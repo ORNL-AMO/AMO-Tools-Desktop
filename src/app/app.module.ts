@@ -6,10 +6,12 @@ import { HttpModule } from '@angular/http';
 import { AppComponent } from './app.component';
 
 import { ElectronService } from './electron.service';
+import { DemoComponent } from './demo/demo.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    DemoComponent
   ],
   imports: [
     BrowserModule,

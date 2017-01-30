@@ -16,4 +16,10 @@ export class ElectronService {
   closeWindow(){
     this.app.quit();
   }
+
+  logDialog(){
+    let fileName = this.dialog.showOpenDialog(this.win);
+    console.log(fileName);
+  }
+
 }
