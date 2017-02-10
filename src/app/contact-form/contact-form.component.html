@@ -1,0 +1,149 @@
+<div class="row" style="height: 10px;"></div>
+<div class="row">
+  <div class="col-md-6">
+    <div class="card">
+      <div class="card-header">
+        <h5>Create A Contact</h5>
+      </div>
+      <div class="card-block">
+        <form class="form-group" [formGroup]="contactForm">
+          <div class="row">
+            <div class="col-md-6" [ngClass]="{'has-success':contactForm.controls.firstName.valid}">
+              <label class="form-control-label required" for="firstName"><strong>First Name</strong></label>
+              <div class="input-group">
+                <input class="form-control" formControlName="firstName" id="firstName" />
+              </div>
+              <app-control-messages [control]="contactForm.controls.firstName"></app-control-messages>
+            </div>
+            <div class="col-md-6" [ngClass]="{'has-success':contactForm.controls.lastName.valid}">
+              <label class="form-control-label required" for="lastName"><strong>Last Name</strong></label>
+              <div class="input-group">
+                <input class="form-control" formControlName="lastName" id="lastName"/>
+              </div>
+              <app-control-messages [control]="contactForm.controls.lastName"></app-control-messages>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-6" [ngClass]="{'has-success':contactForm.controls.email.valid}">
+              <label class="form-control-label required" for="email"><strong>Email Address</strong></label>
+              <div class="input-group">
+                <input class="form-control" formControlName="email" id="email" />
+              </div>
+              <app-control-messages [control]="contactForm.controls.email"></app-control-messages>
+            </div>
+
+            <div class="col-md-6" [ngClass]="{'has-success':contactForm.controls.phone.valid}">
+              <label class="form-control-label required" for="phone"><strong>Phone Number</strong></label>
+              <div class="input-group">
+                <input class="form-control" formControlName="phone" id="phone" />
+              </div>
+              <app-control-messages [control]="contactForm.controls.phone"></app-control-messages>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-6" [ngClass]="{'has-success':contactForm.controls.street.valid}">
+              <label class="form-control-label required" for="street"><strong>Street Address</strong></label>
+              <div class="input-group">
+                <input class="form-control" formControlName="street" id="street" />
+              </div>
+              <app-control-messages [control]="contactForm.controls.street"></app-control-messages>
+            </div>
+            <div class="col-md-6" [ngClass]="{'has-success':contactForm.controls.city.valid}">
+              <label class="form-control-label required" for="city"><strong>City</strong></label>
+              <div class="input-group">
+                <input class="form-control" formControlName="city" id="city" />
+              </div>
+              <app-control-messages [control]="contactForm.controls.city"></app-control-messages>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-6 input-group-container" [ngClass]="{'has-success':contactForm.controls.state.valid}">
+              <label class="form-control-label required" for="city"><strong>State</strong></label>
+              <div class="input-group">
+                <select name="state" formControlName="state" id="state" class="form-control selectpicker">
+                  <option>Alabama</option>
+                  <option>Alaska</option>
+                  <option>Arizona</option>
+                  <option>Arkansas</option>
+                  <option>California</option>
+                  <option>Colorado</option>
+                  <option>Connecticut</option>
+                  <option>Delaware</option>
+                  <option>District of Columbia</option>
+                  <option>Florida</option>
+                  <option>Georgia</option>
+                  <option>Hawaii</option>
+                  <option>Idaho</option>
+                  <option>Illinois</option>
+                  <option>Indiana</option>
+                  <option>Iowa</option>
+                  <option>Kansas</option>
+                  <option>Kentucky</option>
+                  <option>Louisiana</option>
+                  <option>Maine</option>
+                  <option>Maryland</option>
+                  <option>Mass</option>
+                  <option>Michigan</option>
+                  <option>Minnesota</option>
+                  <option>Mississippi</option>
+                  <option>Missouri</option>
+                  <option>Montana</option>
+                  <option>Nebraska</option>
+                  <option>Nevada</option>
+                  <option>New Hampshire</option>
+                  <option>New Jersey</option>
+                  <option>New Mexico</option>
+                  <option>New York</option>
+                  <option>North Carolina</option>
+                  <option>North Dakota</option>
+                  <option>Ohio</option>
+                  <option>Oklahoma</option>
+                  <option>Oregon</option>
+                  <option>Pennsylvania</option>
+                  <option>Rhode Island</option>
+                  <option>South Carolina</option>
+                  <option>South Dakota</option>
+                  <option>Tennessee</option>
+                  <option>Texas</option>
+                  <option>Uttah</option>
+                  <option>Vermont</option>
+                  <option>Virginia</option>
+                  <option>Washington</option>
+                  <option>West Virginia</option>
+                  <option>Wisconsin</option>
+                  <option>Wyoming</option>
+                </select>
+              </div>
+              <app-control-messages [control]="contactForm.controls.state"></app-control-messages>
+            </div>
+
+            <div class="col-md-6" [ngClass]="{'has-success':contactForm.controls.zip.valid}">
+              <label class="form-control-label required" for="zip"><strong>Zip</strong></label>
+              <div class="input-group">
+                <input class="form-control" formControlName="zip" id="zip" />
+              </div>
+              <app-control-messages [control]="contactForm.controls.zip"></app-control-messages>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="row" style="height:45%;"></div>
+              <button class="btn btn-default" [disabled]="!contactForm.valid" (click)="saveContact()">Submit</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+
+  </div>
+  <div class="col-md-6">
+    <a routerLink="/demo">
+      <span class="icon">
+          <i class="glyphicons-circle-arrow-right"></i>
+      </span>Demo
+    </a>
+  </div>
+</div>
