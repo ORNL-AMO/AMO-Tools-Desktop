@@ -6,6 +6,7 @@ export class ElectronService {
   win: any = electron.remote.getCurrentWindow();
   app: any = electron.remote.app;
   dialog: any = electron.remote.dialog;
+  fs: any = electron.remote.fs;
 
   constructor() { }
 
