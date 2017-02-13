@@ -3,22 +3,21 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
 
-import { DemoComponent } from './demo.component';
-import { ControlMessagesComponent } from '../shared/control-messages/control-messages.component';
+import { PsatBannerComponent } from './psat-banner.component';
 
-describe('DemoComponent', () => {
-  let component: DemoComponent;
-  let fixture: ComponentFixture<DemoComponent>;
+describe('PsatBannerComponent', () => {
+  let component: PsatBannerComponent;
+  let fixture: ComponentFixture<PsatBannerComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ DemoComponent, ControlMessagesComponent ]
+      declarations: [ PsatBannerComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(DemoComponent);
+    fixture = TestBed.createComponent(PsatBannerComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
