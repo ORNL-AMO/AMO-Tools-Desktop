@@ -1,25 +1,16 @@
 import { Routes, RouterModule } from '@angular/router';
 import { ModuleWithProviders } from '@angular/core';
 import { CoreComponent } from './core/core.component';
-import { DemoComponent } from './demo/demo.component';
-import { ContactFormComponent } from './contact-form/contact-form.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
+import { PhastComponent } from './phast/phast.component';
+import { PsatComponent } from './psat/psat.component';
+import { coreRoutes } from './core/core.routing';
 
 const appRoutes: Routes = [
   {
     path: '',
     component: CoreComponent,
-    children: [
-      {
-        path: '',
-        component: DemoComponent
-      },{
-        path:'demo',
-        component: DemoComponent
-      },{
-        path: 'contact-form',
-        component: ContactFormComponent
-      }
-    ]
+    children: coreRoutes
   }
 ]
 

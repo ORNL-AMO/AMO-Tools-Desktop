@@ -6,18 +6,13 @@ import { LocationStrategy, HashLocationStrategy } from '@angular/common';
 
 import { AppComponent } from './app.component';
 
-import { ElectronService } from './electron.service';
-import { DemoComponent } from './demo/demo.component';
 import { SharedModule } from './shared/shared.module';
-import { CoreComponent } from './core/core.component';
-import { ContactFormComponent } from './contact-form/contact-form.component';
 import { routing, appRoutingProviders } from './app.routing';
+import { CoreModule } from './core/core.module';
+
 @NgModule({
   declarations: [
     AppComponent,
-    DemoComponent,
-    CoreComponent,
-    ContactFormComponent
   ],
   imports: [
     BrowserModule,
@@ -25,11 +20,11 @@ import { routing, appRoutingProviders } from './app.routing';
     ReactiveFormsModule,
     HttpModule,
     SharedModule,
+    CoreModule,
     routing
   ],
   providers: [
-    ElectronService,
-    appRoutingProviders,
+    appRoutingProviders
   ],
   entryComponents: [AppComponent],
   bootstrap: [AppComponent]
