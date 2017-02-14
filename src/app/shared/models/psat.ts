@@ -1,4 +1,4 @@
-import { Assessment } from '../assessment/assessment';
+import { Assessment } from './assessment';
 
 export interface PSAT {
   assessment: Assessment,

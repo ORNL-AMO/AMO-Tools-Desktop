@@ -1,3 +1,25 @@
-<p>
-  assessment works!
-</p>
+<button class="btn" (click)="getDirectory()">Get Directory</button>
+<button class="btn btn-danger" (click)="clearLocal()">Clear LocalStorage</button>
+<button class="btn btn-info" (click)="addPSAT()">Add PSAT</button>
+<button class="btn btn-info" (click)="addDirectory()">Add Directory</button>
+<button class="btn btn-primary" (click)="save()">Save Directory</button>
+
+
+<div *ngIf="_directory" class="card">
+  <div class="card-block">
+    <h4>{{_directory.name}}</h4>
+
+    <div *ngIf="_directory.psat">
+      <div *ngFor="let ps of _directory.psat">
+        <h5>{{ps.assessment.type}}</h5>
+      </div>
+    </div>
+
+    <div *ngIf="_directory.directories">
+      <div *ngFor="let directory of _directory.directories">
+        <h4>{{directory.name}}</h4>
+      </div>
+    </div>
+
+  </div>
+</div>

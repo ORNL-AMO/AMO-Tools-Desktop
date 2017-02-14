@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ControlMessagesComponent } from './control-messages/control-messages.component';
 import { ValidationService } from './validation.service';
+import { ModelService } from './model.service';
 
 @NgModule({
     imports: [
@@ -17,7 +18,9 @@ import { ValidationService } from './validation.service';
     ControlMessagesComponent
   ],
   providers: [
-    ValidationService
+    ValidationService,
+    ModelService
+
   ]
 })
 
