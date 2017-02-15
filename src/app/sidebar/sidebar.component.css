@@ -6,6 +6,14 @@
   color:white;
 }
 
+.folder-item{
+  cursor: pointer;
+}
+
+.selected{
+  font-weight: bold;
+}
+
 .doe_logo{
   width:100%;
   padding:10px;
