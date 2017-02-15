@@ -8,7 +8,8 @@
 </div>
 -->
 <div class="assessment-container">
-<app-assessment-banner [workingDirectoryName]="directories.name"></app-assessment-banner>
-<app-assessment-menu></app-assessment-menu>
-<app-assessment-grid-view [directories]="directories"></app-assessment-grid-view>
+  <app-assessment-banner [workingDirectoryName]="directory.name"></app-assessment-banner>
+  <app-assessment-menu (viewChange)="changeView($event)"></app-assessment-menu>
+  <app-assessment-grid-view *ngIf="view == 'grid'" [directory]="directory"></app-assessment-grid-view>
+  <app-assessment-list-view *ngIf="view == 'list'" [directory]="directory"></app-assessment-list-view>
 </div>

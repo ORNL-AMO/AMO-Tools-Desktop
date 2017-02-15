@@ -7,11 +7,10 @@ import { Directory } from '../../shared/models/directory';
 })
 export class AssessmentGridViewComponent implements OnInit {
   @Input()
-  directories: Directory;
+  directory: Directory;
   constructor() { }
 
   ngOnInit() {
-    console.log(this.directories)
   }
 
 }
