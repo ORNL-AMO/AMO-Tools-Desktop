@@ -1,7 +1,14 @@
+<!--
 <div class="row">
   <div class="card">
     <div class="card-block">
-      <h3>No Assessments Found!</h3>
+      <app-assessment></app-assessment>
     </div>
   </div>
+</div>
+-->
+<div class="assessment-container">
+<app-assessment-banner [workingDirectoryName]="directories.name"></app-assessment-banner>
+<app-assessment-menu></app-assessment-menu>
+<app-assessment-grid-view [directories]="directories"></app-assessment-grid-view>
 </div>

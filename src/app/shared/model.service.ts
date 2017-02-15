@@ -1,10 +1,20 @@
 import { Injectable } from '@angular/core';
-import { PSAT } from '../shared/models/psat';
+import { Directory } from './models/directory'
+import { PSAT } from './models/psat';
 
 @Injectable()
-export class PsatService {
+export class ModelService {
 
   constructor() { }
+
+  initDirectory() {
+    let newDirectory: Directory = {
+      name: 'Root',
+      psat: null,
+      subDirectory: null
+    }
+    return newDirectory
+  }
 
   getNewPsat(){
     let newPsat: PSAT = {
@@ -12,7 +22,7 @@ export class PsatService {
         type: 'PSAT',
         filePath: '',
         date: new Date(),
-        name: 'PSAT Name'
+        name: 'New PSAT'
       },
       pump_style: null,
       pump_specified: null,
@@ -41,4 +51,14 @@ export class PsatService {
     }
     return newPsat;
   }
+
+  getNewDirectory(name: string){
+    let newDirectory: Directory = {
+      name: name,
+      psat: null,
+      subDirectory: null
+    }
+    return newDirectory
+  }
+
 }
