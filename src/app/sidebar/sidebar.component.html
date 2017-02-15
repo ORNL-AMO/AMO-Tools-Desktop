@@ -1,48 +1,85 @@
-<div class="row">
-  ICON
+<div class="row banner">
+  <a routerLink="/dashboard">
+    <img src="assets/images/DOE_banner.png" class="doe_logo">
+   </a>
 </div>
 
-  <ul class="list-group">
-    CALCULATORS
-    <li class="list-group-item">
-      <a class="nav-item" routerLink="/calculator">
-        <span class="icon">
-      <i class="fa fa-calculator"></i>
-        </span>Pumps
-      </a>
-    </li>
-    <li class="list-group-item">
-      <a class="nav-item" routerLink="/calculator">
-        <span class="icon">
-      <i class="fa fa-calculator"></i>
-        </span>Fans
-      </a>
-    </li>
-    <li class="list-group-item">
-      <a class="nav-item" routerLink="/calculator">
-        <span class="icon">
-      <i class="fa fa-calculator"></i>
-        </span>Furnaces
-      </a>
-    </li>
-    <li class="list-group-item">
-      <a class="nav-item" routerLink="/calculator">
-        <span class="icon">
-      <i class="fa fa-calculator"></i>
-        </span>Steam
-      </a>
-    </li>
-    <li class="list-group-item">
-      <a class="nav-item" routerLink="/calculator">
-        <span class="icon">
-      <i class="fa fa-calculator"></i>
-        </span>Motors
-      </a>
-    </li>
-  </ul>
-
-<ul class="list-group">
+<div style="padding-top:15px;">
   ASSESSMENTS
+  <ul class="tree" *ngIf="directory">
+    <li>
+    <i class="fa fa-folder" aria-hidden="true"></i>
+    {{directory.name}}
+    </li>
+    <ul *ngIf="directory.subDirectory">
+      <li *ngFor="let directory of directory.subDirectory">
+        <i class="fa fa-folder" aria-hidden="true"></i>
+        {{directory.name}}
+        <ul *ngIf="directory.directories">
+          <li *ngFor="let directory of directory.subDirectory">
+            <i class="fa fa-folder" aria-hidden="true"></i>
+            {{directory.name}}
+          </li>
+        </ul>
+        <ul *ngIf="directory.psat">
+          <li *ngFor="let psat of directory.psat">
+            <i class="fa fa-bar-chart" aria-hidden="true"></i>
+            {{psat.assessment.name}}
+          </li>
+        </ul>
+      </li>
+    </ul>
+    <ul *ngIf="directory.psat">
+      <li *ngFor="let psat of directory.psat">
+        <i class="fa fa-bar-chart" aria-hidden="true"></i>
+        {{psat.assessment.name}}
+      </li>
+    </ul>
+  </ul>
+</div>
+
+ <div style="padding-top: 20px;">
+   CALCULATORS
+   <div>
+     <a class="nav-item" routerLink="/calculator">
+       <span class="icon">
+     <i class="fa fa-calculator"></i>
+       </span>Pumps
+     </a>
+   </div>
+   <div>
+     <a class="nav-item" routerLink="/calculator">
+       <span class="icon">
+     <i class="fa fa-calculator"></i>
+       </span>Fans
+     </a>
+   </div>
+   <div>
+     <a class="nav-item" routerLink="/calculator">
+       <span class="icon">
+     <i class="fa fa-calculator"></i>
+       </span>Furnaces
+     </a>
+   </div>
+   <div>
+     <a class="nav-item" routerLink="/calculator">
+       <span class="icon">
+     <i class="fa fa-calculator"></i>
+       </span>Steam
+     </a>
+   </div>
+   <div>
+     <a class="nav-item" routerLink="/calculator">
+       <span class="icon">
+     <i class="fa fa-calculator"></i>
+       </span>Motors
+     </a>
+   </div>
+ </div>
+
+<!--
+<ul>
+
   <li class="list-group-item">
     <a class="nav-item" routerLink="/psat">
       <span class="icon">
@@ -59,3 +96,4 @@
     </a>
   </li>
 </ul>
+-->

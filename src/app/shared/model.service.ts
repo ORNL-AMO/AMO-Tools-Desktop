@@ -11,7 +11,7 @@ export class ModelService {
     let newDirectory: Directory = {
       name: 'Root',
       psat: null,
-      directories: null
+      subDirectory: null
     }
     return newDirectory
   }
@@ -21,7 +21,8 @@ export class ModelService {
       assessment: {
         type: 'PSAT',
         filePath: '',
-        date: new Date()
+        date: new Date(),
+        name: 'New PSAT'
       },
       pump_style: null,
       pump_specified: null,
@@ -55,7 +56,7 @@ export class ModelService {
     let newDirectory: Directory = {
       name: name,
       psat: null,
-      directories: null
+      subDirectory: null
     }
     return newDirectory
   }

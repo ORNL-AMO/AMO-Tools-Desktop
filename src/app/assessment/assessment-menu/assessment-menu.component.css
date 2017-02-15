@@ -1,0 +1,20 @@
+.search{
+  width:40%;
+}
+
+.main-menu{
+  height:100px;
+  border-bottom: solid;
+  padding-bottom: 5px;
+  padding-top: 5px;
+  border-width: 1px;
+  border-color: slategray;
+}
+
+.nav-menu{
+  border-bottom: solid;
+  padding-bottom: 5px;
+  padding-top: 5px;
+  border-width: 1px;
+  border-color: slategray;
+}

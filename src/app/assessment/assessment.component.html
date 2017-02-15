@@ -5,18 +5,18 @@
 <button class="btn btn-primary" (click)="save()">Save Directory</button>
 
 
-<div *ngIf="_directory" class="card">
+<div *ngIf="directory" class="card">
   <div class="card-block">
-    <h4>{{_directory.name}}</h4>
+    <h4>{{directory.name}}</h4>
 
-    <div *ngIf="_directory.psat">
-      <div *ngFor="let ps of _directory.psat">
+    <div *ngIf="directory.psat">
+      <div *ngFor="let ps of directory.psat">
         <h5>{{ps.assessment.type}}</h5>
       </div>
     </div>
 
-    <div *ngIf="_directory.directories">
-      <div *ngFor="let directory of _directory.directories">
+    <div *ngIf="directory.subDirectory">
+      <div *ngFor="let directory of directory.subDirectory">
         <h4>{{directory.name}}</h4>
       </div>
     </div>

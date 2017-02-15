@@ -11,7 +11,8 @@ export class PsatService {
       assessment: {
         type: 'PSAT',
         filePath: '',
-        date: new Date()
+        date: new Date(),
+        name: 'PSAT Name'
       },
       pump_style: null,
       pump_specified: null,

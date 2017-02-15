@@ -1,5 +1,6 @@
 export interface Assessment{
   type: string,
-  date: Date,
-  filePath: string,
+  date?: Date,
+  filePath?: string,
+  name: string
 }

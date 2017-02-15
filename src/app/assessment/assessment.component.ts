@@ -8,7 +8,7 @@ import { Directory } from '../shared/models/directory';
   styleUrls: ['./assessment.component.css']
 })
 export class AssessmentComponent implements OnInit {
-  _directory: Directory;
+  directory: Directory;
 
   constructor(private _modelService: ModelService) { }
 
@@ -19,13 +19,13 @@ export class AssessmentComponent implements OnInit {
     let tmpDir = localStorage.getItem('rootDirectory');
 
     if(!tmpDir){
-      this._directory = this._modelService.initDirectory();
-      let tmp = JSON.stringify(this._directory);
+      this.directory = this._modelService.initDirectory();
+      let tmp = JSON.stringify(this.directory);
       localStorage.setItem('rootDirectory', tmp);
-      console.log(this._directory);
+      console.log(this.directory);
     }else{
-      this._directory = JSON.parse(tmpDir);
-      console.log(this._directory);
+      this.directory = JSON.parse(tmpDir);
+      console.log(this.directory);
     }
   }
 
@@ -34,30 +34,30 @@ export class AssessmentComponent implements OnInit {
   }
 
   addPSAT(){
-    if(this._directory){
-      if(this._directory.psat) {
-        this._directory.psat.push(this._modelService.getNewPsat());
+    if(this.directory){
+      if(this.directory.psat) {
+        this.directory.psat.push(this._modelService.getNewPsat());
       }else{
-        this._directory.psat = new Array();
-        this._directory.psat.push(this._modelService.getNewPsat());
+        this.directory.psat = new Array();
+        this.directory.psat.push(this._modelService.getNewPsat());
       }
     }
   }
 
   addDirectory(){
-    if(this._directory){
-      if(this._directory.directories) {
-        this._directory.directories.push(this._modelService.getNewDirectory('New Directory'));
+    if(this.directory){
+      if(this.directory.subDirectory) {
+        this.directory.subDirectory.push(this._modelService.getNewDirectory('New Directory'));
       }else {
-        this._directory.directories = new Array();
-        this._directory.directories.push(this._modelService.getNewDirectory('New Directory'));
+        this.directory.subDirectory = new Array();
+        this.directory.subDirectory.push(this._modelService.getNewDirectory('New Directory'));
       }
     }
   }
 
   save(){
-    if(this._directory){
-      localStorage.setItem('rootDirectory', JSON.stringify(this._directory));
+    if(this.directory){
+      localStorage.setItem('rootDirectory', JSON.stringify(this.directory));
       console.log(JSON.parse(localStorage.getItem('rootDirectory')));
     }
   }
