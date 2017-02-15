@@ -6,7 +6,7 @@ import { PhastBannerComponent } from './phast-banner/phast-banner.component';
 @NgModule({
   declarations: [
     PhastComponent,
-    PhastBannerComponent
+    PhastBannerComponent,
   ],
   exports: [
   ],
