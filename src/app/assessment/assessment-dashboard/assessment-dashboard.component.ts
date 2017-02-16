@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { MockAssessments } from '../../shared/mocks/mock-assessment';
 import { Directory } from '../../shared/models/directory';
 
@@ -8,11 +8,18 @@ import { Directory } from '../../shared/models/directory';
   styleUrls: ['./assessment-dashboard.component.css']
 })
 export class AssessmentDashboardComponent implements OnInit {
-  directories: Directory = MockAssessments;
+  @Input()
+  directory: Directory;
+
+  view: string = 'grid';
 
   constructor() { }
 
   ngOnInit() {
+  }
+
+  changeView($event){
+    this.view = $event;
   }
 
 }

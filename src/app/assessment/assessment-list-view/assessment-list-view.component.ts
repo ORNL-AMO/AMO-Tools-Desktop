@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
+import { Directory } from '../../shared/models/directory';
 
 @Component({
   selector: 'app-assessment-list-view',
@@ -6,7 +7,8 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./assessment-list-view.component.css']
 })
 export class AssessmentListViewComponent implements OnInit {
-
+  @Input()
+  directory: Directory;
   constructor() { }
 
   ngOnInit() {
