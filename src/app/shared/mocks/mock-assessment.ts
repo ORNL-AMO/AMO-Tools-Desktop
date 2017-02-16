@@ -2,6 +2,7 @@ import { Directory } from '../models/directory';
 export const MockAssessments: Directory = {
   name: 'Root Directory',
   collapsed: false,
+  date: new Date(),
   psat: [
     {
       assessment: {
@@ -19,6 +20,7 @@ export const MockAssessments: Directory = {
     {
       name: 'Mock Directory 2',
       collapsed: true,
+      date: new Date(),
       psat: [
         {
           assessment: {
@@ -36,6 +38,7 @@ export const MockAssessments: Directory = {
     {
       name: 'Mock Directory 3',
       collapsed: true,
+      date: new Date(),
       psat: [
         {
           assessment: {

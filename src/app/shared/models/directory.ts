@@ -5,4 +5,5 @@ export interface Directory {
   psat?: PSAT[],
   subDirectory?: Directory[]
   collapsed?: boolean;
+  date?: Date;
 }

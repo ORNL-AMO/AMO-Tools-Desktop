@@ -19,8 +19,14 @@ export class SidebarComponent implements OnInit {
     this.selectedDirectory = this.directory;
   }
 
-  toggleDirectory(dir: Directory){
+  toggleDirectoryCollapse(dir: Directory){
     dir.collapsed = !dir.collapsed;
+  }
+
+  toggleSelected(dir: Directory){
+    if(dir.collapsed == true){
+      dir.collapsed = false;
+    }
     this.selectedDirectory = dir;
     this.directoryChange.emit(dir);
   }
