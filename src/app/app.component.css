@@ -10,3 +10,34 @@
   border-width: 1px;
   border-color: slategray;
 }
+
+
+/*Modal CSS*/
+.fade{
+  opacity: 1;
+}
+.modal-dialog{
+  top: 10vh;
+}
+.modal-backdrop
+{
+  opacity:0.75 !important;
+}
+
+.btn-primary{
+  background-color: #003054;
+}
+
+.btn-primary:disabled{
+  background-color: pink;
+}
+
+
+.help-text{
+  font-size: small;
+  color: gray;
+}
+
+@font-face {
+  font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+}
