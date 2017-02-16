@@ -28,11 +28,6 @@
   background-color: #003054;
 }
 
-.btn-primary:disabled{
-  background-color: pink;
-}
-
-
 .help-text{
   font-size: small;
   color: gray;

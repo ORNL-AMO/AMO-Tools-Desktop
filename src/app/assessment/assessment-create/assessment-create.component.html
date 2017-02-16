@@ -1,0 +1,69 @@
+<button class="btn btn-primary" (click)="showCreateModal()"><i class="fa fa-bar-chart-o"></i></button>
+
+
+<!--CREATE Folder MODAL-->
+<div bsModal #createModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="createModalLabel" aria-hidden="true"
+     [config]="{backdrop: 'static'}">
+  <div class="modal-dialog modal-lg create-assessment-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Create Assessment in {{directory.name}}</h3>
+        <button class="close" aria-label="Close" (click)="hideCreateModal()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form class="form-group" [formGroup]="newAssessment">
+
+          <div class="row">
+            <div class="col-md-12">
+              <label class="form-control-label" for="assessmentName">Assessment Name</label>
+              <div class="input-group">
+                <input class="form-control input-group" formControlName="assessmentName" id="assessmentName" placeholder="New Assessment"/>
+              </div>
+              <app-control-messages [control]="newAssessment.controls.assessmentName"></app-control-messages>
+              <div class="help-text">
+                <p>Example: "Pump123" or "ORNL Pump 3"</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+              <div class="tool-select-box">
+                <div class="col-md-12">
+                <select class="form-control type-select">
+                  <option>Pump</option>
+                  <option>Furnace</option>
+                </select>
+              </div>
+              <div class="col-md-12">
+                <input type="radio" name="chooseEquipment" value="createNew" checked (click)="selectEquip('new')">Add New Equipment<br>
+                <input type="radio" name="chooseEquipment" value="useExisting" (click)="selectEquip('existing')">Select Equipment from Another Assessment<br>
+              </div>
+              <div class="col-md-12" *ngIf="selectedEquip == 'existing'">
+                <div class="equipment-select">
+                  <select class="form-control">
+                    <div>
+                      <input type="text" class="form-control input-group">
+                    </div>
+                    <option *ngFor="let option of directory.psat">{{option.assessment.name}}</option>
+                  </select>
+
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-6">
+              <button class="btn pull-left" (click)="hideCreateModal()">Close</button>
+            </div>
+            <div class="col-md-6">
+              <button class="btn btn-primary pull-right" [disabled]="!newAssessment.valid" (click)="createAssessment()">Create</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

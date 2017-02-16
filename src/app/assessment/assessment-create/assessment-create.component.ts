@@ -1,30 +1,32 @@
 import { Component, OnInit, ViewChild, Input } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ModalDirective } from 'ng2-bootstrap';
-import { Directory } from '../../../shared/models/directory';
+import { Directory } from '../../shared/models/directory';
+
 @Component({
-  selector: 'app-create-folder',
-  templateUrl: './create-folder.component.html',
-  styleUrls: ['./create-folder.component.css']
+  selector: 'app-assessment-create',
+  templateUrl: './assessment-create.component.html',
+  styleUrls: ['./assessment-create.component.css']
 })
-export class CreateFolderComponent implements OnInit {
+export class AssessmentCreateComponent implements OnInit {
   @Input()
   directory: Directory;
 
-  newFolder: any;
+  newAssessment: any;
+  selectedEquip: string = 'new';
   constructor(private formBuilder: FormBuilder) { }
 
   ngOnInit() {
-    this.newFolder = this.initForm();
+    this.newAssessment = this.initForm();
   }
 
   initForm(){
     return this.formBuilder.group({
-      'newFolderName': ['', Validators.required]
+      'assessmentName': ['', Validators.required]
     });
   }
 
-  //  CREATE FOLDER MODAL
+  //  CREATE ASSESSMENT MODAL
   @ViewChild('createModal') public createModal: ModalDirective;
   showCreateModal(){
     this.createModal.show();
@@ -34,10 +36,13 @@ export class CreateFolderComponent implements OnInit {
     this.createModal.hide();
   }
 
-  createFolder(){
+  createAssessment(){
     this.hideCreateModal();
 
-    //TODO: Logic for creating new folder
-  }
+    // TODO: Create assessment logic
+   }
 
+   selectEquip(eq: string){
+    this.selectedEquip = eq;
+   }
 }
