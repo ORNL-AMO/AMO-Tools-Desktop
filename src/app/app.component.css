@@ -1,3 +1,8 @@
+
+.body{
+  font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+}
+
 .banner{
   padding-top:10px;
   padding-bottom:10px;
@@ -31,8 +36,4 @@
 .help-text{
   font-size: small;
   color: gray;
-}
-
-@font-face {
-  font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
 }

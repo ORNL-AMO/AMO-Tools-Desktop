@@ -1,11 +1,32 @@
 <div class="card" *ngIf="directory">
   <div class="card-header">
+    <input type="checkbox">
     {{directory.name}}
   </div>
-  <div class="card-block">
-    Summary content goes here
+  <div class="card-block row">
+    <div class="col-md-12">
+      <ul *ngIf="directory.subDirectory">
+        <li *ngFor="let directory of subDirectory">
+          <i class="fa fa-folder-o" aria-hidden="true"></i>
+          {{directory.name}}
+        </li>
+      </ul>
+      <ul *ngIf="directory.psat">
+        <li *ngFor="let psat of directory.psat">
+          <i class="fa fa-bar-chart-o" aria-hidden="true"></i>
+          {{psat.assessment.name}}
+        </li>
+      </ul>
+    </div>
   </div>
   <div class="card-footer">
-    elipses and date in footer
+    <div class="row">
+      <div class="col-md-6">
+        <i class="fa fa-ellipsis-h pull-left"></i>
+      </div>
+      <div class="col-md-6">
+        <p class="pull-right">{{directory.date | date}}</p>
+      </div>
+    </div>
   </div>
 </div>

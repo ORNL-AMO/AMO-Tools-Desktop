@@ -1,15 +1,13 @@
-<!--
-<div class="row">
-  <div class="card">
-    <div class="card-block">
-      <app-assessment></app-assessment>
+<app-assessment-banner (changeView)="viewSettings()" [workingDirectoryName]="directory.name"></app-assessment-banner>
+<div class="assessment-container">
+  <div class="row">
+    <div [ngClass]="{'col-md-12': !isSettingsView, 'col-md-9': isSettingsView}">
+      <app-assessment-menu (viewChange)="changeView($event)" [directory]="directory"></app-assessment-menu>
+      <app-assessment-grid-view *ngIf="view == 'grid'" [directory]="directory"></app-assessment-grid-view>
+      <app-assessment-list-view *ngIf="view == 'list'" [directory]="directory"></app-assessment-list-view>
+    </div>
+    <div class="col-md-3 open-settings" *ngIf="isSettingsView == true">
+      <app-assessment-settings></app-assessment-settings>
     </div>
   </div>
-</div>
--->
-<div class="assessment-container">
-  <app-assessment-banner [workingDirectoryName]="directory.name"></app-assessment-banner>
-  <app-assessment-menu (viewChange)="changeView($event)" [directory]="directory"></app-assessment-menu>
-  <app-assessment-grid-view *ngIf="view == 'grid'" [directory]="directory"></app-assessment-grid-view>
-  <app-assessment-list-view *ngIf="view == 'list'" [directory]="directory"></app-assessment-list-view>
 </div>

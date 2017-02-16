@@ -1,11 +1,19 @@
 <div class="card" *ngIf="assessment">
   <div class="card-header">
+    <input type="checkbox">
     {{assessment.assessment.name}}
   </div>
   <div class="card-block">
     assessment summary goes here
   </div>
   <div class="card-footer">
-    elipses and date go here
+    <div class="row">
+      <div class="col-md-6">
+        <i class="fa fa-ellipsis-h pull-left"></i>
+      </div>
+      <div class="col-md-6">
+        <p class="pull-right">{{assessment.assessment.date | date}}</p>
+      </div>
+    </div>
   </div>
 </div>

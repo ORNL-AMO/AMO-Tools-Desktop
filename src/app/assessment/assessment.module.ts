@@ -17,6 +17,7 @@ import { DirectoryListItemComponent } from './assessment-list-view/directory-lis
 import { AssessmentListItemComponent } from './assessment-list-view/assessment-list-item/assessment-list-item.component';
 import { CreateFolderComponent } from './assessment-menu/create-folder/create-folder.component';
 import { AssessmentCreateComponent } from './assessment-create/assessment-create.component';
+import { AssessmentSettingsComponent } from './assessment-settings/assessment-settings.component';
 
 @NgModule({
   declarations: [
@@ -31,7 +32,8 @@ import { AssessmentCreateComponent } from './assessment-create/assessment-create
     DirectoryListItemComponent,
     AssessmentListItemComponent,
     CreateFolderComponent,
-    AssessmentCreateComponent
+    AssessmentCreateComponent,
+    AssessmentSettingsComponent
   ],
   exports: [
     AssessmentDashboardComponent
