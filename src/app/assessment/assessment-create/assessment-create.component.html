@@ -1,4 +1,4 @@
-<button class="btn btn-primary" (click)="showCreateModal()"><i class="fa fa-bar-chart-o"></i></button>
+<a (click)="showCreateModal()" class="pointer-item"><img src="assets/images/ico-addAssessment.png"></a>
 
 
 <!--CREATE Folder MODAL-->
@@ -37,18 +37,22 @@
                 </select>
               </div>
               <div class="col-md-12">
-                <input type="radio" name="chooseEquipment" value="createNew" checked (click)="selectEquip('new')">Add New Equipment<br>
-                <input type="radio" name="chooseEquipment" value="useExisting" (click)="selectEquip('existing')">Select Equipment from Another Assessment<br>
+                <input type="radio" name="chooseEquipment" value="createNew" checked (click)="selectEquip('new')"> Add New Equipment<br>
+                <input type="radio" name="chooseEquipment" value="useExisting" (click)="selectEquip('existing')"> Select Equipment from Another Assessment<br>
               </div>
               <div class="col-md-12" *ngIf="selectedEquip == 'existing'">
                 <div class="equipment-select">
-                  <select class="form-control">
-                    <div>
-                      <input type="text" class="form-control input-group">
-                    </div>
-                    <option *ngFor="let option of directory.psat">{{option.assessment.name}}</option>
-                  </select>
-
+                  <div class="dropdown">
+                    <button class="btn dropdown-toggle assessment-dropdown" type="button" (click)="toggleDropdown(showDropdown)">{{selectedAssessment}}
+                      <span class="caret pull-right"></span></button>
+                    <ul class="dropdown-menu pointer-item assessment-dropdown" [ngClass]="{'not-hidden': showDropdown}">
+                      <li class="assessment-dropdown-item">
+                        <input class="form-control item-search" type="text" placeholder="Search Assessments" #search (keyup)="onKey(search.value)">
+                      </li>
+                      <li class="dropdown-divider"></li>
+                      <li class="item-hover assessment-dropdown-item" *ngFor="let psat of filteredAssessments" (click)="setAssessment(psat.assessment.name)">{{psat.assessment.name}}</li>
+                    </ul>
+                  </div>
                 </div>
               </div>
             </div>

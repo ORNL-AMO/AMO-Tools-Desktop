@@ -14,10 +14,17 @@ export class AssessmentCreateComponent implements OnInit {
 
   newAssessment: any;
   selectedEquip: string = 'new';
+  showDropdown: boolean = false;
+  selectedAssessment: string = 'Select Pump';
+  allAssessments: any[] = new Array();
+  filteredAssessments: any[] = new Array();
   constructor(private formBuilder: FormBuilder) { }
 
   ngOnInit() {
     this.newAssessment = this.initForm();
+    this.allAssessments = this.directory.psat;
+    this.filteredAssessments = this.allAssessments;
+
   }
 
   initForm(){
@@ -33,6 +40,7 @@ export class AssessmentCreateComponent implements OnInit {
   }
 
   hideCreateModal(){
+    this.showDropdown = false;
     this.createModal.hide();
   }
 
@@ -45,4 +53,27 @@ export class AssessmentCreateComponent implements OnInit {
    selectEquip(eq: string){
     this.selectedEquip = eq;
    }
+
+   toggleDropdown(){
+    this.showDropdown = !this.showDropdown;
+   }
+
+   setAssessment(psatName: string){
+     this.selectedAssessment = psatName;
+     this.toggleDropdown();
+   }
+
+  onKey(str: string) {
+    if (str != '') {
+      let temp = this.allAssessments.filter(f => f.assessment.name.toLowerCase().indexOf(str.toLowerCase()) >= 0);
+      if(temp.length != 0) {
+        this.filteredAssessments = temp;
+      }else{
+        this.filteredAssessments = this.allAssessments;
+      }
+    } else {
+      this.filteredAssessments = this.allAssessments;
+    }
+  }
+
 }

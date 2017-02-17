@@ -29,6 +29,22 @@
 }
 
 .equipment-select{
-  margin-right: 15%;
   margin-bottom: 10px;
+}
+
+.not-hidden{
+  display: inherit;
+}
+
+.assessment-dropdown{
+  width: 100%;
+}
+
+.assessment-dropdown-item{
+  margin-right: 5px;
+  margin-left: 5px;
+}
+
+.item-hover:hover{
+  background-color: lightblue;
 }
