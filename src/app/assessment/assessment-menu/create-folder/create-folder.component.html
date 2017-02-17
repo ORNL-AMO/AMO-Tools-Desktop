@@ -1,0 +1,41 @@
+<a (click)="showCreateModal()" class="pointer-item"><img src="assets/images/ico-addFolder.png"></a>
+
+
+<!--CREATE Folder MODAL-->
+<div bsModal #createModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="createModalLabel" aria-hidden="true"
+     [config]="{backdrop: 'static'}">
+  <div class="modal-dialog modal-lg create-folder-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Create a Folder in {{directory.name}}</h3>
+        <button class="close" aria-label="Close" (click)="hideCreateModal()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form class="form-group" [formGroup]="newFolder">
+          <div class="row input-row">
+            <div class="col-md-12">
+                <label class="form-control-label" for="newFolderName">Folder Name</label>
+                <div class="input-group">
+                  <input class="form-control input-group" formControlName="newFolderName" id="newFolderName" placeholder="New Folder"/>
+                </div>
+                <app-control-messages [control]="newFolder.controls.newFolderName"></app-control-messages>
+                <div class="help-text">
+                  <p>Example: 'Minnesota Plant' or 'Furnace Group A'</p>
+               </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+              <button class="btn pull-left" (click)="hideCreateModal()">Close</button>
+            </div>
+            <div class="col-md-6">
+              <button class="btn btn-primary pull-right" [disabled]="!newFolder.valid" (click)="createFolder()">Create</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

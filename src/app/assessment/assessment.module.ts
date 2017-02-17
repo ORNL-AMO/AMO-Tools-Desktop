@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { SharedModule } from '../shared/shared.module';
+import { ModalModule, DropdownModule } from 'ng2-bootstrap';
+
 import { AssessmentComponent } from './assessment.component';
 import { AssessmentDashboardComponent } from './assessment-dashboard/assessment-dashboard.component';
 import { AssessmentBannerComponent } from './assessment-banner/assessment-banner.component';
@@ -13,6 +15,9 @@ import { AssessmentCardComponent } from './assessment-grid-view/assessment-card/
 import { DirectoryCardComponent } from './assessment-grid-view/directory-card/directory-card.component';
 import { DirectoryListItemComponent } from './assessment-list-view/directory-list-item/directory-list-item.component';
 import { AssessmentListItemComponent } from './assessment-list-view/assessment-list-item/assessment-list-item.component';
+import { CreateFolderComponent } from './assessment-menu/create-folder/create-folder.component';
+import { AssessmentCreateComponent } from './assessment-create/assessment-create.component';
+import { AssessmentSettingsComponent } from './assessment-settings/assessment-settings.component';
 
 @NgModule({
   declarations: [
@@ -25,7 +30,10 @@ import { AssessmentListItemComponent } from './assessment-list-view/assessment-l
     AssessmentCardComponent,
     DirectoryCardComponent,
     DirectoryListItemComponent,
-    AssessmentListItemComponent
+    AssessmentListItemComponent,
+    CreateFolderComponent,
+    AssessmentCreateComponent,
+    AssessmentSettingsComponent
   ],
   exports: [
     AssessmentDashboardComponent
@@ -34,7 +42,8 @@ import { AssessmentListItemComponent } from './assessment-list-view/assessment-l
     CommonModule,
     SharedModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    ModalModule.forRoot()
   ],
   providers: []
 })

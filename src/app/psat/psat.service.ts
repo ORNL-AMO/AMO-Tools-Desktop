@@ -8,12 +8,6 @@ export class PsatService {
 
   getNewPsat(){
     let newPsat: PSAT = {
-      assessment: {
-        type: 'PSAT',
-        filePath: '',
-        date: new Date(),
-        name: 'PSAT Name'
-      },
       pump_style: null,
       pump_specified: null,
       pump_rated_speed: null,

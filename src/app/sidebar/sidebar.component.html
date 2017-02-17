@@ -9,7 +9,7 @@
   <ul class="tree" *ngIf="directory">
     <li>
       <i class="fa" (click)="toggleDirectoryCollapse(directory)" [ngClass]="{'fa-angle-right': directory.collapsed == true, 'fa-angle-down': directory.collapsed == false}" aria-hidden="true"></i>
-      <a class="folder-item" (click)="toggleSelected(directory)" (dblclick)="toggleDirectoryCollapse(directory)" [ngClass]="{'selected':selectedDirectory.name == directory.name}">
+      <a class="pointer-item" (click)="toggleSelected(directory)" (dblclick)="toggleDirectoryCollapse(directory)" [ngClass]="{'selected':selectedDirectory.name == directory.name}">
         <i class="fa fa-folder-o" aria-hidden="true"></i>
         {{directory.name}}
       </a>
@@ -17,32 +17,32 @@
     <ul *ngIf="directory.subDirectory && directory.collapsed == false">
       <li *ngFor="let directory of directory.subDirectory">
         <i class="fa" (click)="toggleDirectoryCollapse(directory)" [ngClass]="{'fa-angle-right': directory.collapsed == true, 'fa-angle-down': directory.collapsed == false}" aria-hidden="true"></i>
-        <a class="folder-item" (click)="toggleSelected(directory)" (dblclick)="toggleDirectoryCollapse(directory)" [ngClass]="{'selected':selectedDirectory.name == directory.name}">
+        <a class="pointer-item" (click)="toggleSelected(directory)" (dblclick)="toggleDirectoryCollapse(directory)" [ngClass]="{'selected':selectedDirectory.name == directory.name}">
           <i class="fa fa-folder-o" aria-hidden="true"></i>
           {{directory.name}}
         </a>
 
-        <ul *ngIf="directory.directories && directory.collapsed == false">
+        <ul *ngIf="directory.subDirectory && directory.collapsed == false">
           <li *ngFor="let directory of directory.subDirectory">
             <i class="fa" (click)="toggleDirectoryCollapse(directory)" [ngClass]="{'fa-angle-right': directory.collapsed == true, 'fa-angle-down': directory.collapsed == false}" aria-hidden="true"></i>
-            <a class="folder-item" (click)="toggleSelected(directory)" (dblclick)="toggleDirectoryCollapse(directory)" [ngClass]="{'selected':selectedDirectory.name == directory.name}">
+            <a class="pointer-item" (click)="toggleSelected(directory)" (dblclick)="toggleDirectoryCollapse(directory)" [ngClass]="{'selected':selectedDirectory.name == directory.name}">
               <i class="fa fa-folder-o" aria-hidden="true"></i>
               {{directory.name}}
             </a>
           </li>
         </ul>
-        <ul *ngIf="directory.psat && directory.collapsed == false">
-          <li *ngFor="let psat of directory.psat">
+        <ul *ngIf="directory.assessments && directory.collapsed == false">
+          <li *ngFor="let assessment of directory.assessments">
             <i class="fa fa-bar-chart" aria-hidden="true"></i>
-            {{psat.assessment.name}}
+            {{assessment.name}}
           </li>
         </ul>
       </li>
     </ul>
-    <ul *ngIf="directory.psat && directory.collapsed == false">
-      <li *ngFor="let psat of directory.psat">
+    <ul *ngIf="directory.assessments && directory.collapsed == false">
+      <li *ngFor="let assessment of directory.assessments">
         <i class="fa fa-bar-chart" aria-hidden="true"></i>
-        {{psat.assessment.name}}
+        {{assessment.name}}
       </li>
     </ul>
   </ul>

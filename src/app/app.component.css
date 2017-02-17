@@ -10,3 +10,29 @@
   border-width: 1px;
   border-color: slategray;
 }
+
+
+.pointer-item{
+  cursor: pointer;
+}
+
+/*Modal CSS*/
+.fade{
+  opacity: 1;
+}
+.modal-dialog{
+  top: 10vh;
+}
+.modal-backdrop
+{
+  opacity:0.75 !important;
+}
+
+.btn-primary{
+  background-color: #003054;
+}
+
+.help-text{
+  font-size: small;
+  color: gray;
+}

@@ -3,17 +3,11 @@ export const MockAssessments: Directory = {
   name: 'Root Directory',
   collapsed: false,
   date: new Date(),
-  psat: [
+  assessments: [
     {
-      assessment: {
-        name: 'Mock PSAT 1',
-        type: 'PSAT'
-      }
+      name: 'Mock PSAT 1'
     },{
-      assessment: {
-        name: 'Mock PSAT 2',
-        type: 'PSAT'
-      }
+      name: 'Mock PSAT 2'
     }
   ],
   subDirectory: [
@@ -21,17 +15,13 @@ export const MockAssessments: Directory = {
       name: 'Mock Directory 2',
       collapsed: true,
       date: new Date(),
-      psat: [
+      assessments: [
         {
-          assessment: {
-            name: 'Mock PSAT 3',
-            type: 'PSAT'
-          }
-        },{
-          assessment: {
-            name: 'Mock PSAT 4',
-            type: 'PSAT'
-          }
+          name: 'Mock PSAT 3',
+
+        },
+        {
+          name: 'Mock PSAT 4',
         }
       ]
     },
@@ -39,17 +29,11 @@ export const MockAssessments: Directory = {
       name: 'Mock Directory 3',
       collapsed: true,
       date: new Date(),
-      psat: [
+      assessments: [
         {
-          assessment: {
             name: 'Mock PSAT 4',
-            type: 'PSAT'
-          }
         },{
-          assessment: {
             name: 'Mock PSAT 5',
-            type: 'PSAT'
-          }
         }
       ]
     },

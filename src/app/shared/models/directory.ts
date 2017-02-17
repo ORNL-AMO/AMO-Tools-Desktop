@@ -1,8 +1,8 @@
-import { PSAT } from './psat';
+import { Assessment } from './assessment';
 
 export interface Directory {
   name: string,
-  psat?: PSAT[],
+  assessments: Assessment[];
   subDirectory?: Directory[]
   collapsed?: boolean;
   date?: Date;

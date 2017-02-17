@@ -1,7 +1,4 @@
-import { Assessment } from './assessment';
-
 export interface PSAT {
-  assessment: Assessment,
   pump_style?: any,
   pump_specified?: any,
   pump_rated_speed?: any,

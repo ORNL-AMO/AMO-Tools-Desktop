@@ -11,10 +11,10 @@
           {{directory.name}}
         </li>
       </ul>
-      <ul *ngIf="directory.psat">
-        <li *ngFor="let psat of directory.psat">
+      <ul *ngIf="directory.assessments">
+        <li *ngFor="let assessment of directory.assessments">
           <i class="fa fa-bar-chart-o" aria-hidden="true"></i>
-          {{psat.assessment.name}}
+          {{assessment.name}}
         </li>
       </ul>
     </div>

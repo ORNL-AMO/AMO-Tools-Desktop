@@ -12,7 +12,7 @@ export class AssessmentDashboardComponent implements OnInit {
   directory: Directory;
 
   view: string = 'grid';
-
+  isSettingsView: boolean = false;
   constructor() { }
 
   ngOnInit() {
@@ -20,6 +20,10 @@ export class AssessmentDashboardComponent implements OnInit {
 
   changeView($event){
     this.view = $event;
+  }
+
+  viewSettings(){
+    this.isSettingsView = !this.isSettingsView;
   }
 
 }

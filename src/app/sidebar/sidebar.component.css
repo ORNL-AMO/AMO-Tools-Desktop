@@ -6,10 +6,6 @@
   color:white;
 }
 
-.folder-item{
-  cursor: pointer;
-}
-
 .selected{
   font-weight: bold;
 }
