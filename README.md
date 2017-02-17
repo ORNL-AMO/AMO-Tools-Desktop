@@ -30,3 +30,15 @@ Run `ng github-pages:deploy` to deploy to GitHub Pages.
 ## Further help
 
 To get more help on the `angular-cli` use `ng help` or go check out the [Angular-CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+
+## Building an installer for Windows (on Windows)
+
+Open Cygwin and nagivate to the AMO-Tools-Desktop root directory.
+Run the following command: ./node_modules/.bin/build -w --x64 (or --ia32 depending on the architecture you want to build for).
+The installer will be located in ../AMO-Tools-Desktop/output/win.
+
+## Building a tarball for Linux (on Linux)
+
+Navigate to the AMO-Tools-Desktop root directory.
+Run the following command: ./node_modules/.bin/build -l --x64 (or --ia32 depending on the architecture you want to build for).
+The tarball will be located in ../output/
