@@ -22,7 +22,7 @@ export class AssessmentCreateComponent implements OnInit {
 
   ngOnInit() {
     this.newAssessment = this.initForm();
-    this.allAssessments = this.directory.psat;
+    this.allAssessments = this.directory.assessments;
     this.filteredAssessments = this.allAssessments;
 
   }
@@ -65,7 +65,7 @@ export class AssessmentCreateComponent implements OnInit {
 
   onKey(str: string) {
     if (str != '') {
-      let temp = this.allAssessments.filter(f => f.assessment.name.toLowerCase().indexOf(str.toLowerCase()) >= 0);
+      let temp = this.allAssessments.filter(f => f.name.toLowerCase().indexOf(str.toLowerCase()) >= 0);
       if(temp.length != 0) {
         this.filteredAssessments = temp;
       }else{

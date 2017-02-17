@@ -35,11 +35,11 @@ export class AssessmentComponent implements OnInit {
 
   addPSAT(){
     if(this.directory){
-      if(this.directory.psat) {
-        this.directory.psat.push(this._modelService.getNewPsat());
+      if(this.directory.assessments) {
+        this.directory.assessments.push(this._modelService.getNewPsat());
       }else{
-        this.directory.psat = new Array();
-        this.directory.psat.push(this._modelService.getNewPsat());
+        this.directory.assessments = new Array();
+        this.directory.assessments.push(this._modelService.getNewPsat());
       }
     }
   }

@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { PSAT } from '../../../shared/models/psat';
+import { Assessment } from '../../../shared/models/assessment';
 @Component({
   selector: 'app-assessment-card',
   templateUrl: './assessment-card.component.html',
@@ -7,7 +7,7 @@ import { PSAT } from '../../../shared/models/psat';
 })
 export class AssessmentCardComponent implements OnInit {
   @Input()
-  assessment: PSAT;
+  assessment: Assessment;
   constructor() { }
 
   ngOnInit() {

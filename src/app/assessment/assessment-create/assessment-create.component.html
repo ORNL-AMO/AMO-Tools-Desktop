@@ -50,7 +50,7 @@
                         <input class="form-control item-search" type="text" placeholder="Search Assessments" #search (keyup)="onKey(search.value)">
                       </li>
                       <li class="dropdown-divider"></li>
-                      <li class="item-hover assessment-dropdown-item" *ngFor="let psat of filteredAssessments" (click)="setAssessment(psat.assessment.name)">{{psat.assessment.name}}</li>
+                      <li class="item-hover assessment-dropdown-item" *ngFor="let assessment of filteredAssessments" (click)="setAssessment(assessment.name)">{{assessment.name}}</li>
                     </ul>
                   </div>
                 </div>

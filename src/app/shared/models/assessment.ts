@@ -1,5 +1,7 @@
+import { PSAT } from './psat';
+
 export interface Assessment{
-  type: string,
+  psat?: PSAT,
   date?: Date,
   filePath?: string,
   name: string

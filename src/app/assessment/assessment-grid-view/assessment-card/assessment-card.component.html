@@ -1,7 +1,7 @@
-<div class="card" *ngIf="assessment">
+<div class="card">
   <div class="card-header">
     <input type="checkbox">
-    {{assessment.assessment.name}}
+    {{assessment.name}}
   </div>
   <div class="card-block">
     assessment summary goes here
@@ -12,7 +12,7 @@
         <i class="fa fa-ellipsis-h pull-left"></i>
       </div>
       <div class="col-md-6">
-        <p class="pull-right">{{assessment.assessment.date | date}}</p>
+        <p class="pull-right">{{assessment.date | date}}</p>
       </div>
     </div>
   </div>

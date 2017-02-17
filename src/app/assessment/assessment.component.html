@@ -9,9 +9,9 @@
   <div class="card-block">
     <h4>{{directory.name}}</h4>
 
-    <div *ngIf="directory.psat">
-      <div *ngFor="let ps of directory.psat">
-        <h5>{{ps.assessment.type}}</h5>
+    <div *ngIf="directory.assessments">
+      <div *ngFor="let assessment of directory.assessments">
+        <h5>{{assessment.name}}</h5>
       </div>
     </div>
 
