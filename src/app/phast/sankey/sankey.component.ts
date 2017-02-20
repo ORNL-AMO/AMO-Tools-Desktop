@@ -16,7 +16,6 @@ export class SankeyComponent implements OnInit{
   }
 
   ngOnInit() {
-    this.makeSankey();
   }
 
   makeSankey(){

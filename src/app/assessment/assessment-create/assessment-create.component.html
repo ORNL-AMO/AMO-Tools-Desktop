@@ -1,4 +1,4 @@
-<a (click)="showCreateModal()" class="pointer-item"><img src="assets/images/ico-addAssessment.png"></a>
+<a (click)="createAssessment()" class="pointer-item"><img src="assets/images/ico-addAssessment.png"></a>
 
 
 <!--CREATE Folder MODAL-->
@@ -63,7 +63,7 @@
               <button class="btn pull-left" (click)="hideCreateModal()">Close</button>
             </div>
             <div class="col-md-6">
-              <button class="btn btn-primary pull-right" [disabled]="!newAssessment.valid" (click)="createAssessment()">Create</button>
+              <button class="btn btn-primary pull-right" type="submit" [disabled]="!newAssessment.valid" (click)="createAssessment()">Create</button>
             </div>
           </div>
         </form>

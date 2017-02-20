@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { PSAT } from '../shared/models/psat';
-
+import { Assessment } from '../shared/models/assessment';
 @Injectable()
 export class PsatService {
 
+  workingPsat: Assessment;
   constructor() { }
 
   getNewPsat(){
@@ -34,5 +35,13 @@ export class PsatService {
       motor_field_voltage: null
     }
     return newPsat;
+  }
+
+  getWorkingPsat(){
+    return this.workingPsat;
+  }
+
+  setWorkingPsat(psat: Assessment){
+    this.workingPsat = psat;
   }
 }
