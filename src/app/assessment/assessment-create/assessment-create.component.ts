@@ -32,7 +32,8 @@ export class AssessmentCreateComponent implements OnInit {
 
   initForm(){
     return this.formBuilder.group({
-      'assessmentName': ['', Validators.required]
+      'assessmentName': ['', Validators.required],
+      'assessmentType': ['']
     });
   }
 
@@ -51,12 +52,16 @@ export class AssessmentCreateComponent implements OnInit {
     this.hideCreateModal();
     let tmpPsat = this.modelService.getNewPsat();
     tmpPsat.name = this.newAssessment.value.assessmentName;
-
     this.psatService.setWorkingPsat(tmpPsat);
 
-    //TODO: Make Navigation Async with modal close
-    //this.router.navigateByUrl('/psat',);
-   }
+    this.createModal.onHidden.subscribe(() => {
+      if(this.newAssessment.value.assessmentType == 'Pump') {
+        this.router.navigateByUrl('/psat')
+      }else if(this.newAssessment.value.assessmentType == 'Furnace'){
+        this.router.navigateByUrl('/phast')
+      }
+    })
+  }
 
    selectEquip(eq: string){
     this.selectedEquip = eq;
