@@ -1,3 +1,113 @@
-<p>
-  motor works!
-</p>
+<div class="motor-container">
+  <form class="form-group" [formGroup]="motorForm">
+    <div class="row">
+      <div class="col-md-6">
+        <label class="form-control-label" for="frequency">Line Frequency</label>
+      </div>
+      <div class="col-md-6">
+        <div class="input-group">
+          <select class="form-control" id="frequency">
+            <option>Frequency 1</option>
+            <option>Frequency 2</option>
+          </select>
+        </div>
+        <app-control-messages [control]="motorForm.controls.frequency"></app-control-messages>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-6">
+        <label class="form-control-label" for="horsePower">Horse Power</label>
+      </div>
+      <div class="col-md-6">
+        <div class="input-group">
+          <select class="form-control" id="horsePower">
+            <option>HP 1</option>
+            <option>HP 2</option>
+          </select>
+        </div>
+        <app-control-messages [control]="motorForm.controls.horsePower"></app-control-messages>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-6">
+        <label class="form-control-label" for="motorRPM">Motor RPM</label>
+      </div>
+      <div class="col-md-6">
+        <div class="input-group">
+          <div class="btn"><i class="fa fa-minus"></i></div>
+          <div class="btn"><i class="fa fa-plus"></i></div>
+          <input type="text" class="form-control num-input" id="motorRPM">
+        </div>
+        <app-control-messages [control]="motorForm.controls.motorRPM"></app-control-messages>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-6">
+        <label class="form-control-label" for="efficiencyClass">Efficieny Class</label>
+      </div>
+      <div class="col-md-6">
+        <div class="input-group">
+          <select class="form-control" id="efficiencyClass">
+            <option>class 1</option>
+            <option>Class 2</option>
+          </select>
+        </div>
+        <app-control-messages [control]="motorForm.controls.efficiencyClass"></app-control-messages>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-6">
+        <label class="form-control-label" for="voltage">Voltage</label>
+      </div>
+      <div class="col-md-6">
+        <div class="input-group">
+          <input type="text" class="form-control num-input" id="voltage">
+        </div>
+        <app-control-messages [control]="motorForm.controls.voltage"></app-control-messages>
+      </div>
+    </div>
+
+
+    <div class="row">
+      <div class="col-md-6">
+        <label class="form-control-label" for="fullLoadAmps">Full-Load Amps</label>
+        <p class="help-text">Estimate Full-Load Amps</p>
+      </div>
+      <div class="col-md-6">
+        <div class="input-group">
+          <input type="text" class="form-control num-input" id="fullLoadAmps">
+        </div>
+        <app-control-messages [control]="motorForm.controls.fullLoadAmps"></app-control-messages>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-6">
+        <label class="form-control-label" for="sizeMargin">Size Margin</label>
+      </div>
+      <div class="col-md-6">
+        <div class="input-group">
+          <div class="btn"><i class="fa fa-minus"></i></div>
+          <div class="btn"><i class="fa fa-plus"></i></div>
+          <input type="text" class="form-control num-input" id="sizeMargin">
+        </div>
+        <app-control-messages [control]="motorForm.controls.sizeMargin"></app-control-messages>
+      </div>
+    </div>
+
+  </form>
+</div>
+
+<div class="row">
+  <div class="col-md-6">
+    <button class="btn btn-default pull-left" (click)="back()">Back</button>
+  </div>
+  <div class="col-md-6">
+    <button class="btn btn-primary pull-right" (click)="saveContinue()">Save & Continue</button>
+  </div>
+</div>
+
