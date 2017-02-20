@@ -1,0 +1,23 @@
+<div class="row phast-tab-row">
+  <div class="col-md-2 phast-tab" [ngClass]="{'phast-tab-active': currentTab == 'system-basics'}" (click)="changeTab('system-basics')">
+    1. System Basics
+  </div>
+  <div class="col-md-2 phast-tab right-border" [ngClass]="{'phast-tab-active': currentTab == 'operating-hours'}" (click)="changeTab('operating-hours')">
+    2. Operating Hours
+  </div>
+  <div class="col-md-1 phast-tab" [ngClass]="{'phast-tab-active': currentTab == 'losses'}" (click)="changeTab('losses')">
+    Heat Balance (Losses)
+  </div>
+  <div class="col-md-1 phast-tab" [ngClass]="{'phast-tab-active': currentTab == 'designed-energy-use'}" (click)="changeTab('designed-energy-use')">
+    Design Energy Use
+  </div>
+  <div class="col-md-1 phast-tab" [ngClass]="{'phast-tab-active': currentTab == 'aux-equipment'}" (click)="changeTab('aux-equipment')">
+    Aux Equipment
+  </div>
+  <div class="col-md-1 phast-tab" [ngClass]="{'phast-tab-active': currentTab == 'metered-energy-use'}" (click)="changeTab('metered-energy-use')">
+    Metered Energy Use
+  </div>
+  <div class="col-md-1 phast-tab" [ngClass]="{'phast-tab-active': currentTab == 'sankey'}" (click)="changeTab('sankey')">
+    Sankey
+  </div>
+</div>

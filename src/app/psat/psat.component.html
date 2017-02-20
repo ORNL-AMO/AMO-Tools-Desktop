@@ -1,1 +1,18 @@
-<app-psat-banner></app-psat-banner>
+<app-psat-banner (togglePanel)="toggleOpenPanel($event)" [psat]="psat"></app-psat-banner>
+<app-psat-tabs [currentTab]="currentTab" (tabChange)="changeTab($event)"></app-psat-tabs>
+
+<div class="row">
+  <div [ngClass]="{'col-md-12': !isPanelOpen, 'col-md-9': isPanelOpen}">
+    <app-system-basics *ngIf="currentTab == 'system-basics'"></app-system-basics>
+    <app-pump-fluid *ngIf="currentTab == 'pump-fluid'"></app-pump-fluid>
+    <app-motor *ngIf="currentTab == 'motor'"></app-motor>
+    <app-field-data *ngIf="currentTab == 'field-data'"></app-field-data>
+    <app-modify-conditions *ngIf="currentTab == 'modify-conditions'"></app-modify-conditions>
+  </div>
+
+  <div class="col-md-3" *ngIf="isPanelOpen">
+    <app-data-panel *ngIf="panelView == 'data-panel'"></app-data-panel>
+    <app-help-panel *ngIf="panelView == 'help-panel'"></app-help-panel>
+    <app-settings-panel *ngIf="panelView == 'settings-panel'"></app-settings-panel>
+  </div>
+</div>

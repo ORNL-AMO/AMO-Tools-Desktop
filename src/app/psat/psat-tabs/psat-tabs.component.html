@@ -1,0 +1,17 @@
+<div class="row psat-tab-row">
+  <div class="col-md-2 psat-tab" [ngClass]="{'psat-tab-active': currentTab == 'system-basics'}" (click)="changeTab('system-basics')">
+    1. System Basics
+  </div>
+  <div class="col-md-2 psat-tab" [ngClass]="{'psat-tab-active': currentTab == 'pump-fluid'}" (click)="changeTab('pump-fluid')">
+    2. Pump / Fluid
+  </div>
+  <div class="col-md-1 psat-tab" [ngClass]="{'psat-tab-active': currentTab == 'motor'}" (click)="changeTab('motor')">
+    3. Motor
+  </div>
+  <div class="col-md-1 psat-tab right-border" [ngClass]="{'psat-tab-active': currentTab == 'field-data'}" (click)="changeTab('field-data')">
+    4. Field Data
+  </div>
+  <div class="col-md-1 psat-tab" [ngClass]="{'psat-tab-active': currentTab == 'modify-conditions'}" (click)="changeTab('modify-conditions')">
+    5. Modify Conditions
+  </div>
+</div>

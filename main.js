@@ -1,5 +1,5 @@
 // ./main.js
-require('electron-reload')(__dirname);
+//require('electron-reload')(__dirname);
 
 const {app, BrowserWindow} = require('electron');
 const path = require('path');

@@ -1,0 +1,26 @@
+.psat-tab-row{
+  height:45px;
+  border-bottom: groove;
+  border-bottom-color: slategrey;
+}
+
+.psat-tab{
+  text-align: center;
+  vertical-align: bottom;
+  cursor: pointer;
+}
+.psat-tab:hover{
+  background-color: lightblue;
+}
+
+.psat-tab-active{
+  border-bottom: solid;
+  border-bottom-color: deepskyblue;
+  border-bottom-width: 3px;
+}
+
+.right-border{
+  border-right: groove;
+  border-right-width: 1px;
+  border-right-color: slategrey;
+}

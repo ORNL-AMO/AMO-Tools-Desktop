@@ -1,2 +1,21 @@
-<app-phast-banner></app-phast-banner>
-<app-sankey></app-sankey>
+<app-phast-banner (togglePanel)="toggleOpenPanel($event)"></app-phast-banner>
+<!--<app-sankey></app-sankey>-->
+<app-phast-tabs [currentTab]="currentTab" (tabChange)="changeTab($event)"></app-phast-tabs>
+
+<div class="row">
+  <div [ngClass]="{'col-md-12': !isPanelOpen, 'col-md-9': isPanelOpen}">
+    <app-system-basics [phast]="phast" *ngIf="currentTab == 'system-basics'"></app-system-basics>
+    <app-operating-hours  *ngIf="currentTab == 'operating-hours'"></app-operating-hours>
+    <app-losses *ngIf="currentTab == 'losses'"></app-losses>
+    <app-designed-energy-use *ngIf="currentTab == 'designed-energy-use'"></app-designed-energy-use>
+    <app-aux-equipment *ngIf="currentTab == 'aux-equipment'"></app-aux-equipment>
+    <app-metered-energy-use *ngIf="currentTab == 'metered-energy-use'"></app-metered-energy-use>
+    <app-sankey *ngIf="currentTab == 'sankey'"></app-sankey>
+  </div>
+
+  <div class="col-md-3" *ngIf="isPanelOpen">
+    <app-data-panel *ngIf="panelView == 'data-panel'"></app-data-panel>
+    <app-help-panel *ngIf="panelView == 'help-panel'"></app-help-panel>
+    <app-settings-panel *ngIf="panelView == 'settings-panel'"></app-settings-panel>
+  </div>
+</div>

@@ -41,6 +41,7 @@ import { AssessmentSettingsComponent } from './assessment-settings/assessment-se
   imports: [
     CommonModule,
     SharedModule,
+    RouterModule,
     FormsModule,
     ReactiveFormsModule,
     ModalModule.forRoot()

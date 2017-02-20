@@ -2,6 +2,9 @@ import { Component, OnInit, ViewChild, Input } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ModalDirective } from 'ng2-bootstrap';
 import { Directory } from '../../shared/models/directory';
+import { PsatService } from'../../psat/psat.service';
+import { ModelService } from '../../shared/model.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-assessment-create',
@@ -18,7 +21,7 @@ export class AssessmentCreateComponent implements OnInit {
   selectedAssessment: string = 'Select Pump';
   allAssessments: any[] = new Array();
   filteredAssessments: any[] = new Array();
-  constructor(private formBuilder: FormBuilder) { }
+  constructor(private formBuilder: FormBuilder, private psatService: PsatService, private modelService: ModelService, private router: Router) { }
 
   ngOnInit() {
     this.newAssessment = this.initForm();
@@ -46,8 +49,13 @@ export class AssessmentCreateComponent implements OnInit {
 
   createAssessment(){
     this.hideCreateModal();
+    let tmpPsat = this.modelService.getNewPsat();
+    tmpPsat.name = this.newAssessment.value.assessmentName;
 
-    // TODO: Create assessment logic
+    this.psatService.setWorkingPsat(tmpPsat);
+
+    //TODO: Make Navigation Async with modal close
+    //this.router.navigateByUrl('/psat',);
    }
 
    selectEquip(eq: string){
