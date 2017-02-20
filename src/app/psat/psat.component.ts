@@ -11,8 +11,8 @@ import { PsatService} from './psat.service';
 export class PsatComponent implements OnInit {
   psat: Assessment;
 
-  panelView: string;
-  isPanelOpen: boolean = false;
+  panelView: string = 'help-panel';
+  isPanelOpen: boolean = true;
   currentTab: string = 'system-basics';
   constructor(private _location: Location, private _psatService: PsatService) { }
 

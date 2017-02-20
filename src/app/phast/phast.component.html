@@ -2,9 +2,9 @@
 <!--<app-sankey></app-sankey>-->
 <app-phast-tabs [currentTab]="currentTab" (tabChange)="changeTab($event)"></app-phast-tabs>
 
-<div class="row">
+<div class="row tab-content">
   <div [ngClass]="{'col-md-12': !isPanelOpen, 'col-md-9': isPanelOpen}">
-    <app-system-basics [phast]="phast" *ngIf="currentTab == 'system-basics'"></app-system-basics>
+    <app-system-basics [phast]="phast" (continue)="changeTab($event)" *ngIf="currentTab == 'system-basics'"></app-system-basics>
     <app-operating-hours  *ngIf="currentTab == 'operating-hours'"></app-operating-hours>
     <app-losses *ngIf="currentTab == 'losses'"></app-losses>
     <app-designed-energy-use *ngIf="currentTab == 'designed-energy-use'"></app-designed-energy-use>
@@ -13,7 +13,7 @@
     <app-sankey *ngIf="currentTab == 'sankey'"></app-sankey>
   </div>
 
-  <div class="col-md-3" *ngIf="isPanelOpen">
+  <div class="col-md-3 panel" *ngIf="isPanelOpen">
     <app-data-panel *ngIf="panelView == 'data-panel'"></app-data-panel>
     <app-help-panel *ngIf="panelView == 'help-panel'"></app-help-panel>
     <app-settings-panel *ngIf="panelView == 'settings-panel'"></app-settings-panel>

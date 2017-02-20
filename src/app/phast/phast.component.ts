@@ -11,8 +11,8 @@ export class PhastComponent implements OnInit {
   phast: Assessment;
 
   currentTab: string = 'system-basics';
-  panelView: string;
-  isPanelOpen: boolean = false;
+  panelView: string = 'help-panel';
+  isPanelOpen: boolean = true;
   constructor(private _location: Location) { }
 
   ngOnInit() {

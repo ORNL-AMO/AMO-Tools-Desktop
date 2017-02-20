@@ -11,6 +11,13 @@
   border-color: slategray;
 }
 
+.bold{
+  font-weight: bold;
+}
+
+.btn{
+  cursor: pointer;
+}
 
 .pointer-item{
   cursor: pointer;
