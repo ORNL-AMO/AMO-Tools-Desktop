@@ -1,3 +1,105 @@
-<p>
-  pump-fluid works!
-</p>
+<div class="pump-fluid-container">
+    <form class="form-group" [formGroup]="pumpFluidForm">
+      <div class="row">
+        <div class="col-md-6">
+          <label class="form-control-label" for="pumpType">Pump Type</label>
+        </div>
+        <div class="col-md-6">
+          <div class="input-group">
+            <select class="form-control" id="pumpType">
+              <option>Pump 1</option>
+              <option>Pump 2</option>
+            </select>
+          </div>
+          <app-control-messages [control]="pumpFluidForm.controls.pumpType"></app-control-messages>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-6">
+          <label class="form-control-label" for="pumpRPM">Pump RPM</label>
+        </div>
+        <div class="col-md-6">
+          <div class="input-group">
+            <input type="text" class="form-control num-input" id="pumpRPM">
+          </div>
+          <app-control-messages [control]="pumpFluidForm.controls.pumpRPM"></app-control-messages>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-6">
+          <label class="form-control-label" for="drive">Drive</label>
+        </div>
+        <div class="col-md-6">
+          <div class="input-group">
+            <select class="form-control" id="drive">
+              <option>Drive 1</option>
+              <option>Drive 2</option>
+            </select>
+          </div>
+          <app-control-messages [control]="pumpFluidForm.controls.drive"></app-control-messages>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-6">
+          <label class="form-control-label" for="viscosity">Kinematic Viscosity</label>
+        </div>
+        <div class="col-md-6">
+          <div class="input-group">
+            <div class="btn"><i class="fa fa-minus"></i></div>
+            <div class="btn"><i class="fa fa-plus"></i></div>
+            <input type="text" class="form-control num-input" id="viscosity">
+          </div>
+          <app-control-messages [control]="pumpFluidForm.controls.viscosity"></app-control-messages>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-6">
+          <label class="form-control-label" for="gravity">Specific Gravity</label>
+        </div>
+        <div class="col-md-6">
+          <div class="input-group">
+            <input type="text" class="form-control num-input" id="gravity">
+          </div>
+          <app-control-messages [control]="pumpFluidForm.controls.gravity"></app-control-messages>
+        </div>
+      </div>
+
+
+      <div class="row">
+        <div class="col-md-6">
+          <label class="form-control-label" for="stages">Stages</label>
+        </div>
+        <div class="col-md-6">
+          <div class="input-group">
+            <div class="btn"><i class="fa fa-minus"></i></div>
+            <div class="btn"><i class="fa fa-plus"></i></div>
+            <input type="text" class="form-control num-input" id="stages">
+          </div>
+          <app-control-messages [control]="pumpFluidForm.controls.stages"></app-control-messages>
+        </div>
+      </div>
+
+      <div class="row">
+         <div class="col-md-6">
+           <label class="form-control-label">Fixed specific speed?</label>
+         </div>
+         <div class="col-md-6">
+             <input type="radio" name="fixedSpeed" checked value="yes">Yes<br>
+             <input type="radio" name="fixedSpeed" value="no">No<br>
+         </div>
+       </div>
+
+    </form>
+</div>
+<div class="row">
+  <div class="col-md-6">
+    <button class="btn btn-default pull-left" (click)="back()">Close</button>
+  </div>
+  <div class="col-md-6">
+    <button class="btn btn-primary pull-right" (click)="saveContinue()">Save & Continue</button>
+  </div>
+</div>

@@ -7,7 +7,7 @@
     <app-pump-fluid (continue)="changeTab($event)" *ngIf="currentTab == 'pump-fluid'"></app-pump-fluid>
     <app-motor (continue)="changeTab($event)" *ngIf="currentTab == 'motor'"></app-motor>
     <app-field-data (continue)="changeTab($event)" *ngIf="currentTab == 'field-data'"></app-field-data>
-    <app-modify-conditions *ngIf="currentTab == 'modify-conditions'"></app-modify-conditions>
+    <app-modify-conditions (continue)="changeTab($event)" *ngIf="currentTab == 'modify-conditions'"></app-modify-conditions>
   </div>
 
   <div class="col-md-3 panel" *ngIf="isPanelOpen">
