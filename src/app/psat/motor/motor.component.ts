@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 @Component({
   selector: 'app-motor',
@@ -6,24 +6,12 @@ import { FormBuilder } from '@angular/forms';
   styleUrls: ['./motor.component.css']
 })
 export class MotorComponent implements OnInit {
-  motorForm: any;
+  @Input()
+  psatForm: any;
 
-  constructor(private formBuilder: FormBuilder) { }
+  constructor() { }
 
   ngOnInit() {
-    this.motorForm = this.initForm();
-  }
-
-  initForm(){
-    return this.formBuilder.group({
-      'frequency': [''],
-      'horsePower': [''],
-      'motorRPM': [''],
-      'efficiencyClass': [''],
-      'voltage': [''],
-      'fullLoadAmps': [''],
-      'sizeMargin': ['']
-    })
   }
 
 }

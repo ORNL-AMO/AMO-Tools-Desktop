@@ -1,17 +1,17 @@
 <div class="motor-container">
-  <form class="form-group" [formGroup]="motorForm">
+  <form class="form-group" [formGroup]="psatForm">
     <div class="row">
       <div class="col-md-6">
         <label class="form-control-label" for="frequency">Line Frequency</label>
       </div>
       <div class="col-md-6">
         <div class="input-group">
-          <select class="form-control" id="frequency">
+          <select class="form-control" id="frequency" formControlName="frequency">
             <option>Frequency 1</option>
             <option>Frequency 2</option>
           </select>
         </div>
-        <app-control-messages [control]="motorForm.controls.frequency"></app-control-messages>
+        <app-control-messages [control]="psatForm.controls.frequency"></app-control-messages>
       </div>
     </div>
 
@@ -21,12 +21,12 @@
       </div>
       <div class="col-md-6">
         <div class="input-group">
-          <select class="form-control" id="horsePower">
+          <select class="form-control" id="horsePower" formControlName="horsePower">
             <option>HP 1</option>
             <option>HP 2</option>
           </select>
         </div>
-        <app-control-messages [control]="motorForm.controls.horsePower"></app-control-messages>
+        <app-control-messages [control]="psatForm.controls.horsePower"></app-control-messages>
       </div>
     </div>
 
@@ -38,9 +38,9 @@
         <div class="input-group">
           <div class="btn"><i class="fa fa-minus"></i></div>
           <div class="btn"><i class="fa fa-plus"></i></div>
-          <input type="text" class="form-control num-input" id="motorRPM">
+          <input type="text" class="form-control num-input" id="motorRPM" formControlName="motorRPM">
         </div>
-        <app-control-messages [control]="motorForm.controls.motorRPM"></app-control-messages>
+        <app-control-messages [control]="psatForm.controls.motorRPM"></app-control-messages>
       </div>
     </div>
 
@@ -50,12 +50,12 @@
       </div>
       <div class="col-md-6">
         <div class="input-group">
-          <select class="form-control" id="efficiencyClass">
+          <select class="form-control" id="efficiencyClass" formControlName="efficiencyClass">
             <option>class 1</option>
             <option>Class 2</option>
           </select>
         </div>
-        <app-control-messages [control]="motorForm.controls.efficiencyClass"></app-control-messages>
+        <app-control-messages [control]="psatForm.controls.efficiencyClass"></app-control-messages>
       </div>
     </div>
 
@@ -65,9 +65,9 @@
       </div>
       <div class="col-md-6">
         <div class="input-group">
-          <input type="text" class="form-control num-input" id="voltage">
+          <input type="text" class="form-control num-input" id="voltage" formControlName="voltage">
         </div>
-        <app-control-messages [control]="motorForm.controls.voltage"></app-control-messages>
+        <app-control-messages [control]="psatForm.controls.voltage"></app-control-messages>
       </div>
     </div>
 
@@ -79,9 +79,9 @@
       </div>
       <div class="col-md-6">
         <div class="input-group">
-          <input type="text" class="form-control num-input" id="fullLoadAmps">
+          <input type="text" class="form-control num-input" id="fullLoadAmps" formControlName="fullLoadAmps">
         </div>
-        <app-control-messages [control]="motorForm.controls.fullLoadAmps"></app-control-messages>
+        <app-control-messages [control]="psatForm.controls.fullLoadAmps"></app-control-messages>
       </div>
     </div>
 
@@ -93,9 +93,9 @@
         <div class="input-group">
           <div class="btn"><i class="fa fa-minus"></i></div>
           <div class="btn"><i class="fa fa-plus"></i></div>
-          <input type="text" class="form-control num-input" id="sizeMargin">
+          <input type="text" class="form-control num-input" id="sizeMargin" formControlName="sizeMargin">
         </div>
-        <app-control-messages [control]="motorForm.controls.sizeMargin"></app-control-messages>
+        <app-control-messages [control]="psatForm.controls.sizeMargin"></app-control-messages>
       </div>
     </div>
 

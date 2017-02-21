@@ -1,3 +1,90 @@
-<p>
-  field-data works!
-</p>
+<div class="field-data-container">
+  <form class="form-group" [formGroup]="psatForm">
+      <div class="row">
+        <div class="col-md-6">
+          <label class="form-control-label" for="operatingFraction">Operating Fraction</label>
+        </div>
+        <div class="col-md-6">
+          <div class="input-group">
+            <input type="text" class="form-control num-input" formControlName="operatingFraction" id="operatingFraction">
+          </div>
+          <app-control-messages [control]="psatForm.controls.operatingFraction"></app-control-messages>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-6">
+          <label class="form-control-label" for="costKwHr">Cost (kw/hr)</label>
+        </div>
+        <div class="col-md-6">
+          <div class="input-group">
+            <input type="text" class="form-control num-input" formControlName="costKwHr" id="costKwHr">
+          </div>
+          <app-control-messages [control]="psatForm.controls.costKwHr"></app-control-messages>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-6">
+          <label class="form-control-label" for="flowRate">Flow Rate (gpm)</label>
+        </div>
+        <div class="col-md-6">
+          <div class="input-group">
+            <input type="text" class="form-control num-input" formControlName="flowRate" id="flowRate">
+          </div>
+          <app-control-messages [control]="psatForm.controls.flowRate"></app-control-messages>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-6">
+          <label class="form-control-label" for="head">Head</label>
+        </div>
+        <div class="col-md-6">
+          <div class="input-group">
+            <input type="text" class="form-control num-input" formControlName="head" id="head">
+          </div>
+          <app-control-messages [control]="psatForm.controls.head"></app-control-messages>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-6">
+          <label class="form-control-label" for="loadEstimatedMethod">Load Estimated Method</label>
+        </div>
+        <div class="col-md-6">
+          <div class="input-group">
+            <select class="form-control" formControlName="loadEstimatedMethod" id="loadEstimatedMethod">
+              <option>Method 1</option>
+              <option>Method 2</option>
+            </select>
+          </div>
+          <app-control-messages [control]="psatForm.controls.loadEstimatedMethod"></app-control-messages>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-6">
+          <label class="form-control-label" for="motorKW">Motor (kW)</label>
+        </div>
+        <div class="col-md-6">
+          <div class="input-group">
+            <input type="text" class="form-control num-input" formControlName="motorKW" id="motorKW">
+          </div>
+          <app-control-messages [control]="psatForm.controls.motorKW"></app-control-messages>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-6">
+          <label class="form-control-label" for="voltage">Voltage</label>
+        </div>
+        <div class="col-md-6">
+          <div class="input-group">
+            <input type="text" class="form-control num-input" formControlName="voltage" id="voltage">
+          </div>
+          <app-control-messages [control]="psatForm.controls.voltage"></app-control-messages>
+        </div>
+      </div>
+  </form>
+</div>
