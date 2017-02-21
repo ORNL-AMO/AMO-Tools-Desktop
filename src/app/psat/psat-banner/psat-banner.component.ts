@@ -8,7 +8,7 @@ import { Assessment } from '../../shared/models/assessment';
 })
 export class PsatBannerComponent implements OnInit {
   @Input()
-  psat: Assessment;
+  assessment: Assessment;
   @Output('togglePanel')
   togglePanel = new EventEmitter<string>();
   constructor() { }

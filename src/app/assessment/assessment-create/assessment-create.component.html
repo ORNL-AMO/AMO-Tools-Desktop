@@ -1,4 +1,4 @@
-<a (click)="createAssessment()" class="pointer-item"><img src="assets/images/ico-addAssessment.png"></a>
+<a (click)="showCreateModal()" class="pointer-item"><img src="assets/images/ico-addAssessment.png"></a>
 
 
 <!--CREATE Folder MODAL-->
@@ -31,7 +31,7 @@
           <div class="row">
               <div class="tool-select-box">
                 <div class="col-md-12">
-                <select class="form-control type-select">
+                <select class="form-control type-select" formControlName="assessmentType">
                   <option>Pump</option>
                   <option>Furnace</option>
                 </select>

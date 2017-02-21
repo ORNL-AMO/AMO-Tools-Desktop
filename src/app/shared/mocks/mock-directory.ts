@@ -1,5 +1,5 @@
 import { Directory } from '../models/directory';
-export const MockAssessments: Directory = {
+export const MockDirectory: Directory = {
   name: 'Root Directory',
   collapsed: false,
   date: new Date(),

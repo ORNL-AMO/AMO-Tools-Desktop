@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
 import { Assessment } from '../shared/models/assessment';
+import { AssessmentService } from '../assessment/assessment.service';
 
 @Component({
   selector: 'app-phast',
@@ -8,15 +9,15 @@ import { Assessment } from '../shared/models/assessment';
   styleUrls: ['./phast.component.css']
 })
 export class PhastComponent implements OnInit {
-  phast: Assessment;
+  assessment: Assessment;
 
   currentTab: string = 'system-basics';
   panelView: string = 'help-panel';
   isPanelOpen: boolean = true;
-  constructor(private _location: Location) { }
+  constructor(private location: Location, private assessmentService: AssessmentService) { }
 
   ngOnInit() {
-    //this.psat = this._psatService.getWorkingPsat();
+    this.assessment = this.assessmentService.getWorkingAssessment();
   }
 
   changeTab($event){
@@ -35,6 +36,6 @@ export class PhastComponent implements OnInit {
   }
 
   goBack(){
-    this._location.back();
+    this.location.back();
   }
 }

@@ -1,0 +1,18 @@
+.hours-container{
+  margin-top: 10%;
+  margin-left: 30%;
+  margin-right: 30%;
+  margin-bottom: 10%;
+}
+
+
+.hour-border{
+  border: groove;
+  border-width: 1px;
+  border-color: slategrey;
+  padding: 10px;
+}
+
+.total-row{
+  padding: 10px;
+}

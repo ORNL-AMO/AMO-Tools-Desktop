@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { MockAssessments } from '../../shared/mocks/mock-assessment';
+import { MockDirectory } from '../../shared/mocks/mock-directory';
 import { Directory } from '../../shared/models/directory';
 
 @Component({

@@ -2,9 +2,9 @@ import { Component, OnInit, ViewChild, Input } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ModalDirective } from 'ng2-bootstrap';
 import { Directory } from '../../shared/models/directory';
-import { PsatService } from'../../psat/psat.service';
 import { ModelService } from '../../shared/model.service';
 import { Router } from '@angular/router';
+import { AssessmentService } from '../assessment.service';
 
 @Component({
   selector: 'app-assessment-create',
@@ -21,7 +21,7 @@ export class AssessmentCreateComponent implements OnInit {
   selectedAssessment: string = 'Select Pump';
   allAssessments: any[] = new Array();
   filteredAssessments: any[] = new Array();
-  constructor(private formBuilder: FormBuilder, private psatService: PsatService, private modelService: ModelService, private router: Router) { }
+  constructor(private formBuilder: FormBuilder, private assessmentService: AssessmentService, private modelService: ModelService, private router: Router) { }
 
   ngOnInit() {
     this.newAssessment = this.initForm();
@@ -32,7 +32,8 @@ export class AssessmentCreateComponent implements OnInit {
 
   initForm(){
     return this.formBuilder.group({
-      'assessmentName': ['', Validators.required]
+      'assessmentName': ['', Validators.required],
+      'assessmentType': ['']
     });
   }
 
@@ -49,14 +50,30 @@ export class AssessmentCreateComponent implements OnInit {
 
   createAssessment(){
     this.hideCreateModal();
-    let tmpPsat = this.modelService.getNewPsat();
-    tmpPsat.name = this.newAssessment.value.assessmentName;
 
-    this.psatService.setWorkingPsat(tmpPsat);
+    this.createModal.onHidden.subscribe(() => {
+      if(this.newAssessment.value.assessmentType == 'Pump') {
+        let tmpAssessment = this.assessmentService.getNewAssessment();
+        tmpAssessment.name = this.newAssessment.value.assessmentName;
 
-    //TODO: Make Navigation Async with modal close
-    //this.router.navigateByUrl('/psat',);
-   }
+        let tmpPsat = this.assessmentService.getNewPsat();
+        tmpAssessment.psat = tmpPsat;
+        this.assessmentService.setWorkingAssessment(tmpAssessment);
+
+        this.router.navigateByUrl('/psat')
+
+      }else if(this.newAssessment.value.assessmentType == 'Furnace'){
+        let tmpAssessment = this.assessmentService.getNewAssessment();
+        tmpAssessment.name = this.newAssessment.value.assessmentName;
+
+        let tmpPhast = this.assessmentService.getNewPhast();
+        tmpAssessment.phast = tmpPhast;
+
+        this.assessmentService.setWorkingAssessment(tmpAssessment);
+        this.router.navigateByUrl('/phast')
+      }
+    })
+  }
 
    selectEquip(eq: string){
     this.selectedEquip = eq;

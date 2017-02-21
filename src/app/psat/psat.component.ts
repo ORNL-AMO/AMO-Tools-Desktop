@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
 import { Assessment } from '../shared/models/assessment';
-import { PsatService} from './psat.service';
+import { AssessmentService } from '../assessment/assessment.service';
 
 @Component({
   selector: 'app-psat',
@@ -9,15 +9,16 @@ import { PsatService} from './psat.service';
   styleUrls: ['./psat.component.css']
 })
 export class PsatComponent implements OnInit {
-  psat: Assessment;
+  assessment: Assessment;
 
   panelView: string = 'help-panel';
   isPanelOpen: boolean = true;
   currentTab: string = 'system-basics';
-  constructor(private _location: Location, private _psatService: PsatService) { }
+
+  constructor(private location: Location, private assessmentService: AssessmentService) { }
 
   ngOnInit() {
-    this.psat = this._psatService.getWorkingPsat();
+    this.assessment = this.assessmentService.getWorkingAssessment();
   }
 
   changeTab($event){
@@ -35,9 +36,8 @@ export class PsatComponent implements OnInit {
     }
   }
 
-
   goBack(){
-    this._location.back();
+    this.location.back();
   }
 
 }
