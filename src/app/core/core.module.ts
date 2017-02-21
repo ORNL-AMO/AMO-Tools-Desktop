@@ -8,7 +8,8 @@ import { CalculatorModule } from '../calculator/calculator.module';
 import { CoreComponent } from './core.component';
 import { SidebarComponent } from '../sidebar/sidebar.component';
 import { DashboardComponent } from '../dashboard/dashboard.component';
-import { PsatService} from '../psat/psat.service';
+import { AssessmentService } from '../assessment/assessment.service';
+
 @NgModule({
   declarations: [
     CoreComponent,
@@ -24,7 +25,7 @@ import { PsatService} from '../psat/psat.service';
     CalculatorModule
   ],
   providers: [
-    PsatService
+    AssessmentService
   ]
 })
 

@@ -1,4 +1,6 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
+import { Assessment } from '../../shared/models/assessment';
+
 @Component({
   selector: 'app-phast-banner',
   templateUrl: './phast-banner.component.html',
@@ -7,6 +9,8 @@ import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 export class PhastBannerComponent implements OnInit {
   @Output('togglePanel')
   togglePanel = new EventEmitter<string>();
+  @Input()
+  assessment: Assessment;
   constructor() { }
 
   ngOnInit() {

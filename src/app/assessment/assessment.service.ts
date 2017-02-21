@@ -1,11 +1,21 @@
 import { Injectable } from '@angular/core';
 import { PSAT } from '../shared/models/psat';
 import { Assessment } from '../shared/models/assessment';
-@Injectable()
-export class PsatService {
+import { PHAST } from '../shared/models/phast';
 
-  workingPsat: Assessment;
+@Injectable()
+export class AssessmentService {
+
+  workingAssessment: Assessment;
   constructor() { }
+
+  getNewAssessment(){
+    let newAssessment: Assessment = {
+      name: null,
+      date: new Date()
+    }
+    return newAssessment;
+  }
 
   getNewPsat(){
     let newPsat: PSAT = {
@@ -37,11 +47,19 @@ export class PsatService {
     return newPsat;
   }
 
-  getWorkingPsat(){
-    return this.workingPsat;
+  getNewPhast(){
+    let newPhast: PHAST = {
+      name: null
+    }
+    return newPhast;
   }
 
-  setWorkingPsat(psat: Assessment){
-    this.workingPsat = psat;
+  getWorkingAssessment(){
+    return this.workingAssessment;
   }
+
+  setWorkingAssessment(assessment: Assessment){
+    this.workingAssessment = assessment;
+  }
+
 }

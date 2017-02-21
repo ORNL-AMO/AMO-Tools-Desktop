@@ -5,7 +5,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SharedModule } from '../shared/shared.module';
 import { PsatComponent } from './psat.component';
 import { PsatBannerComponent } from './psat-banner/psat-banner.component';
-import { PsatService } from './psat.service';
 import { PsatTabsComponent } from './psat-tabs/psat-tabs.component';
 import { SystemBasicsComponent } from './system-basics/system-basics.component';
 import { PumpFluidComponent } from './pump-fluid/pump-fluid.component';

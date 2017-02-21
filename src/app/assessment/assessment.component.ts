@@ -10,7 +10,7 @@ import { Directory } from '../shared/models/directory';
 export class AssessmentComponent implements OnInit {
   directory: Directory;
 
-  constructor(private _modelService: ModelService) { }
+  constructor(private modelService: ModelService) { }
 
   ngOnInit() {
   }
@@ -19,7 +19,7 @@ export class AssessmentComponent implements OnInit {
     let tmpDir = localStorage.getItem('rootDirectory');
 
     if(!tmpDir){
-      this.directory = this._modelService.initDirectory();
+      this.directory = this.modelService.initDirectory();
       let tmp = JSON.stringify(this.directory);
       localStorage.setItem('rootDirectory', tmp);
       console.log(this.directory);
@@ -33,24 +33,14 @@ export class AssessmentComponent implements OnInit {
     localStorage.clear();
   }
 
-  addPSAT(){
-    if(this.directory){
-      if(this.directory.assessments) {
-        this.directory.assessments.push(this._modelService.getNewPsat());
-      }else{
-        this.directory.assessments = new Array();
-        this.directory.assessments.push(this._modelService.getNewPsat());
-      }
-    }
-  }
 
   addDirectory(){
     if(this.directory){
       if(this.directory.subDirectory) {
-        this.directory.subDirectory.push(this._modelService.getNewDirectory('New Directory'));
+        this.directory.subDirectory.push(this.modelService.getNewDirectory('New Directory'));
       }else {
         this.directory.subDirectory = new Array();
-        this.directory.subDirectory.push(this._modelService.getNewDirectory('New Directory'));
+        this.directory.subDirectory.push(this.modelService.getNewDirectory('New Directory'));
       }
     }
   }
