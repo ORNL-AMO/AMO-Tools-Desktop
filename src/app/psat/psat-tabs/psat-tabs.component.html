@@ -1,17 +1,17 @@
 <div class="row psat-tab-row">
-  <div class="col-md-2 psat-tab" [ngClass]="{'psat-tab-active': currentTab == 'system-basics'}" (click)="changeTab('system-basics')">
+  <div class="col-md-2 psat-tab" [ngClass]="{'psat-tab-active': currentTab == 1}" (click)="changeTab(1)">
     1. System Basics
   </div>
-  <div class="col-md-2 psat-tab" [ngClass]="{'psat-tab-active': currentTab == 'pump-fluid'}" (click)="changeTab('pump-fluid')">
+  <div class="col-md-2 psat-tab" [ngClass]="{'psat-tab-active': currentTab == 2}" (click)="changeTab(2)">
     2. Pump / Fluid
   </div>
-  <div class="col-md-1 psat-tab" [ngClass]="{'psat-tab-active': currentTab == 'motor'}" (click)="changeTab('motor')">
+  <div class="col-md-1 psat-tab" [ngClass]="{'psat-tab-active': currentTab == 3}" (click)="changeTab(3)">
     3. Motor
   </div>
-  <div class="col-md-1 psat-tab right-border" [ngClass]="{'psat-tab-active': currentTab == 'field-data'}" (click)="changeTab('field-data')">
+  <div class="col-md-1 psat-tab right-border" [ngClass]="{'psat-tab-active': currentTab == 4}" (click)="changeTab(4)">
     4. Field Data
   </div>
-  <div class="col-md-1 psat-tab" [ngClass]="{'psat-tab-active': currentTab == 'modify-conditions'}" (click)="changeTab('modify-conditions')">
+  <div class="col-md-1 psat-tab" [ngClass]="{'psat-tab-active': currentTab == 5}" (click)="changeTab(5)">
     5. Modify Conditions
   </div>
 </div>

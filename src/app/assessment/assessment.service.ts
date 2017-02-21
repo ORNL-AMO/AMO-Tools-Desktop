@@ -9,10 +9,11 @@ export class AssessmentService {
   workingAssessment: Assessment;
   constructor() { }
 
-  getNewAssessment(){
+  getNewAssessment(assessmentType: string){
     let newAssessment: Assessment = {
       name: null,
-      date: new Date()
+      date: new Date(),
+      type: assessmentType
     }
     return newAssessment;
   }

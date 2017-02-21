@@ -7,9 +7,15 @@ import { Component, OnInit } from '@angular/core';
 })
 export class LossesComponent implements OnInit {
 
+  lossesTab: string = 'charge-material';
+
   constructor() { }
 
   ngOnInit() {
+  }
+
+  changeTab($event){
+    this.lossesTab = $event;
   }
 
 }

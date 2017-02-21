@@ -3,5 +3,10 @@
 }
 
 .tab-content{
-  height: 85vh;
+  height: 75vh;
+}
+
+.btn-footer{
+  height: 10vh;
+  padding-top: 3vh;
 }

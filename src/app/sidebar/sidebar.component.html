@@ -33,16 +33,20 @@
         </ul>
         <ul *ngIf="directory.assessments && directory.collapsed == false">
           <li *ngFor="let assessment of directory.assessments">
-            <i class="fa fa-bar-chart" aria-hidden="true"></i>
-            {{assessment.name}}
+            <a class="nav-item pointer-item" (click)="goToAssessment(assessment)">
+              <i class="fa fa-bar-chart" aria-hidden="true"></i>
+              {{assessment.name}}
+            </a>
           </li>
         </ul>
       </li>
     </ul>
     <ul *ngIf="directory.assessments && directory.collapsed == false">
       <li *ngFor="let assessment of directory.assessments">
-        <i class="fa fa-bar-chart" aria-hidden="true"></i>
-        {{assessment.name}}
+        <a class="nav-item pointer-item" (click)="goToAssessment(assessment)">
+          <i class="fa fa-bar-chart" aria-hidden="true"></i>
+          {{assessment.name}}
+        </a>
       </li>
     </ul>
   </ul>

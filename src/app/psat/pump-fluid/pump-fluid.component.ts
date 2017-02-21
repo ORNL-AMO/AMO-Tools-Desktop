@@ -7,9 +7,6 @@ import { FormBuilder } from '@angular/forms';
   styleUrls: ['./pump-fluid.component.css']
 })
 export class PumpFluidComponent implements OnInit {
-  @Output('continue')
-  continue = new EventEmitter<string>();
-
   pumpFluidForm: any;
 
   constructor(private formBuilder: FormBuilder) { }
@@ -30,13 +27,4 @@ export class PumpFluidComponent implements OnInit {
     })
   }
 
-  saveContinue(){
-    //TODO: Save Logic
-
-    this.continue.emit('motor');
-  }
-
-  back(){
-    this.continue.emit('system-basics');
-  }
 }

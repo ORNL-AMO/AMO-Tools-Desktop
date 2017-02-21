@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input} from '@angular/core';
 import { Router } from '@angular/router';
 import { Assessment } from '../../shared/models/assessment';
 import { FormBuilder }  from '@angular/forms';
@@ -8,9 +8,6 @@ import { FormBuilder }  from '@angular/forms';
   styleUrls: ['system-basics.component.css']
 })
 export class SystemBasicsComponent implements OnInit {
-  @Output('continue')
-  continue = new EventEmitter<string>();
-
   @Input()
   phast: Assessment;
 
@@ -26,15 +23,5 @@ export class SystemBasicsComponent implements OnInit {
       'heatSource': [''],
       'energySource': ['']
     })
-  }
-
-  saveContinue(){
-    //TODO: Save Logic
-
-    this.continue.emit('operating-hours');
-  }
-
-  close(){
-    this.router.navigateByUrl('/dashboard');
   }
 }

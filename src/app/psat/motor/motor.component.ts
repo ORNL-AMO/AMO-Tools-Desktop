@@ -6,9 +6,6 @@ import { FormBuilder } from '@angular/forms';
   styleUrls: ['./motor.component.css']
 })
 export class MotorComponent implements OnInit {
-  @Output('continue')
-  continue = new EventEmitter<string>();
-
   motorForm: any;
 
   constructor(private formBuilder: FormBuilder) { }
@@ -27,16 +24,6 @@ export class MotorComponent implements OnInit {
       'fullLoadAmps': [''],
       'sizeMargin': ['']
     })
-  }
-
-  saveContinue(){
-    //TODO: Save Logic
-
-    this.continue.emit('field-data');
-  }
-
-  back(){
-    this.continue.emit('pump-fluid');
   }
 
 }

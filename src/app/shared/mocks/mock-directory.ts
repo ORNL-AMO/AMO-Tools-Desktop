@@ -1,13 +1,16 @@
 import { Directory } from '../models/directory';
+
 export const MockDirectory: Directory = {
   name: 'Root Directory',
   collapsed: false,
   date: new Date(),
   assessments: [
     {
-      name: 'Mock PSAT 1'
+      name: 'Mock PSAT 1',
+      type: 'PSAT'
     },{
-      name: 'Mock PSAT 2'
+      name: 'Mock PHAST 1',
+      type: 'PHAST'
     }
   ],
   subDirectory: [
@@ -17,11 +20,13 @@ export const MockDirectory: Directory = {
       date: new Date(),
       assessments: [
         {
-          name: 'Mock PSAT 3',
+          name: 'Mock PSAT 2',
+          type: 'PSAT'
 
         },
         {
-          name: 'Mock PSAT 4',
+          name: 'Mock PSAT 3',
+          type: 'PSAT'
         }
       ]
     },
@@ -31,9 +36,12 @@ export const MockDirectory: Directory = {
       date: new Date(),
       assessments: [
         {
-            name: 'Mock PSAT 4',
+            name: 'Mock PHAST 2',
+            type: 'PHAST'
+
         },{
-            name: 'Mock PSAT 5',
+            name: 'Mock PSAT 4',
+            type: 'PSAT'
         }
       ]
     },

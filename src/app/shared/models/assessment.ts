@@ -5,6 +5,7 @@ export interface Assessment{
   psat?: PSAT,
   phast?: PHAST,
   date?: Date,
+  type: string;
   filePath?: string,
   name: string
 }

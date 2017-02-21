@@ -7,16 +7,16 @@ import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 })
 export class PsatTabsComponent implements OnInit {
   @Output('tabChange')
-  tabChange = new EventEmitter<string>();
+  tabChange = new EventEmitter<number>();
   @Input()
-  currentTab: string;
+  currentTab: number;
   constructor() { }
 
   ngOnInit() {
   }
 
-  changeTab(str: string){
-    this.tabChange.emit(str);
+  changeTab(num: number){
+    this.tabChange.emit(num);
   }
 
 }

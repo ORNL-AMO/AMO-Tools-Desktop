@@ -2,6 +2,10 @@
   background-color: #003054;
 }
 
+.nav-item:hover{
+ text-decoration: underline;
+}
+
 .nav-item{
   color:white;
 }
