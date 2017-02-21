@@ -13,7 +13,7 @@ export class PsatComponent implements OnInit {
 
   panelView: string = 'help-panel';
   isPanelOpen: boolean = true;
-  currentTab: string = 'system-basics';
+  currentTab: number = 1;
 
   constructor(private location: Location, private assessmentService: AssessmentService) { }
 
@@ -36,8 +36,24 @@ export class PsatComponent implements OnInit {
     }
   }
 
-  goBack(){
+  continue(){
+    this.save();
+    this.currentTab++;
+  }
+
+  close(){
     this.location.back();
   }
 
+  goBack(){
+    this.currentTab--;
+  }
+
+  save(){
+    //TODO: Logic for saving assessment
+  }
+
+  exportData(){
+    //TODO: Logic for saving assessment
+  }
 }

@@ -11,7 +11,7 @@ import { AssessmentService } from '../assessment/assessment.service';
 export class PhastComponent implements OnInit {
   assessment: Assessment;
 
-  currentTab: string = 'system-basics';
+  currentTab: number = 1;
   panelView: string = 'help-panel';
   isPanelOpen: boolean = true;
   constructor(private location: Location, private assessmentService: AssessmentService) { }
@@ -35,7 +35,24 @@ export class PhastComponent implements OnInit {
     }
   }
 
-  goBack(){
+  continue(){
+    this.save();
+    this.currentTab++;
+  }
+
+  close(){
     this.location.back();
+  }
+
+  goBack(){
+    this.currentTab--;
+  }
+
+  save(){
+    //TODO: Logic for saving assessment
+  }
+
+  exportData(){
+    //TODO: Logic for exporting data
   }
 }

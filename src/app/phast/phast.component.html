@@ -4,18 +4,28 @@
 
 <div class="row tab-content">
   <div [ngClass]="{'col-md-12': !isPanelOpen, 'col-md-9': isPanelOpen}">
-    <app-system-basics (continue)="changeTab($event)" *ngIf="currentTab == 'system-basics'"></app-system-basics>
-    <app-operating-hours  (continue)="changeTab($event)" *ngIf="currentTab == 'operating-hours'"></app-operating-hours>
-    <app-losses (continue)="changeTab($event)" *ngIf="currentTab == 'losses'"></app-losses>
-    <app-designed-energy-use (continue)="changeTab($event)" *ngIf="currentTab == 'designed-energy-use'"></app-designed-energy-use>
-    <app-aux-equipment (continue)="changeTab($event)" *ngIf="currentTab == 'aux-equipment'"></app-aux-equipment>
-    <app-metered-energy-use (continue)="changeTab($event)" *ngIf="currentTab == 'metered-energy-use'"></app-metered-energy-use>
-    <app-sankey *ngIf="currentTab == 'sankey'"></app-sankey>
+    <app-system-basics (continue)="changeTab($event)" *ngIf="currentTab == 1"></app-system-basics>
+    <app-operating-hours  (continue)="changeTab($event)" *ngIf="currentTab == 2"></app-operating-hours>
+    <app-losses (continue)="changeTab($event)" *ngIf="currentTab == 3"></app-losses>
+    <app-designed-energy-use (continue)="changeTab($event)" *ngIf="currentTab == 4"></app-designed-energy-use>
+    <app-aux-equipment (continue)="changeTab($event)" *ngIf="currentTab == 5"></app-aux-equipment>
+    <app-metered-energy-use (continue)="changeTab($event)" *ngIf="currentTab == 6"></app-metered-energy-use>
+    <app-sankey *ngIf="currentTab == 7"></app-sankey>
   </div>
 
   <div class="col-md-3 panel" *ngIf="isPanelOpen">
     <app-data-panel *ngIf="panelView == 'data-panel'"></app-data-panel>
     <app-help-panel *ngIf="panelView == 'help-panel'"></app-help-panel>
     <app-settings-panel *ngIf="panelView == 'settings-panel'"></app-settings-panel>
+  </div>
+</div>
+
+<div class="row btn-footer">
+  <div class="col-md-12">
+    <button class="btn pull-left" *ngIf="currentTab == 1" (click)="close()">Close</button>
+    <button class="btn pull-left" *ngIf="currentTab != 1" (click)="goBack()">Back</button>
+    <button class="btn btn-primary pull-right" *ngIf="currentTab < 3" (click)="continue()">Save & Continue</button>
+    <button class="btn btn-primary pull-right" *ngIf="currentTab >= 3" (click)="continue()">Save</button>
+    <button class="btn btn-primary pull-right" *ngIf="currentTab >= 3" (click)="continue()">Export</button>
   </div>
 </div>
