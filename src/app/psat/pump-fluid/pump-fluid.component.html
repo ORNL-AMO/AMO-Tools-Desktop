@@ -48,8 +48,8 @@
         </div>
         <div class="col-md-6">
           <div class="input-group">
-            <div class="btn"><i class="fa fa-minus" (click)="subtract(psatForm.value.viscosity)"></i></div>
-            <div class="btn"><i class="fa fa-plus" (click)="add(psatForm.value.viscosity)"></i></div>
+            <div class="btn" (click)="subtractNum('viscosity')"><i class="fa fa-minus"></i></div>
+            <div class="btn" (click)="addNum('viscosity')"><i class="fa fa-plus"></i></div>
             <input type="text" class="form-control num-input" formControlName="viscosity" id="viscosity">
           </div>
           <app-control-messages [control]="psatForm.controls.viscosity"></app-control-messages>
@@ -75,8 +75,8 @@
         </div>
         <div class="col-md-6">
           <div class="input-group">
-            <div class="btn"><i class="fa fa-minus"></i></div>
-            <div class="btn"><i class="fa fa-plus"></i></div>
+            <div class="btn" (click)="subtractNum('stages')"><i class="fa fa-minus"></i></div>
+            <div class="btn" (click)="addNum('stages')"><i class="fa fa-plus"></i></div>
             <input type="text" class="form-control num-input" formControlName="stages" id="stages">
           </div>
           <app-control-messages [control]="psatForm.controls.stages"></app-control-messages>

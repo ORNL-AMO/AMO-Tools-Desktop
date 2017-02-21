@@ -63,7 +63,7 @@ export class PsatComponent implements OnInit {
 
   initForm(){
     return this.formBuilder.group({
-      'pumpType': [''],
+      'pumpType': [this.assessment.psat.pump_style],
       'pumpRPM': [''],
       'drive': [''],
       'viscosity': [0],
