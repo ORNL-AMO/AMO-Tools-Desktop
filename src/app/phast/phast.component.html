@@ -4,7 +4,7 @@
 
 <div class="row tab-content">
   <div [ngClass]="{'col-md-12': !isPanelOpen, 'col-md-9': isPanelOpen}">
-    <app-system-basics [phast]="assessment.phast" (continue)="changeTab($event)" *ngIf="currentTab == 'system-basics'"></app-system-basics>
+    <app-system-basics (continue)="changeTab($event)" *ngIf="currentTab == 'system-basics'"></app-system-basics>
     <app-operating-hours  (continue)="changeTab($event)" *ngIf="currentTab == 'operating-hours'"></app-operating-hours>
     <app-losses (continue)="changeTab($event)" *ngIf="currentTab == 'losses'"></app-losses>
     <app-designed-energy-use (continue)="changeTab($event)" *ngIf="currentTab == 'designed-energy-use'"></app-designed-energy-use>

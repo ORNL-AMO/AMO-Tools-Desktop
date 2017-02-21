@@ -1,0 +1,12 @@
+.losses-sidebar{
+  height: 80vh;
+}
+
+.sidebar-item{
+  height: 10%;
+  background-color: tan;
+}
+
+.sidebar-item:hover{
+  background-color: rosybrown;
+}

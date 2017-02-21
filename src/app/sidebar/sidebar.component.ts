@@ -1,6 +1,8 @@
 import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 import { Directory } from '../shared/models/directory';
-
+import { Assessment } from '../shared/models/assessment';
+import { Router } from '@angular/router';
+import { AssessmentService } from '../assessment/assessment.service';
 @Component({
   selector: 'app-sidebar',
   templateUrl: './sidebar.component.html',
@@ -13,7 +15,7 @@ export class SidebarComponent implements OnInit {
   directory: Directory;
 
   selectedDirectory: Directory;
-  constructor() { }
+  constructor(private assessmentService: AssessmentService, private router: Router) { }
 
   ngOnInit() {
     this.selectedDirectory = this.directory;
@@ -29,6 +31,15 @@ export class SidebarComponent implements OnInit {
     }
     this.selectedDirectory = dir;
     this.directoryChange.emit(dir);
+  }
+
+  goToAssessment(assessment: Assessment){
+    this.assessmentService.setWorkingAssessment(assessment);
+    if(assessment.type == 'PSAT') {
+      this.router.navigateByUrl('/psat');
+    }else if(assessment.type == 'PHAST'){
+      this.router.navigateByUrl('/phast');
+    }
   }
 
 }

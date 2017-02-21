@@ -16,6 +16,16 @@ import { PhastTabsComponent } from './phast-tabs/phast-tabs.component';
 import { HelpPanelComponent } from './help-panel/help-panel.component';
 import { DataPanelComponent } from './data-panel/data-panel.component';
 import { SettingsPanelComponent } from './settings-panel/settings-panel.component';
+import { ChargeMaterialComponent } from './losses/charge-material/charge-material.component';
+import { WallLossesComponent } from './losses/wall-losses/wall-losses.component';
+import { AtmosphereLossesComponent } from './losses/atmosphere-losses/atmosphere-losses.component';
+import { OpeningLossesComponent } from './losses/opening-losses/opening-losses.component';
+import { WaterCoolingLossesComponent } from './losses/water-cooling-losses/water-cooling-losses.component';
+import { HeatStorageComponent } from './losses/heat-storage/heat-storage.component';
+import { FlueGasLossesComponent } from './losses/flue-gas-losses/flue-gas-losses.component';
+import { OtherLossesComponent } from './losses/other-losses/other-losses.component';
+import { FixtureLossesComponent } from './losses/fixture-losses/fixture-losses.component';
+import { LossesSidebarComponent } from './losses/losses-sidebar/losses-sidebar.component';
 @NgModule({
   declarations: [
     PhastComponent,
@@ -30,7 +40,17 @@ import { SettingsPanelComponent } from './settings-panel/settings-panel.componen
     MeteredEnergyUseComponent,
     HelpPanelComponent,
     DataPanelComponent,
-    SettingsPanelComponent
+    SettingsPanelComponent,
+    ChargeMaterialComponent,
+    WallLossesComponent,
+    AtmosphereLossesComponent,
+    OpeningLossesComponent,
+    WaterCoolingLossesComponent,
+    HeatStorageComponent,
+    FlueGasLossesComponent,
+    OtherLossesComponent,
+    FixtureLossesComponent,
+    LossesSidebarComponent
   ],
   exports: [
   ],

@@ -1,3 +1,16 @@
-<p>
-  losses works!
-</p>
+<div class="row">
+  <div class="col-md-4">
+    <app-losses-sidebar (changeTab)="changeTab($event)"></app-losses-sidebar>
+  </div>
+  <div class="col-md-8">
+    <app-charge-material *ngIf="lossesTab == 'charge-material'"></app-charge-material>
+    <app-wall-losses *ngIf="lossesTab == 'wall-losses'"></app-wall-losses>
+    <app-atmosphere-losses *ngIf="lossesTab == 'atmosphere-losses'"></app-atmosphere-losses>
+    <app-fixture-losses *ngIf="lossesTab == 'fixture-losses'"></app-fixture-losses>
+    <app-opening-losses *ngIf="lossesTab == 'opening-losses'"></app-opening-losses>
+    <app-water-cooling-losses *ngIf="lossesTab == 'water-cooling-losses'"></app-water-cooling-losses>
+    <app-heat-storage *ngIf="lossesTab == 'heat-storage'"></app-heat-storage>
+    <app-flue-gas-losses *ngIf="lossesTab == 'flue-gas-losses'"></app-flue-gas-losses>
+    <app-other-losses *ngIf="lossesTab == 'other-losses'"></app-other-losses>
+  </div>
+</div>

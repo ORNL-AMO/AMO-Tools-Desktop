@@ -53,7 +53,7 @@ export class AssessmentCreateComponent implements OnInit {
 
     this.createModal.onHidden.subscribe(() => {
       if(this.newAssessment.value.assessmentType == 'Pump') {
-        let tmpAssessment = this.assessmentService.getNewAssessment();
+        let tmpAssessment = this.assessmentService.getNewAssessment('PSAT');
         tmpAssessment.name = this.newAssessment.value.assessmentName;
 
         let tmpPsat = this.assessmentService.getNewPsat();
@@ -63,7 +63,7 @@ export class AssessmentCreateComponent implements OnInit {
         this.router.navigateByUrl('/psat')
 
       }else if(this.newAssessment.value.assessmentType == 'Furnace'){
-        let tmpAssessment = this.assessmentService.getNewAssessment();
+        let tmpAssessment = this.assessmentService.getNewAssessment('PHAST');
         tmpAssessment.name = this.newAssessment.value.assessmentName;
 
         let tmpPhast = this.assessmentService.getNewPhast();
