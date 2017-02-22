@@ -2,6 +2,12 @@ import { Component, OnInit} from '@angular/core';
 
 declare var d3: any;
 
+
+var svg;
+
+const width = 1100,
+      height = 1000;
+
 @Component({
   selector: 'app-sankey',
   templateUrl: 'sankey.component.html',
@@ -10,22 +16,20 @@ declare var d3: any;
 
 export class SankeyComponent implements OnInit{
 
-
   constructor() {
-
   }
 
   ngOnInit() {
-    this.makeSankey();
+  }
+
+  closeSankey(){
+    //Remove Sankey
+    svg.remove();
   }
 
   makeSankey(){
 
-    var width = 1100,
-      height = 1000;
-
     var color = "#485bff";
-
 
     var nodes = [
 
@@ -37,7 +41,7 @@ export class SankeyComponent implements OnInit{
       /*5*/{ name: "inter3", value: 0, x: 350, y: height/2, input: false, usefulOutput: false, inter: true, top: true},
       /*6*/{ name: "Wall Losses", value: 16, x: 725, y: ((height/2)-40), input: false, usefulOutput: false, inter: false, top: true},
       /*7*/{ name: "inter4", value: 0, x: 425, y: height/2, input: false, usefulOutput: false, inter: true, top: false},
-      /*8*/{ name: "Opening Losses", value: 7, x: 800, y: ((height/2)-25), input: false, usefulOutput: false, inter: false, top: true},
+      /*8*/{ name: "Opening Losses", value: 7, x: 830, y: ((height/2)-25), input: false, usefulOutput: false, inter: false, top: true},
       /*9*/{ name: "inter5", value: 0, x: 500, y: height/2, input: false, usefulOutput: false, inter: true, top: true},
       /*10*/{ name: "Atmosphere Losses", value: 14, x: 500, y: ((height/2)+225), input: false, usefulOutput: false, inter: false, top: false},
       /*11*/{ name: "inter6", value: 0, x: 575, y: height/2, input: false, usefulOutput: false, inter: true, top: false},
@@ -72,54 +76,102 @@ export class SankeyComponent implements OnInit{
       { source: 13, target: 15 }
     ];
 
-    //Make the svg
-    var svg = d3.select('body').append('svg')
+    svg = d3.select('app-sankey-diagram').append('svg')
       .attr('width', width)
       .attr('height', height)
-      .style("border", "1px solid black");
+      .style("border", "1px solid black")
+      .call(calcSankey);
 
+    function calcSankey() {
+      var alterVal = 0, shiftVal = 0;
+      nodes.forEach(function (d, i) {
 
-
-    var alterVal = 0, shiftVal = 0;
-
-    nodes.forEach(function(d, i){
-      if (d.inter) {
-        if(i == 1){
-          //First interNode
-          d.value = nodes[i-1].value;
-          shiftVal = (nodes[0].x + nodes[0].value)-d.x;
-        }
-        else {
-          d.value = (nodes[i - 2].value - nodes[links[i - 2].target].value);
-          if (d.top) {
-            d.y = d.y + alterVal;
+        if (d.inter) {
+          d.y = height/2;
+          //Reset height
+          if (i == 1) {
+            //First interNode
+            d.value = nodes[i - 1].value;
+            shiftVal = (nodes[0].x + nodes[0].value) - d.x;
           }
           else {
-            alterVal += (nodes[i - 2].value - d.value);
-            d.y = (d.y + alterVal);
+            d.value = (nodes[i - 2].value - nodes[links[i - 2].target].value);
+            if (d.top) {
+              d.y = d.y + alterVal;
+            }
+            else {
+              alterVal += (nodes[i - 2].value - d.value);
+              d.y = (d.y + alterVal);
+            }
           }
-        }
-        d.x += shiftVal;
-      }
-      //Triangle for all other nodes then the source
-      else {
-        if(d.usefulOutput){
-          //Set the output node in relation to where the links will end up
-          d.y = d.y+alterVal;
-          d.value = (nodes[i-2].value - nodes[i-1].value);
           d.x += shiftVal;
         }
-      }
-    });
+        //Triangle for all other nodes then the source
+        else {
+          if (d.usefulOutput) {
+            d.y = height/2;
+            //Set the output node in relation to where the links will end up
+            d.y = d.y + alterVal;
+            d.value = (nodes[i - 2].value - nodes[i - 1].value);
+            d.x += shiftVal;
+          }
+        }
+      })
+    }
 
+    function makeLinks(d){
+
+      var points = [];
+
+      if(nodes[d.source].input){
+        points.push([(nodes[d.source].x+nodes[d.source].value), (nodes[d.target].y+( nodes[d.target].value/2))]);
+        points.push([nodes[d.target].x, (nodes[d.target].y+(nodes[d.target].value/2))]);
+      }
+      //If it links up with an inter or usefulOutput then go strait tot the interNode
+      else if(nodes[d.target].inter || nodes[d.target].usefulOutput){
+        points.push([nodes[d.source].x, (nodes[d.target].y+( nodes[d.target].value/2))]);
+        points.push([nodes[d.target].x, (nodes[d.target].y+(nodes[d.target].value/2))]);
+      }
+      else {
+        //Curved linkes
+        if(nodes[d.target].top) {
+          points.push([(nodes[d.source].x ), (nodes[d.source].y+(nodes[d.target].value/2))]);
+          points.push([(nodes[d.source].x + 30), (nodes[d.source].y+(nodes[d.target].value/2))]);
+          points.push([(nodes[d.target].x ),(nodes[d.target].y + (nodes[d.target].value / 2))]);
+        }
+        else {
+          points.push([(nodes[d.source].x), ((nodes[d.source].y+nodes[d.source].value)-(nodes[d.target].value/2))]);
+          points.push([(nodes[d.source].x + 30), (((nodes[d.source].y+nodes[d.source].value)-(nodes[d.target].value/2)))]);
+          points.push([(nodes[d.target].x ),(nodes[d.target].y + (nodes[d.target].value / 2))]);
+        }
+      }
+
+      return linkGen(points);
+    };
+
+    function makeInputNode(d){
+      if (d.input) {
+        return d.x + "," + d.y + "," + (d.x + (d.value / 2)) + "," + (d.y + (d.value / 2)) + "," + d.x + "," + (d.y + d.value * 1) + "," + (d.x + d.value) + "," + (d.y + d.value) + "," + (d.x + d.value) + "," + d.y;
+      }
+      else{
+        return "";
+      }
+    }
+
+    function makeEndMarker(d){
+      if(!nodes[d.target].inter || nodes[d.target].usefulOutput) {
+        return "url(" + window.location + "#end)";
+      }
+      else{
+        return "";
+      }
+    }
 
     var marker = svg.append('svg:defs').selectAll('marker')
       .data(links)
       .enter()
       .append('svg:marker')
       .attr('id','end')
-
-
       .attr('orient', 'auto')
       .attr('refX', .1)
       .attr('refY', 0)
@@ -138,38 +190,9 @@ export class SankeyComponent implements OnInit{
       .data(links)
       .enter().append('path')
       .attr("d", function(d){
-
-        var points = [];
-        var pointsS = [];
-
-
-        if(nodes[d.source].input){
-          points.push([(nodes[d.source].x+nodes[d.source].value), (nodes[d.target].y+( nodes[d.target].value/2))]);
-          points.push([nodes[d.target].x, (nodes[d.target].y+(nodes[d.target].value/2))]);
-        }
-        //If it links up with an inter or usefulOutput then go strait tot the interNode
-        else if(nodes[d.target].inter || nodes[d.target].usefulOutput){
-          points.push([nodes[d.source].x, (nodes[d.target].y+( nodes[d.target].value/2))]);
-          points.push([nodes[d.target].x, (nodes[d.target].y+(nodes[d.target].value/2))]);
-        }
-        else {
-          if(nodes[d.target].top) {
-            points.push([(nodes[d.source].x ), (nodes[d.source].y+(nodes[d.target].value/2))]);
-            points.push([(nodes[d.source].x + 30), (nodes[d.source].y+(nodes[d.target].value/2))]);
-            //points.push([(nodes[d.source].x + 80), ((nodes[d.source].y+(nodes[d.target].value/2))-30)]);
-            points.push([(nodes[d.target].x ),(nodes[d.target].y + (nodes[d.target].value / 2))]);
-          }
-          else {
-            points.push([(nodes[d.source].x), ((nodes[d.source].y+nodes[d.source].value)-(nodes[d.target].value/2))]);
-            points.push([(nodes[d.source].x + 30), (((nodes[d.source].y+nodes[d.source].value)-(nodes[d.target].value/2)))]);
-            //points.push([(nodes[d.source].x + 80), (((nodes[d.source].y+nodes[d.source].value)-(nodes[d.target].value/2))+30)]);
-            points.push([(nodes[d.target].x ),(nodes[d.target].y + (nodes[d.target].value / 2))]);
-          }
-        }
-
-        return linkGen(points);
-
+        return makeLinks(d);
       })
+
       .style("stroke", color)
       //.style("stroke-opacity", ".3")
       .style("fill", "none")
@@ -179,14 +202,8 @@ export class SankeyComponent implements OnInit{
         return nodes[d.target].value;
       })
       .attr('marker-end', function(d){
-        if(!nodes[d.target].inter || nodes[d.target].usefulOutput) {
-          return "url(" + window.location + "#end)";
-        }
-        else{
-          return "";
-        }
+        return makeEndMarker(d);
       });
-
 
     //Draw nodes to the svg
     var node = svg.selectAll('.node')
@@ -196,16 +213,10 @@ export class SankeyComponent implements OnInit{
       .append("polygon")
       .attr('class', 'node')
       .attr('points', function(d, i){
-        if (d.input) {
-          //input node is made as a square
-          return d.x + "," + d.y + "," + (d.x+(d.value/2)) + "," + (d.y+(d.value/2)) + "," + d.x + "," + (d.y + d.value) + "," + (d.x + d.value) + "," + (d.y + d.value) + "," + (d.x + d.value) + "," + d.y;
-        }
-        return "";
+          return makeInputNode(d);
       })
       //Color of node is red
-      .style('fill', function (d) {
-        return color;
-      });
+      .style('fill', color);
 
     var nodes_text = svg.selectAll(".nodetext")
       .data(nodes)
@@ -219,7 +230,9 @@ export class SankeyComponent implements OnInit{
         else if(d.usefulOutput){
           return d.x + 90;
         }
-        return d.x;
+        else {
+          return d.x;
+        }
       })
       .attr("dy", function(d){
         if(d.input || d.usefulOutput){
@@ -239,6 +252,77 @@ export class SankeyComponent implements OnInit{
           return d.name;
         }
       });
+
+       nodes.forEach(function(d, i){
+          var node_val  = d, i = i;
+          if(!node_val.inter) {
+            svg.append('foreignObject')
+              .attr("x", function () {
+                if (node_val.input) {
+                  return node_val.x - 95;
+                }
+                else if (node_val.usefulOutput) {
+                  return node_val.x + 40;
+                }
+                else {
+                  return node_val.x - 50;
+                }
+              })
+              .attr("y", function () {
+                if (node_val.input || node_val.usefulOutput) {
+                  return (node_val.y + (node_val.value / 2)) + 10;
+                }
+                else if (node_val.top) {
+                  return node_val.y - 80;
+                }
+                else {
+                  return node_val.y + 50;
+                }
+              })
+              .attr("width", 100)
+              .attr("height", 50)
+              .append("xhtml:body")
+                .append("input")
+                  .data(nodes)
+                  .attr("type", "text")
+                  .attr("id", node_val.name)
+                  .attr("placeholder", node_val.value)
+                  .style("width", "100px")
+                  .on("change", function(){
+                      nodes[i].value = (this.value*1);
+                      calcSankey();
+                      link
+                        .attr("d", function(d){
+                          return makeLinks(d)
+                        })
+                        .style("stroke-width", function(d){
+                          //returns a links width equal to the target's value
+                          return nodes[d.target].value;
+                        })
+
+                        .attr("marker-end", function (d) {
+                          return makeEndMarker(d);
+                        });
+                      node
+                        .attr("points", function(d){
+                          return makeInputNode(d);
+                        });
+                      changePlaceHolders();
+                  });
+          }
+        });
+
+       function changePlaceHolders(){
+         svg.selectAll("input")
+             .attr("placeholder", function(d,i){
+                if(i == 8){
+                  return nodes[15].value;
+                }
+                else {
+                  return nodes[i * 2].value;
+                }
+             });
+       }
 
 
   }
