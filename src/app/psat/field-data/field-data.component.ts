@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 
 @Component({
   selector: 'app-field-data',
@@ -6,7 +6,8 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./field-data.component.css']
 })
 export class FieldDataComponent implements OnInit {
-
+  @Input()
+  psatForm: any;
   constructor() { }
 
   ngOnInit() {

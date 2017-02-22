@@ -1,17 +1,17 @@
 <div class="pump-fluid-container">
-    <form class="form-group" [formGroup]="pumpFluidForm">
+    <form class="form-group" [formGroup]="psatForm">
       <div class="row">
         <div class="col-md-6">
           <label class="form-control-label" for="pumpType">Pump Type</label>
         </div>
         <div class="col-md-6">
           <div class="input-group">
-            <select class="form-control" id="pumpType">
+            <select class="form-control" formControlName="pumpType" id="pumpType">
               <option>Pump 1</option>
               <option>Pump 2</option>
             </select>
           </div>
-          <app-control-messages [control]="pumpFluidForm.controls.pumpType"></app-control-messages>
+          <app-control-messages [control]="psatForm.controls.pumpType"></app-control-messages>
         </div>
       </div>
 
@@ -21,9 +21,9 @@
         </div>
         <div class="col-md-6">
           <div class="input-group">
-            <input type="text" class="form-control num-input" id="pumpRPM">
+            <input type="text" class="form-control num-input" formControlName="pumpRPM" id="pumpRPM">
           </div>
-          <app-control-messages [control]="pumpFluidForm.controls.pumpRPM"></app-control-messages>
+          <app-control-messages [control]="psatForm.controls.pumpRPM"></app-control-messages>
         </div>
       </div>
 
@@ -33,12 +33,12 @@
         </div>
         <div class="col-md-6">
           <div class="input-group">
-            <select class="form-control" id="drive">
+            <select class="form-control" formControlName="drive" id="drive">
               <option>Drive 1</option>
               <option>Drive 2</option>
             </select>
           </div>
-          <app-control-messages [control]="pumpFluidForm.controls.drive"></app-control-messages>
+          <app-control-messages [control]="psatForm.controls.drive"></app-control-messages>
         </div>
       </div>
 
@@ -48,11 +48,11 @@
         </div>
         <div class="col-md-6">
           <div class="input-group">
-            <div class="btn"><i class="fa fa-minus"></i></div>
-            <div class="btn"><i class="fa fa-plus"></i></div>
-            <input type="text" class="form-control num-input" id="viscosity">
+            <div class="btn" (click)="subtractNum('viscosity')"><i class="fa fa-minus"></i></div>
+            <div class="btn" (click)="addNum('viscosity')"><i class="fa fa-plus"></i></div>
+            <input type="text" class="form-control num-input" formControlName="viscosity" id="viscosity">
           </div>
-          <app-control-messages [control]="pumpFluidForm.controls.viscosity"></app-control-messages>
+          <app-control-messages [control]="psatForm.controls.viscosity"></app-control-messages>
         </div>
       </div>
 
@@ -62,9 +62,9 @@
         </div>
         <div class="col-md-6">
           <div class="input-group">
-            <input type="text" class="form-control num-input" id="gravity">
+            <input type="text" class="form-control num-input" formControlName="gravity" id="gravity">
           </div>
-          <app-control-messages [control]="pumpFluidForm.controls.gravity"></app-control-messages>
+          <app-control-messages [control]="psatForm.controls.gravity"></app-control-messages>
         </div>
       </div>
 
@@ -75,11 +75,11 @@
         </div>
         <div class="col-md-6">
           <div class="input-group">
-            <div class="btn"><i class="fa fa-minus"></i></div>
-            <div class="btn"><i class="fa fa-plus"></i></div>
-            <input type="text" class="form-control num-input" id="stages">
+            <div class="btn" (click)="subtractNum('stages')"><i class="fa fa-minus"></i></div>
+            <div class="btn" (click)="addNum('stages')"><i class="fa fa-plus"></i></div>
+            <input type="text" class="form-control num-input" formControlName="stages" id="stages">
           </div>
-          <app-control-messages [control]="pumpFluidForm.controls.stages"></app-control-messages>
+          <app-control-messages [control]="psatForm.controls.stages"></app-control-messages>
         </div>
       </div>
 

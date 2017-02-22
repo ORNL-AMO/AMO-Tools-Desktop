@@ -14,6 +14,8 @@ import { ModifyConditionsComponent } from './modify-conditions/modify-conditions
 import { SettingsPanelComponent } from './settings-panel/settings-panel.component';
 import { DataPanelComponent } from './data-panel/data-panel.component';
 import { HelpPanelComponent } from './help-panel/help-panel.component';
+import { BaselineComponent } from './modify-conditions/baseline/baseline.component';
+import { AdjustmentComponent } from './modify-conditions/adjustment/adjustment.component';
 
 @NgModule({
   declarations: [
@@ -27,7 +29,9 @@ import { HelpPanelComponent } from './help-panel/help-panel.component';
     ModifyConditionsComponent,
     SettingsPanelComponent,
     DataPanelComponent,
-    HelpPanelComponent
+    HelpPanelComponent,
+    BaselineComponent,
+    AdjustmentComponent
   ],
   exports: [
 

@@ -60,6 +60,13 @@ export class AssessmentCreateComponent implements OnInit {
         tmpAssessment.psat = tmpPsat;
         this.assessmentService.setWorkingAssessment(tmpAssessment);
 
+        if(this.directory.assessments){
+          this.directory.assessments.push(tmpAssessment);
+        }else{
+          this.directory.assessments = new Array();
+          this.directory.assessments.push(tmpAssessment);
+        }
+
         this.router.navigateByUrl('/psat')
 
       }else if(this.newAssessment.value.assessmentType == 'Furnace'){

@@ -3,6 +3,6 @@
     <app-sidebar [directory]="allDirectories" (directoryChange)="changeWorkingDirectory($event)"></app-sidebar>
   </div>
   <div class="col-md-10">
-    <app-assessment-dashboard [directory]="workingDirectory"></app-assessment-dashboard>
+    <app-assessment-dashboard [(directory)]="workingDirectory"></app-assessment-dashboard>
   </div>
  </div>

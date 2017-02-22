@@ -22,5 +22,13 @@ export interface PSAT {
   head?: any,
   motor_field_power?: any,
   motor_field_current?: any,
-  motor_field_voltage?: any
+  motor_field_voltage?: any,
+  cost_kw_hour?: any,
+  adjustments?: Adjustment[]
+  
+}
+
+export interface Adjustment {
+  psat: PSAT,
+  name: string
 }

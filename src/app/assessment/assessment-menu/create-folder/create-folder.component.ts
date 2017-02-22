@@ -2,6 +2,8 @@ import { Component, OnInit, ViewChild, Input } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ModalDirective } from 'ng2-bootstrap';
 import { Directory } from '../../../shared/models/directory';
+import { ModelService } from '../../../shared/model.service';
+
 @Component({
   selector: 'app-create-folder',
   templateUrl: './create-folder.component.html',
@@ -12,7 +14,7 @@ export class CreateFolderComponent implements OnInit {
   directory: Directory;
 
   newFolder: any;
-  constructor(private formBuilder: FormBuilder) { }
+  constructor(private formBuilder: FormBuilder,private modelService: ModelService) { }
 
   ngOnInit() {
     this.newFolder = this.initForm();
@@ -36,8 +38,15 @@ export class CreateFolderComponent implements OnInit {
 
   createFolder(){
     this.hideCreateModal();
+    let newDir = this.modelService.getNewDirectory(this.newFolder.value.newFolderName);
 
     //TODO: Logic for creating new folder
+    if(this.directory.subDirectory){
+      this.directory.subDirectory.push(newDir);
+    }else{
+      this.directory.subDirectory = new Array();
+      this.directory.subDirectory.push(newDir);
+    }
   }
 
 }

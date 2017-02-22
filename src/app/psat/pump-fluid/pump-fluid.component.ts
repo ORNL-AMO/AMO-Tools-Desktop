@@ -1,5 +1,4 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import { Component, OnInit, Input } from '@angular/core';
 
 @Component({
   selector: 'app-pump-fluid',
@@ -7,24 +6,25 @@ import { FormBuilder } from '@angular/forms';
   styleUrls: ['./pump-fluid.component.css']
 })
 export class PumpFluidComponent implements OnInit {
-  pumpFluidForm: any;
+  @Input()
+  psatForm: any;
 
-  constructor(private formBuilder: FormBuilder) { }
+  constructor() { }
 
   ngOnInit() {
-    this.pumpFluidForm = this.initForm();
   }
 
-  initForm(){
-    return this.formBuilder.group({
-      'pumpType': [''],
-      'pumpRPM': [''],
-      'drive': [''],
-      'viscosity': [''],
-      'gravity': [''],
-      'stages': [''],
-      'fixedSpeed': ['']
-    })
+  addNum(str: string){
+    if(str == 'viscosity'){
+      this.psatForm.value.viscosity++;
+      console.log(this.psatForm.value.viscosity);
+    }else if(str == 'stages'){
+      this.psatForm.value.stages++;
+    }
+  }
+
+  subtractNum(num: number){
+    num--;
   }
 
 }
