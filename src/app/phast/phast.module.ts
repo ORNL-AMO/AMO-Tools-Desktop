@@ -26,6 +26,7 @@ import { FlueGasLossesComponent } from './losses/flue-gas-losses/flue-gas-losses
 import { OtherLossesComponent } from './losses/other-losses/other-losses.component';
 import { FixtureLossesComponent } from './losses/fixture-losses/fixture-losses.component';
 import { LossesSidebarComponent } from './losses/losses-sidebar/losses-sidebar.component';
+import { SankeyDiagramComponent } from './sankey/sankey-diagram/sankey-diagram.component';
 @NgModule({
   declarations: [
     PhastComponent,
@@ -50,7 +51,8 @@ import { LossesSidebarComponent } from './losses/losses-sidebar/losses-sidebar.c
     FlueGasLossesComponent,
     OtherLossesComponent,
     FixtureLossesComponent,
-    LossesSidebarComponent
+    LossesSidebarComponent,
+    SankeyDiagramComponent
   ],
   exports: [
   ],
