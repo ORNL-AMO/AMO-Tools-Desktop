@@ -80,6 +80,7 @@ export class PsatComponent implements OnInit {
       this.psatForm.value.voltage,
       this.psatForm.value.costKwHr
     );
+    tmpPSAT.adjustments = this.assessment.psat.adjustments;
     this.assessment.psat = tmpPSAT;
     this.assessmentService.setWorkingAssessment(this.assessment);
   }

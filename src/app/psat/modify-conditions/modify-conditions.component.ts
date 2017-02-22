@@ -15,7 +15,9 @@ export class ModifyConditionsComponent implements OnInit {
   constructor(private assessmentService: AssessmentService) { }
 
   ngOnInit() {
-    this.baseline.adjustments = new Array();
+    if(!this.baseline.adjustments){
+      this.baseline.adjustments = new Array();
+    }
   }
 
   addAdjustment(){
