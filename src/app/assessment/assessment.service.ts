@@ -63,4 +63,61 @@ export class AssessmentService {
     this.workingAssessment = assessment;
   }
 
+  buildPSAT(
+      _pump_style: any,
+      _pump_specified: any,
+      _pump_rated_speed: any,
+      _drive: any,
+      _kinematic_viscosity: any,
+      _specific_gravity: any,
+      _stages: any,
+      _fixed_speed: any,
+      _line_frequency: any,
+      _motor_rated_power: any,
+      _motor_rated_speed: any,
+      _efficiency_class: any,
+      _efficiency: any,
+      _motor_rated_voltage: any,
+      _load_estimation_method: any,
+      _motor_rated_flc: any,
+      _full_load_amps: any,
+      _margin: any,
+      _operating_fraction: any,
+      _flow_rate:any,
+      _head: any,
+      _motor_field_power: any,
+      _motor_field_current: any,
+      _motor_field_voltage: any,
+      _cost_kw_hour: any
+
+  ){
+    let newPsat: PSAT = {
+      pump_style: _pump_style,
+      pump_specified: _pump_specified,
+      pump_rated_speed: _pump_rated_speed,
+      drive: _drive,
+      kinematic_viscosity: _kinematic_viscosity,
+      specific_gravity: _specific_gravity,
+      stages: _stages,
+      fixed_speed: _fixed_speed,
+      line_frequency: _line_frequency,
+      motor_rated_power: _motor_rated_power,
+      motor_rated_speed: _motor_rated_speed,
+      efficiency_class: _efficiency_class,
+      efficiency: _efficiency,
+      motor_rated_voltage: _motor_rated_voltage,
+      load_estimation_method: _load_estimation_method,
+      motor_rated_flc: _motor_rated_flc,
+      full_load_amps: _full_load_amps,
+      margin: _margin,
+      operating_fraction: _operating_fraction,
+      flow_rate: _flow_rate,
+      head: _head,
+      motor_field_power: _motor_field_power,
+      motor_field_current: _motor_field_current,
+      motor_field_voltage: _motor_field_voltage,
+      cost_kw_hour: _cost_kw_hour
+    }
+    return newPsat;
+  }
 }

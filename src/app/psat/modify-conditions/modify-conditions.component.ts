@@ -15,14 +15,13 @@ export class ModifyConditionsComponent implements OnInit {
   constructor(private assessmentService: AssessmentService) { }
 
   ngOnInit() {
-    this.baseline.adjustments = new Array<PSAT>();
+    this.baseline.adjustments = new Array();
   }
 
   addAdjustment(){
-    debugger
     if(this.baseline.adjustments.length < 4){
-      let newAdjustment = this.assessmentService.getNewPsat();
-      this.baseline.adjustments.push(newAdjustment);
+      let newAdjustment = this.assessmentService.getWorkingAssessment();
+      this.baseline.adjustments.push({psat:newAdjustment.psat, name: 'Adjustment '+(this.baseline.adjustments.length+1)});
     }
   }
 

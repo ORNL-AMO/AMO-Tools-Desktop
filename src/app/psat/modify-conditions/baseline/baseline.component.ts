@@ -12,6 +12,7 @@ export class BaselineComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
+    console.log(this.baseline)
   }
 
 }
