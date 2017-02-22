@@ -23,4 +23,5 @@ export interface PSAT {
   motor_field_power?: any,
   motor_field_current?: any,
   motor_field_voltage?: any
+  adjustments?: PSAT[]
 }

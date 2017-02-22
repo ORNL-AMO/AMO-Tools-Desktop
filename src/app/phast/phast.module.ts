@@ -26,6 +26,7 @@ import { FlueGasLossesComponent } from './losses/flue-gas-losses/flue-gas-losses
 import { OtherLossesComponent } from './losses/other-losses/other-losses.component';
 import { FixtureLossesComponent } from './losses/fixture-losses/fixture-losses.component';
 import { LossesSidebarComponent } from './losses/losses-sidebar/losses-sidebar.component';
+
 @NgModule({
   declarations: [
     PhastComponent,

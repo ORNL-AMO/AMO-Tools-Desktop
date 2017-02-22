@@ -1,0 +1,51 @@
+<div class="card">
+  <div class="card-header">
+    Adjustment A
+  </div>
+    <!-- PUMP / FLUID-->
+      <div class="card-header">
+        PUMP / FLUID
+      </div>
+      <div class="card-block row">
+        <div class="col-md-12">
+          {{adjustment.pump_style}}
+          <br> {{adjustment.pump_rated_speed}}
+          <br> {{adjustment.drive}}
+          <br> {{adjustment.kinematic_viscosity}}
+          <br> {{adjustment.specific_gravity}}
+          <br> {{adjustment.stages}}
+          <br> {{adjustment.fixed_speed}}
+        </div>
+        </div>
+    <!-- MOTOR -->
+      <div class="card-header">
+        MOTOR
+      </div>
+      <div class="card-block row">
+        <div class="col-md-12">
+          {{adjustment.line_frequency}}
+          <br>{{adjustment.motor_rated_power}}
+          <br>{{adjustment.motor_rated_speed}}
+          <br>{{adjustment.efficiency_class}}
+          <br>{{adjustment.motor_rated_voltage}}
+          <br>{{adjustment.full_load_amps}}
+          <br>{{adjustment.margin}}
+        </div>
+      </div>
+    <!-- FIELD DATA-->
+
+      <div class="card-header">
+        Field Data
+      </div>
+      <div class="card-block row">
+        <div class="col-md-12">
+          {{adjustment.operating_fraction}}
+          <br>Cost?
+          <br>{{adjustment.flow_rate}}
+          <br>{{adjustment.head}}
+          <br>{{adjustment.load_estimation_method}}
+          <br>{{adjustment.motor_field_current}}
+          <br>{{adjustment.motor_field_voltage}}
+        </div>
+      </div>
+    </div>

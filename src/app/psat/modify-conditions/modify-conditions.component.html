@@ -1,3 +1,11 @@
-<p>
-  modify-conditions works!
-</p>
+<div class="row modify-content">
+  <div class="col-md-3">
+    <app-baseline [baseline]="baseline"></app-baseline>
+  </div>
+  <div *ngFor="let adjustment of baseline.adjustments" class="col-md-3">
+    <app-adjustment [adjustment]="adjustment"></app-adjustment>
+  </div>
+  <div class="col-md-3">
+    <button class="btn" (click)="addAdjustment()">Add adjustment</button>
+  </div>
+</div> 

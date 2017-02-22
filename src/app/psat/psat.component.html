@@ -7,7 +7,7 @@
     <app-pump-fluid [(psatForm)]="psatForm" *ngIf="currentTab == 2"></app-pump-fluid>
     <app-motor  [(psatForm)]="psatForm" *ngIf="currentTab == 3"></app-motor>
     <app-field-data  [(psatForm)]="psatForm" *ngIf="currentTab == 4"></app-field-data>
-    <app-modify-conditions *ngIf="currentTab == 5"></app-modify-conditions>
+    <app-modify-conditions [(baseline)]="assessment.psat" *ngIf="currentTab == 5"></app-modify-conditions>
   </div>
 
   <div class="col-md-3 panel" *ngIf="isPanelOpen">
