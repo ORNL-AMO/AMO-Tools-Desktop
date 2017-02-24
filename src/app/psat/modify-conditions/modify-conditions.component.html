@@ -3,7 +3,7 @@
     <app-baseline [baseline]="baseline"></app-baseline>
   </div>
   <div *ngFor="let adjustment of baseline.adjustments" class="col-md-3">
-    <app-adjustment [adjustment]="adjustment"></app-adjustment>
+    <app-adjustment [adjustment]="adjustment" (adjustmentRemove)="removeAdjustment($event)"></app-adjustment>
   </div>
   <div class="col-md-3" *ngIf="baseline.adjustments.length < 3">
     <button class="btn" (click)="addAdjustment()">Add adjustment</button>
