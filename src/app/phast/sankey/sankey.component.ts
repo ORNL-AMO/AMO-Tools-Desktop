@@ -5,8 +5,8 @@ declare var d3: any;
 
 var svg;
 
-const width = 1100,
-      height = 1000;
+const width = 1000,
+  height = 700;
 
 @Component({
   selector: 'app-sankey',
@@ -33,22 +33,22 @@ export class SankeyComponent implements OnInit{
 
     var nodes = [
 
-      /*0*/{ name: "Input", value: 150, x: 125, y: height/2, input: true, usefulOutput: false, inter: false, top: false},
-      /*1*/{ name: "inter1", value: 0, x: 200, y: height/2, input: false, usefulOutput: false, inter: true, top: true},
-      /*2*/{ name: "Flue Gas Losses", value: 50, x: 350, y: ((height/2)-50), input: false, usefulOutput: false, inter: false, top: true},
-      /*3*/{ name: "inter2", value: 0, x: 275, y: height/2, input: false, usefulOutput: false, inter: true, top: false},
-      /*4*/{ name: "Other Losses", value: 20, x: 575, y: ((height/2)-60), input: false, usefulOutput: false, inter: false, top: true},
-      /*5*/{ name: "inter3", value: 0, x: 350, y: height/2, input: false, usefulOutput: false, inter: true, top: true},
-      /*6*/{ name: "Wall Losses", value: 16, x: 725, y: ((height/2)-40), input: false, usefulOutput: false, inter: false, top: true},
-      /*7*/{ name: "inter4", value: 0, x: 425, y: height/2, input: false, usefulOutput: false, inter: true, top: false},
-      /*8*/{ name: "Opening Losses", value: 7, x: 830, y: ((height/2)-25), input: false, usefulOutput: false, inter: false, top: true},
-      /*9*/{ name: "inter5", value: 0, x: 500, y: height/2, input: false, usefulOutput: false, inter: true, top: true},
-      /*10*/{ name: "Atmosphere Losses", value: 14, x: 500, y: ((height/2)+225), input: false, usefulOutput: false, inter: false, top: false},
-      /*11*/{ name: "inter6", value: 0, x: 575, y: height/2, input: false, usefulOutput: false, inter: true, top: false},
-      /*12*/{ name: "Water Cooling Losses", value: 5, x: 650, y: ((height/2)+235), input: false, usefulOutput: false, inter: false, top: false},
-      /*13*/{ name: "inter7", value: 0, x: 650, y: height/2, input: false, usefulOutput: false, inter: true, top: false},
-      /*14*/{ name: "Fixture/Conveyor Losses", value: 5, x: 850, y: ((height/2)+225), input: false, usefulOutput: false, inter: false, top: false},
-      /*15*/{ name: "Useful Output", value: 0, x: 800, y: (height/2), input: false, usefulOutput: true, inter: false, top: true}
+      /*0*/{ name: "Input", value: 150, x: (width-(width*.9)), y: height/2, input: true, usefulOutput: false, inter: false, top: false},
+      /*1*/{ name: "inter1", value: 0, x: (width-(width*.83)), y: height/2, input: false, usefulOutput: false, inter: true, top: true},
+      /*2*/{ name: "Flue Gas Losses", value: 50, x: (width-(width*.75)), y: ((height/2)-(height*.06)), input: false, usefulOutput: false, inter: false, top: true},
+      /*3*/{ name: "inter2", value: 0, x: (width-(width*.75)), y: height/2, input: false, usefulOutput: false, inter: true, top: false},
+      /*4*/{ name: "Other Losses", value: 20, x: (width-(width*.55)), y: ((height/2)-(height*.055)), input: false, usefulOutput: false, inter: false, top: true},
+      /*5*/{ name: "inter3", value: 0, x: 350, y: (width-(width*.78)), input: false, usefulOutput: false, inter: true, top: true},
+      /*6*/{ name: "Wall Losses", value: 16, x: (width-(width*.44)), y: ((height/2)-(height*.04)), input: false, usefulOutput: false, inter: false, top: true},
+      /*7*/{ name: "inter4", value: 0, x: 425, y:(width-(width*.54)), input: false, usefulOutput: false, inter: true, top: false},
+      /*8*/{ name: "Opening Losses", value: 7, x: (width-(width*.33)), y: ((height/2)-(height*.025)), input: false, usefulOutput: false, inter: false, top: true},
+      /*9*/{ name: "inter5", value: 0, x: (width-(width*.56)), y: height/2, input: false, usefulOutput: false, inter: true, top: true},
+      /*10*/{ name: "Atmosphere Losses", value: 12, x: (width-(width*.65)), y: ((height/2)+(height*.25)), input: false, usefulOutput: false, inter: false, top: false},
+      /*11*/{ name: "inter6", value: 0, x: (width-(width*.46)), y: height/2, input: false, usefulOutput: false, inter: true, top: false},
+      /*12*/{ name: "Water Cooling Losses", value: 5, x: (width-(width*.45)), y: ((height/2)+(height*.235)), input: false, usefulOutput: false, inter: false, top: false},
+      /*13*/{ name: "inter7", value: 0, x: (width-(width*.4)), y: height/2, input: false, usefulOutput: false, inter: true, top: false},
+      /*14*/{ name: "Fixture/Conveyor Losses", value: 5, x: (width-(width*.28)), y: ((height/2)+(height*.225)), input: false, usefulOutput: false, inter: false, top: false},
+      /*15*/{ name: "Useful Output", value: 0, x: (width-(width*.25)), y: (height/2), input: false, usefulOutput: true, inter: false, top: true}
     ];
     var links = [
       //linking to the first interNode
@@ -113,8 +113,8 @@ export class SankeyComponent implements OnInit{
             //Set the output node in relation to where the links will end up
             d.y = d.y + alterVal;
             d.value = (nodes[i - 2].value - nodes[i - 1].value);
-            d.x += shiftVal;
           }
+          d.x += shiftVal;
         }
       })
     }
@@ -213,7 +213,7 @@ export class SankeyComponent implements OnInit{
       .append("polygon")
       .attr('class', 'node')
       .attr('points', function(d, i){
-          return makeInputNode(d);
+        return makeInputNode(d);
       })
       //Color of node is red
       .style('fill', color);
@@ -253,76 +253,76 @@ export class SankeyComponent implements OnInit{
         }
       });
 
-       nodes.forEach(function(d, i){
-          var node_val  = d, i = i;
-          if(!node_val.inter) {
-            svg.append('foreignObject')
-              .attr("x", function () {
-                if (node_val.input) {
-                  return node_val.x - 95;
-                }
-                else if (node_val.usefulOutput) {
-                  return node_val.x + 40;
-                }
-                else {
-                  return node_val.x - 50;
-                }
+    nodes.forEach(function(d, i){
+      var node_val  = d, i = i;
+      if(!node_val.inter) {
+        svg.append('foreignObject')
+          .attr("x", function () {
+            if (node_val.input) {
+              return node_val.x - 95;
+            }
+            else if (node_val.usefulOutput) {
+              return node_val.x + 40;
+            }
+            else {
+              return node_val.x - 50;
+            }
+          })
+          .attr("y", function () {
+            if (node_val.input || node_val.usefulOutput) {
+              return (node_val.y + (node_val.value / 2)) + 10;
+            }
+            else if (node_val.top) {
+              return node_val.y - 80;
+            }
+            else {
+              return node_val.y + 50;
+            }
+          })
+          .attr("width", 100)
+          .attr("height", 50)
+          .append("xhtml:body")
+          .append("input")
+          .data(nodes)
+          .attr("type", "text")
+          .attr("id", node_val.name)
+          .attr("placeholder", node_val.value)
+          .style("width", "100px")
+          .on("change", function(){
+            nodes[i].value = (this.value*1);
+            calcSankey();
+            link
+              .attr("d", function(d){
+                return makeLinks(d)
               })
-              .attr("y", function () {
-                if (node_val.input || node_val.usefulOutput) {
-                  return (node_val.y + (node_val.value / 2)) + 10;
-                }
-                else if (node_val.top) {
-                  return node_val.y - 80;
-                }
-                else {
-                  return node_val.y + 50;
-                }
+              .style("stroke-width", function(d){
+                //returns a links width equal to the target's value
+                return nodes[d.target].value;
               })
-              .attr("width", 100)
-              .attr("height", 50)
-              .append("xhtml:body")
-                .append("input")
-                  .data(nodes)
-                  .attr("type", "text")
-                  .attr("id", node_val.name)
-                  .attr("placeholder", node_val.value)
-                  .style("width", "100px")
-                  .on("change", function(){
-                      nodes[i].value = (this.value*1);
-                      calcSankey();
-                      link
-                        .attr("d", function(d){
-                          return makeLinks(d)
-                        })
-                        .style("stroke-width", function(d){
-                          //returns a links width equal to the target's value
-                          return nodes[d.target].value;
-                        })
 
-                        .attr("marker-end", function (d) {
-                          return makeEndMarker(d);
-                        });
-                      node
-                        .attr("points", function(d){
-                          return makeInputNode(d);
-                        });
-                      changePlaceHolders();
-                  });
+              .attr("marker-end", function (d) {
+                return makeEndMarker(d);
+              });
+            node
+              .attr("points", function(d){
+                return makeInputNode(d);
+              });
+            changePlaceHolders();
+          });
+      }
+    });
+
+    function changePlaceHolders(){
+      svg.selectAll("input")
+        .attr("placeholder", function(d,i){
+          if(i == 8){
+            return nodes[15].value;
+          }
+          else {
+            return nodes[i * 2].value;
           }
         });
-
-       function changePlaceHolders(){
-         svg.selectAll("input")
-             .attr("placeholder", function(d,i){
-                if(i == 8){
-                  return nodes[15].value;
-                }
-                else {
-                  return nodes[i * 2].value;
-                }
-             });
-       }
+    }
 
 
   }
