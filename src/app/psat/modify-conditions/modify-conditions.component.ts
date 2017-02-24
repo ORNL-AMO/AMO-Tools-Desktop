@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { PSAT } from '../../shared/models/psat';
 import { AssessmentService } from '../../assessment/assessment.service';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'app-modify-conditions',
@@ -10,7 +11,6 @@ import { AssessmentService } from '../../assessment/assessment.service';
 export class ModifyConditionsComponent implements OnInit {
   @Input()
   baseline: PSAT;
-  adjustments: PSAT[];
 
   constructor(private assessmentService: AssessmentService) { }
 
@@ -26,5 +26,20 @@ export class ModifyConditionsComponent implements OnInit {
       this.baseline.adjustments.push({psat:newAdjustment.psat, name: 'Adjustment '+(this.baseline.adjustments.length+1)});
     }
   }
+
+   removeAdjustment($event){
+     this.baseline.adjustments = _.remove(this.baseline.adjustments, adjustment => {
+       return $event != adjustment.name;
+     })
+     this.renameAdjustments();
+   }
+
+   renameAdjustments(){
+     let index = 1;
+     this.baseline.adjustments.forEach(adjustment => {
+       adjustment.name = 'Adjustment ' + index;
+       index ++;
+     })
+   }
 
 }

@@ -1,6 +1,9 @@
 <div class="card">
   <div class="card-header">
     {{adjustment.name}}
+       <button class="close pull-right" aria-label="Close" (click)="removeAdjustment()">
+          <span aria-hidden="true">&times;</span>
+        </button>
   </div>
     <!-- PUMP / FLUID-->
       <div class="card-header">
