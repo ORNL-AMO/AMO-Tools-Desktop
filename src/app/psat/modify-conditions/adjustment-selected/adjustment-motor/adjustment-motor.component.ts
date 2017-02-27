@@ -13,5 +13,24 @@ export class AdjustmentMotorComponent implements OnInit {
 
   ngOnInit() {
   }
+  
+   addNum(str: string) {
+    if (str == 'motorRPM') {
+      this.adjustmentForm.value.motorRPM++;
+    } else if (str == 'sizeMargin') {
+      this.adjustmentForm.value.sizeMargin++;
+    }
+  }
 
+  subtractNum(str: string) {
+    if (str == 'motorRPM') {
+      if (this.adjustmentForm.value.motorRPM != 0) {
+        this.adjustmentForm.value.motorRPM--;
+      }
+    } else if (str == 'sizeMargin') {
+      if (this.adjustmentForm.value.sizeMargin != 0) {
+        this.adjustmentForm.value.sizeMargin--;
+      }
+    }
+  }
 }

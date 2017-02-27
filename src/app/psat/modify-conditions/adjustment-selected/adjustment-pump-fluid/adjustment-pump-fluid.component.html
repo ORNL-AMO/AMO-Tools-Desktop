@@ -37,7 +37,7 @@
       <div class="input-group input-group-sm">
         <div class="btn btn-sm" (click)="subtractNum('viscosity')">-</div>
         <div class="btn btn-sm" (click)="addNum('viscosity')">+</div>
-        <input type="text" class="form-control input-sm" formControlName="viscosity" id="viscosity">
+        <input type="text" class="form-control input-sm" formControlName="viscosity" id="viscosity" ngModel="{{adjustmentForm.value.viscosity}}">
       </div>
       <app-control-messages [control]="adjustmentForm.controls.viscosity"></app-control-messages>
     </div>
@@ -58,7 +58,7 @@
       <div class="input-group input-group-sm">
         <div class="btn btn-sm" (click)="subtractNum('stages')">-</div>
         <div class="btn btn-sm" (click)="addNum('stages')">+</div>
-        <input type="text" class="form-control input-sm" formControlName="stages" id="stages">
+        <input type="text" class="form-control input-sm" formControlName="stages" id="stages" ngModel="{{adjustmentForm.value.stages}}">
       </div>
       <app-control-messages [control]="adjustmentForm.controls.stages"></app-control-messages>
     </div>
@@ -66,8 +66,8 @@
 
   <div class="row">
     <div class="col-sm-12">
-      <input type="radio" name="fixedSpeed" checked value="yes">Yes<br>
-      <input type="radio" name="fixedSpeed" value="no">No<br>
+      <input type="radio" name="fixedSpeed" formControlName="fixedSpeed" ngModel="{{adjustmentForm.value.fixedSpeed}}" checked value="Yes">Yes<br>
+      <input type="radio" name="fixedSpeed" formControlName="fixedSpeed" ngModel="{{adjustmentForm.value.fixedSpeed}}" value="No">No<br>
     </div>
   </div>
 

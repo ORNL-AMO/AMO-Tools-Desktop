@@ -36,9 +36,9 @@
       </div>
       <div class="col-md-6">
         <div class="input-group">
-          <div class="btn"><i class="fa fa-minus"></i></div>
-          <div class="btn"><i class="fa fa-plus"></i></div>
-          <input type="text" class="form-control num-input" id="motorRPM" formControlName="motorRPM">
+          <div class="btn" (click)="subtractNum('motorRPM')"><i class="fa fa-minus"></i></div>
+          <div class="btn" (click)="addNum('motorRPM')"><i class="fa fa-plus"></i></div>
+          <input type="text" class="form-control num-input" id="motorRPM" formControlName="motorRPM" ngModel="{{psatForm.value.motorRPM}}">
         </div>
         <app-control-messages [control]="psatForm.controls.motorRPM"></app-control-messages>
       </div>
@@ -91,9 +91,9 @@
       </div>
       <div class="col-md-6">
         <div class="input-group">
-          <div class="btn"><i class="fa fa-minus"></i></div>
-          <div class="btn"><i class="fa fa-plus"></i></div>
-          <input type="text" class="form-control num-input" id="sizeMargin" formControlName="sizeMargin">
+          <div class="btn" (click)="subtractNum('sizeMargin')"><i class="fa fa-minus"></i></div>
+          <div class="btn" (click)="addNum('sizeMargin')"><i class="fa fa-plus"></i></div>
+          <input type="text" class="form-control num-input" id="sizeMargin" formControlName="sizeMargin" ngModel="{{psatForm.value.sizeMargin}}">
         </div>
         <app-control-messages [control]="psatForm.controls.sizeMargin"></app-control-messages>
       </div>

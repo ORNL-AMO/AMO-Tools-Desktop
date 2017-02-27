@@ -32,7 +32,7 @@ export class ModifyConditionsComponent implements OnInit {
     let newAdjustmentPsat = this.assessmentService.getBaselinePSAT();
     newAdjustmentPsat.selected = true;
     this.baseline.adjustments.push({ psat: newAdjustmentPsat, name: 'Adjustment ' + (this.baseline.adjustments.length + 1) });
-    //this.adjustmentForm = this.initForm(this.baseline.adjustments[this.baseline.adjustments.length - 1].psat);
+    this.adjustmentForm = this.initForm(this.baseline.adjustments[this.baseline.adjustments.length - 1].psat);
   }
 
 

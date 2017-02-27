@@ -50,7 +50,7 @@
           <div class="input-group">
             <div class="btn" (click)="subtractNum('viscosity')"><i class="fa fa-minus"></i></div>
             <div class="btn" (click)="addNum('viscosity')"><i class="fa fa-plus"></i></div>
-            <input type="text" class="form-control num-input" formControlName="viscosity" id="viscosity">
+            <input type="text" class="form-control num-input" formControlName="viscosity" id="viscosity" ngModel="{{psatForm.value.viscosity}}">
           </div>
           <app-control-messages [control]="psatForm.controls.viscosity"></app-control-messages>
         </div>
@@ -77,7 +77,7 @@
           <div class="input-group">
             <div class="btn" (click)="subtractNum('stages')"><i class="fa fa-minus"></i></div>
             <div class="btn" (click)="addNum('stages')"><i class="fa fa-plus"></i></div>
-            <input type="text" class="form-control num-input" formControlName="stages" id="stages">
+            <input type="text" class="form-control num-input" formControlName="stages" id="stages" ngModel="{{psatForm.value.stages}}">
           </div>
           <app-control-messages [control]="psatForm.controls.stages"></app-control-messages>
         </div>
@@ -88,10 +88,9 @@
            <label class="form-control-label">Fixed specific speed?</label>
          </div>
          <div class="col-md-6">
-             <input type="radio" name="fixedSpeed" checked value="yes">Yes<br>
-             <input type="radio" name="fixedSpeed" value="no">No<br>
+             <input type="radio" name="fixedSpeed" formControlName="fixedSpeed" checked value="Yes">Yes<br>
+             <input type="radio" name="fixedSpeed" formControlName="fixedSpeed" value="No">No<br>
          </div>
        </div>
-
     </form>
 </div>

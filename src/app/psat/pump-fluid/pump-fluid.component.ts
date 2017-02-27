@@ -14,17 +14,24 @@ export class PumpFluidComponent implements OnInit {
   ngOnInit() {
   }
 
-  addNum(str: string){
-    if(str == 'viscosity'){
+  addNum(str: string) {
+    if (str == 'viscosity') {
       this.psatForm.value.viscosity++;
-      console.log(this.psatForm.value.viscosity);
-    }else if(str == 'stages'){
+    } else if (str == 'stages') {
       this.psatForm.value.stages++;
     }
   }
 
-  subtractNum(num: number){
-    num--;
+  subtractNum(str: string) {
+    if (str == 'viscosity') {
+      if (this.psatForm.value.viscosity != 0) {
+        this.psatForm.value.viscosity--;
+      }
+    } else if (str == 'stages') {
+      if (this.psatForm.value.stages != 0) {
+        this.psatForm.value.stages--;
+      }
+    }
   }
 
 }
