@@ -1,0 +1,23 @@
+.adjustment-name{
+    cursor: pointer;
+}
+
+.adjustment-selected-card{
+    height: 100%;
+}
+
+.card-header{
+    padding-top: 5px;
+    padding-bottom: 5px;
+    height: 35px;
+}
+
+/*.card-block{
+    border-bottom: groove;
+    border-bottom-color: slategray;
+    border-bottom-width: 1px;
+}*/
+
+.input-group{
+    padding: 2px;
+}

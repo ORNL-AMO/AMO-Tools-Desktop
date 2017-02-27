@@ -1,9 +1,10 @@
-<div class="row modify-content">
-  <div class="col-md-3">
-    <app-baseline [baseline]="baseline"></app-baseline>
+<div class="row modify-content medium-bg">
+  <div class="col-md-3" [ngClass]="{'white-bg':baseline.selected}">
+    <app-baseline [baseline]="baseline" (baselineSelect)="changeSelect($event)"></app-baseline>
   </div>
   <div *ngFor="let adjustment of baseline.adjustments" class="col-md-3">
-    <app-adjustment [adjustment]="adjustment" (adjustmentRemove)="removeAdjustment($event)"></app-adjustment>
+    <app-adjustment *ngIf="!adjustment.psat.selected" [adjustment]="adjustment" (adjustmentSelect)="changeSelect($event)" (adjustmentRemove)="removeAdjustment($event)"></app-adjustment>
+    <app-adjustment-selected *ngIf="adjustment.psat.selected && adjustmentForm"  [adjustment]="adjustment" [(adjustmentForm)]="adjustmentForm" (adjustmentSelect)="changeSelect($event)" (adjustmentRemove)="removeAdjustment($event)"></app-adjustment-selected>
   </div>
   <div class="col-md-3" *ngIf="baseline.adjustments.length < 3">
     <button class="btn" (click)="addAdjustment()">Add adjustment</button>

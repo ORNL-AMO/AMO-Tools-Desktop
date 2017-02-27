@@ -1,0 +1,79 @@
+  <form class="form-group form-group-sm" [formGroup]="adjustmentForm">
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="input-group input-group-sm">
+          <select class="form-control input-sm" id="frequency" formControlName="frequency">
+            <option>Frequency 1</option>
+            <option>Frequency 2</option>
+          </select>
+        </div>
+        <app-control-messages [control]="adjustmentForm.controls.frequency"></app-control-messages>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="input-group input-group-sm">
+          <select class="form-control input-sm" id="horsePower" formControlName="horsePower">
+            <option>HP 1</option>
+            <option>HP 2</option>
+          </select>
+        </div>
+        <app-control-messages [control]="adjustmentForm.controls.horsePower"></app-control-messages>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="input-group input-group-sm">
+          <div class="btn btn-sm">-</div>
+          <div class="btn btn-sm">+</div>
+          <input type="text" class="form-control input-sm" id="motorRPM" formControlName="motorRPM">
+        </div>
+        <app-control-messages [control]="adjustmentForm.controls.motorRPM"></app-control-messages>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="input-group input-group-sm">
+          <select class="form-control input-sm" id="efficiencyClass" formControlName="efficiencyClass">
+            <option>class 1</option>
+            <option>Class 2</option>
+          </select>
+        </div>
+        <app-control-messages [control]="adjustmentForm.controls.efficiencyClass"></app-control-messages>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="input-group input-group-sm">
+          <input type="text" class="form-control input-sm" id="voltage" formControlName="voltage">
+        </div>
+        <app-control-messages [control]="adjustmentForm.controls.voltage"></app-control-messages>
+      </div>
+    </div>
+
+
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="input-group input-group-sm">
+          <input type="text" class="form-control input-sm" id="fullLoadAmps" formControlName="fullLoadAmps">
+        </div>
+        <app-control-messages [control]="adjustmentForm.controls.fullLoadAmps"></app-control-messages>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="input-group input-group-sm">
+          <div class="btn btn-sm">-</div>
+          <div class="btn btn-sm">+</div>
+          <input type="text" class="form-control input-sm" id="sizeMargin" formControlName="sizeMargin">
+        </div>
+        <app-control-messages [control]="adjustmentForm.controls.sizeMargin"></app-control-messages>
+      </div>
+    </div>
+
+  </form>

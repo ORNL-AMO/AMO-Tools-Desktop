@@ -43,3 +43,17 @@
   font-size: small;
   color: gray;
 }
+
+
+/*tmp color variables*/
+.dark-bg{
+  background-color: #EDEDED;
+}
+
+.medium-bg{
+  background-color: #F5F5F5;
+}
+
+.white-bg{
+  background-color: white;
+}

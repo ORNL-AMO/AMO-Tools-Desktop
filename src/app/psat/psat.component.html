@@ -10,7 +10,7 @@
     <app-modify-conditions [(baseline)]="assessment.psat" *ngIf="currentTab == 5"></app-modify-conditions>
   </div>
 
-  <div class="col-md-3 panel" *ngIf="isPanelOpen">
+  <div class="col-md-3 panel white-bg" *ngIf="isPanelOpen">
     <app-data-panel *ngIf="panelView == 'data-panel'"></app-data-panel>
     <app-help-panel *ngIf="panelView == 'help-panel'"></app-help-panel>
     <app-settings-panel *ngIf="panelView == 'settings-panel'"></app-settings-panel>
