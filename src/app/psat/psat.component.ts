@@ -97,7 +97,7 @@ export class PsatComponent implements OnInit {
       'viscosity': [this.assessment.psat.kinematic_viscosity],
       'gravity': [this.assessment.psat.specific_gravity],
       'stages': [this.assessment.psat.stages],
-      'fixedSpeed': ['No'],
+      'fixedSpeed': [this.assessment.psat.fixed_speed],
       'frequency': [this.assessment.psat.line_frequency],
       'horsePower': [this.assessment.psat.motor_rated_power],
       'motorRPM': [this.assessment.psat.motor_rated_speed],

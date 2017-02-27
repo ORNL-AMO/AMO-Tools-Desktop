@@ -6,3 +6,18 @@
         padding-top: 0;
     padding-bottom: 0;
 }
+
+.baseline-name{
+    cursor: pointer;
+
+}
+
+.card-header{
+    padding-top: 5px;
+    padding-bottom: 5px;
+    height: 35px;
+}
+
+.baseline-card{
+    height:100%;
+}

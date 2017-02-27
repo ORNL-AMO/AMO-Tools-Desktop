@@ -24,7 +24,8 @@ export interface PSAT {
   motor_field_current?: any,
   motor_field_voltage?: any,
   cost_kw_hour?: any,
-  adjustments?: Adjustment[]
+  adjustments?: Adjustment[],
+  selected?: boolean
   
 }
 

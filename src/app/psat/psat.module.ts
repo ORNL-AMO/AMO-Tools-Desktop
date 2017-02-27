@@ -16,6 +16,10 @@ import { DataPanelComponent } from './data-panel/data-panel.component';
 import { HelpPanelComponent } from './help-panel/help-panel.component';
 import { BaselineComponent } from './modify-conditions/baseline/baseline.component';
 import { AdjustmentComponent } from './modify-conditions/adjustment/adjustment.component';
+import { AdjustmentSelectedComponent } from './modify-conditions/adjustment-selected/adjustment-selected.component';
+import { AdjustmentPumpFluidComponent } from './modify-conditions/adjustment-selected/adjustment-pump-fluid/adjustment-pump-fluid.component';
+import { AdjustmentMotorComponent } from './modify-conditions/adjustment-selected/adjustment-motor/adjustment-motor.component';
+import { AdjustmentFieldDataComponent } from './modify-conditions/adjustment-selected/adjustment-field-data/adjustment-field-data.component';
 
 @NgModule({
   declarations: [
@@ -31,7 +35,11 @@ import { AdjustmentComponent } from './modify-conditions/adjustment/adjustment.c
     DataPanelComponent,
     HelpPanelComponent,
     BaselineComponent,
-    AdjustmentComponent
+    AdjustmentComponent,
+    AdjustmentSelectedComponent,
+    AdjustmentPumpFluidComponent,
+    AdjustmentMotorComponent,
+    AdjustmentFieldDataComponent
   ],
   exports: [
 

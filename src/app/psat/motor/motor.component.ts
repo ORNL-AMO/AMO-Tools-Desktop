@@ -14,4 +14,25 @@ export class MotorComponent implements OnInit {
   ngOnInit() {
   }
 
+  addNum(str: string) {
+    if (str == 'motorRPM') {
+      this.psatForm.value.motorRPM++;
+    } else if (str == 'sizeMargin') {
+      this.psatForm.value.sizeMargin++;
+    }
+  }
+
+  subtractNum(str: string) {
+    if (str == 'motorRPM') {
+      if (this.psatForm.value.motorRPM != 0) {
+        this.psatForm.value.motorRPM--;
+      }
+    } else if (str == 'sizeMargin') {
+      if (this.psatForm.value.sizeMargin != 0) {
+        this.psatForm.value.sizeMargin--;
+      }
+    }
+  }
+
+
 }

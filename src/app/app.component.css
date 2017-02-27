@@ -43,3 +43,29 @@
   font-size: small;
   color: gray;
 }
+
+
+/*tmp color variables*/
+.dark-bg{
+  background-color: #EDEDED;
+}
+
+.medium-bg{
+  background-color: #F5F5F5;
+}
+
+.white-bg{
+  background-color: white;
+}
+
+
+/*Plus Minus sign buttons */
+.fa-plus:hover{
+  text-shadow: 0 0 0.3em dodgerblue, 0 0 0.3em dodgerblue,
+        0 0 0.3em dodgerblue
+}
+
+.fa-minus:hover{
+  text-shadow: 0 0 0.3em indianred, 0 0 0.3em indianred,
+        0 0 0.3em indianred
+}

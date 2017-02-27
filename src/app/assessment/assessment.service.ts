@@ -63,6 +63,38 @@ export class AssessmentService {
     this.workingAssessment = assessment;
   }
 
+  getBaselinePSAT(){
+    let tmpPSAT = this.buildPSAT(
+      this.workingAssessment.psat.pump_style,
+      this.workingAssessment.psat.pump_specified,
+      this.workingAssessment.psat.pump_rated_speed,
+      this.workingAssessment.psat.drive,
+      this.workingAssessment.psat.kinematic_viscosity,
+      this.workingAssessment.psat.specific_gravity,
+      this.workingAssessment.psat.stages,
+      this.workingAssessment.psat.fixed_speed,
+      this.workingAssessment.psat.line_frequency,
+      this.workingAssessment.psat.motor_rated_power,
+      this.workingAssessment.psat.motor_rated_speed,
+      this.workingAssessment.psat.efficiency_class,
+      this.workingAssessment.psat.efficiency,
+      this.workingAssessment.psat.motor_rated_voltage,
+      this.workingAssessment.psat.load_estimation_method,
+      this.workingAssessment.psat.motor_rated_flc,
+      this.workingAssessment.psat.full_load_amps,
+      this.workingAssessment.psat.margin,
+      this.workingAssessment.psat.operating_fraction,
+      this.workingAssessment.psat.flow_rate,
+      this.workingAssessment.psat.head,
+      this.workingAssessment.psat.motor_field_power,
+      this.workingAssessment.psat.motor_field_current,
+      this.workingAssessment.psat.motor_field_voltage,
+      this.workingAssessment.psat.cost_kw_hour
+    );
+
+    return tmpPSAT;
+  }
+
   buildPSAT(
       _pump_style: any,
       _pump_specified: any,

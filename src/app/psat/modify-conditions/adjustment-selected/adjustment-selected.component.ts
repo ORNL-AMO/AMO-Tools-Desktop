@@ -1,21 +1,26 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Adjustment } from '../../../shared/models/psat';
+import { FormBuilder } from '@angular/forms';
 
 @Component({
-  selector: 'app-adjustment',
-  templateUrl: './adjustment.component.html',
-  styleUrls: ['./adjustment.component.css']
+  selector: 'app-adjustment-selected',
+  templateUrl: './adjustment-selected.component.html',
+  styleUrls: ['./adjustment-selected.component.css']
 })
-export class AdjustmentComponent implements OnInit {
+export class AdjustmentSelectedComponent implements OnInit {
+  @Input()
+  adjustmentForm: any;
   @Input()
   adjustment: Adjustment;
   @Output('adjustmentRemove')
   adjustmentRemove = new EventEmitter<string>();
   @Output('adjustmentSelect')
   adjustmentSelect = new EventEmitter<string>();
-  constructor() { }
+
+  constructor(private formBuilder: FormBuilder) { }
 
   ngOnInit() {
+    //this.adjustmentForm = this.initForm();
   }
 
   removeAdjustment(){
@@ -23,6 +28,6 @@ export class AdjustmentComponent implements OnInit {
   }
 
   selectAdjustment(){
-    this.adjustmentSelect.emit(this.adjustment.name);
+   // this.adjustmentSelect.emit(this.adjustment.name);
   }
 }

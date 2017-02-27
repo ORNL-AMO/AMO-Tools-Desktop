@@ -1,5 +1,5 @@
-<div class="card">
-  <div class="card-header">
+<div class="card dark-bg adjustment-card">
+  <div class="card-header adjustment-name" (click)="selectAdjustment()">
     {{adjustment.name}}
        <button class="close pull-right" aria-label="Close" (click)="removeAdjustment()">
           <span aria-hidden="true">&times;</span>
@@ -7,7 +7,6 @@
   </div>
     <!-- PUMP / FLUID-->
       <div class="card-header">
-        PUMP / FLUID
       </div>
       <div class="card-block row">
         <div class="col-md-12">
@@ -22,7 +21,6 @@
         </div>
     <!-- MOTOR -->
       <div class="card-header">
-        MOTOR
       </div>
       <div class="card-block row">
         <div class="col-md-12">
@@ -38,7 +36,6 @@
     <!-- FIELD DATA-->
 
       <div class="card-header">
-        Field Data
       </div>
       <div class="card-block row">
         <div class="col-md-12">
