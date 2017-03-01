@@ -2,3 +2,7 @@
   background-color: #003054;
   color: white;
 }
+
+.dashboard-content{
+  height: 100vh;
+}

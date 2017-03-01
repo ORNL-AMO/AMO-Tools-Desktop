@@ -4,7 +4,7 @@
 <!--CREATE Folder MODAL-->
 <div bsModal #createModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="createModalLabel" aria-hidden="true"
      [config]="{backdrop: 'static'}">
-  <div class="modal-dialog modal-lg create-folder-modal">
+  <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
         <h3>Create a Folder in {{directory.name}}</h3>
@@ -14,8 +14,8 @@
       </div>
       <div class="modal-body">
         <form class="form-group" [formGroup]="newFolder">
-          <div class="row input-row">
-            <div class="col-md-12">
+          <div class="row">
+            <div class="col-12">
                 <label class="form-control-label" for="newFolderName">Folder Name</label>
                 <div class="input-group">
                   <input class="form-control input-group" formControlName="newFolderName" id="newFolderName" placeholder="New Folder"/>
@@ -26,12 +26,12 @@
                </div>
             </div>
           </div>
-          <div class="row">
-            <div class="col-md-6">
-              <button class="btn pull-left" (click)="hideCreateModal()">Close</button>
+          <div class="row justify-content-between">
+            <div class="col-2">
+              <button class="btn" (click)="hideCreateModal()">Close</button>
             </div>
-            <div class="col-md-6">
-              <button class="btn btn-primary pull-right" [disabled]="!newFolder.valid" (click)="createFolder()">Create</button>
+            <div class="col-2">
+              <button class="btn btn-primary" [disabled]="!newFolder.valid" (click)="createFolder()">Create</button>
             </div>
           </div>
         </form>

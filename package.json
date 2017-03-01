@@ -71,6 +71,7 @@
     "@types/moment": "^2.13.0",
     "@types/node": "~6.0.60",
     "codelyzer": "~2.0.0",
+
     "css-loader": "^0.26.2",
     "electron": "^1.4.15",
     "electron-builder": "^13.9.0",

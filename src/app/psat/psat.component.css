@@ -1,14 +1,16 @@
 .panel{
   background-color: beige;
+  height: 100%;
 }
 
 .tab-content{
   height: 75vh;
+  max-height: 75vh;
+  overflow-y: scroll;
 }
 
 .btn-footer{
   height: 10vh;
-  padding-top: 3vh;
 }
 
 
