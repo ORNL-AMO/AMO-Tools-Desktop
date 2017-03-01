@@ -72,6 +72,7 @@
     "@types/node": "^6.0.42",
     "angular-cli": "1.0.0-beta.26",
     "codelyzer": "~2.0.0-beta.1",
+    "css-loader": "^0.26.2",
     "electron": "^1.4.15",
     "electron-builder": "^13.9.0",
     "electron-builder-squirrel-windows": "^13.6.1",
@@ -85,6 +86,7 @@
     "karma-jasmine": "^1.0.2",
     "karma-remap-istanbul": "^0.2.1",
     "protractor": "~4.0.13",
+    "style-loader": "^0.13.2",
     "ts-node": "1.2.1",
     "tslint": "^4.3.0",
     "typescript": "~2.0.3"

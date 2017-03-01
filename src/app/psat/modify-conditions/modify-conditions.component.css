@@ -1,9 +1,9 @@
 .modify-content{
     font-size: small;
-    height: 100%;
+    height: 75vh;
 }
 
-.col-md-3{
+.col-3{
     padding-left: 0;
     padding-right:0;
 }

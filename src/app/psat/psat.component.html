@@ -1,28 +1,32 @@
-<app-psat-banner (togglePanel)="toggleOpenPanel($event)" [assessment]="assessment"></app-psat-banner>
-<app-psat-tabs [currentTab]="currentTab" (tabChange)="changeTab($event)"></app-psat-tabs>
+<div class="container-fluid">
+  <app-psat-banner (togglePanel)="toggleOpenPanel($event)" [assessment]="assessment"></app-psat-banner>
+  <app-psat-tabs [currentTab]="currentTab" (tabChange)="changeTab($event)"></app-psat-tabs>
 
-<div class="row tab-content">
-  <div [ngClass]="{'col-md-12': !isPanelOpen, 'col-md-9': isPanelOpen}">
-    <app-system-basics *ngIf="currentTab == 1"></app-system-basics>
-    <app-pump-fluid [(psatForm)]="psatForm" *ngIf="currentTab == 2"></app-pump-fluid>
-    <app-motor  [(psatForm)]="psatForm" *ngIf="currentTab == 3"></app-motor>
-    <app-field-data  [(psatForm)]="psatForm" *ngIf="currentTab == 4"></app-field-data>
-    <app-modify-conditions [(baseline)]="assessment.psat" *ngIf="currentTab == 5"></app-modify-conditions>
+  <div class="row tab-content" [ngClass]="{'align-items-center':currentTab != 5}">
+    <div [ngClass]="{'col-12': !isPanelOpen, 'col-9': isPanelOpen}">
+      <app-system-basics *ngIf="currentTab == 1"></app-system-basics>
+      <app-pump-fluid [(psatForm)]="psatForm" *ngIf="currentTab == 2"></app-pump-fluid>
+      <app-motor [(psatForm)]="psatForm" *ngIf="currentTab == 3"></app-motor>
+      <app-field-data [(psatForm)]="psatForm" *ngIf="currentTab == 4"></app-field-data>
+      <app-modify-conditions [(baseline)]="assessment.psat" *ngIf="currentTab == 5"></app-modify-conditions>
+    </div>
+
+    <div class="col-3 panel white-bg" *ngIf="isPanelOpen">
+      <app-data-panel *ngIf="panelView == 'data-panel'"></app-data-panel>
+      <app-help-panel *ngIf="panelView == 'help-panel'"></app-help-panel>
+      <app-settings-panel *ngIf="panelView == 'settings-panel'"></app-settings-panel>
+    </div>
   </div>
 
-  <div class="col-md-3 panel white-bg" *ngIf="isPanelOpen">
-    <app-data-panel *ngIf="panelView == 'data-panel'"></app-data-panel>
-    <app-help-panel *ngIf="panelView == 'help-panel'"></app-help-panel>
-    <app-settings-panel *ngIf="panelView == 'settings-panel'"></app-settings-panel>
-  </div>
-</div>
-
-<div class="row btn-footer">
-  <div class="col-md-12">
-    <button class="btn pull-left" *ngIf="currentTab == 1" (click)="close()">Close</button>
-    <button class="btn pull-left" *ngIf="currentTab != 1" (click)="goBack()">Back</button>
-    <button class="btn btn-primary pull-right" *ngIf="currentTab < 5" (click)="continue()">Save & Continue</button>
-    <button class="btn btn-primary pull-right" *ngIf="currentTab >= 5" (click)="save()">Save</button>
-    <button class="btn btn-primary pull-right" *ngIf="currentTab >= 5" (click)="exportData()">Export</button>
+  <div class="row btn-footer align-items-center justify-content-between">
+    <div class="col-2">
+      <button class="btn" *ngIf="currentTab == 1" (click)="close()">Close</button>
+      <button class="btn" *ngIf="currentTab != 1" (click)="goBack()">Back</button>
+    </div>
+    <div class="col-2">
+      <button class="btn btn-primary" *ngIf="currentTab < 5" (click)="continue()">Save & Continue</button>
+      <button class="btn btn-primary" *ngIf="currentTab >= 5" (click)="save()">Save</button>
+      <button class="btn btn-primary" *ngIf="currentTab >= 5" (click)="exportData()">Export</button>
+    </div>
   </div>
 </div>

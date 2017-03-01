@@ -16,7 +16,7 @@
         <form class="form-group" [formGroup]="newAssessment">
 
           <div class="row">
-            <div class="col-md-12">
+            <div class="col-12">
               <label class="form-control-label" for="assessmentName">Assessment Name</label>
               <div class="input-group">
                 <input class="form-control input-group" formControlName="assessmentName" id="assessmentName" placeholder="New Assessment"/>
@@ -30,17 +30,17 @@
 
           <div class="row">
               <div class="tool-select-box">
-                <div class="col-md-12">
+                <div class="col-12">
                 <select class="form-control type-select" formControlName="assessmentType">
                   <option>Pump</option>
                   <option>Furnace</option>
                 </select>
               </div>
-              <div class="col-md-12">
+              <div class="col-12">
                 <input type="radio" name="chooseEquipment" value="createNew" checked (click)="selectEquip('new')"> Add New Equipment<br>
                 <input type="radio" name="chooseEquipment" value="useExisting" (click)="selectEquip('existing')"> Select Equipment from Another Assessment<br>
               </div>
-              <div class="col-md-12" *ngIf="selectedEquip == 'existing'">
+              <div class="col-12" *ngIf="selectedEquip == 'existing'">
                 <div class="equipment-select">
                   <div class="dropdown">
                     <button class="btn dropdown-toggle assessment-dropdown" type="button" (click)="toggleDropdown(showDropdown)">{{selectedAssessment}}
@@ -59,10 +59,10 @@
           </div>
 
           <div class="row">
-            <div class="col-md-6">
+            <div class="col-6">
               <button class="btn pull-left" (click)="hideCreateModal()">Close</button>
             </div>
-            <div class="col-md-6">
+            <div class="col-6">
               <button class="btn btn-primary pull-right" type="submit" [disabled]="!newAssessment.valid" (click)="createAssessment()">Create</button>
             </div>
           </div>
