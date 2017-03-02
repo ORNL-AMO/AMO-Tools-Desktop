@@ -17,6 +17,8 @@ export class PsatComponent implements OnInit {
   isPanelOpen: boolean = true;
   currentTab: number = 1;
 
+  showDetailedReport: boolean = false;
+
   psatForm: any;
 
   adjustment: Adjustment;
@@ -28,45 +30,53 @@ export class PsatComponent implements OnInit {
     this.psatForm = this.initForm();
   }
 
-  changeTab($event){
+  changeTab($event) {
     this.currentTab = $event;
-    if(this.currentTab == 5){
+    if (this.currentTab == 5) {
       this.panelView = 'data-panel';
     }
   }
 
-  toggleOpenPanel($event){
-    if(!this.isPanelOpen) {
+  toggleOpenPanel($event) {
+    if (!this.isPanelOpen) {
       this.panelView = $event;
       this.isPanelOpen = true;
-    }else if(this.isPanelOpen && $event != this.panelView){
+    } else if (this.isPanelOpen && $event != this.panelView) {
       this.panelView = $event;
-    }else{
+    } else {
       this.isPanelOpen = false;
     }
   }
 
-  selectAdjustment($event){
+  selectAdjustment($event) {
     this.adjustment = $event;
   }
 
-  continue(){
+  continue() {
     this.save();
     this.currentTab++;
-    if(this.currentTab == 5){
+    if (this.currentTab == 5) {
       this.panelView = 'data-panel';
     }
   }
 
-  close(){
+  close() {
     this.location.back();
   }
 
-  goBack(){
+  goBack() {
     this.currentTab--;
   }
 
-  save(){
+  showReport() {
+    this.showDetailedReport = true;
+  }
+
+  closeReport(){
+    this.showDetailedReport = false;
+  }
+
+  save() {
     let tmpPSAT = this.assessmentService.buildPSAT(
       this.psatForm.value.pumpType,
       '',
@@ -99,11 +109,11 @@ export class PsatComponent implements OnInit {
     this.assessmentService.setWorkingAssessment(this.assessment);
   }
 
-  exportData(){
+  exportData() {
     //TODO: Logic for saving assessment
   }
 
-  initForm(){
+  initForm() {
     return this.formBuilder.group({
       'pumpType': [this.assessment.psat.pump_style],
       'pumpRPM': [this.assessment.psat.pump_rated_speed],

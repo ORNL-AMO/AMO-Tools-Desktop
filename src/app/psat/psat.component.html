@@ -1,4 +1,4 @@
-<div class="container-fluid">
+<div class="container-fluid" *ngIf="!showDetailedReport">
   <app-psat-banner (togglePanel)="toggleOpenPanel($event)" [assessment]="assessment"></app-psat-banner>
   <app-psat-tabs [currentTab]="currentTab" (tabChange)="changeTab($event)"></app-psat-tabs>
 
@@ -12,7 +12,7 @@
     </div>
 
     <div class="col-3 panel white-bg" *ngIf="isPanelOpen">
-      <app-data-panel [adjustment]="adjustment" *ngIf="panelView == 'data-panel' && currentTab == 5"></app-data-panel>
+      <app-data-panel (showReport)="showReport()" [adjustment]="adjustment" *ngIf="panelView == 'data-panel' && currentTab == 5"></app-data-panel>
       <app-help-panel *ngIf="panelView == 'help-panel'"></app-help-panel>
       <app-settings-panel *ngIf="panelView == 'settings-panel'"></app-settings-panel>
     </div>
@@ -29,4 +29,8 @@
       <button class="btn btn-primary" *ngIf="currentTab >= 5" (click)="exportData()">Export</button>
     </div>
   </div>
+</div>
+
+<div *ngIf="showDetailedReport">
+  <app-psat-report (closeReport)="closeReport()" [baseline]="assessment.psat"></app-psat-report>
 </div>

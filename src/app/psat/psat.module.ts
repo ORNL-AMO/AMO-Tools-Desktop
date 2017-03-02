@@ -22,6 +22,10 @@ import { AdjustmentSelectedComponent } from './modify-conditions/adjustment-sele
 import { AdjustmentPumpFluidComponent } from './modify-conditions/adjustment-selected/adjustment-pump-fluid/adjustment-pump-fluid.component';
 import { AdjustmentMotorComponent } from './modify-conditions/adjustment-selected/adjustment-motor/adjustment-motor.component';
 import { AdjustmentFieldDataComponent } from './modify-conditions/adjustment-selected/adjustment-field-data/adjustment-field-data.component';
+import { PsatReportComponent } from './psat-report/psat-report.component';
+import { InputSummaryComponent } from './psat-report/input-summary/input-summary.component';
+import { OutputSummaryComponent } from './psat-report/output-summary/output-summary.component';
+import { ChartSummaryComponent } from './psat-report/chart-summary/chart-summary.component';
 
 @NgModule({
   declarations: [
@@ -41,7 +45,11 @@ import { AdjustmentFieldDataComponent } from './modify-conditions/adjustment-sel
     AdjustmentSelectedComponent,
     AdjustmentPumpFluidComponent,
     AdjustmentMotorComponent,
-    AdjustmentFieldDataComponent
+    AdjustmentFieldDataComponent,
+    PsatReportComponent,
+    InputSummaryComponent,
+    OutputSummaryComponent,
+    ChartSummaryComponent
   ],
   exports: [
 

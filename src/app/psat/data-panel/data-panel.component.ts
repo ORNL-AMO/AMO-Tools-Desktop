@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, SimpleChange } from '@angular/core';
+import { Component, OnInit, Input, SimpleChange, Output, EventEmitter } from '@angular/core';
 import { Adjustment } from '../../shared/models/psat';
 //import { BaseChartDirective } from 'ng2-charts';
 
@@ -10,6 +10,8 @@ import { Adjustment } from '../../shared/models/psat';
 export class DataPanelComponent implements OnInit {
   @Input()
   adjustment: Adjustment;
+  @Output('showReport')
+  showReport = new EventEmitter();
 
   doughnutChartLabels: string[] = ['Optimization Rating', 'Potential'];
   doughnutChartData: number[];
@@ -47,11 +49,11 @@ export class DataPanelComponent implements OnInit {
     if (this.adjustment.optimizationRating >= 70) {
       this.chartColorDataSet = [
         {
+          options: this.chartOptions,
           data: this.doughnutChartData,
           backgroundColor: [
             "#27AE60",
             "#CCD1D1"
-
           ],
           hoverBackground: [
             "#229954",
@@ -62,6 +64,7 @@ export class DataPanelComponent implements OnInit {
     }else if(this.adjustment.optimizationRating < 70 && this.adjustment.optimizationRating >= 50){
       this.chartColorDataSet = [
         {
+          options: this.chartOptions,
           data: this.doughnutChartData,
           backgroundColor: [
             "#EB984E",
@@ -77,6 +80,7 @@ export class DataPanelComponent implements OnInit {
     }else{
       this.chartColorDataSet = [
         {
+          options: this.chartOptions,
           data: this.doughnutChartData,
           backgroundColor: [
             "#E74C3C",
@@ -98,6 +102,10 @@ export class DataPanelComponent implements OnInit {
     // this.baseChart.labels = this.doughnutChartLabels;
 
     //TODO: Add data init here
+  }
+
+  goToReport(){
+    this.showReport.emit(true);
   }
 
 }

@@ -5,6 +5,8 @@ import { AssessmentModule } from '../assessment/assessment.module';
 import { PhastModule } from '../phast/phast.module';
 import { PsatModule } from '../psat/psat.module';
 import { CalculatorModule } from '../calculator/calculator.module';
+import { DetailedReportModule } from '../detailed-report/detailed-report.module';
+
 import { CoreComponent } from './core.component';
 import { SidebarComponent } from '../sidebar/sidebar.component';
 import { DashboardComponent } from '../dashboard/dashboard.component';
@@ -22,7 +24,8 @@ import { AssessmentService } from '../assessment/assessment.service';
     AssessmentModule,
     PsatModule,
     PhastModule,
-    CalculatorModule
+    CalculatorModule,
+    DetailedReportModule
   ],
   providers: [
     AssessmentService

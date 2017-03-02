@@ -21,10 +21,11 @@ export class ModifyConditionsComponent implements OnInit {
   ngOnInit() {
     if (!this.baseline.adjustments) {
       this.baseline.adjustments = new Array();
+      this.addAdjustment();
     }
     this.baseline.selected = false;
     this.adjustmentForm = this.initForm(this.baseline);
-    this.addAdjustment();
+    this.selectedAdjustment.emit(this.baseline.adjustments[this.baseline.adjustments.length - 1]);
   }
 
   addAdjustment() {
