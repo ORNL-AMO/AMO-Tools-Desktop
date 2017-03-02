@@ -1,3 +1,5 @@
-<p>
-  chart-summary works!
-</p>
+<div class="row justify-content-center" style="height: 50vh;">
+  <div class="col" *ngFor="let adjustment of baseline.adjustments">
+    <app-psat-chart [adjustment]="adjustment"></app-psat-chart>
+  </div>
+</div>

@@ -1,25 +1,18 @@
-<div class="row justify-content-center align-items-center panel-top">
-  <div class="col-8">
-    <div style="display: block">
-      <canvas baseChart [data]="doughnutChartData" [datasets]="chartColorDataSet" [labels]="doughnutChartLabels" [chartType]="doughnutChartType" [options]="chartOptions" [colors]="chartColors"></canvas>
-    </div>
-    <div class="small text-muted text-center">Optimization Rating</div>
+<div class="row justify-content-center">
+  <div class="col-8 align-items-center">
+    <app-psat-chart [adjustment]="adjustment"></app-psat-chart>
   </div>
 </div>
 
 
-<div class="row justify-content-center align-items-center panel-middle">
-  <div class="col-8">
-    <div class="savings text-center">{{adjustment.savings | currency:'USD':true:'4.2-2'}} </div>
-    <div class="small text-muted text-center">Annual Savings Potential</div>
-  </div>
-   <div class="col-8 justify-content-center">
+<div class="row justify-content-center button-row">
+   <div class="col-8 align-items-center">
     <button class="btn btn-default report-button" (click)="goToReport()">View Detailed Report</button>
   </div>
 </div>
 
-<div class="row justify-content-center align-items-center panel-bottom">
-  <div class="col-8">
+<div class="row justify-content-center">
+  <div class="col-8 align-items-center">
       <div class="h5 text-center">Modified Data</div>
       <div class="h5 text-center text-muted">You haven't modified anything yet.</div>
   </div>

@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
+import { PSAT } from '../../../shared/models/psat';
 
 @Component({
   selector: 'app-chart-summary',
@@ -6,7 +7,8 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./chart-summary.component.css']
 })
 export class ChartSummaryComponent implements OnInit {
-
+  @Input()
+  baseline: PSAT;
   constructor() { }
 
   ngOnInit() {

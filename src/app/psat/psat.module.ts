@@ -26,6 +26,7 @@ import { PsatReportComponent } from './psat-report/psat-report.component';
 import { InputSummaryComponent } from './psat-report/input-summary/input-summary.component';
 import { OutputSummaryComponent } from './psat-report/output-summary/output-summary.component';
 import { ChartSummaryComponent } from './psat-report/chart-summary/chart-summary.component';
+import { PsatChartComponent } from './psat-chart/psat-chart.component';
 
 @NgModule({
   declarations: [
@@ -49,7 +50,8 @@ import { ChartSummaryComponent } from './psat-report/chart-summary/chart-summary
     PsatReportComponent,
     InputSummaryComponent,
     OutputSummaryComponent,
-    ChartSummaryComponent
+    ChartSummaryComponent,
+    PsatChartComponent
   ],
   exports: [
 

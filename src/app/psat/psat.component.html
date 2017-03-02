@@ -1,4 +1,4 @@
-<div class="container-fluid" *ngIf="!showDetailedReport">
+<div *ngIf="!showDetailedReport">
   <app-psat-banner (togglePanel)="toggleOpenPanel($event)" [assessment]="assessment"></app-psat-banner>
   <app-psat-tabs [currentTab]="currentTab" (tabChange)="changeTab($event)"></app-psat-tabs>
 
