@@ -31,5 +31,7 @@ export interface PSAT {
 
 export interface Adjustment {
   psat: PSAT,
-  name: string
+  name: string,
+  savings?: number,
+  optimizationRating?: number
 }

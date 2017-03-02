@@ -3,6 +3,8 @@ import { Location } from '@angular/common';
 import { Assessment } from '../shared/models/assessment';
 import { AssessmentService } from '../assessment/assessment.service';
 import { FormBuilder } from '@angular/forms';
+import { Adjustment } from '../shared/models/psat';
+
 @Component({
   selector: 'app-psat',
   templateUrl: './psat.component.html',
@@ -17,6 +19,8 @@ export class PsatComponent implements OnInit {
 
   psatForm: any;
 
+  adjustment: Adjustment;
+
   constructor(private location: Location, private assessmentService: AssessmentService, private formBuilder: FormBuilder) { }
 
   ngOnInit() {
@@ -26,6 +30,9 @@ export class PsatComponent implements OnInit {
 
   changeTab($event){
     this.currentTab = $event;
+    if(this.currentTab == 5){
+      this.panelView = 'data-panel';
+    }
   }
 
   toggleOpenPanel($event){
@@ -39,9 +46,16 @@ export class PsatComponent implements OnInit {
     }
   }
 
+  selectAdjustment($event){
+    this.adjustment = $event;
+  }
+
   continue(){
     this.save();
     this.currentTab++;
+    if(this.currentTab == 5){
+      this.panelView = 'data-panel';
+    }
   }
 
   close(){

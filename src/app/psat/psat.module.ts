@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SharedModule } from '../shared/shared.module';
+import { ChartsModule } from 'ng2-charts';
+
 import { PsatComponent } from './psat.component';
 import { PsatBannerComponent } from './psat-banner/psat-banner.component';
 import { PsatTabsComponent } from './psat-tabs/psat-tabs.component';
@@ -49,7 +51,8 @@ import { AdjustmentFieldDataComponent } from './modify-conditions/adjustment-sel
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    SharedModule
+    SharedModule,
+    ChartsModule
   ],
   providers: [
   ]

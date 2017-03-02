@@ -1,0 +1,21 @@
+.savings{
+    font-weight: bold;
+    color: #27AE60;
+    font-size: xx-large;
+}
+
+.report-button{
+    width: 100%;
+}
+
+.panel-top{
+    height: 40%;
+}
+
+.panel-middle{
+    height: 20%;
+}
+
+.panel-bottom{
+  height: 40%;
+}

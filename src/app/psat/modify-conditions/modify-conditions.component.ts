@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { PSAT, Adjustment } from '../../shared/models/psat';
 import { AssessmentService } from '../../assessment/assessment.service';
 import * as _ from 'lodash';
@@ -11,6 +11,8 @@ import { FormBuilder } from '@angular/forms';
 export class ModifyConditionsComponent implements OnInit {
   @Input()
   baseline: PSAT;
+  @Output('selectedAdjustment')
+  selectedAdjustment = new EventEmitter<Adjustment>();
 
   adjustmentForm: any;
 
@@ -22,6 +24,7 @@ export class ModifyConditionsComponent implements OnInit {
     }
     this.baseline.selected = false;
     this.adjustmentForm = this.initForm(this.baseline);
+    this.addAdjustment();
   }
 
   addAdjustment() {
@@ -31,8 +34,16 @@ export class ModifyConditionsComponent implements OnInit {
     }
     let newAdjustmentPsat = this.assessmentService.getBaselinePSAT();
     newAdjustmentPsat.selected = true;
-    this.baseline.adjustments.push({ psat: newAdjustmentPsat, name: 'Adjustment ' + (this.baseline.adjustments.length + 1) });
+    this.baseline.adjustments.push(
+      {
+        psat: newAdjustmentPsat,
+        name: 'Adjustment ' + (this.baseline.adjustments.length + 1),
+        optimizationRating: Math.random() * 100,
+        savings: Math.random() * 10000
+      }
+    );
     this.adjustmentForm = this.initForm(this.baseline.adjustments[this.baseline.adjustments.length - 1].psat);
+    this.selectedAdjustment.emit(this.baseline.adjustments[this.baseline.adjustments.length - 1]);
   }
 
 
@@ -65,6 +76,7 @@ export class ModifyConditionsComponent implements OnInit {
         if (adjustment.name == $event) {
           adjustment.psat.selected = true;
           this.adjustmentForm = this.initForm(adjustment.psat);
+          this.selectedAdjustment.emit(adjustment);
         }
         else {
           adjustment.psat.selected = false;
