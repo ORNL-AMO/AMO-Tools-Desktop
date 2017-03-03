@@ -27,6 +27,8 @@ import { OtherLossesComponent } from './losses/other-losses/other-losses.compone
 import { FixtureLossesComponent } from './losses/fixture-losses/fixture-losses.component';
 import { LossesSidebarComponent } from './losses/losses-sidebar/losses-sidebar.component';
 import { SankeyDiagramComponent } from './sankey/sankey-diagram/sankey-diagram.component';
+import {ColorPickerModule} from 'angular2-color-picker';
+
 @NgModule({
   declarations: [
     PhastComponent,
@@ -61,7 +63,8 @@ import { SankeyDiagramComponent } from './sankey/sankey-diagram/sankey-diagram.c
     CommonModule,
     ReactiveFormsModule,
     FormsModule,
-    SharedModule
+    SharedModule,
+    ColorPickerModule
   ],
   providers: []
 })
