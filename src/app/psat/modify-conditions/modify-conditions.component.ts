@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
-import { PSAT, Adjustment } from '../../shared/models/psat';
+import { PSAT, PsatInputs } from '../../shared/models/psat';
 import { AssessmentService } from '../../assessment/assessment.service';
 import * as _ from 'lodash';
 import { FormBuilder } from '@angular/forms';
@@ -12,7 +12,7 @@ export class ModifyConditionsComponent implements OnInit {
   @Input()
   baseline: PSAT;
   @Output('selectedAdjustment')
-  selectedAdjustment = new EventEmitter<Adjustment>();
+  selectedAdjustment = new EventEmitter<PSAT>();
 
   adjustmentForm: any;
 
@@ -24,26 +24,23 @@ export class ModifyConditionsComponent implements OnInit {
       this.addAdjustment();
     }
     this.baseline.selected = false;
+    this.baseline.name = 'Baseline';
     this.adjustmentForm = this.initForm(this.baseline);
     this.selectedAdjustment.emit(this.baseline.adjustments[this.baseline.adjustments.length - 1]);
   }
 
   addAdjustment() {
     if (this.baseline.adjustments.length > 0) {
-      let adjustedPsat = this.createPsatFromForm();
-      this.saveAdjustment(adjustedPsat);
+      let adjustedPsatInputs: PsatInputs = this.createPsatInputsFromForm();
+      this.saveAdjustment(adjustedPsatInputs);
     }
     let newAdjustmentPsat = this.assessmentService.getBaselinePSAT();
-    newAdjustmentPsat.selected = true;
-    this.baseline.adjustments.push(
-      {
-        psat: newAdjustmentPsat,
-        name: 'Adjustment ' + (this.baseline.adjustments.length + 1),
-        optimizationRating: Math.random() * 100,
-        savings: Math.random() * 10000
-      }
-    );
-    this.adjustmentForm = this.initForm(this.baseline.adjustments[this.baseline.adjustments.length - 1].psat);
+    newAdjustmentPsat.name = 'Adjustment ' + (this.baseline.adjustments.length + 1);
+    newAdjustmentPsat.optimizationRating = Math.random() * 100;
+    newAdjustmentPsat.savings =  Math.random() * 10000;
+    this.baseline.adjustments.push(newAdjustmentPsat);
+    this.adjustmentForm = this.initForm(this.baseline.adjustments[this.baseline.adjustments.length - 1]);
+    this.changeSelect(this.baseline.adjustments[this.baseline.adjustments.length-1].name);
     this.selectedAdjustment.emit(this.baseline.adjustments[this.baseline.adjustments.length - 1]);
   }
 
@@ -63,34 +60,34 @@ export class ModifyConditionsComponent implements OnInit {
     })
   }
 
-  changeSelect($event) {
-    let adjustedPsat = this.createPsatFromForm();
-    if ($event == 'baseline') {
+  changeSelect(str: string) {
+    let adjustedPsatInputs = this.createPsatInputsFromForm();
+    if (str == 'baseline') {
       this.baseline.selected = true;
-      this.saveAdjustment(adjustedPsat);
+      this.saveAdjustment(adjustedPsatInputs);
     }
     else {
       this.baseline.selected = false;
-      this.saveAdjustment(adjustedPsat);
+      this.saveAdjustment(adjustedPsatInputs);
 
       this.baseline.adjustments.forEach(adjustment => {
-        if (adjustment.name == $event) {
-          adjustment.psat.selected = true;
-          this.adjustmentForm = this.initForm(adjustment.psat);
+        if (adjustment.name == str) {
+          adjustment.selected = true;
+          this.adjustmentForm = this.initForm(adjustment);
           this.selectedAdjustment.emit(adjustment);
         }
         else {
-          adjustment.psat.selected = false;
+          adjustment.selected = false;
         }
       })
     }
   }
 
-  saveAdjustment(adjustedPsat: PSAT) {
+  saveAdjustment(adjustedPsatInputs: PsatInputs) {
     this.baseline.adjustments.forEach(adjustment => {
-      if (adjustment.psat.selected == true) {
-        adjustment.psat = adjustedPsat;
-        adjustment.psat.selected = false;
+      if (adjustment.selected == true) {
+        adjustment.inputs = adjustedPsatInputs;
+        adjustment.selected = false;
       }
     })
   }
@@ -98,31 +95,31 @@ export class ModifyConditionsComponent implements OnInit {
 
   initForm(psat: PSAT) {
     return this.formBuilder.group({
-      'pumpType': [psat.pump_style],
-      'pumpRPM': [psat.pump_rated_speed],
-      'drive': [psat.drive],
-      'viscosity': [psat.kinematic_viscosity],
-      'gravity': [psat.specific_gravity],
-      'stages': [psat.stages],
+      'pumpType': [psat.inputs.pump_style],
+      'pumpRPM': [psat.inputs.pump_rated_speed],
+      'drive': [psat.inputs.drive],
+      'viscosity': [psat.inputs.kinematic_viscosity],
+      'gravity': [psat.inputs.specific_gravity],
+      'stages': [psat.inputs.stages],
       'fixedSpeed': [''],
-      'frequency': [psat.line_frequency],
-      'horsePower': [psat.motor_rated_power],
-      'motorRPM': [psat.motor_rated_speed],
-      'efficiencyClass': [psat.efficiency_class],
-      'voltage': [psat.motor_field_voltage],
-      'fullLoadAmps': [psat.full_load_amps],
-      'sizeMargin': [psat.margin],
-      'operatingFraction': [psat.operating_fraction],
-      'costKwHr': [psat.cost_kw_hour],
-      'flowRate': [psat.flow_rate],
-      'head': [psat.head],
-      'loadEstimatedMethod': [psat.load_estimation_method],
-      'motorKW': [psat.motor_field_voltage]
+      'frequency': [psat.inputs.line_frequency],
+      'horsePower': [psat.inputs.motor_rated_power],
+      'motorRPM': [psat.inputs.motor_rated_speed],
+      'efficiencyClass': [psat.inputs.efficiency_class],
+      'voltage': [psat.inputs.motor_field_voltage],
+      'fullLoadAmps': [psat.inputs.full_load_amps],
+      'sizeMargin': [psat.inputs.margin],
+      'operatingFraction': [psat.inputs.operating_fraction],
+      'costKwHr': [psat.inputs.cost_kw_hour],
+      'flowRate': [psat.inputs.flow_rate],
+      'head': [psat.inputs.head],
+      'loadEstimatedMethod': [psat.inputs.load_estimation_method],
+      'motorKW': [psat.inputs.motor_field_voltage]
     })
   }
 
-  createPsatFromForm() {
-    let tmpPSAT = this.assessmentService.buildPSAT(
+  createPsatInputsFromForm() {
+    let tmpPSATinputs = this.assessmentService.buildPsatInputs(
       this.adjustmentForm.value.pumpType,
       '',
       this.adjustmentForm.value.pumpRPM,
@@ -149,7 +146,7 @@ export class ModifyConditionsComponent implements OnInit {
       this.adjustmentForm.value.voltage,
       this.adjustmentForm.value.costKwHr
     );
-    return tmpPSAT;
+    return tmpPSATinputs;
   }
 
 }

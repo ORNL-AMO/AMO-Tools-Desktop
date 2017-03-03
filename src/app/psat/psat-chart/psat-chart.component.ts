@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, SimpleChange } from '@angular/core';
-import { Adjustment } from '../../shared/models/psat';
+import { PSAT } from '../../shared/models/psat';
 
 @Component({
   selector: 'app-psat-chart',
@@ -8,7 +8,7 @@ import { Adjustment } from '../../shared/models/psat';
 })
 export class PsatChartComponent implements OnInit {
   @Input()
-  adjustment: Adjustment;
+  adjustment: PSAT;
 
   doughnutChartLabels: string[] = ['Optimization Rating', 'Potential'];
   doughnutChartData: number[];

@@ -1,6 +1,8 @@
 <div class="row justify-content-center">
-  <div class="col-8 align-items-center">
+  <div class="col-8 justify-content-center">
     <app-psat-chart [adjustment]="adjustment"></app-psat-chart>
+    <div class="savings text-center">{{adjustment.savings | currency:'USD':true:'4.2-2'}}</div>
+    <div class="text-muted text-center">Annual Savings Potential</div>
   </div>
 </div>
 

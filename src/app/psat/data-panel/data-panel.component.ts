@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, SimpleChange, Output, EventEmitter } from '@angular/core';
-import { Adjustment } from '../../shared/models/psat';
+import { PSAT } from '../../shared/models/psat';
 //import { BaseChartDirective } from 'ng2-charts';
 
 @Component({
@@ -9,7 +9,7 @@ import { Adjustment } from '../../shared/models/psat';
 })
 export class DataPanelComponent implements OnInit {
   @Input()
-  adjustment: Adjustment;
+  adjustment: PSAT;
   @Output('showReport')
   showReport = new EventEmitter();
 

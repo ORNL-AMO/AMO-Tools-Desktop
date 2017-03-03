@@ -3,8 +3,8 @@
     <div class="row assessment-report">
       <div class="col-12">
         <div class="row justify-content-between">
-          <div class="col-4">
-            {{baseline.name}} Report
+          <div class="col-6">
+            <div class="h1">{{assessment.name}} Report</div>
           </div>
           <div class="col-2">
             <button class="close pull-right" aria-label="Close" (click)="closeAssessment()">
@@ -14,15 +14,11 @@
         </div>
         <div class="row">
           <div class="col-6">
-            <app-input-summary [baseline]="baseline"></app-input-summary>
+            <app-input-summary [baseline]="assessment.psat"></app-input-summary>
           </div>
           <div class="col-6">
-            <div class="row">
-              <app-chart-summary [baseline]="baseline"></app-chart-summary>
-            </div>
-            <div class="row">
-              <app-output-summary [baseline]="baseline"></app-output-summary>
-            </div>
+            <app-chart-summary [baseline]="assessment.psat"></app-chart-summary>
+            <app-output-summary [baseline]="assessment.psat"></app-output-summary>
           </div>
         </div>
       </div>

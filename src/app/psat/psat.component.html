@@ -32,5 +32,5 @@
 </div>
 
 <div *ngIf="showDetailedReport">
-  <app-psat-report (closeReport)="closeReport()" [baseline]="assessment.psat"></app-psat-report>
+  <app-psat-report (closeReport)="closeReport()" [assessment]="assessment"></app-psat-report>
 </div>

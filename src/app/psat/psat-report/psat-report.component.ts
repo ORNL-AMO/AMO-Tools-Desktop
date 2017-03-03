@@ -1,5 +1,6 @@
 import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
-import { Adjustment, PSAT } from '../../shared/models/psat';
+import { PSAT } from '../../shared/models/psat';
+import { Assessment } from '../../shared/models/assessment';
 
 @Component({
   selector: 'app-psat-report',
@@ -8,13 +9,12 @@ import { Adjustment, PSAT } from '../../shared/models/psat';
 })
 export class PsatReportComponent implements OnInit {
   @Input()
-  baseline: PSAT;
+  assessment: Assessment;
   @Output('closeReport')
   closeReport = new EventEmitter();
   constructor() { }
 
   ngOnInit() {
-    console.log(this.baseline)
   }
 
   closeAssessment() {
