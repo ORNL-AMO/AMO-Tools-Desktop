@@ -1,0 +1,27 @@
+<div class="row justify-content-center detailed-report">
+  <div class="col-8">
+    <div class="row assessment-report">
+      <div class="col-12">
+        <div class="row justify-content-between">
+          <div class="col-6">
+            <div class="h1">{{assessment.name}} Report</div>
+          </div>
+          <div class="col-2">
+            <button class="close pull-right" aria-label="Close" (click)="closeAssessment()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-6">
+            <app-input-summary [baseline]="assessment.psat"></app-input-summary>
+          </div>
+          <div class="col-6">
+            <app-chart-summary [baseline]="assessment.psat"></app-chart-summary>
+            <app-output-summary [baseline]="assessment.psat"></app-output-summary>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

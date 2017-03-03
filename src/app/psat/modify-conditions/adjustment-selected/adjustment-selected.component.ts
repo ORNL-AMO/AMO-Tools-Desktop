@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { Adjustment } from '../../../shared/models/psat';
+import { PSAT } from '../../../shared/models/psat';
 import { FormBuilder } from '@angular/forms';
 
 @Component({
@@ -11,7 +11,7 @@ export class AdjustmentSelectedComponent implements OnInit {
   @Input()
   adjustmentForm: any;
   @Input()
-  adjustment: Adjustment;
+  adjustment: PSAT;
   @Output('adjustmentRemove')
   adjustmentRemove = new EventEmitter<string>();
   @Output('adjustmentSelect')
