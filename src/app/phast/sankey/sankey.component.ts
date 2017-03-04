@@ -1,7 +1,6 @@
 'use strict';
 
 import { Component, OnInit} from '@angular/core';
-import {ColorPickerService} from 'angular2-color-picker';
 
 declare var d3: any;
 
@@ -21,7 +20,7 @@ const portionAmount = 30000;
 export class SankeyComponent implements OnInit{
 
   private color: string = "#127bdc";
-  constructor(private cpService: ColorPickerService) {
+  constructor() {
   }
 
   ngOnInit() {
@@ -185,11 +184,13 @@ export class SankeyComponent implements OnInit{
 
     function makeInputNode(d){
       if (d.input) {
-        console.log(d.proportion);
         return d.x + "," + d.y + "," + d.x + "," + (d.y + d.proportion) + "," + (d.x + d.proportion) + "," + (d.y + d.proportion) + "," + (d.x + d.proportion) + "," + d.y;
       }
       else if(d.inter){
         return "";
+      }
+      else{
+        return d.x + "," + d.y + "," + d.x + "," + (d.y + d.proportion) + "," + (d.x + d.proportion) + "," + (d.y + d.proportion) + "," + (d.x + d.proportion) + "," + d.y;
       }
     }
 
@@ -206,18 +207,63 @@ export class SankeyComponent implements OnInit{
       return value/proportion;
     }
 
+    //d will be a link
+    function findAngle(node, i){
+      if(node.top){
+        var deltaX = node.x - (nodes[i-1].x + 30);
+        var deltaY = (node.y + (node.proportion / 2)) - (nodes[i-1].y+(node.proportion/2));
+        return toDegrees(Math.atan2(deltaY, deltaX));
+      }
+      else{
+        var deltaX = node.x - (nodes[i-1].x + 30);
+        var deltaY = (node.y - (node.proportion / 2)) - (((nodes[i-1].y+nodes[i-1].proportion) -(node.proportion/2)));
+        return toDegrees(Math.atan2(deltaY, deltaX));
+      }
+    }
+
+    function toDegrees (angle) {
+      return angle * (180 / Math.PI);
+    }
+
+
+    //Gradient
+    var linearGradient = svg.append("linearGradient")
+      .attr("id", "linear-gradient")
+      .attr("gradientUnits", "userSpaceOnUse")
+      .attr("x1", "0%")
+      .attr("y1", "50%")
+      .attr("x2", "100%")
+      .attr("y2", "50%")
+      .selectAll("stop")
+      .data([
+        {offset: "0%", color: "#ff3300"},
+        {offset: "100%", color: "#ffcc00"},
+      ])
+      .enter().append("stop")
+      .attr("offset", function(d) { return d.offset; })
+      .attr("stop-color", function(d) { return d.color; });
+
+
+
     var marker = svg.append('svg:defs').selectAll('marker')
       .data(links)
       .enter()
       .append('svg:marker')
-      .attr('id','end')
-      .attr('orient', 'auto')
-      .attr('refX', .1)
-      .attr('refY', 0)
-      .attr("viewBox", "0 -5 10 10")
-      .append('svg:path')
-      .attr("d", "M0,-2.5L2,0L0,2.5")
-      .attr('fill', color);
+        .attr('id','end')
+        .attr('orient', 'auto')
+        .attr('refX', .1)
+        .attr('refY', 0)
+        .attr("viewBox", "0 -5 10 10")
+        .attr("x", function(d){
+          return nodes[d.target].x;
+          })
+        .attr("y", function(d){
+          return nodes[d.target].y;
+        })
+        .style("fill",  "url(" + window.location + "#linear-gradient)")
+        .append('svg:path')
+          .attr("d", "M0,-2.5L2,0L0,2.5");
+
 
     var linkGen = d3.line()
       .curve(d3.curveMonotoneX);
@@ -231,9 +277,7 @@ export class SankeyComponent implements OnInit{
       .attr("d", function(d){
         return makeLinks(d);
       })
-
-      .style("stroke", color)
-      //.style("stroke-opacity", ".3")
+      .style("stroke", "url(" + window.location + "#linear-gradient)")
       .style("fill", "none")
       //Edit the link width here
       .style("stroke-width", function(d){
@@ -241,7 +285,7 @@ export class SankeyComponent implements OnInit{
         return nodes[d.target].proportion;
       })
       .attr('marker-end', function(d){
-        return makeEndMarker(d);
+        //return makeEndMarker(d);
       });
 
     //Draw nodes to the svg
@@ -250,12 +294,20 @@ export class SankeyComponent implements OnInit{
       .enter()
       .append('g')
       .append("polygon")
-      .attr('class', 'node')
-      .attr('points', function(d, i){
-        return makeInputNode(d);
-      })
-      //Color of node is red
-      .style('fill', color);
+        .attr('class', 'node')
+        .attr('points', function(d){
+          return makeInputNode(d);
+        })
+        .attr("transform", function(d, i){
+          if(!d.inter && !d.input && !d.usefulOutput) {
+            console.log(findAngle(d, i));
+            return "rotate(" + findAngle(d, i) + "," + (d.x) + "," + (d.y + (d.proportion / 2)) + ")";
+          }
+          else{
+            return "";
+          }
+        })
+        .style("fill",  "url(" + window.location + "#linear-gradient)");
 
     var nodes_text = svg.selectAll(".nodetext")
       .data(nodes)
@@ -329,7 +381,13 @@ export class SankeyComponent implements OnInit{
           .attr("value", node_val.value)
           .style("width", "100px")
           .on("change", function(){
-            nodes[i].value = parseFloat(this.value);
+            if(isNaN(parseFloat(this.value))){
+              nodes[i].value = 0;
+            }
+            else{
+              nodes[i].value = parseFloat(this.value);
+            }
+
             calcSankey();
             link
               .attr("d", function(d){
@@ -391,7 +449,6 @@ export class SankeyComponent implements OnInit{
       svg.selectAll("inputObject")
         .data(nodes)
         .attr("x", function (d, i) {
-          console.log(d);
           if(i == 8){
             return nodes[15].x + (nodes[15].proportion*.8);
           }
@@ -419,8 +476,7 @@ export class SankeyComponent implements OnInit{
           }
         });
 
-      var colorPicker = svg.html("<input [(colorPicker)]='color' [style.background]='color' [value]='color'/>");
-
     }
   }
 }
+
