@@ -8,7 +8,7 @@
       <app-pump-fluid [(psatForm)]="psatForm" *ngIf="currentTab == 2"></app-pump-fluid>
       <app-motor [(psatForm)]="psatForm" *ngIf="currentTab == 3"></app-motor>
       <app-field-data [(psatForm)]="psatForm" *ngIf="currentTab == 4"></app-field-data>
-      <app-modify-conditions [saveClicked]="saveClicked" [(baseline)]="assessment.psat" (selectedAdjustment)="selectAdjustment($event)" *ngIf="currentTab == 5"></app-modify-conditions>
+      <app-modify-conditions [(baseline)]="assessment.psat" (selectedAdjustment)="selectAdjustment($event)" *ngIf="currentTab == 5"></app-modify-conditions>
     </div>
 
     <div class="col-3 panel" *ngIf="isPanelOpen" [ngClass]="{'white-bg': currentTab == 5, 'dark-bg': currentTab != 5 }">
