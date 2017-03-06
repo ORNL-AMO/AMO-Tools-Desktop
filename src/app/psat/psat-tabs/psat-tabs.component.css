@@ -5,11 +5,7 @@
 
 .psat-tab{
   text-align: center;
-  vertical-align: bottom;
-  cursor: pointer;
-}
-.psat-tab:hover{
-  background-color: lightblue;
+    width: 15vw;
 }
 
 .psat-tab-active{
