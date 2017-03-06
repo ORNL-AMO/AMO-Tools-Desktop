@@ -1,3 +1,6 @@
+::-webkit-scrollbar { 
+    display: none; 
+}
 /*
 HTML Elements
 ========================================================= */
@@ -70,15 +73,6 @@ Buttons
 }
 
 
-
-
-
-
-
-
-
-
-
 .banner{
   padding-top:10px;
   padding-bottom:10px;
@@ -113,11 +107,6 @@ Buttons
 {
   opacity:0.75 !important;
 }
-
-.btn-primary{
-  background-color: #003054;
-}
-
 .help-text{
   font-size: small;
   color: gray;

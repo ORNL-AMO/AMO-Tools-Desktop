@@ -1,12 +1,17 @@
 <div class="row modify-content medium-bg">
-  <div class="col-3" [ngClass]="{'white-bg':baseline.selected}">
+  <div class="col-3 modify-panel" [ngClass]="{'white-bg':baseline.selected}">
     <app-baseline [baseline]="baseline" (baselineSelect)="changeSelect($event)"></app-baseline>
   </div>
-  <div class="col-3" *ngFor="let adjustment of baseline.adjustments">
-    <app-adjustment *ngIf="!adjustment.psat.selected" [adjustment]="adjustment" (adjustmentSelect)="changeSelect($event)" (adjustmentRemove)="removeAdjustment($event)"></app-adjustment>
-    <app-adjustment-selected *ngIf="adjustment.psat.selected && adjustmentForm"  [adjustment]="adjustment" [(adjustmentForm)]="adjustmentForm" (adjustmentSelect)="changeSelect($event)" (adjustmentRemove)="removeAdjustment($event)"></app-adjustment-selected>
+  <div class="col-3 modify-panel" *ngFor="let adjustment of baseline.adjustments">
+    <app-adjustment *ngIf="!adjustment.selected" [adjustment]="adjustment" (adjustmentSelect)="changeSelect($event)" (adjustmentRemove)="removeAdjustment($event)"></app-adjustment>
+    <app-adjustment-selected *ngIf="adjustment.selected && adjustmentForm" [adjustment]="adjustment" [(adjustmentForm)]="adjustmentForm"
+      (adjustmentSelect)="changeSelect($event)" (adjustmentRemove)="removeAdjustment($event)"></app-adjustment-selected>
   </div>
-  <div class="col-3" *ngIf="baseline.adjustments.length < 3">
-    <button class="btn" (click)="addAdjustment()">Add adjustment</button>
+  <div class="col-3 text-center" *ngIf="baseline.adjustments.length < 3">
+    <div class="row align-items-center" style="height: 100%">
+      <div class="col">
+        <button class="btn btn-secondary" (click)="addAdjustment()">Add adjustment</button>
+      </div>
+    </div>
   </div>
-</div> 
+</div>

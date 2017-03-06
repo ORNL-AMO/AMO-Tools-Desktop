@@ -1,5 +1,4 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { Adjustment } from '../../../../shared/models/psat';
 
 @Component({
   selector: 'app-adjustment-motor',

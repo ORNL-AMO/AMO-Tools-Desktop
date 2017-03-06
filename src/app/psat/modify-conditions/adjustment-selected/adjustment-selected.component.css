@@ -1,5 +1,8 @@
 .adjustment-name{
     cursor: pointer;
+    border-bottom: solid;
+    border-bottom-color: deepskyblue;
+    border-bottom-width: 3px;
 }
 
 .adjustment-selected-card{
@@ -19,5 +22,12 @@
 }*/
 
 .input-group{
-    padding: 2px;
+    padding: 1px;
+}
+
+.input-block{
+    padding-left:1.25rem;
+    padding-right:1.25rem;
+    padding-top: 0;
+    padding-bottom: 0;
 }

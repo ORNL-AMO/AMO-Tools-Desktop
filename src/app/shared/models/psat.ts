@@ -1,4 +1,15 @@
 export interface PSAT {
+  inputs?: PsatInputs,
+  outputs?: PsatOutputs,
+  adjustments?: PSAT[],
+  selected?: boolean
+  name?: string,
+  savings?: number,
+  optimizationRating?: number
+
+}
+
+export interface PsatInputs {
   pump_style?: any,
   pump_specified?: any,
   pump_rated_speed?: any,
@@ -23,13 +34,18 @@ export interface PSAT {
   motor_field_power?: any,
   motor_field_current?: any,
   motor_field_voltage?: any,
-  cost_kw_hour?: any,
-  adjustments?: Adjustment[],
-  selected?: boolean
-  
+  cost_kw_hour?: any
 }
 
-export interface Adjustment {
-  psat: PSAT,
-  name: string
+export interface PsatOutputs {
+  pump_efficiency?: any,
+  motor_rated_power?: any,
+  motor_shaft_power?: any,
+  pump_shaft_power?: any,
+  motor_efficiency?: any,
+  motor_power_factor?: any,
+  motor_current?: any,
+  motor_power?: any,
+  annual_energy?: any,
+  annual_cost?: any
 }

@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SharedModule } from '../shared/shared.module';
+import { ChartsModule } from 'ng2-charts';
+
 import { PsatComponent } from './psat.component';
 import { PsatBannerComponent } from './psat-banner/psat-banner.component';
 import { PsatTabsComponent } from './psat-tabs/psat-tabs.component';
@@ -20,6 +22,11 @@ import { AdjustmentSelectedComponent } from './modify-conditions/adjustment-sele
 import { AdjustmentPumpFluidComponent } from './modify-conditions/adjustment-selected/adjustment-pump-fluid/adjustment-pump-fluid.component';
 import { AdjustmentMotorComponent } from './modify-conditions/adjustment-selected/adjustment-motor/adjustment-motor.component';
 import { AdjustmentFieldDataComponent } from './modify-conditions/adjustment-selected/adjustment-field-data/adjustment-field-data.component';
+import { PsatReportComponent } from './psat-report/psat-report.component';
+import { InputSummaryComponent } from './psat-report/input-summary/input-summary.component';
+import { OutputSummaryComponent } from './psat-report/output-summary/output-summary.component';
+import { ChartSummaryComponent } from './psat-report/chart-summary/chart-summary.component';
+import { PsatChartComponent } from './psat-chart/psat-chart.component';
 
 @NgModule({
   declarations: [
@@ -39,7 +46,12 @@ import { AdjustmentFieldDataComponent } from './modify-conditions/adjustment-sel
     AdjustmentSelectedComponent,
     AdjustmentPumpFluidComponent,
     AdjustmentMotorComponent,
-    AdjustmentFieldDataComponent
+    AdjustmentFieldDataComponent,
+    PsatReportComponent,
+    InputSummaryComponent,
+    OutputSummaryComponent,
+    ChartSummaryComponent,
+    PsatChartComponent
   ],
   exports: [
 
@@ -49,7 +61,8 @@ import { AdjustmentFieldDataComponent } from './modify-conditions/adjustment-sel
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    SharedModule
+    SharedModule,
+    ChartsModule
   ],
   providers: [
   ]

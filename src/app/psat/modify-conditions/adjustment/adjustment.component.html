@@ -1,51 +1,51 @@
 <div class="card dark-bg adjustment-card">
   <div class="card-header adjustment-name" (click)="selectAdjustment()">
     {{adjustment.name}}
-       <button class="close pull-right" aria-label="Close" (click)="removeAdjustment()">
+    <button class="close pull-right" aria-label="Close" (click)="removeAdjustment()">
           <span aria-hidden="true">&times;</span>
         </button>
   </div>
-    <!-- PUMP / FLUID-->
-      <div class="card-header">
-      </div>
-      <div class="card-block row">
-        <div class="col-md-12">
-          {{adjustment.psat.pump_style}}
-          <br> {{adjustment.psat.pump_rated_speed}}
-          <br> {{adjustment.psat.drive}}
-          <br> {{adjustment.psat.kinematic_viscosity}}
-          <br> {{adjustment.psat.specific_gravity}}
-          <br> {{adjustment.psat.stages}}
-          <br> {{adjustment.psat.fixed_speed}}
-        </div>
-        </div>
-    <!-- MOTOR -->
-      <div class="card-header">
-      </div>
-      <div class="card-block row">
-        <div class="col-md-12">
-          {{adjustment.psat.line_frequency}}
-          <br>{{adjustment.psat.motor_rated_power}}
-          <br>{{adjustment.psat.motor_rated_speed}}
-          <br>{{adjustment.psat.efficiency_class}}
-          <br>{{adjustment.psat.motor_rated_voltage}}
-          <br>{{adjustment.psat.full_load_amps}}
-          <br>{{adjustment.psat.margin}}
-        </div>
-      </div>
-    <!-- FIELD DATA-->
-
-      <div class="card-header">
-      </div>
-      <div class="card-block row">
-        <div class="col-md-12">
-          {{adjustment.psat.operating_fraction}}
-          <br>{{adjustment.psat.cost_kw_hour}}
-          <br>{{adjustment.psat.flow_rate}}
-          <br>{{adjustment.psat.head}}
-          <br>{{adjustment.psat.load_estimation_method}}
-          <br>{{adjustment.psat.motor_field_current}}
-          <br>{{adjustment.psat.motor_field_voltage}}
-        </div>
-      </div>
+  <!-- PUMP / FLUID-->
+  <div class="card-header">
+  </div>
+  <div class="card-block row">
+    <div class="col-md-12">
+      {{adjustment.inputs.pump_style}}
+      <br> {{adjustment.inputs.pump_rated_speed}}
+      <br> {{adjustment.inputs.drive}}
+      <br> {{adjustment.inputs.kinematic_viscosity}}
+      <br> {{adjustment.inputs.specific_gravity}}
+      <br> {{adjustment.inputs.stages}}
+      <br> {{adjustment.inputs.fixed_speed}}
     </div>
+  </div>
+  <!-- MOTOR -->
+  <div class="card-header">
+  </div>
+  <div class="card-block row">
+    <div class="col-md-12">
+      {{adjustment.inputs.line_frequency}}
+      <br>{{adjustment.inputs.motor_rated_power}}
+      <br>{{adjustment.inputs.motor_rated_speed}}
+      <br>{{adjustment.inputs.efficiency_class}}
+      <br>{{adjustment.inputs.motor_rated_voltage}}
+      <br>{{adjustment.inputs.full_load_amps}}
+      <br>{{adjustment.inputs.margin}}
+    </div>
+  </div>
+  <!-- FIELD DATA-->
+
+  <div class="card-header">
+  </div>
+  <div class="card-block row">
+    <div class="col-md-12">
+      {{adjustment.inputs.operating_fraction}}
+      <br>{{adjustment.inputs.cost_kw_hour}}
+      <br>{{adjustment.inputs.flow_rate}}
+      <br>{{adjustment.inputs.head}}
+      <br>{{adjustment.inputs.load_estimation_method}}
+      <br>{{adjustment.inputs.motor_field_current}}
+      <br>{{adjustment.inputs.motor_field_voltage}}
+    </div>
+  </div>
+</div>
