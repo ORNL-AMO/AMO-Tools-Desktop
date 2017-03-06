@@ -11,9 +11,9 @@
       <app-modify-conditions [(baseline)]="assessment.psat" (selectedAdjustment)="selectAdjustment($event)" *ngIf="currentTab == 5"></app-modify-conditions>
     </div>
 
-    <div class="col-3 panel" *ngIf="isPanelOpen" [ngClass]="{'white-bg': panelView == 'data-panel', 'dark-bg': panelView != 'data-panel' }">
+    <div class="col-3 panel" *ngIf="isPanelOpen" [ngClass]="{'white-bg': currentTab == 5, 'dark-bg': currentTab != 5 }">
       <app-data-panel (showReport)="showReport()" [adjustment]="adjustment" *ngIf="panelView == 'data-panel' && currentTab == 5"></app-data-panel>
-      <app-help-panel *ngIf="panelView == 'help-panel'"></app-help-panel>
+      <app-help-panel [currentTab]="currentTab" *ngIf="panelView == 'help-panel'"></app-help-panel>
       <app-settings-panel *ngIf="panelView == 'settings-panel'"></app-settings-panel>
     </div>
   </div>
