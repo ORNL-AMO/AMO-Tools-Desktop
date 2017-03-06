@@ -32,13 +32,11 @@ export class SankeyComponent implements OnInit{
 
   }
 
-  resetZoom(){
-    svg.attr("transform", "translate(150, 0) scale(.8)");
-  }
-
   makeSankey(){
 
     var color = "#485bff";
+    //Remove  all Sankeys
+    d3.select('app-sankey-diagram').selectAll('svg').remove();
 
     var nodes = [
 
@@ -91,10 +89,9 @@ export class SankeyComponent implements OnInit{
       .attr('height', height)
       .style("border", "1px solid black")
       .call(calcSankey)
-      .call(d3.zoom().on("zoom", function(){
-        svg.attr("transform", d3.event.transform);
-      }))
       .append("g");
+
+    svg.attr("transform", "translate(150, 0) scale(.8)");
 
 
     function calcSankey() {
@@ -186,11 +183,8 @@ export class SankeyComponent implements OnInit{
       if (d.input) {
         return d.x + "," + d.y + "," + d.x + "," + (d.y + d.proportion) + "," + (d.x + d.proportion) + "," + (d.y + d.proportion) + "," + (d.x + d.proportion) + "," + d.y;
       }
-      else if(d.inter){
-        return "";
-      }
       else{
-        return d.x + "," + d.y + "," + d.x + "," + (d.y + d.proportion) + "," + (d.x + d.proportion) + "," + (d.y + d.proportion) + "," + (d.x + d.proportion) + "," + d.y;
+        return "";
       }
     }
 
@@ -285,7 +279,7 @@ export class SankeyComponent implements OnInit{
         return nodes[d.target].proportion;
       })
       .attr('marker-end', function(d){
-        //return makeEndMarker(d);
+        return makeEndMarker(d);
       });
 
     //Draw nodes to the svg
@@ -297,15 +291,6 @@ export class SankeyComponent implements OnInit{
         .attr('class', 'node')
         .attr('points', function(d){
           return makeInputNode(d);
-        })
-        .attr("transform", function(d, i){
-          if(!d.inter && !d.input && !d.usefulOutput) {
-            console.log(findAngle(d, i));
-            return "rotate(" + findAngle(d, i) + "," + (d.x) + "," + (d.y + (d.proportion / 2)) + ")";
-          }
-          else{
-            return "";
-          }
         })
         .style("fill",  "url(" + window.location + "#linear-gradient)");
 
