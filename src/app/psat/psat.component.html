@@ -11,7 +11,7 @@
       <app-modify-conditions [(baseline)]="assessment.psat" (selectedAdjustment)="selectAdjustment($event)" *ngIf="currentTab == 5"></app-modify-conditions>
     </div>
 
-    <div class="col-3 panel white-bg" *ngIf="isPanelOpen">
+    <div class="col-3 panel" *ngIf="isPanelOpen" [ngClass]="{'white-bg': panelView == 'data-panel', 'dark-bg': panelView != 'data-panel' }">
       <app-data-panel (showReport)="showReport()" [adjustment]="adjustment" *ngIf="panelView == 'data-panel' && currentTab == 5"></app-data-panel>
       <app-help-panel *ngIf="panelView == 'help-panel'"></app-help-panel>
       <app-settings-panel *ngIf="panelView == 'settings-panel'"></app-settings-panel>
@@ -19,11 +19,11 @@
   </div>
 
   <div class="row btn-footer align-items-center justify-content-between">
-    <div class="col-2">
-      <button class="btn" *ngIf="currentTab == 1" (click)="close()">Close</button>
-      <button class="btn" *ngIf="currentTab != 1" (click)="goBack()">Back</button>
+    <div class="col-2 text-center">
+      <button class="btn btn-secondary" *ngIf="currentTab == 1" (click)="close()">Close</button>
+      <button class="btn btn-secondary" *ngIf="currentTab != 1" (click)="goBack()">Back</button>
     </div>
-    <div class="col-2">
+    <div class="col-2 text-center">
       <button class="btn btn-primary" *ngIf="currentTab < 5" (click)="continue()">Save & Continue</button>
       <button class="btn btn-primary" *ngIf="currentTab >= 5" (click)="save()">Save</button>
       <button class="btn btn-primary" *ngIf="currentTab >= 5" (click)="exportData()">Export</button>
