@@ -16,6 +16,7 @@ export class DataPanelComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
+    console.log(this.adjustment)
   }
 
   goToReport(){
