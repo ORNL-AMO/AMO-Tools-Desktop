@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output, SimpleChange } from '@angular/core';
 import { PSAT, PsatInputs } from '../../shared/models/psat';
 import { AssessmentService } from '../../assessment/assessment.service';
 import * as _ from 'lodash';
@@ -13,12 +13,15 @@ export class ModifyConditionsComponent implements OnInit {
   baseline: PSAT;
   @Output('selectedAdjustment')
   selectedAdjustment = new EventEmitter<PSAT>();
+  @Input()
+  saveClicked: boolean;
 
   adjustmentForm: any;
 
   constructor(private assessmentService: AssessmentService, private formBuilder: FormBuilder) { }
 
   ngOnInit() {
+    //Check for existing adjustments
     if (!this.baseline.adjustments) {
       this.baseline.adjustments = new Array();
       this.addAdjustment();
@@ -29,18 +32,31 @@ export class ModifyConditionsComponent implements OnInit {
     this.selectedAdjustment.emit(this.baseline.adjustments[this.baseline.adjustments.length - 1]);
   }
 
+  ngOnChanges(changes: SimpleChange) {
+    //saveClicked input changes causes adjustment save
+    if (!changes.isFirstChange && this.adjustmentForm) {
+      let adjustedPsatInputs: PsatInputs = this.createPsatInputsFromForm();
+      this.saveAdjustment(adjustedPsatInputs);
+    }
+  }
+
   addAdjustment() {
+    //if adjustment exists save it
     if (this.baseline.adjustments.length > 0) {
       let adjustedPsatInputs: PsatInputs = this.createPsatInputsFromForm();
       this.saveAdjustment(adjustedPsatInputs);
     }
+
+    //init new adjustment
     let newAdjustmentPsat = this.assessmentService.getBaselinePSAT();
     newAdjustmentPsat.name = 'Adjustment ' + (this.baseline.adjustments.length + 1);
     newAdjustmentPsat.optimizationRating = Math.random() * 100;
-    newAdjustmentPsat.savings =  Math.random() * 10000;
+    newAdjustmentPsat.savings = Math.random() * 10000;
+    //add adjustment to baseline
     this.baseline.adjustments.push(newAdjustmentPsat);
     this.adjustmentForm = this.initForm(this.baseline.adjustments[this.baseline.adjustments.length - 1]);
-    this.changeSelect(this.baseline.adjustments[this.baseline.adjustments.length-1].name);
+    //select adjustment
+    this.changeSelect(this.baseline.adjustments[this.baseline.adjustments.length - 1].name);
     this.selectedAdjustment.emit(this.baseline.adjustments[this.baseline.adjustments.length - 1]);
   }
 
@@ -84,6 +100,7 @@ export class ModifyConditionsComponent implements OnInit {
   }
 
   saveAdjustment(adjustedPsatInputs: PsatInputs) {
+    //save the selected adjustment
     this.baseline.adjustments.forEach(adjustment => {
       if (adjustment.selected == true) {
         adjustment.inputs = adjustedPsatInputs;
