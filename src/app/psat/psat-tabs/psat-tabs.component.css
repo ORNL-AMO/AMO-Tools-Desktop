@@ -21,5 +21,6 @@
 .right-border{
   border-right: groove;
   border-right-width: 1px;
-  border-right-color: slategrey;
+  margin-top: 10px;
+  margin-bottom: 10px;
 }
