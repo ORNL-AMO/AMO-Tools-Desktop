@@ -8,7 +8,7 @@
       <app-pump-fluid [(psatForm)]="psatForm" *ngIf="currentTab == 2"></app-pump-fluid>
       <app-motor [(psatForm)]="psatForm" *ngIf="currentTab == 3"></app-motor>
       <app-field-data [(psatForm)]="psatForm" *ngIf="currentTab == 4"></app-field-data>
-      <app-modify-conditions [(baseline)]="assessment.psat" (selectedAdjustment)="selectAdjustment($event)" *ngIf="currentTab == 5"></app-modify-conditions>
+      <app-modify-conditions [(saveClicked)]="saveClicked" (saveSuccess)="saveSuccess($event)" [(baseline)]="assessment.psat" (selectedAdjustment)="selectAdjustment($event)" *ngIf="currentTab == 5"></app-modify-conditions>
     </div>
 
     <div class="col-3 panel" *ngIf="isPanelOpen" [ngClass]="{'white-bg': panelView == 'data-panel', 'dark-bg': panelView != 'data-panel' }">
@@ -25,7 +25,7 @@
     </div>
     <div class="col-2 text-center">
       <button class="btn btn-primary" *ngIf="currentTab < 5" (click)="continue()">Save & Continue</button>
-      <button class="btn btn-primary" *ngIf="currentTab >= 5" (click)="save()">Save</button>
+      <button class="btn btn-primary" *ngIf="currentTab >= 5" (click)="saveAdjustment()">Save</button>
       <button class="btn btn-primary" *ngIf="currentTab >= 5" (click)="exportData()">Export</button>
     </div>
   </div>

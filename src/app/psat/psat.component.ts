@@ -20,13 +20,12 @@ export class PsatComponent implements OnInit {
   showDetailedReport: boolean = false;
 
   psatForm: any;
-
+  saveClicked:boolean = false;
   adjustment: PSAT;
 
   constructor(private location: Location, private assessmentService: AssessmentService, private formBuilder: FormBuilder) { }
 
   ngOnInit() {
-
     this.assessment = this.assessmentService.getWorkingAssessment();
     this.psatForm = this.initForm();
   }
@@ -75,6 +74,10 @@ export class PsatComponent implements OnInit {
 
   closeReport() {
     this.showDetailedReport = false;
+  }
+
+  saveAdjustment(){
+    this.saveClicked = !this.saveClicked;
   }
 
   save() {
