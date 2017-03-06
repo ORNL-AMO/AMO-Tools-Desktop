@@ -27,6 +27,11 @@ import { InputSummaryComponent } from './psat-report/input-summary/input-summary
 import { OutputSummaryComponent } from './psat-report/output-summary/output-summary.component';
 import { ChartSummaryComponent } from './psat-report/chart-summary/chart-summary.component';
 import { PsatChartComponent } from './psat-chart/psat-chart.component';
+import { SystemBasicsHelpComponent } from './help-panel/system-basics-help/system-basics-help.component';
+import { PumpFluidHelpComponent } from './help-panel/pump-fluid-help/pump-fluid-help.component';
+import { MotorHelpComponent } from './help-panel/motor-help/motor-help.component';
+import { FieldDataHelpComponent } from './help-panel/field-data-help/field-data-help.component';
+import { ModifyConditionsHelpComponent } from './help-panel/modify-conditions-help/modify-conditions-help.component';
 
 @NgModule({
   declarations: [
@@ -51,7 +56,12 @@ import { PsatChartComponent } from './psat-chart/psat-chart.component';
     InputSummaryComponent,
     OutputSummaryComponent,
     ChartSummaryComponent,
-    PsatChartComponent
+    PsatChartComponent,
+    SystemBasicsHelpComponent,
+    PumpFluidHelpComponent,
+    MotorHelpComponent,
+    FieldDataHelpComponent,
+    ModifyConditionsHelpComponent
   ],
   exports: [
 
