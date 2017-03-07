@@ -3,71 +3,87 @@
     <div class="col-2">
       <label class="form-control-label" for="frequency">Line Frequency</label>
     </div>
-    <div class="col-3">
+    <div class="col-3" [popover]="frequencyPopover">
       <div class="input-group">
-        <select class="form-control" id="frequency" formControlName="frequency">
+        <select class="form-control" id="frequency" formControlName="frequency" (mousedown)="frequencyPopover.show()">
             <option>Frequency 1</option>
             <option>Frequency 2</option>
           </select>
       </div>
       <app-control-messages [control]="psatForm.controls.frequency"></app-control-messages>
     </div>
+    <popover-content #frequencyPopover title="Line Frequency" placement="auto right" [closeOnClickOutside]="true">
+      <div class="popover-md">Some content</div>
+    </popover-content>
   </div>
 
   <div class="row justify-content-center">
     <div class="col-2">
       <label class="form-control-label" for="horsePower">Horse Power</label>
     </div>
-    <div class="col-3">
+    <div class="col-3" [popover]="horsePowerPopover">
       <div class="input-group">
-        <select class="form-control" id="horsePower" formControlName="horsePower">
+        <select class="form-control" id="horsePower" formControlName="horsePower" (mousedown)="horsePowerPopover.show()">
             <option>HP 1</option>
             <option>HP 2</option>
           </select>
       </div>
       <app-control-messages [control]="psatForm.controls.horsePower"></app-control-messages>
     </div>
+    <popover-content #horsePowerPopover title="Horse Power" placement="auto right" [closeOnClickOutside]="true">
+      <div class="popover-md">Some content</div>
+    </popover-content>
   </div>
 
   <div class="row justify-content-center">
     <div class="col-2">
       <label class="form-control-label" for="motorRPM">Motor RPM</label>
     </div>
-    <div class="col-3">
+    <div class="col-3" [popover]="motorRpmPopover">
       <div class="input-group">
         <div class="btn" (click)="subtractNum('motorRPM')"><i class="fa fa-minus"></i></div>
         <div class="btn" (click)="addNum('motorRPM')"><i class="fa fa-plus"></i></div>
-        <input type="text" class="form-control num-input" id="motorRPM" formControlName="motorRPM" ngModel="{{psatForm.value.motorRPM}}">
+        <input type="text" class="form-control num-input" id="motorRPM" formControlName="motorRPM" ngModel="{{psatForm.value.motorRPM}}"
+          (focus)="motorRpmPopover.show()">
       </div>
       <app-control-messages [control]="psatForm.controls.motorRPM"></app-control-messages>
     </div>
+    <popover-content #motorRpmPopover title="Motor Rpm" placement="auto right" [closeOnClickOutside]="true">
+      <div class="popover-md">Some content</div>
+    </popover-content>
   </div>
 
   <div class="row justify-content-center">
     <div class="col-2">
-      <label class="form-control-label" for="efficiencyClass">Efficieny Class</label>
+      <label class="form-control-label" for="efficiencyClass">Efficiency Class</label>
     </div>
-    <div class="col-3">
+    <div class="col-3" [popover]="efficienyPopover">
       <div class="input-group">
-        <select class="form-control" id="efficiencyClass" formControlName="efficiencyClass">
+        <select class="form-control" id="efficiencyClass" formControlName="efficiencyClass" (mousedown)="efficienyPopover.show()">
             <option>class 1</option>
             <option>Class 2</option>
           </select>
       </div>
       <app-control-messages [control]="psatForm.controls.efficiencyClass"></app-control-messages>
     </div>
+    <popover-content #efficienyPopover title="Efficiency Class" placement="auto right" [closeOnClickOutside]="true">
+      <div class="popover-md">Some content</div>
+    </popover-content>
   </div>
 
   <div class="row justify-content-center">
     <div class="col-2">
       <label class="form-control-label" for="voltage">Voltage</label>
     </div>
-    <div class="col-3">
+    <div class="col-3" [popover]="voltagePopover">
       <div class="input-group">
-        <input type="text" class="form-control num-input" id="voltage" formControlName="voltage">
+        <input type="text" class="form-control num-input" id="voltage" formControlName="voltage" (focus)="voltagePopover.show()">
       </div>
       <app-control-messages [control]="psatForm.controls.voltage"></app-control-messages>
     </div>
+    <popover-content #voltagePopover title="Voltage" placement="auto right" [closeOnClickOutside]="true">
+      <div class="popover-md">Some content</div>
+    </popover-content>
   </div>
 
 
@@ -76,26 +92,33 @@
       <label class="form-control-label" for="fullLoadAmps">Full-Load Amps</label>
       <p class="help-text">Estimate Full-Load Amps</p>
     </div>
-    <div class="col-3">
+    <div class="col-3" [popover]="fullLoadAmpsPopover">
       <div class="input-group">
-        <input type="text" class="form-control num-input" id="fullLoadAmps" formControlName="fullLoadAmps">
+        <input type="text" class="form-control num-input" id="fullLoadAmps" formControlName="fullLoadAmps" (focus)="fullLoadAmpsPopover.show()">
       </div>
       <app-control-messages [control]="psatForm.controls.fullLoadAmps"></app-control-messages>
     </div>
+    <popover-content #fullLoadAmpsPopover title="Full Load Ampts" placement="auto right" [closeOnClickOutside]="true">
+      <div class="popover-md">Some content</div>
+    </popover-content>
   </div>
 
   <div class="row justify-content-center">
     <div class="col-2">
       <label class="form-control-label" for="sizeMargin">Size Margin</label>
     </div>
-    <div class="col-3">
+    <div class="col-3" [popover]="marginPopover">
       <div class="input-group">
         <div class="btn" (click)="subtractNum('sizeMargin')"><i class="fa fa-minus"></i></div>
         <div class="btn" (click)="addNum('sizeMargin')"><i class="fa fa-plus"></i></div>
-        <input type="text" class="form-control num-input" id="sizeMargin" formControlName="sizeMargin" ngModel="{{psatForm.value.sizeMargin}}">
+        <input type="text" class="form-control num-input" id="sizeMargin" formControlName="sizeMargin" ngModel="{{psatForm.value.sizeMargin}}"
+          (focus)="marginPopover.show()">
       </div>
       <app-control-messages [control]="psatForm.controls.sizeMargin"></app-control-messages>
     </div>
+    <popover-content #marginPopover title="Size Margin" placement="auto right" [closeOnClickOutside]="true">
+      <div class="popover-md">Some content</div>
+    </popover-content>
   </div>
 
 </form>
