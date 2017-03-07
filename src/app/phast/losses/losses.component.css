@@ -1,3 +1,13 @@
-.losses-sidebar-column{
-  padding-left:0;
+.losses-row{
+  height: 100%;
+}
+
+.losses-sidebar{
+background-color: #EDEDED;
+padding-right: 0px; 
+}
+
+.losses-container{
+  padding-left: 0px;
+  padding-right: 0px;
 }

@@ -1,12 +1,18 @@
-.losses-sidebar{
-  height: 80vh;
+.nav-item{
+    cursor: pointer;
+    height: 10%;
+    display: flex;
+    align-items: center;
 }
 
-.sidebar-item{
-  height: 10%;
-  background-color: tan;
+.nav-item-active{
+  background-color: white;
+  border-right: solid;
+  border-right-width: 3px;
+  border-right-color: deepskyblue;
 }
 
-.sidebar-item:hover{
-  background-color: rosybrown;
+.nav{
+  height: 100%;
 }
+

@@ -1,10 +1,10 @@
-.panel{
-  background-color: beige;
-}
 
 .tab-content{
   height: 75vh;
+  max-height: 75vh;
+  overflow-y: scroll;
 }
+
 
 .btn-footer{
   height: 10vh;
@@ -13,4 +13,8 @@
 
 .input-group{
     padding: 2px;
+}
+
+.panel{
+  height: 100%;
 }
