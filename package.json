@@ -87,6 +87,7 @@
     "karma-jasmine": "~1.1.0",
     "karma-jasmine-html-reporter": "^0.2.2",
     "ng2-charts": "^1.5.0",
+    "ngx-popover": "0.0.16",
     "protractor": "~5.1.0",
     "style-loader": "^0.13.2",
     "ts-node": "~2.0.0",

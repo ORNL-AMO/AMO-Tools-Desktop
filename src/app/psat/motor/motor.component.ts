@@ -1,5 +1,6 @@
 import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
+
 @Component({
   selector: 'app-motor',
   templateUrl: './motor.component.html',
@@ -33,6 +34,4 @@ export class MotorComponent implements OnInit {
       }
     }
   }
-
-
 }
