@@ -1,13 +1,13 @@
-<div class="row phast-banner">
-  <div class="col-md-1 banner-content">
+<div class="row phast-banner align-items-center">
+  <div class="col-1 banner-content text-center">
     <a routerLink="/dashboard">
       <span class="fa fa-home home-icon"></span>
     </a>
   </div>
-  <div class="col-md-8 banner-content">
-    <h4 class="pull-left" *ngIf="assessment">{{assessment.name}}</h4>
+  <div class="col-8 banner-content">
+    <div *ngIf="assessment">{{assessment.name}}</div>
   </div>
-  <div class="col-md-3 banner-content">
+  <div class="col-2 banner-content">
     <div class="pointer-item" (click)="openPanel('settings-panel')">
       <span class="fa fa-cog home-icon pull-right"></span>
     </div>
