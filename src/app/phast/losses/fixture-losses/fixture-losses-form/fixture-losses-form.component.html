@@ -1,3 +1,123 @@
-<p>
-  fixture-losses-form works!
-</p>
+<div class="row justify-content-end">
+  <div class="col-4">
+    Baseline
+  </div>
+  <div class="col-4">
+    Modified
+  </div>
+</div>
+<form class="form-group form-group-sm" [formGroup]="lossesForm">
+  <div class="row">
+    <div class="col-4">
+      <label class="form-control-label small" for="baselineType">Select Type</label>
+    </div>
+    <div class="col-4">
+      <div class="input-group input-group-sm">
+        <select class="form-control input-sm" formControlName="baselineType" id="baselineType">
+          <option>Type 1</option>
+          <option>Type 2</option>
+        </select>
+      </div>
+      <app-control-messages [control]="lossesForm.controls.baselineType"></app-control-messages>
+    </div>
+    <div class="col-4">
+      <div class="input-group input-group-sm">
+        <select class="form-control input-sm" formControlName="modifiedType" id="modifiedType">
+          <option>Type 1</option>
+          <option>Type 2</option>
+        </select>
+      </div>
+      <app-control-messages [control]="lossesForm.controls.modifiedType"></app-control-messages>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-4">
+      <label class="form-control-label small" for="baselineFixtureWeight">Fixture Weight (lb/hr)</label>
+    </div>
+    <div class="col-4">
+      <div class="input-group input-group-sm">
+        <input type="text" class="form-control input-sm" formControlName="baselineFixtureWeight" id="baselineFixtureWeight">
+      </div>
+      <app-control-messages [control]="lossesForm.controls.baselineFixtureWeight"></app-control-messages>
+    </div>
+    <div class="col-4">
+      <div class="input-group input-group-sm">
+        <input type="text" class="form-control input-sm" formControlName="modifiedFixtureWeight" id="modifiedFixtureWeight">
+      </div>
+      <app-control-messages [control]="lossesForm.controls.modifiedFixtureWeight"></app-control-messages>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-4">
+      <label class="form-control-label small" for="baselineInitialTemp">Initial Temp (&#8457;)</label>
+    </div>
+    <div class="col-4">
+      <div class="input-group input-group-sm">
+        <input type="text" class="form-control input-sm" formControlName="baselineInitialTemp" id="baselineInitialTemp">
+      </div>
+      <app-control-messages [control]="lossesForm.controls.baselineInitialTemp"></app-control-messages>
+    </div>
+    <div class="col-4">
+      <div class="input-group input-group-sm">
+        <input type="text" class="form-control input-sm" formControlName="modifiedInitialTemp" id="modifiedInitialTemp">
+      </div>
+      <app-control-messages [control]="lossesForm.controls.modifiedInitialTemp"></app-control-messages>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-4">
+      <label class="form-control-label small" for="baselineFinalTemp">Final Temp (&#8457;)</label>
+    </div>
+    <div class="col-4">
+      <div class="input-group input-group-sm">
+        <input type="text" class="form-control input-sm" formControlName="baselineFinalTemp" id="baselineFinalTemp">
+      </div>
+      <app-control-messages [control]="lossesForm.controls.baselineFinalTemp"></app-control-messages>
+    </div>
+    <div class="col-4">
+      <div class="input-group input-group-sm">
+        <input type="text" class="form-control input-sm" formControlName="modifiedFinalTemp" id="modifiedFinalTemp">
+      </div>
+      <app-control-messages [control]="lossesForm.controls.modifiedFinalTemp"></app-control-messages>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-4">
+      <label class="form-control-label small" for="baselineCorrectionFactor">Correction Factor</label>
+    </div>
+    <div class="col-4">
+      <div class="input-group input-group-sm">
+        <input type="text" class="form-control input-sm" formControlName="baselineCorrectionFactor" id="baselineCorrectionFactor">
+      </div>
+      <app-control-messages [control]="lossesForm.controls.baselineCorrectionFactor"></app-control-messages>
+    </div>
+    <div class="col-4">
+      <div class="input-group input-group-sm">
+        <input type="text" class="form-control input-sm" formControlName="modifiedCorrectionFactor" id="modifiedCorrectionFactor">
+      </div>
+      <app-control-messages [control]="lossesForm.controls.modifiedCorrectionFactor"></app-control-messages>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-4">
+      <label class="form-control-label small" for="baselineHeatRequired">Heat Required (Btu/hr)</label>
+    </div>
+    <div class="col-4">
+      <div class="input-group input-group-sm">
+        <input type="text" class="form-control input-sm" formControlName="baselineHeatRequired" id="baselineHeatRequired">
+      </div>
+      <app-control-messages [control]="lossesForm.controls.baselineHeatRequired"></app-control-messages>
+    </div>
+    <div class="col-4">
+      <div class="input-group input-group-sm">
+        <input type="text" class="form-control input-sm" formControlName="modifiedHeatRequired" id="modifiedHeatRequired">
+      </div>
+      <app-control-messages [control]="lossesForm.controls.modifiedHeatRequired"></app-control-messages>
+    </div>
+  </div>
+</form>
