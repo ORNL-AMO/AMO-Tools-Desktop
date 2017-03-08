@@ -1,23 +1,23 @@
 <div class="row justify-content-end">
-  <div class="col-3">
+  <div class="col-4">
     Baseline
   </div>
-  <div class="col-3">
+  <div class="col-4">
     Modified
   </div>
 </div>
 <form class="form-group form-group-sm" [formGroup]="wallLossesForm">
   <div class="row">
-    <div class="col-6">
-      <label class="form-control-label" for="baselineSurfaceArea">Surface Area (ft 2)</label>
+    <div class="col-4">
+      <label class="form-control-label small" for="baselineSurfaceArea">Surface Area (ft 2)</label>
     </div>
-    <div class="col-3">
+    <div class="col-4">
       <div class="input-group input-group-sm">
         <input type="text" class="form-control input-sm" formControlName="baselineSurfaceArea" id="baselineSurfaceArea">
       </div>
       <app-control-messages [control]="wallLossesForm.controls.baselineSurfaceArea"></app-control-messages>
     </div>
-    <div class="col-3">
+    <div class="col-4">
       <div class="input-group input-group-sm">
         <input type="text" class="form-control input-sm" formControlName="modifiedSurfaceArea" id="modifiedSurfaceArea">
       </div>
@@ -26,16 +26,16 @@
   </div>
 
   <div class="row">
-    <div class="col-6">
-      <label class="form-control-label" for="baselineAvgSurfaceTemp">Average Surface Temp (F)</label>
+    <div class="col-4">
+      <label class="form-control-label small" for="baselineAvgSurfaceTemp">Average Surface Temp (&#8457;)</label>
     </div>
-    <div class="col-3">
+    <div class="col-4">
       <div class="input-group input-group-sm">
         <input type="text" class="form-control input-sm" formControlName="baselineAvgSurfaceTemp" id="baselineAvgSurfaceTemp">
       </div>
       <app-control-messages [control]="wallLossesForm.controls.baselineAvgSurfaceTemp"></app-control-messages>
     </div>
-    <div class="col-3">
+    <div class="col-4">
       <div class="input-group input-group-sm">
         <input type="text" class="form-control input-sm" formControlName="modifiedAvgSurfaceTemp" id="modifiedAvgSurfaceTemp">
       </div>
@@ -44,16 +44,16 @@
   </div>
 
   <div class="row">
-    <div class="col-6">
-      <label class="form-control-label" for="baselineAmbientTemp">Ambient Temp (F)</label>
+    <div class="col-4">
+      <label class="form-control-label small" for="baselineAmbientTemp">Ambient Temp (&#8457;)</label>
     </div>
-    <div class="col-3">
+    <div class="col-4">
       <div class="input-group input-group-sm">
         <input type="text" class="form-control input-sm" formControlName="baselineAmbientTemp" id="baselineAmbientTemp">
       </div>
       <app-control-messages [control]="wallLossesForm.controls.baselineAmbientTemp"></app-control-messages>
     </div>
-    <div class="col-3">
+    <div class="col-4">
       <div class="input-group input-group-sm">
         <input type="text" class="form-control input-sm" formControlName="modifiedAmbientTemp" id="modifiedAmbientTemp">
       </div>
@@ -62,16 +62,16 @@
   </div>
 
   <div class="row">
-    <div class="col-6">
-      <label class="form-control-label" for="baselineCorrectionFactor">Correction Factor</label>
+    <div class="col-4">
+      <label class="form-control-label small" for="baselineCorrectionFactor">Correction Factor</label>
     </div>
-    <div class="col-3">
+    <div class="col-4">
       <div class="input-group input-group-sm">
         <input type="text" class="form-control input-sm" formControlName="baselineCorrectionFactor" id="baselineCorrectionFactor">
       </div>
       <app-control-messages [control]="wallLossesForm.controls.baselineCorrectionFactor"></app-control-messages>
     </div>
-    <div class="col-3">
+    <div class="col-4">
       <div class="input-group input-group-sm">
         <input type="text" class="form-control input-sm" formControlName="modifiedCorrectionFactor" id="modifiedCorrectionFactor">
       </div>
@@ -80,18 +80,18 @@
   </div>
 
   <div class="row">
-    <div class="col-6">
-      <label class="form-control-label" for="baselineHeatRequired">Heat Required (Btu / hr)</label>
+    <div class="col-4">
+      <label class="form-control-label small" for="baselineHeatRequired">Heat Required (Btu / hr)</label>
     </div>
-    <div class="col-3">
+    <div class="col-4">
       <div class="input-group input-group-sm">
-        <input type="text" class="form-control input-sm" [disabled]="true" formControlName="baselineHeatRequired" id="baselineHeatRequired">
+        <input type="text" class="form-control input-sm" formControlName="baselineHeatRequired" id="baselineHeatRequired">
       </div>
       <app-control-messages [control]="wallLossesForm.controls.baselineHeatRequired"></app-control-messages>
     </div>
-    <div class="col-3">
+    <div class="col-4">
       <div class="input-group input-group-sm">
-        <input type="text" class="form-control input-sm" [disabled]="true" formControlName="modifiedHeatRequired" id="modifiedHeatRequired">
+        <input type="text" class="form-control input-sm" formControlName="modifiedHeatRequired" id="modifiedHeatRequired">
       </div>
       <app-control-messages [control]="wallLossesForm.controls.modifiedHeatRequired"></app-control-messages>
     </div>

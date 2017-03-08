@@ -1,7 +1,7 @@
 <div class="card">
   <div class="card-header">
     <div class="row justify-content-between">
-      <div class="col-2">
+      <div class="col-4">
         <b>Wall Losses</b>
       </div>
       <div class="col-2">
@@ -12,7 +12,7 @@
   <div class="card" *ngFor="let wallLoss of wallLosses">
     <div class="card-header">
       <div class="row justify-content-between">
-        <div class="col-2">
+        <div class="col-4">
           <b>{{wallLoss.name}}</b>
         </div>
         <div class="col-2">
@@ -23,7 +23,7 @@
       </div>
     </div>
     <div class="card-block">
-      <app-wall-losses-form [wallLossesForm]="wallLoss.form"></app-wall-losses-form>
+      <app-wall-losses-form [(wallLossesForm)]="wallLoss.form"></app-wall-losses-form>
     </div>
   </div>
 </div>

@@ -1,3 +1,51 @@
-<p>
-  charge-material works!
-</p>
+<div class="card">
+  <div class="card-header">
+    <div class="row justify-content-between">
+      <div class="col-4">
+        <b>Charge Material</b>
+      </div>
+      <div class="col-2">
+        <button class="btn btn-secondary" (click)="addMaterial()">+ Add</button>
+      </div>
+    </div>
+  </div>
+  <div class="card" *ngFor="let material of chargeMaterial">
+    <div class="card-header">
+      <div class="row justify-content-between">
+        <div class="col-4">
+          <b>{{material.name}}</b>
+        </div>
+        <div class="col-2">
+          <button class="close" aria-label="Close" (click)="removeMaterial(material.name)">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        </div>
+      </div>
+    </div>
+    <div class="card-block">
+      <form class="form-group form-group-sm" [formGroup]="material.form">
+        <div class="row">
+          <div class="col-3">
+            <label class="form-control-label" for="type">Select Type</label>
+          </div>
+          <div class="col-3">
+            <div class="input-group input-group-sm">
+              <input type="radio" formControlName="type" value="Solid"> Solid
+            </div>
+          </div>
+          <div class="col-3">
+            <div class="input-group input-group-sm">
+              <input type="radio" formControlName="type" value="Liquid"> Liquid
+            </div>
+          </div>
+          <div class="col-3">
+            <div class="input-group input-group-sm">
+              <input type="radio" formControlName="type" value="Gas"> Gas
+            </div>
+          </div>
+        </div>
+        <app-solid-charge-material-form [(chargeMaterialForm)]="material.form"></app-solid-charge-material-form>
+      </form>
+    </div>
+  </div>
+</div>

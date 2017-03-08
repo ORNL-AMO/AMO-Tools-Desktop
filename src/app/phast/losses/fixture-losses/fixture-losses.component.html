@@ -1,3 +1,29 @@
-<p>
-  fixture-losses works!
-</p>
+<div class="card">
+  <div class="card-header">
+    <div class="row justify-content-between">
+      <div class="col-4">
+        <b>Losses</b>
+      </div>
+      <div class="col-2">
+        <button class="btn btn-secondary" (click)="addLoss()">+ Add</button>
+      </div>
+    </div>
+  </div>
+  <div class="card" *ngFor="let loss of fixtureLosses">
+    <div class="card-header">
+      <div class="row justify-content-between">
+        <div class="col-4">
+          <b>{{loss.name}}</b>
+        </div>
+        <div class="col-2">
+          <button class="close" aria-label="Close" (click)="removeLoss(loss.name)">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        </div>
+      </div>
+    </div>
+    <div class="card-block">
+      <app-fixture-losses-form [(lossesForm)]="loss.form"></app-fixture-losses-form>
+    </div>
+  </div>
+</div>

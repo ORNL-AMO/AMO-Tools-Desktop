@@ -1,0 +1,232 @@
+<div class="row justify-content-end">
+  <div class="col-4">
+    Baseline
+  </div>
+  <div class="col-4">
+    Modified
+  </div>
+</div>
+<form class="form-group form-group-sm" [formGroup]="chargeMaterialForm">
+  <div class="row">
+    <div class="col-4">
+      <label class="form-control-label small" for="baselineMaterial">Type of Material</label>
+    </div>
+    <div class="col-4">
+      <div class="input-group input-group-sm">
+        <select class="form-control input-sm" formControlName="baselineMaterial" id="baselineMaterial">
+          <option>Type 1</option>
+          <option>Type 2</option>
+        </select>
+      </div>
+      <app-control-messages [control]="chargeMaterialForm.controls.baselineMaterial"></app-control-messages>
+    </div>
+    <div class="col-4">
+      <div class="input-group input-group-sm">
+        <select class="form-control input-sm" formControlName="modifiedMaterial" id="modifiedMaterial">
+          <option>Type 1</option>
+          <option>Type 2</option>
+        </select>
+      </div>
+      <app-control-messages [control]="chargeMaterialForm.controls.modifiedMaterial"></app-control-messages>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-4">
+      <label class="form-control-label small" for="baselineChargeFeedRate">Charge (wet)-Feed Rate (lb/hr)</label>
+    </div>
+    <div class="col-4">
+      <div class="input-group input-group-sm">
+        <input type="text" class="form-control input-sm" formControlName="baselineChargeFeedRate" id="baselineChargeFeedRate">
+      </div>
+      <app-control-messages [control]="chargeMaterialForm.controls.baselineChargeFeedRate"></app-control-messages>
+    </div>
+    <div class="col-4">
+      <div class="input-group input-group-sm">
+        <input type="text" class="form-control input-sm" formControlName="modifiedChargeFeedRate" id="modifiedChargeFeedRate">
+      </div>
+      <app-control-messages [control]="chargeMaterialForm.controls.modifiedChargeFeedRate"></app-control-messages>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-4">
+      <label class="form-control-label small" for="baselineWaterContentCharged">Water Content as Charged (%)</label>
+    </div>
+    <div class="col-4">
+      <div class="input-group input-group-sm">
+        <input type="text" class="form-control input-sm" formControlName="baselineWaterContentCharged" id="baselineWaterContentCharged">
+      </div>
+      <app-control-messages [control]="chargeMaterialForm.controls.baselineWaterContentCharged"></app-control-messages>
+    </div>
+    <div class="col-4">
+      <div class="input-group input-group-sm">
+        <input type="text" class="form-control input-sm" formControlName="modifiedWaterContentCharged" id="modifiedChargeFeedRate">
+      </div>
+      <app-control-messages [control]="chargeMaterialForm.controls.modifiedChargeFeedRate"></app-control-messages>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-4">
+      <label class="form-control-label small" for="baselineWaterContentDischarged">Water Content as Disharged (%)</label>
+    </div>
+    <div class="col-4">
+      <div class="input-group input-group-sm">
+        <input type="text" class="form-control input-sm" formControlName="baselineWaterContentDischarged" id="baselineWaterContentDischarged">
+      </div>
+      <app-control-messages [control]="chargeMaterialForm.controls.baselineWaterContentDischarged"></app-control-messages>
+    </div>
+    <div class="col-4">
+      <div class="input-group input-group-sm">
+        <input type="text" class="form-control input-sm" formControlName="modifiedWaterContentDischarged" id="modifiedWaterContentDischarged">
+      </div>
+      <app-control-messages [control]="chargeMaterialForm.controls.modifiedWaterContentDischarged"></app-control-messages>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-4">
+      <label class="form-control-label small" for="baselineInitialTemp">Initial Temp.  (&#8457;)</label>
+    </div>
+    <div class="col-4">
+      <div class="input-group input-group-sm">
+        <input type="text" class="form-control input-sm" formControlName="baselineInitialTemp" id="baselineInitialTemp">
+      </div>
+      <app-control-messages [control]="chargeMaterialForm.controls.baselineInitialTemp"></app-control-messages>
+    </div>
+    <div class="col-4">
+      <div class="input-group input-group-sm">
+        <input type="text" class="form-control input-sm" formControlName="modifiedInitialTemp" id="modifiedInitialTemp">
+      </div>
+      <app-control-messages [control]="chargeMaterialForm.controls.modifiedInitialTemp"></app-control-messages>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-4">
+      <label class="form-control-label small" for="baselineWaterDischargeTemp">Water Discharge Temp. (&#8457;)</label>
+    </div>
+    <div class="col-4">
+      <div class="input-group input-group-sm">
+        <input type="text" class="form-control input-sm" formControlName="baselineWaterDischargeTemp" id="baselineWaterDischargeTemp">
+      </div>
+      <app-control-messages [control]="chargeMaterialForm.controls.baselineWaterDischargeTemp"></app-control-messages>
+    </div>
+    <div class="col-4">
+      <div class="input-group input-group-sm">
+        <input type="text" class="form-control input-sm" formControlName="modifiedWaterDischargeTemp" id="modifiedWaterDischargeTemp">
+      </div>
+      <app-control-messages [control]="chargeMaterialForm.controls.modifiedWaterDischargeTemp"></app-control-messages>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-4">
+      <label class="form-control-label small" for="baselineDischargeTemp">Discharge Temp. (&#8457;)</label>
+    </div>
+    <div class="col-4">
+      <div class="input-group input-group-sm">
+        <input type="text" class="form-control input-sm" formControlName="baselineDischargeTemp" id="baselineDischargeTemp">
+      </div>
+      <app-control-messages [control]="chargeMaterialForm.controls.baselineDischargeTemp"></app-control-messages>
+    </div>
+    <div class="col-4">
+      <div class="input-group input-group-sm">
+        <input type="text" class="form-control input-sm" formControlName="modifiedDischargeTemp" id="modifiedDischargeTemp">
+      </div>
+      <app-control-messages [control]="chargeMaterialForm.controls.modifiedDischargeTemp"></app-control-messages>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-4">
+      <label class="form-control-label small" for="baselineChargeMelted">Charged Melted (% of Charge)</label>
+    </div>
+    <div class="col-4">
+      <div class="input-group input-group-sm">
+        <input type="text" class="form-control input-sm" formControlName="baselineChargeMelted" id="baselineChargeMelted">
+      </div>
+      <app-control-messages [control]="chargeMaterialForm.controls.baselineChargeMelted"></app-control-messages>
+    </div>
+    <div class="col-4">
+      <div class="input-group input-group-sm">
+        <input type="text" class="form-control input-sm" formControlName="modifiedChargeMelted" id="modifiedChargeMelted">
+      </div>
+      <app-control-messages [control]="chargeMaterialForm.controls.modifiedChargeMelted"></app-control-messages>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-4">
+      <label class="form-control-label small" for="baselineChargeReacted">Charged Reacted (% of Dry)</label>
+    </div>
+    <div class="col-4">
+      <div class="input-group input-group-sm">
+        <input type="text" class="form-control input-sm" formControlName="baselineChargeReacted" id="baselineChargeReacted">
+      </div>
+      <app-control-messages [control]="chargeMaterialForm.controls.baselineChargeReacted"></app-control-messages>
+    </div>
+    <div class="col-4">
+      <div class="input-group input-group-sm">
+        <input type="text" class="form-control input-sm" formControlName="modifiedChargeReacted" id="modifiedChargeReacted">
+      </div>
+      <app-control-messages [control]="chargeMaterialForm.controls.modifiedChargeReacted"></app-control-messages>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-4">
+      <label class="form-control-label small" for="baselineHeatOfReaction">Heat of Reaction (Btu/lb)</label>
+    </div>
+    <div class="col-4">
+      <div class="input-group input-group-sm">
+        <input type="text" class="form-control input-sm" formControlName="baselineHeatOfReaction" id="baselineHeatOfReaction">
+      </div>
+      <app-control-messages [control]="chargeMaterialForm.controls.baselineHeatOfReaction"></app-control-messages>
+    </div>
+    <div class="col-4">
+      <div class="input-group input-group-sm">
+        <input type="text" class="form-control input-sm" formControlName="modifiedHeatOfReaction" id="modifiedHeatOfReaction">
+      </div>
+      <app-control-messages [control]="chargeMaterialForm.controls.modifiedHeatOfReaction"></app-control-messages>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-4">
+      <label class="form-control-label small" for="baselineAdditionalHeatRequired">Additional Heat Required (Btu/lb)</label>
+    </div>
+    <div class="col-4">
+      <div class="input-group input-group-sm">
+        <input type="text" class="form-control input-sm" formControlName="baselineAdditionalHeatRequired" id="baselineAdditionalHeatRequired">
+      </div>
+      <app-control-messages [control]="chargeMaterialForm.controls.baselineAdditionalHeatRequired"></app-control-messages>
+    </div>
+    <div class="col-4">
+      <div class="input-group input-group-sm">
+        <input type="text" class="form-control input-sm" formControlName="modifiedAdditionalHeatRequired" id="modifiedAdditionalHeatRequired">
+      </div>
+      <app-control-messages [control]="chargeMaterialForm.controls.modifiedAdditionalHeatRequired"></app-control-messages>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-4">
+      <label class="form-control-label small" for="baselineHeatRequired">Heat Required (Btu/lb)</label>
+    </div>
+    <div class="col-4">
+      <div class="input-group input-group-sm">
+        <input type="text" class="form-control input-sm" formControlName="baselineHeatRequired" id="baselineHeatRequired">
+      </div>
+      <app-control-messages [control]="chargeMaterialForm.controls.baselineHeatRequired"></app-control-messages>
+    </div>
+    <div class="col-4">
+      <div class="input-group input-group-sm">
+        <input type="text" class="form-control input-sm" formControlName="modifiedHeatRequired" id="modifiedHeatRequired">
+      </div>
+      <app-control-messages [control]="chargeMaterialForm.controls.modifiedHeatRequired"></app-control-messages>
+    </div>
+  </div>
+
+</form>
