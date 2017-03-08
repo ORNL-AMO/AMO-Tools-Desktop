@@ -1,120 +1,108 @@
-<form class="form-group" [formGroup]="psatForm">
-
-  <div class="row justify-content-center">
-    <div class="col-2">
-      <label class="form-control-label" for="pumpType">Pump Type</label>
-    </div>
-    <div class="col-3" [popover]="pumpTypePopover">
-      <div class="input-group" (mousedown)="pumpTypePopover.show()">
-        <select class="form-control" formControlName="pumpType" id="pumpType">
+<form [formGroup]="psatForm">
+  <div class="form-group row">
+    <label class="col-6 col-form-label" for="pumpType">Pump Type</label>
+    <div class="col-6">
+      <select class="form-control" formControlName="pumpType" id="pumpType" (mousedown)="pumpTypePopover.show()" [popover]="pumpTypePopover">
               <option>Pump 1</option>
               <option>Pump 2</option>
             </select>
-      </div>
       <app-control-messages [control]="psatForm.controls.pumpType"></app-control-messages>
+      <popover-content #pumpTypePopover title="Pump Type" placement="auto right" [closeOnClickOutside]="true">
+        <div class="popover-lg">Choose your pump type</div>
+      </popover-content>
     </div>
-    <popover-content #pumpTypePopover title="Pump Type" placement="auto right" [closeOnClickOutside]="true">
-      <div class="popover-lg">Choose your pump type</div>
-    </popover-content>
   </div>
 
-  <div class="row justify-content-center">
-    <div class="col-2">
-      <label class="form-control-label" for="pumpRPM">Pump RPM</label>
-    </div>
-    <div class="col-3" [popover]="pumpRpmPopover">
-      <div class="input-group">
-        <input type="text" class="form-control num-input" formControlName="pumpRPM" id="pumpRPM" (focus)="pumpRpmPopover.show()">
-      </div>
+  <div class="form-group row">
+    <label class="col-6 col-form-label" for="pumpRPM">Pump RPM</label>
+    <div class="col-6">
+      <input type="text" class="form-control" formControlName="pumpRPM" id="pumpRPM" (focus)="pumpRpmPopover.show()" [popover]="pumpRpmPopover">
       <app-control-messages [control]="psatForm.controls.pumpRPM"></app-control-messages>
+      <popover-content #pumpRpmPopover title="Pump RPM" placement="auto right" [closeOnClickOutside]="true">
+        <div class="popover-lg">Pump RPM Help</div>
+      </popover-content>
     </div>
-    <popover-content #pumpRpmPopover title="Pump RPM" placement="auto right" [closeOnClickOutside]="true">
-      <div class="popover-lg">Pump RPM Help</div>
-    </popover-content>
   </div>
 
-  <div class="row justify-content-center">
-    <div class="col-2">
-      <label class="form-control-label" for="drive">Drive</label>
-    </div>
-    <div class="col-3" [popover]="drivePopover">
-      <div class="input-group">
-        <select class="form-control" formControlName="drive" id="drive" (mousedown)="drivePopover.show()">
+  <div class="form-group row">
+    <label class="col-6 col-form-label" for="drive">Drive</label>
+    <div class="col-6">
+      <select class="form-control" formControlName="drive" id="drive" (mousedown)="drivePopover.show()" [popover]="drivePopover">
               <option>Drive 1</option>
               <option>Drive 2</option>
             </select>
-      </div>
+
       <app-control-messages [control]="psatForm.controls.drive"></app-control-messages>
+      <popover-content #drivePopover title="Pump Drive" placement="auto right" [closeOnClickOutside]="true">
+        <div class="popover-lg">Drive Help</div>
+      </popover-content>
     </div>
-    <popover-content #drivePopover title="Pump Drive" placement="auto right" [closeOnClickOutside]="true">
-      <div class="popover-lg">Drive Help</div>
-    </popover-content>
   </div>
 
-  <div class="row justify-content-center">
-    <div class="col-2">
-      <label class="form-control-label" for="viscosity">Kinematic Viscosity</label>
-    </div>
-    <div class="col-3" [popover]="viscosityPopover">
-      <div class="input-group incrementor">
+  <div class="form-group row">
+    <label class="col-6 col-form-label" for="viscosity">Kinematic Viscosity</label>
+    <div class="col-6 input-group">
+      <div class="incrementor input-group-addon">
         <div class="btn" (click)="subtractNum('viscosity')"><i class="fa fa-minus"></i></div>
+      </div>
+      <div class="incrementor input-group-addon">
         <div class="btn" (click)="addNum('viscosity')"><i class="fa fa-plus"></i></div>
-        <input type="text" class="form-control num-input" formControlName="viscosity" id="viscosity" ngModel="{{psatForm.value.viscosity}}"
-          (focus)="viscosityPopover.show()">
       </div>
+      <input type="text" class="form-control" formControlName="viscosity" id="viscosity" ngModel="{{psatForm.value.viscosity}}"
+        (focus)="viscosityPopover.show()" [popover]="viscosityPopover">
       <app-control-messages [control]="psatForm.controls.viscosity"></app-control-messages>
+      <popover-content #viscosityPopover title="Kinematic Viscosity" placement="auto right" [closeOnClickOutside]="true">
+        <div class="popover-lg">Kinematic Help</div>
+      </popover-content>
     </div>
-    <popover-content #viscosityPopover title="Kinematic Viscosity" placement="auto right" [closeOnClickOutside]="true">
-      <div class="popover-lg">Kinematic Help</div>
-    </popover-content>
   </div>
 
-  <div class="row justify-content-center">
-    <div class="col-2">
-      <label class="form-control-label" for="gravity">Specific Gravity</label>
-    </div>
-    <div class="col-3" [popover]="gravityPopover">
-      <div class="input-group">
-        <input type="text" class="form-control num-input" formControlName="gravity" id="gravity" (focus)="gravityPopover.show()">
-      </div>
+  <div class="form-group row">
+    <label class="col-6 col-form-label" for="gravity">Specific Gravity</label>
+    <div class="col-6">
+      <input type="text" class="form-control" formControlName="gravity" id="gravity" (focus)="gravityPopover.show()" [popover]="gravityPopover">
       <app-control-messages [control]="psatForm.controls.gravity"></app-control-messages>
+      <popover-content #gravityPopover title="Specific Gravity" placement="auto right" [closeOnClickOutside]="true">
+        <div class="popover-lg">Gravity Help</div>
+      </popover-content>
     </div>
-    <popover-content #gravityPopover title="Specific Gravity" placement="auto right" [closeOnClickOutside]="true">
-      <div class="popover-lg">Gravity Help</div>
-    </popover-content>
   </div>
 
 
-  <div class="row justify-content-center">
-    <div class="col-2">
-      <label class="form-control-label" for="stages">Stages</label>
-    </div>
-    <div class="col-3" [popover]="stagesPopover">
-      <div class="input-group incrementor">
+  <div class="form-group row">
+    <label class="col-6 col-form-label" for="stages">Stages</label>
+    <div class="col-6 input-group">
+      <div class="incrementor input-group-addon">
         <div class="btn" (click)="subtractNum('stages')"><i class="fa fa-minus"></i></div>
-        <div class="btn" (click)="addNum('stages')"><i class="fa fa-plus"></i></div>
-        <input type="text" class="form-control num-input" formControlName="stages" id="stages" ngModel="{{psatForm.value.stages}}"
-          (focus)="stagesPopover.show()">
       </div>
+      <div class="incrementor input-group-addon">
+        <div class="btn" (click)="addNum('stages')"><i class="fa fa-plus"></i></div>
+      </div>
+      <input type="text" class="form-control" formControlName="stages" id="stages" ngModel="{{psatForm.value.stages}}" (focus)="stagesPopover.show()"
+        [popover]="stagesPopover">
       <app-control-messages [control]="psatForm.controls.stages"></app-control-messages>
+      <popover-content #stagesPopover title="Pump Stages" placement="auto right" [closeOnClickOutside]="true">
+        <div class="popover-lg">Input the number of stages your pump has</div>
+      </popover-content>
     </div>
-    <popover-content #stagesPopover title="Pump Stages" placement="auto right" [closeOnClickOutside]="true">
-      <div class="popover-lg">Input the number of stages your pump has</div>
-    </popover-content>
   </div>
 
-  <div class="row justify-content-center">
-    <div class="col-2">
-      <label class="form-control-label">Fixed specific speed?</label>
-    </div>
-    <div class="col-3" [popover]="fixedSpeedPopover">
-      <div class="input-group" (hover)="fixedSpeedPopover.show()">
-        <input type="radio" name="fixedSpeed" formControlName="fixedSpeed" checked value="Yes">Yes<br>
-        <input type="radio" name="fixedSpeed" formControlName="fixedSpeed" value="No">No
+  <div class="form-group row">
+    <label class="col-6 col-form-label">Fixed specific speed?</label>
+    <div class="col-6">
+      <div class="form-check" [popover]="fixedSpeedPopover">
+        <label class="col-6 col-form-label" class="form-check-label" (hover)="fixedSpeedPopover.show()" [popover]="fixedSpeedPopover">
+          <input class="form-check-input" type="radio" name="fixedSpeed" formControlName="fixedSpeed" checked value="Yes">Yes
+        </label>
+      </div>
+      <div class="form-check" [popover]="fixedSpeedPopover">
+        <label class="col-6 col-form-label" class="form-check-label" (hover)="fixedSpeedPopover.show()" [popover]="fixedSpeedPopover">
+             <input class="form-check-input" type="radio" name="fixedSpeed" formControlName="fixedSpeed" value="No">No
+          </label>
+        <popover-content #fixedSpeedPopover title="Fixed Speed" placement="auto right" [closeOnClickOutside]="true">
+          <div class="popover-md">Some content</div>
+        </popover-content>
       </div>
     </div>
-    <popover-content #fixedSpeedPopover title="Fixed Speed" placement="auto right" [closeOnClickOutside]="true">
-      <div class="popover-md">Some content</div>
-    </popover-content>
   </div>
 </form>

@@ -100,9 +100,7 @@ Forms
   border-radius: 0;
   border-color: #9c9c9c;
 }
-.input-group {
-  padding: 0;
-}
+
 .incrementor {
   border:  #9c9c9c solid 1px; 
   padding: 0;
@@ -114,12 +112,27 @@ Forms
   background: -webkit-linear-gradient(top, #ffffff 0%,#f7f7f7 100%);
   background: linear-gradient(to bottom, #ffffff 0%,#f7f7f7 100%);
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#f7f7f7',GradientType=0 );
-  padding: 9px;
+  padding: 12px;
+  font-size: 12px;
 }
+
+.incrementor-sm .btn{
+    border-right: #c9c9c9 solid 1px;
+  background: #ffffff;
+  background: -moz-linear-gradient(top, #ffffff 0%, #f7f7f7 100%);
+  background: -webkit-linear-gradient(top, #ffffff 0%,#f7f7f7 100%);
+  background: linear-gradient(to bottom, #ffffff 0%,#f7f7f7 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#f7f7f7',GradientType=0 );
+  padding: 8px;
+  font-size: 8px;
+}
+
 .incrementor input.form-control {
   border: none;
   padding-left: 4px;
 }
+
+
 
 /*
 Popovers (Contextual Help)
@@ -144,7 +157,7 @@ Popovers (Contextual Help)
 
 .popover-md{
   width: 150px;
-  height: 150pxpx;
+  height: 150px;
 }
 
 .popover-sm{
@@ -226,16 +239,4 @@ Footer
 
 .white-bg{
   background-color: white;
-}
-
-
-/*Plus Minus sign buttons */
-.fa-plus:hover{
-  text-shadow: 0 0 0.3em dodgerblue, 0 0 0.3em dodgerblue,
-        0 0 0.3em dodgerblue
-}
-
-.fa-minus:hover{
-  text-shadow: 0 0 0.3em indianred, 0 0 0.3em indianred,
-        0 0 0.3em indianred
 }
