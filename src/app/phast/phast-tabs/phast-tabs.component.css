@@ -1,16 +1,11 @@
 .phast-tab-row{
-  height:5vh;
   border-bottom: groove;
   border-bottom-color: slategrey;
 }
 
 .phast-tab{
   text-align: center;
-  vertical-align: bottom;
-  cursor: pointer;
-}
-.phast-tab:hover{
-  background-color: lightblue;
+    width: 10vw;
 }
 
 .phast-tab-active{
@@ -22,5 +17,6 @@
 .right-border{
   border-right: groove;
   border-right-width: 1px;
-  border-right-color: slategrey;
+  margin-top: 10px;
+  margin-bottom: 10px;
 }

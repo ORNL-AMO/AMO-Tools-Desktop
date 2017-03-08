@@ -1,8 +1,8 @@
-<div class="row">
-  <div class="col-md-4">
-    <app-losses-sidebar (changeTab)="changeTab($event)"></app-losses-sidebar>
-  </div>
-  <div class="col-md-8">
+<div class="row losses-row">
+  <nav class="col-3 sidebar losses-sidebar">
+    <app-losses-sidebar (changeTab)="changeTab($event)" [lossesTab]="lossesTab"></app-losses-sidebar>
+  </nav>
+  <div class="col-9 losses-container">
     <app-charge-material *ngIf="lossesTab == 'charge-material'"></app-charge-material>
     <app-wall-losses *ngIf="lossesTab == 'wall-losses'"></app-wall-losses>
     <app-atmosphere-losses *ngIf="lossesTab == 'atmosphere-losses'"></app-atmosphere-losses>

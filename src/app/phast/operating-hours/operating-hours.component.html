@@ -1,87 +1,72 @@
-<div class="hours-container">
-  <form class="form-group" [formGroup]="hoursForm">
-     <div class="hour-border">
-      <div class="row">
-        <div class="col-md-6">
-          <label class="form-control-label" for="weeksPerYear">Weeks / year</label>
-        </div>
-        <div class="col-md-6">
-          <div class="input-group">
-            <input type="text" class="form-control num-input" id="weeksPerYear">
-          </div>
-          <app-control-messages [control]="hoursForm.controls.weeksPerYear"></app-control-messages>
-        </div>
+<form class="form-group" [formGroup]="hoursForm">
+  <div class="hour-border">
+    <div class="row justify-content-center">
+      <div class="col-2 input-row-border-left input-row-border-top">
+        <label class="form-control-label" for="weeksPerYear">Weeks / year</label>
       </div>
-
-      <div class="row">
-        <div class="col-md-6">
-          <label class="form-control-label" for="daysPerWeek">Days / week</label>
+      <div class="col-3 input-row-border-right input-row-border-top">
+        <div class="input-group">
+          <input type="text" class="form-control num-input" id="weeksPerYear">
         </div>
-        <div class="col-md-6">
-          <div class="input-group">
-            <div class="btn"><i class="fa fa-minus"></i></div>
-            <div class="btn"><i class="fa fa-plus"></i></div>
-            <input type="text" class="form-control num-input" id="daysPerWeek">
-          </div>
-          <app-control-messages [control]="hoursForm.controls.daysPerWeek"></app-control-messages>
-        </div>
-      </div>
-
-      <div class="row">
-        <div class="col-md-6">
-          <label class="form-control-label" for="shiftsPerDay">Shifts / day</label>
-        </div>
-        <div class="col-md-6">
-          <div class="input-group">
-            <div class="btn"><i class="fa fa-minus"></i></div>
-            <div class="btn"><i class="fa fa-plus"></i></div>
-            <input type="text" class="form-control num-input" id="shiftsPerDay">
-          </div>
-          <app-control-messages [control]="hoursForm.controls.shiftsPerDay"></app-control-messages>
-        </div>
-      </div>
-
-      <div class="row">
-        <div class="col-md-6">
-          <label class="form-control-label" for="hoursPerShift">Hours / shift</label>
-        </div>
-        <div class="col-md-6">
-          <div class="input-group">
-            <div class="btn"><i class="fa fa-minus"></i></div>
-            <div class="btn"><i class="fa fa-plus"></i></div>
-            <input type="text" class="form-control num-input" id="hoursPerShift">
-          </div>
-          <app-control-messages [control]="hoursForm.controls.hoursPerShift"></app-control-messages>
-        </div>
+        <app-control-messages [control]="hoursForm.controls.weeksPerYear"></app-control-messages>
       </div>
     </div>
 
-    <div class="row total-row">
-      <div class="col-md-6">
-        <label class="form-control-label bold" for="totalHoursPerYear">Total Hours / year</label>
+    <div class="row justify-content-center">
+      <div class="col-2 input-row-border-left">
+        <label class="form-control-label" for="daysPerWeek">Days / week</label>
       </div>
-      <div class="col-md-6">
+      <div class="col-3  input-row-border-right">
         <div class="input-group">
           <div class="btn"><i class="fa fa-minus"></i></div>
           <div class="btn"><i class="fa fa-plus"></i></div>
-          <input type="text" class="form-control num-input" id="totalHoursPerYear">
+          <input type="text" class="form-control num-input" id="daysPerWeek">
         </div>
-        <app-control-messages [control]="hoursForm.controls.totalHoursPerYear"></app-control-messages>
+        <app-control-messages [control]="hoursForm.controls.daysPerWeek"></app-control-messages>
       </div>
     </div>
 
-  </form>
-</div>
+    <div class="row justify-content-center">
+      <div class="col-2 input-row-border-left">
+        <label class="form-control-label" for="shiftsPerDay">Shifts / day</label>
+      </div>
+      <div class="col-3  input-row-border-right">
+        <div class="input-group">
+          <div class="btn"><i class="fa fa-minus"></i></div>
+          <div class="btn"><i class="fa fa-plus"></i></div>
+          <input type="text" class="form-control num-input" id="shiftsPerDay">
+        </div>
+        <app-control-messages [control]="hoursForm.controls.shiftsPerDay"></app-control-messages>
+      </div>
+    </div>
 
-
-<!--
-<div class="row">
-  <div class="col-md-6">
-    <button class="btn btn-default pull-left" (click)="back()">Back</button>
+    <div class="row justify-content-center">
+      <div class="col-2 input-row-border-left input-row-border-bottom">
+        <label class="form-control-label" for="hoursPerShift">Hours / shift</label>
+      </div>
+      <div class="col-3 input-row-border-right input-row-border-bottom">
+        <div class="input-group">
+          <div class="btn"><i class="fa fa-minus"></i></div>
+          <div class="btn"><i class="fa fa-plus"></i></div>
+          <input type="text" class="form-control num-input" id="hoursPerShift">
+        </div>
+        <app-control-messages [control]="hoursForm.controls.hoursPerShift"></app-control-messages>
+      </div>
+    </div>
   </div>
-  <div class="col-md-6">
-    <button class="btn btn-primary pull-right" (click)="saveContinue()">Save & Continue</button>
+
+  <div class="row justify-content-center total-row">
+    <div class="col-2">
+      <label class="form-control-label bold" for="totalHoursPerYear">Total Hours / year</label>
+    </div>
+    <div class="col-3">
+      <div class="input-group">
+        <div class="btn"><i class="fa fa-minus"></i></div>
+        <div class="btn"><i class="fa fa-plus"></i></div>
+        <input type="text" class="form-control num-input" id="totalHoursPerYear">
+      </div>
+      <app-control-messages [control]="hoursForm.controls.totalHoursPerYear"></app-control-messages>
+    </div>
   </div>
--->
 
-
+</form>
