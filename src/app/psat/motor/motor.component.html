@@ -40,7 +40,7 @@
       <label class="form-control-label" for="motorRPM">Motor RPM</label>
     </div>
     <div class="col-3" [popover]="motorRpmPopover">
-      <div class="input-group">
+      <div class="input-group incrementor">
         <div class="btn" (click)="subtractNum('motorRPM')"><i class="fa fa-minus"></i></div>
         <div class="btn" (click)="addNum('motorRPM')"><i class="fa fa-plus"></i></div>
         <input type="text" class="form-control num-input" id="motorRPM" formControlName="motorRPM" ngModel="{{psatForm.value.motorRPM}}"
@@ -108,7 +108,7 @@
       <label class="form-control-label" for="sizeMargin">Size Margin</label>
     </div>
     <div class="col-3" [popover]="marginPopover">
-      <div class="input-group">
+      <div class="input-group incrementor">
         <div class="btn" (click)="subtractNum('sizeMargin')"><i class="fa fa-minus"></i></div>
         <div class="btn" (click)="addNum('sizeMargin')"><i class="fa fa-plus"></i></div>
         <input type="text" class="form-control num-input" id="sizeMargin" formControlName="sizeMargin" ngModel="{{psatForm.value.sizeMargin}}"
