@@ -18,12 +18,12 @@
     </div>
   </div>
 
-  <div class="row btn-footer align-items-center justify-content-between">
-    <div class="col-2 text-center">
+  <div class="footer">
+    <div class="pull-left">
       <button class="btn btn-secondary" *ngIf="currentTab == 1" (click)="close()">Close</button>
       <button class="btn btn-secondary" *ngIf="currentTab != 1" (click)="goBack()">Back</button>
     </div>
-    <div class="col-2 text-center">
+    <div class="pull-right">
       <button class="btn btn-primary" *ngIf="currentTab < 5" (click)="continue()">Save & Continue</button>
       <button class="btn btn-primary" *ngIf="currentTab >= 5" (click)="saveAdjustment()">Save</button>
       <button class="btn btn-primary" *ngIf="currentTab >= 5" (click)="exportData()">Export</button>

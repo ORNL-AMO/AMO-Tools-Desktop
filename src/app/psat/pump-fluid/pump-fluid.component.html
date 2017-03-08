@@ -56,7 +56,7 @@
       <label class="form-control-label" for="viscosity">Kinematic Viscosity</label>
     </div>
     <div class="col-3" [popover]="viscosityPopover">
-      <div class="input-group">
+      <div class="input-group incrementor">
         <div class="btn" (click)="subtractNum('viscosity')"><i class="fa fa-minus"></i></div>
         <div class="btn" (click)="addNum('viscosity')"><i class="fa fa-plus"></i></div>
         <input type="text" class="form-control num-input" formControlName="viscosity" id="viscosity" ngModel="{{psatForm.value.viscosity}}"
@@ -90,7 +90,7 @@
       <label class="form-control-label" for="stages">Stages</label>
     </div>
     <div class="col-3" [popover]="stagesPopover">
-      <div class="input-group">
+      <div class="input-group incrementor">
         <div class="btn" (click)="subtractNum('stages')"><i class="fa fa-minus"></i></div>
         <div class="btn" (click)="addNum('stages')"><i class="fa fa-plus"></i></div>
         <input type="text" class="form-control num-input" formControlName="stages" id="stages" ngModel="{{psatForm.value.stages}}"
