@@ -10,7 +10,7 @@
   <div class="row form-group">
     <label class="col-4 col-form-label small" for="baselineCoolingMedium">Cooling Medium</label>
     <div class="col-4 input-group input-group-sm">
-      <select class="form-control" formControlName="baselineCoolingMedium" id="baselineCoolingMedium">
+      <select class="form-control" formControlName="baselineCoolingMedium" id="baselineCoolingMedium" ngModel="{{lossesForm.value.baselineCoolingMedium}}">
           <option>Air</option>
           <option>Water</option>
           <option>Other Gas</option>
@@ -19,7 +19,7 @@
       <app-control-messages [control]="lossesForm.controls.baselineCoolingMedium"></app-control-messages>
     </div>
     <div class="col-4 input-group input-group-sm">
-      <select class="form-control" formControlName="modifiedCoolingMedium" id="modifiedCoolingMedium">
+      <select class="form-control" formControlName="modifiedCoolingMedium" id="modifiedCoolingMedium" ngModel="{{lossesForm.value.modifiedCoolingMedium}}">
           <option>Air</option>
           <option>Water</option>
           <option>Other Gas</option>
@@ -29,7 +29,11 @@
     </div>
   </div>
 
-  <div class="row form-group">
+  <div class="row form-group" *ngIf="
+  lossesForm.value.baselineCoolingMedium == 'Other Gas' 
+  || lossesForm.value.modifiedCoolingMedium == 'Other Gas'
+  ||lossesForm.value.baselineCoolingMedium == 'Other Liquid' 
+  || lossesForm.value.modifiedCoolingMedium == 'Other Liquid'">
     <label class="col-4 col-form-label small" for="baselineAvgSpecificHeat">Average Specific Heat (Btu/lb-F)</label>
     <div class="col-4 input-group input-group-sm">
       <input type="text" class="form-control" formControlName="baselineAvgSpecificHeat" id="baselineAvgSpecificHeat">
@@ -41,7 +45,11 @@
     </div>
   </div>
 
-  <div class="row form-group">
+  <div class="row form-group" *ngIf="
+  lossesForm.value.baselineCoolingMedium == 'Other Gas' 
+  || lossesForm.value.modifiedCoolingMedium == 'Other Gas'
+  ||lossesForm.value.baselineCoolingMedium == 'Other Liquid' 
+  || lossesForm.value.modifiedCoolingMedium == 'Other Liquid'">
     <label class="col-4 col-form-label small" for="baselineDensity">Density (lb/SCF)</label>
     <div class="col-4 input-group input-group-sm">
       <input type="text" class="form-control" formControlName="baselineDensity" id="baselineDensity">
