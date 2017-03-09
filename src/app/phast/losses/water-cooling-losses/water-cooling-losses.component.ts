@@ -45,19 +45,21 @@ export class WaterCoolingLossesComponent implements OnInit {
       'baselineCoolingMedium': [''],
       'baselineAvgSpecificHeat': [''],
       'baselineDensity': [''],
-      'baselineLiquidFlow': [''],
+      'baselineFlow': [''],
       'baselineInletTemp': [''],
       'baselineOutletTemp': [''],
       'baselineHeatRequired': [{value: '', disabled: true}],
       'baselineCorrectionFactor': [''],
+      'baselineHeatLoss': [{value: '', disabled: true}],
       'modifiedCoolingMedium': [''],
       'modifiedAvgSpecificHeat': [''],
       'modifiedDensity': [''],
-      'modifiedLiquidFlow': [''],
+      'modifiedFlow': [''],
       'modifiedInletTemp': [''],
       'modifiedOutletTemp': [''],
       'modifiedHeatRequired': [{value: '', disabled: true}],
-      'modifiedCorrectionFactor': ['']
+      'modifiedCorrectionFactor': [''],
+      'modifiedHeatLoss': [{value: '', disabled: true}]
     })
   }
 }

@@ -9,7 +9,7 @@
       </div>
     </div>
   </div>
-  <div *ngFor="let loss of waterCoolingLosses">
+  <div *ngFor="let loss of coolingLosses">
     <div class="card-header">
       <div class="row justify-content-between">
         <div class="col-4">
@@ -23,7 +23,7 @@
       </div>
     </div>
     <div class="card-block">
-      <app-water-cooling-losses [(lossesForm)]="loss.form"></app-water-cooling-losses>
+      <app-water-cooling-losses-form [(lossesForm)]="loss.form"></app-water-cooling-losses-form>
     </div>
   </div>
 </div>
