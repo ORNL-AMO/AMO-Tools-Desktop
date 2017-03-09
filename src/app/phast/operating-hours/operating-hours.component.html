@@ -1,72 +1,61 @@
-<form class="form-group" [formGroup]="hoursForm">
-  <div class="hour-border">
-    <div class="row justify-content-center">
-      <div class="col-2 input-row-border-left input-row-border-top">
-        <label class="form-control-label" for="weeksPerYear">Weeks / year</label>
-      </div>
-      <div class="col-3 input-row-border-right input-row-border-top">
-        <div class="input-group">
-          <input type="text" class="form-control num-input" id="weeksPerYear">
-        </div>
+<form [formGroup]="hoursForm">
+  <div class="calc-border">
+    <div class="row form-group">
+      <label class="col-6 col-form-label" for="weeksPerYear">Weeks / year</label>
+      <div class="col-6">
+        <input type="text" class="form-control" id="weeksPerYear">
         <app-control-messages [control]="hoursForm.controls.weeksPerYear"></app-control-messages>
       </div>
     </div>
 
-    <div class="row justify-content-center">
-      <div class="col-2 input-row-border-left">
-        <label class="form-control-label" for="daysPerWeek">Days / week</label>
-      </div>
-      <div class="col-3  input-row-border-right">
-        <div class="input-group">
+    <div class="row form-group">
+      <label class="col-6 col-form-label" for="daysPerWeek">Days / week</label>
+      <div class="col-6 input-group">
+        <div class="incrementor input-group-addon">
           <div class="btn"><i class="fa fa-minus"></i></div>
-          <div class="btn"><i class="fa fa-plus"></i></div>
-          <input type="text" class="form-control num-input" id="daysPerWeek">
         </div>
+        <div class="incrementor input-group-addon">
+          <div class="btn"><i class="fa fa-plus"></i></div>
+        </div>
+        <input type="text" class="form-control" id="daysPerWeek">
         <app-control-messages [control]="hoursForm.controls.daysPerWeek"></app-control-messages>
       </div>
     </div>
 
-    <div class="row justify-content-center">
-      <div class="col-2 input-row-border-left">
-        <label class="form-control-label" for="shiftsPerDay">Shifts / day</label>
-      </div>
-      <div class="col-3  input-row-border-right">
-        <div class="input-group">
+    <div class="row form-group">
+      <label class="col-6 col-form-label" for="shiftsPerDay">Shifts / day</label>
+      <div class="col-6 input-group">
+        <div class="incrementor input-group-addon">
           <div class="btn"><i class="fa fa-minus"></i></div>
-          <div class="btn"><i class="fa fa-plus"></i></div>
-          <input type="text" class="form-control num-input" id="shiftsPerDay">
         </div>
+        <div class="incrementor input-group-addon">
+          <div class="btn"><i class="fa fa-plus"></i></div>
+        </div>
+        <input type="text" class="form-control" id="shiftsPerDay">
         <app-control-messages [control]="hoursForm.controls.shiftsPerDay"></app-control-messages>
       </div>
     </div>
 
-    <div class="row justify-content-center">
-      <div class="col-2 input-row-border-left input-row-border-bottom">
-        <label class="form-control-label" for="hoursPerShift">Hours / shift</label>
-      </div>
-      <div class="col-3 input-row-border-right input-row-border-bottom">
-        <div class="input-group">
+    <div class="row form-group">
+      <label class="col-6 col-form-label" for="hoursPerShift">Hours / shift</label>
+      <div class="col-6 input-group">
+        <div class="incrementor input-group-addon">
           <div class="btn"><i class="fa fa-minus"></i></div>
-          <div class="btn"><i class="fa fa-plus"></i></div>
-          <input type="text" class="form-control num-input" id="hoursPerShift">
         </div>
+        <div class="incrementor input-group-addon">
+          <div class="btn"><i class="fa fa-plus"></i></div>
+        </div>
+        <input type="text" class="form-control" id="hoursPerShift">
+
         <app-control-messages [control]="hoursForm.controls.hoursPerShift"></app-control-messages>
       </div>
     </div>
   </div>
-
-  <div class="row justify-content-center total-row">
-    <div class="col-2">
-      <label class="form-control-label bold" for="totalHoursPerYear">Total Hours / year</label>
-    </div>
-    <div class="col-3">
-      <div class="input-group">
-        <div class="btn"><i class="fa fa-minus"></i></div>
-        <div class="btn"><i class="fa fa-plus"></i></div>
-        <input type="text" class="form-control num-input" id="totalHoursPerYear">
-      </div>
+  <div class="row form-group total-row">
+    <label class="col-6 col-form-label bold" for="totalHoursPerYear">Total Hours / year</label>
+    <div class="col-6">
+      <input type="text" class="form-control" id="totalHoursPerYear">
       <app-control-messages [control]="hoursForm.controls.totalHoursPerYear"></app-control-messages>
     </div>
   </div>
-
 </form>

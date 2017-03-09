@@ -13,10 +13,9 @@ export class WallLossesComponent implements OnInit {
   constructor(private formBuilder: FormBuilder) { }
 
   ngOnInit() {
-    this.wallLosses = new Array();
-    // let tmpForm = this.initForm();
-    // let tmpName = 'Loss #' + (this.wallLosses.length + 1);
-    // this.wallLosses.push({ form: tmpForm, name: tmpName });
+    if (!this.wallLosses) {
+      this.wallLosses = new Array();
+    }
   }
 
   initForm() {
@@ -25,12 +24,12 @@ export class WallLossesComponent implements OnInit {
       'baselineAvgSurfaceTemp': [''],
       'baselineAmbientTemp': [''],
       'baselineCorrectionFactor': [''],
-      'baselineHeatRequired': [''],
+      'baselineHeatRequired': [{ value: '', disabled: true }],
       'modifiedSurfaceArea': [''],
       'modifiedAvgSurfaceTemp': [''],
       'modifiedAmbientTemp': [''],
       'modifiedCorrectionFactor': [''],
-      'modifiedHeatRequired': [''],
+      'modifiedHeatRequired': [{ value: '', disabled: true }],
     })
   }
 
@@ -40,11 +39,11 @@ export class WallLossesComponent implements OnInit {
     this.wallLosses.push({ form: tmpForm, name: tmpName });
   }
 
-  removeLoss(str: string){
+  removeLoss(str: string) {
     this.wallLosses = _.remove(this.wallLosses, loss => {
       return loss.name != str;
     });
-   // this.renameLossess();
+    this.renameLossess();
   }
 
   renameLossess() {

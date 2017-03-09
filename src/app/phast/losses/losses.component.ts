@@ -7,7 +7,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class LossesComponent implements OnInit {
 
-  lossesTab: string = 'wall-losses';
+  lossesTab: string = 'charge-material';
 
   constructor() { }
 

@@ -2,6 +2,7 @@
   background-color: #003054;
   color: white;
   height:10vh;
+  max-height: 10vh;
 }
 
 .banner-content{

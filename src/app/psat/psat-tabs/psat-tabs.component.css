@@ -1,6 +1,5 @@
 .psat-tab-row{
-  border-bottom: groove;
-  border-bottom-color: slategrey;
+  max-height: 10vh;
 }
 
 .psat-tab{
