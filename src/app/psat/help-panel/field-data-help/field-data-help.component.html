@@ -1,10 +1,112 @@
-<p class="h5">
-  Field Data Help
-</p><br>
-<p class="text-muted">
-  Enter measured data to calculate your pump and system's optimization rating and annual savings potential.
-</p><br>
+<div class="card">
+  <div class="card-header" (click)="defaultOpen = toggleOpen(defaultOpen)">
+    Field Data Help
+  </div>
+  <div class="card-block" *ngIf="currentField == 'default' || defaultOpen">
+    <p class="text-muted">
+      Enter measured data to calculate your pump and system's optimization rating and annual savings potential.
+    </p><br>
 
-<p class="text-muted">
-  <span class="fa fa-youtube-play"> Watch tutorial on gathering field data.</span>
-</p>
+    <p class="text-muted">
+      <span class="fa fa-youtube-play"> Watch tutorial on gathering field data.</span>
+    </p>
+  </div>
+</div>
+<div class="card">
+  <div class="card-header" (click)="operatingFractionOpen = toggleOpen(operatingFractionOpen)">
+    Operating Fraction
+  </div>
+  <div class="card-block" *ngIf="currentField == 'operatingFraction' || operatingFractionOpen">
+    <p>
+      Operating Fraction simply represents the fraction of the calender hours the equipment is running.
+    </p>
+    <label>Input:</label>
+    <p>
+      Units: <b>Percent</b><br> Minimum Value Allowed: <b>0</b><br> Maximum Value Allowed: <b>100</b><br>
+    </p>
+  </div>
+</div>
+<div class="card">
+  <div class="card-header" (click)="costKwHrOpen = toggleOpen(costKwHrOpen)">
+    Cost (KwHr)
+  </div>
+  <div class="card-block" *ngIf="currentField == 'costKwHr' || costKwHrOpen">
+    <p>
+      Operating Fraction simply represents the fraction of the calender hours the equipment is running.
+    </p>
+    <label>Input:</label>
+    <p>
+      Units: <strong>Percent</strong><br> Minimum Value Allowed: <strong>0</strong><br> Maximum Value Allowed: <strong>100</strong><br>
+    </p>
+  </div>
+</div>
+<div class="card">
+  <div class="card-header" (click)="flowRateOpen = toggleOpen(flowRateOpen)">
+    Flow Rate (gpm)
+  </div>
+  <div class="card-block" *ngIf="currentField == 'flowRate' || flowRateOpen">
+    <p>
+      Operating Fraction simply represents the fraction of the calender hours the equipment is running.
+    </p>
+    <label>Input:</label>
+    <p>
+      Units: <strong>Percent</strong><br> Minimum Value Allowed: <strong>0</strong><br> Maximum Value Allowed: <strong>100</strong><br>
+    </p>
+  </div>
+</div>
+<div class="card">
+  <div class="card-header" (click)="headOpen = toggleOpen(headOpen)">
+    Head
+  </div>
+  <div class="card-block" *ngIf="currentField == 'head' || headOpen">
+    <p>
+      Operating Fraction simply represents the fraction of the calender hours the equipment is running.
+    </p>
+    <label>Input:</label>
+    <p>
+      Units: <strong>Percent</strong><br> Minimum Value Allowed: <strong>0</strong><br> Maximum Value Allowed: <b>100</b><br>
+    </p>
+  </div>
+</div>
+<div class="card">
+  <div class="card-header"  (click)="loadEstimatedMethodOpen = toggleOpen(loadEstimatedMethodOpen)">
+    Load Estimated Method
+  </div>
+  <div class="card-block" *ngIf="currentField == 'loadEstimatedMethod' || loadEstimatedMethodOpen">
+    <p>
+      Operating Fraction simply represents the fraction of the calender hours the equipment is running.
+    </p>
+    <label>Input:</label>
+    <p>
+      Units: <strong>Percent</strong><br> Minimum Value Allowed: <strong>0</strong><br> Maximum Value Allowed: <b>100</b><br>
+    </p>
+  </div>
+</div>
+<div class="card">
+  <div class="card-header"  (click)="motorKWOpen = toggleOpen(motorKWOpen)">
+    Motor (kW)
+  </div>
+  <div class="card-block" *ngIf="currentField == 'motorKW' || motorKWOpen">
+    <p>
+      Cost is representative of the per unit cost of electricity in (kw/hr).
+    </p>
+    <label>Input:</label>
+    <p>
+      <strong>Money</strong><br> Minimum Value Allowed: <strong>0</strong><br> Maximum Value Allowed: <strong>None</strong><br>
+    </p>
+  </div>
+</div>
+<div class="card">
+  <div class="card-header" (click)="voltageOpen = toggleOpen(voltageOpen)">
+    Voltage
+  </div>
+  <div class="card-block" *ngIf="currentField == 'voltage' || voltageOpen">
+    <p>
+      Operating Fraction simply represents the fraction of the calender hours the equipment is running.
+    </p>
+    <label>Input:</label>
+    <p>
+      Units: <b>Percent</b><br> Minimum Value Allowed: <b>0</b><br> Maximum Value Allowed: <b>100</b><br>
+    </p>
+  </div>
+</div>

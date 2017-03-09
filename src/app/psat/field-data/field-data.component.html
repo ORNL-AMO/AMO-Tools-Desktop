@@ -2,10 +2,9 @@
   <div class="row form-group">
     <label class="col-6 col-form-label" for="operatingFraction">Operating Fraction</label>
     <div class="col-6">
-      <input type="text" class="form-control" formControlName="operatingFraction" id="operatingFraction" (focus)="fractionPopover.show()"
-        [popover]="fractionPopover">
+      <input type="text" class="form-control" formControlName="operatingFraction" id="operatingFraction" (focus)="focusField('operatingFraction')">
       <app-control-messages [control]="psatForm.controls.operatingFraction"></app-control-messages>
-      <popover-content #fractionPopover title="Operating Fraction" placement="auto right" [closeOnClickOutside]="true">
+      <!--<popover-content #fractionPopover title="Operating Fraction" placement="auto right" [closeOnClickOutside]="true">
         <div class="popover-lg">
 
           <div class="popover-lg">
@@ -30,16 +29,16 @@
           </div>
 
         </div>
-      </popover-content>
+      </popover-content>-->
     </div>
   </div>
 
   <div class="row form-group">
     <label class="col-6 col-form-label" for="costKwHr">Cost (kw/hr)</label>
     <div class="col-6">
-      <input type="text" class="form-control" formControlName="costKwHr" id="costKwHr" (focus)="costPopover.show()" [popover]="costPopover">
+      <input type="text" class="form-control" formControlName="costKwHr" id="costKwHr" (focus)="focusField('costKwHr')">
       <app-control-messages [control]="psatForm.controls.costKwHr"></app-control-messages>
-      <popover-content #costPopover title="Cost" placement="auto right" [closeOnClickOutside]="true">
+     <popover-content #costPopover title="Cost" placement="auto right" [closeOnClickOutside]="true">
         <div class="popover-lg">
 
           <div class="popover-lg">
@@ -71,7 +70,7 @@
   <div class="row form-group">
     <label class="col-6 col-form-label" for="flowRate">Flow Rate (gpm)</label>
     <div class="col-6">
-      <input type="text" class="form-control" formControlName="flowRate" id="flowRate" (focus)="flowRatePopover.show()" [popover]="flowRatePopover">
+      <input type="text" class="form-control" formControlName="flowRate" id="flowRate" (focus)="focusField('flowRate')">
       <app-control-messages [control]="psatForm.controls.flowRate"></app-control-messages>
       <popover-content #flowRatePopover title="Flow Rate" placement="auto right" [closeOnClickOutside]="true">
         <div class="popover-lg">
@@ -105,7 +104,7 @@
   <div class="row form-group">
     <label class="col-6 col-form-label" for="head">Head</label>
     <div class="col-6">
-      <input type="text" class="form-control" formControlName="head" id="head" (focus)="headPopover.show()" [popover]="headPopover">
+      <input type="text" class="form-control" formControlName="head" id="head" (focus)="focusField('head')">
       <app-control-messages [control]="psatForm.controls.head"></app-control-messages>
       <popover-content #headPopover title="Head" placement="auto right" [closeOnClickOutside]="true">
         <div class="popover-lg">
@@ -139,8 +138,7 @@
   <div class="row form-group">
     <label class="col-6 col-form-label" for="loadEstimatedMethod">Load Estimated Method</label>
     <div class="col-6">
-      <select class="form-control" formControlName="loadEstimatedMethod" id="loadEstimatedMethod" (focus)="loadPopover.show()"
-        [popover]="loadPopover">
+      <select class="form-control" formControlName="loadEstimatedMethod" id="loadEstimatedMethod" (focus)="focusField('loadEstimatedMethod')">
               <option>Method 1</option>
               <option>Method 2</option>
             </select>
@@ -171,7 +169,7 @@
   <div class="row form-group">
     <label class="col-6 col-form-label" for="motorKW">Motor (kW)</label>
     <div class="col-6">
-      <input type="text" class="form-control" formControlName="motorKW" id="motorKW" (focus)="motorPowerPopover.show()" [popover]="motorPowerPopover">
+      <input type="text" class="form-control" formControlName="motorKW" id="motorKW" (focus)="focusField('motorKW')">
       <app-control-messages [control]="psatForm.controls.motorKW"></app-control-messages>
       <popover-content #motorPowerPopover title="Motor" placement="auto right" [closeOnClickOutside]="true">
         <div class="popover-lg">
@@ -205,7 +203,7 @@
   <div class="row form-group">
     <label class="col-6 col-form-label" for="voltage">Voltage</label>
     <div class="col-6">
-      <input type="text" class="form-control" formControlName="voltage" id="voltage" (focus)="voltagePopover.show()" [popover]="voltagePopover">
+      <input type="text" class="form-control" formControlName="voltage" id="voltage" (focus)="focusField('voltage')">
       <app-control-messages [control]="psatForm.controls.voltage"></app-control-messages>
       <popover-content #voltagePopover title="Voltage" placement="auto right" [closeOnClickOutside]="true">
         <div class="popover-lg">

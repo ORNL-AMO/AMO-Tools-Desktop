@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 
 @Component({
   selector: 'app-field-data-help',
@@ -6,10 +6,25 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./field-data-help.component.css']
 })
 export class FieldDataHelpComponent implements OnInit {
+  @Input()
+  currentField: string;
 
+  defaultOpen: boolean = false;
+  operatingFractionOpen: boolean = false;
+  costKwHrOpen: boolean = false;
+  flowRateOpen: boolean = false;
+  headOpen: boolean = false;
+  loadEstimatedMethodOpen: boolean = false;
+  motorKWOpen: boolean = false;
+  voltageOpen: boolean = false;
   constructor() { }
 
   ngOnInit() {
+    console.log(this.currentField)
+  }
+
+  toggleOpen(bool: boolean){
+    return !bool;
   }
 
 }
