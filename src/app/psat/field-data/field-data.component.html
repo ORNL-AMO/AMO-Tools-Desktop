@@ -6,7 +6,30 @@
         [popover]="fractionPopover">
       <app-control-messages [control]="psatForm.controls.operatingFraction"></app-control-messages>
       <popover-content #fractionPopover title="Operating Fraction" placement="auto right" [closeOnClickOutside]="true">
-        <div class="popover-lg">Some Content</div>
+        <div class="popover-lg">
+
+          <div class="popover-lg">
+            <div class="description">
+              <h4>Description:</h4>
+              <div class="description-box">
+                <p>
+                  Operating Fraction simply represents the fraction of the calender hours the equipment is running.
+                </p>
+              </div>
+            </div>
+            <div class = "input-info">
+              <h4>Input:</h4>
+              <div class="input-box">
+                <p>
+                  Units: <strong>Percent</strong><br>
+                  Minimum Value Allowed: <strong>0</strong><br>
+                  Maximum Value Allowed: <strong>100</strong><br>
+                </p>
+              </div>
+            </div>
+          </div>
+
+        </div>
       </popover-content>
     </div>
   </div>
@@ -17,7 +40,30 @@
       <input type="text" class="form-control" formControlName="costKwHr" id="costKwHr" (focus)="costPopover.show()" [popover]="costPopover">
       <app-control-messages [control]="psatForm.controls.costKwHr"></app-control-messages>
       <popover-content #costPopover title="Cost" placement="auto right" [closeOnClickOutside]="true">
-        <div class="popover-lg">Some Content</div>
+        <div class="popover-lg">
+
+          <div class="popover-lg">
+            <div class="description">
+              <h4>Description:</h4>
+              <div class="description-box">
+                <p>
+                  Cost is representative of the per unit cost of electricity in (kw/hr).
+                </p>
+              </div>
+            </div>
+            <div class = "input-info">
+              <h4>Input:</h4>
+              <div class="input-box">
+                <p>
+                  Units: <strong>Money</strong><br>
+                  Minimum Value Allowed: <strong>0</strong><br>
+                  Maximum Value Allowed: <strong>None</strong><br>
+                </p>
+              </div>
+            </div>
+          </div>
+
+        </div>
       </popover-content>
     </div>
   </div>
@@ -28,7 +74,30 @@
       <input type="text" class="form-control" formControlName="flowRate" id="flowRate" (focus)="flowRatePopover.show()" [popover]="flowRatePopover">
       <app-control-messages [control]="psatForm.controls.flowRate"></app-control-messages>
       <popover-content #flowRatePopover title="Flow Rate" placement="auto right" [closeOnClickOutside]="true">
-        <div class="popover-lg">Some Content</div>
+        <div class="popover-lg">
+
+          <div class="popover-lg">
+            <div class="description">
+              <h4>Description:</h4>
+              <div class="description-box">
+                <p>
+                  Flow Rate represents either the <u>measured</u> or <u>required</u> rate of flow.
+                </p>
+              </div>
+            </div>
+            <div class = "input-info">
+              <h4>Input:</h4>
+              <div class="input-box">
+                <p>
+                  Units: <strong>GPM, MGD, m^3/h, L/s</strong><br>
+                  Minimum Value Allowed: <strong>0</strong><br>
+                  Maximum Value Allowed: <strong>None</strong><br>
+                </p>
+              </div>
+            </div>
+          </div>
+
+        </div>
       </popover-content>
     </div>
   </div>
@@ -39,7 +108,30 @@
       <input type="text" class="form-control" formControlName="head" id="head" (focus)="headPopover.show()" [popover]="headPopover">
       <app-control-messages [control]="psatForm.controls.head"></app-control-messages>
       <popover-content #headPopover title="Head" placement="auto right" [closeOnClickOutside]="true">
-        <div class="popover-lg">Some Content</div>
+        <div class="popover-lg">
+
+          <div class="popover-lg">
+            <div class="description">
+              <h4>Description:</h4>
+              <div class="description-box">
+                <p>
+                  Head represents either the <u>measured</u> or <u>required</u> pump head in feet or meters.
+                </p>
+              </div>
+            </div>
+            <div class = "input-info">
+              <h4>Input:</h4>
+              <div class="input-box">
+                <p>
+                  Units: <strong>Feet or Meters</strong><br>
+                  Minimum Value Allowed: <strong>0</strong><br>
+                  Maximum Value Allowed: <strong>None</strong><br>
+                </p>
+              </div>
+            </div>
+          </div>
+
+        </div>
       </popover-content>
     </div>
   </div>
@@ -54,7 +146,24 @@
             </select>
       <app-control-messages [control]="psatForm.controls.loadEstimatedMethod"></app-control-messages>
       <popover-content #loadPopover title="Load Estimated Method" placement="auto right" [closeOnClickOutside]="true">
-        <div class="popover-lg">Some Content</div>
+        <div class="popover-lg">
+
+          <div class="description">
+            <h4>Description:</h4>
+            <div class="description-box">
+              Load Estimation Method can either be one of two choices: <u>Power</u> or <u>Current</u>. Both of which calculate <u>Load</u>.
+            </div>
+          </div>
+          <div class = "input-info">
+            <h4>Input:</h4>
+            <div class="input-box">
+              <p>
+                Options: <strong>Power</strong> or <strong>Current</strong><br>
+              </p>
+            </div>
+          </div>
+
+        </div>
       </popover-content>
     </div>
   </div>
@@ -65,7 +174,30 @@
       <input type="text" class="form-control" formControlName="motorKW" id="motorKW" (focus)="motorPowerPopover.show()" [popover]="motorPowerPopover">
       <app-control-messages [control]="psatForm.controls.motorKW"></app-control-messages>
       <popover-content #motorPowerPopover title="Motor" placement="auto right" [closeOnClickOutside]="true">
-        <div class="popover-lg">Some Content</div>
+        <div class="popover-lg">
+
+          <div class="popover-lg">
+            <div class="description">
+              <h4>Description:</h4>
+              <div class="description-box">
+                <p>
+                  Motor represents either a measured or average current among the three phases. The units will depend on the Load Estimation Method Selected.
+                </p>
+              </div>
+            </div>
+            <div class = "input-info">
+              <h4>Input:</h4>
+              <div class="input-box">
+                <p>
+                  Units: <strong>kW or amps</strong><br>
+                  Minimum Value Allowed: <strong>0</strong><br>
+                  Maximum Value Allowed: <strong>None</strong><br>
+                </p>
+              </div>
+            </div>
+          </div>
+
+        </div>
       </popover-content>
     </div>
   </div>
@@ -76,7 +208,30 @@
       <input type="text" class="form-control" formControlName="voltage" id="voltage" (focus)="voltagePopover.show()" [popover]="voltagePopover">
       <app-control-messages [control]="psatForm.controls.voltage"></app-control-messages>
       <popover-content #voltagePopover title="Voltage" placement="auto right" [closeOnClickOutside]="true">
-        <div class="popover-lg">Some Content</div>
+        <div class="popover-lg">
+
+          <div class="popover-lg">
+            <div class="description">
+              <h4>Description:</h4>
+              <div class="description-box">
+                <p>
+                  Voltage is the measured bus voltage.
+                </p>
+              </div>
+            </div>
+            <div class = "input-info">
+              <h4>Input:</h4>
+              <div class="input-box">
+                <p>
+                  Units: <strong>Voltage</strong><br>
+                  Minimum Value Allowed: <strong>0</strong><br>
+                  Maximum Value Allowed: <strong>None</strong><br>
+                </p>
+              </div>
+            </div>
+          </div>
+
+        </div>
       </popover-content>
     </div>
   </div>
