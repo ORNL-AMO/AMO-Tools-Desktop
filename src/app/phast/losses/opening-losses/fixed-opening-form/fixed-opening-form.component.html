@@ -1,0 +1,149 @@
+<div class="row justify-content-center loss-header">
+  <div class="col-12 text-center">
+    <b class="h4">Fixed Opening Losses Information</b>
+  </div>
+</div>
+
+<form [formGroup]="openingLossesForm">
+  <div class="row form-group">
+    <label class="col-4 col-form-label small" for="type">Select Type</label>
+    <div class="col-8 input-group input-group-sm">
+      <select class="form-control" formControlName="openingType" id="openingType">
+              <option>Round</option>
+              <option>Rectangular (Square)</option>
+              </select>
+      <!--<app-control-messages [control]="openingLossesForm.controls.openingType"></app-control-messages>-->
+    </div>
+  </div>
+</form>
+
+<div class="row justify-content-end">
+  <div class="col-4 text-center">
+    Baseline
+  </div>
+  <div class="col-4 text-center">
+    Modified
+  </div>
+</div>
+<form [formGroup]="openingLossesForm">
+  <div class="row form-group">
+    <label class="col-4 col-form-label small" for="baselineWallThickness">Furnace Wall Thickness (inch)</label>
+    <div class="col-4 input-group input-group-sm">
+      <input type="text" class="form-control" formControlName="baselineWallThickness" id="baselineWallThickness">
+      <!--<app-control-messages [control]="openingLossesForm.controls.baselineWallThickness"></app-control-messages>-->
+    </div>
+    <div class="col-4 input-group input-group-sm">
+      <input type="text" class="form-control" formControlName="modifiedWallThickness" id="modifiedWallThickness">
+      <!--<app-control-messages [control]="openingLossesForm.controls.modifiedWallThickness"></app-control-messages>-->
+    </div>
+  </div>
+
+  <div class="row form-group">
+    <label class="col-4 col-form-label small" for="baselineLengthOfOpenings">Length of Openings (inch)</label>
+    <div class="col-4 input-group input-group-sm">
+      <input type="text" class="form-control" formControlName="baselineLengthOfOpenings" id="baselineLengthOfOpenings">
+      <!--<app-control-messages [control]="openingLossesForm.controls.baselineLengthOfOpenings"></app-control-messages>-->
+    </div>
+    <div class="col-4 input-group input-group-sm">
+      <input type="text" class="form-control" formControlName="modifiedLengthOfOpenings" id="modifiedLengthOfOpenings">
+      <!--<app-control-messages [control]="openingLossesForm.controls.modifiedLengthOfOpenings"></app-control-messages>-->
+    </div>
+  </div>
+
+  <div class="row form-group">
+    <label class="col-4 col-form-label small" for="baselineHeightOfOpenings">Height of Openings (inch)</label>
+    <div class="col-4 input-group input-group-sm">
+      <input type="text" class="form-control" formControlName="baselineHeightOfOpenings" id="baselineHeightOfOpenings">
+      <!--<app-control-messages [control]="openingLossesForm.controls.baselineHeightOfOpenings"></app-control-messages>-->
+    </div>
+    <div class="col-4 input-group input-group-sm">
+      <input type="text" class="form-control" formControlName="modifiedHeightOfOpenings" id="modifiedHeightOfOpenings">
+      <!--<app-control-messages [control]="openingLossesForm.controls.modifiedHeightOfOpenings"></app-control-messages>-->
+    </div>
+  </div>
+
+  <!--NEED TO DISABLE AND BIND TO USER VIEW FACTOR INPUT-->
+  <div class="row form-group">
+    <label class="col-4 col-form-label small" for="baselineViewFactor">View Factor - User Defined</label>
+    <div class="col-4 input-group input-group-sm">
+      <input type="text" class="form-control" formControlName="baselineViewFactor" id="baselineViewFactor">
+      <!--<app-control-messages [control]="openingLossesForm.controls.baselineViewFactor"></app-control-messages>-->
+    </div>
+    <div class="col-4 input-group input-group-sm">
+      <input type="text" class="form-control" formControlName="modifiedViewFactor" id="modifiedViewFactor">
+      <!--<app-control-messages [control]="openingLossesForm.controls.modifiedViewFactor"></app-control-messages>-->
+    </div>
+  </div>
+
+  <div class="row form-group">
+    <label class="col-4 col-form-label small" for="baselineViewFactor">View Factor - User Defined</label>
+    <div class="col-4 input-group input-group-sm">
+      <input type="text" class="form-control" formControlName="baselineViewFactor" id="baselineViewFactor">
+      <!--<app-control-messages [control]="openingLossesForm.controls.baselineViewFactor"></app-control-messages>-->
+    </div>
+    <div class="col-4 input-group input-group-sm">
+      <input type="text" class="form-control" formControlName="modifiedViewFactor" id="modifiedViewFactor">
+      <!--<app-control-messages [control]="openingLossesForm.controls.modifiedViewFactor"></app-control-messages>-->
+    </div>
+  </div>
+
+  <div class="row form-group">
+    <label class="col-4 col-form-label small" for="baselineTotalOpeningArea">Total Opening Area (ft^2)</label>
+    <div class="col-4 input-group input-group-sm">
+      <input type="text" class="form-control" formControlName="baselineTotalOpeningArea" id="baselineTotalOpeningArea">
+      <!--<app-control-messages [control]="openingLossesForm.controls.baselineTotalOpeningArea"></app-control-messages>-->
+    </div>
+    <div class="col-4 input-group input-group-sm">
+      <input type="text" class="form-control" formControlName="modifiedTotalOpeningArea" id="modifiedTotalOpeningArea">
+      <!--<app-control-messages [control]="openingLossesForm.controls.modifiedTotalOpeningArea"></app-control-messages>-->
+    </div>
+  </div>
+
+  <div class="row form-group">
+    <label class="col-4 col-form-label small" for="baselineInsideTemp">Inside Temp. (&#8457;)</label>
+    <div class="col-4 input-group input-group-sm">
+      <input type="text" class="form-control" formControlName="baselineInsideTemp" id="baselineInsideTemp">
+      <!--<app-control-messages [control]="openingLossesForm.controls.baselineInsideTemp"></app-control-messages>-->
+    </div>
+    <div class="col-4 input-group input-group-sm">
+      <input type="text" class="form-control" formControlName="modifiedInsideTemp" id="modifiedInsideTemp">
+      <!--<app-control-messages [control]="openingLossesForm.controls.modifiedInsideTemp"></app-control-messages>-->
+    </div>
+  </div>
+
+  <div class="row form-group">
+    <label class="col-4 col-form-label small" for="baselineOutsideTemp">Outside or Ambient Temp. (&#8457;)</label>
+    <div class="col-4 input-group input-group-sm">
+      <input type="text" class="form-control" formControlName="baselineOutsideTemp" id="baselineOutsideTemp">
+      <!--<app-control-messages [control]="openingLossesForm.controls.baselineOutsideTemp"></app-control-messages>-->
+    </div>
+    <div class="col-4 input-group input-group-sm">
+      <input type="text" class="form-control" formControlName="modifiedOutsideTemp" id="modifiedOutsideTemp">
+      <!--<app-control-messages [control]="openingLossesForm.controls.modifiedOutsideTemp"></app-control-messages>-->
+    </div>
+  </div>
+
+  <div class="row form-group">
+    <label class="col-4 col-form-label small" for="baselinePercentTimeOpen">% of Time Open</label>
+    <div class="col-4 input-group input-group-sm">
+      <input type="text" class="form-control" formControlName="baselinePercentTimeOpen" id="baselinePercentTimeOpen">
+      <!--<app-control-messages [control]="openingLossesForm.controls.baselinePercentTimeOpen"></app-control-messages>-->
+    </div>
+    <div class="col-4 input-group input-group-sm">
+      <input type="text" class="form-control" formControlName="modifiedPercentTimeOpen" id="modifiedPercentTimeOpen">
+      <!--<app-control-messages [control]="openingLossesForm.controls.modifiedPercentTimeOpen"></app-control-messages>-->
+    </div>
+  </div>
+
+  <div class="row form-group">
+    <label class="col-4 col-form-label small" for="baselineOpeningLosses">Fixed Opening Losses</label>
+    <div class="col-4 input-group input-group-sm">
+      <input type="text" class="form-control" formControlName="baselineOpeningLosses" id="baselineOpeningLosses">
+      <!--<app-control-messages [control]="openingLossesForm.controls.baselineOpeeingLosses"></app-control-messages>-->
+    </div>
+    <div class="col-4 input-group input-group-sm">
+      <input type="text" class="form-control" formControlName="modifiedOpeningLosses" id="modifiedOpeningLosses">
+      <!--<app-control-messages [control]="openingLossesForm.controls.modifiedOpeningLosses"></app-control-messages>-->
+    </div>
+  </div>
+</form>

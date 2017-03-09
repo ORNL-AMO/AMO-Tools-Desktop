@@ -194,6 +194,7 @@ Footer
   padding: 20px;
   background: #fff;
   border-top: #DBDBDB solid 1px;
+  z-index: 5;
 }
 .footer:after {
   display: table;

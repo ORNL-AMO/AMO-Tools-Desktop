@@ -30,6 +30,8 @@ import { SankeyDiagramComponent } from './sankey/sankey-diagram/sankey-diagram.c
 import { WallLossesFormComponent } from './losses/wall-losses/wall-losses-form/wall-losses-form.component';
 import { SolidChargeMaterialFormComponent } from './losses/charge-material/solid-charge-material-form/solid-charge-material-form.component';
 import { FixtureLossesFormComponent } from './losses/fixture-losses/fixture-losses-form/fixture-losses-form.component';
+import { FixedOpeningFormComponent } from './losses/opening-losses/fixed-opening-form/fixed-opening-form.component';
+import { VariableOpeningFormComponent } from './losses/opening-losses/variable-opening-form/variable-opening-form.component';
 
 @NgModule({
   declarations: [
@@ -59,7 +61,9 @@ import { FixtureLossesFormComponent } from './losses/fixture-losses/fixture-loss
     SankeyDiagramComponent,
     WallLossesFormComponent,
     SolidChargeMaterialFormComponent,
-    FixtureLossesFormComponent
+    FixtureLossesFormComponent,
+    FixedOpeningFormComponent,
+    VariableOpeningFormComponent
   ],
   exports: [
   ],
