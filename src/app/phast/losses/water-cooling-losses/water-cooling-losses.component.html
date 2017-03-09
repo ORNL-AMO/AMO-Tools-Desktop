@@ -1,15 +1,15 @@
-<!--<div class="card fixture-container">
-  <div class="card-header fixture-header">
+<div class="card cooling-container">
+  <div class="card-header cooling-header">
     <div class="row justify-content-between">
       <div class="col-4">
-        <b>Fixture, Trays, Baskets etc. Losses</b>
+        <b>Cooling Losses</b>
       </div>
       <div class="col-2">
         <button class="btn btn-secondary" (click)="addLoss()">+ Add</button>
       </div>
     </div>
   </div>
-  <div *ngFor="let loss of fixtureLosses">
+  <div *ngFor="let loss of waterCoolingLosses">
     <div class="card-header">
       <div class="row justify-content-between">
         <div class="col-4">
@@ -23,7 +23,7 @@
       </div>
     </div>
     <div class="card-block">
-      <app-fixture-losses-form [(lossesForm)]="loss.form"></app-fixture-losses-form>
+      <app-water-cooling-losses [(lossesForm)]="loss.form"></app-water-cooling-losses>
     </div>
   </div>
-</div>-->
+</div>
