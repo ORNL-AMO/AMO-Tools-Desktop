@@ -1,7 +1,7 @@
 <div class="row banner">
-  <a routerLink="/dashboard">
+  <span routerLink="/dashboard">
     <img src="assets/images/DOE_banner.png" class="doe_logo">
-   </a>
+   </span>
 </div>
 
 <div style="padding-top:15px;">
@@ -9,44 +9,44 @@
   <ul class="tree" *ngIf="directory">
     <li>
       <i class="fa" (click)="toggleDirectoryCollapse(directory)" [ngClass]="{'fa-angle-right': directory.collapsed == true, 'fa-angle-down': directory.collapsed == false}" aria-hidden="true"></i>
-      <a class="pointer-item" (click)="toggleSelected(directory)" (dblclick)="toggleDirectoryCollapse(directory)" [ngClass]="{'selected':selectedDirectory.name == directory.name}">
+      <span class="pointer-item" (click)="toggleSelected(directory)" (dblclick)="toggleDirectoryCollapse(directory)" [ngClass]="{'selected':selectedDirectory.name == directory.name}">
         <i class="fa fa-folder-o" aria-hidden="true"></i>
         {{directory.name}}
-      </a>
+      </span>
     </li>
     <ul *ngIf="directory.subDirectory && directory.collapsed == false">
       <li *ngFor="let directory of directory.subDirectory">
         <i class="fa" (click)="toggleDirectoryCollapse(directory)" [ngClass]="{'fa-angle-right': directory.collapsed == true, 'fa-angle-down': directory.collapsed == false}" aria-hidden="true"></i>
-        <a class="pointer-item" (click)="toggleSelected(directory)" (dblclick)="toggleDirectoryCollapse(directory)" [ngClass]="{'selected':selectedDirectory.name == directory.name}">
+        <span class="pointer-item" (click)="toggleSelected(directory)" (dblclick)="toggleDirectoryCollapse(directory)" [ngClass]="{'selected':selectedDirectory.name == directory.name}">
           <i class="fa fa-folder-o" aria-hidden="true"></i>
           {{directory.name}}
-        </a>
+        </span>
 
         <ul *ngIf="directory.subDirectory && directory.collapsed == false">
           <li *ngFor="let directory of directory.subDirectory">
             <i class="fa" (click)="toggleDirectoryCollapse(directory)" [ngClass]="{'fa-angle-right': directory.collapsed == true, 'fa-angle-down': directory.collapsed == false}" aria-hidden="true"></i>
-            <a class="pointer-item" (click)="toggleSelected(directory)" (dblclick)="toggleDirectoryCollapse(directory)" [ngClass]="{'selected':selectedDirectory.name == directory.name}">
+            <span class="pointer-item" (click)="toggleSelected(directory)" (dblclick)="toggleDirectoryCollapse(directory)" [ngClass]="{'selected':selectedDirectory.name == directory.name}">
               <i class="fa fa-folder-o" aria-hidden="true"></i>
               {{directory.name}}
-            </a>
+            </span>
           </li>
         </ul>
         <ul *ngIf="directory.assessments && directory.collapsed == false">
           <li *ngFor="let assessment of directory.assessments">
-            <a class="nav-item pointer-item" (click)="goToAssessment(assessment)">
+            <span class="nav-item pointer-item" (click)="goToAssessment(assessment)">
               <i class="fa fa-bar-chart" aria-hidden="true"></i>
               {{assessment.name}}
-            </a>
+            </span>
           </li>
         </ul>
       </li>
     </ul>
     <ul *ngIf="directory.assessments && directory.collapsed == false">
       <li *ngFor="let assessment of directory.assessments">
-        <a class="nav-item pointer-item" (click)="goToAssessment(assessment)">
+        <span class="nav-item pointer-item" (click)="goToAssessment(assessment)">
           <i class="fa fa-bar-chart" aria-hidden="true"></i>
           {{assessment.name}}
-        </a>
+        </span>
       </li>
     </ul>
   </ul>
@@ -55,57 +55,57 @@
  <div style="padding-top: 20px;">
    CALCULATORS
    <div>
-     <a class="nav-item" routerLink="/calculator">
+     <span class="nav-item" routerLink="/calculator">
        <span class="icon">
      <i class="fa fa-calculator"></i>
        </span>Pumps
-     </a>
+     </span>
    </div>
    <div>
-     <a class="nav-item" routerLink="/calculator">
+     <span class="nav-item" routerLink="/calculator">
        <span class="icon">
      <i class="fa fa-calculator"></i>
        </span>Fans
-     </a>
+     </span>
    </div>
    <div>
-     <a class="nav-item" routerLink="/calculator">
+     <span class="nav-item" routerLink="/calculator">
        <span class="icon">
      <i class="fa fa-calculator"></i>
        </span>Furnaces
-     </a>
+     </span>
    </div>
    <div>
-     <a class="nav-item" routerLink="/calculator">
+     <span class="nav-item" routerLink="/calculator">
        <span class="icon">
      <i class="fa fa-calculator"></i>
        </span>Steam
-     </a>
+     </span>
    </div>
    <div>
-     <a class="nav-item" routerLink="/calculator">
+     <span class="nav-item" routerLink="/calculator">
        <span class="icon">
      <i class="fa fa-calculator"></i>
        </span>Motors
-     </a>
+     </span>
    </div>
  </div>
 
 <!--
 <div style="padding-top: 20px;">
   <div>
-    <a class="nav-item" routerLink="/psat">
+    <span class="nav-item" routerLink="/psat">
       <span class="icon">
         <i class="fa fa-wrench"></i>
       </span>PSAT
-    </a>
+    </span>
   </div>
   <div>
-    <a class="nav-item" routerLink="/phast">
+    <span class="nav-item" routerLink="/phast">
       <span class="icon">
         <i class="fa fa-wrench"></i>
       </span>PHAST
-    </a>
+    </span>
   </div>
 </div>
 -->
