@@ -27,12 +27,15 @@
   padding-bottom: 10px;
 }
 
-
-
-.total-row{
-  padding: 10px;
+.calc-border{
+  border: groove;
+    padding: 10px;
+    padding-bottom: 0px;
+    border-color: lightgray;
 }
 
-.input-group{
-    padding: 2px;
+.total-row{
+      padding-top: 10px;
+    padding-right: 10px;
+    padding-left: 10px;
 }

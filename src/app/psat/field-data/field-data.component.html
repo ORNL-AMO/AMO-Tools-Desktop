@@ -1,109 +1,83 @@
-<form class="form-group" [formGroup]="psatForm">
-  <div class="row justify-content-center">
-    <div class="col-2">
-      <label class="form-control-label" for="operatingFraction">Operating Fraction</label>
-    </div>
-    <div class="col-3" [popover]="fractionPopover">
-      <div class="input-group">
-        <input type="text" class="form-control num-input" formControlName="operatingFraction" id="operatingFraction" (focus)="fractionPopover.show()">
-      </div>
+<form [formGroup]="psatForm">
+  <div class="row form-group">
+    <label class="col-6 col-form-label" for="operatingFraction">Operating Fraction</label>
+    <div class="col-6">
+      <input type="text" class="form-control" formControlName="operatingFraction" id="operatingFraction" (focus)="fractionPopover.show()"
+        [popover]="fractionPopover">
       <app-control-messages [control]="psatForm.controls.operatingFraction"></app-control-messages>
+      <popover-content #fractionPopover title="Operating Fraction" placement="auto right" [closeOnClickOutside]="true">
+        <div class="popover-lg">Some Content</div>
+      </popover-content>
     </div>
-    <popover-content #fractionPopover title="Operating Fraction" placement="auto right" [closeOnClickOutside]="true">
-      <div class="popover-lg">Some Content</div>
-    </popover-content>
   </div>
 
-  <div class="row justify-content-center">
-    <div class="col-2">
-      <label class="form-control-label" for="costKwHr">Cost (kw/hr)</label>
-    </div>
-    <div class="col-3" [popover]="costPopover">
-      <div class="input-group">
-        <input type="text" class="form-control num-input" formControlName="costKwHr" id="costKwHr" (focus)="costPopover.show()">
-      </div>
+  <div class="row form-group">
+    <label class="col-6 col-form-label" for="costKwHr">Cost (kw/hr)</label>
+    <div class="col-6">
+      <input type="text" class="form-control" formControlName="costKwHr" id="costKwHr" (focus)="costPopover.show()" [popover]="costPopover">
       <app-control-messages [control]="psatForm.controls.costKwHr"></app-control-messages>
+      <popover-content #costPopover title="Cost" placement="auto right" [closeOnClickOutside]="true">
+        <div class="popover-lg">Some Content</div>
+      </popover-content>
     </div>
-    <popover-content #costPopover title="Cost" placement="auto right" [closeOnClickOutside]="true">
-      <div class="popover-lg">Some Content</div>
-    </popover-content>
   </div>
 
-  <div class="row justify-content-center">
-    <div class="col-2">
-      <label class="form-control-label" for="flowRate">Flow Rate (gpm)</label>
-    </div>
-    <div class="col-3" [popover]="flowRatePopover">
-      <div class="input-group">
-        <input type="text" class="form-control num-input" formControlName="flowRate" id="flowRate" (focus)="flowRatePopover.show()">
-      </div>
+  <div class="row form-group">
+    <label class="col-6 col-form-label" for="flowRate">Flow Rate (gpm)</label>
+    <div class="col-6">
+      <input type="text" class="form-control" formControlName="flowRate" id="flowRate" (focus)="flowRatePopover.show()" [popover]="flowRatePopover">
       <app-control-messages [control]="psatForm.controls.flowRate"></app-control-messages>
+      <popover-content #flowRatePopover title="Flow Rate" placement="auto right" [closeOnClickOutside]="true">
+        <div class="popover-lg">Some Content</div>
+      </popover-content>
     </div>
-    <popover-content #flowRatePopover title="Flow Rate" placement="auto right" [closeOnClickOutside]="true">
-      <div class="popover-lg">Some Content</div>
-    </popover-content>
   </div>
 
-  <div class="row justify-content-center">
-    <div class="col-2">
-      <label class="form-control-label" for="head">Head</label>
-    </div>
-    <div class="col-3" [popover]="headPopover">
-      <div class="input-group">
-        <input type="text" class="form-control num-input" formControlName="head" id="head" (focus)="headPopover.show()">
-      </div>
+  <div class="row form-group">
+    <label class="col-6 col-form-label" for="head">Head</label>
+    <div class="col-6">
+      <input type="text" class="form-control" formControlName="head" id="head" (focus)="headPopover.show()" [popover]="headPopover">
       <app-control-messages [control]="psatForm.controls.head"></app-control-messages>
+      <popover-content #headPopover title="Head" placement="auto right" [closeOnClickOutside]="true">
+        <div class="popover-lg">Some Content</div>
+      </popover-content>
     </div>
-    <popover-content #headPopover title="Head" placement="auto right" [closeOnClickOutside]="true">
-      <div class="popover-lg">Some Content</div>
-    </popover-content>
   </div>
 
-  <div class="row justify-content-center">
-    <div class="col-2">
-      <label class="form-control-label" for="loadEstimatedMethod">Load Estimated Method</label>
-    </div>
-    <div class="col-3" [popover]="loadPopover">
-      <div class="input-group">
-        <select class="form-control" formControlName="loadEstimatedMethod" id="loadEstimatedMethod" (focus)="loadPopover.show()">
+  <div class="row form-group">
+    <label class="col-6 col-form-label" for="loadEstimatedMethod">Load Estimated Method</label>
+    <div class="col-6">
+      <select class="form-control" formControlName="loadEstimatedMethod" id="loadEstimatedMethod" (focus)="loadPopover.show()"
+        [popover]="loadPopover">
               <option>Method 1</option>
               <option>Method 2</option>
             </select>
-      </div>
       <app-control-messages [control]="psatForm.controls.loadEstimatedMethod"></app-control-messages>
+      <popover-content #loadPopover title="Load Estimated Method" placement="auto right" [closeOnClickOutside]="true">
+        <div class="popover-lg">Some Content</div>
+      </popover-content>
     </div>
-    <popover-content #loadPopover title="Load Estimated Method" placement="auto right" [closeOnClickOutside]="true">
-      <div class="popover-lg">Some Content</div>
-    </popover-content>
   </div>
 
-  <div class="row justify-content-center">
-    <div class="col-2">
-      <label class="form-control-label" for="motorKW">Motor (kW)</label>
-    </div>
-    <div class="col-3" [popover]="motorPowerPopover">
-      <div class="input-group">
-        <input type="text" class="form-control num-input" formControlName="motorKW" id="motorKW" (focus)="motorPowerPopover.show()">
-      </div>
+  <div class="row form-group">
+    <label class="col-6 col-form-label" for="motorKW">Motor (kW)</label>
+    <div class="col-6">
+      <input type="text" class="form-control" formControlName="motorKW" id="motorKW" (focus)="motorPowerPopover.show()" [popover]="motorPowerPopover">
       <app-control-messages [control]="psatForm.controls.motorKW"></app-control-messages>
+      <popover-content #motorPowerPopover title="Motor" placement="auto right" [closeOnClickOutside]="true">
+        <div class="popover-lg">Some Content</div>
+      </popover-content>
     </div>
-    <popover-content #motorPowerPopover title="Motor" placement="auto right" [closeOnClickOutside]="true">
-      <div class="popover-lg">Some Content</div>
-    </popover-content>
   </div>
 
-  <div class="row justify-content-center">
-    <div class="col-2">
-      <label class="form-control-label" for="voltage">Voltage</label>
-    </div>
-    <div class="col-3" [popover]="voltagePopover">
-      <div class="input-group">
-        <input type="text" class="form-control num-input" formControlName="voltage" id="voltage" (focus)="voltagePopover.show()">
-      </div>
+  <div class="row form-group">
+    <label class="col-6 col-form-label" for="voltage">Voltage</label>
+    <div class="col-6">
+      <input type="text" class="form-control" formControlName="voltage" id="voltage" (focus)="voltagePopover.show()" [popover]="voltagePopover">
       <app-control-messages [control]="psatForm.controls.voltage"></app-control-messages>
+      <popover-content #voltagePopover title="Voltage" placement="auto right" [closeOnClickOutside]="true">
+        <div class="popover-lg">Some Content</div>
+      </popover-content>
     </div>
-    <popover-content #voltagePopover title="Voltage" placement="auto right" [closeOnClickOutside]="true">
-      <div class="popover-lg">Some Content</div>
-    </popover-content>
   </div>
 </form>

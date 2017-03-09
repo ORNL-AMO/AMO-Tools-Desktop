@@ -1,3 +1,7 @@
-.input-group{
-    padding: 2px;
+.input-group-addon{
+    padding:0px;
+}
+
+.form-group{
+    margin-bottom: 0px;
 }
