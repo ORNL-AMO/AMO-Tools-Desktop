@@ -23,7 +23,10 @@ export class FieldDataHelpComponent implements OnInit {
     console.log(this.currentField)
   }
 
-  toggleOpen(bool: boolean){
+  toggleOpen(bool: boolean, str: string){
+    if(this.currentField == str){
+      this.currentField = '';
+    }
     return !bool;
   }
 
