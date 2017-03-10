@@ -132,6 +132,16 @@ Forms
   padding-left: 4px;
 }
 
+.calculator .btn {
+  border-left: #c9c9c9 solid 1px;
+  background: #ffffff;
+  background: -moz-linear-gradient(top, #ffffff 0%, #f7f7f7 100%);
+  background: -webkit-linear-gradient(top, #ffffff 0%,#f7f7f7 100%);
+  background: linear-gradient(to bottom, #ffffff 0%,#f7f7f7 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#f7f7f7',GradientType=0 );
+  padding: 12px;
+  font-size: 12px;
+}
 
 
 /*
