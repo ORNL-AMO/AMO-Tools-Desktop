@@ -204,12 +204,43 @@ Footer
 
 
 
-
+/*
+Banner
+=============================================== */
 .banner{
-  padding-top:10px;
-  padding-bottom:10px;
-  height:75px;
   font-size: 28px;
+  background: #2c2c2c;
+  color: #fff;
+}
+.banner:after {
+  display: table;
+  content: "";
+  clear: both;
+}
+
+.banner a, .banner .title, .banner .settings {
+  display: inline-block;
+  padding: 12px 20px;
+  color: rgba(255,255,255,0.7);
+}
+.banner a {
+  border-right: #000 solid 1px;
+}
+.banner a:hover, .banner .settings:hover {
+  color: rgba(255,255,255,1);   
+  cursor: pointer;
+}
+.banner a:hover {
+  background: #424242;
+  background: -moz-linear-gradient(top, #424242 0%, #2c2c2c 100%);
+  background: -webkit-linear-gradient(top, #424242 0%,#2c2c2c 100%);
+  background: linear-gradient(to bottom, #424242 0%,#2c2c2c 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#424242', endColorstr='#2c2c2c',GradientType=0 );
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 1);
+}
+.banner .title {
+  color: #fff;
+  border-left: #626262 solid 1px;
 }
 
 .banner-border{
