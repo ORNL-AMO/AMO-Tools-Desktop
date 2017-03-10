@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import * as _ from 'lodash';
+import { ModalDirective } from 'ng2-bootstrap';
 
 @Component({
   selector: 'app-opening-losses',
@@ -10,7 +11,7 @@ import * as _ from 'lodash';
 export class OpeningLossesComponent implements OnInit {
 
   openingLosses: Array<any>;
-
+  editLoss: any;
   constructor(private formBuilder: FormBuilder) { }
 
   ngOnInit() {
@@ -39,6 +40,30 @@ export class OpeningLossesComponent implements OnInit {
       fixture.name = 'Openeing #' + index;
       index++;
     })
+  }
+
+
+  //  Fixed Opening MODAL
+  @ViewChild('fixedModal') public fixedModal: ModalDirective;
+  showFixedModal(loss: any){
+    this.editLoss = loss;
+    this.fixedModal.show();
+  }
+
+  hideFixedModal(){
+    this.fixedModal.hide();
+  }
+
+
+  //  Variable Opening MODAL
+  @ViewChild('variableModal') public variableModal: ModalDirective;
+  showVariableModal(loss: any){
+    this.editLoss = loss;
+    this.variableModal.show();
+  }
+
+  hideVariableModal(){
+    this.variableModal.hide();
   }
 
   showFixed(loss: any){
