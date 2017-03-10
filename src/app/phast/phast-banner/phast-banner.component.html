@@ -1,21 +1,18 @@
-<div class="row phast-banner align-items-center">
-  <div class="col-1 banner-content text-center">
-    <a routerLink="/dashboard">
-      <span class="fa fa-home home-icon"></span>
-    </a>
+<div class="banner">
+
+  <a routerLink="/dashboard" class="pull-left">
+    <span class="fa fa-home home-icon"></span>
+  </a>
+  <div *ngIf="assessment" class="title pull-left">{{assessment.name}}</div>
+
+  <div class="pull-right settings" (click)="openPanel('settings-panel')">
+    <span class="fa fa-cog"></span>
   </div>
-  <div class="col-8 banner-content">
-    <div *ngIf="assessment">{{assessment.name}}</div>
+  <!-- <div class="pointer-item" (click)="openPanel('help-panel')">
+    <span class="fa fa-question home-icon pull-right"></span>
   </div>
-  <div class="col-2 banner-content">
-    <div class="pointer-item" (click)="openPanel('settings-panel')">
-      <span class="fa fa-cog home-icon pull-right"></span>
-    </div>
-    <div class="pointer-item" (click)="openPanel('help-panel')">
-      <span class="fa fa-question home-icon pull-right"></span>
-    </div>
-    <div class="pointer-item" (click)="openPanel('data-panel')">
-      <span class="fa fa-bar-chart-o home-icon pull-right"></span>
-    </div>
-  </div>
+  <div class="pointer-item pull-right" (click)="openPanel('data-panel')">
+    <span class="fa fa-bar-chart-o home-icon pull-right"></span>
+  </div> -->
+
 </div>
