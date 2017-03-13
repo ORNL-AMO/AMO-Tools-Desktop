@@ -28,7 +28,6 @@ export class PsatComponent implements OnInit {
   ngOnInit() {
     this.assessment = this.assessmentService.getWorkingAssessment();
     this.psatForm = this.initForm();
-    this.psatService.test();
   }
 
   changeTab($event) {

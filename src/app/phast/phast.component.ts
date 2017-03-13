@@ -17,7 +17,6 @@ export class PhastComponent implements OnInit {
   constructor(private location: Location, private assessmentService: AssessmentService, private phastService: PhastService) { }
 
   ngOnInit() {
-    this.phastService.test();
     this.assessment = this.assessmentService.getWorkingAssessment();
   }
 
