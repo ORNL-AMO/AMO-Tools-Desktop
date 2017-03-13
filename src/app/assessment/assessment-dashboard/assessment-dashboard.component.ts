@@ -16,7 +16,7 @@ export class AssessmentDashboardComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    //console.log(addon.wallLosses(500.0, 80.0, 225.0, 10.0, 0.9, 1.394, 1.0));
+    console.log(addon.wallLosses(500.0, 80.0, 225.0, 10.0, 0.9, 1.394, 1.0));
   }
 
   changeView($event){
