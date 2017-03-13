@@ -3,6 +3,8 @@ import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SharedModule } from '../shared/shared.module';
+import { ModalModule } from 'ng2-bootstrap';
+
 import { PhastComponent } from './phast.component';
 import { PhastBannerComponent } from './phast-banner/phast-banner.component';
 import { SankeyComponent } from './sankey/sankey.component';
@@ -75,6 +77,7 @@ import { WaterCoolingLossesFormComponent } from './losses/water-cooling-losses/w
     ReactiveFormsModule,
     FormsModule,
     SharedModule,
+    ModalModule
   ],
   providers: []
 })
