@@ -1,0 +1,87 @@
+<form [formGroup]="adjustmentForm">
+  <div class="row form-group">
+    <div class="col-sm-12">
+      <div class="input-group input-group-sm">
+        <select class="form-control" id="frequency" formControlName="frequency">
+            <option>Frequency 1</option>
+            <option>Frequency 2</option>
+          </select>
+      </div>
+      <app-control-messages [control]="adjustmentForm.controls.frequency"></app-control-messages>
+    </div>
+  </div>
+
+  <div class="row form-group">
+    <div class="col-sm-12">
+      <div class="input-group input-group-sm">
+        <select class="form-control" id="horsePower" formControlName="horsePower">
+            <option>HP 1</option>
+            <option>HP 2</option>
+          </select>
+      </div>
+      <app-control-messages [control]="adjustmentForm.controls.horsePower"></app-control-messages>
+    </div>
+  </div>
+
+  <div class="row form-group">
+    <div class="col-sm-12">
+      <div class="input-group input-group-sm">
+        <div class="input-group-addon incrementor-sm">
+          <button class="btn btn-default btn-sm" (click)="subtractNum('motorRPM')"><i class="fa fa-minus"></i></button>
+        </div>
+        <div class="input-group-addon incrementor-sm">
+          <button class="btn btn-default btn-sm" (click)="addNum('motorRPM')"><i class="fa fa-plus"></i></button>
+        </div>
+        <input type="text" class="form-control" id="motorRPM" formControlName="motorRPM" ngModel="{{adjustmentForm.value.motorRPM}}">
+      </div>
+      <app-control-messages [control]="adjustmentForm.controls.motorRPM"></app-control-messages>
+    </div>
+  </div>
+
+  <div class="row form-group">
+    <div class="col-sm-12">
+      <div class="input-group input-group-sm">
+        <select class="form-control" id="efficiencyClass" formControlName="efficiencyClass">
+            <option>class 1</option>
+            <option>Class 2</option>
+          </select>
+      </div>
+      <app-control-messages [control]="adjustmentForm.controls.efficiencyClass"></app-control-messages>
+    </div>
+  </div>
+
+  <div class="row form-group">
+    <div class="col-sm-12">
+      <div class="input-group input-group-sm">
+        <input type="text" class="form-control" id="voltage" formControlName="voltage">
+      </div>
+      <app-control-messages [control]="adjustmentForm.controls.voltage"></app-control-messages>
+    </div>
+  </div>
+
+
+  <div class="row form-group">
+    <div class="col-sm-12">
+      <div class="input-group input-group-sm">
+        <input type="text" class="form-control" id="fullLoadAmps" formControlName="fullLoadAmps">
+      </div>
+      <app-control-messages [control]="adjustmentForm.controls.fullLoadAmps"></app-control-messages>
+    </div>
+  </div>
+
+  <div class="row form-group">
+    <div class="col-sm-12">
+      <div class="input-group input-group-sm">
+        <div class="input-group-addon incrementor-sm">
+          <button class="btn btn-sm" (click)="subtractNum('sizeMargin')"><i class="fa fa-minus"></i></button>
+        </div>
+        <div class="input-group-addon incrementor-sm">
+          <button class="btn btn-sm" (click)="addNum('sizeMargin')"><i class="fa fa-plus"></i></button>
+        </div>
+        <input type="text" class="form-control" id="sizeMargin" formControlName="sizeMargin" ngModel="{{adjustmentForm.value.sizeMargin}}">
+      </div>
+      <app-control-messages [control]="adjustmentForm.controls.sizeMargin"></app-control-messages>
+    </div>
+  </div>
+
+</form>

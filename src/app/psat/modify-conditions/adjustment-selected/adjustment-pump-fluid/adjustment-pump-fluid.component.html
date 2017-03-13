@@ -1,0 +1,79 @@
+<form [formGroup]="adjustmentForm">
+  <div class="row form-group">
+    <div class="col-sm-12 input-group input-group-sm">
+      <select class="form-control" formControlName="pumpType" id="pumpType">
+              <option>Pump 1</option>
+              <option>Pump 2</option>
+            </select>
+      <app-control-messages [control]="adjustmentForm.controls.pumpType"></app-control-messages>
+    </div>
+  </div>
+
+  <div class="row form-group">
+    <div class="col-sm-12 input-group input-group-sm">
+      <input type="text" class="form-control" formControlName="pumpRPM" id="pumpRPM">
+      <app-control-messages [control]="adjustmentForm.controls.pumpRPM"></app-control-messages>
+    </div>
+  </div>
+
+  <div class="row form-group">
+    <div class="col-sm-12 input-group input-group-sm">
+      <select class="form-control" formControlName="drive" id="drive">
+              <option>Drive 1</option>
+              <option>Drive 2</option>
+            </select>
+      <app-control-messages [control]="adjustmentForm.controls.drive"></app-control-messages>
+    </div>
+  </div>
+
+  <div class="row form-group">
+    <div class="col-sm-12 input-group input-group-sm">
+      <div class="input-group-addon incrementor-sm">
+        <div class="btn btn-sm" (click)="subtractNum('viscosity')"><i class="fa fa-minus"></i></div>
+      </div>
+      <div class="input-group-addon incrementor-sm">
+        <div class="btn btn-sm" (click)="addNum('viscosity')"><i class="fa fa-plus"></i></div>
+      </div>
+      <input type="text" class="form-control" formControlName="viscosity" id="viscosity" ngModel="{{adjustmentForm.value.viscosity}}">
+      <app-control-messages [control]="adjustmentForm.controls.viscosity"></app-control-messages>
+    </div>
+  </div>
+
+  <div class="row form-group">
+    <div class="col-sm-12 input-group input-group-sm">
+      <input type="text" class="form-control" formControlName="gravity" id="gravity">
+      <app-control-messages [control]="adjustmentForm.controls.gravity"></app-control-messages>
+    </div>
+  </div>
+
+
+  <div class="row form-group">
+    <div class="col-sm-12 input-group input-group-sm">
+      <div class="input-group-addon incrementor-sm">
+        <div class="btn btn-sm" (click)="subtractNum('stages')"><i class="fa fa-minus"></i></div>
+      </div>
+      <div class="input-group-addon incrementor-sm">
+        <div class="btn btn-sm" (click)="addNum('stages')"><i class="fa fa-plus"></i></div>
+      </div>
+      <input type="text" class="form-control" formControlName="stages" id="stages" ngModel="{{adjustmentForm.value.stages}}">
+      <app-control-messages [control]="adjustmentForm.controls.stages"></app-control-messages>
+    </div>
+  </div>
+
+  <fieldset class="form-group">
+    <div class="form-check">
+      <label class="form-check-label">
+      <input class="form-check-input" type="radio" name="fixedSpeed" formControlName="fixedSpeed" ngModel="{{adjustmentForm.value.fixedSpeed}}" checked
+        value="Yes">
+        Yes
+        </label>
+    </div>
+    <div class="form-check">
+      <label class="form-check-label">
+      <input class="form-check-input" type="radio" name="fixedSpeed" formControlName="fixedSpeed" ngModel="{{adjustmentForm.value.fixedSpeed}}" value="No">
+      No
+      </label>
+    </div>
+  </fieldset>
+
+</form>

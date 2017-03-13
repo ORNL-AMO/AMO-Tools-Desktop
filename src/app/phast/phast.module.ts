@@ -27,6 +27,12 @@ import { OtherLossesComponent } from './losses/other-losses/other-losses.compone
 import { FixtureLossesComponent } from './losses/fixture-losses/fixture-losses.component';
 import { LossesSidebarComponent } from './losses/losses-sidebar/losses-sidebar.component';
 import { SankeyDiagramComponent } from './sankey/sankey-diagram/sankey-diagram.component';
+import { WallLossesFormComponent } from './losses/wall-losses/wall-losses-form/wall-losses-form.component';
+import { SolidChargeMaterialFormComponent } from './losses/charge-material/solid-charge-material-form/solid-charge-material-form.component';
+import { FixtureLossesFormComponent } from './losses/fixture-losses/fixture-losses-form/fixture-losses-form.component';
+import { FixedOpeningFormComponent } from './losses/opening-losses/fixed-opening-form/fixed-opening-form.component';
+import { VariableOpeningFormComponent } from './losses/opening-losses/variable-opening-form/variable-opening-form.component';
+
 @NgModule({
   declarations: [
     PhastComponent,
@@ -52,7 +58,12 @@ import { SankeyDiagramComponent } from './sankey/sankey-diagram/sankey-diagram.c
     OtherLossesComponent,
     FixtureLossesComponent,
     LossesSidebarComponent,
-    SankeyDiagramComponent
+    SankeyDiagramComponent,
+    WallLossesFormComponent,
+    SolidChargeMaterialFormComponent,
+    FixtureLossesFormComponent,
+    FixedOpeningFormComponent,
+    VariableOpeningFormComponent
   ],
   exports: [
   ],
@@ -61,7 +72,7 @@ import { SankeyDiagramComponent } from './sankey/sankey-diagram/sankey-diagram.c
     CommonModule,
     ReactiveFormsModule,
     FormsModule,
-    SharedModule
+    SharedModule,
   ],
   providers: []
 })

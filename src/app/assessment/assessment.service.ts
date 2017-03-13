@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { PSAT } from '../shared/models/psat';
+import { PSAT, PsatInputs } from '../shared/models/psat';
 import { Assessment } from '../shared/models/assessment';
 import { PHAST } from '../shared/models/phast';
 
@@ -9,7 +9,7 @@ export class AssessmentService {
   workingAssessment: Assessment;
   constructor() { }
 
-  getNewAssessment(assessmentType: string){
+  getNewAssessment(assessmentType: string): Assessment{
     let newAssessment: Assessment = {
       name: null,
       date: new Date(),
@@ -18,8 +18,8 @@ export class AssessmentService {
     return newAssessment;
   }
 
-  getNewPsat(){
-    let newPsat: PSAT = {
+  getNewPsat(): PSAT{
+    let newPsatInputs: PsatInputs = {
       pump_style: null,
       pump_specified: null,
       pump_rated_speed: null,
@@ -45,17 +45,20 @@ export class AssessmentService {
       motor_field_current: null,
       motor_field_voltage: null
     }
+    let newPsat: PSAT = {
+      inputs: newPsatInputs
+    }
     return newPsat;
   }
 
-  getNewPhast(){
+  getNewPhast(): PHAST{
     let newPhast: PHAST = {
       name: null
     }
     return newPhast;
   }
 
-  getWorkingAssessment(){
+  getWorkingAssessment(): Assessment{
     return this.workingAssessment;
   }
 
@@ -63,7 +66,42 @@ export class AssessmentService {
     this.workingAssessment = assessment;
   }
 
-  buildPSAT(
+  getBaselinePSAT(): PSAT{
+    let tmpPSAT: PSAT;
+    let tmpPsatInputs = this.buildPsatInputs(
+      this.workingAssessment.psat.inputs.pump_style,
+      this.workingAssessment.psat.inputs.pump_specified,
+      this.workingAssessment.psat.inputs.pump_rated_speed,
+      this.workingAssessment.psat.inputs.drive,
+      this.workingAssessment.psat.inputs.kinematic_viscosity,
+      this.workingAssessment.psat.inputs.specific_gravity,
+      this.workingAssessment.psat.inputs.stages,
+      this.workingAssessment.psat.inputs.fixed_speed,
+      this.workingAssessment.psat.inputs.line_frequency,
+      this.workingAssessment.psat.inputs.motor_rated_power,
+      this.workingAssessment.psat.inputs.motor_rated_speed,
+      this.workingAssessment.psat.inputs.efficiency_class,
+      this.workingAssessment.psat.inputs.efficiency,
+      this.workingAssessment.psat.inputs.motor_rated_voltage,
+      this.workingAssessment.psat.inputs.load_estimation_method,
+      this.workingAssessment.psat.inputs.motor_rated_flc,
+      this.workingAssessment.psat.inputs.full_load_amps,
+      this.workingAssessment.psat.inputs.margin,
+      this.workingAssessment.psat.inputs.operating_fraction,
+      this.workingAssessment.psat.inputs.flow_rate,
+      this.workingAssessment.psat.inputs.head,
+      this.workingAssessment.psat.inputs.motor_field_power,
+      this.workingAssessment.psat.inputs.motor_field_current,
+      this.workingAssessment.psat.inputs.motor_field_voltage,
+      this.workingAssessment.psat.inputs.cost_kw_hour
+    );
+    tmpPSAT = { 
+      inputs: tmpPsatInputs
+    };
+    return tmpPSAT;
+  }
+
+  buildPsatInputs(
       _pump_style: any,
       _pump_specified: any,
       _pump_rated_speed: any,
@@ -90,8 +128,8 @@ export class AssessmentService {
       _motor_field_voltage: any,
       _cost_kw_hour: any
 
-  ){
-    let newPsat: PSAT = {
+  ): PsatInputs{
+    let newPsatInputs: PsatInputs = {
       pump_style: _pump_style,
       pump_specified: _pump_specified,
       pump_rated_speed: _pump_rated_speed,
@@ -118,6 +156,6 @@ export class AssessmentService {
       motor_field_voltage: _motor_field_voltage,
       cost_kw_hour: _cost_kw_hour
     }
-    return newPsat;
+    return newPsatInputs;
   }
 }

@@ -1,6 +1,6 @@
-.open-settings{
-  background-color: lightgray;
-  padding-top:0px;
-  padding-bottom:0px;
-  height:100%;
+.assessment-banner{
+  height:10vh;
+  border-bottom: groove;
+  border-bottom-color: lightslategrey;
+  border-bottom-width: 1px;
 }

@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input, SimpleChange, Output, EventEmitter } from '@angular/core';
+import { PSAT } from '../../shared/models/psat';
+//import { BaseChartDirective } from 'ng2-charts';
 
 @Component({
   selector: 'app-data-panel',
@@ -6,10 +8,19 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./data-panel.component.css']
 })
 export class DataPanelComponent implements OnInit {
+  @Input()
+  adjustment: PSAT;
+  @Output('showReport')
+  showReport = new EventEmitter();
 
   constructor() { }
 
   ngOnInit() {
+    console.log(this.adjustment)
+  }
+
+  goToReport(){
+    this.showReport.emit(true);
   }
 
 }

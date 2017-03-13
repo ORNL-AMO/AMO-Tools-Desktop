@@ -1,18 +1,41 @@
-.hours-container{
-  margin-top: 10%;
-  margin-left: 30%;
-  margin-right: 30%;
-  margin-bottom: 10%;
+.input-row-border-left{
+  border-left: groove;
+  border-left-width: 1px;
+  border-left-color: lightgray;
+  padding-left: 10px;
+}
+
+.input-row-border-right{
+  border-right: groove;
+  border-right-width: 1px;
+  border-right-color: lightgray;
+  padding-right: 10px;
+}
+
+.input-row-border-top{
+  border-top: groove;
+  border-top-width: 1px;
+  border-top-color: lightgray;
+  padding-top: 10px;
 }
 
 
-.hour-border{
+.input-row-border-bottom{
+  border-bottom: groove;
+  border-bottom-width: 1px;
+  border-bottom-color: lightgray;
+  padding-bottom: 10px;
+}
+
+.calc-border{
   border: groove;
-  border-width: 1px;
-  border-color: slategrey;
-  padding: 10px;
+    padding: 10px;
+    padding-bottom: 0px;
+    border-color: lightgray;
 }
 
 .total-row{
-  padding: 10px;
+      padding-top: 10px;
+    padding-right: 10px;
+    padding-left: 10px;
 }

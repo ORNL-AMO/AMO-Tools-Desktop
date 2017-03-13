@@ -1,12 +1,15 @@
-.panel{
-  background-color: beige;
-}
 
 .tab-content{
-  height: 75vh;
+  height: 70vh;
+  max-height: 70vh;
 }
+
 
 .btn-footer{
   height: 10vh;
-  padding-top: 3vh;
+  max-height: 10vh;
+}
+
+.panel{
+  height: 100%;
 }

@@ -8,8 +8,9 @@ export const MockDirectory: Directory = {
     {
       name: 'Mock PSAT 1',
       type: 'PSAT',
-      psat:[
-        {
+      psat:
+      {
+        inputs: {
           pump_style: null,
           pump_specified: null,
           pump_rated_speed: null,
@@ -34,9 +35,13 @@ export const MockDirectory: Directory = {
           motor_field_power: null,
           motor_field_current: null,
           motor_field_voltage: null
-        }
-      ]
-    },{
+        },
+        savings: 10000,
+        selected: false,
+        optimizationRating: 80,
+      }
+
+    }, {
       name: 'Mock PHAST 1',
       type: 'PHAST'
     }
@@ -50,8 +55,9 @@ export const MockDirectory: Directory = {
         {
           name: 'Mock PSAT 2',
           type: 'PSAT',
-          psat:[
-            {
+          psat:
+          {
+            inputs: {
               pump_style: null,
               pump_specified: null,
               pump_rated_speed: null,
@@ -75,16 +81,21 @@ export const MockDirectory: Directory = {
               head: null,
               motor_field_power: null,
               motor_field_current: null,
-              motor_field_voltage: null
-            }
-          ]
+              motor_field_voltage: null,
+            },
+            savings: 10000,
+            selected: false,
+            optimizationRating: 80
+          }
+
 
         },
         {
           name: 'Mock PSAT 3',
           type: 'PSAT',
-          psat:[
-            {
+          psat:
+          {
+            inputs: {
               pump_style: null,
               pump_specified: null,
               pump_rated_speed: null,
@@ -109,8 +120,12 @@ export const MockDirectory: Directory = {
               motor_field_power: null,
               motor_field_current: null,
               motor_field_voltage: null
-            }
-          ]
+            },
+            savings: 10000,
+            selected: false,
+            optimizationRating: 80,
+          }
+
         }
       ]
     },
@@ -120,14 +135,15 @@ export const MockDirectory: Directory = {
       date: new Date(),
       assessments: [
         {
-            name: 'Mock PHAST 2',
-            type: 'PHAST'
+          name: 'Mock PHAST 2',
+          type: 'PHAST'
 
-        },{
-            name: 'Mock PSAT 4',
-            type: 'PSAT',
-            psat:[
-              {
+        }, {
+          name: 'Mock PSAT 4',
+          type: 'PSAT',
+          psat: [
+            {
+              inputs: {
                 pump_style: null,
                 pump_specified: null,
                 pump_rated_speed: null,
@@ -151,9 +167,13 @@ export const MockDirectory: Directory = {
                 head: null,
                 motor_field_power: null,
                 motor_field_current: null,
-                motor_field_voltage: null
+                motor_field_voltage: null,
+                savings: 10000,
+                selected: false,
+                optimizationRating: 80
               }
-            ]
+            }
+          ]
         }
       ]
     },

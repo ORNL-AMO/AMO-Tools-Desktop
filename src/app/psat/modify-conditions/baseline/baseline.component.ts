@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { PSAT } from '../../../shared/models/psat';
 
 @Component({
@@ -9,10 +9,15 @@ import { PSAT } from '../../../shared/models/psat';
 export class BaselineComponent implements OnInit {
   @Input()
   baseline: PSAT;
+  @Output('baselineSelect')
+  baselineSelect = new EventEmitter();
   constructor() { }
 
   ngOnInit() {
-    console.log(this.baseline)
+  }
+
+  selectBaseline(){
+    this.baselineSelect.emit('baseline');
   }
 
 }

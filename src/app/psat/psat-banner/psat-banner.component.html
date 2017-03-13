@@ -1,21 +1,18 @@
-<div class="row psat-banner">
-  <div class="col-md-1 banner-content">
-    <a routerLink="/dashboard">
+<div class="banner">
+
+  <a routerLink="/dashboard" class="pull-left">
     <span class="fa fa-home home-icon"></span>
-    </a>
+  </a>
+  <div *ngIf="assessment" class="title pull-left">{{assessment.name}}</div>
+  
+  <div class="pull-right settings" (click)="openPanel('settings-panel')">
+    <span class="fa fa-cog"></span>
   </div>
-  <div class="col-md-8 banner-content">
-    <h4 class="pull-left" *ngIf="assessment">{{assessment.name}}</h4>
+  <!-- <div class="pointer-item" (click)="openPanel('help-panel')">
+    <span class="fa fa-question home-icon pull-right"></span>
   </div>
-  <div class="col-md-3 banner-content">
-    <div class="pointer-item" (click)="openPanel('settings-panel')">
-      <span class="fa fa-cog home-icon pull-right"></span>
-    </div>
-    <div class="pointer-item" (click)="openPanel('help-panel')">
-      <span class="fa fa-question home-icon pull-right"></span>
-    </div>
-    <div class="pointer-item" (click)="openPanel('data-panel')">
-      <span class="fa fa-bar-chart-o home-icon pull-right"></span>
-    </div>
-  </div>
+  <div class="pointer-item pull-right" (click)="openPanel('data-panel')">
+    <span class="fa fa-bar-chart-o home-icon pull-right"></span>
+  </div> -->
+
 </div>

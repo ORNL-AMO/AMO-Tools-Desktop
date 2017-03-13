@@ -1,3 +1,90 @@
-<p>
-  opening-losses works!
-</p>
+<div class="card opening-container">
+  <div class="card-header opening-header">
+    <div class="row justify-content-between">
+      <div class="col-4">
+        <b>Opening Losses</b>
+      </div>
+      <div class="col-2">
+        <button class="btn btn-secondary" (click)="addLoss()">+ Add</button>
+      </div>
+    </div>
+  </div>
+  <div *ngFor="let loss of openingLosses">
+    <div class="card-header">
+      <div class="row justify-content-between">
+        <div class="col-4">
+          <b>{{loss.name}}</b>
+        </div>
+        <div class="col-4">
+          <button class="close" aria-label="Close" (click)="removeLoss(loss.name)">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        </div>
+      </div>
+    </div>
+    <div class="card-block">
+      <div class="row justify-content-end">
+        <div class="col-4 text-center">
+          Baseline
+        </div>
+        <div class="col-4 text-center">
+          Modified
+        </div>
+      </div>
+      <form [formGroup]="loss.fixedForm">
+        <div class="row form-group">
+          <label class="col-4 col-form-label small" for="baselineOpeningLosses">Fixed Heat Losses (Btu / hr)</label>
+          <div class="col-4 input-group input-group-sm">
+            <input type="text" class="form-control" formControlName="baselineOpeningLosses" id="baselineOpeningLosses">
+            <app-control-messages [control]="loss.fixedForm.controls.baselineOpeningLosses"></app-control-messages>
+          </div>
+          <div class="col-4 input-group input-group-sm">
+            <input type="text" class="form-control" formControlName="modifiedOpeningLosses" id="modifiedOpeningLosses">
+            <app-control-messages [control]="loss.fixedForm.controls.modifiedOpeningLosses"></app-control-messages>
+          </div>
+        </div>
+      </form>
+      <form [formGroup]="loss.variableForm">
+        <div class="row form-group">
+          <label class="col-4 col-form-label small" for="baselineOpeningLosses">Variable Heat Losses (Btu / hr)</label>
+          <div class="col-4 input-group input-group-sm">
+            <input type="text" class="form-control" formControlName="baselineOpeningLosses" id="baselineOpeningLosses">
+            <app-control-messages [control]="loss.variableForm.controls.baselineOpeningLosses"></app-control-messages>
+          </div>
+          <div class="col-4 input-group input-group-sm">
+            <input type="text" class="form-control" formControlName="modifiedOpeningLosses" id="modifiedOpeningLosses">
+            <app-control-messages [control]="loss.variableForm.controls.modifiedOpeningLosses"></app-control-messages>
+          </div>
+        </div>
+      </form>
+      <form [formGroup]="loss.variableForm">
+        <div class="row form-group">
+          <label class="col-4 col-form-label small" for="baselineOpeningLosses">Total Heat Losses (Btu / hr)</label>
+          <div class="col-4 input-group input-group-sm">
+            <input type="text" class="form-control" formControlName="baselineOpeningLosses" id="baselineOpeningLosses">
+            <app-control-messages [control]="loss.variableForm.controls.baselineOpeningLosses"></app-control-messages>
+          </div>
+          <div class="col-4 input-group input-group-sm">
+            <input type="text" class="form-control" formControlName="modifiedOpeningLosses" id="modifiedOpeningLosses">
+            <app-control-messages [control]="loss.variableForm.controls.modifiedOpeningLosses"></app-control-messages>
+          </div>
+        </div>
+      </form>
+      <div class="card-header row opening-header justify-content-center">
+        <div class="col-3 text-center" *ngIf="!loss.showFixed && !loss.showVariable">
+          <button class="btn btn-secondary btn-sm" (click)="showFixed(loss)"><i class="fa fa-calculator"></i> Calculate Fixed</button>
+        </div>
+        <div class="col-3 text-center" *ngIf="!loss.showFixed && !loss.showVariable">
+          <button class="btn btn-secondary btn-sm" (click)="showVariable(loss)"><i class="fa fa-calculator"></i> Calculate Variable</button>
+        </div>
+        <div class="col-3 text-center" *ngIf="loss.showFixed || loss.showVariable">
+          <button class="btn btn-secondary btn-sm" (click)="hideCalc(loss)">Hide Calculator</button>
+        </div>
+      </div>
+    </div>
+    <div class="card-block">
+      <app-fixed-opening-form [(openingLossesForm)]="loss.fixedForm" *ngIf="loss.showFixed"></app-fixed-opening-form>
+      <app-variable-opening-form [(openingLossesForm)]="loss.variableForm" *ngIf="loss.showVariable"></app-variable-opening-form>
+    </div>
+  </div>
+</div>

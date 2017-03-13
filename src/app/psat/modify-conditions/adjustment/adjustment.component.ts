@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { PSAT } from '../../../shared/models/psat';
 
 @Component({
@@ -9,9 +9,20 @@ import { PSAT } from '../../../shared/models/psat';
 export class AdjustmentComponent implements OnInit {
   @Input()
   adjustment: PSAT;
-
+  @Output('adjustmentRemove')
+  adjustmentRemove = new EventEmitter<string>();
+  @Output('adjustmentSelect')
+  adjustmentSelect = new EventEmitter<string>();
   constructor() { }
 
   ngOnInit() {
+  }
+
+  removeAdjustment(){
+    this.adjustmentRemove.emit(this.adjustment.name);
+  }
+
+  selectAdjustment(){
+    this.adjustmentSelect.emit(this.adjustment.name);
   }
 }

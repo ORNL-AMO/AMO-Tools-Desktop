@@ -1,8 +1,10 @@
- <div class="row" style="height: 100vh;">
-  <div class="col-md-2 sidebar-bg">
-    <app-sidebar [directory]="allDirectories" (directoryChange)="changeWorkingDirectory($event)"></app-sidebar>
+<div class="container-fluid">
+  <div class="row dashboard-content">
+    <div class="col-2 sidebar-bg">
+      <app-sidebar [directory]="allDirectories" (directoryChange)="changeWorkingDirectory($event)"></app-sidebar>
+    </div>
+    <div class="col-10">
+      <app-assessment-dashboard [(directory)]="workingDirectory"></app-assessment-dashboard>
+    </div>
   </div>
-  <div class="col-md-10">
-    <app-assessment-dashboard [(directory)]="workingDirectory"></app-assessment-dashboard>
-  </div>
- </div>
+</div>

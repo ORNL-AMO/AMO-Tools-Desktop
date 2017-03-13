@@ -1,5 +1,5 @@
-<div class="card">
-  <div class="card-header">
+<div class="card dark-bg baseline-card">
+  <div class="card-header baseline-name" (click)="selectBaseline()">
     Baseline
   </div>
   <!--<div class="card-block">
@@ -9,7 +9,7 @@
         PUMP / FLUID
       </div>
       <div class="card-block row">
-        <div class="col-md-7">
+        <div class="col-7">
           Pump Type
           <br> Pump RPM
           <br> Drive
@@ -18,14 +18,14 @@
           <br> Stages
           <br> Fixed specific speed?
         </div>
-        <div class="col-md-5">
-          {{baseline.pump_style}}
-          <br> {{baseline.pump_rated_speed}}
-          <br> {{baseline.drive}}
-          <br> {{baseline.kinematic_viscosity}}
-          <br> {{baseline.specific_gravity}}
-          <br> {{baseline.stages}}
-          <br> {{baseline.fixed_speed}}
+        <div class="col-5">
+          {{baseline.inputs.pump_style}}
+          <br> {{baseline.inputs.pump_rated_speed}}
+          <br> {{baseline.inputs.drive}}
+          <br> {{baseline.inputs.kinematic_viscosity}}
+          <br> {{baseline.inputs.specific_gravity}}
+          <br> {{baseline.inputs.stages}}
+          <br> {{baseline.inputs.fixed_speed}}
         </div>
       </div>
     <!--</div>
@@ -35,7 +35,7 @@
         MOTOR
       </div>
       <div class="card-block row">
-        <div class="col-md-7">
+        <div class="col-7">
           Line Frequency
           <br>Horse Power
           <br>Motor RPM
@@ -44,14 +44,14 @@
           <br>Full-Load Amps
           <br>Size Margin
         </div>
-        <div class="col-md-5">
-          {{baseline.line_frequency}}
-          <br>{{baseline.motor_rated_power}}
-          <br>{{baseline.motor_rated_speed}}
-          <br>{{baseline.efficiency_class}}
-          <br>{{baseline.motor_rated_voltage}}
-          <br>{{baseline.full_load_amps}}
-          <br>{{baseline.margin}}
+        <div class="col-5">
+          {{baseline.inputs.line_frequency}}
+          <br>{{baseline.inputs.motor_rated_power}}
+          <br>{{baseline.inputs.motor_rated_speed}}
+          <br>{{baseline.inputs.efficiency_class}}
+          <br>{{baseline.inputs.motor_rated_voltage}}
+          <br>{{baseline.inputs.full_load_amps}}
+          <br>{{baseline.inputs.margin}}
         </div>
       </div>
     <!--</div>
@@ -62,7 +62,7 @@
         FIELD DATA
       </div>
       <div class="card-block row">
-        <div class="col-md-7">
+        <div class="col-7">
           Operating Fraction
           <br>Cost (kw/hr)
           <br>Flow Rate (gpm)
@@ -71,14 +71,14 @@
           <br>Motor (kW)
           <br>Voltage
         </div>
-        <div class="col-md-5">
-          {{baseline.operating_fraction}}
-          <br>{{baseline.cost_kw_hour}}
-          <br>{{baseline.flow_rate}}
-          <br>{{baseline.head}}
-          <br>{{baseline.load_estimation_method}}
-          <br>{{baseline.motor_field_current}}
-          <br>{{baseline.motor_field_voltage}}
+        <div class="col-5">
+          {{baseline.inputs.operating_fraction}}
+          <br>{{baseline.inputs.cost_kw_hour}}
+          <br>{{baseline.inputs.flow_rate}}
+          <br>{{baseline.inputs.head}}
+          <br>{{baseline.inputs.load_estimation_method}}
+          <br>{{baseline.inputs.motor_field_current}}
+          <br>{{baseline.inputs.motor_field_voltage}}
         </div>
       </div>
     </div>
