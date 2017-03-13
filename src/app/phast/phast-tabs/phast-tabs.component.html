@@ -1,37 +1,39 @@
-<ul class="nav nav-tabs align-items-end">
-  <li class="nav-item phast-tab" [ngClass]="{'phast-tab-active': currentTab == 1}">
-    <a class="nav-link small" (click)="changeTab(1)">
-      <div>System Setup</div>
-      1. System Basics
-    </a>
-  </li>
-  <li class="nav-item phast-tab" [ngClass]="{'phast-tab-active': currentTab == 2}">
-    <a class="nav-link small" (click)="changeTab(2)">2. Operating Hours</a>
-  </li>
-  <li class="nav-item phast-tab" [ngClass]="{'phast-tab-active': currentTab == 3}">
-    <a class="nav-link small" (click)="changeTab(3)">
-      <div>Assessment & Analysis</div>
-      Heat Balance (Losses)
-    </a>
-  </li>
-  <li class="nav-item phast-tab" [ngClass]="{'phast-tab-active': currentTab == 4}">
-    <a class="nav-link small" (click)="changeTab(4)">
-      Design Energy Use
-      </a>
-  </li>
-  <li class="nav-item phast-tab" [ngClass]="{'phast-tab-active': currentTab == 5}">
-    <a class="nav-link small" (click)="changeTab(5)">
-      Aux Equipment
-      </a>
-  </li>
-  <li class="nav-item phast-tab" [ngClass]="{'phast-tab-active': currentTab == 6}">
-    <a class="nav-link small" (click)="changeTab(6)">
-      Meter Energy
-      </a>
-  </li>
-  <li class="nav-item phast-tab" [ngClass]="{'phast-tab-active': currentTab == 7}">
-    <a class="nav-link small" (click)="changeTab(7)">
-      Sankey
-      </a>
-  </li>
-</ul>
+
+<div class="wizard-steps">
+
+  <div class="section">
+    <h2><span>System Setup</span></h2>
+    <ul>
+      <li [ngClass]="{'phast-tab-active': currentTab == 1}">
+        <a (click)="changeTab(1)">1. System Basics</a>
+      </li>
+      <li [ngClass]="{'phast-tab-active': currentTab == 2}">
+        <a (click)="changeTab(2)">2. Operating Hours</a>
+      </li>
+    </ul>
+  </div><!-- End .section -->
+
+  <div class="section">
+    <h2><span>Assessment &amp; Analysis</span></h2>
+    <ul>
+      <li [ngClass]="{'phast-tab-active': currentTab == 3}">
+        <a (click)="changeTab(3)">3. Heat Balance (Losses)</a>
+      </li>
+      <li [ngClass]="{'phast-tab-active': currentTab == 4}">
+        <a (click)="changeTab(4)">4. Design Energy Use</a>
+      </li>
+      <li [ngClass]="{'phast-tab-active': currentTab == 5}">
+        <a (click)="changeTab(5)">5. Aux Equipment</a>
+      </li>
+      <li [ngClass]="{'phast-tab-active': currentTab == 6}">
+        <a (click)="changeTab(6)">6. Meter Energy</a>
+      </li>
+      <li [ngClass]="{'phast-tab-active': currentTab == 7}">
+        <a (click)="changeTab(7)">Sankey</a>
+      </li>
+    </ul>
+  </div><!-- End .section -->
+
+</div>
+
+

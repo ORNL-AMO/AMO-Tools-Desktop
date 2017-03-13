@@ -3,6 +3,8 @@ import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SharedModule } from '../shared/shared.module';
+import { ModalModule } from 'ng2-bootstrap';
+
 import { PhastComponent } from './phast.component';
 import { PhastBannerComponent } from './phast-banner/phast-banner.component';
 import { SankeyComponent } from './sankey/sankey.component';
@@ -32,6 +34,7 @@ import { SolidChargeMaterialFormComponent } from './losses/charge-material/solid
 import { FixtureLossesFormComponent } from './losses/fixture-losses/fixture-losses-form/fixture-losses-form.component';
 import { FixedOpeningFormComponent } from './losses/opening-losses/fixed-opening-form/fixed-opening-form.component';
 import { VariableOpeningFormComponent } from './losses/opening-losses/variable-opening-form/variable-opening-form.component';
+import { WaterCoolingLossesFormComponent } from './losses/water-cooling-losses/water-cooling-losses-form/water-cooling-losses-form.component';
 
 @NgModule({
   declarations: [
@@ -63,7 +66,8 @@ import { VariableOpeningFormComponent } from './losses/opening-losses/variable-o
     SolidChargeMaterialFormComponent,
     FixtureLossesFormComponent,
     FixedOpeningFormComponent,
-    VariableOpeningFormComponent
+    VariableOpeningFormComponent,
+    WaterCoolingLossesFormComponent
   ],
   exports: [
   ],
@@ -73,6 +77,7 @@ import { VariableOpeningFormComponent } from './losses/opening-losses/variable-o
     ReactiveFormsModule,
     FormsModule,
     SharedModule,
+    ModalModule
   ],
   providers: []
 })

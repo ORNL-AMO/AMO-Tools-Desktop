@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-field-data',
@@ -8,9 +8,15 @@ import { Component, OnInit, Input } from '@angular/core';
 export class FieldDataComponent implements OnInit {
   @Input()
   psatForm: any;
+  @Output('changeField')
+  changeField = new EventEmitter<string>();
   constructor() { }
 
   ngOnInit() {
   }
 
+  focusField(str: string){
+    console.log(str);
+    this.changeField.emit(str);
+  }
 }

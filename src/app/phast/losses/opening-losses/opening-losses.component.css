@@ -7,3 +7,11 @@
     max-height: 100%;
     overflow-y: scroll;
 }
+
+.input-group-addon{
+    padding: 0;
+}
+
+.modal-dialog{
+    top:20%;
+}

@@ -1,9 +1,7 @@
-<div class="row help-content">
-    <div class="col">
-        <app-system-basics-help *ngIf="currentTab == 1"></app-system-basics-help>
-        <app-pump-fluid-help *ngIf="currentTab == 2"></app-pump-fluid-help>
-        <app-motor-help *ngIf="currentTab == 3"></app-motor-help>
-        <app-field-data-help *ngIf="currentTab == 4"></app-field-data-help>
-        <app-modify-conditions-help *ngIf="currentTab == 5"></app-modify-conditions-help>
-    </div>
+<div class="help-panel">
+    <app-system-basics-help *ngIf="currentTab == 1"></app-system-basics-help>
+    <app-pump-fluid-help *ngIf="currentTab == 2"></app-pump-fluid-help>
+    <app-motor-help *ngIf="currentTab == 3"></app-motor-help>
+    <app-field-data-help [currentField]="currentField" *ngIf="currentTab == 4"></app-field-data-help>
+    <app-modify-conditions-help *ngIf="currentTab == 5"></app-modify-conditions-help>
 </div>

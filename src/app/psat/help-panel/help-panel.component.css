@@ -1,3 +1,4 @@
-.help-content{
-    padding-top: 20%;
+.help-panel{
+    max-height: 100%;
+    overflow-y: scroll;
 }
