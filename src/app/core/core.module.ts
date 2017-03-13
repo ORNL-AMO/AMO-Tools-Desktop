@@ -11,7 +11,6 @@ import { CoreComponent } from './core.component';
 import { SidebarComponent } from '../sidebar/sidebar.component';
 import { DashboardComponent } from '../dashboard/dashboard.component';
 import { AssessmentService } from '../assessment/assessment.service';
-import { AddonService } from '../shared/addon.service';
 
 @NgModule({
   declarations: [
@@ -29,8 +28,7 @@ import { AddonService } from '../shared/addon.service';
     DetailedReportModule
   ],
   providers: [
-    AssessmentService,
-    AddonService
+    AssessmentService
   ]
 })
 

@@ -33,6 +33,8 @@ import { FixtureLossesFormComponent } from './losses/fixture-losses/fixture-loss
 import { FixedOpeningFormComponent } from './losses/opening-losses/fixed-opening-form/fixed-opening-form.component';
 import { VariableOpeningFormComponent } from './losses/opening-losses/variable-opening-form/variable-opening-form.component';
 
+import { PhastService } from './phast.service';
+
 @NgModule({
   declarations: [
     PhastComponent,
@@ -74,7 +76,9 @@ import { VariableOpeningFormComponent } from './losses/opening-losses/variable-o
     FormsModule,
     SharedModule,
   ],
-  providers: []
+  providers: [
+    PhastService
+  ]
 })
 
 export class PhastModule { }

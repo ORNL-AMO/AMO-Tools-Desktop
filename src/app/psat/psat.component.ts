@@ -4,7 +4,7 @@ import { Assessment } from '../shared/models/assessment';
 import { AssessmentService } from '../assessment/assessment.service';
 import { FormBuilder } from '@angular/forms';
 import { PSAT, PsatInputs } from '../shared/models/psat';
-
+import { PsatService } from './psat.service';
 @Component({
   selector: 'app-psat',
   templateUrl: './psat.component.html',
@@ -23,11 +23,12 @@ export class PsatComponent implements OnInit {
   saveClicked:boolean = false;
   adjustment: PSAT;
 
-  constructor(private location: Location, private assessmentService: AssessmentService, private formBuilder: FormBuilder) { }
+  constructor(private location: Location, private assessmentService: AssessmentService, private formBuilder: FormBuilder, private psatService: PsatService) { }
 
   ngOnInit() {
     this.assessment = this.assessmentService.getWorkingAssessment();
     this.psatForm = this.initForm();
+    this.psatService.test();
   }
 
   changeTab($event) {

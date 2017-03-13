@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
 import { Assessment } from '../shared/models/assessment';
 import { AssessmentService } from '../assessment/assessment.service';
-
+import { PhastService } from './phast.service';
 @Component({
   selector: 'app-phast',
   templateUrl: './phast.component.html',
@@ -14,9 +14,10 @@ export class PhastComponent implements OnInit {
   currentTab: number = 1;
   panelView: string = 'help-panel';
   isPanelOpen: boolean = true;
-  constructor(private location: Location, private assessmentService: AssessmentService) { }
+  constructor(private location: Location, private assessmentService: AssessmentService, private phastService: PhastService) { }
 
   ngOnInit() {
+    this.phastService.test();
     this.assessment = this.assessmentService.getWorkingAssessment();
   }
 
