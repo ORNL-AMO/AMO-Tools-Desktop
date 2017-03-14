@@ -7,9 +7,10 @@ declare var d3: any;
 var svg;
 
 var width = 1650,
-    height = 1200;
+  height = 1200;
 
-const baseWidth = 1650;
+var baseWidth = 1650,
+   baseHeight = 900;
 
 @Component({
   selector: 'app-sankey',
@@ -36,7 +37,7 @@ export class SankeyComponent implements OnInit{
     svg.attr("transform", "scale(2)");
   }
   minSankey(){
-    svg.attr("transform", " scale(.8)");
+    svg.attr("transform", " scale(.5)");
   }
 
   makeSankey(){
@@ -65,42 +66,42 @@ export class SankeyComponent implements OnInit{
     ];
     var links = [
       //linking to the first interNode
-      { source: 0, target: 1},
+      { source: 0, target: 1, endWidth: 0 },
       //interNode1 to Flue Gas and interNode2
-      { source: 1, target: 2 },
-      { source: 1, target: 3 },
+      { source: 1, target: 2, endWidth: 0 },
+      { source: 1, target: 3, endWidth: 0 },
       //interNode2 to Atmosphere and interNode3
-      { source: 3, target: 4 },
-      { source: 3, target: 5 },
+      { source: 3, target: 4, endWidth: 0},
+      { source: 3, target: 5, endWidth: 0 },
       //interNode3 to Other and interNode4
-      { source: 5, target: 6 },
-      { source: 5, target: 7 },
+      { source: 5, target: 6, endWidth: 0 },
+      { source: 5, target: 7, endWidth: 0 },
       //interNode4 to Water and interNode5
-      { source: 7, target: 8 },
-      { source: 7, target: 9 },
+      { source: 7, target: 8, endWidth: 0 },
+      { source: 7, target: 9, endWidth: 0 },
       //interNode5 to Wall and interNode6
-      { source: 9, target: 10 },
-      { source: 9, target: 11 },
+      { source: 9, target: 10, endWidth: 0 },
+      { source: 9, target: 11, endWidth: 0 },
       //interNode6 to Opening and interNode7
-      { source: 11, target: 12 },
-      { source: 11, target: 13 },
+      { source: 11, target: 12, endWidth: 0 },
+      { source: 11, target: 13, endWidth: 0 },
       //interNode7 to Fixture and Useful Output
-      { source: 13, target: 14 },
-      { source: 13, target: 15 }
+      { source: 13, target: 14, endWidth: 0 },
+      { source: 13, target: 15, endWidth: 0 }
     ];
 
 
     svg = d3.select('app-sankey-diagram').append('svg')
-          .call(calcSankey)
-          .attr("viewBox", "0 0 " + width + " " + height)
-          .attr("preserveAspectRatio", "xMidYMid meet")
-          .style("border", "1px solid black")
-          .append("g");
-
-    var tShiftVal;
+      .call(calcSankey)
+      .attr("width", "800")
+      .attr("height", "500")
+      .attr("viewBox", "0 0 " + width + " " + height)
+      .attr("preserveAspectRatio", "none")
+      .style("border", "1px solid black")
+      .append("g");
 
     function calcSankey() {
-      var alterVal = 0, shiftVal;
+      var alterVal = 0, change;
 
       nodes.forEach(function (d, i) {
         d.y = (height/2 - nodes[0].value/2);
@@ -110,9 +111,6 @@ export class SankeyComponent implements OnInit{
             //First interNode
             d.value = nodes[i - 1].value;
             d.x = (width*d.proportionX);
-            shiftVal = (nodes[0].x + nodes[0].value) - d.x;
-            width += shiftVal;
-            tShiftVal = shiftVal;
           }
           else {
             //Previous node.val - interNode.value
@@ -125,7 +123,7 @@ export class SankeyComponent implements OnInit{
               d.y = (d.y + alterVal);
             }
           }
-          d.x = (width*d.proportionX) + shiftVal;
+          d.x = (width*d.proportionX);
         }
         else {
           if(!d.input) {
@@ -141,23 +139,32 @@ export class SankeyComponent implements OnInit{
                 d.y += (nodes[i - 1].value * 2) + alterVal;
               }
             }
-            d.x = (width*d.proportionX) + shiftVal;
+            d.x = (width*d.proportionX);
           }
           else{
-            d.x = (width*d.proportionX);
+            width = (baseWidth + d.value);
+            d.x = (width* d.proportionX);
           }
         }
       });
-      console.log("Shift: " + tShiftVal);
-      updateDisplay(tShiftVal);
     }
 
-    function updateDisplay(addition){
-      console.log(d3.select('app-sankey-diagram').selectAll('svg'));
-      console.log("ratio: " + (baseWidth/width));
-      d3.select('app-sankey-diagram').selectAll('svg')
-        .attr("viewBox", "0 0 " + width+400 + " " + height);
+    var lastHeight = height;
+    function updateDisplay(){
+      //console.log(d3.select('app-sankey-diagram').selectAll('svg'));
+      //console.log("svg: " + svg);
+      //console.log("ratio: " + (baseWidth/width));
+
+      svg.attr("transform", "scale(" + (baseWidth/width) + ")");
+
+     //width += nodes[15].x + (nodes[15].value*.8) + 50;
+      //console.log("bounds: " + svg.select("g").getBBox());
+      //d3.select('app-sankey-diagram').selectAll('svg').attr("viewBox", "0 0 " + (width + nodes[15].value )+ " " + height);
+
+      //svg.attr("viewBox", "0 0 " + 1 + " " + 1)
+      //.attr("preserveAspectRatio", "xMidYMid meet");
     }
+
 
     function makeLinks(d){
 
@@ -258,6 +265,7 @@ export class SankeyComponent implements OnInit{
       .attr('refX', .1)
       .attr('refY', 0)
       .attr("viewBox", "0 -5 10 10")
+      .style("border", "1px solid black")
       .attr("fill", function (d) {
         return color(nodes[d.target].value);
       })
@@ -336,7 +344,7 @@ export class SankeyComponent implements OnInit{
       .style("stroke-width", function(d){
         return nodes[d.target].value;
       })
-      .attr('marker-end', function(d){
+      .attr('marker-end', function(d) {
         return getEndMarker(d);
       });
 
@@ -359,7 +367,7 @@ export class SankeyComponent implements OnInit{
           return d.x - 70;
         }
         else if(d.usefulOutput){
-          return d.x + (nodes[15].value*.8) + 50;
+          return d.x + (d.value * .65) + 50;
         }
         else {
           return d.x;
@@ -394,7 +402,7 @@ export class SankeyComponent implements OnInit{
               return node_val.x - 120;
             }
             else if (node_val.usefulOutput) {
-              return d.x + (nodes[15].value*.8);
+              return d.x + (d.value*.8);
             }
             else {
               return node_val.x - 50;
@@ -453,7 +461,7 @@ export class SankeyComponent implements OnInit{
                   return d.x - 70;
                 }
                 else if(d.usefulOutput){
-                  return d.x + (nodes[15].value*.8) + 50;
+                  return d.x + (d.value*.65) + 50;
                 }
                 else {
                   return d.x;
@@ -474,6 +482,7 @@ export class SankeyComponent implements OnInit{
               });
 
             changePlaceHolders();
+            updateDisplay();
           });
       }
     });

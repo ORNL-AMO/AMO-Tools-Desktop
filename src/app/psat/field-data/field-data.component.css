@@ -12,38 +12,3 @@
 .input-group{
   padding: 2px;
 }
-
-.description h4{
-  font-size: 24px;
-  font-weight: 400;
-}
-
-.description .description-box{
-  width: 100%;
-  height: 30%;
-  border: 5px solid #044976;
-  background-color: #ededed;
-}
-
-.description .description-box p{
-  font-size: 18px;
-  font-family: Lucida Grande;
-}
-
-
-.input-info h4{
-  font-size: 24px;
-  font-weight: 400;
-}
-
-.input-info .input-box{
-  width: 100%;
-  height: 40%;
-  border: 5px solid #044976;
-  background-color: #ededed;
-}
-
-input-info .input-box p{
-  font-size: 18px;
-  font-family: Lucida Grande;
-}
