@@ -2,40 +2,30 @@
   <div class="form-group row">
     <label class="col-6 col-form-label" for="pumpType">Pump Type</label>
     <div class="col-6">
-      <select class="form-control" formControlName="pumpType" id="pumpType" (mousedown)="pumpTypePopover.show()" [popover]="pumpTypePopover">
+      <select class="form-control" formControlName="pumpType" id="pumpType" (focus)="focusField('pumpType')">
               <option>Pump 1</option>
               <option>Pump 2</option>
             </select>
       <app-control-messages [control]="psatForm.controls.pumpType"></app-control-messages>
-      <popover-content #pumpTypePopover title="Pump Type" placement="auto right" [closeOnClickOutside]="true">
-        <div class="popover-lg">Choose your pump type</div>
-      </popover-content>
     </div>
   </div>
 
   <div class="form-group row">
     <label class="col-6 col-form-label" for="pumpRPM">Pump RPM</label>
     <div class="col-6">
-      <input type="text" class="form-control" formControlName="pumpRPM" id="pumpRPM" (focus)="pumpRpmPopover.show()" [popover]="pumpRpmPopover">
+      <input type="text" class="form-control" formControlName="pumpRPM" id="pumpRPM" (focus)="focusField('pumpRPM')">
       <app-control-messages [control]="psatForm.controls.pumpRPM"></app-control-messages>
-      <popover-content #pumpRpmPopover title="Pump RPM" placement="auto right" [closeOnClickOutside]="true">
-        <div class="popover-lg">Pump RPM Help</div>
-      </popover-content>
     </div>
   </div>
 
   <div class="form-group row">
     <label class="col-6 col-form-label" for="drive">Drive</label>
     <div class="col-6">
-      <select class="form-control" formControlName="drive" id="drive" (mousedown)="drivePopover.show()" [popover]="drivePopover">
+      <select class="form-control" formControlName="drive" id="drive" (focus)="focusField('drive')">
               <option>Drive 1</option>
               <option>Drive 2</option>
             </select>
-
       <app-control-messages [control]="psatForm.controls.drive"></app-control-messages>
-      <popover-content #drivePopover title="Pump Drive" placement="auto right" [closeOnClickOutside]="true">
-        <div class="popover-lg">Drive Help</div>
-      </popover-content>
     </div>
   </div>
 
@@ -49,25 +39,18 @@
         <div class="btn" (click)="addNum('viscosity')"><i class="fa fa-plus"></i></div>
       </div>
       <input type="text" class="form-control" formControlName="viscosity" id="viscosity" ngModel="{{psatForm.value.viscosity}}"
-        (focus)="viscosityPopover.show()" [popover]="viscosityPopover">
+             (focus)="focusField('kinematicViscosity')">
       <app-control-messages [control]="psatForm.controls.viscosity"></app-control-messages>
-      <popover-content #viscosityPopover title="Kinematic Viscosity" placement="auto right" [closeOnClickOutside]="true">
-        <div class="popover-lg">Kinematic Help</div>
-      </popover-content>
     </div>
   </div>
 
   <div class="form-group row">
     <label class="col-6 col-form-label" for="gravity">Specific Gravity</label>
     <div class="col-6">
-      <input type="text" class="form-control" formControlName="gravity" id="gravity" (focus)="gravityPopover.show()" [popover]="gravityPopover">
+      <input type="text" class="form-control" formControlName="gravity" id="gravity" (focus)="focusField('specificGravity')">
       <app-control-messages [control]="psatForm.controls.gravity"></app-control-messages>
-      <popover-content #gravityPopover title="Specific Gravity" placement="auto right" [closeOnClickOutside]="true">
-        <div class="popover-lg">Gravity Help</div>
-      </popover-content>
     </div>
   </div>
-
 
   <div class="form-group row">
     <label class="col-6 col-form-label" for="stages">Stages</label>
@@ -78,30 +61,25 @@
       <div class="incrementor input-group-addon">
         <div class="btn" (click)="addNum('stages')"><i class="fa fa-plus"></i></div>
       </div>
-      <input type="text" class="form-control" formControlName="stages" id="stages" ngModel="{{psatForm.value.stages}}" (focus)="stagesPopover.show()"
-        [popover]="stagesPopover">
+      <input type="text" class="form-control" formControlName="stages" id="stages" ngModel="{{psatForm.value.stages}}" (focus)="focusField('stages')">
       <app-control-messages [control]="psatForm.controls.stages"></app-control-messages>
-      <popover-content #stagesPopover title="Pump Stages" placement="auto right" [closeOnClickOutside]="true">
-        <div class="popover-lg">Input the number of stages your pump has</div>
-      </popover-content>
     </div>
   </div>
 
   <div class="form-group row">
     <label class="col-6 col-form-label">Fixed specific speed?</label>
     <div class="col-6">
-      <div class="form-check" [popover]="fixedSpeedPopover">
-        <label class="col-6 col-form-label" class="form-check-label" (hover)="fixedSpeedPopover.show()" [popover]="fixedSpeedPopover">
-          <input class="form-check-input" type="radio" name="fixedSpeed" formControlName="fixedSpeed" checked value="Yes">Yes
+      <div class="form-check">
+        <label class="col-6 col-form-label" class="form-check-label" (hover)="fixedSpeedPopover.show()">
+          <input class="form-check-input" type="radio" name="fixedSpeed" formControlName="fixedSpeed" checked value="Yes"
+                 (focus)="focusField('fixedSpecificSpeed')">Yes
         </label>
       </div>
-      <div class="form-check" [popover]="fixedSpeedPopover">
-        <label class="col-6 col-form-label" class="form-check-label" (hover)="fixedSpeedPopover.show()" [popover]="fixedSpeedPopover">
-             <input class="form-check-input" type="radio" name="fixedSpeed" formControlName="fixedSpeed" value="No">No
+      <div class="form-check" (focus)="focusField('fixedSpecificSpeed')">
+        <label class="col-6 col-form-label" class="form-check-label" (hover)="fixedSpeedPopover.show()">
+             <input class="form-check-input" type="radio" name="fixedSpeed" formControlName="fixedSpeed" value="No"
+                    (focus)="focusField('fixedSpecificSpeed')">No
           </label>
-        <popover-content #fixedSpeedPopover title="Fixed Speed" placement="auto right" [closeOnClickOutside]="true">
-          <div class="popover-md">Some content</div>
-        </popover-content>
       </div>
     </div>
   </div>

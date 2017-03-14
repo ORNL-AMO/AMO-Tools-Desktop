@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 
 @Component({
   selector: 'app-pump-fluid',
@@ -8,6 +8,8 @@ import { Component, OnInit, Input } from '@angular/core';
 export class PumpFluidComponent implements OnInit {
   @Input()
   psatForm: any;
+  @Output('changeField')
+  changeField = new EventEmitter<string>();
 
   constructor() { }
 
@@ -32,6 +34,11 @@ export class PumpFluidComponent implements OnInit {
         this.psatForm.value.stages--;
       }
     }
+  }
+
+  focusField(str: string){
+    console.log(str);
+    this.changeField.emit(str);
   }
 
 }
