@@ -69,6 +69,7 @@
     "@types/jasmine": "2.5.38",
     "@types/lodash": "^4.14.52",
     "@types/node": "~6.0.60",
+    "browserify": "^14.1.0",
     "chart.js": "^2.5.0",
     "codelyzer": "~2.0.0",
     "css-loader": "^0.26.2",
@@ -80,6 +81,7 @@
     "jasmine-core": "~2.5.2",
     "jasmine-spec-reporter": "~3.2.0",
     "karma": "~1.4.1",
+    "karma-browserify": "^5.1.1",
     "karma-chrome-launcher": "~2.0.0",
     "karma-cli": "~1.0.1",
     "karma-coverage-istanbul-reporter": "^0.2.0",
@@ -87,10 +89,12 @@
     "karma-jasmine-html-reporter": "^0.2.2",
     "ng2-charts": "^1.5.0",
     "ngx-popover": "0.0.16",
+    "node-loader": "^0.6.0",
     "protractor": "~5.1.0",
     "style-loader": "^0.13.2",
     "ts-node": "~2.0.0",
     "tslint": "~4.4.2",
-    "typescript": "~2.0.0"
+    "typescript": "~2.0.0",
+    "watchify": "^3.9.0"
   }
 }

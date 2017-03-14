@@ -7,7 +7,6 @@ const url = require('url');
 const {autoUpdater} = require('electron');
 const feedURL = '~/updates-folder';
 
-
 require('dotenv').config();
 let win = null;
 

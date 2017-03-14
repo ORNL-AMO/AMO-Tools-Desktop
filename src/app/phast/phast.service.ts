@@ -25,7 +25,7 @@ export class PhastService {
     return phastAddon.gasLoadChargeMaterial(thermicReactionType, specificHeatGas, feedRate, percentVapor, initialTemperature, dischargeTemperature, specificHeatVapor, percentReacted, reactionHeat, additionalHeat);
   }
 
-  liquidCoolingLosses(flowRate: number, density: number, initialTemperature: number, outletTemperature: number, specificHeat: number, correctionFactor: number, heatLoss: number): number {
+  liquidCoolingLosses(flowRate: number, density: number, initialTemperature: number, outletTemperature: number, specificHeat: number, correctionFactor: number): number {
     //returns heatLoss
     return phastAddon.liquidCoolingLosses(flowRate, density, initialTemperature, outletTemperature, specificHeat, correctionFactor);
   }

@@ -18,10 +18,12 @@ export class PhastComponent implements OnInit {
 
   ngOnInit() {
     this.assessment = this.assessmentService.getWorkingAssessment();
+    this.phastService.test();
   }
 
   changeTab($event){
     this.currentTab = $event;
+    this.phastService.test();
   }
 
   toggleOpenPanel($event){
