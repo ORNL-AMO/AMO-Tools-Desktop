@@ -17,6 +17,10 @@ export class PumpsComponent implements OnInit {
     this.headTool = true;
   }
 
+  hideTool(){
+    this.headTool = false;
+  }
+
   @ViewChild('headToolModal') public headToolModal: ModalDirective;
   showHeadToolModal() {
     this.headToolModal.show();
@@ -25,6 +29,5 @@ export class PumpsComponent implements OnInit {
   hideHeadToolModal() {
     this.headToolModal.hide();
   }
-
 
 }

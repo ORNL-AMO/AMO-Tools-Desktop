@@ -57,8 +57,11 @@
 
   <div class="row form-group">
     <label class="col-6 col-form-label" for="head">Head</label>
-    <div class="col-6">
+    <div class="col-6 input-group">
       <input type="text" class="form-control" formControlName="head" id="head" (focus)="focusField('head')">
+      <div class="incrementor input-group-addon">
+        <div class="btn" (click)="showHeadToolModal()"><i class="fa fa-calculator"></i></div>
+      </div>
       <app-control-messages [control]="psatForm.controls.head"></app-control-messages>
       <popover-content #headPopover title="Head" placement="auto right" [closeOnClickOutside]="true">
         <div class="popover-lg"></div>
@@ -102,3 +105,21 @@
     </div>
   </div>
 </form>
+
+
+<div bsModal #headToolModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="createHeadToolLabel"
+  aria-hidden="true" [config]="{backdrop: 'static'}">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="h3">Pump Head Calculator: {{assessment.name}}</div>
+        <button class="close" aria-label="Close" (click)="hideHeadToolModal()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <app-head-tool></app-head-tool>
+      </div>
+    </div>
+  </div>
+</div>

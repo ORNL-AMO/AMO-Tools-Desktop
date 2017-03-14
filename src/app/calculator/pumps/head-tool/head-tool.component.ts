@@ -20,14 +20,14 @@ export class HeadToolComponent implements OnInit {
   initForm() {
     return this.formBuilder.group({
       'type': [''],
-      'baselinePipeDiameter': [''],
-      'baselinePverpressure': [''],
-      'baselineSurfaceElevation': [''],
-      'baselineLossCoefficients': [''],
-      'modifiedPipeDiameter': [''],
-      'modifiedPverpressure': [''],
-      'modifiedSurfaceElevation': [''],
-      'modifiedLossCoefficients': [''],
+      'suctionPipeDiameter': [''],
+      'overpressure': [''],
+      'surfaceElevation': [''],
+      'suctionLossCoefficients': [''],
+      'dischargePipeDiameter': [''],
+      'dischargePressure': [''],
+      'dischargeElevation': [''],
+      'dischargeLineCoefficients': [''],
       'specificGravity': [''],
       'flowRate': [''],
     })

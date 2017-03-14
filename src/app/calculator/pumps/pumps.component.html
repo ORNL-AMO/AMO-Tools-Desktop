@@ -1,32 +1,61 @@
-<div class="pump-dashboard">
+<div *ngIf="!headTool">
   <div class="row justify-content-center align-items-center">
     <div class="h2">Pump Calculators</div>
   </div>
   <div class="row justify-content-center align-items-center">
-    <div class="card col-8">
-      <div class="card-header">
-        <div class="pull-left">Pump Head Calculator</div>
-        <button class="btn btn-secondary pull-right" (click)="showTool()"><i class="fa fa-calculator"></i></button>
-        <button class="btn btn-primary pull-right" (click)="showHeadToolModal()"><i class="fa fa-calculator"></i></button>
+    <div class="col-8">
+      <div class="row calc-type">
+        <div class="col-12">
+          <div class="h3">Type A Calculators</div>
+        </div>
       </div>
-      <div class="card-block" *ngIf="headTool">
-        <app-head-tool></app-head-tool>
+      <div class="row">
+        <div class="col-12">
+          <a class="h4" (click)="showTool()">Head Tool option 1</a>
+          <div>Use this option to show the head tool in this space</div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12">
+          <a class="h4" (click)="showHeadToolModal()"> Head Tool option 2 </a>
+          <div>Use this option to show the head tool in a modal</div>
+        </div>
       </div>
     </div>
   </div>
-  <div bsModal #headToolModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="createHeadToolLabel"
-    aria-hidden="true" [config]="{backdrop: 'static'}">
-    <div class="modal-dialog modal-lg">
-      <div class="modal-content">
-        <div class="modal-header">
-          <div class="h3">Pump Head Calculator</div>
-          <button class="close" aria-label="Close" (click)="hideHeadToolModal()">
+</div>
+<div class="card" *ngIf="headTool">
+  <div class="card-header">
+    Head Tool
+    <button class="close pull-right" aria-label="Close" (click)="hideTool()">
           <span aria-hidden="true">&times;</span>
         </button>
-        </div>
-        <div class="modal-body">
-          <app-head-tool></app-head-tool>
-        </div>
+  </div>
+  <div class="card-block">
+    <app-head-tool></app-head-tool>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+<div bsModal #headToolModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="createHeadToolLabel"
+  aria-hidden="true" [config]="{backdrop: 'static'}">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="h3">Pump Head Calculator</div>
+        <button class="close" aria-label="Close" (click)="hideHeadToolModal()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <app-head-tool></app-head-tool>
       </div>
     </div>
   </div>

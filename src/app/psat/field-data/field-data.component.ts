@@ -1,4 +1,6 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ViewChild } from '@angular/core';
+import { ModalDirective } from 'ng2-bootstrap';
+import { Assessment } from '../../shared/models/assessment';
 
 @Component({
   selector: 'app-field-data',
@@ -8,6 +10,8 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 export class FieldDataComponent implements OnInit {
   @Input()
   psatForm: any;
+  @Input()
+  assessment: Assessment;
   @Output('changeField')
   changeField = new EventEmitter<string>();
   constructor() { }
@@ -15,8 +19,19 @@ export class FieldDataComponent implements OnInit {
   ngOnInit() {
   }
 
-  focusField(str: string){
+  focusField(str: string) {
     console.log(str);
     this.changeField.emit(str);
   }
+
+
+  @ViewChild('headToolModal') public headToolModal: ModalDirective;
+  showHeadToolModal() {
+    this.headToolModal.show();
+  }
+
+  hideHeadToolModal() {
+    this.headToolModal.hide();
+  }
+
 }

@@ -1,4 +1,15 @@
-.pump-dashboard{
-    height: 100vh;
-    max-height: 100vh;
+
+.modal-content{
+    height: 95%;
+    max-height: 95%;
+}
+
+.modal-dialog{
+    max-width: 95%;
+    top: 20vh;
+}
+
+.calc-type{
+    border-bottom: groove;
+    border-bottom-width: 1px;
 }

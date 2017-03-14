@@ -1,14 +1,14 @@
 <form [formGroup]="headToolForm">
-  <div class="row form-group">
-    <div class="pull-left">
+  <div class="row justify-content-between form-group type-row">
+    <div class="col-8">
       <select class="form-control" formControlName="type" id="type">
           <option>Suction tank elevation, gas space pressure, and discharged line pressure</option>
           <option>Type 2</option>
         </select>
       <app-control-messages [control]="headToolForm.controls.type"></app-control-messages>
     </div>
-    <div class="pull-right">
-      <small><b>Units of Measure:</b>gpm, ft, hp</small><a> Edit</a>
+    <div class="col-3">
+      <b>Units of Measure:</b>gpm, ft, hp<a> Edit</a>
     </div>
   </div>
 </form>
@@ -20,14 +20,16 @@
     <div class="row">
       <!--Tabs-->
     </div>
-    <div class="row">
+    <div class="row dark-bg help-panel">
       <app-head-tool-results *ngIf="tabSelect == 'results'"></app-head-tool-results>
       <app-head-tool-help *ngIf="tabSelect == 'help'"></app-head-tool-help>
     </div>
   </div>
 </div>
-<div class="row">
-  <button class="btn btn-secondary pull-left">Close</button>
-  <button class="btn btn-primary pull-right">Save to Assessment</button>
-  <button class="btn btn-secondary pull-right">Export to CSV...</button>
+<div class="row button-row">
+  <div class="col-12">
+    <button class="btn btn-secondary pull-left">Close</button>
+    <button class="btn btn-primary pull-right">Save to Assessment</button>
+    <button class="btn btn-secondary pull-right">Export to CSV...</button>
+  </div>
 </div>
