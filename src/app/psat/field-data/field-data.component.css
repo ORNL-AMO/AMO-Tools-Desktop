@@ -1,14 +1,10 @@
-.field-data-container{
-  margin-top: 10%;
-  margin-left: 30%;
-  margin-right: 30%;
-  margin-bottom: 10%;
+
+.modal-content{
+    height: 95%;
+    max-height: 95%;
 }
 
-.num-input{
-  width: 25%;
-}
-
-.input-group{
-  padding: 2px;
+.modal-dialog{
+    max-width: 95%;
+    top: 20vh;
 }

@@ -144,6 +144,9 @@ export class SankeyComponent implements OnInit{
           else{
             width = (baseWidth + d.value);
             d.x = (width* d.proportionX);
+            ////////////////////////////////////////
+            height = baseHeight + (d.value);
+            d.y = (height/2 - nodes[0].value/2);
           }
         }
       });

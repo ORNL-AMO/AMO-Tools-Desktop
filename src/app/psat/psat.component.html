@@ -7,8 +7,8 @@
       <div class="row" [ngClass]="{'justify-content-center':currentTab != 5}">
         <div class="col-lg-8 col-md-8 col-sm-10 col-xs-12" *ngIf="currentTab != 5">
           <app-system-basics *ngIf="currentTab == 1"></app-system-basics>
-          <app-pump-fluid [(psatForm)]="psatForm" *ngIf="currentTab == 2"></app-pump-fluid>
-          <app-motor [(psatForm)]="psatForm" *ngIf="currentTab == 3"></app-motor>
+          <app-pump-fluid (changeField)="changeField($event)"  [(psatForm)]="psatForm" *ngIf="currentTab == 2"></app-pump-fluid>
+          <app-motor (changeField)="changeField($event)"  [(psatForm)]="psatForm" *ngIf="currentTab == 3"></app-motor>
           <app-field-data (changeField)="changeField($event)" [assessment]="assessment" [(psatForm)]="psatForm" *ngIf="currentTab == 4"></app-field-data>
         </div>
         <div class="col-12" *ngIf="currentTab == 5">
