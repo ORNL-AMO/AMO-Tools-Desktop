@@ -23,10 +23,6 @@ export const coreRoutes: Routes = [
     component: PsatComponent
   },
   {
-    path: 'calculator',
-    component: CalculatorComponent
-  },
-  {
     path: 'detailed-report',
     component: DetailedReportComponent
   }

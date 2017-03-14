@@ -1,0 +1,33 @@
+<form [formGroup]="headToolForm">
+  <div class="row form-group">
+    <div class="pull-left">
+      <select class="form-control" formControlName="type" id="type">
+          <option>Suction tank elevation, gas space pressure, and discharged line pressure</option>
+          <option>Type 2</option>
+        </select>
+      <app-control-messages [control]="headToolForm.controls.type"></app-control-messages>
+    </div>
+    <div class="pull-right">
+      <small><b>Units of Measure:</b>gpm, ft, hp</small><a> Edit</a>
+    </div>
+  </div>
+</form>
+<div class="row">
+  <div class="col-7">
+    <app-head-tool-form [(headToolForm)]="headToolForm"></app-head-tool-form>
+  </div>
+  <div class="col-5">
+    <div class="row">
+      <!--Tabs-->
+    </div>
+    <div class="row">
+      <app-head-tool-results *ngIf="tabSelect == 'results'"></app-head-tool-results>
+      <app-head-tool-help *ngIf="tabSelect == 'help'"></app-head-tool-help>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <button class="btn btn-secondary pull-left">Close</button>
+  <button class="btn btn-primary pull-right">Save to Assessment</button>
+  <button class="btn btn-secondary pull-right">Export to CSV...</button>
+</div>

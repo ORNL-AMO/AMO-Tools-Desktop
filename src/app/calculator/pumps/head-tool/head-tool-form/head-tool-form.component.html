@@ -1,0 +1,14 @@
+<form [formGroup]="headToolForm">
+  <div class="row">
+    <div class="col-6">
+      <label for="baselinePipeDiameter">Suction pipe diameter (ID)</label>
+      <input type="text" class="form-control" formControlName="baselinePipeDiameter" id="baselinePipeDiameter">
+      <app-control-messages [control]="headToolForm.controls.baselinePipeDiameter"></app-control-messages>
+    </div>
+    <div class="col-6">
+      <label for="modifiedPipeDiameter">Suction pipe diameter (ID)</label>
+      <input type="text" class="form-control" formControlName="modifiedPipeDiameter" id="modifiedPipeDiameter">
+      <app-control-messages [control]="headToolForm.controls.modifiedPipeDiameter"></app-control-messages>
+    </div>
+  </div>
+</form>

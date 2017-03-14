@@ -11,6 +11,8 @@ import { AssessmentService } from '../assessment/assessment.service';
 export class SidebarComponent implements OnInit {
   @Output('directoryChange')
   directoryChange = new EventEmitter();
+  @Output('selectCalculator')
+  selectCalculator = new EventEmitter<string>();
   @Input()
   directory: Directory;
 
@@ -41,5 +43,10 @@ export class SidebarComponent implements OnInit {
       this.router.navigateByUrl('/phast');
     }
   }
+
+  chooseCalculator(str: string){
+    this.selectCalculator.emit(str);
+  }
+
 
 }
