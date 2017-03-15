@@ -1,26 +1,18 @@
-<div class="card opening-container">
-  <div class="card-header opening-header">
-    <div class="row">
-      <div class="pull-left">
-        <b>Opening Losses</b>
-      </div>
-      <div class="pull-right">
-        <button class="btn btn-secondary" (click)="addLoss()">+ Add</button>
-      </div>
+<div class="card losses-container">
+  <div class="card-header losses-header">
+    <div class="pull-left">
+      <b>Opening Losses</b>
     </div>
+    <button class="btn btn-secondary pull-right" (click)="addLoss()">+ Add</button>
   </div>
-  <div *ngFor="let loss of openingLosses">
+  <div class="card" *ngFor="let loss of openingLosses">
     <div class="card-header">
-      <div class="row">
-        <div class="pull-left">
-          <b>{{loss.name}}</b>
-        </div>
-        <div class="pull-right">
-          <button class="close" aria-label="Close" (click)="removeLoss(loss.name)">
+      <div class="pull-left">
+        <b>{{loss.name}}</b>
+      </div>
+      <button class="close pull-right" aria-label="Close" (click)="removeLoss(loss.name)">
           <span aria-hidden="true">&times;</span>
         </button>
-        </div>
-      </div>
     </div>
     <div class="card-block">
       <div class="row justify-content-end">
@@ -98,6 +90,12 @@
       <app-fixed-opening-form [(openingLossesForm)]="loss.fixedForm" *ngIf="loss.showFixed"></app-fixed-opening-form>
       <app-variable-opening-form [(openingLossesForm)]="loss.variableForm" *ngIf="loss.showVariable"></app-variable-opening-form>
     </div>-->
+  </div>
+
+  <div class="card losses-empty" *ngIf="openingLosses.length == 0">
+    <div class="card-block row align-items-center justify-content-center">
+      <div class="h4 text-muted">You haven't defined any opening losses</div>
+    </div>
   </div>
 </div>
 

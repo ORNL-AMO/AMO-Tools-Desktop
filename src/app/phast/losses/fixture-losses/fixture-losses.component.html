@@ -1,29 +1,26 @@
 <div class="card fixture-container">
   <div class="card-header fixture-header">
-    <div class="row">
-      <div class="pull-left">
-        <b>Fixture, Trays, Baskets etc. Losses</b>
-      </div>
-      <div class="pull-right">
-        <button class="btn btn-secondary" (click)="addLoss()">+ Add</button>
-      </div>
+    <div class="pull-left">
+      <b>Fixture, Trays, Baskets etc. Losses</b>
     </div>
+    <button class="btn btn-secondary pull-right" (click)="addLoss()">+ Add</button>
   </div>
-  <div *ngFor="let loss of fixtureLosses">
+  <div class="card" *ngFor="let loss of fixtureLosses">
     <div class="card-header">
-      <div class="row">
-        <div class="pull-left">
-          <b>{{loss.name}}</b>
-        </div>
-        <div class="pull-right">
-          <button class="close" aria-label="Close" (click)="removeLoss(loss.name)">
+      <div class="pull-left">
+        <b>{{loss.name}}</b>
+      </div>
+      <button class="close pull-right" aria-label="Close" (click)="removeLoss(loss.name)">
           <span aria-hidden="true">&times;</span>
         </button>
-        </div>
-      </div>
     </div>
     <div class="card-block">
       <app-fixture-losses-form [(lossesForm)]="loss.form"></app-fixture-losses-form>
+    </div>
+  </div>
+  <div class="card losses-empty" *ngIf="fixtureLosses.length == 0">
+    <div class="card-block row align-items-center justify-content-center">
+      <div class="h4 text-muted">You haven't defined any fixture losses</div>
     </div>
   </div>
 </div>
