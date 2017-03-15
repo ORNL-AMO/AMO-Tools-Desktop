@@ -1,11 +1,124 @@
-<p class="h5">
-  Motor Help
-</p><br>
-<p class="text-muted">
-  Enter information you know about your motor. Most of this information can be found by simply looking
-  at the nameplate on the motor.
-</p><br>
+<div class="card">
+  <div class="card-header" (click)="defaultOpen = toggleOpen(defaultOpen, 'default')">
+    Motor Help
+  </div>
+  <div class="card-block" *ngIf="currentField == 'default' || defaultOpen">
+    <p class="text-muted">
+      Enter measured data to calculate your pump and system's optimization rating and annual savings potential.
+    </p><br>
 
-<p class="text-muted">
-  <span class="fa fa-youtube-play"> Watch tutorial on finding information about your motor.</span>
-</p>
+    <p class="text-muted">
+      <span class="fa fa-youtube-play"> Watch tutorial on gathering motor data.</span>
+    </p>
+  </div>
+</div>
+<div class="card">
+  <div class="card-header small" (click)="lineFrequencyOpen = toggleOpen(lineFrequencyOpen, 'lineFrequency')">
+    Line Frequency
+  </div>
+  <div class="card-block small" *ngIf="currentField == 'lineFrequency' || lineFrequencyOpen">
+    <label>Description:</label>
+    <p>
+      Line Frequency is the mains supply frequency.
+    </p>
+    <label>Input:</label>
+    <p>
+      Options: <b>50 Hz</b> or <b>60 Hz</b>
+    </p>
+  </div>
+</div>
+<div class="card">
+  <div class="card-header small" (click)="horsePowerOpen = toggleOpen(horsePowerOpen, 'horsePower')">
+    Horse Power
+  </div>
+  <div class="card-block small" *ngIf="currentField == 'horsePower' || horsePowerOpen">
+    <label>Description:</label>
+    <p>
+      Horse Power represents the rated power for the motor.
+    </p>
+    <label>Input:</label>
+    <p>
+      Units: <strong>HP</strong><br> Minimum Value Allowed: <strong>0</strong><br> Maximum Value Allowed: <strong>None</strong><br>
+    </p>
+  </div>
+</div>
+<div class="card">
+  <div class="card-header small" (click)="motorRPMOpen = toggleOpen(motorRPMOpen, 'motorRPM')">
+    Motor RPM
+  </div>
+  <div class="card-block small" *ngIf="currentField == 'motorRPM' || motorRPMOpen">
+    <label>Description:</label>
+    <p>
+      Motor RPM is the speed of the motor.
+    </p>
+    <label>Input:</label>
+    <p>
+      Units: <strong>RPM</strong><br> Minimum Value Allowed: <strong>0</strong><br> Maximum Value Allowed: <strong>None</strong><br>
+    </p>
+  </div>
+</div>
+<div class="card">
+  <div class="card-header small" (click)="efficiencyClassOpen = toggleOpen(efficiencyClassOpen, 'efficiencyClass')">
+    Efficiency Class
+  </div>
+  <div class="card-block small" *ngIf="currentField == 'efficiencyClass' || efficiencyClassOpen">
+    <label>Description:</label>
+    <p>
+      Efficiency Class is the classification of efficiency given to motor. This can be found
+      either on the nameplate or based on how the motor compares with the NEMA MG 1-2003.
+    </p>
+    <label>Input:</label>
+    <p>
+      Options: </p>
+              <ul style="list-style: none;">
+                <li> <strong>Standard Efficency</strong><br> </li>
+                <li> <strong>Energy Efficient</strong><br> </li>
+                <li> <strong>Average</strong><br> </li>
+                <li> <strong>Specified (below)</strong><br> </li>
+              </ul>
+</div>
+<div class="card">
+  <div class="card-header small" (click)="voltageOpen = toggleOpen(voltageOpen, 'voltage')">
+    Voltage
+  </div>
+  <div class="card-block small" *ngIf="currentField == 'voltage' || voltageOpen">
+    <label>Description:</label>
+    <p>
+      Measured bus voltage.
+    </p>
+    <label>Input:</label>
+    <p>
+      Units: <b>Voltage</b><br> Minimum Value Allowed: <b>0</b><br> Maximum Value Allowed: <b>None</b><br>
+    </p>
+  </div>
+</div>
+<div class="card">
+  <div class="card-header small"  (click)="fullLoadAmpsOpen = toggleOpen(fullLoadAmpsOpen, 'fullLoadAmps')">
+    Full Load Amps
+  </div>
+  <div class="card-block small" *ngIf="currentField == 'fullLoadAmps' || fullLoadAmpsOpen">
+    <label>Description:</label>
+    <p>
+      Full Load Amps represent either the known or estimated amps used as a normalizing value.
+    </p>
+    <label>Input:</label>
+    <p>
+      Units: <strong>amps</strong><br> Minimum Value Allowed: <strong>0</strong><br> Maximum Value Allowed: <strong>None</strong><br>
+    </p>
+  </div>
+</div>
+<div class="card">
+  <div class="card-header small" (click)="sizeMarginOpen = toggleOpen(sizeMarginOpen, 'sizeMargin')">
+    Size Margin
+  </div>
+  <div class="card-block small" *ngIf="currentField == 'sizeMargin' || sizeMarginOpen">
+    <label>Description:</label>
+    <p>
+      This Size Margin is added to the motor selected for the optimal application.
+    </p>
+    <label>Input:</label>
+    <p>
+      Units: <b>Percent</b><br> Minimum Value Allowed: <b>0</b><br> Maximum Value Allowed: <b>100</b><br>
+    </p>
+  </div>
+</div>

@@ -9,6 +9,8 @@ import { FormBuilder } from '@angular/forms';
 export class MotorComponent implements OnInit {
   @Input()
   psatForm: any;
+  @Output('changeField')
+  changeField = new EventEmitter<string>();
 
   constructor() { }
 
@@ -33,5 +35,10 @@ export class MotorComponent implements OnInit {
         this.psatForm.value.sizeMargin--;
       }
     }
+  }
+
+  focusField(str: string){
+    console.log(str);
+    this.changeField.emit(str);
   }
 }

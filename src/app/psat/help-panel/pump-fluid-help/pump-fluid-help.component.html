@@ -1,11 +1,132 @@
-<p class="h5">
-  Pumps & Fluid Help
-</p><br>
-<p class="text-muted">
-  Enter information you know about your pump and the fluid it is pumping. Most of this information can be found by simply looking
-  at the nameplate on the pump.
-</p><br>
+<div class="card">
+  <div class="card-header" (click)="defaultOpen = toggleOpen(defaultOpen, 'default')">
+    Pump/Fluid Help
+  </div>
+  <div class="card-block" *ngIf="currentField == 'default' || defaultOpen">
+    <p class="text-muted">
+      Enter measured data to calculate your pump and system's optimization rating and annual savings potential.
+    </p><br>
 
-<p class="text-muted">
-  <span class="fa fa-youtube-play"> Watch tutorial on finding information about your pump.</span>
-</p>
+    <p class="text-muted">
+      <span class="fa fa-youtube-play"> Watch tutorial on gathering pump/fluid data.</span>
+    </p>
+  </div>
+</div>
+<div class="card">
+  <div class="card-header small" (click)="pumpTypeOpen = toggleOpen(pumpTypeOpen, 'pumpType')">
+    Pump Type
+  </div>
+  <div class="card-block small" *ngIf="currentField == 'pumpType' || pumpTypeOpen">
+    <label>Description:</label>
+    <p>
+      Pump Type represents what style of pump is being used based off of the listings in the standard ANSI/HI 1.3-2000.
+    </p>
+    <label>Input:</label>
+    <p>
+      Options: </p>
+    <ul style="list-style: none;">
+      <li> <b>End Suction Slurry</b><br> </li>
+      <li> <b>End Suction Sewage</b><br> </li>
+      <li> <b>End Suction Stock</b><br>  </li>
+      <li> <b>API double Suction</b><br> </li>
+      <li> <b>Multistage Boiler Feed</b><br> </li>
+      <li> <b>End Suction ANSI/API</b><br> </li>
+      <li> <b>Axial Flow</b><br> </li>
+      <li> <b>Double Suction</b><br> </li>
+      <li> <b>Vertical Turbine</b><br> </li>
+      <li> <b>Large End Suction</b><br> </li>
+      <li> <b>Specified Optimal eff (below)</b> </li>
+    </ul>
+  </div>
+</div>
+<div class="card">
+  <div class="card-header small" (click)="pumpRPMOpen = toggleOpen(pumpRPMOpen, 'pumpRPM')">
+    Pump RPM
+  </div>
+  <div class="card-block small" *ngIf="currentField == 'pumpRPM' || pumpRPMOpen">
+    <label>Description:</label>
+    <p>
+      The operating or nameplate speed at which the pump is running at.
+    </p>
+    <label>Input:</label>
+    <p>
+      Units: <strong>RPM</strong><br> Minimum Value Allowed: <strong>0</strong><br> Maximum Value Allowed: <strong>None</strong><br>
+    </p>
+  </div>
+</div>
+<div class="card">
+  <div class="card-header small" (click)="driveOpen = toggleOpen(driveOpen, 'drive')">
+    Drive
+  </div>
+  <div class="card-block small" *ngIf="currentField == 'drive' || driveOpen">
+    <label>Description:</label>
+    <p>
+      The type of drive the pump is using.
+    </p>
+    <label>Input:</label>
+    <p>
+      Options: <b>Direct Drive</b> or <b>Belt Drive</b>
+    </p>
+  </div>
+</div>
+<div class="card">
+  <div class="card-header small" (click)="kinematicViscosityOpen = toggleOpen(kinematicViscosityOpen, 'kinematicViscosity')">
+    Kinematic Viscosity
+  </div>
+  <div class="card-block small" *ngIf="currentField == 'kinematicViscosity' || kinematicViscosityOpen">
+    <label>Description:</label>
+    <p>
+      Kinematic Viscosity is the viscosity of the fluid being pumped in centistokes.
+    </p>
+    <label>Input:</label>
+    <p>
+      Units: <b>cS</b><br> Minimum Value Allowed: <b>0</b><br> Maximum Value Allowed: <b>None</b><br>
+    </p>
+  </div>
+</div>
+<div class="card">
+  <div class="card-header small" (click)="specificGravityOpen = toggleOpen(specificGravityOpen, 'specificGravity')">
+    Specific Gravity
+  </div>
+  <div class="card-block small" *ngIf="currentField == 'specificGravity' || specificGravityOpen">
+    <label>Description:</label>
+    <p>
+      Specific Gravity is the ratio of the density of the fluid to water at standard condition.
+    </p>
+    <label>Input:</label>
+    <p>
+      Units: <b>Units</b><br> Minimum Value Allowed: <b>0</b><br> Maximum Value Allowed: <b>None</b><br>
+    </p>
+  </div>
+</div>
+<div class="card">
+  <div class="card-header small"  (click)="stagesOpen = toggleOpen(stagesOpen, 'stages')">
+    Stages
+  </div>
+  <div class="card-block small" *ngIf="currentField == 'stages' || stagesOpen">
+    <label>Description:</label>
+    <p>
+      The number of pump stages.
+    </p>
+    <label>Input:</label>
+    <p>
+      Units: <strong>Number of Stages</strong><br> Minimum Value Allowed: <strong>0</strong><br> Maximum Value Allowed: <strong>None</strong><br>
+    </p>
+  </div>
+</div>
+<div class="card">
+  <div class="card-header small" (click)="fixedSpecificSpeedOpen = toggleOpen(fixedSpecificSpeedOpen, 'fixedSpecificSpeed')">
+    Fixed Specific Speed
+  </div>
+  <div class="card-block small" *ngIf="currentField == 'fixedSpecificSpeed' || fixedSpecificSpeedOpen">
+    <label>Description:</label>
+    <p>
+      Fixed Specific Speed allows the user to specify whether a specific speed penalty that is part of
+      the HI achievable efficiency algorithm sequence, is actuall imposed.
+    </p>
+    <label>Input:</label>
+    <p>
+      Options: <b>Yes</b> or <b>No</b>
+    </p>
+  </div>
+</div>

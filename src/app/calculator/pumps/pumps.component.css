@@ -1,0 +1,36 @@
+
+.modal-content{
+    height: 95%;
+    max-height: 95%;
+}
+
+.modal-dialog{
+    max-width: 95%;
+    top: 20vh;
+}
+
+.calc-type{
+    border-bottom: groove;
+    border-bottom-width: 1px;
+}
+
+.calc-content{
+    height: 100%;
+}
+
+.calc-list{
+    min-height: 50%;
+    max-height: 100%;
+}
+
+.tools{
+    padding-top: 15px;
+}
+
+.calc-banner{
+        text-align: center;
+    padding-top: 10px;
+    border-bottom: groove;
+    padding-bottom: 10px;
+    border-width: 1px;
+}

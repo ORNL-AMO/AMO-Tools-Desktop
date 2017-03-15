@@ -7,9 +7,9 @@
       <div class="row" [ngClass]="{'justify-content-center':currentTab != 5}">
         <div class="col-lg-8 col-md-8 col-sm-10 col-xs-12" *ngIf="currentTab != 5">
           <app-system-basics *ngIf="currentTab == 1"></app-system-basics>
-          <app-pump-fluid [(psatForm)]="psatForm" *ngIf="currentTab == 2"></app-pump-fluid>
-          <app-motor [(psatForm)]="psatForm" *ngIf="currentTab == 3"></app-motor>
-          <app-field-data [(psatForm)]="psatForm" *ngIf="currentTab == 4"></app-field-data>
+          <app-pump-fluid (changeField)="changeField($event)"  [(psatForm)]="psatForm" *ngIf="currentTab == 2"></app-pump-fluid>
+          <app-motor (changeField)="changeField($event)"  [(psatForm)]="psatForm" *ngIf="currentTab == 3"></app-motor>
+          <app-field-data (changeField)="changeField($event)" [assessment]="assessment" [(psatForm)]="psatForm" *ngIf="currentTab == 4"></app-field-data>
         </div>
         <div class="col-12" *ngIf="currentTab == 5">
           <app-modify-conditions [(saveClicked)]="saveClicked" (saveSuccess)="saveSuccess($event)" [(baseline)]="assessment.psat" (selectedAdjustment)="selectAdjustment($event)"></app-modify-conditions>
@@ -17,9 +17,9 @@
       </div>
     </div>
 
-    <div class="col-3 panel" *ngIf="isPanelOpen" [ngClass]="{'white-bg': currentTab == 5, 'dark-bg': currentTab != 5 }">
+    <div class="col-3 panel" *ngIf="isPanelOpen" [ngClass]="{'white-bg': currentTab == 5, 'dark-bg': currentTab != 5, 'help-col':panelView == 'help-panel' }">
       <app-data-panel (showReport)="showReport()" [adjustment]="adjustment" *ngIf="panelView == 'data-panel' && currentTab == 5"></app-data-panel>
-      <app-help-panel [currentTab]="currentTab" *ngIf="panelView == 'help-panel'"></app-help-panel>
+      <app-help-panel [currentField]="currentField" [currentTab]="currentTab" *ngIf="panelView == 'help-panel'"></app-help-panel>
       <app-settings-panel *ngIf="panelView == 'settings-panel'"></app-settings-panel>
     </div>
   </div>

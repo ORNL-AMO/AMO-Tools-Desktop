@@ -22,6 +22,7 @@ export class PsatComponent implements OnInit {
   psatForm: any;
   saveClicked:boolean = false;
   adjustment: PSAT;
+  currentField: string = 'default';
 
   constructor(private location: Location, private assessmentService: AssessmentService, private formBuilder: FormBuilder, private psatService: PsatService) { }
 
@@ -37,6 +38,10 @@ export class PsatComponent implements OnInit {
     }else{
       this.panelView = 'help-panel';
     }
+  }
+
+  changeField($event){
+    this.currentField = $event;
   }
 
   toggleOpenPanel($event) {

@@ -1,21 +1,21 @@
 <div class="card wall-losses-container">
   <div class="card-header wall-losses-header">
-    <div class="row justify-content-between">
-      <div class="col-4">
+    <div class="row">
+      <div class="pull-left">
         <b>Wall Losses</b>
       </div>
-      <div class="col-2">
+      <div class="pull-right">
         <button class="btn btn-secondary" (click)="addLoss()">+ Add</button>
       </div>
     </div>
   </div>
   <div *ngFor="let wallLoss of wallLosses">
     <div class="card-header">
-      <div class="row justify-content-between">
-        <div class="col-4">
+      <div class="row">
+        <div class="pull-left">
           <b>{{wallLoss.name}}</b>
         </div>
-        <div class="col-2">
+        <div class="pull-right">
           <button class="close" aria-label="Close" (click)="removeLoss(wallLoss.name)">
           <span aria-hidden="true">&times;</span>
         </button>

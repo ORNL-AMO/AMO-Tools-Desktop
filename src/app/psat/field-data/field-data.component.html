@@ -2,237 +2,80 @@
   <div class="row form-group">
     <label class="col-6 col-form-label" for="operatingFraction">Operating Fraction</label>
     <div class="col-6">
-      <input type="text" class="form-control" formControlName="operatingFraction" id="operatingFraction" (focus)="fractionPopover.show()"
-        [popover]="fractionPopover">
+      <input type="text" class="form-control" formControlName="operatingFraction" id="operatingFraction" (focus)="focusField('operatingFraction')">
       <app-control-messages [control]="psatForm.controls.operatingFraction"></app-control-messages>
-      <popover-content #fractionPopover title="Operating Fraction" placement="auto right" [closeOnClickOutside]="true">
-        <div class="popover-lg">
-
-          <div class="popover-lg">
-            <div class="description">
-              <h4>Description:</h4>
-              <div class="description-box">
-                <p>
-                  Operating Fraction simply represents the fraction of the calender hours the equipment is running.
-                </p>
-              </div>
-            </div>
-            <div class = "input-info">
-              <h4>Input:</h4>
-              <div class="input-box">
-                <p>
-                  Units: <strong>Percent</strong><br>
-                  Minimum Value Allowed: <strong>0</strong><br>
-                  Maximum Value Allowed: <strong>100</strong><br>
-                </p>
-              </div>
-            </div>
-          </div>
-
-        </div>
-      </popover-content>
     </div>
   </div>
 
   <div class="row form-group">
     <label class="col-6 col-form-label" for="costKwHr">Cost (kw/hr)</label>
     <div class="col-6">
-      <input type="text" class="form-control" formControlName="costKwHr" id="costKwHr" (focus)="costPopover.show()" [popover]="costPopover">
+      <input type="text" class="form-control" formControlName="costKwHr" id="costKwHr" (focus)="focusField('costKwHr')">
       <app-control-messages [control]="psatForm.controls.costKwHr"></app-control-messages>
-      <popover-content #costPopover title="Cost" placement="auto right" [closeOnClickOutside]="true">
-        <div class="popover-lg">
-
-          <div class="popover-lg">
-            <div class="description">
-              <h4>Description:</h4>
-              <div class="description-box">
-                <p>
-                  Cost is representative of the per unit cost of electricity in (kw/hr).
-                </p>
-              </div>
-            </div>
-            <div class = "input-info">
-              <h4>Input:</h4>
-              <div class="input-box">
-                <p>
-                  Units: <strong>Money</strong><br>
-                  Minimum Value Allowed: <strong>0</strong><br>
-                  Maximum Value Allowed: <strong>None</strong><br>
-                </p>
-              </div>
-            </div>
-          </div>
-
-        </div>
-      </popover-content>
     </div>
   </div>
 
   <div class="row form-group">
     <label class="col-6 col-form-label" for="flowRate">Flow Rate (gpm)</label>
     <div class="col-6">
-      <input type="text" class="form-control" formControlName="flowRate" id="flowRate" (focus)="flowRatePopover.show()" [popover]="flowRatePopover">
+      <input type="text" class="form-control" formControlName="flowRate" id="flowRate" (focus)="focusField('flowRate')">
       <app-control-messages [control]="psatForm.controls.flowRate"></app-control-messages>
-      <popover-content #flowRatePopover title="Flow Rate" placement="auto right" [closeOnClickOutside]="true">
-        <div class="popover-lg">
-
-          <div class="popover-lg">
-            <div class="description">
-              <h4>Description:</h4>
-              <div class="description-box">
-                <p>
-                  Flow Rate represents either the <u>measured</u> or <u>required</u> rate of flow.
-                </p>
-              </div>
-            </div>
-            <div class = "input-info">
-              <h4>Input:</h4>
-              <div class="input-box">
-                <p>
-                  Units: <strong>GPM, MGD, m^3/h, L/s</strong><br>
-                  Minimum Value Allowed: <strong>0</strong><br>
-                  Maximum Value Allowed: <strong>None</strong><br>
-                </p>
-              </div>
-            </div>
-          </div>
-
-        </div>
-      </popover-content>
     </div>
   </div>
 
   <div class="row form-group">
     <label class="col-6 col-form-label" for="head">Head</label>
-    <div class="col-6">
-      <input type="text" class="form-control" formControlName="head" id="head" (focus)="headPopover.show()" [popover]="headPopover">
+    <div class="col-6 input-group">
+      <input type="text" class="form-control" formControlName="head" id="head" (focus)="focusField('head')">
+      <div class="incrementor input-group-addon">
+        <div class="btn" (click)="showHeadToolModal()"><i class="fa fa-calculator"></i></div>
+      </div>
       <app-control-messages [control]="psatForm.controls.head"></app-control-messages>
-      <popover-content #headPopover title="Head" placement="auto right" [closeOnClickOutside]="true">
-        <div class="popover-lg">
-
-          <div class="popover-lg">
-            <div class="description">
-              <h4>Description:</h4>
-              <div class="description-box">
-                <p>
-                  Head represents either the <u>measured</u> or <u>required</u> pump head in feet or meters.
-                </p>
-              </div>
-            </div>
-            <div class = "input-info">
-              <h4>Input:</h4>
-              <div class="input-box">
-                <p>
-                  Units: <strong>Feet or Meters</strong><br>
-                  Minimum Value Allowed: <strong>0</strong><br>
-                  Maximum Value Allowed: <strong>None</strong><br>
-                </p>
-              </div>
-            </div>
-          </div>
-
-        </div>
-      </popover-content>
     </div>
   </div>
 
   <div class="row form-group">
     <label class="col-6 col-form-label" for="loadEstimatedMethod">Load Estimated Method</label>
     <div class="col-6">
-      <select class="form-control" formControlName="loadEstimatedMethod" id="loadEstimatedMethod" (focus)="loadPopover.show()"
-        [popover]="loadPopover">
+      <select class="form-control" formControlName="loadEstimatedMethod" id="loadEstimatedMethod" (focus)="focusField('loadEstimatedMethod')">
               <option>Method 1</option>
               <option>Method 2</option>
             </select>
       <app-control-messages [control]="psatForm.controls.loadEstimatedMethod"></app-control-messages>
-      <popover-content #loadPopover title="Load Estimated Method" placement="auto right" [closeOnClickOutside]="true">
-        <div class="popover-lg">
-
-          <div class="description">
-            <h4>Description:</h4>
-            <div class="description-box">
-              Load Estimation Method can either be one of two choices: <u>Power</u> or <u>Current</u>. Both of which calculate <u>Load</u>.
-            </div>
-          </div>
-          <div class = "input-info">
-            <h4>Input:</h4>
-            <div class="input-box">
-              <p>
-                Options: <strong>Power</strong> or <strong>Current</strong><br>
-              </p>
-            </div>
-          </div>
-
-        </div>
-      </popover-content>
     </div>
   </div>
 
   <div class="row form-group">
     <label class="col-6 col-form-label" for="motorKW">Motor (kW)</label>
     <div class="col-6">
-      <input type="text" class="form-control" formControlName="motorKW" id="motorKW" (focus)="motorPowerPopover.show()" [popover]="motorPowerPopover">
+      <input type="text" class="form-control" formControlName="motorKW" id="motorKW" (focus)="focusField('motorKW')">
       <app-control-messages [control]="psatForm.controls.motorKW"></app-control-messages>
-      <popover-content #motorPowerPopover title="Motor" placement="auto right" [closeOnClickOutside]="true">
-        <div class="popover-lg">
-
-          <div class="popover-lg">
-            <div class="description">
-              <h4>Description:</h4>
-              <div class="description-box">
-                <p>
-                  Motor represents either a measured or average current among the three phases. The units will depend on the Load Estimation Method Selected.
-                </p>
-              </div>
-            </div>
-            <div class = "input-info">
-              <h4>Input:</h4>
-              <div class="input-box">
-                <p>
-                  Units: <strong>kW or amps</strong><br>
-                  Minimum Value Allowed: <strong>0</strong><br>
-                  Maximum Value Allowed: <strong>None</strong><br>
-                </p>
-              </div>
-            </div>
-          </div>
-
-        </div>
-      </popover-content>
     </div>
   </div>
 
   <div class="row form-group">
     <label class="col-6 col-form-label" for="voltage">Voltage</label>
     <div class="col-6">
-      <input type="text" class="form-control" formControlName="voltage" id="voltage" (focus)="voltagePopover.show()" [popover]="voltagePopover">
+      <input type="text" class="form-control" formControlName="voltage" id="voltage" (focus)="focusField('voltage')">
       <app-control-messages [control]="psatForm.controls.voltage"></app-control-messages>
-      <popover-content #voltagePopover title="Voltage" placement="auto right" [closeOnClickOutside]="true">
-        <div class="popover-lg">
-
-          <div class="popover-lg">
-            <div class="description">
-              <h4>Description:</h4>
-              <div class="description-box">
-                <p>
-                  Voltage is the measured bus voltage.
-                </p>
-              </div>
-            </div>
-            <div class = "input-info">
-              <h4>Input:</h4>
-              <div class="input-box">
-                <p>
-                  Units: <strong>Voltage</strong><br>
-                  Minimum Value Allowed: <strong>0</strong><br>
-                  Maximum Value Allowed: <strong>None</strong><br>
-                </p>
-              </div>
-            </div>
-          </div>
-
-        </div>
-      </popover-content>
     </div>
   </div>
 </form>
+
+<!-- HEAD TOOL MODAL -->
+<div bsModal #headToolModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="createHeadToolLabel"
+  aria-hidden="true" [config]="{backdrop: 'static'}">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="h3">Pump Head Calculator: {{assessment.name}}</div>
+        <button class="close" aria-label="Close" (click)="hideHeadToolModal()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <app-head-tool></app-head-tool>
+      </div>
+    </div>
+  </div>
+</div>
