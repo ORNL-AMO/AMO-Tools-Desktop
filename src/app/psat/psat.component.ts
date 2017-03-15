@@ -20,7 +20,7 @@ export class PsatComponent implements OnInit {
   showDetailedReport: boolean = false;
 
   psatForm: any;
-  saveClicked:boolean = false;
+  saveClicked: boolean = false;
   adjustment: PSAT;
   currentField: string = 'default';
 
@@ -35,12 +35,12 @@ export class PsatComponent implements OnInit {
     this.currentTab = $event;
     if (this.currentTab == 5) {
       this.panelView = 'data-panel';
-    }else{
+    } else {
       this.panelView = 'help-panel';
     }
   }
 
-  changeField($event){
+  changeField($event) {
     this.currentField = $event;
   }
 
@@ -64,7 +64,7 @@ export class PsatComponent implements OnInit {
     this.currentTab++;
     if (this.currentTab == 5) {
       this.panelView = 'data-panel';
-    }else{
+    } else {
       this.panelView = 'help-panel';
     }
   }
@@ -75,6 +75,11 @@ export class PsatComponent implements OnInit {
 
   goBack() {
     this.currentTab--;
+    if (this.currentTab == 5) {
+      this.panelView = 'data-panel';
+    } else {
+      this.panelView = 'help-panel';
+    }
   }
 
   showReport() {
@@ -85,7 +90,7 @@ export class PsatComponent implements OnInit {
     this.showDetailedReport = false;
   }
 
-  saveAdjustment(){
+  saveAdjustment() {
     this.saveClicked = !this.saveClicked;
   }
 

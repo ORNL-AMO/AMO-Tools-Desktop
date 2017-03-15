@@ -1,26 +1,19 @@
-<div class="card charge-material-container">
-  <div class="card-header charge-material-header">
-    <div class="row">
-      <div class="pull-left">
-        <b>Charge Material</b>
-      </div>
-      <div class="pull-right">
-        <button class="btn btn-secondary" (click)="addMaterial()">+ Add</button>
-      </div>
+<div class="card losses-container">
+  <div class="card-header losses
+  -header">
+    <div class="pull-left">
+      <b>Charge Material</b>
     </div>
+    <button class="btn btn-secondary pull-right" (click)="addMaterial()">+ Add</button>
   </div>
-  <div *ngFor="let material of chargeMaterial">
+  <div class="card" *ngFor="let material of chargeMaterial">
     <div class="card-header">
-      <div class="row">
-        <div class="pull-left">
-          <b>{{material.name}}</b>
-        </div>
-        <div class="pull-right">
-          <button class="close" aria-label="Close" (click)="removeMaterial(material.name)">
+      <div class="pull-left">
+        <b>{{material.name}}</b>
+      </div>
+      <button class="close pull-right" aria-label="Close" (click)="removeMaterial(material.name)">
           <span aria-hidden="true">&times;</span>
         </button>
-        </div>
-      </div>
     </div>
     <div class="card-block">
       <form [formGroup]="material.form">
@@ -37,6 +30,11 @@
         </div>
       </form>
       <app-solid-charge-material-form [(chargeMaterialForm)]="material.form"></app-solid-charge-material-form>
+    </div>
+  </div>
+  <div class="card losses-empty" *ngIf="chargeMaterial.length == 0">
+    <div class="card-block row align-items-center justify-content-center">
+      <div class="h4 text-muted">You haven't defined any charge material losses</div>
     </div>
   </div>
 </div>
