@@ -22,10 +22,14 @@
     border-bottom: solid;
     width: 50%;
     text-align: center;
-    padding: 3px;
     cursor: pointer;
+        padding-top: 25px;
 }
 
 .calc-tab-active{
     border-bottom-color: dodgerblue;
+}
+
+.head-diagram{
+    padding-top: 25px;
 }

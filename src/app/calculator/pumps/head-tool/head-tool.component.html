@@ -12,8 +12,13 @@
     </div>
   </div>
 </form>
-<div class="row help-panel">
+<div class="row">
   <div class="col-7">
+    <div class="head-diagram text-center">
+      <img class="img-fluid mx-auto d-block" aria-describedby="headDiagramHelp" src="assets/images/img-suction-discharge-head.png">
+      <small id="headDiagramHelp" class="text-muted text-help">K<sub>s</sub> represents all suction losses from the tank to the pump</small><br>
+      <small id="headDiagramHelp" class="text-muted text-help">K<sub>d</sub> represents all discharge losses from the pump to the guage P<sub>d</sub></small>
+    </div>
     <app-head-tool-form [(headToolForm)]="headToolForm"></app-head-tool-form>
   </div>
   <div class="col-5 dark-bg ">
@@ -25,8 +30,10 @@
         Help
       </li>
     </ul>
-    <app-head-tool-results *ngIf="tabSelect == 'results'"></app-head-tool-results>
-    <app-head-tool-help *ngIf="tabSelect == 'help'"></app-head-tool-help>
+    <div class="row align-items-center justify-content-center">
+      <app-head-tool-results *ngIf="tabSelect == 'results'"></app-head-tool-results>
+      <app-head-tool-help *ngIf="tabSelect == 'help'"></app-head-tool-help>
+    </div>
   </div>
 </div>
 <div class="row button-row">

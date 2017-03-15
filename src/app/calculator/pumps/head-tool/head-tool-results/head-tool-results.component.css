@@ -1,6 +1,7 @@
 .results-list{
     list-style: none;
     text-align: center;
+    padding-top: 25px;
 }
 
 .result-item{
@@ -13,7 +14,7 @@
     font-weight: bold;
     font-size: 18px;
 }
-
+/*
 .result-content{
     padding-top: 25px;
-}
+}*/
