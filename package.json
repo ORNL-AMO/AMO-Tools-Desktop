@@ -1,10 +1,11 @@
 {
   "name": "amo-tools-desktop",
-  "version": "0.0.0",
+  "version": "0.1.5",
   "main": "main.js",
   "license": "MIT",
   "description": "AMO-Tools-Desktop",
   "author": "Advanced Manufacturing Office",
+  "repository": "https://github.com/ORNL-AMO/AMO-Tools-Desktop.git",
   "angular-cli": {},
   "scripts": {
     "ng": "ng",
@@ -35,32 +36,48 @@
     "d3": "4.5.0",
     "d3-ng2-service": "^1.6.0",
     "dotenv": "^4.0.0",
+    "electron-log": "^1.3.0",
+    "electron-updater": "^1.8.2",
     "font-awesome": "^4.7.0",
     "ng2-bootstrap": "^1.3.1",
     "rxjs": "^5.1.0",
     "ts-helpers": "^1.1.1",
     "zone.js": "^0.7.6"
   },
-  "build": {
+ "build": {
     "appId": "com.electron.amo-tools-desktop",
     "copyright": "Copyright 2017 ORNL. All rights reserved.",
     "productName": "AMO-Tools-Desktop",
-    "iconUrl": "https://raw.githubusercontent.com/ORNL-AMO/AMO-Tools-Desktop/blob/develop/src/favicon.ico",
+    "iconUrl": "https://github.com/ORNL-AMO/AMO-Tools-Desktop/blob/master/src/favicon.ico?raw=true",
     "directories": {
-      "buildResources": "../AMO-Tools-Desktop/src/",
       "output": "../output/"
     },
     "win": {
-      "target": "squirrel"
+      "target": "nsis",
+      "publish": [
+        {
+          "provider": "github",
+          "owner": "ORNL-AMO",
+          "repo": "AMO-Tools-Desktop"
+        }
+      ]
     },
-    "windowsSquirrel": {
-      "msi": "true"
+    "nsis": {
+      "installerIcon": "../AMO-Tools-Desktop/src/favicon.ico",
+      "perMachine": false
     },
     "linux": {
-      "target": "tar.gz"
+      "target": [
+        "tar.gz",
+        "deb",
+        "rpm"
+      ]
     },
     "mac": {
-      "target": "dmg"
+      "target": [
+        "dmg",
+        "zip"
+      ]
     }
   },
   "devDependencies": {
@@ -75,8 +92,7 @@
     "css-loader": "^0.26.2",
     "electron": "^1.4.15",
     "electron-builder": "^13.9.0",
-    "electron-builder-squirrel-windows": "^13.6.1",
-    "electron-packager": "",
+    "electron-packager": "^8.5.2",
     "electron-rebuild": "^1.5.7",
     "jasmine-core": "~2.5.2",
     "jasmine-spec-reporter": "~3.2.0",
