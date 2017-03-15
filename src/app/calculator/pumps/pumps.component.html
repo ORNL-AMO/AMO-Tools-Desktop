@@ -1,38 +1,38 @@
-<div *ngIf="!headTool">
-  <div class="row justify-content-center align-items-center">
-    <div class="h2">Pump Calculators</div>
+<div class="calc-content" *ngIf="!headTool">
+  <div class="calc-banner">
+    <div class="h3">Pump Calculators</div>
   </div>
-  <div class="row justify-content-center align-items-center">
+  <div class="row justify-content-center align-items-center calc-list">
     <div class="col-8">
       <div class="row calc-type">
         <div class="col-12">
-          <div class="h3">Type A Calculators</div>
+          <p class="h4">Type A Calculators</p>
         </div>
       </div>
-      <div class="row">
+      <div class="row tools">
         <div class="col-12">
-          <a class="h4" (click)="showTool()">Head Tool option 1</a>
+          <a class="h5" (click)="showTool()">Head Tool option 1</a>
           <div>Use this option to show the head tool in this space</div>
         </div>
       </div>
-      <div class="row">
+      <div class="row tools">
         <div class="col-12">
-          <a class="h4" (click)="showHeadToolModal()"> Head Tool option 2 </a>
+          <a class="h5" (click)="showHeadToolModal()"> Head Tool option 2 </a>
           <div>Use this option to show the head tool in a modal</div>
         </div>
       </div>
     </div>
   </div>
 </div>
-<div class="card" *ngIf="headTool">
+<div class="card fade show" *ngIf="headTool">
   <div class="card-header">
-    Head Tool
+    <b class="h4">Pump Head Calculator</b>
     <button class="close pull-right" aria-label="Close" (click)="hideTool()">
           <span aria-hidden="true">&times;</span>
         </button>
   </div>
   <div class="card-block">
-    <app-head-tool></app-head-tool>
+    <app-head-tool (close)="hideTool()"></app-head-tool>
   </div>
 </div>
 

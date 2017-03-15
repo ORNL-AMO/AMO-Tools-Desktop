@@ -1,61 +1,102 @@
-<form [formGroup]="headToolForm">
+<form [formGroup]="headToolForm" style="padding-top: 20px;">
   <div class="row form-group">
     <div class="col-6">
-      <label for="suctionPipeDiameter">Suction pipe diameter (ID)</label>
-      <input type="text" class="form-control" formControlName="suctionPipeDiameter" id="suctionPipeDiameter">
+      <label class="small" for="suctionPipeDiameter">Suction pipe diameter (ID)</label>
+      <div class="input-group input-group-sm">
+        <input type="text" class="form-control head-input" formControlName="suctionPipeDiameter" id="suctionPipeDiameter">
+        <div class="input-group-addon">
+          inches
+        </div>
+      </div>
       <app-control-messages [control]="headToolForm.controls.suctionPipeDiameter"></app-control-messages>
     </div>
     <div class="col-6">
-      <label for="dischargePipeDiameter">Discharge pipe diameter (ID)</label>
-      <input type="text" class="form-control" formControlName="dischargePipeDiameter" id="dischargePipeDiameter">
+      <label class="small" for="dischargePipeDiameter">Discharge pipe diameter (ID)</label>
+      <div class="input-group input-group-sm">
+        <input type="text" class="form-control head-input" formControlName="dischargePipeDiameter" id="dischargePipeDiameter">
+        <div class="input-group-addon">
+          inches
+        </div>
+      </div>
       <app-control-messages [control]="headToolForm.controls.dischargePipeDiameter"></app-control-messages>
     </div>
   </div>
   <div class="row form-group">
     <div class="col-6">
-      <label for="overpressure">Suction tank gas overpressure (Pg)</label>
-      <input type="text" class="form-control" formControlName="overpressure" id="overpressure">
+      <label class="small" for="overpressure">Suction tank gas overpressure (Pg)</label>
+      <div class="input-group input-group-sm">
+        <input type="text" class="form-control head-input" formControlName="overpressure" id="overpressure">
+        <div class="input-group-addon">
+          pslg
+        </div>
+      </div>
       <app-control-messages [control]="headToolForm.controls.overpressure"></app-control-messages>
     </div>
     <div class="col-6">
-      <label for="dischargePressure">Discharge guage pressure (Pd)</label>
-      <input type="text" class="form-control" formControlName="dischargePressure" id="dischargePressure">
+      <label class="small" for="dischargePressure">Discharge guage pressure (Pd)</label>
+      <div class="input-group input-group-sm">
+        <input type="text" class="form-control head-input" formControlName="dischargePressure" id="dischargePressure">
+        <div class="input-group-addon">
+          pslg
+        </div>
+      </div>
       <app-control-messages [control]="headToolForm.controls.dischargePressure"></app-control-messages>
     </div>
   </div>
   <div class="row form-group">
     <div class="col-6">
-      <label for="surfaceElevation">Suction tank fluid surface elevation (Zs)</label>
-      <input type="text" class="form-control" formControlName="surfaceElevation" id="surfaceElevation">
+      <label class="small" for="surfaceElevation">Suction tank fluid surface elevation (Zs)</label>
+      <div class="input-group input-group-sm">
+        <input type="text" class="form-control head-input" formControlName="surfaceElevation" id="surfaceElevation">
+        <div class="input-group-addon">
+          ft
+        </div>
+      </div>
       <app-control-messages [control]="headToolForm.controls.surfaceElevation"></app-control-messages>
     </div>
     <div class="col-6">
-      <label for="dischargeElevation">Discharge guage elevation (Zd)</label>
-      <input type="text" class="form-control" formControlName="dischargeElevation" id="dischargeElevation">
+      <label class="small" for="dischargeElevation">Discharge guage elevation (Zd)</label>
+      <div class="input-group input-group-sm">
+        <input type="text" class="form-control head-input" formControlName="dischargeElevation" id="dischargeElevation">
+        <div class="input-group-addon">
+          ft
+        </div>
+      </div>
       <app-control-messages [control]="headToolForm.controls.dischargeElevation"></app-control-messages>
     </div>
   </div>
   <div class="row form-group">
     <div class="col-6">
-      <label for="suctionLossCoefficients">Suction line loss coefficients (Ks)</label>
-      <input type="text" class="form-control" formControlName="suctionLossCoefficients" id="suctionLossCoefficients">
+      <label class="small" for="suctionLossCoefficients">Suction line loss coefficients (Ks)</label>
+      <div class="input-group input-group-sm">
+        <input type="text" class="form-control head-input" formControlName="suctionLossCoefficients" id="suctionLossCoefficients">
+      </div>
       <app-control-messages [control]="headToolForm.controls.suctionLossCoefficients"></app-control-messages>
     </div>
     <div class="col-6">
-      <label for="dischargeLineCoefficients">Discharge line loss coefficients (Kd)</label>
-      <input type="text" class="form-control" formControlName="dischargeLineCoefficients" id="dischargeLineCoefficients">
+      <label class="small" for="dischargeLineCoefficients">Discharge line loss coefficients (Kd)</label>
+      <div class="input-group input-group-sm">
+        <input type="text" class="form-control head-input" formControlName="dischargeLineCoefficients" id="dischargeLineCoefficients">
+      </div>
       <app-control-messages [control]="headToolForm.controls.dischargeLineCoefficients"></app-control-messages>
     </div>
   </div>
   <div class="row form-group">
     <div class="col-6">
-      <label for="specificGravity">Fluid Specific Gravity</label>
-      <input type="text" class="form-control" formControlName="specificGravity" id="specificGravity">
+      <label class="small" for="specificGravity">Fluid Specific Gravity</label>
+      <div class="input-group input-group-sm">
+        <input type="text" class="form-control head-input" formControlName="specificGravity" id="specificGravity">
+      </div>
       <app-control-messages [control]="headToolForm.controls.specificGravity"></app-control-messages>
     </div>
     <div class="col-6">
-      <label for="flowRate">Flow Rate</label>
-      <input type="text" class="form-control" formControlName="flowRate" id="flowRate">
+      <label class="small" for="flowRate">Flow Rate</label>
+      <div class="input-group input-group-sm">
+        <input type="text" class="form-control head-input" formControlName="flowRate" id="flowRate">
+        <div class="input-group-addon">
+          gpm
+        </div>
+      </div>
       <app-control-messages [control]="headToolForm.controls.flowRate"></app-control-messages>
     </div>
   </div>

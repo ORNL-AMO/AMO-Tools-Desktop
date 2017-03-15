@@ -17,3 +17,15 @@
 .form-group{
     margin-bottom: 0px;
 }
+
+.calc-tab{
+    border-bottom: solid;
+    width: 50%;
+    text-align: center;
+    padding: 3px;
+    cursor: pointer;
+}
+
+.calc-tab-active{
+    border-bottom-color: dodgerblue;
+}

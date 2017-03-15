@@ -1,6 +1,6 @@
 <form [formGroup]="headToolForm">
   <div class="row justify-content-between form-group type-row">
-    <div class="col-8">
+    <div class="col-8 input-group input-group-sm">
       <select class="form-control" formControlName="type" id="type">
           <option>Suction tank elevation, gas space pressure, and discharged line pressure</option>
           <option>Type 2</option>
@@ -12,23 +12,26 @@
     </div>
   </div>
 </form>
-<div class="row">
+<div class="row help-panel">
   <div class="col-7">
     <app-head-tool-form [(headToolForm)]="headToolForm"></app-head-tool-form>
   </div>
-  <div class="col-5">
-    <div class="row">
-      <!--Tabs-->
-    </div>
-    <div class="row dark-bg help-panel">
-      <app-head-tool-results *ngIf="tabSelect == 'results'"></app-head-tool-results>
-      <app-head-tool-help *ngIf="tabSelect == 'help'"></app-head-tool-help>
-    </div>
+  <div class="col-5 dark-bg ">
+    <ul class="nav nav-tabs">
+      <li class="calc-tab nav-item" (click)="setTab('results')" [ngClass]="{'calc-tab-active': tabSelect == 'results'}">
+        Results
+      </li>
+      <li class="calc-tab nav-item" (click)="setTab('help')" [ngClass]="{'calc-tab-active': tabSelect == 'help'}">
+        Help
+      </li>
+    </ul>
+    <app-head-tool-results *ngIf="tabSelect == 'results'"></app-head-tool-results>
+    <app-head-tool-help *ngIf="tabSelect == 'help'"></app-head-tool-help>
   </div>
 </div>
 <div class="row button-row">
   <div class="col-12">
-    <button class="btn btn-secondary pull-left">Close</button>
+    <button class="btn btn-secondary pull-left" (click)="closeTool()">Close</button>
     <button class="btn btn-primary pull-right">Save to Assessment</button>
     <button class="btn btn-secondary pull-right">Export to CSV...</button>
   </div>
