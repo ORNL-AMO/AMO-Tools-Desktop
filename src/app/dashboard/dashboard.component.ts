@@ -9,13 +9,20 @@ import { MockDirectory } from '../shared/mocks/mock-directory';
 export class DashboardComponent implements OnInit {
   allDirectories: Directory = MockDirectory;
   workingDirectory: Directory = MockDirectory;
-
+  showCalculators: boolean = false;
+  selectedCalculator: string;
   constructor() { }
 
   ngOnInit() {
   }
 
-  changeWorkingDirectory($event){
+  changeWorkingDirectory($event) {
+    this.showCalculators = false;
     this.workingDirectory = $event;
+  }
+
+  viewCalculator(str: string) {
+    this.showCalculators = true;
+    this.selectedCalculator = str;
   }
 }

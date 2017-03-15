@@ -52,9 +52,6 @@
     <div class="col-6">
       <input type="text" class="form-control" id="voltage" formControlName="voltage" (focus)="focusField('voltage')">
       <app-control-messages [control]="psatForm.controls.voltage"></app-control-messages>
-      <popover-content #voltagePopover title="Voltage" placement="auto right" [closeOnClickOutside]="true">
-        <div class="popover-md">Some content</div>
-      </popover-content>
     </div>
   </div>
 
@@ -66,15 +63,12 @@
     <div class="col-6">
       <input type="text" class="form-control" id="fullLoadAmps" formControlName="fullLoadAmps" (focus)="focusField('fullLoadAmps')">
       <app-control-messages [control]="psatForm.controls.fullLoadAmps"></app-control-messages>
-      <popover-content #fullLoadAmpsPopover title="Full Load Ampts" placement="auto right" [closeOnClickOutside]="true">
-        <div class="popover-md">Some content</div>
-      </popover-content>
     </div>
   </div>
 
   <div class="row form-group">
     <label class="col-6 col-form-label" for="sizeMargin">Size Margin</label>
-    <div class="col-6 input-group" [popover]="marginPopover">
+    <div class="col-6 input-group">
       <div class="incrementor input-group-addon">
         <div class="btn" (click)="subtractNum('sizeMargin')"><i class="fa fa-minus"></i></div>
       </div>

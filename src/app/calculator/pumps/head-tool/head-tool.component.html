@@ -1,0 +1,45 @@
+<form [formGroup]="headToolForm">
+  <div class="row justify-content-between form-group type-row">
+    <div class="col-8 input-group input-group-sm">
+      <select class="form-control" formControlName="type" id="type">
+          <option>Suction tank elevation, gas space pressure, and discharged line pressure</option>
+          <option>Type 2</option>
+        </select>
+      <app-control-messages [control]="headToolForm.controls.type"></app-control-messages>
+    </div>
+    <div class="col-3">
+      <b>Units of Measure:</b>gpm, ft, hp<a> Edit</a>
+    </div>
+  </div>
+</form>
+<div class="row">
+  <div class="col-7">
+    <div class="head-diagram text-center">
+      <img class="img-fluid mx-auto d-block" aria-describedby="headDiagramHelp" src="assets/images/img-suction-discharge-head.png">
+      <small id="headDiagramHelp" class="text-muted text-help">K<sub>s</sub> represents all suction losses from the tank to the pump</small><br>
+      <small id="headDiagramHelp" class="text-muted text-help">K<sub>d</sub> represents all discharge losses from the pump to the guage P<sub>d</sub></small>
+    </div>
+    <app-head-tool-form [(headToolForm)]="headToolForm"></app-head-tool-form>
+  </div>
+  <div class="col-5 dark-bg ">
+    <ul class="nav nav-tabs">
+      <li class="calc-tab nav-item" (click)="setTab('results')" [ngClass]="{'calc-tab-active': tabSelect == 'results'}">
+        Results
+      </li>
+      <li class="calc-tab nav-item" (click)="setTab('help')" [ngClass]="{'calc-tab-active': tabSelect == 'help'}">
+        Help
+      </li>
+    </ul>
+    <div class="row align-items-center justify-content-center">
+      <app-head-tool-results *ngIf="tabSelect == 'results'"></app-head-tool-results>
+      <app-head-tool-help *ngIf="tabSelect == 'help'"></app-head-tool-help>
+    </div>
+  </div>
+</div>
+<div class="row button-row">
+  <div class="col-12">
+    <button class="btn btn-secondary pull-left" (click)="closeTool()">Close</button>
+    <button class="btn btn-primary pull-right">Save to Assessment</button>
+    <button class="btn btn-secondary pull-right">Export to CSV...</button>
+  </div>
+</div>

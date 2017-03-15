@@ -4,32 +4,6 @@
     <div class="col-6">
       <input type="text" class="form-control" formControlName="operatingFraction" id="operatingFraction" (focus)="focusField('operatingFraction')">
       <app-control-messages [control]="psatForm.controls.operatingFraction"></app-control-messages>
-      <!--<popover-content #fractionPopover title="Operating Fraction" placement="auto right" [closeOnClickOutside]="true">
-        <div class="popover-lg">
-
-          <div class="popover-lg">
-            <div class="description">
-              <h4>Description:</h4>
-              <div class="description-box">
-                <p>
-                  Operating Fraction represents the fraction of the calender hours the equipment is running.
-                </p>
-              </div>
-            </div>
-            <div class = "input-info">
-              <h4>Input:</h4>
-              <div class="input-box">
-                <p>
-                  Units: <strong>Percent</strong><br>
-                  Minimum Value Allowed: <strong>0</strong><br>
-                  Maximum Value Allowed: <strong>100</strong><br>
-                </p>
-              </div>
-            </div>
-          </div>
-
-        </div>
-      </popover-content>-->
     </div>
   </div>
 
@@ -38,9 +12,6 @@
     <div class="col-6">
       <input type="text" class="form-control" formControlName="costKwHr" id="costKwHr" (focus)="focusField('costKwHr')">
       <app-control-messages [control]="psatForm.controls.costKwHr"></app-control-messages>
-     <popover-content #costPopover title="Cost" placement="auto right" [closeOnClickOutside]="true">
-        <div class="popover-lg"></div>
-      </popover-content>
     </div>
   </div>
 
@@ -49,20 +20,17 @@
     <div class="col-6">
       <input type="text" class="form-control" formControlName="flowRate" id="flowRate" (focus)="focusField('flowRate')">
       <app-control-messages [control]="psatForm.controls.flowRate"></app-control-messages>
-      <popover-content #flowRatePopover title="Flow Rate" placement="auto right" [closeOnClickOutside]="true">
-        <div class="popover-lg"></div>
-      </popover-content>
     </div>
   </div>
 
   <div class="row form-group">
     <label class="col-6 col-form-label" for="head">Head</label>
-    <div class="col-6">
+    <div class="col-6 input-group">
       <input type="text" class="form-control" formControlName="head" id="head" (focus)="focusField('head')">
+      <div class="incrementor input-group-addon">
+        <div class="btn" (click)="showHeadToolModal()"><i class="fa fa-calculator"></i></div>
+      </div>
       <app-control-messages [control]="psatForm.controls.head"></app-control-messages>
-      <popover-content #headPopover title="Head" placement="auto right" [closeOnClickOutside]="true">
-        <div class="popover-lg"></div>
-      </popover-content>
     </div>
   </div>
 
@@ -74,9 +42,6 @@
               <option>Method 2</option>
             </select>
       <app-control-messages [control]="psatForm.controls.loadEstimatedMethod"></app-control-messages>
-      <popover-content #loadPopover title="Load Estimated Method" placement="auto right" [closeOnClickOutside]="true">
-        <div class="popover-lg"></div>
-      </popover-content>
     </div>
   </div>
 
@@ -85,9 +50,6 @@
     <div class="col-6">
       <input type="text" class="form-control" formControlName="motorKW" id="motorKW" (focus)="focusField('motorKW')">
       <app-control-messages [control]="psatForm.controls.motorKW"></app-control-messages>
-      <popover-content #motorPowerPopover title="Motor" placement="auto right" [closeOnClickOutside]="true">
-        <div class="popover-lg"></div>
-      </popover-content>
     </div>
   </div>
 
@@ -96,9 +58,24 @@
     <div class="col-6">
       <input type="text" class="form-control" formControlName="voltage" id="voltage" (focus)="focusField('voltage')">
       <app-control-messages [control]="psatForm.controls.voltage"></app-control-messages>
-      <popover-content #voltagePopover title="Voltage" placement="auto right" [closeOnClickOutside]="true">
-        <div class="popover-lg"></div>
-      </popover-content>
     </div>
   </div>
 </form>
+
+<!-- HEAD TOOL MODAL -->
+<div bsModal #headToolModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="createHeadToolLabel"
+  aria-hidden="true" [config]="{backdrop: 'static'}">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="h3">Pump Head Calculator: {{assessment.name}}</div>
+        <button class="close" aria-label="Close" (click)="hideHeadToolModal()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <app-head-tool></app-head-tool>
+      </div>
+    </div>
+  </div>
+</div>

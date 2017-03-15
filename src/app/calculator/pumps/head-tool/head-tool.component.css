@@ -1,0 +1,35 @@
+.type-row{
+        border-bottom: groove;
+    padding-bottom: 10px;
+    border-width: 1px;
+}
+
+.button-row{
+        border-top: groove;
+    padding-top: 10px;
+    border-width: 1px;
+}
+
+.help-panel{
+    height: 100%;
+}
+
+.form-group{
+    margin-bottom: 0px;
+}
+
+.calc-tab{
+    border-bottom: solid;
+    width: 50%;
+    text-align: center;
+    cursor: pointer;
+        padding-top: 25px;
+}
+
+.calc-tab-active{
+    border-bottom-color: dodgerblue;
+}
+
+.head-diagram{
+    padding-top: 25px;
+}

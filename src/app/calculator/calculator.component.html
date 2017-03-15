@@ -1,11 +1,5 @@
-<div class="row calculator-banner">
-  <div class="col-md-1">
-    <a routerLink="/dashboard">
-    <span class="fa fa-home home-icon">
-    </span>
-    </a>
-  </div>
-  <div class="col-md-11">
-    <h4 class="pull-left">Calculator Screen</h4>
-  </div>
-</div>
+<app-pumps *ngIf="selectedCalculator == 'pumps'"></app-pumps>
+<app-furnaces *ngIf="selectedCalculator == 'furnaces'"></app-furnaces>
+<app-motors *ngIf="selectedCalculator == 'motors'"></app-motors>
+<app-fans *ngIf="selectedCalculator == 'fans'"></app-fans>
+<app-steam *ngIf="selectedCalculator == 'steam'"></app-steam>

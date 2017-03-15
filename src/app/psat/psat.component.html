@@ -9,7 +9,7 @@
           <app-system-basics *ngIf="currentTab == 1"></app-system-basics>
           <app-pump-fluid (changeField)="changeField($event)"  [(psatForm)]="psatForm" *ngIf="currentTab == 2"></app-pump-fluid>
           <app-motor (changeField)="changeField($event)"  [(psatForm)]="psatForm" *ngIf="currentTab == 3"></app-motor>
-          <app-field-data (changeField)="changeField($event)" [(psatForm)]="psatForm" *ngIf="currentTab == 4"></app-field-data>
+          <app-field-data (changeField)="changeField($event)" [assessment]="assessment" [(psatForm)]="psatForm" *ngIf="currentTab == 4"></app-field-data>
         </div>
         <div class="col-12" *ngIf="currentTab == 5">
           <app-modify-conditions [(saveClicked)]="saveClicked" (saveSuccess)="saveSuccess($event)" [(baseline)]="assessment.psat" (selectedAdjustment)="selectAdjustment($event)"></app-modify-conditions>
