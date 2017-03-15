@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-
+declare var converter: any;
 @Component({
   selector: 'app-head-tool-form',
   templateUrl: './head-tool-form.component.html',
@@ -11,6 +11,9 @@ export class HeadToolFormComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
+
+    let test = converter(1).from('l').to('ml');
+    console.log(test);
   }
 
 }

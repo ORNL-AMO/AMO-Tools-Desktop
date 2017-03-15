@@ -25,7 +25,7 @@
       ],
       "scripts": [
         "../node_modules/chart.js/dist/Chart.bundle.min.js",
-        "./addon.js"
+        "./jsRequireScript.js"
       ],
       "environmentSource": "environments/environment.ts",
       "environments": {

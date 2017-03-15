@@ -71,6 +71,7 @@
     "@types/node": "~6.0.60",
     "chart.js": "^2.5.0",
     "codelyzer": "~2.0.0",
+    "convert-units": "^2.0.1",
     "css-loader": "^0.26.2",
     "electron": "^1.4.15",
     "electron-builder": "^13.9.0",
