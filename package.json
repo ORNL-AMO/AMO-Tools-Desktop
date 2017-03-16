@@ -1,6 +1,7 @@
 {
   "name": "amo-tools-desktop",
-  "version": "0.1.5",
+  "productName": "AMO-Tools-Desktop",
+  "version": "0.1.0",
   "main": "main.js",
   "license": "MIT",
   "description": "AMO-Tools-Desktop",
@@ -18,7 +19,10 @@
     "e2e": "ng e2e",
     "pack": "build --dir",
     "dist": "build",
-    "postinstall": "./node_modules/.bin/electron-rebuild"
+    "postinstall": "./node_modules/.bin/electron-rebuild",
+    "windows": "./node_modules/.bin/build -w --x64 --ia32",
+    "linux": "./node_modules/.bin/build -l --x64 --ia32",
+    "mac": "./node_modules/.bin/build -m --x64 --ia32"
   },
   "private": true,
   "dependencies": {
@@ -64,14 +68,17 @@
     },
     "nsis": {
       "installerIcon": "../AMO-Tools-Desktop/src/favicon.ico",
-      "perMachine": false
+      "perMachine": false,
+      "installerHeaderIcon": "../AMO-Tools-Desktop/src/favicon.cio"
     },
     "linux": {
       "target": [
         "tar.gz",
         "deb",
         "rpm"
-      ]
+      ],
+    "executableName": "AMO-Tools-Desktop",
+    "maintainer": "Advanced Manufacturing Office"
     },
     "mac": {
       "target": [

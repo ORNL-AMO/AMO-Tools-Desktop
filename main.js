@@ -35,7 +35,7 @@ app.on('ready', function () {
   });
   
   
-    // Auto Updater events
+  // Auto Updater events
   autoUpdater.on('checking-for-update', () => {
   });
   autoUpdater.on('update-available', (ev, info) => {
