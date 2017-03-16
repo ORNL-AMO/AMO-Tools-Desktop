@@ -73,6 +73,7 @@
     },
     "linux": {
       "target": [
+        "tar.gz",
         "deb",
         "rpm"
       ],
