@@ -4,9 +4,14 @@
 const {app, BrowserWindow} = require('electron');
 const path = require('path');
 const url = require('url');
-const {autoUpdater} = require('electron');
 const feedURL = '~/updates-folder';
+const log = require('electron-log');
+const {autoUpdater} = require('electron-updater');
 
+// Logger for autoUpdater
+autoUpdater.logger = log;
+autoUpdater.logger.transports.file.level = 'info';
+log.info('App starting...');
 require('dotenv').config();
 let win = null;
 
@@ -22,15 +27,33 @@ app.on('ready', function () {
     protocol: 'file',
     slashes: true
   }));
-
   
-
   // Remove window once app is closed
   win.on('closed', function () {
     win = null;
   });
   
+  
+  // Auto Updater events
+  autoUpdater.on('checking-for-update', () => {
+  });
+  autoUpdater.on('update-available', (ev, info) => {
+  });
+  autoUpdater.on('update-not-available', (ev, info) => {
+  });
+  autoUpdater.on('error', (ev, error) => {
+    });
+  autoUpdater.on('download-progress', (ev, progressObj) => {
+  });
+  autoUpdater.on('update-downloaded', (ev, info) => {
+    autoUpdater.quitAndInstall();
+  });
+  
+  //Check for updates and install
+  autoUpdater.autoDownload = true;
+  autoUpdater.checkForUpdates();
 });
+
 
 app.on('activate', () => {
   if (win === null) {

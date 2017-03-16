@@ -109,6 +109,11 @@ export class PsatComponent implements OnInit {
 
   goBack() {
     this.currentTab--;
+    if (this.currentTab == 5) {
+      this.panelView = 'data-panel';
+    } else {
+      this.panelView = 'help-panel';
+    }
   }
 
   showReport() {

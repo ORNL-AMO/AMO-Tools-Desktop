@@ -35,6 +35,10 @@ import { FixtureLossesFormComponent } from './losses/fixture-losses/fixture-loss
 import { FixedOpeningFormComponent } from './losses/opening-losses/fixed-opening-form/fixed-opening-form.component';
 import { VariableOpeningFormComponent } from './losses/opening-losses/variable-opening-form/variable-opening-form.component';
 import { WaterCoolingLossesFormComponent } from './losses/water-cooling-losses/water-cooling-losses-form/water-cooling-losses-form.component';
+import { AtmosphereLossesFormComponent } from './losses/atmosphere-losses/atmosphere-losses-form/atmosphere-losses-form.component';
+import { HeatStorageFormComponent } from './losses/heat-storage/heat-storage-form/heat-storage-form.component';
+import { OtherLossesFormComponent } from './losses/other-losses/other-losses-form/other-losses-form.component';
+import { FlueGasLossesFormComponent } from './losses/flue-gas-losses/flue-gas-losses-form/flue-gas-losses-form.component';
 
 import { PhastService } from './phast.service';
 
@@ -69,7 +73,11 @@ import { PhastService } from './phast.service';
     FixtureLossesFormComponent,
     FixedOpeningFormComponent,
     VariableOpeningFormComponent,
-    WaterCoolingLossesFormComponent
+    WaterCoolingLossesFormComponent,
+    AtmosphereLossesFormComponent,
+    HeatStorageFormComponent,
+    OtherLossesFormComponent,
+    FlueGasLossesFormComponent
   ],
   exports: [
   ],

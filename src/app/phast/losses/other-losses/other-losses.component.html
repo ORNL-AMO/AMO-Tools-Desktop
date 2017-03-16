@@ -1,3 +1,27 @@
-<p>
-  other-losses works!
-</p>
+<div class="card losses-container">
+  <div class="card-header losses-header">
+    <div class="pull-left">
+      <b>Other Losses</b>
+    </div>
+    <button class="btn btn-secondary pull-right" (click)="addLoss()">+ Add</button>
+  </div>
+  <div class="card" *ngFor="let loss of otherLosses">
+    <div class="card-header">
+      <div class="pull-left">
+        <b>{{loss.name}}</b>
+      </div>
+      <button class="close pull-right" aria-label="Close" (click)="removeLoss(loss.name)">
+          <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="card-block">
+      <app-other-losses-form [(otherLossesForm)]="loss.form"></app-other-losses-form>
+    </div>
+  </div>
+  <div class="card losses-empty" *ngIf="otherLosses.length == 0">
+    <div class="card-block row align-items-center justify-content-center">
+      <div class="h4 text-muted">You haven't defined any other losses</div>
+    </div>
+  </div>
+
+</div>

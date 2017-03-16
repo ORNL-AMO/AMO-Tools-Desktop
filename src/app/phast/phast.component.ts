@@ -21,40 +21,54 @@ export class PhastComponent implements OnInit {
     this.phastService.test();
   }
 
-  changeTab($event){
+  changeTab($event) {
     this.currentTab = $event;
-    this.phastService.test();
+    if (this.currentTab > 2) {
+      this.panelView = 'data-panel';
+    }else {
+      this.panelView = 'help-panel';
+    }
   }
 
-  toggleOpenPanel($event){
-    if(!this.isPanelOpen) {
+  toggleOpenPanel($event) {
+    if (!this.isPanelOpen) {
       this.panelView = $event;
       this.isPanelOpen = true;
-    }else if(this.isPanelOpen && $event != this.panelView){
+    } else if (this.isPanelOpen && $event != this.panelView) {
       this.panelView = $event;
-    }else{
+    } else {
       this.isPanelOpen = false;
     }
   }
 
-  continue(){
+  continue() {
     this.save();
     this.currentTab++;
+    if (this.currentTab > 2) {
+      this.panelView = 'data-panel';
+    }else{
+      this.panelView = 'help-panel';
+    }
   }
 
-  close(){
+  close() {
     this.location.back();
   }
 
-  goBack(){
+  goBack() {
     this.currentTab--;
+    if(this.currentTab > 2){
+      this.panelView = 'data-panel';
+    }else{
+      this.panelView = 'help-panel';
+    }
   }
 
-  save(){
+  save() {
     //TODO: Logic for saving assessment
   }
 
-  exportData(){
+  exportData() {
     //TODO: Logic for exporting data
   }
 }
