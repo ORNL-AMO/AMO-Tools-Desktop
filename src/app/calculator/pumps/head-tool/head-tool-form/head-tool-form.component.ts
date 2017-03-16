@@ -1,5 +1,5 @@
-import { Component, OnInit, Input } from '@angular/core';
-declare var converter: any;
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+
 @Component({
   selector: 'app-head-tool-form',
   templateUrl: './head-tool-form.component.html',
@@ -8,12 +8,18 @@ declare var converter: any;
 export class HeadToolFormComponent implements OnInit {
   @Input()
   headToolForm: any;
+  @Output('calculate')
+  calculate = new EventEmitter<boolean>();
+
   constructor() { }
 
   ngOnInit() {
+  }
 
-    let test = converter(1).from('l').to('ml');
-    console.log(test);
+  calc() {
+    if (this.headToolForm.valid) {
+      this.calculate.emit(true);
+    }
   }
 
 }

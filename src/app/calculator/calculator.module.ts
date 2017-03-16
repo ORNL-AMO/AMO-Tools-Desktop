@@ -14,6 +14,7 @@ import { FansComponent } from './fans/fans.component';
 import { FurnacesComponent } from './furnaces/furnaces.component';
 import { SteamComponent } from './steam/steam.component';
 import { MotorsComponent } from './motors/motors.component';
+import { HeadToolSuctionFormComponent } from './pumps/head-tool/head-tool-suction-form/head-tool-suction-form.component';
 
 @NgModule({
   declarations: [
@@ -26,7 +27,8 @@ import { MotorsComponent } from './motors/motors.component';
     FansComponent,
     FurnacesComponent,
     SteamComponent,
-    MotorsComponent
+    MotorsComponent,
+    HeadToolSuctionFormComponent
   ],
   exports: [
     CalculatorComponent,

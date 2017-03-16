@@ -1,25 +1,30 @@
-<form [formGroup]="headToolForm">
-  <div class="row justify-content-between form-group type-row">
-    <div class="col-8 input-group input-group-sm">
-      <select class="form-control" formControlName="type" id="type">
+<div class="row justify-content-between form-group type-row">
+  <div class="col-8 input-group input-group-sm">
+    <select class="form-control" id="type" [(ngModel)]="headToolType">
           <option>Suction tank elevation, gas space pressure, and discharged line pressure</option>
-          <option>Type 2</option>
+          <option>Suction guage elevation, gas space pressure, and discharged line pressure</option>
         </select>
-      <app-control-messages [control]="headToolForm.controls.type"></app-control-messages>
-    </div>
-    <div class="col-3">
-      <b>Units of Measure:</b>gpm, ft, hp<a> Edit</a>
-    </div>
   </div>
-</form>
+  <div class="col-3">
+    <b>Units of Measure:</b>gpm, ft, hp<a> Edit</a>
+  </div>
+</div>
 <div class="row">
-  <div class="col-7">
+  <div class="col-7" *ngIf="headToolType == 'Suction tank elevation, gas space pressure, and discharged line pressure'">
+    <div class="head-diagram text-center">
+      <img class="img-fluid mx-auto d-block" aria-describedby="headDiagramHelp" src="assets/images/img-tank-elevation-head.png">
+      <small id="headDiagramHelp" class="text-muted text-help">K<sub>s</sub> represents all suction losses from the tank to the pump</small><br>
+      <small id="headDiagramHelp" class="text-muted text-help">K<sub>d</sub> represents all discharge losses from the pump to the guage P<sub>d</sub></small>
+    </div>
+    <app-head-tool-suction-form [(headToolSuctionForm)]="headToolSuctionForm" (calculate)="calculateHeadToolSuctionTank()"></app-head-tool-suction-form>
+  </div>
+  <div class="col-7" *ngIf="headToolType == 'Suction guage elevation, gas space pressure, and discharged line pressure'">
     <div class="head-diagram text-center">
       <img class="img-fluid mx-auto d-block" aria-describedby="headDiagramHelp" src="assets/images/img-suction-discharge-head.png">
       <small id="headDiagramHelp" class="text-muted text-help">K<sub>s</sub> represents all suction losses from the tank to the pump</small><br>
       <small id="headDiagramHelp" class="text-muted text-help">K<sub>d</sub> represents all discharge losses from the pump to the guage P<sub>d</sub></small>
     </div>
-    <app-head-tool-form [(headToolForm)]="headToolForm"></app-head-tool-form>
+    <app-head-tool-form [(headToolForm)]="headToolForm" (calculate)="calculateHeadTool()"></app-head-tool-form>
   </div>
   <div class="col-5 dark-bg ">
     <ul class="nav nav-tabs">
@@ -31,7 +36,7 @@
       </li>
     </ul>
     <div class="row align-items-center justify-content-center">
-      <app-head-tool-results *ngIf="tabSelect == 'results'"></app-head-tool-results>
+      <app-head-tool-results *ngIf="tabSelect == 'results'" [results]="results"></app-head-tool-results>
       <app-head-tool-help *ngIf="tabSelect == 'help'"></app-head-tool-help>
     </div>
   </div>

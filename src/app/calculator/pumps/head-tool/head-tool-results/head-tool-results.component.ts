@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 
 @Component({
   selector: 'app-head-tool-results',
@@ -6,7 +6,8 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./head-tool-results.component.css']
 })
 export class HeadToolResultsComponent implements OnInit {
-
+  @Input()
+  results: any;
   constructor() { }
 
   ngOnInit() {
