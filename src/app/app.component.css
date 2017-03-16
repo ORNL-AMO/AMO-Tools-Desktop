@@ -1,21 +1,4 @@
 /*
-Table of Contents
-========================================================= 
-1.  HTML Elements (Global styles of structural HTML elements)
-2.  Typography
-3.  Buttons
-4.  Forms
-5.  Popovers
-6.  Modals
-7.  Sidebar
-8.  Footer
-9.  Banner
-10. Wizard Steps
-11. Tabs
-*/
-
-
-/*
 HTML Elements
 ========================================================= */
 html {
@@ -201,6 +184,30 @@ Modals
 
 
 /*
+Section Headers
+=========================================== */
+.section-header {
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: #bbb solid 1px;
+}
+.section-header:after {
+  display: table;
+  content: "";
+  clear: both;
+}
+.section-header h3 {
+  font-size: 18px;
+  margin: 0;
+  padding: 0;
+  line-height: 1.5;
+}
+.section-header .btn {
+  padding: 8px 10px 6px;
+}
+
+
+/*
 Sidebar
 =========================================== */
 .sidebar {
@@ -217,7 +224,7 @@ Footer
   width: 100%;
   padding: 20px;
   background: #fff;
-  border-top: #DBDBDB solid 1px;
+  border-top: #8b8b8b solid 1px;
   z-index: 5;
 }
 .footer:after {
@@ -398,7 +405,27 @@ Tabs
 
 
 
-
+/*
+No Data Messaging
+========================================== */
+.no-data {
+  padding-top: 200px;
+  text-align: center;
+}
+.no-data:hover {
+  cursor: pointer;
+}
+.no-data h3 {
+  color: #787878;
+  font-size: 20px;
+}
+.no-data h4 {
+  color: #0076FF;
+  font-size: 16px;
+}
+.no-data:hover h4 {
+  text-decoration: underline;
+}
 
 
 
