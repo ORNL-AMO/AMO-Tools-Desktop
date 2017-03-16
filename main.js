@@ -28,18 +28,12 @@ app.on('ready', function () {
     protocol: 'file',
     slashes: true
   }));
-  win.webContents.openDevTools();
   
   // Remove window once app is closed
   win.on('closed', function () {
     win = null;
   });
   
-function sendStatusToWindow(text) {
-  log.info(text);
-  win.webContents.send('message', text);
-};
-
   
     // Auto Updater events
   autoUpdater.on('checking-for-update', () => {
