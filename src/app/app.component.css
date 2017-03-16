@@ -1,13 +1,19 @@
 /*
 Table of Contents
 ========================================================= 
-
-1. HTML Elements (Global styles of structural HTML elements)
-2. Typography
-3. Buttons
-4. Forms
-
+1.  HTML Elements (Global styles of structural HTML elements)
+2.  Typography
+3.  Buttons
+4.  Forms
+5.  Popovers
+6.  Modals
+7.  Sidebar
+8.  Footer
+9.  Banner
+10. Wizard Steps
+11. Tabs
 */
+
 
 /*
 HTML Elements
@@ -195,6 +201,14 @@ Modals
 
 
 /*
+Sidebar
+=========================================== */
+.sidebar {
+  border-right: #ddd solid 1px;
+}
+
+
+/*
 Footer
 =============================================== */
 .footer {
@@ -211,8 +225,6 @@ Footer
   clear: both;
   content: "";
 }
-
-
 
 /*
 Banner
@@ -259,8 +271,6 @@ Banner
   border-color: slategray;
 }
 
-
-
 /*
 Wizard Steps
 ============================================== */
@@ -279,7 +289,7 @@ Wizard Steps
 }
 .wizard-steps h2 {
   font-weight: 300;
-  font-size: 16px;
+  font-size: 15px;
   margin: 10px 0 5px 0;
   color: #a2a2a2;
   position: relative;
@@ -321,7 +331,8 @@ Wizard Steps
 }
 .wizard-steps a, .wizard-steps a:not([href]):not([tabindex]) {
   display: block;
-  padding: 8px 16px 10px;
+  padding: 8px 8px 10px;
+  font-size: 14px;
   color: #0076FF;
 }
 .wizard-steps a:hover {
@@ -330,8 +341,8 @@ Wizard Steps
 .wizard-steps li.psat-tab-active a, .wizard-steps li.psat-tab-active a:not([href]):not([tabindex]) {
   color: #333;
   font-weight: bold;
-  background: linear-gradient(to bottom,  rgba(255,255,255,0) 0%,rgba(255,255,255,0.4) 100%);
-  border-width: 0 1px 0 1px;
+  /*background: linear-gradient(to bottom,  rgba(255,255,255,0) 0%,rgba(255,255,255,0.4) 100%);*/
+  /*border-width: 0 1px 0 1px;
   border-style: solid;
   -webkit-border-image: 
     -webkit-gradient(linear, 0 100%, 0 0, from(rgba(0,0,0,0.3)), to(rgba(0, 0, 0, 0))) 1 100%;
@@ -342,12 +353,55 @@ Wizard Steps
   -o-border-image:
     -o-linear-gradient(bottom, rgba(0,0,0,0.3), rgba(0, 0, 0, 0)) 1 100%;
   border-image:
-    linear-gradient(to top, rgba(0,0,0,0.3), rgba(0, 0, 0, 0)) 1 100%;
+    linear-gradient(to top, rgba(0,0,0,0.3), rgba(0, 0, 0, 0)) 1 100%;*/
 }
 .wizard-steps li.psat-tab-active a:hover {
   cursor: default;
   text-decoration: none;
 }
+
+
+/*
+Tabs
+========================================== */
+.tabs {
+  margin: 0;
+  padding: 0;
+}
+.tabs li {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.tabs.vertical {
+  margin-right: -1px;
+}
+.tabs.vertical a {
+  display: block;
+  padding: 10px;
+  border-bottom: #ccc solid 1px;
+  border-top: #fff solid 1px;
+  border-right: #ccc solid 1px;
+}
+.tabs.vertical a:hover {
+  text-decoration: none;
+}
+.tabs.vertical .active a {
+  color: #333;
+  font-weight: bold;
+  background: #fff;
+  border-color: #bbb;
+  border-style: solid;
+  border-width: 1px 0;
+}
+
+
+
+
+
+
+
+
 
 
 /*tmp color variables*/

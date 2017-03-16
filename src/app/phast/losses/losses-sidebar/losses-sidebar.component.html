@@ -1,45 +1,45 @@
-<ul class="nav nav-pills flex-column">
-  <li class="nav-item" [ngClass]="{'nav-item-active': lossesTab == 'charge-material'}" (click)="tabChange('charge-material')">
+<ul class="tabs vertical flex-column">
+  <li [ngClass]="{'active': lossesTab == 'charge-material'}" (click)="tabChange('charge-material')">
     <a class="nav-link small">
     Charge Material
     </a>
   </li>
-  <li class="nav-item" [ngClass]="{'nav-item-active': lossesTab == 'wall-losses'}" (click)="tabChange('wall-losses')">
+  <li [ngClass]="{'active': lossesTab == 'wall-losses'}" (click)="tabChange('wall-losses')">
     <a class="nav-link small">
     Wall Losses
     </a>
   </li>
-  <li class="nav-item" [ngClass]="{'nav-item-active': lossesTab == 'atmosphere-losses'}" (click)="tabChange('atmosphere-losses')">
+  <li [ngClass]="{'active': lossesTab == 'atmosphere-losses'}" (click)="tabChange('atmosphere-losses')">
     <a class="nav-link small">
     Atmosphere Losses
     </a>
   </li>
-  <li class="nav-item" [ngClass]="{'nav-item-active': lossesTab == 'fixture-losses'}" (click)="tabChange('fixture-losses')">
+  <li [ngClass]="{'active': lossesTab == 'fixture-losses'}" (click)="tabChange('fixture-losses')">
     <a class="nav-link small">
     Fixtures, Trays, Baskets, etc. Losses
     </a>
   </li>
-  <li class="nav-item" [ngClass]="{'nav-item-active': lossesTab == 'opening-losses'}" (click)="tabChange('opening-losses')">
+  <li [ngClass]="{'active': lossesTab == 'opening-losses'}" (click)="tabChange('opening-losses')">
     <a class="nav-link small">
     Opening Losses
     </a>
   </li>
-  <li class="nav-item" [ngClass]="{'nav-item-active': lossesTab == 'water-cooling-losses'}" (click)="tabChange('water-cooling-losses')">
+  <li [ngClass]="{'active': lossesTab == 'water-cooling-losses'}" (click)="tabChange('water-cooling-losses')">
     <a class="nav-link small">
     Water Cooling Losses
     </a>
   </li>
-  <li class="nav-item" [ngClass]="{'nav-item-active': lossesTab == 'heat-storage'}" (click)="tabChange('heat-storage')">
+  <li [ngClass]="{'active': lossesTab == 'heat-storage'}" (click)="tabChange('heat-storage')">
     <a class="nav-link small">
     Heat Storage
     </a>
   </li>
-  <li class="nav-item" [ngClass]="{'nav-item-active': lossesTab == 'flue-gas-losses'}" (click)="tabChange('flue-gas-losses')">
+  <li [ngClass]="{'active': lossesTab == 'flue-gas-losses'}" (click)="tabChange('flue-gas-losses')">
     <a class="nav-link small">
     Flue Gas Losses
     </a>
   </li>
-  <li class="nav-item" [ngClass]="{'nav-item-active': lossesTab == 'other-losses'}" (click)="tabChange('other-losses')">
+  <li [ngClass]="{'active': lossesTab == 'other-losses'}" (click)="tabChange('other-losses')">
     <a class="nav-link small">
     Other Losses
     </a>
