@@ -29,38 +29,38 @@ export class PsatComponent implements OnInit {
   ngOnInit() {
     this.assessment = this.assessmentService.getWorkingAssessment();
     this.psatForm = this.initForm();
-    let flowRate = 454.24941359535023;
-    console.log('headToolSuctionTank()');
-    let t1 = this.psatService.headToolSuctionTank(1, flowRate, 455.6, 792.9, 0, 1, 254, 854.9, 0, 1);
-    console.log('t1: 6.9867498670003165 = ' + t1);
+    // let flowRate = 454.24941359535023;
+    // console.log('headToolSuctionTank()');
+    // let t1 = this.psatService.headToolSuctionTank(1, flowRate, 455.6, 792.9, 0, 1, 254, 854.9, 0, 1);
+    // console.log('t1: 6.9867498670003165 = ' + t1);
 
-    let t2 = this.psatService.headToolSuctionTank(1, flowRate, 255.6, 792.9, 0, 1, 254, 854.9, 0, 1);
-    console.log('t2: 7.264536476019559 = ' + t2);
+    // let t2 = this.psatService.headToolSuctionTank(1, flowRate, 255.6, 792.9, 0, 1, 254, 854.9, 0, 1);
+    // console.log('t2: 7.264536476019559 = ' + t2);
 
-    let t3 = this.psatService.headToolSuctionTank(1, flowRate, 255.6, 692.9, 0, 1, 254, 854.9, 0, 1);
-    console.log('t3: 17.464309816021647 = ' + t3);
+    // let t3 = this.psatService.headToolSuctionTank(1, flowRate, 255.6, 692.9, 0, 1, 254, 854.9, 0, 1);
+    // console.log('t3: 17.464309816021647 = ' + t3);
 
-    let t4 = this.psatService.headToolSuctionTank(1, flowRate, 255.6, 692.9, 2, 1, 254, 854.9, 0, 1);
-    console.log('t4: 15.464309816021645 = ' + t4);
+    // let t4 = this.psatService.headToolSuctionTank(1, flowRate, 255.6, 692.9, 2, 1, 254, 854.9, 0, 1);
+    // console.log('t4: 15.464309816021645 = ' + t4);
 
-    let t5 = this.psatService.headToolSuctionTank(1, flowRate, 255.6, 692.9, 2, 1, 254, 854.9, 3, 1);
-    console.log('t5: 18.464309816021647 = ' + t5);
+    // let t5 = this.psatService.headToolSuctionTank(1, flowRate, 255.6, 692.9, 2, 1, 254, 854.9, 3, 1);
+    // console.log('t5: 18.464309816021647 = ' + t5);
 
-    let t6 = this.psatService.headToolSuctionTank(1, flowRate, 255.6, 692.9, 2, 1, 254, 954.9, 3, 1);
-    console.log('t6: 28.664083156023732 = ' + t6);
+    // let t6 = this.psatService.headToolSuctionTank(1, flowRate, 255.6, 692.9, 2, 1, 254, 954.9, 3, 1);
+    // console.log('t6: 28.664083156023732 = ' + t6);
 
-    console.log('headTool()');
-    let t7 = this.psatService.headTool(1, flowRate, 355.6, 34.5, 0, 1, 254, 854.9, 0, 1);
-    console.log('t7: 84.3112869348736 = ' + t7);
+    // console.log('headTool()');
+    // let t7 = this.psatService.headTool(1, flowRate, 355.6, 34.5, 0, 1, 254, 854.9, 0, 1);
+    // console.log('t7: 84.3112869348736 = ' + t7);
 
-    let t8 = this.psatService.headTool(1, flowRate, 355.6, 34.5, 5, 1, 254, 854.9, 0, 1);
-    console.log('t8: 79.3112869348736 = ' + t8);
+    // let t8 = this.psatService.headTool(1, flowRate, 355.6, 34.5, 5, 1, 254, 854.9, 0, 1);
+    // console.log('t8: 79.3112869348736 = ' + t8);
 
-    let t9 = this.psatService.headTool(1, flowRate, 355.6, 34.5, 5, 1, 254, 554.9, 0, 1 );
-    console.log('t9: 48.711966914867354 = ' + t9);
+    // let t9 = this.psatService.headTool(1, flowRate, 355.6, 34.5, 5, 1, 254, 554.9, 0, 1 );
+    // console.log('t9: 48.711966914867354 = ' + t9);
 
-    let t10 = this.psatService.headTool(1, flowRate, 355.6, 34.5, 5, 1, 254, 554.9, 3, 1);
-    console.log('t10: 51.711966914867354 = ' + t10);
+    // let t10 = this.psatService.headTool(1, flowRate, 355.6, 34.5, 5, 1, 254, 554.9, 3, 1);
+    // console.log('t10: 51.711966914867354 = ' + t10);
 
 
   }
