@@ -8,9 +8,6 @@ const feedURL = '~/updates-folder';
 const log = require('electron-log');
 const {autoUpdater} = require('electron-updater');
 
-// Set the Application User Model ID to the appId of the application. For notifications on Windows 8+ to work properly
-app.setAppUserModelId('com.electron.amo-tools-desktop');
-
 // Logger for autoUpdater
 autoUpdater.logger = log;
 autoUpdater.logger.transports.file.level = 'info';

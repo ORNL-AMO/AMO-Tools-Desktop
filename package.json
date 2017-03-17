@@ -62,6 +62,7 @@
     "nsis": {
       "oneClick": true,
       "perMachine": false,
+      "installerIcon": "../AMO-Tools-Desktop/src/favicon.ico",
       "installerHeaderIcon": "../AMO-Tools-Desktop/src/favicon.ico",
       "artifactName": "${productName}-Setup-${version}.${ext}"
     },
