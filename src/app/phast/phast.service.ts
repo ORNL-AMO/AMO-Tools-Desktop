@@ -20,7 +20,18 @@ export class PhastService {
     return phastAddon.gasCoolingLosses(flowRate, initialTemperature, finalTemperature, specificHeat, correctionFactor);
   }
 
-  gasLoadChargeMaterial(thermicReactionType: number, specificHeatGas: number, feedRate: number, percentVapor: number, initialTemperature: number, dischargeTemperature: number, specificHeatVapor: number, percentReacted: number, reactionHeat: number, additionalHeat: number): number {
+  gasLoadChargeMaterial(
+    thermicReactionType: number, 
+    specificHeatGas: number, 
+    feedRate: number, 
+    percentVapor: number, 
+    initialTemperature: number, 
+    dischargeTemperature: number, 
+    specificHeatVapor: number, 
+    percentReacted: number, 
+    reactionHeat: number, 
+    additionalHeat: number
+    ): number {
     //returns heatLoss
     return phastAddon.gasLoadChargeMaterial(thermicReactionType, specificHeatGas, feedRate, percentVapor, initialTemperature, dischargeTemperature, specificHeatVapor, percentReacted, reactionHeat, additionalHeat);
   }
@@ -30,7 +41,20 @@ export class PhastService {
     return phastAddon.liquidCoolingLosses(flowRate, density, initialTemperature, outletTemperature, specificHeat, correctionFactor);
   }
 
-  liquidLoadChargeMaterial(thermicReactionType: number, specificHeatLiquid: number, vaporizingTemperature: number, latentHeat: number, specificHeatVapor: number, chargeFeedRate: number, initialTemperature: number, dischargeTemperature: number, percentVaporized: number, percentReacted: number, reactionHeat: number, additionalHeat: number): number {
+  liquidLoadChargeMaterial(
+    thermicReactionType: number, 
+    specificHeatLiquid: number, 
+    vaporizingTemperature: number, 
+    latentHeat: number, 
+    specificHeatVapor: number, 
+    chargeFeedRate: number, 
+    initialTemperature: number, 
+    dischargeTemperature: number, 
+    percentVaporized: number, 
+    percentReacted: number, 
+    reactionHeat: number, 
+    additionalHeat: number
+    ): number {
     //returns heatLoss
     return phastAddon.liquidLoadChargeMaterial(thermicReactionType, specificHeatLiquid, vaporizingTemperature, latentHeat, specificHeatVapor, chargeFeedRate, initialTemperature, dischargeTemperature, percentVaporized, percentReacted, reactionHeat, additionalHeat);
   }

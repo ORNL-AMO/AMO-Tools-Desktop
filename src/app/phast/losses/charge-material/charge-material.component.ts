@@ -76,6 +76,27 @@ export class ChargeMaterialComponent implements OnInit {
         loss.solidForm.value.baselineAdditionalHeatRequired,
 
       );
+    } else if (this.chargeMaterialType == 'Liquid') {
+      let reactionType = 0;
+      debugger
+      if (loss.liquidForm.value.baselineEndothermicOrExothermic == 'Exothermic') {
+        reactionType = 1;
+      }
+      loss.baselineHeatRequired = this.phastService.liquidLoadChargeMaterial(
+        reactionType,
+        loss.liquidForm.value.baselineMaterialSpecificHeatLiquid,
+        loss.liquidForm.value.baselineMaterialVaporizingTemperature,
+        loss.liquidForm.value.baselineMaterialLatentHeat,
+        loss.liquidForm.value.baselineMaterialSpecificHeatVapor,
+        loss.liquidForm.value.baselineFeedRate,
+        loss.liquidForm.value.baselineInitialTemperature,
+        loss.liquidForm.value.baselineDischargeTemperature,
+        loss.liquidForm.value.baselineLiquidVaporized,
+        loss.liquidForm.value.baselineLiquidReacted,
+        loss.liquidForm.value.baselineHeatOfReaction,
+        loss.liquidForm.value.baselineAdditionalHeatRequired
+      )
+
     }
   }
 
@@ -103,12 +124,57 @@ export class ChargeMaterialComponent implements OnInit {
         loss.solidForm.value.modifiedAdditionalHeatRequired,
 
       );
+    } else if (this.chargeMaterialType == 'Liquid') {
+      let reactionType = 0;
+      if (loss.liquidForm.value.modifiedEndothermicOrExothermic == 'Exothermic') {
+        reactionType = 1;
+      }
+      loss.modifiedHeatRequired = this.phastService.liquidLoadChargeMaterial(
+        reactionType,
+        loss.liquidForm.value.modifiedMaterialSpecificHeatLiquid,
+        loss.liquidForm.value.modifiedMaterialVaporizingTemperature,
+        loss.liquidForm.value.modifiedMaterialLatentHeat,
+        loss.liquidForm.value.modifiedMaterialSpecificHeatVapor,
+        loss.liquidForm.value.modifiedFeedRate,
+        loss.liquidForm.value.modifiedInitialTemperature,
+        loss.liquidForm.value.modifiedDischargeTemperature,
+        loss.liquidForm.value.modifiedLiquidVaporized,
+        loss.liquidForm.value.modifiedLiquidReacted,
+        loss.liquidForm.value.modifiedHeatOfReaction,
+        loss.liquidForm.value.modifiedAdditionalHeatRequired
+      )
     }
   }
 
   initLiquidForm() {
     return this.formBuilder.group({
+      'baselineMaterialName': ['', Validators.required],
+      'baselineMaterialSpecificHeatLiquid': ['', Validators.required],
+      'baselineMaterialVaporizingTemperature': ['', Validators.required],
+      'baselineMaterialLatentHeat': ['', Validators.required],
+      'baselineMaterialSpecificHeatVapor': ['', Validators.required],
+      'baselineFeedRate': ['', Validators.required],
+      'baselineInitialTemperature': ['', Validators.required],
+      'baselineDischargeTemperature': ['', Validators.required],
+      'baselineLiquidVaporized': ['', Validators.required],
+      'baselineLiquidReacted': ['', Validators.required],
+      'baselineHeatOfReaction': ['', Validators.required],
+      'baselineEndothermicOrExothermic': ['', Validators.required],
+      'baselineAdditionalHeatRequired': ['', Validators.required],
 
+      'modifiedMaterialName': ['', Validators.required],
+      'modifiedMaterialSpecificHeatLiquid': ['', Validators.required],
+      'modifiedMaterialVaporizingTemperature': ['', Validators.required],
+      'modifiedMaterialLatentHeat': ['', Validators.required],
+      'modifiedMaterialSpecificHeatVapor': ['', Validators.required],
+      'modifiedFeedRate': ['', Validators.required],
+      'modifiedInitialTemperature': ['', Validators.required],
+      'modifiedDischargeTemperature': ['', Validators.required],
+      'modifiedLiquidVaporized': ['', Validators.required],
+      'modifiedLiquidReacted': ['', Validators.required],
+      'modifiedHeatOfReaction': ['', Validators.required],
+      'modifiedEndothermicOrExothermic': ['', Validators.required],
+      'modifiedAdditionalHeatRequired': ['', Validators.required]
     })
   }
 
