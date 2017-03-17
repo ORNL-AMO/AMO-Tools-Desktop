@@ -37,7 +37,12 @@ export class WallLossesComponent implements OnInit {
   addLoss() {
     let tmpForm = this.initForm();
     let tmpName = 'Loss #' + (this.wallLosses.length + 1);
-    this.wallLosses.push({ form: tmpForm, name: tmpName });
+    this.wallLosses.push({ 
+      form: tmpForm, 
+      name: tmpName ,
+      modifiedHeatRequired: 0.0,
+      baselineHeatRequired: 0.0
+  });
   }
 
   removeLoss(str: string) {
@@ -56,7 +61,7 @@ export class WallLossesComponent implements OnInit {
   }
 
   calculateModified(loss: any){
-    loss.form.value.modifiedHeatRequired = this.phastService.wallLosses(
+    loss.modifiedHeatRequired = this.phastService.wallLosses(
       loss.form.value.modifiedSurfaceArea,
       loss.form.value.modifiedAmbientTemp,
       loss.form.value.modifiedAvgSurfaceTemp,
@@ -66,7 +71,7 @@ export class WallLossesComponent implements OnInit {
   }
 
   calculateBaseline(loss:any){
-      loss.form.value.baselineHeatRequired = this.phastService.wallLosses(
+      loss.baselineHeatRequired = this.phastService.wallLosses(
       loss.form.value.baselineSurfaceArea,
       loss.form.value.baselineAmbientTemp,
       loss.form.value.baselineAvgSurfaceTemp,

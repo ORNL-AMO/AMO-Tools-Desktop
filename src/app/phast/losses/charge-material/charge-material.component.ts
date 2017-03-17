@@ -14,15 +14,24 @@ export class ChargeMaterialComponent implements OnInit {
   constructor(private formBuilder: FormBuilder) { }
 
   ngOnInit() {
-    if(!this.chargeMaterial){
+    if (!this.chargeMaterial) {
       this.chargeMaterial = new Array();
     }
   }
 
   addMaterial() {
-    let tmpForm = this.initForm();
+    let tmpSolidForm = this.initSolidForm();
+    let tmpGasForm = this.initGasForm();
+    let tmpLiquidForm = this.initLiquidForm();
     let tmpName = 'Material #' + (this.chargeMaterial.length + 1);
-    this.chargeMaterial.push({ form: tmpForm, name: tmpName });
+    this.chargeMaterial.push({
+      solidForm: tmpSolidForm,
+      liquidForm: tmpLiquidForm,
+      gasForm: tmpGasForm,
+      name: tmpName,
+      baselineHeatRequired: 0.0,
+      modifiedHeatRequired: 0.0
+    });
   }
 
   removeMaterial(str: string) {
@@ -40,7 +49,24 @@ export class ChargeMaterialComponent implements OnInit {
     })
   }
 
-  initForm(){
+  calculateBaseline() {
+
+  }
+
+  calculateModified() {
+
+  }
+
+  initLiquidForm() {
+
+  }
+
+  initGasForm() {
+
+  }
+
+
+  initSolidForm() {
     //FUEL FIRED SOLID
     return this.formBuilder.group({
       'type': [''],
@@ -55,7 +81,7 @@ export class ChargeMaterialComponent implements OnInit {
       'baselineChargeReacted': [''],
       'baselineHeatOfReaction': [''],
       'baselineAdditionalHeatRequired': [''],
-      'baselineHeatRequired': [{value:'', disabled: true}],
+      'baselineHeatRequired': [{ value: '', disabled: true }],
       'modifiedMaterial': [''],
       'modifiedChargeFeedRate': [''],
       'modifiedWaterContentCharged': [''],
@@ -67,8 +93,9 @@ export class ChargeMaterialComponent implements OnInit {
       'modifiedChargeReacted': [''],
       'modifiedHeatOfReaction': [''],
       'modifiedAdditionalHeatRequired': [''],
-      'modifiedHeatRequired': [{value:'', disabled: true}]
+      'modifiedHeatRequired': [{ value: '', disabled: true }]
     })
   }
+
 
 }
