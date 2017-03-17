@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { PsatService } from '../../../psat/psat.service';
 @Component({
@@ -9,11 +9,15 @@ import { PsatService } from '../../../psat/psat.service';
 export class HeadToolComponent implements OnInit {
   @Output('close')
   close = new EventEmitter<boolean>();
-
-  headToolForm: any;
-  headToolSuctionForm: any;
-  headToolType: string = "Suction tank elevation, gas space pressure, and discharged line pressure";
-  tabSelect: string = 'results';
+  @Input()
+  headToolResults: any = {
+    differentialElevationHead: 0.0,
+    differentialIPressureHead: 0.0,
+    differentialVelocityHead: 0.0,
+    estimatedSuctionFrictionHead: 0.0,
+    estimatedDischargeFrictionHead: 0.0,
+    pumpHead: 0.0
+  }
   results: any = {
     differentialElevationHead: 0.0,
     differentialPressureHead: 0.0,
@@ -22,6 +26,10 @@ export class HeadToolComponent implements OnInit {
     estimatedDischargeFrictionHead: 0.0,
     pumpHead: 0.0
   }
+  headToolForm: any;
+  headToolSuctionForm: any;
+  headToolType: string = "Suction tank elevation, gas space pressure, and discharged line pressure";
+  tabSelect: string = 'results';
 
   constructor(private formBuilder: FormBuilder, private psatService: PsatService) { }
 
@@ -38,6 +46,16 @@ export class HeadToolComponent implements OnInit {
 
   closeTool() {
     this.close.emit(true);
+  }
+
+  save() {
+    this.headToolResults.differentialElevationHead = this.results.differentialElevationHead;
+    this.headToolResults.differentialPressureHead = this.results.differentialPressureHead;
+    this.headToolResults.differentialVelocityHead = this.results.differentialVelocityHead;
+    this.headToolResults.estimatedSuctionFrictionHead = this.results.estimatedSuctionFrictionHead;
+    this.headToolResults.estimatedDischargeFrictionHead = this.results.estimatedDischargeFrictionHead;
+    this.headToolResults.pumpHead = this.results.pumpHead;
+    this.closeTool();
   }
 
   calculateHeadTool() {
@@ -75,7 +93,7 @@ export class HeadToolComponent implements OnInit {
       this.headToolSuctionForm.value.dischargeGaugeElevation,
       this.headToolSuctionForm.value.dischargeLineLossCoefficients
     );
-    
+
     this.results.differentialElevationHead = result.differentialElevationHead;
     this.results.differentialPressureHead = result.differentialPressureHead;
     this.results.differentialVelocityHead = result.differentialVelocityHead;

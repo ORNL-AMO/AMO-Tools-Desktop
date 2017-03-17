@@ -26,7 +26,7 @@
   <div class="row form-group">
     <label class="col-6 col-form-label" for="head">Head</label>
     <div class="col-6 input-group">
-      <input type="text" class="form-control" formControlName="head" id="head" (focus)="focusField('head')">
+      <input type="text" class="form-control" formControlName="head" id="head" (focus)="focusField('head')" ngModel="{{headToolResults.pumpHead}}">
       <div class="incrementor input-group-addon">
         <div class="btn" (click)="showHeadToolModal()"><i class="fa fa-calculator"></i></div>
       </div>
@@ -74,7 +74,7 @@
         </button>
       </div>
       <div class="modal-body">
-        <app-head-tool></app-head-tool>
+        <app-head-tool [(headToolResults)]="headToolResults" (close)="hideHeadToolModal()"></app-head-tool>
       </div>
     </div>
   </div>
