@@ -15,7 +15,7 @@
         </button>
     </div>
     <div class="card-block">
-      <app-wall-losses-form [(wallLossesForm)]="wallLoss.form"></app-wall-losses-form>
+      <app-wall-losses-form [(wallLossesForm)]="wallLoss.form" (calculateModified)="calculateModified()" (calculateBaseline)="calculateBaseline()"></app-wall-losses-form>
     </div>
   </div>
   <div class="card losses-empty" *ngIf="wallLosses.length == 0">

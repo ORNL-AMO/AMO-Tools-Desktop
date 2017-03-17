@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, Validators } from '@angular/forms';
 import * as _ from 'lodash';
+import { PhastService } from '../../phast.service';
 @Component({
   selector: 'app-wall-losses',
   templateUrl: './wall-losses.component.html',
@@ -10,7 +11,7 @@ export class WallLossesComponent implements OnInit {
 
   wallLosses: Array<any>;
 
-  constructor(private formBuilder: FormBuilder) { }
+  constructor(private formBuilder: FormBuilder, private phastService: PhastService) { }
 
   ngOnInit() {
     if (!this.wallLosses) {
@@ -20,15 +21,15 @@ export class WallLossesComponent implements OnInit {
 
   initForm() {
     return this.formBuilder.group({
-      'baselineSurfaceArea': [''],
-      'baselineAvgSurfaceTemp': [''],
-      'baselineAmbientTemp': [''],
-      'baselineCorrectionFactor': [''],
+      'baselineSurfaceArea': ['', Validators.required],
+      'baselineAvgSurfaceTemp': ['', Validators.required],
+      'baselineAmbientTemp': ['', Validators.required],
+      'baselineCorrectionFactor': ['', Validators.required],
       'baselineHeatRequired': [{ value: '', disabled: true }],
-      'modifiedSurfaceArea': [''],
-      'modifiedAvgSurfaceTemp': [''],
-      'modifiedAmbientTemp': [''],
-      'modifiedCorrectionFactor': [''],
+      'modifiedSurfaceArea': ['', Validators.required],
+      'modifiedAvgSurfaceTemp': ['', Validators.required],
+      'modifiedAmbientTemp': ['', Validators.required],
+      'modifiedCorrectionFactor': ['', Validators.required],
       'modifiedHeatRequired': [{ value: '', disabled: true }],
     })
   }
@@ -52,5 +53,25 @@ export class WallLossesComponent implements OnInit {
       loss.name = 'Loss #' + index;
       index++;
     })
+  }
+
+  calculateModified(loss: any){
+    loss.form.value.modifiedHeatRequired = this.phastService.wallLosses(
+      loss.form.value.modifiedSurfaceArea,
+      loss.form.value.modifiedAmbientTemp,
+      loss.form.value.modifiedAvgSurfaceTemp,
+      0,0,0,
+      loss.form.value.modifiedCorrectionFactor
+    );
+  }
+
+  calculateBaseline(loss:any){
+      loss.form.value.baselineHeatRequired = this.phastService.wallLosses(
+      loss.form.value.baselineSurfaceArea,
+      loss.form.value.baselineAmbientTemp,
+      loss.form.value.baselineAvgSurfaceTemp,
+      0,0,0,
+      loss.form.value.baselineCorrectionFactor
+    );
   }
 }

@@ -45,7 +45,15 @@ export class PhastService {
     return phastAddon.solidLoadChargeMaterial(thermicReactionType, specificHeatSolid, latentHeat, specificHeatLiquid, meltingPoint, chargeFeedRate, waterContentCharged, waterContentDischarged, initialTemperature, dischargeTemperature, waterVaporDischargeTemperature, chargeMelted, chargedReacted, reactionHeat, additionalHeat);
   }
 
-  wallLosses(surfaceArea: number, ambientTemperature: number, surfaceTemperature: number, windVelocity: number, surfaceEmissivity: number, conditionFactor: number, correctionFactor: number) {
+  wallLosses(
+    surfaceArea: number, 
+    ambientTemperature: number, 
+    surfaceTemperature: number, 
+    windVelocity: number, 
+    surfaceEmissivity: number, 
+    conditionFactor: number, 
+    correctionFactor: number
+    ){
     //returns heatLoss
     return phastAddon.wallLosses(surfaceArea, ambientTemperature, surfaceTemperature, windVelocity, surfaceEmissivity, conditionFactor, correctionFactor);
   }

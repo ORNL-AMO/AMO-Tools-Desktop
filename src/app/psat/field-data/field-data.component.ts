@@ -14,13 +14,21 @@ export class FieldDataComponent implements OnInit {
   assessment: Assessment;
   @Output('changeField')
   changeField = new EventEmitter<string>();
+
+  headToolResults: any = {
+    differentialElevationHead: 0.0,
+    differentialPressureHead: 0.0,
+    differentialVelocityHead: 0.0,
+    estimatedSuctionFrictionHead: 0.0,
+    estimatedDischargeFrictionHead: 0.0,
+    pumpHead: 0.0
+  };
   constructor() { }
 
   ngOnInit() {
   }
 
   focusField(str: string) {
-    console.log(str);
     this.changeField.emit(str);
   }
 
