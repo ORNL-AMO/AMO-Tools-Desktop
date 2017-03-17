@@ -13,7 +13,7 @@ export class ChargeMaterialComponent implements OnInit {
   chargeMaterial: Array<any>;
   chargeMaterialType: string = 'Solid';
 
-  constructor(private formBuilder: FormBuilder) { }
+  constructor(private formBuilder: FormBuilder, private phastService: PhastService) { }
 
   ngOnInit() {
     if (!this.chargeMaterial) {
@@ -51,17 +51,64 @@ export class ChargeMaterialComponent implements OnInit {
     })
   }
 
-  calculateBaseline() {
-    console.log('calculate baseline');
+  calculateBaseline(loss: any) {
+    if (this.chargeMaterialType == 'Solid') {
+      let reactionType = 0;
+      debugger
+      if (loss.solidForm.value.baselineEndothermicOrExothermic == 'Exothermic') {
+        reactionType = 1;
+      }
+      loss.baselineHeatRequired = this.phastService.solidLoadChargeMaterial(
+        reactionType,
+        loss.solidForm.value.baselineMaterialSpecificHeatOfSolidMaterial,
+        loss.solidForm.value.baselineMaterialLatentHeatOfFusion,
+        loss.solidForm.value.baselineMaterialHeatOfLiquid,
+        loss.solidForm.value.baselineMaterialLatentHeatOfFusion,
+        loss.solidForm.value.baselineMaterialMeltingPoint,
+        loss.solidForm.value.baselineFeedRate,
+        loss.solidForm.value.baselineWaterContentAsCharged,
+        loss.solidForm.value.baselineWaterContentAsDischarged,
+        loss.solidForm.value.baselineInitialTemperature,
+        loss.solidForm.value.baselineChargeMaterialDischargeTemperature,
+        loss.solidForm.value.baselineWaterVaporDischargeTemperature,
+        loss.solidForm.value.baselinePercentChargeMelted,
+        loss.solidForm.value.baselinePercentChargeReacted,
+        loss.solidForm.value.baselineAdditionalHeatRequired,
+
+      );
+    }
   }
 
-  calculateModified() {
-    console.log('calculate modified');
+  calculateModified(loss: any) {
+    if (this.chargeMaterialType == 'Solid') {
+      let reactionType = 0;
+      if (loss.solidForm.value.modifiedEndothermicOrExothermic == 'Exothermic') {
+        reactionType = 1;
+      }
+      loss.modifiedHeatRequired = this.phastService.solidLoadChargeMaterial(
+        reactionType,
+        loss.solidForm.value.modifiedMaterialSpecificHeatOfSolidMaterial,
+        loss.solidForm.value.modifiedMaterialLatentHeatOfFusion,
+        loss.solidForm.value.modifiedMaterialHeatOfLiquid,
+        loss.solidForm.value.modifiedMaterialLatentHeatOfFusion,
+        loss.solidForm.value.modifiedMaterialMeltingPoint,
+        loss.solidForm.value.modifiedFeedRate,
+        loss.solidForm.value.modifiedWaterContentAsCharged,
+        loss.solidForm.value.modifiedWaterContentAsDischarged,
+        loss.solidForm.value.modifiedInitialTemperature,
+        loss.solidForm.value.modifiedChargeMaterialDischargeTemperature,
+        loss.solidForm.value.modifiedWaterVaporDischargeTemperature,
+        loss.solidForm.value.modifiedPercentChargeMelted,
+        loss.solidForm.value.modifiedPercentChargeReacted,
+        loss.solidForm.value.modifiedAdditionalHeatRequired,
+
+      );
+    }
   }
 
   initLiquidForm() {
     return this.formBuilder.group({
-      
+
     })
   }
 

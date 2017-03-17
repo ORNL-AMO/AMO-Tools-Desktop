@@ -19,8 +19,8 @@
   </div>
   <div class="card-block">
     <div class="row form-group">
-      <label class="col-4 col-form-label" for="type">Select Type</label>
-      <div class="col-8 input-group">
+      <label class="col-4 col-form-label small" for="type">Select Type</label>
+      <div class="col-8 input-group input-group-sm">
         <select class="form-control" id="baselineMaterial" ngModel="{{chargeMaterialType}}">
             <option>Solid</option>
             <option>Liquid</option>
@@ -29,8 +29,25 @@
         <!--<app-control-messages [control]="material.form.controls.type"></app-control-messages>-->
       </div>
     </div>
-    <app-solid-charge-material-form *ngIf="chargeMaterialType == 'Solid'" [(chargeMaterialForm)]="material.solidForm" (calculateModified)="calculateModified()" (calculateBaseline)="calculateBaseline()"></app-solid-charge-material-form>
-    <app-liquid-charge-material-form *ngIf="chargeMaterialType == 'Liquid'" [(chargeMaterialForm)]="material.liquidForm" (calculateModified)="calculateModified()" (calculateBaseline)="calculateBaseline()"></app-liquid-charge-material-form>
-    <app-gas-charge-material-form *ngIf="chargeMaterialType == 'Gas'" [(chargeMaterialForm)]="material.gasForm" (calculateModified)="calculateModified()" (calculateBaseline)="calculateBaseline()"></app-gas-charge-material-form>
+    <app-solid-charge-material-form *ngIf="chargeMaterialType == 'Solid'" [(chargeMaterialForm)]="material.solidForm" (calculateModified)="calculateModified(material)"
+      (calculateBaseline)="calculateBaseline(material)"></app-solid-charge-material-form>
+    <app-liquid-charge-material-form *ngIf="chargeMaterialType == 'Liquid'" [(chargeMaterialForm)]="material.liquidForm" (calculateModified)="calculateModified(material)"
+      (calculateBaseline)="calculateBaseline(material)"></app-liquid-charge-material-form>
+    <app-gas-charge-material-form *ngIf="chargeMaterialType == 'Gas'" [(chargeMaterialForm)]="material.gasForm" (calculateModified)="calculateModified(material)"
+      (calculateBaseline)="calculateBaseline(material)"></app-gas-charge-material-form>
+    <div class="row">
+      <div class="col-4">
+        <small>Total Heat Required For Charge Material</small>
+      </div>
+      <div class="col-2 text-center">
+        <small>Btu/hr</small>
+      </div>
+      <div class="col-3 text-center">
+        {{material.baselineHeatRequired |number:'2.2-2'}}
+      </div>
+      <div class="col-3 text-center">
+        {{material.modifiedHeatRequired |number:'2.2-2'}}
+      </div>
+    </div>
   </div>
 </div>

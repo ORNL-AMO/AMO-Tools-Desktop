@@ -40,7 +40,22 @@ export class PhastService {
     return phastAddon.openingLosses(emessivity, diameterWidth, thickness, ratio, ambientTemperature, insideTemperature, percentTimeOpen, viewFactor);
   }
 
-  solidLoadChargeMaterial(thermicReactionType: number, specificHeatSolid: number, latentHeat: number, specificHeatLiquid: number, meltingPoint: number, chargeFeedRate: number, waterContentCharged: number, waterContentDischarged: number, initialTemperature: number, dischargeTemperature: number, waterVaporDischargeTemperature: number, chargeMelted: number, chargedReacted: number, reactionHeat: number, additionalHeat: number) {
+  solidLoadChargeMaterial(
+    thermicReactionType: number, 
+    specificHeatSolid: number, 
+    latentHeat: number, 
+    specificHeatLiquid: number, 
+    meltingPoint: number, 
+    chargeFeedRate: number, 
+    waterContentCharged: number, 
+    waterContentDischarged: number, 
+    initialTemperature: number, 
+    dischargeTemperature: number, 
+    waterVaporDischargeTemperature: number, 
+    chargeMelted: number, 
+    chargedReacted: number, 
+    reactionHeat: number, 
+    additionalHeat: number) {
     //return nothing?
     return phastAddon.solidLoadChargeMaterial(thermicReactionType, specificHeatSolid, latentHeat, specificHeatLiquid, meltingPoint, chargeFeedRate, waterContentCharged, waterContentDischarged, initialTemperature, dischargeTemperature, waterVaporDischargeTemperature, chargeMelted, chargedReacted, reactionHeat, additionalHeat);
   }
