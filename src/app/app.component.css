@@ -132,6 +132,9 @@ Forms
   font-size: 12px;
 }
 
+.form-spacer{
+  padding-top: 15px;
+}
 
 /*
 Popovers (Contextual Help)

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, Validators } from '@angular/forms';
 import * as _ from 'lodash';
+import { PhastService } from '../../phast.service';
 
 @Component({
   selector: 'app-charge-material',
@@ -10,6 +11,7 @@ import * as _ from 'lodash';
 export class ChargeMaterialComponent implements OnInit {
 
   chargeMaterial: Array<any>;
+  chargeMaterialType: string = 'Solid';
 
   constructor(private formBuilder: FormBuilder) { }
 
@@ -50,15 +52,17 @@ export class ChargeMaterialComponent implements OnInit {
   }
 
   calculateBaseline() {
-
+    console.log('calculate baseline');
   }
 
   calculateModified() {
-
+    console.log('calculate modified');
   }
 
   initLiquidForm() {
-
+    return this.formBuilder.group({
+      
+    })
   }
 
   initGasForm() {
@@ -69,31 +73,39 @@ export class ChargeMaterialComponent implements OnInit {
   initSolidForm() {
     //FUEL FIRED SOLID
     return this.formBuilder.group({
-      'type': [''],
-      'baselineMaterial': [''],
-      'baselineChargeFeedRate': [''],
-      'baselineWaterContentCharged': [''],
-      'baselineWaterContentDischarged': [''],
-      'baselineInitialTemp': [''],
-      'baselineWaterDischargeTemp': [''],
-      'baselineDischargeTemp': [''],
-      'baselineChargeMelted': [''],
-      'baselineChargeReacted': [''],
-      'baselineHeatOfReaction': [''],
-      'baselineAdditionalHeatRequired': [''],
-      'baselineHeatRequired': [{ value: '', disabled: true }],
-      'modifiedMaterial': [''],
-      'modifiedChargeFeedRate': [''],
-      'modifiedWaterContentCharged': [''],
-      'modifiedWaterContentDischarged': [''],
-      'modifiedInitialTemp': [''],
-      'modifiedWaterDischargeTemp': [''],
-      'modifiedDischargeTemp': [''],
-      'modifiedChargeMelted': [''],
-      'modifiedChargeReacted': [''],
-      'modifiedHeatOfReaction': [''],
-      'modifiedAdditionalHeatRequired': [''],
-      'modifiedHeatRequired': [{ value: '', disabled: true }]
+      'baselineMaterialName': ['', Validators.required],
+      'baselineMaterialSpecificHeatOfSolidMaterial': ['', Validators.required],
+      'baselineMaterialLatentHeatOfFusion': ['', Validators.required],
+      'baselineMaterialHeatOfLiquid': ['', Validators.required],
+      'baselineMaterialMeltingPoint': ['', Validators.required],
+      'baselineFeedRate': ['', Validators.required],
+      'baselineWaterContentAsCharged': ['', Validators.required],
+      'baselineWaterContentAsDischarged': ['', Validators.required],
+      'baselineInitialTemperature': ['', Validators.required],
+      'baselineChargeMaterialDischargeTemperature': ['', Validators.required],
+      'baselineWaterVaporDischargeTemperature': ['', Validators.required],
+      'baselinePercentChargeMelted': ['', Validators.required],
+      'baselinePercentChargeReacted': ['', Validators.required],
+      'baselineHeatOfReaction': ['', Validators.required],
+      'baselineEndothermicOrExothermic': ['', Validators.required],
+      'baselineAdditionalHeatRequired': ['', Validators.required],
+
+      'modifiedMaterialName': ['', Validators.required],
+      'modifiedMaterialSpecificHeatOfSolidMaterial': ['', Validators.required],
+      'modifiedMaterialLatentHeatOfFusion': ['', Validators.required],
+      'modifiedMaterialHeatOfLiquid': ['', Validators.required],
+      'modifiedMaterialMeltingPoint': ['', Validators.required],
+      'modifiedFeedRate': ['', Validators.required],
+      'modifiedWaterContentAsCharged': ['', Validators.required],
+      'modifiedWaterContentAsDischarged': ['', Validators.required],
+      'modifiedInitialTemperature': ['', Validators.required],
+      'modifiedChargeMaterialDischargeTemperature': ['', Validators.required],
+      'modifiedWaterVaporDischargeTemperature': ['', Validators.required],
+      'modifiedPercentChargeMelted': ['', Validators.required],
+      'modifiedPercentChargeReacted': ['', Validators.required],
+      'modifiedHeatOfReaction': ['', Validators.required],
+      'modifiedEndothermicOrExothermic': ['', Validators.required],
+      'modifiedAdditionalHeatRequired': ['', Validators.required],
     })
   }
 
