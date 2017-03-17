@@ -40,6 +40,8 @@ import { HeatStorageFormComponent } from './losses/heat-storage/heat-storage-for
 import { OtherLossesFormComponent } from './losses/other-losses/other-losses-form/other-losses-form.component';
 import { FlueGasLossesFormComponent } from './losses/flue-gas-losses/flue-gas-losses-form/flue-gas-losses-form.component';
 
+import { PhastService } from './phast.service';
+
 @NgModule({
   declarations: [
     PhastComponent,
@@ -87,7 +89,9 @@ import { FlueGasLossesFormComponent } from './losses/flue-gas-losses/flue-gas-lo
     SharedModule,
     ModalModule
   ],
-  providers: []
+  providers: [
+    PhastService
+  ]
 })
 
 export class PhastModule { }

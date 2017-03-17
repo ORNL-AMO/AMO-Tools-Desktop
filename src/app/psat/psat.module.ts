@@ -36,6 +36,8 @@ import { MotorHelpComponent } from './help-panel/motor-help/motor-help.component
 import { FieldDataHelpComponent } from './help-panel/field-data-help/field-data-help.component';
 import { ModifyConditionsHelpComponent } from './help-panel/modify-conditions-help/modify-conditions-help.component';
 
+import { PsatService } from './psat.service';
+
 @NgModule({
   declarations: [
     PsatComponent,
@@ -81,6 +83,7 @@ import { ModifyConditionsHelpComponent } from './help-panel/modify-conditions-he
     ModalModule
   ],
   providers: [
+    PsatService
   ]
 })
 

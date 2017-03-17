@@ -12,7 +12,6 @@ const {autoUpdater} = require('electron-updater');
 autoUpdater.logger = log;
 autoUpdater.logger.transports.file.level = 'info';
 log.info('App starting...');
-
 require('dotenv').config();
 let win = null;
 
