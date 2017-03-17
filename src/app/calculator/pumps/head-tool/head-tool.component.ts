@@ -28,7 +28,7 @@ export class HeadToolComponent implements OnInit {
   ngOnInit() {
     this.headToolForm = this.initHeadToolForm();
     this.headToolSuctionForm = this.initHeadToolSuctionForm();
-    
+
   }
 
 
@@ -36,41 +36,53 @@ export class HeadToolComponent implements OnInit {
     this.tabSelect = str;
   }
 
-  closeTool(){
+  closeTool() {
     this.close.emit(true);
   }
 
-  calculateHeadTool(){
-   this.results.pumpHead = this.psatService.headToolSuctionTank(
-      this.headToolForm.value.specificGravity, 
-      this.headToolForm.value.flowRate, 
-      this.headToolForm.value.suctionPipeDiameter, 
-      this.headToolForm.value.suctionGuagePressure, 
-      this.headToolForm.value.suctionGuageElevation, 
-      this.headToolForm.value.suctionLineLossCoefficients, 
-      this.headToolForm.value.dischargePipeDiameter, 
-      this.headToolForm.value.dischargeGaugePressure, 
-      this.headToolForm.value.dischargeGaugeElevation, 
+  calculateHeadTool() {
+    let result = this.psatService.headToolSuctionTank(
+      this.headToolForm.value.specificGravity,
+      this.headToolForm.value.flowRate,
+      this.headToolForm.value.suctionPipeDiameter,
+      this.headToolForm.value.suctionGuagePressure,
+      this.headToolForm.value.suctionGuageElevation,
+      this.headToolForm.value.suctionLineLossCoefficients,
+      this.headToolForm.value.dischargePipeDiameter,
+      this.headToolForm.value.dischargeGaugePressure,
+      this.headToolForm.value.dischargeGaugeElevation,
       this.headToolForm.value.dischargeLineLossCoefficients
-      );
+    );
+    this.results.differentialElevationHead = result.differentialElevationHead;
+    this.results.differentialPressureHead = result.differentialPressureHead;
+    this.results.differentialVelocityHead = result.differentialVelocityHead;
+    this.results.estimatedSuctionFrictionHead = result.estimatedSuctionFrictionHead;
+    this.results.estimatedDischargeFrictionHead = result.estimatedDischargeFrictionHead;
+    this.results.pumpHead = result.pumpHead;
   }
 
-  calculateHeadToolSuctionTank(){
-    //debugger
-    this.results.pumpHead = this.psatService.headToolSuctionTank(
-      this.headToolSuctionForm.value.specificGravity, 
-      this.headToolSuctionForm.value.flowRate, 
-      this.headToolSuctionForm.value.suctionPipeDiameter, 
-      this.headToolSuctionForm.value.suctionTankGasOverPressure, 
-      this.headToolSuctionForm.value.suctionTankFluidSurfaceElevation, 
-      this.headToolSuctionForm.value.suctionLineLossCoefficients, 
-      this.headToolSuctionForm.value.dischargePipeDiameter, 
-      this.headToolSuctionForm.value.dischargeGaugePressure, 
-      this.headToolSuctionForm.value.dischargeGaugeElevation, 
+
+  calculateHeadToolSuctionTank() {
+    let result = this.psatService.headToolSuctionTank(
+      this.headToolSuctionForm.value.specificGravity,
+      this.headToolSuctionForm.value.flowRate,
+      this.headToolSuctionForm.value.suctionPipeDiameter,
+      this.headToolSuctionForm.value.suctionTankGasOverPressure,
+      this.headToolSuctionForm.value.suctionTankFluidSurfaceElevation,
+      this.headToolSuctionForm.value.suctionLineLossCoefficients,
+      this.headToolSuctionForm.value.dischargePipeDiameter,
+      this.headToolSuctionForm.value.dischargeGaugePressure,
+      this.headToolSuctionForm.value.dischargeGaugeElevation,
       this.headToolSuctionForm.value.dischargeLineLossCoefficients
-      );
-    console.log(this.results.pumpHead)
-}
+    );
+    
+    this.results.differentialElevationHead = result.differentialElevationHead;
+    this.results.differentialPressureHead = result.differentialPressureHead;
+    this.results.differentialVelocityHead = result.differentialVelocityHead;
+    this.results.estimatedSuctionFrictionHead = result.estimatedSuctionFrictionHead;
+    this.results.estimatedDischargeFrictionHead = result.estimatedDischargeFrictionHead;
+    this.results.pumpHead = result.pumpHead;
+  }
 
   initHeadToolSuctionForm() {
     return this.formBuilder.group({
@@ -87,7 +99,7 @@ export class HeadToolComponent implements OnInit {
     })
   }
 
-   initHeadToolForm() {
+  initHeadToolForm() {
     return this.formBuilder.group({
       'suctionPipeDiameter': ['', Validators.required],
       'suctionGuagePressure': ['', Validators.required],

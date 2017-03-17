@@ -48,7 +48,7 @@
     "ts-helpers": "^1.1.1",
     "zone.js": "^0.7.6"
   },
- "build": {
+  "build": {
     "appId": "com.electron.amo-tools-desktop",
     "copyright": "Copyright 2017 ORNL. All rights reserved.",
     "productName": "AMO-Tools-Desktop",
@@ -77,8 +77,8 @@
         "deb",
         "rpm"
       ],
-    "executableName": "AMO-Tools-Desktop",
-    "maintainer": "Advanced Manufacturing Office"
+      "executableName": "AMO-Tools-Desktop",
+      "maintainer": "Advanced Manufacturing Office"
     },
     "mac": {
       "target": [
@@ -93,7 +93,7 @@
     "@types/jasmine": "2.5.38",
     "@types/lodash": "^4.14.52",
     "@types/node": "~6.0.60",
-    "amo-tools-suite": "^0.1.13",
+    "amo-tools-suite": "^0.1.14",
     "chart.js": "^2.5.0",
     "codelyzer": "~2.0.0",
     "convert-units": "^2.0.1",
