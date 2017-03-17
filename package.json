@@ -1,6 +1,6 @@
 {
   "name": "amo-tools-desktop",
-  "version": "0.1.0",
+  "version": "0.1.5",
   "main": "main.js",
   "license": "MIT",
   "description": "AMO-Tools-Desktop",
@@ -60,8 +60,9 @@
       "target": "nsis"
     },
     "nsis": {
-      "oneClick": true,
-      "perMachine": false,
+      "oneClick": false,
+      "allowElevation": true,
+      "allowToChangeInstallationDirectory": true,
       "installerIcon": "../AMO-Tools-Desktop/src/favicon.ico",
       "installerHeaderIcon": "../AMO-Tools-Desktop/src/favicon.ico",
       "artifactName": "${productName}-Setup-${version}.${ext}"
