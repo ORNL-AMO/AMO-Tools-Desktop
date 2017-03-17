@@ -1,6 +1,5 @@
 {
   "name": "amo-tools-desktop",
-  "productName": "AMO-Tools-Desktop",
   "version": "0.1.0",
   "main": "main.js",
   "license": "MIT",
@@ -22,7 +21,8 @@
     "postinstall": "./node_modules/.bin/electron-rebuild",
     "windows": "./node_modules/.bin/build -w --x64 --ia32",
     "linux": "./node_modules/.bin/build -l --x64 --ia32",
-    "mac": "./node_modules/.bin/build -m --x64 --ia32"
+    "mac": "./node_modules/.bin/build -m --x64 --ia32",
+    "build-all": "./node_modules/.bin/build -mwl --x64 --ia32"
   },
   "private": true,
   "dependencies": {
@@ -57,19 +57,13 @@
       "output": "../output/"
     },
     "win": {
-      "target": "nsis",
-      "publish": [
-        {
-          "provider": "github",
-          "owner": "ORNL-AMO",
-          "repo": "AMO-Tools-Desktop"
-        }
-      ]
+      "target": "nsis"
     },
     "nsis": {
-      "installerIcon": "../AMO-Tools-Desktop/src/favicon.ico",
+      "oneClick": true,
       "perMachine": false,
-      "installerHeaderIcon": "../AMO-Tools-Desktop/src/favicon.cio"
+      "installerHeaderIcon": "../AMO-Tools-Desktop/src/favicon.ico",
+      "artifactName": "${productName}-Setup-${version}.${ext}"
     },
     "linux": {
       "target": [
