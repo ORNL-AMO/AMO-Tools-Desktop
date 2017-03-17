@@ -19,7 +19,6 @@ export class LiquidChargeMaterialFormComponent implements OnInit {
   }
 
   checkBaseline() {
-    debugger
     if (
       this.chargeMaterialForm.controls.baselineMaterialName.status == 'VALID' &&
       this.chargeMaterialForm.controls.baselineMaterialSpecificHeatLiquid.status == 'VALID' &&

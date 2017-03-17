@@ -96,7 +96,25 @@ export class ChargeMaterialComponent implements OnInit {
         loss.liquidForm.value.baselineHeatOfReaction,
         loss.liquidForm.value.baselineAdditionalHeatRequired
       )
-
+    } else if (this.chargeMaterialType == 'Gas') {
+      let reactionType = 0;
+      if (loss.gasForm.value.baselineEndothermicOrExothermic == 'Exothermic') {
+        reactionType = 1;
+      }
+      loss.baselineHeatRequired = this.phastService.liquidLoadChargeMaterial(
+        reactionType,
+        loss.gasForm.value.baselineMaterialSpecificHeat,
+        loss.gasForm.value.baselineFeedRate,
+        loss.gasForm.value.baselineVaporInGas,
+        loss.gasForm.value.baselineInitialTemperature,
+        loss.gasForm.value.baselineDischargeTemperature,
+        loss.gasForm.value.baselineSpecificHeatOfVapor,
+        loss.gasForm.value.baselineGasReacted,
+        loss.gasForm.value.baselineHeatOfReaction,
+        loss.gasForm.value.baselineAdditionalHeatRequired,
+        loss.gasForm.value.modifiedHeatOfReaction,
+        loss.gasForm.value.modifiedAdditionalHeatRequired
+      )
     }
   }
 
@@ -143,6 +161,25 @@ export class ChargeMaterialComponent implements OnInit {
         loss.liquidForm.value.modifiedHeatOfReaction,
         loss.liquidForm.value.modifiedAdditionalHeatRequired
       )
+    } else if (this.chargeMaterialType == 'Gas') {
+      let reactionType = 0;
+      if (loss.gasForm.value.modifiedEndothermicOrExothermic == 'Exothermic') {
+        reactionType = 1;
+      }
+      loss.modifiedHeatRequired = this.phastService.liquidLoadChargeMaterial(
+        reactionType,
+        loss.gasForm.value.modifiedMaterialSpecificHeat,
+        loss.gasForm.value.modifiedFeedRate,
+        loss.gasForm.value.modifiedVaporInGas,
+        loss.gasForm.value.modifiedInitialTemperature,
+        loss.gasForm.value.modifiedDischargeTemperature,
+        loss.gasForm.value.modifiedSpecificHeatOfVapor,
+        loss.gasForm.value.modifiedGasReacted,
+        loss.gasForm.value.modifiedHeatOfReaction,
+        loss.gasForm.value.modifiedAdditionalHeatRequired,
+        loss.gasForm.value.modifiedHeatOfReaction,
+        loss.gasForm.value.modifiedAdditionalHeatRequired
+      )
     }
   }
 
@@ -179,7 +216,33 @@ export class ChargeMaterialComponent implements OnInit {
   }
 
   initGasForm() {
+    return this.formBuilder.group({
+      'baselineMaterialName': ['', Validators.required],
+      'baselineMaterialSpecificHeat': ['', Validators.required],
+      'baselineFeedRate': ['', Validators.required],
+      'baselineVaporInGas': ['', Validators.required],
+      'baselineInitialTemperature': ['', Validators.required],
+      'baselineDischargeTemperature': ['', Validators.required],
+      'baselineSpecificHeatOfVapor': ['', Validators.required],
+      'baselineGasReacted': ['', Validators.required],
+      'baselineHeatOfReaction': ['', Validators.required],
+      'baselineEndothermicOrExothermic': ['', Validators.required],
+      'baselineAdditionalHeatRequired': ['', Validators.required],
 
+      'modifiedMaterialName': ['', Validators.required],
+      'modifiedMaterialSpecificHeat': ['', Validators.required],
+      'modifiedFeedRate': ['', Validators.required],
+      'modifiedVaporInGas': ['', Validators.required],
+      'modifiedInitialTemperature': ['', Validators.required],
+      'modifiedDischargeTemperature': ['', Validators.required],
+      'modifiedSpecificHeatOfVapor': ['', Validators.required],
+      'modifiedGasReacted': ['', Validators.required],
+      'modifiedHeatOfReaction': ['', Validators.required],
+      'modifiedEndothermicOrExothermic': ['', Validators.required],
+      'modifiedAdditionalHeatRequired': ['', Validators.required]
+
+
+    })
   }
 
 
