@@ -3,7 +3,7 @@
     <div class="col-6">
       <label class="small" for="suctionPipeDiameter">Suction pipe diameter (ID)</label>
       <div class="input-group input-group-sm">
-        <input type="text" class="form-control head-input" formControlName="suctionPipeDiameter" id="suctionPipeDiameter" (keyup)="calc()">
+        <input type="number" class="form-control head-input" formControlName="suctionPipeDiameter" id="suctionPipeDiameter" (keyup)="calc()">
         <div class="input-group-addon">
           inches
         </div>
@@ -13,7 +13,7 @@
     <div class="col-6">
       <label class="small" for="dischargePipeDiameter">Discharge pipe diameter (ID)</label>
       <div class="input-group input-group-sm">
-        <input type="text" class="form-control head-input" formControlName="dischargePipeDiameter" id="dischargePipeDiameter" (keyup)="calc()">
+        <input type="number" class="form-control head-input" formControlName="dischargePipeDiameter" id="dischargePipeDiameter" (keyup)="calc()">
         <div class="input-group-addon">
           inches
         </div>
@@ -25,7 +25,7 @@
     <div class="col-6">
       <label class="small" for="suctionGuagePressure">Suction guage pressure (Pg)</label>
       <div class="input-group input-group-sm">
-        <input type="text" class="form-control head-input" formControlName="suctionGuagePressure" id="suctionGuagePressure" (keyup)="calc()">
+        <input type="number" class="form-control head-input" formControlName="suctionGuagePressure" id="suctionGuagePressure" (keyup)="calc()">
         <div class="input-group-addon">
           pslg
         </div>
@@ -35,7 +35,7 @@
     <div class="col-6">
       <label class="small" for="dischargeGaugePressure">Discharge guage pressure (Pd)</label>
       <div class="input-group input-group-sm">
-        <input type="text" class="form-control head-input" formControlName="dischargeGaugePressure" id="dischargeGaugePressure" (keyup)="calc()">
+        <input type="number" class="form-control head-input" formControlName="dischargeGaugePressure" id="dischargeGaugePressure" (keyup)="calc()">
         <div class="input-group-addon">
           pslg
         </div>
@@ -47,7 +47,7 @@
     <div class="col-6">
       <label class="small" for="suctionGuageElevation">Suction guage elevation (Zs)</label>
       <div class="input-group input-group-sm">
-        <input type="text" class="form-control head-input" formControlName="suctionGuageElevation" id="suctionGuageElevation" (keyup)="calc()">
+        <input type="number" class="form-control head-input" formControlName="suctionGuageElevation" id="suctionGuageElevation" (keyup)="calc()">
         <div class="input-group-addon">
           ft
         </div>
@@ -57,7 +57,7 @@
     <div class="col-6">
       <label class="small" for="dischargeGaugeElevation">Discharge guage elevation (Zd)</label>
       <div class="input-group input-group-sm">
-        <input type="text" class="form-control head-input" formControlName="dischargeGaugeElevation" id="dischargeGaugeElevation" (keyup)="calc()">
+        <input type="number" class="form-control head-input" formControlName="dischargeGaugeElevation" id="dischargeGaugeElevation" (keyup)="calc()">
         <div class="input-group-addon">
           ft
         </div>
@@ -69,14 +69,14 @@
     <div class="col-6">
       <label class="small" for="suctionLineLossCoefficients">Suction line loss coefficients (Ks)</label>
       <div class="input-group input-group-sm">
-        <input type="text" class="form-control head-input" formControlName="suctionLineLossCoefficients" id="suctionLineLossCoefficients" (keyup)="calc()">
+        <input type="number" class="form-control head-input" formControlName="suctionLineLossCoefficients" id="suctionLineLossCoefficients" (keyup)="calc()">
       </div>
       <!--<app-control-messages [control]="headToolForm.controls.suctionLineLossCoefficients"></app-control-messages>-->
     </div>
     <div class="col-6">
       <label class="small" for="dischargeLineLossCoefficients">Discharge line loss coefficients (Kd)</label>
       <div class="input-group input-group-sm">
-        <input type="text" class="form-control head-input" formControlName="dischargeLineLossCoefficients" id="dischargeLineLossCoefficients" (keyup)="calc()">
+        <input type="number" class="form-control head-input" formControlName="dischargeLineLossCoefficients" id="dischargeLineLossCoefficients" (keyup)="calc()">
       </div>
       <app-control-messages [control]="headToolForm.controls.dischargeLineLossCoefficients"></app-control-messages>
     </div>
@@ -85,14 +85,14 @@
     <div class="col-6">
       <label class="small" for="specificGravity">Fluid Specific Gravity</label>
       <div class="input-group input-group-sm">
-        <input type="text" class="form-control head-input" formControlName="specificGravity" id="specificGravity" (keyup)="calc()">
+        <input type="number" class="form-control head-input" formControlName="specificGravity" id="specificGravity" (keyup)="calc()">
       </div>
       <!--<app-control-messages [control]="headToolForm.controls.specificGravity"></app-control-messages>-->
     </div>
     <div class="col-6">
       <label class="small" for="flowRate">Flow Rate</label>
       <div class="input-group input-group-sm">
-        <input type="text" class="form-control head-input" formControlName="flowRate" id="flowRate" (keyup)="calc()">
+        <input type="number" class="form-control head-input" formControlName="flowRate" id="flowRate" (keyup)="calc()">
         <div class="input-group-addon">
           gpm
         </div>

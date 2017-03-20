@@ -2,7 +2,7 @@
   <div class="row form-group">
     <label class="col-6 col-form-label" for="operatingFraction">Operating Fraction</label>
     <div class="col-6">
-      <input type="text" class="form-control" formControlName="operatingFraction" id="operatingFraction" (focus)="focusField('operatingFraction')">
+      <input type="number" class="form-control" formControlName="operatingFraction" id="operatingFraction" (focus)="focusField('operatingFraction')">
       <app-control-messages [control]="psatForm.controls.operatingFraction"></app-control-messages>
     </div>
   </div>
@@ -10,7 +10,7 @@
   <div class="row form-group">
     <label class="col-6 col-form-label" for="costKwHr">Cost (kw/hr)</label>
     <div class="col-6">
-      <input type="text" class="form-control" formControlName="costKwHr" id="costKwHr" (focus)="focusField('costKwHr')">
+      <input type="number" class="form-control" formControlName="costKwHr" id="costKwHr" (focus)="focusField('costKwHr')">
       <app-control-messages [control]="psatForm.controls.costKwHr"></app-control-messages>
     </div>
   </div>
@@ -18,7 +18,7 @@
   <div class="row form-group">
     <label class="col-6 col-form-label" for="flowRate">Flow Rate (gpm)</label>
     <div class="col-6">
-      <input type="text" class="form-control" formControlName="flowRate" id="flowRate" (focus)="focusField('flowRate')">
+      <input type="number" class="form-control" formControlName="flowRate" id="flowRate" (focus)="focusField('flowRate')">
       <app-control-messages [control]="psatForm.controls.flowRate"></app-control-messages>
     </div>
   </div>
@@ -26,7 +26,7 @@
   <div class="row form-group">
     <label class="col-6 col-form-label" for="head">Head</label>
     <div class="col-6 input-group">
-      <input type="text" class="form-control" formControlName="head" id="head" (focus)="focusField('head')" ngModel="{{headToolResults.pumpHead}}">
+      <input type="number" class="form-control" formControlName="head" id="head" (focus)="focusField('head')" ngModel="{{headToolResults.pumpHead}}">
       <div class="incrementor input-group-addon">
         <div class="btn" (click)="showHeadToolModal()"><i class="fa fa-calculator"></i></div>
       </div>
@@ -48,7 +48,7 @@
   <div class="row form-group">
     <label class="col-6 col-form-label" for="motorKW">Motor (kW)</label>
     <div class="col-6">
-      <input type="text" class="form-control" formControlName="motorKW" id="motorKW" (focus)="focusField('motorKW')">
+      <input type="number" class="form-control" formControlName="motorKW" id="motorKW" (focus)="focusField('motorKW')">
       <app-control-messages [control]="psatForm.controls.motorKW"></app-control-messages>
     </div>
   </div>
@@ -56,7 +56,7 @@
   <div class="row form-group">
     <label class="col-6 col-form-label" for="voltage">Voltage</label>
     <div class="col-6">
-      <input type="text" class="form-control" formControlName="voltage" id="voltage" (focus)="focusField('voltage')">
+      <input type="number" class="form-control" formControlName="voltage" id="voltage" (focus)="focusField('voltage')">
       <app-control-messages [control]="psatForm.controls.voltage"></app-control-messages>
     </div>
   </div>

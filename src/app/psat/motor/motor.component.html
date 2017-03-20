@@ -30,7 +30,7 @@
       <div class="incrementor input-group-addon">
         <div class="btn" (click)="addNum('motorRPM')"><i class="fa fa-plus"></i></div>
       </div>
-      <input type="text" class="form-control" id="motorRPM" formControlName="motorRPM" ngModel="{{psatForm.value.motorRPM}}"
+      <input type="number" class="form-control" id="motorRPM" formControlName="motorRPM" ngModel="{{psatForm.value.motorRPM}}"
              (focus)="focusField('motorRPM')">
       <app-control-messages [control]="psatForm.controls.motorRPM"></app-control-messages>
     </div>
@@ -50,7 +50,7 @@
   <div class="row form-group">
     <label class="col-6 col-form-label" for="voltage">Voltage</label>
     <div class="col-6">
-      <input type="text" class="form-control" id="voltage" formControlName="voltage" (focus)="focusField('voltage')">
+      <input type="number" class="form-control" id="voltage" formControlName="voltage" (focus)="focusField('voltage')">
       <app-control-messages [control]="psatForm.controls.voltage"></app-control-messages>
     </div>
   </div>
@@ -61,7 +61,7 @@
     <small id="flaHelp" class="form-text text-muted text-help">Estimate Full-Load Amps</small>
     </label>
     <div class="col-6">
-      <input type="text" class="form-control" id="fullLoadAmps" formControlName="fullLoadAmps" (focus)="focusField('fullLoadAmps')">
+      <input type="number" class="form-control" id="fullLoadAmps" formControlName="fullLoadAmps" (focus)="focusField('fullLoadAmps')">
       <app-control-messages [control]="psatForm.controls.fullLoadAmps"></app-control-messages>
     </div>
   </div>
@@ -75,7 +75,7 @@
       <div class="incrementor input-group-addon">
         <div class="btn" (click)="addNum('sizeMargin')"><i class="fa fa-plus"></i></div>
       </div>
-      <input type="text" class="form-control" id="sizeMargin" formControlName="sizeMargin" ngModel="{{psatForm.value.sizeMargin}}"
+      <input type="number" class="form-control" id="sizeMargin" formControlName="sizeMargin" ngModel="{{psatForm.value.sizeMargin}}"
              (focus)="focusField('sizeMargin')">
       <app-control-messages [control]="psatForm.controls.sizeMargin"></app-control-messages>
     </div>

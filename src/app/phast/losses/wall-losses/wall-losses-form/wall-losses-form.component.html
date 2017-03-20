@@ -10,11 +10,11 @@
   <div class="row form-group">
     <label class="col-4 col-form-label small" for="baselineSurfaceArea">Surface Area (ft 2)</label>
     <div class="col-4 input-group input-group-sm">
-      <input type="text" class="form-control" formControlName="baselineSurfaceArea" id="baselineSurfaceArea" (keyup)="checkBaseline()">
+      <input type="number" class="form-control" formControlName="baselineSurfaceArea" id="baselineSurfaceArea" (keyup)="checkBaseline()">
       <!--<app-control-messages [control]="wallLossesForm.controls.baselineSurfaceArea"></app-control-messages>-->
     </div>
     <div class="col-4 input-group input-group-sm">
-      <input type="text" class="form-control" formControlName="modifiedSurfaceArea" id="modifiedSurfaceArea" (keyup)="checkModified()">
+      <input type="number" class="form-control" formControlName="modifiedSurfaceArea" id="modifiedSurfaceArea" (keyup)="checkModified()">
       <!--<app-control-messages [control]="wallLossesForm.controls.modifiedSurfaceArea"></app-control-messages>-->
     </div>
   </div>
@@ -22,12 +22,12 @@
   <div class="row form-group">
     <label class="col-4 col-form-label small" for="baselineAvgSurfaceTemp">Average Surface Temperature (&#8457;)</label>
     <div class="col-4 input-group input-group-sm">
-      <input type="text" class="form-control" formControlName="baselineAvgSurfaceTemp" id="baselineAvgSurfaceTemp" (keyup)="checkBaseline()">
+      <input type="number" class="form-control" formControlName="baselineAvgSurfaceTemp" id="baselineAvgSurfaceTemp" (keyup)="checkBaseline()">
       <!--<app-control-messages [control]="wallLossesForm.controls.baselineAvgSurfaceTemp"></app-control-messages>-->
     </div>
     <div class="col-4 input-group input-group-sm">
       <div class="input-group input-group-sm">
-        <input type="text" class="form-control" formControlName="modifiedAvgSurfaceTemp" id="modifiedAvgSurfaceTemp" (keyup)="checkModified()">
+        <input type="number" class="form-control" formControlName="modifiedAvgSurfaceTemp" id="modifiedAvgSurfaceTemp" (keyup)="checkModified()">
       </div>
       <!--<app-control-messages [control]="wallLossesForm.controls.modifiedAvgSurfaceTemp"></app-control-messages>-->
     </div>
@@ -36,11 +36,11 @@
   <div class="row form-group">
     <label class="col-4 col-form-label small" for="baselineAmbientTemp">Ambient Temp (&#8457;)</label>
     <div class="col-4 input-group input-group-sm">
-      <input type="text" class="form-control" formControlName="baselineAmbientTemp" id="baselineAmbientTemp" (keyup)="checkBaseline()">
+      <input type="number" class="form-control" formControlName="baselineAmbientTemp" id="baselineAmbientTemp" (keyup)="checkBaseline()">
       <!--<app-control-messages [control]="wallLossesForm.controls.baselineAmbientTemp"></app-control-messages>-->
     </div>
     <div class="col-4 input-group input-group-sm">
-      <input type="text" class="form-control" formControlName="modifiedAmbientTemp" id="modifiedAmbientTemp" (keyup)="checkModified()">
+      <input type="number" class="form-control" formControlName="modifiedAmbientTemp" id="modifiedAmbientTemp" (keyup)="checkModified()">
       <!--<app-control-messages [control]="wallLossesForm.controls.modifiedAmbientTemp"></app-control-messages>-->
     </div>
   </div>
@@ -48,11 +48,11 @@
   <div class="row form-group">
     <label class="col-4 col-form-label small" for="baselineCorrectionFactor">Correction Factor</label>
     <div class="col-4 input-group input-group-sm">
-      <input type="text" class="form-control" formControlName="baselineCorrectionFactor" id="baselineCorrectionFactor" (keyup)="checkBaseline()">
+      <input type="number" class="form-control" formControlName="baselineCorrectionFactor" id="baselineCorrectionFactor" (keyup)="checkBaseline()">
       <!--<app-control-messages [control]="wallLossesForm.controls.baselineCorrectionFactor"></app-control-messages>-->
     </div>
     <div class="col-4 input-group input-group-sm">
-      <input type="text" class="form-control" formControlName="modifiedCorrectionFactor" id="modifiedCorrectionFactor" (keyup)="checkModified()">
+      <input type="number" class="form-control" formControlName="modifiedCorrectionFactor" id="modifiedCorrectionFactor" (keyup)="checkModified()">
       <!--<app-control-messages [control]="wallLossesForm.controls.modifiedCorrectionFactor"></app-control-messages>-->
     </div>
   </div>
@@ -60,11 +60,11 @@
   <div class="row form-group">
     <label class="col-4 col-form-label small" for="baselineHeatRequired">Heat Required (Btu / hr)</label>
     <div class="col-4 input-group input-group-sm">
-      <input type="text" class="form-control" formControlName="baselineHeatRequired" id="baselineHeatRequired" ngModel="{{wallLossesForm.value.baselineHeatRequired}}">
+      <input type="number" class="form-control" formControlName="baselineHeatRequired" id="baselineHeatRequired" ngModel="{{wallLossesForm.value.baselineHeatRequired}}">
       <app-control-messages [control]="wallLossesForm.controls.baselineHeatRequired"></app-control-messages>
     </div>
     <div class="col-4">
-      <input type="text" class="form-control" formControlName="modifiedHeatRequired" id="modifiedHeatRequired" ngModel="{{wallLossesForm.value.baselineHeatRequired}}">
+      <input type="number" class="form-control" formControlName="modifiedHeatRequired" id="modifiedHeatRequired" ngModel="{{wallLossesForm.value.baselineHeatRequired}}">
       <app-control-messages [control]="wallLossesForm.controls.modifiedHeatRequired"></app-control-messages>
     </div>
   </div>-->

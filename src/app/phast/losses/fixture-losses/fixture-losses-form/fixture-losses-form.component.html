@@ -29,11 +29,11 @@
   <div class="row form-group">
     <label class="col-4 col-form-label small" for="baselineFixtureWeight">Specific Weight feed rate (lb/hr)</label>
     <div class="col-4 input-group input-group-sm">
-      <input type="text" class="form-control" formControlName="baselineFixtureWeight" id="baselineFixtureWeight">
+      <input type="number" class="form-control" formControlName="baselineFixtureWeight" id="baselineFixtureWeight">
       <app-control-messages [control]="lossesForm.controls.baselineFixtureWeight"></app-control-messages>
     </div>
     <div class="col-4 input-group input-group-sm">
-      <input type="text" class="form-control" formControlName="modifiedFixtureWeight" id="modifiedFixtureWeight">
+      <input type="number" class="form-control" formControlName="modifiedFixtureWeight" id="modifiedFixtureWeight">
       <app-control-messages [control]="lossesForm.controls.modifiedFixtureWeight"></app-control-messages>
     </div>
   </div>
@@ -41,11 +41,11 @@
   <div class="row form-group">
     <label class="col-4 col-form-label small" for="baselineInitialTemp">Initial Temperature (&#8457;)</label>
     <div class="col-4 input-group input-group-sm">
-      <input type="text" class="form-control" formControlName="baselineInitialTemp" id="baselineInitialTemp">
+      <input type="number" class="form-control" formControlName="baselineInitialTemp" id="baselineInitialTemp">
       <app-control-messages [control]="lossesForm.controls.baselineInitialTemp"></app-control-messages>
     </div>
     <div class="col-4 input-group input-group-sm">
-      <input type="text" class="form-control" formControlName="modifiedInitialTemp" id="modifiedInitialTemp">
+      <input type="number" class="form-control" formControlName="modifiedInitialTemp" id="modifiedInitialTemp">
       <app-control-messages [control]="lossesForm.controls.modifiedInitialTemp"></app-control-messages>
     </div>
   </div>
@@ -53,11 +53,11 @@
   <div class="row form-group">
     <label class="col-4 col-form-label small" for="baselineFinalTemp">Final Temperature (&#8457;)</label>
     <div class="col-4 input-group input-group-sm">
-      <input type="text" class="form-control" formControlName="baselineFinalTemp" id="baselineFinalTemp">
+      <input type="number" class="form-control" formControlName="baselineFinalTemp" id="baselineFinalTemp">
       <app-control-messages [control]="lossesForm.controls.baselineFinalTemp"></app-control-messages>
     </div>
     <div class="col-4 input-group input-group-sm">
-      <input type="text" class="form-control" formControlName="modifiedFinalTemp" id="modifiedFinalTemp">
+      <input type="number" class="form-control" formControlName="modifiedFinalTemp" id="modifiedFinalTemp">
       <app-control-messages [control]="lossesForm.controls.modifiedFinalTemp"></app-control-messages>
     </div>
   </div>
@@ -65,11 +65,11 @@
   <div class="row form-group">
     <label class="col-4 col-form-label small" for="baselineCorrectionFactor">Correction Factor</label>
     <div class="col-4 input-group input-group-sm">
-      <input type="text" class="form-control" formControlName="baselineCorrectionFactor" id="baselineCorrectionFactor">
+      <input type="number" class="form-control" formControlName="baselineCorrectionFactor" id="baselineCorrectionFactor">
       <app-control-messages [control]="lossesForm.controls.baselineCorrectionFactor"></app-control-messages>
     </div>
     <div class="col-4 input-group input-group-sm">
-      <input type="text" class="form-control" formControlName="modifiedCorrectionFactor" id="modifiedCorrectionFactor">
+      <input type="number" class="form-control" formControlName="modifiedCorrectionFactor" id="modifiedCorrectionFactor">
       <app-control-messages [control]="lossesForm.controls.modifiedCorrectionFactor"></app-control-messages>
     </div>
   </div>
