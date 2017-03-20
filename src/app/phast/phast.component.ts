@@ -18,7 +18,6 @@ export class PhastComponent implements OnInit {
 
   ngOnInit() {
     this.assessment = this.assessmentService.getWorkingAssessment();
-    this.phastService.test();
   }
 
   changeTab($event) {
