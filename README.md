@@ -106,7 +106,7 @@ latest-mac.json will be in ../output/github
 
 *The code will be signed with a certificate from your keychain automatically as long as it is appropriate and valid*  
   
-## Builing for all platforms at once
+## Building for all platforms at once
 *Only Mac can build all platforms at once*  
 
 Prerequisites as stated above  
