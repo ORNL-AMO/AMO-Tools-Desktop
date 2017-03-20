@@ -9,7 +9,7 @@
         <app-operating-hours (continue)="changeTab($event)" *ngIf="currentTab == 2"></app-operating-hours>
       </div>
       <div class="col-12">
-        <app-losses (continue)="changeTab($event)" *ngIf="currentTab == 3"></app-losses>
+        <app-losses [phast]="assessment.phast" (continue)="changeTab($event)" *ngIf="currentTab == 3"></app-losses>
         <app-designed-energy-use (continue)="changeTab($event)" *ngIf="currentTab == 4"></app-designed-energy-use>
         <app-aux-equipment (continue)="changeTab($event)" *ngIf="currentTab == 5"></app-aux-equipment>
         <app-metered-energy-use (continue)="changeTab($event)" *ngIf="currentTab == 6"></app-metered-energy-use>
@@ -33,6 +33,6 @@
   <div class="pull-right">
     <button class="btn btn-primary" *ngIf="currentTab < 3" (click)="continue()">Save & Continue</button>
     <button class="btn btn-secondary" *ngIf="currentTab >= 3" (click)="exportData()">Export to CSV...</button>
-    <button class="btn btn-primary" *ngIf="currentTab >= 3" (click)="saveAdjustment()">Save</button>
+    <button class="btn btn-primary" *ngIf="currentTab >= 3" (click)="save()">Save</button>
   </div>
 </div>

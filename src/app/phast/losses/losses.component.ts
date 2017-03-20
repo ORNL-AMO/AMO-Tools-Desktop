@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
+import { PHAST } from '../../shared/models/phast';
 
 @Component({
   selector: 'app-losses',
@@ -6,7 +7,9 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['losses.component.css']
 })
 export class LossesComponent implements OnInit {
-
+  @Input()
+  phast: PHAST;
+  
   lossesTab: string = 'charge-material';
 
   constructor() { }

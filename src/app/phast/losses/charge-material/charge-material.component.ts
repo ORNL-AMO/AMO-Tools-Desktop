@@ -1,36 +1,82 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import * as _ from 'lodash';
 import { PhastService } from '../../phast.service';
-
+import { Losses } from '../../../shared/models/phast';
+import { ChargeMaterial } from '../../../shared/models/losses/chargeMaterial';
+import { ChargeMaterialService } from './charge-material.service';
 @Component({
   selector: 'app-charge-material',
   templateUrl: './charge-material.component.html',
   styleUrls: ['./charge-material.component.css']
 })
 export class ChargeMaterialComponent implements OnInit {
+  @Input()
+  losses: Losses;
 
   chargeMaterial: Array<any>;
-  chargeMaterialType: string = 'Solid';
 
-  constructor(private formBuilder: FormBuilder, private phastService: PhastService) { }
+  constructor(private formBuilder: FormBuilder, private phastService: PhastService, private chargeMaterialService: ChargeMaterialService) { }
 
   ngOnInit() {
     if (!this.chargeMaterial) {
       this.chargeMaterial = new Array();
     }
+    if (this.losses.chargeMaterials) {
+      this.losses.chargeMaterials.forEach(loss => {
+        if (loss.inputs.chargeMaterialType == 'Gas') {
+          let tmpLoss = {
+            chargeMaterialType: 'Gas',
+            solidForm: this.chargeMaterialService.initSolidForm(),
+            liquidForm: this.chargeMaterialService.initLiquidForm(),
+            gasForm: this.chargeMaterialService.getGasChargeMaterialForm(loss.inputs.gasChargeMaterial),
+            name: 'Material #' + (this.chargeMaterial.length + 1),
+            baselineHeatRequired: 0.0,
+            modifiedHeatRequired: 0.0
+          };
+          this.calculateBaseline(tmpLoss);
+          this.calculateModified(tmpLoss);
+          this.chargeMaterial.unshift(tmpLoss);
+        }
+        else if (loss.inputs.chargeMaterialType == 'Solid') {
+          let tmpLoss = {
+            chargeMaterialType: 'Solid',
+            solidForm: this.chargeMaterialService.getSolidChargeMaterialForm(loss.inputs.solidChargeMaterial),
+            liquidForm: this.chargeMaterialService.initLiquidForm(),
+            gasForm: this.chargeMaterialService.initGasForm(),
+            name: 'Material #' + (this.chargeMaterial.length + 1),
+            baselineHeatRequired: 0.0,
+            modifiedHeatRequired: 0.0
+          };
+          this.calculateBaseline(tmpLoss);
+          this.calculateModified(tmpLoss);
+          this.chargeMaterial.unshift(tmpLoss);
+        }
+        else if (loss.inputs.chargeMaterialType == 'Liquid') {
+          let tmpLoss = {
+            chargeMaterialType: 'Liquid',
+            solidForm:  this.chargeMaterialService.initSolidForm(),
+            liquidForm: this.chargeMaterialService.getLiquidChargeMaterialForm(loss.inputs.liquidChargeMaterial),
+            gasForm: this.chargeMaterialService.initGasForm(),
+            name: 'Material #' + (this.chargeMaterial.length + 1),
+            baselineHeatRequired: 0.0,
+            modifiedHeatRequired: 0.0
+          };
+          this.calculateBaseline(tmpLoss);
+          this.calculateModified(tmpLoss);
+          this.chargeMaterial.unshift(tmpLoss);
+        }
+      })
+    }
   }
 
   addMaterial() {
-    let tmpSolidForm = this.initSolidForm();
-    let tmpGasForm = this.initGasForm();
-    let tmpLiquidForm = this.initLiquidForm();
-    let tmpName = 'Material #' + (this.chargeMaterial.length + 1);
-    this.chargeMaterial.push({
-      solidForm: tmpSolidForm,
-      liquidForm: tmpLiquidForm,
-      gasForm: tmpGasForm,
-      name: tmpName,
+    this.chargeMaterial.unshift({
+      chargeMaterialType: 'Solid',
+      solidForm: this.chargeMaterialService.initSolidForm(),
+      liquidForm: this.chargeMaterialService.initLiquidForm(),
+      gasForm: this.chargeMaterialService.initGasForm(),
+      name: 'Material #' + (this.chargeMaterial.length + 1),
       baselineHeatRequired: 0.0,
       modifiedHeatRequired: 0.0
     });
@@ -52,9 +98,8 @@ export class ChargeMaterialComponent implements OnInit {
   }
 
   calculateBaseline(loss: any) {
-    if (this.chargeMaterialType == 'Solid') {
+    if (loss.chargeMaterialType == 'Solid') {
       let reactionType = 0;
-      debugger
       if (loss.solidForm.value.baselineEndothermicOrExothermic == 'Exothermic') {
         reactionType = 1;
       }
@@ -76,9 +121,8 @@ export class ChargeMaterialComponent implements OnInit {
         loss.solidForm.value.baselineAdditionalHeatRequired,
 
       );
-    } else if (this.chargeMaterialType == 'Liquid') {
+    } else if (loss.chargeMaterialType == 'Liquid') {
       let reactionType = 0;
-      debugger
       if (loss.liquidForm.value.baselineEndothermicOrExothermic == 'Exothermic') {
         reactionType = 1;
       }
@@ -96,7 +140,7 @@ export class ChargeMaterialComponent implements OnInit {
         loss.liquidForm.value.baselineHeatOfReaction,
         loss.liquidForm.value.baselineAdditionalHeatRequired
       )
-    } else if (this.chargeMaterialType == 'Gas') {
+    } else if (loss.chargeMaterialType == 'Gas') {
       let reactionType = 0;
       if (loss.gasForm.value.baselineEndothermicOrExothermic == 'Exothermic') {
         reactionType = 1;
@@ -117,7 +161,7 @@ export class ChargeMaterialComponent implements OnInit {
   }
 
   calculateModified(loss: any) {
-    if (this.chargeMaterialType == 'Solid') {
+    if (loss.chargeMaterialType == 'Solid') {
       let reactionType = 0;
       if (loss.solidForm.value.modifiedEndothermicOrExothermic == 'Exothermic') {
         reactionType = 1;
@@ -140,7 +184,7 @@ export class ChargeMaterialComponent implements OnInit {
         loss.solidForm.value.modifiedAdditionalHeatRequired,
 
       );
-    } else if (this.chargeMaterialType == 'Liquid') {
+    } else if (loss.chargeMaterialType == 'Liquid') {
       let reactionType = 0;
       if (loss.liquidForm.value.modifiedEndothermicOrExothermic == 'Exothermic') {
         reactionType = 1;
@@ -159,7 +203,7 @@ export class ChargeMaterialComponent implements OnInit {
         loss.liquidForm.value.modifiedHeatOfReaction,
         loss.liquidForm.value.modifiedAdditionalHeatRequired
       )
-    } else if (this.chargeMaterialType == 'Gas') {
+    } else if (loss.chargeMaterialType == 'Gas') {
       let reactionType = 0;
       if (loss.gasForm.value.modifiedEndothermicOrExothermic == 'Exothermic') {
         reactionType = 1;
@@ -179,107 +223,6 @@ export class ChargeMaterialComponent implements OnInit {
     }
   }
 
-  initLiquidForm() {
-    return this.formBuilder.group({
-      'baselineMaterialName': ['', Validators.required],
-      'baselineMaterialSpecificHeatLiquid': ['', Validators.required],
-      'baselineMaterialVaporizingTemperature': ['', Validators.required],
-      'baselineMaterialLatentHeat': ['', Validators.required],
-      'baselineMaterialSpecificHeatVapor': ['', Validators.required],
-      'baselineFeedRate': ['', Validators.required],
-      'baselineInitialTemperature': ['', Validators.required],
-      'baselineDischargeTemperature': ['', Validators.required],
-      'baselineLiquidVaporized': ['', Validators.required],
-      'baselineLiquidReacted': ['', Validators.required],
-      'baselineHeatOfReaction': ['', Validators.required],
-      'baselineEndothermicOrExothermic': ['', Validators.required],
-      'baselineAdditionalHeatRequired': ['', Validators.required],
-
-      'modifiedMaterialName': ['', Validators.required],
-      'modifiedMaterialSpecificHeatLiquid': ['', Validators.required],
-      'modifiedMaterialVaporizingTemperature': ['', Validators.required],
-      'modifiedMaterialLatentHeat': ['', Validators.required],
-      'modifiedMaterialSpecificHeatVapor': ['', Validators.required],
-      'modifiedFeedRate': ['', Validators.required],
-      'modifiedInitialTemperature': ['', Validators.required],
-      'modifiedDischargeTemperature': ['', Validators.required],
-      'modifiedLiquidVaporized': ['', Validators.required],
-      'modifiedLiquidReacted': ['', Validators.required],
-      'modifiedHeatOfReaction': ['', Validators.required],
-      'modifiedEndothermicOrExothermic': ['', Validators.required],
-      'modifiedAdditionalHeatRequired': ['', Validators.required]
-    })
-  }
-
-  initGasForm() {
-    return this.formBuilder.group({
-      'baselineMaterialName': ['', Validators.required],
-      'baselineMaterialSpecificHeat': ['', Validators.required],
-      'baselineFeedRate': ['', Validators.required],
-      'baselineVaporInGas': ['', Validators.required],
-      'baselineInitialTemperature': ['', Validators.required],
-      'baselineDischargeTemperature': ['', Validators.required],
-      'baselineSpecificHeatOfVapor': ['', Validators.required],
-      'baselineGasReacted': ['', Validators.required],
-      'baselineHeatOfReaction': ['', Validators.required],
-      'baselineEndothermicOrExothermic': ['', Validators.required],
-      'baselineAdditionalHeatRequired': ['', Validators.required],
-
-      'modifiedMaterialName': ['', Validators.required],
-      'modifiedMaterialSpecificHeat': ['', Validators.required],
-      'modifiedFeedRate': ['', Validators.required],
-      'modifiedVaporInGas': ['', Validators.required],
-      'modifiedInitialTemperature': ['', Validators.required],
-      'modifiedDischargeTemperature': ['', Validators.required],
-      'modifiedSpecificHeatOfVapor': ['', Validators.required],
-      'modifiedGasReacted': ['', Validators.required],
-      'modifiedHeatOfReaction': ['', Validators.required],
-      'modifiedEndothermicOrExothermic': ['', Validators.required],
-      'modifiedAdditionalHeatRequired': ['', Validators.required]
-
-
-    })
-  }
-
-
-  initSolidForm() {
-    //FUEL FIRED SOLID
-    return this.formBuilder.group({
-      'baselineMaterialName': ['', Validators.required],
-      'baselineMaterialSpecificHeatOfSolidMaterial': ['', Validators.required],
-      'baselineMaterialLatentHeatOfFusion': ['', Validators.required],
-      'baselineMaterialHeatOfLiquid': ['', Validators.required],
-      'baselineMaterialMeltingPoint': ['', Validators.required],
-      'baselineFeedRate': ['', Validators.required],
-      'baselineWaterContentAsCharged': ['', Validators.required],
-      'baselineWaterContentAsDischarged': ['', Validators.required],
-      'baselineInitialTemperature': ['', Validators.required],
-      'baselineChargeMaterialDischargeTemperature': ['', Validators.required],
-      'baselineWaterVaporDischargeTemperature': ['', Validators.required],
-      'baselinePercentChargeMelted': ['', Validators.required],
-      'baselinePercentChargeReacted': ['', Validators.required],
-      'baselineHeatOfReaction': ['', Validators.required],
-      'baselineEndothermicOrExothermic': ['', Validators.required],
-      'baselineAdditionalHeatRequired': ['', Validators.required],
-
-      'modifiedMaterialName': ['', Validators.required],
-      'modifiedMaterialSpecificHeatOfSolidMaterial': ['', Validators.required],
-      'modifiedMaterialLatentHeatOfFusion': ['', Validators.required],
-      'modifiedMaterialHeatOfLiquid': ['', Validators.required],
-      'modifiedMaterialMeltingPoint': ['', Validators.required],
-      'modifiedFeedRate': ['', Validators.required],
-      'modifiedWaterContentAsCharged': ['', Validators.required],
-      'modifiedWaterContentAsDischarged': ['', Validators.required],
-      'modifiedInitialTemperature': ['', Validators.required],
-      'modifiedChargeMaterialDischargeTemperature': ['', Validators.required],
-      'modifiedWaterVaporDischargeTemperature': ['', Validators.required],
-      'modifiedPercentChargeMelted': ['', Validators.required],
-      'modifiedPercentChargeReacted': ['', Validators.required],
-      'modifiedHeatOfReaction': ['', Validators.required],
-      'modifiedEndothermicOrExothermic': ['', Validators.required],
-      'modifiedAdditionalHeatRequired': ['', Validators.required],
-    })
-  }
 
 
 }

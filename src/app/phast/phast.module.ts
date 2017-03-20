@@ -43,6 +43,7 @@ import { FlueGasLossesFormComponent } from './losses/flue-gas-losses/flue-gas-lo
 import { PhastService } from './phast.service';
 import { LiquidChargeMaterialFormComponent } from './losses/charge-material/liquid-charge-material-form/liquid-charge-material-form.component';
 import { GasChargeMaterialFormComponent } from './losses/charge-material/gas-charge-material-form/gas-charge-material-form.component';
+import { ChargeMaterialService } from './losses/charge-material/charge-material.service';
 
 @NgModule({
   declarations: [
@@ -94,7 +95,8 @@ import { GasChargeMaterialFormComponent } from './losses/charge-material/gas-cha
     ModalModule
   ],
   providers: [
-    PhastService
+    PhastService,
+    ChargeMaterialService
   ]
 })
 
