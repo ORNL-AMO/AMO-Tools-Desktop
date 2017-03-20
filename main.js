@@ -27,13 +27,13 @@ app.on('ready', function () {
     protocol: 'file',
     slashes: true
   }));
-  
+
   // Remove window once app is closed
   win.on('closed', function () {
     win = null;
   });
-  
-  
+
+
   // Auto Updater events
   autoUpdater.on('checking-for-update', () => {
   });
@@ -48,7 +48,7 @@ app.on('ready', function () {
   autoUpdater.on('update-downloaded', (ev, info) => {
     autoUpdater.quitAndInstall();
   });
-  
+
   //Check for updates and install
   autoUpdater.autoDownload = true;
   autoUpdater.checkForUpdates();

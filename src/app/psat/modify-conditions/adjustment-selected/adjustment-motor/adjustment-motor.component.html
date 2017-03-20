@@ -32,7 +32,7 @@
         <div class="input-group-addon incrementor-sm">
           <button class="btn btn-default btn-sm" (click)="addNum('motorRPM')"><i class="fa fa-plus"></i></button>
         </div>
-        <input type="text" class="form-control" id="motorRPM" formControlName="motorRPM" ngModel="{{adjustmentForm.value.motorRPM}}">
+        <input type="number" class="form-control" id="motorRPM" formControlName="motorRPM" ngModel="{{adjustmentForm.value.motorRPM}}">
       </div>
       <app-control-messages [control]="adjustmentForm.controls.motorRPM"></app-control-messages>
     </div>
@@ -53,7 +53,7 @@
   <div class="row form-group">
     <div class="col-sm-12">
       <div class="input-group input-group-sm">
-        <input type="text" class="form-control" id="voltage" formControlName="voltage">
+        <input type="number" class="form-control" id="voltage" formControlName="voltage">
       </div>
       <app-control-messages [control]="adjustmentForm.controls.voltage"></app-control-messages>
     </div>
@@ -63,7 +63,7 @@
   <div class="row form-group">
     <div class="col-sm-12">
       <div class="input-group input-group-sm">
-        <input type="text" class="form-control" id="fullLoadAmps" formControlName="fullLoadAmps">
+        <input type="number" class="form-control" id="fullLoadAmps" formControlName="fullLoadAmps">
       </div>
       <app-control-messages [control]="adjustmentForm.controls.fullLoadAmps"></app-control-messages>
     </div>
@@ -78,7 +78,7 @@
         <div class="input-group-addon incrementor-sm">
           <button class="btn btn-sm" (click)="addNum('sizeMargin')"><i class="fa fa-plus"></i></button>
         </div>
-        <input type="text" class="form-control" id="sizeMargin" formControlName="sizeMargin" ngModel="{{adjustmentForm.value.sizeMargin}}">
+        <input type="number" class="form-control" id="sizeMargin" formControlName="sizeMargin" ngModel="{{adjustmentForm.value.sizeMargin}}">
       </div>
       <app-control-messages [control]="adjustmentForm.controls.sizeMargin"></app-control-messages>
     </div>

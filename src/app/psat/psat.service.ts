@@ -17,7 +17,7 @@ export class PsatService {
     dischargeGaugePressure: number, 
     dischargeGaugeElevation: number, 
     dischargeLineLossCoefficients: number
-    ): number {
+    ){
     return psatAddon.headToolSuctionTank(specificGravity, flowRate, suctionPipeDiameter, suctionTankGasOverPressure, suctionTankFluidSurfaceElevation, suctionLineLossCoefficients, dischargePipeDiameter, dischargeGaugePressure, dischargeGaugeElevation, dischargeLineLossCoefficients)
   }
 
@@ -32,7 +32,7 @@ export class PsatService {
     dischargeGaugePressure: number, 
     dischargeGaugeElevation: number, 
     dischargeLineLossCoefficients: number
-    ): number{
+    ){
     return psatAddon.headTool(specificGravity, flowRate, suctionPipeDiameter, suctionGuagePressure, suctionGuageElevation, suctionLineLossCoefficients, dischargePipeDiameter, dischargeGaugePressure, dischargeGaugeElevation, dischargeLineLossCoefficients);
   }
 

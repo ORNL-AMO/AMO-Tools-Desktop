@@ -30,69 +30,69 @@
   </div>
 
   <div class="row form-group" *ngIf="
-  lossesForm.value.baselineCoolingMedium == 'Other Gas' 
+  lossesForm.value.baselineCoolingMedium == 'Other Gas'
   || lossesForm.value.modifiedCoolingMedium == 'Other Gas'
-  ||lossesForm.value.baselineCoolingMedium == 'Other Liquid' 
+  ||lossesForm.value.baselineCoolingMedium == 'Other Liquid'
   || lossesForm.value.modifiedCoolingMedium == 'Other Liquid'">
     <label class="col-4 col-form-label small" for="baselineAvgSpecificHeat">Average Specific Heat (Btu/lb-F)</label>
     <div class="col-4 input-group input-group-sm">
-      <input type="text" class="form-control" formControlName="baselineAvgSpecificHeat" id="baselineAvgSpecificHeat">
+      <input type="number" class="form-control" formControlName="baselineAvgSpecificHeat" id="baselineAvgSpecificHeat">
       <app-control-messages [control]="lossesForm.controls.baselineAvgSpecificHeat"></app-control-messages>
     </div>
     <div class="col-4 input-group input-group-sm">
-      <input type="text" class="form-control" formControlName="modifiedAvgSpecificHeat" id="modifiedAvgSpecificHeat">
+      <input type="number" class="form-control" formControlName="modifiedAvgSpecificHeat" id="modifiedAvgSpecificHeat">
       <app-control-messages [control]="lossesForm.controls.modifiedAvgSpecificHeat"></app-control-messages>
     </div>
   </div>
 
   <div class="row form-group" *ngIf="
-  lossesForm.value.baselineCoolingMedium == 'Other Gas' 
+  lossesForm.value.baselineCoolingMedium == 'Other Gas'
   || lossesForm.value.modifiedCoolingMedium == 'Other Gas'
-  ||lossesForm.value.baselineCoolingMedium == 'Other Liquid' 
+  ||lossesForm.value.baselineCoolingMedium == 'Other Liquid'
   || lossesForm.value.modifiedCoolingMedium == 'Other Liquid'">
     <label class="col-4 col-form-label small" for="baselineDensity">Density (lb/SCF)</label>
     <div class="col-4 input-group input-group-sm">
-      <input type="text" class="form-control" formControlName="baselineDensity" id="baselineDensity">
+      <input type="number" class="form-control" formControlName="baselineDensity" id="baselineDensity">
       <app-control-messages [control]="lossesForm.controls.baselineDensity"></app-control-messages>
     </div>
     <div class="col-4 input-group input-group-sm">
-      <input type="text" class="form-control" formControlName="modifiedDensity" id="modifiedDensity">
+      <input type="number" class="form-control" formControlName="modifiedDensity" id="modifiedDensity">
       <app-control-messages [control]="lossesForm.controls.modifiedDensity"></app-control-messages>
     </div>
   </div>
 
   <div class="row form-group">
-    <label class="col-4 col-form-label small" for="baselineFlow">Flow</label>
+    <label class="col-4 col-form-label small" for="baselineFlow">Gas Flow (SCFM)</label>
     <div class="col-4 input-group input-group-sm">
-      <input type="text" class="form-control" formControlName="baselineFlow" id="baselineFlow">
+      <input type="number" class="form-control" formControlName="baselineFlow" id="baselineFlow">
       <app-control-messages [control]="lossesForm.controls.baselineFlow"></app-control-messages>
     </div>
     <div class="col-4 input-group input-group-sm">
-      <input type="text" class="form-control" formControlName="modifiedFlow" id="modifiedFlow">
+      <input type="number" class="form-control" formControlName="modifiedFlow" id="modifiedFlow">
       <app-control-messages [control]="lossesForm.controls.modifiedFlow"></app-control-messages>
     </div>
   </div>
 
   <div class="row form-group">
-    <label class="col-4 col-form-label small" for="baselineInletTemp">Inlet Temp. (&#8457;)</label>
+    <label class="col-4 col-form-label small" for="baselineInletTemp">Inlet Temperature (&#8457;)</label>
     <div class="col-4 input-group input-group-sm">
-      <input type="text" class="form-control" formControlName="baselineInletTemp" id="baselineInletTemp">
+      <input type="number" class="form-control" formControlName="baselineInletTemp" id="baselineInletTemp">
       <app-control-messages [control]="lossesForm.controls.baselineInletTemp"></app-control-messages>
     </div>
     <div class="col-4 input-group input-group-sm">
-      <input type="text" class="form-control" formControlName="modifiedInletTemp" id="modifiedInletTemp">
+      <input type="number" class="form-control" formControlName="modifiedInletTemp" id="modifiedInletTemp">
       <app-control-messages [control]="lossesForm.controls.modifiedInletTemp"></app-control-messages>
     </div>
   </div>
 
   <div class="row form-group">
-    <label class="col-4 col-form-label small" for="baselineOutletTemp">Outlet Temp. (&#8457;)</label>
+    <label class="col-4 col-form-label small" for="baselineOutletTemp">Outlet Temperature (&#8457;)</label>
     <div class="col-4 input-group input-group-sm">
-      <input type="text" class="form-control" formControlName="baselineOutletTemp" id="baselineOutletTemp">
+      <input type="number" class="form-control" formControlName="baselineOutletTemp" id="baselineOutletTemp">
       <app-control-messages [control]="lossesForm.controls.baselineOutletTemp"></app-control-messages>
     </div>
     <div class="col-4 input-group input-group-sm">
-      <input type="text" class="form-control" formControlName="modifiedOutletTemp" id="modifiedOutletTemp">
+      <input type="number" class="form-control" formControlName="modifiedOutletTemp" id="modifiedOutletTemp">
       <app-control-messages [control]="lossesForm.controls.modifiedOutletTemp"></app-control-messages>
     </div>
   </div>
@@ -100,11 +100,11 @@
   <div class="row form-group">
     <label class="col-4 col-form-label small" for="baselineHeatRequired">Heat Required (Btu/hr)</label>
     <div class="col-4 input-group input-group-sm">
-      <input type="text" class="form-control" formControlName="baselineHeatRequired" id="baselineHeatRequired">
+      <input type="number" class="form-control" formControlName="baselineHeatRequired" id="baselineHeatRequired">
       <app-control-messages [control]="lossesForm.controls.baselineHeatRequired"></app-control-messages>
     </div>
     <div class="col-4 input-group input-group-sm">
-      <input type="text" class="form-control" formControlName="modifiedHeatRequired" id="modifiedHeatRequired">
+      <input type="number" class="form-control" formControlName="modifiedHeatRequired" id="modifiedHeatRequired">
       <app-control-messages [control]="lossesForm.controls.modifiedHeatRequired"></app-control-messages>
     </div>
   </div>
@@ -112,11 +112,11 @@
   <div class="row form-group">
     <label class="col-4 col-form-label small" for="baselineCorrectionFactor">Correction Factor</label>
     <div class="col-4 input-group input-group-sm">
-      <input type="text" class="form-control" formControlName="baselineCorrectionFactor" id="baselineHeatRequired">
+      <input type="number" class="form-control" formControlName="baselineCorrectionFactor" id="baselineHeatRequired">
       <app-control-messages [control]="lossesForm.controls.baselineCorrectionFactor"></app-control-messages>
     </div>
     <div class="col-4 input-group input-group-sm">
-      <input type="text" class="form-control" formControlName="modifiedCorrectionFactor" id="modifiedCorrectionFactor">
+      <input type="number" class="form-control" formControlName="modifiedCorrectionFactor" id="modifiedCorrectionFactor">
       <app-control-messages [control]="lossesForm.controls.modifiedCorrectionFactor"></app-control-messages>
     </div>
   </div>
@@ -124,11 +124,11 @@
   <div class="row form-group total-row">
     <label class="col-4 col-form-label small bold" for="baselineHeatLoss">Total Heat loss for cooling (Btu/hr)</label>
     <div class="col-4 input-group input-group-sm">
-      <input type="text" class="form-control bold" formControlName="baselineHeatLoss" id="baselineHeatLoss">
+      <input type="number" class="form-control bold" formControlName="baselineHeatLoss" id="baselineHeatLoss">
       <app-control-messages [control]="lossesForm.controls.baselineHeatLoss"></app-control-messages>
     </div>
     <div class="col-4 input-group input-group-sm">
-      <input type="text" class="form-control bold" formControlName="modifiedHeatLoss" id="modifiedHeatLoss">
+      <input type="number" class="form-control bold" formControlName="modifiedHeatLoss" id="modifiedHeatLoss">
       <app-control-messages [control]="lossesForm.controls.modifiedHeatLoss"></app-control-messages>
     </div>
   </div>-->

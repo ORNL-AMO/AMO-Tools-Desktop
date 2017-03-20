@@ -1,7 +1,6 @@
 {
   "name": "amo-tools-desktop",
-  "productName": "AMO-Tools-Desktop",
-  "version": "0.1.0",
+  "version": "0.1.5",
   "main": "main.js",
   "license": "MIT",
   "description": "AMO-Tools-Desktop",
@@ -22,7 +21,8 @@
     "postinstall": "./node_modules/.bin/electron-rebuild",
     "windows": "./node_modules/.bin/build -w --x64 --ia32",
     "linux": "./node_modules/.bin/build -l --x64 --ia32",
-    "mac": "./node_modules/.bin/build -m --x64 --ia32"
+    "mac": "./node_modules/.bin/build -m --x64 --ia32",
+    "build-all": "./node_modules/.bin/build -mwl --x64 --ia32"
   },
   "private": true,
   "dependencies": {
@@ -48,7 +48,7 @@
     "ts-helpers": "^1.1.1",
     "zone.js": "^0.7.6"
   },
- "build": {
+  "build": {
     "appId": "com.electron.amo-tools-desktop",
     "copyright": "Copyright 2017 ORNL. All rights reserved.",
     "productName": "AMO-Tools-Desktop",
@@ -57,19 +57,15 @@
       "output": "../output/"
     },
     "win": {
-      "target": "nsis",
-      "publish": [
-        {
-          "provider": "github",
-          "owner": "ORNL-AMO",
-          "repo": "AMO-Tools-Desktop"
-        }
-      ]
+      "target": "nsis"
     },
     "nsis": {
+      "oneClick": false,
+      "allowElevation": true,
+      "allowToChangeInstallationDirectory": true,
       "installerIcon": "../AMO-Tools-Desktop/src/favicon.ico",
-      "perMachine": false,
-      "installerHeaderIcon": "../AMO-Tools-Desktop/src/favicon.cio"
+      "installerHeaderIcon": "../AMO-Tools-Desktop/src/favicon.ico",
+      "artifactName": "${productName}-Setup-${version}.${ext}"
     },
     "linux": {
       "target": [
@@ -77,8 +73,8 @@
         "deb",
         "rpm"
       ],
-    "executableName": "AMO-Tools-Desktop",
-    "maintainer": "Advanced Manufacturing Office"
+      "executableName": "AMO-Tools-Desktop",
+      "maintainer": "Advanced Manufacturing Office"
     },
     "mac": {
       "target": [
@@ -93,7 +89,7 @@
     "@types/jasmine": "2.5.38",
     "@types/lodash": "^4.14.52",
     "@types/node": "~6.0.60",
-    "amo-tools-suite": "^0.1.13",
+    "amo-tools-suite": "^0.1.14",
     "chart.js": "^2.5.0",
     "codelyzer": "~2.0.0",
     "convert-units": "^2.0.1",

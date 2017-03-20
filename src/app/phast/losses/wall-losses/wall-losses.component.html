@@ -1,37 +1,23 @@
-<div class="card losses-container">
-  <div class="card-header losses-header">
+<div class="section-header">
+  <h3 class="pull-left">Wall Losses</h3>
+  <button class="btn btn-secondary pull-right" (click)="addLoss()">+ Add Wall Loss</button>
+</div>
+
+<div class="no-data" *ngIf="wallLosses.length == 0" (click)="addLoss()">
+  <h3>You have no Atmosphere Losses</h3>
+  <h4>Add some now.</h4>
+</div>
+
+<div class="card card-form" *ngFor="let loss of wallLosses">
+  <div class="card-header">
     <div class="pull-left">
-      <b>Wall Losses</b>
+      <b>{{loss.name}}</b>
     </div>
-    <button class="btn btn-secondary pull-right" (click)="addLoss()">+ Add</button>
+    <button class="close pull-right" aria-label="Close" (click)="removeLoss(loss.name)">
+      <span aria-hidden="true">&times;</span>
+    </button>
   </div>
-  <div class="card" *ngFor="let wallLoss of wallLosses">
-    <div class="card-header">
-      <div class="pull-left">
-        <b>{{wallLoss.name}}</b>
-      </div>
-      <button class="close pull-right" aria-label="Close" (click)="removeLoss(wallLoss.name)">
-          <span aria-hidden="true">&times;</span>
-        </button>
-    </div>
-    <div class="card-block">
-      <app-wall-losses-form [(wallLossesForm)]="wallLoss.form" (calculateModified)="calculateModified(wallLoss)" (calculateBaseline)="calculateBaseline(wallLoss)"></app-wall-losses-form>
-      <div class="row">
-        <div class="col-4">
-          Heat Required
-        </div>
-        <div class="col-4 text-center">
-          {{wallLoss.baselineHeatRequired | number:'2.2-2'}}
-        </div>
-        <div class="col-4 text-center"> 
-          {{wallLoss.modifiedHeatRequired | number:'2.2-2'}}
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="card losses-empty" *ngIf="wallLosses.length == 0">
-    <div class="card-block row align-items-center justify-content-center">
-      <div class="h4 text-muted">You haven't defined any wall losses</div>
-    </div>
+  <div class="card-block">
+    <app-wall-losses-form [(wallLossesForm)]="loss.form"></app-wall-losses-form>
   </div>
 </div>

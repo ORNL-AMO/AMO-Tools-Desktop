@@ -41,6 +41,23 @@ export class FlueGasLossesComponent implements OnInit {
 
   initForm(){
     return this.formBuilder.group({
+      'baselineFurnaceFlueGasTemp': [''],
+      'baselineInput': [''],
+      'baselineOxygenInFlueGas': [''],
+      'baselineExcessAir': [''],
+      'baselineCombustionAirTemp': [''],
+      'baselineCalculatedO2InFlueGas': [''],
+      'baselineAvailableHeatInput': [''],
+      'baselineAvailableHeat': [{ value: '', disabled: true }],
+
+      'modifiedFurnaceFlueGasTemp': [''],
+      'modifiedInput': [''],
+      'modifiedOxygenInFlueGas': [''],
+      'modifiedExcessAir': [''],
+      'modifiedCombustionAirTemp': [''],
+      'modifiedCalculatedO2InFlueGas': [''],
+      'modifiedAvailableHeatInput': [''],
+      'modifiedAvailableHeat': [{ value: '', disabled: true }]
     })
   }
 }
