@@ -282,14 +282,10 @@ Banner
 Wizard Steps
 ============================================== */
 .wizard-steps {
-  background: #ffffff;
-  background: -moz-linear-gradient(top,  #ffffff 0%, #e6e6e6 100%);
-  background: -webkit-linear-gradient(top,  #ffffff 0%,#e6e6e6 100%);
-  background: linear-gradient(to bottom,  #ffffff 0%,#e6e6e6 100%);
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#e6e6e6',GradientType=0 );
-  -webkit-box-shadow: 0px 1px 3px 0px rgba(0,0,0,0.28);
-  -moz-box-shadow: 0px 1px 3px 0px rgba(0,0,0,0.28);
-  box-shadow: 0px 1px 3px 0px rgba(0,0,0,0.28);
+  background: #efefef;
+  -webkit-box-shadow: 0px 1px 3px 0px rgba(0,0,0,0.10);
+  -moz-box-shadow: 0px 1px 3px 0px rgba(0,0,0,0.10);
+  box-shadow: 0px 1px 3px 0px rgba(0,0,0,0.10);
   border-bottom: #8a8a8a solid 1px;
   display: flex;
   justify-content: center;
@@ -313,7 +309,7 @@ Wizard Steps
   z-index: -1;
 }
 .wizard-steps h2 span {
-  background: #f8f8f8; 
+  background: #efefef; 
   padding: 0 15px; 
 }
 
@@ -403,6 +399,56 @@ Tabs
 }
 
 
+/*
+Help Panel Cards
+========================================= */
+.help-col {
+  padding: 0;
+}
+
+.help-header, .help-content {
+  padding: 36px;
+}
+
+.help-header {
+  border-bottom: #ededed solid 1px;
+}
+.help-header p:last-of-type {
+  margin-bottom: 0;
+}
+.help-panel .card {
+  background-color: transparent; 
+  border: none; 
+  border-radius: 0; 
+}
+.help-panel .card-header {
+  padding: 0;
+  background: none;
+  border-bottom: none;
+  font-weight: 700;
+  font-size: 20px;
+  border-radius: none;
+}
+  .help-panel .card-header:hover {
+    cursor: default;
+  }
+.help-panel .card-block {
+  padding: 0;
+  background: none;
+}
+
+.help-panel h3 {
+  font-size: 22px;
+  font-weight: 700;
+  color: #000;
+}
+.help-panel p {
+  font-size: 16px;
+  color: #222;
+}
+
+
+
 
 
 /*
@@ -433,7 +479,7 @@ No Data Messaging
 
 /*tmp color variables*/
 .dark-bg{
-  background-color: #EDEDED;
+  border-left: #EDEDED solid 1px;
 }
 
 .medium-bg{
