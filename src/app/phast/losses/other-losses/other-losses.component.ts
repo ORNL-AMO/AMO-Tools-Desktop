@@ -40,6 +40,16 @@ export class OtherLossesComponent implements OnInit {
 
   initForm(){
     return this.formBuilder.group({
+      'baselineAreaOfHeatLoss': [''],
+      'baselineAverageTemp': [''],
+      'baselineAmbientTemp': [''],
+      'baselineSurfaceEmissivity': [''],
+      'baselineHeatLoss': [{value:'', disabled: true}],
+      'modifiedAreaOfHeatLoss': [''],
+      'modifiedAverageTemp': [''],
+      'modifiedAmbientTemp': [''],
+      'modofiedSurfaceEmissivity': [''],
+      'modifiedHeatLoss': [{value:'', disabled: true}]
     })
   }
 }

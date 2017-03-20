@@ -1,36 +1,26 @@
-<div class="card fixture-container">
-  <div class="card-header fixture-header">
+<div class="section-header">
+  <h3 class="pull-left">Fixture Losses</h3>
+  <button class="btn btn-secondary pull-right" (click)="addLoss()">+ Add Fixture Loss</button>
+</div>
+
+<div class="no-data" *ngIf="fixtureLosses.length == 0" (click)="addLoss()">
+  <h3>You have no Fixture Losses</h3>
+  <h4>Add some now.</h4>
+</div>
+
+<div class="card card-form" *ngFor="let loss of fixtureLosses">
+  <div class="card-header">
     <div class="pull-left">
-      <b>Fixture, Trays, Baskets etc. Losses</b>
+      <b>{{loss.name}}</b>
     </div>
-    <button class="btn btn-secondary pull-right" (click)="addLoss()">+ Add</button>
+    <button class="close pull-right" aria-label="Close" (click)="removeLoss(loss.name)">
+      <span aria-hidden="true">&times;</span>
+    </button>
   </div>
-  <div class="card" *ngFor="let loss of fixtureLosses">
-    <div class="card-header">
-      <div class="pull-left">
-        <b>{{loss.name}}</b>
-      </div>
-      <button class="close pull-right" aria-label="Close" (click)="removeLoss(loss.name)">
-          <span aria-hidden="true">&times;</span>
-        </button>
-    </div>
-    <div class="card-block">
-      <app-fixture-losses-form [(lossesForm)]="loss.form" (calculateBaseline)="calculateBaseline(loss)" (calculateModified)="calculateModified(loss)"></app-fixture-losses-form>
-      <div class="row results-row">
-        <div class="col-4">
-          <small>Heat Required (Btu/hr)</small>
-        </div>
-        <div class="col-4 text-center">
-          {{loss.baselineHeatRequired | number: '2.2-2'}}
-        </div>
-        <div class="col-4 text-center">
-          {{loss.modifiedHeatRequired | number:'2.2-2'}}
-        </div>
-      </div>
-    </div>
-    <div class="card losses-empty" *ngIf="fixtureLosses.length == 0">
-      <div class="card-block row align-items-center justify-content-center">
-        <div class="h4 text-muted">You haven't defined any fixture losses</div>
-      </div>
-    </div>
+  <div class="card-block">
+    <app-fixture-losses-form [(lossesForm)]="loss.form"></app-fixture-losses-form>
   </div>
+</div>
+
+
+

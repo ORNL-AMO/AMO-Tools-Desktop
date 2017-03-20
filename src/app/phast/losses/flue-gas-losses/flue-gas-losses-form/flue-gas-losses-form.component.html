@@ -1,3 +1,114 @@
-<p>
-  flue-gas-losses-form works!
-</p>
+<div class="row justify-content-end">
+  <div class="col-4 text-center">
+    Baseline
+  </div>
+  <div class="col-4 text-center">
+    Modified
+  </div>
+</div>
+<form [formGroup]="flueGasLossForm">
+
+  <div class="row form-group">
+    <label class="col-4 col-form-label small" for="baselineFurnaceFlueGasTemp">Furnace Flue Gas Temperature (&#8457;)</label>
+    <div class="col-4 input-group input-group-sm">
+      <input type="text" class="form-control" formControlName="baselineFurnaceFlueGasTemp" id="baselineFurnaceFlueGasTemp">
+      <app-control-messages [control]="flueGasLossForm.controls.baselineFurnaceFlueGasTemp"></app-control-messages>
+    </div>
+    <div class="col-4 input-group input-group-sm">
+      <input type="text" class="form-control" formControlName="modifiedFurnaceFlueGasTemp" id="modifiedFurnaceFlueGasTemp">
+      <app-control-messages [control]="flueGasLossForm.controls.modifiedFurnaceFlueGasTemp"></app-control-messages>
+    </div>
+  </div>
+
+  <div class="row form-group">
+    <label class="col-4 col-form-label small" for="baselineInput">Select Input (% XS Air or % O2)</label>
+    <div class="col-4 input-group input-group-sm">
+      <select class="form-control" formControlName="baselineInput" id="baselineInput">
+        <option>% XS Air</option>
+        <option>% O2</option>
+      </select>
+      <app-control-messages [control]="flueGasLossForm.controls.baselineInput"></app-control-messages>
+    </div>
+    <div class="col-4 input-group input-group-sm">
+      <select class="form-control" formControlName="modifiedInput" id="modifiedInput">
+        <option>% XS Air</option>
+        <option>% O2</option>
+      </select>
+      <app-control-messages [control]="flueGasLossForm.controls.modifiedInput"></app-control-messages>
+    </div>
+  </div>
+
+  <div class="row form-group">
+    <label class="col-4 col-form-label small" for="baselineOxygenInFlueGas">Oxygen in Flue Gases (%)</label>
+    <div class="col-4 input-group input-group-sm">
+      <input type="text" class="form-control" formControlName="baselineOxygenInFlueGas" id="baselineOxygenInFlueGas">
+      <app-control-messages [control]="flueGasLossForm.controls.baselineOxygenInFlueGas"></app-control-messages>
+    </div>
+    <div class="col-4 input-group input-group-sm">
+      <input type="text" class="form-control" formControlName="modifiedOxygenInFlueGas" id="modifiedOxygenInFlueGas">
+      <app-control-messages [control]="flueGasLossForm.controls.modifiedOxygenInFlueGas"></app-control-messages>
+    </div>
+  </div>
+
+  <div class="row form-group">
+    <label class="col-4 col-form-label small" for="baselineExcessAir">Excess Air (%)</label>
+    <div class="col-4 input-group input-group-sm">
+      <input type="text" class="form-control" formControlName="baselineExcessAir" id="baselineExcessAir">
+      <app-control-messages [control]="flueGasLossForm.controls.baselineExcessAir"></app-control-messages>
+    </div>
+    <div class="col-4 input-group input-group-sm">
+      <input type="text" class="form-control" formControlName="modifiedExcessAir" id="modofiedExcessAir">
+      <app-control-messages [control]="flueGasLossForm.controls.modifiedExcessAir"></app-control-messages>
+    </div>
+  </div>
+
+  <div class="row form-group">
+    <label class="col-4 col-form-label small" for="baselineCombustionAirTemp">Combustion Air Temperature (&#8457;)</label>
+    <div class="col-4 input-group input-group-sm">
+      <input type="text" class="form-control" formControlName="baselineCombustionAirTemp" id="baselineCombustionAirTemp">
+      <app-control-messages [control]="flueGasLossForm.controls.baselineCombustionAirTemp"></app-control-messages>
+    </div>
+    <div class="col-4 input-group input-group-sm">
+      <input type="text" class="form-control" formControlName="modifiedCombustionAirTemp" id="modifiedCombustionAirTemp">
+      <app-control-messages [control]="flueGasLossForm.controls.modifiedCombustionAirTemp"></app-control-messages>
+    </div>
+  </div>
+
+  <div class="row form-group">
+    <label class="col-4 col-form-label small" for="baselineCalculatedO2InFlueGas">Calculated % O2 in Flue Gas (%)</label>
+    <div class="col-4 input-group input-group-sm">
+      <input type="text" class="form-control" formControlName="baselineCalculatedO2InFlueGas" id="baselineCalculatedO2InFlueGas">
+      <app-control-messages [control]="flueGasLossForm.controls.baselineCalculatedO2InFlueGas"></app-control-messages>
+    </div>
+    <div class="col-4 input-group input-group-sm">
+      <input type="text" class="form-control" formControlName="modifiedCalculatedO2InFlueGas" id="modifiedCalculatedO2InFlueGas">
+      <app-control-messages [control]="flueGasLossForm.controls.modifiedCalculatedO2InFlueGas"></app-control-messages>
+    </div>
+  </div>
+
+  <div class="row form-group">
+    <label class="col-4 col-form-label small" for="baselineAvailableHeatInput">Available Heat (%)</label>
+    <div class="col-4 input-group input-group-sm">
+      <input type="text" class="form-control" formControlName="baselineAvailableHeatInput" id="baselineAvailableHeatInput">
+      <app-control-messages [control]="flueGasLossForm.controls.baselineAvailableHeatInput"></app-control-messages>
+    </div>
+    <div class="col-4 input-group input-group-sm">
+      <input type="text" class="form-control" formControlName="modifiedAvailableHeatInput" id="modifiedAvailableHeatInput">
+      <app-control-messages [control]="flueGasLossForm.controls.modifiedAvailableHeatInput"></app-control-messages>
+    </div>
+  </div>
+
+  <div class="row form-group">
+    <label class="col-4 col-form-label small" for="baselineAvailableHeat">Available Heat (%)</label>
+    <div class="col-4 input-group input-group-sm">
+      <input type="text" class="form-control" formControlName="baselineAvailableHeat" id="baselineAvailableHeat">
+      <app-control-messages [control]="flueGasLossForm.controls.baselineAvailableHeat"></app-control-messages>
+    </div>
+    <div class="col-4 input-group input-group-sm">
+      <input type="text" class="form-control" formControlName="modifiedAvailableHeat" id="modifiedAvailableHeat">
+      <app-control-messages [control]="flueGasLossForm.controls.modifiedAvailableHeat"></app-control-messages>
+    </div>
+  </div>
+
+
+</form>
