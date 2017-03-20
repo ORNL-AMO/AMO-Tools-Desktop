@@ -105,11 +105,11 @@ export class PhastService {
     dischargeTemperature: number, 
     waterVaporDischargeTemperature: number, 
     chargeMelted: number, 
-    chargedReacted: number, 
+    chargeReacted: number, 
     reactionHeat: number, 
     additionalHeat: number) {
     //return nothing?
-    return phastAddon.solidLoadChargeMaterial(thermicReactionType, specificHeatSolid, latentHeat, specificHeatLiquid, meltingPoint, chargeFeedRate, waterContentCharged, waterContentDischarged, initialTemperature, dischargeTemperature, waterVaporDischargeTemperature, chargeMelted, chargedReacted, reactionHeat, additionalHeat);
+    return phastAddon.solidLoadChargeMaterial(thermicReactionType, specificHeatSolid, latentHeat, specificHeatLiquid, meltingPoint, chargeFeedRate, waterContentCharged, waterContentDischarged, initialTemperature, dischargeTemperature, waterVaporDischargeTemperature, chargeMelted, chargeReacted, reactionHeat, additionalHeat);
   }
 
   wallLosses(

@@ -11,7 +11,7 @@ import { FlueGas } from './losses/flueGas';
 export interface PHAST {
   name?: string,
   phastInputs?: PhastInputs,
-  losses?: Losses[]
+  losses?: Losses
 }
 
 export interface PhastInputs {
