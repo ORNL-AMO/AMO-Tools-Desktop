@@ -5,14 +5,14 @@
   <div [ngClass]="{'col-md-12': !isPanelOpen, 'col-md-9': isPanelOpen}">
     <div class="row panel" [ngClass]="{'justify-content-center':currentTab < 3}">
       <div class="col-lg-8 col-md-8 col-sm-10 col-xs-12" *ngIf="currentTab < 3">
-        <app-system-basics (continue)="changeTab($event)" *ngIf="currentTab == 1"></app-system-basics>
-        <app-operating-hours (continue)="changeTab($event)" *ngIf="currentTab == 2"></app-operating-hours>
+        <app-system-basics *ngIf="currentTab == 1"></app-system-basics>
+        <app-operating-hours *ngIf="currentTab == 2"></app-operating-hours>
       </div>
       <div class="col-12">
-        <app-losses [phast]="assessment.phast" (continue)="changeTab($event)" *ngIf="currentTab == 3"></app-losses>
-        <app-designed-energy-use (continue)="changeTab($event)" *ngIf="currentTab == 4"></app-designed-energy-use>
-        <app-aux-equipment (continue)="changeTab($event)" *ngIf="currentTab == 5"></app-aux-equipment>
-        <app-metered-energy-use (continue)="changeTab($event)" *ngIf="currentTab == 6"></app-metered-energy-use>
+        <app-losses [(phast)]="assessment.phast" [saveClicked]="saveClicked" *ngIf="currentTab == 3"></app-losses>
+        <app-designed-energy-use *ngIf="currentTab == 4"></app-designed-energy-use>
+        <app-aux-equipment *ngIf="currentTab == 5"></app-aux-equipment>
+        <app-metered-energy-use *ngIf="currentTab == 6"></app-metered-energy-use>
         <app-sankey *ngIf="currentTab == 7"></app-sankey>
       </div>
     </div>

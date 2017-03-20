@@ -9,7 +9,9 @@ import { PHAST } from '../../shared/models/phast';
 export class LossesComponent implements OnInit {
   @Input()
   phast: PHAST;
-  
+  @Input()
+  saveClicked: boolean;
+
   lossesTab: string = 'charge-material';
 
   constructor() { }

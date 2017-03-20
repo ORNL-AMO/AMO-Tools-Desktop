@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, SimpleChange } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import * as _ from 'lodash';
 import { PhastService } from '../../phast.service';
@@ -13,10 +13,20 @@ import { ChargeMaterialService } from './charge-material.service';
 export class ChargeMaterialComponent implements OnInit {
   @Input()
   losses: Losses;
+  @Input()
+  saveClicked: boolean;
 
   chargeMaterial: Array<any>;
 
   constructor(private formBuilder: FormBuilder, private phastService: PhastService, private chargeMaterialService: ChargeMaterialService) { }
+
+  ngOnChanges(changes: SimpleChange){
+    console.log('SAVE');
+    if(!changes.isFirstChange && this.chargeMaterial){
+      console.log('SAVE 2');
+      this.saveLosses();
+    }
+  }
 
   ngOnInit() {
     if (!this.chargeMaterial) {
@@ -68,6 +78,15 @@ export class ChargeMaterialComponent implements OnInit {
         }
       })
     }
+  }
+
+  saveLosses(){
+    this.chargeMaterial.forEach(material => {
+      if(material.chargeMaterialType == 'Gas'){
+        let test = this.chargeMaterialService.buildGasChargeMaterial(material.gasForm);
+        console.log(test);
+      }
+    })
   }
 
   addMaterial() {

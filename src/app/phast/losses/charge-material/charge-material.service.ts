@@ -7,6 +7,47 @@ export class ChargeMaterialService {
 
   constructor(private formBuilder: FormBuilder) { }
 
+  buildGasChargeMaterial(gasForm: any) {
+    let baselineReactionType = 0;
+    let modifiedReactionType = 0;
+    if(gasForm.value.baselineExothermicOrEndothermic == 'Exothermic'){
+      baselineReactionType = 1;
+    }
+    if(gasForm.value.modifiedExothermicOrEndothermic == 'Exothermic'){
+      modifiedReactionType = 1;
+    }
+    let tmpGasMaterial: GasChargeMaterial = {
+      baseline: {
+        materialName: gasForm.value.baselineMaterialName,
+        thermicReactionType: baselineReactionType, 
+        specificHeatGas: gasForm.value.baselineMaterialSpecificHeat,
+        feedRate: gasForm.value.baselineFeedRate,
+        percentVapor: gasForm.value.baselineVaporInGas,
+        initialTemperature: gasForm.value.baselineInitialTemperature,
+        dischargeTemperature: gasForm.value.baselineDischargeTemperature,
+        specificHeatVapor: gasForm.value.baselineSpecificHeatOfVapor,
+        percentReacted: gasForm.value.baselineGasReacted,
+        reactionHeat: gasForm.value.baselineHeatOfReaction,
+        additionalHeat: gasForm.value.baselineAdditionalHeatRequired
+      },
+      modified: {
+        materialName: gasForm.value.modifiedMaterialName,
+        thermicReactionType: modifiedReactionType,
+        specificHeatGas: gasForm.value.modifiedMaterialSpecificHeat,
+        feedRate: gasForm.value.modifiedFeedRate,
+        percentVapor: gasForm.value.modifiedVaporInGas,
+        initialTemperature: gasForm.value.modifiedInitialTemperature,
+        dischargeTemperature: gasForm.value.modifiedDischargeTemperature,
+        specificHeatVapor: gasForm.value.modifiedSpecificHeatOfVapor,
+        percentReacted: gasForm.value.modifiedGasReacted,
+        reactionHeat: gasForm.value.modifiedHeatOfReaction,
+        additionalHeat: gasForm.value.modifiedAdditionalHeatRequired
+      }
+    }
+    return tmpGasMaterial;
+  }
+
+
   initLiquidForm() {
     return this.formBuilder.group({
       'baselineMaterialName': ['', Validators.required],
