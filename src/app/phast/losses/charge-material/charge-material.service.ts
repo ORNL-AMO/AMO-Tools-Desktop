@@ -48,6 +48,14 @@ export class ChargeMaterialService {
   }
 
 
+  buildLiquidChargeMaterial(liquidForm: any){
+    //TODO: map form to LiquidChargeMaterial
+  }
+
+  buildSolidChargeMaterial(solidForm: any){
+    //TODO: map form to SolidChargeMaterial
+  }
+
   initLiquidForm() {
     return this.formBuilder.group({
       'baselineMaterialName': ['', Validators.required],
