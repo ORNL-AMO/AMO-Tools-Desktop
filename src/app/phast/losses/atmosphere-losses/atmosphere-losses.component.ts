@@ -40,7 +40,20 @@ export class AtmosphereLossesComponent implements OnInit {
   }
 
   initForm(){
+
     return this.formBuilder.group({
+      'baselineSpecificHeat': [''],
+      'baselineInitialTemp': [''],
+      'baselineFinalTemp': [''],
+      'baselineFlowRate': [''],
+      'baselineCorrectionFactor': [''],
+      'baselineHeatLoss': [{value:'', disabled: true}],
+      'modifiedSpecificHeat': [''],
+      'modifiedInitialTemp': [''],
+      'modifiedFinalTemp': [''],
+      'modofiedFlowRate': [''],
+      'modifiedCorrectionFactor': [''],
+      'modifiedHeatLoss': [{value:'', disabled: true}]
     })
   }
 

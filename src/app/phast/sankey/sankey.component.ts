@@ -91,7 +91,6 @@ export class SankeyComponent implements OnInit{
       { source: 13, target: 15, endWidth: 0 }
     ];
 
-
     svg = d3.select('app-sankey-diagram').append('svg')
       .call(calcSankey)
       .attr("width", "900")
