@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import * as _ from 'lodash';
+import { PhastService } from '../../phast.service';
 
 @Component({
   selector: 'app-water-cooling-losses',
@@ -11,7 +12,7 @@ export class WaterCoolingLossesComponent implements OnInit {
 
   coolingLosses: Array<any>;
 
-  constructor(private formBuilder: FormBuilder) { }
+  constructor(private formBuilder: FormBuilder, private phastService: PhastService) { }
 
   ngOnInit() {
     if (!this.coolingLosses) {
@@ -22,7 +23,12 @@ export class WaterCoolingLossesComponent implements OnInit {
   addLoss() {
     let tmpForm = this.initForm();
     let tmpName = 'Loss #' + (this.coolingLosses.length + 1);
-    this.coolingLosses.push({ form: tmpForm, name: tmpName });
+    this.coolingLosses.push({ 
+      form: tmpForm, 
+      name: tmpName,
+      baselineHeatLoss: 0.0,
+      modifiedHeatLoss: 0.0
+    });
   }
 
   removeLoss(str: string) {
@@ -61,5 +67,14 @@ export class WaterCoolingLossesComponent implements OnInit {
       'modifiedCorrectionFactor': [''],
       'modifiedHeatLoss': [{value: '', disabled: true}]
     })
+  }
+
+  calculateBaseline(loss: any){
+    //TODO: call phast to calculate baseline
+    //loss.baselineHeatLoss = this.phastService.waterCoolingLosses()
+  }
+
+  calculateModified(loss: any){
+    //TODO: call phast to calculate modified
   }
 }

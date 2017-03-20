@@ -41,6 +41,8 @@ import { OtherLossesFormComponent } from './losses/other-losses/other-losses-for
 import { FlueGasLossesFormComponent } from './losses/flue-gas-losses/flue-gas-losses-form/flue-gas-losses-form.component';
 
 import { PhastService } from './phast.service';
+import { LiquidChargeMaterialFormComponent } from './losses/charge-material/liquid-charge-material-form/liquid-charge-material-form.component';
+import { GasChargeMaterialFormComponent } from './losses/charge-material/gas-charge-material-form/gas-charge-material-form.component';
 
 @NgModule({
   declarations: [
@@ -77,7 +79,9 @@ import { PhastService } from './phast.service';
     AtmosphereLossesFormComponent,
     HeatStorageFormComponent,
     OtherLossesFormComponent,
-    FlueGasLossesFormComponent
+    FlueGasLossesFormComponent,
+    LiquidChargeMaterialFormComponent,
+    GasChargeMaterialFormComponent
   ],
   exports: [
   ],

@@ -15,12 +15,22 @@
         </button>
     </div>
     <div class="card-block">
-      <app-fixture-losses-form [(lossesForm)]="loss.form"></app-fixture-losses-form>
+      <app-fixture-losses-form [(lossesForm)]="loss.form" (calculateBaseline)="calculateBaseline(loss)" (calculateModified)="calculateModified(loss)"></app-fixture-losses-form>
+      <div class="row results-row">
+        <div class="col-4">
+          <small>Heat Required (Btu/hr)</small>
+        </div>
+        <div class="col-4 text-center">
+          {{loss.baselineHeatRequired | number: '2.2-2'}}
+        </div>
+        <div class="col-4 text-center">
+          {{loss.modifiedHeatRequired | number:'2.2-2'}}
+        </div>
+      </div>
+    </div>
+    <div class="card losses-empty" *ngIf="fixtureLosses.length == 0">
+      <div class="card-block row align-items-center justify-content-center">
+        <div class="h4 text-muted">You haven't defined any fixture losses</div>
+      </div>
     </div>
   </div>
-  <div class="card losses-empty" *ngIf="fixtureLosses.length == 0">
-    <div class="card-block row align-items-center justify-content-center">
-      <div class="h4 text-muted">You haven't defined any fixture losses</div>
-    </div>
-  </div>
-</div>
