@@ -63,7 +63,6 @@ export class ChargeMaterialComponent implements OnInit {
         loss.solidForm.value.baselineMaterialSpecificHeatOfSolidMaterial,
         loss.solidForm.value.baselineMaterialLatentHeatOfFusion,
         loss.solidForm.value.baselineMaterialHeatOfLiquid,
-        loss.solidForm.value.baselineMaterialLatentHeatOfFusion,
         loss.solidForm.value.baselineMaterialMeltingPoint,
         loss.solidForm.value.baselineFeedRate,
         loss.solidForm.value.baselineWaterContentAsCharged,
@@ -73,6 +72,7 @@ export class ChargeMaterialComponent implements OnInit {
         loss.solidForm.value.baselineWaterVaporDischargeTemperature,
         loss.solidForm.value.baselinePercentChargeMelted,
         loss.solidForm.value.baselinePercentChargeReacted,
+        loss.solidForm.value.baselineHeatOfReaction,
         loss.solidForm.value.baselineAdditionalHeatRequired,
 
       );
@@ -101,7 +101,7 @@ export class ChargeMaterialComponent implements OnInit {
       if (loss.gasForm.value.baselineEndothermicOrExothermic == 'Exothermic') {
         reactionType = 1;
       }
-      loss.baselineHeatRequired = this.phastService.liquidLoadChargeMaterial(
+      loss.baselineHeatRequired = this.phastService.gasLoadChargeMaterial(
         reactionType,
         loss.gasForm.value.baselineMaterialSpecificHeat,
         loss.gasForm.value.baselineFeedRate,
@@ -112,8 +112,6 @@ export class ChargeMaterialComponent implements OnInit {
         loss.gasForm.value.baselineGasReacted,
         loss.gasForm.value.baselineHeatOfReaction,
         loss.gasForm.value.baselineAdditionalHeatRequired,
-        loss.gasForm.value.modifiedHeatOfReaction,
-        loss.gasForm.value.modifiedAdditionalHeatRequired
       )
     }
   }
@@ -129,7 +127,6 @@ export class ChargeMaterialComponent implements OnInit {
         loss.solidForm.value.modifiedMaterialSpecificHeatOfSolidMaterial,
         loss.solidForm.value.modifiedMaterialLatentHeatOfFusion,
         loss.solidForm.value.modifiedMaterialHeatOfLiquid,
-        loss.solidForm.value.modifiedMaterialLatentHeatOfFusion,
         loss.solidForm.value.modifiedMaterialMeltingPoint,
         loss.solidForm.value.modifiedFeedRate,
         loss.solidForm.value.modifiedWaterContentAsCharged,
@@ -139,6 +136,7 @@ export class ChargeMaterialComponent implements OnInit {
         loss.solidForm.value.modifiedWaterVaporDischargeTemperature,
         loss.solidForm.value.modifiedPercentChargeMelted,
         loss.solidForm.value.modifiedPercentChargeReacted,
+        loss.solidForm.value.modifiedHeatOfReaction,
         loss.solidForm.value.modifiedAdditionalHeatRequired,
 
       );
@@ -166,7 +164,7 @@ export class ChargeMaterialComponent implements OnInit {
       if (loss.gasForm.value.modifiedEndothermicOrExothermic == 'Exothermic') {
         reactionType = 1;
       }
-      loss.modifiedHeatRequired = this.phastService.liquidLoadChargeMaterial(
+      loss.modifiedHeatRequired = this.phastService.gasLoadChargeMaterial(
         reactionType,
         loss.gasForm.value.modifiedMaterialSpecificHeat,
         loss.gasForm.value.modifiedFeedRate,
@@ -175,8 +173,6 @@ export class ChargeMaterialComponent implements OnInit {
         loss.gasForm.value.modifiedDischargeTemperature,
         loss.gasForm.value.modifiedSpecificHeatOfVapor,
         loss.gasForm.value.modifiedGasReacted,
-        loss.gasForm.value.modifiedHeatOfReaction,
-        loss.gasForm.value.modifiedAdditionalHeatRequired,
         loss.gasForm.value.modifiedHeatOfReaction,
         loss.gasForm.value.modifiedAdditionalHeatRequired
       )
