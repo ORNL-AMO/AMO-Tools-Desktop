@@ -17,20 +17,19 @@ var baseSize = 300;
 
 export class SankeyComponent implements OnInit{
 
-  private color: string = "#127bdc";
   constructor() {
   }
 
   ngOnInit() {
   }
 
-  closeSankey(){
+  closeSankey(location){
     //Remove Sankey
-    d3.select('app-sankey-diagram').selectAll('svg').remove();
+    d3.select(location).selectAll('svg').remove();
   }
 
-  zoom(){
-    d3.select('app-sankey-diagram').selectAll('svg')
+  zoom(location){
+    d3.select(location).selectAll('svg')
       .attr("width", "100%")
       .attr("height", "700");
   }
@@ -41,10 +40,10 @@ export class SankeyComponent implements OnInit{
       .attr("height", "600")
   }
 
-  makeSankey(){
+  makeSankey(location){
 
     //Remove  all Sankeys
-    d3.select('app-sankey-diagram').selectAll('svg').remove();
+    d3.select(location).selectAll('svg').remove();
 
     var nodes = [
 
@@ -91,12 +90,12 @@ export class SankeyComponent implements OnInit{
       { source: 13, target: 15, endWidth: 0 }
     ];
 
-    svg = d3.select('app-sankey-diagram').append('svg')
+    svg = d3.select(location).append('svg')
       .call(calcSankey)
       .attr("width", "900")
       .attr("height", "600")
       .attr("viewBox", "0 0 " + width + " " + height)
-      .attr("preserveAspectRatio", "none")
+      .attr("preserveAspectRatio", "xMinYMin")
       .style("border", "1px solid black")
       .append("g")
       .call(findColor);

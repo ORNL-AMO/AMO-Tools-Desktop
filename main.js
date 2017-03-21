@@ -42,7 +42,7 @@ app.on('ready', function () {
   autoUpdater.on('update-not-available', (ev, info) => {
   });
   autoUpdater.on('error', (ev, error) => {
-    });
+  });
   autoUpdater.on('download-progress', (ev, progressObj) => {
   });
   autoUpdater.on('update-downloaded', (ev, info) => {
