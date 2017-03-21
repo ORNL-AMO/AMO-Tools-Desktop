@@ -1,6 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { PHAST } from '../../shared/models/phast';
-
+import { PHAST, Losses } from '../../shared/models/phast';
 @Component({
   selector: 'app-losses',
   templateUrl: 'losses.component.html',
@@ -17,11 +16,13 @@ export class LossesComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
+    if(!this.phast.losses){
+      this.phast.losses = new Array<Losses>();
+    }
   }
 
   changeTab($event){
     this.lossesTab = $event;
-    console.log(this.phast)
   }
 
 }

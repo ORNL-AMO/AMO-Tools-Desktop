@@ -30,7 +30,7 @@ export class AssessmentCreateComponent implements OnInit {
 
   }
 
-  initForm(){
+  initForm() {
     return this.formBuilder.group({
       'assessmentName': ['', Validators.required],
       'assessmentType': ['']
@@ -39,20 +39,20 @@ export class AssessmentCreateComponent implements OnInit {
 
   //  CREATE ASSESSMENT MODAL
   @ViewChild('createModal') public createModal: ModalDirective;
-  showCreateModal(){
+  showCreateModal() {
     this.createModal.show();
   }
 
-  hideCreateModal(){
+  hideCreateModal() {
     this.showDropdown = false;
     this.createModal.hide();
   }
 
-  createAssessment(){
+  createAssessment() {
     this.hideCreateModal();
 
     this.createModal.onHidden.subscribe(() => {
-      if(this.newAssessment.value.assessmentType == 'Pump') {
+      if (this.newAssessment.value.assessmentType == 'Pump') {
         let tmpAssessment = this.assessmentService.getNewAssessment('PSAT');
         tmpAssessment.name = this.newAssessment.value.assessmentName;
 
@@ -60,16 +60,16 @@ export class AssessmentCreateComponent implements OnInit {
         tmpAssessment.psat = tmpPsat;
         this.assessmentService.setWorkingAssessment(tmpAssessment);
 
-        if(this.directory.assessments){
+        if (this.directory.assessments) {
           this.directory.assessments.push(tmpAssessment);
-        }else{
+        } else {
           this.directory.assessments = new Array();
           this.directory.assessments.push(tmpAssessment);
         }
 
         this.router.navigateByUrl('/psat')
 
-      }else if(this.newAssessment.value.assessmentType == 'Furnace'){
+      } else if (this.newAssessment.value.assessmentType == 'Furnace') {
         let tmpAssessment = this.assessmentService.getNewAssessment('PHAST');
         tmpAssessment.name = this.newAssessment.value.assessmentName;
 
@@ -77,30 +77,36 @@ export class AssessmentCreateComponent implements OnInit {
         tmpAssessment.phast = tmpPhast;
 
         this.assessmentService.setWorkingAssessment(tmpAssessment);
+        if (this.directory.assessments) {
+          this.directory.assessments.push(tmpAssessment);
+        } else {
+          this.directory.assessments = new Array();
+          this.directory.assessments.push(tmpAssessment);
+        }
         this.router.navigateByUrl('/phast')
       }
     })
   }
 
-   selectEquip(eq: string){
+  selectEquip(eq: string) {
     this.selectedEquip = eq;
-   }
+  }
 
-   toggleDropdown(){
+  toggleDropdown() {
     this.showDropdown = !this.showDropdown;
-   }
+  }
 
-   setAssessment(psatName: string){
-     this.selectedAssessment = psatName;
-     this.toggleDropdown();
-   }
+  setAssessment(psatName: string) {
+    this.selectedAssessment = psatName;
+    this.toggleDropdown();
+  }
 
   onKey(str: string) {
     if (str != '') {
       let temp = this.allAssessments.filter(f => f.name.toLowerCase().indexOf(str.toLowerCase()) >= 0);
-      if(temp.length != 0) {
+      if (temp.length != 0) {
         this.filteredAssessments = temp;
-      }else{
+      } else {
         this.filteredAssessments = this.allAssessments;
       }
     } else {
