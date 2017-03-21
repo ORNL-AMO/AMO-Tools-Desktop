@@ -1,22 +1,18 @@
-<div class="card">
-  <div class="card-header" (click)="defaultOpen = toggleOpen(defaultOpen, 'default')">
-    Field Data Help
-  </div>
-  <div class="card-block" *ngIf="currentField == 'default' || defaultOpen">
-    <p class="text-muted">
-      Enter measured data to calculate your pump and system's optimization rating and annual savings potential.
-    </p><br>
+<div class="help-header">
 
-    <p class="text-muted">
-      <span class="fa fa-youtube-play"> Watch tutorial on gathering field data.</span>
-    </p>
-  </div>
+  <h3>Field Data Help</h3>
+  <p>Enter measured feild data to calculate your system's optimization rating and annual savings potential.</p>
+  <p class="text-muted">
+    <span class="fa fa-youtube-play"></span> Watch tutorial on gathering field data.
+  </p>
+
 </div>
-<div class="card">
-  <div class="card-header small" (click)="operatingFractionOpen = toggleOpen(operatingFractionOpen, 'operatingFraction')">
+
+<div class="card" *ngIf="currentField == 'operatingFraction'">
+  <div class="card-header">
     Operating Fraction
   </div>
-  <div class="card-block small" *ngIf="currentField == 'operatingFraction' || operatingFractionOpen">
+  <div class="card-block">
     <label>Description:</label>
     <p>
       Operating Fraction represents the fraction of calender hours the equipment is running.
@@ -27,11 +23,12 @@
     </p>
   </div>
 </div>
-<div class="card">
-  <div class="card-header small" (click)="costKwHrOpen = toggleOpen(costKwHrOpen, 'costKwHr')">
+
+<div class="card" *ngIf="currentField == 'costKwHr'">
+  <div class="card-header">
     Cost (KwHr)
   </div>
-  <div class="card-block small" *ngIf="currentField == 'costKwHr' || costKwHrOpen">
+  <div class="card-block">
     <label>Description:</label>
     <p>
       Cost is the per unit cost of electricity in (kw/hr).
@@ -42,11 +39,12 @@
     </p>
   </div>
 </div>
-<div class="card">
-  <div class="card-header small" (click)="flowRateOpen = toggleOpen(flowRateOpen, 'flowRate')">
+
+<div class="card" *ngIf="currentField == 'flowRate'">
+  <div class="card-header">
     Flow Rate (gpm)
   </div>
-  <div class="card-block small" *ngIf="currentField == 'flowRate' || flowRateOpen">
+  <div class="card-block">
     <label>Description:</label>
     <p>
       Flow Rate represents either the <u>measured</u> or <u>required</u> rate of flow.
@@ -57,11 +55,12 @@
     </p>
   </div>
 </div>
-<div class="card">
-  <div class="card-header small" (click)="headOpen = toggleOpen(headOpen, 'head')">
+
+<div class="card" *ngIf="currentField == 'head'">
+  <div class="card-header">
     Head
   </div>
-  <div class="card-block small" *ngIf="currentField == 'head' || headOpen">
+  <div class="card-block">
     <label>Description:</label>
     <p>
       Head represents either the <u>measured</u> or <u>required</u> pump head in feet or meters.
@@ -72,11 +71,12 @@
     </p>
   </div>
 </div>
-<div class="card">
-  <div class="card-header small"  (click)="loadEstimatedMethodOpen = toggleOpen(loadEstimatedMethodOpen, 'loadEstimatedMethod')">
+
+<div class="card" *ngIf="currentField == 'loadEstimatedMethod'">
+  <div class="card-header">
     Load Estimated Method
   </div>
-  <div class="card-block small" *ngIf="currentField == 'loadEstimatedMethod' || loadEstimatedMethodOpen">
+  <div class="card-block">
     <label>Description:</label>
     <p>
       Load Estimation Method can either be one of two choices: <u>Power</u> or <u>Current</u>. Both of which calculate <u>Load</u>.
@@ -87,11 +87,12 @@
     </p>
   </div>
 </div>
-<div class="card">
-  <div class="card-header small"  (click)="motorKWOpen = toggleOpen(motorKWOpen, 'motorKW')">
+
+<div class="card" *ngIf="currentField == 'motorKW'">
+  <div class="card-header">
     Motor (kW)
   </div>
-  <div class="card-block small" *ngIf="currentField == 'motorKW' || motorKWOpen">
+  <div class="card-block">
     <label>Description:</label>
     <p>
       Motor represents either a measured or average current among the three phases.
@@ -102,11 +103,12 @@
     </p>
   </div>
 </div>
-<div class="card">
-  <div class="card-header small" (click)="voltageOpen = toggleOpen(voltageOpen, 'voltage')">
+
+<div class="card" *ngIf="currentField == 'voltage'">
+  <div class="card-header">
     Voltage
   </div>
-  <div class="card-block small" *ngIf="currentField == 'voltage' || voltageOpen">
+  <div class="card-block">
     <label>Description:</label>
     <p>
       Measured bus voltage.

@@ -1,22 +1,18 @@
-<div class="card">
-  <div class="card-header" (click)="defaultOpen = toggleOpen(defaultOpen, 'default')">
-    Motor Help
-  </div>
-  <div class="card-block" *ngIf="currentField == 'default' || defaultOpen">
-    <p class="text-muted">
-      Enter measured data to calculate your pump and system's optimization rating and annual savings potential.
-    </p><br>
+<div class="help-header">
 
-    <p class="text-muted">
-      <span class="fa fa-youtube-play"> Watch tutorial on gathering motor data.</span>
-    </p>
-  </div>
+  <h3>Motor Help</h3>
+  <p>Enter measured data to calculate your motor's optimization rating and annual savings potential.</p>
+  <p class="text-muted">
+    <span class="fa fa-youtube-play"></span> Watch tutorial on gathering motor data.
+  </p>
+
 </div>
-<div class="card">
-  <div class="card-header small" (click)="lineFrequencyOpen = toggleOpen(lineFrequencyOpen, 'lineFrequency')">
+
+<div class="card" *ngIf="currentField == 'lineFrequency'">
+  <div class="card-header">
     Line Frequency
   </div>
-  <div class="card-block small" *ngIf="currentField == 'lineFrequency' || lineFrequencyOpen">
+  <div class="card-block">
     <label>Description:</label>
     <p>
       Line Frequency is the mains supply frequency.
@@ -27,11 +23,12 @@
     </p>
   </div>
 </div>
-<div class="card">
-  <div class="card-header small" (click)="horsePowerOpen = toggleOpen(horsePowerOpen, 'horsePower')">
+
+<div class="card" *ngIf="currentField == 'horsePower'">
+  <div class="card-header">
     Horse Power
   </div>
-  <div class="card-block small" *ngIf="currentField == 'horsePower' || horsePowerOpen">
+  <div class="card-block">
     <label>Description:</label>
     <p>
       Horse Power represents the rated power for the motor.
@@ -42,11 +39,12 @@
     </p>
   </div>
 </div>
-<div class="card">
-  <div class="card-header small" (click)="motorRPMOpen = toggleOpen(motorRPMOpen, 'motorRPM')">
+
+<div class="card" *ngIf="currentField == 'motorRPM'">
+  <div class="card-header">
     Motor RPM
   </div>
-  <div class="card-block small" *ngIf="currentField == 'motorRPM' || motorRPMOpen">
+  <div class="card-block">
     <label>Description:</label>
     <p>
       Motor RPM is the speed of the motor.
@@ -57,11 +55,12 @@
     </p>
   </div>
 </div>
-<div class="card">
-  <div class="card-header small" (click)="efficiencyClassOpen = toggleOpen(efficiencyClassOpen, 'efficiencyClass')">
+
+<div class="card" *ngIf="currentField == 'efficiencyClass'">
+  <div class="card-header">
     Efficiency Class
   </div>
-  <div class="card-block small" *ngIf="currentField == 'efficiencyClass' || efficiencyClassOpen">
+  <div class="card-block">
     <label>Description:</label>
     <p>
       Efficiency Class is the classification of efficiency given to motor. This can be found
@@ -76,12 +75,14 @@
                 <li> <strong>Average</strong><br> </li>
                 <li> <strong>Specified (below)</strong><br> </li>
               </ul>
+  </div>
 </div>
-<div class="card">
-  <div class="card-header small" (click)="voltageOpen = toggleOpen(voltageOpen, 'voltage')">
+
+<div class="card" *ngIf="currentField == 'voltage'">
+  <div class="card-header">
     Voltage
   </div>
-  <div class="card-block small" *ngIf="currentField == 'voltage' || voltageOpen">
+  <div class="card-block">
     <label>Description:</label>
     <p>
       Measured bus voltage.
@@ -92,11 +93,12 @@
     </p>
   </div>
 </div>
-<div class="card">
-  <div class="card-header small"  (click)="fullLoadAmpsOpen = toggleOpen(fullLoadAmpsOpen, 'fullLoadAmps')">
+
+<div class="card" *ngIf="currentField == 'fullLoadAmps'">
+  <div class="card-header">
     Full Load Amps
   </div>
-  <div class="card-block small" *ngIf="currentField == 'fullLoadAmps' || fullLoadAmpsOpen">
+  <div class="card-block small">
     <label>Description:</label>
     <p>
       Full Load Amps represent either the known or estimated amps used as a normalizing value.
@@ -107,11 +109,12 @@
     </p>
   </div>
 </div>
-<div class="card">
-  <div class="card-header small" (click)="sizeMarginOpen = toggleOpen(sizeMarginOpen, 'sizeMargin')">
+
+<div class="card" *ngIf="currentField == 'sizeMargin'">
+  <div class="card-header">
     Size Margin
   </div>
-  <div class="card-block small" *ngIf="currentField == 'sizeMargin' || sizeMarginOpen">
+  <div class="card-block">
     <label>Description:</label>
     <p>
       This Size Margin is added to the motor selected for the optimal application.
