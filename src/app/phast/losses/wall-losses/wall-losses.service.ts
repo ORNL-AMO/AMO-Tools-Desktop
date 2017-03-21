@@ -18,7 +18,7 @@ export class WallLossesService {
       'baselineCorrectionFactor': ['', Validators.required],
       'baselineWindVelocity': ['', Validators.required],
       'baselineSurfaceShape': ['Vertical Plates', Validators.required],
-      'baselineConditionFactor': [{ value: 1.394, disabled: "true" }, Validators.required],
+      'baselineConditionFactor': [1.394, Validators.required],
       'baselineSurfaceEmissivity': ['', Validators.required],
       'modifiedSurfaceArea': ['', Validators.required],
       'modifiedAvgSurfaceTemp': ['', Validators.required],
@@ -26,7 +26,7 @@ export class WallLossesService {
       'modifiedCorrectionFactor': ['', Validators.required],
       'modifiedWindVelocity': ['', Validators.required],
       'modifiedSurfaceShape': ['Vertical Plates', Validators.required],
-      'modifiedConditionFactor': [{ value: 1.394, disabled: "true" }, Validators.required],
+      'modifiedConditionFactor': [1.394, Validators.required],
       'modifiedSurfaceEmissivity': ['', Validators.required],
     })
   }
@@ -40,7 +40,7 @@ export class WallLossesService {
       'baselineAmbientTemp': [wallLoss.inputs.baseline.ambientTemperature, Validators.required],
       'baselineCorrectionFactor': [wallLoss.inputs.baseline.correctionFactor, Validators.required],
       'baselineWindVelocity': [wallLoss.inputs.baseline.windVelocity, Validators.required],
-      'baselineConditionFactor': [{value: wallLoss.inputs.baseline.conditionFactor, disabled: "true"}, Validators.required],
+      'baselineConditionFactor': [wallLoss.inputs.baseline.conditionFactor, Validators.required],
       'baselineSurfaceEmissivity': [wallLoss.inputs.baseline.surfaceEmissivity, Validators.required],
       'baselineSurfaceShape': [wallLoss.inputs.baseline.surfaceShape, Validators.required],
       'modifiedSurfaceArea': [wallLoss.inputs.modified.surfaceArea, Validators.required],
@@ -48,7 +48,7 @@ export class WallLossesService {
       'modifiedAmbientTemp': [wallLoss.inputs.modified.ambientTemperature, Validators.required],
       'modifiedCorrectionFactor': [wallLoss.inputs.modified.correctionFactor, Validators.required],
       'modifiedWindVelocity': [wallLoss.inputs.modified.windVelocity, Validators.required],
-      'modifiedConditionFactor': [{value: wallLoss.inputs.modified.conditionFactor, disabled: "true"}, Validators.required],
+      'modifiedConditionFactor': [wallLoss.inputs.modified.conditionFactor, Validators.required],
       'modifiedSurfaceEmissivity': [wallLoss.inputs.modified.surfaceEmissivity, Validators.required],
       'modifiedSurfaceShape': [wallLoss.inputs.modified.surfaceShape, Validators.required],
     })
