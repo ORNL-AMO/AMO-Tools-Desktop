@@ -172,7 +172,7 @@ export const MockDirectory: Directory = {
                   windVelocity: 10.0,
                   surfaceEmissivity: 0.9,
                   conditionFactor: 1.394,
-                  surfaceShape: 'Mock Shape',
+                  surfaceShape: 'Vertical Plates',
                   correctionFactor: 1.0
                 },
                 modified: {
@@ -181,7 +181,7 @@ export const MockDirectory: Directory = {
                   surfaceTemperature: 225.0,
                   windVelocity: 10.0,
                   surfaceEmissivity: 0.9,
-                  surfaceShape: 'Mock Shape',
+                  surfaceShape: 'Vertical Plates',
                   conditionFactor: 1.394,
                   correctionFactor: 1.0
                 }

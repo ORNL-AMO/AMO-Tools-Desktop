@@ -10,8 +10,8 @@
 
   <div class="row form-group">
     <label class="col-4 col-form-label small" for="baselineAvgSurfaceTemp">Average Surface Temperature</label>
-    <div class="col-2">
-      <small>(&#8457;)</small>
+    <div class="col-2 text-center">
+      <small>&#8457;</small>
     </div>
     <div class="col-3 input-group input-group-sm">
       <input type="number" class="form-control" formControlName="baselineAvgSurfaceTemp" id="baselineAvgSurfaceTemp" (keyup)="checkBaseline()">
@@ -27,8 +27,8 @@
 
   <div class="row form-group">
     <label class="col-4 col-form-label small" for="baselineAmbientTemp">Ambient Temperature</label>
-    <div class="col-2">
-      <small>(&#8457;)</small>
+    <div class="col-2 text-center">
+      <small>&#8457;</small>
     </div>
     <div class="col-3 input-group input-group-sm">
       <input type="number" class="form-control" formControlName="baselineAmbientTemp" id="baselineAmbientTemp" (keyup)="checkBaseline()">
@@ -42,7 +42,7 @@
 
   <div class="row form-group">
     <label class="col-4 col-form-label small" for="baselineWindVelocity">Wind Velocity</label>
-    <div class="col-2">
+    <div class="col-2  text-center">
       <small>miles/hr.</small>
     </div>
     <div class="col-3 input-group input-group-sm">
@@ -58,15 +58,15 @@
   <div class="row form-group">
     <label class="col-6 col-form-label small" for="baselineSurfaceShape">Surface shape/orientation</label>
     <div class="col-3 input-group input-group-sm">
-      <select class="form-control" formControlName="baselineSurfaceShape" ngModel="wallLossesForm.value.baselineSurfaceShape">
-        <option>Shape 1</option>
+      <select class="form-control" formControlName="baselineSurfaceShape" ngModel="{{wallLossesForm.value.baselineSurfaceShape}}">
+        <option>Vertical Plates</option>
         <option>Shape 2</option>
       </select>
       <!--<app-control-messages [control]="wallLossesForm.controls.baselineCorrectionFactor"></app-control-messages>-->
     </div>
     <div class="col-3 input-group input-group-sm">
-      <select class="form-control" formControlName="modifiedSurfaceShape" ngModel="wallLossesForm.value.modifiedSurfaceShape">
-        <option>Shape 1</option>
+      <select class="form-control" formControlName="modifiedSurfaceShape" ngModel="{{wallLossesForm.value.modifiedSurfaceShape}}">
+        <option>Vertical Plates</option>
         <option>Shape 2</option>
       </select>
       <!--<app-control-messages [control]="wallLossesForm.controls.modifiedCorrectionFactor"></app-control-messages>-->
@@ -77,11 +77,13 @@
   <div class="row form-group">
     <label class="col-6 col-form-label small" for="baselineConditionFactor">Surface shape/orientation factor</label>
     <div class="col-3 input-group input-group-sm">
-      <input type="number" class="form-control" formControlName="baselineConditionFactor" id="baselineConditionFactor" (keyup)="checkBaseline()">
+      {{wallLossesForm.value.baselineConditionFactor}}
+      <!--<input type="number" class="form-control" formControlName="baselineConditionFactor" id="baselineConditionFactor" (keyup)="checkBaseline()">-->
       <!--<app-control-messages [control]="wallLossesForm.controls.baselineCorrectionFactor"></app-control-messages>-->
     </div>
     <div class="col-3 input-group input-group-sm">
-      <input type="number" class="form-control" formControlName="modifiedConditionFactor" id="modifiedConditionFactor" (keyup)="checkModified()">
+      {{wallLossesForm.value.modifiedConditionFactor}}
+      <!--<input type="number" class="form-control" formControlName="modifiedConditionFactor" id="modifiedConditionFactor" (keyup)="checkModified()">-->
       <!--<app-control-messages [control]="wallLossesForm.controls.modifiedCorrectionFactor"></app-control-messages>-->
     </div>
   </div>
@@ -93,14 +95,14 @@
       <!--<app-control-messages [control]="wallLossesForm.controls.baselineCorrectionFactor"></app-control-messages>-->
     </div>
     <div class="col-3 input-group input-group-sm">
-      <input type="number" class="form-control" formControlName="modifiedCorrectionFactor" id="modifiedSurfaceEmissivity" (keyup)="checkModified()">
+      <input type="number" class="form-control" formControlName="modifiedSurfaceEmissivity" id="modifiedSurfaceEmissivity" (keyup)="checkModified()">
       <!--<app-control-messages [control]="wallLossesForm.controls.modifiedCorrectionFactor"></app-control-messages>-->
     </div>
   </div>
 
   <div class="row form-group">
     <label class="col-4 col-form-label small" for="baselineSurfaceArea">Total Outside Surface Area</label>
-    <div class="col-2">
+    <div class="col-2 text-center">
       <small>ft<sup>2</sup></small>
     </div>
     <div class="col-3 input-group input-group-sm">

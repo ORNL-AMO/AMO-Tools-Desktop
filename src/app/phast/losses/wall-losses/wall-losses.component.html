@@ -18,6 +18,20 @@
     </button>
   </div>
   <div class="card-block">
-    <app-wall-losses-form [(wallLossesForm)]="loss.form"></app-wall-losses-form>
+    <app-wall-losses-form [(wallLossesForm)]="loss.form" (calculateBaseline)="calculateBaseline(loss)" (calculateModified)="calculateModified(loss)"></app-wall-losses-form>
+    <div class="row">
+      <div class="col-4">
+        <small>Heat Loss</small>
+      </div>
+      <div class="col-2 text-center">
+        <small>Btu/hr</small>
+      </div>
+      <div class="col-3 text-center">
+        {{loss.baselineHeatLoss |number:'2.2-2'}}
+      </div>
+      <div class="col-3 text-center">
+        {{loss.modifiedHeatLoss |number:'2.2-2'}}
+      </div>
+    </div>
   </div>
 </div>

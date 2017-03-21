@@ -16,7 +16,6 @@ export class LossesSidebarComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    console.log(this.losses);
   }
 
   tabChange(str: string){
