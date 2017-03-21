@@ -8,114 +8,124 @@
 
 </div>
 
-<div class="card" *ngIf="currentField == 'operatingFraction'">
-  <div class="card-header">
-    Operating Fraction
+<div class="help-content">
+  <div class="card" *ngIf="currentField == 'operatingFraction'">
+    <div class="card-header">
+      Operating Fraction
+    </div>
+    <div class="card-block">
+      <label>Description:</label>
+      <p>
+        Operating Fraction represents the fraction of calender hours the equipment is running.
+      </p>
+      <label>Input:</label>
+      <p>
+        Units: <b>Percent</b><br> Minimum Value Allowed: <b>0</b><br> Maximum Value Allowed: <b>100</b><br>
+      </p>
+    </div>
   </div>
-  <div class="card-block">
-    <label>Description:</label>
-    <p>
-      Operating Fraction represents the fraction of calender hours the equipment is running.
-    </p>
-    <label>Input:</label>
-    <p>
-      Units: <b>Percent</b><br> Minimum Value Allowed: <b>0</b><br> Maximum Value Allowed: <b>100</b><br>
-    </p>
-  </div>
-</div>
 
-<div class="card" *ngIf="currentField == 'costKwHr'">
-  <div class="card-header">
-    Cost (KwHr)
+  <div class="card" *ngIf="currentField == 'costKwHr'">
+    <div class="card-header">
+      Cost (KwHr)
+    </div>
+    <div class="card-block">
+      <label>Description:</label>
+      <p>
+        Cost is the per unit cost of electricity in (kw/hr).
+      </p>
+      <label>Input:</label>
+      <p>
+        Units: <strong>Money</strong><br> Minimum Value Allowed: <strong>0</strong><br> Maximum Value Allowed: <strong>None</strong><br>
+      </p>
+    </div>
   </div>
-  <div class="card-block">
-    <label>Description:</label>
-    <p>
-      Cost is the per unit cost of electricity in (kw/hr).
-    </p>
-    <label>Input:</label>
-    <p>
-      Units: <strong>Money</strong><br> Minimum Value Allowed: <strong>0</strong><br> Maximum Value Allowed: <strong>None</strong><br>
-    </p>
-  </div>
-</div>
 
-<div class="card" *ngIf="currentField == 'flowRate'">
-  <div class="card-header">
-    Flow Rate (gpm)
+  <div class="card" *ngIf="currentField == 'flowRate'">
+    <div class="card-header">
+      Flow Rate (gpm)
+    </div>
+    <div class="card-block">
+      <label>Description:</label>
+      <p>
+        Flow Rate represents either the
+        <u>measured</u> or
+        <u>required</u> rate of flow.
+      </p>
+      <label>Input:</label>
+      <p>
+        Units: <strong>GPM, MGD, m^3/h, L/s</strong><br> Minimum Value Allowed: <strong>0</strong><br> Maximum Value Allowed:
+        <strong>None</strong><br>
+      </p>
+    </div>
   </div>
-  <div class="card-block">
-    <label>Description:</label>
-    <p>
-      Flow Rate represents either the <u>measured</u> or <u>required</u> rate of flow.
-    </p>
-    <label>Input:</label>
-    <p>
-      Units: <strong>GPM, MGD, m^3/h, L/s</strong><br> Minimum Value Allowed: <strong>0</strong><br> Maximum Value Allowed: <strong>None</strong><br>
-    </p>
-  </div>
-</div>
 
-<div class="card" *ngIf="currentField == 'head'">
-  <div class="card-header">
-    Head
+  <div class="card" *ngIf="currentField == 'head'">
+    <div class="card-header">
+      Head
+    </div>
+    <div class="card-block">
+      <label>Description:</label>
+      <p>
+        Head represents either the
+        <u>measured</u> or
+        <u>required</u> pump head in feet or meters.
+      </p>
+      <label>Input:</label>
+      <p>
+        Units: <strong>Feet or Meters</strong><br> Minimum Value Allowed: <strong>0</strong><br> Maximum Value Allowed: <b>None</b><br>
+      </p>
+    </div>
   </div>
-  <div class="card-block">
-    <label>Description:</label>
-    <p>
-      Head represents either the <u>measured</u> or <u>required</u> pump head in feet or meters.
-    </p>
-    <label>Input:</label>
-    <p>
-      Units: <strong>Feet or Meters</strong><br> Minimum Value Allowed: <strong>0</strong><br> Maximum Value Allowed: <b>None</b><br>
-    </p>
-  </div>
-</div>
 
-<div class="card" *ngIf="currentField == 'loadEstimatedMethod'">
-  <div class="card-header">
-    Load Estimated Method
+  <div class="card" *ngIf="currentField == 'loadEstimatedMethod'">
+    <div class="card-header">
+      Load Estimated Method
+    </div>
+    <div class="card-block">
+      <label>Description:</label>
+      <p>
+        Load Estimation Method can either be one of two choices:
+        <u>Power</u> or
+        <u>Current</u>. Both of which calculate
+        <u>Load</u>.
+      </p>
+      <label>Input:</label>
+      <p>
+        Options: <strong>Power</strong> or <strong>Current</strong><br>
+      </p>
+    </div>
   </div>
-  <div class="card-block">
-    <label>Description:</label>
-    <p>
-      Load Estimation Method can either be one of two choices: <u>Power</u> or <u>Current</u>. Both of which calculate <u>Load</u>.
-    </p>
-    <label>Input:</label>
-    <p>
-      Options: <strong>Power</strong> or <strong>Current</strong><br>
-    </p>
-  </div>
-</div>
 
-<div class="card" *ngIf="currentField == 'motorKW'">
-  <div class="card-header">
-    Motor (kW)
+  <div class="card" *ngIf="currentField == 'motorKW'">
+    <div class="card-header">
+      Motor (kW)
+    </div>
+    <div class="card-block">
+      <label>Description:</label>
+      <p>
+        Motor represents either a measured or average current among the three phases.
+      </p>
+      <label>Input:</label>
+      <p>
+        Units: <strong>kW or amps</strong><br> Minimum Value Allowed: <strong>0</strong><br> Maximum Value Allowed: <strong>None</strong><br>
+      </p>
+    </div>
   </div>
-  <div class="card-block">
-    <label>Description:</label>
-    <p>
-      Motor represents either a measured or average current among the three phases.
-    </p>
-    <label>Input:</label>
-    <p>
-     Units: <strong>kW or amps</strong><br> Minimum Value Allowed: <strong>0</strong><br> Maximum Value Allowed: <strong>None</strong><br>
-    </p>
-  </div>
-</div>
 
-<div class="card" *ngIf="currentField == 'voltage'">
-  <div class="card-header">
-    Voltage
-  </div>
-  <div class="card-block">
-    <label>Description:</label>
-    <p>
-      Measured bus voltage.
-    </p>
-    <label>Input:</label>
-    <p>
-      Units: <b>Voltage</b><br> Minimum Value Allowed: <b>0</b><br> Maximum Value Allowed: <b>None</b><br>
-    </p>
+  <div class="card" *ngIf="currentField == 'voltage'">
+    <div class="card-header">
+      Voltage
+    </div>
+    <div class="card-block">
+      <label>Description:</label>
+      <p>
+        Measured bus voltage.
+      </p>
+      <label>Input:</label>
+      <p>
+        Units: <b>Voltage</b><br> Minimum Value Allowed: <b>0</b><br> Maximum Value Allowed: <b>None</b><br>
+      </p>
+    </div>
   </div>
 </div>
