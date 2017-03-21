@@ -20,10 +20,8 @@ export class ChargeMaterialComponent implements OnInit {
 
   constructor(private formBuilder: FormBuilder, private phastService: PhastService, private chargeMaterialService: ChargeMaterialService) { }
 
-  ngOnChanges(changes: SimpleChange){
-    console.log('SAVE');
-    if(!changes.isFirstChange && this.chargeMaterial){
-      console.log('SAVE 2');
+  ngOnChanges(changes: SimpleChange) {
+    if (!changes.isFirstChange && this.chargeMaterial) {
       this.saveLosses();
     }
   }
@@ -65,7 +63,7 @@ export class ChargeMaterialComponent implements OnInit {
         else if (loss.inputs.chargeMaterialType == 'Liquid') {
           let tmpLoss = {
             chargeMaterialType: 'Liquid',
-            solidForm:  this.chargeMaterialService.initSolidForm(),
+            solidForm: this.chargeMaterialService.initSolidForm(),
             liquidForm: this.chargeMaterialService.getLiquidChargeMaterialForm(loss.inputs.liquidChargeMaterial),
             gasForm: this.chargeMaterialService.initGasForm(),
             name: 'Material #' + (this.chargeMaterial.length + 1),
@@ -80,13 +78,37 @@ export class ChargeMaterialComponent implements OnInit {
     }
   }
 
-  saveLosses(){
+  saveLosses() {
+    let tmpChargeMaterials = new Array<ChargeMaterial>();
     this.chargeMaterial.forEach(material => {
-      if(material.chargeMaterialType == 'Gas'){
-        let test = this.chargeMaterialService.buildGasChargeMaterial(material.gasForm);
-        console.log(test);
+      if (material.chargeMaterialType == 'Gas') {
+        let tmpGasMaterial = this.chargeMaterialService.buildGasChargeMaterial(material.gasForm);
+        tmpChargeMaterials.push({
+          inputs: {
+            chargeMaterialType: 'Gas',
+            gasChargeMaterial: tmpGasMaterial
+          }
+        })
+      } else if (material.chargeMaterialType == 'Solid') {
+        let tmpSolidMaterial = this.chargeMaterialService.buildSolidChargeMaterial(material.solidForm);
+        tmpChargeMaterials.push({
+          inputs: {
+            chargeMaterialType: 'Solid',
+            solidChargeMaterial: tmpSolidMaterial
+          }
+        })
+      } else if (material.chargeMaterialType == 'Liquid') {
+        let tmpLiquidMaterial = this.chargeMaterialService.buildLiquidChargeMaterial(material.liquidForm);
+        tmpChargeMaterials.push({
+          inputs: {
+            chargeMaterialType: 'Liquid',
+            liquidChargeMaterial: tmpLiquidMaterial
+          }
+        })
       }
     })
+    this.losses.chargeMaterials = tmpChargeMaterials;
+    console.log(this.losses);
   }
 
   addMaterial() {

@@ -65,10 +65,8 @@ export class PhastComponent implements OnInit {
   }
 
   save() {
-    //TODO: Logic for saving assessment
-    console.log(this.saveClicked);
     this.saveClicked = !this.saveClicked;
-    console.log(this.saveClicked);
+    this.assessmentService.setWorkingAssessment(this.assessment);
   }
 
   exportData() {

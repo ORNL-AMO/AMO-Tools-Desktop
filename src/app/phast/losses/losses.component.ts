@@ -21,6 +21,7 @@ export class LossesComponent implements OnInit {
 
   changeTab($event){
     this.lossesTab = $event;
+    console.log(this.phast)
   }
 
 }
