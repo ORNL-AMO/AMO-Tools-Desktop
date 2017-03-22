@@ -32,6 +32,7 @@ export class LossesComponent implements OnInit {
 
   changeTab($event) {
     this.lossesTab = $event;
+    this.lossesStates.chargeMaterial.saved = true;
   }
 
 }

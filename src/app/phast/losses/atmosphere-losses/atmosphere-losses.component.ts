@@ -21,7 +21,10 @@ export class AtmosphereLossesComponent implements OnInit {
   addLoss() {
     let tmpForm = this.initForm();
     let tmpName = 'Loss #' + (this.atmosphereLosses.length + 1);
-    this.atmosphereLosses.push({ form: tmpForm, name: tmpName });
+    this.atmosphereLosses.push({ 
+      form: tmpForm, 
+      name: tmpName 
+    });
   }
 
   removeLoss(str: string) {
@@ -42,6 +45,7 @@ export class AtmosphereLossesComponent implements OnInit {
   initForm(){
 
     return this.formBuilder.group({
+      'baselineAtmosphereGas': ['',],
       'baselineSpecificHeat': [''],
       'baselineInitialTemp': [''],
       'baselineFinalTemp': [''],
