@@ -37,6 +37,9 @@ import { FieldDataHelpComponent } from './help-panel/field-data-help/field-data-
 import { ModifyConditionsHelpComponent } from './help-panel/modify-conditions-help/modify-conditions-help.component';
 
 import { PsatService } from './psat.service';
+import { SystemCurveComponent } from './system-curve/system-curve.component';
+import { SystemCurveFormComponent } from './system-curve/system-curve-form/system-curve-form.component';
+import { SystemCurveGraphComponent } from './system-curve/system-curve-graph/system-curve-graph.component';
 
 @NgModule({
   declarations: [
@@ -66,7 +69,10 @@ import { PsatService } from './psat.service';
     PumpFluidHelpComponent,
     MotorHelpComponent,
     FieldDataHelpComponent,
-    ModifyConditionsHelpComponent
+    ModifyConditionsHelpComponent,
+    SystemCurveComponent,
+    SystemCurveFormComponent,
+    SystemCurveGraphComponent
   ],
   exports: [
 

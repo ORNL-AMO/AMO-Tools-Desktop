@@ -2,23 +2,24 @@
   <app-psat-banner (togglePanel)="toggleOpenPanel($event)" [assessment]="assessment"></app-psat-banner>
   <app-psat-tabs [currentTab]="currentTab" (tabChange)="changeTab($event)"></app-psat-tabs>
 
-  <div class="row tab-content" [ngClass]="{'align-items-center':currentTab != 5}">
+  <div class="row tab-content" [ngClass]="{'align-items-center':currentTab < 5}">
     <div [ngClass]="{'col-12': !isPanelOpen, 'col-9': isPanelOpen}">
-      <div class="row" [ngClass]="{'justify-content-center':currentTab != 5}">
-        <div class="col-lg-8 col-md-8 col-sm-10 col-xs-12" *ngIf="currentTab != 5">
+      <div class="row" [ngClass]="{'justify-content-center':currentTab < 5}">
+        <div class="col-lg-8 col-md-8 col-sm-10 col-xs-12" *ngIf="currentTab < 5">
           <app-system-basics *ngIf="currentTab == 1"></app-system-basics>
           <app-pump-fluid (changeField)="changeField($event)"  [(psatForm)]="psatForm" *ngIf="currentTab == 2"></app-pump-fluid>
           <app-motor (changeField)="changeField($event)"  [(psatForm)]="psatForm" *ngIf="currentTab == 3"></app-motor>
           <app-field-data (changeField)="changeField($event)" [assessment]="assessment" [(psatForm)]="psatForm" *ngIf="currentTab == 4"></app-field-data>
         </div>
-        <div class="col-12" *ngIf="currentTab == 5">
-          <app-modify-conditions [(saveClicked)]="saveClicked" (saveSuccess)="saveSuccess($event)" [(baseline)]="assessment.psat" (selectedAdjustment)="selectAdjustment($event)"></app-modify-conditions>
+        <div class="col-12" *ngIf="currentTab > 4">
+          <app-modify-conditions *ngIf="currentTab == 5" [(saveClicked)]="saveClicked" (saveSuccess)="saveSuccess($event)" [(baseline)]="assessment.psat" (selectedAdjustment)="selectAdjustment($event)"></app-modify-conditions>
+          <app-system-curve *ngIf="currentTab == 6"></app-system-curve>
         </div>
       </div>
     </div>
 
-    <div class="col-3 panel" *ngIf="isPanelOpen" [ngClass]="{'white-bg': currentTab == 5, 'dark-bg': currentTab != 5, 'help-col':panelView == 'help-panel' }">
-      <app-data-panel (showReport)="showReport()" [adjustment]="adjustment" *ngIf="panelView == 'data-panel' && currentTab == 5"></app-data-panel>
+    <div class="col-3 panel" *ngIf="isPanelOpen" [ngClass]="{'white-bg': currentTab > 4, 'dark-bg': currentTab < 5, 'help-col':panelView == 'help-panel' }">
+      <app-data-panel (showReport)="showReport()" [adjustment]="adjustment" *ngIf="panelView == 'data-panel' && currentTab > 4"></app-data-panel>
       <app-help-panel [currentField]="currentField" [currentTab]="currentTab" *ngIf="panelView == 'help-panel'"></app-help-panel>
       <app-settings-panel *ngIf="panelView == 'settings-panel'"></app-settings-panel>
     </div>

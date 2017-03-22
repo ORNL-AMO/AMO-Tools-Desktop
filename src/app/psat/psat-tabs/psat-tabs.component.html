@@ -22,7 +22,10 @@
     <h2><span>Assessment &amp; Analysis</span></h2>
     <ul>
       <li [ngClass]="{'psat-tab-active': currentTab == 5}">
-        <a (click)="changeTab(5)">5. Modify Conditions</a>
+        <a (click)="changeTab(5)">Modify Conditions</a>
+      </li>
+      <li [ngClass]="{'psat-tab-active': currentTab == 6}">
+        <a (click)="changeTab(6)">System Curve</a>
       </li>
     </ul>
   </div>
