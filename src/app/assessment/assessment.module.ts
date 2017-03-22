@@ -44,7 +44,7 @@ import { AssessmentSettingsComponent } from './assessment-settings/assessment-se
     RouterModule,
     FormsModule,
     ReactiveFormsModule,
-    ModalModule.forRoot()
+    ModalModule
   ],
   providers: []
 })
