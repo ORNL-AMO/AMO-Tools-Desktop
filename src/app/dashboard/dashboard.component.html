@@ -1,5 +1,3 @@
-<app-update-modal *ngIf="update"></app-update-modal>
-
 <div class="container-fluid">
   <div class="row dashboard-content">
     <div class="col-2 sidebar-bg">
@@ -10,5 +8,5 @@
       <app-calculator *ngIf="showCalculators" [selectedCalculator]="selectedCalculator"></app-calculator>
     </div>
   </div>
+  <app-update-modal *ngIf="updateAvailable"></app-update-modal>
 </div>
-

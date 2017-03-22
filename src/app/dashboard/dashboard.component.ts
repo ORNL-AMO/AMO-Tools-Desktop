@@ -13,14 +13,12 @@ export class DashboardComponent implements OnInit {
   workingDirectory: Directory = MockDirectory;
   showCalculators: boolean = false;
   selectedCalculator: string;
-  update: boolean;
-  electronService = new ElectronService();
+  updateAvailable: boolean;
 
-  constructor() { }
+  constructor(private electronService: ElectronService) { }
 
   ngOnInit() {
-    this.update = this.electronService.isUpdateAvailable();
-    console.log(this.update);
+    this.updateAvailable = this.electronService.isUpdateAvailable();
   }
 
   changeWorkingDirectory($event) {
