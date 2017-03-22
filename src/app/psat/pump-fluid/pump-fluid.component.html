@@ -13,7 +13,7 @@
   <div class="form-group row">
     <label class="col-6 col-form-label" for="pumpRPM">Pump RPM</label>
     <div class="col-6">
-      <input type="text" class="form-control" formControlName="pumpRPM" id="pumpRPM" (focus)="focusField('pumpRPM')">
+      <input type="number" class="form-control" formControlName="pumpRPM" id="pumpRPM" (focus)="focusField('pumpRPM')">
       <app-control-messages [control]="psatForm.controls.pumpRPM"></app-control-messages>
     </div>
   </div>
@@ -38,7 +38,7 @@
       <div class="incrementor input-group-addon">
         <div class="btn" (click)="addNum('viscosity')"><i class="fa fa-plus"></i></div>
       </div>
-      <input type="text" class="form-control" formControlName="viscosity" id="viscosity" ngModel="{{psatForm.value.viscosity}}"
+      <input type="number" class="form-control" formControlName="viscosity" id="viscosity" ngModel="{{psatForm.value.viscosity}}"
              (focus)="focusField('kinematicViscosity')">
       <app-control-messages [control]="psatForm.controls.viscosity"></app-control-messages>
     </div>
@@ -47,7 +47,7 @@
   <div class="form-group row">
     <label class="col-6 col-form-label" for="gravity">Specific Gravity</label>
     <div class="col-6">
-      <input type="text" class="form-control" formControlName="gravity" id="gravity" (focus)="focusField('specificGravity')">
+      <input type="number" class="form-control" formControlName="gravity" id="gravity" (focus)="focusField('specificGravity')">
       <app-control-messages [control]="psatForm.controls.gravity"></app-control-messages>
     </div>
   </div>
@@ -61,7 +61,7 @@
       <div class="incrementor input-group-addon">
         <div class="btn" (click)="addNum('stages')"><i class="fa fa-plus"></i></div>
       </div>
-      <input type="text" class="form-control" formControlName="stages" id="stages" ngModel="{{psatForm.value.stages}}" (focus)="focusField('stages')">
+      <input type="number" class="form-control" formControlName="stages" id="stages" ngModel="{{psatForm.value.stages}}" (focus)="focusField('stages')">
       <app-control-messages [control]="psatForm.controls.stages"></app-control-messages>
     </div>
   </div>

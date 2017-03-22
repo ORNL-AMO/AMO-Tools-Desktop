@@ -161,8 +161,35 @@ export const MockDirectory: Directory = {
                 }
               }
             }
+          ],
+          wallLosses: [
+            {
+              inputs: {
+                baseline: {
+                  surfaceArea: 500.0,
+                  ambientTemperature: 80.0,
+                  surfaceTemperature: 225.0,
+                  windVelocity: 10.0,
+                  surfaceEmissivity: 0.9,
+                  conditionFactor: 1.394,
+                  surfaceShape: 'Vertical Plates',
+                  correctionFactor: 1.0
+                },
+                modified: {
+                  surfaceArea: 500.0,
+                  ambientTemperature: 80.0,
+                  surfaceTemperature: 225.0,
+                  windVelocity: 10.0,
+                  surfaceEmissivity: 0.9,
+                  surfaceShape: 'Vertical Plates',
+                  conditionFactor: 1.394,
+                  correctionFactor: 1.0
+                }
+              }
+            },
           ]
-        }
+        },
+
       }
     }
   ],

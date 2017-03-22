@@ -1,52 +1,63 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input, SimpleChange } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import * as _ from 'lodash';
 import { PhastService } from '../../phast.service';
+import { WallLoss } from '../../../shared/models/losses/wallLoss';
+import { Losses } from '../../../shared/models/phast';
+import { WallLossesService } from './wall-losses.service';
+
 @Component({
   selector: 'app-wall-losses',
   templateUrl: './wall-losses.component.html',
   styleUrls: ['./wall-losses.component.css']
 })
 export class WallLossesComponent implements OnInit {
+  @Input()
+  losses: Losses;
+  @Input()
+  saveClicked: boolean;
 
-  wallLosses: Array<any>;
+  _wallLosses: Array<any>;
 
-  constructor(private formBuilder: FormBuilder, private phastService: PhastService) { }
+  constructor(private formBuilder: FormBuilder, private phastService: PhastService, private wallLossesService: WallLossesService) { }
 
-  ngOnInit() {
-    if (!this.wallLosses) {
-      this.wallLosses = new Array();
+  ngOnChanges(changes: SimpleChange) {
+    if (!changes.isFirstChange && this._wallLosses) {
+      this.saveLosses();
     }
   }
 
-  initForm() {
-    return this.formBuilder.group({
-      'baselineSurfaceArea': ['', Validators.required],
-      'baselineAvgSurfaceTemp': ['', Validators.required],
-      'baselineAmbientTemp': ['', Validators.required],
-      'baselineCorrectionFactor': ['', Validators.required],
-      'baselineHeatRequired': [{ value: '', disabled: true }],
-      'modifiedSurfaceArea': ['', Validators.required],
-      'modifiedAvgSurfaceTemp': ['', Validators.required],
-      'modifiedAmbientTemp': ['', Validators.required],
-      'modifiedCorrectionFactor': ['', Validators.required],
-      'modifiedHeatRequired': [{ value: '', disabled: true }],
-    })
+  ngOnInit() {
+    if (!this._wallLosses) {
+      this._wallLosses = new Array();
+    }
+    if (this.losses.wallLosses) {
+      this.losses.wallLosses.forEach(loss => {
+        //TODO populate with current losses
+        let tmpLoss = {
+          form: this.wallLossesService.getWallLossForm(loss),
+          name: 'Loss #' + (this._wallLosses.length + 1),
+          modifiedHeatLoss: 0.0,
+          baselineHeatLoss: 0.0
+        };
+        this.calculateBaseline(tmpLoss);
+        this.calculateModified(tmpLoss);
+        this._wallLosses.unshift(tmpLoss);
+      })
+    }
   }
 
   addLoss() {
-    let tmpForm = this.initForm();
-    let tmpName = 'Loss #' + (this.wallLosses.length + 1);
-    this.wallLosses.push({ 
-      form: tmpForm, 
-      name: tmpName ,
-      modifiedHeatRequired: 0.0,
-      baselineHeatRequired: 0.0
-  });
+    this._wallLosses.unshift({
+      form: this.wallLossesService.initForm(),
+      name: 'Loss #' + (this._wallLosses.length + 1),
+      modifiedHeatLoss: 0.0,
+      baselineHeatLoss: 0.0
+    });
   }
 
   removeLoss(str: string) {
-    this.wallLosses = _.remove(this.wallLosses, loss => {
+    this._wallLosses = _.remove(this._wallLosses, loss => {
       return loss.name != str;
     });
     this.renameLossess();
@@ -54,29 +65,43 @@ export class WallLossesComponent implements OnInit {
 
   renameLossess() {
     let index = 1;
-    this.wallLosses.forEach(loss => {
+    this._wallLosses.forEach(loss => {
       loss.name = 'Loss #' + index;
       index++;
     })
   }
 
-  calculateModified(loss: any){
-    loss.modifiedHeatRequired = this.phastService.wallLosses(
+  calculateModified(loss: any) {
+    loss.modifiedHeatLoss = this.phastService.wallLosses(
       loss.form.value.modifiedSurfaceArea,
       loss.form.value.modifiedAmbientTemp,
       loss.form.value.modifiedAvgSurfaceTemp,
-      0,0,0,
+      loss.form.value.modifiedWindVelocity,
+      loss.form.value.modifiedSurfaceEmissivity,
+      loss.form.value.modifiedConditionFactor,
       loss.form.value.modifiedCorrectionFactor
     );
   }
 
-  calculateBaseline(loss:any){
-      loss.baselineHeatRequired = this.phastService.wallLosses(
+  calculateBaseline(loss: any) {
+    loss.baselineHeatLoss = this.phastService.wallLosses(
       loss.form.value.baselineSurfaceArea,
       loss.form.value.baselineAmbientTemp,
       loss.form.value.baselineAvgSurfaceTemp,
-      0,0,0,
+      loss.form.value.baselineWindVelocity,
+      loss.form.value.baselineSurfaceEmissivity,
+      loss.form.value.baselineConditionFactor,
       loss.form.value.baselineCorrectionFactor
     );
+  }
+
+  saveLosses() {
+    let tmpWallLosses = new Array<WallLoss>();
+    this._wallLosses.forEach(loss => {
+      let tmpWallLoss = this.wallLossesService.getWallLossFromForm(loss.form);
+      debugger
+      tmpWallLosses.push(tmpWallLoss);
+    })
+    this.losses.wallLosses = tmpWallLosses;
   }
 }

@@ -3,12 +3,12 @@
   <button class="btn btn-secondary pull-right" (click)="addLoss()">+ Add Wall Loss</button>
 </div>
 
-<div class="no-data" *ngIf="wallLosses.length == 0" (click)="addLoss()">
+<div class="no-data" *ngIf="_wallLosses.length == 0" (click)="addLoss()">
   <h3>You have no Wall Losses</h3>
   <h4>Add some now.</h4>
 </div>
 
-<div class="card card-form" *ngFor="let loss of wallLosses">
+<div class="card card-form" *ngFor="let loss of _wallLosses">
   <div class="card-header">
     <div class="pull-left">
       <b>{{loss.name}}</b>
@@ -18,6 +18,20 @@
     </button>
   </div>
   <div class="card-block">
-    <app-wall-losses-form [(wallLossesForm)]="loss.form"></app-wall-losses-form>
+    <app-wall-losses-form [(wallLossesForm)]="loss.form" (calculateBaseline)="calculateBaseline(loss)" (calculateModified)="calculateModified(loss)"></app-wall-losses-form>
+    <div class="row">
+      <div class="col-4">
+        <small>Heat Loss</small>
+      </div>
+      <div class="col-2 text-center">
+        <small>Btu/hr</small>
+      </div>
+      <div class="col-3 text-center">
+        {{loss.baselineHeatLoss |number:'2.2-2'}}
+      </div>
+      <div class="col-3 text-center">
+        {{loss.modifiedHeatLoss |number:'2.2-2'}}
+      </div>
+    </div>
   </div>
 </div>

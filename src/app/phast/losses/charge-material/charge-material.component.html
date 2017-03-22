@@ -3,12 +3,12 @@
   <button class="btn btn-secondary pull-right" (click)="addMaterial()">+ Add charge material</button>
 </div>
 
-<div class="no-data" *ngIf="chargeMaterial.length == 0" (click)="addMaterial()">
+<div class="no-data" *ngIf="_chargeMaterial.length == 0" (click)="addMaterial()">
   <h3>You have no charge material</h3>
   <h4>Add some now.</h4>
 </div>
 
-<div class="card card-form" *ngFor="let material of chargeMaterial">
+<div class="card card-form" *ngFor="let material of _chargeMaterial">
   <div class="card-header">
     <div class="pull-left">
       <b>{{material.name}}</b>

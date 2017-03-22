@@ -14,6 +14,7 @@ export class PhastComponent implements OnInit {
   currentTab: number = 1;
   panelView: string = 'help-panel';
   isPanelOpen: boolean = true;
+  saveClicked: boolean = false;
   constructor(private location: Location, private assessmentService: AssessmentService, private phastService: PhastService) { }
 
   ngOnInit() {
@@ -64,7 +65,8 @@ export class PhastComponent implements OnInit {
   }
 
   save() {
-    //TODO: Logic for saving assessment
+    this.saveClicked = !this.saveClicked;
+    this.assessmentService.setWorkingAssessment(this.assessment);
   }
 
   exportData() {

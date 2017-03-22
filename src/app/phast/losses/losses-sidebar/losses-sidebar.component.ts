@@ -1,4 +1,5 @@
 import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
+import { Losses } from '../../../shared/models/phast';
 
 @Component({
   selector: 'app-losses-sidebar',
@@ -10,6 +11,8 @@ export class LossesSidebarComponent implements OnInit {
   changeTab = new EventEmitter<string>();
   @Input()
   lossesTab: string;
+  @Input()
+  losses: Losses;
   constructor() { }
 
   ngOnInit() {

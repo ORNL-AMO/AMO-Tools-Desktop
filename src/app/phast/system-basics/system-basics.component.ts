@@ -1,5 +1,4 @@
 import { Component, OnInit, Input} from '@angular/core';
-import { Router } from '@angular/router';
 import { Assessment } from '../../shared/models/assessment';
 import { FormBuilder }  from '@angular/forms';
 @Component({
@@ -12,7 +11,7 @@ export class SystemBasicsComponent implements OnInit {
   phast: Assessment;
 
   sourcesForm: any;
-  constructor(private formBuilder: FormBuilder, private router: Router) { }
+  constructor(private formBuilder: FormBuilder) { }
 
   ngOnInit() {
     this.sourcesForm = this.initForm();
