@@ -12,13 +12,15 @@ export class SolidChargeMaterialFormComponent implements OnInit {
   calculateBaseline = new EventEmitter<boolean>();
   @Output('calculateModified')
   calculateModified = new EventEmitter<boolean>();
-
+  @Input()
+  lossState: any;
   constructor() { }
 
   ngOnInit() {
   }
 
   checkBaseline() {
+    this.lossState.saved = false;
     if (
       this.chargeMaterialForm.controls.baselineMaterialName.status == 'VALID' &&
       this.chargeMaterialForm.controls.baselineMaterialSpecificHeatOfSolidMaterial.status == 'VALID' &&
@@ -42,6 +44,7 @@ export class SolidChargeMaterialFormComponent implements OnInit {
   }
 
   checkModified() {
+    this.lossState.saved = false;
     if (
       this.chargeMaterialForm.controls.modifiedMaterialName.status == 'VALID' &&
       this.chargeMaterialForm.controls.modifiedMaterialSpecificHeatOfSolidMaterial.status == 'VALID' &&

@@ -29,7 +29,7 @@
         <!--<app-control-messages [control]="material.form.controls.type"></app-control-messages>-->
       </div>
     </div>
-    <app-solid-charge-material-form *ngIf="material.chargeMaterialType == 'Solid'" [(chargeMaterialForm)]="material.solidForm" (calculateModified)="calculateModified(material)"
+    <app-solid-charge-material-form *ngIf="material.chargeMaterialType == 'Solid'" [(lossState)]="lossState" [(chargeMaterialForm)]="material.solidForm" (calculateModified)="calculateModified(material)"
       (calculateBaseline)="calculateBaseline(material)"></app-solid-charge-material-form>
     <app-liquid-charge-material-form *ngIf="material.chargeMaterialType == 'Liquid'" [(chargeMaterialForm)]="material.liquidForm" (calculateModified)="calculateModified(material)"
       (calculateBaseline)="calculateBaseline(material)"></app-liquid-charge-material-form>
