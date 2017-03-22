@@ -15,6 +15,8 @@ log.info('App starting...');
 require('dotenv').config();
 let win = null;
 
+global.globalUpdate = true;
+
 app.on('ready', function () {
 
   // Initialize the window to our specified dimensions

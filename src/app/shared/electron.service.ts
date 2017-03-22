@@ -23,4 +23,8 @@ export class ElectronService {
     console.log(fileName);
   }
 
+  isUpdateAvailable(){
+    return electron.remote.getGlobal('globalUpdate');
+  }
+
 }
