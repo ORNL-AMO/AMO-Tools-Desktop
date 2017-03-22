@@ -12,16 +12,25 @@ export class LossesComponent implements OnInit {
   saveClicked: boolean;
 
   lossesTab: string = 'charge-material';
-
+  lossesStates: any = {
+    wallLosses: {
+      numLosses: 0,
+      saved: true
+    },
+    chargeMaterial: {
+      numLosses: 0,
+      saved: true
+    }
+  }
   constructor() { }
 
   ngOnInit() {
-    if(!this.phast.losses){
+    if (!this.phast.losses) {
       this.phast.losses = new Array<Losses>();
     }
   }
 
-  changeTab($event){
+  changeTab($event) {
     this.lossesTab = $event;
   }
 
