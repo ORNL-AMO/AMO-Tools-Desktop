@@ -33,7 +33,7 @@ export class PsatComponent implements OnInit {
 
   changeTab($event) {
     this.currentTab = $event;
-    if (this.currentTab == 5) {
+    if (this.currentTab > 4) {
       this.panelView = 'data-panel';
     } else {
       this.panelView = 'help-panel';
@@ -62,7 +62,7 @@ export class PsatComponent implements OnInit {
   continue() {
     this.save();
     this.currentTab++;
-    if (this.currentTab == 5) {
+    if (this.currentTab > 4) {
       this.panelView = 'data-panel';
     } else {
       this.panelView = 'help-panel';
@@ -75,7 +75,7 @@ export class PsatComponent implements OnInit {
 
   goBack() {
     this.currentTab--;
-    if (this.currentTab == 5) {
+    if (this.currentTab > 4) {
       this.panelView = 'data-panel';
     } else {
       this.panelView = 'help-panel';
