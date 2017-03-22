@@ -33,10 +33,17 @@ export class PsatComponent implements OnInit {
 
   changeTab($event) {
     this.currentTab = $event;
+    //wizard steps
     if (this.currentTab > 4) {
       this.panelView = 'data-panel';
-    } else {
+    } 
+    //assessment tabs show help panel
+    else {
       this.panelView = 'help-panel';
+    }
+    //System curve hides panel
+    if(this.currentTab == 6){
+      this.isPanelOpen = false;
     }
   }
 
