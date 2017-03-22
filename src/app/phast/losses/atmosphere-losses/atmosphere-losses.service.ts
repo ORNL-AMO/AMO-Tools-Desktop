@@ -9,59 +9,36 @@ export class AtmosphereLossesService {
   //get empty atmosphere form
   initForm() {
     return this.formBuilder.group({
-      'baselineAtmosphereGas': ['', Validators.required],
-      'baselineSpecificHeat': ['', Validators.required],
-      'baselineInitialTemp': ['', Validators.required],
-      'baselineFinalTemp': ['', Validators.required],
-      'baselineFlowRate': ['', Validators.required],
-      'baselineCorrectionFactor': ['', Validators.required],
-      'modifiedAtmosphereGas': ['', Validators.required],
-      'modifiedSpecificHeat': ['', Validators.required],
-      'modifiedInitialTemp': ['', Validators.required],
-      'modifiedFinalTemp': ['', Validators.required],
-      'modofiedFlowRate': ['', Validators.required],
-      'modifiedCorrectionFactor': ['', Validators.required]
+      'atmosphereGas': ['', Validators.required],
+      'specificHeat': ['', Validators.required],
+      'initialTemp': ['', Validators.required],
+      'finalTemp': ['', Validators.required],
+      'flowRate': ['', Validators.required],
+      'correctionFactor': ['', Validators.required],
     });
   }
 
   //get form from object
   getAtmosphereForm(loss: AtmosphereLoss) {
     return this.formBuilder.group({
-      'baselineAtmosphereGas': [loss.inputs.baseline.atmosphereGas, Validators.required],
-      'baselineSpecificHeat': [loss.inputs.baseline.specificHeat, Validators.required],
-      'baselineInitialTemp': [loss.inputs.baseline.initialTemperature, Validators.required],
-      'baselineFinalTemp': [loss.inputs.baseline.finalTemperature, Validators.required],
-      'baselineFlowRate': [loss.inputs.baseline.flowRate, Validators.required],
-      'baselineCorrectionFactor': [loss.inputs.baseline.correctionFactor, Validators.required],
-      'modifiedAtmosphereGas': [loss.inputs.modified.atmosphereGas, Validators.required],
-      'modifiedSpecificHeat': [loss.inputs.modified.specificHeat, Validators.required],
-      'modifiedInitialTemp': [loss.inputs.modified.initialTemperature, Validators.required],
-      'modifiedFinalTemp': [loss.inputs.modified.finalTemperature, Validators.required],
-      'modofiedFlowRate': [loss.inputs.modified.flowRate, Validators.required],
-      'modifiedCorrectionFactor': [loss.inputs.modified.correctionFactor, Validators.required]
+      'atmosphereGas': [loss.atmosphereGas, Validators.required],
+      'specificHeat': [loss.specificHeat, Validators.required],
+      'initialTemp': [loss.initialTemperature, Validators.required],
+      'finalTemp': [loss.finalTemperature, Validators.required],
+      'flowRate': [loss.flowRate, Validators.required],
+      'correctionFactor': [loss.correctionFactor, Validators.required]
     });
   }
 
   getLossFromForm(form: any): AtmosphereLoss {
     let tmpLoss: AtmosphereLoss = {
-      inputs: {
-        baseline: {
-          atmosphereGas: form.value.baselineAtmosphereGas,
-          specificHeat: form.value.baselineSpecificHeat,
-          initialTemperature: form.value.baselineInitialTemp,
-          finalTemperature: form.value.baselineFinalTemp,
-          flowRate: form.value.baselineFlowRate,
-          correctionFactor: form.value.baselineCorrectionFactor
-        },
-        modified: {
-          atmosphereGas: form.value.modifiedAtmosphereGas,
-          specificHeat: form.value.modifiedSpecificHeat,
-          initialTemperature: form.value.modifiedInitialTemp,
-          finalTemperature: form.value.modifiedFinalTemp,
-          flowRate: form.value.modifiedFlowRate,
-          correctionFactor: form.value.modifiedCorrectionFactor
-        }
-      }
+      atmosphereGas: form.value.atmosphereGas,
+      specificHeat: form.value.specificHeat,
+      initialTemperature: form.value.initialTemp,
+      finalTemperature: form.value.finalTemp,
+      flowRate: form.value.flowRate,
+      correctionFactor: form.value.correctionFactor
+
     }
     return tmpLoss;
   }

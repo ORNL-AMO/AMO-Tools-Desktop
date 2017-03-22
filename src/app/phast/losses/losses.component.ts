@@ -11,7 +11,7 @@ export class LossesComponent implements OnInit {
   @Input()
   saveClicked: boolean;
 
-  lossesTab: string = 'charge-material';
+  lossesTab: string = 'wall-losses';
   lossesStates: any = {
     wallLosses: {
       numLosses: 0,

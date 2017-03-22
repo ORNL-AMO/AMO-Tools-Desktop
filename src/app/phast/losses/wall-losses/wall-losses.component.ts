@@ -33,15 +33,12 @@ export class WallLossesComponent implements OnInit {
     }
     if (this.losses.wallLosses) {
       this.losses.wallLosses.forEach(loss => {
-        //TODO populate with current losses
         let tmpLoss = {
           form: this.wallLossesService.getWallLossForm(loss),
           name: 'Loss #' + (this._wallLosses.length + 1),
-          modifiedHeatLoss: 0.0,
-          baselineHeatLoss: 0.0
+          heatLoss: 0.0
         };
-        this.calculateBaseline(tmpLoss);
-        this.calculateModified(tmpLoss);
+        this.calculate(tmpLoss);
         this._wallLosses.unshift(tmpLoss);
       })
     }
@@ -51,8 +48,7 @@ export class WallLossesComponent implements OnInit {
     this._wallLosses.unshift({
       form: this.wallLossesService.initForm(),
       name: 'Loss #' + (this._wallLosses.length + 1),
-      modifiedHeatLoss: 0.0,
-      baselineHeatLoss: 0.0
+      heatLoss: 0.0
     });
   }
 
@@ -71,27 +67,27 @@ export class WallLossesComponent implements OnInit {
     })
   }
 
-  calculateModified(loss: any) {
-    loss.modifiedHeatLoss = this.phastService.wallLosses(
-      loss.form.value.modifiedSurfaceArea,
-      loss.form.value.modifiedAmbientTemp,
-      loss.form.value.modifiedAvgSurfaceTemp,
-      loss.form.value.modifiedWindVelocity,
-      loss.form.value.modifiedSurfaceEmissivity,
-      loss.form.value.modifiedConditionFactor,
-      loss.form.value.modifiedCorrectionFactor
-    );
-  }
+  // calculateModified(loss: any) {
+  //   loss.modifiedHeatLoss = this.phastService.wallLosses(
+  //     loss.form.value.modifiedSurfaceArea,
+  //     loss.form.value.modifiedAmbientTemp,
+  //     loss.form.value.modifiedAvgSurfaceTemp,
+  //     loss.form.value.modifiedWindVelocity,
+  //     loss.form.value.modifiedSurfaceEmissivity,
+  //     loss.form.value.modifiedConditionFactor,
+  //     loss.form.value.modifiedCorrectionFactor
+  //   );
+  // }
 
-  calculateBaseline(loss: any) {
-    loss.baselineHeatLoss = this.phastService.wallLosses(
-      loss.form.value.baselineSurfaceArea,
-      loss.form.value.baselineAmbientTemp,
-      loss.form.value.baselineAvgSurfaceTemp,
-      loss.form.value.baselineWindVelocity,
-      loss.form.value.baselineSurfaceEmissivity,
-      loss.form.value.baselineConditionFactor,
-      loss.form.value.baselineCorrectionFactor
+  calculate(loss: any) {
+    loss.heatLoss = this.phastService.wallLosses(
+      loss.form.value.surfaceArea,
+      loss.form.value.ambientTemp,
+      loss.form.value.avgSurfaceTemp,
+      loss.form.value.windVelocity,
+      loss.form.value.surfaceEmissivity,
+      loss.form.value.conditionFactor,
+      loss.form.value.correctionFactor
     );
   }
 

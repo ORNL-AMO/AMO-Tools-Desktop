@@ -1,143 +1,76 @@
-<div class="row justify-content-end">
-  <div class="col-3 text-center">
-    Baseline
-  </div>
-  <div class="col-3 text-center">
-    Modified
-  </div>
-</div>
 <form [formGroup]="wallLossesForm">
 
   <div class="row form-group">
-    <label class="col-4 col-form-label small" for="baselineAvgSurfaceTemp">Average Surface Temperature</label>
+    <label class="col-4 col-form-label small" for="avgSurfaceTemp">Average Surface Temperature</label>
     <div class="col-2 text-center">
       <small>&#8457;</small>
     </div>
-    <div class="col-3 input-group input-group-sm">
-      <input type="number" class="form-control" formControlName="baselineAvgSurfaceTemp" id="baselineAvgSurfaceTemp" (keyup)="checkBaseline()">
-      <!--<app-control-messages [control]="wallLossesForm.controls.baselineAvgSurfaceTemp"></app-control-messages>-->
-    </div>
-    <div class="col-3 input-group input-group-sm">
-      <div class="input-group input-group-sm">
-        <input type="number" class="form-control" formControlName="modifiedAvgSurfaceTemp" id="modifiedAvgSurfaceTemp" (keyup)="checkModified()">
-      </div>
-      <!--<app-control-messages [control]="wallLossesForm.controls.modifiedAvgSurfaceTemp"></app-control-messages>-->
+    <div class="col-6 input-group input-group-sm">
+      <input type="number" class="form-control" formControlName="avgSurfaceTemp" id="avgSurfaceTemp" (keyup)="checkForm()">
     </div>
   </div>
 
   <div class="row form-group">
-    <label class="col-4 col-form-label small" for="baselineAmbientTemp">Ambient Temperature</label>
+    <label class="col-4 col-form-label small" for="ambientTemp">Ambient Temperature</label>
     <div class="col-2 text-center">
       <small>&#8457;</small>
     </div>
-    <div class="col-3 input-group input-group-sm">
-      <input type="number" class="form-control" formControlName="baselineAmbientTemp" id="baselineAmbientTemp" (keyup)="checkBaseline()">
-      <!--<app-control-messages [control]="wallLossesForm.controls.baselineAmbientTemp"></app-control-messages>-->
-    </div>
-    <div class="col-3 input-group input-group-sm">
-      <input type="number" class="form-control" formControlName="modifiedAmbientTemp" id="modifiedAmbientTemp" (keyup)="checkModified()">
-      <!--<app-control-messages [control]="wallLossesForm.controls.modifiedAmbientTemp"></app-control-messages>-->
+    <div class="col-6 input-group input-group-sm">
+      <input type="number" class="form-control" formControlName="ambientTemp" id="ambientTemp" (keyup)="checkForm()">
     </div>
   </div>
 
   <div class="row form-group">
-    <label class="col-4 col-form-label small" for="baselineWindVelocity">Wind Velocity</label>
+    <label class="col-4 col-form-label small" for="windVelocity">Wind Velocity</label>
     <div class="col-2  text-center">
       <small>miles/hr.</small>
     </div>
-    <div class="col-3 input-group input-group-sm">
-      <input type="number" class="form-control" formControlName="baselineWindVelocity" id="baselineWindVelocity" (keyup)="checkBaseline()">
-      <!--<app-control-messages [control]="wallLossesForm.controls.baselineAmbientTemp"></app-control-messages>-->
-    </div>
-    <div class="col-3 input-group input-group-sm">
-      <input type="number" class="form-control" formControlName="modifiedWindVelocity" id="modifiedWindVelocity" (keyup)="checkModified()">
-      <!--<app-control-messages [control]="wallLossesForm.controls.modifiedAmbientTemp"></app-control-messages>-->
+    <div class="col-6 input-group input-group-sm">
+      <input type="number" class="form-control" formControlName="windVelocity" id="windVelocity" (keyup)="checkForm()">
     </div>
   </div>
 
   <div class="row form-group">
-    <label class="col-6 col-form-label small" for="baselineSurfaceShape">Surface shape/orientation</label>
-    <div class="col-3 input-group input-group-sm">
-      <select class="form-control" formControlName="baselineSurfaceShape" ngModel="{{wallLossesForm.value.baselineSurfaceShape}}">
+    <label class="col-6 col-form-label small" for="surfaceShape">Surface shape/orientation</label>
+    <div class="col-6 input-group input-group-sm">
+      <select class="form-control" formControlName="surfaceShape" ngModel="{{wallLossesForm.value.surfaceShape}}">
         <option>Vertical Plates</option>
         <option>Shape 2</option>
       </select>
-      <!--<app-control-messages [control]="wallLossesForm.controls.baselineCorrectionFactor"></app-control-messages>-->
-    </div>
-    <div class="col-3 input-group input-group-sm">
-      <select class="form-control" formControlName="modifiedSurfaceShape" ngModel="{{wallLossesForm.value.modifiedSurfaceShape}}">
-        <option>Vertical Plates</option>
-        <option>Shape 2</option>
-      </select>
-      <!--<app-control-messages [control]="wallLossesForm.controls.modifiedCorrectionFactor"></app-control-messages>-->
     </div>
   </div>
 
 
   <div class="row form-group">
-    <label class="col-6 col-form-label small" for="baselineConditionFactor">Surface shape/orientation factor</label>
-    <div class="col-3 text-center">
-      {{wallLossesForm.value.baselineConditionFactor}}
-      <!--<input type="number" class="form-control" formControlName="baselineConditionFactor" id="baselineConditionFactor" (keyup)="checkBaseline()">-->
-      <!--<app-control-messages [control]="wallLossesForm.controls.baselineCorrectionFactor"></app-control-messages>-->
-    </div>
-    <div class="col-3 text-center">
-      {{wallLossesForm.value.modifiedConditionFactor}}
-      <!--<input type="number" class="form-control" formControlName="modifiedConditionFactor" id="modifiedConditionFactor" (keyup)="checkModified()">-->
-      <!--<app-control-messages [control]="wallLossesForm.controls.modifiedCorrectionFactor"></app-control-messages>-->
+    <label class="col-6 col-form-label small" for="conditionFactor">Surface shape/orientation factor</label>
+    <div class="col-6 text-center">
+      {{wallLossesForm.value.conditionFactor}}
     </div>
   </div>
 
   <div class="row form-group">
-    <label class="col-6 col-form-label small" for="baselineSurfaceEmissivity">Surface Emissivity (Typical - 0.9)</label>
-    <div class="col-3 input-group input-group-sm">
-      <input type="number" class="form-control" formControlName="baselineSurfaceEmissivity" id="baselineSurfaceEmissivity" (keyup)="checkBaseline()">
-      <!--<app-control-messages [control]="wallLossesForm.controls.baselineCorrectionFactor"></app-control-messages>-->
-    </div>
-    <div class="col-3 input-group input-group-sm">
-      <input type="number" class="form-control" formControlName="modifiedSurfaceEmissivity" id="modifiedSurfaceEmissivity" (keyup)="checkModified()">
-      <!--<app-control-messages [control]="wallLossesForm.controls.modifiedCorrectionFactor"></app-control-messages>-->
+    <label class="col-6 col-form-label small" for="surfaceEmissivity">Surface Emissivity (Typical - 0.9)</label>
+    <div class="col-6 input-group input-group-sm">
+      <input type="number" class="form-control" formControlName="surfaceEmissivity" id="surfaceEmissivity" (keyup)="checkForm()">
     </div>
   </div>
 
   <div class="row form-group">
-    <label class="col-4 col-form-label small" for="baselineSurfaceArea">Total Outside Surface Area</label>
+    <label class="col-4 col-form-label small" for="surfaceArea">Total Outside Surface Area</label>
     <div class="col-2 text-center">
       <small>ft<sup>2</sup></small>
     </div>
-    <div class="col-3 input-group input-group-sm">
-      <input type="number" class="form-control" formControlName="baselineSurfaceArea" id="baselineSurfaceArea" (keyup)="checkBaseline()">
-      <!--<app-control-messages [control]="wallLossesForm.controls.baselineSurfaceArea"></app-control-messages>-->
-    </div>
-    <div class="col-3 input-group input-group-sm">
-      <input type="number" class="form-control" formControlName="modifiedSurfaceArea" id="modifiedSurfaceArea" (keyup)="checkModified()">
-      <!--<app-control-messages [control]="wallLossesForm.controls.modifiedSurfaceArea"></app-control-messages>-->
+    <div class="col-6 input-group input-group-sm">
+      <input type="number" class="form-control" formControlName="surfaceArea" id="surfaceArea" (keyup)="checkForm()">
     </div>
   </div>
 
 
   <div class="row form-group">
-    <label class="col-6 col-form-label small" for="baselineCorrectionFactor">Correction Factor</label>
-    <div class="col-3 input-group input-group-sm">
-      <input type="number" class="form-control" formControlName="baselineCorrectionFactor" id="baselineCorrectionFactor" (keyup)="checkBaseline()">
-      <!--<app-control-messages [control]="wallLossesForm.controls.baselineCorrectionFactor"></app-control-messages>-->
-    </div>
-    <div class="col-3 input-group input-group-sm">
-      <input type="number" class="form-control" formControlName="modifiedCorrectionFactor" id="modifiedCorrectionFactor" (keyup)="checkModified()">
-      <!--<app-control-messages [control]="wallLossesForm.controls.modifiedCorrectionFactor"></app-control-messages>-->
+    <label class="col-6 col-form-label small" for="correctionFactor">Correction Factor</label>
+    <div class="col-6 input-group input-group-sm">
+      <input type="number" class="form-control" formControlName="correctionFactor" id="correctionFactor" (keyup)="checkForm()">
     </div>
   </div>
-  <!--
-  <div class="row form-group">
-    <label class="col-4 col-form-label small" for="baselineHeatRequired">Heat Required (Btu / hr)</label>
-    <div class="col-4 input-group input-group-sm">
-      <input type="number" class="form-control" formControlName="baselineHeatRequired" id="baselineHeatRequired" ngModel="{{wallLossesForm.value.baselineHeatRequired}}">
-      <app-control-messages [control]="wallLossesForm.controls.baselineHeatRequired"></app-control-messages>
-    </div>
-    <div class="col-4">
-      <input type="number" class="form-control" formControlName="modifiedHeatRequired" id="modifiedHeatRequired" ngModel="{{wallLossesForm.value.baselineHeatRequired}}">
-      <app-control-messages [control]="wallLossesForm.controls.modifiedHeatRequired"></app-control-messages>
-    </div>
-  </div>-->
 
 </form>
