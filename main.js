@@ -28,6 +28,8 @@ app.on('ready', function () {
     slashes: true
   }));
 
+  win.openDevTools();
+
   // Remove window once app is closed
   win.on('closed', function () {
     win = null;
@@ -50,7 +52,7 @@ app.on('ready', function () {
   });
 
   //Check for updates and install
-  autoUpdater.autoDownload = true;
+  autoUpdater.autoDownload = false;
   autoUpdater.checkForUpdates();
 });
 
