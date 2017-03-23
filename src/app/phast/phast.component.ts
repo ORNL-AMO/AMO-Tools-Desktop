@@ -28,6 +28,9 @@ export class PhastComponent implements OnInit {
     }else {
       this.panelView = 'help-panel';
     }
+    if(this.currentTab == 3){
+      this.isPanelOpen = false;
+    }
   }
 
   toggleOpenPanel($event) {
