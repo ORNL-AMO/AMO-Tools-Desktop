@@ -1,6 +1,6 @@
 <div class="row">
   <div class="col-md-6 col-lg-4 col-sm-6">
-    <app-system-curve-form [(pointOne)]="pointOne" [(pointTwo)]="pointTwo" [(curveConstants)]="curveConstants" (calculate)="calculateValues()"></app-system-curve-form>
+    <app-system-curve-form [(pointOne)]="pointOne" [(pointTwo)]="pointTwo" [(curveConstants)]="curveConstants" (calculate)="calculateValues()" (calculateP1)="calculateP1Flow()" (calculateP2)="calculateP2Flow()"></app-system-curve-form>
   </div>
   <div class="col-md-6 col-lg-8 col-sm-6">
     <app-system-curve-graph [lossCoefficient]="lossCoefficient" [staticHead]="staticHead" [pointOne]="pointOne" [pointTwo]="pointTwo" [curveConstants]="curveConstants"></app-system-curve-graph>
