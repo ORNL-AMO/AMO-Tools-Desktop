@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import {ElectronService} from '../shared/electron.service';
 
 @Component({
   selector: 'app-core',
@@ -7,9 +8,12 @@ import { Component, OnInit } from '@angular/core';
 })
 export class CoreComponent implements OnInit {
 
-  constructor() { }
+  updateAvailable: boolean;
+
+  constructor(private electronService: ElectronService) { }
 
   ngOnInit() {
+    this.updateAvailable = this.electronService.isUpdateAvailable();
   }
 
 }
