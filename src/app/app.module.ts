@@ -9,11 +9,13 @@ import { AppComponent } from './app.component';
 import { SharedModule } from './shared/shared.module';
 import { routing, appRoutingProviders } from './app.routing';
 import { CoreModule } from './core/core.module';
+import { SankeyModalComponent } from './sankey-modal/sankey-modal.component';
 
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    SankeyModalComponent
   ],
   imports: [
     BrowserModule,
