@@ -18,6 +18,13 @@
       </div>
     </div>
 
+    <div class="col-3 panel" *ngIf="isPanelOpen" [ngClass]="{'white-bg': currentTab > 4, 'dark-bg': currentTab < 5, 'help-col':panelView == 'help-panel' }">
+      <app-data-panel (showReport)="showReport()" [adjustment]="adjustment" *ngIf="panelView == 'data-panel' && currentTab > 4"></app-data-panel>
+      <app-help-panel [currentField]="currentField" [currentTab]="currentTab" *ngIf="panelView == 'help-panel'"></app-help-panel>
+      <app-settings-panel *ngIf="panelView == 'settings-panel'"></app-settings-panel>
+    </div>
+  </div>
+
   <div class="footer">
     <div class="pull-left">
       <button class="btn btn-secondary" *ngIf="currentTab == 1" (click)="close()">Close</button>

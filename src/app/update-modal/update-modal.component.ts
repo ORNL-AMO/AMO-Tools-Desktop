@@ -12,11 +12,9 @@ export class UpdateModalComponent implements OnInit {
 
   ngOnInit() {
   }
-
   ngAfterViewInit() {
     this.showUpdateModal();
   }
-
   showUpdateModal() {
     this.updateModal.show();
   }
