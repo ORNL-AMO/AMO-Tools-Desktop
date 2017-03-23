@@ -46,6 +46,15 @@ export class SystemCurveComponent implements OnInit {
     })
   }
 
+  calculateP1Flow() {
+    this.pointOne.fluidPower = this.getFluidPower(this.pointOne.form.value.head, this.pointOne.form.value.flowRate, this.curveConstants.form.value.specificGravity);
+  }
+
+  calculateP2Flow() {
+    this.pointTwo.fluidPower = this.getFluidPower(this.pointTwo.form.value.head, this.pointTwo.form.value.flowRate, this.curveConstants.form.value.specificGravity);
+  }
+
+
   calculateValues() {
     this.lossCoefficient = this.getLossCoefficient(
       this.pointOne.form.value.flowRate,
@@ -61,6 +70,11 @@ export class SystemCurveComponent implements OnInit {
       this.pointTwo.form.value.head,
       this.curveConstants.form.value.systemLossExponent
     );
+  }
+
+  getFluidPower(head: number, flow: number, specificGravity: number): number {
+    //from Daryl -> fluidPower = (head * flow * specificGravity) / 3960
+    return (head * flow * specificGravity) / 3960;
   }
 
 

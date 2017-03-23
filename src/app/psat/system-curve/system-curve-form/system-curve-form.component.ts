@@ -14,6 +14,10 @@ export class SystemCurveFormComponent implements OnInit {
   pointTwo: any;
   @Output('calculate')
   calculate = new EventEmitter<boolean>();
+  @Output('calculateP1')
+  calculateP1 = new EventEmitter<boolean>();
+  @Output('calculateP2')
+  calculateP2 = new EventEmitter<boolean>();
 
   constructor() { }
 
@@ -24,6 +28,12 @@ export class SystemCurveFormComponent implements OnInit {
     let p1 = this.checkForm(this.pointOne);
     let p2 = this.checkForm(this.pointTwo);
     let cc = this.checkForm(this.curveConstants);
+    if(p1){
+      this.calculateP1.emit(true);
+    }
+    if(p2){
+      this.calculateP2.emit(true);
+    }
     if(p1 && p2 && cc){
       this.calculate.emit(true);
     }

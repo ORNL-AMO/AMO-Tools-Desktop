@@ -46,7 +46,7 @@
           <small>Fluid Power, hp</small>
         </div>
         <div class="col-6 text-center">
-          <small>{{pointOne.fluidPower}}</small>
+          <small>{{pointOne.fluidPower| number:'2.2-2'}}</small>
         </div>
       </div>
     </form>
@@ -82,8 +82,8 @@
       <div class="col-6">
         <small>Fluid Power, hp</small>
       </div>
-      <div class="col-6">
-        <small>{{pointTwo.fluidPower}}</small>
+      <div class="col-6 text-center">
+        <small>{{pointTwo.fluidPower | number:'2.2-2'}}</small>
       </div>
     </div>
   </div>
