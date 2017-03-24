@@ -3,5 +3,6 @@ export interface FixtureLoss {
     feedRate?: number,
     initialTemperature?: number,
     finalTemperature?: number,
-    correctionFactor?: number
+    correctionFactor?: number,
+    type?: string
 }

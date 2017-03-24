@@ -24,7 +24,8 @@ export class AtmosphereLossesComponent implements OnInit {
     let tmpName = 'Loss #' + (this.atmosphereLosses.length + 1);
     this.atmosphereLosses.push({ 
       form: tmpForm, 
-      name: tmpName 
+      name: tmpName,
+      heatLoss: 0.0
     });
   }
 

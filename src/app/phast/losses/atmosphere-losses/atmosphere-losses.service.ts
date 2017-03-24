@@ -38,7 +38,6 @@ export class AtmosphereLossesService {
       finalTemperature: form.value.finalTemp,
       flowRate: form.value.flowRate,
       correctionFactor: form.value.correctionFactor
-
     }
     return tmpLoss;
   }

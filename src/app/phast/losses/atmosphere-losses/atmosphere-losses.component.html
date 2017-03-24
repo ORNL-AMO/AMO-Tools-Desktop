@@ -19,5 +19,13 @@
   </div>
   <div class="card-block">
     <app-atmosphere-losses-form [(atmosphereLossForm)]="loss.form"></app-atmosphere-losses-form>
+    <div class="row">
+      <div class="col-4">
+        <small>Total Heat Loss (Btu/hr)</small>
+      </div>
+      <div class="col-4 text-center">
+        {{loss.heatLoss |number:'2.2-2'}}
+      </div>
+    </div>
   </div>
 </div>
