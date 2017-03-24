@@ -93,6 +93,8 @@ Buttons
     width: 22px; 
     font-size: 18px;
     background-color: #81D4FA;
+        padding-left: 5px;
+    padding-right: 5px;
 }
 .numberCircle span {
     text-align: center;
@@ -212,7 +214,6 @@ Modals
 Section Headers
 =========================================== */
 .section-header {
-  margin-bottom: 20px;
   padding-bottom: 10px;
   border-bottom: #bbb solid 1px;
 }
@@ -423,6 +424,26 @@ Tabs
   border-width: 1px 0;
 }
 
+.tabs.horizontal a {
+  display: block;
+  padding-right: 10px;
+  padding-left: 10px;
+  border-bottom: #ccc solid 1px;
+  border-top: #fff solid 1px;
+  border-right: #ccc solid 1px;
+  border-left: #ccc solid 1px;
+}
+.tabs.horizontal a:hover {
+  text-decoration: none;
+}
+.tabs.horizontal .active a {
+  color: #333;
+  font-weight: bold;
+  background: #fff;
+  border-color: #bbb;
+  border-style: solid;
+  border-width: 0 1px;
+}
 
 /*
 Help Panel Cards

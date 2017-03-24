@@ -30,7 +30,9 @@ import { GasChargeMaterialFormComponent } from './charge-material/gas-charge-mat
 
 import { ChargeMaterialService } from './charge-material/charge-material.service';
 import { WallLossesService } from './wall-losses/wall-losses.service';
-
+import { LossesTabsComponent } from './losses-tabs/losses-tabs.component';
+import { WallLossesLabelsComponent } from './wall-losses/wall-losses-labels/wall-losses-labels.component';
+import { WallLossesAdjustmentFormComponent } from './wall-losses/wall-losses-adjustment-form/wall-losses-adjustment-form.component';
 @NgModule({
   imports: [
     CommonModule,
@@ -63,7 +65,10 @@ import { WallLossesService } from './wall-losses/wall-losses.service';
     GasChargeMaterialFormComponent,
     SolidChargeMaterialFormComponent,
     WallLossesFormComponent,
-    FlueGasLossesFormComponent
+    FlueGasLossesFormComponent,
+    LossesTabsComponent,
+    WallLossesLabelsComponent,
+    WallLossesAdjustmentFormComponent
   ],
   providers: [
     ChargeMaterialService,

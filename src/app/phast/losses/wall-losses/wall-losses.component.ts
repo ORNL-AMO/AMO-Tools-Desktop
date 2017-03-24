@@ -18,6 +18,7 @@ export class WallLossesComponent implements OnInit {
   saveClicked: boolean;
 
   _wallLosses: Array<any>;
+  _adjustments: Array<any>;
 
   constructor(private formBuilder: FormBuilder, private phastService: PhastService, private wallLossesService: WallLossesService) { }
 
@@ -30,6 +31,9 @@ export class WallLossesComponent implements OnInit {
   ngOnInit() {
     if (!this._wallLosses) {
       this._wallLosses = new Array();
+    }
+    if (!this._adjustments) {
+      this._adjustments = new Array();
     }
     if (this.losses.wallLosses) {
       this.losses.wallLosses.forEach(loss => {
@@ -67,17 +71,20 @@ export class WallLossesComponent implements OnInit {
     })
   }
 
-  // calculateModified(loss: any) {
-  //   loss.modifiedHeatLoss = this.phastService.wallLosses(
-  //     loss.form.value.modifiedSurfaceArea,
-  //     loss.form.value.modifiedAmbientTemp,
-  //     loss.form.value.modifiedAvgSurfaceTemp,
-  //     loss.form.value.modifiedWindVelocity,
-  //     loss.form.value.modifiedSurfaceEmissivity,
-  //     loss.form.value.modifiedConditionFactor,
-  //     loss.form.value.modifiedCorrectionFactor
-  //   );
-  // }
+  addAdjustment() {
+    let tmpArray = new Array();
+    this._wallLosses.forEach(loss => {
+      tmpArray.push({
+        form: loss.form,
+        name: loss.name,
+        heatLoss: loss.heatLoss
+      })
+    })
+    this._adjustments.push({
+      losses: tmpArray,
+      name: 'Adjustment'
+    })
+  }
 
   calculate(loss: any) {
     loss.heatLoss = this.phastService.wallLosses(

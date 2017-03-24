@@ -39,7 +39,7 @@ import { PhastService } from './phast.service';
     HelpPanelComponent,
     DataPanelComponent,
     SettingsPanelComponent,
-    SankeyDiagramComponent,
+    SankeyDiagramComponent
 
   ],
   exports: [

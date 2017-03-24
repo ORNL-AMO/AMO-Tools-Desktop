@@ -12,14 +12,14 @@ export class WallLossesService {
   //init empty wall loss form
   initForm() {
     return this.formBuilder.group({
-      'SurfaceArea': ['', Validators.required],
-      'AvgSurfaceTemp': ['', Validators.required],
-      'AmbientTemp': ['', Validators.required],
-      'CorrectionFactor': ['', Validators.required],
-      'WindVelocity': ['', Validators.required],
-      'SurfaceShape': ['Vertical Plates', Validators.required],
-      'ConditionFactor': [1.394, Validators.required],
-      'SurfaceEmissivity': ['', Validators.required],
+      'surfaceArea': ['', Validators.required],
+      'avgSurfaceTemp': ['', Validators.required],
+      'ambientTemp': ['', Validators.required],
+      'correctionFactor': ['', Validators.required],
+      'windVelocity': ['', Validators.required],
+      'surfaceShape': ['Vertical Plates', Validators.required],
+      'conditionFactor': [1.394, Validators.required],
+      'surfaceEmissivity': ['', Validators.required],
 
     })
   }

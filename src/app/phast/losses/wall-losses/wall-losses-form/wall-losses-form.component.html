@@ -1,30 +1,21 @@
 <form [formGroup]="wallLossesForm">
 
   <div class="row form-group">
-    <label class="col-6 col-form-label small" for="avgSurfaceTemp">Average Surface Temperature</label>
-    <div class="col-2 text-center">
-      <small>&#8457;</small>
-    </div>
+    <label class="col-8 col-form-label small" for="avgSurfaceTemp">Average Surface Temperature (&#8457;)</label>
     <div class="col-4 input-group input-group-sm">
       <input type="number" class="form-control" formControlName="avgSurfaceTemp" id="avgSurfaceTemp" (keyup)="checkForm()">
     </div>
   </div>
 
   <div class="row form-group">
-    <label class="col-6 col-form-label small" for="ambientTemp">Ambient Temperature</label>
-    <div class="col-2 text-center">
-      <small>&#8457;</small>
-    </div>
+    <label class="col-8 col-form-label small" for="ambientTemp">Ambient Temperature (&#8457;)</label>
     <div class="col-4 input-group input-group-sm">
       <input type="number" class="form-control" formControlName="ambientTemp" id="ambientTemp" (keyup)="checkForm()">
     </div>
   </div>
 
   <div class="row form-group">
-    <label class="col-6 col-form-label small" for="windVelocity">Wind Velocity</label>
-    <div class="col-2  text-center">
-      <small>miles/hr.</small>
-    </div>
+    <label class="col-8 col-form-label small" for="windVelocity">Wind Velocity (mph)</label>
     <div class="col-4 input-group input-group-sm">
       <input type="number" class="form-control" formControlName="windVelocity" id="windVelocity" (keyup)="checkForm()">
     </div>
@@ -56,10 +47,7 @@
   </div>
 
   <div class="row form-group">
-    <label class="col-6 col-form-label small" for="surfaceArea">Total Outside Surface Area</label>
-    <div class="col-2 text-center">
-      <small>ft<sup>2</sup></small>
-    </div>
+    <label class="col-8 col-form-label small" for="surfaceArea">Total Outside Surface Area (ft<sup>2</sup>)</label>
     <div class="col-4 input-group input-group-sm">
       <input type="number" class="form-control" formControlName="surfaceArea" id="surfaceArea" (keyup)="checkForm()">
     </div>
