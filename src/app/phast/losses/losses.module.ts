@@ -37,7 +37,7 @@ import { AtmosphereLossesService } from './atmosphere-losses/atmosphere-losses.s
 import { FixtureLossesService } from './fixture-losses/fixture-losses.service';
 import { FlueGasLossesService } from './flue-gas-losses/flue-gas-losses.service';
 import { HeatStorageService } from './heat-storage/heat-storage.service';
-
+import { OpeningLossesService } from './opening-losses/opening-losses.service';
 
 @NgModule({
   imports: [
@@ -82,8 +82,8 @@ import { HeatStorageService } from './heat-storage/heat-storage.service';
     AtmosphereLossesService,
     FixtureLossesService,
     FlueGasLossesService,
-    HeatStorageService
-
+    HeatStorageService,
+    OpeningLossesService
   ],
   exports: [
     LossesComponent

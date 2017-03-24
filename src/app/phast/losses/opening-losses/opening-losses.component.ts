@@ -1,8 +1,8 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
 import * as _ from 'lodash';
 import { ModalDirective } from 'ng2-bootstrap';
-
+import { PhastService } from '../../phast.service';
+import { OpeningLossesService } from './opening-losses.service';
 @Component({
   selector: 'app-opening-losses',
   templateUrl: './opening-losses.component.html',
@@ -12,7 +12,7 @@ export class OpeningLossesComponent implements OnInit {
 
   openingLosses: Array<any>;
   editLoss: any;
-  constructor(private formBuilder: FormBuilder) { }
+  constructor(private phastService: PhastService, private openingLossesService: OpeningLossesService) { }
 
   ngOnInit() {
     if(!this.openingLosses){
@@ -21,10 +21,14 @@ export class OpeningLossesComponent implements OnInit {
   }
 
   addLoss() {
-    let tmpFixedForm = this.initForm();
-    let tmpVariableForm = this.initForm();
     let tmpName = 'Opening Loss #' + (this.openingLosses.length + 1);
-    this.openingLosses.push({ fixedForm: tmpFixedForm, variableForm: tmpVariableForm, name: tmpName, showfixed: false, showVariable: false });
+    this.openingLosses.push({ 
+      fixedForm: this.openingLossesService.initForm(), 
+      variableForm: this.openingLossesService.initForm(), 
+      name: tmpName, 
+      showfixed: false, 
+      showVariable: false 
+    });
   }
 
   removeLoss(str: string) {
@@ -77,30 +81,6 @@ export class OpeningLossesComponent implements OnInit {
   hideCalc(loss: any){
     loss.showFixed = false;
     loss.showVariable = false;
-  }
-
-  initForm() {
-    return this.formBuilder.group({
-      'openingType': [''],
-      'baselineWallThickness': [''],
-      'baselineLengthOfOpenings': [''],
-      'baselineHeightOfOpenings': [''],
-      'baselineViewFactor': [''],
-      'baselineTotalOpeningArea': [''],
-      'baselineInsideTemp': [''],
-      'baselineOutsideTemp': [''],
-      'baselinePercentTimeOpen': [''],
-      'baselineOpeningLosses': [{ value: '', disabled: true }],
-      'modifiedWallThickness': [''],
-      'modifiedLengthOfOpenings': [''],
-      'modifiedHeightOfOpenings': [''],
-      'modifiedViewFactor': [''],
-      'modifiedTotalOpeningArea': [''],
-      'modifiedInsideTemp': [''],
-      'modifiedOutsideTemp': [''],
-      'modifiedPercentTimeOpen': [''],
-      'modifiedOpeningLosses': [{ value: '', disabled: true }]
-    })
   }
 
 }
