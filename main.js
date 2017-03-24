@@ -19,7 +19,7 @@ log.info('App starting...');
 require('dotenv').config();
 let win = null;
 
-global.globalUpdate = true;
+global.globalUpdate = false;
 
 app.on('ready', function () {
 
