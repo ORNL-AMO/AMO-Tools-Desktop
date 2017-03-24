@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import * as _ from 'lodash';
 import { FormBuilder } from '@angular/forms';
+import { AtmosphereLossesService } from './atmosphere-losses.service';
 
 @Component({
   selector: 'app-atmosphere-losses',
@@ -10,7 +11,7 @@ import { FormBuilder } from '@angular/forms';
 export class AtmosphereLossesComponent implements OnInit {
   atmosphereLosses: Array<any>;
 
-  constructor(private formBuilder: FormBuilder) { }
+  constructor(private formBuilder: FormBuilder, private atmosphereLossesService: AtmosphereLossesService) { }
 
   ngOnInit() {
     if(!this.atmosphereLosses){
@@ -19,7 +20,7 @@ export class AtmosphereLossesComponent implements OnInit {
   }
 
   addLoss() {
-    let tmpForm = this.initForm();
+    let tmpForm = this.atmosphereLossesService.initForm();
     let tmpName = 'Loss #' + (this.atmosphereLosses.length + 1);
     this.atmosphereLosses.push({ 
       form: tmpForm, 
@@ -41,24 +42,4 @@ export class AtmosphereLossesComponent implements OnInit {
       index++;
     })
   }
-
-  initForm(){
-
-    return this.formBuilder.group({
-      'baselineAtmosphereGas': ['',],
-      'baselineSpecificHeat': [''],
-      'baselineInitialTemp': [''],
-      'baselineFinalTemp': [''],
-      'baselineFlowRate': [''],
-      'baselineCorrectionFactor': [''],
-      'baselineHeatLoss': [{value:'', disabled: true}],
-      'modifiedSpecificHeat': [''],
-      'modifiedInitialTemp': [''],
-      'modifiedFinalTemp': [''],
-      'modofiedFlowRate': [''],
-      'modifiedCorrectionFactor': [''],
-      'modifiedHeatLoss': [{value:'', disabled: true}]
-    })
-  }
-
 }

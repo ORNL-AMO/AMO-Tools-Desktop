@@ -1,188 +1,112 @@
-<div class="row justify-content-end">
-  <div class="col-3 text-center">
-    Baseline
-  </div>
-  <div class="col-3 text-center">
-    Modified
-  </div>
-</div>
 <form [formGroup]="chargeMaterialForm">
   <div class="row form-group">
-    <label class="col-4 col-form-label small" for="baselineMaterialName">Name of Material</label>
-    <div class="col-2">
-    </div>
+    <label class="col-6 col-form-label small" for="materialName">Name of Material</label>
     <div class="col-3 input-group input-group-sm">
-      <select class="form-control" formControlName="baselineMaterialName" id="baselineMaterialName">
+      <select class="form-control" formControlName="materialName" id="materialName">
           <option>Type 1</option>
           <option>Type 2</option>
         </select>
-      <!--<app-control-messages [control]="chargeMaterialForm.controls.baselineMaterial"></app-control-messages>-->
-    </div>
-    <div class="col-3 input-group input-group-sm">
-      <select class="form-control" formControlName="modifiedMaterialName" id="modifiedMaterialName">
-          <option>Type 1</option>
-          <option>Type 2</option>
-        </select>
-      <!--<app-control-messages [control]="chargeMaterialForm.controls.modifiedMaterial"></app-control-messages>-->
     </div>
   </div>
 
   <div class="row form-group">
-    <label class="col-4 col-form-label small" for="baselineMaterialSpecificHeat">Specific Heat of Liquid</label>
+    <label class="col-4 col-form-label small" for="materialSpecificHeat">Specific Heat of Liquid</label>
     <div class="col-2 text-center">
       <small>Btu/(lb-F)</small>
     </div>
     <div class="col-3 input-group input-group-sm">
-      <input type="number" class="form-control" formControlName="baselineMaterialSpecificHeat" id="baselineMaterialSpecificHeat">
-      <!--<app-control-messages [control]="chargeMaterialForm.controls.baselineChargeFeedRate"></app-control-messages>-->
-    </div>
-    <div class="col-3 input-group input-group-sm">
-      <input type="number" class="form-control" formControlName="modifiedMaterialSpecificHeat" id="modifiedMaterialSpecificHeat">
-      <!--<app-control-messages [control]="chargeMaterialForm.controls.modifiedChargeFeedRate"></app-control-messages>-->
+      <input type="number" class="form-control" formControlName="materialSpecificHeat" id="materialSpecificHeat" (keyup)="checkForm()">
     </div>
   </div>
 
   <div class="row form-group form-spacer">
-    <label class="col-4 col-form-label small" for="baselineFeedRate">Feed Rate for Gas Mixture</label>
+    <label class="col-4 col-form-label small" for="feedRate">Feed Rate for Gas Mixture</label>
     <div class="col-2 text-center">
       <small>lb/hr</small>
     </div>
     <div class="col-3 input-group input-group-sm">
-      <input type="number" class="form-control" formControlName="baselineFeedRate" id="baselineFeedRate" (keyup)="checkBaseline()">
-      <!--<app-control-messages [control]="chargeMaterialForm.controls.baselineChargeFeedRate"></app-control-messages>-->
-    </div>
-    <div class="col-3 input-group input-group-sm">
-      <input type="number" class="form-control" formControlName="modifiedFeedRate" id="modifiedFeedRate" (keyup)="checkModified()">
-      <!--<app-control-messages [control]="chargeMaterialForm.controls.modifiedChargeFeedRate"></app-control-messages>-->
+      <input type="number" class="form-control" formControlName="feedRate" id="feedRate" (keyup)="checkForm()">
     </div>
   </div>
 
 
   <div class="row form-group">
-    <label class="col-4 col-form-label small" for="baselineVaporInGas">Vapor in Gas Mixture (% of Total)</label>
+    <label class="col-4 col-form-label small" for="vaporInGas">Vapor in Gas Mixture (% of Total)</label>
     <div class="col-2 text-center">
       <small>%</small>
     </div>
     <div class="col-3 input-group input-group-sm">
-      <input type="number" class="form-control" formControlName="baselineVaporInGas" id="baselineVaporInGas" (keyup)="checkBaseline()">
-      <!--<app-control-messages [control]="chargeMaterialForm.controls.baselineChargeFeedRate"></app-control-messages>-->
-    </div>
-    <div class="col-3 input-group input-group-sm">
-      <input type="number" class="form-control" formControlName="modifiedVaporInGas" id="modifiedVaporInGas" (keyup)="checkModified()">
-      <!--<app-control-messages [control]="chargeMaterialForm.controls.modifiedChargeFeedRate"></app-control-messages>-->
+      <input type="number" class="form-control" formControlName="vaporInGas" id="vaporInGas" (keyup)="checkForm()">
     </div>
   </div>
 
   <div class="row form-group">
-    <label class="col-4 col-form-label small" for="baselineInitialTemperature">Initial Temperature</label>
+    <label class="col-4 col-form-label small" for="initialTemperature">Initial Temperature</label>
     <div class="col-2 text-center">
       <small>&#8457;</small>
     </div>
     <div class="col-3 input-group input-group-sm">
-      <input type="number" class="form-control" formControlName="baselineInitialTemperature" id="baselineInitialTemperature" (keyup)="checkBaseline()">
-      <!--<app-control-messages [control]="chargeMaterialForm.controls.baselineChargeFeedRate"></app-control-messages>-->
-    </div>
-    <div class="col-3 input-group input-group-sm">
-      <input type="number" class="form-control" formControlName="modifiedInitialTemperature" id="modifiedInitialTemperature" (keyup)="checkModified()">
-      <!--<app-control-messages [control]="chargeMaterialForm.controls.modifiedChargeFeedRate"></app-control-messages>-->
+      <input type="number" class="form-control" formControlName="initialTemperature" id="initialTemperature" (keyup)="checkForm()">
     </div>
   </div>
 
   <div class="row form-group">
-    <label class="col-4 col-form-label small" for="baselineDischargeTemperature">Discharge Temperature</label>
+    <label class="col-4 col-form-label small" for="dischargeTemperature">Discharge Temperature</label>
     <div class="col-2 text-center">
       <small>&#8457;</small>
     </div>
     <div class="col-3 input-group input-group-sm">
-      <input type="number" class="form-control" formControlName="baselineDischargeTemperature" id="baselineDischargeTemperature" (keyup)="checkBaseline()">
-      <!--<app-control-messages [control]="chargeMaterialForm.controls.baselineChargeFeedRate"></app-control-messages>-->
-    </div>
-    <div class="col-3 input-group input-group-sm">
-      <input type="number" class="form-control" formControlName="modifiedDischargeTemperature" id="modifiedDischargeTemperature" (keyup)="checkModified()">
-      <!--<app-control-messages [control]="chargeMaterialForm.controls.modifiedChargeFeedRate"></app-control-messages>-->
+      <input type="number" class="form-control" formControlName="dischargeTemperature" id="dischargeTemperature" (keyup)="checkForm()">
     </div>
   </div>
 
   <div class="row form-group">
-    <label class="col-4 col-form-label small" for="baselineSpecificHeatOfVapor">Specific Heat of Vapor</label>
+    <label class="col-4 col-form-label small" for="specificHeatOfVapor">Specific Heat of Vapor</label>
     <div class="col-2 text-center">
       <small>Btu/(lb-F)</small>
     </div>
     <div class="col-3 input-group input-group-sm">
-      <input type="number" class="form-control" formControlName="baselineSpecificHeatOfVapor" id="baselineSpecificHeatOfVapor" (keyup)="checkBaseline()">
-      <!--<app-control-messages [control]="chargeMaterialForm.controls.baselineChargeFeedRate"></app-control-messages>-->
-    </div>
-    <div class="col-3 input-group input-group-sm">
-      <input type="number" class="form-control" formControlName="modifiedSpecificHeatOfVapor" id="modifiedSpecificHeatOfVapor" (keyup)="checkModified()">
-      <!--<app-control-messages [control]="chargeMaterialForm.controls.modifiedChargeFeedRate"></app-control-messages>-->
+      <input type="number" class="form-control" formControlName="specificHeatOfVapor" id="specificHeatOfVapor" (keyup)="checkForm()">
     </div>
   </div>
 
   <div class="row form-group">
-    <label class="col-4 col-form-label small" for="baselineGasReacted">Feed Gas Reacted (% of Total)</label>
+    <label class="col-4 col-form-label small" for="gasReacted">Feed Gas Reacted (% of Total)</label>
     <div class="col-2 text-center">
       <small>%</small>
     </div>
     <div class="col-3 input-group input-group-sm">
-      <input type="number" class="form-control" formControlName="baselineGasReacted" id="baselineGasReacted" (keyup)="checkBaseline()">
-      <!--<app-control-messages [control]="chargeMaterialForm.controls.baselineChargeFeedRate"></app-control-messages>-->
-    </div>
-    <div class="col-3 input-group input-group-sm">
-      <input type="number" class="form-control" formControlName="modifiedGasReacted" id="modifiedGasReacted" (keyup)="checkModified()">
-      <!--<app-control-messages [control]="chargeMaterialForm.controls.modifiedChargeFeedRate"></app-control-messages>-->
+      <input type="number" class="form-control" formControlName="gasReacted" id="gasReacted" (keyup)="checkForm()">
     </div>
   </div>
 
   <div class="row form-group">
-    <label class="col-4 col-form-label small" for="baselineHeatOfReaction">Heat of Reaction</label>
+    <label class="col-4 col-form-label small" for="heatOfReaction">Heat of Reaction</label>
     <div class="col-2 text-center">
       <small>Btu/lb</small>
     </div>
     <div class="col-3 input-group input-group-sm">
-      <input type="number" class="form-control" formControlName="baselineHeatOfReaction" id="baselineHeatOfReaction" (keyup)="checkBaseline()">
-      <!--<app-control-messages [control]="chargeMaterialForm.controls.baselineChargeFeedRate"></app-control-messages>-->
-    </div>
-    <div class="col-3 input-group input-group-sm">
-      <input type="number" class="form-control" formControlName="modifiedHeatOfReaction" id="modifiedHeatOfReaction">
-      <!--<app-control-messages [control]="chargeMaterialForm.controls.modifiedChargeFeedRate"></app-control-messages>-->
+      <input type="number" class="form-control" formControlName="heatOfReaction" id="heatOfReaction" (keyup)="checkForm()">
     </div>
   </div>
 
   <div class="row form-group">
-    <label class="col-4 col-form-label small" for="baselineEndothermicOrExothermic">Endothermic/Exothermic</label>
-    <div class="col-2 text-center">
-
-    </div>
+    <label class="col-6 col-form-label small" for="endothermicOrExothermic">Endothermic/Exothermic</label>
     <div class="col-3 input-group input-group-sm">
-      <select class="form-control" formControlName="baselineEndothermicOrExothermic" id="baselineEndothermicOrExothermic">
+      <select class="form-control" formControlName="endothermicOrExothermic" id="endothermicOrExothermic">
         <option>Endothermic</option>
         <option>Exothermic</option>
       </select>
-      <!--<app-control-messages [control]="chargeMaterialForm.controls.baselineChargeFeedRate"></app-control-messages>-->
-    </div>
-    <div class="col-3 input-group input-group-sm">
-      <select class="form-control" formControlName="modifiedEndothermicOrExothermic" id="modifiedEndothermicOrExothermic">
-        <option>Endothermic</option>
-        <option>Exothermic</option>
-      </select>
-      <!--<app-control-messages [control]="chargeMaterialForm.controls.modifiedChargeFeedRate"></app-control-messages>-->
     </div>
   </div>
 
   <div class="row form-group">
-    <label class="col-4 col-form-label small" for="baselineAdditionalHeatRequired">Additional Heat Required</label>
+    <label class="col-4 col-form-label small" for="additionalHeatRequired">Additional Heat Required</label>
     <div class="col-2 text-center">
       <small>Btu/lb</small>
     </div>
     <div class="col-3 input-group input-group-sm">
-      <input type="number" class="form-control" formControlName="baselineAdditionalHeatRequired" id="baselineAdditionalHeatRequired"
-        (keyup)="checkBaseline()">
-      <!--<app-control-messages [control]="chargeMaterialForm.controls.baselineChargeFeedRate"></app-control-messages>-->
-    </div>
-    <div class="col-3 input-group input-group-sm">
-      <input type="number" class="form-control" formControlName="modifiedAdditionalHeatRequired" id="modifiedAdditionalHeatRequired"
-        (keyup)="checkModified()">
-      <!--<app-control-messages [control]="chargeMaterialForm.controls.modifiedChargeFeedRate"></app-control-messages>-->
+      <input type="number" class="form-control" formControlName="additionalHeatRequired" id="additionalHeatRequired" (keyup)="checkForm()">
     </div>
   </div>
 </form>

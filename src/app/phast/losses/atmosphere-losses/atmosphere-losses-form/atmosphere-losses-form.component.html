@@ -1,82 +1,44 @@
-<div class="row justify-content-end">
-  <div class="col-4 text-center">
-    Baseline
-  </div>
-  <div class="col-4 text-center">
-    Modified
-  </div>
-</div>
 <form [formGroup]="atmosphereLossForm">
 
   <div class="row form-group">
-    <label class="col-4 col-form-label small" for="baselineSpecificHeat">Specific heat of gas (Btu/(SCF-(&#8457;)))</label>
+    <label class="col-4 col-form-label small" for="specificHeat">Specific heat of gas (Btu/(SCF-(&#8457;)))</label>
     <div class="col-4 input-group input-group-sm">
-      <input type="number" class="form-control" formControlName="baselineSpecificHeat" id="baselineSpecificHeat">
-      <app-control-messages [control]="atmosphereLossForm.controls.baselineSpecificHeat"></app-control-messages>
-    </div>
-    <div class="col-4 input-group input-group-sm">
-      <input type="number" class="form-control" formControlName="modifiedSpecificHeat" id="modifiedSpecificHeat">
-      <app-control-messages [control]="atmosphereLossForm.controls.modifiedSpecificHeat"></app-control-messages>
+      <input type="number" class="form-control" formControlName="specificHeat" id="specificHeat">
     </div>
   </div>
 
   <div class="row form-group">
-    <label class="col-4 col-form-label small" for="baselineInitialTemp">Initial temperature (&#8457;)</label>
+    <label class="col-4 col-form-label small" for="initialTemp">Initial temperature (&#8457;)</label>
     <div class="col-4 input-group input-group-sm">
-      <input type="number" class="form-control" formControlName="baselineInitialTemp" id="baselineInitialTemp">
-      <app-control-messages [control]="atmosphereLossForm.controls.baselineInitialTemp"></app-control-messages>
-    </div>
-    <div class="col-4 input-group input-group-sm">
-      <input type="number" class="form-control" formControlName="modifiedInitialTemp" id="modifiedInitialTemp">
-      <app-control-messages [control]="atmosphereLossForm.controls.modifiedInitialTemp"></app-control-messages>
+      <input type="number" class="form-control" formControlName="initialTemp" id="initialTemp">
     </div>
   </div>
 
   <div class="row form-group">
-    <label class="col-4 col-form-label small" for="baselineFinalTemp">Final temperature (&#8457;)</label>
+    <label class="col-4 col-form-label small" for="finalTemp">Final temperature (&#8457;)</label>
     <div class="col-4 input-group input-group-sm">
-      <input type="number" class="form-control" formControlName="baselineFinalTemp" id="baselineFinalTemp">
-      <app-control-messages [control]="atmosphereLossForm.controls.baselineFinalTemp"></app-control-messages>
-    </div>
-    <div class="col-4 input-group input-group-sm">
-      <input type="number" class="form-control" formControlName="modifiedFinalTemp" id="modifiedFinalTemp">
-      <app-control-messages [control]="atmosphereLossForm.controls.modifiedFinalTemp"></app-control-messages>
+      <input type="number" class="form-control" formControlName="finalTemp" id="finalTemp">
     </div>
   </div>
 
   <div class="row form-group">
-    <label class="col-4 col-form-label small" for="baselineFlowRate">Flow Rate (SCF/hr)</label>
+    <label class="col-4 col-form-label small" for="flowRate">Flow Rate (SCF/hr)</label>
     <div class="col-4 input-group input-group-sm">
-      <input type="number" class="form-control" formControlName="baselineFlowRate" id="baselineFlowRate">
-      <app-control-messages [control]="atmosphereLossForm.controls.modofiedFlowRate"></app-control-messages>
-    </div>
-    <div class="col-4 input-group input-group-sm">
-      <input type="number" class="form-control" formControlName="modofiedFlowRate" id="modofiedFlowRate">
-      <app-control-messages [control]="atmosphereLossForm.controls.modofiedFlowRate"></app-control-messages>
+      <input type="number" class="form-control" formControlName="flowRate" id="flowRate">
     </div>
   </div>
 
   <div class="row form-group">
-    <label class="col-4 col-form-label small" for="baselineCorrectionFactor">Correction Factor</label>
+    <label class="col-4 col-form-label small" for="correctionFactor">Correction Factor</label>
     <div class="col-4 input-group input-group-sm">
-      <input type="number" class="form-control" formControlName="baselineCorrectionFactor" id="baselineCorrectionFactor">
-      <app-control-messages [control]="atmosphereLossForm.controls.baselineCorrectionFactor"></app-control-messages>
-    </div>
-    <div class="col-4 input-group input-group-sm">
-      <input type="number" class="form-control" formControlName="modifiedCorrectionFactor" id="modifiedCorrectionFactor">
-      <app-control-messages [control]="atmosphereLossForm.controls.modifiedCorrectionFactor"></app-control-messages>
+      <input type="number" class="form-control" formControlName="correctionFactor" id="correctionFactor">
     </div>
   </div>
 
   <div class="row form-group">
-    <label class="col-4 col-form-label small" for="baselineHeatLoss">Heat Loss (Btu/hr)</label>
+    <label class="col-4 col-form-label small" for="heatLoss">Heat Loss (Btu/hr)</label>
     <div class="col-4 input-group input-group-sm">
-      <input type="number" class="form-control" formControlName="baselineHeatLoss" id="baselineHeatLoss">
-      <app-control-messages [control]="atmosphereLossForm.controls.baselineHeatLoss"></app-control-messages>
-    </div>
-    <div class="col-4 input-group input-group-sm">
-      <input type="number" class="form-control" formControlName="modifiedHeatLoss" id="modifiedHeatLoss">
-      <app-control-messages [control]="atmosphereLossForm.controls.modifiedHeatLoss"></app-control-messages>
+      <input type="number" class="form-control" formControlName="heatLoss" id="heatLoss">
     </div>
   </div>
 

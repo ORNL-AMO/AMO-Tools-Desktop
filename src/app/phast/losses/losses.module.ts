@@ -33,6 +33,8 @@ import { WallLossesService } from './wall-losses/wall-losses.service';
 import { LossesTabsComponent } from './losses-tabs/losses-tabs.component';
 import { WallLossesLabelsComponent } from './wall-losses/wall-losses-labels/wall-losses-labels.component';
 import { WallLossesAdjustmentFormComponent } from './wall-losses/wall-losses-adjustment-form/wall-losses-adjustment-form.component';
+import { AtmosphereLossesService } from './atmosphere-losses/atmosphere-losses.service';
+
 @NgModule({
   imports: [
     CommonModule,
@@ -72,7 +74,8 @@ import { WallLossesAdjustmentFormComponent } from './wall-losses/wall-losses-adj
   ],
   providers: [
     ChargeMaterialService,
-    WallLossesService
+    WallLossesService,
+    AtmosphereLossesService
   ],
   exports: [
     LossesComponent

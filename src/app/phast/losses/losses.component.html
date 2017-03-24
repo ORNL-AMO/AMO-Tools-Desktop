@@ -1,9 +1,9 @@
-<app-losses-tabs [losses]="phast.losses" [lossesStates]="lossesStates" (changeTab)="changeTab($event)" [lossesTab]="lossesTab"></app-losses-tabs>
+<!--<app-losses-tabs [losses]="phast.losses" [lossesStates]="lossesStates" (changeTab)="changeTab($event)" [lossesTab]="lossesTab"></app-losses-tabs>-->
 <div class="row losses-row">
-  <!--<nav class="col-3 sidebar losses-sidebar">
+  <nav class="col-3 sidebar losses-sidebar">
     <app-losses-sidebar [losses]="phast.losses" [lossesStates]="lossesStates" (changeTab)="changeTab($event)" [lossesTab]="lossesTab"></app-losses-sidebar>
-  </nav>-->
-  <div class="col-12">
+  </nav>
+  <div class="col-9 losses-container">
     <app-charge-material [(losses)]="phast.losses" [(lossState)]="lossesStates.chargeMaterial" [saveClicked]="saveClicked" *ngIf="lossesTab == 'charge-material'"></app-charge-material>
     <app-wall-losses [(losses)]="phast.losses" [saveClicked]="saveClicked" *ngIf="lossesTab == 'wall-losses'"></app-wall-losses>
     <app-atmosphere-losses *ngIf="lossesTab == 'atmosphere-losses'"></app-atmosphere-losses>

@@ -77,8 +77,8 @@ export class ChargeMaterialService {
       'feedRate': ['', Validators.required],
       'initialTemperature': ['', Validators.required],
       'dischargeTemperature': ['', Validators.required],
-      'baselineLiquidVaporized': ['', Validators.required],
-      'baselineLiquidReacted': ['', Validators.required],
+      'liquidVaporized': ['', Validators.required],
+      'liquidReacted': ['', Validators.required],
       'heatOfReaction': ['', Validators.required],
       'endothermicOrExothermic': ['', Validators.required],
       'additionalHeatRequired': ['', Validators.required],
@@ -100,8 +100,8 @@ export class ChargeMaterialService {
       'feedRate': [liquidChargeMaterial.chargeFeedRate, Validators.required],
       'initialTemperature': [liquidChargeMaterial.initialTemperature, Validators.required],
       'dischargeTemperature': [liquidChargeMaterial.dischargeTemperature, Validators.required],
-      'baselineLiquidVaporized': [liquidChargeMaterial.percentVaporized, Validators.required],
-      'baselineLiquidReacted': [liquidChargeMaterial.percentReacted, Validators.required],
+      'liquidVaporized': [liquidChargeMaterial.percentVaporized, Validators.required],
+      'liquidReacted': [liquidChargeMaterial.percentReacted, Validators.required],
       'heatOfReaction': [liquidChargeMaterial.reactionHeat, Validators.required],
       'endothermicOrExothermic': [reactionType, Validators.required],
       'additionalHeatRequired': [liquidChargeMaterial.additionalHeat, Validators.required],
@@ -111,7 +111,7 @@ export class ChargeMaterialService {
   //build LiquidChargeMaterial from liquidForm
   buildLiquidChargeMaterial(liquidForm: any): LiquidChargeMaterial {
     let reactionType = 0;
-    if (liquidForm.value.baselineExothermicOrEndothermic == 'Exothermic') {
+    if (liquidForm.value.exothermicOrEndothermic == 'Exothermic') {
       reactionType = 1;
     }
     let tmpLiquidMaterial: LiquidChargeMaterial = {
@@ -124,8 +124,8 @@ export class ChargeMaterialService {
       chargeFeedRate: liquidForm.value.feedRate,
       initialTemperature: liquidForm.value.initialTemperature,
       dischargeTemperature: liquidForm.value.dischargeTemperature,
-      percentVaporized: liquidForm.value.baselineLiquidVaporized,
-      percentReacted: liquidForm.value.baselineLiquidReacted,
+      percentVaporized: liquidForm.value.liquidVaporized,
+      percentReacted: liquidForm.value.liquidReacted,
       reactionHeat: liquidForm.value.heatOfReaction,
       additionalHeat: liquidForm.value.additionalHeatRequired
     }
@@ -142,13 +142,13 @@ export class ChargeMaterialService {
       'materialHeatOfLiquid': ['', Validators.required],
       'materialMeltingPoint': ['', Validators.required],
       'feedRate': ['', Validators.required],
-      'baselineWaterContentAsCharged': ['', Validators.required],
-      'baselineWaterContentAsDischarged': ['', Validators.required],
+      'waterContentAsCharged': ['', Validators.required],
+      'waterContentAsDischarged': ['', Validators.required],
       'initialTemperature': ['', Validators.required],
-      'baselineChargeMaterialDischargeTemperature': ['', Validators.required],
-      'baselineWaterVaporDischargeTemperature': ['', Validators.required],
-      'baselinePercentChargeMelted': ['', Validators.required],
-      'baselinePercentChargeReacted': ['', Validators.required],
+      'chargeMaterialDischargeTemperature': ['', Validators.required],
+      'waterVaporDischargeTemperature': ['', Validators.required],
+      'percentChargeMelted': ['', Validators.required],
+      'percentChargeReacted': ['', Validators.required],
       'heatOfReaction': ['', Validators.required],
       'endothermicOrExothermic': ['', Validators.required],
       'additionalHeatRequired': ['', Validators.required],
@@ -169,13 +169,13 @@ export class ChargeMaterialService {
       'materialHeatOfLiquid': [solidChargeMaterial.specificHeatLiquid, Validators.required],
       'materialMeltingPoint': [solidChargeMaterial.meltingPoint, Validators.required],
       'feedRate': [solidChargeMaterial.chargeFeedRate, Validators.required],
-      'baselineWaterContentAsCharged': [solidChargeMaterial.waterContentCharged, Validators.required],
-      'baselineWaterContentAsDischarged': [solidChargeMaterial.waterContentDischarged, Validators.required],
+      'waterContentAsCharged': [solidChargeMaterial.waterContentCharged, Validators.required],
+      'waterContentAsDischarged': [solidChargeMaterial.waterContentDischarged, Validators.required],
       'initialTemperature': [solidChargeMaterial.initialTemperature, Validators.required],
-      'baselineChargeMaterialDischargeTemperature': [solidChargeMaterial.dischargeTemperature, Validators.required],
-      'baselineWaterVaporDischargeTemperature': [solidChargeMaterial.waterVaporDischargeTemperature, Validators.required],
-      'baselinePercentChargeMelted': [solidChargeMaterial.chargeMelted, Validators.required],
-      'baselinePercentChargeReacted': [solidChargeMaterial.chargeReacted, Validators.required],
+      'chargeMaterialDischargeTemperature': [solidChargeMaterial.dischargeTemperature, Validators.required],
+      'waterVaporDischargeTemperature': [solidChargeMaterial.waterVaporDischargeTemperature, Validators.required],
+      'percentChargeMelted': [solidChargeMaterial.chargeMelted, Validators.required],
+      'percentChargeReacted': [solidChargeMaterial.chargeReacted, Validators.required],
       'heatOfReaction': [solidChargeMaterial.reactionHeat, Validators.required],
       'endothermicOrExothermic': [reactionType, Validators.required],
       'additionalHeatRequired': [solidChargeMaterial.additionalHeat, Validators.required],
@@ -186,7 +186,7 @@ export class ChargeMaterialService {
   //SolidChargeMaterial from form
   buildSolidChargeMaterial(solidForm: any): SolidChargeMaterial {
     let reactionType = 0;
-    if (solidForm.value.baselineExothermicOrEndothermic == 'Exothermic') {
+    if (solidForm.value.exothermicOrEndothermic == 'Exothermic') {
       reactionType = 1;
     }
 
@@ -198,13 +198,13 @@ export class ChargeMaterialService {
       specificHeatLiquid: solidForm.value.materialHeatOfLiquid,
       meltingPoint: solidForm.value.materialMeltingPoint,
       chargeFeedRate: solidForm.value.feedRate,
-      waterContentCharged: solidForm.value.baselineWaterContentAsCharged,
-      waterContentDischarged: solidForm.value.baselineWaterContentAsDischarged,
+      waterContentCharged: solidForm.value.waterContentAsCharged,
+      waterContentDischarged: solidForm.value.waterContentAsDischarged,
       initialTemperature: solidForm.value.initialTemperature,
-      dischargeTemperature: solidForm.value.baselineChargeMaterialDischargeTemperature,
-      waterVaporDischargeTemperature: solidForm.value.baselineWaterVaporDischargeTemperature,
-      chargeMelted: solidForm.value.baselinePercentChargeMelted,
-      chargeReacted: solidForm.value.baselinePercentChargeReacted,
+      dischargeTemperature: solidForm.value.chargeMaterialDischargeTemperature,
+      waterVaporDischargeTemperature: solidForm.value.waterVaporDischargeTemperature,
+      chargeMelted: solidForm.value.percentChargeMelted,
+      chargeReacted: solidForm.value.percentChargeReacted,
       reactionHeat: solidForm.value.heatOfReaction,
       additionalHeat: solidForm.value.additionalHeatRequired
     }
