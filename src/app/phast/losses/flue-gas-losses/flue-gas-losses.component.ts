@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import * as _ from 'lodash';
 import { FormBuilder } from '@angular/forms';
+import { FlueGasLossesService } from './flue-gas-losses.service';
+import { PhastService } from '../../phast.service';
 
 @Component({
   selector: 'app-flue-gas-losses',
@@ -10,7 +12,7 @@ import { FormBuilder } from '@angular/forms';
 export class FlueGasLossesComponent implements OnInit {
   flueGasLosses: Array<any>;
 
-  constructor(private formBuilder: FormBuilder) { }
+  constructor(private formBuilder: FormBuilder, private phastService: PhastService, private flueGasLossesService: FlueGasLossesService) { }
 
   ngOnInit() {
     if(!this.flueGasLosses){
@@ -19,9 +21,11 @@ export class FlueGasLossesComponent implements OnInit {
   }
 
   addLoss() {
-    let tmpForm = this.initForm();
-    let tmpName = 'Loss #' + (this.flueGasLosses.length + 1);
-    this.flueGasLosses.push({ form: tmpForm, name: tmpName });
+    this.flueGasLosses.push({ 
+      form: this.flueGasLossesService.initForm(), 
+      name: 'Loss #' + (this.flueGasLosses.length + 1),
+      heatLoss: 0.0
+    });
   }
 
   removeLoss(str: string) {
@@ -39,26 +43,9 @@ export class FlueGasLossesComponent implements OnInit {
     })
   }
 
-  initForm(){
-    return this.formBuilder.group({
-      'baselineFurnaceFlueGasTemp': [''],
-      'baselineInput': [''],
-      'baselineOxygenInFlueGas': [''],
-      'baselineExcessAir': [''],
-      'baselineCombustionAirTemp': [''],
-      'baselineCalculatedO2InFlueGas': [''],
-      'baselineAvailableHeatInput': [''],
-      'baselineAvailableHeat': [{ value: '', disabled: true }],
-
-      'modifiedFurnaceFlueGasTemp': [''],
-      'modifiedInput': [''],
-      'modifiedOxygenInFlueGas': [''],
-      'modifiedExcessAir': [''],
-      'modifiedCombustionAirTemp': [''],
-      'modifiedCalculatedO2InFlueGas': [''],
-      'modifiedAvailableHeatInput': [''],
-      'modifiedAvailableHeat': [{ value: '', disabled: true }]
-    })
+  calculate(loss: any){
+    //TODO: ADD call to phastService to calculate heat loss
+    //loss.heatLoss = this.phastService.flueGasLoss();
   }
 }
 

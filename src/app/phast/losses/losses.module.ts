@@ -35,6 +35,10 @@ import { WallLossesLabelsComponent } from './wall-losses/wall-losses-labels/wall
 import { WallLossesAdjustmentFormComponent } from './wall-losses/wall-losses-adjustment-form/wall-losses-adjustment-form.component';
 import { AtmosphereLossesService } from './atmosphere-losses/atmosphere-losses.service';
 import { FixtureLossesService } from './fixture-losses/fixture-losses.service';
+import { FlueGasLossesService } from './flue-gas-losses/flue-gas-losses.service';
+import { HeatStorageService } from './heat-storage/heat-storage.service';
+
+
 @NgModule({
   imports: [
     CommonModule,
@@ -76,7 +80,10 @@ import { FixtureLossesService } from './fixture-losses/fixture-losses.service';
     ChargeMaterialService,
     WallLossesService,
     AtmosphereLossesService,
-    FixtureLossesService
+    FixtureLossesService,
+    FlueGasLossesService,
+    HeatStorageService
+
   ],
   exports: [
     LossesComponent

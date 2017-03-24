@@ -18,6 +18,14 @@
     </button>
   </div>
   <div class="card-block">
-    <app-flue-gas-losses-form [(flueGasLossForm)]="loss.form"></app-flue-gas-losses-form>
+    <app-flue-gas-losses-form [(flueGasLossForm)]="loss.form" (calculate)="calculate(loss)"></app-flue-gas-losses-form>
+    <div class="row">
+      <div class="col-4">
+        <small>Heat Loss (Btu/hr)</small>
+      </div>
+      <div class="col-4 text-center">
+        {{loss.heatLoss |number:'2.2-2'}}
+      </div>
+    </div>
   </div>
 </div>
