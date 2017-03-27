@@ -11,6 +11,7 @@ import { routing, appRoutingProviders } from './app.routing';
 import { CoreModule } from './core/core.module';
 
 
+
 @NgModule({
   declarations: [
     AppComponent
@@ -22,7 +23,7 @@ import { CoreModule } from './core/core.module';
     HttpModule,
     SharedModule,
     CoreModule,
-    routing,
+    routing
   ],
   providers: [
     appRoutingProviders

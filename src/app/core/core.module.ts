@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { NgxElectronModule } from 'ngx-electron';
 import { AssessmentModule } from '../assessment/assessment.module';
 import { PhastModule } from '../phast/phast.module';
 import { PsatModule } from '../psat/psat.module';
@@ -13,7 +14,6 @@ import { SidebarComponent } from '../sidebar/sidebar.component';
 import { DashboardComponent } from '../dashboard/dashboard.component';
 import { AssessmentService } from '../assessment/assessment.service';
 import { UpdateModalComponent } from '../update-modal/update-modal.component';
-import { ElectronService } from '../shared/electron.service';
 
 @NgModule({
   declarations: [
@@ -30,11 +30,11 @@ import { ElectronService } from '../shared/electron.service';
     PhastModule,
     CalculatorModule,
     DetailedReportModule,
-    ModalModule.forRoot()
+    ModalModule.forRoot(),
+    NgxElectronModule
   ],
   providers: [
-    AssessmentService,
-    ElectronService
+    AssessmentService
   ]
 })
 
