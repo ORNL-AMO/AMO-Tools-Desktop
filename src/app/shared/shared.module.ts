@@ -20,7 +20,7 @@ import { ModelService } from './model.service';
   ],
   providers: [
     ValidationService,
-    ModelService,
+    ModelService
 
   ]
 })
