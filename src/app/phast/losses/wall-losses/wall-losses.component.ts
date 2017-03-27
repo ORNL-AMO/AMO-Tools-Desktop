@@ -16,6 +16,8 @@ export class WallLossesComponent implements OnInit {
   losses: Losses;
   @Input()
   saveClicked: boolean;
+  @Input()
+  lossState: any;
 
   _wallLosses: Array<any>;
   _adjustments: Array<any>;
@@ -54,12 +56,14 @@ export class WallLossesComponent implements OnInit {
       name: 'Loss #' + (this._wallLosses.length + 1),
       heatLoss: 0.0
     });
+    this.lossState.saved = false;
   }
 
   removeLoss(str: string) {
     this._wallLosses = _.remove(this._wallLosses, loss => {
       return loss.name != str;
     });
+    this.lossState.saved = false;
     this.renameLossess();
   }
 
@@ -106,5 +110,8 @@ export class WallLossesComponent implements OnInit {
       tmpWallLosses.push(tmpWallLoss);
     })
     this.losses.wallLosses = tmpWallLosses;
+    this.lossState.numLosses = this._wallLosses.length;
+    this.lossState.saved = true;
+
   }
 }

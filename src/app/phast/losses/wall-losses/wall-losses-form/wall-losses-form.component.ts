@@ -8,14 +8,14 @@ import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 export class WallLossesFormComponent implements OnInit {
   @Input()
   wallLossesForm: any;
-  @Output('calculateBaseline')
+  @Output('calculate')
   calculate = new EventEmitter<boolean>();
   constructor() { }
 
   ngOnInit() {
   }
 
-  checkBaseline() {
+  checkForm() {
     if (this.wallLossesForm.status == "VALID") {
       this.calculate.emit(true);
     }

@@ -3,12 +3,12 @@
   <button class="btn btn-secondary pull-right" (click)="addLoss()">+ Add Atmosphere Loss</button>
 </div>
 
-<div class="no-data" *ngIf="atmosphereLosses.length == 0" (click)="addLoss()">
+<div class="no-data" *ngIf="_atmosphereLosses.length == 0" (click)="addLoss()">
   <h3>You have no Atmosphere Losses</h3>
   <h4>Add some now.</h4>
 </div>
 
-<div class="card card-form" *ngFor="let loss of atmosphereLosses">
+<div class="card card-form" *ngFor="let loss of _atmosphereLosses">
   <div class="card-header">
     <div class="pull-left">
       <b>{{loss.name}}</b>
@@ -18,7 +18,7 @@
     </button>
   </div>
   <div class="card-block">
-    <app-atmosphere-losses-form [(atmosphereLossForm)]="loss.form"></app-atmosphere-losses-form>
+    <app-atmosphere-losses-form [(atmosphereLossForm)]="loss.form" (calculate)="calculate(loss)"></app-atmosphere-losses-form>
     <div class="row">
       <div class="col-6">
         <small>Total Heat Loss (Btu/hr)</small>

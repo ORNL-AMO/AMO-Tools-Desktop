@@ -11,8 +11,8 @@ export class AtmosphereLossesService {
     return this.formBuilder.group({
       'atmosphereGas': ['', Validators.required],
       'specificHeat': ['', Validators.required],
-      'initialTemp': ['', Validators.required],
-      'finalTemp': ['', Validators.required],
+      'inletTemp': ['', Validators.required],
+      'outletTemp': ['', Validators.required],
       'flowRate': ['', Validators.required],
       'correctionFactor': ['', Validators.required],
     });
@@ -23,8 +23,8 @@ export class AtmosphereLossesService {
     return this.formBuilder.group({
       'atmosphereGas': [loss.atmosphereGas, Validators.required],
       'specificHeat': [loss.specificHeat, Validators.required],
-      'initialTemp': [loss.initialTemperature, Validators.required],
-      'finalTemp': [loss.finalTemperature, Validators.required],
+      'inletTemp': [loss.inletTemperature, Validators.required],
+      'outletTemp': [loss.outletTemperature, Validators.required],
       'flowRate': [loss.flowRate, Validators.required],
       'correctionFactor': [loss.correctionFactor, Validators.required]
     });
@@ -34,8 +34,8 @@ export class AtmosphereLossesService {
     let tmpLoss: AtmosphereLoss = {
       atmosphereGas: form.value.atmosphereGas,
       specificHeat: form.value.specificHeat,
-      initialTemperature: form.value.initialTemp,
-      finalTemperature: form.value.finalTemp,
+      inletTemperature: form.value.inletTemp,
+      outletTemperature: form.value.outletTemp,
       flowRate: form.value.flowRate,
       correctionFactor: form.value.correctionFactor
     }

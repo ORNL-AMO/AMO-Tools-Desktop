@@ -14,6 +14,7 @@
   <li [ngClass]="{'active': lossesTab == 'atmosphere-losses'}" (click)="tabChange('atmosphere-losses')">
     <a class="nav-link small">
     Atmosphere Losses
+    <div class="pull-right numberCircle" *ngIf="losses.atmosphereLosses" [ngClass]="{'unsaved':!lossesStates.atmosphereLosses.saved}"><span>{{losses.atmosphereLosses.length}}</span></div>
     </a>
   </li>
   <li [ngClass]="{'active': lossesTab == 'fixture-losses'}" (click)="tabChange('fixture-losses')">

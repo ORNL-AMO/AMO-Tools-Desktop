@@ -1,8 +1,8 @@
 export interface AtmosphereLoss {
     atmosphereGas?: string,
     specificHeat?: number,
-    initialTemperature?: number,
-    finalTemperature?: number,
+    inletTemperature?: number,
+    outletTemperature?: number,
     flowRate?: number,
     correctionFactor?: number
 }

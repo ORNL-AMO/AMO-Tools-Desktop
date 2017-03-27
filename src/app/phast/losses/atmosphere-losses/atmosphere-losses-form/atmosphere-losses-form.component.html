@@ -1,37 +1,44 @@
 <form [formGroup]="atmosphereLossForm">
 
   <div class="row form-group">
-    <label class="col-6 col-form-label small" for="specificHeat">Specific heat of gas (Btu/(SCF-(&#8657;)))</label>
+    <label class="col-6 col-form-label small" for="atmosphereGas">Atmosphere Gas</label>
     <div class="col-6 input-group input-group-sm">
-      <input type="number" class="form-control" formControlName="specificHeat" id="specificHeat">
+      <input type="text" class="form-control" formControlName="atmosphereGas" id="atmosphereGas" (keyup)="checkForm()">
     </div>
   </div>
 
   <div class="row form-group">
-    <label class="col-6 col-form-label small" for="initialTemp">Initial temperature (&#8657;)</label>
+    <label class="col-6 col-form-label small" for="specificHeat">Specific heat of gas (Btu/(SCF-(&#8457;)))</label>
     <div class="col-6 input-group input-group-sm">
-      <input type="number" class="form-control" formControlName="initialTemp" id="initialTemp">
+      <input type="number" class="form-control" formControlName="specificHeat" id="specificHeat" (keyup)="checkForm()">
     </div>
   </div>
 
   <div class="row form-group">
-    <label class="col-6 col-form-label small" for="finalTemp">Final temperature (&#8657;)</label>
+    <label class="col-6 col-form-label small" for="inletTemp">Initial temperature (&#8457;)</label>
     <div class="col-6 input-group input-group-sm">
-      <input type="number" class="form-control" formControlName="finalTemp" id="finalTemp">
+      <input type="number" class="form-control" formControlName="inletTemp" id="inletTemp" (keyup)="checkForm()">
+    </div>
+  </div>
+
+  <div class="row form-group">
+    <label class="col-6 col-form-label small" for="outletTemp">Final temperature (&#8457;)</label>
+    <div class="col-6 input-group input-group-sm">
+      <input type="number" class="form-control" formControlName="outletTemp" id="outletTemp" (keyup)="checkForm()">
     </div>
   </div>
 
   <div class="row form-group">
     <label class="col-6 col-form-label small" for="flowRate">Flow Rate (SCF/hr)</label>
     <div class="col-6 input-group input-group-sm">
-      <input type="number" class="form-control" formControlName="flowRate" id="flowRate">
+      <input type="number" class="form-control" formControlName="flowRate" id="flowRate" (keyup)="checkForm()">
     </div>
   </div>
 
   <div class="row form-group">
     <label class="col-6 col-form-label small" for="correctionFactor">Correction Factor</label>
     <div class="col-6 input-group input-group-sm">
-      <input type="number" class="form-control" formControlName="correctionFactor" id="correctionFactor">
+      <input type="number" class="form-control" formControlName="correctionFactor" id="correctionFactor" (keyup)="checkForm()">
     </div>
   </div>
 

@@ -20,6 +20,10 @@ export class LossesComponent implements OnInit {
     chargeMaterial: {
       numLosses: 0,
       saved: true
+    },
+    atmosphereLosses: {
+      numLosses: 0,
+      saved: true
     }
   }
   constructor() { }
