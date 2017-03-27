@@ -53,7 +53,6 @@
     "appId": "com.electron.amo-tools-desktop",
     "copyright": "Copyright 2017 ORNL. All rights reserved.",
     "productName": "AMO-Tools-Desktop",
-    "iconUrl": "https://github.com/ORNL-AMO/AMO-Tools-Desktop/blob/master/src/favicon.ico?raw=true",
     "directories": {
       "output": "../output/"
     },

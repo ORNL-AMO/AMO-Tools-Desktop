@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Directory } from '../shared/models/directory';
 import { MockDirectory } from '../shared/mocks/mock-directory';
-import {ElectronService} from '../shared/electron.service';
+import { ElectronService } from '../core/core.component';
+
+
 
 @Component({
   selector: 'app-dashboard',
@@ -18,7 +20,7 @@ export class DashboardComponent implements OnInit {
   constructor(private electronService: ElectronService) { }
 
   ngOnInit() {
-    this.updateAvailable = this.electronService.isUpdateAvailable();
+    this.updateAvailable = this.electronService.isUpdateAvailable()
   }
 
   changeWorkingDirectory($event) {

@@ -3,12 +3,14 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { LocationStrategy, HashLocationStrategy } from '@angular/common';
+import { ElectronService } from 'ngx-electron';
 
 import { AppComponent } from './app.component';
 
 import { SharedModule } from './shared/shared.module';
 import { routing, appRoutingProviders } from './app.routing';
 import { CoreModule } from './core/core.module';
+
 
 
 @NgModule({
@@ -23,9 +25,11 @@ import { CoreModule } from './core/core.module';
     SharedModule,
     CoreModule,
     routing,
+    ElectronService
   ],
   providers: [
-    appRoutingProviders
+    appRoutingProviders,
+    ElectronService
   ],
   entryComponents: [AppComponent],
   bootstrap: [AppComponent]
