@@ -23,16 +23,16 @@ export class OpeningLossesService {
 
   getFormFromLoss(loss: OpeningLoss) {
     return this.formBuilder.group({
-      'numberOfOpenings': [loss.numberOfOpenings],
-      'openingType': [loss.openingType],
-      'wallThickness': [loss.thickness],
-      'lengthOfOpening': [loss.lengthOfOpening],
-      'heightOfOpening': [loss.heightOfOpening],
-      'viewFactor': [loss.viewFactor],
-      'insideTemp': [loss.insideTemperature],
-      'ambientTemp': [loss.ambientTemperature],
-      'percentTimeOpen': [loss.percentTimeOpen],
-      'emissivity': [loss.emessivity]
+      'numberOfOpenings': [loss.numberOfOpenings, Validators.required],
+      'openingType': [loss.openingType, Validators.required],
+      'wallThickness': [loss.thickness, Validators.required],
+      'lengthOfOpening': [loss.lengthOfOpening, Validators.required],
+      'heightOfOpening': [loss.heightOfOpening, Validators.required],
+      'viewFactor': [loss.viewFactor, Validators.required],
+      'insideTemp': [loss.insideTemperature, Validators.required],
+      'ambientTemp': [loss.ambientTemperature, Validators.required],
+      'percentTimeOpen': [loss.percentTimeOpen, Validators.required],
+      'emissivity': [loss.emessivity, Validators.required]
     })
   }
 

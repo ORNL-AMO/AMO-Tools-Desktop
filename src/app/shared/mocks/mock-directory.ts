@@ -47,63 +47,63 @@ export const MockDirectory: Directory = {
       type: 'PHAST',
       phast: {
         losses: {
-           chargeMaterials: [
-             {
-               chargeMaterialType: 'Gas',
-               gasChargeMaterial: {
-                 materialName: 'Type 1',
-                 thermicReactionType: 0,
-                 specificHeatGas: 0.24,
-                 feedRate: 1000,
-                 percentVapor: 15,
-                 initialTemperature: 80,
-                 dischargeTemperature: 1150,
-                 specificHeatVapor: .5,
-                 percentReacted: 100,
-                 reactionHeat: 80,
-                 additionalHeat: 5000
-               }
-             },
-             {
-               chargeMaterialType: 'Solid',
-               solidChargeMaterial: {
-                 materialName: 'Type 1',
-                 thermicReactionType: 1,
-                 specificHeatSolid: .15,
-                 latentHeat: 60,
-                 specificHeatLiquid: .481,
-                 meltingPoint: 2900,
-                 chargeFeedRate: 10000,
-                 waterContentCharged: .1,
-                 waterContentDischarged: 0.0,
-                 initialTemperature: 70.0,
-                 dischargeTemperature: 2200,
-                 waterVaporDischargeTemperature: 500,
-                 chargeMelted: 0.0,
-                 chargeReacted: 1.0,
-                 reactionHeat: 100,
-                 additionalHeat: 0
-               }
-             },
-             {
-               chargeMaterialType: 'Liquid',
-               liquidChargeMaterial: {
-                 materialName: 'Type 1',
-                 thermicReactionType: 0,
-                 specificHeatLiquid: .48,
-                 vaporizingTemperature: 240,
-                 latentHeat: 250,
-                 specificHeatVapor: .25,
-                 chargeFeedRate: 1000,
-                 initialTemperature: 70,
-                 dischargeTemperature: 320,
-                 percentVaporized: 100,
-                 percentReacted: 25,
-                 reactionHeat: 50,
-                 additionalHeat: 0
-               }
-             }
-           ],
+          chargeMaterials: [
+            {
+              chargeMaterialType: 'Gas',
+              gasChargeMaterial: {
+                materialName: 'Type 1',
+                thermicReactionType: 0,
+                specificHeatGas: 0.24,
+                feedRate: 1000,
+                percentVapor: 15,
+                initialTemperature: 80,
+                dischargeTemperature: 1150,
+                specificHeatVapor: .5,
+                percentReacted: 100,
+                reactionHeat: 80,
+                additionalHeat: 5000
+              }
+            },
+            {
+              chargeMaterialType: 'Solid',
+              solidChargeMaterial: {
+                materialName: 'Type 1',
+                thermicReactionType: 1,
+                specificHeatSolid: .15,
+                latentHeat: 60,
+                specificHeatLiquid: .481,
+                meltingPoint: 2900,
+                chargeFeedRate: 10000,
+                waterContentCharged: .1,
+                waterContentDischarged: 0.0,
+                initialTemperature: 70.0,
+                dischargeTemperature: 2200,
+                waterVaporDischargeTemperature: 500,
+                chargeMelted: 0.0,
+                chargeReacted: 1.0,
+                reactionHeat: 100,
+                additionalHeat: 0
+              }
+            },
+            {
+              chargeMaterialType: 'Liquid',
+              liquidChargeMaterial: {
+                materialName: 'Type 1',
+                thermicReactionType: 0,
+                specificHeatLiquid: .48,
+                vaporizingTemperature: 240,
+                latentHeat: 250,
+                specificHeatVapor: .25,
+                chargeFeedRate: 1000,
+                initialTemperature: 70,
+                dischargeTemperature: 320,
+                percentVaporized: 100,
+                percentReacted: 25,
+                reactionHeat: 50,
+                additionalHeat: 0
+              }
+            }
+          ],
           wallLosses: [
             {
               surfaceArea: 500.0,
@@ -124,6 +124,30 @@ export const MockDirectory: Directory = {
               outletTemperature: 1400.0,
               flowRate: 1200.0,
               correctionFactor: 1.0,
+            }
+          ],
+          openingLosses: [
+            {
+              numberOfOpenings: 1,
+              emessivity: .95,
+              thickness:9.0,
+              ambientTemperature:75.0,
+              insideTemperature:1600,
+              percentTimeOpen:100,
+              viewFactor:.7,
+              openingType:'Round',
+              lengthOfOpening:12.0,
+            },{
+              numberOfOpenings: 1,
+              emessivity: .95,
+              thickness:9.0,
+              ambientTemperature:75.0,
+              insideTemperature:1600,
+              percentTimeOpen:20,
+              viewFactor:.64,
+              openingType:'Rectangular (Square)',
+              lengthOfOpening:48.0,
+              heightOfOpening:15.0
             }
           ]
         },

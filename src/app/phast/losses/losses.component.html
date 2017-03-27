@@ -8,7 +8,7 @@
     <app-wall-losses [(losses)]="phast.losses" [(lossState)]="lossesStates.wallLosses"  [saveClicked]="saveClicked" *ngIf="lossesTab == 'wall-losses'"></app-wall-losses>
     <app-atmosphere-losses [(losses)]="phast.losses" [(lossState)]="lossesStates.atmosphereLosses"   [saveClicked]="saveClicked" *ngIf="lossesTab == 'atmosphere-losses'"></app-atmosphere-losses>
     <app-fixture-losses *ngIf="lossesTab == 'fixture-losses'"></app-fixture-losses>
-    <app-opening-losses *ngIf="lossesTab == 'opening-losses'"></app-opening-losses>
+    <app-opening-losses [(losses)]="phast.losses" *ngIf="lossesTab == 'opening-losses'"></app-opening-losses>
     <app-water-cooling-losses *ngIf="lossesTab == 'water-cooling-losses'"></app-water-cooling-losses>
     <app-heat-storage *ngIf="lossesTab == 'heat-storage'"></app-heat-storage>
     <app-flue-gas-losses *ngIf="lossesTab == 'flue-gas-losses'"></app-flue-gas-losses>

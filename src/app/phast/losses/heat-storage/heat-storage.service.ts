@@ -7,17 +7,22 @@ export class HeatStorageService {
 
   constructor(private formBuilder: FormBuilder) { }
 
-  initForm(){
+  initForm() {
     return this.formBuilder.group({
-
+      'shape': [''],
+      'area': [''],
+      'furnaceTemp': [''],
+      'ambientTemp': [''],
+      'startingWallTemp': [''],
+      'correctionFactor': [''],
     })
   }
 
-  getFormFromLoss(loss: HeatStorage){
+  getFormFromLoss(loss: HeatStorage) {
 
   }
 
-  getLossFromForm(form: any){
+  getLossFromForm(form: any) {
 
   }
 
