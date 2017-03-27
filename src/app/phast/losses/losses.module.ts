@@ -18,8 +18,6 @@ import { LossesSidebarComponent } from './losses-sidebar/losses-sidebar.componen
 import { WallLossesFormComponent } from './wall-losses/wall-losses-form/wall-losses-form.component';
 import { SolidChargeMaterialFormComponent } from './charge-material/solid-charge-material-form/solid-charge-material-form.component';
 import { FixtureLossesFormComponent } from './fixture-losses/fixture-losses-form/fixture-losses-form.component';
-import { FixedOpeningFormComponent } from './opening-losses/fixed-opening-form/fixed-opening-form.component';
-import { VariableOpeningFormComponent } from './opening-losses/variable-opening-form/variable-opening-form.component';
 import { WaterCoolingLossesFormComponent } from './water-cooling-losses/water-cooling-losses-form/water-cooling-losses-form.component';
 import { AtmosphereLossesFormComponent } from './atmosphere-losses/atmosphere-losses-form/atmosphere-losses-form.component';
 import { HeatStorageFormComponent } from './heat-storage/heat-storage-form/heat-storage-form.component';
@@ -30,7 +28,16 @@ import { GasChargeMaterialFormComponent } from './charge-material/gas-charge-mat
 
 import { ChargeMaterialService } from './charge-material/charge-material.service';
 import { WallLossesService } from './wall-losses/wall-losses.service';
-
+import { LossesTabsComponent } from './losses-tabs/losses-tabs.component';
+import { WallLossesLabelsComponent } from './wall-losses/wall-losses-labels/wall-losses-labels.component';
+import { WallLossesAdjustmentFormComponent } from './wall-losses/wall-losses-adjustment-form/wall-losses-adjustment-form.component';
+import { AtmosphereLossesService } from './atmosphere-losses/atmosphere-losses.service';
+import { FixtureLossesService } from './fixture-losses/fixture-losses.service';
+import { FlueGasLossesService } from './flue-gas-losses/flue-gas-losses.service';
+import { HeatStorageService } from './heat-storage/heat-storage.service';
+import { OpeningLossesService } from './opening-losses/opening-losses.service';
+import { OpeningLossesFormComponent } from './opening-losses/opening-losses-form/opening-losses-form.component';
+import { WaterCoolingLossesService } from './water-cooling-losses/water-cooling-losses.service';
 @NgModule({
   imports: [
     CommonModule,
@@ -53,8 +60,6 @@ import { WallLossesService } from './wall-losses/wall-losses.service';
     LossesSidebarComponent,
     WallLossesComponent,
     FixtureLossesFormComponent,
-    FixedOpeningFormComponent,
-    VariableOpeningFormComponent,
     WaterCoolingLossesFormComponent,
     AtmosphereLossesFormComponent,
     HeatStorageFormComponent,
@@ -63,11 +68,21 @@ import { WallLossesService } from './wall-losses/wall-losses.service';
     GasChargeMaterialFormComponent,
     SolidChargeMaterialFormComponent,
     WallLossesFormComponent,
-    FlueGasLossesFormComponent
+    FlueGasLossesFormComponent,
+    LossesTabsComponent,
+    WallLossesLabelsComponent,
+    WallLossesAdjustmentFormComponent,
+    OpeningLossesFormComponent
   ],
   providers: [
     ChargeMaterialService,
-    WallLossesService
+    WallLossesService,
+    AtmosphereLossesService,
+    FixtureLossesService,
+    FlueGasLossesService,
+    HeatStorageService,
+    OpeningLossesService,
+    WaterCoolingLossesService
   ],
   exports: [
     LossesComponent

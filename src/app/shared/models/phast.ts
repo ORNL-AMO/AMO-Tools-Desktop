@@ -5,13 +5,14 @@ import { OtherLoss } from './losses/otherLoss';
 import { FixtureLoss } from './losses/fixtureLoss';
 import { OpeningLoss } from './losses/openingLoss';
 import { CoolingLoss } from './losses/coolingLoss';
-import { HeatStorage } from'./losses/heatStorage';
+import { HeatStorage } from './losses/heatStorage';
 import { FlueGas } from './losses/flueGas';
 
 export interface PHAST {
   name?: string,
   phastInputs?: PhastInputs,
   losses?: Losses
+  lossAdjustments?: Losses[]
 }
 
 export interface PhastInputs {

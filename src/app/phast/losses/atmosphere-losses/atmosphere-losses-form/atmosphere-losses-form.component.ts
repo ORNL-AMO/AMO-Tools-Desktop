@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-atmosphere-losses-form',
@@ -8,9 +8,19 @@ import { Component, OnInit, Input } from '@angular/core';
 export class AtmosphereLossesFormComponent implements OnInit {
   @Input()
   atmosphereLossForm: any;
+  @Output('calculate')
+  calculate = new EventEmitter<boolean>();
+
   constructor() { }
 
   ngOnInit() {
+  }
+
+  checkForm(){
+    debugger
+    if(this.atmosphereLossForm.status == "VALID"){
+      this.calculate.emit(true);
+    }
   }
 
 }

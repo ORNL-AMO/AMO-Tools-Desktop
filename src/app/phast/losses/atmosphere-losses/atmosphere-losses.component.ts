@@ -1,6 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input, SimpleChange } from '@angular/core';
 import * as _ from 'lodash';
-import { FormBuilder } from '@angular/forms';
+import { PhastService } from '../../phast.service';
+import { AtmosphereLossesService } from './atmosphere-losses.service';
+import { Losses } from '../../../shared/models/phast';
+import { AtmosphereLoss } from '../../../shared/models/losses/atmosphereLoss';
 
 @Component({
   selector: 'app-atmosphere-losses',
@@ -8,53 +11,84 @@ import { FormBuilder } from '@angular/forms';
   styleUrls: ['./atmosphere-losses.component.css']
 })
 export class AtmosphereLossesComponent implements OnInit {
-  atmosphereLosses: Array<any>;
+  @Input()
+  losses: Losses;
+  @Input()
+  saveClicked: boolean;
+  @Input()
+  lossState: any;
 
-  constructor(private formBuilder: FormBuilder) { }
+  _atmosphereLosses: Array<any>;
+
+  constructor(private atmosphereLossesService: AtmosphereLossesService, private phastService: PhastService) { }
+  ngOnChanges(changes: SimpleChange) {
+    if (!changes.isFirstChange && this._atmosphereLosses) {
+      this.saveLosses();
+    }
+  }
 
   ngOnInit() {
-    if(!this.atmosphereLosses){
-      this.atmosphereLosses = new Array();
+    if (!this._atmosphereLosses) {
+      this._atmosphereLosses = new Array();
+    }
+    if (this.losses.atmosphereLosses) {
+      this.losses.atmosphereLosses.forEach(loss => {
+        let tmpLoss = {
+          form: this.atmosphereLossesService.getAtmosphereForm(loss),
+          name: 'Loss #' + (this._atmosphereLosses.length + 1),
+          heatLoss: 0.0
+        };
+        this.calculate(tmpLoss);
+        this._atmosphereLosses.unshift(tmpLoss);
+      })
     }
   }
 
   addLoss() {
-    let tmpForm = this.initForm();
-    let tmpName = 'Loss #' + (this.atmosphereLosses.length + 1);
-    this.atmosphereLosses.push({ form: tmpForm, name: tmpName });
+    let tmpForm = this.atmosphereLossesService.initForm();
+    let tmpName = 'Loss #' + (this._atmosphereLosses.length + 1);
+    this._atmosphereLosses.unshift({
+      form: tmpForm,
+      name: tmpName,
+      heatLoss: 0.0
+    });
+    this.lossState.saved = false;
   }
 
   removeLoss(str: string) {
-    this.atmosphereLosses = _.remove(this.atmosphereLosses, loss => {
+    this._atmosphereLosses = _.remove(this._atmosphereLosses, loss => {
       return loss.name != str;
     });
+    this.lossState.saved = false;
     this.renameLoss();
   }
 
   renameLoss() {
     let index = 1;
-    this.atmosphereLosses.forEach(loss => {
+    this._atmosphereLosses.forEach(loss => {
       loss.name = 'Loss #' + index;
       index++;
     })
   }
 
-  initForm(){
-
-    return this.formBuilder.group({
-      'baselineSpecificHeat': [''],
-      'baselineInitialTemp': [''],
-      'baselineFinalTemp': [''],
-      'baselineFlowRate': [''],
-      'baselineCorrectionFactor': [''],
-      'baselineHeatLoss': [{value:'', disabled: true}],
-      'modifiedSpecificHeat': [''],
-      'modifiedInitialTemp': [''],
-      'modifiedFinalTemp': [''],
-      'modofiedFlowRate': [''],
-      'modifiedCorrectionFactor': [''],
-      'modifiedHeatLoss': [{value:'', disabled: true}]
-    })
+  calculate(loss: any) {
+    loss.heatLoss = this.phastService.atmosphere(
+      loss.form.value.inletTemp,
+      loss.form.value.outletTemp,
+      loss.form.value.flowRate,
+      loss.form.value.correctionFactor,
+      loss.form.value.specificHeat
+    );
   }
 
+  saveLosses() {
+    let tmpAtmosphereLosses = new Array<AtmosphereLoss>();
+    this._atmosphereLosses.forEach(loss => {
+      let tmpAtmosphereLoss = this.atmosphereLossesService.getLossFromForm(loss.form);
+      tmpAtmosphereLosses.push(tmpAtmosphereLoss);
+    })
+    this.losses.atmosphereLosses = tmpAtmosphereLosses;
+    this.lossState.numLosses = this._atmosphereLosses.length;
+    this.lossState.saved = true;
+  }
 }

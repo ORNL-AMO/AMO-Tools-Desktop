@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import * as _ from 'lodash';
 import { PhastService } from '../../phast.service';
+import { FixtureLossesService } from './fixture-losses.service';
 
 @Component({
   selector: 'app-fixture-losses',
@@ -12,7 +13,7 @@ export class FixtureLossesComponent implements OnInit {
 
   fixtureLosses: Array<any>;
 
-  constructor(private formBuilder: FormBuilder, private phastService: PhastService) { }
+  constructor(private formBuilder: FormBuilder, private phastService: PhastService, private fixtureLossesService: FixtureLossesService) { }
 
   ngOnInit() {
     if (!this.fixtureLosses) {
@@ -21,13 +22,12 @@ export class FixtureLossesComponent implements OnInit {
   }
 
   addLoss() {
-    let tmpForm = this.initForm();
+    let tmpForm = this.fixtureLossesService.initForm();
     let tmpName = 'Loss #' + (this.fixtureLosses.length + 1);
     this.fixtureLosses.push({ 
       form: tmpForm, 
       name: tmpName,
-      baselineHeatRequired: 0.0,
-      modifiedHeatRequired: 0.0
+      heatRequired: 0.0
     });
   }
 
@@ -46,30 +46,10 @@ export class FixtureLossesComponent implements OnInit {
     })
   }
 
-  initForm() {
-    return this.formBuilder.group({
-      'baselineType': ['', Validators.required],
-      'baselineFixtureWeight': ['', Validators.required],
-      'baselineInitialTemp': ['', Validators.required],
-      'baselineFinalTemp': ['', Validators.required],
-      'baselineCorrectionFactor': ['', Validators.required],
-      'modifiedType': ['', Validators.required],
-      'modifiedFixtureWeight': ['', Validators.required],
-      'modifiedInitialTemp': ['', Validators.required],
-      'modifiedFinalTemp': ['', Validators.required],
-      'modifiedCorrectionFactor': ['', Validators.required]
-    })
-  }
-
-  calculateModified(loss: any){
+  calculate(loss: any){
     //TODO call phast service for fixture loss
-    //loss.modifiedHeatRequired = this.phastService.fixtureLosses()
+    //loss.heatRequired = this.phastService.fixtureLosses()
 
-  }
-
-  calculateBaseline(loss: any){
-    //TODO call phast service for fixture loss
-    //loss.baselineHeatRequired = this.phastService.fixtureLosses()
   }
 
 }

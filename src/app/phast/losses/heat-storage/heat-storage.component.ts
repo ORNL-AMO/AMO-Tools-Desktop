@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import * as _ from 'lodash';
-import { FormBuilder } from '@angular/forms';
+import { HeatStorageService } from './heat-storage.service';
+import { PhastService } from '../../phast.service';
 
 @Component({
   selector: 'app-heat-storage',
@@ -10,7 +11,7 @@ import { FormBuilder } from '@angular/forms';
 export class HeatStorageComponent implements OnInit {
   heatStorage: Array<any>;
 
-  constructor(private formBuilder: FormBuilder) { }
+  constructor(private heatStorageService: HeatStorageService, private phastService: PhastService) { }
 
   ngOnInit(){
     if(!this.heatStorage){
@@ -19,9 +20,12 @@ export class HeatStorageComponent implements OnInit {
   }
 
   addLoss() {
-    let tmpForm = this.initForm();
+    let tmpForm = this.heatStorageService.initForm();
     let tmpName = 'Loss #' + (this.heatStorage.length + 1);
-    this.heatStorage.push({ form: tmpForm, name: tmpName });
+    this.heatStorage.push({ 
+      form: tmpForm, 
+      name: tmpName
+    });
   }
 
   removeLoss(str: string) {
@@ -39,6 +43,10 @@ export class HeatStorageComponent implements OnInit {
     })
   }
 
+  calculate(){
+    //TODO call phast service to calculate heatLoss
+  }
+  
   initForm(){
     return this.formBuilder.group({
       'baselineShape': [''],
@@ -58,4 +66,5 @@ export class HeatStorageComponent implements OnInit {
       'modifiedHeatRequired': [{value:'', disabled: true}]
     })
   }
+
 }

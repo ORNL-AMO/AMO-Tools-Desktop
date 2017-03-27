@@ -21,7 +21,6 @@ import { HelpPanelComponent } from './help-panel/help-panel.component';
 import { DataPanelComponent } from './data-panel/data-panel.component';
 import { SettingsPanelComponent } from './settings-panel/settings-panel.component';
 
-
 import { PhastService } from './phast.service';
 
 
@@ -39,7 +38,7 @@ import { PhastService } from './phast.service';
     HelpPanelComponent,
     DataPanelComponent,
     SettingsPanelComponent,
-    SankeyDiagramComponent,
+    SankeyDiagramComponent
 
   ],
   exports: [

@@ -19,5 +19,13 @@
   </div>
   <div class="card-block">
     <app-water-cooling-losses-form [(lossesForm)]="loss.form"></app-water-cooling-losses-form>
+    <div class="row">
+      <div class="col-6">
+        <small>Heat Loss for cooling (Btu/hr)</small>
+      </div>
+      <div class="col-6 text-center">
+        {{loss.heatLoss | number:'2.2-2'}}
+      </div>
+    </div>
   </div>
 </div>
