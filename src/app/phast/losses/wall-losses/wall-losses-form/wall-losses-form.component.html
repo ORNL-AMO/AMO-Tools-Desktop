@@ -1,29 +1,29 @@
 <form [formGroup]="wallLossesForm">
 
   <div class="row form-group">
-    <label class="col-8 col-form-label small" for="avgSurfaceTemp">Average Surface Temperature (&#8457;)</label>
-    <div class="col-4 input-group input-group-sm">
+    <label class="col-6 col-form-label small" for="avgSurfaceTemp">Average Surface Temperature (&#8457;)</label>
+    <div class="col-6 input-group input-group-s6">
       <input type="number" class="form-control" formControlName="avgSurfaceTemp" id="avgSurfaceTemp" (keyup)="checkForm()">
     </div>
   </div>
 
   <div class="row form-group">
-    <label class="col-8 col-form-label small" for="ambientTemp">Ambient Temperature (&#8457;)</label>
-    <div class="col-4 input-group input-group-sm">
+    <label class="col-6 col-form-label small" for="ambientTemp">Ambient Temperature (&#8457;)</label>
+    <div class="col-6 input-group input-group-s6">
       <input type="number" class="form-control" formControlName="ambientTemp" id="ambientTemp" (keyup)="checkForm()">
     </div>
   </div>
 
   <div class="row form-group">
-    <label class="col-8 col-form-label small" for="windVelocity">Wind Velocity (mph)</label>
-    <div class="col-4 input-group input-group-sm">
+    <label class="col-6 col-form-label small" for="windVelocity">Wind Velocity (mph)</label>
+    <div class="col-6 input-group input-group-sm">
       <input type="number" class="form-control" formControlName="windVelocity" id="windVelocity" (keyup)="checkForm()">
     </div>
   </div>
 
   <div class="row form-group">
-    <label class="col-8 col-form-label small" for="surfaceShape">Surface shape/orientation</label>
-    <div class="col-4 input-group input-group-sm">
+    <label class="col-6 col-form-label small" for="surfaceShape">Surface shape/orientation</label>
+    <div class="col-6 input-group input-group-sm">
       <select class="form-control" formControlName="surfaceShape" ngModel="{{wallLossesForm.value.surfaceShape}}">
         <option>Vertical Plates</option>
         <option>Shape 2</option>
@@ -33,30 +33,30 @@
 
 
   <div class="row form-group">
-    <label class="col-8 col-form-label small" for="conditionFactor">Surface shape/orientation factor</label>
-    <div class="col-4 text-center">
+    <label class="col-6 col-form-label small" for="conditionFactor">Surface shape/orientation factor</label>
+    <div class="col-6 text-center">
       {{wallLossesForm.value.conditionFactor}}
     </div>
   </div>
 
   <div class="row form-group">
-    <label class="col-8 col-form-label small" for="surfaceEmissivity">Surface Emissivity (Typical - 0.9)</label>
-    <div class="col-4 input-group input-group-sm">
+    <label class="col-6 col-form-label small" for="surfaceEmissivity">Surface Emissivity (Typical - 0.9)</label>
+    <div class="col-6 input-group input-group-sm">
       <input type="number" class="form-control" formControlName="surfaceEmissivity" id="surfaceEmissivity" (keyup)="checkForm()">
     </div>
   </div>
 
   <div class="row form-group">
-    <label class="col-8 col-form-label small" for="surfaceArea">Total Outside Surface Area (ft<sup>2</sup>)</label>
-    <div class="col-4 input-group input-group-sm">
+    <label class="col-6 col-form-label small" for="surfaceArea">Total Outside Surface Area (ft<sup>2</sup>)</label>
+    <div class="col-6 input-group input-group-sm">
       <input type="number" class="form-control" formControlName="surfaceArea" id="surfaceArea" (keyup)="checkForm()">
     </div>
   </div>
 
 
   <div class="row form-group">
-    <label class="col-8 col-form-label small" for="correctionFactor">Correction Factor</label>
-    <div class="col-4 input-group input-group-sm">
+    <label class="col-6 col-form-label small" for="correctionFactor">Correction Factor</label>
+    <div class="col-6 input-group input-group-sm">
       <input type="number" class="form-control" formControlName="correctionFactor" id="correctionFactor" (keyup)="checkForm()">
     </div>
   </div>

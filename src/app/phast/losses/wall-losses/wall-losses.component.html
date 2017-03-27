@@ -7,30 +7,25 @@
   <h3>You have no Wall Losses</h3>
   <h4>Add some now.</h4>
 </div>
-<div class="row">
-  <div class="col-4">
-    <div class="h4">Baseline</div>
-    <div class="row" *ngFor="let loss of _wallLosses">
-      <div class="card card-form adjustment-card">
-        <div class="card-header">
-          <div class="pull-left">
-            <b>{{loss.name}}</b>
-          </div>
-          <button class="close pull-right" aria-label="Close" (click)="removeLoss(loss.name)">
+
+
+<div class="card card-form" *ngFor="let loss of _wallLosses">
+  <div class="card-header">
+    <div class="pull-left">
+      <b>{{loss.name}}</b>
+    </div>
+    <button class="close pull-right" aria-label="Close" (click)="removeLoss(loss.name)">
       <span aria-hidden="true">&times;</span>
     </button>
-        </div>
-        <div class="card-block">
-          <app-wall-losses-form [(wallLossesForm)]="loss.form" (calculate)="calculate(loss)"></app-wall-losses-form>
-          <div class="row">
-            <div class="col-8">
-              <small>Heat Loss (Btu/hr)</small>
-            </div>
-            <div class="col-4 text-center">
-              {{loss.heatLoss | number:'2.2-2'}}
-            </div>
-          </div>
-        </div>
+  </div>
+  <div class="card-block">
+    <app-wall-losses-form [(wallLossesForm)]="loss.form" (calculate)="calculate(loss)"></app-wall-losses-form>
+    <div class="row">
+      <div class="col-6">
+        <small>Heat Loss (Btu/hr)</small>
+      </div>
+      <div class="col-6 text-center">
+        {{loss.heatLoss | number:'2.2-2'}}
       </div>
     </div>
   </div>

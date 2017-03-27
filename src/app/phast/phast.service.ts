@@ -78,9 +78,10 @@ export class PhastService {
     return phastAddon.liquidLoadChargeMaterial(thermicReactionType, specificHeatLiquid, vaporizingTemperature, latentHeat, specificHeatVapor, chargeFeedRate, initialTemperature, dischargeTemperature, percentVaporized, percentReacted, reactionHeat, additionalHeat);
   }
 
-  openingLosses(
-    emessivity: number, 
-    diameterWidth: number, 
+  quadOpeningLosses(
+    emessivity: number,
+    diameterLength: number, 
+    diameterHeight: number, 
     thickness: number, 
     ratio: number, 
     ambientTemperature: number, 
@@ -88,8 +89,22 @@ export class PhastService {
     percentTimeOpen: number, 
     viewFactor: number
     ): number {
-    //returns nothing?
-    return phastAddon.openingLosses(emessivity, diameterWidth, thickness, ratio, ambientTemperature, insideTemperature, percentTimeOpen, viewFactor);
+    //TODO: Update call for quad
+    return phastAddon.openingLosses(emessivity, diameterHeight, thickness, ratio, ambientTemperature, insideTemperature, percentTimeOpen, viewFactor);
+  }
+
+   roundOpeningLosses(
+    emessivity: number, 
+    diameterLength: number, 
+    thickness: number, 
+    ratio: number, 
+    ambientTemperature: number, 
+    insideTemperature: number, 
+    percentTimeOpen: number, 
+    viewFactor: number
+    ): number {
+    //TODO: update call for round
+    return phastAddon.openingLosses(emessivity, diameterLength, thickness, ratio, ambientTemperature, insideTemperature, percentTimeOpen, viewFactor);
   }
 
   solidLoadChargeMaterial(

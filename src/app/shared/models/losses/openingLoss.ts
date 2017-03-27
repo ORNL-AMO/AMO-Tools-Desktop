@@ -1,10 +1,13 @@
 export interface OpeningLoss {
+    numberOfOpenings?: number,
     emessivity?: number,
-    diameterWidth?: number,
     thickness?: number,
-    ratio?: number,
     ambientTemperature?: number,
     insideTemperature?: number,
     percentTimeOpen?: number,
-    viewFactor?: number
+    viewFactor?: number,
+    openingType?: string,
+    lengthOfOpening?: number,
+    heightOfOpening?: number,
+    openingTotalArea?: number
 }
