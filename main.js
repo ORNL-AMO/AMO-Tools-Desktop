@@ -4,16 +4,22 @@
 const {app, BrowserWindow} = require('electron');
 const path = require('path');
 const url = require('url');
-const feedURL = '~/updates-folder';
 const log = require('electron-log');
 const {autoUpdater} = require('electron-updater');
+
+function isDev() {
+  return process.mainModule.filename.indexOf('app.asar') === -1;
+};
 
 // Logger for autoUpdater
 autoUpdater.logger = log;
 autoUpdater.logger.transports.file.level = 'info';
 log.info('App starting...');
+
 require('dotenv').config();
 let win = null;
+
+global.globalUpdate = false;
 
 app.on('ready', function () {
 
@@ -51,7 +57,13 @@ app.on('ready', function () {
 
   //Check for updates and install
   autoUpdater.autoDownload = false;
-  autoUpdater.checkForUpdates();
+
+  // If isDev = true, don't check for updates. If false, check for updates
+  if (isDev()) {
+    update = null;
+  } else {
+    autoUpdater.checkForUpdates();
+  };
 });
 
 

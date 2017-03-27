@@ -46,5 +46,25 @@ export class HeatStorageComponent implements OnInit {
   calculate(){
     //TODO call phast service to calculate heatLoss
   }
+  
+  initForm(){
+    return this.formBuilder.group({
+      'baselineShape': [''],
+      'baselineArea': [''],
+      'baselineFurnaceTemp': [''],
+      'baselineAmbientTemp': [''],
+      'baselineStartingWallTemp': [''],
+      'baselineCorrectionFactor': [''],
+      'baselineHeatRequired': [{value:'', disabled: true}],
+
+      'modifiedShape': [''],
+      'modifiedArea': [''],
+      'modifiedFurnaceTemp': [''],
+      'modifiedAmbientTemp': [''],
+      'modifiedStartingWallTemp': [''],
+      'modifiedCorrectionFactor': [''],
+      'modifiedHeatRequired': [{value:'', disabled: true}]
+    })
+  }
 
 }

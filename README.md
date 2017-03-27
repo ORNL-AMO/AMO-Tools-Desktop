@@ -31,10 +31,13 @@ Run `ng github-pages:deploy` to deploy to GitHub Pages.
 
 To get more help on the `angular-cli` use `ng help` or go check out the [Angular-CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
 
-## Building for Windows
-*electron-builder makes one installer that will install either x64 or ia32 as appropriate*  
+## Building Packages
 
-On Windows:  
+*Due to issues from building the amo-tools-suite node modules, packages cannot be built cross platform.*
+
+## Building for Windows
+
+*electron-builder makes one installer that will install either x64 or ia32 as appropriate*  
 
 Prerequisites:  
   electron-builder v13.9.0+  
@@ -44,25 +47,7 @@ Run `npm run windows` to build the installer in x64 and ia32.
 Installer will be in ../output  
 latest.yml will be in ../output  
 
-
-
-On Linux:  
-
-Prerequisites:  
-  Wine v1.8+  
-  Mono v4.2+  
-  gcc-multilib - for building cross architecture  
-  g++-multilib - for building cross architecture  
-  electron-builder v15.5.1 *Must be this version to build cross-platform on Linux*  
-  electron-packager v8.5.2  
-  
-Run `npm run windows` to build tehe installer in x64 and ia32.  
-Installer will be in ../output  
-latest.yml will be in ../output  
-
 ## Building for Linux
-
-On Linux:  
 
 Prerequisites:  
   icnutils  
@@ -73,24 +58,10 @@ Prerequisites:
   electron-builder v13.9.0+  
   electron-packager v8.5.2  
 
-Run `npm run linux` to build a tar.gz, .deb, and .rpm in x64 and ia32.  
+Run `npm run linux` to build a tar.gz, .deb, and .rpm in x64 
 Packages will be in ../output  
 
-
-
-On Mac:  
-
-Prerequisites:  
-  gnu-tar  
-  graphicsmagick  
-  xz  
-  rpm  
-  electron-builder v13.9.0+  
-  electron-packager v8.5.2  
-  
-Run `npm run linux` to build a tar.gz, .deb, and .rpm in x64 and ia32.  
-Packages will be in ../output  
-
+*Cannot build cross platform on Linux due to building the amo-tools-suite node module. To build for ia32 on 32bit Linux, run `./node_modules/.bin/build -l --ia32`
 
 ## Building for Mac
 *Can only be done on Mac due to signing issues*  
@@ -105,16 +76,10 @@ Packages will be in ../output/mac
 latest-mac.json will be in ../output/github  
 
 *The code will be signed with a certificate from your keychain automatically as long as it is appropriate and valid*  
-  
-## Building for all platforms at once
-*Only Mac can build all platforms at once*  
-
-Prerequisites as stated above  
-
-Run `npm run build-all` to build for all platforms  
-Packages will be in ../output  
 
 ## Auto Update
+
+*electron-builder and electron autoUpdate does not support auto updating on Linux*
 
 Prerequisites:  
   electron-updater v1.8.2  
@@ -122,9 +87,14 @@ Prerequisites:
   electron-builder v13.9.0+  
   electron-packager v8.5.2  
   
-Build the application as directed above. electron-builder will create the installer/executable AND a file named latest.yml or latest-mac.json (when building Mac packages).  
+Build the application as directed above. electron-builder will create the installer/executable AND a file named latest.yml or latest-mac.json (when building Mac packages).
+
 Go to the AMO-Tools-Desktop releases page in GitHub.  
+
 Draft a new release. For the tag version, make sure to include a `v` before the version number (example: v0.0.1).  
+
 Upload BOTH the installer/executable AND the latest.yml and latest-mac.json. (the autoUpdater looks for the latest.yml and latest-mac.json in the release. If they is not present, it will not work.)  
+
 Publish the release.  
+
 Once the older version of the application is started, it will check for an update, download it, and install it automatically.  

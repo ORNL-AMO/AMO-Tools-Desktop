@@ -1,6 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Directory } from '../shared/models/directory';
 import { MockDirectory } from '../shared/mocks/mock-directory';
+import { ElectronService } from 'ngx-electron';
+
+
+
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
@@ -11,9 +15,13 @@ export class DashboardComponent implements OnInit {
   workingDirectory: Directory = MockDirectory;
   showCalculators: boolean = false;
   selectedCalculator: string;
-  constructor() { }
+  updateAvailable: boolean;
+
+  constructor(private electronService: ElectronService) { }
 
   ngOnInit() {
+    this.updateAvailable = this.electronService.remote.getGlobal('globalUpdate');
+    console.log(this.updateAvailable);
   }
 
   changeWorkingDirectory($event) {
