@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Directory } from '../shared/models/directory';
 import { MockDirectory } from '../shared/mocks/mock-directory';
-import { ElectronService } from '../core/core.component';
+import { ElectronService } from 'ngx-electron';
 
 
 
@@ -20,7 +20,8 @@ export class DashboardComponent implements OnInit {
   constructor(private electronService: ElectronService) { }
 
   ngOnInit() {
-    this.updateAvailable = this.electronService.isUpdateAvailable()
+    this.updateAvailable = this.electronService.remote.getGlobal('globalUpdate');
+    console.log(this.updateAvailable);
   }
 
   changeWorkingDirectory($event) {

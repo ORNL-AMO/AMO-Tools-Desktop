@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { ElectronService } from 'ngx-electron';
+import { NgxElectronModule } from 'ngx-electron';
 import { AssessmentModule } from '../assessment/assessment.module';
 import { PhastModule } from '../phast/phast.module';
 import { PsatModule } from '../psat/psat.module';
@@ -30,11 +30,11 @@ import { UpdateModalComponent } from '../update-modal/update-modal.component';
     PhastModule,
     CalculatorModule,
     DetailedReportModule,
-    ModalModule.forRoot()
+    ModalModule.forRoot(),
+    NgxElectronModule
   ],
   providers: [
-    AssessmentService,
-    ElectronService
+    AssessmentService
   ]
 })
 
