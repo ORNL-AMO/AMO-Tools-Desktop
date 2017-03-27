@@ -1,5 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
+import {SystemCurveGraphComponent} from '../system-curve-graph/system-curve-graph.component';
+
 @Component({
   selector: 'app-system-curve-form',
   templateUrl: './system-curve-form.component.html',

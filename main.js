@@ -59,7 +59,7 @@ app.on('ready', function () {
 
   //Check for updates and install
   autoUpdater.autoDownload = false;
-  
+
   // If isDev = true, don't check for updates. If false, check for updates
   if (isDev()) {
     update = null;
