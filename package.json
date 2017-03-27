@@ -21,7 +21,7 @@
     "postinstall": "./node_modules/.bin/electron-rebuild",
     "windows": "./node_modules/.bin/build -w --x64 --ia32",
     "linux": "./node_modules/.bin/build -l --x64",
-    "mac": "./node_modules/.bin/build -m --x64",
+    "mac": "./node_modules/.bin/build -m --x64"
   },
   "private": true,
   "dependencies": {
