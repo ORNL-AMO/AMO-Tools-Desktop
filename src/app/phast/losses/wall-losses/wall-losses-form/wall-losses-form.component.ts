@@ -10,12 +10,15 @@ export class WallLossesFormComponent implements OnInit {
   wallLossesForm: any;
   @Output('calculate')
   calculate = new EventEmitter<boolean>();
+  @Input()
+  lossState: any;
   constructor() { }
 
   ngOnInit() {
   }
 
   checkForm() {
+    this.lossState.saved = false;
     if (this.wallLossesForm.status == "VALID") {
       this.calculate.emit(true);
     }

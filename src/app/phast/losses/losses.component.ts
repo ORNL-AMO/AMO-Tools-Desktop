@@ -32,6 +32,10 @@ export class LossesComponent implements OnInit {
     coolingLosses: {
       numLosses: 0,
       saved: true
+    },
+    fixtureLosses: {
+      numLosses: 0,
+      saved: true
     }
   }
   constructor() { }
@@ -45,6 +49,11 @@ export class LossesComponent implements OnInit {
   changeTab($event) {
     this.lossesTab = $event;
     this.lossesStates.chargeMaterial.saved = true;
+    this.lossesStates.wallLosses.saved = true;
+    this.lossesStates.atmosphereLosses.saved = true;
+    this.lossesStates.openingLosses.saved = true;
+    this.lossesStates.coolingLosses.saved = true;
+    this.lossesStates.fixtureLosses.saved = true;
   }
 
 }

@@ -19,7 +19,7 @@
     </button>
   </div>
   <div class="card-block">
-    <app-wall-losses-form [(wallLossesForm)]="loss.form" (calculate)="calculate(loss)"></app-wall-losses-form>
+    <app-wall-losses-form [(wallLossesForm)]="loss.form" (calculate)="calculate(loss)" [(lossState)]="lossState"></app-wall-losses-form>
     <div class="row">
       <div class="col-6">
         <small>Heat Loss (Btu/hr)</small>

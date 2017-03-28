@@ -2,14 +2,14 @@
 
   <div class="row form-group">
     <label class="col-6 col-form-label small" for="avgSurfaceTemp">Average Surface Temperature (&#8457;)</label>
-    <div class="col-6 input-group input-group-s6">
+    <div class="col-6 input-group input-group-sm">
       <input type="number" class="form-control" formControlName="avgSurfaceTemp" id="avgSurfaceTemp" (keyup)="checkForm()">
     </div>
   </div>
 
   <div class="row form-group">
     <label class="col-6 col-form-label small" for="ambientTemp">Ambient Temperature (&#8457;)</label>
-    <div class="col-6 input-group input-group-s6">
+    <div class="col-6 input-group input-group-sm">
       <input type="number" class="form-control" formControlName="ambientTemp" id="ambientTemp" (keyup)="checkForm()">
     </div>
   </div>
@@ -34,7 +34,7 @@
 
   <div class="row form-group">
     <label class="col-6 col-form-label small" for="conditionFactor">Surface shape/orientation factor</label>
-    <div class="col-6 text-center">
+    <div class="col-6 text-center small">
       {{wallLossesForm.value.conditionFactor}}
     </div>
   </div>

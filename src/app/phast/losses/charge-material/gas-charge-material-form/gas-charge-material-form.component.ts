@@ -10,12 +10,15 @@ export class GasChargeMaterialFormComponent implements OnInit {
   chargeMaterialForm: any;
   @Output('calculate')
   calculate = new EventEmitter<boolean>();
+  @Input()
+  lossState: any;
   constructor() { }
 
   ngOnInit() {
   }
-  
+
   checkForm() {
+    this.lossState.saved = false;
     if (this.chargeMaterialForm.status == "VALID") {
       this.calculate.emit(true);
     }

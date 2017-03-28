@@ -10,15 +10,16 @@ export class AtmosphereLossesFormComponent implements OnInit {
   atmosphereLossForm: any;
   @Output('calculate')
   calculate = new EventEmitter<boolean>();
-
+  @Input()
+  lossState: any;
   constructor() { }
 
   ngOnInit() {
   }
 
-  checkForm(){
-    debugger
-    if(this.atmosphereLossForm.status == "VALID"){
+  checkForm() {
+    this.lossState.saved = false;
+    if (this.atmosphereLossForm.status == "VALID") {
       this.calculate.emit(true);
     }
   }

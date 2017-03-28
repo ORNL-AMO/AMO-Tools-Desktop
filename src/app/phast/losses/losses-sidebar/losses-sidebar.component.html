@@ -20,6 +20,7 @@
   <li [ngClass]="{'active': lossesTab == 'fixture-losses'}" (click)="tabChange('fixture-losses')">
     <a class="nav-link small">
     Fixtures, Trays, Baskets, etc. Losses
+    <div class="pull-right numberCircle" *ngIf="losses.fixtureLosses" [ngClass]="{'unsaved':!lossesStates.fixtureLosses.saved}"><span>{{losses.fixtureLosses.length}}</span></div>
     </a>
   </li>
   <li [ngClass]="{'active': lossesTab == 'opening-losses'}" (click)="tabChange('opening-losses')">

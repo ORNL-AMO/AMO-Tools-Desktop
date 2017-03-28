@@ -191,6 +191,16 @@ export const MockDirectory: Directory = {
                 correctionFactor: 1.0
               }
             }
+          ],
+          fixtureLosses: [
+            {
+              materialName: 'Material 1',
+              specificHeat: 0.122,
+              feedRate: 1250.0,
+              initialTemperature: 300.0,
+              finalTemperature: 1800.0,
+              correctionFactor: 1.0
+            }
           ]
         },
       }

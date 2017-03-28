@@ -109,7 +109,7 @@ export class OpeningLossesComponent implements OnInit {
       tmpOpeningLosses.unshift(tmpOpeningLoss);
     })
     this.losses.openingLosses = tmpOpeningLosses;
-    this.lossState.numLosses = this._openingLosses.length;
+    this.lossState.numLosses = this.losses.openingLosses.length;
     this.lossState.saved = true;
 
   }

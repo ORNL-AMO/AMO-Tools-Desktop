@@ -18,7 +18,7 @@
     </button>
   </div>
   <div class="card-block">
-    <app-opening-losses-form [(openingLossesForm)]="loss.form" (calculate)="calculate(loss)"></app-opening-losses-form>
+    <app-opening-losses-form [(openingLossesForm)]="loss.form" (calculate)="calculate(loss)" [(lossState)]="lossState"></app-opening-losses-form>
     <div class="row">
       <label class="col-6 small">Radiation Losses (Btu / hr)</label>
       <div class="col-6 text-center">

@@ -10,18 +10,27 @@ export class OpeningLossesFormComponent implements OnInit {
   openingLossesForm: any;
   @Output('calculate')
   calculate = new EventEmitter<boolean>();
+  @Input()
+  lossState: any;
 
   totalArea: number = 0.0;
+
+  init: boolean;
   constructor() { }
 
   ngOnInit() {
+    this.init = true;
     this.getArea();
   }
 
   checkForm() {
+    if (!this.init) {
+      this.lossState.saved = false;
+    }
     if (this.openingLossesForm.status == 'VALID') {
       this.calculate.emit(true);
     }
+    this.init = false;
   }
 
   getArea() {
