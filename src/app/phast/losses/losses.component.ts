@@ -28,6 +28,10 @@ export class LossesComponent implements OnInit {
     openingLosses: {
       numLosses: 0,
       saved: true
+    },
+    coolingLosses: {
+      numLosses: 0,
+      saved: true
     }
   }
   constructor() { }

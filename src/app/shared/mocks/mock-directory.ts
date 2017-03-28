@@ -130,24 +130,66 @@ export const MockDirectory: Directory = {
             {
               numberOfOpenings: 1,
               emessivity: .95,
-              thickness:9.0,
-              ambientTemperature:75.0,
-              insideTemperature:1600,
-              percentTimeOpen:100,
-              viewFactor:.7,
-              openingType:'Round',
-              lengthOfOpening:12.0,
-            },{
+              thickness: 9.0,
+              ambientTemperature: 75.0,
+              insideTemperature: 1600,
+              percentTimeOpen: 100,
+              viewFactor: .7,
+              openingType: 'Round',
+              lengthOfOpening: 12.0,
+            }, {
               numberOfOpenings: 1,
               emessivity: .95,
-              thickness:9.0,
-              ambientTemperature:75.0,
-              insideTemperature:1600,
-              percentTimeOpen:20,
-              viewFactor:.64,
-              openingType:'Rectangular (Square)',
-              lengthOfOpening:48.0,
-              heightOfOpening:15.0
+              thickness: 9.0,
+              ambientTemperature: 75.0,
+              insideTemperature: 1600,
+              percentTimeOpen: 20,
+              viewFactor: .64,
+              openingType: 'Rectangular (Square)',
+              lengthOfOpening: 48.0,
+              heightOfOpening: 15.0
+            }
+          ],
+          coolingLosses: [
+            {
+              coolingLossType: 'Other Gas',
+              gasCoolingLoss: {
+                flowRate: 2500.0,
+                initialTemperature: 80.0,
+                finalTemperature: 280.0,
+                specificHeat: 0.02,
+                correctionFactor: 1.0
+              }
+            },
+            {
+              coolingLossType: 'Other Gas',
+              gasCoolingLoss: {
+                flowRate: 600.0,
+                initialTemperature: 80.0,
+                finalTemperature: 350.0,
+                specificHeat: 0.02,
+                correctionFactor: 1.0
+              }
+            },
+            {
+              coolingLossType: 'Other Liquid',
+              liquidCoolingLoss: {
+                flowRate: 100.0,
+                density: 9.35,
+                initialTemperature: 80.0,
+                outletTemperature: 210.0,
+                specificHeat: .52,
+                correctionFactor: 1.0
+              }
+            },
+            {
+              coolingLossType: 'Water',
+              waterCoolingLoss: {
+                flowRate: 100.0,
+                initialTemperature: 80.0,
+                outletTemperature: 120.0,
+                correctionFactor: 1.0
+              }
             }
           ]
         },

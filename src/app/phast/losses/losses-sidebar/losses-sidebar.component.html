@@ -28,9 +28,10 @@
     <div class="pull-right numberCircle" *ngIf="losses.openingLosses" [ngClass]="{'unsaved':!lossesStates.openingLosses.saved}"><span>{{losses.openingLosses.length}}</span></div>
     </a>
   </li>
-  <li [ngClass]="{'active': lossesTab == 'water-cooling-losses'}" (click)="tabChange('water-cooling-losses')">
+  <li [ngClass]="{'active': lossesTab == 'cooling-losses'}" (click)="tabChange('cooling-losses')">
     <a class="nav-link small">
-    Water Cooling Losses
+    Cooling Losses
+    <div class="pull-right numberCircle" *ngIf="losses.coolingLosses" [ngClass]="{'unsaved':!lossesStates.coolingLosses.saved}"><span>{{losses.coolingLosses.length}}</span></div>
     </a>
   </li>
   <li [ngClass]="{'active': lossesTab == 'heat-storage'}" (click)="tabChange('heat-storage')">

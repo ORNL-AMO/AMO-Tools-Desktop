@@ -1,0 +1,44 @@
+<div class="section-header">
+  <h3 class="pull-left">Cooling Losses</h3>
+  <button class="btn btn-secondary pull-right" (click)="addLoss()">+ Add Cooling Loss</button>
+</div>
+
+<div class="no-data" *ngIf="_coolingLosses.length == 0" (click)="addLoss()">
+  <h3>You have no Cooling Losses</h3>
+  <h4>Add some now.</h4>
+</div>
+
+<div class="card card-form" *ngFor="let loss of _coolingLosses">
+  <div class="card-header">
+    <div class="pull-left">
+      <b>{{loss.name}}</b>
+    </div>
+    <button class="close pull-right" aria-label="Close" (click)="removeLoss(loss.name)">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="card-block">
+    <div class="row form-group">
+      <label class="col-4 col-form-label small" for="coolingMedium">Cooling Medium</label>
+      <div class="col-8 input-group input-group-sm">
+        <select class="form-control" id="coolingMedium" [(ngModel)]="loss.coolingMedium">
+          <!--<option>Air</option>-->
+          <option>Water</option>
+          <option>Other Gas</option>
+          <option>Other Liquid</option>
+        </select>
+      </div>
+    </div>
+    <app-water-cooling-losses-form *ngIf="loss.coolingMedium == 'Water'" [(lossesForm)]="loss.waterCoolingForm" (calculate)="calculate(loss)"></app-water-cooling-losses-form>
+    <app-liquid-cooling-losses-form *ngIf="loss.coolingMedium == 'Other Liquid'" [(lossesForm)]="loss.liquidCoolingForm" (calculate)="calculate(loss)"></app-liquid-cooling-losses-form>
+    <app-gas-cooling-losses-form *ngIf="loss.coolingMedium == 'Other Gas' || loss.coolingMedium == 'Air'"  [(lossesForm)]="loss.gasCoolingForm" (calculate)="calculate(loss)"></app-gas-cooling-losses-form>
+    <div class="row">
+      <div class="col-6">
+        <small>Heat Loss for cooling (Btu/hr)</small>
+      </div>
+      <div class="col-6 text-center">
+        {{loss.heatLoss | number:'2.2-2'}}
+      </div>
+    </div>
+  </div>
+</div>
