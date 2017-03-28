@@ -15,11 +15,11 @@ export class OpeningLossesFormComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
+    this.getArea();
   }
 
   checkForm() {
     if (this.openingLossesForm.status == 'VALID') {
-      console.log('check')
       this.calculate.emit(true);
     }
   }
@@ -28,7 +28,6 @@ export class OpeningLossesFormComponent implements OnInit {
     if (this.openingLossesForm.value.openingType == 'Round') {
       if (this.openingLossesForm.controls.lengthOfOpening.status == "VALID") {
         this.openingLossesForm.controls.heightOfOpening.setValue(0);
-        console.log(this.openingLossesForm.value.heightOfOpening)
         let radiusInches = this.openingLossesForm.value.lengthOfOpening;
         let radiusFeet = converter(radiusInches).from('in').to('ft') / 2;
         this.totalArea = Math.PI * Math.pow(radiusFeet, 2);

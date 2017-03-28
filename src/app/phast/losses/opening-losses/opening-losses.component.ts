@@ -1,8 +1,9 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, SimpleChange } from '@angular/core';
 import * as _ from 'lodash';
 import { PhastService } from '../../phast.service';
 import { OpeningLossesService } from './opening-losses.service';
 import { Losses } from '../../../shared/models/phast';
+import { OpeningLoss } from '../../../shared/models/losses/openingLoss';
 
 @Component({
   selector: 'app-opening-losses',
@@ -12,10 +13,20 @@ import { Losses } from '../../../shared/models/phast';
 export class OpeningLossesComponent implements OnInit {
   @Input()
   losses: Losses;
+  @Input()
+  lossState: any;
+  @Input()
+  saveClicked: boolean;
 
   _openingLosses: Array<any>;
   editLoss: any;
   constructor(private phastService: PhastService, private openingLossesService: OpeningLossesService) { }
+
+  ngOnChanges(changes: SimpleChange) {
+    if (!changes.isFirstChange && this._openingLosses) {
+      this.saveLosses();
+    }
+  }
 
   ngOnInit() {
     if (!this._openingLosses) {
@@ -29,7 +40,6 @@ export class OpeningLossesComponent implements OnInit {
           totalOpeningLosses: 0.0
         };
         this.calculate(tmpLoss);
-        debugger;
         this._openingLosses.unshift(tmpLoss);
       })
     }
@@ -37,17 +47,19 @@ export class OpeningLossesComponent implements OnInit {
 
   addLoss() {
     let tmpName = 'Opening Loss #' + (this._openingLosses.length + 1);
-    this._openingLosses.push({
+    this._openingLosses.unshift({
       form: this.openingLossesService.initForm(),
       name: tmpName,
       totalOpeningLosses: 0.0
     });
+    this.lossState.saved = false;
   }
 
   removeLoss(str: string) {
     this._openingLosses = _.remove(this._openingLosses, loss => {
       return loss.name != str;
     });
+    this.lossState.saved = false;
     this.renameLosses();
   }
 
@@ -58,13 +70,6 @@ export class OpeningLossesComponent implements OnInit {
       index++;
     })
   }
-
-
-  hideCalc(loss: any) {
-    loss.showFixed = false;
-    loss.showVariable = false;
-  }
-
 
   calculate(loss: any) {
     if (loss.form.value.openingType == 'Rectangular (Square)') {
@@ -95,5 +100,17 @@ export class OpeningLossesComponent implements OnInit {
       );
       loss.totalOpeningLosses = loss.form.value.numberOfOpenings * lossAmount;
     }
+  }
+
+  saveLosses() {
+    let tmpOpeningLosses = new Array<OpeningLoss>();
+    this._openingLosses.forEach(loss => {
+      let tmpOpeningLoss = this.openingLossesService.getLossFromForm(loss.form);
+      tmpOpeningLosses.unshift(tmpOpeningLoss);
+    })
+    this.losses.openingLosses = tmpOpeningLosses;
+    this.lossState.numLosses = this._openingLosses.length;
+    this.lossState.saved = true;
+
   }
 }

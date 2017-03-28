@@ -112,6 +112,5 @@ export class WallLossesComponent implements OnInit {
     this.losses.wallLosses = tmpWallLosses;
     this.lossState.numLosses = this._wallLosses.length;
     this.lossState.saved = true;
-
   }
 }

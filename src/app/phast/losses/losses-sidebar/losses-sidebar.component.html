@@ -25,6 +25,7 @@
   <li [ngClass]="{'active': lossesTab == 'opening-losses'}" (click)="tabChange('opening-losses')">
     <a class="nav-link small">
     Opening Losses
+    <div class="pull-right numberCircle" *ngIf="losses.openingLosses" [ngClass]="{'unsaved':!lossesStates.openingLosses.saved}"><span>{{losses.openingLosses.length}}</span></div>
     </a>
   </li>
   <li [ngClass]="{'active': lossesTab == 'water-cooling-losses'}" (click)="tabChange('water-cooling-losses')">

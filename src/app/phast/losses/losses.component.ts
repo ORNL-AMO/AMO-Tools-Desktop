@@ -24,6 +24,10 @@ export class LossesComponent implements OnInit {
     atmosphereLosses: {
       numLosses: 0,
       saved: true
+    },
+    openingLosses: {
+      numLosses: 0,
+      saved: true
     }
   }
   constructor() { }
