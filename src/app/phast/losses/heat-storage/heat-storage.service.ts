@@ -9,7 +9,12 @@ export class HeatStorageService {
 
   initForm(){
     return this.formBuilder.group({
-
+      'shape': [''],
+      'area': [''],
+      'furnaceTemp': [''],
+      'ambientTemp': [''],
+      'startingWallTemp': [''],
+      'correctionFactor': [''],
     })
   }
 
