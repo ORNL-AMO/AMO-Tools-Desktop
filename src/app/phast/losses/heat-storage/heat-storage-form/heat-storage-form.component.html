@@ -1,100 +1,54 @@
-<div class="row justify-content-end">
-  <div class="col-4 text-center">
-    Baseline
-  </div>
-  <div class="col-4 text-center">
-    Modified
-  </div>
-</div>
 <form [formGroup]="heatStorageForm">
 
   <div class="row form-group">
-    <label class="col-4 col-form-label small" for="baselineShape">Furnace Shape</label>
+    <label class="col-4 col-form-label small" for="shape">Furnace Shape</label>
     <div class="col-4 input-group input-group-sm">
-      <select class="form-control" formControlName="baselineShape" id="baselineShape">
+      <select class="form-control" formControlName="shape" id="shape">
         <option>Rectangular</option>
         <option>Cylindrical</option>
       </select>
-      <app-control-messages [control]="heatStorageForm.controls.baselineShape"></app-control-messages>
-    </div>
-    <div class="col-4 input-group input-group-sm">
-      <select class="form-control" formControlName="modifiedShape" id="modifiedShape">
-        <option>Rectangular</option>
-        <option>Cylindrical</option>
-      </select>
-      <app-control-messages [control]="heatStorageForm.controls.modifiedShape"></app-control-messages>
     </div>
   </div>
 
   <div class="row form-group">
-    <label class="col-4 col-form-label small" for="baselineArea">Area (m<sup>2</sup>)</label>
+    <label class="col-4 col-form-label small" for="area">Area (m<sup>2</sup>)</label>
     <div class="col-4 input-group input-group-sm">
-      <input type="number" class="form-control" formControlName="baselineArea" id="baselineArea">
-      <app-control-messages [control]="heatStorageForm.controls.baselineArea"></app-control-messages>
-    </div>
-    <div class="col-4 input-group input-group-sm">
-      <input type="number" class="form-control" formControlName="modifiedArea" id="modifiedArea">
-      <app-control-messages [control]="heatStorageForm.controls.modifiedArea"></app-control-messages>
+      <input type="number" class="form-control" formControlName="area" id="area">
     </div>
   </div>
 
   <div class="row form-group">
-    <label class="col-4 col-form-label small" for="baselineFurnaceTemp">Furnace Temperature (&#8457;)</label>
+    <label class="col-4 col-form-label small" for="furnaceTemp">Furnace Temperature (&#8457;)</label>
     <div class="col-4 input-group input-group-sm">
-      <input type="number" class="form-control" formControlName="baselineFurnaceTemp" id="baselineFurnaceTemp">
-      <app-control-messages [control]="heatStorageForm.controls.baselineFurnaceTemp"></app-control-messages>
-    </div>
-    <div class="col-4 input-group input-group-sm">
-      <input type="number" class="form-control" formControlName="modifiedFurnaceTemp" id="modifiedFurnaceTemp">
-      <app-control-messages [control]="heatStorageForm.controls.modifiedFurnaceTemp"></app-control-messages>
+      <input type="number" class="form-control" formControlName="furnaceTemp" id="furnaceTemp">
     </div>
   </div>
 
   <div class="row form-group">
-    <label class="col-4 col-form-label small" for="baselineAmbientTemp">Ambient Temperature (&#8457;)</label>
+    <label class="col-4 col-form-label small" for="ambientTemp">Ambient Temperature (&#8457;)</label>
     <div class="col-4 input-group input-group-sm">
-      <input type="number" class="form-control" formControlName="baselineAmbientTemp" id="baselineAmbientTemp">
-      <app-control-messages [control]="heatStorageForm.controls.baselineAmbientTemp"></app-control-messages>
-    </div>
-    <div class="col-4 input-group input-group-sm">
-      <input type="number" class="form-control" formControlName="modifiedAmbientTemp" id="modifiedAmbientTemp">
-      <app-control-messages [control]="heatStorageForm.controls.modifiedAmbientTemp"></app-control-messages>
+      <input type="number" class="form-control" formControlName="ambientTemp" id="ambientTemp">
     </div>
   </div>
 
   <div class="row form-group">
-    <label class="col-4 col-form-label small" for="baselineStartingWallTemp">Starting Wall Temperature (&#8457;)</label>
+    <label class="col-4 col-form-label small" for="startingWallTemp">Starting Wall Temperature (&#8457;)</label>
     <div class="col-4 input-group input-group-sm">
-      <input type="number" class="form-control" formControlName="baselineStartingWallTemp" id="baselineStartingWallTemp">
-      <app-control-messages [control]="heatStorageForm.controls.baselineStartingWallTemp"></app-control-messages>
-    </div>
-    <div class="col-4 input-group input-group-sm">
-      <input type="number" class="form-control" formControlName="modifiedAmbientTemp" id="modifiedAmbientTemp">
-      <app-control-messages [control]="heatStorageForm.controls.modifiedAmbientTemp"></app-control-messages>
+      <input type="number" class="form-control" formControlName="startingWallTemp" id="startingWallTemp">
     </div>
   </div>
 
   <div class="row form-group">
-    <label class="col-4 col-form-label small" for="baselineCorrectionFactor">Correction Factor</label>
+    <label class="col-4 col-form-label small" for="correctionFactor">Correction Factor</label>
     <div class="col-4 input-group input-group-sm">
-      <input type="number" class="form-control" formControlName="baselineCorrectionFactor" id="baselineCorrectionFactor">
-      <app-control-messages [control]="heatStorageForm.controls.baselineCorrectionFactor"></app-control-messages>
-    </div>
-    <div class="col-4 input-group input-group-sm">
-      <input type="number" class="form-control" formControlName="modifiedCorrectionFactor" id="modifiedCorrectionFactor">
-      <app-control-messages [control]="heatStorageForm.controls.modifiedCorrectionFactor"></app-control-messages>
+      <input type="number" class="form-control" formControlName="correctionFactor" id="correctionFactor">
     </div>
   </div>
 
   <div class="row form-group">
-    <label class="col-4 col-form-label small" for="baselineHeatRequired">Correction Factor</label>
+    <label class="col-4 col-form-label small" for="heatRequired">Correction Factor</label>
     <div class="col-4 input-group input-group-sm">
-      <input type="number" class="form-control" formControlName="baselineHeatRequired" id="baselineHeatRequired">
-      <app-control-messages [control]="heatStorageForm.controls.baselineHeatRequired"></app-control-messages>
-    </div>
-    <div class="col-4 input-group input-group-sm">
-      <input type="number" class="form-control" formControlName="modifiedHeatRequired" id="modifiedHeatRequired">
-      <app-control-messages [control]="heatStorageForm.controls.modifiedHeatRequired"></app-control-messages>
+      <input type="number" class="form-control" formControlName="heatRequired" id="heatRequired">
     </div>
   </div>
 
