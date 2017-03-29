@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-//declare var converter: any;
+declare var converter: any;
 @Component({
   selector: 'app-opening-losses-form',
   templateUrl: './opening-losses-form.component.html',
@@ -38,8 +38,8 @@ export class OpeningLossesFormComponent implements OnInit {
       if (this.openingLossesForm.controls.lengthOfOpening.status == "VALID") {
         this.openingLossesForm.controls.heightOfOpening.setValue(0);
         let radiusInches = this.openingLossesForm.value.lengthOfOpening;
-        let radiusFeet = (radiusInches * .08333333) / 2;
-        //let radiusFeet = converter(radiusInches).from('in').to('ft') / 2;
+        //let radiusFeet = (radiusInches * .08333333) / 2;
+        let radiusFeet = converter(radiusInches).from('in').to('ft') / 2;
         this.totalArea = Math.PI * Math.pow(radiusFeet, 2);
         this.checkForm();
       }
