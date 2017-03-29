@@ -1,3 +1,14 @@
+/*
+  When using ConvertUnitsService you need to chain these commands
+  1. Set value you are converting
+  2. Declare unit you are converting from
+  3. Declare unit you are converting to
+  4. converted unit will return
+  convertUnitsService.unit(1).from('in').to('ft');
+*/
+
+
+
 import { Injectable } from '@angular/core';
 import { length } from './definitions/length';
 import { area } from './definitions/area';
@@ -53,6 +64,8 @@ export class ConvertUnitsService {
   }
 
   from(from: any) {
+    if(!this.val)
+      throw new Error('need to set value before call to .from');
     if (this.destination)
       throw new Error('.from must be called before .to');
     this.origin = this.getUnit(from);
