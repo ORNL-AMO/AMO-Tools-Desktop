@@ -1,4 +1,5 @@
 export interface CoolingLoss {
+    coolingLossType?: string,
     gasCoolingLoss?: GasCoolingLoss,
     liquidCoolingLoss?: LiquidCoolingLoss,
     waterCoolingLoss?: WaterCoolingLoss,

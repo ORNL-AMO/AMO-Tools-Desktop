@@ -10,13 +10,15 @@ export class FlueGasLossesFormComponent implements OnInit {
   flueGasLossForm: any;
   @Output('calculate')
   calculate = new EventEmitter<boolean>();
-
+  @Input()
+  lossState: any;
   constructor() { }
 
   ngOnInit() {
   }
 
   checkForm(){
+    this.lossState = false;
     if(this.flueGasLossForm.status == 'VALID'){
       this.calculate.emit(true);
     }

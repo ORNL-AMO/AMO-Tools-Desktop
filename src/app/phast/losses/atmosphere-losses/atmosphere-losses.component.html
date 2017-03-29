@@ -18,7 +18,7 @@
     </button>
   </div>
   <div class="card-block">
-    <app-atmosphere-losses-form [(atmosphereLossForm)]="loss.form" (calculate)="calculate(loss)"></app-atmosphere-losses-form>
+    <app-atmosphere-losses-form [(atmosphereLossForm)]="loss.form" (calculate)="calculate(loss)" [(lossState)]="lossState"></app-atmosphere-losses-form>
     <div class="row">
       <div class="col-6">
         <small>Total Heat Loss (Btu/hr)</small>

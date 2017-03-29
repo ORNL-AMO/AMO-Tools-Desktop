@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import { Component, OnInit, Input, SimpleChange } from '@angular/core';
 import * as _ from 'lodash';
 import { PhastService } from '../../phast.service';
 import { FixtureLossesService } from './fixture-losses.service';
+import { Losses } from '../../../shared/models/phast';
+import { FixtureLoss } from '../../../shared/models/losses/fixtureLoss';
 
 @Component({
   selector: 'app-fixture-losses',
@@ -10,46 +11,84 @@ import { FixtureLossesService } from './fixture-losses.service';
   styleUrls: ['./fixture-losses.component.css']
 })
 export class FixtureLossesComponent implements OnInit {
+  @Input()
+  losses: Losses;
+  @Input()
+  saveClicked: boolean;
+  @Input()
+  lossState: any;
 
-  fixtureLosses: Array<any>;
+  _fixtureLosses: Array<any>;
 
-  constructor(private formBuilder: FormBuilder, private phastService: PhastService, private fixtureLossesService: FixtureLossesService) { }
+  constructor(private phastService: PhastService, private fixtureLossesService: FixtureLossesService) { }
+
+  ngOnChanges(changes: SimpleChange) {
+    if (!changes.isFirstChange && this._fixtureLosses) {
+      this.saveLosses()
+    }
+  }
 
   ngOnInit() {
-    if (!this.fixtureLosses) {
-      this.fixtureLosses = new Array();
+    if (!this._fixtureLosses) {
+      this._fixtureLosses = new Array();
+    }
+    if (this.losses.fixtureLosses) {
+      this.losses.fixtureLosses.forEach(loss => {
+        let tmpLoss = {
+          form: this.fixtureLossesService.getFormFromLoss(loss),
+          name: 'Loss #' + (this._fixtureLosses.length + 1),
+          heatLoss: 0.0
+        };
+        this.calculate(tmpLoss);
+        this._fixtureLosses.unshift(tmpLoss);
+      })
     }
   }
 
   addLoss() {
-    let tmpForm = this.fixtureLossesService.initForm();
-    let tmpName = 'Loss #' + (this.fixtureLosses.length + 1);
-    this.fixtureLosses.push({ 
-      form: tmpForm, 
-      name: tmpName,
-      heatRequired: 0.0
+    this._fixtureLosses.unshift({
+      form: this.fixtureLossesService.initForm(),
+      name: 'Loss #' + (this._fixtureLosses.length + 1),
+      heatLoss: 0.0
     });
+    this.lossState.saved = false;
   }
 
   removeLoss(str: string) {
-    this.fixtureLosses = _.remove(this.fixtureLosses, fixture => {
+    this._fixtureLosses = _.remove(this._fixtureLosses, fixture => {
       return fixture.name != str;
     });
+    this.lossState.saved = false;
     this.renameLosses();
   }
 
   renameLosses() {
     let index = 1;
-    this.fixtureLosses.forEach(fixture => {
+    this._fixtureLosses.forEach(fixture => {
       fixture.name = 'Fixture #' + index;
       index++;
     })
   }
 
-  calculate(loss: any){
-    //TODO call phast service for fixture loss
-    //loss.heatRequired = this.phastService.fixtureLosses()
+  calculate(loss: any) {
+    loss.heatLoss = this.phastService.fixtureLosses(
+      loss.form.value.specificHeat,
+      loss.form.value.feedRate,
+      loss.form.value.initialTemp,
+      loss.form.value.finalTemp,
+      loss.form.value.correctionFactor
+    );
+  }
 
+  saveLosses() {
+    let tmpFixtureLosses = new Array<FixtureLoss>();
+    this._fixtureLosses.forEach(loss => {
+      let tmpFixtureLoss = this.fixtureLossesService.getLossFromForm(loss.form);
+      tmpFixtureLosses.unshift(tmpFixtureLoss);
+    });
+    this.losses.fixtureLosses = tmpFixtureLosses;
+    this.lossState.numLosses = this.losses.fixtureLosses.length;
+    this.lossState.saved = true;
   }
 
 }

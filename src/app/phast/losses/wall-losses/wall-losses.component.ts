@@ -106,12 +106,10 @@ export class WallLossesComponent implements OnInit {
     let tmpWallLosses = new Array<WallLoss>();
     this._wallLosses.forEach(loss => {
       let tmpWallLoss = this.wallLossesService.getWallLossFromForm(loss.form);
-      debugger
-      tmpWallLosses.push(tmpWallLoss);
+      tmpWallLosses.unshift(tmpWallLoss);
     })
     this.losses.wallLosses = tmpWallLosses;
-    this.lossState.numLosses = this._wallLosses.length;
+    this.lossState.numLosses = this.losses.wallLosses.length;
     this.lossState.saved = true;
-
   }
 }
