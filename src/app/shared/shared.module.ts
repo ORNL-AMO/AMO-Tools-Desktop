@@ -5,6 +5,7 @@ import { ControlMessagesComponent } from './control-messages/control-messages.co
 import { ValidationService } from './validation.service';
 import { ModelService } from './model.service';
 
+import { ConvertUnitsService } from './convert-units/convert-units.service';
 
 @NgModule({
     imports: [
@@ -20,8 +21,8 @@ import { ModelService } from './model.service';
   ],
   providers: [
     ValidationService,
-    ModelService
-
+    ModelService,
+    ConvertUnitsService
   ]
 })
 
