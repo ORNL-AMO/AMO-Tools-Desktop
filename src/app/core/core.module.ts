@@ -14,7 +14,7 @@ import { SidebarComponent } from '../sidebar/sidebar.component';
 import { DashboardComponent } from '../dashboard/dashboard.component';
 import { AssessmentService } from '../assessment/assessment.service';
 import { UpdateModalComponent } from '../update-modal/update-modal.component';
-import { ConvertUnitsService } from '../shared/convert-units/convert-units.service';
+
 @NgModule({
   declarations: [
     CoreComponent,
@@ -34,8 +34,7 @@ import { ConvertUnitsService } from '../shared/convert-units/convert-units.servi
     NgxElectronModule
   ],
   providers: [
-    AssessmentService,
-    ConvertUnitsService
+    AssessmentService
   ]
 })
 
