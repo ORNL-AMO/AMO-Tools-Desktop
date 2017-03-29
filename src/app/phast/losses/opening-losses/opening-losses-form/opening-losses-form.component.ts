@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-declare var converter: any;
+//declare var converter: any;
 @Component({
   selector: 'app-opening-losses-form',
   templateUrl: './opening-losses-form.component.html',
@@ -38,7 +38,8 @@ export class OpeningLossesFormComponent implements OnInit {
       if (this.openingLossesForm.controls.lengthOfOpening.status == "VALID") {
         this.openingLossesForm.controls.heightOfOpening.setValue(0);
         let radiusInches = this.openingLossesForm.value.lengthOfOpening;
-        let radiusFeet = converter(radiusInches).from('in').to('ft') / 2;
+        let radiusFeet = (radiusInches * .08333333) / 2;
+        //let radiusFeet = converter(radiusInches).from('in').to('ft') / 2;
         this.totalArea = Math.PI * Math.pow(radiusFeet, 2);
         this.checkForm();
       }
@@ -46,8 +47,10 @@ export class OpeningLossesFormComponent implements OnInit {
       if (this.openingLossesForm.controls.lengthOfOpening.status == "VALID" && this.openingLossesForm.controls.heightOfOpening.status == "VALID") {
         let lengthInches = this.openingLossesForm.value.lengthOfOpening;
         let heightInches = this.openingLossesForm.value.heightOfOpening;
-        let lengthFeet = converter(lengthInches).from('in').to('ft');
-        let heightFeet = converter(heightInches).from('in').to('ft');
+        let lengthFeet = lengthInches * .08333333;
+        let heightFeet = heightInches * .08333333;
+        //let lengthFeet = converter(lengthInches).from('in').to('ft');
+        //let heightFeet = converter(heightInches).from('in').to('ft');
         this.totalArea = lengthFeet * heightFeet;
         this.checkForm();
       }
