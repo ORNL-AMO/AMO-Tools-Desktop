@@ -1,3 +1,5 @@
+//origianl functions from npm convert-units that service is based on
+
 var convert
   , keys = require('../../../../node_modules/lodash.keys')
   , each = require('../../../../node_modules/lodash.foreach')
