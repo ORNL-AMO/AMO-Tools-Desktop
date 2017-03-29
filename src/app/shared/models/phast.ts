@@ -7,6 +7,7 @@ import { OpeningLoss } from './losses/openingLoss';
 import { CoolingLoss } from './losses/coolingLoss';
 import { HeatStorage } from './losses/heatStorage';
 import { FlueGas } from './losses/flueGas';
+import { LeakageLoss } from './losses/leakageLoss';
 
 export interface PHAST {
   name?: string,
@@ -30,5 +31,6 @@ export interface Losses {
   coolingLosses?: CoolingLoss[],
   heatStorageLosses?: HeatStorage[],
   flueGasLosses?: FlueGas[],
-  otherLosses?: OtherLoss[]
+  otherLosses?: OtherLoss[],
+  leakageLosses?: LeakageLoss[]
 }

@@ -201,6 +201,17 @@ export const MockDirectory: Directory = {
               finalTemperature: 1800.0,
               correctionFactor: 1.0
             }
+          ],
+          leakageLosses: [
+            {
+              draftPressure: 0.1,
+              openingArea: 3.0,
+              leakageGasTemperature: 1600.0,
+              ambientTemperature: 80.0,
+              coefficient: .8052,
+              specificGravity: 1.02,
+              correctionFactor: 1.0
+            }
           ]
         },
       }

@@ -40,6 +40,9 @@ import { CoolingLossesComponent } from './cooling-losses/cooling-losses.componen
 import { CoolingLossesService } from './cooling-losses/cooling-losses.service';
 import { GasCoolingLossesFormComponent } from './cooling-losses/gas-cooling-losses-form/gas-cooling-losses-form.component';
 import { LiquidCoolingLossesFormComponent } from './cooling-losses/liquid-cooling-losses-form/liquid-cooling-losses-form.component';
+import { GasLeakageLossesComponent } from './gas-leakage-losses/gas-leakage-losses.component';
+import { GasLeakageLossesFormComponent } from './gas-leakage-losses/gas-leakage-losses-form/gas-leakage-losses-form.component';
+import { GasLeakageLossesService } from './gas-leakage-losses/gas-leakage-losses.service';
 
 @NgModule({
   imports: [
@@ -77,7 +80,9 @@ import { LiquidCoolingLossesFormComponent } from './cooling-losses/liquid-coolin
     OpeningLossesFormComponent,
     CoolingLossesComponent,
     GasCoolingLossesFormComponent,
-    LiquidCoolingLossesFormComponent
+    LiquidCoolingLossesFormComponent,
+    GasLeakageLossesComponent,
+    GasLeakageLossesFormComponent
   ],
   providers: [
     ChargeMaterialService,
@@ -87,7 +92,8 @@ import { LiquidCoolingLossesFormComponent } from './cooling-losses/liquid-coolin
     FlueGasLossesService,
     HeatStorageService,
     OpeningLossesService,
-    CoolingLossesService
+    CoolingLossesService,
+    GasLeakageLossesService
   ],
   exports: [
     LossesComponent

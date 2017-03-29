@@ -1,5 +1,4 @@
 import { Component, OnInit, Input, SimpleChange } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
 import * as _ from 'lodash';
 import { PhastService } from '../../phast.service';
 import { WallLoss } from '../../../shared/models/losses/wallLoss';
@@ -22,7 +21,7 @@ export class WallLossesComponent implements OnInit {
   _wallLosses: Array<any>;
   _adjustments: Array<any>;
 
-  constructor(private formBuilder: FormBuilder, private phastService: PhastService, private wallLossesService: WallLossesService) { }
+  constructor(private phastService: PhastService, private wallLossesService: WallLossesService) { }
 
   ngOnChanges(changes: SimpleChange) {
     if (!changes.isFirstChange && this._wallLosses) {

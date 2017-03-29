@@ -36,6 +36,10 @@ export class LossesComponent implements OnInit {
     fixtureLosses: {
       numLosses: 0,
       saved: true
+    },
+    leakageLosses: {
+      numLosses: 0,
+      saved: true
     }
   }
   constructor() { }

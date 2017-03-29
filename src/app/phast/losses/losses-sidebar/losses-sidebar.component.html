@@ -45,6 +45,12 @@
     Flue Gas Losses
     </a>
   </li>
+  <li [ngClass]="{'active': lossesTab == 'gas-leakage-losses'}" (click)="tabChange('gas-leakage-losses')">
+    <a class="nav-link small">
+    Gas Leakage Losses
+     <div class="pull-right numberCircle" *ngIf="losses.leakageLosses" [ngClass]="{'unsaved':!lossesStates.leakageLosses.saved}"><span>{{losses.leakageLosses.length}}</span></div>
+    </a>
+  </li>
   <li [ngClass]="{'active': lossesTab == 'other-losses'}" (click)="tabChange('other-losses')">
     <a class="nav-link small">
     Other Losses

@@ -13,7 +13,6 @@ export class CoolingLossesService {
       'liquidFlow': ['', Validators.required],
       'inletTemp': ['', Validators.required],
       'outletTemp': ['', Validators.required],
-      'heatRequired': [{ value: '', disabled: 'true' }],
       'correctionFactor': ['', Validators.required],
     })
   }
@@ -23,7 +22,6 @@ export class CoolingLossesService {
       'liquidFlow': [loss.flowRate, Validators.required],
       'inletTemp': [loss.initialTemperature, Validators.required],
       'outletTemp': [loss.outletTemperature, Validators.required],
-      'heatRequired': [{ value: '', disabled: 'true' }],
       'correctionFactor': [loss.correctionFactor, Validators.required],
     })
   }
@@ -48,7 +46,6 @@ export class CoolingLossesService {
       'liquidFlow': ['', Validators.required],
       'inletTemp': ['', Validators.required],
       'outletTemp': ['', Validators.required],
-      'heatRequired': [{ value: '', disabled: 'true' }],
       'correctionFactor': ['', Validators.required],
     });
   }
@@ -60,7 +57,6 @@ export class CoolingLossesService {
       'liquidFlow': [loss.flowRate, Validators.required],
       'inletTemp': [loss.initialTemperature, Validators.required],
       'outletTemp': [loss.outletTemperature, Validators.required],
-      'heatRequired': [{ value: '', disabled: 'true' }],
       'correctionFactor': [loss.correctionFactor, Validators.required],
     })
   }
@@ -86,7 +82,6 @@ export class CoolingLossesService {
       'gasFlow': ['', Validators.required],
       'inletTemp': ['', Validators.required],
       'outletTemp': ['', Validators.required],
-      'heatRequired': [{ value: '', disabled: 'true' }],
       'correctionFactor': ['', Validators.required],
     });
   }
@@ -97,7 +92,6 @@ export class CoolingLossesService {
       'gasFlow': [loss.flowRate, Validators.required],
       'inletTemp': [loss.initialTemperature, Validators.required],
       'outletTemp': [loss.finalTemperature, Validators.required],
-      'heatRequired': [{ value: '', disabled: 'true' }],
       'correctionFactor': [loss.correctionFactor, Validators.required],
     });
   }
