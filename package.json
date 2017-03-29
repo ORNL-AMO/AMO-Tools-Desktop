@@ -103,6 +103,7 @@
     "karma-coverage-istanbul-reporter": "^0.2.0",
     "karma-jasmine": "~1.1.0",
     "karma-jasmine-html-reporter": "^0.2.2",
+    "lodash.foreach": "^4.5.0",
     "lodash.keys": "^4.2.0",
     "ng2-charts": "^1.5.0",
     "ngx-popover": "0.0.16",
