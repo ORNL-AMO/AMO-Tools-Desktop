@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, Input } from '@angular/core';
+import { Component, OnInit, ViewChild, ViewChildren, Input } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ModalDirective } from 'ng2-bootstrap';
 import { Directory } from '../../shared/models/directory';
@@ -14,6 +14,7 @@ import { AssessmentService } from '../assessment.service';
 export class AssessmentCreateComponent implements OnInit {
   @Input()
   directory: Directory;
+  @ViewChildren('assessmentName') vc;
 
   newAssessment: any;
   selectedEquip: string = 'new';
@@ -32,8 +33,8 @@ export class AssessmentCreateComponent implements OnInit {
 
   initForm() {
     return this.formBuilder.group({
-      'assessmentName': ['', Validators.required],
-      'assessmentType': ['']
+      'assessmentName': ['New Assessment', Validators.required],
+      'assessmentType': ['', Validators.required]
     });
   }
 
@@ -41,6 +42,9 @@ export class AssessmentCreateComponent implements OnInit {
   @ViewChild('createModal') public createModal: ModalDirective;
   showCreateModal() {
     this.createModal.show();
+    this.createModal.onShow.subscribe(() => {
+      this.vc.first.nativeElement.focus().select();
+    })
   }
 
   hideCreateModal() {

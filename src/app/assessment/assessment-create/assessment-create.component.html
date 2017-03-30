@@ -19,9 +19,8 @@
             <div class="col-12">
               <label class="form-control-label" for="assessmentName">Assessment Name</label>
               <div class="input-group">
-                <input class="form-control" formControlName="assessmentName" id="assessmentName" placeholder="New Assessment"/>
+                <input #assessmentName class="form-control" formControlName="assessmentName" id="assessmentName"/>
               </div>
-              <app-control-messages [control]="newAssessment.controls.assessmentName"></app-control-messages>
               <div class="help-text">
                 <p>Example: "Pump123" or "ORNL Pump 3"</p>
               </div>
