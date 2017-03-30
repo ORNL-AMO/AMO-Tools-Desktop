@@ -49,147 +49,171 @@ export const MockDirectory: Directory = {
         losses: {
           chargeMaterials: [
             {
-              inputs: {
-                chargeMaterialType: 'Gas',
-                gasChargeMaterial: {
-                  baseline: {
-                    materialName: 'Type 1',
-                    thermicReactionType: 0,
-                    specificHeatGas: 0.24,
-                    feedRate: 1000,
-                    percentVapor: 15,
-                    initialTemperature: 80,
-                    dischargeTemperature: 1150,
-                    specificHeatVapor: .5,
-                    percentReacted: 100,
-                    reactionHeat: 80,
-                    additionalHeat: 5000
-                  },
-                  modified: {
-                    materialName: 'Type 1',
-                    thermicReactionType: 0,
-                    specificHeatGas: 0.24,
-                    feedRate: 1000,
-                    percentVapor: 15,
-                    initialTemperature: 80,
-                    dischargeTemperature: 1150,
-                    specificHeatVapor: .5,
-                    percentReacted: 100,
-                    reactionHeat: 80,
-                    additionalHeat: 5000
-                  }
-                }
+              chargeMaterialType: 'Gas',
+              gasChargeMaterial: {
+                materialName: 'Type 1',
+                thermicReactionType: 0,
+                specificHeatGas: 0.24,
+                feedRate: 1000,
+                percentVapor: 15,
+                initialTemperature: 80,
+                dischargeTemperature: 1150,
+                specificHeatVapor: .5,
+                percentReacted: 100,
+                reactionHeat: 80,
+                additionalHeat: 5000
               }
             },
             {
-              inputs: {
-                chargeMaterialType: 'Solid',
-                solidChargeMaterial: {
-                  baseline: {
-                    materialName: 'Type 1',
-                    thermicReactionType: 1,
-                    specificHeatSolid: .15,
-                    latentHeat: 60,
-                    specificHeatLiquid: .481,
-                    meltingPoint: 2900,
-                    chargeFeedRate: 10000,
-                    waterContentCharged: .1,
-                    waterContentDischarged: 0.0,
-                    initialTemperature: 70.0,
-                    dischargeTemperature: 2200,
-                    waterVaporDischargeTemperature: 500,
-                    chargeMelted: 0.0,
-                    chargeReacted: 1.0,
-                    reactionHeat: 100,
-                    additionalHeat: 0
-                  },
-                  modified: {
-                    materialName: 'Type 1',
-                    thermicReactionType: 1,
-                    specificHeatSolid: .15,
-                    latentHeat: 60,
-                    specificHeatLiquid: .481,
-                    meltingPoint: 2900,
-                    chargeFeedRate: 10000,
-                    waterContentCharged: .1,
-                    waterContentDischarged: 0.0,
-                    initialTemperature: 70.0,
-                    dischargeTemperature: 2200,
-                    waterVaporDischargeTemperature: 500,
-                    chargeMelted: 0.0,
-                    chargeReacted: 1.0,
-                    reactionHeat: 100,
-                    additionalHeat: 0
-                  }
-                }
+              chargeMaterialType: 'Solid',
+              solidChargeMaterial: {
+                materialName: 'Type 1',
+                thermicReactionType: 1,
+                specificHeatSolid: .15,
+                latentHeat: 60,
+                specificHeatLiquid: .481,
+                meltingPoint: 2900,
+                chargeFeedRate: 10000,
+                waterContentCharged: .1,
+                waterContentDischarged: 0.0,
+                initialTemperature: 70.0,
+                dischargeTemperature: 2200,
+                waterVaporDischargeTemperature: 500,
+                chargeMelted: 0.0,
+                chargeReacted: 1.0,
+                reactionHeat: 100,
+                additionalHeat: 0
               }
             },
             {
-              inputs: {
-                chargeMaterialType: 'Liquid',
-                liquidChargeMaterial: {
-                  baseline: {
-                    materialName: 'Type 1',
-                    thermicReactionType: 0,
-                    specificHeatLiquid: .48,
-                    vaporizingTemperature: 240,
-                    latentHeat: 250,
-                    specificHeatVapor: .25,
-                    chargeFeedRate: 1000,
-                    initialTemperature: 70,
-                    dischargeTemperature: 320,
-                    percentVaporized: 100,
-                    percentReacted: 25,
-                    reactionHeat: 50,
-                    additionalHeat: 0
-                  },
-                  modified: {
-                    materialName: 'Type 1',
-                    thermicReactionType: 0,
-                    specificHeatLiquid: .48,
-                    vaporizingTemperature: 240,
-                    latentHeat: 250,
-                    specificHeatVapor: .25,
-                    chargeFeedRate: 1000,
-                    initialTemperature: 70,
-                    dischargeTemperature: 320,
-                    percentVaporized: 100,
-                    percentReacted: 25,
-                    reactionHeat: 50,
-                    additionalHeat: 0
-                  }
-                }
+              chargeMaterialType: 'Liquid',
+              liquidChargeMaterial: {
+                materialName: 'Type 1',
+                thermicReactionType: 0,
+                specificHeatLiquid: .48,
+                vaporizingTemperature: 240,
+                latentHeat: 250,
+                specificHeatVapor: .25,
+                chargeFeedRate: 1000,
+                initialTemperature: 70,
+                dischargeTemperature: 320,
+                percentVaporized: 100,
+                percentReacted: 25,
+                reactionHeat: 50,
+                additionalHeat: 0
               }
             }
           ],
           wallLosses: [
             {
-              inputs: {
-                baseline: {
-                  surfaceArea: 500.0,
-                  ambientTemperature: 80.0,
-                  surfaceTemperature: 225.0,
-                  windVelocity: 10.0,
-                  surfaceEmissivity: 0.9,
-                  conditionFactor: 1.394,
-                  surfaceShape: 'Vertical Plates',
-                  correctionFactor: 1.0
-                },
-                modified: {
-                  surfaceArea: 500.0,
-                  ambientTemperature: 80.0,
-                  surfaceTemperature: 225.0,
-                  windVelocity: 10.0,
-                  surfaceEmissivity: 0.9,
-                  surfaceShape: 'Vertical Plates',
-                  conditionFactor: 1.394,
-                  correctionFactor: 1.0
-                }
+              surfaceArea: 500.0,
+              ambientTemperature: 80.0,
+              surfaceTemperature: 225.0,
+              windVelocity: 10.0,
+              surfaceEmissivity: 0.9,
+              conditionFactor: 1.394,
+              surfaceShape: 'Vertical Plates',
+              correctionFactor: 1.0
+            },
+          ],
+          atmosphereLosses: [
+            {
+              atmosphereGas: 'Test Gas',
+              specificHeat: 0.02,
+              inletTemperature: 100.0,
+              outletTemperature: 1400.0,
+              flowRate: 1200.0,
+              correctionFactor: 1.0,
+            }
+          ],
+          openingLosses: [
+            {
+              numberOfOpenings: 1,
+              emessivity: .95,
+              thickness: 9.0,
+              ambientTemperature: 75.0,
+              insideTemperature: 1600,
+              percentTimeOpen: 100,
+              viewFactor: .7,
+              openingType: 'Round',
+              lengthOfOpening: 12.0,
+            }, {
+              numberOfOpenings: 1,
+              emessivity: .95,
+              thickness: 9.0,
+              ambientTemperature: 75.0,
+              insideTemperature: 1600,
+              percentTimeOpen: 20,
+              viewFactor: .64,
+              openingType: 'Rectangular (Square)',
+              lengthOfOpening: 48.0,
+              heightOfOpening: 15.0
+            }
+          ],
+          coolingLosses: [
+            {
+              coolingLossType: 'Other Gas',
+              gasCoolingLoss: {
+                flowRate: 2500.0,
+                initialTemperature: 80.0,
+                finalTemperature: 280.0,
+                specificHeat: 0.02,
+                correctionFactor: 1.0
               }
             },
+            {
+              coolingLossType: 'Other Gas',
+              gasCoolingLoss: {
+                flowRate: 600.0,
+                initialTemperature: 80.0,
+                finalTemperature: 350.0,
+                specificHeat: 0.02,
+                correctionFactor: 1.0
+              }
+            },
+            {
+              coolingLossType: 'Other Liquid',
+              liquidCoolingLoss: {
+                flowRate: 100.0,
+                density: 9.35,
+                initialTemperature: 80.0,
+                outletTemperature: 210.0,
+                specificHeat: .52,
+                correctionFactor: 1.0
+              }
+            },
+            {
+              coolingLossType: 'Water',
+              waterCoolingLoss: {
+                flowRate: 100.0,
+                initialTemperature: 80.0,
+                outletTemperature: 120.0,
+                correctionFactor: 1.0
+              }
+            }
+          ],
+          fixtureLosses: [
+            {
+              materialName: 'Material 1',
+              specificHeat: 0.122,
+              feedRate: 1250.0,
+              initialTemperature: 300.0,
+              finalTemperature: 1800.0,
+              correctionFactor: 1.0
+            }
+          ],
+          leakageLosses: [
+            {
+              draftPressure: 0.1,
+              openingArea: 3.0,
+              leakageGasTemperature: 1600.0,
+              ambientTemperature: 80.0,
+              coefficient: .8052,
+              specificGravity: 1.02,
+              correctionFactor: 1.0
+            }
           ]
         },
-
       }
     }
   ],

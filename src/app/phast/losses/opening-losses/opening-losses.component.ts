@@ -1,7 +1,9 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import { Component, OnInit, Input, SimpleChange } from '@angular/core';
 import * as _ from 'lodash';
-import { ModalDirective } from 'ng2-bootstrap';
+import { PhastService } from '../../phast.service';
+import { OpeningLossesService } from './opening-losses.service';
+import { Losses } from '../../../shared/models/phast';
+import { OpeningLoss } from '../../../shared/models/losses/openingLoss';
 
 @Component({
   selector: 'app-opening-losses',
@@ -9,98 +11,106 @@ import { ModalDirective } from 'ng2-bootstrap';
   styleUrls: ['./opening-losses.component.css']
 })
 export class OpeningLossesComponent implements OnInit {
+  @Input()
+  losses: Losses;
+  @Input()
+  lossState: any;
+  @Input()
+  saveClicked: boolean;
 
-  openingLosses: Array<any>;
+  _openingLosses: Array<any>;
   editLoss: any;
-  constructor(private formBuilder: FormBuilder) { }
+  constructor(private phastService: PhastService, private openingLossesService: OpeningLossesService) { }
+
+  ngOnChanges(changes: SimpleChange) {
+    if (!changes.isFirstChange && this._openingLosses) {
+      this.saveLosses();
+    }
+  }
 
   ngOnInit() {
-    if(!this.openingLosses){
-      this.openingLosses = new Array();
+    if (!this._openingLosses) {
+      this._openingLosses = new Array();
+    }
+    if (this.losses.openingLosses) {
+      this.losses.openingLosses.forEach(loss => {
+        let tmpLoss = {
+          form: this.openingLossesService.getFormFromLoss(loss),
+          name: 'Loss #' + (this._openingLosses.length + 1),
+          totalOpeningLosses: 0.0
+        };
+        this.calculate(tmpLoss);
+        this._openingLosses.unshift(tmpLoss);
+      })
     }
   }
 
   addLoss() {
-    let tmpFixedForm = this.initForm();
-    let tmpVariableForm = this.initForm();
-    let tmpName = 'Opening Loss #' + (this.openingLosses.length + 1);
-    this.openingLosses.push({ fixedForm: tmpFixedForm, variableForm: tmpVariableForm, name: tmpName, showfixed: false, showVariable: false });
+    let tmpName = 'Opening Loss #' + (this._openingLosses.length + 1);
+    this._openingLosses.unshift({
+      form: this.openingLossesService.initForm(),
+      name: tmpName,
+      totalOpeningLosses: 0.0
+    });
+    this.lossState.saved = false;
   }
 
   removeLoss(str: string) {
-    this.openingLosses = _.remove(this.openingLosses, fixture => {
-      return fixture.name != str;
+    this._openingLosses = _.remove(this._openingLosses, loss => {
+      return loss.name != str;
     });
+    this.lossState.saved = false;
     this.renameLosses();
   }
 
   renameLosses() {
     let index = 1;
-    this.openingLosses.forEach(fixture => {
-      fixture.name = 'Openeing #' + index;
+    this._openingLosses.forEach(loss => {
+      loss.name = 'Opening #' + index;
       index++;
     })
   }
 
-
-  //  Fixed Opening MODAL
-  @ViewChild('fixedModal') public fixedModal: ModalDirective;
-  showFixedModal(loss: any){
-    this.editLoss = loss;
-    this.fixedModal.show();
+  calculate(loss: any) {
+    if (loss.form.value.openingType == 'Rectangular (Square)') {
+      let ratio = Math.min(loss.form.value.lengthOfOpening, loss.form.value.heightOfOpening) / loss.form.value.wallThickness;
+      let lossAmount = this.phastService.openingLossesQuad(
+        loss.form.value.emissivity,
+        loss.form.value.lengthOfOpening,
+        loss.form.value.heightOfOpening,
+        loss.form.value.wallThickness,
+        ratio,
+        loss.form.value.ambientTemp,
+        loss.form.value.insideTemp,
+        loss.form.value.percentTimeOpen,
+        loss.form.value.viewFactor
+      );
+      loss.totalOpeningLosses = loss.form.value.numberOfOpenings * lossAmount;
+    } else if (loss.form.value.openingType == 'Round') {
+      let ratio = loss.form.value.lengthOfOpening / loss.form.value.wallThickness;
+      let lossAmount = this.phastService.openingLossesCircular(
+        loss.form.value.emissivity,
+        loss.form.value.lengthOfOpening,
+        loss.form.value.wallThickness,
+        ratio,
+        loss.form.value.ambientTemp,
+        loss.form.value.insideTemp,
+        loss.form.value.percentTimeOpen,
+        loss.form.value.viewFactor
+      );
+      loss.totalOpeningLosses = loss.form.value.numberOfOpenings * lossAmount;
+    }
   }
 
-  hideFixedModal(){
-    this.fixedModal.hide();
-  }
-
-
-  //  Variable Opening MODAL
-  @ViewChild('variableModal') public variableModal: ModalDirective;
-  showVariableModal(loss: any){
-    this.editLoss = loss;
-    this.variableModal.show();
-  }
-
-  hideVariableModal(){
-    this.variableModal.hide();
-  }
-
-  showFixed(loss: any){
-    loss.showFixed = true;
-  }
-
-  showVariable(loss: any){
-    loss.showVariable = true;
-  }
-
-  hideCalc(loss: any){
-    loss.showFixed = false;
-    loss.showVariable = false;
-  }
-
-  initForm() {
-    return this.formBuilder.group({
-      'openingType': [''],
-      'baselineWallThickness': [''],
-      'baselineLengthOfOpenings': [''],
-      'baselineHeightOfOpenings': [''],
-      'baselineViewFactor': [''],
-      'baselineTotalOpeningArea': [''],
-      'baselineInsideTemp': [''],
-      'baselineOutsideTemp': [''],
-      'baselinePercentTimeOpen': [''],
-      'baselineOpeningLosses': [{ value: '', disabled: true }],
-      'modifiedWallThickness': [''],
-      'modifiedLengthOfOpenings': [''],
-      'modifiedHeightOfOpenings': [''],
-      'modifiedViewFactor': [''],
-      'modifiedTotalOpeningArea': [''],
-      'modifiedInsideTemp': [''],
-      'modifiedOutsideTemp': [''],
-      'modifiedPercentTimeOpen': [''],
-      'modifiedOpeningLosses': [{ value: '', disabled: true }]
+  saveLosses() {
+    let tmpOpeningLosses = new Array<OpeningLoss>();
+    this._openingLosses.forEach(loss => {
+      let tmpOpeningLoss = this.openingLossesService.getLossFromForm(loss.form);
+      tmpOpeningLosses.unshift(tmpOpeningLoss);
     })
-  }
+    this.losses.openingLosses = tmpOpeningLosses;
+    this.lossState.numLosses = this.losses.openingLosses.length;
+    this.lossState.saved = true;
 
+  }
 }

@@ -13,6 +13,8 @@ export class LossesSidebarComponent implements OnInit {
   lossesTab: string;
   @Input()
   losses: Losses;
+  @Input()
+  lossesStates: any;
   constructor() { }
 
   ngOnInit() {

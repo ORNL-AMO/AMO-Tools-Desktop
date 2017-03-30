@@ -1,0 +1,43 @@
+<form [formGroup]="lossesForm">
+  <div class="row form-group">
+    <label class="col-6 col-form-label small" for="avgSpecificHeat">Average Specific Heat (Btu/lb-F)</label>
+    <div class="col-6 input-group input-group-sm">
+      <input type="number" class="form-control" formControlName="avgSpecificHeat" id="avgSpecificHeat" (keyup)="checkForm()">
+    </div>
+  </div>
+
+  <div class="row form-group">
+    <label class="col-6 col-form-label small" for="density">Density (lb/SCF)</label>
+    <div class="col-6 input-group input-group-sm">
+      <input type="number" class="form-control" formControlName="density" id="density" (keyup)="checkForm()">
+    </div>
+  </div>
+
+  <div class="row form-group">
+    <label class="col-6 col-form-label small" for="liquidFlow">Liquid Flow (gal/min)</label>
+    <div class="col-6 input-group input-group-sm">
+      <input type="number" class="form-control" formControlName="liquidFlow" id="liquidFlow" (keyup)="checkForm()">
+    </div>
+  </div>
+
+  <div class="row form-group">
+    <label class="col-6 col-form-label small" for="inletTemp">Inlet Temperature (&#8457;)</label>
+    <div class="col-6 input-group input-group-sm">
+      <input type="number" class="form-control" formControlName="inletTemp" id="inletTemp" (keyup)="checkForm()">
+    </div>
+  </div>
+
+  <div class="row form-group">
+    <label class="col-6 col-form-label small" for="outletTemp">Outlet Temperature (&#8457;)</label>
+    <div class="col-6 input-group input-group-sm">
+      <input type="number" class="form-control" formControlName="outletTemp" id="outletTemp" (keyup)="checkForm()">
+    </div>
+  </div>
+  
+  <div class="row form-group">
+    <label class="col-6 col-form-label small" for="correctionFactor">Correction Factor</label>
+    <div class="col-6 input-group input-group-sm">
+      <input type="number" class="form-control" formControlName="correctionFactor" id="correctionFactor" (keyup)="checkForm()">
+    </div>
+  </div>
+</form>

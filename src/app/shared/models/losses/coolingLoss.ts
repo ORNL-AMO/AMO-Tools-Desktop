@@ -1,12 +1,8 @@
 export interface CoolingLoss {
-    inputs?: {
-        gasCoolingLoss?: GasCoolingLoss,
-        liquidCoolingLoss?: LiquidCoolingLoss,
-        waterCoolingLoss?: WaterCoolingLoss,
-    },
-    outputs?: {
-        heatLoss?: number
-    }
+    coolingLossType?: string,
+    gasCoolingLoss?: GasCoolingLoss,
+    liquidCoolingLoss?: LiquidCoolingLoss,
+    waterCoolingLoss?: WaterCoolingLoss,
 }
 
 export interface LiquidCoolingLoss {

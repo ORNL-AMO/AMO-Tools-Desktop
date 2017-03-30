@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { SharedModule } from '../shared/shared.module';
-import { ModalModule, DropdownModule } from 'ng2-bootstrap';
+import { ModalModule } from 'ng2-bootstrap';
 
 import { AssessmentComponent } from './assessment.component';
 import { AssessmentDashboardComponent } from './assessment-dashboard/assessment-dashboard.component';

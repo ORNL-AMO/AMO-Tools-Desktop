@@ -8,6 +8,7 @@
   <h4>Add some now.</h4>
 </div>
 
+
 <div class="card card-form" *ngFor="let loss of _wallLosses">
   <div class="card-header">
     <div class="pull-left">
@@ -18,20 +19,37 @@
     </button>
   </div>
   <div class="card-block">
-    <app-wall-losses-form [(wallLossesForm)]="loss.form" (calculateBaseline)="calculateBaseline(loss)" (calculateModified)="calculateModified(loss)"></app-wall-losses-form>
+    <app-wall-losses-form [(wallLossesForm)]="loss.form" (calculate)="calculate(loss)" [(lossState)]="lossState"></app-wall-losses-form>
     <div class="row">
-      <div class="col-4">
-        <small>Heat Loss</small>
+      <div class="col-6">
+        <small>Heat Loss (Btu/hr)</small>
       </div>
-      <div class="col-2 text-center">
-        <small>Btu/hr</small>
-      </div>
-      <div class="col-3 text-center">
-        {{loss.baselineHeatLoss |number:'2.2-2'}}
-      </div>
-      <div class="col-3 text-center">
-        {{loss.modifiedHeatLoss |number:'2.2-2'}}
+      <div class="col-6 text-center">
+        {{loss.heatLoss | number:'2.2-2'}}
       </div>
     </div>
   </div>
+  <!--<div *ngFor="let adjustment of _adjustments" class="col-2">
+    <div class="h4">Adjustment</div>
+    <div class="row" *ngFor="let loss of adjustment.losses">
+      <div class="card card-form adjustment-card">
+        <div class="card-header">
+          <div class="pull-left">
+            <b>{{loss.name}}</b>
+          </div>
+        </div>
+        <div class="card-block justify-content-center">
+          <app-wall-losses-adjustment-form [(adjustmentForm)]="loss.form" (calculate)="calculate(loss)"></app-wall-losses-adjustment-form>
+          <div class="row">
+            <div class="col-12 text-center">
+              {{loss.heatLoss | number:'2.2-2'}}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="card card-form col-3" *ngIf="_adjustments.length < 3">
+    <button class="btn btn-secondary" (click)="addAdjustment()">Add Adjustment</button>
+  </div>-->
 </div>

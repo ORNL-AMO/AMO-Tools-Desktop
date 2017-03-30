@@ -29,12 +29,12 @@
         <!--<app-control-messages [control]="material.form.controls.type"></app-control-messages>-->
       </div>
     </div>
-    <app-solid-charge-material-form *ngIf="material.chargeMaterialType == 'Solid'" [(chargeMaterialForm)]="material.solidForm" (calculateModified)="calculateModified(material)"
-      (calculateBaseline)="calculateBaseline(material)"></app-solid-charge-material-form>
-    <app-liquid-charge-material-form *ngIf="material.chargeMaterialType == 'Liquid'" [(chargeMaterialForm)]="material.liquidForm" (calculateModified)="calculateModified(material)"
-      (calculateBaseline)="calculateBaseline(material)"></app-liquid-charge-material-form>
-    <app-gas-charge-material-form *ngIf="material.chargeMaterialType == 'Gas'" [(chargeMaterialForm)]="material.gasForm" (calculateModified)="calculateModified(material)"
-      (calculateBaseline)="calculateBaseline(material)"></app-gas-charge-material-form>
+    <app-solid-charge-material-form *ngIf="material.chargeMaterialType == 'Solid'" [(lossState)]="lossState" [(chargeMaterialForm)]="material.solidForm"
+      (calculate)="calculate(material)"></app-solid-charge-material-form>
+    <app-liquid-charge-material-form *ngIf="material.chargeMaterialType == 'Liquid'" [(lossState)]="lossState" [(chargeMaterialForm)]="material.liquidForm"
+      (calculate)="calculate(material)"></app-liquid-charge-material-form>
+    <app-gas-charge-material-form *ngIf="material.chargeMaterialType == 'Gas'" [(lossState)]="lossState" [(chargeMaterialForm)]="material.gasForm"
+      (calculate)="calculate(material)"></app-gas-charge-material-form>
     <div class="row">
       <div class="col-4">
         <small>Total Heat Required For Charge Material</small>
@@ -42,11 +42,8 @@
       <div class="col-2 text-center">
         <small>Btu/hr</small>
       </div>
-      <div class="col-3 text-center">
-        {{material.baselineHeatRequired |number:'2.2-2'}}
-      </div>
-      <div class="col-3 text-center">
-        {{material.modifiedHeatRequired |number:'2.2-2'}}
+      <div class="col-6 text-center">
+        {{material.heatRequired |number:'2.2-2'}}
       </div>
     </div>
   </div>

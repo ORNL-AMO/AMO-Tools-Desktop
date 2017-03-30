@@ -3,8 +3,6 @@ import { Directory } from '../shared/models/directory';
 import { MockDirectory } from '../shared/mocks/mock-directory';
 import { ElectronService } from 'ngx-electron';
 
-
-
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',

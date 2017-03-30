@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, SimpleChange } from '@angular/core';
+import { Component, OnInit, Input, SimpleChange, Output, EventEmitter } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import * as _ from 'lodash';
 import { PhastService } from '../../phast.service';
@@ -15,6 +15,8 @@ export class ChargeMaterialComponent implements OnInit {
   losses: Losses;
   @Input()
   saveClicked: boolean;
+  @Input()
+  lossState: any;
 
   _chargeMaterial: Array<any>;
 
@@ -31,83 +33,50 @@ export class ChargeMaterialComponent implements OnInit {
       this._chargeMaterial = new Array();
     }
     if (this.losses.chargeMaterials) {
-      this.losses.chargeMaterials.forEach(loss => {
-        if (loss.inputs.chargeMaterialType == 'Gas') {
-          let tmpLoss = {
-            chargeMaterialType: 'Gas',
-            solidForm: this.chargeMaterialService.initSolidForm(),
-            liquidForm: this.chargeMaterialService.initLiquidForm(),
-            gasForm: this.chargeMaterialService.getGasChargeMaterialForm(loss.inputs.gasChargeMaterial),
-            name: 'Material #' + (this._chargeMaterial.length + 1),
-            baselineHeatRequired: 0.0,
-            modifiedHeatRequired: 0.0
-          };
-          this.calculateBaseline(tmpLoss);
-          this.calculateModified(tmpLoss);
-          this._chargeMaterial.unshift(tmpLoss);
-        }
-        else if (loss.inputs.chargeMaterialType == 'Solid') {
-          let tmpLoss = {
-            chargeMaterialType: 'Solid',
-            solidForm: this.chargeMaterialService.getSolidChargeMaterialForm(loss.inputs.solidChargeMaterial),
-            liquidForm: this.chargeMaterialService.initLiquidForm(),
-            gasForm: this.chargeMaterialService.initGasForm(),
-            name: 'Material #' + (this._chargeMaterial.length + 1),
-            baselineHeatRequired: 0.0,
-            modifiedHeatRequired: 0.0
-          };
-          this.calculateBaseline(tmpLoss);
-          this.calculateModified(tmpLoss);
-          this._chargeMaterial.unshift(tmpLoss);
-        }
-        else if (loss.inputs.chargeMaterialType == 'Liquid') {
-          let tmpLoss = {
-            chargeMaterialType: 'Liquid',
-            solidForm: this.chargeMaterialService.initSolidForm(),
-            liquidForm: this.chargeMaterialService.getLiquidChargeMaterialForm(loss.inputs.liquidChargeMaterial),
-            gasForm: this.chargeMaterialService.initGasForm(),
-            name: 'Material #' + (this._chargeMaterial.length + 1),
-            baselineHeatRequired: 0.0,
-            modifiedHeatRequired: 0.0
-          };
-          this.calculateBaseline(tmpLoss);
-          this.calculateModified(tmpLoss);
-          this._chargeMaterial.unshift(tmpLoss);
-        }
-      })
+      this.initChargeMaterial();
     }
+    this.lossState.numLosses = this._chargeMaterial.length;
   }
 
-  saveLosses() {
-    let tmpChargeMaterials = new Array<ChargeMaterial>();
-    this._chargeMaterial.forEach(material => {
-      if (material.chargeMaterialType == 'Gas') {
-        let tmpGasMaterial = this.chargeMaterialService.buildGasChargeMaterial(material.gasForm);
-        tmpChargeMaterials.push({
-          inputs: {
-            chargeMaterialType: 'Gas',
-            gasChargeMaterial: tmpGasMaterial
-          }
-        })
-      } else if (material.chargeMaterialType == 'Solid') {
-        let tmpSolidMaterial = this.chargeMaterialService.buildSolidChargeMaterial(material.solidForm);
-        tmpChargeMaterials.push({
-          inputs: {
-            chargeMaterialType: 'Solid',
-            solidChargeMaterial: tmpSolidMaterial
-          }
-        })
-      } else if (material.chargeMaterialType == 'Liquid') {
-        let tmpLiquidMaterial = this.chargeMaterialService.buildLiquidChargeMaterial(material.liquidForm);
-        tmpChargeMaterials.push({
-          inputs: {
-            chargeMaterialType: 'Liquid',
-            liquidChargeMaterial: tmpLiquidMaterial
-          }
-        })
+  initChargeMaterial() {
+    this.losses.chargeMaterials.forEach(loss => {
+      if (loss.chargeMaterialType == 'Gas') {
+        let tmpLoss = {
+          chargeMaterialType: 'Gas',
+          solidForm: this.chargeMaterialService.initSolidForm(),
+          liquidForm: this.chargeMaterialService.initLiquidForm(),
+          gasForm: this.chargeMaterialService.getGasChargeMaterialForm(loss.gasChargeMaterial),
+          name: 'Material #' + (this._chargeMaterial.length + 1),
+          heatRequired: 0.0
+        };
+        this.calculate(tmpLoss);
+        this._chargeMaterial.unshift(tmpLoss);
+      }
+      else if (loss.chargeMaterialType == 'Solid') {
+        let tmpLoss = {
+          chargeMaterialType: 'Solid',
+          solidForm: this.chargeMaterialService.getSolidChargeMaterialForm(loss.solidChargeMaterial),
+          liquidForm: this.chargeMaterialService.initLiquidForm(),
+          gasForm: this.chargeMaterialService.initGasForm(),
+          name: 'Material #' + (this._chargeMaterial.length + 1),
+          heatRequired: 0.0
+        };
+        this.calculate(tmpLoss);
+        this._chargeMaterial.unshift(tmpLoss);
+      }
+      else if (loss.chargeMaterialType == 'Liquid') {
+        let tmpLoss = {
+          chargeMaterialType: 'Liquid',
+          solidForm: this.chargeMaterialService.initSolidForm(),
+          liquidForm: this.chargeMaterialService.getLiquidChargeMaterialForm(loss.liquidChargeMaterial),
+          gasForm: this.chargeMaterialService.initGasForm(),
+          name: 'Material #' + (this._chargeMaterial.length + 1),
+          heatRequired: 0.0
+        };
+        this.calculate(tmpLoss);
+        this._chargeMaterial.unshift(tmpLoss);
       }
     })
-    this.losses.chargeMaterials = tmpChargeMaterials;
   }
 
   addMaterial() {
@@ -117,9 +86,10 @@ export class ChargeMaterialComponent implements OnInit {
       liquidForm: this.chargeMaterialService.initLiquidForm(),
       gasForm: this.chargeMaterialService.initGasForm(),
       name: 'Material #' + (this._chargeMaterial.length + 1),
-      baselineHeatRequired: 0.0,
+      heatRequired: 0.0,
       modifiedHeatRequired: 0.0
     });
+    this.lossState.saved = false;
   }
 
   removeMaterial(str: string) {
@@ -127,6 +97,7 @@ export class ChargeMaterialComponent implements OnInit {
       return material.name != str;
     });
     this.renameMaterial();
+    this.lossState.saved = false;
   }
 
   renameMaterial() {
@@ -137,132 +108,94 @@ export class ChargeMaterialComponent implements OnInit {
     })
   }
 
-  calculateBaseline(loss: any) {
+  calculate(loss: any) {
     if (loss.chargeMaterialType == 'Solid') {
       let reactionType = 0;
-      if (loss.solidForm.value.baselineEndothermicOrExothermic == 'Exothermic') {
+      if (loss.solidForm.value.endothermicOrExothermic == 'Exothermic') {
         reactionType = 1;
       }
-      loss.baselineHeatRequired = this.phastService.solidLoadChargeMaterial(
+      loss.heatRequired = this.phastService.solidLoadChargeMaterial(
         reactionType,
-        loss.solidForm.value.baselineMaterialSpecificHeatOfSolidMaterial,
-        loss.solidForm.value.baselineMaterialLatentHeatOfFusion,
-        loss.solidForm.value.baselineMaterialHeatOfLiquid,
-        loss.solidForm.value.baselineMaterialMeltingPoint,
-        loss.solidForm.value.baselineFeedRate,
-        loss.solidForm.value.baselineWaterContentAsCharged,
-        loss.solidForm.value.baselineWaterContentAsDischarged,
-        loss.solidForm.value.baselineInitialTemperature,
-        loss.solidForm.value.baselineChargeMaterialDischargeTemperature,
-        loss.solidForm.value.baselineWaterVaporDischargeTemperature,
-        loss.solidForm.value.baselinePercentChargeMelted,
-        loss.solidForm.value.baselinePercentChargeReacted,
-        loss.solidForm.value.baselineHeatOfReaction,
-        loss.solidForm.value.baselineAdditionalHeatRequired,
+        loss.solidForm.value.materialSpecificHeatOfSolidMaterial,
+        loss.solidForm.value.materialLatentHeatOfFusion,
+        loss.solidForm.value.materialHeatOfLiquid,
+        loss.solidForm.value.materialMeltingPoint,
+        loss.solidForm.value.feedRate,
+        loss.solidForm.value.waterContentAsCharged,
+        loss.solidForm.value.waterContentAsDischarged,
+        loss.solidForm.value.initialTemperature,
+        loss.solidForm.value.chargeMaterialDischargeTemperature,
+        loss.solidForm.value.waterVaporDischargeTemperature,
+        loss.solidForm.value.percentChargeMelted,
+        loss.solidForm.value.percentChargeReacted,
+        loss.solidForm.value.heatOfReaction,
+        loss.solidForm.value.additionalHeatRequired,
 
       );
     } else if (loss.chargeMaterialType == 'Liquid') {
       let reactionType = 0;
-      if (loss.liquidForm.value.baselineEndothermicOrExothermic == 'Exothermic') {
+      if (loss.liquidForm.value.endothermicOrExothermic == 'Exothermic') {
         reactionType = 1;
       }
-      loss.baselineHeatRequired = this.phastService.liquidLoadChargeMaterial(
+      loss.heatRequired = this.phastService.liquidLoadChargeMaterial(
         reactionType,
-        loss.liquidForm.value.baselineMaterialSpecificHeatLiquid,
-        loss.liquidForm.value.baselineMaterialVaporizingTemperature,
-        loss.liquidForm.value.baselineMaterialLatentHeat,
-        loss.liquidForm.value.baselineMaterialSpecificHeatVapor,
-        loss.liquidForm.value.baselineFeedRate,
-        loss.liquidForm.value.baselineInitialTemperature,
-        loss.liquidForm.value.baselineDischargeTemperature,
-        loss.liquidForm.value.baselineLiquidVaporized,
-        loss.liquidForm.value.baselineLiquidReacted,
-        loss.liquidForm.value.baselineHeatOfReaction,
-        loss.liquidForm.value.baselineAdditionalHeatRequired
+        loss.liquidForm.value.materialSpecificHeatLiquid,
+        loss.liquidForm.value.materialVaporizingTemperature,
+        loss.liquidForm.value.materialLatentHeat,
+        loss.liquidForm.value.materialSpecificHeatVapor,
+        loss.liquidForm.value.feedRate,
+        loss.liquidForm.value.initialTemperature,
+        loss.liquidForm.value.dischargeTemperature,
+        loss.liquidForm.value.liquidVaporized,
+        loss.liquidForm.value.liquidReacted,
+        loss.liquidForm.value.heatOfReaction,
+        loss.liquidForm.value.additionalHeatRequired
       )
     } else if (loss.chargeMaterialType == 'Gas') {
       let reactionType = 0;
-      if (loss.gasForm.value.baselineEndothermicOrExothermic == 'Exothermic') {
+      if (loss.gasForm.value.endothermicOrExothermic == 'Exothermic') {
         reactionType = 1;
       }
-      loss.baselineHeatRequired = this.phastService.gasLoadChargeMaterial(
+      loss.heatRequired = this.phastService.gasLoadChargeMaterial(
         reactionType,
-        loss.gasForm.value.baselineMaterialSpecificHeat,
-        loss.gasForm.value.baselineFeedRate,
-        loss.gasForm.value.baselineVaporInGas,
-        loss.gasForm.value.baselineInitialTemperature,
-        loss.gasForm.value.baselineDischargeTemperature,
-        loss.gasForm.value.baselineSpecificHeatOfVapor,
-        loss.gasForm.value.baselineGasReacted,
-        loss.gasForm.value.baselineHeatOfReaction,
-        loss.gasForm.value.baselineAdditionalHeatRequired,
+        loss.gasForm.value.materialSpecificHeat,
+        loss.gasForm.value.feedRate,
+        loss.gasForm.value.vaporInGas,
+        loss.gasForm.value.initialTemperature,
+        loss.gasForm.value.dischargeTemperature,
+        loss.gasForm.value.specificHeatOfVapor,
+        loss.gasForm.value.gasReacted,
+        loss.gasForm.value.heatOfReaction,
+        loss.gasForm.value.additionalHeatRequired,
       )
     }
   }
 
-  calculateModified(loss: any) {
-    if (loss.chargeMaterialType == 'Solid') {
-      let reactionType = 0;
-      if (loss.solidForm.value.modifiedEndothermicOrExothermic == 'Exothermic') {
-        reactionType = 1;
+  saveLosses() {
+    let tmpChargeMaterials = new Array<ChargeMaterial>();
+    this._chargeMaterial.forEach(material => {
+      if (material.chargeMaterialType == 'Gas') {
+        let tmpGasMaterial = this.chargeMaterialService.buildGasChargeMaterial(material.gasForm);
+        tmpChargeMaterials.unshift({
+          chargeMaterialType: 'Gas',
+          gasChargeMaterial: tmpGasMaterial
+        })
+      } else if (material.chargeMaterialType == 'Solid') {
+        let tmpSolidMaterial = this.chargeMaterialService.buildSolidChargeMaterial(material.solidForm);
+        tmpChargeMaterials.unshift({
+          chargeMaterialType: 'Solid',
+          solidChargeMaterial: tmpSolidMaterial
+        })
+      } else if (material.chargeMaterialType == 'Liquid') {
+        let tmpLiquidMaterial = this.chargeMaterialService.buildLiquidChargeMaterial(material.liquidForm);
+        tmpChargeMaterials.unshift({
+          chargeMaterialType: 'Liquid',
+          liquidChargeMaterial: tmpLiquidMaterial
+        })
       }
-      loss.modifiedHeatRequired = this.phastService.solidLoadChargeMaterial(
-        reactionType,
-        loss.solidForm.value.modifiedMaterialSpecificHeatOfSolidMaterial,
-        loss.solidForm.value.modifiedMaterialLatentHeatOfFusion,
-        loss.solidForm.value.modifiedMaterialHeatOfLiquid,
-        loss.solidForm.value.modifiedMaterialMeltingPoint,
-        loss.solidForm.value.modifiedFeedRate,
-        loss.solidForm.value.modifiedWaterContentAsCharged,
-        loss.solidForm.value.modifiedWaterContentAsDischarged,
-        loss.solidForm.value.modifiedInitialTemperature,
-        loss.solidForm.value.modifiedChargeMaterialDischargeTemperature,
-        loss.solidForm.value.modifiedWaterVaporDischargeTemperature,
-        loss.solidForm.value.modifiedPercentChargeMelted,
-        loss.solidForm.value.modifiedPercentChargeReacted,
-        loss.solidForm.value.modifiedHeatOfReaction,
-        loss.solidForm.value.modifiedAdditionalHeatRequired,
-
-      );
-    } else if (loss.chargeMaterialType == 'Liquid') {
-      let reactionType = 0;
-      if (loss.liquidForm.value.modifiedEndothermicOrExothermic == 'Exothermic') {
-        reactionType = 1;
-      }
-      loss.modifiedHeatRequired = this.phastService.liquidLoadChargeMaterial(
-        reactionType,
-        loss.liquidForm.value.modifiedMaterialSpecificHeatLiquid,
-        loss.liquidForm.value.modifiedMaterialVaporizingTemperature,
-        loss.liquidForm.value.modifiedMaterialLatentHeat,
-        loss.liquidForm.value.modifiedMaterialSpecificHeatVapor,
-        loss.liquidForm.value.modifiedFeedRate,
-        loss.liquidForm.value.modifiedInitialTemperature,
-        loss.liquidForm.value.modifiedDischargeTemperature,
-        loss.liquidForm.value.modifiedLiquidVaporized,
-        loss.liquidForm.value.modifiedLiquidReacted,
-        loss.liquidForm.value.modifiedHeatOfReaction,
-        loss.liquidForm.value.modifiedAdditionalHeatRequired
-      )
-    } else if (loss.chargeMaterialType == 'Gas') {
-      let reactionType = 0;
-      if (loss.gasForm.value.modifiedEndothermicOrExothermic == 'Exothermic') {
-        reactionType = 1;
-      }
-      loss.modifiedHeatRequired = this.phastService.gasLoadChargeMaterial(
-        reactionType,
-        loss.gasForm.value.modifiedMaterialSpecificHeat,
-        loss.gasForm.value.modifiedFeedRate,
-        loss.gasForm.value.modifiedVaporInGas,
-        loss.gasForm.value.modifiedInitialTemperature,
-        loss.gasForm.value.modifiedDischargeTemperature,
-        loss.gasForm.value.modifiedSpecificHeatOfVapor,
-        loss.gasForm.value.modifiedGasReacted,
-        loss.gasForm.value.modifiedHeatOfReaction,
-        loss.gasForm.value.modifiedAdditionalHeatRequired
-      )
-    }
+    })
+    this.losses.chargeMaterials = tmpChargeMaterials;
+    this.lossState.numLosses = this.losses.chargeMaterials.length;
+    this.lossState.saved = true;
   }
-
-
-
 }
