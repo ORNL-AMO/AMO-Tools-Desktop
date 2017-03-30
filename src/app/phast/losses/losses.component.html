@@ -1,9 +1,9 @@
 <!--<app-losses-tabs [losses]="phast.losses" [lossesStates]="lossesStates" (changeTab)="changeTab($event)" [lossesTab]="lossesTab"></app-losses-tabs>-->
 <div class="row losses-row">
-  <nav class="col-3 sidebar losses-sidebar">
+  <nav class="col-2 sidebar losses-sidebar">
     <app-losses-sidebar [losses]="phast.losses" [lossesStates]="lossesStates" (changeTab)="changeTab($event)" [lossesTab]="lossesTab"></app-losses-sidebar>
   </nav>
-  <div class="col-9 losses-container">
+  <div class="col-10 losses-container">
     <app-charge-material [(losses)]="phast.losses" [(lossState)]="lossesStates.chargeMaterial" [saveClicked]="saveClicked" *ngIf="lossesTab == 'charge-material'"></app-charge-material>
     <app-wall-losses [(losses)]="phast.losses" [(lossState)]="lossesStates.wallLosses" [saveClicked]="saveClicked" *ngIf="lossesTab == 'wall-losses'"></app-wall-losses>
     <app-atmosphere-losses [(losses)]="phast.losses" [(lossState)]="lossesStates.atmosphereLosses" [saveClicked]="saveClicked"
@@ -11,9 +11,9 @@
     <app-fixture-losses [(losses)]="phast.losses" [(lossState)]="lossesStates.fixtureLosses" [saveClicked]="saveClicked" *ngIf="lossesTab == 'fixture-losses'"></app-fixture-losses>
     <app-opening-losses [(losses)]="phast.losses" [(lossState)]="lossesStates.openingLosses" [saveClicked]="saveClicked" *ngIf="lossesTab == 'opening-losses'"></app-opening-losses>
     <app-cooling-losses [(losses)]="phast.losses" [(lossState)]="lossesStates.coolingLosses" [saveClicked]="saveClicked" *ngIf="lossesTab == 'cooling-losses'"></app-cooling-losses>
-    <app-heat-storage *ngIf="lossesTab == 'heat-storage'"></app-heat-storage>
     <app-flue-gas-losses *ngIf="lossesTab == 'flue-gas-losses'"></app-flue-gas-losses>
     <app-gas-leakage-losses [(losses)]="phast.losses" [(lossState)]="lossesStates.leakageLosses" [saveClicked]="saveClicked" *ngIf="lossesTab == 'gas-leakage-losses'"></app-gas-leakage-losses>
-    <app-other-losses *ngIf="lossesTab == 'other-losses'"></app-other-losses>
+    <app-extended-surface-losses [(losses)]="phast.losses" [(lossState)]="lossesStates.surfaceLosses" [saveClicked]="saveClicked" *ngIf="lossesTab == 'extended-surface-losses'"></app-extended-surface-losses>
+    <app-other-losses [(losses)]="phast.losses" [(lossState)]="lossesStates.otherLosses" [saveClicked]="saveClicked" *ngIf="lossesTab == 'other-losses'"></app-other-losses>
   </div>
 </div>

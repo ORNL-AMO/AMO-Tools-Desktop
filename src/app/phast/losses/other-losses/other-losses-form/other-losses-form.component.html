@@ -1,70 +1,16 @@
-<div class="row justify-content-end">
-  <div class="col-4 text-center">
-    Baseline
-  </div>
-  <div class="col-4 text-center">
-    Modified
-  </div>
-</div>
-<form [formGroup]="otherLossesForm">
+<form [formGroup]="lossesForm">
 
   <div class="row form-group">
-    <label class="col-4 col-form-label small" for="baselineAreaOfHeatLoss">Area of heat loss source (m<sup>2</sup>)</label>
-    <div class="col-4 input-group input-group-sm">
-      <input type="number" class="form-control" formControlName="baselineAreaOfHeatLoss" id="baselineAreaOfHeatLoss">
-      <app-control-messages [control]="otherLossesForm.controls.baselineAreaOfHeatLoss"></app-control-messages>
-    </div>
-    <div class="col-4 input-group input-group-sm">
-      <input type="number" class="form-control" formControlName="modifiedAreaOfHeatLoss" id="modifiedAreaOfHeatLoss">
-      <app-control-messages [control]="otherLossesForm.controls.modifiedAreaOfHeatLoss"></app-control-messages>
+    <label class="col-6 col-form-label small" for="description">Loss Description</label>
+    <div class="col-6 input-group input-group-sm">
+      <input type="text" class="form-control" formControlName="description" id="description" (keyup)="checkForm()">
     </div>
   </div>
 
   <div class="row form-group">
-    <label class="col-4 col-form-label small" for="baselineAverageTemp">Average Temperature (&#8457;)</label>
-    <div class="col-4 input-group input-group-sm">
-      <input type="number" class="form-control" formControlName="baselineAverageTemp" id="baselineAverageTemp">
-      <app-control-messages [control]="otherLossesForm.controls.baselineAverageTemp"></app-control-messages>
-    </div>
-    <div class="col-4 input-group input-group-sm">
-      <input type="number" class="form-control" formControlName="modifiedAverageTemp" id="modifiedAverageTemp">
-      <app-control-messages [control]="otherLossesForm.controls.modifiedAverageTemp"></app-control-messages>
-    </div>
-  </div>
-
-  <div class="row form-group">
-    <label class="col-4 col-form-label small" for="baselineAmbientTemp">Ambient Temperature (&#8457;)</label>
-    <div class="col-4 input-group input-group-sm">
-      <input type="number" class="form-control" formControlName="baselineAmbientTemp" id="baselineAmbientTemp">
-      <app-control-messages [control]="otherLossesForm.controls.baselineAmbientTemp"></app-control-messages>
-    </div>
-    <div class="col-4 input-group input-group-sm">
-      <input type="number" class="form-control" formControlName="modifiedAmbientTemp" id="modifiedAmbientTemp">
-      <app-control-messages [control]="otherLossesForm.controls.modifiedAmbientTemp"></app-control-messages>
-    </div>
-  </div>
-
-  <div class="row form-group">
-    <label class="col-4 col-form-label small" for="baselineSurfaceEmissivity">Surface emissivity of the heat source<br>(Typical - 0.9)</label>
-    <div class="col-4 input-group input-group-sm">
-      <input type="number" class="form-control" formControlName="baselineSurfaceEmissivity" id="baselineSurfaceEmissivity">
-      <app-control-messages [control]="otherLossesForm.controls.baselineSurfaceEmissivity"></app-control-messages>
-    </div>
-    <div class="col-4 input-group input-group-sm">
-      <input type="number" class="form-control" formControlName="modofiedSurfaceEmissivity" id="modofiedSurfaceEmissivity">
-      <app-control-messages [control]="otherLossesForm.controls.modofiedSurfaceEmissivity"></app-control-messages>
-    </div>
-  </div>
-
-  <div class="row form-group">
-    <label class="col-4 col-form-label small" for="baselineHeatLoss">Heat Loss (Btu/hr)</label>
-    <div class="col-4 input-group input-group-sm">
-      <input type="number" class="form-control" formControlName="baselineHeatLoss" id="baselineHeatLoss">
-      <app-control-messages [control]="otherLossesForm.controls.baselineHeatLoss"></app-control-messages>
-    </div>
-    <div class="col-4 input-group input-group-sm">
-      <input type="number" class="form-control" formControlName="modifiedHeatLoss" id="modifiedHeatLoss">
-      <app-control-messages [control]="otherLossesForm.controls.modifiedHeatLoss"></app-control-messages>
+    <label class="col-6 col-form-label small" for="heatLoss">Heat Loss (Btu/hr)</label>
+    <div class="col-6 input-group input-group-sm">
+      <input type="number" class="form-control" formControlName="heatLoss" id="heatLoss" (keyup)="checkForm()">
     </div>
   </div>
 

@@ -8,12 +8,13 @@ import { CoolingLoss } from './losses/coolingLoss';
 import { HeatStorage } from './losses/heatStorage';
 import { FlueGas } from './losses/flueGas';
 import { LeakageLoss } from './losses/leakageLoss';
+import { ExtendedSurface } from './losses/extendedSurface';
 
 export interface PHAST {
   name?: string,
   phastInputs?: PhastInputs,
   losses?: Losses
-  lossAdjustments?: Losses[]
+  adjustments?: Losses[]
 }
 
 export interface PhastInputs {
@@ -32,5 +33,6 @@ export interface Losses {
   heatStorageLosses?: HeatStorage[],
   flueGasLosses?: FlueGas[],
   otherLosses?: OtherLoss[],
-  leakageLosses?: LeakageLoss[]
+  leakageLosses?: LeakageLoss[],
+  extendedSurfaces?: ExtendedSurface[]
 }

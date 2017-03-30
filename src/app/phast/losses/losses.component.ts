@@ -40,6 +40,14 @@ export class LossesComponent implements OnInit {
     leakageLosses: {
       numLosses: 0,
       saved: true
+    },
+    surfaceLosses: {
+      numLosses: 0,
+      saved: true
+    },
+    otherLosses: {
+      numLosses: 0,
+      saved: true
     }
   }
   constructor() { }

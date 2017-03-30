@@ -1,18 +1,17 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 
 @Component({
-  selector: 'app-other-losses-form',
-  templateUrl: './other-losses-form.component.html',
-  styleUrls: ['./other-losses-form.component.css']
+  selector: 'app-extended-surface-losses-form',
+  templateUrl: './extended-surface-losses-form.component.html',
+  styleUrls: ['./extended-surface-losses-form.component.css']
 })
-export class OtherLossesFormComponent implements OnInit {
+export class ExtendedSurfaceLossesFormComponent implements OnInit {
   @Input()
   lossesForm: any;
   @Output('calculate')
   calculate = new EventEmitter<boolean>();
   @Input()
   lossState: any;
-  
   constructor() { }
 
   ngOnInit() {
@@ -24,4 +23,5 @@ export class OtherLossesFormComponent implements OnInit {
       this.calculate.emit(true);
     }
   }
+
 }
