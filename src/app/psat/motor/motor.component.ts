@@ -12,6 +12,18 @@ export class MotorComponent implements OnInit {
   @Output('changeField')
   changeField = new EventEmitter<string>();
 
+  efficiencyClasses: Array<string> = [
+    'Standard Efficiency',
+    'Energy Efficient',
+    // When the user chooses specified, they need a place to put the efficiency value
+    'Specified'
+  ];
+
+  frequencies: Array<string> = [
+    '50 Hz',
+    '60 Hz'
+  ];
+
   constructor() { }
 
   ngOnInit() {

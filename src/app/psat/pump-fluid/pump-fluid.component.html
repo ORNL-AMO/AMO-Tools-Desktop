@@ -3,9 +3,8 @@
     <label class="col-6 col-form-label" for="pumpType">Pump Type</label>
     <div class="col-6">
       <select class="form-control" formControlName="pumpType" id="pumpType" (focus)="focusField('pumpType')">
-              <option>Pump 1</option>
-              <option>Pump 2</option>
-            </select>
+        <option *ngFor="let pumpType of pumpTypes">{{pumpType}}</option>
+      </select>
       <app-control-messages [control]="psatForm.controls.pumpType"></app-control-messages>
     </div>
   </div>
@@ -22,9 +21,8 @@
     <label class="col-6 col-form-label" for="drive">Drive</label>
     <div class="col-6">
       <select class="form-control" formControlName="drive" id="drive" (focus)="focusField('drive')">
-              <option>Drive 1</option>
-              <option>Drive 2</option>
-            </select>
+        <option *ngFor="let drive of drives">{{drive}}</option>
+      </select>
       <app-control-messages [control]="psatForm.controls.drive"></app-control-messages>
     </div>
   </div>

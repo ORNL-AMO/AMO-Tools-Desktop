@@ -11,6 +11,26 @@ export class PumpFluidComponent implements OnInit {
   @Output('changeField')
   changeField = new EventEmitter<string>();
 
+  pumpTypes: Array<string> = [
+    'End Suction Slurry',
+    'End Suction Sewage',
+    'End Suction Stock',
+    'API Double Suction',
+    'Multistage Boiler Feed',
+    'End Suction ANSI/API',
+    'Axial Flow',
+    'Double Suction',
+    'Vertical Turbine',
+    'Large End Suction',
+    // When user selects below they need a way to provide the optimal efficiency
+    'Specified Optimal Efficiency'
+  ];
+
+  drives: Array<string> = [
+    'Direct Drive',
+    'Belt Drive'
+  ];
+
   constructor() { }
 
   ngOnInit() {

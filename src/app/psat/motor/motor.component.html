@@ -3,9 +3,8 @@
     <label class="col-6 col-form-label" for="frequency">Line Frequency</label>
     <div class="col-6">
       <select class="form-control" id="frequency" formControlName="frequency" (focus)="focusField('lineFrequency')">
-            <option>Frequency 1</option>
-            <option>Frequency 2</option>
-          </select>
+        <option *ngFor="let frequency of frequencies">{{frequency}}</option>
+      </select>
       <app-control-messages [control]="psatForm.controls.frequency"></app-control-messages>
     </div>
   </div>
@@ -40,9 +39,8 @@
     <label class="col-6 col-form-label" for="efficiencyClass">Efficiency Class</label>
     <div class="col-6">
       <select class="form-control" id="efficiencyClass" formControlName="efficiencyClass" (focus)="focusField('efficiencyClass')">>
-            <option>class 1</option>
-            <option>Class 2</option>
-          </select>
+        <option *ngFor="let efficiencyClass of efficiencyClasses">{{efficiencyClass}}</option>
+      </select>
       <app-control-messages [control]="psatForm.controls.efficiencyClass"></app-control-messages>
     </div>
   </div>

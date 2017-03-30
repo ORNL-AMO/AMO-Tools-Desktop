@@ -27,9 +27,9 @@ export class FieldDataComponent implements OnInit {
   //Create your array of options
   //first item in array will be default selected, can modify that functionality later if desired
   loadEstimateMethods: Array<string> = [
-    'method 1',
-    'method 2'
-  ]
+    'Power',
+    'Current'
+  ];
 
   constructor() { }
 
