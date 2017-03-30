@@ -19,7 +19,6 @@ export class WallLossesComponent implements OnInit {
   lossState: any;
 
   _wallLosses: Array<any>;
-  _adjustments: Array<any>;
 
   constructor(private phastService: PhastService, private wallLossesService: WallLossesService) { }
 
@@ -32,9 +31,6 @@ export class WallLossesComponent implements OnInit {
   ngOnInit() {
     if (!this._wallLosses) {
       this._wallLosses = new Array();
-    }
-    if (!this._adjustments) {
-      this._adjustments = new Array();
     }
     if (this.losses.wallLosses) {
       this.losses.wallLosses.forEach(loss => {
@@ -71,21 +67,6 @@ export class WallLossesComponent implements OnInit {
     this._wallLosses.forEach(loss => {
       loss.name = 'Loss #' + index;
       index++;
-    })
-  }
-
-  addAdjustment() {
-    let tmpArray = new Array();
-    this._wallLosses.forEach(loss => {
-      tmpArray.push({
-        form: loss.form,
-        name: loss.name,
-        heatLoss: loss.heatLoss
-      })
-    })
-    this._adjustments.push({
-      losses: tmpArray,
-      name: 'Adjustment'
     })
   }
 
