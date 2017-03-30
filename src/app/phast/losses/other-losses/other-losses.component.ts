@@ -1,55 +1,87 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input, SimpleChange } from '@angular/core';
 import * as _ from 'lodash';
-import { FormBuilder } from '@angular/forms';
+import { OtherLossesService } from './other-losses.service';
+import { Losses } from '../../../shared/models/phast';
+import { OtherLoss } from '../../../shared/models/losses/otherLoss';
+
 @Component({
   selector: 'app-other-losses',
   templateUrl: './other-losses.component.html',
   styleUrls: ['./other-losses.component.css']
 })
 export class OtherLossesComponent implements OnInit {
-  otherLosses: Array<any>;
+  @Input()
+  losses: Losses;
+  @Input()
+  saveClicked: boolean;
+  @Input()
+  lossState: any;
 
-  constructor(private formBuilder: FormBuilder) { }
+  _otherLosses: Array<any>;
+
+  constructor(private otherLossesService: OtherLossesService) { }
+
+  ngOnChanges(changes: SimpleChange) {
+    if (!changes.isFirstChange && this._otherLosses) {
+      this.saveLosses();
+    }
+  }
+
 
   ngOnInit() {
-    if(!this.otherLosses){
-      this.otherLosses = new Array();
+    if (!this._otherLosses) {
+      this._otherLosses = new Array();
+    }
+    if (this.losses.otherLosses) {
+      this.losses.otherLosses.forEach(loss => {
+        let tmpLoss = {
+          form: this.otherLossesService.getFormFromLoss(loss),
+          name: 'Loss #' + (this._otherLosses.length + 1),
+          heatLoss: 0.0
+        };
+        this.calculate(tmpLoss);
+        this._otherLosses.unshift(tmpLoss);
+      })
     }
   }
 
   addLoss() {
-    let tmpForm = this.initForm();
-    let tmpName = 'Loss #' + (this.otherLosses.length + 1);
-    this.otherLosses.push({ form: tmpForm, name: tmpName });
+    this._otherLosses.push({
+      form: this.otherLossesService.initForm(),
+      name: 'Loss #' + (this._otherLosses.length + 1)
+    });
+    this.lossState.saved = false;
   }
 
   removeLoss(str: string) {
-    this.otherLosses = _.remove(this.otherLosses, loss => {
+    this._otherLosses = _.remove(this._otherLosses, loss => {
       return loss.name != str;
     });
+    this.lossState.saved = false;
     this.renameLoss();
   }
 
   renameLoss() {
     let index = 1;
-    this.otherLosses.forEach(loss => {
+    this._otherLosses.forEach(loss => {
       loss.name = 'Loss #' + index;
       index++;
     })
   }
 
-  initForm(){
-    return this.formBuilder.group({
-      'baselineAreaOfHeatLoss': [''],
-      'baselineAverageTemp': [''],
-      'baselineAmbientTemp': [''],
-      'baselineSurfaceEmissivity': [''],
-      'baselineHeatLoss': [{value:'', disabled: true}],
-      'modifiedAreaOfHeatLoss': [''],
-      'modifiedAverageTemp': [''],
-      'modifiedAmbientTemp': [''],
-      'modofiedSurfaceEmissivity': [''],
-      'modifiedHeatLoss': [{value:'', disabled: true}]
+  calculate(loss: any) {
+    loss.heatLoss = loss.form.value.heatLoss;
+  }
+
+
+  saveLosses() {
+    let tmpLosses = new Array<OtherLoss>();
+    this._otherLosses.forEach(loss => {
+      let tmpLoss = this.otherLossesService.getLossFromForm(loss.form);
+      tmpLosses.unshift(tmpLoss);
     })
+    this.losses.otherLosses = tmpLosses;
+    this.lossState.numLosses = this.losses.otherLosses.length;
+    this.lossState.saved = true;
   }
 }

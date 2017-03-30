@@ -3,12 +3,12 @@
   <button class="btn btn-secondary pull-right" (click)="addLoss()">+ Add Other Loss</button>
 </div>
 
-<div class="no-data" *ngIf="otherLosses.length == 0" (click)="addLoss()">
+<div class="no-data" *ngIf="_otherLosses.length == 0" (click)="addLoss()">
   <h3>You have no Other Losses</h3>
   <h4>Add some now.</h4>
 </div>
 
-<div class="card card-form" *ngFor="let loss of otherLosses">
+<div class="card card-form" *ngFor="let loss of _otherLosses">
   <div class="card-header">
     <div class="pull-left">
       <b>{{loss.name}}</b>
@@ -18,6 +18,6 @@
     </button>
   </div>
   <div class="card-block">
-    <app-other-losses-form [(otherLossesForm)]="loss.form"></app-other-losses-form>
+    <app-other-losses-form [(lossesForm)]="loss.form" (calculate)="calculate(loss)" [(lossState)]="lossState"></app-other-losses-form>
   </div>
 </div>

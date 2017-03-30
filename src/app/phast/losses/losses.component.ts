@@ -44,6 +44,10 @@ export class LossesComponent implements OnInit {
     surfaceLosses: {
       numLosses: 0,
       saved: true
+    },
+    otherLosses: {
+      numLosses: 0,
+      saved: true
     }
   }
   constructor() { }

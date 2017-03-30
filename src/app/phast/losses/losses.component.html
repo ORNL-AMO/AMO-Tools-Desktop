@@ -14,6 +14,6 @@
     <app-flue-gas-losses *ngIf="lossesTab == 'flue-gas-losses'"></app-flue-gas-losses>
     <app-gas-leakage-losses [(losses)]="phast.losses" [(lossState)]="lossesStates.leakageLosses" [saveClicked]="saveClicked" *ngIf="lossesTab == 'gas-leakage-losses'"></app-gas-leakage-losses>
     <app-extended-surface-losses [(losses)]="phast.losses" [(lossState)]="lossesStates.surfaceLosses" [saveClicked]="saveClicked" *ngIf="lossesTab == 'extended-surface-losses'"></app-extended-surface-losses>
-    <app-other-losses *ngIf="lossesTab == 'other-losses'"></app-other-losses>
+    <app-other-losses [(losses)]="phast.losses" [(lossState)]="lossesStates.otherLosses" [saveClicked]="saveClicked" *ngIf="lossesTab == 'other-losses'"></app-other-losses>
   </div>
 </div>

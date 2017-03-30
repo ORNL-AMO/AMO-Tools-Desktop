@@ -41,6 +41,8 @@ import { GasLeakageLossesService } from './gas-leakage-losses/gas-leakage-losses
 import { ExtendedSurfaceLossesComponent } from './extended-surface-losses/extended-surface-losses.component';
 import { ExtendedSurfaceLossesFormComponent } from './extended-surface-losses/extended-surface-losses-form/extended-surface-losses-form.component';
 import { ExtendedSurfaceLossesService } from './extended-surface-losses/extended-surface-losses.service';
+import { OtherLossesService } from './other-losses/other-losses.service';
+
 @NgModule({
   imports: [
     CommonModule,
@@ -88,7 +90,8 @@ import { ExtendedSurfaceLossesService } from './extended-surface-losses/extended
     OpeningLossesService,
     CoolingLossesService,
     GasLeakageLossesService,
-    ExtendedSurfaceLossesService
+    ExtendedSurfaceLossesService,
+    OtherLossesService
   ],
   exports: [
     LossesComponent
