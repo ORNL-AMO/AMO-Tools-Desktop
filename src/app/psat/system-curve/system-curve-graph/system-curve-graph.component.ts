@@ -74,7 +74,6 @@ export class SystemCurveGraphComponent implements OnInit {
       .attr("width", this.width + margin.left + margin.right)
       .attr("height", this.height + margin.top + margin.bottom)
       .style("background-color", "#f5f3e9")
-      .style("border", "1px solid black")
       .append("g")
       .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
@@ -112,6 +111,20 @@ export class SystemCurveGraphComponent implements OnInit {
     feMerge.append("feMergeNode")
       .attr("in", "SourceGraphic");
 
+    var focus = this.svg.append("g")
+      .attr("class", "focus")
+      .style("display", "none");
+
+    focus.append("circle")
+      .attr("r", 4.5)
+      .style("color" , "#6276f5");
+
+    focus.append("text")
+      .attr("x", 9)
+      .attr("dy", ".35em");
+
+    var data = [];
+
     this.svg.append('rect')
       .attr("width", this.width)
       .attr("height", this.height)
@@ -120,19 +133,9 @@ export class SystemCurveGraphComponent implements OnInit {
 
     ////////////////////////////////////////////////////
 
-    var data = [];
 
-    var systemCurve = d3.line()
-      .x(function(d) { return x(d.x); })
-      .y(function(d) { return y(d.y); });
-
-    var line = this.svg.append("path")
-      .data([data])
-      .attr("class", "line")
-      .attr("d", systemCurve)
-      .style("stroke-width", "1px")
-      .style("fill", "none")
-      .style("stroke", "steelblue");
+    this.svg.append("path")
+      .attr("id", "areaUnderCurve");
 
     ////////////////////////////////////////////////////
 
@@ -269,33 +272,50 @@ export class SystemCurveGraphComponent implements OnInit {
         .selectAll('text')
         .style("font-size", "12px");
 
+      var data = [];
 
-      console.log("called");
-      this.makeCurve(x, y);
+      for(var i = 0; i <= x.domain()[1]; i++){
+        console.log("y: " + y.domain()[1]);
+        //if(this.lossCoefficient * Math.pow(i, this.curveConstants.form.value.systemLossExponent) > 0 && this.lossCoefficient * Math.pow(i, this.curveConstants.form.value.systemLossExponent) < y.domain()[1]) {
+        data.push({
+          x: i,
+          y: this.staticHead + this.lossCoefficient * Math.pow(i, this.curveConstants.form.value.systemLossExponent)
+        });
+      }
 
+      this.makeCurve(x, y, data);
     }
   }
 
-  makeCurve(x , y){
 
-    var data = [];
-
-    console.log("width: " + x.domain()[1]);
-    for(var i = 0; i < x.domain()[1]; i++){
-      data.push({x:i, y:this.staticHead+this.lossCoefficient*Math.pow(i, this.curveConstants.form.value.systemLossExponent)});
-      console.log("data: " + i + " " + (this.staticHead+this.lossCoefficient*Math.pow(i, this.curveConstants.form.value.systemLossExponent)));
-    }
-
+  makeCurve(x , y, data){
 
     var line = d3.line()
       .x(function(d) { return x(d.x); })
-      .y(function(d) { return y(d.y); });
+      .y(function(d) { return y(d.y); })
+      .curve(d3.curveNatural);
 
     this.svg.select("path")
       .data([data])
       .attr("class", "line")
       .attr("d", line)
-      .style("stroke-width", 10);
+      .style("stroke-width", 10)
+      .style("stroke-width", "0px")
+      .style("fill", "none");
+
+    // define the area
+    var area = d3.area()
+      .x(function(d) { return x(d.x); })
+      .y0(this.height)
+      .y1(function(d) { return y(d.y); })
+      .curve(d3.curveNatural);
+
+    // add the area
+    this.svg.select("#areaUnderCurve")
+      .data([data])
+      .attr("class", "area")
+      .attr("d", area)
+      .style("fill", "#bfbeb9");
   }
 
 }
