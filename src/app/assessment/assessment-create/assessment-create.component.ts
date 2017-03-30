@@ -34,7 +34,7 @@ export class AssessmentCreateComponent implements OnInit {
   initForm() {
     return this.formBuilder.group({
       'assessmentName': ['New Assessment', Validators.required],
-      'assessmentType': ['', Validators.required]
+      'assessmentType': ['Pump', Validators.required]
     });
   }
 
@@ -42,8 +42,8 @@ export class AssessmentCreateComponent implements OnInit {
   @ViewChild('createModal') public createModal: ModalDirective;
   showCreateModal() {
     this.createModal.show();
-    this.createModal.onShow.subscribe(() => {
-      this.vc.first.nativeElement.focus().select();
+    this.createModal.onShown.subscribe(() => {
+      this.vc.first.nativeElement.select();
     })
   }
 
