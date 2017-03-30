@@ -20,10 +20,14 @@ export class SystemCurveGraphComponent implements OnInit {
   lossCoefficient: number;
 
   svg: any;
-  x: any;
-  y: any;
+  xAxis: any;
+  yAxis: any;
+  width: any;
+  height: any;
   staticHeadText: any;
   lossCoefficientText: any;
+
+  line: any;
 
 
   constructor() {}
@@ -40,34 +44,35 @@ export class SystemCurveGraphComponent implements OnInit {
     var curvePoints = [];
 
     //graph dimensions
-    var margin = {top: 20, right: 20, bottom: 80, left: 120},
-      width = 800 - margin.left - margin.right,
-      height = 500 - margin.top - margin.bottom;
+    var margin = {top: 20, right: 20, bottom: 80, left: 120};
+      this.width = 800 - margin.left - margin.right;
+      this.height = 500 - margin.top - margin.bottom;
 
-    this.x = d3.scaleLinear()
-      .range([0, width]);
+    var x = d3.scaleLinear()
+      .range([0, this.width])
+      .domain([0, 100]);
 
-    this.y = d3.scaleLinear()
-      .range([height, 0]);
+    var y = d3.scaleLinear()
+      .range([this.height, 0])
+      .domain([0, 100]);
 
-    var xAxis = d3.axisBottom()
-      .scale(this.x)
+    this.xAxis = d3.axisBottom()
+      .scale(x)
       .tickSizeInner(0)
       .tickSizeOuter(0)
-      .tickPadding(0);
+      .tickPadding(0)
+      .ticks(11);
 
-    var yAxis = d3.axisLeft()
-      .scale(this.y)
+    this.yAxis = d3.axisLeft()
+      .scale(y)
       .tickSizeInner(0)
       .tickSizeOuter(0)
-      .tickPadding(15);
-
-    this.x.domain([0, 100]);
-    this.y.domain([0, 100]);
+      .tickPadding(15)
+      .ticks(11);
 
     this.svg  = d3.select('app-system-curve-graph').append('svg')
-      .attr("width", width + margin.left + margin.right)
-      .attr("height", height + margin.top + margin.bottom)
+      .attr("width", this.width + margin.left + margin.right)
+      .attr("height", this.height + margin.top + margin.bottom)
       .style("background-color", "#f5f3e9")
       .style("border", "1px solid black")
       .append("g")
@@ -108,15 +113,33 @@ export class SystemCurveGraphComponent implements OnInit {
       .attr("in", "SourceGraphic");
 
     this.svg.append('rect')
-      .attr("width", width)
-      .attr("height", height)
+      .attr("width", this.width)
+      .attr("height", this.height)
       .attr("fill", "#ffffff")
       .style("filter", "url(#drop-shadow)");
 
-    var xAxis = this.svg.append('g')
+    ////////////////////////////////////////////////////
+
+    var data = [];
+
+    var systemCurve = d3.line()
+      .x(function(d) { return x(d.x); })
+      .y(function(d) { return y(d.y); });
+
+    var line = this.svg.append("path")
+      .data([data])
+      .attr("class", "line")
+      .attr("d", systemCurve)
+      .style("stroke-width", "1px")
+      .style("fill", "none")
+      .style("stroke", "steelblue");
+
+    ////////////////////////////////////////////////////
+
+    this.xAxis = this.svg.append('g')
       .attr("class", "x axis")
-      .attr("transform", "translate(0," + height + ")")
-      .call(xAxis)
+      .attr("transform", "translate(0," + this.height + ")")
+      .call(this.xAxis)
       .style("stroke-width", "0")
       .selectAll('text')
       .style("text-anchor", "end")
@@ -124,22 +147,23 @@ export class SystemCurveGraphComponent implements OnInit {
       .attr("transform", "rotate(-65) translate(-15, 0)")
       .attr("dy", "12px");
 
-    var yAxis = this.svg.append('g')
+    this.yAxis = this.svg.append('g')
       .attr("class", "y axis")
-      .call(yAxis)
+      .call(this.yAxis)
       .style("stroke-width", "0")
       .selectAll('text')
       .style("font-size", "12px");
 
     this.svg.append("text")
       .attr("text-anchor", "middle")  // this makes it easy to centre the text as the transform is applied to the anchor
-      .attr("transform", "translate("+ (-60) +","+(height/2)+")rotate(-90)")  // text is drawn off the screen top left, move down and out and rotate
+      .attr("transform", "translate("+ (-60) +","+(this.height/2)+")rotate(-90)")  // text is drawn off the screen top left, move down and out and rotate
       .text("Head, ft");
 
     this.svg.append("text")
       .attr("text-anchor", "middle")  // this makes it easy to centre the text as the transform is applied to the anchor
-      .attr("transform", "translate("+ (width/2) +","+(height-(-70))+")")  // centre below axis
+      .attr("transform", "translate("+ (this.width/2) +","+(this.height-(-70))+")")  // centre below axis
       .text("Flow Rate, gpm");
+
 
     this.svg.append("text")
       .attr("x", 20)
@@ -169,15 +193,6 @@ export class SystemCurveGraphComponent implements OnInit {
       .style("font-size", "12px")
       .style("font-weight", "bold");
 
-    function makeCurve(){
-
-      /*
-       var line = d3.svg.line()
-       .x(function(d) { return x(d.date); })
-       .y(function(d) { return y(d.close); });
-       */
-    }
-
   }
 
   ngOnChanges(changes: SimpleChange) {
@@ -198,31 +213,89 @@ export class SystemCurveGraphComponent implements OnInit {
         .style("font-weight", "bold");
 
 
+      var x = d3.scaleLinear()
+        .range([0, this.width]);
 
-      console.log(this.pointOne.form.value.head);
-      if (this.pointOne.form.value.head > this.pointTwo.form.value.head) {
-        this.x.domain([0, 100]);
-      }
-      else{
-        this.x.domain([0, 100]);
-      }
+      var y = d3.scaleLinear()
+        .range([this.height, 0]);
 
       if(this.pointOne.form.value.flowRate > this.pointTwo.form.value.flowRate){
-        this.y.domain([0, 100]);
+        x.domain([0, this.pointOne.form.value.flowRate]);
       }
       else{
-        this.y.domain([0, 100]);
+        x.domain([0, this.pointTwo.form.value.flowRate]);
       }
+
+      if (this.pointOne.form.value.head > this.pointTwo.form.value.head) {
+        y.domain([0, (this.pointOne.form.value.head+(this.pointOne.form.value.head/10))]);
+      }
+      else{
+        y.domain([0, (this.pointTwo.form.value.head+(this.pointTwo.form.value.head/10))]);
+      }
+
+
+      this.xAxis.remove();
+      this.yAxis.remove();
+
+      this.xAxis = d3.axisBottom()
+        .scale(x)
+        .tickSizeInner(0)
+        .tickSizeOuter(0)
+        .tickPadding(0)
+        .ticks(11);
+
+      this.yAxis = d3.axisLeft()
+        .scale(y)
+        .tickSizeInner(0)
+        .tickSizeOuter(0)
+        .tickPadding(15)
+        .ticks(11);
+
+      this.xAxis = this.svg.append('g')
+        .attr("class", "x axis")
+        .attr("transform", "translate(0," + this.height + ")")
+        .call(this.xAxis)
+        .style("stroke-width", "0")
+        .selectAll('text')
+        .style("text-anchor", "end")
+        .style("font-size", "12px")
+        .attr("transform", "rotate(-65) translate(-15, 0)")
+        .attr("dy", "12px");
+
+      this.yAxis = this.svg.append('g')
+        .attr("class", "y axis")
+        .call(this.yAxis)
+        .style("stroke-width", "0")
+        .selectAll('text')
+        .style("font-size", "12px");
+
+
+      console.log("called");
+      this.makeCurve(x, y);
 
     }
   }
 
-  changeValues(){
+  makeCurve(x , y){
 
-  }
+    var data = [];
 
-  changeGraphs(){
+    console.log("width: " + x.domain()[1]);
+    for(var i = 0; i < x.domain()[1]; i++){
+      data.push({x:i, y:this.staticHead+this.lossCoefficient*Math.pow(i, this.curveConstants.form.value.systemLossExponent)});
+      console.log("data: " + i + " " + (this.staticHead+this.lossCoefficient*Math.pow(i, this.curveConstants.form.value.systemLossExponent)));
+    }
 
+
+    var line = d3.line()
+      .x(function(d) { return x(d.x); })
+      .y(function(d) { return y(d.y); });
+
+    this.svg.select("path")
+      .data([data])
+      .attr("class", "line")
+      .attr("d", line)
+      .style("stroke-width", 10);
   }
 
 }
