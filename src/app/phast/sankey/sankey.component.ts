@@ -9,6 +9,8 @@ const width = 1750,
 
 var baseSize = 300;
 
+var isBase;
+
 @Component({
   selector: 'app-sankey',
   templateUrl: 'sankey.component.html',
@@ -191,7 +193,7 @@ export class SankeyComponent implements OnInit{
 
     var color;
     function findColor() {
-       color = d3.scaleLinear()
+      color = d3.scaleLinear()
         .domain([0, nodes[0].value])
         .range(["#ffcc00", "#ff3300"]);
     }
