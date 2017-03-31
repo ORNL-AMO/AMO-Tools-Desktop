@@ -43,7 +43,6 @@ app.on('ready', function () {
   autoUpdater.on('checking-for-update', () => {
   });
   autoUpdater.on('update-available', (ev, info) => {
-    globalUpdate=true;
   });
   autoUpdater.on('update-not-available', (ev, info) => {
   });
