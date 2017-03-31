@@ -36,13 +36,13 @@ export class PsatComponent implements OnInit {
     //wizard steps
     if (this.currentTab > 4) {
       this.panelView = 'data-panel';
-    } 
+    }
     //assessment tabs show help panel
     else {
       this.panelView = 'help-panel';
     }
     //System curve hides panel
-    if(this.currentTab == 6){
+    if (this.currentTab == 6) {
       this.isPanelOpen = false;
     }
   }
@@ -140,12 +140,13 @@ export class PsatComponent implements OnInit {
   }
 
   exportData() {
-    //TODO: Logic for saving assessment
+    //TODO: Logic for exporting assessment
   }
 
   initForm() {
     return this.formBuilder.group({
       'pumpType': [this.assessment.psat.inputs.pump_style],
+      'specifiedPumpType': [this.assessment.psat.inputs.pump_specified],
       'pumpRPM': [this.assessment.psat.inputs.pump_rated_speed],
       'drive': [this.assessment.psat.inputs.drive],
       'viscosity': [this.assessment.psat.inputs.kinematic_viscosity],
@@ -156,6 +157,7 @@ export class PsatComponent implements OnInit {
       'horsePower': [this.assessment.psat.inputs.motor_rated_power],
       'motorRPM': [this.assessment.psat.inputs.motor_rated_speed],
       'efficiencyClass': [this.assessment.psat.inputs.efficiency_class],
+      'efficiencyClassSpecified': [this.assessment.psat.inputs.efficiency_class_specified],
       'voltage': [this.assessment.psat.inputs.motor_field_voltage],
       'fullLoadAmps': [this.assessment.psat.inputs.full_load_amps],
       'sizeMargin': [this.assessment.psat.inputs.margin],

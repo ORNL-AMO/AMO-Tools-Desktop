@@ -5,7 +5,6 @@
       <select class="form-control" id="frequency" formControlName="frequency" (focus)="focusField('lineFrequency')">
         <option *ngFor="let frequency of frequencies">{{frequency}}</option>
       </select>
-      <app-control-messages [control]="psatForm.controls.frequency"></app-control-messages>
     </div>
   </div>
 
@@ -16,7 +15,6 @@
             <option>HP 1</option>
             <option>HP 2</option>
           </select>
-      <app-control-messages [control]="psatForm.controls.horsePower"></app-control-messages>
     </div>
   </div>
 
@@ -30,8 +28,7 @@
         <div class="btn" (click)="addNum('motorRPM')"><i class="fa fa-plus"></i></div>
       </div>
       <input type="number" class="form-control" id="motorRPM" formControlName="motorRPM" ngModel="{{psatForm.value.motorRPM}}"
-             (focus)="focusField('motorRPM')">
-      <app-control-messages [control]="psatForm.controls.motorRPM"></app-control-messages>
+        (focus)="focusField('motorRPM')">
     </div>
   </div>
 
@@ -41,7 +38,13 @@
       <select class="form-control" id="efficiencyClass" formControlName="efficiencyClass" (focus)="focusField('efficiencyClass')">>
         <option *ngFor="let efficiencyClass of efficiencyClasses">{{efficiencyClass}}</option>
       </select>
-      <app-control-messages [control]="psatForm.controls.efficiencyClass"></app-control-messages>
+    </div>
+  </div>
+
+  <div class="row form-group" *ngIf="psatForm.value.efficiencyClass == 'Specified'">
+    <label class="col-6 col-form-label" for="efficiencyClass">Specify Efficiency Class</label>
+    <div class="col-6">
+      <input type="number" class="form-control" id="efficiencyClassSpecified" formControlName="efficiencyClassSpecified" (focus)="focusField('efficiencyClass')">
     </div>
   </div>
 
@@ -49,7 +52,6 @@
     <label class="col-6 col-form-label" for="voltage">Voltage</label>
     <div class="col-6">
       <input type="number" class="form-control" id="voltage" formControlName="voltage" (focus)="focusField('voltage')">
-      <app-control-messages [control]="psatForm.controls.voltage"></app-control-messages>
     </div>
   </div>
 
@@ -60,7 +62,6 @@
     </label>
     <div class="col-6">
       <input type="number" class="form-control" id="fullLoadAmps" formControlName="fullLoadAmps" (focus)="focusField('fullLoadAmps')">
-      <app-control-messages [control]="psatForm.controls.fullLoadAmps"></app-control-messages>
     </div>
   </div>
 
@@ -74,8 +75,7 @@
         <div class="btn" (click)="addNum('sizeMargin')"><i class="fa fa-plus"></i></div>
       </div>
       <input type="number" class="form-control" id="sizeMargin" formControlName="sizeMargin" ngModel="{{psatForm.value.sizeMargin}}"
-             (focus)="focusField('sizeMargin')">
-      <app-control-messages [control]="psatForm.controls.sizeMargin"></app-control-messages>
+        (focus)="focusField('sizeMargin')">
     </div>
   </div>
 

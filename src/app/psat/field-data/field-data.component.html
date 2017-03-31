@@ -37,7 +37,6 @@
   <div class="row form-group">
     <label class="col-6 col-form-label" for="loadEstimatedMethod">Load Estimated Method</label>
     <div class="col-6">
-      <!--Use created array in .ts for select menu -->
       <select class="form-control" formControlName="loadEstimatedMethod" id="loadEstimatedMethod" (focus)="focusField('loadEstimatedMethod')">
         <option *ngFor="let method of loadEstimateMethods">{{method}}</option>
       </select>

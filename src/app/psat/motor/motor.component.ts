@@ -50,7 +50,6 @@ export class MotorComponent implements OnInit {
   }
 
   focusField(str: string){
-    console.log(str);
     this.changeField.emit(str);
   }
 }
