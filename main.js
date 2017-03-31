@@ -39,9 +39,6 @@ app.on('ready', function () {
     win = null;
   });
 
-  win.toggleDevTools();
-
-
   // Auto Updater events
   autoUpdater.on('checking-for-update', () => {
   });
