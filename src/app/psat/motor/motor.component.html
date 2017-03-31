@@ -12,9 +12,8 @@
     <label class="col-6 col-form-label" for="horsePower">Horse Power</label>
     <div class="col-6">
       <select class="form-control" id="horsePower" formControlName="horsePower" (focus)="focusField('horsePower')">
-            <option>HP 1</option>
-            <option>HP 2</option>
-          </select>
+        <option *ngFor="let horsePower of horsePowers">{{horsePower}}</option>
+      </select>
     </div>
   </div>
 
