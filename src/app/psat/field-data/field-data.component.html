@@ -1,62 +1,55 @@
 <form [formGroup]="psatForm">
   <div class="row form-group">
-    <label class="col-6 col-form-label" for="operatingFraction">Operating Fraction</label>
+    <label class="col-sm-6 col-md-4 col-lg-3 col-form-label" for="operatingFraction">Operating Fraction</label>
     <div class="col-6">
-      <input type="number" class="form-control" formControlName="operatingFraction" id="operatingFraction" (focus)="focusField('operatingFraction')">
-      <app-control-messages [control]="psatForm.controls.operatingFraction"></app-control-messages>
+      <input type="number" class="form-control number-input-field" formControlName="operatingFraction" id="operatingFraction" (focus)="focusField('operatingFraction')">
     </div>
   </div>
 
   <div class="row form-group">
-    <label class="col-6 col-form-label" for="costKwHr">Cost (kw/hr)</label>
+    <label class="col-sm-6 col-md-4 col-lg-3 col-form-label" for="costKwHr">Cost (kw/hr)</label>
     <div class="col-6">
-      <input type="number" class="form-control" formControlName="costKwHr" id="costKwHr" (focus)="focusField('costKwHr')">
-      <app-control-messages [control]="psatForm.controls.costKwHr"></app-control-messages>
+      <input type="number" class="form-control number-input-field" formControlName="costKwHr" id="costKwHr" (focus)="focusField('costKwHr')">
     </div>
   </div>
 
   <div class="row form-group">
-    <label class="col-6 col-form-label" for="flowRate">Flow Rate (gpm)</label>
+    <label class="col-sm-6 col-md-4 col-lg-3 col-form-label" for="flowRate">Flow Rate (gpm)</label>
     <div class="col-6">
-      <input type="number" class="form-control" formControlName="flowRate" id="flowRate" (focus)="focusField('flowRate')">
-      <app-control-messages [control]="psatForm.controls.flowRate"></app-control-messages>
+      <input type="number" class="form-control number-input-field" formControlName="flowRate" id="flowRate" (focus)="focusField('flowRate')">
     </div>
   </div>
 
   <div class="row form-group">
-    <label class="col-6 col-form-label" for="head">Head</label>
+    <label class="col-sm-6 col-md-4 col-lg-3 col-form-label" for="head">Head</label>
     <div class="col-6 input-group">
-      <input type="number" class="form-control" formControlName="head" id="head" (focus)="focusField('head')" ngModel="{{headToolResults.pumpHead}}">
       <div class="incrementor input-group-addon">
         <div class="btn" (click)="showHeadToolModal()"><i class="fa fa-calculator"></i></div>
       </div>
-      <app-control-messages [control]="psatForm.controls.head"></app-control-messages>
+      <input type="number" class="form-control number-input-field" formControlName="head" id="head" (focus)="focusField('head')">
     </div>
   </div>
 
   <div class="row form-group">
-    <label class="col-6 col-form-label" for="loadEstimatedMethod">Load Estimated Method</label>
+    <label class="col-sm-6 col-md-4 col-lg-3 col-form-label" for="loadEstimatedMethod">Load Estimated Method</label>
     <div class="col-6">
-      <select class="form-control" formControlName="loadEstimatedMethod" id="loadEstimatedMethod" (focus)="focusField('loadEstimatedMethod')">
+      <select class="form-control select-input-field" formControlName="loadEstimatedMethod" id="loadEstimatedMethod" (focus)="focusField('loadEstimatedMethod')">
         <option *ngFor="let method of loadEstimateMethods">{{method}}</option>
       </select>
-      <app-control-messages [control]="psatForm.controls.loadEstimatedMethod"></app-control-messages>
     </div>
   </div>
 
   <div class="row form-group">
-    <label class="col-6 col-form-label" for="motorKW">Motor (kW)</label>
+    <label class="col-sm-6 col-md-4 col-lg-3 col-form-label" for="motorKW">Motor (kW)</label>
     <div class="col-6">
-      <input type="number" class="form-control" formControlName="motorKW" id="motorKW" (focus)="focusField('motorKW')">
-      <app-control-messages [control]="psatForm.controls.motorKW"></app-control-messages>
+      <input type="number" class="form-control number-input-field" formControlName="motorKW" id="motorKW" (focus)="focusField('motorKW')">
     </div>
   </div>
 
   <div class="row form-group">
-    <label class="col-6 col-form-label" for="voltage">Voltage</label>
+    <label class="col-sm-6 col-md-4 col-lg-3 col-form-label" for="voltage">Voltage</label>
     <div class="col-6">
-      <input type="number" class="form-control" formControlName="voltage" id="voltage" (focus)="focusField('voltage')">
-      <app-control-messages [control]="psatForm.controls.voltage"></app-control-messages>
+      <input type="number" class="form-control number-input-field" formControlName="voltage" id="voltage" (focus)="focusField('voltage')">
     </div>
   </div>
 </form>
