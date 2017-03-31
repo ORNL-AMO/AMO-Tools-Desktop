@@ -8,3 +8,15 @@
     max-width: 95%;
     top: 20vh;
 }
+
+.incrementor-input-field{
+    margin-right: 45%;
+}
+
+.number-input-field{
+    width: 35%;
+}
+
+.select-input-field{
+    width: 90%;
+}

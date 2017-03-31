@@ -8,3 +8,15 @@
 .num-input{
   width: 25%;
 }
+
+.incrementor-input-field{
+    margin-right: 45%;
+}
+.number-input-field{
+    width: 35%;
+}
+
+
+.select-input-field{
+    width: 90%;
+}
