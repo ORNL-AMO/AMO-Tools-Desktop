@@ -71,7 +71,7 @@ app.on('ready', function () {
 
 app.on('activate', () => {
   if (win === null) {
-    createWindow()
+    createWindow();
   }
 })
 

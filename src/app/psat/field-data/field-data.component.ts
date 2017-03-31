@@ -23,6 +23,14 @@ export class FieldDataComponent implements OnInit {
     estimatedDischargeFrictionHead: 0.0,
     pumpHead: 0.0
   };
+
+  //Create your array of options
+  //first item in array will be default selected, can modify that functionality later if desired
+  loadEstimateMethods: Array<string> = [
+    'Power',
+    'Current'
+  ];
+
   constructor() { }
 
   ngOnInit() {

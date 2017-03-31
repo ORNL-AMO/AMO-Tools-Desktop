@@ -10,7 +10,7 @@ export interface PSAT {
 }
 
 export interface PsatInputs {
-  pump_style?: any,
+  pump_style?: string,
   pump_specified?: any,
   pump_rated_speed?: any,
   drive?: any,
@@ -21,7 +21,8 @@ export interface PsatInputs {
   line_frequency?: any,
   motor_rated_power?: any,
   motor_rated_speed?: any,
-  efficiency_class?: any,
+  efficiency_class?: string,
+  efficiency_class_specified?: string,
   efficiency?: any,
   motor_rated_voltage?: any,
   load_estimation_method?: any,
