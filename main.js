@@ -39,13 +39,11 @@ app.on('ready', function () {
     win = null;
   });
 
-  win.toggleDevTools();
-
-
   // Auto Updater events
   autoUpdater.on('checking-for-update', () => {
   });
   autoUpdater.on('update-available', (ev, info) => {
+    globalUpdate=true;
   });
   autoUpdater.on('update-not-available', (ev, info) => {
   });
