@@ -47,18 +47,20 @@ app.on('ready', function () {
   autoUpdater.on('update-available', (ev, info) => {
   });
 
-  if (updateAvailable) {
-    ipcMain.on('ready', (event, arg) => {
-      event.sender.send('available', null);
-    });
-  };
+  // Send message to core.component when an update is available
+  ipcMain.on('ready', (event, arg) => {
+    event.sender.send('available', updateAvailable);
+  });
 
   autoUpdater.on('update-not-available', (ev, info) => {
   });
+
   autoUpdater.on('error', (ev, error) => {
   });
+
   autoUpdater.on('download-progress', (ev, progressObj) => {
   });
+
   autoUpdater.on('update-downloaded', (ev, info) => {
     autoUpdater.quitAndInstall();
   });

@@ -14,7 +14,7 @@ export class CoreComponent implements OnInit {
 
   ngOnInit() {
     this.ElectronService.ipcRenderer.send('ready', null);
-    this.ElectronService.ipcRenderer.on('available', (event, args) => {
+    this.ElectronService.ipcRenderer.on('available', (updateAvailable) => {
       this.updateAvailable = true;
     });
   }
