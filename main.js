@@ -18,6 +18,7 @@ log.info('App starting...');
 
 require('dotenv').config();
 let win = null;
+let available = null;
 
 app.on('ready', function () {
 
@@ -40,12 +41,16 @@ app.on('ready', function () {
   // Auto Updater events
   autoUpdater.on('checking-for-update', () => {
   });
-  autoUpdater.on('update-available', (ev, info) => {
-    // Send message to core.component that updates are available
-    ipcMain.on('ready', (event, args) => {
-      event.sender.send('available', null);
-    })
+
+  available = autoUpdater.on('update-available', (ev, info) => {
   });
+
+  ipcMain.on('ready', (event, arg) => {
+    if (available) {
+      event.sender.send('available', null);
+    };
+  });
+
   autoUpdater.on('update-not-available', (ev, info) => {
   });
   autoUpdater.on('error', (ev, error) => {
