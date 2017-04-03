@@ -43,7 +43,7 @@ app.on('ready', function () {
   autoUpdater.on('update-available', (ev, info) => {
     // Send message to core.component that updates are available
     ipcMain.on('ready', (ev) => {
-      getWindow('windowName').webContents.send('available');
+      windowName.webContents.send('available');
     })
   });
   autoUpdater.on('update-not-available', (ev, info) => {
@@ -66,16 +66,6 @@ app.on('ready', function () {
     autoUpdater.checkForUpdates();
   };
 });
-
-// Array to hold every window created
-function getWindow(windowName) {
-  for (var i = 0; i < windowArray.length; i++) {
-    if (windowArray[i].name == windowName) {
-      return windowArray[i].window;
-    }
-  }
-  return null;
-}
 
 // Listen for message from core.component to either download updates or not
 ipcMain.on('update', (ev) => {
