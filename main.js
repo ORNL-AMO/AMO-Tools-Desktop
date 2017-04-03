@@ -42,8 +42,8 @@ app.on('ready', function () {
   });
   autoUpdater.on('update-available', (ev, info) => {
     // Send message to core.component that updates are available
-    ipcMain.on('ready', (event) => {
-      event.sender.send('available');
+    ipcMain.on('ready', (event, args) => {
+      event.sender.send('available', null);
     })
   });
   autoUpdater.on('update-not-available', (ev, info) => {
