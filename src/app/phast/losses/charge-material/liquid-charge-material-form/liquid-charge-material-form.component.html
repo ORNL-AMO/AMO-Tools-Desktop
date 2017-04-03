@@ -1,7 +1,7 @@
 <form [formGroup]="chargeMaterialForm">
   <div class="row form-group">
-    <label class="col-6 col-form-label small" for="materialName">Name of Material</label>
-    <div class="col-6 input-group input-group-sm">
+    <label class="col-8 col-form-label small" for="materialName">Name of Material</label>
+    <div class="col-4 input-group input-group-sm">
       <select class="form-control" formControlName="materialName" id="materialName">
           <option>Type 1</option>
           <option>Type 2</option>
@@ -10,108 +10,78 @@
   </div>
 
   <div class="row form-group">
-    <label class="col-4 col-form-label small" for="materialSpecificHeatLiquid">Specific Heat of Liquid</label>
-    <div class="col-2 text-center">
-      <small>Btu/(lb-F)</small>
-    </div>
-    <div class="col-6 input-group input-group-sm">
+    <label class="col-8 col-form-label small" for="materialSpecificHeatLiquid">Specific Heat of Liquid (Btu/(lb-F))</label>
+    <div class="col-4 input-group input-group-sm">
       <input type="number" class="form-control" formControlName="materialSpecificHeatLiquid" id="materialSpecificHeatLiquid">
     </div>
   </div>
 
   <div class="row form-group">
-    <label class="col-4 col-form-label small" for="materialVaporizingTemperature">Vaporizing Temperature</label>
-    <div class="col-2 text-center">
-      <small>&#8457;</small>
-    </div>
-    <div class="col-6 input-group input-group-sm">
+    <label class="col-8 col-form-label small" for="materialVaporizingTemperature">Vaporizing Temperature (&#8457;)</label>
+    <div class="col-4 input-group input-group-sm">
       <input type="number" class="form-control" formControlName="materialVaporizingTemperature" id="materialVaporizingTemperature">
     </div>
   </div>
 
   <div class="row form-group">
-    <label class="col-4 col-form-label small" for="materialLatentHeat">Latent Heat of Vaporization</label>
-    <div class="col-2 text-center">
-      <small>&#8457;</small>
-    </div>
-    <div class="col-6 input-group input-group-sm">
+    <label class="col-8 col-form-label small" for="materialLatentHeat">Latent Heat of Vaporization (&#8457;)</label>
+    <div class="col-4 input-group input-group-sm">
       <input type="number" class="form-control" formControlName="materialLatentHeat" id="materialLatentHeat">
     </div>
   </div>
 
   <div class="row form-group">
-    <label class="col-4 col-form-label small" for="materialSpecificHeatVapor">Specific Heat of Vapor</label>
-    <div class="col-2 text-center">
-      <small>Btu/(lb-F)</small>
-    </div>
-    <div class="col-6 input-group input-group-sm">
+    <label class="col-8 col-form-label small" for="materialSpecificHeatVapor">Specific Heat of Vapor (Btu/(lb-F))</label>
+    <div class="col-4 input-group input-group-sm">
       <input type="number" class="form-control" formControlName="materialSpecificHeatVapor" id="materialSpecificHeatVapor">
     </div>
   </div>
 
   <div class="row form-group form-spacer">
-    <label class="col-4 col-form-label small" for="feedRate">Charge (Liquid)-Feed Rate</label>
-    <div class="col-2 text-center">
-      <small>lb/hr</small>
-    </div>
-    <div class="col-6 input-group input-group-sm">
+    <label class="col-8 col-form-label small" for="feedRate">Charge (Liquid)-Feed Rate (lb/hr)</label>
+    <div class="col-4 input-group input-group-sm">
       <input type="number" class="form-control" formControlName="feedRate" id="feedRate" (keyup)="checkForm()">
     </div>
   </div>
 
   <div class="row form-group">
-    <label class="col-4 col-form-label small" for="initialTemperature">Initial Temperature</label>
-    <div class="col-2 text-center">
-      <small>&#8457;</small>
-    </div>
-    <div class="col-6 input-group input-group-sm">
+    <label class="col-8 col-form-label small" for="initialTemperature">Initial Temperature (&#8457;)</label>
+    <div class="col-4 input-group input-group-sm">
       <input type="number" class="form-control" formControlName="initialTemperature" id="initialTemperature" (keyup)="checkForm()">
     </div>
   </div>
 
   <div class="row form-group">
-    <label class="col-4 col-form-label small" for="dischargeTemperature">Discharge Temperature</label>
-    <div class="col-2 text-center">
-      <small>&#8457;</small>
-    </div>
-    <div class="col-6 input-group input-group-sm">
+    <label class="col-8 col-form-label small" for="dischargeTemperature">Discharge Temperature (&#8457;)</label>
+    <div class="col-4 input-group input-group-sm">
       <input type="number" class="form-control" formControlName="dischargeTemperature" id="dischargeTemperature" (keyup)="checkForm()">
     </div>
   </div>
 
   <div class="row form-group">
-    <label class="col-4 col-form-label small" for="liquidVaporized">Charge Liquid Vaporized (% of Charge</label>
-    <div class="col-2 text-center">
-      <small>%</small>
-    </div>
-    <div class="col-6 input-group input-group-sm">
+    <label class="col-8 col-form-label small" for="liquidVaporized">Charge Liquid Vaporized (% of Charge)</label>
+    <div class="col-4 input-group input-group-sm">
       <input type="number" class="form-control" formControlName="liquidVaporized" id="liquidVaporized" (keyup)="checkForm()">
     </div>
   </div>
 
   <div class="row form-group">
-    <label class="col-4 col-form-label small" for="liquidReacted">Charge Liquid Reacted (% of Charge)</label>
-    <div class="col-2 text-center">
-      <small>%</small>
-    </div>
-    <div class="col-6 input-group input-group-sm">
+    <label class="col-8 col-form-label small" for="liquidReacted">Charge Liquid Reacted (% of Charge)</label>
+    <div class="col-4 input-group input-group-sm">
       <input type="number" class="form-control" formControlName="liquidReacted" id="liquidReacted" (keyup)="checkForm()">
     </div>
   </div>
 
   <div class="row form-group">
-    <label class="col-4 col-form-label small" for="heatOfReaction">Heat of Reaction</label>
-    <div class="col-2 text-center">
-      <small>Btu/lb</small>
-    </div>
-    <div class="col-6 input-group input-group-sm">
+    <label class="col-8 col-form-label small" for="heatOfReaction">Heat of Reaction (Btu/lb)</label>
+    <div class="col-4 input-group input-group-sm">
       <input type="number" class="form-control" formControlName="heatOfReaction" id="heatOfReaction" (keyup)="checkForm()">
     </div>
   </div>
 
   <div class="row form-group">
-    <label class="col-6 col-form-label small" for="endothermicOrExothermic">Endothermic/Exothermic</label>
-    <div class="col-6 input-group input-group-sm">
+    <label class="col-8 col-form-label small" for="endothermicOrExothermic">Endothermic/Exothermic</label>
+    <div class="col-4 input-group input-group-sm">
       <select class="form-control" formControlName="endothermicOrExothermic" id="endothermicOrExothermic">
         <option>Endothermic</option>
         <option>Exothermic</option>
@@ -120,11 +90,8 @@
   </div>
 
   <div class="row form-group">
-    <label class="col-4 col-form-label small" for="additionalHeatRequired">Additional Heat Required</label>
-    <div class="col-2 text-center">
-      <small>Btu/lb</small>
-    </div>
-    <div class="col-6 input-group input-group-sm">
+    <label class="col-8 col-form-label small" for="additionalHeatRequired">Additional Heat Required (Btu/lb)</label>
+    <div class="col-4 input-group input-group-sm">
       <input type="number" class="form-control" formControlName="additionalHeatRequired" id="additionalHeatRequired" (keyup)="checkForm()">
     </div>
   </div>
