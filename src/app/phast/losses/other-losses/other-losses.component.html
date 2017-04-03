@@ -1,23 +1,27 @@
-<div class="section-header">
+<!--<div class="section-header">
   <h3 class="pull-left">Other Losses</h3>
   <button class="btn btn-secondary pull-right" (click)="addLoss()">+ Add Other Loss</button>
-</div>
+</div>-->
 
 <div class="no-data" *ngIf="_otherLosses.length == 0" (click)="addLoss()">
   <h3>You have no Other Losses</h3>
   <h4>Add some now.</h4>
 </div>
 
-<div class="card card-form" *ngFor="let loss of _otherLosses">
-  <div class="card-header">
-    <div class="pull-left">
-      <b>{{loss.name}}</b>
-    </div>
-    <button class="close pull-right" aria-label="Close" (click)="removeLoss(loss.name)">
+<div class="card-form" *ngFor="let loss of _otherLosses">
+  <div class="row">
+    <div class="col-12">
+      <div class="pull-left">
+        <b>{{loss.name}}</b>
+      </div>
+      <button class="close pull-right" aria-label="Close" (click)="removeLoss(loss.name)">
       <span aria-hidden="true">&times;</span>
     </button>
+    </div>
   </div>
-  <div class="card-block">
-    <app-other-losses-form [(lossesForm)]="loss.form" (calculate)="calculate(loss)" [(lossState)]="lossState"></app-other-losses-form>
+  <div class="row">
+    <div class="col-12">
+      <app-other-losses-form [(lossesForm)]="loss.form" (calculate)="calculate(loss)" [(lossState)]="lossState"></app-other-losses-form>
+    </div>
   </div>
 </div>

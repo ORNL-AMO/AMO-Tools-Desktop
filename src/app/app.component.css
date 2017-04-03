@@ -160,6 +160,10 @@ Forms
   padding-top: 15px;
 }
 
+.card-form{
+  padding-bottom: 30px;
+}
+
 /*
 Popovers (Contextual Help)
 =============================================== */

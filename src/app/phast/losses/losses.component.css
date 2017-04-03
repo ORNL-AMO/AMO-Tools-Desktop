@@ -1,5 +1,7 @@
 .losses-row{
   height: 100%;
+  padding-left: 0px;
+  padding-right: 0px;
 }
 
 .losses-sidebar{
@@ -7,6 +9,15 @@ background-color: #EDEDED;
 padding-right: 0px; 
 }
 
-.losses-container{
-  padding: 30px;
+.loss-card{
+  padding-left: 0px;
+  padding-right: 0px;
+}
+
+.card-header{
+  background-color: white;
+}
+
+.mod-dropdown{
+  
 }

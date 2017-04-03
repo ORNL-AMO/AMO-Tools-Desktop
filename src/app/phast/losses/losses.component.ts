@@ -11,6 +11,10 @@ export class LossesComponent implements OnInit {
   @Input()
   saveClicked: boolean;
 
+  modifications: any[];
+  selectedModification: any;
+  isDropdownOpen: boolean = false;
+
   lossesTab: string = 'charge-material';
   lossesStates: any = {
     wallLosses: {
@@ -56,6 +60,15 @@ export class LossesComponent implements OnInit {
     if (!this.phast.losses) {
       this.phast.losses = new Array<Losses>();
     }
+    if (!this.modifications) {
+      this.modifications = [{
+        name: 'Modification 1',
+        phast: this.phast
+      }];
+    }
+    if (!this.selectedModification) {
+      this.selectedModification = this.modifications[0];
+    }
   }
 
   changeTab($event) {
@@ -66,6 +79,17 @@ export class LossesComponent implements OnInit {
     this.lossesStates.openingLosses.saved = true;
     this.lossesStates.coolingLosses.saved = true;
     this.lossesStates.fixtureLosses.saved = true;
+  }
+
+  addModification() {
+    this.modifications.unshift({
+    name: 'Modification ' + (this.modifications.length+1),
+      phast: this.phast
+    })
+  }
+
+  toggleDropdown(){
+    this.isDropdownOpen = !this.isDropdownOpen;
   }
 
 }

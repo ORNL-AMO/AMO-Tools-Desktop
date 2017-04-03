@@ -1,51 +1,52 @@
-<div class="row justify-content-center">
-  <ul class="tabs horizontal d-flex flex-row">
-    <li [ngClass]="{'active': lossesTab == 'charge-material'}" (click)="tabChange('charge-material')">
-      <a class="nav-link small">
+<ul class="tabs horizontal d-flex flex-row">
+  <li [ngClass]="{'active': lossesTab == 'charge-material'}" (click)="tabChange('charge-material')">
+    <a class="nav-link small">
     Charge Material
-    <span class="numberCircle" *ngIf="losses.chargeMaterials" [ngClass]="{'unsaved':!lossesStates.chargeMaterial.saved}">{{lossesStates.chargeMaterial.numLosses}}</span>
     </a>
-    </li>
-    <li [ngClass]="{'active': lossesTab == 'wall-losses'}" (click)="tabChange('wall-losses')">
-      <a class="nav-link small">
-    Wall Losses
-    <span class="numberCircle" *ngIf="losses.wallLosses" [ngClass]="{'unsaved':!lossesStates.wallLosses.saved}">{{losses.wallLosses.length}}</span>
+  </li>
+  <li [ngClass]="{'active': lossesTab == 'wall-losses'}" (click)="tabChange('wall-losses')">
+    <a class="nav-link small">
+    Wall
     </a>
-    </li>
-    <li [ngClass]="{'active': lossesTab == 'atmosphere-losses'}" (click)="tabChange('atmosphere-losses')">
-      <a class="nav-link small">
-    Atmosphere Losses
+  </li>
+  <li [ngClass]="{'active': lossesTab == 'atmosphere-losses'}" (click)="tabChange('atmosphere-losses')">
+    <a class="nav-link small">
+    Atmosphere
     </a>
-    </li>
-    <li [ngClass]="{'active': lossesTab == 'fixture-losses'}" (click)="tabChange('fixture-losses')">
-      <a class="nav-link small">
-    Fixtures, Trays, Baskets, etc. Losses
+  </li>
+  <li [ngClass]="{'active': lossesTab == 'fixture-losses'}" (click)="tabChange('fixture-losses')">
+    <a class="nav-link small">
+    Fixtures, Trays, etc.
     </a>
-    </li>
-    <li [ngClass]="{'active': lossesTab == 'opening-losses'}" (click)="tabChange('opening-losses')">
-      <a class="nav-link small">
-    Opening Losses
+  </li>
+  <li [ngClass]="{'active': lossesTab == 'opening-losses'}" (click)="tabChange('opening-losses')">
+    <a class="nav-link small">
+    Opening
     </a>
-    </li>
-    <li [ngClass]="{'active': lossesTab == 'water-cooling-losses'}" (click)="tabChange('water-cooling-losses')">
-      <a class="nav-link small">
-    Water Cooling Losses
+  </li>
+  <li [ngClass]="{'active': lossesTab == 'cooling-losses'}" (click)="tabChange('cooling-losses')">
+    <a class="nav-link small">
+    Cooling
     </a>
-    </li>
-    <li [ngClass]="{'active': lossesTab == 'heat-storage'}" (click)="tabChange('heat-storage')">
-      <a class="nav-link small">
-    Heat Storage
+  </li>
+  <li [ngClass]="{'active': lossesTab == 'flue-gas-losses'}" (click)="tabChange('flue-gas-losses')">
+    <a class="nav-link small">
+    Flue Gas
     </a>
-    </li>
-    <li [ngClass]="{'active': lossesTab == 'flue-gas-losses'}" (click)="tabChange('flue-gas-losses')">
-      <a class="nav-link small">
-    Flue Gas Losses
+  </li>
+  <li [ngClass]="{'active': lossesTab == 'gas-leakage-losses'}" (click)="tabChange('gas-leakage-losses')">
+    <a class="nav-link small">
+    Gas Leakage
     </a>
-    </li>
-    <li [ngClass]="{'active': lossesTab == 'other-losses'}" (click)="tabChange('other-losses')">
-      <a class="nav-link small">
-    Other Losses
+  </li>
+  <li [ngClass]="{'active': lossesTab == 'extended-surface-losses'}" (click)="tabChange('extended-surface-losses')">
+    <a class="nav-link small">
+    Extended Surface
     </a>
-    </li>
-  </ul>
-</div>
+  </li>
+  <li [ngClass]="{'active': lossesTab == 'other-losses'}" (click)="tabChange('other-losses')">
+    <a class="nav-link small">
+    Other
+    </a>
+  </li>
+</ul>

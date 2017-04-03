@@ -1,31 +1,35 @@
-<div class="section-header">
+<!--<div class="section-header">
   <h3 class="pull-left">Flue Gas Losses</h3>
   <button class="btn btn-secondary pull-right" (click)="addLoss()">+ Add Flue Gas Loss</button>
-</div>
+</div>-->
 
 <div class="no-data" *ngIf="flueGasLosses.length == 0" (click)="addLoss()">
   <h3>You have no Fixture Losses</h3>
   <h4>Add some now.</h4>
 </div>
 
-<div class="card card-form" *ngFor="let loss of flueGasLosses">
-  <div class="card-header">
-    <div class="pull-left">
-      <b>{{loss.name}}</b>
-    </div>
-    <button class="close pull-right" aria-label="Close" (click)="removeLoss(loss.name)">
+<div class="card-form" *ngFor="let loss of flueGasLosses">
+  <div class="row">
+    <div class="col-12">
+      <div class="pull-left">
+        <b>{{loss.name}}</b>
+      </div>
+      <button class="close pull-right" aria-label="Close" (click)="removeLoss(loss.name)">
       <span aria-hidden="true">&times;</span>
     </button>
+    </div>
   </div>
-  <div class="card-block">
-    <app-flue-gas-losses-form [(flueGasLossForm)]="loss.form" (calculate)="calculate(loss)" [(lossState)]="lossState"></app-flue-gas-losses-form>
-    <div class="row">
-      <div class="col-4">
-        <small>Heat Loss (Btu/hr)</small>
-      </div>
-      <div class="col-4 text-center">
-        {{loss.heatLoss |number:'2.2-2'}}
-      </div>
+  <div class="row">
+    <div class="col-12">
+      <app-flue-gas-losses-form [(flueGasLossForm)]="loss.form" (calculate)="calculate(loss)" [(lossState)]="lossState"></app-flue-gas-losses-form>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-4">
+      <small>Heat Loss (Btu/hr)</small>
+    </div>
+    <div class="col-4 text-center">
+      {{loss.heatLoss |number:'2.2-2'}}
     </div>
   </div>
 </div>
