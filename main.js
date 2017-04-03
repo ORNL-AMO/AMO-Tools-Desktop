@@ -62,9 +62,9 @@ app.on('ready', function () {
   autoUpdater.autoDownload = false;
 
   // If isDev = true, don't check for updates. If false, check for updates
-  if (isDev()) {
+  /*if (isDev()) {
     update = null;
-  } else {
+  } else {*/
     autoUpdater.checkForUpdates();
   };
 });
@@ -73,7 +73,7 @@ app.on('ready', function () {
 ipcMain.on('update', (ev) => {
   autoUpdater.downloadUpdate();
 })
-ipcmain.on('later', (ev) => {
+ipcMain.on('later', (ev) => {
   update = null;
 })
 

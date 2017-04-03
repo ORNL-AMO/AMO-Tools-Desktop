@@ -7,7 +7,6 @@ import { ElectronService } from 'ngx-electron';
   styleUrls: ['./core.component.css']
 })
 
-
 export class CoreComponent implements OnInit {
   updateAvailable: boolean;
 
