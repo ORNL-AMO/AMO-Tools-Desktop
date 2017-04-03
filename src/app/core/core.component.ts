@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ElectronService } from 'ngx-electron';
 
+this.updateAvailable = false;
+
 @Component({
   selector: 'app-core',
   templateUrl: './core.component.html',
