@@ -11,15 +11,20 @@ export class LossesComponent implements OnInit {
   @Input()
   saveClicked: boolean;
 
-  modifications: any[];
+  //modifications: any[];
   selectedModification: any;
   isDropdownOpen: boolean = false;
+  modificationsIndex: number = 0;
+  baseline: boolean = true;
+  modification: boolean = false;
 
   lossesTab: string = 'charge-material';
+  addLossToggle: boolean = false;
+
   lossesStates: any = {
     wallLosses: {
       numLosses: 0,
-      saved: true
+      saved: true,
     },
     chargeMaterial: {
       numLosses: 0,
@@ -60,14 +65,15 @@ export class LossesComponent implements OnInit {
     if (!this.phast.losses) {
       this.phast.losses = new Array<Losses>();
     }
-    if (!this.modifications) {
-      this.modifications = [{
+    if (!this.phast.modifications) {
+      this.phast.modifications = new Array();
+      this.phast.modifications.push({
         name: 'Modification 1',
-        phast: this.phast
-      }];
+        losses: this.phast.losses
+      });
     }
     if (!this.selectedModification) {
-      this.selectedModification = this.modifications[0];
+      this.selectedModification = this.phast.modifications[this.modificationsIndex];
     }
   }
 
@@ -82,14 +88,23 @@ export class LossesComponent implements OnInit {
   }
 
   addModification() {
-    this.modifications.unshift({
-    name: 'Modification ' + (this.modifications.length+1),
-      phast: this.phast
+    this.phast.modifications.unshift({
+      name: 'Modification ' + (this.phast.modifications.length + 1),
+      losses: this.phast.losses
     })
   }
 
-  toggleDropdown(){
+  toggleDropdown() {
     this.isDropdownOpen = !this.isDropdownOpen;
+  }
+
+  selectModification(modification: any){
+    this.selectedModification = this.phast.modifications.filter(mod => mod.name == modification.name);
+    this.isDropdownOpen = false;
+  }
+
+  addLoss(){
+    this.addLossToggle = !this.addLossToggle;
   }
 
 }

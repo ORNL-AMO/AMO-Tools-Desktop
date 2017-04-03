@@ -14,7 +14,7 @@ export interface PHAST {
   name?: string,
   phastInputs?: PhastInputs,
   losses?: Losses
-  adjustments?: Losses[]
+  modifications?: Modification[]
 }
 
 export interface PhastInputs {
@@ -35,4 +35,9 @@ export interface Losses {
   otherLosses?: OtherLoss[],
   leakageLosses?: LeakageLoss[],
   extendedSurfaces?: ExtendedSurface[]
+}
+
+export interface Modification {
+  losses?: Losses,
+  name?: string
 }
