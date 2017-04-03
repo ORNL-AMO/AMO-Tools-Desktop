@@ -1,7 +1,7 @@
 // ./main.js
 //require('electron-reload')(__dirname);
 
-const {app, BrowserWindow, ipcMain, ipcRenderer} = require('electron');
+const {app, BrowserWindow, ipcMain, ipcRenderer, webContents} = require('electron');
 const path = require('path');
 const url = require('url');
 const log = require('electron-log');
@@ -18,8 +18,6 @@ log.info('App starting...');
 
 require('dotenv').config();
 let win = null;
-
-global.globalUpdate = false;
 
 app.on('ready', function () {
 
@@ -45,7 +43,7 @@ app.on('ready', function () {
   autoUpdater.on('update-available', (ev, info) => {
     // Send message to core.component that updates are available
     ipcMain.on('ready', (ev) => {
-      ipcRenderer.send('available');
+      getWindow('windowName').webContents.send('available');
     })
   });
   autoUpdater.on('update-not-available', (ev, info) => {
@@ -62,12 +60,22 @@ app.on('ready', function () {
   autoUpdater.autoDownload = false;
 
   // If isDev = true, don't check for updates. If false, check for updates
-  /*if (isDev()) {
+  if (isDev()) {
     update = null;
-  } else {*/
+  } else {
     autoUpdater.checkForUpdates();
-  //};
+  };
 });
+
+// Array to hold every window created
+function getWindow(windowName) {
+  for (var i = 0; i < windowArray.length; i++) {
+    if (windowArray[i].name == windowName) {
+      return windowArray[i].window;
+    }
+  }
+  return null;
+}
 
 // Listen for message from core.component to either download updates or not
 ipcMain.on('update', (ev) => {
