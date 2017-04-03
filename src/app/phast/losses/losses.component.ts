@@ -1,5 +1,5 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { PHAST, Losses } from '../../shared/models/phast';
+import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
+import { PHAST, Losses, Modification } from '../../shared/models/phast';
 @Component({
   selector: 'app-losses',
   templateUrl: 'losses.component.html',
@@ -11,16 +11,15 @@ export class LossesComponent implements OnInit {
   @Input()
   saveClicked: boolean;
 
-  //modifications: any[];
-  selectedModification: any;
+  selectedModification: Modification;
+  _modifications: Modification[];
   isDropdownOpen: boolean = false;
-  modificationsIndex: number = 0;
   baseline: boolean = true;
   modification: boolean = false;
 
   lossesTab: string = 'charge-material';
   addLossToggle: boolean = false;
-
+  isFirstChange: boolean = true;
   lossesStates: any = {
     wallLosses: {
       numLosses: 0,
@@ -61,19 +60,28 @@ export class LossesComponent implements OnInit {
   }
   constructor() { }
 
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.saveClicked && !this.isFirstChange) {
+      if (this._modifications) {
+        console.log('save');
+        this.phast.modifications = this._modifications;
+      }
+    }
+    this.isFirstChange = false;
+  }
   ngOnInit() {
+    this._modifications = new Array();
     if (!this.phast.losses) {
       this.phast.losses = new Array<Losses>();
     }
     if (!this.phast.modifications) {
-      this.phast.modifications = new Array();
-      this.phast.modifications.push({
-        name: 'Modification 1',
-        losses: this.phast.losses
-      });
+      //this._modifications = new Array();
+      this.addModification();
+    } else {
+      this._modifications = (JSON.parse(JSON.stringify(this.phast.modifications)));
     }
     if (!this.selectedModification) {
-      this.selectedModification = this.phast.modifications[this.modificationsIndex];
+      this.selectedModification = this._modifications[0];
     }
   }
 
@@ -88,22 +96,22 @@ export class LossesComponent implements OnInit {
   }
 
   addModification() {
-    this.phast.modifications.unshift({
-      name: 'Modification ' + (this.phast.modifications.length + 1),
-      losses: this.phast.losses
-    })
+    this._modifications.unshift({
+      name: 'Modification ' + (this._modifications.length + 1),
+      losses: (JSON.parse(JSON.stringify(this.phast.losses)))
+    });
   }
 
   toggleDropdown() {
     this.isDropdownOpen = !this.isDropdownOpen;
   }
 
-  selectModification(modification: any){
-    this.selectedModification = this.phast.modifications.filter(mod => mod.name == modification.name);
+  selectModification(modification: any) {
+    this.selectedModification = modification;
     this.isDropdownOpen = false;
   }
 
-  addLoss(){
+  addLoss() {
     this.addLossToggle = !this.addLossToggle;
   }
 

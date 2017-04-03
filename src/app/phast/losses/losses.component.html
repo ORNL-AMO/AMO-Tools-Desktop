@@ -68,7 +68,7 @@
     </div>
     <div class="card-block losses-container" *ngIf="isDropdownOpen">
       <ul>
-        <li *ngFor="let modification of phast.modifications">
+        <li *ngFor="let modification of _modifications">
           <button class="btn btn-secondary" (click)="selectModification(modification)">{{modification.name}}</button>
         </li>
         <li>
