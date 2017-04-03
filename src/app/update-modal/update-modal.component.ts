@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild, Input } from '@angular/core';
 import { ModalDirective } from 'ng2-bootstrap';
 import { ElectronService } from 'ngx-electron';
+
 @Component({
   selector: 'app-update-modal',
   templateUrl: 'update-modal.component.html',

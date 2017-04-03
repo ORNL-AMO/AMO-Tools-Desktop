@@ -1,7 +1,7 @@
 // ./main.js
 //require('electron-reload')(__dirname);
 
-const {app, BrowserWindow, ipcMain, ipcRenderer, webContents} = require('electron');
+const {app, BrowserWindow, ipcMain} = require('electron');
 const path = require('path');
 const url = require('url');
 const log = require('electron-log');
@@ -42,8 +42,8 @@ app.on('ready', function () {
   });
   autoUpdater.on('update-available', (ev, info) => {
     // Send message to core.component that updates are available
-    ipcMain.on('ready', (ev) => {
-      windowName.webContents.send('available');
+    ipcMain.on('ready', (event) => {
+      event.sender.send('available');
     })
   });
   autoUpdater.on('update-not-available', (ev, info) => {
