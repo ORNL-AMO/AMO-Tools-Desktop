@@ -19,8 +19,6 @@ export class WallLossesComponent implements OnInit {
   lossState: any;
   @Input()
   addLossToggle: boolean;
-  @Input()
-  baseline: boolean;
 
   _wallLosses: Array<any>;
   firstChange: boolean = true;

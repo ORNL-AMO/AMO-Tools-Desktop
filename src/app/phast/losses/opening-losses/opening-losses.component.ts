@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, SimpleChange } from '@angular/core';
+import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
 import * as _ from 'lodash';
 import { PhastService } from '../../phast.service';
 import { OpeningLossesService } from './opening-losses.service';
@@ -17,17 +17,29 @@ export class OpeningLossesComponent implements OnInit {
   lossState: any;
   @Input()
   saveClicked: boolean;
+  @Input()
+  addLossToggle: boolean;
+
 
   _openingLosses: Array<any>;
-  editLoss: any;
+  firstChange: boolean = true;
+  
   constructor(private phastService: PhastService, private openingLossesService: OpeningLossesService) { }
 
-  ngOnChanges(changes: SimpleChange) {
-    if (!changes.isFirstChange && this._openingLosses) {
-      this.saveLosses();
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (!this.firstChange) {
+      if (changes.saveClicked) {
+        this.saveLosses();
+      }
+      if (changes.addLossToggle) {
+        this.addLoss();
+      }
+    }
+    else {
+      this.firstChange = false;
     }
   }
-
   ngOnInit() {
     if (!this._openingLosses) {
       this._openingLosses = new Array();
