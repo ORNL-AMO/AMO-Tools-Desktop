@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ElectronService } from 'ngx-electron';
 
-this.updateAvailable = false;
-
 @Component({
   selector: 'app-core',
   templateUrl: './core.component.html',
@@ -17,8 +15,8 @@ export class CoreComponent implements OnInit {
 
   ngOnInit() {
     this.ElectronService.ipcRenderer.send('ready');
-    this.ElectronService.ipcRenderer.on('available', (ev, info) => {
-      this.updateAvailable = true;
+    this.ElectronService.ipcRenderer.on('available', (ev) => {
+      this.updateAvailable;
     });
   }
 }
