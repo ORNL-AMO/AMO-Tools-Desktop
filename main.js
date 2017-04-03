@@ -7,6 +7,8 @@ const url = require('url');
 const log = require('electron-log');
 const {autoUpdater} = require('electron-updater');
 
+var available = null;
+
 function isDev() {
   return process.mainModule.filename.indexOf('app.asar') === -1;
 };
@@ -42,14 +44,14 @@ app.on('ready', function () {
   autoUpdater.on('checking-for-update', () => {
   });
 
-  available = autoUpdater.on('update-available', (ev, info) => {
+  autoUpdater.on('update-available', (ev, info) => {
   });
 
-  ipcMain.on('ready', (event, arg) => {
-    if (available) {
+  if (updateAvailable) {
+    ipcMain.on('ready', (event, arg) => {
       event.sender.send('available', null);
-    };
-  });
+    });
+  };
 
   autoUpdater.on('update-not-available', (ev, info) => {
   });
