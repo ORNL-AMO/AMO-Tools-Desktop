@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild, Input } from '@angular/core';
 import { ModalDirective } from 'ng2-bootstrap';
+import { ElectronService } from 'ngx-electron';
 @Component({
   selector: 'app-update-modal',
   templateUrl: 'update-modal.component.html',
@@ -8,9 +9,12 @@ import { ModalDirective } from 'ng2-bootstrap';
 export class UpdateModalComponent implements OnInit {
   @ViewChild('updateModal') public updateModal: ModalDirective;
 
-  constructor() { }
+  constructor(private ElectronService: ElectronService) { }
 
   ngOnInit() {
+    this.ElectronService.ipcRenderer.on('popup', (info) => {
+      this.showUpdateModal();
+    })
   }
   
   ngAfterViewInit() {
