@@ -7,8 +7,6 @@ const url = require('url');
 const log = require('electron-log');
 const {autoUpdater} = require('electron-updater');
 
-var available = null;
-
 function isDev() {
   return process.mainModule.filename.indexOf('app.asar') === -1;
 };
@@ -40,6 +38,13 @@ app.on('ready', function () {
     win = null;
   });
 
+// If isDev = true, don't check for updates. If false, check for update
+ if (isDev()) {
+    update = null;
+  } else {
+    autoUpdater.checkForUpdates();
+  };
+
   // Auto Updater events
   autoUpdater.on('checking-for-update', () => {
   });
@@ -49,7 +54,8 @@ app.on('ready', function () {
 
   // Send message to core.component when an update is available
   ipcMain.on('ready', (event, arg) => {
-    event.sender.send('available', updateAvailable);
+    console.log(autoUpdater.updateAvailable);
+    event.sender.send('available', autoUpdater.updateAvailable);
   });
 
   autoUpdater.on('update-not-available', (ev, info) => {
@@ -67,13 +73,6 @@ app.on('ready', function () {
 
   //Check for updates and install
   autoUpdater.autoDownload = false;
-
-  // If isDev = true, don't check for updates. If false, check for updates
-  if (isDev()) {
-    update = null;
-  } else {
-    autoUpdater.checkForUpdates();
-  };
 });
 
 // Listen for message from core.component to either download updates or not
