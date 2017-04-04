@@ -20,7 +20,9 @@ export class OtherLossesComponent implements OnInit {
   addLossToggle: boolean;
   @Output('savedLoss')
   savedLoss = new EventEmitter<boolean>();
-
+  @Input()
+  baselineSelected: boolean;
+  
   _otherLosses: Array<any>;
   firstChange: boolean = true;
   constructor(private otherLossesService: OtherLossesService) { }

@@ -21,6 +21,8 @@ export class ChargeMaterialComponent implements OnInit {
   addLossToggle: boolean;
   @Output('savedLoss')
   savedLoss = new EventEmitter<boolean>();
+  @Input()
+  baselineSelected: boolean;
 
   _chargeMaterial: Array<any>;
   firstChange: boolean = true;

@@ -21,6 +21,8 @@ export class WallLossesComponent implements OnInit {
   addLossToggle: boolean;
   @Output('savedLoss')
   savedLoss = new EventEmitter<boolean>();
+  @Input()
+  baselineSelected: boolean;
 
   _wallLosses: Array<any>;
   firstChange: boolean = true;

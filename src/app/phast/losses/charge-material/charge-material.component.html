@@ -33,11 +33,11 @@
         </div>
       </div>
       <app-solid-charge-material-form *ngIf="material.chargeMaterialType == 'Solid'" [(lossState)]="lossState" [(chargeMaterialForm)]="material.solidForm"
-        (calculate)="calculate(material)"></app-solid-charge-material-form>
+        (calculate)="calculate(material)" [baselineSelected]="baselineSelected"></app-solid-charge-material-form>
       <app-liquid-charge-material-form *ngIf="material.chargeMaterialType == 'Liquid'" [(lossState)]="lossState" [(chargeMaterialForm)]="material.liquidForm"
-        (calculate)="calculate(material)"></app-liquid-charge-material-form>
+        (calculate)="calculate(material)" [baselineSelected]="baselineSelected"></app-liquid-charge-material-form>
       <app-gas-charge-material-form *ngIf="material.chargeMaterialType == 'Gas'" [(lossState)]="lossState" [(chargeMaterialForm)]="material.gasForm"
-        (calculate)="calculate(material)"></app-gas-charge-material-form>
+        (calculate)="calculate(material)" [baselineSelected]="baselineSelected"></app-gas-charge-material-form>
     </div>
   </div>
   <div class="row">

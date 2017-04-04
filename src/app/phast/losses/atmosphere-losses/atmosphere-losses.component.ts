@@ -21,10 +21,13 @@ export class AtmosphereLossesComponent implements OnInit {
   addLossToggle: boolean;
   @Output('savedLoss')
   savedLoss = new EventEmitter<boolean>();
+  @Input()
+  baselineSelected: boolean;
 
   _atmosphereLosses: Array<any>;
   firstChange: boolean = true;
   constructor(private atmosphereLossesService: AtmosphereLossesService, private phastService: PhastService) { }
+  
   ngOnChanges(changes: SimpleChanges) {
     if (!this.firstChange) {
       if (changes.saveClicked) {

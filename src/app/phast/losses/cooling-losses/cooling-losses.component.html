@@ -33,11 +33,11 @@
         </div>
       </div>
       <app-water-cooling-losses-form *ngIf="loss.coolingMedium == 'Water'" [(lossesForm)]="loss.waterCoolingForm" (calculate)="calculate(loss)"
-        [(lossState)]="lossState"></app-water-cooling-losses-form>
+        [(lossState)]="lossState" [baselineSelected]="baselineSelected"></app-water-cooling-losses-form>
       <app-liquid-cooling-losses-form *ngIf="loss.coolingMedium == 'Other Liquid'" [(lossesForm)]="loss.liquidCoolingForm" (calculate)="calculate(loss)"
-        [(lossState)]="lossState"></app-liquid-cooling-losses-form>
+        [(lossState)]="lossState" [baselineSelected]="baselineSelected"></app-liquid-cooling-losses-form>
       <app-gas-cooling-losses-form *ngIf="loss.coolingMedium == 'Other Gas' || loss.coolingMedium == 'Air'" [(lossesForm)]="loss.gasCoolingForm"
-        (calculate)="calculate(loss)" [(lossState)]="lossState"></app-gas-cooling-losses-form>
+        (calculate)="calculate(loss)" [(lossState)]="lossState" [baselineSelected]="baselineSelected"></app-gas-cooling-losses-form>
     </div>
   </div>
   <div class="row">

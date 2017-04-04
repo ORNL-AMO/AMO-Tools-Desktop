@@ -21,6 +21,8 @@ export class CoolingLossesComponent implements OnInit {
   addLossToggle: boolean;
   @Output('savedLoss')
   savedLoss = new EventEmitter<boolean>();
+  @Input()
+  baselineSelected: boolean;
 
   _coolingLosses: Array<any>;
   firstChange: boolean = true;

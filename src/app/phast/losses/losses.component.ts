@@ -13,8 +13,8 @@ export class LossesComponent implements OnInit {
 
   _modifications: Modification[];
   isDropdownOpen: boolean = false;
-  baseline: boolean = true;
-  modification: boolean = false;
+  baselineSelected: boolean = true;
+  modificationSelected: boolean = false;
   modificationIndex: number = 0;
   lossesTab: string = 'charge-material';
   addLossToggle: boolean = false;
@@ -104,6 +104,9 @@ export class LossesComponent implements OnInit {
       }
     });
     this.modificationIndex = this._modifications.length - 1;
+    this.modificationSelected = true;
+    this.baselineSelected = false;
+    console.log(this._modifications[this.modificationIndex])
 
   }
 
@@ -132,6 +135,17 @@ export class LossesComponent implements OnInit {
   toggleNotes() {
     this.showNotes = !this.showNotes;
     this.isDropdownOpen = false;
+  }
+
+  togglePanel(bool: boolean) {
+    if (bool == this.baselineSelected) {
+      this.baselineSelected = true;
+      this.modificationSelected = false;
+    }
+    else if (bool == this.modificationSelected) {
+      this.modificationSelected = true;
+      this.baselineSelected = false;
+    }
   }
 
 }

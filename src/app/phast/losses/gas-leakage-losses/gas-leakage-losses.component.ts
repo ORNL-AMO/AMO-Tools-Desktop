@@ -20,7 +20,9 @@ export class GasLeakageLossesComponent implements OnInit {
   addLossToggle: boolean;
   @Output('savedLoss')
   savedLoss = new EventEmitter<boolean>();
-
+  @Input()
+  baselineSelected: boolean;
+  
   _leakageLosses: Array<any>;
   firstChange: boolean = true;
   

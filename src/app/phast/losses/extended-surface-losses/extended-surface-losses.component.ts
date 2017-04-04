@@ -23,7 +23,9 @@ export class ExtendedSurfaceLossesComponent implements OnInit {
   addLossToggle: boolean;
   @Output('savedLoss')
   savedLoss = new EventEmitter<boolean>();
-
+  @Input()
+  baselineSelected: boolean;
+  
   _surfaceLosses: Array<any>;
   firstChange: boolean = true;
   constructor(private phastService: PhastService, private extendedSurfaceLossesService: ExtendedSurfaceLossesService) { }

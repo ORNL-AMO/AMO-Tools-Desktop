@@ -1,4 +1,4 @@
-<form [formGroup]="openingLossesForm">
+<form #lossForm [formGroup]="openingLossesForm">
   <div class="row form-group">
     <label class="col-6 col-form-label small" for="type">Select Type</label>
     <div class="col-6 input-group input-group-sm">
@@ -12,7 +12,7 @@
   <div class="row form-group">
     <label class="col-6 col-form-label small" for="numberOfOpenings">Number of Openings of Same Size and Shape</label>
     <div class="col-6 input-group input-group-sm">
-      <input type="number" class="form-control" formControlName="numberOfOpenings" id="numberOfOpenings" (keyup)="checkForm()">
+      <input type="number" class="form-control" formControlName="numberOfOpenings" id="numberOfOpenings" (keyup)="getArea()">
     </div>
   </div>
 

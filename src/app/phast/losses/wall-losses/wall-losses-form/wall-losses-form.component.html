@@ -1,4 +1,4 @@
-<form [formGroup]="wallLossesForm">
+<form #lossForm [formGroup]="wallLossesForm">
 
   <div class="row form-group">
     <label class="col-6 col-form-label small" for="avgSurfaceTemp">Average Surface Temperature (&#8457;)</label>
@@ -24,7 +24,7 @@
   <div class="row form-group">
     <label class="col-6 col-form-label small" for="surfaceShape">Surface shape/orientation</label>
     <div class="col-6 input-group input-group-sm">
-      <select class="form-control" formControlName="surfaceShape" ngModel="{{wallLossesForm.value.surfaceShape}}">
+      <select class="form-control" formControlName="surfaceShape">
         <option>Vertical Plates</option>
         <option>Shape 2</option>
       </select>

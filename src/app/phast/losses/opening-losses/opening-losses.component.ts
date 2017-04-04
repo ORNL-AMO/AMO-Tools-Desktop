@@ -21,7 +21,9 @@ export class OpeningLossesComponent implements OnInit {
   addLossToggle: boolean;
   @Output('savedLoss')
   savedLoss = new EventEmitter<boolean>();
-
+  @Input()
+  baselineSelected: boolean;
+  
   _openingLosses: Array<any>;
   firstChange: boolean = true;
   
