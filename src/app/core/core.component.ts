@@ -8,13 +8,13 @@ import { ElectronService } from 'ngx-electron';
 })
 
 export class CoreComponent implements OnInit {
-  updateAvailable: any;
+  updateAvailable: boolean = false;
 
   constructor(private ElectronService: ElectronService) { }
 
   ngOnInit() {
     this.ElectronService.ipcRenderer.send('ready', null);
-    this.ElectronService.ipcRenderer.on('available', (arg) => {
+    this.ElectronService.ipcRenderer.on('available', (event, arg) => {
       this.updateAvailable = arg;
     });
   }
