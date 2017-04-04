@@ -41,10 +41,10 @@ app.on('ready', function () {
   });
 
   // If isDev = true, don't check for updates. If false, check for update
- if (isDev()) {
-   update = null;
-   } else {
-     autoUpdater.checkForUpdates();
+  if (isDev()) {
+    update = null;
+  } else {
+    autoUpdater.checkForUpdates();
   };
 
   // Auto Updater events
@@ -56,9 +56,8 @@ app.on('ready', function () {
 
   // Send message to core.component when an update is available
   ipcMain.on('ready', (event, arg) => {
-    if (autoUpdater.updateAvailable === true) {
-      event.sender.send('available', null);
-    };
+    console.log('autoUpdate.updateAvailable = ' + autoUpdater.updateAvailable);
+    event.sender.send('available',  autoUpdater.updateAvailable);
   });
 
   autoUpdater.on('update-not-available', (ev, info) => {

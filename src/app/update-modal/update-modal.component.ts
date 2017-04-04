@@ -16,6 +16,7 @@ export class UpdateModalComponent implements OnInit {
   constructor(private ElectronService: ElectronService) { }
 
   ngOnChanges(changes: SimpleChanges){
+    console.log('did it make it? ' + this.updateAvailable);
     if(changes.updateAvailable){
       if(changes.updateAvailable.currentValue == true){
         this.showUpdateModal();

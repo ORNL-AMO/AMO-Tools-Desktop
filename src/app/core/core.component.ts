@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, Input, SimpleChanges } from '@angular/core';
+import { ModalDirective } from 'ng2-bootstrap';
 import { ElectronService } from 'ngx-electron';
 
 @Component({
@@ -8,15 +9,35 @@ import { ElectronService } from 'ngx-electron';
 })
 
 export class CoreComponent implements OnInit {
-  updateAvailable: boolean = false;
-
+  updateAvailable: boolean;
+ 
+  @ViewChild('updateModal') public updateModal: ModalDirective;
   constructor(private ElectronService: ElectronService) { }
 
   ngOnInit() {
-    this.ElectronService.ipcRenderer.send('ready', null);
     this.ElectronService.ipcRenderer.on('available', (event, arg) => {
-      this.updateAvailable = arg;
+      console.log('arg response: ' + arg);
+      if(arg == true){
+        this.showUpdateModal();
+      }
     });
-    console.log(this.updateAvailable);
+    this.ElectronService.ipcRenderer.send('ready', null);
+  }
+
+  showUpdateModal() {
+    this.updateModal.show();
+  }
+
+  hideUpdateModal() {
+    this.updateModal.hide();
+  }
+
+  update() {
+    this.ElectronService.ipcRenderer.send('update');
+  }
+
+  later() {
+    this.ElectronService.ipcRenderer.send('later');
+    this.updateModal.hide();
   }
 }
