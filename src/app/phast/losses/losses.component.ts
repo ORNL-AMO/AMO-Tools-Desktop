@@ -11,15 +11,15 @@ export class LossesComponent implements OnInit {
   @Input()
   saveClicked: boolean;
 
-  selectedModification: Modification;
   _modifications: Modification[];
   isDropdownOpen: boolean = false;
   baseline: boolean = true;
   modification: boolean = false;
-
+  modificationIndex: number = 0;
   lossesTab: string = 'charge-material';
   addLossToggle: boolean = false;
   isFirstChange: boolean = true;
+  showNotes: boolean = false;
   lossesStates: any = {
     wallLosses: {
       numLosses: 0,
@@ -60,28 +60,13 @@ export class LossesComponent implements OnInit {
   }
   constructor() { }
 
-  ngOnChanges(changes: SimpleChanges) {
-    if (changes.saveClicked && !this.isFirstChange) {
-      if (this._modifications) {
-        console.log('save');
-        this.phast.modifications = this._modifications;
-      }
-    }
-    this.isFirstChange = false;
-  }
   ngOnInit() {
-    this._modifications = new Array();
+    this._modifications = new Array<Modification>();
     if (!this.phast.losses) {
       this.phast.losses = new Array<Losses>();
     }
-    if (!this.phast.modifications) {
-      //this._modifications = new Array();
-      this.addModification();
-    } else {
+    if (this.phast.modifications) {
       this._modifications = (JSON.parse(JSON.stringify(this.phast.modifications)));
-    }
-    if (!this.selectedModification) {
-      this.selectedModification = this._modifications[0];
     }
   }
 
@@ -95,24 +80,58 @@ export class LossesComponent implements OnInit {
     this.lossesStates.fixtureLosses.saved = true;
   }
 
+  saveModifications() {
+    if (this._modifications) {
+      this.phast.modifications = (JSON.parse(JSON.stringify(this._modifications)));
+    }
+  }
+
   addModification() {
     this._modifications.unshift({
       name: 'Modification ' + (this._modifications.length + 1),
-      losses: (JSON.parse(JSON.stringify(this.phast.losses)))
+      losses: (JSON.parse(JSON.stringify(this.phast.losses))),
+      notes: {
+        chargeNotes: '',
+        wallNotes: '',
+        atmosphereNotes: '',
+        fixtureNotes: '',
+        openingNotes: '',
+        coolingNotes: '',
+        flueGasNotes: '',
+        otherNotes: '',
+        leakageNotes: '',
+        extendedNotes: ''
+      }
     });
+    this.modificationIndex = this._modifications.length - 1;
+
   }
 
   toggleDropdown() {
     this.isDropdownOpen = !this.isDropdownOpen;
+    this.showNotes = false;
   }
 
-  selectModification(modification: any) {
-    this.selectedModification = modification;
+  selectModification(modification: Modification) {
+    let tmpIndex = 0;
+    this._modifications.forEach(mod => {
+      if (mod == modification) {
+        this.modificationIndex = tmpIndex;
+        return;
+      } else {
+        tmpIndex++;
+      }
+    });
     this.isDropdownOpen = false;
   }
 
   addLoss() {
     this.addLossToggle = !this.addLossToggle;
+  }
+
+  toggleNotes() {
+    this.showNotes = !this.showNotes;
+    this.isDropdownOpen = false;
   }
 
 }

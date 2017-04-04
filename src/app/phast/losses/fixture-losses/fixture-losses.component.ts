@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, SimpleChanges, Output, EventEmitter } from '@angular/core';
 import * as _ from 'lodash';
 import { PhastService } from '../../phast.service';
 import { FixtureLossesService } from './fixture-losses.service';
@@ -19,6 +19,8 @@ export class FixtureLossesComponent implements OnInit {
   lossState: any;
   @Input()
   addLossToggle: boolean;
+  @Output('savedLoss')
+  savedLoss = new EventEmitter<boolean>();
 
   _fixtureLosses: Array<any>;
   firstChange: boolean = true;
@@ -98,6 +100,7 @@ export class FixtureLossesComponent implements OnInit {
     this.losses.fixtureLosses = tmpFixtureLosses;
     this.lossState.numLosses = this.losses.fixtureLosses.length;
     this.lossState.saved = true;
+    this.savedLoss.emit(true);
   }
 
 }

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, SimpleChanges, Output, EventEmitter } from '@angular/core';
 import * as _ from 'lodash';
 import { PhastService } from '../../phast.service';
 import { OpeningLossesService } from './opening-losses.service';
@@ -19,7 +19,8 @@ export class OpeningLossesComponent implements OnInit {
   saveClicked: boolean;
   @Input()
   addLossToggle: boolean;
-
+  @Output('savedLoss')
+  savedLoss = new EventEmitter<boolean>();
 
   _openingLosses: Array<any>;
   firstChange: boolean = true;
@@ -123,6 +124,6 @@ export class OpeningLossesComponent implements OnInit {
     this.losses.openingLosses = tmpOpeningLosses;
     this.lossState.numLosses = this.losses.openingLosses.length;
     this.lossState.saved = true;
-
+    this.savedLoss.emit(true);
   }
 }

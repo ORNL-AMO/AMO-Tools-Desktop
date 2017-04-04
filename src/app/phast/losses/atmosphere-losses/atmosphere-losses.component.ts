@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, SimpleChanges, Output, EventEmitter } from '@angular/core';
 import * as _ from 'lodash';
 import { PhastService } from '../../phast.service';
 import { AtmosphereLossesService } from './atmosphere-losses.service';
@@ -19,6 +19,8 @@ export class AtmosphereLossesComponent implements OnInit {
   lossState: any;
   @Input()
   addLossToggle: boolean;
+  @Output('savedLoss')
+  savedLoss = new EventEmitter<boolean>();
 
   _atmosphereLosses: Array<any>;
   firstChange: boolean = true;
@@ -100,5 +102,6 @@ export class AtmosphereLossesComponent implements OnInit {
     this.losses.atmosphereLosses = tmpAtmosphereLosses;
     this.lossState.numLosses = this.losses.atmosphereLosses.length;
     this.lossState.saved = true;
+    this.savedLoss.emit(true);
   }
 }
