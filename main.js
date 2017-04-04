@@ -56,7 +56,7 @@ app.on('ready', function () {
 
   // Send message to core.component when an update is available
   ipcMain.on('ready', (event, arg) => {
-    if (autoUpdater.updateAvailable === true) {
+    if (autoUpdater.updateAvailable) {
       event.sender.send('available', null);
     };
   });
