@@ -11,7 +11,7 @@
         Baseline
       </div>
       <div class="pull-right">
-        <button class="btn btn-secondary" (click)="addLoss()"><span class="fa fa-plus"></span></button>
+        <button class="btn btn-secondary" (click)="addLoss()" [disabled]="!baselineSelected"><span class="fa fa-plus"></span></button>
       </div>
     </div>
     <div class="card-block losses-container" [ngClass]="{'disabled': baselineSelected == false}">
@@ -56,7 +56,7 @@
       </div>
       <div class="pull-right">
         <div class="mod-dropdown">
-          <button class="btn btn-secondary" (click)="toggleDropdown()">
+          <button class="btn btn-secondary" (click)="toggleDropdown()" [disabled]="!modificationSelected">
           <span class="fa fa-angle-down" *ngIf="!isDropdownOpen"></span>
           <span class="fa fa-angle-up" *ngIf="isDropdownOpen"></span>
           </button>
