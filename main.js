@@ -33,18 +33,18 @@ app.on('ready', function () {
     slashes: true
   }));
 
-win.toggleDevTools();
+  win.toggleDevTools();
 
   // Remove window once app is closed
   win.on('closed', function () {
     win = null;
   });
 
-// If isDev = true, don't check for updates. If false, check for update
+  // If isDev = true, don't check for updates. If false, check for update
  if (isDev()) {
-    update = null;
-  } else {
-    autoUpdater.checkForUpdates();
+   update = null;
+   } else {
+     autoUpdater.checkForUpdates();
   };
 
   // Auto Updater events
@@ -56,8 +56,9 @@ win.toggleDevTools();
 
   // Send message to core.component when an update is available
   ipcMain.on('ready', (event, arg) => {
-    console.log(autoUpdater.updateAvailable);
-    event.sender.send('available', autoUpdater.updateAvailable);
+    if (autoUpdater.updateAvailable === true) {
+      event.sender.send('available', null);
+    };
   });
 
   autoUpdater.on('update-not-available', (ev, info) => {
