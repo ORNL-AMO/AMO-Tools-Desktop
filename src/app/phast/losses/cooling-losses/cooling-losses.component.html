@@ -24,7 +24,7 @@
       <div class="row form-group">
         <label class="col-4 col-form-label small" for="coolingMedium">Cooling Medium</label>
         <div class="col-8 input-group input-group-sm">
-          <select class="form-control" id="coolingMedium" [(ngModel)]="loss.coolingMedium">
+          <select class="form-control" id="coolingMedium" [(ngModel)]="loss.coolingMedium" [disabled]="!baselineSelected">
           <option>Air</option>
           <option>Water</option>
           <option>Other Gas</option>

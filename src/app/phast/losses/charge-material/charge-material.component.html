@@ -24,7 +24,7 @@
       <div class="row form-group">
         <label class="col-6 col-form-label small" for="type">Select Type</label>
         <div class="col-6 input-group input-group-sm">
-          <select class="form-control" id="baselineMaterial" [(ngModel)]="material.chargeMaterialType">
+          <select class="form-control" id="baselineMaterial" [(ngModel)]="material.chargeMaterialType" [disabled]="!baselineSelected">
             <option>Solid</option>
             <option>Liquid</option>
             <option>Gas</option>

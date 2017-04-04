@@ -35,7 +35,6 @@ export class AtmosphereLossesFormComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log(this.lossForm);
     if (!this.baselineSelected) {
       this.disableForm();
     }

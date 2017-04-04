@@ -106,8 +106,6 @@ export class LossesComponent implements OnInit {
     this.modificationIndex = this._modifications.length - 1;
     this.modificationSelected = true;
     this.baselineSelected = false;
-    console.log(this._modifications[this.modificationIndex])
-
   }
 
   toggleDropdown() {
