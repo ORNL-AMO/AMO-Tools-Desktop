@@ -6,7 +6,7 @@
     <app-losses-sidebar [losses]="phast.losses" [lossesStates]="lossesStates" (changeTab)="changeTab($event)" [lossesTab]="lossesTab"></app-losses-sidebar>
   </nav>-->
   <div class="col-5 card loss-card">
-    <div class="card-header" (click)="togglePanel(baselineSelected)">
+    <div class="card-header" (click)="togglePanel(baselineSelected)" [ngClass]="{'disabled': baselineSelected == false}">
       <div class="pull-left">
         Baseline
       </div>
@@ -14,7 +14,7 @@
         <button class="btn btn-secondary" (click)="addLoss()"><span class="fa fa-plus"></span></button>
       </div>
     </div>
-    <div class="card-block losses-container">
+    <div class="card-block losses-container" [ngClass]="{'disabled': baselineSelected == false}">
       <app-charge-material [baselineSelected]="baselineSelected" (savedLoss)="saveModifications()" [(losses)]="phast.losses" [addLossToggle]="addLossToggle"
         [(lossState)]="lossesStates.chargeMaterial" [saveClicked]="saveClicked" *ngIf="lossesTab == 'charge-material'"></app-charge-material>
 
@@ -46,7 +46,7 @@
     </div>
   </div>
   <div class="col-5 card loss-card" *ngIf="_modifications.length != 0">
-    <div class="card-header" (click)="togglePanel(modificationSelected)">
+    <div class="card-header" (click)="togglePanel(modificationSelected)" [ngClass]="{'disabled': modificationSelected == false}">
       <div class="pull-left">
         {{_modifications[modificationIndex].name}}
         <span (click)="toggleNotes()">
@@ -63,7 +63,7 @@
         </div>
       </div>
     </div>
-    <div class="card-block losses-container" *ngIf="!isDropdownOpen && !showNotes">
+    <div class="card-block losses-container" *ngIf="!isDropdownOpen && !showNotes" [ngClass]="{'disabled': modificationSelected == false}">
       <app-charge-material [baselineSelected]="modificationSelected" (savedLoss)="saveModifications()" [(losses)]="_modifications[modificationIndex].losses"
         [addLossToggle]="addLossToggle" [saveClicked]="saveClicked" [(lossState)]="lossesStates.chargeMaterial" *ngIf="lossesTab == 'charge-material'"></app-charge-material>
 
