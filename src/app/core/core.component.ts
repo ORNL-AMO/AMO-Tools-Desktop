@@ -10,7 +10,7 @@ import { ElectronService } from 'ngx-electron';
 
 export class CoreComponent implements OnInit {
   updateAvailable: boolean;
- 
+  
   @ViewChild('updateModal') public updateModal: ModalDirective;
   constructor(private ElectronService: ElectronService) { }
 
