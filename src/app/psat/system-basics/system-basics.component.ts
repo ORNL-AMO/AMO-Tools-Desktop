@@ -1,4 +1,5 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
+import { PSAT } from '../../shared/models/psat';
 
 @Component({
   selector: 'app-system-basics',
@@ -6,6 +7,10 @@ import { Component, OnInit, Output, EventEmitter } from '@angular/core';
   styleUrls: ['./system-basics.component.css']
 })
 export class SystemBasicsComponent implements OnInit {
+  @Input()
+  psat: PSAT;
+  @Output('changeField')
+  changeField = new EventEmitter<string>();
 
   constructor() { }
 

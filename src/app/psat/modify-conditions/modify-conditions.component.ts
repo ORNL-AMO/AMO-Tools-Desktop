@@ -1,8 +1,7 @@
 import { Component, OnInit, Input, EventEmitter, Output, SimpleChange } from '@angular/core';
-import { PSAT, PsatInputs } from '../../shared/models/psat';
-import { AssessmentService } from '../../assessment/assessment.service';
+import { PSAT, PsatInputs, Modification } from '../../shared/models/psat';
 import * as _ from 'lodash';
-import { FormBuilder } from '@angular/forms';
+
 @Component({
   selector: 'app-modify-conditions',
   templateUrl: './modify-conditions.component.html',
@@ -10,160 +9,92 @@ import { FormBuilder } from '@angular/forms';
 })
 export class ModifyConditionsComponent implements OnInit {
   @Input()
-  baseline: PSAT;
-  @Output('selectedAdjustment')
-  selectedAdjustment = new EventEmitter<PSAT>();
+  psat: PSAT;
   @Input()
   saveClicked: boolean;
 
-  adjustmentForm: any;
-
-  constructor(private assessmentService: AssessmentService, private formBuilder: FormBuilder) { }
+  modifyTab: string = 'system-basics';
+  _modifications: Array<Modification>;
+  baselineSelected: boolean = true;
+  modifiedSelected: boolean = false;
+  isFirstChange: boolean = true;
+  showNotes: boolean = false;
+  currentField: string = 'default';
+  isDropdownOpen: boolean = false;
+  modificationIndex: number = 0;
+  constructor() { }
 
   ngOnInit() {
-    //Check for existing adjustments
-    if (!this.baseline.adjustments) {
-      this.baseline.adjustments = new Array();
-      this.addAdjustment();
+    this._modifications = new Array<Modification>();
+    if (this.psat.modifications) {
+      this._modifications = (JSON.parse(JSON.stringify(this.psat.modifications)));
     }
-    this.baseline.selected = false;
-    this.baseline.name = 'Baseline';
-    this.adjustmentForm = this.initForm(this.baseline);
-    this.selectedAdjustment.emit(this.baseline.adjustments[this.baseline.adjustments.length - 1]);
   }
 
   ngOnChanges(changes: SimpleChange) {
     //saveClicked input changes causes adjustment save
-    if (!changes.isFirstChange && this.adjustmentForm) {
-      let adjustedPsatInputs: PsatInputs = this.createPsatInputsFromForm();
-      this.saveAdjustment(adjustedPsatInputs);
+  }
+
+  saveModifications() {
+    if (this._modifications) {
+      this.psat.modifications = (JSON.parse(JSON.stringify(this._modifications)));
     }
   }
 
-  addAdjustment() {
-    //if adjustment exists save it
-    if (this.baseline.adjustments.length > 0) {
-      let adjustedPsatInputs: PsatInputs = this.createPsatInputsFromForm();
-      this.saveAdjustment(adjustedPsatInputs);
-    }
-
-    //init new adjustment
-    let newAdjustmentPsat = this.assessmentService.getBaselinePSAT();
-    newAdjustmentPsat.name = 'Adjustment ' + (this.baseline.adjustments.length + 1);
-    newAdjustmentPsat.optimizationRating = Math.random() * 100;
-    newAdjustmentPsat.savings = Math.random() * 10000;
-    //add adjustment to baseline
-    this.baseline.adjustments.push(newAdjustmentPsat);
-    this.adjustmentForm = this.initForm(this.baseline.adjustments[this.baseline.adjustments.length - 1]);
-    //select adjustment
-    this.changeSelect(this.baseline.adjustments[this.baseline.adjustments.length - 1].name);
-    this.selectedAdjustment.emit(this.baseline.adjustments[this.baseline.adjustments.length - 1]);
-  }
-
-
-  removeAdjustment($event) {
-    this.baseline.adjustments = _.remove(this.baseline.adjustments, adjustment => {
-      return $event != adjustment.name;
-    })
-    this.renameAdjustments();
-  }
-
-  renameAdjustments() {
-    let index = 1;
-    this.baseline.adjustments.forEach(adjustment => {
-      adjustment.name = 'Adjustment ' + index;
-      index++;
-    })
-  }
-
-  changeSelect(str: string) {
-    let adjustedPsatInputs = this.createPsatInputsFromForm();
-    if (str == 'baseline') {
-      this.baseline.selected = true;
-      this.saveAdjustment(adjustedPsatInputs);
-    }
-    else {
-      this.baseline.selected = false;
-      this.saveAdjustment(adjustedPsatInputs);
-
-      this.baseline.adjustments.forEach(adjustment => {
-        if (adjustment.name == str) {
-          adjustment.selected = true;
-          this.adjustmentForm = this.initForm(adjustment);
-          this.selectedAdjustment.emit(adjustment);
-        }
-        else {
-          adjustment.selected = false;
-        }
-      })
-    }
-  }
-
-  saveAdjustment(adjustedPsatInputs: PsatInputs) {
-    //save the selected adjustment
-    this.baseline.adjustments.forEach(adjustment => {
-      if (adjustment.selected == true) {
-        adjustment.inputs = adjustedPsatInputs;
-        adjustment.selected = false;
+  addModification() {
+    this._modifications.unshift({
+      name: 'Modification ' + (this._modifications.length + 1),
+      inputs: (JSON.parse(JSON.stringify(this.psat.inputs))),
+      notes: {
+        systemBasicsNotes: '',
+        pumpFluidNotes: '',
+        motorNotes: '',
+        fieldDataNotes: ''
       }
-    })
+    });
+    this.modificationIndex = this._modifications.length - 1;
+    this.modifiedSelected = true;
+    this.baselineSelected = false;
   }
 
-
-  initForm(psat: PSAT) {
-    return this.formBuilder.group({
-      'pumpType': [psat.inputs.pump_style],
-      'pumpRPM': [psat.inputs.pump_rated_speed],
-      'drive': [psat.inputs.drive],
-      'viscosity': [psat.inputs.kinematic_viscosity],
-      'gravity': [psat.inputs.specific_gravity],
-      'stages': [psat.inputs.stages],
-      'fixedSpeed': [''],
-      'frequency': [psat.inputs.line_frequency],
-      'horsePower': [psat.inputs.motor_rated_power],
-      'motorRPM': [psat.inputs.motor_rated_speed],
-      'efficiencyClass': [psat.inputs.efficiency_class],
-      'voltage': [psat.inputs.motor_field_voltage],
-      'fullLoadAmps': [psat.inputs.full_load_amps],
-      'sizeMargin': [psat.inputs.margin],
-      'operatingFraction': [psat.inputs.operating_fraction],
-      'costKwHr': [psat.inputs.cost_kw_hour],
-      'flowRate': [psat.inputs.flow_rate],
-      'head': [psat.inputs.head],
-      'loadEstimatedMethod': [psat.inputs.load_estimation_method],
-      'motorKW': [psat.inputs.motor_field_voltage]
-    })
+  selectModification(modification: Modification) {
+    let tmpIndex = 0;
+    this._modifications.forEach(mod => {
+      if (mod == modification) {
+        this.modificationIndex = tmpIndex;
+        return;
+      } else {
+        tmpIndex++;
+      }
+    });
+    this.isDropdownOpen = false;
   }
 
-  createPsatInputsFromForm() {
-    let tmpPSATinputs = this.assessmentService.buildPsatInputs(
-      this.adjustmentForm.value.pumpType,
-      '',
-      this.adjustmentForm.value.pumpRPM,
-      this.adjustmentForm.value.drive,
-      this.adjustmentForm.value.viscosity,
-      this.adjustmentForm.value.gravity,
-      this.adjustmentForm.value.stages,
-      this.adjustmentForm.value.fixedSpeed,
-      this.adjustmentForm.value.frequency,
-      this.adjustmentForm.value.horsePower,
-      this.adjustmentForm.value.motorRPM,
-      this.adjustmentForm.value.efficiencyClass,
-      '',
-      this.adjustmentForm.value.voltage,
-      this.adjustmentForm.value.loadEstimatedMethod,
-      '',
-      this.adjustmentForm.value.fullLoadAmps,
-      this.adjustmentForm.value.sizeMargin,
-      this.adjustmentForm.value.operatingFraction,
-      this.adjustmentForm.value.flowRate,
-      this.adjustmentForm.value.head,
-      this.adjustmentForm.value.motorRPM,
-      this.adjustmentForm.value.motorKW,
-      this.adjustmentForm.value.voltage,
-      this.adjustmentForm.value.costKwHr
-    );
-    return tmpPSATinputs;
+  changeTab(str: string) {
+    this.modifyTab = str;
   }
 
+  toggleDropdown() {
+    this.isDropdownOpen = !this.isDropdownOpen;
+    this.showNotes = false;
+  }
+  toggleNotes() {
+    this.showNotes = !this.showNotes;
+    this.isDropdownOpen = false;
+  }
+
+  togglePanel(bool: boolean) {
+    if (bool == this.baselineSelected) {
+      this.baselineSelected = true;
+      this.modifiedSelected = false;
+    }
+    else if (bool == this.modifiedSelected) {
+      this.modifiedSelected = true;
+      this.baselineSelected = false;
+    }
+  }
+
+  changeField(str: string) {
+    this.currentField = str;
+  }
 }

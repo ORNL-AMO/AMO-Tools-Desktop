@@ -19,13 +19,13 @@ export class ChartSummaryComponent implements OnInit {
   }
 
   setColumns() {
-    if (this.baseline.adjustments.length == 1) {
+    if (this.baseline.modifications.length == 1) {
       this.columnStyle = 'col-6';
     }
-    else if (this.baseline.adjustments.length == 2) {
+    else if (this.baseline.modifications.length == 2) {
       this.columnStyle = 'col-4';
     }
-    else if (this.baseline.adjustments.length == 3) {
+    else if (this.baseline.modifications.length == 3) {
       this.columnStyle = 'col-3';
     }
   }

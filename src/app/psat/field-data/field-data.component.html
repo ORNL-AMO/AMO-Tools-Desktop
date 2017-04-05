@@ -31,7 +31,7 @@
   </div>
 
   <div class="row form-group">
-    <label class="col-sm-6 col-md-4 col-lg-3 col-form-label" for="loadEstimatedMethod">Load Estimated Method</label>
+    <label class="col-sm-6 col-md-4 col-lg-3 col-form-label" for="loadEstimatedMethod">Load Estimation Method</label>
     <div class="col-6">
       <select class="form-control select-input-field" formControlName="loadEstimatedMethod" id="loadEstimatedMethod" (focus)="focusField('loadEstimatedMethod')">
         <option *ngFor="let method of loadEstimateMethods">{{method}}</option>
@@ -39,17 +39,24 @@
     </div>
   </div>
 
-  <div class="row form-group">
+  <div class="row form-group" *ngIf="psatForm.value.loadEstimatedMethod == 'Power'">
     <label class="col-sm-6 col-md-4 col-lg-3 col-form-label" for="motorKW">Motor (kW)</label>
     <div class="col-6">
       <input type="number" class="form-control number-input-field" formControlName="motorKW" id="motorKW" (focus)="focusField('motorKW')">
     </div>
   </div>
 
-  <div class="row form-group">
-    <label class="col-sm-6 col-md-4 col-lg-3 col-form-label" for="voltage">Voltage</label>
+  <div class="row form-group" *ngIf="psatForm.value.loadEstimatedMethod == 'Current'">
+    <label class="col-sm-6 col-md-4 col-lg-3 col-form-label" for="motorAmps">Motor Amps</label>
     <div class="col-6">
-      <input type="number" class="form-control number-input-field" formControlName="voltage" id="voltage" (focus)="focusField('voltage')">
+      <input type="number" class="form-control number-input-field" formControlName="motorAmps" id="motorAmps" (focus)="focusField('motorAmps')">
+    </div>
+  </div>
+
+  <div class="row form-group">
+    <label class="col-sm-6 col-md-4 col-lg-3 col-form-label" for="measuredVoltage">Voltage</label>
+    <div class="col-6">
+      <input type="number" class="form-control number-input-field" formControlName="measuredVoltage" id="measuredVoltage" (focus)="focusField('measuredVoltage')">
     </div>
   </div>
 </form>
@@ -60,7 +67,7 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <div class="h3">Pump Head Calculator: {{assessment.name}}</div>
+        <div class="h3">Pump Head Calculator: {{psat.name}}</div>
         <button class="close" aria-label="Close" (click)="hideHeadToolModal()">
           <span aria-hidden="true">&times;</span>
         </button>

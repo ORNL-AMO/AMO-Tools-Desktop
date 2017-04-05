@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter, ViewChild } from '@angular/core';
 import { ModalDirective } from 'ng2-bootstrap';
-import { Assessment } from '../../shared/models/assessment';
+import { PSAT } from '../../shared/models/psat';
+import { PsatService } from '../psat.service';
 
 @Component({
   selector: 'app-field-data',
@@ -9,9 +10,7 @@ import { Assessment } from '../../shared/models/assessment';
 })
 export class FieldDataComponent implements OnInit {
   @Input()
-  psatForm: any;
-  @Input()
-  assessment: Assessment;
+  psat: PSAT;
   @Output('changeField')
   changeField = new EventEmitter<string>();
 
@@ -30,13 +29,15 @@ export class FieldDataComponent implements OnInit {
     'Power',
     'Current'
   ];
-
-  constructor() { }
+  psatForm: any;
+  constructor(private psatService: PsatService) { }
 
   ngOnInit() {
+    this.psatForm = this.psatService.getFormFromPsat(this.psat);
   }
 
   focusField(str: string) {
+    console.log(this.psatForm.value.loadEstimatedMethod);
     this.changeField.emit(str);
   }
 

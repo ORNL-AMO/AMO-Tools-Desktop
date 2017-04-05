@@ -1,5 +1,6 @@
 import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import { PsatService } from '../psat.service';
+import { PSAT } from '../../shared/models/psat';
 
 @Component({
   selector: 'app-motor',
@@ -8,7 +9,7 @@ import { FormBuilder } from '@angular/forms';
 })
 export class MotorComponent implements OnInit {
   @Input()
-  psatForm: any;
+  psat: PSAT;
   @Output('changeField')
   changeField = new EventEmitter<string>();
 
@@ -27,9 +28,12 @@ export class MotorComponent implements OnInit {
     '60 Hz'
   ];
 
-  constructor() { }
+  psatForm: any;
+
+  constructor(private psatService: PsatService) { }
 
   ngOnInit() {
+    this.psatForm = this.psatService.getFormFromPsat(this.psat);
   }
 
   addNum(str: string) {

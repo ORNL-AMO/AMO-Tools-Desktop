@@ -1,12 +1,12 @@
 <div class="row">
   <div class="{{columnStyle}}">
-    <app-psat-chart [adjustment]="baseline"></app-psat-chart>
+    <app-psat-chart [modification]="baseline"></app-psat-chart>
     <div class="savings text-center">{{baseline.savings | currency:'USD':true:'4.2-2'}}</div>
     <div class="text-muted text-center">Annual Savings Potential</div>
   </div>
-  <div class="{{columnStyle}}" *ngFor="let adjustment of baseline.adjustments">
-    <app-psat-chart [adjustment]="adjustment"></app-psat-chart>
-    <div class="savings text-center">{{adjustment.savings | currency:'USD':true:'4.2-2'}}</div>
+  <div class="{{columnStyle}}" *ngFor="let modification of baseline.modifications">
+    <app-psat-chart [modification]="modification"></app-psat-chart>
+    <div class="savings text-center">{{modification.savings | currency:'USD':true:'4.2-2'}}</div>
     <div class="text-muted text-center">Annual Savings Potential</div>
   </div>
 </div>

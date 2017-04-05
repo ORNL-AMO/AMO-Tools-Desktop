@@ -1,17 +1,66 @@
-<div class="row modify-content medium-bg">
-  <div class="col-3 modify-panel" [ngClass]="{'white-bg':baseline.selected}">
-    <app-baseline [baseline]="baseline" (baselineSelect)="changeSelect($event)"></app-baseline>
-  </div>
-  <div class="col-3 modify-panel" *ngFor="let adjustment of baseline.adjustments">
-    <app-adjustment *ngIf="!adjustment.selected" [adjustment]="adjustment" (adjustmentSelect)="changeSelect($event)" (adjustmentRemove)="removeAdjustment($event)"></app-adjustment>
-    <app-adjustment-selected *ngIf="adjustment.selected && adjustmentForm" [adjustment]="adjustment" [(adjustmentForm)]="adjustmentForm"
-      (adjustmentSelect)="changeSelect($event)" (adjustmentRemove)="removeAdjustment($event)"></app-adjustment-selected>
-  </div>
-  <div class="col-3 text-center" *ngIf="baseline.adjustments.length < 3">
-    <div class="row align-items-center" style="height: 100%">
-      <div class="col">
-        <button class="btn btn-secondary" (click)="addAdjustment()">Add adjustment</button>
+<nav>
+  <app-modify-conditions-tabs (changeTab)="changeTab($event)" [modifyTab]="modifyTab"></app-modify-conditions-tabs>
+</nav>
+
+<div class="row losses-row">
+  <div class="col-5 card loss-card">
+    <div class="card-header" (click)="togglePanel(baselineSelected)" [ngClass]="{'disabled': baselineSelected == false}">
+      <div class="pull-left">
+        Baseline
       </div>
     </div>
+    <div class="card-block losses-container" [ngClass]="{'disabled': baselineSelected == false}">
+      <app-system-basics *ngIf="modifyTab == 'system-basics'" [(psat)]="psat" (changeField)="changeField($event)"></app-system-basics>
+      <app-pump-fluid *ngIf="modifyTab == 'pump-fluid'" [(psat)]="psat" (changeField)="changeField($event)"></app-pump-fluid>
+      <app-motor *ngIf="modifyTab == 'motor'" [(psat)]="psat" (changeField)="changeField($event)"></app-motor>
+      <app-field-data *ngIf="modifyTab == 'field-data'" [(psat)]="psat" (changeField)="changeField($event)"></app-field-data>
+    </div>
+  </div>
+  <div class="col-5 card loss-card" *ngIf="_modifications.length != 0">
+    <div class="card-header" (click)="togglePanel(modificationSelected)" [ngClass]="{'disabled': modificationSelected == false}">
+      <div class="pull-left">
+        {{_modifications[modificationIndex].name}}
+        <span (click)="toggleNotes()">
+          <i class="fa fa-sticky-note-o" aria-hidden="true" *ngIf="!showNotes"></i>
+          <i class="fa fa-sticky-note" aria-hidden="true" *ngIf="showNotes"></i>
+        </span>
+      </div>
+      <div class="pull-right">
+        <div class="mod-dropdown">
+          <button class="btn btn-secondary" (click)="toggleDropdown()" [disabled]="!modificationSelected">
+          <span class="fa fa-angle-down" *ngIf="!isDropdownOpen"></span>
+          <span class="fa fa-angle-up" *ngIf="isDropdownOpen"></span>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="card-block losses-container" *ngIf="!isDropdownOpen && !showNotes" [ngClass]="{'disabled': modificationSelected == false}">
+      <app-system-basics *ngIf="modifyTab == 'system-basics'" [(psat)]="psat" (changeField)="changeField($event)"></app-system-basics>
+      <app-pump-fluid *ngIf="modifyTab == 'pump-fluid'" [(psat)]="psat" (changeField)="changeField($event)"></app-pump-fluid>
+      <app-motor *ngIf="modifyTab == 'motor'" [(psat)]="psat" (changeField)="changeField($event)"></app-motor>
+      <app-field-data *ngIf="modifyTab == 'field-data'" [(psat)]="psat" (changeField)="changeField($event)"></app-field-data>
+    </div>
+    <div class="card-block losses-container" *ngIf="isDropdownOpen && !showNotes">
+      <ul>
+        <li *ngFor="let modification of _modifications">
+          <button class="btn btn-secondary" (click)="selectModification(modification)">{{modification.name}}</button>
+        </li>
+        <li>
+          <button class="btn btn-secondary" (click)="addModification()">+ Add Modifiction</button>
+        </li>
+      </ul>
+    </div>
+    <div class="card-block losses-container" *ngIf="!isDropdownOpen && showNotes">
+      <app-modify-conditions-notes [(notes)]="_modifications[modificationIndex].notes" [currentTab]="modifyTab"></app-modify-conditions-notes>
+    </div>
+  </div>
+  <div class="col-5 card loss-card" *ngIf="_modifications.length == 0">
+    <div class="no-data" (click)="addModification()">
+      <h3>Once you have your baseline set up, click below to start adding modifications.</h3>
+      <h4>Add some now.</h4>
+    </div>
+  </div>
+  <div class="col-2 loss-card">
+    <app-help-panel [currentTab]="modifyTab" [currentField]="currentField"></app-help-panel>
   </div>
 </div>

@@ -23,9 +23,10 @@ export const MockDirectory: Directory = {
           motor_rated_power: null,
           motor_rated_speed: null,
           efficiency_class: null,
+          efficiency_class_specified: null,
           efficiency: null,
           motor_rated_voltage: null,
-          load_estimation_method: null,
+          load_estimation_method: 'Power',
           motor_rated_flc: null,
           full_load_amps: null,
           margin: null,
@@ -34,7 +35,8 @@ export const MockDirectory: Directory = {
           head: null,
           motor_field_power: null,
           motor_field_current: null,
-          motor_field_voltage: null
+          motor_field_voltage: null,
+          cost_kw_hour: null
         },
         savings: 10000,
         selected: false,
@@ -241,6 +243,7 @@ export const MockDirectory: Directory = {
               motor_rated_power: null,
               motor_rated_speed: null,
               efficiency_class: null,
+              efficiency_class_specified: null,
               efficiency: null,
               motor_rated_voltage: null,
               load_estimation_method: null,
@@ -253,6 +256,7 @@ export const MockDirectory: Directory = {
               motor_field_power: null,
               motor_field_current: null,
               motor_field_voltage: null,
+              cost_kw_hour: null
             },
             savings: 10000,
             selected: false,
@@ -279,6 +283,7 @@ export const MockDirectory: Directory = {
               motor_rated_power: null,
               motor_rated_speed: null,
               efficiency_class: null,
+              efficiency_class_specified: null,
               efficiency: null,
               motor_rated_voltage: null,
               load_estimation_method: null,
@@ -290,7 +295,8 @@ export const MockDirectory: Directory = {
               head: null,
               motor_field_power: null,
               motor_field_current: null,
-              motor_field_voltage: null
+              motor_field_voltage: null,
+              cost_kw_hour: null
             },
             savings: 10000,
             selected: false,
@@ -327,6 +333,7 @@ export const MockDirectory: Directory = {
                 motor_rated_power: null,
                 motor_rated_speed: null,
                 efficiency_class: null,
+                efficiency_class_specified: null,
                 efficiency: null,
                 motor_rated_voltage: null,
                 load_estimation_method: null,
@@ -339,9 +346,7 @@ export const MockDirectory: Directory = {
                 motor_field_power: null,
                 motor_field_current: null,
                 motor_field_voltage: null,
-                savings: 10000,
-                selected: false,
-                optimizationRating: 80
+                cost_kw_hour: null
               }
             }
           ]

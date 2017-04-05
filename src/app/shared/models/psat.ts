@@ -1,12 +1,11 @@
 export interface PSAT {
   inputs?: PsatInputs,
   outputs?: PsatOutputs,
-  adjustments?: PSAT[],
+  modifications?: Modification[],
   selected?: boolean
   name?: string,
   savings?: number,
   optimizationRating?: number
-
 }
 
 export interface PsatInputs {
@@ -49,4 +48,20 @@ export interface PsatOutputs {
   motor_power?: any,
   annual_energy?: any,
   annual_cost?: any
+}
+
+export interface Modification {
+  notes?: Notes,
+  name?: string,
+  inputs?: PsatInputs,
+  outputs?: PsatOutputs,
+  savings?: number,
+  optimizationRating?: number
+}
+
+export interface Notes {
+  systemBasicsNotes?: string,
+  pumpFluidNotes?: string,
+  motorNotes?: string,
+  fieldDataNotes?: string
 }

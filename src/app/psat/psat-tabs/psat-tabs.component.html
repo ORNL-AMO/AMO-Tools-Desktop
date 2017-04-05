@@ -1,6 +1,6 @@
 <div class="wizard-steps">
 
-  <div class="section">
+  <div class="section" *ngIf="currentTab < 5">
     <h2><span>System Setup</span></h2>
     <ul>
       <li [ngClass]="{'psat-tab-active': currentTab == 1}">
@@ -18,7 +18,7 @@
     </ul>
   </div>
 
-  <div class="section">
+  <div class="section" *ngIf="currentTab > 4">
     <h2><span>Assessment &amp; Analysis</span></h2>
     <ul>
       <li [ngClass]="{'psat-tab-active': currentTab == 5}">

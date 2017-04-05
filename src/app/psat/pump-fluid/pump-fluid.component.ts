@@ -1,4 +1,6 @@
 import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
+import { PsatService } from '../psat.service';
+import { PSAT } from '../../shared/models/psat';
 
 @Component({
   selector: 'app-pump-fluid',
@@ -7,7 +9,7 @@ import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 })
 export class PumpFluidComponent implements OnInit {
   @Input()
-  psatForm: any;
+  psat: PSAT;
   @Output('changeField')
   changeField = new EventEmitter<string>();
 
@@ -30,10 +32,12 @@ export class PumpFluidComponent implements OnInit {
     'Direct Drive',
     'Belt Drive'
   ];
+  psatForm: any;
 
-  constructor() { }
+  constructor(private psatService: PsatService) { }
 
   ngOnInit() {
+    this.psatForm = this.psatService.getFormFromPsat(this.psat);
   }
 
   addNum(str: string) {
@@ -56,8 +60,7 @@ export class PumpFluidComponent implements OnInit {
     }
   }
 
-  focusField(str: string){
-    console.log(str);
+  focusField(str: string) {
     this.changeField.emit(str);
   }
 
