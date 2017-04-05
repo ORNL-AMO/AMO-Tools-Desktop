@@ -1,7 +1,7 @@
 // ./main.js
 //require('electron-reload')(__dirname);
 
-const {app, BrowserWindow} = require('electron');
+const {app, BrowserWindow, ipcMain} = require('electron');
 const path = require('path');
 const url = require('url');
 const log = require('electron-log');
@@ -18,8 +18,7 @@ log.info('App starting...');
 
 require('dotenv').config();
 let win = null;
-
-global.globalUpdate = false;
+let available = null;
 
 app.on('ready', function () {
 
@@ -34,37 +33,59 @@ app.on('ready', function () {
     slashes: true
   }));
 
+  if (isDev()) {
+    win.toggleDevTools();
+  };
+
   // Remove window once app is closed
   win.on('closed', function () {
     win = null;
   });
 
+  // If isDev = true, don't check for updates. If false, check for update
+  if (isDev()) {
+    update = null;
+  } else {
+    autoUpdater.checkForUpdates();
+  };
+
   // Auto Updater events
   autoUpdater.on('checking-for-update', () => {
   });
+
   autoUpdater.on('update-available', (ev, info) => {
   });
+
+  // Send message to core.component when an update is available
+  ipcMain.on('ready', (event, arg) => {
+    log.info('autoUpdate.updateAvailable = ' + autoUpdater.updateAvailable);
+    event.sender.send('available',  autoUpdater.updateAvailable);
+  });
+
   autoUpdater.on('update-not-available', (ev, info) => {
   });
+
   autoUpdater.on('error', (ev, error) => {
   });
+
   autoUpdater.on('download-progress', (ev, progressObj) => {
   });
+
   autoUpdater.on('update-downloaded', (ev, info) => {
     autoUpdater.quitAndInstall();
   });
 
   //Check for updates and install
   autoUpdater.autoDownload = false;
-
-  // If isDev = true, don't check for updates. If false, check for updates
-  if (isDev()) {
-    update = null;
-  } else {
-    autoUpdater.checkForUpdates();
-  };
 });
 
+// Listen for message from core.component to either download updates or not
+ipcMain.on('update', (ev) => {
+  autoUpdater.downloadUpdate();
+})
+ipcMain.on('later', (ev) => {
+  update = null;
+})
 
 app.on('activate', () => {
   if (win === null) {
