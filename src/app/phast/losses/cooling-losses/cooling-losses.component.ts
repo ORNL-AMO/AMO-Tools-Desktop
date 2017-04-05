@@ -23,7 +23,9 @@ export class CoolingLossesComponent implements OnInit {
   savedLoss = new EventEmitter<boolean>();
   @Input()
   baselineSelected: boolean;
-
+  @Output('fieldChange')
+  fieldChange = new EventEmitter<string>();
+  
   _coolingLosses: Array<any>;
   firstChange: boolean = true;
   constructor(private coolingLossesService: CoolingLossesService, private phastService: PhastService) { }
@@ -166,5 +168,9 @@ export class CoolingLossesComponent implements OnInit {
     this.lossState.numLosses = this.losses.coolingLosses.length;
     this.lossState.saved = true;
     this.savedLoss.emit(true);
+  }
+
+  changeField(str: string) {
+    this.fieldChange.emit(str);
   }
 }

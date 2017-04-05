@@ -3,14 +3,14 @@
   <div class="row form-group">
     <label class="col-6 col-form-label small" for="description">Loss Description</label>
     <div class="col-6 input-group input-group-sm">
-      <input type="text" class="form-control" formControlName="description" id="description" (keyup)="checkForm()">
+      <input type="text" class="form-control" formControlName="description" id="description" (keyup)="checkForm()" (focus)="focusField('description')">
     </div>
   </div>
 
   <div class="row form-group">
     <label class="col-6 col-form-label small" for="heatLoss">Heat Loss (Btu/hr)</label>
     <div class="col-6 input-group input-group-sm">
-      <input type="number" class="form-control" formControlName="heatLoss" id="heatLoss" (keyup)="checkForm()">
+      <input type="number" class="form-control" formControlName="heatLoss" id="heatLoss" (keyup)="checkForm()" (focus)="focusField('heatLoss')">
     </div>
   </div>
 

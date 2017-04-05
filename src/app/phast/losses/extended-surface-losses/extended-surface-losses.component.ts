@@ -12,7 +12,6 @@ import { ExtendedSurfaceLossesService } from './extended-surface-losses.service'
   styleUrls: ['./extended-surface-losses.component.css']
 })
 export class ExtendedSurfaceLossesComponent implements OnInit {
-
   @Input()
   losses: Losses;
   @Input()
@@ -25,7 +24,9 @@ export class ExtendedSurfaceLossesComponent implements OnInit {
   savedLoss = new EventEmitter<boolean>();
   @Input()
   baselineSelected: boolean;
-  
+  @Output('fieldChange')
+  fieldChange = new EventEmitter<string>();
+
   _surfaceLosses: Array<any>;
   firstChange: boolean = true;
   constructor(private phastService: PhastService, private extendedSurfaceLossesService: ExtendedSurfaceLossesService) { }
@@ -113,5 +114,9 @@ export class ExtendedSurfaceLossesComponent implements OnInit {
     this.lossState.numLosses = this.losses.extendedSurfaces.length;
     this.lossState.saved = true;
     this.savedLoss.emit(true);
+  }
+
+  changeField(str: string) {
+    this.fieldChange.emit(str);
   }
 }

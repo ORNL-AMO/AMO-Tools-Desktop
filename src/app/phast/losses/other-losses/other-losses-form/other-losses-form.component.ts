@@ -11,8 +11,10 @@ export class OtherLossesFormComponent implements OnInit {
   calculate = new EventEmitter<boolean>();
   @Input()
   lossState: any;
-   @Input()
+  @Input()
   baselineSelected: boolean;
+  @Output('changeField')
+  changeField = new EventEmitter<string>();
 
   @ViewChild('lossForm') lossForm: ElementRef;
   form: any;
@@ -25,10 +27,10 @@ export class OtherLossesFormComponent implements OnInit {
     if (!this.firstChange) {
       if (!this.baselineSelected) {
         this.disableForm();
-      }else{
+      } else {
         this.enableForm();
       }
-    }else{
+    } else {
       this.firstChange = false;
     }
   }
@@ -46,8 +48,8 @@ export class OtherLossesFormComponent implements OnInit {
     }
   }
 
-  enableForm(){
-        this.elements = this.lossForm.nativeElement.elements;
+  enableForm() {
+    this.elements = this.lossForm.nativeElement.elements;
     for (var i = 0, len = this.elements.length; i < len; ++i) {
       this.elements[i].disabled = false;
     }
@@ -58,5 +60,9 @@ export class OtherLossesFormComponent implements OnInit {
     if (this.lossesForm.status == "VALID") {
       this.calculate.emit(true);
     }
+  }
+
+  focusField(str: string) {
+    this.changeField.emit(str);
   }
 }

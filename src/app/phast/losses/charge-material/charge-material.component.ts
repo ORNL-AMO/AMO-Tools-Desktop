@@ -23,7 +23,9 @@ export class ChargeMaterialComponent implements OnInit {
   savedLoss = new EventEmitter<boolean>();
   @Input()
   baselineSelected: boolean;
-
+  @Output('fieldChange')
+  fieldChange = new EventEmitter<string>();
+  
   _chargeMaterial: Array<any>;
   firstChange: boolean = true;
   constructor(private formBuilder: FormBuilder, private phastService: PhastService, private chargeMaterialService: ChargeMaterialService) { }
@@ -212,5 +214,9 @@ export class ChargeMaterialComponent implements OnInit {
     this.lossState.numLosses = this.losses.chargeMaterials.length;
     this.lossState.saved = true;
     this.savedLoss.emit(true);
+  }
+
+  changeField(str: string) {
+    this.fieldChange.emit(str);
   }
 }

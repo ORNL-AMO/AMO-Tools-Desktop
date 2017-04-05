@@ -14,6 +14,8 @@ export class WaterCoolingLossesFormComponent implements OnInit {
   lossState: any;
   @Input()
   baselineSelected: boolean;
+  @Output('changeField')
+  changeField = new EventEmitter<string>();
 
   @ViewChild('lossForm') lossForm: ElementRef;
   form: any;
@@ -60,4 +62,7 @@ export class WaterCoolingLossesFormComponent implements OnInit {
     }
   }
 
+  focusField(str: string) {
+    this.changeField.emit(str);
+  }
 }

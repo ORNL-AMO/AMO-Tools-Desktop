@@ -2,7 +2,7 @@
   <div class="row form-group">
     <label class="col-6 col-form-label small" for="type">Select Type</label>
     <div class="col-6 input-group input-group-sm">
-      <select class="form-control" formControlName="openingType" id="openingType">
+      <select class="form-control" formControlName="openingType" id="openingType" (focus)="focusField('openingType')">
               <option>Round</option>
               <option>Rectangular (Square)</option>
               </select>

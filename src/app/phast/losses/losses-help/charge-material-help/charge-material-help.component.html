@@ -1,0 +1,66 @@
+<div class="help-header">
+
+  <h3>Charge Material Help</h3>
+  <p>Enter loss data</p>
+  <p class="text-muted">
+    <span class="fa fa-youtube-play"></span> Watch tutorial on entering charge material data.
+  </p>
+
+</div>
+
+
+<div class="help-content">
+  <!--Solid, Liquid and Gas Charge Material-->
+  <div class="card" *ngIf="currentField == 'chargeMaterialType'">
+    <div class="card-header">
+      Charge Material Type
+    </div>
+    <div class="card-block">
+      <label>Description:</label>
+      <ul>
+        <li>Solid</li>
+        <li>Liquid</li>
+        <li>Gas</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card" *ngIf="currentField == 'materialName'">
+    <div class="card-header">
+      Material Name
+    </div>
+    <div class="card-block">
+      <label>Description:</label>
+    </div>
+  </div>
+
+  <!--Solid Charge Material-->
+  <div class="card" *ngIf="currentField == 'materialSpecificHeatOfSolidMaterial'">
+    <div class="card-header">
+      Average specific heat of the solid material (Btu/(lb-F))
+    </div>
+    <div class="card-block">
+      <label>Description:</label>
+    </div>
+  </div>
+
+  <!--Liquid Charge Material-->
+  <div class="card" *ngIf="currentField == 'materialSpecificHeatLiquid'">
+    <div class="card-header">
+      Specific Heat of Liquid (Btu/(lb-F))
+    </div>
+    <div class="card-block">
+      <label>Description:</label>
+    </div>
+  </div>
+
+  <!--Gas Charge Material-->
+  <div class="card" *ngIf="currentField == 'materialSpecificHeat'">
+    <div class="card-header">
+      Specific Heat of Gas (Btu/(lb-F))
+    </div>
+    <div class="card-block">
+      <label>Description:</label>
+    </div>
+  </div>
+</div>

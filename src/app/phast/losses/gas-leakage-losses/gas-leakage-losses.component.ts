@@ -22,10 +22,12 @@ export class GasLeakageLossesComponent implements OnInit {
   savedLoss = new EventEmitter<boolean>();
   @Input()
   baselineSelected: boolean;
-  
+  @Output('fieldChange')
+  fieldChange = new EventEmitter<string>();
+
   _leakageLosses: Array<any>;
   firstChange: boolean = true;
-  
+
   constructor(private gasLeakageLossesService: GasLeakageLossesService, private phastService: PhastService) { }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -108,5 +110,7 @@ export class GasLeakageLossesComponent implements OnInit {
     this.lossState.saved = true;
     this.savedLoss.emit(true);
   }
-
+  changeField(str: string) {
+    this.fieldChange.emit(str);
+  }
 }

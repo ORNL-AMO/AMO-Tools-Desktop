@@ -15,6 +15,8 @@ export class OpeningLossesFormComponent implements OnInit {
   lossState: any;
   @Input()
   baselineSelected: boolean;
+  @Output('changeField')
+  changeField = new EventEmitter<string>();
 
   @ViewChild('lossForm') lossForm: ElementRef;
   totalArea: number = 0.0;
@@ -97,4 +99,7 @@ export class OpeningLossesFormComponent implements OnInit {
     }
   }
 
+  focusField(str: string) {
+    this.changeField.emit(str);
+  }
 }

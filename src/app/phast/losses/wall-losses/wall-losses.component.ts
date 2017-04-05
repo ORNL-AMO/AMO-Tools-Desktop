@@ -23,6 +23,8 @@ export class WallLossesComponent implements OnInit {
   savedLoss = new EventEmitter<boolean>();
   @Input()
   baselineSelected: boolean;
+  @Output('fieldChange')
+  fieldChange = new EventEmitter<string>();
 
   _wallLosses: Array<any>;
   firstChange: boolean = true;
@@ -106,5 +108,9 @@ export class WallLossesComponent implements OnInit {
     this.lossState.numLosses = this.losses.wallLosses.length;
     this.lossState.saved = true;
     this.savedLoss.emit(true);
+  }
+
+  changeField(str: string){
+    this.fieldChange.emit(str);
   }
 }

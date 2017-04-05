@@ -14,6 +14,8 @@ export class ExtendedSurfaceLossesFormComponent implements OnInit {
   lossState: any;
   @Input()
   baselineSelected: boolean;
+  @Output('changeField')
+  changeField = new EventEmitter<string>();
 
   @ViewChild('lossForm') lossForm: ElementRef;
   form: any;
@@ -26,10 +28,10 @@ export class ExtendedSurfaceLossesFormComponent implements OnInit {
     if (!this.firstChange) {
       if (!this.baselineSelected) {
         this.disableForm();
-      }else{
+      } else {
         this.enableForm();
       }
-    }else{
+    } else {
       this.firstChange = false;
     }
   }
@@ -47,8 +49,8 @@ export class ExtendedSurfaceLossesFormComponent implements OnInit {
     }
   }
 
-  enableForm(){
-        this.elements = this.lossForm.nativeElement.elements;
+  enableForm() {
+    this.elements = this.lossForm.nativeElement.elements;
     for (var i = 0, len = this.elements.length; i < len; ++i) {
       this.elements[i].disabled = false;
     }
@@ -60,4 +62,7 @@ export class ExtendedSurfaceLossesFormComponent implements OnInit {
     }
   }
 
+  focusField(str: string) {
+    this.changeField.emit(str);
+  }
 }

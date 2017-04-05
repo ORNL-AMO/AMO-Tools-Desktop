@@ -2,7 +2,7 @@
   <div class="row form-group">
     <label class="col-8 col-form-label small" for="materialName">Name of Material</label>
     <div class="col-4 input-group input-group-sm">
-      <select class="form-control" formControlName="materialName" id="materialName">
+      <select class="form-control" formControlName="materialName" id="materialName" (focus)="focusField('materialName')">
           <option>Type 1</option>
           <option>Type 2</option>
         </select>
@@ -12,28 +12,28 @@
   <div class="row form-group">
     <label class="col-8 col-form-label small" for="materialSpecificHeatOfSolidMaterial">Average specific heat of the solid material (Btu/(lb-F))</label>
     <div class="col-4 input-group input-group-sm">
-      <input type="number" class="form-control" formControlName="materialSpecificHeatOfSolidMaterial" id="materialSpecificHeatOfSolidMaterial">
+      <input type="number" class="form-control" formControlName="materialSpecificHeatOfSolidMaterial" id="materialSpecificHeatOfSolidMaterial"  (keyup)="checkForm()" (focus)="focusField('materialSpecificHeatOfSolidMaterial')">
     </div>
   </div>
 
   <div class="row form-group">
     <label class="col-8 col-form-label small" for="materialLatentHeatOfFusion">Latent Heat of Fusion (Btu/lb)</label>
     <div class="col-4 input-group input-group-sm">
-      <input type="number" class="form-control" formControlName="materialLatentHeatOfFusion" id="materialLatentHeatOfFusion">
+      <input type="number" class="form-control" formControlName="materialLatentHeatOfFusion" id="materialLatentHeatOfFusion" (keyup)="checkForm()">
     </div>
   </div>
 
   <div class="row form-group">
     <label class="col-8 col-form-label small" for="materialHeatOfLiquid">Specific heat of liquid from molten material (Btu/(lb-F))</label>
     <div class="col-4 input-group input-group-sm">
-      <input type="number" class="form-control" formControlName="materialHeatOfLiquid" id="materialHeatOfLiquid">
+      <input type="number" class="form-control" formControlName="materialHeatOfLiquid" id="materialHeatOfLiquid" (keyup)="checkForm()">
     </div>
   </div>
 
   <div class="row form-group">
     <label class="col-8 col-form-label small" for="materialMeltingPoint">Melting Point (&#8457;)</label>
     <div class="col-4 input-group input-group-sm">
-      <input type="number" class="form-control" formControlName="materialMeltingPoint" id="materialMeltingPoint">
+      <input type="number" class="form-control" formControlName="materialMeltingPoint" id="materialMeltingPoint" (keyup)="checkForm()">
     </div>
   </div>
 

@@ -23,11 +23,13 @@ export class AtmosphereLossesComponent implements OnInit {
   savedLoss = new EventEmitter<boolean>();
   @Input()
   baselineSelected: boolean;
+  @Output('fieldChange')
+  fieldChange = new EventEmitter<string>();
 
   _atmosphereLosses: Array<any>;
   firstChange: boolean = true;
   constructor(private atmosphereLossesService: AtmosphereLossesService, private phastService: PhastService) { }
-  
+
   ngOnChanges(changes: SimpleChanges) {
     if (!this.firstChange) {
       if (changes.saveClicked) {
@@ -106,5 +108,9 @@ export class AtmosphereLossesComponent implements OnInit {
     this.lossState.numLosses = this.losses.atmosphereLosses.length;
     this.lossState.saved = true;
     this.savedLoss.emit(true);
+  }
+
+  changeField(str: string) {
+    this.fieldChange.emit(str);
   }
 }

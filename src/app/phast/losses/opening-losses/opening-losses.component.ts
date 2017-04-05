@@ -23,10 +23,12 @@ export class OpeningLossesComponent implements OnInit {
   savedLoss = new EventEmitter<boolean>();
   @Input()
   baselineSelected: boolean;
-  
+  @Output('fieldChange')
+  fieldChange = new EventEmitter<string>();
+
   _openingLosses: Array<any>;
   firstChange: boolean = true;
-  
+
   constructor(private phastService: PhastService, private openingLossesService: OpeningLossesService) { }
 
 
@@ -128,4 +130,8 @@ export class OpeningLossesComponent implements OnInit {
     this.lossState.saved = true;
     this.savedLoss.emit(true);
   }
+  changeField(str: string) {
+    this.fieldChange.emit(str);
+  }
+
 }

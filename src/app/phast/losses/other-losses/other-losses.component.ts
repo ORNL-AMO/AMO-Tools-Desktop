@@ -22,7 +22,9 @@ export class OtherLossesComponent implements OnInit {
   savedLoss = new EventEmitter<boolean>();
   @Input()
   baselineSelected: boolean;
-  
+  @Output('fieldChange')
+  fieldChange = new EventEmitter<string>();
+
   _otherLosses: Array<any>;
   firstChange: boolean = true;
   constructor(private otherLossesService: OtherLossesService) { }
@@ -99,5 +101,9 @@ export class OtherLossesComponent implements OnInit {
     this.lossState.numLosses = this.losses.otherLosses.length;
     this.lossState.saved = true;
     this.savedLoss.emit(true);
+  }
+
+  changeField(str: string) {
+    this.fieldChange.emit(str);
   }
 }

@@ -2,7 +2,7 @@
   <div class="row form-group">
     <label class="col-8 col-form-label small" for="materialName">Name of Material</label>
     <div class="col-4 input-group input-group-sm">
-      <select class="form-control" formControlName="materialName" id="materialName">
+      <select class="form-control" formControlName="materialName" id="materialName" (focus)="focusField('materialName')">
           <option>Type 1</option>
           <option>Type 2</option>
         </select>
@@ -12,7 +12,7 @@
   <div class="row form-group">
     <label class="col-8 col-form-label small" for="materialSpecificHeatLiquid">Specific Heat of Liquid (Btu/(lb-F))</label>
     <div class="col-4 input-group input-group-sm">
-      <input type="number" class="form-control" formControlName="materialSpecificHeatLiquid" id="materialSpecificHeatLiquid">
+      <input type="number" class="form-control" formControlName="materialSpecificHeatLiquid" id="materialSpecificHeatLiquid"  (focus)="focusField('materialSpecificHeatLiquid')">
     </div>
   </div>
 

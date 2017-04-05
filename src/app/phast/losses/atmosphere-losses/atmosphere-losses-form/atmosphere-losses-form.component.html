@@ -3,7 +3,7 @@
   <div class="row form-group">
     <label class="col-6 col-form-label small" for="atmosphereGas">Atmosphere Gas</label>
     <div class="col-6 input-group input-group-sm">
-      <input type="text" class="form-control" formControlName="atmosphereGas" id="atmosphereGas" (keyup)="checkForm()">
+      <input type="text" class="form-control" formControlName="atmosphereGas" id="atmosphereGas" (keyup)="checkForm()" (focus)="focusField('atmosphereGas')">
     </div>
   </div>
 
