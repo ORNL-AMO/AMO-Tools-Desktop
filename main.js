@@ -87,11 +87,6 @@ ipcMain.on('later', (ev) => {
   update = null;
 })
 
-ipcMain.on('progress', (event, arg) => {
-  log.info('progress =' + autoUpdater.progressObj);
-  event.sender.send('progressObj', autoUpdater.progressObj);
-})
-
 app.on('activate', () => {
   if (win === null) {
     createWindow();
