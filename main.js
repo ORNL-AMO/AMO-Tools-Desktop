@@ -33,7 +33,9 @@ app.on('ready', function () {
     slashes: true
   }));
 
-  win.toggleDevTools();
+  if (isDev()) {
+    win.toggleDevTools();
+  };
 
   // Remove window once app is closed
   win.on('closed', function () {
