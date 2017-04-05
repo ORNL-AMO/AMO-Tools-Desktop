@@ -3,7 +3,7 @@
   <div class="row form-group">
     <label class="col-6 col-form-label small" for="liquidFlow">Liquid Flow (gal/min)</label>
     <div class="col-6 input-group input-group-sm">
-      <input type="number" class="form-control" formControlName="liquidFlow" id="liquidFlow" (keyup)="checkForm()">
+      <input type="number" class="form-control" formControlName="liquidFlow" id="liquidFlow" (keyup)="checkForm()" (focus)="focusField('liquidFlow')">
     </div>
   </div>
 

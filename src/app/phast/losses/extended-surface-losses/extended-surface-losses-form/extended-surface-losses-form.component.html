@@ -3,7 +3,7 @@
   <div class="row form-group">
     <label class="col-6 col-form-label small" for="surfaceArea">Total Outside Surface Area (ft<sup>2</sup>)</label>
     <div class="col-6 input-group input-group-sm">
-      <input type="number" class="form-control" formControlName="surfaceArea" id="surfaceArea" (keyup)="checkForm()">
+      <input type="number" class="form-control" formControlName="surfaceArea" id="surfaceArea" (keyup)="checkForm()" (focus)="focusField('surfaceArea')">
     </div>
   </div>
 

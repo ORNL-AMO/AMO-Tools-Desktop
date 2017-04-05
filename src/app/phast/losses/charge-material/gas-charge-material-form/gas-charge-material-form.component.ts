@@ -14,6 +14,8 @@ export class GasChargeMaterialFormComponent implements OnInit {
   lossState: any;
   @Input()
   baselineSelected: boolean;
+  @Output('changeField')
+  changeField = new EventEmitter<string>();
 
   @ViewChild('lossForm') lossForm: ElementRef;
   form: any;
@@ -59,5 +61,9 @@ export class GasChargeMaterialFormComponent implements OnInit {
     if (this.chargeMaterialForm.status == "VALID") {
       this.calculate.emit(true);
     }
+  }
+
+  focusField(str: string) {
+    this.changeField.emit(str);
   }
 }

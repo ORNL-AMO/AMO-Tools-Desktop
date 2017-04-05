@@ -2,7 +2,7 @@
   <div class="row form-group">
     <label class="col-6 col-form-label small" for="avgSpecificHeat">Average Specific Heat (Btu/lb-F)</label>
     <div class="col-6 input-group input-group-sm">
-      <input type="number" class="form-control" formControlName="avgSpecificHeat" id="avgSpecificHeat" (keyup)="checkForm()">
+      <input type="number" class="form-control" formControlName="avgSpecificHeat" id="avgSpecificHeat" (keyup)="checkForm()" (focus)="focusField('avgSpecificHeat')">
     </div>
   </div>
 

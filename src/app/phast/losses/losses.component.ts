@@ -17,6 +17,7 @@ export class LossesComponent implements OnInit {
   modificationSelected: boolean = false;
   modificationIndex: number = 0;
   lossesTab: string = 'charge-material';
+  currentField: string = 'default';
   addLossToggle: boolean = false;
   isFirstChange: boolean = true;
   showNotes: boolean = false;
@@ -79,6 +80,11 @@ export class LossesComponent implements OnInit {
     this.lossesStates.coolingLosses.saved = true;
     this.lossesStates.fixtureLosses.saved = true;
   }
+
+  changeField($event) {
+    this.currentField = $event;
+  }
+
 
   saveModifications() {
     if (this._modifications) {

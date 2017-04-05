@@ -3,7 +3,7 @@
   <div class="row form-group">
     <label class="col-6 col-form-label small" for="materialName">Material Name</label>
     <div class="col-6 input-group input-group-sm">
-      <select class="form-control" formControlName="materialName" id="materialName">
+      <select class="form-control" formControlName="materialName" id="materialName" (focus)="focusField('materialName')">
         <option>Material 1</option>
         <option>Material 2</option>
       </select>

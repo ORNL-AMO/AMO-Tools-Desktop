@@ -3,7 +3,7 @@
   <div class="row form-group">
     <label class="col-6 col-form-label small" for="draftPressure">Furnace Draft Pressure (Inch W.C.)</label>
     <div class="col-6 input-group input-group-sm">
-      <input type="number" class="form-control" formControlName="draftPressure" id="draftPressure" (keyup)="checkForm()">
+      <input type="number" class="form-control" formControlName="draftPressure" id="draftPressure" (keyup)="checkForm()" (focus)="focusField('draftPressure')">
     </div>
   </div>
 

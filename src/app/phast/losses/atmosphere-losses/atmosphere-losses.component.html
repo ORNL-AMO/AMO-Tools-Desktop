@@ -21,7 +21,7 @@
   </div>
   <div class="row">
     <div class="col-12">
-      <app-atmosphere-losses-form [(atmosphereLossForm)]="loss.form" (calculate)="calculate(loss)" [(lossState)]="lossState" [baselineSelected]="baselineSelected"></app-atmosphere-losses-form>
+      <app-atmosphere-losses-form [(atmosphereLossForm)]="loss.form" (changeField)="changeField($event)" (calculate)="calculate(loss)" [(lossState)]="lossState" [baselineSelected]="baselineSelected"></app-atmosphere-losses-form>
     </div>
   </div>
   <div class="row">

@@ -14,6 +14,8 @@ export class AtmosphereLossesFormComponent implements OnInit {
   lossState: any;
   @Input()
   baselineSelected: boolean;
+  @Output('changeField')
+  changeField = new EventEmitter<string>();
 
   @ViewChild('lossForm') lossForm: ElementRef;
   form: any;
@@ -60,6 +62,10 @@ export class AtmosphereLossesFormComponent implements OnInit {
     if (this.atmosphereLossForm.status == "VALID") {
       this.calculate.emit(true);
     }
+  }
+
+  focusField(str: string) {
+    this.changeField.emit(str);
   }
 
 }

@@ -14,7 +14,9 @@ export class FixtureLossesFormComponent implements OnInit {
   lossState: any;
   @Input()
   baselineSelected: boolean;
-
+  @Output('changeField')
+  changeField = new EventEmitter<string>();
+  
   @ViewChild('lossForm') lossForm: ElementRef;
   form: any;
   elements: any;
@@ -26,10 +28,10 @@ export class FixtureLossesFormComponent implements OnInit {
     if (!this.firstChange) {
       if (!this.baselineSelected) {
         this.disableForm();
-      }else{
+      } else {
         this.enableForm();
       }
-    }else{
+    } else {
       this.firstChange = false;
     }
   }
@@ -47,8 +49,8 @@ export class FixtureLossesFormComponent implements OnInit {
     }
   }
 
-  enableForm(){
-        this.elements = this.lossForm.nativeElement.elements;
+  enableForm() {
+    this.elements = this.lossForm.nativeElement.elements;
     for (var i = 0, len = this.elements.length; i < len; ++i) {
       this.elements[i].disabled = false;
     }
@@ -59,5 +61,10 @@ export class FixtureLossesFormComponent implements OnInit {
     if (this.lossesForm.status == 'VALID') {
       this.calculate.emit(true);
     }
+  }
+
+
+  focusField(str: string) {
+    this.changeField.emit(str);
   }
 }

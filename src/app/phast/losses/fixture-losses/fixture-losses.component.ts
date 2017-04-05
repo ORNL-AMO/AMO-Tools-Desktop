@@ -23,6 +23,8 @@ export class FixtureLossesComponent implements OnInit {
   savedLoss = new EventEmitter<boolean>();
   @Input()
   baselineSelected: boolean;
+  @Output('fieldChange')
+  fieldChange = new EventEmitter<string>();
 
   _fixtureLosses: Array<any>;
   firstChange: boolean = true;
@@ -103,6 +105,10 @@ export class FixtureLossesComponent implements OnInit {
     this.lossState.numLosses = this.losses.fixtureLosses.length;
     this.lossState.saved = true;
     this.savedLoss.emit(true);
+  }
+
+  changeField(str: string) {
+    this.fieldChange.emit(str);
   }
 
 }

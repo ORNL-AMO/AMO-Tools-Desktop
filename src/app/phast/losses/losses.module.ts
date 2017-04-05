@@ -43,6 +43,17 @@ import { ExtendedSurfaceLossesFormComponent } from './extended-surface-losses/ex
 import { ExtendedSurfaceLossesService } from './extended-surface-losses/extended-surface-losses.service';
 import { OtherLossesService } from './other-losses/other-losses.service';
 import { NotesComponent } from './notes/notes.component';
+import { LossesHelpComponent } from './losses-help/losses-help.component';
+import { AtmosphereLossesHelpComponent } from './losses-help/atmosphere-losses-help/atmosphere-losses-help.component';
+import { ChargeMaterialHelpComponent } from './losses-help/charge-material-help/charge-material-help.component';
+import { CoolingLossesHelpComponent } from './losses-help/cooling-losses-help/cooling-losses-help.component';
+import { ExtendedSurfaceLossesHelpComponent } from './losses-help/extended-surface-losses-help/extended-surface-losses-help.component';
+import { FixtureLossesHelpComponent } from './losses-help/fixture-losses-help/fixture-losses-help.component';
+import { FlueGasLossesHelpComponent } from './losses-help/flue-gas-losses-help/flue-gas-losses-help.component';
+import { GasLeakageLossesHelpComponent } from './losses-help/gas-leakage-losses-help/gas-leakage-losses-help.component';
+import { OpeningLossesHelpComponent } from './losses-help/opening-losses-help/opening-losses-help.component';
+import { OtherLossesHelpComponent } from './losses-help/other-losses-help/other-losses-help.component';
+import { WallLossesHelpComponent } from './losses-help/wall-losses-help/wall-losses-help.component';
 
 @NgModule({
   imports: [
@@ -81,7 +92,18 @@ import { NotesComponent } from './notes/notes.component';
     GasLeakageLossesFormComponent,
     ExtendedSurfaceLossesComponent,
     ExtendedSurfaceLossesFormComponent,
-    NotesComponent
+    NotesComponent,
+    LossesHelpComponent,
+    AtmosphereLossesHelpComponent,
+    ChargeMaterialHelpComponent,
+    CoolingLossesHelpComponent,
+    ExtendedSurfaceLossesHelpComponent,
+    FixtureLossesHelpComponent,
+    FlueGasLossesHelpComponent,
+    GasLeakageLossesHelpComponent,
+    OpeningLossesHelpComponent,
+    OtherLossesHelpComponent,
+    WallLossesHelpComponent
   ],
   providers: [
     ChargeMaterialService,

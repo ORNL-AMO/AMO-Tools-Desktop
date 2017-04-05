@@ -22,7 +22,7 @@
   </div>
   <div class="row">
     <div class="col-12">
-      <app-gas-leakage-losses-form [(lossesForm)]="loss.form" (calculate)="calculate(loss)" [(lossState)]="lossState" [baselineSelected]="baselineSelected"></app-gas-leakage-losses-form>
+      <app-gas-leakage-losses-form (changeField)="changeField($event)" [(lossesForm)]="loss.form" (calculate)="calculate(loss)" [(lossState)]="lossState" [baselineSelected]="baselineSelected"></app-gas-leakage-losses-form>
     </div>
   </div>
   <div class="row">

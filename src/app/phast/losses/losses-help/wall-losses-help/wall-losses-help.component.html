@@ -1,0 +1,36 @@
+
+
+<div class="help-header">
+  
+  <h3>Wall Losses Help</h3>
+  <p>Enter loss data</p>
+  <p class="text-muted">
+    <span class="fa fa-youtube-play"></span> Watch tutorial on gathering wall loss data.
+  </p>
+
+</div>
+
+
+<div class="help-content">
+
+
+  <div class="card" *ngIf="currentField == 'avgSurfaceTemp'">
+    <div class="card-header">
+      Average Surface Temperature
+    </div>
+    <div class="card-block">
+      <label>Description:</label>
+    </div>
+  </div>
+
+
+  <div class="card" *ngIf="currentField == 'ambientTemp'">
+    <div class="card-header">
+      Ambient Temperature
+    </div>
+    <div class="card-block">
+      <label>Description:</label>
+    </div>
+  </div>
+  
+</div>

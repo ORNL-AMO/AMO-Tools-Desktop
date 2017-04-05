@@ -3,14 +3,14 @@
   <div class="row form-group">
     <label class="col-6 col-form-label small" for="avgSurfaceTemp">Average Surface Temperature (&#8457;)</label>
     <div class="col-6 input-group input-group-sm">
-      <input type="number" class="form-control" formControlName="avgSurfaceTemp" id="avgSurfaceTemp" (keyup)="checkForm()">
+      <input type="number" class="form-control" formControlName="avgSurfaceTemp" id="avgSurfaceTemp" (keyup)="checkForm()" (focus)="focusField('avgSurfaceTemp')">
     </div>
   </div>
 
   <div class="row form-group">
     <label class="col-6 col-form-label small" for="ambientTemp">Ambient Temperature (&#8457;)</label>
     <div class="col-6 input-group input-group-sm">
-      <input type="number" class="form-control" formControlName="ambientTemp" id="ambientTemp" (keyup)="checkForm()">
+      <input type="number" class="form-control" formControlName="ambientTemp" id="ambientTemp" (keyup)="checkForm()" (focus)="focusField('ambientTemp')">
     </div>
   </div>
 
