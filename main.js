@@ -56,7 +56,7 @@ app.on('ready', function () {
 
   // Send message to core.component when an update is available
   ipcMain.on('ready', (event, arg) => {
-    console.log('autoUpdate.updateAvailable = ' + autoUpdater.updateAvailable);
+    log.info('autoUpdate.updateAvailable = ' + autoUpdater.updateAvailable);
     event.sender.send('available',  autoUpdater.updateAvailable);
   });
 
@@ -83,6 +83,11 @@ ipcMain.on('update', (ev) => {
 })
 ipcMain.on('later', (ev) => {
   update = null;
+})
+
+ipcMain.on('progress', (event, arg) => {
+  log.info('progress =' + autoUpdater.progressObj);
+  event.sender.send('progressObj', autoUpdater.progressObj);
 })
 
 app.on('activate', () => {

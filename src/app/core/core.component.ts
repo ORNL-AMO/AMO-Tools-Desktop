@@ -32,12 +32,12 @@ export class CoreComponent implements OnInit {
     this.updateModal.hide();
   }
 
-  update() {
-    this.ElectronService.ipcRenderer.send('update');
+  updateSelected() {
+    this.ElectronService.ipcRenderer.send('update', null);
   }
 
   later() {
-    this.ElectronService.ipcRenderer.send('later');
     this.updateModal.hide();
+    this.ElectronService.ipcRenderer.send('later', null);
   }
 }
