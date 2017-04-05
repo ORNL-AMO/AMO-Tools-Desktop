@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, SimpleChanges, Output, EventEmitter } from '@angular/core';
 import * as _ from 'lodash';
 import { PhastService } from '../../phast.service';
 import { CoolingLossesService } from './cooling-losses.service';
@@ -19,6 +19,10 @@ export class CoolingLossesComponent implements OnInit {
   lossState: any;
   @Input()
   addLossToggle: boolean;
+  @Output('savedLoss')
+  savedLoss = new EventEmitter<boolean>();
+  @Input()
+  baselineSelected: boolean;
 
   _coolingLosses: Array<any>;
   firstChange: boolean = true;
@@ -161,5 +165,6 @@ export class CoolingLossesComponent implements OnInit {
     this.losses.coolingLosses = tmpCoolingLoss;
     this.lossState.numLosses = this.losses.coolingLosses.length;
     this.lossState.saved = true;
+    this.savedLoss.emit(true);
   }
 }

@@ -18,6 +18,10 @@ padding-right: 0px;
   background-color: white;
 }
 
+.card-header.disabled, .card-header:disabled{
+  background:#efefef
+}
+
 .mod-dropdown{
   
 }

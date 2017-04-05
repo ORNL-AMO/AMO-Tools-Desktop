@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, SimpleChanges, Output, EventEmitter } from '@angular/core';
 import * as _ from 'lodash';
 import { PhastService } from '../../phast.service';
 import { Losses } from '../../../shared/models/phast';
@@ -18,7 +18,11 @@ export class GasLeakageLossesComponent implements OnInit {
   lossState: any;
   @Input()
   addLossToggle: boolean;
-
+  @Output('savedLoss')
+  savedLoss = new EventEmitter<boolean>();
+  @Input()
+  baselineSelected: boolean;
+  
   _leakageLosses: Array<any>;
   firstChange: boolean = true;
   
@@ -102,6 +106,7 @@ export class GasLeakageLossesComponent implements OnInit {
     this.losses.leakageLosses = tmpLeakageLosses;
     this.lossState.numLosses = this.losses.leakageLosses.length;
     this.lossState.saved = true;
+    this.savedLoss.emit(true);
   }
 
 }

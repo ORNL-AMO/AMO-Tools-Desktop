@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, SimpleChanges, Output, EventEmitter } from '@angular/core';
 import * as _ from 'lodash';
 import { PhastService } from '../../phast.service';
 import { ExtendedSurface } from '../../../shared/models/losses/extendedSurface';
@@ -21,7 +21,11 @@ export class ExtendedSurfaceLossesComponent implements OnInit {
   lossState: any;
   @Input()
   addLossToggle: boolean;
-
+  @Output('savedLoss')
+  savedLoss = new EventEmitter<boolean>();
+  @Input()
+  baselineSelected: boolean;
+  
   _surfaceLosses: Array<any>;
   firstChange: boolean = true;
   constructor(private phastService: PhastService, private extendedSurfaceLossesService: ExtendedSurfaceLossesService) { }
@@ -108,5 +112,6 @@ export class ExtendedSurfaceLossesComponent implements OnInit {
     this.losses.extendedSurfaces = tmpSurfaceLosses;
     this.lossState.numLosses = this.losses.extendedSurfaces.length;
     this.lossState.saved = true;
+    this.savedLoss.emit(true);
   }
 }

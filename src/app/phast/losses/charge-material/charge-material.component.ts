@@ -19,6 +19,10 @@ export class ChargeMaterialComponent implements OnInit {
   lossState: any;
   @Input()
   addLossToggle: boolean;
+  @Output('savedLoss')
+  savedLoss = new EventEmitter<boolean>();
+  @Input()
+  baselineSelected: boolean;
 
   _chargeMaterial: Array<any>;
   firstChange: boolean = true;
@@ -207,5 +211,6 @@ export class ChargeMaterialComponent implements OnInit {
     this.losses.chargeMaterials = tmpChargeMaterials;
     this.lossState.numLosses = this.losses.chargeMaterials.length;
     this.lossState.saved = true;
+    this.savedLoss.emit(true);
   }
 }

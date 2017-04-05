@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, SimpleChanges, SimpleChange } from '@angular/core';
+import { Component, OnInit, Input, SimpleChanges, SimpleChange, Output, EventEmitter } from '@angular/core';
 import * as _ from 'lodash';
 import { PhastService } from '../../phast.service';
 import { WallLoss } from '../../../shared/models/losses/wallLoss';
@@ -19,6 +19,10 @@ export class WallLossesComponent implements OnInit {
   lossState: any;
   @Input()
   addLossToggle: boolean;
+  @Output('savedLoss')
+  savedLoss = new EventEmitter<boolean>();
+  @Input()
+  baselineSelected: boolean;
 
   _wallLosses: Array<any>;
   firstChange: boolean = true;
@@ -101,5 +105,6 @@ export class WallLossesComponent implements OnInit {
     this.losses.wallLosses = tmpWallLosses;
     this.lossState.numLosses = this.losses.wallLosses.length;
     this.lossState.saved = true;
+    this.savedLoss.emit(true);
   }
 }

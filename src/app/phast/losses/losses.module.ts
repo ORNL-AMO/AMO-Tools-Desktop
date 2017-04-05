@@ -42,6 +42,7 @@ import { ExtendedSurfaceLossesComponent } from './extended-surface-losses/extend
 import { ExtendedSurfaceLossesFormComponent } from './extended-surface-losses/extended-surface-losses-form/extended-surface-losses-form.component';
 import { ExtendedSurfaceLossesService } from './extended-surface-losses/extended-surface-losses.service';
 import { OtherLossesService } from './other-losses/other-losses.service';
+import { NotesComponent } from './notes/notes.component';
 
 @NgModule({
   imports: [
@@ -79,7 +80,8 @@ import { OtherLossesService } from './other-losses/other-losses.service';
     GasLeakageLossesComponent,
     GasLeakageLossesFormComponent,
     ExtendedSurfaceLossesComponent,
-    ExtendedSurfaceLossesFormComponent
+    ExtendedSurfaceLossesFormComponent,
+    NotesComponent
   ],
   providers: [
     ChargeMaterialService,

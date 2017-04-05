@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, SimpleChanges, Output, EventEmitter } from '@angular/core';
 import * as _ from 'lodash';
 import { OtherLossesService } from './other-losses.service';
 import { Losses } from '../../../shared/models/phast';
@@ -18,12 +18,16 @@ export class OtherLossesComponent implements OnInit {
   lossState: any;
   @Input()
   addLossToggle: boolean;
+  @Output('savedLoss')
+  savedLoss = new EventEmitter<boolean>();
+  @Input()
+  baselineSelected: boolean;
   
   _otherLosses: Array<any>;
   firstChange: boolean = true;
   constructor(private otherLossesService: OtherLossesService) { }
 
- 
+
   ngOnChanges(changes: SimpleChanges) {
     if (!this.firstChange) {
       if (changes.saveClicked) {
@@ -94,5 +98,6 @@ export class OtherLossesComponent implements OnInit {
     this.losses.otherLosses = tmpLosses;
     this.lossState.numLosses = this.losses.otherLosses.length;
     this.lossState.saved = true;
+    this.savedLoss.emit(true);
   }
 }
