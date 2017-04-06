@@ -18,4 +18,50 @@
       <label>Description:</label>
     </div>
   </div>
+
+  <div class="card" *ngIf="currentField == 'specificHeat'">
+    <div class="card-header">
+      Specific Heat (Btu/(lb-f))
+    </div>
+    <div class="card-block">
+      <label>Description:</label>
+    </div>
+  </div>
+
+  <div class="card" *ngIf="currentField == 'feedRate'">
+    <div class="card-header">
+      Fixture Weight feed rate (lb/hr)
+    </div>
+    <div class="card-block">
+      <label>Description:</label>
+    </div>
+  </div>
+
+  <div class="card" *ngIf="currentField == 'initialTemp'">
+    <div class="card-header">
+      Initial Temperature (&#8457;)
+    </div>
+    <div class="card-block">
+      <label>Description:</label>
+    </div>
+  </div>
+
+  <div class="card" *ngIf="currentField == 'finalTemp'">
+    <div class="card-header">
+      Final Temperature (&#8457;)
+    </div>
+    <div class="card-block">
+      <label>Description:</label>
+    </div>
+  </div>
+
+  <div class="card" *ngIf="currentField == 'correctionFactor'">
+    <div class="card-header">
+      Correction Factor
+    </div>
+    <div class="card-block">
+      <label>Description:</label>
+    </div>
+  </div>
+
 </div>

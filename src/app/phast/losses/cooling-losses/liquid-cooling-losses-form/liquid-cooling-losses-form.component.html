@@ -16,28 +16,28 @@
   <div class="row form-group">
     <label class="col-6 col-form-label small" for="liquidFlow">Liquid Flow (gal/min)</label>
     <div class="col-6 input-group input-group-sm">
-      <input type="number" class="form-control" formControlName="liquidFlow" id="liquidFlow" (keyup)="checkForm()">
+      <input type="number" class="form-control" formControlName="liquidFlow" id="liquidFlow" (keyup)="checkForm()" (focus)="focusField('liquidFlow')">
     </div>
   </div>
 
   <div class="row form-group">
     <label class="col-6 col-form-label small" for="inletTemp">Inlet Temperature (&#8457;)</label>
     <div class="col-6 input-group input-group-sm">
-      <input type="number" class="form-control" formControlName="inletTemp" id="inletTemp" (keyup)="checkForm()">
+      <input type="number" class="form-control" formControlName="inletTemp" id="inletTemp" (keyup)="checkForm()" (focus)="focusField('inletTemp')">
     </div>
   </div>
 
   <div class="row form-group">
     <label class="col-6 col-form-label small" for="outletTemp">Outlet Temperature (&#8457;)</label>
     <div class="col-6 input-group input-group-sm">
-      <input type="number" class="form-control" formControlName="outletTemp" id="outletTemp" (keyup)="checkForm()">
+      <input type="number" class="form-control" formControlName="outletTemp" id="outletTemp" (keyup)="checkForm()" (focus)="focusField('outletTemp')">
     </div>
   </div>
-  
+
   <div class="row form-group">
     <label class="col-6 col-form-label small" for="correctionFactor">Correction Factor</label>
     <div class="col-6 input-group input-group-sm">
-      <input type="number" class="form-control" formControlName="correctionFactor" id="correctionFactor" (keyup)="checkForm()">
+      <input type="number" class="form-control" formControlName="correctionFactor" id="correctionFactor" (keyup)="checkForm()" (focus)="focusField('correctionFactor')">
     </div>
   </div>
 </form>
