@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, Input, SimpleChanges } from '@angular/core';
 import { PsatService } from '../psat.service';
 import { PSAT } from '../../shared/models/psat';
 
@@ -12,6 +12,14 @@ export class MotorComponent implements OnInit {
   psat: PSAT;
   @Output('changeField')
   changeField = new EventEmitter<string>();
+  @Input()
+  saveClicked: boolean;
+  @Input()
+  isValid: boolean;
+  @Output('saved')
+  saved = new EventEmitter<boolean>();
+  @Input()
+  selected: boolean;
 
   efficiencyClasses: Array<string> = [
     'Standard Efficiency',
@@ -29,11 +37,22 @@ export class MotorComponent implements OnInit {
   ];
 
   psatForm: any;
-
+  isFirstChange: boolean = true;
   constructor(private psatService: PsatService) { }
 
   ngOnInit() {
-    this.psatForm = this.psatService.getFormFromPsat(this.psat);
+    this.psatForm = this.psatService.getFormFromPsat(this.psat.inputs);
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (!this.isFirstChange) {
+      if (changes.saveClicked) {
+        this.savePsat(this.psatForm);
+      }
+    }
+    else {
+      this.isFirstChange = false;
+    }
   }
 
   addNum(str: string) {
@@ -56,7 +75,15 @@ export class MotorComponent implements OnInit {
     }
   }
 
-  focusField(str: string){
+  focusField(str: string) {
     this.changeField.emit(str);
+  }
+
+  savePsat(form: any) {
+    this.isValid = this.psatService.isMotorFormValid(form);
+    if (this.isValid) {
+      this.psat.inputs = this.psatService.getPsatInputsFromForm(form);
+      this.saved.emit(this.selected);
+    }
   }
 }

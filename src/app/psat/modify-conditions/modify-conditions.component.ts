@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, EventEmitter, Output, SimpleChange } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output, SimpleChanges } from '@angular/core';
 import { PSAT, PsatInputs, Modification } from '../../shared/models/psat';
 import * as _ from 'lodash';
 
@@ -31,20 +31,35 @@ export class ModifyConditionsComponent implements OnInit {
     }
   }
 
-  ngOnChanges(changes: SimpleChange) {
-    //saveClicked input changes causes adjustment save
-  }
 
-  saveModifications() {
-    if (this._modifications) {
-      this.psat.modifications = (JSON.parse(JSON.stringify(this._modifications)));
+  // ngOnChanges(changes: SimpleChanges) {
+  //   if (!this.isFirstChange) {
+  //     if (changes.saveClicked) {
+  //       this.saveModifications();
+  //     }
+  //   }
+  //   else {
+  //     this.isFirstChange = false;
+  //   }
+  // }
+
+  save(bool: boolean) {
+    debugger
+    if (bool == this.modifiedSelected) {
+      if (this._modifications) {
+        this.psat.modifications = (JSON.parse(JSON.stringify(this._modifications)));
+        console.log('PSAT MODIFICATION')
+        console.log(this.psat);
+      }
     }
   }
 
   addModification() {
     this._modifications.unshift({
-      name: 'Modification ' + (this._modifications.length + 1),
-      inputs: (JSON.parse(JSON.stringify(this.psat.inputs))),
+      psat: {
+        name: 'Modification ' + (this._modifications.length + 1),
+        inputs: (JSON.parse(JSON.stringify(this.psat.inputs))),
+      },
       notes: {
         systemBasicsNotes: '',
         pumpFluidNotes: '',

@@ -52,11 +52,7 @@ export interface PsatOutputs {
 
 export interface Modification {
   notes?: Notes,
-  name?: string,
-  inputs?: PsatInputs,
-  outputs?: PsatOutputs,
-  savings?: number,
-  optimizationRating?: number
+  psat?: PSAT,
 }
 
 export interface Notes {

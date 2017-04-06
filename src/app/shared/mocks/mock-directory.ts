@@ -11,18 +11,18 @@ export const MockDirectory: Directory = {
       psat:
       {
         inputs: {
-          pump_style: null,
+          pump_style: 'End Suction Slurry',
           pump_specified: null,
           pump_rated_speed: null,
-          drive: null,
+          drive: 'Direct Drive',
           kinematic_viscosity: null,
           specific_gravity: null,
           stages: null,
           fixed_speed: null,
-          line_frequency: null,
-          motor_rated_power: null,
+          line_frequency: '50 Hz',
+          motor_rated_power: 5,
           motor_rated_speed: null,
-          efficiency_class: null,
+          efficiency_class: 'Standard Efficiency',
           efficiency_class_specified: null,
           efficiency: null,
           motor_rated_voltage: null,

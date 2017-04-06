@@ -6,7 +6,7 @@
   </div>
   <div class="{{columnStyle}}" *ngFor="let modification of baseline.modifications">
     <app-psat-chart [modification]="modification"></app-psat-chart>
-    <div class="savings text-center">{{modification.savings | currency:'USD':true:'4.2-2'}}</div>
+    <div class="savings text-center">{{modification.psat.savings | currency:'USD':true:'4.2-2'}}</div>
     <div class="text-muted text-center">Annual Savings Potential</div>
   </div>
 </div>

@@ -1,6 +1,6 @@
-import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, Input, SimpleChanges } from '@angular/core';
 import { PsatService } from '../psat.service';
-import { PSAT } from '../../shared/models/psat';
+import { PSAT, PsatInputs } from '../../shared/models/psat';
 
 @Component({
   selector: 'app-pump-fluid',
@@ -12,6 +12,15 @@ export class PumpFluidComponent implements OnInit {
   psat: PSAT;
   @Output('changeField')
   changeField = new EventEmitter<string>();
+  @Input()
+  saveClicked: boolean;
+  @Output('saved')
+  saved = new EventEmitter<boolean>();
+  @Input()
+  isValid: boolean;
+  @Input()
+  selected: boolean;
+
 
   pumpTypes: Array<string> = [
     'End Suction Slurry',
@@ -33,11 +42,24 @@ export class PumpFluidComponent implements OnInit {
     'Belt Drive'
   ];
   psatForm: any;
+  isFirstChange: boolean = true;
 
   constructor(private psatService: PsatService) { }
 
+  ngOnChanges(changes: SimpleChanges) {
+    if (!this.isFirstChange) {
+      if (changes.saveClicked) {
+        this.savePsat(this.psatForm);
+      }
+    }
+    else {
+      this.isFirstChange = false;
+    }
+  }
+
   ngOnInit() {
-    this.psatForm = this.psatService.getFormFromPsat(this.psat);
+    this.isValid = false;
+    this.psatForm = this.psatService.getFormFromPsat(this.psat.inputs);
   }
 
   addNum(str: string) {
@@ -62,6 +84,14 @@ export class PumpFluidComponent implements OnInit {
 
   focusField(str: string) {
     this.changeField.emit(str);
+  }
+
+  savePsat(form: any) {
+    this.isValid = this.psatService.isPumpFluidFormValid(form);
+    if(this.isValid){
+      this.psat.inputs = this.psatService.getPsatInputsFromForm(form);
+      this.saved.emit(this.selected);
+    }
   }
 
 }

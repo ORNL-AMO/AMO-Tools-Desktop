@@ -15,35 +15,60 @@ export class PsatComponent implements OnInit {
 
   panelView: string = 'help-panel';
   isPanelOpen: boolean = true;
-  currentTab: number = 1;
+  currentTab: string = 'system-basics';
+
+  //TODO update tabs
+  tabs: Array<string> = [
+    'system-basics',
+    'pump-fluid',
+    'motor',
+    'field-data',
+    'modify-conditions',
+    'system-curve'
+  ]
+  tabIndex: number = 0;
 
   showDetailedReport: boolean = false;
 
   saveClicked: boolean = false;
   adjustment: PSAT;
   currentField: string = 'default';
-
+  isValid: any = {
+    test: 'false'
+  };
   constructor(private location: Location, private assessmentService: AssessmentService, private formBuilder: FormBuilder, private psatService: PsatService) { }
 
   ngOnInit() {
     this.assessment = this.assessmentService.getWorkingAssessment();
+    this.isValid = false;
+  }
 
+  valid() {
+    console.log(this.assessment)
   }
 
   changeTab($event) {
-    this.currentTab = $event;
+    let tmpIndex = 0;
+    this.tabs.forEach(tab => {
+      if (tab == $event) {
+        this.tabIndex = tmpIndex;
+        this.currentTab = this.tabs[this.tabIndex];
+      } else {
+        tmpIndex++;
+      }
+    })
     //wizard steps
-    if (this.currentTab > 4) {
-      this.panelView = 'data-panel';
-    }
+    //if (this.currentTab > 4) {
+    //   this.panelView = 'data-panel';
+    //}
     //assessment tabs show help panel
-    else {
-      this.panelView = 'help-panel';
-    }
+    // else {
+    //  this.panelView = 'help-panel';
+    //}
     //System curve hides panel
-    if (this.currentTab == 6) {
-      this.isPanelOpen = false;
-    }
+    //if (this.currentTab == 6) {
+    // this.isPanelOpen = false;
+    //}
   }
 
   changeField($event) {
@@ -66,13 +91,14 @@ export class PsatComponent implements OnInit {
   }
 
   continue() {
-    this.save();
-    this.currentTab++;
-    if (this.currentTab > 4) {
-      this.panelView = 'data-panel';
-    } else {
-      this.panelView = 'help-panel';
-    }
+    console.log('continue')
+    this.tabIndex++;
+    this.currentTab = this.tabs[this.tabIndex];
+    // if (this.currentTab > 4) {
+    //   this.panelView = 'data-panel';
+    // } else {
+    //   this.panelView = 'help-panel';
+    // }
   }
 
   close() {
@@ -80,12 +106,13 @@ export class PsatComponent implements OnInit {
   }
 
   goBack() {
-    this.currentTab--;
-    if (this.currentTab > 4) {
-      this.panelView = 'data-panel';
-    } else {
-      this.panelView = 'help-panel';
-    }
+    this.tabIndex--;
+    this.currentTab = this.tabs[this.tabIndex];
+    // if (this.currentTab > 4) {
+    //   this.panelView = 'data-panel';
+    // } else {
+    //   this.panelView = 'help-panel';
+    // }
   }
 
   showReport() {
@@ -96,13 +123,13 @@ export class PsatComponent implements OnInit {
     this.showDetailedReport = false;
   }
 
-  saveAdjustment() {
+  toggleSave(){
     this.saveClicked = !this.saveClicked;
   }
 
   save() {
-
     this.assessmentService.setWorkingAssessment(this.assessment);
+    console.log(this.assessment);
   }
 
   exportData() {

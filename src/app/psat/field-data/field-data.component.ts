@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter, ViewChild } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, ViewChild, Input, SimpleChanges } from '@angular/core';
 import { ModalDirective } from 'ng2-bootstrap';
 import { PSAT } from '../../shared/models/psat';
 import { PsatService } from '../psat.service';
@@ -13,6 +13,16 @@ export class FieldDataComponent implements OnInit {
   psat: PSAT;
   @Output('changeField')
   changeField = new EventEmitter<string>();
+  @Input()
+  saveClicked: boolean;
+  @Input()
+  isValid: boolean;
+  @Output('saved')
+  saved = new EventEmitter<boolean>();
+  @Input()
+  isBaseline: boolean;
+  @Input()
+  selected: boolean;
 
   headToolResults: any = {
     differentialElevationHead: 0.0,
@@ -30,15 +40,37 @@ export class FieldDataComponent implements OnInit {
     'Current'
   ];
   psatForm: any;
+  isFirstChange: boolean = true;
   constructor(private psatService: PsatService) { }
 
   ngOnInit() {
-    this.psatForm = this.psatService.getFormFromPsat(this.psat);
+    this.psatForm = this.psatService.getFormFromPsat(this.psat.inputs);
   }
 
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (!this.isFirstChange) {
+      if (changes.saveClicked) {
+        console.log('changes saveClicked');
+        this.savePsat(this.psatForm);
+      }
+    }
+    else {
+      this.isFirstChange = false;
+    }
+  }
+
+
   focusField(str: string) {
-    console.log(this.psatForm.value.loadEstimatedMethod);
     this.changeField.emit(str);
+  }
+
+  savePsat(form: any) {
+    this.isValid = this.psatService.isFieldDataFormValid(form);
+    if (this.isValid) {
+      this.psat.inputs = this.psatService.getPsatInputsFromForm(form);
+      this.saved.emit(true);
+    }
   }
 
 

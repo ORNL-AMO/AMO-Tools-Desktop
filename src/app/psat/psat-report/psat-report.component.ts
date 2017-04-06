@@ -37,7 +37,7 @@ export class PsatReportComponent implements OnInit {
       annual_cost: 0
     }
     this.assessment.psat.modifications.forEach(modification => {
-      modification.outputs = {
+      modification.psat.outputs = {
         pump_efficiency: 0,
         motor_rated_power: 0,
         motor_shaft_power: 0,
