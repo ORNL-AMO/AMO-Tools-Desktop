@@ -1,46 +1,59 @@
-<div class="row main-menu">
+
+<div class="row">
+
   <div class="col-12">
-    test
+  
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="#">Parent Directory</a></li>
+      <li class="breadcrumb-item active">Current Directory</li>
+    </ol>
+  
   </div>
-  <div class="col-2">
-    <app-assessment-create [(directory)]="directory"></app-assessment-create>
-    <app-create-folder [(directory)]="directory"></app-create-folder>
-  </div>
-  <div class="col-5">
+<!--   <div class="col-8">
+    
     <div class="input-group search pull-right">
-         <span class="input-group-addon">
-           <i class="fa fa-search"></i></span>
-              <input class="form-control">
+      <span class="input-group-addon">
+      <i class="fa fa-search"></i></span>
+      <input class="form-control">
     </div>
-  </div>
-  <div class="col-2">
-    <select class="form-control">
+  
+    <select class="form-control pull-right">
       <option>Sort By:</option>
     </select>
+
+  </div> -->
+
+</div>
+
+
+
+<div class="row main-menu">
+
+  <div class="col-10">
+    <app-assessment-create [(directory)]="directory"></app-assessment-create>
+    <app-create-folder [(directory)]="directory"></app-create-folder>
+    <button type="button" class="btn btn-secondary" disabled>Generate Report</button>
+    <button type="button" class="btn btn-secondary" disabled>Delete...</button>
+    <button type="button" class="btn btn-secondary space-left">Import...</button>    
+    <button type="button" class="btn btn-secondary">Export...</button>    
   </div>
   <div class="col-2">
-    <div class="pull-right">
-      <button class="btn" (click)="setView('list')"><i class="fa fa-list"></i></button>
-      <button class="btn" (click)="setView('grid')"><i class="fa fa-th"></i></button>
+
+    <div class="btn-group pull-right" role="group">
+      <button class="btn btn-secondary active" (click)="setView('list')"><i class="fa fa-list"></i></button>
+      <button class="btn btn-secondary" (click)="setView('grid')"><i class="fa fa-th"></i></button>
+    </div>
+
+  </div>
+
+</div>
+
+
+
+<div class="table-header">
+  <div class="row">
+    <div class="col-12">
+      <input type="checkbox">  Select All
     </div>
   </div>
 </div>
-
-<div class="row nav-menu">
-  <div class="col-2">
-    <input type="checkbox">  Select All
-  </div>
-  <div class="col-2">
-    <a>Generate Report</a>
-  </div>
-  <div class="col-2">
-    <a>Delete...</a>
-  </div>
-  <div class="col-5">
-    <a class="pull-right">Import...</a>
-  </div>
-  <div class="col-1">
-    <a>Export...</a>
-  </div>
-</div>
-

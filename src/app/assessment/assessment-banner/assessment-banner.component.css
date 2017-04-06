@@ -1,6 +1,36 @@
-.assessment-banner{
-  height:10vh;
-  border-bottom: groove;
-  border-bottom-color: lightslategrey;
-  border-bottom-width: 1px;
+
+.assessment-banner {
+	border-bottom: #dbdbdb solid 1px;
+	display: block;
+	margin-bottom: 40px;
+}
+
+.assessment-banner:after {
+	display: table;
+	clear: both;
+	content: "";
+}
+
+
+.assessment-banner h1 {
+	font-size: 24px;
+    float: left;
+    padding: 9px 0 0px 13px;
+}
+
+
+.assessment-banner .btn-settings {
+	float: right;
+	background: #fff;
+	border: none;
+	padding: 10px 20px;
+}
+.assessment-banner .btn-settings i {
+	font-size: 22px;
+	color: #b4cdd8;
+}
+
+.assessment-banner .btn-settings:hover {
+	cursor: pointer;
+	background: #f0f5f9;
 }

@@ -214,6 +214,17 @@ Modals
 }
 
 
+
+
+/*
+Data Tables
+=========================================== */
+.table-header {
+  margin-top: 20px;
+}
+
+
+
 /*
 Section Headers
 =========================================== */
@@ -234,6 +245,16 @@ Section Headers
 }
 .section-header .btn {
   padding: 8px 10px 6px;
+}
+
+
+
+/*
+Breadcrumb
+=========================================== */
+.breadcrumb {
+  background-color: transparent;
+  padding: 0;
 }
 
 
