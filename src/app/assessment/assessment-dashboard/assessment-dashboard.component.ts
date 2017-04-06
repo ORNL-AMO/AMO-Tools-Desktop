@@ -11,7 +11,7 @@ export class AssessmentDashboardComponent implements OnInit {
   @Input()
   directory: Directory;
 
-  view: string = 'grid';
+  view: string = 'list';
   isSettingsView: boolean = false;
   constructor() { }
 
