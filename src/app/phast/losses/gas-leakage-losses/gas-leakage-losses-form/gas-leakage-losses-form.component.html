@@ -10,28 +10,28 @@
   <div class="row form-group">
     <label class="col-6 col-form-label small" for="openingArea">Opening Area (ft<sup>2</sup>)</label>
     <div class="col-6 input-group input-group-sm">
-      <input type="number" class="form-control" formControlName="openingArea" id="openingArea" (keyup)="checkForm()">
+      <input type="number" class="form-control" formControlName="openingArea" id="openingArea" (keyup)="checkForm()"(focus)="focusField('openingArea')">
     </div>
   </div>
 
   <div class="row form-group">
     <label class="col-6 col-form-label small" for="leakageGasTemperature">Temperature of Gases Leaking (&#8457;)</label>
     <div class="col-6 input-group input-group-sm">
-      <input type="number" class="form-control" formControlName="leakageGasTemperature" id="leakageGasTemperature" (keyup)="checkForm()">
+      <input type="number" class="form-control" formControlName="leakageGasTemperature" id="leakageGasTemperature" (keyup)="checkForm()" (focus)="focusField('leakageGasTemperature')">
     </div>
   </div>
 
   <div class="row form-group">
     <label class="col-6 col-form-label small" for="specificGravity">Specific Density of Flue Gases (Air = 1.0)</label>
     <div class="col-6 input-group input-group-sm">
-      <input type="number" class="form-control" formControlName="specificGravity" id="specificGravity" (keyup)="checkForm()">
+      <input type="number" class="form-control" formControlName="specificGravity" id="specificGravity" (keyup)="checkForm()" (focus)="focusField('specificGravity')">
     </div>
   </div>
 
   <div class="row form-group">
     <label class="col-6 col-form-label small" for="ambientTemperature">Ambient Temperature (&#8457;)</label>
     <div class="col-6 input-group input-group-sm">
-      <input type="number" class="form-control" formControlName="ambientTemperature" id="ambientTemperature" (keyup)="checkForm()">
+      <input type="number" class="form-control" formControlName="ambientTemperature" id="ambientTemperature" (keyup)="checkForm()" (focus)="focusField('ambientTemperature')">
     </div>
   </div>
 

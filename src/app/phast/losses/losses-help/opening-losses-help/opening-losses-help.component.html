@@ -22,4 +22,86 @@
       </ul>
     </div>
   </div>
+
+  <div class="card" *ngIf="currentField == 'numberOfOpenings'">
+    <div class="card-header">
+      Number of Openings of Same Size and Shape
+    </div>
+    <div class="card-block">
+      <label>Description:</label>
+    </div>
+  </div>
+
+  <div class="card" *ngIf="currentField == 'wallThickness'">
+    <div class="card-header">
+      Furnace Wall Thickness (Inch)
+    </div>
+    <div class="card-block">
+      <label>Description:</label>
+    </div>
+  </div>
+
+  <div class="card" *ngIf="currentField == 'lengthOfOpening'">
+    <div class="card-header">
+      Length of Openings (Inch) Or Diameter of Openings (Inch)
+    </div>
+    <div class="card-block">
+      <label>Description:</label>
+    </div>
+  </div>
+
+  <div class="card" *ngIf="currentField == 'heightOfOpening'">
+    <div class="card-header">
+      Height of Openings (Inch)
+    </div>
+    <div class="card-block">
+      <label>Description:</label>
+    </div>
+  </div>
+
+  <div class="card" *ngIf="currentField == 'viewFactor'">
+    <div class="card-header">
+      View Factor - User defined if known or from chart
+    </div>
+    <div class="card-block">
+      <label>Description:</label>
+    </div>
+  </div>
+
+  <div class="card" *ngIf="currentField == 'insideTemp'">
+    <div class="card-header">
+      Avg. Zone or Radiation Source Temp. (&#8457;)
+    </div>
+    <div class="card-block">
+      <label>Description:</label>
+    </div>
+  </div>
+
+  <div class="card" *ngIf="currentField == 'ambientTemp'">
+    <div class="card-header">
+      Ambient Temp. (&#8457;)
+    </div>
+    <div class="card-block">
+      <label>Description:</label>
+    </div>
+  </div>
+
+  <div class="card" *ngIf="currentField == 'emissivity'">
+    <div class="card-header">
+      Emissivity of the Source (Typical - 0.9)
+    </div>
+    <div class="card-block">
+      <label>Description:</label>
+    </div>
+  </div>
+
+  <div class="card" *ngIf="currentField == 'percentTimeOpen'">
+    <div class="card-header">
+      % of Time Open
+    </div>
+    <div class="card-block">
+      <label>Description:</label>
+    </div>
+  </div>
+
 </div>

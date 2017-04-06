@@ -1,7 +1,7 @@
 
 
 <div class="help-header">
-  
+
   <h3>Wall Losses Help</h3>
   <p>Enter loss data</p>
   <p class="text-muted">
@@ -32,5 +32,50 @@
       <label>Description:</label>
     </div>
   </div>
-  
+
+  <div class="card" *ngIf="currentField == 'windVelocity'">
+    <div class="card-header">
+      Wind Velocity (mph)
+    </div>
+    <div class="card-block">
+      <label>Description:</label>
+    </div>
+  </div>
+
+  <div class="card" *ngIf="currentField == 'surfaceShape'">
+    <div class="card-header">
+      Surface shape/orientation
+    </div>
+    <div class="card-block">
+      <label>Description:</label>
+    </div>
+  </div>
+
+  <div class="card" *ngIf="currentField == 'surfaceEmissivity'">
+    <div class="card-header">
+      Surface Emissivity (Typical - 0.9)
+    </div>
+    <div class="card-block">
+      <label>Description:</label>
+    </div>
+  </div>
+
+  <div class="card" *ngIf="currentField == 'surfaceArea'">
+    <div class="card-header">
+      Total Outside Surface Area (ft<sup>2</sup>)
+    </div>
+    <div class="card-block">
+      <label>Description:</label>
+    </div>
+  </div>
+
+  <div class="card" *ngIf="currentField == 'correctionFactor'">
+    <div class="card-header">
+      Correction Factor
+    </div>
+    <div class="card-block">
+      <label>Description:</label>
+    </div>
+  </div>
+
 </div>

@@ -20,10 +20,47 @@
     </div>
   </div>
 
+  <div class="card" *ngIf="currentField == 'inletTemp'">
+    <div class="card-header">
+      Inlet Temperature (&#8457;)
+    </div>
+    <div class="card-block">
+      <label>Description:</label>
+    </div>
+  </div>
+
+  <div class="card" *ngIf="currentField == 'outletTemp'">
+    <div class="card-header">
+      Outlet Temperature (&#8457;)
+    </div>
+    <div class="card-block">
+      <label>Description:</label>
+    </div>
+  </div>
+
+  <!--Gas -->
+  <div class="card" *ngIf="currentField == 'gasFlow'">
+    <div class="card-header">
+      Gas Flow (SCFM)
+    </div>
+    <div class="card-block">
+      <label>Description:</label>
+    </div>
+  </div>
+
   <!--Liquid and Gas -->
   <div class="card" *ngIf="currentField == 'avgSpecificHeat'">
     <div class="card-header">
       Average Specific Heat (Btu/lb-F)
+    </div>
+    <div class="card-block">
+      <label>Description:</label>
+    </div>
+  </div>
+
+  <div class="card" *ngIf="currentField == 'correctionFactor'">
+    <div class="card-header">
+      Correction Factor
     </div>
     <div class="card-block">
       <label>Description:</label>
@@ -49,4 +86,7 @@
       <label>Description:</label>
     </div>
   </div>
+
+
+
 </div>

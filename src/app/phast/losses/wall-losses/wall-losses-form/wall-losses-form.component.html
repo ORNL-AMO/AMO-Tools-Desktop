@@ -17,14 +17,14 @@
   <div class="row form-group">
     <label class="col-6 col-form-label small" for="windVelocity">Wind Velocity (mph)</label>
     <div class="col-6 input-group input-group-sm">
-      <input type="number" class="form-control" formControlName="windVelocity" id="windVelocity" (keyup)="checkForm()">
+      <input type="number" class="form-control" formControlName="windVelocity" id="windVelocity" (keyup)="checkForm()" (focus)="focusField('windVelocity')">
     </div>
   </div>
 
   <div class="row form-group">
     <label class="col-6 col-form-label small" for="surfaceShape">Surface shape/orientation</label>
     <div class="col-6 input-group input-group-sm">
-      <select class="form-control" formControlName="surfaceShape">
+      <select class="form-control" formControlName="surfaceShape"  id="surfaceShape" (focus)="focusField('surfaceShape')">
         <option>Vertical Plates</option>
         <option>Shape 2</option>
       </select>
@@ -42,22 +42,21 @@
   <div class="row form-group">
     <label class="col-6 col-form-label small" for="surfaceEmissivity">Surface Emissivity (Typical - 0.9)</label>
     <div class="col-6 input-group input-group-sm">
-      <input type="number" class="form-control" formControlName="surfaceEmissivity" id="surfaceEmissivity" (keyup)="checkForm()">
+      <input type="number" class="form-control" formControlName="surfaceEmissivity" id="surfaceEmissivity" (keyup)="checkForm()" (focus)="focusField('surfaceEmissivity')">
     </div>
   </div>
 
   <div class="row form-group">
     <label class="col-6 col-form-label small" for="surfaceArea">Total Outside Surface Area (ft<sup>2</sup>)</label>
     <div class="col-6 input-group input-group-sm">
-      <input type="number" class="form-control" formControlName="surfaceArea" id="surfaceArea" (keyup)="checkForm()">
+      <input type="number" class="form-control" formControlName="surfaceArea" id="surfaceArea" (keyup)="checkForm()" (focus)="focusField('surfaceArea')">
     </div>
   </div>
-
 
   <div class="row form-group">
     <label class="col-6 col-form-label small" for="correctionFactor">Correction Factor</label>
     <div class="col-6 input-group input-group-sm">
-      <input type="number" class="form-control" formControlName="correctionFactor" id="correctionFactor" (keyup)="checkForm()">
+      <input type="number" class="form-control" formControlName="correctionFactor" id="correctionFactor" (keyup)="checkForm()" (focus)="focusField('correctionFactor')">
     </div>
   </div>
 

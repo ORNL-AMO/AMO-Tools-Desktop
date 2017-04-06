@@ -18,4 +18,32 @@
       <label>Description:</label>
     </div>
   </div>
+
+  <div class="card" *ngIf="currentField == 'avgSurfaceTemp'">
+    <div class="card-header">
+      Average Surface Temperature (&#8457;)
+    </div>
+    <div class="card-block">
+      <label>Description:</label>
+    </div>
+  </div>
+
+  <div class="card" *ngIf="currentField == 'ambientTemp'">
+    <div class="card-header">
+      Ambient Temperature (&#8457;)
+    </div>
+    <div class="card-block">
+      <label>Description:</label>
+    </div>
+  </div>
+
+  <div class="card" *ngIf="currentField == 'surfaceEmissivity'">
+    <div class="card-header">
+      Surface Emissivity (Typical - 0.9)
+    </div>
+    <div class="card-block">
+      <label>Description:</label>
+    </div>
+  </div>
+
 </div>
