@@ -16,12 +16,14 @@ export class PumpFluidComponent implements OnInit {
   saveClicked: boolean;
   @Output('saved')
   saved = new EventEmitter<boolean>();
-  @Input()
-  isValid: boolean;
+  @Output('isValid')
+  isValid = new EventEmitter<boolean>();
+  @Output('isInvalid')
+  isInvalid = new EventEmitter<boolean>();
   @Input()
   selected: boolean;
 
-
+  formValid: boolean;
   pumpTypes: Array<string> = [
     'End Suction Slurry',
     'End Suction Sewage',
@@ -58,8 +60,8 @@ export class PumpFluidComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.isValid = false;
     this.psatForm = this.psatService.getFormFromPsat(this.psat.inputs);
+    this.checkForm(this.psatForm);
   }
 
   addNum(str: string) {
@@ -86,9 +88,17 @@ export class PumpFluidComponent implements OnInit {
     this.changeField.emit(str);
   }
 
+  checkForm(form: any) {
+    this.formValid = this.psatService.isPumpFluidFormValid(form);
+    if (this.formValid) {
+      this.isValid.emit(true)
+    }else{
+      this.isInvalid.emit(true)
+    }
+  }
+
   savePsat(form: any) {
-    this.isValid = this.psatService.isPumpFluidFormValid(form);
-    if(this.isValid){
+    if (this.formValid) {
       this.psat.inputs = this.psatService.getPsatInputsFromForm(form);
       this.saved.emit(this.selected);
     }

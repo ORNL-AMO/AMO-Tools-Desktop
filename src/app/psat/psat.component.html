@@ -1,102 +1,86 @@
 <app-psat-banner (togglePanel)="toggleOpenPanel($event)" [assessment]="assessment"></app-psat-banner>
 <app-psat-tabs [currentTab]="currentTab" (tabChange)="changeTab($event)"></app-psat-tabs>
 
-<!--<div class="row tab-content" [ngClass]="{'align-items-center':currentTab < 5}">
+<div class="row tab-content align-items-center" *ngIf="currentTab == 'system-basics'">
   <div class="col-9">
-    <div class="row" [ngClass]="{'justify-content-center':currentTab < 5}">
-      <div class="col-lg-8 col-md-8 col-sm-10 col-xs-12" *ngIf="currentTab < 5">
-        <app-system-basics [(isValid)]="isValid" *ngIf="currentTab == 1"></app-system-basics>
-        <app-pump-fluid [(isValid)]="isValid" [saveClicked]="saveClicked" (changeField)="changeField($event)" [(psat)]="assessment.psat"
-          *ngIf="currentTab == 2"></app-pump-fluid>
-        <app-motor [(isValid)]="isValid" [saveClicked]="saveClicked" (changeField)="changeField($event)" [(psat)]="assessment.psat"
-          *ngIf="currentTab == 3"></app-motor>
-        <app-field-data [(isValid)]="isValid" [saveClicked]="saveClicked" (changeField)="changeField($event)" [(psat)]="assessment.psat"
-          *ngIf="currentTab == 4"></app-field-data>
-      </div>
-      <div class="col-12" *ngIf="currentTab > 4">
-        <app-modify-conditions *ngIf="currentTab == 5" [saveClicked]="saveClicked" [(psat)]="assessment.psat"></app-modify-conditions>
-        <app-system-curve *ngIf="currentTab == 6"></app-system-curve>
+    <div class="row justify-content-center">
+      <div class="col-lg-8 col-md-8 col-sm-10 col-xs-12">
+        <app-system-basics></app-system-basics>
       </div>
     </div>
-  </div>-->
+  </div>
+  <div class="col-3 panel help-col dark-bg">
+    <app-help-panel [currentField]="currentField" [currentTab]="currentTab"></app-help-panel>
+  </div>
+</div>
 
-  <div class="row tab-content align-items-center" *ngIf="currentTab == 'system-basics'">
-    <div class="col-9">
-      <div class="row justify-content-center">
-        <div class="col-lg-8 col-md-8 col-sm-10 col-xs-12">
-          <app-system-basics [(isValid)]="isValid"></app-system-basics>
-        </div>
+<div class="row tab-content align-items-center" *ngIf="currentTab == 'pump-fluid'">
+  <div class="col-9">
+    <div class="row justify-content-center">
+      <div class="col-lg-8 col-md-8 col-sm-10 col-xs-12">
+        <app-pump-fluid (isValid)="setValid()" (isInvalid)="setInvalid()" [saveClicked]="saveClicked" (changeField)="changeField($event)"
+          [(psat)]="_psat" (saved)="save()"></app-pump-fluid>
       </div>
     </div>
-    <div class="col-3 panel help-col dark-bg">
-      <app-help-panel [currentField]="currentField" [currentTab]="currentTab"></app-help-panel>
-    </div>
   </div>
+  <div class="col-3 panel help-col dark-bg">
+    <app-help-panel [currentField]="currentField" [currentTab]="currentTab"></app-help-panel>
+  </div>
+</div>
 
-  <div class="row tab-content align-items-center" *ngIf="currentTab == 'pump-fluid'">
-    <div class="col-9">
-      <div class="row justify-content-center">
-        <div class="col-lg-8 col-md-8 col-sm-10 col-xs-12">
-          <app-pump-fluid [(isValid)]="isValid" [saveClicked]="saveClicked" (changeField)="changeField($event)" [(psat)]="assessment.psat" (saved)="save()"></app-pump-fluid>
-        </div>
+
+<div class="row tab-content align-items-center" *ngIf="currentTab == 'motor'">
+  <div class="col-9">
+    <div class="row justify-content-center">
+      <div class="col-lg-8 col-md-8 col-sm-10 col-xs-12">
+        <app-motor (isValid)="setValid()" (isInvalid)="setInvalid()" [saveClicked]="saveClicked" (changeField)="changeField($event)"
+          [(psat)]="_psat" (saved)="save()"></app-motor>
       </div>
     </div>
-    <div class="col-3 panel help-col dark-bg">
-      <app-help-panel [currentField]="currentField" [currentTab]="currentTab"></app-help-panel>
-    </div>
   </div>
+  <div class="col-3 panel help-col dark-bg">
+    <app-help-panel [currentField]="currentField" [currentTab]="currentTab"></app-help-panel>
+  </div>
+</div>
 
-
-  <div class="row tab-content align-items-center" *ngIf="currentTab == 'motor'">
-    <div class="col-9">
-      <div class="row justify-content-center">
-        <div class="col-lg-8 col-md-8 col-sm-10 col-xs-12">
-          <app-motor [(isValid)]="isValid" [saveClicked]="saveClicked" (changeField)="changeField($event)" [(psat)]="assessment.psat" (saved)="save()"></app-motor>
-        </div>
+<div class="row tab-content align-items-center" *ngIf="currentTab == 'field-data'">
+  <div class="col-9">
+    <div class="row justify-content-center">
+      <div class="col-lg-8 col-md-8 col-sm-10 col-xs-12">
+        <app-field-data (isValid)="setValid()" (isInvalid)="setInvalid()" [saveClicked]="saveClicked" (changeField)="changeField($event)"
+          [(psat)]="_psat" (saved)="save()"></app-field-data>
       </div>
     </div>
-    <div class="col-3 panel help-col dark-bg">
-      <app-help-panel [currentField]="currentField" [currentTab]="currentTab"></app-help-panel>
-    </div>
   </div>
-
-  <div class="row tab-content align-items-center" *ngIf="currentTab == 'field-data'">
-    <div class="col-9">
-      <div class="row justify-content-center">
-        <div class="col-lg-8 col-md-8 col-sm-10 col-xs-12">
-          <app-field-data [(isValid)]="isValid" [saveClicked]="saveClicked" (changeField)="changeField($event)" [(psat)]="assessment.psat" (saved)="save()"></app-field-data>
-        </div>
-      </div>
-    </div>
-    <div class="col-3 panel help-col dark-bg">
-      <app-help-panel [currentField]="currentField" [currentTab]="currentTab"></app-help-panel>
-    </div>
+  <div class="col-3 panel help-col dark-bg">
+    <app-help-panel [currentField]="currentField" [currentTab]="currentTab"></app-help-panel>
   </div>
+</div>
 
-  <div class="row tab-content" *ngIf="currentTab == 'modify-conditions'">
-    <div class="col-12">
-      <app-modify-conditions [saveClicked]="saveClicked" [(psat)]="assessment.psat"></app-modify-conditions>
-    </div>
+<div class="row tab-content" *ngIf="currentTab == 'modify-conditions'">
+  <div class="col-12">
+    <app-modify-conditions [saveClicked]="saveClicked" [(psat)]="_psat" (saved)="save()"></app-modify-conditions>
   </div>
+</div>
 
-  <div class="row tab-content" *ngIf="currentTab == 'system-curve'">
-    <div class="col-12">
-      <app-system-curve></app-system-curve>
-    </div>
+<div class="row tab-content" *ngIf="currentTab == 'system-curve'">
+  <div class="col-12">
+    <app-system-curve></app-system-curve>
   </div>
+</div>
 
-  <div class="footer">
-    <div class="pull-left">
-      <button class="btn btn-secondary" *ngIf="currentTab == 'system-basics'" (click)="close()">Close</button>
-      <button class="btn btn-secondary" *ngIf="currentTab != 'system-basics'" (click)="goBack()">Back</button>
-    </div>
-    <div class="pull-right">
-      <button class="btn btn-primary" (click)="toggleSave()">Save</button>
-      <button class="btn btn-primary" *ngIf="currentTab != 'modify-conditions'" (click)="continue()">Continue</button>
-      <button class="btn btn-primary" *ngIf="currentTab == 'modify-conditions'" (click)="exportData()">Export</button>
-    </div>
+<div class="footer">
+  <div class="pull-left">
+    <button class="btn btn-secondary" *ngIf="currentTab == 'system-basics'" (click)="close()">Close</button>
+    <button class="btn btn-secondary" *ngIf="currentTab != 'system-basics'" (click)="goBack()">Back</button>
   </div>
+  <div class="pull-right">
+    <button class="btn btn-primary" #saveButton (click)="toggleSave()">Save</button>
+    <button class="btn btn-primary" #continueButton (click)="continue()">Continue</button>
+    <button class="btn btn-primary" *ngIf="currentTab == 'modify-conditions'" (click)="exportData()">Export</button>
+  </div>
+</div>
 
-  <!--<div *ngIf="showDetailedReport">
+<!--<div *ngIf="showDetailedReport">
   <app-psat-report (closeReport)="closeReport()" [assessment]="assessment"></app-psat-report>
 </div>-->

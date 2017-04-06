@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { Location } from '@angular/common';
 import { Assessment } from '../shared/models/assessment';
 import { AssessmentService } from '../assessment/assessment.service';
@@ -11,6 +11,8 @@ import { PsatService } from './psat.service';
   styleUrls: ['./psat.component.css']
 })
 export class PsatComponent implements OnInit {
+  @ViewChild('saveButton') saveButton: ElementRef;
+  @ViewChild('continueButton') continueButton: ElementRef;
   assessment: Assessment;
 
   panelView: string = 'help-panel';
@@ -33,18 +35,40 @@ export class PsatComponent implements OnInit {
   saveClicked: boolean = false;
   adjustment: PSAT;
   currentField: string = 'default';
-  isValid: any = {
-    test: 'false'
-  };
+  isValid;
+  canContinue;
+
+  _psat: PSAT;
   constructor(private location: Location, private assessmentService: AssessmentService, private formBuilder: FormBuilder, private psatService: PsatService) { }
 
   ngOnInit() {
     this.assessment = this.assessmentService.getWorkingAssessment();
-    this.isValid = false;
+    this._psat = (JSON.parse(JSON.stringify(this.assessment.psat)));
+    this.isValid = true;
   }
 
   valid() {
-    console.log(this.assessment)
+
+  }
+
+  disableSave() {
+    this.saveButton.nativeElement.disabled = true;
+    this.continueButton.nativeElement.disabled = true;
+  }
+
+  enableSave() {
+    this.saveButton.nativeElement.disabled = false;
+  }
+
+  setValid() {
+    // this.isValid = true;
+    this.enableSave();
+  }
+
+  setInvalid() {
+    //this.isValid = false;
+    //console.log('IS INVALID')
+    this.disableSave();
   }
 
   changeTab($event) {
@@ -57,18 +81,6 @@ export class PsatComponent implements OnInit {
         tmpIndex++;
       }
     })
-    //wizard steps
-    //if (this.currentTab > 4) {
-    //   this.panelView = 'data-panel';
-    //}
-    //assessment tabs show help panel
-    // else {
-    //  this.panelView = 'help-panel';
-    //}
-    //System curve hides panel
-    //if (this.currentTab == 6) {
-    // this.isPanelOpen = false;
-    //}
   }
 
   changeField($event) {
@@ -91,14 +103,8 @@ export class PsatComponent implements OnInit {
   }
 
   continue() {
-    console.log('continue')
     this.tabIndex++;
     this.currentTab = this.tabs[this.tabIndex];
-    // if (this.currentTab > 4) {
-    //   this.panelView = 'data-panel';
-    // } else {
-    //   this.panelView = 'help-panel';
-    // }
   }
 
   close() {
@@ -108,11 +114,6 @@ export class PsatComponent implements OnInit {
   goBack() {
     this.tabIndex--;
     this.currentTab = this.tabs[this.tabIndex];
-    // if (this.currentTab > 4) {
-    //   this.panelView = 'data-panel';
-    // } else {
-    //   this.panelView = 'help-panel';
-    // }
   }
 
   showReport() {
@@ -123,13 +124,15 @@ export class PsatComponent implements OnInit {
     this.showDetailedReport = false;
   }
 
-  toggleSave(){
+  toggleSave() {
     this.saveClicked = !this.saveClicked;
   }
 
   save() {
+    this.assessment.psat = (JSON.parse(JSON.stringify(this._psat)));
     this.assessmentService.setWorkingAssessment(this.assessment);
-    console.log(this.assessment);
+    this.continueButton.nativeElement.disabled = false;
+    console.log(this.continueButton);
   }
 
   exportData() {

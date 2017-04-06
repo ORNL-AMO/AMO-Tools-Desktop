@@ -15,8 +15,10 @@ export class FieldDataComponent implements OnInit {
   changeField = new EventEmitter<string>();
   @Input()
   saveClicked: boolean;
-  @Input()
-  isValid: boolean;
+  @Output('isValid')
+  isValid = new EventEmitter<boolean>();
+  @Output('isInvalid')
+  isInvalid = new EventEmitter<boolean>();
   @Output('saved')
   saved = new EventEmitter<boolean>();
   @Input()
@@ -24,6 +26,7 @@ export class FieldDataComponent implements OnInit {
   @Input()
   selected: boolean;
 
+  formValid: boolean;
   headToolResults: any = {
     differentialElevationHead: 0.0,
     differentialPressureHead: 0.0,
@@ -45,6 +48,7 @@ export class FieldDataComponent implements OnInit {
 
   ngOnInit() {
     this.psatForm = this.psatService.getFormFromPsat(this.psat.inputs);
+    this.checkForm(this.psatForm);
   }
 
 
@@ -65,9 +69,19 @@ export class FieldDataComponent implements OnInit {
     this.changeField.emit(str);
   }
 
+
+  checkForm(form: any) {
+    this.formValid = this.psatService.isFieldDataFormValid(form);
+    if (this.formValid) {
+      this.isValid.emit(true)
+    } else {
+      this.isInvalid.emit(true)
+    }
+  }
+
   savePsat(form: any) {
-    this.isValid = this.psatService.isFieldDataFormValid(form);
-    if (this.isValid) {
+    // this.isValid = this.psatService.isFieldDataFormValid(form);
+    if (this.formValid) {
       this.psat.inputs = this.psatService.getPsatInputsFromForm(form);
       this.saved.emit(true);
     }

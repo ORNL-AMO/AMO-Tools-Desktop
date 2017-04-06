@@ -12,6 +12,8 @@ export class ModifyConditionsComponent implements OnInit {
   psat: PSAT;
   @Input()
   saveClicked: boolean;
+  @Output('saved')
+  saved = new EventEmitter<boolean>();
 
   modifyTab: string = 'system-basics';
   _modifications: Array<Modification>;
@@ -43,15 +45,11 @@ export class ModifyConditionsComponent implements OnInit {
   //   }
   // }
 
-  save(bool: boolean) {
-    debugger
-    if (bool == this.modifiedSelected) {
-      if (this._modifications) {
-        this.psat.modifications = (JSON.parse(JSON.stringify(this._modifications)));
-        console.log('PSAT MODIFICATION')
-        console.log(this.psat);
-      }
-    }
+  save() {
+    this.psat.modifications = (JSON.parse(JSON.stringify(this._modifications)));
+    console.log('Modification')
+    console.log(this.psat);
+    this.saved.emit(true);
   }
 
   addModification() {

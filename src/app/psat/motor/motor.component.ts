@@ -14,8 +14,10 @@ export class MotorComponent implements OnInit {
   changeField = new EventEmitter<string>();
   @Input()
   saveClicked: boolean;
-  @Input()
-  isValid: boolean;
+  @Output('isValid')
+  isValid = new EventEmitter<boolean>();
+  @Output('isValid')
+  isInvalid = new EventEmitter<boolean>();
   @Output('saved')
   saved = new EventEmitter<boolean>();
   @Input()
@@ -38,10 +40,12 @@ export class MotorComponent implements OnInit {
 
   psatForm: any;
   isFirstChange: boolean = true;
+  formValid: boolean;
   constructor(private psatService: PsatService) { }
 
   ngOnInit() {
     this.psatForm = this.psatService.getFormFromPsat(this.psat.inputs);
+    this.checkForm(this.psatForm);
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -79,9 +83,22 @@ export class MotorComponent implements OnInit {
     this.changeField.emit(str);
   }
 
+  checkForm(form: any) {
+    debugger
+    this.formValid = this.psatService.isMotorFormValid(form);
+    if (this.formValid) {
+      this.isValid.emit(true)
+    }else{
+      this.isInvalid.emit(true)
+      console.log('NOT VALID')
+    }
+  }
+
+
+
   savePsat(form: any) {
-    this.isValid = this.psatService.isMotorFormValid(form);
-    if (this.isValid) {
+    // this.isValid = this.psatService.isMotorFormValid(form);
+    if (this.formValid) {
       this.psat.inputs = this.psatService.getPsatInputsFromForm(form);
       this.saved.emit(this.selected);
     }

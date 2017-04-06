@@ -2,7 +2,8 @@
   <div class="form-group row">
     <label class="col-sm-6 col-md-4 col-lg-3 col-form-label" for="pumpType">Pump Type</label>
     <div class="col-6">
-      <select class="form-control select-input-field" formControlName="pumpType" id="pumpType" (focus)="focusField('pumpType')" ngModel="{{psatForm.value.pumpType}}">
+      <select class="form-control select-input-field" formControlName="pumpType" id="pumpType" (keyup)="checkForm(psatForm)" (focus)="focusField('pumpType')"
+        ngModel="{{psatForm.value.pumpType}}">
         <option *ngFor="let pumpType of pumpTypes">{{pumpType}}</option>
       </select>
     </div>
@@ -12,21 +13,23 @@
   <div class="form-group row" *ngIf="psatForm.value.pumpType == 'Specified Optimal Efficiency'">
     <label class="col-sm-6 col-md-4 col-lg-3 col-form-label" for="specifiedPumpType">Specify Pump Type</label>
     <div class="col-6">
-      <input type="text" class="form-control select-input-field" formControlName="specifiedPumpType" id="specifiedPumpType" (focus)="focusField('pumpType')">
+      <input type="text" class="form-control select-input-field" formControlName="specifiedPumpType" id="specifiedPumpType" (keyup)="checkForm(psatForm)"
+        (focus)="focusField('pumpType')">
     </div>
   </div>
 
   <div class="form-group row">
     <label class="col-sm-6 col-md-4 col-lg-3 col-form-label" for="pumpRPM">Pump RPM</label>
     <div class="col-6">
-      <input type="number" class="form-control number-input-field" formControlName="pumpRPM" id="pumpRPM" (focus)="focusField('pumpRPM')">
+      <input type="number" class="form-control number-input-field" formControlName="pumpRPM" id="pumpRPM" (keyup)="checkForm(psatForm)"
+        (focus)="focusField('pumpRPM')">
     </div>
   </div>
 
   <div class="form-group row">
     <label class="col-sm-6 col-md-4 col-lg-3 col-form-label" for="drive">Drive</label>
     <div class="col-6">
-      <select class="form-control select-input-field" formControlName="drive" id="drive" (focus)="focusField('drive')">
+      <select class="form-control select-input-field" formControlName="drive" id="drive" (keyup)="checkForm(psatForm)" (focus)="focusField('drive')">
         <option *ngFor="let drive of drives">{{drive}}</option>
       </select>
     </div>
@@ -42,14 +45,15 @@
         <div class="btn" (click)="addNum('viscosity')"><i class="fa fa-plus"></i></div>
       </div>
       <input type="number" class="form-control incrementor-input-field" formControlName="viscosity" id="viscosity" ngModel="{{psatForm.value.viscosity}}"
-             (focus)="focusField('kinematicViscosity')">
+        (keyup)="checkForm(psatForm)" (focus)="focusField('kinematicViscosity')">
     </div>
   </div>
 
   <div class="form-group row">
     <label class="col-sm-6 col-md-4 col-lg-3 col-form-label" for="gravity">Specific Gravity</label>
     <div class="col-6">
-      <input type="number" class="form-control number-input-field" formControlName="gravity" id="gravity" (focus)="focusField('specificGravity')">
+      <input type="number" class="form-control number-input-field" formControlName="gravity" id="gravity" (keyup)="checkForm(psatForm)"
+        (focus)="focusField('specificGravity')">
     </div>
   </div>
 
@@ -62,7 +66,8 @@
       <div class="incrementor input-group-addon">
         <div class="btn" (click)="addNum('stages')"><i class="fa fa-plus"></i></div>
       </div>
-      <input type="number" class="form-control incrementor-input-field" formControlName="stages" id="stages" ngModel="{{psatForm.value.stages}}" (focus)="focusField('stages')">
+      <input type="number" class="form-control incrementor-input-field" formControlName="stages" id="stages" ngModel="{{psatForm.value.stages}}"
+        (keyup)="checkForm(psatForm)" (focus)="focusField('stages')">
     </div>
   </div>
 
@@ -72,13 +77,13 @@
       <div class="form-check">
         <label class="col-sm-6 col-md-4 col-lg-3 col-form-label" class="form-check-label">
           <input class="form-check-input" type="radio" name="fixedSpeed" formControlName="fixedSpeed" checked value="Yes"
-                 (focus)="focusField('fixedSpecificSpeed')">Yes
+                 (keyup)="checkForm(psatForm)" (focus)="focusField('fixedSpecificSpeed')">Yes
         </label>
       </div>
-      <div class="form-check" (focus)="focusField('fixedSpecificSpeed')">
+      <div class="form-check" (keyup)="checkForm(psatForm)" (focus)="focusField('fixedSpecificSpeed')">
         <label class="col-sm-6 col-md-4 col-lg-3 col-form-label" class="form-check-label">
              <input class="form-check-input" type="radio" name="fixedSpeed" formControlName="fixedSpeed" value="No"
-                    (focus)="focusField('fixedSpecificSpeed')">No
+                    (keyup)="checkForm(psatForm)" (focus)="focusField('fixedSpecificSpeed')">No
           </label>
       </div>
     </div>
