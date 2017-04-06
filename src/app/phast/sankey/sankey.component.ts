@@ -102,6 +102,8 @@ export class SankeyComponent implements OnInit{
       .append("g")
       .call(findColor);
 
+    this.drawFurnace();
+
     function calcSankey() {
       var alterVal = 0, change;
 
@@ -242,7 +244,6 @@ export class SankeyComponent implements OnInit{
         });
     });
 
-
     svg.selectAll('marker')
       .data(links)
       .enter().append('svg:marker')
@@ -268,7 +269,6 @@ export class SankeyComponent implements OnInit{
       nodes.forEach(function(d , i){
         var node_data = d;
         if(!d.inter || d.usefulOutput) {
-          console.log("num: " + i);
           svg.select("#end-" + i)
             .attr("fill", function () {
               return color(node_data.value);
@@ -612,4 +612,15 @@ export class SankeyComponent implements OnInit{
         });
     }
   }
+
+  drawFurnace(){
+    var furnace = svg.append("g")
+      .append("polygon")
+      .attr("points", function(){
+        return (620-100) + "," + ((height/2)-500) + "," + (620-150) + "," + ((height/2)-500) + "," + (620-150) + "," + ((height/2)-350) + "," + 250 + "," + ((height/2)-350) + "," + 250 + "," + ((height/2)+350) + "," + 1130 + "," +  ((height/2)+350) + "," + 1130 + "," + ((height/2)-350) + "," + (620+150) + "," + ((height/2)-350) + "," + (620+150) + "," + ((height/2)-500) + "," + (620+100) + "," + ((height/2)-500) + "," + (620+100) + "," + ((height/2)-300) + "," + (1130-50) + "," + ((height/2)-300) + "," + (1130-50) + "," + ((height/2)+300) + "," + 300 + "," + ((height/2)+300) + "," + 300 + "," + ((height/2)-300) + "," + (620-100) + "," + ((height/2)-300) + "," + (620-100) + "," + ((height/2)-500);
+      })
+      .style("fill", "#bae4ce")
+      .style("stroke", "black");
+  }
+
 }
