@@ -18,7 +18,7 @@ export class DashboardComponent implements OnInit {
   constructor(private electronService: ElectronService) { }
 
   ngOnInit() {
-    this.updateAvailable = this.electronService.remote.getGlobal('globalUpdate');
+    // this.updateAvailable = this.electronService.remote.getGlobal('globalUpdate');
   }
 
   changeWorkingDirectory($event) {
