@@ -1,0 +1,70 @@
+
+
+<div class="help-header">
+
+  <h3>Atmosphere Losses Help</h3>
+  <p>Enter loss data</p>
+  <p class="text-muted">
+    <span class="fa fa-youtube-play"></span> Watch tutorial on entering atmosphere loss data.
+  </p>
+
+</div>
+
+
+<div class="help-content">
+
+  <div class="card" *ngIf="currentField == 'atmosphereGas'">
+    <div class="card-header">
+      Atmosphere Gas
+    </div>
+    <div class="card-block">
+      <label>Description:</label>
+    </div>
+  </div>
+
+  <div class="card" *ngIf="currentField == 'specificHeat'">
+    <div class="card-header">
+      Specific heat of gas (Btu/(SCF-(&#8457;)))
+    </div>
+    <div class="card-block">
+      <label>Description:</label>
+    </div>
+  </div>
+
+  <div class="card" *ngIf="currentField == 'inletTemp'">
+    <div class="card-header">
+      Initial temperature (&#8457;)
+    </div>
+    <div class="card-block">
+      <label>Description:</label>
+    </div>
+  </div>
+
+  <div class="card" *ngIf="currentField == 'outletTemp'">
+    <div class="card-header">
+      Final temperature (&#8457;)
+    </div>
+    <div class="card-block">
+      <label>Description:</label>
+    </div>
+  </div>
+
+  <div class="card" *ngIf="currentField == 'flowRate'">
+    <div class="card-header">
+      Flow Rate (SCF/hr)
+    </div>
+    <div class="card-block">
+      <label>Description:</label>
+    </div>
+  </div>
+
+  <div class="card" *ngIf="currentField == 'correctionFactor'">
+    <div class="card-header">
+      Correction Factor
+    </div>
+    <div class="card-block">
+      <label>Description:</label>
+    </div>
+  </div>
+
+</div>

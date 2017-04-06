@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { UpdateModalComponent } from './update-modal.component';
+import { LossesHelpComponent } from './losses-help.component';
 
-describe('UpdateModalComponent', () => {
-  let component: UpdateModalComponent;
-  let fixture: ComponentFixture<UpdateModalComponent>;
+describe('LossesHelpComponent', () => {
+  let component: LossesHelpComponent;
+  let fixture: ComponentFixture<LossesHelpComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ UpdateModalComponent ]
+      declarations: [ LossesHelpComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(UpdateModalComponent);
+    fixture = TestBed.createComponent(LossesHelpComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

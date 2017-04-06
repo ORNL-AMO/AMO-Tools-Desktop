@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, SimpleChange } from '@angular/core';
+import { Component, OnInit, Input, SimpleChanges, Output, EventEmitter } from '@angular/core';
 import * as _ from 'lodash';
 import { PhastService } from '../../phast.service';
 import { CoolingLossesService } from './cooling-losses.service';
@@ -17,14 +17,30 @@ export class CoolingLossesComponent implements OnInit {
   saveClicked: boolean;
   @Input()
   lossState: any;
-
+  @Input()
+  addLossToggle: boolean;
+  @Output('savedLoss')
+  savedLoss = new EventEmitter<boolean>();
+  @Input()
+  baselineSelected: boolean;
+  @Output('fieldChange')
+  fieldChange = new EventEmitter<string>();
+  
   _coolingLosses: Array<any>;
-
+  firstChange: boolean = true;
   constructor(private coolingLossesService: CoolingLossesService, private phastService: PhastService) { }
 
-  ngOnChanges(changes: SimpleChange) {
-    if (!changes.isFirstChange && this._coolingLosses) {
-      this.saveLosses()
+  ngOnChanges(changes: SimpleChanges) {
+    if (!this.firstChange) {
+      if (changes.saveClicked) {
+        this.saveLosses();
+      }
+      if (changes.addLossToggle) {
+        this.addLoss();
+      }
+    }
+    else {
+      this.firstChange = false;
     }
   }
 
@@ -151,5 +167,10 @@ export class CoolingLossesComponent implements OnInit {
     this.losses.coolingLosses = tmpCoolingLoss;
     this.lossState.numLosses = this.losses.coolingLosses.length;
     this.lossState.saved = true;
+    this.savedLoss.emit(true);
+  }
+
+  changeField(str: string) {
+    this.fieldChange.emit(str);
   }
 }

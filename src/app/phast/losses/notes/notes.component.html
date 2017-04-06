@@ -1,0 +1,49 @@
+<div class="form-group" *ngIf="currentTab == 'charge-material'">
+  <label for="notes">Charge Material Modification Notes:</label>
+  <textarea class="form-control" rows="5" id="notes" [(ngModel)]="notes.chargeNotes"></textarea>
+</div>
+
+<div class="form-group" *ngIf="currentTab == 'wall-losses'">
+  <label for="notes">Wall Loss Modification Notes:</label>
+  <textarea class="form-control" rows="5" id="notes" [(ngModel)]="notes.wallNotes"></textarea>
+</div>
+
+<div class="form-group" *ngIf="currentTab == 'atmosphere-losses'">
+  <label for="notes">Atmosphere Loss Modification Notes:</label>
+  <textarea class="form-control" rows="5" id="notes" [(ngModel)]="notes.atmosphereNotes"></textarea>
+</div>
+
+<div class="form-group" *ngIf="currentTab == 'fixture-losses'">
+  <label for="notes">Fixture Loss Modification Notes:</label>
+  <textarea class="form-control" rows="5" id="notes" [(ngModel)]="notes.fixtureNotes"></textarea>
+</div>
+
+<div class="form-group" *ngIf="currentTab == 'opening-losses'">
+  <label for="notes">Opening Loss Modification Notes:</label>
+  <textarea class="form-control" rows="5" id="notes" [(ngModel)]="notes.openingNotes"></textarea>
+</div>
+
+<div class="form-group" *ngIf="currentTab == 'cooling-losses'">
+  <label for="notes">Cooling Loss Modification Notes:</label>
+  <textarea class="form-control" rows="5" id="notes" [(ngModel)]="notes.coolingNotes"></textarea>
+</div>
+
+<div class="form-group" *ngIf="currentTab == 'flue-gas-losses'">
+  <label for="notes">Flue Gas Loss Modification Notes:</label>
+  <textarea class="form-control" rows="5" id="notes" [(ngModel)]="notes.flueGasNotes"></textarea>
+</div>
+
+<div class="form-group" *ngIf="currentTab == 'gas-leakage-losses'">
+  <label for="notes">Gas Leakage Loss Modification Notes:</label>
+  <textarea class="form-control" rows="5" id="notes" [(ngModel)]="notes.leakageNotes"></textarea>
+</div>
+
+<div class="form-group" *ngIf="currentTab == 'extended-surface-losses'">
+  <label for="notes">Extended Surface Loss Modification Notes:</label>
+  <textarea class="form-control" rows="5" id="notes" [(ngModel)]="notes.extendedNotes"></textarea>
+</div>
+
+<div class="form-group" *ngIf="currentTab == 'other-losses'">
+  <label for="notes">Other Loss Modification Notes:</label>
+  <textarea class="form-control" rows="5" id="notes" [(ngModel)]="notes.otherNotes"></textarea>
+</div>

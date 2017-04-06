@@ -572,6 +572,10 @@ No Data Messaging
     overflow-y: scroll;
 }
 
+.losses-container.disabled, .losses-container:disabled{
+    background: #efefef;
+}
+
 .losses-empty{
   height:100%;
 }

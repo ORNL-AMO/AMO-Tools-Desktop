@@ -21,7 +21,7 @@
   </div>
   <div class="row">
     <div class="col-12">
-      <app-fixture-losses-form [(lossesForm)]="loss.form" (calculate)="calculate(loss)" [(lossState)]="lossState"></app-fixture-losses-form>
+      <app-fixture-losses-form (changeField)="changeField($event)" [(lossesForm)]="loss.form" (calculate)="calculate(loss)" [(lossState)]="lossState" [baselineSelected]="baselineSelected"></app-fixture-losses-form>
     </div>
   </div>
   <div class="row">

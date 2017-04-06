@@ -1,9 +1,9 @@
-<form [formGroup]="lossesForm">
+<form #lossForm [formGroup]="lossesForm">
 
   <div class="row form-group">
     <label class="col-6 col-form-label small" for="materialName">Material Name</label>
     <div class="col-6 input-group input-group-sm">
-      <select class="form-control" formControlName="materialName" id="materialName">
+      <select class="form-control" formControlName="materialName" id="materialName" (focus)="focusField('materialName')">
         <option>Material 1</option>
         <option>Material 2</option>
       </select>
@@ -13,35 +13,35 @@
   <div class="row form-group">
     <label class="col-6 col-form-label small" for="specificHeat">Specific Heat (Btu/(lb-f))</label>
     <div class="col-6 input-group input-group-sm">
-      <input type="number" class="form-control" formControlName="specificHeat" id="specificHeat">
+      <input type="number" class="form-control" formControlName="specificHeat" id="specificHeat" (focus)="focusField('specificHeat')">
     </div>
   </div>
 
   <div class="row form-group">
     <label class="col-6 col-form-label small" for="feedRate">Fixture Weight feed rate (lb/hr)</label>
     <div class="col-6 input-group input-group-sm">
-      <input type="number" class="form-control" formControlName="feedRate" id="feedRate" (keyup)="checkForm()">
+      <input type="number" class="form-control" formControlName="feedRate" id="feedRate" (keyup)="checkForm()" (focus)="focusField('feedRate')">
     </div>
   </div>
 
   <div class="row form-group">
     <label class="col-6 col-form-label small" for="initialTemp">Initial Temperature (&#8457;)</label>
     <div class="col-6 input-group input-group-sm">
-      <input type="number" class="form-control" formControlName="initialTemp" id="initialTemp" (keyup)="checkForm()">
+      <input type="number" class="form-control" formControlName="initialTemp" id="initialTemp" (keyup)="checkForm()" (focus)="focusField('initialTemp')">
     </div>
   </div>
 
   <div class="row form-group">
     <label class="col-6 col-form-label small" for="finalTemp">Final Temperature (&#8457;)</label>
     <div class="col-6 input-group input-group-sm">
-      <input type="number" class="form-control" formControlName="finalTemp" id="finalTemp" (keyup)="checkForm()">
+      <input type="number" class="form-control" formControlName="finalTemp" id="finalTemp" (keyup)="checkForm()" (focus)="focusField('finalTemp')">
     </div>
   </div>
 
   <div class="row form-group">
     <label class="col-6 col-form-label small" for="correctionFactor">Correction Factor</label>
     <div class="col-6 input-group input-group-sm">
-      <input type="number" class="form-control" formControlName="correctionFactor" id="correctionFactor" (keyup)="checkForm()">
+      <input type="number" class="form-control" formControlName="correctionFactor" id="correctionFactor" (keyup)="checkForm()" (focus)="focusField('correctionFactor')">
     </div>
   </div>
 

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, SimpleChange } from '@angular/core';
+import { Component, OnInit, Input, SimpleChanges, Output, EventEmitter } from '@angular/core';
 import * as _ from 'lodash';
 import { OtherLossesService } from './other-losses.service';
 import { Losses } from '../../../shared/models/phast';
@@ -16,14 +16,31 @@ export class OtherLossesComponent implements OnInit {
   saveClicked: boolean;
   @Input()
   lossState: any;
+  @Input()
+  addLossToggle: boolean;
+  @Output('savedLoss')
+  savedLoss = new EventEmitter<boolean>();
+  @Input()
+  baselineSelected: boolean;
+  @Output('fieldChange')
+  fieldChange = new EventEmitter<string>();
 
   _otherLosses: Array<any>;
-
+  firstChange: boolean = true;
   constructor(private otherLossesService: OtherLossesService) { }
 
-  ngOnChanges(changes: SimpleChange) {
-    if (!changes.isFirstChange && this._otherLosses) {
-      this.saveLosses();
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (!this.firstChange) {
+      if (changes.saveClicked) {
+        this.saveLosses();
+      }
+      if (changes.addLossToggle) {
+        this.addLoss();
+      }
+    }
+    else {
+      this.firstChange = false;
     }
   }
 
@@ -83,5 +100,10 @@ export class OtherLossesComponent implements OnInit {
     this.losses.otherLosses = tmpLosses;
     this.lossState.numLosses = this.losses.otherLosses.length;
     this.lossState.saved = true;
+    this.savedLoss.emit(true);
+  }
+
+  changeField(str: string) {
+    this.fieldChange.emit(str);
   }
 }

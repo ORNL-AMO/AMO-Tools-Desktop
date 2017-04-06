@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, SimpleChange } from '@angular/core';
+import { Component, OnInit, Input, SimpleChanges, Output, EventEmitter } from '@angular/core';
 import * as _ from 'lodash';
 import { PhastService } from '../../phast.service';
 import { ExtendedSurface } from '../../../shared/models/losses/extendedSurface';
@@ -12,21 +12,36 @@ import { ExtendedSurfaceLossesService } from './extended-surface-losses.service'
   styleUrls: ['./extended-surface-losses.component.css']
 })
 export class ExtendedSurfaceLossesComponent implements OnInit {
-
   @Input()
   losses: Losses;
   @Input()
   saveClicked: boolean;
   @Input()
   lossState: any;
+  @Input()
+  addLossToggle: boolean;
+  @Output('savedLoss')
+  savedLoss = new EventEmitter<boolean>();
+  @Input()
+  baselineSelected: boolean;
+  @Output('fieldChange')
+  fieldChange = new EventEmitter<string>();
 
   _surfaceLosses: Array<any>;
-
+  firstChange: boolean = true;
   constructor(private phastService: PhastService, private extendedSurfaceLossesService: ExtendedSurfaceLossesService) { }
 
-  ngOnChanges(changes: SimpleChange) {
-    if (!changes.isFirstChange && this._surfaceLosses) {
-      this.saveLosses();
+  ngOnChanges(changes: SimpleChanges) {
+    if (!this.firstChange) {
+      if (changes.saveClicked) {
+        this.saveLosses();
+      }
+      if (changes.addLossToggle) {
+        this.addLoss();
+      }
+    }
+    else {
+      this.firstChange = false;
     }
   }
 
@@ -98,5 +113,10 @@ export class ExtendedSurfaceLossesComponent implements OnInit {
     this.losses.extendedSurfaces = tmpSurfaceLosses;
     this.lossState.numLosses = this.losses.extendedSurfaces.length;
     this.lossState.saved = true;
+    this.savedLoss.emit(true);
+  }
+
+  changeField(str: string) {
+    this.fieldChange.emit(str);
   }
 }

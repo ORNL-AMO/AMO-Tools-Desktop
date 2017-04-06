@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, SimpleChange } from '@angular/core';
+import { Component, OnInit, Input, SimpleChanges, Output, EventEmitter } from '@angular/core';
 import * as _ from 'lodash';
 import { PhastService } from '../../phast.service';
 import { Losses } from '../../../shared/models/phast';
@@ -16,17 +16,33 @@ export class GasLeakageLossesComponent implements OnInit {
   saveClicked: boolean;
   @Input()
   lossState: any;
+  @Input()
+  addLossToggle: boolean;
+  @Output('savedLoss')
+  savedLoss = new EventEmitter<boolean>();
+  @Input()
+  baselineSelected: boolean;
+  @Output('fieldChange')
+  fieldChange = new EventEmitter<string>();
 
   _leakageLosses: Array<any>;
+  firstChange: boolean = true;
 
   constructor(private gasLeakageLossesService: GasLeakageLossesService, private phastService: PhastService) { }
 
-  ngOnChanges(changes: SimpleChange) {
-    if (!changes.isFirstChange && this._leakageLosses) {
-      this.saveLosses();
+  ngOnChanges(changes: SimpleChanges) {
+    if (!this.firstChange) {
+      if (changes.saveClicked) {
+        this.saveLosses();
+      }
+      if (changes.addLossToggle) {
+        this.addLoss();
+      }
+    }
+    else {
+      this.firstChange = false;
     }
   }
-
   ngOnInit() {
     if (!this._leakageLosses) {
       this._leakageLosses = new Array<any>();
@@ -92,6 +108,9 @@ export class GasLeakageLossesComponent implements OnInit {
     this.losses.leakageLosses = tmpLeakageLosses;
     this.lossState.numLosses = this.losses.leakageLosses.length;
     this.lossState.saved = true;
+    this.savedLoss.emit(true);
   }
-
+  changeField(str: string) {
+    this.fieldChange.emit(str);
+  }
 }

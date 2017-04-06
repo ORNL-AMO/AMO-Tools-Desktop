@@ -21,7 +21,7 @@
   </div>
   <div class="row">
     <div class="col-12">
-      <app-opening-losses-form [(openingLossesForm)]="loss.form" (calculate)="calculate(loss)" [(lossState)]="lossState"></app-opening-losses-form>
+      <app-opening-losses-form  (changeField)="changeField($event)" [(openingLossesForm)]="loss.form" (calculate)="calculate(loss)" [(lossState)]="lossState" [baselineSelected]="baselineSelected"></app-opening-losses-form>
     </div>
   </div>
   <div class="row">

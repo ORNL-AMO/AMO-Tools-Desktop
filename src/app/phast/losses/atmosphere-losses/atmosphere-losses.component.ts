@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, SimpleChange } from '@angular/core';
+import { Component, OnInit, Input, SimpleChanges, Output, EventEmitter } from '@angular/core';
 import * as _ from 'lodash';
 import { PhastService } from '../../phast.service';
 import { AtmosphereLossesService } from './atmosphere-losses.service';
@@ -17,13 +17,30 @@ export class AtmosphereLossesComponent implements OnInit {
   saveClicked: boolean;
   @Input()
   lossState: any;
+  @Input()
+  addLossToggle: boolean;
+  @Output('savedLoss')
+  savedLoss = new EventEmitter<boolean>();
+  @Input()
+  baselineSelected: boolean;
+  @Output('fieldChange')
+  fieldChange = new EventEmitter<string>();
 
   _atmosphereLosses: Array<any>;
-
+  firstChange: boolean = true;
   constructor(private atmosphereLossesService: AtmosphereLossesService, private phastService: PhastService) { }
-  ngOnChanges(changes: SimpleChange) {
-    if (!changes.isFirstChange && this._atmosphereLosses) {
-      this.saveLosses();
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (!this.firstChange) {
+      if (changes.saveClicked) {
+        this.saveLosses();
+      }
+      if (changes.addLossToggle) {
+        this.addLoss();
+      }
+    }
+    else {
+      this.firstChange = false;
     }
   }
 
@@ -90,5 +107,10 @@ export class AtmosphereLossesComponent implements OnInit {
     this.losses.atmosphereLosses = tmpAtmosphereLosses;
     this.lossState.numLosses = this.losses.atmosphereLosses.length;
     this.lossState.saved = true;
+    this.savedLoss.emit(true);
+  }
+
+  changeField(str: string) {
+    this.fieldChange.emit(str);
   }
 }

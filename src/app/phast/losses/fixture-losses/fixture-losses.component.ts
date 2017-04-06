@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, SimpleChange } from '@angular/core';
+import { Component, OnInit, Input, SimpleChanges, Output, EventEmitter } from '@angular/core';
 import * as _ from 'lodash';
 import { PhastService } from '../../phast.service';
 import { FixtureLossesService } from './fixture-losses.service';
@@ -17,14 +17,29 @@ export class FixtureLossesComponent implements OnInit {
   saveClicked: boolean;
   @Input()
   lossState: any;
+  @Input()
+  addLossToggle: boolean;
+  @Output('savedLoss')
+  savedLoss = new EventEmitter<boolean>();
+  @Input()
+  baselineSelected: boolean;
+  @Output('fieldChange')
+  fieldChange = new EventEmitter<string>();
 
   _fixtureLosses: Array<any>;
-
+  firstChange: boolean = true;
   constructor(private phastService: PhastService, private fixtureLossesService: FixtureLossesService) { }
-
-  ngOnChanges(changes: SimpleChange) {
-    if (!changes.isFirstChange && this._fixtureLosses) {
-      this.saveLosses()
+  ngOnChanges(changes: SimpleChanges) {
+    if (!this.firstChange) {
+      if (changes.saveClicked) {
+        this.saveLosses();
+      }
+      if (changes.addLossToggle) {
+        this.addLoss();
+      }
+    }
+    else {
+      this.firstChange = false;
     }
   }
 
@@ -89,6 +104,11 @@ export class FixtureLossesComponent implements OnInit {
     this.losses.fixtureLosses = tmpFixtureLosses;
     this.lossState.numLosses = this.losses.fixtureLosses.length;
     this.lossState.saved = true;
+    this.savedLoss.emit(true);
+  }
+
+  changeField(str: string) {
+    this.fieldChange.emit(str);
   }
 
 }

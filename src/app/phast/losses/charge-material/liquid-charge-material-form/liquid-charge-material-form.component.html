@@ -1,8 +1,8 @@
-<form [formGroup]="chargeMaterialForm">
+<form #lossForm [formGroup]="chargeMaterialForm">
   <div class="row form-group">
     <label class="col-8 col-form-label small" for="materialName">Name of Material</label>
     <div class="col-4 input-group input-group-sm">
-      <select class="form-control" formControlName="materialName" id="materialName">
+      <select class="form-control" formControlName="materialName" id="materialName" (focus)="focusField('materialName')">
           <option>Type 1</option>
           <option>Type 2</option>
         </select>
@@ -12,77 +12,77 @@
   <div class="row form-group">
     <label class="col-8 col-form-label small" for="materialSpecificHeatLiquid">Specific Heat of Liquid (Btu/(lb-F))</label>
     <div class="col-4 input-group input-group-sm">
-      <input type="number" class="form-control" formControlName="materialSpecificHeatLiquid" id="materialSpecificHeatLiquid">
+      <input type="number" class="form-control" formControlName="materialSpecificHeatLiquid" id="materialSpecificHeatLiquid"  (focus)="focusField('materialSpecificHeatLiquid')">
     </div>
   </div>
 
   <div class="row form-group">
     <label class="col-8 col-form-label small" for="materialVaporizingTemperature">Vaporizing Temperature (&#8457;)</label>
     <div class="col-4 input-group input-group-sm">
-      <input type="number" class="form-control" formControlName="materialVaporizingTemperature" id="materialVaporizingTemperature">
+      <input type="number" class="form-control" formControlName="materialVaporizingTemperature" id="materialVaporizingTemperature" (focus)="focusField('materialVaporizingTemperature')">
     </div>
   </div>
 
   <div class="row form-group">
     <label class="col-8 col-form-label small" for="materialLatentHeat">Latent Heat of Vaporization (&#8457;)</label>
     <div class="col-4 input-group input-group-sm">
-      <input type="number" class="form-control" formControlName="materialLatentHeat" id="materialLatentHeat">
+      <input type="number" class="form-control" formControlName="materialLatentHeat" id="materialLatentHeat" (focus)="focusField('materialLatentHeat')">
     </div>
   </div>
 
   <div class="row form-group">
     <label class="col-8 col-form-label small" for="materialSpecificHeatVapor">Specific Heat of Vapor (Btu/(lb-F))</label>
     <div class="col-4 input-group input-group-sm">
-      <input type="number" class="form-control" formControlName="materialSpecificHeatVapor" id="materialSpecificHeatVapor">
+      <input type="number" class="form-control" formControlName="materialSpecificHeatVapor" id="materialSpecificHeatVapor" (focus)="focusField('materialSpecificHeatVapor')">
     </div>
   </div>
 
   <div class="row form-group form-spacer">
     <label class="col-8 col-form-label small" for="feedRate">Charge (Liquid)-Feed Rate (lb/hr)</label>
     <div class="col-4 input-group input-group-sm">
-      <input type="number" class="form-control" formControlName="feedRate" id="feedRate" (keyup)="checkForm()">
+      <input type="number" class="form-control" formControlName="feedRate" id="feedRate" (keyup)="checkForm()" (focus)="focusField('feedRate')">
     </div>
   </div>
 
   <div class="row form-group">
     <label class="col-8 col-form-label small" for="initialTemperature">Initial Temperature (&#8457;)</label>
     <div class="col-4 input-group input-group-sm">
-      <input type="number" class="form-control" formControlName="initialTemperature" id="initialTemperature" (keyup)="checkForm()">
+      <input type="number" class="form-control" formControlName="initialTemperature" id="initialTemperature" (keyup)="checkForm()" (focus)="focusField('initialTemperature')">
     </div>
   </div>
 
   <div class="row form-group">
     <label class="col-8 col-form-label small" for="dischargeTemperature">Discharge Temperature (&#8457;)</label>
     <div class="col-4 input-group input-group-sm">
-      <input type="number" class="form-control" formControlName="dischargeTemperature" id="dischargeTemperature" (keyup)="checkForm()">
+      <input type="number" class="form-control" formControlName="dischargeTemperature" id="dischargeTemperature" (keyup)="checkForm()" (focus)="focusField('dischargeTemperature')">
     </div>
   </div>
 
   <div class="row form-group">
     <label class="col-8 col-form-label small" for="liquidVaporized">Charge Liquid Vaporized (% of Charge)</label>
     <div class="col-4 input-group input-group-sm">
-      <input type="number" class="form-control" formControlName="liquidVaporized" id="liquidVaporized" (keyup)="checkForm()">
+      <input type="number" class="form-control" formControlName="liquidVaporized" id="liquidVaporized" (keyup)="checkForm()" (focus)="focusField('liquidVaporized')">
     </div>
   </div>
 
   <div class="row form-group">
     <label class="col-8 col-form-label small" for="liquidReacted">Charge Liquid Reacted (% of Charge)</label>
     <div class="col-4 input-group input-group-sm">
-      <input type="number" class="form-control" formControlName="liquidReacted" id="liquidReacted" (keyup)="checkForm()">
+      <input type="number" class="form-control" formControlName="liquidReacted" id="liquidReacted" (keyup)="checkForm()" (focus)="focusField('liquidReacted')">
     </div>
   </div>
 
   <div class="row form-group">
     <label class="col-8 col-form-label small" for="heatOfReaction">Heat of Reaction (Btu/lb)</label>
     <div class="col-4 input-group input-group-sm">
-      <input type="number" class="form-control" formControlName="heatOfReaction" id="heatOfReaction" (keyup)="checkForm()">
+      <input type="number" class="form-control" formControlName="heatOfReaction" id="heatOfReaction" (keyup)="checkForm()" (focus)="focusField('heatOfReaction')">
     </div>
   </div>
 
   <div class="row form-group">
     <label class="col-8 col-form-label small" for="endothermicOrExothermic">Endothermic/Exothermic</label>
     <div class="col-4 input-group input-group-sm">
-      <select class="form-control" formControlName="endothermicOrExothermic" id="endothermicOrExothermic">
+      <select class="form-control" formControlName="endothermicOrExothermic" id="endothermicOrExothermic" (focus)="focusField('endothermicOrExothermic')">
         <option>Endothermic</option>
         <option>Exothermic</option>
       </select>
@@ -92,7 +92,7 @@
   <div class="row form-group">
     <label class="col-8 col-form-label small" for="additionalHeatRequired">Additional Heat Required (Btu/lb)</label>
     <div class="col-4 input-group input-group-sm">
-      <input type="number" class="form-control" formControlName="additionalHeatRequired" id="additionalHeatRequired" (keyup)="checkForm()">
+      <input type="number" class="form-control" formControlName="additionalHeatRequired" id="additionalHeatRequired" (keyup)="checkForm()" (focus)="focusField('additionalHeatRequired')">
     </div>
   </div>
 </form>

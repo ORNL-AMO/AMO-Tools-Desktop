@@ -1,0 +1,49 @@
+<div class="help-header">
+
+  <h3>Extended Surface Losses Help</h3>
+  <p>Enter loss data</p>
+  <p class="text-muted">
+    <span class="fa fa-youtube-play"></span> Watch tutorial on entering extended surface loss data.
+  </p>
+
+</div>
+
+
+<div class="help-content">
+  <div class="card" *ngIf="currentField == 'surfaceArea'">
+    <div class="card-header">
+      Total Outside Surface Area (ft<sup>2</sup>)
+    </div>
+    <div class="card-block">
+      <label>Description:</label>
+    </div>
+  </div>
+
+  <div class="card" *ngIf="currentField == 'avgSurfaceTemp'">
+    <div class="card-header">
+      Average Surface Temperature (&#8457;)
+    </div>
+    <div class="card-block">
+      <label>Description:</label>
+    </div>
+  </div>
+
+  <div class="card" *ngIf="currentField == 'ambientTemp'">
+    <div class="card-header">
+      Ambient Temperature (&#8457;)
+    </div>
+    <div class="card-block">
+      <label>Description:</label>
+    </div>
+  </div>
+
+  <div class="card" *ngIf="currentField == 'surfaceEmissivity'">
+    <div class="card-header">
+      Surface Emissivity (Typical - 0.9)
+    </div>
+    <div class="card-block">
+      <label>Description:</label>
+    </div>
+  </div>
+
+</div>

@@ -9,25 +9,24 @@ export class MotorHelpComponent implements OnInit {
   @Input()
   currentField: string;
 
-  defaultOpen: boolean = false; 
-  lineFrequencyOpen: boolean = false;
-  horsePowerOpen: boolean = false;
-  motorRPMOpen: boolean = false;
-  efficiencyClassOpen: boolean = false;
-  voltageOpen: boolean = false;
-  fullLoadAmpsOpen: boolean = false;
-  sizeMarginOpen: boolean = false;
+  // defaultOpen: boolean = false; 
+  // lineFrequencyOpen: boolean = false;
+  // horsePowerOpen: boolean = false;
+  // motorRPMOpen: boolean = false;
+  // efficiencyClassOpen: boolean = false;
+  // voltageOpen: boolean = false;
+  // fullLoadAmpsOpen: boolean = false;
+  // sizeMarginOpen: boolean = false;
   constructor() { }
 
   ngOnInit() {
-    console.log(this.currentField)
   }
 
-  toggleOpen(bool: boolean, str: string){
-    if(this.currentField == str){
-      this.currentField = '';
-    }
-    return !bool;
-  }
+  // toggleOpen(bool: boolean, str: string){
+  //   if(this.currentField == str){
+  //     this.currentField = '';
+  //   }
+  //   return !bool;
+  // }
 
 }

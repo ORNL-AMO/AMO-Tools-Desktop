@@ -13,14 +13,12 @@ import { CoreComponent } from './core.component';
 import { SidebarComponent } from '../sidebar/sidebar.component';
 import { DashboardComponent } from '../dashboard/dashboard.component';
 import { AssessmentService } from '../assessment/assessment.service';
-import { UpdateModalComponent } from '../update-modal/update-modal.component';
 
 @NgModule({
   declarations: [
     CoreComponent,
     SidebarComponent,
     DashboardComponent,
-    UpdateModalComponent
   ],
   imports: [
     CommonModule,

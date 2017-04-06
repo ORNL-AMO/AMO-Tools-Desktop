@@ -1,0 +1,92 @@
+<div class="help-header">
+
+  <h3>Cooling Losses Help</h3>
+  <p>Enter loss data</p>
+  <p class="text-muted">
+    <span class="fa fa-youtube-play"></span> Watch tutorial on entering cooling loss data.
+  </p>
+
+</div>
+
+
+<div class="help-content">
+  <!-- All -->
+  <div class="card" *ngIf="currentField == 'coolingMedium'">
+    <div class="card-header">
+      Cooling Medium
+    </div>
+    <div class="card-block">
+      <label>Description:</label>
+    </div>
+  </div>
+
+  <div class="card" *ngIf="currentField == 'inletTemp'">
+    <div class="card-header">
+      Inlet Temperature (&#8457;)
+    </div>
+    <div class="card-block">
+      <label>Description:</label>
+    </div>
+  </div>
+
+  <div class="card" *ngIf="currentField == 'outletTemp'">
+    <div class="card-header">
+      Outlet Temperature (&#8457;)
+    </div>
+    <div class="card-block">
+      <label>Description:</label>
+    </div>
+  </div>
+
+  <!--Gas -->
+  <div class="card" *ngIf="currentField == 'gasFlow'">
+    <div class="card-header">
+      Gas Flow (SCFM)
+    </div>
+    <div class="card-block">
+      <label>Description:</label>
+    </div>
+  </div>
+
+  <!--Liquid and Gas -->
+  <div class="card" *ngIf="currentField == 'avgSpecificHeat'">
+    <div class="card-header">
+      Average Specific Heat (Btu/lb-F)
+    </div>
+    <div class="card-block">
+      <label>Description:</label>
+    </div>
+  </div>
+
+  <div class="card" *ngIf="currentField == 'correctionFactor'">
+    <div class="card-header">
+      Correction Factor
+    </div>
+    <div class="card-block">
+      <label>Description:</label>
+    </div>
+  </div>
+
+  <!--Liquid and Water-->
+  <div class="card" *ngIf="currentField == 'liquidFlow'">
+    <div class="card-header">
+      Liquid Flow (gal/min)
+    </div>
+    <div class="card-block">
+      <label>Description:</label>
+    </div>
+  </div>
+
+  <!--Liquid-->
+  <div class="card" *ngIf="currentField == 'density'">
+    <div class="card-header">
+      Density (lb/SCF)
+    </div>
+    <div class="card-block">
+      <label>Description:</label>
+    </div>
+  </div>
+
+
+
+</div>

@@ -10,26 +10,25 @@ export class PumpFluidHelpComponent implements OnInit {
   @Input()
   currentField: string;
 
-  defaultOpen: boolean = false;
-  pumpTypeOpen: boolean = false;
-  pumpRPMOpen: boolean = false;
-  driveOpen: boolean = false;
-  kinematicViscosityOpen: boolean = false;
-  specificGravityOpen: boolean = false;
-  stagesOpen: boolean = false;
-  fixedSpecificSpeedOpen: boolean = false;
+  // defaultOpen: boolean = false;
+  // pumpTypeOpen: boolean = false;
+  // pumpRPMOpen: boolean = false;
+  // driveOpen: boolean = false;
+  // kinematicViscosityOpen: boolean = false;
+  // specificGravityOpen: boolean = false;
+  // stagesOpen: boolean = false;
+  // fixedSpecificSpeedOpen: boolean = false;
   constructor() { }
 
   ngOnInit() {
-    console.log(this.currentField)
   }
 
-  toggleOpen(bool: boolean, str: string){
-    if(this.currentField == str){
-      this.currentField = '';
-    }
-    return !bool;
-  }
+  // toggleOpen(bool: boolean, str: string){
+  //   if(this.currentField == str){
+  //     this.currentField = '';
+  //   }
+  //   return !bool;
+  // }
 
 
 }

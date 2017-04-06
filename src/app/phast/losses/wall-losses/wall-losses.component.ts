@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, SimpleChange } from '@angular/core';
+import { Component, OnInit, Input, SimpleChanges, SimpleChange, Output, EventEmitter } from '@angular/core';
 import * as _ from 'lodash';
 import { PhastService } from '../../phast.service';
 import { WallLoss } from '../../../shared/models/losses/wallLoss';
@@ -17,14 +17,30 @@ export class WallLossesComponent implements OnInit {
   saveClicked: boolean;
   @Input()
   lossState: any;
+  @Input()
+  addLossToggle: boolean;
+  @Output('savedLoss')
+  savedLoss = new EventEmitter<boolean>();
+  @Input()
+  baselineSelected: boolean;
+  @Output('fieldChange')
+  fieldChange = new EventEmitter<string>();
 
   _wallLosses: Array<any>;
-
+  firstChange: boolean = true;
   constructor(private phastService: PhastService, private wallLossesService: WallLossesService) { }
 
-  ngOnChanges(changes: SimpleChange) {
-    if (!changes.isFirstChange && this._wallLosses) {
-      this.saveLosses();
+  ngOnChanges(changes: SimpleChanges) {
+    if (!this.firstChange) {
+      if (changes.saveClicked) {
+        this.saveLosses();
+      }
+      if (changes.addLossToggle) {
+        this.addLoss();
+      }
+    }
+    else {
+      this.firstChange = false;
     }
   }
 
@@ -91,5 +107,10 @@ export class WallLossesComponent implements OnInit {
     this.losses.wallLosses = tmpWallLosses;
     this.lossState.numLosses = this.losses.wallLosses.length;
     this.lossState.saved = true;
+    this.savedLoss.emit(true);
+  }
+
+  changeField(str: string){
+    this.fieldChange.emit(str);
   }
 }

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, SimpleChange, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, SimpleChanges, Output, EventEmitter } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import * as _ from 'lodash';
 import { PhastService } from '../../phast.service';
@@ -17,14 +17,30 @@ export class ChargeMaterialComponent implements OnInit {
   saveClicked: boolean;
   @Input()
   lossState: any;
-
+  @Input()
+  addLossToggle: boolean;
+  @Output('savedLoss')
+  savedLoss = new EventEmitter<boolean>();
+  @Input()
+  baselineSelected: boolean;
+  @Output('fieldChange')
+  fieldChange = new EventEmitter<string>();
+  
   _chargeMaterial: Array<any>;
-
+  firstChange: boolean = true;
   constructor(private formBuilder: FormBuilder, private phastService: PhastService, private chargeMaterialService: ChargeMaterialService) { }
 
-  ngOnChanges(changes: SimpleChange) {
-    if (!changes.isFirstChange && this._chargeMaterial) {
-      this.saveLosses();
+  ngOnChanges(changes: SimpleChanges) {
+    if (!this.firstChange) {
+      if (changes.saveClicked) {
+        this.saveLosses();
+      }
+      if (changes.addLossToggle) {
+        this.addMaterial();
+      }
+    }
+    else {
+      this.firstChange = false;
     }
   }
 
@@ -197,5 +213,10 @@ export class ChargeMaterialComponent implements OnInit {
     this.losses.chargeMaterials = tmpChargeMaterials;
     this.lossState.numLosses = this.losses.chargeMaterials.length;
     this.lossState.saved = true;
+    this.savedLoss.emit(true);
+  }
+
+  changeField(str: string) {
+    this.fieldChange.emit(str);
   }
 }
