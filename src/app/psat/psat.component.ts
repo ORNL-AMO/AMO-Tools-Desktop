@@ -39,6 +39,8 @@ export class PsatComponent implements OnInit {
   canContinue;
 
   _psat: PSAT;
+
+
   constructor(private location: Location, private assessmentService: AssessmentService, private formBuilder: FormBuilder, private psatService: PsatService) { }
 
   ngOnInit() {
@@ -130,6 +132,7 @@ export class PsatComponent implements OnInit {
     this.assessmentService.setWorkingAssessment(this.assessment);
     // this.continueButton.nativeElement.disabled = false;
     // console.log(this.continueButton);
+    this.canContinue = true;
   }
 
   exportData() {
