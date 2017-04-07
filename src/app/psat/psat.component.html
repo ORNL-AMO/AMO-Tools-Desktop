@@ -69,6 +69,30 @@
   </div>
 </div>
 
+<div class="row tab-content" *ngIf="currentTab == 'achievable-efficiency'">
+  <div class="col-12">
+    <app-achievable-efficiency></app-achievable-efficiency>
+  </div>
+</div>
+
+<div class="row tab-content" *ngIf="currentTab == 'motor-performance'">
+  <div class="col-12">
+    <app-motor-performance></app-motor-performance>
+  </div>
+</div>
+
+<div class="row tab-content" *ngIf="currentTab == 'nema-energy-efficiency'">
+  <div class="col-12">
+    <app-nema-energy-efficiency></app-nema-energy-efficiency>
+  </div>
+</div>
+
+<div class="row tab-content" *ngIf="currentTab == 'specific-speed'">
+  <div class="col-12">
+    <app-specific-speed></app-specific-speed>
+  </div>
+</div>
+
 <div class="footer">
   <div class="pull-left">
     <button class="btn btn-secondary" *ngIf="currentTab == 'system-basics'" (click)="close()">Close</button>
@@ -76,7 +100,7 @@
   </div>
   <div class="pull-right">
     <button class="btn btn-primary" [disabled]="!isValid" (click)="toggleSave()">Save</button>
-    <button class="btn btn-primary"  *ngIf="currentTab != 'modify-conditions'" [disabled]="!isValid" (click)="continue()">Continue</button>
+    <button class="btn btn-primary" *ngIf="currentTab != 'modify-conditions'" [disabled]="!isValid" (click)="continue()">Continue</button>
     <button class="btn btn-primary" *ngIf="currentTab == 'modify-conditions'" (click)="exportData()">Export</button>
   </div>
 </div>

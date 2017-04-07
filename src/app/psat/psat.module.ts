@@ -37,6 +37,10 @@ import { SystemCurveFormComponent } from './system-curve/system-curve-form/syste
 import { SystemCurveGraphComponent } from './system-curve/system-curve-graph/system-curve-graph.component';
 import { ModifyConditionsTabsComponent } from './modify-conditions/modify-conditions-tabs/modify-conditions-tabs.component';
 import { ModifyConditionsNotesComponent } from './modify-conditions/modify-conditions-notes/modify-conditions-notes.component';
+import { SpecificSpeedComponent } from './specific-speed/specific-speed.component';
+import { AchievableEfficiencyComponent } from './achievable-efficiency/achievable-efficiency.component';
+import { MotorPerformanceComponent } from './motor-performance/motor-performance.component';
+import { NemaEnergyEfficiencyComponent } from './nema-energy-efficiency/nema-energy-efficiency.component';
 
 @NgModule({
   declarations: [
@@ -65,7 +69,11 @@ import { ModifyConditionsNotesComponent } from './modify-conditions/modify-condi
     SystemCurveFormComponent,
     SystemCurveGraphComponent,
     ModifyConditionsTabsComponent,
-    ModifyConditionsNotesComponent
+    ModifyConditionsNotesComponent,
+    SpecificSpeedComponent,
+    AchievableEfficiencyComponent,
+    MotorPerformanceComponent,
+    NemaEnergyEfficiencyComponent
   ],
   exports: [
 
