@@ -3,28 +3,28 @@
   <div class="row form-group">
     <label class="col-6 col-form-label small" for="avgSurfaceTemp">Average Surface Temperature (&#8457;)</label>
     <div class="col-6 input-group input-group-sm">
-      <input type="number" class="form-control" formControlName="avgSurfaceTemp" id="avgSurfaceTemp" (keyup)="checkForm()" (focus)="focusField('avgSurfaceTemp')">
+      <input type="number" class="form-control" formControlName="avgSurfaceTemp" id="avgSurfaceTemp" (input)="checkForm()" (focus)="focusField('avgSurfaceTemp')">
     </div>
   </div>
 
   <div class="row form-group">
     <label class="col-6 col-form-label small" for="ambientTemp">Ambient Temperature (&#8457;)</label>
     <div class="col-6 input-group input-group-sm">
-      <input type="number" class="form-control" formControlName="ambientTemp" id="ambientTemp" (keyup)="checkForm()" (focus)="focusField('ambientTemp')">
+      <input type="number" class="form-control" formControlName="ambientTemp" id="ambientTemp" (input)="checkForm()" (focus)="focusField('ambientTemp')">
     </div>
   </div>
 
   <div class="row form-group">
     <label class="col-6 col-form-label small" for="windVelocity">Wind Velocity (mph)</label>
     <div class="col-6 input-group input-group-sm">
-      <input type="number" class="form-control" formControlName="windVelocity" id="windVelocity" (keyup)="checkForm()" (focus)="focusField('windVelocity')">
+      <input type="number" class="form-control" formControlName="windVelocity" id="windVelocity" (input)="checkForm()" (focus)="focusField('windVelocity')">
     </div>
   </div>
 
   <div class="row form-group">
     <label class="col-6 col-form-label small" for="surfaceShape">Surface shape/orientation</label>
     <div class="col-6 input-group input-group-sm">
-      <select class="form-control" formControlName="surfaceShape"  id="surfaceShape" (focus)="focusField('surfaceShape')">
+      <select class="form-control" formControlName="surfaceShape" id="surfaceShape" (input)="checkForm()" (focus)="focusField('surfaceShape')">
         <option>Vertical Plates</option>
         <option>Shape 2</option>
       </select>
@@ -42,21 +42,23 @@
   <div class="row form-group">
     <label class="col-6 col-form-label small" for="surfaceEmissivity">Surface Emissivity (Typical - 0.9)</label>
     <div class="col-6 input-group input-group-sm">
-      <input type="number" class="form-control" formControlName="surfaceEmissivity" id="surfaceEmissivity" (keyup)="checkForm()" (focus)="focusField('surfaceEmissivity')">
+      <input type="number" class="form-control" formControlName="surfaceEmissivity" id="surfaceEmissivity" (input)="checkForm()"
+        (focus)="focusField('surfaceEmissivity')">
     </div>
   </div>
 
   <div class="row form-group">
     <label class="col-6 col-form-label small" for="surfaceArea">Total Outside Surface Area (ft<sup>2</sup>)</label>
     <div class="col-6 input-group input-group-sm">
-      <input type="number" class="form-control" formControlName="surfaceArea" id="surfaceArea" (keyup)="checkForm()" (focus)="focusField('surfaceArea')">
+      <input type="number" class="form-control" formControlName="surfaceArea" id="surfaceArea" (input)="checkForm()" (focus)="focusField('surfaceArea')">
     </div>
   </div>
 
   <div class="row form-group">
     <label class="col-6 col-form-label small" for="correctionFactor">Correction Factor</label>
     <div class="col-6 input-group input-group-sm">
-      <input type="number" class="form-control" formControlName="correctionFactor" id="correctionFactor" (keyup)="checkForm()" (focus)="focusField('correctionFactor')">
+      <input type="number" class="form-control" formControlName="correctionFactor" id="correctionFactor" (input)="checkForm()"
+        (focus)="focusField('correctionFactor')">
     </div>
   </div>
 

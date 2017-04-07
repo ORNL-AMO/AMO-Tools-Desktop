@@ -2,7 +2,7 @@
   <div class="row form-group">
     <label class="col-sm-6 col-md-4 col-lg-3 col-form-label" for="frequency">Line Frequency</label>
     <div class="col-6">
-      <select class="form-control number-input-field" id="frequency" formControlName="frequency" (keyup)="checkForm(psatForm)"
+      <select class="form-control number-input-field" id="frequency" formControlName="frequency" (input)="checkForm(psatForm)"
         (focus)="focusField('lineFrequency')">
         <option *ngFor="let frequency of frequencies">{{frequency}}</option>
       </select>
@@ -12,7 +12,7 @@
   <div class="row form-group">
     <label class="col-sm-6 col-md-4 col-lg-3 col-form-label" for="horsePower">Horse Power</label>
     <div class="col-6">
-      <select class="form-control number-input-field" id="horsePower" formControlName="horsePower" (keyup)="checkForm(psatForm)"
+      <select class="form-control number-input-field" id="horsePower" formControlName="horsePower" (input)="checkForm(psatForm)"
         (focus)="focusField('horsePower')">
         <option *ngFor="let horsePower of horsePowers">{{horsePower}}</option>
       </select>
@@ -29,14 +29,14 @@
         <button class="btn" [disabled]="!selected" (click)="addNum('motorRPM')"><i class="fa fa-plus"></i></button>
       </div>
       <input type="number " class="form-control incrementor-input-field" id="motorRPM" formControlName="motorRPM" ngModel="{{psatForm.value.motorRPM}}"
-        (keyup)="checkForm(psatForm)" (focus)="focusField('motorRPM')">
+        (input)="checkForm(psatForm)" (focus)="focusField('motorRPM')">
     </div>
   </div>
 
   <div class="row form-group">
     <label class="col-sm-6 col-md-4 col-lg-3 col-form-label" for="efficiencyClass">Efficiency Class</label>
     <div class="col-6">
-      <select class="form-control select-input-field" id="efficiencyClass" formControlName="efficiencyClass" (change)="checkForm(psatForm)"
+      <select class="form-control select-input-field" id="efficiencyClass" formControlName="efficiencyClass" (input)="checkForm(psatForm)"
         (focus)="focusField('efficiencyClass')">>
         <option *ngFor="let efficiencyClass of efficiencyClasses">{{efficiencyClass}}</option>
       </select>
@@ -47,14 +47,14 @@
     <label class="col-sm-6 col-md-4 col-lg-3 col-form-label" for="efficiencyClass">Specify Efficiency Class</label>
     <div class="col-6">
       <input type="text" class="form-control select-input-field" id="efficiencyClassSpecified" formControlName="efficiencyClassSpecified"
-        (keyup)="checkForm(psatForm)" (focus)="focusField('efficiencyClass')">
+        (input)="checkForm(psatForm)" (focus)="focusField('efficiencyClass')">
     </div>
   </div>
 
   <div class="row form-group" *ngIf="psatForm.value.efficiencyClass == 'Specified'">
     <label class="col-sm-6 col-md-4 col-lg-3 col-form-label" for="efficiency">Efficiency</label>
     <div class="col-6">
-      <input type="number" class="form-control number-input-field" id="efficiency" formControlName="efficiency" (keyup)="checkForm(psatForm)"
+      <input type="number" class="form-control number-input-field" id="efficiency" formControlName="efficiency" (input)="checkForm(psatForm)"
         (focus)="focusField('efficiency')">
     </div>
   </div>
@@ -62,7 +62,7 @@
   <div class="row form-group">
     <label class="col-sm-6 col-md-4 col-lg-3 col-form-label" for="motorVoltage">Voltage</label>
     <div class="col-6">
-      <input type="number" class="form-control number-input-field" id="motorVoltage" formControlName="motorVoltage" (keyup)="checkForm(psatForm)"
+      <input type="number" class="form-control number-input-field" id="motorVoltage" formControlName="motorVoltage" (input)="checkForm(psatForm)"
         (focus)="focusField('motorVoltage')">
     </div>
   </div>
@@ -70,10 +70,10 @@
   <div class="row form-group">
     <label class="col-sm-6 col-md-4 col-lg-3 col-form-label" for="fullLoadAmps" aria-describedby="flaHelp">
       Full-Load Amps
-    <small id="flaHelp" class="form-text text-muted text-help">Estimate Full-Load Amps</small>
+    <small id="flaHelp" class="form-text text-muted text-help" (click)="getFullLoadAmps()"><a>Estimate Full-Load Amps</a></small>
     </label>
     <div class="col-6">
-      <input type="number" class="form-control number-input-field" id="fullLoadAmps" formControlName="fullLoadAmps" (keyup)="checkForm(psatForm)"
+      <input type="number" class="form-control number-input-field" id="fullLoadAmps" formControlName="fullLoadAmps" (input)="checkForm(psatForm)"
         (focus)="focusField('fullLoadAmps')">
     </div>
   </div>
@@ -88,7 +88,7 @@
         <button class="btn" [disabled]="!selected" (click)="addNum('sizeMargin')"><i class="fa fa-plus"></i></button>
       </div>
       <input type="number" class="form-control incrementor-input-field" id="sizeMargin" formControlName="sizeMargin" ngModel="{{psatForm.value.sizeMargin}}"
-        (keyup)="checkForm(psatForm)" (focus)="focusField('sizeMargin')">
+        (input)="checkForm(psatForm)" (focus)="focusField('sizeMargin')">
     </div>
   </div>
 

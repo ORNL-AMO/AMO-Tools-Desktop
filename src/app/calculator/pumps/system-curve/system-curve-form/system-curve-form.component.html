@@ -4,13 +4,13 @@
       <div class="row form-group">
         <label class="col-8 col-form-label small" for="specificGravity">Fluid Specific Gravity</label>
         <div class="col-4 input-group input-group-sm">
-          <input type="number" class="form-control" formControlName="specificGravity" id="specificGravity" (keyup)="checkInputs()">
+          <input type="number" class="form-control" formControlName="specificGravity" id="specificGravity" (input)="checkInputs()">
         </div>
       </div>
       <div class="row form-group">
         <label class="col-8 col-form-label small" for="systemLossExponent">System Loss Exponent, C</label>
         <div class="col-4 input-group input-group-sm">
-          <input type="number" class="form-control" formControlName="systemLossExponent" id="systemLossExponent" (keyup)="checkInputs()">
+          <input type="number" class="form-control" formControlName="systemLossExponent" id="systemLossExponent" (input)="checkInputs()">
         </div>
       </div>
     </form>
@@ -23,7 +23,7 @@
       <div class="row form-group">
         <label class="col-6 col-form-label small" for="pointAdjustment">Point 1</label>
         <div class="col-6 input-group input-group-sm">
-          <select class="form-control" formControlName="pointAdjustment" id="pointAdjustment">
+          <select class="form-control"(input)="checkInputs()" formControlName="pointAdjustment" id="pointAdjustment">
             <option>Baseline</option>
             <option>Adjustment 1</option>
           </select>
@@ -32,13 +32,13 @@
       <div class="row form-group">
         <label class="col-6 col-form-label small" for="flowRate">Flow Rate (gpm)</label>
         <div class="col-6 input-group input-group-sm">
-          <input type="number" class="form-control" formControlName="flowRate" id="flowRate" (keyup)="checkInputs()">
+          <input type="number" class="form-control" formControlName="flowRate" id="flowRate" (input)="checkInputs()">
         </div>
       </div>
       <div class="row form-group">
         <label class="col-6 col-form-label small" for="head">Head</label>
         <div class="col-6 input-group input-group-sm">
-          <input type="number" class="form-control" formControlName="head" id="head" (keyup)="checkInputs()">
+          <input type="number" class="form-control" formControlName="head" id="head" (input)="checkInputs()">
         </div>
       </div>
       <div class="row">
@@ -59,7 +59,7 @@
       <div class="row form-group">
         <label class="col-6 col-form-label small" for="pointAdjustment">Point 1</label>
         <div class="col-6 input-group input-group-sm">
-          <select class="form-control" formControlName="pointAdjustment" id="pointAdjustment">
+          <select class="form-control" (input)="checkInputs()" formControlName="pointAdjustment" id="pointAdjustment">
             <option>Baseline</option>
             <option>Adjustment 1</option>
           </select>
@@ -68,13 +68,13 @@
       <div class="row form-group">
         <label class="col-6 col-form-label small" for="flowRate">Flow Rate (gpm)</label>
         <div class="col-6 input-group input-group-sm">
-          <input type="number" class="form-control" formControlName="flowRate" id="flowRate" (keyup)="checkInputs()">
+          <input type="number" class="form-control" formControlName="flowRate" id="flowRate" (input)="checkInputs()">
         </div>
       </div>
       <div class="row form-group">
         <label class="col-6 col-form-label small" for="head">Head</label>
         <div class="col-6 input-group input-group-sm">
-          <input type="number" class="form-control" formControlName="head" id="head" (keyup)="checkInputs()">
+          <input type="number" class="form-control" formControlName="head" id="head" (input)="checkInputs()">
         </div>
       </div>
     </form>

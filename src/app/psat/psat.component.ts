@@ -26,7 +26,11 @@ export class PsatComponent implements OnInit {
     'motor',
     'field-data',
     'modify-conditions',
-    'system-curve'
+    'system-curve',
+    'achievable-efficiency',
+    'motor-performance',
+    'nema-energy-efficiency',
+    'specific-speed'
   ]
   tabIndex: number = 0;
 

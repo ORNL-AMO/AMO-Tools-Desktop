@@ -1,4 +1,4 @@
-<div class="calc-content" *ngIf="!headTool">
+<div class="calc-content" *ngIf="selectedTool == 'none'">
   <div class="calc-banner">
     <div class="h3">Pump Calculators</div>
   </div>
@@ -6,25 +6,54 @@
     <div class="col-8">
       <div class="row calc-type">
         <div class="col-12">
-          <p class="h4">Type A Calculators</p>
+          <p class="h4">Choose a Calculator</p>
         </div>
       </div>
       <div class="row tools">
         <div class="col-12">
-          <a class="h5" (click)="showTool()">Head Tool option 1</a>
-          <div>Use this option to show the head tool in this space</div>
+          <a class="h5" (click)="showTool('head-tool')">Head Tool</a>
+          <div>Use head tool calculator to calculate pump head.</div>
         </div>
       </div>
       <div class="row tools">
         <div class="col-12">
-          <a class="h5" (click)="showHeadToolModal()"> Head Tool option 2 </a>
-          <div>Use this option to show the head tool in a modal</div>
+          <a class="h5" (click)="showTool('system-curve')">System Curve</a>
+          <div>Use system curve to graph your pumps flow.</div>
         </div>
       </div>
+      <div class="row tools">
+        <div class="col-12">
+          <a class="h5" (click)="showTool('nema-energy-efficiency')">NEMA Energy Efficiency</a>
+          <div>Calculate stuff...</div>
+        </div>
+      </div>
+
+      <div class="row tools">
+        <div class="col-12">
+          <a class="h5" (click)="showTool('specific-speed')">Specific Speed</a>
+          <div>Calculate Stuff...</div>
+        </div>
+      </div>
+
+      <div class="row tools">
+        <div class="col-12">
+          <a class="h5" (click)="showTool('achievable-efficiency')">Achievable Efficiency</a>
+          <div>Calculate some other stuff...</div>
+        </div>
+      </div>
+
+      <div class="row tools">
+        <div class="col-12">
+          <a class="h5" (click)="showTool('motor-performance')">Motor Performance</a>
+          <div>Calculate some motor stuff...</div>
+        </div>
+      </div>
+
     </div>
   </div>
 </div>
-<div class="card fade show" *ngIf="headTool">
+
+<div class="card fade show" *ngIf="selectedTool == 'head-tool'">
   <div class="card-header">
     <b class="h4">Pump Head Calculator</b>
     <button class="close pull-right" aria-label="Close" (click)="hideTool()">
@@ -36,27 +65,62 @@
   </div>
 </div>
 
-
-
-
-
-
-
-
-
-<div bsModal #headToolModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="createHeadToolLabel"
-  aria-hidden="true" [config]="{backdrop: 'static'}">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <div class="h3">Pump Head Calculator</div>
-        <button class="close" aria-label="Close" (click)="hideHeadToolModal()">
+<div class="card fade show" *ngIf="selectedTool == 'system-curve'">
+  <div class="card-header">
+    <b class="h4">System Curve Calculator</b>
+    <button class="close pull-right" aria-label="Close" (click)="hideTool()">
           <span aria-hidden="true">&times;</span>
         </button>
-      </div>
-      <div class="modal-body">
-        <app-head-tool></app-head-tool>
-      </div>
-    </div>
+  </div>
+  <div class="card-block">
+    <app-system-curve></app-system-curve>
+  </div>
+</div>
+
+<div class="card fade show" *ngIf="selectedTool == 'nema-energy-efficiency'">
+  <div class="card-header">
+    <b class="h4">NEMA Energy Efficiency Calculator</b>
+    <button class="close pull-right" aria-label="Close" (click)="hideTool()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+  </div>
+  <div class="card-block">
+    <app-nema-energy-efficiency></app-nema-energy-efficiency>
+  </div>
+</div>
+
+<div class="card fade show" *ngIf="selectedTool == 'specific-speed'">
+  <div class="card-header">
+    <b class="h4">Specific Speed Calculator</b>
+    <button class="close pull-right" aria-label="Close" (click)="hideTool()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+  </div>
+  <div class="card-block">
+    <app-specific-speed></app-specific-speed>
+  </div>
+</div>
+
+<div class="card fade show" *ngIf="selectedTool == 'achievable-efficiency'">
+  <div class="card-header">
+    <b class="h4">Achievable Efficiency Calculator</b>
+    <button class="close pull-right" aria-label="Close" (click)="hideTool()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+  </div>
+  <div class="card-block">
+    <app-achievable-efficiency></app-achievable-efficiency>
+  </div>
+</div>
+
+<div class="card fade show" *ngIf="selectedTool == 'motor-performance'">
+  <div class="card-header">
+    <b class="h4">Pump Head Calculator</b>
+    <button class="close pull-right" aria-label="Close" (click)="hideTool()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+  </div>
+  <div class="card-block">
+    <app-motor-performance></app-motor-performance>
   </div>
 </div>

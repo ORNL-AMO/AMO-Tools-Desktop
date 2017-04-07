@@ -38,6 +38,118 @@ export class PsatService {
     return psatAddon.headTool(specificGravity, flowRate, suctionPipeDiameter, suctionGuagePressure, suctionGuageElevation, suctionLineLossCoefficients, dischargePipeDiameter, dischargeGaugePressure, dischargeGaugeElevation, dischargeLineLossCoefficients);
   }
 
+  estFLA(horsePower, motorRPM, frequency, efficiencyClass, efficiency, motorVoltage) {
+    let lineFreqEnum = this.getLineFreqEnum(frequency);
+    let effClassEnum = this.getEfficienyClassEnum(efficiencyClass);
+    let inputs: any = {
+      motor_rated_power: horsePower,
+      motor_rated_speed: motorRPM,
+      line: lineFreqEnum,
+      efficiency_class: effClassEnum,
+      efficiency: efficiency,
+      motor_rated_voltage: motorVoltage
+    }
+    return psatAddon.estFLA(inputs);
+
+  }
+
+
+  // enum class Style {
+  // END_SUCTION_SLURRY,
+  // END_SUCTION_SEWAGE,
+  // END_SUCTION_STOCK,
+  // END_SUCTION_SUBMERSIBLE_SEWAGE,
+  // API_DOUBLE_SUCTION,
+  // MULTISTAGE_BOILER_FEED,
+  // END_SUCTION_ANSI_API,
+  // AXIAL_FLOW,
+  // DOUBLE_SUCTION,
+  // VERTICAL_TURBINE,
+  // LARGE_END_SUCTION,
+  // SPECIFIED_OPTIMAL_EFFICIENCY
+  // }
+  achievableEfficiency(
+    pumpStyle: string,
+    specificSpeed: number
+  ) {
+    let inputs: any;
+    let enumPumpStyle = this.getPumpStyleEnum(pumpStyle);
+    inputs = {
+      pump_style: enumPumpStyle,
+      specific_speed: specificSpeed
+    }
+    return psatAddon.achievableEfficiency(inputs)
+  }
+  //ENUM HELPERS
+  getPumpStyleEnum(pumpStyle: string) {
+    let enumPumpStyle: number = 0;
+    if (pumpStyle == 'End Suction Slurry') {
+      enumPumpStyle = 0;
+    }
+    else if (pumpStyle == 'End Suction Sewage') {
+      enumPumpStyle = 1;
+    }
+    else if (pumpStyle == 'End Suction Stock') {
+      enumPumpStyle = 2;
+    }
+    else if (pumpStyle == 'API Double Suction') {
+      enumPumpStyle = 3;
+    }
+    else if (pumpStyle == 'Multistage Boiler Feed') {
+      enumPumpStyle = 4;
+    }
+    else if (pumpStyle == 'End Suction ANSI/API') {
+      enumPumpStyle = 5;
+    }
+    else if (pumpStyle == 'Axial Flow') {
+      enumPumpStyle = 6;
+    }
+    else if (pumpStyle == 'Double Suction') {
+      enumPumpStyle = 7;
+    }
+    else if (pumpStyle == 'Vertical Turbine') {
+      enumPumpStyle = 8;
+    }
+    else if (pumpStyle == 'Large End Suction') {
+      enumPumpStyle = 9;
+    }
+    return enumPumpStyle;
+  }
+
+  getLineFreqEnum(lineFreq: string) {
+    let lineFreqEnum: number;
+    if (lineFreq == '60 Hz') {
+      lineFreqEnum = 0;
+    } else if (lineFreq == '50 Hz') {
+      lineFreqEnum = 1;
+    }
+    return lineFreqEnum;
+  }
+
+  getEfficienyClassEnum(effClass: string) {
+    let effEnum: number;
+    if (effClass == 'Standard') {
+      effEnum = 0;
+    } else if (effClass == 'Energy Efficient') {
+      effEnum = 1;
+    } else if (effClass == 'Specified') {
+      effEnum = 3;
+    }
+    return effEnum;
+  }
+
+  getEfficiencyFromForm(form: any) {
+    let efficiency;
+    if (form.value.efficiencyClass == 'Standard') {
+      efficiency = 0;
+    } else if (form.value.efficiencyClass == 'Energy Efficient') {
+      efficiency = 1;
+    } else if (form.value.efficiencyClass == 'Specified') {
+      efficiency = form.value.efficiency;
+    }
+    return efficiency;
+  }
+  //PSAT FORM UTILITIES
   initForm() {
     return this.formBuilder.group({
       'pumpType': ['', Validators.required],
@@ -99,41 +211,34 @@ export class PsatService {
   }
 
   getPsatInputsFromForm(form: any): PsatInputs {
-    let efficiency;
-    if (form.value.efficiencyClass == 'Standard') {
-      efficiency = 0;
-    } else if (form.value.efficiencyClass == 'Energy Efficient') {
-      efficiency = 1;
-    } else if (form.value.efficiencyClass == 'Specified') {
-      efficiency = form.value.efficiency;
-    }
+    let efficiency = this.getEfficiencyFromForm(form);
     let tmpPsatInputs: PsatInputs = {
-        pump_style: form.value.pumpType,
-        pump_specified: form.value.specifiedPumpType,
-        pump_rated_speed: form.value.pumpRPM,
-        drive: form.value.drive,
-        kinematic_viscosity: form.value.viscosity,
-        specific_gravity: form.value.gravity,
-        stages: form.value.stages,
-        fixed_speed: form.value.fixedSpeed,
-        line_frequency: form.value.frequency,
-        motor_rated_power: form.value.horsePower,
-        motor_rated_speed: form.value.motorRPM,
-        efficiency_class: form.value.efficiencyClass,
-        efficiency_class_specified: form.value.efficiencyClassSpecified,
-        efficiency: efficiency,
-        motor_rated_voltage: form.value.motorVoltage,
-        load_estimation_method: form.value.loadEstimatedMethod,
-        motor_rated_flc: form.value.motorRatedFlc,
-        full_load_amps: form.value.fullLoadAmps,
-        margin: form.value.sizeMargin,
-        operating_fraction: form.value.operatingFraction,
-        flow_rate: form.value.flowRate,
-        head: form.value.head,
-        motor_field_power: form.value.motorKW,
-        motor_field_current: form.value.motorAmps,
-        motor_field_voltage: form.value.measuredVoltage,
-        cost_kw_hour: form.value.costKwHr
+      pump_style: form.value.pumpType,
+      pump_specified: form.value.specifiedPumpType,
+      pump_rated_speed: form.value.pumpRPM,
+      drive: form.value.drive,
+      kinematic_viscosity: form.value.viscosity,
+      specific_gravity: form.value.gravity,
+      stages: form.value.stages,
+      fixed_speed: form.value.fixedSpeed,
+      line_frequency: form.value.frequency,
+      motor_rated_power: form.value.horsePower,
+      motor_rated_speed: form.value.motorRPM,
+      efficiency_class: form.value.efficiencyClass,
+      efficiency_class_specified: form.value.efficiencyClassSpecified,
+      efficiency: efficiency,
+      motor_rated_voltage: form.value.motorVoltage,
+      load_estimation_method: form.value.loadEstimatedMethod,
+      motor_rated_flc: form.value.motorRatedFlc,
+      full_load_amps: form.value.fullLoadAmps,
+      margin: form.value.sizeMargin,
+      operating_fraction: form.value.operatingFraction,
+      flow_rate: form.value.flowRate,
+      head: form.value.head,
+      motor_field_power: form.value.motorKW,
+      motor_field_current: form.value.motorAmps,
+      motor_field_voltage: form.value.measuredVoltage,
+      cost_kw_hour: form.value.costKwHr
     }
     return tmpPsatInputs;
   }

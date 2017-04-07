@@ -5,7 +5,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SharedModule } from '../shared/shared.module';
 import { ChartsModule } from 'ng2-charts';
 import { PopoverModule } from 'ngx-popover';
-import { CalculatorModule } from '../calculator/calculator.module';
+import { PumpsModule } from '../calculator/pumps/pumps.module';
 import { ModalModule } from 'ng2-bootstrap';
 
 import { PsatComponent } from './psat.component';
@@ -32,11 +32,9 @@ import { FieldDataHelpComponent } from './help-panel/field-data-help/field-data-
 import { ModifyConditionsHelpComponent } from './help-panel/modify-conditions-help/modify-conditions-help.component';
 
 import { PsatService } from './psat.service';
-import { SystemCurveComponent } from './system-curve/system-curve.component';
-import { SystemCurveFormComponent } from './system-curve/system-curve-form/system-curve-form.component';
-import { SystemCurveGraphComponent } from './system-curve/system-curve-graph/system-curve-graph.component';
 import { ModifyConditionsTabsComponent } from './modify-conditions/modify-conditions-tabs/modify-conditions-tabs.component';
 import { ModifyConditionsNotesComponent } from './modify-conditions/modify-conditions-notes/modify-conditions-notes.component';
+
 
 @NgModule({
   declarations: [
@@ -61,9 +59,6 @@ import { ModifyConditionsNotesComponent } from './modify-conditions/modify-condi
     MotorHelpComponent,
     FieldDataHelpComponent,
     ModifyConditionsHelpComponent,
-    SystemCurveComponent,
-    SystemCurveFormComponent,
-    SystemCurveGraphComponent,
     ModifyConditionsTabsComponent,
     ModifyConditionsNotesComponent
   ],
@@ -78,7 +73,7 @@ import { ModifyConditionsNotesComponent } from './modify-conditions/modify-condi
     SharedModule,
     ChartsModule,
     PopoverModule,
-    CalculatorModule,
+    PumpsModule,
     ModalModule
   ],
   providers: [

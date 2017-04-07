@@ -3,42 +3,42 @@
   <div class="row form-group">
     <label class="col-6 col-form-label small" for="atmosphereGas">Atmosphere Gas</label>
     <div class="col-6 input-group input-group-sm">
-      <input type="text" class="form-control" formControlName="atmosphereGas" id="atmosphereGas" (keyup)="checkForm()" (focus)="focusField('atmosphereGas')">
+      <input type="text" class="form-control" formControlName="atmosphereGas" id="atmosphereGas" (input)="checkForm()" (focus)="focusField('atmosphereGas')">
     </div>
   </div>
 
   <div class="row form-group">
     <label class="col-6 col-form-label small" for="specificHeat">Specific heat of gas (Btu/(SCF-(&#8457;)))</label>
     <div class="col-6 input-group input-group-sm">
-      <input type="number" class="form-control" formControlName="specificHeat" id="specificHeat" (keyup)="checkForm()" (focus)="focusField('specificHeat')">
+      <input type="number" class="form-control" formControlName="specificHeat" id="specificHeat" (input)="checkForm()" (focus)="focusField('specificHeat')">
     </div>
   </div>
 
   <div class="row form-group">
     <label class="col-6 col-form-label small" for="inletTemp">Initial temperature (&#8457;)</label>
     <div class="col-6 input-group input-group-sm">
-      <input type="number" class="form-control" formControlName="inletTemp" id="inletTemp" (keyup)="checkForm()" (focus)="focusField('inletTemp')">
+      <input type="number" class="form-control" formControlName="inletTemp" id="inletTemp" (input)="checkForm()" (focus)="focusField('inletTemp')">
     </div>
   </div>
 
   <div class="row form-group">
     <label class="col-6 col-form-label small" for="outletTemp">Final temperature (&#8457;)</label>
     <div class="col-6 input-group input-group-sm">
-      <input type="number" class="form-control" formControlName="outletTemp" id="outletTemp" (keyup)="checkForm()" (focus)="focusField('outletTemp')">
+      <input type="number" class="form-control" formControlName="outletTemp" id="outletTemp" (input)="checkForm()" (focus)="focusField('outletTemp')">
     </div>
   </div>
 
   <div class="row form-group">
     <label class="col-6 col-form-label small" for="flowRate">Flow Rate (SCF/hr)</label>
     <div class="col-6 input-group input-group-sm">
-      <input type="number" class="form-control" formControlName="flowRate" id="flowRate" (keyup)="checkForm()" (focus)="focusField('flowRate')">
+      <input type="number" class="form-control" formControlName="flowRate" id="flowRate" (input)="checkForm()" (focus)="focusField('flowRate')">
     </div>
   </div>
 
   <div class="row form-group">
     <label class="col-6 col-form-label small" for="correctionFactor">Correction Factor</label>
     <div class="col-6 input-group input-group-sm">
-      <input type="number" class="form-control" formControlName="correctionFactor" id="correctionFactor" (keyup)="checkForm()" (focus)="focusField('correctionFactor')">
+      <input type="number" class="form-control" formControlName="correctionFactor" id="correctionFactor" (input)="checkForm()" (focus)="focusField('correctionFactor')">
     </div>
   </div>
 

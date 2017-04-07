@@ -2,7 +2,7 @@
   <div class="row form-group">
     <label class="col-6 col-form-label small" for="type">Select Type</label>
     <div class="col-6 input-group input-group-sm">
-      <select class="form-control" formControlName="openingType" id="openingType" (focus)="focusField('openingType')">
+      <select class="form-control" formControlName="openingType" id="openingType"  (input)="checkForm()" (focus)="focusField('openingType')">
               <option>Round</option>
               <option>Rectangular (Square)</option>
               </select>
@@ -12,7 +12,7 @@
   <div class="row form-group">
     <label class="col-6 col-form-label small" for="numberOfOpenings">Number of Openings of Same Size and Shape</label>
     <div class="col-6 input-group input-group-sm">
-      <input type="number" class="form-control" formControlName="numberOfOpenings" id="numberOfOpenings" (keyup)="getArea()" (focus)="focusField('numberOfOpenings')">
+      <input type="number" class="form-control" formControlName="numberOfOpenings" id="numberOfOpenings" (input)="getArea()" (focus)="focusField('numberOfOpenings')">
     </div>
   </div>
 
@@ -20,7 +20,7 @@
   <div class="row form-group">
     <label class="col-6 col-form-label small" for="wallThickness">Furnace Wall Thickness (Inch)</label>
     <div class="col-6 input-group input-group-sm">
-      <input type="number" class="form-control" formControlName="wallThickness" id="wallThickness" (keyup)="checkForm()" (focus)="focusField('wallThickness')">
+      <input type="number" class="form-control" formControlName="wallThickness" id="wallThickness" (input)="checkForm()" (focus)="focusField('wallThickness')">
     </div>
   </div>
 
@@ -28,14 +28,14 @@
     <label *ngIf="openingLossesForm.value.openingType != 'Round'" class="col-6 col-form-label small" for="lengthOfOpening">Length of Openings (Inch)</label>
     <label *ngIf="openingLossesForm.value.openingType == 'Round'" class="col-6 col-form-label small" for="lengthOfOpening">Diameter of Openings (Inch)</label>
     <div class="col-6 input-group input-group-sm">
-      <input type="number" class="form-control" formControlName="lengthOfOpening" id="lengthOfOpening" (keyup)="getArea()" (focus)="focusField('lengthOfOpening')">
+      <input type="number" class="form-control" formControlName="lengthOfOpening" id="lengthOfOpening" (input)="getArea()" (focus)="focusField('lengthOfOpening')">
     </div>
   </div>
 
   <div class="row form-group" *ngIf="openingLossesForm.value.openingType != 'Round'">
     <label class="col-6 col-form-label small" for="heightOfOpening">Height of Openings (Inch)</label>
     <div class="col-6 input-group input-group-sm">
-      <input type="number" class="form-control" formControlName="heightOfOpening" id="heightOfOpening" (keyup)="getArea()" (focus)="focusField('heightOfOpening')">
+      <input type="number" class="form-control" formControlName="heightOfOpening" id="heightOfOpening" (input)="getArea()" (focus)="focusField('heightOfOpening')">
     </div>
   </div>
 
@@ -50,35 +50,35 @@
   <div class="row form-group">
     <label class="col-6 col-form-label small" for="viewFactor">View Factor - User defined if known or from chart</label>
     <div class="col-6 input-group input-group-sm">
-      <input type="number" class="form-control" formControlName="viewFactor" id="viewFactor" (keyup)="checkForm()" (focus)="focusField('viewFactor')">
+      <input type="number" class="form-control" formControlName="viewFactor" id="viewFactor" (input)="checkForm()" (focus)="focusField('viewFactor')">
     </div>
   </div>
 
   <div class="row form-group">
     <label class="col-6 col-form-label small" for="insideTemp">Avg. Zone or Radiation Source Temp. (&#8457;)</label>
     <div class="col-6 input-group input-group-sm">
-      <input type="number" class="form-control" formControlName="insideTemp" id="insideTemp" (keyup)="checkForm()" (focus)="focusField('insideTemp')">
+      <input type="number" class="form-control" formControlName="insideTemp" id="insideTemp" (input)="checkForm()" (focus)="focusField('insideTemp')">
     </div>
   </div>
 
   <div class="row form-group">
     <label class="col-6 col-form-label small" for="ambientTemp">Ambient Temp. (&#8457;)</label>
     <div class="col-6 input-group input-group-sm">
-      <input type="number" class="form-control" formControlName="ambientTemp" id="ambientTemp" (keyup)="checkForm()" (focus)="focusField('ambientTemp')">
+      <input type="number" class="form-control" formControlName="ambientTemp" id="ambientTemp" (input)="checkForm()" (focus)="focusField('ambientTemp')">
     </div>
   </div>
 
   <div class="row form-group">
     <label class="col-6 col-form-label small" for="emissivity">Emissivity of the Source (Typical - 0.9)</label>
     <div class="col-6 input-group input-group-sm">
-      <input type="number" class="form-control" formControlName="emissivity" id="emissivity" (keyup)="checkForm()" (focus)="focusField('emissivity')">
+      <input type="number" class="form-control" formControlName="emissivity" id="emissivity" (input)="checkForm()" (focus)="focusField('emissivity')">
     </div>
   </div>
 
   <div class="row form-group">
     <label class="col-6 col-form-label small" for="percentTimeOpen">% of Time Open</label>
     <div class="col-6 input-group input-group-sm">
-      <input type="number" class="form-control" formControlName="percentTimeOpen" id="percentTimeOpen" (keyup)="checkForm()" (focus)="focusField('percentTimeOpen')">
+      <input type="number" class="form-control" formControlName="percentTimeOpen" id="percentTimeOpen" (input)="checkForm()" (focus)="focusField('percentTimeOpen')">
     </div>
   </div>
 

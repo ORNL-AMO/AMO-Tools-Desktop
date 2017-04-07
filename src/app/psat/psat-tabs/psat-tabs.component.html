@@ -27,6 +27,18 @@
       <li [ngClass]="{'psat-tab-active': currentTab == 'system-curve'}">
         <a (click)="changeTab('system-curve')">System Curve</a>
       </li>
+      <li [ngClass]="{'psat-tab-active': currentTab == 'achievable-efficiency'}">
+        <a (click)="changeTab('achievable-efficiency')">Achievable Pump Efficiency</a>
+      </li>
+      <li [ngClass]="{'psat-tab-active': currentTab == 'motor-performance'}">
+        <a (click)="changeTab('motor-performance')">Motor Performance</a>
+      </li>
+      <li [ngClass]="{'psat-tab-active': currentTab == 'nema-energy-efficiency'}">
+        <a (click)="changeTab('nema-energy-efficiency')">NEMA Energy Efficiency</a>
+      </li>
+      <li [ngClass]="{'psat-tab-active': currentTab == 'specific-speed'}">
+        <a (click)="changeTab('specific-speed')">Specific Speed</a>
+      </li>
     </ul>
   </div>
 
