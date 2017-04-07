@@ -1,5 +1,6 @@
-import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import { Component, OnInit, Output, EventEmitter, Input, SimpleChanges, ViewChild, ElementRef } from '@angular/core';
+import { PsatService } from '../psat.service';
+import { PSAT } from '../../shared/models/psat';
 
 @Component({
   selector: 'app-motor',
@@ -8,9 +9,22 @@ import { FormBuilder } from '@angular/forms';
 })
 export class MotorComponent implements OnInit {
   @Input()
-  psatForm: any;
+  psat: PSAT;
   @Output('changeField')
   changeField = new EventEmitter<string>();
+  @Input()
+  saveClicked: boolean;
+  @Output('isValid')
+  isValid = new EventEmitter<boolean>();
+  @Output('isInvalid')
+  isInvalid = new EventEmitter<boolean>();
+  @Output('saved')
+  saved = new EventEmitter<boolean>();
+  @Input()
+  selected: boolean;
+
+  @ViewChild('formRef') formRef: ElementRef;
+  elements: any;
 
   efficiencyClasses: Array<string> = [
     'Standard Efficiency',
@@ -27,9 +41,47 @@ export class MotorComponent implements OnInit {
     '60 Hz'
   ];
 
-  constructor() { }
+  psatForm: any;
+  isFirstChange: boolean = true;
+  formValid: boolean;
+  constructor(private psatService: PsatService) { }
 
   ngOnInit() {
+    this.psatForm = this.psatService.getFormFromPsat(this.psat.inputs);
+    this.checkForm(this.psatForm);
+    if (!this.selected) {
+      this.disableForm();
+    }
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (!this.isFirstChange) {
+      if (changes.saveClicked) {
+        this.savePsat(this.psatForm);
+      }
+      if (!this.selected) {
+        this.disableForm();
+      } else {
+        this.enableForm();
+      }
+    }
+    else {
+      this.isFirstChange = false;
+    }
+  }
+
+  disableForm() {
+    this.elements = this.formRef.nativeElement.elements;
+    for (var i = 0, len = this.elements.length; i < len; ++i) {
+      this.elements[i].disabled = true;
+    }
+  }
+
+  enableForm() {
+    this.elements = this.formRef.nativeElement.elements;
+    for (var i = 0, len = this.elements.length; i < len; ++i) {
+      this.elements[i].disabled = false;
+    }
   }
 
   addNum(str: string) {
@@ -38,6 +90,7 @@ export class MotorComponent implements OnInit {
     } else if (str == 'sizeMargin') {
       this.psatForm.value.sizeMargin++;
     }
+    this.checkForm(this.psatForm);
   }
 
   subtractNum(str: string) {
@@ -50,9 +103,29 @@ export class MotorComponent implements OnInit {
         this.psatForm.value.sizeMargin--;
       }
     }
+    this.checkForm(this.psatForm);
   }
 
-  focusField(str: string){
+  focusField(str: string) {
     this.changeField.emit(str);
+  }
+
+  checkForm(form: any) {
+    this.formValid = this.psatService.isMotorFormValid(form);
+    if (this.formValid) {
+      this.isValid.emit(true)
+    } else {
+      this.isInvalid.emit(true)
+    }
+  }
+
+
+
+  savePsat(form: any) {
+    // this.isValid = this.psatService.isMotorFormValid(form);
+    if (this.formValid) {
+      this.psat.inputs = this.psatService.getPsatInputsFromForm(form);
+      this.saved.emit(this.selected);
+    }
   }
 }

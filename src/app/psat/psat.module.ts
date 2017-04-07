@@ -19,12 +19,7 @@ import { ModifyConditionsComponent } from './modify-conditions/modify-conditions
 import { SettingsPanelComponent } from './settings-panel/settings-panel.component';
 import { DataPanelComponent } from './data-panel/data-panel.component';
 import { HelpPanelComponent } from './help-panel/help-panel.component';
-import { BaselineComponent } from './modify-conditions/baseline/baseline.component';
-import { AdjustmentComponent } from './modify-conditions/adjustment/adjustment.component';
-import { AdjustmentSelectedComponent } from './modify-conditions/adjustment-selected/adjustment-selected.component';
-import { AdjustmentPumpFluidComponent } from './modify-conditions/adjustment-selected/adjustment-pump-fluid/adjustment-pump-fluid.component';
-import { AdjustmentMotorComponent } from './modify-conditions/adjustment-selected/adjustment-motor/adjustment-motor.component';
-import { AdjustmentFieldDataComponent } from './modify-conditions/adjustment-selected/adjustment-field-data/adjustment-field-data.component';
+
 import { PsatReportComponent } from './psat-report/psat-report.component';
 import { InputSummaryComponent } from './psat-report/input-summary/input-summary.component';
 import { OutputSummaryComponent } from './psat-report/output-summary/output-summary.component';
@@ -40,6 +35,8 @@ import { PsatService } from './psat.service';
 import { SystemCurveComponent } from './system-curve/system-curve.component';
 import { SystemCurveFormComponent } from './system-curve/system-curve-form/system-curve-form.component';
 import { SystemCurveGraphComponent } from './system-curve/system-curve-graph/system-curve-graph.component';
+import { ModifyConditionsTabsComponent } from './modify-conditions/modify-conditions-tabs/modify-conditions-tabs.component';
+import { ModifyConditionsNotesComponent } from './modify-conditions/modify-conditions-notes/modify-conditions-notes.component';
 
 @NgModule({
   declarations: [
@@ -54,12 +51,6 @@ import { SystemCurveGraphComponent } from './system-curve/system-curve-graph/sys
     SettingsPanelComponent,
     DataPanelComponent,
     HelpPanelComponent,
-    BaselineComponent,
-    AdjustmentComponent,
-    AdjustmentSelectedComponent,
-    AdjustmentPumpFluidComponent,
-    AdjustmentMotorComponent,
-    AdjustmentFieldDataComponent,
     PsatReportComponent,
     InputSummaryComponent,
     OutputSummaryComponent,
@@ -72,7 +63,9 @@ import { SystemCurveGraphComponent } from './system-curve/system-curve-graph/sys
     ModifyConditionsHelpComponent,
     SystemCurveComponent,
     SystemCurveFormComponent,
-    SystemCurveGraphComponent
+    SystemCurveGraphComponent,
+    ModifyConditionsTabsComponent,
+    ModifyConditionsNotesComponent
   ],
   exports: [
 

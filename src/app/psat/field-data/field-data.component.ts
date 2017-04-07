@@ -1,6 +1,7 @@
-import { Component, OnInit, Input, Output, EventEmitter, ViewChild } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, ViewChild, Input, SimpleChanges, ElementRef } from '@angular/core';
 import { ModalDirective } from 'ng2-bootstrap';
-import { Assessment } from '../../shared/models/assessment';
+import { PSAT } from '../../shared/models/psat';
+import { PsatService } from '../psat.service';
 
 @Component({
   selector: 'app-field-data',
@@ -9,12 +10,27 @@ import { Assessment } from '../../shared/models/assessment';
 })
 export class FieldDataComponent implements OnInit {
   @Input()
-  psatForm: any;
-  @Input()
-  assessment: Assessment;
+  psat: PSAT;
   @Output('changeField')
   changeField = new EventEmitter<string>();
+  @Input()
+  saveClicked: boolean;
+  @Output('isValid')
+  isValid = new EventEmitter<boolean>();
+  @Output('isInvalid')
+  isInvalid = new EventEmitter<boolean>();
+  @Output('saved')
+  saved = new EventEmitter<boolean>();
+  @Input()
+  isBaseline: boolean;
+  @Input()
+  selected: boolean;
 
+
+  @ViewChild('formRef') formRef: ElementRef;
+  elements: any;
+
+  formValid: boolean;
   headToolResults: any = {
     differentialElevationHead: 0.0,
     differentialPressureHead: 0.0,
@@ -30,14 +46,68 @@ export class FieldDataComponent implements OnInit {
     'Power',
     'Current'
   ];
-
-  constructor() { }
+  psatForm: any;
+  isFirstChange: boolean = true;
+  constructor(private psatService: PsatService) { }
 
   ngOnInit() {
+    this.psatForm = this.psatService.getFormFromPsat(this.psat.inputs);
+    this.checkForm(this.psatForm);
+    if (!this.selected) {
+      this.disableForm();
+    }
+  }
+
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (!this.isFirstChange) {
+      if (changes.saveClicked) {
+        this.savePsat(this.psatForm);
+      }
+      if (!this.selected) {
+        this.disableForm();
+      } else {
+        this.enableForm();
+      }
+    }
+    else {
+      this.isFirstChange = false;
+    }
+  }
+
+  disableForm() {
+    this.elements = this.formRef.nativeElement.elements;
+    for (var i = 0, len = this.elements.length; i < len; ++i) {
+      this.elements[i].disabled = true;
+    }
+  }
+
+  enableForm() {
+    this.elements = this.formRef.nativeElement.elements;
+    for (var i = 0, len = this.elements.length; i < len; ++i) {
+      this.elements[i].disabled = false;
+    }
   }
 
   focusField(str: string) {
     this.changeField.emit(str);
+  }
+
+  checkForm(form: any) {
+    this.formValid = this.psatService.isFieldDataFormValid(form);
+    if (this.formValid) {
+      this.isValid.emit(true)
+    } else {
+      this.isInvalid.emit(true)
+    }
+  }
+
+  savePsat(form: any) {
+    // this.isValid = this.psatService.isFieldDataFormValid(form);
+    if (this.formValid) {
+      this.psat.inputs = this.psatService.getPsatInputsFromForm(form);
+      this.saved.emit(true);
+    }
   }
 
 

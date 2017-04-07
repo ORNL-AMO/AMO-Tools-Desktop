@@ -9,14 +9,13 @@ import { PSAT } from '../../shared/models/psat';
 })
 export class DataPanelComponent implements OnInit {
   @Input()
-  adjustment: PSAT;
+  modification: PSAT;
   @Output('showReport')
   showReport = new EventEmitter();
 
   constructor() { }
 
   ngOnInit() {
-    console.log(this.adjustment)
   }
 
   goToReport(){

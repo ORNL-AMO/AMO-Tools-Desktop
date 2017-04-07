@@ -1,8 +1,23 @@
-.modify-content{
-    font-size: small;
+.losses-row{
+  height: 100%;
+  padding-left: 0px;
+  padding-right: 0px;
 }
 
-.modify-panel{
-    padding-left: 0;
-    padding-right:0;
+.losses-sidebar{
+background-color: #EDEDED;
+padding-right: 0px; 
+}
+
+.loss-card{
+  padding-left: 0px;
+  padding-right: 0px;
+}
+
+.card-header{
+  background-color: white;
+}
+
+.card-header.disabled, .card-header:disabled{
+  background:#efefef
 }

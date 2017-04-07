@@ -1,43 +1,86 @@
-<div *ngIf="!showDetailedReport">
-  <app-psat-banner (togglePanel)="toggleOpenPanel($event)" [assessment]="assessment"></app-psat-banner>
-  <app-psat-tabs [currentTab]="currentTab" (tabChange)="changeTab($event)"></app-psat-tabs>
+<app-psat-banner (togglePanel)="toggleOpenPanel($event)" [assessment]="assessment"></app-psat-banner>
+<app-psat-tabs [currentTab]="currentTab" (tabChange)="changeTab($event)"></app-psat-tabs>
 
-  <div class="row tab-content" [ngClass]="{'align-items-center':currentTab < 5}">
-    <div [ngClass]="{'col-12': !isPanelOpen, 'col-9': isPanelOpen}">
-      <div class="row" [ngClass]="{'justify-content-center':currentTab < 5}">
-        <div class="col-lg-8 col-md-8 col-sm-10 col-xs-12" *ngIf="currentTab < 5">
-          <app-system-basics *ngIf="currentTab == 1"></app-system-basics>
-          <app-pump-fluid (changeField)="changeField($event)"  [(psatForm)]="psatForm" *ngIf="currentTab == 2"></app-pump-fluid>
-          <app-motor (changeField)="changeField($event)"  [(psatForm)]="psatForm" *ngIf="currentTab == 3"></app-motor>
-          <app-field-data (changeField)="changeField($event)" [assessment]="assessment" [(psatForm)]="psatForm" *ngIf="currentTab == 4"></app-field-data>
-        </div>
-        <div class="col-12" *ngIf="currentTab > 4">
-          <app-modify-conditions *ngIf="currentTab == 5" [(saveClicked)]="saveClicked" (saveSuccess)="saveSuccess($event)" [(baseline)]="assessment.psat" (selectedAdjustment)="selectAdjustment($event)"></app-modify-conditions>
-          <app-system-curve *ngIf="currentTab == 6"></app-system-curve>
-        </div>
+<div class="row tab-content align-items-center" *ngIf="currentTab == 'system-basics'">
+  <div class="col-9">
+    <div class="row justify-content-center">
+      <div class="col-lg-8 col-md-8 col-sm-10 col-xs-12">
+        <app-system-basics></app-system-basics>
       </div>
     </div>
-
-    <div class="col-3 panel" *ngIf="isPanelOpen" [ngClass]="{'white-bg': currentTab > 4, 'dark-bg': currentTab < 5, 'help-col':panelView == 'help-panel' }">
-      <app-data-panel (showReport)="showReport()" [adjustment]="adjustment" *ngIf="panelView == 'data-panel' && currentTab > 4"></app-data-panel>
-      <app-help-panel [currentField]="currentField" [currentTab]="currentTab" *ngIf="panelView == 'help-panel'"></app-help-panel>
-      <app-settings-panel *ngIf="panelView == 'settings-panel'"></app-settings-panel>
-    </div>
   </div>
-
-  <div class="footer">
-    <div class="pull-left">
-      <button class="btn btn-secondary" *ngIf="currentTab == 1" (click)="close()">Close</button>
-      <button class="btn btn-secondary" *ngIf="currentTab != 1" (click)="goBack()">Back</button>
-    </div>
-    <div class="pull-right">
-      <button class="btn btn-primary" *ngIf="currentTab < 5" (click)="continue()">Save & Continue</button>
-      <button class="btn btn-primary" *ngIf="currentTab >= 5" (click)="saveAdjustment()">Save</button>
-      <button class="btn btn-primary" *ngIf="currentTab >= 5" (click)="exportData()">Export</button>
-    </div>
+  <div class="col-3 panel help-col dark-bg">
+    <app-help-panel [currentField]="currentField" [currentTab]="currentTab"></app-help-panel>
   </div>
 </div>
 
-<div *ngIf="showDetailedReport">
+<div class="row tab-content align-items-center" *ngIf="currentTab == 'pump-fluid'">
+  <div class="col-9">
+    <div class="row justify-content-center">
+      <div class="col-lg-8 col-md-8 col-sm-10 col-xs-12">
+        <app-pump-fluid (isValid)="setValid()" (isInvalid)="setInvalid()" [saveClicked]="saveClicked" (changeField)="changeField($event)"
+          [(psat)]="_psat" (saved)="save()" [selected]="true"></app-pump-fluid>
+      </div>
+    </div>
+  </div>
+  <div class="col-3 panel help-col dark-bg">
+    <app-help-panel [currentField]="currentField" [currentTab]="currentTab"></app-help-panel>
+  </div>
+</div>
+
+
+<div class="row tab-content align-items-center" *ngIf="currentTab == 'motor'">
+  <div class="col-9">
+    <div class="row justify-content-center">
+      <div class="col-lg-8 col-md-8 col-sm-10 col-xs-12">
+        <app-motor (isValid)="setValid()" (isInvalid)="setInvalid()" [saveClicked]="saveClicked" (changeField)="changeField($event)"
+          [(psat)]="_psat" (saved)="save()" [selected]="true"></app-motor>
+      </div>
+    </div>
+  </div>
+  <div class="col-3 panel help-col dark-bg">
+    <app-help-panel [currentField]="currentField" [currentTab]="currentTab"></app-help-panel>
+  </div>
+</div>
+
+<div class="row tab-content align-items-center" *ngIf="currentTab == 'field-data'">
+  <div class="col-9">
+    <div class="row justify-content-center">
+      <div class="col-lg-8 col-md-8 col-sm-10 col-xs-12">
+        <app-field-data (isValid)="setValid()" (isInvalid)="setInvalid()" [saveClicked]="saveClicked" (changeField)="changeField($event)"
+          [(psat)]="_psat" (saved)="save()" [selected]="true"></app-field-data>
+      </div>
+    </div>
+  </div>
+  <div class="col-3 panel help-col dark-bg">
+    <app-help-panel [currentField]="currentField" [currentTab]="currentTab"></app-help-panel>
+  </div>
+</div>
+
+<div class="row tab-content" *ngIf="currentTab == 'modify-conditions'">
+  <div class="col-12">
+    <app-modify-conditions [saveClicked]="saveClicked" [(psat)]="_psat" (saved)="save()"></app-modify-conditions>
+  </div>
+</div>
+
+<div class="row tab-content" *ngIf="currentTab == 'system-curve'">
+  <div class="col-12">
+    <app-system-curve></app-system-curve>
+  </div>
+</div>
+
+<div class="footer">
+  <div class="pull-left">
+    <button class="btn btn-secondary" *ngIf="currentTab == 'system-basics'" (click)="close()">Close</button>
+    <button class="btn btn-secondary" *ngIf="currentTab != 'system-basics'" (click)="goBack()">Back</button>
+  </div>
+  <div class="pull-right">
+    <button class="btn btn-primary" [disabled]="!isValid" (click)="toggleSave()">Save</button>
+    <button class="btn btn-primary"  *ngIf="currentTab != 'modify-conditions'" [disabled]="!isValid" (click)="continue()">Continue</button>
+    <button class="btn btn-primary" *ngIf="currentTab == 'modify-conditions'" (click)="exportData()">Export</button>
+  </div>
+</div>
+
+<!--<div *ngIf="showDetailedReport">
   <app-psat-report (closeReport)="closeReport()" [assessment]="assessment"></app-psat-report>
-</div>
+</div>-->

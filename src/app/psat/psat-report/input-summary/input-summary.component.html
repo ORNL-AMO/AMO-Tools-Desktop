@@ -3,7 +3,7 @@
     <tr>
       <th></th>
       <th>Baseline</th>
-      <th *ngFor="let adjustment of baseline.adjustments">{{adjustment.name}}</th>
+      <th *ngFor="let modification of baseline.modifications">{{modification.psat.name}}</th>
     </tr>
   </thead>
   <tbody>
@@ -15,42 +15,42 @@
     <tr>
       <td>Pump Type</td>
       <td>{{baseline.inputs.pump_style}}</td>
-      <td *ngFor="let adjustment of baseline.adjustments">{{adjustment.inputs.pump_style}}</td>
+      <td *ngFor="let modification of baseline.modifications">{{modification.psat.inputs.pump_style}}</td>
     </tr>
     <tr>
       <td>Pump RPM</td>
       <td>{{baseline.inputs.pump_rated_speed}}</td>
-      <td *ngFor="let adjustment of baseline.adjustments">{{adjustment.inputs.pump_rated_speed}}</td>
+      <td *ngFor="let modification of baseline.modifications">{{modification.psat.inputs.pump_rated_speed}}</td>
     </tr>
 
     <tr>
       <td>Drive</td>
       <td>{{baseline.inputs.drive}}</td>
-      <td *ngFor="let adjustment of baseline.adjustments">{{adjustment.inputs.drive}}</td>
+      <td *ngFor="let modification of baseline.modifications">{{modification.psat.inputs.drive}}</td>
     </tr>
 
     <tr>
       <td>Kinemativ Viscosity (cS)</td>
       <td>{{baseline.inputs.kinematic_viscosity}}</td>
-      <td *ngFor="let adjustment of baseline.adjustments">{{adjustment.inputs.kinematic_viscosity}}</td>
+      <td *ngFor="let modification of baseline.modifications">{{modification.psat.inputs.kinematic_viscosity}}</td>
     </tr>
 
     <tr>
       <td>Specific Gravity</td>
       <td>{{baseline.inputs.specific_gravity}}</td>
-      <td *ngFor="let adjustment of baseline.adjustments">{{adjustment.inputs.specific_gravity}}</td>
+      <td *ngFor="let modification of baseline.modifications">{{modification.psat.inputs.specific_gravity}}</td>
     </tr>
 
     <tr>
       <td>Stages</td>
       <td>{{baseline.inputs.stages}}</td>
-      <td *ngFor="let adjustment of baseline.adjustments">{{adjustment.inputs.stages}}</td>
+      <td *ngFor="let modification of baseline.modifications">{{modification.psat.inputs.stages}}</td>
     </tr>
 
     <tr>
       <td>Fixed specifc speed?</td>
       <td>{{baseline.inputs.fixed_speed}}</td>
-      <td *ngFor="let adjustment of baseline.adjustments">{{adjustment.inputs.fixed_speed}}</td>
+      <td *ngFor="let modification of baseline.modifications">{{modification.psat.inputs.fixed_speed}}</td>
     </tr>
 
 
@@ -61,42 +61,42 @@
     <tr>
       <td>Line Frequency</td>
       <td>{{baseline.inputs.line_frequency}}</td>
-      <td *ngFor="let adjustment of baseline.adjustments">{{adjustment.inputs.line_frequency}}</td>
+      <td *ngFor="let modification of baseline.modifications">{{modification.psat.inputs.line_frequency}}</td>
     </tr>
     <tr>
       <td>Horse Power</td>
       <td>{{baseline.inputs.motor_rated_power}}</td>
-      <td *ngFor="let adjustment of baseline.adjustments">{{adjustment.inputs.motor_rated_power}}</td>
+      <td *ngFor="let modification of baseline.modifications">{{modification.psat.inputs.motor_rated_power}}</td>
     </tr>
 
     <tr>
       <td>Motor (RPM)</td>
       <td>{{baseline.inputs.motor_rated_speed}}</td>
-      <td *ngFor="let adjustment of baseline.adjustments">{{adjustment.inputs.motor_rated_speed}}</td>
+      <td *ngFor="let modification of baseline.modifications">{{modification.psat.inputs.motor_rated_speed}}</td>
     </tr>
 
     <tr>
       <td>Efficiency Class</td>
       <td>{{baseline.inputs.efficiency_class}}</td>
-      <td *ngFor="let adjustment of baseline.adjustments">{{adjustment.inputs.efficiency_class}}</td>
+      <td *ngFor="let modification of baseline.modifications">{{modification.psat.inputs.efficiency_class}}</td>
     </tr>
 
     <tr>
       <td>Voltage</td>
       <td>{{baseline.inputs.motor_rated_voltage}}</td>
-      <td *ngFor="let adjustment of baseline.adjustments">{{adjustment.inputs.motor_rated_voltage}}</td>
+      <td *ngFor="let modification of baseline.modifications">{{modification.psat.inputs.motor_rated_voltage}}</td>
     </tr>
 
     <tr>
       <td>Full-Load Amps</td>
       <td>{{baseline.inputs.full_load_amps}}</td>
-      <td *ngFor="let adjustment of baseline.adjustments">{{adjustment.inputs.full_load_amps}}</td>
+      <td *ngFor="let modification of baseline.modifications">{{modification.psat.inputs.full_load_amps}}</td>
     </tr>
 
     <tr>
       <td>Size Margin</td>
       <td>{{baseline.inputs.margin}}</td>
-      <td *ngFor="let adjustment of baseline.adjustments">{{adjustment.inputs.margin}}</td>
+      <td *ngFor="let modification of baseline.modifications">{{modification.psat.inputs.margin}}</td>
     </tr>
 
 
@@ -107,42 +107,42 @@
     <tr>
       <td>Operating Fraction</td>
       <td>{{baseline.inputs.operating_fraction}}</td>
-      <td *ngFor="let adjustment of baseline.adjustments">{{adjustment.inputs.operating_fraction}}</td>
+      <td *ngFor="let modification of baseline.modifications">{{modification.psat.inputs.operating_fraction}}</td>
     </tr>
     <tr>
       <td>Cost (kw/hr)</td>
       <td>{{baseline.inputs.cost_kw_hour}}</td>
-      <td *ngFor="let adjustment of baseline.adjustments">{{adjustment.inputs.cost_kw_hour}}</td>
+      <td *ngFor="let modification of baseline.modifications">{{modification.psat.inputs.cost_kw_hour}}</td>
     </tr>
 
     <tr>
       <td>Flow Rate (gpm)</td>
       <td>{{baseline.inputs.flow_rate}}</td>
-      <td *ngFor="let adjustment of baseline.adjustments">{{adjustment.inputs.flow_rate}}</td>
+      <td *ngFor="let modification of baseline.modifications">{{modification.psat.inputs.flow_rate}}</td>
     </tr>
 
     <tr>
       <td>Head</td>
       <td>{{baseline.inputs.head}}</td>
-      <td *ngFor="let adjustment of baseline.adjustments">{{adjustment.inputs.head}}</td>
+      <td *ngFor="let modification of baseline.modifications">{{modification.psat.inputs.head}}</td>
     </tr>
 
     <tr>
       <td>Load Estimated Method</td>
       <td>{{baseline.inputs.load_estimation_method}}</td>
-      <td *ngFor="let adjustment of baseline.adjustments">{{adjustment.inputs.load_estimation_method}}</td>
+      <td *ngFor="let modification of baseline.modifications">{{modification.psat.inputs.load_estimation_method}}</td>
     </tr>
 
     <tr>
       <td>Motor (kW)</td>
       <td>{{baseline.inputs.motor_field_current}}</td>
-      <td *ngFor="let adjustment of baseline.adjustments">{{adjustment.inputs.motor_field_current}}</td>
+      <td *ngFor="let modification of baseline.modifications">{{modification.psat.inputs.motor_field_current}}</td>
     </tr>
 
     <tr>
       <td>Voltage</td>
       <td>{{baseline.inputs.motor_field_voltage}}</td>
-      <td *ngFor="let adjustment of baseline.adjustments">{{adjustment.inputs.motor_field_voltage}}</td>
+      <td *ngFor="let modification of baseline.modifications">{{modification.psat.inputs.motor_field_voltage}}</td>
     </tr>
   </tbody>
 </table>

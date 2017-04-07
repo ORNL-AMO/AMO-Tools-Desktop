@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { Location } from '@angular/common';
 import { Assessment } from '../shared/models/assessment';
 import { AssessmentService } from '../assessment/assessment.service';
@@ -11,40 +11,75 @@ import { PsatService } from './psat.service';
   styleUrls: ['./psat.component.css']
 })
 export class PsatComponent implements OnInit {
+  @ViewChild('saveButton') saveButton: ElementRef;
+  @ViewChild('continueButton') continueButton: ElementRef;
   assessment: Assessment;
 
   panelView: string = 'help-panel';
   isPanelOpen: boolean = true;
-  currentTab: number = 1;
+  currentTab: string = 'system-basics';
+
+  //TODO update tabs
+  tabs: Array<string> = [
+    'system-basics',
+    'pump-fluid',
+    'motor',
+    'field-data',
+    'modify-conditions',
+    'system-curve'
+  ]
+  tabIndex: number = 0;
 
   showDetailedReport: boolean = false;
 
-  psatForm: any;
   saveClicked: boolean = false;
   adjustment: PSAT;
   currentField: string = 'default';
+  isValid;
+  canContinue;
+
+  _psat: PSAT;
+
 
   constructor(private location: Location, private assessmentService: AssessmentService, private formBuilder: FormBuilder, private psatService: PsatService) { }
 
   ngOnInit() {
     this.assessment = this.assessmentService.getWorkingAssessment();
-    this.psatForm = this.initForm();
+    this._psat = (JSON.parse(JSON.stringify(this.assessment.psat)));
+    this.isValid = true;
+  }
+
+  valid() {
+    this.isValid = !this.isValid
+  }
+
+  disableSave() {
+    this.saveButton.nativeElement.disabled = true;
+    this.continueButton.nativeElement.disabled = true;
+  }
+
+  enableSave() {
+    this.saveButton.nativeElement.disabled = false;
+  }
+
+  setValid() {
+    this.isValid = true;
+  }
+
+  setInvalid() {
+    this.isValid = false;
   }
 
   changeTab($event) {
-    this.currentTab = $event;
-    //wizard steps
-    if (this.currentTab > 4) {
-      this.panelView = 'data-panel';
-    }
-    //assessment tabs show help panel
-    else {
-      this.panelView = 'help-panel';
-    }
-    //System curve hides panel
-    if (this.currentTab == 6) {
-      this.isPanelOpen = false;
-    }
+    let tmpIndex = 0;
+    this.tabs.forEach(tab => {
+      if (tab == $event) {
+        this.tabIndex = tmpIndex;
+        this.currentTab = this.tabs[this.tabIndex];
+      } else {
+        tmpIndex++;
+      }
+    })
   }
 
   changeField($event) {
@@ -67,13 +102,8 @@ export class PsatComponent implements OnInit {
   }
 
   continue() {
-    this.save();
-    this.currentTab++;
-    if (this.currentTab > 4) {
-      this.panelView = 'data-panel';
-    } else {
-      this.panelView = 'help-panel';
-    }
+    this.tabIndex++;
+    this.currentTab = this.tabs[this.tabIndex];
   }
 
   close() {
@@ -81,12 +111,8 @@ export class PsatComponent implements OnInit {
   }
 
   goBack() {
-    this.currentTab--;
-    if (this.currentTab > 4) {
-      this.panelView = 'data-panel';
-    } else {
-      this.panelView = 'help-panel';
-    }
+    this.tabIndex--;
+    this.currentTab = this.tabs[this.tabIndex];
   }
 
   showReport() {
@@ -97,76 +123,20 @@ export class PsatComponent implements OnInit {
     this.showDetailedReport = false;
   }
 
-  saveAdjustment() {
+  toggleSave() {
     this.saveClicked = !this.saveClicked;
   }
 
   save() {
-    let tmpPsatInputs: PsatInputs = this.assessmentService.buildPsatInputs(
-      this.psatForm.value.pumpType,
-      '',
-      this.psatForm.value.pumpRPM,
-      this.psatForm.value.drive,
-      this.psatForm.value.viscosity,
-      this.psatForm.value.gravity,
-      this.psatForm.value.stages,
-      this.psatForm.value.fixedSpeed,
-      this.psatForm.value.frequency,
-      this.psatForm.value.horsePower,
-      this.psatForm.value.motorRPM,
-      this.psatForm.value.efficiencyClass,
-      '',
-      this.psatForm.value.voltage,
-      this.psatForm.value.loadEstimatedMethod,
-      '',
-      this.psatForm.value.fullLoadAmps,
-      this.psatForm.value.sizeMargin,
-      this.psatForm.value.operatingFraction,
-      this.psatForm.value.flowRate,
-      this.psatForm.value.head,
-      this.psatForm.value.motorRPM,
-      this.psatForm.value.motorKW,
-      this.psatForm.value.voltage,
-      this.psatForm.value.costKwHr
-    );
-    let tmpPSAT: PSAT = {
-      inputs: tmpPsatInputs,
-      adjustments: this.assessment.psat.adjustments,
-      savings: this.assessment.psat.savings,
-      optimizationRating: this.assessment.psat.optimizationRating
-    }
-    this.assessment.psat = tmpPSAT;
+    this.assessment.psat = (JSON.parse(JSON.stringify(this._psat)));
     this.assessmentService.setWorkingAssessment(this.assessment);
+    // this.continueButton.nativeElement.disabled = false;
+    // console.log(this.continueButton);
+    this.canContinue = true;
   }
 
   exportData() {
     //TODO: Logic for exporting assessment
   }
 
-  initForm() {
-    return this.formBuilder.group({
-      'pumpType': [this.assessment.psat.inputs.pump_style],
-      'specifiedPumpType': [this.assessment.psat.inputs.pump_specified],
-      'pumpRPM': [this.assessment.psat.inputs.pump_rated_speed],
-      'drive': [this.assessment.psat.inputs.drive],
-      'viscosity': [this.assessment.psat.inputs.kinematic_viscosity],
-      'gravity': [this.assessment.psat.inputs.specific_gravity],
-      'stages': [this.assessment.psat.inputs.stages],
-      'fixedSpeed': [this.assessment.psat.inputs.fixed_speed],
-      'frequency': [this.assessment.psat.inputs.line_frequency],
-      'horsePower': [this.assessment.psat.inputs.motor_rated_power],
-      'motorRPM': [this.assessment.psat.inputs.motor_rated_speed],
-      'efficiencyClass': [this.assessment.psat.inputs.efficiency_class],
-      'efficiencyClassSpecified': [this.assessment.psat.inputs.efficiency_class_specified],
-      'voltage': [this.assessment.psat.inputs.motor_field_voltage],
-      'fullLoadAmps': [this.assessment.psat.inputs.full_load_amps],
-      'sizeMargin': [this.assessment.psat.inputs.margin],
-      'operatingFraction': [this.assessment.psat.inputs.operating_fraction],
-      'costKwHr': [this.assessment.psat.inputs.cost_kw_hour],
-      'flowRate': [this.assessment.psat.inputs.flow_rate],
-      'head': [this.assessment.psat.inputs.head],
-      'loadEstimatedMethod': [this.assessment.psat.inputs.load_estimation_method],
-      'motorKW': [this.assessment.psat.inputs.motor_field_voltage]
-    })
-  }
 }

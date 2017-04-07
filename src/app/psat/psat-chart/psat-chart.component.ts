@@ -8,7 +8,7 @@ import { PSAT } from '../../shared/models/psat';
 })
 export class PsatChartComponent implements OnInit {
   @Input()
-  adjustment: PSAT;
+  modification: PSAT;
 
   doughnutChartLabels: string[] = ['Optimization Rating', 'Potential'];
   doughnutChartData: number[];
@@ -20,7 +20,7 @@ export class PsatChartComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    if (this.adjustment) {
+    if (this.modification) {
       this.initChart();
     }
   }
@@ -35,15 +35,15 @@ export class PsatChartComponent implements OnInit {
         display: false
       },
       title: {
-        text: this.adjustment.name,
+        text: this.modification.name,
         display: true,
         positions: "top",
         fontStyle: "bold",
         fontSize: 22
       }
     }
-    this.doughnutChartData = [this.adjustment.optimizationRating, 100 - this.adjustment.optimizationRating];
-    if (this.adjustment.optimizationRating >= 70) {
+    this.doughnutChartData = [this.modification.optimizationRating, 100 - this.modification.optimizationRating];
+    if (this.modification.optimizationRating >= 70) {
       this.chartColorDataSet = [
         {
           options: this.chartOptions,
@@ -58,7 +58,7 @@ export class PsatChartComponent implements OnInit {
           ]
         }
       ]
-    } else if (this.adjustment.optimizationRating < 70 && this.adjustment.optimizationRating >= 50) {
+    } else if (this.modification.optimizationRating < 70 && this.modification.optimizationRating >= 50) {
       this.chartColorDataSet = [
         {
           options: this.chartOptions,
