@@ -45,17 +45,15 @@ export class SystemCurveGraphComponent implements OnInit {
 
   setUp(){
 
-    console.log("here");
-
     //Remove  all previous graphs
     d3.select('app-system-curve-graph').selectAll('svg').remove();
 
     var curvePoints = [];
 
     //graph dimensions
-    this.margin = {top: 20, right: 20, bottom: 80, left: 120};
-    this.width = 800 - this.margin.left - this.margin.right;
-    this.height = 500 - this.margin.top - this.margin.bottom;
+    this.margin = {top: 20, right: 120, bottom: 110, left: 120};
+    this.width = 900 - this.margin.left - this.margin.right;
+    this.height = 600 - this.margin.top - this.margin.bottom;
 
     var x = d3.scaleLinear()
       .range([0, this.width])
@@ -132,7 +130,6 @@ export class SystemCurveGraphComponent implements OnInit {
     this.svg.append("path")
       .attr("id", "areaUnderCurve");
 
-
     this.xAxis = this.svg.append('g')
       .attr("class", "x axis")
       .attr("transform", "translate(0," + this.height + ")")
@@ -202,7 +199,7 @@ export class SystemCurveGraphComponent implements OnInit {
     this.pointer = this.svg.append("polygon")
       .attr("id", "pointer")
       //.attr("points", "0,13, 14,13, 7,-2");
-      .attr("points", "0,0, 0," + detailBoxHeight +  "," + detailBoxWidth + "," +  detailBoxHeight + "," + detailBoxWidth + ", 0,"     +      ((detailBoxWidth/2)+12) + ",0," + (detailBoxWidth/2) + ", -12, " + ((detailBoxWidth/2)- 12) + ",0")
+      .attr("points", "0,0, 0," + (detailBoxHeight-2) +  "," + detailBoxWidth + "," +  (detailBoxHeight-2) + "," + detailBoxWidth + ", 0," + ((detailBoxWidth/2)+12) + ",0," + (detailBoxWidth/2) + ", -12, " + ((detailBoxWidth/2)- 12) + ",0")
       .style("opacity", 0);
 
    this.focus = this.svg.append("g")
@@ -212,7 +209,7 @@ export class SystemCurveGraphComponent implements OnInit {
     this.focus.append("circle")
       .attr("r", 10)
       .style("fill", "none")
-      .style("stroke", "#6276f5")
+      .style("stroke", "#007536")
       .style("stroke-width", "3px");
 
     this.focus.append("text")
@@ -223,7 +220,7 @@ export class SystemCurveGraphComponent implements OnInit {
   }
 
   ngOnChanges(changes: SimpleChange) {
-    if (!changes.isFirstChange && this.staticHead && this.lossCoefficient) {
+    if (!changes.isFirstChange && (this.staticHead || this.lossCoefficient)) {
 
       this.svg.style("display", null);
 
@@ -282,11 +279,13 @@ export class SystemCurveGraphComponent implements OnInit {
         .style("filter", "url(#drop-shadow)")
         .on("mouseover", () =>  { this.focus.style("display", null); })
         .on("mouseout", () =>  {
-          this.focus.style("display", "none");
-          this.detailBox.transition()
-            .style("opacity", 0);
-          this.pointer.transition()
-            .style("opacity", 0);
+          this.detailBox.on("mouseout", () =>{
+            this.focus.style("display", "none");
+            this.detailBox.transition()
+              .style("opacity", 0);
+            this.pointer.transition()
+              .style("opacity", 0);
+          })
         })
         .on("mousemove", () => {
           var x0 = x.invert(d3.mouse(d3.event.currentTarget)[0]),
@@ -329,7 +328,6 @@ export class SystemCurveGraphComponent implements OnInit {
             .style("background", "#ffffff")
             .style("border", "0px")
             .style("pointer-events", "none");
-            //.style("box-shadow", "1px 1px 4px grey");
         });
 
       this.xAxis.remove();
@@ -341,7 +339,7 @@ export class SystemCurveGraphComponent implements OnInit {
         .tickSizeOuter(0)
         .tickPadding(0)
         .ticks(11)
-        .tickFormat(d3.format(".0s"));
+        .tickFormat(d3.format(".2s"));
 
       this.yAxis = d3.axisLeft()
         .scale(y)
@@ -349,7 +347,7 @@ export class SystemCurveGraphComponent implements OnInit {
         .tickSizeOuter(0)
         .tickPadding(15)
         .ticks(11)
-        .tickFormat(d3.format(".0s"));
+        .tickFormat(d3.format(".2s"));
 
       this.xAxis = this.svg.append('g')
         .attr("class", "x axis")
@@ -369,7 +367,6 @@ export class SystemCurveGraphComponent implements OnInit {
         .selectAll('text')
         .style("font-size", "12px");
 
-
       this.makeCurve(x, y, data, bisectDate, format);
     }
   }
@@ -378,7 +375,6 @@ export class SystemCurveGraphComponent implements OnInit {
 
     //Load data here
     var data = [];
-    if(x.domain()[1] < 500) {
 
       var head = this.staticHead + this.lossCoefficient * Math.pow(x.domain()[1], this.curveConstants.form.value.systemLossExponent);
 
@@ -399,6 +395,7 @@ export class SystemCurveGraphComponent implements OnInit {
 
 
       for (var i = 0; i <= x.domain()[1]; i+=increment) {
+
         //if(this.lossCoefficient * Math.pow(i, this.curveConstants.form.value.systemLossExponent) > 0 && this.lossCoefficient * Math.pow(i, this.curveConstants.form.value.systemLossExponent) < y.domain()[1]) {
 
         var head = this.staticHead + this.lossCoefficient * Math.pow(i, this.curveConstants.form.value.systemLossExponent);
@@ -439,7 +436,7 @@ export class SystemCurveGraphComponent implements OnInit {
           y: 0,
           fluidPower: 0
         });
-      }
+
 
     }
 
@@ -460,9 +457,11 @@ export class SystemCurveGraphComponent implements OnInit {
       .attr("class", "line")
       .attr("d", line)
       .style("stroke-width", 10)
-      .style("stroke-width", "0px")
-      .style("fill", "none");
+      .style("stroke-width", "2px")
+      .style("fill", "none")
+      .style("stroke", "#6277f5");
 
+    /*
     // define the area
     var area = d3.area()
       .x(function(d) { return x(d.x); })
@@ -484,6 +483,7 @@ export class SystemCurveGraphComponent implements OnInit {
         this.pointer.transition()
           .style("opacity", 0);
       })
+
 
       .on("mousemove", () => {
         var x0 = x.invert(d3.mouse(d3.event.currentTarget)[0]),
@@ -528,6 +528,7 @@ export class SystemCurveGraphComponent implements OnInit {
         //.style("box-shadow", "1px 1px 4px grey");
 
       });
+     */
   }
 
 }
