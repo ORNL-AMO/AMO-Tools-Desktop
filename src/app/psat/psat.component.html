@@ -19,7 +19,7 @@
     <div class="row justify-content-center">
       <div class="col-lg-8 col-md-8 col-sm-10 col-xs-12">
         <app-pump-fluid (isValid)="setValid()" (isInvalid)="setInvalid()" [saveClicked]="saveClicked" (changeField)="changeField($event)"
-          [(psat)]="_psat" (saved)="save()"></app-pump-fluid>
+          [(psat)]="_psat" (saved)="save()" [selected]="true"></app-pump-fluid>
       </div>
     </div>
   </div>
@@ -34,7 +34,7 @@
     <div class="row justify-content-center">
       <div class="col-lg-8 col-md-8 col-sm-10 col-xs-12">
         <app-motor (isValid)="setValid()" (isInvalid)="setInvalid()" [saveClicked]="saveClicked" (changeField)="changeField($event)"
-          [(psat)]="_psat" (saved)="save()"></app-motor>
+          [(psat)]="_psat" (saved)="save()" [selected]="true"></app-motor>
       </div>
     </div>
   </div>
@@ -48,7 +48,7 @@
     <div class="row justify-content-center">
       <div class="col-lg-8 col-md-8 col-sm-10 col-xs-12">
         <app-field-data (isValid)="setValid()" (isInvalid)="setInvalid()" [saveClicked]="saveClicked" (changeField)="changeField($event)"
-          [(psat)]="_psat" (saved)="save()"></app-field-data>
+          [(psat)]="_psat" (saved)="save()" [selected]="true"></app-field-data>
       </div>
     </div>
   </div>
@@ -75,8 +75,8 @@
     <button class="btn btn-secondary" *ngIf="currentTab != 'system-basics'" (click)="goBack()">Back</button>
   </div>
   <div class="pull-right">
-    <button class="btn btn-primary" #saveButton (click)="toggleSave()">Save</button>
-    <button class="btn btn-primary" #continueButton (click)="continue()">Continue</button>
+    <button class="btn btn-primary" [disabled]="!isValid" (click)="toggleSave()">Save</button>
+    <button class="btn btn-primary"  *ngIf="currentTab != 'modify-conditions'" [disabled]="!isValid" (click)="continue()">Continue</button>
     <button class="btn btn-primary" *ngIf="currentTab == 'modify-conditions'" (click)="exportData()">Export</button>
   </div>
 </div>

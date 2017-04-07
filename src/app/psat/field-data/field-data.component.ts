@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter, ViewChild, Input, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, ViewChild, Input, SimpleChanges, ElementRef } from '@angular/core';
 import { ModalDirective } from 'ng2-bootstrap';
 import { PSAT } from '../../shared/models/psat';
 import { PsatService } from '../psat.service';
@@ -26,6 +26,10 @@ export class FieldDataComponent implements OnInit {
   @Input()
   selected: boolean;
 
+
+  @ViewChild('formRef') formRef: ElementRef;
+  elements: any;
+
   formValid: boolean;
   headToolResults: any = {
     differentialElevationHead: 0.0,
@@ -49,14 +53,21 @@ export class FieldDataComponent implements OnInit {
   ngOnInit() {
     this.psatForm = this.psatService.getFormFromPsat(this.psat.inputs);
     this.checkForm(this.psatForm);
+    if (!this.selected) {
+      this.disableForm();
+    }
   }
 
 
   ngOnChanges(changes: SimpleChanges) {
     if (!this.isFirstChange) {
       if (changes.saveClicked) {
-        console.log('changes saveClicked');
         this.savePsat(this.psatForm);
+      }
+      if (!this.selected) {
+        this.disableForm();
+      } else {
+        this.enableForm();
       }
     }
     else {
@@ -64,11 +75,23 @@ export class FieldDataComponent implements OnInit {
     }
   }
 
+  disableForm() {
+    this.elements = this.formRef.nativeElement.elements;
+    for (var i = 0, len = this.elements.length; i < len; ++i) {
+      this.elements[i].disabled = true;
+    }
+  }
+
+  enableForm() {
+    this.elements = this.formRef.nativeElement.elements;
+    for (var i = 0, len = this.elements.length; i < len; ++i) {
+      this.elements[i].disabled = false;
+    }
+  }
 
   focusField(str: string) {
     this.changeField.emit(str);
   }
-
 
   checkForm(form: any) {
     this.formValid = this.psatService.isFieldDataFormValid(form);

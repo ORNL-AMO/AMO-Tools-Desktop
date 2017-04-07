@@ -48,7 +48,7 @@ export class PsatComponent implements OnInit {
   }
 
   valid() {
-
+    this.isValid = !this.isValid
   }
 
   disableSave() {
@@ -61,14 +61,11 @@ export class PsatComponent implements OnInit {
   }
 
   setValid() {
-    // this.isValid = true;
-    this.enableSave();
+    this.isValid = true;
   }
 
   setInvalid() {
-    //this.isValid = false;
-    //console.log('IS INVALID')
-    this.disableSave();
+    this.isValid = false;
   }
 
   changeTab($event) {
@@ -131,8 +128,8 @@ export class PsatComponent implements OnInit {
   save() {
     this.assessment.psat = (JSON.parse(JSON.stringify(this._psat)));
     this.assessmentService.setWorkingAssessment(this.assessment);
-    this.continueButton.nativeElement.disabled = false;
-    console.log(this.continueButton);
+    // this.continueButton.nativeElement.disabled = false;
+    // console.log(this.continueButton);
   }
 
   exportData() {

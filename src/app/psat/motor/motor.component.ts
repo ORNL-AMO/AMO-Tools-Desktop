@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter, Input, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, Input, SimpleChanges, ViewChild, ElementRef } from '@angular/core';
 import { PsatService } from '../psat.service';
 import { PSAT } from '../../shared/models/psat';
 
@@ -16,12 +16,15 @@ export class MotorComponent implements OnInit {
   saveClicked: boolean;
   @Output('isValid')
   isValid = new EventEmitter<boolean>();
-  @Output('isValid')
+  @Output('isInvalid')
   isInvalid = new EventEmitter<boolean>();
   @Output('saved')
   saved = new EventEmitter<boolean>();
   @Input()
   selected: boolean;
+
+  @ViewChild('formRef') formRef: ElementRef;
+  elements: any;
 
   efficiencyClasses: Array<string> = [
     'Standard Efficiency',
@@ -46,6 +49,9 @@ export class MotorComponent implements OnInit {
   ngOnInit() {
     this.psatForm = this.psatService.getFormFromPsat(this.psat.inputs);
     this.checkForm(this.psatForm);
+    if (!this.selected) {
+      this.disableForm();
+    }
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -53,9 +59,28 @@ export class MotorComponent implements OnInit {
       if (changes.saveClicked) {
         this.savePsat(this.psatForm);
       }
+      if (!this.selected) {
+        this.disableForm();
+      } else {
+        this.enableForm();
+      }
     }
     else {
       this.isFirstChange = false;
+    }
+  }
+
+  disableForm() {
+    this.elements = this.formRef.nativeElement.elements;
+    for (var i = 0, len = this.elements.length; i < len; ++i) {
+      this.elements[i].disabled = true;
+    }
+  }
+
+  enableForm() {
+    this.elements = this.formRef.nativeElement.elements;
+    for (var i = 0, len = this.elements.length; i < len; ++i) {
+      this.elements[i].disabled = false;
     }
   }
 
@@ -65,6 +90,7 @@ export class MotorComponent implements OnInit {
     } else if (str == 'sizeMargin') {
       this.psatForm.value.sizeMargin++;
     }
+    this.checkForm(this.psatForm);
   }
 
   subtractNum(str: string) {
@@ -77,6 +103,7 @@ export class MotorComponent implements OnInit {
         this.psatForm.value.sizeMargin--;
       }
     }
+    this.checkForm(this.psatForm);
   }
 
   focusField(str: string) {
@@ -84,13 +111,11 @@ export class MotorComponent implements OnInit {
   }
 
   checkForm(form: any) {
-    debugger
     this.formValid = this.psatService.isMotorFormValid(form);
     if (this.formValid) {
       this.isValid.emit(true)
-    }else{
+    } else {
       this.isInvalid.emit(true)
-      console.log('NOT VALID')
     }
   }
 

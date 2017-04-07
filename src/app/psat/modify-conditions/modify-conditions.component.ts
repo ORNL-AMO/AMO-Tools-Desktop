@@ -15,7 +15,7 @@ export class ModifyConditionsComponent implements OnInit {
   @Output('saved')
   saved = new EventEmitter<boolean>();
 
-  modifyTab: string = 'system-basics';
+  modifyTab: string = 'pump-fluid';
   _modifications: Array<Modification>;
   baselineSelected: boolean = true;
   modifiedSelected: boolean = false;
@@ -47,8 +47,6 @@ export class ModifyConditionsComponent implements OnInit {
 
   save() {
     this.psat.modifications = (JSON.parse(JSON.stringify(this._modifications)));
-    console.log('Modification')
-    console.log(this.psat);
     this.saved.emit(true);
   }
 

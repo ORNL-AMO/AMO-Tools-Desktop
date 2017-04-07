@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter, Input, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, Input, SimpleChanges, ViewChild, ElementRef } from '@angular/core';
 import { PsatService } from '../psat.service';
 import { PSAT, PsatInputs } from '../../shared/models/psat';
 
@@ -22,6 +22,9 @@ export class PumpFluidComponent implements OnInit {
   isInvalid = new EventEmitter<boolean>();
   @Input()
   selected: boolean;
+
+  @ViewChild('formRef') formRef: ElementRef;
+  elements: any;
 
   formValid: boolean;
   pumpTypes: Array<string> = [
@@ -53,6 +56,11 @@ export class PumpFluidComponent implements OnInit {
       if (changes.saveClicked) {
         this.savePsat(this.psatForm);
       }
+      if (!this.selected) {
+        this.disableForm();
+      } else {
+        this.enableForm();
+      }
     }
     else {
       this.isFirstChange = false;
@@ -62,6 +70,23 @@ export class PumpFluidComponent implements OnInit {
   ngOnInit() {
     this.psatForm = this.psatService.getFormFromPsat(this.psat.inputs);
     this.checkForm(this.psatForm);
+    if (!this.selected) {
+      this.disableForm();
+    }
+  }
+
+  disableForm() {
+    this.elements = this.formRef.nativeElement.elements;
+    for (var i = 0, len = this.elements.length; i < len; ++i) {
+      this.elements[i].disabled = true;
+    }
+  }
+
+  enableForm() {
+    this.elements = this.formRef.nativeElement.elements;
+    for (var i = 0, len = this.elements.length; i < len; ++i) {
+      this.elements[i].disabled = false;
+    }
   }
 
   addNum(str: string) {
@@ -70,6 +95,7 @@ export class PumpFluidComponent implements OnInit {
     } else if (str == 'stages') {
       this.psatForm.value.stages++;
     }
+    this.checkForm(this.psatForm);
   }
 
   subtractNum(str: string) {
@@ -82,6 +108,7 @@ export class PumpFluidComponent implements OnInit {
         this.psatForm.value.stages--;
       }
     }
+    this.checkForm(this.psatForm);
   }
 
   focusField(str: string) {
@@ -92,7 +119,7 @@ export class PumpFluidComponent implements OnInit {
     this.formValid = this.psatService.isPumpFluidFormValid(form);
     if (this.formValid) {
       this.isValid.emit(true)
-    }else{
+    } else {
       this.isInvalid.emit(true)
     }
   }
