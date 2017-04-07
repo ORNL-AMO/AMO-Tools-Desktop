@@ -33,18 +33,6 @@ export class ModifyConditionsComponent implements OnInit {
     }
   }
 
-
-  // ngOnChanges(changes: SimpleChanges) {
-  //   if (!this.isFirstChange) {
-  //     if (changes.saveClicked) {
-  //       this.saveModifications();
-  //     }
-  //   }
-  //   else {
-  //     this.isFirstChange = false;
-  //   }
-  // }
-
   save() {
     this.psat.modifications = (JSON.parse(JSON.stringify(this._modifications)));
     this.saved.emit(true);
@@ -105,7 +93,7 @@ export class ModifyConditionsComponent implements OnInit {
     }
   }
 
-  changeField(str: string) {
-    this.currentField = str;
+  changeField($event) {
+    this.currentField = $event;
   }
 }

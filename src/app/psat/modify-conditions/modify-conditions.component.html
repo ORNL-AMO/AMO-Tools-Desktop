@@ -12,11 +12,11 @@
     <div class="card-block losses-container" [ngClass]="{'disabled': baselineSelected == false}">
       <!--<app-system-basics *ngIf="modifyTab == 'system-basics'"></app-system-basics>-->
       <app-pump-fluid *ngIf="modifyTab == 'pump-fluid'" [selected]="baselineSelected" [saveClicked]="saveClicked"
-        [(psat)]="psat" (changeField)="changeField()" (saved)="save()"></app-pump-fluid>
+        [(psat)]="psat" (changeField)="changeField($event)" (saved)="save()"></app-pump-fluid>
       <app-motor *ngIf="modifyTab == 'motor'" [selected]="baselineSelected" [saveClicked]="saveClicked" [(psat)]="psat"
-        (changeField)="changeField()" (saved)="save()"></app-motor>
+        (changeField)="changeField($event)" (saved)="save()"></app-motor>
       <app-field-data *ngIf="modifyTab == 'field-data'" [selected]="baselineSelected" [saveClicked]="saveClicked"
-        [(psat)]="psat" (changeField)="changeField()" (saved)="save()"></app-field-data>
+        [(psat)]="psat" (changeField)="changeField($event)" (saved)="save()"></app-field-data>
     </div>
   </div>
   <div class="col-5 card loss-card" *ngIf="_modifications.length != 0">
@@ -40,11 +40,11 @@
     <div class="card-block losses-container" *ngIf="!isDropdownOpen && !showNotes" [ngClass]="{'disabled': modifiedSelected == false}">
       <!--<app-system-basics *ngIf="modifyTab == 'system-basics'"></app-system-basics>-->
       <app-pump-fluid *ngIf="modifyTab == 'pump-fluid'" [selected]="modifiedSelected" [saveClicked]="saveClicked"
-        [(psat)]="_modifications[modificationIndex].psat" (changeField)="changeField()" (saved)="save()"></app-pump-fluid>
+        [(psat)]="_modifications[modificationIndex].psat" (changeField)="changeField($event)" (saved)="save()"></app-pump-fluid>
       <app-motor *ngIf="modifyTab == 'motor'" [selected]="modifiedSelected" [saveClicked]="saveClicked"
-        [(psat)]="_modifications[modificationIndex].psat" (changeField)="changeField()" (saved)="save()"></app-motor>
+        [(psat)]="_modifications[modificationIndex].psat" (changeField)="changeField($event)" (saved)="save()"></app-motor>
       <app-field-data *ngIf="modifyTab == 'field-data'" [saveClicked]="saveClicked" [(psat)]="_modifications[modificationIndex].psat"
-        (changeField)="changeField()" [selected]="modifiedSelected" (saved)="save()"></app-field-data>
+        (changeField)="changeField($event)" [selected]="modifiedSelected" (saved)="save()"></app-field-data>
     </div>
     <div class="card-block losses-container" *ngIf="isDropdownOpen && !showNotes">
       <ul>
