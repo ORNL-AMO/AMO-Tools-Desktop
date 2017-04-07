@@ -1,5 +1,5 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { ModalDirective } from 'ng2-bootstrap';
+import { Component, OnInit } from '@angular/core';
+
 
 @Component({
   selector: 'app-pumps',
@@ -7,27 +7,18 @@ import { ModalDirective } from 'ng2-bootstrap';
   styleUrls: ['./pumps.component.css']
 })
 export class PumpsComponent implements OnInit {
-  headTool: boolean = false;
+  selectedTool: string = 'none';
   constructor() { }
 
   ngOnInit() {
   }
 
-  showTool() {
-    this.headTool = true;
+  showTool(str: string) {
+    this.selectedTool = str;
   }
 
-  hideTool(){
-    this.headTool = false;
-  }
-
-  @ViewChild('headToolModal') public headToolModal: ModalDirective;
-  showHeadToolModal() {
-    this.headToolModal.show();
-  }
-
-  hideHeadToolModal() {
-    this.headToolModal.hide();
+  hideTool() {
+    this.selectedTool = 'none'
   }
 
 }

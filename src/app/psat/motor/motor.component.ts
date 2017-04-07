@@ -70,6 +70,21 @@ export class MotorComponent implements OnInit {
     }
   }
 
+  getFullLoadAmps() {
+    let tmpEfficiency = this.psatService.getEfficiencyFromForm(this.psatForm);
+    let estEfficiency = this.psatService.estFLA(
+      this.psatForm.value.horsePower,
+      this.psatForm.value.motorRPM,
+      this.psatForm.value.frequency,
+      this.psatForm.value.efficiencyClass,
+      tmpEfficiency,
+      this.psatForm.value.motorVoltage
+    );
+    this.psatForm.patchValue({
+      fullLoadAmps: estEfficiency
+    });
+  }
+
   disableForm() {
     this.elements = this.formRef.nativeElement.elements;
     for (var i = 0, len = this.elements.length; i < len; ++i) {
