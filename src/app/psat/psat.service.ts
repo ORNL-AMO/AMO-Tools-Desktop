@@ -111,7 +111,7 @@ export class PsatService {
       efficiency: efficiency,
       load_factor: .25,
       motor_rated_voltage: motorVoltage,
-      full_load_amps: fullLoadAmps
+      motor_rated_fla: fullLoadAmps
     }
     return psatAddon.motorPerformance(tmpInputs);
   }
@@ -271,7 +271,7 @@ export class PsatService {
       'efficiencyClassSpecified': [psatInputs.efficiency_class_specified],
       'efficiency': [psatInputs.efficiency],
       'motorVoltage': [psatInputs.motor_rated_voltage, Validators.required],
-      'fullLoadAmps': [psatInputs.full_load_amps, Validators.required],
+      'fullLoadAmps': [psatInputs.motor_rated_fla, Validators.required],
       'sizeMargin': [psatInputs.margin, Validators.required],
       'operatingFraction': [psatInputs.operating_fraction, Validators.required],
       'costKwHr': [psatInputs.cost_kw_hour, Validators.required],
@@ -303,8 +303,7 @@ export class PsatService {
       efficiency: efficiency,
       motor_rated_voltage: form.value.motorVoltage,
       load_estimation_method: form.value.loadEstimatedMethod,
-      motor_rated_flc: form.value.motorRatedFlc,
-      full_load_amps: form.value.fullLoadAmps,
+      motor_rated_fla: form.value.fullLoadAmps,
       margin: form.value.sizeMargin,
       operating_fraction: form.value.operatingFraction,
       flow_rate: form.value.flowRate,
