@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
+import { PSAT } from '../../../shared/models/psat';
+import { PsatService } from '../../../psat/psat.service';
 
 @Component({
   selector: 'app-motor-performance',
@@ -6,10 +8,18 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./motor-performance.component.css']
 })
 export class MotorPerformanceComponent implements OnInit {
+  @Input()
+  psat: PSAT;
 
-  constructor() { }
+  performanceForm: any;
+  constructor(private psatService: PsatService) { }
 
   ngOnInit() {
+    if (!this.psat) {
+      this.performanceForm = this.psatService.initForm();
+    } else {
+      this.performanceForm = this.psatService.getFormFromPsat(this.psat.inputs);
+    }
   }
 
 }
