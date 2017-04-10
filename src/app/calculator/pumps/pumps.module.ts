@@ -25,6 +25,8 @@ import { MotorPerformanceComponent } from './motor-performance/motor-performance
 import { AchievableEfficiencyComponent } from './achievable-efficiency/achievable-efficiency.component';
 
 import { PumpsComponent } from './pumps.component';
+import { AchievableEfficiencyFormComponent } from './achievable-efficiency/achievable-efficiency-form/achievable-efficiency-form.component';
+import { AchievableEfficiencyGraphComponent } from './achievable-efficiency/achievable-efficiency-graph/achievable-efficiency-graph.component';
 
 @NgModule({
     declarations: [
@@ -42,7 +44,9 @@ import { PumpsComponent } from './pumps.component';
         NemaEnergyEfficiencyFormComponent,
         NemaEnergyEfficiencyGraphComponent,
         MotorPerformanceComponent,
-        AchievableEfficiencyComponent
+        AchievableEfficiencyComponent,
+        AchievableEfficiencyFormComponent,
+        AchievableEfficiencyGraphComponent
     ],
     exports:[
         SystemCurveComponent,

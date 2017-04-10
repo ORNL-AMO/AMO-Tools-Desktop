@@ -7,6 +7,11 @@ declare var psatAddon: any;
 export class PsatService {
 
   constructor(private formBuilder: FormBuilder) { }
+  //CALCULATORS
+  results(psatInputs: PsatInputs) {
+    console.log(psatInputs);
+    return psatAddon.results(psatInputs);
+  }
 
   headToolSuctionTank(
     specificGravity: number,
@@ -38,13 +43,20 @@ export class PsatService {
     return psatAddon.headTool(specificGravity, flowRate, suctionPipeDiameter, suctionGuagePressure, suctionGuageElevation, suctionLineLossCoefficients, dischargePipeDiameter, dischargeGaugePressure, dischargeGaugeElevation, dischargeLineLossCoefficients);
   }
 
-  estFLA(horsePower, motorRPM, frequency, efficiencyClass, efficiency, motorVoltage) {
+  estFLA(
+    horsePower,
+    motorRPM,
+    frequency,
+    efficiencyClass,
+    efficiency,
+    motorVoltage
+  ) {
     let lineFreqEnum = this.getLineFreqEnum(frequency);
     let effClassEnum = this.getEfficienyClassEnum(efficiencyClass);
     let inputs: any = {
       motor_rated_power: horsePower,
       motor_rated_speed: motorRPM,
-      line: lineFreqEnum,
+      line_frequency: lineFreqEnum,
       efficiency_class: effClassEnum,
       efficiency: efficiency,
       motor_rated_voltage: motorVoltage
@@ -53,21 +65,6 @@ export class PsatService {
 
   }
 
-
-  // enum class Style {
-  // END_SUCTION_SLURRY,
-  // END_SUCTION_SEWAGE,
-  // END_SUCTION_STOCK,
-  // END_SUCTION_SUBMERSIBLE_SEWAGE,
-  // API_DOUBLE_SUCTION,
-  // MULTISTAGE_BOILER_FEED,
-  // END_SUCTION_ANSI_API,
-  // AXIAL_FLOW,
-  // DOUBLE_SUCTION,
-  // VERTICAL_TURBINE,
-  // LARGE_END_SUCTION,
-  // SPECIFIED_OPTIMAL_EFFICIENCY
-  // }
   achievableEfficiency(
     pumpStyle: string,
     specificSpeed: number
@@ -80,8 +77,83 @@ export class PsatService {
     }
     return psatAddon.achievableEfficiency(inputs)
   }
+
+  pumpEfficiency(
+    pumpStyle,
+    flowRate
+  ) {
+    let inputs: any;
+    let enumPumpStyle = this.getPumpStyleEnum(pumpStyle);
+    inputs = {
+      pump_style: enumPumpStyle,
+      specific_speed: flowRate
+    }
+    return psatAddon.pumpEfficiency(inputs);
+  }
+
+  motorPerformance(
+    lineFreq,
+    efficiencyClass,
+    horsePower,
+    motorRPM,
+    efficiency,
+    motorVoltage,
+    fullLoadAmps
+  ) {
+    let tmpInputs: any;
+    let lineFreqEnum = this.getLineFreqEnum(lineFreq);
+    let effClassEnum = this.getEfficienyClassEnum(efficiencyClass);
+    tmpInputs = {
+      line_frequency: lineFreqEnum,
+      efficiency_class: effClassEnum,
+      motor_rated_power: horsePower,
+      motor_rated_speed: motorRPM,
+      efficiency: efficiency,
+      load_factor: .25,
+      motor_rated_voltage: motorVoltage,
+      full_load_amps: fullLoadAmps
+    }
+    return psatAddon.motorPerformance(tmpInputs);
+  }
+
+  //loadFactor hard coded to 1
+  nema(
+    lineFreq,
+    motorRPM,
+    efficiencyClass,
+    efficiency,
+    horsePower
+  ) {
+    let tmpInputs: any;
+    let lineFreqEnum = this.getLineFreqEnum(lineFreq);
+    let effClassEnum = this.getEfficienyClassEnum(efficiencyClass);
+    tmpInputs = {
+      line_frequency: lineFreqEnum,
+      motor_rated_speed: motorRPM,
+      efficiency_class: effClassEnum,
+      efficiency: efficiency,
+      motor_rated_power: horsePower,
+      loadFactor: 1
+    };
+    return psatAddon.nema(tmpInputs);
+  }
+
   //ENUM HELPERS
   getPumpStyleEnum(pumpStyle: string) {
+    // enum class Style {
+    // END_SUCTION_SLURRY,
+    // END_SUCTION_SEWAGE,
+    // END_SUCTION_STOCK,
+    // END_SUCTION_SUBMERSIBLE_SEWAGE,
+    // API_DOUBLE_SUCTION,
+    // MULTISTAGE_BOILER_FEED,
+    // END_SUCTION_ANSI_API,
+    // AXIAL_FLOW,
+    // DOUBLE_SUCTION,
+    // VERTICAL_TURBINE,
+    // LARGE_END_SUCTION,
+    // SPECIFIED_OPTIMAL_EFFICIENCY
+    // }
     let enumPumpStyle: number = 0;
     if (pumpStyle == 'End Suction Slurry') {
       enumPumpStyle = 0;
@@ -149,6 +221,8 @@ export class PsatService {
     }
     return efficiency;
   }
+
+  
   //PSAT FORM UTILITIES
   initForm() {
     return this.formBuilder.group({

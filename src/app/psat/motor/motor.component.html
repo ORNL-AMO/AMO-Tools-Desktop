@@ -3,7 +3,7 @@
     <label class="col-sm-6 col-md-4 col-lg-3 col-form-label" for="frequency">Line Frequency</label>
     <div class="col-6">
       <select class="form-control number-input-field" id="frequency" formControlName="frequency" (input)="checkForm(psatForm)"
-        (focus)="focusField('lineFrequency')">
+        (focus)="focusField('lineFrequency')" ngModel="{{psatForm.value.frequency}}">
         <option *ngFor="let frequency of frequencies">{{frequency}}</option>
       </select>
     </div>
@@ -13,7 +13,7 @@
     <label class="col-sm-6 col-md-4 col-lg-3 col-form-label" for="horsePower">Horse Power</label>
     <div class="col-6">
       <select class="form-control number-input-field" id="horsePower" formControlName="horsePower" (input)="checkForm(psatForm)"
-        (focus)="focusField('horsePower')">
+        (focus)="focusField('horsePower')" ngModel="{{psatForm.value.horsePower}}">
         <option *ngFor="let horsePower of horsePowers">{{horsePower}}</option>
       </select>
     </div>

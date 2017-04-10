@@ -1,0 +1,11 @@
+.calc-container{
+    height: 100%;
+}
+
+.calc-graph{
+    background-color: #efefef;
+}
+
+ul{
+    list-style: circle;
+}
