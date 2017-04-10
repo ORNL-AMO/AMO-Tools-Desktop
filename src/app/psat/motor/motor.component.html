@@ -4,7 +4,7 @@
     <div class="col-6">
       <select class="form-control number-input-field" id="frequency" formControlName="frequency" (input)="checkForm(psatForm)"
         (focus)="focusField('lineFrequency')" ngModel="{{psatForm.value.frequency}}">
-        <option *ngFor="let frequency of frequencies">{{frequency}}</option>
+        <option *ngFor="let frequency of frequencies" [ngValue]="frequency">{{frequency}}</option>
       </select>
     </div>
   </div>
@@ -14,7 +14,7 @@
     <div class="col-6">
       <select class="form-control number-input-field" id="horsePower" formControlName="horsePower" (input)="checkForm(psatForm)"
         (focus)="focusField('horsePower')" ngModel="{{psatForm.value.horsePower}}">
-        <option *ngFor="let horsePower of horsePowers">{{horsePower}}</option>
+        <option *ngFor="let horsePower of horsePowers" [ngValue]="horsePower">{{horsePower}}</option>
       </select>
     </div>
   </div>
@@ -37,8 +37,8 @@
     <label class="col-sm-6 col-md-4 col-lg-3 col-form-label" for="efficiencyClass">Efficiency Class</label>
     <div class="col-6">
       <select class="form-control select-input-field" id="efficiencyClass" formControlName="efficiencyClass" (input)="checkForm(psatForm)"
-        (focus)="focusField('efficiencyClass')">>
-        <option *ngFor="let efficiencyClass of efficiencyClasses">{{efficiencyClass}}</option>
+        (focus)="focusField('efficiencyClass')" ngModel="{{psatForm.value.efficiencyClass}}">
+        <option *ngFor="let efficiencyClass of efficiencyClasses" [ngValue]="efficiencyClass">{{efficiencyClass}}</option>
       </select>
     </div>
   </div>

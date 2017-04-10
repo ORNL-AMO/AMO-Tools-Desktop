@@ -38,8 +38,8 @@
     <label class="col-sm-6 col-md-4 col-lg-3 col-form-label" for="loadEstimatedMethod">Load Estimation Method</label>
     <div class="col-6">
       <select class="form-control select-input-field" formControlName="loadEstimatedMethod" id="loadEstimatedMethod" (input)="checkForm(psatForm)"
-        (focus)="focusField('loadEstimatedMethod')">
-        <option *ngFor="let method of loadEstimateMethods">{{method}}</option>
+        (focus)="focusField('loadEstimatedMethod')" ngModel="{{psatForm.value.loadEstimatedMethod}}">
+        <option *ngFor="let method of loadEstimateMethods" [ngValue]="method">{{method}}</option>
       </select>
     </div>
   </div>
