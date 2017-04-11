@@ -25,7 +25,8 @@ export class PsatComponent implements OnInit {
     'achievable-efficiency',
     'motor-performance',
     'nema-energy-efficiency',
-    'specific-speed'
+    'specific-speed',
+    'results'
   ]
   tabIndex: number = 0;
 
@@ -115,10 +116,11 @@ export class PsatComponent implements OnInit {
   }
 
   continue() {
-    if (this.currentTab != 'system-setup') {
+    console.log(this.subTabIndex);
+    if (this.subTabIndex > 2) {
       this.tabIndex++;
       this.currentTab = this.tabs[this.tabIndex];
-    } else if (this.currentTab == 'system-setup') {
+    } else if (this.subTabIndex < 3) {
       this.subTabIndex++;
       this.subTab = this.subTabs[this.subTabIndex];
     }

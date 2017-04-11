@@ -3,7 +3,7 @@
     <tr>
       <th></th>
       <th>Baseline</th>
-      <th *ngFor="let modification of baseline.modifications">{{modification.psat.name}}</th>
+      <th *ngFor="let modification of psat.modifications">{{modification.psat.name}}</th>
     </tr>
   </thead>
   <tbody>
@@ -14,43 +14,43 @@
     </tr>
     <tr>
       <td>Pump Type</td>
-      <td>{{baseline.inputs.pump_style}}</td>
-      <td *ngFor="let modification of baseline.modifications">{{modification.psat.inputs.pump_style}}</td>
+      <td>{{getPumpType(psat.inputs.pump_style)}}</td>
+      <td *ngFor="let modification of psat.modifications">{{getPumpType(modification.psat.inputs.pump_style)}}</td>
     </tr>
     <tr>
       <td>Pump RPM</td>
-      <td>{{baseline.inputs.pump_rated_speed}}</td>
-      <td *ngFor="let modification of baseline.modifications">{{modification.psat.inputs.pump_rated_speed}}</td>
+      <td>{{psat.inputs.pump_rated_speed | number:'2.2-2'}}</td>
+      <td *ngFor="let modification of psat.modifications">{{modification.psat.inputs.pump_rated_speed | number:'2.2-2'}}</td>
     </tr>
 
     <tr>
       <td>Drive</td>
-      <td>{{baseline.inputs.drive}}</td>
-      <td *ngFor="let modification of baseline.modifications">{{modification.psat.inputs.drive}}</td>
+      <td>{{getDrive(psat.inputs.drive)}}</td>
+      <td *ngFor="let modification of psat.modifications">{{getDrive(modification.psat.inputs.drive)}}</td>
     </tr>
 
     <tr>
       <td>Kinemativ Viscosity (cS)</td>
-      <td>{{baseline.inputs.kinematic_viscosity}}</td>
-      <td *ngFor="let modification of baseline.modifications">{{modification.psat.inputs.kinematic_viscosity}}</td>
+      <td>{{psat.inputs.kinematic_viscosity | number:'2.2-2'}}</td>
+      <td *ngFor="let modification of psat.modifications">{{modification.psat.inputs.kinematic_viscosity | number:'2.2-2'}}</td>
     </tr>
 
     <tr>
       <td>Specific Gravity</td>
-      <td>{{baseline.inputs.specific_gravity}}</td>
-      <td *ngFor="let modification of baseline.modifications">{{modification.psat.inputs.specific_gravity}}</td>
+      <td>{{psat.inputs.specific_gravity | number:'2.2-2'}}</td>
+      <td *ngFor="let modification of psat.modifications">{{modification.psat.inputs.specific_gravity | number:'2.2-2'}}</td>
     </tr>
 
     <tr>
       <td>Stages</td>
-      <td>{{baseline.inputs.stages}}</td>
-      <td *ngFor="let modification of baseline.modifications">{{modification.psat.inputs.stages}}</td>
+      <td>{{psat.inputs.stages | number:'2.2-2'}}</td>
+      <td *ngFor="let modification of psat.modifications">{{modification.psat.inputs.stages | number:'2.2-2'}}</td>
     </tr>
 
     <tr>
       <td>Fixed specifc speed?</td>
-      <td>{{baseline.inputs.fixed_speed}}</td>
-      <td *ngFor="let modification of baseline.modifications">{{modification.psat.inputs.fixed_speed}}</td>
+      <td>{{getFixedSpeed(psat.inputs.fixed_speed)}}</td>
+      <td *ngFor="let modification of psat.modifications">{{getFixedSpeed(modification.psat.inputs.fixed_speed)}}</td>
     </tr>
 
 
@@ -60,43 +60,43 @@
     </tr>
     <tr>
       <td>Line Frequency</td>
-      <td>{{baseline.inputs.line_frequency}}</td>
-      <td *ngFor="let modification of baseline.modifications">{{modification.psat.inputs.line_frequency}}</td>
+      <td>{{getLineFreq(psat.inputs.line_frequency)}}</td>
+      <td *ngFor="let modification of psat.modifications">{{getLineFreq(modification.psat.inputs.line_frequency)}}</td>
     </tr>
     <tr>
       <td>Horse Power</td>
-      <td>{{baseline.inputs.motor_rated_power}}</td>
-      <td *ngFor="let modification of baseline.modifications">{{modification.psat.inputs.motor_rated_power}}</td>
+      <td>{{psat.inputs.motor_rated_power | number:'2.2-2'}}</td>
+      <td *ngFor="let modification of psat.modifications">{{modification.psat.inputs.motor_rated_power | number:'2.2-2'}}</td>
     </tr>
 
     <tr>
       <td>Motor (RPM)</td>
-      <td>{{baseline.inputs.motor_rated_speed}}</td>
-      <td *ngFor="let modification of baseline.modifications">{{modification.psat.inputs.motor_rated_speed}}</td>
+      <td>{{psat.inputs.motor_rated_speed | number:'2.2-2'}}</td>
+      <td *ngFor="let modification of psat.modifications">{{modification.psat.inputs.motor_rated_speed | number:'2.2-2'}}</td>
     </tr>
 
     <tr>
       <td>Efficiency Class</td>
-      <td>{{baseline.inputs.efficiency_class}}</td>
-      <td *ngFor="let modification of baseline.modifications">{{modification.psat.inputs.efficiency_class}}</td>
+      <td>{{getEfficiencyClass(psat.inputs.efficiency_class)}}</td>
+      <td *ngFor="let modification of psat.modifications">{{getEfficiencyClass(modification.psat.inputs.efficiency_class)}}</td>
     </tr>
 
     <tr>
       <td>Voltage</td>
-      <td>{{baseline.inputs.motor_rated_voltage}}</td>
-      <td *ngFor="let modification of baseline.modifications">{{modification.psat.inputs.motor_rated_voltage}}</td>
+      <td>{{psat.inputs.motor_rated_voltage | number:'2.2-2'}}</td>
+      <td *ngFor="let modification of psat.modifications">{{modification.psat.inputs.motor_rated_voltage | number:'2.2-2'}}</td>
     </tr>
 
     <tr>
       <td>Full-Load Amps</td>
-      <td>{{baseline.inputs.motor_rated_fla}}</td>
-      <td *ngFor="let modification of baseline.modifications">{{modification.psat.inputs.motor_rated_fla}}</td>
+      <td>{{psat.inputs.motor_rated_fla | number:'2.2-2'}}</td>
+      <td *ngFor="let modification of psat.modifications">{{modification.psat.inputs.motor_rated_fla | number:'2.2-2'}}</td>
     </tr>
 
     <tr>
       <td>Size Margin</td>
-      <td>{{baseline.inputs.margin}}</td>
-      <td *ngFor="let modification of baseline.modifications">{{modification.psat.inputs.margin}}</td>
+      <td>{{psat.inputs.margin | number:'2.2-2'}}</td>
+      <td *ngFor="let modification of psat.modifications">{{modification.psat.inputs.margin | number:'2.2-2'}}</td>
     </tr>
 
 
@@ -106,43 +106,43 @@
     </tr>
     <tr>
       <td>Operating Fraction</td>
-      <td>{{baseline.inputs.operating_fraction}}</td>
-      <td *ngFor="let modification of baseline.modifications">{{modification.psat.inputs.operating_fraction}}</td>
+      <td>{{psat.inputs.operating_fraction | number:'2.2-2'}}</td>
+      <td *ngFor="let modification of psat.modifications">{{modification.psat.inputs.operating_fraction | number:'2.2-2'}}</td>
     </tr>
     <tr>
       <td>Cost (kw/hr)</td>
-      <td>{{baseline.inputs.cost_kw_hour}}</td>
-      <td *ngFor="let modification of baseline.modifications">{{modification.psat.inputs.cost_kw_hour}}</td>
+      <td>{{psat.inputs.cost_kw_hour | number:'2.2-2'}}</td>
+      <td *ngFor="let modification of psat.modifications">{{modification.psat.inputs.cost_kw_hour | number:'2.2-2'}}</td>
     </tr>
 
     <tr>
       <td>Flow Rate (gpm)</td>
-      <td>{{baseline.inputs.flow_rate}}</td>
-      <td *ngFor="let modification of baseline.modifications">{{modification.psat.inputs.flow_rate}}</td>
+      <td>{{psat.inputs.flow_rate | number:'2.2-2'}}</td>
+      <td *ngFor="let modification of psat.modifications">{{modification.psat.inputs.flow_rate | number:'2.2-2'}}</td>
     </tr>
 
     <tr>
       <td>Head</td>
-      <td>{{baseline.inputs.head}}</td>
-      <td *ngFor="let modification of baseline.modifications">{{modification.psat.inputs.head}}</td>
+      <td>{{psat.inputs.head | number:'2.2-2'}}</td>
+      <td *ngFor="let modification of psat.modifications">{{modification.psat.inputs.head | number:'2.2-2'}}</td>
     </tr>
 
     <tr>
       <td>Load Estimated Method</td>
-      <td>{{baseline.inputs.load_estimation_method}}</td>
-      <td *ngFor="let modification of baseline.modifications">{{modification.psat.inputs.load_estimation_method}}</td>
+      <td>{{getLoadMethod(psat.inputs.load_estimation_method)}}</td>
+      <td *ngFor="let modification of psat.modifications">{{getLoadMethod(modification.psat.inputs.load_estimation_method)}}</td>
     </tr>
 
     <tr>
       <td>Motor (kW)</td>
-      <td>{{baseline.inputs.motor_field_current}}</td>
-      <td *ngFor="let modification of baseline.modifications">{{modification.psat.inputs.motor_field_current}}</td>
+      <td>{{psat.inputs.motor_field_current | number:'2.2-2'}}</td>
+      <td *ngFor="let modification of psat.modifications">{{modification.psat.inputs.motor_field_current | number:'2.2-2'}}</td>
     </tr>
 
     <tr>
       <td>Voltage</td>
-      <td>{{baseline.inputs.motor_field_voltage}}</td>
-      <td *ngFor="let modification of baseline.modifications">{{modification.psat.inputs.motor_field_voltage}}</td>
+      <td>{{psat.inputs.motor_field_voltage | number:'2.2-2'}}</td>
+      <td *ngFor="let modification of psat.modifications">{{modification.psat.inputs.motor_field_voltage | number:'2.2-2'}}</td>
     </tr>
   </tbody>
 </table>

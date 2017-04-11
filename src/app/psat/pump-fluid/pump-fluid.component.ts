@@ -114,6 +114,7 @@ export class PumpFluidComponent implements OnInit {
 
   focusField(str: string) {
     this.changeField.emit(str);
+    this.checkForm(this.psatForm);
   }
 
   checkForm(form: any) {

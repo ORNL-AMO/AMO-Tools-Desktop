@@ -111,6 +111,12 @@
   </div>
 </div>
 
+<div class="row tab-content" *ngIf="currentTab == 'results'">
+  <div class="col-12">
+    <app-psat-report [psat]="_psat"></app-psat-report>
+  </div>
+</div>
+
 <div class="footer">
   <div class="pull-left">
     <button class="btn btn-secondary" *ngIf="currentTab == 'system-setup'" (click)="close()">Close</button>

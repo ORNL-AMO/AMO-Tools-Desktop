@@ -9,7 +9,6 @@ export class PsatService {
   constructor(private formBuilder: FormBuilder) { }
   //CALCULATORS
   results(psatInputs: PsatInputs): PsatOutputs {
-    console.log(psatInputs);
     // let inp: PsatInputs = {
     //   // PUMP INFORMATION
     //   // Pump Style End suction ansi API

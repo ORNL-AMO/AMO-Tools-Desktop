@@ -11,35 +11,33 @@ export const MockDirectory: Directory = {
       psat:
       {
         inputs: {
-          pump_style: null,
+          pump_style: 6,
           pump_specified: null,
-          pump_rated_speed: null,
-          drive: null,
-          kinematic_viscosity: null,
-          specific_gravity: null,
-          stages: null,
-          fixed_speed: null,
-          line_frequency: null,
-          motor_rated_power: null,
-          motor_rated_speed: null,
-          efficiency_class: null,
-          efficiency_class_specified: null,
-          efficiency: null,
-          motor_rated_voltage: null,
-          load_estimation_method: null,
-          motor_rated_fla: null,
-          margin: null,
-          operating_fraction: null,
-          flow_rate: null,
-          head: null,
-          motor_field_power: null,
+          pump_rated_speed: 1780,
+          drive: 0,
+          kinematic_viscosity: 1.0,
+          specific_gravity: 1.0,
+          stages: 2.0,
+          fixed_speed: 1,
+          line_frequency: 0,
+          motor_rated_power: 200,
+          motor_rated_speed: 1780,
+          efficiency_class: 2,
+          efficiency_class_specified: 'Some Class',
+          efficiency: 95,
+          motor_rated_voltage: 460,
+          load_estimation_method: 0,
+          motor_rated_fla: 225.0,
+          margin: 0,
+          operating_fraction: 1,
+          flow_rate: 1840,
+          head: 174.85,
+          motor_field_power: 80,
           motor_field_current: null,
-          motor_field_voltage: null,
-          cost_kw_hour: null
-        },
-        savings: 10000,
-        selected: false,
-        optimizationRating: 80,
+          motor_field_voltage: 480,
+          cost_kw_hour: .05,
+          cost: .05
+        }
       }
 
     },
@@ -246,7 +244,7 @@ export const MockDirectory: Directory = {
               efficiency: null,
               motor_rated_voltage: null,
               load_estimation_method: null,
-  
+
               motor_rated_fla: null,
               margin: null,
               operating_fraction: null,
@@ -286,7 +284,7 @@ export const MockDirectory: Directory = {
               efficiency: null,
               motor_rated_voltage: null,
               load_estimation_method: null,
-  
+
               motor_rated_fla: null,
               margin: null,
               operating_fraction: null,
@@ -336,7 +334,7 @@ export const MockDirectory: Directory = {
                 efficiency: null,
                 motor_rated_voltage: null,
                 load_estimation_method: null,
-    
+
                 motor_rated_fla: null,
                 margin: null,
                 operating_fraction: null,
