@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { PSAT, PsatInputs } from '../shared/models/psat';
+import { PSAT, PsatInputs, PsatOutputs, PsatCalcResults } from '../shared/models/psat';
 declare var psatAddon: any;
 
 @Injectable()
@@ -8,9 +8,104 @@ export class PsatService {
 
   constructor(private formBuilder: FormBuilder) { }
   //CALCULATORS
-  results(psatInputs: PsatInputs) {
+  results(psatInputs: PsatInputs): PsatOutputs {
     console.log(psatInputs);
-    return psatAddon.results(psatInputs);
+    // let inp: PsatInputs = {
+    //   // PUMP INFORMATION
+    //   // Pump Style End suction ansi API
+    //   pump_style: 6,
+    //   // Achievable pump efficiency
+    //   pump_specified: 90,
+    //   pump_rated_speed: 1780,
+
+    //   // Pump Drive : Direct
+    //   drive: 0,
+    //   // kinematic viscosity
+    //   kinematic_viscosity: 1.0,
+    //   // specific gravity
+    //   specific_gravity: 1.000,
+    //   // stages count
+    //   stages: 2.0,
+    //   // Not fixed speed
+    //   fixed_speed: 1,
+
+    //   // MOTOR INFORMATION
+    //   // Line frequency 60
+    //   line_frequency: 0,
+    //   // motor rated power
+    //   motor_rated_power: 200,
+    //   // motor speed
+    //   motor_rated_speed: 1780,
+    //   // Efficiency class SPECIFIED
+    //   efficiency_class: 2,
+    //   // efficiency
+    //   efficiency: 95,
+    //   // motor rated voltage
+    //   motor_rated_voltage: 460,
+    //   // Full load amps
+    //   motor_rated_fla: 225.0,
+    //   // Size margin
+    //   margin: 0,
+
+    //   // FINANCIALS
+    //   operating_fraction: 1.00,
+    //   cost: 0.05,
+
+    //   // FIELD DATA
+    //   // Flow rate
+    //   flow_rate: 1840,
+    //   // Head
+    //   head: 174.85,
+    //   // enum class LoadEstimationMethod {
+    //   //     POWER,
+    //   //     CURRENT
+    //   // };
+    //   load_estimation_method: 0,
+    //   // motor power
+    //   motor_field_power: 80,
+    //   // motor amps-current
+    //   motor_field_current: 125.857,
+    //   // voltage
+    //   motor_field_voltage: 480
+    // }
+    debugger
+    let tmpResults = psatAddon.results(psatInputs);
+    let tmpOutputs: PsatOutputs = this.parseResults(tmpResults);
+    return tmpOutputs;
+  }
+
+  parseResults(results: PsatCalcResults): PsatOutputs {
+    let tmpOutputs: PsatOutputs = {
+      existing: {
+        pump_efficiency: results.pump_efficiency[0],
+        motor_rated_power: results.motor_rated_power[0],
+        motor_shaft_power: results.motor_shaft_power[0],
+        pump_shaft_power: results.pump_shaft_power[0],
+        motor_efficiency: results.motor_efficiency[0],
+        motor_power_factor: results.motor_power_factor[0],
+        motor_current: results.motor_current[0],
+        motor_power: results.motor_power[0],
+        annual_energy: results.annual_energy[0],
+        annual_cost: results.annual_cost[0],
+        annual_savings_potential: results.annual_savings_potential[0],
+        optimization_rating: results.optimization_rating[0]
+      },
+      optimal: {
+        pump_efficiency: results.pump_efficiency[1],
+        motor_rated_power: results.motor_rated_power[1],
+        motor_shaft_power: results.motor_shaft_power[1],
+        pump_shaft_power: results.pump_shaft_power[1],
+        motor_efficiency: results.motor_efficiency[1],
+        motor_power_factor: results.motor_power_factor[1],
+        motor_current: results.motor_current[1],
+        motor_power: results.motor_power[1],
+        annual_energy: results.annual_energy[1],
+        annual_cost: results.annual_cost[1],
+        annual_savings_potential: results.annual_savings_potential[1],
+        optimization_rating: results.optimization_rating[1]
+      }
+    }
+    return tmpOutputs;
   }
 
   headToolSuctionTank(
@@ -139,7 +234,7 @@ export class PsatService {
   }
 
   //ENUM HELPERS
-  getPumpStyleEnum(pumpStyle: string) {
+  getPumpStyleEnum(pumpStyle: string): number {
     // enum class Style {
     // END_SUCTION_SLURRY,
     // END_SUCTION_SEWAGE,
@@ -154,7 +249,7 @@ export class PsatService {
     // LARGE_END_SUCTION,
     // SPECIFIED_OPTIMAL_EFFICIENCY
     // }
-    let enumPumpStyle: number = 0;
+    let enumPumpStyle;
     if (pumpStyle == 'End Suction Slurry') {
       enumPumpStyle = 0;
     }
@@ -164,31 +259,70 @@ export class PsatService {
     else if (pumpStyle == 'End Suction Stock') {
       enumPumpStyle = 2;
     }
-    else if (pumpStyle == 'API Double Suction') {
+    else if (pumpStyle == 'End Suction Submersible Sewage') {
       enumPumpStyle = 3;
     }
-    else if (pumpStyle == 'Multistage Boiler Feed') {
+    else if (pumpStyle == 'API Double Suction') {
       enumPumpStyle = 4;
     }
-    else if (pumpStyle == 'End Suction ANSI/API') {
+    else if (pumpStyle == 'Multistage Boiler Feed') {
       enumPumpStyle = 5;
     }
-    else if (pumpStyle == 'Axial Flow') {
+    else if (pumpStyle == 'End Suction ANSI/API') {
       enumPumpStyle = 6;
     }
-    else if (pumpStyle == 'Double Suction') {
+    else if (pumpStyle == 'Axial Flow') {
       enumPumpStyle = 7;
     }
-    else if (pumpStyle == 'Vertical Turbine') {
+    else if (pumpStyle == 'Double Suction') {
       enumPumpStyle = 8;
     }
-    else if (pumpStyle == 'Large End Suction') {
+    else if (pumpStyle == 'Vertical Turbine') {
       enumPumpStyle = 9;
+    }
+    else if (pumpStyle == 'Large End Suction') {
+      enumPumpStyle = 10;
     }
     return enumPumpStyle;
   }
-
-  getLineFreqEnum(lineFreq: string) {
+  getPumpStyleFromEnum(num: number): string {
+    let pumpStyle;
+    if (num == 0) {
+      pumpStyle = 'End Suction Slurry';
+    }
+    else if (num == 1) {
+      pumpStyle = 'End Suction Sewage';
+    }
+    else if (num == 2) {
+      pumpStyle = 'End Suction Stock';
+    }
+    else if (num == 3) {
+      pumpStyle = 'End Suction Submersible Sewage';
+    }
+    else if (num == 4) {
+      pumpStyle = 'API Double Suction';
+    }
+    else if (num == 5) {
+      pumpStyle = 'Multistage Boiler Feed';
+    }
+    else if (num == 6) {
+      pumpStyle = 'End Suction ANSI/API';
+    }
+    else if (num == 7) {
+      pumpStyle = 'Axial Flow';
+    }
+    else if (num == 8) {
+      pumpStyle = 'Double Suction';
+    }
+    else if (num == 9) {
+      pumpStyle = 'Vertical Turbine';
+    }
+    else if (num == 10) {
+      pumpStyle = 'Large End Suction';
+    }
+    return pumpStyle;
+  }
+  getLineFreqEnum(lineFreq: string): number {
     let lineFreqEnum: number;
     if (lineFreq == '60 Hz') {
       lineFreqEnum = 0;
@@ -197,19 +331,92 @@ export class PsatService {
     }
     return lineFreqEnum;
   }
-
-  getEfficienyClassEnum(effClass: string) {
+  getLineFreqFromEnum(num: number): string {
+    let lineFreq;
+    if (num == 0) {
+      lineFreq = '60 Hz';
+    } else if (num == 1) {
+      lineFreq = '50 Hz';
+    }
+    return lineFreq;
+  }
+  getEfficienyClassEnum(effClass: string): number {
     let effEnum: number;
     if (effClass == 'Standard') {
       effEnum = 0;
     } else if (effClass == 'Energy Efficient') {
       effEnum = 1;
     } else if (effClass == 'Specified') {
-      effEnum = 3;
+      effEnum = 2;
     }
     return effEnum;
   }
-
+  getEfficiencyClassFromEnum(num: number): string {
+    let effClass;
+    if (num == 0) {
+      effClass = 'Standard';
+    } else if (num == 1) {
+      effClass = 'Energy Efficient';
+    } else if (num == 2) {
+      effClass = 'Specified';
+    }
+    return effClass;
+  }
+  getDriveEnum(drive: string): number {
+    let driveEnum;
+    if (drive == 'Direct Drive') {
+      driveEnum = 0;
+    } else if (drive == 'Belt Drive') {
+      driveEnum = 1;
+    }
+    return driveEnum;
+  }
+  getDriveFromEnum(num: number): string {
+    let drive;
+    if (num == 0) {
+      drive = 'Direct Drive';
+    } else if (num == 1) {
+      drive = 'Belt Drive';
+    }
+    return drive;
+  }
+  getFixedSpeedEmum(fixedSpeed: string): number {
+    let fixedSpeedEnum;
+    if (fixedSpeed == 'Yes') {
+      fixedSpeedEnum = 0;
+    } else if (fixedSpeed == 'No') {
+      fixedSpeedEnum = 1;
+    }
+    return fixedSpeedEnum;
+  }
+  getFixedSpeedFromEnum(num: number): string {
+    let fixedSpeed;
+    if (num == 0) {
+      fixedSpeed = 'Yes';
+    }
+    else if (num == 1) {
+      fixedSpeed = 'No';
+    }
+    return fixedSpeed;
+  }
+  getLoadEstimationEnum(method: string): number {
+    let methodEnum;
+    if (method == 'Power') {
+      methodEnum = 0;
+    } else if (method == 'Current') {
+      methodEnum = 1;
+    }
+    return methodEnum;
+  }
+  getLoadEstimationFromEnum(num: number): string {
+    let method;
+    if (num == 0) {
+      method = 'Power';
+    } else if (num == 1) {
+      method = 'Current';
+    }
+    return method;
+  }
   getEfficiencyFromForm(form: any) {
     let efficiency;
     if (form.value.efficiencyClass == 'Standard') {
@@ -222,7 +429,6 @@ export class PsatService {
     return efficiency;
   }
 
-  
   //PSAT FORM UTILITIES
   initForm() {
     return this.formBuilder.group({
@@ -247,7 +453,7 @@ export class PsatService {
       'costKwHr': ['', Validators.required],
       'flowRate': ['', Validators.required],
       'head': ['', Validators.required],
-      'loadEstimatedMethod': ['Power', Validators.required],
+      'loadEstimatedMethod': ['', Validators.required],
       'motorKW': ['', Validators.required],
       'motorAmps': ['', Validators.required],
       'measuredVoltage': ['', Validators.required]
@@ -255,19 +461,27 @@ export class PsatService {
   }
 
   getFormFromPsat(psatInputs: PsatInputs) {
+    debugger
+    let pumpStyle = this.getPumpStyleFromEnum(psatInputs.pump_style);
+    let lineFreq = this.getLineFreqFromEnum(psatInputs.line_frequency);
+    let effClass = this.getEfficiencyClassFromEnum(psatInputs.efficiency_class);
+    let drive = this.getDriveFromEnum(psatInputs.drive);
+    let fixedSpeed = this.getFixedSpeedFromEnum(psatInputs.fixed_speed);
+    let loadEstMethod = this.getLoadEstimationFromEnum(psatInputs.load_estimation_method);
+
     return this.formBuilder.group({
-      'pumpType': [psatInputs.pump_style, Validators.required],
+      'pumpType': [pumpStyle, Validators.required],
       'specifiedPumpType': [psatInputs.pump_specified, Validators.required],
       'pumpRPM': [psatInputs.pump_rated_speed, Validators.required],
-      'drive': [psatInputs.drive, Validators.required],
+      'drive': [drive, Validators.required],
       'viscosity': [psatInputs.kinematic_viscosity, Validators.required],
       'gravity': [psatInputs.specific_gravity, Validators.required],
       'stages': [psatInputs.stages, Validators.required],
-      'fixedSpeed': [psatInputs.fixed_speed, Validators.required],
-      'frequency': [psatInputs.line_frequency, Validators.required],
+      'fixedSpeed': [fixedSpeed, Validators.required],
+      'frequency': [lineFreq, Validators.required],
       'horsePower': [psatInputs.motor_rated_power, Validators.required],
       'motorRPM': [psatInputs.motor_rated_speed, Validators.required],
-      'efficiencyClass': [psatInputs.efficiency_class, Validators.required],
+      'efficiencyClass': [effClass, Validators.required],
       'efficiencyClassSpecified': [psatInputs.efficiency_class_specified],
       'efficiency': [psatInputs.efficiency],
       'motorVoltage': [psatInputs.motor_rated_voltage, Validators.required],
@@ -277,7 +491,7 @@ export class PsatService {
       'costKwHr': [psatInputs.cost_kw_hour, Validators.required],
       'flowRate': [psatInputs.flow_rate, Validators.required],
       'head': [psatInputs.head, Validators.required],
-      'loadEstimatedMethod': [psatInputs.load_estimation_method, Validators.required],
+      'loadEstimatedMethod': [loadEstMethod, Validators.required],
       'motorKW': [psatInputs.motor_field_power, Validators.required],
       'motorAmps': [psatInputs.motor_field_current, Validators.required],
       'measuredVoltage': [psatInputs.motor_field_voltage, Validators.required]
@@ -285,24 +499,32 @@ export class PsatService {
   }
 
   getPsatInputsFromForm(form: any): PsatInputs {
+    debugger
     let efficiency = this.getEfficiencyFromForm(form);
+    let lineFreqEnum = this.getLineFreqEnum(form.value.frequency);
+    let pumpStyleEnum = this.getPumpStyleEnum(form.value.pumpType);
+    let efficiencyClassEnum = this.getEfficienyClassEnum(form.value.efficiencyClass);
+    let driveEnum = this.getDriveEnum(form.value.drive);
+    let fixedSpeedEnum = this.getFixedSpeedEmum(form.value.fixedSpeed);
+    let loadEstMethodEnum = this.getLoadEstimationEnum(form.value.loadEstimatedMethod);
+
     let tmpPsatInputs: PsatInputs = {
-      pump_style: form.value.pumpType,
+      pump_style: pumpStyleEnum,
       pump_specified: form.value.specifiedPumpType,
       pump_rated_speed: form.value.pumpRPM,
-      drive: form.value.drive,
+      drive: driveEnum,
       kinematic_viscosity: form.value.viscosity,
       specific_gravity: form.value.gravity,
       stages: form.value.stages,
-      fixed_speed: form.value.fixedSpeed,
-      line_frequency: form.value.frequency,
+      fixed_speed: fixedSpeedEnum,
+      line_frequency: lineFreqEnum,
       motor_rated_power: form.value.horsePower,
       motor_rated_speed: form.value.motorRPM,
-      efficiency_class: form.value.efficiencyClass,
+      efficiency_class: efficiencyClassEnum,
       efficiency_class_specified: form.value.efficiencyClassSpecified,
       efficiency: efficiency,
       motor_rated_voltage: form.value.motorVoltage,
-      load_estimation_method: form.value.loadEstimatedMethod,
+      load_estimation_method: loadEstMethodEnum,
       motor_rated_fla: form.value.fullLoadAmps,
       margin: form.value.sizeMargin,
       operating_fraction: form.value.operatingFraction,
@@ -311,7 +533,8 @@ export class PsatService {
       motor_field_power: form.value.motorKW,
       motor_field_current: form.value.motorAmps,
       motor_field_voltage: form.value.measuredVoltage,
-      cost_kw_hour: form.value.costKwHr
+      cost_kw_hour: form.value.costKwHr,
+      cost: form.value.costKwHr
     }
     return tmpPsatInputs;
   }

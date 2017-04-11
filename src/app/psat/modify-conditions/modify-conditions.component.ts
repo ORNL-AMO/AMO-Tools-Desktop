@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, EventEmitter, Output, SimpleChanges } from '@angular/core';
-import { PSAT, PsatInputs, Modification } from '../../shared/models/psat';
+import { PSAT, PsatInputs, Modification, PsatOutputs } from '../../shared/models/psat';
 import * as _ from 'lodash';
 import { PsatService } from '../psat.service';
 
@@ -32,7 +32,8 @@ export class ModifyConditionsComponent implements OnInit {
     if (this.psat.modifications) {
       this._modifications = (JSON.parse(JSON.stringify(this.psat.modifications)));
     }
-    //this.psatService.results(this.psat.inputs);
+    let results: PsatOutputs = this.psatService.results(this.psat.inputs);
+    console.log(results)
   }
 
   save() {

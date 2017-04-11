@@ -31,6 +31,7 @@ export class PumpFluidComponent implements OnInit {
     'End Suction Slurry',
     'End Suction Sewage',
     'End Suction Stock',
+    'End Suction Submersible Sewage',
     'API Double Suction',
     'Multistage Boiler Feed',
     'End Suction ANSI/API',

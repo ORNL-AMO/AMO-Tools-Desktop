@@ -9,44 +9,78 @@ export interface PSAT {
 }
 
 export interface PsatInputs {
-  pump_style?: string,
-  pump_specified?: any,
-  pump_rated_speed?: any,
-  drive?: any,
-  kinematic_viscosity?: any,
-  specific_gravity?: any,
-  stages?: any,
-  fixed_speed?: any,
-  line_frequency?: any,
-  motor_rated_power?: any,
-  motor_rated_speed?: any,
-  efficiency_class?: string,
+  pump_style?: number,
+  pump_specified?: number,
+  pump_rated_speed?: number,
+  drive?: number,
+  kinematic_viscosity?: number,
+  specific_gravity?: number,
+  stages?:number,
+  fixed_speed?: number,
+  line_frequency?: number,
+  motor_rated_power?: number,
+  motor_rated_speed?: number,
+  efficiency_class?: number,
   efficiency_class_specified?: string,
-  efficiency?: any,
-  motor_rated_voltage?: any,
-  load_estimation_method?: any,
-  motor_rated_fla?: any,
-  margin?: any,
-  operating_fraction?: any,
-  flow_rate?: any,
-  head?: any,
-  motor_field_power?: any,
-  motor_field_current?: any,
-  motor_field_voltage?: any,
-  cost_kw_hour?: any
+  efficiency?: number,
+  motor_rated_voltage?: number,
+  load_estimation_method?: number,
+  motor_rated_fla?: number,
+  margin?: number,
+  operating_fraction?: number,
+  flow_rate?: number,
+  head?: number,
+  motor_field_power?: number,
+  motor_field_current?: number,
+  motor_field_voltage?: number,
+  cost_kw_hour?: number
+  cost?: number,
 }
 
 export interface PsatOutputs {
-  pump_efficiency?: any,
-  motor_rated_power?: any,
-  motor_shaft_power?: any,
-  pump_shaft_power?: any,
-  motor_efficiency?: any,
-  motor_power_factor?: any,
-  motor_current?: any,
-  motor_power?: any,
-  annual_energy?: any,
-  annual_cost?: any
+  existing: {
+    pump_efficiency?: number,
+    motor_rated_power?: number,
+    motor_shaft_power?: number,
+    pump_shaft_power?: number,
+    motor_efficiency?: number,
+    motor_power_factor?: number,
+    motor_current?: number,
+    motor_power?: number,
+    annual_energy?: number,
+    annual_cost?: number,
+    annual_savings_potential?: number,
+    optimization_rating?: number
+  },
+  optimal: {
+    pump_efficiency?: number,
+    motor_rated_power?: number,
+    motor_shaft_power?: number,
+    pump_shaft_power?: number,
+    motor_efficiency?: number,
+    motor_power_factor?: number,
+    motor_current?: number,
+    motor_power?: number,
+    annual_energy?: number,
+    annual_cost?: number,
+    annual_savings_potential?: number,
+    optimization_rating?: number
+  }
+}
+
+export interface PsatCalcResults {
+  pump_efficiency?: number[],
+  motor_rated_power?: number[],
+  motor_shaft_power?: number[],
+  pump_shaft_power?: number[],
+  motor_efficiency?: number[],
+  motor_power_factor?: number[],
+  motor_current?: number[],
+  motor_power?: number[],
+  annual_energy?: number[],
+  annual_cost?: number[],
+  annual_savings_potential?: number[],
+  optimization_rating?: number[]
 }
 
 export interface Modification {
