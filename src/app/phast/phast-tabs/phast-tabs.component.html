@@ -1,24 +1,20 @@
 <ul class="tabs primary">
-  
-
-  <!-- These should be sub tabs of the System Setup tab -->
-  <!-- <li [ngClass]="{'active': currentTab == 1}">
-    <a (click)="changeTab(1)">System Basics</a>
-  </li><li [ngClass]="{'active': currentTab == 2}">
-    <a (click)="changeTab(2)">Operating Hours</a>
-  </li> -->
-
-  <li>
-    <a href="">System Setup</a>
-  </li><li [ngClass]="{'active': currentTab == 3}">
-    <a (click)="changeTab(3)">Heat Balance</a>
-  </li><li [ngClass]="{'active': currentTab == 4}">
-    <a (click)="changeTab(4)">Design Energy Use</a>
-  </li><li [ngClass]="{'active': currentTab == 5}">
-    <a (click)="changeTab(5)">Aux Equipment</a>
-  </li><li [ngClass]="{'active': currentTab == 6}">
-    <a (click)="changeTab(6)">Meter Energy</a>
-  </li><li [ngClass]="{'active': currentTab == 7}">
-    <a (click)="changeTab(7)">Sankey</a>
+ <li [ngClass]="{'active': currentTab == 'system-setup'}">
+    <a (click)="changeTab('system-setup')">System Setup</a>
+  </li>
+  <li [ngClass]="{'active': currentTab == 'losses'}">
+    <a (click)="changeTab('losses')">Heat Balance</a>
+  </li>
+  <li [ngClass]="{'active': currentTab == 'designed-energy-use'}">
+    <a (click)="changeTab('designed-energy-use')">Design Energy Use</a>
+  </li>
+  <li [ngClass]="{'active': currentTab == 'aux-equipment'}">
+    <a (click)="changeTab('aux-equipment')">Aux Equipment</a>
+  </li>
+  <li [ngClass]="{'active': currentTab == 'metered-energy'}">
+    <a (click)="changeTab('metered-energy')">Metered Energy</a>
+  </li>
+  <li [ngClass]="{'active': currentTab == 'sankey'}">
+    <a (click)="changeTab('sankey')">Sankey</a>
   </li>
 </ul>

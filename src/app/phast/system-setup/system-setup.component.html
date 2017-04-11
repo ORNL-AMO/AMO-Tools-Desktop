@@ -1,0 +1,16 @@
+<nav>
+  <ul class="tabs subtabs">
+    <li [ngClass]="{'active': subTab == 'system-basics'}">
+      <a (click)="changeTab('system-basics')">System Basics</a>
+    </li>
+    <li [ngClass]="{'active': subTab == 'operating-hours'}">
+      <a (click)="changeTab('operating-hours')">Operating Hours</a>
+    </li>
+  </ul>
+</nav>
+<div class="row basics-content justify-content-center align-items-center">
+  <div class="col-lg-8 col-md-8 col-sm-10 col-xs-12 ">
+    <app-system-basics *ngIf="subTab == 'system-basics'"></app-system-basics>
+    <app-operating-hours *ngIf="subTab == 'operating-hours'"></app-operating-hours>
+  </div>
+</div>

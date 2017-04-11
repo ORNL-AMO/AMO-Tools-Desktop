@@ -32,8 +32,8 @@ export class ModifyConditionsComponent implements OnInit {
     if (this.psat.modifications) {
       this._modifications = (JSON.parse(JSON.stringify(this.psat.modifications)));
     }
-    let results: PsatOutputs = this.psatService.results(this.psat.inputs);
-    console.log(results)
+   // let results: PsatOutputs = this.psatService.results(this.psat.inputs);
+   // console.log(results)
   }
 
   save() {

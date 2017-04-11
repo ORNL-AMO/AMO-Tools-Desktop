@@ -22,6 +22,7 @@ import { DataPanelComponent } from './data-panel/data-panel.component';
 import { SettingsPanelComponent } from './settings-panel/settings-panel.component';
 
 import { PhastService } from './phast.service';
+import { SystemSetupComponent } from './system-setup/system-setup.component';
 
 
 @NgModule({
@@ -38,7 +39,8 @@ import { PhastService } from './phast.service';
     HelpPanelComponent,
     DataPanelComponent,
     SettingsPanelComponent,
-    SankeyDiagramComponent
+    SankeyDiagramComponent,
+    SystemSetupComponent
 
   ],
   exports: [

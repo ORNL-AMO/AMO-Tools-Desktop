@@ -11,20 +11,15 @@ import { PsatService } from './psat.service';
   styleUrls: ['./psat.component.css']
 })
 export class PsatComponent implements OnInit {
-  @ViewChild('saveButton') saveButton: ElementRef;
-  @ViewChild('continueButton') continueButton: ElementRef;
   assessment: Assessment;
 
   panelView: string = 'help-panel';
   isPanelOpen: boolean = true;
-  currentTab: string = 'system-basics';
+  currentTab: string = 'system-setup';
 
   //TODO update tabs
   tabs: Array<string> = [
-    'system-basics',
-    'pump-fluid',
-    'motor',
-    'field-data',
+    'system-setup',
     'modify-conditions',
     'system-curve',
     'achievable-efficiency',
@@ -33,6 +28,15 @@ export class PsatComponent implements OnInit {
     'specific-speed'
   ]
   tabIndex: number = 0;
+
+  subTabs: Array<string> = [
+    'system-basics',
+    'pump-fluid',
+    'motor',
+    'field-data'
+  ]
+
+  subTabIndex: number = 0;
 
   showDetailedReport: boolean = false;
 
@@ -44,6 +48,7 @@ export class PsatComponent implements OnInit {
 
   _psat: PSAT;
 
+  subTab: string = 'system-basics';
 
   constructor(private location: Location, private assessmentService: AssessmentService, private formBuilder: FormBuilder, private psatService: PsatService) { }
 
@@ -51,19 +56,11 @@ export class PsatComponent implements OnInit {
     this.assessment = this.assessmentService.getWorkingAssessment();
     this._psat = (JSON.parse(JSON.stringify(this.assessment.psat)));
     this.isValid = true;
+    this.canContinue = true;
   }
 
   valid() {
     this.isValid = !this.isValid
-  }
-
-  disableSave() {
-    this.saveButton.nativeElement.disabled = true;
-    this.continueButton.nativeElement.disabled = true;
-  }
-
-  enableSave() {
-    this.saveButton.nativeElement.disabled = false;
   }
 
   setValid() {
@@ -80,6 +77,18 @@ export class PsatComponent implements OnInit {
       if (tab == $event) {
         this.tabIndex = tmpIndex;
         this.currentTab = this.tabs[this.tabIndex];
+      } else {
+        tmpIndex++;
+      }
+    })
+  }
+
+  changeSubTab(str: string) {
+    let tmpIndex = 0;
+    this.subTabs.forEach(tab => {
+      if (tab == str) {
+        this.subTabIndex = tmpIndex;
+        this.subTab = this.subTabs[this.subTabIndex];
       } else {
         tmpIndex++;
       }
@@ -106,8 +115,14 @@ export class PsatComponent implements OnInit {
   }
 
   continue() {
-    this.tabIndex++;
-    this.currentTab = this.tabs[this.tabIndex];
+    if (this.currentTab != 'system-setup') {
+      this.tabIndex++;
+      this.currentTab = this.tabs[this.tabIndex];
+    } else if (this.currentTab == 'system-setup') {
+      this.subTabIndex++;
+      this.subTab = this.subTabs[this.subTabIndex];
+    }
+    this.canContinue = false;
   }
 
   close() {

@@ -68,7 +68,7 @@ export class PsatService {
     //   // voltage
     //   motor_field_voltage: 480
     // }
-    debugger
+
     let tmpResults = psatAddon.results(psatInputs);
     let tmpOutputs: PsatOutputs = this.parseResults(tmpResults);
     return tmpOutputs;
@@ -461,7 +461,6 @@ export class PsatService {
   }
 
   getFormFromPsat(psatInputs: PsatInputs) {
-    debugger
     let pumpStyle = this.getPumpStyleFromEnum(psatInputs.pump_style);
     let lineFreq = this.getLineFreqFromEnum(psatInputs.line_frequency);
     let effClass = this.getEfficiencyClassFromEnum(psatInputs.efficiency_class);
@@ -499,7 +498,6 @@ export class PsatService {
   }
 
   getPsatInputsFromForm(form: any): PsatInputs {
-    debugger
     let efficiency = this.getEfficiencyFromForm(form);
     let lineFreqEnum = this.getLineFreqEnum(form.value.frequency);
     let pumpStyleEnum = this.getPumpStyleEnum(form.value.pumpType);
