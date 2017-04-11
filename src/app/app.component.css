@@ -427,6 +427,63 @@ Tabs
   margin: 0;
   padding: 0;
 }
+.tabs.primary {
+  background: #e5e5e5;
+  border-bottom: #c8c8c8 solid 1px;
+}
+.tabs.primary li {
+  display: inline-block;
+}
+.tabs.primary a {
+  padding: 20px 32px;
+  font-size: 14px;
+  border-left: #c8c8c8 solid 1px;
+  display: block;
+  color: #0F0F0F;
+}
+.tabs.primary li:last-of-type a {
+  border-right: #c8c8c8 solid 1px;
+}
+.tabs.primary a:hover {
+  text-decoration: none;
+  background: #efefef;
+}
+.tabs.primary .active a {
+  background: #fff;
+  font-weight: bold;
+  border-bottom: #fff solid 1px;
+  margin-bottom: -1px;
+}
+
+
+
+
+.tabs.subtabs {
+  background: #fff;
+  border-bottom: #828282 solid 1px;
+  -webkit-box-shadow: 0px 1px 4px 0px rgba(0,0,0,0.2);
+  -moz-box-shadow: 0px 1px 4px 0px rgba(0,0,0,0.2);
+  box-shadow: 0px 1px 4px 0px rgba(0,0,0,0.2);
+}
+.tabs.subtabs li {
+  display: inline-block;
+}
+.tabs.subtabs a {
+  padding: 12px;
+  font-size: 13px;
+  display: block;
+  color: #0F0F0F;
+}
+.tabs.subtabs a:hover {
+  text-decoration: none;
+  background: #efefef;
+}
+.tabs.subtabs .active a {
+  font-weight: bold;
+}
+
+
+
 .tabs.vertical {
   margin-right: -1px;
 }
