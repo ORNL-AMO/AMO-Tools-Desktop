@@ -31,7 +31,7 @@
   <div class="form-group">
     <label for="efficiencyClass">Efficiency Class</label>
 
-    <select class="form-control select-input-field" id="efficiencyClass" formControlName="efficiencyClass" (input)="checkForm()"
+    <select class="form-control" id="efficiencyClass" formControlName="efficiencyClass" (input)="checkForm()"
       ngModel="{{performanceForm.value.efficiencyClass}}">
         <option *ngFor="let efficiencyClass of efficiencyClasses" [ngValue]="efficiencyClass">{{efficiencyClass}}</option>
       </select>
@@ -39,19 +39,19 @@
 
   <div class="form-group" *ngIf="performanceForm.value.efficiencyClass == 'Specified'">
     <label for="efficiencyClass">Specify Efficiency Class</label>
-    <input type="text" class="form-control select-input-field" id="efficiencyClassSpecified" formControlName="efficiencyClassSpecified"
+    <input type="text" class="form-control" id="efficiencyClassSpecified" formControlName="efficiencyClassSpecified"
       (input)="checkForm()">
   </div>
 
   <div class="form-group" *ngIf="performanceForm.value.efficiencyClass == 'Specified'">
     <label for="efficiency">Efficiency</label>
-    <input type="number" class="form-control number-input-field" id="efficiency" formControlName="efficiency" (input)="checkForm()">
+    <input type="number" class="form-control" id="efficiency" formControlName="efficiency" (input)="checkForm()">
   </div>
 
   <div class="form-group">
     <label for="motorVoltage">Voltage</label>
 
-    <input type="number" class="form-control number-input-field" id="motorVoltage" formControlName="motorVoltage" (input)="checkForm()">
+    <input type="number" class="form-control" id="motorVoltage" formControlName="motorVoltage" (input)="checkForm()">
   </div>
 
   <div class="form-group">
@@ -59,6 +59,6 @@
       Full-Load Amps
     <small id="flaHelp" class="form-text text-muted text-help" (click)="getFullLoadAmps()"><a>Estimate Full-Load Amps</a></small>
     </label>
-    <input type="number" class="form-control number-input-field" id="fullLoadAmps" formControlName="fullLoadAmps" (input)="checkForm()">
+    <input type="number" class="form-control" id="fullLoadAmps" formControlName="fullLoadAmps" (input)="checkForm()">
   </div>
 </form>

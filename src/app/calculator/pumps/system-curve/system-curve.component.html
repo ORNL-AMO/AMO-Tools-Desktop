@@ -1,8 +1,20 @@
-<div class="row system-curve-container">
-  <div class="col-md-6 col-lg-4 col-sm-6">
+<div class="row calc-container">
+  <div class="col-3">
     <app-system-curve-form [(pointOne)]="pointOne" [(pointTwo)]="pointTwo" [(curveConstants)]="curveConstants" (calculate)="calculateValues()" (calculateP1)="calculateP1Flow()" (calculateP2)="calculateP2Flow()"></app-system-curve-form>
   </div>
-  <div class="col-md-6 col-lg-8 col-sm-6" style="background-color: #f5f3e9;">
-    <app-system-curve-graph [lossCoefficient]="lossCoefficient" [staticHead]="staticHead" [pointOne]="pointOne" [pointTwo]="pointTwo" [curveConstants]="curveConstants"></app-system-curve-graph>
+  <div class="col-9 calc-graph">
+    <div class="row">
+      <div class="col-9">
+        <app-system-curve-graph [lossCoefficient]="lossCoefficient" [staticHead]="staticHead" [pointOne]="pointOne" [pointTwo]="pointTwo" [curveConstants]="curveConstants"></app-system-curve-graph>
+      </div>
+      <div class="col-3">
+        <!--LEGEND-->
+        <h4>Legend</h4>
+        <ul>
+          <li>Some info..</li>
+          <li>Some more info..</li>
+        </ul>
+      </div>
+    </div>
   </div>
 </div>
