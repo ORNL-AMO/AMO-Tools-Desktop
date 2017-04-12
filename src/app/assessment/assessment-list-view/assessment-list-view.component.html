@@ -1,8 +1,8 @@
 <div class="row">
-  <div class="col-md-12 summary-card" *ngFor="let directory of directory.subDirectory">
+  <div class="col-12" *ngFor="let directory of directory.subDirectory">
     <app-directory-list-item [directory]="directory"></app-directory-list-item>
   </div>
-  <div class="col-md-12 summary-card" *ngFor="let assessment of directory.assessments">
+  <div class="col-12" *ngFor="let assessment of directory.assessments">
     <app-assessment-list-item [assessment]="assessment"></app-assessment-list-item>
   </div>
 </div>

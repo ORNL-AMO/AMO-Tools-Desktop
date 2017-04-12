@@ -1,12 +1,4 @@
-.input-row{
-  padding-left:25px;
-  padding-right:25px;
-  padding-top:10px;
-  padding-bottom: 10px;
+.create-btn {
+  padding: 8px 10px 6px;
+  font-size: 15px;
 }
-
-
-.create-folder-modal{
-  max-width:550px;
-}
-

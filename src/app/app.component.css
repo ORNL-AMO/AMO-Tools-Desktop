@@ -221,7 +221,63 @@ Data Tables
 =========================================== */
 .table-header {
   margin-top: 20px;
+  vertical-align: middle;
 }
+  .table-header input {
+    margin: 7px 10px 0 0;
+    vertical-align: top;
+  }
+  .table-header label {
+    display: inline-block;
+    margin-top: 2px;
+  }
+
+
+
+
+/*
+Assessments: List View
+=========================================== */
+.list-row {
+  padding: 10px 0;
+  border-bottom: #d6d6d6 solid 1px;
+}
+  .drag-handle, .list-row input, .assessment-name {
+    display: inline-block;
+    vertical-align: middle;
+  }
+  .drag-handle {
+    color: #d6d6d6;
+    font-size: 20px;
+    margin: 0px 14px 0 0;
+  }
+    .drag-handle:hover {
+      cursor: grab;
+    }
+    .drag-handle .fa {
+      margin-left: -3px;
+    }
+    .drag-handle .fa:nth-child(1) {
+      margin-left: 0;
+    }
+  .list-row input {
+    margin-right: 12px;
+  }
+  .assessment-name .fa {
+    margin-left: -5px;
+    padding-right: 5px;
+    color: #0076FF;
+  }
+    .assessment-name .fa:hover {
+      cursor: pointer;
+    }
+  .assessment-name a {
+    font-weight: 300;
+  }
+    .assessment-name a:hover,.assessment-name a:not([href]):not([tabindex]):focus,.assessment-name a:not([href]):not([tabindex]):hover {
+      text-decoration: none;
+      color: #0076FF;
+    }
 
 
 

@@ -1,3 +1,9 @@
+
+.main-menu .btn {
+  padding: 8px 10px 6px;
+  font-size: 15px;
+}
+
 .space-left {
   margin-left: 20px;
 }

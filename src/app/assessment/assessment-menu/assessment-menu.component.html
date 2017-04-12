@@ -30,8 +30,8 @@
 <div class="row main-menu">
 
   <div class="col-10">
-    <app-assessment-create [(directory)]="directory"></app-assessment-create>
-    <app-create-folder [(directory)]="directory"></app-create-folder>
+    <app-assessment-create [(directory)]="directory" class="create-container"></app-assessment-create>
+    <app-create-folder [(directory)]="directory" class="create-container"></app-create-folder>
     <button type="button" class="btn btn-secondary" disabled>Generate Report</button>
     <button type="button" class="btn btn-secondary" disabled>Delete...</button>
     <button type="button" class="btn btn-secondary space-left">Import...</button>    
@@ -53,7 +53,7 @@
 <div class="table-header">
   <div class="row">
     <div class="col-12">
-      <input type="checkbox">  Select All
+      <label><input type="checkbox" /> Select all</label>
     </div>
   </div>
 </div>
