@@ -168,7 +168,7 @@ export class PsatService {
       efficiency_class: effClassEnum,
       efficiency: efficiency,
       motor_rated_power: horsePower,
-      loadFactor: 1
+      load_factor: 1
     };
     return psatAddon.nema(tmpInputs);
   }
@@ -305,7 +305,7 @@ export class PsatService {
   }
   getEfficienyClassEnum(effClass: string): number {
     let effEnum: number;
-    if (effClass == 'Standard') {
+    if (effClass == 'Standard Efficiency') {
       effEnum = 0;
     } else if (effClass == 'Energy Efficient') {
       effEnum = 1;
@@ -317,7 +317,7 @@ export class PsatService {
   getEfficiencyClassFromEnum(num: number): string {
     let effClass;
     if (num == 0) {
-      effClass = 'Standard';
+      effClass = 'Standard Efficiency';
     } else if (num == 1) {
       effClass = 'Energy Efficient';
     } else if (num == 2) {
@@ -382,7 +382,7 @@ export class PsatService {
   }
   getEfficiencyFromForm(form: any) {
     let efficiency;
-    if (form.value.efficiencyClass == 'Standard') {
+    if (form.value.efficiencyClass == 'Standard Efficiency') {
       efficiency = 0;
     } else if (form.value.efficiencyClass == 'Energy Efficient') {
       efficiency = 1;

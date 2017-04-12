@@ -1,0 +1,11 @@
+.chart-container{
+    display: block;
+    max-height: 800px;
+    max-width: 800px;
+}
+
+.value{
+    position: absolute;
+    margin-top: 48%;
+    margin-left: 38%;
+}

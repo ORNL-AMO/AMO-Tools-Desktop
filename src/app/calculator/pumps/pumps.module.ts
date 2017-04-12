@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SharedModule } from '../../shared/shared.module';
 import { ModalModule } from 'ng2-bootstrap';
+import { ChartsModule } from 'ng2-charts';
 
 import { SystemCurveComponent } from './system-curve/system-curve.component';
 import { SystemCurveFormComponent } from './system-curve/system-curve-form/system-curve-form.component';
@@ -18,7 +19,6 @@ import { SpecificSpeedComponent } from './specific-speed/specific-speed.componen
 
 import { NemaEnergyEfficiencyComponent } from './nema-energy-efficiency/nema-energy-efficiency.component';
 import { NemaEnergyEfficiencyFormComponent } from './nema-energy-efficiency/nema-energy-efficiency-form/nema-energy-efficiency-form.component';
-import { NemaEnergyEfficiencyGraphComponent } from './nema-energy-efficiency/nema-energy-efficiency-graph/nema-energy-efficiency-graph.component';
 
 import { MotorPerformanceComponent } from './motor-performance/motor-performance.component';
 
@@ -46,7 +46,6 @@ import { SpecificSpeedFormComponent } from './specific-speed/specific-speed-form
         SpecificSpeedComponent,
         NemaEnergyEfficiencyComponent,
         NemaEnergyEfficiencyFormComponent,
-        NemaEnergyEfficiencyGraphComponent,
         MotorPerformanceComponent,
         AchievableEfficiencyComponent,
         AchievableEfficiencyFormComponent,
@@ -70,7 +69,8 @@ import { SpecificSpeedFormComponent } from './specific-speed/specific-speed-form
         FormsModule,
         ReactiveFormsModule,
         SharedModule,
-        ModalModule
+        ModalModule,
+        ChartsModule
     ],
     providers: []
 })
