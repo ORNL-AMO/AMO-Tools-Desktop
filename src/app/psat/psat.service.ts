@@ -144,11 +144,16 @@ export class PsatService {
       motor_rated_power: horsePower,
       motor_rated_speed: motorRPM,
       efficiency: efficiency,
-      load_factor: .25,
+      load_factor: 1,
       motor_rated_voltage: motorVoltage,
       motor_rated_fla: fullLoadAmps
     }
     return psatAddon.motorPerformance(tmpInputs);
+  }
+
+  motorPerformancePsat(psatInputs: PsatInputs) {
+    psatInputs.load_factor = 1;
+    return psatAddon.motorPerformance(psatInputs);
   }
 
   //loadFactor hard coded to 1
