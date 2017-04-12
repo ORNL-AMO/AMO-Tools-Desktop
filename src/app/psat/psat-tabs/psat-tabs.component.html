@@ -1,31 +1,26 @@
 <ul class="tabs primary">
-  
-
-  <!-- These should be sub tabs of the System Setup tab -->
-
-  <!-- <li [ngClass]="{'psat-tab-active': currentTab == 'system-basics'}">
-    <a (click)="changeTab('system-basics')">1. System Basics</a>
-  </li><li [ngClass]="{'psat-tab-active': currentTab == 'pump-fluid'}">
-    <a (click)="changeTab('pump-fluid')">2. Pump / Fluid</a>
-  </li><li [ngClass]="{'psat-tab-active': currentTab == 'motor'}">
-    <a (click)="changeTab('motor')">3. Motor</a>
-  </li><li [ngClass]="{'psat-tab-active': currentTab == 'field-data'}">
-    <a (click)="changeTab('field-data')">4. Field Data</a>
-  </li> -->
-
-  <li>
-    <a href="">System Setup</a>
-  </li><li [ngClass]="{'psat-tab-active': currentTab == 'modify-conditions'}">
+  <li [ngClass]="{'active': currentTab == 'system-setup'}">
+    <a (click)="changeTab('system-setup')">System Setup</a>
+  </li>
+  <li [ngClass]="{'active': currentTab == 'modify-conditions'}">
     <a (click)="changeTab('modify-conditions')">Modify Conditions</a>
-  </li><li [ngClass]="{'psat-tab-active': currentTab == 'system-curve'}">
+  </li>
+  <li [ngClass]="{'active': currentTab == 'system-curve'}">
     <a (click)="changeTab('system-curve')">System Curve</a>
-  </li><li [ngClass]="{'psat-tab-active': currentTab == 'achievable-efficiency'}">
+  </li>
+  <li [ngClass]="{'active': currentTab == 'achievable-efficiency'}">
     <a (click)="changeTab('achievable-efficiency')">Achievable Pump Efficiency</a>
-  </li><li [ngClass]="{'psat-tab-active': currentTab == 'motor-performance'}">
+  </li>
+  <li [ngClass]="{'active': currentTab == 'motor-performance'}">
     <a (click)="changeTab('motor-performance')">Motor Performance</a>
-  </li><li [ngClass]="{'psat-tab-active': currentTab == 'nema-energy-efficiency'}">
+  </li>
+  <li [ngClass]="{'active': currentTab == 'nema-energy-efficiency'}">
     <a (click)="changeTab('nema-energy-efficiency')">NEMA Energy Efficiency</a>
-  </li><li [ngClass]="{'psat-tab-active': currentTab == 'specific-speed'}">
+  </li>
+  <li [ngClass]="{'active': currentTab == 'specific-speed'}">
     <a (click)="changeTab('specific-speed')">Specific Speed</a>
+  </li>
+  <li [ngClass]="{'active': currentTab == 'results'}">
+    <a (click)="changeTab('results')">Results</a>
   </li>
 </ul>
