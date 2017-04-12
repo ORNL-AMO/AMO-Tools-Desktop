@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 
 @Component({
   selector: 'app-nema-energy-efficiency-graph',
@@ -6,7 +6,8 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./nema-energy-efficiency-graph.component.css']
 })
 export class NemaEnergyEfficiencyGraphComponent implements OnInit {
-
+  @Input()
+  tefc: number;
   constructor() { }
 
   ngOnInit() {

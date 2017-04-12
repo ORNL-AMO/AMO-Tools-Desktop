@@ -21,6 +21,8 @@ export class NemaEnergyEfficiencyComponent implements OnInit {
       this.nemaForm = this.psatService.initForm();
     } else {
       this.nemaForm = this.psatService.getFormFromPsat(this.psat.inputs);
+      this.tefc = this.psatService.nemaPsat(this.psat.inputs);
+      console.log(this.tefc);
     }
   }
 }
