@@ -19,7 +19,6 @@ log.info('App starting...');
 require('dotenv').config();
 let win = null;
 let available = null;
-let downloadFinished = null;
 
 app.on('ready', function () {
 
@@ -34,9 +33,9 @@ app.on('ready', function () {
     slashes: true
   }));
 
-  //if (isDev()) {
+  if (isDev()) {
     win.toggleDevTools();
-  //};
+  };
 
   // Remove window once app is closed
   win.on('closed', function () {
@@ -50,7 +49,6 @@ app.on('ready', function () {
     autoUpdater.checkForUpdates();
   };
 
-  // Auto Updater events
   autoUpdater.on('checking-for-update', () => {
   });
 
@@ -70,11 +68,11 @@ app.on('ready', function () {
   });
 
   autoUpdater.on('download-progress', (event, progressObj) => {
-    log.info(event, progressObj);
+    log.info(progressObj);
   });
 
   autoUpdater.on('update-downloaded', (event, info) => {
-    sendDone();
+    autoUpdater.quitAndInstall();
   });
 
   //Check for updates and install
@@ -90,25 +88,14 @@ ipcMain.once('later', (event, arg) => {
   update = null;
 });
 
-ipcMain.once('exit', (event, arg) => {
-  autoUpdater.quitAndInstall();
-});
-
 app.on('activate', () => {
   if (win === null) {
     createWindow();
   }
-})
+});
 
 app.on('window-all-closed', function () {
   if (process.platform != 'darwin') {
     app.quit();
   }
 });
-
-function sendDone() {
-  downloadFinished = true;
-  ipcMain.once('finished', (event, arg) => {
-    event.sender.send('downloadDone', downloadFinished);
-  })
-}

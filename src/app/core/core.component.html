@@ -5,38 +5,24 @@
         <div class="modal-content">
             <div class="modal-header">
                 <div *ngIf="!updateSelected">
-                    <div *ngIf="!downloadComplete">
-                        Updates Available...
-                    </div>
+                    Updates Available...
                 </div>
                 <div *ngIf="updateSelected">
-                    <div *ngIf="!downloadComplete">
-                        Downloading...
-                    </div>
-                </div>
-                <div *ngIf="downloadComplete">
-                    Updates Are Ready
+                    Downloading...
                 </div>
             </div>
             <div class="modal-body">
                 <div *ngIf="!updateSelected">
-                    <div *ngIf="!downloadComplete">
-                        <button (click)="updateClick()">Download Now</button>
-                        <button (click)="later()">Later</button>
-                    </div>
+                    <div>When the download is complete, the program will automatically exit and install the updates</div>
+                    <button (click)="updateClick()">Download Now</button>
+                    <button (click)="cancel()">Cancel</button>
                 </div>
                 <div *ngIf="updateSelected">
-                    <div *ngIf="!downloadComplete">
-					    <div class="spinner">
-						    <div class="bounce1"></div>
-						    <div class="bounce2"></div>
-						    <div class="bounce3"></div>
-					    </div>
-                    </div>
-                </div>
-                <div *ngIf="downloadComplete">
-                    <button (click)="quitAndInstall()">Exit and Install</button>
-                    <button (click)="installLater()">Install Later</button>
+					<div class="spinner">
+						<div class="bounce1"></div>
+						<div class="bounce2"></div>
+						<div class="bounce3"></div>
+					</div>
                 </div>
             </div>
         </div>
