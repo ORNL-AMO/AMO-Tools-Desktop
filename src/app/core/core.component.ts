@@ -52,6 +52,7 @@ export class CoreComponent implements OnInit {
 
   updater() {
     autoUpdater.on('update-downloaded', (event, info) => {
+      this.downloadComplete = true;
     })
     //this.ElectronService.ipcRenderer.on('update-downloaded', (event, info) => {
     //})
@@ -72,7 +73,6 @@ export class CoreComponent implements OnInit {
 
   removeUpdateDownloaded() {
     autoUpdater.removeListener('update-downloaded', (event, info) => {
-      this.downloadComplete = true;
     })
   }
 }
