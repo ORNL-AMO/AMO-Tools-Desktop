@@ -234,6 +234,18 @@ Data Tables
 
 
 
+/*
+Assessments: Grid & List View Shared Styles
+=========================================== */
+
+.assessment-name span {
+  display: block;
+  color: #999;
+  font-size: 13px;
+}
+.list-row input, .list-card input {
+  margin-right: 8px;
+}
 
 /*
 Assessments: List View
@@ -260,9 +272,6 @@ Assessments: List View
     .drag-handle .fa:nth-child(1) {
       margin-left: 0;
     }
-  .list-row input {
-    margin-right: 12px;
-  }
   .assessment-name .fa {
     margin-left: -5px;
     padding-right: 5px;
@@ -278,6 +287,50 @@ Assessments: List View
       text-decoration: none;
       color: #0076FF;
     }
+
+
+/*
+Assessments: Grid View
+=========================================== */
+.list-card {
+  border: #95A4AF solid 1px;
+  -webkit-box-shadow: 0px 2px 6px 0px rgba(149,164,175,0.3);
+  -moz-box-shadow: 0px 2px 6px 0px rgba(149,164,175,0.3);
+  box-shadow: 0px 2px 6px 0px rgba(149,164,175,0.3);
+  padding: 20px;
+  position: relative;
+  min-height: 320px;
+}
+  .list-card input[type="checkbox"] {
+    vertical-align: top;
+    margin-top: 6px;
+  }
+  .list-card button {
+    position: absolute;
+    left: 20px;
+    bottom: 20px;
+    background: transparent;
+    border: none;
+    padding: 0;
+    box-shadow: none;
+    font-size: 14px;
+    color: #0076FF;
+  }
+    .list-card button:hover {
+      cursor: pointer;
+    }
+  .list-card .menu {
+    display: none;
+  }
+  .last-updated {
+    position: absolute;
+    right: 20px;
+    bottom: 20px;
+    font-size: 13px;
+    color: #999;
+  }
+
+
 
 
 
