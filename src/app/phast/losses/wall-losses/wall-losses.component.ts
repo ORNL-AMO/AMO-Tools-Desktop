@@ -53,7 +53,7 @@ export class WallLossesComponent implements OnInit {
         let tmpLoss = {
           form: this.wallLossesService.getWallLossForm(loss),
           name: 'Loss #' + (this._wallLosses.length + 1),
-          heatLoss: 0.0
+          heatLoss: loss.heatLoss || 0.0
         };
         this.calculate(tmpLoss);
         this._wallLosses.unshift(tmpLoss);
@@ -102,6 +102,7 @@ export class WallLossesComponent implements OnInit {
     let tmpWallLosses = new Array<WallLoss>();
     this._wallLosses.forEach(loss => {
       let tmpWallLoss = this.wallLossesService.getWallLossFromForm(loss.form);
+      tmpWallLoss.heatLoss = loss.heatLoss;
       tmpWallLosses.unshift(tmpWallLoss);
     })
     this.losses.wallLosses = tmpWallLosses;
@@ -110,7 +111,7 @@ export class WallLossesComponent implements OnInit {
     this.savedLoss.emit(true);
   }
 
-  changeField(str: string){
+  changeField(str: string) {
     this.fieldChange.emit(str);
   }
 }

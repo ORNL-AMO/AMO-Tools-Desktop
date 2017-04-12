@@ -52,7 +52,7 @@ export class GasLeakageLossesComponent implements OnInit {
         let tmpLoss = {
           form: this.gasLeakageLossesService.initFormFromLoss(loss),
           name: 'Loss #' + (this._leakageLosses.length + 1),
-          heatLoss: 0.0
+          heatLoss: loss.heatLoss || 0.0
         };
         this.calculate(tmpLoss);
         this._leakageLosses.unshift(tmpLoss);
@@ -103,6 +103,7 @@ export class GasLeakageLossesComponent implements OnInit {
     let tmpLeakageLosses = new Array<LeakageLoss>();
     this._leakageLosses.forEach(loss => {
       let tmpLeakageLoss = this.gasLeakageLossesService.initLossFromForm(loss.form);
+      tmpLeakageLoss.heatLoss = loss.heatLoss;
       tmpLeakageLosses.unshift(tmpLeakageLoss);
     })
     this.losses.leakageLosses = tmpLeakageLosses;

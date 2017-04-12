@@ -11,7 +11,8 @@ export interface LiquidCoolingLoss {
     initialTemperature?: number,
     outletTemperature?: number,
     specificHeat?: number,
-    correctionFactor?: number
+    correctionFactor?: number,
+    heatLoss?: number
 }
 
 export interface GasCoolingLoss {
@@ -19,7 +20,8 @@ export interface GasCoolingLoss {
     initialTemperature?: number,
     finalTemperature?: number,
     specificHeat?: number,
-    correctionFactor?: number
+    correctionFactor?: number,
+    heatLoss?: number
 }
 
 
@@ -27,5 +29,6 @@ export interface WaterCoolingLoss {
     flowRate?: number,
     initialTemperature?: number,
     outletTemperature?: number,
-    correctionFactor?: number
+    correctionFactor?: number,
+    heatLoss?: number
 }
