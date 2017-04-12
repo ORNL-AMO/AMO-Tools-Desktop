@@ -18,24 +18,14 @@ export class CoreComponent implements OnInit {
 
   ngOnInit() {
 
-    this.ElectronService.ipcRenderer.on('update-available', (event, info) => {
-      this.showUpdateModal();
-    })
-
-    /*this.ElectronService.ipcRenderer.on('available', (event, arg) => {
+    this.ElectronService.ipcRenderer.once('available', (event, arg) => {
       console.log('Update Availble: ' + arg);
       if(arg == true){
         this.showUpdateModal();
-        this.removeAvailable();
       }
-    });*/
+    });
 
-    this.ElectronService.ipcRenderer.on('update-downloaded', (event, info) => {
-      this.downloadComplete = true;
-      //this.removeUpdateDownloaded();
-    })
-
-    //this.ElectronService.ipcRenderer.send('ready', null);
+    this.ElectronService.ipcRenderer.send('ready', null);
   }
 
   showUpdateModal() {
@@ -50,6 +40,7 @@ export class CoreComponent implements OnInit {
     this.updateSelected = true;
     this.ElectronService.ipcRenderer.send('update', null);
     this.updateAvailable = false;
+    this.sendFinish();
   }
 
   later() {
@@ -65,13 +56,13 @@ export class CoreComponent implements OnInit {
     this.updateModal.hide();
   }
 
-  removeAvailable() {
-    this.ElectronService.ipcRenderer.removeListener('available', (event, arg) => {
+  sendFinish() {
+    this.ElectronService.ipcRenderer.once('downloadDone', (event, arg) => {
+      if(arg == true){
+        this.downloadComplete = true;
+      }
     })
+    this.ElectronService.ipcRenderer.emit('finished', null);
   }
 
-  removeUpdateDownloaded() {
-    this.ElectronService.ipcRenderer.removeListener('update-downloaded', (event, info) => {
-    })
-  }
 }

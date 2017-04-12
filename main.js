@@ -19,6 +19,7 @@ log.info('App starting...');
 require('dotenv').config();
 let win = null;
 let available = null;
+let downloadFinished = null;
 
 app.on('ready', function () {
 
@@ -69,25 +70,27 @@ app.on('ready', function () {
   });
 
   autoUpdater.on('download-progress', (event, progressObj) => {
-    log.info(event, info);
+    log.info(event, progressObj);
   });
 
-  //autoUpdater.on('update-downloaded', (event, info) => {
-  //});
+  autoUpdater.on('update-downloaded', (event, info) => {
+    sendDone();
+  });
 
   //Check for updates and install
   autoUpdater.autoDownload = false;
 });
 
 // Listen for message from core.component to either download updates or not
-ipcMain.on('update', (event, arg) => {
+ipcMain.once('update', (event, arg) => {
   autoUpdater.downloadUpdate();
-})
-ipcMain.on('later', (event, arg) => {
-  update = null;
-})
+});
 
-ipcMain.on('exit', (event, arg) => {
+ipcMain.once('later', (event, arg) => {
+  update = null;
+});
+
+ipcMain.once('exit', (event, arg) => {
   autoUpdater.quitAndInstall();
 });
 
@@ -102,3 +105,10 @@ app.on('window-all-closed', function () {
     app.quit();
   }
 });
+
+function sendDone() {
+  downloadFinished = true;
+  ipcMain.once('finished', (event, arg) => {
+    event.sender.send('downloadDone', downloadFinished);
+  })
+}
