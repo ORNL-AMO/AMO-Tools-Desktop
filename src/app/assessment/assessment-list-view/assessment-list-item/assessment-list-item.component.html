@@ -1,12 +1,12 @@
-<div class="row assessment-item">
-  <div class="col-md-1">
+<div class="list-row">
+  <input type="checkbox" />
+  <div class="drag-handle">
+    <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
+    <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
     <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
   </div>
-  <div class="col-md-1">
-    <input type="checkbox">
-  </div>
-  <div class="col-md-10">
-      <i class="fa fa-bar-chart-o" aria-hidden="true"></i>
-      {{assessment.name}}
+  <div class="assessment-name">
+    <i (click)="goToAssessment(assessment)" class="fa fa-bar-chart-o" aria-hidden="true"></i>
+    <a (click)="goToAssessment(assessment)">{{assessment.name}}</a>
   </div>
 </div>

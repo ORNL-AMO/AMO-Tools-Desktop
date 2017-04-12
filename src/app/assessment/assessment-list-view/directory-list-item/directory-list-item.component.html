@@ -1,12 +1,13 @@
-<div class="row directory-item">
-  <div class="col-md-1">
+<div class="list-row">
+  <input type="checkbox" />
+  <div class="drag-handle">
+    <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
+    <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
     <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
   </div>
-  <div class="col-md-1">
-    <input type="checkbox">
-  </div>
-  <div class="col-md-10">
-      <i class="fa fa-folder-o" aria-hidden="true"></i>
-      {{directory.name}}
+  <div class="assessment-name">
+    <i class="fa fa-folder-o" aria-hidden="true"></i>
+    <a (click)="goToDirectory(directory)">{{directory.name}}</a>
   </div>
 </div>
+

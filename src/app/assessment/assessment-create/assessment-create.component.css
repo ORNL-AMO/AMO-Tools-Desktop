@@ -8,6 +8,13 @@
 */
 
 
+.create-btn {
+  padding: 8px 10px 6px;
+  font-size: 15px;
+}
+
+
+
 .create-assessment-modal{
   max-width:550px;
 }
