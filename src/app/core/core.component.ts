@@ -27,7 +27,10 @@ export class CoreComponent implements OnInit {
       }
     });
 
-    this.updater();
+    this.ElectronService.ipcRenderer.on('update-downloaded', (event, info) => {
+      this.downloadComplete = true;
+      //this.removeUpdateDownloaded();
+    })
 
     this.ElectronService.ipcRenderer.send('ready', null);
   }
@@ -43,19 +46,12 @@ export class CoreComponent implements OnInit {
   updateClick() {
     this.updateSelected = true;
     this.ElectronService.ipcRenderer.send('update', null);
+    this.updateAvailable = false;
   }
 
   later() {
     this.updateModal.hide();
     this.ElectronService.ipcRenderer.send('later', null);
-  }
-
-  updater() {
-    autoUpdater.on('update-downloaded', (event, info) => {
-      this.downloadComplete = true;
-    })
-    //this.ElectronService.ipcRenderer.on('update-downloaded', (event, info) => {
-    //})
   }
 
   quitAndInstall() {
@@ -72,7 +68,7 @@ export class CoreComponent implements OnInit {
   }
 
   removeUpdateDownloaded() {
-    autoUpdater.removeListener('update-downloaded', (event, info) => {
+    this.ElectronService.ipcRenderer.removeListener('update-downloaded', (event, info) => {
     })
   }
 }
