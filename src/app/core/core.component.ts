@@ -23,7 +23,13 @@ export class CoreComponent implements OnInit {
       if(arg == true){
         this.showUpdateModal();
       }
-    });
+    })
+
+    this.ElectronService.ipcRenderer.once('downloadDone', (event, arg) => {
+      if(arg == true){
+        this.downloadComplete = true;
+      }
+    })
 
     this.ElectronService.ipcRenderer.send('ready', null);
   }
@@ -40,7 +46,7 @@ export class CoreComponent implements OnInit {
     this.updateSelected = true;
     this.ElectronService.ipcRenderer.send('update', null);
     this.updateAvailable = false;
-    this.sendFinish();
+    this.ElectronService.ipcRenderer.send('finished', null);
   }
 
   later() {
@@ -55,14 +61,4 @@ export class CoreComponent implements OnInit {
   installLater() {
     this.updateModal.hide();
   }
-
-  sendFinish() {
-    this.ElectronService.ipcRenderer.once('downloadDone', (event, arg) => {
-      if(arg == true){
-        this.downloadComplete = true;
-      }
-    })
-    this.ElectronService.ipcRenderer.emit('finished', null);
-  }
-
 }
