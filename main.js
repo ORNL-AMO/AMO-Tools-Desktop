@@ -69,6 +69,7 @@ app.on('ready', function () {
   });
 
   autoUpdater.on('download-progress', (event, progressObj) => {
+    log.info(event, info);
   });
 
   //autoUpdater.on('update-downloaded', (event, info) => {

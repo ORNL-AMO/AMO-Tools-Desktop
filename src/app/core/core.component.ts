@@ -2,8 +2,6 @@ import { Component, OnInit, ViewChild, Input, SimpleChanges } from '@angular/cor
 import { ModalDirective } from 'ng2-bootstrap';
 import { ElectronService } from 'ngx-electron';
 
-declare var autoUpdater: any;
-
 @Component({
   selector: 'app-core',
   templateUrl: './core.component.html',
@@ -19,20 +17,25 @@ export class CoreComponent implements OnInit {
   constructor(private ElectronService: ElectronService) { }
 
   ngOnInit() {
-    this.ElectronService.ipcRenderer.on('available', (event, arg) => {
-      console.log('arg response: ' + arg);
+
+    this.ElectronService.ipcRenderer.on('update-available', (event, info) => {
+      this.showUpdateModal();
+    })
+
+    /*this.ElectronService.ipcRenderer.on('available', (event, arg) => {
+      console.log('Update Availble: ' + arg);
       if(arg == true){
         this.showUpdateModal();
         this.removeAvailable();
       }
-    });
+    });*/
 
     this.ElectronService.ipcRenderer.on('update-downloaded', (event, info) => {
       this.downloadComplete = true;
       //this.removeUpdateDownloaded();
     })
 
-    this.ElectronService.ipcRenderer.send('ready', null);
+    //this.ElectronService.ipcRenderer.send('ready', null);
   }
 
   showUpdateModal() {
