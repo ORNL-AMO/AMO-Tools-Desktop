@@ -45,8 +45,4 @@ export class CoreComponent implements OnInit {
     this.updateModal.hide();
     this.ElectronService.ipcRenderer.send('later', null);
   }
-
-  quitAndInstall() {
-    this.ElectronService.ipcRenderer.send('exit', null);
-  }
 }
