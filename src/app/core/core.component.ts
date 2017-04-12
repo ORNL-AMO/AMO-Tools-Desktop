@@ -61,6 +61,10 @@ export class CoreComponent implements OnInit {
     this.ElectronService.ipcRenderer.send('exit', null);
   }
 
+  installLater() {
+    this.updateModal.hide();
+  }
+
   removeAvailable() {
     this.ElectronService.ipcRenderer.removeListener('available', (event, arg) => {
     })
