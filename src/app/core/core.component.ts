@@ -2,6 +2,8 @@ import { Component, OnInit, ViewChild, Input, SimpleChanges } from '@angular/cor
 import { ModalDirective } from 'ng2-bootstrap';
 import { ElectronService } from 'ngx-electron';
 
+declare var autoUpdater: any;
+
 @Component({
   selector: 'app-core',
   templateUrl: './core.component.html',
@@ -10,6 +12,7 @@ import { ElectronService } from 'ngx-electron';
 
 export class CoreComponent implements OnInit {
   updateAvailable: boolean;
+  downloadComplete: boolean;
   
   @ViewChild('updateModal') public updateModal: ModalDirective;
   constructor(private ElectronService: ElectronService) { }
@@ -21,8 +24,15 @@ export class CoreComponent implements OnInit {
         this.showUpdateModal();
       }
     });
+
+    if(this.updater()) {
+      this.downloadComplete = true;
+    }
+
+
     this.ElectronService.ipcRenderer.send('ready', null);
   }
+
 
   showUpdateModal() {
     this.updateModal.show();
@@ -39,5 +49,10 @@ export class CoreComponent implements OnInit {
   later() {
     this.updateModal.hide();
     this.ElectronService.ipcRenderer.send('later', null);
+  }
+
+  updater() {
+    autoUpdater.on('update-downloaded', (event, info) => {
+    })
   }
 }
