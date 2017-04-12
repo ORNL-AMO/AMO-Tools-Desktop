@@ -7,7 +7,7 @@ import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 })
 export class PhastTabsComponent implements OnInit {
   @Output('tabChange')
-  tabChange = new EventEmitter<number>();
+  tabChange = new EventEmitter<string>();
   @Input()
   currentTab: number;
   constructor() { }
@@ -15,8 +15,8 @@ export class PhastTabsComponent implements OnInit {
   ngOnInit() {
   }
 
-  changeTab(num: number){
-    this.tabChange.emit(num);
+  changeTab(str: string){
+    this.tabChange.emit(str);
   }
 
 }

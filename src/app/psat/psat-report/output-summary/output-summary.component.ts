@@ -8,7 +8,7 @@ import { PSAT } from '../../../shared/models/psat';
 })
 export class OutputSummaryComponent implements OnInit {
   @Input()
-  baseline: PSAT;
+  psat: PSAT;
   
   constructor() { }
 

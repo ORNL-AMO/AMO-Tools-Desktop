@@ -3,6 +3,5 @@
   [options]="chartOptions" [colors]="chartColors"></canvas>
 </div>
 <div class="small text-muted text-center">Optimization Rating</div><br>
-
-<!--<div class="savings text-center">{{adjustment.savings | currency:'USD':true:'4.2-2'}} </div>
-<div class="small text-muted text-center">Annual Savings Potential</div>-->
+<div class="savings text-center">{{psat.outputs.existing.annual_savings_potential | currency:'USD':true:'4.2-2'}} </div>
+<div class="small text-muted text-center">Annual Savings Potential</div>
