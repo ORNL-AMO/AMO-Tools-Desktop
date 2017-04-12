@@ -251,6 +251,9 @@ Assessments: List View
     font-size: 20px;
     margin: 0px 14px 0 0;
   }
+    .drag-handle:hover {
+      cursor: grab;
+    }
     .drag-handle .fa {
       margin-left: -3px;
     }
