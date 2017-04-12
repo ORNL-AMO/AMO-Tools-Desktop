@@ -1,29 +1,33 @@
-<div class="card" *ngIf="directory">
-  <div class="card-header">
-    <input type="checkbox"> {{directory.name}}
+<div class="list-card" *ngIf="directory">
+
+  <input type="checkbox" />
+  <div class="assessment-name">
+    <a (click)="goToAssessment(assessment)">{{directory.name}}</a>
+    <span>Folder / Plant</span>
   </div>
-  <div class="card-block row">
-    <div class="col-12">
-      <ul *ngIf="directory.subDirectory">
-        <li *ngFor="let directory of subDirectory">
-          <i class="fa fa-folder-o" aria-hidden="true"></i> {{directory.name}}
-        </li>
-      </ul>
-      <ul *ngIf="directory.assessments">
-        <li *ngFor="let assessment of directory.assessments">
-          <i class="fa fa-bar-chart-o" aria-hidden="true"></i> {{assessment.name}}
-        </li>
-      </ul>
-    </div>
+
+  <div class="assessment-details">
+    <ul *ngIf="directory.subDirectory">
+      <li *ngFor="let directory of subDirectory">
+        <i class="fa fa-folder-o" aria-hidden="true"></i> {{directory.name}}
+      </li>
+    </ul>
+    <ul *ngIf="directory.assessments">
+      <li *ngFor="let assessment of directory.assessments">
+        <i class="fa fa-bar-chart-o" aria-hidden="true"></i> {{assessment.name}}
+      </li>
+    </ul>
   </div>
-  <div class="card-footer">
-    <div class="row justify-content-between align-items-end">
-      <div class="col-3">
-        <i class="fa fa-ellipsis-h"></i>
-      </div>
-      <div class="col-3">
-        {{directory.date | date}}
-      </div>
-    </div>
-  </div>
+
+  <button type="button">Menu</button>
+  <ul class="menu">
+    <li><a href=""></a></li>
+    <li><a href=""></a></li>
+    <li><a href=""></a></li>
+    <li><a href=""></a></li>
+  </ul>
+
+  <!-- <div class="last-updated">{{directory.date | date}}</div> -->
+  <div class="last-updated">Last updated Apr 12, 2017</div>
+
 </div>

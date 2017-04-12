@@ -1,18 +1,24 @@
-<div class="card">
-  <div class="card-header">
-    <input type="checkbox"> {{assessment.name}}
+<div class="list-card">
+
+  <input type="checkbox" />
+  <div class="assessment-name">
+    <a (click)="goToAssessment(assessment)">{{assessment.name}}</a>
+    <span>Box Type Annealing Furnace</span>
   </div>
-  <div class="card-block">
-    assessment summary goes here
+
+  <div class="assessment-details">
+    Assessment details go here
   </div>
-  <div class="card-footer">
-    <div class=" row justify-content-between align-items-end">
-      <div class="col-3">
-        <i class="fa fa-ellipsis-h pull-left"></i>
-      </div>
-      <div class="col-3">
-        {{assessment.date | date}}
-      </div>
-    </div>
-  </div>
+
+  <button type="button">Menu</button>
+  <ul class="menu">
+    <li><a href=""></a></li>
+    <li><a href=""></a></li>
+    <li><a href=""></a></li>
+    <li><a href=""></a></li>
+  </ul>
+
+  <!-- <div class="last-updated">{{assessment.date | date}}</div> -->
+  <div class="last-updated">Last updated Apr 12, 2017</div>
+
 </div>
