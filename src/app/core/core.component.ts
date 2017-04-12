@@ -12,6 +12,7 @@ declare var autoUpdater: any;
 
 export class CoreComponent implements OnInit {
   updateAvailable: boolean;
+  updateSelected: boolean;
   downloadComplete: boolean;
   
   @ViewChild('updateModal') public updateModal: ModalDirective;
@@ -29,7 +30,6 @@ export class CoreComponent implements OnInit {
       this.downloadComplete = true;
     }
 
-
     this.ElectronService.ipcRenderer.send('ready', null);
   }
 
@@ -42,7 +42,8 @@ export class CoreComponent implements OnInit {
     this.updateModal.hide();
   }
 
-  updateSelected() {
+  updateClick() {
+    this.updateSelected = true;
     this.ElectronService.ipcRenderer.send('update', null);
   }
 
@@ -54,5 +55,7 @@ export class CoreComponent implements OnInit {
   updater() {
     autoUpdater.on('update-downloaded', (event, info) => {
     })
+    //this.ElectronService.ipcRenderer.on('update-downloaded', (event, info) => {
+    //})
   }
 }
