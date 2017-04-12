@@ -23,6 +23,7 @@ export class CoreComponent implements OnInit {
       console.log('arg response: ' + arg);
       if(arg == true){
         this.showUpdateModal();
+        this.removeAvailable();
       }
     });
 
@@ -32,7 +33,6 @@ export class CoreComponent implements OnInit {
 
     this.ElectronService.ipcRenderer.send('ready', null);
   }
-
 
   showUpdateModal() {
     this.updateModal.show();
@@ -57,5 +57,15 @@ export class CoreComponent implements OnInit {
     })
     //this.ElectronService.ipcRenderer.on('update-downloaded', (event, info) => {
     //})
+  }
+
+  removeAvailable() {
+    this.ElectronService.ipcRenderer.removeListener('available', (event, arg) => {
+    })
+  }
+
+  removeUpdateDownloaded() {
+    autoUpdater.removeListener('update-downloaded', (event, info) => {
+    })
   }
 }
