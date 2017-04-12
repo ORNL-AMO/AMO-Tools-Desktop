@@ -1,11 +1,12 @@
 <div class="row calc-container">
   <div class="col-3">
-    <app-nema-energy-efficiency-form [(nemaForm)]="nemaForm"></app-nema-energy-efficiency-form>
+    <app-nema-energy-efficiency-form [(nemaForm)]="nemaForm" (calculate)="calculate()"></app-nema-energy-efficiency-form>
   </div>
   <div class="col-9 calc-graph">
     <div class="row">
       <div class="col-9">
-        <app-nema-energy-efficiency-graph></app-nema-energy-efficiency-graph>
+        <app-percent-graph [value]="tefc" [title]="'TEFC Calculation'" [valueDescription]="'TEFC'" [fontSize]="32" [titlePlacement]="'top'"
+          [unit]="'%'"></app-percent-graph>
       </div>
       <div class="col-3">
         <!--LEGEND-->

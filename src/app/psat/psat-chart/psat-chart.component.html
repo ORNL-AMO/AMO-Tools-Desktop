@@ -1,6 +1,7 @@
 <div style="display: block">
-<canvas baseChart [data]="doughnutChartData" [datasets]="chartColorDataSet" [labels]="doughnutChartLabels" [chartType]="doughnutChartType"
-  [options]="chartOptions" [colors]="chartColors"></canvas>
+<!--<canvas baseChart [data]="doughnutChartData" [datasets]="chartColorDataSet" [labels]="doughnutChartLabels" [chartType]="doughnutChartType"
+  [options]="chartOptions" [colors]="chartColors"></canvas>-->
+<app-percent-graph [value]="optimizationRating" [title]="title" [unit]="unit"></app-percent-graph>
 </div>
 <div class="small text-muted text-center">Optimization Rating</div><br>
 <div class="savings text-center">{{psat.outputs.existing.annual_savings_potential | currency:'USD':true:'4.2-2'}} </div>
