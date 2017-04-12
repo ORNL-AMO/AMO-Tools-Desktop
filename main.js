@@ -79,12 +79,16 @@ app.on('ready', function () {
 });
 
 // Listen for message from core.component to either download updates or not
-ipcMain.on('update', (ev) => {
+ipcMain.on('update', (event, arg) => {
   autoUpdater.downloadUpdate();
 })
-ipcMain.on('later', (ev) => {
+ipcMain.on('later', (event, arg) => {
   update = null;
 })
+
+ipcMain.on('exit', (event, arg) => {
+  autoUpdater.quitAndInstall();
+});
 
 app.on('activate', () => {
   if (win === null) {
