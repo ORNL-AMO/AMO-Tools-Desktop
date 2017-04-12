@@ -71,9 +71,8 @@ app.on('ready', function () {
   autoUpdater.on('download-progress', (event, progressObj) => {
   });
 
-  autoUpdater.on('update-downloaded', (event, info) => {
-    autoUpdater.quitAndInstall();
-  });
+  //autoUpdater.on('update-downloaded', (event, info) => {
+  //});
 
   //Check for updates and install
   autoUpdater.autoDownload = false;
