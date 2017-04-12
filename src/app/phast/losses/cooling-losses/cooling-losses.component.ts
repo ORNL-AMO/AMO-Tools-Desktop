@@ -25,7 +25,7 @@ export class CoolingLossesComponent implements OnInit {
   baselineSelected: boolean;
   @Output('fieldChange')
   fieldChange = new EventEmitter<string>();
-  
+
   _coolingLosses: Array<any>;
   firstChange: boolean = true;
   constructor(private coolingLossesService: CoolingLossesService, private phastService: PhastService) { }
@@ -63,7 +63,7 @@ export class CoolingLossesComponent implements OnInit {
           gasCoolingForm: this.coolingLossesService.initGasFormFromLoss(loss.gasCoolingLoss),
           liquidCoolingForm: this.coolingLossesService.initLiquidCoolingForm(),
           name: 'Loss #' + (this._coolingLosses.length + 1),
-          heatLoss: 0.0
+          heatLoss: loss.heatLoss || 0.0
         };
       } else if (loss.coolingLossType == 'Other Liquid') {
         tmpLoss = {
@@ -72,7 +72,7 @@ export class CoolingLossesComponent implements OnInit {
           gasCoolingForm: this.coolingLossesService.initGasCoolingForm(),
           liquidCoolingForm: this.coolingLossesService.initLiquidFormFromLoss(loss.liquidCoolingLoss),
           name: 'Loss #' + (this._coolingLosses.length + 1),
-          heatLoss: 0.0
+          heatLoss: loss.heatLoss || 0.0
         };
       }
       else if (loss.coolingLossType == 'Water') {
@@ -82,7 +82,7 @@ export class CoolingLossesComponent implements OnInit {
           gasCoolingForm: this.coolingLossesService.initGasCoolingForm(),
           liquidCoolingForm: this.coolingLossesService.initLiquidCoolingForm(),
           name: 'Loss #' + (this._coolingLosses.length + 1),
-          heatLoss: 0.0
+          heatLoss: loss.heatLoss || 0.0
         };
       }
       this.calculate(tmpLoss);
@@ -150,21 +150,24 @@ export class CoolingLossesComponent implements OnInit {
   }
 
   saveLosses() {
-    let tmpCoolingLoss = new Array<CoolingLoss>();
+    let tmpCoolingLosses = new Array<CoolingLoss>();
     this._coolingLosses.forEach(loss => {
-      let tmpWallLoss: any;
+      let tmpCoolingLoss: any;
       if (loss.coolingMedium == 'Other Gas' || loss.coolingMedium == 'Air') {
-        tmpWallLoss = this.coolingLossesService.initGasLossFromForm(loss.gasCoolingForm);
+        tmpCoolingLoss = this.coolingLossesService.initGasLossFromForm(loss.gasCoolingForm);
+        tmpCoolingLoss.heatLoss = loss.heatLoss;
       }
       else if (loss.coolingMedium == 'Other Liquid') {
-        tmpWallLoss = this.coolingLossesService.initLiquidLossFromForm(loss.liquidCoolingForm);
+        tmpCoolingLoss = this.coolingLossesService.initLiquidLossFromForm(loss.liquidCoolingForm);
+        tmpCoolingLoss.heatLoss = loss.heatLoss;
       }
       else if (loss.coolingMedium == 'Water') {
-        tmpWallLoss = this.coolingLossesService.initWaterLossFromForm(loss.waterCoolingForm);
+        tmpCoolingLoss = this.coolingLossesService.initWaterLossFromForm(loss.waterCoolingForm);
+        tmpCoolingLoss.heatLoss = loss.heatLoss;
       }
-      tmpCoolingLoss.unshift(tmpWallLoss);
+      tmpCoolingLosses.unshift(tmpCoolingLoss);
     })
-    this.losses.coolingLosses = tmpCoolingLoss;
+    this.losses.coolingLosses = tmpCoolingLosses;
     this.lossState.numLosses = this.losses.coolingLosses.length;
     this.lossState.saved = true;
     this.savedLoss.emit(true);

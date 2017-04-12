@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, EventEmitter, Output, SimpleChanges } from '@angular/core';
-import { PSAT, PsatInputs, Modification } from '../../shared/models/psat';
+import { PSAT, PsatInputs, Modification, PsatOutputs } from '../../shared/models/psat';
 import * as _ from 'lodash';
+import { PsatService } from '../psat.service';
 
 @Component({
   selector: 'app-modify-conditions',
@@ -24,13 +25,15 @@ export class ModifyConditionsComponent implements OnInit {
   currentField: string = 'default';
   isDropdownOpen: boolean = false;
   modificationIndex: number = 0;
-  constructor() { }
+  constructor(private psatService: PsatService) { }
 
   ngOnInit() {
     this._modifications = new Array<Modification>();
     if (this.psat.modifications) {
       this._modifications = (JSON.parse(JSON.stringify(this.psat.modifications)));
     }
+   // let results: PsatOutputs = this.psatService.results(this.psat.inputs);
+   // console.log(results)
   }
 
   save() {

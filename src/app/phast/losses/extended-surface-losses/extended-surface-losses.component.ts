@@ -54,7 +54,7 @@ export class ExtendedSurfaceLossesComponent implements OnInit {
         let tmpLoss = {
           form: this.extendedSurfaceLossesService.getSurfaceLossForm(loss),
           name: 'Loss #' + (this._surfaceLosses.length + 1),
-          heatLoss: 0.0
+          heatLoss: loss.heatLoss || 0.0
         };
         this.calculate(tmpLoss);
         this._surfaceLosses.unshift(tmpLoss);
@@ -108,6 +108,7 @@ export class ExtendedSurfaceLossesComponent implements OnInit {
     let tmpSurfaceLosses = new Array<ExtendedSurface>();
     this._surfaceLosses.forEach(loss => {
       let tmpSurfaceLoss = this.extendedSurfaceLossesService.getSurfaceLossFromForm(loss.form);
+      tmpSurfaceLoss.heatLoss = loss.heatLoss;
       tmpSurfaceLosses.unshift(tmpSurfaceLoss);
     })
     this.losses.extendedSurfaces = tmpSurfaceLosses;

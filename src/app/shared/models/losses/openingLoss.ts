@@ -9,5 +9,6 @@ export interface OpeningLoss {
     openingType?: string,
     lengthOfOpening?: number,
     heightOfOpening?: number,
-    openingTotalArea?: number
+    openingTotalArea?: number,
+    heatLoss?: number
 }

@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
+import { PSAT } from '../../../shared/models/psat';
+import { PsatService } from '../../../psat/psat.service';
 
 @Component({
   selector: 'app-specific-speed',
@@ -6,10 +8,18 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./specific-speed.component.css']
 })
 export class SpecificSpeedComponent implements OnInit {
+  @Input()
+  psat: PSAT;
 
-  constructor() { }
+  speedForm: any;
+  constructor(private psatService: PsatService) { }
 
   ngOnInit() {
+    if (!this.psat) {
+      this.speedForm = this.psatService.initForm();
+    } else {
+      this.speedForm = this.psatService.getFormFromPsat(this.psat.inputs);
+    }
   }
 
 }

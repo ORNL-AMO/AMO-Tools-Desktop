@@ -6,5 +6,6 @@ export interface WallLoss {
   surfaceEmissivity?: number,
   surfaceShape?: string,
   conditionFactor?: number,
-  correctionFactor?: number
+  correctionFactor?: number,
+  heatLoss?: number
 }

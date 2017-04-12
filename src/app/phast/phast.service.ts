@@ -158,7 +158,6 @@ export class PhastService {
     specificGravity: number,
     correctionFactor: number
   ) {
-    debugger
     return phastAddon.leakageLosses(draftPressure, openingArea, leakageGasTemperature, ambientTemperature, coefficient, specificGravity, correctionFactor)
   }
 

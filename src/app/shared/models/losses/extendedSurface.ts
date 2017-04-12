@@ -3,4 +3,5 @@ export interface ExtendedSurface {
   ambientTemperature?: number,
   surfaceTemperature?: number,
   surfaceEmissivity?: number,
+  heatLoss?: number
 }
