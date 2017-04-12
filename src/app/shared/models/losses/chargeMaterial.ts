@@ -17,7 +17,8 @@ export interface GasChargeMaterial {
   specificHeatVapor?: number,
   percentReacted?: number,
   reactionHeat?: number,
-  additionalHeat?: number
+  additionalHeat?: number,
+  heatRequired?: number
 }
 
 export interface LiquidChargeMaterial {
@@ -33,7 +34,8 @@ export interface LiquidChargeMaterial {
   percentVaporized?: number,
   percentReacted?: number,
   reactionHeat?: number,
-  additionalHeat?: number
+  additionalHeat?: number,
+  heatRequired?: number
 }
 export interface SolidChargeMaterial {
   materialName?: string,
@@ -51,5 +53,6 @@ export interface SolidChargeMaterial {
   chargeMelted?: number,
   chargeReacted?: number,
   reactionHeat?: number,
-  additionalHeat?: number
+  additionalHeat?: number,
+  heatRequired?: number
 }

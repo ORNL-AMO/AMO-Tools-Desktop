@@ -1,4 +1,6 @@
-import { Component, OnInit} from '@angular/core';
+import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
+import { Losses } from '../../shared/models/phast';
+import * as _ from 'lodash';
 
 declare var d3: any;
 
@@ -17,54 +19,94 @@ var isBase;
   styleUrls: ['sankey.component.css']
 })
 
-export class SankeyComponent implements OnInit{
+export class SankeyComponent implements OnInit {
+  @Input()
+  losses: Losses;
 
+  totalChargeMaterialLoss: number = 0;
+  totalWallLoss: number = 0;
+  totalOtherLoss: number = 0;
+  totalOpeningLoss: number = 0;
+  totalLeakageLoss: number = 0;
+  totalFixtureLoss: number = 0;
+  totalExtSurfaceLoss: number = 0;
+  totalCoolingLoss: number = 0;
+  totalAtmosphereLoss: number = 0;
+
+  firstChange: boolean = true;
   constructor() {
   }
 
   ngOnInit() {
+    if (this.losses) {
+      this.getTotals();
+    }
   }
 
-  closeSankey(location){
+  //For dynamic sankey, will calculate totals when losses input changes value
+  // ngOnChanges(changes: SimpleChanges) {
+  //   if (!this.firstChange) {
+  //     if (changes.losses) {
+  //       this.getTotals();
+  //     }
+  //   }
+  //   else {
+  //     this.firstChange = false;
+  //   }
+  // }
+
+  getTotals() {
+    this.totalWallLoss = _.sumBy(this.losses.wallLosses, 'heatLoss');
+    this.totalAtmosphereLoss = _.sumBy(this.losses.atmosphereLosses, 'heatLoss');
+    this.totalOtherLoss = _.sumBy(this.losses.otherLosses, 'heatLoss');
+    this.totalLeakageLoss = _.sumBy(this.losses.leakageLosses, 'heatLoss');
+    this.totalCoolingLoss = _.sumBy(this.losses.coolingLosses, 'heatLoss');
+    this.totalExtSurfaceLoss = _.sumBy(this.losses.extendedSurfaces, 'heatLoss');
+    this.totalOpeningLoss = _.sumBy(this.losses.openingLosses, 'heatLoss');
+    this.totalChargeMaterialLoss = (_.sumBy(this.losses.chargeMaterials, 'gasChargeMaterial.heatRequired') + _.sumBy(this.losses.chargeMaterials, 'liquidChargeMaterial.heatRequired') + _.sumBy(this.losses.chargeMaterials, 'solidChargeMaterial.heatRequired'))
+    this.totalFixtureLoss = _.sumBy(this.losses.fixtureLosses, 'heatLoss');
+  }
+
+  closeSankey(location) {
     //Remove Sankey
     d3.select(location).selectAll('svg').remove();
   }
 
-  zoom(location){
+  zoom(location) {
     d3.select(location).selectAll('svg')
       .attr("width", "100%")
       .attr("height", "700");
   }
 
-  unZoom(){
+  unZoom() {
     svg
       .attr("width", "900")
       .attr("height", "600")
   }
 
-  makeSankey(location){
+  makeSankey(location) {
 
     //Remove  all Sankeys
     d3.select(location).selectAll('svg').remove();
 
     var nodes = [
 
-      /*0*/{ name: "Input", value: 300, displaySize: baseSize, width: 300, x: 150, y:0, input: true, usefulOutput: false, inter: false, top: false},
-      /*1*/{ name: "inter1", value: 0, displaySize: 0, width: 0, x: 450, y: 0, input: false, usefulOutput: false, inter: true, top: true},
-      /*2*/{ name: "Flue Gas Losses", value: 70, displaySize: 0, width: 0, x: 620, y: 0, input: false, usefulOutput: false, inter: false, top: true},
-      /*3*/{ name: "inter2", value: 0, displaySize: 0 ,width: 0, x: 500, y: 0, input: false, usefulOutput: false, inter: true, top: false},
-      /*4*/{ name: "Atmosphere Losses", value: 40, displaySize: 0, width: 0, x: 650, y: 0, input: false, usefulOutput: false, inter: false, top: false},
-      /*5*/{ name: "inter3", value: 0, displaySize: 0, width: 0, x: 630, y: 0, input: false, usefulOutput: false, inter: true, top: true},
-      /*6*/{ name: "Other Losses", value: 20, displaySize: 0, width: 0, x: 770,  y: 0, input: false, usefulOutput: false, inter: false, top: true},
-      /*7*/{ name: "inter4", value: 0, displaySize: 0, width: 0, x: 740, y: 0, input: false, usefulOutput: false, inter: true, top: false},
-      /*8*/{ name: "Water Cooling Losses", value: 30, displaySize: 0, width: 0, x: 890, y: 0, input: false, usefulOutput: false, inter: false, top: false},
-      /*9*/{ name: "inter5", value: 0, displaySize: 0, width: 0, x: 900, y: 0, input: false, usefulOutput: false, inter: true, top: true},
-      /*10*/{ name: "Wall Losses", value: 40, displaySize: 0, width: 0, x: 1030, y: 0, input: false, usefulOutput: false, inter: false, top: true},
-      /*11*/{ name: "inter6", value: 0, displaySize: 0, width: 0, x: 1070, y: 0, input: false, usefulOutput: false, inter: true, top: false},
-      /*12*/{ name: "Opening Losses", value: 10, displaySize: 0, width: 0, x: 1200, y: 0, input: false, usefulOutput: false, inter: false, top: true},
-      /*13*/{ name: "inter7", value: 0, displaySize: 0, width: 0, x: 1130, y: 0, input: false, usefulOutput: false, inter: true, top: false},
-      /*14*/{ name: "Fixture/Conveyor Losses", value: 10, displaySize: 0, width: 0, x: 1270, y: 0, input: false, usefulOutput: false, inter: false, top: false},
-      /*15*/{ name: "Useful Output", value: 0, displaySize: 0, width: 0, x: 1350, y: 0, input: false, usefulOutput: true, inter: false, top: true}
+      /*0*/{ name: "Input", value: 300, displaySize: baseSize, width: 300, x: 150, y: 0, input: true, usefulOutput: false, inter: false, top: false },
+      /*1*/{ name: "inter1", value: 0, displaySize: 0, width: 0, x: 450, y: 0, input: false, usefulOutput: false, inter: true, top: true },
+      /*2*/{ name: "Flue Gas Losses", value: 70, displaySize: 0, width: 0, x: 620, y: 0, input: false, usefulOutput: false, inter: false, top: true },
+      /*3*/{ name: "inter2", value: 0, displaySize: 0, width: 0, x: 500, y: 0, input: false, usefulOutput: false, inter: true, top: false },
+      /*4*/{ name: "Atmosphere Losses", value: 40, displaySize: 0, width: 0, x: 650, y: 0, input: false, usefulOutput: false, inter: false, top: false },
+      /*5*/{ name: "inter3", value: 0, displaySize: 0, width: 0, x: 630, y: 0, input: false, usefulOutput: false, inter: true, top: true },
+      /*6*/{ name: "Other Losses", value: 20, displaySize: 0, width: 0, x: 770, y: 0, input: false, usefulOutput: false, inter: false, top: true },
+      /*7*/{ name: "inter4", value: 0, displaySize: 0, width: 0, x: 740, y: 0, input: false, usefulOutput: false, inter: true, top: false },
+      /*8*/{ name: "Water Cooling Losses", value: 30, displaySize: 0, width: 0, x: 890, y: 0, input: false, usefulOutput: false, inter: false, top: false },
+      /*9*/{ name: "inter5", value: 0, displaySize: 0, width: 0, x: 900, y: 0, input: false, usefulOutput: false, inter: true, top: true },
+      /*10*/{ name: "Wall Losses", value: 40, displaySize: 0, width: 0, x: 1030, y: 0, input: false, usefulOutput: false, inter: false, top: true },
+      /*11*/{ name: "inter6", value: 0, displaySize: 0, width: 0, x: 1070, y: 0, input: false, usefulOutput: false, inter: true, top: false },
+      /*12*/{ name: "Opening Losses", value: 10, displaySize: 0, width: 0, x: 1200, y: 0, input: false, usefulOutput: false, inter: false, top: true },
+      /*13*/{ name: "inter7", value: 0, displaySize: 0, width: 0, x: 1130, y: 0, input: false, usefulOutput: false, inter: true, top: false },
+      /*14*/{ name: "Fixture/Conveyor Losses", value: 10, displaySize: 0, width: 0, x: 1270, y: 0, input: false, usefulOutput: false, inter: false, top: false },
+      /*15*/{ name: "Useful Output", value: 0, displaySize: 0, width: 0, x: 1350, y: 0, input: false, usefulOutput: true, inter: false, top: true }
     ];
     var links = [
       //linking to the first interNode
@@ -73,7 +115,7 @@ export class SankeyComponent implements OnInit{
       { source: 1, target: 2, endWidth: 0 },
       { source: 1, target: 3, endWidth: 0 },
       //interNode2 to Atmosphere and interNode3
-      { source: 3, target: 4, endWidth: 0},
+      { source: 3, target: 4, endWidth: 0 },
       { source: 3, target: 5, endWidth: 0 },
       //interNode3 to Other and interNode4
       { source: 5, target: 6, endWidth: 0 },
@@ -108,7 +150,7 @@ export class SankeyComponent implements OnInit{
       var alterVal = 0, change;
 
       nodes.forEach(function (d, i) {
-        d.y = (height/2 - nodes[0].displaySize/2);
+        d.y = (height / 2 - nodes[0].displaySize / 2);
         if (d.inter) {
           //Reset height
           if (i == 1) {
@@ -130,7 +172,7 @@ export class SankeyComponent implements OnInit{
           }
         }
         else {
-          if(!d.input) {
+          if (!d.input) {
             if (d.usefulOutput) {
               d.value = (nodes[i - 2].value - nodes[i - 1].value);
               d.displaySize = calcDisplayValue(d.value);
@@ -151,44 +193,44 @@ export class SankeyComponent implements OnInit{
       });
     }
 
-    function calcDisplayValue(val){
-      return baseSize * (val/nodes[0].value);
+    function calcDisplayValue(val) {
+      return baseSize * (val / nodes[0].value);
     }
 
-    function makeLinks(d){
+    function makeLinks(d) {
 
       var points = [];
 
-      if(nodes[d.source].input){
-        points.push([nodes[d.source].x, (nodes[d.target].y+( nodes[d.target].displaySize/2))]);
-        points.push([nodes[d.target].x, (nodes[d.target].y+(nodes[d.target].displaySize/2))]);
+      if (nodes[d.source].input) {
+        points.push([nodes[d.source].x, (nodes[d.target].y + (nodes[d.target].displaySize / 2))]);
+        points.push([nodes[d.target].x, (nodes[d.target].y + (nodes[d.target].displaySize / 2))]);
       }
       //If it links up with an inter or usefulOutput then go strait tot the interNode
-      else if(nodes[d.target].inter || nodes[d.target].usefulOutput){
-        points.push([(nodes[d.source].x - 5), (nodes[d.target].y+( nodes[d.target].displaySize/2))]);
-        points.push([nodes[d.target].x, (nodes[d.target].y+(nodes[d.target].displaySize/2))]);
+      else if (nodes[d.target].inter || nodes[d.target].usefulOutput) {
+        points.push([(nodes[d.source].x - 5), (nodes[d.target].y + (nodes[d.target].displaySize / 2))]);
+        points.push([nodes[d.target].x, (nodes[d.target].y + (nodes[d.target].displaySize / 2))]);
       }
       else {
         //Curved linkes
-        if(nodes[d.target].top) {
-          points.push([(nodes[d.source].x-5 ), (nodes[d.source].y+(nodes[d.target].displaySize/2))]);
-          points.push([(nodes[d.source].x + 30), (nodes[d.source].y+(nodes[d.target].displaySize/2))]);
-          points.push([(nodes[d.target].x ),(nodes[d.target].y + (nodes[d.target].displaySize / 2))]);
+        if (nodes[d.target].top) {
+          points.push([(nodes[d.source].x - 5), (nodes[d.source].y + (nodes[d.target].displaySize / 2))]);
+          points.push([(nodes[d.source].x + 30), (nodes[d.source].y + (nodes[d.target].displaySize / 2))]);
+          points.push([(nodes[d.target].x), (nodes[d.target].y + (nodes[d.target].displaySize / 2))]);
         }
         else {
-          points.push([(nodes[d.source].x-5), ((nodes[d.source].y+nodes[d.source].displaySize)-(nodes[d.target].displaySize/2))]);
-          points.push([(nodes[d.source].x + 30), (((nodes[d.source].y+nodes[d.source].displaySize)-(nodes[d.target].displaySize/2)))]);
-          points.push([(nodes[d.target].x ),(nodes[d.target].y - (nodes[d.target].displaySize / 2))]);
+          points.push([(nodes[d.source].x - 5), ((nodes[d.source].y + nodes[d.source].displaySize) - (nodes[d.target].displaySize / 2))]);
+          points.push([(nodes[d.source].x + 30), (((nodes[d.source].y + nodes[d.source].displaySize) - (nodes[d.target].displaySize / 2)))]);
+          points.push([(nodes[d.target].x), (nodes[d.target].y - (nodes[d.target].displaySize / 2))]);
         }
       }
       return linkGen(points);
     };
 
-    function getEndMarker(d){
-      if(!nodes[d.target].inter || nodes[d.target].usefulOutput) {
+    function getEndMarker(d) {
+      if (!nodes[d.target].inter || nodes[d.target].usefulOutput) {
         return "url(" + window.location + "#end-" + d.target + ")";
       }
-      else{
+      else {
         return "";
       }
     }
@@ -200,40 +242,40 @@ export class SankeyComponent implements OnInit{
         .range(["#ffcc00", "#ff3300"]);
     }
 
-    links.forEach( function(d, i) {
+    links.forEach(function (d, i) {
       var link_data = d;
       svg.append("linearGradient")
-        .attr("id", function(){
+        .attr("id", function () {
           return "linear-gradient-" + i;
         })
         .attr("gradientUnits", "userSpaceOnUse")
         .attr("x1", nodes[link_data.source].x)
-        .attr("y1", function() {
-          if (nodes[link_data.target].inter || nodes[link_data.target].usefulOutput){
-            return (nodes[link_data.target].y + (nodes[link_data.target].displaySize/2));
+        .attr("y1", function () {
+          if (nodes[link_data.target].inter || nodes[link_data.target].usefulOutput) {
+            return (nodes[link_data.target].y + (nodes[link_data.target].displaySize / 2));
           }
-          else{
-            if(nodes[link_data.target].top) {
+          else {
+            if (nodes[link_data.target].top) {
               return nodes[link_data.source].y;
             }
-            else{
-              return (nodes[link_data.source].y+nodes[link_data.source].displaySize);
+            else {
+              return (nodes[link_data.source].y + nodes[link_data.source].displaySize);
             }
           }
         })
         .attr("x2", nodes[link_data.target].x)
-        .attr("y2", function(){
+        .attr("y2", function () {
           if (nodes[link_data.target].inter || nodes[link_data.target].usefulOutput) {
-            return (nodes[link_data.target].y + (nodes[link_data.target].displaySize/2));
+            return (nodes[link_data.target].y + (nodes[link_data.target].displaySize / 2));
           }
-          else{
+          else {
             return nodes[link_data.target].y;
           }
         })
         .selectAll("stop")
         .data([
-          {offset: "0%", color: color(nodes[link_data.source].value)},
-          {offset: "76%", color: color(nodes[link_data.target].value)},
+          { offset: "0%", color: color(nodes[link_data.source].value) },
+          { offset: "76%", color: color(nodes[link_data.target].value) },
         ])
         .enter().append("stop")
         .attr("offset", function (d) {
@@ -261,14 +303,14 @@ export class SankeyComponent implements OnInit{
       .append('svg:path')
       .attr("d", "M0,-2.5L2,0L0,2.5");
 
-    function updateColors(){
+    function updateColors() {
 
       //make a new gradient
       findColor();
 
-      nodes.forEach(function(d , i){
+      nodes.forEach(function (d, i) {
         var node_data = d;
-        if(!d.inter || d.usefulOutput) {
+        if (!d.inter || d.usefulOutput) {
           svg.select("#end-" + i)
             .attr("fill", function () {
               return color(node_data.value);
@@ -276,36 +318,36 @@ export class SankeyComponent implements OnInit{
         }
       });
 
-      links.forEach( function(d, i) {
+      links.forEach(function (d, i) {
         var link_data = d;
         svg.select("#linear-gradient-" + i)
           .attr("x1", nodes[link_data.source].x)
-          .attr("y1", function() {
-            if (nodes[link_data.target].inter || nodes[link_data.target].usefulOutput){
-              return (nodes[link_data.target].y + (nodes[link_data.target].displaySize/2));
+          .attr("y1", function () {
+            if (nodes[link_data.target].inter || nodes[link_data.target].usefulOutput) {
+              return (nodes[link_data.target].y + (nodes[link_data.target].displaySize / 2));
             }
-            else{
-              if(nodes[link_data.target].top) {
+            else {
+              if (nodes[link_data.target].top) {
                 return nodes[link_data.source].y;
               }
-              else{
-                return (nodes[link_data.source].y+nodes[link_data.source].displaySize);
+              else {
+                return (nodes[link_data.source].y + nodes[link_data.source].displaySize);
               }
             }
           })
           .attr("x2", nodes[link_data.target].x)
-          .attr("y2", function(){
+          .attr("y2", function () {
             if (nodes[link_data.target].inter || nodes[link_data.target].usefulOutput) {
-              return (nodes[link_data.target].y + (nodes[link_data.target].displaySize/2));
+              return (nodes[link_data.target].y + (nodes[link_data.target].displaySize / 2));
             }
-            else{
+            else {
               return nodes[link_data.target].y;
             }
           })
           .selectAll("stop")
           .data([
-            {offset: "0%", color: color(nodes[link_data.source].value)},
-            {offset: "76%", color: color(nodes[link_data.target].value)},
+            { offset: "0%", color: color(nodes[link_data.source].value) },
+            { offset: "76%", color: color(nodes[link_data.target].value) },
           ])
           .attr("offset", function (d) {
             return d.offset;
@@ -326,17 +368,17 @@ export class SankeyComponent implements OnInit{
       .selectAll("path")
       .data(links)
       .enter().append('path')
-      .attr("d", function(d){
+      .attr("d", function (d) {
         return makeLinks(d);
       })
-      .style("stroke", function(d, i){
+      .style("stroke", function (d, i) {
         return "url(" + window.location + "#linear-gradient-" + i + ")"
       })
       .style("fill", "none")
-      .style("stroke-width", function(d){
+      .style("stroke-width", function (d) {
         return nodes[d.target].displaySize;
       })
-      .attr('marker-end', function(d) {
+      .attr('marker-end', function (d) {
         return getEndMarker(d);
       })
       .on("mouseover", mouseover)
@@ -376,20 +418,20 @@ export class SankeyComponent implements OnInit{
       .enter()
       .append("text")
       .attr("text-anchor", "middle")
-      .attr("dx", function(d){
-        if(d.input){
+      .attr("dx", function (d) {
+        if (d.input) {
           return d.x - 70;
         }
-        else if(d.usefulOutput){
-          return d.x + (d.displaySize*.7)  + 100;
+        else if (d.usefulOutput) {
+          return d.x + (d.displaySize * .7) + 100;
         }
         else {
           return d.x;
         }
       })
-      .attr("dy", function(d){
-        if(d.input || d.usefulOutput){
-          return d.y + (d.displaySize/2);
+      .attr("dy", function (d) {
+        if (d.input || d.usefulOutput) {
+          return d.y + (d.displaySize / 2);
         }
         else {
           if (d.top) {
@@ -400,8 +442,8 @@ export class SankeyComponent implements OnInit{
           }
         }
       })
-      .text(function(d) {
-        if(!d.inter) {
+      .text(function (d) {
+        if (!d.inter) {
           return d.name;
         }
       });
@@ -411,20 +453,20 @@ export class SankeyComponent implements OnInit{
       .enter()
       .append("text")
       .attr("text-anchor", "middle")
-      .attr("dx", function(d){
-        if(d.input){
+      .attr("dx", function (d) {
+        if (d.input) {
           return d.x - 70;
         }
-        else if(d.usefulOutput){
-          return d.x + (d.displaySize*.7)  + 100;
+        else if (d.usefulOutput) {
+          return d.x + (d.displaySize * .7) + 100;
         }
         else {
           return d.x;
         }
       })
-      .attr("dy", function(d){
-        if(d.input || d.usefulOutput){
-          return d.y + (d.displaySize/2) + 60;
+      .attr("dy", function (d) {
+        if (d.input || d.usefulOutput) {
+          return d.y + (d.displaySize / 2) + 60;
         }
         else {
           if (d.top) {
@@ -435,15 +477,15 @@ export class SankeyComponent implements OnInit{
           }
         }
       })
-      .text(function(d) {
-        if(!d.inter) {
+      .text(function (d) {
+        if (!d.inter) {
           return "Btu/Hr.";
         }
       });
 
-    nodes.forEach(function(d, i){
-      var node_val  = d, i = i;
-      if(!node_val.inter) {
+    nodes.forEach(function (d, i) {
+      var node_val = d, i = i;
+      if (!node_val.inter) {
         svg.append('foreignObject')
           .attr("id", "inputObject")
           .attr("x", function () {
@@ -451,7 +493,7 @@ export class SankeyComponent implements OnInit{
               return node_val.x - 120;
             }
             else if (node_val.usefulOutput) {
-              return d.x + (d.displaySize*.7) + 50;
+              return d.x + (d.displaySize * .7) + 50;
             }
             else {
               return node_val.x - 50;
@@ -475,25 +517,25 @@ export class SankeyComponent implements OnInit{
           .data(nodes)
           .attr("type", "text")
           .attr("id", node_val.name)
-          .attr("value", function(){
+          .attr("value", function () {
             var format = d3.format(",");
             return format(node_val.value);
           })
           .style("width", "100px")
-          .on("change", function(){
-            if(isNaN(parseFloat(this.value))){
+          .on("change", function () {
+            if (isNaN(parseFloat(this.value))) {
               nodes[i].value = 0;
             }
-            else{
+            else {
               nodes[i].value = parseFloat(this.value.replace(new RegExp(",", "g"), ""));
             }
             calcSankey();
             updateColors();
             link
-              .attr("d", function(d){
+              .attr("d", function (d) {
                 return makeLinks(d)
               })
-              .style("stroke-width", function(d){
+              .style("stroke-width", function (d) {
                 //returns a links width equal to the target's value
                 return nodes[d.target].displaySize;
               })
@@ -501,24 +543,24 @@ export class SankeyComponent implements OnInit{
                 return getEndMarker(d);
               });
             link
-              .style("stroke", function(d, i){
+              .style("stroke", function (d, i) {
                 return "url(" + window.location + "#linear-gradient-" + i + ")"
               });
             nodes_text
-              .attr("dx", function(d){
-                if(d.input){
+              .attr("dx", function (d) {
+                if (d.input) {
                   return d.x - 70;
                 }
-                else if(d.usefulOutput){
-                  return d.x + (d.displaySize*.7)  + 100;
+                else if (d.usefulOutput) {
+                  return d.x + (d.displaySize * .7) + 100;
                 }
                 else {
                   return d.x;
                 }
               })
-              .attr("dy", function(d){
-                if(d.input || d.usefulOutput){
-                  return d.y + (d.displaySize/2);
+              .attr("dy", function (d) {
+                if (d.input || d.usefulOutput) {
+                  return d.y + (d.displaySize / 2);
                 }
                 else {
                   if (d.top) {
@@ -530,20 +572,20 @@ export class SankeyComponent implements OnInit{
                 }
               });
             nodes_units
-              .attr("dx", function(d){
-                if(d.input){
+              .attr("dx", function (d) {
+                if (d.input) {
                   return d.x - 70;
                 }
-                else if(d.usefulOutput){
-                  return d.x + (d.displaySize*.7)  + 100;
+                else if (d.usefulOutput) {
+                  return d.x + (d.displaySize * .7) + 100;
                 }
                 else {
                   return d.x;
                 }
               })
-              .attr("dy", function(d){
-                if(d.input || d.usefulOutput){
-                  return d.y + (d.displaySize/2) + 60;
+              .attr("dy", function (d) {
+                if (d.input || d.usefulOutput) {
+                  return d.y + (d.displaySize / 2) + 60;
                 }
                 else {
                   if (d.top) {
@@ -561,20 +603,20 @@ export class SankeyComponent implements OnInit{
     });
 
 
-    function changePlaceHolders(){
+    function changePlaceHolders() {
       svg.selectAll("input")
-        .attr("value", function(d,i){
+        .attr("value", function (d, i) {
           var format = d3.format(",");
-          if(i == 8){
+          if (i == 8) {
             return format(nodes[15].value);
           }
           else {
             return format(nodes[i * 2].value);
           }
         })
-        .each(function(d, i){
+        .each(function (d, i) {
           var format = d3.format(",");
-          if(i == 8){
+          if (i == 8) {
             this.value = format(nodes[15].value);
           }
           else {
@@ -584,24 +626,24 @@ export class SankeyComponent implements OnInit{
       svg.selectAll("foreignObject")
         .data(nodes)
         .attr("x", function (d, i) {
-          if(i == 8){
-            return nodes[15].x + (nodes[15].displaySize*.7) + 50;
+          if (i == 8) {
+            return nodes[15].x + (nodes[15].displaySize * .7) + 50;
           }
-          else if(nodes[i * 2].input){
+          else if (nodes[i * 2].input) {
             return nodes[i * 2].x - 120;
           }
-          else{
+          else {
             return nodes[i * 2].x - 50;
           }
         })
         .attr("y", function (d, i) {
-          if (nodes[i].input){
+          if (nodes[i].input) {
             return (nodes[i * 2].y + (nodes[i * 2].displaySize / 2)) + 10;
           }
-          else if(i == 8 ){
+          else if (i == 8) {
             return (nodes[15].y + (nodes[15].displaySize / 2)) + 10;
           }
-          else{
+          else {
             if (nodes[i * 2].top) {
               return nodes[i * 2].y - 80;
             }
@@ -613,11 +655,11 @@ export class SankeyComponent implements OnInit{
     }
   }
 
-  drawFurnace(){
+  drawFurnace() {
     var furnace = svg.append("g")
       .append("polygon")
-      .attr("points", function(){
-        return (620-100) + "," + ((height/2)-500) + "," + (620-150) + "," + ((height/2)-500) + "," + (620-150) + "," + ((height/2)-350) + "," + 250 + "," + ((height/2)-350) + "," + 250 + "," + ((height/2)+350) + "," + 1130 + "," +  ((height/2)+350) + "," + 1130 + "," + ((height/2)-350) + "," + (620+150) + "," + ((height/2)-350) + "," + (620+150) + "," + ((height/2)-500) + "," + (620+100) + "," + ((height/2)-500) + "," + (620+100) + "," + ((height/2)-300) + "," + (1130-50) + "," + ((height/2)-300) + "," + (1130-50) + "," + ((height/2)+300) + "," + 300 + "," + ((height/2)+300) + "," + 300 + "," + ((height/2)-300) + "," + (620-100) + "," + ((height/2)-300) + "," + (620-100) + "," + ((height/2)-500);
+      .attr("points", function () {
+        return (620 - 100) + "," + ((height / 2) - 500) + "," + (620 - 150) + "," + ((height / 2) - 500) + "," + (620 - 150) + "," + ((height / 2) - 350) + "," + 250 + "," + ((height / 2) - 350) + "," + 250 + "," + ((height / 2) + 350) + "," + 1130 + "," + ((height / 2) + 350) + "," + 1130 + "," + ((height / 2) - 350) + "," + (620 + 150) + "," + ((height / 2) - 350) + "," + (620 + 150) + "," + ((height / 2) - 500) + "," + (620 + 100) + "," + ((height / 2) - 500) + "," + (620 + 100) + "," + ((height / 2) - 300) + "," + (1130 - 50) + "," + ((height / 2) - 300) + "," + (1130 - 50) + "," + ((height / 2) + 300) + "," + 300 + "," + ((height / 2) + 300) + "," + 300 + "," + ((height / 2) - 300) + "," + (620 - 100) + "," + ((height / 2) - 300) + "," + (620 - 100) + "," + ((height / 2) - 500);
       })
       .style("fill", "#bae4ce")
       .style("stroke", "black");

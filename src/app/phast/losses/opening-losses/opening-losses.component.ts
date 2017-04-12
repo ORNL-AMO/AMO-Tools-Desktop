@@ -54,7 +54,7 @@ export class OpeningLossesComponent implements OnInit {
         let tmpLoss = {
           form: this.openingLossesService.getFormFromLoss(loss),
           name: 'Loss #' + (this._openingLosses.length + 1),
-          totalOpeningLosses: 0.0
+          totalOpeningLosses: loss.heatLoss || 0.0
         };
         this.calculate(tmpLoss);
         this._openingLosses.unshift(tmpLoss);
@@ -123,6 +123,7 @@ export class OpeningLossesComponent implements OnInit {
     let tmpOpeningLosses = new Array<OpeningLoss>();
     this._openingLosses.forEach(loss => {
       let tmpOpeningLoss = this.openingLossesService.getLossFromForm(loss.form);
+      tmpOpeningLoss.heatLoss = loss.totalOpeningLosses;
       tmpOpeningLosses.unshift(tmpOpeningLoss);
     })
     this.losses.openingLosses = tmpOpeningLosses;

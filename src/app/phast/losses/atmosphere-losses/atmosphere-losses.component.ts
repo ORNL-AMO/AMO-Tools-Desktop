@@ -53,7 +53,7 @@ export class AtmosphereLossesComponent implements OnInit {
         let tmpLoss = {
           form: this.atmosphereLossesService.getAtmosphereForm(loss),
           name: 'Loss #' + (this._atmosphereLosses.length + 1),
-          heatLoss: 0.0
+          heatLoss: loss.heatLoss || 0.0
         };
         this.calculate(tmpLoss);
         this._atmosphereLosses.unshift(tmpLoss);
@@ -102,6 +102,7 @@ export class AtmosphereLossesComponent implements OnInit {
     let tmpAtmosphereLosses = new Array<AtmosphereLoss>();
     this._atmosphereLosses.forEach(loss => {
       let tmpAtmosphereLoss = this.atmosphereLossesService.getLossFromForm(loss.form);
+      tmpAtmosphereLoss.heatLoss = loss.heatLoss;
       tmpAtmosphereLosses.unshift(tmpAtmosphereLoss);
     })
     this.losses.atmosphereLosses = tmpAtmosphereLosses;
