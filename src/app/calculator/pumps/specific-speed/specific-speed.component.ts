@@ -22,4 +22,6 @@ export class SpecificSpeedComponent implements OnInit {
     }
   }
 
+  calculate() {}
+
 }

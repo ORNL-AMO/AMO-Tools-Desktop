@@ -100,6 +100,7 @@ export class PsatService {
 
   }
 
+  //specific speed
   achievableEfficiency(
     pumpStyle: string,
     specificSpeed: number
@@ -113,6 +114,7 @@ export class PsatService {
     return psatAddon.achievableEfficiency(inputs)
   }
 
+  ///achievable pump efficiency
   pumpEfficiency(
     pumpStyle,
     flowRate
@@ -121,7 +123,7 @@ export class PsatService {
     let enumPumpStyle = this.getPumpStyleEnum(pumpStyle);
     inputs = {
       pump_style: enumPumpStyle,
-      specific_speed: flowRate
+      flow_rate: flowRate
     }
     return psatAddon.pumpEfficiency(inputs);
   }
@@ -133,7 +135,8 @@ export class PsatService {
     motorRPM,
     efficiency,
     motorVoltage,
-    fullLoadAmps
+    fullLoadAmps,
+    loadFactor
   ) {
     let tmpInputs: any;
     let lineFreqEnum = this.getLineFreqEnum(lineFreq);
@@ -144,7 +147,7 @@ export class PsatService {
       motor_rated_power: horsePower,
       motor_rated_speed: motorRPM,
       efficiency: efficiency,
-      load_factor: 1,
+      load_factor: loadFactor,
       motor_rated_voltage: motorVoltage,
       motor_rated_fla: fullLoadAmps
     }
@@ -187,17 +190,6 @@ export class PsatService {
       motor_rated_power: psatInputs.motor_rated_power,
       load_factor: 1
     };
-    // console.log(tmpInputs)
-    // let tmpInputs1: any = {
-    //   line_frequency: 0,
-    //   motor_rated_speed: 1200,
-    //   efficiency_class: 1,
-    //   efficiency: 0,
-    //   motor_rated_power: 200,
-    //   load_factor: 1
-    // };
-    //console.log(tmpInputs1);
-    //debugger
     return psatAddon.nema(tmpInputs);
   }
 

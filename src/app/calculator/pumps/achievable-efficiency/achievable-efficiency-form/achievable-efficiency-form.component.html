@@ -2,7 +2,7 @@
   <div class="form-group">
     <label for="pumpType">Pump Type</label>
     <select class="form-control" formControlName="pumpType" id="pumpType" ngModel="{{efficiencyForm.value.pumpType}}" (input)="checkForm()">
-        <option *ngFor="let pumpType of pumpTypes">{{pumpType}}</option>
+        <option *ngFor="let pumpType of pumpTypes" [ngValue]="pumpType">{{pumpType}}</option>
       </select>
   </div>
 
