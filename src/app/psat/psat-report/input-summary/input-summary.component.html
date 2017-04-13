@@ -134,9 +134,15 @@
     </tr>
 
     <tr>
-      <td>Motor (kW)</td>
+      <td>Motor Amps</td>
       <td>{{psat.inputs.motor_field_current | number:'2.2-2'}}</td>
       <td *ngFor="let modification of psat.modifications">{{modification.psat.inputs.motor_field_current | number:'2.2-2'}}</td>
+    </tr>
+
+    <tr>
+      <td>Motor (kW)</td>
+      <td>{{psat.inputs.motor_field_power | number:'2.2-2'}}</td>
+      <td *ngFor="let modification of psat.modifications">{{modification.psat.inputs.motor_field_power | number:'2.2-2'}}</td>
     </tr>
 
     <tr>

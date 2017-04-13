@@ -25,59 +25,91 @@ export class MotorPerformanceGraphComponent implements OnInit {
 
   }
 
-  ngOnChanges(changes: SimpleChanges) {
-    if (!this.firstChange) {
-      if (changes.toggleCalculate) {
-        this.drawGraph();
-      }
-    } else {
-      this.firstChange = false;
+  // ngOnChanges(changes: SimpleChanges) {
+  //   if (!this.firstChange) {
+  //     if (changes.toggleCalculate) {
+  //       this.drawGraph();
+  //     }
+  //   } else {
+  //     this.firstChange = false;
+  //   }
+  // }
+
+  calculateEfficiency(loadFactor: number) {
+    if (this.checkForm()) {
+      console.log(this.performanceForm.value.horsePower)
+      let efficiency = this.psatService.getEfficiencyFromForm(this.performanceForm);
+      let results = this.psatService.motorPerformance(
+        this.performanceForm.value.frequency,
+        this.performanceForm.value.efficiencyClass,
+        this.performanceForm.value.horsePower,
+        this.performanceForm.value.motorRPM,
+        efficiency,
+        this.performanceForm.value.motorVoltage,
+        this.performanceForm.value.fullLoadAmps,
+        loadFactor
+      );
+      return results.efficiency;
     }
   }
 
-  calculateEfficiency(loadFactor: number) {
-    let efficiency = this.psatService.getEfficiencyFromForm(this.performanceForm);
-    let results = this.psatService.motorPerformance(
-      this.performanceForm.value.frequency,
-      this.performanceForm.value.efficiencyClass,
-      this.performanceForm.value.horsePower,
-      this.performanceForm.value.motorRPM,
-      efficiency,
-      this.performanceForm.value.motorVoltage,
-      this.performanceForm.value.fullLoadAmps,
-      loadFactor
-    );
-    return results.efficiency;
-  }
-
   calculateCurrent(loadFactor: number) {
-    let efficiency = this.psatService.getEfficiencyFromForm(this.performanceForm);
-    let results = this.psatService.motorPerformance(
-      this.performanceForm.value.frequency,
-      this.performanceForm.value.efficiencyClass,
-      this.performanceForm.value.horsePower,
-      this.performanceForm.value.motorRPM,
-      efficiency,
-      this.performanceForm.value.motorVoltage,
-      this.performanceForm.value.fullLoadAmps,
-      loadFactor
-    );
-    return results.motor_current;
+    if (this.checkForm()) {
+      let efficiency = this.psatService.getEfficiencyFromForm(this.performanceForm);
+      let results = this.psatService.motorPerformance(
+        this.performanceForm.value.frequency,
+        this.performanceForm.value.efficiencyClass,
+        this.performanceForm.value.horsePower,
+        this.performanceForm.value.motorRPM,
+        efficiency,
+        this.performanceForm.value.motorVoltage,
+        this.performanceForm.value.fullLoadAmps,
+        loadFactor
+      );
+      return results.motor_current;
+    } else {
+      return 0;
+    }
   }
 
   calculatePowerFactor(loadFactor: number) {
-    let efficiency = this.psatService.getEfficiencyFromForm(this.performanceForm);
-    let results = this.psatService.motorPerformance(
-      this.performanceForm.value.frequency,
-      this.performanceForm.value.efficiencyClass,
-      this.performanceForm.value.horsePower,
-      this.performanceForm.value.motorRPM,
-      efficiency,
-      this.performanceForm.value.motorVoltage,
-      this.performanceForm.value.fullLoadAmps,
-      loadFactor
-    );
-    return results.motor_power_factor;
+    if (this.checkForm()) {
+      let efficiency = this.psatService.getEfficiencyFromForm(this.performanceForm);
+      let results = this.psatService.motorPerformance(
+        this.performanceForm.value.frequency,
+        this.performanceForm.value.efficiencyClass,
+        this.performanceForm.value.horsePower,
+        this.performanceForm.value.motorRPM,
+        efficiency,
+        this.performanceForm.value.motorVoltage,
+        this.performanceForm.value.fullLoadAmps,
+        loadFactor
+      );
+      return results.motor_power_factor;
+    } else {
+      return 0;
+    }
+  }
+
+  checkForm() {
+    if (this.performanceForm.controls.frequency.status == 'VALID' &&
+      this.performanceForm.controls.horsePower.status == 'VALID' &&
+      this.performanceForm.controls.motorRPM.status == 'VALID' &&
+      this.performanceForm.controls.efficiencyClass.status == 'VALID' &&
+      this.performanceForm.controls.motorVoltage.status == 'VALID' &&
+      this.performanceForm.controls.fullLoadAmps.status == 'VALID'
+    ) {
+      if (this.performanceForm.value.efficiencyClass == 'Specified') {
+        if (
+          this.performanceForm.controls.efficiencyClassSpecified.status == 'VALID' &&
+          this.performanceForm.controls.efficiencyClass.status == 'VALID'
+        ) {
+          return true;
+        }
+      } else {
+        return true;
+      }
+    }
   }
 
   drawGraph() {

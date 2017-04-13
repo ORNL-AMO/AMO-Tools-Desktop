@@ -1,3 +1,4 @@
-<p>
-  specific-speed-graph works!
-</p>
+<h4>Specific Speed Equation:</h4>
+<h4 style="padding-top:10px;">{{speedForm.value.pumpRPM}} * ({{speedForm.value.flowRate}})<sup>0.5</sup> / ({{speedForm.value.head}})<sup>.75</sup>
+<h4 style="padding-top:15px;">Specific Speed: {{getSpecificSpeed() | number:'2.2-2'}}</h4>
+<h4 style="padding-top:15px;">Efficiency Correction (%): {{getEfficiencyCorrection() | number:"2.2-2"}}</h4>

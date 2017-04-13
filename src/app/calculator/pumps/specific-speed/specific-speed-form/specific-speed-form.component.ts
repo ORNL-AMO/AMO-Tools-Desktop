@@ -8,8 +8,8 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 export class SpecificSpeedFormComponent implements OnInit {
   @Input()
   speedForm: any;
-  @Output('calculate')
-  calculate = new EventEmitter<boolean>();
+  // @Output('calculate')
+  // calculate = new EventEmitter<boolean>();
 
   pumpTypes: Array<string> = [
     'End Suction Slurry',
@@ -28,17 +28,18 @@ export class SpecificSpeedFormComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    this.checkForm();
+    //   this.checkForm();
   }
 
-  checkForm() {
-    debugger
-    if (
-      this.speedForm.controls.pumpType.status == 'VALID' &&
-      this.speedForm.controls.flowRate.status == 'VALID'
-    ) {
-      this.calculate.emit(true);
-    }
-  }
+  // checkForm() {
+  //   if (
+  //     this.speedForm.controls.pumpType.status == 'VALID' &&
+  //     this.speedForm.controls.flowRate.status == 'VALID' &&
+  //     this.speedForm.controls.head.status == 'VALID' &&
+  //     this.speedForm.controls.pumpRPM.status == 'VALID'
+  //   ) {
+  //     this.calculate.emit(true);
+  //   }
+  // }
 
 }

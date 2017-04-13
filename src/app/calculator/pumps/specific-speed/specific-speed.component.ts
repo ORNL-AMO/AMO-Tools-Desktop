@@ -12,6 +12,9 @@ export class SpecificSpeedComponent implements OnInit {
   psat: PSAT;
 
   speedForm: any;
+  specificSpeed: number;
+  efficiencyCorrection: number;
+  toggleCalculate: boolean = true;
   constructor(private psatService: PsatService) { }
 
   ngOnInit() {
@@ -22,6 +25,8 @@ export class SpecificSpeedComponent implements OnInit {
     }
   }
 
-  calculate() {}
+  // calculate() {
+  //   this.toggleCalculate = !this.toggleCalculate;
+  // }
 
 }
