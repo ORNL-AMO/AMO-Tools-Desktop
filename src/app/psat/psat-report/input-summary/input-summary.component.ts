@@ -13,6 +13,7 @@ export class InputSummaryComponent implements OnInit {
   constructor(private psatService: PsatService) { }
 
   ngOnInit() {
+    console.log(this.psat)
   }
 
   getPumpType(num: number) {
