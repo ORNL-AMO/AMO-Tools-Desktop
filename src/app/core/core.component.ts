@@ -10,17 +10,20 @@ import { ElectronService } from 'ngx-electron';
 
 export class CoreComponent implements OnInit {
   updateAvailable: boolean;
+  updateSelected: boolean;
   
   @ViewChild('updateModal') public updateModal: ModalDirective;
   constructor(private ElectronService: ElectronService) { }
 
   ngOnInit() {
-    this.ElectronService.ipcRenderer.on('available', (event, arg) => {
-      console.log('arg response: ' + arg);
+
+    this.ElectronService.ipcRenderer.once('available', (event, arg) => {
+      console.log('Update Availble: ' + arg);
       if(arg == true){
         this.showUpdateModal();
       }
-    });
+    })
+
     this.ElectronService.ipcRenderer.send('ready', null);
   }
 
@@ -32,11 +35,13 @@ export class CoreComponent implements OnInit {
     this.updateModal.hide();
   }
 
-  updateSelected() {
+  updateClick() {
+    this.updateSelected = true;
+    this.updateAvailable = false;
     this.ElectronService.ipcRenderer.send('update', null);
   }
 
-  later() {
+  cancel() {
     this.updateModal.hide();
     this.ElectronService.ipcRenderer.send('later', null);
   }

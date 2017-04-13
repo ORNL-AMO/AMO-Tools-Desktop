@@ -4,14 +4,26 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                Updates Available...
-                <button class="close" aria-label="Close" (click)="hideUpdateModal()">
-          <span aria-hidden="true">&times;</span>
-        </button>
+                <div *ngIf="!updateSelected">
+                    Updates Available...
+                </div>
+                <div *ngIf="updateSelected">
+                    Downloading...
+                </div>
             </div>
             <div class="modal-body">
-                <button click="updateSelected()">Download Now</button>
-                <button click="later()">Later</button>
+                <div *ngIf="!updateSelected">
+                    <div>When the download is complete, the program will automatically exit and install the updates</div>
+                    <button (click)="updateClick()">Download Now</button>
+                    <button (click)="cancel()">Cancel</button>
+                </div>
+                <div *ngIf="updateSelected">
+					<div class="spinner">
+						<div class="bounce1"></div>
+						<div class="bounce2"></div>
+						<div class="bounce3"></div>
+					</div>
+                </div>
             </div>
         </div>
     </div>

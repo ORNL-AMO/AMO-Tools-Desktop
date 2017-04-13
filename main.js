@@ -49,11 +49,10 @@ app.on('ready', function () {
     autoUpdater.checkForUpdates();
   };
 
-  // Auto Updater events
   autoUpdater.on('checking-for-update', () => {
   });
 
-  autoUpdater.on('update-available', (ev, info) => {
+  autoUpdater.on('update-available', (event, info) => {
   });
 
   // Send message to core.component when an update is available
@@ -62,16 +61,17 @@ app.on('ready', function () {
     event.sender.send('available',  autoUpdater.updateAvailable);
   });
 
-  autoUpdater.on('update-not-available', (ev, info) => {
+  autoUpdater.on('update-not-available', (event, info) => {
   });
 
-  autoUpdater.on('error', (ev, error) => {
+  autoUpdater.on('error', (event, error) => {
   });
 
-  autoUpdater.on('download-progress', (ev, progressObj) => {
+  autoUpdater.on('download-progress', (event, progressObj) => {
+    log.info(progressObj);
   });
 
-  autoUpdater.on('update-downloaded', (ev, info) => {
+  autoUpdater.on('update-downloaded', (event, info) => {
     autoUpdater.quitAndInstall();
   });
 
@@ -80,18 +80,19 @@ app.on('ready', function () {
 });
 
 // Listen for message from core.component to either download updates or not
-ipcMain.on('update', (ev) => {
+ipcMain.once('update', (event, arg) => {
   autoUpdater.downloadUpdate();
-})
-ipcMain.on('later', (ev) => {
+});
+
+ipcMain.once('later', (event, arg) => {
   update = null;
-})
+});
 
 app.on('activate', () => {
   if (win === null) {
     createWindow();
   }
-})
+});
 
 app.on('window-all-closed', function () {
   if (process.platform != 'darwin') {
