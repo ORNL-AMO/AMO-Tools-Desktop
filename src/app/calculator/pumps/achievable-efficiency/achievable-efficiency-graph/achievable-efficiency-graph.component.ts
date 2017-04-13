@@ -8,8 +8,8 @@ import { PsatService } from '../../../../psat/psat.service';
 export class AchievableEfficiencyGraphComponent implements OnInit {
   @Input()
   efficiencyForm: any;
-  @Input()
-  toggleCalculate: boolean;
+  // @Input()
+  // toggleCalculate: boolean;
 
   firstChange: boolean = true;
 
@@ -22,31 +22,34 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
   ngOnInit() {
   }
 
-  ngOnChanges(changes: SimpleChanges) {
-    if (changes.toggleCalculate) {
-      this.drawGraph();
-    }
-  }
+  // ngOnChanges(changes: SimpleChanges) {
+  //   if (changes.toggleCalculate) {
+  //     this.drawGraph();
+  //   }
+  // }
 
   calculateYaverage(flow: number) {
-    let tmpResults = this.psatService.pumpEfficiency(
-      this.efficiencyForm.value.pumpType,
-      flow
-    );
-    return tmpResults.average;
+    if (this.checkForm()) {
+      let tmpResults = this.psatService.pumpEfficiency(
+        this.efficiencyForm.value.pumpType,
+        flow
+      );
+      return tmpResults.average;
+    } else { return 0 }
   }
 
   calculateYmax(flow: number) {
-    let tmpResults = this.psatService.pumpEfficiency(
-      this.efficiencyForm.value.pumpType,
-      flow
-    );
-    return tmpResults.max;
+    if (this.checkForm()) {
+      let tmpResults = this.psatService.pumpEfficiency(
+        this.efficiencyForm.value.pumpType,
+        flow
+      );
+      return tmpResults.max;
+    } else { return 0 }
   }
 
   drawGraph() {
     if (this.checkForm()) {
-      console.log('draw');
       this.results.max = this.calculateYmax(this.efficiencyForm.value.flowRate);
       this.results.average = this.calculateYaverage(this.efficiencyForm.value.flowRate);
     }
@@ -58,7 +61,7 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
       this.efficiencyForm.controls.flowRate.status == 'VALID'
     ) {
       return true;
-    }else{
+    } else {
       return false;
     }
   }

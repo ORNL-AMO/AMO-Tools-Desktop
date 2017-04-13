@@ -1,3 +1,3 @@
 <h3>Achievable Efficiency</h3>
-<h4>Average: {{results.average | number:'2.2-2'}}</h4>
-<h4>Max: {{results.max | number:'2.2-2'}}</h4>
+<h4>Average: {{calculateYaverage(efficiencyForm.value.flowRate) | number:'2.2-2'}}</h4>
+<h4>Max: {{calculateYmax(efficiencyForm.value.flowRate) | number:'2.2-2'}}</h4>

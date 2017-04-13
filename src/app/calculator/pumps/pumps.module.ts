@@ -31,6 +31,7 @@ import { MotorPerformanceGraphComponent } from './motor-performance/motor-perfor
 import { MotorPerformanceFormComponent } from './motor-performance/motor-performance-form/motor-performance-form.component';
 import { SpecificSpeedGraphComponent } from './specific-speed/specific-speed-graph/specific-speed-graph.component';
 import { SpecificSpeedFormComponent } from './specific-speed/specific-speed-form/specific-speed-form.component';
+import { NemaEnergyEfficiencyGraphComponent } from './nema-energy-efficiency/nema-energy-efficiency-graph/nema-energy-efficiency-graph.component';
 
 @NgModule({
     declarations: [
@@ -53,7 +54,8 @@ import { SpecificSpeedFormComponent } from './specific-speed/specific-speed-form
         MotorPerformanceGraphComponent,
         MotorPerformanceFormComponent,
         SpecificSpeedGraphComponent,
-        SpecificSpeedFormComponent
+        SpecificSpeedFormComponent,
+        NemaEnergyEfficiencyGraphComponent
     ],
     exports:[
         SystemCurveComponent,

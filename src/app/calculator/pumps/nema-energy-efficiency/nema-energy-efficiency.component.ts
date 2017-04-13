@@ -13,7 +13,6 @@ export class NemaEnergyEfficiencyComponent implements OnInit {
 
   nemaForm: any;
 
-  tefc: number = 0;
   constructor(private formBuilder: FormBuilder, private psatService: PsatService) { }
 
   ngOnInit() {
@@ -25,21 +24,9 @@ export class NemaEnergyEfficiencyComponent implements OnInit {
         efficiencyClass: 'Standard Efficiency',
         motorRPM: 1
       })
-      this.calculate();
     } else {
       this.nemaForm = this.psatService.getFormFromPsat(this.psat.inputs);
-      this.tefc = this.psatService.nemaPsat(this.psat.inputs);
-    }
-  }
 
-  calculate() {
-    let efficiency = this.psatService.getEfficiencyFromForm(this.nemaForm);
-    this.tefc = this.psatService.nema(
-      this.nemaForm.value.frequency,
-      this.nemaForm.value.motorRPM,
-      this.nemaForm.value.efficiencyClass,
-      efficiency,
-      this.nemaForm.value.horsePower
-    );
+    }
   }
 }

@@ -1,11 +1,11 @@
 <div class="row calc-container">
   <div class="col-3">
-    <app-specific-speed-form [(speedForm)]="speedForm" (calculate)="calculate()"></app-specific-speed-form>
+    <app-specific-speed-form [(speedForm)]="speedForm"></app-specific-speed-form>
   </div>
   <div class="col-9 calc-graph">
     <div class="row">
       <div class="col-9">
-        <app-specific-speed-graph></app-specific-speed-graph>
+        <app-specific-speed-graph [speedForm]="speedForm"></app-specific-speed-graph>
       </div>
       <div class="col-3">
         <!--LEGEND-->

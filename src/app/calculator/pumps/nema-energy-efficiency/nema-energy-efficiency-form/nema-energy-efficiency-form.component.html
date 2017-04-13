@@ -1,15 +1,15 @@
 <form [formGroup]="nemaForm" style="padding-top: 20px;">
 <div class="form-group">
   <label for="frequency">Line Frequency</label>
-  <select class="form-control" id="frequency" formControlName="frequency" (input)="checkForm()" ngModel="{{nemaForm.value.frequency}}">
-        <option *ngFor="let frequency of frequencies" [ngValue]="frequency" (click)="checkForm()">{{frequency}}</option>
+  <select class="form-control" id="frequency" formControlName="frequency" ngModel="{{nemaForm.value.frequency}}">
+        <option *ngFor="let frequency of frequencies" [ngValue]="frequency">{{frequency}}</option>
       </select>
 </div>
 
 <div class="form-group">
   <label for="horsePower">Horse Power</label>
-  <select class="form-control" id="horsePower" formControlName="horsePower" (input)="checkForm()" ngModel="{{nemaForm.value.horsePower}}">
-        <option *ngFor="let horsePower of horsePowers" [ngValue]="horsePower" (click)="checkForm()">{{horsePower}}</option>
+  <select class="form-control" id="horsePower" formControlName="horsePower" ngModel="{{nemaForm.value.horsePower}}">
+        <option *ngFor="let horsePower of horsePowers" [ngValue]="horsePower">{{horsePower}}</option>
       </select>
 </div>
 
@@ -23,24 +23,24 @@
       <button class="btn" (click)="addNum('motorRPM')"><i class="fa fa-plus"></i></button>
     </div>
     <input type="number" min="1" class="form-control incrementor-input-field" id="motorRPM" formControlName="motorRPM" ngModel="{{nemaForm.value.motorRPM}}"
-      (input)="checkForm()">
+     >
   </div>
 </div>
 
 <div class="form-group">
   <label for="efficiencyClass">Efficiency Class</label>
-  <select class="form-control" id="efficiencyClass" formControlName="efficiencyClass" (input)="checkForm()" ngModel="{{nemaForm.value.efficiencyClass}}">
-        <option *ngFor="let efficiencyClass of efficiencyClasses" [ngValue]="efficiencyClass" (click)="checkForm()">{{efficiencyClass}}</option>
+  <select class="form-control" id="efficiencyClass" formControlName="efficiencyClass" ngModel="{{nemaForm.value.efficiencyClass}}">
+        <option *ngFor="let efficiencyClass of efficiencyClasses" [ngValue]="efficiencyClass">{{efficiencyClass}}</option>
       </select>
 </div>
 
 <div class="form-group" *ngIf="nemaForm.value.efficiencyClass == 'Specified'">
   <label for="efficiencyClassSpecified">Specify Efficiency Class</label>
-  <input type="text" class="form-control" id="efficiencyClassSpecified" formControlName="efficiencyClassSpecified" (input)="checkForm()">
+  <input type="text" class="form-control" id="efficiencyClassSpecified" formControlName="efficiencyClassSpecified">
 </div>
 
 <div class="form-group" *ngIf="nemaForm.value.efficiencyClass == 'Specified'">
   <label for="efficiency">Efficiency</label>
-  <input type="number" class="form-control" id="efficiency" formControlName="efficiency" (input)="checkForm()">
+  <input type="number" class="form-control" id="efficiency" formControlName="efficiency">
 </div>
 </form>
