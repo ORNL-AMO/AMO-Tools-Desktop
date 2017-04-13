@@ -1,11 +1,11 @@
 <div class="row calc-container">
   <div class="col-3">
-    <app-achievable-efficiency-form [(efficiencyForm)]="efficiencyForm"></app-achievable-efficiency-form>
+    <app-achievable-efficiency-form [(efficiencyForm)]="efficiencyForm" (calculate)="calculate()"></app-achievable-efficiency-form>
   </div>
   <div class="col-9 calc-graph">
     <div class="row">
       <div class="col-9">
-        <app-achievable-efficiency-graph></app-achievable-efficiency-graph>
+        <app-achievable-efficiency-graph [efficiencyForm]="efficiencyForm" [toggleCalculate]="toggleCalculate"></app-achievable-efficiency-graph>
       </div>
       <div class="col-3">
         <!--LEGEND-->
