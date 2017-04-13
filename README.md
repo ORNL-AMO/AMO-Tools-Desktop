@@ -39,9 +39,9 @@ To get more help on the `angular-cli` use `ng help` or go check out the [Angular
 
 *electron-builder makes one installer that will install either x64 or ia32 as appropriate*  
 
-Prerequisites:  
-  electron-builder v13.9.0+  
-  electron-packager v8.5.2  
+### Prerequisites:  
+  * electron-builder v13.9.0+  
+  * electron-packager v8.5.2  
 
 Run `npm run windows` to build the installer in x64 and ia32.   
 Installer will be in ../output  
@@ -49,14 +49,14 @@ latest.yml will be in ../output
 
 ## Building for Linux
 
-Prerequisites:  
-  icnutils  
-  graphicsmagick  
-  xz-utils  
-  rpm  
-  apt  
-  electron-builder v13.9.0+  
-  electron-packager v8.5.2  
+### Prerequisites:  
+  * icnutils  
+  * graphicsmagick  
+  * xz-utils  
+  * rpm  
+  * apt  
+  * electron-builder v13.9.0+  
+  * electron-packager v8.5.2  
 
 Run `npm run linux` to build a tar.gz, .deb, and .rpm in x64 
 Packages will be in ../output  
@@ -66,10 +66,10 @@ Packages will be in ../output
 ## Building for Mac
 *Can only be done on Mac due to signing issues*  
 
-Prerequisites:  
-  electron-builder v13.9.0+  
-  electron-packager v8.5.2  
-  An Apple Developer account and correct code signing certificate  
+### Prerequisites:  
+  * electron-builder v13.9.0+  
+  * electron-packager v8.5.2  
+  * An Apple Developer account and correct code signing certificate  
   
 Run `npm run mac` to build a .zip and .dmg in x64 and ia32.  
 Packages will be in ../output/mac  
@@ -81,11 +81,11 @@ latest-mac.json will be in ../output/github
 
 *electron-builder and electron autoUpdate does not support auto updating on Linux*
 
-Prerequisites:  
-  electron-updater v1.8.2  
-  electron-log v1.3.0  
-  electron-builder v13.9.0+  
-  electron-packager v8.5.2  
+### Prerequisites:  
+  * electron-updater v1.8.2  
+  * electron-log v1.3.0  
+  * electron-builder v13.9.0+  
+  * electron-packager v8.5.2  
   
 Build the application as directed above. electron-builder will create the installer/executable AND a file named latest.yml or latest-mac.json (when building Mac packages).
 
