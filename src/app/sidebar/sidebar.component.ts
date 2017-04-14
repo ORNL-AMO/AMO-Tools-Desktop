@@ -27,7 +27,6 @@ export class SidebarComponent implements OnInit {
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.workingDirectory) {
-      console.log(this.workingDirectory)
       this.toggleSelected(this.workingDirectory);
     }
   }

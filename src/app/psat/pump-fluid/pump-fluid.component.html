@@ -1,41 +1,35 @@
-<form #formRef [formGroup]="psatForm">
-  <div class="form-group row">
-    <label class="col-sm-6 col-md-4 col-lg-3 col-form-label" for="pumpType">Pump Type</label>
-    <div class="col-6">
-      <select class="form-control select-input-field" formControlName="pumpType" id="pumpType" (input)="checkForm(psatForm)" (focus)="focusField('pumpType')"
-        ngModel="{{psatForm.value.pumpType}}">
-        <option *ngFor="let pumpType of pumpTypes" [ngValue]="pumpType">{{pumpType}}</option>
-      </select>
-    </div>
+<form #formRef [formGroup]="psatForm" class="pump-fluid">
+
+
+  <div class="form-group">
+    <label for="pumpType">Pump Type</label>
+    <select class="form-control select-input-field" formControlName="pumpType" id="pumpType" (input)="checkForm(psatForm)" (focus)="focusField('pumpType')"
+      ngModel="{{psatForm.value.pumpType}}">
+      <option *ngFor="let pumpType of pumpTypes" [ngValue]="pumpType">{{pumpType}}</option>
+    </select>
   </div>
 
 
-  <div class="form-group row" *ngIf="psatForm.value.pumpType == 'Specified Optimal Efficiency'">
-    <label class="col-sm-6 col-md-4 col-lg-3 col-form-label" for="specifiedPumpType">Specify Pump Type</label>
-    <div class="col-6">
-      <input type="text" class="form-control select-input-field" formControlName="specifiedPumpType" id="specifiedPumpType" (input)="checkForm(psatForm)"
-        (focus)="focusField('pumpType')">
-    </div>
+  <div class="form-group" *ngIf="psatForm.value.pumpType == 'Specified Optimal Efficiency'">
+    <label for="specifiedPumpType">Specify Pump Type</label>
+    <input type="text" class="form-control select-input-field" formControlName="specifiedPumpType" id="specifiedPumpType" (input)="checkForm(psatForm)"
+      (focus)="focusField('pumpType')">
   </div>
 
-  <div class="form-group row">
-    <label class="col-sm-6 col-md-4 col-lg-3 col-form-label" for="pumpRPM">Pump RPM</label>
-    <div class="col-6">
-      <input type="number" class="form-control number-input-field" formControlName="pumpRPM" id="pumpRPM" (input)="checkForm(psatForm)"
-        (focus)="focusField('pumpRPM')">
-    </div>
+  <div class="form-group">
+    <label for="pumpRPM">Pump RPM</label>
+    <input type="number" class="form-control number-input-field" formControlName="pumpRPM" id="pumpRPM" (input)="checkForm(psatForm)"
+      (focus)="focusField('pumpRPM')">
   </div>
 
-  <div class="form-group row">
-    <label class="col-sm-6 col-md-4 col-lg-3 col-form-label" for="drive">Drive</label>
-    <div class="col-6">
-      <select class="form-control select-input-field" formControlName="drive" id="drive" (input)="checkForm(psatForm)" (focus)="focusField('drive')" ngModel="{{psatForm.value.drive}}">
-        <option *ngFor="let drive of drives" [ngValue]="drive">{{drive}}</option>
-      </select>
-    </div>
+  <div class="form-group">
+    <label for="drive">Drive</label>
+    <select class="form-control select-input-field" formControlName="drive" id="drive" (input)="checkForm(psatForm)" (focus)="focusField('drive')" ngModel="{{psatForm.value.drive}}">
+      <option *ngFor="let drive of drives" [ngValue]="drive">{{drive}}</option>
+    </select>
   </div>
 
-  <div class="form-group row">
+  <div class="form-group">
     <label class="col-sm-6 col-md-4 col-lg-3 col-form-label" for="viscosity">Kinematic Viscosity</label>
     <div class="col-6 input-group">
       <div class="incrementor input-group-addon">

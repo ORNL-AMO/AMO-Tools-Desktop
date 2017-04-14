@@ -14,9 +14,10 @@ export class DirectoryCardComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
+    console.log(this.directory);
   }
 
-  goToDirectory(dir){
+  goToDirectory(dir) {
     this.directoryChange.emit(dir)
   }
 

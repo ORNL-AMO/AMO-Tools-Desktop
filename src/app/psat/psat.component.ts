@@ -5,6 +5,8 @@ import { AssessmentService } from '../assessment/assessment.service';
 import { FormBuilder } from '@angular/forms';
 import { PSAT, PsatInputs } from '../shared/models/psat';
 import { PsatService } from './psat.service';
+import * as _ from 'lodash';
+
 @Component({
   selector: 'app-psat',
   templateUrl: './psat.component.html',
@@ -48,7 +50,8 @@ export class PsatComponent implements OnInit {
   canContinue;
 
   _psat: PSAT;
-
+  fieldDataReady: boolean = false;
+  motorReady: boolean = false;
   subTab: string = 'system-basics';
 
   constructor(private location: Location, private assessmentService: AssessmentService, private formBuilder: FormBuilder, private psatService: PsatService) { }
@@ -58,6 +61,18 @@ export class PsatComponent implements OnInit {
     this._psat = (JSON.parse(JSON.stringify(this.assessment.psat)));
     this.isValid = true;
     this.canContinue = true;
+  }
+
+  checkPumpFluid() {
+    let tmpForm = this.psatService.getFormFromPsat(this._psat.inputs);
+    let tmpBool = this.psatService.isPumpFluidFormValid(tmpForm);
+    return !tmpBool;
+  }
+
+  checkMotor() {
+    let tmpForm = this.psatService.getFormFromPsat(this._psat.inputs);
+    let tmpBool = this.psatService.isMotorFormValid(tmpForm);
+    return !tmpBool;
   }
 
   valid() {
@@ -85,30 +100,26 @@ export class PsatComponent implements OnInit {
   }
 
   changeSubTab(str: string) {
-    let tmpIndex = 0;
-    this.subTabs.forEach(tab => {
-      if (tab == str) {
-        this.subTabIndex = tmpIndex;
+    if (str == 'motor') {
+      let tmpBool = this.checkPumpFluid();
+      if (!tmpBool == true) {
+        this.subTabIndex = _.findIndex(this.subTabs, function (tab) { return tab == str });
         this.subTab = this.subTabs[this.subTabIndex];
-      } else {
-        tmpIndex++;
       }
-    })
+    } else if (str == 'field-data') {
+      let tmpBool = this.checkMotor();
+      if (!tmpBool == true) {
+        this.subTabIndex = _.findIndex(this.subTabs, function (tab) { return tab == str });
+        this.subTab = this.subTabs[this.subTabIndex];
+      }
+    } else {
+      this.subTabIndex = _.findIndex(this.subTabs, function (tab) { return tab == str });
+      this.subTab = this.subTabs[this.subTabIndex];
+    }
   }
 
   changeField($event) {
     this.currentField = $event;
-  }
-
-  toggleOpenPanel($event) {
-    if (!this.isPanelOpen) {
-      this.panelView = $event;
-      this.isPanelOpen = true;
-    } else if (this.isPanelOpen && $event != this.panelView) {
-      this.panelView = $event;
-    } else {
-      this.isPanelOpen = false;
-    }
   }
 
   selectAdjustment($event) {
@@ -116,15 +127,29 @@ export class PsatComponent implements OnInit {
   }
 
   continue() {
-    console.log(this.subTabIndex);
-    if (this.subTabIndex > 2) {
-      this.tabIndex++;
-      this.currentTab = this.tabs[this.tabIndex];
-    } else if (this.subTabIndex < 3) {
+    if (this.subTab == 'field-data') {
+      this.currentTab = 'modify-conditions';
+    } else {
       this.subTabIndex++;
       this.subTab = this.subTabs[this.subTabIndex];
     }
     this.canContinue = false;
+  }
+
+  getCanContinue() {
+    if (this.subTab == 'system-basics') {
+      return true;
+    }
+    else if (this.subTab == 'pump-fluid') {
+      let tmpForm = this.psatService.getFormFromPsat(this._psat.inputs);
+      return this.psatService.isPumpFluidFormValid(tmpForm);
+    } else if (this.subTab == 'motor') {
+      let tmpForm = this.psatService.getFormFromPsat(this._psat.inputs);
+      return this.psatService.isMotorFormValid(tmpForm);
+    } else if (this.subTab == 'field-data') {
+      let tmpForm = this.psatService.getFormFromPsat(this._psat.inputs);
+      return this.psatService.isFieldDataFormValid(tmpForm);
+    }
   }
 
   close() {
@@ -132,8 +157,7 @@ export class PsatComponent implements OnInit {
   }
 
   goBack() {
-    this.tabIndex--;
-    this.currentTab = this.tabs[this.tabIndex];
+    this.currentTab = 'system-setup';
   }
 
   showReport() {
@@ -151,8 +175,6 @@ export class PsatComponent implements OnInit {
   save() {
     this.assessment.psat = (JSON.parse(JSON.stringify(this._psat)));
     this.assessmentService.setWorkingAssessment(this.assessment);
-    // this.continueButton.nativeElement.disabled = false;
-    // console.log(this.continueButton);
     this.canContinue = true;
   }
 
