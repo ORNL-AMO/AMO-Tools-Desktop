@@ -12,6 +12,9 @@ export class MotorPerformanceComponent implements OnInit {
   psat: PSAT;
 
   performanceForm: any;
+
+  toggleCalculate: boolean = false;
+
   constructor(private psatService: PsatService) { }
 
   ngOnInit() {
@@ -22,4 +25,8 @@ export class MotorPerformanceComponent implements OnInit {
     }
   }
 
+  calculate(){
+    this.toggleCalculate = !this.toggleCalculate;
+  }
+  
 }

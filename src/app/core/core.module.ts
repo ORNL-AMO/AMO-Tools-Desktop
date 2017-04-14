@@ -8,6 +8,7 @@ import { PsatModule } from '../psat/psat.module';
 import { CalculatorModule } from '../calculator/calculator.module';
 import { DetailedReportModule } from '../detailed-report/detailed-report.module';
 import { ModalModule } from 'ng2-bootstrap';
+import { autoUpdater } from 'electron-updater';
 
 import { CoreComponent } from './core.component';
 import { SidebarComponent } from '../sidebar/sidebar.component';

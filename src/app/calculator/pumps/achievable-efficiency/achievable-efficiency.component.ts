@@ -13,26 +13,20 @@ export class AchievableEfficiencyComponent implements OnInit {
   psat: PSAT;
 
   efficiencyForm: any;
+  toggleCalculate: boolean = true;
   constructor(private formBuilder: FormBuilder, private psatService: PsatService) { }
 
   ngOnInit() {
-    this.efficiencyForm = this.initForm();
-    if (this.psat) {
-      if (this.psat.inputs) {
-        this.efficiencyForm.patchValue({
-          flowRate: this.psat.inputs.flow_rate,
-          pumpType: this.psat.inputs.pump_style
-        })
-      }
+    if (!this.psat) {
+      this.efficiencyForm = this.psatService.initForm();
+    } else {
+      this.efficiencyForm = this.psatService.getFormFromPsat(this.psat.inputs);
     }
   }
 
-  initForm() {
-    return this.formBuilder.group({
-      'flowRate': [''],
-      'units': [''],
-      'pumpType': ['']
-    })
-  }
+  // calculate(){
+  //   this.toggleCalculate = !this.toggleCalculate;
+  //   console.log('change');
+  // }
 
 }

@@ -9,65 +9,6 @@ export class PsatService {
   constructor(private formBuilder: FormBuilder) { }
   //CALCULATORS
   results(psatInputs: PsatInputs): PsatOutputs {
-    // let inp: PsatInputs = {
-    //   // PUMP INFORMATION
-    //   // Pump Style End suction ansi API
-    //   pump_style: 6,
-    //   // Achievable pump efficiency
-    //   pump_specified: 90,
-    //   pump_rated_speed: 1780,
-
-    //   // Pump Drive : Direct
-    //   drive: 0,
-    //   // kinematic viscosity
-    //   kinematic_viscosity: 1.0,
-    //   // specific gravity
-    //   specific_gravity: 1.000,
-    //   // stages count
-    //   stages: 2.0,
-    //   // Not fixed speed
-    //   fixed_speed: 1,
-
-    //   // MOTOR INFORMATION
-    //   // Line frequency 60
-    //   line_frequency: 0,
-    //   // motor rated power
-    //   motor_rated_power: 200,
-    //   // motor speed
-    //   motor_rated_speed: 1780,
-    //   // Efficiency class SPECIFIED
-    //   efficiency_class: 2,
-    //   // efficiency
-    //   efficiency: 95,
-    //   // motor rated voltage
-    //   motor_rated_voltage: 460,
-    //   // Full load amps
-    //   motor_rated_fla: 225.0,
-    //   // Size margin
-    //   margin: 0,
-
-    //   // FINANCIALS
-    //   operating_fraction: 1.00,
-    //   cost: 0.05,
-
-    //   // FIELD DATA
-    //   // Flow rate
-    //   flow_rate: 1840,
-    //   // Head
-    //   head: 174.85,
-    //   // enum class LoadEstimationMethod {
-    //   //     POWER,
-    //   //     CURRENT
-    //   // };
-    //   load_estimation_method: 0,
-    //   // motor power
-    //   motor_field_power: 80,
-    //   // motor amps-current
-    //   motor_field_current: 125.857,
-    //   // voltage
-    //   motor_field_voltage: 480
-    // }
-
     let tmpResults = psatAddon.results(psatInputs);
     let tmpOutputs: PsatOutputs = this.parseResults(tmpResults);
     return tmpOutputs;
@@ -159,6 +100,7 @@ export class PsatService {
 
   }
 
+  //specific speed
   achievableEfficiency(
     pumpStyle: string,
     specificSpeed: number
@@ -172,6 +114,7 @@ export class PsatService {
     return psatAddon.achievableEfficiency(inputs)
   }
 
+  ///achievable pump efficiency
   pumpEfficiency(
     pumpStyle,
     flowRate
@@ -180,7 +123,7 @@ export class PsatService {
     let enumPumpStyle = this.getPumpStyleEnum(pumpStyle);
     inputs = {
       pump_style: enumPumpStyle,
-      specific_speed: flowRate
+      flow_rate: flowRate
     }
     return psatAddon.pumpEfficiency(inputs);
   }
@@ -192,7 +135,8 @@ export class PsatService {
     motorRPM,
     efficiency,
     motorVoltage,
-    fullLoadAmps
+    fullLoadAmps,
+    loadFactor
   ) {
     let tmpInputs: any;
     let lineFreqEnum = this.getLineFreqEnum(lineFreq);
@@ -203,11 +147,16 @@ export class PsatService {
       motor_rated_power: horsePower,
       motor_rated_speed: motorRPM,
       efficiency: efficiency,
-      load_factor: .25,
+      load_factor: loadFactor,
       motor_rated_voltage: motorVoltage,
       motor_rated_fla: fullLoadAmps
     }
     return psatAddon.motorPerformance(tmpInputs);
+  }
+
+  motorPerformancePsat(psatInputs: PsatInputs) {
+    psatInputs.load_factor = 1;
+    return psatAddon.motorPerformance(psatInputs);
   }
 
   //loadFactor hard coded to 1
@@ -227,7 +176,19 @@ export class PsatService {
       efficiency_class: effClassEnum,
       efficiency: efficiency,
       motor_rated_power: horsePower,
-      loadFactor: 1
+      load_factor: 1
+    };
+    return psatAddon.nema(tmpInputs);
+  }
+
+  nemaPsat(psatInputs: PsatInputs) {
+    let tmpInputs: any = {
+      line_frequency: psatInputs.line_frequency,
+      motor_rated_speed: psatInputs.motor_rated_speed,
+      efficiency_class: psatInputs.efficiency_class,
+      efficiency: psatInputs.efficiency,
+      motor_rated_power: psatInputs.motor_rated_power,
+      load_factor: 1
     };
     return psatAddon.nema(tmpInputs);
   }
@@ -341,7 +302,7 @@ export class PsatService {
   }
   getEfficienyClassEnum(effClass: string): number {
     let effEnum: number;
-    if (effClass == 'Standard') {
+    if (effClass == 'Standard Efficiency') {
       effEnum = 0;
     } else if (effClass == 'Energy Efficient') {
       effEnum = 1;
@@ -353,7 +314,7 @@ export class PsatService {
   getEfficiencyClassFromEnum(num: number): string {
     let effClass;
     if (num == 0) {
-      effClass = 'Standard';
+      effClass = 'Standard Efficiency';
     } else if (num == 1) {
       effClass = 'Energy Efficient';
     } else if (num == 2) {
@@ -418,7 +379,7 @@ export class PsatService {
   }
   getEfficiencyFromForm(form: any) {
     let efficiency;
-    if (form.value.efficiencyClass == 'Standard') {
+    if (form.value.efficiencyClass == 'Standard Efficiency') {
       efficiency = 0;
     } else if (form.value.efficiencyClass == 'Energy Efficient') {
       efficiency = 1;

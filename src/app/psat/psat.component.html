@@ -78,7 +78,7 @@
 </div>
 
 <div class="tab-content" *ngIf="currentTab == 'achievable-efficiency'">
-  <app-achievable-efficiency></app-achievable-efficiency>
+  <app-achievable-efficiency [psat]="_psat"></app-achievable-efficiency>
 </div>
 
 <div class="tab-content" *ngIf="currentTab == 'motor-performance'">
@@ -90,7 +90,7 @@
 </div>
 
 <div class="tab-content" *ngIf="currentTab == 'specific-speed'">
-  <app-specific-speed></app-specific-speed>
+  <app-specific-speed [psat]="_psat"></app-specific-speed>
 </div>
 
 <div class="tab-content" *ngIf="currentTab == 'results'">
