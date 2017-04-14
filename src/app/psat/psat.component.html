@@ -2,119 +2,99 @@
 <app-psat-tabs [currentTab]="currentTab" (tabChange)="changeTab($event)"></app-psat-tabs>
 
 <div *ngIf="currentTab == 'system-setup'">
+
+
   <nav>
-    <ul class="tabs subtabs">
+    <ul class="tabs subtabs progress-tabs">
       <li [ngClass]="{'active': subTab == 'system-basics'}">
-        <a (click)="changeSubTab('system-basics')">1. System Basics</a>
+        <a (click)="changeSubTab('system-basics')"><span class="step-number">1</span> System Basics</a>
       </li>
       <li [ngClass]="{'active': subTab == 'pump-fluid'}">
-        <a (click)="changeSubTab('pump-fluid')">2. Pump / Fluid</a>
+        <a (click)="changeSubTab('pump-fluid')"><span class="step-number">2</span> Pump / Fluid</a>
       </li>
-      <li [ngClass]="{'active': subTab == 'motor'}">
-        <a (click)="changeSubTab('motor')">3. Motor</a>
+      <li [ngClass]="{'active': subTab == 'motor'}" class="disabled">
+        <a (click)="changeSubTab('motor')"><span class="step-number">3</span> Motor</a>
       </li>
-      <li [ngClass]="{'active': subTab == 'field-data'}">
-        <a (click)="changeSubTab('field-data')">4. Field Data</a>
+      <li [ngClass]="{'active': subTab == 'field-data'}" class="disabled">
+        <a (click)="changeSubTab('field-data')"><span class="step-number">4</span> Field Data</a>
       </li>
     </ul>
   </nav>
-  <div class="row tab-content align-items-center" *ngIf="subTab == 'system-basics'">
-    <div class="col-9">
-      <div class="row justify-content-center">
-        <div class="col-lg-8 col-md-8 col-sm-10 col-xs-12">
-          <app-system-basics></app-system-basics>
-        </div>
+
+
+  <div class="tab-content" *ngIf="subTab == 'system-basics'">
+    <div class="wrapper">
+      <div class="form">
+        <app-system-basics></app-system-basics>
+      </div>
+      <div class="help">
+        <app-help-panel [currentField]="currentField" [currentTab]="subTab"></app-help-panel>
       </div>
     </div>
-    <div class="col-3 panel help-col dark-bg">
-      <app-help-panel [currentField]="currentField" [currentTab]="subTab"></app-help-panel>
-    </div>
   </div>
 
-  <div class="row tab-content align-items-center" *ngIf="subTab == 'pump-fluid'">
-    <div class="col-9">
-      <div class="row justify-content-center">
-        <div class="col-lg-8 col-md-8 col-sm-10 col-xs-12">
-          <app-pump-fluid (isValid)="setValid()" (isInvalid)="setInvalid()" [saveClicked]="saveClicked" (changeField)="changeField($event)"
-            [(psat)]="_psat" (saved)="save()" [selected]="true"></app-pump-fluid>
-        </div>
+  <div class="tab-content" *ngIf="subTab == 'pump-fluid'">
+    <div class="wrapper">
+      <div class="form">
+        <app-pump-fluid (isValid)="setValid()" (isInvalid)="setInvalid()" [saveClicked]="saveClicked" (changeField)="changeField($event)" [(psat)]="_psat" (saved)="save()" [selected]="true"></app-pump-fluid>
+      </div>
+      <div class="help">
+        <app-help-panel [currentField]="currentField" [currentTab]="subTab"></app-help-panel>
       </div>
     </div>
-    <div class="col-3 panel help-col dark-bg">
-      <app-help-panel [currentField]="currentField" [currentTab]="subTab"></app-help-panel>
-    </div>
   </div>
 
-
-  <div class="row tab-content align-items-center" *ngIf="subTab == 'motor'">
-    <div class="col-9">
-      <div class="row justify-content-center">
-        <div class="col-lg-8 col-md-8 col-sm-10 col-xs-12">
-          <app-motor (isValid)="setValid()" (isInvalid)="setInvalid()" [saveClicked]="saveClicked" (changeField)="changeField($event)"
-            [(psat)]="_psat" (saved)="save()" [selected]="true"></app-motor>
-        </div>
+  <div class="tab-content" *ngIf="subTab == 'motor'">
+    <div class="wrapper">
+      <div class="form">
+        <app-motor (isValid)="setValid()" (isInvalid)="setInvalid()" [saveClicked]="saveClicked" (changeField)="changeField($event)"
+              [(psat)]="_psat" (saved)="save()" [selected]="true"></app-motor>
+      </div>
+      <div class="help">
+        <app-help-panel [currentField]="currentField" [currentTab]="subTab"></app-help-panel>
       </div>
     </div>
-    <div class="col-3 panel help-col dark-bg">
-      <app-help-panel [currentField]="currentField" [currentTab]="subTab"></app-help-panel>
-    </div>
   </div>
 
-  <div class="row tab-content align-items-center" *ngIf="subTab == 'field-data'">
-    <div class="col-9">
-      <div class="row justify-content-center">
-        <div class="col-lg-8 col-md-8 col-sm-10 col-xs-12">
-          <app-field-data (isValid)="setValid()" (isInvalid)="setInvalid()" [saveClicked]="saveClicked" (changeField)="changeField($event)"
-            [(psat)]="_psat" (saved)="save()" [selected]="true"></app-field-data>
-        </div>
+  <div class="tab-content" *ngIf="subTab == 'field-data'">
+    <div class="wrapper">
+      <div class="form">
+        <app-field-data (isValid)="setValid()" (isInvalid)="setInvalid()" [saveClicked]="saveClicked" (changeField)="changeField($event)"
+              [(psat)]="_psat" (saved)="save()" [selected]="true"></app-field-data>
+      </div>
+      <div class="help">
+        <app-help-panel [currentField]="currentField" [currentTab]="subTab"></app-help-panel>
       </div>
     </div>
-    <div class="col-3 panel help-col dark-bg">
-      <app-help-panel [currentField]="currentField" [currentTab]="subTab"></app-help-panel>
-    </div>
   </div>
 </div>
 
-<div class="row tab-content" *ngIf="currentTab == 'modify-conditions'">
-  <div class="col-12">
-    <app-modify-conditions [saveClicked]="saveClicked" [(psat)]="_psat" (saved)="save()"></app-modify-conditions>
-  </div>
+<div class="tab-content" *ngIf="currentTab == 'modify-conditions'">
+  <app-modify-conditions [saveClicked]="saveClicked" [(psat)]="_psat" (saved)="save()"></app-modify-conditions>
 </div>
 
-<div class="row tab-content" *ngIf="currentTab == 'system-curve'">
-  <div class="col-12">
-    <app-system-curve></app-system-curve>
-  </div>
+<div class="tab-content" *ngIf="currentTab == 'system-curve'">
+  <app-system-curve></app-system-curve>
 </div>
 
-<div class="row tab-content" *ngIf="currentTab == 'achievable-efficiency'">
-  <div class="col-12">
-    <app-achievable-efficiency></app-achievable-efficiency>
-  </div>
+<div class="tab-content" *ngIf="currentTab == 'achievable-efficiency'">
+  <app-achievable-efficiency></app-achievable-efficiency>
 </div>
 
-<div class="row tab-content" *ngIf="currentTab == 'motor-performance'">
-  <div class="col-12">
-    <app-motor-performance [psat]="_psat"></app-motor-performance>
-  </div>
+<div class="tab-content" *ngIf="currentTab == 'motor-performance'">
+  <app-motor-performance [psat]="_psat"></app-motor-performance>
 </div>
 
-<div class="row tab-content" *ngIf="currentTab == 'nema-energy-efficiency'">
-  <div class="col-12">
-    <app-nema-energy-efficiency [psat]="_psat"></app-nema-energy-efficiency>
-  </div>
+<div class="tab-content" *ngIf="currentTab == 'nema-energy-efficiency'">
+  <app-nema-energy-efficiency [psat]="_psat"></app-nema-energy-efficiency>
 </div>
 
-<div class="row tab-content" *ngIf="currentTab == 'specific-speed'">
-  <div class="col-12">
-    <app-specific-speed></app-specific-speed>
-  </div>
+<div class="tab-content" *ngIf="currentTab == 'specific-speed'">
+  <app-specific-speed></app-specific-speed>
 </div>
 
-<div class="row tab-content" *ngIf="currentTab == 'results'">
-  <div class="col-12">
-    <app-psat-report [psat]="_psat"></app-psat-report>
-  </div>
+<div class="tab-content" *ngIf="currentTab == 'results'">
+  <app-psat-report [psat]="_psat"></app-psat-report>
 </div>
 
 <div class="footer">

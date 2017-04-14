@@ -1,9 +1,0 @@
-.panel{
-  height: 100%;
-}
-
-.tab-content{
-  height: 80vh;
-  max-height: 80vh;
-  overflow-y: scroll;
-}

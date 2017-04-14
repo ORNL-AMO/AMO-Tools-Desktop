@@ -112,6 +112,7 @@ Forms
 .form-control {
   border-radius: 0;
   border-color: #9c9c9c;
+  width: inherit;
 }
 
 .incrementor {
@@ -163,6 +164,30 @@ Forms
 .card-form{
   padding-bottom: 30px;
 }
+.tab-content .form-group:after {
+  display: table;
+  content: "";
+  clear: both;
+}  
+  .tab-content .form-group .form-control, .tab-content .form-group label {
+    float: left;
+  }
+  .tab-content .form-group label {
+    width: 30%;
+  }
+  .tab-content .form-group .form-control {
+    nwidth: 50%;
+  }
+
+
+/*
+Pump Fluid CSS
+=============================================== */
+.pump-fluid {
+
+}
+
+
 
 /*
 Popovers (Contextual Help)
@@ -382,7 +407,7 @@ Footer
   position: fixed;
   bottom: 0;
   width: 100%;
-  padding: 20px;
+  padding: 12px;
   background: #fff;
   border-top: #8b8b8b solid 1px;
   z-index: 5;
@@ -401,25 +426,33 @@ Banner
   background: #2c2c2c;
   color: #fff;
 }
+  .banner.psat {
+    background: #2980b9;
+  }
+  .banner.phast {
+    background: #d35400;
+  }
 .banner:after {
   display: table;
   content: "";
   clear: both;
 }
 
-.banner a, .banner .title, .banner .settings {
+.banner .btn-dashboard, .banner .title, .banner .settings {
   display: inline-block;
   padding: 12px 20px;
-  color: rgba(255,255,255,0.7);
+  color: rgba(255,255,255,0.8);
 }
-.banner a {
+.banner .btn-dashboard {
+  background: #424242;
+  float: left;
   border-right: #000 solid 1px;
 }
-.banner a:hover, .banner .settings:hover {
+.banner .btn-dashboard:hover, .banner .settings:hover {
   color: rgba(255,255,255,1);   
   cursor: pointer;
 }
-.banner a:hover {
+.banner .btn-dashboard:hover {
   background: #424242;
   background: -moz-linear-gradient(top, #424242 0%, #2c2c2c 100%);
   background: -webkit-linear-gradient(top, #424242 0%,#2c2c2c 100%);
@@ -536,6 +569,8 @@ Tabs
   margin: 0;
   padding: 0;
 }
+
+/* Primary Tabs */
 .tabs.primary {
   background: #e5e5e5;
   border-bottom: #c8c8c8 solid 1px;
@@ -564,9 +599,7 @@ Tabs
   margin-bottom: -1px;
 }
 
-
-
-
+/* Sub Tabs */
 .tabs.subtabs {
   background: #fff;
   border-bottom: #828282 solid 1px;
@@ -591,8 +624,39 @@ Tabs
   font-weight: bold;
 }
 
+  .tabs.subtabs.progress-tabs a {
+    color: #000;
+    font-size: 16px;
+    padding: 19px 18px;
+  }
+    .tabs.subtabs.progress-tabs a:hover {
+      background: #fff;
+    }
+  .tabs.subtabs.progress-tabs li.active a {
+    color: #000;
+  }
+  .tabs.subtabs.progress-tabs li.disabled a {
+    color: #999;
+  }
+  .step-number {
+    background: #333;
+    color: #fff;
+    font-weight: bold;
+    font-size: 14px;
+    padding: 5px 10px;
+    border-radius: 23%;
+    margin-right: 5px;
+  }
+    .active .step-number {
+      background: #d35400;
+    }
+    .disabled .step-number {
+      background: #efefef;
+      color: #999;
+      font-weight: normal;
+    }
 
-
+/* Vertical Tabs */
 .tabs.vertical {
   margin-right: -1px;
 }
@@ -636,6 +700,31 @@ Tabs
   border-width: 0 1px;
 }
 
+
+.tab-content {
+  overflow-y: scroll;
+}
+  .tab-content .wrapper {
+      max-width: 1024px;
+      width: 100%;
+      margin: 40px auto;
+      display: flex;  
+  }
+  .form, .help {
+    padding: 20px;
+  }
+  .form {
+    width: 60%;
+  }
+  .help {
+    width: 40%;
+  }
+
+
+
+
+
+
 /*
 Help Panel Cards
 ========================================= */
@@ -644,7 +733,7 @@ Help Panel Cards
 }
 
 .help-header, .help-content {
-  padding: 36px;
+  padding: 25px 0px;
 }
 
 .help-header {
@@ -662,7 +751,7 @@ Help Panel Cards
   padding: 0;
   background: none;
   border-bottom: none;
-  font-weight: 700;
+  font-weight: 100;
   font-size: 20px;
   border-radius: none;
 }
@@ -676,7 +765,7 @@ Help Panel Cards
 
 .help-panel h3 {
   font-size: 22px;
-  font-weight: 700;
+  font-weight: 100;
   color: #000;
 }
 .help-panel p {
