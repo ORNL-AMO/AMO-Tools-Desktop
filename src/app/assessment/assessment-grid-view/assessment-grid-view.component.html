@@ -1,6 +1,6 @@
 <div class="row">
   <div class="col-4 summary-card" *ngFor="let directory of directory.subDirectory">
-    <app-directory-card [directory]="directory"></app-directory-card>
+    <app-directory-card [directory]="directory" (directoryChange)="changeDirectory($event)"></app-directory-card>
   </div>
   <div class="col-4 summary-card" *ngFor="let assessment of directory.assessments">
     <app-assessment-card [assessment]="assessment"></app-assessment-card>
