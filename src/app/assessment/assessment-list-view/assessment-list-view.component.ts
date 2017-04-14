@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Directory } from '../../shared/models/directory';
 
 @Component({
@@ -9,9 +9,15 @@ import { Directory } from '../../shared/models/directory';
 export class AssessmentListViewComponent implements OnInit {
   @Input()
   directory: Directory;
+  @Output('directoryChange')
+  directoryChange = new EventEmitter();
   constructor() { }
 
   ngOnInit() {
+  }
+
+  changeDirectory($event) {
+    this.directoryChange.emit($event);
   }
 
 }

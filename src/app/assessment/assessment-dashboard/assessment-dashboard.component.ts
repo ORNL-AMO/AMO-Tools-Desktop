@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { MockDirectory } from '../../shared/mocks/mock-directory';
 import { Directory } from '../../shared/models/directory';
 
@@ -10,6 +10,8 @@ import { Directory } from '../../shared/models/directory';
 export class AssessmentDashboardComponent implements OnInit {
   @Input()
   directory: Directory;
+  @Output('directoryChange')
+  directoryChange = new EventEmitter();
 
   view: string = 'list';
   isSettingsView: boolean = false;
@@ -18,12 +20,16 @@ export class AssessmentDashboardComponent implements OnInit {
   ngOnInit() {
   }
 
-  changeView($event){
+  changeView($event) {
     this.view = $event;
   }
 
-  viewSettings(){
+  viewSettings() {
     this.isSettingsView = !this.isSettingsView;
+  }
+
+  changeDirectory($event) {
+    this.directoryChange.emit($event);
   }
 
 }
