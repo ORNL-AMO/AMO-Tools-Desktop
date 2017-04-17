@@ -12,10 +12,10 @@
       <li [ngClass]="{'active': subTab == 'pump-fluid'}">
         <a (click)="changeSubTab('pump-fluid')"><span class="step-number">2</span> Pump / Fluid</a>
       </li>
-      <li [ngClass]="{'active': subTab == 'motor'}" class="disabled">
+      <li [ngClass]="{'active': subTab == 'motor', 'disabled': checkPumpFluid() }">
         <a (click)="changeSubTab('motor')"><span class="step-number">3</span> Motor</a>
       </li>
-      <li [ngClass]="{'active': subTab == 'field-data'}" class="disabled">
+      <li [ngClass]="{'active': subTab == 'field-data', 'disabled': checkMotor()}">
         <a (click)="changeSubTab('field-data')"><span class="step-number">4</span> Field Data</a>
       </li>
     </ul>
@@ -36,7 +36,8 @@
   <div class="tab-content" *ngIf="subTab == 'pump-fluid'">
     <div class="wrapper">
       <div class="form">
-        <app-pump-fluid (isValid)="setValid()" (isInvalid)="setInvalid()" [saveClicked]="saveClicked" (changeField)="changeField($event)" [(psat)]="_psat" (saved)="save()" [selected]="true"></app-pump-fluid>
+        <app-pump-fluid (isValid)="setValid()" (isInvalid)="setInvalid()" [saveClicked]="saveClicked" (changeField)="changeField($event)"
+          [(psat)]="_psat" (saved)="save()" [selected]="true"></app-pump-fluid>
       </div>
       <div class="help">
         <app-help-panel [currentField]="currentField" [currentTab]="subTab"></app-help-panel>
@@ -48,7 +49,7 @@
     <div class="wrapper">
       <div class="form">
         <app-motor (isValid)="setValid()" (isInvalid)="setInvalid()" [saveClicked]="saveClicked" (changeField)="changeField($event)"
-              [(psat)]="_psat" (saved)="save()" [selected]="true"></app-motor>
+          [(psat)]="_psat" (saved)="save()" [selected]="true"></app-motor>
       </div>
       <div class="help">
         <app-help-panel [currentField]="currentField" [currentTab]="subTab"></app-help-panel>
@@ -60,7 +61,7 @@
     <div class="wrapper">
       <div class="form">
         <app-field-data (isValid)="setValid()" (isInvalid)="setInvalid()" [saveClicked]="saveClicked" (changeField)="changeField($event)"
-              [(psat)]="_psat" (saved)="save()" [selected]="true"></app-field-data>
+          [(psat)]="_psat" (saved)="save()" [selected]="true"></app-field-data>
       </div>
       <div class="help">
         <app-help-panel [currentField]="currentField" [currentTab]="subTab"></app-help-panel>
@@ -104,7 +105,7 @@
   </div>
   <div class="pull-right">
     <button class="btn btn-primary" [disabled]="!isValid" (click)="toggleSave()">Save</button>
-    <button class="btn btn-primary" *ngIf="currentTab != 'modify-conditions'" [disabled]="!canContinue" (click)="continue()">Continue</button>
+    <button class="btn btn-primary" *ngIf="currentTab != 'modify-conditions'" [disabled]="!getCanContinue()" (click)="continue()">Continue</button>
     <button class="btn btn-primary" *ngIf="currentTab == 'modify-conditions'" (click)="exportData()">Export</button>
   </div>
 </div>

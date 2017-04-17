@@ -8,7 +8,7 @@
 
   <div class="assessment-details">
     <ul *ngIf="directory.subDirectory">
-      <li *ngFor="let directory of subDirectory">
+      <li *ngFor="let directory of directory.subDirectory">
         <i class="fa fa-folder-o" aria-hidden="true"></i> {{directory.name}}
       </li>
     </ul>
