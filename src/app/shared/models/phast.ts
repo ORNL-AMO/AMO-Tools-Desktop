@@ -13,7 +13,8 @@ export interface PHAST {
   name?: string,
   phastInputs?: PhastInputs,
   losses?: Losses
-  modifications?: Modification[]
+  modifications?: Modification[],
+  setupDone?: boolean
 }
 
 export interface PhastInputs {

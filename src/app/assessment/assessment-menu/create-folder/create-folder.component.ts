@@ -14,13 +14,13 @@ export class CreateFolderComponent implements OnInit {
   directory: Directory;
 
   newFolder: any;
-  constructor(private formBuilder: FormBuilder,private modelService: ModelService) { }
+  constructor(private formBuilder: FormBuilder, private modelService: ModelService) { }
 
   ngOnInit() {
     this.newFolder = this.initForm();
   }
 
-  initForm(){
+  initForm() {
     return this.formBuilder.group({
       'newFolderName': ['', Validators.required]
     });
@@ -28,22 +28,22 @@ export class CreateFolderComponent implements OnInit {
 
   //  CREATE FOLDER MODAL
   @ViewChild('createModal') public createModal: ModalDirective;
-  showCreateModal(){
+  showCreateModal() {
     this.createModal.show();
   }
 
-  hideCreateModal(){
+  hideCreateModal() {
     this.createModal.hide();
   }
 
-  createFolder(){
+  createFolder() {
     this.hideCreateModal();
     let newDir = this.modelService.getNewDirectory(this.newFolder.value.newFolderName);
-
+    newDir.collapsed = true;
     //TODO: Logic for creating new folder
-    if(this.directory.subDirectory){
+    if (this.directory.subDirectory) {
       this.directory.subDirectory.push(newDir);
-    }else{
+    } else {
       this.directory.subDirectory = new Array();
       this.directory.subDirectory.push(newDir);
     }
