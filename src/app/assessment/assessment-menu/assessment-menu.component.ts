@@ -12,6 +12,8 @@ export class AssessmentMenuComponent implements OnInit {
   allDirectories: Directory = MockDirectory;
   @Input()
   directory: Directory;
+  @Input()
+  view: string;
   @Output('viewChange')
   viewChange = new EventEmitter();
   @Output('directoryChange')

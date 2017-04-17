@@ -37,7 +37,8 @@ export const MockDirectory: Directory = {
           motor_field_voltage: 480,
           cost_kw_hour: .05,
           cost: .05
-        }
+        },
+        setupDone: true
       }
 
     },
@@ -213,6 +214,7 @@ export const MockDirectory: Directory = {
             }
           ]
         },
+        setupDone: true
       }
     }
   ]

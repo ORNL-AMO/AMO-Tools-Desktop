@@ -5,7 +5,8 @@ export interface PSAT {
   selected?: boolean
   name?: string,
   savings?: number,
-  optimizationRating?: number
+  optimizationRating?: number,
+  setupDone?: boolean
 }
 
 export interface PsatInputs {

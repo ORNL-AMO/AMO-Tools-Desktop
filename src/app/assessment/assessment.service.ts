@@ -7,9 +7,10 @@ import { PHAST } from '../shared/models/phast';
 export class AssessmentService {
 
   workingAssessment: Assessment;
+  tab: string;
   constructor() { }
 
-  getNewAssessment(assessmentType: string): Assessment{
+  getNewAssessment(assessmentType: string): Assessment {
     let newAssessment: Assessment = {
       name: null,
       date: new Date(),
@@ -18,7 +19,7 @@ export class AssessmentService {
     return newAssessment;
   }
 
-  getNewPsat(): PSAT{
+  getNewPsat(): PSAT {
     let newPsatInputs: PsatInputs = {
       pump_style: null,
       pump_specified: null,
@@ -50,22 +51,27 @@ export class AssessmentService {
     return newPsat;
   }
 
-  getNewPhast(): PHAST{
+  getNewPhast(): PHAST {
     let newPhast: PHAST = {
       name: null
     }
     return newPhast;
   }
 
-  getWorkingAssessment(): Assessment{
+  getWorkingAssessment(): Assessment {
     return this.workingAssessment;
   }
 
-  setWorkingAssessment(assessment: Assessment){
+  getTab() {
+    return this.tab;
+  }
+
+  setWorkingAssessment(assessment: Assessment, str?: string) {
+    this.tab = str;
     this.workingAssessment = assessment;
   }
 
-  getBaselinePSAT(): PSAT{
+  getBaselinePSAT(): PSAT {
     let tmpPSAT: PSAT;
     let tmpPsatInputs = this.buildPsatInputs(
       this.workingAssessment.psat.inputs.pump_style,
@@ -93,39 +99,39 @@ export class AssessmentService {
       this.workingAssessment.psat.inputs.motor_field_voltage,
       this.workingAssessment.psat.inputs.cost_kw_hour
     );
-    tmpPSAT = { 
+    tmpPSAT = {
       inputs: tmpPsatInputs
     };
     return tmpPSAT;
   }
 
   buildPsatInputs(
-      _pump_style: any,
-      _pump_specified: any,
-      _pump_rated_speed: any,
-      _drive: any,
-      _kinematic_viscosity: any,
-      _specific_gravity: any,
-      _stages: any,
-      _fixed_speed: any,
-      _line_frequency: any,
-      _motor_rated_power: any,
-      _motor_rated_speed: any,
-      _efficiency_class: any,
-      _efficiency: any,
-      _motor_rated_voltage: any,
-      _load_estimation_method: any,
-      _motor_rated_fla: any,
-      _margin: any,
-      _operating_fraction: any,
-      _flow_rate:any,
-      _head: any,
-      _motor_field_power: any,
-      _motor_field_current: any,
-      _motor_field_voltage: any,
-      _cost_kw_hour: any
+    _pump_style: any,
+    _pump_specified: any,
+    _pump_rated_speed: any,
+    _drive: any,
+    _kinematic_viscosity: any,
+    _specific_gravity: any,
+    _stages: any,
+    _fixed_speed: any,
+    _line_frequency: any,
+    _motor_rated_power: any,
+    _motor_rated_speed: any,
+    _efficiency_class: any,
+    _efficiency: any,
+    _motor_rated_voltage: any,
+    _load_estimation_method: any,
+    _motor_rated_fla: any,
+    _margin: any,
+    _operating_fraction: any,
+    _flow_rate: any,
+    _head: any,
+    _motor_field_power: any,
+    _motor_field_current: any,
+    _motor_field_voltage: any,
+    _cost_kw_hour: any
 
-  ): PsatInputs{
+  ): PsatInputs {
     let newPsatInputs: PsatInputs = {
       pump_style: _pump_style,
       pump_specified: _pump_specified,

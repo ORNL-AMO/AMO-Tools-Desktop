@@ -1,20 +1,13 @@
-<ul class="tabs primary">
- <li [ngClass]="{'active': currentTab == 'system-setup'}">
-    <a (click)="changeTab('system-setup')">System Setup</a>
-  </li>
+<ul class="tabs primary" *ngIf="currentTab != 'system-setup'">
   <li [ngClass]="{'active': currentTab == 'losses'}">
     <a (click)="changeTab('losses')">Heat Balance</a>
-  </li>
-  <li [ngClass]="{'active': currentTab == 'designed-energy-use'}">
+  </li><li [ngClass]="{'active': currentTab == 'designed-energy-use'}">
     <a (click)="changeTab('designed-energy-use')">Design Energy Use</a>
-  </li>
-  <li [ngClass]="{'active': currentTab == 'aux-equipment'}">
+  </li><li [ngClass]="{'active': currentTab == 'aux-equipment'}">
     <a (click)="changeTab('aux-equipment')">Aux Equipment</a>
-  </li>
-  <li [ngClass]="{'active': currentTab == 'metered-energy'}">
+  </li><li [ngClass]="{'active': currentTab == 'metered-energy'}">
     <a (click)="changeTab('metered-energy')">Metered Energy</a>
-  </li>
-  <li [ngClass]="{'active': currentTab == 'sankey'}">
+  </li><li [ngClass]="{'active': currentTab == 'sankey'}">
     <a (click)="changeTab('sankey')">Sankey</a>
   </li>
 </ul>
