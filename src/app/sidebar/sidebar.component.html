@@ -1,4 +1,4 @@
-<div class="row banner">
+<div>
   <span routerLink="/dashboard">
     <img src="assets/images/DOE_banner.png" class="doe_logo">
    </span>
@@ -36,7 +36,7 @@
       <ul *ngIf="directory.assessments && directory.collapsed == false">
         <li *ngFor="let assessment of directory.assessments">
           <span class="nav-item pointer-item" (click)="goToAssessment(assessment)">
-              <i class="fa fa-bar-chart" aria-hidden="true"></i>
+              <i class="fa fa-pie-chart" [ngClass]="{ 'phast' : assessment.type == 'PHAST', 'psat': assessment.type == 'PSAT' }" aria-hidden="true"></i>
               {{assessment.name}}
             </span>
         </li>
@@ -46,7 +46,7 @@
   <ul *ngIf="directory.assessments && directory.collapsed == false">
     <li *ngFor="let assessment of directory.assessments">
       <span class="nav-item pointer-item" (click)="goToAssessment(assessment)">
-          <i class="fa fa-bar-chart" aria-hidden="true"></i>
+          <i class="fa fa-pie-chart" [ngClass]="{ 'phast' : assessment.type == 'PHAST', 'psat': assessment.type == 'PSAT' }" aria-hidden="true"></i>
           {{assessment.name}}
         </span>
     </li>

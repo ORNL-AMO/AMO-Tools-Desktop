@@ -33,7 +33,7 @@ h2 {
   color: #222;
 }
 a, a:not([href]):not([tabindex]){
-  color: #0076FF;
+  color: #0081d6;
   text-decoration: none;
 }
 a:hover, a:not([href]):not([tabindex]):focus, a:not([href]):not([tabindex]):hover {
@@ -276,12 +276,28 @@ Assessments: Grid & List View Shared Styles
 Assessments: List View
 =========================================== */
 .list-row {
-  padding: 10px 0;
+  padding: 14px 0;
   border-bottom: #d6d6d6 solid 1px;
 }
+  .list-row .actions {
+    margin-left: 90px;
+    font-size: 14px;
+  }
+    .list-row .actions a {
+      display: inline-block;
+      margin-right: 10px;
+    }
+      .list-row .actions a:hover {
+        text-decoration: none;
+        color: #0076FF;
+      }
+
   .drag-handle, .list-row input, .assessment-name {
     display: inline-block;
-    vertical-align: middle;
+    vertical-align: top;
+  }
+  .list-row input {
+    margin-top: 6px;
   }
   .drag-handle {
     color: #d6d6d6;
@@ -300,18 +316,26 @@ Assessments: List View
   .assessment-name .fa {
     margin-left: -5px;
     padding-right: 5px;
-    color: #0076FF;
   }
-    .assessment-name .fa:hover {
-      cursor: pointer;
-    }
-  .assessment-name a {
+  .assessment-name {
     font-weight: 300;
+    margin-bottom: 6px;
   }
-    .assessment-name a:hover,.assessment-name a:not([href]):not([tabindex]):focus,.assessment-name a:not([href]):not([tabindex]):hover {
-      text-decoration: none;
-      color: #0076FF;
+    .assessment-name span {
+      color: #8a8a8a;
+      display: block;
+      margin-left: 23px;
+      margin-top: -6px;
     }
+  .folder .assessment-name .fa {
+    color: #434343;
+  }
+  .psat .assessment-name .fa {
+    color: #2980b9;
+  }
+  .phast .assessment-name .fa {
+    color: #d35400;
+  }
 
 
 /*
@@ -398,6 +422,12 @@ Sidebar
 .sidebar {
   border-right: #ddd solid 1px;
 }
+  .psat.fa {
+    color: #2980b9;
+  }
+  .phast.fa {
+    color: #d35400;
+  }
 
 
 /*

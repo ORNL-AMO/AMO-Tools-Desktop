@@ -1,10 +1,10 @@
 <nav>
-  <ul class="tabs subtabs">
+  <ul class="tabs subtabs progress-tabs">
     <li [ngClass]="{'active': subTab == 'system-basics'}">
-      <a (click)="changeTab('system-basics')">System Basics</a>
+      <a (click)="changeTab('system-basics')"><span class="step-number">1</span> System Basics</a>
     </li>
     <li [ngClass]="{'active': subTab == 'operating-hours'}">
-      <a (click)="changeTab('operating-hours')">Operating Hours</a>
+      <a (click)="changeTab('operating-hours')"><span class="step-number">2</span> Operating Hours</a>
     </li>
   </ul>
 </nav>

@@ -1,6 +1,12 @@
-.sidebar-bg{
-  background-color: #2f2f2f;
-  color: white;
+.sidebar-bg {
+	background-color: #2f2f2f;
+	-webkit-box-shadow: inset -8px 0px 10px 0px rgba(0,0,0,1);
+	-moz-box-shadow: inset -8px 0px 10px 0px rgba(0,0,0,1);
+	box-shadow: inset -8px 0px 10px 0px rgba(0,0,0,1);
+	color: rgba(255,255,255,0.8);
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
 }
 
 .dashboard-content{
