@@ -2,7 +2,7 @@
 
 <div class="row">
 	<div [ngClass]="{'col-10 offset-1': !isSettingsView, 'col-9': isSettingsView}">
-		<app-assessment-menu (viewChange)="changeView($event)" (directoryChange)="changeDirectory($event)" [(directory)]="directory"></app-assessment-menu>
+		<app-assessment-menu (viewChange)="changeView($event)" (directoryChange)="changeDirectory($event)" [(directory)]="directory" [view]="view"></app-assessment-menu>
 		<app-assessment-grid-view *ngIf="view == 'grid'" [directory]="directory" (directoryChange)="changeDirectory($event)"></app-assessment-grid-view>
 		<app-assessment-list-view *ngIf="view == 'list'" [directory]="directory" (directoryChange)="changeDirectory($event)"></app-assessment-list-view>
 	</div>

@@ -39,8 +39,8 @@
   <div class="col-2">
 
     <div class="btn-group pull-right" role="group">
-      <button class="btn btn-secondary active" (click)="setView('list')"><i class="fa fa-list"></i></button>
-      <button class="btn btn-secondary" (click)="setView('grid')"><i class="fa fa-th"></i></button>
+      <button class="btn btn-secondary" [ngClass]="{'active': view == 'list'}" (click)="setView('list')"><i class="fa fa-list"></i></button>
+      <button class="btn btn-secondary" [ngClass]="{'active': view == 'grid'}" (click)="setView('grid')"><i class="fa fa-th"></i></button>
     </div>
 
   </div>

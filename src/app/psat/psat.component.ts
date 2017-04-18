@@ -58,6 +58,10 @@ export class PsatComponent implements OnInit {
 
   ngOnInit() {
     this.assessment = this.assessmentService.getWorkingAssessment();
+    let tmpTab = this.assessmentService.getTab();
+    if (tmpTab) {
+      this.currentTab = tmpTab;
+    }
     this._psat = (JSON.parse(JSON.stringify(this.assessment.psat)));
     this.isValid = true;
     this.canContinue = true;
@@ -88,15 +92,8 @@ export class PsatComponent implements OnInit {
   }
 
   changeTab($event) {
-    let tmpIndex = 0;
-    this.tabs.forEach(tab => {
-      if (tab == $event) {
-        this.tabIndex = tmpIndex;
-        this.currentTab = this.tabs[this.tabIndex];
-      } else {
-        tmpIndex++;
-      }
-    })
+    this.tabIndex = _.findIndex(this.tabs, function (tab) { return tab == $event });
+    this.currentTab = this.tabs[this.tabIndex];
   }
 
   changeSubTab(str: string) {
@@ -173,9 +170,18 @@ export class PsatComponent implements OnInit {
   }
 
   save() {
+    let tmpForm = this.psatService.getFormFromPsat(this._psat.inputs);
+    if (
+      this.psatService.isPumpFluidFormValid(tmpForm) &&
+      this.psatService.isMotorFormValid(tmpForm) &&
+      this.psatService.isFieldDataFormValid(tmpForm)
+    ) {
+      this._psat.setupDone = true;
+    } else {
+      this._psat.setupDone = false;
+    }
     this.assessment.psat = (JSON.parse(JSON.stringify(this._psat)));
     this.assessmentService.setWorkingAssessment(this.assessment);
-    this.canContinue = true;
   }
 
   exportData() {

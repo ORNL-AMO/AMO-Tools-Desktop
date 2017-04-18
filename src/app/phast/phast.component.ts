@@ -29,6 +29,10 @@ export class PhastComponent implements OnInit {
 
   ngOnInit() {
     this.assessment = this.assessmentService.getWorkingAssessment();
+    let tmpTab = this.assessmentService.getTab();
+    if (tmpTab == 'modify-conditions') {
+      this.currentTab = 'losses';
+    }
   }
 
   changeTab($event) {

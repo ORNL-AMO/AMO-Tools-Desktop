@@ -37,7 +37,6 @@ export class MotorPerformanceGraphComponent implements OnInit {
 
   calculateEfficiency(loadFactor: number) {
     if (this.checkForm()) {
-      console.log(this.performanceForm.value.horsePower)
       let efficiency = this.psatService.getEfficiencyFromForm(this.performanceForm);
       let results = this.psatService.motorPerformance(
         this.performanceForm.value.frequency,
