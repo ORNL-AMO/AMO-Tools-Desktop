@@ -1,10 +1,7 @@
 <div class="banner phast">
 
-  <a routerLink="/dashboard" class="btn-dashboard">
-    <span class="fa fa-home"></span>
-  </a>
+  <a routerLink="/dashboard" class="btn-dashboard">&nbsp;</a>
   <div *ngIf="assessment" class="title pull-left">{{assessment.name}}</div>
-
   <div class="pull-right settings" (click)="openPanel('settings-panel')">
     <span class="fa fa-cog"></span>
   </div>
