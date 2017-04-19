@@ -1,72 +1,58 @@
 <form #formRef [formGroup]="psatForm">
-  <div class="row form-group">
-    <label class="col-sm-6 col-md-4 col-lg-3 col-form-label" for="operatingFraction">Operating Fraction</label>
-    <div class="col-6">
-      <input type="number" class="form-control number-input-field" formControlName="operatingFraction" id="operatingFraction" (input)="checkForm(psatForm)"
+
+  <div class="form-group">
+    <label for="operatingFraction">Operating Fraction</label>
+    <input type="number" class="form-control" formControlName="operatingFraction" id="operatingFraction" (input)="checkForm(psatForm)"
         (focus)="focusField('operatingFraction')">
-    </div>
   </div>
 
-  <div class="row form-group">
-    <label class="col-sm-6 col-md-4 col-lg-3 col-form-label" for="costKwHr">Cost (kw/hr)</label>
-    <div class="col-6">
-      <input type="number" class="form-control number-input-field" formControlName="costKwHr" id="costKwHr" (input)="checkForm(psatForm)"
+  <div class="form-group">
+    <label for="costKwHr">Cost (kw/hr)</label>
+    <input type="number" class="form-control" formControlName="costKwHr" id="costKwHr" (input)="checkForm(psatForm)"
         (focus)="focusField('costKwHr')">
-    </div>
   </div>
 
-  <div class="row form-group">
-    <label class="col-sm-6 col-md-4 col-lg-3 col-form-label" for="flowRate">Flow Rate (gpm)</label>
-    <div class="col-6">
-      <input type="number" class="form-control number-input-field" formControlName="flowRate" id="flowRate" (input)="checkForm(psatForm)"
+  <div class="form-group">
+    <label for="flowRate">Flow Rate (gpm)</label>
+    <input type="number" class="form-control" formControlName="flowRate" id="flowRate" (input)="checkForm(psatForm)"
         (focus)="focusField('flowRate')">
-    </div>
   </div>
 
-  <div class="row form-group">
-    <label class="col-sm-6 col-md-4 col-lg-3 col-form-label" for="head">Head</label>
-    <div class="col-6 input-group">
-      <div class="incrementor input-group-addon">
-        <button class="btn" [disabled]="!selected" (click)="showHeadToolModal()"><i class="fa fa-calculator"></i></button>
-      </div>
-      <input type="number" class="form-control number-input-field" formControlName="head" id="head" (input)="checkForm(psatForm)"
+  <div class="form-group">
+    <label for="head">
+      Head
+      <small id="flaHelp" class="form-text text-muted text-help" (click)="showHeadToolModal()"><a>Calculate Head</a></small>
+    </label>
+    <input type="number" class="form-control" formControlName="head" id="head" (input)="checkForm(psatForm)"
         (focus)="focusField('head')">
-    </div>
   </div>
 
-  <div class="row form-group">
-    <label class="col-sm-6 col-md-4 col-lg-3 col-form-label" for="loadEstimatedMethod">Load Estimation Method</label>
-    <div class="col-6">
-      <select class="form-control select-input-field" formControlName="loadEstimatedMethod" id="loadEstimatedMethod" (input)="checkForm(psatForm)"
+  <div class="form-group">
+    <label for="loadEstimatedMethod">Load Estimation Method</label>
+    <select class="form-control" formControlName="loadEstimatedMethod" id="loadEstimatedMethod" (input)="checkForm(psatForm)"
         (focus)="focusField('loadEstimatedMethod')" ngModel="{{psatForm.value.loadEstimatedMethod}}">
         <option *ngFor="let method of loadEstimateMethods" [ngValue]="method">{{method}}</option>
-      </select>
-    </div>
+    </select>
   </div>
 
-  <div class="row form-group" *ngIf="psatForm.value.loadEstimatedMethod == 'Power'">
-    <label class="col-sm-6 col-md-4 col-lg-3 col-form-label" for="motorKW">Motor (kW)</label>
-    <div class="col-6">
-      <input type="number" class="form-control number-input-field" formControlName="motorKW" id="motorKW" (input)="checkForm(psatForm)"
+  <div class="form-group" *ngIf="psatForm.value.loadEstimatedMethod == 'Power'">
+    <label for="motorKW">Motor (kW)</label>
+    <input type="number" class="form-control" formControlName="motorKW" id="motorKW" (input)="checkForm(psatForm)"
         (focus)="focusField('motorKW')">
-    </div>
   </div>
 
-  <div class="row form-group" *ngIf="psatForm.value.loadEstimatedMethod == 'Current'">
-    <label class="col-sm-6 col-md-4 col-lg-3 col-form-label" for="motorAmps">Motor Amps</label>
-    <div class="col-6">
-      <input type="number" class="form-control number-input-field" formControlName="motorAmps" id="motorAmps" (input)="checkForm(psatForm)"
+  <div class="form-group" *ngIf="psatForm.value.loadEstimatedMethod == 'Current'">
+    <label for="motorAmps">Motor Amps</label>
+    <input type="number" class="form-control" formControlName="motorAmps" id="motorAmps" (input)="checkForm(psatForm)"
         (focus)="focusField('motorAmps')">
-    </div>
   </div>
 
-  <div class="row form-group">
-    <label class="col-sm-6 col-md-4 col-lg-3 col-form-label" for="measuredVoltage">Voltage</label>
-    <div class="col-6">
-      <input type="number" class="form-control number-input-field" formControlName="measuredVoltage" id="measuredVoltage" (input)="checkForm(psatForm)"
+  <div class="form-group">
+    <label for="measuredVoltage">Voltage</label>
+    <input type="number" class="form-control" formControlName="measuredVoltage" id="measuredVoltage" (input)="checkForm(psatForm)"
         (focus)="focusField('measuredVoltage')">
-    </div>
   </div>
+
 </form>
 
 <!-- HEAD TOOL MODAL -->

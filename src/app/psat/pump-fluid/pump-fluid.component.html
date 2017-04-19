@@ -1,4 +1,4 @@
-<form #formRef [formGroup]="psatForm" class="pump-fluid">
+<form #formRef [formGroup]="psatForm">
 
 
   <div class="form-group">
@@ -30,56 +30,46 @@
   </div>
 
   <div class="form-group">
-    <label class="col-sm-6 col-md-4 col-lg-3 col-form-label" for="viscosity">Kinematic Viscosity</label>
-    <div class="col-6 input-group">
-      <div class="incrementor input-group-addon">
-        <button class="btn" [disabled]="!selected" (click)="subtractNum('viscosity')"><i class="fa fa-minus"></i></button>
-      </div>
-      <div class="incrementor input-group-addon">
-        <button class="btn" [disabled]="!selected" (click)="addNum('viscosity')"><i class="fa fa-plus"></i></button>
-      </div>
-      <input type="number" class="form-control incrementor-input-field" formControlName="viscosity" id="viscosity" ngModel="{{psatForm.value.viscosity}}"
+    <label for="viscosity">Kinematic Viscosity</label>
+    <div class="incrementor form-control">
+      <button class="btn" [disabled]="!selected" (click)="subtractNum('viscosity')"><i class="fa fa-minus"></i></button>
+      <button class="btn" [disabled]="!selected" (click)="addNum('viscosity')"><i class="fa fa-plus"></i></button>
+      <input type="number" class="form-control" formControlName="viscosity" id="viscosity" ngModel="{{psatForm.value.viscosity}}"
         (input)="checkForm(psatForm)" (focus)="focusField('kinematicViscosity')">
     </div>
   </div>
 
-  <div class="form-group row">
-    <label class="col-sm-6 col-md-4 col-lg-3 col-form-label" for="gravity">Specific Gravity</label>
-    <div class="col-6">
-      <input type="number" class="form-control number-input-field" formControlName="gravity" id="gravity" (input)="checkForm(psatForm)"
+  <div class="form-group">
+    <label for="gravity">Specific Gravity</label>
+    <input type="number" class="form-control number-input-field" formControlName="gravity" id="gravity" (input)="checkForm(psatForm)"
         (focus)="focusField('specificGravity')">
-    </div>
   </div>
 
-  <div class="form-group row">
-    <label class="col-sm-6 col-md-4 col-lg-3 col-form-label" for="stages">Stages</label>
-    <div class="col-6 input-group">
-      <div class="incrementor input-group-addon">
-        <button class="btn" [disabled]="!selected" (click)="subtractNum('stages')"><i class="fa fa-minus"></i></button>
-      </div>
-      <div class="incrementor input-group-addon">
-        <button class="btn" [disabled]="!selected" (click)="addNum('stages')"><i class="fa fa-plus"></i></button>
-      </div>
-      <input type="number" class="form-control incrementor-input-field" formControlName="stages" id="stages" ngModel="{{psatForm.value.stages}}"
+  <div class="form-group">
+    <label for="stages">Stages</label>
+    <div class="incrementor form-control">
+      <button class="btn" [disabled]="!selected" (click)="subtractNum('stages')"><i class="fa fa-minus"></i></button>
+      <button class="btn" [disabled]="!selected" (click)="addNum('stages')"><i class="fa fa-plus"></i></button>
+      <input type="number" class="form-control" formControlName="stages" id="stages" ngModel="{{psatForm.value.stages}}"
         (input)="checkForm(psatForm)" (focus)="focusField('stages')">
     </div>
   </div>
 
-  <div class="form-group row">
-    <label class="col-sm-6 col-md-4 col-lg-3 col-form-label">Fixed specific speed?</label>
-    <div class="col-6">
-      <div class="form-check">
-        <label class="col-sm-6 col-md-4 col-lg-3 col-form-label" class="form-check-label">
-          <input class="form-check-input" type="radio" name="fixedSpeed" formControlName="fixedSpeed" value="Yes"
-                 (input)="checkForm(psatForm)" (focus)="focusField('fixedSpecificSpeed')">Yes
-        </label>
-      </div>
-      <div class="form-check" (focus)="focusField('fixedSpecificSpeed')">
-        <label class="col-sm-6 col-md-4 col-lg-3 col-form-label" class="form-check-label">
-             <input class="form-check-input" type="radio" name="fixedSpeed" formControlName="fixedSpeed" value="No"
-                    (input)="checkForm(psatForm)" (focus)="focusField('fixedSpecificSpeed')">No
-          </label>
-      </div>
+  <div class="form-group">
+
+    <label>Fixed specific speed?</label>
+    <div class="form-check">
+      <label class="form-check-label">
+        <input class="form-check-input" type="radio" name="fixedSpeed" formControlName="fixedSpeed" value="Yes"
+               (input)="checkForm(psatForm)" (focus)="focusField('fixedSpecificSpeed')">Yes
+      </label>
     </div>
+    <div class="form-check" (focus)="focusField('fixedSpecificSpeed')">
+      <label class="form-check-label">
+        <input class="form-check-input" type="radio" name="fixedSpeed" formControlName="fixedSpeed" value="No"
+                  (input)="checkForm(psatForm)" (focus)="focusField('fixedSpecificSpeed')">No
+      </label>
+    </div>
+
   </div>
 </form>
