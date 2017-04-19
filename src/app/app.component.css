@@ -109,16 +109,51 @@ Buttons
 /*
 Forms
 =============================================== */
+.form-group {
+  margin-bottom: 0;
+}
 .form-control {
   border-radius: 0;
   border-color: #9c9c9c;
   width: inherit;
+  padding: 2px;
+  line-height: 1;
+  font-size: 16px;
+}
+select.form-control:not([size]):not([multiple]) {
+  height: inherit;
+}
+.tab-content .form-group:after {
+  display: table;
+  content: "";
+  clear: both;
+}  
+  .tab-content .form-group .form-control, .tab-content .form-group label {
+    float: left;
+  }
+  .tab-content .form-group label {
+    width: 50%;
+  }
+  .tab-content .form-group .form-control {
+    width: 50%;
+  }
+
+.form-check-input {
+  vertical-align: top;
+  margin-top: 5px;
+  margin-right: 8px;
 }
 
 .incrementor {
   border:  #9c9c9c solid 1px; 
   padding: 0;
 }
+  .tab-content .form-group .form-control.incrementor {
+    width: 102px;
+  }
+  .tab-content .form-group .form-control.incrementor .form-control {
+    width: 58px;
+  }
 .incrementor .btn {
   border-right: #c9c9c9 solid 1px;
   background: #ffffff;
@@ -126,19 +161,20 @@ Forms
   background: -webkit-linear-gradient(top, #ffffff 0%,#f7f7f7 100%);
   background: linear-gradient(to bottom, #ffffff 0%,#f7f7f7 100%);
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#f7f7f7',GradientType=0 );
-  padding: 12px;
-  font-size: 12px;
+  padding: 5px;
+  font-size: 10px;
 }
 
-.incrementor-sm .btn{
+.incrementor .btn{
     border-right: #c9c9c9 solid 1px;
   background: #ffffff;
   background: -moz-linear-gradient(top, #ffffff 0%, #f7f7f7 100%);
   background: -webkit-linear-gradient(top, #ffffff 0%,#f7f7f7 100%);
   background: linear-gradient(to bottom, #ffffff 0%,#f7f7f7 100%);
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#f7f7f7',GradientType=0 );
-  padding: 8px;
+  padding: 6px;
   font-size: 8px;
+  float: left;
 }
 
 .incrementor input.form-control {
@@ -164,20 +200,7 @@ Forms
 .card-form{
   padding-bottom: 30px;
 }
-.tab-content .form-group:after {
-  display: table;
-  content: "";
-  clear: both;
-}  
-  .tab-content .form-group .form-control, .tab-content .form-group label {
-    float: left;
-  }
-  .tab-content .form-group label {
-    width: 30%;
-  }
-  .tab-content .form-group .form-control {
-    nwidth: 50%;
-  }
+
 
 
 /*
@@ -460,39 +483,42 @@ Banner
     background: #2980b9;
   }
   .banner.phast {
-    background: #d35400;
+    background: #BF3D00;
   }
 .banner:after {
   display: table;
+  display: tbannerable;
   content: "";
   clear: both;
 }
 
 .banner .btn-dashboard, .banner .title, .banner .settings {
   display: inline-block;
-  padding: 12px 20px;
+  padding: 14px 29px;
   color: rgba(255,255,255,0.8);
 }
 .banner .btn-dashboard {
-  background: #424242;
   float: left;
-  border-right: #000 solid 1px;
 }
+.banner.psat .btn-dashboard {
+  background: url('/assets/images/assessment-icon-psat.png') no-repeat center center;
+}
+  .banner.psat .btn-dashboard:hover {
+     background-color: #0063a4;
+  }
+.banner.phast .btn-dashboard {
+  background: url('/assets/images/assessment-icon-phast.png') no-repeat center center;
+}
+    .banner.phast .btn-dashboard:hover {
+      background-color: #a83600; 
+    }
 .banner .btn-dashboard:hover, .banner .settings:hover {
-  color: rgba(255,255,255,1);   
+  text-decoration: none;
   cursor: pointer;
-}
-.banner .btn-dashboard:hover {
-  background: #424242;
-  background: -moz-linear-gradient(top, #424242 0%, #2c2c2c 100%);
-  background: -webkit-linear-gradient(top, #424242 0%,#2c2c2c 100%);
-  background: linear-gradient(to bottom, #424242 0%,#2c2c2c 100%);
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#424242', endColorstr='#2c2c2c',GradientType=0 );
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 1);
 }
 .banner .title {
   color: #fff;
-  border-left: #626262 solid 1px;
+  padding-left: 16px;
 }
 
 .banner-border{
@@ -609,7 +635,7 @@ Tabs
   display: inline-block;
 }
 .tabs.primary a {
-  padding: 20px 32px;
+  padding: 16px 22px;
   font-size: 14px;
   border-left: #c8c8c8 solid 1px;
   display: block;
@@ -636,6 +662,8 @@ Tabs
   -webkit-box-shadow: 0px 1px 4px 0px rgba(0,0,0,0.2);
   -moz-box-shadow: 0px 1px 4px 0px rgba(0,0,0,0.2);
   box-shadow: 0px 1px 4px 0px rgba(0,0,0,0.2);
+  z-index: 3;
+  position: relative;
 }
 .tabs.subtabs li {
   display: inline-block;
@@ -754,6 +782,136 @@ Tabs
 
 
 
+/*
+Modify Conditions
+========================================= */
+.modify-conditions {
+  height: 100vh;
+  display: flex;
+}
+  .modify-conditions .col-4 {
+    padding-right: 0;
+    padding-left: 0;
+  }
+.modify-conditions .help-panel {
+  padding-left: 20px;
+  padding-right: 20px;
+  background: #efefef;
+  height: 100%;
+}
+
+.modification {
+  background: #fff;
+  -webkit-box-shadow: 0px 0px 69px -1px rgba(0,0,0,0.2);
+  -moz-box-shadow: 0px 0px 69px -1px rgba(0,0,0,0.2);
+  box-shadow: 0px 0px 69px -1px rgba(0,0,0,0.2);
+  z-index: 2;
+  width: 35%;
+}
+  .modification .header {
+    display: block;
+    border-bottom: #ddd solid 1px;
+  }
+    .modification .header:after {
+      display: table;
+      content: "";
+      clear: both;
+    }
+    .modification .header h3 {
+      margin: 10px 0 10px 10px;
+      font-size: 20px;
+      font-weight: bold;
+      display: inline-block;
+    }
+    .modification .header button {
+      background: #fff;
+      border: none;
+      border-left: #efefef solid 1px;
+      margin: 0;
+      padding: 8px 16px;
+      float: right;
+    }
+      .modification .header button:hover {
+        cursor: pointer;
+        background: #efefef;
+      }
+  .losses-header {
+
+  }
+  .modification.disabled {
+    background: #efefef;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+    z-index: 1;
+  }
+    .modification.disabled:hover {
+      cursor: pointer;
+    }
+
+    .modify-conditions .no-data {
+      width: 35%;
+    }
+    .modify-conditions app-help-panel  {
+      width: 30%;
+    }
+
+.modifications-list {
+  background: #f1f1f1;
+  height: 100%;
+}
+.modifications-list ul {
+  margin: 0;
+  padding: 0;
+}
+  .modifications-list li {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .modifications-list button {
+    display: block;
+    background: #fff;
+    width: 100%;
+    text-align: left;
+    padding: 20px;
+    border: none;
+    border-bottom: #ddd solid 1px;
+  }
+
+  .modifications-list li:nth-last-child(2) button {
+    border-bottom: #989898 solid 1px;
+    -webkit-box-shadow: 0px 1px 4px 0px rgba(0,0,0,0.2);
+    -moz-box-shadow: 0px 1px 4px 0px rgba(0,0,0,0.2);
+    box-shadow: 0px 1px 4px 0px rgba(0,0,0,0.2);
+  }
+
+    .modifications-list button:hover {
+      background: #eee;
+      cursor: pointer;
+    }
+
+  .modifications-list .add-modification {
+    text-align: center;
+    padding: 40px 20px;
+  }
+  .modifications-list .add-modification button {
+    width: auto;
+    border: #989898 solid 1px;
+    padding: 10px 50px;
+    display: inline-block;
+    -webkit-box-shadow: 0px 1px 4px 0px rgba(0,0,0,0.2);
+    -moz-box-shadow: 0px 1px 4px 0px rgba(0,0,0,0.2);
+    box-shadow: 0px 1px 4px 0px rgba(0,0,0,0.2);
+  }
+  .modifications-list .add-modification p {
+    font-size: 16px;
+    color: #989898;
+    padding: 4px 20px; 
+  }
+
+
 
 /*
 Help Panel Cards
@@ -765,7 +923,9 @@ Help Panel Cards
 .help-header, .help-content {
   padding: 25px 0px;
 }
-
+  .wrapper .help-header {
+    padding-top: 0;
+  }
 .help-header {
   border-bottom: #ededed solid 1px;
 }
@@ -803,6 +963,13 @@ Help Panel Cards
   color: #222;
 }
 
+.wrapper .help-panel {
+  background: #efefef;
+  padding: 20px;
+  border-radius: 4px;
+  border: #cecece solid 1px;
+}
+
 
 
 
@@ -811,15 +978,15 @@ Help Panel Cards
 No Data Messaging
 ========================================== */
 .no-data {
-  padding-top: 200px;
+  padding: 133px 50px;
   text-align: center;
-}
-.no-data:hover {
-  cursor: pointer;
+  background: #efefef;
+  border-right: #cacaca solid 1px;
 }
 .no-data h3 {
   color: #787878;
   font-size: 20px;
+  padding: inherit 80px;
 }
 .no-data h4 {
   color: #0076FF;
@@ -827,6 +994,25 @@ No Data Messaging
 }
 .no-data:hover h4 {
   text-decoration: underline;
+}
+.no-data button {
+  background: transparent;
+  border: #b5b5b5 solid 1px;
+  padding: 12px 54px;
+  margin-top: 34px;
+  border-radius: 4px;
+}
+.no-data:hover, .no-data button:hover {
+  cursor: pointer;
+  background: #fff;
+}
+.no-data:hover button, .no-data button:hover {
+  border-color: #0099fd;
+}
+.no-data p {
+  font-size: 14px;
+  color: #a2a2a2;
+  margin-top: 6px;
 }
 
 
@@ -855,6 +1041,7 @@ No Data Messaging
     height: 100%;
     max-height: 100%;
     overflow-y: scroll;
+    padding: 30px 50px;
 }
 
 .losses-container.disabled, .losses-container:disabled{
