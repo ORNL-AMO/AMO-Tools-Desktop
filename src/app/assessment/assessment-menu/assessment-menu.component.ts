@@ -1,15 +1,15 @@
 import { Component, OnInit, Output, EventEmitter, Input, ViewChild, SimpleChanges } from '@angular/core';
 import { Directory } from '../../shared/models/directory';
 import { ModalDirective } from 'ng2-bootstrap';
-import { MockDirectory } from '../../shared/mocks/mock-directory';
-
+import { IndexedDbService } from '../../indexedDb/indexed-db.service';
 @Component({
   selector: 'app-assessment-menu',
   templateUrl: './assessment-menu.component.html',
   styleUrls: ['./assessment-menu.component.css']
 })
 export class AssessmentMenuComponent implements OnInit {
-  allDirectories: Directory = MockDirectory;
+  @Input()
+  allDirectories: Directory;
   @Input()
   directory: Directory;
   @Input()
@@ -20,15 +20,18 @@ export class AssessmentMenuComponent implements OnInit {
   directoryChange = new EventEmitter();
   breadCrumbs: Array<string>;
 
-  constructor() { }
+  firstChange: boolean = true;
+  constructor(private indexedDbService: IndexedDbService) { }
 
   ngOnInit() {
-    this.breadCrumbs = this.getBreadcrumbs(this.directory.name, this.allDirectories);
+    //   this.breadCrumbs = this.getBreadcrumbs(this.directory.name, this.allDirectories);
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes.directory) {
+    if (changes.directory && !this.firstChange) {
       this.breadCrumbs = this.getBreadcrumbs(this.directory.name, this.allDirectories);
+    } else {
+      this.firstChange = false;
     }
   }
   setView(view: string) {
@@ -67,6 +70,20 @@ export class AssessmentMenuComponent implements OnInit {
     }
   }
 
+  test() {
+    //this.indexedDbService.addAssessment();
+  }
 
+  export() {
+    this.indexedDbService.getAssessment(1).then((result) => {
+      console.log(result);
+    });
+  }
+
+  deletedb() {
+    this.indexedDbService.deleteDb().then((result) => {
+      console.log(result);
+    });
+  }
 
 }

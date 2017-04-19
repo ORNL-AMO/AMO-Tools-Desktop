@@ -1,11 +1,12 @@
 import { Component, OnInit, ViewChild, ViewChildren, Input } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ModalDirective } from 'ng2-bootstrap';
-import { Directory } from '../../shared/models/directory';
+import { Directory, DirectoryDbRef } from '../../shared/models/directory';
 import { ModelService } from '../../shared/model.service';
 import { Router } from '@angular/router';
 import { AssessmentService } from '../assessment.service';
-
+import { IndexedDbService } from '../../indexedDb/indexed-db.service';
+import * as _ from 'lodash';
 @Component({
   selector: 'app-assessment-create',
   templateUrl: './assessment-create.component.html',
@@ -22,7 +23,13 @@ export class AssessmentCreateComponent implements OnInit {
   selectedAssessment: string = 'Select Pump';
   allAssessments: any[] = new Array();
   filteredAssessments: any[] = new Array();
-  constructor(private formBuilder: FormBuilder, private assessmentService: AssessmentService, private modelService: ModelService, private router: Router) { }
+
+  constructor(
+    private formBuilder: FormBuilder,
+    private assessmentService: AssessmentService,
+    private modelService: ModelService,
+    private router: Router,
+    private indexedDbService: IndexedDbService) { }
 
   ngOnInit() {
     this.newAssessment = this.initForm();
@@ -62,32 +69,59 @@ export class AssessmentCreateComponent implements OnInit {
 
         let tmpPsat = this.assessmentService.getNewPsat();
         tmpAssessment.psat = tmpPsat;
-        this.assessmentService.setWorkingAssessment(tmpAssessment);
+        tmpAssessment.directoryId = this.directory.id;
+        this.indexedDbService.addAssessment(tmpAssessment).then(assessmentId => {
+          console.log('assesmentId ' + assessmentId);
+          this.indexedDbService.getAssessment(assessmentId).then(assessment => {
+            console.log('assessment ' + assessment);
+            tmpAssessment = assessment;
+            if (this.directory.assessments) {
+              this.directory.assessments.push(tmpAssessment);
+            } else {
+              this.directory.assessments = new Array();
+              this.directory.assessments.push(tmpAssessment);
+            }
+            debugger;
+            //NEED TO CHECK FOR SUBS
+            let test = _.map(this.directory.subDirectory, 'id');
+            console.log(test);
+            // let tmpDirRef: DirectoryDbRef = {
+            //   name: this.directory.name,
+            //   id: this.directory.id,
+            //   subDirectoryIds: _.map(this.directory.subDirectory, 'id'),
+            //   assessmentIds: _.map(this.directory.assessments, 'id')
 
-        if (this.directory.assessments) {
-          this.directory.assessments.push(tmpAssessment);
-        } else {
-          this.directory.assessments = new Array();
-          this.directory.assessments.push(tmpAssessment);
-        }
-
-        this.router.navigateByUrl('/psat')
-
+            // }
+            this.indexedDbService.putDirectory(this.directory).then(results => {
+              console.log('put results ' + results);
+              this.assessmentService.setWorkingAssessment(tmpAssessment);
+              this.router.navigateByUrl('/psat')
+            });
+          })
+        });
       } else if (this.newAssessment.value.assessmentType == 'Furnace') {
         let tmpAssessment = this.assessmentService.getNewAssessment('PHAST');
         tmpAssessment.name = this.newAssessment.value.assessmentName;
 
         let tmpPhast = this.assessmentService.getNewPhast();
         tmpAssessment.phast = tmpPhast;
-
-        this.assessmentService.setWorkingAssessment(tmpAssessment);
-        if (this.directory.assessments) {
-          this.directory.assessments.push(tmpAssessment);
-        } else {
-          this.directory.assessments = new Array();
-          this.directory.assessments.push(tmpAssessment);
-        }
-        this.router.navigateByUrl('/phast')
+        tmpAssessment.directoryId = this.directory.id;
+        this.indexedDbService.addAssessment(tmpAssessment).then(assessmentId => {
+          this.indexedDbService.getAssessment(assessmentId).then(assessment => {
+            tmpAssessment = assessment;
+            if (this.directory.assessments) {
+              this.directory.assessments.push(tmpAssessment);
+            } else {
+              this.directory.assessments = new Array();
+              this.directory.assessments.push(tmpAssessment);
+            }
+            this.indexedDbService.putDirectory(this.directory).then(results => {
+              debugger;
+              this.assessmentService.setWorkingAssessment(tmpAssessment);
+              this.router.navigateByUrl('/phast')
+            });
+          })
+        });
       }
     })
   }

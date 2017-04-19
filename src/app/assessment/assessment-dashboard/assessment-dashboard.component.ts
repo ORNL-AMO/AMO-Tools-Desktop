@@ -18,6 +18,7 @@ export class AssessmentDashboardComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
+    console.log(this.directory);
   }
 
   changeView($event) {

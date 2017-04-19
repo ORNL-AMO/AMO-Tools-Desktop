@@ -1,11 +1,25 @@
 <div class="container-fluid">
 	<div class="row dashboard-content">
 		<div class="col-2 sidebar-bg">
-			<app-sidebar [directory]="allDirectories" [workingDirectory]="workingDirectory"(directoryChange)="changeWorkingDirectory($event)" (selectCalculator)="viewCalculator($event)"></app-sidebar>
+			<app-sidebar [directory]="allDirectories" [workingDirectory]="workingDirectory" (directoryChange)="changeWorkingDirectory($event)"
+				(selectCalculator)="viewCalculator($event)"></app-sidebar>
 		</div>
-		<div class="col-10">
-			<app-assessment-dashboard *ngIf="!showCalculators" [(directory)]="workingDirectory" (directoryChange)="changeWorkingDirectory($event)"></app-assessment-dashboard>
-			<app-calculator *ngIf="showCalculators" [selectedCalculator]="selectedCalculator"></app-calculator>
+		<div class="col-10" *ngIf="allDirectories">
+			<app-assessment-dashboard [(directory)]="workingDirectory" (directoryChange)="changeWorkingDirectory($event)"></app-assessment-dashboard>
+			<app-calculator [selectedCalculator]="selectedCalculator"></app-calculator>
+		</div>
+		<div class="col-10 align-items-center" *ngIf="!allDirectories">
+			<form class="form-group" [formGroup]="newDirectory">
+				<div class="row justify-content-center">
+					<div class="col-6">
+						<label class="form-control-label" for="directoryName">Root Directory Name</label>
+						<div class="input-group">
+							<input class="form-control" formControlName="directoryName" id="directoryName" />
+						</div>
+						<button class="btn btn-primary pull-right" (click)="createDirectory()" [disabled]="!newDirectory.valid">Submit</button>
+					</div>
+				</div>
+			</form>
 		</div>
 	</div>
 </div>

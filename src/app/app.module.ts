@@ -9,7 +9,7 @@ import { AppComponent } from './app.component';
 import { SharedModule } from './shared/shared.module';
 import { routing, appRoutingProviders } from './app.routing';
 import { CoreModule } from './core/core.module';
-
+import { IndexedDbModule } from './indexedDb/indexedDb.module';
 
 
 @NgModule({
@@ -23,7 +23,8 @@ import { CoreModule } from './core/core.module';
     HttpModule,
     SharedModule,
     CoreModule,
-    routing
+    routing,
+    IndexedDbModule
   ],
   providers: [
     appRoutingProviders

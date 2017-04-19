@@ -3,7 +3,8 @@ import { Directory } from '../models/directory';
 export const MockDirectory: Directory = {
   name: 'Root Directory',
   collapsed: false,
-  date: new Date(),
+  createdDate: new Date(),
+  modifiedDate: new Date(),
   assessments: [
     {
       name: 'Mock PSAT 1',

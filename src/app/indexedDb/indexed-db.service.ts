@@ -1,0 +1,255 @@
+import { Injectable } from '@angular/core';
+import { WindowRefService } from '../indexedDb/window-ref.service';
+import { MockDirectory } from '../shared/mocks/mock-directory';
+import { DirectoryDbRef } from '../shared/models/directory';
+import { Assessment } from '../shared/models/assessment';
+
+var myDb: any = {
+  name: 'CrudDB',
+  version: 3,
+  instance: {},
+  storeNames: {
+    assessments: 'assessments',
+    directories: 'directories'
+  },
+  defaultErrorHandler: function (e) {
+    //todo: implement error handling
+    console.log(e);
+  },
+  setDefaultErrorHandler: function (request, db) {
+    if ('onerror' in request) {
+      request.onerror = db.defaultErrorHandler;
+    }
+    if ('onblocked' in request) {
+      request.onblocked = db.defaultErrorHandler;
+    }
+  }
+};
+
+
+@Injectable()
+export class IndexedDbService {
+
+  db: any;
+  request: any;
+  private _window: Window;
+  constructor(private windowRef: WindowRefService) {
+    this._window = windowRef.nativeWindow;
+  }
+
+  initDb(): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.request = this._window.indexedDB.open(myDb.name, myDb.version);
+      this.request.onupgradeneeded = function (e) {
+        var newVersion = e.target.result;
+        if (!newVersion.objectStoreNames.contains(myDb.storeNames.assessments)) {
+          console.log('creating assessments store...');
+          newVersion.createObjectStore(myDb.storeNames.assessments, {
+            autoIncrement: true,
+            keyPath: 'id'
+          })
+        }
+        if (!newVersion.objectStoreNames.contains(myDb.storeNames.directories)) {
+          console.log('creating directories store...');
+          newVersion.createObjectStore(myDb.storeNames.directories, {
+            autoIncrement: true,
+            keyPath: 'id'
+          })
+        }
+      }
+      myDb.setDefaultErrorHandler(this.request, myDb);
+
+      this.request.onsuccess = function (e) {
+        myDb.instance = e.target.result;
+        resolve('db init success');
+      }
+
+      this.request.onerror = (error) => {
+        reject(error.target.result);
+      }
+    });
+  }
+
+  deleteDb(): Promise<any> {
+    return new Promise((resolve, reject) => {
+      myDb.instance.close();
+      let deleteRequest = this._window.indexedDB.deleteDatabase(myDb.name);
+      deleteRequest.onsuccess = (e) => {
+        console.log('deleted');
+        resolve(e);
+      }
+      deleteRequest.onerror = (e) => {
+        console.log('error')
+        reject(e);
+      }
+    })
+  }
+
+  addAssessment(_assessment: Assessment): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let transaction = myDb.instance.transaction([myDb.storeNames.assessments], 'readwrite');
+      let store = transaction.objectStore(myDb.storeNames.assessments);
+      let addRequest = store.add(_assessment);
+      myDb.setDefaultErrorHandler(addRequest, myDb);
+      addRequest.onsuccess = function (e) {
+        resolve(e.target.result);
+      }
+      addRequest.onerror = (error) => {
+        reject(error.target.result)
+      }
+    });
+  }
+
+  getAllAssessments(): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let transaction = myDb.instance.transaction([myDb.storeNames.assessments], 'readonly');
+      let store = transaction.objectStore(myDb.storeNames.assessments);
+      let getRequest = store.getAll();
+      myDb.setDefaultErrorHandler(getRequest, myDb);
+      getRequest.onsuccess = (e) => {
+        resolve(e.target.result);
+      }
+      getRequest.onerror = (error) => {
+        reject(error.target.result)
+      }
+    })
+  }
+
+  getAssessment(id: number): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let transaction = myDb.instance.transaction([myDb.storeNames.assessments], 'readonly');
+      let store = transaction.objectStore(myDb.storeNames.assessments);
+      let getRequest = store.get(id);
+      myDb.setDefaultErrorHandler(getRequest, myDb);
+      getRequest.onsuccess = (e) => {
+        resolve(e.target.result);
+      }
+      getRequest.onerror = (error) => {
+        reject(error.target.result)
+      }
+    })
+  }
+
+  putAssessment(assessment: Assessment): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let transaction = myDb.instance.transaction([myDb.storeNames.assessments], 'readwrite');
+      let store = transaction.objectStore(myDb.storeNames.assessments);
+      let getRequest = store.get(assessment.id);
+
+      getRequest.onsucces = (event) => {
+        let tmpAssessment: Assessment = event.target.result;
+        tmpAssessment = assessment;
+        tmpAssessment.modifiedDate = new Date();
+        let updateRequest = store.put(tmpAssessment);
+        updateRequest.onsucces = (event) => {
+          resolve(event);
+        }
+        updateRequest.onerror = (event) => {
+          reject(event)
+        }
+      }
+      getRequest.onerror = (event) => {
+        reject(event);
+      }
+    })
+  }
+
+  deleteAssessment(id: number): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let transaction = myDb.instance.transaction([myDb.storeNames.assessments], 'readonly');
+      let store = transaction.objectStore(myDb.storeNames.assessments);
+      let deleteRequest = store.delete(id);
+      deleteRequest.onsuccess = (event) => {
+        resolve(event.target.result);
+      }
+      deleteRequest.onerror = (event) => {
+        reject(event.target.result);
+      }
+    })
+  }
+
+  addDirectory(directoryRef: DirectoryDbRef): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let transaction = myDb.instance.transaction([myDb.storeNames.directories], 'readwrite');
+      let store = transaction.objectStore(myDb.storeNames.directories);
+      let addRequest = store.add(directoryRef);
+      myDb.setDefaultErrorHandler(addRequest, myDb);
+      addRequest.onsuccess = function (e) {
+        resolve(e.target.result);
+      }
+      addRequest.onerror = (error) => {
+        reject(error.target.result)
+      }
+    });
+  }
+
+  getDirectory(id: number): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let transaction = myDb.instance.transaction([myDb.storeNames.directories], 'readonly');
+      let store = transaction.objectStore(myDb.storeNames.directories);
+      let getRequest = store.get(id);
+      myDb.setDefaultErrorHandler(getRequest, myDb);
+      getRequest.onsuccess = (e) => {
+        resolve(e.target.result);
+      }
+      getRequest.onerror = (error) => {
+        reject(error.target.result)
+      }
+    })
+  }
+
+  getAllDirectories(): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let transaction = myDb.instance.transaction([myDb.storeNames.directories], 'readonly');
+      let store = transaction.objectStore(myDb.storeNames.directories);
+      let getRequest = store.getAll();
+      myDb.setDefaultErrorHandler(getRequest, myDb);
+      getRequest.onsuccess = (e) => {
+        resolve(e.target.result);
+      }
+      getRequest.onerror = (error) => {
+        reject(error.target.result)
+      }
+    })
+  }
+
+  putDirectory(directoryRef: DirectoryDbRef): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let transaction = myDb.instance.transaction([myDb.storeNames.directories], 'readwrite');
+      let store = transaction.objectStore(myDb.storeNames.directories);
+      let getRequest = store.get(directoryRef.id);
+      getRequest.onsuccess = (event) => {
+        let tmpDirectory: DirectoryDbRef = event.target.result;
+        tmpDirectory = directoryRef;
+        tmpDirectory.modifiedDate = new Date();
+        let updateRequest = store.put(tmpDirectory);
+        updateRequest.onsuccess = (event) => {
+          console.log('update directory success');
+          resolve(event);
+        }
+        updateRequest.onerror = (event) => {
+          reject(event)
+        }
+      }
+      getRequest.onerror = (event) => {
+        reject(event);
+      }
+    })
+  }
+
+  deleteDirectory(id: number): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let transaction = myDb.instance.transaction([myDb.storeNames.directories], 'readwrite');
+      let store = transaction.objectStore(myDb.storeNames.directories);
+      let deleteRequest = store.delete(id);
+      deleteRequest.onsuccess = (event) => {
+        resolve(event.target.result);
+      }
+      deleteRequest.onerror = (event) => {
+        reject(event.target.result);
+      }
+    })
+  }
+
+
+}

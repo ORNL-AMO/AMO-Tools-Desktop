@@ -19,6 +19,7 @@ export class SidebarComponent implements OnInit {
   workingDirectory: Directory;
 
   selectedDirectory: Directory;
+  firstChange: boolean = true;
   constructor(private assessmentService: AssessmentService, private router: Router) { }
 
   ngOnInit() {
@@ -26,8 +27,11 @@ export class SidebarComponent implements OnInit {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes.workingDirectory) {
+    if (changes.workingDirectory && !this.firstChange) {
       this.toggleSelected(this.workingDirectory);
+    }
+    if (this.firstChange) {
+      this.firstChange = false;
     }
   }
 

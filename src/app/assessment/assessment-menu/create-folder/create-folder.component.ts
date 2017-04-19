@@ -1,8 +1,9 @@
 import { Component, OnInit, ViewChild, Input } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ModalDirective } from 'ng2-bootstrap';
-import { Directory } from '../../../shared/models/directory';
+import { Directory, DirectoryDbRef } from '../../../shared/models/directory';
 import { ModelService } from '../../../shared/model.service';
+import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
 
 @Component({
   selector: 'app-create-folder',
@@ -14,7 +15,7 @@ export class CreateFolderComponent implements OnInit {
   directory: Directory;
 
   newFolder: any;
-  constructor(private formBuilder: FormBuilder, private modelService: ModelService) { }
+  constructor(private formBuilder: FormBuilder, private modelService: ModelService, private indexedDbService: IndexedDbService) { }
 
   ngOnInit() {
     this.newFolder = this.initForm();
@@ -38,15 +39,31 @@ export class CreateFolderComponent implements OnInit {
 
   createFolder() {
     this.hideCreateModal();
-    let newDir = this.modelService.getNewDirectory(this.newFolder.value.newFolderName);
-    newDir.collapsed = true;
-    //TODO: Logic for creating new folder
-    if (this.directory.subDirectory) {
-      this.directory.subDirectory.push(newDir);
-    } else {
-      this.directory.subDirectory = new Array();
-      this.directory.subDirectory.push(newDir);
+    // let newDir = this.modelService.getNewDirectory(this.newFolder.value.newFolderName);
+    // newDir.collapsed = true;
+    // newDir.parentDirectoryId = this.directory.id;
+    let newDir: DirectoryDbRef = {
+      name: this.newFolder.value.newFolderName,
+      parentDirectoryId: this.directory.id,
+      createdDate: new Date(),
+      modifiedDate: new Date()
     }
+
+    this.indexedDbService.addDirectory(newDir).then(newDirId => {
+      this.indexedDbService.getDirectory(newDirId).then(newDirDb => {
+        this.indexedDbService.getDirectory(this.directory.id).then(workingDirRef => {
+          if (workingDirRef.subDirectoryIds) {
+            workingDirRef.subDirectoryIds.push(newDirDb);
+          } else {
+            workingDirRef.subDirectoyIds = new Array();
+            workingDirRef.subDirectoryIds.push(newDirDb);
+          }
+          this.indexedDbService.putDirectory(this.directory).then(results => {
+            console.log(results);
+          });
+        });
+      })
+    })
   }
 
 }
