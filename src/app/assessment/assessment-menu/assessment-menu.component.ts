@@ -18,18 +18,21 @@ export class AssessmentMenuComponent implements OnInit {
   viewChange = new EventEmitter();
   @Output('directoryChange')
   directoryChange = new EventEmitter();
-  breadCrumbs: Array<string>;
+  breadCrumbs: Array<Directory>;
 
   firstChange: boolean = true;
   constructor(private indexedDbService: IndexedDbService) { }
 
   ngOnInit() {
+    this.breadCrumbs = new Array();
+    this.getBreadcrumbs(this.directory.id);
     //   this.breadCrumbs = this.getBreadcrumbs(this.directory.name, this.allDirectories);
   }
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.directory && !this.firstChange) {
-      this.breadCrumbs = this.getBreadcrumbs(this.directory.name, this.allDirectories);
+      this.breadCrumbs = new Array();
+      this.getBreadcrumbs(this.directory.id);
     } else {
       this.firstChange = false;
     }
@@ -42,54 +45,21 @@ export class AssessmentMenuComponent implements OnInit {
     this.directoryChange.emit(dir)
   }
 
-  getBreadcrumbs(targetDirName: string, allDirs: Directory) {
-    if (this.breadCrumbs) {
-      if (this.breadCrumbs[this.breadCrumbs.length - 1] == targetDirName) {
-        return this.breadCrumbs;
-      }
-    }
-    let breadCrumbs = new Array();
-    breadCrumbs.push(allDirs);
-    if (breadCrumbs[breadCrumbs.length - 1].name == targetDirName) {
-      return breadCrumbs;
-    } else {
-      if (allDirs.subDirectory) {
-        let newArr;
-        let index = 0;
-        for (index; index < allDirs.subDirectory.length; index++) {
-          let directory = allDirs.subDirectory[index];
-          let test = this.getBreadcrumbs(targetDirName, directory);
-          newArr = breadCrumbs.concat(test);
-          if (newArr[newArr.length - 1].name == targetDirName) {
-            return newArr;
-          }
+  getBreadcrumbs(dirId: number) {
+    this.indexedDbService.getDirectory(dirId).then(
+      resultDir => {
+        this.breadCrumbs.unshift(resultDir);
+        if (resultDir.parentDirectoryId) {
+          this.getBreadcrumbs(resultDir.parentDirectoryId);
         }
-      } else {
-        return [];
       }
-    }
-  }
-
-  test() {
-    //this.indexedDbService.addAssessment();
-  }
-
-  export() {
-    this.indexedDbService.getAssessment(1).then((result) => {
-      console.log(result);
-    });
+    )
   }
 
   deletedb() {
     this.indexedDbService.deleteDb().then((result) => {
       console.log(result);
     });
-  }
-
-  getAllKey() {
-    this.indexedDbService.getDirectoryAssessments(1).then((result) => {
-      console.log(result);
-    })
   }
 
 }

@@ -23,20 +23,11 @@ export class AssessmentListItemComponent implements OnInit {
   }
 
   goToAssessment(assessment: Assessment, str?: string) {
-    if (this.isSetup && str != 'system-setup') {
-      this.assessmentService.setWorkingAssessment(assessment, str);
-      if (assessment.type == 'PSAT') {
-        this.router.navigateByUrl('/psat');
-      } else if (assessment.type == 'PHAST') {
-        this.router.navigateByUrl('/phast');
-      }
-    } else if (str == 'system-setup') {
-      this.assessmentService.setWorkingAssessment(assessment, str);
-      if (assessment.type == 'PSAT') {
-        this.router.navigateByUrl('/psat');
-      } else if (assessment.type == 'PHAST') {
-        this.router.navigateByUrl('/phast');
-      }
+    this.assessmentService.tab = str;
+    if (assessment.type == 'PSAT') {
+      this.router.navigateByUrl('/psat/' + this.assessment.id);
+    } else if (assessment.type == 'PHAST') {
+      this.router.navigateByUrl('/phast/' + this.assessment.id);
     }
   }
 

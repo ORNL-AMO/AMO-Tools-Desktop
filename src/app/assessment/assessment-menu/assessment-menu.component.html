@@ -31,10 +31,10 @@
   <div class="col-10">
     <app-assessment-create [(directory)]="directory" class="create-container"></app-assessment-create>
     <app-create-folder [(directory)]="directory" class="create-container"></app-create-folder>
-    <button type="button" class="btn btn-secondary" (click)="getAllKey()">Generate Report</button>
+    <button type="button" class="btn btn-secondary" disabled>Generate Report</button>
     <button type="button" (click)="deletedb()" class="btn btn-secondary">Delete...</button>
-    <button type="button" (click)="test()" class="btn btn-secondary space-left">Import...</button>
-    <button type="button" (click)="export()" class="btn btn-secondary">Export...</button>
+    <button type="button" disabled class="btn btn-secondary space-left">Import...</button>
+    <button type="button" disabled class="btn btn-secondary">Export...</button>
   </div>
   <div class="col-2">
 

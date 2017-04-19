@@ -49,7 +49,6 @@ export class CreateFolderComponent implements OnInit {
     this.indexedDbService.addDirectory(newDir).then(newDirId => {
       this.indexedDbService.getChildrenDirectories(this.directory.id).then(childDirs => {
         this.directory.subDirectory = childDirs;
-        console.log(this.directory);
       })
     })
   }

@@ -6,7 +6,7 @@ import { Assessment } from '../shared/models/assessment';
 
 var myDb: any = {
   name: 'CrudDB',
-  version: 5,
+  version: 1,
   instance: {},
   storeNames: {
     assessments: 'assessments',
@@ -156,7 +156,7 @@ export class IndexedDbService {
       let store = transaction.objectStore(myDb.storeNames.assessments);
       let getRequest = store.get(assessment.id);
 
-      getRequest.onsucces = (event) => {
+      getRequest.onsuccess = (event) => {
         let tmpAssessment: Assessment = event.target.result;
         tmpAssessment = assessment;
         tmpAssessment.modifiedDate = new Date();

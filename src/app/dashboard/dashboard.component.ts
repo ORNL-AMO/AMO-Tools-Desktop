@@ -15,6 +15,7 @@ export class DashboardComponent implements OnInit {
   selectedCalculator: string;
 
   newDirectory: any;
+  isFirstChange: boolean = true;
 
   constructor(private indexedDbService: IndexedDbService, private formBuilder: FormBuilder) { }
 
@@ -31,6 +32,9 @@ export class DashboardComponent implements OnInit {
             if (results) {
               this.allDirectories = this.populateDirectories(results);
               this.workingDirectory = this.allDirectories
+            } else {
+              this.createExampleAssessments();
+              this.createDirectory();
             }
           })
       }
@@ -43,7 +47,8 @@ export class DashboardComponent implements OnInit {
       createdDate: directoryRef.createdDate,
       modifiedDate: directoryRef.modifiedDate,
       id: directoryRef.id,
-      collapsed: false
+      collapsed: false,
+      parentDirectoryId: directoryRef.parentDirectoryId
     }
     this.indexedDbService.getDirectoryAssessments(directoryRef.id).then(
       results => {
@@ -59,9 +64,14 @@ export class DashboardComponent implements OnInit {
     return tmpDirectory;
   }
 
-  changeWorkingDirectory($event) {
+  changeWorkingDirectory(directory: Directory) {
     this.showCalculators = false;
-    this.workingDirectory = $event;
+    this.indexedDbService.getDirectory(directory.id).then(
+      results => {
+        if (results) {
+          this.workingDirectory = this.populateDirectories(results);
+        }
+      })
   }
 
   viewCalculator(str: string) {
@@ -69,9 +79,24 @@ export class DashboardComponent implements OnInit {
     this.selectedCalculator = str;
   }
 
+  createExampleAssessments() {
+    let tmpAssessment = MockDirectory.assessments[0];
+    tmpAssessment.directoryId = 1;
+    this.indexedDbService.addAssessment(tmpAssessment).then(assessmentId => {
+
+    })
+
+    tmpAssessment = MockDirectory.assessments[1];
+    tmpAssessment.directoryId = 1;
+    this.indexedDbService.addAssessment(tmpAssessment).then(assessmentId => {
+
+    })
+  }
+
+
   createDirectory() {
     let tmpDirectory: DirectoryDbRef = {
-      name: this.newDirectory.value.directoryName,
+      name: 'Root',
       createdDate: new Date(),
       modifiedDate: new Date(),
       assessmentIds: null,

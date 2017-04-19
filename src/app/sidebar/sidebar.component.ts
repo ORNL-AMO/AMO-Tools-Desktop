@@ -28,7 +28,7 @@ export class SidebarComponent implements OnInit {
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.workingDirectory && !this.firstChange) {
-      this.toggleSelected(this.workingDirectory);
+      //   this.toggleSelected(this.workingDirectory);
     }
     if (this.firstChange) {
       this.firstChange = false;
@@ -48,11 +48,11 @@ export class SidebarComponent implements OnInit {
   }
 
   goToAssessment(assessment: Assessment) {
-    this.assessmentService.setWorkingAssessment(assessment);
+    this.assessmentService.tab = 'system-setup';
     if (assessment.type == 'PSAT') {
-      this.router.navigateByUrl('/psat');
+      this.router.navigateByUrl('/psat/' + assessment.id);
     } else if (assessment.type == 'PHAST') {
-      this.router.navigateByUrl('/phast');
+      this.router.navigateByUrl('/phast/' + assessment.id);
     }
   }
 

@@ -7,7 +7,8 @@ export interface Directory {
   collapsed?: boolean,
   createdDate?: Date,
   modifiedDate?: Date,
-  id?: number
+  id?: number,
+  parentDirectoryId?: number
 }
 
 

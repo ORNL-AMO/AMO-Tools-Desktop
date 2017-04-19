@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, SimpleChanges, Output, EventEmitter } from '@angular/core';
 import { PHAST, Losses, Modification } from '../../shared/models/phast';
 @Component({
   selector: 'app-losses',
@@ -10,6 +10,8 @@ export class LossesComponent implements OnInit {
   phast: PHAST;
   @Input()
   saveClicked: boolean;
+  @Output('saved')
+  saved = new EventEmitter<boolean>();
 
   _modifications: Modification[];
   isDropdownOpen: boolean = false;
@@ -89,6 +91,8 @@ export class LossesComponent implements OnInit {
   saveModifications() {
     if (this._modifications) {
       this.phast.modifications = (JSON.parse(JSON.stringify(this._modifications)));
+      console.log('saveModifications');
+      this.saved.emit(true);
     }
   }
 

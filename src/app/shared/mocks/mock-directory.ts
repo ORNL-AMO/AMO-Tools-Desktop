@@ -7,7 +7,9 @@ export const MockDirectory: Directory = {
   modifiedDate: new Date(),
   assessments: [
     {
-      name: 'Mock PSAT 1',
+      createdDate: new Date(),
+      modifiedDate: new Date(),
+      name: 'Example PSAT',
       type: 'PSAT',
       psat:
       {
@@ -44,8 +46,10 @@ export const MockDirectory: Directory = {
 
     },
     {
-      name: 'Mock PHAST 1',
+      name: 'Example PHAST',
       type: 'PHAST',
+      createdDate: new Date(),
+      modifiedDate: new Date(),
       phast: {
         losses: {
           chargeMaterials: [
