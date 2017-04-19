@@ -71,9 +71,7 @@ export class AssessmentCreateComponent implements OnInit {
         tmpAssessment.psat = tmpPsat;
         tmpAssessment.directoryId = this.directory.id;
         this.indexedDbService.addAssessment(tmpAssessment).then(assessmentId => {
-          console.log('assesmentId ' + assessmentId);
           this.indexedDbService.getAssessment(assessmentId).then(assessment => {
-            console.log('assessment ' + assessment);
             tmpAssessment = assessment;
             if (this.directory.assessments) {
               this.directory.assessments.push(tmpAssessment);
@@ -82,18 +80,28 @@ export class AssessmentCreateComponent implements OnInit {
               this.directory.assessments.push(tmpAssessment);
             }
             debugger;
-            //NEED TO CHECK FOR SUBS
-            let test = _.map(this.directory.subDirectory, 'id');
-            console.log(test);
-            // let tmpDirRef: DirectoryDbRef = {
-            //   name: this.directory.name,
-            //   id: this.directory.id,
-            //   subDirectoryIds: _.map(this.directory.subDirectory, 'id'),
-            //   assessmentIds: _.map(this.directory.assessments, 'id')
+            let tmpSubIds = new Array();
+            let tmpAssIds = new Array();
+            if (this.directory.subDirectory) {
+              this.directory.subDirectory.forEach(dir => {
+                tmpSubIds.push(dir.id);
+              })
+            }
+            if (this.directory.assessments) {
+              this.directory.assessments.forEach(assessment => {
+                tmpAssIds.push(assessment.id);
+              })
+            }
+            let tmpDirRef: DirectoryDbRef = {
+              name: this.directory.name,
+              id: this.directory.id,
+              subDirectoryIds: tmpSubIds,
+              assessmentIds: tmpAssIds,
+              createdDate: this.directory.createdDate,
+              modifiedDate: this.directory.modifiedDate
+            }
 
-            // }
-            this.indexedDbService.putDirectory(this.directory).then(results => {
-              console.log('put results ' + results);
+            this.indexedDbService.putDirectory(tmpDirRef).then(results => {
               this.assessmentService.setWorkingAssessment(tmpAssessment);
               this.router.navigateByUrl('/psat')
             });

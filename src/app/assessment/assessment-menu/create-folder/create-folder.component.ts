@@ -39,9 +39,6 @@ export class CreateFolderComponent implements OnInit {
 
   createFolder() {
     this.hideCreateModal();
-    // let newDir = this.modelService.getNewDirectory(this.newFolder.value.newFolderName);
-    // newDir.collapsed = true;
-    // newDir.parentDirectoryId = this.directory.id;
     let newDir: DirectoryDbRef = {
       name: this.newFolder.value.newFolderName,
       parentDirectoryId: this.directory.id,
@@ -50,18 +47,9 @@ export class CreateFolderComponent implements OnInit {
     }
 
     this.indexedDbService.addDirectory(newDir).then(newDirId => {
-      this.indexedDbService.getDirectory(newDirId).then(newDirDb => {
-        this.indexedDbService.getDirectory(this.directory.id).then(workingDirRef => {
-          if (workingDirRef.subDirectoryIds) {
-            workingDirRef.subDirectoryIds.push(newDirDb);
-          } else {
-            workingDirRef.subDirectoyIds = new Array();
-            workingDirRef.subDirectoryIds.push(newDirDb);
-          }
-          this.indexedDbService.putDirectory(this.directory).then(results => {
-            console.log(results);
-          });
-        });
+      this.indexedDbService.getChildrenDirectories(this.directory.id).then(childDirs => {
+        this.directory.subDirectory = childDirs;
+        console.log(this.directory);
       })
     })
   }

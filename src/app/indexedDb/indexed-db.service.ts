@@ -6,7 +6,7 @@ import { Assessment } from '../shared/models/assessment';
 
 var myDb: any = {
   name: 'CrudDB',
-  version: 3,
+  version: 5,
   instance: {},
   storeNames: {
     assessments: 'assessments',
@@ -44,18 +44,21 @@ export class IndexedDbService {
         var newVersion = e.target.result;
         if (!newVersion.objectStoreNames.contains(myDb.storeNames.assessments)) {
           console.log('creating assessments store...');
-          newVersion.createObjectStore(myDb.storeNames.assessments, {
+          let assessmentObjStore = newVersion.createObjectStore(myDb.storeNames.assessments, {
             autoIncrement: true,
             keyPath: 'id'
           })
+          assessmentObjStore.createIndex('directoryId', 'directoryId', { unique: false });
         }
         if (!newVersion.objectStoreNames.contains(myDb.storeNames.directories)) {
           console.log('creating directories store...');
-          newVersion.createObjectStore(myDb.storeNames.directories, {
+          let directoryObjectStore = newVersion.createObjectStore(myDb.storeNames.directories, {
             autoIncrement: true,
             keyPath: 'id'
           })
+          directoryObjectStore.createIndex('parentDirectoryId', 'parentDirectoryId', { unique: false });
         }
+
       }
       myDb.setDefaultErrorHandler(this.request, myDb);
 
@@ -126,6 +129,23 @@ export class IndexedDbService {
       }
       getRequest.onerror = (error) => {
         reject(error.target.result)
+      }
+    })
+  }
+
+  getDirectoryAssessments(directoryId: number): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let transaction = myDb.instance.transaction([myDb.storeNames.assessments], 'readwrite');
+      let store = transaction.objectStore(myDb.storeNames.assessments);
+      let index = store.index('directoryId');
+      let indexGetRequest = index.getAll(directoryId);
+      myDb.setDefaultErrorHandler(indexGetRequest, myDb);
+
+      indexGetRequest.onsuccess = (e) => {
+        resolve(e.target.result)
+      }
+      indexGetRequest.onerror = (e) => {
+        reject(e);
       }
     })
   }
@@ -209,6 +229,22 @@ export class IndexedDbService {
       }
       getRequest.onerror = (error) => {
         reject(error.target.result)
+      }
+    })
+  }
+
+  getChildrenDirectories(parentDirectoryId): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let transaction = myDb.instance.transaction([myDb.storeNames.directories], 'readwrite');
+      let store = transaction.objectStore(myDb.storeNames.directories);
+      let index = store.index('parentDirectoryId');
+      let indexGetRequest = index.getAll(parentDirectoryId);
+      myDb.setDefaultErrorHandler(indexGetRequest, myDb);
+      indexGetRequest.onsuccess = (e) => {
+        resolve(e.target.result)
+      }
+      indexGetRequest.onerror = (e) => {
+        reject(e);
       }
     })
   }

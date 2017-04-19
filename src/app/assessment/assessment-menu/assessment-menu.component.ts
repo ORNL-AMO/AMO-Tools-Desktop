@@ -86,4 +86,10 @@ export class AssessmentMenuComponent implements OnInit {
     });
   }
 
+  getAllKey() {
+    this.indexedDbService.getDirectoryAssessments(1).then((result) => {
+      console.log(result);
+    })
+  }
+
 }

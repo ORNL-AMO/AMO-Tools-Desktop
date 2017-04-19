@@ -29,10 +29,8 @@ export class DashboardComponent implements OnInit {
         this.indexedDbService.getDirectory(1).then(
           results => {
             if (results) {
-
               this.allDirectories = this.populateDirectories(results);
               this.workingDirectory = this.allDirectories
-              debugger
             }
           })
       }
@@ -44,35 +42,22 @@ export class DashboardComponent implements OnInit {
       name: directoryRef.name,
       createdDate: directoryRef.createdDate,
       modifiedDate: directoryRef.modifiedDate,
+      id: directoryRef.id,
+      collapsed: false
     }
-    if (directoryRef.assessmentIds) {
-      tmpDirectory.assessments = new Array();
-      let i = 0;
-      for (i; i < directoryRef.assessmentIds.length; i++) {
-        this.indexedDbService.getAssessment(directoryRef.assessmentIds[i]).then(
-          assessmentObj => {
-            tmpDirectory.assessments.push(assessmentObj);
-          }
-        );
+    this.indexedDbService.getDirectoryAssessments(directoryRef.id).then(
+      results => {
+        tmpDirectory.assessments = results;
       }
-    }
-    if (directoryRef.subDirectoryIds) {
-      tmpDirectory.subDirectory = new Array();
-      let i = 0;
-      for (i; i < directoryRef.subDirectoryIds.length; i++) {
-        this.indexedDbService.getDirectory(directoryRef.subDirectoryIds[i]).then(
-          directoryRef => {
-            let tmpDir = this.populateDirectories(directoryRef);
-            tmpDirectory.subDirectory.push(tmpDir);
-          }
-        )
-      }
-    } else {
-      console.log(tmpDirectory);
-      return tmpDirectory;
-    }
-  }
+    );
 
+    this.indexedDbService.getChildrenDirectories(directoryRef.id).then(
+      results => {
+        tmpDirectory.subDirectory = results;
+      }
+    )
+    return tmpDirectory;
+  }
 
   changeWorkingDirectory($event) {
     this.showCalculators = false;
@@ -85,7 +70,6 @@ export class DashboardComponent implements OnInit {
   }
 
   createDirectory() {
-    debugger
     let tmpDirectory: DirectoryDbRef = {
       name: this.newDirectory.value.directoryName,
       createdDate: new Date(),
