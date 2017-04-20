@@ -16,7 +16,7 @@ export class ModifyConditionsComponent implements OnInit {
   @Output('saved')
   saved = new EventEmitter<boolean>();
 
-  modifyTab: string = 'pump-fluid';
+  modifyTab: string = 'field-data';
   _modifications: Array<Modification>;
   baselineSelected: boolean = true;
   modifiedSelected: boolean = false;
