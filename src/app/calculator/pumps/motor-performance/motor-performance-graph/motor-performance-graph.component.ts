@@ -272,12 +272,123 @@ export class MotorPerformanceGraphComponent implements OnInit {
     this.focus.append("text")
       .attr("x", 9)
       .attr("dy", ".35em");
+
+    this.svg.append("text")
+      .attr("x", 20)
+      .attr("y", "20")
+      .text("Current(%FLC)")
+      .style("font-size", "13px")
+      .style("font-weight", "bold")
+      .style("fill", "#f53e3d");
+
+    this.svg.append("text")
+      .attr("x", 20)
+      .attr("y", "50")
+      .text( "Power Factor(%)")
+      .style("font-size", "13px")
+      .style("font-weight", "bold")
+      .style("fill", "#6175f5");
+
+    this.svg.append("text")
+      .attr("x", 20)
+      .attr("y", "80")
+      .text( "Efficiency")
+      .style("font-size", "13px")
+      .style("font-weight", "bold")
+      .style("fill", "#fecb00");
+
+
+
+    console.log("first");
   }
 
-  ngOnChanges(changes: SimpleChanges) {
+  onChanges() {
+
+    this.drawCurrentLine();
+    this.drawPowerFactorLine();
+    this.drawEfficiencyLine();
 
   }
 
+  drawCurrentLine(){
 
+    var data = [];
+
+    for(var i = 0; i < 120; i++) {
+
+      data.push({
+        x: i,
+        y: this.calculateCurrent(i)
+      })
+    }
+
+    var currentLine = d3.line()
+      .x(function(d) { return this.x(d.x); })
+      .y(function(d) { return this.y(d.y); })
+      .curve(d3.curveNatural);
+
+
+    console.log("here");
+    this.svg.append("path")
+      .data([data])
+      .attr("class", "line")
+      .attr("d", currentLine)
+      .style("stroke-width", 10)
+      .style("stroke-width", "2px")
+      .style("fill", "none")
+      .style("stroke", "#f53e3d");
+  }
+
+  drawPowerFactorLine(){
+
+    var data = [];
+
+    for(var i = 0; i < 120; i++) {
+      data.push({
+        x: i,
+        y: this.calculatePowerFactor(i)
+      })
+    }
+
+    var powerFactorLine = d3.line()
+      .x(function(d) { return this.x(d.x); })
+      .y(function(d) { return this.y(d.y); })
+      .curve(d3.curveNatural);
+
+    this.svg.append("path")
+      .data([data])
+      .attr("class", "line")
+      .attr("d", powerFactorLine)
+      .style("stroke-width", 10)
+      .style("stroke-width", "2px")
+      .style("fill", "none")
+      .style("stroke", "#6175f5");
+  }
+
+  drawEfficiencyLine(){
+
+    var data = [];
+
+    for(var i = 0; i < 120; i++) {
+      data.push({
+        x: i,
+        y: this.calculateEfficiency(i)
+      })
+    }
+
+    var powerFactorLine = d3.line()
+      .x(function(d) { return this.x(d.x); })
+      .y(function(d) { return this.y(d.y); })
+      .curve(d3.curveNatural);
+
+    this.svg.append("path")
+      .data([data])
+      .attr("class", "line")
+      .attr("d", powerFactorLine)
+      .style("stroke-width", 10)
+      .style("stroke-width", "2px")
+      .style("fill", "none")
+      .style("stroke", "#fecb00");
+  }
 
 }

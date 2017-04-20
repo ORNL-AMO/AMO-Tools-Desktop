@@ -16,12 +16,55 @@ const width = 1950,
 })
 
 export class SankeyComponent implements OnInit {
+  @Input()
+  losses: Losses;
+
+  totalChargeMaterialLoss: number = 0;
+  totalWallLoss: number = 0;
+  totalOtherLoss: number = 0;
+  totalOpeningLoss: number = 0;
+  totalLeakageLoss: number = 0;
+  totalFixtureLoss: number = 0;
+  totalExtSurfaceLoss: number = 0;
+  totalCoolingLoss: number = 0;
+  totalAtmosphereLoss: number = 0;
+
+  firstChange: boolean = true;
 
   baseSize: number = 300;
   constructor() {
   }
 
   ngOnInit() {
+    if (this.losses) {
+      this.getTotals();
+    }
+  }
+
+  //For dynamic sankey, will calculate totals when losses input changes value
+  // ngOnChanges(changes: SimpleChanges) {
+  //   if (!this.firstChange) {
+  //     if (changes.losses) {
+  //       this.getTotals();
+  //     }
+  //   }
+  //   else {
+  //     this.firstChange = false;
+  //   }
+  // }
+
+  getTotals() {
+    this.totalWallLoss = _.sumBy(this.losses.wallLosses, 'heatLoss');
+    this.totalAtmosphereLoss = _.sumBy(this.losses.atmosphereLosses, 'heatLoss');
+    this.totalOtherLoss = _.sumBy(this.losses.otherLosses, 'heatLoss');
+    this.totalCoolingLoss = _.sumBy(this.losses.coolingLosses, 'heatLoss');
+    this.totalOpeningLoss = _.sumBy(this.losses.openingLosses, 'heatLoss');
+    this.totalFixtureLoss = _.sumBy(this.losses.fixtureLosses, 'heatLoss');
+
+    this.totalLeakageLoss = _.sumBy(this.losses.leakageLosses, 'heatLoss');
+    this.totalExtSurfaceLoss = _.sumBy(this.losses.extendedSurfaces, 'heatLoss');
+    this.totalChargeMaterialLoss = (_.sumBy(this.losses.chargeMaterials, 'gasChargeMaterial.heatRequired') + _.sumBy(this.losses.chargeMaterials, 'liquidChargeMaterial.heatRequired') + _.sumBy(this.losses.chargeMaterials, 'solidChargeMaterial.heatRequired'))
+
   }
 
   closeSankey(location){
@@ -42,53 +85,76 @@ export class SankeyComponent implements OnInit {
   }
 
   makeSankey(location){
+    //Sankey will not be made if even a single loss has not been entered
+    if(this.totalWallLoss != null && this.totalAtmosphereLoss != null && this.totalOtherLoss != null && this.totalCoolingLoss != null && this.totalOpeningLoss != null
+          && this.totalFixtureLoss != null && this.totalLeakageLoss != null && this.totalExtSurfaceLoss != null && this.totalChargeMaterialLoss != null) {
+      this.sankey(location);
+    }
+  }
+
+  sankey(location){
 
     //Remove  all Sankeys
     d3.select(location).selectAll('svg').remove();
 
     var nodes = [
-      /*0*/{ name: "Input", value: 300, displaySize: this.baseSize, width: 300, x: 150, y:0, input: true, usefulOutput: false, inter: false, top: false},
+      /*0*/{ name: "Input", value: 20000000, displaySize: this.baseSize, width: 300, x: 150, y:0, input: true, usefulOutput: false, inter: false, top: false},
       /*1*/{ name: "inter1", value: 0, displaySize: 0, width: 0, x: 450, y: 0, input: false, usefulOutput: false, inter: true, top: true},
-      /*2*/{ name: "Flue Gas Losses", value: 70, displaySize: 0, width: 0, x: 620, y: 0, input: false, usefulOutput: false, inter: false, top: true},
+      /*2*/{ name: "Flue Gas Losses", value: 0, displaySize: 0, width: 0, x: 620, y: 0, input: false, usefulOutput: false, inter: false, top: true},
       /*3*/{ name: "inter2", value: 0, displaySize: 0 ,width: 0, x: 500, y: 0, input: false, usefulOutput: false, inter: true, top: false},
-      /*4*/{ name: "Atmosphere Losses", value: 40, displaySize: 0, width: 0, x: 650, y: 0, input: false, usefulOutput: false, inter: false, top: false},
+      /*4*/{ name: "Atmosphere Losses", value: this.totalAtmosphereLoss, displaySize: 0, width: 0, x: 650, y: 0, input: false, usefulOutput: false, inter: false, top: false},
       /*5*/{ name: "inter3", value: 0, displaySize: 0, width: 0, x: 630, y: 0, input: false, usefulOutput: false, inter: true, top: true},
-      /*6*/{ name: "Other Losses", value: 20, displaySize: 0, width: 0, x: 770,  y: 0, input: false, usefulOutput: false, inter: false, top: true},
+      /*6*/{ name: "Other Losses", value: this.totalOtherLoss, displaySize: 0, width: 0, x: 790,  y: 0, input: false, usefulOutput: false, inter: false, top: true},
       /*7*/{ name: "inter4", value: 0, displaySize: 0, width: 0, x: 740, y: 0, input: false, usefulOutput: false, inter: true, top: false},
-      /*8*/{ name: "Water Cooling Losses", value: 30, displaySize: 0, width: 0, x: 890, y: 0, input: false, usefulOutput: false, inter: false, top: false},
-      /*9*/{ name: "inter5", value: 0, displaySize: 0, width: 0, x: 900, y: 0, input: false, usefulOutput: false, inter: true, top: true},
-      /*10*/{ name: "Wall Losses", value: 40, displaySize: 0, width: 0, x: 1030, y: 0, input: false, usefulOutput: false, inter: false, top: true},
-      /*11*/{ name: "inter6", value: 0, displaySize: 0, width: 0, x: 1070, y: 0, input: false, usefulOutput: false, inter: true, top: false},
-      /*12*/{ name: "Opening Losses", value: 10, displaySize: 0, width: 0, x: 1200, y: 0, input: false, usefulOutput: false, inter: false, top: true},
-      /*13*/{ name: "inter7", value: 0, displaySize: 0, width: 0, x: 1130, y: 0, input: false, usefulOutput: false, inter: true, top: false},
-      /*14*/{ name: "Fixture/Conveyor Losses", value: 10, displaySize: 0, width: 0, x: 1270, y: 0, input: false, usefulOutput: false, inter: false, top: false},
-      /*15*/{ name: "Useful Output", value: 0, displaySize: 0, width: 0, x: 1350, y: 0, input: false, usefulOutput: true, inter: false, top: true}
+      /*8*/{ name: "Water Cooling Losses", value: this.totalCoolingLoss, displaySize: 0, width: 0, x: 890, y: 0, input: false, usefulOutput: false, inter: false, top: false},
+      /*9*/{ name: "inter5", value: 0, displaySize: 0, width: 0, x: 850, y: 0, input: false, usefulOutput: false, inter: true, top: true},
+      /*10*/{ name: "Wall Losses", value: this.totalWallLoss, displaySize: 0, width: 0, x: 980, y: 0, input: false, usefulOutput: false, inter: false, top: true},
+      /*11*/{ name: "inter6", value: 0, displaySize: 0, width: 0, x: 940, y: 0, input: false, usefulOutput: false, inter: true, top: false},
+      /*12*/{ name: "Opening Losses", value: this.totalOpeningLoss, displaySize: 0, width: 0, x: 1120, y: 0, input: false, usefulOutput: false, inter: false, top: false},
+      /*13*/{ name: "inter7", value: 0, displaySize: 0, width: 0, x: 1040, y: 0, input: false, usefulOutput: false, inter: true, top: true},
+      /*14*/{ name: "Fixture/Conveyor Losses", value: this.totalFixtureLoss, displaySize: 0, width: 0, x: 1200, y: 0, input: false, usefulOutput: false, inter: false, top: true},
+      /*15*/{ name: "inter8", value: 0, displaySize: 0, width: 0, x: 1170, y: 0, input: false, usefulOutput: false, inter: true, top: false},
+      /*16*/{ name: "Leakage Losses", value: this.totalLeakageLoss, displaySize: 0, width: 0, x: 1330, y: 0, input: false, usefulOutput: false, inter: false, top: false},
+      /*17*/{ name: "inter9", value: 0, displaySize: 0, width: 0, x: 1280, y: 0, input: false, usefulOutput: false, inter: true, top: true},
+      /*18*/{ name: "External SurfaceLosses", value: this.totalExtSurfaceLoss, displaySize: 0, width: 0, x: 1400, y: 0, input: false, usefulOutput: false, inter: false, top: true},
+      /*19*/{ name: "inter10", value: 0, displaySize: 0, width: 0, x: 1400, y: 0, input: false, usefulOutput: false, inter: true, top: false},
+      /*20*/{ name: "Charge Material Losses", value: this.totalChargeMaterialLoss, displaySize: 0, width: 0, x: 1520, y: 0, input: false, usefulOutput: false, inter: false, top: false},
+      /*21*/{ name: "Useful Output", value: 0, displaySize: 0, width: 0, x: 1650, y: 0, input: false, usefulOutput: true, inter: false, top: false}
     ];
 
     var links = [
       //linking to the first interNode
-      { source: 0, target: 1, endWidth: 0 },
+      { source: 0, target: 1 },
       //interNode1 to Flue Gas and interNode2
-      { source: 1, target: 2, endWidth: 0 },
-      { source: 1, target: 3, endWidth: 0 },
+      { source: 1, target: 2 },
+      { source: 1, target: 3 },
       //interNode2 to Atmosphere and interNode3
-      { source: 3, target: 4, endWidth: 0},
-      { source: 3, target: 5, endWidth: 0 },
+      { source: 3, target: 4 },
+      { source: 3, target: 5 },
       //interNode3 to Other and interNode4
-      { source: 5, target: 6, endWidth: 0 },
-      { source: 5, target: 7, endWidth: 0 },
+      { source: 5, target: 6 },
+      { source: 5, target: 7 },
       //interNode4 to Water and interNode5
-      { source: 7, target: 8, endWidth: 0 },
-      { source: 7, target: 9, endWidth: 0 },
+      { source: 7, target: 8 },
+      { source: 7, target: 9 },
       //interNode5 to Wall and interNode6
-      { source: 9, target: 10, endWidth: 0 },
-      { source: 9, target: 11, endWidth: 0 },
+      { source: 9, target: 10 },
+      { source: 9, target: 11 },
       //interNode6 to Opening and interNode7
-      { source: 11, target: 12, endWidth: 0 },
-      { source: 11, target: 13, endWidth: 0 },
-      //interNode7 to Fixture and Useful Output
-      { source: 13, target: 14, endWidth: 0 },
-      { source: 13, target: 15, endWidth: 0 }
+      { source: 11, target: 12 },
+      { source: 11, target: 13 },
+      //interNode7 to Fixture and interNode8
+      { source: 13, target: 14 },
+      { source: 13, target: 15 },
+      //interNode8 to Leakage and interNode9
+      { source: 15, target: 16 },
+      { source: 15, target: 17 },
+      //interNode9 to External and interNode10
+      { source: 17, target: 18 },
+      { source: 17, target: 19 },
+      //interNode10 to Charge and usefulOutput
+      { source: 19, target: 20 },
+      { source: 19, target: 21 },
     ];
 
     svg = d3.select(location).append('svg')
@@ -186,7 +252,8 @@ export class SankeyComponent implements OnInit {
         if(!d.inter) {
           return d.name;
         }
-      });
+      })
+      .style("font-size", "20px");
 
     var nodes_units = svg.selectAll(".nodetext")
       .data(nodes)
@@ -206,14 +273,14 @@ export class SankeyComponent implements OnInit {
       })
       .attr("dy", function(d){
         if(d.input || d.usefulOutput){
-          return d.y + (d.displaySize/2) + 60;
+          return d.y + (d.displaySize/2) + 70;
         }
         else {
           if (d.top) {
-            return d.y - 30;
+            return d.y - 20;
           }
           else {
-            return d.y + 130;
+            return d.y + 140;
           }
         }
       })
@@ -221,7 +288,8 @@ export class SankeyComponent implements OnInit {
         if(!d.inter) {
           return "Btu/Hr.";
         }
-      });
+      })
+      .style("font-size", "20px");
 
     nodes.forEach((d, i) => {
       var node_val = d, i = i;
@@ -230,13 +298,13 @@ export class SankeyComponent implements OnInit {
           .attr("id", "inputObject")
           .attr("x", function () {
             if (node_val.input) {
-              return node_val.x - 120;
+              return node_val.x - 150;
             }
             else if (node_val.usefulOutput) {
-              return d.x + (d.displaySize*.7) + 50;
+              return d.x + (d.displaySize*.7) + 30;
             }
             else {
-              return node_val.x - 50;
+              return node_val.x - 70;
             }
           })
           .attr("y", function () {
@@ -259,10 +327,12 @@ export class SankeyComponent implements OnInit {
           .attr("type", "text")
           .attr("id", node_val.name)
           .attr("value", function(){
-            var format = d3.format(",");
+            var format = d3.format(",.3f");
             return format(node_val.value);
           })
-          .style("width", "100px")
+          .style("width", "140px")
+          .style("font-size", "20px");
+          /*
           .on("change", (inputBox) => {
 
             console.log("value: " + inputBox.value);
@@ -348,6 +418,7 @@ export class SankeyComponent implements OnInit {
 
 
           });
+          */
       }
     });
 

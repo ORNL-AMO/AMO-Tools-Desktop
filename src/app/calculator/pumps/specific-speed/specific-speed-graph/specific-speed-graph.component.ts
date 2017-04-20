@@ -24,8 +24,8 @@ export class SpecificSpeedGraphComponent implements OnInit {
   y: any;
   width: any;
   height: any;
-  staticHeadText: any;
-  lossCoefficientText: any;
+  specificSpeedText: any;
+  efficiencyCorrectionText: any;
   margin: any;
   line: any;
   filter: any;
@@ -108,7 +108,7 @@ export class SpecificSpeedGraphComponent implements OnInit {
 
     this.x1 = d3.scaleLinear()
       .range([(this.width*(1/3)), (this.width*(2/3))])
-      .domain([100, 10000]);
+      .domain([1000, 10000]);
 
     this.x2 = d3.scaleLinear()
       .range([(this.width*(2/3)), this.width])
@@ -261,17 +261,15 @@ export class SpecificSpeedGraphComponent implements OnInit {
       .style("font-size", "13px")
       .style("font-weight", "bold");
 
-    this.staticHeadText = this.svg.append("text")
-      .attr("x", 240)
+    this.specificSpeedText = this.svg.append("text")
+      .attr("x", 200)
       .attr("y", "20")
-      .text("Something")
       .style("font-size", "13px")
       .style("font-weight", "bold");
 
-    this.lossCoefficientText = this.svg.append("text")
-      .attr("x", 240)
+    this.efficiencyCorrectionText = this.svg.append("text")
+      .attr("x", 200)
       .attr("y", "50")
-      .text("Something")
       .style("font-size", "13px")
       .style("font-weight", "bold");
 
@@ -310,8 +308,32 @@ export class SpecificSpeedGraphComponent implements OnInit {
   drawGuideCurve(svg, x0, x1, y, psatService, type){
 
     var data = [];
-    console.log("here");
-    for(var  i = 100; i < 7000; i++){
+    for(var  i = 100; i < 1000; i++){
+      var efficiencyCorrection = psatService.achievableEfficiency(type, i);
+      if(efficiencyCorrection <= 6) {
+        data.push({
+          x: i,
+          y: efficiencyCorrection
+        });
+      }
+    }
+
+    var guideLine = d3.line()
+      .x(function(d) { return x0(d.x); })
+      .y(function(d) { return y(d.y); })
+      .curve(d3.curveNatural);
+
+    svg.append("path")
+      .data([data])
+      .attr("class", "line")
+      .attr("d", guideLine)
+      .style("stroke-width", 10)
+      .style("stroke-width", "2px")
+      .style("fill", "none")
+      .style("stroke", "#fecb00");
+
+    data = [];
+    for(var  i = 1000; i < 7000; i++){
       data.push({
         x: i,
         y: psatService.achievableEfficiency(type, i)
@@ -332,7 +354,6 @@ export class SpecificSpeedGraphComponent implements OnInit {
       .style("fill", "none")
       .style("stroke", "#fecb00");
 
-
     this.focus = this.svg.append("g")
       .attr("class", "focus")
       .style("display", "none");
@@ -345,7 +366,7 @@ export class SpecificSpeedGraphComponent implements OnInit {
 
   }
 
-  onChange(){
+  onChanges(){
 
     var specificSpeed = this.getSpecificSpeed();
     var efficiencyCorrection = this.psatService.achievableEfficiency(this.speedForm.value.pumpType, specificSpeed);
@@ -360,6 +381,13 @@ export class SpecificSpeedGraphComponent implements OnInit {
           return "translate(" + this.x1(specificSpeed) + "," + this.y(efficiencyCorrection) + ")";
         }
       });
+
+    this.specificSpeedText = this.svg.append("text")
+      .text(specificSpeed);
+
+    this.efficiencyCorrectionText = this.svg.append("text")
+      .text(efficiencyCorrection);
+
   }
 
 }
