@@ -16,6 +16,9 @@ import { CoreComponent } from './core.component';
 import { SidebarComponent } from '../sidebar/sidebar.component';
 import { DashboardComponent } from '../dashboard/dashboard.component';
 import { AssessmentService } from '../assessment/assessment.service';
+import { AssessmentItemComponent } from '../sidebar/assessment-item/assessment-item.component';
+import { DirectoryItemComponent } from '../sidebar/directory-item/directory-item.component';
+
 
 import { IndexedDbModule } from '../indexedDb/indexedDb.module';
 
@@ -24,6 +27,8 @@ import { IndexedDbModule } from '../indexedDb/indexedDb.module';
     CoreComponent,
     SidebarComponent,
     DashboardComponent,
+    AssessmentItemComponent,
+    DirectoryItemComponent
   ],
   imports: [
     CommonModule,

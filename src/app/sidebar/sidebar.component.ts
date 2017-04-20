@@ -20,15 +20,15 @@ export class SidebarComponent implements OnInit {
 
   selectedDirectory: Directory;
   firstChange: boolean = true;
-  constructor(private assessmentService: AssessmentService, private router: Router) { }
+  constructor() { }
 
   ngOnInit() {
     this.selectedDirectory = this.directory;
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes.workingDirectory && !this.firstChange) {
-      //   this.toggleSelected(this.workingDirectory);
+    if (changes.directory && !this.firstChange) {
+      this.toggleSelected(this.workingDirectory);
     }
     if (this.firstChange) {
       this.firstChange = false;
@@ -45,15 +45,6 @@ export class SidebarComponent implements OnInit {
     }
     this.selectedDirectory = dir;
     this.directoryChange.emit(dir);
-  }
-
-  goToAssessment(assessment: Assessment) {
-    this.assessmentService.tab = 'system-setup';
-    if (assessment.type == 'PSAT') {
-      this.router.navigateByUrl('/psat/' + assessment.id);
-    } else if (assessment.type == 'PHAST') {
-      this.router.navigateByUrl('/phast/' + assessment.id);
-    }
   }
 
   chooseCalculator(str: string) {

@@ -35,7 +35,7 @@ export class AssessmentMenuComponent implements OnInit {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if ((changes.directory != changes.directory) && !this.firstChange) {
+    if ((changes.directory) && !this.firstChange) {
       if (changes.directory.currentValue.id != changes.directory.previousValue.id) {
         this.breadCrumbs = new Array();
         this.getBreadcrumbs(this.directory.id);

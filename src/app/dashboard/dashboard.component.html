@@ -5,7 +5,7 @@
 				(selectCalculator)="viewCalculator($event)"></app-sidebar>
 		</div>
 		<div class="col-10" *ngIf="allDirectories">
-			<app-assessment-dashboard *ngIf="!showCalculators" [directory]="workingDirectory" (directoryChange)="changeWorkingDirectory($event)" (deleteDataSignal)="showDeleteModal($event)" (deleteCheckedItems)="showDeleteItemsModal()"></app-assessment-dashboard>
+			<app-assessment-dashboard *ngIf="!showCalculators" [(directory)]="workingDirectory" (directoryChange)="changeWorkingDirectory($event)" (deleteDataSignal)="showDeleteModal($event)" (deleteCheckedItems)="showDeleteItemsModal()"></app-assessment-dashboard>
 			<app-calculator *ngIf="showCalculators" [selectedCalculator]="selectedCalculator"></app-calculator>
 		</div>
 	</div>

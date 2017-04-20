@@ -11,10 +11,9 @@ import { routing, appRoutingProviders } from './app.routing';
 import { CoreModule } from './core/core.module';
 import { IndexedDbModule } from './indexedDb/indexedDb.module';
 
-
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
   ],
   imports: [
     BrowserModule,
