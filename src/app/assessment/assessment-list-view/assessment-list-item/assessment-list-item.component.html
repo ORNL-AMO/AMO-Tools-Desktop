@@ -1,5 +1,5 @@
 <div class="list-row" [ngClass]="{ 'phast' : assessment.type == 'PHAST', 'psat': assessment.type == 'PSAT' }">
-  <input type="checkbox" />
+  <input type="checkbox" [(ngModel)]="isChecked" (change)="setDelete()" />
   <div class="drag-handle">
     <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
     <i class="fa fa-ellipsis-v" aria-hidden="true"></i>

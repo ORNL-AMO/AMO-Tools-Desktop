@@ -5,7 +5,7 @@
 				(selectCalculator)="viewCalculator($event)"></app-sidebar>
 		</div>
 		<div class="col-10" *ngIf="allDirectories">
-			<app-assessment-dashboard [directory]="workingDirectory" (directoryChange)="changeWorkingDirectory($event)"></app-assessment-dashboard>
+			<app-assessment-dashboard [directory]="workingDirectory" (directoryChange)="changeWorkingDirectory($event)" (deleteDataSignal)="showDeleteModal($event)" (deleteCheckedItems)="showDeleteItemsModal()"></app-assessment-dashboard>
 			<app-calculator [selectedCalculator]="selectedCalculator"></app-calculator>
 		</div>
 		<!--<div class="col-10 align-items-center" *ngIf="!allDirectories">
@@ -23,3 +23,41 @@
 		</div>-->
 	</div>
 </div>
+
+
+<div bsModal #deleteModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true"
+    [config]="{backdrop: 'static'}">
+    <div class="modal-dialog modal-lg create-assessment-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Delete Data</h3>
+                <button class="close" aria-label="Close" (click)="hideDeleteModal()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+            </div>
+            <div class="modal-body">
+                <button class="btn btn-secondary pull-left" (click)="hideDeleteModal()">Cancel</button>
+                <button class="btn btn-danger pull-right" (click)="deleteData()">Delete All Data</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div bsModal #deleteItemsModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="deleteItemsModalLabel" aria-hidden="true"
+    [config]="{backdrop: 'static'}">
+    <div class="modal-dialog modal-lg create-assessment-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Delete Selected Items</h3>
+                <button class="close" aria-label="Close" (click)="hideDeleteItemsModal()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+            </div>
+            <div class="modal-body">
+                <button class="btn btn-secondary pull-left" (click)="hideDeleteItemsModal()">Cancel</button>
+                <button class="btn btn-danger pull-right" (click)="deleteSelected(workingDirectory)">Delete Selected Items</button>
+            </div>
+        </div>
+    </div>
+</div>
+

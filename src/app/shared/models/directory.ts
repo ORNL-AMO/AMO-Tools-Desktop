@@ -8,7 +8,8 @@ export interface Directory {
   createdDate?: Date,
   modifiedDate?: Date,
   id?: number,
-  parentDirectoryId?: number
+  parentDirectoryId?: number,
+  delete?: boolean
 }
 
 

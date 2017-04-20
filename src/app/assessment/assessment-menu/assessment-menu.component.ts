@@ -18,6 +18,11 @@ export class AssessmentMenuComponent implements OnInit {
   viewChange = new EventEmitter();
   @Output('directoryChange')
   directoryChange = new EventEmitter();
+  @Output('deleteItems')
+  deleteItems = new EventEmitter<boolean>();
+
+
+
   breadCrumbs: Array<Directory>;
 
   firstChange: boolean = true;
@@ -60,6 +65,10 @@ export class AssessmentMenuComponent implements OnInit {
     this.indexedDbService.deleteDb().then((result) => {
       console.log(result);
     });
+  }
+
+  signalDeleteItems() {
+    this.deleteItems.emit(true);
   }
 
 }

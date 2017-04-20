@@ -10,5 +10,6 @@ export interface Assessment {
   modifiedDate?: Date,
   type: string;
   filePath?: string,
-  name: string
+  name: string,
+  delete?: boolean
 }

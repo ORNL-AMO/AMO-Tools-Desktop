@@ -176,7 +176,7 @@ export class IndexedDbService {
 
   deleteAssessment(id: number): Promise<any> {
     return new Promise((resolve, reject) => {
-      let transaction = myDb.instance.transaction([myDb.storeNames.assessments], 'readonly');
+      let transaction = myDb.instance.transaction([myDb.storeNames.assessments], 'readwrite');
       let store = transaction.objectStore(myDb.storeNames.assessments);
       let deleteRequest = store.delete(id);
       deleteRequest.onsuccess = (event) => {
@@ -195,6 +195,7 @@ export class IndexedDbService {
       let addRequest = store.add(directoryRef);
       myDb.setDefaultErrorHandler(addRequest, myDb);
       addRequest.onsuccess = function (e) {
+        console.log('added directory ' + e.target.result);
         resolve(e.target.result);
       }
       addRequest.onerror = (error) => {

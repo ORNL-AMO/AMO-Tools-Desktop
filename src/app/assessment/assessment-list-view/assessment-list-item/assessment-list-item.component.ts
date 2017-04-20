@@ -12,6 +12,8 @@ export class AssessmentListItemComponent implements OnInit {
   @Input()
   assessment: Assessment;
   isSetup: boolean;
+
+  isChecked: any;
   constructor(private assessmentService: AssessmentService, private router: Router) { }
 
   ngOnInit() {
@@ -30,5 +32,10 @@ export class AssessmentListItemComponent implements OnInit {
       this.router.navigateByUrl('/phast/' + this.assessment.id);
     }
   }
+
+  setDelete(){
+    this.assessment.delete = this.isChecked;
+  }
+
 
 }
