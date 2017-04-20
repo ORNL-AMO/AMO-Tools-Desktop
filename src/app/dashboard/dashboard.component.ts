@@ -17,7 +17,6 @@ export class DashboardComponent implements OnInit {
   showCalculators: boolean = false;
   selectedCalculator: string;
 
-  newDirectory: any;
   isFirstChange: boolean = true;
   rootDirectoryRef: DirectoryDbRef;
 
@@ -26,10 +25,6 @@ export class DashboardComponent implements OnInit {
   constructor(private indexedDbService: IndexedDbService, private formBuilder: FormBuilder) { }
 
   ngOnInit() {
-    this.newDirectory = this.formBuilder.group({
-      directoryName: ['', Validators.required]
-    });
-
     //open DB and get directories
     this.indexedDbService.initDb().then(
       results => {

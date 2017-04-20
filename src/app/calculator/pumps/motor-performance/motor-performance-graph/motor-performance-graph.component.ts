@@ -42,6 +42,7 @@ export class MotorPerformanceGraphComponent implements OnInit {
 
   ngOnInit() {
     this.setUp();
+    //this.onChanges();
   }
 
   // ngOnChanges(changes: SimpleChanges) {
