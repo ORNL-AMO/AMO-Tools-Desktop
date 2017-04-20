@@ -149,9 +149,6 @@ export class DashboardComponent implements OnInit {
 
   deleteSelected(dir: Directory) {
     this.hideDeleteItemsModal();
-    console.log('id ');
-    console.log(dir.id);
-    console.log('---');
     if (dir.subDirectory) {
       dir.subDirectory.forEach(subDir => {
         if (subDir.delete || subDir.parentDirectoryId != 1) {
@@ -163,19 +160,17 @@ export class DashboardComponent implements OnInit {
           })
         }
       });
-    } 
+    }
     if (dir != this.workingDirectory) {
       this.indexedDbService.getDirectoryAssessments(dir.id).then(results => {
         let childDirAssessments = results;
         childDirAssessments.forEach(assessment => {
           this.indexedDbService.deleteAssessment(assessment.id).then(results => {
-            console.log('deleted assessment');
             this.allDirectories = this.populateDirectories(this.rootDirectoryRef);
             this.workingDirectory = this.populateDirectories(this.workingDirectory);
           });
         })
         this.indexedDbService.deleteDirectory(dir.id).then(results => {
-          console.log('deleted directory');
           this.allDirectories = this.populateDirectories(this.rootDirectoryRef);
           this.workingDirectory = this.populateDirectories(this.workingDirectory);
         })
@@ -187,7 +182,6 @@ export class DashboardComponent implements OnInit {
       let checkedAssessments = _.filter(this.workingDirectory.assessments, { 'delete': true });
       checkedAssessments.forEach(assessment => {
         this.indexedDbService.deleteAssessment(assessment.id).then(results => {
-          console.log('deleted assessment');
           this.allDirectories = this.populateDirectories(this.rootDirectoryRef);
           this.workingDirectory = this.populateDirectories(this.workingDirectory);
         });
