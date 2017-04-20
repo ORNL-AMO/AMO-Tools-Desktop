@@ -1,5 +1,5 @@
 <div class="list-row folder">
-  <input type="checkbox" />
+  <input type="checkbox" [(ngModel)]="isChecked" (change)="setDelete()" />
   <div class="drag-handle">
     <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
     <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
@@ -10,4 +10,3 @@
     <a (click)="goToDirectory(directory)">{{directory.name}}</a>
   </div>
 </div>
-

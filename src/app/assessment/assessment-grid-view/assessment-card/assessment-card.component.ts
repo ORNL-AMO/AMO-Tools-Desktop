@@ -17,11 +17,11 @@ export class AssessmentCardComponent implements OnInit {
   }
 
   goToAssessment(assessment: Assessment) {
-    this.assessmentService.setWorkingAssessment(assessment);
+    this.assessmentService.tab = 'system-setup';
     if (assessment.type == 'PSAT') {
-      this.router.navigateByUrl('/psat');
+      this.router.navigateByUrl('/psat/' + this.assessment.id);
     } else if (assessment.type == 'PHAST') {
-      this.router.navigateByUrl('/phast');
+      this.router.navigateByUrl('/phast/' + this.assessment.id);
     }
   }
 

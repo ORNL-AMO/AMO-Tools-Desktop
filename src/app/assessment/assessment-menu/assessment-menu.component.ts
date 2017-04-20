@@ -1,15 +1,15 @@
 import { Component, OnInit, Output, EventEmitter, Input, ViewChild, SimpleChanges } from '@angular/core';
 import { Directory } from '../../shared/models/directory';
 import { ModalDirective } from 'ng2-bootstrap';
-import { MockDirectory } from '../../shared/mocks/mock-directory';
-
+import { IndexedDbService } from '../../indexedDb/indexed-db.service';
 @Component({
   selector: 'app-assessment-menu',
   templateUrl: './assessment-menu.component.html',
   styleUrls: ['./assessment-menu.component.css']
 })
 export class AssessmentMenuComponent implements OnInit {
-  allDirectories: Directory = MockDirectory;
+  @Input()
+  allDirectories: Directory;
   @Input()
   directory: Directory;
   @Input()
@@ -18,17 +18,30 @@ export class AssessmentMenuComponent implements OnInit {
   viewChange = new EventEmitter();
   @Output('directoryChange')
   directoryChange = new EventEmitter();
-  breadCrumbs: Array<string>;
+  @Output('deleteItems')
+  deleteItems = new EventEmitter<boolean>();
 
-  constructor() { }
+
+
+  breadCrumbs: Array<Directory>;
+
+  firstChange: boolean = true;
+  constructor(private indexedDbService: IndexedDbService) { }
 
   ngOnInit() {
-    this.breadCrumbs = this.getBreadcrumbs(this.directory.name, this.allDirectories);
+    this.breadCrumbs = new Array();
+    this.getBreadcrumbs(this.directory.id);
+    //   this.breadCrumbs = this.getBreadcrumbs(this.directory.name, this.allDirectories);
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes.directory) {
-      this.breadCrumbs = this.getBreadcrumbs(this.directory.name, this.allDirectories);
+    if ((changes.directory) && !this.firstChange) {
+      if (changes.directory.currentValue.id != changes.directory.previousValue.id) {
+        this.breadCrumbs = new Array();
+        this.getBreadcrumbs(this.directory.id);
+      }
+    } else {
+      this.firstChange = false;
     }
   }
   setView(view: string) {
@@ -39,34 +52,25 @@ export class AssessmentMenuComponent implements OnInit {
     this.directoryChange.emit(dir)
   }
 
-  getBreadcrumbs(targetDirName: string, allDirs: Directory) {
-    if (this.breadCrumbs) {
-      if (this.breadCrumbs[this.breadCrumbs.length - 1] == targetDirName) {
-        return this.breadCrumbs;
-      }
-    }
-    let breadCrumbs = new Array();
-    breadCrumbs.push(allDirs);
-    if (breadCrumbs[breadCrumbs.length - 1].name == targetDirName) {
-      return breadCrumbs;
-    } else {
-      if (allDirs.subDirectory) {
-        let newArr;
-        let index = 0;
-        for (index; index < allDirs.subDirectory.length; index++) {
-          let directory = allDirs.subDirectory[index];
-          let test = this.getBreadcrumbs(targetDirName, directory);
-          newArr = breadCrumbs.concat(test);
-          if (newArr[newArr.length - 1].name == targetDirName) {
-            return newArr;
-          }
+  getBreadcrumbs(dirId: number) {
+    this.indexedDbService.getDirectory(dirId).then(
+      resultDir => {
+        this.breadCrumbs.unshift(resultDir);
+        if (resultDir.parentDirectoryId) {
+          this.getBreadcrumbs(resultDir.parentDirectoryId);
         }
-      } else {
-        return [];
       }
-    }
+    )
   }
 
+  deletedb() {
+    this.indexedDbService.deleteDb().then((result) => {
+      console.log(result);
+    });
+  }
 
+  signalDeleteItems() {
+    this.deleteItems.emit(true);
+  }
 
 }

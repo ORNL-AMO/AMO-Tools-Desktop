@@ -1,50 +1,52 @@
 <app-phast-banner (togglePanel)="toggleOpenPanel($event)" [assessment]="assessment"></app-phast-banner>
 <app-phast-tabs [currentTab]="currentTab" (tabChange)="changeTab($event)"></app-phast-tabs>
 
-<div class="row tab-content" *ngIf="currentTab == 'system-setup'">
-  <div class="col-12">
-    <app-system-setup></app-system-setup>
+<div *ngIf="assessment">
+  <div class="row tab-content" *ngIf="currentTab == 'system-setup'">
+    <div class="col-12">
+      <app-system-setup></app-system-setup>
+    </div>
   </div>
-</div>
 
-<div class="row tab-content" *ngIf="currentTab == 'losses'">
-  <div class="col-12">
-    <app-losses [(phast)]="assessment.phast" [saveClicked]="saveClicked"></app-losses>
+  <div class="row tab-content" *ngIf="currentTab == 'losses'">
+    <div class="col-12">
+      <app-losses [(phast)]="assessment.phast" [saveClicked]="saveClicked" (saved)="saveDb()"></app-losses>
+    </div>
   </div>
-</div>
 
-<div class="row tab-content" *ngIf="currentTab == 'designed-energy-use'">
-  <div class="col-12">
-    <app-designed-energy-use></app-designed-energy-use>
+  <div class="row tab-content" *ngIf="currentTab == 'designed-energy-use'">
+    <div class="col-12">
+      <app-designed-energy-use></app-designed-energy-use>
+    </div>
   </div>
-</div>
 
-<div class="row tab-content" *ngIf="currentTab == 'aux-equipment'">
-  <div class="col-12">
-    <app-aux-equipment></app-aux-equipment>
+  <div class="row tab-content" *ngIf="currentTab == 'aux-equipment'">
+    <div class="col-12">
+      <app-aux-equipment></app-aux-equipment>
+    </div>
   </div>
-</div>
 
-<div class="row patab-contentnel" *ngIf="currentTab == 'metered-energy'">
-  <div class="col-12">
-    <app-metered-energy-use></app-metered-energy-use>
+  <div class="row patab-contentnel" *ngIf="currentTab == 'metered-energy'">
+    <div class="col-12">
+      <app-metered-energy-use></app-metered-energy-use>
+    </div>
   </div>
-</div>
 
-<div class="row tab-content" *ngIf="currentTab == 'sankey'">
-  <div class="col-12">
-    <app-sankey [losses]="assessment.phast.losses"></app-sankey>
+  <div class="row tab-content" *ngIf="currentTab == 'sankey'">
+    <div class="col-12">
+      <app-sankey [losses]="assessment.phast.losses"></app-sankey>
+    </div>
   </div>
-</div>
 
-<div class="footer">
-  <div class="pull-left">
-    <button class="btn btn-secondary" *ngIf="currentTab == 'system-setup'" (click)="close()">Close</button>
-    <button class="btn btn-secondary" *ngIf="currentTab != 'system-setup'" (click)="goBack()">Back</button>
-  </div>
-  <div class="pull-right">
-    <button class="btn btn-primary" *ngIf="currentTab == 'system-setup'" (click)="continue()">Save & Continue</button>
-    <!--<button class="btn btn-secondary" *ngIf="currentTab >= 3" (click)="exportData()">Export to CSV...</button>-->
-    <button class="btn btn-primary" *ngIf="currentTab != 'system-setup'" (click)="save()">Save</button>
+  <div class="footer">
+    <div class="pull-left">
+      <button class="btn btn-secondary" *ngIf="currentTab == 'system-setup'" (click)="close()">Close</button>
+      <button class="btn btn-secondary" *ngIf="currentTab != 'system-setup'" (click)="goBack()">Back</button>
+    </div>
+    <div class="pull-right">
+      <button class="btn btn-primary" *ngIf="currentTab == 'system-setup'" (click)="continue()">Save & Continue</button>
+      <!--<button class="btn btn-secondary" *ngIf="currentTab >= 3" (click)="exportData()">Export to CSV...</button>-->
+      <button class="btn btn-primary" *ngIf="currentTab != 'system-setup'" (click)="save()">Save</button>
+    </div>
   </div>
 </div>

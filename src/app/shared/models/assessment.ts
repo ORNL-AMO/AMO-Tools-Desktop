@@ -1,11 +1,15 @@
 import { PSAT } from './psat';
 import { PHAST } from './phast';
 
-export interface Assessment{
+export interface Assessment {
+  id?: number,
+  directoryId?: number,
   psat?: PSAT,
   phast?: PHAST,
-  date?: Date,
+  createdDate?: Date,
+  modifiedDate?: Date,
   type: string;
   filePath?: string,
-  name: string
+  name: string,
+  delete?: boolean
 }

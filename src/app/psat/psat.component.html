@@ -1,115 +1,118 @@
-<app-psat-banner (togglePanel)="toggleOpenPanel($event)" [assessment]="assessment"></app-psat-banner>
-<app-psat-tabs [currentTab]="currentTab" (tabChange)="changeTab($event)"></app-psat-tabs>
+<div *ngIf="assessment">
+  <app-psat-banner (togglePanel)="toggleOpenPanel($event)" [assessment]="assessment"></app-psat-banner>
+  <app-psat-tabs [currentTab]="currentTab" (tabChange)="changeTab($event)"></app-psat-tabs>
 
-<div *ngIf="currentTab == 'system-setup'">
-
-
-  <nav>
-    <ul class="tabs subtabs progress-tabs">
-      <li [ngClass]="{'active': subTab == 'system-basics'}">
-        <a (click)="changeSubTab('system-basics')"><span class="step-number">1</span> System Basics</a>
-      </li>
-      <li [ngClass]="{'active': subTab == 'pump-fluid'}">
-        <a (click)="changeSubTab('pump-fluid')"><span class="step-number">2</span> Pump / Fluid</a>
-      </li>
-      <li [ngClass]="{'active': subTab == 'motor', 'disabled': checkPumpFluid() }">
-        <a (click)="changeSubTab('motor')"><span class="step-number">3</span> Motor</a>
-      </li>
-      <li [ngClass]="{'active': subTab == 'field-data', 'disabled': checkMotor()}">
-        <a (click)="changeSubTab('field-data')"><span class="step-number">4</span> Field Data</a>
-      </li>
-    </ul>
-  </nav>
+  <div *ngIf="currentTab == 'system-setup'">
 
 
-  <div class="tab-content" *ngIf="subTab == 'system-basics'">
-    <div class="wrapper">
-      <div class="form">
-        <app-system-basics></app-system-basics>
+    <nav>
+      <ul class="tabs subtabs progress-tabs">
+        <li [ngClass]="{'active': subTab == 'system-basics'}">
+          <a (click)="changeSubTab('system-basics')"><span class="step-number">1</span> System Basics</a>
+        </li>
+        <li [ngClass]="{'active': subTab == 'pump-fluid'}">
+          <a (click)="changeSubTab('pump-fluid')"><span class="step-number">2</span> Pump / Fluid</a>
+        </li>
+        <li [ngClass]="{'active': subTab == 'motor', 'disabled': checkPumpFluid() }">
+          <a (click)="changeSubTab('motor')"><span class="step-number">3</span> Motor</a>
+        </li>
+        <li [ngClass]="{'active': subTab == 'field-data', 'disabled': checkMotor()}">
+          <a (click)="changeSubTab('field-data')"><span class="step-number">4</span> Field Data</a>
+        </li>
+      </ul>
+    </nav>
+
+
+    <div class="tab-content" *ngIf="subTab == 'system-basics'">
+      <div class="wrapper">
+        <div class="form">
+          <app-system-basics></app-system-basics>
+        </div>
+        <div class="help">
+          <app-help-panel [currentField]="currentField" [currentTab]="subTab"></app-help-panel>
+        </div>
       </div>
-      <div class="help">
-        <app-help-panel [currentField]="currentField" [currentTab]="subTab"></app-help-panel>
+    </div>
+
+    <div class="tab-content" *ngIf="subTab == 'pump-fluid'">
+      <div class="wrapper">
+        <div class="form">
+          <app-pump-fluid (isValid)="setValid()" (isInvalid)="setInvalid()" [saveClicked]="saveClicked" (changeField)="changeField($event)"
+            [(psat)]="_psat" (saved)="save()" [selected]="true"></app-pump-fluid>
+        </div>
+        <div class="help">
+          <app-help-panel [currentField]="currentField" [currentTab]="subTab"></app-help-panel>
+        </div>
+      </div>
+    </div>
+
+    <div class="tab-content" *ngIf="subTab == 'motor'">
+      <div class="wrapper">
+        <div class="form">
+          <app-motor (isValid)="setValid()" (isInvalid)="setInvalid()" [saveClicked]="saveClicked" (changeField)="changeField($event)"
+            [(psat)]="_psat" (saved)="save()" [selected]="true"></app-motor>
+        </div>
+        <div class="help">
+          <app-help-panel [currentField]="currentField" [currentTab]="subTab"></app-help-panel>
+        </div>
+      </div>
+    </div>
+
+    <div class="tab-content" *ngIf="subTab == 'field-data'">
+      <div class="wrapper">
+        <div class="form">
+          <app-field-data (isValid)="setValid()" (isInvalid)="setInvalid()" [saveClicked]="saveClicked" (changeField)="changeField($event)"
+            [(psat)]="_psat" (saved)="save()" [selected]="true"></app-field-data>
+        </div>
+        <div class="help">
+          <app-help-panel [currentField]="currentField" [currentTab]="subTab"></app-help-panel>
+        </div>
       </div>
     </div>
   </div>
 
-  <div class="tab-content" *ngIf="subTab == 'pump-fluid'">
-    <div class="wrapper">
-      <div class="form">
-        <app-pump-fluid (isValid)="setValid()" (isInvalid)="setInvalid()" [saveClicked]="saveClicked" (changeField)="changeField($event)"
-          [(psat)]="_psat" (saved)="save()" [selected]="true"></app-pump-fluid>
-      </div>
-      <div class="help">
-        <app-help-panel [currentField]="currentField" [currentTab]="subTab"></app-help-panel>
-      </div>
+  <div class="tab-content" *ngIf="currentTab == 'modify-conditions'">
+    <app-modify-conditions [saveClicked]="saveClicked" [(psat)]="_psat" (saved)="save()"></app-modify-conditions>
+  </div>
+
+  <div class="tab-content" *ngIf="currentTab == 'system-curve'">
+    <app-system-curve></app-system-curve>
+  </div>
+
+  <div class="tab-content" *ngIf="currentTab == 'achievable-efficiency'">
+    <app-achievable-efficiency [psat]="_psat"></app-achievable-efficiency>
+  </div>
+
+  <div class="tab-content" *ngIf="currentTab == 'motor-performance'">
+    <app-motor-performance [psat]="_psat"></app-motor-performance>
+  </div>
+
+  <div class="tab-content" *ngIf="currentTab == 'nema-energy-efficiency'">
+    <app-nema-energy-efficiency [psat]="_psat"></app-nema-energy-efficiency>
+  </div>
+
+  <div class="tab-content" *ngIf="currentTab == 'specific-speed'">
+    <app-specific-speed [psat]="_psat"></app-specific-speed>
+  </div>
+
+  <div class="tab-content" *ngIf="currentTab == 'results'">
+    <app-psat-report [psat]="_psat"></app-psat-report>
+  </div>
+
+  <div class="footer">
+    <div class="pull-left">
+      <button class="btn btn-secondary" *ngIf="currentTab == 'system-setup'" (click)="close()">Close</button>
+      <button class="btn btn-secondary" *ngIf="currentTab != 'system-setup'" (click)="goBack()">Back</button>
+    </div>
+    <div class="pull-right">
+      <button class="btn btn-primary" [disabled]="!isValid" (click)="toggleSave()">Save</button>
+      <button class="btn btn-primary" *ngIf="currentTab != 'modify-conditions'" [disabled]="!getCanContinue()" (click)="continue()">Continue</button>
+      <button class="btn btn-primary" *ngIf="currentTab == 'modify-conditions'" (click)="exportData()">Export</button>
     </div>
   </div>
 
-  <div class="tab-content" *ngIf="subTab == 'motor'">
-    <div class="wrapper">
-      <div class="form">
-        <app-motor (isValid)="setValid()" (isInvalid)="setInvalid()" [saveClicked]="saveClicked" (changeField)="changeField($event)"
-          [(psat)]="_psat" (saved)="save()" [selected]="true"></app-motor>
-      </div>
-      <div class="help">
-        <app-help-panel [currentField]="currentField" [currentTab]="subTab"></app-help-panel>
-      </div>
-    </div>
-  </div>
-
-  <div class="tab-content" *ngIf="subTab == 'field-data'">
-    <div class="wrapper">
-      <div class="form">
-        <app-field-data (isValid)="setValid()" (isInvalid)="setInvalid()" [saveClicked]="saveClicked" (changeField)="changeField($event)"
-          [(psat)]="_psat" (saved)="save()" [selected]="true"></app-field-data>
-      </div>
-      <div class="help">
-        <app-help-panel [currentField]="currentField" [currentTab]="subTab"></app-help-panel>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div class="tab-content" *ngIf="currentTab == 'modify-conditions'">
-  <app-modify-conditions [saveClicked]="saveClicked" [(psat)]="_psat" (saved)="save()"></app-modify-conditions>
-</div>
-
-<div class="tab-content" *ngIf="currentTab == 'system-curve'">
-  <app-system-curve></app-system-curve>
-</div>
-
-<div class="tab-content" *ngIf="currentTab == 'achievable-efficiency'">
-  <app-achievable-efficiency [psat]="_psat"></app-achievable-efficiency>
-</div>
-
-<div class="tab-content" *ngIf="currentTab == 'motor-performance'">
-  <app-motor-performance [psat]="_psat"></app-motor-performance>
-</div>
-
-<div class="tab-content" *ngIf="currentTab == 'nema-energy-efficiency'">
-  <app-nema-energy-efficiency [psat]="_psat"></app-nema-energy-efficiency>
-</div>
-
-<div class="tab-content" *ngIf="currentTab == 'specific-speed'">
-  <app-specific-speed [psat]="_psat"></app-specific-speed>
-</div>
-
-<div class="tab-content" *ngIf="currentTab == 'results'">
-  <app-psat-report [psat]="_psat"></app-psat-report>
-</div>
-
-<div class="footer">
-  <div class="pull-left">
-    <button class="btn btn-secondary" *ngIf="currentTab == 'system-setup'" (click)="close()">Close</button>
-    <button class="btn btn-secondary" *ngIf="currentTab != 'system-setup'" (click)="goBack()">Back</button>
-  </div>
-  <div class="pull-right">
-    <button class="btn btn-primary" [disabled]="!isValid" (click)="toggleSave()">Save</button>
-    <button class="btn btn-primary" *ngIf="currentTab != 'modify-conditions'" [disabled]="!getCanContinue()" (click)="continue()">Continue</button>
-    <button class="btn btn-primary" *ngIf="currentTab == 'modify-conditions'" (click)="exportData()">Export</button>
-  </div>
-</div>
-
-<!--<div *ngIf="showDetailedReport">
+  <!--<div *ngIf="showDetailedReport">
   <app-psat-report (closeReport)="closeReport()" [assessment]="assessment"></app-psat-report>
 </div>-->
+
+</div>

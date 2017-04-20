@@ -13,7 +13,8 @@ export class AssessmentService {
   getNewAssessment(assessmentType: string): Assessment {
     let newAssessment: Assessment = {
       name: null,
-      date: new Date(),
+      createdDate: new Date(),
+      modifiedDate: new Date(),
       type: assessmentType
     }
     return newAssessment;

@@ -1,6 +1,8 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+
 import { NgxElectronModule } from 'ngx-electron';
 import { AssessmentModule } from '../assessment/assessment.module';
 import { PhastModule } from '../phast/phast.module';
@@ -14,12 +16,19 @@ import { CoreComponent } from './core.component';
 import { SidebarComponent } from '../sidebar/sidebar.component';
 import { DashboardComponent } from '../dashboard/dashboard.component';
 import { AssessmentService } from '../assessment/assessment.service';
+import { AssessmentItemComponent } from '../sidebar/assessment-item/assessment-item.component';
+import { DirectoryItemComponent } from '../sidebar/directory-item/directory-item.component';
+
+
+import { IndexedDbModule } from '../indexedDb/indexedDb.module';
 
 @NgModule({
   declarations: [
     CoreComponent,
     SidebarComponent,
     DashboardComponent,
+    AssessmentItemComponent,
+    DirectoryItemComponent
   ],
   imports: [
     CommonModule,
@@ -30,11 +39,14 @@ import { AssessmentService } from '../assessment/assessment.service';
     CalculatorModule,
     DetailedReportModule,
     ModalModule.forRoot(),
-    NgxElectronModule
+    NgxElectronModule,
+    IndexedDbModule,
+    FormsModule,
+    ReactiveFormsModule
   ],
   providers: [
     AssessmentService
   ]
 })
 
-export class CoreModule {};
+export class CoreModule { };

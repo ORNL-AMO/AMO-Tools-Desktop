@@ -11,15 +11,16 @@ import { ElectronService } from 'ngx-electron';
 export class CoreComponent implements OnInit {
   updateAvailable: boolean;
   updateSelected: boolean;
-  
+
   @ViewChild('updateModal') public updateModal: ModalDirective;
-  constructor(private ElectronService: ElectronService) { }
+
+  constructor(private ElectronService: ElectronService) {
+  }
 
   ngOnInit() {
-
     this.ElectronService.ipcRenderer.once('available', (event, arg) => {
       console.log('Update Availble: ' + arg);
-      if(arg == true){
+      if (arg == true) {
         this.showUpdateModal();
       }
     })

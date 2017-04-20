@@ -7,6 +7,7 @@ import { ChartsModule } from 'ng2-charts';
 import { PopoverModule } from 'ngx-popover';
 import { PumpsModule } from '../calculator/pumps/pumps.module';
 import { ModalModule } from 'ng2-bootstrap';
+import { IndexedDbModule } from '../indexedDb/indexedDb.module';
 
 import { PsatComponent } from './psat.component';
 import { PsatBannerComponent } from './psat-banner/psat-banner.component';
@@ -74,7 +75,8 @@ import { ModifyConditionsNotesComponent } from './modify-conditions/modify-condi
     ChartsModule,
     PopoverModule,
     PumpsModule,
-    ModalModule
+    ModalModule,
+    IndexedDbModule
   ],
   providers: [
     PsatService

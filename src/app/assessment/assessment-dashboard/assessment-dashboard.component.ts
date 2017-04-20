@@ -1,4 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+
 import { MockDirectory } from '../../shared/mocks/mock-directory';
 import { Directory } from '../../shared/models/directory';
 
@@ -12,6 +13,10 @@ export class AssessmentDashboardComponent implements OnInit {
   directory: Directory;
   @Output('directoryChange')
   directoryChange = new EventEmitter();
+  @Output('deleteDataSignal')
+  deleteDataSignal = new EventEmitter<boolean>();
+  @Output('deleteCheckedItems')
+  deleteCheckedItems = new EventEmitter<boolean>();
 
   view: string = 'list';
   isSettingsView: boolean = false;
@@ -30,6 +35,14 @@ export class AssessmentDashboardComponent implements OnInit {
 
   changeDirectory($event) {
     this.directoryChange.emit($event);
+  }
+
+  signalDelete() {
+    this.deleteDataSignal.emit(true);
+  }
+
+  signalDeleteItems() {
+    this.deleteCheckedItems.emit(true);
   }
 
 }
