@@ -64,7 +64,7 @@ export class ConvertUnitsService {
   }
 
   from(from: any) {
-    if(!this.val)
+    if (!this.val)
       throw new Error('need to set value before call to .from');
     if (this.destination)
       throw new Error('.from must be called before .to');
@@ -180,6 +180,55 @@ export class ConvertUnitsService {
     });
 
     throw new Error('Unsupported unit ' + what + ', use one of: ' + validUnits.join(', '));
+  }
+
+  possibilities(measure) {
+    var possibilities = [];
+    if (!this.origin && !measure) {
+      each(keys(this._measures), function (measure) {
+        each(this._measures[measure], function (units, system) {
+          if (system == '_anchors')
+            return false;
+
+          possibilities = possibilities.concat(keys(units));
+        });
+      });
+    } else {
+      measure = measure || this.origin.measure;
+      each(this._measures[measure], function (units, system) {
+        if (system == '_anchors')
+          return false;
+
+        possibilities = possibilities.concat(keys(units));
+      });
+    }
+
+    return possibilities;
+  }
+
+  list(measure?) {
+    var list = [];
+
+    each(this._measures, function (systems, testMeasure) {
+      if (measure && measure !== testMeasure)
+        return;
+
+      each(systems, function (units, system) {
+        if (system == '_anchors')
+          return false;
+
+        each(units, function (unit, abbr) {
+          list = list.concat(this.describe({
+            abbr: abbr,
+            measure: testMeasure
+            , system: system
+            , unit: unit
+          }));
+        });
+      });
+    });
+
+    return list;
   }
 
   measures() {

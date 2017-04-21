@@ -1,0 +1,16 @@
+<select [(ngModel)]="measure" (change)="getMeasures()">
+  <option>length</option>
+  <option>area</option>
+  <option>volume</option>
+  <option>temperature</option>
+  <option>time</option>
+  <option>digital</option>
+  <option>partsPer</option>
+  <option>speed</option>
+</select>
+
+<ul>
+  <li *ngFor="let possibility of possibilities">
+    {{possibility}}
+  </li>
+</ul>

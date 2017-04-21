@@ -1,0 +1,33 @@
+<div class="calc-content" *ngIf="selectedTool == 'none'">
+  <div class="calc-banner">
+    <div class="h3">Utilities Calculators</div>
+  </div>
+  <div class="row justify-content-center align-items-center calc-list">
+    <div class="col-8">
+      <div class="row calc-type">
+        <div class="col-12">
+          <p class="h4">Choose a Calculator</p>
+        </div>
+      </div>
+      <div class="row tools">
+        <div class="col-12">
+          <a class="h5" (click)="showTool('convert-units')">Unit Converter</a>
+          <div>Use unit converter for quick unit conversion calculations</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="card fade show" *ngIf="selectedTool == 'convert-units'">
+  <div class="card-header">
+    <b class="h4">Convert Units</b>
+    <button class="close pull-right" aria-label="Close" (click)="hideTool()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+  </div>
+  <div class="card-block">
+    <app-unit-converter></app-unit-converter>
+  </div>
+</div>
