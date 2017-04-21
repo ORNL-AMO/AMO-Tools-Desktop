@@ -21,6 +21,15 @@ import { digital } from './definitions/digital';
 import { partsPer } from './definitions/partsPer';
 import { pressure } from './definitions/pressure';
 import { speed } from './definitions/speed';
+import { power } from './definitions/power';
+import { current } from './definitions/current';
+import { energy } from './definitions/energy';
+import { voltage } from './definitions/voltage';
+import { apparentPower } from './definitions/apparentPower';
+import { reactiveEnergy } from './definitions/reactiveEnergy';
+import { reactivePower } from './definitions/reactivePower';
+import { volumeFlowRate } from './definitions/volumeFlowRate';
+
 import * as _ from 'lodash';
 import * as keys from 'lodash.keys';
 import * as each from 'lodash.foreach';
@@ -38,7 +47,16 @@ export class ConvertUnitsService {
     digital: digital,
     partsPer: partsPer,
     speed: speed,
-    pressure: pressure
+    pressure: pressure,
+    power: power,
+    current: current,
+    energy: energy,
+    voltage: voltage,
+    apparentPower: apparentPower,
+    reactiveEnergy: reactiveEnergy,
+    reactivePower: reactivePower,
+    volumeFlowRate: volumeFlowRate
+    
   }
   origin: any;
   destination: any;
@@ -206,30 +224,30 @@ export class ConvertUnitsService {
     return possibilities;
   }
 
-  list(measure?) {
-    var list = [];
+  // list(measure?) {
+  //   var list = [];
 
-    each(this._measures, function (systems, testMeasure) {
-      if (measure && measure !== testMeasure)
-        return;
+  //   each(this._measures, function (systems, testMeasure) {
+  //     if (measure && measure !== testMeasure)
+  //       return;
 
-      each(systems, function (units, system) {
-        if (system == '_anchors')
-          return false;
+  //     each(systems, function (units, system) {
+  //       if (system == '_anchors')
+  //         return false;
 
-        each(units, function (unit, abbr) {
-          list = list.concat(this.describe({
-            abbr: abbr,
-            measure: testMeasure
-            , system: system
-            , unit: unit
-          }));
-        });
-      });
-    });
+  //       each(units, function (unit, abbr) {
+  //         list = list.concat(this.describe({
+  //           abbr: abbr,
+  //           measure: testMeasure
+  //           , system: system
+  //           , unit: unit
+  //         }));
+  //       });
+  //     });
+  //   });
 
-    return list;
-  }
+  //   return list;
+  // }
 
   measures() {
     return keys(this._measures);
