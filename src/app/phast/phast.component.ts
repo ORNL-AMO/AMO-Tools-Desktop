@@ -3,6 +3,9 @@ import { Location } from '@angular/common';
 import { Assessment } from '../shared/models/assessment';
 import { AssessmentService } from '../assessment/assessment.service';
 import { PhastService } from './phast.service';
+import { IndexedDbService } from '../indexedDb/indexed-db.service';
+import { ActivatedRoute } from '@angular/router';
+
 @Component({
   selector: 'app-phast',
   templateUrl: './phast.component.html',
@@ -25,14 +28,26 @@ export class PhastComponent implements OnInit {
     'sankey'
   ]
   tabIndex: number = 0;
-  constructor(private location: Location, private assessmentService: AssessmentService, private phastService: PhastService) { }
+  constructor(
+    private location: Location,
+    private assessmentService: AssessmentService,
+    private phastService: PhastService,
+    private indexedDbService: IndexedDbService,
+    private activatedRoute: ActivatedRoute
+  ) { }
 
   ngOnInit() {
-    this.assessment = this.assessmentService.getWorkingAssessment();
-    let tmpTab = this.assessmentService.getTab();
-    if (tmpTab == 'modify-conditions') {
-      this.currentTab = 'losses';
-    }
+    let tmpAssessmentId;
+    this.activatedRoute.params.subscribe(params => {
+      tmpAssessmentId = params['id'];
+      this.indexedDbService.getAssessment(parseInt(tmpAssessmentId)).then(dbAssessment => {
+        this.assessment = dbAssessment;
+      })
+      let tmpTab = this.assessmentService.getTab();
+      if (tmpTab == 'modify-conditions') {
+        this.currentTab = 'losses';
+      }
+    });
   }
 
   changeTab($event) {
@@ -75,7 +90,12 @@ export class PhastComponent implements OnInit {
 
   save() {
     this.saveClicked = !this.saveClicked;
-    this.assessmentService.setWorkingAssessment(this.assessment);
+  }
+
+  saveDb() {
+    this.indexedDbService.putAssessment(this.assessment).then(
+      results => { console.log('saved!'); }
+    )
   }
 
   exportData() {

@@ -18,6 +18,7 @@ import { AssessmentListItemComponent } from './assessment-list-view/assessment-l
 import { CreateFolderComponent } from './assessment-menu/create-folder/create-folder.component';
 import { AssessmentCreateComponent } from './assessment-create/assessment-create.component';
 import { AssessmentSettingsComponent } from './assessment-settings/assessment-settings.component';
+import { IndexedDbModule } from '../indexedDb/indexedDb.module';
 
 @NgModule({
   declarations: [
@@ -44,7 +45,8 @@ import { AssessmentSettingsComponent } from './assessment-settings/assessment-se
     RouterModule,
     FormsModule,
     ReactiveFormsModule,
-    ModalModule
+    ModalModule,
+    IndexedDbModule
   ],
   providers: []
 })

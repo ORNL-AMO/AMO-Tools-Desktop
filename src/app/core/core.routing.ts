@@ -15,11 +15,11 @@ export const coreRoutes: Routes = [
     component: DashboardComponent
   },
   {
-    path: 'phast',
+    path: 'phast/:id',
     component: PhastComponent
   },
   {
-    path: 'psat',
+    path: 'psat/:id',
     component: PsatComponent
   },
   {

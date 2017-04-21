@@ -5,7 +5,11 @@
 </div>
 
 <div style="padding-top:15px;"> ASSESSMENTS
-<ul class="tree" *ngIf="directory">
+  <div *ngIf="directory">
+    <app-directory-item [directory]="directory" [selectedDirectory]="selectedDirectory" (selectSignal)="toggleSelected($event)" (collapseSignal)="toggleDirectoryCollapse($event)"></app-directory-item>
+  </div>
+</div>
+<!--<ul class="tree" *ngIf="directory">
   <li>
     <i class="fa" (click)="toggleDirectoryCollapse(directory)" [ngClass]="{'fa-angle-right': directory.collapsed == true, 'fa-angle-down': directory.collapsed == false}"
       aria-hidden="true"></i>
@@ -51,8 +55,7 @@
         </span>
     </li>
   </ul>
-</ul>
-</div>
+</ul>-->
 
 <div style="padding-top: 20px;"> CALCULATORS
 <div>

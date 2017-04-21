@@ -8,16 +8,20 @@ import { Directory } from '../../../shared/models/directory';
 })
 export class DirectoryListItemComponent implements OnInit {
   @Input()
-  directory:Directory;
+  directory: Directory;
   @Output('directoryChange')
   directoryChange = new EventEmitter();
-
+  isChecked: boolean;
   constructor() { }
 
   ngOnInit() {
   }
 
-  goToDirectory(dir){
+  goToDirectory(dir) {
     this.directoryChange.emit(dir)
+  }
+
+  setDelete() {
+    this.directory.delete = this.isChecked;
   }
 }

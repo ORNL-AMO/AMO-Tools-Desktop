@@ -6,6 +6,8 @@ import { FormBuilder } from '@angular/forms';
 import { PSAT, PsatInputs } from '../shared/models/psat';
 import { PsatService } from './psat.service';
 import * as _ from 'lodash';
+import { IndexedDbService } from '../indexedDb/indexed-db.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-psat',
@@ -54,19 +56,31 @@ export class PsatComponent implements OnInit {
   motorReady: boolean = false;
   subTab: string = 'system-basics';
 
-  constructor(private location: Location, private assessmentService: AssessmentService, private formBuilder: FormBuilder, private psatService: PsatService) { }
+  constructor(
+    private location: Location,
+    private assessmentService: AssessmentService,
+    private formBuilder: FormBuilder,
+    private psatService: PsatService,
+    private indexedDbService: IndexedDbService,
+    private activatedRoute: ActivatedRoute
+  ) { }
 
   ngOnInit() {
-    this.assessment = this.assessmentService.getWorkingAssessment();
-    let tmpTab = this.assessmentService.getTab();
-    if (tmpTab) {
-      this.currentTab = tmpTab;
-    }
-    this._psat = (JSON.parse(JSON.stringify(this.assessment.psat)));
-    this.isValid = true;
-    this.canContinue = true;
+    let tmpAssessmentId;
+    this.activatedRoute.params.subscribe(params => {
+      tmpAssessmentId = params['id'];
+      this.indexedDbService.getAssessment(parseInt(tmpAssessmentId)).then(dbAssessment => {
+        this.assessment = dbAssessment;
+        this._psat = (JSON.parse(JSON.stringify(this.assessment.psat)));
+        this.isValid = true;
+        this.canContinue = true;
+      })
+      let tmpTab = this.assessmentService.getTab();
+      if (tmpTab) {
+        this.currentTab = tmpTab;
+      }
+    })
   }
-
   checkPumpFluid() {
     let tmpForm = this.psatService.getFormFromPsat(this._psat.inputs);
     let tmpBool = this.psatService.isPumpFluidFormValid(tmpForm);
@@ -181,7 +195,11 @@ export class PsatComponent implements OnInit {
       this._psat.setupDone = false;
     }
     this.assessment.psat = (JSON.parse(JSON.stringify(this._psat)));
-    this.assessmentService.setWorkingAssessment(this.assessment);
+    this.indexedDbService.putAssessment(this.assessment).then(
+      results => {
+        console.log('save successful');
+      }
+    )
   }
 
   exportData() {
