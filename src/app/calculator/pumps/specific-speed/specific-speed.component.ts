@@ -25,8 +25,8 @@ export class SpecificSpeedComponent implements OnInit {
     }
   }
 
-  // calculate() {
-  //   this.toggleCalculate = !this.toggleCalculate;
-  // }
+  calculate() {
+    this.toggleCalculate = !this.toggleCalculate;
+  }
 
 }
