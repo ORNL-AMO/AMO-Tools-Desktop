@@ -128,7 +128,7 @@ export class ConvertUnitsService {
       if (typeof transform === 'function') {
         return result = transform(result)
       }
-      result *= this.measures[this.origin.measure]._anchors[this.origin.system].ratio;
+      result *= this._measures[this.origin.measure]._anchors[this.origin.system].ratio;
     }
 
     /**
