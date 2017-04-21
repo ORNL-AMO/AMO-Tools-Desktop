@@ -18,7 +18,7 @@
     <div class="form-group">
       <label for="from">From</label>
       <select class="form-control" id="from" [(ngModel)]="from">
-    <option *ngFor="let possibility of possibilities">{{possibility}}</option>
+    <option *ngFor="let possibility of possibilities" [value]="possibility.unit">{{possibility.display}}</option>
       </select>
     </div>
   </div>
@@ -32,14 +32,14 @@
     <div class="form-group">
       <label for="to">To</label>
       <select class="form-control" id="to" [(ngModel)]="to">
-    <option *ngFor="let possibility of possibilities">{{possibility}}</option>
+    <option *ngFor="let possibility of possibilities" [value]="possibility.unit">{{possibility.display}}</option>
       </select>
     </div>
   </div>
 </div>
 
 <div class="row justify-content-center" style="padding-top:25px;">
-  <div class="col-4">
-  <h4>Result: {{getValue()}} {{to}}</h4>
-  </div>
+<div class="col-12">
+  <h4>Result: {{getValue()}} {{getUnitName(to)}}</h4>
+</div>
 </div>

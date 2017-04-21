@@ -14,6 +14,8 @@ export class UnitConverterComponent implements OnInit {
   to: string;
   value: number;
   results: number;
+  fromDisp: string;
+  toDisp: string;
   constructor(private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
@@ -24,7 +26,16 @@ export class UnitConverterComponent implements OnInit {
     this.from = null;
     this.to = null;
     if (this.measure) {
-      this.possibilities = this.convertUnitsService.possibilities(this.measure);
+      this.possibilities = new Array();
+      let tmpList = this.convertUnitsService.possibilities(this.measure);
+      tmpList.forEach(unit => {
+        let tmpPossibility = {
+          unit: unit,
+          display: this.getUnitName(unit)
+        }
+        this.possibilities.push(tmpPossibility);
+      })
+      console.log(this.possibilities);
     }
   }
 
@@ -33,6 +44,12 @@ export class UnitConverterComponent implements OnInit {
       return this.convertUnitsService.value(this.value).from(this.from).to(this.to);
     } else {
       return 0;
+    }
+  }
+
+  getUnitName(unit: any) {
+    if (unit) {
+      return this.convertUnitsService.getUnit(unit).unit.name.plural;
     }
   }
 }
