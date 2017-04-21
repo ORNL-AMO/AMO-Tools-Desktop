@@ -504,13 +504,13 @@ Banner
   float: left;
 }
 .banner.psat .btn-dashboard {
-  background: url('/assets/images/assessment-icon-psat.png') no-repeat center center;
+  background: url('../assets/images/assessment-icon-psat.png') no-repeat center center;
 }
   .banner.psat .btn-dashboard:hover {
      background-color: #0063a4;
   }
 .banner.phast .btn-dashboard {
-  background: url('/assets/images/assessment-icon-phast.png') no-repeat center center;
+  background: url('../assets/images/assessment-icon-phast.png') no-repeat center center;
 }
     .banner.phast .btn-dashboard:hover {
       background-color: #a83600; 

@@ -12,14 +12,14 @@ import { SteamComponent } from './steam/steam.component';
 import { MotorsComponent } from './motors/motors.component';
 
 import { PumpsModule } from './pumps/pumps.module';
-
+import { UtilitiesModule } from './utilities/utilities.module';
 @NgModule({
   declarations: [
     CalculatorComponent,
     FansComponent,
     FurnacesComponent,
     SteamComponent,
-    MotorsComponent
+    MotorsComponent,
   ],
   exports: [
     CalculatorComponent
@@ -31,7 +31,8 @@ import { PumpsModule } from './pumps/pumps.module';
     ReactiveFormsModule,
     CommonModule,
     ModalModule,
-    PumpsModule
+    PumpsModule,
+    UtilitiesModule
   ],
   providers: [
   ]
