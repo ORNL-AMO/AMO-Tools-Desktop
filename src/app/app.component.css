@@ -120,6 +120,9 @@ Forms
   line-height: 1;
   font-size: 16px;
 }
+.note-form {
+  margin-bottom: 16px;
+}
 select.form-control:not([size]):not([multiple]) {
   height: inherit;
 }
@@ -838,7 +841,7 @@ Modify Conditions
   .losses-header {
 
   }
-  .modification.disabled {
+  .modification.disabled, .modification.disabled button, .modification.disabled textarea {
     background: #efefef;
     -webkit-box-shadow: none;
     -moz-box-shadow: none;
@@ -1043,7 +1046,9 @@ No Data Messaging
     overflow-y: scroll;
     padding: 30px 50px;
 }
-
+.baseline .losses-container {
+  padding-top: 103px;
+}
 .losses-container.disabled, .losses-container:disabled{
     background: #efefef;
 }
