@@ -1,19 +1,11 @@
 <div class="row calc-container">
   <div class="col-3">
-    <app-motor-performance-form [(performanceForm)]="performanceForm"></app-motor-performance-form>
+    <app-motor-performance-form [(performanceForm)]="performanceForm" (calculate)="calculate()"></app-motor-performance-form>
   </div>
   <div class="col-9 calc-graph">
     <div class="row">
       <div class="col-9">
-        <app-motor-performance-graph [performanceForm]="performanceForm"></app-motor-performance-graph>
-      </div>
-      <div class="col-3">
-        <!--LEGEND-->
-        <h4>Legend</h4>
-        <ul>
-          <li>Some info..</li>
-          <li>Some more info..</li>
-        </ul>
+        <app-motor-performance-graph [performanceForm]="performanceForm" [toggleCalculate]="toggleCalculate"></app-motor-performance-graph>
       </div>
     </div>
   </div>

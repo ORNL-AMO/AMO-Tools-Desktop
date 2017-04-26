@@ -8,8 +8,8 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 export class SpecificSpeedFormComponent implements OnInit {
   @Input()
   speedForm: any;
-  // @Output('calculate')
-  // calculate = new EventEmitter<boolean>();
+  @Output('calculate')
+  calculate = new EventEmitter<boolean>();
 
   pumpTypes: Array<string> = [
     'End Suction Slurry',
@@ -41,5 +41,9 @@ export class SpecificSpeedFormComponent implements OnInit {
   //     this.calculate.emit(true);
   //   }
   // }
+
+  emitCalculate() {
+    this.calculate.emit(true);
+  }
 
 }
