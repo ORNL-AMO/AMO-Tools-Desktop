@@ -3,7 +3,9 @@ export interface Settings {
     currency?: string,
     unitsOfMeasure?: string
     assessmentId?: number,
-    directoryId?: string
+    directoryId?: number,
+    createdDate?: Date,
+    modifiedDate?: Date
 }
 
 export interface PsatSettings { 

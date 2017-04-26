@@ -5,6 +5,7 @@ import { MockDirectory } from '../shared/mocks/mock-directory';
 import { IndexedDbService } from '../indexedDb/indexed-db.service';
 import { ModalDirective } from 'ng2-bootstrap';
 import * as _ from 'lodash';
+import { Settings } from '../shared/models/settings';
 
 @Component({
   selector: 'app-dashboard',
@@ -37,8 +38,16 @@ export class DashboardComponent implements OnInit {
             } else {
               this.createExampleAssessments();
               this.createDirectory();
+              this.createDirectorySettings();
             }
           })
+        this.indexedDbService.getDirectorySettings(1).then(
+          results => {
+            if (results.length == 0) {
+              this.createDirectorySettings();
+            }
+          }
+        );
       }
     )
   }
@@ -100,6 +109,22 @@ export class DashboardComponent implements OnInit {
     this.indexedDbService.addAssessment(tmpAssessment).then(assessmentId => {
 
     })
+  }
+
+  createDirectorySettings() {
+    let tmpSettings: Settings = {
+      language: 'English',
+      currency: 'US Dollar',
+      unitsOfMeasure: 'Imperial',
+      directoryId: 1,
+      createdDate: new Date(),
+      modifiedDate: new Date()
+    }
+    this.indexedDbService.addSettings(tmpSettings).then(
+      results => {
+        console.log('root directory settings added');
+      }
+    )
   }
 
 

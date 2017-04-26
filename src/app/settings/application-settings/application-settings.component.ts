@@ -1,6 +1,4 @@
-import { Component, OnInit } from '@angular/core';
-import { SettingsService } from '../settings.service';
-import { IndexedDbService } from '../../indexedDb/indexed-db.service';
+import { Component, OnInit, Input } from '@angular/core';
 
 @Component({
   selector: 'app-application-settings',
@@ -8,7 +6,7 @@ import { IndexedDbService } from '../../indexedDb/indexed-db.service';
   styleUrls: ['./application-settings.component.css']
 })
 export class ApplicationSettingsComponent implements OnInit {
-
+  @Input()
   settingsForm: any;
 
   languages: Array<string> = [
@@ -19,10 +17,10 @@ export class ApplicationSettingsComponent implements OnInit {
     'US Dollar'
   ]
 
-  constructor(private settingsService: SettingsService, private indexedDbService: IndexedDbService) { }
+  constructor() { }
 
   ngOnInit() {
-    this.settingsForm = this.settingsService.getSettingsForm();
+
   }
 
 }
