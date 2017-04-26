@@ -1,22 +1,12 @@
-<div class="row justify-content-center detailed-report">
-  <div class="col-8">
-    <div class="row assessment-report">
-      <div class="col-12">
-        <div class="row justify-content-between">
-          <div class="col-12">
-            <div class="h2">Assessment Report</div>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-6">
-            <app-input-summary [psat]="psat"></app-input-summary>
-          </div>
-          <div class="col-6">
-            <app-chart-summary [psat]="psat"></app-chart-summary>
-            <app-output-summary [psat]="psat"></app-output-summary>
-          </div>
-        </div>
-      </div>
-    </div>
+<div class="row assessment-report">
+  <div class="col-12">
+    <div class="h2">Assessment Report</div>
+  </div>
+  <div class="col-6">
+    <app-input-summary [psat]="psat"></app-input-summary>
+  </div>
+  <div class="col-6">
+    <app-chart-summary [psat]="psat"></app-chart-summary>
+    <app-output-summary [psat]="psat"></app-output-summary>
   </div>
 </div>

@@ -95,10 +95,6 @@
     <app-specific-speed [psat]="_psat"></app-specific-speed>
   </div>
 
-  <div class="tab-content" *ngIf="currentTab == 'results'">
-    <app-psat-report [psat]="_psat"></app-psat-report>
-  </div>
-
   <div class="footer">
     <div class="pull-left">
       <button class="btn btn-secondary" *ngIf="currentTab == 'system-setup'" (click)="close()">Close</button>
