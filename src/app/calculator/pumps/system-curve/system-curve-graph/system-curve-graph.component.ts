@@ -206,7 +206,7 @@ export class SystemCurveGraphComponent implements OnInit {
       .attr("class", "focus")
       .style("display", "none");
 
-    this.focus.append("circle")
+   this.focus.append("circle")
       .attr("r", 10)
       .style("fill", "none")
       .style("stroke", "#007536")

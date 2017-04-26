@@ -21,8 +21,9 @@ export class MotorPerformanceGraphComponent implements OnInit {
   y: any;
   width: any;
   height: any;
-  staticHeadText: any;
-  lossCoefficientText: any;
+  currentLine: any;
+  powerLine: any;
+  efficiencyLine: any;
   margin: any;
   line: any;
   filter: any;
@@ -42,18 +43,19 @@ export class MotorPerformanceGraphComponent implements OnInit {
 
   ngOnInit() {
     this.setUp();
-    //this.onChanges();
   }
 
-  // ngOnChanges(changes: SimpleChanges) {
-  //   if (!this.firstChange) {
-  //     if (changes.toggleCalculate) {
-  //       this.drawGraph();
-  //     }
-  //   } else {
-  //     this.firstChange = false;
-  //   }
-  // }
+  ngOnChanges(changes: SimpleChanges) {
+    if (!this.firstChange) {
+      if (changes.toggleCalculate) {
+        if (this.checkForm()) {
+          this.onChanges();
+        }
+      }
+    } else {
+      this.firstChange = false;
+    }
+  }
 
   calculateEfficiency(loadFactor: number) {
     if (this.checkForm()) {
@@ -137,7 +139,7 @@ export class MotorPerformanceGraphComponent implements OnInit {
     this.motorPerformanceResults.motor_power_factor = this.calculatePowerFactor(1);
   }
 
-  setUp(){
+  setUp() {
 
     //Remove  all previous graphs
     d3.select('app-motor-performance-graph').selectAll('svg').remove();
@@ -145,13 +147,13 @@ export class MotorPerformanceGraphComponent implements OnInit {
     var curvePoints = [];
 
     //graph dimensions
-    this.margin = {top: 20, right: 120, bottom: 110, left: 120};
+    this.margin = { top: 20, right: 120, bottom: 110, left: 120 };
     this.width = 900 - this.margin.left - this.margin.right;
     this.height = 600 - this.margin.top - this.margin.bottom;
 
     this.x = d3.scaleLinear()
       .range([0, this.width])
-      .domain([0, 120]);
+      .domain([0, 1.20]);
 
     this.y = d3.scaleLinear()
       .range([this.height, 0])
@@ -162,16 +164,16 @@ export class MotorPerformanceGraphComponent implements OnInit {
       .tickSizeInner(0)
       .tickSizeOuter(0)
       .tickPadding(0)
-      .ticks(12);
+      .ticks(13);
 
     this.yAxis = d3.axisLeft()
       .scale(this.y)
       .tickSizeInner(0)
       .tickSizeOuter(0)
       .tickPadding(15)
-      .ticks(12);
+      .ticks(13);
 
-    this.svg  = d3.select('app-motor-performance-graph').append('svg')
+    this.svg = d3.select('app-motor-performance-graph').append('svg')
       .attr("width", this.width + this.margin.left + this.margin.right)
       .attr("height", this.height + this.margin.top + this.margin.bottom)
       .style("background-color", "#f5f3e9")
@@ -181,30 +183,30 @@ export class MotorPerformanceGraphComponent implements OnInit {
     // filters go in defs element
     var defs = this.svg.append("defs");
 
-// create filter with id #drop-shadow
-// height=130% so that the shadow is not clipped
+    // create filter with id #drop-shadow
+    // height=130% so that the shadow is not clipped
     this.filter = defs.append("filter")
       .attr("id", "drop-shadow")
       .attr("height", "130%");
 
-// SourceAlpha refers to opacity of graphic that this filter will be applied to
-// convolve that with a Gaussian with standard deviation 3 and store result
-// in blur
+    // SourceAlpha refers to opacity of graphic that this filter will be applied to
+    // convolve that with a Gaussian with standard deviation 3 and store result
+    // in blur
     this.filter.append("feGaussianBlur")
       .attr("in", "SourceAlpha")
       .attr("stdDeviation", 3)
       .attr("result", "blur");
 
-// translate output of Gaussian blur to the right and downwards with 2px
-// store result in offsetBlur
+    // translate output of Gaussian blur to the right and downwards with 2px
+    // store result in offsetBlur
     this.filter.append("feOffset")
       .attr("in", "blur")
       .attr("dx", 0)
       .attr("dy", 0)
       .attr("result", "offsetBlur");
 
-// overlay original SourceGraphic over translated blurred opacity by using
-// feMerge filter. Order of specifying inputs is important!
+    // overlay original SourceGraphic over translated blurred opacity by using
+    // feMerge filter. Order of specifying inputs is important!
     var feMerge = this.filter.append("feMerge");
 
     feMerge.append("feMergeNode")
@@ -242,7 +244,7 @@ export class MotorPerformanceGraphComponent implements OnInit {
 
     this.svg.append("text")
       .attr("text-anchor", "middle")  // this makes it easy to centre the text as the transform is applied to the anchor
-      .attr("transform", "translate("+ (this.width/2) +","+(this.height-(-70))+")")  // centre below axis
+      .attr("transform", "translate(" + (this.width / 2) + "," + (this.height - (-70)) + ")")  // centre below axis
       .text("Motor Shaft Load(%)");
 
     // Define the div for the tooltip
@@ -257,7 +259,7 @@ export class MotorPerformanceGraphComponent implements OnInit {
     this.pointer = this.svg.append("polygon")
       .attr("id", "pointer")
       //.attr("points", "0,13, 14,13, 7,-2");
-      .attr("points", "0,0, 0," + (detailBoxHeight-2) +  "," + detailBoxWidth + "," +  (detailBoxHeight-2) + "," + detailBoxWidth + ", 0," + ((detailBoxWidth/2)+12) + ",0," + (detailBoxWidth/2) + ", -12, " + ((detailBoxWidth/2)- 12) + ",0")
+      .attr("points", "0,0, 0," + (detailBoxHeight - 2) + "," + detailBoxWidth + "," + (detailBoxHeight - 2) + "," + detailBoxWidth + ", 0," + ((detailBoxWidth / 2) + 12) + ",0," + (detailBoxWidth / 2) + ", -12, " + ((detailBoxWidth / 2) - 12) + ",0")
       .style("opacity", 0);
 
     this.focus = this.svg.append("g")
@@ -285,7 +287,7 @@ export class MotorPerformanceGraphComponent implements OnInit {
     this.svg.append("text")
       .attr("x", 20)
       .attr("y", "50")
-      .text( "Power Factor(%)")
+      .text("Power Factor(%)")
       .style("font-size", "13px")
       .style("font-weight", "bold")
       .style("fill", "#6175f5");
@@ -293,103 +295,116 @@ export class MotorPerformanceGraphComponent implements OnInit {
     this.svg.append("text")
       .attr("x", 20)
       .attr("y", "80")
-      .text( "Efficiency")
+      .text("Efficiency(%)")
       .style("font-size", "13px")
       .style("font-weight", "bold")
       .style("fill", "#fecb00");
 
+    this.currentLine = this.svg.append("path")
+      .attr("class", "line")
+      .style("stroke-width", 10)
+      .style("stroke-width", "2px")
+      .style("fill", "none")
+      .style("stroke", "#f53e3d")
+      .style("display", "none");
 
+   this.powerLine = this.svg.append("path")
+      .attr("class", "line")
+      .style("stroke-width", 10)
+      .style("stroke-width", "2px")
+      .style("fill", "none")
+      .style("stroke", "#6175f5")
+      .style("display", "none");
 
-    console.log("first");
+    this.efficiencyLine = this.svg.append("path")
+      .attr("class", "line")
+      .style("stroke-width", 10)
+      .style("stroke-width", "2px")
+      .style("fill", "none")
+      .style("stroke", "#fecb00")
+      .style("display", "none");
+
   }
 
   onChanges() {
 
-    this.drawCurrentLine();
-    this.drawPowerFactorLine();
-    this.drawEfficiencyLine();
+    this.drawCurrentLine(this.x, this.y);
+    this.drawPowerFactorLine(this.x, this.y);
+    this.drawEfficiencyLine(this.x, this.y);
 
   }
 
-  drawCurrentLine(){
+  drawCurrentLine(x, y) {
 
     var data = [];
-
-    for(var i = 0; i < 120; i++) {
-
-      data.push({
-        x: i,
-        y: this.calculateCurrent(i)
-      })
+    let i = .001;
+    for (i; i < 1.2; i = i + 0.001) {
+      if(this.calculateCurrent(i) >= 0 && this.calculateCurrent(i) <= this.height) {
+        data.push({
+          x: i,
+          y: this.calculateCurrent(i)
+        })
+      }
     }
-
     var currentLine = d3.line()
-      .x(function(d) { return this.x(d.x); })
-      .y(function(d) { return this.y(d.y); })
+      .x(function (d) { return x(d.x); })
+      .y(function (d) { return y(d.y); })
       .curve(d3.curveNatural);
 
 
-    console.log("here");
-    this.svg.append("path")
+    this.currentLine
       .data([data])
-      .attr("class", "line")
       .attr("d", currentLine)
-      .style("stroke-width", 10)
-      .style("stroke-width", "2px")
-      .style("fill", "none")
-      .style("stroke", "#f53e3d");
+      .style("display", null);
   }
 
-  drawPowerFactorLine(){
+  drawPowerFactorLine(x, y) {
 
     var data = [];
 
-    for(var i = 0; i < 120; i++) {
-      data.push({
-        x: i,
-        y: this.calculatePowerFactor(i)
-      })
+    for (var i = .001; i < 1.20; i = i + .001) {
+      console.log(this.calculatePowerFactor(i));
+      if(this.calculatePowerFactor(i) >= 0 && this.calculatePowerFactor(i) <= this.height) {
+        data.push({
+          x: i,
+          y: this.calculatePowerFactor(i)
+        })
+      }
     }
 
     var powerFactorLine = d3.line()
-      .x(function(d) { return this.x(d.x); })
-      .y(function(d) { return this.y(d.y); })
+      .x(function (d) { return x(d.x); })
+      .y(function (d) { return y(d.y); })
       .curve(d3.curveNatural);
 
-    this.svg.append("path")
+    this.powerLine
       .data([data])
-      .attr("class", "line")
       .attr("d", powerFactorLine)
-      .style("stroke-width", 10)
-      .style("stroke-width", "2px")
-      .style("fill", "none")
-      .style("stroke", "#6175f5");
+      .style("display", null);
   }
 
-  drawEfficiencyLine(){
+  drawEfficiencyLine(x, y) {
 
     var data = [];
 
-    for(var i = 0; i < 120; i++) {
-      data.push({
-        x: i,
-        y: this.calculateEfficiency(i)
-      })
+    for (var i = .001; i < 1.20; i = i + .001) {
+      if(this.calculateEfficiency(i) >= 0 && this.calculateEfficiency(i) <= this.height) {
+        data.push({
+          x: i,
+          y: this.calculateEfficiency(i)
+        })
+      }
     }
 
     var powerFactorLine = d3.line()
-      .x(function(d) { return this.x(d.x); })
-      .y(function(d) { return this.y(d.y); })
+      .x(function (d) { return x(d.x); })
+      .y(function (d) { return y(d.y); })
       .curve(d3.curveNatural);
 
-    this.svg.append("path")
+    this.efficiencyLine
       .data([data])
-      .attr("class", "line")
       .attr("d", powerFactorLine)
-      .style("stroke-width", 10)
-      .style("stroke-width", "2px")
-      .style("fill", "none")
-      .style("stroke", "#fecb00");
+      .style("display", null);
   }
 
 }
