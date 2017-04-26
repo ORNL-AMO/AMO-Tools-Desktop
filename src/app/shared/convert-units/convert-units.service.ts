@@ -21,6 +21,15 @@ import { digital } from './definitions/digital';
 import { partsPer } from './definitions/partsPer';
 import { pressure } from './definitions/pressure';
 import { speed } from './definitions/speed';
+import { power } from './definitions/power';
+import { current } from './definitions/current';
+import { energy } from './definitions/energy';
+import { voltage } from './definitions/voltage';
+import { apparentPower } from './definitions/apparentPower';
+import { reactiveEnergy } from './definitions/reactiveEnergy';
+import { reactivePower } from './definitions/reactivePower';
+import { volumeFlowRate } from './definitions/volumeFlowRate';
+
 import * as _ from 'lodash';
 import * as keys from 'lodash.keys';
 import * as each from 'lodash.foreach';
@@ -38,7 +47,16 @@ export class ConvertUnitsService {
     digital: digital,
     partsPer: partsPer,
     speed: speed,
-    pressure: pressure
+    pressure: pressure,
+    power: power,
+    current: current,
+    energy: energy,
+    voltage: voltage,
+    apparentPower: apparentPower,
+    reactiveEnergy: reactiveEnergy,
+    reactivePower: reactivePower,
+    volumeFlowRate: volumeFlowRate
+    
   }
   origin: any;
   destination: any;
@@ -64,7 +82,7 @@ export class ConvertUnitsService {
   }
 
   from(from: any) {
-    if(!this.val)
+    if (!this.val)
       throw new Error('need to set value before call to .from');
     if (this.destination)
       throw new Error('.from must be called before .to');
@@ -128,7 +146,7 @@ export class ConvertUnitsService {
       if (typeof transform === 'function') {
         return result = transform(result)
       }
-      result *= this.measures[this.origin.measure]._anchors[this.origin.system].ratio;
+      result *= this._measures[this.origin.measure]._anchors[this.origin.system].ratio;
     }
 
     /**
@@ -181,6 +199,55 @@ export class ConvertUnitsService {
 
     throw new Error('Unsupported unit ' + what + ', use one of: ' + validUnits.join(', '));
   }
+
+  possibilities(measure) {
+    var possibilities = [];
+    if (!this.origin && !measure) {
+      each(keys(this._measures), function (measure) {
+        each(this._measures[measure], function (units, system) {
+          if (system == '_anchors')
+            return false;
+
+          possibilities = possibilities.concat(keys(units));
+        });
+      });
+    } else {
+      measure = measure || this.origin.measure;
+      each(this._measures[measure], function (units, system) {
+        if (system == '_anchors')
+          return false;
+
+        possibilities = possibilities.concat(keys(units));
+      });
+    }
+
+    return possibilities;
+  }
+
+  // list(measure?) {
+  //   var list = [];
+
+  //   each(this._measures, function (systems, testMeasure) {
+  //     if (measure && measure !== testMeasure)
+  //       return;
+
+  //     each(systems, function (units, system) {
+  //       if (system == '_anchors')
+  //         return false;
+
+  //       each(units, function (unit, abbr) {
+  //         list = list.concat(this.describe({
+  //           abbr: abbr,
+  //           measure: testMeasure
+  //           , system: system
+  //           , unit: unit
+  //         }));
+  //       });
+  //     });
+  //   });
+
+  //   return list;
+  // }
 
   measures() {
     return keys(this._measures);

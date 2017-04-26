@@ -1,0 +1,53 @@
+<div class="row">
+  <div class="col-3">
+    <div class="form-group">
+      <label for="type">Conversion Type</label>
+      <select class="form-control" id="type" [(ngModel)]="measure" (change)="getMeasures()">
+  <option>length</option>
+  <option>area</option>
+  <option>volume</option>
+  <option>temperature</option>
+  <option>time</option>
+  <option>digital</option>
+  <option>partsPer</option>
+  <option>speed</option>
+  <option>power</option>
+  <option>current</option>
+  <option>energy</option>
+  <option>voltage</option>
+  <option>apparentPower</option>
+  <option>reactiveEnergy</option>
+  <option>reactivePower</option>
+  <option>volumeFlowRate</option>
+      </select>
+    </div>
+  </div>
+  <div class="col-3">
+    <div class="form-group">
+      <label for="from">From</label>
+      <select class="form-control" id="from" [(ngModel)]="from">
+    <option *ngFor="let possibility of possibilities" [value]="possibility.unit">{{possibility.display}}</option>
+      </select>
+    </div>
+  </div>
+  <div class="col-3">
+    <div class="form-group">
+      <label for="value">Value</label>
+      <input type="number" class="form-control" id="value" [(ngModel)]="value">
+    </div>
+  </div>
+  <div class="col-3">
+    <div class="form-group">
+      <label for="to">To</label>
+      <select class="form-control" id="to" [(ngModel)]="to">
+    <option *ngFor="let possibility of possibilities" [value]="possibility.unit">{{possibility.display}}</option>
+      </select>
+    </div>
+  </div>
+</div>
+
+<div class="row justify-content-center" style="padding-top:25px;">
+<div class="col-12">
+  <h4>Result: {{getValue()}} {{getUnitName(to)}}</h4>
+</div>
+</div>
