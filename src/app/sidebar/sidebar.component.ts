@@ -17,6 +17,8 @@ export class SidebarComponent implements OnInit {
   directory: Directory;
   @Input()
   workingDirectory: Directory;
+  @Output('showSettings')
+  showSettings = new EventEmitter<boolean>();
 
   selectedDirectory: Directory;
   firstChange: boolean = true;
@@ -51,5 +53,7 @@ export class SidebarComponent implements OnInit {
     this.selectCalculator.emit(str);
   }
 
-
+  emitShowSettings(){
+    this.showSettings.emit(true)
+  }
 }

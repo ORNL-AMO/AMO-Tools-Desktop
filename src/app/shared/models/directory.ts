@@ -1,5 +1,4 @@
 import { Assessment } from './assessment';
-
 export interface Directory {
   name: string,
   assessments?: Assessment[];
@@ -9,7 +8,8 @@ export interface Directory {
   modifiedDate?: Date,
   id?: number,
   parentDirectoryId?: number,
-  delete?: boolean
+  delete?: boolean,
+
 }
 
 
@@ -17,6 +17,7 @@ export interface DirectoryDbRef {
   name?: string,
   id?: number,
   parentDirectoryId?: number,
+  settingsId?: number,
   subDirectoryIds?: number[],
   assessmentIds?: number[],
   createdDate?: Date;

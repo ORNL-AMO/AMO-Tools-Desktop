@@ -16,7 +16,7 @@ export class DashboardComponent implements OnInit {
   workingDirectory: Directory;
   showCalculators: boolean = false;
   selectedCalculator: string;
-
+  showSettings: boolean = false;
   isFirstChange: boolean = true;
   rootDirectoryRef: DirectoryDbRef;
 
@@ -77,8 +77,15 @@ export class DashboardComponent implements OnInit {
   }
 
   viewCalculator(str: string) {
+    this.showSettings = false;
     this.showCalculators = true;
     this.selectedCalculator = str;
+  }
+
+  viewSettings(bool: boolean) {
+    this.showSettings = true;
+    this.showCalculators = false;
+    this.selectedCalculator = '';
   }
 
   createExampleAssessments() {

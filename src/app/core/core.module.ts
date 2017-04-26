@@ -18,8 +18,7 @@ import { DashboardComponent } from '../dashboard/dashboard.component';
 import { AssessmentService } from '../assessment/assessment.service';
 import { AssessmentItemComponent } from '../sidebar/assessment-item/assessment-item.component';
 import { DirectoryItemComponent } from '../sidebar/directory-item/directory-item.component';
-
-
+import { SettingsModule } from '../settings/settings.module';
 import { IndexedDbModule } from '../indexedDb/indexedDb.module';
 
 @NgModule({
@@ -42,7 +41,9 @@ import { IndexedDbModule } from '../indexedDb/indexedDb.module';
     NgxElectronModule,
     IndexedDbModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    SettingsModule
+
   ],
   providers: [
     AssessmentService
