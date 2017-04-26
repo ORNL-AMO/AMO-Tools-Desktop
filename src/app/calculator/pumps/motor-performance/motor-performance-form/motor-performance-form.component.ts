@@ -29,29 +29,8 @@ export class MotorPerformanceFormComponent implements OnInit {
   constructor(private psatService: PsatService) { }
 
   ngOnInit() {
-    // this.checkForm();
-  }
 
-  // checkForm() {
-  //   if (this.performanceForm.controls.frequency.status == 'VALID' &&
-  //     this.performanceForm.controls.horsePower.status == 'VALID' &&
-  //     this.performanceForm.controls.motorRPM.status == 'VALID' &&
-  //     this.performanceForm.controls.efficiencyClass.status == 'VALID' &&
-  //     this.performanceForm.controls.motorVoltage.status == 'VALID' &&
-  //     this.performanceForm.controls.fullLoadAmps.status == 'VALID'
-  //   ) {
-  //     if (this.performanceForm.value.efficiencyClass == 'Specified') {
-  //       if (
-  //         this.performanceForm.controls.efficiencyClassSpecified.status == 'VALID' &&
-  //         this.performanceForm.controls.efficiencyClass.status == 'VALID'
-  //       ) {
-  //         this.calculate.emit(true);
-  //       }
-  //     } else {
-  //       this.calculate.emit(true);
-  //     }
-  //   }
-  // }
+  }
 
   emitChange() {
     this.calculate.emit(true);
@@ -61,7 +40,6 @@ export class MotorPerformanceFormComponent implements OnInit {
     if (str == 'motorRPM') {
       this.performanceForm.value.motorRPM++;
     }
-    // this.checkForm();
   }
 
   subtractNum(str: string) {
@@ -70,7 +48,6 @@ export class MotorPerformanceFormComponent implements OnInit {
         this.performanceForm.value.motorRPM--;
       }
     }
-    //  this.checkForm();
   }
 
   getFullLoadAmps() {
@@ -86,7 +63,6 @@ export class MotorPerformanceFormComponent implements OnInit {
     this.performanceForm.patchValue({
       fullLoadAmps: estEfficiency
     });
-    //this.checkForm();
   }
 
 }

@@ -11,8 +11,8 @@ declare const d3: any;
 export class AchievableEfficiencyGraphComponent implements OnInit {
   @Input()
   efficiencyForm: any;
-  // @Input()
-  // toggleCalculate: boolean;
+  @Input()
+  toggleCalculate: boolean;
 
 
   svg: any;
@@ -42,11 +42,18 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
   }
 
 
-  // ngOnChanges(changes: SimpleChanges) {
-  //   if (changes.toggleCalculate) {
-  //     this.drawGraph();
-  //   }
-  // }
+  ngOnChanges(changes: SimpleChanges) {
+    if (!this.firstChange) {
+      if (changes.toggleCalculate) {
+        if (this.checkForm()) {
+          console.log('changed')
+          this.onChanges();
+        }
+      }
+    } else {
+      this.firstChange = false;
+    }
+  }
 
   calculateYaverage(flow: number) {
     if (this.checkForm()) {
@@ -88,23 +95,7 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
     }
   }
 
-  ngOnChanges(changes: SimpleChanges) {
-    console.log("change 1");
-    if (!this.firstChange) {
-      console.log("change 2");
-      if (changes.toggleCalculate) {
-        console.log("change 3");
-        if (this.checkForm()) {
-          console.log("change 4");
-          this.drawGraph();
-        }
-      }
-    } else {
-      this.firstChange = false;
-    }
-  }
-
-  setUp(){
+  setUp() {
 
     //Remove  all previous graphs
     d3.select('app-achievable-efficiency-graph').selectAll('svg').remove();
@@ -112,7 +103,7 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
     var curvePoints = [];
 
     //graph dimensions
-    this.margin = {top: 20, right: 120, bottom: 110, left: 120};
+    this.margin = { top: 20, right: 120, bottom: 110, left: 120 };
     this.width = 900 - this.margin.left - this.margin.right;
     this.height = 600 - this.margin.top - this.margin.bottom;
 
@@ -138,7 +129,7 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
       .tickPadding(15)
       .ticks(11);
 
-    this.svg  = d3.select('app-achievable-efficiency-graph').append('svg')
+    this.svg = d3.select('app-achievable-efficiency-graph').append('svg')
       .attr("width", this.width + this.margin.left + this.margin.right)
       .attr("height", this.height + this.margin.top + this.margin.bottom)
       .style("background-color", "#f5f3e9")
@@ -148,30 +139,30 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
     // filters go in defs element
     var defs = this.svg.append("defs");
 
-// create filter with id #drop-shadow
-// height=130% so that the shadow is not clipped
+    // create filter with id #drop-shadow
+    // height=130% so that the shadow is not clipped
     this.filter = defs.append("filter")
       .attr("id", "drop-shadow")
       .attr("height", "130%");
 
-// SourceAlpha refers to opacity of graphic that this filter will be applied to
-// convolve that with a Gaussian with standard deviation 3 and store result
-// in blur
+    // SourceAlpha refers to opacity of graphic that this filter will be applied to
+    // convolve that with a Gaussian with standard deviation 3 and store result
+    // in blur
     this.filter.append("feGaussianBlur")
       .attr("in", "SourceAlpha")
       .attr("stdDeviation", 3)
       .attr("result", "blur");
 
-// translate output of Gaussian blur to the right and downwards with 2px
-// store result in offsetBlur
+    // translate output of Gaussian blur to the right and downwards with 2px
+    // store result in offsetBlur
     this.filter.append("feOffset")
       .attr("in", "blur")
       .attr("dx", 0)
       .attr("dy", 0)
       .attr("result", "offsetBlur");
 
-// overlay original SourceGraphic over translated blurred opacity by using
-// feMerge filter. Order of specifying inputs is important!
+    // overlay original SourceGraphic over translated blurred opacity by using
+    // feMerge filter. Order of specifying inputs is important!
     var feMerge = this.filter.append("feMerge");
 
     feMerge.append("feMergeNode")
@@ -211,12 +202,12 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
 
     this.svg.append("text")
       .attr("text-anchor", "middle")  // this makes it easy to centre the text as the transform is applied to the anchor
-      .attr("transform", "translate("+ (-60) +","+(this.height/2)+")rotate(-90)")  // text is drawn off the screen top left, move down and out and rotate
+      .attr("transform", "translate(" + (-60) + "," + (this.height / 2) + ")rotate(-90)")  // text is drawn off the screen top left, move down and out and rotate
       .text("Achievable Efficiency (%)");
 
     this.svg.append("text")
       .attr("text-anchor", "middle")  // this makes it easy to centre the text as the transform is applied to the anchor
-      .attr("transform", "translate("+ (this.width/2) +","+(this.height-(-70))+")")  // centre below axis
+      .attr("transform", "translate(" + (this.width / 2) + "," + (this.height - (-70)) + ")")  // centre below axis
       .text("Flow Rate, gpm");
 
 
@@ -231,7 +222,7 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
     this.svg.append("text")
       .attr("x", 20)
       .attr("y", "50")
-      .text( "Achievable Efficiency (average)")
+      .text("Achievable Efficiency (average)")
       .style("font-size", "13px")
       .style("font-weight", "bold")
       .style("fill", "#fecb00");
@@ -248,7 +239,7 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
     this.pointer = this.svg.append("polygon")
       .attr("id", "pointer")
       //.attr("points", "0,13, 14,13, 7,-2");
-      .attr("points", "0,0, 0," + (detailBoxHeight-2) +  "," + detailBoxWidth + "," +  (detailBoxHeight-2) + "," + detailBoxWidth + ", 0," + ((detailBoxWidth/2)+12) + ",0," + (detailBoxWidth/2) + ", -12, " + ((detailBoxWidth/2)- 12) + ",0")
+      .attr("points", "0,0, 0," + (detailBoxHeight - 2) + "," + detailBoxWidth + "," + (detailBoxHeight - 2) + "," + detailBoxWidth + ", 0," + ((detailBoxWidth / 2) + 12) + ",0," + (detailBoxWidth / 2) + ", -12, " + ((detailBoxWidth / 2) - 12) + ",0")
       .style("opacity", 0);
 
     this.focus = this.svg.append("g")
@@ -267,17 +258,17 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
 
   }
 
-  onChanges(){
+  onChanges() {
 
     this.drawMaxLine();
     this.drawAverageLine();
 
   }
 
-  drawMaxLine(){
+  drawMaxLine() {
     var data = [];
 
-    for(var i = 0; i < 5000; i++) {
+    for (var i = 0; i < 5000; i++) {
 
       data.push({
         x: i,
@@ -286,8 +277,8 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
     }
 
     var currentLine = d3.line()
-      .x(function(d) { return this.x(d.x); })
-      .y(function(d) { return this.y(d.y); })
+      .x(function (d) { return this.x(d.x); })
+      .y(function (d) { return this.y(d.y); })
       .curve(d3.curveNatural);
 
 
@@ -303,10 +294,10 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
 
   }
 
-  drawAverageLine(){
+  drawAverageLine() {
     var data = [];
 
-    for(var i = 0; i < 5000; i++) {
+    for (var i = 0; i < 5000; i++) {
 
       data.push({
         x: i,
@@ -315,8 +306,8 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
     }
 
     var currentLine = d3.line()
-      .x(function(d) { return this.x(d.x); })
-      .y(function(d) { return this.y(d.y); })
+      .x(function (d) { return this.x(d.x); })
+      .y(function (d) { return this.y(d.y); })
       .curve(d3.curveNatural);
 
 
