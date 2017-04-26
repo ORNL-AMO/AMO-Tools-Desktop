@@ -21,8 +21,9 @@ export class MotorPerformanceGraphComponent implements OnInit {
   y: any;
   width: any;
   height: any;
-  staticHeadText: any;
-  lossCoefficientText: any;
+  currentLine: any;
+  powerLine: any;
+  efficiencyLine: any;
   margin: any;
   line: any;
   filter: any;
@@ -42,7 +43,6 @@ export class MotorPerformanceGraphComponent implements OnInit {
 
   ngOnInit() {
     this.setUp();
-    this.onChanges();
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -164,14 +164,14 @@ export class MotorPerformanceGraphComponent implements OnInit {
       .tickSizeInner(0)
       .tickSizeOuter(0)
       .tickPadding(0)
-      .ticks(12);
+      .ticks(13);
 
     this.yAxis = d3.axisLeft()
       .scale(this.y)
       .tickSizeInner(0)
       .tickSizeOuter(0)
       .tickPadding(15)
-      .ticks(12);
+      .ticks(13);
 
     this.svg = d3.select('app-motor-performance-graph').append('svg')
       .attr("width", this.width + this.margin.left + this.margin.right)
@@ -295,10 +295,35 @@ export class MotorPerformanceGraphComponent implements OnInit {
     this.svg.append("text")
       .attr("x", 20)
       .attr("y", "80")
-      .text("Efficiency")
+      .text("Efficiency(%)")
       .style("font-size", "13px")
       .style("font-weight", "bold")
       .style("fill", "#fecb00");
+
+    this.currentLine = this.svg.append("path")
+      .attr("class", "line")
+      .style("stroke-width", 10)
+      .style("stroke-width", "2px")
+      .style("fill", "none")
+      .style("stroke", "#f53e3d")
+      .style("display", "none");
+
+   this.powerLine = this.svg.append("path")
+      .attr("class", "line")
+      .style("stroke-width", 10)
+      .style("stroke-width", "2px")
+      .style("fill", "none")
+      .style("stroke", "#6175f5")
+      .style("display", "none");
+
+    this.efficiencyLine = this.svg.append("path")
+      .attr("class", "line")
+      .style("stroke-width", 10)
+      .style("stroke-width", "2px")
+      .style("fill", "none")
+      .style("stroke", "#fecb00")
+      .style("display", "none");
+
   }
 
   onChanges() {
@@ -312,12 +337,14 @@ export class MotorPerformanceGraphComponent implements OnInit {
   drawCurrentLine(x, y) {
 
     var data = [];
-    let i = 0.01;
-    for (i; i < 1.5; i = i + 0.01) {
-      data.push({
-        x: i,
-        y: this.calculateCurrent(i)
-      })
+    let i = .001;
+    for (i; i < 1.2; i = i + 0.001) {
+      if(this.calculateCurrent(i) >= 0 && this.calculateCurrent(i) <= this.height) {
+        data.push({
+          x: i,
+          y: this.calculateCurrent(i)
+        })
+      }
     }
     var currentLine = d3.line()
       .x(function (d) { return x(d.x); })
@@ -325,26 +352,24 @@ export class MotorPerformanceGraphComponent implements OnInit {
       .curve(d3.curveNatural);
 
 
-    console.log("here");
-    this.svg.append("path")
+    this.currentLine
       .data([data])
-      .attr("class", "line")
       .attr("d", currentLine)
-      .style("stroke-width", 10)
-      .style("stroke-width", "2px")
-      .style("fill", "none")
-      .style("stroke", "#f53e3d");
+      .style("display", null);
   }
 
   drawPowerFactorLine(x, y) {
 
     var data = [];
 
-    for (var i = 0.01; i < 1.20; i = i + .01) {
-      data.push({
-        x: i,
-        y: this.calculatePowerFactor(i)
-      })
+    for (var i = .001; i < 1.20; i = i + .001) {
+      console.log(this.calculatePowerFactor(i));
+      if(this.calculatePowerFactor(i) >= 0 && this.calculatePowerFactor(i) <= this.height) {
+        data.push({
+          x: i,
+          y: this.calculatePowerFactor(i)
+        })
+      }
     }
 
     var powerFactorLine = d3.line()
@@ -352,25 +377,23 @@ export class MotorPerformanceGraphComponent implements OnInit {
       .y(function (d) { return y(d.y); })
       .curve(d3.curveNatural);
 
-    this.svg.append("path")
+    this.powerLine
       .data([data])
-      .attr("class", "line")
       .attr("d", powerFactorLine)
-      .style("stroke-width", 10)
-      .style("stroke-width", "2px")
-      .style("fill", "none")
-      .style("stroke", "#6175f5");
+      .style("display", null);
   }
 
   drawEfficiencyLine(x, y) {
 
     var data = [];
 
-    for (var i = 0.01; i < 1.20; i = i + .01) {
-      data.push({
-        x: i,
-        y: this.calculateEfficiency(i)
-      })
+    for (var i = .001; i < 1.20; i = i + .001) {
+      if(this.calculateEfficiency(i) >= 0 && this.calculateEfficiency(i) <= this.height) {
+        data.push({
+          x: i,
+          y: this.calculateEfficiency(i)
+        })
+      }
     }
 
     var powerFactorLine = d3.line()
@@ -378,14 +401,10 @@ export class MotorPerformanceGraphComponent implements OnInit {
       .y(function (d) { return y(d.y); })
       .curve(d3.curveNatural);
 
-    this.svg.append("path")
+    this.efficiencyLine
       .data([data])
-      .attr("class", "line")
       .attr("d", powerFactorLine)
-      .style("stroke-width", 10)
-      .style("stroke-width", "2px")
-      .style("fill", "none")
-      .style("stroke", "#fecb00");
+      .style("display", null);
   }
 
 }
