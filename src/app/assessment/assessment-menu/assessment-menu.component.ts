@@ -43,7 +43,6 @@ export class AssessmentMenuComponent implements OnInit {
     }
   }
   setView(view: string) {
-
     this.viewChange.emit(view);
   }
 

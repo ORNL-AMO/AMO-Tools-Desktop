@@ -17,21 +17,33 @@ export class SidebarComponent implements OnInit {
   directory: Directory;
   @Input()
   workingDirectory: Directory;
-  @Output('showSettings')
-  showSettings = new EventEmitter<boolean>();
+  @Output('showSettingsEmit')
+  showSettingsEmit = new EventEmitter<boolean>();
+  @Input()
+  showSettings: boolean;
+  @Input()
+  selectedCalculator: string;
 
-  selectedDirectory: Directory;
+  selectedDirectoryId: number;
   firstChange: boolean = true;
   constructor() { }
 
   ngOnInit() {
-    this.selectedDirectory = this.directory;
+    this.directory.collapsed = false;
+    this.selectedDirectoryId = this.directory.id;
   }
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.directory && !this.firstChange) {
       this.toggleSelected(this.workingDirectory);
+    } else if (changes.selectedCalculator && !this.firstChange) {
+      if (this.selectedCalculator != '') {
+        this.selectedDirectoryId = null;
+      }
+    } else if (changes.showSettings && !this.firstChange) {
+      this.selectedDirectoryId = null;
     }
+
     if (this.firstChange) {
       this.firstChange = false;
     }
@@ -45,7 +57,9 @@ export class SidebarComponent implements OnInit {
     if (dir.collapsed == true) {
       dir.collapsed = false;
     }
-    this.selectedDirectory = dir;
+    this.selectedCalculator = '';
+    this.showSettings = false;
+    this.selectedDirectoryId = dir.id;
     this.directoryChange.emit(dir);
   }
 
@@ -53,7 +67,7 @@ export class SidebarComponent implements OnInit {
     this.selectCalculator.emit(str);
   }
 
-  emitShowSettings(){
-    this.showSettings.emit(true)
+  emitShowSettings() {
+    this.showSettingsEmit.emit(true)
   }
 }

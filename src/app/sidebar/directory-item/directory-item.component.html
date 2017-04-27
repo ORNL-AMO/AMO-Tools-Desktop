@@ -2,7 +2,7 @@
   <li>
     <i class="fa" (click)="toggleDirectoryCollapse(directory)" [ngClass]="{'fa-angle-right': directory.collapsed == true, 'fa-angle-down': directory.collapsed == false}"
       aria-hidden="true"></i>
-    <span class="pointer-item" (click)="toggleSelected(directory)" (dblclick)="toggleDirectoryCollapse(directory)" [ngClass]="{'selected':selectedDirectory.id == directory.id}">
+    <span class="pointer-item" (click)="toggleSelected(directory)" (dblclick)="toggleDirectoryCollapse(directory)" [ngClass]="{'selected':selectedDirectoryId == directory.id}">
         <i class="fa fa-folder-o" aria-hidden="true"></i>
         {{directory.name}}
       </span>
@@ -14,7 +14,7 @@
   </div>
   <div *ngIf="directory.subDirectory && directory.collapsed == false">
     <div *ngFor="let directory of directory.subDirectory">
-      <app-directory-item [directory]="directory" [selectedDirectory]="selectedDirectory" (selectSignal)="toggleSelected($event)"
+      <app-directory-item [directory]="directory" [selectedDirectoryId]="selectedDirectoryId" (selectSignal)="toggleSelected($event)"
         (collapseSignal)="toggleDirectoryCollapse($event)"></app-directory-item>
     </div>
   </div>
