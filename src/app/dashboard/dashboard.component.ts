@@ -17,9 +17,10 @@ export class DashboardComponent implements OnInit {
   workingDirectory: Directory;
   showCalculators: boolean = false;
   selectedCalculator: string;
-  showSettings: boolean = false;
+  // showSettings: boolean = false;
   isFirstChange: boolean = true;
   rootDirectoryRef: DirectoryDbRef;
+  view: string;
 
   @ViewChild('deleteModal') public deleteModal: ModalDirective;
   @ViewChild('deleteItemsModal') public deleteItemsModal: ModalDirective;
@@ -86,16 +87,17 @@ export class DashboardComponent implements OnInit {
   }
 
   viewCalculator(str: string) {
-    this.showSettings = false;
+    //this.showSettings = false;
     this.showCalculators = true;
     this.selectedCalculator = str;
   }
 
-  viewSettings(bool: boolean) {
-    this.showSettings = true;
-    this.showCalculators = false;
-    this.selectedCalculator = '';
-  }
+  // viewSettings(bool: boolean) {
+  //   this.view = 'settings';
+  //   this.showSettings = true;
+  //   this.showCalculators = false;
+  //   this.selectedCalculator = '';
+  // }
 
   createExampleAssessments() {
     let tmpAssessment = MockDirectory.assessments[0];
