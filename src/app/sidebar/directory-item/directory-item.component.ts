@@ -22,7 +22,6 @@ export class DirectoryItemComponent implements OnInit {
   constructor(private indexedDbService: IndexedDbService) { }
 
   ngOnChanges(changes: SimpleChanges) {
-    console.log(changes.directory);
     if (changes.directory && !this.isFirstChange) {
       this.populateDirectories(this.directory);
     }else{

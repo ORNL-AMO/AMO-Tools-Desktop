@@ -1,0 +1,14 @@
+<form [formGroup]="settingsForm">
+  <div class="form-group">
+    <label for="headMeasurement">Head Measurement</label>
+    <select class="form-control" formControlName="headMeasurement" id="headMeasurement" ngModel="{{settingsForm.value.headMeasurement}}">
+        <option *ngFor="let measurement of headMeasurements" [ngValue]="measurement.unit">{{measurement.display}}</option>
+    </select>
+  </div>
+  <div class="form-group">
+    <label for="flowMeasurement">Flow Measurement</label>
+    <select class="form-control" formControlName="flowMeasurement" id="flowMeasurement" ngModel="{{settingsForm.value.flowMeasurement}}">
+        <option *ngFor="let measurement of flowMeasurements" [ngValue]="measurement.unit">{{measurement.display}}</option>
+    </select>
+  </div>
+</form>

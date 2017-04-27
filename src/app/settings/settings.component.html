@@ -1,0 +1,23 @@
+<div class="row" *ngIf="settingsForm">
+  <div class="col-12">
+    <h3>Application Settings</h3>
+    <h5 class="text-muted">These settings are for the entire application. Settings can be adjusted by directory and assessment.</h5>
+  </div>
+  <div class="col-12">
+    <app-application-settings [(settingsForm)]="settingsForm"></app-application-settings>
+  </div>
+</div>
+<div class="row" *ngIf="settingsForm">
+  <div class="col-12">
+    <h3>PSAT Settings</h3>
+    <h5 class="text-muted">These settings will be used as the default settings for pump assessments.</h5>
+  </div>
+  <div class="col-12">
+    <app-psat-settings [(settingsForm)]="settingsForm"></app-psat-settings>
+  </div>
+</div>
+<div class="row justify-content-end">
+  <div class="col-2">
+    <button class="btn btn-primary" (click)="saveSettings()">Save Settings</button>
+  </div>
+</div>

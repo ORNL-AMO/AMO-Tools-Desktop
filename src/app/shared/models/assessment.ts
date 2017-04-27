@@ -11,5 +11,5 @@ export interface Assessment {
   type: string;
   filePath?: string,
   name: string,
-  delete?: boolean
+  delete?: boolean,
 }

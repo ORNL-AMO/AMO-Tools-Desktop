@@ -35,7 +35,7 @@ import { ModifyConditionsHelpComponent } from './help-panel/modify-conditions-he
 import { PsatService } from './psat.service';
 import { ModifyConditionsTabsComponent } from './modify-conditions/modify-conditions-tabs/modify-conditions-tabs.component';
 import { ModifyConditionsNotesComponent } from './modify-conditions/modify-conditions-notes/modify-conditions-notes.component';
-
+import { SettingsModule } from '../settings/settings.module';
 
 @NgModule({
   declarations: [
@@ -76,7 +76,8 @@ import { ModifyConditionsNotesComponent } from './modify-conditions/modify-condi
     PopoverModule,
     PumpsModule,
     ModalModule,
-    IndexedDbModule
+    IndexedDbModule,
+    SettingsModule
   ],
   providers: [
     PsatService
