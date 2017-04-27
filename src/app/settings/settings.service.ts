@@ -10,23 +10,29 @@ export class SettingsService {
     return this.formBuilder.group({
       'language': ['', Validators.required],
       'currency': ['', Validators.required],
-      'unitsOfMeasure': ['', Validators.required]
+      'unitsOfMeasure': ['', Validators.required],
+      'headMeasurement': [''],
+      'flowMeasurement': ['']
     });
   }
 
-  getFormFromSettings(settings: Settings){
+  getFormFromSettings(settings: Settings) {
     return this.formBuilder.group({
       'language': [settings.language, Validators.required],
       'currency': [settings.currency, Validators.required],
-      'unitsOfMeasure': [settings.unitsOfMeasure, Validators.required]
+      'unitsOfMeasure': [settings.unitsOfMeasure, Validators.required],
+      'headMeasurement': [settings.headMeasurement],
+      'flowMeasurement': [settings.flowMeasurement]
     });
   }
 
-  getSettingsFromForm(form: any){
-    let tmpSettings: Settings  = {
+  getSettingsFromForm(form: any) {
+    let tmpSettings: Settings = {
       language: form.value.language,
       currency: form.value.currency,
-      unitsOfMeasure: form.value.unitsOfMeasure
+      unitsOfMeasure: form.value.unitsOfMeasure,
+      headMeasurement: form.value.headMeasurement,
+      flowMeasurement: form.value.flowMeasurement
     };
     return tmpSettings;
   }

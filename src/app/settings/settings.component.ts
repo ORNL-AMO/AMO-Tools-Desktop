@@ -33,6 +33,8 @@ export class SettingsComponent implements OnInit {
     this.currentSettings.currency = tmpSettings.currency;
     this.currentSettings.language = tmpSettings.language;
     this.currentSettings.unitsOfMeasure = tmpSettings.unitsOfMeasure;
+    this.currentSettings.flowMeasurement = tmpSettings.flowMeasurement;
+    this.currentSettings.headMeasurement = tmpSettings.headMeasurement;
     this.indexedDbService.putSettings(this.currentSettings).then(
       results => {
         this.indexedDbService.getDirectorySettings(1).then(

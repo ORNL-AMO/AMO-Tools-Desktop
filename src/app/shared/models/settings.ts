@@ -6,14 +6,16 @@ export interface Settings {
     directoryId?: number,
     createdDate?: Date,
     modifiedDate?: Date
+    headMeasurement?: string,
+    flowMeasurement?: string,
+    id?: number
 }
 
-export interface PsatSettings { 
-    settings?: Settings,
+export interface PsatSettings {
     headMeasurement?: string,
     flowMeasurement?: string
 }
 
 export interface PhastSettings {
-    settings?: string
+
 }

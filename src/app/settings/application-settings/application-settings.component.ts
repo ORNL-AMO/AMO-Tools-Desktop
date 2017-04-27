@@ -14,7 +14,7 @@ export class ApplicationSettingsComponent implements OnInit {
   ];
 
   currencies: Array<string> = [
-    'US Dollar'
+    '$ - US Dollar'
   ]
 
   constructor() { }

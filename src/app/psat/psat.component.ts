@@ -8,6 +8,7 @@ import { PsatService } from './psat.service';
 import * as _ from 'lodash';
 import { IndexedDbService } from '../indexedDb/indexed-db.service';
 import { ActivatedRoute } from '@angular/router';
+import { Settings } from '../shared/models/settings';
 
 @Component({
   selector: 'app-psat',
@@ -55,6 +56,8 @@ export class PsatComponent implements OnInit {
   fieldDataReady: boolean = false;
   motorReady: boolean = false;
   subTab: string = 'system-basics';
+  settings: Settings;
+  isAssessmentSettings: boolean = false;
 
   constructor(
     private location: Location,
@@ -74,12 +77,47 @@ export class PsatComponent implements OnInit {
         this._psat = (JSON.parse(JSON.stringify(this.assessment.psat)));
         this.isValid = true;
         this.canContinue = true;
+        this.getSettings();
       })
       let tmpTab = this.assessmentService.getTab();
       if (tmpTab) {
         this.currentTab = tmpTab;
       }
     })
+  }
+
+  getSettings() {
+    //get assessment settings
+    this.indexedDbService.getAssessmentSettings(this.assessment.id).then(
+      results => {
+        if (results.length != 0) {
+          this.settings = results[0];
+          this.isAssessmentSettings = true;
+        } else {
+          //if no settings found for assessment, check directory settings
+          this.getParentDirectorySettings(this.assessment.directoryId);
+        }
+      }
+    )
+  }
+
+  getParentDirectorySettings(parentId: number) {
+    this.indexedDbService.getDirectorySettings(parentId).then(
+      results => {
+        if (results.length != 0) {
+          this.settings = results[0];
+        }
+        else {
+          //if no settings for directory check parent directory
+          this.indexedDbService.getDirectory(parentId).then(
+            results => {
+              this.getParentDirectorySettings(results.parentDirectoryId);
+            }
+          )
+        }
+      }
+    )
+
   }
   checkPumpFluid() {
     let tmpForm = this.psatService.getFormFromPsat(this._psat.inputs);

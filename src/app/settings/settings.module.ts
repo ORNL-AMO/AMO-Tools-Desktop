@@ -24,7 +24,9 @@ import { SettingsService } from './settings.service';
         SettingsService
     ],
     exports: [
-        SettingsComponent
+        SettingsComponent,
+        PsatSettingsComponent,
+        ApplicationSettingsComponent
     ]
 })
 
