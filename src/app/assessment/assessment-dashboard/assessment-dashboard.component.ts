@@ -17,6 +17,8 @@ export class AssessmentDashboardComponent implements OnInit {
   deleteDataSignal = new EventEmitter<boolean>();
   @Output('deleteCheckedItems')
   deleteCheckedItems = new EventEmitter<boolean>();
+  @Output('resetDataEmit')
+  resetDataEmit = new EventEmitter<boolean>();
 
   view: string;
   isFirstChange: boolean = true;
@@ -58,6 +60,10 @@ export class AssessmentDashboardComponent implements OnInit {
 
   signalDeleteItems() {
     this.deleteCheckedItems.emit(true);
+  }
+
+  resetData(){
+    this.resetDataEmit.emit(true);
   }
 
 }

@@ -357,8 +357,9 @@ export class IndexedDbService {
     })
   }
 
-  putSettings(settings: DirectoryDbRef): Promise<any> {
+  putSettings(settings: Settings): Promise<any> {
     return new Promise((resolve, reject) => {
+      debugger
       let transaction = myDb.instance.transaction([myDb.storeNames.settings], 'readwrite');
       let store = transaction.objectStore(myDb.storeNames.settings);
       let getRequest = store.get(settings.id);
@@ -381,4 +382,17 @@ export class IndexedDbService {
     })
   }
 
+  deleteSettings(id: number): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let transaction = myDb.instance.transaction([myDb.storeNames.settings], 'readwrite');
+      let store = transaction.objectStore(myDb.storeNames.settings);
+      let deleteRequest = store.delete(id);
+      deleteRequest.onsuccess = (event) => {
+        resolve(event.target.result);
+      }
+      deleteRequest.onerror = (event) => {
+        reject(event.target.result);
+      }
+    })
+  }
 }

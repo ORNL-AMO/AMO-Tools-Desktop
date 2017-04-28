@@ -5,6 +5,6 @@
 			[view]="view" (deleteItems)="signalDeleteItems()"></app-assessment-menu>
 		<app-assessment-grid-view *ngIf="view == 'grid'" [directory]="directory" (directoryChange)="changeDirectory($event)"></app-assessment-grid-view>
 		<app-assessment-list-view *ngIf="view == 'list'" [directory]="directory" (directoryChange)="changeDirectory($event)"></app-assessment-list-view>
-		<app-assessment-settings *ngIf="view == 'settings'" [directory]="directory"></app-assessment-settings>
+		<app-assessment-settings *ngIf="view == 'settings'" [directory]="directory" (resetDataEmit)="resetData()"></app-assessment-settings>
 	</div>
 </div>
