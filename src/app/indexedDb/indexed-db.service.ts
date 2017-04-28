@@ -3,14 +3,16 @@ import { WindowRefService } from '../indexedDb/window-ref.service';
 import { MockDirectory } from '../shared/mocks/mock-directory';
 import { DirectoryDbRef } from '../shared/models/directory';
 import { Assessment } from '../shared/models/assessment';
+import { Settings } from '../shared/models/settings';
 
 var myDb: any = {
   name: 'CrudDB',
-  version: 1,
+  version: 2,
   instance: {},
   storeNames: {
     assessments: 'assessments',
-    directories: 'directories'
+    directories: 'directories',
+    settings: 'settings'
   },
   defaultErrorHandler: function (e) {
     //todo: implement error handling
@@ -42,6 +44,7 @@ export class IndexedDbService {
       this.request = this._window.indexedDB.open(myDb.name, myDb.version);
       this.request.onupgradeneeded = function (e) {
         var newVersion = e.target.result;
+        //assessments
         if (!newVersion.objectStoreNames.contains(myDb.storeNames.assessments)) {
           console.log('creating assessments store...');
           let assessmentObjStore = newVersion.createObjectStore(myDb.storeNames.assessments, {
@@ -50,6 +53,7 @@ export class IndexedDbService {
           })
           assessmentObjStore.createIndex('directoryId', 'directoryId', { unique: false });
         }
+        //directories
         if (!newVersion.objectStoreNames.contains(myDb.storeNames.directories)) {
           console.log('creating directories store...');
           let directoryObjectStore = newVersion.createObjectStore(myDb.storeNames.directories, {
@@ -57,6 +61,16 @@ export class IndexedDbService {
             keyPath: 'id'
           })
           directoryObjectStore.createIndex('parentDirectoryId', 'parentDirectoryId', { unique: false });
+        }
+        //settings
+        if (!newVersion.objectStoreNames.contains(myDb.storeNames.settings)) {
+          console.log('creating settings store...');
+          let settingsObjStore = newVersion.createObjectStore(myDb.storeNames.settings, {
+            autoIncrement: true,
+            keyPath: 'id'
+          })
+          settingsObjStore.createIndex('directoryId', 'directoryId', { unique: false });
+          settingsObjStore.createIndex('assessmentId', 'assessmentId', { unique: false });
         }
 
       }
@@ -88,6 +102,7 @@ export class IndexedDbService {
     })
   }
 
+  //ASSESSMENTS
   addAssessment(_assessment: Assessment): Promise<any> {
     return new Promise((resolve, reject) => {
       let transaction = myDb.instance.transaction([myDb.storeNames.assessments], 'readwrite');
@@ -188,6 +203,7 @@ export class IndexedDbService {
     })
   }
 
+  //DIRECTORIES
   addDirectory(directoryRef: DirectoryDbRef): Promise<any> {
     return new Promise((resolve, reject) => {
       let transaction = myDb.instance.transaction([myDb.storeNames.directories], 'readwrite');
@@ -289,4 +305,94 @@ export class IndexedDbService {
   }
 
 
+  //Settings
+  addSettings(_settings: Settings): Promise<any> {
+    debugger
+    return new Promise((resolve, reject) => {
+      let transaction = myDb.instance.transaction([myDb.storeNames.settings], 'readwrite');
+      let store = transaction.objectStore(myDb.storeNames.settings);
+      let addRequest = store.add(_settings);
+      myDb.setDefaultErrorHandler(addRequest, myDb);
+      addRequest.onsuccess = (e) => {
+        console.log('on sucess');
+        resolve(e.target.result);
+      }
+      addRequest.onerror = (e) => {
+        console.log('on error')
+        debugger
+        reject(e.target.result)
+      }
+    });
+  }
+
+  getDirectorySettings(directoryId): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let transaction = myDb.instance.transaction([myDb.storeNames.settings], 'readwrite');
+      let store = transaction.objectStore(myDb.storeNames.settings);
+      let index = store.index('directoryId');
+      let indexGetRequest = index.getAll(directoryId);
+      myDb.setDefaultErrorHandler(indexGetRequest, myDb);
+      indexGetRequest.onsuccess = (e) => {
+        resolve(e.target.result)
+      }
+      indexGetRequest.onerror = (e) => {
+        reject(e);
+      }
+    })
+  }
+
+  getAssessmentSettings(assessmentId): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let transaction = myDb.instance.transaction([myDb.storeNames.settings], 'readwrite');
+      let store = transaction.objectStore(myDb.storeNames.settings);
+      let index = store.index('assessmentId');
+      let indexGetRequest = index.getAll(assessmentId);
+      myDb.setDefaultErrorHandler(indexGetRequest, myDb);
+      indexGetRequest.onsuccess = (e) => {
+        resolve(e.target.result)
+      }
+      indexGetRequest.onerror = (e) => {
+        reject(e);
+      }
+    })
+  }
+
+  putSettings(settings: Settings): Promise<any> {
+    return new Promise((resolve, reject) => {
+      debugger
+      let transaction = myDb.instance.transaction([myDb.storeNames.settings], 'readwrite');
+      let store = transaction.objectStore(myDb.storeNames.settings);
+      let getRequest = store.get(settings.id);
+      getRequest.onsuccess = (event) => {
+        let tmpSettings: Settings = event.target.result;
+        tmpSettings = settings;
+        tmpSettings.modifiedDate = new Date();
+        let updateRequest = store.put(tmpSettings);
+        updateRequest.onsuccess = (event) => {
+          console.log('update settings success');
+          resolve(event);
+        }
+        updateRequest.onerror = (event) => {
+          reject(event)
+        }
+      }
+      getRequest.onerror = (event) => {
+        reject(event);
+      }
+    })
+  }
+
+  deleteSettings(id: number): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let transaction = myDb.instance.transaction([myDb.storeNames.settings], 'readwrite');
+      let store = transaction.objectStore(myDb.storeNames.settings);
+      let deleteRequest = store.delete(id);
+      deleteRequest.onsuccess = (event) => {
+        resolve(event.target.result);
+      }
+      deleteRequest.onerror = (event) => {
+        reject(event.target.result);
+      }
+    })
+  }
 }

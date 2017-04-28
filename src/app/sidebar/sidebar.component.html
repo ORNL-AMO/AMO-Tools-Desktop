@@ -5,98 +5,61 @@
 </div>
 
 <div style="padding-top:15px;"> ASSESSMENTS
-  <div *ngIf="directory">
-    <app-directory-item [directory]="directory" [selectedDirectory]="selectedDirectory" (selectSignal)="toggleSelected($event)" (collapseSignal)="toggleDirectoryCollapse($event)"></app-directory-item>
-  </div>
+<div *ngIf="directory">
+  <app-directory-item [directory]="directory" [selectedDirectoryId]="selectedDirectoryId" (selectSignal)="toggleSelected($event)"
+    (collapseSignal)="toggleDirectoryCollapse($event)"></app-directory-item>
 </div>
-<!--<ul class="tree" *ngIf="directory">
-  <li>
-    <i class="fa" (click)="toggleDirectoryCollapse(directory)" [ngClass]="{'fa-angle-right': directory.collapsed == true, 'fa-angle-down': directory.collapsed == false}"
-      aria-hidden="true"></i>
-    <span class="pointer-item" (click)="toggleSelected(directory)" (dblclick)="toggleDirectoryCollapse(directory)" [ngClass]="{'selected':selectedDirectory.name == directory.name}">
-        <i class="fa fa-folder-o" aria-hidden="true"></i>
-        {{directory.name}}
-      </span>
-  </li>
-  <ul *ngIf="directory.subDirectory && directory.collapsed == false">
-    <li *ngFor="let directory of directory.subDirectory">
-      <i class="fa" (click)="toggleDirectoryCollapse(directory)" [ngClass]="{'fa-angle-right': directory.collapsed == true, 'fa-angle-down': directory.collapsed == false}"
-        aria-hidden="true"></i>
-      <span class="pointer-item" (click)="toggleSelected(directory)" (dblclick)="toggleDirectoryCollapse(directory)" [ngClass]="{'selected':selectedDirectory.name == directory.name}">
-          <i class="fa fa-folder-o" aria-hidden="true"></i>
-          {{directory.name}}
-        </span>
+</div>
 
-      <ul *ngIf="directory.subDirectory && directory.collapsed == false">
-        <li *ngFor="let directory of directory.subDirectory">
-          <i class="fa" (click)="toggleDirectoryCollapse(directory)" [ngClass]="{'fa-angle-right': directory.collapsed == true, 'fa-angle-down': directory.collapsed == false}"
-            aria-hidden="true"></i>
-          <span class="pointer-item" (click)="toggleSelected(directory)" (dblclick)="toggleDirectoryCollapse(directory)" [ngClass]="{'selected':selectedDirectory.name == directory.name}">
-              <i class="fa fa-folder-o" aria-hidden="true"></i>
-              {{directory.name}}
-            </span>
-        </li>
-      </ul>
-      <ul *ngIf="directory.assessments && directory.collapsed == false">
-        <li *ngFor="let assessment of directory.assessments">
-          <span class="nav-item pointer-item" (click)="goToAssessment(assessment)">
-              <i class="fa fa-pie-chart" [ngClass]="{ 'phast' : assessment.type == 'PHAST', 'psat': assessment.type == 'PSAT' }" aria-hidden="true"></i>
-              {{assessment.name}}
-            </span>
-        </li>
-      </ul>
-    </li>
-  </ul>
-  <ul *ngIf="directory.assessments && directory.collapsed == false">
-    <li *ngFor="let assessment of directory.assessments">
-      <span class="nav-item pointer-item" (click)="goToAssessment(assessment)">
-          <i class="fa fa-pie-chart" [ngClass]="{ 'phast' : assessment.type == 'PHAST', 'psat': assessment.type == 'PSAT' }" aria-hidden="true"></i>
-          {{assessment.name}}
-        </span>
-    </li>
-  </ul>
-</ul>-->
-
-<div style="padding-top: 20px;"> CALCULATORS
-<div>
-  <span class="nav-item" (click)="chooseCalculator('pumps')">
+<div class="sidebar-group"> CALCULATORS
+  <div>
+    <span class="nav-item" [ngClass]="{'selected': selectedCalculator == 'pumps'}" (click)="chooseCalculator('pumps')">
        <span class="icon">
      <i class="fa fa-calculator"></i>
        </span>Pumps
-  </span>
-</div>
-<div>
-  <span class="nav-item" (click)="chooseCalculator('fans')">
+    </span>
+  </div>
+  <div>
+    <span class="nav-item" [ngClass]="{'selected': selectedCalculator == 'fans'}" (click)="chooseCalculator('fans')">
        <span class="icon">
      <i class="fa fa-calculator"></i>
        </span>Fans
-  </span>
-</div>
-<div>
-  <span class="nav-item" (click)="chooseCalculator('furnaces')">
+    </span>
+  </div>
+  <div>
+    <span class="nav-item" [ngClass]="{'selected': selectedCalculator == 'furnaces'}" (click)="chooseCalculator('furnaces')">
        <span class="icon">
      <i class="fa fa-calculator"></i>
        </span>Furnaces
-  </span>
-</div>
-<div>
-  <span class="nav-item" (click)="chooseCalculator('steam')">
+    </span>
+  </div>
+  <div>
+    <span class="nav-item" [ngClass]="{'selected': selectedCalculator == 'steam'}" (click)="chooseCalculator('steam')">
        <span class="icon">
      <i class="fa fa-calculator"></i>
        </span>Steam
-  </span>
-</div>
-<div>
-  <span class="nav-item" (click)="chooseCalculator('motors')">
+    </span>
+  </div>
+  <div>
+    <span class="nav-item" [ngClass]="{'selected': selectedCalculator == 'motors'}" (click)="chooseCalculator('motors')">
        <span class="icon">
      <i class="fa fa-calculator"></i>
        </span>Motors
-  </span>
-</div>
-<div>
-  <span class="nav-item" (click)="chooseCalculator('utilities')">
+    </span>
+  </div>
+  <div>
+    <span class="nav-item" [ngClass]="{'selected': selectedCalculator == 'utilities'}" (click)="chooseCalculator('utilities')">
        <span class="icon">
      <i class="fa fa-calculator"></i>
        </span>Utilities
-  </span>
+    </span>
+  </div>
 </div>
+<!--
+<div class="sidebar-group">
+  <span class="nav-item" [ngClass]="{'selected': showSettings}" (click)="emitShowSettings()">
+       <span class="icon">
+     <i class="fa fa-cog"></i>
+       </span>{{directory.name}} Settings
+  </span>
+</div>-->

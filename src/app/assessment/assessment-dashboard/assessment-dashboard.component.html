@@ -1,15 +1,10 @@
-<div *ngIf="directory.name">
-	<app-assessment-banner (changeView)="viewSettings()" [workingDirectoryName]="directory.name"></app-assessment-banner>
-
-	<div class="row">
-		<div [ngClass]="{'col-10 offset-1': !isSettingsView, 'col-9': isSettingsView}">
-			<app-assessment-menu (viewChange)="changeView($event)" (directoryChange)="changeDirectory($event)" [(directory)]="directory"
-				[view]="view" (deleteItems)="signalDeleteItems()"></app-assessment-menu>
-			<app-assessment-grid-view *ngIf="view == 'grid'" [directory]="directory" (directoryChange)="changeDirectory($event)"></app-assessment-grid-view>
-			<app-assessment-list-view *ngIf="view == 'list'" [directory]="directory" (directoryChange)="changeDirectory($event)"></app-assessment-list-view>
-		</div>
-		<div class="col-3 open-settings" *ngIf="isSettingsView == true">
-			<app-assessment-settings (deleteData)="signalDelete()"></app-assessment-settings>
-		</div>
+<div class="row justify-content-center dashboard" *ngIf="directory.name">
+	<!--<app-assessment-banner [workingDirectoryName]="directory.name"></app-assessment-banner>-->
+	<div class="col-10">
+		<app-assessment-menu (viewChange)="changeView($event)" (directoryChange)="changeDirectory($event)" [(directory)]="directory"
+			[view]="view" (deleteItems)="signalDeleteItems()"></app-assessment-menu>
+		<app-assessment-grid-view *ngIf="view == 'grid'" [directory]="directory" (directoryChange)="changeDirectory($event)"></app-assessment-grid-view>
+		<app-assessment-list-view *ngIf="view == 'list'" [directory]="directory" (directoryChange)="changeDirectory($event)"></app-assessment-list-view>
+		<app-assessment-settings *ngIf="view == 'settings'" [directory]="directory" (resetDataEmit)="resetData()"></app-assessment-settings>
 	</div>
 </div>

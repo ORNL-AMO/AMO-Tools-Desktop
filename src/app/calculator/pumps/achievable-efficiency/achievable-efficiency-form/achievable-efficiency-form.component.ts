@@ -23,7 +23,8 @@ export class AchievableEfficiencyFormComponent implements OnInit {
     'Vertical Turbine',
     'Large End Suction',
     // When user selects below they need a way to provide the optimal efficiency
-    'Specified Optimal Efficiency'
+    //NOT USED FOR GRAPH!
+    //'Specified Optimal Efficiency'
   ];
 
   constructor() { }

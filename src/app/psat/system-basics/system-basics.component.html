@@ -6,52 +6,18 @@
 <div class="row">
   <div class="col-12">
     <h6 class="bold">Units of Measure</h6>
-    <p>Units of Measure are inherited by your <a>Application Settings</a></p>
-  </div>
-</div>
-<div class="row">
-  <div class="col-6">
-    <p>Language:</p>
-  </div>
-  <div class="col-6">
-    <p class="pull-left">English</p>
+    <p>Units of Measure are inherited by your <a>Application Settings</a> or the working directory settings but can also be
+      modified for this individual assessment here.</p>
   </div>
 </div>
 
-<div class="row">
-  <div class="col-6">
-    <p>Currency:</p>
-  </div>
-  <div class="col-6">
-    <p class="pull-left">$ - U.S. Dollar</p>
+<div class="row" *ngIf="settingsForm">
+  <div class="col-12">
+    <app-application-settings [(settingsForm)]="settingsForm"></app-application-settings>
   </div>
 </div>
-<div class="row">
-  <div class="col-6">
-    <p>Measurement System:</p>
-  </div>
-  <div class="col-6">
-    <p class="pull-left">Imperial</p>
-  </div>
-</div>
-<div class="row">
-  <div class="col-6">
-    <p>Head Measurement:</p>
-  </div>
-  <div class="col-6">
-    <p class="pull-left">Feet</p>
-  </div>
-</div>
-<div class="row">
-  <div class="col-6">
-    <p>Flow Rate:</p>
-  </div>
-  <div class="col-6">
-    <p class="pull-left">Gallons / Minute</p>
-  </div>
-</div>
-<div class="row">
-  <div class="col-6">
-    <a>Customize for this assessment</a>
+<div class="row" *ngIf="settingsForm">
+  <div class="col-12">
+    <app-psat-settings [(settingsForm)]="settingsForm"></app-psat-settings>
   </div>
 </div>

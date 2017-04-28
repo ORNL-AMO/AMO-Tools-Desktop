@@ -24,9 +24,9 @@
 
 
     <div class="tab-content" *ngIf="subTab == 'system-basics'">
-      <div class="wrapper">
+      <div class="wrapper" *ngIf="settings">
         <div class="form">
-          <app-system-basics></app-system-basics>
+          <app-system-basics [settings]="settings" [saveClicked]="saveClicked" [assessment]="assessment" [isAssessmentSettings]="isAssessmentSettings"></app-system-basics>
         </div>
         <div class="help">
           <app-help-panel [currentField]="currentField" [currentTab]="subTab"></app-help-panel>

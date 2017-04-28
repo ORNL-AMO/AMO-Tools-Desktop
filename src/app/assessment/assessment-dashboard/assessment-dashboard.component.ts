@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
 
 import { MockDirectory } from '../../shared/mocks/mock-directory';
 import { Directory } from '../../shared/models/directory';
@@ -17,23 +17,40 @@ export class AssessmentDashboardComponent implements OnInit {
   deleteDataSignal = new EventEmitter<boolean>();
   @Output('deleteCheckedItems')
   deleteCheckedItems = new EventEmitter<boolean>();
+  @Output('resetDataEmit')
+  resetDataEmit = new EventEmitter<boolean>();
 
-  view: string = 'list';
-  isSettingsView: boolean = false;
+  view: string;
+  isFirstChange: boolean = true;
   constructor() { }
 
   ngOnInit() {
+    if (!this.view) {
+      this.view = 'list';
+    }
   }
 
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.directory && !this.isFirstChange) {
+      this.view == 'list';
+    }
+
+    if (this.isFirstChange) {
+      this.isFirstChange = false;
+    }
+  }
   changeView($event) {
-    this.view = $event;
-  }
-
-  viewSettings() {
-    this.isSettingsView = !this.isSettingsView;
+    if (this.view == $event && this.view == 'settings') {
+      this.view = 'list';
+    } else {
+      this.view = $event;
+    }
   }
 
   changeDirectory($event) {
+    if (this.view == 'settings') {
+      this.view = 'list';
+    }
     this.directoryChange.emit($event);
   }
 
@@ -43,6 +60,10 @@ export class AssessmentDashboardComponent implements OnInit {
 
   signalDeleteItems() {
     this.deleteCheckedItems.emit(true);
+  }
+
+  resetData(){
+    this.resetDataEmit.emit(true);
   }
 
 }
