@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
 
 import { MockDirectory } from '../../shared/mocks/mock-directory';
 import { Directory } from '../../shared/models/directory';
@@ -20,13 +20,25 @@ export class AssessmentDashboardComponent implements OnInit {
 
   view: string = 'list';
   isSettingsView: boolean = false;
+  isFirstChange: boolean = true;
   constructor() { }
 
   ngOnInit() {
   }
 
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.directory && !this.isFirstChange) {
+      this.view == 'list';
+    } else {
+      this.isFirstChange = false;
+    }
+  }
   changeView($event) {
-    this.view = $event;
+    if (this.view == $event && this.view == 'settings') {
+      this.view = 'list';
+    } else {
+      this.view = $event;
+    }
   }
 
   viewSettings() {
@@ -34,6 +46,9 @@ export class AssessmentDashboardComponent implements OnInit {
   }
 
   changeDirectory($event) {
+    if (this.view == 'settings') {
+      this.view = 'list';
+    }
     this.directoryChange.emit($event);
   }
 

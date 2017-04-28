@@ -21,8 +21,6 @@ export class AssessmentMenuComponent implements OnInit {
   @Output('deleteItems')
   deleteItems = new EventEmitter<boolean>();
 
-
-
   breadCrumbs: Array<Directory>;
 
   firstChange: boolean = true;
@@ -45,6 +43,7 @@ export class AssessmentMenuComponent implements OnInit {
     }
   }
   setView(view: string) {
+
     this.viewChange.emit(view);
   }
 
@@ -72,5 +71,4 @@ export class AssessmentMenuComponent implements OnInit {
   signalDeleteItems() {
     this.deleteItems.emit(true);
   }
-
 }

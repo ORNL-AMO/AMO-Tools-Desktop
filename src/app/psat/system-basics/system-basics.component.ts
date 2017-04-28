@@ -37,8 +37,8 @@ export class SystemBasicsComponent implements OnInit {
   saveChanges() {
     let tmpSettings = this.settingsService.getSettingsFromForm(this.settingsForm);
     tmpSettings.assessmentId = this.assessment.id;
-    tmpSettings.id = this.settings.id;
     if (this.isAssessmentSettings) {
+      tmpSettings.id = this.settings.id;
       this.indexedDbService.putSettings(tmpSettings).then(
         results => {
           //get updated settings
@@ -46,8 +46,11 @@ export class SystemBasicsComponent implements OnInit {
         }
       )
     } else {
+      tmpSettings.createdDate = new Date();
+      tmpSettings.modifiedDate = new Date();
       this.indexedDbService.addSettings(tmpSettings).then(
         results => {
+          console.log(results);
           this.isAssessmentSettings = true;
           //get updated settings
           this.getSettingsForm();
@@ -60,7 +63,7 @@ export class SystemBasicsComponent implements OnInit {
     this.indexedDbService.getAssessmentSettings(this.assessment.id).then(
       results => {
         if (results.length != 0) {
-          this.settings = results;
+          this.settings = results[0];
           this.settingsForm = this.settingsService.getFormFromSettings(this.settings);
         }
       }

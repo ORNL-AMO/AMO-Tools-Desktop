@@ -1,5 +1,28 @@
-<div class="row justify-content-center align-items-end">
-    <div class="col-2">
-        <button class="btn btn-danger" (click)="signalDelete()">Delete Data</button>
+<div class="row" *ngIf="settingsForm">
+    <div class="col-12">
+        <div class="row settings">
+            <div class="col-12">
+                <h5>{{directory.name}}: General Settings</h5>
+                <h6 class="text-muted">These will be default settings for assessments and folders inside {{directory.name}}.
+                </h6>
+            </div>
+            <div class="col-12">
+                <app-application-settings [(settingsForm)]="settingsForm"></app-application-settings>
+            </div>
+        </div>
+        <div class="row settings">
+            <div class="col-12">
+                <h5>{{directory.name}}: PSAT Settings</h5>
+                <h6 class="text-muted">These settings will be used as the default settings for pump assessments inside {{directory.name}}.</h6>
+            </div>
+            <div class="col-12">
+                <app-psat-settings [(settingsForm)]="settingsForm"></app-psat-settings>
+            </div>
+        </div>
+        <div class="row settings justify-content-end">
+            <div class="col-2">
+                <button class="btn btn-primary" (click)="saveSettings()">Save Settings</button>
+            </div>
+        </div>
     </div>
 </div>

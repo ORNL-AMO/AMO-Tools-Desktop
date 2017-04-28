@@ -1,33 +1,17 @@
-<div class="row list-menu">
-
+<div class="row">
   <div class="col-12">
-
     <ol class="breadcrumb">
-      <li class="breadcrumb-item" *ngFor="let crumb of breadCrumbs; let last = last;" [ngClass]="{'active':last }"><a (click)="goToDirectory(crumb)">{{crumb.name}}</a></li>
-      <!--<li class="breadcrumb-item active" *ngIf="last">{{crumb}}</li>-->
+      <li class="breadcrumb-item" *ngFor="let crumb of breadCrumbs; let last = last;" [ngClass]="{'active':last }">
+        <a (click)="goToDirectory(crumb)">
+          {{crumb.name}}
+        </a>
+      </li>
+      <li class="breadcrumb-item" *ngIf="view == 'settings'">Settings</li>
     </ol>
-
   </div>
-  <!--   <div class="col-8">
-    
-    <div class="input-group search pull-right">
-      <span class="input-group-addon">
-      <i class="fa fa-search"></i></span>
-      <input class="form-control">
-    </div>
-  
-    <select class="form-control pull-right">
-      <option>Sort By:</option>
-    </select>
-
-  </div> -->
-
 </div>
 
-
-
 <div class="row main-menu">
-
   <div class="col-10">
     <app-assessment-create [(directory)]="directory" class="create-container"></app-assessment-create>
     <app-create-folder [(directory)]="directory" class="create-container"></app-create-folder>
@@ -37,19 +21,15 @@
     <button type="button" disabled class="btn btn-secondary">Export...</button>
   </div>
   <div class="col-2">
-
     <div class="btn-group pull-right" role="group">
       <button class="btn btn-secondary" [ngClass]="{'active': view == 'list'}" (click)="setView('list')"><i class="fa fa-list"></i></button>
       <button class="btn btn-secondary" [ngClass]="{'active': view == 'grid'}" (click)="setView('grid')"><i class="fa fa-th"></i></button>
+      <button class="btn btn-secondary" [ngClass]="{'active': view == 'settings'}" (click)="setView('settings')"><i class="fa fa-cog"></i></button>
     </div>
-
   </div>
-
 </div>
 
-
-
-<div class="table-header">
+<div class="table-header" *ngIf="view != 'settings'">
   <div class="row">
     <div class="col-12">
       <label><input type="checkbox" /> Select all</label>

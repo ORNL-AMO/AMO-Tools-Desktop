@@ -102,7 +102,7 @@ export class IndexedDbService {
     })
   }
 
-//ASSESSMENTS
+  //ASSESSMENTS
   addAssessment(_assessment: Assessment): Promise<any> {
     return new Promise((resolve, reject) => {
       let transaction = myDb.instance.transaction([myDb.storeNames.assessments], 'readwrite');
@@ -203,7 +203,7 @@ export class IndexedDbService {
     })
   }
 
-//DIRECTORIES
+  //DIRECTORIES
   addDirectory(directoryRef: DirectoryDbRef): Promise<any> {
     return new Promise((resolve, reject) => {
       let transaction = myDb.instance.transaction([myDb.storeNames.directories], 'readwrite');
@@ -307,16 +307,20 @@ export class IndexedDbService {
 
   //Settings
   addSettings(_settings: Settings): Promise<any> {
+    debugger
     return new Promise((resolve, reject) => {
       let transaction = myDb.instance.transaction([myDb.storeNames.settings], 'readwrite');
       let store = transaction.objectStore(myDb.storeNames.settings);
       let addRequest = store.add(_settings);
       myDb.setDefaultErrorHandler(addRequest, myDb);
-      addRequest.onsuccess = function (e) {
+      addRequest.onsuccess = (e) => {
+        console.log('on sucess');
         resolve(e.target.result);
       }
-      addRequest.onerror = (error) => {
-        reject(error.target.result)
+      addRequest.onerror = (e) => {
+        console.log('on error')
+        debugger
+        reject(e.target.result)
       }
     });
   }
