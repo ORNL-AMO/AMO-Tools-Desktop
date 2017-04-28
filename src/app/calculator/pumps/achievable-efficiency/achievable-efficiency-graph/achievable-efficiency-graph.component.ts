@@ -267,9 +267,12 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
       .style("font-size", "13px")
       .style("font-weight", "bold");
 
+    this.svg.style("display", "none");
+
   }
 
   onChanges() {
+    this.svg.style("display", null);
     this.drawMaxLine();
     this.drawAverageLine();
     this.updateValues();
