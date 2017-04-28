@@ -1,13 +1,13 @@
 <form [formGroup]="efficiencyForm">
   <div class="form-group">
     <label for="pumpType">Pump Type</label>
-    <select class="form-control" formControlName="pumpType" id="pumpType" ngModel="{{efficiencyForm.value.pumpType}}">
+    <select class="form-control" formControlName="pumpType" id="pumpType" ngModel="{{efficiencyForm.value.pumpType}}" (change)="emitChange()">
         <option *ngFor="let pumpType of pumpTypes" [ngValue]="pumpType">{{pumpType}}</option>
       </select>
   </div>
 
   <div class="form-group">
     <label for="flowRate">Flow Rate</label>
-    <input type="number" class="form-control" formControlName="flowRate" id="flowRate">
+    <input type="number" class="form-control" formControlName="flowRate" id="flowRate" (change)="emitChange()">
   </div>
 </form>
