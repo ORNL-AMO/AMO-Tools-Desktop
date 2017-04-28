@@ -16,12 +16,16 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
 
 
   svg: any;
+  x: any;
+  y: any;
   xAxis: any;
   yAxis: any;
   width: any;
   height: any;
-  staticHeadText: any;
-  lossCoefficientText: any;
+  maxLine: any;
+  averageLine: any;
+  maxValue: any;
+  averageValue: any;
   margin: any;
   line: any;
   filter: any;
@@ -46,7 +50,6 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
     if (!this.firstChange) {
       if (changes.toggleCalculate) {
         if (this.checkForm()) {
-          console.log('changed')
           this.onChanges();
         }
       }
@@ -78,9 +81,7 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
   drawGraph() {
     if (this.checkForm()) {
       this.results.max = this.calculateYmax(this.efficiencyForm.value.flowRate);
-      console.log(this.results.max);
       this.results.average = this.calculateYaverage(this.efficiencyForm.value.flowRate);
-      console.log(this.results.average);
     }
   }
 
@@ -107,23 +108,23 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
     this.width = 900 - this.margin.left - this.margin.right;
     this.height = 600 - this.margin.top - this.margin.bottom;
 
-    var x = d3.scaleLinear()
+    this.x = d3.scaleLinear()
       .range([0, this.width])
       .domain([0, 5000]);
 
-    var y = d3.scaleLinear()
+    this.y = d3.scaleLinear()
       .range([this.height, 0])
       .domain([0, 100]);
 
     this.xAxis = d3.axisBottom()
-      .scale(x)
+      .scale(this.x)
       .tickSizeInner(0)
       .tickSizeOuter(0)
       .tickPadding(0)
       .ticks(16);
 
     this.yAxis = d3.axisLeft()
-      .scale(y)
+      .scale(this.y)
       .tickSizeInner(0)
       .tickSizeOuter(0)
       .tickPadding(15)
@@ -210,37 +211,19 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
       .attr("transform", "translate(" + (this.width / 2) + "," + (this.height - (-70)) + ")")  // centre below axis
       .text("Flow Rate, gpm");
 
+    this.maxLine = this.svg.append("path")
+      .attr("class", "line")
+      .style("stroke-width", 10)
+      .style("stroke-width", "2px")
+      .style("fill", "none")
+      .style("stroke", "#f53e3d");
 
-    this.svg.append("text")
-      .attr("x", 20)
-      .attr("y", "20")
-      .text("Achievable Efficiency (max)")
-      .style("font-size", "13px")
-      .style("font-weight", "bold")
-      .style("fill", "#f53e3d");
-
-    this.svg.append("text")
-      .attr("x", 20)
-      .attr("y", "50")
-      .text("Achievable Efficiency (average)")
-      .style("font-size", "13px")
-      .style("font-weight", "bold")
-      .style("fill", "#fecb00");
-
-    // Define the div for the tooltip
-    this.detailBox = d3.select("app-achievable-efficiency-graph").append("div")
-      .attr("id", "detailBox")
-      .attr("class", "d3-tip")
-      .style("opacity", 0);
-
-    const detailBoxWidth = 160;
-    const detailBoxHeight = 80;
-
-    this.pointer = this.svg.append("polygon")
-      .attr("id", "pointer")
-      //.attr("points", "0,13, 14,13, 7,-2");
-      .attr("points", "0,0, 0," + (detailBoxHeight - 2) + "," + detailBoxWidth + "," + (detailBoxHeight - 2) + "," + detailBoxWidth + ", 0," + ((detailBoxWidth / 2) + 12) + ",0," + (detailBoxWidth / 2) + ", -12, " + ((detailBoxWidth / 2) - 12) + ",0")
-      .style("opacity", 0);
+    this.averageLine = this.svg.append("path")
+        .attr("class", "line")
+        .style("stroke-width", 10)
+        .style("stroke-width", "2px")
+        .style("fill", "none")
+        .style("stroke", "#fecb00");
 
     this.focus = this.svg.append("g")
       .attr("class", "focus")
@@ -256,72 +239,97 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
       .attr("x", 9)
       .attr("dy", ".35em");
 
+    this.svg.append("text")
+      .attr("x", 20)
+      .attr("y", "20")
+      .text("Achievable Efficiency (max): ")
+      .style("font-size", "13px")
+      .style("font-weight", "bold")
+      .style("fill", "#f53e3d");
+
+    this.svg.append("text")
+      .attr("x", 20)
+      .attr("y", "50")
+      .text("Achievable Efficiency (average): ")
+      .style("font-size", "13px")
+      .style("font-weight", "bold")
+      .style("fill", "#fecb00");
+
+   this.maxValue = this.svg.append("text")
+      .attr("x", 250)
+      .attr("y", "20")
+      .style("font-size", "13px")
+      .style("font-weight", "bold");
+
+    this.averageValue = this.svg.append("text")
+      .attr("x", 250)
+      .attr("y", "50")
+      .style("font-size", "13px")
+      .style("font-weight", "bold");
+
   }
 
   onChanges() {
-
     this.drawMaxLine();
     this.drawAverageLine();
+    this.updateValues();
+  }
+
+  drawAverageLine() {
+    var data = [];
+
+    for (var i = 2; i < 5000; i++) {
+       if(this.calculateYaverage(i) <= 100) {
+         data.push({
+           x: i,
+           y: this.calculateYaverage(i)
+         })
+       }
+    }
+
+    var currentLine = d3.line()
+      .x((d) => { return this.x(d.x); })
+      .y((d) => { return this.y(d.y); })
+      .curve(d3.curveNatural);
+
+    this.averageLine
+      .data([data])
+      .attr("d", currentLine);
 
   }
 
   drawMaxLine() {
     var data = [];
 
-    for (var i = 0; i < 5000; i++) {
-
-      data.push({
-        x: i,
-        y: this.calculateYaverage(i)
-      })
+    for (var i = 2; i < 5000; i++) {
+      if(this.calculateYmax(i) <= 100) {
+        data.push({
+          x: i,
+          y: this.calculateYmax(i)
+        })
+      }
     }
 
     var currentLine = d3.line()
-      .x(function (d) { return this.x(d.x); })
-      .y(function (d) { return this.y(d.y); })
+      .x((d) => { return this.x(d.x); })
+      .y((d) => { return this.y(d.y); })
       .curve(d3.curveNatural);
 
-
-    console.log("here");
-    this.svg.append("path")
+    this.maxLine
       .data([data])
-      .attr("class", "line")
-      .attr("d", currentLine)
-      .style("stroke-width", 10)
-      .style("stroke-width", "2px")
-      .style("fill", "none")
-      .style("stroke", "#f53e3d");
+      .attr("d", currentLine);
 
   }
 
-  drawAverageLine() {
-    var data = [];
+  updateValues(){
 
-    for (var i = 0; i < 5000; i++) {
+    var format = d3.format(".3n");
 
-      data.push({
-        x: i,
-        y: this.calculateYmax(i)
-      })
-    }
+    this.maxValue
+      .text(format(this.calculateYmax(this.efficiencyForm.value.flowRate)));
 
-    var currentLine = d3.line()
-      .x(function (d) { return this.x(d.x); })
-      .y(function (d) { return this.y(d.y); })
-      .curve(d3.curveNatural);
-
-
-    console.log("here");
-    this.svg.append("path")
-      .data([data])
-      .attr("class", "line")
-      .attr("d", currentLine)
-      .style("stroke-width", 10)
-      .style("stroke-width", "2px")
-      .style("fill", "none")
-      .style("stroke", "#fecb00");
-
+    this.averageValue
+      .text(format(this.calculateYaverage(this.efficiencyForm.value.flowRate)));
   }
-
 
 }
