@@ -45,6 +45,10 @@ export class SpecificSpeedGraphComponent implements OnInit {
 
   ngOnInit() {
     this.setUp();
+    if (this.checkForm()) {
+      this.drawPoint();
+      this.svg.style("display", null);
+    }
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -116,7 +120,7 @@ export class SpecificSpeedGraphComponent implements OnInit {
       .domain([10000, 100000]);
 
     this.x3 = d3.scaleLinear()
-      .range([0, (this.width*(1/3))])
+      .range([0, (this.width * (1 / 3))])
       .domain([0, 1000]);
 
     this.y = d3.scaleLinear()
@@ -398,7 +402,7 @@ export class SpecificSpeedGraphComponent implements OnInit {
 
     this.focus
       .attr("transform", () => {
-        if(this.y(efficiencyCorrection) >= 0) {
+        if (this.y(efficiencyCorrection) >= 0) {
           if (specificSpeed < 1000) {
             return "translate(" + this.x0(specificSpeed) + "," + this.y(efficiencyCorrection) + ")";
           }
@@ -408,10 +412,10 @@ export class SpecificSpeedGraphComponent implements OnInit {
         }
       })
       .style("display", () => {
-        if(this.y(efficiencyCorrection) >= 0) {
+        if (this.y(efficiencyCorrection) >= 0) {
           return null;
         }
-        else{
+        else {
           return "none";
         }
       });

@@ -43,6 +43,9 @@ export class MotorPerformanceGraphComponent implements OnInit {
 
   ngOnInit() {
     this.setUp();
+    if(this.checkForm()){
+      this.onChanges();
+    }
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -338,7 +341,7 @@ export class MotorPerformanceGraphComponent implements OnInit {
 
     var data = [];
     let i = .001;
-    for (i; i < 1.2; i = i + 0.0001) {
+    for (i; i < 1.2; i = i + 0.01) {
       if(this.calculateCurrent(i) >= 0 && this.calculateCurrent(i) <= this.height) {
         data.push({
           x: i,
@@ -362,7 +365,7 @@ export class MotorPerformanceGraphComponent implements OnInit {
 
     var data = [];
 
-    for (var i = .001; i < 1.20; i = i + .0001) {
+    for (var i = .001; i < 1.20; i = i + .01) {
       if(this.calculatePowerFactor(i) >= 0 && this.calculatePowerFactor(i) <= 120) {
         data.push({
           x: i,
@@ -386,7 +389,7 @@ export class MotorPerformanceGraphComponent implements OnInit {
 
     var data = [];
 
-    for (var i = .001; i < 1.20; i = i + .0001) {
+    for (var i = .001; i < 1.20; i = i + .01) {
       if(this.calculateEfficiency(i) >= 0 && this.calculateEfficiency(i) <= 120) {
         data.push({
           x: i,

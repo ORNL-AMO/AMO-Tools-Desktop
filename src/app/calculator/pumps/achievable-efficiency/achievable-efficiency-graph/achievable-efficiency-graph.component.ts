@@ -43,6 +43,9 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
 
   ngOnInit() {
     this.setUp();
+    if (this.checkForm()) {
+      this.onChanges();
+    }
   }
 
 
@@ -88,7 +91,8 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
   checkForm() {
     if (
       this.efficiencyForm.controls.pumpType.status == 'VALID' &&
-      this.efficiencyForm.controls.flowRate.status == 'VALID'
+      this.efficiencyForm.controls.flowRate.status == 'VALID' &&
+      this.efficiencyForm.value.pumpType != 'Specified Optimal Efficiency'
     ) {
       return true;
     } else {
@@ -219,11 +223,11 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
       .style("stroke", "#f53e3d");
 
     this.averageLine = this.svg.append("path")
-        .attr("class", "line")
-        .style("stroke-width", 10)
-        .style("stroke-width", "2px")
-        .style("fill", "none")
-        .style("stroke", "#fecb00");
+      .attr("class", "line")
+      .style("stroke-width", 10)
+      .style("stroke-width", "2px")
+      .style("fill", "none")
+      .style("stroke", "#fecb00");
 
     this.focus = this.svg.append("g")
       .attr("class", "focus")
@@ -255,7 +259,7 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
       .style("font-weight", "bold")
       .style("fill", "#fecb00");
 
-   this.maxValue = this.svg.append("text")
+    this.maxValue = this.svg.append("text")
       .attr("x", 250)
       .attr("y", "20")
       .style("font-size", "13px")
@@ -278,13 +282,13 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
   drawAverageLine() {
     var data = [];
 
-    for (var i = 2; i < 5000; i++) {
-       if(this.calculateYaverage(i) <= 100) {
-         data.push({
-           x: i,
-           y: this.calculateYaverage(i)
-         })
-       }
+    for (var i = 2; i < 5000; i = i + 10) {
+      if (this.calculateYaverage(i) <= 100) {
+        data.push({
+          x: i,
+          y: this.calculateYaverage(i)
+        })
+      }
     }
 
     var currentLine = d3.line()
@@ -301,8 +305,8 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
   drawMaxLine() {
     var data = [];
 
-    for (var i = 2; i < 5000; i++) {
-      if(this.calculateYmax(i) <= 100) {
+    for (var i = 2; i < 5000; i = i + 10) {
+      if (this.calculateYmax(i) <= 100) {
         data.push({
           x: i,
           y: this.calculateYmax(i)
@@ -321,7 +325,7 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
 
   }
 
-  updateValues(){
+  updateValues() {
 
     var format = d3.format(".3n");
 
