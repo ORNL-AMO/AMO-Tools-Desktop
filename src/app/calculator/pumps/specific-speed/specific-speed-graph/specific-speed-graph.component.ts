@@ -14,16 +14,11 @@ export class SpecificSpeedGraphComponent implements OnInit {
 
 
   svg: any;
+  xAxis: any;
   xAxis0: any;
-  xAxis1: any;
-  xAxis2: any;
-  xAxis3: any;
   yAxis: any;
   x: any;
   x0: any;
-  x1: any;
-  x2: any;
-  x3: any;
   y: any;
   specificSpeedText: any;
   efficiencyCorrectionText: any;
@@ -107,54 +102,21 @@ export class SpecificSpeedGraphComponent implements OnInit {
     this.width = 900 - this.margin.left - this.margin.right;
     this.height = 600 - this.margin.top - this.margin.bottom;
 
-    this.x0 = d3.scaleLinear()
-      .range([0, (this.width * (1 / 3))])
-      .domain([100, 1000]);
 
-    this.x1 = d3.scaleLinear()
-      .range([(this.width * (1 / 3)), (this.width * (2 / 3))])
-      .domain([1000, 10000]);
-
-    this.x2 = d3.scaleLinear()
-      .range([(this.width * (2 / 3)), this.width])
-      .domain([10000, 100000]);
-
-    this.x3 = d3.scaleLinear()
-      .range([0, (this.width * (1 / 3))])
-      .domain([0, 1000]);
+    this.x = d3.scaleLinear()
+      .range([0, this.width])
+      .domain([0, 10000]);
 
     this.y = d3.scaleLinear()
       .range([this.height, 0])
       .domain([0, 6]);
 
-    this.xAxis0 = d3.axisBottom()
-      .scale(this.x0)
+    this.xAxis = d3.axisBottom()
+      .scale(this.x)
       .tickSizeInner(0)
       .tickSizeOuter(0)
       .tickPadding(0)
-      .ticks(1);
-
-    this.xAxis1 = d3.axisBottom()
-      .scale(this.x1)
-      .tickSizeInner(0)
-      .tickSizeOuter(0)
-      .tickPadding(0)
-      .ticks(1);
-
-    this.xAxis2 = d3.axisBottom()
-      .scale(this.x2)
-      .tickSizeInner(0)
-      .tickSizeOuter(0)
-      .tickPadding(0)
-      .ticks(1);
-
-    this.xAxis3 = d3.axisBottom()
-      .scale(this.x3)
-      .tickSizeInner(0)
-      .tickSizeOuter(0)
-      .tickPadding(0)
-      .ticks(1);
-
+      .ticks(11);
 
     this.yAxis = d3.axisLeft()
       .scale(this.y)
@@ -214,44 +176,10 @@ export class SpecificSpeedGraphComponent implements OnInit {
     this.svg.append("path")
       .attr("id", "areaUnderCurve");
 
-    this.xAxis3 = this.svg.append('g')
+    this.xAxis = this.svg.append('g')
       .attr("class", "x axis")
       .attr("transform", "translate(0," + this.height + ")")
-      .call(this.xAxis3)
-      .style("stroke-width", "0")
-      .selectAll('text')
-      .style("text-anchor", "end")
-      .style("font-size", "13px")
-      .attr("transform", "rotate(-65) translate(-15, 0)")
-      .attr("dy", "12px");
-
-    this.xAxis0 = this.svg.append('g')
-      .attr("class", "x axis")
-      .attr("transform", "translate(0," + this.height + ")")
-      .call(this.xAxis0)
-      .style("stroke-width", "0")
-      .selectAll('text')
-      .style("text-anchor", "end")
-      .style("font-size", "13px")
-      .attr("transform", "rotate(-65) translate(-15, 0)")
-      .attr("dy", "12px");
-
-
-    this.xAxis1 = this.svg.append('g')
-      .attr("class", "x axis")
-      .attr("transform", "translate(0," + this.height + ")")
-      .call(this.xAxis1)
-      .style("stroke-width", "0")
-      .selectAll('text')
-      .style("text-anchor", "end")
-      .style("font-size", "13px")
-      .attr("transform", "rotate(-65) translate(-15, 0)")
-      .attr("dy", "12px");
-
-    this.xAxis2 = this.svg.append('g')
-      .attr("class", "x axis")
-      .attr("transform", "translate(0," + this.height + ")")
-      .call(this.xAxis2)
+      .call(this.xAxis)
       .style("stroke-width", "0")
       .selectAll('text')
       .style("text-anchor", "end")
@@ -292,7 +220,7 @@ export class SpecificSpeedGraphComponent implements OnInit {
       .style("opacity", 0);
 
     //We can draw the guideCurve now since pump type has no effect on what kind of shape it has.
-    this.drawGuideCurve(this.svg, this.x0, this.x1, this.y, this.psatService, "Axial Flow");
+    this.drawGuideCurve(this.svg, this.x, this.y, this.psatService, "Axial Flow");
 
     this.svg.append("text")
       .attr("x", "20")
@@ -335,12 +263,12 @@ export class SpecificSpeedGraphComponent implements OnInit {
     this.svg.style("display", "none");
   }
 
-  drawGuideCurve(svg, x0, x1, y, psatService, type) {
+  drawGuideCurve(svg, x, y, psatService, type) {
 
     svg.selectAll("path").remove();
 
     var data = [];
-    for (var i = 100; i < 1000; i++) {
+    for (var i = 100; i < 7000; i++) {
       var efficiencyCorrection = psatService.achievableEfficiency(type, i);
       if (efficiencyCorrection <= 6) {
         data.push({
@@ -352,33 +280,7 @@ export class SpecificSpeedGraphComponent implements OnInit {
 
     var guideLine = d3.line()
       .x(function (d) {
-        return x0(d.x);
-      })
-      .y(function (d) {
-        return y(d.y);
-      })
-      .curve(d3.curveNatural);
-
-    svg.append("path")
-      .data([data])
-      .attr("class", "line")
-      .attr("d", guideLine)
-      .style("stroke-width", 10)
-      .style("stroke-width", "2px")
-      .style("fill", "none")
-      .style("stroke", "#757575");
-
-    data = [];
-    for (var i = 1000; i < 7000; i++) {
-      data.push({
-        x: i,
-        y: psatService.achievableEfficiency(type, i)
-      });
-    }
-
-    var guideLine = d3.line()
-      .x(function (d) {
-        return x1(d.x);
+        return x(d.x);
       })
       .y(function (d) {
         return y(d.y);
@@ -402,13 +304,9 @@ export class SpecificSpeedGraphComponent implements OnInit {
 
     this.focus
       .attr("transform", () => {
+
         if (this.y(efficiencyCorrection) >= 0) {
-          if (specificSpeed < 1000) {
-            return "translate(" + this.x0(specificSpeed) + "," + this.y(efficiencyCorrection) + ")";
-          }
-          else {
-            return "translate(" + this.x1(specificSpeed) + "," + this.y(efficiencyCorrection) + ")";
-          }
+          return "translate(" + this.x(specificSpeed) + "," + this.y(efficiencyCorrection) + ")";
         }
       })
       .style("display", () => {

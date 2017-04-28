@@ -31,7 +31,6 @@ export class MotorPerformanceGraphComponent implements OnInit {
   pointer: any;
   focus: any;
 
-
   motorPerformanceResults: any = {
     efficiency: 0,
     motor_current: 0,
@@ -147,8 +146,6 @@ export class MotorPerformanceGraphComponent implements OnInit {
     //Remove  all previous graphs
     d3.select('app-motor-performance-graph').selectAll('svg').remove();
 
-    var curvePoints = [];
-
     //graph dimensions
     this.margin = { top: 20, right: 120, bottom: 110, left: 120 };
     this.width = 900 - this.margin.left - this.margin.right;
@@ -156,7 +153,7 @@ export class MotorPerformanceGraphComponent implements OnInit {
 
     this.x = d3.scaleLinear()
       .range([0, this.width])
-      .domain([0, 1.20]);
+      .domain([0, 1.21]);
 
     this.y = d3.scaleLinear()
       .range([this.height, 0])
@@ -327,10 +324,12 @@ export class MotorPerformanceGraphComponent implements OnInit {
       .style("font-weight", "bold")
       .style("fill", "#fecb00");
 
+    this.svg.style("display", "none");
+
   }
 
   onChanges() {
-
+    this.svg.style("display", null);
     this.drawCurrentLine(this.x, this.y);
     this.drawPowerFactorLine(this.x, this.y);
     this.drawEfficiencyLine(this.x, this.y);
@@ -353,7 +352,6 @@ export class MotorPerformanceGraphComponent implements OnInit {
       .x(function (d) { return x(d.x); })
       .y(function (d) { return y(d.y); })
       .curve(d3.curveNatural);
-
 
     this.currentLine
       .data([data])
