@@ -1,11 +1,11 @@
 .chart-container{
     display: block;
-    max-height: 800px;
-    max-width: 800px;
+    width: 100%;
 }
 
 .value{
     position: absolute;
-    margin-top: 48%;
-    margin-left: 38%;
+    margin-top: 120px;
+    margin-left: 110px;
+    font-size: 24px;
 }
