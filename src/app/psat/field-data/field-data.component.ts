@@ -53,14 +53,15 @@ export class FieldDataComponent implements OnInit {
   constructor(private psatService: PsatService) { }
 
   ngOnInit() {
-    console.log(this.settings);
     this.psatForm = this.psatService.getFormFromPsat(this.psat.inputs);
     this.checkForm(this.psatForm);
+  }
+
+  ngAfterViewInit() {
     if (!this.selected) {
       this.disableForm();
     }
   }
-
 
   ngOnChanges(changes: SimpleChanges) {
     if (!this.isFirstChange) {

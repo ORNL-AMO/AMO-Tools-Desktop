@@ -16,7 +16,7 @@
       <small id="headDiagramHelp" class="text-muted text-help">K<sub>s</sub> represents all suction losses from the tank to the pump</small><br>
       <small id="headDiagramHelp" class="text-muted text-help">K<sub>d</sub> represents all discharge losses from the pump to the guage P<sub>d</sub></small>
     </div>
-    <app-head-tool-suction-form [(headToolSuctionForm)]="headToolSuctionForm" (calculate)="calculateHeadToolSuctionTank()"></app-head-tool-suction-form>
+    <app-head-tool-suction-form [(headToolSuctionForm)]="headToolSuctionForm" [settings]="settings" (calculate)="calculateHeadToolSuctionTank()"></app-head-tool-suction-form>
   </div>
   <div class="col-7" *ngIf="headToolType == 'Suction guage elevation, gas space pressure, and discharged line pressure'">
     <div class="head-diagram text-center">
