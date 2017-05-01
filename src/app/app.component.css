@@ -148,12 +148,12 @@ select.form-control:not([size]):not([multiple]) {
   border:  #9c9c9c solid 1px; 
   padding: 0;
 }
-  .tab-content .form-group .form-control.incrementor {
+  /*.tab-content .form-group .form-control.incrementor {
     width: 102px;
   }
   .tab-content .form-group .form-control.incrementor .form-control {
     width: 58px;
-  }
+  }*/
 .incrementor .btn {
   border-right: #c9c9c9 solid 1px;
   background: #ffffff;

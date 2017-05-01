@@ -1,4 +1,4 @@
-<div class="row justify-content-center dashboard" *ngIf="directory.name">
+<div class="row justify-content-center dashboard-content" *ngIf="directory.name">
 	<!--<app-assessment-banner [workingDirectoryName]="directory.name"></app-assessment-banner>-->
 	<div class="col-10">
 		<app-assessment-menu (viewChange)="changeView($event)" (directoryChange)="changeDirectory($event)" [(directory)]="directory"

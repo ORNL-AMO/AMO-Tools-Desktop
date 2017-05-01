@@ -10,5 +10,8 @@ export interface Settings {
     powerMeasurement?: string,
     distanceMeasurement?: string,
     pressureMeasurement?: string,
+    currentMeasurement?: string,
+    viscosityMeasurement?: string,
+    voltageMeasurement?: string,
     id?: number
 }

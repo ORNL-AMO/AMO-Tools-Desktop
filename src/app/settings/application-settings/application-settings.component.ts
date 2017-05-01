@@ -27,9 +27,12 @@ export class ApplicationSettingsComponent implements OnInit {
     if (this.settingsForm.value.unitsOfMeasure == 'Imperial') {
       this.settingsForm.patchValue({
         powerMeasurement: 'hp',
-        flowMeasurement: 'gal/min',
+        flowMeasurement: 'gpm',
         distanceMeasurement: 'ft',
-        pressureMeasurement: 'psi'
+        pressureMeasurement: 'psi',
+        currentMeasurement: 'A',
+        viscosityMeasurement: 'cST',
+        voltageMeasurement: 'V'
       })
 
     } else if (this.settingsForm.value.unitsOfMeasure == 'Metric') {
@@ -37,7 +40,10 @@ export class ApplicationSettingsComponent implements OnInit {
         powerMeasurement: 'kW',
         flowMeasurement: 'm3/h',
         distanceMeasurement: 'm',
-        pressureMeasurement: 'kPa'
+        pressureMeasurement: 'kPa',
+        currentMeasurement: 'A',
+        viscosityMeasurement: 'cST',
+        voltageMeasurement: 'V'
       })
     }
   }

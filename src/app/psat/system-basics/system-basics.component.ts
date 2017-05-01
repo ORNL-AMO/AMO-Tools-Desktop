@@ -17,6 +17,8 @@ export class SystemBasicsComponent implements OnInit {
   settings: Settings;
   @Input()
   isAssessmentSettings: boolean;
+  @Output('updateSettings')
+  updateSettings = new EventEmitter<boolean>();
 
   unitChange: boolean = false;
 
@@ -49,7 +51,7 @@ export class SystemBasicsComponent implements OnInit {
       this.indexedDbService.putSettings(tmpSettings).then(
         results => {
           //get updated settings
-          this.getSettingsForm();
+          this.updateSettings.emit(true);
         }
       )
     } else {
@@ -57,10 +59,9 @@ export class SystemBasicsComponent implements OnInit {
       tmpSettings.modifiedDate = new Date();
       this.indexedDbService.addSettings(tmpSettings).then(
         results => {
-          console.log(results);
           this.isAssessmentSettings = true;
           //get updated settings
-          this.getSettingsForm();
+          this.updateSettings.emit(true);
         }
       )
     }
@@ -71,6 +72,7 @@ export class SystemBasicsComponent implements OnInit {
       results => {
         if (results.length != 0) {
           this.settings = results[0];
+          console.log(this.settings);
           this.settingsForm = this.settingsService.getFormFromSettings(this.settings);
         }
       }

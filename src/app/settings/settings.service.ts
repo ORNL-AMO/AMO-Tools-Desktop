@@ -14,7 +14,10 @@ export class SettingsService {
       'distanceMeasurement': [''],
       'flowMeasurement': [''],
       'powerMeasurement': [''],
-      'pressureMeasurement': ['']
+      'pressureMeasurement': [''],
+      'currentMeasurement': [''],
+      'viscosityMeasurement': [''],
+      'voltageMeasurement': ['']
     });
   }
 
@@ -26,7 +29,10 @@ export class SettingsService {
       'distanceMeasurement': [settings.distanceMeasurement],
       'flowMeasurement': [settings.flowMeasurement],
       'powerMeasurement': [settings.powerMeasurement],
-      'pressureMeasurement': [settings.pressureMeasurement]
+      'pressureMeasurement': [settings.pressureMeasurement],
+      'currentMeasurement': [settings.currentMeasurement],
+      'viscosityMeasurement': [settings.viscosityMeasurement],
+      'voltageMeasurement': [settings.voltageMeasurement]
     });
   }
 
@@ -38,7 +44,10 @@ export class SettingsService {
       distanceMeasurement: form.value.distanceMeasurement,
       flowMeasurement: form.value.flowMeasurement,
       powerMeasurement: form.value.powerMeasurement,
-      pressureMeasurement: form.value.pressureMeasurement
+      pressureMeasurement: form.value.pressureMeasurement,
+      currentMeasurement: form.value.currentMeasurement,
+      viscosityMeasurement: form.value.viscosityMeasurement,
+      voltageMeasurement: form.value.voltageMeasurement
     };
     return tmpSettings;
   }

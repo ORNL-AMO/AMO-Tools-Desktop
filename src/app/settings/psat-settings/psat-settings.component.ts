@@ -15,7 +15,9 @@ export class PsatSettingsComponent implements OnInit {
   powerMeasurements: Array<any> = [];
   distanceMeasurements: Array<any> = [];
   pressureMeasurements: Array<any> = [];
-
+  currentMeasurements: Array<any> = [];
+  viscosityMeasurements: Array<any> = [];
+  voltageMeasurements: Array<any> = [];
 
 
   isFirstChange: boolean = true;
@@ -26,6 +28,10 @@ export class PsatSettingsComponent implements OnInit {
     this.distanceMeasurements = new Array();
     this.pressureMeasurements = new Array();
     this.powerMeasurements = new Array();
+    this.currentMeasurements = new Array();
+    this.viscosityMeasurements = new Array();
+    this.voltageMeasurements = new Array();
+
     let tmpList = this.convertUnitsService.possibilities('volumeFlowRate');
     tmpList.forEach(unit => {
       let tmpPossibility = {
@@ -50,13 +56,40 @@ export class PsatSettingsComponent implements OnInit {
       }
       this.powerMeasurements.push(tmpPossibility);
     })
-    tmpList = this.convertUnitsService.possibilities('pressure');
+    // tmpList = this.convertUnitsService.possibilities('pressure');
+    // tmpList.forEach(unit => {
+    //   let tmpPossibility = {
+    //     unit: unit,
+    //     display: this.getUnitName(unit)
+    //   }
+    //   this.pressureMeasurements.push(tmpPossibility);
+    // })
+
+    tmpList = this.convertUnitsService.possibilities('current');
     tmpList.forEach(unit => {
       let tmpPossibility = {
         unit: unit,
         display: this.getUnitName(unit)
       }
-      this.pressureMeasurements.push(tmpPossibility);
+      this.currentMeasurements.push(tmpPossibility);
+    })
+
+    tmpList = this.convertUnitsService.possibilities('viscosity');
+    tmpList.forEach(unit => {
+      let tmpPossibility = {
+        unit: unit,
+        display: this.getUnitName(unit)
+      }
+      this.viscosityMeasurements.push(tmpPossibility);
+    })
+
+    tmpList = this.convertUnitsService.possibilities('voltage');
+    tmpList.forEach(unit => {
+      let tmpPossibility = {
+        unit: unit,
+        display: this.getUnitName(unit)
+      }
+      this.voltageMeasurements.push(tmpPossibility);
     })
   }
 

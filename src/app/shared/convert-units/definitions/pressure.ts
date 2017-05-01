@@ -2,43 +2,43 @@ export const pressure = {
     metric: {
         Pa: {
             name: {
-                singular: 'pascal'
-                , plural: 'pascals'
+                singular: 'Pascal'
+                , plural: 'Pascals'
             }
             , to_anchor: 1 / 1000
         }
         , kPa: {
             name: {
-                singular: 'kilopascal'
-                , plural: 'kilopascals'
+                singular: 'Kilopascal'
+                , plural: 'Kilopascals'
             }
             , to_anchor: 1
         }
         , MPa: {
             name: {
-                singular: 'megapascal'
-                , plural: 'megapascals'
+                singular: 'Megapascal'
+                , plural: 'Megapascals'
             }
             , to_anchor: 1000
         }
         , hPa: {
             name: {
-                singular: 'hectopascal'
-                , plural: 'hectopascals'
+                singular: 'Hectopascal'
+                , plural: 'Hectopascals'
             }
             , to_anchor: 1 / 10
         }
         , bar: {
             name: {
-                singular: 'bar'
-                , plural: 'bar'
+                singular: 'Bar'
+                , plural: 'Bar'
             }
             , to_anchor: 100
         }
         , torr: {
             name: {
-                singular: 'torr'
-                , plural: 'torr'
+                singular: 'Torr'
+                , plural: 'Torr'
             }
             , to_anchor: 101325 / 760000
         }
@@ -46,15 +46,15 @@ export const pressure = {
     imperial: {
         psi: {
             name: {
-                singular: 'pound per square inch'
-                , plural: 'pounds per square inch'
+                singular: 'Pound per Square Inch'
+                , plural: 'Pounds per Square Inch'
             }
             , to_anchor: 1 / 1000
         }
         , ksi: {
             name: {
-                singular: 'kilopound per square inch'
-                , plural: 'kilopound per square inch'
+                singular: 'Kilopound per Square Inch'
+                , plural: 'Kilopounds per Square Inch'
             }
             , to_anchor: 1
         }

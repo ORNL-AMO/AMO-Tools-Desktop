@@ -17,12 +17,13 @@
   </div>
 
   <div class="form-group">
-    <label for="motorRPM">Motor RPM</label>
+    <label for="motorRPM">Motor</label>
     <div class="incrementor form-control">
       <button class="btn" [disabled]="!selected" (click)="subtractNum('motorRPM')"><i class="fa fa-minus"></i></button>
       <button class="btn" [disabled]="!selected" (click)="addNum('motorRPM')"><i class="fa fa-plus"></i></button>
       <input type="number " class="form-control" id="motorRPM" formControlName="motorRPM" ngModel="{{psatForm.value.motorRPM}}"
         (input)="checkForm(psatForm)" (focus)="focusField('motorRPM')">
+        <span class="units">rpms</span>
     </div>
   </div>
 
@@ -44,12 +45,14 @@
     <label for="efficiency">Efficiency</label>
     <input type="number" class="form-control" id="efficiency" formControlName="efficiency" (input)="checkForm(psatForm)"
         (focus)="focusField('efficiency')">
+        <span class="units">%</span>
   </div>
 
   <div class="form-group">
     <label for="motorVoltage">Voltage</label>
     <input type="number" class="form-control number-input-field" id="motorVoltage" formControlName="motorVoltage" (input)="checkForm(psatForm)"
         (focus)="focusField('motorVoltage')">
+        <span class="units">{{settings.voltageMeasurement}}</span>
   </div>
 
   <div class="form-group">
@@ -59,6 +62,7 @@
     </label>
     <input type="number" class="form-control number-input-field" id="fullLoadAmps" formControlName="fullLoadAmps" (input)="checkForm(psatForm)"
         (focus)="focusField('fullLoadAmps')">
+        <span class="units">{{settings.currentMeasurement}}</span>
   </div>
 
   <div class="form-group">
