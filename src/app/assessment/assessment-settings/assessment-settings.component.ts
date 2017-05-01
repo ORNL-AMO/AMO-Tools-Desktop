@@ -16,6 +16,10 @@ export class AssessmentSettingsComponent implements OnInit {
   resetDataEmit = new EventEmitter<boolean>();
   settings: Settings;
   settingsForm: any;
+
+  unitChange: boolean = false;
+
+
   //does directory have settings
   isDirectorySettings: boolean = false;
   constructor(private indexedDbService: IndexedDbService, private settingsService: SettingsService) { }
@@ -33,6 +37,11 @@ export class AssessmentSettingsComponent implements OnInit {
       }
     )
 
+  }
+
+
+  setUnits(){
+    this.unitChange = !this.unitChange;
   }
 
   getParentDirectorySettings(parentDirectoryId: number) {

@@ -18,6 +18,8 @@ export class SystemBasicsComponent implements OnInit {
   @Input()
   isAssessmentSettings: boolean;
 
+  unitChange: boolean = false;
+
   settingsForm: any;
   isFirstChange: boolean = true;
   constructor(private settingsService: SettingsService, private indexedDbService: IndexedDbService) { }
@@ -32,6 +34,11 @@ export class SystemBasicsComponent implements OnInit {
 
   ngOnInit() {
     this.settingsForm = this.settingsService.getFormFromSettings(this.settings);
+  }
+
+
+  setUnits(){
+    this.unitChange = !this.unitChange;
   }
 
   saveChanges() {

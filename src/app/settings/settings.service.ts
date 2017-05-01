@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { Settings, PsatSettings, PhastSettings } from '../shared/models/settings';
+import { Settings } from '../shared/models/settings';
 @Injectable()
 export class SettingsService {
 
@@ -11,8 +11,10 @@ export class SettingsService {
       'language': ['', Validators.required],
       'currency': ['', Validators.required],
       'unitsOfMeasure': ['', Validators.required],
-      'headMeasurement': [''],
-      'flowMeasurement': ['']
+      'distanceMeasurement': [''],
+      'flowMeasurement': [''],
+      'powerMeasurement': [''],
+      'pressureMeasurement': ['']
     });
   }
 
@@ -21,8 +23,10 @@ export class SettingsService {
       'language': [settings.language, Validators.required],
       'currency': [settings.currency, Validators.required],
       'unitsOfMeasure': [settings.unitsOfMeasure, Validators.required],
-      'headMeasurement': [settings.headMeasurement],
-      'flowMeasurement': [settings.flowMeasurement]
+      'distanceMeasurement': [settings.distanceMeasurement],
+      'flowMeasurement': [settings.flowMeasurement],
+      'powerMeasurement': [settings.powerMeasurement],
+      'pressureMeasurement': [settings.pressureMeasurement]
     });
   }
 
@@ -31,8 +35,10 @@ export class SettingsService {
       language: form.value.language,
       currency: form.value.currency,
       unitsOfMeasure: form.value.unitsOfMeasure,
-      headMeasurement: form.value.headMeasurement,
-      flowMeasurement: form.value.flowMeasurement
+      distanceMeasurement: form.value.distanceMeasurement,
+      flowMeasurement: form.value.flowMeasurement,
+      powerMeasurement: form.value.powerMeasurement,
+      pressureMeasurement: form.value.pressureMeasurement
     };
     return tmpSettings;
   }
