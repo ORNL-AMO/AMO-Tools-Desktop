@@ -76,7 +76,7 @@
   </div>
 
   <div class="tab-content" *ngIf="currentTab == 'system-curve'">
-    <app-system-curve></app-system-curve>
+    <app-system-curve [psat]="_psat"></app-system-curve>
   </div>
 
   <div class="tab-content" *ngIf="currentTab == 'achievable-efficiency'">

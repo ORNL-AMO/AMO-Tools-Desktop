@@ -23,24 +23,12 @@ export class SpecificSpeedFormComponent implements OnInit {
     'Vertical Turbine',
     'Large End Suction',
     // When user selects below they need a way to provide the optimal efficiency
-    'Specified Optimal Efficiency'
+    //'Specified Optimal Efficiency'
   ];
   constructor() { }
 
   ngOnInit() {
-    //   this.checkForm();
   }
-
-  // checkForm() {
-  //   if (
-  //     this.speedForm.controls.pumpType.status == 'VALID' &&
-  //     this.speedForm.controls.flowRate.status == 'VALID' &&
-  //     this.speedForm.controls.head.status == 'VALID' &&
-  //     this.speedForm.controls.pumpRPM.status == 'VALID'
-  //   ) {
-  //     this.calculate.emit(true);
-  //   }
-  // }
 
   emitCalculate() {
     this.calculate.emit(true);

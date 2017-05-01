@@ -1,11 +1,14 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms'
+import { PSAT } from '../../../shared/models/psat';
 @Component({
   selector: 'app-system-curve',
   templateUrl: './system-curve.component.html',
   styleUrls: ['./system-curve.component.css']
 })
 export class SystemCurveComponent implements OnInit {
+  @Input()
+  psat: PSAT;
 
   curveConstants: any;
 
@@ -18,32 +21,65 @@ export class SystemCurveComponent implements OnInit {
   constructor(private formBuilder: FormBuilder) { }
 
   ngOnInit() {
-    this.curveConstants = {
-      form: this.initCurveConstants()
-    };
-    this.pointOne = {
-      form: this.initPointForm(),
-      fluidPower: 0
-    };
-    this.pointTwo = {
-      form: this.initPointForm(),
-      fluidPower: 0
-    };
+    if (this.psat) {
+      this.psat.name = 'Baseline';
+      this.curveConstants = {
+        form: this.initCurveConstants(this.psat)
+      };
+      this.pointOne = {
+        form: this.initPointForm(this.psat),
+        fluidPower: 0
+      };
+      this.pointTwo = {
+        form: this.initPointForm(),
+        fluidPower: 0
+      };
+      this.pointTwo.form.value.pointAdjustment = 'Baseline';
+    } else {
+      this.curveConstants = {
+        form: this.initCurveConstants()
+      };
+      this.pointOne = {
+        form: this.initPointForm(),
+        fluidPower: 0
+      };
+      this.pointTwo = {
+        form: this.initPointForm(),
+        fluidPower: 0
+      };
+      this.pointOne.form.value.pointAdjustment = 'Point One';
+      this.pointTwo.form.value.pointAdjustment = 'Point Two';
+    }
   }
 
-  initPointForm() {
-    return this.formBuilder.group({
-      'flowRate': ['', Validators.required],
-      'head': ['', Validators.required],
-      'pointAdjustment': ['', Validators.required]
-    })
+  initPointForm(psat?: PSAT) {
+    if (psat) {
+      return this.formBuilder.group({
+        'flowRate': [psat.inputs.flow_rate, Validators.required],
+        'head': [psat.inputs.head, Validators.required],
+        'pointAdjustment': [psat.name, Validators.required]
+      })
+    } else {
+      return this.formBuilder.group({
+        'flowRate': ['', Validators.required],
+        'head': ['', Validators.required],
+        'pointAdjustment': ['', Validators.required]
+      })
+    }
   }
 
-  initCurveConstants() {
-    return this.formBuilder.group({
-      'specificGravity': ['', Validators.required],
-      'systemLossExponent': ['', Validators.required]
-    })
+  initCurveConstants(psat?: PSAT) {
+    if (psat) {
+      return this.formBuilder.group({
+        'specificGravity': [psat.inputs.specific_gravity, Validators.required],
+        'systemLossExponent': [2.5, Validators.required]
+      })
+    } else {
+      return this.formBuilder.group({
+        'specificGravity': ['', Validators.required],
+        'systemLossExponent': [2.5, Validators.required]
+      })
+    }
   }
 
   calculateP1Flow() {
