@@ -23,9 +23,8 @@
       <div class="row form-group">
         <label class="col-6 col-form-label small" for="pointAdjustment">Point 1</label>
         <div class="col-6 input-group input-group-sm">
-          <select class="form-control"(input)="checkInputs()" formControlName="pointAdjustment" id="pointAdjustment">
-            <option>Baseline</option>
-            <option>Adjustment 1</option>
+          <select class="form-control" (change)="setFormValues(pointOne)" formControlName="pointAdjustment" id="pointAdjustment" ngModel="{{pointOne.form.value.pointAdjustment}}">
+            <option *ngFor="let option of options" [ngValue]="option.name">{{option.name}}</option>
           </select>
         </div>
       </div>
@@ -57,11 +56,10 @@
   <div class="card-block">
     <form [formGroup]="pointTwo.form">
       <div class="row form-group">
-        <label class="col-6 col-form-label small" for="pointAdjustment">Point 1</label>
+        <label class="col-6 col-form-label small" for="pointAdjustment">Point 2</label>
         <div class="col-6 input-group input-group-sm">
-          <select class="form-control" (input)="checkInputs()" formControlName="pointAdjustment" id="pointAdjustment">
-            <option>Baseline</option>
-            <option>Adjustment 1</option>
+          <select class="form-control" (change)="setFormValues(pointTwo)" formControlName="pointAdjustment" id="pointAdjustment" ngModel="{{pointTwo.form.value.pointAdjustment}}">
+            <option *ngFor="let option of options" [ngValue]="option.name">{{option.name}}</option>
           </select>
         </div>
       </div>
