@@ -107,6 +107,7 @@ Forms
 =============================================== */
 .form-group {
   margin-bottom: 0;
+  position: relative;
 }
 .form-control {
   border-radius: 0;
@@ -200,6 +201,13 @@ select.form-control:not([size]):not([multiple]) {
   padding-bottom: 30px;
 }
 
+.units {
+  position: absolute;
+  top: 0px;
+  right: 5px;
+  font-size: 14px;
+  color: #b0b0b0;
+}
 
 
 /*
