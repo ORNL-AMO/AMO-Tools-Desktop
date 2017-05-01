@@ -62,7 +62,7 @@
       <div class="wrapper">
         <div class="form">
           <app-field-data (isValid)="setValid()" (isInvalid)="setInvalid()" [saveClicked]="saveClicked" (changeField)="changeField($event)"
-            [(psat)]="_psat" (saved)="save()" [selected]="true"></app-field-data>
+            [(psat)]="_psat" (saved)="save()" [selected]="true" [settings]="settings"></app-field-data>
         </div>
         <div class="help">
           <app-help-panel [currentField]="currentField" [currentTab]="subTab"></app-help-panel>

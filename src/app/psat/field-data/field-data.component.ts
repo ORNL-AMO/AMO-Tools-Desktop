@@ -2,7 +2,7 @@ import { Component, OnInit, Output, EventEmitter, ViewChild, Input, SimpleChange
 import { ModalDirective } from 'ng2-bootstrap';
 import { PSAT } from '../../shared/models/psat';
 import { PsatService } from '../psat.service';
-
+import { Settings } from '../../shared/models/settings';
 @Component({
   selector: 'app-field-data',
   templateUrl: './field-data.component.html',
@@ -25,6 +25,8 @@ export class FieldDataComponent implements OnInit {
   isBaseline: boolean;
   @Input()
   selected: boolean;
+  @Input()
+  settings: Settings;
 
 
   @ViewChild('formRef') formRef: ElementRef;

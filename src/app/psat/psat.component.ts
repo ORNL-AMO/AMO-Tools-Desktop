@@ -116,8 +116,8 @@ export class PsatComponent implements OnInit {
         }
       }
     )
-
   }
+  
   checkPumpFluid() {
     let tmpForm = this.psatService.getFormFromPsat(this._psat.inputs);
     let tmpBool = this.psatService.isPumpFluidFormValid(tmpForm);
