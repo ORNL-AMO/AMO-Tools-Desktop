@@ -34,6 +34,12 @@ export const power = {
                 , plural: 'Gigawatts'
             }
             , to_anchor: 1000000000
+        }, hp: {
+            name: {
+                singular: 'Horse Power',
+                plural: 'Horse Power'
+            },
+            to_anchor: 745.7
         }
     },
     _anchors: {

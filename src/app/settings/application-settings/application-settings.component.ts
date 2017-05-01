@@ -26,7 +26,7 @@ export class ApplicationSettingsComponent implements OnInit {
   setUnits() {
     if (this.settingsForm.value.unitsOfMeasure == 'Imperial') {
       this.settingsForm.patchValue({
-        powerMeasurement: '',
+        powerMeasurement: 'hp',
         flowMeasurement: 'gal/min',
         distanceMeasurement: 'ft',
         pressureMeasurement: 'psi'
