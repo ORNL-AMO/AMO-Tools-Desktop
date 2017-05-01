@@ -61,11 +61,7 @@ Buttons
 }
 .btn-primary {
     color: #fff;
-    background: #044976;
-    background: -moz-linear-gradient(top,  #044976 0%, #003253 79%, #003253 100%);
-    background: -webkit-linear-gradient(top,  #044976 0%,#003253 79%,#003253 100%);
-    background: linear-gradient(to bottom,  #044976 0%,#003253 79%,#003253 100%);
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#044976', endColorstr='#003253',GradientType=0 );
+    background: #2980b9;
     border-color: #000B13;
     font-weight: normal;
 }
@@ -111,6 +107,7 @@ Forms
 =============================================== */
 .form-group {
   margin-bottom: 0;
+  position: relative;
 }
 .form-control {
   border-radius: 0;
@@ -204,6 +201,13 @@ select.form-control:not([size]):not([multiple]) {
   padding-bottom: 30px;
 }
 
+.units {
+  position: absolute;
+  top: 0px;
+  right: 5px;
+  font-size: 14px;
+  color: #b0b0b0;
+}
 
 
 /*

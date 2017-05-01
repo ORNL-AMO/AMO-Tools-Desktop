@@ -1,12 +1,30 @@
-<div class="row assessment-report">
-  <div class="col-12">
-    <div class="h2">Assessment Report</div>
+<div class="assessment-report">
+
+  <div class="row">
+    <div class="col-12">
+      <div class="h2">Assessment Report</div>
+    </div>
   </div>
-  <div class="col-6">
-    <app-input-summary [psat]="psat"></app-input-summary>
+
+  <div class="row">
+    <div class="col-12">
+      <h3>Report Summary</h3>
+      <app-chart-summary [psat]="psat"></app-chart-summary>
+    </div>
   </div>
-  <div class="col-6">
-    <app-chart-summary [psat]="psat"></app-chart-summary>
-    <app-output-summary [psat]="psat"></app-output-summary>
+
+  <div class="row">
+    <div class="col-12">
+      <h3>Report Details</h3>
+      <app-output-summary [psat]="psat"></app-output-summary>
+    </div>
   </div>
+
+  <div class="row">
+    <div class="col-12">
+      <h3>Input Data</h3>
+      <app-input-summary [psat]="psat"></app-input-summary>
+    </div>
+  </div>
+
 </div>

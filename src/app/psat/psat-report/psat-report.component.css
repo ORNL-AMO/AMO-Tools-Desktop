@@ -1,11 +1,6 @@
-.assessment-report{
-    background: white;
-    box-shadow: 0 0 30px black;
-    height: 100%;
-    padding: 2%;
+.assessment-report {
+	margin: 40px 0 100px;
 }
-
-.detailed-report{
-    height: 100vh;
-    background-color: lightgray;
-}
+	.assessment-report > .row {
+		margin-bottom: 40px;
+	}
