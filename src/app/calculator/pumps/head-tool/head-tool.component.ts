@@ -97,7 +97,8 @@ export class HeadToolComponent implements OnInit {
       this.headToolForm.value.dischargePipeDiameter,
       this.headToolForm.value.dischargeGaugePressure,
       this.headToolForm.value.dischargeGaugeElevation,
-      this.headToolForm.value.dischargeLineLossCoefficients
+      this.headToolForm.value.dischargeLineLossCoefficients,
+      this.settings
     );
     this.results.differentialElevationHead = result.differentialElevationHead;
     this.results.differentialPressureHead = result.differentialPressureHead;
@@ -119,7 +120,8 @@ export class HeadToolComponent implements OnInit {
       this.headToolSuctionForm.value.dischargePipeDiameter,
       this.headToolSuctionForm.value.dischargeGaugePressure,
       this.headToolSuctionForm.value.dischargeGaugeElevation,
-      this.headToolSuctionForm.value.dischargeLineLossCoefficients
+      this.headToolSuctionForm.value.dischargeLineLossCoefficients,
+      this.settings
     );
 
     this.results.differentialElevationHead = result.differentialElevationHead;

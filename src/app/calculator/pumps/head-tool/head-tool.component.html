@@ -9,7 +9,7 @@
     <b>Units of Measure:</b>gpm, ft, hp<a> Edit</a>
   </div>
 </div>
-<div class="row">
+<div class="row" *ngIf="settings">
   <div class="col-7" *ngIf="headToolType == 'Suction tank elevation, gas space pressure, and discharged line pressure'">
     <div class="head-diagram text-center">
       <img class="img-fluid mx-auto d-block" aria-describedby="headDiagramHelp" src="assets/images/img-tank-elevation-head.png">

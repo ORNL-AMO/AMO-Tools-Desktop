@@ -13,9 +13,16 @@ export class HeadToolSuctionFormComponent implements OnInit {
   @Input()
   settings: Settings;
 
+  smallUnit: string;
+
   constructor() { }
 
   ngOnInit() {
+    if(this.settings.distanceMeasurement == 'ft'){
+      this.smallUnit = 'in'
+    }else{
+      this.smallUnit = 'mm'
+    }
   }
 
   calc() {

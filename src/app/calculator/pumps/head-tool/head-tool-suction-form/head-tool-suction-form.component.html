@@ -7,14 +7,14 @@
 <div class=" form-group">
   <label class="small" for="suctionPipeDiameter">Suction pipe diameter (ID)</label>
   <input type="number" class="form-control" formControlName="suctionPipeDiameter" id="suctionPipeDiameter" (keyup)="calc()">
-  <span class="units">inches</span>
+  <span class="units">{{smallUnit}}</span>
 </div>
 
 <div class="form-group">
   <label class="small" for="dischargePipeDiameter">Discharge pipe diameter (ID)</label>
   <input type="number" class="form-control" formControlName="dischargePipeDiameter" id="dischargePipeDiameter" (keyup)="calc()">
   <span class="units">
-      inches
+      {{smallUnit}}
     </span>
 </div>
 
@@ -22,7 +22,7 @@
   <label class="small" for="suctionTankGasOverPressure">Suction tank gas overpressure (Pg)</label>
   <input type="number" class="form-control" formControlName="suctionTankGasOverPressure" id="suctionTankGasOverPressure" (keyup)="calc()">
   <span class="units">
-        test
+       {{settings.preasureMeasurement}}
     </span>
 </div>
 
@@ -30,7 +30,7 @@
   <label class="small" for="dischargeGaugePressure">Discharge guage pressure (Pd)</label>
   <input type="number" class="form-control" formControlName="dischargeGaugePressure" id="dischargeGaugePressure" (keyup)="calc()">
   <span class="units">
-        pslg
+        {{settings.pressureMeasurement}}
     </span>
 </div>
 
@@ -39,7 +39,7 @@
   <input type="number" class="form-control" formControlName="suctionTankFluidSurfaceElevation" id="suctionTankFluidSurfaceElevation"
     (keyup)="calc()">
   <span class="units">
-        ft
+        {{settings.distanceMeasurement}}
     </span>
 </div>
 
@@ -47,7 +47,7 @@
   <label class="small" for="dischargeGaugeElevation">Discharge guage elevation (Zd)</label>
   <input type="number" class="form-control" formControlName="dischargeGaugeElevation" id="dischargeGaugeElevation" (keyup)="calc()">
   <span class="units">
-        ft
+        {{settings.distanceMeasurement}}
   </span>
 </div>
 
@@ -73,7 +73,7 @@
 
   <input type="number" class="form-control" formControlName="flowRate" id="flowRate" (keyup)="calc()">
   <span class="units">
-        gpm
+       {{settings.flowMeasurement}}
   </span>
 </div>
 </form>

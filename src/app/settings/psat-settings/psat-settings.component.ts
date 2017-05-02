@@ -32,7 +32,13 @@ export class PsatSettingsComponent implements OnInit {
     this.viscosityMeasurements = new Array();
     this.voltageMeasurements = new Array();
 
-    let tmpList = this.convertUnitsService.possibilities('volumeFlowRate');
+    let tmpList = [
+      'gpm',
+      'MGD',
+      'm3/h',
+      'l/s',
+      'm3/min'
+    ];
     tmpList.forEach(unit => {
       let tmpPossibility = {
         unit: unit,
@@ -40,7 +46,10 @@ export class PsatSettingsComponent implements OnInit {
       }
       this.flowMeasurements.push(tmpPossibility);
     })
-    tmpList = this.convertUnitsService.possibilities('length');
+    tmpList = [
+      'm',
+      'ft'
+    ];
     tmpList.forEach(unit => {
       let tmpPossibility = {
         unit: unit,
@@ -48,7 +57,10 @@ export class PsatSettingsComponent implements OnInit {
       }
       this.distanceMeasurements.push(tmpPossibility);
     })
-    tmpList = this.convertUnitsService.possibilities('power');
+    tmpList = [
+      'kW',
+      'hp'
+    ];
     tmpList.forEach(unit => {
       let tmpPossibility = {
         unit: unit,
@@ -56,41 +68,44 @@ export class PsatSettingsComponent implements OnInit {
       }
       this.powerMeasurements.push(tmpPossibility);
     })
-    // tmpList = this.convertUnitsService.possibilities('pressure');
+    tmpList = [
+      'kPa',
+      'psi'
+    ];
+    tmpList.forEach(unit => {
+      let tmpPossibility = {
+        unit: unit,
+        display: this.getUnitName(unit)
+      }
+      this.pressureMeasurements.push(tmpPossibility);
+    })
+
+    // tmpList = this.convertUnitsService.possibilities('current');
     // tmpList.forEach(unit => {
     //   let tmpPossibility = {
     //     unit: unit,
     //     display: this.getUnitName(unit)
     //   }
-    //   this.pressureMeasurements.push(tmpPossibility);
+    //   this.currentMeasurements.push(tmpPossibility);
     // })
 
-    tmpList = this.convertUnitsService.possibilities('current');
-    tmpList.forEach(unit => {
-      let tmpPossibility = {
-        unit: unit,
-        display: this.getUnitName(unit)
-      }
-      this.currentMeasurements.push(tmpPossibility);
-    })
+    // tmpList = this.convertUnitsService.possibilities('viscosity');
+    // tmpList.forEach(unit => {
+    //   let tmpPossibility = {
+    //     unit: unit,
+    //     display: this.getUnitName(unit)
+    //   }
+    //   this.viscosityMeasurements.push(tmpPossibility);
+    // })
 
-    tmpList = this.convertUnitsService.possibilities('viscosity');
-    tmpList.forEach(unit => {
-      let tmpPossibility = {
-        unit: unit,
-        display: this.getUnitName(unit)
-      }
-      this.viscosityMeasurements.push(tmpPossibility);
-    })
-
-    tmpList = this.convertUnitsService.possibilities('voltage');
-    tmpList.forEach(unit => {
-      let tmpPossibility = {
-        unit: unit,
-        display: this.getUnitName(unit)
-      }
-      this.voltageMeasurements.push(tmpPossibility);
-    })
+    // tmpList = this.convertUnitsService.possibilities('voltage');
+    // tmpList.forEach(unit => {
+    //   let tmpPossibility = {
+    //     unit: unit,
+    //     display: this.getUnitName(unit)
+    //   }
+    //   this.voltageMeasurements.push(tmpPossibility);
+    // })
   }
 
   getUnitName(unit: any) {

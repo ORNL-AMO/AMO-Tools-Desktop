@@ -211,6 +211,15 @@ export const volumeFlowRate = {
                 , plural: 'Gallons per minute'
             }
             , to_anchor: 32 / 15
+        },
+        'MGD':
+        {
+            name: {
+                singular: 'Million Gallon per day',
+                plural: 'Million Gallons per day'
+            },
+            to_anchor: 128000000 / 86400
+
         }
         , 'gal/h': {
             name: {

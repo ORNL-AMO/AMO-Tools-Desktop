@@ -1,12 +1,15 @@
 import { Injectable } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { PSAT, PsatInputs, PsatOutputs, PsatCalcResults } from '../shared/models/psat';
+//import { IndexedDbService } from '../indexedDb/indexed-db.service';
+import { Settings } from '../shared/models/settings';
+import { ConvertUnitsService } from '../shared/convert-units/convert-units.service';
 declare var psatAddon: any;
 
 @Injectable()
 export class PsatService {
 
-  constructor(private formBuilder: FormBuilder) { }
+  constructor(private formBuilder: FormBuilder, private converUnitsService: ConvertUnitsService) { }
   //CALCULATORS
   results(psatInputs: PsatInputs): PsatOutputs {
     let tmpResults = psatAddon.results(psatInputs);
@@ -58,8 +61,17 @@ export class PsatService {
     dischargePipeDiameter: number,
     dischargeGaugePressure: number,
     dischargeGaugeElevation: number,
-    dischargeLineLossCoefficients: number
+    dischargeLineLossCoefficients: number,
+    settings: Settings
   ) {
+    //flowRate = m3/hr
+    //suctionPipeDiameter = millimeters
+    //suctionTankGasOverPressure = kPa
+    //suctionTankFluidSurfaceElevation = meters
+    //dischargePipeDiameter = millimeters
+    //dischargeGaugePressure = kPa
+    //dischargeGaugeElevation = meters
+
     return psatAddon.headToolSuctionTank(specificGravity, flowRate, suctionPipeDiameter, suctionTankGasOverPressure, suctionTankFluidSurfaceElevation, suctionLineLossCoefficients, dischargePipeDiameter, dischargeGaugePressure, dischargeGaugeElevation, dischargeLineLossCoefficients)
   }
 
@@ -73,8 +85,16 @@ export class PsatService {
     dischargePipeDiameter: number,
     dischargeGaugePressure: number,
     dischargeGaugeElevation: number,
-    dischargeLineLossCoefficients: number
+    dischargeLineLossCoefficients: number,
+    settings: Settings
   ) {
+    //flowRate = m3/hr
+    //suctionPipeDiameter = millimeters
+    //suctionGuagePressure = kPa
+    //suctionGuageElevation = meters
+    //dischargePipeDiameter = millimeters
+    //dischargeGaugePressure = kPa
+    //dischargeGaugeElevation = meters
     return psatAddon.headTool(specificGravity, flowRate, suctionPipeDiameter, suctionGuagePressure, suctionGuageElevation, suctionLineLossCoefficients, dischargePipeDiameter, dischargeGaugePressure, dischargeGaugeElevation, dischargeLineLossCoefficients);
   }
 

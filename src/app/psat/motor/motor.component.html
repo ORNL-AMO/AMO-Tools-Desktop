@@ -52,7 +52,7 @@
     <label for="motorVoltage">Voltage</label>
     <input type="number" class="form-control number-input-field" id="motorVoltage" formControlName="motorVoltage" (input)="checkForm(psatForm)"
         (focus)="focusField('motorVoltage')">
-        <span class="units">{{settings.voltageMeasurement}}</span>
+        <span class="units">V</span>
   </div>
 
   <div class="form-group">
@@ -62,7 +62,7 @@
     </label>
     <input type="number" class="form-control number-input-field" id="fullLoadAmps" formControlName="fullLoadAmps" (input)="checkForm(psatForm)"
         (focus)="focusField('fullLoadAmps')">
-        <span class="units">{{settings.currentMeasurement}}</span>
+        <span class="units">A</span>
   </div>
 
   <div class="form-group">

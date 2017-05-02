@@ -321,6 +321,21 @@ export class IndexedDbService {
     });
   }
 
+  getSettings(id: number): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let transaction = myDb.instance.transaction([myDb.storeNames.settings], 'readonly');
+      let store = transaction.objectStore(myDb.storeNames.settings);
+      let getRequest = store.get(id);
+      myDb.setDefaultErrorHandler(getRequest, myDb);
+      getRequest.onsuccess = (e) => {
+        resolve(e.target.result);
+      }
+      getRequest.onerror = (error) => {
+        reject(error.target.result)
+      }
+    })
+  }
+
   getDirectorySettings(directoryId): Promise<any> {
     return new Promise((resolve, reject) => {
       let transaction = myDb.instance.transaction([myDb.storeNames.settings], 'readwrite');
