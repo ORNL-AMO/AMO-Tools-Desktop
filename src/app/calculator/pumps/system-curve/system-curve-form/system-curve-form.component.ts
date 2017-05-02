@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { FormBuilder, Validators } from '@angular/forms';
 
-import {SystemCurveGraphComponent} from '../system-curve-graph/system-curve-graph.component';
+import { PSAT } from '../../../../shared/models/psat';
 
 @Component({
   selector: 'app-system-curve-form',
@@ -20,34 +21,58 @@ export class SystemCurveFormComponent implements OnInit {
   calculateP1 = new EventEmitter<boolean>();
   @Output('calculateP2')
   calculateP2 = new EventEmitter<boolean>();
+  @Input()
+  psat: PSAT;
 
-  constructor() { }
+  options: Array<PSAT>;
+
+  constructor(private formBuilder: FormBuilder) { }
 
   ngOnInit() {
+    this.options = new Array<PSAT>();
+    if (this.psat) {
+      this.options.push(this.psat);
+      this.psat.modifications.forEach(mod => {
+        this.options.push(mod.psat);
+      })
+    }
   }
 
-  checkInputs(){
+  checkInputs() {
     let p1 = this.checkForm(this.pointOne);
     let p2 = this.checkForm(this.pointTwo);
     let cc = this.checkForm(this.curveConstants);
-    if(p1){
+    if (p1) {
       this.calculateP1.emit(true);
     }
-    if(p2){
+    if (p2) {
       this.calculateP2.emit(true);
     }
-    if(p1 && p2 && cc){
+    if (p1 && p2 && cc) {
       this.calculate.emit(true);
     }
   }
 
-  checkForm(point: any){
-    if(point.form.status == "VALID"){
+  checkForm(point: any) {
+    if (point.form.status == "VALID") {
       return true;
     }
-    else{
+    else {
       return false;
     }
   }
+
+  setFormValues(point: any) {
+    console.log(point);
+  }
+
+  initPointForm(psat: PSAT) {
+    return this.formBuilder.group({
+      'flowRate': [psat.inputs.flow_rate, Validators.required],
+      'head': [psat.inputs.head, Validators.required],
+      'pointAdjustment': [psat.name, Validators.required]
+    })
+  }
+
 
 }

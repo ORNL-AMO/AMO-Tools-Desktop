@@ -1,14 +1,13 @@
 <div class="container-fluid">
     <div class="row dashboard-content">
         <div class="col-2 sidebar-bg">
-            <app-sidebar *ngIf="allDirectories" [directory]="allDirectories" [workingDirectory]="workingDirectory" (directoryChange)="changeWorkingDirectory($event)"
-                (selectCalculator)="viewCalculator($event)" (showSettings)="viewSettings($event)"></app-sidebar>
+            <app-sidebar *ngIf="allDirectories" [(selectedCalculator)]="selectedCalculator" [directory]="allDirectories" [workingDirectory]="workingDirectory"
+                (directoryChange)="changeWorkingDirectory($event)" (selectCalculator)="viewCalculator($event)"></app-sidebar>
         </div>
         <div class="col-10" *ngIf="allDirectories">
-            <app-assessment-dashboard *ngIf="!showCalculators && !showSettings" [(directory)]="workingDirectory" (directoryChange)="changeWorkingDirectory($event)"
-                (deleteDataSignal)="showDeleteModal($event)" (deleteCheckedItems)="showDeleteItemsModal()"></app-assessment-dashboard>
-            <app-calculator *ngIf="showCalculators && !showSettings" [selectedCalculator]="selectedCalculator"></app-calculator>
-            <app-settings *ngIf="!showCalculators && showSettings"></app-settings>
+            <app-assessment-dashboard *ngIf="!showCalculators" [(directory)]="workingDirectory" (directoryChange)="changeWorkingDirectory($event)"
+                (deleteDataSignal)="showDeleteModal($event)" (deleteCheckedItems)="showDeleteItemsModal()" (resetDataEmit)="showDeleteModal()"></app-assessment-dashboard>
+            <app-calculator *ngIf="showCalculators" [selectedCalculator]="selectedCalculator"></app-calculator>
         </div>
     </div>
 </div>
@@ -25,8 +24,17 @@
         </button>
             </div>
             <div class="modal-body">
-                <button class="btn btn-secondary pull-left" (click)="hideDeleteModal()">Cancel</button>
-                <button class="btn btn-danger pull-right" (click)="deleteData()">Delete All Data</button>
+                <div class="row">
+                    <div class="col-12">
+                        All of your data will be deleted and your database will be reset to the initial state.
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <button class="btn btn-secondary pull-left" (click)="hideDeleteModal()">Cancel</button>
+                        <button class="btn btn-danger pull-right" (click)="deleteData()">Delete All Data</button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

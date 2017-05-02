@@ -6,60 +6,60 @@
 
 <div style="padding-top:15px;"> ASSESSMENTS
 <div *ngIf="directory">
-  <app-directory-item [directory]="directory" [selectedDirectory]="selectedDirectory" (selectSignal)="toggleSelected($event)"
+  <app-directory-item [directory]="directory" [selectedDirectoryId]="selectedDirectoryId" (selectSignal)="toggleSelected($event)"
     (collapseSignal)="toggleDirectoryCollapse($event)"></app-directory-item>
 </div>
 </div>
 
 <div class="sidebar-group"> CALCULATORS
   <div>
-    <span class="nav-item" (click)="chooseCalculator('pumps')">
+    <span class="nav-item" [ngClass]="{'selected': selectedCalculator == 'pumps'}" (click)="chooseCalculator('pumps')">
        <span class="icon">
      <i class="fa fa-calculator"></i>
        </span>Pumps
     </span>
   </div>
   <div>
-    <span class="nav-item" (click)="chooseCalculator('fans')">
+    <span class="nav-item" [ngClass]="{'selected': selectedCalculator == 'fans'}" (click)="chooseCalculator('fans')">
        <span class="icon">
      <i class="fa fa-calculator"></i>
        </span>Fans
     </span>
   </div>
   <div>
-    <span class="nav-item" (click)="chooseCalculator('furnaces')">
+    <span class="nav-item" [ngClass]="{'selected': selectedCalculator == 'furnaces'}" (click)="chooseCalculator('furnaces')">
        <span class="icon">
      <i class="fa fa-calculator"></i>
        </span>Furnaces
     </span>
   </div>
   <div>
-    <span class="nav-item" (click)="chooseCalculator('steam')">
+    <span class="nav-item" [ngClass]="{'selected': selectedCalculator == 'steam'}" (click)="chooseCalculator('steam')">
        <span class="icon">
      <i class="fa fa-calculator"></i>
        </span>Steam
     </span>
   </div>
   <div>
-    <span class="nav-item" (click)="chooseCalculator('motors')">
+    <span class="nav-item" [ngClass]="{'selected': selectedCalculator == 'motors'}" (click)="chooseCalculator('motors')">
        <span class="icon">
      <i class="fa fa-calculator"></i>
        </span>Motors
     </span>
   </div>
   <div>
-    <span class="nav-item" (click)="chooseCalculator('utilities')">
+    <span class="nav-item" [ngClass]="{'selected': selectedCalculator == 'utilities'}" (click)="chooseCalculator('utilities')">
        <span class="icon">
      <i class="fa fa-calculator"></i>
        </span>Utilities
     </span>
   </div>
 </div>
-
+<!--
 <div class="sidebar-group">
-  <span class="nav-item" (click)="emitShowSettings()">
+  <span class="nav-item" [ngClass]="{'selected': showSettings}" (click)="emitShowSettings()">
        <span class="icon">
      <i class="fa fa-cog"></i>
-       </span>Application Settings
+       </span>{{directory.name}} Settings
   </span>
-</div>
+</div>-->

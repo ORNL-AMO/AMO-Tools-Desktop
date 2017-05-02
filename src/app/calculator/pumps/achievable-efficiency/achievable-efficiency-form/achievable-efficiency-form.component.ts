@@ -8,8 +8,8 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 export class AchievableEfficiencyFormComponent implements OnInit {
   @Input()
   efficiencyForm: any;
-  // @Output('calculate')
-  // calculate = new EventEmitter<boolean>();
+  @Output('calculate')
+  calculate = new EventEmitter<boolean>();
 
   pumpTypes: Array<string> = [
     'End Suction Slurry',
@@ -23,22 +23,18 @@ export class AchievableEfficiencyFormComponent implements OnInit {
     'Vertical Turbine',
     'Large End Suction',
     // When user selects below they need a way to provide the optimal efficiency
-    'Specified Optimal Efficiency'
+    //NOT USED FOR GRAPH!
+    //'Specified Optimal Efficiency'
   ];
 
   constructor() { }
 
   ngOnInit() {
-   // this.checkForm();
   }
 
-  // checkForm() {
-  //   if (
-  //     this.efficiencyForm.controls.pumpType.status == 'VALID' && 
-  //     this.efficiencyForm.controls.flowRate.status == 'VALID'
-  //   ) {
-  //     this.calculate.emit(true);
-  //   }
-  // }
-
+  emitChange() {
+    this.calculate.emit(true);
+  }
 }
+
+

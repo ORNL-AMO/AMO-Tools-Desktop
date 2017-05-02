@@ -25,7 +25,8 @@
 
   <div class="form-group">
     <label for="drive">Drive</label>
-    <select class="form-control select-input-field" formControlName="drive" id="drive" (input)="checkForm(psatForm)" (focus)="focusField('drive')" ngModel="{{psatForm.value.drive}}">
+    <select class="form-control select-input-field" formControlName="drive" id="drive" (input)="checkForm(psatForm)" (focus)="focusField('drive')"
+      ngModel="{{psatForm.value.drive}}">
       <option *ngFor="let drive of drives" [ngValue]="drive">{{drive}}</option>
     </select>
   </div>
@@ -43,7 +44,7 @@
   <div class="form-group">
     <label for="gravity">Specific Gravity</label>
     <input type="number" class="form-control number-input-field" formControlName="gravity" id="gravity" (input)="checkForm(psatForm)"
-        (focus)="focusField('specificGravity')">
+      (focus)="focusField('specificGravity')">
   </div>
 
   <div class="form-group">
@@ -51,8 +52,8 @@
     <div class="incrementor form-control">
       <button class="btn" [disabled]="!selected" (click)="subtractNum('stages')"><i class="fa fa-minus"></i></button>
       <button class="btn" [disabled]="!selected" (click)="addNum('stages')"><i class="fa fa-plus"></i></button>
-      <input type="number" class="form-control" formControlName="stages" id="stages" ngModel="{{psatForm.value.stages}}"
-        (input)="checkForm(psatForm)" (focus)="focusField('stages')">
+      <input type="number" class="form-control" formControlName="stages" id="stages" ngModel="{{psatForm.value.stages}}" (input)="checkForm(psatForm)"
+        (focus)="focusField('stages')">
     </div>
   </div>
 
@@ -62,13 +63,13 @@
     <div class="form-check">
       <label class="form-check-label">
         <input class="form-check-input" type="radio" name="fixedSpeed" formControlName="fixedSpeed" value="Yes"
-               (input)="checkForm(psatForm)" (focus)="focusField('fixedSpecificSpeed')">Yes
+               (change)="focusField('fixedSpecificSpeed')">Yes
       </label>
     </div>
-    <div class="form-check" (focus)="focusField('fixedSpecificSpeed')">
+    <div class="form-check">
       <label class="form-check-label">
         <input class="form-check-input" type="radio" name="fixedSpeed" formControlName="fixedSpeed" value="No"
-                  (input)="checkForm(psatForm)" (focus)="focusField('fixedSpecificSpeed')">No
+                  (change)="focusField('fixedSpecificSpeed')">No
       </label>
     </div>
 

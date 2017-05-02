@@ -12,7 +12,8 @@ import { IndexedDbService } from '../../indexedDb/indexed-db.service';
 export class AssessmentSettingsComponent implements OnInit {
   @Input()
   directory: Directory;
-
+  @Output('resetDataEmit')
+  resetDataEmit = new EventEmitter<boolean>();
   settings: Settings;
   settingsForm: any;
   //does directory have settings
@@ -79,6 +80,7 @@ export class AssessmentSettingsComponent implements OnInit {
     else {
       let tmpSettings = this.settingsService.getSettingsFromForm(this.settingsForm);
       tmpSettings.directoryId = this.directory.id;
+      tmpSettings.id = this.settings.id;
       this.indexedDbService.putSettings(tmpSettings).then(
         results => {
           this.indexedDbService.getDirectorySettings(this.directory.id).then(
@@ -92,6 +94,10 @@ export class AssessmentSettingsComponent implements OnInit {
         }
       )
     }
+  }
+
+  resetData(){
+    this.resetDataEmit.emit(true);
   }
 
 }

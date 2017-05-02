@@ -1,13 +1,16 @@
-<div class="row">
-  <div class="col-12">
+<div class="row main-menu">
+  <div class="col-11">
     <ol class="breadcrumb">
-      <li class="breadcrumb-item" *ngFor="let crumb of breadCrumbs; let last = last;" [ngClass]="{'active':last }">
-        <a (click)="goToDirectory(crumb)">
+      <li class="breadcrumb-item" *ngFor="let crumb of breadCrumbs; let last = last;">
+        <a  [ngClass]="{'active':last == true }" (click)="goToDirectory(crumb)">
           {{crumb.name}}
         </a>
       </li>
       <li class="breadcrumb-item" *ngIf="view == 'settings'">Settings</li>
     </ol>
+  </div>
+  <div class="col-1">
+    <button class="btn btn-secondary pull-right" [ngClass]="{'active': view == 'settings'}" (click)="setView('settings')"><i class="fa fa-cog"></i></button>
   </div>
 </div>
 
@@ -24,7 +27,6 @@
     <div class="btn-group pull-right" role="group">
       <button class="btn btn-secondary" [ngClass]="{'active': view == 'list'}" (click)="setView('list')"><i class="fa fa-list"></i></button>
       <button class="btn btn-secondary" [ngClass]="{'active': view == 'grid'}" (click)="setView('grid')"><i class="fa fa-th"></i></button>
-      <button class="btn btn-secondary" [ngClass]="{'active': view == 'settings'}" (click)="setView('settings')"><i class="fa fa-cog"></i></button>
     </div>
   </div>
 </div>

@@ -31,7 +31,6 @@ export class MotorPerformanceGraphComponent implements OnInit {
   pointer: any;
   focus: any;
 
-
   motorPerformanceResults: any = {
     efficiency: 0,
     motor_current: 0,
@@ -43,6 +42,9 @@ export class MotorPerformanceGraphComponent implements OnInit {
 
   ngOnInit() {
     this.setUp();
+    if(this.checkForm()){
+      this.onChanges();
+    }
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -144,8 +146,6 @@ export class MotorPerformanceGraphComponent implements OnInit {
     //Remove  all previous graphs
     d3.select('app-motor-performance-graph').selectAll('svg').remove();
 
-    var curvePoints = [];
-
     //graph dimensions
     this.margin = { top: 20, right: 120, bottom: 110, left: 120 };
     this.width = 900 - this.margin.left - this.margin.right;
@@ -153,7 +153,7 @@ export class MotorPerformanceGraphComponent implements OnInit {
 
     this.x = d3.scaleLinear()
       .range([0, this.width])
-      .domain([0, 1.20]);
+      .domain([0, 1.21]);
 
     this.y = d3.scaleLinear()
       .range([this.height, 0])
@@ -276,30 +276,6 @@ export class MotorPerformanceGraphComponent implements OnInit {
       .attr("x", 9)
       .attr("dy", ".35em");
 
-    this.svg.append("text")
-      .attr("x", 20)
-      .attr("y", "20")
-      .text("Current(%FLC)")
-      .style("font-size", "13px")
-      .style("font-weight", "bold")
-      .style("fill", "#f53e3d");
-
-    this.svg.append("text")
-      .attr("x", 20)
-      .attr("y", "50")
-      .text("Power Factor(%)")
-      .style("font-size", "13px")
-      .style("font-weight", "bold")
-      .style("fill", "#6175f5");
-
-    this.svg.append("text")
-      .attr("x", 20)
-      .attr("y", "80")
-      .text("Efficiency(%)")
-      .style("font-size", "13px")
-      .style("font-weight", "bold")
-      .style("fill", "#fecb00");
-
     this.currentLine = this.svg.append("path")
       .attr("class", "line")
       .style("stroke-width", 10)
@@ -324,10 +300,36 @@ export class MotorPerformanceGraphComponent implements OnInit {
       .style("stroke", "#fecb00")
       .style("display", "none");
 
+    this.svg.append("text")
+      .attr("x", 20)
+      .attr("y", "20")
+      .text("Current (%FLC)")
+      .style("font-size", "13px")
+      .style("font-weight", "bold")
+      .style("fill", "#f53e3d");
+
+    this.svg.append("text")
+      .attr("x", 20)
+      .attr("y", "50")
+      .text("Power Factor (%)")
+      .style("font-size", "13px")
+      .style("font-weight", "bold")
+      .style("fill", "#6175f5");
+
+    this.svg.append("text")
+      .attr("x", 20)
+      .attr("y", "80")
+      .text("Efficiency (%)")
+      .style("font-size", "13px")
+      .style("font-weight", "bold")
+      .style("fill", "#fecb00");
+
+    this.svg.style("display", "none");
+
   }
 
   onChanges() {
-
+    this.svg.style("display", null);
     this.drawCurrentLine(this.x, this.y);
     this.drawPowerFactorLine(this.x, this.y);
     this.drawEfficiencyLine(this.x, this.y);
@@ -338,7 +340,7 @@ export class MotorPerformanceGraphComponent implements OnInit {
 
     var data = [];
     let i = .001;
-    for (i; i < 1.2; i = i + 0.001) {
+    for (i; i < 1.2; i = i + 0.01) {
       if(this.calculateCurrent(i) >= 0 && this.calculateCurrent(i) <= this.height) {
         data.push({
           x: i,
@@ -351,7 +353,6 @@ export class MotorPerformanceGraphComponent implements OnInit {
       .y(function (d) { return y(d.y); })
       .curve(d3.curveNatural);
 
-
     this.currentLine
       .data([data])
       .attr("d", currentLine)
@@ -362,9 +363,8 @@ export class MotorPerformanceGraphComponent implements OnInit {
 
     var data = [];
 
-    for (var i = .001; i < 1.20; i = i + .001) {
-      console.log(this.calculatePowerFactor(i));
-      if(this.calculatePowerFactor(i) >= 0 && this.calculatePowerFactor(i) <= this.height) {
+    for (var i = .001; i < 1.20; i = i + .01) {
+      if(this.calculatePowerFactor(i) >= 0 && this.calculatePowerFactor(i) <= 120) {
         data.push({
           x: i,
           y: this.calculatePowerFactor(i)
@@ -387,8 +387,8 @@ export class MotorPerformanceGraphComponent implements OnInit {
 
     var data = [];
 
-    for (var i = .001; i < 1.20; i = i + .001) {
-      if(this.calculateEfficiency(i) >= 0 && this.calculateEfficiency(i) <= this.height) {
+    for (var i = .001; i < 1.20; i = i + .01) {
+      if(this.calculateEfficiency(i) >= 0 && this.calculateEfficiency(i) <= 120) {
         data.push({
           x: i,
           y: this.calculateEfficiency(i)

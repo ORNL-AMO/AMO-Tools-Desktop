@@ -17,19 +17,25 @@ export class AssessmentDashboardComponent implements OnInit {
   deleteDataSignal = new EventEmitter<boolean>();
   @Output('deleteCheckedItems')
   deleteCheckedItems = new EventEmitter<boolean>();
+  @Output('resetDataEmit')
+  resetDataEmit = new EventEmitter<boolean>();
 
-  view: string = 'list';
-  isSettingsView: boolean = false;
+  view: string;
   isFirstChange: boolean = true;
   constructor() { }
 
   ngOnInit() {
+    if (!this.view) {
+      this.view = 'list';
+    }
   }
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.directory && !this.isFirstChange) {
       this.view == 'list';
-    } else {
+    }
+
+    if (this.isFirstChange) {
       this.isFirstChange = false;
     }
   }
@@ -39,10 +45,6 @@ export class AssessmentDashboardComponent implements OnInit {
     } else {
       this.view = $event;
     }
-  }
-
-  viewSettings() {
-    this.isSettingsView = !this.isSettingsView;
   }
 
   changeDirectory($event) {
@@ -58,6 +60,10 @@ export class AssessmentDashboardComponent implements OnInit {
 
   signalDeleteItems() {
     this.deleteCheckedItems.emit(true);
+  }
+
+  resetData(){
+    this.resetDataEmit.emit(true);
   }
 
 }

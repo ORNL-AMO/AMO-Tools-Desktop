@@ -11,7 +11,7 @@ export class DirectoryItemComponent implements OnInit {
   @Input()
   directory: Directory;
   @Input()
-  selectedDirectory: Directory;
+  selectedDirectoryId: number;
   @Output('selectSignal')
   selectSignal = new EventEmitter<Directory>();
   @Output('collapseSignal')
@@ -24,14 +24,14 @@ export class DirectoryItemComponent implements OnInit {
   ngOnChanges(changes: SimpleChanges) {
     if (changes.directory && !this.isFirstChange) {
       this.populateDirectories(this.directory);
-    }else{
+    } else {
       this.isFirstChange = false;
     }
   }
 
   ngOnInit() {
     this.populateDirectories(this.directory);
-    if (!this.directory.collapsed) {
+    if (this.directory.collapsed == undefined) {
       this.directory.collapsed = true;
     }
   }
@@ -45,14 +45,6 @@ export class DirectoryItemComponent implements OnInit {
   }
 
   populateDirectories(directoryRef: DirectoryDbRef) {
-    let tmpDirectory: Directory = {
-      name: directoryRef.name,
-      createdDate: directoryRef.createdDate,
-      modifiedDate: directoryRef.modifiedDate,
-      id: directoryRef.id,
-      collapsed: false,
-      parentDirectoryId: directoryRef.id
-    }
     this.indexedDbService.getDirectoryAssessments(directoryRef.id).then(
       results => {
         this.directory.assessments = results;
