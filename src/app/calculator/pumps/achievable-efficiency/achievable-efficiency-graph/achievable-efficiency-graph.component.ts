@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
 import { PsatService } from '../../../../psat/psat.service';
 import { Settings } from '../../../../shared/models/settings';
+import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
 
 declare const d3: any;
 
@@ -14,7 +15,8 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
   efficiencyForm: any;
   @Input()
   toggleCalculate: boolean;
-
+  @Input()
+  settings: Settings;
   svg: any;
   x: any;
   y: any;
@@ -39,7 +41,7 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
     max: 0,
     average: 0
   }
-  constructor(private psatService: PsatService) { }
+  constructor(private psatService: PsatService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
     this.setUp();
@@ -65,7 +67,8 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
     if (this.checkForm()) {
       let tmpResults = this.psatService.pumpEfficiency(
         this.efficiencyForm.value.pumpType,
-        flow
+        flow,
+        this.settings
       );
       return tmpResults.average;
     } else { return 0 }
@@ -75,7 +78,8 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
     if (this.checkForm()) {
       let tmpResults = this.psatService.pumpEfficiency(
         this.efficiencyForm.value.pumpType,
-        flow
+        flow,
+        this.settings
       );
       return tmpResults.max;
     } else { return 0 }
@@ -213,7 +217,7 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
     this.svg.append("text")
       .attr("text-anchor", "middle")  // this makes it easy to centre the text as the transform is applied to the anchor
       .attr("transform", "translate(" + (this.width / 2) + "," + (this.height - (-70)) + ")")  // centre below axis
-      .text("Flow Rate, gpm");
+      .text("Flow Rate (" + this.settings.flowMeasurement + ')');
 
     this.maxLine = this.svg.append("path")
       .attr("class", "line")

@@ -173,9 +173,14 @@ export class PsatService {
 
   ///achievable pump efficiency
   pumpEfficiency(
-    pumpStyle,
-    flowRate
+    pumpStyle: string,
+    flowRate: number,
+    settings: Settings
   ) {
+    //flow rate = 'gpm'
+    if(settings.flowMeasurement != 'gpm'){
+      flowRate = this.convertUnitsService.value(flowRate).from(settings.flowMeasurement).to('gpm');
+    }
     let inputs: any;
     let enumPumpStyle = this.getPumpStyleEnum(pumpStyle);
     inputs = {
