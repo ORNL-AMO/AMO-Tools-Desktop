@@ -1,23 +1,32 @@
-<form [formGroup]="speedForm">
-  <div class="form-group">
-    <label for="pumpType">Pump Type</label>
-    <select class="form-control" formControlName="pumpType" id="pumpType" ngModel="{{speedForm.value.pumpType}}" (change)="emitCalculate()">
+<div class="tab-content">
+  <div class="wrapper">
+    <div class="row">
+      <div class="col-12" *ngIf="settings">
+        <div class="form-group">
+          <label for="pumpType">Pump Type</label>
+          <select class="form-control" id="pumpType" [(ngModel)]="tmpPumpType" (change)="emitCalculate()">
         <option *ngFor="let pumpType of pumpTypes" [ngValue]="pumpType">{{pumpType}}</option>
       </select>
-  </div>
+        </div>
 
-  <div class="form-group">
-    <label for="pumpRPM">Pump Speed</label>
-    <input type="number" class="form-control" formControlName="pumpRPM" id="pumpRPM" (change)="emitCalculate()">
-  </div>
+        <div class="form-group">
+          <label for="pumpRPM">Pump Speed</label>
+          <input type="number" class="form-control" id="pumpRPM" [(ngModel)]="tmpPumpRpm" (input)="emitCalculate()">
+          <span class="units">rpm</span>
+        </div>
 
-  <div class="form-group">
-    <label for="flowRate">Flow Rate</label>
-    <input type="number" class="form-control" formControlName="flowRate" id="flowRate" (change)="emitCalculate()">
-  </div>
+        <div class="form-group">
+          <label for="flowRate">Flow Rate</label>
+          <input type="number" class="form-control" id="flowRate" [(ngModel)]="tmpFlowRate" (input)="emitCalculate()">
+          <span class="units">{{settings.flowMeasurement}}</span>
+        </div>
 
-  <div class="form-group">
-    <label for="head">Head</label>
-    <input type="number" class="form-control number-input-field" formControlName="head" id="head" (change)="emitCalculate()">
+        <div class="form-group">
+          <label for="head">Head</label>
+          <input type="number" class="form-control number-input-field" [(ngModel)]="tmpHead" id="head" (input)="emitCalculate()">
+          <span class="units">{{settings.distanceMeasurement}}</span>
+        </div>
+      </div>
+    </div>
   </div>
-</form>
+</div>

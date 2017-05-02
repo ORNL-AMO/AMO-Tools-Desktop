@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
 import { PsatService } from '../../../../psat/psat.service';
+import { Settings } from '../../../../shared/models/settings';
 
 declare const d3: any;
 
@@ -13,7 +14,6 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
   efficiencyForm: any;
   @Input()
   toggleCalculate: boolean;
-
 
   svg: any;
   x: any;

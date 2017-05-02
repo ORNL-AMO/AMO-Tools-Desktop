@@ -1,4 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Settings } from '../../../../shared/models/settings';
 
 @Component({
   selector: 'app-achievable-efficiency-form',
@@ -10,7 +11,8 @@ export class AchievableEfficiencyFormComponent implements OnInit {
   efficiencyForm: any;
   @Output('calculate')
   calculate = new EventEmitter<boolean>();
-
+  @Input()
+  settings: Settings;
   pumpTypes: Array<string> = [
     'End Suction Slurry',
     'End Suction Sewage',
@@ -27,12 +29,22 @@ export class AchievableEfficiencyFormComponent implements OnInit {
     //'Specified Optimal Efficiency'
   ];
 
+  tmpPumpType: string;
+  tmpFlowRate: number;
   constructor() { }
 
   ngOnInit() {
+    if (this.efficiencyForm) {
+      this.tmpFlowRate = this.efficiencyForm.value.flowRate;
+      this.tmpPumpType = this.efficiencyForm.value.pumpType;
+    }
   }
 
   emitChange() {
+    this.efficiencyForm.patchValue({
+      pumpType: this.tmpPumpType,
+      flowRate: this.tmpFlowRate
+    })
     this.calculate.emit(true);
   }
 }
