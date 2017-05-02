@@ -21,13 +21,16 @@ import { DirectoryItemComponent } from '../sidebar/directory-item/directory-item
 import { SettingsModule } from '../settings/settings.module';
 import { IndexedDbModule } from '../indexedDb/indexedDb.module';
 
+import { LandingScreenComponent } from '../landing-screen/landing-screen.component';
+
 @NgModule({
   declarations: [
     CoreComponent,
     SidebarComponent,
     DashboardComponent,
     AssessmentItemComponent,
-    DirectoryItemComponent
+    DirectoryItemComponent,
+    LandingScreenComponent
   ],
   imports: [
     CommonModule,
