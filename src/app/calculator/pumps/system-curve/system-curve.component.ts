@@ -1,6 +1,9 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms'
 import { PSAT } from '../../../shared/models/psat';
+import { Settings } from '../../../shared/models/settings';
+import { IndexedDbService} from '../../../indexedDb/indexed-db.service';
+
 @Component({
   selector: 'app-system-curve',
   templateUrl: './system-curve.component.html',
@@ -9,6 +12,8 @@ import { PSAT } from '../../../shared/models/psat';
 export class SystemCurveComponent implements OnInit {
   @Input()
   psat: PSAT;
+  @Input()
+  settings: Settings;
 
   curveConstants: any;
 
@@ -18,7 +23,7 @@ export class SystemCurveComponent implements OnInit {
   staticHead: number;
   lossCoefficient: number;
 
-  constructor(private formBuilder: FormBuilder) { }
+  constructor(private formBuilder: FormBuilder, private indexedDbService: IndexedDbService) { }
 
   ngOnInit() {
     if (this.psat) {
@@ -49,6 +54,15 @@ export class SystemCurveComponent implements OnInit {
       };
       this.pointOne.form.value.pointAdjustment = 'Point One';
       this.pointTwo.form.value.pointAdjustment = 'Point Two';
+    }
+
+
+    if(!this.settings){
+      this.indexedDbService.getDirectorySettings(1).then(
+        results => {
+          this.settings = results[0];
+        }
+      )
     }
   }
 

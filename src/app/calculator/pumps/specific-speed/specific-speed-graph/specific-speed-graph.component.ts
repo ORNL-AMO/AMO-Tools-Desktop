@@ -50,6 +50,7 @@ export class SpecificSpeedGraphComponent implements OnInit {
     if (!this.firstChange) {
       if (changes.toggleCalculate) {
         if (this.checkForm()) {
+          console.log(this.speedForm.value);
           this.drawPoint();
           this.svg.style("display", null);
         }
@@ -298,7 +299,6 @@ export class SpecificSpeedGraphComponent implements OnInit {
   }
 
   drawPoint() {
-
     var specificSpeed = this.getSpecificSpeed();
     var efficiencyCorrection = this.psatService.achievableEfficiency(this.speedForm.value.pumpType, specificSpeed);
 

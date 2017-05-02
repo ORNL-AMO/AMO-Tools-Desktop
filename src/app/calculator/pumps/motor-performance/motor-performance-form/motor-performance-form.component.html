@@ -1,61 +1,68 @@
-<form [formGroup]="performanceForm">
-  <div class="form-group">
-    <label for="frequency">Line Frequency</label>
-    <select class="form-control" id="frequency" formControlName="frequency" ngModel="{{performanceForm.value.frequency}}" (change)="emitChange()">
+<div class="tab-content">
+  <div class="wrapper">
+    <div class="row">
+      <div class="col-12">
+        <div class="form-group">
+          <label for="frequency">Line Frequency</label>
+          <select class="form-control" id="frequency" [(ngModel)]="tmpFrequency" (change)="emitChange()">
         <option *ngFor="let frequency of frequencies" [ngValue]="frequency">{{frequency}}</option>
       </select>
-  </div>
+        </div>
 
-  <div class="form-group">
-    <label for="horsePower">Horse Power</label>
-    <select class="form-control" id="horsePower" formControlName="horsePower" ngModel="{{performanceForm.value.horsePower}}" (change)="emitChange()">
+        <div class="form-group">
+          <label for="horsePower">Horse Power</label>
+          <select class="form-control" id="horsePower" [(ngModel)]="tmpHorsePower" (change)="emitChange()">
         <option *ngFor="let horsePower of horsePowers" [ngValue]="horsePower">{{horsePower}}</option>
       </select>
-  </div>
+        </div>
 
-  <div class=" form-group">
-    <label for="motorRPM">Motor RPM</label>
-    <div class="input-group">
-      <div class="incrementor input-group-addon">
-        <button class="btn" (click)="subtractNum('motorRPM')"><i class="fa fa-minus"></i></button>
-      </div>
-      <div class="incrementor input-group-addon">
-        <button class="btn" (click)="addNum('motorRPM')"><i class="fa fa-plus"></i></button>
-      </div>
-      <input type="number " class="form-control" id="motorRPM" formControlName="motorRPM" ngModel="{{performanceForm.value.motorRPM}}" (change)="emitChange()">
-    </div>
-  </div>
+        <div class=" form-group">
+          <label for="motorRPM">Motor RPM</label>
+          <div class="input-group">
+            <div class="incrementor input-group-addon">
+              <button class="btn" (click)="subtractNum('motorRPM')"><i class="fa fa-minus"></i></button>
+            </div>
+            <div class="incrementor input-group-addon">
+              <button class="btn" (click)="addNum('motorRPM')"><i class="fa fa-plus"></i></button>
+            </div>
+            <input type="number" class="form-control" id="motorRPM" [(ngModel)]="tmpMotorRpm" (input)="emitChange()">
+          </div>
+        </div>
 
 
-  <div class="form-group">
-    <label for="efficiencyClass">Efficiency Class</label>
+        <div class="form-group">
+          <label for="efficiencyClass">Efficiency Class</label>
 
-    <select class="form-control" id="efficiencyClass" formControlName="efficiencyClass" ngModel="{{performanceForm.value.efficiencyClass}}" (change)="emitChange()">
+          <select class="form-control" id="efficiencyClass" [(ngModel)]="tmpEfficiencyClass" (change)="emitChange()">
         <option *ngFor="let efficiencyClass of efficiencyClasses" [ngValue]="efficiencyClass">{{efficiencyClass}}</option>
       </select>
-  </div>
+        </div>
 
-  <div class="form-group" *ngIf="performanceForm.value.efficiencyClass == 'Specified'">
-    <label for="efficiencyClass">Specify Efficiency Class</label>
-    <input type="text" class="form-control" id="efficiencyClassSpecified" formControlName="efficiencyClassSpecified" (change)="emitChange()">
-  </div>
+        <div class="form-group" *ngIf="tmpEfficiencyClass == 'Specified'">
+          <label for="efficiencyClass">Specify Efficiency Class</label>
+          <input type="text" class="form-control" id="efficiencyClassSpecified" [(ngModel)]="tmpEfficiencyClassSpecified" (input)="emitChange()">
+        </div>
 
-  <div class="form-group" *ngIf="performanceForm.value.efficiencyClass == 'Specified'">
-    <label for="efficiency">Efficiency</label>
-    <input type="number" class="form-control" id="efficiency" formControlName="efficiency" (change)="emitChange()">
-  </div>
+        <div class="form-group" *ngIf="tmpEfficiencyClass == 'Specified'">
+          <label for="efficiency">Efficiency</label>
+          <input type="number" class="form-control" id="efficiency" [(ngModel)]="tmpEfficiency" (input)="emitChange()">
+        </div>
 
-  <div class="form-group">
-    <label for="motorVoltage">Voltage</label>
+        <div class="form-group">
+          <label for="motorVoltage">Voltage</label>
+          <input type="number" class="form-control" id="motorVoltage" [(ngModel)]="tmpMotorVoltage" (input)="emitChange()">
+          <span class="units">V</span>
+        </div>
 
-    <input type="number" class="form-control" id="motorVoltage" formControlName="motorVoltage" (change)="emitChange()">
-  </div>
-
-  <div class="form-group">
-    <label for="fullLoadAmps" aria-describedby="flaHelp">
+        <div class="form-group">
+          <label for="fullLoadAmps" aria-describedby="flaHelp">
       Full-Load Amps
-    <small id="flaHelp" class="form-text text-muted text-help" (click)="getFullLoadAmps()"><a>Estimate Full-Load Amps</a></small>
     </label>
-    <input type="number" class="form-control" id="fullLoadAmps" formControlName="fullLoadAmps" (change)="emitChange()">
+          <input type="number" class="form-control" id="fullLoadAmps" [(ngModel)]="tmpFullLoadAmps" (input)="emitChange()">
+          <span class="units">A</span>
+        </div>
+
+      </div>
+    </div>
   </div>
-</form>
+</div>

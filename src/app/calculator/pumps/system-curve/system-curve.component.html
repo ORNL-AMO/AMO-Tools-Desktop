@@ -1,8 +1,8 @@
-<div class="row calc-container">
+<div class="row calc-container" *ngIf="settings">
   <div class="col-3 calc-form">
-    <app-system-curve-form [psat]="psat" [(pointOne)]="pointOne" [(pointTwo)]="pointTwo" [(curveConstants)]="curveConstants" (calculate)="calculateValues()" (calculateP1)="calculateP1Flow()" (calculateP2)="calculateP2Flow()"></app-system-curve-form>
+    <app-system-curve-form [psat]="psat" [settings]="settings" [(pointOne)]="pointOne" [(pointTwo)]="pointTwo" [(curveConstants)]="curveConstants" (calculate)="calculateValues()" (calculateP1)="calculateP1Flow()" (calculateP2)="calculateP2Flow()"></app-system-curve-form>
   </div>
   <div class="col-9 calc-graph">
-    <app-system-curve-graph [lossCoefficient]="lossCoefficient" [staticHead]="staticHead" [pointOne]="pointOne" [pointTwo]="pointTwo" [curveConstants]="curveConstants"></app-system-curve-graph>
+    <app-system-curve-graph [lossCoefficient]="lossCoefficient" [settings]="settings" [staticHead]="staticHead" [pointOne]="pointOne" [pointTwo]="pointTwo" [curveConstants]="curveConstants"></app-system-curve-graph>
   </div>
 </div>

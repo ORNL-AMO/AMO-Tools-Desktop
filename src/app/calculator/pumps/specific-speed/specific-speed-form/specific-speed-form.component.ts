@@ -1,4 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Settings } from '../../../../shared/models/settings';
 
 @Component({
   selector: 'app-specific-speed-form',
@@ -10,6 +11,8 @@ export class SpecificSpeedFormComponent implements OnInit {
   speedForm: any;
   @Output('calculate')
   calculate = new EventEmitter<boolean>();
+  @Input()
+  settings: Settings;
 
   pumpTypes: Array<string> = [
     'End Suction Slurry',
@@ -25,12 +28,28 @@ export class SpecificSpeedFormComponent implements OnInit {
     // When user selects below they need a way to provide the optimal efficiency
     //'Specified Optimal Efficiency'
   ];
+  tmpPumpType: string;
+  tmpPumpRpm: number;
+  tmpFlowRate: number;
+  tmpHead: number;
   constructor() { }
 
   ngOnInit() {
+    if (this.speedForm) {
+      this.tmpPumpType = this.speedForm.value.pumpType;
+      this.tmpPumpRpm = this.speedForm.value.pumpRPM;
+      this.tmpFlowRate = this.speedForm.value.flowRate;
+      this.tmpHead = this.speedForm.value.head;
+    }
   }
 
   emitCalculate() {
+    this.speedForm.patchValue({
+      pumpType: this.tmpPumpType,
+      pumpRPM: this.tmpPumpRpm,
+      flowRate: this.tmpFlowRate,
+      head: this.tmpHead
+    })
     this.calculate.emit(true);
   }
 
