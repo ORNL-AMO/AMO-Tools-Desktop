@@ -1,6 +1,11 @@
 import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { PsatService } from '../../../psat/psat.service';
+import { PSAT } from '../../../shared/models/psat';
+import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
+import { Settings } from '../../../shared/models/settings';
+import { SettingsService } from '../../../settings/settings.service';
+
 @Component({
   selector: 'app-head-tool',
   templateUrl: './head-tool.component.html',
@@ -10,6 +15,10 @@ export class HeadToolComponent implements OnInit {
   @Output('close')
   close = new EventEmitter<boolean>();
   @Input()
+  psat: PSAT;
+  @Input()
+  settings: Settings;
+  @Input()
   headToolResults: any = {
     differentialElevationHead: 0.0,
     differentialIPressureHead: 0.0,
@@ -18,6 +27,10 @@ export class HeadToolComponent implements OnInit {
     estimatedDischargeFrictionHead: 0.0,
     pumpHead: 0.0
   }
+  @Input()
+  inAssessment: boolean;
+
+
   results: any = {
     differentialElevationHead: 0.0,
     differentialPressureHead: 0.0,
@@ -26,19 +39,43 @@ export class HeadToolComponent implements OnInit {
     estimatedDischargeFrictionHead: 0.0,
     pumpHead: 0.0
   }
+
   headToolForm: any;
   headToolSuctionForm: any;
   headToolType: string = "Suction tank elevation, gas space pressure, and discharged line pressure";
   tabSelect: string = 'results';
-
-  constructor(private formBuilder: FormBuilder, private psatService: PsatService) { }
+  showSettings: boolean = false;
+  settingsForm: any;
+  constructor(private formBuilder: FormBuilder, private psatService: PsatService, private indexedDbService: IndexedDbService, private settingsService: SettingsService) { }
 
   ngOnInit() {
     this.headToolForm = this.initHeadToolForm();
     this.headToolSuctionForm = this.initHeadToolSuctionForm();
-
+    if (this.psat) {
+      this.headToolForm.patchValue({
+        specificGravity: this.psat.inputs.specific_gravity,
+        flowRate: this.psat.inputs.flow_rate,
+      });
+      this.headToolSuctionForm.patchValue({
+        specificGravity: this.psat.inputs.specific_gravity,
+        flowRate: this.psat.inputs.flow_rate,
+      })
+    }
+    if (!this.settings) {
+      this.indexedDbService.getDirectorySettings(1).then(
+        results => {
+          if (results.length != 0) {
+            this.settings = results[0];
+          }
+        }
+      )
+    }
   }
 
+  editSettings() {
+    this.settingsForm = this.settingsService.getFormFromSettings(this.settings);
+    this.showSettings = true;
+  }
 
   setTab(str: string) {
     this.tabSelect = str;
@@ -46,6 +83,14 @@ export class HeadToolComponent implements OnInit {
 
   closeTool() {
     this.close.emit(true);
+  }
+
+  applySettings() {
+    this.settings = this.settingsService.getSettingsFromForm(this.settingsForm)
+    this.showSettings = false;
+  }
+  cancelSettings(){
+    this.showSettings = false;
   }
 
   save() {
@@ -59,7 +104,7 @@ export class HeadToolComponent implements OnInit {
   }
 
   calculateHeadTool() {
-    let result = this.psatService.headToolSuctionTank(
+    let result = this.psatService.headTool(
       this.headToolForm.value.specificGravity,
       this.headToolForm.value.flowRate,
       this.headToolForm.value.suctionPipeDiameter,
@@ -69,7 +114,8 @@ export class HeadToolComponent implements OnInit {
       this.headToolForm.value.dischargePipeDiameter,
       this.headToolForm.value.dischargeGaugePressure,
       this.headToolForm.value.dischargeGaugeElevation,
-      this.headToolForm.value.dischargeLineLossCoefficients
+      this.headToolForm.value.dischargeLineLossCoefficients,
+      this.settings
     );
     this.results.differentialElevationHead = result.differentialElevationHead;
     this.results.differentialPressureHead = result.differentialPressureHead;
@@ -91,7 +137,8 @@ export class HeadToolComponent implements OnInit {
       this.headToolSuctionForm.value.dischargePipeDiameter,
       this.headToolSuctionForm.value.dischargeGaugePressure,
       this.headToolSuctionForm.value.dischargeGaugeElevation,
-      this.headToolSuctionForm.value.dischargeLineLossCoefficients
+      this.headToolSuctionForm.value.dischargeLineLossCoefficients,
+      this.settings
     );
 
     this.results.differentialElevationHead = result.differentialElevationHead;

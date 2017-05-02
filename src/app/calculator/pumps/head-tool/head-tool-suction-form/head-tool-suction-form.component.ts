@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
-
+import { Settings } from '../../../../shared/models/settings';
 @Component({
   selector: 'app-head-tool-suction-form',
   templateUrl: './head-tool-suction-form.component.html',
@@ -10,10 +10,19 @@ export class HeadToolSuctionFormComponent implements OnInit {
   headToolSuctionForm: any;
   @Output('calculate')
   calculate = new EventEmitter<boolean>();
+  @Input()
+  settings: Settings;
+
+  smallUnit: string;
 
   constructor() { }
 
   ngOnInit() {
+    if(this.settings.distanceMeasurement == 'ft'){
+      this.smallUnit = 'in'
+    }else{
+      this.smallUnit = 'mm'
+    }
   }
 
   calc() {

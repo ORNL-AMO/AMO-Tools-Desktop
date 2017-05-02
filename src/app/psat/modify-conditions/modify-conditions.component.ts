@@ -2,6 +2,7 @@ import { Component, OnInit, Input, EventEmitter, Output, SimpleChanges } from '@
 import { PSAT, PsatInputs, Modification, PsatOutputs } from '../../shared/models/psat';
 import * as _ from 'lodash';
 import { PsatService } from '../psat.service';
+import { Settings } from '../../shared/models/settings';
 
 @Component({
   selector: 'app-modify-conditions',
@@ -13,6 +14,8 @@ export class ModifyConditionsComponent implements OnInit {
   psat: PSAT;
   @Input()
   saveClicked: boolean;
+  @Input()
+  settings: Settings;
   @Output('saved')
   saved = new EventEmitter<boolean>();
 
@@ -32,8 +35,8 @@ export class ModifyConditionsComponent implements OnInit {
     if (this.psat.modifications) {
       this._modifications = (JSON.parse(JSON.stringify(this.psat.modifications)));
     }
-   // let results: PsatOutputs = this.psatService.results(this.psat.inputs);
-   // console.log(results)
+    // let results: PsatOutputs = this.psatService.results(this.psat.inputs);
+    // console.log(results)
   }
 
   save() {

@@ -1,3 +1,7 @@
-.dashboard{
-  padding-top: 8%;
+.dashboard-content{
+      max-height: 100vh;
+    overflow-y: scroll;
+    padding-bottom: 15px;
+    height: 100vh;
+    padding-top: 15px;
 }

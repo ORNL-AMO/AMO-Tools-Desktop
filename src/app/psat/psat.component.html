@@ -26,7 +26,7 @@
     <div class="tab-content" *ngIf="subTab == 'system-basics'">
       <div class="wrapper" *ngIf="settings">
         <div class="form">
-          <app-system-basics [settings]="settings" [saveClicked]="saveClicked" [assessment]="assessment" [isAssessmentSettings]="isAssessmentSettings"></app-system-basics>
+          <app-system-basics [settings]="settings" [saveClicked]="saveClicked" [assessment]="assessment" [isAssessmentSettings]="isAssessmentSettings" (updateSettings)="getSettings()"></app-system-basics>
         </div>
         <div class="help">
           <app-help-panel [currentField]="currentField" [currentTab]="subTab"></app-help-panel>
@@ -38,7 +38,7 @@
       <div class="wrapper">
         <div class="form">
           <app-pump-fluid (isValid)="setValid()" (isInvalid)="setInvalid()" [saveClicked]="saveClicked" (changeField)="changeField($event)"
-            [(psat)]="_psat" (saved)="save()" [selected]="true"></app-pump-fluid>
+            [(psat)]="_psat" (saved)="save()" [selected]="true" [settings]="settings"></app-pump-fluid>
         </div>
         <div class="help">
           <app-help-panel [currentField]="currentField" [currentTab]="subTab"></app-help-panel>
@@ -50,7 +50,7 @@
       <div class="wrapper">
         <div class="form">
           <app-motor (isValid)="setValid()" (isInvalid)="setInvalid()" [saveClicked]="saveClicked" (changeField)="changeField($event)"
-            [(psat)]="_psat" (saved)="save()" [selected]="true"></app-motor>
+            [(psat)]="_psat" (saved)="save()" [selected]="true" [settings]="settings"></app-motor>
         </div>
         <div class="help">
           <app-help-panel [currentField]="currentField" [currentTab]="subTab"></app-help-panel>
@@ -62,7 +62,7 @@
       <div class="wrapper">
         <div class="form">
           <app-field-data (isValid)="setValid()" (isInvalid)="setInvalid()" [saveClicked]="saveClicked" (changeField)="changeField($event)"
-            [(psat)]="_psat" (saved)="save()" [selected]="true"></app-field-data>
+            [(psat)]="_psat" (saved)="save()" [selected]="true" [settings]="settings"></app-field-data>
         </div>
         <div class="help">
           <app-help-panel [currentField]="currentField" [currentTab]="subTab"></app-help-panel>
@@ -72,7 +72,7 @@
   </div>
 
   <div class="tab-content" *ngIf="currentTab == 'modify-conditions'">
-    <app-modify-conditions [saveClicked]="saveClicked" [(psat)]="_psat" (saved)="save()"></app-modify-conditions>
+    <app-modify-conditions [settings]="settings" [saveClicked]="saveClicked" [(psat)]="_psat" (saved)="save()"></app-modify-conditions>
   </div>
 
   <div class="tab-content" *ngIf="currentTab == 'system-curve'">

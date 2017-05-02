@@ -17,17 +17,17 @@
     <label>Units of Measure</label>
     <div class="form-check">
       <label class="form-check-label">
-        <input class="form-check-input" type="radio" name="unitsOfMeasure" formControlName="unitsOfMeasure" value="Imperial">Imperial
+        <input class="form-check-input" type="radio" name="unitsOfMeasure" formControlName="unitsOfMeasure" value="Imperial" (change)="setUnits()">Imperial
       </label>
     </div>
     <div class="form-check">
       <label class="form-check-label">
-        <input class="form-check-input" type="radio" name="unitsOfMeasure" formControlName="unitsOfMeasure" value="Metric">Metric
+        <input class="form-check-input" type="radio" name="unitsOfMeasure" formControlName="unitsOfMeasure" value="Metric" (change)="setUnits()">Metric
       </label>
     </div>
     <div class="form-check">
       <label class="form-check-label">
-        <input class="form-check-input" type="radio" name="unitsOfMeasure" formControlName="unitsOfMeasure" value="Other">Other
+        <input class="form-check-input" type="radio" name="unitsOfMeasure" formControlName="unitsOfMeasure" value="Custom" (change)="setUnits()">Custom
       </label>
     </div>
   </div>

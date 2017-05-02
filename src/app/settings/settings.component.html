@@ -4,7 +4,7 @@
     <h5 class="text-muted">These settings are for the entire application. Settings can be adjusted by directory and assessment.</h5>
   </div>
   <div class="col-12">
-    <app-application-settings [(settingsForm)]="settingsForm"></app-application-settings>
+    <app-application-settings [(settingsForm)]="settingsForm" (unitChange)="setUnits()"></app-application-settings>
   </div>
 </div>
 <div class="row" *ngIf="settingsForm">

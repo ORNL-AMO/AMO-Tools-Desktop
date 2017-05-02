@@ -19,12 +19,12 @@
                 <app-psat-settings [(settingsForm)]="settingsForm"></app-psat-settings>
             </div>
         </div>
-        <div class="row settings justify-content-end">
+        <div class="row justify-content-end">
             <div class="col-2">
                 <button class="btn btn-primary" (click)="saveSettings()">Save Settings</button>
             </div>
         </div>
-        <div class="row settings justify-content-end" *ngIf="directory.id == 1">
+        <div class="row justify-content-end" *ngIf="directory.id == 1">
             <div class="col-2">
                 <button class="btn btn-primary" (click)="resetData()">Reset Data</button>
             </div>

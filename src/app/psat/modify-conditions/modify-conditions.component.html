@@ -2,7 +2,7 @@
   <app-modify-conditions-tabs (changeTab)="changeTab($event)" [modifyTab]="modifyTab"></app-modify-conditions-tabs>
 </nav>
 
-<div class="modify-conditions" *ngIf="modifyTab != 'report'">
+<div class="modify-conditions" *ngIf="modifyTab != 'report' && settings">
 
   <!-- Baseline -->
   <div class="modification baseline" (click)="togglePanel(baselineSelected)" [ngClass]="{'disabled': baselineSelected == false}">
@@ -12,11 +12,11 @@
     <div class="losses-container">
       <!--<app-system-basics *ngIf="modifyTab == 'system-basics'"></app-system-basics>-->
       <app-pump-fluid *ngIf="modifyTab == 'pump-fluid'" [selected]="baselineSelected" [saveClicked]="saveClicked" [(psat)]="psat"
-        (changeField)="changeField($event)" (saved)="save()"></app-pump-fluid>
+        (changeField)="changeField($event)" (saved)="save()" [settings]="settings"></app-pump-fluid>
       <app-motor *ngIf="modifyTab == 'motor'" [selected]="baselineSelected" [saveClicked]="saveClicked" [(psat)]="psat" (changeField)="changeField($event)"
-        (saved)="save()"></app-motor>
+        (saved)="save()" [settings]="settings"></app-motor>
       <app-field-data *ngIf="modifyTab == 'field-data'" [selected]="baselineSelected" [saveClicked]="saveClicked" [(psat)]="psat"
-        (changeField)="changeField($event)" (saved)="save()"></app-field-data>
+        (changeField)="changeField($event)" (saved)="save()" [settings]="settings"></app-field-data>
     </div>
   </div>
 
@@ -44,11 +44,11 @@
 
       <!--<app-system-basics *ngIf="modifyTab == 'system-basics'"></app-system-basics>-->
       <app-pump-fluid *ngIf="modifyTab == 'pump-fluid'" [selected]="modifiedSelected" [saveClicked]="saveClicked" [(psat)]="_modifications[modificationIndex].psat"
-        (changeField)="changeField($event)" (saved)="save()"></app-pump-fluid>
+        (changeField)="changeField($event)" (saved)="save()" [settings]="settings"></app-pump-fluid>
       <app-motor *ngIf="modifyTab == 'motor'" [selected]="modifiedSelected" [saveClicked]="saveClicked" [(psat)]="_modifications[modificationIndex].psat"
-        (changeField)="changeField($event)" (saved)="save()"></app-motor>
+        (changeField)="changeField($event)" (saved)="save()" [settings]="settings"></app-motor>
       <app-field-data *ngIf="modifyTab == 'field-data'" [saveClicked]="saveClicked" [(psat)]="_modifications[modificationIndex].psat"
-        (changeField)="changeField($event)" [selected]="modifiedSelected" (saved)="save()"></app-field-data>
+        (changeField)="changeField($event)" [selected]="modifiedSelected" (saved)="save()" [settings]="settings"></app-field-data>
 
     </div>
 

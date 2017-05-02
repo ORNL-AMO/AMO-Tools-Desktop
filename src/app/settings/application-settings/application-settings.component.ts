@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-application-settings',
@@ -20,7 +20,32 @@ export class ApplicationSettingsComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
+    this.setUnits();
+  }
 
+  setUnits() {
+    if (this.settingsForm.value.unitsOfMeasure == 'Imperial') {
+      this.settingsForm.patchValue({
+        powerMeasurement: 'hp',
+        flowMeasurement: 'gpm',
+        distanceMeasurement: 'ft',
+        pressureMeasurement: 'psi',
+        currentMeasurement: 'A',
+        viscosityMeasurement: 'cST',
+        voltageMeasurement: 'V'
+      })
+
+    } else if (this.settingsForm.value.unitsOfMeasure == 'Metric') {
+      this.settingsForm.patchValue({
+        powerMeasurement: 'kW',
+        flowMeasurement: 'm3/h',
+        distanceMeasurement: 'm',
+        pressureMeasurement: 'kPa',
+        currentMeasurement: 'A',
+        viscosityMeasurement: 'cST',
+        voltageMeasurement: 'V'
+      })
+    }
   }
 
 }

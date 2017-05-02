@@ -6,16 +6,12 @@ export interface Settings {
     directoryId?: number,
     createdDate?: Date,
     modifiedDate?: Date
-    headMeasurement?: string,
     flowMeasurement?: string,
+    powerMeasurement?: string,
+    distanceMeasurement?: string,
+    pressureMeasurement?: string,
+    currentMeasurement?: string,
+    viscosityMeasurement?: string,
+    voltageMeasurement?: string,
     id?: number
-}
-
-export interface PsatSettings {
-    headMeasurement?: string,
-    flowMeasurement?: string
-}
-
-export interface PhastSettings {
-
 }

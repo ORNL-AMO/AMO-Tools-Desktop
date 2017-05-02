@@ -1,6 +1,7 @@
 import { Component, OnInit, Output, EventEmitter, Input, SimpleChanges, ViewChild, ElementRef } from '@angular/core';
 import { PsatService } from '../psat.service';
 import { PSAT, PsatInputs } from '../../shared/models/psat';
+import { Settings } from '../../shared/models/settings';
 
 @Component({
   selector: 'app-pump-fluid',
@@ -22,6 +23,8 @@ export class PumpFluidComponent implements OnInit {
   isInvalid = new EventEmitter<boolean>();
   @Input()
   selected: boolean;
+  @Input()
+  settings: Settings;
 
   @ViewChild('formRef') formRef: ElementRef;
   elements: any;
@@ -71,6 +74,9 @@ export class PumpFluidComponent implements OnInit {
   ngOnInit() {
     this.psatForm = this.psatService.getFormFromPsat(this.psat.inputs);
     this.checkForm(this.psatForm);
+  }
+
+  ngAfterViewInit() {
     if (!this.selected) {
       this.disableForm();
     }

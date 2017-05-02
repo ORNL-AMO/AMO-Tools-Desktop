@@ -29,7 +29,7 @@ import { apparentPower } from './definitions/apparentPower';
 import { reactiveEnergy } from './definitions/reactiveEnergy';
 import { reactivePower } from './definitions/reactivePower';
 import { volumeFlowRate } from './definitions/volumeFlowRate';
-
+import { viscosity } from './definitions/viscosity';
 import * as _ from 'lodash';
 import * as keys from 'lodash.keys';
 import * as each from 'lodash.foreach';
@@ -55,7 +55,8 @@ export class ConvertUnitsService {
     apparentPower: apparentPower,
     reactiveEnergy: reactiveEnergy,
     reactivePower: reactivePower,
-    volumeFlowRate: volumeFlowRate
+    volumeFlowRate: volumeFlowRate,
+    viscosity: viscosity
     
   }
   origin: any;

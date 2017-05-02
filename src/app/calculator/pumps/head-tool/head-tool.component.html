@@ -5,18 +5,20 @@
           <option>Suction guage elevation, gas space pressure, and discharged line pressure</option>
         </select>
   </div>
-  <div class="col-3">
-    <b>Units of Measure:</b>gpm, ft, hp<a> Edit</a>
+  <div class="col-3" *ngIf="settings && !inAssessment">
+    <b>Units of Measure:</b> {{settings.pressureMeasurement}}, {{settings.flowMeasurement}}, {{settings.distanceMeasurement}}
+    <br>
+    <a (click)="editSettings()">Edit</a>
   </div>
 </div>
-<div class="row">
+<div class="row" *ngIf="settings && !showSettings">
   <div class="col-7" *ngIf="headToolType == 'Suction tank elevation, gas space pressure, and discharged line pressure'">
     <div class="head-diagram text-center">
       <img class="img-fluid mx-auto d-block" aria-describedby="headDiagramHelp" src="assets/images/img-tank-elevation-head.png">
       <small id="headDiagramHelp" class="text-muted text-help">K<sub>s</sub> represents all suction losses from the tank to the pump</small><br>
       <small id="headDiagramHelp" class="text-muted text-help">K<sub>d</sub> represents all discharge losses from the pump to the guage P<sub>d</sub></small>
     </div>
-    <app-head-tool-suction-form [(headToolSuctionForm)]="headToolSuctionForm" (calculate)="calculateHeadToolSuctionTank()"></app-head-tool-suction-form>
+    <app-head-tool-suction-form [(headToolSuctionForm)]="headToolSuctionForm" [settings]="settings" (calculate)="calculateHeadToolSuctionTank()"></app-head-tool-suction-form>
   </div>
   <div class="col-7" *ngIf="headToolType == 'Suction guage elevation, gas space pressure, and discharged line pressure'">
     <div class="head-diagram text-center">
@@ -36,15 +38,26 @@
       </li>
     </ul>
     <div class="row align-items-center justify-content-center">
-      <app-head-tool-results *ngIf="tabSelect == 'results'" [results]="results"></app-head-tool-results>
+      <app-head-tool-results *ngIf="tabSelect == 'results'" [results]="results" [settings]="settings"></app-head-tool-results>
       <app-head-tool-help *ngIf="tabSelect == 'help'"></app-head-tool-help>
     </div>
   </div>
 </div>
+
+<div class="row justify-content-center" *ngIf="settingsForm && showSettings">
+  <div class="col-4">
+    <app-psat-settings [(settingsForm)]="settingsForm"></app-psat-settings>
+  </div>
+</div>
+
+
 <div class="row button-row">
   <div class="col-12">
-    <button class="btn btn-secondary pull-left" (click)="closeTool()">Close</button>
-    <button class="btn btn-primary pull-right" (click)="save()">Save to Assessment</button>
-    <button class="btn btn-secondary pull-right">Export to CSV...</button>
+
+    <button class="btn btn-secondary pull-left" *ngIf="!showSettings" (click)="closeTool()">Close</button>
+    <button class="btn btn-primary pull-right" (click)="save()" *ngIf="inAssessment">Save to Assessment</button>
+   <!-- <button class="btn btn-secondary pull-right">Export to CSV...</button>-->
+    <button class="btn btn-secondary pull-left" (click)="cancelSettings()" *ngIf="showSettings">Cancel</button>
+    <button class="btn btn-secondary pull-right" (click)="applySettings()" *ngIf="showSettings">Apply Settings</button>
   </div>
 </div>

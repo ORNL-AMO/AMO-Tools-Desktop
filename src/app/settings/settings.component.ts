@@ -27,6 +27,11 @@ export class SettingsComponent implements OnInit {
     )
   }
 
+  setUnits(){
+    console.log('settings comp')
+    console.log(this.settingsForm.value.unitsOfMeasure)
+  }
+
 
   saveSettings() {
     let tmpSettings = this.settingsService.getSettingsFromForm(this.settingsForm);
@@ -34,7 +39,7 @@ export class SettingsComponent implements OnInit {
     this.currentSettings.language = tmpSettings.language;
     this.currentSettings.unitsOfMeasure = tmpSettings.unitsOfMeasure;
     this.currentSettings.flowMeasurement = tmpSettings.flowMeasurement;
-    this.currentSettings.headMeasurement = tmpSettings.headMeasurement;
+    this.currentSettings.distanceMeasurement = tmpSettings.distanceMeasurement;
     this.indexedDbService.putSettings(this.currentSettings).then(
       results => {
         this.indexedDbService.getDirectorySettings(1).then(
