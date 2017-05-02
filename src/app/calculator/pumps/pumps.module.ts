@@ -32,6 +32,7 @@ import { MotorPerformanceFormComponent } from './motor-performance/motor-perform
 import { SpecificSpeedGraphComponent } from './specific-speed/specific-speed-graph/specific-speed-graph.component';
 import { SpecificSpeedFormComponent } from './specific-speed/specific-speed-form/specific-speed-form.component';
 import { NemaEnergyEfficiencyGraphComponent } from './nema-energy-efficiency/nema-energy-efficiency-graph/nema-energy-efficiency-graph.component';
+import { SettingsModule } from '../../settings/settings.module';
 
 @NgModule({
     declarations: [
@@ -57,7 +58,7 @@ import { NemaEnergyEfficiencyGraphComponent } from './nema-energy-efficiency/nem
         SpecificSpeedFormComponent,
         NemaEnergyEfficiencyGraphComponent
     ],
-    exports:[
+    exports: [
         SystemCurveComponent,
         NemaEnergyEfficiencyComponent,
         MotorPerformanceComponent,
@@ -72,9 +73,10 @@ import { NemaEnergyEfficiencyGraphComponent } from './nema-energy-efficiency/nem
         ReactiveFormsModule,
         SharedModule,
         ModalModule,
-        ChartsModule
+        ChartsModule,
+        SettingsModule
     ],
     providers: []
 })
 
-export class PumpsModule {}
+export class PumpsModule { }

@@ -4,6 +4,7 @@ import { PsatService } from '../../../psat/psat.service';
 import { PSAT } from '../../../shared/models/psat';
 import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
 import { Settings } from '../../../shared/models/settings';
+import { SettingsService } from '../../../settings/settings.service';
 
 @Component({
   selector: 'app-head-tool',
@@ -26,6 +27,9 @@ export class HeadToolComponent implements OnInit {
     estimatedDischargeFrictionHead: 0.0,
     pumpHead: 0.0
   }
+  @Input()
+  inAssessment: boolean;
+
 
   results: any = {
     differentialElevationHead: 0.0,
@@ -40,8 +44,9 @@ export class HeadToolComponent implements OnInit {
   headToolSuctionForm: any;
   headToolType: string = "Suction tank elevation, gas space pressure, and discharged line pressure";
   tabSelect: string = 'results';
-
-  constructor(private formBuilder: FormBuilder, private psatService: PsatService, private indexedDbService: IndexedDbService) { }
+  showSettings: boolean = false;
+  settingsForm: any;
+  constructor(private formBuilder: FormBuilder, private psatService: PsatService, private indexedDbService: IndexedDbService, private settingsService: SettingsService) { }
 
   ngOnInit() {
     this.headToolForm = this.initHeadToolForm();
@@ -67,6 +72,10 @@ export class HeadToolComponent implements OnInit {
     }
   }
 
+  editSettings() {
+    this.settingsForm = this.settingsService.getFormFromSettings(this.settings);
+    this.showSettings = true;
+  }
 
   setTab(str: string) {
     this.tabSelect = str;
@@ -74,6 +83,14 @@ export class HeadToolComponent implements OnInit {
 
   closeTool() {
     this.close.emit(true);
+  }
+
+  applySettings() {
+    this.settings = this.settingsService.getSettingsFromForm(this.settingsForm)
+    this.showSettings = false;
+  }
+  cancelSettings(){
+    this.showSettings = false;
   }
 
   save() {
