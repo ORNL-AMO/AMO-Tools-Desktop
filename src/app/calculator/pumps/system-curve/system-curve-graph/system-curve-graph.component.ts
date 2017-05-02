@@ -80,7 +80,7 @@ export class SystemCurveGraphComponent implements OnInit {
     this.svg  = d3.select('app-system-curve-graph').append('svg')
       .attr("width", this.width + this.margin.left + this.margin.right)
       .attr("height", this.height + this.margin.top + this.margin.bottom)
-      .style("background-color", "#f5f3e9")
+      .style("background-color", "#fff")
       .append("g")
       .attr("transform", "translate(" + this.margin.left + "," + this.margin.top + ")");
 
