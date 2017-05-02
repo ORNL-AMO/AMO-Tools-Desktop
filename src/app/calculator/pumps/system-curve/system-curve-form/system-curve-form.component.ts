@@ -32,9 +32,11 @@ export class SystemCurveFormComponent implements OnInit {
     this.options = new Array<PSAT>();
     if (this.psat) {
       this.options.push(this.psat);
-      this.psat.modifications.forEach(mod => {
-        this.options.push(mod.psat);
-      })
+      if (this.psat.modifications) {
+        this.psat.modifications.forEach(mod => {
+          this.options.push(mod.psat);
+        })
+      }
     }
   }
 

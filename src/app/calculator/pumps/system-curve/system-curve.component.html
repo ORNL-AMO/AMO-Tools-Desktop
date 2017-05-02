@@ -1,12 +1,8 @@
 <div class="row calc-container">
-  <div class="col-3">
+  <div class="col-3 calc-form">
     <app-system-curve-form [psat]="psat" [(pointOne)]="pointOne" [(pointTwo)]="pointTwo" [(curveConstants)]="curveConstants" (calculate)="calculateValues()" (calculateP1)="calculateP1Flow()" (calculateP2)="calculateP2Flow()"></app-system-curve-form>
   </div>
   <div class="col-9 calc-graph">
-    <div class="row">
-      <div class="col-9">
-        <app-system-curve-graph [lossCoefficient]="lossCoefficient" [staticHead]="staticHead" [pointOne]="pointOne" [pointTwo]="pointTwo" [curveConstants]="curveConstants"></app-system-curve-graph>
-      </div>
-    </div>
+    <app-system-curve-graph [lossCoefficient]="lossCoefficient" [staticHead]="staticHead" [pointOne]="pointOne" [pointTwo]="pointTwo" [curveConstants]="curveConstants"></app-system-curve-graph>
   </div>
 </div>
