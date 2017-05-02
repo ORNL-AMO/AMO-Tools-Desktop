@@ -144,6 +144,10 @@ select.form-control:not([size]):not([multiple]) {
   margin-right: 8px;
 }
 
+.input-group {
+  width: inherit;
+}
+
 .incrementor {
   border:  #9c9c9c solid 1px; 
   padding: 0;

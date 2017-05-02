@@ -26,7 +26,6 @@ export class AchievableEfficiencyComponent implements OnInit {
 
   calculate() {
     this.toggleCalculate = !this.toggleCalculate;
-    console.log('change');
   }
 
 }
