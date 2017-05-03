@@ -40,6 +40,7 @@ export class MotorPerformanceFormComponent implements OnInit {
   ngOnInit() {
     if (this.performanceForm) {
       this.tmpFrequency = this.performanceForm.value.frequency;
+      debugger
       this.tmpHorsePower = this.performanceForm.value.horsePower;
       this.tmpEfficiencyClass = this.performanceForm.value.efficiencyClass;
       this.tmpEfficiencyClassSpecified = this.performanceForm.value.efficiencyClassSpecified;
