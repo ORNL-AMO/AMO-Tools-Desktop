@@ -13,7 +13,7 @@ export class AssessmentListItemComponent implements OnInit {
   assessment: Assessment;
   @Input()
   isChecked: any;
-  
+
   isSetup: boolean;
   isFirstChange: boolean = true;
   constructor(private assessmentService: AssessmentService, private router: Router) { }
@@ -24,22 +24,23 @@ export class AssessmentListItemComponent implements OnInit {
     } else if (this.assessment.psat) {
       this.isSetup = this.assessment.psat.setupDone;
     }
-    if(this.isChecked){
+    if (this.isChecked) {
       this.assessment.delete = this.isChecked;
     }
   }
 
-  ngOnChanges(changes: SimpleChanges){
-    if(changes.isChecked && !this.isFirstChange){
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.isChecked && !this.isFirstChange) {
       this.assessment.delete = this.isChecked;
     }
-    else{
+    else {
       this.isFirstChange = false;
     }
   }
 
-  goToAssessment(assessment: Assessment, str?: string) {
+  goToAssessment(assessment: Assessment, str?: string, str2?: string) {
     this.assessmentService.tab = str;
+    this.assessmentService.subTab = str2;
     if (assessment.type == 'PSAT') {
       this.router.navigateByUrl('/psat/' + this.assessment.id);
     } else if (assessment.type == 'PHAST') {
@@ -47,7 +48,7 @@ export class AssessmentListItemComponent implements OnInit {
     }
   }
 
-  setDelete(){
+  setDelete() {
     this.assessment.delete = this.isChecked;
   }
 

@@ -119,7 +119,12 @@ export class DashboardComponent implements OnInit {
       unitsOfMeasure: 'Imperial',
       directoryId: 1,
       createdDate: new Date(),
-      modifiedDate: new Date()
+      modifiedDate: new Date(),
+      distanceMeasurement: 'ft',
+      flowMeasurement: 'gpm',
+      powerMeasurement: 'hp',
+      pressureMeasurement: 'psi'
+
     }
     this.indexedDbService.addSettings(tmpSettings).then(
       results => {

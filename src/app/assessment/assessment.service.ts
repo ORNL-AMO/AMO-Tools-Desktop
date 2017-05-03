@@ -8,6 +8,7 @@ export class AssessmentService {
 
   workingAssessment: Assessment;
   tab: string;
+  subTab: string;
   constructor() { }
 
   getNewAssessment(assessmentType: string): Assessment {
@@ -65,6 +66,10 @@ export class AssessmentService {
 
   getTab() {
     return this.tab;
+  }
+
+  getSubTab() {
+    return this.subTab;
   }
 
   setWorkingAssessment(assessment: Assessment, str?: string) {

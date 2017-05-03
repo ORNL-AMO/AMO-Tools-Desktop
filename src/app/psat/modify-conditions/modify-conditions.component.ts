@@ -3,7 +3,7 @@ import { PSAT, PsatInputs, Modification, PsatOutputs } from '../../shared/models
 import * as _ from 'lodash';
 import { PsatService } from '../psat.service';
 import { Settings } from '../../shared/models/settings';
-
+import { AssessmentService } from '../../assessment/assessment.service';
 @Component({
   selector: 'app-modify-conditions',
   templateUrl: './modify-conditions.component.html',
@@ -28,12 +28,16 @@ export class ModifyConditionsComponent implements OnInit {
   currentField: string = 'default';
   isDropdownOpen: boolean = false;
   modificationIndex: number = 0;
-  constructor(private psatService: PsatService) { }
+  constructor(private psatService: PsatService, private assessmentService: AssessmentService) { }
 
   ngOnInit() {
     this._modifications = new Array<Modification>();
     if (this.psat.modifications) {
       this._modifications = (JSON.parse(JSON.stringify(this.psat.modifications)));
+    }
+    let tmpTab = this.assessmentService.getSubTab();
+    if(tmpTab){
+      this.modifyTab = tmpTab;
     }
     // let results: PsatOutputs = this.psatService.results(this.psat.inputs);
     // console.log(results)

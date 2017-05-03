@@ -27,7 +27,7 @@ export class AssessmentDashboardComponent implements OnInit {
 
   ngOnInit() {
     if (!this.view) {
-      this.view = 'grid';
+      this.view = 'list';
     }
   }
 

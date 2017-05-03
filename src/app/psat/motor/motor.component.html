@@ -58,7 +58,7 @@
   <div class="form-group">
     <label for="fullLoadAmps" aria-describedby="flaHelp">
       Full-Load Amps
-      <small id="flaHelp" class="form-text text-muted text-help" (click)="getFullLoadAmps()"><a>Estimate Full-Load Amps</a></small>
+      <small *ngIf="!disableFLA()" id="flaHelp" class="form-text text-muted text-help" (click)="getFullLoadAmps()"><a>Estimate Full-Load Amps</a></small>
     </label>
     <input type="number" class="form-control number-input-field" id="fullLoadAmps" formControlName="fullLoadAmps" (input)="checkForm(psatForm)"
         (focus)="focusField('fullLoadAmps')">

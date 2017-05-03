@@ -12,6 +12,7 @@ export class PsatService {
   constructor(private formBuilder: FormBuilder, private convertUnitsService: ConvertUnitsService) { }
   //CALCULATORS
   results(psatInputs: PsatInputs, settings: Settings): PsatOutputs {
+    debugger
     if (settings.distanceMeasurement != 'ft') {
       psatInputs.head = this.convertUnitsService.value(psatInputs.head).from(settings.distanceMeasurement).to('ft');
     }
@@ -592,8 +593,15 @@ export class PsatService {
       form.controls.fullLoadAmps.status == 'VALID' &&
       form.controls.sizeMargin.status == 'VALID'
     ) {
-      //TODO: logic for specified
-      return true;
+      if (form.value.efficiencyClass != 'Specified') {
+        return true;
+      } else {
+        if (form.value.efficiency) {
+          return true;
+        } else {
+          return false;
+        }
+      }
     }
     else {
       return false;

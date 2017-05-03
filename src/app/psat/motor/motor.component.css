@@ -1,0 +1,4 @@
+.disabled{
+    color: red;
+    cursor: not-allowed;
+}
