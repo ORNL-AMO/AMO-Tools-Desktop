@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
 import { Assessment } from '../../../shared/models/assessment';
 import { Router } from '@angular/router';
 import { AssessmentService } from '../../assessment.service';
@@ -10,10 +10,26 @@ import { AssessmentService } from '../../assessment.service';
 export class AssessmentCardComponent implements OnInit {
   @Input()
   assessment: Assessment;
+  @Input()
+  isChecked: boolean;
+
+  isFirstChange: boolean = true;
   constructor(private assessmentService: AssessmentService, private router: Router) { }
 
 
   ngOnInit() {
+     if(this.isChecked){
+      this.assessment.delete = this.isChecked;
+    }
+  }
+
+  ngOnChanges(changes: SimpleChanges){
+    if(changes.isChecked && !this.isFirstChange){
+      this.assessment.delete = this.isChecked;
+    }
+    else{
+      this.isFirstChange = false;
+    }
   }
 
   goToAssessment(assessment: Assessment) {
@@ -25,4 +41,7 @@ export class AssessmentCardComponent implements OnInit {
     }
   }
 
+  setDelete() {
+    this.assessment.delete = this.isChecked;
+  }
 }

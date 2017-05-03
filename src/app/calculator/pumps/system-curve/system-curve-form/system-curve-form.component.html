@@ -1,63 +1,70 @@
-
-<form [formGroup]="curveConstants.form">
-  <div class="form-group">
-    <label for="specificGravity">Fluid Specific Gravity</label>
-    <input type="number" class="form-control" formControlName="specificGravity" id="specificGravity" (input)="checkInputs()">
-  </div>
-  <div class="form-group">
-    <label for="systemLossExponent">System Loss Exponent, C</label>
-    <input type="number" class="form-control" formControlName="systemLossExponent" id="systemLossExponent" (input)="checkInputs()">
-  </div>
-</form>
-
-
-<form [formGroup]="pointOne.form">
-  <div class="form-group">
-    <label for="pointAdjustment">Point 1</label>
-    <select class="form-control" (change)="setFormValues(pointOne)" formControlName="pointAdjustment" id="pointAdjustment" ngModel="{{pointOne.form.value.pointAdjustment}}">
+<div class="tab-content">
+  <div class="wrapper">
+    <div class="row">
+      <div class="col-12">
+        <div class="form-section">
+          <div class="form-group">
+            <label class="small" for="specificGravity">Fluid Specific Gravity</label>
+            <input type="number" class="form-control" [(ngModel)]="tmpSpecificGravity" id="specificGravity" (input)="checkInputs()">
+          </div>
+          <div class="form-group">
+            <label class="small" for="systemLossExponent">System Loss Exponent, C</label>
+            <input type="number" class="form-control" [(ngModel)]="tmpSystemLossExponent" id="systemLossExponent" (input)="checkInputs()">
+          </div>
+        </div>
+        <div class="form-section">
+          <div class="form-group">
+            <label class="small" for="pointAdjustment">Point 1</label>
+            <select class="form-control" *ngIf="options.length != 0 " (change)="setFormValues(pointOne)" [(ngModel)]="p1Option" id="pointAdjustment">
       <option *ngFor="let option of options" [ngValue]="option.name">{{option.name}}</option>
     </select>
-  </div>
-  <div class="form-group">
-    <label for="flowRate">Flow Rate (gpm)</label>
-    <input type="number" class="form-control" formControlName="flowRate" id="flowRate" (input)="checkInputs()">
-  </div>
-  <div class="form-group">
-    <label for="head">Head</label>
-    <input type="number" class="form-control" formControlName="head" id="head" (input)="checkInputs()">
-  </div>
-  <div class="row">
-    <div class="col-8">
-      <small>Fluid Power, hp</small>
-    </div>
-    <div class="col-4 text-center">
-      <small>{{pointOne.fluidPower| number:'2.2-2'}}</small>
-    </div>
-  </div>
-</form>
-
-<form [formGroup]="pointTwo.form">
-  <div class="form-group">
-    <label for="pointAdjustment">Point 2</label>
-    <select class="form-control" (change)="setFormValues(pointTwo)" formControlName="pointAdjustment" id="pointAdjustment" ngModel="{{pointTwo.form.value.pointAdjustment}}">
+          </div>
+          <div class="form-group">
+            <label class="small" for="flowRate">Flow Rate</label>
+            <input type="number" class="form-control" id="flowRate" [(ngModel)]="p1FlowRate" (input)="checkInputs()">
+            <span class="units">{{settings.flowMeasurement}}</span>
+          </div>
+          <div class="form-group">
+            <label class="small" for="head">Head</label>
+            <input type="number" class="form-control" id="head" [(ngModel)]="p1Head" (input)="checkInputs()">
+            <span class="units">{{settings.distanceMeasurement}}</span>
+          </div>
+          <div class="row">
+            <div class="col-6">
+              <small>Fluid Power, hp</small>
+            </div>
+            <div class="col-6 text-center">
+              <small>{{pointOne.fluidPower| number:'2.2-2'}}</small>
+            </div>
+          </div>
+        </div>
+        <div class="form-section">
+          <div class="form-group">
+            <label class="small" for="pointAdjustment">Point 2</label>
+            <select class="form-control" *ngIf="options.length != 0 " (change)="setFormValues(pointTwo)" id="pointAdjustment" [(ngModel)]="p2Option">
       <option *ngFor="let option of options" [ngValue]="option.name">{{option.name}}</option>
     </select>
-  </div>
-  <div class="form-group">
-    <label for="flowRate">Flow Rate (gpm)</label>
-    <input type="number" class="form-control" formControlName="flowRate" id="flowRate" (input)="checkInputs()">
-  </div>
-  <div class="form-group">
-    <label for="head">Head</label>
-    <input type="number" class="form-control" formControlName="head" id="head" (input)="checkInputs()">
-  </div>
-  <div class="row">
-    <div class="col-8">
-      <small>Fluid Power, hp</small>
+          </div>
+          <div class="form-group">
+            <label class="small" for="flowRate">Flow Rate</label>
+            <input type="number" class="form-control" id="flowRate" [(ngModel)]="p2FlowRate" (input)="checkInputs()">
+            <span class="units">{{settings.flowMeasurement}}</span>
+          </div>
+          <div class="form-group">
+            <label class="small" for="head">Head</label>
+            <input type="number" class="form-control" id="head" [(ngModel)]="p2Head" (input)="checkInputs()">
+            <span class="units">{{settings.distanceMeasurement}}</span>
+          </div>
+          <div class="row">
+            <div class="col-6">
+              <small>Fluid Power, hp</small>
+            </div>
+            <div class="col-6 text-center">
+              <small>{{pointTwo.fluidPower | number:'2.2-2'}}</small>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-    <div class="col-4 text-center">
-      <small>{{pointTwo.fluidPower | number:'2.2-2'}}</small>
-    </div>
   </div>
-</form>
-    
+</div>

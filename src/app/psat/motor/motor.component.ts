@@ -54,7 +54,7 @@ export class MotorComponent implements OnInit {
     this.checkForm(this.psatForm);
   }
 
-    ngAfterViewInit() {
+  ngAfterViewInit() {
     if (!this.selected) {
       this.disableForm();
     }
@@ -77,18 +77,43 @@ export class MotorComponent implements OnInit {
   }
 
   getFullLoadAmps() {
-    let tmpEfficiency = this.psatService.getEfficiencyFromForm(this.psatForm);
-    let estEfficiency = this.psatService.estFLA(
-      this.psatForm.value.horsePower,
-      this.psatForm.value.motorRPM,
-      this.psatForm.value.frequency,
-      this.psatForm.value.efficiencyClass,
-      tmpEfficiency,
-      this.psatForm.value.motorVoltage
-    );
-    this.psatForm.patchValue({
-      fullLoadAmps: estEfficiency
-    });
+    if (!this.disableFLA()) {
+      let tmpEfficiency = this.psatService.getEfficiencyFromForm(this.psatForm);
+      let estEfficiency = this.psatService.estFLA(
+        this.psatForm.value.horsePower,
+        this.psatForm.value.motorRPM,
+        this.psatForm.value.frequency,
+        this.psatForm.value.efficiencyClass,
+        tmpEfficiency,
+        this.psatForm.value.motorVoltage
+      );
+      this.psatForm.patchValue({
+        fullLoadAmps: estEfficiency
+      });
+    }
+  }
+
+  disableFLA() {
+    if (
+      this.psatForm.controls.frequency.status == 'VALID' &&
+      this.psatForm.controls.horsePower.status == 'VALID' &&
+      this.psatForm.controls.motorRPM.status == 'VALID' &&
+      this.psatForm.controls.efficiencyClass.status == 'VALID' &&
+      this.psatForm.controls.motorVoltage.status == 'VALID'
+    ) {
+      if (this.psatForm.value.efficiencyClass != 'Specified') {
+        return false;
+      } else {
+        if (this.psatForm.value.efficiency) {
+          return false;
+        } else {
+          return true;
+        }
+      }
+    }
+    else {
+      return true;
+    }
   }
 
   disableForm() {

@@ -8,7 +8,7 @@ export class AssessmentService {
 
   workingAssessment: Assessment;
   tab: string;
-  showLandingScreen: boolean = true;
+  subTab: string;
   constructor() { }
 
   getNewAssessment(assessmentType: string): Assessment {
@@ -19,14 +19,6 @@ export class AssessmentService {
       type: assessmentType
     }
     return newAssessment;
-  }
-
-  setLandingScreen(bool: boolean){
-    this.showLandingScreen = bool;
-  }
-
-  getLandingScreen(){
-    return this.showLandingScreen;
   }
 
   getNewPsat(): PSAT {
@@ -74,6 +66,10 @@ export class AssessmentService {
 
   getTab() {
     return this.tab;
+  }
+
+  getSubTab() {
+    return this.subTab;
   }
 
   setWorkingAssessment(assessment: Assessment, str?: string) {

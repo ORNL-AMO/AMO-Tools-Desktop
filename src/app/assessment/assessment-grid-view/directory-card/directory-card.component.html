@@ -1,6 +1,6 @@
 <div class="list-card" *ngIf="directory">
 
-  <input type="checkbox" />
+  <input type="checkbox" [(ngModel)]="isChecked" (change)="setDelete()" />
   <div class="assessment-name">
     <a (click)="goToDirectory(directory)">{{directory.name}}</a>
     <span>Folder / Plant</span>

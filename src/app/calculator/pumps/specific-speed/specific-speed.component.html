@@ -1,6 +1,6 @@
 <div class="row calc-container">
   <div class="col-3 calc-form">
-    <app-specific-speed-form [(speedForm)]="speedForm" (calculate)="calculate()"></app-specific-speed-form>
+    <app-specific-speed-form [(speedForm)]="speedForm" [settings]="settings" (calculate)="calculate()"></app-specific-speed-form>
   </div>
   <div class="col-9 calc-graph">
     <app-specific-speed-graph [speedForm]="speedForm" [toggleCalculate]="toggleCalculate"></app-specific-speed-graph>
