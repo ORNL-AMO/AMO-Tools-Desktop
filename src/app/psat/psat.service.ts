@@ -11,7 +11,13 @@ export class PsatService {
 
   constructor(private formBuilder: FormBuilder, private convertUnitsService: ConvertUnitsService) { }
   //CALCULATORS
-  results(psatInputs: PsatInputs): PsatOutputs {
+  results(psatInputs: PsatInputs, settings: Settings): PsatOutputs {
+    if (settings.distanceMeasurement != 'ft') {
+      psatInputs.head = this.convertUnitsService.value(psatInputs.head).from(settings.distanceMeasurement).to('ft');
+    }
+    if (settings.flowMeasurement != 'gpm') {
+      psatInputs.flow_rate = this.convertUnitsService.value(psatInputs.flow_rate).from(settings.flowMeasurement).to('gpm');
+    }
     let tmpResults = psatAddon.results(psatInputs);
     let tmpOutputs: PsatOutputs = this.parseResults(tmpResults);
     return tmpOutputs;
@@ -178,7 +184,7 @@ export class PsatService {
     settings: Settings
   ) {
     //flow rate = 'gpm'
-    if(settings.flowMeasurement != 'gpm'){
+    if (settings.flowMeasurement != 'gpm') {
       flowRate = this.convertUnitsService.value(flowRate).from(settings.flowMeasurement).to('gpm');
     }
     let inputs: any;

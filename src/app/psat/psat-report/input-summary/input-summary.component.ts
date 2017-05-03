@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { PSAT } from '../../../shared/models/psat';
 import { PsatService } from '../../psat.service';
+import { Settings } from '../../../shared/models/settings';
 
 @Component({
   selector: 'app-input-summary',
@@ -10,6 +11,9 @@ import { PsatService } from '../../psat.service';
 export class InputSummaryComponent implements OnInit {
   @Input()
   psat: PSAT;
+  @Input()
+  settings: Settings;
+  
   constructor(private psatService: PsatService) { }
 
   ngOnInit() {

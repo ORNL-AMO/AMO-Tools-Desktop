@@ -110,19 +110,19 @@
       <td *ngFor="let modification of psat.modifications">{{modification.psat.inputs.operating_fraction | number:'2.2-2'}}</td>
     </tr>
     <tr>
-      <td>Cost (kw/hr)</td>
+      <td>Cost (kW/hr)</td>
       <td>{{psat.inputs.cost_kw_hour | number:'2.2-2'}}</td>
       <td *ngFor="let modification of psat.modifications">{{modification.psat.inputs.cost_kw_hour | number:'2.2-2'}}</td>
     </tr>
 
     <tr>
-      <td>Flow Rate (gpm)</td>
+      <td>Flow Rate ({{settings.flowMeasurement}})</td>
       <td>{{psat.inputs.flow_rate | number:'2.2-2'}}</td>
       <td *ngFor="let modification of psat.modifications">{{modification.psat.inputs.flow_rate | number:'2.2-2'}}</td>
     </tr>
 
     <tr>
-      <td>Head</td>
+      <td>Head ({{settings.distanceMeasurement}})</td>
       <td>{{psat.inputs.head | number:'2.2-2'}}</td>
       <td *ngFor="let modification of psat.modifications">{{modification.psat.inputs.head | number:'2.2-2'}}</td>
     </tr>
