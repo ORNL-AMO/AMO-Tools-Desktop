@@ -13,6 +13,6 @@
     <a (click)="goToAssessment(assessment, 'system-setup')">System Setup</a>
     <div class="text-muted" *ngIf="!isSetup">&mdash; System Setup Not Complete</div>
     <a (click)="goToAssessment(assessment, 'modify-conditions')" *ngIf="isSetup">Modify Conditions</a>
-    <a (click)="goToAssessment(assessment, 'results')" *ngIf="isSetup">Report</a>
+    <a (click)="goToAssessment(assessment, 'modify-conditions', 'report')" *ngIf="isSetup">Report</a>
   </div>
 </div>

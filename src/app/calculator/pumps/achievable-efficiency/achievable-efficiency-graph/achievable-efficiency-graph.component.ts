@@ -85,12 +85,6 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
     } else { return 0 }
   }
 
-  drawGraph() {
-    if (this.checkForm()) {
-      this.results.max = this.calculateYmax(this.efficiencyForm.value.flowRate);
-      this.results.average = this.calculateYaverage(this.efficiencyForm.value.flowRate);
-    }
-  }
 
   checkForm() {
     if (

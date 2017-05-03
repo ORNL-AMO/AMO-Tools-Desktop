@@ -115,11 +115,16 @@ export class DashboardComponent implements OnInit {
   createDirectorySettings() {
     let tmpSettings: Settings = {
       language: 'English',
-      currency: 'US Dollar',
+      currency: '$ - US Dollar',
       unitsOfMeasure: 'Imperial',
       directoryId: 1,
       createdDate: new Date(),
-      modifiedDate: new Date()
+      modifiedDate: new Date(),
+      distanceMeasurement: 'ft',
+      flowMeasurement: 'gpm',
+      powerMeasurement: 'hp',
+      pressureMeasurement: 'psi'
+
     }
     this.indexedDbService.addSettings(tmpSettings).then(
       results => {
@@ -177,10 +182,8 @@ export class DashboardComponent implements OnInit {
   }
 
   deleteSelected(dir: Directory) {
-    console.log('delete dir ' + dir.id);
     this.hideDeleteItemsModal();
     if (dir.subDirectory) {
-      console.log('if subDir ' + dir.id);
       dir.subDirectory.forEach(subDir => {
         if (subDir.delete || subDir.parentDirectoryId != 1) {
           this.indexedDbService.getChildrenDirectories(subDir.id).then(results => {
@@ -193,26 +196,25 @@ export class DashboardComponent implements OnInit {
       });
     }
     if (dir != this.workingDirectory) {
-      console.log('if != working ' + dir.id);
-      this.indexedDbService.getDirectoryAssessments(dir.id).then(results => {
-        let childDirAssessments = results;
-        childDirAssessments.forEach(assessment => {
-          this.indexedDbService.deleteAssessment(assessment.id).then(results => {
-            this.allDirectories = this.populateDirectories(this.rootDirectoryRef);
-            this.workingDirectory = this.populateDirectories(this.workingDirectory);
-          });
-          this.indexedDbService.getAssessmentSettings(assessment.id).then(
-            results => {
-              if (results.length != 0) {
-                this.indexedDbService.deleteSettings(results[0].id).then(
-                  results => { console.log('assessment setting deleter'); }
-                )
+      if (dir.parentDirectoryId != this.workingDirectory.id || dir.delete) {
+        this.indexedDbService.getDirectoryAssessments(dir.id).then(results => {
+          let childDirAssessments = results;
+          childDirAssessments.forEach(assessment => {
+            this.indexedDbService.deleteAssessment(assessment.id).then(results => {
+              this.allDirectories = this.populateDirectories(this.rootDirectoryRef);
+              this.workingDirectory = this.populateDirectories(this.workingDirectory);
+            });
+            this.indexedDbService.getAssessmentSettings(assessment.id).then(
+              results => {
+                if (results.length != 0) {
+                  this.indexedDbService.deleteSettings(results[0].id).then(
+                    results => { console.log('assessment setting deleter'); }
+                  )
+                }
               }
-            }
-          )
+            )
+          })
         })
-      })
-      if (dir.delete) {
         this.indexedDbService.deleteDirectory(dir.id).then(results => {
           this.allDirectories = this.populateDirectories(this.rootDirectoryRef);
           this.workingDirectory = this.populateDirectories(this.workingDirectory);

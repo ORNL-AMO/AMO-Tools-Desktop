@@ -20,10 +20,15 @@ export class AssessmentMenuComponent implements OnInit {
   directoryChange = new EventEmitter();
   @Output('deleteItems')
   deleteItems = new EventEmitter<boolean>();
+  @Output('selectAll')
+  selectAll = new EventEmitter<boolean>();
 
   breadCrumbs: Array<Directory>;
 
   firstChange: boolean = true;
+
+  isAllSelected: boolean;
+
   constructor(private indexedDbService: IndexedDbService) { }
 
   ngOnInit() {
@@ -61,13 +66,11 @@ export class AssessmentMenuComponent implements OnInit {
     )
   }
 
-  deletedb() {
-    this.indexedDbService.deleteDb().then((result) => {
-      console.log(result);
-    });
-  }
-
   signalDeleteItems() {
     this.deleteItems.emit(true);
+  }
+
+  signalSelectAll() {
+    this.selectAll.emit(this.isAllSelected);
   }
 }

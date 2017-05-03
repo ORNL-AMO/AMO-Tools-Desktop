@@ -30,9 +30,9 @@ export class ApplicationSettingsComponent implements OnInit {
         flowMeasurement: 'gpm',
         distanceMeasurement: 'ft',
         pressureMeasurement: 'psi',
-        currentMeasurement: 'A',
-        viscosityMeasurement: 'cST',
-        voltageMeasurement: 'V'
+        // currentMeasurement: 'A',
+        // viscosityMeasurement: 'cST',
+        // voltageMeasurement: 'V'
       })
 
     } else if (this.settingsForm.value.unitsOfMeasure == 'Metric') {
@@ -41,9 +41,9 @@ export class ApplicationSettingsComponent implements OnInit {
         flowMeasurement: 'm3/h',
         distanceMeasurement: 'm',
         pressureMeasurement: 'kPa',
-        currentMeasurement: 'A',
-        viscosityMeasurement: 'cST',
-        voltageMeasurement: 'V'
+        // currentMeasurement: 'A',
+        // viscosityMeasurement: 'cST',
+        // voltageMeasurement: 'V'
       })
     }
   }

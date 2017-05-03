@@ -20,6 +20,7 @@ export class AssessmentDashboardComponent implements OnInit {
   @Output('resetDataEmit')
   resetDataEmit = new EventEmitter<boolean>();
 
+  isChecked: boolean = false;
   view: string;
   isFirstChange: boolean = true;
   constructor() { }
@@ -59,11 +60,17 @@ export class AssessmentDashboardComponent implements OnInit {
   }
 
   signalDeleteItems() {
+    this.directory;
+    debugger;
     this.deleteCheckedItems.emit(true);
   }
 
-  resetData(){
+  resetData() {
     this.resetDataEmit.emit(true);
+  }
+
+  selectAllItems(bool: boolean) {
+    this.isChecked = bool;
   }
 
 }

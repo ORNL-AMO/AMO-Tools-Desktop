@@ -11,7 +11,14 @@ export class PsatService {
 
   constructor(private formBuilder: FormBuilder, private convertUnitsService: ConvertUnitsService) { }
   //CALCULATORS
-  results(psatInputs: PsatInputs): PsatOutputs {
+  results(psatInputs: PsatInputs, settings: Settings): PsatOutputs {
+    debugger
+    if (settings.distanceMeasurement != 'ft') {
+      psatInputs.head = this.convertUnitsService.value(psatInputs.head).from(settings.distanceMeasurement).to('ft');
+    }
+    if (settings.flowMeasurement != 'gpm') {
+      psatInputs.flow_rate = this.convertUnitsService.value(psatInputs.flow_rate).from(settings.flowMeasurement).to('gpm');
+    }
     let tmpResults = psatAddon.results(psatInputs);
     let tmpOutputs: PsatOutputs = this.parseResults(tmpResults);
     return tmpOutputs;
@@ -178,7 +185,7 @@ export class PsatService {
     settings: Settings
   ) {
     //flow rate = 'gpm'
-    if(settings.flowMeasurement != 'gpm'){
+    if (settings.flowMeasurement != 'gpm') {
       flowRate = this.convertUnitsService.value(flowRate).from(settings.flowMeasurement).to('gpm');
     }
     let inputs: any;
@@ -586,8 +593,15 @@ export class PsatService {
       form.controls.fullLoadAmps.status == 'VALID' &&
       form.controls.sizeMargin.status == 'VALID'
     ) {
-      //TODO: logic for specified
-      return true;
+      if (form.value.efficiencyClass != 'Specified') {
+        return true;
+      } else {
+        if (form.value.efficiency) {
+          return true;
+        } else {
+          return false;
+        }
+      }
     }
     else {
       return false;

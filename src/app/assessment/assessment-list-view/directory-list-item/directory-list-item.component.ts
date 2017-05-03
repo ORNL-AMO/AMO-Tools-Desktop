@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
 import { Directory } from '../../../shared/models/directory';
 
 @Component({
@@ -11,10 +11,25 @@ export class DirectoryListItemComponent implements OnInit {
   directory: Directory;
   @Output('directoryChange')
   directoryChange = new EventEmitter();
+  @Input()
   isChecked: boolean;
+
+  isFirstChange: boolean = true;
   constructor() { }
 
   ngOnInit() {
+    if (this.isChecked) {
+      this.directory.delete = this.isChecked;
+    }
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.isChecked && !this.isFirstChange) {
+      this.directory.delete = this.isChecked;
+    }
+    else {
+      this.isFirstChange = false;
+    }
   }
 
   goToDirectory(dir) {
