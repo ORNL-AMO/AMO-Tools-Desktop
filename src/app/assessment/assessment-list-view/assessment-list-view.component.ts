@@ -11,6 +11,8 @@ export class AssessmentListViewComponent implements OnInit {
   directory: Directory;
   @Output('directoryChange')
   directoryChange = new EventEmitter();
+  @Input()
+  isChecked: boolean;
   constructor() { }
 
   ngOnInit() {

@@ -34,7 +34,7 @@
 <div class="table-header" *ngIf="view != 'settings'">
   <div class="row">
     <div class="col-12">
-      <label><input type="checkbox" /> Select all</label>
+      <label><input type="checkbox" [(ngModel)]="isAllSelected" (change)="signalSelectAll()"/> Select all</label>
     </div>
   </div>
 </div>

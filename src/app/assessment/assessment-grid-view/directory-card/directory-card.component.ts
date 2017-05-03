@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
 import { Directory, DirectoryDbRef } from '../../../shared/models/directory';
 import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
 
@@ -12,11 +12,30 @@ export class DirectoryCardComponent implements OnInit {
   directory: Directory;
   @Output('directoryChange')
   directoryChange = new EventEmitter();
+  @Input()
+  isChecked: boolean;
 
+  isFirstChange: boolean = true;
   constructor(private indexedDbService: IndexedDbService) { }
 
   ngOnInit() {
-    this.directory = this.populateDirectories(this.directory);
+    let tmpDirectory = this.populateDirectories(this.directory);
+    this.directory.assessments = tmpDirectory.assessments;
+    this.directory.subDirectory = tmpDirectory.subDirectory;
+    this.directory.collapsed = tmpDirectory.collapsed;
+    if (this.isChecked) {
+      this.directory.delete = this.isChecked;
+    }
+  }
+
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.isChecked && !this.isFirstChange) {
+      this.directory.delete = this.isChecked;
+    }
+    else {
+      this.isFirstChange = false;
+    }
   }
 
   goToDirectory(dir) {
@@ -44,6 +63,10 @@ export class DirectoryCardComponent implements OnInit {
       }
     )
     return tmpDirectory;
+  }
+
+  setDelete() {
+    this.directory.delete = this.isChecked;
   }
 
 }

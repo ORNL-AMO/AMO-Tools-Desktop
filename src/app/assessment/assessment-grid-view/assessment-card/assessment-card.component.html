@@ -1,6 +1,6 @@
 <div class="list-card">
 
-  <input type="checkbox" />
+  <input type="checkbox" [(ngModel)]="isChecked" (change)="setDelete()"/>
   <div class="assessment-name">
     <a (click)="goToAssessment(assessment)">{{assessment.name}}</a>
     <span>Box Type Annealing Furnace</span>

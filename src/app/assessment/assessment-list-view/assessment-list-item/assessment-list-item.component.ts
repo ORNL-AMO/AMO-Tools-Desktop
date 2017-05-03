@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
 import { Assessment } from '../../../shared/models/assessment';
 import { Router } from '@angular/router';
 import { AssessmentService } from '../../assessment.service';
@@ -11,9 +11,11 @@ import { PsatService } from '../../../psat/psat.service';
 export class AssessmentListItemComponent implements OnInit {
   @Input()
   assessment: Assessment;
-  isSetup: boolean;
-
+  @Input()
   isChecked: any;
+  
+  isSetup: boolean;
+  isFirstChange: boolean = true;
   constructor(private assessmentService: AssessmentService, private router: Router) { }
 
   ngOnInit() {
@@ -21,6 +23,18 @@ export class AssessmentListItemComponent implements OnInit {
       this.isSetup = this.assessment.phast.setupDone;
     } else if (this.assessment.psat) {
       this.isSetup = this.assessment.psat.setupDone;
+    }
+    if(this.isChecked){
+      this.assessment.delete = this.isChecked;
+    }
+  }
+
+  ngOnChanges(changes: SimpleChanges){
+    if(changes.isChecked && !this.isFirstChange){
+      this.assessment.delete = this.isChecked;
+    }
+    else{
+      this.isFirstChange = false;
     }
   }
 
