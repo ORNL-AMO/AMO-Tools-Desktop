@@ -72,7 +72,6 @@ export class SystemBasicsComponent implements OnInit {
       results => {
         if (results.length != 0) {
           this.settings = results[0];
-          console.log(this.settings);
           this.settingsForm = this.settingsService.getFormFromSettings(this.settings);
         }
       }

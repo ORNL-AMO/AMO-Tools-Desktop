@@ -43,8 +43,6 @@ export class PsatComponent implements OnInit {
 
   subTabIndex: number = 0;
 
-  showDetailedReport: boolean = false;
-
   saveClicked: boolean = false;
   adjustment: PSAT;
   currentField: string = 'default';
@@ -206,14 +204,6 @@ export class PsatComponent implements OnInit {
 
   goBack() {
     this.currentTab = 'system-setup';
-  }
-
-  showReport() {
-    this.showDetailedReport = true;
-  }
-
-  closeReport() {
-    this.showDetailedReport = false;
   }
 
   toggleSave() {
