@@ -8,13 +8,19 @@ import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 export class LandingScreenComponent implements OnInit {
   @Output('hideLandingScreen')
   hideLandingScreen = new EventEmitter<boolean>();
+
+  displayVideo: boolean = false;
+
   constructor() { }
 
   ngOnInit() {
   }
 
+  showVideo() {
+    this.displayVideo = true;
+  }
 
-  hideScreen(){
+  hideScreen() {
     this.hideLandingScreen.emit(true);
   }
 }
