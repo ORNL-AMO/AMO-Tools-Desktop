@@ -6,10 +6,12 @@
 </div>
 
 <div class="row justify-content-center align-items-center" style="height: 600px;">
-<div class="col-6">
+    <div class="col-6">
     <a (click)="showVideo()" *ngIf="!displayVideo">Show Video</a>
+    
     <video controls autoplay *ngIf="displayVideo" style="max-width:100%;">
-<source src="assets/videos/recording.mp4" type="video/mp4"> Your browser does not support mp4 videos
-</video>
-</div>
+        <source src="assets/videos/recording.mp4" type="video/mp4"> Your browser does not support mp4 videos
+    </video>
+
+    </div>
 </div>
