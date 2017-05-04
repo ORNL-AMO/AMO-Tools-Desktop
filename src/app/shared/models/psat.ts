@@ -22,7 +22,6 @@ export interface PsatInputs {
   motor_rated_power?: number,
   motor_rated_speed?: number,
   efficiency_class?: number,
-  efficiency_class_specified?: string,
   efficiency?: number,
   motor_rated_voltage?: number,
   load_estimation_method?: number,

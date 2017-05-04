@@ -88,11 +88,11 @@
   </div>
 
   <div class="tab-content" *ngIf="currentTab == 'motor-performance'">
-    <app-motor-performance [psat]="_psat"></app-motor-performance>
+    <app-motor-performance [psat]="_psat" [settings]="settings"></app-motor-performance>
   </div>
 
   <div class="tab-content" style="max-height: 75vh;" *ngIf="currentTab == 'nema-energy-efficiency'">
-    <app-nema-energy-efficiency [psat]="_psat"></app-nema-energy-efficiency>
+    <app-nema-energy-efficiency [psat]="_psat" [settings]="settings"></app-nema-energy-efficiency>
   </div>
 
   <div class="tab-content" *ngIf="currentTab == 'specific-speed'">
@@ -105,8 +105,8 @@
       <button class="btn btn-secondary" *ngIf="currentTab != 'system-setup'" (click)="goBack()">Back</button>
     </div>
     <div class="pull-right">
-      <button class="btn btn-primary" [disabled]="!isValid" (click)="toggleSave()">Save</button>
-      <button class="btn btn-primary" *ngIf="currentTab != 'modify-conditions'" [disabled]="!getCanContinue()" (click)="continue()">Continue</button>
+      <button class="btn btn-primary" *ngIf="currentTab == 'system-setup' || currentTab == 'modify-conditions'" [disabled]="!isValid" (click)="toggleSave()">Save</button>
+      <button class="btn btn-primary" *ngIf="currentTab == 'system-setup'" [disabled]="!getCanContinue()" (click)="continue()">Continue</button>
       <button class="btn btn-primary" *ngIf="currentTab == 'modify-conditions'" (click)="exportData()">Export</button>
     </div>
   </div>

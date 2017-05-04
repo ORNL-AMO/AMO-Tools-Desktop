@@ -1,5 +1,7 @@
 import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
 import { PsatService } from '../../../../psat/psat.service';
+import { Settings } from '../../../../shared/models/settings';
+
 @Component({
   selector: 'app-nema-energy-efficiency-graph',
   templateUrl: './nema-energy-efficiency-graph.component.html',
@@ -8,6 +10,8 @@ import { PsatService } from '../../../../psat/psat.service';
 export class NemaEnergyEfficiencyGraphComponent implements OnInit {
   @Input()
   nemaForm: any;
+  @Input()
+  settings:Settings;
 
   constructor(private psatService: PsatService) { }
 
@@ -22,7 +26,8 @@ export class NemaEnergyEfficiencyGraphComponent implements OnInit {
         this.nemaForm.value.motorRPM,
         this.nemaForm.value.efficiencyClass,
         efficiency,
-        this.nemaForm.value.horsePower
+        this.nemaForm.value.horsePower,
+        this.settings
       );
     }else{
       return 0;
@@ -40,8 +45,7 @@ export class NemaEnergyEfficiencyGraphComponent implements OnInit {
       ) {
         if (this.nemaForm.value.efficiencyClass == 'Specified') {
           if (
-            this.nemaForm.controls.efficiencyClassSpecified.status == 'VALID' &&
-            this.nemaForm.controls.efficiencyClass.status == 'VALID'
+            this.nemaForm.controls.efficiency.status == 'VALID'
           ) {
             return true;
           } else {
