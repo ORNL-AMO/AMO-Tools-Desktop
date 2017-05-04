@@ -1,17 +1,69 @@
-<div class="row justify-content-center align-items-center" style="height: 100px;">
-<div class="col-6">
-    <a (click)="hideScreen()">Go To Assessment Dashboard
-        </a>
-</div>
-</div>
+<div class="landing">
 
-<div class="row justify-content-center align-items-center" style="height: 600px;">
-    <div class="col-6">
-    <a (click)="showVideo()" *ngIf="!displayVideo">Show Video</a>
-    
-    <video controls autoplay *ngIf="displayVideo" style="max-width:100%;">
-        <source src="assets/videos/recording.mp4" type="video/mp4"> Your browser does not support mp4 videos
-    </video>
+	<h1>Welcome to the most efficient way to manage and optimize your plant's systems and equipment.</h1>
+	<h2>Start with one of the following options to get started.</h2>
 
-    </div>
+	<ul>
+		<li>
+			<h3>Properties &amp; Equipment Calculators</h3>
+			<p>Generate detailed properties and test a variety of adjustments.</p>
+			<div>
+			<span class="nav-item" [ngClass]="{'selected': selectedCalculator == 'pumps'}" (click)="chooseCalculator('pumps')">
+			   <span class="icon">
+			 <i class="fa fa-calculator"></i>
+			   </span>Pumps
+			</span>
+			</div>
+			<div>
+			<span class="nav-item" [ngClass]="{'selected': selectedCalculator == 'fans'}" (click)="chooseCalculator('fans')">
+			   <span class="icon">
+			 <i class="fa fa-calculator"></i>
+			   </span>Fans
+			</span>
+			</div>
+			<div>
+			<span class="nav-item" [ngClass]="{'selected': selectedCalculator == 'furnaces'}" (click)="chooseCalculator('furnaces')">
+			   <span class="icon">
+			 <i class="fa fa-calculator"></i>
+			   </span>Furnaces
+			</span>
+			</div>
+			<div>
+			<span class="nav-item" [ngClass]="{'selected': selectedCalculator == 'steam'}" (click)="chooseCalculator('steam')">
+			   <span class="icon">
+			 <i class="fa fa-calculator"></i>
+			   </span>Steam
+			</span>
+			</div>
+			<div>
+			<span class="nav-item" [ngClass]="{'selected': selectedCalculator == 'motors'}" (click)="chooseCalculator('motors')">
+			   <span class="icon">
+			 <i class="fa fa-calculator"></i>
+			   </span>Motors
+			</span>
+			</div>
+			<div>
+			<span class="nav-item" [ngClass]="{'selected': selectedCalculator == 'utilities'}" (click)="chooseCalculator('utilities')">
+			   <span class="icon">
+			 <i class="fa fa-calculator"></i>
+			   </span>Utilities
+			</span>
+			</div>
+		</li>
+		<li>
+			<h3>Create Assessment</h3>
+			<p>Model a system and explore endless optimization scenarios.</p>
+			<button type="button" class="btn btn-secondary">Create Assessment</button>
+			<a (click)="hideScreen()">Go To Assessments Dashboard</a>
+		</li>
+	</ul>
+
+	<div class="help">
+		<h3>Need help getting started?</h3>
+		<p>Watch the following tutorial to see how to get started using the tool.</p>
+		<video controls style="max-width:100%;">
+	        <source src="assets/videos/recording.mp4" type="video/mp4"> Your browser does not support mp4 videos
+	    </video>
+	</div>
+
 </div>
