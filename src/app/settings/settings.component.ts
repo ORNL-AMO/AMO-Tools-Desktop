@@ -27,12 +27,6 @@ export class SettingsComponent implements OnInit {
     )
   }
 
-  setUnits(){
-    console.log('settings comp')
-    console.log(this.settingsForm.value.unitsOfMeasure)
-  }
-
-
   saveSettings() {
     let tmpSettings = this.settingsService.getSettingsFromForm(this.settingsForm);
     this.currentSettings.currency = tmpSettings.currency;
@@ -44,7 +38,6 @@ export class SettingsComponent implements OnInit {
       results => {
         this.indexedDbService.getDirectorySettings(1).then(
           results => {
-            console.log(results);
             this.settingsForm = this.settingsService.getFormFromSettings(results[0]);
           }
         )

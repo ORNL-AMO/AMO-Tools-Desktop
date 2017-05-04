@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, SimpleChange, ViewContainerRef } from '@angular/core';
+import { Component, OnInit, Input, SimpleChange } from '@angular/core';
 import { WindowRefService } from '../../indexedDb/window-ref.service';
 @Component({
   selector: 'app-percent-graph',
@@ -33,7 +33,7 @@ export class PercentGraphComponent implements OnInit {
   doc: any;
   window: any;
 
-  constructor(private windowRefService: WindowRefService, private viewContainerRef: ViewContainerRef) { }
+  constructor(private windowRefService: WindowRefService) { }
 
   ngOnInit() {
     this.initChart();

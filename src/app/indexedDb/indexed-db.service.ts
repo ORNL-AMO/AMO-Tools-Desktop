@@ -92,11 +92,9 @@ export class IndexedDbService {
       myDb.instance.close();
       let deleteRequest = this._window.indexedDB.deleteDatabase(myDb.name);
       deleteRequest.onsuccess = (e) => {
-        console.log('deleted');
         resolve(e);
       }
       deleteRequest.onerror = (e) => {
-        console.log('error')
         reject(e);
       }
     })
@@ -211,7 +209,6 @@ export class IndexedDbService {
       let addRequest = store.add(directoryRef);
       myDb.setDefaultErrorHandler(addRequest, myDb);
       addRequest.onsuccess = function (e) {
-        console.log('added directory ' + e.target.result);
         resolve(e.target.result);
       }
       addRequest.onerror = (error) => {
@@ -277,7 +274,6 @@ export class IndexedDbService {
         tmpDirectory.modifiedDate = new Date();
         let updateRequest = store.put(tmpDirectory);
         updateRequest.onsuccess = (event) => {
-          console.log('update directory success');
           resolve(event);
         }
         updateRequest.onerror = (event) => {
@@ -379,7 +375,6 @@ export class IndexedDbService {
         tmpSettings.modifiedDate = new Date();
         let updateRequest = store.put(tmpSettings);
         updateRequest.onsuccess = (event) => {
-          console.log('update settings success');
           resolve(event);
         }
         updateRequest.onerror = (event) => {
