@@ -1,8 +1,8 @@
-<div class="row calc-container">
+<div class="row calc-container" *ngIf="settings">
   <div class="col-3 calc-form">
     <app-nema-energy-efficiency-form [(nemaForm)]="nemaForm"></app-nema-energy-efficiency-form>
   </div>
   <div class="col-9 calc-graph">
-    <app-nema-energy-efficiency-graph [(nemaForm)]="nemaForm"></app-nema-energy-efficiency-graph>
+    <app-nema-energy-efficiency-graph [settings]="settings" [(nemaForm)]="nemaForm"></app-nema-energy-efficiency-graph>
   </div>
 </div>

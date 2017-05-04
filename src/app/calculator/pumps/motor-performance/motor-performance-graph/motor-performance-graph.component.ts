@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
 import { PsatService } from '../../../../psat/psat.service';
-
+import { Settings } from '../../../../shared/models/settings';
 declare const d3: any;
 
 @Component({
@@ -13,6 +13,8 @@ export class MotorPerformanceGraphComponent implements OnInit {
   performanceForm: any;
   @Input()
   toggleCalculate: boolean;
+  @Input()
+  settings:Settings;
 
   svg: any;
   xAxis: any;
@@ -70,7 +72,8 @@ export class MotorPerformanceGraphComponent implements OnInit {
         efficiency,
         this.performanceForm.value.motorVoltage,
         this.performanceForm.value.fullLoadAmps,
-        loadFactor
+        loadFactor,
+        this.settings
       );
       return results.efficiency;
     }
@@ -87,7 +90,8 @@ export class MotorPerformanceGraphComponent implements OnInit {
         efficiency,
         this.performanceForm.value.motorVoltage,
         this.performanceForm.value.fullLoadAmps,
-        loadFactor
+        loadFactor,
+        this.settings
       );
       return results.motor_current;
     } else {
@@ -106,7 +110,8 @@ export class MotorPerformanceGraphComponent implements OnInit {
         efficiency,
         this.performanceForm.value.motorVoltage,
         this.performanceForm.value.fullLoadAmps,
-        loadFactor
+        loadFactor,
+        this.settings
       );
       return results.motor_power_factor;
     } else {

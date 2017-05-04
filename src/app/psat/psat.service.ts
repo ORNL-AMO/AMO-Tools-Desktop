@@ -147,8 +147,12 @@ export class PsatService {
     frequency,
     efficiencyClass,
     efficiency,
-    motorVoltage
+    motorVoltage,
+    settings: Settings
   ) {
+    if(settings.powerMeasurement != 'hp'){
+      horsePower = this.convertUnitsService.value(horsePower).from(settings.powerMeasurement).to('hp');
+    }
     let lineFreqEnum = this.getLineFreqEnum(frequency);
     let effClassEnum = this.getEfficienyClassEnum(efficiencyClass);
     let inputs: any = {
@@ -204,8 +208,13 @@ export class PsatService {
     efficiency,
     motorVoltage,
     fullLoadAmps,
-    loadFactor
+    loadFactor,
+    settings
   ) {
+
+    if(settings.powerMeasurement != 'hp'){
+      horsePower = this.convertUnitsService.value(horsePower).from(settings.powerMeasurement).to('hp');
+    }
     let tmpInputs: any;
     let lineFreqEnum = this.getLineFreqEnum(lineFreq);
     let effClassEnum = this.getEfficienyClassEnum(efficiencyClass);
@@ -222,19 +231,18 @@ export class PsatService {
     return psatAddon.motorPerformance(tmpInputs);
   }
 
-  motorPerformancePsat(psatInputs: PsatInputs) {
-    psatInputs.load_factor = 1;
-    return psatAddon.motorPerformance(psatInputs);
-  }
-
   //loadFactor hard coded to 1
   nema(
     lineFreq,
     motorRPM,
     efficiencyClass,
     efficiency,
-    horsePower
+    horsePower,
+    settings: Settings
   ) {
+    if(settings.powerMeasurement != 'hp'){
+      horsePower = this.convertUnitsService.value(horsePower).from(settings.powerMeasurement).to('hp');
+    }
     let tmpInputs: any;
     let lineFreqEnum = this.getLineFreqEnum(lineFreq);
     let effClassEnum = this.getEfficienyClassEnum(efficiencyClass);
@@ -244,18 +252,6 @@ export class PsatService {
       efficiency_class: effClassEnum,
       efficiency: efficiency,
       motor_rated_power: horsePower,
-      load_factor: 1
-    };
-    return psatAddon.nema(tmpInputs);
-  }
-
-  nemaPsat(psatInputs: PsatInputs) {
-    let tmpInputs: any = {
-      line_frequency: psatInputs.line_frequency,
-      motor_rated_speed: psatInputs.motor_rated_speed,
-      efficiency_class: psatInputs.efficiency_class,
-      efficiency: psatInputs.efficiency,
-      motor_rated_power: psatInputs.motor_rated_power,
       load_factor: 1
     };
     return psatAddon.nema(tmpInputs);
@@ -352,9 +348,9 @@ export class PsatService {
   }
   getLineFreqEnum(lineFreq: string): number {
     let lineFreqEnum: number;
-    if (lineFreq == '60 Hz') {
+    if (lineFreq == '60') {
       lineFreqEnum = 0;
-    } else if (lineFreq == '50 Hz') {
+    } else if (lineFreq == '50') {
       lineFreqEnum = 1;
     }
     return lineFreqEnum;
@@ -362,9 +358,9 @@ export class PsatService {
   getLineFreqFromEnum(num: number): string {
     let lineFreq;
     if (num == 0) {
-      lineFreq = '60 Hz';
+      lineFreq = '60';
     } else if (num == 1) {
-      lineFreq = '50 Hz';
+      lineFreq = '50';
     }
     return lineFreq;
   }

@@ -1,6 +1,8 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { PSAT } from '../../../shared/models/psat';
 import { PsatService } from '../../../psat/psat.service';
+import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
+import { Settings } from '../../../shared/models/settings';
 
 @Component({
   selector: 'app-motor-performance',
@@ -10,12 +12,14 @@ import { PsatService } from '../../../psat/psat.service';
 export class MotorPerformanceComponent implements OnInit {
   @Input()
   psat: PSAT;
+  @Input()
+  settings: Settings;
 
   performanceForm: any;
 
   toggleCalculate: boolean = false;
 
-  constructor(private psatService: PsatService) { }
+  constructor(private psatService: PsatService, private indexedDbService: IndexedDbService) { }
 
   ngOnInit() {
     if (!this.psat) {
@@ -23,10 +27,20 @@ export class MotorPerformanceComponent implements OnInit {
     } else {
       this.performanceForm = this.psatService.getFormFromPsat(this.psat.inputs);
     }
+
+    if (!this.settings) {
+      this.indexedDbService.getDirectorySettings(1).then(
+        results => {
+          if (results.length != 0) {
+            this.settings = results[0];
+          }
+        }
+      )
+    }
   }
 
-  calculate(){
+  calculate() {
     this.toggleCalculate = !this.toggleCalculate;
   }
-  
+
 }
