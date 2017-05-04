@@ -5,10 +5,7 @@
     <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
     <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
   </div>
-  <div class="assessment-name">
-    <i class="fa fa-pie-chart" aria-hidden="true"></i> {{assessment.name}}
-    <span>Pump Assessment</span>
-  </div>
+  <div class="assessment-name">{{assessment.name}}</div>
   <div class="actions">
     <a (click)="goToAssessment(assessment, 'system-setup')">System Setup</a>
     <div class="text-muted" *ngIf="!isSetup">&mdash; System Setup Not Complete</div>

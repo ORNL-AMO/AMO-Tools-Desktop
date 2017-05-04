@@ -1,6 +1,6 @@
 <li>
-  <span class="nav-item pointer-item" (click)="goToAssessment(assessment)">
-          <i class="fa fa-pie-chart" [ngClass]="{ 'phast' : assessment.type == 'PHAST', 'psat': assessment.type == 'PSAT' }" aria-hidden="true"></i>
+  <span class="nav-item pointer-item" [ngClass]="{ 'phast' : assessment.type == 'PHAST', 'psat': assessment.type == 'PSAT' }" (click)="goToAssessment(assessment)">
+          <span class="assessment-name"></span>
           {{assessment.name}}
         </span>
 </li>
