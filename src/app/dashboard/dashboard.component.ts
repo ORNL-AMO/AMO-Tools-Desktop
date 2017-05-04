@@ -6,7 +6,7 @@ import { IndexedDbService } from '../indexedDb/indexed-db.service';
 import { ModalDirective } from 'ng2-bootstrap';
 import * as _ from 'lodash';
 import { Settings } from '../shared/models/settings';
-
+import { AssessmentService } from '../assessment/assessment.service';
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
@@ -22,11 +22,14 @@ export class DashboardComponent implements OnInit {
   rootDirectoryRef: DirectoryDbRef;
   view: string;
 
+  showLandingScreen: boolean;
+
   @ViewChild('deleteModal') public deleteModal: ModalDirective;
   @ViewChild('deleteItemsModal') public deleteItemsModal: ModalDirective;
-  constructor(private indexedDbService: IndexedDbService, private formBuilder: FormBuilder) { }
+  constructor(private indexedDbService: IndexedDbService, private formBuilder: FormBuilder, private assessmentService: AssessmentService) { }
 
   ngOnInit() {
+    this.showLandingScreen = this.assessmentService.getLandingScreen();
     //open DB and get directories
     this.indexedDbService.initDb().then(
       results => {
@@ -50,6 +53,11 @@ export class DashboardComponent implements OnInit {
         );
       }
     )
+  }
+
+  hideScreen(){
+    this.assessmentService.setLandingScreen(false);
+    this.showLandingScreen = false;
   }
 
   populateDirectories(directoryRef: DirectoryDbRef): Directory {
@@ -77,6 +85,7 @@ export class DashboardComponent implements OnInit {
 
   changeWorkingDirectory(directory: Directory) {
     this.showCalculators = false;
+    this.hideScreen();
     this.indexedDbService.getDirectory(directory.id).then(
       results => {
         if (results) {
@@ -87,6 +96,7 @@ export class DashboardComponent implements OnInit {
 
   viewCalculator(str: string) {
     //this.showSettings = false;
+    this.hideScreen();
     this.showCalculators = true;
     this.selectedCalculator = str;
   }

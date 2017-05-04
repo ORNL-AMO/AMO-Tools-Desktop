@@ -1,0 +1,61 @@
+.landing * {
+	box-sizing: border-box;
+}
+.landing {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-direction: column;
+}
+	.landing h1, .landing h2, .landing ul {
+		width: 960px;
+	}
+	.landing h1 {
+		text-align: center;
+		color: #333;
+		font-size: 32px;
+    	margin-top: 7%;
+	}
+	.landing h2 {
+		margin: 0;
+		font-size: 24px;
+		font-weight: normal;
+		text-align: center;
+		color: #717171;
+	}
+	.landing h3 {
+		color: #333;
+		font-size: 18px;
+		font-weight: bold;
+	}
+	.landing p {
+		font-size: 16px;
+	}
+	.landing a {
+		display: block;
+		margin-top: 14px;
+	}
+
+.landing ul {
+	margin: 40px 0 20px;
+    padding: 50px 0;
+	border-color: #ddd;
+	border-style: solid;
+	border-width: 1px 0;
+	display: flex;
+}
+.landing li {
+	list-style: none;
+	padding: 0;
+}
+	.landing li:first-of-type {
+		padding-right: 20px;
+	}
+
+.landing .help {
+	text-align: center;
+	margin-bottom: 80px;
+}
+.landing .nav-item span:hover {
+	cursor: pointer;
+}

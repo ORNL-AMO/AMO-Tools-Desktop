@@ -9,6 +9,7 @@ export class AssessmentService {
   workingAssessment: Assessment;
   tab: string;
   subTab: string;
+  showLandingScreen: boolean = true;
   constructor() { }
 
   getNewAssessment(assessmentType: string): Assessment {
@@ -70,6 +71,14 @@ export class AssessmentService {
 
   getSubTab() {
     return this.subTab;
+  }
+
+  getLandingScreen(){
+    return this.showLandingScreen;
+  }
+
+  setLandingScreen(bool: boolean){
+    this.showLandingScreen = bool;
   }
 
   setWorkingAssessment(assessment: Assessment, str?: string) {

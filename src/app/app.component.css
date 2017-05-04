@@ -397,11 +397,15 @@ Assessments: List View
   .folder .assessment-name .fa {
     color: #434343;
   }
-  .psat .assessment-name .fa {
-    color: #2980b9;
+  .psat .assessment-name {
+    background: url('../assets/images/assessment-icon-psat.png') no-repeat left;
+    padding-left: 24px;
+    background-size: 20px;
   }
-  .phast .assessment-name .fa {
-    color: #d35400;
+  .phast .assessment-name {
+    background: url('../assets/images/assessment-icon-phast.png') no-repeat left;
+    padding-left: 24px;
+    background-size: 20px;
   }
 
 
