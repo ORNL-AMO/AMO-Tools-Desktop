@@ -31,7 +31,7 @@ export class MotorPerformanceFormComponent implements OnInit {
   tmpHorsePower: string;
   tmpMotorRpm: number;
   tmpEfficiencyClass: string;
-  tmpEfficiencyClassSpecified: string;
+
   tmpEfficiency: number;
   tmpMotorVoltage: number;
   tmpFullLoadAmps: number;
@@ -43,7 +43,6 @@ export class MotorPerformanceFormComponent implements OnInit {
       debugger
       this.tmpHorsePower = this.performanceForm.value.horsePower;
       this.tmpEfficiencyClass = this.performanceForm.value.efficiencyClass;
-      this.tmpEfficiencyClassSpecified = this.performanceForm.value.efficiencyClassSpecified;
       this.tmpEfficiency = this.performanceForm.value.efficiency;
       this.tmpMotorVoltage = this.performanceForm.value.motorVoltage;
       this.tmpFullLoadAmps = this.performanceForm.value.fullLoadAmps;
@@ -56,7 +55,6 @@ export class MotorPerformanceFormComponent implements OnInit {
       frequency: this.tmpFrequency,
       horsePower: this.tmpHorsePower,
       efficiencyClass: this.tmpEfficiencyClass,
-      efficiecyClassSpecified: this.tmpEfficiencyClassSpecified,
       efficiency: this.tmpEfficiency,
       motorVoltage: this.tmpMotorVoltage,
       fullLoadAmps: this.tmpFullLoadAmps,

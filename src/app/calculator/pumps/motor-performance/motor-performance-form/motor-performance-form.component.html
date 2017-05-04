@@ -39,11 +39,6 @@
         </div>
 
         <div class="form-group" *ngIf="tmpEfficiencyClass == 'Specified'">
-          <label for="efficiencyClass">Specify Efficiency Class</label>
-          <input type="text" class="form-control" id="efficiencyClassSpecified" [(ngModel)]="tmpEfficiencyClassSpecified" (input)="emitChange()">
-        </div>
-
-        <div class="form-group" *ngIf="tmpEfficiencyClass == 'Specified'">
           <label for="efficiency">Efficiency</label>
           <input type="number" class="form-control" id="efficiency" [(ngModel)]="tmpEfficiency" (input)="emitChange()">
         </div>

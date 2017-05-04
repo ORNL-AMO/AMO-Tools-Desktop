@@ -40,8 +40,7 @@ export class NemaEnergyEfficiencyGraphComponent implements OnInit {
       ) {
         if (this.nemaForm.value.efficiencyClass == 'Specified') {
           if (
-            this.nemaForm.controls.efficiencyClassSpecified.status == 'VALID' &&
-            this.nemaForm.controls.efficiencyClass.status == 'VALID'
+            this.nemaForm.controls.efficiency.status == 'VALID'
           ) {
             return true;
           } else {

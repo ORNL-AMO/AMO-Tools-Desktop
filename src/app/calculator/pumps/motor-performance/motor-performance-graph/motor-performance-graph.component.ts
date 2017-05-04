@@ -124,8 +124,7 @@ export class MotorPerformanceGraphComponent implements OnInit {
     ) {
       if (this.performanceForm.value.efficiencyClass == 'Specified') {
         if (
-          this.performanceForm.controls.efficiencyClassSpecified.status == 'VALID' &&
-          this.performanceForm.controls.efficiencyClass.status == 'VALID'
+          this.performanceForm.controls.efficiency.status == 'VALID'
         ) {
           return true;
         }

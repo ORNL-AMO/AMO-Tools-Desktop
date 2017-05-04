@@ -26,7 +26,6 @@ export const MockDirectory: Directory = {
           motor_rated_power: 200,
           motor_rated_speed: 1780,
           efficiency_class: 2,
-          efficiency_class_specified: 'Some Class',
           efficiency: 95,
           motor_rated_voltage: 460,
           load_estimation_method: 0,

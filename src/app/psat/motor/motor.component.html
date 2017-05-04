@@ -36,12 +36,6 @@
   </div>
 
   <div class="form-group" *ngIf="psatForm.value.efficiencyClass == 'Specified'">
-    <label for="efficiencyClass">Specify Efficiency Class</label>
-    <input type="text" class="form-control" id="efficiencyClassSpecified" formControlName="efficiencyClassSpecified"
-        (input)="checkForm(psatForm)" (focus)="focusField('efficiencyClass')">
-  </div>
-
-  <div class="form-group" *ngIf="psatForm.value.efficiencyClass == 'Specified'">
     <label for="efficiency">Efficiency</label>
     <input type="number" class="form-control" id="efficiency" formControlName="efficiency" (input)="checkForm(psatForm)"
         (focus)="focusField('efficiency')">
