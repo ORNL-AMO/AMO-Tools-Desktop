@@ -2,13 +2,13 @@ import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { Location } from '@angular/common';
 import { Assessment } from '../shared/models/assessment';
 import { AssessmentService } from '../assessment/assessment.service';
-import { FormBuilder } from '@angular/forms';
 import { PSAT, PsatInputs } from '../shared/models/psat';
 import { PsatService } from './psat.service';
 import * as _ from 'lodash';
 import { IndexedDbService } from '../indexedDb/indexed-db.service';
 import { ActivatedRoute } from '@angular/router';
 import { Settings } from '../shared/models/settings';
+import { WindowRefService } from '../indexedDb/window-ref.service';
 
 @Component({
   selector: 'app-psat',
@@ -43,8 +43,6 @@ export class PsatComponent implements OnInit {
 
   subTabIndex: number = 0;
 
-  showDetailedReport: boolean = false;
-
   saveClicked: boolean = false;
   adjustment: PSAT;
   currentField: string = 'default';
@@ -58,10 +56,12 @@ export class PsatComponent implements OnInit {
   settings: Settings;
   isAssessmentSettings: boolean = false;
 
+  doc: any;
+  window: any;
+
   constructor(
     private location: Location,
     private assessmentService: AssessmentService,
-    private formBuilder: FormBuilder,
     private psatService: PsatService,
     private indexedDbService: IndexedDbService,
     private activatedRoute: ActivatedRoute
@@ -84,6 +84,7 @@ export class PsatComponent implements OnInit {
       }
     })
   }
+
 
   getSettings() {
     //get assessment settings
@@ -206,14 +207,6 @@ export class PsatComponent implements OnInit {
 
   goBack() {
     this.currentTab = 'system-setup';
-  }
-
-  showReport() {
-    this.showDetailedReport = true;
-  }
-
-  closeReport() {
-    this.showDetailedReport = false;
   }
 
   toggleSave() {

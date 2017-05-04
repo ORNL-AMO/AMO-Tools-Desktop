@@ -12,7 +12,6 @@ export class PsatService {
   constructor(private formBuilder: FormBuilder, private convertUnitsService: ConvertUnitsService) { }
   //CALCULATORS
   results(psatInputs: PsatInputs, settings: Settings): PsatOutputs {
-    debugger
     if (settings.distanceMeasurement != 'ft') {
       psatInputs.head = this.convertUnitsService.value(psatInputs.head).from(settings.distanceMeasurement).to('ft');
     }

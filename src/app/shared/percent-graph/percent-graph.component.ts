@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, SimpleChange } from '@angular/core';
-
+import { WindowRefService } from '../../indexedDb/window-ref.service';
 @Component({
   selector: 'app-percent-graph',
   templateUrl: './percent-graph.component.html',
@@ -20,7 +20,7 @@ export class PercentGraphComponent implements OnInit {
   fontSize: number;
   @Input()
   unit: string;
-  
+
   doughnutChartLabels: string[];
   doughnutChartData: number[];
   doughnutChartType: string = 'doughnut';
@@ -30,15 +30,36 @@ export class PercentGraphComponent implements OnInit {
 
   potential: number = 0;
 
+  doc: any;
+  window: any;
 
-
-  constructor() { }
+  constructor(private windowRefService: WindowRefService) { }
 
   ngOnInit() {
     this.initChart();
   }
 
-  ngOnChanges(){
+  ngAfterViewInit() {
+    this.doc = this.windowRefService.getDoc();
+    this.window = this.windowRefService.nativeWindow;
+    this.window.onresize = () => { this.setValueMargin() };
+    this.setValueMargin();
+  }
+
+  setValueMargin() {
+    let div = this.doc.getElementsByClassName('chart-container')
+    let percentValue = this.doc.getElementById('percent');
+    let valueClass = this.doc.getElementsByClassName('value');
+    if (div[0].clientHeight < 350) {
+      valueClass[0].style.fontSize = '24px'
+    }
+    let marginTop = (div[0].clientHeight / 2) - (percentValue.clientHeight / 2);
+    let marginLeft = (div[0].clientWidth / 2) - (percentValue.clientWidth / 2);
+    valueClass[0].style.marginTop = marginTop + 'px';
+    valueClass[0].style.marginLeft = marginLeft + 'px';
+  }
+
+  ngOnChanges() {
     this.initChart();
   }
 

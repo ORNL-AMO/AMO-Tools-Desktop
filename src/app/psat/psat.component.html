@@ -1,7 +1,10 @@
 <div *ngIf="assessment">
-  <app-psat-banner (togglePanel)="toggleOpenPanel($event)" [assessment]="assessment"></app-psat-banner>
-  <app-psat-tabs [currentTab]="currentTab" (tabChange)="changeTab($event)"></app-psat-tabs>
-
+  <div id="psatBanner">
+    <app-psat-banner (togglePanel)="toggleOpenPanel($event)" [assessment]="assessment"></app-psat-banner>
+  </div>
+  <div id="psatTabs">
+    <app-psat-tabs [currentTab]="currentTab" (tabChange)="changeTab($event)"></app-psat-tabs>
+  </div>
   <div *ngIf="currentTab == 'system-setup'">
 
 
@@ -26,7 +29,7 @@
     <div class="tab-content" *ngIf="subTab == 'system-basics'">
       <div class="wrapper" *ngIf="settings">
         <div class="form">
-          <app-system-basics [settings]="settings" [saveClicked]="saveClicked" [assessment]="assessment" [isAssessmentSettings]="isAssessmentSettings"
+          <app-system-basics [settings]="settings" [saveClicked]="saveClicked" [assessment]="assessment" [(psat)]="_psat" [isAssessmentSettings]="isAssessmentSettings"
             (updateSettings)="getSettings()"></app-system-basics>
         </div>
         <div class="help">
@@ -88,7 +91,7 @@
     <app-motor-performance [psat]="_psat"></app-motor-performance>
   </div>
 
-  <div class="tab-content" *ngIf="currentTab == 'nema-energy-efficiency'">
+  <div class="tab-content" style="max-height: 75vh;" *ngIf="currentTab == 'nema-energy-efficiency'">
     <app-nema-energy-efficiency [psat]="_psat"></app-nema-energy-efficiency>
   </div>
 
@@ -96,7 +99,7 @@
     <app-specific-speed [psat]="_psat"></app-specific-speed>
   </div>
 
-  <div class="footer">
+  <div id="psatFooter" class="footer">
     <div class="pull-left">
       <button class="btn btn-secondary" *ngIf="currentTab == 'system-setup'" (click)="close()">Close</button>
       <button class="btn btn-secondary" *ngIf="currentTab != 'system-setup'" (click)="goBack()">Back</button>
@@ -107,9 +110,4 @@
       <button class="btn btn-primary" *ngIf="currentTab == 'modify-conditions'" (click)="exportData()">Export</button>
     </div>
   </div>
-
-  <!--<div *ngIf="showDetailedReport">
-  <app-psat-report (closeReport)="closeReport()" [assessment]="assessment"></app-psat-report>
-</div>-->
-
 </div>
