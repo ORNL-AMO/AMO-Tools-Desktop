@@ -81,7 +81,7 @@ export class PsatService {
 
     if (settings.distanceMeasurement == 'ft') {
       suctionPipeDiameter = this.convertUnitsService.value(suctionPipeDiameter).from('in').to('ft');
-      dischargePipeDiameter = this.convertUnitsService.val(dischargePipeDiameter).from('in').to('ft');
+      dischargePipeDiameter = this.convertUnitsService.value(dischargePipeDiameter).from('in').to('ft');
     } else {
       suctionPipeDiameter = this.convertUnitsService.value(suctionPipeDiameter).from('mm').to('ft');
       dischargePipeDiameter = this.convertUnitsService.value(dischargePipeDiameter).from('mm').to('ft');
