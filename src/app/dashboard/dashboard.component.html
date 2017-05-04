@@ -9,8 +9,8 @@
                 (deleteDataSignal)="showDeleteModal($event)" (deleteCheckedItems)="showDeleteItemsModal()" (resetDataEmit)="showDeleteModal()"></app-assessment-dashboard>
             <app-calculator *ngIf="showCalculators" [selectedCalculator]="selectedCalculator"></app-calculator>
         </div>
-        <div class="col-10" *ngIf="showLandingScreen">
-            <app-landing-screen (hideLandingScreen)="hideScreen()"></app-landing-screen>
+        <div class="col-10" *ngIf="showLandingScreen && allDirectories">
+            <app-landing-screen (hideLandingScreen)="hideScreen()" (selectCalculator)="viewCalculator($event)" [directory]="allDirectories"></app-landing-screen>
         </div>
     </div>
 </div>

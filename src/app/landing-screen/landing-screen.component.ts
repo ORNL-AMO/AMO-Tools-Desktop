@@ -1,4 +1,5 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
+import { Directory } from '../shared/models/directory';
 
 @Component({
   selector: 'app-landing-screen',
@@ -8,6 +9,10 @@ import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 export class LandingScreenComponent implements OnInit {
   @Output('hideLandingScreen')
   hideLandingScreen = new EventEmitter<boolean>();
+  @Output('selectCalculator')
+  selectCalculator = new EventEmitter<string>();
+  @Input()
+  directory: Directory;
 
   displayVideo: boolean = false;
 
@@ -22,5 +27,9 @@ export class LandingScreenComponent implements OnInit {
 
   hideScreen() {
     this.hideLandingScreen.emit(true);
+  }
+
+  chooseCalculator(str: string) {
+    this.selectCalculator.emit(str);
   }
 }

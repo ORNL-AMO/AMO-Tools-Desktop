@@ -37,7 +37,8 @@ import { SettingsModule } from '../settings/settings.module';
     AssessmentSettingsComponent
   ],
   exports: [
-    AssessmentDashboardComponent
+    AssessmentDashboardComponent,
+    AssessmentCreateComponent
   ],
   imports: [
     CommonModule,
