@@ -1,4 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Settings } from '../../../../shared/models/settings';
 
 @Component({
   selector: 'app-head-tool-form',
@@ -10,10 +11,17 @@ export class HeadToolFormComponent implements OnInit {
   headToolForm: any;
   @Output('calculate')
   calculate = new EventEmitter<boolean>();
-
+  @Input()
+  settings: Settings;
+  smallUnit: string;
   constructor() { }
 
   ngOnInit() {
+    if (this.settings.distanceMeasurement == 'ft') {
+      this.smallUnit = 'in'
+    } else {
+      this.smallUnit = 'mm'
+    }
   }
 
   calc() {
