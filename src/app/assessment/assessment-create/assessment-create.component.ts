@@ -63,7 +63,6 @@ export class AssessmentCreateComponent implements OnInit {
     this.hideCreateModal();
 
     this.createModal.onHidden.subscribe(() => {
-      this.assessmentService.showLandingScreen = false;
       this.assessmentService.tab = 'system-setup';
       if (this.newAssessment.value.assessmentType == 'Pump') {
         let tmpAssessment = this.assessmentService.getNewAssessment('PSAT');

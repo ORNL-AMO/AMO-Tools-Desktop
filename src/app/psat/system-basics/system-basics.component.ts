@@ -86,18 +86,19 @@ export class SystemBasicsComponent implements OnInit {
       }
       if (this.psat.inputs.motor_rated_power) {
         this.psat.inputs.motor_rated_power = this.convertUnitsService.value(this.psat.inputs.motor_rated_power).from(this.settings.powerMeasurement).to(this.newSettings.powerMeasurement);
-        if (this.settings.powerMeasurement == 'hp') {
-          console.log('before')
-          console.log(this.psat.inputs.motor_rated_power);
+        //console.log(this.newSettings.powerMeasurement);
+        if (this.newSettings.powerMeasurement == 'hp') {
+          // console.log('before')
+          // console.log(this.psat.inputs.motor_rated_power);
           this.psat.inputs.motor_rated_power = this.getClosest(this.psat.inputs.motor_rated_power, this.horsePowers);
-          console.log('after')
-          console.log(this.psat.inputs.motor_rated_power);
+          // console.log('after')
+          // console.log(this.psat.inputs.motor_rated_power);
         } else {
-          console.log('before')
-          console.log(this.psat.inputs.motor_rated_power);
+          // console.log('before')
+          // console.log(this.psat.inputs.motor_rated_power);
           this.psat.inputs.motor_rated_power = this.getClosest(this.psat.inputs.motor_rated_power, this.kWatts);
-          console.log('after')
-          console.log(this.psat.inputs.motor_rated_power);
+          // console.log('after')
+          // console.log(this.psat.inputs.motor_rated_power);
         }
       }
     }

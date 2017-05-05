@@ -56,7 +56,6 @@ export class DashboardComponent implements OnInit {
   }
 
   hideScreen(){
-    this.assessmentService.setLandingScreen(false);
     this.showLandingScreen = false;
   }
 
