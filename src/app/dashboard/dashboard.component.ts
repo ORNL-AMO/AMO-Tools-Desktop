@@ -17,12 +17,14 @@ export class DashboardComponent implements OnInit {
   workingDirectory: Directory;
   showCalculators: boolean = false;
   selectedCalculator: string;
-  // showSettings: boolean = false;
   isFirstChange: boolean = true;
   rootDirectoryRef: DirectoryDbRef;
   view: string;
 
   showLandingScreen: boolean;
+
+  newDirEventToggle: boolean = false;
+
 
   @ViewChild('deleteModal') public deleteModal: ModalDirective;
   @ViewChild('deleteItemsModal') public deleteItemsModal: ModalDirective;
@@ -55,11 +57,19 @@ export class DashboardComponent implements OnInit {
     )
   }
 
-  hideScreen(){
+  hideScreen() {
     this.showLandingScreen = false;
   }
 
-  goHome(){
+  getAllDirectories() {
+    return this.allDirectories;
+  }
+
+  getWorkingDirectory() {
+    return this.workingDirectory;
+  }
+
+  goHome() {
     this.selectedCalculator = '';
     this.showLandingScreen = true;
   }
@@ -99,18 +109,10 @@ export class DashboardComponent implements OnInit {
   }
 
   viewCalculator(str: string) {
-    //this.showSettings = false;
     this.hideScreen();
     this.showCalculators = true;
     this.selectedCalculator = str;
   }
-
-  // viewSettings(bool: boolean) {
-  //   this.view = 'settings';
-  //   this.showSettings = true;
-  //   this.showCalculators = false;
-  //   this.selectedCalculator = '';
-  // }
 
   createExampleAssessments() {
     let tmpAssessment = MockDirectory.assessments[0];
@@ -142,16 +144,13 @@ export class DashboardComponent implements OnInit {
     }
     this.indexedDbService.addSettings(tmpSettings).then(
       results => {
-        console.log('root directory settings added');
-        console.log(results);
       }
     )
   }
 
-
   createDirectory() {
     let tmpDirectory: DirectoryDbRef = {
-      name: 'Root',
+      name: 'Assessments',
       createdDate: new Date(),
       modifiedDate: new Date(),
       assessmentIds: null,
@@ -167,7 +166,10 @@ export class DashboardComponent implements OnInit {
         })
       }
     )
+  }
 
+  newDir() {
+    this.newDirEventToggle = !this.newDirEventToggle;
   }
 
   showDeleteModal() {
@@ -222,7 +224,7 @@ export class DashboardComponent implements OnInit {
               results => {
                 if (results.length != 0) {
                   this.indexedDbService.deleteSettings(results[0].id).then(
-                    results => { console.log('assessment setting deleter'); }
+                    results => { console.log('assessment setting deleted'); }
                   )
                 }
               }
@@ -254,7 +256,7 @@ export class DashboardComponent implements OnInit {
           results => {
             if (results.length != 0) {
               this.indexedDbService.deleteSettings(results[0].id).then(
-                results => { console.log('assessment setting deleter'); }
+                results => { console.log('assessment setting deleted'); }
               )
             }
           }

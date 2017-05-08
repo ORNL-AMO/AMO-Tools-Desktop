@@ -4,11 +4,11 @@
    </span>
 </div>
 
-<div style="padding-top:15px;"> ASSESSMENTS
+<div class="root-item" (click)="toggleSelected(directory)" [ngClass]="{'selected':selectedDirectoryId == directory.id}">
+  ASSESSMENTS</div>
 <div *ngIf="directory">
-  <app-directory-item [directory]="directory" [selectedDirectoryId]="selectedDirectoryId" (selectSignal)="toggleSelected($event)"
-    (collapseSignal)="toggleDirectoryCollapse($event)"></app-directory-item>
-</div>
+  <app-directory-item [directory]="getDirectory()" [selectedDirectoryId]="selectedDirectoryId" (selectSignal)="toggleSelected($event)"
+    (collapseSignal)="toggleDirectoryCollapse($event)" [newDirEventToggle]="newDirEventToggle"></app-directory-item>
 </div>
 
 <div class="sidebar-group"> CALCULATORS
