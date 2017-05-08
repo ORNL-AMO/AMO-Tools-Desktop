@@ -18,14 +18,14 @@ export class CoreComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.ElectronService.ipcRenderer.once('available', (event, arg) => {
-      console.log('Update Availble: ' + arg);
-      if (arg == true) {
-        this.showUpdateModal();
-      }
-    })
+    // this.ElectronService.ipcRenderer.once('available', (event, arg) => {
+    //   console.log('Update Availble: ' + arg);
+    //   if (arg == true) {
+    //     this.showUpdateModal();
+    //   }
+    // })
 
-    this.ElectronService.ipcRenderer.send('ready', null);
+    // this.ElectronService.ipcRenderer.send('ready', null);
   }
 
   showUpdateModal() {
