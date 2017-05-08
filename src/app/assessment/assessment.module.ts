@@ -20,6 +20,8 @@ import { AssessmentCreateComponent } from './assessment-create/assessment-create
 import { AssessmentSettingsComponent } from './assessment-settings/assessment-settings.component';
 import { IndexedDbModule } from '../indexedDb/indexedDb.module';
 import { SettingsModule } from '../settings/settings.module';
+import { ToastyModule } from 'ng2-toasty';
+
 @NgModule({
   declarations: [
     AssessmentComponent,
@@ -48,7 +50,8 @@ import { SettingsModule } from '../settings/settings.module';
     ReactiveFormsModule,
     ModalModule,
     IndexedDbModule,
-    SettingsModule
+    SettingsModule,
+    ToastyModule.forRoot()
   ],
   providers: []
 })

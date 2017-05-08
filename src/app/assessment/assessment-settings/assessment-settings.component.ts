@@ -3,6 +3,7 @@ import { Directory } from '../../shared/models/directory';
 import { Settings } from '../../shared/models/settings';
 import { SettingsService } from '../../settings/settings.service';
 import { IndexedDbService } from '../../indexedDb/indexed-db.service';
+import { ToastyService, ToastyConfig, ToastOptions, ToastData } from 'ng2-toasty';
 
 @Component({
   selector: 'app-assessment-settings',
@@ -22,7 +23,9 @@ export class AssessmentSettingsComponent implements OnInit {
 
   //does directory have settings
   isDirectorySettings: boolean = false;
-  constructor(private indexedDbService: IndexedDbService, private settingsService: SettingsService) { }
+  constructor(private indexedDbService: IndexedDbService, private settingsService: SettingsService, private toastyService: ToastyService, private toastyConfig: ToastyConfig) { 
+        this.toastyConfig.theme = 'bootstrap';
+  }
 
   ngOnInit() {
     this.indexedDbService.getDirectorySettings(this.directory.id).then(
@@ -77,6 +80,7 @@ export class AssessmentSettingsComponent implements OnInit {
           this.indexedDbService.getDirectorySettings(this.directory.id).then(
             results => {
               if (results.length != 0) {
+                this.addToast();
                 this.settings = results[0];
                 this.settingsForm = this.settingsService.getFormFromSettings(this.settings);
                 this.isDirectorySettings = true;
@@ -95,6 +99,7 @@ export class AssessmentSettingsComponent implements OnInit {
           this.indexedDbService.getDirectorySettings(this.directory.id).then(
             results => {
               if (results.length != 0) {
+                this.addToast();
                 this.settings = results[0];
                 this.settingsForm = this.settingsService.getFormFromSettings(this.settings);
               }
@@ -103,6 +108,18 @@ export class AssessmentSettingsComponent implements OnInit {
         }
       )
     }
+  }
+
+
+  addToast() {
+    console.log('updated')
+    let toastOptions: ToastOptions = {
+      title: 'Updated Settings',
+      timeout: 5000,
+      showClose: true,
+      theme: 'default'
+    }
+    this.toastyService.success(toastOptions);
   }
 
   resetData(){
