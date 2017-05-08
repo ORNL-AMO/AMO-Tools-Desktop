@@ -558,7 +558,7 @@ Banner
 
 .banner .btn-dashboard, .banner .title, .banner .settings {
   display: inline-block;
-  padding: 14px 29px;
+  padding: 7px 29px;
   color: rgba(255,255,255,0.8);
 }
 .banner .btn-dashboard {
@@ -917,7 +917,7 @@ Modify Conditions
   
   }
   .modification.disabled, .modify-conditions .no-data {
-    border: transparent solid 1px;
+    border: transparent solid 3px;
   }
   .modification.disabled, .modification.disabled button, .modification.disabled textarea {
     background: #efefef;
@@ -928,7 +928,7 @@ Modify Conditions
   }
     .modification.disabled:hover, .modify-conditions .no-data:hover {
       cursor: pointer;
-      border: #4990E2 solid 1px;
+      border: #4990E2 solid 3px;
     }
 
     .modify-conditions .no-data {
