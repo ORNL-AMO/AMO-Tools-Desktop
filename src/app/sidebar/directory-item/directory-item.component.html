@@ -1,5 +1,5 @@
 <ul class="tree" *ngIf="directory">
-  <li>
+  <li *ngIf="directory.id != 1">
     <i class="fa" (click)="toggleDirectoryCollapse(directory)" [ngClass]="{'fa-angle-right': directory.collapsed == true, 'fa-angle-down': directory.collapsed == false}"
       aria-hidden="true"></i>
     <span class="pointer-item" (click)="toggleSelected(directory)" (dblclick)="toggleDirectoryCollapse(directory)" [ngClass]="{'selected':selectedDirectoryId == directory.id}">
