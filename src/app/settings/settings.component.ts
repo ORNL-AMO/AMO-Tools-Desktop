@@ -12,7 +12,9 @@ export class SettingsComponent implements OnInit {
 
   settingsForm: any;
   currentSettings: Settings;
-  constructor(private settingsService: SettingsService, private indexedDbService: IndexedDbService) { }
+  constructor(private settingsService: SettingsService, private indexedDbService: IndexedDbService) {
+
+  }
 
   ngOnInit() {
     this.indexedDbService.getDirectorySettings(1).then(
@@ -44,4 +46,5 @@ export class SettingsComponent implements OnInit {
       }
     )
   }
+
 }

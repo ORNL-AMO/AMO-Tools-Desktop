@@ -10,6 +10,8 @@ import { ActivatedRoute } from '@angular/router';
 import { Settings } from '../shared/models/settings';
 import { WindowRefService } from '../indexedDb/window-ref.service';
 
+import { ToastyService, ToastyConfig, ToastOptions, ToastData } from 'ng2-toasty';
+
 @Component({
   selector: 'app-psat',
   templateUrl: './psat.component.html',
@@ -64,8 +66,13 @@ export class PsatComponent implements OnInit {
     private assessmentService: AssessmentService,
     private psatService: PsatService,
     private indexedDbService: IndexedDbService,
-    private activatedRoute: ActivatedRoute
-  ) { }
+    private activatedRoute: ActivatedRoute,
+    private toastyService: ToastyService,
+    private toastyConfig: ToastyConfig) {
+
+    this.toastyConfig.theme = 'bootstrap';
+    this.toastyConfig.position = 'bottom-center';
+  }
 
   ngOnInit() {
     let tmpAssessmentId;
@@ -86,13 +93,17 @@ export class PsatComponent implements OnInit {
   }
 
 
-  getSettings() {
+  getSettings(update?: boolean) {
     //get assessment settings
     this.indexedDbService.getAssessmentSettings(this.assessment.id).then(
       results => {
         if (results.length != 0) {
           this.settings = results[0];
           this.isAssessmentSettings = true;
+          console.log('update: ' + update);
+          if (update) {
+            this.addToast('Settings Saved');
+          }
         } else {
           //if no settings found for assessment, check directory settings
           this.getParentDirectorySettings(this.assessment.directoryId);
@@ -227,13 +238,23 @@ export class PsatComponent implements OnInit {
     this.assessment.psat = (JSON.parse(JSON.stringify(this._psat)));
     this.indexedDbService.putAssessment(this.assessment).then(
       results => {
-        console.log('save successful');
+        this.addToast('Assessment Saved');
       }
     )
   }
 
   exportData() {
     //TODO: Logic for exporting assessment
+  }
+
+  addToast(msg: string) {
+    let toastOptions: ToastOptions = {
+      title: msg,
+      timeout: 2000,
+      showClose: true,
+      theme: 'default'
+    }
+    this.toastyService.success(toastOptions);
   }
 
 }
