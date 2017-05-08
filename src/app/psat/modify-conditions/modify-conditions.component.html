@@ -58,7 +58,7 @@
         <li *ngFor="let modification of _modifications">
           <button (click)="selectModification(modification)">
             {{modification.psat.name}}
-            <span class="pull-right">Edit / Delete</span>
+            <span class="pull-right" (click)="editModification(modification)">Edit / Delete</span>
           </button>
         </li>
         <li class="add-modification">

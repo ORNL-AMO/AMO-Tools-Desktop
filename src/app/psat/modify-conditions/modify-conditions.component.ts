@@ -106,4 +106,8 @@ export class ModifyConditionsComponent implements OnInit {
   changeField($event) {
     this.currentField = $event;
   }
+
+  editModification(mod: Modification){
+    console.log(mod);
+  }
 }
