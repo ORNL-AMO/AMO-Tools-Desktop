@@ -25,6 +25,7 @@ export class AssessmentSettingsComponent implements OnInit {
   isDirectorySettings: boolean = false;
   constructor(private indexedDbService: IndexedDbService, private settingsService: SettingsService, private toastyService: ToastyService, private toastyConfig: ToastyConfig) { 
         this.toastyConfig.theme = 'bootstrap';
+        this.toastyConfig.position = 'bottom-center';
   }
 
   ngOnInit() {
@@ -112,10 +113,9 @@ export class AssessmentSettingsComponent implements OnInit {
 
 
   addToast() {
-    console.log('updated')
     let toastOptions: ToastOptions = {
-      title: 'Updated Settings',
-      timeout: 5000,
+      title: 'Settings Saved',
+      timeout: 2000,
       showClose: true,
       theme: 'default'
     }
