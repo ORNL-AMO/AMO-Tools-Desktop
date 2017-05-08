@@ -19,6 +19,7 @@
 .doe_logo{
   width:100%;
   padding:10px;
+  cursor: pointer;
 }
 
 ul.tree, ul.tree ul {
@@ -37,14 +38,8 @@ ul.tree li {
   margin: 0;
   padding: 0 7px;
   color: rgba(255,255,255,0.8);
-  te`-overflow: ellipsis; 
+  text-overflow: ellipsis; 
 }
-
-/*
-ul.tree li:last-child {
-  border-left:none;
-}
-*/
 
 ul.tree li:before {
   position:relative;
@@ -56,16 +51,10 @@ ul.tree li:before {
   left:-7px;
 }
 
-/*
-li{
-  list-style: none;
-  margin: 0;
-  color: white;
-  font-weight: bold;
-}
-*/
-
-
 .sidebar-group{
   padding-top: 20px;
+}
+
+.root-item{
+  cursor: pointer;
 }

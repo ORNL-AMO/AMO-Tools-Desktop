@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, Input } from '@angular/core';
+import { Component, OnInit, ViewChild, Input, Output, EventEmitter } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ModalDirective } from 'ng2-bootstrap';
 import { Directory, DirectoryDbRef } from '../../../shared/models/directory';
@@ -13,6 +13,8 @@ import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
 export class CreateFolderComponent implements OnInit {
   @Input()
   directory: Directory;
+  @Output('newDirectory')
+  newDirectory = new EventEmitter<boolean>();
 
   newFolder: any;
   constructor(private formBuilder: FormBuilder, private modelService: ModelService, private indexedDbService: IndexedDbService) { }
@@ -49,6 +51,7 @@ export class CreateFolderComponent implements OnInit {
     this.indexedDbService.addDirectory(newDir).then(newDirId => {
       this.indexedDbService.getChildrenDirectories(this.directory.id).then(childDirs => {
         this.directory.subDirectory = childDirs;
+        this.newDirectory.emit(true);
       })
     })
   }

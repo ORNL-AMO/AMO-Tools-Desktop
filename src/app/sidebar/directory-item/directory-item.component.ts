@@ -16,23 +16,32 @@ export class DirectoryItemComponent implements OnInit {
   selectSignal = new EventEmitter<Directory>();
   @Output('collapseSignal')
   collapseSignal = new EventEmitter<Directory>();
+  @Input()
+  newDirEventToggle: boolean;
 
   isFirstChange: boolean = true;
-
+  childDirectories: Directory
   constructor(private indexedDbService: IndexedDbService) { }
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.directory && !this.isFirstChange) {
-      this.populateDirectories(this.directory);
-    } else {
+      this.populateDirectories(this.directory, false);
+    } else if (changes.newDirEventToggle && !this.isFirstChange) {
+      this.populateDirectories(this.directory, false);
+    }
+    else {
       this.isFirstChange = false;
     }
   }
 
   ngOnInit() {
-    this.populateDirectories(this.directory);
-    if (this.directory.collapsed == undefined) {
-      this.directory.collapsed = true;
+    if (this.directory.id == 1) {
+      this.populateDirectories(this.directory, false);
+    } else if (this.directory.id == this.selectedDirectoryId) {
+      this.populateDirectories(this.directory, false);
+    }
+    else {
+      this.populateDirectories(this.directory, true);
     }
   }
 
@@ -44,7 +53,7 @@ export class DirectoryItemComponent implements OnInit {
     this.collapseSignal.emit(directory);
   }
 
-  populateDirectories(directoryRef: DirectoryDbRef) {
+  populateDirectories(directoryRef: DirectoryDbRef, collapse?: boolean) {
     this.indexedDbService.getDirectoryAssessments(directoryRef.id).then(
       results => {
         this.directory.assessments = results;
@@ -54,6 +63,7 @@ export class DirectoryItemComponent implements OnInit {
     this.indexedDbService.getChildrenDirectories(directoryRef.id).then(
       results => {
         this.directory.subDirectory = results;
+        this.directory.collapsed = collapse;
       }
     )
   }
