@@ -15,7 +15,6 @@ import { AssessmentService } from '../assessment/assessment.service';
 export class DashboardComponent implements OnInit {
   allDirectories: Directory;
   workingDirectory: Directory;
-  showCalculators: boolean = false;
   selectedCalculator: string;
   isFirstChange: boolean = true;
   rootDirectoryRef: DirectoryDbRef;
@@ -24,7 +23,7 @@ export class DashboardComponent implements OnInit {
   showLandingScreen: boolean;
 
   newDirEventToggle: boolean = false;
-
+  dashboardView: string = 'landing-screen';
 
   @ViewChild('deleteModal') public deleteModal: ModalDirective;
   @ViewChild('deleteItemsModal') public deleteItemsModal: ModalDirective;
@@ -58,7 +57,7 @@ export class DashboardComponent implements OnInit {
   }
 
   hideScreen() {
-    this.showLandingScreen = false;
+    this.dashboardView = 'assessment-dashboard';
   }
 
   getAllDirectories() {
@@ -71,7 +70,17 @@ export class DashboardComponent implements OnInit {
 
   goHome() {
     this.selectedCalculator = '';
-    this.showLandingScreen = true;
+    this.dashboardView = 'landing-screen';
+  }
+
+  showAbout(){
+    this.selectedCalculator = '';
+    this.dashboardView = 'about-page';
+  }
+
+  showTutorials(){
+    this.selectedCalculator = '';
+    this.dashboardView = 'tutorials';
   }
 
   populateDirectories(directoryRef: DirectoryDbRef): Directory {
@@ -98,8 +107,7 @@ export class DashboardComponent implements OnInit {
   }
 
   changeWorkingDirectory(directory: Directory) {
-    this.showCalculators = false;
-    this.hideScreen();
+    this.dashboardView = 'assessment-dashboard';
     this.indexedDbService.getDirectory(directory.id).then(
       results => {
         if (results) {
@@ -109,8 +117,7 @@ export class DashboardComponent implements OnInit {
   }
 
   viewCalculator(str: string) {
-    this.hideScreen();
-    this.showCalculators = true;
+    this.dashboardView = 'calculator';
     this.selectedCalculator = str;
   }
 

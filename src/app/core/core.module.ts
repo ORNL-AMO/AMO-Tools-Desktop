@@ -22,6 +22,8 @@ import { SettingsModule } from '../settings/settings.module';
 import { IndexedDbModule } from '../indexedDb/indexedDb.module';
 
 import { LandingScreenComponent } from '../landing-screen/landing-screen.component';
+import { AboutPageComponent } from '../about-page/about-page.component';
+import { TutorialsComponent } from '../tutorials/tutorials.component';
 
 @NgModule({
   declarations: [
@@ -30,7 +32,9 @@ import { LandingScreenComponent } from '../landing-screen/landing-screen.compone
     DashboardComponent,
     AssessmentItemComponent,
     DirectoryItemComponent,
-    LandingScreenComponent
+    LandingScreenComponent,
+    AboutPageComponent,
+    TutorialsComponent
   ],
   imports: [
     CommonModule,

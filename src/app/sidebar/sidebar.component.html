@@ -55,11 +55,20 @@
     </span>
   </div>
 </div>
-<!--
+
 <div class="sidebar-group">
-  <span class="nav-item" [ngClass]="{'selected': showSettings}" (click)="emitShowSettings()">
+  <div>
+    <span class="nav-item" [ngClass]="{'selected': dashboardView == 'tutorials'}" (click)="showTutorials()">
        <span class="icon">
-     <i class="fa fa-cog"></i>
-       </span>{{directory.name}} Settings
-  </span>
-</div>-->
+     <i class="fa fa-play-circle-o"></i>
+       </span>Video Tutorials
+    </span>
+  </div>
+  <div>
+    <span class="nav-item" [ngClass]="{'selected': dashboardView == 'about-page'}" (click)="showAbout()">
+       <span class="icon">
+     <i class="fa fa-info-circle"></i>
+       </span>About Tool Suite
+    </span>
+  </div>
+</div>

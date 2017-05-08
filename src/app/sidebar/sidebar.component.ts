@@ -23,6 +23,13 @@ export class SidebarComponent implements OnInit {
   emitGoHome = new EventEmitter<boolean>();
   @Input()
   newDirEventToggle: boolean;
+  @Output('emitShowTutorials')
+  emitShowTutorials = new EventEmitter<boolean>();
+  @Output('emitShowAbout')
+  emitShowAbout = new EventEmitter<boolean>();
+  @Input()
+  dashboardView: string;
+
 
   selectedDirectoryId: number;
   firstChange: boolean = true;
@@ -44,7 +51,7 @@ export class SidebarComponent implements OnInit {
         this.selectedDirectoryId = null;
       }
     }
-    
+
     if (this.firstChange) {
       this.firstChange = false;
     }
@@ -73,5 +80,13 @@ export class SidebarComponent implements OnInit {
 
   goHome(){
     this.emitGoHome.emit(true);
+  }
+
+  showAbout(){
+    this.emitShowAbout.emit(true);
+  }
+
+  showTutorials(){
+    this.emitShowTutorials.emit(true);
   }
 }

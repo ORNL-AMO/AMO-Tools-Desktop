@@ -1,16 +1,34 @@
 <div class="container-fluid">
     <div class="row dashboard-content">
         <div class="col-2 sidebar-bg">
-            <app-sidebar *ngIf="allDirectories" [(selectedCalculator)]="selectedCalculator" [directory]="getAllDirectories()" [workingDirectory]="getWorkingDirectory()"
-                (directoryChange)="changeWorkingDirectory($event)" (selectCalculator)="viewCalculator($event)" (emitGoHome)="goHome()" [newDirEventToggle]="newDirEventToggle"></app-sidebar>
+            <app-sidebar *ngIf="allDirectories" 
+            [selectedCalculator]="selectedCalculator" 
+            [directory]="getAllDirectories()"
+            [newDirEventToggle]="newDirEventToggle" 
+            [workingDirectory]="getWorkingDirectory()"
+            [dashboardView]="dashboardView"
+                (directoryChange)="changeWorkingDirectory($event)" 
+                (selectCalculator)="viewCalculator($event)" 
+                (emitGoHome)="goHome()"
+                (emitShowAbout)="showAbout()"
+                (emitShowTutorials)="showTutorials()"
+                ></app-sidebar>
         </div>
-        <div class="col-10" *ngIf="allDirectories && !showLandingScreen">
-            <app-assessment-dashboard *ngIf="!showCalculators" [directory]="workingDirectory" (directoryChange)="changeWorkingDirectory($event)"
-                (deleteDataSignal)="showDeleteModal($event)" (deleteCheckedItems)="showDeleteItemsModal()" (resetDataEmit)="showDeleteModal()" (emitNewDir)="newDir()"></app-assessment-dashboard>
+        <div class="col-10" *ngIf="allDirectories && dashboardView == 'assessment-dashboard'">
+            <app-assessment-dashboard [directory]="workingDirectory" (directoryChange)="changeWorkingDirectory($event)" (deleteDataSignal)="showDeleteModal($event)"
+                (deleteCheckedItems)="showDeleteItemsModal()" (resetDataEmit)="showDeleteModal()" (emitNewDir)="newDir()"></app-assessment-dashboard>
+        </div>
+        <div class="col-10" *ngIf="allDirectories && dashboardView == 'calculator'">
             <app-calculator *ngIf="showCalculators" [selectedCalculator]="selectedCalculator"></app-calculator>
         </div>
-        <div class="col-10" *ngIf="showLandingScreen && allDirectories">
+        <div class="col-10" *ngIf="allDirectories && dashboardView == 'landing-screen'">
             <app-landing-screen (hideLandingScreen)="hideScreen()" (selectCalculator)="viewCalculator($event)" [directory]="allDirectories"></app-landing-screen>
+        </div>
+        <div class="col-10" *ngIf="allDirectories && dashboardView == 'tutorials'">
+            <app-tutorials></app-tutorials>
+        </div>
+        <div class="col-10" *ngIf="allDirectories && dashboardView == 'about-page'">
+            <app-about-page></app-about-page>
         </div>
     </div>
 </div>
