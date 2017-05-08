@@ -19,6 +19,7 @@
 .doe_logo{
   width:100%;
   padding:10px;
+  cursor: pointer;
 }
 
 ul.tree, ul.tree ul {

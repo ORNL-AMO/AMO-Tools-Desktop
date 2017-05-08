@@ -59,6 +59,11 @@ export class DashboardComponent implements OnInit {
     this.showLandingScreen = false;
   }
 
+  goHome(){
+    this.selectedCalculator = '';
+    this.showLandingScreen = true;
+  }
+
   populateDirectories(directoryRef: DirectoryDbRef): Directory {
     let tmpDirectory: Directory = {
       name: directoryRef.name,

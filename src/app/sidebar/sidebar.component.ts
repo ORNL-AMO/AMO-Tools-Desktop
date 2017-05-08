@@ -23,6 +23,8 @@ export class SidebarComponent implements OnInit {
   // showSettings: boolean;
   @Input()
   selectedCalculator: string;
+  @Output('emitGoHome')
+  emitGoHome = new EventEmitter<boolean>();
 
   selectedDirectoryId: number;
   firstChange: boolean = true;
@@ -73,4 +75,8 @@ export class SidebarComponent implements OnInit {
   // emitShowSettings() {
   //   this.showSettingsEmit.emit(true)
   // }
+
+  goHome(){
+    this.emitGoHome.emit(true);
+  }
 }
