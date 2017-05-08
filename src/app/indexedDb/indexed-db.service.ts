@@ -174,7 +174,7 @@ export class IndexedDbService {
         tmpAssessment = assessment;
         tmpAssessment.modifiedDate = new Date();
         let updateRequest = store.put(tmpAssessment);
-        updateRequest.onsucces = (event) => {
+        updateRequest.onsuccess = (event) => {
           resolve(event);
         }
         updateRequest.onerror = (event) => {

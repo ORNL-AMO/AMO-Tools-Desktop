@@ -36,6 +36,7 @@ import { PsatService } from './psat.service';
 import { ModifyConditionsTabsComponent } from './modify-conditions/modify-conditions-tabs/modify-conditions-tabs.component';
 import { ModifyConditionsNotesComponent } from './modify-conditions/modify-conditions-notes/modify-conditions-notes.component';
 import { SettingsModule } from '../settings/settings.module';
+import { ToastyModule } from 'ng2-toasty';
 
 @NgModule({
   declarations: [
@@ -77,7 +78,8 @@ import { SettingsModule } from '../settings/settings.module';
     PumpsModule,
     ModalModule,
     IndexedDbModule,
-    SettingsModule
+    SettingsModule,
+    ToastyModule
   ],
   providers: [
     PsatService

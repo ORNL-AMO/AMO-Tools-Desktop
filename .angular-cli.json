@@ -21,7 +21,10 @@
       "styles": [
         "styles.css",
         "../node_modules/font-awesome/css/font-awesome.css",
-        "../node_modules/bootstrap/dist/css/bootstrap.css"
+        "../node_modules/bootstrap/dist/css/bootstrap.css",
+        "../node_modules/ng2-toasty/style-bootstrap.css",
+        "../node_modules/ng2-toasty/style-default.css",
+        "../node_modules/ng2-toasty/style-material.css"
       ],
       "scripts": [
         "../node_modules/chart.js/dist/Chart.bundle.min.js",

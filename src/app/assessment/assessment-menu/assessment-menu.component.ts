@@ -22,6 +22,8 @@ export class AssessmentMenuComponent implements OnInit {
   deleteItems = new EventEmitter<boolean>();
   @Output('selectAll')
   selectAll = new EventEmitter<boolean>();
+  @Output('newDir')
+  newDir = new EventEmitter<boolean>();
 
   breadCrumbs: Array<Directory>;
 
@@ -34,14 +36,13 @@ export class AssessmentMenuComponent implements OnInit {
   ngOnInit() {
     this.breadCrumbs = new Array();
     this.getBreadcrumbs(this.directory.id);
-    //   this.breadCrumbs = this.getBreadcrumbs(this.directory.name, this.allDirectories);
   }
 
   ngOnChanges(changes: SimpleChanges) {
     if ((changes.directory) && !this.firstChange) {
       if (changes.directory.currentValue.id != changes.directory.previousValue.id) {
         this.breadCrumbs = new Array();
-        this.getBreadcrumbs(this.directory.id);
+        this.getBreadcrumbs(changes.directory.currentValue.id);
       }
     } else {
       this.firstChange = false;
@@ -49,6 +50,10 @@ export class AssessmentMenuComponent implements OnInit {
   }
   setView(view: string) {
     this.viewChange.emit(view);
+  }
+
+  emitNewDir(){
+    this.newDir.emit(true);
   }
 
   goToDirectory(dir) {
