@@ -11,10 +11,10 @@
     <nav>
       <ul class="tabs subtabs progress-tabs">
         <li [ngClass]="{'active': subTab == 'system-basics'}">
-          <a (click)="changeSubTab('system-basics')"><span class="step-number">1</span> System Basics</a>
+          <a (click)="changeSubTab('system-basics')"><span class="step-number">1</span> Assessment Settings</a>
         </li>
         <li [ngClass]="{'active': subTab == 'pump-fluid'}">
-          <a (click)="changeSubTab('pump-fluid')"><span class="step-number">2</span> Pump / Fluid</a>
+          <a (click)="changeSubTab('pump-fluid')"><span class="step-number">2</span> Pump &amp; Fluid</a>
         </li>
         <li [ngClass]="{'active': subTab == 'motor', 'disabled': checkPumpFluid() }">
           <a (click)="changeSubTab('motor')"><span class="step-number">3</span> Motor</a>

@@ -105,10 +105,17 @@ Buttons
 /*
 Forms
 =============================================== */
-.form-group {
+label {
   margin-bottom: 0;
+  font-size: 15px;
+}
+.form-group {
+  margin: 4px 0;
   position: relative;
 }
+  .form-group:hover {
+    background: #efefef;
+  }
 .form-control {
   border-radius: 0;
   border-color: #9c9c9c;
@@ -116,6 +123,9 @@ Forms
   padding: 2px;
   line-height: 1;
   font-size: 16px;
+}
+.form-text {
+  margin-top: 0;
 }
 .note-form {
   margin-bottom: 16px;
@@ -128,8 +138,11 @@ select.form-control:not([size]):not([multiple]) {
   content: "";
   clear: both;
 }  
-  .tab-content .form-group .form-control, .tab-content .form-group label {
+  .tab-content .form-group .form-control, .tab-content .form-group label, .tab-content .form-group .form-check {
     float: left;
+  }
+  .tab-content .form-group .form-check label {  
+    float: none;
   }
   .tab-content .form-group label {
     width: 50%;
@@ -138,10 +151,12 @@ select.form-control:not([size]):not([multiple]) {
     width: 50%;
   }
 
+
 .form-check-input {
   vertical-align: top;
   margin-top: 5px;
   margin-right: 8px;
+  padding: 3px;
 }
 
 .input-group {
@@ -152,9 +167,6 @@ select.form-control:not([size]):not([multiple]) {
   border:  #9c9c9c solid 1px; 
   padding: 0;
 }
-  .tab-content .form-group .form-control.incrementor {
-    width: 102px;
-  }
   .tab-content .form-group .form-control.incrementor .form-control {
     width: 58px;
   }
@@ -207,11 +219,12 @@ select.form-control:not([size]):not([multiple]) {
 
 .units {
   position: absolute;
-  top: 0px;
+  top: 3px;
   right: 5px;
   font-size: 14px;
-  color: #b0b0b0;
+  color: #5a5a5a;
 }
+
 
 
 /*
@@ -224,10 +237,13 @@ Pump Fluid CSS
 /*
 In-Assessment Calculators
 =============================================== */
+.tab-content form h5, .tab-content .form h5 {
+  margin-bottom: 20px;
+  font-weight: bold;
+}
 .calc-form {
   padding: 20px 30px;
-  height: 100%;
-  max-height: 100%;
+  height: 100vh;
   background: #fff;
   border-right: #bbb solid 1px;
 }
@@ -236,7 +252,7 @@ In-Assessment Calculators
     padding-bottom: 10px;
     border-bottom: #efefef solid 1px;
   }
-  .tab-content .calc-form .form-group label {
+   .calc-form .form-group label {
     font-size: 15px;
     width: 60%;
   }
@@ -542,7 +558,7 @@ Banner
 
 .banner .btn-dashboard, .banner .title, .banner .settings {
   display: inline-block;
-  padding: 14px 29px;
+  padding: 7px 29px;
   color: rgba(255,255,255,0.8);
 }
 .banner .btn-dashboard {
@@ -550,6 +566,7 @@ Banner
 }
 .banner.psat .btn-dashboard {
   background: url('../assets/images/assessment-icon-psat.png') no-repeat center center;
+  background-size: 38px;
 }
   .banner.psat .btn-dashboard:hover {
      background-color: #0063a4;
@@ -683,7 +700,7 @@ Tabs
   display: inline-block;
 }
 .tabs.primary a {
-  padding: 16px 22px;
+  padding: 14px 10px;
   font-size: 14px;
   border-left: #c8c8c8 solid 1px;
   display: block;
@@ -724,7 +741,6 @@ Tabs
 }
 .tabs.subtabs a:hover {
   text-decoration: none;
-  background: #efefef;
 }
 .tabs.subtabs .active a {
   font-weight: bold;
@@ -761,6 +777,18 @@ Tabs
       color: #999;
       font-weight: normal;
     }
+
+.tabs.subtabs .report-link {
+  color: #0081d6;
+  text-decoration: none;
+  font-weight: bold;
+  padding-left: 23px;
+  margin-left: 10px;
+  border-left: #ddd dashed 1px;
+}
+  .tabs.subtabs .active .report-link {
+    color: #0F0F0F;
+  }
 
 /* Vertical Tabs */
 .tabs.vertical {
@@ -867,16 +895,17 @@ Modify Conditions
     }
     .modification .header h3 {
       margin: 10px 0 10px 10px;
-      font-size: 20px;
-      font-weight: bold;
+      font-size: 15px;
+      text-transform: uppercase;
       display: inline-block;
+      letter-spacing: 4px;
     }
     .modification .header button {
       background: #fff;
       border: none;
       border-left: #efefef solid 1px;
       margin: 0;
-      padding: 7px 16px;
+      padding: 4px 16px;
       float: right;
     }
       .modification .header button:hover {
@@ -885,6 +914,10 @@ Modify Conditions
       }
   .losses-header {
 
+  
+  }
+  .modification.disabled, .modify-conditions .no-data {
+    border: transparent solid 3px;
   }
   .modification.disabled, .modification.disabled button, .modification.disabled textarea {
     background: #efefef;
@@ -893,8 +926,9 @@ Modify Conditions
     box-shadow: none;
     z-index: 1;
   }
-    .modification.disabled:hover {
+    .modification.disabled:hover, .modify-conditions .no-data:hover {
       cursor: pointer;
+      border: #4990E2 solid 3px;
     }
 
     .modify-conditions .no-data {
@@ -974,9 +1008,6 @@ Help Panel Cards
   .wrapper .help-header {
     padding-top: 0;
   }
-.help-header {
-  border-bottom: #ededed solid 1px;
-}
 .help-header p:last-of-type {
   margin-bottom: 0;
 }
@@ -1002,9 +1033,10 @@ Help Panel Cards
 }
 
 .help-panel h3 {
-  font-size: 22px;
+  font-size: 20px;
   font-weight: 100;
-  color: #000;
+  color: #646464;
+  line-height: 24px;
 }
 .help-panel p {
   font-size: 16px;
@@ -1012,10 +1044,14 @@ Help Panel Cards
 }
 
 .wrapper .help-panel {
-  background: #efefef;
-  padding: 20px;
-  border-radius: 4px;
-  border: #cecece solid 1px;
+  padding-left: 40px;
+  border-width:  0 0 0 1px;
+  border-style: solid;
+  -webkit-border-image: -webkit-gradient(linear, 0 0, 0 100%, from(#a7a7a7), to(rgba(255, 255, 255, 0))) 1 100%;
+  -webkit-border-image: -webkit-linear-gradient(#a7a7a7, rgba(255, 255, 255, 0)) 1 100%;
+  -moz-border-image: -moz-linear-gradient(#a7a7a7, rgba(255, 255, 255, 0)) 1 100%;    
+  -o-border-image: -o-linear-gradient(#a7a7a7, rgba(255, 255, 255, 0)) 1 100%;
+  border-image: linear-gradient(to bottom, #a7a7a7, rgba(255, 255, 255, 0)) 1 100%;
 }
 
 
@@ -1026,7 +1062,7 @@ Help Panel Cards
 No Data Messaging
 ========================================== */
 .no-data {
-  padding: 133px 50px;
+  padding: 26px 50px;
   text-align: center;
   background: #efefef;
   border-right: #cacaca solid 1px;
@@ -1044,18 +1080,18 @@ No Data Messaging
   text-decoration: underline;
 }
 .no-data button {
-  background: transparent;
-  border: #b5b5b5 solid 1px;
+  background: #fff;
+  -webkit-box-shadow: 0px 2px 9px 0px rgba(0,0,0,0.2);
+  -moz-box-shadow: 0px 2px 9px 0px rgba(0,0,0,0.2);
+  box-shadow: 0px 2px 9px 0px rgba(0,0,0,0.2);
+  border: #0099fd solid 1px;
   padding: 12px 54px;
   margin-top: 34px;
   border-radius: 4px;
 }
-.no-data:hover, .no-data button:hover {
+.no-data:hover, .no-data:hover button {
   cursor: pointer;
   background: #fff;
-}
-.no-data:hover button, .no-data button:hover {
-  border-color: #0099fd;
 }
 .no-data p {
   font-size: 14px;
