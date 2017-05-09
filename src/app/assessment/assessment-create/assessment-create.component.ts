@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ViewChildren, Input } from '@angular/core';
+import { Component, OnInit, ViewChild, ViewChildren, Input, EventEmitter, Output } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ModalDirective } from 'ng2-bootstrap';
 import { Directory, DirectoryDbRef } from '../../shared/models/directory';
@@ -16,6 +16,9 @@ export class AssessmentCreateComponent implements OnInit {
   @Input()
   directory: Directory;
   @ViewChildren('assessmentName') vc;
+  @Output('hideModal')
+  hideModal = new EventEmitter<boolean>();
+
 
   newAssessment: any;
   selectedEquip: string = 'new';
@@ -35,7 +38,10 @@ export class AssessmentCreateComponent implements OnInit {
     this.newAssessment = this.initForm();
     this.allAssessments = this.directory.assessments;
     this.filteredAssessments = this.allAssessments;
+  }
 
+  ngAfterViewInit() {
+    this.showCreateModal();
   }
 
   initForm() {
@@ -57,6 +63,8 @@ export class AssessmentCreateComponent implements OnInit {
   hideCreateModal() {
     this.showDropdown = false;
     this.createModal.hide();
+    this.hideModal.emit(true);
+
   }
 
   createAssessment() {

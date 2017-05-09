@@ -33,7 +33,7 @@ export class SidebarComponent implements OnInit {
 
   selectedDirectoryId: number;
   firstChange: boolean = true;
-
+  createAssessment: boolean = false;
   constructor() { }
 
   ngOnInit() {
@@ -74,19 +74,27 @@ export class SidebarComponent implements OnInit {
     this.selectCalculator.emit(str);
   }
 
-  getDirectory(){
+  getDirectory() {
     return this.directory;
   }
 
-  goHome(){
+  goHome() {
     this.emitGoHome.emit(true);
   }
 
-  showAbout(){
+  showAbout() {
     this.emitShowAbout.emit(true);
   }
 
-  showTutorials(){
+  showTutorials() {
     this.emitShowTutorials.emit(true);
+  }
+
+  showCreateAssessment() {
+    this.createAssessment = true;
+  }
+
+  hideModal() {
+    this.createAssessment = false;
   }
 }

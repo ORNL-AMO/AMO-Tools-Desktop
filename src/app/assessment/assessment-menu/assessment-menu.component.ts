@@ -30,7 +30,7 @@ export class AssessmentMenuComponent implements OnInit {
   firstChange: boolean = true;
 
   isAllSelected: boolean;
-
+  createAssessment: boolean = false;
   constructor(private indexedDbService: IndexedDbService) { }
 
   ngOnInit() {
@@ -48,6 +48,15 @@ export class AssessmentMenuComponent implements OnInit {
       this.firstChange = false;
     }
   }
+
+  hideModal(){
+    this.createAssessment = false;
+  }
+
+  showCreateAssessment(){
+    this.createAssessment = true;
+  }
+
   setView(view: string) {
     this.viewChange.emit(view);
   }

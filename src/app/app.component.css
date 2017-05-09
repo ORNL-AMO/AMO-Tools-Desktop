@@ -977,10 +977,6 @@ Modify Conditions
         cursor: pointer;
         background: #efefef;
       }
-  .losses-header {
-
-  
-  }
   .modification.disabled, .modify-conditions .no-data {
     border: transparent solid 3px;
   }

@@ -25,8 +25,8 @@
   <div class="modification" (click)="togglePanel(modifiedSelected)" *ngIf="_modifications.length != 0" [ngClass]="{'disabled': modifiedSelected == false}">
 
     <!-- Modification Header -->
-    <div class="header">
-      <h3>{{_modifications[modificationIndex].psat.name}}</h3>
+    <div class="header" *ngIf="!editModification">
+      <h3 *ngIf="_modifications[modificationIndex]">{{_modifications[modificationIndex].psat.name}}</h3>
       <button class="pull-right" (click)="toggleDropdown()" [disabled]="!modifiedSelected">
 <!--         <span class="fa fa-caret-down" *ngIf="!isDropdownOpen"></span>
         <span class="fa fa-caret-up" *ngIf="isDropdownOpen"></span> -->
@@ -54,11 +54,13 @@
 
     <!-- Modifications List -->
     <div class="modifications-list" *ngIf="isDropdownOpen && !showNotes">
-      <ul>
+      <ul *ngIf="!showEditModification">
         <li *ngFor="let modification of _modifications">
-          <button (click)="selectModification(modification)">
+          <button>
+          <a (click)="selectModification(modification)">
             {{modification.psat.name}}
-            <span class="pull-right">Edit / Delete</span>
+          </a>
+          <a class="pull-right" (click)="dispEditModification(modification)">Edit / Delete</a>
           </button>
         </li>
         <li class="add-modification">
@@ -66,6 +68,9 @@
           <p>Data will be copied from <br/> your baseline operating condition</p>
         </li>
       </ul>
+      <div class="losses-container" *ngIf="showEditModification && editModification">
+        <app-edit-condition-properties [modification]="editModification" (deleteMod)="deleteModification()" (saveMod)="save()" (cancelEdit)="cancelEdit()"></app-edit-condition-properties>
+      </div>
     </div>
 
   </div>
