@@ -10,6 +10,11 @@ declare var psatAddon: any;
 export class PsatService {
 
   constructor(private formBuilder: FormBuilder, private convertUnitsService: ConvertUnitsService) { }
+
+  roundVal(val: number, digits: number) {
+    return Number((Math.round(val * 100) / 100).toFixed(digits))
+  }
+
   //CALCULATORS
   results(psatInputs: PsatInputs, settings: Settings): PsatOutputs {
     if (settings.distanceMeasurement != 'ft') {
@@ -26,32 +31,32 @@ export class PsatService {
   parseResults(results: PsatCalcResults): PsatOutputs {
     let tmpOutputs: PsatOutputs = {
       existing: {
-        pump_efficiency: results.pump_efficiency[0],
-        motor_rated_power: results.motor_rated_power[0],
-        motor_shaft_power: results.motor_shaft_power[0],
-        pump_shaft_power: results.pump_shaft_power[0],
-        motor_efficiency: results.motor_efficiency[0],
-        motor_power_factor: results.motor_power_factor[0],
-        motor_current: results.motor_current[0],
-        motor_power: results.motor_power[0],
-        annual_energy: results.annual_energy[0],
-        annual_cost: results.annual_cost[0],
-        annual_savings_potential: results.annual_savings_potential[0],
-        optimization_rating: results.optimization_rating[0]
+        pump_efficiency: this.roundVal(results.pump_efficiency[0], 2),
+        motor_rated_power: this.roundVal(results.motor_rated_power[0], 2),
+        motor_shaft_power: this.roundVal(results.motor_shaft_power[0], 2),
+        pump_shaft_power: this.roundVal(results.pump_shaft_power[0], 2),
+        motor_efficiency: this.roundVal(results.motor_efficiency[0], 2),
+        motor_power_factor: this.roundVal(results.motor_power_factor[0], 2),
+        motor_current: this.roundVal(results.motor_current[0], 2),
+        motor_power: this.roundVal(results.motor_power[0], 2),
+        annual_energy: this.roundVal(results.annual_energy[0], 2),
+        annual_cost: this.roundVal(results.annual_cost[0], 2),
+        annual_savings_potential: this.roundVal(results.annual_savings_potential[0], 2),
+        optimization_rating: this.roundVal(results.optimization_rating[0], 2)
       },
       optimal: {
-        pump_efficiency: results.pump_efficiency[1],
-        motor_rated_power: results.motor_rated_power[1],
-        motor_shaft_power: results.motor_shaft_power[1],
-        pump_shaft_power: results.pump_shaft_power[1],
-        motor_efficiency: results.motor_efficiency[1],
-        motor_power_factor: results.motor_power_factor[1],
-        motor_current: results.motor_current[1],
-        motor_power: results.motor_power[1],
-        annual_energy: results.annual_energy[1],
-        annual_cost: results.annual_cost[1],
-        annual_savings_potential: results.annual_savings_potential[1],
-        optimization_rating: results.optimization_rating[1]
+        pump_efficiency: this.roundVal(results.pump_efficiency[1], 2),
+        motor_rated_power: this.roundVal(results.motor_rated_power[1], 2),
+        motor_shaft_power: this.roundVal(results.motor_shaft_power[1], 2),
+        pump_shaft_power: this.roundVal(results.pump_shaft_power[1], 2),
+        motor_efficiency: this.roundVal(results.motor_efficiency[1], 2),
+        motor_power_factor: this.roundVal(results.motor_power_factor[1], 2),
+        motor_current: this.roundVal(results.motor_current[1], 2),
+        motor_power: this.roundVal(results.motor_power[1], 2),
+        annual_energy: this.roundVal(results.annual_energy[1], 2),
+        annual_cost: this.roundVal(results.annual_cost[1], 2),
+        annual_savings_potential: this.roundVal(results.annual_savings_potential[1], 2),
+        optimization_rating: this.roundVal(results.optimization_rating[1], 2)
       }
     }
     return tmpOutputs;
@@ -97,7 +102,17 @@ export class PsatService {
     if (settings.flowMeasurement != 'gpm') {
       flowRate = this.convertUnitsService.value(flowRate).from(settings.flowMeasurement).to('gpm');
     }
-    return psatAddon.headToolSuctionTank(specificGravity, flowRate, suctionPipeDiameter, suctionTankGasOverPressure, suctionTankFluidSurfaceElevation, suctionLineLossCoefficients, dischargePipeDiameter, dischargeGaugePressure, dischargeGaugeElevation, dischargeLineLossCoefficients)
+
+    let tmpResults = psatAddon.headToolSuctionTank(specificGravity, flowRate, suctionPipeDiameter, suctionTankGasOverPressure, suctionTankFluidSurfaceElevation, suctionLineLossCoefficients, dischargePipeDiameter, dischargeGaugePressure, dischargeGaugeElevation, dischargeLineLossCoefficients);
+    let results = {
+      differentialElevationHead: this.roundVal(tmpResults.differentialElevationHead, 2),
+      differentialPressureHead: this.roundVal(tmpResults.differentialPressureHead, 2),
+      differentialVelocityHead: this.roundVal(tmpResults.differentialVelocityHead, 2),
+      estimatedDischargeFrictionHead: this.roundVal(tmpResults.estimatedDischargeFrictionHead, 2),
+      estimatedSuctionFrictionHead: this.roundVal(tmpResults.estimatedSuctionFrictionHead, 2),
+      pumpHead: this.roundVal(tmpResults.pumpHead, 2)
+    }
+    return results;
   }
 
   headTool(
@@ -138,7 +153,17 @@ export class PsatService {
     if (settings.flowMeasurement != 'gpm') {
       flowRate = this.convertUnitsService.value(flowRate).from(settings.flowMeasurement).to('gpm');
     }
-    return psatAddon.headTool(specificGravity, flowRate, suctionPipeDiameter, suctionGuagePressure, suctionGuageElevation, suctionLineLossCoefficients, dischargePipeDiameter, dischargeGaugePressure, dischargeGaugeElevation, dischargeLineLossCoefficients);
+    let tmpResults = psatAddon.headTool(specificGravity, flowRate, suctionPipeDiameter, suctionGuagePressure, suctionGuageElevation, suctionLineLossCoefficients, dischargePipeDiameter, dischargeGaugePressure, dischargeGaugeElevation, dischargeLineLossCoefficients);
+
+    let results = {
+      differentialElevationHead: this.roundVal(tmpResults.differentialElevationHead, 2),
+      differentialPressureHead: this.roundVal(tmpResults.differentialPressureHead, 2),
+      differentialVelocityHead: this.roundVal(tmpResults.differentialVelocityHead, 2),
+      estimatedDischargeFrictionHead: this.roundVal(tmpResults.estimatedDischargeFrictionHead, 2),
+      estimatedSuctionFrictionHead: this.roundVal(tmpResults.estimatedSuctionFrictionHead, 2),
+      pumpHead: this.roundVal(tmpResults.pumpHead, 2)
+    }
+    return results;
   }
 
   estFLA(
@@ -150,7 +175,7 @@ export class PsatService {
     motorVoltage,
     settings: Settings
   ) {
-    if(settings.powerMeasurement != 'hp'){
+    if (settings.powerMeasurement != 'hp') {
       horsePower = this.convertUnitsService.value(horsePower).from(settings.powerMeasurement).to('hp');
     }
     let lineFreqEnum = this.getLineFreqEnum(frequency);
@@ -163,7 +188,7 @@ export class PsatService {
       efficiency: efficiency,
       motor_rated_voltage: motorVoltage
     }
-    return psatAddon.estFLA(inputs);
+    return this.roundVal(psatAddon.estFLA(inputs), 2);
 
   }
 
@@ -212,7 +237,7 @@ export class PsatService {
     settings
   ) {
 
-    if(settings.powerMeasurement != 'hp'){
+    if (settings.powerMeasurement != 'hp') {
       horsePower = this.convertUnitsService.value(horsePower).from(settings.powerMeasurement).to('hp');
     }
     let tmpInputs: any;
@@ -240,7 +265,7 @@ export class PsatService {
     horsePower,
     settings: Settings
   ) {
-    if(settings.powerMeasurement != 'hp'){
+    if (settings.powerMeasurement != 'hp') {
       horsePower = this.convertUnitsService.value(horsePower).from(settings.powerMeasurement).to('hp');
     }
     let tmpInputs: any;
@@ -254,7 +279,7 @@ export class PsatService {
       motor_rated_power: horsePower,
       load_factor: 1
     };
-    return psatAddon.nema(tmpInputs);
+    return this.roundVal(psatAddon.nema(tmpInputs), 2);
   }
 
   //ENUM HELPERS
