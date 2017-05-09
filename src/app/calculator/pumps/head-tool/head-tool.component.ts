@@ -19,14 +19,7 @@ export class HeadToolComponent implements OnInit {
   @Input()
   settings: Settings;
   @Input()
-  headToolResults: any = {
-    differentialElevationHead: 0.0,
-    differentialIPressureHead: 0.0,
-    differentialVelocityHead: 0.0,
-    estimatedSuctionFrictionHead: 0.0,
-    estimatedDischargeFrictionHead: 0.0,
-    pumpHead: 0.0
-  }
+  headToolResults: any ;
   @Input()
   inAssessment: boolean;
 
@@ -94,12 +87,13 @@ export class HeadToolComponent implements OnInit {
   }
 
   save() {
-    this.headToolResults.differentialElevationHead = this.results.differentialElevationHead;
-    this.headToolResults.differentialPressureHead = this.results.differentialPressureHead;
-    this.headToolResults.differentialVelocityHead = this.results.differentialVelocityHead;
-    this.headToolResults.estimatedSuctionFrictionHead = this.results.estimatedSuctionFrictionHead;
-    this.headToolResults.estimatedDischargeFrictionHead = this.results.estimatedDischargeFrictionHead;
-    this.headToolResults.pumpHead = this.results.pumpHead;
+    // this.headToolResults.differentialElevationHead = this.results.differentialElevationHead;
+    // this.headToolResults.differentialPressureHead = this.results.differentialPressureHead;
+    // this.headToolResults.differentialVelocityHead = this.results.differentialVelocityHead;
+    // this.headToolResults.estimatedSuctionFrictionHead = this.results.estimatedSuctionFrictionHead;
+    // this.headToolResults.estimatedDischargeFrictionHead = this.results.estimatedDischargeFrictionHead;
+    // this.headToolResults.pumpHead = this.results.pumpHead;
+    this.psat.inputs.head = this.results.pumpHead;
     this.closeTool();
   }
 

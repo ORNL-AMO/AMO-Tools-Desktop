@@ -121,6 +121,11 @@ export class FieldDataComponent implements OnInit {
   }
 
   hideHeadToolModal() {
+    if (this.psatForm.value.head != this.psat.inputs.head) {
+      this.psatForm.patchValue({
+        head: this.psat.inputs.head
+      })
+    }
     this.headToolModal.hide();
   }
 

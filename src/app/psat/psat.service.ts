@@ -203,7 +203,7 @@ export class PsatService {
       pump_style: enumPumpStyle,
       specific_speed: specificSpeed
     }
-    return psatAddon.achievableEfficiency(inputs)
+    return this.roundVal(psatAddon.achievableEfficiency(inputs), 2);
   }
 
   ///achievable pump efficiency
@@ -222,7 +222,12 @@ export class PsatService {
       pump_style: enumPumpStyle,
       flow_rate: flowRate
     }
-    return psatAddon.pumpEfficiency(inputs);
+    let tmpResults = psatAddon.pumpEfficiency(inputs);
+    let results = {
+      average: this.roundVal(tmpResults.average, 2),
+      max: this.roundVal(tmpResults.max, 2)
+    }
+    return results;
   }
 
   motorPerformance(
@@ -253,7 +258,13 @@ export class PsatService {
       motor_rated_voltage: motorVoltage,
       motor_rated_fla: fullLoadAmps
     }
-    return psatAddon.motorPerformance(tmpInputs);
+    let tmpResults = psatAddon.motorPerformance(tmpInputs);
+    let results = {
+      efficiency: this.roundVal(tmpResults.efficiency, 2),
+      motor_current: this.roundVal(tmpResults.motor_current, 2),
+      motor_power_factor: this.roundVal(tmpResults.motor_power_factor, 2)
+    }
+    return results;
   }
 
   //loadFactor hard coded to 1
