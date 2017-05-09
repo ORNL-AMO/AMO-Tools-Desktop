@@ -2,23 +2,14 @@
   background-color: #003054;
 }
 
-.nav-item {
-  color: rgba(255,255,255,0.8);
-}
 
 .nav-item:hover, .pointer-item:hover {
   cursor: pointer;
-  color: rgba(255,255,255,1);
 }
 
 .selected{
   font-weight: bold;
-  color: rgba(255,255,255,1);
-}
-
-.doe_logo{
-  width:100%;
-  padding:10px;
+  color: #000;
 }
 
 ul.tree, ul.tree ul {
