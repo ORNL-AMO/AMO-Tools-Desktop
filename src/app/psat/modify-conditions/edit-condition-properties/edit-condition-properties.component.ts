@@ -13,22 +13,27 @@ export class EditConditionPropertiesComponent implements OnInit {
   deleteMod = new EventEmitter<boolean>();
   @Output('saveMod')
   saveMod = new EventEmitter<boolean>();
-
+  @Output('cancelEdit')
+  cancelEdit = new EventEmitter<boolean>();
+  
   name: string;
   constructor() { }
 
   ngOnInit() {
     this.name = this.modification.psat.name;
-    console.log(this.name);
   }
 
-  saveModification(){
+  saveModification() {
     this.modification.psat.name = this.name;
     this.saveMod.emit(true);
   }
 
-  deleteModification(){
+  deleteModification() {
     this.deleteMod.emit(true);
+  }
+
+  cancel() {
+    this.cancelEdit.emit(true);
   }
 
 }

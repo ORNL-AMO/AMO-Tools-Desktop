@@ -69,7 +69,7 @@
         </li>
       </ul>
       <div class="losses-container" *ngIf="showEditModification && editModification">
-        <app-edit-condition-properties [modification]="editModification" (deleteMod)="deleteModification()" (saveMod)="save()"></app-edit-condition-properties>
+        <app-edit-condition-properties [modification]="editModification" (deleteMod)="deleteModification()" (saveMod)="save()" (cancelEdit)="cancelEdit()"></app-edit-condition-properties>
       </div>
     </div>
 

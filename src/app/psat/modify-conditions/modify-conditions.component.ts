@@ -121,8 +121,13 @@ export class ModifyConditionsComponent implements OnInit {
     this.showEditModification = false;
   }
 
+  cancelEdit(){
+    this.showEditModification = false;
+    this.editModification = null;
+  }
+
   deleteModification() {
-    this.modificationIndex == 0;
+    this.modificationIndex = 0;
     _.remove(this._modifications, (mod) => {
       return mod.psat.name == this.editModification.psat.name;
     });
