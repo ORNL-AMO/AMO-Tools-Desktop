@@ -6,20 +6,20 @@
 </div>
   <div class="form-group">
     <label for="operatingFraction">Operating Fraction</label>
-    <input type="number" class="form-control" formControlName="operatingFraction" id="operatingFraction" (input)="startSavePolling()"
+    <input type="number" min="0" max="1" class="form-control" formControlName="operatingFraction" id="operatingFraction" (input)="startSavePolling()"
         (focus)="focusField('operatingFraction')">
   </div>
 
   <div class="form-group">
-    <label for="costKwHr">Cost (kw/hr)</label>
-    <input type="number" class="form-control" formControlName="costKwHr" id="costKwHr" (input)="startSavePolling()"
+    <label for="costKwHr">Cost</label>
+    <input type="number" min="0" class="form-control" formControlName="costKwHr" id="costKwHr" (input)="startSavePolling()"
         (focus)="focusField('costKwHr')">
-        <span class="units">$</span>
+        <span class="units">$/kwh</span>
   </div>
 
   <div class="form-group">
     <label for="flowRate">Flow Rate</label>
-    <input type="number" class="form-control" formControlName="flowRate" id="flowRate" (input)="startSavePolling()"
+    <input type="number" min="0" class="form-control" formControlName="flowRate" id="flowRate" (input)="startSavePolling()"
         (focus)="focusField('flowRate')">
         <span class="units">{{settings.flowMeasurement}}</span>
   </div>
@@ -29,7 +29,7 @@
       Head
       <small id="flaHelp" class="form-text text-muted text-help" (click)="showHeadToolModal()"><a>Calculate Head</a></small>
     </label>
-    <input type="number" class="form-control" formControlName="head" id="head" (input)="startSavePolling()"
+    <input type="number" min="0" class="form-control" formControlName="head" id="head" (input)="startSavePolling()"
         (focus)="focusField('head')">
         <span class="units">{{settings.distanceMeasurement}}</span>
   </div>
@@ -44,21 +44,21 @@
 
   <div class="form-group" *ngIf="psatForm.value.loadEstimatedMethod == 'Power'">
     <label for="motorKW">Motor Power</label>
-    <input type="number" class="form-control" formControlName="motorKW" id="motorKW" (input)="startSavePolling()"
+    <input type="number" min="0" class="form-control" formControlName="motorKW" id="motorKW" (input)="startSavePolling()"
         (focus)="focusField('motorKW')">
         <span class="units">kW</span>
   </div>
 
   <div class="form-group" *ngIf="psatForm.value.loadEstimatedMethod == 'Current'">
     <label for="motorAmps">Motor Power</label>
-    <input type="number" class="form-control" formControlName="motorAmps" id="motorAmps" (input)="startSavePolling()"
+    <input type="number" min="0" class="form-control" formControlName="motorAmps" id="motorAmps" (input)="startSavePolling()"
         (focus)="focusField('motorAmps')">
         <span class="units">A</span>
   </div>
 
   <div class="form-group">
     <label for="measuredVoltage">Voltage</label>
-    <input type="number" class="form-control" formControlName="measuredVoltage" id="measuredVoltage" (input)="startSavePolling()"
+    <input type="number" min="0" class="form-control" formControlName="measuredVoltage" id="measuredVoltage" (input)="startSavePolling()"
         (focus)="focusField('measuredVoltage')">
         <span class="units">V</span>
   </div>

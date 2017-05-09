@@ -4,12 +4,13 @@ import { PSAT, PsatInputs, PsatOutputs, PsatCalcResults } from '../shared/models
 //import { IndexedDbService } from '../indexedDb/indexed-db.service';
 import { Settings } from '../shared/models/settings';
 import { ConvertUnitsService } from '../shared/convert-units/convert-units.service';
+import { ValidationService } from '../shared/validation.service';
 declare var psatAddon: any;
 
 @Injectable()
 export class PsatService {
 
-  constructor(private formBuilder: FormBuilder, private convertUnitsService: ConvertUnitsService) { }
+  constructor(private formBuilder: FormBuilder, private convertUnitsService: ConvertUnitsService, private validationService: ValidationService) { }
 
   roundVal(val: number, digits: number) {
     return Number((Math.round(val * 100) / 100).toFixed(digits))
