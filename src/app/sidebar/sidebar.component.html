@@ -5,7 +5,7 @@
 </div>
 
 <div class="sidebar-group">
-  <button type="button" class="btn btn-primary btn-block">Create Assessment</button> 
+  <button type="button" class="btn btn-primary btn-block" (click)="showCreateAssessment()">Create Assessment</button> 
 </div>
 
 <div class="sidebar-group"> 
@@ -45,3 +45,8 @@
     <li><span (click)="goHome()">Welcome screen</span></li>
   </ul>
 </div>
+
+
+
+
+<app-assessment-create *ngIf="createAssessment" (hideModal)="hideModal()" [(directory)]="directory" class="create-container"></app-assessment-create>
