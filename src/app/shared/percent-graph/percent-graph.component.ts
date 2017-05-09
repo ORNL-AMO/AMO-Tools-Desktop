@@ -51,14 +51,16 @@ export class PercentGraphComponent implements OnInit {
     let percentValue = this.doc.getElementById('percent');
     let valueClass = this.doc.getElementsByClassName('value');
     if (div[0].clientHeight < 350) {
-      valueClass.forEach(cl => { cl.style.fontSize = '24px' });
+      for (let i = 0; i < valueClass.length; i++) {
+        valueClass[i].style.fontSize = '24px';
+      }
     }
     let marginTop = (div[0].clientHeight / 2) - (percentValue.clientHeight / 2);
     let marginLeft = (div[0].clientWidth / 2) - (percentValue.clientWidth / 2);
-    valueClass.forEach(cl => {
-      cl.style.marginTop = marginTop + 'px';
-      cl.style.marginLeft = marginLeft + 'px';
-    });
+    for (let i = 0; i < valueClass.length; i++) {
+      valueClass[i].style.marginTop = marginTop + 'px';
+      valueClass[i].style.marginLeft = marginLeft + 'px';
+    }
   }
 
   ngOnChanges() {
