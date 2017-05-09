@@ -11,6 +11,7 @@ export class CalculatorComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
+    console.log(this.selectedCalculator);
   }
 
 }

@@ -119,6 +119,7 @@ export class DashboardComponent implements OnInit {
   viewCalculator(str: string) {
     this.dashboardView = 'calculator';
     this.selectedCalculator = str;
+    console.log(this.selectedCalculator);
   }
 
   createExampleAssessments() {
