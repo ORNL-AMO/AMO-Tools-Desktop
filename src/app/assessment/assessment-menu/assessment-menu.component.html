@@ -18,7 +18,7 @@
   <div class="col-10">
     <app-assessment-create [(directory)]="directory" class="create-container"></app-assessment-create>
     <app-create-folder [(directory)]="directory" (newDirectory)="emitNewDir()" class="create-container"></app-create-folder>
-    <button type="button" class="btn btn-secondary" disabled>Generate Report</button>
+    <!-- <button type="button" class="btn btn-secondary" disabled>Generate Report</button> -->
     <button type="button" (click)="signalDeleteItems()" class="btn btn-secondary">Delete...</button>
     <button type="button" disabled class="btn btn-secondary space-left">Import...</button>
     <button type="button" disabled class="btn btn-secondary">Export...</button>

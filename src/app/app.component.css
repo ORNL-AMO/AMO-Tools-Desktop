@@ -32,8 +32,8 @@ h2 {
   font-weight: 700;
   color: #222;
 }
-a, a:not([href]):not([tabindex]){
-  color: #0081d6;
+a, a:not([href]):not([tabindex]), .nav-item{
+  color: #0077e3;
   text-decoration: none;
 }
 a:hover, a:not([href]):not([tabindex]):focus, a:not([href]):not([tabindex]):hover {
@@ -55,6 +55,9 @@ Buttons
   -webkit-box-shadow: 0px 1px 4px 0px rgba(0,0,0,0.2);
   -moz-box-shadow: 0px 1px 4px 0px rgba(0,0,0,0.2);
   box-shadow: 0px 1px 4px 0px rgba(0,0,0,0.2);
+}
+.btn-block {
+  display: block;
 }
 .btn:hover {
   cursor: pointer;
@@ -329,6 +332,9 @@ Data Tables
 =========================================== */
 .table-header {
   margin-top: 20px;
+  padding: 10px 15px;
+  background: #fff;
+  border-bottom: #ddd solid 1px;
   vertical-align: middle;
 }
   .table-header input {
@@ -359,8 +365,9 @@ Assessments: Grid & List View Shared Styles
 Assessments: List View
 =========================================== */
 .list-row {
-  padding: 14px 0;
-  border-bottom: #d6d6d6 solid 1px;
+  padding: 14px;
+  background: #fff;
+  border-bottom: #d6d6d6 dashed 1px;
 }
   .list-row .actions {
     margin-left: 90px;
@@ -515,6 +522,64 @@ Sidebar
   .phast.fa {
     color: #d35400;
   }
+
+
+.sidebar-bg {
+  background-color: #fff;
+  border-width: 1px;
+  border-style: solid;
+  -webkit-border-image: -webkit-gradient(linear, 0 0, 0 100%, from(#949494), to(rgba(0, 0, 0, 0))) 1 100%;
+  -webkit-border-image: -webkit-linear-gradient(#949494, rgba(0, 0, 0, 0)) 1 100%;
+  -moz-border-image:    -moz-linear-gradient(#949494, rgba(0, 0, 0, 0)) 1 100%;    
+  -o-border-image:      -o-linear-gradient(#949494, rgba(0, 0, 0, 0)) 1 100%;
+  border-image:         linear-gradient(to bottom, #949494, rgba(0, 0, 0, 0)) 1 100%;
+}
+
+.dashboard-content{
+  height: 100vh;
+  background-color: #eee;
+}
+
+
+.doe-logo {
+  width: 100%;
+  max-width: 200px;
+  margin-bottom: 20px;
+}
+.sidebar-group {
+  margin-bottom: 28px;
+}
+.sidebar-group .btn-primary {
+  padding: 10px;
+}
+.sidebar-group h3 {
+  text-transform: uppercase;
+  font-size: 12px;
+  color: #898989;
+  letter-spacing: 1px;
+  margin-bottom: 6px;
+}
+.sidebar-group ul, .sidebar-group li {
+  padding: 0;
+  margin: 0;
+}
+.sidebar-group li {
+  list-style: none;
+  margin: 0 0 8px 0;
+  line-height: 1;
+}
+.sidebar-group li > span {
+  font-size: 15px;
+  display: block;
+  color: #333;
+}
+  .sidebar-group li span:hover {
+    cursor: pointer;
+  }
+.sidebar-group li.selected span {
+  color: #000;
+  font-weight: bold;
+}
 
 
 /*
