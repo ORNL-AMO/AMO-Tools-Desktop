@@ -29,6 +29,8 @@ export class PumpFluidComponent implements OnInit {
   @ViewChild('formRef') formRef: ElementRef;
   elements: any;
 
+  counter: any;
+
   formValid: boolean;
   pumpTypes: Array<string> = [
     'End Suction Slurry',
@@ -119,6 +121,9 @@ export class PumpFluidComponent implements OnInit {
   }
 
   focusField(str: string) {
+    if (str == 'fixedSpecificSpeed') {
+      this.startSavePolling();
+    }
     this.changeField.emit(str);
     this.checkForm(this.psatForm);
   }
@@ -133,10 +138,19 @@ export class PumpFluidComponent implements OnInit {
   }
 
   savePsat(form: any) {
-    if (this.formValid) {
-      this.psat.inputs = this.psatService.getPsatInputsFromForm(form);
-      this.saved.emit(this.selected);
+    this.psat.inputs = this.psatService.getPsatInputsFromForm(form);
+    this.saved.emit(this.selected);
+  }
+
+
+  startSavePolling() {
+    this.checkForm(this.psatForm);
+    if (this.counter) {
+      clearTimeout(this.counter);
     }
+    this.counter = setTimeout(() => {
+      this.savePsat(this.psatForm)
+    }, 3000)
   }
 
 }

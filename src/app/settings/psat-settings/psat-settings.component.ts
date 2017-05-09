@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, SimpleChanges, Output, EventEmitter } from '@angular/core';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
 @Component({
   selector: 'app-psat-settings',
@@ -10,6 +10,8 @@ export class PsatSettingsComponent implements OnInit {
   settingsForm: any;
   @Input()
   unitChange: boolean;
+  @Output('startSavePolling')
+  startSavePolling = new EventEmitter<boolean>();
 
   flowMeasurements: Array<any> = [];
   powerMeasurements: Array<any> = [];
@@ -118,5 +120,7 @@ export class PsatSettingsComponent implements OnInit {
     this.settingsForm.patchValue({
       unitsOfMeasure: 'Custom'
     })
+
+    this.startSavePolling.emit(true);
   }
 }

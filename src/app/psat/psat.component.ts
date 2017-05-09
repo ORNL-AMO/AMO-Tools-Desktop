@@ -71,7 +71,8 @@ export class PsatComponent implements OnInit {
     private toastyConfig: ToastyConfig) {
 
     this.toastyConfig.theme = 'bootstrap';
-    this.toastyConfig.position = 'bottom-center';
+    this.toastyConfig.position = 'top-right';
+    this.toastyConfig.limit = 1;
   }
 
   ngOnInit() {
@@ -100,7 +101,6 @@ export class PsatComponent implements OnInit {
         if (results.length != 0) {
           this.settings = results[0];
           this.isAssessmentSettings = true;
-          console.log('update: ' + update);
           if (update) {
             this.addToast('Settings Saved');
           }

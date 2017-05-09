@@ -6,12 +6,12 @@
 
 <div class="row" *ngIf="settingsForm">
   <div class="col-12">
-    <app-application-settings [(settingsForm)]="settingsForm"></app-application-settings>
+    <app-application-settings [(settingsForm)]="settingsForm" (startSavePolling)="startSavePolling()"></app-application-settings>
   </div>
 </div>
 <div class="row" *ngIf="settingsForm">
   <div class="col-12">
-    <app-psat-settings [(settingsForm)]="settingsForm"></app-psat-settings>
+    <app-psat-settings [(settingsForm)]="settingsForm" (startSavePolling)="startSavePolling()"></app-psat-settings>
   </div>
 </div>
 

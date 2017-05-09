@@ -6,7 +6,7 @@
 </div>
   <div class="form-group">
     <label for="frequency">Line Frequency</label>
-    <select class="form-control number-input-field" id="frequency" formControlName="frequency" (input)="checkForm(psatForm)"
+    <select class="form-control number-input-field" id="frequency" formControlName="frequency" (input)="startSavePolling()"
         (focus)="focusField('lineFrequency')" ngModel="{{psatForm.value.frequency}}">
         <option *ngFor="let frequency of frequencies" [ngValue]="frequency">{{frequency}} Hz</option>
     </select>
@@ -14,7 +14,7 @@
 
   <div class="form-group">
     <label for="horsePower">Motor Power</label>
-    <select class="form-control number-input-field" id="horsePower" formControlName="horsePower" (input)="checkForm(psatForm)"
+    <select class="form-control number-input-field" id="horsePower" formControlName="horsePower" (input)="startSavePolling()"
         (focus)="focusField('horsePower')" ngModel="{{psatForm.value.horsePower}}">
         <option  *ngFor="let option of options" [ngValue]="option">{{option}} {{settings.powerMeasurement}}</option>
         
@@ -27,14 +27,14 @@
       <button class="btn" [disabled]="!selected" (click)="subtractNum('motorRPM')"><i class="fa fa-minus"></i></button>
       <button class="btn" [disabled]="!selected" (click)="addNum('motorRPM')"><i class="fa fa-plus"></i></button>
       <input type="number " class="form-control" id="motorRPM" formControlName="motorRPM" ngModel="{{psatForm.value.motorRPM}}"
-        (input)="checkForm(psatForm)" (focus)="focusField('motorRPM')">
+        (input)="startSavePolling()" (focus)="focusField('motorRPM')">
         <span class="units">rpms</span>
     </div>
   </div>
 
   <div class="form-group">
     <label for="efficiencyClass">Efficiency Class</label>
-    <select class="form-control select-input-field" id="efficiencyClass" formControlName="efficiencyClass" (input)="checkForm(psatForm)"
+    <select class="form-control select-input-field" id="efficiencyClass" formControlName="efficiencyClass" (input)="startSavePolling()"
         (focus)="focusField('efficiencyClass')" ngModel="{{psatForm.value.efficiencyClass}}">
       <option *ngFor="let efficiencyClass of efficiencyClasses" [ngValue]="efficiencyClass">{{efficiencyClass}}</option>
     </select>
@@ -42,14 +42,14 @@
 
   <div class="form-group" *ngIf="psatForm.value.efficiencyClass == 'Specified'">
     <label for="efficiency">Efficiency</label>
-    <input type="number" class="form-control" id="efficiency" formControlName="efficiency" (input)="checkForm(psatForm)"
+    <input type="number" class="form-control" id="efficiency" formControlName="efficiency" (input)="startSavePolling()"
         (focus)="focusField('efficiency')">
         <span class="units">%</span>
   </div>
 
   <div class="form-group">
     <label for="motorVoltage">Voltage</label>
-    <input type="number" class="form-control number-input-field" id="motorVoltage" formControlName="motorVoltage" (input)="checkForm(psatForm)"
+    <input type="number" class="form-control number-input-field" id="motorVoltage" formControlName="motorVoltage" (input)="startSavePolling()"
         (focus)="focusField('motorVoltage')">
         <span class="units">V</span>
   </div>
@@ -59,7 +59,7 @@
       Full-Load Amps
       <small *ngIf="!disableFLA()" id="flaHelp" class="form-text text-muted text-help" (click)="getFullLoadAmps()"><a>Estimate Full-Load Amps</a></small>
     </label>
-    <input type="number" class="form-control number-input-field" id="fullLoadAmps" formControlName="fullLoadAmps" (input)="checkForm(psatForm)"
+    <input type="number" class="form-control number-input-field" id="fullLoadAmps" formControlName="fullLoadAmps" (input)="startSavePolling()"
         (focus)="focusField('fullLoadAmps')">
         <span class="units">A</span>
   </div>
@@ -70,7 +70,7 @@
       <button class="btn" [disabled]="!selected" (click)="subtractNum('sizeMargin')"><i class="fa fa-minus"></i></button>
       <button class="btn" [disabled]="!selected" (click)="addNum('sizeMargin')"><i class="fa fa-plus"></i></button>
       <input type="number" class="form-control" id="sizeMargin" formControlName="sizeMargin" ngModel="{{psatForm.value.sizeMargin}}"
-        (input)="checkForm(psatForm)" (focus)="focusField('sizeMargin')">
+        (input)="startSavePolling()" (focus)="focusField('sizeMargin')">
     </div>
   </div>
 

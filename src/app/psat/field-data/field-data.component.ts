@@ -28,6 +28,7 @@ export class FieldDataComponent implements OnInit {
   @Input()
   settings: Settings;
 
+  counter: any;
 
   @ViewChild('formRef') formRef: ElementRef;
   elements: any;
@@ -107,11 +108,8 @@ export class FieldDataComponent implements OnInit {
   }
 
   savePsat(form: any) {
-    // this.isValid = this.psatService.isFieldDataFormValid(form);
-    if (this.formValid) {
-      this.psat.inputs = this.psatService.getPsatInputsFromForm(form);
-      this.saved.emit(true);
-    }
+    this.psat.inputs = this.psatService.getPsatInputsFromForm(form);
+    this.saved.emit(true);
   }
 
 
@@ -122,6 +120,20 @@ export class FieldDataComponent implements OnInit {
 
   hideHeadToolModal() {
     this.headToolModal.hide();
+  }
+
+  startSavePolling() {
+    this.checkForm(this.psatForm);
+    if (this.counter) {
+      console.log('reset');
+      clearTimeout(this.counter);
+    } else {
+      console.log('start')
+    }
+    this.counter = setTimeout(() => {
+      console.log('save')
+      this.savePsat(this.psatForm)
+    }, 3000)
   }
 
 }
