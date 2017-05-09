@@ -8,6 +8,9 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 export class ApplicationSettingsComponent implements OnInit {
   @Input()
   settingsForm: any;
+  @Output('startSavePolling')
+  startSavePolling = new EventEmitter<boolean>();
+
 
   languages: Array<string> = [
     'English'
@@ -20,7 +23,7 @@ export class ApplicationSettingsComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    this.setUnits();
+    //this.setUnits();
   }
 
   setUnits() {
@@ -46,6 +49,7 @@ export class ApplicationSettingsComponent implements OnInit {
         // voltageMeasurement: 'V'
       })
     }
-  }
 
+    this.startSavePolling.emit(true);
+  }
 }

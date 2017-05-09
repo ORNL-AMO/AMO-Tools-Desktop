@@ -45,7 +45,7 @@ export class MotorComponent implements OnInit {
   ];
 
   options: Array<any>;
-
+  counter: any;
   psatForm: any;
   isFirstChange: boolean = true;
   formValid: boolean;
@@ -176,10 +176,17 @@ export class MotorComponent implements OnInit {
 
 
   savePsat(form: any) {
-    // this.isValid = this.psatService.isMotorFormValid(form);
-    if (this.formValid) {
-      this.psat.inputs = this.psatService.getPsatInputsFromForm(form);
-      this.saved.emit(this.selected);
+    this.psat.inputs = this.psatService.getPsatInputsFromForm(form);
+    this.saved.emit(this.selected);
+  }
+
+  startSavePolling() {
+    this.checkForm(this.psatForm);
+    if (this.counter) {
+      clearTimeout(this.counter);
     }
+    this.counter = setTimeout(() => {
+      this.savePsat(this.psatForm)
+    }, 3000)
   }
 }
