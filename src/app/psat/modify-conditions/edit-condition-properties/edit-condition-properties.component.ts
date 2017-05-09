@@ -1,5 +1,6 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ViewChild } from '@angular/core';
 import { Modification } from '../../../shared/models/psat';
+import { ModalDirective } from 'ng2-bootstrap';
 
 @Component({
   selector: 'app-edit-condition-properties',
@@ -15,8 +16,9 @@ export class EditConditionPropertiesComponent implements OnInit {
   saveMod = new EventEmitter<boolean>();
   @Output('cancelEdit')
   cancelEdit = new EventEmitter<boolean>();
-  
+
   name: string;
+  deleteConfirm: boolean = false;
   constructor() { }
 
   ngOnInit() {
@@ -30,6 +32,14 @@ export class EditConditionPropertiesComponent implements OnInit {
 
   deleteModification() {
     this.deleteMod.emit(true);
+  }
+
+  showDeleteConfirm() {
+    this.deleteConfirm = true;
+  }
+
+  cancelDelete(){
+    this.deleteConfirm = false;
   }
 
   cancel() {

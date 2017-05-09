@@ -59,6 +59,7 @@ export class SystemBasicsComponent implements OnInit {
   }
 
   saveChanges() {
+    console.log('test');
     this.newSettings = this.settingsService.getSettingsFromForm(this.settingsForm);
     if (
       this.settings.currency != this.newSettings.currency ||
@@ -69,7 +70,7 @@ export class SystemBasicsComponent implements OnInit {
       this.settings.pressureMeasurement != this.newSettings.pressureMeasurement ||
       this.settings.unitsOfMeasure != this.newSettings.unitsOfMeasure
     ) {
-      if (this.psat.inputs.flow_rate || this.psat.inputs.head) {
+      if (this.psat.inputs.flow_rate || this.psat.inputs.head || this.psat.inputs.motor_rated_power) {
         this.showSettingsModal();
       } else {
         this.updateData(false);

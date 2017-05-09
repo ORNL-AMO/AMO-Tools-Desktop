@@ -11,7 +11,6 @@ export class PumpsComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    console.log('init');
   }
 
   showTool(str: string) {
