@@ -7,8 +7,8 @@
 	justify-content: center;
 	flex-direction: column;
 }
-	.landing h1, .landing h2, .landing ul {
-		width: 960px;
+	.landing h1, .landing h2 {
+		width: 70%;
 	}
 	.landing h1 {
 		text-align: center;
@@ -25,8 +25,9 @@
 	}
 	.landing h3 {
 		color: #333;
-		font-size: 18px;
-		font-weight: bold;
+		font-size: 22px;
+		text-align: center;
+		font-weight: normal;
 	}
 	.landing p {
 		font-size: 16px;
@@ -36,25 +37,38 @@
 		margin-top: 14px;
 	}
 
-.landing ul {
-	margin: 40px 0 20px;
-    padding: 50px 0;
-	border-color: #ddd;
-	border-style: solid;
-	border-width: 1px 0;
+.landing > ul {
+	margin: 60px 0 20px;
+	padding: 0;
+    background: #fff;
+    -webkit-box-shadow: 0px 2px 5px -1px rgba(0,0,0,0.28);
+	-moz-box-shadow: 0px 2px 5px -1px rgba(0,0,0,0.28);
+	box-shadow: 0px 2px 5px -1px rgba(0,0,0,0.28);
+	border: #ddd solid 1px;
+	border-radius: 4px;
 	display: flex;
 }
 .landing li {
 	list-style: none;
 	padding: 0;
 }
-	.landing li:first-of-type {
-		padding-right: 20px;
+	.landing > ul > li {
+		width: 50%;
+		padding: 20px;
+	}
+	.landing > ul > li:first-of-type {
+		border-right: #ddd solid 1px;
+	}
+	.landing > ul > li > div {
+		display: inline-block;
+		width: 30%;
 	}
 
 .landing .help {
-	text-align: center;
-	margin-bottom: 80px;
+    text-align: center;
+    margin-top: 60px;
+    padding-top: 60px;
+    border-top: #ddd solid 1px;
 }
 .landing .nav-item span:hover {
 	cursor: pointer;

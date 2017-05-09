@@ -1,74 +1,47 @@
 <div>
   <span (click)="goHome()">
-    <img src="assets/images/DOE_banner.png" class="doe_logo">
+    <img src="assets/images/DOE-banner-color.png" class="doe-logo">
    </span>
 </div>
 
-<div class="root-item" (click)="toggleSelected(directory)" [ngClass]="{'selected':selectedDirectoryId == directory.id}">
-  ASSESSMENTS</div>
-<div *ngIf="directory">
-  <app-directory-item [directory]="getDirectory()" [selectedDirectoryId]="selectedDirectoryId" (selectSignal)="toggleSelected($event)"
-    (collapseSignal)="toggleDirectoryCollapse($event)" [newDirEventToggle]="newDirEventToggle"></app-directory-item>
+<div class="sidebar-group">
+  <button type="button" class="btn btn-primary btn-block">Create Assessment</button> 
 </div>
 
-<div class="sidebar-group"> CALCULATORS
-  <div>
-    <span class="nav-item" [ngClass]="{'selected': selectedCalculator == 'pumps'}" (click)="chooseCalculator('pumps')">
-       <span class="icon">
-     <i class="fa fa-calculator"></i>
-       </span>Pumps
-    </span>
-  </div>
-  <div>
-    <span class="nav-item" [ngClass]="{'selected': selectedCalculator == 'fans'}" (click)="chooseCalculator('fans')">
-       <span class="icon">
-     <i class="fa fa-calculator"></i>
-       </span>Fans
-    </span>
-  </div>
-  <div>
-    <span class="nav-item" [ngClass]="{'selected': selectedCalculator == 'furnaces'}" (click)="chooseCalculator('furnaces')">
-       <span class="icon">
-     <i class="fa fa-calculator"></i>
-       </span>Furnaces
-    </span>
-  </div>
-  <div>
-    <span class="nav-item" [ngClass]="{'selected': selectedCalculator == 'steam'}" (click)="chooseCalculator('steam')">
-       <span class="icon">
-     <i class="fa fa-calculator"></i>
-       </span>Steam
-    </span>
-  </div>
-  <div>
-    <span class="nav-item" [ngClass]="{'selected': selectedCalculator == 'motors'}" (click)="chooseCalculator('motors')">
-       <span class="icon">
-     <i class="fa fa-calculator"></i>
-       </span>Motors
-    </span>
-  </div>
-  <div>
-    <span class="nav-item" [ngClass]="{'selected': selectedCalculator == 'utilities'}" (click)="chooseCalculator('utilities')">
-       <span class="icon">
-     <i class="fa fa-calculator"></i>
-       </span>Utilities
-    </span>
-  </div>
+<div class="sidebar-group"> 
+  <h3>Assessments</h3>
+  <ul>
+    <li [ngClass]="{'selected':selectedDirectoryId == directory.id}"><span (click)="toggleSelected(directory)" >All Assessments</span></li>
+    <div *ngIf="directory">
+      <app-directory-item [directory]="getDirectory()" [selectedDirectoryId]="selectedDirectoryId" (selectSignal)="toggleSelected($event)"
+        (collapseSignal)="toggleDirectoryCollapse($event)" [newDirEventToggle]="newDirEventToggle"></app-directory-item>
+    </div>
+  </ul>
+</div>
+
+<div class="sidebar-group"> 
+  <h3>Calculators</h3>
+  <ul>
+    <li><span>All Calculators</span></li>
+    <li [ngClass]="{'selected': selectedCalculator == 'pumps'}"><span (click)="chooseCalculator('pumps')">Pumps</span></li>
+    <li [ngClass]="{'selected': selectedCalculator == 'fans'}"><span (click)="chooseCalculator('fans')">Fans</span></li>
+    <li [ngClass]="{'selected': selectedCalculator == 'furnaces'}"><span (click)="chooseCalculator('furnaces')">Furnaces</span></li>
+    <li [ngClass]="{'selected': selectedCalculator == 'steam'}"><span (click)="chooseCalculator('steam')">Steam</span></li>
+    <li [ngClass]="{'selected': selectedCalculator == 'motors'}"><span (click)="chooseCalculator('motors')">Motors</span></li>
+    <li [ngClass]="{'selected': selectedCalculator == 'utilities'}"><span (click)="chooseCalculator('utilities')">Utilities</span></li>
+  </ul>
 </div>
 
 <div class="sidebar-group">
-  <div>
-    <span class="nav-item" [ngClass]="{'selected': dashboardView == 'tutorials'}" (click)="showTutorials()">
-       <span class="icon">
-     <i class="fa fa-play-circle-o"></i>
-       </span>Video Tutorials
-    </span>
-  </div>
-  <div>
-    <span class="nav-item" [ngClass]="{'selected': dashboardView == 'about-page'}" (click)="showAbout()">
-       <span class="icon">
-     <i class="fa fa-info-circle"></i>
-       </span>About Tool Suite
-    </span>
-  </div>
+  <h3>Help</h3>
+  <ul>
+    <li [ngClass]="{'selected': dashboardView == 'tutorials'}">
+      <span (click)="showTutorials()">Video Tutorials</span>
+    </li>
+    <li [ngClass]="{'selected': dashboardView == 'about-page'}">
+      <span (click)="showAbout()">About Tool Suite</span>
+    </li>
+    <li><span href="mailto:">Contact AMO Tool Administrators</span></li>
+    <li><span (click)="goHome()">Welcome screen</span></li>
+  </ul>
 </div>
