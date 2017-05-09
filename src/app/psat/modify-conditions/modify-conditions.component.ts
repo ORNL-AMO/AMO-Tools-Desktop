@@ -4,6 +4,7 @@ import * as _ from 'lodash';
 import { PsatService } from '../psat.service';
 import { Settings } from '../../shared/models/settings';
 import { AssessmentService } from '../../assessment/assessment.service';
+
 @Component({
   selector: 'app-modify-conditions',
   templateUrl: './modify-conditions.component.html',
@@ -28,6 +29,8 @@ export class ModifyConditionsComponent implements OnInit {
   currentField: string = 'default';
   isDropdownOpen: boolean = false;
   modificationIndex: number = 0;
+  showEditModification: boolean = false;
+  editModification: Modification;
   constructor(private psatService: PsatService, private assessmentService: AssessmentService) { }
 
   ngOnInit() {
@@ -36,7 +39,7 @@ export class ModifyConditionsComponent implements OnInit {
       this._modifications = (JSON.parse(JSON.stringify(this.psat.modifications)));
     }
     let tmpTab = this.assessmentService.getSubTab();
-    if(tmpTab){
+    if (tmpTab) {
       this.modifyTab = tmpTab;
     }
     // let results: PsatOutputs = this.psatService.results(this.psat.inputs);
@@ -46,6 +49,8 @@ export class ModifyConditionsComponent implements OnInit {
   save() {
     this.psat.modifications = (JSON.parse(JSON.stringify(this._modifications)));
     this.saved.emit(true);
+    this.showEditModification = false;
+    this.editModification = null;
   }
 
   addModification() {
@@ -107,7 +112,22 @@ export class ModifyConditionsComponent implements OnInit {
     this.currentField = $event;
   }
 
-  editModification(mod: Modification){
-    console.log(mod);
+  dispEditModification(mod: Modification) {
+    this.editModification = mod;
+    this.showEditModification = true;
+  }
+
+  hideEditModification() {
+    this.showEditModification = false;
+  }
+
+  deleteModification() {
+    this.modificationIndex == 0;
+    _.remove(this._modifications, (mod) => {
+      return mod.psat.name == this.editModification.psat.name;
+    });
+    this.hideEditModification();
+    this.editModification = null;
+    this.save();
   }
 }

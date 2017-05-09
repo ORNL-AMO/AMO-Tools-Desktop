@@ -37,6 +37,7 @@ import { ModifyConditionsTabsComponent } from './modify-conditions/modify-condit
 import { ModifyConditionsNotesComponent } from './modify-conditions/modify-conditions-notes/modify-conditions-notes.component';
 import { SettingsModule } from '../settings/settings.module';
 import { ToastyModule } from 'ng2-toasty';
+import { EditConditionPropertiesComponent } from './modify-conditions/edit-condition-properties/edit-condition-properties.component';
 
 @NgModule({
   declarations: [
@@ -62,7 +63,8 @@ import { ToastyModule } from 'ng2-toasty';
     FieldDataHelpComponent,
     ModifyConditionsHelpComponent,
     ModifyConditionsTabsComponent,
-    ModifyConditionsNotesComponent
+    ModifyConditionsNotesComponent,
+    EditConditionPropertiesComponent
   ],
   exports: [
 
