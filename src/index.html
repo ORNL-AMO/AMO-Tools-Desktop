@@ -9,10 +9,17 @@
 	<link rel="icon" type="image/x-icon" href="favicon.ico">
 
 	<style>
+	.loading-screen {
+		background: #eee;
+	}
   	.loading-screen .sidebar-bg {
   		height: 100vh;
-  		background: #2c2c2c;
-  		padding: 10px;
+  		background-color: #fff;
+	    border-width: 1px;
+	    border-style: solid;
+	    -o-border-image: linear-gradient(to bottom, #949494, rgba(0, 0, 0, 0)) 1 100%;
+	    border-image: -webkit-linear-gradient(top, #949494, rgba(0, 0, 0, 0)) 1 100%;
+	    border-image: linear-gradient(to bottom, #949494, rgba(0, 0, 0, 0)) 1 100%;
   	}
   	.loading-screen .main-content {
   		height: 100vh;
@@ -25,8 +32,9 @@
   		font-size: 30px;
   	}
 
-  	.loading-screen .logo {
+  	.loading-screen .doe-logo {
   		width: 100%;
+    	max-width: 200px;
   	}
 
 	.loading-screen .spinner {
@@ -81,7 +89,7 @@
 			<div class="row">
 				<div class="col-md-2 sidebar-bg">
 
-					<img src="assets/images/DOE_banner.png" class="logo">
+					<img src="assets/images/DOE-banner-color.png" class="doe-logo">
 
 				</div>
 				<div class="col-md-10">

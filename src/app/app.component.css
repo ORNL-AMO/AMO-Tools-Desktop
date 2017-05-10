@@ -119,6 +119,9 @@ label {
   .form-group:hover {
     background: #efefef;
   }
+  .modal .form-group:hover {
+    background: transparent;
+  }
 .form-control {
   border-radius: 0;
   border-color: #9c9c9c;
@@ -420,16 +423,22 @@ Assessments: List View
   .folder .assessment-name .fa {
     color: #434343;
   }
-  .psat .assessment-name {
+  .assessments .psat .assessment-name {
     background: url('../assets/images/assessment-icon-psat.png') no-repeat left;
-    padding-left: 24px;
-    background-size: 20px;
+    padding-left: 14px;
+    background-size: 12px;
   }
-  .phast .assessment-name {
+    .assessments .psat {
+      font-size: 15px;
+    }
+  .assessments .phast .assessment-name {
     background: url('../assets/images/assessment-icon-phast.png') no-repeat left;
-    padding-left: 24px;
-    background-size: 20px;
+    padding-left: 14px;
+    background-size: 12px;
   }
+      .assessments .phast {
+        font-size: 15px;
+      }
 
 
 /*
@@ -581,6 +590,9 @@ Sidebar
   font-weight: bold;
 }
 
+.sidebar-group li.sub-directory .sub-directory {
+  margin-left: 20px;
+}
 
 /*
 Footer
@@ -627,28 +639,37 @@ Banner
   color: rgba(255,255,255,0.8);
 }
 .banner .btn-dashboard {
-  float: left;
+  float: right;
+  font-size: 16px;
+  padding: 12px 20px;
 }
-.banner.psat .btn-dashboard {
-  background: url('../assets/images/assessment-icon-psat.png') no-repeat center center;
-  background-size: 38px;
-}
+  .banner .btn-dashboard span {
+    font-size: 23px;
+    font-weight: bold;
+  }
+
   .banner.psat .btn-dashboard:hover {
      background-color: #0063a4;
   }
-.banner.phast .btn-dashboard {
-  background: url('../assets/images/assessment-icon-phast.png') no-repeat center center;
-}
-    .banner.phast .btn-dashboard:hover {
-      background-color: #a83600; 
-    }
-.banner .btn-dashboard:hover, .banner .settings:hover {
+  .banner.phast .btn-dashboard:hover {
+    background-color: #a83600; 
+  }
+
+.banner .btn-dashboard:hover {
   text-decoration: none;
   cursor: pointer;
 }
-.banner .title {
+.banner.psat .title {
   color: #fff;
-  padding-left: 16px;
+  padding-left: 58px;
+  background: url('../assets/images/assessment-icon-psat.png') no-repeat 14px;
+  background-size: 31px;
+}
+.banner.phast .title {
+  color: #fff;
+  padding-left: 58px;
+  background: url('../assets/images/assessment-icon-phast.png') no-repeat 14px;
+  background-size: 31px;
 }
 
 .banner-border{
@@ -972,6 +993,9 @@ Modify Conditions
       margin: 0;
       padding: 4px 16px;
       float: right;
+      text-transform: uppercase;
+      font-size: 14px;
+      line-height: 2;
     }
       .modification .header button:hover {
         cursor: pointer;
