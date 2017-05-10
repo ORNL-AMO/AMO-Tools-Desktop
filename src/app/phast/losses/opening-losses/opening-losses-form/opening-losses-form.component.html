@@ -1,85 +1,65 @@
 <form #lossForm [formGroup]="openingLossesForm">
-  <div class="row form-group">
-    <label class="col-6 col-form-label small" for="type">Select Type</label>
-    <div class="col-6 input-group input-group-sm">
-      <select class="form-control" formControlName="openingType" id="openingType"  (input)="checkForm()" (focus)="focusField('openingType')">
+  <div class="form-group">
+    <label class="small" for="type">Select Type</label>
+    <select class="form-control" formControlName="openingType" id="openingType" (input)="checkForm()" (focus)="focusField('openingType')">
               <option>Round</option>
               <option>Rectangular (Square)</option>
               </select>
-    </div>
   </div>
 
-  <div class="row form-group">
-    <label class="col-6 col-form-label small" for="numberOfOpenings">Number of Openings of Same Size and Shape</label>
-    <div class="col-6 input-group input-group-sm">
-      <input type="number" class="form-control" formControlName="numberOfOpenings" id="numberOfOpenings" (input)="getArea()" (focus)="focusField('numberOfOpenings')">
-    </div>
+  <div class="form-group">
+    <label class="small" for="numberOfOpenings">Number of Openings of Same Size and Shape</label>
+    <input type="number" class="form-control" formControlName="numberOfOpenings" id="numberOfOpenings" (input)="getArea()" (focus)="focusField('numberOfOpenings')">
   </div>
 
 
-  <div class="row form-group">
-    <label class="col-6 col-form-label small" for="wallThickness">Furnace Wall Thickness (Inch)</label>
-    <div class="col-6 input-group input-group-sm">
-      <input type="number" class="form-control" formControlName="wallThickness" id="wallThickness" (input)="checkForm()" (focus)="focusField('wallThickness')">
-    </div>
+  <div class="form-group">
+    <label class="small" for="wallThickness">Furnace Wall Thickness (Inch)</label>
+    <input type="number" class="form-control" formControlName="wallThickness" id="wallThickness" (input)="checkForm()" (focus)="focusField('wallThickness')">
   </div>
 
-  <div class="row form-group">
-    <label *ngIf="openingLossesForm.value.openingType != 'Round'" class="col-6 col-form-label small" for="lengthOfOpening">Length of Openings (Inch)</label>
-    <label *ngIf="openingLossesForm.value.openingType == 'Round'" class="col-6 col-form-label small" for="lengthOfOpening">Diameter of Openings (Inch)</label>
-    <div class="col-6 input-group input-group-sm">
-      <input type="number" class="form-control" formControlName="lengthOfOpening" id="lengthOfOpening" (input)="getArea()" (focus)="focusField('lengthOfOpening')">
-    </div>
+  <div class="form-group">
+    <label *ngIf="openingLossesForm.value.openingType != 'Round'" class="small" for="lengthOfOpening">Length of Openings (Inch)</label>
+    <label *ngIf="openingLossesForm.value.openingType == 'Round'" class="small" for="lengthOfOpening">Diameter of Openings (Inch)</label>
+    <input type="number" class="form-control" formControlName="lengthOfOpening" id="lengthOfOpening" (input)="getArea()" (focus)="focusField('lengthOfOpening')">
   </div>
 
-  <div class="row form-group" *ngIf="openingLossesForm.value.openingType != 'Round'">
-    <label class="col-6 col-form-label small" for="heightOfOpening">Height of Openings (Inch)</label>
-    <div class="col-6 input-group input-group-sm">
-      <input type="number" class="form-control" formControlName="heightOfOpening" id="heightOfOpening" (input)="getArea()" (focus)="focusField('heightOfOpening')">
-    </div>
+  <div class="form-group" *ngIf="openingLossesForm.value.openingType != 'Round'">
+    <label class="small" for="heightOfOpening">Height of Openings (Inch)</label>
+    <input type="number" class="form-control" formControlName="heightOfOpening" id="heightOfOpening" (input)="getArea()" (focus)="focusField('heightOfOpening')">
   </div>
 
 
-  <div class="row">
-    <label class="col-6 small">Total Opening Area (ft<sup>2</sup>)</label>
-    <div class="col-6 text-center">
+  <div class="form-group">
+    <label class="small">Total Opening Area (ft<sup>2</sup>)</label>
+    <div class="text-center">
       {{totalArea | number:'2.2-2'}}
     </div>
   </div>
 
-  <div class="row form-group">
-    <label class="col-6 col-form-label small" for="viewFactor">View Factor - User defined if known or from chart</label>
-    <div class="col-6 input-group input-group-sm">
-      <input type="number" class="form-control" formControlName="viewFactor" id="viewFactor" (input)="checkForm()" (focus)="focusField('viewFactor')">
-    </div>
+  <div class="form-group">
+    <label class="small" for="viewFactor">View Factor - User defined if known or from chart</label>
+    <input type="number" class="form-control" formControlName="viewFactor" id="viewFactor" (input)="checkForm()" (focus)="focusField('viewFactor')">
   </div>
 
-  <div class="row form-group">
-    <label class="col-6 col-form-label small" for="insideTemp">Avg. Zone or Radiation Source Temp. (&#8457;)</label>
-    <div class="col-6 input-group input-group-sm">
-      <input type="number" class="form-control" formControlName="insideTemp" id="insideTemp" (input)="checkForm()" (focus)="focusField('insideTemp')">
-    </div>
+  <div class="form-group">
+    <label class="small" for="insideTemp">Avg. Zone or Radiation Source Temp. (&#8457;)</label>
+    <input type="number" class="form-control" formControlName="insideTemp" id="insideTemp" (input)="checkForm()" (focus)="focusField('insideTemp')">
   </div>
 
-  <div class="row form-group">
-    <label class="col-6 col-form-label small" for="ambientTemp">Ambient Temp. (&#8457;)</label>
-    <div class="col-6 input-group input-group-sm">
-      <input type="number" class="form-control" formControlName="ambientTemp" id="ambientTemp" (input)="checkForm()" (focus)="focusField('ambientTemp')">
-    </div>
+  <div class="form-group">
+    <label class="small" for="ambientTemp">Ambient Temp. (&#8457;)</label>
+    <input type="number" class="form-control" formControlName="ambientTemp" id="ambientTemp" (input)="checkForm()" (focus)="focusField('ambientTemp')">
   </div>
 
-  <div class="row form-group">
-    <label class="col-6 col-form-label small" for="emissivity">Emissivity of the Source (Typical - 0.9)</label>
-    <div class="col-6 input-group input-group-sm">
-      <input type="number" class="form-control" formControlName="emissivity" id="emissivity" (input)="checkForm()" (focus)="focusField('emissivity')">
-    </div>
+  <div class="form-group">
+    <label class="small" for="emissivity">Emissivity of the Source (Typical - 0.9)</label>
+    <input type="number" class="form-control" formControlName="emissivity" id="emissivity" (input)="checkForm()" (focus)="focusField('emissivity')">
   </div>
 
-  <div class="row form-group">
-    <label class="col-6 col-form-label small" for="percentTimeOpen">% of Time Open</label>
-    <div class="col-6 input-group input-group-sm">
-      <input type="number" class="form-control" formControlName="percentTimeOpen" id="percentTimeOpen" (input)="checkForm()" (focus)="focusField('percentTimeOpen')">
-    </div>
+  <div class="form-group">
+    <label class="small" for="percentTimeOpen">% of Time Open</label>
+    <input type="number" class="form-control" formControlName="percentTimeOpen" id="percentTimeOpen" (input)="checkForm()" (focus)="focusField('percentTimeOpen')">
   </div>
 
 </form>
