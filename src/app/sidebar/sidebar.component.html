@@ -8,6 +8,14 @@
   <button type="button" class="btn btn-primary btn-block" (click)="showCreateAssessment()">Create Assessment</button> 
 </div>
 
+<div class="sidebar-group">
+  <ul>
+    <li [ngClass]="{'selected':selectedDirectoryId == directory.id}">
+      <span (click)="goHome()">Landing Screen</span>
+    </li>
+  </ul>
+</div>
+
 <div class="sidebar-group"> 
   <h3>Assessments</h3>
   <ul>
@@ -42,7 +50,6 @@
       <span (click)="showAbout()">About Tool Suite</span>
     </li>
     <li><span href="mailto:">Contact AMO Tool Administrators</span></li>
-    <li><span (click)="goHome()">Welcome screen</span></li>
   </ul>
 </div>
 

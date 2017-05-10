@@ -119,6 +119,9 @@ label {
   .form-group:hover {
     background: #efefef;
   }
+  .modal .form-group:hover {
+    background: transparent;
+  }
 .form-control {
   border-radius: 0;
   border-color: #9c9c9c;
@@ -990,6 +993,9 @@ Modify Conditions
       margin: 0;
       padding: 4px 16px;
       float: right;
+      text-transform: uppercase;
+      font-size: 14px;
+      line-height: 2;
     }
       .modification .header button:hover {
         cursor: pointer;
