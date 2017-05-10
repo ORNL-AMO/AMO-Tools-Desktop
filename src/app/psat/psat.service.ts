@@ -385,9 +385,9 @@ export class PsatService {
   }
   getLineFreqEnum(lineFreq: string): number {
     let lineFreqEnum: number;
-    if (lineFreq == '60') {
+    if (lineFreq == '60 Hz') {
       lineFreqEnum = 0;
-    } else if (lineFreq == '50') {
+    } else if (lineFreq == '50 Hz') {
       lineFreqEnum = 1;
     }
     return lineFreqEnum;
@@ -395,9 +395,9 @@ export class PsatService {
   getLineFreqFromEnum(num: number): string {
     let lineFreq;
     if (num == 0) {
-      lineFreq = '60';
+      lineFreq = '60 Hz';
     } else if (num == 1) {
-      lineFreq = '50';
+      lineFreq = '50 Hz';
     }
     return lineFreq;
   }
