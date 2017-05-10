@@ -71,7 +71,7 @@ export class PsatComponent implements OnInit {
     private toastyConfig: ToastyConfig) {
 
     this.toastyConfig.theme = 'bootstrap';
-    this.toastyConfig.position = 'top-right';
+    this.toastyConfig.position = 'bottom-right';
     this.toastyConfig.limit = 1;
   }
 

@@ -1186,6 +1186,17 @@ No Data Messaging
 
 
 
+/* 
+Toasty Overrides ================================= */
+#toasty.toasty-position-bottom-right {
+  bottom: 75px;
+  right: 12px;
+}
+
+
+
+
+
 /*tmp color variables*/
 .dark-bg{
   border-left: #EDEDED solid 1px;
