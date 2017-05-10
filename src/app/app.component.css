@@ -420,17 +420,6 @@ Assessments: List View
   .folder .assessment-name .fa {
     color: #434343;
   }
-  .psat .assessment-name {
-    background: url('../assets/images/assessment-icon-psat.png') no-repeat left;
-    padding-left: 24px;
-    background-size: 20px;
-  }
-  .phast .assessment-name {
-    background: url('../assets/images/assessment-icon-phast.png') no-repeat left;
-    padding-left: 24px;
-    background-size: 20px;
-  }
-
   .assessments .psat .assessment-name {
     background: url('../assets/images/assessment-icon-psat.png') no-repeat left;
     padding-left: 14px;
