@@ -13,7 +13,6 @@
     </select>
   </div>
 
-
   <div class="form-group" *ngIf="psatForm.value.pumpType == 'Specified Optimal Efficiency'">
     <label for="specifiedPumpType">Specify Pump Type</label>
     <input type="text" class="form-control" formControlName="specifiedPumpType" id="specifiedPumpType" (input)="startSavePolling()"
@@ -22,7 +21,7 @@
 
   <div class="form-group">
     <label for="pumpRPM">Pump</label>
-    <input type="number" class="form-control" formControlName="pumpRPM" id="pumpRPM" (input)="startSavePolling()"
+    <input type="number" min="0" class="form-control" formControlName="pumpRPM" id="pumpRPM" (input)="startSavePolling()"
       (focus)="focusField('pumpRPM')">
     <span class="units">rpms</span>
   </div>
@@ -40,7 +39,7 @@
     <div class="incrementor form-control">
       <button class="btn" [disabled]="!selected" (click)="subtractNum('viscosity')"><i class="fa fa-minus"></i></button>
       <button class="btn" [disabled]="!selected" (click)="addNum('viscosity')"><i class="fa fa-plus"></i></button>
-      <input type="number" class="form-control" formControlName="viscosity" id="viscosity" ngModel="{{psatForm.value.viscosity}}"
+      <input type="number" min="0" class="form-control" formControlName="viscosity" id="viscosity" ngModel="{{psatForm.value.viscosity}}"
         (input)="startSavePolling()" (focus)="focusField('kinematicViscosity')">
     </div>
     <span class="units">cST</span>
@@ -48,7 +47,7 @@
 
   <div class="form-group">
     <label for="gravity">Specific Gravity</label>
-    <input type="number" class="form-control" formControlName="gravity" id="gravity" (input)="startSavePolling()"
+    <input type="number" min="0" class="form-control" formControlName="gravity" id="gravity" (input)="startSavePolling()"
       (focus)="focusField('specificGravity')">
   </div>
 
@@ -57,7 +56,7 @@
     <div class="incrementor form-control">
       <button class="btn" [disabled]="!selected" (click)="subtractNum('stages')"><i class="fa fa-minus"></i></button>
       <button class="btn" [disabled]="!selected" (click)="addNum('stages')"><i class="fa fa-plus"></i></button>
-      <input type="number" class="form-control" formControlName="stages" id="stages" ngModel="{{psatForm.value.stages}}" (input)="startSavePolling()"
+      <input type="number" min="1" class="form-control" formControlName="stages" id="stages" ngModel="{{psatForm.value.stages}}" (input)="startSavePolling()"
         (focus)="focusField('stages')">
     </div>
   </div>

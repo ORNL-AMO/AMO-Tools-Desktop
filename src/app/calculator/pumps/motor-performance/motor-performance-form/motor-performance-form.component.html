@@ -40,7 +40,8 @@
 
         <div class="form-group" *ngIf="tmpEfficiencyClass == 'Specified'">
           <label for="efficiency">Efficiency</label>
-          <input type="number" class="form-control" id="efficiency" [(ngModel)]="tmpEfficiency" (input)="emitChange()">
+          <input type="number" min="0" max="100" class="form-control" id="efficiency" [(ngModel)]="tmpEfficiency" (input)="emitChange()">
+          <span class="units">%</span>
         </div>
 
         <div class="form-group">

@@ -30,7 +30,7 @@ export class AssessmentService {
       drive: null,
       kinematic_viscosity: 1,
       specific_gravity: 1,
-      stages: null,
+      stages: 1,
       fixed_speed: null,
       line_frequency: null,
       motor_rated_power: null,
