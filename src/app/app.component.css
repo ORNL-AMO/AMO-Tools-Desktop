@@ -647,28 +647,37 @@ Banner
   color: rgba(255,255,255,0.8);
 }
 .banner .btn-dashboard {
-  float: left;
+  float: right;
+  font-size: 16px;
+  padding: 12px 20px;
 }
-.banner.psat .btn-dashboard {
-  background: url('../assets/images/assessment-icon-psat.png') no-repeat center center;
-  background-size: 38px;
-}
+  .banner .btn-dashboard span {
+    font-size: 23px;
+    font-weight: bold;
+  }
+
   .banner.psat .btn-dashboard:hover {
      background-color: #0063a4;
   }
-.banner.phast .btn-dashboard {
-  background: url('../assets/images/assessment-icon-phast.png') no-repeat center center;
-}
-    .banner.phast .btn-dashboard:hover {
-      background-color: #a83600; 
-    }
-.banner .btn-dashboard:hover, .banner .settings:hover {
+  .banner.phast .btn-dashboard:hover {
+    background-color: #a83600; 
+  }
+
+.banner .btn-dashboard:hover {
   text-decoration: none;
   cursor: pointer;
 }
-.banner .title {
+.banner.psat .title {
   color: #fff;
-  padding-left: 16px;
+  padding-left: 58px;
+  background: url('../assets/images/assessment-icon-psat.png') no-repeat 14px;
+  background-size: 31px;
+}
+.banner.phast .title {
+  color: #fff;
+  padding-left: 58px;
+  background: url('../assets/images/assessment-icon-phast.png') no-repeat 14px;
+  background-size: 31px;
 }
 
 .banner-border{
