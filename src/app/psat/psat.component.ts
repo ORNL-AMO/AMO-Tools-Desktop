@@ -250,7 +250,7 @@ export class PsatComponent implements OnInit {
   addToast(msg: string) {
     let toastOptions: ToastOptions = {
       title: msg,
-      timeout: 2000,
+      timeout: 4000,
       showClose: true,
       theme: 'default'
     }
