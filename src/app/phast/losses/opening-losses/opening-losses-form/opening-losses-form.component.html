@@ -8,7 +8,9 @@
   </div>
 
   <div class="form-group">
-    <label class="small" for="numberOfOpenings">Number of Openings of Same Size and Shape</label>
+    <label class="small" for="numberOfOpenings" aria-describedby="numberOfOpeningsHelp">Number of Openings
+    <small id="numberOfOpeningsHelp" class="form-text text-muted text-help">Same Size and Shape</small>
+    </label>
     <input type="number" class="form-control" formControlName="numberOfOpenings" id="numberOfOpenings" (input)="getArea()" (focus)="focusField('numberOfOpenings')">
   </div>
 
@@ -34,13 +36,15 @@
 
   <div class="form-group">
     <label class="small">Total Opening Area</label>
-    <div class="text-center">
+    <div class="text-center small">
       {{totalArea | number:'2.2-2'}} ft<sup>2</sup>
     </div>
   </div>
 
   <div class="form-group">
-    <label class="small" for="viewFactor">View Factor - User defined if known or from chart</label>
+    <label class="small" for="viewFactor" aria-describedby="viewFactorHelp">View Factor
+    <small id="viewFactorHelp" class="form-text text-muted text-help">User defined if known or from chart</small>
+    </label>
     <input type="number" class="form-control" formControlName="viewFactor" id="viewFactor" (input)="checkForm()" (focus)="focusField('viewFactor')">
   </div>
 
@@ -57,7 +61,9 @@
   </div>
 
   <div class="form-group">
-    <label class="small" for="emissivity">Emissivity of the Source (Typical - 0.9)</label>
+    <label class="small" for="emissivity" aria-describedby="emissivityHelp">Emissivity of the Source
+    <small id="emissivityHelp" class="form-text text-muted text-help">Typical - 0.9</small>
+    </label>
     <input type="number" class="form-control" formControlName="emissivity" id="emissivity" (input)="checkForm()" (focus)="focusField('emissivity')">
   </div>
 

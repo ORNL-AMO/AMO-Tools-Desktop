@@ -21,13 +21,18 @@
   </div>
   <div class="row">
     <div class="col-12">
-      <app-opening-losses-form  (changeField)="changeField($event)" [(openingLossesForm)]="loss.form" (calculate)="calculate(loss)" [(lossState)]="lossState" [baselineSelected]="baselineSelected"></app-opening-losses-form>
+      <app-opening-losses-form (changeField)="changeField($event)" [(openingLossesForm)]="loss.form" (calculate)="calculate(loss)"
+        [(lossState)]="lossState" [baselineSelected]="baselineSelected"></app-opening-losses-form>
     </div>
   </div>
   <div class="row">
-    <label class="col-6 small">Radiation Losses (Btu / hr)</label>
-    <div class="col-6 text-center">
-      {{loss.totalOpeningLosses | number:'2.2-2'}}
+    <div class="col-12">
+      <div class="form-group">
+        <label class="small">Radiation Losses</label>
+        <div class="small text-center">
+          {{loss.totalOpeningLosses | number:'2.2-2'}} Btu/hr
+        </div>
+      </div>
     </div>
   </div>
 </div>

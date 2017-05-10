@@ -25,11 +25,13 @@
     </div>
   </div>
   <div class="row">
-    <div class="col-6">
-      <small>Total Heat Loss (Btu/hr)</small>
-    </div>
-    <div class="col-6 text-center">
-      {{loss.heatLoss |number:'2.2-2'}}
+    <div class="col-12">
+      <div class="form-group">
+        <label class="small">Total Heat Loss</label>
+        <div class="text-center small">
+          {{loss.heatLoss | number:'2.2-2'}} Btu/hr
+        </div>
+      </div>
     </div>
   </div>
 </div>

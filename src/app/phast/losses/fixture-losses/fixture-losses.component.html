@@ -24,12 +24,14 @@
       <app-fixture-losses-form (changeField)="changeField($event)" [(lossesForm)]="loss.form" (calculate)="calculate(loss)" [(lossState)]="lossState" [baselineSelected]="baselineSelected"></app-fixture-losses-form>
     </div>
   </div>
-  <div class="row">
-    <div class="col-6">
-      <small>Total Heat Required (Btu/hr)</small>
-    </div>
-    <div class="col-6 text-center">
-      {{loss.heatLoss |number:'2.2-2'}}
+    <div class="row">
+    <div class="col-12">
+      <div class="form-group">
+        <label class="small">Total Heat Required</label>
+        <div class="text-center small">
+          {{loss.heatLoss | number:'2.2-2'}} Btu/hr
+        </div>
+      </div>
     </div>
   </div>
 </div>

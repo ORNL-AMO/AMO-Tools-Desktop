@@ -38,12 +38,14 @@
         [(lossesForm)]="loss.gasCoolingForm" (calculate)="calculate(loss)" [(lossState)]="lossState" [baselineSelected]="baselineSelected"></app-gas-cooling-losses-form>
     </div>
   </div>
-  <div class="row">
-    <div class="col-6">
-      <small>Heat Loss for cooling (Btu/hr)</small>
-    </div>
-    <div class="col-6 text-center">
-      {{loss.heatLoss | number:'2.2-2'}}
+    <div class="row">
+    <div class="col-12">
+      <div class="form-group">
+        <label class="small">Heat Loss for Cooling</label>
+        <div class="text-center small">
+          {{loss.heatLoss | number:'2.2-2'}} Btu/hr
+        </div>
+      </div>
     </div>
   </div>
 </div>
