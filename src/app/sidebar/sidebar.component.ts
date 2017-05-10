@@ -43,8 +43,10 @@ export class SidebarComponent implements OnInit {
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.workingDirectory && !this.firstChange) {
-      if (changes.workingDirectory.previousValue.id != changes.workingDirectory.currentValue.id) {
-        this.toggleSelected(this.workingDirectory);
+      if (changes.workingDirectory.currentValue) {
+        if (changes.workingDirectory.previousValue.id != changes.workingDirectory.currentValue.id) {
+          this.toggleSelected(changes.workingDirectory.currentValue);
+        }
       }
     } else if (changes.selectedCalculator && !this.firstChange) {
       if (this.selectedCalculator != '') {
@@ -62,14 +64,18 @@ export class SidebarComponent implements OnInit {
   }
 
   toggleSelected(dir: Directory) {
-    if (dir.collapsed == true) {
-      dir.collapsed = false;
+    if (dir) {
+      if (dir.collapsed == true) {
+        dir.collapsed = false;
+      }
+      this.selectedCalculator = '';
+      this.selectedDirectoryId = dir.id;
+      this.directoryChange.emit(dir);
+    } else {
+      this.selectedCalculator = '';
+      this.selectedDirectoryId = null;
     }
-    this.selectedCalculator = '';
-    this.selectedDirectoryId = dir.id;
-    this.directoryChange.emit(dir);
   }
-
   chooseCalculator(str: string) {
     this.selectCalculator.emit(str);
   }

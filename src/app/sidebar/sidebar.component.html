@@ -10,7 +10,7 @@
 
 <div class="sidebar-group">
   <ul>
-    <li [ngClass]="{'selected':selectedDirectoryId == directory.id}">
+    <li [ngClass]="{'selected':dashboardView == 'landing-screen'}">
       <span (click)="goHome()">Landing Screen</span>
     </li>
   </ul>

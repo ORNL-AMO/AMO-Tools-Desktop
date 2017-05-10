@@ -1,6 +1,6 @@
 <ul>
-  <li *ngIf="directory.id != 1">
-    <span (click)="toggleSelected(directory)" (dblclick)="toggleDirectoryCollapse(directory)" [ngClass]="{'selected':selectedDirectoryId == directory.id}">
+  <li *ngIf="directory.id != 1" [ngClass]="{'selected':selectedDirectoryId == directory.id}">
+    <span (click)="toggleSelected(directory)" (dblclick)="toggleDirectoryCollapse(directory)">
       <i class="fa fa-folder-o" [ngClass]="{'selected':selectedDirectoryId == directory.id}" aria-hidden="true"></i>
         {{directory.name}}
     </span>
