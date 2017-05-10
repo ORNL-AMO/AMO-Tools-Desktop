@@ -431,6 +431,23 @@ Assessments: List View
     background-size: 20px;
   }
 
+  .assessments .psat .assessment-name {
+    background: url('../assets/images/assessment-icon-psat.png') no-repeat left;
+    padding-left: 14px;
+    background-size: 12px;
+  }
+    .assessments .psat {
+      font-size: 15px;
+    }
+  .assessments .phast .assessment-name {
+    background: url('../assets/images/assessment-icon-phast.png') no-repeat left;
+    padding-left: 14px;
+    background-size: 12px;
+  }
+      .assessments .phast {
+        font-size: 15px;
+      }
+
 
 /*
 Assessments: Grid View
@@ -581,6 +598,9 @@ Sidebar
   font-weight: bold;
 }
 
+.sidebar-group li.sub-directory .sub-directory {
+  margin-left: 20px;
+}
 
 /*
 Footer

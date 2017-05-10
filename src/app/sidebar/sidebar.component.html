@@ -12,10 +12,10 @@
   <h3>Assessments</h3>
   <ul>
     <li [ngClass]="{'selected':selectedDirectoryId == directory.id}"><span (click)="toggleSelected(directory)" >All Assessments</span></li>
-    <div *ngIf="directory">
+    <li *ngIf="directory">
       <app-directory-item [directory]="getDirectory()" [selectedDirectoryId]="selectedDirectoryId" (selectSignal)="toggleSelected($event)"
         (collapseSignal)="toggleDirectoryCollapse($event)" [newDirEventToggle]="newDirEventToggle"></app-directory-item>
-    </div>
+    </li>
   </ul>
 </div>
 
