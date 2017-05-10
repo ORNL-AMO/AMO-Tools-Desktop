@@ -10,11 +10,13 @@
       <app-directory-item [directory]="directory" [selectedDirectoryId]="selectedDirectoryId" (selectSignal)="toggleSelected($event)"
       (collapseSignal)="toggleDirectoryCollapse($event)"></app-directory-item>
     </span>
-  </li>
-  <li class="assessments" *ngIf="directory.assessments && directory.collapsed == false">
     <ul>
-      <li *ngFor="let assessment of directory.assessments">
-        <app-assessment-item [assessment]="assessment"></app-assessment-item>
+      <li class="assessments" *ngIf="directory.assessments && directory.collapsed == false">
+        <ul>
+          <li *ngFor="let assessment of directory.assessments">
+            <app-assessment-item [assessment]="assessment"></app-assessment-item>
+          </li>
+        </ul>
       </li>
     </ul>
   </li>
