@@ -423,22 +423,20 @@ Assessments: List View
   .folder .assessment-name .fa {
     color: #434343;
   }
-  .assessments .psat .assessment-name {
-    background: url('../assets/images/assessment-icon-psat.png') no-repeat left;
-    padding-left: 14px;
-    background-size: 12px;
+  .assessments .psat, .assessments .phast {
+    font-size: 15px;
   }
-    .assessments .psat {
-      font-size: 15px;
-    }
+  .assessments .psat .assessment-name {
+    background: url('../assets/images/assessment-icon-psat.png') no-repeat left 3px;
+  }
   .assessments .phast .assessment-name {
     background: url('../assets/images/assessment-icon-phast.png') no-repeat left;
-    padding-left: 14px;
-    background-size: 12px;
   }
-      .assessments .phast {
-        font-size: 15px;
-      }
+  .assessments .psat .assessment-name, .assessments .phast .assessment-name {
+    display: inline;
+    padding-left: 20px;
+    background-size: 16px;
+  }
 
 
 /*
@@ -1182,6 +1180,17 @@ No Data Messaging
   font-size: 14px;
   color: #a2a2a2;
   margin-top: 6px;
+}
+
+
+
+
+
+/* 
+Toasty Overrides ================================= */
+#toasty.toasty-position-bottom-right {
+  bottom: 75px;
+  right: 12px;
 }
 
 

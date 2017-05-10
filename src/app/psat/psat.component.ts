@@ -71,7 +71,7 @@ export class PsatComponent implements OnInit {
     private toastyConfig: ToastyConfig) {
 
     this.toastyConfig.theme = 'bootstrap';
-    this.toastyConfig.position = 'top-right';
+    this.toastyConfig.position = 'bottom-right';
     this.toastyConfig.limit = 1;
   }
 
@@ -250,7 +250,7 @@ export class PsatComponent implements OnInit {
   addToast(msg: string) {
     let toastOptions: ToastOptions = {
       title: msg,
-      timeout: 2000,
+      timeout: 4000,
       showClose: true,
       theme: 'default'
     }
