@@ -6,8 +6,9 @@
   </div>
 
   <div class="form-group">
-    <label class="small" for="heatLoss">Heat Loss (Btu/hr)</label>
+    <label class="small" for="heatLoss">Heat Loss</label>
     <input type="number" class="form-control" formControlName="heatLoss" id="heatLoss" (input)="checkForm()" (focus)="focusField('heatLoss')">
+    <span class="units">Btu/hr</span>
   </div>
 
 </form>

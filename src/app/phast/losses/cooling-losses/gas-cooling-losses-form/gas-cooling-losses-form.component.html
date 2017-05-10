@@ -1,27 +1,32 @@
 <form #lossForm [formGroup]="lossesForm">
   <div class="row form-group">
-    <label class="small" for="avgSpecificHeat">Average Specific Heat (Btu/lb-F)</label>
+    <label class="small" for="avgSpecificHeat">Average Specific Heat</label>
     <input type="number" class="form-control" formControlName="avgSpecificHeat" id="avgSpecificHeat" (input)="checkForm()" (focus)="focusField('avgSpecificHeat')">
+      <span class="units">Btu/(lb-&#8457;)</span>
   </div>
 
   <div class="row form-group">
-    <label class="small" for="gasFlow">Gas Flow (SCFM)</label>
+    <label class="small" for="gasFlow">Gas Flow</label>
     <input type="number" class="form-control" formControlName="gasFlow" id="gasFlow" (input)="checkForm()" (focus)="focusField('gasFlow')">
+      <span class="units">SCFM</span>
   </div>
 
   <div class="row form-group">
-    <label class="small" for="inletTemp">Inlet Temperature (&#8457;)</label>
+    <label class="small" for="inletTemp">Inlet Temperature</label>
     <input type="number" class="form-control" formControlName="inletTemp" id="inletTemp" (input)="checkForm()" (focus)="focusField('inletTemp')">
+     <span class="units">&#8457;</span>
   </div>
 
   <div class="row form-group">
-    <label class="small" for="outletTemp">Outlet Temperature (&#8457;)</label>
+    <label class="small" for="outletTemp">Outlet Temperature</label>
     <input type="number" class="form-control" formControlName="outletTemp" id="outletTemp" (input)="checkForm()" (focus)="focusField('outletTemp')">
+    <span class="units">&#8457;</span>
   </div>
 
   <div class="row form-group">
     <label class="small" for="correctionFactor">Correction Factor</label>
     <input type="number" class="form-control" formControlName="correctionFactor" id="correctionFactor" (input)="checkForm()"
       (focus)="focusField('correctionFactor')">
+      
   </div>
 </form>

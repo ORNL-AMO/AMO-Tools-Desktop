@@ -1,18 +1,21 @@
 <form #lossForm [formGroup]="lossesForm">
 
   <div class="form-group">
-    <label class="small" for="surfaceArea">Total Outside Surface Area (ft<sup>2</sup>)</label>
+    <label class="small" for="surfaceArea">Total Outside Surface Area</label>
     <input type="number" class="form-control" formControlName="surfaceArea" id="surfaceArea" (input)="checkForm()" (focus)="focusField('surfaceArea')">
+    <span class="units">ft<sup>2</sup></span>
   </div>
 
   <div class="form-group">
-    <label class="small" for="avgSurfaceTemp">Average Surface Temperature (&#8457;)</label>
+    <label class="small" for="avgSurfaceTemp">Average Surface Temperature</label>
     <input type="number" class="form-control" formControlName="avgSurfaceTemp" id="avgSurfaceTemp" (input)="checkForm()" (focus)="focusField('avgSurfaceTemp')">
+    <span class="units">&#8457;</span>
   </div>
 
   <div class="form-group">
-    <label class="small" for="ambientTemp">Ambient Temperature (&#8457;)</label>
+    <label class="small" for="ambientTemp">Ambient Temperature</label>
     <input type="number" class="form-control" formControlName="ambientTemp" id="ambientTemp" (input)="checkForm()" (focus)="focusField('ambientTemp')">
+    <span class="units">&#8457;</span>
   </div>
 
   <div class="form-group">

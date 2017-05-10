@@ -14,8 +14,9 @@
 
 
   <div class="form-group">
-    <label class="small" for="wallThickness">Furnace Wall Thickness (Inch)</label>
+    <label class="small" for="wallThickness">Furnace Wall Thickness</label>
     <input type="number" class="form-control" formControlName="wallThickness" id="wallThickness" (input)="checkForm()" (focus)="focusField('wallThickness')">
+    <span class="units">in</span>
   </div>
 
   <div class="form-group">
@@ -25,15 +26,16 @@
   </div>
 
   <div class="form-group" *ngIf="openingLossesForm.value.openingType != 'Round'">
-    <label class="small" for="heightOfOpening">Height of Openings (Inch)</label>
+    <label class="small" for="heightOfOpening">Height of Openings</label>
     <input type="number" class="form-control" formControlName="heightOfOpening" id="heightOfOpening" (input)="getArea()" (focus)="focusField('heightOfOpening')">
+    <span class="units">in</span>
   </div>
 
 
   <div class="form-group">
-    <label class="small">Total Opening Area (ft<sup>2</sup>)</label>
+    <label class="small">Total Opening Area</label>
     <div class="text-center">
-      {{totalArea | number:'2.2-2'}}
+      {{totalArea | number:'2.2-2'}} ft<sup>2</sup>
     </div>
   </div>
 
@@ -43,13 +45,15 @@
   </div>
 
   <div class="form-group">
-    <label class="small" for="insideTemp">Avg. Zone or Radiation Source Temp. (&#8457;)</label>
+    <label class="small" for="insideTemp">Avg. Zone or Radiation Source Temp.</label>
     <input type="number" class="form-control" formControlName="insideTemp" id="insideTemp" (input)="checkForm()" (focus)="focusField('insideTemp')">
+    <span class="units">&#8457;</span>
   </div>
 
   <div class="form-group">
-    <label class="small" for="ambientTemp">Ambient Temp. (&#8457;)</label>
+    <label class="small" for="ambientTemp">Ambient Temp.</label>
     <input type="number" class="form-control" formControlName="ambientTemp" id="ambientTemp" (input)="checkForm()" (focus)="focusField('ambientTemp')">
+    <span class="units">&#8457;</span>
   </div>
 
   <div class="form-group">
@@ -60,6 +64,7 @@
   <div class="form-group">
     <label class="small" for="percentTimeOpen">% of Time Open</label>
     <input type="number" class="form-control" formControlName="percentTimeOpen" id="percentTimeOpen" (input)="checkForm()" (focus)="focusField('percentTimeOpen')">
+    <span class="units">%</span>
   </div>
 
 </form>

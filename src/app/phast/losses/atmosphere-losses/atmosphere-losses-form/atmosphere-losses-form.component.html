@@ -6,23 +6,27 @@
   </div>
 
   <div class="form-group">
-    <label class="small" for="specificHeat">Specific heat of gas (Btu/(SCF-(&#8457;)))</label>
+    <label class="small" for="specificHeat">Specific heat of gas</label>
     <input type="number" class="form-control" formControlName="specificHeat" id="specificHeat" (input)="checkForm()" (focus)="focusField('specificHeat')">
+    <span class="units">Btu/(SCF-&#8457;)</span>
   </div>
 
   <div class="form-group">
-    <label class="small" for="inletTemp">Initial temperature (&#8457;)</label>
+    <label class="small" for="inletTemp">Initial temperature</label>
     <input type="number" class="form-control" formControlName="inletTemp" id="inletTemp" (input)="checkForm()" (focus)="focusField('inletTemp')">
+    <span class="units">&#8457;</span>
   </div>
 
   <div class="form-group">
-    <label class="small" for="outletTemp">Final temperature (&#8457;)</label>
+    <label class="small" for="outletTemp">Final temperature</label>
     <input type="number" class="form-control" formControlName="outletTemp" id="outletTemp" (input)="checkForm()" (focus)="focusField('outletTemp')">
+        <span class="units">&#8457;</span>
   </div>
 
   <div class="form-group">
-    <label class="small" for="flowRate">Flow Rate (SCF/hr)</label>
+    <label class="small" for="flowRate">Flow Rate</label>
     <input type="number" class="form-control" formControlName="flowRate" id="flowRate" (input)="checkForm()" (focus)="focusField('flowRate')">
+      <span class="units">SCF/hr</span>
   </div>
 
   <div class="form-group">

@@ -1,19 +1,22 @@
 <form #lossForm [formGroup]="lossesForm">
 
   <div class="form-group">
-    <label class="small" for="draftPressure">Furnace Draft Pressure (Inch W.C.)</label>
+    <label class="small" for="draftPressure">Furnace Draft Pressure</label>
     <input type="number" class="form-control" formControlName="draftPressure" id="draftPressure" (input)="checkForm()" (focus)="focusField('draftPressure')">
+    <span class="units">in. W.C.</span>
   </div>
 
   <div class="form-group">
-    <label class="small" for="openingArea">Opening Area (ft<sup>2</sup>)</label>
+    <label class="small" for="openingArea">Opening Area</label>
     <input type="number" class="form-control" formControlName="openingArea" id="openingArea" (input)="checkForm()" (focus)="focusField('openingArea')">
+    <span class="units">ft<sup>2</sup></span>
   </div>
 
   <div class="form-group">
-    <label class="small" for="leakageGasTemperature">Temperature of Gases Leaking (&#8457;)</label>
+    <label class="small" for="leakageGasTemperature">Temperature of Gases Leaking</label>
     <input type="number" class="form-control" formControlName="leakageGasTemperature" id="leakageGasTemperature" (input)="checkForm()"
       (focus)="focusField('leakageGasTemperature')">
+    <span class="units">&#8457;</span>
   </div>
 
   <div class="form-group">
@@ -22,9 +25,10 @@
   </div>
 
   <div class="form-group">
-    <label class="small" for="ambientTemperature">Ambient Temperature (&#8457;)</label>
+    <label class="small" for="ambientTemperature">Ambient Temperature</label>
     <input type="number" class="form-control" formControlName="ambientTemperature" id="ambientTemperature" (input)="checkForm()"
       (focus)="focusField('ambientTemperature')">
+    <span class="units">&#8457;</span>
   </div>
 
 </form>

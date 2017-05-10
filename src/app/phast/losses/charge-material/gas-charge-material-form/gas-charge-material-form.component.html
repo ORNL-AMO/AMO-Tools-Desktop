@@ -11,45 +11,53 @@
     <label class="small" for="materialSpecificHeat">Specific Heat of Gas (Btu/(lb-F))</label>
     <input type="number" class="form-control" formControlName="materialSpecificHeat" id="materialSpecificHeat" (input)="checkForm()"
       (focus)="focusField('materialSpecificHeat')">
+    <span class="units">Btu/(lb-&#8457;)</span>
   </div>
 
   <div class="form-group form-spacer">
-    <label class="small" for="feedRate">Feed Rate for Gas Mixture (lb/hr)</label>
+    <label class="small" for="feedRate">Feed Rate for Gas Mixture</label>
     <input type="number" class="form-control" formControlName="feedRate" id="feedRate" (input)="checkForm()" (focus)="focusField('feedRate')">
+    <span class="units">lb/hr</span>
   </div>
 
 
   <div class="form-group">
-    <label class="small" for="vaporInGas">Vapor in Gas Mixture (% of Total)</label>
+    <label class="small" for="vaporInGas">Vapor in Gas Mixture</label>
     <input type="number" class="form-control" formControlName="vaporInGas" id="vaporInGas" (input)="checkForm()" (focus)="focusField('vaporInGas')">
+    <span class="units">%</span>
   </div>
 
   <div class="form-group">
-    <label class="small" for="initialTemperature">Initial Temperature (&#8457;)</label>
+    <label class="small" for="initialTemperature">Initial Temperature</label>
     <input type="number" class="form-control" formControlName="initialTemperature" id="initialTemperature" (input)="checkForm()"
       (focus)="focusField('initialTemperature')">
+    <span class="units">&#8457;</span>
   </div>
 
   <div class="form-group">
-    <label class="small" for="dischargeTemperature">Discharge Temperature (&#8457;)</label>
+    <label class="small" for="dischargeTemperature">Discharge Temperature</label>
     <input type="number" class="form-control" formControlName="dischargeTemperature" id="dischargeTemperature" (input)="checkForm()"
       (focus)="focusField('dischargeTemperature')">
+    <span class="units">&#8457;</span>
   </div>
 
   <div class="form-group">
-    <label class="small" for="specificHeatOfVapor">Specific Heat of Vapor (Btu/(lb-F))</label>
+    <label class="small" for="specificHeatOfVapor">Specific Heat of Vapor</label>
     <input type="number" class="form-control" formControlName="specificHeatOfVapor" id="specificHeatOfVapor" (input)="checkForm()"
       (focus)="focusField('specificHeatOfVapor')">
+    <span class="units">Btu/(lb-&#8457;)</span>
   </div>
 
   <div class="form-group">
-    <label class="small" for="gasReacted">Feed Gas Reacted (% of Total)</label>
+    <label class="small" for="gasReacted">Feed Gas Reacted</label>
     <input type="number" class="form-control" formControlName="gasReacted" id="gasReacted" (input)="checkForm()" (focus)="focusField('gasReacted')">
+    <span class="units">%</span>
   </div>
 
   <div class="form-group">
-    <label class="small" for="heatOfReaction">Heat of Reaction (Btu/lb)</label>
+    <label class="small" for="heatOfReaction">Heat of Reaction</label>
     <input type="number" class="form-control" formControlName="heatOfReaction" id="heatOfReaction" (input)="checkForm()" (focus)="focusField('heatOfReaction')">
+    <span class="units">Btu/lb</span>
   </div>
 
   <div class="form-group">
@@ -61,8 +69,9 @@
   </div>
 
   <div class="form-group">
-    <label class="small" for="additionalHeatRequired">Additional Heat Required (Btu/lb)</label>
+    <label class="small" for="additionalHeatRequired">Additional Heat Required</label>
     <input type="number" class="form-control" formControlName="additionalHeatRequired" id="additionalHeatRequired" (input)="checkForm()"
       (focus)="focusField('additionalHeatRequired')">
+    <span class="units">Btu/lb</span>
   </div>
 </form>
