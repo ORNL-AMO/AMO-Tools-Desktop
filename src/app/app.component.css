@@ -427,7 +427,7 @@ Assessments: List View
     font-size: 15px;
   }
   .assessments .psat .assessment-name {
-    background: url('../assets/images/assessment-icon-psat.png') no-repeat left;
+    background: url('../assets/images/assessment-icon-psat.png') no-repeat left 3px;
   }
   .assessments .phast .assessment-name {
     background: url('../assets/images/assessment-icon-phast.png') no-repeat left;
