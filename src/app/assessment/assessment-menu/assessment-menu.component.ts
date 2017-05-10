@@ -34,6 +34,7 @@ export class AssessmentMenuComponent implements OnInit {
   constructor(private indexedDbService: IndexedDbService) { }
 
   ngOnInit() {
+    this.firstChange = true;
     this.breadCrumbs = new Array();
     this.getBreadcrumbs(this.directory.id);
   }
