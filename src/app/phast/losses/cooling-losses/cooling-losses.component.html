@@ -21,31 +21,31 @@
   </div>
   <div class="row">
     <div class="col-12">
-      <div class="row form-group">
-        <label class="col-4 col-form-label small" for="coolingMedium">Cooling Medium</label>
-        <div class="col-8 input-group input-group-sm">
-          <select class="form-control" id="coolingMedium" [(ngModel)]="loss.coolingMedium" [disabled]="!baselineSelected" (focus)="changeField('coolingMedium')">
+      <div class="form-group">
+        <label class="small" for="coolingMedium">Cooling Medium</label>
+        <select class="form-control" id="coolingMedium" [(ngModel)]="loss.coolingMedium" [disabled]="!baselineSelected" (focus)="changeField('coolingMedium')">
           <option>Air</option>
           <option>Water</option>
           <option>Other Gas</option>
           <option>Other Liquid</option>
         </select>
-        </div>
       </div>
-      <app-water-cooling-losses-form (changeField)="changeField($event)" *ngIf="loss.coolingMedium == 'Water'" [(lossesForm)]="loss.waterCoolingForm" (calculate)="calculate(loss)"
-        [(lossState)]="lossState" [baselineSelected]="baselineSelected"></app-water-cooling-losses-form>
-      <app-liquid-cooling-losses-form (changeField)="changeField($event)" *ngIf="loss.coolingMedium == 'Other Liquid'" [(lossesForm)]="loss.liquidCoolingForm" (calculate)="calculate(loss)"
-        [(lossState)]="lossState" [baselineSelected]="baselineSelected"></app-liquid-cooling-losses-form>
-      <app-gas-cooling-losses-form (changeField)="changeField($event)" *ngIf="loss.coolingMedium == 'Other Gas' || loss.coolingMedium == 'Air'" [(lossesForm)]="loss.gasCoolingForm"
-        (calculate)="calculate(loss)" [(lossState)]="lossState" [baselineSelected]="baselineSelected"></app-gas-cooling-losses-form>
+      <app-water-cooling-losses-form (changeField)="changeField($event)" *ngIf="loss.coolingMedium == 'Water'" [(lossesForm)]="loss.waterCoolingForm"
+        (calculate)="calculate(loss)" [(lossState)]="lossState" [baselineSelected]="baselineSelected"></app-water-cooling-losses-form>
+      <app-liquid-cooling-losses-form (changeField)="changeField($event)" *ngIf="loss.coolingMedium == 'Other Liquid'" [(lossesForm)]="loss.liquidCoolingForm"
+        (calculate)="calculate(loss)" [(lossState)]="lossState" [baselineSelected]="baselineSelected"></app-liquid-cooling-losses-form>
+      <app-gas-cooling-losses-form (changeField)="changeField($event)" *ngIf="loss.coolingMedium == 'Other Gas' || loss.coolingMedium == 'Air'"
+        [(lossesForm)]="loss.gasCoolingForm" (calculate)="calculate(loss)" [(lossState)]="lossState" [baselineSelected]="baselineSelected"></app-gas-cooling-losses-form>
     </div>
   </div>
-  <div class="row">
-    <div class="col-6">
-      <small>Heat Loss for cooling (Btu/hr)</small>
-    </div>
-    <div class="col-6 text-center">
-      {{loss.heatLoss | number:'2.2-2'}}
+    <div class="row">
+    <div class="col-12">
+      <div class="form-group">
+        <label class="small">Heat Loss for Cooling</label>
+        <div class="text-center small">
+          {{loss.heatLoss | number:'2.2-2'}} Btu/hr
+        </div>
+      </div>
     </div>
   </div>
 </div>

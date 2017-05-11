@@ -1,45 +1,38 @@
 <form #lossForm [formGroup]="atmosphereLossForm">
 
-  <div class="row form-group">
-    <label class="col-6 col-form-label small" for="atmosphereGas">Atmosphere Gas</label>
-    <div class="col-6 input-group input-group-sm">
-      <input type="text" class="form-control" formControlName="atmosphereGas" id="atmosphereGas" (input)="checkForm()" (focus)="focusField('atmosphereGas')">
-    </div>
+  <div class="form-group">
+    <label class="small" for="atmosphereGas">Atmosphere Gas</label>
+    <input type="text" class="form-control" formControlName="atmosphereGas" id="atmosphereGas" (input)="checkForm()" (focus)="focusField('atmosphereGas')">
   </div>
 
-  <div class="row form-group">
-    <label class="col-6 col-form-label small" for="specificHeat">Specific heat of gas (Btu/(SCF-(&#8457;)))</label>
-    <div class="col-6 input-group input-group-sm">
-      <input type="number" class="form-control" formControlName="specificHeat" id="specificHeat" (input)="checkForm()" (focus)="focusField('specificHeat')">
-    </div>
+  <div class="form-group">
+    <label class="small" for="specificHeat">Specific heat of gas</label>
+    <input type="number" class="form-control" formControlName="specificHeat" id="specificHeat" (input)="checkForm()" (focus)="focusField('specificHeat')">
+    <span class="units">Btu/(SCF-&#8457;)</span>
   </div>
 
-  <div class="row form-group">
-    <label class="col-6 col-form-label small" for="inletTemp">Initial temperature (&#8457;)</label>
-    <div class="col-6 input-group input-group-sm">
-      <input type="number" class="form-control" formControlName="inletTemp" id="inletTemp" (input)="checkForm()" (focus)="focusField('inletTemp')">
-    </div>
+  <div class="form-group">
+    <label class="small" for="inletTemp">Initial temperature</label>
+    <input type="number" class="form-control" formControlName="inletTemp" id="inletTemp" (input)="checkForm()" (focus)="focusField('inletTemp')">
+    <span class="units">&#8457;</span>
   </div>
 
-  <div class="row form-group">
-    <label class="col-6 col-form-label small" for="outletTemp">Final temperature (&#8457;)</label>
-    <div class="col-6 input-group input-group-sm">
-      <input type="number" class="form-control" formControlName="outletTemp" id="outletTemp" (input)="checkForm()" (focus)="focusField('outletTemp')">
-    </div>
+  <div class="form-group">
+    <label class="small" for="outletTemp">Final temperature</label>
+    <input type="number" class="form-control" formControlName="outletTemp" id="outletTemp" (input)="checkForm()" (focus)="focusField('outletTemp')">
+        <span class="units">&#8457;</span>
   </div>
 
-  <div class="row form-group">
-    <label class="col-6 col-form-label small" for="flowRate">Flow Rate (SCF/hr)</label>
-    <div class="col-6 input-group input-group-sm">
-      <input type="number" class="form-control" formControlName="flowRate" id="flowRate" (input)="checkForm()" (focus)="focusField('flowRate')">
-    </div>
+  <div class="form-group">
+    <label class="small" for="flowRate">Flow Rate</label>
+    <input type="number" class="form-control" formControlName="flowRate" id="flowRate" (input)="checkForm()" (focus)="focusField('flowRate')">
+      <span class="units">SCF/hr</span>
   </div>
 
-  <div class="row form-group">
-    <label class="col-6 col-form-label small" for="correctionFactor">Correction Factor</label>
-    <div class="col-6 input-group input-group-sm">
-      <input type="number" class="form-control" formControlName="correctionFactor" id="correctionFactor" (input)="checkForm()" (focus)="focusField('correctionFactor')">
-    </div>
+  <div class="form-group">
+    <label class="small" for="correctionFactor">Correction Factor</label>
+    <input type="number" class="form-control" formControlName="correctionFactor" id="correctionFactor" (input)="checkForm()"
+      (focus)="focusField('correctionFactor')">
   </div>
 
 </form>

@@ -21,16 +21,14 @@
   </div>
   <div class="row">
     <div class="col-12">
-      <div class="row form-group">
-        <label class="col-6 col-form-label small" for="type">Select Type</label>
-        <div class="col-6 input-group input-group-sm">
-          <select class="form-control" id="baselineMaterial" [(ngModel)]="material.chargeMaterialType" [disabled]="!baselineSelected" (focus)="changeField('chargeMaterialType')">
+      <div class="form-group">
+        <label class="small" for="type">Select Type</label>
+        <select class="form-control" id="baselineMaterial" [(ngModel)]="material.chargeMaterialType" [disabled]="!baselineSelected"
+          (focus)="changeField('chargeMaterialType')">
             <option>Solid</option>
             <option>Liquid</option>
             <option>Gas</option>
             </select>
-          <!--<app-control-messages [control]="material.form.controls.type"></app-control-messages>-->
-        </div>
       </div>
       <app-solid-charge-material-form *ngIf="material.chargeMaterialType == 'Solid'" (changeField)="changeField($event)" [(lossState)]="lossState"
         [(chargeMaterialForm)]="material.solidForm" (calculate)="calculate(material)" [baselineSelected]="baselineSelected"></app-solid-charge-material-form>
@@ -41,11 +39,13 @@
     </div>
   </div>
   <div class="row">
-    <div class="col-8">
-      <small>Total Heat Required For Charge Material (Btu/hr)</small>
-    </div>
-    <div class="col-4 text-center">
-      {{material.heatRequired |number:'2.2-2'}}
+    <div class="col-12">
+      <div class="form-group">
+        <label class="small">Total Heat Required For Charge Material</label>
+        <div class="text-center small">
+          {{material.heatRequired |number:'2.2-2'}} Btu/hr
+        </div>
+      </div>
     </div>
   </div>
 </div>
