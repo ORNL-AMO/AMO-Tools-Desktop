@@ -8,7 +8,7 @@
   <div class="form-group">
     <label for="pumpType">Pump Type</label>
     <select class="form-control" formControlName="pumpType" id="pumpType" (input)="startSavePolling()" (focus)="focusField('pumpType')"
-      ngModel="{{psatForm.value.pumpType}}">
+      ngModel="{{psatForm.value.pumpType}}" autofocus>
       <option *ngFor="let pumpType of pumpTypes" [ngValue]="pumpType">{{pumpType}}</option>
     </select>
   </div>

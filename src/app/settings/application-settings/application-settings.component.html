@@ -1,7 +1,7 @@
 <form [formGroup]="settingsForm">
   <div class="form-group">
     <label for="language">Language</label>
-    <select class="form-control" formControlName="language" id="language" ngModel="{{settingsForm.value.language}}">
+    <select class="form-control" formControlName="language" id="language" ngModel="{{settingsForm.value.language}}" autofocus>
         <option *ngFor="let language of languages" [ngValue]="language">{{language}}</option>
     </select>
   </div>
