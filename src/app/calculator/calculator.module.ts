@@ -13,6 +13,8 @@ import { MotorsComponent } from './motors/motors.component';
 
 import { PumpsModule } from './pumps/pumps.module';
 import { UtilitiesModule } from './utilities/utilities.module';
+import { CompressedAirComponent } from './compressed-air/compressed-air.component';
+
 @NgModule({
   declarations: [
     CalculatorComponent,
@@ -20,6 +22,7 @@ import { UtilitiesModule } from './utilities/utilities.module';
     FurnacesComponent,
     SteamComponent,
     MotorsComponent,
+    CompressedAirComponent
   ],
   exports: [
     CalculatorComponent
