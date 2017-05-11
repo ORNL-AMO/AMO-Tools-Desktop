@@ -36,6 +36,7 @@
     <li [ngClass]="{'selected': selectedCalculator == 'furnaces'}"><span (click)="chooseCalculator('furnaces')">Furnaces</span></li>
     <li [ngClass]="{'selected': selectedCalculator == 'steam'}"><span (click)="chooseCalculator('steam')">Steam</span></li>
     <li [ngClass]="{'selected': selectedCalculator == 'motors'}"><span (click)="chooseCalculator('motors')">Motors</span></li>
+    <li [ngClass]="{'selected': selectedCalculator == 'compressed-air'}"><span (click)="chooseCalculator('compressed-air')">Compressed Air</span></li>
     <li [ngClass]="{'selected': selectedCalculator == 'utilities'}"><span (click)="chooseCalculator('utilities')">Utilities</span></li>
   </ul>
 </div>
@@ -49,7 +50,7 @@
     <li [ngClass]="{'selected': dashboardView == 'about-page'}">
       <span (click)="showAbout()">About Tool Suite</span>
     </li>
-    <li><span href="mailto:">Contact AMO Tool Administrators</span></li>
+    <li><span href="mailto:accawigk@ornl.gov">Contact AMO Tool Administrators</span></li>
   </ul>
 </div>
 
