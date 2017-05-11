@@ -8,3 +8,9 @@
 .panel{
   height: 100%;
 }
+
+.disclaimer{
+  width: 75%;
+    float: left;
+    padding-left: 20%;
+}

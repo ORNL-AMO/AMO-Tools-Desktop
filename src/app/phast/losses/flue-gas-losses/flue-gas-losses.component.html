@@ -3,7 +3,7 @@
   <button class="btn btn-secondary pull-right" (click)="addLoss()">+ Add Flue Gas Loss</button>
 </div>-->
 
-<div class="no-data" *ngIf="flueGasLosses.length == 0" (click)="addLoss()">
+<!--<div class="no-data" *ngIf="flueGasLosses.length == 0" (click)="addLoss()">
   <h3>You have no Fixture Losses</h3>
   <h4>Add some now.</h4>
 </div>
@@ -24,12 +24,44 @@
       <app-flue-gas-losses-form [(flueGasLossForm)]="loss.form" (calculate)="calculate(loss)" [(lossState)]="lossState"></app-flue-gas-losses-form>
     </div>
   </div>
-  <div class="row">
-    <div class="col-4">
-      <small>Heat Loss (Btu/hr)</small>
-    </div>
-    <div class="col-4 text-center">
-      {{loss.heatLoss |number:'2.2-2'}}
+   <div class="row">
+    <div class="col-12">
+      <div class="form-group">
+        <label class="small">Heat Loss</label>
+        <div class="text-center small">
+          {{loss.heatLoss | number:'2.2-2'}} Btu/hr
+        </div>
+      </div>
     </div>
   </div>
+</div>-->
+
+<div class="row justify-content-center align-items-center" style="height: 100%;">
+<div class="col-8">
+  <h4>
+    This portion of the application is still in active development.
+  </h4>
+  <h5>
+    Below is a description of what you will find here in the future.
+  </h5>
+  <blockquote class="blockquote">
+    <p>
+      Flue gas losses encompass energy lost through the flue or “chimney” of the furnace. The gasses constitute normally the largest
+      losses in a fired process heating system.
+    </p>
+  </blockquote>
+  <blockquote class="blockquote">
+    <p>
+      The flue gas calculator calculates flue gas loss by summing up heat content of components of flue gas. For industrial heating
+      systems, it is difficult and impractical to measure the quantity of each component to calculate the total heat content
+      of the flue gases.
+    </p>
+  </blockquote>
+  <blockquote class="blockquote">
+    <p>
+      Hence, an indirect method known as available heat method is used to calculate heat losses from a heating system. Available
+      heat is expressed as the percentage of the fuel heat input into the system.
+    </p>
+  </blockquote>
+</div>
 </div>

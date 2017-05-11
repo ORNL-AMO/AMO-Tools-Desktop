@@ -3,6 +3,7 @@
 <app-motors *ngIf="selectedCalculator == 'motors'"></app-motors>
 <app-fans *ngIf="selectedCalculator == 'fans'"></app-fans>
 <app-steam *ngIf="selectedCalculator == 'steam'"></app-steam>
+<app-compressed-air *ngIf="selectedCalculator == 'compressed-air'"></app-compressed-air>
 <app-utilities [selectedTool]="selectedTool" *ngIf="selectedCalculator == 'utilities'"></app-utilities>
 
 <div *ngIf="selectedCalculator == 'all'">
@@ -76,3 +77,4 @@
     </div>
 
 </div>
+
