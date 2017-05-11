@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 
 
 @Component({
@@ -7,10 +7,14 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./pumps.component.css']
 })
 export class PumpsComponent implements OnInit {
-  selectedTool: string = 'none';
+  @Input()
+  selectedTool: string;
   constructor() { }
 
   ngOnInit() {
+    if(!this.selectedTool){
+      this.selectedTool = 'none';
+    }
   }
 
   showTool(str: string) {
