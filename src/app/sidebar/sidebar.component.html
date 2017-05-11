@@ -30,7 +30,7 @@
 <div class="sidebar-group"> 
   <h3>Calculators</h3>
   <ul>
-    <li><span>All Calculators</span></li>
+    <li [ngClass]="{'selected': selectedCalculator == 'all'}"><span (click)="chooseCalculator('all')">All Calculators</span></li>
     <li [ngClass]="{'selected': selectedCalculator == 'pumps'}"><span (click)="chooseCalculator('pumps')">Pumps</span></li>
     <li [ngClass]="{'selected': selectedCalculator == 'fans'}"><span (click)="chooseCalculator('fans')">Fans</span></li>
     <li [ngClass]="{'selected': selectedCalculator == 'furnaces'}"><span (click)="chooseCalculator('furnaces')">Furnaces</span></li>

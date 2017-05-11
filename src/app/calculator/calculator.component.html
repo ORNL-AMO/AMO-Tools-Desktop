@@ -1,6 +1,78 @@
-<app-pumps *ngIf="selectedCalculator == 'pumps'"></app-pumps>
+<app-pumps [selectedTool]="selectedTool" *ngIf="selectedCalculator == 'pumps'"></app-pumps>
 <app-furnaces *ngIf="selectedCalculator == 'furnaces'"></app-furnaces>
 <app-motors *ngIf="selectedCalculator == 'motors'"></app-motors>
 <app-fans *ngIf="selectedCalculator == 'fans'"></app-fans>
 <app-steam *ngIf="selectedCalculator == 'steam'"></app-steam>
-<app-utilities *ngIf="selectedCalculator == 'utilities'"></app-utilities>
+<app-utilities [selectedTool]="selectedTool" *ngIf="selectedCalculator == 'utilities'"></app-utilities>
+
+<div *ngIf="selectedCalculator == 'all'">
+    <div class="calc-content">
+        <div class="calc-banner">
+            <div class="h3">All Calculators</div>
+        </div>
+        <div class="row justify-content-center align-items-center calc-list">
+            <div class="col-8">
+                <div class="row calc-type">
+                    <div class="col-12">
+                        <p class="h4">Pumps</p>
+                    </div>
+                </div>
+                <div class="row tools">
+                    <div class="col-12">
+                        <a class="h5" (click)="showTool('pumps','head-tool')">Head Tool</a>
+                        <div>Use head tool calculator to calculate pump head.</div>
+                    </div>
+                </div>
+                <div class="row tools">
+                    <div class="col-12">
+                        <a class="h5" (click)="showTool('pumps','system-curve')">System Curve</a>
+                        <div>Use system curve to graph your pumps flow.</div>
+                    </div>
+                </div>
+                <div class="row tools">
+                    <div class="col-12">
+                        <a class="h5" (click)="showTool('pumps','nema-energy-efficiency')">NEMA Energy Efficiency</a>
+                        <div>Calculate stuff...</div>
+                    </div>
+                </div>
+
+                <div class="row tools">
+                    <div class="col-12">
+                        <a class="h5" (click)="showTool('pumps','specific-speed')">Specific Speed</a>
+                        <div>Calculate Stuff...</div>
+                    </div>
+                </div>
+
+                <div class="row tools">
+                    <div class="col-12">
+                        <a class="h5" (click)="showTool('pumps','achievable-efficiency')">Achievable Efficiency</a>
+                        <div>Calculate some other stuff...</div>
+                    </div>
+                </div>
+
+                <div class="row tools">
+                    <div class="col-12">
+                        <a class="h5" (click)="showTool('pumps','motor-performance')">Motor Performance</a>
+                        <div>Calculate some motor stuff...</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row justify-content-center align-items-center calc-list">
+            <div class="col-8">
+                <div class="row calc-type">
+                    <div class="col-12">
+                        <p class="h4">Utilities</p>
+                    </div>
+                </div>
+                <div class="row tools">
+                    <div class="col-12">
+                        <a class="h5" (click)="showTool('utilities','convert-units')">Unit Converter</a>
+                        <div>Use unit converter for quick unit conversion calculations</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
