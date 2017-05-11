@@ -3,7 +3,7 @@
   <button class="btn btn-secondary pull-right" (click)="addLoss()">+ Add Flue Gas Loss</button>
 </div>-->
 
-<div class="no-data" *ngIf="flueGasLosses.length == 0" (click)="addLoss()">
+<!--<div class="no-data" *ngIf="flueGasLosses.length == 0" (click)="addLoss()">
   <h3>You have no Fixture Losses</h3>
   <h4>Add some now.</h4>
 </div>
@@ -32,4 +32,29 @@
       {{loss.heatLoss |number:'2.2-2'}}
     </div>
   </div>
+</div>-->
+
+<div class="row justify-content-center align-items-center" style="height: 100%;">
+<div class="col-8">
+  <h4>
+    This portion of the application is still in active development.
+  </h4>
+  <h5>
+    Below is a description of what you will find here in the future.
+  </h5>
+
+  <p>
+    Flue gas losses encompass energy lost through the flue or “chimney” of the furnace. The gasses constitute normally the largest
+    losses in a fired process heating system.
+  </p>
+  <p>
+    The flue gas calculator calculates flue gas loss by summing up heat content of components of flue gas. For industrial heating
+    systems, it is difficult and impractical to measure the quantity of each component to calculate the total heat content
+    of the flue gases.
+  </p>
+  <p>
+    Hence, an indirect method known as available heat method is used to calculate heat losses from a heating system. Available
+    heat is expressed as the percentage of the fuel heat input into the system.
+  </p>
+</div>
 </div>

@@ -26,7 +26,7 @@
     </div>
   </div>
 
-  <div class="row patab-contentnel" *ngIf="currentTab == 'metered-energy'">
+  <div class="row tab-content" *ngIf="currentTab == 'metered-energy'">
     <div class="col-12">
       <app-metered-energy-use></app-metered-energy-use>
     </div>
@@ -42,6 +42,12 @@
     <div class="pull-left">
       <button class="btn btn-secondary" *ngIf="currentTab == 'system-setup'" (click)="close()">Close</button>
       <button class="btn btn-secondary" *ngIf="currentTab != 'system-setup'" (click)="goBack()">Back</button>
+    </div>
+    <div>
+      <div class="text-center small disclaimer">
+        Disclaimer: The PHAST Tool is still in the early stages of development. Only a portion of the tools functionality is in place,
+        some links/buttons/forms may not work and are placeholders for future work.
+      </div>
     </div>
     <div class="pull-right">
       <button class="btn btn-primary" *ngIf="currentTab == 'system-setup'" (click)="continue()">Save & Continue</button>
