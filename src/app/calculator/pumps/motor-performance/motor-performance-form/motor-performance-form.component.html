@@ -5,7 +5,7 @@
         <div class="form-group">
           <label for="frequency">Line Frequency</label>
           <select class="form-control" id="frequency" [(ngModel)]="tmpFrequency" (change)="emitChange()">
-        <option *ngFor="let frequency of frequencies" [ngValue]="frequency">{{frequency}} Hz</option>
+        <option *ngFor="let frequency of frequencies" [ngValue]="frequency">{{frequency}}</option>
       </select>
         </div>
 
