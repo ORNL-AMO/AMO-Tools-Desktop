@@ -19,10 +19,10 @@
 <div class="sidebar-group"> 
   <h3>Assessments</h3>
   <ul>
-    <li [ngClass]="{'selected':selectedDirectoryId == directory.id}"><span (click)="toggleSelected(directory)" >All Assessments</span></li>
+    <li [ngClass]="{'selected':selectedDirectoryId == directory.id && dashboardView == 'assessment-dashboard'}"><span (click)="toggleSelected(directory)" >All Assessments</span></li>
     <li *ngIf="directory">
       <app-directory-item [directory]="getDirectory()" [selectedDirectoryId]="selectedDirectoryId" (selectSignal)="toggleSelected($event)"
-        (collapseSignal)="toggleDirectoryCollapse($event)" [newDirEventToggle]="newDirEventToggle"></app-directory-item>
+        (collapseSignal)="toggleDirectoryCollapse($event)" [newDirEventToggle]="newDirEventToggle" [dashboardView]="dashboardView"></app-directory-item>
     </li>
   </ul>
 </div>

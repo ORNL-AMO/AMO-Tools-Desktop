@@ -1,5 +1,5 @@
 <ul>
-  <li *ngIf="directory.id != 1" [ngClass]="{'selected':selectedDirectoryId == directory.id}">
+  <li *ngIf="directory.id != 1" [ngClass]="{'selected':selectedDirectoryId == directory.id  && dashboardView == 'assessment-dashboard'}">
     <span (click)="toggleSelected(directory)" (dblclick)="toggleDirectoryCollapse(directory)">
       <i class="fa fa-folder-o" [ngClass]="{'selected':selectedDirectoryId == directory.id}" aria-hidden="true"></i>
         {{directory.name}}
@@ -8,7 +8,7 @@
   <li class="sub-directory" *ngIf="directory.subDirectory && directory.collapsed == false">
     <span *ngFor="let directory of directory.subDirectory">
       <app-directory-item [directory]="directory" [selectedDirectoryId]="selectedDirectoryId" (selectSignal)="toggleSelected($event)"
-      (collapseSignal)="toggleDirectoryCollapse($event)"></app-directory-item>
+      (collapseSignal)="toggleDirectoryCollapse($event)" [dashboardView]="dashboardView"></app-directory-item>
     </span>
     <ul>
       <li class="assessments" *ngIf="directory.assessments && directory.collapsed == false">

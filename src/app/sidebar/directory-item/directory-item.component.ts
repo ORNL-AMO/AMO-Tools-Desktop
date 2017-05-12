@@ -18,7 +18,9 @@ export class DirectoryItemComponent implements OnInit {
   collapseSignal = new EventEmitter<Directory>();
   @Input()
   newDirEventToggle: boolean;
-
+  @Input()
+  dashboardView: string;
+  
   isFirstChange: boolean = true;
   childDirectories: Directory
   constructor(private indexedDbService: IndexedDbService) { }
