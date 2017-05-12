@@ -1,8 +1,11 @@
 <div class="row main-menu">
   <div class="col-11">
     <ol class="breadcrumb">
-      <li class="breadcrumb-item" *ngFor="let crumb of breadCrumbs; let last = last;">
-        <a [ngClass]="{'active':last == true }" (click)="goToDirectory(crumb)">
+      <li class="breadcrumb-item" *ngFor="let crumb of breadCrumbs; let first = first;">
+        <a *ngIf="first" (click)="goToDirectory(crumb)">
+          All Assessments
+        </a>
+        <a *ngIf="!first" (click)="goToDirectory(crumb)">
           {{crumb.name}}
         </a>
       </li>

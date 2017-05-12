@@ -24,8 +24,7 @@ export class PhastComponent implements OnInit {
     'losses',
     'designed-energy-use',
     'aux-equipment',
-    'metered-energy',
-    'sankey'
+    'metered-energy'
   ]
   tabIndex: number = 0;
   constructor(

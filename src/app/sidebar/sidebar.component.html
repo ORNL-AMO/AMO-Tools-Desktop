@@ -33,7 +33,7 @@
     <li [ngClass]="{'selected': selectedCalculator == 'all'}"><span (click)="chooseCalculator('all')">All Calculators</span></li>
     <li [ngClass]="{'selected': selectedCalculator == 'pumps'}"><span (click)="chooseCalculator('pumps')">Pumps</span></li>
     <li [ngClass]="{'selected': selectedCalculator == 'fans'}"><span (click)="chooseCalculator('fans')">Fans</span></li>
-    <li [ngClass]="{'selected': selectedCalculator == 'furnaces'}"><span (click)="chooseCalculator('furnaces')">Furnaces</span></li>
+    <li [ngClass]="{'selected': selectedCalculator == 'furnaces'}"><span (click)="chooseCalculator('furnaces')">Process Heating</span></li>
     <li [ngClass]="{'selected': selectedCalculator == 'steam'}"><span (click)="chooseCalculator('steam')">Steam</span></li>
     <li [ngClass]="{'selected': selectedCalculator == 'motors'}"><span (click)="chooseCalculator('motors')">Motors</span></li>
     <li [ngClass]="{'selected': selectedCalculator == 'compressed-air'}"><span (click)="chooseCalculator('compressed-air')">Compressed Air</span></li>
@@ -50,7 +50,7 @@
     <li [ngClass]="{'selected': dashboardView == 'about-page'}">
       <span (click)="showAbout()">About Tool Suite</span>
     </li>
-    <li><span href="mailto:accawigk@ornl.gov">Contact AMO Tool Administrators</span></li>
+    <li><a href="mailto:accawigk@ornl.gov"><span class="small">Contact Tool Administrators</span></a></li>
   </ul>
 </div>
 
