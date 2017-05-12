@@ -13,7 +13,7 @@
     </ol>
   </div>
   <div class="col-1">
-    <button class="btn btn-secondary pull-right" [ngClass]="{'active': view == 'settings'}" (click)="setView('settings')"><i class="fa fa-cog"></i></button>
+    <button class="btn btn-secondary pull-right" *ngIf="directory.id != 1" [ngClass]="{'active': view == 'settings'}" (click)="setView('settings')"><i class="fa fa-cog"></i></button>
   </div>
 </div>
 
