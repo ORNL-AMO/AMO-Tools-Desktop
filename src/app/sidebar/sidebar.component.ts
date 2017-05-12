@@ -29,7 +29,8 @@ export class SidebarComponent implements OnInit {
   emitShowAbout = new EventEmitter<boolean>();
   @Input()
   dashboardView: string;
-
+  @Output('emitGoToSettings')
+  emitGoToSettings = new EventEmitter<boolean>();
 
   selectedDirectoryId: number;
   firstChange: boolean = true;
@@ -82,6 +83,10 @@ export class SidebarComponent implements OnInit {
 
   getDirectory() {
     return this.directory;
+  }
+
+  goToSettings(){
+    this.emitGoToSettings.emit(true);
   }
 
   goHome() {

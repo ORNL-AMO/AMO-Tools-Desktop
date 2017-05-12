@@ -29,6 +29,7 @@ export class AssessmentSettingsComponent implements OnInit {
   }
 
   ngOnInit() {
+    debugger
     this.indexedDbService.getDirectorySettings(this.directory.id).then(
       results => {
         if (results.length != 0) {
