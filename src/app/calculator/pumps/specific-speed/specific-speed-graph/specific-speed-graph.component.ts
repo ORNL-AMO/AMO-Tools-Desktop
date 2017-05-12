@@ -15,10 +15,8 @@ export class SpecificSpeedGraphComponent implements OnInit {
 
   svg: any;
   xAxis: any;
-  xAxis0: any;
   yAxis: any;
   x: any;
-  x0: any;
   y: any;
   specificSpeedText: any;
   efficiencyCorrectionText: any;
@@ -50,7 +48,7 @@ export class SpecificSpeedGraphComponent implements OnInit {
     if (!this.firstChange) {
       if (changes.toggleCalculate) {
         if (this.checkForm()) {
-          console.log(this.speedForm.value);
+          this.setUp();
           this.drawPoint();
           this.svg.style("display", null);
         }
@@ -94,7 +92,7 @@ export class SpecificSpeedGraphComponent implements OnInit {
   setUp() {
 
     //Remove  all previous graphs
-    d3.select('app-system-curve-graph').selectAll('svg').remove();
+    d3.select('app-specific-speed-graph').selectAll('svg').remove();
 
     var curvePoints = [];
 
@@ -103,21 +101,16 @@ export class SpecificSpeedGraphComponent implements OnInit {
     this.width = 900 - this.margin.left - this.margin.right;
     this.height = 600 - this.margin.top - this.margin.bottom;
 
-
-    this.x = d3.scaleLinear()
+    this.x = d3.scaleLog()
       .range([0, this.width])
-      .domain([0, 10000]);
+      .domain([100, 100000]);
 
     this.y = d3.scaleLinear()
       .range([this.height, 0])
       .domain([0, 6]);
 
     this.xAxis = d3.axisBottom()
-      .scale(this.x)
-      .tickSizeInner(0)
-      .tickSizeOuter(0)
-      .tickPadding(0)
-      .ticks(11);
+      .scale(this.x).ticks(3).tickFormat(d3.format("d"));
 
     this.yAxis = d3.axisLeft()
       .scale(this.y)
@@ -221,7 +214,7 @@ export class SpecificSpeedGraphComponent implements OnInit {
       .style("opacity", 0);
 
     //We can draw the guideCurve now since pump type has no effect on what kind of shape it has.
-    this.drawGuideCurve(this.svg, this.x, this.y, this.psatService, "Axial Flow");
+    this.drawGuideCurve(this.svg, this.x, this.y, this.psatService, this.speedForm.value.pumpType);
 
     this.svg.append("text")
       .attr("x", "20")
@@ -265,11 +258,11 @@ export class SpecificSpeedGraphComponent implements OnInit {
   }
 
   drawGuideCurve(svg, x, y, psatService, type) {
-
+  
     svg.selectAll("path").remove();
 
     var data = [];
-    for (var i = 100; i < 7000; i++) {
+    for (var i = 100; i < 100000; i = i + 100) {
       var efficiencyCorrection = psatService.achievableEfficiency(type, i);
       if (efficiencyCorrection <= 6) {
         data.push({
@@ -278,7 +271,6 @@ export class SpecificSpeedGraphComponent implements OnInit {
         });
       }
     }
-
     var guideLine = d3.line()
       .x(function (d) {
         return x(d.x);
