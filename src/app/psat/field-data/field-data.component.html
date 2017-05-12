@@ -20,7 +20,7 @@
   <div class="form-group">
     <label for="flowRate">Flow Rate</label>
     <input type="number" min="0" class="form-control" formControlName="flowRate" id="flowRate" (input)="startSavePolling()"
-        (focus)="focusField('flowRate')">
+        (focus)="focusField('flowRate')" [ngClass]="{'invalid': !checkFlowRate()}">
         <span class="units">{{settings.flowMeasurement}}</span>
   </div>
 

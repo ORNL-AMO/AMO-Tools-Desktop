@@ -653,4 +653,24 @@ export class PsatService {
       return false;
     }
   }
+
+  checkFlowRate(pumpStyle: number, flowRate: number, settings: Settings): boolean {
+    let tmpFlowRate;
+    if (settings.flowMeasurement != 'gpm') {
+      tmpFlowRate = this.convertUnitsService.value(tmpFlowRate).from(settings.flowMeasurement).to('gpm');
+
+    } else {
+      tmpFlowRate = flowRate;
+    }
+    if (pumpStyle == 0) {
+      if (tmpFlowRate >> 100 && tmpFlowRate << 20000) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+    else {
+      return true;
+    }
+  }
 }

@@ -130,15 +130,17 @@ export class FieldDataComponent implements OnInit {
   startSavePolling() {
     this.checkForm(this.psatForm);
     if (this.counter) {
-      console.log('reset');
       clearTimeout(this.counter);
-    } else {
-      console.log('start')
     }
     this.counter = setTimeout(() => {
-      console.log('save')
       this.savePsat(this.psatForm)
     }, 3000)
+  }
+
+  checkFlowRate() {
+    let tmp = this.psatService.checkFlowRate(this.psat.inputs.pump_style, this.psatForm.value.flowRate, this.settings);
+    console.log(tmp);
+    return tmp
   }
 
 }
