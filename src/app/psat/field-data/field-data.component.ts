@@ -32,6 +32,7 @@ export class FieldDataComponent implements OnInit {
 
   @ViewChild('formRef') formRef: ElementRef;
   elements: any;
+  @ViewChild('flowRatePopover') flowRatePopover: ElementRef;
 
   formValid: boolean;
   headToolResults: any = {
@@ -51,6 +52,7 @@ export class FieldDataComponent implements OnInit {
   ];
   psatForm: any;
   isFirstChange: boolean = true;
+  flowError: string = null;
   constructor(private psatService: PsatService) { }
 
   ngOnInit() {
@@ -139,9 +141,13 @@ export class FieldDataComponent implements OnInit {
 
   checkFlowRate() {
     if (this.psat.inputs.pump_style && this.psatForm.value.flowRate != '') {
-      debugger
       let tmp = this.psatService.checkFlowRate(this.psat.inputs.pump_style, this.psatForm.value.flowRate, this.settings);
-      return tmp
+      if (tmp.message) {
+        this.flowError = tmp.message;
+      } else {
+        this.flowError = null;
+      }
+      return tmp.valid;
     }
     else {
       return true;

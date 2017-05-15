@@ -5,7 +5,7 @@
     
     <app-motor-help [currentField]="currentField" *ngIf="currentTab == 'motor'"></app-motor-help>
     
-    <app-field-data-help [currentField]="currentField" *ngIf="currentTab == 'field-data'"></app-field-data-help>
+    <app-field-data-help [settings]="settings" [psat]="psat" [currentField]="currentField" *ngIf="currentTab == 'field-data'"></app-field-data-help>
     
     <app-modify-conditions-help *ngIf="currentTab == 'modify-conditions'"></app-modify-conditions-help>
 </div>

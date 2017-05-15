@@ -654,23 +654,78 @@ export class PsatService {
     }
   }
 
-  checkFlowRate(pumpStyle: number, flowRate: number, settings: Settings): boolean {
+  checkFlowRate(pumpStyle: number, flowRate: number, settings: Settings) {
     let tmpFlowRate;
+    let response = {
+      valid: null,
+      message: null
+    };
+    //convert
     if (settings.flowMeasurement != 'gpm') {
-      tmpFlowRate = this.convertUnitsService.value(tmpFlowRate).from(settings.flowMeasurement).to('gpm');
-
+      tmpFlowRate = this.convertUnitsService.value(flowRate).from(settings.flowMeasurement).to('gpm');
     } else {
       tmpFlowRate = flowRate;
     }
-    if (pumpStyle == 0) {
-      if (tmpFlowRate >> 100 && tmpFlowRate << 20000) {
-        return true;
-      } else {
-        return false;
-      }
+    //get min max
+    let flowRateRange = this.getFlowRateMinMax(pumpStyle);
+    //check in range
+    if (tmpFlowRate >= flowRateRange.min && tmpFlowRate <= flowRateRange.max) {
+      response.valid = true;
+      return response;
+    } else if (tmpFlowRate < flowRateRange.min) {
+      response.valid = false;
+      response.message = 'Flow Rate to Small for Selected Pump Style';
+      return response;
+    } else if (tmpFlowRate > flowRateRange.max) {
+      response.valid = false;
+      response.message = 'Flow Rate to Large for Selected Pump Style';
+      return response;
+    }else{
+      return response;
     }
-    else {
-      return true;
+  }
+
+  getFlowRateMinMax(pumpStyle: number) {
+    //min/max values from Daryl
+    let flowRate = {
+      min: 0,
+      max: 0
+    }
+    if (pumpStyle == 0) {
+      flowRate.min = 100;
+      flowRate.max = 20000;
+      return flowRate;
+    }
+    else if (pumpStyle == 1 || pumpStyle == 3) {
+      flowRate.min = 100;
+      flowRate.max = 22500;
+      return flowRate;
+    } else if (pumpStyle == 2 || pumpStyle == 4) {
+      flowRate.min = 400;
+      flowRate.max = 22000;
+      return flowRate;
+    } else if (pumpStyle == 5) {
+      flowRate.min = 100;
+      flowRate.max = 4000;
+      return flowRate;
+    } else if (pumpStyle == 6) {
+      flowRate.min = 100;
+      flowRate.max = 5000;
+      return flowRate;
+    } else if (pumpStyle == 10) {
+      flowRate.min = 5000;
+      flowRate.max = 100000;
+      return flowRate;
+    } else if (pumpStyle == 8) {
+      flowRate.min = 200;
+      flowRate.max = 100000;
+      return flowRate;
+    } else if (pumpStyle == 7 || pumpStyle == 9) {
+      flowRate.min = 200;
+      flowRate.max = 40000;
+      return flowRate;
+    } else {
+      return flowRate;
     }
   }
 }

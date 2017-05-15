@@ -61,8 +61,7 @@ export class SystemBasicsComponent implements OnInit {
   }
 
   saveChanges() {
-    console.log('test');
-    this.newSettings = this.settingsService.getSettingsFromForm(this.settingsForm);
+  this.newSettings = this.settingsService.getSettingsFromForm(this.settingsForm);
     if (
       this.settings.currency != this.newSettings.currency ||
       this.settings.distanceMeasurement != this.newSettings.distanceMeasurement ||
@@ -85,6 +84,8 @@ export class SystemBasicsComponent implements OnInit {
     if (bool == true) {
       if (this.psat.inputs.flow_rate) {
         this.psat.inputs.flow_rate = this.convertUnitsService.value(this.psat.inputs.flow_rate).from(this.settings.flowMeasurement).to(this.newSettings.flowMeasurement);
+        console.log(this.psat.inputs.flow_rate);
+        debugger
       }
       if (this.psat.inputs.head) {
         this.psat.inputs.head = this.convertUnitsService.value(this.psat.inputs.head).from(this.settings.distanceMeasurement).to(this.newSettings.distanceMeasurement);
