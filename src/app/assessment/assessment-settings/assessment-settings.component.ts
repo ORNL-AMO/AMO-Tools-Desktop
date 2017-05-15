@@ -312,7 +312,6 @@ export class AssessmentSettingsComponent implements OnInit {
       }
     })
     return closest;
-
   }
 
 }
