@@ -138,9 +138,14 @@ export class FieldDataComponent implements OnInit {
   }
 
   checkFlowRate() {
-    let tmp = this.psatService.checkFlowRate(this.psat.inputs.pump_style, this.psatForm.value.flowRate, this.settings);
-    console.log(tmp);
-    return tmp
+    if (this.psat.inputs.pump_style && this.psatForm.value.flowRate != '') {
+      debugger
+      let tmp = this.psatService.checkFlowRate(this.psat.inputs.pump_style, this.psatForm.value.flowRate, this.settings);
+      return tmp
+    }
+    else {
+      return true;
+    }
   }
 
 }

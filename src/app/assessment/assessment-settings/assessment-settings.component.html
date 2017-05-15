@@ -31,3 +31,24 @@
 </div>
 
 <ng2-toasty></ng2-toasty>
+
+<div bsModal #settingsModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="settingsModal" aria-hidden="true"
+  [config]="{backdrop: 'static'}">
+  <div class="modal-dialog modal-md">
+    <div class="modal-content">
+      <div class="modal-header">
+        Settings Changed
+        <button class="close" aria-label="Close" (click)="hideSettingsModal()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        Your settings have changed. Would you like to convert assessment data to match new settings?
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-primary pull-right" (click)="updateSettings(true)">Yes</button>
+        <button class="btn btn-danger pull-left" (click)="updateSettings(false)">No keep data</button>
+      </div>
+    </div>
+  </div>
+</div>
