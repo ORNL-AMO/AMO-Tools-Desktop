@@ -50,13 +50,18 @@ export class AssessmentSettingsComponent implements OnInit {
 
   }
 
-  showSettingsModal() {
+  showSettingsModal(_oldSettings?: Settings, _newSettings?: Settings) {
+    let settingsChanged;
     //check if settings have changed
-    let tmpSettings = this.settingsService.getSettingsFromForm(this.settingsForm);
-    tmpSettings.directoryId = this.directory.id;
-    tmpSettings.id = this.settings.id;
-    let oldSettings = this.settings;
-    let settingsChanged = this.checkNewSettings(tmpSettings, oldSettings);
+    if (!_oldSettings && !_newSettings) {
+      let tmpSettings = this.settingsService.getSettingsFromForm(this.settingsForm);
+      tmpSettings.directoryId = this.directory.id;
+      tmpSettings.id = this.settings.id;
+      let oldSettings = this.settings;
+      settingsChanged = this.checkNewSettings(tmpSettings, oldSettings);
+    } else {
+      settingsChanged = this.checkNewSettings(_oldSettings, _newSettings);
+    }
     if (settingsChanged) {
       this.settingsModal.show();
     }
@@ -139,8 +144,8 @@ export class AssessmentSettingsComponent implements OnInit {
           results => {
             if (results.length != 0) {
               this.addToast('Settings Created for this folder');
-
               this.settings = results[0];
+              this.showSettingsModal(oldSettings, this.settings);
               this.settingsForm = this.settingsService.getFormFromSettings(this.settings);
               this.isDirectorySettings = true;
             }
@@ -166,7 +171,6 @@ export class AssessmentSettingsComponent implements OnInit {
                 assessment.psat = tmpResults.psat;
                 if (tmpResults.updated) {
                   //update assessment
-                  console.log('updated: ' + assessment.name);
                   this.indexedDbService.putAssessment(assessment).then(results => { this.addToast('Assessment Updated') });
                 }
               } else {
@@ -215,6 +219,7 @@ export class AssessmentSettingsComponent implements OnInit {
         this.indexedDbService.getDirectorySettings(dir.id).then(
           results => {
             if (results.length == 0) {
+              debugger
               this.updateAssessments(dir, oldSettings, newSettings);
             }
           }
@@ -222,10 +227,10 @@ export class AssessmentSettingsComponent implements OnInit {
       })
     }
     //check for subDirectory if none
-    else{
+    else {
       this.indexedDbService.getChildrenDirectories(directory.id).then(
         results => {
-          if(results.length != 0){
+          if (results.length != 0) {
             results.forEach(dir => {
               this.updateAssessments(dir, oldSettings, newSettings);
             })
