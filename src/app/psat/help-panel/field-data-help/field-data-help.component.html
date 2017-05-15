@@ -26,7 +26,7 @@
 
   <div class="card" *ngIf="currentField == 'costKwHr'">
     <div class="card-header">
-      Cost (KwHr)
+      Cost
     </div>
     <div class="card-block">
       <label>Description:</label>
@@ -35,14 +35,14 @@
       </p>
       <label>Input:</label>
       <p>
-        Units: <strong>Money</strong><br> Minimum Value Allowed: <strong>0</strong><br> Maximum Value Allowed: <strong>None</strong><br>
+        Units: <strong>Currency</strong><br> Minimum Value Allowed: <strong>0</strong><br> Maximum Value Allowed: <strong>None</strong><br>
       </p>
     </div>
   </div>
 
   <div class="card" *ngIf="currentField == 'flowRate'">
     <div class="card-header">
-      Flow Rate (gpm)
+      Flow Rate
     </div>
     <div class="card-block">
       <label>Description:</label>
@@ -96,14 +96,16 @@
     </div>
   </div>
 
-  <div class="card" *ngIf="currentField == 'motorKW'">
+  <div class="card" *ngIf="currentField == 'motorPower'">
     <div class="card-header">
-      Motor (kW)
+      Motor Power
     </div>
     <div class="card-block">
       <label>Description:</label>
       <p>
-        Motor represents either a measured or average current among the three phases.
+        Either Motor kW (power) or Motor amps (current) will be displayed, depending on the Load estimation method selected. Power
+        is the preferred measurement, but unless a permanently-installed power meter is available, is much more intrusive
+        and challenging.
       </p>
       <label>Input:</label>
       <p>
@@ -123,7 +125,7 @@
       </p>
       <label>Input:</label>
       <p>
-        Units: <b>Voltage</b><br> Minimum Value Allowed: <b>0</b><br> Maximum Value Allowed: <b>None</b><br>
+        Units: <b>Volts</b><br> Minimum Value Allowed: <b>0</b><br> Maximum Value Allowed: <b>None</b><br>
       </p>
     </div>
   </div>
