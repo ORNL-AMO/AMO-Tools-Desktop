@@ -5,11 +5,11 @@
         <div class="form-section">
           <div class="form-group">
             <label class="small" for="specificGravity">Fluid Specific Gravity</label>
-            <input type="number" class="form-control" [(ngModel)]="tmpSpecificGravity" id="specificGravity" (input)="checkInputs()">
+            <input type="number" class="form-control" [(ngModel)]="tmpSpecificGravity" id="specificGravity" (input)="checkInputs()" onfocus="this.select();">
           </div>
           <div class="form-group">
             <label class="small" for="systemLossExponent">System Loss Exponent, C</label>
-            <input type="number" class="form-control" [(ngModel)]="tmpSystemLossExponent" id="systemLossExponent" (input)="checkInputs()">
+            <input type="number" class="form-control" [(ngModel)]="tmpSystemLossExponent" id="systemLossExponent" (input)="checkInputs()" onfocus="this.select();">
           </div>
         </div>
         <div class="form-section">
@@ -21,12 +21,12 @@
           </div>
           <div class="form-group">
             <label class="small" for="flowRate">Flow Rate</label>
-            <input type="number" class="form-control" id="flowRate" [(ngModel)]="p1FlowRate" (input)="checkInputs()">
+            <input type="number" class="form-control" id="flowRate" [(ngModel)]="p1FlowRate" (input)="checkInputs()" onfocus="this.select();">
             <span class="units">{{settings.flowMeasurement}}</span>
           </div>
           <div class="form-group">
             <label class="small" for="head">Head</label>
-            <input type="number" class="form-control" id="head" [(ngModel)]="p1Head" (input)="checkInputs()">
+            <input type="number" class="form-control" id="head" [(ngModel)]="p1Head" (input)="checkInputs()" onfocus="this.select();">
             <span class="units">{{settings.distanceMeasurement}}</span>
           </div>
           <div class="row">
@@ -47,12 +47,12 @@
           </div>
           <div class="form-group">
             <label class="small" for="flowRate">Flow Rate</label>
-            <input type="number" class="form-control" id="flowRate" [(ngModel)]="p2FlowRate" (input)="checkInputs()">
+            <input type="number" class="form-control" id="flowRate" [(ngModel)]="p2FlowRate" (input)="checkInputs()" onfocus="this.select();" autofocus>
             <span class="units">{{settings.flowMeasurement}}</span>
           </div>
           <div class="form-group">
             <label class="small" for="head">Head</label>
-            <input type="number" class="form-control" id="head" [(ngModel)]="p2Head" (input)="checkInputs()">
+            <input type="number" class="form-control" id="head" [(ngModel)]="p2Head" (input)="checkInputs()" onfocus="this.select();">
             <span class="units">{{settings.distanceMeasurement}}</span>
           </div>
           <div class="row">

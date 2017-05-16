@@ -62,6 +62,9 @@ export class MotorComponent implements OnInit {
     } else {
       this.options = this.kWatts;
     }
+    if (this.selected) {
+      this.formRef.nativeElement.frequency.focus();
+    }
   }
 
   ngAfterViewInit() {

@@ -47,7 +47,7 @@ export class PsatComponent implements OnInit {
 
   saveClicked: boolean = false;
   adjustment: PSAT;
-  currentField: string = 'default';
+  currentField: string;
   isValid;
   canContinue;
 

@@ -4,14 +4,14 @@
       <div class="col-12">
         <div class="form-group">
           <label for="pumpType">Pump Type</label>
-          <select class="form-control" id="pumpType" [(ngModel)]="tmpPumpType" (change)="emitChange()">
+          <select class="form-control" id="pumpType" [(ngModel)]="tmpPumpType" (change)="emitChange()" autofocus>
         <option *ngFor="let pumpType of pumpTypes">{{pumpType}}</option>
       </select>
         </div>
 
         <div class="form-group">
           <label for="flowRate">Flow Rate</label>
-          <input type="number" class="form-control" [(ngModel)]="tmpFlowRate" id="flowRate" (input)="emitChange()">
+          <input type="number" class="form-control" [(ngModel)]="tmpFlowRate" id="flowRate" (input)="emitChange()" onfocus="this.select();">
           <span class="units">{{settings.flowMeasurement}}</span>
         </div>
       </div>
