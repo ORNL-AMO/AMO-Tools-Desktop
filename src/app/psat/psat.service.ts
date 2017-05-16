@@ -654,23 +654,139 @@ export class PsatService {
     }
   }
 
-  checkFlowRate(pumpStyle: number, flowRate: number, settings: Settings): boolean {
+  checkFlowRate(pumpStyle: number, flowRate: number, settings: Settings) {
     let tmpFlowRate;
+    let response = {
+      valid: null,
+      message: null
+    };
+    //convert
     if (settings.flowMeasurement != 'gpm') {
-      tmpFlowRate = this.convertUnitsService.value(tmpFlowRate).from(settings.flowMeasurement).to('gpm');
-
+      tmpFlowRate = this.convertUnitsService.value(flowRate).from(settings.flowMeasurement).to('gpm');
     } else {
       tmpFlowRate = flowRate;
     }
-    if (pumpStyle == 0) {
-      if (tmpFlowRate >> 100 && tmpFlowRate << 20000) {
-        return true;
-      } else {
-        return false;
-      }
-    }
-    else {
-      return true;
+    //get min max
+    let flowRateRange = this.getFlowRateMinMax(pumpStyle);
+    //check in range
+    if (tmpFlowRate >= flowRateRange.min && tmpFlowRate <= flowRateRange.max) {
+      response.valid = true;
+      return response;
+    } else if (tmpFlowRate < flowRateRange.min) {
+      response.valid = false;
+      response.message = 'Flow Rate too Small for Selected Pump Style';
+      return response;
+    } else if (tmpFlowRate > flowRateRange.max) {
+      response.valid = false;
+      response.message = 'Flow Rate too Large for Selected Pump Style';
+      return response;
+    } else {
+      return response;
     }
   }
+
+  getFlowRateMinMax(pumpStyle: number) {
+    //min/max values from Daryl
+    let flowRate = {
+      min: 0,
+      max: 0
+    }
+    if (pumpStyle == 0) {
+      flowRate.min = 100;
+      flowRate.max = 20000;
+      return flowRate;
+    }
+    else if (pumpStyle == 1 || pumpStyle == 3) {
+      flowRate.min = 100;
+      flowRate.max = 22500;
+      return flowRate;
+    } else if (pumpStyle == 2 || pumpStyle == 4) {
+      flowRate.min = 400;
+      flowRate.max = 22000;
+      return flowRate;
+    } else if (pumpStyle == 5) {
+      flowRate.min = 100;
+      flowRate.max = 4000;
+      return flowRate;
+    } else if (pumpStyle == 6) {
+      flowRate.min = 100;
+      flowRate.max = 5000;
+      return flowRate;
+    } else if (pumpStyle == 10) {
+      flowRate.min = 5000;
+      flowRate.max = 100000;
+      return flowRate;
+    } else if (pumpStyle == 8) {
+      flowRate.min = 200;
+      flowRate.max = 100000;
+      return flowRate;
+    } else if (pumpStyle == 7 || pumpStyle == 9) {
+      flowRate.min = 200;
+      flowRate.max = 40000;
+      return flowRate;
+    } else {
+      return flowRate;
+    }
+  }
+
+  checkMotorRpm(lineFreqEnum: number, motorRPM: number) {
+    let response = {
+      valid: null,
+      message: null
+    };
+    let range = this.getMotorRpmMinMax(lineFreqEnum);
+    if(motorRPM >= range.min && motorRPM <= range.max){
+      response.valid = true;
+      return response
+    }else if(motorRPM < range.min){
+      response.valid = false;
+      response.message = 'Motor RPM too Small for Selected Line Frequency';
+      return response;
+    }else if(motorRPM > range.max){
+      response.valid = false;
+      response.message = 'Motor RPM too Latge for Selected Line Frequency';
+      return response;
+    }else{
+      return response;
+    }
+  }
+
+  getMotorRpmMinMax(lineFreqEnum: number) {
+    let rpmRange = {
+      min: 0,
+      max: 0
+    }
+    if (lineFreqEnum == 0) {
+      rpmRange.min = 540;
+      rpmRange.max = 3960;
+    } else if (lineFreqEnum == 1) {
+      rpmRange.min = 450;
+      rpmRange.max = 3300;
+    }
+    return rpmRange;
+  }
+
+  checkMotorVoltage(voltage: number){
+    let response = {
+      valid: null,
+      message: null
+    };
+
+    if(voltage >= 208 && voltage <= 15180){
+      response.valid = true;
+      return response;
+    }else if(voltage < 208){
+      response.valid = false;
+      response.message = "Voltage value is too small."
+      return response;
+    }else if(voltage > 15180){
+      response.valid = false;
+      response.message = "Voltage value is too large";
+    }else{
+      return response;
+    }
+  }
+
+
+
 }

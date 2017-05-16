@@ -13,3 +13,10 @@
     border-color: red;
 }
 
+.valid{
+    border-color: green;
+}
+
+.warning{
+  border-color:darkorange;
+}

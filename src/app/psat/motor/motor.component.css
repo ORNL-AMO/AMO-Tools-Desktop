@@ -1,4 +1,11 @@
-.disabled{
-    color: red;
-    cursor: not-allowed;
+.invalid{
+    border-color: red;
+}
+
+.valid{
+    border-color: green;
+}
+
+.warning{
+  border-color:darkorange;
 }

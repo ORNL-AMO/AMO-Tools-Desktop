@@ -51,8 +51,16 @@
       </p>
       <label>Input:</label>
       <p>
-        Units: <strong>RPM</strong><br> Minimum Value Allowed: <strong>0</strong><br> Maximum Value Allowed: <strong>None</strong><br>
+        Units: <strong>RPM</strong>
       </p>
+      <p>
+        (60 Hz) Minimum Value Allowed: <strong>540</strong><br>(60 Hz) Maximum Value Allowed: <strong>3960</strong><br>
+      </p>
+      <p>
+        (50 Hz) Minimum Value Allowed: <strong>450</strong><br>(50 Hz) Maximum Value Allowed: <strong>3300</strong><br>
+      </p>
+      <p>
+        *Min/Max values determined by line frequency selection</p>
     </div>
   </div>
 
@@ -125,6 +133,10 @@
     <label>Input:</label>
     <p>
       Units: <strong>amps</strong><br> Minimum Value Allowed: <strong>0</strong><br> Maximum Value Allowed: <strong>None</strong><br>
+    </p>
+    <p>
+      An expected range is determined by the provided motor rated power, speed, voltage and class.
+      <br> Expected Minimum Value: <strong>{{flaExpectedMin | number:'2.2-2'}}</strong><br> Expected Maximum Value: <strong>{{flaExpectedMax | number:'2.2-2'}}</strong><br>
     </p>
   </div>
 </div>
