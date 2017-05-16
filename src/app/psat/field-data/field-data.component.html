@@ -59,9 +59,9 @@
   <div class="form-group">
     <label for="measuredVoltage">Voltage</label>
     <input type="number" min="1" class="form-control" formControlName="measuredVoltage" id="measuredVoltage" (input)="startSavePolling()"
-      (focus)="focusField('measuredVoltage')" [ngClass]="{'invalid': checkVoltage() == false, 'valid': checkVoltage() == true}">
+      (focus)="focusField('measuredVoltage')" [ngClass]="{'warning': checkVoltage() == false, 'valid': checkVoltage() == true}">
     <span class="units">V</span>
-    <span class="alert-danger pull-right small" *ngIf="voltageError !== null">{{voltageError}}</span>
+    <span class="alert-warning pull-right small" *ngIf="voltageError !== null">{{voltageError}}</span>
   </div>
 
 </form>

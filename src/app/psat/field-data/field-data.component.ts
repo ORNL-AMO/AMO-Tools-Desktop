@@ -158,10 +158,10 @@ export class FieldDataComponent implements OnInit {
 
   checkVoltage() {
     if (this.psatForm.value.measuredVoltage < 1 || this.psatForm.value.measuredVoltage == 0) {
-      this.voltageError = 'Value is too small';
+      this.voltageError = 'Outside estimated voltage range';
       return false;
     } else if (this.psatForm.value.measuredVoltage > 13800) {
-      this.voltageError = 'Value is too large.';
+      this.voltageError = 'Outside estimated voltage range';
       return false;
     }
     else if (this.psatForm.value.measuredVoltage <= 13800 && this.psatForm.value.measuredVoltage >= 1) {
