@@ -674,13 +674,13 @@ export class PsatService {
       return response;
     } else if (tmpFlowRate < flowRateRange.min) {
       response.valid = false;
-      response.message = 'Flow Rate to Small for Selected Pump Style';
+      response.message = 'Flow Rate too Small for Selected Pump Style';
       return response;
     } else if (tmpFlowRate > flowRateRange.max) {
       response.valid = false;
-      response.message = 'Flow Rate to Large for Selected Pump Style';
+      response.message = 'Flow Rate too Large for Selected Pump Style';
       return response;
-    }else{
+    } else {
       return response;
     }
   }
@@ -728,4 +728,65 @@ export class PsatService {
       return flowRate;
     }
   }
+
+  checkMotorRpm(lineFreqEnum: number, motorRPM: number) {
+    let response = {
+      valid: null,
+      message: null
+    };
+    let range = this.getMotorRpmMinMax(lineFreqEnum);
+    if(motorRPM >= range.min && motorRPM <= range.max){
+      response.valid = true;
+      return response
+    }else if(motorRPM < range.min){
+      response.valid = false;
+      response.message = 'Motor RPM too Small for Selected Line Frequency';
+      return response;
+    }else if(motorRPM > range.max){
+      response.valid = false;
+      response.message = 'Motor RPM too Latge for Selected Line Frequency';
+      return response;
+    }else{
+      return response;
+    }
+  }
+
+  getMotorRpmMinMax(lineFreqEnum: number) {
+    let rpmRange = {
+      min: 0,
+      max: 0
+    }
+    if (lineFreqEnum == 0) {
+      rpmRange.min = 540;
+      rpmRange.max = 3960;
+    } else if (lineFreqEnum == 1) {
+      rpmRange.min = 450;
+      rpmRange.max = 3300;
+    }
+    return rpmRange;
+  }
+
+  checkMotorVoltage(voltage: number){
+    let response = {
+      valid: null,
+      message: null
+    };
+
+    if(voltage >= 208 && voltage <= 15180){
+      response.valid = true;
+      return response;
+    }else if(voltage < 208){
+      response.valid = false;
+      response.message = "Voltage value is too small."
+      return response;
+    }else if(voltage > 15180){
+      response.valid = false;
+      response.message = "Voltage value is too large";
+    }else{
+      return response;
+    }
+  }
+
+
+
 }

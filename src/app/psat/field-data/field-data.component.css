@@ -16,3 +16,7 @@
 .valid{
     border-color: green;
 }
+
+.warning{
+  border-color:darkorange;
+}

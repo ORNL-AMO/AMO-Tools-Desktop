@@ -54,7 +54,7 @@ export class PumpFluidComponent implements OnInit {
   ];
   psatForm: any;
   isFirstChange: boolean = true;
-
+  rpmError: string = null;
   constructor(private psatService: PsatService) { }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -140,6 +140,32 @@ export class PumpFluidComponent implements OnInit {
   savePsat(form: any) {
     this.psat.inputs = this.psatService.getPsatInputsFromForm(form);
     this.saved.emit(this.selected);
+  }
+
+  checkPumpRpm() {
+    let min = 0;
+    let max = 0;
+    if (this.psatForm.value.drive == 'Direct Drive') {
+      min = 540;
+      max = 3960;
+    } else if (this.psatForm.value.drive == 'Belt Drive') {
+      //TODO UPDATE WITH BELT DRIVE VALS
+      min = 540;
+      max = 3960;
+    }
+    if (this.psatForm.value.pumpRPM < min) {
+      this.rpmError = 'Value is too small';
+      return false;
+    } else if (this.psatForm.value.pumpRPM > max) {
+      this.rpmError = 'Value is too large';
+      return false;
+    } else if (this.psatForm.value.pumpRPM >= min && this.psatForm.value.pumpRPM <= max) {
+      this.rpmError = null;
+      return true;
+    } else {
+      this.rpmError = null;
+      return null;
+    }
   }
 
 

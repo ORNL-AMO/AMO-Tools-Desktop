@@ -3,7 +3,7 @@
     
     <app-pump-fluid-help [currentField]="currentField" *ngIf="currentTab == 'pump-fluid'"></app-pump-fluid-help>
     
-    <app-motor-help [currentField]="currentField" *ngIf="currentTab == 'motor'"></app-motor-help>
+    <app-motor-help [currentField]="currentField" [settings]="settings" [psat]="psat" *ngIf="currentTab == 'motor'"></app-motor-help>
     
     <app-field-data-help [settings]="settings" [psat]="psat" [currentField]="currentField" *ngIf="currentTab == 'field-data'"></app-field-data-help>
     

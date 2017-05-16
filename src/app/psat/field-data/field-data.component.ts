@@ -53,6 +53,8 @@ export class FieldDataComponent implements OnInit {
   psatForm: any;
   isFirstChange: boolean = true;
   flowError: string = null;
+  voltageError: string = null;
+  costError: string = null;
   constructor(private psatService: PsatService) { }
 
   ngOnInit() {
@@ -150,8 +152,42 @@ export class FieldDataComponent implements OnInit {
       return tmp.valid;
     }
     else {
-      return true;
+      return null;
     }
   }
 
+  checkVoltage() {
+    if (this.psatForm.value.measuredVoltage < 1 || this.psatForm.value.measuredVoltage == 0) {
+      this.voltageError = 'Value is too small';
+      return false;
+    } else if (this.psatForm.value.measuredVoltage > 13800) {
+      this.voltageError = 'Value is too large.';
+      return false;
+    }
+    else if (this.psatForm.value.measuredVoltage <= 13800 && this.psatForm.value.measuredVoltage >= 1) {
+      this.voltageError = null;
+      return true;
+    }
+    else {
+      this.voltageError = null;
+      return null;
+    }
+  }
+
+
+  checkCost() {
+    if (this.psatForm.value.costKwHr < 0) {
+      this.costError = 'Cannot have negative cost';
+      return false;
+    } else if (this.psatForm.value.costKwHr > 1) {
+      this.costError = "Shouldn't be greater then 1";
+      return false;
+    } else if (this.psatForm.value.costKwHr >= 0 && this.psatForm.value.costKwHr <= 1) {
+      this.costError = null;
+      return true;
+    } else {
+      this.costError = null;
+      return null;
+    }
+  }
 }
