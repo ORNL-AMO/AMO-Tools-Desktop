@@ -17,7 +17,6 @@
     <select class="form-control number-input-field" id="horsePower" formControlName="horsePower" (input)="startSavePolling()"
       (focus)="focusField('horsePower')" ngModel="{{psatForm.value.horsePower}}">
         <option  *ngFor="let option of options" [ngValue]="option">{{option}} {{settings.powerMeasurement}}</option>
-        
     </select>
   </div>
 
@@ -27,7 +26,7 @@
       <button class="btn" [disabled]="!selected" (click)="subtractNum('motorRPM')"><i class="fa fa-minus"></i></button>
       <button class="btn" [disabled]="!selected" (click)="addNum('motorRPM')"><i class="fa fa-plus"></i></button>
       <input type="number " class="form-control" id="motorRPM" formControlName="motorRPM" ngModel="{{psatForm.value.motorRPM}}"
-        (input)="startSavePolling()" (focus)="focusField('motorRPM')">
+        (input)="startSavePolling()" (focus)="focusField('motorRPM')"  onfocus="this.select();">
       <span class="units">rpms</span>
     </div>
     <span class="alert-danger pull-right small" *ngIf="rpmError !== null">{{rpmError}}</span>
@@ -44,14 +43,14 @@
   <div class="form-group" *ngIf="psatForm.value.efficiencyClass == 'Specified'">
     <label for="efficiency">Efficiency</label>
     <input type="number" min="0" class="form-control" id="efficiency" formControlName="efficiency" (input)="startSavePolling()"
-      (focus)="focusField('efficiency')">
+      (focus)="focusField('efficiency')" onfocus="this.select();">
     <span class="units">%</span>
   </div>
 
   <div class="form-group">
     <label for="motorVoltage">Voltage</label>
     <input type="number" min="0" class="form-control number-input-field" id="motorVoltage" formControlName="motorVoltage" (input)="startSavePolling()"
-      (focus)="focusField('motorVoltage')" [ngClass]="{'invalid': checkMotorVoltage() == false, 'valid': checkMotorVoltage() == true}">
+      (focus)="focusField('motorVoltage')" [ngClass]="{'invalid': checkMotorVoltage() == false, 'valid': checkMotorVoltage() == true}" onfocus="this.select();">
     <span class="units">V</span>
     <span class="alert-danger pull-right small" *ngIf="voltageError !== null">{{voltageError}}</span>
   </div>
@@ -62,7 +61,7 @@
       <small *ngIf="!disableFLA()" id="flaHelp" class="form-text text-muted text-help" (click)="getFullLoadAmps()"><a>Estimate Full-Load Amps</a></small>
     </label>
     <input type="number" min="0" class="form-control number-input-field" id="fullLoadAmps" formControlName="fullLoadAmps" (input)="startSavePolling()"
-      (focus)="focusField('fullLoadAmps')" [ngClass]="{'warning': checkFLA() == false, 'valid': checkFLA() == true}">
+      (focus)="focusField('fullLoadAmps')" [ngClass]="{'warning': checkFLA() == false, 'valid': checkFLA() == true}" onfocus="this.select();">
     <span class="units">A</span>
     <span class="alert-warning pull-right small" *ngIf="flaError !== null">{{flaError}}</span>
   </div>
@@ -73,7 +72,7 @@
       <button class="btn" [disabled]="!selected" (click)="subtractNum('sizeMargin')"><i class="fa fa-minus"></i></button>
       <button class="btn" [disabled]="!selected" (click)="addNum('sizeMargin')"><i class="fa fa-plus"></i></button>
       <input type="number" min="0" class="form-control" id="sizeMargin" formControlName="sizeMargin" ngModel="{{psatForm.value.sizeMargin}}"
-        (input)="startSavePolling()" (focus)="focusField('sizeMargin')">
+        (input)="startSavePolling()" (focus)="focusField('sizeMargin')" onfocus="this.select();">
     </div>
   </div>
 

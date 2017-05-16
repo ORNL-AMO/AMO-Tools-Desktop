@@ -26,7 +26,7 @@ export class ModifyConditionsComponent implements OnInit {
   modifiedSelected: boolean = false;
   isFirstChange: boolean = true;
   showNotes: boolean = false;
-  currentField: string = 'default';
+  currentField: string;
   isDropdownOpen: boolean = false;
   modificationIndex: number = 0;
   showEditModification: boolean = false;
@@ -42,6 +42,7 @@ export class ModifyConditionsComponent implements OnInit {
     if (tmpTab) {
       this.modifyTab = tmpTab;
     }
+    this.currentField = 'operatingFraction';
     // let results: PsatOutputs = this.psatService.results(this.psat.inputs);
     // console.log(results)
   }
@@ -85,6 +86,13 @@ export class ModifyConditionsComponent implements OnInit {
   }
 
   changeTab(str: string) {
+    if(str == 'pump-fluid'){
+      this.currentField = 'pumpType';
+    }else if(str == 'motor'){
+      this.currentField = 'lineFrequency';
+    }else if(str == 'field-data'){
+      this.currentField = 'operatingFraction';
+    }
     this.modifyTab = str;
   }
 
