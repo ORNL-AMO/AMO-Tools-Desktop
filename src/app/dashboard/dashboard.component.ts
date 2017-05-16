@@ -165,9 +165,7 @@ export class DashboardComponent implements OnInit {
       name: 'Assessments',
       createdDate: new Date(),
       modifiedDate: new Date(),
-      assessmentIds: null,
       parentDirectoryId: null,
-      subDirectoryIds: null
     }
     this.indexedDbService.addDirectory(tmpDirectory).then(
       results => {
