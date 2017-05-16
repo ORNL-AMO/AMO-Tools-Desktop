@@ -173,6 +173,23 @@ export class MotorComponent implements OnInit {
     }
   }
 
+  defaultRpm() {
+    if (this.psatForm.value.frequency == '60 Hz') {
+      if (this.psatForm.value.motorRPM == 1485) {
+        this.psatForm.patchValue({
+          motorRPM: 1780
+        })
+        console.log('set motor rpm for 60 hz')
+      }
+    } else if (this.psatForm.value.frequency == '50 Hz') {
+      if (this.psatForm.value.motorRPM == 1780) {
+        this.psatForm.patchValue({
+          motorRPM: 1485
+        })
+        console.log('set motor rpm for 50 hz')
+      }
+    }
+  }
 
 
   savePsat(form: any) {
