@@ -40,7 +40,8 @@ import { ToastyModule } from 'ng2-toasty';
   ],
   exports: [
     AssessmentDashboardComponent,
-    AssessmentCreateComponent
+    AssessmentCreateComponent,
+    AssessmentSettingsComponent
   ],
   imports: [
     CommonModule,

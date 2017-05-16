@@ -18,8 +18,6 @@ export interface DirectoryDbRef {
   id?: number,
   parentDirectoryId?: number,
   settingsId?: number,
-  subDirectoryIds?: number[],
-  assessmentIds?: number[],
   createdDate?: Date;
   modifiedDate?: Date;
 }

@@ -24,29 +24,30 @@ export class AssessmentService {
 
   getNewPsat(): PSAT {
     let newPsatInputs: PsatInputs = {
-      pump_style: null,
+      pump_style: 0,
       pump_specified: null,
-      pump_rated_speed: null,
-      drive: null,
+      pump_rated_speed: 1780,
+      drive: 0,
       kinematic_viscosity: 1,
       specific_gravity: 1,
       stages: 1,
-      fixed_speed: null,
-      line_frequency: null,
-      motor_rated_power: null,
-      motor_rated_speed: null,
-      efficiency_class: null,
+      fixed_speed: 0,
+      line_frequency: 0,
+      motor_rated_power: 200,
+      motor_rated_speed: 1780,
+      efficiency_class: 1,
       efficiency: null,
-      motor_rated_voltage: null,
-      load_estimation_method: null,
+      motor_rated_voltage: 460,
+      load_estimation_method: 0,
       motor_rated_fla: null,
       margin: null,
       operating_fraction: null,
       flow_rate: null,
-      head: null,
+      head: 277,
       motor_field_power: null,
       motor_field_current: null,
-      motor_field_voltage: null
+      motor_field_voltage: 460,
+      cost_kw_hour: 0.06
     }
     let newPsat: PSAT = {
       inputs: newPsatInputs

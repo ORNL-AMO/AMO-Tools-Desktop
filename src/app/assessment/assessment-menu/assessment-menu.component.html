@@ -1,8 +1,11 @@
 <div class="row main-menu">
   <div class="col-11">
     <ol class="breadcrumb">
-      <li class="breadcrumb-item" *ngFor="let crumb of breadCrumbs; let last = last;">
-        <a [ngClass]="{'active':last == true }" (click)="goToDirectory(crumb)">
+      <li class="breadcrumb-item" *ngFor="let crumb of breadCrumbs; let first = first;">
+        <a *ngIf="first" (click)="goToDirectory(crumb)">
+          All Assessments
+        </a>
+        <a *ngIf="!first" (click)="goToDirectory(crumb)">
           {{crumb.name}}
         </a>
       </li>
@@ -10,7 +13,7 @@
     </ol>
   </div>
   <div class="col-1">
-    <button class="btn btn-secondary pull-right" [ngClass]="{'active': view == 'settings'}" (click)="setView('settings')"><i class="fa fa-cog"></i></button>
+    <button class="btn btn-secondary pull-right" *ngIf="directory.id != 1" [ngClass]="{'active': view == 'settings'}" (click)="setView('settings')"><i class="fa fa-cog"></i></button>
   </div>
 </div>
 

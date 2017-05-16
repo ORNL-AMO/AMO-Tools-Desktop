@@ -32,6 +32,7 @@ export class FieldDataComponent implements OnInit {
 
   @ViewChild('formRef') formRef: ElementRef;
   elements: any;
+  @ViewChild('flowRatePopover') flowRatePopover: ElementRef;
 
   formValid: boolean;
   headToolResults: any = {
@@ -51,6 +52,9 @@ export class FieldDataComponent implements OnInit {
   ];
   psatForm: any;
   isFirstChange: boolean = true;
+  flowError: string = null;
+  voltageError: string = null;
+  costError: string = null;
   constructor(private psatService: PsatService) { }
 
   ngOnInit() {
@@ -130,15 +134,60 @@ export class FieldDataComponent implements OnInit {
   startSavePolling() {
     this.checkForm(this.psatForm);
     if (this.counter) {
-      console.log('reset');
       clearTimeout(this.counter);
-    } else {
-      console.log('start')
     }
     this.counter = setTimeout(() => {
-      console.log('save')
       this.savePsat(this.psatForm)
     }, 3000)
   }
 
+  checkFlowRate() {
+    if (this.psat.inputs.pump_style && this.psatForm.value.flowRate != '') {
+      let tmp = this.psatService.checkFlowRate(this.psat.inputs.pump_style, this.psatForm.value.flowRate, this.settings);
+      if (tmp.message) {
+        this.flowError = tmp.message;
+      } else {
+        this.flowError = null;
+      }
+      return tmp.valid;
+    }
+    else {
+      return null;
+    }
+  }
+
+  checkVoltage() {
+    if (this.psatForm.value.measuredVoltage < 1 || this.psatForm.value.measuredVoltage == 0) {
+      this.voltageError = 'Outside estimated voltage range';
+      return false;
+    } else if (this.psatForm.value.measuredVoltage > 13800) {
+      this.voltageError = 'Outside estimated voltage range';
+      return false;
+    }
+    else if (this.psatForm.value.measuredVoltage <= 13800 && this.psatForm.value.measuredVoltage >= 1) {
+      this.voltageError = null;
+      return true;
+    }
+    else {
+      this.voltageError = null;
+      return null;
+    }
+  }
+
+
+  checkCost() {
+    if (this.psatForm.value.costKwHr < 0) {
+      this.costError = 'Cannot have negative cost';
+      return false;
+    } else if (this.psatForm.value.costKwHr > 1) {
+      this.costError = "Shouldn't be greater then 1";
+      return false;
+    } else if (this.psatForm.value.costKwHr >= 0 && this.psatForm.value.costKwHr <= 1) {
+      this.costError = null;
+      return true;
+    } else {
+      this.costError = null;
+      return null;
+    }
+  }
 }

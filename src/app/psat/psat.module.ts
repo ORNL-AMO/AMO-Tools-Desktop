@@ -4,7 +4,6 @@ import { RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SharedModule } from '../shared/shared.module';
 import { ChartsModule } from 'ng2-charts';
-import { PopoverModule } from 'ngx-popover';
 import { PumpsModule } from '../calculator/pumps/pumps.module';
 import { ModalModule } from 'ng2-bootstrap';
 import { IndexedDbModule } from '../indexedDb/indexedDb.module';
@@ -76,7 +75,6 @@ import { EditConditionPropertiesComponent } from './modify-conditions/edit-condi
     ReactiveFormsModule,
     SharedModule,
     ChartsModule,
-    PopoverModule,
     PumpsModule,
     ModalModule,
     IndexedDbModule,

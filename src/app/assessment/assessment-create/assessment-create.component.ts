@@ -7,6 +7,8 @@ import { Router } from '@angular/router';
 import { AssessmentService } from '../assessment.service';
 import { IndexedDbService } from '../../indexedDb/indexed-db.service';
 import * as _ from 'lodash';
+import { Settings } from '../../shared/models/settings';
+
 @Component({
   selector: 'app-assessment-create',
   templateUrl: './assessment-create.component.html',
@@ -19,13 +21,13 @@ export class AssessmentCreateComponent implements OnInit {
   @Output('hideModal')
   hideModal = new EventEmitter<boolean>();
 
-
   newAssessment: any;
   selectedEquip: string = 'new';
   showDropdown: boolean = false;
   selectedAssessment: string = 'Select Pump';
   allAssessments: any[] = new Array();
   filteredAssessments: any[] = new Array();
+  settings: Settings;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -35,9 +37,36 @@ export class AssessmentCreateComponent implements OnInit {
     private indexedDbService: IndexedDbService) { }
 
   ngOnInit() {
+    this.indexedDbService.getDirectorySettings(this.directory.id).then(
+      results => {
+        if (results.length != 0) {
+          this.settings = results[0];
+        } else {
+          this.getParentDirectorySettings(this.directory.parentDirectoryId);
+        }
+      });
     this.newAssessment = this.initForm();
     this.allAssessments = this.directory.assessments;
     this.filteredAssessments = this.allAssessments;
+  }
+
+  getParentDirectorySettings(parentDirectoryId: number) {
+    //get parent directory
+    this.indexedDbService.getDirectory(parentDirectoryId).then(
+      results => {
+        let parentDirectory = results;
+        //get parent directory settings
+        this.indexedDbService.getDirectorySettings(parentDirectory.id).then(
+          results => {
+            if (results.length != 0) {
+              this.settings = results[0];
+            } else {
+              //no settings try again with parents parent directory
+              this.getParentDirectorySettings(parentDirectory.parentDirectoryId)
+            }
+          })
+      }
+    )
   }
 
   ngAfterViewInit() {
@@ -78,6 +107,9 @@ export class AssessmentCreateComponent implements OnInit {
 
         let tmpPsat = this.assessmentService.getNewPsat();
         tmpAssessment.psat = tmpPsat;
+        if (this.settings.powerMeasurement != 'hp') {
+          tmpAssessment.psat.inputs.motor_rated_power = 150;
+        }
         tmpAssessment.directoryId = this.directory.id;
         this.indexedDbService.addAssessment(tmpAssessment).then(assessmentId => {
           this.indexedDbService.getAssessment(assessmentId).then(assessment => {
@@ -88,24 +120,10 @@ export class AssessmentCreateComponent implements OnInit {
               this.directory.assessments = new Array();
               this.directory.assessments.push(tmpAssessment);
             }
-            let tmpSubIds = new Array();
-            let tmpAssIds = new Array();
-            if (this.directory.subDirectory) {
-              this.directory.subDirectory.forEach(dir => {
-                tmpSubIds.push(dir.id);
-              })
-            }
-            if (this.directory.assessments) {
-              this.directory.assessments.forEach(assessment => {
-                tmpAssIds.push(assessment.id);
-              })
-            }
             let tmpDirRef: DirectoryDbRef = {
               name: this.directory.name,
               id: this.directory.id,
               parentDirectoryId: this.directory.parentDirectoryId,
-              subDirectoryIds: tmpSubIds,
-              assessmentIds: tmpAssIds,
               createdDate: this.directory.createdDate,
               modifiedDate: this.directory.modifiedDate
             }
@@ -132,24 +150,11 @@ export class AssessmentCreateComponent implements OnInit {
               this.directory.assessments = new Array();
               this.directory.assessments.push(tmpAssessment);
             }
-            let tmpSubIds = new Array();
-            let tmpAssIds = new Array();
-            if (this.directory.subDirectory) {
-              this.directory.subDirectory.forEach(dir => {
-                tmpSubIds.push(dir.id);
-              })
-            }
-            if (this.directory.assessments) {
-              this.directory.assessments.forEach(assessment => {
-                tmpAssIds.push(assessment.id);
-              })
-            }
+
             let tmpDirRef: DirectoryDbRef = {
               name: this.directory.name,
               id: this.directory.id,
               parentDirectoryId: this.directory.parentDirectoryId,
-              subDirectoryIds: tmpSubIds,
-              assessmentIds: tmpAssIds,
               createdDate: this.directory.createdDate,
               modifiedDate: this.directory.modifiedDate
             }

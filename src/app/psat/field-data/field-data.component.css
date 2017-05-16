@@ -9,14 +9,14 @@
     top: 20vh;
 }
 
-.incrementor-input-field{
-    margin-right: 45%;
+.invalid{
+    border-color: red;
 }
 
-.number-input-field{
-    width: 35%;
+.valid{
+    border-color: green;
 }
 
-.select-input-field{
-    width: 90%;
+.warning{
+  border-color:darkorange;
 }

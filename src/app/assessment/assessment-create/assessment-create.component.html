@@ -24,7 +24,8 @@
                 <input #assessmentName class="form-control" formControlName="assessmentName" id="assessmentName"/>
               </div>
               <div class="help-text">
-                <p>Example: "Pump123" or "ORNL Pump 3"</p>
+                <p *ngIf="newAssessment.value.assessmentType == 'Pump'">Example: "Pump123" or "ORNL Pump 3"</p>
+                <p *ngIf="newAssessment.value.assessmentType == 'Furnace'">Example: "Furnace123" or "ORNL Furnace 3"</p>
               </div>
             </div>
           </div>

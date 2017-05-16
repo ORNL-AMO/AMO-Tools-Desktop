@@ -83,6 +83,11 @@ export class DashboardComponent implements OnInit {
     this.dashboardView = 'tutorials';
   }
 
+  showSettings(){
+    this.selectedCalculator = '';
+    this.dashboardView = 'settings';
+  }
+
   populateDirectories(directoryRef: DirectoryDbRef): Directory {
     let tmpDirectory: Directory = {
       name: directoryRef.name,
@@ -160,9 +165,7 @@ export class DashboardComponent implements OnInit {
       name: 'Assessments',
       createdDate: new Date(),
       modifiedDate: new Date(),
-      assessmentIds: null,
       parentDirectoryId: null,
-      subDirectoryIds: null
     }
     this.indexedDbService.addDirectory(tmpDirectory).then(
       results => {

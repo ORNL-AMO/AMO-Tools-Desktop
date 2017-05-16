@@ -49,6 +49,9 @@ export class MotorComponent implements OnInit {
   psatForm: any;
   isFirstChange: boolean = true;
   formValid: boolean;
+  rpmError: string = null;
+  voltageError: string = null;
+  flaError: string = null;
   constructor(private psatService: PsatService) { }
 
   ngOnInit() {
@@ -173,7 +176,74 @@ export class MotorComponent implements OnInit {
     }
   }
 
+  defaultRpm() {
+    if (this.psatForm.value.frequency == '60 Hz') {
+      if (this.psatForm.value.motorRPM == 1485) {
+        this.psatForm.patchValue({
+          motorRPM: 1780
+        })
+      }
+    } else if (this.psatForm.value.frequency == '50 Hz') {
+      if (this.psatForm.value.motorRPM == 1780) {
+        this.psatForm.patchValue({
+          motorRPM: 1485
+        })
+      }
+    }
+  }
 
+  checkMotorRpm() {
+    if (this.psatForm.value.frequency && this.psatForm.value.motorRPM != '') {
+      let frequencyEnum = this.psatService.getLineFreqEnum(this.psatForm.value.frequency);
+      let tmp = this.psatService.checkMotorRpm(frequencyEnum, this.psatForm.value.motorRPM);
+      if (tmp.message) {
+        this.rpmError = tmp.message;
+      } else {
+        this.rpmError = null;
+      }
+      return tmp.valid;
+    }
+    else {
+      return null;
+    }
+  }
+
+  checkMotorVoltage() {
+    if (this.psatForm.value.motorVoltage != '') {
+      let tmp = this.psatService.checkMotorVoltage(this.psatForm.value.motorVoltage);
+      if (tmp.message) {
+        this.voltageError = tmp.message;
+      } else {
+        this.voltageError = null;
+      }
+      return tmp.valid;
+    }
+    else {
+      return null;
+    }
+  }
+
+
+  checkFLA() {
+    let tmpEfficiency = this.psatService.getEfficiencyFromForm(this.psatForm);
+    let estEfficiency = this.psatService.estFLA(
+      this.psatForm.value.horsePower,
+      this.psatForm.value.motorRPM,
+      this.psatForm.value.frequency,
+      this.psatForm.value.efficiencyClass,
+      tmpEfficiency,
+      this.psatForm.value.motorVoltage,
+      this.settings
+    );
+    let test = 1 - (this.psatForm.value.fullLoadAmps / estEfficiency);
+    if (Math.abs(test) > .05) {
+      this.flaError = 'Value is outside expected range';
+      return false;
+    } else {
+      this.flaError = null;
+      return true;
+    }
+  }
 
   savePsat(form: any) {
     this.psat.inputs = this.psatService.getPsatInputsFromForm(form);
