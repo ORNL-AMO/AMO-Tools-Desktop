@@ -3,6 +3,10 @@
     <app-nema-energy-efficiency-form [(nemaForm)]="nemaForm"></app-nema-energy-efficiency-form>
   </div>
   <div class="col-9 calc-graph">
-    <app-nema-energy-efficiency-graph [settings]="settings" [(nemaForm)]="nemaForm"></app-nema-energy-efficiency-graph>
+    <div class="row justify-content-center">
+      <div class="col-6">
+        <app-nema-energy-efficiency-graph [settings]="settings" [(nemaForm)]="nemaForm"></app-nema-energy-efficiency-graph>
+      </div>
+    </div>
   </div>
 </div>
