@@ -8,8 +8,23 @@
 
 <div class="row report-container justify-content-center">
   <div class="col-10">
-    <app-report-banner (emitCloseReport)="closeReport()"></app-report-banner>
-    <app-report-summary *ngIf="reportAssessments.length == numAssessments" [assessments]="reportAssessments"></app-report-summary>
-    <app-assessment-summaries *ngIf="reportAssessments.length == numAssessments" [assessments]="reportAssessments"></app-assessment-summaries>
+    <div class="row">
+      <app-report-banner (emitCloseReport)="closeReport()"></app-report-banner>
+    </div>
+    <div class="row">
+      <app-report-summary *ngIf="reportAssessments.length == numAssessments" [assessments]="reportAssessments"></app-report-summary>
+    </div>
+    <div class="row" *ngIf="reportAssessments.length == numAssessments">
+      <div class="col-2">
+        <ul>
+          <li *ngFor="let assessment of reportAssessments">{{assessment.name}}</li>
+        </ul>
+      </div>
+      <div class="col-10">
+        <div class="row" *ngFor="let assessment of reportAssessments">
+          <app-psat-report [assessment]="assessment"></app-psat-report>
+        </div>
+      </div>
+    </div>
   </div>
 </div>

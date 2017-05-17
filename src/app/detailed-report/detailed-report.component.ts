@@ -30,11 +30,7 @@ export class DetailedReportComponent implements OnInit {
     this.numAssessments = tmpArray.length;
     this.assessments.forEach(assessment => {
       if (assessment.psat) {
-        if (assessment.psat.setupDone && !assessment.psat.outputs) {
-          this.getAssessmentSettingsThenResults(assessment);
-        } else if (assessment.psat.setupDone && assessment.psat.outputs) {
-          this.reportAssessments.push(assessment);
-        }
+        this.getAssessmentSettingsThenResults(assessment);
       }
     })
   }
@@ -44,7 +40,7 @@ export class DetailedReportComponent implements OnInit {
     this.indexedDbService.getAssessmentSettings(assessment.id).then(
       results => {
         if (results.length != 0) {
-          assessment.psat.outputs = this.psatService.results(assessment.psat.inputs, results[0]);
+          assessment.psat = this.getResults(assessment.psat, results[0]);
           this.reportAssessments.push(assessment);
         } else {
           //no assessment settings, find dir settings being usd
@@ -63,7 +59,7 @@ export class DetailedReportComponent implements OnInit {
         this.indexedDbService.getDirectorySettings(parentDirectory.id).then(
           results => {
             if (results.length != 0) {
-              assessment.psat.outputs = this.psatService.results(assessment.psat.inputs, results[0]);
+              assessment.psat = this.getResults(assessment.psat, results[0]);
               this.reportAssessments.push(assessment);
             } else {
               //no settings try again with parents parent directory
@@ -75,7 +71,13 @@ export class DetailedReportComponent implements OnInit {
   }
 
   getResults(psat: PSAT, settings: Settings) {
-    return this.psatService.results(psat.inputs, settings);
+    psat.outputs = this.psatService.results(psat.inputs, settings);
+    if (psat.modifications) {
+      psat.modifications.forEach(modification => {
+        modification.psat.outputs = this.psatService.results(modification.psat.inputs, settings);
+      })
+    }
+    return psat;
   }
 
   closeReport() {

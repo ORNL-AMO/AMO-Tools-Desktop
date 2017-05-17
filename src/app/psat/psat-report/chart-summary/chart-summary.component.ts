@@ -15,6 +15,8 @@ export class ChartSummaryComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
+    this.psat;
+    debugger;
     this.setColumns();
   }
 
