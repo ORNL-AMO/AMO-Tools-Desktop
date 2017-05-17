@@ -80,7 +80,6 @@ export class AssessmentDashboardComponent implements OnInit {
   }
 
   emitGenReport(){
-    console.log('assessment dashboard')
     this.genReport.emit(true);
   }
 

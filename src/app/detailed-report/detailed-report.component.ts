@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
+import { Assessment } from '../shared/models/assessment';
+import { PSAT } from '../shared/models/psat';
 
 @Component({
   selector: 'app-detailed-report',
@@ -6,6 +8,9 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./detailed-report.component.css']
 })
 export class DetailedReportComponent implements OnInit {
+  @Input()
+  assessments: Array<Assessment>;
+
 
   constructor() { }
 

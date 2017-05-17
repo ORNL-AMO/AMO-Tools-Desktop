@@ -1,5 +1,7 @@
-<div class="row">
-  <div class="col-12">
-    <app-assessment-report></app-assessment-report>
+<div class="row justify-content-center">
+  <div class="col-10">
+    <div *ngFor="let assessment of assessments">
+      <app-psat-report [assessment]="assessment"></app-psat-report>
+    </div>
   </div>
 </div>

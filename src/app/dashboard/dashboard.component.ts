@@ -27,6 +27,9 @@ export class DashboardComponent implements OnInit {
 
   @ViewChild('deleteModal') public deleteModal: ModalDirective;
   @ViewChild('deleteItemsModal') public deleteItemsModal: ModalDirective;
+
+  reportAssessments: Array<any>;
+
   constructor(private indexedDbService: IndexedDbService, private formBuilder: FormBuilder, private assessmentService: AssessmentService) { }
 
   ngOnInit() {
@@ -211,7 +214,7 @@ export class DashboardComponent implements OnInit {
     this.hideDeleteItemsModal();
     if (dir.subDirectory) {
       dir.subDirectory.forEach(subDir => {
-        if (subDir.delete || subDir.parentDirectoryId != 1) {
+        if (subDir.selected || subDir.parentDirectoryId != 1) {
           this.indexedDbService.getChildrenDirectories(subDir.id).then(results => {
             if (results) {
               subDir.subDirectory = results;
@@ -222,7 +225,7 @@ export class DashboardComponent implements OnInit {
       });
     }
     if (dir != this.workingDirectory) {
-      if (dir.parentDirectoryId != this.workingDirectory.id || dir.delete) {
+      if (dir.parentDirectoryId != this.workingDirectory.id || dir.selected) {
         this.indexedDbService.getDirectoryAssessments(dir.id).then(results => {
           let childDirAssessments = results;
           childDirAssessments.forEach(assessment => {
@@ -256,7 +259,7 @@ export class DashboardComponent implements OnInit {
       }
     }
     if (dir == this.workingDirectory) {
-      let checkedAssessments = _.filter(this.workingDirectory.assessments, { 'delete': true });
+      let checkedAssessments = _.filter(this.workingDirectory.assessments, { 'selected': true });
       checkedAssessments.forEach(assessment => {
         this.indexedDbService.deleteAssessment(assessment.id).then(results => {
           this.allDirectories = this.populateDirectories(this.rootDirectoryRef);
@@ -276,9 +279,10 @@ export class DashboardComponent implements OnInit {
   }
 
   generateReport(){
-    console.log('dashboard');
-    this.workingDirectory;
-    debugger;
+    this.reportAssessments = new Array();
+    //only PSAT for now
+    this.reportAssessments = _.filter(this.workingDirectory.assessments, {'selected': true, 'type': 'PSAT'});
+    this.dashboardView = 'detailed-report';
   }
 
 }

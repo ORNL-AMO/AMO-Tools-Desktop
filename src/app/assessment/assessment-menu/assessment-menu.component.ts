@@ -69,7 +69,6 @@ export class AssessmentMenuComponent implements OnInit {
   }
 
   emitGenReport(){
-    console.log('menu');
     this.genReport.emit(true);
   }
 

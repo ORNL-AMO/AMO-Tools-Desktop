@@ -19,7 +19,7 @@
 </div>
 
 <div class="row" *ngIf="!psat.modifications">
-  <div class="col-3">
+  <div class="col-12">
 
     <app-psat-chart [psat]="psat"></app-psat-chart>
     <div class="savings text-center">{{psat.outputs.existing.annual_savings_potential| currency:'USD':true:'4.2-2'}}</div>
