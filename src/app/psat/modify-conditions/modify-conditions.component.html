@@ -68,7 +68,7 @@
           <p>Data will be copied from <br/> your baseline operating condition</p>
         </li>
       </ul>
-      <div class="losses-container" *ngIf="showEditModification && editModification">
+      <div class="losses-container edit-modification" *ngIf="showEditModification && editModification">
         <app-edit-condition-properties [modification]="editModification" (deleteMod)="deleteModification()" (saveMod)="save()" (cancelEdit)="cancelEdit()"></app-edit-condition-properties>
       </div>
     </div>
