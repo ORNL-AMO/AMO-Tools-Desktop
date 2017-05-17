@@ -4,8 +4,8 @@
   <input type="text" class="form-control" id="modName" [(ngModel)]="name">
 </div>
 <div class="actions">
-	<a class="pull-left" (click)="cancel()">Cancel</a>
-	<a class="pull-right" *ngIf="!deleteConfirm" (click)="saveModification()">Save</a>
+	<a (click)="cancel()" class="pull-left btn btn-secondary">Cancel</a>
+	<a *ngIf="!deleteConfirm" (click)="saveModification()" class="pull-right btn btn-primary">Save</a>
 </div>
 
 
