@@ -76,17 +76,17 @@ export class DashboardComponent implements OnInit {
     this.dashboardView = 'landing-screen';
   }
 
-  showAbout(){
+  showAbout() {
     this.selectedCalculator = '';
     this.dashboardView = 'about-page';
   }
 
-  showTutorials(){
+  showTutorials() {
     this.selectedCalculator = '';
     this.dashboardView = 'tutorials';
   }
 
-  showSettings(){
+  showSettings() {
     this.selectedCalculator = '';
     this.dashboardView = 'settings';
   }
@@ -278,11 +278,15 @@ export class DashboardComponent implements OnInit {
     }
   }
 
-  generateReport(){
+  generateReport() {
     this.reportAssessments = new Array();
     //only PSAT for now
-    this.reportAssessments = _.filter(this.workingDirectory.assessments, {'selected': true, 'type': 'PSAT'});
+    this.reportAssessments = _.filter(this.workingDirectory.assessments, { 'selected': true, 'type': 'PSAT' });
     this.dashboardView = 'detailed-report';
+  }
+
+  closeReport() {
+    this.dashboardView = 'assessment-dashboard';
   }
 
 }
