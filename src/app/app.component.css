@@ -228,7 +228,7 @@ select.form-control:not([size]):not([multiple]) {
   top: 3px;
   right: 5px;
   font-size: 14px;
-  color: #5a5a5a;
+  color: #a9a9a9;
 }
 
 /*
@@ -323,6 +323,10 @@ Modals
 .help-text{
   font-size: small;
   color: gray;
+}
+.modal h3 {
+  font-size: 22px;
+  margin-bottom: 0;
 }
 
 
