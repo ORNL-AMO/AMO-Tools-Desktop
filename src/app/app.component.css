@@ -1078,7 +1078,41 @@ Modify Conditions
     padding: 4px 20px; 
   }
 
+.edit-modification {
+  height: 100%;
+  background: #fff;
+}
+  .tab-content .edit-modification .form-group label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 4px;
+  }
+  .tab-content .edit-modification .form-group input {
+    width: 100%;
+    padding: 10px;
+  }
+    .tab-content .edit-modification .form-group:hover {
+      background: #fff;
+    }
+  
+  .edit-modification .actions {
+    margin-top: 16px;
+    margin-bottom: 100px;
+  }
+    .edit-modification .actions:after {
+      display: table;
+      content: "";
+      clear: both;
+    }
 
+  a.delete-modification, a:not([href]):not([tabindex]).delete-modification {
+    display: block;
+    text-align: center;
+    color: #ff0000;
+  }
+  .edit-modification a.btn-primary, .edit-modification a:not([href]):not([tabindex]).btn-primary {
+    color: #fff;
+  }
 
 /*
 Help Panel Cards
