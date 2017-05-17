@@ -324,6 +324,10 @@ Modals
   font-size: small;
   color: gray;
 }
+.modal h3 {
+  font-size: 22px;
+  margin-bottom: 0;
+}
 
 
 
