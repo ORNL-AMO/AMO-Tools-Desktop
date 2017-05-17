@@ -13,7 +13,7 @@
   <div class="form-group">
     <label for="costKwHr">Cost</label>
     <input type="number" min="0" max="1" class="form-control" formControlName="costKwHr" id="costKwHr" (input)="startSavePolling()"
-      (focus)="focusField('costKwHr')" [ngClass]="{'invalid': checkCost() == false, 'valid': checkCost() == true}" onfocus="this.select();">
+      (focus)="focusField('costKwHr')" [ngClass]="{'invalid': checkCost() == false}" onfocus="this.select();">
     <span class="units">$/kwh</span>
     <span class="alert-danger pull-right small" *ngIf="costError !== null">{{costError}}</span>
   </div>
@@ -21,7 +21,7 @@
   <div class="form-group">
     <label for="flowRate">Flow Rate</label>
     <input type="number" min="0" class="form-control" formControlName="flowRate" id="flowRate" (input)="startSavePolling()" (focus)="focusField('flowRate')"
-      [ngClass]="{'invalid': checkFlowRate() == false, 'valid': checkFlowRate() == true}" onfocus="this.select();">
+      [ngClass]="{'invalid': checkFlowRate() == false}" onfocus="this.select();">
     <span class="units">{{settings.flowMeasurement}}</span>
     <span class="alert-danger pull-right small" *ngIf="flowError !== null">{{flowError}}</span>
   </div>
@@ -59,7 +59,7 @@
   <div class="form-group">
     <label for="measuredVoltage">Voltage</label>
     <input type="number" min="1" class="form-control" formControlName="measuredVoltage" id="measuredVoltage" (input)="startSavePolling()"
-      (focus)="focusField('measuredVoltage')" [ngClass]="{'warning': checkVoltage() == false, 'valid': checkVoltage() == true}" onfocus="this.select();">
+      (focus)="focusField('measuredVoltage')" [ngClass]="{'warning': checkVoltage() == false}" onfocus="this.select();">
     <span class="units">V</span>
     <span class="alert-warning pull-right small" *ngIf="voltageError !== null">{{voltageError}}</span>
   </div>
