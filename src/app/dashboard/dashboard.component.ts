@@ -275,4 +275,10 @@ export class DashboardComponent implements OnInit {
     }
   }
 
+  generateReport(){
+    console.log('dashboard');
+    this.workingDirectory;
+    debugger;
+  }
+
 }
