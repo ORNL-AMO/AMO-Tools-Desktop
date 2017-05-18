@@ -4,20 +4,11 @@
    </span>
 </div>
 
-<div class="sidebar-group">
+<div class="sidebar-group create-button">
   <button type="button" class="btn btn-primary btn-block" (click)="showCreateAssessment()">Create Assessment</button> 
 </div>
 
-<div class="sidebar-group">
-  <ul>
-    <li [ngClass]="{'selected':dashboardView == 'landing-screen'}">
-      <span (click)="goHome()">Landing Screen</span>
-    </li>
-  </ul>
-</div>
-
 <div class="sidebar-group"> 
-  <h3>Assessments</h3>
   <ul>
     <li [ngClass]="{'selected':selectedDirectoryId == directory.id && dashboardView == 'assessment-dashboard'}"><span (click)="toggleSelected(directory)" >All Assessments</span></li>
     <li *ngIf="directory">
@@ -28,41 +19,53 @@
 </div>
 
 <div class="sidebar-group"> 
-  <h3>Calculators</h3>
   <ul>
-    <li [ngClass]="{'selected': selectedCalculator == 'all'}"><span (click)="chooseCalculator('all')">All Calculators</span></li>
-    <li [ngClass]="{'selected': selectedCalculator == 'pumps'}"><span (click)="chooseCalculator('pumps')">Pumps</span></li>
-    <li [ngClass]="{'selected': selectedCalculator == 'fans'}"><span (click)="chooseCalculator('fans')">Fans</span></li>
-    <li [ngClass]="{'selected': selectedCalculator == 'furnaces'}"><span (click)="chooseCalculator('furnaces')">Process Heating</span></li>
-    <li [ngClass]="{'selected': selectedCalculator == 'steam'}"><span (click)="chooseCalculator('steam')">Steam</span></li>
-    <li [ngClass]="{'selected': selectedCalculator == 'motors'}"><span (click)="chooseCalculator('motors')">Motors</span></li>
-    <li [ngClass]="{'selected': selectedCalculator == 'compressed-air'}"><span (click)="chooseCalculator('compressed-air')">Compressed Air</span></li>
-    <li [ngClass]="{'selected': selectedCalculator == 'utilities'}"><span (click)="chooseCalculator('utilities')">Utilities</span></li>
+    <li [ngClass]="{'selected': selectedCalculator == 'all'}">
+      <span (click)="chooseCalculator('all')">All Calculators</span>
+    </li>
+    <li [ngClass]="{'selected': selectedCalculator == 'pumps'}">
+      <span (click)="chooseCalculator('pumps')">Pumps</span>
+    </li>
+
+<!--     <li [ngClass]="{'selected': selectedCalculator == 'fans'}">
+      <span (click)="chooseCalculator('fans')">Fans</span>
+    </li>
+    <li [ngClass]="{'selected': selectedCalculator == 'furnaces'}">
+      <span (click)="chooseCalculator('furnaces')">Process Heating</span>
+    </li>
+    <li [ngClass]="{'selected': selectedCalculator == 'steam'}">
+      <span (click)="chooseCalculator('steam')">Steam</span>
+    </li>
+    <li [ngClass]="{'selected': selectedCalculator == 'motors'}">
+      <span (click)="chooseCalculator('motors')">Motors</span>
+    </li>
+    <li [ngClass]="{'selected': selectedCalculator == 'compressed-air'}">
+      <span (click)="chooseCalculator('compressed-air')">Compressed Air</span>
+    </li> -->
+
+    <li [ngClass]="{'selected': selectedCalculator == 'utilities'}">
+      <span (click)="chooseCalculator('utilities')">Utilities</span>
+    </li>
   </ul>
 </div>
 
-<div class="sidebar-group">
+<div class="sidebar-group secondary">
  <ul>
     <li [ngClass]="{'selected':dashboardView == 'settings'}">
       <span (click)="goToSettings()">Settings</span>
     </li>
-  </ul>
-</div>
-
-<div class="sidebar-group">
-  <h3>Help</h3>
-  <ul>
     <li [ngClass]="{'selected': dashboardView == 'tutorials'}">
-      <span (click)="showTutorials()">Video Tutorials</span>
+      <span (click)="showTutorials()">Tutorials</span>
     </li>
+    <!-- <li [ngClass]="{'selected':dashboardView == 'landing-screen'}">
+      <span (click)="goHome()">Welcome</span>
+    </li> -->
     <li [ngClass]="{'selected': dashboardView == 'about-page'}">
-      <span (click)="showAbout()">About Tool Suite</span>
+      <span (click)="showAbout()">About</span>
     </li>
-    <li><a href="mailto:accawigk@ornl.gov"><span class="small">Contact Tool Administrators</span></a></li>
+    <li><a href="mailto:accawigk@ornl.gov">Contact</a></li>
   </ul>
 </div>
-
-
 
 
 <app-assessment-create *ngIf="createAssessment" (hideModal)="hideModal()" [(directory)]="directory" class="create-container"></app-assessment-create>

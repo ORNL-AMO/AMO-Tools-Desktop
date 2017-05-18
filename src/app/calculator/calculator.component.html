@@ -7,74 +7,53 @@
 <app-utilities [selectedTool]="selectedTool" *ngIf="selectedCalculator == 'utilities'"></app-utilities>
 
 <div *ngIf="selectedCalculator == 'all'">
-    <div class="calc-content">
-        <div class="calc-banner">
-            <div class="h3">All Calculators</div>
-        </div>
-        <div class="row justify-content-center align-items-center calc-list">
-            <div class="col-8">
-                <div class="row calc-type">
-                    <div class="col-12">
-                        <p class="h4">Pumps</p>
-                    </div>
-                </div>
-                <div class="row tools">
-                    <div class="col-12">
-                        <a class="h5" (click)="showTool('pumps','head-tool')">Head Tool</a>
-                        <div>Use head tool calculator to calculate pump head.</div>
-                    </div>
-                </div>
-                <div class="row tools">
-                    <div class="col-12">
-                        <a class="h5" (click)="showTool('pumps','system-curve')">System Curve</a>
-                        <div>Use system curve to graph your pumps flow.</div>
-                    </div>
-                </div>
-                <div class="row tools">
-                    <div class="col-12">
-                        <a class="h5" (click)="showTool('pumps','nema-energy-efficiency')">NEMA Energy Efficiency</a>
-                        <div>The predicted efficiency of an induction motor from NEMA MG1, based on size, rotating speed and efficiency class.</div>
-                    </div>
-                </div>
 
-                <div class="row tools">
-                    <div class="col-12">
-                        <a class="h5" (click)="showTool('pumps','specific-speed')">Specific Speed</a>
-                        <div>For each pump type there is an optimal specific speed based on size, flow rate, specific speed.  Hydraulic Institute standards also include factors for wear and surface finish on wetted parts but these two factors are not considered in the PSAT calculations.  Operation at the optimal specific speed allows a pump to operate at maximum efficiency.  This calculator determines the specific speed for a pump at the given conditions and calculates the amount of efficiency penalty to be deducted from the maximum value due to operation away from the optimal specific speed.</div>
-                    </div>
-                </div>
+    <div class="row">
+        <div class="col-10 offset-md-1">
 
-                <div class="row tools">
-                    <div class="col-12">
-                        <a class="h5" (click)="showTool('pumps','achievable-efficiency')">Achievable Efficiency</a>
+            <div class="content-container calculators">
+            
+                <h2>All Calculators</h2>
+
+                <h3>Pumps</h3>
+                <ul>
+                    <li>
+                        <a (click)="showTool('pumps','head-tool')">Head Tool</a>
+                        <p>Use head tool calculator to calculate pump head.</p>
+                    </li>
+                    <li>
+                        <a (click)="showTool('pumps','system-curve')">System Curve</a>
+                        <p>Use system curve to graph your pumps flow.</p>
+                    </li>
+                    <li>
+                        <a (click)="showTool('pumps','nema-energy-efficiency')">NEMA Energy Efficiency</a>
+                        <p>The predicted efficiency of an induction motor from NEMA MG1, based on size, rotating speed and efficiency class.</p>
+                    </li>
+                    <li>
+                        <a (click)="showTool('pumps','specific-speed')">Specific Speed</a>
+                        <p>For each pump type there is an optimal specific speed based on size, flow rate, specific speed.  Hydraulic Institute standards also include factors for wear and surface finish on wetted parts but these two factors are not considered in the PSAT calculations.  Operation at the optimal specific speed allows a pump to operate at maximum efficiency.  This calculator determines the specific speed for a pump at the given conditions and calculates the amount of efficiency penalty to be deducted from the maximum value due to operation away from the optimal specific speed.</p>
+                    </li>
+                    <li>
+                        <a (click)="showTool('pumps','achievable-efficiency')">Achievable Efficiency</a>
                         <div>Calculate some other stuff...</div>
-                    </div>
-                </div>
-
-                <div class="row tools">
-                    <div class="col-12">
-                        <a class="h5" (click)="showTool('pumps','motor-performance')">Motor Performance</a>
+                    </li>
+                    <li>
+                        <a (click)="showTool('pumps','motor-performance')">Motor Performance</a>
                         <div>Calculate some motor stuff...</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="row justify-content-center align-items-center calc-list">
-            <div class="col-8">
-                <div class="row calc-type">
-                    <div class="col-12">
-                        <p class="h4">Utilities</p>
-                    </div>
-                </div>
-                <div class="row tools">
-                    <div class="col-12">
-                        <a class="h5" (click)="showTool('utilities','convert-units')">Unit Converter</a>
-                        <div>Use unit converter for quick unit conversion calculations</div>
-                    </div>
-                </div>
-            </div>
+                    </li>
+                </ul>
+
+                <h3>Utilities</h3>
+                <ul>
+                    <li>
+                        <a (click)="showTool('utilities','convert-units')">Unit Converter</a>
+                        <p>Use unit converter for quick unit conversion calculations</p>
+                    </li>
+                </ul>
+
+            </div><!-- End .content-container -->
+
         </div>
     </div>
-
 </div>
 
