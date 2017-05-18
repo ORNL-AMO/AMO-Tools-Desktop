@@ -1,5 +1,36 @@
-<div class="row">
-  <div class="col-12">
-    <app-assessment-report></app-assessment-report>
+<div class="row report-container justify-content-center">
+  <div class="col-10">
+    <div class="card" style="max-height: 100vh">
+      <div class="card-block">
+        <div class="row">
+          <div class="col-12">
+            <app-report-banner (emitCloseReport)="closeReport()"></app-report-banner>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-12">
+            <app-report-summary [numPsats]="numPsats" [pumpSavingsPotential]="pumpSavingsPotential"></app-report-summary>
+          </div>
+        </div>
+        <div class="row" style="padding-top: 15px;">
+          <div class="col-12">
+            <h2>ASSESSMENTS</h2>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-2" style="padding-top: 30px;">
+            <h5>Pumps</h5>
+            <ul class="list-group">
+              <li class="list-group-item" *ngFor="let assessment of reportAssessments"><a href="#assessment.id" (click)="selectAssessment(assessment.id)">{{assessment.name}}</a></li>
+            </ul>
+          </div>
+          <div class="col-10" style="max-height: 62vh; overflow: scroll">
+            <div class="row" *ngFor="let assessment of reportAssessments">
+              <app-psat-report id="assessment.id" style="width: 100%" [assessment]="assessment"></app-psat-report>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </div>

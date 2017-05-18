@@ -1,8 +1,10 @@
-<div class="assessment-report">
+<div class="assessment-report" *ngIf="psat.outputs && settings">
 
   <div class="row">
-    <div class="col-12">
-      <div class="h2">Assessment Report</div>
+    <div class="col-lg-6 col-md-8 col-sm-12">
+      <div class="h2" *ngIf="!assessment">Assessment Report</div>
+      <div class="h2" *ngIf="assessment">{{assessment.name}} Report</div>
+      <div class="small alert-warning" *ngIf="!psat.setupDone">*This assessment has not been completed, the resulting data may be inaccurate</div>
     </div>
   </div>
 

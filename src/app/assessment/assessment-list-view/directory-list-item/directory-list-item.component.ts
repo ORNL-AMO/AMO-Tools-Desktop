@@ -19,13 +19,13 @@ export class DirectoryListItemComponent implements OnInit {
 
   ngOnInit() {
     if (this.isChecked) {
-      this.directory.delete = this.isChecked;
+      this.directory.selected = this.isChecked;
     }
   }
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.isChecked && !this.isFirstChange) {
-      this.directory.delete = this.isChecked;
+      this.directory.selected = this.isChecked;
     }
     else {
       this.isFirstChange = false;
@@ -37,6 +37,6 @@ export class DirectoryListItemComponent implements OnInit {
   }
 
   setDelete() {
-    this.directory.delete = this.isChecked;
+    this.directory.selected = this.isChecked;
   }
 }

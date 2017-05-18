@@ -9,6 +9,10 @@ declare var psatAddon: any;
 
 @Injectable()
 export class PsatService {
+  flaRange: any = {
+    flaMin: 0,
+    flaMax: 0
+  };
 
   constructor(private formBuilder: FormBuilder, private convertUnitsService: ConvertUnitsService, private validationService: ValidationService) { }
 
@@ -191,6 +195,10 @@ export class PsatService {
     }
     return this.roundVal(psatAddon.estFLA(inputs), 2);
 
+  }
+
+  getFlaRange(){
+    return this.flaRange;
   }
 
   //specific speed
@@ -735,18 +743,18 @@ export class PsatService {
       message: null
     };
     let range = this.getMotorRpmMinMax(lineFreqEnum);
-    if(motorRPM >= range.min && motorRPM <= range.max){
+    if (motorRPM >= range.min && motorRPM <= range.max) {
       response.valid = true;
       return response
-    }else if(motorRPM < range.min){
+    } else if (motorRPM < range.min) {
       response.valid = false;
       response.message = 'Motor RPM too Small for Selected Line Frequency';
       return response;
-    }else if(motorRPM > range.max){
+    } else if (motorRPM > range.max) {
       response.valid = false;
       response.message = 'Motor RPM too Latge for Selected Line Frequency';
       return response;
-    }else{
+    } else {
       return response;
     }
   }
@@ -766,23 +774,23 @@ export class PsatService {
     return rpmRange;
   }
 
-  checkMotorVoltage(voltage: number){
+  checkMotorVoltage(voltage: number) {
     let response = {
       valid: null,
       message: null
     };
 
-    if(voltage >= 208 && voltage <= 15180){
+    if (voltage >= 208 && voltage <= 15180) {
       response.valid = true;
       return response;
-    }else if(voltage < 208){
+    } else if (voltage < 208) {
       response.valid = false;
       response.message = "Voltage value is too small."
       return response;
-    }else if(voltage > 15180){
+    } else if (voltage > 15180) {
       response.valid = false;
       response.message = "Voltage value is too large";
-    }else{
+    } else {
       return response;
     }
   }

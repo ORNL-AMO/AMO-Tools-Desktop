@@ -238,8 +238,11 @@ export class MotorComponent implements OnInit {
       this.psatForm.value.motorVoltage,
       this.settings
     );
-    let test = 1 - (this.psatForm.value.fullLoadAmps / estEfficiency);
-    if (Math.abs(test) > .05) {
+
+    this.psatService.flaRange.flaMax = estEfficiency * 1.05;
+    this.psatService.flaRange.flaMin = estEfficiency * .95;
+    //let test = 1 - (this.psatForm.value.fullLoadAmps / estEfficiency);
+    if (this.psatForm.value.fullLoadAmps < this.psatService.flaRange.flaMin || this.psatForm.value.fullLoadAmps > this.psatService.flaRange.flaMax) {
       this.flaError = 'Value is outside expected range';
       return false;
     } else {

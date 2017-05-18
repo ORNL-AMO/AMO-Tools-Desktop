@@ -1,5 +1,5 @@
 <div class="container-fluid">
-    <div class="row dashboard-content">
+    <div class="row dashboard-content" *ngIf="dashboardView != 'detailed-report'">
         <div class="col-2 sidebar-bg">
             <app-sidebar *ngIf="allDirectories" [selectedCalculator]="selectedCalculator" [directory]="getAllDirectories()" [newDirEventToggle]="newDirEventToggle"
                 [workingDirectory]="getWorkingDirectory()" [dashboardView]="dashboardView" (directoryChange)="changeWorkingDirectory($event)"
@@ -8,7 +8,7 @@
         </div>
         <div class="col-10" *ngIf="allDirectories && dashboardView == 'assessment-dashboard'">
             <app-assessment-dashboard [directory]="workingDirectory" (directoryChange)="changeWorkingDirectory($event)" (deleteDataSignal)="showDeleteModal($event)"
-                (deleteCheckedItems)="showDeleteItemsModal()" (resetDataEmit)="showDeleteModal()" (emitNewDir)="newDir()"></app-assessment-dashboard>
+                (deleteCheckedItems)="showDeleteItemsModal()" (resetDataEmit)="showDeleteModal()" (emitNewDir)="newDir()" (genReport)="generateReport()"></app-assessment-dashboard>
         </div>
         <div class="col-10" *ngIf="allDirectories && dashboardView == 'calculator'">
             <app-calculator (selectCalculator)="viewCalculator($event)" [selectedCalculator]="selectedCalculator"></app-calculator>
@@ -30,6 +30,9 @@
                 </div>
             </div>
         </div>
+    </div>
+    <div class="row dashboard-content" *ngIf="dashboardView == 'detailed-report'">
+        <app-detailed-report [assessments]="reportAssessments" (emitCloseReport)="closeReport()"></app-detailed-report>
     </div>
 </div>
 

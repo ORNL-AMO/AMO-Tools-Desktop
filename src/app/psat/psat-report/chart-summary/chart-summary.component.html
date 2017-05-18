@@ -2,7 +2,6 @@
 <div class="row" *ngIf="psat.modifications">
   <!-- <div class="{{columnStyle}}"> -->
   <div class="col-3">
-
     <app-psat-chart [psat]="psat"></app-psat-chart>
     <div class="savings text-center">{{psat.outputs.existing.annual_savings_potential| currency:'USD':true:'4.2-2'}}</div>
     <div class="text-muted text-center">Annual Savings Potential</div>
@@ -11,7 +10,6 @@
 
   <div class="col-3" *ngFor="let modification of psat.modifications">
     <app-psat-chart [psat]="modification.psat"></app-psat-chart>
-
     <div class="savings text-center">{{modification.psat.outputs.existing.annual_savings_potential | currency:'USD':true:'4.2-2'}}</div>
     <div class="text-muted text-center">Annual Savings Potential</div>
 
@@ -20,7 +18,6 @@
 
 <div class="row" *ngIf="!psat.modifications">
   <div class="col-3">
-
     <app-psat-chart [psat]="psat"></app-psat-chart>
     <div class="savings text-center">{{psat.outputs.existing.annual_savings_potential| currency:'USD':true:'4.2-2'}}</div>
     <div class="text-muted text-center">Annual Savings Potential</div>
