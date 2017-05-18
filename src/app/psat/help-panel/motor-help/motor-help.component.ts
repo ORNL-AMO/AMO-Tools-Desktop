@@ -27,13 +27,13 @@ export class MotorHelpComponent implements OnInit {
 
   ngOnInit() {
     this.getRpmRange();
-    this.getExpectedRange();
+   // this.getExpectedRange();
   }
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.psat) {
       this.getRpmRange();
-      this.getExpectedRange()
+     // this.getExpectedRange()
     }
   }
 
@@ -44,20 +44,11 @@ export class MotorHelpComponent implements OnInit {
   }
 
 
-  getExpectedRange() {
-    //estFLA expects psat form elements in argument
-    let tmpForm = this.psatService.getFormFromPsat(this.psat.inputs);
-    let tmpEfficiency = this.psatService.getEfficiencyFromForm(tmpForm);
-    let estimatedFLA = this.psatService.estFLA(
-      tmpForm.value.horsePower,
-      tmpForm.value.motorRPM,
-      tmpForm.value.frequency,
-      tmpForm.value.efficiencyClass,
-      tmpEfficiency,
-      tmpForm.value.motorVoltage,
-      this.settings
-    );
-    this.flaExpectedMax = estimatedFLA * 1.05;
-    this.flaExpectedMin = estimatedFLA * .95;
+  getFlaMin() {
+    return this.psatService.flaRange.flaMin;
+  }
+
+  getFlaMax() {
+    return this.psatService.flaRange.flaMax;
   }
 }
