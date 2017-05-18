@@ -22,7 +22,7 @@ export class DetailedReportComponent implements OnInit {
   reportAssessments: Array<Assessment>;
   psats: Array<PSAT>;
   numPsats: number;
-  pumpSavingsPotential:number;
+  pumpSavingsPotential: number;
   constructor(private indexedDbService: IndexedDbService, private psatService: PsatService, private windowRefService: WindowRefService) { }
 
   ngOnInit() {
@@ -46,10 +46,6 @@ export class DetailedReportComponent implements OnInit {
         if (results.length != 0) {
           assessment.psat = this.getResults(assessment.psat, results[0]);
           this.reportAssessments.push(assessment);
-          this.psats.push(assessment.psat);
-          if (this.psats.length == this.numPsats) {
-
-          }
         } else {
           //no assessment settings, find dir settings being usd
           this.getParentDirSettingsThenResults(assessment.directoryId, assessment);
@@ -69,10 +65,6 @@ export class DetailedReportComponent implements OnInit {
             if (results.length != 0) {
               assessment.psat = this.getResults(assessment.psat, results[0]);
               this.reportAssessments.push(assessment);
-              this.psats.push(assessment.psat);
-              if (this.psats.length == this.numPsats) {
-                this.calcPsatSums();
-              }
             } else {
               //no settings try again with parents parent directory
               this.getParentDirSettingsThenResults(parentDirectory.parentDirectoryId, assessment)
@@ -97,11 +89,12 @@ export class DetailedReportComponent implements OnInit {
   }
 
 
-  calcPsatSums(){
+
+  calcPsatSums() {
     this.pumpSavingsPotential = _.sumBy(this.psats, 'outputs.existing.annual_savings_potential')
   }
 
-  selectAssessment(num: number){
+  selectAssessment(num: number) {
     console.log(num);
   }
 }
