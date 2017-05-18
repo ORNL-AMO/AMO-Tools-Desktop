@@ -1,4 +1,6 @@
-<span [ngClass]="{ 'phast' : assessment.type == 'PHAST', 'psat': assessment.type == 'PSAT' }" (click)="goToAssessment(assessment)">
-      <span class="assessment-name"></span>
-      {{assessment.name}}
-    </span>
+<span 
+	[ngClass]="{ 'phast' : assessment.type == 'PHAST', 'psat': assessment.type == 'PSAT' }" (click)="goToAssessment(assessment)">
+
+	<div>&nbsp;</div> {{assessment.name}}
+
+</span>
