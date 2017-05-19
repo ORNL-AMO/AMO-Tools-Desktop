@@ -23,6 +23,7 @@ export class HeadToolSuctionFormComponent implements OnInit {
     }else{
       this.smallUnit = 'mm'
     }
+    this.calc();
   }
 
   calc() {

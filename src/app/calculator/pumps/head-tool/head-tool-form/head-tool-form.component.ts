@@ -22,6 +22,7 @@ export class HeadToolFormComponent implements OnInit {
     } else {
       this.smallUnit = 'mm'
     }
+    this.calc();
   }
 
   calc() {
