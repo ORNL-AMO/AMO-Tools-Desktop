@@ -8,7 +8,7 @@ export interface Directory {
   modifiedDate?: Date,
   id?: number,
   parentDirectoryId?: number,
-  delete?: boolean,
+  selected?: boolean,
 
 }
 

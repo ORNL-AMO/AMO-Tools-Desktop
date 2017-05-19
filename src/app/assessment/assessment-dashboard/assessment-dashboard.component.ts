@@ -21,6 +21,8 @@ export class AssessmentDashboardComponent implements OnInit {
   resetDataEmit = new EventEmitter<boolean>();
   @Output('emitNewDir')
   emitNewDir = new EventEmitter<boolean>();
+  @Output('genReport')
+  genReport = new EventEmitter<boolean>();
 
   isChecked: boolean = false;
   view: string;
@@ -75,6 +77,10 @@ export class AssessmentDashboardComponent implements OnInit {
 
   newDir(){
     this.emitNewDir.emit(true);
+  }
+
+  emitGenReport(){
+    this.genReport.emit(true);
   }
 
 }

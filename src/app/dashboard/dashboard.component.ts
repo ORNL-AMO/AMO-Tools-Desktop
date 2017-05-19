@@ -7,6 +7,9 @@ import { ModalDirective } from 'ng2-bootstrap';
 import * as _ from 'lodash';
 import { Settings } from '../shared/models/settings';
 import { AssessmentService } from '../assessment/assessment.service';
+
+import { ToastyService, ToastyConfig, ToastOptions, ToastData } from 'ng2-toasty';
+
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
@@ -27,9 +30,18 @@ export class DashboardComponent implements OnInit {
 
   @ViewChild('deleteModal') public deleteModal: ModalDirective;
   @ViewChild('deleteItemsModal') public deleteItemsModal: ModalDirective;
-  constructor(private indexedDbService: IndexedDbService, private formBuilder: FormBuilder, private assessmentService: AssessmentService) { }
+
+  reportAssessments: Array<any>;
+  selectedAssessments: Array<any>;
+  constructor(private indexedDbService: IndexedDbService, private formBuilder: FormBuilder, private assessmentService: AssessmentService, private toastyService: ToastyService,
+    private toastyConfig: ToastyConfig) {
+    this.toastyConfig.theme = 'bootstrap';
+    this.toastyConfig.position = 'bottom-right';
+    this.toastyConfig.limit = 1;
+  }
 
   ngOnInit() {
+    this.selectedAssessments = new Array();
     this.showLandingScreen = this.assessmentService.getLandingScreen();
     //open DB and get directories
     this.indexedDbService.initDb().then(
@@ -73,17 +85,17 @@ export class DashboardComponent implements OnInit {
     this.dashboardView = 'landing-screen';
   }
 
-  showAbout(){
+  showAbout() {
     this.selectedCalculator = '';
     this.dashboardView = 'about-page';
   }
 
-  showTutorials(){
+  showTutorials() {
     this.selectedCalculator = '';
     this.dashboardView = 'tutorials';
   }
 
-  showSettings(){
+  showSettings() {
     this.selectedCalculator = '';
     this.dashboardView = 'settings';
   }
@@ -191,7 +203,11 @@ export class DashboardComponent implements OnInit {
   }
 
   showDeleteItemsModal() {
-    this.deleteItemsModal.show();
+    if (this.checkSelected()) {
+      this.deleteItemsModal.show();
+    } else {
+      this.addToast('No items have been selected');
+    }
   }
 
   hideDeleteItemsModal() {
@@ -207,11 +223,40 @@ export class DashboardComponent implements OnInit {
     )
   }
 
+  checkSelected() {
+    let tmpArray = new Array();
+    let tmpArray2 = new Array();
+    if (this.workingDirectory.assessments) {
+      tmpArray = this.workingDirectory.assessments.filter(
+        assessment => {
+          if (assessment.selected) {
+            return assessment;
+          }
+        }
+      )
+    }
+    if (this.workingDirectory.subDirectory) {
+      tmpArray2 = this.workingDirectory.subDirectory.filter(
+        subDir => {
+          if (subDir.selected) {
+            return subDir;
+          }
+        }
+      )
+    }
+    if (tmpArray.length != 0 || tmpArray2.length != 0) {
+      return true;
+    } else {
+      return false;
+    }
+
+  }
+
   deleteSelected(dir: Directory) {
     this.hideDeleteItemsModal();
     if (dir.subDirectory) {
       dir.subDirectory.forEach(subDir => {
-        if (subDir.delete || subDir.parentDirectoryId != 1) {
+        if (subDir.selected || subDir.parentDirectoryId != 1) {
           this.indexedDbService.getChildrenDirectories(subDir.id).then(results => {
             if (results) {
               subDir.subDirectory = results;
@@ -222,7 +267,7 @@ export class DashboardComponent implements OnInit {
       });
     }
     if (dir != this.workingDirectory) {
-      if (dir.parentDirectoryId != this.workingDirectory.id || dir.delete) {
+      if (dir.parentDirectoryId != this.workingDirectory.id || dir.selected) {
         this.indexedDbService.getDirectoryAssessments(dir.id).then(results => {
           let childDirAssessments = results;
           childDirAssessments.forEach(assessment => {
@@ -256,7 +301,7 @@ export class DashboardComponent implements OnInit {
       }
     }
     if (dir == this.workingDirectory) {
-      let checkedAssessments = _.filter(this.workingDirectory.assessments, { 'delete': true });
+      let checkedAssessments = _.filter(this.workingDirectory.assessments, { 'selected': true });
       checkedAssessments.forEach(assessment => {
         this.indexedDbService.deleteAssessment(assessment.id).then(results => {
           this.allDirectories = this.populateDirectories(this.rootDirectoryRef);
@@ -274,5 +319,90 @@ export class DashboardComponent implements OnInit {
       })
     }
   }
+
+  generateReport() {
+    if (this.checkSelected()) {
+      this.selectedAssessments = new Array();
+      this.getSelected(this.workingDirectory);
+      this.dashboardView = 'detailed-report';
+    } else {
+      this.addToast('No items have been selected');
+    }
+  }
+
+  returnSelected() {
+    return this.selectedAssessments;
+  }
+
+  closeReport() {
+    this.workingDirectory.assessments.forEach(
+      assessment => {
+        assessment.selected = false;
+      }
+    )
+    this.dashboardView = 'assessment-dashboard';
+  }
+
+
+  getSelected(dir: Directory) {
+    //add selected and children dir assessments
+    if (dir.assessments) {
+      dir.assessments.forEach(
+        assessment => {
+          if (assessment.selected) {
+            this.selectedAssessments.push(assessment);
+          } else if (dir.id != this.workingDirectory.id) {
+            console.log('called');
+            this.selectedAssessments.push(assessment);
+          }
+        }
+      )
+    } else {
+      //get assessments of directory if non passed in
+      this.indexedDbService.getDirectoryAssessments(dir.id).then(
+        resultAssessments => {
+          if (resultAssessments.length != 0) {
+            resultAssessments.forEach(assessment => { this.selectedAssessments.push(assessment) })
+            console.log('selected assesments');
+            console.log(this.selectedAssessments);
+          }
+        }
+      )
+    }
+
+    //process selected sub directories of working directory
+    if (dir.id == this.workingDirectory.id) {
+      if (dir.subDirectory) {
+        dir.subDirectory.forEach(
+          subDir => {
+            if (subDir.selected) {
+              this.getSelected(subDir);
+            }
+          }
+        )
+      }
+    }
+    //get subdirectories of selected non working directories
+    else {
+      this.indexedDbService.getChildrenDirectories(dir.id).then(
+        resultDir => {
+          if (resultDir.length != 0) {
+            resultDir.forEach(dir => this.getSelected(dir));
+          }
+        }
+      )
+    }
+  }
+
+  addToast(msg: string) {
+    let toastOptions: ToastOptions = {
+      title: msg,
+      timeout: 2000,
+      showClose: true,
+      theme: 'default'
+    }
+    this.toastyService.warning(toastOptions);
+  }
+
 
 }
