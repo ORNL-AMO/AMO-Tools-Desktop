@@ -428,11 +428,15 @@ Assessments: List View
   .assessments .psat, .assessments .phast {
     font-size: 15px;
   }
-  .assessments .psat .assessment-name {
-    background: url('../assets/images/assessment-icon-psat.png') no-repeat left 3px;
+  .assessment-list-type {
+    display: block;
+    padding: 3px;
   }
-  .assessments .phast .assessment-name {
-    background: url('../assets/images/assessment-icon-phast.png') no-repeat left;
+  .assessments .psat .assessment-name .assessment-list-type {
+    background: #2980b9;
+  }
+  .assessments .phast .assessment-name .assessment-list-type {
+    background: #BF3D00;
   }
   .assessments .psat .assessment-name, .assessments .phast .assessment-name {
     display: inline;
@@ -542,10 +546,12 @@ Sidebar
   -moz-border-image:    -moz-linear-gradient(#949494, rgba(0, 0, 0, 0)) 1 100%;    
   -o-border-image:      -o-linear-gradient(#949494, rgba(0, 0, 0, 0)) 1 100%;
   border-image:         linear-gradient(to bottom, #949494, rgba(0, 0, 0, 0)) 1 100%;
+  padding: 0;
 }
 
 .dashboard-content{
   height: 100vh;
+  min-height: 100%;
   background-color: #eee;
 }
 
@@ -555,11 +561,17 @@ Sidebar
   max-width: 200px;
   margin-bottom: 20px;
 }
+  .doe-logo:hover {
+    cursor: pointer;
+  }
 .sidebar-group {
-  margin-bottom: 28px;
+  margin-bottom: 20px;
 }
+  .sidebar-group.create-button {
+    margin: 0 20px 20px;
+  }
 .sidebar-group .btn-primary {
-  padding: 10px;
+  padding: 8px;
 }
 .sidebar-group h3 {
   text-transform: uppercase;
@@ -574,25 +586,108 @@ Sidebar
 }
 .sidebar-group li {
   list-style: none;
-  margin: 0 0 8px 0;
+  margin: 0;
   line-height: 1;
 }
-.sidebar-group li > span {
-  font-size: 15px;
+.sidebar-group li span, .sidebar-group li > a, .sidebar-group li > a:not([href]):not([tabindex])  {
+  font-size: 16px;
   display: block;
-  color: #333;
+  color: #0077e3;
+  padding: 8px 20px;
+}
+.sidebar-group li span.disabled {
+  font-size: 15px;
+  color: #a0a0a0;
+}
+.sidebar-group li span.disabled:hover {
+  cursor: default;
+}
+.sidebar-group.secondary {
+  border-top: #ddd dotted 1px;
+  padding-top: 20px;
+}
+.sidebar-group.secondary li > span, .sidebar-group.secondary li > a, .sidebar-group.secondary li > a:not([href]):not([tabindex]) {
+  color: #787878;
 }
   .sidebar-group li span:hover {
     cursor: pointer;
   }
 .sidebar-group li.selected span {
   color: #000;
+  background: #eee;
   font-weight: bold;
 }
 
 .sidebar-group li.sub-directory .sub-directory {
   margin-left: 20px;
 }
+.sidebar-group li.sub-directory > span {
+  padding: 0;
+}
+
+.sidebar-group .assessments span > div {
+  display: inline-block;
+  padding: 0px 6px;
+  border-radius: 50%;
+}
+  .sidebar-group .assessments .psat > div {
+    background: #2980b9;
+  }
+  .sidebar-group .assessments .phast > div {
+    background: #BF3D00;
+  }
+
+
+
+/*
+Content Container
+=============================================== */
+.content-container {
+  background: #fff;
+  padding: 40px;
+  border: #ddd solid 1px;
+  border-radius: 4px;
+  margin-top: 40px;
+  -webkit-box-shadow: 0px 1px 8px 0px rgba(0,0,0,0.07);
+  -moz-box-shadow: 0px 1px 8px 0px rgba(0,0,0,0.07);
+  box-shadow: 0px 1px 8px 0px rgba(0,0,0,0.07);
+}
+  
+  .content-container h2 {
+    font-size: 30px;
+    margin-bottom: 40px;
+  }
+  .content-container h3 {
+    font-size: 22px;
+    font-weight: bold;
+  }
+
+
+
+
+
+/*
+Calculators
+=============================================== */
+.calculators ul {
+  margin: 0 0 40px;
+  padding: 0;
+}
+  .calculators li {
+    margin: 0 0 10px;
+    padding: 0 0 10px;
+    border-bottom: #eee solid 1px;
+    list-style: none;
+  }
+  .calculators a {
+    
+  }
+  .calculators p {
+    margin-bottom: 0;
+    font-size: 16px;
+  }
+
+
 
 /*
 Footer
