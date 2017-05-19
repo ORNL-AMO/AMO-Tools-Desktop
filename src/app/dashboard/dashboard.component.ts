@@ -7,6 +7,9 @@ import { ModalDirective } from 'ng2-bootstrap';
 import * as _ from 'lodash';
 import { Settings } from '../shared/models/settings';
 import { AssessmentService } from '../assessment/assessment.service';
+
+import { ToastyService, ToastyConfig, ToastOptions, ToastData } from 'ng2-toasty';
+
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
@@ -30,7 +33,12 @@ export class DashboardComponent implements OnInit {
 
   reportAssessments: Array<any>;
   selectedAssessments: Array<any>;
-  constructor(private indexedDbService: IndexedDbService, private formBuilder: FormBuilder, private assessmentService: AssessmentService) { }
+  constructor(private indexedDbService: IndexedDbService, private formBuilder: FormBuilder, private assessmentService: AssessmentService, private toastyService: ToastyService,
+    private toastyConfig: ToastyConfig) {
+    this.toastyConfig.theme = 'bootstrap';
+    this.toastyConfig.position = 'bottom-right';
+    this.toastyConfig.limit = 1;
+  }
 
   ngOnInit() {
     this.selectedAssessments = new Array();
@@ -195,7 +203,11 @@ export class DashboardComponent implements OnInit {
   }
 
   showDeleteItemsModal() {
-    this.deleteItemsModal.show();
+    if (this.checkSelected()) {
+      this.deleteItemsModal.show();
+    } else {
+      this.addToast('No items have been selected');
+    }
   }
 
   hideDeleteItemsModal() {
@@ -209,6 +221,35 @@ export class DashboardComponent implements OnInit {
         this.hideDeleteModal()
       }
     )
+  }
+
+  checkSelected() {
+    let tmpArray = new Array();
+    let tmpArray2 = new Array();
+    if (this.workingDirectory.assessments) {
+      tmpArray = this.workingDirectory.assessments.filter(
+        assessment => {
+          if (assessment.selected) {
+            return assessment;
+          }
+        }
+      )
+    }
+    if (this.workingDirectory.subDirectory) {
+      tmpArray2 = this.workingDirectory.subDirectory.filter(
+        subDir => {
+          if (subDir.selected) {
+            return subDir;
+          }
+        }
+      )
+    }
+    if (tmpArray.length != 0 || tmpArray2.length != 0) {
+      return true;
+    } else {
+      return false;
+    }
+
   }
 
   deleteSelected(dir: Directory) {
@@ -280,12 +321,16 @@ export class DashboardComponent implements OnInit {
   }
 
   generateReport() {
-    this.selectedAssessments = new Array();
-    this.getSelected(this.workingDirectory);
-    this.dashboardView = 'detailed-report';
+    if (this.checkSelected()) {
+      this.selectedAssessments = new Array();
+      this.getSelected(this.workingDirectory);
+      this.dashboardView = 'detailed-report';
+    } else {
+      this.addToast('No items have been selected');
+    }
   }
 
-  returnSelected(){
+  returnSelected() {
     return this.selectedAssessments;
   }
 
@@ -347,7 +392,17 @@ export class DashboardComponent implements OnInit {
         }
       )
     }
-
   }
+
+  addToast(msg: string) {
+    let toastOptions: ToastOptions = {
+      title: msg,
+      timeout: 2000,
+      showClose: true,
+      theme: 'default'
+    }
+    this.toastyService.warning(toastOptions);
+  }
+
 
 }

@@ -7,7 +7,7 @@
                 (emitGoToSettings)="showSettings()"></app-sidebar>
         </div>
         <div class="col-10" *ngIf="allDirectories && dashboardView == 'assessment-dashboard'">
-            <app-assessment-dashboard [directory]="workingDirectory" (directoryChange)="changeWorkingDirectory($event)" (deleteDataSignal)="showDeleteModal($event)"
+            <app-assessment-dashboard [directory]="workingDirectory" (directoryChange)="changeWorkingDirectory($event)" (deleteDataSignal)="showDeleteModal()"
                 (deleteCheckedItems)="showDeleteItemsModal()" (resetDataEmit)="showDeleteModal()" (emitNewDir)="newDir()" (genReport)="generateReport()"></app-assessment-dashboard>
         </div>
         <div class="col-10" *ngIf="allDirectories && dashboardView == 'calculator'">
@@ -81,3 +81,6 @@
         </div>
     </div>
 </div>
+
+
+<ng2-toasty></ng2-toasty>
