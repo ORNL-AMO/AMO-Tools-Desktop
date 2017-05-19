@@ -27,7 +27,7 @@ export class DashboardComponent implements OnInit {
 
   newDirEventToggle: boolean = false;
   dashboardView: string = 'landing-screen';
-
+  goCalcHome: boolean = false;
   @ViewChild('deleteModal') public deleteModal: ModalDirective;
   @ViewChild('deleteItemsModal') public deleteItemsModal: ModalDirective;
 
@@ -134,6 +134,7 @@ export class DashboardComponent implements OnInit {
   }
 
   viewCalculator(str: string) {
+    this.goCalcHome = !this.goCalcHome;
     this.dashboardView = 'calculator';
     this.selectedCalculator = str;
   }
@@ -352,7 +353,6 @@ export class DashboardComponent implements OnInit {
           if (assessment.selected) {
             this.selectedAssessments.push(assessment);
           } else if (dir.id != this.workingDirectory.id) {
-            console.log('called');
             this.selectedAssessments.push(assessment);
           }
         }
@@ -363,8 +363,6 @@ export class DashboardComponent implements OnInit {
         resultAssessments => {
           if (resultAssessments.length != 0) {
             resultAssessments.forEach(assessment => { this.selectedAssessments.push(assessment) })
-            console.log('selected assesments');
-            console.log(this.selectedAssessments);
           }
         }
       )
