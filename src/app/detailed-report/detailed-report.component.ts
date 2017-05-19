@@ -23,20 +23,45 @@ export class DetailedReportComponent implements OnInit {
   psats: Array<PSAT>;
   numPsats: number;
   pumpSavingsPotential: number;
+
+  gatheringData: any;
+  assessmentsGathered: boolean;
   constructor(private indexedDbService: IndexedDbService, private psatService: PsatService, private windowRefService: WindowRefService) { }
 
   ngOnInit() {
     //used to hold assessments with outputs
     this.reportAssessments = new Array<Assessment>();
     this.psats = new Array<PSAT>();
-    let tmpArr = this.assessments.filter(assessment => { return assessment.psat != undefined });
-    this.numPsats = tmpArr.length;
-    //used to make sure all assessments proccessed (gotten outputs)
-    this.assessments.forEach(assessment => {
-      if (assessment.psat) {
-        this.getAssessmentSettingsThenResults(assessment);
-      }
-    })
+    // let tmpArr = this.assessments.filter(assessment => { return assessment.psat != undefined });
+    //   this.numPsats = tmpArr.length;
+    //   //used to make sure all assessments proccessed (gotten outputs)
+    //   this.assessments.forEach(assessment => {
+    //     if (assessment.psat) {
+    //       this.getAssessmentSettingsThenResults(assessment);
+    //     }
+    //   });
+    //   this.assessmentsGathered = true;
+
+  }
+
+  ngOnChanges() {
+    // console.log('change');
+    if (this.gatheringData) {
+      clearTimeout(this.gatheringData);
+    }
+
+    this.gatheringData = setTimeout(() => {
+      let tmpArr = this.assessments.filter(assessment => { return assessment.psat != undefined });
+      this.numPsats = tmpArr.length;
+      //used to make sure all assessments proccessed (gotten outputs)
+      this.assessments.forEach(assessment => {
+        if (assessment.psat) {
+          this.getAssessmentSettingsThenResults(assessment);
+        }
+      });
+      this.assessmentsGathered = true;
+      console.log('done');
+    }, 1000)
   }
 
   getAssessmentSettingsThenResults(assessment: Assessment) {
@@ -46,6 +71,10 @@ export class DetailedReportComponent implements OnInit {
         if (results.length != 0) {
           assessment.psat = this.getResults(assessment.psat, results[0]);
           this.reportAssessments.push(assessment);
+          this.psats.push(assessment.psat);
+          if (this.psats.length == this.numPsats) {
+            this.calcPsatSums();
+          }
         } else {
           //no assessment settings, find dir settings being usd
           this.getParentDirSettingsThenResults(assessment.directoryId, assessment);
@@ -65,6 +94,10 @@ export class DetailedReportComponent implements OnInit {
             if (results.length != 0) {
               assessment.psat = this.getResults(assessment.psat, results[0]);
               this.reportAssessments.push(assessment);
+              this.psats.push(assessment.psat);
+              if (this.psats.length == this.numPsats) {
+                this.calcPsatSums();
+              }
             } else {
               //no settings try again with parents parent directory
               this.getParentDirSettingsThenResults(parentDirectory.parentDirectoryId, assessment)
@@ -95,6 +128,10 @@ export class DetailedReportComponent implements OnInit {
   }
 
   selectAssessment(num: number) {
-    console.log(num);
+    //console.log(num);
+    //debugger
+    let doc = this.windowRefService.getDoc();
+    let content = doc.getElementById(num);
+    content.scrollIntoView();
   }
 }

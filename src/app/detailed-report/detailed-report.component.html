@@ -1,6 +1,6 @@
 <div class="row report-container justify-content-center">
   <div class="col-10">
-    <div class="card" style="max-height: 100vh">
+    <div class="card" style="max-height: 100vh" *ngIf="assessmentsGathered">
       <div class="card-block">
         <div class="row">
           <div class="col-12">
@@ -26,11 +26,29 @@
           </div>
           <div class="col-10" style="max-height: 62vh; overflow: scroll">
             <div class="row" *ngFor="let assessment of reportAssessments">
-              <app-psat-report id="assessment.id" style="width: 100%" [assessment]="assessment"></app-psat-report>
+              <app-psat-report id="{{assessment.id}}" style="width: 100%" [assessment]="assessment"></app-psat-report>
             </div>
           </div>
         </div>
       </div>
+    </div>
+    <div class="row justify-content-center" *ngIf="!assessmentsGathered">
+      	<div class="col-md-10">
+          <div class="card">
+            <div class="card-block" style="height: 100vh;">
+
+					<div class="main-content" style="text-align: center; padding-top: 30%;">
+						<div class="spinner">
+							<div class="bounce1"></div>
+							<div class="bounce2"></div>
+							<div class="bounce3"></div>
+						</div>
+						<h1>Gathering Results</h1>
+					</div>
+            </div>
+          </div>
+
+				</div>
     </div>
   </div>
 </div>

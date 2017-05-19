@@ -29,10 +29,11 @@ export class DashboardComponent implements OnInit {
   @ViewChild('deleteItemsModal') public deleteItemsModal: ModalDirective;
 
   reportAssessments: Array<any>;
-
+  selectedAssessments: Array<any>;
   constructor(private indexedDbService: IndexedDbService, private formBuilder: FormBuilder, private assessmentService: AssessmentService) { }
 
   ngOnInit() {
+    this.selectedAssessments = new Array();
     this.showLandingScreen = this.assessmentService.getLandingScreen();
     //open DB and get directories
     this.indexedDbService.initDb().then(
@@ -279,17 +280,74 @@ export class DashboardComponent implements OnInit {
   }
 
   generateReport() {
-    this.reportAssessments = new Array();
-    this.reportAssessments = this.workingDirectory.assessments.filter(assessment => {
-      if(assessment.selected){
-          return assessment;
-      }
-    });
+    this.selectedAssessments = new Array();
+    this.getSelected(this.workingDirectory);
     this.dashboardView = 'detailed-report';
   }
 
+  returnSelected(){
+    return this.selectedAssessments;
+  }
+
   closeReport() {
+    this.workingDirectory.assessments.forEach(
+      assessment => {
+        assessment.selected = false;
+      }
+    )
     this.dashboardView = 'assessment-dashboard';
+  }
+
+
+  getSelected(dir: Directory) {
+    //add selected and children dir assessments
+    if (dir.assessments) {
+      dir.assessments.forEach(
+        assessment => {
+          if (assessment.selected) {
+            this.selectedAssessments.push(assessment);
+          } else if (dir.id != this.workingDirectory.id) {
+            console.log('called');
+            this.selectedAssessments.push(assessment);
+          }
+        }
+      )
+    } else {
+      //get assessments of directory if non passed in
+      this.indexedDbService.getDirectoryAssessments(dir.id).then(
+        resultAssessments => {
+          if (resultAssessments.length != 0) {
+            resultAssessments.forEach(assessment => { this.selectedAssessments.push(assessment) })
+            console.log('selected assesments');
+            console.log(this.selectedAssessments);
+          }
+        }
+      )
+    }
+
+    //process selected sub directories of working directory
+    if (dir.id == this.workingDirectory.id) {
+      if (dir.subDirectory) {
+        dir.subDirectory.forEach(
+          subDir => {
+            if (subDir.selected) {
+              this.getSelected(subDir);
+            }
+          }
+        )
+      }
+    }
+    //get subdirectories of selected non working directories
+    else {
+      this.indexedDbService.getChildrenDirectories(dir.id).then(
+        resultDir => {
+          if (resultDir.length != 0) {
+            resultDir.forEach(dir => this.getSelected(dir));
+          }
+        }
+      )
+    }
+
   }
 
 }
