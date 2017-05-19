@@ -55,6 +55,7 @@ export class FieldDataComponent implements OnInit {
   flowError: string = null;
   voltageError: string = null;
   costError: string = null;
+  opFractionError: string = null;
   constructor(private psatService: PsatService) { }
 
   ngOnInit() {
@@ -191,6 +192,21 @@ export class FieldDataComponent implements OnInit {
     } else {
       this.costError = null;
       return null;
+    }
+  }
+
+  checkOpFraction(){
+    if(this.psatForm.value.operatingFraction > 1){
+      this.opFractionError = 'Operating fraction needs to be between 0 - 1';
+      return false;
+    }
+    else if(this.psatForm.value.operatingFraction < 0){
+      this.opFractionError = "Cannot have negative operating fraction";
+      return false;
+    }
+    else{
+      this.opFractionError = null;
+      return true;
     }
   }
 }
