@@ -43,8 +43,9 @@
   <div class="form-group" *ngIf="psatForm.value.efficiencyClass == 'Specified'">
     <label for="efficiency">Efficiency</label>
     <input type="number" min="0" class="form-control" id="efficiency" formControlName="efficiency" (input)="startSavePolling()"
-      (focus)="focusField('efficiency')" onfocus="this.select();">
+      (focus)="focusField('efficiency')" onfocus="this.select();"  [ngClass]="{'invalid': checkEfficiency() == false}">
     <span class="units">%</span>
+    <span class="alert-danger pull-right small" *ngIf="efficiencyError !== null">{{efficiencyError}}</span>
   </div>
 
   <div class="form-group">

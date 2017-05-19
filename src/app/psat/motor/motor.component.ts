@@ -52,6 +52,8 @@ export class MotorComponent implements OnInit {
   rpmError: string = null;
   voltageError: string = null;
   flaError: string = null;
+
+  efficiencyError: string = null;
   constructor(private psatService: PsatService) { }
 
   ngOnInit() {
@@ -226,6 +228,25 @@ export class MotorComponent implements OnInit {
     }
   }
 
+
+  checkEfficiency() {
+    if (this.psatForm.value.efficiency > 100) {
+      this.efficiencyError = "Unrealistic efficiency, shouldn't be greater then 100%";
+      return false;
+    }
+    else if (this.psatForm.value.efficiency == 0) {
+      this.efficiencyError = "Cannot have 0% efficiency";
+      return false;
+    }
+    else if (this.psatForm.value.efficiency < 0) {
+      this.efficiencyError = "Cannot have negative efficiency";
+      return false;
+    }
+    else {
+      this.efficiencyError = null;
+      return true;
+    }
+  }
 
   checkFLA() {
     let tmpEfficiency = this.psatService.getEfficiencyFromForm(this.psatForm);
