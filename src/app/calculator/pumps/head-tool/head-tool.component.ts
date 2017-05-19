@@ -5,7 +5,7 @@ import { PSAT } from '../../../shared/models/psat';
 import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
 import { Settings } from '../../../shared/models/settings';
 import { SettingsService } from '../../../settings/settings.service';
-
+import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 @Component({
   selector: 'app-head-tool',
   templateUrl: './head-tool.component.html',
@@ -19,7 +19,7 @@ export class HeadToolComponent implements OnInit {
   @Input()
   settings: Settings;
   @Input()
-  headToolResults: any ;
+  headToolResults: any;
   @Input()
   inAssessment: boolean;
 
@@ -39,11 +39,27 @@ export class HeadToolComponent implements OnInit {
   tabSelect: string = 'results';
   showSettings: boolean = false;
   settingsForm: any;
-  constructor(private formBuilder: FormBuilder, private psatService: PsatService, private indexedDbService: IndexedDbService, private settingsService: SettingsService) { }
+  constructor(private formBuilder: FormBuilder, private psatService: PsatService, private indexedDbService: IndexedDbService, private settingsService: SettingsService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
-    this.headToolForm = this.initHeadToolForm();
-    this.headToolSuctionForm = this.initHeadToolSuctionForm();
+
+    if (!this.settings) {
+      this.indexedDbService.getDirectorySettings(1).then(
+        results => {
+          if (results.length != 0) {
+            this.settings = results[0];
+            this.initForm(this.settings);
+          }
+        }
+      )
+    } else {
+      this.initForm(this.settings);
+    }
+  }
+
+  initForm(settings: Settings) {
+    this.headToolForm = this.initHeadToolForm(settings);
+    this.headToolSuctionForm = this.initHeadToolSuctionForm(settings);
     if (this.psat) {
       this.headToolForm.patchValue({
         specificGravity: this.psat.inputs.specific_gravity,
@@ -53,15 +69,6 @@ export class HeadToolComponent implements OnInit {
         specificGravity: this.psat.inputs.specific_gravity,
         flowRate: this.psat.inputs.flow_rate,
       })
-    }
-    if (!this.settings) {
-      this.indexedDbService.getDirectorySettings(1).then(
-        results => {
-          if (results.length != 0) {
-            this.settings = results[0];
-          }
-        }
-      )
     }
   }
 
@@ -82,7 +89,7 @@ export class HeadToolComponent implements OnInit {
     this.settings = this.settingsService.getSettingsFromForm(this.settingsForm)
     this.showSettings = false;
   }
-  cancelSettings(){
+  cancelSettings() {
     this.showSettings = false;
   }
 
@@ -143,33 +150,45 @@ export class HeadToolComponent implements OnInit {
     this.results.pumpHead = result.pumpHead;
   }
 
-  initHeadToolSuctionForm() {
+  initHeadToolSuctionForm(settings: Settings) {
+    let smallUnit;
+    if (settings.distanceMeasurement == 'ft') {
+      smallUnit = 'in'
+    } else {
+      smallUnit = 'mm'
+    }
     return this.formBuilder.group({
-      'suctionPipeDiameter': ['', Validators.required],
-      'suctionTankGasOverPressure': ['', Validators.required],
-      'suctionTankFluidSurfaceElevation': ['', Validators.required],
-      'suctionLineLossCoefficients': ['', Validators.required],
-      'dischargePipeDiameter': ['', Validators.required],
-      'dischargeGaugePressure': ['', Validators.required],
-      'dischargeGaugeElevation': ['', Validators.required],
-      'dischargeLineLossCoefficients': ['', Validators.required],
-      'specificGravity': ['', Validators.required],
-      'flowRate': ['', Validators.required],
+      'suctionPipeDiameter': [this.convertUnitsService.value(12).from('in').to(smallUnit), Validators.required],
+      'suctionTankGasOverPressure': [0, Validators.required],
+      'suctionTankFluidSurfaceElevation': [this.convertUnitsService.value(10).from('ft').to(settings.distanceMeasurement), Validators.required],
+      'suctionLineLossCoefficients': [.5, Validators.required],
+      'dischargePipeDiameter': [this.convertUnitsService.value(10).from('in').to(smallUnit), Validators.required],
+      'dischargeGaugePressure': [124, Validators.required],
+      'dischargeGaugeElevation': [this.convertUnitsService.value(5).from('ft').to(settings.distanceMeasurement), Validators.required],
+      'dischargeLineLossCoefficients': [1, Validators.required],
+      'specificGravity': [1, Validators.required],
+      'flowRate': [this.convertUnitsService.value(2000).from('gpm').to(settings.flowMeasurement), Validators.required],
     })
   }
 
-  initHeadToolForm() {
+  initHeadToolForm(settings: Settings) {
+    let smallUnit;
+    if (settings.distanceMeasurement == 'ft') {
+      smallUnit = 'in'
+    } else {
+      smallUnit = 'mm'
+    }
     return this.formBuilder.group({
-      'suctionPipeDiameter': ['', Validators.required],
-      'suctionGuagePressure': ['', Validators.required],
-      'suctionGuageElevation': ['', Validators.required],
-      'suctionLineLossCoefficients': ['', Validators.required],
-      'dischargePipeDiameter': ['', Validators.required],
-      'dischargeGaugePressure': ['', Validators.required],
-      'dischargeGaugeElevation': ['', Validators.required],
-      'dischargeLineLossCoefficients': ['', Validators.required],
-      'specificGravity': ['', Validators.required],
-      'flowRate': ['', Validators.required],
+      'suctionPipeDiameter': [this.convertUnitsService.value(12).from('in').to(smallUnit), Validators.required],
+      'suctionGuagePressure': [5, Validators.required],
+      'suctionGuageElevation': [this.convertUnitsService.value(5).from('ft').to(settings.distanceMeasurement), Validators.required],
+      'suctionLineLossCoefficients': [.5, Validators.required],
+      'dischargePipeDiameter': [this.convertUnitsService.value(10).from('in').to(smallUnit), Validators.required],
+      'dischargeGaugePressure': [124, Validators.required],
+      'dischargeGaugeElevation': [this.convertUnitsService.value(5).from('ft').to(settings.distanceMeasurement), Validators.required],
+      'dischargeLineLossCoefficients': [1, Validators.required],
+      'specificGravity': [1, Validators.required],
+      'flowRate': [this.convertUnitsService.value(2000).from('gpm').to(settings.flowMeasurement), Validators.required],
     })
   }
 

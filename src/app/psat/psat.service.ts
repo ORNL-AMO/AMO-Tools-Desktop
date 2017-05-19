@@ -82,27 +82,24 @@ export class PsatService {
   ) {
     //desired units
     //flowRate = gpm
-    //suctionPipeDiameter = feet
+    //suctionPipeDiameter = in
     //suctionTankGasOverPressure = psi
     //suctionTankFluidSurfaceElevation = feet
     //dischargePipeDiameter = feet
     //dischargeGaugePressure = psi
     //dischargeGaugeElevation = feet
 
-    if (settings.distanceMeasurement == 'ft') {
-      suctionPipeDiameter = this.convertUnitsService.value(suctionPipeDiameter).from('in').to('ft');
-      dischargePipeDiameter = this.convertUnitsService.value(dischargePipeDiameter).from('in').to('ft');
-    } else {
-      suctionPipeDiameter = this.convertUnitsService.value(suctionPipeDiameter).from('mm').to('ft');
-      dischargePipeDiameter = this.convertUnitsService.value(dischargePipeDiameter).from('mm').to('ft');
+    if (settings.distanceMeasurement != 'ft') {
+      suctionPipeDiameter = this.convertUnitsService.value(suctionPipeDiameter).from('mm').to('in');
+      dischargePipeDiameter = this.convertUnitsService.value(dischargePipeDiameter).from('mm').to('in');
       suctionTankFluidSurfaceElevation = this.convertUnitsService.value(suctionTankFluidSurfaceElevation).from('m').to('ft');
       dischargeGaugeElevation = this.convertUnitsService.value(dischargeGaugeElevation).from('m').to('ft');
     }
 
-    if (settings.pressureMeasurement != 'psi') {
-      suctionTankGasOverPressure = this.convertUnitsService.value(suctionTankGasOverPressure).from(settings.pressureMeasurement).to('psi');
-      dischargeGaugePressure = this.convertUnitsService.value(dischargeGaugePressure).from(settings.pressureMeasurement).to('psi');
-    }
+    // if (settings.pressureMeasurement != 'psi') {
+    //   suctionTankGasOverPressure = this.convertUnitsService.value(suctionTankGasOverPressure).from(settings.pressureMeasurement).to('psi');
+    //   dischargeGaugePressure = this.convertUnitsService.value(dischargeGaugePressure).from(settings.pressureMeasurement).to('psi');
+    // }
 
     if (settings.flowMeasurement != 'gpm') {
       flowRate = this.convertUnitsService.value(flowRate).from(settings.flowMeasurement).to('gpm');
@@ -134,32 +131,23 @@ export class PsatService {
     settings: Settings
   ) {
     //flowRate = gpm
-    //suctionPipeDiameter = feet
+    //suctionPipeDiameter = in
     //suctionGuagePressure = psi
     //suctionGuageElevation = feet
-    //dischargePipeDiameter = feet
+    //dischargePipeDiameter = in
     //dischargeGaugePressure = psi
     //dischargeGaugeElevation = feet
-    if (settings.distanceMeasurement == 'ft') {
-      suctionPipeDiameter = this.convertUnitsService.value(suctionPipeDiameter).from('in').to('ft');
-      dischargePipeDiameter = this.convertUnitsService.value(dischargePipeDiameter).from('in').to('ft');
-    } else {
-      suctionPipeDiameter = this.convertUnitsService.value(suctionPipeDiameter).from('mm').to('ft');
-      dischargePipeDiameter = this.convertUnitsService.value(dischargePipeDiameter).from('mm').to('ft');
+    if (settings.distanceMeasurement != 'ft') {
+      suctionPipeDiameter = this.convertUnitsService.value(suctionPipeDiameter).from('mm').to('in');
+      dischargePipeDiameter = this.convertUnitsService.value(dischargePipeDiameter).from('mm').to('in');
       suctionGuageElevation = this.convertUnitsService.value(suctionGuageElevation).from('m').to('ft');
       dischargeGaugeElevation = this.convertUnitsService.value(dischargeGaugeElevation).from('m').to('ft');
-    }
-
-    if (settings.pressureMeasurement != 'psi') {
-      suctionGuagePressure = this.convertUnitsService.value(suctionGuagePressure).from(settings.pressureMeasurement).to('psi');
-      dischargeGaugePressure = this.convertUnitsService.value(dischargeGaugePressure).from(settings.pressureMeasurement).to('psi');
     }
 
     if (settings.flowMeasurement != 'gpm') {
       flowRate = this.convertUnitsService.value(flowRate).from(settings.flowMeasurement).to('gpm');
     }
     let tmpResults = psatAddon.headTool(specificGravity, flowRate, suctionPipeDiameter, suctionGuagePressure, suctionGuageElevation, suctionLineLossCoefficients, dischargePipeDiameter, dischargeGaugePressure, dischargeGaugeElevation, dischargeLineLossCoefficients);
-
     let results = {
       differentialElevationHead: this.roundVal(tmpResults.differentialElevationHead, 2),
       differentialPressureHead: this.roundVal(tmpResults.differentialPressureHead, 2),
@@ -197,7 +185,7 @@ export class PsatService {
 
   }
 
-  getFlaRange(){
+  getFlaRange() {
     return this.flaRange;
   }
 
