@@ -8,6 +8,8 @@ import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@
 export class CalculatorComponent implements OnInit {
   @Input()
   selectedCalculator: string;
+  @Input()
+  goCalcHome: boolean;
   @Output('selectCalculator')
   selectCalculator = new EventEmitter<string>();
 
@@ -16,10 +18,8 @@ export class CalculatorComponent implements OnInit {
   constructor() { }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes.selectedCalculator && !this.isFirstChange) {
-      if (changes.selectedCalculator.currentValue == 'all') {
-        this.selectedTool = 'none';
-      }
+    if (!this.isFirstChange) {
+      this.selectedTool = 'none';
     } else {
       this.isFirstChange = false;
     }
@@ -31,6 +31,7 @@ export class CalculatorComponent implements OnInit {
   }
 
   showTool(calc: string, tool: string) {
+    this.isFirstChange = true;
     this.selectedTool = tool;
     this.selectCalculator.emit(calc);
   }

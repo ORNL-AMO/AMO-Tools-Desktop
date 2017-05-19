@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
 
 
 @Component({
@@ -9,11 +9,23 @@ import { Component, OnInit, Input } from '@angular/core';
 export class PumpsComponent implements OnInit {
   @Input()
   selectedTool: string;
+  @Input()
+  goCalcHome: boolean;
+
+  firstChange: boolean = true;
   constructor() { }
 
   ngOnInit() {
-    if(!this.selectedTool){
+    if (!this.selectedTool) {
       this.selectedTool = 'none';
+    }
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (!this.firstChange) {
+      this.selectedTool = 'none';
+    }else{
+      this.firstChange = false;
     }
   }
 
@@ -25,4 +37,10 @@ export class PumpsComponent implements OnInit {
     this.selectedTool = 'none'
   }
 
+
+  getSelectedTool() {
+    if (this.selectedTool != undefined) {
+      return this.selectedTool;
+    }
+  }
 }
