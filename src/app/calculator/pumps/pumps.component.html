@@ -1,56 +1,41 @@
-<div class="calc-content" *ngIf="selectedTool == 'none'">
-  <div class="calc-banner">
-    <div class="h3">Pump Calculators</div>
-  </div>
-  <div class="row justify-content-center align-items-center calc-list">
-    <div class="col-8">
-      <div class="row calc-type">
-        <div class="col-12">
-          <p class="h4">Choose a Calculator</p>
-        </div>
-      </div>
-      <div class="row tools">
-        <div class="col-12">
-          <a class="h5" (click)="showTool('head-tool')">Head Tool</a>
-          <div>Use head tool calculator to calculate pump head.</div>
-        </div>
-      </div>
-      <div class="row tools">
-        <div class="col-12">
-          <a class="h5" (click)="showTool('system-curve')">System Curve</a>
-          <div>Use system curve to graph your pumps flow.</div>
-        </div>
-      </div>
-      <div class="row tools">
-        <div class="col-12">
-          <a class="h5" (click)="showTool('nema-energy-efficiency')">NEMA Energy Efficiency</a>
-          <div>The predicted efficiency of an induction motor from NEMA MG1, based on size, rotating speed and efficiency class.</div>
-        </div>
-      </div>
+<div *ngIf="selectedTool == 'none'">
+  
+  <div class="row">
+    <div class="col-10 offset-md-1">
+      <div class="content-container calculators">
+  
+        <h2>Pump Calculators</h2>
+        <ul>
+          <li>
+            <a (click)="showTool('head-tool')">Head Tool</a>
+            <p>Use head tool calculator to calculate pump head.</p>
+          </li>
+          <li>
+            <a (click)="showTool('system-curve')">System Curve</a>
+            <p>Use system curve to graph your pumps flow.</p>
+          </li>
+          <li>
+            <a (click)="showTool('nema-energy-efficiency')">NEMA Energy Efficiency</a>
+            <p>The predicted efficiency of an induction motor from NEMA MG1, based on size, rotating speed and efficiency class.</p>
+          </li>
+          <li>
+            <a (click)="showTool('specific-speed')">Specific Speed</a>
+            <p>For each pump type there is an optimal specific speed based on size, flow rate, specific speed.  Hydraulic Institute standards also include factors for wear and surface finish on wetted parts but these two factors are not considered in the PSAT calculations.  Operation at the optimal specific speed allows a pump to operate at maximum efficiency.  This calculator determines the specific speed for a pump at the given conditions and calculates the amount of efficiency penalty to be deducted from the maximum value due to operation away from the optimal specific speed.</p>
+          </li>
+          <li>
+            <a (click)="showTool('achievable-efficiency')">Pump Efficiency Curves</a>
+            <p>Determine the achievable pump efficiency for vaious pump styles which are based on the Hydraulic Institute (HI) standard ANSI/HI 1.3-2000</p>
+          </li>
+          <li>
+            <a (click)="showTool('motor-performance')">Motor Performance</a>
+            <p>Calculate some motor stuff...</p>
+          </li>
+        </ul>
 
-      <div class="row tools">
-        <div class="col-12">
-          <a class="h5" (click)="showTool('specific-speed')">Specific Speed</a>
-          <div>For each pump type there is an optimal specific speed based on size, flow rate, specific speed.  Hydraulic Institute standards also include factors for wear and surface finish on wetted parts but these two factors are not considered in the PSAT calculations.  Operation at the optimal specific speed allows a pump to operate at maximum efficiency.  This calculator determines the specific speed for a pump at the given conditions and calculates the amount of efficiency penalty to be deducted from the maximum value due to operation away from the optimal specific speed.</div>
-        </div>
       </div>
-
-      <div class="row tools">
-        <div class="col-12">
-          <a class="h5" (click)="showTool('achievable-efficiency')">Achievable Efficiency</a>
-          <div>Calculate some other stuff...</div>
-        </div>
-      </div>
-
-      <div class="row tools">
-        <div class="col-12">
-          <a class="h5" (click)="showTool('motor-performance')">Motor Performance</a>
-          <div>Calculate some motor stuff...</div>
-        </div>
-      </div>
-
     </div>
   </div>
+  
 </div>
 
 <div class="card fade show" *ngIf="selectedTool == 'head-tool'">
