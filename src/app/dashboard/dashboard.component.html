@@ -23,12 +23,18 @@
             <app-about-page></app-about-page>
         </div>
         <div class="col-10" *ngIf="allDirectories && dashboardView == 'settings'">
-            <div class="card">
-                <div class="card-block">
-                    <h4>Default Settings</h4>
-                    <app-assessment-settings [directory]="allDirectories" (resetDataEmit)="showDeleteModal($event)"></app-assessment-settings>
+            
+            <div class="row">
+                <div class="col-10 offset-md-1">
+                    <div class="content-container default-settings">
+
+                        <h2>Default Settings</h2>
+                        <app-assessment-settings [directory]="allDirectories" (resetDataEmit)="showDeleteModal($event)"></app-assessment-settings>
+
+                    </div>
                 </div>
             </div>
+
         </div>
     </div>
 </div>

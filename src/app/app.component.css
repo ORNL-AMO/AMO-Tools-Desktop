@@ -661,10 +661,30 @@ Content Container
     font-size: 22px;
     font-weight: bold;
   }
+  .content-container h4 {
+    font-size: 18px;
+    font-weight: bold;
+  }
 
 
 
 
+/*
+Default Settings
+=============================================== */
+.default-settings form {
+  margin-bottom: 30px;
+}
+.default-settings .actions:after {
+  display: table;
+  content: "";
+  clear: both;
+}
+.reset-data {
+  margin-top: 60px;
+  padding-top: 40px;
+  border-top: #eee solid 1px;
+}
 
 /*
 Calculators
