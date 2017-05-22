@@ -1,4 +1,4 @@
-<div class="row calc-container">
+<div class="row calc-container" *ngIf="settings">
   <div class="col-3 calc-form">
     <app-specific-speed-form [(speedForm)]="speedForm" [settings]="settings" (calculate)="calculate()"></app-specific-speed-form>
   </div>

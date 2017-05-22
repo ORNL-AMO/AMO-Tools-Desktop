@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
 import { Settings } from '../../../../shared/models/settings';
 
 @Component({
@@ -42,6 +42,8 @@ export class SpecificSpeedFormComponent implements OnInit {
       this.tmpHead = this.speedForm.value.head;
     }
   }
+
+
 
   emitCalculate() {
     this.speedForm.patchValue({
