@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
 import { Settings } from '../../../../shared/models/settings';
-
+import { WindowRefService } from '../../../../indexedDb/window-ref.service';
 declare const d3: any;
 
 @Component({
@@ -36,12 +36,25 @@ export class SystemCurveGraphComponent implements OnInit {
   pointer: any;
   focus: any;
 
+  canvasWidth: number;
+  canvasHeight: number;
+  doc: any;
+  window: any;
+
+
   isFirstChange: boolean = true;
-  constructor() { }
+  constructor(private windowRefService: WindowRefService) { }
 
   ngOnInit() {
-    this.setUp();
   }
+
+  ngAfterViewInit() {
+    this.doc = this.windowRefService.getDoc();
+    this.window = this.windowRefService.nativeWindow;
+    this.window.onresize = () => { this.resize() };
+    this.resize();
+  }
+
 
   ngOnChanges(changes: SimpleChanges) {
     if (!this.isFirstChange && (changes.lossCoefficient || changes.staticHead)) {
@@ -51,7 +64,16 @@ export class SystemCurveGraphComponent implements OnInit {
     }
   }
 
-  setUp() {
+  resize() {
+    let curveGraph = this.doc.getElementById('systemCurveGraph');
+    this.height = curveGraph.clientHeight;
+    this.width = curveGraph.clientWidth;
+    debugger;
+
+    //his.setUp();
+  }
+
+  setUp(winHeight: number, winWidth: number) {
 
     //Remove  all previous graphs
     d3.select('app-system-curve-graph').selectAll('svg').remove();
@@ -159,7 +181,7 @@ export class SystemCurveGraphComponent implements OnInit {
     this.svg.append("text")
       .attr("text-anchor", "middle")  // this makes it easy to centre the text as the transform is applied to the anchor
       .attr("transform", "translate(" + (-60) + "," + (this.height / 2) + ")rotate(-90)")  // text is drawn off the screen top left, move down and out and rotate
-      .text("Head ("+this.settings.distanceMeasurement+")" );
+      .text("Head (" + this.settings.distanceMeasurement + ")");
 
     this.svg.append("text")
       .attr("text-anchor", "middle")  // this makes it easy to centre the text as the transform is applied to the anchor

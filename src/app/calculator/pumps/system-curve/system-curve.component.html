@@ -1,8 +1,14 @@
-<div *ngIf="settings">
+<div class="row" *ngIf="settings">
   <div class="col-3 calc-form">
-    <app-system-curve-form [psat]="psat" [settings]="settings" [(pointOne)]="pointOne" [(pointTwo)]="pointTwo" [(curveConstants)]="curveConstants" (calculate)="calculateValues()" (calculateP1)="calculateP1Flow()" (calculateP2)="calculateP2Flow()"></app-system-curve-form>
+    <div class="card">
+      <div class="card-block">
+        <app-system-curve-form [psat]="psat" [settings]="settings" [(pointOne)]="pointOne" [(pointTwo)]="pointTwo" [(curveConstants)]="curveConstants"
+          (calculate)="calculateValues()" (calculateP1)="calculateP1Flow()" (calculateP2)="calculateP2Flow()"></app-system-curve-form>
+      </div>
+    </div>
   </div>
-  <div class="col-9 calc-graph">
-    <app-system-curve-graph [lossCoefficient]="lossCoefficient" [settings]="settings" [staticHead]="staticHead" [pointOne]="pointOne" [pointTwo]="pointTwo" [curveConstants]="curveConstants"></app-system-curve-graph>
+  <div id="systemCurveGraph" class="col-9 calc-graph">
+    <app-system-curve-graph [lossCoefficient]="lossCoefficient" [settings]="settings" [staticHead]="staticHead" [pointOne]="pointOne"
+      [pointTwo]="pointTwo" [curveConstants]="curveConstants"></app-system-curve-graph>
   </div>
 </div>
