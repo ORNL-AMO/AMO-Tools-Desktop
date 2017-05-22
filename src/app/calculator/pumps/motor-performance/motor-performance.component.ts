@@ -43,6 +43,11 @@ export class MotorPerformanceComponent implements OnInit {
       this.indexedDbService.getDirectorySettings(1).then(
         results => {
           if (results.length != 0) {
+            if(results[0].powerMeasurement != 'hp'){
+              this.performanceForm.patchValue({
+                horsePower: '150'
+              })
+            }
             this.settings = results[0];
           }
         }

@@ -3,7 +3,8 @@ import { FormBuilder, Validators } from '@angular/forms'
 import { PSAT } from '../../../shared/models/psat';
 import { Settings } from '../../../shared/models/settings';
 import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
-
+import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
+import { PsatService } from '../../../psat/psat.service';
 @Component({
   selector: 'app-system-curve',
   templateUrl: './system-curve.component.html',
@@ -23,7 +24,7 @@ export class SystemCurveComponent implements OnInit {
   staticHead: number;
   lossCoefficient: number;
 
-  constructor(private formBuilder: FormBuilder, private indexedDbService: IndexedDbService) { }
+  constructor(private formBuilder: FormBuilder, private indexedDbService: IndexedDbService, private psatService: PsatService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
     if (this.psat) {
@@ -68,6 +69,26 @@ export class SystemCurveComponent implements OnInit {
     if (!this.settings) {
       this.indexedDbService.getDirectorySettings(1).then(
         results => {
+         // if (results[0].flowMeasurement != 'gpm') {
+           // let tmpVal = this.convertUnitsService.value(this.pointOne.form.value.flowRate).from('gpm').to(results[0].flowMeasurement);
+            //let tmpVal2 = this.convertUnitsService.value(this.pointTwo.form.value.flowRate).from('gpm').to(results[0].flowMeasurement);
+           // this.pointOne.form.patchValue({
+           //   flowRate: this.psatService.roundVal(tmpVal, 2)
+           // })
+            // this.pointTwo.form.patchValue({
+            //   flowRate: this.psatService.roundVal(tmpVal2, 2)
+            // })
+          // }
+          // if (results[0].distanceMeasurement != 'ft') {
+          //   let tmpVal = this.convertUnitsService.value(this.pointOne.form.value.head).from('ft').to(results[0].distanceMeasurement);
+          //   let tmpVal2 = this.convertUnitsService.value(this.pointTwo.form.value.head).from('ft').to(results[0].distanceMeasurement);
+          //   this.pointOne.form.patchValue({
+          //     head: this.psatService.roundVal(tmpVal, 2)
+          //   })
+          //   this.pointTwo.form.patchValue({
+          //     head: this.psatService.roundVal(tmpVal2, 2)
+          //   })
+          // }
           this.settings = results[0];
         }
       )
