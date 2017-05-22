@@ -9,8 +9,8 @@
   height: 100%;
 }
 
+
 .disclaimer{
-  width: 75%;
-    float: left;
-    padding-left: 20%;
+  font-weight: bold !important;
+  opacity: 1 !important;
 }
