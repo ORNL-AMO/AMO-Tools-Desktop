@@ -3,6 +3,7 @@ import { PsatService } from '../../../../psat/psat.service';
 import { Settings } from '../../../../shared/models/settings';
 import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
 
+import { WindowRefService } from '../../../../indexedDb/window-ref.service';
 declare const d3: any;
 
 @Component({
@@ -41,13 +42,18 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
     max: 0,
     average: 0
   }
-  constructor(private psatService: PsatService, private convertUnitsService: ConvertUnitsService) { }
+
+  canvasWidth: number;
+  canvasHeight: number;
+  doc: any;
+  window: any;
+  constructor(private psatService: PsatService, private convertUnitsService: ConvertUnitsService, private windowRefService: WindowRefService) { }
 
   ngOnInit() {
-    this.setUp();
-    if (this.checkForm()) {
-      this.onChanges();
-    }
+    // this.setUp();
+    // if (this.checkForm()) {
+    //   this.onChanges();
+    // }
   }
 
 
@@ -62,6 +68,26 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
       this.firstChange = false;
     }
   }
+
+  ngAfterViewInit() {
+    this.doc = this.windowRefService.getDoc();
+    this.window = this.windowRefService.nativeWindow;
+    this.window.onresize = () => { this.resizeGraph() };
+    this.resizeGraph();
+  }
+
+  resizeGraph() {
+    let curveGraph = this.doc.getElementById('achievableEfficiencyGraph');
+
+    this.canvasWidth = curveGraph.clientWidth;
+    this.canvasHeight = this.canvasWidth * (2 / 3);
+    this.margin = { top: 20, right: 20, bottom: 110, left: 120 };
+    this.width = this.canvasWidth - this.margin.left - this.margin.right;
+    this.height = this.canvasHeight - this.margin.top - this.margin.bottom;
+    this.setUp();
+    this.onChanges();
+  }
+
 
   calculateYaverage(flow: number) {
     if (this.checkForm()) {
@@ -106,9 +132,9 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
     var curvePoints = [];
 
     //graph dimensions
-    this.margin = { top: 20, right: 120, bottom: 110, left: 120 };
-    this.width = 900 - this.margin.left - this.margin.right;
-    this.height = 600 - this.margin.top - this.margin.bottom;
+    // this.margin = { top: 20, right: 120, bottom: 110, left: 120 };
+    // this.width = 900 - this.margin.left - this.margin.right;
+    // this.height = 600 - this.margin.top - this.margin.bottom;
 
     this.x = d3.scaleLinear()
       .range([0, this.width])
@@ -135,7 +161,7 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
     this.svg = d3.select('app-achievable-efficiency-graph').append('svg')
       .attr("width", this.width + this.margin.left + this.margin.right)
       .attr("height", this.height + this.margin.top + this.margin.bottom)
-      .style("background-color", "#f5f3e9")
+      .style("background-color", "#fff")
       .append("g")
       .attr("transform", "translate(" + this.margin.left + "," + this.margin.top + ")");
 

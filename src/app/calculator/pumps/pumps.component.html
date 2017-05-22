@@ -45,15 +45,18 @@
 
 </div>
 
-<div class="card fade show" *ngIf="getSelectedTool() == 'head-tool'">
-  <div class="card-header">
-    <b class="h4">Pump Head Calculator</b>
-    <button class="close pull-right" aria-label="Close" (click)="hideTool()">
-          <span aria-hidden="true">&times;</span>
-        </button>
+<div class="calculator" *ngIf="getSelectedTool() == 'head-tool'">
+  <div class="row">
+    <div class="col-10 offset-md-1">
+      <h2>Pump Head Calculator</h2>
+    </div>
   </div>
-  <div class="card-block">
-    <app-head-tool (close)="hideTool()"></app-head-tool>
+  <div class="row">
+    <div class="col-10 offset-md-1">
+      <div class="calculator-container">
+        <app-head-tool (close)="hideTool()"></app-head-tool>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -73,50 +76,63 @@
   </div>
 </div>
 
-<div class="card fade show" *ngIf="getSelectedTool() == 'nema-energy-efficiency'">
-  <div class="card-header">
-    <b class="h4">NEMA Energy Efficiency Calculator</b>
-    <button class="close pull-right" aria-label="Close" (click)="hideTool()">
-          <span aria-hidden="true">&times;</span>
-        </button>
+<div class="calculator" *ngIf="getSelectedTool() == 'nema-energy-efficiency'">
+  <div class="row">
+    <div class="col-10 offset-md-1">
+      <h2>NEMA Energy Efficiency Calculator</h2>
+    </div>
   </div>
-  <div class="card-block">
-    <app-nema-energy-efficiency></app-nema-energy-efficiency>
-  </div>
-</div>
-
-<div class="card fade show" *ngIf="getSelectedTool() == 'specific-speed'">
-  <div class="card-header">
-    <b class="h4">Specific Speed Calculator</b>
-    <button class="close pull-right" aria-label="Close" (click)="hideTool()">
-          <span aria-hidden="true">&times;</span>
-        </button>
-  </div>
-  <div class="card-block">
-    <app-specific-speed></app-specific-speed>
+  <div class="row">
+    <div class="col-10 offset-md-1">
+      <div class="calculator-container">
+        <app-nema-energy-efficiency></app-nema-energy-efficiency>
+      </div>
+    </div>
   </div>
 </div>
 
-<div class="card fade show" *ngIf="getSelectedTool() == 'achievable-efficiency'">
-  <div class="card-header">
-    <b class="h4">Achievable Efficiency Calculator</b>
-    <button class="close pull-right" aria-label="Close" (click)="hideTool()">
-          <span aria-hidden="true">&times;</span>
-        </button>
+<div class="calculator" *ngIf="getSelectedTool() == 'specific-speed'">
+  <div class="row">
+    <div class="col-10 offset-md-1">
+      <h2>Specific Speed Calculator</h2>
+    </div>
   </div>
-  <div class="card-block">
-    <app-achievable-efficiency></app-achievable-efficiency>
+  <div class="row">
+    <div class="col-10 offset-md-1">
+      <div class="calculator-container">
+        <app-specific-speed></app-specific-speed>
+      </div>
+    </div>
   </div>
 </div>
 
-<div class="card fade show" *ngIf="getSelectedTool() == 'motor-performance'">
-  <div class="card-header">
-    <b class="h4">Pump Head Calculator</b>
-    <button class="close pull-right" aria-label="Close" (click)="hideTool()">
-          <span aria-hidden="true">&times;</span>
-        </button>
+<div class="calculator" *ngIf="getSelectedTool() == 'achievable-efficiency'">
+  <div class="row">
+    <div class="col-10 offset-md-1">
+      <h2>Achievable Efficiency Calculator</h2>
+    </div>
   </div>
-  <div class="card-block">
-    <app-motor-performance></app-motor-performance>
+  <div class="row">
+    <div class="col-10 offset-md-1">
+      <div class="calculator-container">
+        <app-achievable-efficiency></app-achievable-efficiency>
+      </div>
+    </div>
   </div>
 </div>
+
+<div class="calculator" *ngIf="getSelectedTool() == 'motor-performance'">
+  <div class="row">
+    <div class="col-10 offset-md-1">
+      <h2>Pump Head Calculator</h2>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-10 offset-md-1">
+      <div class="calculator-container">
+        <div class="card-block">
+          <app-motor-performance></app-motor-performance>
+        </div>
+      </div>
+    </div>
+  </div>

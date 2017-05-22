@@ -1,8 +1,12 @@
-<div class="row calc-container" *ngIf="settings">
+<div class="row" *ngIf="settings">
   <div class="col-3 calc-form">
-    <app-specific-speed-form [(speedForm)]="speedForm" [settings]="settings" (calculate)="calculate()"></app-specific-speed-form>
+    <div class="card">
+      <div class="card-block">
+        <app-specific-speed-form [(speedForm)]="speedForm" [settings]="settings" (calculate)="calculate()"></app-specific-speed-form>
+      </div>
+    </div>
   </div>
-  <div class="col-9 calc-graph">
+  <div id="specificSpeedGraph" class="col-9 calc-graph">
     <app-specific-speed-graph [speedForm]="speedForm" [toggleCalculate]="toggleCalculate"></app-specific-speed-graph>
   </div>
 </div>

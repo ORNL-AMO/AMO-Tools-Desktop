@@ -1,8 +1,12 @@
-<div class="row calc-container" *ngIf="settings">
+<div class="row" *ngIf="settings">
   <div class="col-3 calc-form">
-    <app-motor-performance-form [(performanceForm)]="performanceForm" [settings]="settings" (calculate)="calculate()"></app-motor-performance-form>
+    <div class="card">
+      <div class="card-block">
+        <app-motor-performance-form [(performanceForm)]="performanceForm" [settings]="settings" (calculate)="calculate()"></app-motor-performance-form>
+      </div>
+    </div>
   </div>
-  <div class="col-9 calc-graph">
+  <div id="motorPerformanceGraph" class="col-9 calc-graph">
     <app-motor-performance-graph [performanceForm]="performanceForm" [settings]="settings" [toggleCalculate]="toggleCalculate"></app-motor-performance-graph>
   </div>
 </div>
