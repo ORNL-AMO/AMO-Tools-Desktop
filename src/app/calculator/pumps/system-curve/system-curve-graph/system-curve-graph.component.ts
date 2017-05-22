@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
 import { Settings } from '../../../../shared/models/settings';
+import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
 
 declare const d3: any;
 
@@ -37,7 +38,7 @@ export class SystemCurveGraphComponent implements OnInit {
   focus: any;
 
   isFirstChange: boolean = true;
-  constructor() { }
+  constructor(private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
     this.setUp();
@@ -387,10 +388,14 @@ export class SystemCurveGraphComponent implements OnInit {
     var head = this.staticHead + this.lossCoefficient * Math.pow(x.domain()[1], this.curveConstants.form.value.systemLossExponent);
 
     if (head >= 0) {
+      let tmpFluidPower = (this.staticHead * 0 * this.curveConstants.form.value.specificGravity) / 3960;
+      if (this.settings.powerMeasurement != 'hp' && tmpFluidPower != 0) {
+        tmpFluidPower = this.convertUnitsService.value(tmpFluidPower).from('hp').to(this.settings.powerMeasurement);
+      }
       data.push({
         x: 0,
         y: this.staticHead + this.lossCoefficient * Math.pow(0, this.curveConstants.form.value.systemLossExponent),
-        fluidPower: (this.staticHead * 0 * this.curveConstants.form.value.specificGravity) / 3960
+        fluidPower: tmpFluidPower
       });
     }
     else {
@@ -413,10 +418,14 @@ export class SystemCurveGraphComponent implements OnInit {
       }
 
       if (head >= 0) {
+        let tmpFluidPower = (this.staticHead * i * this.curveConstants.form.value.specificGravity) / 3960;
+        if (this.settings.powerMeasurement != 'hp' && tmpFluidPower != 0) {
+          tmpFluidPower = this.convertUnitsService.value(tmpFluidPower).from('hp').to(this.settings.powerMeasurement);
+        }
         data.push({
           x: i,
           y: head,
-          fluidPower: (this.staticHead * i * this.curveConstants.form.value.specificGravity) / 3960
+          fluidPower: tmpFluidPower
         });
       }
       else {
@@ -432,10 +441,14 @@ export class SystemCurveGraphComponent implements OnInit {
     head = this.staticHead + this.lossCoefficient * Math.pow(x.domain()[1], this.curveConstants.form.value.systemLossExponent);
 
     if (head >= 0) {
+      let tmpFluidPower = (this.staticHead * x.domain()[1] * this.curveConstants.form.value.specificGravity) / 3960
+      if (this.settings.powerMeasurement != 'hp' && tmpFluidPower != 0) {
+        tmpFluidPower = this.convertUnitsService.value(tmpFluidPower).from('hp').to(this.settings.powerMeasurement);
+      }
       data.push({
         x: x.domain()[1],
         y: this.staticHead + this.lossCoefficient * Math.pow(x.domain()[1], this.curveConstants.form.value.systemLossExponent),
-        fluidPower: (this.staticHead * x.domain()[1] * this.curveConstants.form.value.specificGravity) / 3960
+        fluidPower: tmpFluidPower
       });
     }
     else {
