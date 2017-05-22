@@ -24,9 +24,17 @@ export class AchievableEfficiencyComponent implements OnInit {
   ngOnInit() {
     if (!this.psat) {
       this.efficiencyForm = this.psatService.initForm();
+      //patch default/starter values for stand alone calculator
+      this.efficiencyForm.patchValue({
+        pumpType: this.psatService.getPumpStyleFromEnum(6),
+        flowRate: 2000
+      })
     } else {
       this.efficiencyForm = this.psatService.getFormFromPsat(this.psat.inputs);
     }
+
+
+    //if stand alone calculator use system settings
     if (!this.settings) {
       this.indexedDbService.getDirectorySettings(1).then(
         results => {
