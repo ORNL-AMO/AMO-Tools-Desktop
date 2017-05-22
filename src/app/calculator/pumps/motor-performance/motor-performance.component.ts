@@ -24,10 +24,21 @@ export class MotorPerformanceComponent implements OnInit {
   ngOnInit() {
     if (!this.psat) {
       this.performanceForm = this.psatService.initForm();
+      //default values for standalone calculator
+      this.performanceForm.patchValue({
+        frequency: this.psatService.getLineFreqFromEnum(0),
+        horsePower: '200',
+        motorRPM: 1780,
+        efficiencyClass: this.psatService.getEfficiencyClassFromEnum(1),
+        motorVoltage: 460,
+        fullLoadAmps: 225.4,
+        sizeMargin: 1
+      });
     } else {
       this.performanceForm = this.psatService.getFormFromPsat(this.psat.inputs);
     }
 
+    //use system settings for standalone calculator
     if (!this.settings) {
       this.indexedDbService.getDirectorySettings(1).then(
         results => {
