@@ -6,6 +6,8 @@ import { PhastService } from './phast.service';
 import { IndexedDbService } from '../indexedDb/indexed-db.service';
 import { ActivatedRoute } from '@angular/router';
 
+import { ToastyService, ToastyConfig, ToastOptions, ToastData } from 'ng2-toasty';
+
 @Component({
   selector: 'app-phast',
   templateUrl: './phast.component.html',
@@ -32,8 +34,13 @@ export class PhastComponent implements OnInit {
     private assessmentService: AssessmentService,
     private phastService: PhastService,
     private indexedDbService: IndexedDbService,
-    private activatedRoute: ActivatedRoute
-  ) { }
+    private activatedRoute: ActivatedRoute,
+    private toastyService: ToastyService,
+    private toastyConfig: ToastyConfig) {
+    this.toastyConfig.theme = 'bootstrap';
+    this.toastyConfig.position = 'bottom-right';
+    // this.toastyConfig.limit = 1;
+  }
 
   ngOnInit() {
     let tmpAssessmentId;
@@ -46,7 +53,11 @@ export class PhastComponent implements OnInit {
       if (tmpTab == 'modify-conditions') {
         this.currentTab = 'losses';
       }
-    });
+    });   
+  }
+
+  ngAfterViewInit(){
+    this.disclaimerToast();
   }
 
   changeTab($event) {
@@ -100,4 +111,16 @@ export class PhastComponent implements OnInit {
   exportData() {
     //TODO: Logic for exporting data
   }
+
+  disclaimerToast() {
+    let toastOptions: ToastOptions = {
+      title: 'Disclaimer:',
+      msg: ' The PHAST Tool is still in the early stages of development. Only a portion of the tools functionality is in place, some links/buttons/forms may not work and are placeholders for future work.',
+      showClose: true,
+      timeout: 10000000,
+      theme: 'default'
+    }    
+    this.toastyService.info(toastOptions);
+  }
+
 }
