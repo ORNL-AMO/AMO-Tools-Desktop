@@ -51,8 +51,8 @@ export class SystemCurveGraphComponent implements OnInit {
   ngAfterViewInit() {
     this.doc = this.windowRefService.getDoc();
     this.window = this.windowRefService.nativeWindow;
-    this.window.onresize = () => { this.resize() };
-    this.resize();
+    this.window.onresize = () => { this.resizeGraph() };
+    this.resizeGraph();
   }
 
 
@@ -64,13 +64,14 @@ export class SystemCurveGraphComponent implements OnInit {
     }
   }
 
-  resize() {
+  resizeGraph() {
     let curveGraph = this.doc.getElementById('systemCurveGraph');
-    this.height = curveGraph.clientHeight;
-    this.width = curveGraph.clientWidth;
-    debugger;
+    this.canvasHeight = curveGraph.clientHeight;
+    this.canvasWidth = curveGraph.clientWidth;
+    
 
-    //his.setUp();
+    this.setUp(this.canvasHeight, this.canvasHeight);
+    //this.onChanges();
   }
 
   setUp(winHeight: number, winWidth: number) {
@@ -82,8 +83,8 @@ export class SystemCurveGraphComponent implements OnInit {
 
     //graph dimensions
     this.margin = { top: 20, right: 120, bottom: 110, left: 120 };
-    this.width = 900 - this.margin.left - this.margin.right;
-    this.height = 600 - this.margin.top - this.margin.bottom;
+    this.width = winWidth - this.margin.left - this.margin.right;
+    this.height = winHeight - this.margin.top - this.margin.bottom;
 
     var x = d3.scaleLinear()
       .range([0, this.width])
