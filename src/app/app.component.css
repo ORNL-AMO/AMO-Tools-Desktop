@@ -689,23 +689,68 @@ Default Settings
 /*
 Calculators
 =============================================== */
-.calculators ul {
+.calculator-list ul {
   margin: 0 0 40px;
   padding: 0;
 }
-  .calculators li {
+  .calculator-list li {
     margin: 0 0 10px;
     padding: 0 0 10px;
     border-bottom: #eee solid 1px;
     list-style: none;
   }
-  .calculators a {
+  .calculator-list a {
     
   }
-  .calculators p {
+  .calculator-list p {
     margin-bottom: 0;
     font-size: 16px;
   }
+
+
+
+
+.calculator h2 {
+  margin: 40px 0 20px;
+}
+.calculator .calculator-container .calc-form {
+  height: inherit;
+  border-right: none;
+  padding: 0;
+  background: transparent;
+}
+  .calculator .calculator-container .calc-form .form-group label, .calculator .calculator-container .calc-form .form-group .form-control {
+    width: 90%;
+  }
+.calculator .calculator-container .calc-graph {
+  padding-top: 0;
+}
+  .calculator .calculator-container .calc-form .wrapper {
+    margin: 0;
+  }
+
+.calculator .calc-form .form-group label.section-label {
+  font-size: 18px;
+}
+
+.calculator .form-section {
+  margin-bottom: 10px;
+  padding-bottom: 18px !important;
+  border-bottom: #bbb dashed 1px;
+}
+
+.calculator .form-group label {
+  font-weight: bold;
+}
+
+.calculator .form-group:hover {
+  background: transparent;
+}
+
+.calculator .units {
+  top: 27px;
+  right: 13%;
+}
 
 
 

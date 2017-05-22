@@ -2,7 +2,7 @@
   
   <div class="row">
     <div class="col-10 offset-md-1">
-      <div class="content-container calculators">
+      <div class="content-container calculator-list">
   
         <h2>Pump Calculators</h2>
         <ul>
@@ -50,17 +50,27 @@
   </div>
 </div>
 
-<div class="card fade show" *ngIf="selectedTool == 'system-curve'">
-  <div class="card-header">
-    <b class="h4">System Curve Calculator</b>
-    <button class="close pull-right" aria-label="Close" (click)="hideTool()">
-          <span aria-hidden="true">&times;</span>
-        </button>
+
+
+
+<div class="calculator" *ngIf="selectedTool == 'system-curve'">
+  <div class="row">
+    <div class="col-10 offset-md-1">
+      <h2>System Curve Calculator</h2>  
+    </div>
   </div>
-  <div class="card-block">
-    <app-system-curve></app-system-curve>
+  <div class="row">
+    <div class="col-10 offset-md-1">
+      <div class="calculator-container">
+        <app-system-curve></app-system-curve>
+      </div>
+    </div>
   </div>
 </div>
+
+
+
+
 
 <div class="card fade show" *ngIf="selectedTool == 'nema-energy-efficiency'">
   <div class="card-header">

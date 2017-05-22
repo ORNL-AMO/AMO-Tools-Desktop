@@ -1,4 +1,4 @@
-<div class="row calc-container" *ngIf="settings">
+<div *ngIf="settings">
   <div class="col-3 calc-form">
     <app-system-curve-form [psat]="psat" [settings]="settings" [(pointOne)]="pointOne" [(pointTwo)]="pointTwo" [(curveConstants)]="curveConstants" (calculate)="calculateValues()" (calculateP1)="calculateP1Flow()" (calculateP2)="calculateP2Flow()"></app-system-curve-form>
   </div>
