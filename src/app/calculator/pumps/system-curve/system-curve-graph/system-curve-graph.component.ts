@@ -325,8 +325,8 @@ export class SystemCurveGraphComponent implements OnInit {
           .style("padding-bottom", "10px")
           .style("padding-left", "10px")
           .html("<strong style='font-size: 15px;'>" + format(d.x) + "</strong>" +
-          "<p><strong><div style='float: left;'>Head, ft.</div>           <div style='float: right;'>" + format(d.y) + "</div><br>" +
-          "<div style='float: left;'>Fluid Power, hp</div>     <div style='float: right;'>" + format(d.fluidPower) + "</div></strong></p>")
+          "<p><strong><div style='float: left;'>Head, " + this.settings.distanceMeasurement + "</div>           <div style='float: right;'>" + format(d.y) + "</div><br>" +
+          "<div style='float: left;'>Fluid Power, " + this.settings.powerMeasurement + "</div>     <div style='float: right;'>" + format(d.fluidPower) + "</div></strong></p>")
           .style("left", (this.margin.left + x(d.x) - (detailBoxWidth / 2 - 15)) + "px")
           .style("top", (this.margin.top + y(d.y) + 25) + "px")
           .style("position", "absolute")

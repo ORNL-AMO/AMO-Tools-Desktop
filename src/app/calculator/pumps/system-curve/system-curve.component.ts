@@ -69,26 +69,26 @@ export class SystemCurveComponent implements OnInit {
     if (!this.settings) {
       this.indexedDbService.getDirectorySettings(1).then(
         results => {
-         // if (results[0].flowMeasurement != 'gpm') {
-           // let tmpVal = this.convertUnitsService.value(this.pointOne.form.value.flowRate).from('gpm').to(results[0].flowMeasurement);
+          if (results[0].flowMeasurement != 'gpm') {
+            let tmpVal = this.convertUnitsService.value(this.pointOne.form.value.flowRate).from('gpm').to(results[0].flowMeasurement);
             //let tmpVal2 = this.convertUnitsService.value(this.pointTwo.form.value.flowRate).from('gpm').to(results[0].flowMeasurement);
-           // this.pointOne.form.patchValue({
-           //   flowRate: this.psatService.roundVal(tmpVal, 2)
-           // })
+            this.pointOne.form.patchValue({
+              flowRate: this.psatService.roundVal(tmpVal, 2)
+            })
             // this.pointTwo.form.patchValue({
             //   flowRate: this.psatService.roundVal(tmpVal2, 2)
             // })
-          // }
-          // if (results[0].distanceMeasurement != 'ft') {
-          //   let tmpVal = this.convertUnitsService.value(this.pointOne.form.value.head).from('ft').to(results[0].distanceMeasurement);
-          //   let tmpVal2 = this.convertUnitsService.value(this.pointTwo.form.value.head).from('ft').to(results[0].distanceMeasurement);
-          //   this.pointOne.form.patchValue({
-          //     head: this.psatService.roundVal(tmpVal, 2)
-          //   })
-          //   this.pointTwo.form.patchValue({
-          //     head: this.psatService.roundVal(tmpVal2, 2)
-          //   })
-          // }
+          }
+          if (results[0].distanceMeasurement != 'ft') {
+            let tmpVal = this.convertUnitsService.value(this.pointOne.form.value.head).from('ft').to(results[0].distanceMeasurement);
+            let tmpVal2 = this.convertUnitsService.value(this.pointTwo.form.value.head).from('ft').to(results[0].distanceMeasurement);
+            this.pointOne.form.patchValue({
+              head: this.psatService.roundVal(tmpVal, 2)
+            })
+            this.pointTwo.form.patchValue({
+              head: this.psatService.roundVal(tmpVal2, 2)
+            })
+          }
           this.settings = results[0];
         }
       )
@@ -100,13 +100,13 @@ export class SystemCurveComponent implements OnInit {
       return this.formBuilder.group({
         'flowRate': [psat.inputs.flow_rate, Validators.required],
         'head': [psat.inputs.head, Validators.required],
-        'pointAdjustment': [psat.name, Validators.required]
+        'pointAdjustment': [psat.name]
       })
     } else {
       return this.formBuilder.group({
         'flowRate': [2000, Validators.required],
         'head': [276.8, Validators.required],
-        'pointAdjustment': ['', Validators.required]
+        'pointAdjustment': ['']
       })
     }
   }
@@ -135,6 +135,7 @@ export class SystemCurveComponent implements OnInit {
 
 
   calculateValues() {
+    console.log('calc')
     this.lossCoefficient = this.getLossCoefficient(
       this.pointOne.form.value.flowRate,
       this.pointOne.form.value.head,
