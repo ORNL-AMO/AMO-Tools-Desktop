@@ -1,11 +1,13 @@
-<div class="assessment-report">
+<div class="assessment-report" *ngIf="psat.outputs && settings">
 
   <div class="row">
-    <div class="col-12">
-      <div class="h2">Assessment Report</div>
+    <div class="col-lg-6 col-md-8 col-sm-12">
+      <div class="h2" *ngIf="!assessment">Assessment Report</div>
+      <div class="h2" *ngIf="assessment">{{assessment.name}} Report</div>
     </div>
   </div>
 
+  <div *ngIf="psat.setupDone">
   <div class="row">
     <div class="col-12">
       <h3>Report Summary</h3>
@@ -25,6 +27,10 @@
       <h3>Input Data</h3>
       <app-input-summary [psat]="psat" [settings]="settings"></app-input-summary>
     </div>
+  </div>
+  </div>
+  <div *ngIf="!psat.setupDone">
+    <p class="alert-warning text-center">This assessment has not been completed, please complete this assessment to see the resulting data.</p>
   </div>
 
 </div>

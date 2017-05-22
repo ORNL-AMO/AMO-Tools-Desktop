@@ -50,12 +50,20 @@ export class PercentGraphComponent implements OnInit {
     let div = this.doc.getElementsByClassName('chart-container')
     let percentValue = this.doc.getElementById('percent');
     let valueClass = this.doc.getElementsByClassName('value');
-    if (div[0].clientHeight < 350) {
+    if (div[0].clientHeight < 350 && div[0].clientHeight > 200) {
       for (let i = 0; i < valueClass.length; i++) {
         valueClass[i].style.fontSize = '24px';
       }
+    } else if (div[0].clientHeight < 200) {
+      for (let i = 0; i < valueClass.length; i++) {
+        valueClass[i].style.fontSize = '16px';
+      }
+    } else {
+      for (let i = 0; i < valueClass.length; i++) {
+        valueClass[i].style.fontSize = '32px';
+      }
     }
-    let marginTop = (div[0].clientHeight / 2) - (percentValue.clientHeight / 2);
+    let marginTop = (div[0].clientHeight / 2) - (percentValue.clientHeight + (percentValue.clientHeight * .5));
     let marginLeft = (div[0].clientWidth / 2) - (percentValue.clientWidth / 2);
     for (let i = 0; i < valueClass.length; i++) {
       valueClass[i].style.marginTop = marginTop + 'px';

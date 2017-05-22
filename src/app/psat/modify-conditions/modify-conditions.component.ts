@@ -82,15 +82,16 @@ export class ModifyConditionsComponent implements OnInit {
         tmpIndex++;
       }
     });
+    this.changeTab(this.modifyTab);
     this.isDropdownOpen = false;
   }
 
   changeTab(str: string) {
-    if(str == 'pump-fluid'){
+    if (str == 'pump-fluid') {
       this.currentField = 'pumpType';
-    }else if(str == 'motor'){
+    } else if (str == 'motor') {
       this.currentField = 'lineFrequency';
-    }else if(str == 'field-data'){
+    } else if (str == 'field-data') {
       this.currentField = 'operatingFraction';
     }
     this.modifyTab = str;
@@ -126,11 +127,12 @@ export class ModifyConditionsComponent implements OnInit {
   }
 
   hideEditModification() {
+    this.currentField = 'operatingFraction';
     this.showEditModification = false;
   }
 
-  cancelEdit(){
-    this.showEditModification = false;
+  cancelEdit() {
+    this.hideEditModification();
     this.editModification = null;
   }
 

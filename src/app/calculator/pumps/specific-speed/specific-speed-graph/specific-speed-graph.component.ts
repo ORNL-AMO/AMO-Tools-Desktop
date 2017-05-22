@@ -37,8 +37,9 @@ export class SpecificSpeedGraphComponent implements OnInit {
   constructor(private psatService: PsatService) { }
 
   ngOnInit() {
-    this.setUp();
+
     if (this.checkForm()) {
+      this.setUp();
       this.drawPoint();
       this.svg.style("display", null);
     }
@@ -258,7 +259,7 @@ export class SpecificSpeedGraphComponent implements OnInit {
   }
 
   drawGuideCurve(svg, x, y, psatService, type) {
-  
+
     svg.selectAll("path").remove();
 
     var data = [];

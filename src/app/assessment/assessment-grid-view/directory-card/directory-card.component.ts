@@ -24,14 +24,14 @@ export class DirectoryCardComponent implements OnInit {
     this.directory.subDirectory = tmpDirectory.subDirectory;
     this.directory.collapsed = tmpDirectory.collapsed;
     if (this.isChecked) {
-      this.directory.delete = this.isChecked;
+      this.directory.selected = this.isChecked;
     }
   }
 
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.isChecked && !this.isFirstChange) {
-      this.directory.delete = this.isChecked;
+      this.directory.selected = this.isChecked;
     }
     else {
       this.isFirstChange = false;
@@ -66,7 +66,7 @@ export class DirectoryCardComponent implements OnInit {
   }
 
   setDelete() {
-    this.directory.delete = this.isChecked;
+    this.directory.selected = this.isChecked;
   }
 
 }

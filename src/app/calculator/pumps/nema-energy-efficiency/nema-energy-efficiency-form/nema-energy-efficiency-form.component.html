@@ -9,7 +9,7 @@
 <div class="form-group">
   <label for="horsePower">Horse Power</label>
   <select class="form-control" id="horsePower" formControlName="horsePower" ngModel="{{nemaForm.value.horsePower}}">
-        <option *ngFor="let horsePower of horsePowers" [ngValue]="horsePower">{{horsePower}}</option>
+        <option *ngFor="let option of options" [ngValue]="option">{{option}} {{settings.powerMeasurement}}</option>
       </select>
 </div>
 

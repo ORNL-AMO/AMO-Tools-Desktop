@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
+import { ToastyModule } from 'ng2-toasty';
+
 import { NgxElectronModule } from 'ngx-electron';
 import { AssessmentModule } from '../assessment/assessment.module';
 import { PhastModule } from '../phast/phast.module';
@@ -49,7 +51,8 @@ import { TutorialsComponent } from '../tutorials/tutorials.component';
     IndexedDbModule,
     FormsModule,
     ReactiveFormsModule,
-    SettingsModule
+    SettingsModule,
+    ToastyModule
 
   ],
   providers: [

@@ -2,7 +2,7 @@
 	<!--<app-assessment-banner [workingDirectoryName]="directory.name"></app-assessment-banner>-->
 	<div class="col-10">
 		<app-assessment-menu (viewChange)="changeView($event)" (directoryChange)="changeDirectory($event)" [directory]="directory"
-			[view]="view" (deleteItems)="signalDeleteItems()" (selectAll)="selectAllItems($event)" (newDir)="newDir()"></app-assessment-menu>
+			[view]="view" (deleteItems)="signalDeleteItems()" (selectAll)="selectAllItems($event)" (newDir)="newDir()" (genReport)="emitGenReport()"></app-assessment-menu>
 		<app-assessment-grid-view *ngIf="view == 'grid'" [isChecked]="isChecked" [directory]="directory" (directoryChange)="changeDirectory($event)"></app-assessment-grid-view>
 		<app-assessment-list-view *ngIf="view == 'list'" [isChecked]="isChecked" [directory]="directory" (directoryChange)="changeDirectory($event)"></app-assessment-list-view>
 		<app-assessment-settings *ngIf="view == 'settings'" [directory]="directory" (resetDataEmit)="resetData()"></app-assessment-settings>

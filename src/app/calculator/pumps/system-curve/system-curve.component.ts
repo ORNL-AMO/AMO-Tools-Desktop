@@ -2,8 +2,9 @@ import { Component, OnInit, Input } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms'
 import { PSAT } from '../../../shared/models/psat';
 import { Settings } from '../../../shared/models/settings';
-import { IndexedDbService} from '../../../indexedDb/indexed-db.service';
-
+import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
+import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
+import { PsatService } from '../../../psat/psat.service';
 @Component({
   selector: 'app-system-curve',
   templateUrl: './system-curve.component.html',
@@ -23,7 +24,7 @@ export class SystemCurveComponent implements OnInit {
   staticHead: number;
   lossCoefficient: number;
 
-  constructor(private formBuilder: FormBuilder, private indexedDbService: IndexedDbService) { }
+  constructor(private formBuilder: FormBuilder, private indexedDbService: IndexedDbService, private psatService: PsatService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
     if (this.psat) {
@@ -39,6 +40,10 @@ export class SystemCurveComponent implements OnInit {
         form: this.initPointForm(),
         fluidPower: 0
       };
+      this.pointTwo.form.patchValue({
+        flowRate: '',
+        head: ''
+      })
       this.pointTwo.form.value.pointAdjustment = 'Baseline';
     } else {
       this.curveConstants = {
@@ -52,14 +57,38 @@ export class SystemCurveComponent implements OnInit {
         form: this.initPointForm(),
         fluidPower: 0
       };
+      this.pointTwo.form.patchValue({
+        flowRate: 0,
+        head: 200
+      })
       this.pointOne.form.value.pointAdjustment = 'Point One';
       this.pointTwo.form.value.pointAdjustment = 'Point Two';
     }
 
-
-    if(!this.settings){
+    //get systen settings if using stand alone calculator
+    if (!this.settings) {
       this.indexedDbService.getDirectorySettings(1).then(
         results => {
+          if (results[0].flowMeasurement != 'gpm') {
+            let tmpVal = this.convertUnitsService.value(this.pointOne.form.value.flowRate).from('gpm').to(results[0].flowMeasurement);
+            //let tmpVal2 = this.convertUnitsService.value(this.pointTwo.form.value.flowRate).from('gpm').to(results[0].flowMeasurement);
+            this.pointOne.form.patchValue({
+              flowRate: this.psatService.roundVal(tmpVal, 2)
+            })
+            // this.pointTwo.form.patchValue({
+            //   flowRate: this.psatService.roundVal(tmpVal2, 2)
+            // })
+          }
+          if (results[0].distanceMeasurement != 'ft') {
+            let tmpVal = this.convertUnitsService.value(this.pointOne.form.value.head).from('ft').to(results[0].distanceMeasurement);
+            let tmpVal2 = this.convertUnitsService.value(this.pointTwo.form.value.head).from('ft').to(results[0].distanceMeasurement);
+            this.pointOne.form.patchValue({
+              head: this.psatService.roundVal(tmpVal, 2)
+            })
+            this.pointTwo.form.patchValue({
+              head: this.psatService.roundVal(tmpVal2, 2)
+            })
+          }
           this.settings = results[0];
         }
       )
@@ -71,13 +100,13 @@ export class SystemCurveComponent implements OnInit {
       return this.formBuilder.group({
         'flowRate': [psat.inputs.flow_rate, Validators.required],
         'head': [psat.inputs.head, Validators.required],
-        'pointAdjustment': [psat.name, Validators.required]
+        'pointAdjustment': [psat.name]
       })
     } else {
       return this.formBuilder.group({
-        'flowRate': ['', Validators.required],
-        'head': ['', Validators.required],
-        'pointAdjustment': ['', Validators.required]
+        'flowRate': [2000, Validators.required],
+        'head': [276.8, Validators.required],
+        'pointAdjustment': ['']
       })
     }
   }
@@ -90,8 +119,8 @@ export class SystemCurveComponent implements OnInit {
       })
     } else {
       return this.formBuilder.group({
-        'specificGravity': ['', Validators.required],
-        'systemLossExponent': [2.5, Validators.required]
+        'specificGravity': [1.0, Validators.required],
+        'systemLossExponent': [1.9, Validators.required]
       })
     }
   }

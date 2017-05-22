@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SharedModule } from '../shared/shared.module';
 import { ModalModule } from 'ng2-bootstrap';
+import { ToastyModule } from 'ng2-toasty';
 
 import { LossesModule } from './losses/losses.module';
 
@@ -52,7 +53,8 @@ import { SystemSetupComponent } from './system-setup/system-setup.component';
     FormsModule,
     SharedModule,
     ModalModule,
-    LossesModule
+    LossesModule,
+    ToastyModule
   ],
   providers: [
     PhastService

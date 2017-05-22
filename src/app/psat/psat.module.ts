@@ -66,7 +66,7 @@ import { EditConditionPropertiesComponent } from './modify-conditions/edit-condi
     EditConditionPropertiesComponent
   ],
   exports: [
-
+    PsatReportComponent
   ],
   imports: [
     RouterModule,

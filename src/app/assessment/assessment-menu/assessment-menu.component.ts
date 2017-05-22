@@ -24,6 +24,8 @@ export class AssessmentMenuComponent implements OnInit {
   selectAll = new EventEmitter<boolean>();
   @Output('newDir')
   newDir = new EventEmitter<boolean>();
+  @Output('genReport')
+  genReport = new EventEmitter<boolean>();
 
   breadCrumbs: Array<Directory>;
 
@@ -64,6 +66,10 @@ export class AssessmentMenuComponent implements OnInit {
 
   emitNewDir(){
     this.newDir.emit(true);
+  }
+
+  emitGenReport(){
+    this.genReport.emit(true);
   }
 
   goToDirectory(dir) {

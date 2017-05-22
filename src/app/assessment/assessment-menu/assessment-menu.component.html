@@ -22,7 +22,7 @@
     <!--<app-assessment-create [(directory)]="directory" class="create-container"></app-assessment-create>-->
     <button (click)="showCreateAssessment()" type="button" class="btn btn-secondary create-btn">Create Assessment</button>
     <app-create-folder [(directory)]="directory" (newDirectory)="emitNewDir()" class="create-container"></app-create-folder>
-    <!-- <button type="button" class="btn btn-secondary" disabled>Generate Report</button> -->
+    <button type="button" class="btn btn-secondary" (click)="emitGenReport()">Generate Report</button>
     <button type="button" (click)="signalDeleteItems()" class="btn btn-secondary">Delete...</button>
     <button type="button" disabled class="btn btn-secondary space-left">Import...</button>
     <button type="button" disabled class="btn btn-secondary">Export...</button>

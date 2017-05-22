@@ -1,8 +1,11 @@
 import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
 import { Settings } from '../../../../shared/models/settings';
 import { WindowRefService } from '../../../../indexedDb/window-ref.service';
+import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
 declare const d3: any;
 
+import { PsatService } from '../../../../psat/psat.service';
+ 
 @Component({
   selector: 'app-system-curve-graph',
   templateUrl: './system-curve-graph.component.html',
@@ -42,8 +45,8 @@ export class SystemCurveGraphComponent implements OnInit {
   window: any;
 
 
-  isFirstChange: boolean = true;
-  constructor(private windowRefService: WindowRefService) { }
+  isFirstChange: boolean = true
+  constructor(private windowRefService: WindowRefService, private convertUnitsService: ConvertUnitsService, private psatService: PsatService) { }
 
   ngOnInit() {
   }
@@ -66,25 +69,29 @@ export class SystemCurveGraphComponent implements OnInit {
 
   resizeGraph() {
     let curveGraph = this.doc.getElementById('systemCurveGraph');
-    this.canvasHeight = curveGraph.clientHeight;
-    this.canvasWidth = curveGraph.clientWidth;
-    
 
-    this.setUp(this.canvasHeight, this.canvasHeight);
-    //this.onChanges();
+    this.canvasWidth = curveGraph.clientWidth;
+    this.canvasHeight = this.canvasWidth * (2 / 3);
+    this.margin = { top: 20, right: 20, bottom: 110, left: 120 };
+    this.width = this.canvasWidth - this.margin.left - this.margin.right;
+    this.height = this.canvasHeight - this.margin.top - this.margin.bottom;
+    this.setUp();
+    this.onChanges();
   }
 
-  setUp(winHeight: number, winWidth: number) {
+  setUp() {
 
     //Remove  all previous graphs
     d3.select('app-system-curve-graph').selectAll('svg').remove();
-
+    // if (this.detailBox) {
+    //   this.detailBox.remove();
+    // }
     var curvePoints = [];
 
     //graph dimensions
-    this.margin = { top: 20, right: 120, bottom: 110, left: 120 };
-    this.width = winWidth - this.margin.left - this.margin.right;
-    this.height = winHeight - this.margin.top - this.margin.bottom;
+    // this.margin = { top: 20, right: 20, bottom: 110, left: 120 };
+    // this.width = winWidth - this.margin.left - this.margin.right;
+    // this.height = winHeight - this.margin.top - this.margin.bottom;
 
     var x = d3.scaleLinear()
       .range([0, this.width])
@@ -345,8 +352,8 @@ export class SystemCurveGraphComponent implements OnInit {
           .style("padding-bottom", "10px")
           .style("padding-left", "10px")
           .html("<strong style='font-size: 15px;'>" + format(d.x) + "</strong>" +
-          "<p><strong><div style='float: left;'>Head, ft.</div>           <div style='float: right;'>" + format(d.y) + "</div><br>" +
-          "<div style='float: left;'>Fluid Power, hp</div>     <div style='float: right;'>" + format(d.fluidPower) + "</div></strong></p>")
+          "<p><strong><div style='float: left;'>Head, " + this.settings.distanceMeasurement + "</div>           <div style='float: right;'>" + format(d.y) + "</div><br>" +
+          "<div style='float: left;'>Fluid Power, " + this.settings.powerMeasurement + "</div>     <div style='float: right;'>" + format(d.fluidPower) + "</div></strong></p>")
           .style("left", (this.margin.left + x(d.x) - (detailBoxWidth / 2 - 15)) + "px")
           .style("top", (this.margin.top + y(d.y) + 25) + "px")
           .style("position", "absolute")
@@ -407,10 +414,14 @@ export class SystemCurveGraphComponent implements OnInit {
     var head = this.staticHead + this.lossCoefficient * Math.pow(x.domain()[1], this.curveConstants.form.value.systemLossExponent);
 
     if (head >= 0) {
+      let tmpFluidPower = (this.staticHead * 0 * this.curveConstants.form.value.specificGravity) / 3960;
+      if (this.settings.powerMeasurement != 'hp' && tmpFluidPower != 0) {
+        tmpFluidPower = this.convertUnitsService.value(tmpFluidPower).from('hp').to(this.settings.powerMeasurement);
+      }
       data.push({
         x: 0,
         y: this.staticHead + this.lossCoefficient * Math.pow(0, this.curveConstants.form.value.systemLossExponent),
-        fluidPower: (this.staticHead * 0 * this.curveConstants.form.value.specificGravity) / 3960
+        fluidPower: tmpFluidPower
       });
     }
     else {
@@ -433,10 +444,14 @@ export class SystemCurveGraphComponent implements OnInit {
       }
 
       if (head >= 0) {
+        let tmpFluidPower = (this.staticHead * i * this.curveConstants.form.value.specificGravity) / 3960;
+        if (this.settings.powerMeasurement != 'hp' && tmpFluidPower != 0) {
+          tmpFluidPower = this.convertUnitsService.value(tmpFluidPower).from('hp').to(this.settings.powerMeasurement);
+        }
         data.push({
           x: i,
           y: head,
-          fluidPower: (this.staticHead * i * this.curveConstants.form.value.specificGravity) / 3960
+          fluidPower: tmpFluidPower
         });
       }
       else {
@@ -452,10 +467,14 @@ export class SystemCurveGraphComponent implements OnInit {
     head = this.staticHead + this.lossCoefficient * Math.pow(x.domain()[1], this.curveConstants.form.value.systemLossExponent);
 
     if (head >= 0) {
+      let tmpFluidPower = (this.staticHead * x.domain()[1] * this.curveConstants.form.value.specificGravity) / 3960
+      if (this.settings.powerMeasurement != 'hp' && tmpFluidPower != 0) {
+        tmpFluidPower = this.convertUnitsService.value(tmpFluidPower).from('hp').to(this.settings.powerMeasurement);
+      }
       data.push({
         x: x.domain()[1],
         y: this.staticHead + this.lossCoefficient * Math.pow(x.domain()[1], this.curveConstants.form.value.systemLossExponent),
-        fluidPower: (this.staticHead * x.domain()[1] * this.curveConstants.form.value.specificGravity) / 3960
+        fluidPower: tmpFluidPower
       });
     }
     else {

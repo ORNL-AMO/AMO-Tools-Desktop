@@ -25,13 +25,13 @@ export class AssessmentListItemComponent implements OnInit {
       this.isSetup = this.assessment.psat.setupDone;
     }
     if (this.isChecked) {
-      this.assessment.delete = this.isChecked;
+      this.assessment.selected = this.isChecked;
     }
   }
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.isChecked && !this.isFirstChange) {
-      this.assessment.delete = this.isChecked;
+      this.assessment.selected = this.isChecked;
     }
     else {
       this.isFirstChange = false;
@@ -49,7 +49,7 @@ export class AssessmentListItemComponent implements OnInit {
   }
 
   setDelete() {
-    this.assessment.delete = this.isChecked;
+    this.assessment.selected = this.isChecked;
   }
 
 
