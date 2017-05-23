@@ -285,6 +285,7 @@ export class SpecificSpeedGraphComponent implements OnInit {
     this.svg.style("display", "none");
   }
 
+
   drawGuideCurve(svg, x, y, psatService, type) {
 
     svg.selectAll("path").remove();
