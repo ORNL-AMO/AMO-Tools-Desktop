@@ -15,7 +15,9 @@ export class SystemCurveComponent implements OnInit {
   psat: PSAT;
   @Input()
   settings: Settings;
-
+  @Input()
+  inPsat: boolean;
+  
   curveConstants: any;
 
   pointOne: any;
@@ -135,7 +137,6 @@ export class SystemCurveComponent implements OnInit {
 
 
   calculateValues() {
-    console.log('calc')
     this.lossCoefficient = this.getLossCoefficient(
       this.pointOne.form.value.flowRate,
       this.pointOne.form.value.head,

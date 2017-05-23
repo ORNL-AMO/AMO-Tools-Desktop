@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
 import { PsatService } from '../../../../psat/psat.service';
 import { Settings } from '../../../../shared/models/settings';
+import { WindowRefService } from '../../../../indexedDb/window-ref.service';
 declare const d3: any;
 
 @Component({
@@ -14,7 +15,7 @@ export class MotorPerformanceGraphComponent implements OnInit {
   @Input()
   toggleCalculate: boolean;
   @Input()
-  settings:Settings;
+  settings: Settings;
 
   svg: any;
   xAxis: any;
@@ -40,13 +41,18 @@ export class MotorPerformanceGraphComponent implements OnInit {
   };
   firstChange: boolean = true;
 
-  constructor(private psatService: PsatService) { }
+  canvasWidth: number;
+  canvasHeight: number;
+  doc: any;
+  window: any;
+
+  constructor(private windowRefService: WindowRefService, private psatService: PsatService) { }
 
   ngOnInit() {
-    this.setUp();
-    if(this.checkForm()){
-      this.onChanges();
-    }
+    // this.setUp();
+    // if(this.checkForm()){
+    //   this.onChanges();
+    // }
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -59,6 +65,24 @@ export class MotorPerformanceGraphComponent implements OnInit {
     } else {
       this.firstChange = false;
     }
+  }
+
+  ngAfterViewInit() {
+    this.doc = this.windowRefService.getDoc();
+    this.window = this.windowRefService.nativeWindow;
+    this.window.onresize = () => { this.resizeGraph() };
+    this.resizeGraph();
+  }
+
+  resizeGraph() {
+    let motorGraph = this.doc.getElementById('motorPerformanceGraph');
+    this.canvasWidth = motorGraph.clientWidth;
+    this.canvasHeight = this.canvasWidth * (2 / 3);
+    this.margin = { top: 20, right: 20, bottom: 110, left: 120 };
+    this.width = this.canvasWidth - this.margin.left - this.margin.right;
+    this.height = this.canvasHeight - this.margin.top - this.margin.bottom;
+    this.setUp();
+    this.onChanges();
   }
 
   calculateEfficiency(loadFactor: number) {
@@ -151,9 +175,9 @@ export class MotorPerformanceGraphComponent implements OnInit {
     d3.select('app-motor-performance-graph').selectAll('svg').remove();
 
     //graph dimensions
-    this.margin = { top: 20, right: 120, bottom: 110, left: 120 };
-    this.width = 900 - this.margin.left - this.margin.right;
-    this.height = 600 - this.margin.top - this.margin.bottom;
+    // this.margin = { top: 20, right: 120, bottom: 110, left: 120 };
+    // this.width = 900 - this.margin.left - this.margin.right;
+    // this.height = 600 - this.margin.top - this.margin.bottom;
 
     this.x = d3.scaleLinear()
       .range([0, this.width])
@@ -180,7 +204,7 @@ export class MotorPerformanceGraphComponent implements OnInit {
     this.svg = d3.select('app-motor-performance-graph').append('svg')
       .attr("width", this.width + this.margin.left + this.margin.right)
       .attr("height", this.height + this.margin.top + this.margin.bottom)
-      .style("background-color", "#f5f3e9")
+      .style("background-color", "#fff")
       .append("g")
       .attr("transform", "translate(" + this.margin.left + "," + this.margin.top + ")");
 
@@ -249,7 +273,7 @@ export class MotorPerformanceGraphComponent implements OnInit {
     this.svg.append("text")
       .attr("text-anchor", "middle")  // this makes it easy to centre the text as the transform is applied to the anchor
       .attr("transform", "translate(" + (this.width / 2) + "," + (this.height - (-70)) + ")")  // centre below axis
-      .text("Motor Shaft Load(%)");
+      .text("Motor Shaft Load (%)");
 
     // Define the div for the tooltip
     this.detailBox = d3.select("app-motor-preformance-graph").append("div")
@@ -288,7 +312,7 @@ export class MotorPerformanceGraphComponent implements OnInit {
       .style("stroke", "#f53e3d")
       .style("display", "none");
 
-   this.powerLine = this.svg.append("path")
+    this.powerLine = this.svg.append("path")
       .attr("class", "line")
       .style("stroke-width", 10)
       .style("stroke-width", "2px")
@@ -345,7 +369,7 @@ export class MotorPerformanceGraphComponent implements OnInit {
     var data = [];
     let i = .001;
     for (i; i < 1.2; i = i + 0.01) {
-      if(this.calculateCurrent(i) >= 0 && this.calculateCurrent(i) <= this.height) {
+      if (this.calculateCurrent(i) >= 0 && this.calculateCurrent(i) <= this.height) {
         data.push({
           x: i,
           y: this.calculateCurrent(i)
@@ -368,7 +392,7 @@ export class MotorPerformanceGraphComponent implements OnInit {
     var data = [];
 
     for (var i = .001; i < 1.20; i = i + .01) {
-      if(this.calculatePowerFactor(i) >= 0 && this.calculatePowerFactor(i) <= 120) {
+      if (this.calculatePowerFactor(i) >= 0 && this.calculatePowerFactor(i) <= 120) {
         data.push({
           x: i,
           y: this.calculatePowerFactor(i)
@@ -392,7 +416,7 @@ export class MotorPerformanceGraphComponent implements OnInit {
     var data = [];
 
     for (var i = .001; i < 1.20; i = i + .01) {
-      if(this.calculateEfficiency(i) >= 0 && this.calculateEfficiency(i) <= 120) {
+      if (this.calculateEfficiency(i) >= 0 && this.calculateEfficiency(i) <= 120) {
         data.push({
           x: i,
           y: this.calculateEfficiency(i)

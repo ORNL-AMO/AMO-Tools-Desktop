@@ -14,7 +14,9 @@ export class SpecificSpeedComponent implements OnInit {
   psat: PSAT;
   @Input()
   settings: Settings;
-
+  @Input()
+  inPsat: boolean;
+  
   speedForm: any;
   specificSpeed: number;
   efficiencyCorrection: number;

@@ -1,8 +1,8 @@
 <div *ngIf="selectedTool == 'none'">
-    
+
   <div class="row">
     <div class="col-10 offset-md-1">
-      <div class="content-container calculators">
+      <div class="content-container calculator-list">
 
         <h2>Utilities Calculators</h2>
         <ul>
@@ -19,14 +19,20 @@
 </div>
 
 
-<div class="card fade show" *ngIf="selectedTool == 'convert-units'">
-  <div class="card-header">
-    <b class="h4">Convert Units</b>
-    <button class="close pull-right" aria-label="Close" (click)="hideTool()">
-          <span aria-hidden="true">&times;</span>
-        </button>
+
+<div class="calculator" *ngIf="selectedTool == 'convert-units'">
+  <div class="row">
+    <div class="col-10 offset-md-1">
+      <h2>Convert Units</h2>
+    </div>
   </div>
-  <div class="card-block">
-    <app-unit-converter></app-unit-converter>
+  <div class="row">
+    <div class="col-10 offset-md-1">
+      <div class="calculator-container">
+        <div class="card-block">
+          <app-unit-converter></app-unit-converter>
+        </div>
+      </div>
+    </div>
   </div>
 </div>

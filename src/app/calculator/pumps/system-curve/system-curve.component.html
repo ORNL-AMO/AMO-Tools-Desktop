@@ -1,8 +1,22 @@
-<div class="row calc-container" *ngIf="settings">
-  <div class="col-3 calc-form">
-    <app-system-curve-form [psat]="psat" [settings]="settings" [(pointOne)]="pointOne" [(pointTwo)]="pointTwo" [(curveConstants)]="curveConstants" (calculate)="calculateValues()" (calculateP1)="calculateP1Flow()" (calculateP2)="calculateP2Flow()"></app-system-curve-form>
+<div class="row" *ngIf="settings" [ngClass]="{'align-items-center': !inPsat}">
+  <div class="col-lg-3 col-md-5 col-sm-6 col-xs-7 calc-form">
+    <div class="card">
+      <div class="card-block">
+        <app-system-curve-form [psat]="psat" [settings]="settings" [(pointOne)]="pointOne" [(pointTwo)]="pointTwo" [(curveConstants)]="curveConstants"
+          (calculate)="calculateValues()" (calculateP1)="calculateP1Flow()" (calculateP2)="calculateP2Flow()"></app-system-curve-form>
+      </div>
+    </div>
   </div>
-  <div class="col-9 calc-graph">
-    <app-system-curve-graph [lossCoefficient]="lossCoefficient" [settings]="settings" [staticHead]="staticHead" [pointOne]="pointOne" [pointTwo]="pointTwo" [curveConstants]="curveConstants"></app-system-curve-graph>
+  <div *ngIf="!inPsat" id="systemCurveGraph" class="col-lg-9 col-md-7 col-sm-6 col-xs-5 calc-graph">
+    <app-system-curve-graph [lossCoefficient]="lossCoefficient" [settings]="settings" [staticHead]="staticHead" [pointOne]="pointOne"
+      [pointTwo]="pointTwo" [curveConstants]="curveConstants"></app-system-curve-graph>
+  </div>
+  <div *ngIf="inPsat" class="col-lg-9 col-md-7 col-sm-6 col-xs-5 calc-graph">
+    <div class="row justify-content-center align-items-center">
+      <div id="systemCurveGraph" class="col-lg-10 col-md-11 col-sm-12">
+        <app-system-curve-graph [lossCoefficient]="lossCoefficient" [settings]="settings" [staticHead]="staticHead" [pointOne]="pointOne"
+          [pointTwo]="pointTwo" [curveConstants]="curveConstants"></app-system-curve-graph>
+      </div>
+    </div>
   </div>
 </div>

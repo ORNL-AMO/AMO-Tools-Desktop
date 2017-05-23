@@ -1,11 +1,26 @@
-<div class="row calc-container" *ngIf="settings">
+<div class="row" *ngIf="settings" [ngClass]="{'align-items-center': !inPsat}">
   <div class="col-3 calc-form">
-    <app-nema-energy-efficiency-form [(nemaForm)]="nemaForm" [settings]="settings"></app-nema-energy-efficiency-form>
+    <div class="card">
+      <div class="card-block">
+        <app-nema-energy-efficiency-form [(nemaForm)]="nemaForm" [settings]="settings"></app-nema-energy-efficiency-form>
+      </div>
+    </div>
   </div>
-  <div class="col-9 calc-graph">
-    <div class="row justify-content-center">
-      <div class="col-6">
+  <div *ngIf="!inPsat" class="col-lg-6 col-md-7 col-sm-8 col-xs-9 calc-graph">
+    <div class="card">
+      <div class="card-block">
         <app-nema-energy-efficiency-graph [settings]="settings" [(nemaForm)]="nemaForm"></app-nema-energy-efficiency-graph>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="inPsat" class="col-9 calc-graph">
+    <div class="row justify-content-center align-items-center">
+      <div class="col-lg-6 col-md-7 col-sm-8">
+        <div class="card">
+          <div class="card-block">
+            <app-nema-energy-efficiency-graph [settings]="settings" [(nemaForm)]="nemaForm"></app-nema-energy-efficiency-graph>
+          </div>
+        </div>
       </div>
     </div>
   </div>

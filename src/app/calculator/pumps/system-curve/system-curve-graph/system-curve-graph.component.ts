@@ -1,9 +1,11 @@
 import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
 import { Settings } from '../../../../shared/models/settings';
+import { WindowRefService } from '../../../../indexedDb/window-ref.service';
 import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
-
 declare const d3: any;
 
+import { PsatService } from '../../../../psat/psat.service';
+ 
 @Component({
   selector: 'app-system-curve-graph',
   templateUrl: './system-curve-graph.component.html',
@@ -37,15 +39,25 @@ export class SystemCurveGraphComponent implements OnInit {
   pointer: any;
   focus: any;
 
-  isFirstChange: boolean = true;
-  constructor(private convertUnitsService: ConvertUnitsService) { }
+  canvasWidth: number;
+  canvasHeight: number;
+  doc: any;
+  window: any;
+  fontSize: string;
+
+  isFirstChange: boolean = true
+  constructor(private windowRefService: WindowRefService, private convertUnitsService: ConvertUnitsService, private psatService: PsatService) { }
 
   ngOnInit() {
-    this.setUp();
-    if (this.pointTwo.form.value.head != '') {
-      this.onChanges();
-    }
   }
+
+  ngAfterViewInit() {
+    this.doc = this.windowRefService.getDoc();
+    this.window = this.windowRefService.nativeWindow;
+    this.window.onresize = () => { this.resizeGraph() };
+    this.resizeGraph();
+  }
+
 
   ngOnChanges(changes: SimpleChanges) {
     if (!this.isFirstChange && (changes.lossCoefficient || changes.staticHead)) {
@@ -55,17 +67,38 @@ export class SystemCurveGraphComponent implements OnInit {
     }
   }
 
+  resizeGraph() {
+    let curveGraph = this.doc.getElementById('systemCurveGraph');
+
+    this.canvasWidth = curveGraph.clientWidth;
+    this.canvasHeight = this.canvasWidth * (2 / 3);
+
+    if(this.canvasWidth < 400){
+      this.fontSize = '8px';
+      this.margin = { top: 10, right: 10, bottom: 75, left: 80 };
+    }else{
+      this.fontSize = '12px';
+      this.margin = { top: 20, right: 20, bottom: 110, left: 120 };
+    }
+    this.width = this.canvasWidth - this.margin.left - this.margin.right;
+    this.height = this.canvasHeight - this.margin.top - this.margin.bottom;
+    this.setUp();
+    this.onChanges();
+  }
+
   setUp() {
 
     //Remove  all previous graphs
     d3.select('app-system-curve-graph').selectAll('svg').remove();
-
+    // if (this.detailBox) {
+    //   this.detailBox.remove();
+    // }
     var curvePoints = [];
 
     //graph dimensions
-    this.margin = { top: 20, right: 120, bottom: 110, left: 120 };
-    this.width = 900 - this.margin.left - this.margin.right;
-    this.height = 600 - this.margin.top - this.margin.bottom;
+    // this.margin = { top: 20, right: 20, bottom: 110, left: 120 };
+    // this.width = winWidth - this.margin.left - this.margin.right;
+    // this.height = winHeight - this.margin.top - this.margin.bottom;
 
     var x = d3.scaleLinear()
       .range([0, this.width])
@@ -151,14 +184,14 @@ export class SystemCurveGraphComponent implements OnInit {
       .style("text-anchor", "end")
       .style("font-size", "13px")
       .attr("transform", "rotate(-65) translate(-15, 0)")
-      .attr("dy", "12px");
+      .attr("dy", this.fontSize);
 
     this.yAxis = this.svg.append('g')
       .attr("class", "y axis")
       .call(this.yAxis)
       .style("stroke-width", "0")
       .selectAll('text')
-      .style("font-size", "13px");
+      .style("font-size", this.fontSize);
 
     this.svg.append("text")
       .attr("text-anchor", "middle")  // this makes it easy to centre the text as the transform is applied to the anchor
@@ -175,28 +208,28 @@ export class SystemCurveGraphComponent implements OnInit {
       .attr("x", 20)
       .attr("y", "20")
       .text("Calculated Static Head ")
-      .style("font-size", "13px")
+      .style("font-size", this.fontSize)
       .style("font-weight", "bold");
 
     this.svg.append("text")
       .attr("x", 20)
       .attr("y", "50")
       .text("Calculated K (loss of coefficient)")
-      .style("font-size", "13px")
+      .style("font-size", this.fontSize)
       .style("font-weight", "bold");
 
     this.staticHeadText = this.svg.append("text")
       .attr("x", 240)
       .attr("y", "20")
       .text(this.staticHead)
-      .style("font-size", "13px")
+      .style("font-size", this.fontSize)
       .style("font-weight", "bold");
 
     this.lossCoefficientText = this.svg.append("text")
       .attr("x", 240)
       .attr("y", "50")
       .text(this.lossCoefficient)
-      .style("font-size", "13px")
+      .style("font-size", this.fontSize)
       .style("font-weight", "bold");
 
     // Define the div for the tooltip
@@ -238,14 +271,14 @@ export class SystemCurveGraphComponent implements OnInit {
       .attr("x", 240)
       .attr("y", "20")
       .text(this.staticHead)
-      .style("font-size", "13px")
+      .style("font-size", this.fontSize)
       .style("font-weight", "bold");
 
     this.lossCoefficientText
       .attr("x", 240)
       .attr("y", "50")
       .text(this.lossCoefficient)
-      .style("font-size", "13px")
+      .style("font-size", this.fontSize)
       .style("font-weight", "bold");
 
 
@@ -366,16 +399,16 @@ export class SystemCurveGraphComponent implements OnInit {
       .style("stroke-width", "0")
       .selectAll('text')
       .style("text-anchor", "end")
-      .style("font-size", "12px")
+      .style("font-size", this.fontSize)
       .attr("transform", "rotate(-65) translate(-15, 0)")
-      .attr("dy", "12px");
+      .attr("dy", this.fontSize);
 
     this.yAxis = this.svg.append('g')
       .attr("class", "y axis")
       .call(this.yAxis)
       .style("stroke-width", "0")
       .selectAll('text')
-      .style("font-size", "12px");
+      .style("font-size", this.fontSize);
 
     this.makeCurve(x, y, data, bisectDate, format);
   }

@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
 import { PsatService } from '../../../../psat/psat.service';
+import { WindowRefService } from '../../../../indexedDb/window-ref.service';
 
 declare const d3: any;
 
@@ -30,20 +31,32 @@ export class SpecificSpeedGraphComponent implements OnInit {
   focus: any;
   firstChange: boolean = true;
 
+  canvasWidth: number;
+  canvasHeight: number;
+  doc: any;
+  window: any;
+
   @Input()
   toggleCalculate: boolean;
   // specificSpeed: number = 0;
   // efficiencyCorrection: number = 0;
-  constructor(private psatService: PsatService) { }
+  constructor(private psatService: PsatService, private windowRefService: WindowRefService) { }
 
   ngOnInit() {
-
-    if (this.checkForm()) {
-      this.setUp();
-      this.drawPoint();
-      this.svg.style("display", null);
-    }
+    // if (this.checkForm()) {
+    //   this.setUp();
+    //   this.drawPoint();
+    //   this.svg.style("display", null);
+    // }
   }
+
+  ngAfterViewInit() {
+    this.doc = this.windowRefService.getDoc();
+    this.window = this.windowRefService.nativeWindow;
+    this.window.onresize = () => { this.resizeGraph() };
+    this.resizeGraph();
+  }
+
 
   ngOnChanges(changes: SimpleChanges) {
     if (!this.firstChange) {
@@ -59,6 +72,20 @@ export class SpecificSpeedGraphComponent implements OnInit {
     }
   }
 
+
+  resizeGraph() {
+    let curveGraph = this.doc.getElementById('specificSpeedGraph');
+    this.canvasWidth = curveGraph.clientWidth;
+    this.canvasHeight = this.canvasWidth * (2 / 3);
+    this.margin = { top: 20, right: 20, bottom: 110, left: 120 };
+    this.width = this.canvasWidth - this.margin.left - this.margin.right;
+    this.height = this.canvasHeight - this.margin.top - this.margin.bottom;
+    if (this.checkForm()) {
+      this.setUp();
+      this.drawPoint();
+      this.svg.style("display", null);
+    }
+  }
 
   getEfficiencyCorrection() {
     if (this.checkForm()) {
@@ -98,9 +125,9 @@ export class SpecificSpeedGraphComponent implements OnInit {
     var curvePoints = [];
 
     //graph dimensions
-    this.margin = { top: 20, right: 120, bottom: 110, left: 120 };
-    this.width = 900 - this.margin.left - this.margin.right;
-    this.height = 600 - this.margin.top - this.margin.bottom;
+    // this.margin = { top: 20, right: 120, bottom: 110, left: 120 };
+    // this.width = 900 - this.margin.left - this.margin.right;
+    // this.height = 600 - this.margin.top - this.margin.bottom;
 
     this.x = d3.scaleLog()
       .range([0, this.width])
@@ -123,7 +150,7 @@ export class SpecificSpeedGraphComponent implements OnInit {
     this.svg = d3.select('app-specific-speed-graph').append('svg')
       .attr("width", this.width + this.margin.left + this.margin.right)
       .attr("height", this.height + this.margin.top + this.margin.bottom)
-      .style("background-color", "#f5f3e9")
+      .style("background-color", "#fff")
       .append("g")
       .attr("transform", "translate(" + this.margin.left + "," + this.margin.top + ")");
 

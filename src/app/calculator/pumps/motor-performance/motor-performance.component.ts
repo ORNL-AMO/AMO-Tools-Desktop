@@ -14,7 +14,9 @@ export class MotorPerformanceComponent implements OnInit {
   psat: PSAT;
   @Input()
   settings: Settings;
-
+  @Input()
+  inPsat: boolean;
+  
   performanceForm: any;
 
   toggleCalculate: boolean = false;

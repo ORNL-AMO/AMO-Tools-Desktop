@@ -15,6 +15,8 @@ export class NemaEnergyEfficiencyComponent implements OnInit {
   psat: PSAT;
   @Input()
   settings: Settings;
+  @Input()
+  inPsat: boolean;
   
   nemaForm: any;
 
