@@ -5,7 +5,7 @@ import { ConvertUnitsService } from '../../../../shared/convert-units/convert-un
 declare const d3: any;
 
 import { PsatService } from '../../../../psat/psat.service';
- 
+
 @Component({
   selector: 'app-system-curve-graph',
   templateUrl: './system-curve-graph.component.html',
@@ -73,10 +73,10 @@ export class SystemCurveGraphComponent implements OnInit {
     this.canvasWidth = curveGraph.clientWidth;
     this.canvasHeight = this.canvasWidth * (2 / 3);
 
-    if(this.canvasWidth < 400){
+    if (this.canvasWidth < 400) {
       this.fontSize = '8px';
       this.margin = { top: 10, right: 10, bottom: 75, left: 80 };
-    }else{
+    } else {
       this.fontSize = '12px';
       this.margin = { top: 20, right: 20, bottom: 110, left: 120 };
     }
@@ -90,9 +90,7 @@ export class SystemCurveGraphComponent implements OnInit {
 
     //Remove  all previous graphs
     d3.select('app-system-curve-graph').selectAll('svg').remove();
-    // if (this.detailBox) {
-    //   this.detailBox.remove();
-    // }
+    let tmpBox = d3.select("#detailBox").remove();
     var curvePoints = [];
 
     //graph dimensions
@@ -321,15 +319,6 @@ export class SystemCurveGraphComponent implements OnInit {
       .attr("fill", "#ffffff")
       .style("filter", "url(#drop-shadow)")
       .on("mouseover", () => { this.focus.style("display", null); })
-      .on("mouseout", () => {
-        this.detailBox.on("mouseout", () => {
-          this.focus.style("display", "none");
-          this.detailBox.transition()
-            .style("opacity", 0);
-          this.pointer.transition()
-            .style("opacity", 0);
-        })
-      })
       .on("mousemove", () => {
         var x0 = x.invert(d3.mouse(d3.event.currentTarget)[0]),
           i = bisectDate(data, x0, 1),
@@ -358,9 +347,13 @@ export class SystemCurveGraphComponent implements OnInit {
           .style("padding-right", "10px")
           .style("padding-bottom", "10px")
           .style("padding-left", "10px")
-          .html("<strong style='font-size: 15px;'>" + format(d.x) + "</strong>" +
-          "<p><strong><div style='float: left;'>Head, " + this.settings.distanceMeasurement + "</div>           <div style='float: right;'>" + format(d.y) + "</div><br>" +
-          "<div style='float: left;'>Fluid Power, " + this.settings.powerMeasurement + "</div>     <div style='float: right;'>" + format(d.fluidPower) + "</div></strong></p>")
+          .html(
+          "<p><strong><div style='float:left;'>Flow Rate: </div><div style='float:right;'>" + format(d.x) + " " + this.settings.flowMeasurement + "</div><br>" +
+
+          "<div style='float:left;'>Head: </div><div style='float: right;'>" + format(d.y) + " " + this.settings.distanceMeasurement + "</div><br>" +
+
+          "<div style='float:left;'>Fluid Power: </div><div style='float: right;'>" + format(d.fluidPower) + " " + this.settings.powerMeasurement + "</div></strong></p>")
+
           .style("left", (this.margin.left + x(d.x) - (detailBoxWidth / 2 - 15)) + "px")
           .style("top", (this.margin.top + y(d.y) + 25) + "px")
           .style("position", "absolute")
