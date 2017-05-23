@@ -2,6 +2,7 @@ import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
 import { PsatService } from '../../../../psat/psat.service';
 import { Settings } from '../../../../shared/models/settings';
 import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
+import * as _ from 'lodash';
 
 import { WindowRefService } from '../../../../indexedDb/window-ref.service';
 declare const d3: any;
@@ -48,6 +49,9 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
   doc: any;
   window: any;
   fontSize: string;
+
+  avgData: any;
+  maxData: any;
   constructor(private psatService: PsatService, private convertUnitsService: ConvertUnitsService, private windowRefService: WindowRefService) { }
 
   ngOnInit() {
@@ -62,6 +66,7 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
     if (!this.firstChange) {
       if (changes.toggleCalculate) {
         if (this.checkForm()) {
+          this.setUp();
           this.onChanges();
         }
       }
@@ -144,13 +149,19 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
     // this.width = 900 - this.margin.left - this.margin.right;
     // this.height = 600 - this.margin.top - this.margin.bottom;
 
+    this.avgData = this.getAvgData();
+    this.maxData = this.getMaxData();
+    let tmpMax: any = _.maxBy(_.union(this.avgData, this.maxData), (val : {x: number, y: number})=> {return val.y;});
+    let tmpMin: any = _.minBy(_.union(this.avgData, this.maxData), (val : {x: number, y: number})=> {return val.y;});   
+    let max = tmpMax.y;
+    let min = tmpMin.y;
     this.x = d3.scaleLinear()
       .range([0, this.width])
-      .domain([0, 5000]);
+      .domain([100, 5000]);
 
     this.y = d3.scaleLinear()
       .range([this.height, 0])
-      .domain([0, 100]);
+      .domain([(min-10), (max + 10)]);
 
     this.xAxis = d3.axisBottom()
       .scale(this.x)
@@ -314,10 +325,9 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
     this.updateValues();
   }
 
-  drawAverageLine() {
-    var data = [];
-
-    for (var i = 2; i < 5000; i = i + 10) {
+  getAvgData() {
+    let data = new Array();
+    for (var i = 100; i < 5000; i = i + 10) {
       if (this.calculateYaverage(i) <= 100) {
         data.push({
           x: i,
@@ -325,6 +335,24 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
         })
       }
     }
+    return data;
+  }
+
+  getMaxData() {
+    let data = new Array();
+    for (var i = 100; i < 5000; i = i + 10) {
+      if (this.calculateYmax(i) <= 100) {
+        data.push({
+          x: i,
+          y: this.calculateYmax(i)
+        })
+      }
+    }
+    return data;
+  }
+
+  drawAverageLine() {
+    var data = this.avgData;
 
     var currentLine = d3.line()
       .x((d) => { return this.x(d.x); })
@@ -338,16 +366,7 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
   }
 
   drawMaxLine() {
-    var data = [];
-
-    for (var i = 2; i < 5000; i = i + 10) {
-      if (this.calculateYmax(i) <= 100) {
-        data.push({
-          x: i,
-          y: this.calculateYmax(i)
-        })
-      }
-    }
+    var data = this.maxData;
 
     var currentLine = d3.line()
       .x((d) => { return this.x(d.x); })

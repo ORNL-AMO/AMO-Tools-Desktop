@@ -285,6 +285,7 @@ export class SpecificSpeedGraphComponent implements OnInit {
     this.svg.style("display", "none");
   }
 
+
   drawGuideCurve(svg, x, y, psatService, type) {
 
     svg.selectAll("path").remove();
@@ -292,7 +293,7 @@ export class SpecificSpeedGraphComponent implements OnInit {
     var data = [];
     for (var i = 100; i < 100000; i = i + 100) {
       var efficiencyCorrection = psatService.achievableEfficiency(type, i);
-      if (efficiencyCorrection <= 6) {
+      if (efficiencyCorrection <= 5.5) {
         data.push({
           x: i,
           y: efficiencyCorrection
@@ -319,7 +320,7 @@ export class SpecificSpeedGraphComponent implements OnInit {
   }
 
   drawPoint() {
-    var specificSpeed = this.getSpecificSpeed();
+    var specificSpeed = this.psatService.roundVal(this.getSpecificSpeed(),3);
     var efficiencyCorrection = this.psatService.achievableEfficiency(this.speedForm.value.pumpType, specificSpeed);
 
     this.focus
@@ -339,7 +340,7 @@ export class SpecificSpeedGraphComponent implements OnInit {
       });
 
     this.specificSpeedText.text(specificSpeed);
-    this.efficiencyCorrectionText.text(efficiencyCorrection);
+    this.efficiencyCorrectionText.text(efficiencyCorrection + ' %');
 
   }
 
