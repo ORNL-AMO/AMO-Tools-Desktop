@@ -79,24 +79,24 @@
     <app-modify-conditions [settings]="settings" [saveClicked]="saveClicked" [(psat)]="_psat" (saved)="save()"></app-modify-conditions>
   </div>
 
-  <div class="tab-content" *ngIf="currentTab == 'system-curve'">
-    <app-system-curve [psat]="_psat"></app-system-curve>
+  <div class="tab-content calculator" *ngIf="currentTab == 'system-curve'">
+    <app-system-curve [inPsat]="true" [psat]="_psat" [settings]="settings"></app-system-curve>
   </div>
 
   <div class="tab-content" *ngIf="currentTab == 'achievable-efficiency'">
-    <app-achievable-efficiency [settings]="settings" [psat]="_psat"></app-achievable-efficiency>
+    <app-achievable-efficiency [inPsat]="true" [settings]="settings" [psat]="_psat"></app-achievable-efficiency>
   </div>
 
   <div class="tab-content" *ngIf="currentTab == 'motor-performance'">
-    <app-motor-performance [psat]="_psat" [settings]="settings"></app-motor-performance>
+    <app-motor-performance [inPsat]="true" [psat]="_psat" [settings]="settings"></app-motor-performance>
   </div>
 
-  <div class="tab-content" style="max-height: 75vh;" *ngIf="currentTab == 'nema-energy-efficiency'">
-    <app-nema-energy-efficiency [psat]="_psat" [settings]="settings"></app-nema-energy-efficiency>
+  <div class="tab-content" *ngIf="currentTab == 'nema-energy-efficiency'">
+    <app-nema-energy-efficiency [inPsat]="true" [psat]="_psat" [settings]="settings"></app-nema-energy-efficiency>
   </div>
 
   <div class="tab-content" *ngIf="currentTab == 'specific-speed'">
-    <app-specific-speed [psat]="_psat"></app-specific-speed>
+    <app-specific-speed [settings]="settings" [inPsat]="true" [psat]="_psat"></app-specific-speed>
   </div>
 
   <div id="psatFooter" class="footer">

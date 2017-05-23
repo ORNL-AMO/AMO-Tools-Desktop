@@ -15,7 +15,9 @@ export class SystemCurveComponent implements OnInit {
   psat: PSAT;
   @Input()
   settings: Settings;
-
+  @Input()
+  inPsat: boolean;
+  
   curveConstants: any;
 
   pointOne: any;

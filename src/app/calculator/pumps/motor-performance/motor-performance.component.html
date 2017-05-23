@@ -1,4 +1,4 @@
-<div class="row" *ngIf="settings">
+<div class="row" *ngIf="settings" [ngClass]="{'align-items-center': !inPsat}">
   <div class="col-3 calc-form">
     <div class="card">
       <div class="card-block">
@@ -6,7 +6,14 @@
       </div>
     </div>
   </div>
-  <div id="motorPerformanceGraph" class="col-9 calc-graph">
+  <div *ngIf="!inPsat" id="motorPerformanceGraph" class="col-lg-9 col-md-7 col-sm-6 col-xs-5 calc-graph">
     <app-motor-performance-graph [performanceForm]="performanceForm" [settings]="settings" [toggleCalculate]="toggleCalculate"></app-motor-performance-graph>
+  </div>
+  <div *ngIf="inPsat" class="col-lg-9 col-md-7 col-sm-6 col-xs-5 calc-graph">
+    <div class="row justify-content-center align-items-center">
+      <div id="motorPerformanceGraph" class="col-lg-10 col-md-11 col-sm-12">
+        <app-motor-performance-graph [performanceForm]="performanceForm" [settings]="settings" [toggleCalculate]="toggleCalculate"></app-motor-performance-graph>
+      </div>
+    </div>
   </div>
 </div>

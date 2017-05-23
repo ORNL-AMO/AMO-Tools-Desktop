@@ -47,6 +47,7 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
   canvasHeight: number;
   doc: any;
   window: any;
+  fontSize: string;
   constructor(private psatService: PsatService, private convertUnitsService: ConvertUnitsService, private windowRefService: WindowRefService) { }
 
   ngOnInit() {
@@ -81,7 +82,14 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
 
     this.canvasWidth = curveGraph.clientWidth;
     this.canvasHeight = this.canvasWidth * (2 / 3);
-    this.margin = { top: 20, right: 20, bottom: 110, left: 120 };
+
+    if (this.canvasWidth < 400) {
+      this.fontSize = '8px';
+      this.margin = { top: 10, right: 10, bottom: 70, left: 75 };
+    } else {
+      this.fontSize = '11px';
+      this.margin = { top: 20, right: 20, bottom: 110, left: 120 };
+    }
     this.width = this.canvasWidth - this.margin.left - this.margin.right;
     this.height = this.canvasHeight - this.margin.top - this.margin.bottom;
     this.setUp();
@@ -218,16 +226,16 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
       .style("stroke-width", "0")
       .selectAll('text')
       .style("text-anchor", "end")
-      .style("font-size", "13px")
+      .style("font-size", this.fontSize)
       .attr("transform", "rotate(-65) translate(-15, 0)")
-      .attr("dy", "12px");
+      .attr("dy", this.fontSize);
 
     this.yAxis = this.svg.append('g')
       .attr("class", "y axis")
       .call(this.yAxis)
       .style("stroke-width", "0")
       .selectAll('text')
-      .style("font-size", "13px");
+      .style("font-size", this.fontSize);
 
     this.svg.append("text")
       .attr("text-anchor", "middle")  // this makes it easy to centre the text as the transform is applied to the anchor
@@ -271,7 +279,7 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
       .attr("x", 20)
       .attr("y", "20")
       .text("Achievable Efficiency (max): ")
-      .style("font-size", "13px")
+      .style("font-size", this.fontSize)
       .style("font-weight", "bold")
       .style("fill", "#f53e3d");
 
@@ -279,20 +287,20 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
       .attr("x", 20)
       .attr("y", "50")
       .text("Achievable Efficiency (average): ")
-      .style("font-size", "13px")
+      .style("font-size", this.fontSize)
       .style("font-weight", "bold")
       .style("fill", "#fecb00");
 
     this.maxValue = this.svg.append("text")
       .attr("x", 250)
       .attr("y", "20")
-      .style("font-size", "13px")
+      .style("font-size", this.fontSize)
       .style("font-weight", "bold");
 
     this.averageValue = this.svg.append("text")
       .attr("x", 250)
       .attr("y", "50")
-      .style("font-size", "13px")
+      .style("font-size", this.fontSize)
       .style("font-weight", "bold");
 
     this.svg.style("display", "none");
@@ -357,10 +365,10 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
     var format = d3.format(".3n");
 
     this.maxValue
-      .text(format(this.calculateYmax(this.efficiencyForm.value.flowRate)));
+      .text(format(this.calculateYmax(this.efficiencyForm.value.flowRate)) + ' %');
 
     this.averageValue
-      .text(format(this.calculateYaverage(this.efficiencyForm.value.flowRate)));
+      .text(format(this.calculateYaverage(this.efficiencyForm.value.flowRate)) + ' %');
   }
 
 }
