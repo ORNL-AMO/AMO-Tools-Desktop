@@ -22,6 +22,7 @@ import { AssessmentItemComponent } from '../sidebar/assessment-item/assessment-i
 import { DirectoryItemComponent } from '../sidebar/directory-item/directory-item.component';
 import { SettingsModule } from '../settings/settings.module';
 import { IndexedDbModule } from '../indexedDb/indexedDb.module';
+import { SuiteDbModule } from '../suiteDb/suiteDb.module';
 
 import { LandingScreenComponent } from '../landing-screen/landing-screen.component';
 import { AboutPageComponent } from '../about-page/about-page.component';
@@ -52,8 +53,8 @@ import { TutorialsComponent } from '../tutorials/tutorials.component';
     FormsModule,
     ReactiveFormsModule,
     SettingsModule,
-    ToastyModule
-
+    ToastyModule,
+    SuiteDbModule
   ],
   providers: [
     AssessmentService

@@ -9,6 +9,7 @@ import { Settings } from '../shared/models/settings';
 import { AssessmentService } from '../assessment/assessment.service';
 
 import { ToastyService, ToastyConfig, ToastOptions, ToastData } from 'ng2-toasty';
+import { SuiteDbService } from '../suiteDb/suite-db.service'; 
 
 @Component({
   selector: 'app-dashboard',
@@ -34,13 +35,19 @@ export class DashboardComponent implements OnInit {
   reportAssessments: Array<any>;
   selectedAssessments: Array<any>;
   constructor(private indexedDbService: IndexedDbService, private formBuilder: FormBuilder, private assessmentService: AssessmentService, private toastyService: ToastyService,
-    private toastyConfig: ToastyConfig) {
+    private toastyConfig: ToastyConfig, private suitDbService: SuiteDbService) {
     this.toastyConfig.theme = 'bootstrap';
     this.toastyConfig.position = 'bottom-right';
     this.toastyConfig.limit = 1;
   }
 
   ngOnInit() {
+    let startup = this.suitDbService.startup();
+    console.log('startup');
+    console.log(startup);
+    let test = this.suitDbService.selectFlueGasMaterialGas()
+    console.log('select flue gas material gas')
+    console.log(test);
     this.selectedAssessments = new Array();
     this.showLandingScreen = this.assessmentService.getLandingScreen();
     //open DB and get directories
