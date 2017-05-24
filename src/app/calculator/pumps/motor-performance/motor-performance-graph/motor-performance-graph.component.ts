@@ -33,6 +33,12 @@ export class MotorPerformanceGraphComponent implements OnInit {
   detailBox: any;
   pointer: any;
   focus: any;
+  focusCurrent: any;
+  focusPowerFactor: any;
+  focusEfficiency: any;
+  powerFactorData: any;
+  efficiencyData: any;
+  currentData: any;
 
   motorPerformanceResults: any = {
     efficiency: 0,
@@ -173,11 +179,10 @@ export class MotorPerformanceGraphComponent implements OnInit {
 
     //Remove  all previous graphs
     d3.select('app-motor-performance-graph').selectAll('svg').remove();
+    d3.select('focusCurrent').remove();
+    d3.select('focusEfficiency').remove();
+    d3.select('focusPowerFactor').remove();
 
-    //graph dimensions
-    // this.margin = { top: 20, right: 120, bottom: 110, left: 120 };
-    // this.width = 900 - this.margin.left - this.margin.right;
-    // this.height = 600 - this.margin.top - this.margin.bottom;
 
     this.x = d3.scaleLinear()
       .range([0, this.width])
@@ -290,17 +295,48 @@ export class MotorPerformanceGraphComponent implements OnInit {
       .attr("points", "0,0, 0," + (detailBoxHeight - 2) + "," + detailBoxWidth + "," + (detailBoxHeight - 2) + "," + detailBoxWidth + ", 0," + ((detailBoxWidth / 2) + 12) + ",0," + (detailBoxWidth / 2) + ", -12, " + ((detailBoxWidth / 2) - 12) + ",0")
       .style("opacity", 0);
 
-    this.focus = this.svg.append("g")
+    this.focusCurrent = this.svg.append("g")
+      .attr('id', 'focusCurrent')
       .attr("class", "focus")
       .style("display", "none");
 
-    this.focus.append("circle")
+    this.focusCurrent.append("circle")
       .attr("r", 10)
       .style("fill", "none")
-      .style("stroke", "#007536")
+      .style("stroke", "#f53e3d")
       .style("stroke-width", "3px");
 
-    this.focus.append("text")
+    this.focusCurrent.append("text")
+      .attr("x", 9)
+      .attr("dy", ".35em");
+
+    this.focusPowerFactor = this.svg.append("g")
+      .attr('id', 'focusPowerFactor')
+      .attr("class", "focus")
+      .style("display", "none");
+
+    this.focusPowerFactor.append("circle")
+      .attr("r", 10)
+      .style("fill", "none")
+      .style("stroke", "#6175f5")
+      .style("stroke-width", "3px");
+
+    this.focusPowerFactor.append("text")
+      .attr("x", 9)
+      .attr("dy", ".35em");
+
+    this.focusEfficiency = this.svg.append("g")
+      .attr('id', 'focusEfficiency')
+      .attr("class", "focus")
+      .style("display", "none");
+
+    this.focusEfficiency.append("circle")
+      .attr("r", 10)
+      .style("fill", "none")
+      .style("stroke", "#fecb00")
+      .style("stroke-width", "3px");
+
+    this.focusEfficiency.append("text")
       .attr("x", 9)
       .attr("dy", ".35em");
 
@@ -328,78 +364,77 @@ export class MotorPerformanceGraphComponent implements OnInit {
       .style("stroke", "#fecb00")
       .style("display", "none");
 
-    this.svg.append("text")
-      .attr("x", 20)
-      .attr("y", "20")
-      .text("Current (%FLC)")
-      .style("font-size", "13px")
-      .style("font-weight", "bold")
-      .style("fill", "#f53e3d");
-
-    this.svg.append("text")
-      .attr("x", 20)
-      .attr("y", "50")
-      .text("Power Factor (%)")
-      .style("font-size", "13px")
-      .style("font-weight", "bold")
-      .style("fill", "#6175f5");
-
-    this.svg.append("text")
-      .attr("x", 20)
-      .attr("y", "80")
-      .text("Efficiency (%)")
-      .style("font-size", "13px")
-      .style("font-weight", "bold")
-      .style("fill", "#fecb00");
-
     this.svg.style("display", "none");
 
   }
 
   onChanges() {
     this.svg.style("display", null);
-    this.drawCurrentLine(this.x, this.y);
-    this.drawPowerFactorLine(this.x, this.y);
-    this.drawEfficiencyLine(this.x, this.y);
-
+    this.currentData = this.getCurrentData();
+    this.powerFactorData = this.getPowerFactorData();
+    this.efficiencyData = this.getEfficiencyData();
+    this.drawCurrentLine(this.x, this.y, this.currentData);
+    this.drawPowerFactorLine(this.x, this.y, this.powerFactorData);
+    this.drawEfficiencyLine(this.x, this.y, this.efficiencyData);
+    this.initFocusCircles(this.powerFactorData, this.efficiencyData, this.currentData, this.x, this.y);
   }
 
-  drawCurrentLine(x, y) {
-
+  getCurrentData() {
     var data = [];
     let i = .001;
     for (i; i < 1.2; i = i + 0.01) {
-      if (this.calculateCurrent(i) >= 0 && this.calculateCurrent(i) <= this.height) {
+      let current = this.calculateCurrent(i);
+      if (current >= 0 && current <= this.height) {
         data.push({
           x: i,
-          y: this.calculateCurrent(i)
+          y: this.psatService.roundVal(current, 3)
         })
       }
     }
-    var currentLine = d3.line()
+    return data;
+  }
+
+  getEfficiencyData() {
+    var data = [];
+    for (var i = .001; i < 1.20; i = i + .01) {
+      let efficiency = this.calculateEfficiency(i)
+      if (efficiency >= 0 && efficiency <= 120) {
+        data.push({
+          x: i,
+          y: this.psatService.roundVal(efficiency, 3)
+        })
+      }
+    }
+    return data;
+  }
+
+  getPowerFactorData() {
+    var data = [];
+    for (var i = .001; i < 1.20; i = i + .01) {
+      let powerFactor = this.calculatePowerFactor(i);
+      if (powerFactor >= 0 && powerFactor <= 120) {
+        data.push({
+          x: i,
+          y: this.psatService.roundVal(powerFactor, 3)
+        })
+      }
+    }
+    return data;
+  }
+
+  drawCurrentLine(x, y, data) {
+    var currentLi = d3.line()
       .x(function (d) { return x(d.x); })
       .y(function (d) { return y(d.y); })
       .curve(d3.curveNatural);
 
     this.currentLine
       .data([data])
-      .attr("d", currentLine)
+      .attr("d", currentLi)
       .style("display", null);
   }
 
-  drawPowerFactorLine(x, y) {
-
-    var data = [];
-
-    for (var i = .001; i < 1.20; i = i + .01) {
-      if (this.calculatePowerFactor(i) >= 0 && this.calculatePowerFactor(i) <= 120) {
-        data.push({
-          x: i,
-          y: this.calculatePowerFactor(i)
-        })
-      }
-    }
-
+  drawPowerFactorLine(x, y, data) {
     var powerFactorLine = d3.line()
       .x(function (d) { return x(d.x); })
       .y(function (d) { return y(d.y); })
@@ -411,28 +446,106 @@ export class MotorPerformanceGraphComponent implements OnInit {
       .style("display", null);
   }
 
-  drawEfficiencyLine(x, y) {
-
-    var data = [];
-
-    for (var i = .001; i < 1.20; i = i + .01) {
-      if (this.calculateEfficiency(i) >= 0 && this.calculateEfficiency(i) <= 120) {
-        data.push({
-          x: i,
-          y: this.calculateEfficiency(i)
-        })
-      }
-    }
-
-    var powerFactorLine = d3.line()
+  drawEfficiencyLine(x, y, data) {
+    var efficiencyLi = d3.line()
       .x(function (d) { return x(d.x); })
       .y(function (d) { return y(d.y); })
       .curve(d3.curveNatural);
 
     this.efficiencyLine
       .data([data])
-      .attr("d", powerFactorLine)
+      .attr("d", efficiencyLi)
       .style("display", null);
+  }
+
+  initFocusCircles(powerFactorData, efficiencyData, currentData, x, y) {
+    var format = d3.format(",.2f");
+    var bisectDate = d3.bisector(function (d) { return d.x; }).left;
+    this.svg.select('#graph')
+      .attr("width", this.width)
+      .attr("height", this.height)
+      .attr("class", "overlay")
+      .attr("fill", "#ffffff")
+      .style("filter", "url(#drop-shadow)")
+      .on("mouseover", () => {
+        this.focusCurrent.style("display", null);
+        this.focusEfficiency.style("display", null);
+        this.focusPowerFactor.style("display", null);
+      })
+      .on("mousemove", () => {
+        //current
+        let currentX0 = x.invert(d3.mouse(d3.event.currentTarget)[0]);
+        let currentI = bisectDate(currentData, currentX0, 1);
+        if (currentI >= currentData.length) {
+          currentI = currentData.length - 1
+        }
+        let currentD0 = currentData[currentI - 1];
+        let currentD1 = currentData[currentI];
+        let currentD = currentX0 - currentD0.x > currentD1.x - currentX0 ? currentD1 : currentD0;
+        this.focusCurrent.attr("transform", "translate(" + x(currentD.x) + "," + y(currentD.y) + ")");
+
+        this.svg.select("#currentText").remove();
+        this.svg.append("text")
+          .attr("id", "currentText")
+          .attr("x", 20)
+          .attr("y", "20")
+          .text("Current " + currentD.y + " % FLC")
+          .style("font-size", "13px")
+          .style("font-weight", "bold")
+          .style("fill", "#f53e3d");
+
+        //power factor
+        let powerX0 = x.invert(d3.mouse(d3.event.currentTarget)[0]);
+        let powerI = bisectDate(powerFactorData, powerX0, 1);
+        if (powerI >= powerFactorData.length) {
+          powerI = powerFactorData.length - 1
+        }
+        let powerD0 = powerFactorData[powerI - 1];
+        let powerD1 = powerFactorData[powerI];
+        let powerD = powerX0 - powerD0.x > powerD1.x - powerX0 ? powerD1 : powerD0;
+        this.focusPowerFactor.attr("transform", "translate(" + x(powerD.x) + "," + y(powerD.y) + ")");
+
+        this.svg.select("#powerFactorText").remove();
+        this.svg.append("text")
+          .attr("id", "powerFactorText")
+          .attr("x", 20)
+          .attr("y", "50")
+          .text("Power Factor " + powerD.y + " %")
+          .style("font-size", "13px")
+          .style("font-weight", "bold")
+          .style("fill", "#6175f5");
+
+        //efficiency
+        let efficiencyX0 = x.invert(d3.mouse(d3.event.currentTarget)[0]);
+        let efficiencyI = bisectDate(efficiencyData, efficiencyX0, 1);
+        if (efficiencyI >= efficiencyData.length) {
+          efficiencyI = efficiencyData.length - 1
+        }
+        let efficiencyD0 = efficiencyData[efficiencyI - 1];
+        let efficiencyD1 = efficiencyData[efficiencyI];
+        let efficiencyD = efficiencyX0 - efficiencyD0.x > efficiencyD1.x - efficiencyX0 ? efficiencyD1 : efficiencyD0;
+        this.focusEfficiency.attr("transform", "translate(" + x(efficiencyD.x) + "," + y(efficiencyD.y) + ")");
+
+        this.svg.select("#efficiencyText").remove();
+        this.svg.select("#i").remove();
+        this.svg.append("text")
+          .attr("id", "efficiencyText")
+          .attr("x", 20)
+          .attr("y", "80")
+          .text("Efficiency " + efficiencyD.y + " %")
+          .style("font-size", "13px")
+          .style("font-weight", "bold")
+          .style("fill", "#fecb00");
+
+        this.svg.append("text")
+          .attr("id", "i")
+          .attr("x", 250)
+          .attr("y", "20")
+          .text("Motor Shaft Load " + this.psatService.roundVal(efficiencyD.x, 2) + " %")
+          .style("font-size", "13px")
+          .style("font-weight", "bold")
+          .style("fill", "#000000");
+      })
   }
 
 }
