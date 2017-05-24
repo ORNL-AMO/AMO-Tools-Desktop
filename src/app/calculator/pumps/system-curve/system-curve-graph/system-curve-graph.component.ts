@@ -5,7 +5,7 @@ import { ConvertUnitsService } from '../../../../shared/convert-units/convert-un
 declare const d3: any;
 
 import { PsatService } from '../../../../psat/psat.service';
- 
+
 @Component({
   selector: 'app-system-curve-graph',
   templateUrl: './system-curve-graph.component.html',
@@ -73,10 +73,10 @@ export class SystemCurveGraphComponent implements OnInit {
     this.canvasWidth = curveGraph.clientWidth;
     this.canvasHeight = this.canvasWidth * (2 / 3);
 
-    if(this.canvasWidth < 400){
+    if (this.canvasWidth < 400) {
       this.fontSize = '8px';
       this.margin = { top: 10, right: 10, bottom: 75, left: 80 };
-    }else{
+    } else {
       this.fontSize = '12px';
       this.margin = { top: 20, right: 20, bottom: 110, left: 120 };
     }
@@ -90,9 +90,7 @@ export class SystemCurveGraphComponent implements OnInit {
 
     //Remove  all previous graphs
     d3.select('app-system-curve-graph').selectAll('svg').remove();
-    // if (this.detailBox) {
-    //   this.detailBox.remove();
-    // }
+    let tmpBox = d3.select("#detailBox").remove();
     var curvePoints = [];
 
     //graph dimensions
@@ -169,7 +167,7 @@ export class SystemCurveGraphComponent implements OnInit {
       .attr("id", "graph")
       .attr("width", this.width)
       .attr("height", this.height)
-      .attr("fill", "#ffffff")
+      .style("fill", "#F8F9F9")
       .style("filter", "url(#drop-shadow)");
 
     this.svg.append("path")
@@ -204,34 +202,6 @@ export class SystemCurveGraphComponent implements OnInit {
       .text("Flow Rate (" + this.settings.flowMeasurement + ")");
 
 
-    this.svg.append("text")
-      .attr("x", 20)
-      .attr("y", "20")
-      .text("Calculated Static Head ")
-      .style("font-size", this.fontSize)
-      .style("font-weight", "bold");
-
-    this.svg.append("text")
-      .attr("x", 20)
-      .attr("y", "50")
-      .text("Calculated K (loss of coefficient)")
-      .style("font-size", this.fontSize)
-      .style("font-weight", "bold");
-
-    this.staticHeadText = this.svg.append("text")
-      .attr("x", 240)
-      .attr("y", "20")
-      .text(this.staticHead)
-      .style("font-size", this.fontSize)
-      .style("font-weight", "bold");
-
-    this.lossCoefficientText = this.svg.append("text")
-      .attr("x", 240)
-      .attr("y", "50")
-      .text(this.lossCoefficient)
-      .style("font-size", this.fontSize)
-      .style("font-weight", "bold");
-
     // Define the div for the tooltip
     this.detailBox = d3.select("app-system-curve-graph").append("div")
       .attr("id", "detailBox")
@@ -252,9 +222,9 @@ export class SystemCurveGraphComponent implements OnInit {
       .style("display", "none");
 
     this.focus.append("circle")
-      .attr("r", 10)
+      .attr("r", 8)
       .style("fill", "none")
-      .style("stroke", "#007536")
+      .style("stroke", "#000000")
       .style("stroke-width", "3px");
 
     this.focus.append("text")
@@ -267,17 +237,17 @@ export class SystemCurveGraphComponent implements OnInit {
   onChanges() {
     this.svg.style("display", null);
 
-    this.staticHeadText
-      .attr("x", 240)
+    this.svg.append("text")
+      .attr("x", 20)
       .attr("y", "20")
-      .text(this.staticHead)
+      .text("Calculated Static Head: " + this.staticHead + ' ' + this.settings.distanceMeasurement)
       .style("font-size", this.fontSize)
       .style("font-weight", "bold");
 
-    this.lossCoefficientText
-      .attr("x", 240)
-      .attr("y", "50")
-      .text(this.lossCoefficient)
+    this.svg.append("text")
+      .attr("x", 20)
+      .attr("y", "40")
+      .text("Calculated K (loss coefficient): " + this.lossCoefficient.toExponential(3))
       .style("font-size", this.fontSize)
       .style("font-weight", "bold");
 
@@ -321,15 +291,6 @@ export class SystemCurveGraphComponent implements OnInit {
       .attr("fill", "#ffffff")
       .style("filter", "url(#drop-shadow)")
       .on("mouseover", () => { this.focus.style("display", null); })
-      .on("mouseout", () => {
-        this.detailBox.on("mouseout", () => {
-          this.focus.style("display", "none");
-          this.detailBox.transition()
-            .style("opacity", 0);
-          this.pointer.transition()
-            .style("opacity", 0);
-        })
-      })
       .on("mousemove", () => {
         var x0 = x.invert(d3.mouse(d3.event.currentTarget)[0]),
           i = bisectDate(data, x0, 1),
@@ -358,9 +319,13 @@ export class SystemCurveGraphComponent implements OnInit {
           .style("padding-right", "10px")
           .style("padding-bottom", "10px")
           .style("padding-left", "10px")
-          .html("<strong style='font-size: 15px;'>" + format(d.x) + "</strong>" +
-          "<p><strong><div style='float: left;'>Head, " + this.settings.distanceMeasurement + "</div>           <div style='float: right;'>" + format(d.y) + "</div><br>" +
-          "<div style='float: left;'>Fluid Power, " + this.settings.powerMeasurement + "</div>     <div style='float: right;'>" + format(d.fluidPower) + "</div></strong></p>")
+          .html(
+          "<p><strong><div style='float:left;'>Flow Rate: </div><div style='float:right;'>" + format(d.x) + " " + this.settings.flowMeasurement + "</div><br>" +
+
+          "<div style='float:left;'>Head: </div><div style='float: right;'>" + format(d.y) + " " + this.settings.distanceMeasurement + "</div><br>" +
+
+          "<div style='float:left;'>Fluid Power: </div><div style='float: right;'>" + format(d.fluidPower) + " " + this.settings.powerMeasurement + "</div></strong></p>")
+
           .style("left", (this.margin.left + x(d.x) - (detailBoxWidth / 2 - 15)) + "px")
           .style("top", (this.margin.top + y(d.y) + 25) + "px")
           .style("position", "absolute")
@@ -513,76 +478,7 @@ export class SystemCurveGraphComponent implements OnInit {
       .style("stroke-width", 10)
       .style("stroke-width", "2px")
       .style("fill", "none")
-      .style("stroke", "#6277f5");
-
-    /*
-    // define the area
-    var area = d3.area()
-      .x(function(d) { return x(d.x); })
-      .y0(this.height)
-      .y1(function(d) { return y(d.y); })
-      .curve(d3.curveNatural);
-
-    // add the area
-    this.svg.select("#areaUnderCurve")
-      .data([data])
-      .attr("class", "area")
-      .attr("d", area)
-      .style("fill", "#bfbeb9")
-      .on("mouseover", () =>  { this.focus.style("display", null); })
-      .on("mouseout", () =>  {
-        this.focus.style("display", "none");
-        this.detailBox.transition()
-          .style("opacity", 0);
-        this.pointer.transition()
-          .style("opacity", 0);
-      })
-
-
-      .on("mousemove", () => {
-        var x0 = x.invert(d3.mouse(d3.event.currentTarget)[0]),
-          i = bisectDate(data, x0, 1),
-          d0 = data[i - 1],
-          d1 = data[i],
-          d = x0 - d0.x > d1.x - x0 ? d1 : d0;
-        this.focus.attr("transform", "translate(" + x(d.x) + "," + y(d.y) + ")");
-
-        this.pointer.transition()
-          .style("opacity", 1);
-
-        this.detailBox.transition()
-          .style("opacity", 1);
-
-        var detailBoxWidth = 160;
-        var detailBoxHeight = 80;
-
-        this.pointer
-          .attr("transform", 'translate(' + (x(d.x) - (detailBoxWidth/2)) + ',' + (y(d.y) + 27) + ')')
-          .style("fill", "#ffffff")
-          .style("filter", "url(#drop-shadow)");
-
-        this.detailBox
-          .style("padding-top", "10px")
-          .style("padding-right", "10px")
-          .style("padding-bottom", "10px")
-          .style("padding-left", "10px")
-          .html("<strong style='font-size: 15px;'>" + format(d.x) + "</strong>" +
-            "<p><strong><div style='float: left;'>Head, ft.</div>           <div style='float: right;'>" + format(d.y) + "</div><br>" +
-            "<div style='float: left;'>Fluid Power, hp</div>     <div style='float: right;'>" + format(d.fluidPower) + "</div></strong></p>")
-          .style("left", (this.margin.left + x(d.x) - (detailBoxWidth/2 - 15)) + "px")
-          .style("top", (this.margin.top + y(d.y) + 25) + "px")
-          .style("position", "absolute")
-          .style("width", detailBoxWidth + "px")
-          .style("height", detailBoxHeight + "px")
-          .style("padding", "10px")
-          .style("font", "12px sans-serif")
-          .style("background", "#ffffff")
-          .style("border", "0px")
-          .style("pointer-events", "none");
-        //.style("box-shadow", "1px 1px 4px grey");
-
-      });
-     */
+      .style("stroke", "#2ECC71");
   }
 
 }
