@@ -30,8 +30,6 @@ export class SystemCurveGraphComponent implements OnInit {
   yAxis: any;
   width: any;
   height: any;
-  staticHeadText: any;
-  lossCoefficientText: any;
   margin: any;
   line: any;
   filter: any;
@@ -242,8 +240,11 @@ export class SystemCurveGraphComponent implements OnInit {
 
   onChanges() {
     this.svg.style("display", null);
+    this.svg.select("#staticHeadText").remove();
+    this.svg.select("#lossCoefficientText").remove();
 
     this.svg.append("text")
+      .attr("id", "staticHeadText")
       .attr("x", 20)
       .attr("y", "20")
       .text("Calculated Static Head: " + this.staticHead + ' ' + this.settings.distanceMeasurement)
@@ -251,6 +252,7 @@ export class SystemCurveGraphComponent implements OnInit {
       .style("font-weight", "bold");
 
     this.svg.append("text")
+      .attr("id", "lossCoefficientText")
       .attr("x", 20)
       .attr("y", "40")
       .text("Calculated K (loss coefficient): " + this.lossCoefficient.toExponential(3))
