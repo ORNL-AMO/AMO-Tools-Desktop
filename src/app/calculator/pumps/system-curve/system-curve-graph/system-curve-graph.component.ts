@@ -49,6 +49,12 @@ export class SystemCurveGraphComponent implements OnInit {
   constructor(private windowRefService: WindowRefService, private convertUnitsService: ConvertUnitsService, private psatService: PsatService) { }
 
   ngOnInit() {
+    if (!this.lossCoefficient) {
+      this.lossCoefficient = 0;
+    }
+    if (!this.staticHead) {
+      this.staticHead = 0;
+    }
   }
 
   ngAfterViewInit() {
