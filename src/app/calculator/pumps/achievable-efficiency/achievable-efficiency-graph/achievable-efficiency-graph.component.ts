@@ -228,7 +228,7 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
       .attr("id", "graph")
       .attr("width", this.width)
       .attr("height", this.height)
-      .attr("fill", "#ffffff")
+      .style("fill", "#F8F9F9")
       .style("filter", "url(#drop-shadow)");
 
     this.svg.append("path")
@@ -268,7 +268,7 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
       .style("stroke-width", 10)
       .style("stroke-width", "2px")
       .style("fill", "none")
-      .style("stroke", "#f53e3d");
+      .style("stroke", "#2ECC71");
 
     this.averageLine = this.svg.append("path")
       .attr("class", "line")
@@ -276,51 +276,36 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
       .style("stroke-width", 10)
       .style("stroke-width", "2px")
       .style("fill", "none")
-      .style("stroke", "#fecb00");
+      .style("stroke", "#3498DB");
+   
     this.maxPoint = this.svg.append("g")
       .attr("class", "focus")
       .style("display", "none");
 
-    this.avgPoint = this.svg.append("g")
-      .attr("class", "focus")
-      .style("display", "none");
-
     this.maxPoint.append("circle")
-      .attr("r", 8)
+      .attr("r", 6)
       .style("fill", "none")
-      .style("stroke", "#f53e3d")
+      .style("stroke", "#000000")
       .style("stroke-width", "2px");
 
     this.maxPoint.append("text")
       .attr("x", 9)
       .attr("dy", ".35em");
 
+    this.avgPoint = this.svg.append("g")
+      .attr("class", "focus")
+      .style("display", "none");
 
     this.avgPoint.append("circle")
-      .attr("r", 8)
+      .attr("r", 6)
       .style("fill", "none")
-      .style("stroke", "#fecb00")
+      .style("stroke", "#000000")
       .style("stroke-width", "2px");
 
     this.avgPoint.append("text")
       .attr("x", 9)
       .attr("dy", ".35em");
 
-    this.svg.append("text")
-      .attr("x", 20)
-      .attr("y", "20")
-      .text("Achievable Efficiency (max): ")
-      .style("font-size", this.fontSize)
-      .style("font-weight", "bold")
-      .style("fill", "#f53e3d");
-
-    this.svg.append("text")
-      .attr("x", 20)
-      .attr("y", "50")
-      .text("Achievable Efficiency (average): ")
-      .style("font-size", this.fontSize)
-      .style("font-weight", "bold")
-      .style("fill", "#fecb00");
 
     this.maxValue = this.svg.append("text")
       .attr("x", 250)
@@ -352,9 +337,9 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
       .style("display", "none");
 
     this.focusMax.append("circle")
-      .attr("r", 10)
+      .attr("r", 8)
       .style("fill", "none")
-      .style("stroke", "#007536")
+      .style("stroke", "#000000")
       .style("stroke-width", "3px");
 
     this.focusMax.append("text")
@@ -366,9 +351,9 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
       .style("display", "none");
 
     this.focusAvg.append("circle")
-      .attr("r", 10)
+      .attr("r", 8)
       .style("fill", "none")
-      .style("stroke", "#007536")
+      .style("stroke", "#000000")
       .style("stroke-width", "3px");
 
     this.focusAvg.append("text")
@@ -522,11 +507,27 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
 
     var format = d3.format(".3n");
 
-    this.maxValue
-      .text(format(this.calculateYmax(this.efficiencyForm.value.flowRate)) + ' %');
+    this.svg.append("text")
+      .attr("x", 20)
+      .attr("y", "20")
+      .text("Achievable Efficiency (max): " + format(this.calculateYmax(this.efficiencyForm.value.flowRate)) + ' %')
+      .style("font-size", this.fontSize)
+      .style("font-weight", "bold")
+      .style("fill", "#2ECC71");
 
-    this.averageValue
-      .text(format(this.calculateYaverage(this.efficiencyForm.value.flowRate)) + ' %');
+    this.svg.append("text")
+      .attr("x", 20)
+      .attr("y", "50")
+      .text("Achievable Efficiency (average): " + format(this.calculateYaverage(this.efficiencyForm.value.flowRate)) + ' %')
+      .style("font-size", this.fontSize)
+      .style("font-weight", "bold")
+      .style("fill", "#3498DB");
+
+    // this.maxValue
+    //   .text(format(this.calculateYmax(this.efficiencyForm.value.flowRate)) + ' %');
+
+    // this.averageValue
+    //   .text(format(this.calculateYaverage(this.efficiencyForm.value.flowRate)) + ' %');
   }
 
   drawPoints() {

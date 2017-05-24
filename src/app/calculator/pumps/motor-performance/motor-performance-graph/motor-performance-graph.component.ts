@@ -54,17 +54,13 @@ export class MotorPerformanceGraphComponent implements OnInit {
 
   constructor(private windowRefService: WindowRefService, private psatService: PsatService) { }
 
-  ngOnInit() {
-    // this.setUp();
-    // if(this.checkForm()){
-    //   this.onChanges();
-    // }
-  }
+  ngOnInit() { }
 
   ngOnChanges(changes: SimpleChanges) {
     if (!this.firstChange) {
       if (changes.toggleCalculate) {
         if (this.checkForm()) {
+          this.setUp();
           this.onChanges();
         }
       }
@@ -157,7 +153,7 @@ export class MotorPerformanceGraphComponent implements OnInit {
       this.performanceForm.controls.motorVoltage.status == 'VALID' &&
       this.performanceForm.controls.fullLoadAmps.status == 'VALID'
     ) {
-      if (this.performanceForm.value.efficiencyClass == 'Specified') {
+      if (this.performanceForm.value.efficiencyClass != '' || this.performanceForm.value.efficiencyClass != undefined) {
         if (
           this.performanceForm.controls.efficiency.status == 'VALID'
         ) {
@@ -251,7 +247,7 @@ export class MotorPerformanceGraphComponent implements OnInit {
       .attr("id", "graph")
       .attr("width", this.width)
       .attr("height", this.height)
-      .attr("fill", "#ffffff")
+      .style("fill", "#F8F9F9")
       .style("filter", "url(#drop-shadow)");
 
     this.svg.append("path")
@@ -301,9 +297,9 @@ export class MotorPerformanceGraphComponent implements OnInit {
       .style("display", "none");
 
     this.focusCurrent.append("circle")
-      .attr("r", 10)
+      .attr("r", 6)
       .style("fill", "none")
-      .style("stroke", "#f53e3d")
+      .style("stroke", "#000000")
       .style("stroke-width", "3px");
 
     this.focusCurrent.append("text")
@@ -316,9 +312,9 @@ export class MotorPerformanceGraphComponent implements OnInit {
       .style("display", "none");
 
     this.focusPowerFactor.append("circle")
-      .attr("r", 10)
+      .attr("r", 6)
       .style("fill", "none")
-      .style("stroke", "#6175f5")
+      .style("stroke", "#000000")
       .style("stroke-width", "3px");
 
     this.focusPowerFactor.append("text")
@@ -331,9 +327,9 @@ export class MotorPerformanceGraphComponent implements OnInit {
       .style("display", "none");
 
     this.focusEfficiency.append("circle")
-      .attr("r", 10)
+      .attr("r", 6)
       .style("fill", "none")
-      .style("stroke", "#fecb00")
+      .style("stroke", "#000000")
       .style("stroke-width", "3px");
 
     this.focusEfficiency.append("text")
@@ -345,7 +341,7 @@ export class MotorPerformanceGraphComponent implements OnInit {
       .style("stroke-width", 10)
       .style("stroke-width", "2px")
       .style("fill", "none")
-      .style("stroke", "#f53e3d")
+      .style("stroke", "#2ECC71")
       .style("display", "none");
 
     this.powerLine = this.svg.append("path")
@@ -353,7 +349,7 @@ export class MotorPerformanceGraphComponent implements OnInit {
       .style("stroke-width", 10)
       .style("stroke-width", "2px")
       .style("fill", "none")
-      .style("stroke", "#6175f5")
+      .style("stroke", "#3498DB")
       .style("display", "none");
 
     this.efficiencyLine = this.svg.append("path")
@@ -361,7 +357,7 @@ export class MotorPerformanceGraphComponent implements OnInit {
       .style("stroke-width", 10)
       .style("stroke-width", "2px")
       .style("fill", "none")
-      .style("stroke", "#fecb00")
+      .style("stroke", "#A569BD")
       .style("display", "none");
 
     this.svg.style("display", "none");
@@ -489,31 +485,36 @@ export class MotorPerformanceGraphComponent implements OnInit {
           .attr("id", "currentText")
           .attr("x", 20)
           .attr("y", "20")
-          .text("Current " + currentD.y + " % FLC")
+          .text("Current: " + currentD.y + " % FLC")
           .style("font-size", "13px")
           .style("font-weight", "bold")
-          .style("fill", "#f53e3d");
+          .style("fill", "#2ECC71");
 
         //power factor
-        let powerX0 = x.invert(d3.mouse(d3.event.currentTarget)[0]);
-        let powerI = bisectDate(powerFactorData, powerX0, 1);
-        if (powerI >= powerFactorData.length) {
-          powerI = powerFactorData.length - 1
-        }
-        let powerD0 = powerFactorData[powerI - 1];
-        let powerD1 = powerFactorData[powerI];
-        let powerD = powerX0 - powerD0.x > powerD1.x - powerX0 ? powerD1 : powerD0;
-        this.focusPowerFactor.attr("transform", "translate(" + x(powerD.x) + "," + y(powerD.y) + ")");
+        if (powerFactorData.length != 0) {
+          let powerX0 = x.invert(d3.mouse(d3.event.currentTarget)[0]);
+          let powerI = bisectDate(powerFactorData, powerX0, 1);
+          if (powerI >= powerFactorData.length) {
+            powerI = powerFactorData.length - 1
+          }
+          let powerD0 = powerFactorData[powerI - 1];
+          let powerD1 = powerFactorData[powerI];
+          let powerD = powerX0 - powerD0.x > powerD1.x - powerX0 ? powerD1 : powerD0;
+          this.focusPowerFactor.attr("transform", "translate(" + x(powerD.x) + "," + y(powerD.y) + ")");
 
-        this.svg.select("#powerFactorText").remove();
-        this.svg.append("text")
-          .attr("id", "powerFactorText")
-          .attr("x", 20)
-          .attr("y", "50")
-          .text("Power Factor " + powerD.y + " %")
-          .style("font-size", "13px")
-          .style("font-weight", "bold")
-          .style("fill", "#6175f5");
+          this.svg.select("#powerFactorText").remove();
+          this.svg.append("text")
+            .attr("id", "powerFactorText")
+            .attr("x", 180)
+            .attr("y", "20")
+            .text("Power Factor: " + powerD.y + " %")
+            .style("font-size", "13px")
+            .style("font-weight", "bold")
+            .style("fill", "#3498DB");
+        } else {
+          this.svg.select("#powerFactorText").remove();
+          this.svg.select("#focusPowerFactor").remove();
+        }
 
         //efficiency
         let efficiencyX0 = x.invert(d3.mouse(d3.event.currentTarget)[0]);
@@ -530,22 +531,22 @@ export class MotorPerformanceGraphComponent implements OnInit {
         this.svg.select("#i").remove();
         this.svg.append("text")
           .attr("id", "efficiencyText")
-          .attr("x", 20)
-          .attr("y", "80")
-          .text("Efficiency " + efficiencyD.y + " %")
+          .attr("x", 350)
+          .attr("y", "20")
+          .text("Efficiency: " + efficiencyD.y + " %")
           .style("font-size", "13px")
           .style("font-weight", "bold")
-          .style("fill", "#fecb00");
+          .style("fill", "#A569BD");
 
         this.svg.append("text")
           .attr("id", "i")
-          .attr("x", 250)
-          .attr("y", "20")
-          .text("Motor Shaft Load " + this.psatService.roundVal(efficiencyD.x, 2) + " %")
+          .attr("x", 20)
+          .attr("y", "50")
+          .text("Motor Shaft Load: " + this.psatService.roundVal(efficiencyD.x, 2) + " %")
           .style("font-size", "13px")
           .style("font-weight", "bold")
           .style("fill", "#000000");
-      })
+      });
   }
 
 }

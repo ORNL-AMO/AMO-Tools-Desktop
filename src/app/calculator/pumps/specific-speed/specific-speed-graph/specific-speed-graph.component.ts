@@ -194,7 +194,7 @@ export class SpecificSpeedGraphComponent implements OnInit {
       .attr("id", "graph")
       .attr("width", this.width)
       .attr("height", this.height)
-      .attr("fill", "#ffffff")
+      .style("fill", "#F8F9F9")
       .style("filter", "url(#drop-shadow)");
 
     this.svg.append("path")
@@ -248,9 +248,9 @@ export class SpecificSpeedGraphComponent implements OnInit {
       .style("display", "none");
 
     this.focus.append("circle")
-      .attr("r", 10)
+      .attr("r", 8)
       .style("fill", "none")
-      .style("stroke", "#007536")
+      .style("stroke", "#000000")
       .style("stroke-width", "3px");
 
     this.focus.append("text")
@@ -262,42 +262,14 @@ export class SpecificSpeedGraphComponent implements OnInit {
     //We can draw the guideCurve now since pump type has no effect on what kind of shape it has.
     this.drawGuideCurve(this.svg, this.x, this.y, this.psatService, this.speedForm.value.pumpType);
 
-    this.svg.append("text")
-      .attr("x", "20")
-      .attr("y", "20")
-      .text("Specific Speed: ")
-      .style("font-size", "13px")
-      .style("font-weight", "bold");
-
-    this.svg.append("text")
-      .attr("x", "20")
-      .attr("y", "50")
-      .text("Efficiency Correction:")
-      .style("font-size", "13px")
-      .style("font-weight", "bold");
-
-    this.specificSpeedText = this.svg.append("text")
-      .attr("id", "specificSpeedValue")
-      .attr("x", "200")
-      .attr("y", "20")
-      .style("font-size", "13px")
-      .style("font-weight", "bold");
-
-    this.efficiencyCorrectionText = this.svg.append("text")
-      .attr("id", "efficiencyCorrectionValue")
-      .attr("x", "200")
-      .attr("y", "50")
-      .style("font-size", "13px")
-      .style("font-weight", "bold");
-
     this.calcPoint = this.svg.append("g")
       .attr("class", "focus")
       .style("display", "none");
 
     this.calcPoint.append("circle")
-      .attr("r", 7)
+      .attr("r", 6)
       .style("fill", "none")
-      .style("stroke", "#6277f5")
+      .style("stroke", "#000000")
       .style("stroke-width", "3px");
 
     this.svg.style("display", "none");
@@ -334,7 +306,7 @@ export class SpecificSpeedGraphComponent implements OnInit {
       .style("stroke-width", 10)
       .style("stroke-width", "2px")
       .style("fill", "none")
-      .style("stroke", "#757575");
+      .style("stroke", "#2ECC71");
 
 
     var format = d3.format(",.2f");
@@ -417,8 +389,35 @@ export class SpecificSpeedGraphComponent implements OnInit {
         }
       });
 
-    this.specificSpeedText.text(specificSpeed);
-    this.efficiencyCorrectionText.text(efficiencyCorrection + ' %');
+   // this.specificSpeedText.text(specificSpeed);
+   // this.efficiencyCorrectionText.text(efficiencyCorrection + ' %');
+    this.svg.append("text")
+      .attr("x", "20")
+      .attr("y", "20")
+      .text("Specific Speed: " + specificSpeed)
+      .style("font-size", "13px")
+      .style("font-weight", "bold");
+
+    this.svg.append("text")
+      .attr("x", this.width - 200)
+      .attr("y", "20")
+      .text("Efficiency Correction: " + efficiencyCorrection + ' %')
+      .style("font-size", "13px")
+      .style("font-weight", "bold");
+
+    // this.specificSpeedText = this.svg.append("text")
+    //   .attr("id", "specificSpeedValue")
+    //   .attr("x", "200")
+    //   .attr("y", "20")
+    //   .style("font-size", "13px")
+    //   .style("font-weight", "bold");
+
+    // this.efficiencyCorrectionText = this.svg.append("text")
+    //   .attr("id", "efficiencyCorrectionValue")
+    //   .attr("x", "200")
+    //   .attr("y", "50")
+    //   .style("font-size", "13px")
+    //   .style("font-weight", "bold");
 
   }
 
