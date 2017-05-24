@@ -9,10 +9,11 @@ import { length } from '../../../shared/convert-units/definitions/length';
 })
 export class UnitConverterComponent implements OnInit {
   possibilities: Array<any> = [];
-  measure: any;
+  measure: any = 'length';
   from: string;
   to: string;
-  value: number;
+  value1: number;
+  value2: number;
   results: number;
   fromDisp: string;
   toDisp: string;
@@ -92,6 +93,7 @@ export class UnitConverterComponent implements OnInit {
   constructor(private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
+    this.getMeasures();
   }
 
 
@@ -108,14 +110,26 @@ export class UnitConverterComponent implements OnInit {
         }
         this.possibilities.push(tmpPossibility);
       })
+      this.from = this.possibilities[0].unit;
+      this.to = this.possibilities[1].unit;
+      this.value1 = 1;
+      this.getValue2();
     }
   }
 
-  getValue() {
-    if (this.from && this.to && this.value) {
-      return this.convertUnitsService.value(this.value).from(this.from).to(this.to);
+  getValue1() {
+    if (this.from && this.to && this.value2) {
+      this.value1 = this.convertUnitsService.value(this.value2).from(this.to).to(this.from);
     } else {
-      return 0;
+      this.value1 = 0;
+    }
+  }
+
+  getValue2() {
+    if (this.from && this.to && this.value1) {
+      this.value2 = this.convertUnitsService.value(this.value1).from(this.from).to(this.to);
+    } else {
+      this.value2 = 0;
     }
   }
 
