@@ -16,6 +16,79 @@ export class UnitConverterComponent implements OnInit {
   results: number;
   fromDisp: string;
   toDisp: string;
+
+  options = [
+    {
+      measure: 'length',
+      display: 'Length'
+    },
+    {
+      measure: 'area',
+      display: 'Area'
+    },
+    {
+      measure: 'volume',
+      display: 'volume'
+    },
+    {
+      measure: 'temperature',
+      display: 'Temperature'
+    },
+    {
+      measure: 'time',
+      display: 'Time'
+    },
+    {
+      measure: 'digital',
+      display: 'Digitial'
+    },
+    {
+      measure: 'partsPer',
+      display: 'Parts Per'
+    },
+    {
+      measure: 'speed',
+      display: 'Speed'
+    },
+    {
+      measure: 'power',
+      display: 'Power'
+    },
+    {
+      measure: 'current',
+      display: 'Current'
+    },
+    {
+      measure: 'energy',
+      display: 'Energy'
+    },
+    {
+      measure: 'voltage',
+      display: 'Voltage'
+    },
+    {
+      measure: 'apparentPower',
+      display: 'Apparent Power'
+    },
+    {
+      measure: 'reactiveEnergy',
+      display: 'Reactive Energy'
+    },
+    {
+      measure: 'reactivePower',
+      display: 'Reactive Power'
+    },
+    {
+      measure: 'volumeFlowRate',
+      display: 'Volumetric Flow Rate'
+    },
+    {
+      measure: 'viscosity',
+      display: 'Viscosity'
+    },
+
+  ]
+
   constructor(private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
@@ -35,7 +108,6 @@ export class UnitConverterComponent implements OnInit {
         }
         this.possibilities.push(tmpPossibility);
       })
-      console.log(this.possibilities);
     }
   }
 
