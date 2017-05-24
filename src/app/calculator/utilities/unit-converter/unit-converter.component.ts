@@ -9,16 +9,91 @@ import { length } from '../../../shared/convert-units/definitions/length';
 })
 export class UnitConverterComponent implements OnInit {
   possibilities: Array<any> = [];
-  measure: any;
+  measure: any = 'length';
   from: string;
   to: string;
-  value: number;
+  value1: number;
+  value2: number;
   results: number;
   fromDisp: string;
   toDisp: string;
+
+  options = [
+    {
+      measure: 'length',
+      display: 'Length'
+    },
+    {
+      measure: 'area',
+      display: 'Area'
+    },
+    {
+      measure: 'volume',
+      display: 'volume'
+    },
+    {
+      measure: 'temperature',
+      display: 'Temperature'
+    },
+    {
+      measure: 'time',
+      display: 'Time'
+    },
+    {
+      measure: 'digital',
+      display: 'Digitial'
+    },
+    {
+      measure: 'partsPer',
+      display: 'Parts Per'
+    },
+    {
+      measure: 'speed',
+      display: 'Speed'
+    },
+    {
+      measure: 'power',
+      display: 'Power'
+    },
+    {
+      measure: 'current',
+      display: 'Current'
+    },
+    {
+      measure: 'energy',
+      display: 'Energy'
+    },
+    {
+      measure: 'voltage',
+      display: 'Voltage'
+    },
+    {
+      measure: 'apparentPower',
+      display: 'Apparent Power'
+    },
+    {
+      measure: 'reactiveEnergy',
+      display: 'Reactive Energy'
+    },
+    {
+      measure: 'reactivePower',
+      display: 'Reactive Power'
+    },
+    {
+      measure: 'volumeFlowRate',
+      display: 'Volumetric Flow Rate'
+    },
+    {
+      measure: 'viscosity',
+      display: 'Viscosity'
+    },
+
+  ]
+
   constructor(private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
+    this.getMeasures();
   }
 
 
@@ -35,15 +110,26 @@ export class UnitConverterComponent implements OnInit {
         }
         this.possibilities.push(tmpPossibility);
       })
-      console.log(this.possibilities);
+      this.from = this.possibilities[0].unit;
+      this.to = this.possibilities[1].unit;
+      this.value1 = 1;
+      this.getValue2();
     }
   }
 
-  getValue() {
-    if (this.from && this.to && this.value) {
-      return this.convertUnitsService.value(this.value).from(this.from).to(this.to);
+  getValue1() {
+    if (this.from && this.to && this.value2) {
+      this.value1 = this.convertUnitsService.value(this.value2).from(this.to).to(this.from);
     } else {
-      return 0;
+      this.value1 = 0;
+    }
+  }
+
+  getValue2() {
+    if (this.from && this.to && this.value1) {
+      this.value2 = this.convertUnitsService.value(this.value1).from(this.from).to(this.to);
+    } else {
+      this.value2 = 0;
     }
   }
 

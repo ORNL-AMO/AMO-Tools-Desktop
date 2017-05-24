@@ -1,54 +1,22 @@
-<div class="row">
-  <div class="col-3">
-    <div class="form-group">
-      <label for="type">Conversion Type</label>
-      <select class="form-control" id="type" [(ngModel)]="measure" (change)="getMeasures()">
-  <option>length</option>
-  <option>area</option>
-  <option>volume</option>
-  <option>temperature</option>
-  <option>time</option>
-  <option>digital</option>
-  <option>partsPer</option>
-  <option>speed</option>
-  <option>power</option>
-  <option>current</option>
-  <option>energy</option>
-  <option>voltage</option>
-  <option>apparentPower</option>
-  <option>reactiveEnergy</option>
-  <option>reactivePower</option>
-  <option>volumeFlowRate</option>
-  <option>viscosity</option>
+<div class="row measure-row">
+  <div class="col-12">
+    <select class="form-control" id="type" [(ngModel)]="measure" (change)="getMeasures()">
+        <option *ngFor="let option of options" [ngValue]="option.measure">{{option.display}}</option>
       </select>
-    </div>
-  </div>
-  <div class="col-3">
-    <div class="form-group">
-      <label for="from">From</label>
-      <select class="form-control" id="from" [(ngModel)]="from">
-    <option *ngFor="let possibility of possibilities" [value]="possibility.unit">{{possibility.display}}</option>
-      </select>
-    </div>
-  </div>
-  <div class="col-3">
-    <div class="form-group">
-      <label for="value">Value</label>
-      <input type="number" class="form-control" id="value" [(ngModel)]="value">
-    </div>
-  </div>
-  <div class="col-3">
-    <div class="form-group">
-      <label for="to">To</label>
-      <select class="form-control" id="to" [(ngModel)]="to">
-    <option *ngFor="let possibility of possibilities" [value]="possibility.unit">{{possibility.display}}</option>
-      </select>
-    </div>
   </div>
 </div>
+<div class="row value-row">
+  <div class="col-6">
+    <input type="number" class="form-control text-center" id="value1" [(ngModel)]="value1" (input)="getValue2()">
+    <select class="form-control" id="from" [(ngModel)]="from" (change)="getValue2()">
+      <option *ngFor="let possibility of possibilities" [value]="possibility.unit">{{possibility.display}}</option>
+    </select>
+  </div>
 
-<div class="row justify-content-center" style="padding-top:25px;">
-<div class="col-12">
-  <h4>Result: {{getValue()}} {{getUnitName(to)}}</h4>
-</div>
+  <div class="col-6">
+    <input type="number" class="form-control text-center" id="value2" [(ngModel)]="value2" (input)="getValue1()">
+    <select class="form-control" id="to" [(ngModel)]="to" (change)="getValue1()">
+    <option *ngFor="let possibility of possibilities" [value]="possibility.unit">{{possibility.display}}</option>
+  </select>
+  </div>
 </div>
