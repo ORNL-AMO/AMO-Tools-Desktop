@@ -45,23 +45,11 @@ export class SolidChargeMaterialFormComponent implements OnInit {
     this.materialTypes = this.suiteDbService.selectSolidMaterial();
     if (this.chargeMaterialForm) {
       if (this.chargeMaterialForm.value.materialId && this.chargeMaterialForm.value.materialId != '') {
-        //this.selectedMaterialId = this.chargeMaterialForm.value.materialId;
-        this.selectedMaterial = this.suiteDbService.selectSolidMaterialById(this.chargeMaterialForm.value.materialId);
         if (this.chargeMaterialForm.value.materialLatentHeatOfFusion == '') {
           this.setProperties();
         }
-      } else {
-        this.selectedMaterial = this.suiteDbService.selectSolidMaterialById(1);
-        if (this.chargeMaterialForm.value.materialLatentHeatOfFusion == '') {
-          this.setProperties();
-        }
-      }
-    } else {
-      this.selectedMaterial = this.suiteDbService.selectSolidMaterialById(1);
-      if (this.chargeMaterialForm.value.materialLatentHeatOfFusion == '') {
-        this.setProperties();
-      }
-    }
+      } 
+    } 
     if (!this.baselineSelected) {
       this.disableForm();
     }
@@ -93,12 +81,12 @@ export class SolidChargeMaterialFormComponent implements OnInit {
   }
 
   setProperties() {
+    let selectedMaterial = this.suiteDbService.selectSolidMaterialById(this.chargeMaterialForm.value.materialId);
     this.chargeMaterialForm.patchValue({
-      materialId: this.selectedMaterial.id,
-      materialLatentHeatOfFusion: this.selectedMaterial.latentHeat,
-      materialMeltingPoint: this.selectedMaterial.meltingPoint,
-      materialHeatOfLiquid: this.selectedMaterial.specificHeatLiquid,
-      materialSpecificHeatOfSolidMaterial: this.selectedMaterial.specificHeatSolid
+      materialLatentHeatOfFusion: selectedMaterial.latentHeat,
+      materialMeltingPoint: selectedMaterial.meltingPoint,
+      materialHeatOfLiquid: selectedMaterial.specificHeatLiquid,
+      materialSpecificHeatOfSolidMaterial: selectedMaterial.specificHeatSolid
     })
     this.checkForm();
   }

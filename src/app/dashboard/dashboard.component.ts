@@ -42,8 +42,8 @@ export class DashboardComponent implements OnInit {
   }
 
   ngOnInit() {
-    let startup = this.suitDbService.startup();
-    console.log(this.suitDbService.db);    
+    //start toolts suite database
+    this.suitDbService.startup();
     this.selectedAssessments = new Array();
     this.showLandingScreen = this.assessmentService.getLandingScreen();
     //open DB and get directories

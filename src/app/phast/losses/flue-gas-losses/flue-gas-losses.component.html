@@ -1,14 +1,14 @@
-<div class="section-header">
+<!--<div class="section-header">
   <h3 class="pull-left">Flue Gas Losses</h3>
   <button class="btn btn-secondary pull-right" (click)="addLoss()">+ Add Flue Gas Loss</button>
-</div>
+</div>-->
 
-<div class="no-data" *ngIf="flueGasLosses.length == 0" (click)="addLoss()">
+<div class="no-data" *ngIf="_flueGasLosses.length == 0" (click)="addLoss()">
   <h3>You have no Flue Gas Losses</h3>
   <h4>Add some now.</h4>
 </div>
 
-<div class="card-form" *ngFor="let loss of flueGasLosses">
+<div class="card-form" *ngFor="let loss of _flueGasLosses">
   <div class="row">
     <div class="col-12">
       <div class="pull-left">
@@ -21,7 +21,17 @@
   </div>
   <div class="row">
     <div class="col-12">
-      <app-flue-gas-losses-form [(flueGasLossForm)]="loss.form" (calculate)="calculate(loss)" [(lossState)]="lossState"></app-flue-gas-losses-form>
+      <div class="form-group">
+        <label class="small" for="type">Measurement Method</label>
+        <select class="form-control" id="type" [(ngModel)]="loss.measurementType" [disabled]="!baselineSelected"
+          (focus)="changeField('measurementType')">
+            <option [ngValue]="'By Volume'">By Volume</option>
+            <option [ngValue]="'By Mass'">By Mass</option>
+            </select>
+      </div>
+      <!--<app-flue-gas-losses-form [(flueGasLossForm)]="loss.form" (calculate)="calculate(loss)" [(lossState)]="lossState"></app-flue-gas-losses-form>-->
+      <app-flue-gas-losses-form-mass [(flueGasLossForm)]="loss.formByMass" *ngIf="loss.measurementType == 'By Mass'"></app-flue-gas-losses-form-mass>
+      <app-flue-gas-losses-form-volume [(flueGasLossForm)]="loss.formByVolume" *ngIf="loss.measurementType == 'By Volume'"></app-flue-gas-losses-form-volume>
     </div>
   </div>
   <div class="row">

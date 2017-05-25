@@ -28,7 +28,7 @@ export class FlueGasLossesComponent implements OnInit {
 
 
   _flueGasLosses: Array<any>;
-    firstChange: boolean = true;
+  firstChange: boolean = true;
 
   constructor(private phastService: PhastService, private flueGasLossesService: FlueGasLossesService) { }
 
@@ -54,7 +54,9 @@ export class FlueGasLossesComponent implements OnInit {
 
   addLoss() {
     this._flueGasLosses.push({
-      form: this.flueGasLossesService.initForm(),
+      measurementType: 'By Volume',
+      formByVolume: this.flueGasLossesService.initFormVolume(),
+      formByMass: this.flueGasLossesService.initFormMass(),
       name: 'Loss #' + (this._flueGasLosses.length + 1),
       heatLoss: 0.0
     });
@@ -80,8 +82,12 @@ export class FlueGasLossesComponent implements OnInit {
     //loss.heatLoss = this.phastService.flueGasLoss();
   }
 
-  saveLosses(){
-    
+  saveLosses() {
+
+  }
+
+  changeField(str: string) {
+    this.fieldChange.emit(str);
   }
 }
 

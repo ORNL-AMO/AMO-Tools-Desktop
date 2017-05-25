@@ -220,7 +220,20 @@ select.form-control:not([size]):not([multiple]) {
 }
 
 .card-form{
-  padding-bottom: 30px;
+  padding-bottom: 15px;
+  border-bottom: solid;
+  padding-top: 15px;
+}
+
+.card-form:first-of-type{
+  padding-top: 0px;
+}
+
+
+.card-form .form-section {
+  margin-bottom: 10px;
+  padding-bottom: 18px !important;
+  border-bottom: #bbb dashed 1px;
 }
 
 .units {

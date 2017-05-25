@@ -55,7 +55,7 @@ export const MockDirectory: Directory = {
             {
               chargeMaterialType: 'Gas',
               gasChargeMaterial: {
-                materialName: 'Type 1',
+                materialId: 1,
                 thermicReactionType: 0,
                 specificHeatGas: 0.24,
                 feedRate: 1000,
@@ -92,7 +92,7 @@ export const MockDirectory: Directory = {
             {
               chargeMaterialType: 'Liquid',
               liquidChargeMaterial: {
-                materialName: 'Type 1',
+                materialId: 1,
                 thermicReactionType: 0,
                 specificHeatLiquid: .48,
                 vaporizingTemperature: 240,

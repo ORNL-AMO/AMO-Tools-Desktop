@@ -28,7 +28,6 @@ export class LiquidChargeMaterialFormComponent implements OnInit {
   constructor(private suiteDbService: SuiteDbService) { }
 
   ngOnChanges(changes: SimpleChanges) {
-    this.materialTypes = this.suiteDbService.selectLiquidMaterial();
     if (!this.firstChange) {
       if (!this.baselineSelected) {
         this.disableForm();
@@ -41,6 +40,15 @@ export class LiquidChargeMaterialFormComponent implements OnInit {
   }
 
   ngOnInit() {
+    console.log(this.chargeMaterialForm);
+    this.materialTypes = this.suiteDbService.selectLiquidMaterial();
+    if (this.chargeMaterialForm) {
+      if (this.chargeMaterialForm.value.materialId && this.chargeMaterialForm.value.materialId != '') {
+        if (this.chargeMaterialForm.value.materialLatentHeat == '') {
+          this.setProperties();
+        }
+      }
+    }
     if (!this.baselineSelected) {
       this.disableForm();
     }
@@ -74,14 +82,16 @@ export class LiquidChargeMaterialFormComponent implements OnInit {
 
 
   setProperties() {
-    this.chargeMaterialForm.patchValue({
-      materialLatentHeat: this.selectedMaterial.latentHeat,
-      materialSpecificHeatLiquid: this.selectedMaterial.specificHeatLiquid,
-      materialSpecificHeatVapor: this.selectedMaterial.specificHeatVapor,
-      materialName: this.selectedMaterial.substance,
-      materialVaporizingTemperature: this.selectedMaterial.vaporizationTemperature
-    })
-    this.checkForm();
+    console.log(this.chargeMaterialForm.value.materialId);
+    //let selectedMaterial = this.suiteDbService.selectLiquidMaterialById(this.chargeMaterialForm.value.materialId);
+    // this.chargeMaterialForm.patchValue({
+    //   materialLatentHeat: this.selectedMaterial.latentHeat,
+    //   materialSpecificHeatLiquid: this.selectedMaterial.specificHeatLiquid,
+    //   materialSpecificHeatVapor: this.selectedMaterial.specificHeatVapor,
+    //   materialName: this.selectedMaterial.substance,
+    //   materialVaporizingTemperature: this.selectedMaterial.vaporizationTemperature
+    // })
+    // this.checkForm();
 
   }
 }

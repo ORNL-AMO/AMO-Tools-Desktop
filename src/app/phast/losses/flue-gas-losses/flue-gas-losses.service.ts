@@ -25,7 +25,7 @@ export class FlueGasLossesService {
       'gasType': [''],
       'flueGasTemperature': [''],
       'excessAirPercentage': [''],
-      'combustionAirTemperature ': [''],
+      'combustionAirTemperature': [''],
       'CH4': [''],
       'C2H6': [''],
       'N2': [''],
@@ -45,18 +45,18 @@ export class FlueGasLossesService {
       'gasType': [''],
       'flueGasTemperature': [''],
       'excessAirPercentage': [''],
-      'combustionAirTemperature ': [''],
-      'fuelTemperature ': [''],
+      'combustionAirTemperature': [''],
+      'fuelTemperature': [''],
       'moistureInAirComposition': [''],
       'ashDischargeTemperature': [''],
-      'unburnedCarbonInAsh ': [''],
+      'unburnedCarbonInAsh': [''],
       'carbon': [''],
       'hydrogen': [''],
       'sulphur': [''],
       'inertAsh': [''],
       'o2': [''],
-      'moisture ': [''],
-      'nitrogen ': ['']
+      'moisture': [''],
+      'nitrogen': ['']
     })
   }
 

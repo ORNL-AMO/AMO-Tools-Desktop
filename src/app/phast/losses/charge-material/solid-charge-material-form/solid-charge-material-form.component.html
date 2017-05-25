@@ -1,116 +1,120 @@
-<div class="form-group">
-  <label class="small" for="materialName">Name of Material</label>
-  <select class="form-control" id="materialName" [(ngModel)]="selectedMaterial.id" (change)="setProperties()" (focus)="focusField('materialName')"
-    [disabled]="!baselineSelected">
+<form #lossForm [formGroup]="chargeMaterialForm">
+  
+  <div class="form-section">
+    <div class="form-group">
+      <label class="small" for="materialName">Name of Material</label>
+      <select class="form-control" id="materialName" formControlName="materialId" (change)="setProperties()" (focus)="focusField('materialName')">
           <option *ngFor="let material of materialTypes" [ngValue]="material.id">{{material.substance}}</option>
         </select>
-</div>
-<form #lossForm [formGroup]="chargeMaterialForm">
-  <div class="form-group">
-    <label class="small" for="materialSpecificHeatOfSolidMaterial">Average specific heat of the solid material</label>
-    <input type="number" class="form-control" formControlName="materialSpecificHeatOfSolidMaterial" id="materialSpecificHeatOfSolidMaterial"
-      (input)="checkForm()" (focus)="focusField('materialSpecificHeatOfSolidMaterial')">
-    <span class="units">Btu/(lb-&#8457;)</span>
+    </div>
+
+    <div class="form-group">
+      <label class="small" for="materialSpecificHeatOfSolidMaterial">Average specific heat of the solid material</label>
+      <input type="number" class="form-control" formControlName="materialSpecificHeatOfSolidMaterial" id="materialSpecificHeatOfSolidMaterial"
+        (input)="checkForm()" (focus)="focusField('materialSpecificHeatOfSolidMaterial')">
+      <span class="units">Btu/(lb-&#8457;)</span>
+    </div>
+
+    <div class="form-group">
+      <label class="small" for="materialLatentHeatOfFusion">Latent Heat of Fusion</label>
+      <input type="number" class="form-control" formControlName="materialLatentHeatOfFusion" id="materialLatentHeatOfFusion" (input)="checkForm()"
+        (focus)="focusField('materialLatentHeatOfFusion')">
+      <span class="units">Btu/lb</span>
+    </div>
+
+    <div class="form-group">
+      <label class="small" for="materialHeatOfLiquid">Specific heat of liquid from molten material</label>
+      <input type="number" class="form-control" formControlName="materialHeatOfLiquid" id="materialHeatOfLiquid" (input)="checkForm()"
+        (focus)="focusField('materialHeatOfLiquid')">
+      <span class="units">Btu/(lb-&#8457;)</span>
+    </div>
+
+    <div class="form-group">
+      <label class="small" for="materialMeltingPoint">Melting Point</label>
+      <input type="number" class="form-control" formControlName="materialMeltingPoint" id="materialMeltingPoint" (input)="checkForm()"
+        (focus)="focusField('materialMeltingPoint')">
+      <span class="units">&#8457;</span>
+    </div>
   </div>
 
-  <div class="form-group">
-    <label class="small" for="materialLatentHeatOfFusion">Latent Heat of Fusion</label>
-    <input type="number" class="form-control" formControlName="materialLatentHeatOfFusion" id="materialLatentHeatOfFusion" (input)="checkForm()"
-      (focus)="focusField('materialLatentHeatOfFusion')">
-    <span class="units">Btu/lb</span>
-  </div>
+  <div class="form-section">
+    <div class="form-group">
+      <label class="small" for="feedRate">Charge (wet)-Feed Rate</label>
+      <input type="number" class="form-control" formControlName="feedRate" id="feedRate" (input)="checkForm()" (focus)="focusField('feedRate')">
+      <span class="units">lb/hr</span>
+    </div>
 
-  <div class="form-group">
-    <label class="small" for="materialHeatOfLiquid">Specific heat of liquid from molten material</label>
-    <input type="number" class="form-control" formControlName="materialHeatOfLiquid" id="materialHeatOfLiquid" (input)="checkForm()"
-      (focus)="focusField('materialHeatOfLiquid')">
-    <span class="units">Btu/(lb-&#8457;)</span>
-  </div>
+    <div class="form-group">
+      <label class="small" for="waterContentAsCharged">Water Content as Charged</label>
+      <input type="number" class="form-control" formControlName="waterContentAsCharged" id="waterContentAsCharged" (input)="checkForm()"
+        (focus)="focusField('waterContentAsCharged')">
+      <span class="units">%</span>
+    </div>
 
-  <div class="form-group">
-    <label class="small" for="materialMeltingPoint">Melting Point</label>
-    <input type="number" class="form-control" formControlName="materialMeltingPoint" id="materialMeltingPoint" (input)="checkForm()"
-      (focus)="focusField('materialMeltingPoint')">
-    <span class="units">&#8457;</span>
-  </div>
+    <div class="form-group">
+      <label class="small" for="waterContentAsDischarged">Water Content as Discharged</label>
+      <input type="number" class="form-control" formControlName="waterContentAsDischarged" id="waterContentAsDischarged" (input)="checkForm()"
+        (focus)="focusField('waterContentAsDischarged')">
+      <span class="units">%</span>
+    </div>
 
-
-  <div class="form-group">
-    <label class="small" for="feedRate">Charge (wet)-Feed Rate</label>
-    <input type="number" class="form-control" formControlName="feedRate" id="feedRate" (input)="checkForm()" (focus)="focusField('feedRate')">
-    <span class="units">lb/hr</span>
-  </div>
-
-  <div class="form-group">
-    <label class="small" for="waterContentAsCharged">Water Content as Charged</label>
-    <input type="number" class="form-control" formControlName="waterContentAsCharged" id="waterContentAsCharged" (input)="checkForm()"
-      (focus)="focusField('waterContentAsCharged')">
-    <span class="units">%</span>
-  </div>
-
-  <div class="form-group">
-    <label class="small" for="waterContentAsDischarged">Water Content as Discharged</label>
-    <input type="number" class="form-control" formControlName="waterContentAsDischarged" id="waterContentAsDischarged" (input)="checkForm()"
-      (focus)="focusField('waterContentAsDischarged')">
-    <span class="units">%</span>
-  </div>
-
-  <div class="form-group">
-    <label class="small" for="initialTemperature">Initial Temperature</label>
-    <input type="number" class="form-control" formControlName="initialTemperature" id="initialTemperature" (input)="checkForm()"
-      (focus)="focusField('initialTemperature')">
-    <span class="units">&#8457;</span>
-  </div>
+    <div class="form-group">
+      <label class="small" for="initialTemperature">Initial Temperature</label>
+      <input type="number" class="form-control" formControlName="initialTemperature" id="initialTemperature" (input)="checkForm()"
+        (focus)="focusField('initialTemperature')">
+      <span class="units">&#8457;</span>
+    </div>
 
 
-  <div class="form-group">
-    <label class="small" for="chargeMaterialDischargeTemperature">Charge Material Discharge Temperature</label>
-    <input type="number" class="form-control" formControlName="chargeMaterialDischargeTemperature" id="chargeMaterialDischargeTemperature"
-      (input)="checkForm()" (focus)="focusField('chargeMaterialDischargeTemperature')">
-    <span class="units">&#8457;</span>
-  </div>
+    <div class="form-group">
+      <label class="small" for="chargeMaterialDischargeTemperature">Charge Material Discharge Temperature</label>
+      <input type="number" class="form-control" formControlName="chargeMaterialDischargeTemperature" id="chargeMaterialDischargeTemperature"
+        (input)="checkForm()" (focus)="focusField('chargeMaterialDischargeTemperature')">
+      <span class="units">&#8457;</span>
+    </div>
 
-  <div class="form-group">
-    <label class="small" for="waterVaporDischargeTemperature">Water Vapor Discharge Temperature</label>
-    <input type="number" class="form-control" formControlName="waterVaporDischargeTemperature" id="waterVaporDischargeTemperature"
-      (input)="checkForm()" (focus)="focusField('waterVaporDischargeTemperature')">
-    <span class="units">&#8457;</span>
-  </div>
+    <div class="form-group">
+      <label class="small" for="waterVaporDischargeTemperature">Water Vapor Discharge Temperature</label>
+      <input type="number" class="form-control" formControlName="waterVaporDischargeTemperature" id="waterVaporDischargeTemperature"
+        (input)="checkForm()" (focus)="focusField('waterVaporDischargeTemperature')">
+      <span class="units">&#8457;</span>
+    </div>
 
 
-  <div class="form-group">
-    <label class="small" for="percentChargeMelted">Charge Melted</label>
-    <input type="number" class="form-control" formControlName="percentChargeMelted" id="percentChargeMelted" (input)="checkForm()"
-      (focus)="focusField('percentChargeMelted')">
-    <span class="units">%</span>
-  </div>
+    <div class="form-group">
+      <label class="small" for="percentChargeMelted">Charge Melted</label>
+      <input type="number" class="form-control" formControlName="percentChargeMelted" id="percentChargeMelted" (input)="checkForm()"
+        (focus)="focusField('percentChargeMelted')">
+      <span class="units">%</span>
+    </div>
 
-  <div class="form-group">
-    <label class="small" for="percentChargeReacted">Charge Reacted</label>
-    <input type="number" class="form-control" formControlName="percentChargeReacted" id="percentChargeReacted" (input)="checkForm()"
-      (focus)="focusField('percentChargeReacted')">
-    <span class="units">%</span>
-  </div>
+    <div class="form-group">
+      <label class="small" for="percentChargeReacted">Charge Reacted</label>
+      <input type="number" class="form-control" formControlName="percentChargeReacted" id="percentChargeReacted" (input)="checkForm()"
+        (focus)="focusField('percentChargeReacted')">
+      <span class="units">%</span>
+    </div>
 
-  <div class="form-group">
-    <label class="small" for="heatOfReaction">Heat of Reaction</label>
-    <input type="number" class="form-control" formControlName="heatOfReaction" id="heatOfReaction" (input)="checkForm()" (focus)="focusField('heatOfReaction')">
-    <span class="units">Btu/lb</span>
-  </div>
+    <div class="form-group">
+      <label class="small" for="heatOfReaction">Heat of Reaction</label>
+      <input type="number" class="form-control" formControlName="heatOfReaction" id="heatOfReaction" (input)="checkForm()" (focus)="focusField('heatOfReaction')">
+      <span class="units">Btu/lb</span>
+    </div>
 
-  <div class="form-group">
-    <label class="small" for="endothermicOrExothermic">Endothermic/Exothermic</label>
-    <select class="form-control" formControlName="endothermicOrExothermic" id="endothermicOrExothermic" (input)="checkForm()"
-      (focus)="focusField('endothermicOrExothermic')">
+    <div class="form-group">
+      <label class="small" for="endothermicOrExothermic">Endothermic/Exothermic</label>
+      <select class="form-control" formControlName="endothermicOrExothermic" id="endothermicOrExothermic" (input)="checkForm()"
+        (focus)="focusField('endothermicOrExothermic')">
         <option>Endothermic</option>
         <option>Exothermic</option>
       </select>
-  </div>
+    </div>
 
-  <div class="form-group">
-    <label class="small" for="additionalHeatRequired">Additional Heat Required</label>
-    <input type="number" class="form-control" formControlName="additionalHeatRequired" id="additionalHeatRequired" (input)="checkForm()"
-      (focus)="focusField('additionalHeatRequired')">
-    <span class="units">Btu/lb</span>
+    <div class="form-group">
+      <label class="small" for="additionalHeatRequired">Additional Heat Required</label>
+      <input type="number" class="form-control" formControlName="additionalHeatRequired" id="additionalHeatRequired" (input)="checkForm()"
+        (focus)="focusField('additionalHeatRequired')">
+      <span class="units">Btu/lb</span>
+    </div>
   </div>
 </form>

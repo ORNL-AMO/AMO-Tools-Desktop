@@ -10,7 +10,7 @@ export class ChargeMaterialService {
   //empty gas charge material form
   initGasForm() {
     return this.formBuilder.group({
-      'materialName': ['', Validators.required],
+      'materialId': [1, Validators.required],
       'materialSpecificHeat': ['', Validators.required],
       'feedRate': ['', Validators.required],
       'vaporInGas': ['', Validators.required],
@@ -31,7 +31,7 @@ export class ChargeMaterialService {
       reactionType = 'Exothermic';
     }
     return this.formBuilder.group({
-      'materialName': [gasMaterial.materialName, Validators.required],
+      'materialId': [gasMaterial.materialId, Validators.required],
       'materialSpecificHeat': [gasMaterial.specificHeatGas, Validators.required],
       'feedRate': [gasMaterial.feedRate, Validators.required],
       'vaporInGas': [gasMaterial.percentVapor, Validators.required],
@@ -51,7 +51,7 @@ export class ChargeMaterialService {
       reactionType = 1;
     }
     let tmpGasMaterial: GasChargeMaterial = {
-      materialName: gasForm.value.materialName,
+      materialId: gasForm.value.materialId,
       thermicReactionType: reactionType,
       specificHeatGas: gasForm.value.materialSpecificHeat,
       feedRate: gasForm.value.feedRate,
@@ -69,7 +69,7 @@ export class ChargeMaterialService {
   //Empty liquid charge material form
   initLiquidForm() {
     return this.formBuilder.group({
-      'materialName': ['', Validators.required],
+      'materialId': [1, Validators.required],
       'materialSpecificHeatLiquid': ['', Validators.required],
       'materialVaporizingTemperature': ['', Validators.required],
       'materialLatentHeat': ['', Validators.required],
@@ -92,7 +92,7 @@ export class ChargeMaterialService {
       reactionType = 'Exothermic';
     }
     return this.formBuilder.group({
-      'materialName': [liquidChargeMaterial.materialName, Validators.required],
+      'materialId': [liquidChargeMaterial.materialId, Validators.required],
       'materialSpecificHeatLiquid': [liquidChargeMaterial.specificHeatLiquid, Validators.required],
       'materialVaporizingTemperature': [liquidChargeMaterial.vaporizingTemperature, Validators.required],
       'materialLatentHeat': [liquidChargeMaterial.latentHeat, Validators.required],
@@ -115,7 +115,7 @@ export class ChargeMaterialService {
       reactionType = 1;
     }
     let tmpLiquidMaterial: LiquidChargeMaterial = {
-      materialName: liquidForm.value.materialName,
+      materialId: liquidForm.value.materialId,
       thermicReactionType: reactionType,
       specificHeatLiquid: liquidForm.value.materialSpecificHeatLiquid,
       vaporizingTemperature: liquidForm.value.materialVaporizingTemperature,

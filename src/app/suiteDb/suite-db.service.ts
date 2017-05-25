@@ -11,7 +11,7 @@ export class SuiteDbService {
   startup() {
     return db.startup();
   }
-
+  //volume
   selectFlueGasMaterialGas() {
     return db.selectFlueGasMaterialGas()
   }
@@ -19,7 +19,7 @@ export class SuiteDbService {
   selectFlueGasMaterialGasById(id: number) {
     return db.selectFlueGasMaterialGasById(id)
   }
-
+  //mass
   selectFlueGasMaterialSolidLiquid() {
     return db.selectFlueGasMaterialSolidLiquid()
   }

@@ -28,7 +28,6 @@ export class GasChargeMaterialFormComponent implements OnInit {
   constructor(private suiteDbService: SuiteDbService) { }
 
   ngOnChanges(changes: SimpleChanges) {
-    this.materialTypes = this.suiteDbService.selectGasMaterial();
     if (!this.firstChange) {
       if (!this.baselineSelected) {
         this.disableForm();
@@ -41,6 +40,15 @@ export class GasChargeMaterialFormComponent implements OnInit {
   }
 
   ngOnInit() {
+    console.log(this.chargeMaterialForm);
+    this.materialTypes = this.suiteDbService.selectGasMaterial();
+    if (this.chargeMaterialForm) {
+      if (this.chargeMaterialForm.value.materialId && this.chargeMaterialForm.value.materialId != '') {
+        if (this.chargeMaterialForm.value.materialSpecificHeat == '') {
+          this.setProperties();
+        }
+      }
+    }
     if (!this.baselineSelected) {
       this.disableForm();
     }
@@ -72,9 +80,11 @@ export class GasChargeMaterialFormComponent implements OnInit {
   }
 
   setProperties() {
-    this.chargeMaterialForm.patchValue({
-      materialSpecificHeat: this.selectedMaterial.specificHeatVapor,
-      materialName: this.selectedMaterial.substance
-    });
+    console.log(this.chargeMaterialForm.value.materialId);
+    //let selectedMaterial = this.suiteDbService.selectGasMaterialById(this.chargeMaterialForm.value.materialId);
+    // this.chargeMaterialForm.patchValue({
+    //   materialSpecificHeat: this.selectedMaterial.specificHeatVapor,
+    //   materialName: this.selectedMaterial.substance
+    // });
   }
 }

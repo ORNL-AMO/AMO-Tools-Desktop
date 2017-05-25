@@ -7,7 +7,7 @@ export interface ChargeMaterial {
 }
 
 export interface GasChargeMaterial {
-  materialName?: string,
+  materialId?: number,
   thermicReactionType?: number,
   specificHeatGas?: number,
   feedRate?: number,
@@ -22,7 +22,7 @@ export interface GasChargeMaterial {
 }
 
 export interface LiquidChargeMaterial {
-  materialName?: string,
+  materialId?: number,
   thermicReactionType?: number,
   specificHeatLiquid?: number,
   vaporizingTemperature?: number,
