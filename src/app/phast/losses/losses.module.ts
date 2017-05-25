@@ -54,6 +54,7 @@ import { GasLeakageLossesHelpComponent } from './losses-help/gas-leakage-losses-
 import { OpeningLossesHelpComponent } from './losses-help/opening-losses-help/opening-losses-help.component';
 import { OtherLossesHelpComponent } from './losses-help/other-losses-help/other-losses-help.component';
 import { WallLossesHelpComponent } from './losses-help/wall-losses-help/wall-losses-help.component';
+import { SuiteDbModule } from '../../suiteDb/suiteDb.module';
 
 @NgModule({
   imports: [
@@ -61,7 +62,8 @@ import { WallLossesHelpComponent } from './losses-help/wall-losses-help/wall-los
     FormsModule,
     ReactiveFormsModule,
     SharedModule,
-    ModalModule
+    ModalModule,
+    SuiteDbModule
   ],
   declarations: [
     LossesComponent,

@@ -1,4 +1,5 @@
 import { Component, OnInit, Input, EventEmitter, Output, ViewChild, ElementRef, SimpleChanges } from '@angular/core';
+import { SuiteDbService } from '../../../../suiteDb/suite-db.service';
 
 @Component({
   selector: 'app-gas-charge-material-form',
@@ -22,9 +23,12 @@ export class GasChargeMaterialFormComponent implements OnInit {
   elements: any;
 
   firstChange: boolean = true;
-  constructor() { }
+  materialTypes: any;
+  selectedMaterial: any;
+  constructor(private suiteDbService: SuiteDbService) { }
 
   ngOnChanges(changes: SimpleChanges) {
+    this.materialTypes = this.suiteDbService.selectGasMaterial();
     if (!this.firstChange) {
       if (!this.baselineSelected) {
         this.disableForm();
@@ -65,5 +69,12 @@ export class GasChargeMaterialFormComponent implements OnInit {
 
   focusField(str: string) {
     this.changeField.emit(str);
+  }
+
+  setProperties() {
+    this.chargeMaterialForm.patchValue({
+      materialSpecificHeat: this.selectedMaterial.specificHeatVapor,
+      materialName: this.selectedMaterial.substance
+    });
   }
 }

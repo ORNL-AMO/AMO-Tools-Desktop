@@ -1,4 +1,5 @@
 import { Component, OnInit, Input, EventEmitter, Output, ViewChild, ElementRef, SimpleChanges } from '@angular/core';
+import { SuiteDbService } from '../../../../suiteDb/suite-db.service';
 
 @Component({
   selector: 'app-liquid-charge-material-form',
@@ -16,15 +17,18 @@ export class LiquidChargeMaterialFormComponent implements OnInit {
   baselineSelected: boolean;
   @Output('changeField')
   changeField = new EventEmitter<string>();
-  
+
   @ViewChild('lossForm') lossForm: ElementRef;
   form: any;
   elements: any;
 
   firstChange: boolean = true;
-  constructor() { }
+  materialTypes: any;
+  selectedMaterial: any;
+  constructor(private suiteDbService: SuiteDbService) { }
 
   ngOnChanges(changes: SimpleChanges) {
+    this.materialTypes = this.suiteDbService.selectLiquidMaterial();
     if (!this.firstChange) {
       if (!this.baselineSelected) {
         this.disableForm();
@@ -68,4 +72,16 @@ export class LiquidChargeMaterialFormComponent implements OnInit {
     this.changeField.emit(str);
   }
 
+
+  setProperties() {
+    this.chargeMaterialForm.patchValue({
+      materialLatentHeat: this.selectedMaterial.latentHeat,
+      materialSpecificHeatLiquid: this.selectedMaterial.specificHeatLiquid,
+      materialSpecificHeatVapor: this.selectedMaterial.specificHeatVapor,
+      materialName: this.selectedMaterial.substance,
+      materialVaporizingTemperature: this.selectedMaterial.vaporizationTemperature
+    })
+    this.checkForm();
+
+  }
 }

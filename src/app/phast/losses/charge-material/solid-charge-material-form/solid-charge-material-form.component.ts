@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, EventEmitter, Output, ViewChild, ElementRef, SimpleChanges } from '@angular/core';
-
+import { SuiteDbService } from '../../../../suiteDb/suite-db.service';
 @Component({
   selector: 'app-solid-charge-material-form',
   templateUrl: './solid-charge-material-form.component.html',
@@ -22,7 +22,10 @@ export class SolidChargeMaterialFormComponent implements OnInit {
   elements: any;
 
   firstChange: boolean = true;
-  constructor() { }
+
+  materialTypes: any;
+  selectedMaterial: any;
+  constructor(private suiteDbService: SuiteDbService) { }
 
   ngOnChanges(changes: SimpleChanges) {
     if (!this.firstChange) {
@@ -37,6 +40,8 @@ export class SolidChargeMaterialFormComponent implements OnInit {
   }
 
   ngOnInit() {
+    //get material types from ToolSuiteDb
+    this.materialTypes = this.suiteDbService.selectSolidMaterial();
     if (!this.baselineSelected) {
       this.disableForm();
     }
@@ -66,5 +71,17 @@ export class SolidChargeMaterialFormComponent implements OnInit {
   focusField(str: string) {
     this.changeField.emit(str);
   }
+
+  setProperties() {
+    this.chargeMaterialForm.patchValue({
+      materialName: this.selectedMaterial.substance,
+      materialLatentHeatOfFusion: this.selectedMaterial.latentHeat,
+      materialMeltingPoint: this.selectedMaterial.meltingPoint,
+      materialHeatOfLiquid: this.selectedMaterial.specificHeatLiquid,
+      materialSpecificHeatOfSolidMaterial: this.selectedMaterial.specificHeatSolid
+    })
+    this.checkForm();
+  }
+
 
 }
