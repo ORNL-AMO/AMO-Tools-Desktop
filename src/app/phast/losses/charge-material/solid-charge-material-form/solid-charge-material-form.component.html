@@ -1,10 +1,10 @@
-
-  <div class="form-group">
-    <label class="small" for="materialName">Name of Material</label>
-    <select class="form-control" id="materialName" [(ngModel)]="selectedMaterial" (change)="setProperties()" (focus)="focusField('materialName')">
+<div class="form-group">
+  <label class="small" for="materialName">Name of Material</label>
+  <select class="form-control" id="materialName" [(ngModel)]="selectedMaterial" (change)="setProperties()" (focus)="focusField('materialName')"
+    [disabled]="!baselineSelected">
           <option *ngFor="let material of materialTypes" [ngValue]="material">{{material.substance}}</option>
         </select>
-  </div>
+</div>
 <form #lossForm [formGroup]="chargeMaterialForm">
   <div class="form-group">
     <label class="small" for="materialSpecificHeatOfSolidMaterial">Average specific heat of the solid material</label>
