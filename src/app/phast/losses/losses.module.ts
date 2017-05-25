@@ -55,6 +55,8 @@ import { OpeningLossesHelpComponent } from './losses-help/opening-losses-help/op
 import { OtherLossesHelpComponent } from './losses-help/other-losses-help/other-losses-help.component';
 import { WallLossesHelpComponent } from './losses-help/wall-losses-help/wall-losses-help.component';
 import { SuiteDbModule } from '../../suiteDb/suiteDb.module';
+import { FlueGasLossesFormVolumeComponent } from './flue-gas-losses/flue-gas-losses-form-volume/flue-gas-losses-form-volume.component';
+import { FlueGasLossesFormMassComponent } from './flue-gas-losses/flue-gas-losses-form-mass/flue-gas-losses-form-mass.component';
 
 @NgModule({
   imports: [
@@ -105,7 +107,9 @@ import { SuiteDbModule } from '../../suiteDb/suiteDb.module';
     GasLeakageLossesHelpComponent,
     OpeningLossesHelpComponent,
     OtherLossesHelpComponent,
-    WallLossesHelpComponent
+    WallLossesHelpComponent,
+    FlueGasLossesFormVolumeComponent,
+    FlueGasLossesFormMassComponent
   ],
   providers: [
     ChargeMaterialService,

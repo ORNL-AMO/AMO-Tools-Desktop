@@ -161,16 +161,43 @@ export class PhastService {
     return phastAddon.leakageLosses(draftPressure, openingArea, leakageGasTemperature, ambientTemperature, coefficient, specificGravity, correctionFactor)
   }
 
-  flueGas(
-    furnaceDraft: number,
-    leakageTemperature: number,
-    openingArea: number,
-    ambientTemperature: number,
-    flowCoeeficient: number,
-    specificGravity: number,
-    correctionFactor: number,
+  flueGasByVolume(
+    flueGasTemperature: number,
+    excessAirPercentage: number,
+    combustionAirTemperature: number,
+    CH4: number,
+    C2H6: number,
+    N2: number,
+    H2: number,
+    C3H8: number,
+    C4H10_CnH2n: number,
+    H2O: number,
+    CO: number,
+    CO2: number,
+    SO2: number,
+    O2: number
   ) {
+    return phastAddon.flueGasByVolume(flueGasTemperature, excessAirPercentage, combustionAirTemperature, CH4, C2H6, N2, H2, C3H8, C4H10_CnH2n, H2O, CO, CO2, SO2, O2);
+  }
 
+  flueGasByMass(
+    flueGasTemperature: number,
+    excessAirPercentage: number,
+    combustionAirTemperature: number,
+    fuelTemperature: number,
+    ashDischargeTemperature: number,
+    moistureInAirComposition: number,
+    unburnedCarbonInAsh: number,
+    carbon: number,
+    hydrogen: number,
+    sulphur: number,
+    inertAsh: number,
+    o2: number,
+    moisture: number,
+    nitrogen: number
+  ) {
+    return phastAddon.flueGasByMass(flueGasTemperature, excessAirPercentage, combustionAirTemperature, fuelTemperature, ashDischargeTemperature, moistureInAirComposition,
+      unburnedCarbonInAsh, carbon, hydrogen, sulphur, inertAsh, o2, moisture, nitrogen)
   }
 
   atmosphere(
