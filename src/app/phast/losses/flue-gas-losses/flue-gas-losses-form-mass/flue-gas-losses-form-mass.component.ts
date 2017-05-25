@@ -14,7 +14,11 @@ export class FlueGasLossesFormMassComponent implements OnInit {
   constructor(private suiteDbService: SuiteDbService) { }
 
   ngOnInit() {
-    this.options = this.suiteDbService.selectFlueGasMaterialGas();
+    this.options = this.suiteDbService.selectFlueGasMaterialSolidLiquid();
+  }
+
+  setProperties(){
+    
   }
 
 }

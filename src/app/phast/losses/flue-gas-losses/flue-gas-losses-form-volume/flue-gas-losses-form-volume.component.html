@@ -1,6 +1,6 @@
 <form #lossForm [formGroup]="flueGasLossForm">
   <div class="form-group">
-    <label class="small" for="gasType">Furnace Flue Gas Temperature</label>
+    <label class="small" for="gasType">Flue Gas</label>
     <select class="form-control" formControlName="gasType" id="gasType" (change)="setProperties()">
       <option *ngFor="let option of options" [ngValue]="option.substance">{{option.substance}}</option>
     </select>
