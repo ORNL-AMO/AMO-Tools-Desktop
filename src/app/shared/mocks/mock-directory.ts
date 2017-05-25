@@ -71,7 +71,7 @@ export const MockDirectory: Directory = {
             {
               chargeMaterialType: 'Solid',
               solidChargeMaterial: {
-                materialName: 'Type 1',
+                materialId: 1,
                 thermicReactionType: 1,
                 specificHeatSolid: .15,
                 latentHeat: 60,

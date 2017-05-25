@@ -42,6 +42,15 @@ export class SolidChargeMaterialFormComponent implements OnInit {
   ngOnInit() {
     //get material types from ToolSuiteDb
     this.materialTypes = this.suiteDbService.selectSolidMaterial();
+    if (this.chargeMaterialForm) {
+      if (this.chargeMaterialForm.value.materialId != '') {
+        this.selectedMaterial = this.suiteDbService.selectSolidMaterialById(this.chargeMaterialForm.value.materialId);
+        console.log('selected');
+        console.log(this.selectedMaterial)
+      }
+    }
+    console.log('types');
+    console.log(this.materialTypes)
     if (!this.baselineSelected) {
       this.disableForm();
     }
@@ -74,7 +83,7 @@ export class SolidChargeMaterialFormComponent implements OnInit {
 
   setProperties() {
     this.chargeMaterialForm.patchValue({
-      materialName: this.selectedMaterial.substance,
+      materialId: this.selectedMaterial.materialId,
       materialLatentHeatOfFusion: this.selectedMaterial.latentHeat,
       materialMeltingPoint: this.selectedMaterial.meltingPoint,
       materialHeatOfLiquid: this.selectedMaterial.specificHeatLiquid,
@@ -82,6 +91,4 @@ export class SolidChargeMaterialFormComponent implements OnInit {
     })
     this.checkForm();
   }
-
-
 }

@@ -38,7 +38,7 @@ export interface LiquidChargeMaterial {
   heatRequired?: number
 }
 export interface SolidChargeMaterial {
-  materialName?: string,
+  materialId?: number,
   thermicReactionType?: number,
   specificHeatSolid?: number,
   latentHeat?: number,

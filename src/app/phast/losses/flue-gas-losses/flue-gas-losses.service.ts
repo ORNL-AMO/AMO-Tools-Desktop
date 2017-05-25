@@ -59,4 +59,12 @@ export class FlueGasLossesService {
       'nitrogen ': ['']
     })
   }
+
+  initFormFromLoss(loss: FlueGas){
+
+  }
+
+  initLossFromForm(){
+    
+  }
 }

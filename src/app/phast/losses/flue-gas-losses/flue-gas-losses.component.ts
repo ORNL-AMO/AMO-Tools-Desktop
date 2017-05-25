@@ -1,6 +1,5 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
 import * as _ from 'lodash';
-import { FormBuilder } from '@angular/forms';
 import { FlueGasLossesService } from './flue-gas-losses.service';
 import { PhastService } from '../../phast.service';
 import { FlueGas } from '../../../shared/models/losses/flueGas';
@@ -28,26 +27,41 @@ export class FlueGasLossesComponent implements OnInit {
   fieldChange = new EventEmitter<string>();
 
 
-  flueGasLosses: Array<any>;
+  _flueGasLosses: Array<any>;
+    firstChange: boolean = true;
 
-  constructor(private formBuilder: FormBuilder, private phastService: PhastService, private flueGasLossesService: FlueGasLossesService) { }
+  constructor(private phastService: PhastService, private flueGasLossesService: FlueGasLossesService) { }
 
   ngOnInit() {
-    if (!this.flueGasLosses) {
-      this.flueGasLosses = new Array();
+    if (!this._flueGasLosses) {
+      this._flueGasLosses = new Array();
+    }
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (!this.firstChange) {
+      if (changes.saveClicked) {
+        this.saveLosses();
+      }
+      if (changes.addLossToggle) {
+        this.addLoss();
+      }
+    }
+    else {
+      this.firstChange = false;
     }
   }
 
   addLoss() {
-    this.flueGasLosses.push({
+    this._flueGasLosses.push({
       form: this.flueGasLossesService.initForm(),
-      name: 'Loss #' + (this.flueGasLosses.length + 1),
+      name: 'Loss #' + (this._flueGasLosses.length + 1),
       heatLoss: 0.0
     });
   }
 
   removeLoss(str: string) {
-    this.flueGasLosses = _.remove(this.flueGasLosses, loss => {
+    this._flueGasLosses = _.remove(this._flueGasLosses, loss => {
       return loss.name != str;
     });
     this.renameLoss();
@@ -55,7 +69,7 @@ export class FlueGasLossesComponent implements OnInit {
 
   renameLoss() {
     let index = 1;
-    this.flueGasLosses.forEach(loss => {
+    this._flueGasLosses.forEach(loss => {
       loss.name = 'Loss #' + index;
       index++;
     })
@@ -64,6 +78,10 @@ export class FlueGasLossesComponent implements OnInit {
   calculate(loss: any) {
     //TODO: ADD call to phastService to calculate heat loss
     //loss.heatLoss = this.phastService.flueGasLoss();
+  }
+
+  saveLosses(){
+    
   }
 }
 

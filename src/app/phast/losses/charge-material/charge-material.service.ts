@@ -163,7 +163,7 @@ export class ChargeMaterialService {
     }
     //FUEL FIRED SOLID
     return this.formBuilder.group({
-      'materialName': [solidChargeMaterial.materialName, Validators.required],
+      'materialId': [solidChargeMaterial.materialId, Validators.required],
       'materialSpecificHeatOfSolidMaterial': [solidChargeMaterial.specificHeatSolid, Validators.required],
       'materialLatentHeatOfFusion': [solidChargeMaterial.latentHeat, Validators.required],
       'materialHeatOfLiquid': [solidChargeMaterial.specificHeatLiquid, Validators.required],
@@ -191,7 +191,7 @@ export class ChargeMaterialService {
     }
 
     let tmpSolidMaterial: SolidChargeMaterial = {
-      materialName: solidForm.value.materialName,
+      materialId: solidForm.value.materialId,
       thermicReactionType: reactionType,
       specificHeatSolid: solidForm.value.materialSpecificHeatOfSolidMaterial,
       latentHeat: solidForm.value.materialLatentHeatOfFusion,
