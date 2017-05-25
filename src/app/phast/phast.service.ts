@@ -124,6 +124,7 @@ export class PhastService {
     reactionHeat: number,
     additionalHeat: number) {
     //return nothing?
+    debugger
     return phastAddon.solidLoadChargeMaterial(thermicReactionType, specificHeatSolid, latentHeat, specificHeatLiquid, meltingPoint, chargeFeedRate, waterContentCharged, waterContentDischarged, initialTemperature, dischargeTemperature, waterVaporDischargeTemperature, chargeMelted, chargeReacted, reactionHeat, additionalHeat);
   }
 

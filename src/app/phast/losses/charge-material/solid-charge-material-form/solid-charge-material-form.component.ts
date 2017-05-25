@@ -24,6 +24,7 @@ export class SolidChargeMaterialFormComponent implements OnInit {
   firstChange: boolean = true;
 
   materialTypes: any;
+  selectedMaterialId: any;
   selectedMaterial: any;
   constructor(private suiteDbService: SuiteDbService) { }
 
@@ -43,14 +44,24 @@ export class SolidChargeMaterialFormComponent implements OnInit {
     //get material types from ToolSuiteDb
     this.materialTypes = this.suiteDbService.selectSolidMaterial();
     if (this.chargeMaterialForm) {
-      if (this.chargeMaterialForm.value.materialId != '') {
+      if (this.chargeMaterialForm.value.materialId && this.chargeMaterialForm.value.materialId != '') {
+        //this.selectedMaterialId = this.chargeMaterialForm.value.materialId;
         this.selectedMaterial = this.suiteDbService.selectSolidMaterialById(this.chargeMaterialForm.value.materialId);
-        console.log('selected');
-        console.log(this.selectedMaterial)
+        if (this.chargeMaterialForm.value.materialLatentHeatOfFusion == '') {
+          this.setProperties();
+        }
+      } else {
+        this.selectedMaterial = this.suiteDbService.selectSolidMaterialById(1);
+        if (this.chargeMaterialForm.value.materialLatentHeatOfFusion == '') {
+          this.setProperties();
+        }
+      }
+    } else {
+      this.selectedMaterial = this.suiteDbService.selectSolidMaterialById(1);
+      if (this.chargeMaterialForm.value.materialLatentHeatOfFusion == '') {
+        this.setProperties();
       }
     }
-    console.log('types');
-    console.log(this.materialTypes)
     if (!this.baselineSelected) {
       this.disableForm();
     }
@@ -83,7 +94,7 @@ export class SolidChargeMaterialFormComponent implements OnInit {
 
   setProperties() {
     this.chargeMaterialForm.patchValue({
-      materialId: this.selectedMaterial.materialId,
+      materialId: this.selectedMaterial.id,
       materialLatentHeatOfFusion: this.selectedMaterial.latentHeat,
       materialMeltingPoint: this.selectedMaterial.meltingPoint,
       materialHeatOfLiquid: this.selectedMaterial.specificHeatLiquid,

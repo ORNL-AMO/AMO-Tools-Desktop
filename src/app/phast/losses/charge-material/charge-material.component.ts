@@ -130,24 +130,24 @@ export class ChargeMaterialComponent implements OnInit {
       if (loss.solidForm.value.endothermicOrExothermic == 'Exothermic') {
         reactionType = 1;
       }
-      loss.heatRequired = this.phastService.solidLoadChargeMaterial(
-        reactionType,
-        loss.solidForm.value.materialSpecificHeatOfSolidMaterial,
-        loss.solidForm.value.materialLatentHeatOfFusion,
-        loss.solidForm.value.materialHeatOfLiquid,
-        loss.solidForm.value.materialMeltingPoint,
-        loss.solidForm.value.feedRate,
-        loss.solidForm.value.waterContentAsCharged,
-        loss.solidForm.value.waterContentAsDischarged,
-        loss.solidForm.value.initialTemperature,
-        loss.solidForm.value.chargeMaterialDischargeTemperature,
-        loss.solidForm.value.waterVaporDischargeTemperature,
-        loss.solidForm.value.percentChargeMelted,
-        loss.solidForm.value.percentChargeReacted,
-        loss.solidForm.value.heatOfReaction,
-        loss.solidForm.value.additionalHeatRequired,
+      // loss.heatRequired = this.phastService.solidLoadChargeMaterial(
+      //   reactionType,
+      //   loss.solidForm.value.materialSpecificHeatOfSolidMaterial,
+      //   loss.solidForm.value.materialLatentHeatOfFusion,
+      //   loss.solidForm.value.materialHeatOfLiquid,
+      //   loss.solidForm.value.materialMeltingPoint,
+      //   loss.solidForm.value.feedRate,
+      //   loss.solidForm.value.waterContentAsCharged,
+      //   loss.solidForm.value.waterContentAsDischarged,
+      //   loss.solidForm.value.initialTemperature,
+      //   loss.solidForm.value.chargeMaterialDischargeTemperature,
+      //   loss.solidForm.value.waterVaporDischargeTemperature,
+      //   loss.solidForm.value.percentChargeMelted,
+      //   loss.solidForm.value.percentChargeReacted,
+      //   loss.solidForm.value.heatOfReaction,
+      //   loss.solidForm.value.additionalHeatRequired,
 
-      );
+      // );
     } else if (loss.chargeMaterialType == 'Liquid') {
       let reactionType = 0;
       if (loss.liquidForm.value.endothermicOrExothermic == 'Exothermic') {

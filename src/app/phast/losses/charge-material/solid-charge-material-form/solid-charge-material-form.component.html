@@ -1,6 +1,6 @@
 <div class="form-group">
   <label class="small" for="materialName">Name of Material</label>
-  <select class="form-control" id="materialName" [(ngModel)]="selectedMaterial" (change)="setProperties()" (focus)="focusField('materialName')"
+  <select class="form-control" id="materialName" [(ngModel)]="selectedMaterial.id" (change)="setProperties()" (focus)="focusField('materialName')"
     [disabled]="!baselineSelected">
           <option *ngFor="let material of materialTypes" [ngValue]="material.id">{{material.substance}}</option>
         </select>

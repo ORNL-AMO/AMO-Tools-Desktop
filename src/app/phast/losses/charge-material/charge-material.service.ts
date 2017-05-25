@@ -136,7 +136,7 @@ export class ChargeMaterialService {
   initSolidForm() {
     //FUEL FIRED SOLID
     return this.formBuilder.group({
-      'materialName': ['', Validators.required],
+      'materialId': [1, Validators.required],
       'materialSpecificHeatOfSolidMaterial': ['', Validators.required],
       'materialLatentHeatOfFusion': ['', Validators.required],
       'materialHeatOfLiquid': ['', Validators.required],
