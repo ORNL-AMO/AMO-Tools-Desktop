@@ -40,7 +40,6 @@ export class LiquidChargeMaterialFormComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log(this.chargeMaterialForm);
     this.materialTypes = this.suiteDbService.selectLiquidMaterial();
     if (this.chargeMaterialForm) {
       if (this.chargeMaterialForm.value.materialId && this.chargeMaterialForm.value.materialId != '') {
@@ -83,15 +82,13 @@ export class LiquidChargeMaterialFormComponent implements OnInit {
 
   setProperties() {
     console.log(this.chargeMaterialForm.value.materialId);
-    //let selectedMaterial = this.suiteDbService.selectLiquidMaterialById(this.chargeMaterialForm.value.materialId);
-    // this.chargeMaterialForm.patchValue({
-    //   materialLatentHeat: this.selectedMaterial.latentHeat,
-    //   materialSpecificHeatLiquid: this.selectedMaterial.specificHeatLiquid,
-    //   materialSpecificHeatVapor: this.selectedMaterial.specificHeatVapor,
-    //   materialName: this.selectedMaterial.substance,
-    //   materialVaporizingTemperature: this.selectedMaterial.vaporizationTemperature
-    // })
-    // this.checkForm();
-
+    let selectedMaterial = this.suiteDbService.selectLiquidMaterialById(this.chargeMaterialForm.value.materialId);
+    this.chargeMaterialForm.patchValue({
+      materialLatentHeat: selectedMaterial.latentHeat,
+      materialSpecificHeatLiquid: selectedMaterial.specificHeatLiquid,
+      materialSpecificHeatVapor: selectedMaterial.specificHeatVapor,
+      materialVaporizingTemperature: selectedMaterial.vaporizationTemperature
+    })
+    this.checkForm();
   }
 }
