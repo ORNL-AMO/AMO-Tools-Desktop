@@ -123,8 +123,6 @@ export class PhastService {
     chargeReacted: number,
     reactionHeat: number,
     additionalHeat: number) {
-    //return nothing?
-    debugger
     return phastAddon.solidLoadChargeMaterial(thermicReactionType, specificHeatSolid, latentHeat, specificHeatLiquid, meltingPoint, chargeFeedRate, waterContentCharged, waterContentDischarged, initialTemperature, dischargeTemperature, waterVaporDischargeTemperature, chargeMelted, chargeReacted, reactionHeat, additionalHeat);
   }
 
@@ -178,7 +176,23 @@ export class PhastService {
     SO2: number,
     O2: number
   ) {
-    return phastAddon.flueGasByVolume(flueGasTemperature, excessAirPercentage, combustionAirTemperature, CH4, C2H6, N2, H2, C3H8, C4H10_CnH2n, H2O, CO, CO2, SO2, O2);
+    let inputs = {
+      flueGasTemperature: flueGasTemperature,
+      excessAirPercentage: excessAirPercentage,
+      combustionAirTemperature: combustionAirTemperature,
+      CH4: CH4,
+      C2H6: C2H6,
+      N2: N2,
+      H2: H2,
+      C3H8: C3H8,
+      C4H10_CnH2n: C4H10_CnH2n,
+      H2O: H2O,
+      CO: CO,
+      CO2: CO2,
+      SO2: SO2,
+      O2: O2
+    }
+    return phastAddon.flueGasLossesByVolume(inputs);
   }
 
   flueGasByMass(
@@ -197,8 +211,23 @@ export class PhastService {
     moisture: number,
     nitrogen: number
   ) {
-    return phastAddon.flueGasByMass(flueGasTemperature, excessAirPercentage, combustionAirTemperature, fuelTemperature, ashDischargeTemperature, moistureInAirComposition,
-      unburnedCarbonInAsh, carbon, hydrogen, sulphur, inertAsh, o2, moisture, nitrogen)
+    let inputs = {
+      flueGasTemperature: flueGasTemperature,
+      excessAirPercentage: excessAirPercentage,
+      combustionAirTemperature: combustionAirTemperature,
+      fuelTemperature: fuelTemperature,
+      ashDischargeTemperature: ashDischargeTemperature,
+      moistureInAirComposition: moistureInAirComposition,
+      unburnedCarbonInAsh: unburnedCarbonInAsh,
+      carbon: carbon,
+      hydrogen: hydrogen,
+      sulphur: sulphur,
+      inertAsh: inertAsh,
+      o2: o2,
+      moisture: moisture,
+      nitrogen: nitrogen
+    }
+    return phastAddon.flueGasLossesByMass(inputs)
   }
 
   atmosphere(
