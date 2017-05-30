@@ -21,13 +21,17 @@ export class JsonToCsvService {
         dataArr.push(this.getPsatCsvData(assessment, settings, mod.psat));
       })
     }
+    this.downloadData(dataArr, assessment.name);
+  }
+
+  downloadData(dataArr: any, name: string) {
     let convert2Csv = json2csv({ data: dataArr, fields: PsatCsvDataFields, excelString: true });
     convert2Csv = 'data:text/csv;charset=utf-8,' + convert2Csv;
     let doc = this.windowRefService.getDoc();
     let encodedUri = encodeURI(convert2Csv);
     let dlLink = doc.createElement("a");
     dlLink.setAttribute("href", encodedUri);
-    dlLink.setAttribute("download", assessment.name + ".csv");
+    dlLink.setAttribute("download", name + ".csv");
     dlLink.click();
   }
 
@@ -103,15 +107,15 @@ export class JsonToCsvService {
       OptimalPumpEfficiency: tmpResults.optimal.pump_efficiency,
       OptimalPumpEfficiencyUnit: '%',
       OptimalMotorRatedPower: tmpResults.optimal.motor_rated_power,
-      OptimalMotorRatedPowerUnit:settings.powerMeasurement,
+      OptimalMotorRatedPowerUnit: settings.powerMeasurement,
       OptimalMotorShaftPower: tmpResults.optimal.motor_shaft_power,
-      OptimalMotorShaftPowerUnit:settings.powerMeasurement,
+      OptimalMotorShaftPowerUnit: settings.powerMeasurement,
       OptimalPumpShaftPower: tmpResults.optimal.pump_shaft_power,
-      OptimalPumpShaftPowerUnit:settings.powerMeasurement,
+      OptimalPumpShaftPowerUnit: settings.powerMeasurement,
       OptimalMotorEfficiency: tmpResults.optimal.motor_efficiency,
       OptimalMotorEfficiencyUnit: '%',
       OptimalMotorPowerFactor: tmpResults.optimal.motor_power_factor,
-      OptimalMotorPowerFactorUnit:'%',
+      OptimalMotorPowerFactorUnit: '%',
       OptimalMotorCurrent: tmpResults.optimal.motor_current,
       OptimalMotorCurrentUnit: 'amps',
       OptimalMotorPower: tmpResults.optimal.motor_power,

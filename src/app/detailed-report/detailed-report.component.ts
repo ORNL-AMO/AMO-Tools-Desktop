@@ -6,7 +6,7 @@ import { PsatService } from '../psat/psat.service';
 import { IndexedDbService } from '../indexedDb/indexed-db.service';
 import { Settings } from '../shared/models/settings';
 import { WindowRefService } from '../indexedDb/window-ref.service';
-
+import { JsonToCsvService } from '../shared/json-to-csv/json-to-csv.service';
 @Component({
   selector: 'app-detailed-report',
   templateUrl: './detailed-report.component.html',
@@ -26,22 +26,14 @@ export class DetailedReportComponent implements OnInit {
 
   gatheringData: any;
   assessmentsGathered: boolean;
-  constructor(private indexedDbService: IndexedDbService, private psatService: PsatService, private windowRefService: WindowRefService) { }
+  exportReports: any;
+  constructor(private indexedDbService: IndexedDbService, private psatService: PsatService, private windowRefService: WindowRefService, private jsonToCsvService: JsonToCsvService) { }
 
   ngOnInit() {
     //used to hold assessments with outputs
     this.reportAssessments = new Array<Assessment>();
     this.psats = new Array<PSAT>();
-    // let tmpArr = this.assessments.filter(assessment => { return assessment.psat != undefined });
-    //   this.numPsats = tmpArr.length;
-    //   //used to make sure all assessments proccessed (gotten outputs)
-    //   this.assessments.forEach(assessment => {
-    //     if (assessment.psat) {
-    //       this.getAssessmentSettingsThenResults(assessment);
-    //     }
-    //   });
-    //   this.assessmentsGathered = true;
-
+    this.exportReports = new Array();
   }
 
   ngOnChanges() {
@@ -70,6 +62,7 @@ export class DetailedReportComponent implements OnInit {
       results => {
         if (results.length != 0) {
           assessment.psat = this.getResults(assessment.psat, results[0]);
+          this.exportReports.push({ assessment: assessment, settings: results[0] });
           this.reportAssessments.push(assessment);
           this.psats.push(assessment.psat);
           if (this.psats.length == this.numPsats) {
@@ -93,6 +86,7 @@ export class DetailedReportComponent implements OnInit {
           results => {
             if (results.length != 0) {
               assessment.psat = this.getResults(assessment.psat, results[0]);
+              this.exportReports.push({ assessment: assessment, settings: results[0] });
               this.reportAssessments.push(assessment);
               this.psats.push(assessment.psat);
               if (this.psats.length == this.numPsats) {
@@ -121,17 +115,28 @@ export class DetailedReportComponent implements OnInit {
     this.emitCloseReport.emit(true);
   }
 
-
-
   calcPsatSums() {
     this.pumpSavingsPotential = _.sumBy(this.psats, 'outputs.existing.annual_savings_potential')
   }
 
   selectAssessment(num: number) {
-    //console.log(num);
-    //debugger
     let doc = this.windowRefService.getDoc();
     let content = doc.getElementById(num);
     content.scrollIntoView();
+  }
+
+  exportToCsv() {
+    let tmpDataArr = new Array();
+    this.exportReports.forEach(report => {
+      let tmpData = this.jsonToCsvService.getPsatCsvData(report.assessment, report.settings, report.assessment.psat);
+      tmpDataArr.push(tmpData);
+      if (report.assessment.psat.modifications) {
+        report.assessment.psat.modifications.forEach(mod => {
+          tmpData = this.jsonToCsvService.getPsatCsvData(report.assessment, report.settings, mod.psat);
+          tmpDataArr.push(tmpData);
+        })
+      }
+    })
+    this.jsonToCsvService.downloadData(tmpDataArr, 'psatRollup');
   }
 }
