@@ -13,6 +13,7 @@ export const MockDirectory: Directory = {
       type: 'PSAT',
       psat:
       {
+        name: 'Baseline',
         inputs: {
           pump_style: 6,
           pump_specified: null,

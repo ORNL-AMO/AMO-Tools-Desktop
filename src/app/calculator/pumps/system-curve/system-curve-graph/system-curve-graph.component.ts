@@ -62,6 +62,10 @@ export class SystemCurveGraphComponent implements OnInit {
     this.resizeGraph();
   }
 
+  ngOnDestroy() {
+    this.window.onresize = null;
+  }
+
 
   ngOnChanges(changes: SimpleChanges) {
     if (!this.isFirstChange && (changes.lossCoefficient || changes.staticHead)) {

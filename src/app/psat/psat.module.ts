@@ -7,6 +7,8 @@ import { ChartsModule } from 'ng2-charts';
 import { PumpsModule } from '../calculator/pumps/pumps.module';
 import { ModalModule } from 'ng2-bootstrap';
 import { IndexedDbModule } from '../indexedDb/indexedDb.module';
+import { JsonToCsvModule } from '../shared/json-to-csv/json-to-csv.module';
+
 
 import { PsatComponent } from './psat.component';
 import { PsatBannerComponent } from './psat-banner/psat-banner.component';
@@ -79,7 +81,8 @@ import { EditConditionPropertiesComponent } from './modify-conditions/edit-condi
     ModalModule,
     IndexedDbModule,
     SettingsModule,
-    ToastyModule
+    ToastyModule,
+    JsonToCsvModule
   ],
   providers: [
     PsatService

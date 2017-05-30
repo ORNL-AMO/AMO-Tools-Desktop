@@ -7,6 +7,7 @@ import { ModalDirective } from 'ng2-bootstrap';
 import * as _ from 'lodash';
 import { Settings } from '../shared/models/settings';
 import { AssessmentService } from '../assessment/assessment.service';
+import { JsonToCsvService } from '../shared/json-to-csv/json-to-csv.service';
 
 import { ToastyService, ToastyConfig, ToastOptions, ToastData } from 'ng2-toasty';
 
@@ -34,7 +35,7 @@ export class DashboardComponent implements OnInit {
   reportAssessments: Array<any>;
   selectedAssessments: Array<any>;
   constructor(private indexedDbService: IndexedDbService, private formBuilder: FormBuilder, private assessmentService: AssessmentService, private toastyService: ToastyService,
-    private toastyConfig: ToastyConfig) {
+    private toastyConfig: ToastyConfig, private jsonToCsvService: JsonToCsvService) {
     this.toastyConfig.theme = 'bootstrap';
     this.toastyConfig.position = 'bottom-right';
     this.toastyConfig.limit = 1;
