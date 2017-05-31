@@ -7,6 +7,7 @@ import { Assessment } from '../models/assessment';
 import { PsatService } from '../../psat/psat.service';
 import { Settings } from '../models/settings';
 import { PSAT } from '../models/psat';
+import * as moment from 'moment';
 
 @Injectable()
 export class JsonToCsvService {
@@ -39,8 +40,8 @@ export class JsonToCsvService {
     let tmpResults = this.psatService.results(psat.inputs, settings);
     let tmpPsatCsvData: PsatCsvData = {
       Name: assessment.name,
-      CreatedDate: assessment.createdDate,
-      ModifiedDate: assessment.modifiedDate,
+      CreatedDate: moment(assessment.createdDate).format("YYYY-MM-DD H:mm A"),
+      ModifiedDate: moment(assessment.modifiedDate).format("YYYY-MM-DD H:mm A"),
       PsatName: psat.name ? psat.name : 'Baseline',
       PumpStyle: this.psatService.getPumpStyleFromEnum(psat.inputs.pump_style),
       PumpRatedSpeed: psat.inputs.pump_rated_speed,
@@ -76,7 +77,7 @@ export class JsonToCsvService {
       MotorFieldCurrent: psat.inputs.motor_field_current ? psat.inputs.motor_field_current : null,
       MotorFieldCurrentUnit: psat.inputs.motor_field_current ? 'A' : null,
       MotorFieldVoltage: psat.inputs.motor_field_voltage ? psat.inputs.motor_field_voltage : null,
-      MotorFieldVoltageUnit: psat.inputs.motor_field_voltage ? 'kW' : null,
+      MotorFieldVoltageUnit: psat.inputs.motor_field_voltage ? 'V' : null,
       CostKwHour: psat.inputs.cost_kw_hour,
       CostKwHourUnit: '$/kwh',
       LoadFactor: 1,
@@ -132,8 +133,8 @@ export class JsonToCsvService {
 
 export interface PsatCsvData {
   Name: string,
-  CreatedDate: Date,
-  ModifiedDate: Date,
+  CreatedDate: string,
+  ModifiedDate: string,
   PsatName: string,
   PumpStyle: string,
   PumpRatedSpeed: number,
