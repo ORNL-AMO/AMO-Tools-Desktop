@@ -75,7 +75,9 @@ export class MotorPerformanceGraphComponent implements OnInit {
     this.window.onresize = () => { this.resizeGraph() };
     this.resizeGraph();
   }
-
+  ngOnDestroy() {
+    this.window.onresize = null;
+  }
   resizeGraph() {
     let motorGraph = this.doc.getElementById('motorPerformanceGraph');
     this.canvasWidth = motorGraph.clientWidth;

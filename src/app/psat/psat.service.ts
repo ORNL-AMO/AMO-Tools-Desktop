@@ -28,7 +28,20 @@ export class PsatService {
     if (settings.flowMeasurement != 'gpm') {
       psatInputs.flow_rate = this.convertUnitsService.value(psatInputs.flow_rate).from(settings.flowMeasurement).to('gpm');
     }
+    
     let tmpResults = psatAddon.results(psatInputs);
+
+    if (settings.powerMeasurement != 'hp') {
+      tmpResults.motor_rated_power[0] = this.convertUnitsService.value(tmpResults.motor_rated_power[0]).from('hp').to(settings.powerMeasurement);
+      tmpResults.motor_rated_power[1] = this.convertUnitsService.value(tmpResults.motor_rated_power[1]).from('hp').to(settings.powerMeasurement);
+
+      tmpResults.motor_shaft_power[0] = this.convertUnitsService.value(tmpResults.motor_shaft_power[0]).from('hp').to(settings.powerMeasurement);
+      tmpResults.motor_shaft_power[1] = this.convertUnitsService.value(tmpResults.motor_shaft_power[1]).from('hp').to(settings.powerMeasurement);
+
+      tmpResults.pump_shaft_power[0] = this.convertUnitsService.value(tmpResults.pump_shaft_power[0]).from('hp').to(settings.powerMeasurement);
+      tmpResults.pump_shaft_power[1] = this.convertUnitsService.value(tmpResults.pump_shaft_power[1]).from('hp').to(settings.powerMeasurement);
+      
+  }
     let tmpOutputs: PsatOutputs = this.parseResults(tmpResults);
     return tmpOutputs;
   }
@@ -397,6 +410,18 @@ export class PsatService {
     }
     return lineFreq;
   }
+
+  getLineFreqNumValueFromEnum(num: number): number {
+    let lineFreq;
+    if (num == 0) {
+      lineFreq = 60;
+    } else if (num == 1) {
+      lineFreq = 50;
+    }
+    return lineFreq;
+  }
+
+
   getEfficienyClassEnum(effClass: string): number {
     let effEnum: number;
     if (effClass == 'Standard Efficiency') {

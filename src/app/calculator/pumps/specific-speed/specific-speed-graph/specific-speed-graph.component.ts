@@ -60,6 +60,9 @@ export class SpecificSpeedGraphComponent implements OnInit {
   }
 
 
+  ngOnDestroy() {
+    this.window.onresize = null;
+  }
   ngOnChanges(changes: SimpleChanges) {
     if (!this.firstChange) {
       if (changes.toggleCalculate) {

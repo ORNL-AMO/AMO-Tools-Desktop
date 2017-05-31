@@ -86,6 +86,10 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
     this.resizeGraph();
   }
 
+  ngOnDestroy() {
+    this.window.onresize = null;
+  }
+  
   resizeGraph() {
     let curveGraph = this.doc.getElementById('achievableEfficiencyGraph');
 
@@ -277,7 +281,7 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
       .style("stroke-width", "2px")
       .style("fill", "none")
       .style("stroke", "#3498DB");
-   
+
     this.maxPoint = this.svg.append("g")
       .attr("class", "focus")
       .style("display", "none");
