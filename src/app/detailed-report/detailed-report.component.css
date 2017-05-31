@@ -2,3 +2,22 @@
     width: 100vw;
 }
 
+.print-assessments{
+    max-height: 64vh;
+    overflow: scroll;
+}
+
+@media print {
+    .print-content{
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        margin: 0;
+    }
+
+    .print-assessments{
+        max-height: none;
+        background-color: red;
+    }
+}

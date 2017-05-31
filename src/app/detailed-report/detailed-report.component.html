@@ -1,6 +1,6 @@
 <div class="row report-container justify-content-center">
   <div class="col-10">
-    <div id="detailedReportContainer" class="card" style="max-height: 100vh" *ngIf="assessmentsGathered">
+    <div class="card print-content" style="max-height: 100vh" *ngIf="assessmentsGathered">
       <div class="card-block">
         <div class="row">
           <div class="col-12">
@@ -26,7 +26,7 @@
               <li class="list-group-item" *ngFor="let assessment of reportAssessments"><a href="#assessment.id" (click)="selectAssessment(assessment.id)">{{assessment.name}}</a></li>
             </ul>
           </div>
-          <div class="col-10" style="max-height: 62vh; overflow: scroll">
+          <div class="col-10 print-assessments">
             <div class="row" *ngFor="let assessment of reportAssessments">
               <app-psat-report id="{{assessment.id}}" style="width: 100%" [assessment]="assessment"></app-psat-report>
             </div>
