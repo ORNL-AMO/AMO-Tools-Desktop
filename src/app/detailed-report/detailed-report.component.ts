@@ -139,4 +139,15 @@ export class DetailedReportComponent implements OnInit {
     })
     this.jsonToCsvService.downloadData(tmpDataArr, 'psatRollup');
   }
+
+  print() {
+    let win = this.windowRefService.nativeWindow;
+    let doc = this.windowRefService.getDoc();
+    debugger
+    // let content = doc.getElementById('detailedReportContainer').innerHTML;
+    // let originContent = doc.body.innerHTML;
+    // doc.body.innerHTML = content;
+    win.print();
+  //  doc.body.innerHTML = originContent;
+  }
 }

@@ -1,6 +1,6 @@
 <div class="row report-container justify-content-center">
   <div class="col-10">
-    <div class="card" style="max-height: 100vh" *ngIf="assessmentsGathered">
+    <div id="detailedReportContainer" class="card" style="max-height: 100vh" *ngIf="assessmentsGathered">
       <div class="card-block">
         <div class="row">
           <div class="col-12">
@@ -15,6 +15,7 @@
         <div class="row" style="padding-top: 15px;">
           <div class="col-12">
             <h2>ASSESSMENTS</h2>
+            <button class="btn btn-secondary pull-right" (click)="print()">Print Report</button>
             <button class="btn btn-secondary pull-right" (click)="exportToCsv()">Export to CSV</button>
           </div>
         </div>
