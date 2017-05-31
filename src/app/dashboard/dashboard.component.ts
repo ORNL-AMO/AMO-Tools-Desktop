@@ -36,7 +36,7 @@ export class DashboardComponent implements OnInit {
   reportAssessments: Array<any>;
   selectedAssessments: Array<any>;
   constructor(private indexedDbService: IndexedDbService, private formBuilder: FormBuilder, private assessmentService: AssessmentService, private toastyService: ToastyService,
-    private toastyConfig: ToastyConfig, private jsonToCsvService: JsonToCsvService private suitDbService: SuiteDbService) {
+    private toastyConfig: ToastyConfig, private jsonToCsvService: JsonToCsvService, private suitDbService: SuiteDbService) {
     this.toastyConfig.theme = 'bootstrap';
     this.toastyConfig.position = 'bottom-right';
     this.toastyConfig.limit = 1;

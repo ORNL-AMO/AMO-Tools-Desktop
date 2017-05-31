@@ -58,7 +58,7 @@ import { TutorialsComponent } from '../tutorials/tutorials.component';
     ReactiveFormsModule,
     SettingsModule,
     ToastyModule,
-    JsonToCsvModule
+    JsonToCsvModule,
     SuiteDbModule
   ],
   providers: [
