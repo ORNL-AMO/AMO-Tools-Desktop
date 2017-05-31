@@ -13,43 +13,42 @@ export class SuiteDbService {
   }
   //volume
   selectGasFlueGasMaterials() {
-    debugger
-    return db.selectFlueGasMaterialGas()
+    return db.selectGasFlueGasMaterials()
   }
 
-  selectGasFlueGasMaterialById(id: number) {debugger
-    return db.selectFlueGasMaterialGasById(id)
+  selectGasFlueGasMaterialById(id: number) {
+    return db.selectGasFlueGasMaterialById(id)
   }
   //mass
-  selectSolidLiquidFlueGasMaterials() {debugger
+  selectSolidLiquidFlueGasMaterials() {
     return db.selectSolidLiquidFlueGasMaterials()
   }
 
-  selectSolidLiquidFlueGasMaterialById(id: number) {debugger
+  selectSolidLiquidFlueGasMaterialById(id: number) {
     return db.selectSolidLiquidFlueGasMaterialById(id)
   }
 
-  selectGasLoadChargeMaterials() {debugger
+  selectGasLoadChargeMaterials() {
     return db.selectGasLoadChargeMaterials()
   }
 
-  selectGasLoadChargeMaterialById(id: number) {debugger
+  selectGasLoadChargeMaterialById(id: number) {
     return db.selectGasLoadChargeMaterialById(id)
   }
 
-  selectLiquidLoadChargeMaterials() {debugger
+  selectLiquidLoadChargeMaterials() {
     return db.selectLiquidLoadChargeMaterials()
   }
 
-  selectLiquidLoadChargeMaterialById(id: number) {debugger
+  selectLiquidLoadChargeMaterialById(id: number) {
     return db.selectLiquidLoadChargeMaterialById(id)
   }
 
-  selectSolidLoadChargeMaterials() {debugger
+  selectSolidLoadChargeMaterials() {
     return db.selectSolidLoadChargeMaterials()
   }
 
-  selectSolidLoadChargeMaterialById(id: number) {debugger
+  selectSolidLoadChargeMaterialById(id: number) {
     return db.selectSolidLoadChargeMaterialById(id)
   }
 

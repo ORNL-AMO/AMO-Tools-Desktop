@@ -17,8 +17,9 @@ export class PhastService {
     finalTemperature: number,
     correctionFactor: number
   ): number {
+    let inputs = { specificHeat, feedRate, initialTemperature, finalTemperature, correctionFactor }
     //returns heatLoss
-    return phastAddon.fixtureLosses(specificHeat, feedRate, initialTemperature, finalTemperature, correctionFactor)
+    return phastAddon.fixtureLosses(inputs)
   }
 
   gasCoolingLosses(
@@ -29,7 +30,8 @@ export class PhastService {
     correctionFactor: number
   ): number {
     //returns heatLoss
-    return phastAddon.gasCoolingLosses(flowRate, initialTemperature, finalTemperature, specificHeat, correctionFactor);
+    let inputs = { flowRate, initialTemperature, finalTemperature, specificHeat, correctionFactor }
+    return phastAddon.gasCoolingLosses(inputs);
   }
 
   gasLoadChargeMaterial(
@@ -45,7 +47,8 @@ export class PhastService {
     additionalHeat: number
   ): number {
     //returns heatLoss
-    return phastAddon.gasLoadChargeMaterial(thermicReactionType, specificHeatGas, feedRate, percentVapor, initialTemperature, dischargeTemperature, specificHeatVapor, percentReacted, reactionHeat, additionalHeat);
+    let inputs = { thermicReactionType, specificHeatGas, feedRate, percentVapor, initialTemperature, dischargeTemperature, specificHeatVapor, percentReacted, reactionHeat, additionalHeat }
+    return phastAddon.gasLoadChargeMaterial(inputs);
   }
 
   liquidCoolingLosses(
@@ -57,7 +60,8 @@ export class PhastService {
     correctionFactor: number
   ): number {
     //returns heatLoss
-    return phastAddon.liquidCoolingLosses(flowRate, density, initialTemperature, outletTemperature, specificHeat, correctionFactor);
+    let inputs = { flowRate, density, initialTemperature, outletTemperature, specificHeat, correctionFactor }
+    return phastAddon.liquidCoolingLosses(inputs);
   }
 
   liquidLoadChargeMaterial(
@@ -75,13 +79,14 @@ export class PhastService {
     additionalHeat: number
   ): number {
     //returns heatLoss
-    return phastAddon.liquidLoadChargeMaterial(thermicReactionType, specificHeatLiquid, vaporizingTemperature, latentHeat, specificHeatVapor, chargeFeedRate, initialTemperature, dischargeTemperature, percentVaporized, percentReacted, reactionHeat, additionalHeat);
+    let inputs = { thermicReactionType, specificHeatLiquid, vaporizingTemperature, latentHeat, specificHeatVapor, chargeFeedRate, initialTemperature, dischargeTemperature, percentVaporized, percentReacted, reactionHeat, additionalHeat }
+    return phastAddon.liquidLoadChargeMaterial(inputs);
   }
 
   openingLossesQuad(
-    emessivity: number,
-    openingLength: number,
-    openingHeight: number,
+    emissivity: number,
+    length: number,
+    widthHeight: number,
     thickness: number,
     ratio: number,
     ambientTemperature: number,
@@ -90,11 +95,12 @@ export class PhastService {
     viewFactor: number
   ): number {
     //TODO: Update call for quad
-    return phastAddon.openingLossesQuad(emessivity, openingLength, openingHeight, thickness, ratio, ambientTemperature, insideTemperature, percentTimeOpen, viewFactor);
+    let inputs = { emissivity, length, widthHeight, thickness, ratio, ambientTemperature, insideTemperature, percentTimeOpen, viewFactor }
+    return phastAddon.openingLossesQuad(inputs);
   }
 
   openingLossesCircular(
-    emessivity: number,
+    emissivity: number,
     diameterLength: number,
     thickness: number,
     ratio: number,
@@ -104,7 +110,8 @@ export class PhastService {
     viewFactor: number
   ): number {
     //TODO: update call for round
-    return phastAddon.openingLossesCircular(emessivity, diameterLength, thickness, ratio, ambientTemperature, insideTemperature, percentTimeOpen, viewFactor);
+    let inputs = { emissivity, diameterLength, thickness, ratio, ambientTemperature, insideTemperature, percentTimeOpen, viewFactor }
+    return phastAddon.openingLossesCircular(inputs);
   }
 
   solidLoadChargeMaterial(
@@ -120,10 +127,11 @@ export class PhastService {
     dischargeTemperature: number,
     waterVaporDischargeTemperature: number,
     chargeMelted: number,
-    chargeReacted: number,
+    chargedReacted: number,
     reactionHeat: number,
     additionalHeat: number) {
-    return phastAddon.solidLoadChargeMaterial(thermicReactionType, specificHeatSolid, latentHeat, specificHeatLiquid, meltingPoint, chargeFeedRate, waterContentCharged, waterContentDischarged, initialTemperature, dischargeTemperature, waterVaporDischargeTemperature, chargeMelted, chargeReacted, reactionHeat, additionalHeat);
+    let inputs = { thermicReactionType, specificHeatSolid, latentHeat, specificHeatLiquid, meltingPoint, chargeFeedRate, waterContentCharged, waterContentDischarged, initialTemperature, dischargeTemperature, waterVaporDischargeTemperature, chargeMelted, chargedReacted, reactionHeat, additionalHeat }
+    return phastAddon.solidLoadChargeMaterial(inputs);
   }
 
   wallLosses(
@@ -136,7 +144,8 @@ export class PhastService {
     correctionFactor: number
   ) {
     //returns heatLoss
-    return phastAddon.wallLosses(surfaceArea, ambientTemperature, surfaceTemperature, windVelocity, surfaceEmissivity, conditionFactor, correctionFactor);
+    let inputs = { surfaceArea, ambientTemperature, surfaceTemperature, windVelocity, surfaceEmissivity, conditionFactor, correctionFactor }
+    return phastAddon.wallLosses(inputs);
   }
 
   waterCoolingLosses(
@@ -145,7 +154,8 @@ export class PhastService {
     outletTemperature: number,
     correctionFactor: number
   ) {
-    return phastAddon.waterCoolingLosses(flowRate, initialTemperature, outletTemperature, correctionFactor);
+    let inputs = { flowRate, initialTemperature, outletTemperature, correctionFactor }
+    return phastAddon.waterCoolingLosses(inputs);
   }
 
   leakageLosses(
@@ -157,7 +167,8 @@ export class PhastService {
     specificGravity: number,
     correctionFactor: number
   ) {
-    return phastAddon.leakageLosses(draftPressure, openingArea, leakageGasTemperature, ambientTemperature, coefficient, specificGravity, correctionFactor)
+    let inputs = { draftPressure, openingArea, leakageGasTemperature, ambientTemperature, coefficient, specificGravity, correctionFactor }
+    return phastAddon.leakageLosses(inputs)
   }
 
   flueGasByVolume(
@@ -192,7 +203,6 @@ export class PhastService {
       SO2: SO2,
       O2: O2
     }
-    debugger
     return phastAddon.flueGasLossesByVolume(inputs);
   }
 
@@ -228,7 +238,6 @@ export class PhastService {
       moisture: moisture,
       nitrogen: nitrogen
     }
-    debugger
     return phastAddon.flueGasLossesByMass(inputs)
   }
 
@@ -239,7 +248,8 @@ export class PhastService {
     correctionFactor: number,
     specificHeat: number
   ) {
-    return phastAddon.atmosphere(inletTemperature, outletTemperature, flowRate, correctionFactor, specificHeat);
+    let inputs = { inletTemperature, outletTemperature, flowRate, correctionFactor, specificHeat }
+    return phastAddon.atmosphere(inputs);
   }
 }
 
