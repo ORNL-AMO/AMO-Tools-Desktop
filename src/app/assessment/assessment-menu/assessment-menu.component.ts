@@ -2,6 +2,8 @@ import { Component, OnInit, Output, EventEmitter, Input, ViewChild, SimpleChange
 import { Directory } from '../../shared/models/directory';
 import { ModalDirective } from 'ng2-bootstrap';
 import { IndexedDbService } from '../../indexedDb/indexed-db.service';
+import { ImportExportService } from '../../shared/import-export/import-export.service';
+
 @Component({
   selector: 'app-assessment-menu',
   templateUrl: './assessment-menu.component.html',
@@ -26,6 +28,11 @@ export class AssessmentMenuComponent implements OnInit {
   newDir = new EventEmitter<boolean>();
   @Output('genReport')
   genReport = new EventEmitter<boolean>();
+  @Output('exportEmit')
+  exportEmit = new EventEmitter<boolean>();
+  
+  testInputFile: any;
+
 
   breadCrumbs: Array<Directory>;
 
@@ -33,7 +40,7 @@ export class AssessmentMenuComponent implements OnInit {
 
   isAllSelected: boolean;
   createAssessment: boolean = false;
-  constructor(private indexedDbService: IndexedDbService) { }
+  constructor(private indexedDbService: IndexedDbService, private importExportService: ImportExportService) { }
 
   ngOnInit() {
     this.firstChange = true;
@@ -52,11 +59,11 @@ export class AssessmentMenuComponent implements OnInit {
     }
   }
 
-  hideModal(){
+  hideModal() {
     this.createAssessment = false;
   }
 
-  showCreateAssessment(){
+  showCreateAssessment() {
     this.createAssessment = true;
   }
 
@@ -64,11 +71,11 @@ export class AssessmentMenuComponent implements OnInit {
     this.viewChange.emit(view);
   }
 
-  emitNewDir(){
+  emitNewDir() {
     this.newDir.emit(true);
   }
 
-  emitGenReport(){
+  emitGenReport() {
     this.genReport.emit(true);
   }
 
@@ -94,4 +101,20 @@ export class AssessmentMenuComponent implements OnInit {
   signalSelectAll() {
     this.selectAll.emit(this.isAllSelected);
   }
+
+  emitExport(){
+    this.exportEmit.emit(true);
+  }
+
+  // importDaFile($event) {
+  //   console.log($event.target.files[0]);
+  //   let fr:FileReader = new FileReader();
+  //   fr.readAsText($event.target.files[0]);
+
+
+  //   fr.onloadend = (e) => {
+  //     let testJson = JSON.parse(fr.result);
+  //     console.log(testJson);
+  //   }
+  // }
 }

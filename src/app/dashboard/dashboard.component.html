@@ -8,7 +8,7 @@
         </div>
         <div class="col-10" *ngIf="allDirectories && dashboardView == 'assessment-dashboard'">
             <app-assessment-dashboard [directory]="workingDirectory" (directoryChange)="changeWorkingDirectory($event)" (deleteDataSignal)="showDeleteModal()"
-                (deleteCheckedItems)="showDeleteItemsModal()" (resetDataEmit)="showDeleteModal()" (emitNewDir)="newDir()" (genReport)="generateReport()"></app-assessment-dashboard>
+                (deleteCheckedItems)="showDeleteItemsModal()" (resetDataEmit)="showDeleteModal()" (emitNewDir)="newDir()" (genReport)="generateReport()" (exportEmit)="exportSelected()"></app-assessment-dashboard>
         </div>
         <div class="col-10" *ngIf="allDirectories && dashboardView == 'calculator'">
             <app-calculator (selectCalculator)="viewCalculator($event)" [selectedCalculator]="selectedCalculator" [goCalcHome]="goCalcHome"></app-calculator>
@@ -88,5 +88,21 @@
     </div>
 </div>
 
+<div bsModal #exportModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exportModalLabel"
+    aria-hidden="true" [config]="{backdrop: 'static'}">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Export Modal</h3>
+                <button class="close" aria-label="Close" (click)="hideExportModal()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+            </div>
+            <div class="modal-body">
+                
+            </div>
+        </div>
+    </div>
+</div>
 
 <ng2-toasty></ng2-toasty>

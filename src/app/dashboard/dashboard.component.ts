@@ -32,6 +32,7 @@ export class DashboardComponent implements OnInit {
   goCalcHome: boolean = false;
   @ViewChild('deleteModal') public deleteModal: ModalDirective;
   @ViewChild('deleteItemsModal') public deleteItemsModal: ModalDirective;
+  @ViewChild('exportModal') public exportModal: ModalDirective;
 
   reportAssessments: Array<any>;
   selectedAssessments: Array<any>;
@@ -219,6 +220,14 @@ export class DashboardComponent implements OnInit {
     this.deleteItemsModal.hide();
   }
 
+  showExportModal(){
+    this.exportModal.show();
+  }
+
+  hideExportModal(){
+    this.exportModal.hide();
+  }
+
   deleteData() {
     this.indexedDbService.deleteDb().then(
       results => {
@@ -331,6 +340,16 @@ export class DashboardComponent implements OnInit {
       this.getSelected(this.workingDirectory);
       this.dashboardView = 'detailed-report';
     } else {
+      this.addToast('No items have been selected');
+    }
+  }
+
+  exportSelected(){
+    if(this.checkSelected()){
+      this.selectedAssessments = new Array();
+      this.getSelected(this.workingDirectory);
+      this.showExportModal();
+    }else{
       this.addToast('No items have been selected');
     }
   }

@@ -23,7 +23,9 @@ export class AssessmentDashboardComponent implements OnInit {
   emitNewDir = new EventEmitter<boolean>();
   @Output('genReport')
   genReport = new EventEmitter<boolean>();
-
+  @Output('exportEmit')
+  exportEmit = new EventEmitter<boolean>();
+  
   isChecked: boolean = false;
   view: string;
   isFirstChange: boolean = true;
@@ -81,6 +83,10 @@ export class AssessmentDashboardComponent implements OnInit {
 
   emitGenReport(){
     this.genReport.emit(true);
+  }
+
+  emitExport(){
+    this.exportEmit.emit(true);
   }
 
 }
