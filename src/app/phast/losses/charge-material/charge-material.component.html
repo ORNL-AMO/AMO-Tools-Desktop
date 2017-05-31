@@ -21,14 +21,15 @@
   </div>
   <div class="row">
     <div class="col-12">
-      <div class="form-group">
-        <label class="small" for="type">Select Type</label>
-        <select class="form-control" id="baselineMaterial" [(ngModel)]="material.chargeMaterialType" [disabled]="!baselineSelected"
-          (focus)="changeField('chargeMaterialType')">
+      <div class="form-section">
+        <div class="form-group">
+          <label class="small" for="type">Select Type</label>
+          <select class="form-control" id="type" [(ngModel)]="material.chargeMaterialType" [disabled]="!baselineSelected" (focus)="changeField('chargeMaterialType')">
             <option>Solid</option>
             <option>Liquid</option>
             <option>Gas</option>
             </select>
+        </div>
       </div>
       <app-solid-charge-material-form *ngIf="material.chargeMaterialType == 'Solid'" (changeField)="changeField($event)" [(lossState)]="lossState"
         [(chargeMaterialForm)]="material.solidForm" (calculate)="calculate(material)" [baselineSelected]="baselineSelected"></app-solid-charge-material-form>
