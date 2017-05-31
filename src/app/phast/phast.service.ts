@@ -192,6 +192,7 @@ export class PhastService {
       SO2: SO2,
       O2: O2
     }
+    debugger
     return phastAddon.flueGasLossesByVolume(inputs);
   }
 
@@ -227,6 +228,7 @@ export class PhastService {
       moisture: moisture,
       nitrogen: nitrogen
     }
+    debugger
     return phastAddon.flueGasLossesByMass(inputs)
   }
 

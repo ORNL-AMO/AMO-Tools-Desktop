@@ -42,7 +42,7 @@ export class SolidChargeMaterialFormComponent implements OnInit {
 
   ngOnInit() {
     //get material types from ToolSuiteDb
-    this.materialTypes = this.suiteDbService.selectSolidMaterial();
+    this.materialTypes = this.suiteDbService.selectSolidLoadChargeMaterials();
     if (this.chargeMaterialForm) {
       if (this.chargeMaterialForm.value.materialId && this.chargeMaterialForm.value.materialId != '') {
         if (this.chargeMaterialForm.value.materialLatentHeatOfFusion == '') {
@@ -81,7 +81,7 @@ export class SolidChargeMaterialFormComponent implements OnInit {
   }
 
   setProperties() {
-    let selectedMaterial = this.suiteDbService.selectSolidMaterialById(this.chargeMaterialForm.value.materialId);
+    let selectedMaterial = this.suiteDbService.selectSolidLoadChargeMaterialById(this.chargeMaterialForm.value.materialId);
     this.chargeMaterialForm.patchValue({
       materialLatentHeatOfFusion: selectedMaterial.latentHeat,
       materialMeltingPoint: selectedMaterial.meltingPoint,

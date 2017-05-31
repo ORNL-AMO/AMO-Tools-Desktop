@@ -40,7 +40,7 @@ export class GasChargeMaterialFormComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.materialTypes = this.suiteDbService.selectGasMaterial();
+    this.materialTypes = this.suiteDbService.selectGasLoadChargeMaterials();
     if (this.chargeMaterialForm) {
       if (this.chargeMaterialForm.value.materialId && this.chargeMaterialForm.value.materialId != '') {
         if (this.chargeMaterialForm.value.materialSpecificHeat == '') {
@@ -80,7 +80,7 @@ export class GasChargeMaterialFormComponent implements OnInit {
 
   setProperties() {
     console.log(this.chargeMaterialForm.value.materialId);
-    let selectedMaterial = this.suiteDbService.selectGasMaterialById(this.chargeMaterialForm.value.materialId);
+    let selectedMaterial = this.suiteDbService.selectGasLoadChargeMaterialById(this.chargeMaterialForm.value.materialId);
     this.chargeMaterialForm.patchValue({
       materialSpecificHeat: selectedMaterial.specificHeatVapor,
     });
