@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-declare var json2csv: any;
+//declare var json2csv: any;
 import { MockDirectory } from '../mocks/mock-directory';
 import { WindowRefService } from '../../indexedDb/window-ref.service';
 import { Assessment } from '../models/assessment';
@@ -7,7 +7,7 @@ import { PsatService } from '../../psat/psat.service';
 import { Settings } from '../models/settings';
 import { PSAT } from '../models/psat';
 import * as moment from 'moment';
-
+import * as json2csv from 'json2csv';
 @Injectable()
 export class JsonToCsvService {
 
@@ -25,7 +25,7 @@ export class JsonToCsvService {
   }
 
   downloadData(dataArr: any, name: string) {
-    let convert2Csv = json2csv({ data: dataArr, fields: PsatCsvDataFields, excelString: true });
+    let convert2Csv = json2csv({ data: dataArr, fields: PsatCsvDataFields});
     convert2Csv = 'data:text/csv;charset=utf-8,' + convert2Csv;
     let doc = this.windowRefService.getDoc();
     let encodedUri = encodeURI(convert2Csv);
