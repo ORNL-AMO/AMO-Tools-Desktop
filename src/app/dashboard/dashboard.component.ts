@@ -10,6 +10,7 @@ import { AssessmentService } from '../assessment/assessment.service';
 import { JsonToCsvService } from '../shared/json-to-csv/json-to-csv.service';
 
 import { ToastyService, ToastyConfig, ToastOptions, ToastData } from 'ng2-toasty';
+import { SuiteDbService } from '../suiteDb/suite-db.service'; 
 
 @Component({
   selector: 'app-dashboard',
@@ -35,13 +36,15 @@ export class DashboardComponent implements OnInit {
   reportAssessments: Array<any>;
   selectedAssessments: Array<any>;
   constructor(private indexedDbService: IndexedDbService, private formBuilder: FormBuilder, private assessmentService: AssessmentService, private toastyService: ToastyService,
-    private toastyConfig: ToastyConfig, private jsonToCsvService: JsonToCsvService) {
+    private toastyConfig: ToastyConfig, private jsonToCsvService: JsonToCsvService private suitDbService: SuiteDbService) {
     this.toastyConfig.theme = 'bootstrap';
     this.toastyConfig.position = 'bottom-right';
     this.toastyConfig.limit = 1;
   }
 
   ngOnInit() {
+    //start toolts suite database
+    this.suitDbService.startup();
     this.selectedAssessments = new Array();
     this.showLandingScreen = this.assessmentService.getLandingScreen();
     //open DB and get directories

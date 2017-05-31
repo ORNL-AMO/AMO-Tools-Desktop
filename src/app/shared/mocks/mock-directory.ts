@@ -56,7 +56,7 @@ export const MockDirectory: Directory = {
             {
               chargeMaterialType: 'Gas',
               gasChargeMaterial: {
-                materialName: 'Type 1',
+                materialId: 1,
                 thermicReactionType: 0,
                 specificHeatGas: 0.24,
                 feedRate: 1000,
@@ -72,7 +72,7 @@ export const MockDirectory: Directory = {
             {
               chargeMaterialType: 'Solid',
               solidChargeMaterial: {
-                materialName: 'Type 1',
+                materialId: 1,
                 thermicReactionType: 1,
                 specificHeatSolid: .15,
                 latentHeat: 60,
@@ -93,7 +93,7 @@ export const MockDirectory: Directory = {
             {
               chargeMaterialType: 'Liquid',
               liquidChargeMaterial: {
-                materialName: 'Type 1',
+                materialId: 1,
                 thermicReactionType: 0,
                 specificHeatLiquid: .48,
                 vaporizingTemperature: 240,
@@ -216,6 +216,46 @@ export const MockDirectory: Directory = {
               coefficient: .8052,
               specificGravity: 1.02,
               correctionFactor: 1.0
+            }
+          ],
+          flueGasLosses: [
+            {
+              flueGasType: "By Volume",
+              flueGasByVolume: {
+                flueGasTemperature: 700,
+                excessAirPercentage: 9.0,
+                combustionAirTemperature: 125,
+                CH4: 94.1,
+                C2H6: 2.4,
+                N2: 1.41,
+                H2: 0.03,
+                C3H8: 0.49,
+                C4H10_CnH2n: 0.29,
+                H2O: 0,
+                CO: 0.42,
+                CO2: 0.71,
+                SO2: 0,
+                O2: 0
+              }
+            },
+            {
+              flueGasType: "By Mass",
+              flueGasByMass: {
+                flueGasTemperature: 700,
+                excessAirPercentage: 9.0,
+                combustionAirTemperature: 125,
+                fuelTemperature: 70,
+                moistureInAirComposition: 1.0,
+                ashDischargeTemperature: 100,
+                unburnedCarbonInAsh: 1.5,
+                carbon: 75.0,
+                hydrogen: 5.0,
+                sulphur: 1.0,
+                inertAsh: 9.0,
+                o2: 7.0,
+                moisture: 0.0,
+                nitrogen: 1.5
+              }
             }
           ]
         },

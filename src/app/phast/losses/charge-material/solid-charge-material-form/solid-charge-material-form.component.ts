@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, EventEmitter, Output, ViewChild, ElementRef, SimpleChanges } from '@angular/core';
-
+import { SuiteDbService } from '../../../../suiteDb/suite-db.service';
 @Component({
   selector: 'app-solid-charge-material-form',
   templateUrl: './solid-charge-material-form.component.html',
@@ -22,7 +22,11 @@ export class SolidChargeMaterialFormComponent implements OnInit {
   elements: any;
 
   firstChange: boolean = true;
-  constructor() { }
+
+  materialTypes: any;
+  selectedMaterialId: any;
+  selectedMaterial: any;
+  constructor(private suiteDbService: SuiteDbService) { }
 
   ngOnChanges(changes: SimpleChanges) {
     if (!this.firstChange) {
@@ -37,6 +41,15 @@ export class SolidChargeMaterialFormComponent implements OnInit {
   }
 
   ngOnInit() {
+    //get material types from ToolSuiteDb
+    this.materialTypes = this.suiteDbService.selectSolidMaterial();
+    if (this.chargeMaterialForm) {
+      if (this.chargeMaterialForm.value.materialId && this.chargeMaterialForm.value.materialId != '') {
+        if (this.chargeMaterialForm.value.materialLatentHeatOfFusion == '') {
+          this.setProperties();
+        }
+      } 
+    } 
     if (!this.baselineSelected) {
       this.disableForm();
     }
@@ -67,4 +80,14 @@ export class SolidChargeMaterialFormComponent implements OnInit {
     this.changeField.emit(str);
   }
 
+  setProperties() {
+    let selectedMaterial = this.suiteDbService.selectSolidMaterialById(this.chargeMaterialForm.value.materialId);
+    this.chargeMaterialForm.patchValue({
+      materialLatentHeatOfFusion: selectedMaterial.latentHeat,
+      materialMeltingPoint: selectedMaterial.meltingPoint,
+      materialHeatOfLiquid: selectedMaterial.specificHeatLiquid,
+      materialSpecificHeatOfSolidMaterial: selectedMaterial.specificHeatSolid
+    })
+    this.checkForm();
+  }
 }

@@ -2,13 +2,13 @@ import { Component, OnInit, Input, EventEmitter, Output, ViewChild, ElementRef, 
 import { SuiteDbService } from '../../../../suiteDb/suite-db.service';
 
 @Component({
-  selector: 'app-gas-charge-material-form',
-  templateUrl: './gas-charge-material-form.component.html',
-  styleUrls: ['./gas-charge-material-form.component.css']
+  selector: 'app-flue-gas-losses-form-mass',
+  templateUrl: './flue-gas-losses-form-mass.component.html',
+  styleUrls: ['./flue-gas-losses-form-mass.component.css']
 })
-export class GasChargeMaterialFormComponent implements OnInit {
+export class FlueGasLossesFormMassComponent implements OnInit {
   @Input()
-  chargeMaterialForm: any;
+  flueGasLossForm: any;
   @Output('calculate')
   calculate = new EventEmitter<boolean>();
   @Input()
@@ -23,9 +23,22 @@ export class GasChargeMaterialFormComponent implements OnInit {
   elements: any;
 
   firstChange: boolean = true;
-  materialTypes: any;
-  selectedMaterial: any;
+  options: any;
   constructor(private suiteDbService: SuiteDbService) { }
+
+  ngOnInit() {
+    this.options = this.suiteDbService.selectFlueGasMaterialSolidLiquid();
+    if (this.flueGasLossForm) {
+      if (this.flueGasLossForm.value.gasTypeId && this.flueGasLossForm.value.gasTypeId != '') {
+        if (this.flueGasLossForm.value.carbon == '') {
+          this.setProperties();
+        }
+      }
+    }
+    if (!this.baselineSelected) {
+      this.disableForm();
+    }
+  }
 
   ngOnChanges(changes: SimpleChanges) {
     if (!this.firstChange) {
@@ -39,19 +52,6 @@ export class GasChargeMaterialFormComponent implements OnInit {
     }
   }
 
-  ngOnInit() {
-    this.materialTypes = this.suiteDbService.selectGasMaterial();
-    if (this.chargeMaterialForm) {
-      if (this.chargeMaterialForm.value.materialId && this.chargeMaterialForm.value.materialId != '') {
-        if (this.chargeMaterialForm.value.materialSpecificHeat == '') {
-          this.setProperties();
-        }
-      }
-    }
-    if (!this.baselineSelected) {
-      this.disableForm();
-    }
-  }
 
   disableForm() {
     this.elements = this.lossForm.nativeElement.elements;
@@ -69,7 +69,7 @@ export class GasChargeMaterialFormComponent implements OnInit {
 
   checkForm() {
     this.lossState.saved = false;
-    if (this.chargeMaterialForm.status == "VALID") {
+    if (this.flueGasLossForm.status == "VALID") {
       this.calculate.emit(true);
     }
   }
@@ -79,10 +79,17 @@ export class GasChargeMaterialFormComponent implements OnInit {
   }
 
   setProperties() {
-    console.log(this.chargeMaterialForm.value.materialId);
-    let selectedMaterial = this.suiteDbService.selectGasMaterialById(this.chargeMaterialForm.value.materialId);
-    this.chargeMaterialForm.patchValue({
-      materialSpecificHeat: selectedMaterial.specificHeatVapor,
-    });
+    let tmpFlueGas = this.suiteDbService.selectFlueGasMaterialSolidLiquidById(this.flueGasLossForm.value.gasTypeId);
+    this.flueGasLossForm.patchValue({
+      carbon: tmpFlueGas.carbon,
+      hydrogen: tmpFlueGas.hydrogen,
+      sulphur: tmpFlueGas.sulphur,
+      inertAsh: tmpFlueGas.inertAsh,
+      o2: tmpFlueGas.o2,
+      moisture: tmpFlueGas.moisture,
+      nitrogen: tmpFlueGas.nitrogen
+    })
+    this.checkForm();
   }
+
 }
