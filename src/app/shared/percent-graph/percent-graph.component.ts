@@ -46,6 +46,10 @@ export class PercentGraphComponent implements OnInit {
     this.setValueMargin();
   }
 
+  ngOnDestroy() {
+    this.window.onresize = null;
+  }
+
   setValueMargin() {
     let div = this.doc.getElementsByClassName('chart-container')
     let percentValue = this.doc.getElementById('percent');

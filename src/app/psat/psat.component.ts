@@ -11,6 +11,7 @@ import { Settings } from '../shared/models/settings';
 import { WindowRefService } from '../indexedDb/window-ref.service';
 
 import { ToastyService, ToastyConfig, ToastOptions, ToastData } from 'ng2-toasty';
+import { JsonToCsvService } from '../shared/json-to-csv/json-to-csv.service';
 
 @Component({
   selector: 'app-psat',
@@ -68,7 +69,8 @@ export class PsatComponent implements OnInit {
     private indexedDbService: IndexedDbService,
     private activatedRoute: ActivatedRoute,
     private toastyService: ToastyService,
-    private toastyConfig: ToastyConfig) {
+    private toastyConfig: ToastyConfig,
+    private jsonToCsvService: JsonToCsvService) {
 
     this.toastyConfig.theme = 'bootstrap';
     this.toastyConfig.position = 'bottom-right';
@@ -245,6 +247,7 @@ export class PsatComponent implements OnInit {
 
   exportData() {
     //TODO: Logic for exporting assessment
+    this.jsonToCsvService.exportSinglePsat(this.assessment, this.settings);
   }
 
   addToast(msg: string) {
