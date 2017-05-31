@@ -1,11 +1,11 @@
 // ./main.js
 //require('electron-reload')(__dirname);
 
-const {app, BrowserWindow, ipcMain} = require('electron');
+const { app, BrowserWindow, ipcMain } = require('electron');
 const path = require('path');
 const url = require('url');
 const log = require('electron-log');
-const {autoUpdater} = require('electron-updater');
+const { autoUpdater } = require('electron-updater');
 
 function isDev() {
   return process.mainModule.filename.indexOf('app.asar') === -1;
@@ -58,7 +58,7 @@ app.on('ready', function () {
   // Send message to core.component when an update is available
   ipcMain.on('ready', (event, arg) => {
     log.info('autoUpdate.updateAvailable = ' + autoUpdater.updateAvailable);
-    event.sender.send('available',  autoUpdater.updateAvailable);
+    event.sender.send('available', autoUpdater.updateAvailable);
   });
 
   autoUpdater.on('update-not-available', (event, info) => {

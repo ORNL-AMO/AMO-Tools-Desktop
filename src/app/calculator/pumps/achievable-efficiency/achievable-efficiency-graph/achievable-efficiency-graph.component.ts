@@ -5,8 +5,8 @@ import { ConvertUnitsService } from '../../../../shared/convert-units/convert-un
 import * as _ from 'lodash';
 
 import { WindowRefService } from '../../../../indexedDb/window-ref.service';
-declare const d3: any;
-
+//declare const d3: any;
+import * as d3 from 'd3';
 @Component({
   selector: 'app-achievable-efficiency-graph',
   templateUrl: './achievable-efficiency-graph.component.html',
