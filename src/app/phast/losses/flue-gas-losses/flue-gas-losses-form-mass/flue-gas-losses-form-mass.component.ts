@@ -27,7 +27,7 @@ export class FlueGasLossesFormMassComponent implements OnInit {
   constructor(private suiteDbService: SuiteDbService) { }
 
   ngOnInit() {
-    this.options = this.suiteDbService.selectFlueGasMaterialSolidLiquid();
+    this.options = this.suiteDbService.selectSolidLiquidFlueGasMaterials();
     if (this.flueGasLossForm) {
       if (this.flueGasLossForm.value.gasTypeId && this.flueGasLossForm.value.gasTypeId != '') {
         if (this.flueGasLossForm.value.carbon == '') {
@@ -79,7 +79,7 @@ export class FlueGasLossesFormMassComponent implements OnInit {
   }
 
   setProperties() {
-    let tmpFlueGas = this.suiteDbService.selectFlueGasMaterialSolidLiquidById(this.flueGasLossForm.value.gasTypeId);
+    let tmpFlueGas = this.suiteDbService.selectSolidLiquidFlueGasMaterialById(this.flueGasLossForm.value.gasTypeId);
     this.flueGasLossForm.patchValue({
       carbon: tmpFlueGas.carbon,
       hydrogen: tmpFlueGas.hydrogen,

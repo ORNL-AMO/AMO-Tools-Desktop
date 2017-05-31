@@ -43,6 +43,7 @@ export class PhastComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.phastService.test();
     let tmpAssessmentId;
     this.activatedRoute.params.subscribe(params => {
       tmpAssessmentId = params['id'];
