@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 declare var json2csv: any;
 import { MockDirectory } from '../mocks/mock-directory';
-import { ProjElectronService } from '../proj-electron/proj-electron.service';
 import { WindowRefService } from '../../indexedDb/window-ref.service';
 import { Assessment } from '../models/assessment';
 import { PsatService } from '../../psat/psat.service';
@@ -12,7 +11,7 @@ import * as moment from 'moment';
 @Injectable()
 export class JsonToCsvService {
 
-  constructor(private projElectronService: ProjElectronService, private windowRefService: WindowRefService, private psatService: PsatService) { }
+  constructor(private windowRefService: WindowRefService, private psatService: PsatService) { }
 
   exportSinglePsat(assessment: Assessment, settings: Settings) {
     let dataArr = new Array();
