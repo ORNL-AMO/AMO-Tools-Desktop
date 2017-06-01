@@ -16,6 +16,24 @@ input::-webkit-inner-spin-button {
     -webkit-appearance: none;
     margin: 0;
 }
+.inline dt {
+  float: left;
+  margin-right: 10%;
+  max-width: 50%;
+  font-weight: bold;
+}
+
+.inline dd {
+  text-align: right;
+  margin-left: 55%;
+  margin-bottom: .5em;
+}
+
+.inline dd::after {
+  content: " ";
+  display: block;
+  clear: left;
+} 
 
 /* 
 Typography
@@ -797,7 +815,16 @@ Calculators
   border-color: #c8c8c8;
   border-style: solid;
   border-width: 0 1px 1px;
+  padding: 20px;
 }
+.pump-head dl {
+  margin-bottom: 0;
+}
+.pump-head dt:last-of-type, .pump-head dd:last-of-type {
+  font-size: 22px;
+  font-weight: bold;
+}
+
 
 
 
