@@ -1,73 +1,76 @@
+<div class="pump-head">
 
+  <div class="row" *ngIf="settings && !showSettings">
+    <div class="col-7">
 
-<div class="row" *ngIf="settings && !showSettings">
-  <div class="col-7">
+      <select class="form-control" id="type" [(ngModel)]="headToolType">
+          <option>Suction tank elevation, gas space pressure, and discharged line pressure</option>
+          <option>Suction gauge elevation, gas space pressure, and discharged line pressure</option>
+      </select>
 
-    <select class="form-control" id="type" [(ngModel)]="headToolType">
-        <option>Suction tank elevation, gas space pressure, and discharged line pressure</option>
-        <option>Suction gauge elevation, gas space pressure, and discharged line pressure</option>
-    </select>
-
-    <div class="units-of-measure" *ngIf="settings && !inAssessment">
-      <p><strong>Units of Measure:</strong> {{settings.pressureMeasurement}}, {{settings.flowMeasurement}}, {{settings.distanceMeasurement}} <a (click)="editSettings()">change</a></p>
-    </div>
-
-    <div *ngIf="headToolType == 'Suction tank elevation, gas space pressure, and discharged line pressure'">
-      <div class="head-diagram text-center">
-        <img class="img-fluid mx-auto d-block" aria-describedby="headDiagramHelp" src="assets/images/img-tank-elevation-head.png">
-        <small id="headDiagramHelp" class="text-muted text-help">K<sub>s</sub> represents all suction losses from the tank to the pump</small><br>
-        <small id="headDiagramHelp" class="text-muted text-help">K<sub>d</sub> represents all discharge losses from the pump to the gauge P<sub>d</sub></small>
+      <div class="units-of-measure" *ngIf="settings && !inAssessment">
+        <p><strong>Units of Measure:</strong> {{settings.pressureMeasurement}}, {{settings.flowMeasurement}}, {{settings.distanceMeasurement}} <a (click)="editSettings()">change</a></p>
       </div>
-      <app-head-tool-suction-form [(headToolSuctionForm)]="headToolSuctionForm" [settings]="settings" (calculate)="calculateHeadToolSuctionTank()"></app-head-tool-suction-form>
-    </div>
 
-    <div *ngIf="headToolType == 'Suction gauge elevation, gas space pressure, and discharged line pressure'">
-      <div class="head-diagram text-center">
-        <img class="img-fluid mx-auto d-block" aria-describedby="headDiagramHelp" src="assets/images/img-suction-discharge-head.png">
-        <small id="headDiagramHelp" class="text-muted text-help">K<sub>s</sub> represents all suction losses from the tank to the pump</small><br>
-        <small id="headDiagramHelp" class="text-muted text-help">K<sub>d</sub> represents all discharge losses from the pump to the gauge P<sub>d</sub></small>
+      <div *ngIf="headToolType == 'Suction tank elevation, gas space pressure, and discharged line pressure'">
+        <div class="head-diagram text-center">
+          <img class="img-fluid mx-auto d-block" aria-describedby="headDiagramHelp" src="assets/images/img-tank-elevation-head.png">
+          <small id="headDiagramHelp" class="text-muted text-help">K<sub>s</sub> represents all suction losses from the tank to the pump</small><br>
+          <small id="headDiagramHelp" class="text-muted text-help">K<sub>d</sub> represents all discharge losses from the pump to the gauge P<sub>d</sub></small>
+        </div>
+        <app-head-tool-suction-form [(headToolSuctionForm)]="headToolSuctionForm" [settings]="settings" (calculate)="calculateHeadToolSuctionTank()"></app-head-tool-suction-form>
       </div>
-      <app-head-tool-form [(headToolForm)]="headToolForm" [settings]="settings" (calculate)="calculateHeadTool()"></app-head-tool-form>
+
+      <div *ngIf="headToolType == 'Suction gauge elevation, gas space pressure, and discharged line pressure'">
+        <div class="head-diagram text-center">
+          <img class="img-fluid mx-auto d-block" aria-describedby="headDiagramHelp" src="assets/images/img-suction-discharge-head.png">
+          <small id="headDiagramHelp" class="text-muted text-help">K<sub>s</sub> represents all suction losses from the tank to the pump</small><br>
+          <small id="headDiagramHelp" class="text-muted text-help">K<sub>d</sub> represents all discharge losses from the pump to the gauge P<sub>d</sub></small>
+        </div>
+        <app-head-tool-form [(headToolForm)]="headToolForm" [settings]="settings" (calculate)="calculateHeadTool()"></app-head-tool-form>
+      </div>
+
+    </div><!-- End .col-7 -->
+
+    <div class="col-5">
+
+      <ul class="tabs primary">
+        <li class="calc-tab" [ngClass]="{'active': tabSelect == 'results'}">
+          <a (click)="setTab('results')">Results</a>
+        </li><li class="calc-tab" [ngClass]="{'active': tabSelect == 'help'}">
+          <a (click)="setTab('help')">Help</a>
+        </li>
+      </ul>
+
+      <div class="tab-content">
+        <app-head-tool-results *ngIf="tabSelect == 'results'" [results]="results" [settings]="settings"></app-head-tool-results>
+        <app-head-tool-help *ngIf="tabSelect == 'help'"></app-head-tool-help>
+      </div>
+
     </div>
+  </div>
 
-  </div><!-- End .col-7 -->
 
-  <div class="col-5">
 
-    <ul class="tabs primary">
-      <li class="calc-tab" [ngClass]="{'active': tabSelect == 'results'}">
-        <a (click)="setTab('results')">Results</a>
-      </li><li class="calc-tab" [ngClass]="{'active': tabSelect == 'help'}">
-        <a (click)="setTab('help')">Help</a>
-      </li>
-    </ul>
-
-    <div class="tab-content">
-      <app-head-tool-results *ngIf="tabSelect == 'results'" [results]="results" [settings]="settings"></app-head-tool-results>
-      <app-head-tool-help *ngIf="tabSelect == 'help'"></app-head-tool-help>
+  <div class="row justify-content-center" *ngIf="settingsForm && showSettings">
+    <div class="col-4">
+      <app-psat-settings [(settingsForm)]="settingsForm"></app-psat-settings>
     </div>
-
   </div>
-</div>
 
 
 
-<div class="row justify-content-center" *ngIf="settingsForm && showSettings">
-  <div class="col-4">
-    <app-psat-settings [(settingsForm)]="settingsForm"></app-psat-settings>
+
+  <div class="row button-row">
+    <div class="col-12">
+
+      <!-- <button class="btn btn-secondary pull-left" *ngIf="!showSettings" (click)="closeTool()">Close</button> -->
+      <button class="btn btn-primary pull-right" (click)="save()" *ngIf="inAssessment">Save to Assessment</button>
+      <!-- <button class="btn btn-secondary pull-right">Export to CSV...</button>-->
+      <button class="btn btn-secondary pull-left" (click)="cancelSettings()" *ngIf="showSettings">Cancel</button>
+      <button class="btn btn-secondary pull-right" (click)="applySettings()" *ngIf="showSettings">Apply Settings</button>
+    </div>
   </div>
-</div>
 
 
-
-
-<div class="row button-row">
-  <div class="col-12">
-
-    <!-- <button class="btn btn-secondary pull-left" *ngIf="!showSettings" (click)="closeTool()">Close</button> -->
-    <button class="btn btn-primary pull-right" (click)="save()" *ngIf="inAssessment">Save to Assessment</button>
-    <!-- <button class="btn btn-secondary pull-right">Export to CSV...</button>-->
-    <button class="btn btn-secondary pull-left" (click)="cancelSettings()" *ngIf="showSettings">Cancel</button>
-    <button class="btn btn-secondary pull-right" (click)="applySettings()" *ngIf="showSettings">Apply Settings</button>
-  </div>
 </div>
