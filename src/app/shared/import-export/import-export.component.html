@@ -1,0 +1,40 @@
+<div *ngIf="isDataGathered && export">
+  <ul>
+    <li *ngFor="let data of exportData">{{data.assessment.name}}</li>
+  </ul>
+  <div class="row">
+    <div class="col-12">
+      <button class="btn btn-primary pull-right" (click)="buildExportJSON()">Export</button>
+      <button class="btn btn-secondary pull-left" (click)="cancel()">Cancel</button>
+    </div>
+  </div>
+</div>
+
+ <div class="row justify-content-center" *ngIf="!isDataGathered && export">
+   	<div class="col-md-10">
+			<div class="main-content" style="text-align: center;">
+				<div class="spinner">
+				<div class="bounce1"></div>
+				<div class="bounce2"></div>
+				<div class="bounce3"></div>
+			</div>
+			<h1>Gathering Data</h1>
+    </div>
+	</div>
+</div>
+
+<div *ngIf="import">
+  <div class="row">
+    <div class="col-12 form-group">
+      <input type="file" class="form-control-file" (change)="setImportFile($event)">
+      <span class="alert-danger small" *ngIf="validFile == false">Invalid File Type</span>
+    </div>
+  </div>
+  <div class="row" style="padding-top: 15px;">
+    <div class="col-12">
+      <button [disabled]="validFile !== true" class="btn btn-primary pull-right" (click)="importFile()">Import</button>
+      <button class="btn btn-secondary pull-left" (click)="cancel()">Cancel</button>
+    </div>
+  </div>
+</div>
+

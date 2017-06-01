@@ -30,9 +30,8 @@ export class AssessmentMenuComponent implements OnInit {
   genReport = new EventEmitter<boolean>();
   @Output('exportEmit')
   exportEmit = new EventEmitter<boolean>();
-  
-  testInputFile: any;
-
+  @Output('importEmit')
+  importEmit = new EventEmitter<boolean>();
 
   breadCrumbs: Array<Directory>;
 
@@ -106,15 +105,7 @@ export class AssessmentMenuComponent implements OnInit {
     this.exportEmit.emit(true);
   }
 
-  // importDaFile($event) {
-  //   console.log($event.target.files[0]);
-  //   let fr:FileReader = new FileReader();
-  //   fr.readAsText($event.target.files[0]);
-
-
-  //   fr.onloadend = (e) => {
-  //     let testJson = JSON.parse(fr.result);
-  //     console.log(testJson);
-  //   }
-  // }
+  emitImport(){
+    this.importEmit.emit(true);
+  }
 }

@@ -7,22 +7,15 @@ import { MockDirectory } from '../mocks/mock-directory';
 export class ImportExportService {
 
   constructor(private windowRefService: WindowRefService) { }
-
-  exportData(data: JSON) {
-
-  }
-
-
+  
   downloadData(data: any) {
-    let test = JSON.stringify(MockDirectory.assessments[0]);
-    //test = 'data:text/json;charset=utf-8,' + test;
+    data.push({origin: 'AMO-TOOLS-DESKTOP'});
+    let stringifyData = JSON.stringify(data);
     let doc = this.windowRefService.getDoc();
-   // let encodedUri = encodeURIComponent(test);
     let dlLink = doc.createElement("a");
-
-    let dataStr = 'data:text/json;charset=utf-8,' + encodeURIComponent(test);
+    let dataStr = 'data:text/json;charset=utf-8,' + encodeURIComponent(stringifyData);
     dlLink.setAttribute("href", dataStr);
-    dlLink.setAttribute("download", "test.json");
+    dlLink.setAttribute("download", "exportData.json");
     dlLink.click();
   }
 }

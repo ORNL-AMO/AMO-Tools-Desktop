@@ -8,9 +8,9 @@ import * as _ from 'lodash';
 import { Settings } from '../shared/models/settings';
 import { AssessmentService } from '../assessment/assessment.service';
 import { JsonToCsvService } from '../shared/json-to-csv/json-to-csv.service';
-
+import { Assessment } from '../shared/models/assessment';
 import { ToastyService, ToastyConfig, ToastOptions, ToastData } from 'ng2-toasty';
-import { SuiteDbService } from '../suiteDb/suite-db.service'; 
+import { SuiteDbService } from '../suiteDb/suite-db.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -33,9 +33,13 @@ export class DashboardComponent implements OnInit {
   @ViewChild('deleteModal') public deleteModal: ModalDirective;
   @ViewChild('deleteItemsModal') public deleteItemsModal: ModalDirective;
   @ViewChild('exportModal') public exportModal: ModalDirective;
+  @ViewChild('importModal') public importModal: ModalDirective;
 
+  importInProgress: boolean = false;
+  importing: any;
   reportAssessments: Array<any>;
-  selectedAssessments: Array<any>;
+  selectedItems: Array<any>;
+  showImportExport: boolean;
   constructor(private indexedDbService: IndexedDbService, private formBuilder: FormBuilder, private assessmentService: AssessmentService, private toastyService: ToastyService,
     private toastyConfig: ToastyConfig, private jsonToCsvService: JsonToCsvService, private suitDbService: SuiteDbService) {
     this.toastyConfig.theme = 'bootstrap';
@@ -46,7 +50,7 @@ export class DashboardComponent implements OnInit {
   ngOnInit() {
     //start toolts suite database
     this.suitDbService.startup();
-    this.selectedAssessments = new Array();
+    this.selectedItems = new Array();
     this.showLandingScreen = this.assessmentService.getLandingScreen();
     //open DB and get directories
     this.indexedDbService.initDb().then(
@@ -220,12 +224,24 @@ export class DashboardComponent implements OnInit {
     this.deleteItemsModal.hide();
   }
 
-  showExportModal(){
+  showExportModal() {
+    this.showImportExport = true;
     this.exportModal.show();
   }
 
-  hideExportModal(){
+  hideExportModal() {
     this.exportModal.hide();
+    this.showImportExport = false;
+  }
+
+  showImportModal() {
+    this.showImportExport = true;
+    this.importModal.show();
+  }
+
+  hideImportModal() {
+    this.importModal.hide();
+    this.showImportExport = false;
   }
 
   deleteData() {
@@ -336,7 +352,7 @@ export class DashboardComponent implements OnInit {
 
   generateReport() {
     if (this.checkSelected()) {
-      this.selectedAssessments = new Array();
+      this.selectedItems = new Array();
       this.getSelected(this.workingDirectory);
       this.dashboardView = 'detailed-report';
     } else {
@@ -344,21 +360,22 @@ export class DashboardComponent implements OnInit {
     }
   }
 
-  exportSelected(){
-    if(this.checkSelected()){
-      this.selectedAssessments = new Array();
+  exportSelected() {
+    if (this.checkSelected()) {
+      this.selectedItems = new Array();
       this.getSelected(this.workingDirectory);
       this.showExportModal();
-    }else{
+    } else {
       this.addToast('No items have been selected');
     }
   }
 
   returnSelected() {
-    return this.selectedAssessments;
+    return this.selectedItems;
   }
 
   closeReport() {
+    this.selectedItems = new Array();
     this.workingDirectory.assessments.forEach(
       assessment => {
         assessment.selected = false;
@@ -373,10 +390,14 @@ export class DashboardComponent implements OnInit {
     if (dir.assessments) {
       dir.assessments.forEach(
         assessment => {
+          let assessmentDir;
+          if (dir.id != this.workingDirectory.id) {
+            assessmentDir = dir;
+          }
           if (assessment.selected) {
-            this.selectedAssessments.push(assessment);
+            this.selectedItems.push({ assessment: assessment, directory: assessmentDir });
           } else if (dir.id != this.workingDirectory.id) {
-            this.selectedAssessments.push(assessment);
+            this.selectedItems.push({ assessment: assessment, directory: assessmentDir });
           }
         }
       )
@@ -385,7 +406,7 @@ export class DashboardComponent implements OnInit {
       this.indexedDbService.getDirectoryAssessments(dir.id).then(
         resultAssessments => {
           if (resultAssessments.length != 0) {
-            resultAssessments.forEach(assessment => { this.selectedAssessments.push(assessment) })
+            resultAssessments.forEach(assessment => { this.selectedItems.push({ assessment: assessment, directory: dir }) })
           }
         }
       )
@@ -415,6 +436,80 @@ export class DashboardComponent implements OnInit {
     }
   }
 
+  checkImportData(data: any) {
+    if (data[data.length - 1].origin == "AMO-TOOLS-DESKTOP") {
+      data.pop();
+      this.importInProgress = true;
+      this.runImport(data);
+
+    }
+    else {
+      this.addToast('INVALID FILE');
+    }
+  }
+
+  runImport(data: ImportDataObjects[]) {
+    if (this.importing) {
+      clearTimeout(this.importing)
+    }
+    this.importing = setTimeout(() => {
+      this.hideImportModal();
+      this.importInProgress = false;
+      this.allDirectories = this.populateDirectories(this.rootDirectoryRef);
+      this.workingDirectory = this.populateDirectories(this.workingDirectory);
+    }, 1000)
+
+    let uniqDirs = _.uniqBy(data, 'directory.id');
+    let dirIdPairs = new Array();
+    uniqDirs.forEach(dir => {
+      if (dir.directory) {
+        let tmpDirDbRef: DirectoryDbRef = {
+          name: dir.directory.name,
+          parentDirectoryId: this.workingDirectory.id
+        }
+        this.indexedDbService.addDirectory(tmpDirDbRef).then(results => {
+          dirIdPairs.push({ oldId: dir.directory.id, newId: results })
+        });
+      }
+    })
+    setTimeout(() => {
+      data.forEach(dataObj => {
+        let tmpDirectoryIdArr = dirIdPairs.filter(pair => { return pair.oldId == dataObj.assessment.directoryId });
+        let tmpDirectoryId = this.workingDirectory.id;
+        if (tmpDirectoryIdArr.length != 0) {
+          tmpDirectoryId = tmpDirectoryIdArr[0].newId;
+        }
+        let tmpAssessment: Assessment = {
+          type: dataObj.assessment.type,
+          name: dataObj.assessment.name,
+          psat: dataObj.assessment.psat,
+          phast: dataObj.assessment.phast,
+          directoryId: tmpDirectoryId
+        }
+        this.indexedDbService.addAssessment(tmpAssessment).then(
+          results => {
+            //check for psat until phast has settings
+            if (tmpAssessment.psat) {
+              let tmpSettings: Settings = {
+                language: dataObj.settings.language,
+                currency: dataObj.settings.currency,
+                unitsOfMeasure: dataObj.settings.unitsOfMeasure,
+                assessmentId: results,
+                flowMeasurement: dataObj.settings.flowMeasurement,
+                powerMeasurement: dataObj.settings.powerMeasurement,
+                distanceMeasurement: dataObj.settings.distanceMeasurement,
+                pressureMeasurement: dataObj.settings.pressureMeasurement
+              }
+              this.indexedDbService.addSettings(tmpSettings).then(
+                results => { }
+              )
+            }
+          }
+        )
+      })
+    }, 1000);
+  }
+
   addToast(msg: string) {
     let toastOptions: ToastOptions = {
       title: msg,
@@ -426,4 +521,10 @@ export class DashboardComponent implements OnInit {
   }
 
 
+}
+
+export interface ImportDataObjects {
+  settings: Settings,
+  directory: Directory,
+  assessment: Assessment
 }

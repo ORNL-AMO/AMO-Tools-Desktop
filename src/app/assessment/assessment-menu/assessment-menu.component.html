@@ -24,8 +24,8 @@
     <app-create-folder [(directory)]="directory" (newDirectory)="emitNewDir()" class="create-container"></app-create-folder>
     <button type="button" class="btn btn-secondary" (click)="emitGenReport()">Generate Report</button>
     <button type="button" (click)="signalDeleteItems()" class="btn btn-secondary">Delete...</button>
-    <!--<input type="file" class="form-control-file" placeholder="Import..." (change)="importDaFile($event)">-->
-    <button type="button" disabled class="btn btn-secondary space-left">Import...</button>
+    
+    <button type="button" class="btn btn-secondary space-left" (click)="emitImport()">Import...</button>
     <button type="button" class="btn btn-secondary" (click)="emitExport()">Export...</button>
   </div>
   <div class="col-2">
