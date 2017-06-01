@@ -16,6 +16,24 @@ input::-webkit-inner-spin-button {
     -webkit-appearance: none;
     margin: 0;
 }
+.inline dt {
+  float: left;
+  margin-right: 10%;
+  max-width: 50%;
+  font-weight: bold;
+}
+
+.inline dd {
+  text-align: right;
+  margin-left: 55%;
+  margin-bottom: .5em;
+}
+
+.inline dd::after {
+  content: " ";
+  display: block;
+  clear: left;
+} 
 
 /* 
 Typography
@@ -247,7 +265,7 @@ select.form-control:not([size]):not([multiple]) {
 /*
 Pump Fluid CSS
 =============================================== */
-
+/**/
 
 
 
@@ -276,15 +294,13 @@ In-Assessment Calculators
   .tab-content .calc-form .form-group .form-control {
     width: 40%;
   }
-.calc-graph {
-  background: #efefef;
-  text-align: center;
-  padding-top: 30px;
+.calc-help {
+  margin-top: 10px;
+  padding-left: 20px; 
 }
-  .calc-graph svg {
-    -webkit-box-shadow: 0px 1px 5px 0px rgba(0,0,0,0.6);
-    -moz-box-shadow: 0px 1px 5px 0px rgba(0,0,0,0.6);
-    box-shadow: 0px 1px 5px 0px rgba(0,0,0,0.6);
+  .calc-help h3 {
+    font-size: 20px;
+    font-weight: bold;
   }
 
 
@@ -721,6 +737,14 @@ Calculators
   }
 
 
+.calculator .secondary-header {
+  padding: 20px;
+  margin: 20px 0;
+  border-color: #ddd;
+  border-style: solid;
+  border-width: 1px 0 1px;
+  background: #fafafa;
+}
 
 
 .calculator h2 {
@@ -764,6 +788,43 @@ Calculators
   top: 27px;
   right: 13%;
 }
+
+
+/* Pump Head 
+================================================ */
+.pump-head select.form-control:not([size]):not([multiple]) {
+  width: auto;
+  height: 42px;
+  margin-bottom: 20px;
+}
+.units-of-measure {
+  margin-bottom: 30px;
+}
+  .units-of-measure a {
+    display: inline-block;
+    margin-left: 6px;
+  }
+.pump-head .tabs.primary {
+  background: transparent;
+}
+.pump-head .tabs.primary a {
+  border-top: #c8c8c8 solid 1px;
+}
+.pump-head .tab-content {
+  background: #fff;
+  border-color: #c8c8c8;
+  border-style: solid;
+  border-width: 0 1px 1px;
+  padding: 20px;
+}
+.pump-head dl {
+  margin-bottom: 0;
+}
+.pump-head dt:last-of-type, .pump-head dd:last-of-type {
+  font-size: 22px;
+  font-weight: bold;
+}
+
 
 
 
@@ -832,7 +893,7 @@ Banner
   text-decoration: none;
   cursor: pointer;
 }
-.banner.psat .title {
+/*.banner.psat .title {
   color: #fff;
   padding-left: 58px;
   background: url('../assets/images/assessment-icon-psat.png') no-repeat 14px;
@@ -843,7 +904,7 @@ Banner
   padding-left: 58px;
   background: url('../assets/images/assessment-icon-phast.png') no-repeat 14px;
   background-size: 31px;
-}
+}*/
 
 .banner-border{
   border-bottom: solid;
