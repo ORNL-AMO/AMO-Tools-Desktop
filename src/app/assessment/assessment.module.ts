@@ -22,6 +22,8 @@ import { IndexedDbModule } from '../indexedDb/indexedDb.module';
 import { SettingsModule } from '../settings/settings.module';
 import { ToastyModule } from 'ng2-toasty';
 
+import { ImportExportModule } from '../shared/import-export/import-export.module';
+
 @NgModule({
   declarations: [
     AssessmentComponent,
@@ -52,7 +54,8 @@ import { ToastyModule } from 'ng2-toasty';
     ModalModule,
     IndexedDbModule,
     SettingsModule,
-    ToastyModule.forRoot()
+    ToastyModule.forRoot(),
+    ImportExportModule
   ],
   providers: []
 })
