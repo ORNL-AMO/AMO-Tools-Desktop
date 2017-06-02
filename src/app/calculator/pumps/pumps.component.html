@@ -45,36 +45,35 @@
 
 </div>
 
+
+
+
 <div class="calculator" *ngIf="getSelectedTool() == 'head-tool'">
-  <div class="row justify-content-center">
-    <div class="col-lg-10 col-md-11 col-sm-11">
+  <div class="row">
+    <div class="col-lg-12">
       <h2>Pump Head Calculator</h2>
     </div>
   </div>
-  <div class="row justify-content-center">
-    <div class="col-lg-10 col-md-11 col-sm-11">
-      <div class="calculator-container">
-        <app-head-tool (close)="hideTool()"></app-head-tool>
-      </div>
-    </div>
+  <div class="calculator-container">
+    <app-head-tool (close)="hideTool()"></app-head-tool>
   </div>
 </div>
 
 
 <div class="calculator" *ngIf="selectedTool == 'system-curve'">
-  <div class="row justify-content-center">
-    <div class="col-lg-10 col-md-11 col-sm-11">
+  <div class="row">
+    <div class="col-lg-12">
       <h2>System Curve Calculator</h2>
     </div>
   </div>
-  <div class="row justify-content-center">
-    <div class="col-lg-10 col-md-11 col-sm-11">
-      <div class="calculator-container">
-        <app-system-curve></app-system-curve>
-      </div>
-    </div>
+  <div class="calculator-container container-fluid">
+    <app-system-curve></app-system-curve>
   </div>
 </div>
+
+
+
+
 
 <div class="calculator" *ngIf="getSelectedTool() == 'nema-energy-efficiency'">
   <div class="row justify-content-center">
