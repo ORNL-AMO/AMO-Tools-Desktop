@@ -1,19 +1,43 @@
-<div class="row" *ngIf="settings" [ngClass]="{'align-items-center': !inPsat}">
-  <div class="col-lg-3 col-md-5 col-sm-6 col-xs-7 calc-form">
-    <div class="card">
-      <div class="card-block">
-        <app-achievable-efficiency-form [(efficiencyForm)]="efficiencyForm" [settings]="settings" (calculate)="calculate()"></app-achievable-efficiency-form>
-      </div>
-    </div>
-  </div>
-  <div *ngIf="!inPsat" id="achievableEfficiencyGraph" class="col-lg-9 col-md-7 col-sm-6 col-xs-5 calc-graph">
-    <app-achievable-efficiency-graph [efficiencyForm]="efficiencyForm" [settings]="settings" [toggleCalculate]="toggleCalculate"></app-achievable-efficiency-graph>
-  </div>
-  <div *ngIf="inPsat" class="col-lg-9 col-md-7 col-sm-6 col-xs-5 calc-graph">
-    <div class="row justify-content-center align-items-center">
-      <div id="achievableEfficiencyGraph" class="col-lg-10 col-md-11 col-sm-12">
-        <app-achievable-efficiency-graph [efficiencyForm]="efficiencyForm" [settings]="settings" [toggleCalculate]="toggleCalculate"></app-achievable-efficiency-graph>
-      </div>
-    </div>
-  </div>
+<div class="row" *ngIf="settings" [ngClass]="{'standalone-calc': !inPsat}">
+
+
+	<div class="col-md-2 col-sm-12 calc-form">
+		<app-achievable-efficiency-form [(efficiencyForm)]="efficiencyForm" [settings]="settings" (calculate)="calculate()"></app-achievable-efficiency-form>
+	</div>
+
+
+	<div *ngIf="!inPsat" id="achievableEfficiencyGraph" class="col-md-7 col-sm-12 calc-graph">
+		<app-achievable-efficiency-graph [efficiencyForm]="efficiencyForm" [settings]="settings" [toggleCalculate]="toggleCalculate"></app-achievable-efficiency-graph>
+	</div>
+
+
+	<div *ngIf="inPsat" class="col-md-7 col-sm-12 calc-graph">
+		<div id="achievableEfficiencyGraph">
+			<app-achievable-efficiency-graph [efficiencyForm]="efficiencyForm" [settings]="settings" [toggleCalculate]="toggleCalculate"></app-achievable-efficiency-graph>
+		</div>
+	</div>
+
+
+	<div *ngIf="!inPsat" class="col-md-3 col-sm-12 calc-help">
+		<div class="calc-help">
+
+			<h3>Help</h3>
+			<p>Body text here</p>
+			<ul>
+				<li>bullet</li>
+				<li>bullet</li>
+				<li>bullet</li>
+			</ul>
+			<ol>
+				<li>ordered bullets</li>
+				<li>ordered bullets</li>
+				<li>ordered bullets</li>
+				<li>ordered bullets</li>
+			</ol>
+
+		</div>
+	</div>
+
+
+
 </div>
