@@ -14,9 +14,11 @@ import { JsonToCsvService } from '../shared/json-to-csv/json-to-csv.service';
 })
 export class DetailedReportComponent implements OnInit {
   @Input()
-  assessments: Array<Assessment>;
+  selectedItems: Array<any>;
   @Output('emitCloseReport')
   emitCloseReport = new EventEmitter<boolean>();
+
+  assessments: Array<Assessment>;
 
   numAssessments: number;
   reportAssessments: Array<Assessment>;
@@ -37,12 +39,15 @@ export class DetailedReportComponent implements OnInit {
   }
 
   ngOnChanges() {
-    // console.log('change');
+    this.assessments = new Array();
     if (this.gatheringData) {
       clearTimeout(this.gatheringData);
     }
 
     this.gatheringData = setTimeout(() => {
+      this.selectedItems.forEach(item => {
+        this.assessments.push(item.assessment);
+      })
       let tmpArr = this.assessments.filter(assessment => { return assessment.psat != undefined });
       this.numPsats = tmpArr.length;
       //used to make sure all assessments proccessed (gotten outputs)
@@ -52,7 +57,6 @@ export class DetailedReportComponent implements OnInit {
         }
       });
       this.assessmentsGathered = true;
-      console.log('done');
     }, 1000)
   }
 
