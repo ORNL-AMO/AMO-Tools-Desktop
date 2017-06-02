@@ -1,7 +1,9 @@
 <div *ngIf="isDataGathered && export">
+  <div class="export-content">
   <ul>
     <li *ngFor="let data of exportData">{{data.assessment.name}}</li>
   </ul>
+  </div>
   <div class="row">
     <div class="col-12">
       <button class="btn btn-primary pull-right" (click)="buildExportJSON()">Export</button>
