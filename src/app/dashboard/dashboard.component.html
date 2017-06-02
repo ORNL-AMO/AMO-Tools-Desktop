@@ -98,8 +98,8 @@
           <span aria-hidden="true">&times;</span>
         </button>
             </div>
-            <div class="modal-body">
-                <app-import-export *ngIf="showImportExport" [export]="true" [selectedItems]="returnSelected()" (closeExportModal)="hideExportModal()"></app-import-export>
+            <div class="modal-body" *ngIf="showImportExport && isExportView">
+                <app-import-export [export]="true" [selectedItems]="returnSelected()" (closeExportModal)="hideExportModal()"></app-import-export>
             </div>
         </div>
     </div>
@@ -118,7 +118,7 @@
           <span aria-hidden="true">&times;</span>
         </button>
             </div>
-            <div class="modal-body" *ngIf="showImportExport">
+            <div class="modal-body" *ngIf="showImportExport && isImportView">
                 <app-import-export *ngIf="!importInProgress" [import]="true" (importData)="checkImportData($event)"></app-import-export>
                  
                  <div class="row justify-content-center" *ngIf="importInProgress">

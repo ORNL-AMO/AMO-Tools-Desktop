@@ -560,6 +560,7 @@ Sidebar
   -o-border-image:      -o-linear-gradient(#949494, rgba(0, 0, 0, 0)) 1 100%;
   border-image:         linear-gradient(to bottom, #949494, rgba(0, 0, 0, 0)) 1 100%;
   padding: 0;
+  overflow-y: scroll;
 }
 
 .dashboard-content{

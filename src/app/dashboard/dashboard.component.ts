@@ -36,6 +36,8 @@ export class DashboardComponent implements OnInit {
   @ViewChild('importModal') public importModal: ModalDirective;
 
   importInProgress: boolean = false;
+  isExportView: boolean = false;
+  isImportView: boolean = false;
   importing: any;
   reportAssessments: Array<any>;
   selectedItems: Array<any>;
@@ -225,6 +227,8 @@ export class DashboardComponent implements OnInit {
   }
 
   showExportModal() {
+    this.isExportView = true;
+    this.isImportView = false;
     this.showImportExport = true;
     this.exportModal.show();
   }
@@ -232,9 +236,13 @@ export class DashboardComponent implements OnInit {
   hideExportModal() {
     this.exportModal.hide();
     this.showImportExport = false;
+    this.isExportView = false;
+    this.isImportView = false;
   }
 
   showImportModal() {
+    this.isImportView = true;
+    this.isExportView = false;
     this.showImportExport = true;
     this.importModal.show();
   }
@@ -242,6 +250,8 @@ export class DashboardComponent implements OnInit {
   hideImportModal() {
     this.importModal.hide();
     this.showImportExport = false;
+    this.isExportView = false;
+    this.isImportView = false;
   }
 
   deleteData() {
@@ -457,7 +467,7 @@ export class DashboardComponent implements OnInit {
       this.importInProgress = false;
       this.allDirectories = this.populateDirectories(this.rootDirectoryRef);
       this.workingDirectory = this.populateDirectories(this.workingDirectory);
-    }, 1000)
+    }, 2500)
 
     let uniqDirs = _.uniqBy(data, 'directory.id');
     let dirIdPairs = new Array();
@@ -501,9 +511,12 @@ export class DashboardComponent implements OnInit {
                 pressureMeasurement: dataObj.settings.pressureMeasurement
               }
               this.indexedDbService.addSettings(tmpSettings).then(
-                results => { }
+                results => {
+                  console.log('3')
+                }
               )
             }
+            console.log('2')
           }
         )
       })
