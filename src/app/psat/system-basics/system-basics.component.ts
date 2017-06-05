@@ -134,17 +134,6 @@ export class SystemBasicsComponent implements OnInit {
     this.settingsModal.hide();
   }
 
-  getSettingsForm() {
-    this.indexedDbService.getAssessmentSettings(this.assessment.id).then(
-      results => {
-        if (results.length != 0) {
-          this.settings = results[0];
-          this.settingsForm = this.settingsService.getFormFromSettings(this.settings);
-        }
-      }
-    )
-  }
-
   getClosest(num: number, arr: Array<number>) {
     let closest;
     let diff = Infinity;

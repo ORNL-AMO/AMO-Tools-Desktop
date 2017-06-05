@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
+import { Settings } from '../../shared/models/settings';
 
 @Component({
   selector: 'app-system-setup',
@@ -6,7 +7,8 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./system-setup.component.css']
 })
 export class SystemSetupComponent implements OnInit {
-
+  @Input()
+  settings:Settings;
 
   subTab: string = 'system-basics';
 

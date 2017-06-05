@@ -24,6 +24,7 @@ import { SettingsPanelComponent } from './settings-panel/settings-panel.componen
 
 import { PhastService } from './phast.service';
 import { SystemSetupComponent } from './system-setup/system-setup.component';
+import { SettingsModule } from '../settings/settings.module';
 
 
 @NgModule({
@@ -54,7 +55,8 @@ import { SystemSetupComponent } from './system-setup/system-setup.component';
     SharedModule,
     ModalModule,
     LossesModule,
-    ToastyModule
+    ToastyModule,
+    SettingsModule
   ],
   providers: [
     PhastService

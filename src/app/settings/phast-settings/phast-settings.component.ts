@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
+import { Settings } from '../../shared/models/settings';
 
 @Component({
   selector: 'app-phast-settings',
@@ -6,7 +7,8 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./phast-settings.component.css']
 })
 export class PhastSettingsComponent implements OnInit {
-
+  @Input()
+  settingsForm:any;
   constructor() { }
 
   ngOnInit() {
