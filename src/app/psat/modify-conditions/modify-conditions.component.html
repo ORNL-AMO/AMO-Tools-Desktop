@@ -5,7 +5,7 @@
 <div class="modify-conditions" *ngIf="modifyTab != 'report' && settings">
 
   <!-- Baseline -->
-  <div class="modification baseline" (click)="togglePanel(baselineSelected)" [ngClass]="{'disabled': baselineSelected == false}">
+  <div class="modification baseline" (click)="togglePanel(baselineSelected)" [ngClass]="{'disabled': baselineSelected == false, 'modal-open': isModalOpen == true}">
     <div class="header">
       <h3>Baseline</h3>
     </div>
@@ -16,13 +16,14 @@
       <app-motor *ngIf="modifyTab == 'motor'" [selected]="baselineSelected" [saveClicked]="saveClicked" [(psat)]="psat" (changeField)="changeField($event)"
         (saved)="save()" [settings]="settings"></app-motor>
       <app-field-data *ngIf="modifyTab == 'field-data'" [selected]="baselineSelected" [saveClicked]="saveClicked" [(psat)]="psat"
-        (changeField)="changeField($event)" (saved)="save()" [settings]="settings"></app-field-data>
+        (changeField)="changeField($event)" (saved)="save()" [settings]="settings"(saved)="save()" [settings]="settings" (openHeadTool)="modalOpen()"
+        (closeHeadTool)="modalClose()"></app-field-data>
     </div>
   </div>
 
 
   <!-- Modifications Start -->
-  <div class="modification" (click)="togglePanel(modifiedSelected)" *ngIf="_modifications.length != 0" [ngClass]="{'disabled': modifiedSelected == false}">
+  <div class="modification" (click)="togglePanel(modifiedSelected)" *ngIf="_modifications.length != 0" [ngClass]="{'disabled': modifiedSelected == false, 'modal-open': isModalOpen == true}">
 
     <!-- Modification Header -->
     <div class="header" *ngIf="!editModification">
@@ -48,7 +49,8 @@
       <app-motor *ngIf="modifyTab == 'motor'" [selected]="modifiedSelected" [saveClicked]="saveClicked" [(psat)]="_modifications[modificationIndex].psat"
         (changeField)="changeField($event)" (saved)="save()" [settings]="settings"></app-motor>
       <app-field-data *ngIf="modifyTab == 'field-data'" [saveClicked]="saveClicked" [(psat)]="_modifications[modificationIndex].psat"
-        (changeField)="changeField($event)" [selected]="modifiedSelected" (saved)="save()" [settings]="settings"></app-field-data>
+        (changeField)="changeField($event)" [selected]="modifiedSelected" (saved)="save()" [settings]="settings" (openHeadTool)="modalOpen()"
+        (closeHeadTool)="modalClose()"></app-field-data>
 
     </div>
 

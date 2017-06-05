@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { SharedModule } from '../shared/shared.module';
-import { ModalModule } from 'ng2-bootstrap';
 import { CalculatorComponent } from './calculator.component';
 
 import { FansComponent } from './fans/fans.component';
@@ -33,7 +32,6 @@ import { CompressedAirComponent } from './compressed-air/compressed-air.componen
     FormsModule,
     ReactiveFormsModule,
     CommonModule,
-    ModalModule,
     PumpsModule,
     UtilitiesModule
   ],
