@@ -1,5 +1,7 @@
 import { Component, OnInit, Input, SimpleChanges, Output, EventEmitter } from '@angular/core';
 import { PHAST, Losses, Modification } from '../../shared/models/phast';
+import { Settings } from '../../shared/models/settings';
+
 @Component({
   selector: 'app-losses',
   templateUrl: 'losses.component.html',
@@ -12,6 +14,8 @@ export class LossesComponent implements OnInit {
   saveClicked: boolean;
   @Output('saved')
   saved = new EventEmitter<boolean>();
+  @Input()
+  settings: Settings;
 
   _modifications: Modification[];
   isDropdownOpen: boolean = false;
@@ -75,6 +79,7 @@ export class LossesComponent implements OnInit {
     if (this.phast.modifications) {
       this._modifications = (JSON.parse(JSON.stringify(this.phast.modifications)));
     }
+    console.log(this.settings);
   }
 
   changeTab($event) {

@@ -20,7 +20,6 @@ import { MeteredEnergyUseComponent } from './metered-energy-use/metered-energy-u
 import { PhastTabsComponent } from './phast-tabs/phast-tabs.component';
 import { HelpPanelComponent } from './help-panel/help-panel.component';
 import { DataPanelComponent } from './data-panel/data-panel.component';
-import { SettingsPanelComponent } from './settings-panel/settings-panel.component';
 
 import { PhastService } from './phast.service';
 import { SystemSetupComponent } from './system-setup/system-setup.component';
@@ -40,7 +39,6 @@ import { SettingsModule } from '../settings/settings.module';
     MeteredEnergyUseComponent,
     HelpPanelComponent,
     DataPanelComponent,
-    SettingsPanelComponent,
     SankeyDiagramComponent,
     SystemSetupComponent
 

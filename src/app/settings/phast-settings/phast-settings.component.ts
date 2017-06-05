@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Settings } from '../../shared/models/settings';
 
 @Component({
@@ -8,10 +8,16 @@ import { Settings } from '../../shared/models/settings';
 })
 export class PhastSettingsComponent implements OnInit {
   @Input()
-  settingsForm:any;
+  settingsForm: any;
+  @Output('startSavePolling')
+  startSavePolling = new EventEmitter<boolean>();
   constructor() { }
 
   ngOnInit() {
+  }
+
+  startPolling() {
+    this.startSavePolling.emit(true);
   }
 
 }

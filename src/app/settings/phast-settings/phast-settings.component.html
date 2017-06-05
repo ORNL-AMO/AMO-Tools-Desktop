@@ -9,13 +9,13 @@
     <label>Select Energy Source Type</label>
     <div class="form-check">
       <label class="form-check-label">
-        <input class="form-check-input" type="radio" name="energySourceType" formControlName="energySourceType" value="Fuel">Imperial
+        <input class="form-check-input" type="radio" name="energySourceType" formControlName="energySourceType" value="Fuel" (change)="startPolling()">Fuel
       </label>
       <label class="form-check-label">
-        <input class="form-check-input" type="radio" name="energySourceType" formControlName="energySourceType" value="Electricty">Metric
+        <input class="form-check-input" type="radio" name="energySourceType" formControlName="energySourceType" value="Electricity" (change)="startPolling()">Electricity
       </label>
       <label class="form-check-label">
-        <input class="form-check-input" type="radio" name="energySourceType" formControlName="energySourceType" value="Steam">Steam
+        <input class="form-check-input" type="radio" name="energySourceType" formControlName="energySourceType" value="Steam" (change)="startPolling()">Steam
       </label>
     </div>
   </div>
