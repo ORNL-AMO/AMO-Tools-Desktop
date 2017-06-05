@@ -36,7 +36,6 @@ export class FieldDataComponent implements OnInit {
 
   @ViewChild('formRef') formRef: ElementRef;
   elements: any;
-  @ViewChild('flowRatePopover') flowRatePopover: ElementRef;
 
   formValid: boolean;
   headToolResults: any = {

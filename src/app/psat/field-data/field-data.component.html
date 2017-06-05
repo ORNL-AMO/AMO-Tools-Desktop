@@ -30,7 +30,7 @@
   <div class="form-group">
     <label for="head">
       Head
-      <small id="flaHelp" class="form-text text-muted text-help" (click)="showHeadToolModal()"><a #calcHeadLink>Calculate Head</a></small>
+      <small id="flaHelp" class="form-text text-muted text-help" (click)="showHeadToolModal()"><a>Calculate Head</a></small>
     </label>
     <input type="number" min="0.1" class="form-control" formControlName="head" id="head" (input)="startSavePolling()" (focus)="focusField('head')" onfocus="this.select();">
     <span class="units">{{settings.distanceMeasurement}}</span>
