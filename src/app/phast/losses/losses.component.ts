@@ -59,6 +59,10 @@ export class LossesComponent implements OnInit {
     otherLosses: {
       numLosses: 0,
       saved: true
+    },
+    flueGasLosses:{
+      numLosses: 0,
+      saved: true
     }
   }
   constructor() { }
@@ -81,6 +85,7 @@ export class LossesComponent implements OnInit {
     this.lossesStates.openingLosses.saved = true;
     this.lossesStates.coolingLosses.saved = true;
     this.lossesStates.fixtureLosses.saved = true;
+    this.lossesStates.flueGasLosses.saved = true;
   }
 
   changeField($event) {

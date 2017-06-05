@@ -19,7 +19,6 @@ import { FixtureLossesFormComponent } from './fixture-losses/fixture-losses-form
 import { WaterCoolingLossesFormComponent } from './cooling-losses/water-cooling-losses-form/water-cooling-losses-form.component';
 import { AtmosphereLossesFormComponent } from './atmosphere-losses/atmosphere-losses-form/atmosphere-losses-form.component';
 import { OtherLossesFormComponent } from './other-losses/other-losses-form/other-losses-form.component';
-import { FlueGasLossesFormComponent } from './flue-gas-losses/flue-gas-losses-form/flue-gas-losses-form.component';
 import { LiquidChargeMaterialFormComponent } from './charge-material/liquid-charge-material-form/liquid-charge-material-form.component';
 import { GasChargeMaterialFormComponent } from './charge-material/gas-charge-material-form/gas-charge-material-form.component';
 
@@ -86,7 +85,6 @@ import { FlueGasLossesFormMassComponent } from './flue-gas-losses/flue-gas-losse
     GasChargeMaterialFormComponent,
     SolidChargeMaterialFormComponent,
     WallLossesFormComponent,
-    FlueGasLossesFormComponent,
     LossesTabsComponent,
     OpeningLossesFormComponent,
     CoolingLossesComponent,

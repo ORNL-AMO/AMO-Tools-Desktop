@@ -29,7 +29,6 @@
             <option [ngValue]="'By Mass'">By Mass</option>
             </select>
       </div>
-      <!--<app-flue-gas-losses-form [(flueGasLossForm)]="loss.form" (calculate)="calculate(loss)" [(lossState)]="lossState"></app-flue-gas-losses-form>-->
       <app-flue-gas-losses-form-mass [(flueGasLossForm)]="loss.formByMass" *ngIf="loss.measurementType == 'By Mass'" (changeField)="changeField($event)" [(lossState)]="lossState" (calculate)="calculate(loss)" [baselineSelected]="baselineSelected"></app-flue-gas-losses-form-mass>
       <app-flue-gas-losses-form-volume [(flueGasLossForm)]="loss.formByVolume" *ngIf="loss.measurementType == 'By Volume'" (changeField)="changeField($event)" [(lossState)]="lossState" (calculate)="calculate(loss)" [baselineSelected]="baselineSelected"></app-flue-gas-losses-form-volume>
     </div>

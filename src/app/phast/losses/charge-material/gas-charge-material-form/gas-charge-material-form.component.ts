@@ -79,7 +79,6 @@ export class GasChargeMaterialFormComponent implements OnInit {
   }
 
   setProperties() {
-    console.log(this.chargeMaterialForm.value.materialId);
     let selectedMaterial = this.suiteDbService.selectGasLoadChargeMaterialById(this.chargeMaterialForm.value.materialId);
     this.chargeMaterialForm.patchValue({
       materialSpecificHeat: selectedMaterial.specificHeatVapor,

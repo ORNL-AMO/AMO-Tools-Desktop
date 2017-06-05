@@ -38,7 +38,7 @@
     </div>
 
     <!-- Forms -->
-    <div class="losses-container" *ngIf="!isDropdownOpen && !showNotes">
+    <div class="losses-container" *ngIf="!isDropdownOpen">
 
       <!-- Notes -->
       <app-modify-conditions-notes [(notes)]="_modifications[modificationIndex].notes" [currentTab]="modifyTab"></app-modify-conditions-notes>
@@ -55,7 +55,7 @@
     </div>
 
     <!-- Modifications List -->
-    <div class="modifications-list" *ngIf="isDropdownOpen && !showNotes">
+    <div class="modifications-list" *ngIf="isDropdownOpen">
       <ul *ngIf="!showEditModification">
         <li *ngFor="let modification of _modifications">
           <button>
