@@ -2,10 +2,8 @@
 <app-phast-tabs [currentTab]="currentTab" (tabChange)="changeTab($event)"></app-phast-tabs>
 
 <div *ngIf="assessment">
-  <div class="row tab-content" *ngIf="currentTab == 'system-setup'">
-    <div class="col-12">
+  <div class="row" *ngIf="currentTab == 'system-setup'">
       <app-system-setup></app-system-setup>
-    </div>
   </div>
 
   <div class="tab-content" *ngIf="currentTab == 'losses'">
