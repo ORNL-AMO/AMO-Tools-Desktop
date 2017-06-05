@@ -2,19 +2,19 @@
 
   <div class="form-group">
     <label class="small" for="draftPressure">Furnace Draft Pressure</label>
-    <input type="number" class="form-control" formControlName="draftPressure" id="draftPressure" (input)="checkForm()" (focus)="focusField('draftPressure')">
+    <input type="number" class="form-control" formControlName="draftPressure" id="draftPressure" onfocus="this.select();" (input)="checkForm()" (focus)="focusField('draftPressure')">
     <span class="units">in. W.C.</span>
   </div>
 
   <div class="form-group">
     <label class="small" for="openingArea">Opening Area</label>
-    <input type="number" class="form-control" formControlName="openingArea" id="openingArea" (input)="checkForm()" (focus)="focusField('openingArea')">
+    <input type="number" class="form-control" formControlName="openingArea" id="openingArea" onfocus="this.select();" (input)="checkForm()" (focus)="focusField('openingArea')">
     <span class="units">ft<sup>2</sup></span>
   </div>
 
   <div class="form-group">
     <label class="small" for="leakageGasTemperature">Temperature of Gases Leaking</label>
-    <input type="number" class="form-control" formControlName="leakageGasTemperature" id="leakageGasTemperature" (input)="checkForm()"
+    <input type="number" class="form-control" formControlName="leakageGasTemperature" id="leakageGasTemperature" onfocus="this.select();" (input)="checkForm()"
       (focus)="focusField('leakageGasTemperature')">
     <span class="units">&#8457;</span>
   </div>
@@ -23,12 +23,12 @@
     <label class="small" for="specificGravity" aria-describedby="specificGravityHelp">Specific Density of Flue Gases
     <small id="specificGravityHelp" class="form-text text-muted text-help">Air = 1.0</small>
     </label>
-    <input type="number" class="form-control" formControlName="specificGravity" id="specificGravity" (input)="checkForm()" (focus)="focusField('specificGravity')">
+    <input type="number" class="form-control" formControlName="specificGravity" id="specificGravity" onfocus="this.select();" (input)="checkForm()" (focus)="focusField('specificGravity')">
   </div>
 
   <div class="form-group">
     <label class="small" for="ambientTemperature">Ambient Temperature</label>
-    <input type="number" class="form-control" formControlName="ambientTemperature" id="ambientTemperature" (input)="checkForm()"
+    <input type="number" class="form-control" formControlName="ambientTemperature" id="ambientTemperature" onfocus="this.select();" (input)="checkForm()"
       (focus)="focusField('ambientTemperature')">
     <span class="units">&#8457;</span>
   </div>

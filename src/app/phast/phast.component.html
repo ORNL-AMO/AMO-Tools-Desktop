@@ -8,10 +8,8 @@
     </div>
   </div>
 
-  <div class="row tab-content" *ngIf="currentTab == 'losses'">
-    <div class="col-12">
-      <app-losses [(phast)]="assessment.phast" [saveClicked]="saveClicked" (saved)="saveDb()"></app-losses>
-    </div>
+  <div class="tab-content" *ngIf="currentTab == 'losses'">
+    <app-losses [(phast)]="assessment.phast" [saveClicked]="saveClicked" (saved)="saveDb()"></app-losses>
   </div>
 
   <div class="row tab-content" *ngIf="currentTab == 'designed-energy-use'">

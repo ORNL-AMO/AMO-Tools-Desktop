@@ -1257,6 +1257,9 @@ Modify Conditions
     .modify-conditions app-help-panel  {
       width: 30%;
     }
+    .modify-conditions app-losses-help  {
+      width: 30%;
+    }
 
 .modifications-list {
   background: #f1f1f1;

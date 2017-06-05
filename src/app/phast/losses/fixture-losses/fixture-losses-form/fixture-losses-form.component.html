@@ -2,7 +2,7 @@
 
   <div class="form-group">
     <label class="small" for="materialName">Material Name</label>
-    <select class="form-control" formControlName="materialName" id="materialName" (input)="checkForm()" (focus)="focusField('materialName')">
+    <select class="form-control" formControlName="materialName" id="materialName" (change)="checkForm()" (focus)="focusField('materialName')">
         <option>Material 1</option>
         <option>Material 2</option>
       </select>
@@ -10,31 +10,31 @@
 
   <div class="form-group">
     <label class="small" for="specificHeat">Specific Heat</label>
-    <input type="number" class="form-control" formControlName="specificHeat" id="specificHeat" (input)="checkForm()" (focus)="focusField('specificHeat')">
+    <input type="number" class="form-control" formControlName="specificHeat" id="specificHeat" onfocus="this.select();" (input)="checkForm()" (focus)="focusField('specificHeat')">
     <span class="units">Btu/(lb-&#8457;)</span>
   </div>
 
   <div class="form-group">
     <label class="small" for="feedRate">Fixture Weight feed rate</label>
-    <input type="number" class="form-control" formControlName="feedRate" id="feedRate" (input)="checkForm()" (focus)="focusField('feedRate')">
+    <input type="number" class="form-control" formControlName="feedRate" id="feedRate" onfocus="this.select();" (input)="checkForm()" (focus)="focusField('feedRate')">
     <span class="units">lb/hr</span>
   </div>
 
   <div class="form-group">
     <label class="small" for="initialTemp">Initial Temperature</label>
-    <input type="number" class="form-control" formControlName="initialTemp" id="initialTemp" (input)="checkForm()" (focus)="focusField('initialTemp')">
+    <input type="number" class="form-control" formControlName="initialTemp" id="initialTemp" onfocus="this.select();" (input)="checkForm()" (focus)="focusField('initialTemp')">
     <span class="units">&#8457;</span>
   </div>
 
   <div class="form-group">
     <label class="small" for="finalTemp">Final Temperature</label>
-    <input type="number" class="form-control" formControlName="finalTemp" id="finalTemp" (input)="checkForm()" (focus)="focusField('finalTemp')">
+    <input type="number" class="form-control" formControlName="finalTemp" id="finalTemp" onfocus="this.select();" (input)="checkForm()" (focus)="focusField('finalTemp')">
     <span class="units">&#8457;</span>
   </div>
 
   <div class="form-group">
     <label class="small" for="correctionFactor">Correction Factor</label>
-    <input type="number" class="form-control" formControlName="correctionFactor" id="correctionFactor" (input)="checkForm()"
+    <input type="number" class="form-control" formControlName="correctionFactor" id="correctionFactor" onfocus="this.select();" (input)="checkForm()"
       (focus)="focusField('correctionFactor')">
   </div>
 
