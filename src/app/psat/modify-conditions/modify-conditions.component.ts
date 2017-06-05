@@ -31,6 +31,7 @@ export class ModifyConditionsComponent implements OnInit {
   modificationIndex: number = 0;
   showEditModification: boolean = false;
   editModification: Modification;
+  isModalOpen: boolean = false;
   constructor(private psatService: PsatService, private assessmentService: AssessmentService) { }
 
   ngOnInit() {
@@ -144,5 +145,12 @@ export class ModifyConditionsComponent implements OnInit {
     this.hideEditModification();
     this.editModification = null;
     this.save();
+  }
+
+  modalOpen(){
+    this.isModalOpen = true;
+  }
+  modalClose(){
+    this.isModalOpen = false;
   }
 }

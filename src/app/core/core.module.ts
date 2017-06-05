@@ -51,7 +51,7 @@ import { TutorialsComponent } from '../tutorials/tutorials.component';
     PhastModule,
     CalculatorModule,
     DetailedReportModule,
-    ModalModule.forRoot(),
+    ModalModule,
     NgxElectronModule,
     IndexedDbModule,
     FormsModule,
