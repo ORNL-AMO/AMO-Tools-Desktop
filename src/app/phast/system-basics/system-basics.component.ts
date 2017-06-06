@@ -3,6 +3,8 @@ import { Assessment } from '../../shared/models/assessment';
 import { FormBuilder } from '@angular/forms';
 import { SettingsService } from '../../settings/settings.service';
 
+import { Settings } from '../../shared/models/settings';
+
 @Component({
   selector: 'app-system-basics',
   templateUrl: 'system-basics.component.html',
@@ -11,21 +13,16 @@ import { SettingsService } from '../../settings/settings.service';
 export class SystemBasicsComponent implements OnInit {
   @Input()
   phast: Assessment;
-
-  sourcesForm: any;
+  @Input()
+  settings: Settings;
   settingsForm: any;
-
   constructor(private formBuilder: FormBuilder, private settingsService: SettingsService) { }
 
   ngOnInit() {
-    this.sourcesForm = this.initForm();
-    //this.settingsForm = this.settingsService.getFormFromSettings(this.settings);
-  }
-
-  initForm() {
-    return this.formBuilder.group({
-      'heatSource': [''],
-      'energySource': ['']
-    })
+    if (!this.settings) {
+      this.settingsForm = this.settingsService.getSettingsForm();
+    }else{
+      this.settingsForm = this.settingsService.getFormFromSettings(this.settings);
+    }
   }
 }

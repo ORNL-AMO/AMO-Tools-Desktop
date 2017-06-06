@@ -2,27 +2,28 @@
 <app-phast-tabs [currentTab]="currentTab" (tabChange)="changeTab($event)"></app-phast-tabs>
 
 <div *ngIf="assessment">
-  <div class="row" *ngIf="currentTab == 'system-setup'">
-      <app-system-setup></app-system-setup>
+
+  <div class="tab-content" *ngIf="currentTab == 'system-setup' && settings">
+    <app-system-setup [settings]="settings"></app-system-setup>
   </div>
 
-  <div class="tab-content" *ngIf="currentTab == 'losses'">
-    <app-losses [(phast)]="assessment.phast" [saveClicked]="saveClicked" (saved)="saveDb()"></app-losses>
+  <div class="tab-content" *ngIf="currentTab == 'losses' && settings">
+    <app-losses [(phast)]="assessment.phast" [saveClicked]="saveClicked" (saved)="saveDb()" [settings]="settings"></app-losses>
   </div>
 
-  <div class="row tab-content" *ngIf="currentTab == 'designed-energy-use'">
+  <div class="row tab-content" *ngIf="currentTab == 'designed-energy-use' && settings">
     <div class="col-12">
       <app-designed-energy-use></app-designed-energy-use>
     </div>
   </div>
 
-  <div class="row tab-content" *ngIf="currentTab == 'aux-equipment'">
+  <div class="row tab-content" *ngIf="currentTab == 'aux-equipment' && settings">
     <div class="col-12">
       <app-aux-equipment></app-aux-equipment>
     </div>
   </div>
 
-  <div class="row tab-content" *ngIf="currentTab == 'metered-energy'">
+  <div class="row tab-content" *ngIf="currentTab == 'metered-energy' && settings">
     <div class="col-12">
       <app-metered-energy-use></app-metered-energy-use>
     </div>

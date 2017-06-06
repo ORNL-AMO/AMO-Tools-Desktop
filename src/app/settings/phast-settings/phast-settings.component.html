@@ -1,3 +1,53 @@
-<p>
-  phast-settings works!
-</p>
+<div class="row">
+  <div class="col-12">
+    <div class="bold h6">Heat & Energy Sources</div>
+    <!--<div>Heat & Energy Sources are inherited by the <a>folder's settings</a></div>-->
+  </div>
+</div>
+<form [formGroup]="settingsForm">
+  <div class="form-group">
+    <label>Select Energy Source Type</label>
+    <div class="form-check">
+      <label class="form-check-label">
+        <input class="form-check-input" type="radio" name="energySourceType" formControlName="energySourceType" value="Fuel" (change)="startPolling()">Fuel
+      </label>
+      <label class="form-check-label">
+        <input class="form-check-input" type="radio" name="energySourceType" formControlName="energySourceType" value="Electricity" (change)="startPolling()">Electricity
+      </label>
+      <label class="form-check-label">
+        <input class="form-check-input" type="radio" name="energySourceType" formControlName="energySourceType" value="Steam" (change)="startPolling()">Steam
+      </label>
+    </div>
+  </div>
+</form>
+
+<!--<div class="row">
+  <div class="col-12">
+    <label class="form-control-label" for="heatSource">Heat Source</label>
+    <div class="input-group">
+      <select class="form-control" id="heatSource">
+            <option>Heat Source 1</option>
+            <option>Heat Source 2</option>
+          </select>
+    </div>
+    <app-control-messages [control]="sourcesForm.controls.heatSource"></app-control-messages>
+    <div class="small">
+      <a>Add new heat source</a>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-12">
+    <label class="form-control-label" for="energySource">Energy Source</label>
+    <div class="input-group">
+      <select class="form-control" id="energySource">
+            <option>Energy Source 1</option>
+            <option>Energy Source 2</option>
+          </select>
+    </div>
+    <app-control-messages [control]="sourcesForm.controls.energySource"></app-control-messages>
+    <div class="small">
+      <a>Add new energy source</a>
+    </div>
+  </div>
+</div>-->

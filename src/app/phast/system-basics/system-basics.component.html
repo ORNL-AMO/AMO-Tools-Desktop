@@ -1,78 +1,17 @@
-<form [formGroup]="sourcesForm">
-  <div class="row">
-    <div class="col-12">
-      <div class="bold h5">Assessment Settings</div>
-    </div>
+<div class="row">
+  <div class="col-12">
+    <h5>Assessment Basics</h5>
   </div>
-  <!--<div class="row">
-    <div class="col-12">
-      <div class="bold h6">Units of Measure</div>
-      <div>Units of Measure are inherited by your <a>Application Settings</a></div>
-    </div>
+</div>
+
+<div class="row">
+  <div class="col-12">
+    <app-application-settings [(settingsForm)]="settingsForm"></app-application-settings>
   </div>
-  <div class="row">
-    <div class="col-6">
-      <div class="small">Language:</div>
-    </div>
-    <div class="col-6">
-      <div class="pull-left small">English</div>
-    </div>
+</div>
+
+<div class="row">
+  <div class="col-12">
+    <app-phast-settings [(settingsForm)]="settingsForm"></app-phast-settings>
   </div>
-  <div class="row">
-    <div class="col-6">
-      <div class="small">Currency:</div>
-    </div>
-    <div class="col-6">
-      <div class="pull-left small">$ - U.S. Dollar</div>
-    </div>
-  </div>
-  <div class="row">
-    <div class="col-6">
-      <div class="small">Measurement System:</div>
-    </div>
-    <div class="col-6">
-      <div class="pull-left small">Imperial</div>
-    </div>
-  </div>
-  <div class="row">
-    <div class="col-12">
-      <a class="small">Customize for this assessment</a>
-    </div>
-  </div>-->
-  <div class="row">
-    <div class="col-12">
-      <div class="bold h6">Heat & Energy Sources</div>
-      <div>Heat & Energy Sources are inherited by the <a>folder's settings</a></div>
-    </div>
-  </div>
-  <div class="row">
-    <div class="col-12">
-      <label class="form-control-label" for="heatSource">Heat Source</label>
-      <div class="input-group">
-        <select class="form-control" id="heatSource">
-            <option>Heat Source 1</option>
-            <option>Heat Source 2</option>
-          </select>
-      </div>
-      <app-control-messages [control]="sourcesForm.controls.heatSource"></app-control-messages>
-      <div class="small">
-        <a>Add new heat source</a>
-      </div>
-    </div>
-  </div>
-  <div class="row">
-    <div class="col-12">
-      <label class="form-control-label" for="energySource">Energy Source</label>
-      <div class="input-group">
-        <select class="form-control" id="energySource">
-            <option>Energy Source 1</option>
-            <option>Energy Source 2</option>
-          </select>
-      </div>
-      <app-control-messages [control]="sourcesForm.controls.energySource"></app-control-messages>
-      <div class="small">
-        <a>Add new energy source</a>
-      </div>
-    </div>
-  </div>
-</form>
+</div>
