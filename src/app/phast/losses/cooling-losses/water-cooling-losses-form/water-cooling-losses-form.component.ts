@@ -16,12 +16,15 @@ export class WaterCoolingLossesFormComponent implements OnInit {
   baselineSelected: boolean;
   @Output('changeField')
   changeField = new EventEmitter<string>();
+  @Output('saveEmit')
+  saveEmit = new EventEmitter<boolean>();
 
   @ViewChild('lossForm') lossForm: ElementRef;
   form: any;
   elements: any;
 
   firstChange: boolean = true;
+  counter: any;
   constructor() { }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -64,5 +67,18 @@ export class WaterCoolingLossesFormComponent implements OnInit {
 
   focusField(str: string) {
     this.changeField.emit(str);
+  }
+  emitSave() {
+    this.saveEmit.emit(true);
+  }
+
+  startSavePolling() {
+    this.checkForm();
+    if (this.counter) {
+      clearTimeout(this.counter);
+    }
+    this.counter = setTimeout(() => {
+      this.emitSave();
+    }, 3000)
   }
 }

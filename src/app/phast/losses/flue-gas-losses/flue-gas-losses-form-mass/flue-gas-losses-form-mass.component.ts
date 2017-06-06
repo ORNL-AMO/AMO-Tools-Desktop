@@ -17,6 +17,8 @@ export class FlueGasLossesFormMassComponent implements OnInit {
   baselineSelected: boolean;
   @Output('changeField')
   changeField = new EventEmitter<string>();
+  @Output('saveEmit')
+  saveEmit = new EventEmitter<boolean>();
 
   @ViewChild('lossForm') lossForm: ElementRef;
   form: any;
@@ -24,6 +26,7 @@ export class FlueGasLossesFormMassComponent implements OnInit {
 
   firstChange: boolean = true;
   options: any;
+  counter: any;
   constructor(private suiteDbService: SuiteDbService) { }
 
   ngOnInit() {
@@ -91,5 +94,17 @@ export class FlueGasLossesFormMassComponent implements OnInit {
     })
     this.checkForm();
   }
+  emitSave() {
+    this.saveEmit.emit(true);
+  }
 
+  startSavePolling() {
+    this.checkForm();
+    if (this.counter) {
+      clearTimeout(this.counter);
+    }
+    this.counter = setTimeout(() => {
+      this.emitSave();
+    }, 3000)
+  }
 }

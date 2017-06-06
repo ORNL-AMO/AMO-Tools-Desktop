@@ -13,5 +13,6 @@ export interface Settings {
     currentMeasurement?: string,
     viscosityMeasurement?: string,
     voltageMeasurement?: string,
-    id?: number
+    id?: number,
+    energySourceType?: string
 }

@@ -17,7 +17,8 @@ export class GasChargeMaterialFormComponent implements OnInit {
   baselineSelected: boolean;
   @Output('changeField')
   changeField = new EventEmitter<string>();
-
+  @Output('saveEmit')
+  saveEmit = new EventEmitter<boolean>();
   @ViewChild('lossForm') lossForm: ElementRef;
   form: any;
   elements: any;
@@ -25,6 +26,7 @@ export class GasChargeMaterialFormComponent implements OnInit {
   firstChange: boolean = true;
   materialTypes: any;
   selectedMaterial: any;
+  counter: any;
   constructor(private suiteDbService: SuiteDbService) { }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -83,5 +85,18 @@ export class GasChargeMaterialFormComponent implements OnInit {
     this.chargeMaterialForm.patchValue({
       materialSpecificHeat: selectedMaterial.specificHeatVapor,
     });
+  }
+  emitSave() {
+    this.saveEmit.emit(true);
+  }
+
+  startSavePolling() {
+    this.checkForm();
+    if (this.counter) {
+      clearTimeout(this.counter);
+    }
+    this.counter = setTimeout(() => {
+      this.emitSave();
+    }, 3000)
   }
 }

@@ -1,6 +1,6 @@
 import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 import { Losses } from '../../../shared/models/phast';
-
+import { Settings } from '../../../shared/models/settings';
 @Component({
   selector: 'app-losses-tabs',
   templateUrl: './losses-tabs.component.html',
@@ -15,6 +15,8 @@ export class LossesTabsComponent implements OnInit {
   losses: Losses;
   @Input()
   lossesStates: any;
+  @Input()
+  settings: Settings;
   constructor() { }
 
   ngOnInit() {

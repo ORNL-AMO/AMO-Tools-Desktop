@@ -2,12 +2,12 @@
 
   <div class="form-group">
     <label class="small" for="description">Loss Description</label>
-    <input type="text" class="form-control" formControlName="description" id="description" onfocus="this.select();" (input)="checkForm()" (focus)="focusField('description')">
+    <input type="text" class="form-control" formControlName="description" id="description" onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('description')">
   </div>
 
   <div class="form-group">
     <label class="small" for="heatLoss">Heat Loss</label>
-    <input type="number" class="form-control" formControlName="heatLoss" id="heatLoss" onfocus="this.select();" (input)="checkForm()" (focus)="focusField('heatLoss')">
+    <input type="number" class="form-control" formControlName="heatLoss" id="heatLoss" onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('heatLoss')">
     <span class="units">Btu/hr</span>
   </div>
 

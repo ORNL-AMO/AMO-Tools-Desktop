@@ -23,14 +23,15 @@
     <div class="col-12">
       <div class="form-group">
         <label class="small" for="type">Measurement Method</label>
-        <select class="form-control" id="type" [(ngModel)]="loss.measurementType" [disabled]="!baselineSelected"
-          (focus)="changeField('measurementType')">
+        <select class="form-control" id="type" [(ngModel)]="loss.measurementType" [disabled]="!baselineSelected" (focus)="changeField('measurementType')">
             <option [ngValue]="'By Volume'">By Volume</option>
             <option [ngValue]="'By Mass'">By Mass</option>
             </select>
       </div>
-      <app-flue-gas-losses-form-mass [(flueGasLossForm)]="loss.formByMass" *ngIf="loss.measurementType == 'By Mass'" (changeField)="changeField($event)" [(lossState)]="lossState" (calculate)="calculate(loss)" [baselineSelected]="baselineSelected"></app-flue-gas-losses-form-mass>
-      <app-flue-gas-losses-form-volume [(flueGasLossForm)]="loss.formByVolume" *ngIf="loss.measurementType == 'By Volume'" (changeField)="changeField($event)" [(lossState)]="lossState" (calculate)="calculate(loss)" [baselineSelected]="baselineSelected"></app-flue-gas-losses-form-volume>
+      <app-flue-gas-losses-form-mass [(flueGasLossForm)]="loss.formByMass" *ngIf="loss.measurementType == 'By Mass'" (changeField)="changeField($event)"
+        [(lossState)]="lossState" (calculate)="calculate(loss)" [baselineSelected]="baselineSelected" (saveEmit)="saveLosses()"></app-flue-gas-losses-form-mass>
+      <app-flue-gas-losses-form-volume [(flueGasLossForm)]="loss.formByVolume" *ngIf="loss.measurementType == 'By Volume'" (changeField)="changeField($event)"
+        [(lossState)]="lossState" (calculate)="calculate(loss)" [baselineSelected]="baselineSelected" (saveEmit)="saveLosses()"></app-flue-gas-losses-form-volume>
     </div>
   </div>
   <div class="row">

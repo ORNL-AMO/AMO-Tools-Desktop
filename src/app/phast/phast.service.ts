@@ -251,5 +251,40 @@ export class PhastService {
     let inputs = { inletTemperature, outletTemperature, flowRate, correctionFactor, specificHeat }
     return phastAddon.atmosphere(inputs);
   }
+
+  slagOtherMaterialLosses(
+    weight: number,
+    inletTemperature: number,
+    outletTemperature: number,
+    specificHeat: number,
+    correctionFactor: number
+  ) {
+    let inputs = {
+      weight,
+      inletTemperature,
+      outletTemperature,
+      specificHeat,
+      correctionFactor
+    }
+    return phastAddon.slagOtherMaterialLosses(inputs);
+  }
+
+  auxiliaryPowerLoss(
+    motorPhase: number,
+    supplyVoltage: number,
+    avgCurrent: number,
+    powerFactor: number,
+    operatingTime: number,
+  ) {
+    let inputs = {
+      motorPhase: motorPhase,
+      supplyVoltage: supplyVoltage,
+      avgCurrent: avgCurrent,
+      powerFactor: powerFactor,
+      operatingTime: operatingTime,
+    }
+    return phastAddon.auxiliaryPowerLoss(inputs);
+  }
+
 }
 

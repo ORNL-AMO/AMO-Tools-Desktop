@@ -1,5 +1,6 @@
 <nav>
-  <app-losses-tabs [losses]="phast.losses" [lossesStates]="lossesStates" (changeTab)="changeTab($event)" [lossesTab]="lossesTab"></app-losses-tabs>
+  <app-losses-tabs [losses]="phast.losses" [lossesStates]="lossesStates" (changeTab)="changeTab($event)" [lossesTab]="lossesTab"
+    [settings]="settings"></app-losses-tabs>
 </nav>
 <div class="modify-conditions">
   <!--<nav class="col-2 sidebar losses-sidebar">
@@ -52,6 +53,18 @@
       <app-other-losses (fieldChange)="changeField($event)" [baselineSelected]="baselineSelected" (savedLoss)="saveModifications()"
         [(losses)]="phast.losses" [addLossToggle]="addLossToggle" [(lossState)]="lossesStates.otherLosses" [saveClicked]="saveClicked"
         *ngIf="lossesTab == 'other-losses'"></app-other-losses>
+
+      <app-slag (fieldChange)="changeField($event)" [baselineSelected]="baselineSelected" (savedLoss)="saveModifications()" [(losses)]="phast.losses"
+        [addLossToggle]="addLossToggle" [(lossState)]="lossesStates.slagLosses" [saveClicked]="saveClicked" *ngIf="lossesTab == 'slag'"></app-slag>
+
+      <app-exhaust-gas *ngIf="lossesTab == 'exhaust-gas'"></app-exhaust-gas>
+
+      <app-auxiliary-power-losses (fieldChange)="changeField($event)" [baselineSelected]="baselineSelected" (savedLoss)="saveModifications()"
+        [(losses)]="phast.losses" [addLossToggle]="addLossToggle" [(lossState)]="lossesStates.auxiliaryPowerLosses" [saveClicked]="saveClicked"
+        *ngIf="lossesTab == 'auxiliary-power'"></app-auxiliary-power-losses>
+
+
+      <app-heat-storage *ngIf="lossesTab == 'heat-storage'"></app-heat-storage>
     </div>
   </div>
   <!--Modification Start -->
@@ -111,6 +124,19 @@
       <app-other-losses (fieldChange)="changeField($event)" [baselineSelected]="modificationSelected" (savedLoss)="saveModifications()"
         [(losses)]="_modifications[modificationIndex].losses" [addLossToggle]="addLossToggle" [saveClicked]="saveClicked" [(lossState)]="lossesStates.otherLosses"
         *ngIf="lossesTab == 'other-losses'"></app-other-losses>
+
+      <app-slag (fieldChange)="changeField($event)" [baselineSelected]="modificationSelected" (savedLoss)="saveModifications()"
+        [(losses)]="_modifications[modificationIndex].losses" [addLossToggle]="addLossToggle" [(lossState)]="lossesStates.slagLosses"
+        [saveClicked]="saveClicked" *ngIf="lossesTab == 'slag'"></app-slag>
+
+      <app-exhaust-gas *ngIf="lossesTab == 'exhaust-gas'"></app-exhaust-gas>
+
+      <app-auxiliary-power-losses (fieldChange)="changeField($event)" [baselineSelected]="modificationSelected" (savedLoss)="saveModifications()"
+        [(losses)]="_modifications[modificationIndex].losses" [addLossToggle]="addLossToggle" [(lossState)]="lossesStates.auxiliaryPowerLosses"
+        [saveClicked]="saveClicked" *ngIf="lossesTab == 'auxiliary-power'"></app-auxiliary-power-losses>
+
+      <app-heat-storage *ngIf="lossesTab == 'heat-storage'"></app-heat-storage>
+
     </div>
     <!--<div class="card-block losses-container" *ngIf="isDropdownOpen">
       <ul>

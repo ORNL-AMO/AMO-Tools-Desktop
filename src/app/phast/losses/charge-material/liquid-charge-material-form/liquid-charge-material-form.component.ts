@@ -17,7 +17,9 @@ export class LiquidChargeMaterialFormComponent implements OnInit {
   baselineSelected: boolean;
   @Output('changeField')
   changeField = new EventEmitter<string>();
-
+  @Output('saveEmit')
+  saveEmit = new EventEmitter<boolean>();
+  
   @ViewChild('lossForm') lossForm: ElementRef;
   form: any;
   elements: any;
@@ -25,6 +27,7 @@ export class LiquidChargeMaterialFormComponent implements OnInit {
   firstChange: boolean = true;
   materialTypes: any;
   selectedMaterial: any;
+    counter: any;
   constructor(private suiteDbService: SuiteDbService) { }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -81,7 +84,6 @@ export class LiquidChargeMaterialFormComponent implements OnInit {
 
 
   setProperties() {
-    console.log(this.chargeMaterialForm.value.materialId);
     let selectedMaterial = this.suiteDbService.selectLiquidLoadChargeMaterialById(this.chargeMaterialForm.value.materialId);
     this.chargeMaterialForm.patchValue({
       materialLatentHeat: selectedMaterial.latentHeat,
@@ -90,5 +92,18 @@ export class LiquidChargeMaterialFormComponent implements OnInit {
       materialVaporizingTemperature: selectedMaterial.vaporizationTemperature
     })
     this.checkForm();
+  }
+  emitSave() {
+    this.saveEmit.emit(true);
+  }
+
+  startSavePolling() {
+    this.checkForm();
+    if (this.counter) {
+      clearTimeout(this.counter);
+    }
+    this.counter = setTimeout(() => {
+      this.emitSave();
+    }, 3000)
   }
 }

@@ -175,7 +175,8 @@ export class DashboardComponent implements OnInit {
       distanceMeasurement: 'ft',
       flowMeasurement: 'gpm',
       powerMeasurement: 'hp',
-      pressureMeasurement: 'psi'
+      pressureMeasurement: 'psi',
+      energySourceType: 'Fuel'
 
     }
     this.indexedDbService.addSettings(tmpSettings).then(

@@ -17,6 +17,8 @@ export class OpeningLossesFormComponent implements OnInit {
   baselineSelected: boolean;
   @Output('changeField')
   changeField = new EventEmitter<string>();
+  @Output('saveEmit')
+  saveEmit = new EventEmitter<boolean>();
 
   @ViewChild('lossForm') lossForm: ElementRef;
   totalArea: number = 0.0;
@@ -24,7 +26,7 @@ export class OpeningLossesFormComponent implements OnInit {
   init: boolean;
   form: any;
   elements: any;
-
+  counter: any;
   firstChange: boolean = true;
   constructor(private convertUnitsService: ConvertUnitsService) { }
 
@@ -101,5 +103,19 @@ export class OpeningLossesFormComponent implements OnInit {
 
   focusField(str: string) {
     this.changeField.emit(str);
+  }
+
+  emitSave() {
+    this.saveEmit.emit(true);
+  }
+
+  startSavePolling() {
+    this.checkForm();
+    if (this.counter) {
+      clearTimeout(this.counter);
+    }
+    this.counter = setTimeout(() => {
+      this.emitSave();
+    }, 3000)
   }
 }
