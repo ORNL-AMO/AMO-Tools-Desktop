@@ -83,7 +83,6 @@ export class LossesComponent implements OnInit {
     if (this.phast.modifications) {
       this._modifications = (JSON.parse(JSON.stringify(this.phast.modifications)));
     }
-    console.log(this.settings);
   }
 
   changeTab($event) {
@@ -105,7 +104,7 @@ export class LossesComponent implements OnInit {
   saveModifications() {
     if (this._modifications) {
       this.phast.modifications = (JSON.parse(JSON.stringify(this._modifications)));
-      console.log('saveModifications');
+      debugger;
       this.saved.emit(true);
     }
   }

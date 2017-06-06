@@ -95,7 +95,6 @@ export class SlagComponent implements OnInit {
       loss.form.value.specificHeat,
       loss.form.value.correctionFactor
     );
-    console.log(loss.heatLoss);
   }
 
   saveLosses() {

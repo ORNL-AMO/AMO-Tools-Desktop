@@ -122,7 +122,7 @@
         [(losses)]="_modifications[modificationIndex].losses" [addLossToggle]="addLossToggle" [saveClicked]="saveClicked" [(lossState)]="lossesStates.otherLosses"
         *ngIf="lossesTab == 'other-losses'"></app-other-losses>
 
-      <app-slag (fieldChange)="changeField($event)" [baselineSelected]="baselineSelected" (savedLoss)="saveModifications()" [(losses)]="phast.losses"
+      <app-slag (fieldChange)="changeField($event)" [baselineSelected]="modificationSelected" (savedLoss)="saveModifications()" [(losses)]="_modifications[modificationIndex].losses"
         [addLossToggle]="addLossToggle" [(lossState)]="lossesStates.slagLosses" [saveClicked]="saveClicked" *ngIf="lossesTab == 'slag'"></app-slag>
 
       <app-exhaust-gas *ngIf="lossesTab == 'exhaust-gas'"></app-exhaust-gas>
