@@ -269,5 +269,22 @@ export class PhastService {
     return phastAddon.slagOtherMaterialLosses(inputs);
   }
 
+  auxiliaryPowerLoss(
+    motorPhase: number,
+    supplyVoltage: number,
+    avgCurrent: number,
+    powerFactor: number,
+    operatingTime: number,
+  ) {
+    let inputs = {
+      motorPhase: motorPhase,
+      supplyVoltage: supplyVoltage,
+      avgCurrent: avgCurrent,
+      powerFactor: powerFactor,
+      operatingTime: operatingTime,
+    }
+    return phastAddon.auxiliaryPowerLoss(inputs);
+  }
+
 }
 

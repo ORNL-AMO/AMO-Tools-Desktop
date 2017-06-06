@@ -13,8 +13,7 @@ export class SlagService {
       'inletTemperature': ['', Validators.required],
       'outletTemperature': ['', Validators.required],
       'specificHeat': ['', Validators.required],
-      'correctionFactor': ['', Validators.required],
-      'heatLoss': ['']
+      'correctionFactor': ['', Validators.required]
     })
   }
 
@@ -24,8 +23,7 @@ export class SlagService {
       'inletTemperature': [slag.inletTemperature, Validators.required],
       'outletTemperature': [slag.outletTemperature, Validators.required],
       'specificHeat': [slag.specificHeat, Validators.required],
-      'correctionFactor': [slag.correctionFactor, Validators.required],
-      'heatLoss': [slag.heatLoss]
+      'correctionFactor': [slag.correctionFactor, Validators.required]
     })
   }
 
@@ -35,8 +33,7 @@ export class SlagService {
       inletTemperature: form.value.inletTemperature,
       outletTemperature: form.value.outletTemperature,
       specificHeat: form.value.specificHeat,
-      correctionFactor: form.value.correctionFactor,
-      heatLoss: form.value.heatLoss
+      correctionFactor: form.value.correctionFactor
     }
     return tmpSlag;
   }

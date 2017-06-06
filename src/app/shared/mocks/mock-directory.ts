@@ -266,6 +266,15 @@ export const MockDirectory: Directory = {
               specificHeat: 0.2479,
               correctionFactor: 1.0
             }
+          ],
+          auxiliaryPowerLosses: [
+            {
+              motorPhase: 3,
+              supplyVoltage: 460,
+              avgCurrent: 19,
+              powerFactor: .85,
+              operatingTime: 100,
+            }
           ]
         },
         setupDone: true

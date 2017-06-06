@@ -9,9 +9,9 @@
     Slag
     </a>
   </li>
-  <li *ngIf="settings.energySourceType == 'Electricity'" [ngClass]="{'active': lossesTab == 'energy-input'}" (click)="tabChange('energy-input')">
+  <li *ngIf="settings.energySourceType == 'Electricity'" [ngClass]="{'active': lossesTab == 'auxiliary-power'}" (click)="tabChange('auxiliary-power')">
     <a class="nav-link small">
-    Energy Input
+      Auxiliary Power
     </a>
   </li>
   <li *ngIf="settings.energySourceType == 'Electricity'" [ngClass]="{'active': lossesTab == 'exhaust-gas'}" (click)="tabChange('exhaust-gas')">
