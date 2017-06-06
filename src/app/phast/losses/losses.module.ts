@@ -65,7 +65,10 @@ import { SlagFormComponent } from './slag/slag-form/slag-form.component';
 import { AuxiliaryPowerLossesComponent } from './auxiliary-power-losses/auxiliary-power-losses.component';
 import { AuxiliaryPowerLossesService } from './auxiliary-power-losses/auxiliary-power-losses.service';
 import { AuxiliaryPowerLossesFormComponent } from './auxiliary-power-losses/auxiliary-power-losses-form/auxiliary-power-losses-form.component';
-
+import { AuxiliaryPowerLossesHelpComponent } from './losses-help/auxiliary-power-losses-help/auxiliary-power-losses-help.component';
+import { HeatStorageHelpComponent } from './losses-help/heat-storage-help/heat-storage-help.component';
+import { SlagHelpComponent } from './losses-help/slag-help/slag-help.component';
+import { ExhaustGasHelpComponent } from './losses-help/exhaust-gas-help/exhaust-gas-help.component';
 @NgModule({
   imports: [
     CommonModule,
@@ -122,7 +125,11 @@ import { AuxiliaryPowerLossesFormComponent } from './auxiliary-power-losses/auxi
     HeatStorageComponent,
     SlagFormComponent,
     AuxiliaryPowerLossesComponent,
-    AuxiliaryPowerLossesFormComponent
+    AuxiliaryPowerLossesFormComponent,
+    AuxiliaryPowerLossesHelpComponent,
+    HeatStorageHelpComponent,
+    SlagHelpComponent,
+    ExhaustGasHelpComponent,
   ],
   providers: [
     ChargeMaterialService,
