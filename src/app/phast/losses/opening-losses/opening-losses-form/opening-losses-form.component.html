@@ -1,7 +1,7 @@
 <form #lossForm [formGroup]="openingLossesForm">
   <div class="form-group">
     <label class="small" for="type">Select Type</label>
-    <select class="form-control" formControlName="openingType" id="openingType" (change)="checkForm()" (focus)="focusField('openingType')">
+    <select class="form-control" formControlName="openingType" id="openingType" (change)="startSavePolling()" (focus)="focusField('openingType')">
               <option>Round</option>
               <option>Rectangular (Square)</option>
               </select>
@@ -17,7 +17,7 @@
 
   <div class="form-group">
     <label class="small" for="wallThickness">Furnace Wall Thickness</label>
-    <input type="number" class="form-control" formControlName="wallThickness" id="wallThickness" onfocus="this.select();" (input)="checkForm()" (focus)="focusField('wallThickness')">
+    <input type="number" class="form-control" formControlName="wallThickness" id="wallThickness" onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('wallThickness')">
     <span class="units">in</span>
   </div>
 
@@ -45,18 +45,18 @@
     <label class="small" for="viewFactor" aria-describedby="viewFactorHelp">View Factor
     <small id="viewFactorHelp" class="form-text text-muted text-help">User defined if known or from chart</small>
     </label>
-    <input type="number" class="form-control" formControlName="viewFactor" id="viewFactor" onfocus="this.select();" (input)="checkForm()" (focus)="focusField('viewFactor')">
+    <input type="number" class="form-control" formControlName="viewFactor" id="viewFactor" onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('viewFactor')">
   </div>
 
   <div class="form-group">
     <label class="small" for="insideTemp">Avg. Zone or Radiation Source Temp.</label>
-    <input type="number" class="form-control" formControlName="insideTemp" id="insideTemp" onfocus="this.select();" (input)="checkForm()" (focus)="focusField('insideTemp')">
+    <input type="number" class="form-control" formControlName="insideTemp" id="insideTemp" onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('insideTemp')">
     <span class="units">&#8457;</span>
   </div>
 
   <div class="form-group">
     <label class="small" for="ambientTemp">Ambient Temp.</label>
-    <input type="number" class="form-control" formControlName="ambientTemp" id="ambientTemp" onfocus="this.select();" (input)="checkForm()" (focus)="focusField('ambientTemp')">
+    <input type="number" class="form-control" formControlName="ambientTemp" id="ambientTemp" onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('ambientTemp')">
     <span class="units">&#8457;</span>
   </div>
 
@@ -64,12 +64,12 @@
     <label class="small" for="emissivity" aria-describedby="emissivityHelp">Emissivity of the Source
     <small id="emissivityHelp" class="form-text text-muted text-help">Typical - 0.9</small>
     </label>
-    <input type="number" class="form-control" formControlName="emissivity" id="emissivity" onfocus="this.select();" (input)="checkForm()" (focus)="focusField('emissivity')">
+    <input type="number" class="form-control" formControlName="emissivity" id="emissivity" onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('emissivity')">
   </div>
 
   <div class="form-group">
     <label class="small" for="percentTimeOpen">% of Time Open</label>
-    <input type="number" class="form-control" formControlName="percentTimeOpen" id="percentTimeOpen" onfocus="this.select();" (input)="checkForm()" (focus)="focusField('percentTimeOpen')">
+    <input type="number" class="form-control" formControlName="percentTimeOpen" id="percentTimeOpen" onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('percentTimeOpen')">
     <span class="units">%</span>
   </div>
 

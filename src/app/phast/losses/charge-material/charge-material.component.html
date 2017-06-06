@@ -32,11 +32,13 @@
         </div>
       </div>
       <app-solid-charge-material-form *ngIf="material.chargeMaterialType == 'Solid'" (changeField)="changeField($event)" [(lossState)]="lossState"
-        [(chargeMaterialForm)]="material.solidForm" (calculate)="calculate(material)" [baselineSelected]="baselineSelected"></app-solid-charge-material-form>
+        [(chargeMaterialForm)]="material.solidForm" (calculate)="calculate(material)" [baselineSelected]="baselineSelected"
+        (saveEmit)="saveLosses()"></app-solid-charge-material-form>
       <app-liquid-charge-material-form *ngIf="material.chargeMaterialType == 'Liquid'" (changeField)="changeField($event)" [(lossState)]="lossState"
-        [(chargeMaterialForm)]="material.liquidForm" (calculate)="calculate(material)" [baselineSelected]="baselineSelected"></app-liquid-charge-material-form>
+        [(chargeMaterialForm)]="material.liquidForm" (calculate)="calculate(material)" [baselineSelected]="baselineSelected"
+        (saveEmit)="saveLosses()"></app-liquid-charge-material-form>
       <app-gas-charge-material-form *ngIf="material.chargeMaterialType == 'Gas'" (changeField)="changeField($event)" [(lossState)]="lossState"
-        [(chargeMaterialForm)]="material.gasForm" (calculate)="calculate(material)" [baselineSelected]="baselineSelected"></app-gas-charge-material-form>
+        [(chargeMaterialForm)]="material.gasForm" (calculate)="calculate(material)" [baselineSelected]="baselineSelected" (saveEmit)="saveLosses()"></app-gas-charge-material-form>
     </div>
   </div>
   <div class="row">

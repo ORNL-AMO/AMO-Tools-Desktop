@@ -19,7 +19,7 @@
   <div class="row">
     <div class="col-12">
       <app-slag-form (changeField)="changeField($event)" [(slagLossForm)]="loss.form" (calculate)="calculate(loss)" [(lossState)]="lossState"
-        [baselineSelected]="baselineSelected"></app-slag-form>
+        [baselineSelected]="baselineSelected" (saveEmit)="saveLosses()"></app-slag-form>
     </div>
   </div>
   <div class="row">

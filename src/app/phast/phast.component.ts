@@ -148,7 +148,7 @@ export class PhastComponent implements OnInit {
 
   saveDb() {
     this.indexedDbService.putAssessment(this.assessment).then(
-      results => { console.log('saved!'); }
+      results => { this.addToast('Assessment Saved') }
     )
   }
 

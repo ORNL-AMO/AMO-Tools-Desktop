@@ -16,6 +16,8 @@ export class SolidChargeMaterialFormComponent implements OnInit {
   baselineSelected: boolean;
   @Output('changeField')
   changeField = new EventEmitter<string>();
+  @Output('saveEmit')
+  saveEmit = new EventEmitter<boolean>();
 
   @ViewChild('lossForm') lossForm: ElementRef;
   form: any;
@@ -26,6 +28,7 @@ export class SolidChargeMaterialFormComponent implements OnInit {
   materialTypes: any;
   selectedMaterialId: any;
   selectedMaterial: any;
+  counter: any;
   constructor(private suiteDbService: SuiteDbService) { }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -48,8 +51,8 @@ export class SolidChargeMaterialFormComponent implements OnInit {
         if (this.chargeMaterialForm.value.materialLatentHeatOfFusion == '') {
           this.setProperties();
         }
-      } 
-    } 
+      }
+    }
     if (!this.baselineSelected) {
       this.disableForm();
     }
@@ -71,7 +74,7 @@ export class SolidChargeMaterialFormComponent implements OnInit {
 
   checkForm() {
     this.lossState.saved = false;
-    if (this.chargeMaterialForm.satus == "VALID") {
+    if (this.chargeMaterialForm.status == "VALID") {
       this.calculate.emit(true);
     }
   }
@@ -89,5 +92,18 @@ export class SolidChargeMaterialFormComponent implements OnInit {
       materialSpecificHeatOfSolidMaterial: selectedMaterial.specificHeatSolid
     })
     this.checkForm();
+  }
+  emitSave() {
+    this.saveEmit.emit(true);
+  }
+
+  startSavePolling() {
+    this.checkForm();
+    if (this.counter) {
+      clearTimeout(this.counter);
+    }
+    this.counter = setTimeout(() => {
+      this.emitSave();
+    }, 3000)
   }
 }
