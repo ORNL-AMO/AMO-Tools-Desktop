@@ -263,7 +263,7 @@ export const MockDirectory: Directory = {
               weight: 3,
               inletTemperature: 500,
               outletTemperature: 550,
-              specificHeat: 0.9,
+              specificHeat: 0.2479,
               correctionFactor: 1.0
             }
           ]
