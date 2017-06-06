@@ -15,6 +15,7 @@ export class SystemBasicsComponent implements OnInit {
   phast: Assessment;
   @Input()
   settings: Settings;
+  
   settingsForm: any;
   constructor(private formBuilder: FormBuilder, private settingsService: SettingsService) { }
 

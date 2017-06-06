@@ -257,6 +257,15 @@ export const MockDirectory: Directory = {
                 nitrogen: 1.5
               }
             }
+          ],
+          slagLosses: [
+            {
+              weight: 3,
+              inletTemperature: 500,
+              outletTemperature: 550,
+              specificHeat: 0.9,
+              correctionFactor: 1.0
+            }
           ]
         },
         setupDone: true

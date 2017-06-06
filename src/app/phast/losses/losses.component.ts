@@ -67,6 +67,10 @@ export class LossesComponent implements OnInit {
     flueGasLosses:{
       numLosses: 0,
       saved: true
+    },
+    slagLosses: {
+      numLosses: 0,
+      saved: true
     }
   }
   constructor() { }

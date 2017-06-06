@@ -56,7 +56,12 @@ import { WallLossesHelpComponent } from './losses-help/wall-losses-help/wall-los
 import { SuiteDbModule } from '../../suiteDb/suiteDb.module';
 import { FlueGasLossesFormVolumeComponent } from './flue-gas-losses/flue-gas-losses-form-volume/flue-gas-losses-form-volume.component';
 import { FlueGasLossesFormMassComponent } from './flue-gas-losses/flue-gas-losses-form-mass/flue-gas-losses-form-mass.component';
-
+import { ExhaustGasComponent } from './exhaust-gas/exhaust-gas.component';
+import { EnergyInputComponent } from './energy-input/energy-input.component';
+import { SlagComponent } from './slag/slag.component';
+import { HeatStorageComponent } from './heat-storage/heat-storage.component';
+import { SlagService } from './slag/slag.service';
+import { SlagFormComponent } from './slag/slag-form/slag-form.component';
 @NgModule({
   imports: [
     CommonModule,
@@ -107,7 +112,12 @@ import { FlueGasLossesFormMassComponent } from './flue-gas-losses/flue-gas-losse
     OtherLossesHelpComponent,
     WallLossesHelpComponent,
     FlueGasLossesFormVolumeComponent,
-    FlueGasLossesFormMassComponent
+    FlueGasLossesFormMassComponent,
+    ExhaustGasComponent,
+    EnergyInputComponent,
+    SlagComponent,
+    HeatStorageComponent,
+    SlagFormComponent
   ],
   providers: [
     ChargeMaterialService,
@@ -119,7 +129,8 @@ import { FlueGasLossesFormMassComponent } from './flue-gas-losses/flue-gas-losse
     CoolingLossesService,
     GasLeakageLossesService,
     ExtendedSurfaceLossesService,
-    OtherLossesService
+    OtherLossesService,
+    SlagService
   ],
   exports: [
     LossesComponent
