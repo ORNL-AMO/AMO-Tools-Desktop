@@ -1410,6 +1410,125 @@ Help Panel Cards
 
 
 
+/*
+Reporting
+========================================== */
+.report-header {
+  padding: 22px 0;
+}
+  .report-header h1 {
+    font-size: 1.4rem;
+    font-weight: 100;
+    line-height: 1.4;
+    margin-bottom: 0;
+    margin-right: 20px;
+  }
+  .report-header .btn {
+    padding: 10px 18px;
+      font-size: 13px;
+  }
+
+.report-summary {
+  background: #2980b9;
+  border-color: #000B13;
+  border-style: solid;
+  border-width: 1px 0;
+  color: #fff;
+  padding: 30px 0;
+}
+  .report-summary h2 {
+    font-size: 1.25rem;
+    margin-bottom: 1.25rem;
+  }
+
+
+
+  .rollups {
+    display: -webkit-flex;
+    display: flex;
+  }
+
+  .rollups h3 {
+    line-height: 0.5;
+    font-size: 1.15rem;
+    text-align: center;
+    margin-bottom: 1.5rem;
+  }
+  .rollups h3 span {
+    display: inline-block;
+    position: relative;  
+  }
+  .rollups h3 span:before,
+  .rollups h3 span:after {
+    content: "";
+    position: absolute;
+    height: 10px;
+    border-bottom: 1px solid rgba(255,255,255,0.5);
+    top: 0;
+    width: 100%;
+  }
+  .rollups h3 span:before {
+    right: 100%;
+    margin-right: 15px;
+  }
+  .rollups h3 span:after {
+    left: 100%;
+    margin-left: 15px;
+  }
+
+
+    .rollups .pumps {
+      width: 50%;
+      text-align: center;
+    }
+      .rollups .pumps h3:nth-child(2), .rollups .pumps h4 {
+        margin-bottom: 8px;
+      }
+      .rollups .pumps h3:nth-child(2) {
+        font-size: 1rem;
+      }
+      .rollups .pumps h4 {
+        font-size: 1.75rem;
+        font-weight: bold;
+      }
+      .rollups .pumps h5 {
+        text-transform: uppercase;
+        font-size: 0.85rem;
+        letter-spacing: 2px;
+      }
+
+.report-list-nav h5 {
+  font-size: 17px;
+  text-transform: uppercase;
+  color: #a5a5a5;
+  letter-spacing: 2px;
+}
+.report-list-nav ul {
+  margin: 0;
+  padding: 0;
+}
+.report-list-nav li {
+  list-style: none;
+  font-size: 15px;
+}
+
+.input-data h5 {
+
+}
+.input-data table {
+  display: none;
+}
+
+.report-header h2 {
+  font-size: 1.35rem;
+}
+
+.report-data div:first-of-type {
+  display: -webkit-flex;
+  display: flex;
+}
+
+
 
 /*
 No Data Messaging
@@ -1500,4 +1619,11 @@ Toasty Overrides ================================= */
 
 .losses-empty{
   height:100%;
+}
+
+
+@media screen and (min-width: 768px) {
+  .rollups .pumps {
+    width: 25%;
+  }
 }
