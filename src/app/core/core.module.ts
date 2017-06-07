@@ -24,7 +24,7 @@ import { SettingsModule } from '../settings/settings.module';
 import { IndexedDbModule } from '../indexedDb/indexedDb.module';
 
 import { JsonToCsvModule } from '../shared/json-to-csv/json-to-csv.module';
-
+import { ImportExportModule } from '../shared/import-export/import-export.module';
 import { SuiteDbModule } from '../suiteDb/suiteDb.module';
 
 
@@ -51,7 +51,7 @@ import { TutorialsComponent } from '../tutorials/tutorials.component';
     PhastModule,
     CalculatorModule,
     DetailedReportModule,
-    ModalModule.forRoot(),
+    ModalModule,
     NgxElectronModule,
     IndexedDbModule,
     FormsModule,
@@ -59,7 +59,8 @@ import { TutorialsComponent } from '../tutorials/tutorials.component';
     SettingsModule,
     ToastyModule,
     JsonToCsvModule,
-    SuiteDbModule
+    SuiteDbModule,
+    ImportExportModule
   ],
   providers: [
     AssessmentService

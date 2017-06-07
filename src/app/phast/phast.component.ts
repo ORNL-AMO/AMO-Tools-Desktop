@@ -5,6 +5,7 @@ import { AssessmentService } from '../assessment/assessment.service';
 import { PhastService } from './phast.service';
 import { IndexedDbService } from '../indexedDb/indexed-db.service';
 import { ActivatedRoute } from '@angular/router';
+import { Settings } from '../shared/models/settings';
 
 import { ToastyService, ToastyConfig, ToastOptions, ToastData } from 'ng2-toasty';
 
@@ -29,6 +30,11 @@ export class PhastComponent implements OnInit {
     'metered-energy'
   ]
   tabIndex: number = 0;
+
+  settings: Settings;
+  isAssessmentSettings: boolean;
+
+
   constructor(
     private location: Location,
     private assessmentService: AssessmentService,
@@ -43,21 +49,58 @@ export class PhastComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.phastService.test();
+    //this.phastService.test();
     let tmpAssessmentId;
     this.activatedRoute.params.subscribe(params => {
       tmpAssessmentId = params['id'];
       this.indexedDbService.getAssessment(parseInt(tmpAssessmentId)).then(dbAssessment => {
         this.assessment = dbAssessment;
+        this.getSettings();
       })
       let tmpTab = this.assessmentService.getTab();
       if (tmpTab == 'modify-conditions') {
         this.currentTab = 'losses';
       }
-    });   
+    });
   }
 
-  ngAfterViewInit(){
+  getSettings(update?: boolean) {
+    //get assessment settings
+    this.indexedDbService.getAssessmentSettings(this.assessment.id).then(
+      results => {
+        if (results.length != 0) {
+          this.settings = results[0];
+          this.isAssessmentSettings = true;
+          if (update) {
+            this.addToast('Settings Saved');
+          }
+        } else {
+          //if no settings found for assessment, check directory settings
+          this.getParentDirectorySettings(this.assessment.directoryId);
+        }
+      }
+    )
+  }
+
+  getParentDirectorySettings(parentId: number) {
+    this.indexedDbService.getDirectorySettings(parentId).then(
+      results => {
+        if (results.length != 0) {
+          this.settings = results[0];
+        }
+        else {
+          //if no settings for directory check parent directory
+          this.indexedDbService.getDirectory(parentId).then(
+            results => {
+              this.getParentDirectorySettings(results.parentDirectoryId);
+            }
+          )
+        }
+      }
+    )
+  }
+
+  ngAfterViewInit() {
     this.disclaimerToast();
   }
 
@@ -105,7 +148,7 @@ export class PhastComponent implements OnInit {
 
   saveDb() {
     this.indexedDbService.putAssessment(this.assessment).then(
-      results => { console.log('saved!'); }
+      results => { this.addToast('Assessment Saved') }
     )
   }
 
@@ -120,8 +163,17 @@ export class PhastComponent implements OnInit {
       showClose: true,
       timeout: 10000000,
       theme: 'default'
-    }    
+    }
     this.toastyService.info(toastOptions);
   }
 
+  addToast(msg: string) {
+    let toastOptions: ToastOptions = {
+      title: msg,
+      timeout: 4000,
+      showClose: true,
+      theme: 'default'
+    }
+    this.toastyService.success(toastOptions);
+  }
 }

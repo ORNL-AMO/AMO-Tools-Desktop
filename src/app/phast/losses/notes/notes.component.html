@@ -47,3 +47,13 @@
   <label for="notes">Other Loss Modification Notes:</label>
   <textarea class="form-control" rows="5" id="notes" [(ngModel)]="notes.otherNotes"></textarea>
 </div>
+
+<div class="form-group" *ngIf="currentTab == 'slag'">
+  <label for="notes">Slag Loss Modification Notes:</label>
+  <textarea class="form-control" rows="5" id="notes" [(ngModel)]="notes.slagNotes"></textarea>
+</div>
+
+<div class="form-group" *ngIf="currentTab == 'auxiliary-power'">
+  <label for="notes">Auxiliary Power Loss Modification Notes:</label>
+  <textarea class="form-control" rows="5" id="notes" [(ngModel)]="notes.auxiliaryPowerNotes"></textarea>
+</div>

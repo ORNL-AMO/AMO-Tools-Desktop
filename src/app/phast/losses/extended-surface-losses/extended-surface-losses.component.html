@@ -22,7 +22,7 @@
   </div>
   <div class="row">
     <div class="col-12">
-      <app-extended-surface-losses-form (changeField)="changeField($event)" [(lossesForm)]="loss.form" (calculate)="calculate(loss)" [(lossState)]="lossState"  [baselineSelected]="baselineSelected"></app-extended-surface-losses-form>
+      <app-extended-surface-losses-form (changeField)="changeField($event)" [(lossesForm)]="loss.form" (calculate)="calculate(loss)" [(lossState)]="lossState"  [baselineSelected]="baselineSelected" (saveEmit)="saveLosses()"></app-extended-surface-losses-form>
     </div>
   </div>
     <div class="row">

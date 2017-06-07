@@ -78,7 +78,7 @@ import { EditConditionPropertiesComponent } from './modify-conditions/edit-condi
     SharedModule,
     ChartsModule,
     PumpsModule,
-    ModalModule,
+    ModalModule.forRoot(),
     IndexedDbModule,
     SettingsModule,
     ToastyModule,

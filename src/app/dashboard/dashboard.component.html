@@ -8,7 +8,7 @@
         </div>
         <div class="col-10" *ngIf="allDirectories && dashboardView == 'assessment-dashboard'">
             <app-assessment-dashboard [directory]="workingDirectory" (directoryChange)="changeWorkingDirectory($event)" (deleteDataSignal)="showDeleteModal()"
-                (deleteCheckedItems)="showDeleteItemsModal()" (resetDataEmit)="showDeleteModal()" (emitNewDir)="newDir()" (genReport)="generateReport()"></app-assessment-dashboard>
+                (deleteCheckedItems)="showDeleteItemsModal()" (resetDataEmit)="showDeleteModal()" (emitNewDir)="newDir()" (genReport)="generateReport()" (exportEmit)="exportSelected()" (importEmit)="showImportModal()"></app-assessment-dashboard>
         </div>
         <div class="col-10" *ngIf="allDirectories && dashboardView == 'calculator'">
             <app-calculator (selectCalculator)="viewCalculator($event)" [selectedCalculator]="selectedCalculator" [goCalcHome]="goCalcHome"></app-calculator>
@@ -37,17 +37,10 @@
 
         </div>
     </div>
-    
+    <div class="row dashboard-content" *ngIf="dashboardView == 'detailed-report'">
+        <app-detailed-report [selectedItems]="returnSelected()" (emitCloseReport)="closeReport()"></app-detailed-report>
+    </div>
 </div>
-
-
-
-
-<div class="report" *ngIf="dashboardView == 'detailed-report'">
-    <app-detailed-report [assessments]="returnSelected()" (emitCloseReport)="closeReport()"></app-detailed-report>
-</div>
-
-
 
 
 <div bsModal #deleteModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true"
@@ -90,6 +83,57 @@
             <div class="modal-body">
                 <button class="btn btn-secondary pull-left" (click)="hideDeleteItemsModal()">Cancel</button>
                 <button class="btn btn-danger pull-right" (click)="deleteSelected(workingDirectory)">Delete Selected Items</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div bsModal #exportModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exportModalLabel"
+    aria-hidden="true" [config]="{backdrop: 'static'}">
+    <div class="modal-dialog modal-lg export-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Assessments to be Exported</h3>
+                <button class="close" aria-label="Close" (click)="hideExportModal()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+            </div>
+            <div class="modal-body" *ngIf="showImportExport && isExportView">
+                <app-import-export [export]="true" [selectedItems]="returnSelected()" (closeExportModal)="hideExportModal()"></app-import-export>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div bsModal #importModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="importModalLabel"
+    aria-hidden="true" [config]="{backdrop: 'static'}">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header" *ngIf="!importInProgress">
+                <h3>Choose .json File to be Imported</h3>
+                <!--<p id="inputModalTitleHelp" class="text-muted text-help">
+                    Assessments will be imported into working directory
+                </p>-->
+                <button class="close" aria-label="Close" (click)="hideImportModal()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+            </div>
+            <div class="modal-body" *ngIf="showImportExport && isImportView">
+                <app-import-export *ngIf="!importInProgress" [import]="true" (importData)="checkImportData($event)"></app-import-export>
+                 
+                 <div class="row justify-content-center" *ngIf="importInProgress">
+                    <div class="col-md-10">
+                         <div class="main-content" style="text-align: center;">
+                              <div class="spinner">
+                              <div class="bounce1"></div>
+                              <div class="bounce2"></div>
+                              <div class="bounce3"></div>
+                            </div>
+                            <h1>Importing Data...</h1>
+                        </div>
+                    </div>
+                </div>
+                
             </div>
         </div>
     </div>

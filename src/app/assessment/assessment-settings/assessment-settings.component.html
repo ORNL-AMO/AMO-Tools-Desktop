@@ -9,6 +9,10 @@
   <p>These settings will be used as the default settings for pump assessments inside {{directory.name}}.</p>
   <app-psat-settings [(settingsForm)]="settingsForm"></app-psat-settings>
 
+  <h3>PHAST Settings</h3>
+  <p>These settings will be used as the default settings for process heating assessments.</p>
+  <app-phast-settings [(settingsForm)]="settingsForm"></app-phast-settings>
+
   <div class="actions">
     <button class="btn btn-primary" (click)="saveSettings()">Save Settings</button>
   </div>

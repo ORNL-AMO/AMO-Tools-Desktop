@@ -9,7 +9,6 @@ export interface Assessment {
   createdDate?: Date,
   modifiedDate?: Date,
   type: string;
-  filePath?: string,
   name: string,
   selected?: boolean,
 }

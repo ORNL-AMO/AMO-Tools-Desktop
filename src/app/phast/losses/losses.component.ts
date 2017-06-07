@@ -1,5 +1,7 @@
 import { Component, OnInit, Input, SimpleChanges, Output, EventEmitter } from '@angular/core';
 import { PHAST, Losses, Modification } from '../../shared/models/phast';
+import { Settings } from '../../shared/models/settings';
+
 @Component({
   selector: 'app-losses',
   templateUrl: 'losses.component.html',
@@ -12,6 +14,8 @@ export class LossesComponent implements OnInit {
   saveClicked: boolean;
   @Output('saved')
   saved = new EventEmitter<boolean>();
+  @Input()
+  settings: Settings;
 
   _modifications: Modification[];
   isDropdownOpen: boolean = false;
@@ -59,6 +63,18 @@ export class LossesComponent implements OnInit {
     otherLosses: {
       numLosses: 0,
       saved: true
+    },
+    flueGasLosses: {
+      numLosses: 0,
+      saved: true
+    },
+    slagLosses: {
+      numLosses: 0,
+      saved: true
+    },
+    auxiliaryPowerLosses: {
+      numLosses: 0,
+      saved: true
     }
   }
   constructor() { }
@@ -81,6 +97,9 @@ export class LossesComponent implements OnInit {
     this.lossesStates.openingLosses.saved = true;
     this.lossesStates.coolingLosses.saved = true;
     this.lossesStates.fixtureLosses.saved = true;
+    this.lossesStates.flueGasLosses.saved = true;
+    this.lossesStates.slagLosses.saved = true;
+    this.lossesStates.auxiliaryPowerLosses.saved = true;
   }
 
   changeField($event) {
@@ -91,7 +110,6 @@ export class LossesComponent implements OnInit {
   saveModifications() {
     if (this._modifications) {
       this.phast.modifications = (JSON.parse(JSON.stringify(this._modifications)));
-      console.log('saveModifications');
       this.saved.emit(true);
     }
   }
@@ -110,7 +128,9 @@ export class LossesComponent implements OnInit {
         flueGasNotes: '',
         otherNotes: '',
         leakageNotes: '',
-        extendedNotes: ''
+        extendedNotes: '',
+        slagNotes: '',
+        auxiliaryPowerNotes: ''
       }
     });
     this.modificationIndex = this._modifications.length - 1;

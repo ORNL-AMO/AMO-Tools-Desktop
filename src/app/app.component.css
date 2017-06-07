@@ -576,6 +576,7 @@ Sidebar
   -o-border-image:      -o-linear-gradient(#949494, rgba(0, 0, 0, 0)) 1 100%;
   border-image:         linear-gradient(to bottom, #949494, rgba(0, 0, 0, 0)) 1 100%;
   padding: 0;
+  overflow-y: scroll;
 }
 
 .dashboard-content{
@@ -1254,6 +1255,9 @@ Modify Conditions
       width: 35%;
     }
     .modify-conditions app-help-panel  {
+      width: 30%;
+    }
+    .modify-conditions app-losses-help  {
       width: 30%;
     }
 

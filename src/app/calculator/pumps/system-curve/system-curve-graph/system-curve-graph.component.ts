@@ -2,7 +2,8 @@ import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
 import { Settings } from '../../../../shared/models/settings';
 import { WindowRefService } from '../../../../indexedDb/window-ref.service';
 import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
-declare const d3: any;
+//declare const d3: any;
+import * as d3 from 'd3';
 
 import { PsatService } from '../../../../psat/psat.service';
 
