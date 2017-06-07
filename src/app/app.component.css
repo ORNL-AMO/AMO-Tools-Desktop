@@ -367,7 +367,6 @@ Data Tables
 .table-header {
   margin-top: 20px;
   padding: 10px 15px;
-  background: #fff;
   border-bottom: #ddd solid 1px;
   vertical-align: middle;
 }
@@ -401,10 +400,12 @@ Assessments: List View
 .list-row {
   padding: 14px;
   background: #fff;
-  border-bottom: #d6d6d6 dashed 1px;
+  border-color: #d6d6d6;
+  border-style: solid;
+  border-width: 0 1px 1px;
 }
   .list-row .actions {
-    margin-left: 90px;
+    margin-left: 29px;
     font-size: 14px;
   }
     .list-row .actions a {
@@ -1497,7 +1498,7 @@ Reporting
       }
       .rollups .pumps h5 {
         text-transform: uppercase;
-        font-size: 0.85rem;
+        font-size: 0.65rem;
         letter-spacing: 2px;
       }
 
@@ -1515,22 +1516,43 @@ Reporting
   list-style: none;
   font-size: 15px;
 }
-
-.input-data h5 {
-
-}
-.input-data table {
-  display: none;
-}
+  .report-list-nav li.active a {
+    font-weight: bold;
+    color: #333;
+  }
 
 .report-header h2 {
   font-size: 1.35rem;
 }
 
-.report-data div:first-of-type {
+.report-data .table td, .report-data .table th {
+  font-size: 0.75rem;
+  padding: 4px;
+}
+.report-data .table tbody tr:nth-child(even){
+  background: #f3f3f3;
+}
+.report-data .table tbody tr {
+  border-color: transparent;
+  border-width: 1px 0;
+  border-style: solid;
+}
+.report-data .table tbody tr:hover {
+  border-color: #333;
+
+}
+.input-data h3 {
+  font-size: 1rem;
+  color: #6d6d6d;
+  font-weight: 100;
+  text-transform: uppercase;
+  margin-top: 30px;
+}
+.results {
   display: -webkit-flex;
   display: flex;
 }
+
 
 
 

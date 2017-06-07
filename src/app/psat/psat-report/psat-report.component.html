@@ -6,12 +6,17 @@
   </div><!-- End .report-header -->
 
   <div class="report-data" *ngIf="psat.setupDone">
-    <div>
-      <app-chart-summary [psat]="psat"></app-chart-summary>
+    <div class="results">
+
       <app-output-summary [psat]="psat" [settings]="settings"></app-output-summary>
+      <app-chart-summary [psat]="psat"></app-chart-summary>
+      
     </div>
     <div class="input-data">
+
+      <h3>Input Data</h3>
       <app-input-summary [psat]="psat" [settings]="settings"></app-input-summary>
+      
     </div>
   </div><!-- End .report-data -->
 

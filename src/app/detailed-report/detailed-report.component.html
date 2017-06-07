@@ -28,7 +28,7 @@
         </div>
   
       </div>
-      <div class="col-8" style="max-height: 62vh; overflow: scroll">
+      <div class="col-8">
         <div *ngFor="let assessment of reportAssessments">
           
           <app-psat-report id="{{assessment.id}}" style="width: 100%" [assessment]="assessment"></app-psat-report>
