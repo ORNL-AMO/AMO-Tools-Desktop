@@ -1532,12 +1532,12 @@ Reporting
 .report-data .table tbody tr:nth-child(even){
   background: #f3f3f3;
 }
-.report-data .table tbody tr {
+.report-data .table tbody tr td {
   border-color: transparent;
   border-width: 1px 0;
   border-style: solid;
 }
-.report-data .table tbody tr:hover {
+.report-data .table tbody tr:hover td {
   border-color: #333;
 
 }
