@@ -11,7 +11,7 @@
     </div>
   </div><!-- End .report-header -->
 
-  <div class="report-summary">
+  <div id="reportSummary" class="report-summary">
     <app-report-summary [numPsats]="numPsats" [pumpSavingsPotential]="pumpSavingsPotential"></app-report-summary>
   </div>
 
@@ -20,7 +20,7 @@
     <div class="row">
       <div class="col-md-2 offset-md-1" style="padding-top: 30px;">
   
-        <div class="report-list-nav">
+        <div class="report-list-nav" [ngClass]="{'fixed-nav': !isSummaryVisible}">
           <h5>Pumps</h5>
           <ul>
             <li *ngFor="let assessment of reportAssessments"><a href="#assessment.id" (click)="selectAssessment(assessment.id)">{{assessment.name}}</a></li>
@@ -36,6 +36,9 @@
         </div>
       </div>
     </div>
+  </div><!-- End .container-fluid -->
+
+</div>
 
     <div class="row" *ngIf="!assessmentsGathered">
     	<div class="col-md-10 offset-md-1">
@@ -50,6 +53,3 @@
   		</div>
     </div>
 
-  </div><!-- End .container-fluid -->
-
-</div>

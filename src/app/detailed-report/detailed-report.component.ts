@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, HostListener } from '@angular/core';
 import { Assessment } from '../shared/models/assessment';
 import { PSAT } from '../shared/models/psat';
 import * as _ from 'lodash';
@@ -17,7 +17,9 @@ export class DetailedReportComponent implements OnInit {
   selectedItems: Array<any>;
   @Output('emitCloseReport')
   emitCloseReport = new EventEmitter<boolean>();
-
+  @HostListener('window:scroll', ['$event']) onScrollEvent($event) {
+    this.checkVisibleSummary();
+  }
   assessments: Array<Assessment>;
 
   numAssessments: number;
@@ -29,6 +31,7 @@ export class DetailedReportComponent implements OnInit {
   gatheringData: any;
   assessmentsGathered: boolean;
   exportReports: any;
+  isSummaryVisible: boolean = true;
   constructor(private indexedDbService: IndexedDbService, private psatService: PsatService, private windowRefService: WindowRefService, private jsonToCsvService: JsonToCsvService) { }
 
   ngOnInit() {
@@ -142,5 +145,18 @@ export class DetailedReportComponent implements OnInit {
       }
     })
     this.jsonToCsvService.downloadData(tmpDataArr, 'psatRollup');
+  }
+
+  checkVisibleSummary() {
+    let doc = this.windowRefService.getDoc();
+    let summaryDiv = doc.getElementById("reportSummary");
+
+    let window = this.windowRefService.nativeWindow;
+
+    let y = summaryDiv.offsetTop;
+    let height = summaryDiv.offsetHeight;
+
+    let maxHeight = y + height;
+    this.isSummaryVisible = (y < (window.pageYOffset + window.innerHeight)) && (maxHeight >= window.pageYOffset);
   }
 }
