@@ -30,6 +30,7 @@ export class DetailedReportComponent implements OnInit {
   pumpSavingsPotential: number;
 
   gatheringData: any;
+  gatheringData2: any;
   assessmentsGathered: boolean;
   exportReports: any;
   isSummaryVisible: boolean = true;
@@ -61,9 +62,11 @@ export class DetailedReportComponent implements OnInit {
           this.getAssessmentSettingsThenResults(assessment);
         }
       });
-      this.focusedAssessment = this.assessments[0];
-      this.assessmentsGathered = true;
-    }, 1000)
+      this.gatheringData2 = setTimeout(() => {
+        this.focusedAssessment = this.reportAssessments[0];
+        this.assessmentsGathered = true;
+      }, 1000);
+    }, 500)
   }
 
   getAssessmentSettingsThenResults(assessment: Assessment) {
@@ -171,11 +174,11 @@ export class DetailedReportComponent implements OnInit {
     let scrollAmount = (window.pageYOffset !== undefined) ? window.pageYOffset : (doc.documentElement || doc.body.parentNode || doc.body).scrollTop;
     let activeSet: boolean = false;
     let isFirstElement: boolean = true;
-    let firstAssessment = doc.getElementById(this.assessments[0].id);
+    let firstAssessment = doc.getElementById(this.reportAssessments[0].id);
     if (scrollAmount < (firstAssessment.clientHeight - 200)) {
-      this.focusedAssessment = this.assessments[0];
+      this.focusedAssessment = this.reportAssessments[0];
     } else {
-      let check = this.checkDistance(this.assessments,scrollAmount);
+      let check = this.checkDistance(this.reportAssessments, scrollAmount);
       if (check) {
         this.focusedAssessment = check;
       }
