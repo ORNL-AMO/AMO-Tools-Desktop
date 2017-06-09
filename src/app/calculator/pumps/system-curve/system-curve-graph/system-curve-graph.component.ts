@@ -130,8 +130,9 @@ export class SystemCurveGraphComponent implements OnInit {
       .ticks(11);
 
     this.svg = d3.select('app-system-curve-graph').append('svg')
-      .attr("width", this.width + this.margin.left + this.margin.right)
-      .attr("height", this.height + this.margin.top + this.margin.bottom)
+      //70px is added to accommodate for the shadow
+      .attr("width", this.width + this.margin.left + this.margin.right + 70)
+      .attr("height", this.height + this.margin.top + this.margin.bottom + 70)
       .append("g")
       .attr("transform", "translate(" + this.margin.left + "," + this.margin.top + ")");
 
@@ -214,23 +215,26 @@ export class SystemCurveGraphComponent implements OnInit {
     this.detailBox = d3.select("app-system-curve-graph").append("div")
       .attr("id", "detailBox")
       .attr("class", "d3-tip")
-      .style("opacity", 0);
+      .style("opacity", 0)
+      .style('pointer-events', 'none');
 
     const detailBoxWidth = 160;
     const detailBoxHeight = 80;
 
     this.pointer = this.svg.append("polygon")
       .attr("id", "pointer")
-      //.attr("points", "0,13, 14,13, 7,-2");
       .attr("points", "0,0, 0," + (detailBoxHeight - 2) + "," + detailBoxWidth + "," + (detailBoxHeight - 2) + "," + detailBoxWidth + ", 0," + ((detailBoxWidth / 2) + 12) + ",0," + (detailBoxWidth / 2) + ", -12, " + ((detailBoxWidth / 2) - 12) + ",0")
-      .style("opacity", 0);
+      .style("opacity", 0)
+      .style('pointer-events', 'none');
 
     this.focus = this.svg.append("g")
       .attr("class", "focus")
-      .style("display", "none");
+      .style("display", "none")
+      .style('pointer-events', 'none');
 
     this.focus.append("circle")
       .attr("r", 8)
+      .attr("id", "ring")
       .style("fill", "none")
       .style("stroke", "#000000")
       .style("stroke-width", "3px");
@@ -302,8 +306,33 @@ export class SystemCurveGraphComponent implements OnInit {
       .attr("class", "overlay")
       .attr("fill", "#ffffff")
       .style("filter", "url(#drop-shadow)")
-      .on("mouseover", () => { this.focus.style("display", null); })
+      .on("mouseover", () => {
+
+        this.focus
+          .style("display", null)
+          .style("opacity",1)
+          .style('pointer-events', 'none');
+        this.pointer
+          .style("display", null)
+          .style('pointer-events', 'none');
+        this.detailBox
+          .style("display", null)
+          .style('pointer-events', 'none');
+
+      })
       .on("mousemove", () => {
+
+        this.focus
+          .style("display", null)
+          .style("opacity",1)
+          .style('pointer-events', 'none');
+        this.pointer
+          .style("display", null)
+          .style('pointer-events', 'none');
+        this.detailBox
+          .style("display", null)
+          .style('pointer-events', 'none');
+
         var x0 = x.invert(d3.mouse(d3.event.currentTarget)[0]),
           i = bisectDate(data, x0, 1),
           d0 = data[i - 1],
@@ -324,7 +353,6 @@ export class SystemCurveGraphComponent implements OnInit {
           .attr("transform", 'translate(' + (x(d.x) - (detailBoxWidth / 2)) + ',' + (y(d.y) + 27) + ')')
           .style("fill", "#ffffff")
           .style("filter", "url(#drop-shadow)");
-
 
         this.detailBox
           .style("padding-top", "10px")
@@ -348,6 +376,25 @@ export class SystemCurveGraphComponent implements OnInit {
           .style("background", "#ffffff")
           .style("border", "0px")
           .style("pointer-events", "none");
+      })
+      .on("mouseout", () => {
+          this.pointer
+            .transition()
+              .delay(100)
+              .duration(600)
+              .style("opacity",0);
+
+          this.detailBox
+            .transition()
+              .delay(100)
+              .duration(600)
+              .style("opacity",0);
+
+          this.focus
+            .transition()
+              .delay(100)
+              .duration(600)
+              .style("opacity",0);
       });
 
     this.xAxis.remove();
@@ -475,7 +522,6 @@ export class SystemCurveGraphComponent implements OnInit {
 
   }
 
-
   makeCurve(x, y, data, bisectDate, format) {
 
     var line = d3.line()
@@ -490,7 +536,8 @@ export class SystemCurveGraphComponent implements OnInit {
       .style("stroke-width", 10)
       .style("stroke-width", "2px")
       .style("fill", "none")
-      .style("stroke", "#2ECC71");
+      .style("stroke", "#2ECC71")
+      .style('pointer-events', 'none');
   }
 
 }

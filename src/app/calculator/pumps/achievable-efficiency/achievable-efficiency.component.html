@@ -6,12 +6,12 @@
 	</div>
 
 
-	<div *ngIf="!inPsat" id="achievableEfficiencyGraph" class="col-md-7 col-sm-12 calc-graph">
+	<div *ngIf="!inPsat" id="achievableEfficiencyGraph" class="col-md-7 col-sm-12 calc-graph" style="z-index: +1">
 		<app-achievable-efficiency-graph [efficiencyForm]="efficiencyForm" [settings]="settings" [toggleCalculate]="toggleCalculate"></app-achievable-efficiency-graph>
 	</div>
 
 
-	<div *ngIf="inPsat" class="col-md-7 col-sm-12 calc-graph">
+	<div *ngIf="inPsat" class="col-md-7 col-sm-12 calc-graph" style="z-index: +1">
 		<div id="achievableEfficiencyGraph">
 			<app-achievable-efficiency-graph [efficiencyForm]="efficiencyForm" [settings]="settings" [toggleCalculate]="toggleCalculate"></app-achievable-efficiency-graph>
 		</div>

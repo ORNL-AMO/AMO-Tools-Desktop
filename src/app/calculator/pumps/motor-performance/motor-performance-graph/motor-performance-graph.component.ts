@@ -207,7 +207,6 @@ export class MotorPerformanceGraphComponent implements OnInit {
     this.svg = d3.select('app-motor-performance-graph').append('svg')
       .attr("width", this.width + this.margin.left + this.margin.right)
       .attr("height", this.height + this.margin.top + this.margin.bottom)
-      .style("background-color", "#fff")
       .append("g")
       .attr("transform", "translate(" + this.margin.left + "," + this.margin.top + ")");
 
@@ -296,7 +295,8 @@ export class MotorPerformanceGraphComponent implements OnInit {
     this.focusCurrent = this.svg.append("g")
       .attr('id', 'focusCurrent')
       .attr("class", "focus")
-      .style("display", "none");
+      .style("display", "none")
+      .style('pointer-events', 'none');
 
     this.focusCurrent.append("circle")
       .attr("r", 6)
@@ -311,7 +311,8 @@ export class MotorPerformanceGraphComponent implements OnInit {
     this.focusPowerFactor = this.svg.append("g")
       .attr('id', 'focusPowerFactor')
       .attr("class", "focus")
-      .style("display", "none");
+      .style("display", "none")
+      .style('pointer-events', 'none');
 
     this.focusPowerFactor.append("circle")
       .attr("r", 6)
@@ -326,7 +327,8 @@ export class MotorPerformanceGraphComponent implements OnInit {
     this.focusEfficiency = this.svg.append("g")
       .attr('id', 'focusEfficiency')
       .attr("class", "focus")
-      .style("display", "none");
+      .style("display", "none")
+      .style('pointer-events', 'none');
 
     this.focusEfficiency.append("circle")
       .attr("r", 6)
@@ -344,7 +346,8 @@ export class MotorPerformanceGraphComponent implements OnInit {
       .style("stroke-width", "2px")
       .style("fill", "none")
       .style("stroke", "#2ECC71")
-      .style("display", "none");
+      .style("display", "none")
+      .style('pointer-events', 'none');
 
     this.powerLine = this.svg.append("path")
       .attr("class", "line")
@@ -352,7 +355,8 @@ export class MotorPerformanceGraphComponent implements OnInit {
       .style("stroke-width", "2px")
       .style("fill", "none")
       .style("stroke", "#3498DB")
-      .style("display", "none");
+      .style("display", "none")
+      .style('pointer-events', 'none');
 
     this.efficiencyLine = this.svg.append("path")
       .attr("class", "line")
@@ -360,7 +364,8 @@ export class MotorPerformanceGraphComponent implements OnInit {
       .style("stroke-width", "2px")
       .style("fill", "none")
       .style("stroke", "#A569BD")
-      .style("display", "none");
+      .style("display", "none")
+      .style('pointer-events', 'none');
 
     this.svg.style("display", "none");
 
@@ -466,11 +471,40 @@ export class MotorPerformanceGraphComponent implements OnInit {
       .attr("fill", "#ffffff")
       .style("filter", "url(#drop-shadow)")
       .on("mouseover", () => {
-        this.focusCurrent.style("display", null);
-        this.focusEfficiency.style("display", null);
-        this.focusPowerFactor.style("display", null);
+
+        this.focusCurrent
+          .style("display", null)
+          .style("opacity",1)
+          .style('pointer-events', 'none');
+
+        this.focusEfficiency
+          .style("display", null)
+          .style("opacity",1)
+          .style('pointer-events', 'none');
+
+        this.focusPowerFactor
+          .style("display", null)
+          .style("opacity",1)
+          .style('pointer-events', 'none');
+
       })
       .on("mousemove", () => {
+
+        this.focusCurrent
+          .style("display", null)
+          .style("opacity",1)
+          .style('pointer-events', 'none');
+
+        this.focusEfficiency
+          .style("display", null)
+          .style("opacity",1)
+          .style('pointer-events', 'none');
+
+        this.focusPowerFactor
+          .style("display", null)
+          .style("opacity",1)
+          .style('pointer-events', 'none');
+
         //current
         let currentX0 = x.invert(d3.mouse(d3.event.currentTarget)[0]);
         let currentI = bisectDate(currentData, currentX0, 1);
@@ -548,6 +582,27 @@ export class MotorPerformanceGraphComponent implements OnInit {
           .style("font-size", "13px")
           .style("font-weight", "bold")
           .style("fill", "#000000");
+      })
+      .on("mouseout", () => {
+
+        this.focusCurrent
+          .transition()
+          .delay(100)
+          .duration(600)
+          .style("opacity",0);
+
+        this.focusEfficiency
+          .transition()
+          .delay(100)
+          .duration(600)
+          .style("opacity",0);
+
+        this.focusPowerFactor
+          .transition()
+          .delay(100)
+          .duration(600)
+          .style("opacity",0);
+
       });
   }
 
