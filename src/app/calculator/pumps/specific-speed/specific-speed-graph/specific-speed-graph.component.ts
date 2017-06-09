@@ -155,7 +155,6 @@ export class SpecificSpeedGraphComponent implements OnInit {
     this.svg = d3.select('app-specific-speed-graph').append('svg')
       .attr("width", this.width + this.margin.left + this.margin.right)
       .attr("height", this.height + this.margin.top + this.margin.bottom)
-      .style("background-color", "#fff")
       .append("g")
       .attr("transform", "translate(" + this.margin.left + "," + this.margin.top + ")");
 
@@ -231,24 +230,41 @@ export class SpecificSpeedGraphComponent implements OnInit {
       .attr("transform", "translate(" + (this.width / 2) + "," + (this.height - (-70)) + ")")  // centre below axis
       .text("Specific Speed (U.S.)");
 
+    //We can draw the guideCurve now since pump type has no effect on what kind of shape it has.
+    this.drawGuideCurve(this.svg, this.x, this.y, this.psatService, this.speedForm.value.pumpType);
+
+    this.calcPoint = this.svg.append("g")
+      .attr("class", "focus")
+      .style("display", "none")
+      .style('pointer-events', 'none');
+
+    this.calcPoint.append("circle")
+      .attr("r", 6)
+      .style("fill", "none")
+      .style("stroke", "#000000")
+      .style("stroke-width", "3px");
+
     // Define the div for the tooltip
     this.detailBox = d3.select("app-specific-speed-graph").append("div")
       .attr("id", "detailBox")
       .attr("class", "d3-tip")
-      .style("opacity", 0);
+      .style("opacity", 0)
+      .style('pointer-events', 'none');
 
     const detailBoxWidth = 160;
-    const detailBoxHeight = 80;
+    const detailBoxHeight = 90;
 
     this.pointer = this.svg.append("polygon")
       .attr("id", "pointer")
       //.attr("points", "0,13, 14,13, 7,-2");
       .attr("points", "0,0, 0," + (detailBoxHeight - 2) + "," + detailBoxWidth + "," + (detailBoxHeight - 2) + "," + detailBoxWidth + ", 0," + ((detailBoxWidth / 2) + 12) + ",0," + (detailBoxWidth / 2) + ", -12, " + ((detailBoxWidth / 2) - 12) + ",0")
-      .style("opacity", 0);
+      .style("display", "none")
+      .style('pointer-events', 'none');
 
     this.focus = this.svg.append("g")
       .attr("class", "focus")
-      .style("display", "none");
+      .style("display", "none")
+      .style('pointer-events', 'none');
 
     this.focus.append("circle")
       .attr("r", 8)
@@ -259,21 +275,6 @@ export class SpecificSpeedGraphComponent implements OnInit {
     this.focus.append("text")
       .attr("x", 9)
       .attr("dy", ".35em");
-
-
-
-    //We can draw the guideCurve now since pump type has no effect on what kind of shape it has.
-    this.drawGuideCurve(this.svg, this.x, this.y, this.psatService, this.speedForm.value.pumpType);
-
-    this.calcPoint = this.svg.append("g")
-      .attr("class", "focus")
-      .style("display", "none");
-
-    this.calcPoint.append("circle")
-      .attr("r", 6)
-      .style("fill", "none")
-      .style("stroke", "#000000")
-      .style("stroke-width", "3px");
 
     this.svg.style("display", "none");
   }
@@ -309,7 +310,8 @@ export class SpecificSpeedGraphComponent implements OnInit {
       .style("stroke-width", 10)
       .style("stroke-width", "2px")
       .style("fill", "none")
-      .style("stroke", "#2ECC71");
+      .style("stroke", "#2ECC71")
+      .style('pointer-events', 'none');
 
 
     var format = d3.format(",.2f");
@@ -320,8 +322,33 @@ export class SpecificSpeedGraphComponent implements OnInit {
       .attr("class", "overlay")
       .attr("fill", "#ffffff")
       .style("filter", "url(#drop-shadow)")
-      .on("mouseover", () => { this.focus.style("display", null); })
+      .on("mouseover", () => {
+
+        this.focus
+          .style("display", null)
+          .style("opacity",1)
+          .style('pointer-events', 'none');
+        this.pointer
+          .style("display", null)
+          .style('pointer-events', 'none');
+        this.detailBox
+          .style("display", null)
+          .style('pointer-events', 'none');
+
+      })
       .on("mousemove", () => {
+
+        this.focus
+          .style("display", null)
+          .style("opacity", 1)
+          .style('pointer-events', 'none');
+        this.pointer
+          .style("display", null)
+          .style('pointer-events', 'none');
+        this.detailBox
+          .style("display", null)
+          .style('pointer-events', 'none');
+
         let x0 = x.invert(d3.mouse(d3.event.currentTarget)[0]);
         let i = bisectDate(data, x0, 1);
         if (i >= data.length) {
@@ -346,7 +373,6 @@ export class SpecificSpeedGraphComponent implements OnInit {
           .style("fill", "#ffffff")
           .style("filter", "url(#drop-shadow)");
 
-
         this.detailBox
           .style("padding-right", "10px")
           .style("padding-left", "10px")
@@ -367,8 +393,26 @@ export class SpecificSpeedGraphComponent implements OnInit {
           .style("font", "12px sans-serif")
           .style("background", "#ffffff")
           .style("border", "0px")
-          .style("pointer-events", "none")
-          .style("filter", "url(#drop-shadow)");;
+          .style("pointer-events", "none");
+      })
+      .on("mouseout", () => {
+        this.pointer
+          .transition()
+          .delay(100)
+          .duration(600)
+          .style("opacity",0);
+
+        this.detailBox
+          .transition()
+          .delay(100)
+          .duration(600)
+          .style("opacity",0);
+
+        this.focus
+          .transition()
+          .delay(100)
+          .duration(600)
+          .style("opacity",0);
       });
   }
 
