@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, ViewChildren, Input, EventEmitter, Output } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { ModalDirective } from 'ng2-bootstrap';
+import { ModalDirective } from 'ngx-bootstrap';
 import { Directory, DirectoryDbRef } from '../../shared/models/directory';
 import { ModelService } from '../../shared/model.service';
 import { Router } from '@angular/router';

@@ -4,7 +4,7 @@ import { Settings } from '../../shared/models/settings';
 import { SettingsService } from '../../settings/settings.service';
 import { IndexedDbService } from '../../indexedDb/indexed-db.service';
 import { ToastyService, ToastyConfig, ToastOptions, ToastData } from 'ng2-toasty';
-import { ModalDirective } from 'ng2-bootstrap';
+import { ModalDirective } from 'ngx-bootstrap';
 import { Assessment } from '../../shared/models/assessment';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
 import { PSAT } from '../../shared/models/psat';

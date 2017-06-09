@@ -3,7 +3,7 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { DirectoryDbRef, Directory } from '../shared/models/directory';
 import { MockDirectory } from '../shared/mocks/mock-directory';
 import { IndexedDbService } from '../indexedDb/indexed-db.service';
-import { ModalDirective } from 'ng2-bootstrap';
+import { ModalDirective } from 'ngx-bootstrap';
 import * as _ from 'lodash';
 import { Settings } from '../shared/models/settings';
 import { AssessmentService } from '../assessment/assessment.service';

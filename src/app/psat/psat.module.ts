@@ -5,7 +5,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SharedModule } from '../shared/shared.module';
 import { ChartsModule } from 'ng2-charts';
 import { PumpsModule } from '../calculator/pumps/pumps.module';
-import { ModalModule } from 'ng2-bootstrap';
+import { ModalModule } from 'ngx-bootstrap';
 import { IndexedDbModule } from '../indexedDb/indexedDb.module';
 import { JsonToCsvModule } from '../shared/json-to-csv/json-to-csv.module';
 
