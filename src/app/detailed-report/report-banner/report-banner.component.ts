@@ -8,7 +8,8 @@ import { Component, OnInit, EventEmitter, Output } from '@angular/core';
 export class ReportBannerComponent implements OnInit {
   @Output('emitCloseReport')
   emitCloseReport = new EventEmitter<boolean>();
-
+  @Output('emitExport')
+  emitExport = new EventEmitter<boolean>();
   constructor() { }
 
   ngOnInit() {
@@ -16,6 +17,10 @@ export class ReportBannerComponent implements OnInit {
 
   closeReport(){
     this.emitCloseReport.emit(true);
+  }
+
+  exportToCsv(){
+    this.emitExport.emit(true);
   }
 
 }

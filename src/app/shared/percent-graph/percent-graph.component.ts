@@ -97,7 +97,7 @@ export class PercentGraphComponent implements OnInit {
       this.potential = 100 - this.value;
     }
     this.doughnutChartData = [this.value, this.potential];
-    if (this.value >= 70) {
+    if (this.value >= 70 && this.value <= 100) {
       this.chartColorDataSet = [
         {
           options: this.chartOptions,
@@ -119,6 +119,22 @@ export class PercentGraphComponent implements OnInit {
           data: this.doughnutChartData,
           backgroundColor: [
             "#EB984E",
+            "#CCD1D1"
+
+          ],
+          hoverBackground: [
+            "#DC7633",
+            "#B2BABB"
+          ]
+        }
+      ]
+    } else if (this.value > 100) {
+      this.chartColorDataSet = [
+        {
+          options: this.chartOptions,
+          data: this.doughnutChartData,
+          backgroundColor: [
+            "#3498DB",
             "#CCD1D1"
 
           ],
