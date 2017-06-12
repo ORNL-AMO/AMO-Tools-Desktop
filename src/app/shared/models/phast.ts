@@ -40,8 +40,7 @@ export interface Losses {
 }
 
 export interface Modification {
-  losses?: Losses,
-  name?: string,
+  phast?: PHAST,
   notes?: Notes
 }
 

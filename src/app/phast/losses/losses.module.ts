@@ -69,6 +69,8 @@ import { AuxiliaryPowerLossesHelpComponent } from './losses-help/auxiliary-power
 import { HeatStorageHelpComponent } from './losses-help/heat-storage-help/heat-storage-help.component';
 import { SlagHelpComponent } from './losses-help/slag-help/slag-help.component';
 import { ExhaustGasHelpComponent } from './losses-help/exhaust-gas-help/exhaust-gas-help.component';
+import { EditConditionPropertiesComponent } from './edit-condition-properties/edit-condition-properties.component';
+
 @NgModule({
   imports: [
     CommonModule,
@@ -130,6 +132,7 @@ import { ExhaustGasHelpComponent } from './losses-help/exhaust-gas-help/exhaust-
     HeatStorageHelpComponent,
     SlagHelpComponent,
     ExhaustGasHelpComponent,
+    EditConditionPropertiesComponent
   ],
   providers: [
     ChargeMaterialService,

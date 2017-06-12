@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, SimpleChanges, Output, EventEmitter } from '@angular/core';
 import { PHAST, Losses, Modification } from '../../shared/models/phast';
 import { Settings } from '../../shared/models/settings';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'app-losses',
@@ -27,6 +28,8 @@ export class LossesComponent implements OnInit {
   addLossToggle: boolean = false;
   isFirstChange: boolean = true;
   showNotes: boolean = false;
+  editModification: Modification;
+  showEditModification: boolean = false;
   lossesStates: any = {
     wallLosses: {
       numLosses: 0,
@@ -111,13 +114,14 @@ export class LossesComponent implements OnInit {
     if (this._modifications) {
       this.phast.modifications = (JSON.parse(JSON.stringify(this._modifications)));
       this.saved.emit(true);
+      this.showEditModification = false;
+      this.editModification = null;
     }
   }
 
   addModification() {
-    this._modifications.unshift({
-      name: 'Modification ' + (this._modifications.length + 1),
-      losses: (JSON.parse(JSON.stringify(this.phast.losses))),
+    let tmpModification: Modification = {
+      phast: (JSON.parse(JSON.stringify(this.phast))),
       notes: {
         chargeNotes: '',
         wallNotes: '',
@@ -132,13 +136,26 @@ export class LossesComponent implements OnInit {
         slagNotes: '',
         auxiliaryPowerNotes: ''
       }
-    });
+    }
+    tmpModification.phast.name = 'Modification ' + (this._modifications.length + 1);
+    this._modifications.unshift(tmpModification);
     this.modificationIndex = this._modifications.length - 1;
     this.modificationSelected = true;
     this.baselineSelected = false;
   }
 
+  deleteModification() {
+    this.modificationIndex = 0;
+    _.remove(this._modifications, (mod) => {
+      return mod.phast.name == this.editModification.phast.name;
+    });
+    this.showEditModification = false;
+    this.editModification = null;
+    this.saveModifications();
+  }
+
   toggleDropdown() {
+    this.showEditModification = false;
     this.isDropdownOpen = !this.isDropdownOpen;
     this.showNotes = false;
   }
@@ -174,6 +191,11 @@ export class LossesComponent implements OnInit {
       this.modificationSelected = true;
       this.baselineSelected = false;
     }
+  }
+
+  dispEditModification(modification: Modification) {
+    this.editModification = modification;
+    this.showEditModification = true;
   }
 
 }

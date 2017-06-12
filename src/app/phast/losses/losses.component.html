@@ -73,10 +73,10 @@
     <!-- Modification Header -->
     <!--<div class="header" *ngIf="!editModification">-->
     <div class="header">
-      <h3 *ngIf="_modifications[modificationIndex]">{{_modifications[modificationIndex].name}}</h3>
-      <button class="pull-right" (click)="toggleDropdown()" [disabled]="!modifiedSelected">
-        <span class="" *ngIf="!isDropdownOpen">Change / Add</span>
-        <span class="" *ngIf="isDropdownOpen">Cancel</span>
+      <h3 *ngIf="_modifications[modificationIndex] && !isDropdownOpen">{{_modifications[modificationIndex].phast.name}}</h3>
+      <button class="pull-right" (click)="toggleDropdown()" [disabled]="!modificationSelected">
+        <span class="changeAdd" *ngIf="!isDropdownOpen">Change / Add</span>
+        <span class="changeAdd" *ngIf="isDropdownOpen">Cancel</span>
       </button>
     </div>
 
@@ -86,53 +86,53 @@
       <app-notes [(notes)]="_modifications[modificationIndex].notes" [currentTab]="lossesTab"></app-notes>
 
       <app-charge-material (fieldChange)="changeField($event)" [baselineSelected]="modificationSelected" (savedLoss)="saveModifications()"
-        [(losses)]="_modifications[modificationIndex].losses" [addLossToggle]="addLossToggle" [saveClicked]="saveClicked" [(lossState)]="lossesStates.chargeMaterial"
+        [(losses)]="_modifications[modificationIndex].phast.losses" [addLossToggle]="addLossToggle" [saveClicked]="saveClicked" [(lossState)]="lossesStates.chargeMaterial"
         *ngIf="lossesTab == 'charge-material'"></app-charge-material>
 
       <app-wall-losses (fieldChange)="changeField($event)" [baselineSelected]="modificationSelected" (savedLoss)="saveModifications()"
-        [(losses)]="_modifications[modificationIndex].losses" [addLossToggle]="addLossToggle" [addLossToggle]="addLossToggle"
+        [(losses)]="_modifications[modificationIndex].phast.losses" [addLossToggle]="addLossToggle" [addLossToggle]="addLossToggle"
         [saveClicked]="saveClicked" [(lossState)]="lossesStates.wallLosses" *ngIf="lossesTab == 'wall-losses'"></app-wall-losses>
 
       <app-atmosphere-losses (fieldChange)="changeField($event)" [baselineSelected]="modificationSelected" (savedLoss)="saveModifications()"
-        [(losses)]="_modifications[modificationIndex].losses" [addLossToggle]="addLossToggle" [saveClicked]="saveClicked" [(lossState)]="lossesStates.atmosphereLosses"
+        [(losses)]="_modifications[modificationIndex].phast.losses" [addLossToggle]="addLossToggle" [saveClicked]="saveClicked" [(lossState)]="lossesStates.atmosphereLosses"
         *ngIf="lossesTab == 'atmosphere-losses'"></app-atmosphere-losses>
 
       <app-fixture-losses (fieldChange)="changeField($event)" [baselineSelected]="modificationSelected" (savedLoss)="saveModifications()"
-        [(losses)]="_modifications[modificationIndex].losses" [addLossToggle]="addLossToggle" [saveClicked]="saveClicked" [(lossState)]="lossesStates.fixtureLosses"
+        [(losses)]="_modifications[modificationIndex].phast.losses" [addLossToggle]="addLossToggle" [saveClicked]="saveClicked" [(lossState)]="lossesStates.fixtureLosses"
         *ngIf="lossesTab == 'fixture-losses'"></app-fixture-losses>
 
       <app-opening-losses (fieldChange)="changeField($event)" [baselineSelected]="modificationSelected" (savedLoss)="saveModifications()"
-        [(losses)]="_modifications[modificationIndex].losses" [addLossToggle]="addLossToggle" [saveClicked]="saveClicked" [(lossState)]="lossesStates.openingLosses"
+        [(losses)]="_modifications[modificationIndex].phast.losses" [addLossToggle]="addLossToggle" [saveClicked]="saveClicked" [(lossState)]="lossesStates.openingLosses"
         *ngIf="lossesTab == 'opening-losses'"></app-opening-losses>
 
       <app-cooling-losses (fieldChange)="changeField($event)" [baselineSelected]="modificationSelected" (savedLoss)="saveModifications()"
-        [(losses)]="_modifications[modificationIndex].losses" [addLossToggle]="addLossToggle" [saveClicked]="saveClicked" [(lossState)]="lossesStates.coolingLosses"
+        [(losses)]="_modifications[modificationIndex].phast.losses" [addLossToggle]="addLossToggle" [saveClicked]="saveClicked" [(lossState)]="lossesStates.coolingLosses"
         *ngIf="lossesTab == 'cooling-losses'"></app-cooling-losses>
 
       <app-flue-gas-losses (fieldChange)="changeField($event)" [baselineSelected]="modificationSelected" (savedLoss)="saveModifications()"
-        [(losses)]="_modifications[modificationIndex].losses" [addLossToggle]="addLossToggle" [saveClicked]="saveClicked" [(lossState)]="lossesStates.flueGasLosses"
+        [(losses)]="_modifications[modificationIndex].phast.losses" [addLossToggle]="addLossToggle" [saveClicked]="saveClicked" [(lossState)]="lossesStates.flueGasLosses"
         *ngIf="lossesTab == 'flue-gas-losses'"></app-flue-gas-losses>
 
       <app-gas-leakage-losses (fieldChange)="changeField($event)" [baselineSelected]="modificationSelected" (savedLoss)="saveModifications()"
-        [(losses)]="_modifications[modificationIndex].losses" [addLossToggle]="addLossToggle" [saveClicked]="saveClicked" [(lossState)]="lossesStates.leakageLosses"
+        [(losses)]="_modifications[modificationIndex].phast.losses" [addLossToggle]="addLossToggle" [saveClicked]="saveClicked" [(lossState)]="lossesStates.leakageLosses"
         *ngIf="lossesTab == 'gas-leakage-losses'"></app-gas-leakage-losses>
 
       <app-extended-surface-losses (fieldChange)="changeField($event)" [baselineSelected]="modificationSelected" (savedLoss)="saveModifications()"
-        [(losses)]="_modifications[modificationIndex].losses" [addLossToggle]="addLossToggle" [saveClicked]="saveClicked" [(lossState)]="lossesStates.surfaceLosses"
+        [(losses)]="_modifications[modificationIndex].phast.losses" [addLossToggle]="addLossToggle" [saveClicked]="saveClicked" [(lossState)]="lossesStates.surfaceLosses"
         *ngIf="lossesTab == 'extended-surface-losses'"></app-extended-surface-losses>
 
       <app-other-losses (fieldChange)="changeField($event)" [baselineSelected]="modificationSelected" (savedLoss)="saveModifications()"
-        [(losses)]="_modifications[modificationIndex].losses" [addLossToggle]="addLossToggle" [saveClicked]="saveClicked" [(lossState)]="lossesStates.otherLosses"
+        [(losses)]="_modifications[modificationIndex].phast.losses" [addLossToggle]="addLossToggle" [saveClicked]="saveClicked" [(lossState)]="lossesStates.otherLosses"
         *ngIf="lossesTab == 'other-losses'"></app-other-losses>
 
       <app-slag (fieldChange)="changeField($event)" [baselineSelected]="modificationSelected" (savedLoss)="saveModifications()"
-        [(losses)]="_modifications[modificationIndex].losses" [addLossToggle]="addLossToggle" [(lossState)]="lossesStates.slagLosses"
+        [(losses)]="_modifications[modificationIndex].phast.losses" [addLossToggle]="addLossToggle" [(lossState)]="lossesStates.slagLosses"
         [saveClicked]="saveClicked" *ngIf="lossesTab == 'slag'"></app-slag>
 
       <app-exhaust-gas *ngIf="lossesTab == 'exhaust-gas'"></app-exhaust-gas>
 
       <app-auxiliary-power-losses (fieldChange)="changeField($event)" [baselineSelected]="modificationSelected" (savedLoss)="saveModifications()"
-        [(losses)]="_modifications[modificationIndex].losses" [addLossToggle]="addLossToggle" [(lossState)]="lossesStates.auxiliaryPowerLosses"
+        [(losses)]="_modifications[modificationIndex].phast.losses" [addLossToggle]="addLossToggle" [(lossState)]="lossesStates.auxiliaryPowerLosses"
         [saveClicked]="saveClicked" *ngIf="lossesTab == 'auxiliary-power'"></app-auxiliary-power-losses>
 
       <app-heat-storage *ngIf="lossesTab == 'heat-storage'"></app-heat-storage>
@@ -154,7 +154,7 @@
         <li *ngFor="let modification of _modifications">
           <button>
           <a (click)="selectModification(modification)">
-            {{modification.psat.name}}
+            {{modification.phast.name}}
           </a>
           <a class="pull-right" (click)="dispEditModification(modification)">Edit / Delete</a>
           </button>
@@ -164,6 +164,9 @@
           <p>Data will be copied from <br/> your baseline operating condition</p>
         </li>
       </ul>
+      <div class="losses-container edit-modification" *ngIf="showEditModification && editModification">
+        <app-edit-condition-properties [modification]="editModification" (deleteMod)="deleteModification()" (saveMod)="saveModifications()" (cancelEdit)="toggleDropdown()"></app-edit-condition-properties>
+      </div>
     </div>
   </div>
   <div class="no-data" *ngIf="_modifications.length == 0" (click)="addModification()">
