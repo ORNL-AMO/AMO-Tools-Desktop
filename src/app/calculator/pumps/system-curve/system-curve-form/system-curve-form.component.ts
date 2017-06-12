@@ -26,7 +26,13 @@ export class SystemCurveFormComponent implements OnInit {
   psat: PSAT;
   @Input()
   settings: Settings;
+  // @Output('changeField')
+  // changeField = new EventEmitter<string>();
+  // @Output('saveEmit')
+  // saveEmit = new EventEmitter<boolean>();
 
+  exponentInputError: string = null;
+  pumpForm: any;
   options: Array<PSAT>;
 
   p1FlowRate: number;
@@ -36,7 +42,7 @@ export class SystemCurveFormComponent implements OnInit {
   p2Head: number;
   p2Option: string;
   tmpSpecificGravity: number;
-  tmpSystemLossExponent: number;
+  tmpSystemLossExponent: any;
 
   constructor(private formBuilder: FormBuilder) { }
 
@@ -50,7 +56,7 @@ export class SystemCurveFormComponent implements OnInit {
         })
       }
     } else {
-      
+
       this.p1Option = 'Point 1';
       this.p2Option = 'Point 2';
     }
@@ -79,7 +85,7 @@ export class SystemCurveFormComponent implements OnInit {
     let p1 = this.checkForm(this.pointOne);
     let p2 = this.checkForm(this.pointTwo);
     let cc = this.checkForm(this.curveConstants);
-    
+
     if (p1) {
       this.calculateP1.emit(true);
     }
@@ -115,8 +121,24 @@ export class SystemCurveFormComponent implements OnInit {
     this.curveConstants.form.patchValue({
       specificGravity: this.tmpSpecificGravity,
       systemLossExponent: this.tmpSystemLossExponent
-    })
+    });
 
+  }
+
+    checkLossExponent() {
+    // console.log(this.pumpForm.value.systemLossExponent );
+    if (this.tmpSystemLossExponent > 2.5 || this.tmpSystemLossExponent < 1) {
+      this.exponentInputError = 'System Loss Exponent needs to be between 1 - 2.5';
+      return false;
+    }
+    else if (this.tmpSystemLossExponent < 0) {
+      this.exponentInputError = 'Cannot have negative System Loss Exponent';
+      return false;
+    }
+    else {
+      this.exponentInputError = null;
+      return true;
+    }
   }
 
 }
