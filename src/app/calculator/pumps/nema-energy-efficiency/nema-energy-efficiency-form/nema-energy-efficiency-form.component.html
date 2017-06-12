@@ -38,8 +38,10 @@
 
       <div class="form-group" *ngIf="nemaForm.value.efficiencyClass == 'Specified'">
         <label for="efficiency">Efficiency</label>
-        <input type="number" min="0" class="form-control" id="efficiency" formControlName="efficiency" onfocus="this.select();">
+        <input type="number" min="0" max="100" class="form-control" id="efficiency" formControlName="efficiency" onfocus="this.select();" [ngClass]="{'invalid': checkEfficiency() == false}">
       <span class="units">%</span>
+          <span class="alert-danger pull-right small" *ngIf="efficiencyError !== null">{{efficiencyError}}</span>
+ 
       </div>
       </form>
 </div>

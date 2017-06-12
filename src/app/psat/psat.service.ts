@@ -646,7 +646,7 @@ export class PsatService {
       if (form.value.efficiencyClass != 'Specified') {
         return true;
       } else {
-        if (form.value.efficiency) {
+        if (form.value.efficiency > 0 && form.value.efficiency <= 100) {
           return true;
         } else {
           return false;
