@@ -85,7 +85,7 @@ export class LossesComponent implements OnInit {
   ngOnInit() {
     this._modifications = new Array<Modification>();
     if (!this.phast.losses) {
-      this.phast.losses = new Array<Losses>();
+      this.phast.losses = {};
     }
     if (this.phast.modifications) {
       this._modifications = (JSON.parse(JSON.stringify(this.phast.modifications)));
@@ -120,8 +120,12 @@ export class LossesComponent implements OnInit {
   }
 
   addModification() {
+    console.log('phast')
+    console.log(this.phast);
     let tmpModification: Modification = {
-      phast: (JSON.parse(JSON.stringify(this.phast))),
+      phast: {
+        losses: (JSON.parse(JSON.stringify(this.phast.losses)))
+      },
       notes: {
         chargeNotes: '',
         wallNotes: '',
@@ -137,6 +141,8 @@ export class LossesComponent implements OnInit {
         auxiliaryPowerNotes: ''
       }
     }
+    console.log('mod');
+    console.log(tmpModification.phast);
     tmpModification.phast.name = 'Modification ' + (this._modifications.length + 1);
     this._modifications.unshift(tmpModification);
     this.modificationIndex = this._modifications.length - 1;
@@ -149,6 +155,7 @@ export class LossesComponent implements OnInit {
     _.remove(this._modifications, (mod) => {
       return mod.phast.name == this.editModification.phast.name;
     });
+    console.log(this._modifications);
     this.showEditModification = false;
     this.editModification = null;
     this.saveModifications();
