@@ -260,6 +260,7 @@ select.form-control:not([size]):not([multiple]) {
   right: 5px;
   font-size: 14px;
   color: #a9a9a9;
+  pointer-events: none;
 }
 
 /*

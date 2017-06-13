@@ -19,7 +19,7 @@ export class LiquidChargeMaterialFormComponent implements OnInit {
   changeField = new EventEmitter<string>();
   @Output('saveEmit')
   saveEmit = new EventEmitter<boolean>();
-  
+
   @ViewChild('lossForm') lossForm: ElementRef;
   form: any;
   elements: any;

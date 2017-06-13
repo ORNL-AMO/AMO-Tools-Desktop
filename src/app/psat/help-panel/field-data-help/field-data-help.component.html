@@ -116,12 +116,14 @@
 
   <div class="card" *ngIf="currentField == 'measuredVoltage'">
     <div class="card-header">
-      Voltage
+      Measured Voltage
     </div>
     <div class="card-block small">
       <label>Description:</label>
       <p>
-        Measured bus voltage.
+        The measured bus voltage is used, along with measured current, to estimate input motor power if Current is the
+        specified Load estimation method. If Power is the Load estimation method, the current is estimated from power
+        and voltage.
       </p>
       <label>Input:</label>
       <p>

@@ -13,6 +13,7 @@ export class PumpsComponent implements OnInit {
   goCalcHome: boolean;
 
   firstChange: boolean = true;
+
   constructor() { }
 
   ngOnInit() {
