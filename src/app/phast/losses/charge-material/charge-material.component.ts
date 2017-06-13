@@ -45,7 +45,6 @@ export class ChargeMaterialComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log(this.losses);
     if (!this._chargeMaterial) {
       this._chargeMaterial = new Array();
     }

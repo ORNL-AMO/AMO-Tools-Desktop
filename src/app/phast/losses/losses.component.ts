@@ -2,6 +2,7 @@ import { Component, OnInit, Input, SimpleChanges, Output, EventEmitter } from '@
 import { PHAST, Losses, Modification } from '../../shared/models/phast';
 import { Settings } from '../../shared/models/settings';
 import * as _ from 'lodash';
+import { ModalDirective } from 'ngx-bootstrap';
 
 @Component({
   selector: 'app-losses',
@@ -80,12 +81,18 @@ export class LossesComponent implements OnInit {
       saved: true
     }
   }
+
+  showSetupDialog: boolean;
+  isLossesSetup: boolean;
   constructor() { }
 
   ngOnInit() {
     this._modifications = new Array<Modification>();
     if (!this.phast.losses) {
+      //initialize losses
       this.phast.losses = {};
+      //show setup dialog div
+      this.showSetupDialog = true;
     }
     if (this.phast.modifications) {
       this._modifications = (JSON.parse(JSON.stringify(this.phast.modifications)));
@@ -201,4 +208,12 @@ export class LossesComponent implements OnInit {
     this.showEditModification = true;
   }
 
+  hideSetupDialog() {
+    this.showSetupDialog = false;
+  }
+
+  lossesSetup() {
+    this.saved.emit(true);
+    this.isLossesSetup = true;
+  }
 }

@@ -36,7 +36,8 @@ export interface Losses {
   leakageLosses?: LeakageLoss[],
   extendedSurfaces?: ExtendedSurface[],
   slagLosses?: Slag[],
-  auxiliaryPowerLosses?: AuxiliaryPowerLoss[]
+  auxiliaryPowerLosses?: AuxiliaryPowerLoss[],
+  showSetupDialog?: boolean;
 }
 
 export interface Modification {
