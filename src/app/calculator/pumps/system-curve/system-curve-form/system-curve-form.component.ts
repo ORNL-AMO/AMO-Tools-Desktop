@@ -26,10 +26,6 @@ export class SystemCurveFormComponent implements OnInit {
   psat: PSAT;
   @Input()
   settings: Settings;
-  // @Output('changeField')
-  // changeField = new EventEmitter<string>();
-  // @Output('saveEmit')
-  // saveEmit = new EventEmitter<boolean>();
 
   exponentInputError: string = null;
   pumpForm: any;
@@ -126,7 +122,6 @@ export class SystemCurveFormComponent implements OnInit {
   }
 
     checkLossExponent() {
-    // console.log(this.pumpForm.value.systemLossExponent );
     if (this.tmpSystemLossExponent > 2.5 || this.tmpSystemLossExponent < 1) {
       this.exponentInputError = 'System Loss Exponent needs to be between 1 - 2.5';
       return false;
