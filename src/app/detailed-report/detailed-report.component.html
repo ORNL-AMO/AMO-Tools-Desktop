@@ -5,37 +5,40 @@
     <div class="container-fluid">
       <div class="row">
         <div class="col-md-10 offset-md-1">
-          <app-report-banner (emitCloseReport)="closeReport()"></app-report-banner>
+          <app-report-banner (emitCloseReport)="closeReport()" (emitExport)="exportToCsv()"></app-report-banner>
         </div>
       </div>
     </div>
   </div><!-- End .report-header -->
 
-  <div class="report-summary">
+  <div id="reportSummary" class="report-summary">
     <app-report-summary [numPsats]="numPsats" [pumpSavingsPotential]="pumpSavingsPotential"></app-report-summary>
   </div>
 
-  <div class="container-fluid">
+  <div id="reportContainer" class="container-fluid">
   
     <div class="row">
       <div class="col-md-2 offset-md-1" style="padding-top: 30px;">
   
-        <div class="report-list-nav">
+        <div class="report-list-nav" [ngClass]="{'fixed-nav': !isSummaryVisible}">
           <h5>Pumps</h5>
-          <ul>
-            <li *ngFor="let assessment of reportAssessments"><a href="#assessment.id" (click)="selectAssessment(assessment.id)">{{assessment.name}}</a></li>
+          <ul *ngIf="focusedAssessment">
+            <li *ngFor="let assessment of reportAssessments" [ngClass]="{'active': focusedAssessment.id == assessment.id}"><a href="#assessment.id" (click)="selectAssessment(assessment)">{{assessment.name}}</a></li>
           </ul>
         </div>
   
       </div>
       <div class="col-8">
-        <div *ngFor="let assessment of reportAssessments">
+        <div *ngFor="let assessment of reportAssessments" id="{{assessment.id}}">
           
-          <app-psat-report id="{{assessment.id}}" style="width: 100%" [assessment]="assessment"></app-psat-report>
+          <app-psat-report style="width: 100%" [assessment]="assessment"></app-psat-report>
 
         </div>
       </div>
     </div>
+  </div><!-- End .container-fluid -->
+
+</div>
 
     <div class="row" *ngIf="!assessmentsGathered">
     	<div class="col-md-10 offset-md-1">
@@ -50,6 +53,3 @@
   		</div>
     </div>
 
-  </div><!-- End .container-fluid -->
-
-</div>

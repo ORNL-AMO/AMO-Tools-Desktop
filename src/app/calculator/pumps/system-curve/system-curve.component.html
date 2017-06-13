@@ -8,13 +8,13 @@
   </div>
 
 
-  <div *ngIf="!inPsat" id="systemCurveGraph" class="col-md-7 col-sm-12 calc-graph">
+  <div *ngIf="!inPsat" id="systemCurveGraph" class="col-md-7 col-sm-12 calc-graph" style="z-index: +1">
     <app-system-curve-graph [lossCoefficient]="lossCoefficient" [settings]="settings" [staticHead]="staticHead" [pointOne]="pointOne"
       [pointTwo]="pointTwo" [curveConstants]="curveConstants"></app-system-curve-graph>
   </div>
 
 
-  <div *ngIf="inPsat" class="col-md-7 col-sm-12 calc-graph">
+  <div *ngIf="inPsat" class="col-md-7 col-sm-12 calc-graph" style="z-index: +1">
     <div id="systemCurveGraph">
     	<app-system-curve-graph [lossCoefficient]="lossCoefficient" [settings]="settings" [staticHead]="staticHead" [pointOne]="pointOne"
           [pointTwo]="pointTwo" [curveConstants]="curveConstants"></app-system-curve-graph>

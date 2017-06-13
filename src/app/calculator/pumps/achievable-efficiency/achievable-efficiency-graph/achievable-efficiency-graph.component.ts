@@ -89,7 +89,7 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
   ngOnDestroy() {
     this.window.onresize = null;
   }
-  
+
   resizeGraph() {
     let curveGraph = this.doc.getElementById('achievableEfficiencyGraph');
 
@@ -186,9 +186,8 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
       .ticks(11);
 
     this.svg = d3.select('app-achievable-efficiency-graph').append('svg')
-      .attr("width", this.width + this.margin.left + this.margin.right)
-      .attr("height", this.height + this.margin.top + this.margin.bottom)
-      .style("background-color", "#fff")
+      .attr("width", this.width + this.margin.left + this.margin.right + 70)
+      .attr("height", this.height + this.margin.top + this.margin.bottom + 70)
       .append("g")
       .attr("transform", "translate(" + this.margin.left + "," + this.margin.top + ")");
 
@@ -272,7 +271,8 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
       .style("stroke-width", 10)
       .style("stroke-width", "2px")
       .style("fill", "none")
-      .style("stroke", "#2ECC71");
+      .style("stroke", "#2ECC71")
+      .style('pointer-events', 'none');
 
     this.averageLine = this.svg.append("path")
       .attr("class", "line")
@@ -280,11 +280,13 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
       .style("stroke-width", 10)
       .style("stroke-width", "2px")
       .style("fill", "none")
-      .style("stroke", "#3498DB");
+      .style("stroke", "#3498DB")
+      .style('pointer-events', 'none');
 
     this.maxPoint = this.svg.append("g")
       .attr("class", "focus")
-      .style("display", "none");
+      .style("display", "none")
+      .style('pointer-events', 'none');
 
     this.maxPoint.append("circle")
       .attr("r", 6)
@@ -298,7 +300,8 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
 
     this.avgPoint = this.svg.append("g")
       .attr("class", "focus")
-      .style("display", "none");
+      .style("display", "none")
+      .style('pointer-events', 'none');
 
     this.avgPoint.append("circle")
       .attr("r", 6)
@@ -327,18 +330,23 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
     this.detailBox = d3.select("app-achievable-efficiency-graph").append("div")
       .attr("id", "detailBox")
       .attr("class", "d3-tip")
-      .style("opacity", 0);
+      .style("opacity", 0)
+      .style('pointer-events', 'none');
+
     const detailBoxWidth = 160;
-    const detailBoxHeight = 80;
+    const detailBoxHeight = 120;
 
     this.pointer = this.svg.append("polygon")
       .attr("id", "pointer")
       //.attr("points", "0,13, 14,13, 7,-2");
       .attr("points", "0,0, 0," + (detailBoxHeight - 2) + "," + detailBoxWidth + "," + (detailBoxHeight - 2) + "," + detailBoxWidth + ", 0," + ((detailBoxWidth / 2) + 12) + ",0," + (detailBoxWidth / 2) + ", -12, " + ((detailBoxWidth / 2) - 12) + ",0")
-      .style("opacity", 0);
+      .style("opacity", 0)
+      .style('pointer-events', 'none');
+
     this.focusMax = this.svg.append("g")
       .attr("class", "focus")
-      .style("display", "none");
+      .style("display", "none")
+      .style('pointer-events', 'none');
 
     this.focusMax.append("circle")
       .attr("r", 8)
@@ -352,7 +360,8 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
 
     this.focusAvg = this.svg.append("g")
       .attr("class", "focus")
-      .style("display", "none");
+      .style("display", "none")
+      .style('pointer-events', 'none');
 
     this.focusAvg.append("circle")
       .attr("r", 8)
@@ -383,8 +392,40 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
       .attr("class", "overlay")
       .attr("fill", "#ffffff")
       .style("filter", "url(#drop-shadow)")
-      .on("mouseover", () => { this.focusMax.style("display", null); this.focusAvg.style("display", null); })
+      .on("mouseover", () => {
+
+        this.focusAvg
+          .style("display", null)
+          .style("opacity",1)
+          .style('pointer-events', 'none');
+        this.focusMax
+          .style("display", null)
+          .style("opacity",1)
+          .style('pointer-events', 'none');
+        this.pointer
+          .style("display", null)
+          .style('pointer-events', 'none');
+        this.detailBox
+          .style("display", null)
+          .style('pointer-events', 'none');
+
+      })
       .on("mousemove", () => {
+
+        this.focusAvg
+          .style("display", null)
+          .style("opacity", 1)
+          .style('pointer-events', 'none');
+        this.focusMax
+          .style("display", null)
+          .style("opacity", 1)
+          .style('pointer-events', 'none');
+        this.pointer
+          .style("display", null)
+          .style('pointer-events', 'none');
+        this.detailBox
+          .style("display", null)
+          .style('pointer-events', 'none');
 
         //maxpoint
         let maxX0 = this.x.invert(d3.mouse(d3.event.currentTarget)[0]);
@@ -444,8 +485,32 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
           .style("font", "12px sans-serif")
           .style("background", "#ffffff")
           .style("border", "0px")
-          .style("pointer-events", "none")
-          .style("filter", "url(#drop-shadow)");;
+          .style("pointer-events", "none");
+      })
+      .on("mouseout", () => {
+        this.pointer
+          .transition()
+          .delay(100)
+          .duration(600)
+          .style("opacity",0);
+
+        this.detailBox
+          .transition()
+          .delay(100)
+          .duration(600)
+          .style("opacity",0);
+
+        this.focusAvg
+          .transition()
+          .delay(100)
+          .duration(600)
+          .style("opacity",0);
+
+        this.focusMax
+          .transition()
+          .delay(100)
+          .duration(600)
+          .style("opacity",0);
       });
 
 

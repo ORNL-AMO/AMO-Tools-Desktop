@@ -6,11 +6,11 @@
   </div>
 
 
-  <div *ngIf="!inPsat" id="motorPerformanceGraph" class="col-md-7 col-sm-12 calc-graph">
+  <div *ngIf="!inPsat" id="motorPerformanceGraph" class="col-md-7 col-sm-12 calc-graph" style="z-index: +1">
     <app-motor-performance-graph [performanceForm]="performanceForm" [settings]="settings" [toggleCalculate]="toggleCalculate"></app-motor-performance-graph>
   </div>
 
-  <div *ngIf="inPsat" class="col-md-7 col-sm-12 calc-graph">
+  <div *ngIf="inPsat" class="col-md-7 col-sm-12 calc-graph" style="z-index: +1">
     <div id="motorPerformanceGraph">
       <app-motor-performance-graph [performanceForm]="performanceForm" [settings]="settings" [toggleCalculate]="toggleCalculate"></app-motor-performance-graph>
     </div>
