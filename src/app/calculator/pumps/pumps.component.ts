@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, SimpleChanges, EventEmitter, Output } from '@angular/core';
+import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
 
 
 @Component({
@@ -13,8 +13,6 @@ export class PumpsComponent implements OnInit {
   goCalcHome: boolean;
 
   firstChange: boolean = true;
-
-  
   constructor() { }
 
   ngOnInit() {
@@ -36,8 +34,9 @@ export class PumpsComponent implements OnInit {
   }
 
   hideTool() {
-    this.selectedTool = 'none';
+    this.selectedTool = 'none'
   }
+
 
   getSelectedTool() {
     if (this.selectedTool != undefined) {

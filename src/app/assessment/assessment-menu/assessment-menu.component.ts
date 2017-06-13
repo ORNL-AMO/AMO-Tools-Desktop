@@ -1,6 +1,6 @@
 import { Component, OnInit, Output, EventEmitter, Input, ViewChild, SimpleChanges } from '@angular/core';
 import { Directory } from '../../shared/models/directory';
-import { ModalDirective } from 'ng2-bootstrap';
+import { ModalDirective } from 'ngx-bootstrap';
 import { IndexedDbService } from '../../indexedDb/indexed-db.service';
 import { ImportExportService } from '../../shared/import-export/import-export.service';
 

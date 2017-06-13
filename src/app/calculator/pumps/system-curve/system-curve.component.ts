@@ -17,7 +17,7 @@ export class SystemCurveComponent implements OnInit {
   settings: Settings;
   @Input()
   inPsat: boolean;
-
+  
   curveConstants: any;
 
   pointOne: any;
@@ -112,6 +112,7 @@ export class SystemCurveComponent implements OnInit {
       })
     }
   }
+
   initCurveConstants(psat?: PSAT) {
     if (psat) {
       return this.formBuilder.group({
@@ -121,7 +122,7 @@ export class SystemCurveComponent implements OnInit {
     } else {
       return this.formBuilder.group({
         'specificGravity': [1.0, Validators.required],
-        'systemLossExponent': [1.0, Validators.required]
+        'systemLossExponent': [1.9, Validators.required]
       })
     }
   }
