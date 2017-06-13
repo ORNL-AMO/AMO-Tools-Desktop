@@ -1,5 +1,5 @@
 import { Component, OnInit, Output, EventEmitter, ViewChild, Input, SimpleChanges, ElementRef } from '@angular/core';
-import { ModalDirective } from 'ng2-bootstrap';
+import { ModalDirective } from 'ngx-bootstrap';
 import { PSAT } from '../../shared/models/psat';
 import { PsatService } from '../psat.service';
 import { Settings } from '../../shared/models/settings';
