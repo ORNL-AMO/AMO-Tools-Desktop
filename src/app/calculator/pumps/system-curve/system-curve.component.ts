@@ -122,7 +122,7 @@ export class SystemCurveComponent implements OnInit {
     } else {
       return this.formBuilder.group({
         'specificGravity': [1.0, Validators.required],
-        'systemLossExponent': [1.9, Validators.required]
+        'systemLossExponent': [1.0, Validators.required]
       })
     }
   }
