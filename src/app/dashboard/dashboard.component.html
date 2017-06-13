@@ -6,23 +6,23 @@
                 (selectCalculator)="viewCalculator($event)" (emitGoHome)="goHome()" (emitShowAbout)="showAbout()" (emitShowTutorials)="showTutorials()"
                 (emitGoToSettings)="showSettings()"></app-sidebar>
         </div>
-        <div class="col-10" *ngIf="allDirectories && dashboardView == 'assessment-dashboard'">
+        <div class="col-10 dashboard-page" *ngIf="allDirectories && dashboardView == 'assessment-dashboard'">
             <app-assessment-dashboard [directory]="workingDirectory" (directoryChange)="changeWorkingDirectory($event)" (deleteDataSignal)="showDeleteModal()"
                 (deleteCheckedItems)="showDeleteItemsModal()" (resetDataEmit)="showDeleteModal()" (emitNewDir)="newDir()" (genReport)="generateReport()" (exportEmit)="exportSelected()" (importEmit)="showImportModal()"></app-assessment-dashboard>
         </div>
-        <div class="col-10" *ngIf="allDirectories && dashboardView == 'calculator'">
+        <div class="col-10 dashboard-page" *ngIf="allDirectories && dashboardView == 'calculator'">
             <app-calculator (selectCalculator)="viewCalculator($event)" [selectedCalculator]="selectedCalculator" [goCalcHome]="goCalcHome"></app-calculator>
         </div>
-        <div class="col-10" *ngIf="allDirectories && dashboardView == 'landing-screen'">
+        <div class="col-10 dashboard-page" *ngIf="allDirectories && dashboardView == 'landing-screen'">
             <app-landing-screen (hideLandingScreen)="hideScreen()" (selectCalculator)="viewCalculator($event)" [directory]="allDirectories"></app-landing-screen>
         </div>
-        <div class="col-10" *ngIf="allDirectories && dashboardView == 'tutorials'">
+        <div class="col-10 dashboard-page" *ngIf="allDirectories && dashboardView == 'tutorials'">
             <app-tutorials></app-tutorials>
         </div>
-        <div class="col-10" *ngIf="allDirectories && dashboardView == 'about-page'">
+        <div class="col-10 dashboard-page" *ngIf="allDirectories && dashboardView == 'about-page'">
             <app-about-page></app-about-page>
         </div>
-        <div class="col-10" *ngIf="allDirectories && dashboardView == 'settings'">
+        <div class="col-10 dashboard-page" *ngIf="allDirectories && dashboardView == 'settings'">
             
             <div class="row">
                 <div class="col-10 offset-md-1">

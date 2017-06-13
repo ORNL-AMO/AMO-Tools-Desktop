@@ -108,8 +108,6 @@ export class LossesComponent implements OnInit {
   changeField($event) {
     this.currentField = $event;
   }
-
-
   saveModifications() {
     if (this._modifications) {
       this.phast.modifications = (JSON.parse(JSON.stringify(this._modifications)));
@@ -120,11 +118,10 @@ export class LossesComponent implements OnInit {
   }
 
   addModification() {
-    console.log('phast')
-    console.log(this.phast);
     let tmpModification: Modification = {
       phast: {
-        losses: (JSON.parse(JSON.stringify(this.phast.losses)))
+        losses: {},
+        name: ''
       },
       notes: {
         chargeNotes: '',
@@ -141,9 +138,9 @@ export class LossesComponent implements OnInit {
         auxiliaryPowerNotes: ''
       }
     }
-    console.log('mod');
-    console.log(tmpModification.phast);
+    tmpModification.phast.losses = (JSON.parse(JSON.stringify(this.phast.losses)));
     tmpModification.phast.name = 'Modification ' + (this._modifications.length + 1);
+    console.log(tmpModification);
     this._modifications.unshift(tmpModification);
     this.modificationIndex = this._modifications.length - 1;
     this.modificationSelected = true;
@@ -155,7 +152,6 @@ export class LossesComponent implements OnInit {
     _.remove(this._modifications, (mod) => {
       return mod.phast.name == this.editModification.phast.name;
     });
-    console.log(this._modifications);
     this.showEditModification = false;
     this.editModification = null;
     this.saveModifications();
