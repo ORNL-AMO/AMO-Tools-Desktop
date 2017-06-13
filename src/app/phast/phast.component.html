@@ -52,7 +52,7 @@
     </div>
   </div>
 
-  <div class="row tab-content" *ngIf="currentTab == 'aux-equipment'">
+  <div class="row tab-content" *ngIf="currentTab == 'aux-equipment' && settings">
     <div class="col-12">
       <app-aux-equipment></app-aux-equipment>
     </div>
@@ -64,13 +64,12 @@
     </div>
   </div>
 
-   <!--
-   <div class="row tab-content" *ngIf="currentTab == 'sankey'">
-      <div class="col-12">
-        <app-sankey [losses]="assessment.phast.losses"></app-sankey>
-      </div>
-   </div>
-   -->
+  <!--<div class="row tab-content" *ngIf="currentTab == 'sankey'">
+    <div class="col-12">
+      <app-sankey [losses]="assessment.phast.losses"></app-sankey>
+    </div>
+  </div>-->
+
 
   <div class="footer">
     <div class="pull-left">
