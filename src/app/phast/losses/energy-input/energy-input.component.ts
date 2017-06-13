@@ -30,62 +30,102 @@ export class EnergyInputComponent implements OnInit {
   firstChange: boolean = true;
   constructor(private energyInputService: EnergyInputService, private phastService: PhastService) { }
 
-  ngOnInit(){
-    
+  ngOnChanges(changes: SimpleChanges) {
+    if (!this.firstChange) {
+      if (changes.saveClicked) {
+        this.saveLosses();
+      }
+      if (changes.addLossToggle) {
+        this.addLoss();
+      }
+    }
+    else {
+      this.firstChange = false;
+    }
   }
 
-  // ngOnChanges(changes: SimpleChanges) {
-  //   if (!this.firstChange) {
-  //     if (changes.saveClicked) {
-  //       this.saveLosses();
-  //     }
-  //     if (changes.addLossToggle) {
-  //       this.addLoss();
-  //     }
-  //   }
-  //   else {
-  //     this.firstChange = false;
-  //   }
-  // }
+  ngOnInit() {
+    if (!this._energyInputs) {
+      this._energyInputs = new Array();
+    }
+    if (this.losses.energyInput) {
+      this.losses.energyInput.forEach(loss => {
+        let tmpLoss = {
+          form: this.energyInputService.getFormFromLoss(loss),
+          name: 'Input #' + (this._energyInputs.length + 1),
+          results: {
+            heatDelivered: 0,
+            kwhCycle: 0,
+            totalKwhCycle: 0
+          }
+        };
+        this.calculate(tmpLoss);
+        this._energyInputs.unshift(tmpLoss);
+      })
+    }
+  }
+  addLoss() {
+    this._energyInputs.unshift({
+      form: this.energyInputService.initForm(),
+      name: 'Loss #' + (this._energyInputs.length + 1),
+      results: {
+        heatDelivered: 0,
+        kwhCycle: 0,
+        totalKwhCycle: 0
+      }
+    });
+    this.lossState.saved = false;
+  }
 
-  // ngOnInit() {
-  //   if (!this._energyInputs) {
-  //     this._energyInputs = new Array();
-  //   }
-  //   if (this.losses.energyInput) {
-  //     this.losses.energyInput.forEach(loss => {
-  //       let tmpLoss = {
-  //         form: this.energyInputService.getLossFromForm(loss),
-  //         name: 'Input #' + (this._energyInputs.length + 1)
-  //       };
-  //       this.calculate(tmpLoss);
-  //       this._energyInputs.unshift(tmpLoss);
-  //     })
-  //   }
-  // }
-  // addLoss() {
-  //   this._wallLosses.unshift({
-  //     form: this.wallLossesService.initForm(),
-  //     name: 'Loss #' + (this._wallLosses.length + 1),
-  //     heatLoss: 0.0
-  //   });
-  //   this.lossState.saved = false;
-  // }
+  removeLoss(str: string) {
+    this._energyInputs = _.remove(this._energyInputs, loss => {
+      return loss.name != str;
+    });
+    this.lossState.saved = false;
+    this.renameLossess();
+  }
 
-  // removeLoss(str: string) {
-  //   this._wallLosses = _.remove(this._wallLosses, loss => {
-  //     return loss.name != str;
-  //   });
-  //   this.lossState.saved = false;
-  //   this.renameLossess();
-  // }
+  renameLossess() {
+    let index = 1;
+    this._energyInputs.forEach(loss => {
+      loss.name = 'Loss #' + index;
+      index++;
+    })
+  }
 
-  // renameLossess() {
-  //   let index = 1;
-  //   this._wallLosses.forEach(loss => {
-  //     loss.name = 'Loss #' + index;
-  //     index++;
-  //   })
-  // }
+  calculate(loss: any) {
+    let calculation = this.phastService.energyInput(
+      loss.form.value.naturalGasHeatInput,
+      loss.form.value.naturalGasFlow,
+      loss.form.value.measuredOxygenFlow,
+      loss.form.value.coalCarbonInjection,
+      loss.form.value.coalHeatingValue,
+      loss.form.value.electrodeUse,
+      loss.form.value.electrodeHeatingValue,
+      loss.form.value.otherFuels,
+      loss.form.value.electricityInput
+    );
+    loss.results = {
+      heatDelivered: calculation.heatDelivered,
+      kwhCycle: calculation.kwhCycle,
+      totalKwhCycle: calculation.totalKwhCycle
+    }
+  }
+
+  saveLosses() {
+    let tmpEnergyInputs = new Array<EnergyInput>();
+    this._energyInputs.forEach(loss => {
+      let tmpEnergyInput = this.energyInputService.getLossFromForm(loss.form);
+      tmpEnergyInputs.unshift(tmpEnergyInput);
+    })
+    this.losses.energyInput = tmpEnergyInputs;
+    this.lossState.numLosses = this.losses.energyInput.length;
+    this.lossState.saved = true;
+    this.savedLoss.emit(true);
+  }
+
+  changeField(str: string) {
+    this.fieldChange.emit(str);
+  }
 
 }

@@ -1,3 +1,46 @@
-<p>
-  energy-input works!
-</p>
+<div class="no-data no-data-phast" *ngIf="_energyInputs.length == 0" (click)="addLoss()">
+  <h3>You have no Wall Losses</h3>
+  <h4>Add some now.</h4>
+</div>
+
+
+<div class="card-form" *ngFor="let loss of _energyInputs">
+  <div class="row">
+    <div class="col-12">
+      <div class="pull-left">
+        <b>{{loss.name}}</b>
+      </div>
+      <button class="close pull-right" aria-label="Close" (click)="removeLoss(loss.name)">
+      <span aria-hidden="true">&times;</span>
+    </button>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12">
+      <app-energy-input-form (changeField)="changeField($event)" [(energyInputForm)]="loss.form" (calculate)="calculate(loss)"
+        [(lossState)]="lossState" [baselineSelected]="baselineSelected" (saveEmit)="saveLosses()"></app-energy-input-form>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12">
+      <div class="form-group">
+        <label class="small">Heat Delivered</label>
+        <div class="text-center small">
+          {{loss.results.heatDelivered | number:'2.2-2'}}
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="small">Kwh Cycle</label>
+        <div class="text-center small">
+          {{loss.results.kwhCycle | number:'2.2-2'}}
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="small">Total Kwh Cycle</label>
+        <div class="text-center small">
+          {{loss.results.totalKwhCycle | number:'2.2-2'}}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -16,7 +16,7 @@
       Auxiliary Power
     </a>
   </li>
-  <li *ngIf="settings.energySourceType == 'Electricity' && settings.furnaceType == 'Electric Arc Furnace (EAF)" [ngClass]="{'active': lossesTab == 'energy-input'}"
+  <li *ngIf="settings.energySourceType == 'Electricity' && settings.furnaceType == 'Electric Arc Furnace (EAF)'" [ngClass]="{'active': lossesTab == 'energy-input'}"
     (click)="tabChange('energy-input')">
     <a class="nav-link small">
       Energy Input

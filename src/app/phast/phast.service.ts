@@ -287,7 +287,7 @@ export class PhastService {
   }
 
 
-  electricArcFurnaceEAF(
+  energyInput(
     naturalGasHeatInput: number,
     naturalGasFlow: number,
     measuredOxygenFlow: number,
@@ -309,7 +309,7 @@ export class PhastService {
       otherFuels: otherFuels,
       electricityInput: electricityInput
     }
-    return phastAddon.electricArcFurnaceEAF(inputs);
+    return phastAddon.energyInput(inputs);
   }
 
 }

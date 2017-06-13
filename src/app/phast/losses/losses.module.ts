@@ -72,6 +72,7 @@ import { ExhaustGasHelpComponent } from './losses-help/exhaust-gas-help/exhaust-
 import { EditConditionPropertiesComponent } from './edit-condition-properties/edit-condition-properties.component';
 import { EnergyInputComponent } from './energy-input/energy-input.component';
 import { EnergyInputFormComponent } from './energy-input/energy-input-form/energy-input-form.component';
+import { EnergyInputService } from './energy-input/energy-input.service';
 
 @NgModule({
   imports: [
@@ -150,7 +151,8 @@ import { EnergyInputFormComponent } from './energy-input/energy-input-form/energ
     ExtendedSurfaceLossesService,
     OtherLossesService,
     SlagService,
-    AuxiliaryPowerLossesService
+    AuxiliaryPowerLossesService,
+    EnergyInputService
   ],
   exports: [
     LossesComponent

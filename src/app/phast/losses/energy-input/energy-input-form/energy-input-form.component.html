@@ -1,3 +1,66 @@
-<p>
-  energy-input-form works!
-</p>
+<form #lossForm [formGroup]="energyInputForm">
+  <div class="form-section">
+    <div class="form-group">
+      <label class="small" for="naturalGasHeatInput">Natural Gas Heat Input</label>
+      <input type="number" class="form-control" formControlName="naturalGasHeatInput" id="naturalGasHeatInput" onfocus="this.select();"
+        (input)="startSavePolling()" (focus)="focusField('avgSurfaceTemp')">
+      <span class="units">mm btu/cycle</span>
+    </div>
+
+    <div class="form-group">
+      <label class="small" for="naturalGasFlow">Natural Gas Flow</label>
+      <input type="number" class="form-control" formControlName="naturalGasFlow" id="naturalGasFlow" onfocus="this.select();" (input)="startSavePolling()"
+        (focus)="focusField('avgSurfaceTemp')">
+      <span class="units">scfh</span>
+    </div>
+
+    <div class="form-group">
+      <label class="small" for="measuredOxygenFlow">Measured Oxygen Flow</label>
+      <input type="number" class="form-control" formControlName="measuredOxygenFlow" id="measuredOxygenFlow" onfocus="this.select();"
+        (input)="startSavePolling()" (focus)="focusField('avgSurfaceTemp')">
+      <span class="units">scfh</span>
+    </div>
+
+    <div class="form-group">
+      <label class="small" for="coalCarbonInjection">Coal Carbon Injection</label>
+      <input type="number" class="form-control" formControlName="coalCarbonInjection" id="coalCarbonInjection" onfocus="this.select();"
+        (input)="startSavePolling()" (focus)="focusField('avgSurfaceTemp')">
+      <span class="units">lbs/cycle</span>
+    </div>
+
+    <div class="form-group">
+      <label class="small" for="coalHeatingValue">Coal Heating Value</label>
+      <input type="number" class="form-control" formControlName="coalHeatingValue" id="coalHeatingValue" onfocus="this.select();"
+        (input)="startSavePolling()" (focus)="focusField('avgSurfaceTemp')">
+      <span class="units">btu/lb</span>
+    </div>
+
+    <div class="form-group">
+      <label class="small" for="electrodeUse">Electrode Use</label>
+      <input type="number" class="form-control" formControlName="electrodeUse" id="electrodeUse" onfocus="this.select();" (input)="startSavePolling()"
+        (focus)="focusField('avgSurfaceTemp')">
+      <span class="units">lbs/cycle</span>
+    </div>
+
+    <div class="form-group">
+      <label class="small" for="electrodeHeatingValue">Electrode Heating Value</label>
+      <input type="number" class="form-control" formControlName="electrodeHeatingValue" id="electrodeHeatingValue" onfocus="this.select();"
+        (input)="startSavePolling()" (focus)="focusField('avgSurfaceTemp')">
+      <span class="units">btu/lb</span>
+    </div>
+
+    <div class="form-group">
+      <label class="small" for="otherFuels">Other Fuels</label>
+      <input type="number" class="form-control" formControlName="otherFuels" id="otherFuels" onfocus="this.select();" (input)="startSavePolling()"
+        (focus)="focusField('avgSurfaceTemp')">
+      <span class="units">mm btu/cycle</span>
+    </div>
+
+    <div class="form-group">
+      <label class="small" for="electricityInput">Other Fuels</label>
+      <input type="number" class="form-control" formControlName="electricityInput" id="electricityInput" onfocus="this.select();"
+        (input)="startSavePolling()" (focus)="focusField('avgSurfaceTemp')">
+      <span class="units">kwh/cycle</span>
+    </div>
+  </div>
+</form>
