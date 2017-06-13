@@ -10,6 +10,8 @@ import { LeakageLoss } from './losses/leakageLoss';
 import { ExtendedSurface } from './losses/extendedSurface';
 import { Slag } from './losses/slag';
 import { AuxiliaryPowerLoss } from './losses/auxiliaryPowerLoss';
+import { EnergyInput } from './losses/energyInput';
+
 export interface PHAST {
   name?: string,
   phastInputs?: PhastInputs,
@@ -37,7 +39,7 @@ export interface Losses {
   extendedSurfaces?: ExtendedSurface[],
   slagLosses?: Slag[],
   auxiliaryPowerLosses?: AuxiliaryPowerLoss[],
-  showSetupDialog?: boolean;
+  energyInput?: EnergyInput[]
 }
 
 export interface Modification {

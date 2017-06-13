@@ -286,5 +286,31 @@ export class PhastService {
     return phastAddon.auxiliaryPowerLoss(inputs);
   }
 
+
+  electricArcFurnaceEAF(
+    naturalGasHeatInput: number,
+    naturalGasFlow: number,
+    measuredOxygenFlow: number,
+    coalCarbonInjection: number,
+    coalHeatingValue: number,
+    electrodeUse: number,
+    electrodeHeatingValue: number,
+    otherFuels: number,
+    electricityInput: number
+  ) {
+    let inputs = {
+      naturalGasHeatInput: naturalGasHeatInput,
+      naturalGasFlow: naturalGasFlow,
+      measuredOxygenFlow: measuredOxygenFlow,
+      coalCarbonInjection: coalCarbonInjection,
+      coalHeatingValue: coalHeatingValue,
+      electrodeUse: electrodeUse,
+      electrodeHeatingValue: electrodeHeatingValue,
+      otherFuels: otherFuels,
+      electricityInput: electricityInput
+    }
+    return phastAddon.electricArcFurnaceEAF(inputs);
+  }
+
 }
 

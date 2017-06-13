@@ -4,14 +4,22 @@
     Charge Material
     </a>
   </li>
-  <li *ngIf="settings.energySourceType == 'Electricity' && settings.furnaceType == 'Electric Arc Furnace (EAF)'" [ngClass]="{'active': lossesTab == 'slag'}" (click)="tabChange('slag')">
+  <li *ngIf="settings.energySourceType == 'Electricity' && settings.furnaceType == 'Electric Arc Furnace (EAF)'" [ngClass]="{'active': lossesTab == 'slag'}"
+    (click)="tabChange('slag')">
     <a class="nav-link small">
     Slag
     </a>
   </li>
-  <li *ngIf="settings.energySourceType == 'Electricity' && settings.furnaceType != 'Electric Arc Furnace (EAF)'" [ngClass]="{'active': lossesTab == 'auxiliary-power'}" (click)="tabChange('auxiliary-power')">
+  <li *ngIf="settings.energySourceType == 'Electricity' && settings.furnaceType != 'Electric Arc Furnace (EAF)'" [ngClass]="{'active': lossesTab == 'auxiliary-power'}"
+    (click)="tabChange('auxiliary-power')">
     <a class="nav-link small">
       Auxiliary Power
+    </a>
+  </li>
+  <li *ngIf="settings.energySourceType == 'Electricity' && settings.furnaceType == 'Electric Arc Furnace (EAF)" [ngClass]="{'active': lossesTab == 'energy-input'}"
+    (click)="tabChange('energy-input')">
+    <a class="nav-link small">
+      Energy Input
     </a>
   </li>
   <li *ngIf="settings.energySourceType == 'Electricity'" [ngClass]="{'active': lossesTab == 'exhaust-gas'}" (click)="tabChange('exhaust-gas')">

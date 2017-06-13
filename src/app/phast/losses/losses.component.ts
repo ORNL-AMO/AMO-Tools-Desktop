@@ -79,6 +79,10 @@ export class LossesComponent implements OnInit {
     auxiliaryPowerLosses: {
       numLosses: 0,
       saved: true
+    },
+    energyInput: {
+      numLosses: 0,
+      saved: true
     }
   }
 

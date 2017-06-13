@@ -70,6 +70,8 @@ import { HeatStorageHelpComponent } from './losses-help/heat-storage-help/heat-s
 import { SlagHelpComponent } from './losses-help/slag-help/slag-help.component';
 import { ExhaustGasHelpComponent } from './losses-help/exhaust-gas-help/exhaust-gas-help.component';
 import { EditConditionPropertiesComponent } from './edit-condition-properties/edit-condition-properties.component';
+import { EnergyInputComponent } from './energy-input/energy-input.component';
+import { EnergyInputFormComponent } from './energy-input/energy-input-form/energy-input-form.component';
 
 @NgModule({
   imports: [
@@ -132,7 +134,9 @@ import { EditConditionPropertiesComponent } from './edit-condition-properties/ed
     HeatStorageHelpComponent,
     SlagHelpComponent,
     ExhaustGasHelpComponent,
-    EditConditionPropertiesComponent
+    EditConditionPropertiesComponent,
+    EnergyInputComponent,
+    EnergyInputFormComponent
   ],
   providers: [
     ChargeMaterialService,
