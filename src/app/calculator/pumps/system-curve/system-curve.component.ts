@@ -169,4 +169,6 @@ export class SystemCurveComponent implements OnInit {
     return headOne - (Math.pow(flowRateOne, 1.9) * (headTwo - headOne) / (Math.pow(flowRateTwo, lossExponent) - Math.pow(flowRateOne, lossExponent)))
   }
 
+
+
 }

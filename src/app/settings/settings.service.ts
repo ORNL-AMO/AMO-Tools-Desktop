@@ -18,7 +18,8 @@ export class SettingsService {
       'currentMeasurement': [''],
       'viscosityMeasurement': [''],
       'voltageMeasurement': [''],
-      'energySourceType': ['']
+      'energySourceType': [''],
+      'furnaceType': ['']
     });
   }
 
@@ -34,7 +35,8 @@ export class SettingsService {
       'currentMeasurement': [settings.currentMeasurement],
       'viscosityMeasurement': [settings.viscosityMeasurement],
       'voltageMeasurement': [settings.voltageMeasurement],
-      'energySourceType': [settings.energySourceType]
+      'energySourceType': [settings.energySourceType],
+      'furnaceType': [settings.furnaceType]
     });
   }
 
@@ -50,7 +52,8 @@ export class SettingsService {
       currentMeasurement: form.value.currentMeasurement,
       viscosityMeasurement: form.value.viscosityMeasurement,
       voltageMeasurement: form.value.voltageMeasurement,
-      energySourceType: form.value.energySourceType
+      energySourceType: form.value.energySourceType,
+      furnaceType: form.value.furnaceType
     };
     return tmpSettings;
   }

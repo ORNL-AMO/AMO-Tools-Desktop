@@ -6,12 +6,12 @@
 
 <div class="row">
   <div class="col-12">
-    <app-application-settings [(settingsForm)]="settingsForm"></app-application-settings>
+    <app-application-settings [(settingsForm)]="settingsForm" (startSavePolling)="startSavePolling()"></app-application-settings>
   </div>
 </div>
 
 <div class="row">
   <div class="col-12">
-    <app-phast-settings [(settingsForm)]="settingsForm"></app-phast-settings>
+    <app-phast-settings [(settingsForm)]="settingsForm" (startSavePolling)="startSavePolling()"></app-phast-settings>
   </div>
 </div>
