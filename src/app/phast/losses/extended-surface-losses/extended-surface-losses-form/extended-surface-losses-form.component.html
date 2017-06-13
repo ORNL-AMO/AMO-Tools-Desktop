@@ -2,19 +2,19 @@
 
   <div class="form-group">
     <label class="small" for="surfaceArea">Total Outside Surface Area</label>
-    <input type="number" class="form-control" formControlName="surfaceArea" id="surfaceArea" onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('surfaceArea')">
+    <input type="number" step="any" class="form-control" formControlName="surfaceArea" id="surfaceArea" onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('surfaceArea')">
     <span class="units">ft<sup>2</sup></span>
   </div>
 
   <div class="form-group">
     <label class="small" for="avgSurfaceTemp">Average Surface Temperature</label>
-    <input type="number" class="form-control" formControlName="avgSurfaceTemp" id="avgSurfaceTemp" onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('avgSurfaceTemp')">
+    <input type="number" step="any" class="form-control" formControlName="avgSurfaceTemp" id="avgSurfaceTemp" onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('avgSurfaceTemp')">
     <span class="units">&#8457;</span>
   </div>
 
   <div class="form-group">
     <label class="small" for="ambientTemp">Ambient Temperature</label>
-    <input type="number" class="form-control" formControlName="ambientTemp" id="ambientTemp" onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('ambientTemp')">
+    <input type="number" step="any" class="form-control" formControlName="ambientTemp" id="ambientTemp" onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('ambientTemp')">
     <span class="units">&#8457;</span>
   </div>
 
@@ -22,7 +22,7 @@
     <label class="small" for="surfaceEmissivity" aria-describedby="emissivityHelp">Surface Emissivity
     <small id="emissivityHelp" class="form-text text-muted text-help">Typical - 0.9</small>
     </label>
-    <input type="number" class="form-control" formControlName="surfaceEmissivity" id="surfaceEmissivity" onfocus="this.select();" (input)="startSavePolling()"
+    <input type="number" step="any" class="form-control" formControlName="surfaceEmissivity" id="surfaceEmissivity" onfocus="this.select();" (input)="startSavePolling()"
       (focus)="focusField('surfaceEmissivity')">
   </div>
 

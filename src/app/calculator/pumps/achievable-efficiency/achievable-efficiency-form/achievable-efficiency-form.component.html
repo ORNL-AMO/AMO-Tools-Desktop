@@ -8,7 +8,7 @@
 
   <div class="form-group">
     <label for="flowRate">Flow Rate</label>
-    <input type="number" class="form-control" [(ngModel)]="tmpFlowRate" id="flowRate" (input)="emitChange()" onfocus="this.select();">
+    <input type="number" step="any" class="form-control" [(ngModel)]="tmpFlowRate" id="flowRate" (input)="emitChange()" onfocus="this.select();">
     <span class="units">{{settings.flowMeasurement}}</span>
   </div>
 </div>

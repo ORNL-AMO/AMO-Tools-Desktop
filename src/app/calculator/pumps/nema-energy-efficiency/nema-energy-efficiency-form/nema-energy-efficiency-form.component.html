@@ -23,7 +23,7 @@
         <div class="incrementor input-group-addon">
           <button class="btn" (click)="addNum('motorRPM')"><i class="fa fa-plus"></i></button>
         </div>
-        <input type="number" min="1" class="form-control incrementor-input-field" id="motorRPM" formControlName="motorRPM" ngModel="{{nemaForm.value.motorRPM}}"
+        <input type="number" min="1" step="any" class="form-control incrementor-input-field" id="motorRPM" formControlName="motorRPM" ngModel="{{nemaForm.value.motorRPM}}"
           onfocus="this.select();">
       </div>
       </div>
@@ -38,8 +38,8 @@
 
       <div class="form-group" *ngIf="nemaForm.value.efficiencyClass == 'Specified'">
         <label for="efficiency">Efficiency</label>
-        <input type="number" min="0" class="form-control" id="efficiency" formControlName="efficiency" onfocus="this.select();">
-      <span class="units">%</span>
+        <input type="number" min="0" step="any" class="form-control" id="efficiency" formControlName="efficiency" onfocus="this.select();">
+      <span class="units">%</span>git pull
       </div>
       </form>
 </div>

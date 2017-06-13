@@ -8,7 +8,7 @@
     </div>
     <div class="form-group">
       <label class="small" for="materialSpecificHeat">Specific Heat of Gas</label>
-      <input type="number" class="form-control" formControlName="materialSpecificHeat" id="materialSpecificHeat" onfocus="this.select();" (input)="startSavePolling()"
+      <input type="number" step="any" class="form-control" formControlName="materialSpecificHeat" id="materialSpecificHeat" onfocus="this.select();" (input)="startSavePolling()"
         (focus)="focusField('materialSpecificHeat')">
       <span class="units">Btu/(lb-&#8457;)</span>
     </div>
@@ -16,47 +16,47 @@
   <div class="form-section">
     <div class="form-group">
       <label class="small" for="feedRate">Feed Rate for Gas Mixture</label>
-      <input type="number" class="form-control" formControlName="feedRate" id="feedRate" onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('feedRate')">
+      <input type="number" step="any" class="form-control" formControlName="feedRate" id="feedRate" onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('feedRate')">
       <span class="units">lb/hr</span>
     </div>
 
 
     <div class="form-group">
       <label class="small" for="vaporInGas">Vapor in Gas Mixture</label>
-      <input type="number" class="form-control" formControlName="vaporInGas" id="vaporInGas" onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('vaporInGas')">
+      <input type="number" step="any" class="form-control" formControlName="vaporInGas" id="vaporInGas" onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('vaporInGas')">
       <span class="units">%</span>
     </div>
 
     <div class="form-group">
       <label class="small" for="initialTemperature">Initial Temperature</label>
-      <input type="number" class="form-control" formControlName="initialTemperature" id="initialTemperature" onfocus="this.select();" (input)="startSavePolling()"
+      <input type="number" step="any" class="form-control" formControlName="initialTemperature" id="initialTemperature" onfocus="this.select();" (input)="startSavePolling()"
         (focus)="focusField('initialTemperature')">
       <span class="units">&#8457;</span>
     </div>
 
     <div class="form-group">
       <label class="small" for="dischargeTemperature">Discharge Temperature</label>
-      <input type="number" class="form-control" formControlName="dischargeTemperature" id="dischargeTemperature" onfocus="this.select();" (input)="startSavePolling()"
+      <input type="number" step="any" class="form-control" formControlName="dischargeTemperature" id="dischargeTemperature" onfocus="this.select();" (input)="startSavePolling()"
         (focus)="focusField('dischargeTemperature')">
       <span class="units">&#8457;</span>
     </div>
 
     <div class="form-group">
       <label class="small" for="specificHeatOfVapor">Specific Heat of Vapor</label>
-      <input type="number" class="form-control" formControlName="specificHeatOfVapor" id="specificHeatOfVapor" onfocus="this.select();" (input)="startSavePolling()"
+      <input type="number" step="any" class="form-control" formControlName="specificHeatOfVapor" id="specificHeatOfVapor" onfocus="this.select();" (input)="startSavePolling()"
         (focus)="focusField('specificHeatOfVapor')">
       <span class="units">Btu/(lb-&#8457;)</span>
     </div>
 
     <div class="form-group">
       <label class="small" for="gasReacted">Feed Gas Reacted</label>
-      <input type="number" class="form-control" formControlName="gasReacted" id="gasReacted" onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('gasReacted')">
+      <input type="number" step="any" class="form-control" formControlName="gasReacted" id="gasReacted" onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('gasReacted')">
       <span class="units">%</span>
     </div>
 
     <div class="form-group">
       <label class="small" for="heatOfReaction">Heat of Reaction</label>
-      <input type="number" class="form-control" formControlName="heatOfReaction" id="heatOfReaction" onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('heatOfReaction')">
+      <input type="number" step="any" class="form-control" formControlName="heatOfReaction" id="heatOfReaction" onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('heatOfReaction')">
       <span class="units">Btu/lb</span>
     </div>
 

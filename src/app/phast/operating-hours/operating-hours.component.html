@@ -3,7 +3,7 @@
     <div class="row form-group">
       <label class="col-6 col-form-label" for="weeksPerYear">Weeks / year</label>
       <div class="col-6">
-        <input type="number" class="form-control" id="weeksPerYear">
+        <input type="number" step="any" class="form-control" id="weeksPerYear">
         <app-control-messages [control]="hoursForm.controls.weeksPerYear"></app-control-messages>
       </div>
     </div>
@@ -17,7 +17,7 @@
         <div class="incrementor input-group-addon">
           <div class="btn"><i class="fa fa-plus"></i></div>
         </div>
-        <input type="number" class="form-control" id="daysPerWeek">
+        <input type="number" step="any" class="form-control" id="daysPerWeek">
         <app-control-messages [control]="hoursForm.controls.daysPerWeek"></app-control-messages>
       </div>
     </div>
@@ -31,7 +31,7 @@
         <div class="incrementor input-group-addon">
           <div class="btn"><i class="fa fa-plus"></i></div>
         </div>
-        <input type="number" class="form-control" id="shiftsPerDay">
+        <input type="number" step="any" class="form-control" id="shiftsPerDay">
         <app-control-messages [control]="hoursForm.controls.shiftsPerDay"></app-control-messages>
       </div>
     </div>
@@ -45,7 +45,7 @@
         <div class="incrementor input-group-addon">
           <div class="btn"><i class="fa fa-plus"></i></div>
         </div>
-        <input type="number" class="form-control" id="hoursPerShift">
+        <input type="number" step="any" class="form-control" id="hoursPerShift">
 
         <app-control-messages [control]="hoursForm.controls.hoursPerShift"></app-control-messages>
       </div>
@@ -54,7 +54,7 @@
   <div class="row form-group total-row">
     <label class="col-6 col-form-label bold" for="totalHoursPerYear">Total Hours / year</label>
     <div class="col-6">
-      <input type="number" class="form-control" id="totalHoursPerYear">
+      <input type="number" step="any" class="form-control" id="totalHoursPerYear">
       <app-control-messages [control]="hoursForm.controls.totalHoursPerYear"></app-control-messages>
     </div>
   </div>

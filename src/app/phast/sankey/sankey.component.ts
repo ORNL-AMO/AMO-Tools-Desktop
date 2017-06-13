@@ -2,7 +2,7 @@ import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
 import { Losses } from '../../shared/models/phast';
 import * as _ from 'lodash';
 
-//declare var d3: any;
+// declare var d3: any;
 import * as d3 from 'd3';
 var svg;
 
@@ -41,7 +41,7 @@ export class SankeyComponent implements OnInit {
     }
   }
 
-  //For dynamic sankey, will calculate totals when losses input changes value
+  // For dynamic sankey, will calculate totals when losses input changes value
   // ngOnChanges(changes: SimpleChanges) {
   //   if (!this.firstChange) {
   //     if (changes.losses) {
@@ -68,7 +68,7 @@ export class SankeyComponent implements OnInit {
   }
 
   closeSankey(location) {
-    //Remove Sankey
+    // Remove Sankey
     d3.select(location).selectAll('svg').remove();
   }
 
@@ -85,7 +85,7 @@ export class SankeyComponent implements OnInit {
   }
 
   makeSankey(location) {
-    //Sankey will not be made if even a single loss has not been entered
+    // Sankey will not be made if even a single loss has not been entered
     if (this.totalWallLoss != null && this.totalAtmosphereLoss != null && this.totalOtherLoss != null && this.totalCoolingLoss != null && this.totalOpeningLoss != null
       && this.totalFixtureLoss != null && this.totalLeakageLoss != null && this.totalExtSurfaceLoss != null && this.totalChargeMaterialLoss != null) {
       this.sankey(location);
@@ -94,7 +94,7 @@ export class SankeyComponent implements OnInit {
 
   sankey(location) {
 
-    //Remove  all Sankeys
+    // Remove  all Sankeys
     d3.select(location).selectAll('svg').remove();
 
     var nodes = [
@@ -123,36 +123,36 @@ export class SankeyComponent implements OnInit {
     ];
 
     var links = [
-      //linking to the first interNode
+      // linking to the first interNode
       { source: 0, target: 1 },
-      //interNode1 to Flue Gas and interNode2
+      // interNode1 to Flue Gas and interNode2
       { source: 1, target: 2 },
       { source: 1, target: 3 },
-      //interNode2 to Atmosphere and interNode3
+      // interNode2 to Atmosphere and interNode3
       { source: 3, target: 4 },
       { source: 3, target: 5 },
-      //interNode3 to Other and interNode4
+      // interNode3 to Other and interNode4
       { source: 5, target: 6 },
       { source: 5, target: 7 },
-      //interNode4 to Water and interNode5
+      // interNode4 to Water and interNode5
       { source: 7, target: 8 },
       { source: 7, target: 9 },
-      //interNode5 to Wall and interNode6
+      // interNode5 to Wall and interNode6
       { source: 9, target: 10 },
       { source: 9, target: 11 },
-      //interNode6 to Opening and interNode7
+      // interNode6 to Opening and interNode7
       { source: 11, target: 12 },
       { source: 11, target: 13 },
-      //interNode7 to Fixture and interNode8
+      // interNode7 to Fixture and interNode8
       { source: 13, target: 14 },
       { source: 13, target: 15 },
-      //interNode8 to Leakage and interNode9
+      // interNode8 to Leakage and interNode9
       { source: 15, target: 16 },
       { source: 15, target: 17 },
-      //interNode9 to External and interNode10
+      // interNode9 to External and interNode10
       { source: 17, target: 18 },
       { source: 17, target: 19 },
-      //interNode10 to Charge and usefulOutput
+      // interNode10 to Charge and usefulOutput
       { source: 19, target: 20 },
       { source: 19, target: 21 },
     ];
@@ -191,7 +191,7 @@ export class SankeyComponent implements OnInit {
       .append('svg:path')
       .attr("d", "M0,-2.5L2,0L0,2.5");
 
-    //Draw links to the svg
+    // Draw links to the svg
     var link = svg.append("g")
       .attr("class", "links")
       .selectAll("path")
@@ -211,7 +211,7 @@ export class SankeyComponent implements OnInit {
         return this.getEndMarker(d, nodes);
       });
 
-    //Draw nodes to the svg
+    // Draw nodes to the svg
     var node = svg.selectAll('.node')
       .data(nodes)
       .enter()
@@ -429,14 +429,14 @@ export class SankeyComponent implements OnInit {
     nodes.forEach((d, i) => {
       d.y = (height / 2 - nodes[0].displaySize / 2);
       if (d.inter) {
-        //Reset height
+        // Reset height
         if (i == 1) {
-          //First interNode
+          // First interNode
           d.value = nodes[i - 1].value;
           d.displaySize = this.calcDisplayValue(this.baseSize, d.value, nodes[0].value);
         }
         else {
-          //Previous node.val - interNode.value
+          // Previous node.val - interNode.value
           d.value = (nodes[i - 2].value - nodes[i - 1].value);
           d.displaySize = this.calcDisplayValue(this.baseSize, d.value, nodes[0].value);
           if (d.top) {
@@ -485,13 +485,13 @@ export class SankeyComponent implements OnInit {
       points.push([nodes[d.source].x, (nodes[d.target].y + (nodes[d.target].displaySize / 2))]);
       points.push([nodes[d.target].x, (nodes[d.target].y + (nodes[d.target].displaySize / 2))]);
     }
-    //If it links up with an inter or usefulOutput then go strait tot the interNode
+    // If it links up with an inter or usefulOutput then go strait tot the interNode
     else if (nodes[d.target].inter || nodes[d.target].usefulOutput) {
       points.push([(nodes[d.source].x - 5), (nodes[d.target].y + (nodes[d.target].displaySize / 2))]);
       points.push([nodes[d.target].x, (nodes[d.target].y + (nodes[d.target].displaySize / 2))]);
     }
     else {
-      //Curved linkes
+      // Curved linkes
       if (nodes[d.target].top) {
         points.push([(nodes[d.source].x - 5), (nodes[d.source].y + (nodes[d.target].displaySize / 2))]);
         points.push([(nodes[d.source].x + 30), (nodes[d.source].y + (nodes[d.target].displaySize / 2))]);
@@ -563,7 +563,7 @@ export class SankeyComponent implements OnInit {
 
   updateColors(nodes, links) {
 
-    //make a new gradient
+    // make a new gradient
     var color = this.findColor(nodes[0].value);
 
     nodes.forEach(function (d, i) {
