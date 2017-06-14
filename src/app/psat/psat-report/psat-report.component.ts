@@ -34,7 +34,6 @@ export class PsatReportComponent implements OnInit {
       this.psat = this.assessment.psat;
       //find settings
       this.getAssessmentSettingsThenResults();
-      console.log('get settings');
     }
   }
 

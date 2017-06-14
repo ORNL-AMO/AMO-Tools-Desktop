@@ -7,6 +7,7 @@ import { IndexedDbService } from '../indexedDb/indexed-db.service';
 import { Settings } from '../shared/models/settings';
 import { WindowRefService } from '../indexedDb/window-ref.service';
 import { JsonToCsvService } from '../shared/json-to-csv/json-to-csv.service';
+import * as moment from 'moment';
 @Component({
   selector: 'app-detailed-report',
   templateUrl: './detailed-report.component.html',
@@ -35,6 +36,7 @@ export class DetailedReportComponent implements OnInit {
   exportReports: any;
   isSummaryVisible: boolean = true;
   focusedAssessment: Assessment;
+  createdDate: any;
   constructor(private indexedDbService: IndexedDbService, private psatService: PsatService, private windowRefService: WindowRefService, private jsonToCsvService: JsonToCsvService) { }
 
   ngOnInit() {
@@ -42,6 +44,7 @@ export class DetailedReportComponent implements OnInit {
     this.reportAssessments = new Array<Assessment>();
     this.psats = new Array<PSAT>();
     this.exportReports = new Array();
+    this.createdDate = moment().format('MMMM Do, YYYY');
   }
 
   ngOnChanges() {
@@ -157,7 +160,6 @@ export class DetailedReportComponent implements OnInit {
   print() {
     let win = this.windowRefService.nativeWindow;
     let doc = this.windowRefService.getDoc();
-    debugger
     // let content = doc.getElementById('detailedReportContainer').innerHTML;
     // let originContent = doc.body.innerHTML;
     // doc.body.innerHTML = content;

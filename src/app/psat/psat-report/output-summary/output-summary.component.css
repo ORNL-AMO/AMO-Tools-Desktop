@@ -5,3 +5,9 @@ td{
 th{
     font-size: small;
 }
+
+@media print {
+    tr{
+        border-bottom: 2px solid black;
+    }
+}

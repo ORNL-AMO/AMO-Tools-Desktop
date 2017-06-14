@@ -70,7 +70,7 @@ export class PercentGraphComponent implements OnInit {
     let marginTop = (div[0].clientHeight / 2) - (percentValue.clientHeight + (percentValue.clientHeight * .5));
     let marginLeft = (div[0].clientWidth / 2) - (percentValue.clientWidth / 2);
     for (let i = 0; i < valueClass.length; i++) {
-      valueClass[i].style.marginTop = marginTop + 'px';
+      valueClass[i].style.marginTop = (marginTop+25) + 'px';
       valueClass[i].style.marginLeft = marginLeft + 'px';
     }
   }

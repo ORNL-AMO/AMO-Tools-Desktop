@@ -1,5 +1,12 @@
-.savings{
-    font-weight: bold;
-    color: #27AE60;
-    font-size: xx-large;
+.print-chart{
+    display: none;
+}
+
+@media print {
+    .print-chart{
+        display: block !important;
+    }
+    .chart{
+        display: none !important;
+    }
 }

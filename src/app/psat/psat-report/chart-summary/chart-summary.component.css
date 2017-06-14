@@ -1,0 +1,6 @@
+@media print {
+    .chart-item{
+            border: 1px solid lightgray;
+            padding: 5px;
+    }
+}
