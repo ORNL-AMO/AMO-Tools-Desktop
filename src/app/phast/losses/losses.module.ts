@@ -69,6 +69,12 @@ import { AuxiliaryPowerLossesHelpComponent } from './losses-help/auxiliary-power
 import { HeatStorageHelpComponent } from './losses-help/heat-storage-help/heat-storage-help.component';
 import { SlagHelpComponent } from './losses-help/slag-help/slag-help.component';
 import { ExhaustGasHelpComponent } from './losses-help/exhaust-gas-help/exhaust-gas-help.component';
+import { EditConditionPropertiesComponent } from './edit-condition-properties/edit-condition-properties.component';
+import { EnergyInputComponent } from './energy-input/energy-input.component';
+import { EnergyInputFormComponent } from './energy-input/energy-input-form/energy-input-form.component';
+import { EnergyInputService } from './energy-input/energy-input.service';
+import { EnergyInputHelpComponent } from './losses-help/energy-input-help/energy-input-help.component';
+
 @NgModule({
   imports: [
     CommonModule,
@@ -130,6 +136,10 @@ import { ExhaustGasHelpComponent } from './losses-help/exhaust-gas-help/exhaust-
     HeatStorageHelpComponent,
     SlagHelpComponent,
     ExhaustGasHelpComponent,
+    EditConditionPropertiesComponent,
+    EnergyInputComponent,
+    EnergyInputFormComponent,
+    EnergyInputHelpComponent
   ],
   providers: [
     ChargeMaterialService,
@@ -143,7 +153,8 @@ import { ExhaustGasHelpComponent } from './losses-help/exhaust-gas-help/exhaust-
     ExtendedSurfaceLossesService,
     OtherLossesService,
     SlagService,
-    AuxiliaryPowerLossesService
+    AuxiliaryPowerLossesService,
+    EnergyInputService
   ],
   exports: [
     LossesComponent
