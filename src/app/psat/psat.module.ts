@@ -39,6 +39,7 @@ import { ModifyConditionsNotesComponent } from './modify-conditions/modify-condi
 import { SettingsModule } from '../settings/settings.module';
 import { ToastyModule } from 'ng2-toasty';
 import { EditConditionPropertiesComponent } from './modify-conditions/edit-condition-properties/edit-condition-properties.component';
+import { ExploreOpportunitiesComponent } from './explore-opportunities/explore-opportunities.component';
 
 @NgModule({
   declarations: [
@@ -65,7 +66,8 @@ import { EditConditionPropertiesComponent } from './modify-conditions/edit-condi
     ModifyConditionsHelpComponent,
     ModifyConditionsTabsComponent,
     ModifyConditionsNotesComponent,
-    EditConditionPropertiesComponent
+    EditConditionPropertiesComponent,
+    ExploreOpportunitiesComponent
   ],
   exports: [
     PsatReportComponent
