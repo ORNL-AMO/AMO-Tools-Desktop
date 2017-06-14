@@ -26,7 +26,7 @@ export class NemaEnergyEfficiencyFormComponent implements OnInit {
     // When the user chooses specified, they need a place to put the efficiency value
     'Specified'
   ];
-
+  efficiencyError: string = null;
   options: Array<any>;
   constructor() { }
 
@@ -52,4 +52,24 @@ export class NemaEnergyEfficiencyFormComponent implements OnInit {
     }
   }
 
+
+
+  checkEfficiency() {
+    if (this.nemaForm.value.efficiency > 100) {
+      this.efficiencyError = "Unrealistic efficiency, shouldn't be greater then 100%";
+      return false;
+    }
+    else if (this.nemaForm.value.efficiency == 0) {
+      this.efficiencyError = "Cannot have 0% efficiency";
+      return false;
+    }
+    else if (this.nemaForm.value.efficiency < 0) {
+      this.efficiencyError = "Cannot have negative efficiency";
+      return false;
+    }
+    else {
+      this.efficiencyError = null;
+      return true;
+    }
+  }
 }

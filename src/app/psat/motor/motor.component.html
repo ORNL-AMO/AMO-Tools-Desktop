@@ -69,12 +69,12 @@
 
   <div class="form-group">
     <label for="sizeMargin">Size Margin</label>
-    <div class="incrementor form-control">
-      <button class="btn" [disabled]="!selected" (click)="subtractNum('sizeMargin')"><i class="fa fa-minus"></i></button>
-      <button class="btn" [disabled]="!selected" (click)="addNum('sizeMargin')"><i class="fa fa-plus"></i></button>
-      <input type="number" min="0" class="form-control" id="sizeMargin" formControlName="sizeMargin" ngModel="{{psatForm.value.sizeMargin}}"
-        (input)="startSavePolling()" (focus)="focusField('sizeMargin')" onfocus="this.select();">
-    </div>
+      <!--<button class="btn" [disabled]="!selected" (click)="subtractNum('sizeMargin')"><i class="fa fa-minus"></i></button>
+      <button class="btn" [disabled]="!selected" (click)="addNum('sizeMargin')"><i class="fa fa-plus"></i></button>-->
+      <input type="number" min="0" max="100" class="form-control" id="sizeMargin" formControlName="sizeMargin" ngModel="{{psatForm.value.sizeMargin}}"
+        (input)="startSavePolling()" (focus)="focusField('sizeMargin')" [ngClass]="{'warning': checkMargin() == false}" onfocus="this.select();">
+      <span class="units">%</span>
+      <span class="alert-warning pull-right small" *ngIf="marginError !== null">{{marginError}}</span>
   </div>
 
 </form>

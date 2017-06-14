@@ -54,6 +54,7 @@ export class MotorComponent implements OnInit {
   flaError: string = null;
 
   efficiencyError: string = null;
+  marginError: string = null;
   constructor(private psatService: PsatService) { }
 
   ngOnInit() {
@@ -244,6 +245,23 @@ export class MotorComponent implements OnInit {
     }
     else {
       this.efficiencyError = null;
+      return true;
+    }
+  }
+
+
+
+  checkMargin() {
+    if (this.psatForm.value.sizeMargin > 100) {
+      this.marginError = "Unrealistic size margin, shouldn't be greater then 100%";
+      return false;
+    }
+    else if (this.psatForm.value.sizeMargin < 0) {
+      this.marginError = "Shouldn't have negative size margin";
+      return false;
+    }
+    else {
+      this.marginError = null;
       return true;
     }
   }
