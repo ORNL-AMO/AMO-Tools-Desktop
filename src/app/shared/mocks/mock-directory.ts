@@ -275,6 +275,19 @@ export const MockDirectory: Directory = {
               powerFactor: .85,
               operatingTime: 100,
             }
+          ],
+          energyInput: [
+            {
+              naturalGasHeatInput: 50,
+              naturalGasFlow: 0,
+              measuredOxygenFlow: 6500,
+              coalCarbonInjection: 3300,
+              coalHeatingValue: 9000,
+              electrodeUse: 500,
+              electrodeHeatingValue: 12000,
+              otherFuels: 20,
+              electricityInput: 18000
+            }
           ]
         },
         setupDone: true

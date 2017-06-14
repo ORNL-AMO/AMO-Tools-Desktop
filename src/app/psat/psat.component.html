@@ -75,6 +75,11 @@
     </div>
   </div>
 
+  <div class="tab-content" *ngIf="currentTab == 'explore-opportunities'">
+    <app-explore-opportunities></app-explore-opportunities>
+  </div>
+
+
   <div class="tab-content" *ngIf="currentTab == 'modify-conditions'">
     <app-modify-conditions [settings]="settings" [saveClicked]="saveClicked" [(psat)]="_psat" (saved)="save()"></app-modify-conditions>
   </div>

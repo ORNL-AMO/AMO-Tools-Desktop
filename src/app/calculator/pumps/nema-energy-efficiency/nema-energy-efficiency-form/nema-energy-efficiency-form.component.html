@@ -26,20 +26,22 @@
         <input type="number" min="1" step="any" class="form-control incrementor-input-field" id="motorRPM" formControlName="motorRPM" ngModel="{{nemaForm.value.motorRPM}}"
           onfocus="this.select();">
       </div>
-      </div>
+    </div>
 
-      <div class="form-group">
-        <label for="efficiencyClass">Efficiency Class</label>
-        <select class="form-control" id="efficiencyClass" formControlName="efficiencyClass" ngModel="{{nemaForm.value.efficiencyClass}}">
+    <div class="form-group">
+      <label for="efficiencyClass">Efficiency Class</label>
+      <select class="form-control" id="efficiencyClass" formControlName="efficiencyClass" ngModel="{{nemaForm.value.efficiencyClass}}">
               <option *ngFor="let efficiencyClass of efficiencyClasses" [ngValue]="efficiencyClass">{{efficiencyClass}}</option>
             </select>
-      </div>
+    </div>
 
-
-      <div class="form-group" *ngIf="nemaForm.value.efficiencyClass == 'Specified'">
-        <label for="efficiency">Efficiency</label>
-        <input type="number" min="0" step="any" class="form-control" id="efficiency" formControlName="efficiency" onfocus="this.select();">
+    <div class="form-group" *ngIf="nemaForm.value.efficiencyClass == 'Specified'">
+      <label for="efficiency">Efficiency</label>
+      <input type="number" min="0" step="any" max="100" class="form-control" id="efficiency" formControlName="efficiency" onfocus="this.select();"
+        [ngClass]="{'invalid': checkEfficiency() == false}">
       <span class="units">%</span>
-      </div>
-      </form>
+      <span class="alert-danger pull-right small" *ngIf="efficiencyError !== null">{{efficiencyError}}</span>
+    </div>
+  </form>
 </div>
+

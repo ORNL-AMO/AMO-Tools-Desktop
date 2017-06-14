@@ -1,41 +1,46 @@
 <form #lossForm [formGroup]="lossesForm">
-
-  <div class="form-group">
-    <label class="small" for="materialName">Material Name</label>
-    <select class="form-control" formControlName="materialName" id="materialName" (change)="startSavePolling()" (focus)="focusField('materialName')">
+  <div class="form-section">
+    <div class="form-group">
+      <label class="small" for="materialName">Material Name</label>
+      <select class="form-control" formControlName="materialName" id="materialName" (change)="startSavePolling()" (focus)="focusField('materialName')">
         <option>Material 1</option>
         <option>Material 2</option>
       </select>
-  </div>
+    </div>
 
-  <div class="form-group">
-    <label class="small" for="specificHeat">Specific Heat</label>
-    <input type="number" step="any" class="form-control" formControlName="specificHeat" id="specificHeat" onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('specificHeat')">
-    <span class="units">Btu/(lb-&#8457;)</span>
-  </div>
+    <div class="form-group">
+      <label class="small" for="specificHeat">Specific Heat</label>
+      <input type="number" step="any" class="form-control" formControlName="specificHeat" id="specificHeat" onfocus="this.select();" (input)="startSavePolling()"
+        (focus)="focusField('specificHeat')">
+      <span class="units">Btu/(lb-&#8457;)</span>
+    </div>
 
-  <div class="form-group">
-    <label class="small" for="feedRate">Fixture Weight feed rate</label>
-    <input type="number" step="any" class="form-control" formControlName="feedRate" id="feedRate" onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('feedRate')">
-    <span class="units">lb/hr</span>
-  </div>
+    <div class="form-group">
+      <label class="small" for="feedRate">Fixture Weight feed rate</label>
+      <input type="number" step="any" class="form-control" formControlName="feedRate" id="feedRate" onfocus="this.select();" (input)="startSavePolling()"
+        (focus)="focusField('feedRate')">
+      <span class="units">lb/hr</span>
+    </div>
 
-  <div class="form-group">
-    <label class="small" for="initialTemp">Initial Temperature</label>
-    <input type="number" step="any" class="form-control" formControlName="initialTemp" id="initialTemp" onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('initialTemp')">
-    <span class="units">&#8457;</span>
-  </div>
+    <div class="form-group">
+      <label class="small" for="initialTemp">Initial Temperature</label>
+      <input type="number" step="any" class="form-control" formControlName="initialTemp" id="initialTemp" onfocus="this.select();" (input)="startSavePolling()"
+        (focus)="focusField('initialTemp')">
+      <span class="units">&#8457;</span>
+    </div>
 
-  <div class="form-group">
-    <label class="small" for="finalTemp">Final Temperature</label>
-    <input type="number" step="any" class="form-control" formControlName="finalTemp" id="finalTemp" onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('finalTemp')">
-    <span class="units">&#8457;</span>
-  </div>
+    <div class="form-group">
+      <label class="small" for="finalTemp">Final Temperature</label>
+      <input type="number" step="any" class="form-control" formControlName="finalTemp" id="finalTemp" onfocus="this.select();" (input)="startSavePolling()"
+        (focus)="focusField('finalTemp')">
+      <span class="units">&#8457;</span>
+    </div>
 
-  <div class="form-group">
-    <label class="small" for="correctionFactor">Correction Factor</label>
-    <input type="number" step="any" class="form-control" formControlName="correctionFactor" id="correctionFactor" onfocus="this.select();" (input)="startSavePolling()"
-      (focus)="focusField('correctionFactor')">
+    <div class="form-group">
+      <label class="small" for="correctionFactor">Correction Factor</label>
+      <input type="number" step="any" class="form-control" formControlName="correctionFactor" id="correctionFactor" onfocus="this.select();"
+        (input)="startSavePolling()" (focus)="focusField('correctionFactor')">
+    </div>
   </div>
-
 </form>
+

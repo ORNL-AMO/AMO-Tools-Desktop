@@ -1,26 +1,30 @@
 <form #lossForm [formGroup]="lossesForm">
+  <div class="form-section">
+    <div class="form-group">
+      <label class="small" for="liquidFlow">Liquid Flow</label>
+      <input type="number" class="form-control" formControlName="liquidFlow" id="liquidFlow" onfocus="this.select();" (input)="startSavePolling()"
+        (focus)="focusField('liquidFlow')">
+      <span class="units">gal/min</span>
+    </div>
 
-  <div class="form-group">
-    <label class="small" for="liquidFlow">Liquid Flow</label>
-    <input type="number" step="any" class="form-control" formControlName="liquidFlow" id="liquidFlow" onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('liquidFlow')">
-     <span class="units">gal/min</span>
-  </div>
+    <div class="form-group">
+      <label class="small" for="inletTemp">Inlet Temperature</label>
+      <input type="number" step="any" class="form-control" formControlName="inletTemp" id="inletTemp" onfocus="this.select();" (input)="startSavePolling()"
+        (focus)="focusField('inletTemp')">
+      <span class="units">&#8457;</span>
+    </div>
 
-  <div class="form-group">
-    <label class="small" for="inletTemp">Inlet Temperature</label>
-    <input type="number" step="any" class="form-control" formControlName="inletTemp" id="inletTemp" onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('inletTemp')">
-     <span class="units">&#8457;</span>
-  </div>
+    <div class="form-group">
+      <label class="small" for="outletTemp">Outlet Temperature</label>
+      <input type="number" step="any" class="form-control" formControlName="outletTemp" id="outletTemp" onfocus="this.select();" (input)="startSavePolling()"
+        (focus)="focusField('outletTemp')">
+      <span class="units">&#8457;</span>
+    </div>
 
-  <div class="form-group">
-    <label class="small" for="outletTemp">Outlet Temperature</label>
-    <input type="number" step="any" class="form-control" formControlName="outletTemp" id="outletTemp" onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('outletTemp')">
-     <span class="units">&#8457;</span>
-  </div>
-
-  <div class="form-group">
-    <label class="small" for="correctionFactor">Correction Factor</label>
-    <input type="number" step="any" class="form-control" formControlName="correctionFactor" id="correctionFactor" onfocus="this.select();" (input)="startSavePolling()"
-      (focus)="focusField('correctionFactor')">
+    <div class="form-group">
+      <label class="small" for="correctionFactor">Correction Factor</label>
+      <input type="number" step="any" class="form-control" formControlName="correctionFactor" id="correctionFactor" onfocus="this.select();"
+        (input)="startSavePolling()" (focus)="focusField('correctionFactor')">
+    </div>
   </div>
 </form>

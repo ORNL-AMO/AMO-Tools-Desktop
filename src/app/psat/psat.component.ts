@@ -27,6 +27,7 @@ export class PsatComponent implements OnInit {
   //TODO update tabs
   tabs: Array<string> = [
     'system-setup',
+  //  'explore-opportunities',
     'modify-conditions',
     'system-curve',
     'achievable-efficiency',

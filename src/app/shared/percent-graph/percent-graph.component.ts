@@ -95,6 +95,8 @@ export class PercentGraphComponent implements OnInit {
     this.doughnutChartLabels = [this.valueDescription, 'Potential']
     if (this.value < 100) {
       this.potential = 100 - this.value;
+    }else{
+      this.potential = 0;
     }
     this.doughnutChartData = [this.value, this.potential];
     if (this.value >= 70 && this.value <= 100) {

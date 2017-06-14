@@ -587,6 +587,10 @@ Sidebar
   background-color: #eee;
 }
 
+.dashboard-content .dashboard-page{
+  height: 100%;
+  overflow: scroll;
+}
 
 .doe-logo {
   width: 100%;
@@ -680,6 +684,7 @@ Content Container
   border: #ddd solid 1px;
   border-radius: 4px;
   margin-top: 40px;
+  margin-bottom: 40px;
   -webkit-box-shadow: 0px 1px 8px 0px rgba(0,0,0,0.07);
   -moz-box-shadow: 0px 1px 8px 0px rgba(0,0,0,0.07);
   box-shadow: 0px 1px 8px 0px rgba(0,0,0,0.07);
@@ -1256,6 +1261,11 @@ Modify Conditions
     .modify-conditions .no-data {
       width: 35%;
     }
+
+    .no-data-phast{
+      width: 100% !important;
+    }
+
     .modify-conditions app-help-panel  {
       width: 30%;
     }
@@ -1419,6 +1429,15 @@ Help Panel Cards
 /*
 Reporting
 ========================================== */
+.assessment-report h3 {
+  font-size: 18px;
+  color: #0e0e0e;
+  font-weight: 500;
+  text-transform: uppercase;
+  margin-top: 30px;
+  background: #efefef;
+  padding: 20px;
+}
 .report-header {
   padding: 22px 0;
 }
@@ -1432,6 +1451,21 @@ Reporting
   .report-header .btn {
     padding: 10px 18px;
       font-size: 13px;
+  }
+
+.report-data dl {
+  text-align: center;
+  margin-top: 10px;
+}
+  .report-data dt {
+    font-size: 14px;
+    text-transform: uppercase;
+    font-weight: 100;
+  }
+  .report-data dd {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 0;
   }
 
 .report-summary {
@@ -1527,7 +1561,7 @@ Reporting
 }
 
 .report-data .table td, .report-data .table th {
-  font-size: 0.75rem;
+  font-size: 13px;
   padding: 4px;
 }
 .report-data .table tbody tr:nth-child(even){
@@ -1542,17 +1576,20 @@ Reporting
   border-color: #333;
 
 }
-.input-data h3 {
-  font-size: 1rem;
-  color: #6d6d6d;
-  font-weight: 100;
-  text-transform: uppercase;
-  margin-top: 30px;
-}
-.results {
+.charts {
   display: -webkit-flex;
   display: flex;
+  margin-bottom: 20px;
 }
+  .chart-summary {
+    width: 192px;
+  }
+  .chart-container .value {
+    font-weight: bold;
+    font-size: 28px;
+    margin-top: 62.5px;
+    margin-left: 73px;
+  }
 
 
 

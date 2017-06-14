@@ -1,6 +1,8 @@
 import { Component, OnInit, Input, SimpleChanges, Output, EventEmitter } from '@angular/core';
 import { PHAST, Losses, Modification } from '../../shared/models/phast';
 import { Settings } from '../../shared/models/settings';
+import * as _ from 'lodash';
+import { ModalDirective } from 'ngx-bootstrap';
 
 @Component({
   selector: 'app-losses',
@@ -27,6 +29,8 @@ export class LossesComponent implements OnInit {
   addLossToggle: boolean = false;
   isFirstChange: boolean = true;
   showNotes: boolean = false;
+  editModification: Modification;
+  showEditModification: boolean = false;
   lossesStates: any = {
     wallLosses: {
       numLosses: 0,
@@ -75,14 +79,24 @@ export class LossesComponent implements OnInit {
     auxiliaryPowerLosses: {
       numLosses: 0,
       saved: true
+    },
+    energyInput: {
+      numLosses: 0,
+      saved: true
     }
   }
+
+  showSetupDialog: boolean;
+  isLossesSetup: boolean;
   constructor() { }
 
   ngOnInit() {
     this._modifications = new Array<Modification>();
     if (!this.phast.losses) {
-      this.phast.losses = new Array<Losses>();
+      //initialize losses
+      this.phast.losses = {};
+      //show setup dialog div
+      this.showSetupDialog = true;
     }
     if (this.phast.modifications) {
       this._modifications = (JSON.parse(JSON.stringify(this.phast.modifications)));
@@ -105,19 +119,21 @@ export class LossesComponent implements OnInit {
   changeField($event) {
     this.currentField = $event;
   }
-
-
   saveModifications() {
     if (this._modifications) {
       this.phast.modifications = (JSON.parse(JSON.stringify(this._modifications)));
       this.saved.emit(true);
+      this.showEditModification = false;
+      this.editModification = null;
     }
   }
 
   addModification() {
-    this._modifications.unshift({
-      name: 'Modification ' + (this._modifications.length + 1),
-      losses: (JSON.parse(JSON.stringify(this.phast.losses))),
+    let tmpModification: Modification = {
+      phast: {
+        losses: {},
+        name: ''
+      },
       notes: {
         chargeNotes: '',
         wallNotes: '',
@@ -132,13 +148,28 @@ export class LossesComponent implements OnInit {
         slagNotes: '',
         auxiliaryPowerNotes: ''
       }
-    });
+    }
+    tmpModification.phast.losses = (JSON.parse(JSON.stringify(this.phast.losses)));
+    tmpModification.phast.name = 'Modification ' + (this._modifications.length + 1);
+    console.log(tmpModification);
+    this._modifications.unshift(tmpModification);
     this.modificationIndex = this._modifications.length - 1;
     this.modificationSelected = true;
     this.baselineSelected = false;
   }
 
+  deleteModification() {
+    this.modificationIndex = 0;
+    _.remove(this._modifications, (mod) => {
+      return mod.phast.name == this.editModification.phast.name;
+    });
+    this.showEditModification = false;
+    this.editModification = null;
+    this.saveModifications();
+  }
+
   toggleDropdown() {
+    this.showEditModification = false;
     this.isDropdownOpen = !this.isDropdownOpen;
     this.showNotes = false;
   }
@@ -176,4 +207,17 @@ export class LossesComponent implements OnInit {
     }
   }
 
+  dispEditModification(modification: Modification) {
+    this.editModification = modification;
+    this.showEditModification = true;
+  }
+
+  hideSetupDialog() {
+    this.showSetupDialog = false;
+  }
+
+  lossesSetup() {
+    this.saved.emit(true);
+    this.isLossesSetup = true;
+  }
 }

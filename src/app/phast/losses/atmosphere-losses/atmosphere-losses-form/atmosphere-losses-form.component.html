@@ -1,38 +1,45 @@
 <form #lossForm [formGroup]="atmosphereLossForm">
+  <div class="form-section">
+    <div class="form-group">
+      <label class="small" for="atmosphereGas">Atmosphere Gas</label>
+      <input type="text" class="form-control" formControlName="atmosphereGas" id="atmosphereGas" onfocus="this.select();" (input)="startSavePolling()"
+        (focus)="focusField('atmosphereGas')">
+    </div>
 
-  <div class="form-group">
-    <label class="small" for="atmosphereGas">Atmosphere Gas</label>
-    <input type="text" class="form-control" formControlName="atmosphereGas" id="atmosphereGas" onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('atmosphereGas')">
-  </div>
+    <div class="form-group">
+      <label class="small" for="specificHeat">Specific heat of gas</label>
+      <input type="number" class="form-control" formControlName="specificHeat" id="specificHeat" onfocus="this.select();" (input)="startSavePolling()"
+        (focus)="focusField('specificHeat')">
+      <span class="units">Btu/(SCF-&#8457;)</span>
+    </div>
 
-  <div class="form-group">
-    <label class="small" for="specificHeat">Specific heat of gas</label>
-    <input type="number" step="any"  class="form-control" formControlName="specificHeat" id="specificHeat" onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('specificHeat')">
-    <span class="units">Btu/(SCF-&#8457;)</span>
-  </div>
 
-  <div class="form-group">
-    <label class="small" for="inletTemp">Initial temperature</label>
-    <input type="number" step="any" class="form-control" formControlName="inletTemp" id="inletTemp" onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('inletTemp')">
-    <span class="units">&#8457;</span>
-  </div>
+    <div class="form-group">
+      <label class="small" for="inletTemp">Initial temperature</label>
+      <input type="number" step="any" class="form-control" formControlName="inletTemp" id="inletTemp" onfocus="this.select();" (input)="startSavePolling()"
+        (focus)="focusField('inletTemp')">
+      <span class="units">&#8457;</span>
+    </div>
 
-  <div class="form-group">
-    <label class="small" for="outletTemp">Final temperature</label>
-    <input type="number" step="any" class="form-control" formControlName="outletTemp" id="outletTemp" onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('outletTemp')">
-        <span class="units">&#8457;</span>
-  </div>
+    <div class="form-group">
+      <label class="small" for="outletTemp">Final temperature</label>
+      <input type="number" step="any" class="form-control" formControlName="outletTemp" id="outletTemp" onfocus="this.select();" (input)="startSavePolling()"
+        (focus)="focusField('outletTemp')">
+      <span class="units">&#8457;</span>
+    </div>
 
-  <div class="form-group">
-    <label class="small" for="flowRate">Flow Rate</label>
-    <input type="number" step="any" class="form-control" formControlName="flowRate" id="flowRate" onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('flowRate')">
+    <div class="form-group">
+      <label class="small" for="flowRate">Flow Rate</label>
+      <input type="number" step="any" class="form-control" formControlName="flowRate" id="flowRate" onfocus="this.select();" (input)="startSavePolling()"
+        (focus)="focusField('flowRate')">
       <span class="units">SCF/hr</span>
-  </div>
+    </div>
 
-  <div class="form-group">
-    <label class="small" for="correctionFactor">Correction Factor</label>
-    <input type="number" step="any" class="form-control" formControlName="correctionFactor" id="correctionFactor" onfocus="this.select();" (input)="startSavePolling()"
-      (focus)="focusField('correctionFactor')">
+    <div class="form-group">
+      <label class="small" for="correctionFactor">Correction Factor</label>
+      <input type="number" step="any" class="form-control" formControlName="correctionFactor" id="correctionFactor" onfocus="this.select();"
+        (input)="startSavePolling()" (focus)="focusField('correctionFactor')">
+    </div>
   </div>
-
 </form>
+
