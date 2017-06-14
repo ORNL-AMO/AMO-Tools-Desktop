@@ -31,7 +31,7 @@ export class MotorPerformanceFormComponent implements OnInit {
     // When the user chooses specified, they need a place to put the efficiency value
     'Specified'
   ];
-
+  efficiencyError: string=null;
   tmpFrequency: string;
   tmpHorsePower: string;
   tmpMotorRpm: number;
@@ -92,5 +92,22 @@ export class MotorPerformanceFormComponent implements OnInit {
       }
     }
   }
-
+  checkEfficiency() {
+    if (this.tmpEfficiency > 100) {
+      this.efficiencyError = "Unrealistic efficiency, shouldn't be greater then 100%";
+      return false;
+    }
+    else if (this.tmpEfficiency == 0) {
+      this.efficiencyError = "Cannot have 0% efficiency";
+      return false;
+    }
+    else if (this.tmpEfficiency < 0) {
+      this.efficiencyError = "Cannot have negative efficiency";
+      return false;
+    }
+    else {
+      this.efficiencyError = null;
+      return true;
+    }
+  }
 }
