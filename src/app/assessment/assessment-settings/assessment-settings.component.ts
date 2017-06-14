@@ -4,7 +4,7 @@ import { Settings } from '../../shared/models/settings';
 import { SettingsService } from '../../settings/settings.service';
 import { IndexedDbService } from '../../indexedDb/indexed-db.service';
 import { ToastyService, ToastyConfig, ToastOptions, ToastData } from 'ng2-toasty';
-import { ModalDirective } from 'ng2-bootstrap';
+import { ModalDirective } from 'ngx-bootstrap';
 import { Assessment } from '../../shared/models/assessment';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
 import { PSAT } from '../../shared/models/psat';
@@ -96,6 +96,7 @@ export class AssessmentSettingsComponent implements OnInit {
   }
 
   saveSettings() {
+    console.log('clicked');
     if (!this.isDirectorySettings) {
       //TODO: logic for flow, creating settings inside populated directory
       this.createSettings();
@@ -219,7 +220,6 @@ export class AssessmentSettingsComponent implements OnInit {
         this.indexedDbService.getDirectorySettings(dir.id).then(
           results => {
             if (results.length == 0) {
-              debugger
               this.updateAssessments(dir, oldSettings, newSettings);
             }
           }
@@ -278,7 +278,8 @@ export class AssessmentSettingsComponent implements OnInit {
       oldSettings.language != newSettings.language ||
       oldSettings.powerMeasurement != newSettings.powerMeasurement ||
       oldSettings.pressureMeasurement != newSettings.pressureMeasurement ||
-      oldSettings.unitsOfMeasure != newSettings.unitsOfMeasure
+      oldSettings.unitsOfMeasure != newSettings.unitsOfMeasure || 
+      oldSettings.energySourceType != newSettings.energySourceType
     ) {
       return true;
     } else {

@@ -11,7 +11,7 @@ import { PhastModule } from '../phast/phast.module';
 import { PsatModule } from '../psat/psat.module';
 import { CalculatorModule } from '../calculator/calculator.module';
 import { DetailedReportModule } from '../detailed-report/detailed-report.module';
-import { ModalModule } from 'ng2-bootstrap';
+import { ModalModule } from 'ngx-bootstrap';
 import { autoUpdater } from 'electron-updater';
 
 import { CoreComponent } from './core.component';
@@ -24,7 +24,7 @@ import { SettingsModule } from '../settings/settings.module';
 import { IndexedDbModule } from '../indexedDb/indexedDb.module';
 
 import { JsonToCsvModule } from '../shared/json-to-csv/json-to-csv.module';
-
+import { ImportExportModule } from '../shared/import-export/import-export.module';
 import { SuiteDbModule } from '../suiteDb/suiteDb.module';
 
 
@@ -51,7 +51,7 @@ import { TutorialsComponent } from '../tutorials/tutorials.component';
     PhastModule,
     CalculatorModule,
     DetailedReportModule,
-    ModalModule.forRoot(),
+    ModalModule,
     NgxElectronModule,
     IndexedDbModule,
     FormsModule,
@@ -59,7 +59,8 @@ import { TutorialsComponent } from '../tutorials/tutorials.component';
     SettingsModule,
     ToastyModule,
     JsonToCsvModule,
-    SuiteDbModule
+    SuiteDbModule,
+    ImportExportModule
   ],
   providers: [
     AssessmentService

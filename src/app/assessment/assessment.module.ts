@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { SharedModule } from '../shared/shared.module';
-import { ModalModule } from 'ng2-bootstrap';
+import { ModalModule } from 'ngx-bootstrap';
 
 import { AssessmentComponent } from './assessment.component';
 import { AssessmentDashboardComponent } from './assessment-dashboard/assessment-dashboard.component';
@@ -21,6 +21,8 @@ import { AssessmentSettingsComponent } from './assessment-settings/assessment-se
 import { IndexedDbModule } from '../indexedDb/indexedDb.module';
 import { SettingsModule } from '../settings/settings.module';
 import { ToastyModule } from 'ng2-toasty';
+
+import { ImportExportModule } from '../shared/import-export/import-export.module';
 
 @NgModule({
   declarations: [
@@ -52,7 +54,8 @@ import { ToastyModule } from 'ng2-toasty';
     ModalModule,
     IndexedDbModule,
     SettingsModule,
-    ToastyModule.forRoot()
+    ToastyModule.forRoot(),
+    ImportExportModule
   ],
   providers: []
 })

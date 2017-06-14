@@ -1,19 +1,34 @@
-<div class="row" *ngIf="settings" [ngClass]="{'align-items-center': !inPsat}">
-  <div class="col-3 calc-form">
-    <div class="card">
-      <div class="card-block">
-        <app-motor-performance-form [(performanceForm)]="performanceForm" [settings]="settings" (calculate)="calculate()"></app-motor-performance-form>
-      </div>
-    </div>
+<div class="row" *ngIf="settings" [ngClass]="{'standalone-calc': !inPsat}">
+
+
+  <div class="col-md-2 col-sm-12 calc-form">
+    <app-motor-performance-form [(performanceForm)]="performanceForm" [settings]="settings" (calculate)="calculate()"></app-motor-performance-form>
   </div>
-  <div *ngIf="!inPsat" id="motorPerformanceGraph" class="col-lg-9 col-md-7 col-sm-6 col-xs-5 calc-graph">
+
+
+  <div *ngIf="!inPsat" id="motorPerformanceGraph" class="col-md-7 col-sm-12 calc-graph" style="z-index: +1">
     <app-motor-performance-graph [performanceForm]="performanceForm" [settings]="settings" [toggleCalculate]="toggleCalculate"></app-motor-performance-graph>
   </div>
-  <div *ngIf="inPsat" class="col-lg-9 col-md-7 col-sm-6 col-xs-5 calc-graph">
-    <div class="row justify-content-center align-items-center">
-      <div id="motorPerformanceGraph" class="col-lg-10 col-md-11 col-sm-12">
-        <app-motor-performance-graph [performanceForm]="performanceForm" [settings]="settings" [toggleCalculate]="toggleCalculate"></app-motor-performance-graph>
-      </div>
+
+  <div *ngIf="inPsat" class="col-md-7 col-sm-12 calc-graph" style="z-index: +1">
+    <div id="motorPerformanceGraph">
+      <app-motor-performance-graph [performanceForm]="performanceForm" [settings]="settings" [toggleCalculate]="toggleCalculate"></app-motor-performance-graph>
+    </div>
+  </div>
+
+
+  <div class="col-md-3 col-sm-12 calc-help">
+    <div class="calc-help">
+
+      <h3>Motor Performance Help</h3>
+      <p>
+        Plots current, efficiency, power factor vs motor shaft load for a given motor description
+      </p>
+      <p>
+        <u>Power factor-</u> The ratio of the real electrical power used to do work to the apparent power in the circuit.
+        A higher power factor signifies that the motor consumes power effectively.
+      </p>
+
     </div>
   </div>
 </div>

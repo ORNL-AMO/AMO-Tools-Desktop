@@ -16,6 +16,24 @@ input::-webkit-inner-spin-button {
     -webkit-appearance: none;
     margin: 0;
 }
+.inline dt {
+  float: left;
+  margin-right: 10%;
+  max-width: 50%;
+  font-weight: bold;
+}
+
+.inline dd {
+  text-align: right;
+  margin-left: 55%;
+  margin-bottom: .5em;
+}
+
+.inline dd::after {
+  content: " ";
+  display: block;
+  clear: left;
+} 
 
 /* 
 Typography
@@ -242,12 +260,13 @@ select.form-control:not([size]):not([multiple]) {
   right: 5px;
   font-size: 14px;
   color: #a9a9a9;
+  pointer-events: none;
 }
 
 /*
 Pump Fluid CSS
 =============================================== */
-
+/**/
 
 
 
@@ -276,15 +295,13 @@ In-Assessment Calculators
   .tab-content .calc-form .form-group .form-control {
     width: 40%;
   }
-.calc-graph {
-  background: #efefef;
-  text-align: center;
-  padding-top: 30px;
+.calc-help {
+  margin-top: 10px;
+  padding-left: 20px; 
 }
-  .calc-graph svg {
-    -webkit-box-shadow: 0px 1px 5px 0px rgba(0,0,0,0.6);
-    -moz-box-shadow: 0px 1px 5px 0px rgba(0,0,0,0.6);
-    box-shadow: 0px 1px 5px 0px rgba(0,0,0,0.6);
+  .calc-help h3 {
+    font-size: 20px;
+    font-weight: bold;
   }
 
 
@@ -351,7 +368,6 @@ Data Tables
 .table-header {
   margin-top: 20px;
   padding: 10px 15px;
-  background: #fff;
   border-bottom: #ddd solid 1px;
   vertical-align: middle;
 }
@@ -385,10 +401,12 @@ Assessments: List View
 .list-row {
   padding: 14px;
   background: #fff;
-  border-bottom: #d6d6d6 dashed 1px;
+  border-color: #d6d6d6;
+  border-style: solid;
+  border-width: 0 1px 1px;
 }
   .list-row .actions {
-    margin-left: 90px;
+    margin-left: 29px;
     font-size: 14px;
   }
     .list-row .actions a {
@@ -560,6 +578,7 @@ Sidebar
   -o-border-image:      -o-linear-gradient(#949494, rgba(0, 0, 0, 0)) 1 100%;
   border-image:         linear-gradient(to bottom, #949494, rgba(0, 0, 0, 0)) 1 100%;
   padding: 0;
+  overflow-y: scroll;
 }
 
 .dashboard-content{
@@ -721,6 +740,14 @@ Calculators
   }
 
 
+.calculator .secondary-header {
+  padding: 20px;
+  margin: 20px 0;
+  border-color: #ddd;
+  border-style: solid;
+  border-width: 1px 0 1px;
+  background: #fafafa;
+}
 
 
 .calculator h2 {
@@ -764,6 +791,43 @@ Calculators
   top: 27px;
   right: 13%;
 }
+
+
+/* Pump Head 
+================================================ */
+.pump-head select.form-control:not([size]):not([multiple]) {
+  width: auto;
+  height: 42px;
+  margin-bottom: 20px;
+}
+.units-of-measure {
+  margin-bottom: 30px;
+}
+  .units-of-measure a {
+    display: inline-block;
+    margin-left: 6px;
+  }
+.pump-head .tabs.primary {
+  background: transparent;
+}
+.pump-head .tabs.primary a {
+  border-top: #c8c8c8 solid 1px;
+}
+.pump-head .tab-content {
+  background: #fff;
+  border-color: #c8c8c8;
+  border-style: solid;
+  border-width: 0 1px 1px;
+  padding: 20px;
+}
+.pump-head dl {
+  margin-bottom: 0;
+}
+.pump-head dt:last-of-type, .pump-head dd:last-of-type {
+  font-size: 22px;
+  font-weight: bold;
+}
+
 
 
 
@@ -832,7 +896,7 @@ Banner
   text-decoration: none;
   cursor: pointer;
 }
-.banner.psat .title {
+/*.banner.psat .title {
   color: #fff;
   padding-left: 58px;
   background: url('../assets/images/assessment-icon-psat.png') no-repeat 14px;
@@ -843,7 +907,7 @@ Banner
   padding-left: 58px;
   background: url('../assets/images/assessment-icon-phast.png') no-repeat 14px;
   background-size: 31px;
-}
+}*/
 
 .banner-border{
   border-bottom: solid;
@@ -1195,6 +1259,9 @@ Modify Conditions
     .modify-conditions app-help-panel  {
       width: 30%;
     }
+    .modify-conditions app-losses-help  {
+      width: 30%;
+    }
 
 .modifications-list {
   background: #f1f1f1;
@@ -1349,6 +1416,173 @@ Help Panel Cards
 
 
 
+/*
+Reporting
+========================================== */
+.assessment-report h3 {
+  font-size: 18px;
+  color: #0e0e0e;
+  font-weight: 500;
+  text-transform: uppercase;
+  margin-top: 30px;
+  background: #efefef;
+  padding: 20px;
+}
+.report-header {
+  padding: 22px 0;
+}
+  .report-header h1 {
+    font-size: 1.4rem;
+    font-weight: 100;
+    line-height: 1.4;
+    margin-bottom: 0;
+    margin-right: 20px;
+  }
+  .report-header .btn {
+    padding: 10px 18px;
+      font-size: 13px;
+  }
+
+.report-data dl {
+  text-align: center;
+  margin-top: 10px;
+}
+  .report-data dt {
+    font-size: 14px;
+    text-transform: uppercase;
+    font-weight: 100;
+  }
+  .report-data dd {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 0;
+  }
+
+.report-summary {
+  background: #2980b9;
+  border-color: #000B13;
+  border-style: solid;
+  border-width: 1px 0;
+  color: #fff;
+  padding: 30px 0;
+}
+  .report-summary h2 {
+    font-size: 1.25rem;
+    margin-bottom: 1.25rem;
+  }
+
+
+
+  .rollups {
+    display: -webkit-flex;
+    display: flex;
+  }
+
+  .rollups h3 {
+    line-height: 0.5;
+    font-size: 1.15rem;
+    text-align: center;
+    margin-bottom: 1.5rem;
+  }
+  .rollups h3 span {
+    display: inline-block;
+    position: relative;  
+  }
+  .rollups h3 span:before,
+  .rollups h3 span:after {
+    content: "";
+    position: absolute;
+    height: 10px;
+    border-bottom: 1px solid rgba(255,255,255,0.5);
+    top: 0;
+    width: 100%;
+  }
+  .rollups h3 span:before {
+    right: 100%;
+    margin-right: 15px;
+  }
+  .rollups h3 span:after {
+    left: 100%;
+    margin-left: 15px;
+  }
+
+
+    .rollups .pumps {
+      width: 50%;
+      text-align: center;
+    }
+      .rollups .pumps h3:nth-child(2), .rollups .pumps h4 {
+        margin-bottom: 8px;
+      }
+      .rollups .pumps h3:nth-child(2) {
+        font-size: 1rem;
+      }
+      .rollups .pumps h4 {
+        font-size: 1.75rem;
+        font-weight: bold;
+      }
+      .rollups .pumps h5 {
+        text-transform: uppercase;
+        font-size: 0.65rem;
+        letter-spacing: 2px;
+      }
+
+.report-list-nav h5 {
+  font-size: 17px;
+  text-transform: uppercase;
+  color: #a5a5a5;
+  letter-spacing: 2px;
+}
+.report-list-nav ul {
+  margin: 0;
+  padding: 0;
+}
+.report-list-nav li {
+  list-style: none;
+  font-size: 15px;
+}
+  .report-list-nav li.active a {
+    font-weight: bold;
+    color: #333;
+  }
+
+.report-header h2 {
+  font-size: 1.35rem;
+}
+
+.report-data .table td, .report-data .table th {
+  font-size: 13px;
+  padding: 4px;
+}
+.report-data .table tbody tr:nth-child(even){
+  background: #f3f3f3;
+}
+.report-data .table tbody tr td {
+  border-color: transparent;
+  border-width: 1px 0;
+  border-style: solid;
+}
+.report-data .table tbody tr:hover td {
+  border-color: #333;
+
+}
+.charts {
+  display: -webkit-flex;
+  display: flex;
+  margin-bottom: 20px;
+}
+  .chart-summary {
+    width: 192px;
+  }
+  .chart-container .value {
+    font-weight: bold;
+    font-size: 28px;
+    margin-top: 62.5px;
+    margin-left: 73px;
+  }
+
+
+
 
 /*
 No Data Messaging
@@ -1439,4 +1673,11 @@ Toasty Overrides ================================= */
 
 .losses-empty{
   height:100%;
+}
+
+
+@media screen and (min-width: 768px) {
+  .rollups .pumps {
+    width: 25%;
+  }
 }

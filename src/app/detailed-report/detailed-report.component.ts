@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, HostListener } from '@angular/core';
 import { Assessment } from '../shared/models/assessment';
 import { PSAT } from '../shared/models/psat';
 import * as _ from 'lodash';
@@ -14,9 +14,14 @@ import { JsonToCsvService } from '../shared/json-to-csv/json-to-csv.service';
 })
 export class DetailedReportComponent implements OnInit {
   @Input()
-  assessments: Array<Assessment>;
+  selectedItems: Array<any>;
   @Output('emitCloseReport')
   emitCloseReport = new EventEmitter<boolean>();
+  @HostListener('window:scroll', ['$event']) onScrollEvent($event) {
+    this.checkVisibleSummary();
+    this.checkActiveAssessment();
+  }
+  assessments: Array<Assessment>;
 
   numAssessments: number;
   reportAssessments: Array<Assessment>;
@@ -25,8 +30,11 @@ export class DetailedReportComponent implements OnInit {
   pumpSavingsPotential: number;
 
   gatheringData: any;
+  gatheringData2: any;
   assessmentsGathered: boolean;
   exportReports: any;
+  isSummaryVisible: boolean = true;
+  focusedAssessment: Assessment;
   constructor(private indexedDbService: IndexedDbService, private psatService: PsatService, private windowRefService: WindowRefService, private jsonToCsvService: JsonToCsvService) { }
 
   ngOnInit() {
@@ -37,12 +45,15 @@ export class DetailedReportComponent implements OnInit {
   }
 
   ngOnChanges() {
-    // console.log('change');
+    this.assessments = new Array();
     if (this.gatheringData) {
       clearTimeout(this.gatheringData);
     }
 
     this.gatheringData = setTimeout(() => {
+      this.selectedItems.forEach(item => {
+        this.assessments.push(item.assessment);
+      })
       let tmpArr = this.assessments.filter(assessment => { return assessment.psat != undefined });
       this.numPsats = tmpArr.length;
       //used to make sure all assessments proccessed (gotten outputs)
@@ -51,9 +62,11 @@ export class DetailedReportComponent implements OnInit {
           this.getAssessmentSettingsThenResults(assessment);
         }
       });
-      this.assessmentsGathered = true;
-      console.log('done');
-    }, 1000)
+      this.gatheringData2 = setTimeout(() => {
+        this.focusedAssessment = this.reportAssessments[0];
+        this.assessmentsGathered = true;
+      }, 1000);
+    }, 500)
   }
 
   getAssessmentSettingsThenResults(assessment: Assessment) {
@@ -119,9 +132,10 @@ export class DetailedReportComponent implements OnInit {
     this.pumpSavingsPotential = _.sumBy(this.psats, 'outputs.existing.annual_savings_potential')
   }
 
-  selectAssessment(num: number) {
+  selectAssessment(assessment: Assessment) {
     let doc = this.windowRefService.getDoc();
-    let content = doc.getElementById(num);
+    let content = doc.getElementById(assessment.id);
+    this.focusedAssessment = assessment;
     content.scrollIntoView();
   }
 
@@ -148,6 +162,62 @@ export class DetailedReportComponent implements OnInit {
     // let originContent = doc.body.innerHTML;
     // doc.body.innerHTML = content;
     win.print();
-  //  doc.body.innerHTML = originContent;
+    //  doc.body.innerHTML = originContent;
+  }
+
+  checkVisibleSummary() {
+    let doc = this.windowRefService.getDoc();
+    let summaryDiv = doc.getElementById("reportSummary");
+
+    let window = this.windowRefService.nativeWindow;
+
+    let y = summaryDiv.offsetTop;
+    let height = summaryDiv.offsetHeight;
+
+    let maxHeight = y + height;
+    this.isSummaryVisible = (y < (window.pageYOffset + window.innerHeight)) && (maxHeight >= window.pageYOffset);
+  }
+
+  checkActiveAssessment() {
+    let doc = this.windowRefService.getDoc();
+    let window = this.windowRefService.nativeWindow;
+    let container = doc.getElementById('reportContainer');
+    let scrollAmount = (window.pageYOffset !== undefined) ? window.pageYOffset : (doc.documentElement || doc.body.parentNode || doc.body).scrollTop;
+    let activeSet: boolean = false;
+    let isFirstElement: boolean = true;
+    let firstAssessment = doc.getElementById(this.reportAssessments[0].id);
+    if (scrollAmount < (firstAssessment.clientHeight - 200)) {
+      this.focusedAssessment = this.reportAssessments[0];
+    } else {
+      let check = this.checkDistance(this.reportAssessments, scrollAmount);
+      if (check) {
+        this.focusedAssessment = check;
+      }
+    }
+  }
+
+  checkDistance(assessments: Assessment[], scrollAmount: number) {
+    let doc = this.windowRefService.getDoc();
+    let window = this.windowRefService.nativeWindow;
+    let activeSet: boolean = false;
+    let isFirstElement: boolean = true;
+    let closestAssessment;
+    assessments.forEach(assessment => {
+      if (!isFirstElement) {
+        if (!activeSet) {
+          let assessmentDiv = doc.getElementById(assessment.id);
+          if (assessmentDiv) {
+            let distanceScrolled = Math.abs(scrollAmount - assessmentDiv.offsetTop);
+            let fromBottom = Math.abs(scrollAmount - (assessmentDiv.offsetTop + assessmentDiv.clientHeight));
+            if (distanceScrolled > 0 && distanceScrolled < 200 || fromBottom > 0 && fromBottom < 200) {
+              closestAssessment = assessment;
+            }
+          }
+        }
+      } else {
+        isFirstElement = false;
+      }
+    })
+    return closestAssessment;
   }
 }

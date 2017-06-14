@@ -1,15 +1,21 @@
-<div class="report-summary">
+<div class="container-fluid">
+  
   <div class="row">
-    <div class="col-4">
-      <h2 style="color: white">SUMMARY</h2>
+    <div class="col-md-10 offset-md-1">
+      <h2 style="color: white">Summary</h2>
     </div>
-  </div>
+  </div><!-- End .row -->
+  
   <div class="row">
-    <div class="col-4" style="text-align: center">
-      <h3>------Pumps------</h3>
-      {{numPsats}} pumps with a
-      <h4>{{pumpSavingsPotential| currency:'USD':true:'4.2-2'}}</h4>
-      Annual Savings Potential
+    <div class="rollups col-md-10 offset-md-1">
+      <div class="pumps">
+        <h3><span>Pumps</span></h3>
+        <h3 *ngIf="numPsats == 1">{{numPsats}} pump with a</h3>
+        <h3 *ngIf="numPsats != 1">{{numPsats}} pumps with a</h3>
+        <h4>{{pumpSavingsPotential| currency:'USD':true:'4.2-2'}}</h4>
+        <h5>Annual Savings Potential</h5>
+      </div>
     </div>
-  </div>
-</div>
+  </div><!-- End .row -->
+
+</div><!-- End .container-fluid -->

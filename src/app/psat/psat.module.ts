@@ -5,7 +5,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SharedModule } from '../shared/shared.module';
 import { ChartsModule } from 'ng2-charts';
 import { PumpsModule } from '../calculator/pumps/pumps.module';
-import { ModalModule } from 'ng2-bootstrap';
+import { ModalModule } from 'ngx-bootstrap';
 import { IndexedDbModule } from '../indexedDb/indexedDb.module';
 import { JsonToCsvModule } from '../shared/json-to-csv/json-to-csv.module';
 
@@ -39,6 +39,7 @@ import { ModifyConditionsNotesComponent } from './modify-conditions/modify-condi
 import { SettingsModule } from '../settings/settings.module';
 import { ToastyModule } from 'ng2-toasty';
 import { EditConditionPropertiesComponent } from './modify-conditions/edit-condition-properties/edit-condition-properties.component';
+import { ExploreOpportunitiesComponent } from './explore-opportunities/explore-opportunities.component';
 
 @NgModule({
   declarations: [
@@ -65,7 +66,8 @@ import { EditConditionPropertiesComponent } from './modify-conditions/edit-condi
     ModifyConditionsHelpComponent,
     ModifyConditionsTabsComponent,
     ModifyConditionsNotesComponent,
-    EditConditionPropertiesComponent
+    EditConditionPropertiesComponent,
+    ExploreOpportunitiesComponent
   ],
   exports: [
     PsatReportComponent
@@ -78,7 +80,7 @@ import { EditConditionPropertiesComponent } from './modify-conditions/edit-condi
     SharedModule,
     ChartsModule,
     PumpsModule,
-    ModalModule,
+    ModalModule.forRoot(),
     IndexedDbModule,
     SettingsModule,
     ToastyModule,

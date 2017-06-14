@@ -257,6 +257,24 @@ export const MockDirectory: Directory = {
                 nitrogen: 1.5
               }
             }
+          ],
+          slagLosses: [
+            {
+              weight: 3,
+              inletTemperature: 500,
+              outletTemperature: 550,
+              specificHeat: 0.2479,
+              correctionFactor: 1.0
+            }
+          ],
+          auxiliaryPowerLosses: [
+            {
+              motorPhase: 3,
+              supplyVoltage: 460,
+              avgCurrent: 19,
+              powerFactor: .85,
+              operatingTime: 100,
+            }
           ]
         },
         setupDone: true

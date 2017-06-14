@@ -4,7 +4,7 @@ import { PSAT } from '../../shared/models/psat';
 import { SettingsService } from '../../settings/settings.service';
 import { Settings } from '../../shared/models/settings';
 import { IndexedDbService } from '../../indexedDb/indexed-db.service';
-import { ModalDirective } from 'ng2-bootstrap';
+import { ModalDirective } from 'ngx-bootstrap';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
 @Component({
   selector: 'app-system-basics',
@@ -84,8 +84,6 @@ export class SystemBasicsComponent implements OnInit {
     if (bool == true) {
       if (this.psat.inputs.flow_rate) {
         this.psat.inputs.flow_rate = this.convertUnitsService.value(this.psat.inputs.flow_rate).from(this.settings.flowMeasurement).to(this.newSettings.flowMeasurement);
-        console.log(this.psat.inputs.flow_rate);
-        debugger
       }
       if (this.psat.inputs.head) {
         this.psat.inputs.head = this.convertUnitsService.value(this.psat.inputs.head).from(this.settings.distanceMeasurement).to(this.newSettings.distanceMeasurement);
@@ -132,17 +130,6 @@ export class SystemBasicsComponent implements OnInit {
 
   hideSettingsModal() {
     this.settingsModal.hide();
-  }
-
-  getSettingsForm() {
-    this.indexedDbService.getAssessmentSettings(this.assessment.id).then(
-      results => {
-        if (results.length != 0) {
-          this.settings = results[0];
-          this.settingsForm = this.settingsService.getFormFromSettings(this.settings);
-        }
-      }
-    )
   }
 
   getClosest(num: number, arr: Array<number>) {

@@ -1,22 +1,60 @@
-<div class="row" *ngIf="settings" [ngClass]="{'align-items-center': !inPsat}">
-  <div class="col-lg-3 col-md-5 col-sm-6 col-xs-7 calc-form">
-    <div class="card">
-      <div class="card-block">
+
+<div class="row" *ngIf="settings" [ngClass]="{'standalone-calc': !inPsat}">
+
+
+  <div class="col-md-2 col-sm-12 calc-form">
         <app-system-curve-form [psat]="psat" [settings]="settings" [(pointOne)]="pointOne" [(pointTwo)]="pointTwo" [(curveConstants)]="curveConstants"
           (calculate)="calculateValues()" (calculateP1)="calculateP1Flow()" (calculateP2)="calculateP2Flow()"></app-system-curve-form>
-      </div>
-    </div>
   </div>
-  <div *ngIf="!inPsat" id="systemCurveGraph" class="col-lg-9 col-md-7 col-sm-6 col-xs-5 calc-graph">
+
+
+  <div *ngIf="!inPsat" id="systemCurveGraph" class="col-md-7 col-sm-12 calc-graph" style="z-index: +1">
     <app-system-curve-graph [lossCoefficient]="lossCoefficient" [settings]="settings" [staticHead]="staticHead" [pointOne]="pointOne"
       [pointTwo]="pointTwo" [curveConstants]="curveConstants"></app-system-curve-graph>
   </div>
-  <div *ngIf="inPsat" class="col-lg-9 col-md-7 col-sm-6 col-xs-5 calc-graph">
-    <div class="row justify-content-center align-items-center">
-      <div id="systemCurveGraph" class="col-lg-10 col-md-11 col-sm-12">
-        <app-system-curve-graph [lossCoefficient]="lossCoefficient" [settings]="settings" [staticHead]="staticHead" [pointOne]="pointOne"
+
+
+  <div *ngIf="inPsat" class="col-md-7 col-sm-12 calc-graph" style="z-index: +1">
+    <div id="systemCurveGraph">
+    	<app-system-curve-graph [lossCoefficient]="lossCoefficient" [settings]="settings" [staticHead]="staticHead" [pointOne]="pointOne"
           [pointTwo]="pointTwo" [curveConstants]="curveConstants"></app-system-curve-graph>
-      </div>
     </div>
   </div>
+
+
+  <div class="col-md-3 col-sm-12 calc-help">
+  	<div class="calc-help">
+	  	<h3>System Curve Help</h3>
+	  	<p>
+        A system-head curve is a graphical representation of the relationship between flow and
+      hydraulic losses in a given piping system. Since hydraulic losses are functions of rate of flow,
+      size and length of pipe, and size, number and type of fittings, each system has its own characteristic
+      curve and specific values.
+      </p>
+	  	<p>
+        <u>Curve basis</u><br>
+        H = H<sub>s</sub> + K'Q<sup>C</sup>     where<br>
+        H = Total Head<br>
+        H<sub>s</sub> = Static Head<br>
+        K' = Loss coefficient<br>
+        Q = Flow rate<br>
+        C = dynamic/friction loss exponent
+	  	</p>
+      <p>
+        Note 1: K' here applies to the volumetric flow rate, <u>not</u> the velocity head.
+      </p>
+      <p>
+        Note 2: This simple system method does not apply to complex distribution systems where flow is delivered
+      to multiple elevation or pressure systems.
+      </p>
+      <p>
+        Note 3: The specific gravity does not affect the system head curve, but does affect the fluid power, which is
+        directly proportional to the specific gravity.
+      </p>
+
+	</div>
+  </div>
+
+
+
 </div>

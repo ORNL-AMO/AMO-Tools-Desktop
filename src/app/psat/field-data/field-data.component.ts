@@ -1,5 +1,5 @@
 import { Component, OnInit, Output, EventEmitter, ViewChild, Input, SimpleChanges, ElementRef } from '@angular/core';
-import { ModalDirective } from 'ng2-bootstrap';
+import { ModalDirective } from 'ngx-bootstrap';
 import { PSAT } from '../../shared/models/psat';
 import { PsatService } from '../psat.service';
 import { Settings } from '../../shared/models/settings';
@@ -27,12 +27,15 @@ export class FieldDataComponent implements OnInit {
   selected: boolean;
   @Input()
   settings: Settings;
+  @Output('openHeadTool')
+  openHeadTool = new EventEmitter<boolean>();
+  @Output('closeHeadTool')
+  closeHeadTool = new EventEmitter<boolean>();
 
   counter: any;
 
   @ViewChild('formRef') formRef: ElementRef;
   elements: any;
-  @ViewChild('flowRatePopover') flowRatePopover: ElementRef;
 
   formValid: boolean;
   headToolResults: any = {
@@ -123,10 +126,14 @@ export class FieldDataComponent implements OnInit {
 
   @ViewChild('headToolModal') public headToolModal: ModalDirective;
   showHeadToolModal() {
-    this.headToolModal.show();
+    if (this.selected) {
+      this.openHeadTool.emit(true);
+      this.headToolModal.show();
+    }
   }
 
   hideHeadToolModal() {
+    this.closeHeadTool.emit(true);
     if (this.psatForm.value.head != this.psat.inputs.head) {
       this.psatForm.patchValue({
         head: this.psat.inputs.head
@@ -195,16 +202,16 @@ export class FieldDataComponent implements OnInit {
     }
   }
 
-  checkOpFraction(){
-    if(this.psatForm.value.operatingFraction > 1){
+  checkOpFraction() {
+    if (this.psatForm.value.operatingFraction > 1) {
       this.opFractionError = 'Operating fraction needs to be between 0 - 1';
       return false;
     }
-    else if(this.psatForm.value.operatingFraction < 0){
+    else if (this.psatForm.value.operatingFraction < 0) {
       this.opFractionError = "Cannot have negative operating fraction";
       return false;
     }
-    else{
+    else {
       this.opFractionError = null;
       return true;
     }

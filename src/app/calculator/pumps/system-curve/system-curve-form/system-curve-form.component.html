@@ -5,8 +5,9 @@
   </div>
   <div class="form-group">
     <label class="small" for="systemLossExponent">System Loss Exponent, C</label>
-    <input type="number" class="form-control" [(ngModel)]="tmpSystemLossExponent" id="systemLossExponent" (input)="checkInputs()"
-      onfocus="this.select();">
+    <input type="number" min="1" step="any" max="2.5" class="form-control" [(ngModel)]="tmpSystemLossExponent" id="systemLossExponent" (input)="checkInputs()"
+           onfocus="this.select();" [ngClass]="{'invalid': checkLossExponent() == false}">
+    <span class="alert-danger pull-right small" *ngIf="exponentInputError !== null">{{exponentInputError}}</span>
   </div>
 </div>
 

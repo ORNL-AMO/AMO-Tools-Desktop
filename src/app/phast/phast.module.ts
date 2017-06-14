@@ -3,7 +3,7 @@ import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SharedModule } from '../shared/shared.module';
-import { ModalModule } from 'ng2-bootstrap';
+import { ModalModule } from 'ngx-bootstrap';
 import { ToastyModule } from 'ng2-toasty';
 
 import { LossesModule } from './losses/losses.module';
@@ -20,10 +20,10 @@ import { MeteredEnergyUseComponent } from './metered-energy-use/metered-energy-u
 import { PhastTabsComponent } from './phast-tabs/phast-tabs.component';
 import { HelpPanelComponent } from './help-panel/help-panel.component';
 import { DataPanelComponent } from './data-panel/data-panel.component';
-import { SettingsPanelComponent } from './settings-panel/settings-panel.component';
 
 import { PhastService } from './phast.service';
 import { SystemSetupComponent } from './system-setup/system-setup.component';
+import { SettingsModule } from '../settings/settings.module';
 
 
 @NgModule({
@@ -39,7 +39,6 @@ import { SystemSetupComponent } from './system-setup/system-setup.component';
     MeteredEnergyUseComponent,
     HelpPanelComponent,
     DataPanelComponent,
-    SettingsPanelComponent,
     SankeyDiagramComponent,
     SystemSetupComponent
 
@@ -54,7 +53,8 @@ import { SystemSetupComponent } from './system-setup/system-setup.component';
     SharedModule,
     ModalModule,
     LossesModule,
-    ToastyModule
+    ToastyModule,
+    SettingsModule
   ],
   providers: [
     PhastService

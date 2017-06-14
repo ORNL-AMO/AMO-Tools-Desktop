@@ -1,0 +1,35 @@
+
+<div class="no-data" *ngIf="_slagLosses.length == 0" (click)="addLoss()">
+  <h3>You have no Wall Losses</h3>
+  <h4>Add some now.</h4>
+</div>
+
+
+<div class="card-form" *ngFor="let loss of _slagLosses">
+  <div class="row">
+    <div class="col-12">
+      <div class="pull-left">
+        <b>{{loss.name}}</b>
+      </div>
+      <button class="close pull-right" aria-label="Close" (click)="removeLoss(loss.name)">
+      <span aria-hidden="true">&times;</span>
+    </button>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12">
+      <app-slag-form (changeField)="changeField($event)" [(slagLossForm)]="loss.form" (calculate)="calculate(loss)" [(lossState)]="lossState"
+        [baselineSelected]="baselineSelected" (saveEmit)="saveLosses()"></app-slag-form>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12">
+      <div class="form-group">
+        <label class="small">Heat Loss</label>
+        <div class="text-center small">
+          {{loss.heatLoss | number:'2.2-2'}} Btu/hr
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

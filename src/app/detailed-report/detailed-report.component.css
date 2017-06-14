@@ -20,4 +20,8 @@
         max-height: none;
         background-color: red;
     }
+.fixed-nav{
+    top: 0;
+    padding-top: 15px;
+    position: fixed;
 }

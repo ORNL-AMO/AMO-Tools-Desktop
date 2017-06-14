@@ -20,9 +20,10 @@ export class DirectoryItemComponent implements OnInit {
   newDirEventToggle: boolean;
   @Input()
   dashboardView: string;
-  
+
   isFirstChange: boolean = true;
-  childDirectories: Directory
+  childDirectories: Directory;
+  validDirectory: boolean = false;
   constructor(private indexedDbService: IndexedDbService) { }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -37,13 +38,16 @@ export class DirectoryItemComponent implements OnInit {
   }
 
   ngOnInit() {
-    if (this.directory.id == 1) {
-      this.populateDirectories(this.directory, false);
-    } else if (this.directory.id == this.selectedDirectoryId) {
-      this.populateDirectories(this.directory, false);
-    }
-    else {
-      this.populateDirectories(this.directory, true);
+    if (this.directory.id != undefined) {
+      this.validDirectory = true;
+      if (this.directory.id == 1) {
+        this.populateDirectories(this.directory, false);
+      } else if (this.directory.id == this.selectedDirectoryId) {
+        this.populateDirectories(this.directory, false);
+      }
+      else {
+        this.populateDirectories(this.directory, true);
+      }
     }
   }
 

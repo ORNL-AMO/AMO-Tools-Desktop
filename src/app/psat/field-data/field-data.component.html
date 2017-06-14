@@ -58,7 +58,7 @@
   </div>
 
   <div class="form-group">
-    <label for="measuredVoltage">Voltage</label>
+    <label for="measuredVoltage">Measured Voltage</label>
     <input type="number" min="1" class="form-control" formControlName="measuredVoltage" id="measuredVoltage" (input)="startSavePolling()"
       (focus)="focusField('measuredVoltage')" [ngClass]="{'warning': checkVoltage() == false}" onfocus="this.select();">
     <span class="units">V</span>
@@ -69,7 +69,7 @@
 
 <!-- HEAD TOOL MODAL -->
 <div bsModal #headToolModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="createHeadToolLabel"
-  aria-hidden="true" [config]="{backdrop: 'static'}">
+  aria-hidden="true" [config]="{backdrop: 'fixed'}">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
