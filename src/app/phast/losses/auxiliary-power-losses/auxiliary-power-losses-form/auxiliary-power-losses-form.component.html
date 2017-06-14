@@ -1,34 +1,35 @@
 <form #lossForm [formGroup]="auxLossesForm">
+
   <div class="form-section">
     <div class="form-group">
       <label class="small" for="motorPhase">Motor Current Phase(s)</label>
-      <input type="number" class="form-control" formControlName="motorPhase" id="motorPhase" onfocus="this.select();" (input)="startSavePolling()"
+      <input type="number" step="any" class="form-control" formControlName="motorPhase" id="motorPhase" onfocus="this.select();" (input)="startSavePolling()"
         (focus)="focusField('motorPhase')">
     </div>
 
     <div class="form-group">
       <label class="small" for="supplyVoltage">Supply Voltage</label>
-      <input type="number" class="form-control" formControlName="supplyVoltage" id="supplyVoltage" onfocus="this.select();" (input)="startSavePolling()"
+      <input type="number" step="any" class="form-control" formControlName="supplyVoltage" id="supplyVoltage" onfocus="this.select();" (input)="startSavePolling()"
         (focus)="focusField('supplyVoltage')">
       <span class="units">V</span>
     </div>
 
     <div class="form-group">
       <label class="small" for="avgCurrent">Average Current</label>
-      <input type="number" class="form-control" formControlName="avgCurrent" id="avgCurrent" onfocus="this.select();" (input)="startSavePolling()"
+      <input type="number" step="any" class="form-control" formControlName="avgCurrent" id="avgCurrent" onfocus="this.select();" (input)="startSavePolling()"
         (focus)="focusField('avgCurrent')">
       <span class="units">A</span>
     </div>
 
     <div class="form-group">
       <label class="small" for="powerFactor">Power Factor</label>
-      <input type="number" class="form-control" formControlName="powerFactor" id="powerFactor" onfocus="this.select();" (input)="startSavePolling()"
+      <input type="number" step="any" class="form-control" formControlName="powerFactor" id="powerFactor" onfocus="this.select();" (input)="startSavePolling()"
         (focus)="focusField('powerFactor')">
     </div>
 
     <div class="form-group">
       <label class="small" for="operatingTime">Operating Time</label>
-      <input type="number" class="form-control" formControlName="operatingTime" id="operatingTime" onfocus="this.select();" (input)="startSavePolling()"
+      <input type="number" step="any" class="form-control" formControlName="operatingTime" id="operatingTime" onfocus="this.select();" (input)="startSavePolling()"
         (focus)="focusField('operatingTime')">
       <span class="units">%</span>
     </div>

@@ -7,14 +7,14 @@
 </div>
 <div class="row value-row">
   <div class="col-6">
-    <input type="number" class="form-control text-center" id="value1" [(ngModel)]="value1" (input)="getValue2()">
+    <input type="number" step="any" class="form-control text-center" id="value1" [(ngModel)]="value1" (input)="getValue2()">
     <select class="form-control" id="from" [(ngModel)]="from" (change)="getValue2()">
       <option *ngFor="let possibility of possibilities" [value]="possibility.unit">{{possibility.display}}</option>
     </select>
   </div>
 
   <div class="col-6">
-    <input type="number" class="form-control text-center" id="value2" [(ngModel)]="value2" (input)="getValue1()">
+    <input type="number" step="any" class="form-control text-center" id="value2" [(ngModel)]="value2" (input)="getValue1()">
     <select class="form-control" id="to" [(ngModel)]="to" (change)="getValue1()">
     <option *ngFor="let possibility of possibilities" [value]="possibility.unit">{{possibility.display}}</option>
   </select>

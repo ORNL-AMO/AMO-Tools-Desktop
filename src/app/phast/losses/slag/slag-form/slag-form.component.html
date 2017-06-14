@@ -2,36 +2,36 @@
   <div class="form-section">
     <div class="form-group">
       <label class="small" for="weight">Weight</label>
-      <input type="number" class="form-control" formControlName="weight" id="weight" onfocus="this.select();" (input)="startSavePolling()"
+      <input type="number" step="any" class="form-control" formControlName="weight" id="weight" onfocus="this.select();" (input)="startSavePolling()"
         (focus)="focusField('weight')">
       <span class="units">Lb/cycle</span>
     </div>
 
-
     <div class="form-group">
       <label class="small" for="inletTemperature">Inlet Temperature</label>
-      <input type="number" class="form-control" formControlName="inletTemperature" id="inletTemperature" onfocus="this.select();"
+      <input type="number" step="any" class="form-control" formControlName="inletTemperature" id="inletTemperature" onfocus="this.select();"
         (input)="startSavePolling()" (focus)="focusField('inletTemperature')">
       <span class="units">&#8457;</span>
     </div>
 
+
     <div class="form-group">
       <label class="small" for="outletTemperature">Outlet Temperature</label>
-      <input type="number" class="form-control" formControlName="outletTemperature" id="outletTemperature" onfocus="this.select();"
+      <input type="number" step="any" class="form-control" formControlName="outletTemperature" id="outletTemperature" onfocus="this.select();"
         (input)="startSavePolling()" (focus)="focusField('outletTemperature')">
       <span class="units">&#8457;</span>
     </div>
 
     <div class="form-group">
       <label class="small" for="specificHeat">Specific Heat</label>
-      <input type="number" class="form-control" formControlName="specificHeat" id="specificHeat" onfocus="this.select();" (input)="startSavePolling()"
+      <input type="number" step="any" class="form-control" formControlName="specificHeat" id="specificHeat" onfocus="this.select();" (input)="startSavePolling()"
         (focus)="focusField('specificHeat')">
       <span class="units">Btu/(lb-&#8457;)</span>
     </div>
 
     <div class="form-group">
       <label class="small" for="correctionFactor">Correction Factor</label>
-      <input type="number" class="form-control" formControlName="correctionFactor" id="correctionFactor" onfocus="this.select();"
+      <input type="number" step="any" class="form-control" formControlName="correctionFactor" id="correctionFactor" onfocus="this.select();"
         (input)="startSavePolling()" (focus)="focusField('correctionFactor')">
     </div>
   </div>

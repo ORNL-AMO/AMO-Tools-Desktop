@@ -7,7 +7,7 @@
 
   <div class="form-group">
     <label class="small" for="heatLoss">Heat Loss</label>
-    <input type="number" class="form-control" formControlName="heatLoss" id="heatLoss" onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('heatLoss')">
+    <input type="number" step="any" class="form-control" formControlName="heatLoss" id="heatLoss" onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('heatLoss')">
     <span class="units">Btu/hr</span>
   </div>
 
