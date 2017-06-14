@@ -107,13 +107,13 @@ export class SystemCurveFormComponent implements OnInit {
       flowRate: this.p1FlowRate,
       head: this.p1Head,
       pointAdjustment: this.p1Option
-    })
+    });
 
     this.pointTwo.form.patchValue({
       flowRate: this.p2FlowRate,
       head: this.p2Head,
       pointAdjustment: this.p2Option
-    })
+    });
     this.curveConstants.form.patchValue({
       specificGravity: this.tmpSpecificGravity,
       systemLossExponent: this.tmpSystemLossExponent
