@@ -4,6 +4,7 @@ import { Assessment } from '../../shared/models/assessment';
 import { PsatService } from '../psat.service';
 import { Settings } from '../../shared/models/settings';
 import { IndexedDbService } from '../../indexedDb/indexed-db.service';
+import { Directory } from '../../shared/models/directory';
 
 @Component({
   selector: 'app-psat-report',
@@ -20,6 +21,8 @@ export class PsatReportComponent implements OnInit {
   @Input()
   assessment: Assessment;
 
+  assessmentDirectories: Directory[];
+
   constructor(private psatService: PsatService, private indexedDbService: IndexedDbService) { }
 
   ngOnInit() {
@@ -34,6 +37,10 @@ export class PsatReportComponent implements OnInit {
       this.psat = this.assessment.psat;
       //find settings
       this.getAssessmentSettingsThenResults();
+    }
+    if (this.assessment) {
+      this.assessmentDirectories = new Array();
+      this.getDirectoryList(this.assessment.directoryId);
     }
   }
 
@@ -88,6 +95,19 @@ export class PsatReportComponent implements OnInit {
       })
     }
     return psat;
+  }
+
+  getDirectoryList(id: number) {
+    if (id && id != 1) {
+      this.indexedDbService.getDirectory(id).then(
+        results => {
+          this.assessmentDirectories.push(results);
+          if (results.parentDirectoryId != 1) {
+            this.getDirectoryList(results.parentDirectoryId);
+          }
+        }
+      )
+    }
   }
 
 }

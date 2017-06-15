@@ -2,12 +2,14 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ChartsModule } from 'ng2-charts';
 import { SharedModule } from '../shared/shared.module';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { DetailedReportComponent } from './detailed-report.component';
 import { ReportBannerComponent } from './report-banner/report-banner.component';
 
 import { PsatModule } from '../psat/psat.module';
 import { ReportSummaryComponent } from './report-summary/report-summary.component';
+import { ModalModule } from 'ngx-bootstrap';
 @NgModule({
   declarations: [
       DetailedReportComponent,
@@ -21,7 +23,10 @@ import { ReportSummaryComponent } from './report-summary/report-summary.componen
     CommonModule,
     SharedModule,
     ChartsModule,
-    PsatModule
+    PsatModule,
+    ModalModule,
+    FormsModule,
+    ReactiveFormsModule
   ],
   providers: [
   ]

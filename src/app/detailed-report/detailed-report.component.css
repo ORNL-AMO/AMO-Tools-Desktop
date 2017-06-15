@@ -12,9 +12,22 @@
     display: none;
 }
 
+.report-notes-form{
+    max-width: none;
+    width: 100%;
+}
+
 @media print {
     .report-header{
-        padding-top: 30%;
+        padding-top: 15%;
+    }
+
+    .report-notes{
+        top: 50%;
+        left: 25%;
+        position: absolute;
+        max-width: 50%;
+        overflow-wrap: normal;
     }
 
     .print-content{

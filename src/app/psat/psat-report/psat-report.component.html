@@ -2,7 +2,7 @@
 
   <div class="report-header">
     <h2 *ngIf="!assessment">Assessment Report</h2>
-    <h2 *ngIf="assessment">{{assessment.name}}</h2>
+    <h2 *ngIf="assessment"><span class="dir-list-item" *ngFor="let directory of assessmentDirectories">{{directory.name}} / </span>{{assessment.name}}</h2>
   </div><!-- End .report-header -->
 
   <div class="report-data" *ngIf="psat.setupDone">

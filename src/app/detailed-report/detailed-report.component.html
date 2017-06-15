@@ -4,7 +4,7 @@
     <div class="container-fluid">
       <div class="row">
         <div class="col-md-10 offset-md-1">
-          <app-report-banner (emitCloseReport)="closeReport()" (emitExport)="exportToCsv()" (emitPrint)="print()"></app-report-banner>
+          <app-report-banner (emitCloseReport)="closeReport()" (emitExport)="exportToCsv()" (emitPrint)="showPrintModal()"></app-report-banner>
         </div>
       </div>
     </div>
@@ -15,10 +15,11 @@
     <app-report-summary [numPsats]="numPsats" [pumpSavingsPotential]="pumpSavingsPotential"></app-report-summary>
   </div>
   <div class="report-cover">
+    <p class="report-notes">{{reportNotes}}</p>
     <span class="report-logo">
     <img src="assets/images/DOE-banner-color.png" class="doe-logo">
    </span>
-   <span class="created-date">
+    <span class="created-date">
     <h4>{{createdDate}}</h4>
    </span>
   </div>
@@ -58,6 +59,27 @@
         <div class="bounce3"></div>
       </div>
       <h1>Gathering Results</h1>
+    </div>
+  </div>
+</div>
+
+<!--print modal-->
+<div bsModal #printModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="printModalLabel" aria-hidden="true"
+  [config]="{backdrop: 'static'}">
+  <div class="modal-dialog modal-md">
+    <div class="modal-content">
+      <div class="modal-header">
+        Report Comments
+      </div>
+      <div class="modal-body">
+        <p>Input any comment you would like added to the front page of your report</p>
+        <div class="form-group">
+          <textarea class="form-control report-notes-form" rows="3" id="notes" [(ngModel)]="reportNotes"></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-primary" (click)="print()">Go To Print Settings</button>
+      </div>
     </div>
   </div>
 </div>
