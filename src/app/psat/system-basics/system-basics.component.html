@@ -1,6 +1,12 @@
 <div class="row">
   <div class="col-12">
-    <h5>Assessment Settings</h5>
+    <h5 *ngIf="!isEditingName" (click)="editName()">{{assessment.name}} Settings</h5>
+
+    <span *ngIf="isEditingName">
+    <input style="font-size: 30px; margin-bottom: 40px;" type="text" id="assessmentName" [(ngModel)]="assessment.name" onfocus="this.select();" (input)="startSavePolling(true)" required="required">
+    <span class="alert-danger" *ngIf="!assessment.name">Name is Required</span>
+    <button *ngIf="assessment.name" class="btn-primary btn-sm" (click)="doneEditingName()"><span class="fa fa-check"></span></button>
+    </span>
   </div>
 </div>
 

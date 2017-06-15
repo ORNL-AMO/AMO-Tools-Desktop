@@ -99,7 +99,7 @@ export class AssessmentSettingsComponent implements OnInit {
   }
 
   saveSettings() {
-    if(this.directory.name){
+    if (this.directory.name && this.directory.id != 1) {
       this.indexedDbService.putDirectory(this.directory).then(
         results => {
           this.emitUpdateDirectory.emit(true)
@@ -289,7 +289,7 @@ export class AssessmentSettingsComponent implements OnInit {
       oldSettings.language != newSettings.language ||
       oldSettings.powerMeasurement != newSettings.powerMeasurement ||
       oldSettings.pressureMeasurement != newSettings.pressureMeasurement ||
-      oldSettings.unitsOfMeasure != newSettings.unitsOfMeasure || 
+      oldSettings.unitsOfMeasure != newSettings.unitsOfMeasure ||
       oldSettings.energySourceType != newSettings.energySourceType
     ) {
       return true;
@@ -326,12 +326,19 @@ export class AssessmentSettingsComponent implements OnInit {
     return closest;
   }
 
-  editDirectoryName(){
+  editDirectoryName() {
     this.editName = true;
   }
 
-  doneEditingName(){
+  doneEditingName() {
     this.editName = false;
+    if (this.directory.name) {
+      this.indexedDbService.putDirectory(this.directory).then(
+        results => {
+          this.emitUpdateDirectory.emit(true)
+        }
+      );
+    }
   }
 
 }

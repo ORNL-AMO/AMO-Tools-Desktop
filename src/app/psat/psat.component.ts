@@ -244,7 +244,7 @@ export class PsatComponent implements OnInit {
       }
     )
   }
-
+  
   exportData() {
     //TODO: Logic for exporting assessment
     this.jsonToCsvService.exportSinglePsat(this.assessment, this.settings);

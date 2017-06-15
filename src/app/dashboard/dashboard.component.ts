@@ -79,10 +79,6 @@ export class DashboardComponent implements OnInit {
     )
   }
 
-  updateDir() {
-    console.log(this.allDirectories);
-  }
-
   hideScreen() {
     this.dashboardView = 'assessment-dashboard';
   }
@@ -191,7 +187,7 @@ export class DashboardComponent implements OnInit {
 
   createDirectory() {
     let tmpDirectory: DirectoryDbRef = {
-      name: 'Assessments',
+      name: 'All Assessments',
       createdDate: new Date(),
       modifiedDate: new Date(),
       parentDirectoryId: null,
