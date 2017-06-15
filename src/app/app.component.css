@@ -1534,7 +1534,7 @@ Reporting
       }
 
 .report-list-nav h5 {
-  font-size: 17px;
+  font-size: 20px;
   text-transform: uppercase;
   color: #a5a5a5;
   letter-spacing: 2px;
@@ -1545,7 +1545,7 @@ Reporting
 }
 .report-list-nav li {
   list-style: none;
-  font-size: 15px;
+  font-size: 18px;
 }
   .report-list-nav li.active a {
     font-weight: bold;
