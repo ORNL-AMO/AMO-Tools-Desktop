@@ -1,16 +1,29 @@
-<div *ngIf="settingsForm">
+<div class="content-container" *ngIf="settingsForm">
 
-  <h3>{{directory.name}}: General Settings</h3>
-  <p>These will be default settings for assessments and folders inside {{directory.name}}.</p>
+  <div *ngIf="directory.id != 1 && editName">
+    <span>
+    <input type="text" id="directoryName" [(ngModel)]="directory.name" onfocus="this.select();" required="required">
+    <button class="btn-primary btn-sm" (click)="doneEditingName()"><span class="fa fa-check"></span></button>
+    </span>
+    <span class="alert-danger pull-right small" *ngIf="!directory.name">Directory Name Required</span>
+  </div>
+
+  <h2 *ngIf="directory.id != 1 && !editName"  (click)="editDirectoryName()">{{directory.name}}
+    <!--<button class="btn-secondary btn-sm" (click)="editDirectoryName()"><span class="fa fa-pencil"></span></button>-->
+  </h2>
+
+
+  <h3>General Settings</h3>
+  <p>These will be default settings for assessments and folders inside this.</p>
   <app-application-settings [(settingsForm)]="settingsForm"></app-application-settings>
 
 
-  <h3>{{directory.name}}: PSAT Settings</h3>
-  <p>These settings will be used as the default settings for pump assessments inside {{directory.name}}.</p>
+  <h3>PSAT Settings</h3>
+  <p>These settings will be used as the default settings for pump assessments inside this folder.</p>
   <app-psat-settings [(settingsForm)]="settingsForm"></app-psat-settings>
 
   <h3>PHAST Settings</h3>
-  <p>These settings will be used as the default settings for process heating assessments.</p>
+  <p>These settings will be used as the default settings for process heating assessments inside this folder.</p>
   <app-phast-settings [(settingsForm)]="settingsForm"></app-phast-settings>
 
   <div class="actions">

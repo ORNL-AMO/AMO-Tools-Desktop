@@ -79,6 +79,10 @@ export class DashboardComponent implements OnInit {
     )
   }
 
+  updateDir() {
+    console.log(this.allDirectories);
+  }
+
   hideScreen() {
     this.dashboardView = 'assessment-dashboard';
   }
@@ -204,6 +208,8 @@ export class DashboardComponent implements OnInit {
   }
 
   newDir() {
+    this.allDirectories = this.populateDirectories(this.rootDirectoryRef);
+    this.workingDirectory = this.populateDirectories(this.workingDirectory);
     this.newDirEventToggle = !this.newDirEventToggle;
   }
 
