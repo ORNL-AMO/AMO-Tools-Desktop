@@ -8,9 +8,16 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AboutPageComponent implements OnInit {
 
+  showSystemRequirements: boolean = false;
+
   constructor() { }
 
   ngOnInit() {
+  }
+
+
+  toggleShowSystemRequirements() {
+    this.showSystemRequirements = !this.showSystemRequirements;
   }
 
 }

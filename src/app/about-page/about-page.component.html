@@ -1,38 +1,34 @@
-
-
 <div class="row">
   <div class="col-10 offset-md-1">
-    <!--<div class="container"> -->
+    <div class="content-container">
 
-    <h2>AMO Tools Desktop</h2>
-    <p>
-      AMO’s tools help manufacturers increase industrial energy efficiency at the plant-level and in specific systems. Learn step-by-step ways to identify opportunities, monitor progress, and improve efficiency in any facility. Some tools help facilities implement an energy management system and prepare to become ISO 50001 and Superior Energy Performance certified.
-    </p>
-    <div id="accordion" role="tablist" aria-multiselectable="true">
+      <h2>AMO Tools Desktop</h2>
+      <p>
+        AMO’s tools help manufacturers increase industrial energy efficiency at the plant-level and in specific systems. Learn step-by-step
+        ways to identify opportunities, monitor progress, and improve efficiency in any facility. Some tools help facilities
+        implement an energy management system and prepare to become ISO 50001 and Superior Energy Performance certified.
+      </p>
       <div class="card">
-        <div class="card-header" role="tab" id="headingOne">
-          <h4 class="mb-0">
-            <a data-toggle="collapse" data-parent="#accordion" href="#sysreq" aria-expanded="true" aria-controls="sysreq">
-              System Requirements
-            </a>
+        <div class="card-header" (click)="toggleShowSystemRequirements()">
+          <h4>
+            System Requirements
+            <span class="pull-right" *ngIf="!showSystemRequirements"><i class="fa fa-chevron-up"></i></span>
+            <span class="pull-right" *ngIf="showSystemRequirements"><i class="fa fa-chevron-down"></i></span>
           </h4>
         </div>
-
-        <div id="sysreq" class="collapse show" role="tabpanel" aria-labelledby="headingOne">
-          <div class="card-block">
-            <p>AMO Tools Desktop will operate on the following computers:</p>
-            <ul>
-              <li>
-                64-bit or 32-bit computer running Windows OS
-              </li>
-              <li>
-                64-bit or 32-bit computer running Linux OS
-              </li>
-              <li>
-                Mac OS X
-              </li>
-            </ul>
-          </div>
+        <div *ngIf="showSystemRequirements" class="card-block">
+          <p>AMO Tools Desktop will operate on the following computers:</p>
+          <ul>
+            <li>
+              64-bit or 32-bit computer running Windows OS
+            </li>
+            <li>
+              64-bit or 32-bit computer running Linux OS
+            </li>
+            <li>
+              Mac OS X
+            </li>
+          </ul>
         </div>
       </div>
 
@@ -48,10 +44,10 @@
           <div class="card-block">
             <p>
               The Pumping System Assessment Tool (PSAT) is a free desktop software tool to help industrial users assess the efficiency
-              of pumping system operations. PSAT uses achievable pump performance data from Hydraulic Institute standards and
-              motor performance data from the MotorMaster+ database to calculate potential energy and associated cost savings.
-              The tool also enables users to save and retrieve log files, default values, and system curves for sharing analyses
-              with other users.
+              of pumping system operations. PSAT uses achievable pump performance data from Hydraulic Institute standards
+              and motor performance data from the MotorMaster+ database to calculate potential energy and associated cost
+              savings. The tool also enables users to save and retrieve log files, default values, and system curves for
+              sharing analyses with other users.
             </p>
 
             <h4>Intended Users</h4>
@@ -78,10 +74,13 @@
             <h4>Outputs</h4>
             <p>Base on inputs, PSAT will provide the following:</p>
             <ul>
-              <li>Estimated pump and motor efficiencies and shaft powers for both existing and top-of-the-line commercially available equipment of "optimal" equipment</li>
+              <li>Estimated pump and motor efficiencies and shaft powers for both existing and top-of-the-line commercially available
+                equipment of "optimal" equipment</li>
               <li>Annual energy use and energy costs for existing and optimal equipment</li>
               <li>Potential annual energy savings</li>
-              <li>Optimization rating, which is analogous to a grade (rating of 100 is consistent with top-of-the-line commercial equipment).</li>
+              <li>Optimization rating, which is analogous to a grade (rating of 100 is consistent with top-of-the-line commercial
+                equipment).
+              </li>
             </ul>
           </div>
         </div>
@@ -97,10 +96,15 @@
         </div>
         <div id="phast" class="collapse" role="tabpanel" aria-labelledby="headingThree">
           <div class="card-block">
-            <p>The Process Heating Assessment and Survey Tool (PHAST) introduces methods to improve thermal efficiency of heating equipment. This tool helps industrial users survey process heating equipment that consumes fuel, steam, or electricity, and identifies the most energy-intensive equipment. The tool can be used to perform a heat balance that identifies major areas of energy use under various operating conditions and test "what-if" scenarios for various options to reduce energy use.</p>
+            <p>The Process Heating Assessment and Survey Tool (PHAST) introduces methods to improve thermal efficiency of heating
+              equipment. This tool helps industrial users survey process heating equipment that consumes fuel, steam, or
+              electricity, and identifies the most energy-intensive equipment. The tool can be used to perform a heat balance
+              that identifies major areas of energy use under various operating conditions and test "what-if" scenarios for
+              various options to reduce energy use.</p>
 
             <h4>Intended Users</h4>
-            <p>This tool is designed for industrial energy coordinators, plant managers and engineers who are interested in identifying potential energy-saving opportunities in process heating equipment.</p>
+            <p>This tool is designed for industrial energy coordinators, plant managers and engineers who are interested in
+              identifying potential energy-saving opportunities in process heating equipment.</p>
 
             <h4>Inputs</h4>
             <p>Users will need to inputs the following:</p>
@@ -125,7 +129,5 @@
         </div>
       </div>
     </div>
-
-    <!--</div>-->
   </div>
 </div>
