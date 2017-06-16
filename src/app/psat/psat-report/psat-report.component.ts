@@ -1,10 +1,11 @@
-import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, Input, SimpleChanges } from '@angular/core';
 import { PSAT } from '../../shared/models/psat';
 import { Assessment } from '../../shared/models/assessment';
 import { PsatService } from '../psat.service';
 import { Settings } from '../../shared/models/settings';
 import { IndexedDbService } from '../../indexedDb/indexed-db.service';
 import { Directory } from '../../shared/models/directory';
+import { WindowRefService } from '../../indexedDb/window-ref.service';
 
 @Component({
   selector: 'app-psat-report',
@@ -20,10 +21,13 @@ export class PsatReportComponent implements OnInit {
   settings: Settings;
   @Input()
   assessment: Assessment;
+  @Input()
+  emitPrint: boolean;
 
   assessmentDirectories: Directory[];
+  isFirstChange: boolean = true;
 
-  constructor(private psatService: PsatService, private indexedDbService: IndexedDbService) { }
+  constructor(private psatService: PsatService, private indexedDbService: IndexedDbService, private windowRefService: WindowRefService) { }
 
   ngOnInit() {
     if (this.psat && this.settings) {
@@ -41,6 +45,16 @@ export class PsatReportComponent implements OnInit {
     if (this.assessment) {
       this.assessmentDirectories = new Array();
       this.getDirectoryList(this.assessment.directoryId);
+    }
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (!this.isFirstChange) {
+      if(changes.emitPrint){
+        console.log('clicked');
+      }
+    } else {
+      this.isFirstChange = false;
     }
   }
 
@@ -108,6 +122,12 @@ export class PsatReportComponent implements OnInit {
         }
       )
     }
+  }
+
+  print() {
+    let win = this.windowRefService.nativeWindow;
+    let doc = this.windowRefService.getDoc();
+    win.print();
   }
 
 }

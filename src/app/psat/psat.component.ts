@@ -61,6 +61,7 @@ export class PsatComponent implements OnInit {
 
   doc: any;
   window: any;
+  emitPrint: boolean = false;
 
   constructor(
     private location: Location,
@@ -224,6 +225,10 @@ export class PsatComponent implements OnInit {
 
   toggleSave() {
     this.saveClicked = !this.saveClicked;
+  }
+
+  togglePrint(){
+    this.emitPrint = !this.emitPrint;
   }
 
   save() {

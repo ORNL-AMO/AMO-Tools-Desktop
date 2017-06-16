@@ -2,6 +2,10 @@
     .input-data{
         page-break-before: always;
     }
+
+    .hide-print{
+        display: none !important;
+    }
 }
 
 .dir-list-item{

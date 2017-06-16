@@ -2,8 +2,11 @@
 
   <div class="report-header">
     <h2 *ngIf="!assessment">Assessment Report</h2>
-    <h2 *ngIf="assessment"><span class="dir-list-item" *ngFor="let directory of assessmentDirectories">{{directory.name}} / </span>{{assessment.name}}</h2>
-  </div><!-- End .report-header -->
+    <h2 *ngIf="assessment"><span class="dir-list-item" *ngFor="let directory of assessmentDirectories">{{directory.name}} / </span>{{assessment.name}}
+      <button class="btn-sm btn-secondary pull-right hide-print" (click)="print()"><span class="fa fa-print"></span></button>
+    </h2>
+  </div>
+  <!-- End .report-header -->
 
   <div class="report-data" *ngIf="psat.setupDone">
     <div class="charts">
@@ -17,7 +20,8 @@
       <h3>Assessment Input Data</h3>
       <app-input-summary [psat]="psat" [settings]="settings"></app-input-summary>
     </div>
-  </div><!-- End .report-data -->
+  </div>
+  <!-- End .report-data -->
 
   <div *ngIf="!psat.setupDone">
     <p class="alert-warning text-center">This assessment has not been completed, please complete this assessment to see the resulting data.</p>
