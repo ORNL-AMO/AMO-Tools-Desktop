@@ -263,6 +263,11 @@ select.form-control:not([size]):not([multiple]) {
   pointer-events: none;
 }
 
+.indicate-different{
+  border: #EF6C00 solid 2px;
+  box-shadow: 0px 0px 5px #EF6C00;
+}
+
 /*
 Pump Fluid CSS
 =============================================== */

@@ -40,6 +40,7 @@ import { SettingsModule } from '../settings/settings.module';
 import { ToastyModule } from 'ng2-toasty';
 import { EditConditionPropertiesComponent } from './modify-conditions/edit-condition-properties/edit-condition-properties.component';
 import { ExploreOpportunitiesComponent } from './explore-opportunities/explore-opportunities.component';
+import { CompareService } from './compare.service';
 
 @NgModule({
   declarations: [
@@ -87,7 +88,8 @@ import { ExploreOpportunitiesComponent } from './explore-opportunities/explore-o
     JsonToCsvModule
   ],
   providers: [
-    PsatService
+    PsatService,
+    CompareService
   ]
 })
 

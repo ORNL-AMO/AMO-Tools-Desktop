@@ -12,7 +12,7 @@
     <div class="losses-container">
       <!--<app-system-basics *ngIf="modifyTab == 'system-basics'"></app-system-basics>-->
       <app-pump-fluid *ngIf="modifyTab == 'pump-fluid'" [selected]="baselineSelected" [saveClicked]="saveClicked" [(psat)]="psat"
-        (changeField)="changeField($event)" (saved)="save()" [settings]="settings"></app-pump-fluid>
+        (changeField)="changeField($event)" (saved)="save()" [settings]="settings" [baseline]="true"></app-pump-fluid>
       <app-motor *ngIf="modifyTab == 'motor'" [selected]="baselineSelected" [saveClicked]="saveClicked" [(psat)]="psat" (changeField)="changeField($event)"
         (saved)="save()" [settings]="settings"></app-motor>
       <app-field-data *ngIf="modifyTab == 'field-data'" [selected]="baselineSelected" [saveClicked]="saveClicked" [(psat)]="psat"

@@ -5,6 +5,7 @@ import { PsatService } from '../psat.service';
 import { Settings } from '../../shared/models/settings';
 import { AssessmentService } from '../../assessment/assessment.service';
 import { Assessment } from '../../shared/models/assessment';
+import { CompareService } from '../compare.service';
 
 @Component({
   selector: 'app-modify-conditions',
@@ -37,7 +38,7 @@ export class ModifyConditionsComponent implements OnInit {
   showEditModification: boolean = false;
   editModification: Modification;
   isModalOpen: boolean = false;
-  constructor(private psatService: PsatService, private assessmentService: AssessmentService) { }
+  constructor(private psatService: PsatService, private assessmentService: AssessmentService, private compareService: CompareService) { }
 
   ngOnInit() {
     this._modifications = new Array<Modification>();
@@ -51,6 +52,11 @@ export class ModifyConditionsComponent implements OnInit {
     this.currentField = 'operatingFraction';
     // let results: PsatOutputs = this.psatService.results(this.psat.inputs);
     // console.log(results)
+  }
+
+  ngOnDestroy(){
+    this.compareService.baselinePSAT = null;
+    this.compareService.modifiedPSAT = null;
   }
 
   save() {

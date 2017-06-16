@@ -3,6 +3,9 @@ import { ModalDirective } from 'ngx-bootstrap';
 import { PSAT } from '../../shared/models/psat';
 import { PsatService } from '../psat.service';
 import { Settings } from '../../shared/models/settings';
+import { CompareService } from '../compare.service';
+import { WindowRefService } from '../../indexedDb/window-ref.service';
+
 @Component({
   selector: 'app-field-data',
   templateUrl: './field-data.component.html',
@@ -31,6 +34,8 @@ export class FieldDataComponent implements OnInit {
   openHeadTool = new EventEmitter<boolean>();
   @Output('closeHeadTool')
   closeHeadTool = new EventEmitter<boolean>();
+  @Input()
+  baseline: boolean;
 
   counter: any;
 
@@ -59,7 +64,7 @@ export class FieldDataComponent implements OnInit {
   voltageError: string = null;
   costError: string = null;
   opFractionError: string = null;
-  constructor(private psatService: PsatService) { }
+  constructor(private psatService: PsatService, private compareService: CompareService, private windowRefService: WindowRefService) { }
 
   ngOnInit() {
     this.psatForm = this.psatService.getFormFromPsat(this.psat.inputs);
@@ -67,6 +72,8 @@ export class FieldDataComponent implements OnInit {
     if (this.selected) {
       this.formRef.nativeElement.operatingFraction.focus();
     }
+    this.setCompareVals();
+    this.initDifferenceMonitor();
   }
 
   ngAfterViewInit() {
@@ -85,6 +92,7 @@ export class FieldDataComponent implements OnInit {
       } else {
         this.enableForm();
       }
+      this.setCompareVals();
     }
     else {
       this.isFirstChange = false;
@@ -120,9 +128,19 @@ export class FieldDataComponent implements OnInit {
 
   savePsat(form: any) {
     this.psat.inputs = this.psatService.getPsatInputsFromForm(form);
+    this.setCompareVals();
     this.saved.emit(true);
   }
 
+
+  setCompareVals() {
+    if (this.baseline) {
+      this.compareService.baselinePSAT = this.psat;
+    } else {
+      this.compareService.modifiedPSAT = this.psat;
+    }
+    this.compareService.checkFieldDataDifferent();
+  }
 
   @ViewChild('headToolModal') public headToolModal: ModalDirective;
   showHeadToolModal() {
@@ -215,5 +233,11 @@ export class FieldDataComponent implements OnInit {
       this.opFractionError = null;
       return true;
     }
+  }
+
+
+  //used to add classes to inputs with different baseline vs modification values
+  initDifferenceMonitor() {
+    let doc = this.windowRefService.getDoc();
   }
 }

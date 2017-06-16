@@ -12,8 +12,7 @@ export class PsatService {
   flaRange: any = {
     flaMin: 0,
     flaMax: 0
-  };
-
+  };  
   constructor(private formBuilder: FormBuilder, private convertUnitsService: ConvertUnitsService, private validationService: ValidationService) { }
 
   roundVal(val: number, digits: number) {
