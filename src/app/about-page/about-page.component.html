@@ -12,8 +12,8 @@
         <div class="card-header" (click)="toggleShowSystemRequirements()">
           <h4>
             System Requirements
-            <span class="pull-right" *ngIf="!showSystemRequirements"><i class="fa fa-chevron-up"></i></span>
-            <span class="pull-right" *ngIf="showSystemRequirements"><i class="fa fa-chevron-down"></i></span>
+            <span class="pull-right" *ngIf="!showSystemRequirements"><i class="fa fa-chevron-down"></i></span>
+            <span class="pull-right" *ngIf="showSystemRequirements"><i class="fa fa-chevron-up"></i></span>
           </h4>
         </div>
         <div *ngIf="showSystemRequirements" class="card-block">
@@ -33,15 +33,14 @@
       </div>
 
       <div class="card">
-        <div class="card-header" role="tab" id="headingTwo">
-          <h4 class="mb-0">
-            <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#psatId" aria-expanded="false" aria-controls="psatId">
+        <div class="card-header" (click)="toggleShowPSAT()">
+         <h4>
               PSAT
-            </a>
+           <span class="pull-right" *ngIf="!showPSAT"><i class="fa fa-chevron-down"></i></span>
+           <span class="pull-right" *ngIf="showPSAT"><i class="fa fa-chevron-up"></i></span>
           </h4>
         </div>
-        <div id="collapseTwo" class="collapse" role="tabpanel" aria-labelledby="headingTwo">
-          <div class="card-block">
+        <div *ngIf="showPSAT" class="card-block">
             <p>
               The Pumping System Assessment Tool (PSAT) is a free desktop software tool to help industrial users assess the efficiency
               of pumping system operations. PSAT uses achievable pump performance data from Hydraulic Institute standards
@@ -84,18 +83,17 @@
             </ul>
           </div>
         </div>
-      </div>
+
 
       <div class="card">
-        <div class="card-header" role="tab" id="headingThree">
-          <h4 class="mb-0">
-            <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#phastID" aria-expanded="false" aria-controls="phastID">
-              PHAST
-            </a>
+        <div class="card-header" (click)="toggleShowPHAST()">
+            <h4>
+          PHAST
+              <span class="pull-right" *ngIf="!showPHAST"><i class="fa fa-chevron-down"></i></span>
+              <span class="pull-right" *ngIf="showPHAST"><i class="fa fa-chevron-up"></i></span>
           </h4>
         </div>
-        <div id="phast" class="collapse" role="tabpanel" aria-labelledby="headingThree">
-          <div class="card-block">
+        <div *ngIf="showPHAST" class="card-block">
             <p>The Process Heating Assessment and Survey Tool (PHAST) introduces methods to improve thermal efficiency of heating
               equipment. This tool helps industrial users survey process heating equipment that consumes fuel, steam, or
               electricity, and identifies the most energy-intensive equipment. The tool can be used to perform a heat balance
@@ -125,9 +123,10 @@
               <li>Construct a detailed heat balance for selected pieces of equipment</li>
               <li>Suggest methods to save energy in each area where energy is used or wasted.</li>
             </ul>
-          </div>
         </div>
       </div>
     </div>
   </div>
 </div>
+
+

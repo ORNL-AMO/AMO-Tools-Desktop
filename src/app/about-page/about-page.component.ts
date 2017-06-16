@@ -9,7 +9,8 @@ import { Component, OnInit } from '@angular/core';
 export class AboutPageComponent implements OnInit {
 
   showSystemRequirements: boolean = false;
-
+  showPSAT: boolean = false;
+  showPHAST: boolean = false;
   constructor() { }
 
   ngOnInit() {
@@ -19,5 +20,10 @@ export class AboutPageComponent implements OnInit {
   toggleShowSystemRequirements() {
     this.showSystemRequirements = !this.showSystemRequirements;
   }
-
+  toggleShowPSAT() {
+    this.showPSAT = !this.showPSAT;
+  }
+  toggleShowPHAST() {
+    this.showPHAST = !this.showPHAST;
+  }
 }
