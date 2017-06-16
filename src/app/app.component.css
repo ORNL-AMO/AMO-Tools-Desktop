@@ -413,9 +413,16 @@ Assessments: List View
   border-style: solid;
   border-width: 0 1px 1px;
 }
+  .list-row:after {
+    display: table;
+    clear: both;
+    content: "";
+  }
   .list-row .actions {
-    margin-left: 29px;
+    width: 30%;
     font-size: 14px;
+    float: right;
+    text-align: right;
   }
     .list-row .actions a {
       display: inline-block;
@@ -425,7 +432,12 @@ Assessments: List View
         text-decoration: none;
         color: #0076FF;
       }
-
+  .list-row .assessment-name {
+    float: left;
+    padding-right: 20px;
+    width: 70%;
+    margin-bottom: 0;
+  }
   .drag-handle, .list-row input, .assessment-name {
     display: inline-block;
     vertical-align: top;
