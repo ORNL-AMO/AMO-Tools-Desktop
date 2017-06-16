@@ -140,8 +140,14 @@ export class PsatComponent implements OnInit {
 
   checkMotor() {
     let tmpForm = this.psatService.getFormFromPsat(this._psat.inputs);
-    let tmpBool = this.psatService.isMotorFormValid(tmpForm);
-    return !tmpBool;
+    //check both steps
+    let tmpBoolMotor = this.psatService.isMotorFormValid(tmpForm);
+    let tmpBoolPump = this.psatService.isPumpFluidFormValid(tmpForm);
+    console.log('motor ' + tmpBoolMotor);
+    console.log('pump ' + tmpBoolPump);
+    let test = !tmpBoolMotor && !tmpBoolPump;
+    console.log(test);
+    return !tmpBoolMotor && !tmpBoolPump;
   }
 
   valid() {
