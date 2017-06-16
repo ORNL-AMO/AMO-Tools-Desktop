@@ -553,7 +553,6 @@ export class PsatService {
     let drive = this.getDriveFromEnum(psatInputs.drive);
     let fixedSpeed = this.getFixedSpeedFromEnum(psatInputs.fixed_speed);
     let loadEstMethod = this.getLoadEstimationFromEnum(psatInputs.load_estimation_method);
-
     return this.formBuilder.group({
       'pumpType': [pumpStyle, Validators.required],
       'specifiedPumpEfficiency': [psatInputs.pump_specified, Validators.required],
@@ -593,7 +592,7 @@ export class PsatService {
 
     let tmpPsatInputs: PsatInputs = {
       pump_style: pumpStyleEnum,
-      pump_specified: form.value.specifiedPumpType,
+      pump_specified: form.value.specifiedPumpEfficiency,
       pump_rated_speed: form.value.pumpRPM,
       drive: driveEnum,
       kinematic_viscosity: form.value.viscosity,
