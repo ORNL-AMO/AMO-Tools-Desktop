@@ -1,0 +1,9 @@
+@media print {
+    .text-color{
+        color: black !important;
+    }
+}
+
+.text-color{
+    color: white;
+}

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter, HostListener } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, HostListener, ViewChild } from '@angular/core';
 import { Assessment } from '../shared/models/assessment';
 import { PSAT } from '../shared/models/psat';
 import * as _ from 'lodash';
@@ -7,6 +7,9 @@ import { IndexedDbService } from '../indexedDb/indexed-db.service';
 import { Settings } from '../shared/models/settings';
 import { WindowRefService } from '../indexedDb/window-ref.service';
 import { JsonToCsvService } from '../shared/json-to-csv/json-to-csv.service';
+import * as moment from 'moment';
+import { ModalDirective } from 'ngx-bootstrap';
+
 @Component({
   selector: 'app-detailed-report',
   templateUrl: './detailed-report.component.html',
@@ -17,10 +20,14 @@ export class DetailedReportComponent implements OnInit {
   selectedItems: Array<any>;
   @Output('emitCloseReport')
   emitCloseReport = new EventEmitter<boolean>();
+
   @HostListener('window:scroll', ['$event']) onScrollEvent($event) {
     this.checkVisibleSummary();
     this.checkActiveAssessment();
   }
+
+  @ViewChild('printModal') public printModal: ModalDirective;
+
   assessments: Array<Assessment>;
 
   numAssessments: number;
@@ -35,6 +42,8 @@ export class DetailedReportComponent implements OnInit {
   exportReports: any;
   isSummaryVisible: boolean = true;
   focusedAssessment: Assessment;
+  createdDate: any;
+  reportNotes: string;
   constructor(private indexedDbService: IndexedDbService, private psatService: PsatService, private windowRefService: WindowRefService, private jsonToCsvService: JsonToCsvService) { }
 
   ngOnInit() {
@@ -42,6 +51,7 @@ export class DetailedReportComponent implements OnInit {
     this.reportAssessments = new Array<Assessment>();
     this.psats = new Array<PSAT>();
     this.exportReports = new Array();
+    this.createdDate = moment().format('MMMM Do, YYYY');
   }
 
   ngOnChanges() {
@@ -68,6 +78,15 @@ export class DetailedReportComponent implements OnInit {
       }, 1000);
     }, 500)
   }
+
+  showPrintModal() {
+    this.printModal.show();
+  }
+
+  hidePrintModal() {
+    this.printModal.hide();
+  }
+
 
   getAssessmentSettingsThenResults(assessment: Assessment) {
     //check for assessment settings
@@ -152,6 +171,15 @@ export class DetailedReportComponent implements OnInit {
       }
     })
     this.jsonToCsvService.downloadData(tmpDataArr, 'psatRollup');
+  }
+
+  print() {
+    this.hidePrintModal();
+    this.printModal.onHidden.subscribe(() => {
+      let win = this.windowRefService.nativeWindow;
+      let doc = this.windowRefService.getDoc();
+      win.print();
+    });
   }
 
   checkVisibleSummary() {

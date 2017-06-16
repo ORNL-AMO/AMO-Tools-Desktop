@@ -1453,6 +1453,12 @@ Reporting
       font-size: 13px;
   }
 
+.assessment-report-container{
+  padding-bottom: 15px;
+}
+.assessment-report-item{
+  border-bottom: dashed;
+}
 .report-data dl {
   text-align: center;
   margin-top: 10px;
@@ -1538,7 +1544,7 @@ Reporting
       }
 
 .report-list-nav h5 {
-  font-size: 17px;
+  font-size: 20px;
   text-transform: uppercase;
   color: #a5a5a5;
   letter-spacing: 2px;
@@ -1549,7 +1555,7 @@ Reporting
 }
 .report-list-nav li {
   list-style: none;
-  font-size: 15px;
+  font-size: 18px;
 }
   .report-list-nav li.active a {
     font-weight: bold;
@@ -1581,8 +1587,10 @@ Reporting
   display: flex;
   margin-bottom: 20px;
 }
-  .chart-summary {
-    width: 192px;
+
+  .chart-summary{
+    display: flex;
+    flex-wrap: wrap;
   }
   .chart-container .value {
     font-weight: bold;
@@ -1590,6 +1598,32 @@ Reporting
     margin-top: 62.5px;
     margin-left: 73px;
   }
+
+  
+@media (min-width: 576px) { 
+    .chart-item {
+    width: 105px;
+  }
+}
+
+@media (min-width: 768px) {
+    .chart-item {
+    width: 125px;
+  }
+  }
+
+@media (min-width: 992px) { 
+    .chart-item {
+    width: 175px;
+  }
+ }
+
+
+@media (min-width: 1200px) { 
+    .chart-item {
+    width: 192px;
+  }
+ }
 
 
 

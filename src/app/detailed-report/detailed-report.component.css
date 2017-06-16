@@ -1,3 +1,82 @@
+.report-container{
+    width: 100vw;
+}
+
+
+.print-assessments{
+    max-height: 64vh;
+    overflow: scroll;
+}
+
+.report-cover{
+    display: none;
+}
+
+.report-notes-form{
+    max-width: none;
+    width: 100%;
+}
+
+@media print {
+    .report-header{
+        padding-top: 15%;
+    }
+
+    .report-notes{
+        top: 50%;
+        left: 25%;
+        position: absolute;
+        max-width: 50%;
+        overflow-wrap: normal;
+    }
+
+    .print-content{
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        margin: 0;
+    }
+
+    .created-date{
+        position: absolute;
+        top: 94%;
+        color: black;
+    }
+
+    .report-cover{
+        display: inherit;
+        page-break-after: always;
+    }
+
+    .report-logo{
+        left: 75%;
+        top: 86.5%;
+        position: absolute;
+        color: black;
+    }
+    .doe-logo{
+        margin-bottom: none;
+    }
+
+    .print-assessments{
+        max-height: none;
+    }
+    .report-list-nav{
+        display: none !important;
+    }
+
+    .col-8{
+        max-width: none !important;
+        flex: none !important;
+    }
+
+    .assessment-report-item{
+        page-break-after: always;
+        border-bottom: none;
+    }
+}
+
 .fixed-nav{
     top: 0;
     padding-top: 15px;
