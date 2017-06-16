@@ -2,99 +2,130 @@
 
 <div class="row">
   <div class="col-10 offset-md-1">
-    <div class="content-container">
+    <!--<div class="container"> -->
 
-        <h2>AMO Tools Desktop</h2>
-        <p>
-          AMO’s tools help manufacturers increase industrial energy efficiency at the plant-level and in specific systems. Learn step-by-step ways to identify opportunities, monitor progress, and improve efficiency in any facility. Some tools help facilities implement an energy management system and prepare to become ISO 50001 and Superior Energy Performance certified.
-        </p>
+    <h2>AMO Tools Desktop</h2>
+    <p>
+      AMO’s tools help manufacturers increase industrial energy efficiency at the plant-level and in specific systems. Learn step-by-step ways to identify opportunities, monitor progress, and improve efficiency in any facility. Some tools help facilities implement an energy management system and prepare to become ISO 50001 and Superior Energy Performance certified.
+    </p>
+    <div id="accordion" role="tablist" aria-multiselectable="true">
+      <div class="card">
+        <div class="card-header" role="tab" id="headingOne">
+          <h4 class="mb-0">
+            <a data-toggle="collapse" data-parent="#accordion" href="#sysreq" aria-expanded="true" aria-controls="sysreq">
+              System Requirements
+            </a>
+          </h4>
+        </div>
 
-        <h3>System Requirements</h3>
-        <p>AMO Tools Desktop will operate on the following computers:</p>
-        <ul>
-          <li>
-            64-bit or 32-bit computer running Windows OS
-          </li>
-          <li>
-            64-bit or 32-bit computer running Linux OS
-          </li>
-          <li>
-            Mac OS X
-          </li>
-        </ul>
+        <div id="sysreq" class="collapse show" role="tabpanel" aria-labelledby="headingOne">
+          <div class="card-block">
+            <p>AMO Tools Desktop will operate on the following computers:</p>
+            <ul>
+              <li>
+                64-bit or 32-bit computer running Windows OS
+              </li>
+              <li>
+                64-bit or 32-bit computer running Linux OS
+              </li>
+              <li>
+                Mac OS X
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
 
+      <div class="card">
+        <div class="card-header" role="tab" id="headingTwo">
+          <h4 class="mb-0">
+            <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#psatId" aria-expanded="false" aria-controls="psatId">
+              PSAT
+            </a>
+          </h4>
+        </div>
+        <div id="collapseTwo" class="collapse" role="tabpanel" aria-labelledby="headingTwo">
+          <div class="card-block">
+            <p>
+              The Pumping System Assessment Tool (PSAT) is a free desktop software tool to help industrial users assess the efficiency
+              of pumping system operations. PSAT uses achievable pump performance data from Hydraulic Institute standards and
+              motor performance data from the MotorMaster+ database to calculate potential energy and associated cost savings.
+              The tool also enables users to save and retrieve log files, default values, and system curves for sharing analyses
+              with other users.
+            </p>
 
+            <h4>Intended Users</h4>
+            <p>
+              The tool is designed for industrial plant managers and personnel who are interested in improving pumping system efficiency
+              and measuring potential savings opportunities in both dollars and electrical energy savings.
+            </p>
 
+            <h4>Inputs</h4>
+            <p>To use PSAT, users must input the following data:</p>
+            <ul>
+              <li>Pump style</li>
+              <li>System of units</li>
+              <li>Number of stages</li>
+              <li>Pump and motor speed(s)</li>
+              <li>Motor nameplate ratings</li>
+              <li>Operating duty (fraction of time the equipment runs at the specified condition)</li>
+              <li>Energy cost rates</li>
+              <li>Flow rate</li>
+              <li>Pump head (calculated from user-supplied pressure and line dimensional data)</li>
+              <li>Electric power or current and voltage.</li>
+            </ul>
 
-        <h3>PSAT</h3>
-        <p>
-          The Pumping System Assessment Tool (PSAT) is a free desktop software tool to help industrial users assess the efficiency
-          of pumping system operations. PSAT uses achievable pump performance data from Hydraulic Institute standards and
-          motor performance data from the MotorMaster+ database to calculate potential energy and associated cost savings.
-          The tool also enables users to save and retrieve log files, default values, and system curves for sharing analyses
-          with other users.
-        </p>
+            <h4>Outputs</h4>
+            <p>Base on inputs, PSAT will provide the following:</p>
+            <ul>
+              <li>Estimated pump and motor efficiencies and shaft powers for both existing and top-of-the-line commercially available equipment of "optimal" equipment</li>
+              <li>Annual energy use and energy costs for existing and optimal equipment</li>
+              <li>Potential annual energy savings</li>
+              <li>Optimization rating, which is analogous to a grade (rating of 100 is consistent with top-of-the-line commercial equipment).</li>
+            </ul>
+          </div>
+        </div>
+      </div>
 
-        <h4>Intended Users</h4>
-        <p>
-          The tool is designed for industrial plant managers and personnel who are interested in improving pumping system efficiency
-          and measuring potential savings opportunities in both dollars and electrical energy savings.
-        </p>
+      <div class="card">
+        <div class="card-header" role="tab" id="headingThree">
+          <h4 class="mb-0">
+            <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#phastID" aria-expanded="false" aria-controls="phastID">
+              PHAST
+            </a>
+          </h4>
+        </div>
+        <div id="phast" class="collapse" role="tabpanel" aria-labelledby="headingThree">
+          <div class="card-block">
+            <p>The Process Heating Assessment and Survey Tool (PHAST) introduces methods to improve thermal efficiency of heating equipment. This tool helps industrial users survey process heating equipment that consumes fuel, steam, or electricity, and identifies the most energy-intensive equipment. The tool can be used to perform a heat balance that identifies major areas of energy use under various operating conditions and test "what-if" scenarios for various options to reduce energy use.</p>
 
-        <h4>Inputs</h4>
-        <p>To use PSAT, users must input the following data:</p>
-        <ul>
-          <li>Pump style</li>
-          <li>System of units</li>
-          <li>Number of stages</li>
-          <li>Pump and motor speed(s)</li>
-          <li>Motor nameplate ratings</li>
-          <li>Operating duty (fraction of time the equipment runs at the specified condition)</li>
-          <li>Energy cost rates</li>
-          <li>Flow rate</li>
-          <li>Pump head (calculated from user-supplied pressure and line dimensional data)</li>
-          <li>Electric power or current and voltage.</li>
-        </ul>
+            <h4>Intended Users</h4>
+            <p>This tool is designed for industrial energy coordinators, plant managers and engineers who are interested in identifying potential energy-saving opportunities in process heating equipment.</p>
 
-        <h4>Outputs</h4>
-        <p>Base on inputs, PSAT will provide the following:</p>
-        <ul>
-          <li>Estimated pump and motor efficiencies and shaft powers for both existing and top-of-the-line commercially available equipment of "optimal" equipment</li>
-          <li>Annual energy use and energy costs for existing and optimal equipment</li>
-          <li>Potential annual energy savings</li>
-          <li>Optimization rating, which is analogous to a grade (rating of 100 is consistent with top-of-the-line commercial equipment).</li>
-        </ul>
+            <h4>Inputs</h4>
+            <p>Users will need to inputs the following:</p>
+            <ul>
+              <li>General manufacturing plant information</li>
+              <li>Available energy sources for the plant and the fuel heating value and cost</li>
+              <li>Energy use data for furnaces, and heater</li>
+              <li>Energy used by auxiliary equipment associated with the furnace</li>
+              <li>Energy used in various parts of the furnace under given operating conditions</li>
+              <li>Commonly used materials for charge material, fixtures and process atmosphere in process heating applications.</li>
+            </ul>
 
-
-        
-        <h3>PHAST</h3>
-        <p>The Process Heating Assessment and Survey Tool (PHAST) introduces methods to improve thermal efficiency of heating equipment. This tool helps industrial users survey process heating equipment that consumes fuel, steam, or electricity, and identifies the most energy-intensive equipment. The tool can be used to perform a heat balance that identifies major areas of energy use under various operating conditions and test "what-if" scenarios for various options to reduce energy use.</p>
-
-        <h4>Intended Users</h4>
-        <p>This tool is designed for industrial energy coordinators, plant managers and engineers who are interested in identifying potential energy-saving opportunities in process heating equipment.</p>
-
-        <h4>Inputs</h4>
-        <p>Users will need to inputs the following:</p>
-        <ul>
-          <li>General manufacturing plant information</li>
-          <li>Available energy sources for the plant and the fuel heating value and cost</li>
-          <li>Energy use data for furnaces, and heater</li>
-          <li>Energy used by auxiliary equipment associated with the furnace</li>
-          <li>Energy used in various parts of the furnace under given operating conditions</li>
-          <li>Commonly used materials for charge material, fixtures and process atmosphere in process heating applications.</li>
-        </ul>
-
-        <h4>Outputs</h4>
-        <p>Based on inputs, PHAST will:</p>
-        <ul>
-          <li>Compare energy performance of individual pieces of equipment under various operating conditions</li>
-          <li>Report annual energy use of each piece of equipment</li>
-          <li>Construct a detailed heat balance for selected pieces of equipment</li>
-          <li>Suggest methods to save energy in each area where energy is used or wasted.</li>
-        </ul>
-
-        
-
+            <h4>Outputs</h4>
+            <p>Based on inputs, PHAST will:</p>
+            <ul>
+              <li>Compare energy performance of individual pieces of equipment under various operating conditions</li>
+              <li>Report annual energy use of each piece of equipment</li>
+              <li>Construct a detailed heat balance for selected pieces of equipment</li>
+              <li>Suggest methods to save energy in each area where energy is used or wasted.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
     </div>
+
+    <!--</div>-->
   </div>
 </div>
