@@ -1,14 +1,6 @@
 <ul class="tabs vertical flex-column">
-  <li [ngClass]="{'active': lossesTab == 'charge-material'}" (click)="tabChange('charge-material')">
-    <a class="nav-link small">
-    Charge Material
-    <!--<div class="pull-right numberCircle" *ngIf="losses.chargeMaterials" [ngClass]="{'unsaved':!lossesStates.chargeMaterial.saved}"><span>{{lossesStates.chargeMaterial.numLosses}}</span></div>-->
-    </a>
-  </li>
-  <li [ngClass]="{'active': lossesTab == 'wall-losses'}" (click)="tabChange('wall-losses')">
-    <a class="nav-link small">
-    Wall
-    <!--<div class="pull-right numberCircle" *ngIf="losses.wallLosses" [ngClass]="{'unsaved':!lossesStates.wallLosses.saved}"><span>{{losses.wallLosses.length}}</span></div>-->
+  <li [ngClass]="{'active': lossesTab == 'charge-material'}" (click)="tabChange('charge-material')"><a class="nav-link small">Charge Material<!--<div class="pull-right numberCircle" *ngIf="losses.chargeMaterials" [ngClass]="{'unsaved':!lossesStates.chargeMaterial.saved}"><span>{{lossesStates.chargeMaterial.numLosses}}</span></div>--></a></li><li [ngClass]="{'active': lossesTab == 'wall-losses'}" (click)="tabChange('wall-losses')"><a class="nav-link small">Wall
+  <!--<div class="pull-right numberCircle" *ngIf="losses.wallLosses" [ngClass]="{'unsaved':!lossesStates.wallLosses.saved}"><span>{{losses.wallLosses.length}}</span></div>-->
     </a>
   </li>
   <li [ngClass]="{'active': lossesTab == 'atmosphere-losses'}" (click)="tabChange('atmosphere-losses')">
