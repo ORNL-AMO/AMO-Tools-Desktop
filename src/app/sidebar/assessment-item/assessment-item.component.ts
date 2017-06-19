@@ -19,6 +19,9 @@ export class AssessmentItemComponent implements OnInit {
   goToAssessment(assessment: Assessment) {
     this.assessmentService.tab = 'system-setup';
     if (assessment.type == 'PSAT') {
+      if(assessment.psat.setupDone){
+        this.assessmentService.tab = 'modify-conditions';
+      }
       this.router.navigateByUrl('/psat/' + assessment.id);
     } else if (assessment.type == 'PHAST') {
       this.router.navigateByUrl('/phast/' + assessment.id);

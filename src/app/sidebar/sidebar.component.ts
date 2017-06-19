@@ -1,8 +1,7 @@
 import { Component, OnInit, Output, EventEmitter, Input, SimpleChanges } from '@angular/core';
 import { Directory } from '../shared/models/directory';
 import { Assessment } from '../shared/models/assessment';
-import { Router } from '@angular/router';
-import { AssessmentService } from '../assessment/assessment.service';
+
 @Component({
   selector: 'app-sidebar',
   templateUrl: './sidebar.component.html',
