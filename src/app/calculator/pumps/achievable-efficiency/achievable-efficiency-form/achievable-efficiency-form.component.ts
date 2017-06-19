@@ -44,7 +44,7 @@ export class AchievableEfficiencyFormComponent implements OnInit {
     this.efficiencyForm.patchValue({
       pumpType: this.tmpPumpType,
       flowRate: this.tmpFlowRate
-    })
+    });
     this.calculate.emit(true);
   }
 }

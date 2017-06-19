@@ -366,8 +366,8 @@ Modals
 Data Tables
 =========================================== */
 .table-header {
-  margin-top: 18px;
-  padding: 7px 15px;
+  margin-top: 20px;
+  padding: 10px 15px;
   border-bottom: #ddd solid 1px;
   vertical-align: middle;
 }
@@ -398,14 +398,6 @@ Assessments: Grid & List View Shared Styles
 /*
 Assessments: List View
 =========================================== */
-.list-view {
-  -webkit-box-shadow: 0px 1px 6px 0px rgba(0,0,0,0.1);
-  -moz-box-shadow: 0px 1px 6px 0px rgba(0,0,0,0.1);
-  box-shadow: 0px 1px 6px 0px rgba(0,0,0,0.1);
-}
-  .list-view app-assessment-list-item:nth-child(even) .list-row {
-    background: #f2f5f7;
-  }
 .list-row {
   padding: 14px;
   background: #fff;
@@ -413,16 +405,9 @@ Assessments: List View
   border-style: solid;
   border-width: 0 1px 1px;
 }
-  .list-row:after {
-    display: table;
-    clear: both;
-    content: "";
-  }
   .list-row .actions {
-    width: 30%;
+    margin-left: 29px;
     font-size: 14px;
-    float: right;
-    text-align: right;
   }
     .list-row .actions a {
       display: inline-block;
@@ -432,12 +417,7 @@ Assessments: List View
         text-decoration: none;
         color: #0076FF;
       }
-  .list-row .assessment-name {
-    float: left;
-    padding-right: 20px;
-    width: 70%;
-    margin-bottom: 0;
-  }
+
   .drag-handle, .list-row input, .assessment-name {
     display: inline-block;
     vertical-align: top;
@@ -604,7 +584,7 @@ Sidebar
 .dashboard-content{
   height: 100vh;
   min-height: 100%;
-  background-color: #ececec;
+  background-color: #eee;
 }
 
 .dashboard-content .dashboard-page{
@@ -897,8 +877,8 @@ Banner
 
 .banner .btn-dashboard, .banner .title, .banner .settings {
   display: inline-block;
-  padding: 7px 10px;
-  color: #fff;
+  padding: 7px 29px;
+  color: rgba(255,255,255,0.8);
 }
 .banner .btn-dashboard {
   float: right;
@@ -1086,7 +1066,7 @@ Tabs
   font-size: 13px;
   display: block;
   color: #0F0F0F;
- }
+}
 .tabs.subtabs a:hover {
   text-decoration: none;
 }
@@ -1263,7 +1243,9 @@ Modify Conditions
         cursor: pointer;
         background: #efefef;
       }
-
+  .modification.disabled, .modify-conditions .no-data {
+    border: transparent solid 3px;
+  }
   .modification.disabled, .modification.disabled button, .modification.disabled textarea {
     background: #efefef;
     -webkit-box-shadow: none;
@@ -1471,12 +1453,6 @@ Reporting
       font-size: 13px;
   }
 
-.assessment-report-container{
-  padding-bottom: 15px;
-}
-.assessment-report-item{
-  border-bottom: dashed;
-}
 .report-data dl {
   text-align: center;
   margin-top: 10px;
@@ -1562,7 +1538,7 @@ Reporting
       }
 
 .report-list-nav h5 {
-  font-size: 20px;
+  font-size: 17px;
   text-transform: uppercase;
   color: #a5a5a5;
   letter-spacing: 2px;
@@ -1573,7 +1549,7 @@ Reporting
 }
 .report-list-nav li {
   list-style: none;
-  font-size: 18px;
+  font-size: 15px;
 }
   .report-list-nav li.active a {
     font-weight: bold;
@@ -1605,10 +1581,8 @@ Reporting
   display: flex;
   margin-bottom: 20px;
 }
-
-  .chart-summary{
-    display: flex;
-    flex-wrap: wrap;
+  .chart-summary {
+    width: 192px;
   }
   .chart-container .value {
     font-weight: bold;
@@ -1616,32 +1590,6 @@ Reporting
     margin-top: 62.5px;
     margin-left: 73px;
   }
-
-
-@media (min-width: 576px) {
-    .chart-item {
-    width: 105px;
-  }
-}
-
-@media (min-width: 768px) {
-    .chart-item {
-    width: 125px;
-  }
-  }
-
-@media (min-width: 992px) {
-    .chart-item {
-    width: 175px;
-  }
- }
-
-
-@media (min-width: 1200px) {
-    .chart-item {
-    width: 192px;
-  }
- }
 
 
 
@@ -1743,5 +1691,3 @@ Toasty Overrides ================================= */
     width: 25%;
   }
 }
-
-
