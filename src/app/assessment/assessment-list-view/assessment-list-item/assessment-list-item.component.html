@@ -1,15 +1,17 @@
 <div class="list-row" [ngClass]="{ 'phast' : assessment.type == 'PHAST', 'psat': assessment.type == 'PSAT' }">
-  <input type="checkbox" [(ngModel)]="isChecked" (change)="setDelete()" />
   <!-- <div class="drag-handle">
     <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
     <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
     <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
   </div> -->
-  <div class="assessment-name">{{assessment.name}}</div>
+  <div class="assessment-name">
+    <input type="checkbox" [(ngModel)]="isChecked" (change)="setDelete()" />
+    <a (click)="goToAssessment(assessment, 'explore-opportunities')" *ngIf="isSetup">{{assessment.name}}</a>
+    <a (click)="goToAssessment(assessment, 'system-setup')" *ngIf="!isSetup">{{assessment.name}}</a>
+  </div>
   <div class="actions">
-    <a (click)="goToAssessment(assessment, 'system-setup')">System Setup</a>
     <div class="text-muted" *ngIf="!isSetup">&mdash; System Setup Not Complete</div>
-    <a (click)="goToAssessment(assessment, 'modify-conditions')" *ngIf="isSetup">Modify Conditions</a>
-    <a (click)="goToAssessment(assessment, 'modify-conditions', 'report')" *ngIf="isSetup">Report</a>
+    <a (click)="goToAssessment(assessment, 'modify-conditions', 'report')" *ngIf="isSetup">View Report</a>
+    <a (click)="goToAssessment(assessment, 'system-setup')" *ngIf="isSetup">System Setup</a>
   </div>
 </div>

@@ -7,8 +7,8 @@ html {
 *, *:before, *:after {
   box-sizing: inherit;
 }
-::-webkit-scrollbar { 
-    display: none; 
+::-webkit-scrollbar {
+    display: none;
 }
 
 input::-webkit-outer-spin-button,
@@ -33,13 +33,13 @@ input::-webkit-inner-spin-button {
   content: " ";
   display: block;
   clear: left;
-} 
+}
 
-/* 
+/*
 Typography
 ======================================================== */
 html, body {
-  font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif; 
+  font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
   font-weight: 100;
   font-size: 18px;
 }
@@ -107,7 +107,7 @@ Buttons
 
 .numberCircle {
     border-radius: 50%;
-    width: 22px; 
+    width: 22px;
     font-size: 18px;
     background-color: #81D4FA;
         padding-left: 5px;
@@ -161,11 +161,11 @@ select.form-control:not([size]):not([multiple]) {
   display: table;
   content: "";
   clear: both;
-}  
+}
   .tab-content .form-group .form-control, .tab-content .form-group label, .tab-content .form-group .form-check {
     float: left;
   }
-  .tab-content .form-group .form-check label {  
+  .tab-content .form-group .form-check label {
     float: none;
   }
   .tab-content .form-group label {
@@ -188,7 +188,7 @@ select.form-control:not([size]):not([multiple]) {
 }
 
 .incrementor {
-  border:  #9c9c9c solid 1px; 
+  border:  #9c9c9c solid 1px;
   padding: 0;
 }
   .tab-content .form-group .form-control.incrementor .form-control {
@@ -302,7 +302,7 @@ In-Assessment Calculators
   }
 .calc-help {
   margin-top: 10px;
-  padding-left: 20px; 
+  padding-left: 20px;
 }
   .calc-help h3 {
     font-size: 20px;
@@ -371,8 +371,8 @@ Modals
 Data Tables
 =========================================== */
 .table-header {
-  margin-top: 20px;
-  padding: 10px 15px;
+  margin-top: 18px;
+  padding: 7px 15px;
   border-bottom: #ddd solid 1px;
   vertical-align: middle;
 }
@@ -403,6 +403,14 @@ Assessments: Grid & List View Shared Styles
 /*
 Assessments: List View
 =========================================== */
+.list-view {
+  -webkit-box-shadow: 0px 1px 6px 0px rgba(0,0,0,0.1);
+  -moz-box-shadow: 0px 1px 6px 0px rgba(0,0,0,0.1);
+  box-shadow: 0px 1px 6px 0px rgba(0,0,0,0.1);
+}
+  .list-view app-assessment-list-item:nth-child(even) .list-row {
+    background: #f2f5f7;
+  }
 .list-row {
   padding: 14px;
   background: #fff;
@@ -410,9 +418,16 @@ Assessments: List View
   border-style: solid;
   border-width: 0 1px 1px;
 }
+  .list-row:after {
+    display: table;
+    clear: both;
+    content: "";
+  }
   .list-row .actions {
-    margin-left: 29px;
+    width: 30%;
     font-size: 14px;
+    float: right;
+    text-align: right;
   }
     .list-row .actions a {
       display: inline-block;
@@ -422,7 +437,12 @@ Assessments: List View
         text-decoration: none;
         color: #0076FF;
       }
-
+  .list-row .assessment-name {
+    float: left;
+    padding-right: 20px;
+    width: 70%;
+    margin-bottom: 0;
+  }
   .drag-handle, .list-row input, .assessment-name {
     display: inline-block;
     vertical-align: top;
@@ -579,7 +599,7 @@ Sidebar
   border-style: solid;
   -webkit-border-image: -webkit-gradient(linear, 0 0, 0 100%, from(#949494), to(rgba(0, 0, 0, 0))) 1 100%;
   -webkit-border-image: -webkit-linear-gradient(#949494, rgba(0, 0, 0, 0)) 1 100%;
-  -moz-border-image:    -moz-linear-gradient(#949494, rgba(0, 0, 0, 0)) 1 100%;    
+  -moz-border-image:    -moz-linear-gradient(#949494, rgba(0, 0, 0, 0)) 1 100%;
   -o-border-image:      -o-linear-gradient(#949494, rgba(0, 0, 0, 0)) 1 100%;
   border-image:         linear-gradient(to bottom, #949494, rgba(0, 0, 0, 0)) 1 100%;
   padding: 0;
@@ -589,7 +609,7 @@ Sidebar
 .dashboard-content{
   height: 100vh;
   min-height: 100%;
-  background-color: #eee;
+  background-color: #ececec;
 }
 
 .dashboard-content .dashboard-page{
@@ -694,7 +714,7 @@ Content Container
   -moz-box-shadow: 0px 1px 8px 0px rgba(0,0,0,0.07);
   box-shadow: 0px 1px 8px 0px rgba(0,0,0,0.07);
 }
-  
+
   .content-container h2 {
     font-size: 30px;
     margin-bottom: 40px;
@@ -742,7 +762,7 @@ Calculators
     list-style: none;
   }
   .calculator-list a {
-    
+
   }
   .calculator-list p {
     margin-bottom: 0;
@@ -803,7 +823,7 @@ Calculators
 }
 
 
-/* Pump Head 
+/* Pump Head
 ================================================ */
 .pump-head select.form-control:not([size]):not([multiple]) {
   width: auto;
@@ -882,8 +902,8 @@ Banner
 
 .banner .btn-dashboard, .banner .title, .banner .settings {
   display: inline-block;
-  padding: 7px 29px;
-  color: rgba(255,255,255,0.8);
+  padding: 7px 10px;
+  color: #fff;
 }
 .banner .btn-dashboard {
   float: right;
@@ -899,7 +919,7 @@ Banner
      background-color: #0063a4;
   }
   .banner.phast .btn-dashboard:hover {
-    background-color: #a83600; 
+    background-color: #a83600;
   }
 
 .banner .btn-dashboard:hover {
@@ -956,8 +976,8 @@ Wizard Steps
   z-index: -1;
 }
 .wizard-steps h2 span {
-  background: #efefef; 
-  padding: 0 15px; 
+  background: #efefef;
+  padding: 0 15px;
 }
 
 .wizard-steps ul {
@@ -994,12 +1014,12 @@ Wizard Steps
   /*background: linear-gradient(to bottom,  rgba(255,255,255,0) 0%,rgba(255,255,255,0.4) 100%);*/
   /*border-width: 0 1px 0 1px;
   border-style: solid;
-  -webkit-border-image: 
+  -webkit-border-image:
     -webkit-gradient(linear, 0 100%, 0 0, from(rgba(0,0,0,0.3)), to(rgba(0, 0, 0, 0))) 1 100%;
-  -webkit-border-image: 
+  -webkit-border-image:
     -webkit-linear-gradient(bottom, rgba(0,0,0,0.3), rgba(0, 0, 0, 0)) 1 100%;
   -moz-border-image:
-    -moz-linear-gradient(bottom, rgba(0,0,0,0.3), rgba(0, 0, 0, 0)) 1 100%;  
+    -moz-linear-gradient(bottom, rgba(0,0,0,0.3), rgba(0, 0, 0, 0)) 1 100%;
   -o-border-image:
     -o-linear-gradient(bottom, rgba(0,0,0,0.3), rgba(0, 0, 0, 0)) 1 100%;
   border-image:
@@ -1071,7 +1091,7 @@ Tabs
   font-size: 13px;
   display: block;
   color: #0F0F0F;
-}
+ }
 .tabs.subtabs a:hover {
   text-decoration: none;
 }
@@ -1175,7 +1195,7 @@ Tabs
       max-width: 1024px;
       width: 100%;
       margin: 40px auto;
-      display: flex;  
+      display: flex;
   }
   .form, .help {
     padding: 20px;
@@ -1248,9 +1268,7 @@ Modify Conditions
         cursor: pointer;
         background: #efefef;
       }
-  .modification.disabled, .modify-conditions .no-data {
-    border: transparent solid 3px;
-  }
+
   .modification.disabled, .modification.disabled button, .modification.disabled textarea {
     background: #efefef;
     -webkit-box-shadow: none;
@@ -1330,7 +1348,7 @@ Modify Conditions
   .modifications-list .add-modification p {
     font-size: 16px;
     color: #989898;
-    padding: 4px 20px; 
+    padding: 4px 20px;
   }
 
 .edit-modification {
@@ -1349,7 +1367,7 @@ Modify Conditions
     .tab-content .edit-modification .form-group:hover {
       background: #fff;
     }
-  
+
   .edit-modification .actions {
     margin-top: 16px;
     margin-bottom: 100px;
@@ -1386,9 +1404,9 @@ Help Panel Cards
   margin-bottom: 0;
 }
 .help-panel .card {
-  background-color: transparent; 
-  border: none; 
-  border-radius: 0; 
+  background-color: transparent;
+  border: none;
+  border-radius: 0;
 }
 .help-panel .card-header {
   padding: 0;
@@ -1423,7 +1441,7 @@ Help Panel Cards
   border-style: solid;
   -webkit-border-image: -webkit-gradient(linear, 0 0, 0 100%, from(#a7a7a7), to(rgba(255, 255, 255, 0))) 1 100%;
   -webkit-border-image: -webkit-linear-gradient(#a7a7a7, rgba(255, 255, 255, 0)) 1 100%;
-  -moz-border-image: -moz-linear-gradient(#a7a7a7, rgba(255, 255, 255, 0)) 1 100%;    
+  -moz-border-image: -moz-linear-gradient(#a7a7a7, rgba(255, 255, 255, 0)) 1 100%;
   -o-border-image: -o-linear-gradient(#a7a7a7, rgba(255, 255, 255, 0)) 1 100%;
   border-image: linear-gradient(to bottom, #a7a7a7, rgba(255, 255, 255, 0)) 1 100%;
 }
@@ -1507,7 +1525,7 @@ Reporting
   }
   .rollups h3 span {
     display: inline-block;
-    position: relative;  
+    position: relative;
   }
   .rollups h3 span:before,
   .rollups h3 span:after {
@@ -1604,8 +1622,8 @@ Reporting
     margin-left: 73px;
   }
 
-  
-@media (min-width: 576px) { 
+
+@media (min-width: 576px) {
     .chart-item {
     width: 105px;
   }
@@ -1617,14 +1635,14 @@ Reporting
   }
   }
 
-@media (min-width: 992px) { 
+@media (min-width: 992px) {
     .chart-item {
     width: 175px;
   }
  }
 
 
-@media (min-width: 1200px) { 
+@media (min-width: 1200px) {
     .chart-item {
     width: 192px;
   }
@@ -1678,7 +1696,7 @@ No Data Messaging
 
 
 
-/* 
+/*
 Toasty Overrides ================================= */
 #toasty.toasty-position-bottom-right {
   bottom: 75px;
@@ -1730,3 +1748,5 @@ Toasty Overrides ================================= */
     width: 25%;
   }
 }
+
+
