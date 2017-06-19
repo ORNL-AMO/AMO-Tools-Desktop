@@ -134,7 +134,6 @@ export class FieldDataComponent implements OnInit {
 
 
   setCompareVals() {
-    console.log('setCompareVals');
     if (this.baseline) {
       this.compareService.baselinePSAT = this.psat;
     } else {
