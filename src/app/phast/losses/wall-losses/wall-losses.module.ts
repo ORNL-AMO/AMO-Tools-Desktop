@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SharedModule } from '../../../shared/shared.module';
-import { ModalModule } from 'ngx-bootstrap';
 
 import { WallLossesService } from './wall-losses.service';
 import { WallLossesComponent } from './wall-losses.component';
