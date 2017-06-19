@@ -18,7 +18,7 @@ export class AchievableEfficiencyComponent implements OnInit {
   settings: Settings;
   @Input()
   inPsat: boolean;
-  
+
   efficiencyForm: any;
   toggleCalculate: boolean = true;
   constructor(private formBuilder: FormBuilder, private psatService: PsatService, private indexedDbService: IndexedDbService, private settingsService: SettingsService, private convertUnitsService: ConvertUnitsService) { }

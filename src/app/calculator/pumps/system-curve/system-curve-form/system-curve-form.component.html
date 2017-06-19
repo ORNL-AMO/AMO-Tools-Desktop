@@ -24,10 +24,11 @@
     <input type="number" step="any" class="form-control" id="flowRate" [(ngModel)]="p1FlowRate" (input)="checkInputs()" onfocus="this.select();">
     <span class="units">{{settings.flowMeasurement}}</span>
   </div>
+
   <div class="form-group">
     <label class="small" for="head">Head</label>
     <input type="number" step="any" class="form-control" id="head" [(ngModel)]="p1Head" (input)="checkInputs()" onfocus="this.select();">
-  <span class="units">{{settings.distanceMeasurement}}</span>
+    <span class="units">{{settings.distanceMeasurement}}</span>
   </div>
   <div class="row">
     <div class="col-6">
@@ -65,3 +66,5 @@
     </div>
   </div>
 </div>
+
+
