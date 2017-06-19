@@ -46,7 +46,7 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
   results: any = {
     max: 0,
     average: 0
-  };
+  }
 
   canvasWidth: number;
   canvasHeight: number;
@@ -591,15 +591,6 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
       .style("font-size", this.fontSize)
       .style("font-weight", "bold")
       .style("fill", "#3498DB");
-
-    this.svg.append("text")
-      .attr("x", 20)
-      .attr("y", "80")
-      .text("Pump Type: " + this.efficiencyForm.value.pumpType)
-      .style("font-size", this.fontSize)
-      .style("font-weight", "bold")
-      .style("fill", "#000000");
-
 
     // this.maxValue
     //   .text(format(this.calculateYmax(this.efficiencyForm.value.flowRate)) + ' %');

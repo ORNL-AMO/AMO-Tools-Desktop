@@ -19,6 +19,8 @@ export class SpecificSpeedGraphComponent implements OnInit {
   yAxis: any;
   x: any;
   y: any;
+  specificSpeedText: any;
+  efficiencyCorrectionText: any;
   width: any;
   height: any;
   margin: any;
@@ -449,14 +451,6 @@ export class SpecificSpeedGraphComponent implements OnInit {
       .text("Efficiency Correction: " + efficiencyCorrection + ' %')
       .style("font-size", "13px")
       .style("font-weight", "bold");
-
-    this.svg.append("text")
-      .attr("x", (this.width/2)-100)
-      .attr("y", "20")
-      .text("Pump Type: " + this.speedForm.value.pumpType)
-      .style("font-size", "13px")
-      .style("font-weight", "bold")
-      .style("fill", "#000000");
 
     // this.specificSpeedText = this.svg.append("text")
     //   .attr("id", "specificSpeedValue")
