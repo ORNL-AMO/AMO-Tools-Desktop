@@ -4,16 +4,18 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SharedModule } from '../../shared/shared.module';
 import { ModalModule } from 'ngx-bootstrap';
 
+import { WallLossesModule } from './wall-losses/wall-losses.module';
+
 import { LossesComponent } from './losses.component';
 import { ChargeMaterialComponent } from './charge-material/charge-material.component';
-import { WallLossesComponent } from './wall-losses/wall-losses.component';
+
 import { AtmosphereLossesComponent } from './atmosphere-losses/atmosphere-losses.component';
 import { OpeningLossesComponent } from './opening-losses/opening-losses.component';
 import { FlueGasLossesComponent } from './flue-gas-losses/flue-gas-losses.component';
 import { OtherLossesComponent } from './other-losses/other-losses.component';
 import { FixtureLossesComponent } from './fixture-losses/fixture-losses.component';
 import { LossesSidebarComponent } from './losses-sidebar/losses-sidebar.component';
-import { WallLossesFormComponent } from './wall-losses/wall-losses-form/wall-losses-form.component';
+
 import { SolidChargeMaterialFormComponent } from './charge-material/solid-charge-material-form/solid-charge-material-form.component';
 import { FixtureLossesFormComponent } from './fixture-losses/fixture-losses-form/fixture-losses-form.component';
 import { WaterCoolingLossesFormComponent } from './cooling-losses/water-cooling-losses-form/water-cooling-losses-form.component';
@@ -23,7 +25,7 @@ import { LiquidChargeMaterialFormComponent } from './charge-material/liquid-char
 import { GasChargeMaterialFormComponent } from './charge-material/gas-charge-material-form/gas-charge-material-form.component';
 
 import { ChargeMaterialService } from './charge-material/charge-material.service';
-import { WallLossesService } from './wall-losses/wall-losses.service';
+
 import { LossesTabsComponent } from './losses-tabs/losses-tabs.component';
 import { AtmosphereLossesService } from './atmosphere-losses/atmosphere-losses.service';
 import { FixtureLossesService } from './fixture-losses/fixture-losses.service';
@@ -82,19 +84,18 @@ import { EnergyInputHelpComponent } from './losses-help/energy-input-help/energy
     ReactiveFormsModule,
     SharedModule,
     ModalModule,
-    SuiteDbModule
+    SuiteDbModule,
+    WallLossesModule
   ],
   declarations: [
     LossesComponent,
     ChargeMaterialComponent,
-    WallLossesComponent,
     AtmosphereLossesComponent,
     OpeningLossesComponent,
     FlueGasLossesComponent,
     OtherLossesComponent,
     FixtureLossesComponent,
     LossesSidebarComponent,
-    WallLossesComponent,
     FixtureLossesFormComponent,
     WaterCoolingLossesFormComponent,
     AtmosphereLossesFormComponent,
@@ -102,7 +103,6 @@ import { EnergyInputHelpComponent } from './losses-help/energy-input-help/energy
     LiquidChargeMaterialFormComponent,
     GasChargeMaterialFormComponent,
     SolidChargeMaterialFormComponent,
-    WallLossesFormComponent,
     LossesTabsComponent,
     OpeningLossesFormComponent,
     CoolingLossesComponent,
@@ -143,7 +143,6 @@ import { EnergyInputHelpComponent } from './losses-help/energy-input-help/energy
   ],
   providers: [
     ChargeMaterialService,
-    WallLossesService,
     AtmosphereLossesService,
     FixtureLossesService,
     FlueGasLossesService,
