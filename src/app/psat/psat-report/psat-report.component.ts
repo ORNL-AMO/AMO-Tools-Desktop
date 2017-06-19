@@ -23,6 +23,8 @@ export class PsatReportComponent implements OnInit {
   assessment: Assessment;
   @Input()
   emitPrint: boolean;
+  @Input()
+  inPsat: boolean;
 
   assessmentDirectories: Directory[];
   isFirstChange: boolean = true;
