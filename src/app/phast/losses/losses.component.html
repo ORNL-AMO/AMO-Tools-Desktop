@@ -20,7 +20,7 @@
 
       <app-wall-losses (fieldChange)="changeField($event)" [baselineSelected]="baselineSelected" (savedLoss)="saveModifications()"
         [addLossToggle]="addLossToggle" [(losses)]="phast.losses" [(lossState)]="lossesStates.wallLosses" [saveClicked]="saveClicked"
-        *ngIf="lossesTab == 'wall-losses'"></app-wall-losses>
+        *ngIf="lossesTab == 'wall-losses'" [isBaseline]="true"></app-wall-losses>
 
       <app-atmosphere-losses (fieldChange)="changeField($event)" [baselineSelected]="baselineSelected" (savedLoss)="saveModifications()"
         [(losses)]="phast.losses" [addLossToggle]="addLossToggle" [(lossState)]="lossesStates.atmosphereLosses" [saveClicked]="saveClicked"
