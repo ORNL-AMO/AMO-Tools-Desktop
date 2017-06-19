@@ -87,14 +87,14 @@ export class PumpFluidComponent implements OnInit {
     if (this.selected) {
       this.formRef.nativeElement.pumpType.focus();
     }
-    this.setCompareVals();
-    this.initDifferenceMonitor();
   }
 
   ngAfterViewInit() {
     if (!this.selected) {
       this.disableForm();
     }
+    this.setCompareVals();
+    this.initDifferenceMonitor();
   }
 
   disableForm() {

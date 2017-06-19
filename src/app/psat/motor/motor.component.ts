@@ -72,14 +72,14 @@ export class MotorComponent implements OnInit {
     if (this.selected) {
       this.formRef.nativeElement.frequency.focus();
     }
-    this.setCompareVals();
-    this.initDifferenceMonitor();
   }
 
   ngAfterViewInit() {
     if (!this.selected) {
       this.disableForm();
     }
+    this.setCompareVals();
+    this.initDifferenceMonitor();
   }
 
   ngOnChanges(changes: SimpleChanges) {

@@ -44,6 +44,7 @@ export class ModifyConditionsComponent implements OnInit {
     this._modifications = new Array<Modification>();
     if (this.psat.modifications) {
       this._modifications = (JSON.parse(JSON.stringify(this.psat.modifications)));
+      this.togglePanel(false);
     }
     let tmpTab = this.assessmentService.getSubTab();
     if (tmpTab) {

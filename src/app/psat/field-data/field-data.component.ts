@@ -72,14 +72,14 @@ export class FieldDataComponent implements OnInit {
     if (this.selected) {
       this.formRef.nativeElement.operatingFraction.focus();
     }
-    this.setCompareVals();
-    this.initDifferenceMonitor();
   }
 
   ngAfterViewInit() {
     if (!this.selected) {
       this.disableForm();
     }
+    this.setCompareVals();
+    this.initDifferenceMonitor();
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -134,6 +134,7 @@ export class FieldDataComponent implements OnInit {
 
 
   setCompareVals() {
+    console.log('setCompareVals');
     if (this.baseline) {
       this.compareService.baselinePSAT = this.psat;
     } else {
@@ -239,5 +240,62 @@ export class FieldDataComponent implements OnInit {
   //used to add classes to inputs with different baseline vs modification values
   initDifferenceMonitor() {
     let doc = this.windowRefService.getDoc();
+
+    //operating fraction
+    this.compareService.operating_fraction_different.subscribe((val) => {
+      let opFractionElements = doc.getElementsByName('operatingFraction');
+      opFractionElements.forEach(element => {
+        element.classList.toggle('indicate-different', val);
+      });
+    });
+    //cost kw hr
+    this.compareService.cost_kw_hour_different.subscribe((val) => {
+      let costElements = doc.getElementsByName('costKwHr');
+      costElements.forEach(element => {
+        element.classList.toggle('indicate-different', val);
+      });
+    });
+    //flow rate
+    this.compareService.flow_rate_different.subscribe((val) => {
+      let flowRateElements = doc.getElementsByName('flowRate');
+      flowRateElements.forEach(element => {
+        element.classList.toggle('indicate-different', val);
+      });
+    });
+    //head
+    this.compareService.head_different.subscribe((val) => {
+      let headElements = doc.getElementsByName('head');
+      headElements.forEach(element => {
+        element.classList.toggle('indicate-different', val);
+      });
+    });
+    //load estimation method
+    this.compareService.load_estimation_method_different.subscribe((val) => {
+      let loadEstimationElements = doc.getElementsByName('loadEstimatedMethod');
+      loadEstimationElements.forEach(element => {
+        element.classList.toggle('indicate-different', val);
+      });
+    });
+    //motor power A
+    this.compareService.motor_field_power_different.subscribe((val) => {
+      let motorFieldPowerElements = doc.getElementsByName('motorKW');
+      motorFieldPowerElements.forEach(element => {
+        element.classList.toggle('indicate-different', val);
+      });
+    });
+    //motor power kw
+    this.compareService.motor_field_current_different.subscribe((val) => {
+      let motorFieldCurrentElements = doc.getElementsByName('motorAmps');
+      motorFieldCurrentElements.forEach(element => {
+        element.classList.toggle('indicate-different', val);
+      });
+    });
+    //measured voltage
+    this.compareService.motor_field_voltage_different.subscribe((val) => {
+      let motorFieldVoltageElements = doc.getElementsByName('measuredVoltage');
+      motorFieldVoltageElements.forEach(element => {
+        element.classList.toggle('indicate-different', val);
+      });
+    });
   }
 }
