@@ -84,7 +84,7 @@
     <app-modify-conditions [assessment]="assessment" [settings]="settings" [saveClicked]="saveClicked" [(psat)]="_psat" (saved)="save()" [emitPrint]="emitPrint"></app-modify-conditions>
   </div>
 
-  <div class="tab-content" *ngIf="currentTab == 'system-curve'">
+  <div class="tab-content calculator" *ngIf="currentTab == 'system-curve'">
     <app-system-curve [inPsat]="true" [psat]="_psat" [settings]="settings"></app-system-curve>
   </div>
 

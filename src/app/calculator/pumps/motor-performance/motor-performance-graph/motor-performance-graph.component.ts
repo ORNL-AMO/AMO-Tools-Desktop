@@ -21,7 +21,6 @@ export class MotorPerformanceGraphComponent implements OnInit {
   xAxis: any;
   yAxis: any;
   x: any;
-  xDisplay: any;
   y: any;
   width: any;
   height: any;
@@ -187,16 +186,12 @@ export class MotorPerformanceGraphComponent implements OnInit {
       .range([0, this.width])
       .domain([0, 1.21]);
 
-    this.xDisplay = d3.scaleLinear()
-      .range([0, this.width])
-      .domain([0, 120]);
-
     this.y = d3.scaleLinear()
       .range([this.height, 0])
       .domain([0, 120]);
 
     this.xAxis = d3.axisBottom()
-      .scale(this.xDisplay)
+      .scale(this.x)
       .tickSizeInner(0)
       .tickSizeOuter(0)
       .tickPadding(0)
@@ -269,7 +264,6 @@ export class MotorPerformanceGraphComponent implements OnInit {
       .style("font-size", "13px")
       .attr("transform", "rotate(-65) translate(-15, 0)")
       .attr("dy", "12px");
-
 
     this.yAxis = this.svg.append('g')
       .attr("class", "y axis")
