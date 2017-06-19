@@ -59,7 +59,7 @@ export class PsatService {
         motor_power: this.roundVal(results.motor_power[0], 2),
         annual_energy: this.roundVal(results.annual_energy[0], 2),
         annual_cost: this.roundVal(results.annual_cost[0], 2),
-        annual_savings_potential: this.roundVal(results.annual_savings_potential[0], 2),
+        annual_savings_potential: this.roundVal(results.annual_savings_potential[0], 0),
         optimization_rating: this.roundVal(results.optimization_rating[0], 2)
       },
       optimal: {
@@ -73,7 +73,7 @@ export class PsatService {
         motor_power: this.roundVal(results.motor_power[1], 2),
         annual_energy: this.roundVal(results.annual_energy[1], 2),
         annual_cost: this.roundVal(results.annual_cost[1], 2),
-        annual_savings_potential: this.roundVal(results.annual_savings_potential[1], 2),
+        annual_savings_potential: this.roundVal(results.annual_savings_potential[1], 0),
         optimization_rating: this.roundVal(results.optimization_rating[1], 2)
       }
     }
