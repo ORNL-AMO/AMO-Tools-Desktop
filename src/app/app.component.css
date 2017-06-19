@@ -366,8 +366,8 @@ Modals
 Data Tables
 =========================================== */
 .table-header {
-  margin-top: 20px;
-  padding: 10px 15px;
+  margin-top: 18px;
+  padding: 7px 15px;
   border-bottom: #ddd solid 1px;
   vertical-align: middle;
 }
@@ -398,6 +398,14 @@ Assessments: Grid & List View Shared Styles
 /*
 Assessments: List View
 =========================================== */
+.list-view {
+  -webkit-box-shadow: 0px 1px 6px 0px rgba(0,0,0,0.1);
+  -moz-box-shadow: 0px 1px 6px 0px rgba(0,0,0,0.1);
+  box-shadow: 0px 1px 6px 0px rgba(0,0,0,0.1);
+}
+  .list-view app-assessment-list-item:nth-child(even) .list-row {
+    background: #f2f5f7;
+  }
 .list-row {
   padding: 14px;
   background: #fff;
@@ -405,9 +413,16 @@ Assessments: List View
   border-style: solid;
   border-width: 0 1px 1px;
 }
+  .list-row:after {
+    display: table;
+    clear: both;
+    content: "";
+  }
   .list-row .actions {
-    margin-left: 29px;
+    width: 30%;
     font-size: 14px;
+    float: right;
+    text-align: right;
   }
     .list-row .actions a {
       display: inline-block;
@@ -417,7 +432,12 @@ Assessments: List View
         text-decoration: none;
         color: #0076FF;
       }
-
+  .list-row .assessment-name {
+    float: left;
+    padding-right: 20px;
+    width: 70%;
+    margin-bottom: 0;
+  }
   .drag-handle, .list-row input, .assessment-name {
     display: inline-block;
     vertical-align: top;
@@ -584,7 +604,7 @@ Sidebar
 .dashboard-content{
   height: 100vh;
   min-height: 100%;
-  background-color: #eee;
+  background-color: #ececec;
 }
 
 .dashboard-content .dashboard-page{
@@ -877,8 +897,8 @@ Banner
 
 .banner .btn-dashboard, .banner .title, .banner .settings {
   display: inline-block;
-  padding: 7px 29px;
-  color: rgba(255,255,255,0.8);
+  padding: 7px 10px;
+  color: #fff;
 }
 .banner .btn-dashboard {
   float: right;
@@ -1243,9 +1263,7 @@ Modify Conditions
         cursor: pointer;
         background: #efefef;
       }
-  .modification.disabled, .modify-conditions .no-data {
-    border: transparent solid 3px;
-  }
+
   .modification.disabled, .modification.disabled button, .modification.disabled textarea {
     background: #efefef;
     -webkit-box-shadow: none;

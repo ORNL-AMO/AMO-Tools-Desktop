@@ -2,9 +2,6 @@
   <div class="col-11">
     <ol class="breadcrumb">
       <li class="breadcrumb-item" *ngFor="let crumb of breadCrumbs; let first = first;">
-        <a *ngIf="first" (click)="goToDirectory(crumb)">
-          All Assessments
-        </a>
         <a *ngIf="!first" (click)="goToDirectory(crumb)">
           {{crumb.name}}
         </a>
@@ -19,7 +16,7 @@
 </div>
 
 <div class="row main-menu">
-  <div class="col-10">
+  <div class="col-12">
     <!--<app-assessment-create [(directory)]="directory" class="create-container"></app-assessment-create>-->
     <button (click)="showCreateAssessment()" type="button" class="btn btn-secondary create-btn">Create Assessment</button>
     <app-create-folder [(directory)]="directory" (newDirectory)="emitNewDir()" class="create-container"></app-create-folder>
@@ -29,12 +26,12 @@
     <button type="button" class="btn btn-secondary space-left" (click)="emitImport()">Import...</button>
     <button type="button" class="btn btn-secondary" (click)="emitExport()">Export...</button>
   </div>
-  <div class="col-2">
+  <!-- <div class="col-2">
     <div class="btn-group pull-right" role="group">
       <button class="btn btn-secondary" [ngClass]="{'active': view == 'list'}" (click)="setView('list')"><i class="fa fa-list"></i></button>
       <button class="btn btn-secondary" [ngClass]="{'active': view == 'grid'}" (click)="setView('grid')"><i class="fa fa-th"></i></button>
     </div>
-  </div>
+  </div> -->
 </div>
 
 <div class="table-header" *ngIf="view != 'settings'">
