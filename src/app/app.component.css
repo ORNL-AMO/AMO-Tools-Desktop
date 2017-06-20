@@ -1047,6 +1047,12 @@ Tabs
 .tabs.primary li {
   display: inline-block;
 }
+  .tabs.primary.psat li:nth-child(-n+2) a {
+    border-top: #00315d solid 4px;
+  }
+  .tabs.primary.phast li:nth-child(-n+2) a {
+    border-top: #611f00 solid 4px;
+  }
 .tabs.primary a {
   padding: 14px 10px;
   font-size: 14px;
