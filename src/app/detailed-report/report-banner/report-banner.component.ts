@@ -10,6 +10,8 @@ export class ReportBannerComponent implements OnInit {
   emitCloseReport = new EventEmitter<boolean>();
   @Output('emitExport')
   emitExport = new EventEmitter<boolean>();
+  @Output('emitPrint')
+  emitPrint = new EventEmitter<boolean>();
   constructor() { }
 
   ngOnInit() {
@@ -21,6 +23,10 @@ export class ReportBannerComponent implements OnInit {
 
   exportToCsv(){
     this.emitExport.emit(true);
+  }
+
+  print(){
+    this.emitPrint.emit(true);
   }
 
 }

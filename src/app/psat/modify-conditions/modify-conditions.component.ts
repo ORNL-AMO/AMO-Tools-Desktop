@@ -4,6 +4,7 @@ import * as _ from 'lodash';
 import { PsatService } from '../psat.service';
 import { Settings } from '../../shared/models/settings';
 import { AssessmentService } from '../../assessment/assessment.service';
+import { Assessment } from '../../shared/models/assessment';
 
 @Component({
   selector: 'app-modify-conditions',
@@ -19,7 +20,11 @@ export class ModifyConditionsComponent implements OnInit {
   settings: Settings;
   @Output('saved')
   saved = new EventEmitter<boolean>();
-
+  @Input()
+  assessment: Assessment;
+  @Input()
+  emitPrint: boolean;
+  
   modifyTab: string = 'field-data';
   _modifications: Array<Modification>;
   baselineSelected: boolean = true;

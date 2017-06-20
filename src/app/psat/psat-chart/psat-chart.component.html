@@ -1,4 +1,10 @@
-<dl>
-	<dd><app-percent-graph [value]="optimizationRating" [valueDescription]="'Optimization Rating'" [title]="title" [unit]="unit"></app-percent-graph></dd>
+<dl class="chart">
+	<dd><app-percent-graph [value]="optimizationRating" [titlePlacement]="titlePlacement" [valueDescription]="'Optimization Rating'" [title]="title" [unit]="unit"></app-percent-graph></dd>
+	<dt>Optimization Rating</dt>
+</dl>
+
+<dl class="print-chart">
+	<dd>{{title}}</dd>
+	<dd>{{optimizationRating}} % </dd>
 	<dt>Optimization Rating</dt>
 </dl>

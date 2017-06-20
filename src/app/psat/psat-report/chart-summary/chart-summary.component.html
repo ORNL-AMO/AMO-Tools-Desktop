@@ -1,23 +1,23 @@
-
 <div class="chart-summary" *ngIf="psat.modifications">
-  <div>
+  <div class="chart-item">
     <app-psat-chart [psat]="psat"></app-psat-chart>
     <dl>
-      <dd>{{psat.outputs.existing.annual_savings_potential| currency:'USD':true:'4.2-2'}}</dd>
+      <dd>{{psat.outputs.existing.annual_savings_potential| currency:'USD':true:'4.0-0'}}</dd>
       <dt>Annual Savings Potential</dt>
     </dl>
   </div>
 
-  <div *ngFor="let modification of psat.modifications">
+  <div class="chart-item" *ngFor="let modification of psat.modifications">
     <app-psat-chart [psat]="modification.psat"></app-psat-chart>
-    <div class="savings text-center">{{modification.psat.outputs.existing.annual_savings_potential | currency:'USD':true:'4.2-2'}}</div>
-    <div class="text-muted text-center">Annual Savings Potential</div>
-
+    <dl>
+      <dd class="savings text-center">{{modification.psat.outputs.existing.annual_savings_potential | currency:'USD':true:'4.0-0'}}</dd>
+      <dt class="text-muted text-center">Annual Savings Potential</dt>
+    </dl>
   </div>
 </div>
 
 <div class="chart-summary" *ngIf="!psat.modifications">
-  <div>
+  <div class="chart-item">
     <app-psat-chart [psat]="psat"></app-psat-chart>
     <dl>
       <dd>{{psat.outputs.existing.annual_savings_potential| currency:'USD':true:'4.2-2'}}</dd>

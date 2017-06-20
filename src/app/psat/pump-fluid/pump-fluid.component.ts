@@ -75,6 +75,7 @@ export class PumpFluidComponent implements OnInit {
 
   ngOnInit() {
     this.psatForm = this.psatService.getFormFromPsat(this.psat.inputs);
+    console.log(this.psatForm);
     this.checkForm(this.psatForm);
     if (this.selected) {
       this.formRef.nativeElement.pumpType.focus();

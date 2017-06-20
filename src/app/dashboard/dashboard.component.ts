@@ -187,7 +187,7 @@ export class DashboardComponent implements OnInit {
 
   createDirectory() {
     let tmpDirectory: DirectoryDbRef = {
-      name: 'Assessments',
+      name: 'All Assessments',
       createdDate: new Date(),
       modifiedDate: new Date(),
       parentDirectoryId: null,
@@ -204,6 +204,8 @@ export class DashboardComponent implements OnInit {
   }
 
   newDir() {
+    this.allDirectories = this.populateDirectories(this.rootDirectoryRef);
+    this.workingDirectory = this.populateDirectories(this.workingDirectory);
     this.newDirEventToggle = !this.newDirEventToggle;
   }
 

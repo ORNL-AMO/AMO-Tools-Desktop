@@ -1,3 +1,8 @@
 .form{
     width: 100%;
 }
+.inline-label {
+  white-space: nowrap;
+  max-width: 190px;
+  text-overflow: ellipsis;
+}

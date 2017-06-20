@@ -27,7 +27,7 @@ export class PsatComponent implements OnInit {
   //TODO update tabs
   tabs: Array<string> = [
     'system-setup',
-    'explore-opportunities',
+    //'explore-opportunities',
     'modify-conditions',
     'system-curve',
     'achievable-efficiency',
@@ -61,6 +61,7 @@ export class PsatComponent implements OnInit {
 
   doc: any;
   window: any;
+  emitPrint: boolean = false;
 
   constructor(
     private location: Location,
@@ -140,8 +141,11 @@ export class PsatComponent implements OnInit {
 
   checkMotor() {
     let tmpForm = this.psatService.getFormFromPsat(this._psat.inputs);
-    let tmpBool = this.psatService.isMotorFormValid(tmpForm);
-    return !tmpBool;
+    //check both steps
+    let tmpBoolMotor = this.psatService.isMotorFormValid(tmpForm);
+    let tmpBoolPump = this.psatService.isPumpFluidFormValid(tmpForm);
+    let test = tmpBoolMotor && tmpBoolPump;
+    return !test;
   }
 
   valid() {
@@ -226,6 +230,10 @@ export class PsatComponent implements OnInit {
     this.saveClicked = !this.saveClicked;
   }
 
+  togglePrint(){
+    this.emitPrint = !this.emitPrint;
+  }
+
   save() {
     let tmpForm = this.psatService.getFormFromPsat(this._psat.inputs);
     if (
@@ -244,7 +252,7 @@ export class PsatComponent implements OnInit {
       }
     )
   }
-
+  
   exportData() {
     //TODO: Logic for exporting assessment
     this.jsonToCsvService.exportSinglePsat(this.assessment, this.settings);

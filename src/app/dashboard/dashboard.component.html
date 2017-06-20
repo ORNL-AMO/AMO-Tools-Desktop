@@ -29,7 +29,7 @@
                     <div class="content-container default-settings">
 
                         <h2>Default Settings</h2>
-                        <app-assessment-settings [directory]="allDirectories" (resetDataEmit)="showDeleteModal($event)"></app-assessment-settings>
+                        <app-assessment-settings [directory]="allDirectories" (resetDataEmit)="showDeleteModal($event)" (emitUpdateDirectory)="updateDir()"></app-assessment-settings>
 
                     </div>
                 </div>

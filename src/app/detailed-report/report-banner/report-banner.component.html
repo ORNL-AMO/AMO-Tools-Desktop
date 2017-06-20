@@ -2,11 +2,11 @@
 
 <h1 class="pull-left">Assessments Efficiency Report</h1>
 
-<div class="btn-group pull-left">
-	<button class="btn btn-secondary">Print</button>
+<div class="btn-group pull-left hide-print">
+	<button class="btn btn-secondary" (click)="print()">Print</button>
 	<button class="btn btn-secondary" (click)="exportToCsv()">Export to CSV</button>
 </div>
 
 
-<button class="btn btn-link pull-right" aria-label="Close" (click)="closeReport()">Close Report</button>
+<button class="btn btn-link pull-right hide-print" aria-label="Close" (click)="closeReport()">Close Report</button>
 

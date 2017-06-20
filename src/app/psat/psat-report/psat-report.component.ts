@@ -1,9 +1,11 @@
-import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, Input, SimpleChanges } from '@angular/core';
 import { PSAT } from '../../shared/models/psat';
 import { Assessment } from '../../shared/models/assessment';
 import { PsatService } from '../psat.service';
 import { Settings } from '../../shared/models/settings';
 import { IndexedDbService } from '../../indexedDb/indexed-db.service';
+import { Directory } from '../../shared/models/directory';
+import { WindowRefService } from '../../indexedDb/window-ref.service';
 
 @Component({
   selector: 'app-psat-report',
@@ -19,8 +21,15 @@ export class PsatReportComponent implements OnInit {
   settings: Settings;
   @Input()
   assessment: Assessment;
+  @Input()
+  emitPrint: boolean;
+  @Input()
+  inPsat: boolean;
 
-  constructor(private psatService: PsatService, private indexedDbService: IndexedDbService) { }
+  assessmentDirectories: Directory[];
+  isFirstChange: boolean = true;
+
+  constructor(private psatService: PsatService, private indexedDbService: IndexedDbService, private windowRefService: WindowRefService) { }
 
   ngOnInit() {
     if (this.psat && this.settings) {
@@ -34,7 +43,20 @@ export class PsatReportComponent implements OnInit {
       this.psat = this.assessment.psat;
       //find settings
       this.getAssessmentSettingsThenResults();
-      console.log('get settings');
+    }
+    if (this.assessment) {
+      this.assessmentDirectories = new Array();
+      this.getDirectoryList(this.assessment.directoryId);
+    }
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (!this.isFirstChange) {
+      if(changes.emitPrint){
+        console.log('clicked');
+      }
+    } else {
+      this.isFirstChange = false;
     }
   }
 
@@ -89,6 +111,25 @@ export class PsatReportComponent implements OnInit {
       })
     }
     return psat;
+  }
+
+  getDirectoryList(id: number) {
+    if (id && id != 1) {
+      this.indexedDbService.getDirectory(id).then(
+        results => {
+          this.assessmentDirectories.push(results);
+          if (results.parentDirectoryId != 1) {
+            this.getDirectoryList(results.parentDirectoryId);
+          }
+        }
+      )
+    }
+  }
+
+  print() {
+    let win = this.windowRefService.nativeWindow;
+    let doc = this.windowRefService.getDoc();
+    win.print();
   }
 
 }

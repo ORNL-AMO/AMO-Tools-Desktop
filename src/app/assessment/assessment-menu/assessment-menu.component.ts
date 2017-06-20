@@ -49,7 +49,7 @@ export class AssessmentMenuComponent implements OnInit {
 
   ngOnChanges(changes: SimpleChanges) {
     if ((changes.directory) && !this.firstChange) {
-      if (changes.directory.currentValue.id != changes.directory.previousValue.id) {
+      if (changes.directory.currentValue.id != changes.directory.previousValue.id || changes.directory.currentValue.name != changes.directory.previousValue.name) {
         this.breadCrumbs = new Array();
         this.getBreadcrumbs(changes.directory.currentValue.id);
       }
@@ -85,7 +85,9 @@ export class AssessmentMenuComponent implements OnInit {
   getBreadcrumbs(dirId: number) {
     this.indexedDbService.getDirectory(dirId).then(
       resultDir => {
-        this.breadCrumbs.unshift(resultDir);
+        if (resultDir.id != this.directory.id) {
+          this.breadCrumbs.unshift(resultDir);
+        }
         if (resultDir.parentDirectoryId) {
           this.getBreadcrumbs(resultDir.parentDirectoryId);
         }
@@ -101,11 +103,11 @@ export class AssessmentMenuComponent implements OnInit {
     this.selectAll.emit(this.isAllSelected);
   }
 
-  emitExport(){
+  emitExport() {
     this.exportEmit.emit(true);
   }
 
-  emitImport(){
+  emitImport() {
     this.importEmit.emit(true);
   }
 }

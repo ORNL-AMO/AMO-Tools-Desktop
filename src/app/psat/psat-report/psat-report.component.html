@@ -1,23 +1,27 @@
-<div class="assessment-report" *ngIf="psat.outputs && settings">
+<div class="assessment-report" *ngIf="psat.outputs && settings" [ngClass]="{'assessment-report-padding': inPsat}">
 
   <div class="report-header">
     <h2 *ngIf="!assessment">Assessment Report</h2>
-    <h2 *ngIf="assessment">{{assessment.name}}</h2>
-  </div><!-- End .report-header -->
+    <h2 *ngIf="assessment"><span class="dir-list-item" *ngFor="let directory of assessmentDirectories">{{directory.name}} / </span>{{assessment.name}}
+      <button *ngIf="inPsat" class="btn-sm btn-secondary pull-right hide-print" (click)="print()"><span class="fa fa-print"></span></button>
+    </h2>
+  </div>
+  <!-- End .report-header -->
 
   <div class="report-data" *ngIf="psat.setupDone">
     <div class="charts">
       <app-chart-summary [psat]="psat"></app-chart-summary>
     </div>
     <div class="results">
-      <h3>Summary</h3>
+      <h3>Assessment Result Data</h3>
       <app-output-summary [psat]="psat" [settings]="settings"></app-output-summary>
     </div>
     <div class="input-data">
-      <h3>Input Data</h3>
+      <h3>Assessment Input Data</h3>
       <app-input-summary [psat]="psat" [settings]="settings"></app-input-summary>
     </div>
-  </div><!-- End .report-data -->
+  </div>
+  <!-- End .report-data -->
 
   <div *ngIf="!psat.setupDone">
     <p class="alert-warning text-center">This assessment has not been completed, please complete this assessment to see the resulting data.</p>

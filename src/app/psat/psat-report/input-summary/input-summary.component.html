@@ -1,4 +1,4 @@
-<table class="table table-responsive">
+<table class="table">
   <thead>
     <tr>
       <th></th>
@@ -10,7 +10,9 @@
 
     <tr>
       <!-- PUMP / FLUID -->
-      <th>Pump &amp; Fluid</th>
+      <th class="section-header">Pump &amp; Fluid</th>
+      <th></th>
+      <th *ngFor="let modification of psat.modifications"></th>
     </tr>
     <tr>
       <td>Pump Type</td>
@@ -56,11 +58,13 @@
 
     <!-- MOTOR -->
     <tr>
-      <th>Motor</th>
+      <th class="section-header">Motor</th>
+      <th></th>
+      <th *ngFor="let modification of psat.modifications"></th>
     </tr>
     <tr>
       <td>Line Frequency</td>
-      <td>{{getLineFreq(psat.inputs.line_frequency)}} Hz</td>
+      <td>{{getLineFreq(psat.inputs.line_frequency)}}</td>
       <td *ngFor="let modification of psat.modifications">{{getLineFreq(modification.psat.inputs.line_frequency)}}</td>
     </tr>
     <tr>
@@ -102,7 +106,9 @@
 
     <!-- FIELD DATA -->
     <tr>
-      <th>Field Data</th>
+      <th class="section-header">Field Data</th>
+      <th></th>
+      <th *ngFor="let modification of psat.modifications"></th>
     </tr>
     <tr>
       <td>Operating Fraction</td>

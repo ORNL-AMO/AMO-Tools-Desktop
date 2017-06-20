@@ -1,14 +1,14 @@
 <div *ngIf="assessment">
-  <div id="psatBanner">
+  <div class="hide-print" id="psatBanner">
     <app-psat-banner (togglePanel)="toggleOpenPanel($event)" [assessment]="assessment"></app-psat-banner>
   </div>
-  <div id="psatTabs">
+  <div class="hide-print" id="psatTabs">
     <app-psat-tabs [currentTab]="currentTab" (tabChange)="changeTab($event)"></app-psat-tabs>
   </div>
   <div *ngIf="currentTab == 'system-setup'">
 
 
-    <nav>
+    <nav class="hide-print">
       <ul class="tabs subtabs progress-tabs">
         <li [ngClass]="{'active': subTab == 'system-basics'}">
           <a (click)="changeSubTab('system-basics')"><span class="step-number">1</span> Assessment Settings</a>
@@ -81,10 +81,10 @@
 
 
   <div class="tab-content" *ngIf="currentTab == 'modify-conditions'">
-    <app-modify-conditions [settings]="settings" [saveClicked]="saveClicked" [(psat)]="_psat" (saved)="save()"></app-modify-conditions>
+    <app-modify-conditions [assessment]="assessment" [settings]="settings" [saveClicked]="saveClicked" [(psat)]="_psat" (saved)="save()" [emitPrint]="emitPrint"></app-modify-conditions>
   </div>
 
-  <div class="tab-content calculator" *ngIf="currentTab == 'system-curve'">
+  <div class="tab-content" *ngIf="currentTab == 'system-curve'">
     <app-system-curve [inPsat]="true" [psat]="_psat" [settings]="settings"></app-system-curve>
   </div>
 
@@ -104,7 +104,7 @@
     <app-specific-speed [settings]="settings" [inPsat]="true" [psat]="_psat"></app-specific-speed>
   </div>
 
-  <div id="psatFooter" class="footer">
+  <div id="psatFooter" class="footer hide-print">
     <div class="pull-left">
       <button class="btn btn-secondary" *ngIf="currentTab == 'system-setup'" (click)="close()">Close</button>
       <button class="btn btn-secondary" *ngIf="currentTab != 'system-setup'" (click)="goBack()">Back</button>
@@ -113,6 +113,7 @@
       <button class="btn btn-secondary" *ngIf="currentTab == 'system-setup' || currentTab == 'modify-conditions'" (click)="toggleSave()">Save</button>
       <button class="btn btn-primary" *ngIf="currentTab == 'system-setup'" [disabled]="!getCanContinue()" (click)="continue()">Continue</button>
       <button class="btn btn-primary" *ngIf="currentTab == 'modify-conditions'" (click)="exportData()">Export</button>
+      <!--<button class="btn btn-primary" *ngIf="currentTab == 'modify-conditions'" (click)="togglePrint()"><span class="fa fa-print"></span></button>-->
     </div>
   </div>
 </div>
