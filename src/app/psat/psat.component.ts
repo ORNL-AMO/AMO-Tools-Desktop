@@ -27,7 +27,7 @@ export class PsatComponent implements OnInit {
   //TODO update tabs
   tabs: Array<string> = [
     'system-setup',
-    //'explore-opportunities',
+    'explore-opportunities',
     'modify-conditions',
     'system-curve',
     'achievable-efficiency',
@@ -194,7 +194,7 @@ export class PsatComponent implements OnInit {
 
   continue() {
     if (this.subTab == 'field-data') {
-      this.currentTab = 'modify-conditions';
+      this.currentTab = 'explore-opportunities';
     } else {
       this.subTabIndex++;
       this.subTab = this.subTabs[this.subTabIndex];
