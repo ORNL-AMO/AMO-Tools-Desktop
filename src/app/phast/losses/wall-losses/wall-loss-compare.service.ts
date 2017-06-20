@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { PHAST } from '../../../shared/models/phast';
 import { WallLoss } from '../../../shared/models/losses/wallLoss';
 
 @Injectable()
@@ -9,7 +8,7 @@ export class WallLossCompareService {
   baselineWallLosses: WallLoss[];
   modifiedWallLosses: WallLoss[];
 
-
+  //used to hold behavior subjects for each modification
   differentArray: Array<any>;
   constructor() { }
 

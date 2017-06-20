@@ -55,10 +55,12 @@
         *ngIf="lossesTab == 'other-losses'"></app-other-losses>
 
       <app-slag (fieldChange)="changeField($event)" [baselineSelected]="baselineSelected" (savedLoss)="saveModifications()" [(losses)]="phast.losses"
-        [addLossToggle]="addLossToggle" [(lossState)]="lossesStates.slagLosses" [saveClicked]="saveClicked" *ngIf="lossesTab == 'slag'"></app-slag>
+        [addLossToggle]="addLossToggle" [(lossState)]="lossesStates.slagLosses" [saveClicked]="saveClicked" *ngIf="lossesTab == 'slag'"
+        [isBaseline]="true"></app-slag>
 
-      <app-energy-input (fieldChange)="changeField($event)" [baselineSelected]="baselineSelected" (savedLoss)="saveModifications()" [(losses)]="phast.losses"
-        [addLossToggle]="addLossToggle" [(lossState)]="lossesStates.energyInput" [saveClicked]="saveClicked" *ngIf="lossesTab == 'energy-input'"></app-energy-input>
+      <app-energy-input (fieldChange)="changeField($event)" [baselineSelected]="baselineSelected" (savedLoss)="saveModifications()"
+        [(losses)]="phast.losses" [addLossToggle]="addLossToggle" [(lossState)]="lossesStates.energyInput" [saveClicked]="saveClicked"
+        *ngIf="lossesTab == 'energy-input'"></app-energy-input>
 
       <app-exhaust-gas *ngIf="lossesTab == 'exhaust-gas'"></app-exhaust-gas>
 
@@ -193,7 +195,8 @@
     <h4>Setup Your Process Heating Losses</h4>
     <p>In this section you will input your process heating losses.</p>
     <p>Once you have added the data for your current system you can add modifications to explore potential savings within your
-      system.</p>
+      system.
+    </p>
     <p>We strongly encourage you to completely setup your system by adding all of your losses prior to adding modifications.</p>
     <button class="btn btn-primary" (click)="hideSetupDialog()">Got It!</button>
   </div>

@@ -21,9 +21,6 @@ export class WallLossesFormComponent implements OnInit {
   saveEmit = new EventEmitter<boolean>();
   @Input()
   lossIndex: number;
-  @Input()
-  is
-
 
   @ViewChild('lossForm') lossForm: ElementRef;
   form: any;
@@ -45,13 +42,12 @@ export class WallLossesFormComponent implements OnInit {
     }
   }
 
-  ngOnInit() {
-    if (!this.baselineSelected) {
-      this.disableForm();
-    }
-  }
+  ngOnInit() {  }
 
   ngAfterViewInit() {
+        if (!this.baselineSelected) {
+      this.disableForm();
+    }
     this.initDifferenceMonitor();
   }
 

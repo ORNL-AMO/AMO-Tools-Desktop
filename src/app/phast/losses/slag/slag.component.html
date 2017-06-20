@@ -5,7 +5,7 @@
 </div>
 
 
-<div class="card-form" *ngFor="let loss of _slagLosses">
+<div class="card-form" *ngFor="let loss of _slagLosses; let lossIndex = index;">
   <div class="row">
     <div class="col-12">
       <div class="pull-left">
@@ -19,7 +19,7 @@
   <div class="row">
     <div class="col-12">
       <app-slag-form (changeField)="changeField($event)" [(slagLossForm)]="loss.form" (calculate)="calculate(loss)" [(lossState)]="lossState"
-        [baselineSelected]="baselineSelected" (saveEmit)="saveLosses()"></app-slag-form>
+        [baselineSelected]="baselineSelected" (saveEmit)="saveLosses()" [lossIndex]="lossIndex"></app-slag-form>
     </div>
   </div>
   <div class="row">
