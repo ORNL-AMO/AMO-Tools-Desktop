@@ -14,66 +14,66 @@ export const volumeFlowRate = {
             }
             , to_anchor: 1 / 1000
         }
-        , 'ml/s': {
+        , 'mL/s': {
             name: {
-                singular: 'Millilitre per second'
-                , plural: 'Millilitres per second'
+                singular: 'Milliliter per second'
+                , plural: 'Milliliters per second'
             }
             , to_anchor: 1 / 1000
         }
-        , 'cl/s': {
+        , 'cL/s': {
             name: {
-                singular: 'Centilitre per second'
-                , plural: 'Centilitres per second'
+                singular: 'Centiliter per second'
+                , plural: 'Centiliters per second'
             }
             , to_anchor: 1 / 100
         }
-        , 'dl/s': {
+        , 'dL/s': {
             name: {
-                singular: 'Decilitre per second'
-                , plural: 'Decilitres per second'
+                singular: 'Deciliter per second'
+                , plural: 'Deciliters per second'
             }
             , to_anchor: 1 / 10
         }
-        , 'l/s': {
+        , 'L/s': {
             name: {
-                singular: 'Litre per second'
-                , plural: 'Litres per second'
+                singular: 'Liter per second'
+                , plural: 'Liters per second'
             }
             , to_anchor: 1
         }
-        , 'l/min': {
+        , 'L/min': {
             name: {
-                singular: 'Litre per minute'
-                , plural: 'Litres per minute'
+                singular: 'Liter per minute'
+                , plural: 'Liters per minute'
             }
             , to_anchor: 1 / 60
         }
-        , 'l/h': {
+        , 'L/h': {
             name: {
-                singular: 'Litre per hour'
-                , plural: 'Litres per hour'
+                singular: 'Liter per hour'
+                , plural: 'Liters per hour'
             }
             , to_anchor: 1 / 3600
         }
-        , 'kl/s': {
+        , 'kL/s': {
             name: {
-                singular: 'Kilolitre per second'
-                , plural: 'Kilolitres per second'
+                singular: 'Kiloliter per second'
+                , plural: 'Kiloliters per second'
             }
             , to_anchor: 1000
         }
-        , 'kl/min': {
+        , 'kL/min': {
             name: {
-                singular: 'Kilolitre per minute'
-                , plural: 'Kilolitres per minute'
+                singular: 'Kiloliter per minute'
+                , plural: 'Kiloliters per minute'
             }
             , to_anchor: 50 / 3
         }
-        , 'kl/h': {
+        , 'kL/h': {
             name: {
-                singular: 'Kilolitre per hour'
-                , plural: 'Kilolitres per hour'
+                singular: 'Kiloliter per hour'
+                , plural: 'Kiloliters per hour'
             }
             , to_anchor: 5 / 18
         }
@@ -273,7 +273,7 @@ export const volumeFlowRate = {
     }
     , _anchors: {
         metric: {
-            unit: 'l/s'
+            unit: 'L/s'
             , ratio: 33.8140227
         }
         , imperial: {
