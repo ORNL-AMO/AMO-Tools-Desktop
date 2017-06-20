@@ -9,12 +9,12 @@ import { SlagModule } from './slag/slag.module';
 import { OtherLossesModule } from './other-losses/other-losses.module';
 import { OpeningLossesModule } from './opening-losses/opening-losses.module';
 import { GasLeakageLossesModule } from './gas-leakage-losses/gas-leakage-losses.module';
+import { FlueGasLossesModule } from './flue-gas-losses/flue-gas-losses.module';
 
 import { LossesComponent } from './losses.component';
 import { ChargeMaterialComponent } from './charge-material/charge-material.component';
 
 import { AtmosphereLossesComponent } from './atmosphere-losses/atmosphere-losses.component';
-import { FlueGasLossesComponent } from './flue-gas-losses/flue-gas-losses.component';
 import { FixtureLossesComponent } from './fixture-losses/fixture-losses.component';
 import { LossesSidebarComponent } from './losses-sidebar/losses-sidebar.component';
 
@@ -30,7 +30,6 @@ import { ChargeMaterialService } from './charge-material/charge-material.service
 import { LossesTabsComponent } from './losses-tabs/losses-tabs.component';
 import { AtmosphereLossesService } from './atmosphere-losses/atmosphere-losses.service';
 import { FixtureLossesService } from './fixture-losses/fixture-losses.service';
-import { FlueGasLossesService } from './flue-gas-losses/flue-gas-losses.service';
 
 import { CoolingLossesComponent } from './cooling-losses/cooling-losses.component';
 import { CoolingLossesService } from './cooling-losses/cooling-losses.service';
@@ -53,8 +52,6 @@ import { OpeningLossesHelpComponent } from './losses-help/opening-losses-help/op
 import { OtherLossesHelpComponent } from './losses-help/other-losses-help/other-losses-help.component';
 import { WallLossesHelpComponent } from './losses-help/wall-losses-help/wall-losses-help.component';
 import { SuiteDbModule } from '../../suiteDb/suiteDb.module';
-import { FlueGasLossesFormVolumeComponent } from './flue-gas-losses/flue-gas-losses-form-volume/flue-gas-losses-form-volume.component';
-import { FlueGasLossesFormMassComponent } from './flue-gas-losses/flue-gas-losses-form-mass/flue-gas-losses-form-mass.component';
 import { ExhaustGasComponent } from './exhaust-gas/exhaust-gas.component';
 
 import { HeatStorageComponent } from './heat-storage/heat-storage.component';
@@ -83,13 +80,13 @@ import { EnergyInputHelpComponent } from './losses-help/energy-input-help/energy
     SlagModule,
     OtherLossesModule,
     OpeningLossesModule,
-    GasLeakageLossesModule
+    GasLeakageLossesModule,
+    FlueGasLossesModule
   ],
   declarations: [
     LossesComponent,
     ChargeMaterialComponent,
     AtmosphereLossesComponent,
-    FlueGasLossesComponent,
     FixtureLossesComponent,
     LossesSidebarComponent,
     FixtureLossesFormComponent,
@@ -116,8 +113,6 @@ import { EnergyInputHelpComponent } from './losses-help/energy-input-help/energy
     OpeningLossesHelpComponent,
     OtherLossesHelpComponent,
     WallLossesHelpComponent,
-    FlueGasLossesFormVolumeComponent,
-    FlueGasLossesFormMassComponent,
     ExhaustGasComponent,
     HeatStorageComponent,
     AuxiliaryPowerLossesComponent,
