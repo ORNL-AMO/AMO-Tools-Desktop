@@ -88,12 +88,6 @@ export class OpeningLossesCompareService {
   checkThickness() {
     if (this.baselineOpeningLosses && this.modifiedOpeningLosses) {
       for (let lossIndex = 0; lossIndex < this.baselineOpeningLosses.length; lossIndex++) {
-        console.log('thickness')
-        console.log('baseline')
-        console.log(this.baselineOpeningLosses[lossIndex].thickness);
-        console.log('modified');
-        console.log(this.modifiedOpeningLosses[lossIndex].thickness);
-        console.log('=====')
         if (this.baselineOpeningLosses[lossIndex].thickness != this.modifiedOpeningLosses[lossIndex].thickness) {
           this.differentArray[lossIndex].different.thickness.next(true);
         } else {

@@ -44,7 +44,7 @@
 
       <app-gas-leakage-losses (fieldChange)="changeField($event)" [baselineSelected]="baselineSelected" (savedLoss)="saveModifications()"
         [(losses)]="phast.losses" [addLossToggle]="addLossToggle" [(lossState)]="lossesStates.leakageLosses" [saveClicked]="saveClicked"
-        *ngIf="lossesTab == 'gas-leakage-losses'"></app-gas-leakage-losses>
+        *ngIf="lossesTab == 'gas-leakage-losses'" [isBaseline]="true"></app-gas-leakage-losses>
 
       <app-extended-surface-losses (fieldChange)="changeField($event)" [baselineSelected]="baselineSelected" (savedLoss)="saveModifications()"
         [(losses)]="phast.losses" [addLossToggle]="addLossToggle" [(lossState)]="lossesStates.surfaceLosses" [saveClicked]="saveClicked"

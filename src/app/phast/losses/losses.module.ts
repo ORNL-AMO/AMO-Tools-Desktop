@@ -8,6 +8,7 @@ import { WallLossesModule } from './wall-losses/wall-losses.module';
 import { SlagModule } from './slag/slag.module';
 import { OtherLossesModule } from './other-losses/other-losses.module';
 import { OpeningLossesModule } from './opening-losses/opening-losses.module';
+import { GasLeakageLossesModule } from './gas-leakage-losses/gas-leakage-losses.module';
 
 import { LossesComponent } from './losses.component';
 import { ChargeMaterialComponent } from './charge-material/charge-material.component';
@@ -35,9 +36,7 @@ import { CoolingLossesComponent } from './cooling-losses/cooling-losses.componen
 import { CoolingLossesService } from './cooling-losses/cooling-losses.service';
 import { GasCoolingLossesFormComponent } from './cooling-losses/gas-cooling-losses-form/gas-cooling-losses-form.component';
 import { LiquidCoolingLossesFormComponent } from './cooling-losses/liquid-cooling-losses-form/liquid-cooling-losses-form.component';
-import { GasLeakageLossesComponent } from './gas-leakage-losses/gas-leakage-losses.component';
-import { GasLeakageLossesFormComponent } from './gas-leakage-losses/gas-leakage-losses-form/gas-leakage-losses-form.component';
-import { GasLeakageLossesService } from './gas-leakage-losses/gas-leakage-losses.service';
+
 import { ExtendedSurfaceLossesComponent } from './extended-surface-losses/extended-surface-losses.component';
 import { ExtendedSurfaceLossesFormComponent } from './extended-surface-losses/extended-surface-losses-form/extended-surface-losses-form.component';
 import { ExtendedSurfaceLossesService } from './extended-surface-losses/extended-surface-losses.service';
@@ -83,7 +82,8 @@ import { EnergyInputHelpComponent } from './losses-help/energy-input-help/energy
     WallLossesModule,
     SlagModule,
     OtherLossesModule,
-    OpeningLossesModule
+    OpeningLossesModule,
+    GasLeakageLossesModule
   ],
   declarations: [
     LossesComponent,
@@ -102,8 +102,6 @@ import { EnergyInputHelpComponent } from './losses-help/energy-input-help/energy
     CoolingLossesComponent,
     GasCoolingLossesFormComponent,
     LiquidCoolingLossesFormComponent,
-    GasLeakageLossesComponent,
-    GasLeakageLossesFormComponent,
     ExtendedSurfaceLossesComponent,
     ExtendedSurfaceLossesFormComponent,
     NotesComponent,
@@ -139,7 +137,6 @@ import { EnergyInputHelpComponent } from './losses-help/energy-input-help/energy
     FixtureLossesService,
     FlueGasLossesService,
     CoolingLossesService,
-    GasLeakageLossesService,
     ExtendedSurfaceLossesService,
     AuxiliaryPowerLossesService,
     EnergyInputService

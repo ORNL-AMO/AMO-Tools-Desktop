@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, EventEmitter, Output, ViewChild, ElementRef, SimpleChanges } from '@angular/core';
-
+import { GasLeakageCompareService } from "../gas-leakage-compare.service";
+import { WindowRefService } from "../../../../indexedDb/window-ref.service";
 
 @Component({
   selector: 'app-gas-leakage-losses-form',
@@ -19,6 +20,8 @@ export class GasLeakageLossesFormComponent implements OnInit {
   changeField = new EventEmitter<string>();
   @Output('saveEmit')
   saveEmit = new EventEmitter<boolean>();
+  @Input()
+  lossIndex: number;
 
   @ViewChild('lossForm') lossForm: ElementRef;
   form: any;
@@ -26,7 +29,7 @@ export class GasLeakageLossesFormComponent implements OnInit {
 
   firstChange: boolean = true;
   counter: any;
-  constructor() { }
+  constructor(private gasLeakageCompareService: GasLeakageCompareService, private windowRefService: WindowRefService) { }
 
   ngOnChanges(changes: SimpleChanges) {
     if (!this.firstChange) {
@@ -41,9 +44,13 @@ export class GasLeakageLossesFormComponent implements OnInit {
   }
 
   ngOnInit() {
+  }
+
+  ngAfterViewInit() {
     if (!this.baselineSelected) {
       this.disableForm();
     }
+    this.initDifferenceMonitor();
   }
 
   disableForm() {
@@ -84,4 +91,45 @@ export class GasLeakageLossesFormComponent implements OnInit {
     }, 3000)
   }
 
+
+  initDifferenceMonitor() {
+    if (this.gasLeakageCompareService.baselineLeakageLoss && this.gasLeakageCompareService.modifiedLeakageLoss && this.gasLeakageCompareService.differentArray.length != 0) {
+      let doc = this.windowRefService.getDoc();
+      //draftPressure
+      this.gasLeakageCompareService.differentArray[this.lossIndex].different.draftPressure.subscribe((val) => {
+        let draftPressureElements = doc.getElementsByName('draftPressure_' + this.lossIndex);
+        draftPressureElements.forEach(element => {
+          element.classList.toggle('indicate-different', val);
+        });
+      })
+      //openingArea
+      this.gasLeakageCompareService.differentArray[this.lossIndex].different.openingArea.subscribe((val) => {
+        let openingAreaElements = doc.getElementsByName('openingArea_' + this.lossIndex);
+        openingAreaElements.forEach(element => {
+          element.classList.toggle('indicate-different', val);
+        });
+      })
+      //leakageGasTemperature
+      this.gasLeakageCompareService.differentArray[this.lossIndex].different.leakageGasTemperature.subscribe((val) => {
+        let leakageGasTemperatureElements = doc.getElementsByName('leakageGasTemperature_' + this.lossIndex);
+        leakageGasTemperatureElements.forEach(element => {
+          element.classList.toggle('indicate-different', val);
+        });
+      })
+      //specificGravity
+      this.gasLeakageCompareService.differentArray[this.lossIndex].different.specificGravity.subscribe((val) => {
+        let specificGravityElements = doc.getElementsByName('specificGravity_' + this.lossIndex);
+        specificGravityElements.forEach(element => {
+          element.classList.toggle('indicate-different', val);
+        });
+      })
+      //ambientTemperature
+      this.gasLeakageCompareService.differentArray[this.lossIndex].different.ambientTemperature.subscribe((val) => {
+        let ambientTemperatureElements = doc.getElementsByName('ambientTemperature_' + this.lossIndex);
+        ambientTemperatureElements.forEach(element => {
+          element.classList.toggle('indicate-different', val);
+        });
+      })
+    }
+  }
 }

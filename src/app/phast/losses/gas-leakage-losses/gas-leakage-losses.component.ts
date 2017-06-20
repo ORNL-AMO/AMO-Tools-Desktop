@@ -4,6 +4,8 @@ import { PhastService } from '../../phast.service';
 import { Losses } from '../../../shared/models/phast';
 import { LeakageLoss } from '../../../shared/models/losses/leakageLoss';
 import { GasLeakageLossesService } from './gas-leakage-losses.service';
+import { GasLeakageCompareService } from './gas-leakage-compare.service';
+
 @Component({
   selector: 'app-gas-leakage-losses',
   templateUrl: './gas-leakage-losses.component.html',
@@ -24,11 +26,13 @@ export class GasLeakageLossesComponent implements OnInit {
   baselineSelected: boolean;
   @Output('fieldChange')
   fieldChange = new EventEmitter<string>();
+  @Input()
+  isBaseline: boolean;
 
   _leakageLosses: Array<any>;
   firstChange: boolean = true;
 
-  constructor(private gasLeakageLossesService: GasLeakageLossesService, private phastService: PhastService) { }
+  constructor(private gasLeakageLossesService: GasLeakageLossesService, private phastService: PhastService, private gasLeakageCompareService: GasLeakageCompareService) { }
 
   ngOnChanges(changes: SimpleChanges) {
     if (!this.firstChange) {
@@ -48,6 +52,8 @@ export class GasLeakageLossesComponent implements OnInit {
       this._leakageLosses = new Array<any>();
     }
     if (this.losses.leakageLosses) {
+      this.setCompareVals();
+      this.gasLeakageCompareService.initCompareObjects();
       this.losses.leakageLosses.forEach(loss => {
         let tmpLoss = {
           form: this.gasLeakageLossesService.initFormFromLoss(loss),
@@ -109,9 +115,23 @@ export class GasLeakageLossesComponent implements OnInit {
     this.losses.leakageLosses = tmpLeakageLosses;
     this.lossState.numLosses = this.losses.leakageLosses.length;
     this.lossState.saved = true;
+    this.setCompareVals();
     this.savedLoss.emit(true);
   }
   changeField(str: string) {
     this.fieldChange.emit(str);
+  }
+
+  setCompareVals() {
+    if (this.isBaseline) {
+      this.gasLeakageCompareService.baselineLeakageLoss = this.losses.leakageLosses;
+    } else {
+      this.gasLeakageCompareService.modifiedLeakageLoss = this.losses.leakageLosses;
+    }
+    if (this.gasLeakageCompareService.differentArray) {
+      if (this.gasLeakageCompareService.differentArray.length != 0) {
+        this.gasLeakageCompareService.checkLeakageLosses();
+      }
+    }
   }
 }
