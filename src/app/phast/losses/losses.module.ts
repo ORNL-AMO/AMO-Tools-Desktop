@@ -130,7 +130,6 @@ import { EnergyInputHelpComponent } from './losses-help/energy-input-help/energy
     ChargeMaterialService,
     AtmosphereLossesService,
     FixtureLossesService,
-    FlueGasLossesService,
     CoolingLossesService,
     ExtendedSurfaceLossesService,
     AuxiliaryPowerLossesService,

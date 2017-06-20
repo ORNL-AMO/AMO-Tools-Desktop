@@ -40,7 +40,7 @@
 
       <app-flue-gas-losses (fieldChange)="changeField($event)" [baselineSelected]="baselineSelected" (savedLoss)="saveModifications()"
         [(losses)]="phast.losses" [addLossToggle]="addLossToggle" [(lossState)]="lossesStates.flueGasLosses" [saveClicked]="saveClicked"
-        *ngIf="lossesTab == 'flue-gas-losses'"></app-flue-gas-losses>
+        *ngIf="lossesTab == 'flue-gas-losses'" [isBaseline]="true"></app-flue-gas-losses>
 
       <app-gas-leakage-losses (fieldChange)="changeField($event)" [baselineSelected]="baselineSelected" (savedLoss)="saveModifications()"
         [(losses)]="phast.losses" [addLossToggle]="addLossToggle" [(lossState)]="lossesStates.leakageLosses" [saveClicked]="saveClicked"
