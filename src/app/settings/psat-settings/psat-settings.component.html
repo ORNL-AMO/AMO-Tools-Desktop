@@ -2,25 +2,25 @@
   <div class="form-group">
     <label for="distanceMeasurement">Head Measurement</label>
     <select class="form-control" formControlName="distanceMeasurement" id="distanceMeasurement" (change)="setCustom()" ngModel="{{settingsForm.value.distanceMeasurement}}">
-        <option *ngFor="let measurement of distanceMeasurements" [ngValue]="measurement.unit">{{measurement.display}}</option>
+        <option *ngFor="let measurement of distanceMeasurements" [ngValue]="measurement.unit">{{measurement.display}} ( {{measurement.unit}} )</option>
     </select>
   </div>
   <div class="form-group">
     <label for="flowMeasurement">Flow Measurement</label>
     <select class="form-control" formControlName="flowMeasurement" id="flowMeasurement" (change)="setCustom()" ngModel="{{settingsForm.value.flowMeasurement}}">
-        <option *ngFor="let measurement of flowMeasurements" [ngValue]="measurement.unit">{{measurement.display}}</option>
+        <option *ngFor="let measurement of flowMeasurements" [ngValue]="measurement.unit">{{measurement.display}} ( {{measurement.unit}} )</option>
     </select>
   </div>
   <div class="form-group">
     <label for="powerMeasurement">Power Measurement</label>
     <select class="form-control" formControlName="powerMeasurement" id="powerMeasurement" (change)="setCustom()" ngModel="{{settingsForm.value.powerMeasurement}}">
-        <option *ngFor="let measurement of powerMeasurements" [ngValue]="measurement.unit">{{measurement.display}}</option>
+        <option *ngFor="let measurement of powerMeasurements" [ngValue]="measurement.unit">{{measurement.display}} ( {{measurement.unit}} )</option>
     </select>
   </div>
   <div class="form-group">
     <label for="pressureMeasurement">Pressure Measurement</label>
     <select class="form-control" formControlName="pressureMeasurement" id="pressureMeasurement" (change)="setCustom()" ngModel="{{settingsForm.value.pressureMeasurement}}">
-        <option *ngFor="let measurement of pressureMeasurements" [ngValue]="measurement.unit">{{measurement.display}}</option>
+        <option *ngFor="let measurement of pressureMeasurements" [ngValue]="measurement.unit">{{measurement.display}} ( {{measurement.unit}} ) </option>
     </select>
   </div>
     <!--<div class="form-group">

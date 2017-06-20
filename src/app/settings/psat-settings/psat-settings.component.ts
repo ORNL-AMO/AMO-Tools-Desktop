@@ -38,7 +38,7 @@ export class PsatSettingsComponent implements OnInit {
       'gpm',
       'MGD',
       'm3/h',
-      'l/s',
+      'L/s',
       'm3/min'
     ];
     tmpList.forEach(unit => {
