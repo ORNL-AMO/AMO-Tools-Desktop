@@ -32,7 +32,7 @@
 
       <app-opening-losses (fieldChange)="changeField($event)" [baselineSelected]="baselineSelected" (savedLoss)="saveModifications()"
         [(losses)]="phast.losses" [addLossToggle]="addLossToggle" [(lossState)]="lossesStates.openingLosses" [saveClicked]="saveClicked"
-        *ngIf="lossesTab == 'opening-losses'"></app-opening-losses>
+        *ngIf="lossesTab == 'opening-losses'" [isBaseline]="true"></app-opening-losses>
 
       <app-cooling-losses (fieldChange)="changeField($event)" [baselineSelected]="baselineSelected" (savedLoss)="saveModifications()"
         [(losses)]="phast.losses" [addLossToggle]="addLossToggle" [(lossState)]="lossesStates.coolingLosses" [saveClicked]="saveClicked"

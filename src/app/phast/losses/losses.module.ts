@@ -7,12 +7,12 @@ import { ModalModule } from 'ngx-bootstrap';
 import { WallLossesModule } from './wall-losses/wall-losses.module';
 import { SlagModule } from './slag/slag.module';
 import { OtherLossesModule } from './other-losses/other-losses.module';
+import { OpeningLossesModule } from './opening-losses/opening-losses.module';
 
 import { LossesComponent } from './losses.component';
 import { ChargeMaterialComponent } from './charge-material/charge-material.component';
 
 import { AtmosphereLossesComponent } from './atmosphere-losses/atmosphere-losses.component';
-import { OpeningLossesComponent } from './opening-losses/opening-losses.component';
 import { FlueGasLossesComponent } from './flue-gas-losses/flue-gas-losses.component';
 import { FixtureLossesComponent } from './fixture-losses/fixture-losses.component';
 import { LossesSidebarComponent } from './losses-sidebar/losses-sidebar.component';
@@ -30,8 +30,7 @@ import { LossesTabsComponent } from './losses-tabs/losses-tabs.component';
 import { AtmosphereLossesService } from './atmosphere-losses/atmosphere-losses.service';
 import { FixtureLossesService } from './fixture-losses/fixture-losses.service';
 import { FlueGasLossesService } from './flue-gas-losses/flue-gas-losses.service';
-import { OpeningLossesService } from './opening-losses/opening-losses.service';
-import { OpeningLossesFormComponent } from './opening-losses/opening-losses-form/opening-losses-form.component';
+
 import { CoolingLossesComponent } from './cooling-losses/cooling-losses.component';
 import { CoolingLossesService } from './cooling-losses/cooling-losses.service';
 import { GasCoolingLossesFormComponent } from './cooling-losses/gas-cooling-losses-form/gas-cooling-losses-form.component';
@@ -83,13 +82,13 @@ import { EnergyInputHelpComponent } from './losses-help/energy-input-help/energy
     SuiteDbModule,
     WallLossesModule,
     SlagModule,
-    OtherLossesModule
+    OtherLossesModule,
+    OpeningLossesModule
   ],
   declarations: [
     LossesComponent,
     ChargeMaterialComponent,
     AtmosphereLossesComponent,
-    OpeningLossesComponent,
     FlueGasLossesComponent,
     FixtureLossesComponent,
     LossesSidebarComponent,
@@ -100,7 +99,6 @@ import { EnergyInputHelpComponent } from './losses-help/energy-input-help/energy
     GasChargeMaterialFormComponent,
     SolidChargeMaterialFormComponent,
     LossesTabsComponent,
-    OpeningLossesFormComponent,
     CoolingLossesComponent,
     GasCoolingLossesFormComponent,
     LiquidCoolingLossesFormComponent,
@@ -140,7 +138,6 @@ import { EnergyInputHelpComponent } from './losses-help/energy-input-help/energy
     AtmosphereLossesService,
     FixtureLossesService,
     FlueGasLossesService,
-    OpeningLossesService,
     CoolingLossesService,
     GasLeakageLossesService,
     ExtendedSurfaceLossesService,

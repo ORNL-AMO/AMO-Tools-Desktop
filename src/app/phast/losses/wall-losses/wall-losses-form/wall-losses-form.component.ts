@@ -42,10 +42,10 @@ export class WallLossesFormComponent implements OnInit {
     }
   }
 
-  ngOnInit() {  }
+  ngOnInit() { }
 
   ngAfterViewInit() {
-        if (!this.baselineSelected) {
+    if (!this.baselineSelected) {
       this.disableForm();
     }
     this.initDifferenceMonitor();

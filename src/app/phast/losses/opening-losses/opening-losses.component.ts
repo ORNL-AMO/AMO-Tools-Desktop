@@ -4,6 +4,9 @@ import { PhastService } from '../../phast.service';
 import { OpeningLossesService } from './opening-losses.service';
 import { Losses } from '../../../shared/models/phast';
 import { OpeningLoss } from '../../../shared/models/losses/openingLoss';
+import { OpeningLossesCompareService } from './opening-losses-compare.service';
+
+
 
 @Component({
   selector: 'app-opening-losses',
@@ -25,11 +28,13 @@ export class OpeningLossesComponent implements OnInit {
   baselineSelected: boolean;
   @Output('fieldChange')
   fieldChange = new EventEmitter<string>();
+  @Input()
+  isBaseline: boolean;
 
   _openingLosses: Array<any>;
   firstChange: boolean = true;
 
-  constructor(private phastService: PhastService, private openingLossesService: OpeningLossesService) { }
+  constructor(private phastService: PhastService, private openingLossesService: OpeningLossesService, private openingLossesCompareService: OpeningLossesCompareService) { }
 
 
   ngOnChanges(changes: SimpleChanges) {
@@ -50,6 +55,8 @@ export class OpeningLossesComponent implements OnInit {
       this._openingLosses = new Array();
     }
     if (this.losses.openingLosses) {
+      this.setCompareVals();
+      this.openingLossesCompareService.initCompareObjects();
       this.losses.openingLosses.forEach(loss => {
         let tmpLoss = {
           form: this.openingLossesService.getFormFromLoss(loss),
@@ -57,14 +64,14 @@ export class OpeningLossesComponent implements OnInit {
           totalOpeningLosses: loss.heatLoss || 0.0
         };
         this.calculate(tmpLoss);
-        this._openingLosses.unshift(tmpLoss);
+        this._openingLosses.push(tmpLoss);
       })
     }
   }
 
   addLoss() {
     let tmpName = 'Opening Loss #' + (this._openingLosses.length + 1);
-    this._openingLosses.unshift({
+    this._openingLosses.push({
       form: this.openingLossesService.initForm(),
       name: tmpName,
       totalOpeningLosses: 0.0
@@ -124,15 +131,28 @@ export class OpeningLossesComponent implements OnInit {
     this._openingLosses.forEach(loss => {
       let tmpOpeningLoss = this.openingLossesService.getLossFromForm(loss.form);
       tmpOpeningLoss.heatLoss = loss.totalOpeningLosses;
-      tmpOpeningLosses.unshift(tmpOpeningLoss);
+      tmpOpeningLosses.push(tmpOpeningLoss);
     })
     this.losses.openingLosses = tmpOpeningLosses;
     this.lossState.numLosses = this.losses.openingLosses.length;
     this.lossState.saved = true;
+    this.setCompareVals();
     this.savedLoss.emit(true);
   }
   changeField(str: string) {
     this.fieldChange.emit(str);
   }
 
+ setCompareVals() {
+    if (this.isBaseline) {
+      this.openingLossesCompareService.baselineOpeningLosses = this.losses.openingLosses;
+    } else {
+      this.openingLossesCompareService.modifiedOpeningLosses = this.losses.openingLosses;
+    }
+    if (this.openingLossesCompareService.differentArray) {
+      if (this.openingLossesCompareService.differentArray.length != 0) {
+        this.openingLossesCompareService.checkOpeningLosses();
+      }
+    }
+  }
 }

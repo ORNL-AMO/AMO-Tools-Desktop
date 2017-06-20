@@ -134,7 +134,7 @@ export const MockDirectory: Directory = {
           openingLosses: [
             {
               numberOfOpenings: 1,
-              emessivity: .95,
+              emissivity: .95,
               thickness: 9.0,
               ambientTemperature: 75.0,
               insideTemperature: 1600,
@@ -144,7 +144,7 @@ export const MockDirectory: Directory = {
               lengthOfOpening: 12.0,
             }, {
               numberOfOpenings: 1,
-              emessivity: .95,
+              emissivity: .95,
               thickness: 9.0,
               ambientTemperature: 75.0,
               insideTemperature: 1600,

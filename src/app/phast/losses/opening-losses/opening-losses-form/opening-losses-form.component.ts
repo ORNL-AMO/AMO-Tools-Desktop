@@ -1,5 +1,7 @@
 import { Component, OnInit, Input, EventEmitter, Output, ViewChild, ElementRef, SimpleChanges } from '@angular/core';
 import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
+import { WindowRefService } from '../../../../indexedDb/window-ref.service';
+import { OpeningLossesCompareService } from '../opening-losses-compare.service';
 
 @Component({
   selector: 'app-opening-losses-form',
@@ -19,6 +21,8 @@ export class OpeningLossesFormComponent implements OnInit {
   changeField = new EventEmitter<string>();
   @Output('saveEmit')
   saveEmit = new EventEmitter<boolean>();
+  @Input()
+  lossIndex: number;
 
   @ViewChild('lossForm') lossForm: ElementRef;
   totalArea: number = 0.0;
@@ -28,7 +32,7 @@ export class OpeningLossesFormComponent implements OnInit {
   elements: any;
   counter: any;
   firstChange: boolean = true;
-  constructor(private convertUnitsService: ConvertUnitsService) { }
+  constructor(private convertUnitsService: ConvertUnitsService, private windowRefService: WindowRefService, private openingLossesCompareService: OpeningLossesCompareService) { }
 
   ngOnChanges(changes: SimpleChanges) {
     if (!this.firstChange) {
@@ -46,9 +50,13 @@ export class OpeningLossesFormComponent implements OnInit {
   ngOnInit() {
     this.init = true;
     this.getArea();
+  }
+
+  ngAfterViewInit() {
     if (!this.baselineSelected) {
       this.disableForm();
     }
+    this.initDifferenceMonitor();
   }
 
   disableForm() {
@@ -117,5 +125,82 @@ export class OpeningLossesFormComponent implements OnInit {
     this.counter = setTimeout(() => {
       this.emitSave();
     }, 3000)
+  }
+
+  initDifferenceMonitor() {
+    if (this.openingLossesCompareService.baselineOpeningLosses && this.openingLossesCompareService.modifiedOpeningLosses && this.openingLossesCompareService.differentArray.length != 0) {
+      let doc = this.windowRefService.getDoc();
+
+      //openingType
+      this.openingLossesCompareService.differentArray[this.lossIndex].different.openingType.subscribe((val) => {
+        let openingTypeElements = doc.getElementsByName('openingType_' + this.lossIndex);
+        openingTypeElements.forEach(element => {
+          element.classList.toggle('indicate-different', val);
+        });
+      })
+      //wallThickness
+      this.openingLossesCompareService.differentArray[this.lossIndex].different.thickness.subscribe((val) => {
+        let wallThicknessElements = doc.getElementsByName('wallThickness_' + this.lossIndex);
+        wallThicknessElements.forEach(element => {
+          element.classList.toggle('indicate-different', val);
+        });
+      })
+      //heightOfOpening
+      this.openingLossesCompareService.differentArray[this.lossIndex].different.heightOfOpening.subscribe((val) => {
+        let heightOfOpeningElements = doc.getElementsByName('heightOfOpening_' + this.lossIndex);
+        heightOfOpeningElements.forEach(element => {
+          element.classList.toggle('indicate-different', val);
+        });
+      })
+      //lengthOfOpening
+      this.openingLossesCompareService.differentArray[this.lossIndex].different.lengthOfOpening.subscribe((val) => {
+        let lengthOfOpeningElements = doc.getElementsByName('lengthOfOpening_' + this.lossIndex);
+        lengthOfOpeningElements.forEach(element => {
+          element.classList.toggle('indicate-different', val);
+        });
+      })
+      //viewFactor
+      this.openingLossesCompareService.differentArray[this.lossIndex].different.viewFactor.subscribe((val) => {
+        let viewFactorElements = doc.getElementsByName('viewFactor_' + this.lossIndex);
+        viewFactorElements.forEach(element => {
+          element.classList.toggle('indicate-different', val);
+        });
+      })
+      //insideTemp
+      this.openingLossesCompareService.differentArray[this.lossIndex].different.insideTemperature.subscribe((val) => {
+        let insideTempElements = doc.getElementsByName('insideTemp_' + this.lossIndex);
+        insideTempElements.forEach(element => {
+          element.classList.toggle('indicate-different', val);
+        });
+      })
+      //ambientTemp
+      this.openingLossesCompareService.differentArray[this.lossIndex].different.ambientTemperature.subscribe((val) => {
+        let ambientTempElements = doc.getElementsByName('ambientTemp_' + this.lossIndex);
+        ambientTempElements.forEach(element => {
+          element.classList.toggle('indicate-different', val);
+        });
+      })
+      //emissivity
+      this.openingLossesCompareService.differentArray[this.lossIndex].different.emissivity.subscribe((val) => {
+        let emissivityElements = doc.getElementsByName('emissivity_' + this.lossIndex);
+        emissivityElements.forEach(element => {
+          element.classList.toggle('indicate-different', val);
+        });
+      })
+      //percentTimeOpen
+      this.openingLossesCompareService.differentArray[this.lossIndex].different.percentTimeOpen.subscribe((val) => {
+        let percentTimeOpenElements = doc.getElementsByName('percentTimeOpen_' + this.lossIndex);
+        percentTimeOpenElements.forEach(element => {
+          element.classList.toggle('indicate-different', val);
+        });
+      })
+      //numOpening
+      this.openingLossesCompareService.differentArray[this.lossIndex].different.numberOfOpenings.subscribe((val) => {
+        let numberOfOpeningsElements = doc.getElementsByName('numberOfOpenings_' + this.lossIndex);
+        numberOfOpeningsElements.forEach(element => {
+          element.classList.toggle('indicate-different', val);
+        });
+      })
+    }
   }
 }

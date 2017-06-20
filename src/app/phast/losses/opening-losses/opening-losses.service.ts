@@ -32,14 +32,14 @@ export class OpeningLossesService {
       'insideTemp': [loss.insideTemperature, Validators.required],
       'ambientTemp': [loss.ambientTemperature, Validators.required],
       'percentTimeOpen': [loss.percentTimeOpen, Validators.required],
-      'emissivity': [loss.emessivity, Validators.required]
+      'emissivity': [loss.emissivity, Validators.required]
     })
   }
 
   getLossFromForm(form: any): OpeningLoss {
     let tmpLoss: OpeningLoss = {
       numberOfOpenings: form.value.numberOfOpenings,
-      emessivity: form.value.emissivity,
+      emissivity: form.value.emissivity,
       thickness: form.value.wallThickness,
       ambientTemperature: form.value.ambientTemp,
       insideTemperature: form.value.insideTemp,

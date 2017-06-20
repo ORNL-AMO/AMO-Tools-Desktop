@@ -1,6 +1,6 @@
 export interface OpeningLoss {
     numberOfOpenings?: number,
-    emessivity?: number,
+    emissivity?: number,
     thickness?: number,
     ambientTemperature?: number,
     insideTemperature?: number,
