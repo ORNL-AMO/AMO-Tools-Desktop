@@ -2,6 +2,9 @@
   <div class="col-11">
     <ol class="breadcrumb">
       <li class="breadcrumb-item" *ngFor="let crumb of breadCrumbs; let first = first;">
+        <a *ngIf="first" (click)="goToDirectory(crumb)">
+          All Assessments
+        </a>
         <a *ngIf="!first" (click)="goToDirectory(crumb)">
           {{crumb.name}}
         </a>
