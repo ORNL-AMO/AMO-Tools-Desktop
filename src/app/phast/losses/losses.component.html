@@ -60,7 +60,7 @@
 
       <app-energy-input (fieldChange)="changeField($event)" [baselineSelected]="baselineSelected" (savedLoss)="saveModifications()"
         [(losses)]="phast.losses" [addLossToggle]="addLossToggle" [(lossState)]="lossesStates.energyInput" [saveClicked]="saveClicked"
-        *ngIf="lossesTab == 'energy-input'"></app-energy-input>
+        *ngIf="lossesTab == 'energy-input'" [isBaseline]="true"></app-energy-input>
 
       <app-exhaust-gas *ngIf="lossesTab == 'exhaust-gas'"></app-exhaust-gas>
 

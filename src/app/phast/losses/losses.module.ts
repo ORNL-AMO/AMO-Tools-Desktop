@@ -12,6 +12,7 @@ import { GasLeakageLossesModule } from './gas-leakage-losses/gas-leakage-losses.
 import { FlueGasLossesModule } from './flue-gas-losses/flue-gas-losses.module';
 import { FixtureLossesModule } from "./fixture-losses/fixture-losses.module";
 import { ExtendedSurfaceLossesModule } from './extended-surface-losses/extended-surface-losses.module';
+import { EnergyInputModule } from "./energy-input/energy-input.module";
 
 import { LossesComponent } from './losses.component';
 import { ChargeMaterialComponent } from './charge-material/charge-material.component';
@@ -59,9 +60,7 @@ import { HeatStorageHelpComponent } from './losses-help/heat-storage-help/heat-s
 import { SlagHelpComponent } from './losses-help/slag-help/slag-help.component';
 import { ExhaustGasHelpComponent } from './losses-help/exhaust-gas-help/exhaust-gas-help.component';
 import { EditConditionPropertiesComponent } from './edit-condition-properties/edit-condition-properties.component';
-import { EnergyInputComponent } from './energy-input/energy-input.component';
-import { EnergyInputFormComponent } from './energy-input/energy-input-form/energy-input-form.component';
-import { EnergyInputService } from './energy-input/energy-input.service';
+
 import { EnergyInputHelpComponent } from './losses-help/energy-input-help/energy-input-help.component';
 
 @NgModule({
@@ -79,7 +78,8 @@ import { EnergyInputHelpComponent } from './losses-help/energy-input-help/energy
     GasLeakageLossesModule,
     FlueGasLossesModule,
     FixtureLossesModule,
-    ExtendedSurfaceLossesModule
+    ExtendedSurfaceLossesModule,
+    EnergyInputModule
   ],
   declarations: [
     LossesComponent,
@@ -116,16 +116,13 @@ import { EnergyInputHelpComponent } from './losses-help/energy-input-help/energy
     SlagHelpComponent,
     ExhaustGasHelpComponent,
     EditConditionPropertiesComponent,
-    EnergyInputComponent,
-    EnergyInputFormComponent,
     EnergyInputHelpComponent
   ],
   providers: [
     ChargeMaterialService,
     AtmosphereLossesService,
     CoolingLossesService,
-    AuxiliaryPowerLossesService,
-    EnergyInputService
+    AuxiliaryPowerLossesService
   ],
   exports: [
     LossesComponent

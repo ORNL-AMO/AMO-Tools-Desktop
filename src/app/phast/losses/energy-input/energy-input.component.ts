@@ -4,7 +4,7 @@ import { PhastService } from '../../phast.service';
 import { Losses } from '../../../shared/models/phast';
 import { EnergyInputService } from './energy-input.service';
 import { EnergyInput } from '../../../shared/models/losses/energyInput';
-
+import { EnergyInputCompareService } from './energy-input-compare.service';
 @Component({
   selector: 'app-energy-input',
   templateUrl: './energy-input.component.html',
@@ -25,10 +25,12 @@ export class EnergyInputComponent implements OnInit {
   baselineSelected: boolean;
   @Output('fieldChange')
   fieldChange = new EventEmitter<string>();
+  @Input()
+  isBaseline: boolean;
 
   _energyInputs: Array<any>;
   firstChange: boolean = true;
-  constructor(private energyInputService: EnergyInputService, private phastService: PhastService) { }
+  constructor(private energyInputService: EnergyInputService, private phastService: PhastService, private energyInputCompareService: EnergyInputCompareService) { }
 
   ngOnChanges(changes: SimpleChanges) {
     if (!this.firstChange) {
@@ -49,6 +51,8 @@ export class EnergyInputComponent implements OnInit {
       this._energyInputs = new Array();
     }
     if (this.losses.energyInput) {
+      this.setCompareVals();
+      this.energyInputCompareService.initCompareObjects();
       this.losses.energyInput.forEach(loss => {
         let tmpLoss = {
           form: this.energyInputService.getFormFromLoss(loss),
@@ -121,6 +125,7 @@ export class EnergyInputComponent implements OnInit {
     this.losses.energyInput = tmpEnergyInputs;
     this.lossState.numLosses = this.losses.energyInput.length;
     this.lossState.saved = true;
+    this.setCompareVals();
     this.savedLoss.emit(true);
   }
 
@@ -128,4 +133,16 @@ export class EnergyInputComponent implements OnInit {
     this.fieldChange.emit(str);
   }
 
+  setCompareVals() {
+    if (this.isBaseline) {
+      this.energyInputCompareService.baselineEnergyInput = this.losses.energyInput;
+    } else {
+      this.energyInputCompareService.modifiedEnergyInput = this.losses.energyInput;
+    }
+    if (this.energyInputCompareService.differentArray) {
+      if (this.energyInputCompareService.differentArray.length != 0) {
+        this.energyInputCompareService.checkEnergyInputs();
+      }
+    }
+  }
 }
