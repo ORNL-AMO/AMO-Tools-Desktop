@@ -4,9 +4,14 @@
 
       <h2>AMO Tools Desktop</h2>
       <p>
-        AMO’s tools help manufacturers increase industrial energy efficiency at the plant-level and in specific systems. Learn step-by-step
-        ways to identify opportunities, monitor progress, and improve efficiency in any facility. Some tools help facilities
-        implement an energy management system and prepare to become ISO 50001 and Superior Energy Performance certified.
+        The Advanced Manufacturing Office (AMO) is an office within the Department of Energy’s (DOE) Office of Energy Efficiency and Renewable Energy (EERE).
+        AMO supports R&D projects and consortia, as well as early-stage technical partnerships with national laboratories, companies (for-profit and not-for profit),
+        research institutions, and universities through competitive, merit reviewed funding opportunities designed to investigate novel manufacturing technologies.<br>
+        AMO’s tools were designed to help manufacturers increase industrial energy efficiency at the plant-level and for specific systems.
+        Some tools help facilities implement an energy management system and prepare to become ISO 50001 and Superior Energy Performance certified.<br>
+        This tool suite can help manufacturers improve the efficiency of specific systems and pieces of equipment within a plant.
+        There are also several calculators that can be used independently for system parameter estimations
+        and graphical analysis (e.g., estimate pump head, examine the pump-system curve, converting energy requirements for different heat sources).
       </p>
       <div class="card">
         <div class="card-header" (click)="toggleShowSystemRequirements()">
@@ -33,6 +38,24 @@
       </div>
 
       <div class="card">
+        <div class="card-header" (click)="toggleShowUser()">
+          <h4>
+            Intended Users
+          <span class="pull-right" *ngIf="!showUser"><i class="fa fa-chevron-down"></i></span>
+          <span class="pull-right" *ngIf="showUser"><i class="fa fa-chevron-up"></i></span>
+          </h4>
+        </div>
+          <div *ngIf="showUser" class="card-block">
+            <p>
+              The tool is designed for industrial energy coordinators, plant managers, engineers,
+              and personnel who are interested in improving system efficiency and measuring potential savings
+              opportunities in both dollars and electrical energy savings.
+            </p>
+          </div>
+      </div>
+
+
+      <div class="card">
         <div class="card-header" (click)="toggleShowPSAT()">
          <h4>
               PSAT
@@ -42,24 +65,21 @@
         </div>
         <div *ngIf="showPSAT" class="card-block">
             <p>
-              The Pumping System Assessment Tool (PSAT) is a free desktop software tool to help industrial users assess the efficiency
-              of pumping system operations. PSAT uses achievable pump performance data from Hydraulic Institute standards
-              and motor performance data from the MotorMaster+ database to calculate potential energy and associated cost
-              savings. The tool also enables users to save and retrieve log files, default values, and system curves for
-              sharing analyses with other users.
-            </p>
+              The Pumping System Assessment Tool (PSAT), originally developed by Don Casada of Diagnostic Solutions, LLC,
+              is a free desktop software tool to evaluate the potential energy savings opportunities of pumping systems
+              based on field-measured data. It is also intended to help industrial users assess different system modifications
+              to determine which would be the most energetically beneficial.<br>
+              PSAT uses achievable pump performance data from Hydraulic Institute standards and motor performance data
+              from the MotorMaster+ database to calculate potential energy and associated cost savings.<br>
+              The tool also enables users to save and retrieve log files for sharing analyses with other users,
+              view an example scenario, and explore system and pump curves.
 
-            <h4>Intended Users</h4>
-            <p>
-              The tool is designed for industrial plant managers and personnel who are interested in improving pumping system efficiency
-              and measuring potential savings opportunities in both dollars and electrical energy savings.
             </p>
 
             <h4>Inputs</h4>
             <p>To use PSAT, users must input the following data:</p>
             <ul>
               <li>Pump style</li>
-              <li>System of units</li>
               <li>Number of stages</li>
               <li>Pump and motor speed(s)</li>
               <li>Motor nameplate ratings</li>
@@ -67,7 +87,7 @@
               <li>Energy cost rates</li>
               <li>Flow rate</li>
               <li>Pump head (calculated from user-supplied pressure and line dimensional data)</li>
-              <li>Electric power or current and voltage.</li>
+              <li>Field motor electric power (or current) and voltage.</li>
             </ul>
 
             <h4>Outputs</h4>
@@ -94,15 +114,14 @@
           </h4>
         </div>
         <div *ngIf="showPHAST" class="card-block">
-            <p>The Process Heating Assessment and Survey Tool (PHAST) introduces methods to improve thermal efficiency of heating
-              equipment. This tool helps industrial users survey process heating equipment that consumes fuel, steam, or
-              electricity, and identifies the most energy-intensive equipment. The tool can be used to perform a heat balance
-              that identifies major areas of energy use under various operating conditions and test "what-if" scenarios for
-              various options to reduce energy use.</p>
-
-            <h4>Intended Users</h4>
-            <p>This tool is designed for industrial energy coordinators, plant managers and engineers who are interested in
-              identifying potential energy-saving opportunities in process heating equipment.</p>
+            <p>The Process Heating Assessment and Survey Tool (PHAST), originally developed by E3M, Inc.,
+              Oak Ridge National Laboratory and the Industrial Heating Equipment Association (IHEA),
+              introduces methods to improve thermal efficiency of heating equipment.<br>
+              This tool helps industrial users survey process heating equipment consuming fuel or electricity,
+              and identifies the most energy-intensive equipment.<br>
+              The tool can be used to perform a heat balance that identifies major areas of energy use under
+              various operating conditions and test "what-if" scenarios for various options to reduce energy use.
+            </p>
 
             <h4>Inputs</h4>
             <p>Users will need to inputs the following:</p>
@@ -123,6 +142,42 @@
               <li>Construct a detailed heat balance for selected pieces of equipment</li>
               <li>Suggest methods to save energy in each area where energy is used or wasted.</li>
             </ul>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header" (click)="toggleShowFAST()">
+          <h4>
+            FAST
+            <span class="pull-right" *ngIf="!showFAST"><i class="fa fa-chevron-down"></i></span>
+            <span class="pull-right" *ngIf="showFAST"><i class="fa fa-chevron-up"></i></span>
+          </h4>
+        </div>
+        <div *ngIf="showFAST" class="card-block">
+          <p>
+            The Fan System Assessment Tool (FSAT) is a free online software tool that helps industrial users
+            quantify energy use and savings opportunities in industrial fan systems.
+            Use FSAT to understand how well your fan systems are operating, determine the economic benefit of system modifications,
+            and establish which options are most economically viable when multiple opportunities exist for system modification.
+          </p>
+          <h4>
+            Inputs
+          </h4>
+          <p>FSAT users will need to input the following information:</p>
+          <ul>
+            <li>Fan and motor specifications</li>
+            <li>Operating fraction and electricity rate</li>
+            <li>System required flow and pressure</li>
+            <li>System power kW (or amps and volts).</li>
+          </ul>
+          <h4>
+            Outputs
+          </h4>
+          <p>Based on input, FSAT will:</p>
+          <ul>
+            <li>Calculate how much energy your fan system is using</li>
+            <li>Determine how efficiently your system is operating</li>
+            <li>Quantify savings from upgrading your system.</li>
+          </ul>
         </div>
       </div>
     </div>
