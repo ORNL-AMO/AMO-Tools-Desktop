@@ -24,7 +24,7 @@
 
       <app-atmosphere-losses (fieldChange)="changeField($event)" [baselineSelected]="baselineSelected" (savedLoss)="saveModifications()"
         [(losses)]="phast.losses" [addLossToggle]="addLossToggle" [(lossState)]="lossesStates.atmosphereLosses" [saveClicked]="saveClicked"
-        *ngIf="lossesTab == 'atmosphere-losses'"></app-atmosphere-losses>
+        *ngIf="lossesTab == 'atmosphere-losses'" [isBaseline]="true"></app-atmosphere-losses>
 
       <app-fixture-losses (fieldChange)="changeField($event)" [baselineSelected]="baselineSelected" (savedLoss)="saveModifications()"
         [(losses)]="phast.losses" [addLossToggle]="addLossToggle" [(lossState)]="lossesStates.fixtureLosses" [saveClicked]="saveClicked"

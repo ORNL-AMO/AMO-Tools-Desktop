@@ -4,7 +4,7 @@ import { PhastService } from '../../phast.service';
 import { AtmosphereLossesService } from './atmosphere-losses.service';
 import { Losses } from '../../../shared/models/phast';
 import { AtmosphereLoss } from '../../../shared/models/losses/atmosphereLoss';
-
+import { AtmosphereLossesCompareService } from './atmosphere-losses-compare.service';
 @Component({
   selector: 'app-atmosphere-losses',
   templateUrl: './atmosphere-losses.component.html',
@@ -25,10 +25,12 @@ export class AtmosphereLossesComponent implements OnInit {
   baselineSelected: boolean;
   @Output('fieldChange')
   fieldChange = new EventEmitter<string>();
+  @Input()
+  isBaseline: boolean;
 
   _atmosphereLosses: Array<any>;
   firstChange: boolean = true;
-  constructor(private atmosphereLossesService: AtmosphereLossesService, private phastService: PhastService) { }
+  constructor(private atmosphereLossesService: AtmosphereLossesService, private phastService: PhastService, private atmosphereLossesCompareService: AtmosphereLossesCompareService) { }
 
   ngOnChanges(changes: SimpleChanges) {
     if (!this.firstChange) {
@@ -49,6 +51,8 @@ export class AtmosphereLossesComponent implements OnInit {
       this._atmosphereLosses = new Array();
     }
     if (this.losses.atmosphereLosses) {
+      this.setCompareVals();
+      this.atmosphereLossesCompareService.initCompareObjects();
       this.losses.atmosphereLosses.forEach(loss => {
         let tmpLoss = {
           form: this.atmosphereLossesService.getAtmosphereForm(loss),
@@ -108,10 +112,24 @@ export class AtmosphereLossesComponent implements OnInit {
     this.losses.atmosphereLosses = tmpAtmosphereLosses;
     this.lossState.numLosses = this.losses.atmosphereLosses.length;
     this.lossState.saved = true;
+    this.setCompareVals();
     this.savedLoss.emit(true);
   }
 
   changeField(str: string) {
     this.fieldChange.emit(str);
+  }
+
+  setCompareVals(){
+    if (this.isBaseline) {
+      this.atmosphereLossesCompareService.baselineAtmosphereLosses = this.losses.atmosphereLosses;
+    } else {
+      this.atmosphereLossesCompareService.modifiedAtmosphereLosses = this.losses.atmosphereLosses;
+    }
+    if (this.atmosphereLossesCompareService.differentArray) {
+      if (this.atmosphereLossesCompareService.differentArray.length != 0) {
+        this.atmosphereLossesCompareService.checkAtmosphereLosses();
+      }
+    }
   }
 }
