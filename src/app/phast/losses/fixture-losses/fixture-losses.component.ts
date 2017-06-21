@@ -4,6 +4,7 @@ import { PhastService } from '../../phast.service';
 import { FixtureLossesService } from './fixture-losses.service';
 import { Losses } from '../../../shared/models/phast';
 import { FixtureLoss } from '../../../shared/models/losses/fixtureLoss';
+import { FixtureLossesCompareService } from "./fixture-losses-compare.service";
 
 @Component({
   selector: 'app-fixture-losses',
@@ -25,10 +26,12 @@ export class FixtureLossesComponent implements OnInit {
   baselineSelected: boolean;
   @Output('fieldChange')
   fieldChange = new EventEmitter<string>();
+  @Input()
+  isBaseline: boolean;
 
   _fixtureLosses: Array<any>;
   firstChange: boolean = true;
-  constructor(private phastService: PhastService, private fixtureLossesService: FixtureLossesService) { }
+  constructor(private phastService: PhastService, private fixtureLossesService: FixtureLossesService, private fixtureLossesCompareService: FixtureLossesCompareService) { }
   ngOnChanges(changes: SimpleChanges) {
     if (!this.firstChange) {
       if (changes.saveClicked) {
@@ -48,6 +51,8 @@ export class FixtureLossesComponent implements OnInit {
       this._fixtureLosses = new Array();
     }
     if (this.losses.fixtureLosses) {
+      this.setCompareVals();
+      this.fixtureLossesCompareService.initCompareObjects();
       this.losses.fixtureLosses.forEach(loss => {
         let tmpLoss = {
           form: this.fixtureLossesService.getFormFromLoss(loss),
@@ -105,11 +110,25 @@ export class FixtureLossesComponent implements OnInit {
     this.losses.fixtureLosses = tmpFixtureLosses;
     this.lossState.numLosses = this.losses.fixtureLosses.length;
     this.lossState.saved = true;
+    this.setCompareVals();
     this.savedLoss.emit(true);
   }
 
   changeField(str: string) {
     this.fieldChange.emit(str);
+  }
+
+  setCompareVals() {
+    if (this.isBaseline) {
+      this.fixtureLossesCompareService.baselineFixtureLosses = this.losses.fixtureLosses;
+    } else {
+      this.fixtureLossesCompareService.modifiedFixtureLosses = this.losses.fixtureLosses;
+    }
+    if (this.fixtureLossesCompareService.differentArray) {
+      if (this.fixtureLossesCompareService.differentArray.length != 0) {
+        this.fixtureLossesCompareService.checkFixtureLosses();
+      }
+    }
   }
 
 }

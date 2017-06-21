@@ -8,7 +8,7 @@
   <h4>Add some now.</h4>
 </div>
 
-<div class="card-form" *ngFor="let loss of _fixtureLosses">
+<div class="card-form" *ngFor="let loss of _fixtureLosses; let lossIndex = index;">
   <div class="row">
     <div class="col-12">
       <div class="pull-left">
@@ -21,10 +21,11 @@
   </div>
   <div class="row">
     <div class="col-12">
-      <app-fixture-losses-form (changeField)="changeField($event)" [(lossesForm)]="loss.form" (calculate)="calculate(loss)" [(lossState)]="lossState" [baselineSelected]="baselineSelected" (saveEmit)="saveLosses()"></app-fixture-losses-form>
+      <app-fixture-losses-form (changeField)="changeField($event)" [(lossesForm)]="loss.form" (calculate)="calculate(loss)" [(lossState)]="lossState"
+        [baselineSelected]="baselineSelected" (saveEmit)="saveLosses()" [lossIndex]="lossIndex"></app-fixture-losses-form>
     </div>
   </div>
-    <div class="row">
+  <div class="row">
     <div class="col-12">
       <div class="form-group">
         <label class="small">Total Heat Required</label>

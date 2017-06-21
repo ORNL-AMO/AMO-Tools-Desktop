@@ -28,7 +28,7 @@
 
       <app-fixture-losses (fieldChange)="changeField($event)" [baselineSelected]="baselineSelected" (savedLoss)="saveModifications()"
         [(losses)]="phast.losses" [addLossToggle]="addLossToggle" [(lossState)]="lossesStates.fixtureLosses" [saveClicked]="saveClicked"
-        *ngIf="lossesTab == 'fixture-losses'"></app-fixture-losses>
+        *ngIf="lossesTab == 'fixture-losses'" [isBaseline]="true"></app-fixture-losses>
 
       <app-opening-losses (fieldChange)="changeField($event)" [baselineSelected]="baselineSelected" (savedLoss)="saveModifications()"
         [(losses)]="phast.losses" [addLossToggle]="addLossToggle" [(lossState)]="lossesStates.openingLosses" [saveClicked]="saveClicked"
