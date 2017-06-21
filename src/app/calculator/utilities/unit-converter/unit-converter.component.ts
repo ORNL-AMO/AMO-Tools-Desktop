@@ -9,7 +9,7 @@ import {SortPipe} from './sort-pipe';
 })
 export class UnitConverterComponent implements OnInit {
   possibilities: Array<any> = [];
-  measure: any = 'length';
+  measure: any = 'apparentPower';
   from: string;
   to: string;
   value1: number;
