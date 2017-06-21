@@ -1,7 +1,7 @@
 <div class="row measure-row">
   <div class="col-12">
     <select class="form-control" id="type" [(ngModel)]="measure" (change)="getMeasures()">
-        <option *ngFor="let option of options" [ngValue]="option.measure">{{option.display}}</option>
+        <option *ngFor="let option of options | sortBy : 'measure'" [ngValue]="option.measure">{{option.display}}</option>
       </select>
   </div>
 </div>
