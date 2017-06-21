@@ -9,27 +9,55 @@
 				<ul>
 					<li>
 						<div class="checkbox">
-							<label for="general"><input type ="checkbox" id="general" />
+							<label for="general"><input type ="checkbox" id="general" value="'true1'" [(ngModel)]="showOption1" />
 								Adjust General Operation
 							</label>
 						</div>
-						<ul>
+						<ul *ngIf="showOption1">
 							<li>
 								<div class="checkbox">
-									<label for="operatingHours"><input type ="checkbox" id="operatingHours" />
+									<label for="operatingHours"><input type ="checkbox" id="operatingHours" value="'true2'" [(ngModel)]="showHours1"/>
 										Modify Operating Hours
 									</label>
-								</div>	
-								<form>
+								</div>
+								<form *ngIf="showHours1">
 									<div class="form-group">
 										<label for="initialOperatingHours">Initial Operating Hours</label>
 										<input type="text" id="initialOperatingHours" class="form-control" value="8" />
-				    					<span class="units">hours</span>
+										<span class="units">hours</span>
 									</div>
 									<div class="form-group">
 										<label for="newOperatingHours">New Operating Hours</label>
 										<input type="text" id="newOperatingHours" class="form-control" />
-				    					<span class="units">hours</span>
+										<span class="units">hours</span>
+									</div>
+								</form>
+							</li>
+						</ul>
+					</li>
+					<li >
+						<div class="checkbox">
+							<label for="general2"><input type ="checkbox" id="general2" value="'true3'" [(ngModel)]="showOption2" />
+								Adjust General Operation
+							</label>
+						</div>
+						<ul *ngIf="showOption2">
+							<li>
+								<div class="checkbox">
+									<label for="operatingHours2"><input type ="checkbox" id="operatingHours2" value="'true4'" [(ngModel)]="showHours2"/>
+										Modify Operating Hours
+									</label>
+								</div>
+								<form *ngIf="showHours2">
+									<div class="form-group">
+										<label for="initialOperatingHours">Initial Operating Hours</label>
+										<input type="text" id="initialOperatingHours" class="form-control" value="8" />
+										<span class="units">hours</span>
+									</div>
+									<div class="form-group">
+										<label for="newOperatingHours">New Operating Hours</label>
+										<input type="text" id="newOperatingHours" class="form-control" />
+										<span class="units">hours</span>
 									</div>
 								</form>
 							</li>
@@ -37,55 +65,27 @@
 					</li>
 					<li>
 						<div class="checkbox">
-							<label for="general"><input type ="checkbox" id="general" />
+							<label for="general3"><input type ="checkbox" id="general3" value="'true5'" [(ngModel)]="showOption3" />
 								Adjust General Operation
 							</label>
 						</div>
-						<ul>
+						<ul *ngIf="showOption3">
 							<li>
 								<div class="checkbox">
-									<label for="operatingHours"><input type ="checkbox" id="operatingHours" />
+									<label for="operatingHours3"><input type="checkbox" id="operatingHours3" value="'true6'" [(ngModel)]="showHours3"/>
 										Modify Operating Hours
 									</label>
-								</div>	
-								<form>
+								</div>
+								<form *ngIf="showHours3">
 									<div class="form-group">
 										<label for="initialOperatingHours">Initial Operating Hours</label>
 										<input type="text" id="initialOperatingHours" class="form-control" value="8" />
-				    					<span class="units">hours</span>
+										<span class="units">hours</span>
 									</div>
 									<div class="form-group">
 										<label for="newOperatingHours">New Operating Hours</label>
 										<input type="text" id="newOperatingHours" class="form-control" />
-				    					<span class="units">hours</span>
-									</div>
-								</form>
-							</li>
-						</ul>
-					</li>
-					<li>
-						<div class="checkbox">
-							<label for="general"><input type ="checkbox" id="general" />
-								Adjust General Operation
-							</label>
-						</div>
-						<ul>
-							<li>
-								<div class="checkbox">
-									<label for="operatingHours"><input type ="checkbox" id="operatingHours" />
-										Modify Operating Hours
-									</label>
-								</div>	
-								<form>
-									<div class="form-group">
-										<label for="initialOperatingHours">Initial Operating Hours</label>
-										<input type="text" id="initialOperatingHours" class="form-control" value="8" />
-				    					<span class="units">hours</span>
-									</div>
-									<div class="form-group">
-										<label for="newOperatingHours">New Operating Hours</label>
-										<input type="text" id="newOperatingHours" class="form-control" />
-				    					<span class="units">hours</span>
+										<span class="units">hours</span>
 									</div>
 								</form>
 							</li>

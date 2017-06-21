@@ -18,9 +18,6 @@
 			font-weight: bold;
 			font-size: 16px;
 		}
-		.explore-opportunities > ul > li > ul {
-			display: none;
-		}
 
 
 .explore-opportunities li {
@@ -28,7 +25,6 @@
 }
 
 .explore-opportunities form {
-	display: none;
 	margin-left: 17px;
 }
 .explore-opportunities form:after {
