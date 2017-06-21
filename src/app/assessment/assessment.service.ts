@@ -24,7 +24,7 @@ export class AssessmentService {
 
   getNewPsat(): PSAT {
     let newPsatInputs: PsatInputs = {
-      pump_style: 0,
+      pump_style: 6,
       pump_specified: null,
       pump_rated_speed: 1780,
       drive: 0,
