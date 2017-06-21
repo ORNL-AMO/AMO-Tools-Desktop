@@ -4,6 +4,7 @@ import { PhastService } from '../../phast.service';
 import { AuxiliaryPowerLoss } from '../../../shared/models/losses/auxiliaryPowerLoss';
 import { Losses } from '../../../shared/models/phast';
 import { AuxiliaryPowerLossesService } from './auxiliary-power-losses.service';
+import { AuxiliaryPowerCompareService } from './auxiliary-power-compare.service';
 
 @Component({
   selector: 'app-auxiliary-power-losses',
@@ -25,10 +26,12 @@ export class AuxiliaryPowerLossesComponent implements OnInit {
   baselineSelected: boolean;
   @Output('fieldChange')
   fieldChange = new EventEmitter<string>();
+  @Input()
+  isBaseline: boolean; 
 
   _auxiliaryPowerLosses: Array<any>;
   firstChange: boolean = true;
-  constructor(private phastService: PhastService, private auxiliaryPowerLossesService: AuxiliaryPowerLossesService) { }
+  constructor(private phastService: PhastService, private auxiliaryPowerLossesService: AuxiliaryPowerLossesService, private auxiliaryPowerCompareService: AuxiliaryPowerCompareService) { }
 
   ngOnChanges(changes: SimpleChanges) {
     if (!this.firstChange) {
@@ -49,6 +52,8 @@ export class AuxiliaryPowerLossesComponent implements OnInit {
       this._auxiliaryPowerLosses = new Array();
     }
     if (this.losses.auxiliaryPowerLosses) {
+      this.setCompareVals();
+      this.auxiliaryPowerCompareService.initCompareObjects();
       this.losses.auxiliaryPowerLosses.forEach(loss => {
         let tmpLoss = {
           form: this.auxiliaryPowerLossesService.getFormFromLoss(loss),
@@ -107,11 +112,26 @@ export class AuxiliaryPowerLossesComponent implements OnInit {
     this.losses.auxiliaryPowerLosses = tmpAuxLosses;
     this.lossState.numLosses = this.losses.auxiliaryPowerLosses.length;
     this.lossState.saved = true;
+    this.setCompareVals();
     this.savedLoss.emit(true);
   }
 
   changeField(str: string) {
     this.fieldChange.emit(str);
+  }
+
+
+  setCompareVals() {
+    if (this.isBaseline) {
+      this.auxiliaryPowerCompareService.baselineAuxLosses = this.losses.auxiliaryPowerLosses;
+    } else {
+      this.auxiliaryPowerCompareService.modifiedAuxLosses = this.losses.auxiliaryPowerLosses;
+    }
+    if (this.auxiliaryPowerCompareService.differentArray) {
+      if (this.auxiliaryPowerCompareService.differentArray.length != 0) {
+        this.auxiliaryPowerCompareService.checkAuxLosses();
+      }
+    }
   }
 
 
