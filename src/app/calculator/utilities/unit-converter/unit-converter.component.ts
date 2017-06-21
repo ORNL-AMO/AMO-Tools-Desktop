@@ -29,7 +29,7 @@ export class UnitConverterComponent implements OnInit {
     },
     {
       measure: 'volume',
-      display: 'volume'
+      display: 'Volume'
     },
     {
       measure: 'temperature',
