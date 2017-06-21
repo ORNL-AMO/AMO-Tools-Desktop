@@ -15,24 +15,19 @@ import { ExtendedSurfaceLossesModule } from './extended-surface-losses/extended-
 import { EnergyInputModule } from "./energy-input/energy-input.module";
 import { AuxiliaryPowerLossesModule } from './auxiliary-power-losses/auxiliary-power-losses.module';
 import { AtmosphereLossesModule } from "./atmosphere-losses/atmosphere-losses.module";
+import { CoolingLossesModule } from "./cooling-losses/cooling-losses.module";
 
 import { LossesComponent } from './losses.component';
 import { ChargeMaterialComponent } from './charge-material/charge-material.component';
 import { LossesSidebarComponent } from './losses-sidebar/losses-sidebar.component';
 
 import { SolidChargeMaterialFormComponent } from './charge-material/solid-charge-material-form/solid-charge-material-form.component';
-import { WaterCoolingLossesFormComponent } from './cooling-losses/water-cooling-losses-form/water-cooling-losses-form.component';
 import { LiquidChargeMaterialFormComponent } from './charge-material/liquid-charge-material-form/liquid-charge-material-form.component';
 import { GasChargeMaterialFormComponent } from './charge-material/gas-charge-material-form/gas-charge-material-form.component';
 
 import { ChargeMaterialService } from './charge-material/charge-material.service';
 
 import { LossesTabsComponent } from './losses-tabs/losses-tabs.component';
-
-import { CoolingLossesComponent } from './cooling-losses/cooling-losses.component';
-import { CoolingLossesService } from './cooling-losses/cooling-losses.service';
-import { GasCoolingLossesFormComponent } from './cooling-losses/gas-cooling-losses-form/gas-cooling-losses-form.component';
-import { LiquidCoolingLossesFormComponent } from './cooling-losses/liquid-cooling-losses-form/liquid-cooling-losses-form.component';
 
 import { NotesComponent } from './notes/notes.component';
 import { LossesHelpComponent } from './losses-help/losses-help.component';
@@ -76,20 +71,17 @@ import { EnergyInputHelpComponent } from './losses-help/energy-input-help/energy
     ExtendedSurfaceLossesModule,
     EnergyInputModule,
     AuxiliaryPowerLossesModule,
-    AtmosphereLossesModule
+    AtmosphereLossesModule,
+    CoolingLossesModule
   ],
   declarations: [
     LossesComponent,
     ChargeMaterialComponent,
     LossesSidebarComponent,
-    WaterCoolingLossesFormComponent,
     LiquidChargeMaterialFormComponent,
     GasChargeMaterialFormComponent,
     SolidChargeMaterialFormComponent,
     LossesTabsComponent,
-    CoolingLossesComponent,
-    GasCoolingLossesFormComponent,
-    LiquidCoolingLossesFormComponent,
     NotesComponent,
     LossesHelpComponent,
     AtmosphereLossesHelpComponent,
@@ -112,8 +104,7 @@ import { EnergyInputHelpComponent } from './losses-help/energy-input-help/energy
     EnergyInputHelpComponent
   ],
   providers: [
-    ChargeMaterialService,
-    CoolingLossesService
+    ChargeMaterialService
   ],
   exports: [
     LossesComponent

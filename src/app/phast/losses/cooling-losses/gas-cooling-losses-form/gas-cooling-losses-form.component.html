@@ -3,36 +3,36 @@
   <div class="form-section">
     <div class="row form-group">
       <label class="small" for="avgSpecificHeat">Average Specific Heat</label>
-      <input type="number" step="any" class="form-control" formControlName="avgSpecificHeat" id="avgSpecificHeat" onfocus="this.select();"
-        (input)="startSavePolling()" (focus)="focusField('avgSpecificHeat')">
+      <input name="{{'avgSpecificHeat_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="avgSpecificHeat"
+        id="avgSpecificHeat" onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('avgSpecificHeat')">
       <span class="units">Btu/(lb-&#8457;)</span>
     </div>
 
     <div class="row form-group">
       <label class="small" for="gasFlow">Gas Flow</label>
-      <input type="number" step="any" class="form-control" formControlName="gasFlow" id="gasFlow" onfocus="this.select();" (input)="startSavePolling()"
-        (focus)="focusField('gasFlow')">
+      <input name="{{'gasFlow_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="gasFlow" id="gasFlow"
+        onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('gasFlow')">
       <span class="units">SCFM</span>
     </div>
 
     <div class="row form-group">
       <label class="small" for="inletTemp">Inlet Temperature</label>
-      <input type="number" step="any" class="form-control" formControlName="inletTemp" id="inletTemp" onfocus="this.select();" (input)="startSavePolling()"
-        (focus)="focusField('inletTemp')">
+      <input name="{{'inletTemp_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="inletTemp" id="inletTemp"
+        onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('inletTemp')">
       <span class="units">&#8457;</span>
     </div>
 
     <div class="row form-group">
       <label class="small" for="outletTemp">Outlet Temperature</label>
-      <input type="number" step="any" class="form-control" formControlName="outletTemp" id="outletTemp" onfocus="this.select();" (input)="startSavePolling()"
-        (focus)="focusField('outletTemp')">
+      <input name="{{'outletTemp_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="outletTemp" id="outletTemp"
+        onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('outletTemp')">
       <span class="units">&#8457;</span>
     </div>
 
     <div class="row form-group">
       <label class="small" for="correctionFactor">Correction Factor</label>
-      <input type="number" step="any" class="form-control" formControlName="correctionFactor" id="correctionFactor" onfocus="this.select();"
-        (input)="startSavePolling()" (focus)="focusField('correctionFactor')">
+      <input name="{{'correctionFactor_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="correctionFactor"
+        id="correctionFactor" onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('correctionFactor')">
     </div>
   </div>
 </form>

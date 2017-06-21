@@ -6,7 +6,6 @@ import { ModelService } from '../../shared/model.service';
 import { Router } from '@angular/router';
 import { AssessmentService } from '../assessment.service';
 import { IndexedDbService } from '../../indexedDb/indexed-db.service';
-import * as _ from 'lodash';
 import { Settings } from '../../shared/models/settings';
 
 @Component({

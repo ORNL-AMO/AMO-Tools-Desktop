@@ -36,7 +36,7 @@
 
       <app-cooling-losses (fieldChange)="changeField($event)" [baselineSelected]="baselineSelected" (savedLoss)="saveModifications()"
         [(losses)]="phast.losses" [addLossToggle]="addLossToggle" [(lossState)]="lossesStates.coolingLosses" [saveClicked]="saveClicked"
-        *ngIf="lossesTab == 'cooling-losses'"></app-cooling-losses>
+        *ngIf="lossesTab == 'cooling-losses'" [isBaseline]="true"></app-cooling-losses>
 
       <app-flue-gas-losses (fieldChange)="changeField($event)" [baselineSelected]="baselineSelected" (savedLoss)="saveModifications()"
         [(losses)]="phast.losses" [addLossToggle]="addLossToggle" [(lossState)]="lossesStates.flueGasLosses" [saveClicked]="saveClicked"

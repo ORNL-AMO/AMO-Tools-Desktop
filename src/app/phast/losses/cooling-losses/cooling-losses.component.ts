@@ -4,6 +4,7 @@ import { PhastService } from '../../phast.service';
 import { CoolingLossesService } from './cooling-losses.service';
 import { Losses } from '../../../shared/models/phast';
 import { CoolingLoss } from '../../../shared/models/losses/coolingLoss';
+import { CoolingLossesCompareService } from './cooling-losses-compare.service';
 
 @Component({
   selector: 'app-cooling-losses',
@@ -25,10 +26,12 @@ export class CoolingLossesComponent implements OnInit {
   baselineSelected: boolean;
   @Output('fieldChange')
   fieldChange = new EventEmitter<string>();
+  @Input()
+  isBaseline: boolean;
 
   _coolingLosses: Array<any>;
   firstChange: boolean = true;
-  constructor(private coolingLossesService: CoolingLossesService, private phastService: PhastService) { }
+  constructor(private coolingLossesService: CoolingLossesService, private phastService: PhastService, private coolingLossesCompareService: CoolingLossesCompareService) { }
 
   ngOnChanges(changes: SimpleChanges) {
     if (!this.firstChange) {
@@ -49,6 +52,8 @@ export class CoolingLossesComponent implements OnInit {
       this._coolingLosses = new Array();
     }
     if (this.losses.coolingLosses) {
+      this.setCompareVals();
+      this.coolingLossesCompareService.initCompareObjects();
       this.initCoolingLosses();
     }
   }
@@ -86,12 +91,12 @@ export class CoolingLossesComponent implements OnInit {
         };
       }
       this.calculate(tmpLoss);
-      this._coolingLosses.unshift(tmpLoss);
+      this._coolingLosses.push(tmpLoss);
     })
   }
 
   addLoss() {
-    this._coolingLosses.unshift({
+    this._coolingLosses.push({
       coolingMedium: 'Air',
       waterCoolingForm: this.coolingLossesService.initWaterCoolingForm(),
       gasCoolingForm: this.coolingLossesService.initGasCoolingForm(),
@@ -165,15 +170,29 @@ export class CoolingLossesComponent implements OnInit {
         tmpCoolingLoss = this.coolingLossesService.initWaterLossFromForm(loss.waterCoolingForm);
         tmpCoolingLoss.heatLoss = loss.heatLoss;
       }
-      tmpCoolingLosses.unshift(tmpCoolingLoss);
+      tmpCoolingLosses.push(tmpCoolingLoss);
     })
     this.losses.coolingLosses = tmpCoolingLosses;
     this.lossState.numLosses = this.losses.coolingLosses.length;
     this.lossState.saved = true;
+    this.setCompareVals();
     this.savedLoss.emit(true);
   }
 
   changeField(str: string) {
     this.fieldChange.emit(str);
+  }
+
+  setCompareVals() {
+    if (this.isBaseline) {
+      this.coolingLossesCompareService.baselineCoolingLosses = this.losses.coolingLosses;
+    } else {
+      this.coolingLossesCompareService.modifiedCoolingLosses = this.losses.coolingLosses;
+    }
+    if (this.coolingLossesCompareService.differentArray) {
+      if (this.coolingLossesCompareService.differentArray.length != 0) {
+        this.coolingLossesCompareService.checkCoolingLosses();
+      }
+    }
   }
 }
