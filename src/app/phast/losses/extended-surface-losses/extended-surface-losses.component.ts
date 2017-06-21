@@ -4,7 +4,7 @@ import { PhastService } from '../../phast.service';
 import { ExtendedSurface } from '../../../shared/models/losses/extendedSurface';
 import { Losses } from '../../../shared/models/phast';
 import { ExtendedSurfaceLossesService } from './extended-surface-losses.service';
-
+import { ExtendedSurfaceCompareService } from './extended-surface-compare.service';
 
 @Component({
   selector: 'app-extended-surface-losses',
@@ -26,10 +26,12 @@ export class ExtendedSurfaceLossesComponent implements OnInit {
   baselineSelected: boolean;
   @Output('fieldChange')
   fieldChange = new EventEmitter<string>();
+  @Input()
+  isBaseline: boolean;
 
   _surfaceLosses: Array<any>;
   firstChange: boolean = true;
-  constructor(private phastService: PhastService, private extendedSurfaceLossesService: ExtendedSurfaceLossesService) { }
+  constructor(private phastService: PhastService, private extendedSurfaceLossesService: ExtendedSurfaceLossesService, private extendedSurfaceCompareService: ExtendedSurfaceCompareService) { }
 
   ngOnChanges(changes: SimpleChanges) {
     if (!this.firstChange) {
@@ -50,6 +52,8 @@ export class ExtendedSurfaceLossesComponent implements OnInit {
       this._surfaceLosses = new Array();
     }
     if (this.losses.extendedSurfaces) {
+      this.setCompareVals();
+      this.extendedSurfaceCompareService.initCompareObjects();
       this.losses.extendedSurfaces.forEach(loss => {
         let tmpLoss = {
           form: this.extendedSurfaceLossesService.getSurfaceLossForm(loss),
@@ -114,10 +118,24 @@ export class ExtendedSurfaceLossesComponent implements OnInit {
     this.losses.extendedSurfaces = tmpSurfaceLosses;
     this.lossState.numLosses = this.losses.extendedSurfaces.length;
     this.lossState.saved = true;
+    this.setCompareVals();
     this.savedLoss.emit(true);
   }
 
   changeField(str: string) {
     this.fieldChange.emit(str);
+  }
+
+  setCompareVals() {
+    if (this.isBaseline) {
+      this.extendedSurfaceCompareService.baselineSurface = this.losses.extendedSurfaces;
+    } else {
+      this.extendedSurfaceCompareService.modifiedSurface = this.losses.extendedSurfaces;
+    }
+    if (this.extendedSurfaceCompareService.differentArray) {
+      if (this.extendedSurfaceCompareService.differentArray.length != 0) {
+        this.extendedSurfaceCompareService.checkExtendedSurfaceLosses();
+      }
+    }
   }
 }

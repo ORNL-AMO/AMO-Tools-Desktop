@@ -48,7 +48,7 @@
 
       <app-extended-surface-losses (fieldChange)="changeField($event)" [baselineSelected]="baselineSelected" (savedLoss)="saveModifications()"
         [(losses)]="phast.losses" [addLossToggle]="addLossToggle" [(lossState)]="lossesStates.surfaceLosses" [saveClicked]="saveClicked"
-        *ngIf="lossesTab == 'extended-surface-losses'"></app-extended-surface-losses>
+        *ngIf="lossesTab == 'extended-surface-losses'" [isBaseline]="true"></app-extended-surface-losses>
 
       <app-other-losses (fieldChange)="changeField($event)" [baselineSelected]="baselineSelected" (savedLoss)="saveModifications()"
         [(losses)]="phast.losses" [addLossToggle]="addLossToggle" [(lossState)]="lossesStates.otherLosses" [saveClicked]="saveClicked"
