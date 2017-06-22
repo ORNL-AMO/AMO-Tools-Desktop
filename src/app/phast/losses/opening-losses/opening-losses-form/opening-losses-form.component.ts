@@ -97,10 +97,14 @@ export class OpeningLossesFormComponent implements OnInit {
       if (this.openingLossesForm.controls.lengthOfOpening.status == "VALID" && this.openingLossesForm.controls.heightOfOpening.status == "VALID") {
         let lengthInches = this.openingLossesForm.value.lengthOfOpening;
         let heightInches = this.openingLossesForm.value.heightOfOpening;
-        //let lengthFeet = lengthInches * .08333333;
-        //let heightFeet = heightInches * .08333333;
-        let lengthFeet = this.convertUnitsService.value(lengthInches).from('in').to('ft');
-        let heightFeet = this.convertUnitsService.value(heightInches).from('in').to('ft');
+        let lengthFeet = 0;
+        let heightFeet = 0;
+        if (lengthInches) {
+          lengthFeet = this.convertUnitsService.value(lengthInches).from('in').to('ft');
+        }
+        if (heightInches) {
+          heightFeet = this.convertUnitsService.value(heightInches).from('in').to('ft');
+        }
         this.totalArea = lengthFeet * heightFeet * this.openingLossesForm.value.numberOfOpenings;
         this.checkForm();
       }

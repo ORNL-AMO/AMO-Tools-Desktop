@@ -68,6 +68,12 @@ export class EnergyInputComponent implements OnInit {
       })
     }
   }
+
+  ngOnDestroy(){
+    this.energyInputCompareService.baselineEnergyInput = null;
+    this.energyInputCompareService.modifiedEnergyInput = null;
+  }
+
   addLoss() {
     this._energyInputs.unshift({
       form: this.energyInputService.initForm(),

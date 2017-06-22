@@ -59,6 +59,11 @@ export class FlueGasLossesComponent implements OnInit {
     }
   }
 
+  ngOnDestroy(){
+    this.flueGasCompareService.baselineFlueGasLoss = null;
+    this.flueGasCompareService.modifiedFlueGasLoss = null;
+  }
+
   initFlueGasses() {
     this.losses.flueGasLosses.forEach(loss => {
       if (loss.flueGasType == "By Volume") {

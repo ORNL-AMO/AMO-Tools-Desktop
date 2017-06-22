@@ -60,6 +60,11 @@ export class ChargeMaterialComponent implements OnInit {
     this.lossState.numLosses = this._chargeMaterial.length;
   }
 
+  ngOnDestroy(){
+    this.chargeMaterialCompareService.baselineMaterials = null;
+    this.chargeMaterialCompareService.modifiedMaterials = null;
+  }
+
   initChargeMaterial() {
     this.losses.chargeMaterials.forEach(loss => {
       if (loss.chargeMaterialType == 'Gas') {

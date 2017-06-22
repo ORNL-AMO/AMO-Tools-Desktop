@@ -87,9 +87,10 @@ export class ChargeMaterialCompareService {
   }
 
   checkChargeMaterials() {
-    this.checkChartMaterialType();
+    this.checkChargeMaterialType();
     this.checkLiquidMaterials();
     this.checkGasMaterials();
+    this.checkSolidChargeMaterials();
   }
 
   checkLiquidMaterials() {
@@ -122,14 +123,259 @@ export class ChargeMaterialCompareService {
     this.checkAdditionalHeatGas();
   }
 
+  checkSolidChargeMaterials() {
+    this.checkMaterialIdSolid();
+    this.checkThermicReactionTypeSolid();
+    this.checkSpecificHeatSolid();
+    this.checkLatentHeatSolid();
+    this.checkSpecificHeatLiquidSolid();
+    this.checkMeltingPointSolid();
+    this.checkChargeFeedRateSolid();
+    this.checkWaterContentChargeSolid();
+    this.checkWaterContentDischargedSolid();
+    this.checkInitialTemperatureSolid();
+    this.checkDischargeTemperatureSolid();
+    this.checkWaterVaporDischargeTemperatureSolid();
+    this.checkChargeMeltedSolid();
+    this.checkChargeReactedSolid();
+    this.checkReactionHeatSolid();
+    this.checkAdditionalHeatSolid();
+  }
+
   //chargeMaterialType
-  checkChartMaterialType() {
+  checkChargeMaterialType() {
     if (this.baselineMaterials && this.modifiedMaterials) {
       for (let lossIndex = 0; lossIndex < this.baselineMaterials.length; lossIndex++) {
         if (this.baselineMaterials[lossIndex].chargeMaterialType != this.modifiedMaterials[lossIndex].chargeMaterialType) {
           this.differentArray[lossIndex].different.chargeMaterialType.next(true);
         } else {
           this.differentArray[lossIndex].different.chargeMaterialType.next(false);
+        }
+      }
+    }
+  }
+
+  //Solid
+  //materialId
+  checkMaterialIdSolid() {
+    if (this.baselineMaterials && this.modifiedMaterials) {
+      for (let lossIndex = 0; lossIndex < this.baselineMaterials.length; lossIndex++) {
+        if (this.baselineMaterials[lossIndex].chargeMaterialType == 'Solid' && this.modifiedMaterials[lossIndex].chargeMaterialType == 'Solid') {
+          if (this.baselineMaterials[lossIndex].solidChargeMaterial.materialId != this.modifiedMaterials[lossIndex].solidChargeMaterial.materialId) {
+            this.differentArray[lossIndex].different.solidChargeMaterialDifferent.materialId.next(true);
+          } else {
+            this.differentArray[lossIndex].different.solidChargeMaterialDifferent.materialId.next(false);
+          }
+        }
+      }
+    }
+  }
+  //thermicReactionType
+  checkThermicReactionTypeSolid() {
+    if (this.baselineMaterials && this.modifiedMaterials) {
+      for (let lossIndex = 0; lossIndex < this.baselineMaterials.length; lossIndex++) {
+        if (this.baselineMaterials[lossIndex].chargeMaterialType == 'Solid' && this.modifiedMaterials[lossIndex].chargeMaterialType == 'Solid') {
+          if (this.baselineMaterials[lossIndex].solidChargeMaterial.thermicReactionType != this.modifiedMaterials[lossIndex].solidChargeMaterial.thermicReactionType) {
+            this.differentArray[lossIndex].different.solidChargeMaterialDifferent.thermicReactionType.next(true);
+          } else {
+            this.differentArray[lossIndex].different.solidChargeMaterialDifferent.thermicReactionType.next(false);
+          }
+        }
+      }
+    }
+  }
+  //specificHeatSolid
+  checkSpecificHeatSolid() {
+    if (this.baselineMaterials && this.modifiedMaterials) {
+      for (let lossIndex = 0; lossIndex < this.baselineMaterials.length; lossIndex++) {
+        if (this.baselineMaterials[lossIndex].chargeMaterialType == 'Solid' && this.modifiedMaterials[lossIndex].chargeMaterialType == 'Solid') {
+          if (this.baselineMaterials[lossIndex].solidChargeMaterial.specificHeatSolid != this.modifiedMaterials[lossIndex].solidChargeMaterial.specificHeatSolid) {
+            this.differentArray[lossIndex].different.solidChargeMaterialDifferent.specificHeatSolid.next(true);
+          } else {
+            this.differentArray[lossIndex].different.solidChargeMaterialDifferent.specificHeatSolid.next(false);
+          }
+        }
+      }
+    }
+  }
+  //latentHeat
+  checkLatentHeatSolid() {
+    if (this.baselineMaterials && this.modifiedMaterials) {
+      for (let lossIndex = 0; lossIndex < this.baselineMaterials.length; lossIndex++) {
+        if (this.baselineMaterials[lossIndex].chargeMaterialType == 'Solid' && this.modifiedMaterials[lossIndex].chargeMaterialType == 'Solid') {
+          if (this.baselineMaterials[lossIndex].solidChargeMaterial.latentHeat != this.modifiedMaterials[lossIndex].solidChargeMaterial.latentHeat) {
+            this.differentArray[lossIndex].different.solidChargeMaterialDifferent.latentHeat.next(true);
+          } else {
+            this.differentArray[lossIndex].different.solidChargeMaterialDifferent.latentHeat.next(false);
+          }
+        }
+      }
+    }
+  }
+  //specificHeatLiquid
+  checkSpecificHeatLiquidSolid() {
+    if (this.baselineMaterials && this.modifiedMaterials) {
+      for (let lossIndex = 0; lossIndex < this.baselineMaterials.length; lossIndex++) {
+        if (this.baselineMaterials[lossIndex].chargeMaterialType == 'Solid' && this.modifiedMaterials[lossIndex].chargeMaterialType == 'Solid') {
+          if (this.baselineMaterials[lossIndex].solidChargeMaterial.specificHeatLiquid != this.modifiedMaterials[lossIndex].solidChargeMaterial.specificHeatLiquid) {
+            this.differentArray[lossIndex].different.solidChargeMaterialDifferent.specificHeatLiquid.next(true);
+          } else {
+            this.differentArray[lossIndex].different.solidChargeMaterialDifferent.specificHeatLiquid.next(false);
+          }
+        }
+      }
+    }
+  }
+  //meltingPoint
+  checkMeltingPointSolid() {
+    if (this.baselineMaterials && this.modifiedMaterials) {
+      for (let lossIndex = 0; lossIndex < this.baselineMaterials.length; lossIndex++) {
+        if (this.baselineMaterials[lossIndex].chargeMaterialType == 'Solid' && this.modifiedMaterials[lossIndex].chargeMaterialType == 'Solid') {
+          if (this.baselineMaterials[lossIndex].solidChargeMaterial.meltingPoint != this.modifiedMaterials[lossIndex].solidChargeMaterial.meltingPoint) {
+            this.differentArray[lossIndex].different.solidChargeMaterialDifferent.meltingPoint.next(true);
+          } else {
+            this.differentArray[lossIndex].different.solidChargeMaterialDifferent.meltingPoint.next(false);
+          }
+        }
+      }
+    }
+  }
+  //chargeFeedRate
+  checkChargeFeedRateSolid() {
+    if (this.baselineMaterials && this.modifiedMaterials) {
+      for (let lossIndex = 0; lossIndex < this.baselineMaterials.length; lossIndex++) {
+        if (this.baselineMaterials[lossIndex].chargeMaterialType == 'Solid' && this.modifiedMaterials[lossIndex].chargeMaterialType == 'Solid') {
+          if (this.baselineMaterials[lossIndex].solidChargeMaterial.chargeFeedRate != this.modifiedMaterials[lossIndex].solidChargeMaterial.chargeFeedRate) {
+            this.differentArray[lossIndex].different.solidChargeMaterialDifferent.chargeFeedRate.next(true);
+          } else {
+            this.differentArray[lossIndex].different.solidChargeMaterialDifferent.chargeFeedRate.next(false);
+          }
+        }
+      }
+    }
+  }
+  //waterContentCharged
+  checkWaterContentChargeSolid() {
+    if (this.baselineMaterials && this.modifiedMaterials) {
+      for (let lossIndex = 0; lossIndex < this.baselineMaterials.length; lossIndex++) {
+        if (this.baselineMaterials[lossIndex].chargeMaterialType == 'Solid' && this.modifiedMaterials[lossIndex].chargeMaterialType == 'Solid') {
+          if (this.baselineMaterials[lossIndex].solidChargeMaterial.waterContentCharged != this.modifiedMaterials[lossIndex].solidChargeMaterial.waterContentCharged) {
+            this.differentArray[lossIndex].different.solidChargeMaterialDifferent.waterContentCharged.next(true);
+          } else {
+            this.differentArray[lossIndex].different.solidChargeMaterialDifferent.waterContentCharged.next(false);
+          }
+        }
+      }
+    }
+  }
+  //waterContentDischarged
+  checkWaterContentDischargedSolid() {
+    if (this.baselineMaterials && this.modifiedMaterials) {
+      for (let lossIndex = 0; lossIndex < this.baselineMaterials.length; lossIndex++) {
+        if (this.baselineMaterials[lossIndex].chargeMaterialType == 'Solid' && this.modifiedMaterials[lossIndex].chargeMaterialType == 'Solid') {
+          if (this.baselineMaterials[lossIndex].solidChargeMaterial.waterContentDischarged != this.modifiedMaterials[lossIndex].solidChargeMaterial.waterContentDischarged) {
+            this.differentArray[lossIndex].different.solidChargeMaterialDifferent.waterContentDischarged.next(true);
+          } else {
+            this.differentArray[lossIndex].different.solidChargeMaterialDifferent.waterContentDischarged.next(false);
+          }
+        }
+      }
+    }
+  }
+  //initialTemperature
+  checkInitialTemperatureSolid() {
+    if (this.baselineMaterials && this.modifiedMaterials) {
+      for (let lossIndex = 0; lossIndex < this.baselineMaterials.length; lossIndex++) {
+        if (this.baselineMaterials[lossIndex].chargeMaterialType == 'Solid' && this.modifiedMaterials[lossIndex].chargeMaterialType == 'Solid') {
+          if (this.baselineMaterials[lossIndex].solidChargeMaterial.initialTemperature != this.modifiedMaterials[lossIndex].solidChargeMaterial.initialTemperature) {
+            this.differentArray[lossIndex].different.solidChargeMaterialDifferent.initialTemperature.next(true);
+          } else {
+            this.differentArray[lossIndex].different.solidChargeMaterialDifferent.initialTemperature.next(false);
+          }
+        }
+      }
+    }
+  }
+  //dischargeTemperature
+  checkDischargeTemperatureSolid() {
+    if (this.baselineMaterials && this.modifiedMaterials) {
+      for (let lossIndex = 0; lossIndex < this.baselineMaterials.length; lossIndex++) {
+        if (this.baselineMaterials[lossIndex].chargeMaterialType == 'Solid' && this.modifiedMaterials[lossIndex].chargeMaterialType == 'Solid') {
+          if (this.baselineMaterials[lossIndex].solidChargeMaterial.dischargeTemperature != this.modifiedMaterials[lossIndex].solidChargeMaterial.dischargeTemperature) {
+            this.differentArray[lossIndex].different.solidChargeMaterialDifferent.dischargeTemperature.next(true);
+          } else {
+            this.differentArray[lossIndex].different.solidChargeMaterialDifferent.dischargeTemperature.next(false);
+          }
+        }
+      }
+    }
+  }
+  //waterVaporDischargeTemperature
+  checkWaterVaporDischargeTemperatureSolid() {
+    if (this.baselineMaterials && this.modifiedMaterials) {
+      for (let lossIndex = 0; lossIndex < this.baselineMaterials.length; lossIndex++) {
+        if (this.baselineMaterials[lossIndex].chargeMaterialType == 'Solid' && this.modifiedMaterials[lossIndex].chargeMaterialType == 'Solid') {
+          if (this.baselineMaterials[lossIndex].solidChargeMaterial.waterVaporDischargeTemperature != this.modifiedMaterials[lossIndex].solidChargeMaterial.waterVaporDischargeTemperature) {
+            this.differentArray[lossIndex].different.solidChargeMaterialDifferent.waterVaporDischargeTemperature.next(true);
+          } else {
+            this.differentArray[lossIndex].different.solidChargeMaterialDifferent.waterVaporDischargeTemperature.next(false);
+          }
+        }
+      }
+    }
+  }
+  //chargeMelted
+  checkChargeMeltedSolid() {
+    if (this.baselineMaterials && this.modifiedMaterials) {
+      for (let lossIndex = 0; lossIndex < this.baselineMaterials.length; lossIndex++) {
+        if (this.baselineMaterials[lossIndex].chargeMaterialType == 'Solid' && this.modifiedMaterials[lossIndex].chargeMaterialType == 'Solid') {
+          if (this.baselineMaterials[lossIndex].solidChargeMaterial.chargeMelted != this.modifiedMaterials[lossIndex].solidChargeMaterial.chargeMelted) {
+            this.differentArray[lossIndex].different.solidChargeMaterialDifferent.chargeMelted.next(true);
+          } else {
+            this.differentArray[lossIndex].different.solidChargeMaterialDifferent.chargeMelted.next(false);
+          }
+        }
+      }
+    }
+  }
+  //chargeReacted
+  checkChargeReactedSolid() {
+    if (this.baselineMaterials && this.modifiedMaterials) {
+      for (let lossIndex = 0; lossIndex < this.baselineMaterials.length; lossIndex++) {
+        if (this.baselineMaterials[lossIndex].chargeMaterialType == 'Solid' && this.modifiedMaterials[lossIndex].chargeMaterialType == 'Solid') {
+          if (this.baselineMaterials[lossIndex].solidChargeMaterial.chargeReacted != this.modifiedMaterials[lossIndex].solidChargeMaterial.chargeReacted) {
+            this.differentArray[lossIndex].different.solidChargeMaterialDifferent.chargeReacted.next(true);
+          } else {
+            this.differentArray[lossIndex].different.solidChargeMaterialDifferent.chargeReacted.next(false);
+          }
+        }
+      }
+    }
+  }
+  //reactionHeat
+  checkReactionHeatSolid() {
+    if (this.baselineMaterials && this.modifiedMaterials) {
+      for (let lossIndex = 0; lossIndex < this.baselineMaterials.length; lossIndex++) {
+        if (this.baselineMaterials[lossIndex].chargeMaterialType == 'Solid' && this.modifiedMaterials[lossIndex].chargeMaterialType == 'Solid') {
+          if (this.baselineMaterials[lossIndex].solidChargeMaterial.reactionHeat != this.modifiedMaterials[lossIndex].solidChargeMaterial.reactionHeat) {
+            this.differentArray[lossIndex].different.solidChargeMaterialDifferent.reactionHeat.next(true);
+          } else {
+            this.differentArray[lossIndex].different.solidChargeMaterialDifferent.reactionHeat.next(false);
+          }
+        }
+      }
+    }
+  }
+  //additionalHeat
+  checkAdditionalHeatSolid() {
+    if (this.baselineMaterials && this.modifiedMaterials) {
+      for (let lossIndex = 0; lossIndex < this.baselineMaterials.length; lossIndex++) {
+        if (this.baselineMaterials[lossIndex].chargeMaterialType == 'Solid' && this.modifiedMaterials[lossIndex].chargeMaterialType == 'Solid') {
+          if (this.baselineMaterials[lossIndex].solidChargeMaterial.additionalHeat != this.modifiedMaterials[lossIndex].solidChargeMaterial.additionalHeat) {
+            this.differentArray[lossIndex].different.solidChargeMaterialDifferent.additionalHeat.next(true);
+          } else {
+            this.differentArray[lossIndex].different.solidChargeMaterialDifferent.additionalHeat.next(false);
+          }
         }
       }
     }

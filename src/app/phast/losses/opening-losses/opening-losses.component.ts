@@ -69,6 +69,11 @@ export class OpeningLossesComponent implements OnInit {
     }
   }
 
+  ngOnDestroy(){
+    this.openingLossesCompareService.baselineOpeningLosses = null;
+    this.openingLossesCompareService.modifiedOpeningLosses = null;
+  }
+
   addLoss() {
     let tmpName = 'Opening Loss #' + (this._openingLosses.length + 1);
     this._openingLosses.push({

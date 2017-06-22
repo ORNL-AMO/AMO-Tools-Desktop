@@ -66,6 +66,11 @@ export class AuxiliaryPowerLossesComponent implements OnInit {
     }
   }
 
+  ngOnDestroy(){
+    this.auxiliaryPowerCompareService.baselineAuxLosses = null;
+    this.auxiliaryPowerCompareService.modifiedAuxLosses = null;
+  }
+
   addLoss() {
     this._auxiliaryPowerLosses.unshift({
       form: this.auxiliaryPowerLossesService.initForm(),

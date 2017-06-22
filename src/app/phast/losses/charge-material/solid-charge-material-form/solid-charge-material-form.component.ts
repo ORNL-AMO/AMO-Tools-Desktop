@@ -1,5 +1,8 @@
 import { Component, OnInit, Input, EventEmitter, Output, ViewChild, ElementRef, SimpleChanges } from '@angular/core';
 import { SuiteDbService } from '../../../../suiteDb/suite-db.service';
+import { WindowRefService } from '../../../../indexedDb/window-ref.service';
+import { ChargeMaterialCompareService } from '../charge-material-compare.service';
+
 @Component({
   selector: 'app-solid-charge-material-form',
   templateUrl: './solid-charge-material-form.component.html',
@@ -20,7 +23,7 @@ export class SolidChargeMaterialFormComponent implements OnInit {
   saveEmit = new EventEmitter<boolean>();
   @Input()
   lossIndex: number;
-  
+
   @ViewChild('lossForm') lossForm: ElementRef;
   form: any;
   elements: any;
@@ -31,7 +34,7 @@ export class SolidChargeMaterialFormComponent implements OnInit {
   selectedMaterialId: any;
   selectedMaterial: any;
   counter: any;
-  constructor(private suiteDbService: SuiteDbService) { }
+  constructor(private suiteDbService: SuiteDbService, private chargeMaterialCompareService: ChargeMaterialCompareService, private windowRefService: WindowRefService) { }
 
   ngOnChanges(changes: SimpleChanges) {
     if (!this.firstChange) {
@@ -55,9 +58,13 @@ export class SolidChargeMaterialFormComponent implements OnInit {
         }
       }
     }
+  }
+
+  ngAfterViewInit() {
     if (!this.baselineSelected) {
       this.disableForm();
     }
+    this.initDifferenceMonitor();
   }
 
   disableForm() {
@@ -107,5 +114,124 @@ export class SolidChargeMaterialFormComponent implements OnInit {
     this.counter = setTimeout(() => {
       this.emitSave();
     }, 3000)
+  }
+
+  initDifferenceMonitor() {
+    if (this.chargeMaterialCompareService.baselineMaterials && this.chargeMaterialCompareService.modifiedMaterials && this.chargeMaterialCompareService.differentArray.length != 0) {
+      let doc = this.windowRefService.getDoc();
+
+      //materialName
+      this.chargeMaterialCompareService.differentArray[this.lossIndex].different.solidChargeMaterialDifferent.materialId.subscribe((val) => {
+        let materialNameElements = doc.getElementsByName('materialName_' + this.lossIndex);
+        materialNameElements.forEach(element => {
+          element.classList.toggle('indicate-different', val);
+        });
+      })
+      //materialSpecificHeatOfSolidMaterial
+      this.chargeMaterialCompareService.differentArray[this.lossIndex].different.solidChargeMaterialDifferent.specificHeatSolid.subscribe((val) => {
+        let materialSpecificHeatOfSolidMaterialElements = doc.getElementsByName('materialSpecificHeatOfSolidMaterial_' + this.lossIndex);
+        materialSpecificHeatOfSolidMaterialElements.forEach(element => {
+          element.classList.toggle('indicate-different', val);
+        });
+      })
+      //materialLatentHeatOfFusion
+      this.chargeMaterialCompareService.differentArray[this.lossIndex].different.solidChargeMaterialDifferent.latentHeat.subscribe((val) => {
+        let materialLatentHeatOfFusionElements = doc.getElementsByName('materialLatentHeatOfFusion_' + this.lossIndex);
+        materialLatentHeatOfFusionElements.forEach(element => {
+          element.classList.toggle('indicate-different', val);
+        });
+      })
+      //materialHeatOfLiquid
+      this.chargeMaterialCompareService.differentArray[this.lossIndex].different.solidChargeMaterialDifferent.specificHeatLiquid.subscribe((val) => {
+        let materialHeatOfLiquidElements = doc.getElementsByName('materialHeatOfLiquid_' + this.lossIndex);
+        materialHeatOfLiquidElements.forEach(element => {
+          element.classList.toggle('indicate-different', val);
+        });
+      })
+      //materialMeltingPoint
+      this.chargeMaterialCompareService.differentArray[this.lossIndex].different.solidChargeMaterialDifferent.meltingPoint.subscribe((val) => {
+        let materialMeltingPointElements = doc.getElementsByName('materialMeltingPoint_' + this.lossIndex);
+        materialMeltingPointElements.forEach(element => {
+          element.classList.toggle('indicate-different', val);
+        });
+      })
+      //feedRate
+      this.chargeMaterialCompareService.differentArray[this.lossIndex].different.solidChargeMaterialDifferent.chargeFeedRate.subscribe((val) => {
+        let feedRateElements = doc.getElementsByName('feedRate_' + this.lossIndex);
+        feedRateElements.forEach(element => {
+          element.classList.toggle('indicate-different', val);
+        });
+      })
+      //waterContentAsCharged
+      this.chargeMaterialCompareService.differentArray[this.lossIndex].different.solidChargeMaterialDifferent.waterContentCharged.subscribe((val) => {
+        let waterContentAsChargedElements = doc.getElementsByName('waterContentAsCharged_' + this.lossIndex);
+        waterContentAsChargedElements.forEach(element => {
+          element.classList.toggle('indicate-different', val);
+        });
+      })
+      //waterContentAsDischarged
+      this.chargeMaterialCompareService.differentArray[this.lossIndex].different.solidChargeMaterialDifferent.waterContentDischarged.subscribe((val) => {
+        let waterContentAsDischargedElements = doc.getElementsByName('waterContentAsDischarged_' + this.lossIndex);
+        waterContentAsDischargedElements.forEach(element => {
+          element.classList.toggle('indicate-different', val);
+        });
+      })
+      //initialTemperature
+      this.chargeMaterialCompareService.differentArray[this.lossIndex].different.solidChargeMaterialDifferent.initialTemperature.subscribe((val) => {
+        let initialTemperatureElements = doc.getElementsByName('initialTemperature_' + this.lossIndex);
+        initialTemperatureElements.forEach(element => {
+          element.classList.toggle('indicate-different', val);
+        });
+      })
+      //chargeMaterialDischargeTemperature
+      this.chargeMaterialCompareService.differentArray[this.lossIndex].different.solidChargeMaterialDifferent.dischargeTemperature.subscribe((val) => {
+        let chargeMaterialDischargeTemperatureElements = doc.getElementsByName('chargeMaterialDischargeTemperature_' + this.lossIndex);
+        chargeMaterialDischargeTemperatureElements.forEach(element => {
+          element.classList.toggle('indicate-different', val);
+        });
+      })
+      //waterVaporDischargeTemperature
+      this.chargeMaterialCompareService.differentArray[this.lossIndex].different.solidChargeMaterialDifferent.waterVaporDischargeTemperature.subscribe((val) => {
+        let waterVaporDischargeTemperatureElements = doc.getElementsByName('waterVaporDischargeTemperature_' + this.lossIndex);
+        waterVaporDischargeTemperatureElements.forEach(element => {
+          element.classList.toggle('indicate-different', val);
+        });
+      })
+      //percentChargeMelted
+      this.chargeMaterialCompareService.differentArray[this.lossIndex].different.solidChargeMaterialDifferent.chargeMelted.subscribe((val) => {
+        let percentChargeMeltedElements = doc.getElementsByName('percentChargeMelted_' + this.lossIndex);
+        percentChargeMeltedElements.forEach(element => {
+          element.classList.toggle('indicate-different', val);
+        });
+      })
+      //percentChargeReacted
+      this.chargeMaterialCompareService.differentArray[this.lossIndex].different.solidChargeMaterialDifferent.chargeReacted.subscribe((val) => {
+        let percentChargeReactedElements = doc.getElementsByName('percentChargeReacted_' + this.lossIndex);
+        percentChargeReactedElements.forEach(element => {
+          element.classList.toggle('indicate-different', val);
+        });
+      })
+      //heatOfReaction
+      this.chargeMaterialCompareService.differentArray[this.lossIndex].different.solidChargeMaterialDifferent.reactionHeat.subscribe((val) => {
+        let heatOfReactionElements = doc.getElementsByName('heatOfReaction_' + this.lossIndex);
+        heatOfReactionElements.forEach(element => {
+          element.classList.toggle('indicate-different', val);
+        });
+      })
+      //endothermicOrExothermic
+      this.chargeMaterialCompareService.differentArray[this.lossIndex].different.solidChargeMaterialDifferent.thermicReactionType.subscribe((val) => {
+        let endothermicOrExothermicElements = doc.getElementsByName('endothermicOrExothermic_' + this.lossIndex);
+        endothermicOrExothermicElements.forEach(element => {
+          element.classList.toggle('indicate-different', val);
+        });
+      })
+      //additionalHeatRequired
+      this.chargeMaterialCompareService.differentArray[this.lossIndex].different.solidChargeMaterialDifferent.additionalHeat.subscribe((val) => {
+        let additionalHeatRequiredElements = doc.getElementsByName('additionalHeatRequired_' + this.lossIndex);
+        additionalHeatRequiredElements.forEach(element => {
+          element.classList.toggle('indicate-different', val);
+        });
+      })
+    }
   }
 }

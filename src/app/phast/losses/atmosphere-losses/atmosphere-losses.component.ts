@@ -65,6 +65,12 @@ export class AtmosphereLossesComponent implements OnInit {
     }
   }
 
+  ngOnDestroy() {
+    this.atmosphereLossesCompareService.baselineAtmosphereLosses = null;
+    this.atmosphereLossesCompareService.modifiedAtmosphereLosses = null;
+    console.log(this.atmosphereLossesCompareService.modifiedAtmosphereLosses)
+  }
+
   addLoss() {
     let tmpForm = this.atmosphereLossesService.initForm();
     let tmpName = 'Loss #' + (this._atmosphereLosses.length + 1);
@@ -120,7 +126,7 @@ export class AtmosphereLossesComponent implements OnInit {
     this.fieldChange.emit(str);
   }
 
-  setCompareVals(){
+  setCompareVals() {
     if (this.isBaseline) {
       this.atmosphereLossesCompareService.baselineAtmosphereLosses = this.losses.atmosphereLosses;
     } else {

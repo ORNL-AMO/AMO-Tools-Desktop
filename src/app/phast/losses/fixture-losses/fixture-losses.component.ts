@@ -65,6 +65,11 @@ export class FixtureLossesComponent implements OnInit {
     }
   }
 
+  ngOnDestroy(){
+    this.fixtureLossesCompareService.baselineFixtureLosses = null;
+    this.fixtureLossesCompareService.modifiedFixtureLosses = null;
+  }
+
   addLoss() {
     this._fixtureLosses.unshift({
       form: this.fixtureLossesService.initForm(),

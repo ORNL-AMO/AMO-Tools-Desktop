@@ -68,6 +68,12 @@ export class SlagComponent implements OnInit {
     }
   }
 
+  ngOnDestroy(){
+   this.slagCompareService.baselineSlag = null;
+   this.slagCompareService.modifiedSlag = null; 
+  }
+
+
   addLoss() {
     this._slagLosses.unshift({
       form: this.slagService.initForm(),

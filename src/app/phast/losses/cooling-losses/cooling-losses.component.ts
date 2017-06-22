@@ -58,6 +58,11 @@ export class CoolingLossesComponent implements OnInit {
     }
   }
 
+  ngOnDestroy() {
+    this.coolingLossesCompareService.baselineCoolingLosses = null;
+    this.coolingLossesCompareService.modifiedCoolingLosses = null;
+  }
+
   initCoolingLosses() {
     this.losses.coolingLosses.forEach(loss => {
       let tmpLoss: any;
