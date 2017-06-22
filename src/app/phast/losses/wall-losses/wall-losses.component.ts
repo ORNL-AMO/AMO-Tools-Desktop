@@ -67,14 +67,20 @@ export class WallLossesComponent implements OnInit {
     }
   }
 
-  ngOnDestroy(){
-   this.wallLossCompareService.baselineWallLosses = null;
-   this.wallLossCompareService.modifiedWallLosses = null; 
+  ngOnDestroy() {
+    this.wallLossCompareService.baselineWallLosses = null;
+    this.wallLossCompareService.modifiedWallLosses = null;
   }
 
   addLoss() {
+    let tmpForm = this.wallLossesService.initForm();
+    let tmpLoss = this.wallLossesService.getWallLossFromForm(tmpForm);
+    this.losses.wallLosses.push(tmpLoss);
+    this.setCompareVals();
+    this.wallLossCompareService.initCompareObjects();
+
     this._wallLosses.push({
-      form: this.wallLossesService.initForm(),
+      form: tmpForm,
       name: 'Loss #' + (this._wallLosses.length + 1),
       heatLoss: 0.0
     });
@@ -116,6 +122,7 @@ export class WallLossesComponent implements OnInit {
       tmpWallLoss.heatLoss = loss.heatLoss;
       tmpWallLosses.push(tmpWallLoss);
     })
+    let priorLength = this.losses.wallLosses.length;
     this.losses.wallLosses = tmpWallLosses;
     this.lossState.numLosses = this.losses.wallLosses.length;
     this.lossState.saved = true;
@@ -129,7 +136,6 @@ export class WallLossesComponent implements OnInit {
   }
 
   setCompareVals() {
-    console.log('setCompareVals');
     if (this.isBaseline) {
       this.wallLossCompareService.baselineWallLosses = this.losses.wallLosses;
     } else {
@@ -137,9 +143,8 @@ export class WallLossesComponent implements OnInit {
     }
     if (this.wallLossCompareService.differentArray) {
       if (this.wallLossCompareService.differentArray.length != 0) {
-        console.log('checkWallLosses')
         this.wallLossCompareService.checkWallLosses();
-      }else{
+      } else {
         this.wallLossCompareService.initCompareObjects();
       }
     }

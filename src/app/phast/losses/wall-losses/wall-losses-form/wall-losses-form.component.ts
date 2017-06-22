@@ -92,65 +92,65 @@ export class WallLossesFormComponent implements OnInit {
 
   initDifferenceMonitor() {
     if (this.wallLossCompareService.baselineWallLosses && this.wallLossCompareService.modifiedWallLosses && this.wallLossCompareService.differentArray.length != 0) {
-      let doc = this.windowRefService.getDoc();
-
-      //avgSurfaceTemp
-      this.wallLossCompareService.differentArray[this.lossIndex].different.surfaceTemperature.subscribe((val) => {
-        let avgSurfaceTempElements = doc.getElementsByName('avgSurfaceTemp_' + this.lossIndex);
-        avgSurfaceTempElements.forEach(element => {
-          element.classList.toggle('indicate-different', val);
-        });
-      })
-      //ambientTemp
-      this.wallLossCompareService.differentArray[this.lossIndex].different.ambientTemperature.subscribe((val) => {
-        let ambientTempElements = doc.getElementsByName('ambientTemp_' + this.lossIndex);
-        ambientTempElements.forEach(element => {
-          element.classList.toggle('indicate-different', val);
-        });
-      })
-      //windVelocity
-      this.wallLossCompareService.differentArray[this.lossIndex].different.windVelocity.subscribe((val) => {
-        let windVelocityElements = doc.getElementsByName('windVelocity_' + this.lossIndex);
-        windVelocityElements.forEach(element => {
-          element.classList.toggle('indicate-different', val);
-        });
-      })
-      //surfaceShape
-      this.wallLossCompareService.differentArray[this.lossIndex].different.surfaceShape.subscribe((val) => {
-        let surfaceShapeElements = doc.getElementsByName('surfaceShape_' + this.lossIndex);
-        surfaceShapeElements.forEach(element => {
-          element.classList.toggle('indicate-different', val);
-        });
-      })
-      // //conditionFactor
-      // this.wallLossCompareService.differentArray[this.lossIndex].different.conditionFactor.subscribe((val) => {
-      //   let conditionFactorElements = doc.getElementsByName('conditionFactor_' + this.lossIndex);
-      //   conditionFactorElements.forEach(element => {
-      //     element.classList.toggle('indicate-different', val);
-      //   });
-      // })
-      //surfaceEmissivity
-      this.wallLossCompareService.differentArray[this.lossIndex].different.surfaceEmissivity.subscribe((val) => {
-        let surfaceEmissivityElements = doc.getElementsByName('surfaceEmissivity_' + this.lossIndex);
-        surfaceEmissivityElements.forEach(element => {
-          element.classList.toggle('indicate-different', val);
-        });
-      })
-      //surfaceArea
-      this.wallLossCompareService.differentArray[this.lossIndex].different.surfaceArea.subscribe((val) => {
-        let surfaceAreaElements = doc.getElementsByName('surfaceArea_' + this.lossIndex);
-        surfaceAreaElements.forEach(element => {
-          element.classList.toggle('indicate-different', val);
-        });
-      })
-      //correctionFactor
-      this.wallLossCompareService.differentArray[this.lossIndex].different.correctionFactor.subscribe((val) => {
-        let correctionFactorElements = doc.getElementsByName('correctionFactor_' + this.lossIndex);
-        correctionFactorElements.forEach(element => {
-          element.classList.toggle('indicate-different', val);
-        });
-      })
-
+      if (this.wallLossCompareService.differentArray[this.lossIndex]) {
+        let doc = this.windowRefService.getDoc();
+        //avgSurfaceTemp
+        this.wallLossCompareService.differentArray[this.lossIndex].different.surfaceTemperature.subscribe((val) => {
+          let avgSurfaceTempElements = doc.getElementsByName('avgSurfaceTemp_' + this.lossIndex);
+          avgSurfaceTempElements.forEach(element => {
+            element.classList.toggle('indicate-different', val);
+          });
+        })
+        //ambientTemp
+        this.wallLossCompareService.differentArray[this.lossIndex].different.ambientTemperature.subscribe((val) => {
+          let ambientTempElements = doc.getElementsByName('ambientTemp_' + this.lossIndex);
+          ambientTempElements.forEach(element => {
+            element.classList.toggle('indicate-different', val);
+          });
+        })
+        //windVelocity
+        this.wallLossCompareService.differentArray[this.lossIndex].different.windVelocity.subscribe((val) => {
+          let windVelocityElements = doc.getElementsByName('windVelocity_' + this.lossIndex);
+          windVelocityElements.forEach(element => {
+            element.classList.toggle('indicate-different', val);
+          });
+        })
+        //surfaceShape
+        this.wallLossCompareService.differentArray[this.lossIndex].different.surfaceShape.subscribe((val) => {
+          let surfaceShapeElements = doc.getElementsByName('surfaceShape_' + this.lossIndex);
+          surfaceShapeElements.forEach(element => {
+            element.classList.toggle('indicate-different', val);
+          });
+        })
+        // //conditionFactor
+        // this.wallLossCompareService.differentArray[this.lossIndex].different.conditionFactor.subscribe((val) => {
+        //   let conditionFactorElements = doc.getElementsByName('conditionFactor_' + this.lossIndex);
+        //   conditionFactorElements.forEach(element => {
+        //     element.classList.toggle('indicate-different', val);
+        //   });
+        // })
+        //surfaceEmissivity
+        this.wallLossCompareService.differentArray[this.lossIndex].different.surfaceEmissivity.subscribe((val) => {
+          let surfaceEmissivityElements = doc.getElementsByName('surfaceEmissivity_' + this.lossIndex);
+          surfaceEmissivityElements.forEach(element => {
+            element.classList.toggle('indicate-different', val);
+          });
+        })
+        //surfaceArea
+        this.wallLossCompareService.differentArray[this.lossIndex].different.surfaceArea.subscribe((val) => {
+          let surfaceAreaElements = doc.getElementsByName('surfaceArea_' + this.lossIndex);
+          surfaceAreaElements.forEach(element => {
+            element.classList.toggle('indicate-different', val);
+          });
+        })
+        //correctionFactor
+        this.wallLossCompareService.differentArray[this.lossIndex].different.correctionFactor.subscribe((val) => {
+          let correctionFactorElements = doc.getElementsByName('correctionFactor_' + this.lossIndex);
+          correctionFactorElements.forEach(element => {
+            element.classList.toggle('indicate-different', val);
+          });
+        })
+      }
     }
   }
 }
