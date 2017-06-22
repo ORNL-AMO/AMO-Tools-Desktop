@@ -111,7 +111,7 @@ export class ChargeMaterialService {
   //build LiquidChargeMaterial from liquidForm
   buildLiquidChargeMaterial(liquidForm: any): LiquidChargeMaterial {
     let reactionType = 0;
-    if (liquidForm.value.exothermicOrEndothermic == 'Exothermic') {
+    if (liquidForm.value.endothermicOrExothermic == 'Exothermic') {
       reactionType = 1;
     }
     let tmpLiquidMaterial: LiquidChargeMaterial = {
@@ -186,7 +186,7 @@ export class ChargeMaterialService {
   //SolidChargeMaterial from form
   buildSolidChargeMaterial(solidForm: any): SolidChargeMaterial {
     let reactionType = 0;
-    if (solidForm.value.exothermicOrEndothermic == 'Exothermic') {
+    if (solidForm.value.endothermicOrExothermic == 'Exothermic') {
       reactionType = 1;
     }
 

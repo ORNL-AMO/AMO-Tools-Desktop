@@ -16,17 +16,10 @@ import { EnergyInputModule } from "./energy-input/energy-input.module";
 import { AuxiliaryPowerLossesModule } from './auxiliary-power-losses/auxiliary-power-losses.module';
 import { AtmosphereLossesModule } from "./atmosphere-losses/atmosphere-losses.module";
 import { CoolingLossesModule } from "./cooling-losses/cooling-losses.module";
+import { ChargeMaterialModule } from './charge-material/charge-material.module';
 
 import { LossesComponent } from './losses.component';
-import { ChargeMaterialComponent } from './charge-material/charge-material.component';
 import { LossesSidebarComponent } from './losses-sidebar/losses-sidebar.component';
-
-import { SolidChargeMaterialFormComponent } from './charge-material/solid-charge-material-form/solid-charge-material-form.component';
-import { LiquidChargeMaterialFormComponent } from './charge-material/liquid-charge-material-form/liquid-charge-material-form.component';
-import { GasChargeMaterialFormComponent } from './charge-material/gas-charge-material-form/gas-charge-material-form.component';
-
-import { ChargeMaterialService } from './charge-material/charge-material.service';
-
 import { LossesTabsComponent } from './losses-tabs/losses-tabs.component';
 
 import { NotesComponent } from './notes/notes.component';
@@ -72,15 +65,12 @@ import { EnergyInputHelpComponent } from './losses-help/energy-input-help/energy
     EnergyInputModule,
     AuxiliaryPowerLossesModule,
     AtmosphereLossesModule,
-    CoolingLossesModule
+    CoolingLossesModule,
+    ChargeMaterialModule
   ],
   declarations: [
     LossesComponent,
-    ChargeMaterialComponent,
     LossesSidebarComponent,
-    LiquidChargeMaterialFormComponent,
-    GasChargeMaterialFormComponent,
-    SolidChargeMaterialFormComponent,
     LossesTabsComponent,
     NotesComponent,
     LossesHelpComponent,
@@ -104,7 +94,6 @@ import { EnergyInputHelpComponent } from './losses-help/energy-input-help/energy
     EnergyInputHelpComponent
   ],
   providers: [
-    ChargeMaterialService
   ],
   exports: [
     LossesComponent

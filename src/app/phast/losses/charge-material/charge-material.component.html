@@ -8,7 +8,7 @@
   <h4>Add some now.</h4>
 </div>
 
-<div class="card-form" *ngFor="let material of _chargeMaterial">
+<div class="card-form" *ngFor="let material of _chargeMaterial; let lossIndex = index">
   <div class="row">
     <div class="col-12">
       <div class="pull-left">
@@ -33,12 +33,13 @@
       </div>
       <app-solid-charge-material-form *ngIf="material.chargeMaterialType == 'Solid'" (changeField)="changeField($event)" [(lossState)]="lossState"
         [(chargeMaterialForm)]="material.solidForm" (calculate)="calculate(material)" [baselineSelected]="baselineSelected"
-        (saveEmit)="saveLosses()"></app-solid-charge-material-form>
+        (saveEmit)="saveLosses()" [lossIndex]="lossIndex"></app-solid-charge-material-form>
       <app-liquid-charge-material-form *ngIf="material.chargeMaterialType == 'Liquid'" (changeField)="changeField($event)" [(lossState)]="lossState"
         [(chargeMaterialForm)]="material.liquidForm" (calculate)="calculate(material)" [baselineSelected]="baselineSelected"
-        (saveEmit)="saveLosses()"></app-liquid-charge-material-form>
+        (saveEmit)="saveLosses()" [lossIndex]="lossIndex"></app-liquid-charge-material-form>
       <app-gas-charge-material-form *ngIf="material.chargeMaterialType == 'Gas'" (changeField)="changeField($event)" [(lossState)]="lossState"
-        [(chargeMaterialForm)]="material.gasForm" (calculate)="calculate(material)" [baselineSelected]="baselineSelected" (saveEmit)="saveLosses()"></app-gas-charge-material-form>
+        [(chargeMaterialForm)]="material.gasForm" (calculate)="calculate(material)" [baselineSelected]="baselineSelected" (saveEmit)="saveLosses()"
+        [lossIndex]="lossIndex"></app-gas-charge-material-form>
     </div>
   </div>
   <div class="row">

@@ -18,7 +18,9 @@ export class SolidChargeMaterialFormComponent implements OnInit {
   changeField = new EventEmitter<string>();
   @Output('saveEmit')
   saveEmit = new EventEmitter<boolean>();
-
+  @Input()
+  lossIndex: number;
+  
   @ViewChild('lossForm') lossForm: ElementRef;
   form: any;
   elements: any;
