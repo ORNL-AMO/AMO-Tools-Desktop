@@ -11,6 +11,8 @@ export class AboutPageComponent implements OnInit {
   showSystemRequirements: boolean = false;
   showPSAT: boolean = false;
   showPHAST: boolean = false;
+  showUser: boolean = false;
+  showFAST: boolean = false;
   constructor() { }
 
   ngOnInit() {
@@ -25,5 +27,11 @@ export class AboutPageComponent implements OnInit {
   }
   toggleShowPHAST() {
     this.showPHAST = !this.showPHAST;
+  }
+  toggleShowUser() {
+    this.showUser = !this.showUser;
+  }
+  toggleShowFAST() {
+    this.showFAST = !this.showFAST
   }
 }
