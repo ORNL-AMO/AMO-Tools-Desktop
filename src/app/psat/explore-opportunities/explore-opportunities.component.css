@@ -1,0 +1,49 @@
+.explore-opportunities h2 {
+	margin-top: 40px;
+    font-size: 20px;
+}
+.explore-opportunities p {
+	font-size: 16px;
+}
+
+.explore-opportunities > ul {
+	margin: 0;
+	padding: 0;
+}
+	.explore-opportunities > ul > li {
+		border-bottom: #ddd solid 1px;
+		padding: 13px 0;
+	}
+		.explore-opportunities > ul > li > .checkbox label{
+			font-weight: bold;
+			font-size: 16px;
+		}
+
+
+.explore-opportunities li {
+	list-style: none;
+}
+
+.explore-opportunities form {
+	margin-left: 17px;
+}
+.explore-opportunities form:after {
+	display: table;
+	content: "";
+	clear: both;
+}
+.explore-opportunities .form-group {
+	float: left;
+	width: 300px;
+	margin-right: 20px;
+}
+	.explore-opportunities label {
+		float: none;
+	}
+	.explore-opportunities .form-control {
+		float: none;
+		width: 100%;
+	}
+	.explore-opportunities .units {
+		top: 28px;
+	}

@@ -27,7 +27,7 @@ export class PsatService {
     if (settings.flowMeasurement != 'gpm') {
       psatInputs.flow_rate = this.convertUnitsService.value(psatInputs.flow_rate).from(settings.flowMeasurement).to('gpm');
     }
-    
+
     let tmpResults = psatAddon.results(psatInputs);
 
     if (settings.powerMeasurement != 'hp') {
@@ -39,8 +39,8 @@ export class PsatService {
 
       tmpResults.pump_shaft_power[0] = this.convertUnitsService.value(tmpResults.pump_shaft_power[0]).from('hp').to(settings.powerMeasurement);
       tmpResults.pump_shaft_power[1] = this.convertUnitsService.value(tmpResults.pump_shaft_power[1]).from('hp').to(settings.powerMeasurement);
-      
-  }
+
+    }
     let tmpOutputs: PsatOutputs = this.parseResults(tmpResults);
     return tmpOutputs;
   }
@@ -58,7 +58,7 @@ export class PsatService {
         motor_power: this.roundVal(results.motor_power[0], 2),
         annual_energy: this.roundVal(results.annual_energy[0], 2),
         annual_cost: this.roundVal(results.annual_cost[0], 2),
-        annual_savings_potential: this.roundVal(results.annual_savings_potential[0], 2),
+        annual_savings_potential: this.roundVal(results.annual_savings_potential[0], 0),
         optimization_rating: this.roundVal(results.optimization_rating[0], 2)
       },
       optimal: {
@@ -72,7 +72,7 @@ export class PsatService {
         motor_power: this.roundVal(results.motor_power[1], 2),
         annual_energy: this.roundVal(results.annual_energy[1], 2),
         annual_cost: this.roundVal(results.annual_cost[1], 2),
-        annual_savings_potential: this.roundVal(results.annual_savings_potential[1], 2),
+        annual_savings_potential: this.roundVal(results.annual_savings_potential[1], 0),
         optimization_rating: this.roundVal(results.optimization_rating[1], 2)
       }
     }
@@ -351,6 +351,8 @@ export class PsatService {
     }
     else if (pumpStyle == 'Large End Suction') {
       enumPumpStyle = 10;
+    } else if (pumpStyle == 'Specified Optimal Efficiency') {
+      enumPumpStyle = 11;
     }
     return enumPumpStyle;
   }
@@ -388,6 +390,9 @@ export class PsatService {
     }
     else if (num == 10) {
       pumpStyle = 'Large End Suction';
+    }
+    else if (num == 11) {
+      pumpStyle = 'Specified Optimal Efficiency';
     }
     return pumpStyle;
   }
@@ -514,7 +519,7 @@ export class PsatService {
   initForm() {
     return this.formBuilder.group({
       'pumpType': ['', Validators.required],
-      'specifiedPumpType': ['', Validators.required],
+      'specifiedPumpEfficiency': ['', Validators.required],
       'pumpRPM': ['', Validators.required],
       'drive': ['', Validators.required],
       'viscosity': ['', Validators.required],
@@ -547,10 +552,9 @@ export class PsatService {
     let drive = this.getDriveFromEnum(psatInputs.drive);
     let fixedSpeed = this.getFixedSpeedFromEnum(psatInputs.fixed_speed);
     let loadEstMethod = this.getLoadEstimationFromEnum(psatInputs.load_estimation_method);
-
     return this.formBuilder.group({
       'pumpType': [pumpStyle, Validators.required],
-      'specifiedPumpType': [psatInputs.pump_specified, Validators.required],
+      'specifiedPumpEfficiency': [psatInputs.pump_specified, Validators.required],
       'pumpRPM': [psatInputs.pump_rated_speed, Validators.required],
       'drive': [drive, Validators.required],
       'viscosity': [psatInputs.kinematic_viscosity, Validators.required],
@@ -587,7 +591,7 @@ export class PsatService {
 
     let tmpPsatInputs: PsatInputs = {
       pump_style: pumpStyleEnum,
-      pump_specified: form.value.specifiedPumpType,
+      pump_specified: form.value.specifiedPumpEfficiency,
       pump_rated_speed: form.value.pumpRPM,
       drive: driveEnum,
       kinematic_viscosity: form.value.viscosity,
@@ -626,7 +630,15 @@ export class PsatService {
       form.controls.fixedSpeed.status == 'VALID'
     ) {
       //TODO: Check pumpType for custom
-      return true;
+      if (form.value.pumpType != "Specified Optimal Efficiency") {
+        return true;
+      } else {
+        if (form.controls.specifiedPumpEfficiency.status == 'VALID') {
+          return true;
+        } else {
+          return false;
+        }
+      }
     } else {
       return false;
     }

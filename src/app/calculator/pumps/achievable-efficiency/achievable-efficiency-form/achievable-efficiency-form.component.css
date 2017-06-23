@@ -1,0 +1,7 @@
+.inline-label {
+  margin-left: -11%;
+  max-width: 10px;
+  font-size: 14px;
+  color: #a9a9a9;
+  pointer-events: none;
+}

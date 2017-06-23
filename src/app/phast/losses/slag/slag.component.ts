@@ -54,8 +54,8 @@ export class SlagComponent implements OnInit {
       this._slagLosses = new Array();
     }
     if (this.losses.slagLosses) {
-      this.setCompareVals();
-      this.slagCompareService.initCompareObjects();
+     // this.setCompareVals();
+      //this.slagCompareService.initCompareObjects();
       this.losses.slagLosses.forEach(loss => {
         let tmpLoss = {
           form: this.slagService.getFormFromLoss(loss),
@@ -119,7 +119,7 @@ export class SlagComponent implements OnInit {
     this.losses.slagLosses = tmpSlagLosses;
     this.lossState.numLosses = this.losses.slagLosses.length;
     this.lossState.saved = true;
-    this.setCompareVals();
+   // this.setCompareVals();
     this.savedLoss.emit(true);
   }
 
@@ -135,7 +135,7 @@ export class SlagComponent implements OnInit {
     }
     if(this.slagCompareService.differentArray){
       if(this.slagCompareService.differentArray.length != 0){
-        this.slagCompareService.checkSlagLosses();
+      //  this.slagCompareService.checkSlagLosses();
       }
     }
   }

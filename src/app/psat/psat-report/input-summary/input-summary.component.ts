@@ -17,6 +17,7 @@ export class InputSummaryComponent implements OnInit {
   constructor(private psatService: PsatService) { }
 
   ngOnInit() {
+    console.log(this.psat.inputs.load_estimation_method);
   }
 
   getPumpType(num: number) {

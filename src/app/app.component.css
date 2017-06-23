@@ -408,7 +408,7 @@ Assessments: List View
   -moz-box-shadow: 0px 1px 6px 0px rgba(0,0,0,0.1);
   box-shadow: 0px 1px 6px 0px rgba(0,0,0,0.1);
 }
-  .list-view app-assessment-list-item:nth-child(even) .list-row {
+  .list-view .list-item:nth-child(even) .list-row {
     background: #f2f5f7;
   }
 .list-row {
@@ -1052,6 +1052,12 @@ Tabs
 .tabs.primary li {
   display: inline-block;
 }
+  .tabs.primary.psat li:nth-child(-n+2) a {
+    border-top: #00315d solid 4px;
+  }
+  .tabs.primary.phast li:nth-child(-n+2) a {
+    border-top: #611f00 solid 4px;
+  }
 .tabs.primary a {
   padding: 14px 10px;
   font-size: 14px;

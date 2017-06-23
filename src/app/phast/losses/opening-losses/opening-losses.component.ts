@@ -55,8 +55,8 @@ export class OpeningLossesComponent implements OnInit {
       this._openingLosses = new Array();
     }
     if (this.losses.openingLosses) {
-      this.setCompareVals();
-      this.openingLossesCompareService.initCompareObjects();
+    //  this.setCompareVals();
+    //  this.openingLossesCompareService.initCompareObjects();
       this.losses.openingLosses.forEach(loss => {
         let tmpLoss = {
           form: this.openingLossesService.getFormFromLoss(loss),
@@ -141,7 +141,7 @@ export class OpeningLossesComponent implements OnInit {
     this.losses.openingLosses = tmpOpeningLosses;
     this.lossState.numLosses = this.losses.openingLosses.length;
     this.lossState.saved = true;
-    this.setCompareVals();
+    //this.setCompareVals();
     this.savedLoss.emit(true);
   }
   changeField(str: string) {

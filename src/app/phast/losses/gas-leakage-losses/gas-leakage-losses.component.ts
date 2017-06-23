@@ -52,8 +52,8 @@ export class GasLeakageLossesComponent implements OnInit {
       this._leakageLosses = new Array<any>();
     }
     if (this.losses.leakageLosses) {
-      this.setCompareVals();
-      this.gasLeakageCompareService.initCompareObjects();
+     // this.setCompareVals();
+     // this.gasLeakageCompareService.initCompareObjects();
       this.losses.leakageLosses.forEach(loss => {
         let tmpLoss = {
           form: this.gasLeakageLossesService.initFormFromLoss(loss),
@@ -119,7 +119,7 @@ export class GasLeakageLossesComponent implements OnInit {
     this.losses.leakageLosses = tmpLeakageLosses;
     this.lossState.numLosses = this.losses.leakageLosses.length;
     this.lossState.saved = true;
-    this.setCompareVals();
+    //this.setCompareVals();
     this.savedLoss.emit(true);
   }
   changeField(str: string) {

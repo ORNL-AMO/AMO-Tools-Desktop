@@ -1,9 +1,9 @@
-<div class="assessment-report" *ngIf="psat.outputs && settings">
+<div class="assessment-report" *ngIf="psat.outputs && settings" [ngClass]="{'assessment-report-padding': inPsat}">
 
   <div class="report-header">
     <h2 *ngIf="!assessment">Assessment Report</h2>
     <h2 *ngIf="assessment"><span class="dir-list-item" *ngFor="let directory of assessmentDirectories">{{directory.name}} / </span>{{assessment.name}}
-      <button class="btn-sm btn-secondary pull-right hide-print" (click)="print()"><span class="fa fa-print"></span></button>
+      <button *ngIf="inPsat" class="btn-sm btn-secondary pull-right hide-print" (click)="print()"><span class="fa fa-print"></span></button>
     </h2>
   </div>
   <!-- End .report-header -->

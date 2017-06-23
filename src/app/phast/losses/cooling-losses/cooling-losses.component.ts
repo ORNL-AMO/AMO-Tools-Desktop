@@ -52,8 +52,8 @@ export class CoolingLossesComponent implements OnInit {
       this._coolingLosses = new Array();
     }
     if (this.losses.coolingLosses) {
-      this.setCompareVals();
-      this.coolingLossesCompareService.initCompareObjects();
+     // this.setCompareVals();
+     // this.coolingLossesCompareService.initCompareObjects();
       this.initCoolingLosses();
     }
   }
@@ -180,7 +180,7 @@ export class CoolingLossesComponent implements OnInit {
     this.losses.coolingLosses = tmpCoolingLosses;
     this.lossState.numLosses = this.losses.coolingLosses.length;
     this.lossState.saved = true;
-    this.setCompareVals();
+    //this.setCompareVals();
     this.savedLoss.emit(true);
   }
 

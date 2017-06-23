@@ -53,8 +53,8 @@ export class ChargeMaterialComponent implements OnInit {
       this._chargeMaterial = new Array();
     }
     if (this.losses.chargeMaterials) {
-      this.setCompareVals();
-      this.chargeMaterialCompareService.initCompareObjects();
+    //  this.setCompareVals();
+    //  this.chargeMaterialCompareService.initCompareObjects();
       this.initChargeMaterial();
     }
     this.lossState.numLosses = this._chargeMaterial.length;
@@ -226,7 +226,7 @@ export class ChargeMaterialComponent implements OnInit {
     this.losses.chargeMaterials = tmpChargeMaterials;
     this.lossState.numLosses = this.losses.chargeMaterials.length;
     this.lossState.saved = true;
-    this.setCompareVals();
+    //this.setCompareVals();
     this.savedLoss.emit(true);
   }
 

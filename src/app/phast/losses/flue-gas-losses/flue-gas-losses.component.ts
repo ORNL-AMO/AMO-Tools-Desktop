@@ -38,8 +38,8 @@ export class FlueGasLossesComponent implements OnInit {
       this._flueGasLosses = new Array();
     }
     if (this.losses.flueGasLosses) {
-      this.setCompareVals();
-      this.flueGasCompareService.initCompareObjects();
+    //  this.setCompareVals();
+    //  this.flueGasCompareService.initCompareObjects();
       this.initFlueGasses()
     }
     this.lossState.numLosses = this._flueGasLosses.length;
@@ -169,7 +169,7 @@ export class FlueGasLossesComponent implements OnInit {
     this.losses.flueGasLosses = tmpFlueGasLosses;
     this.lossState.numLosses = this.losses.flueGasLosses.length;
     this.lossState.saved = true;
-    this.setCompareVals();
+   // this.setCompareVals();
     this.savedLoss.emit(true);
   }
 

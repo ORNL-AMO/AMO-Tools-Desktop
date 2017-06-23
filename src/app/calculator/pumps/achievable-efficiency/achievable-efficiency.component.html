@@ -1,17 +1,17 @@
 <div class="row" *ngIf="settings" [ngClass]="{'standalone-calc': !inPsat}">
 
 
-	<div class="col-md-2 col-sm-12 calc-form">
+	<div class="col-md-3 col-sm-12 calc-form">
 		<app-achievable-efficiency-form [(efficiencyForm)]="efficiencyForm" [settings]="settings" (calculate)="calculate()"></app-achievable-efficiency-form>
 	</div>
 
 
-	<div *ngIf="!inPsat" id="achievableEfficiencyGraph" class="col-md-7 col-sm-12 calc-graph" style="z-index: +1">
+	<div *ngIf="!inPsat" id="achievableEfficiencyGraph" class="col-md-6 col-sm-12 calc-graph" style="z-index: +1">
 		<app-achievable-efficiency-graph [efficiencyForm]="efficiencyForm" [settings]="settings" [toggleCalculate]="toggleCalculate"></app-achievable-efficiency-graph>
 	</div>
 
 
-	<div *ngIf="inPsat" class="col-md-7 col-sm-12 calc-graph" style="z-index: +1">
+	<div *ngIf="inPsat" class="col-md-6 col-sm-12 calc-graph" style="z-index: +1">
 		<div id="achievableEfficiencyGraph">
 			<app-achievable-efficiency-graph [efficiencyForm]="efficiencyForm" [settings]="settings" [toggleCalculate]="toggleCalculate"></app-achievable-efficiency-graph>
 		</div>

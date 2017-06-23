@@ -1,16 +1,19 @@
-<ul class="tabs primary" *ngIf="currentTab != 'system-setup'">
-  <li [ngClass]="{'active': currentTab == 'losses'}">
+<ul class="tabs primary phast" *ngIf="currentTab != 'system-setup'">
+  <li [ngClass]="{'active': currentTab == 'explore-opportunities'}">
+    <a (click)="changeTab('explore-opportunities')">Explore Opportunities</a>
+  </li><!--
+  --><li [ngClass]="{'active': currentTab == 'losses'}">
     <a (click)="changeTab('losses')">Heat Balance</a>
-  </li>
-  <li [ngClass]="{'active': currentTab == 'aux-equipment'}">
-    <a (click)="changeTab('aux-equipment')">Aux Equipment</a>
-  </li>
-  <li [ngClass]="{'active': currentTab == 'designed-energy-use'}">
-    <a (click)="changeTab('designed-energy-use')">Design Energy Use</a>
-  </li>
-  <li [ngClass]="{'active': currentTab == 'metered-energy'}">
-    <a (click)="changeTab('metered-energy')">Metered Energy</a>
-  </li>
+  </li><!--
+  --><li [ngClass]="{'active': currentTab == 'aux-equipment'}">
+  <a (click)="changeTab('aux-equipment')">Aux Equipment</a>
+</li><!--
+  --><li [ngClass]="{'active': currentTab == 'designed-energy-use'}">
+  <a (click)="changeTab('designed-energy-use')">Design Energy Use</a>
+</li><!--
+  --><li [ngClass]="{'active': currentTab == 'metered-energy'}">
+  <a (click)="changeTab('metered-energy')">Metered Energy</a>
+</li>
 
   <!--
     <li [ngClass]="{'active': currentTab == 'sankey'}">

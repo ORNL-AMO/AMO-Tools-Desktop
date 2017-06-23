@@ -14,31 +14,31 @@ export const volume = {
             }
             , to_anchor: 1 / 1000
         }
-        , ml: {
+        , mL: {
             name: {
-                singular: 'Millilitre'
-                , plural: 'Millilitres'
+                singular: 'Milliliter'
+                , plural: 'Milliliters'
             }
             , to_anchor: 1 / 1000
         }
-        , cl: {
+        , cL: {
             name: {
-                singular: 'Centilitre'
-                , plural: 'Centilitres'
+                singular: 'Centiliter'
+                , plural: 'Centiliters'
             }
             , to_anchor: 1 / 100
         }
-        , dl: {
+        , dL: {
             name: {
-                singular: 'Decilitre'
-                , plural: 'Decilitres'
+                singular: 'Deciliter'
+                , plural: 'Deciliters'
             }
             , to_anchor: 1 / 10
         }
-        , l: {
+        , L: {
             name: {
-                singular: 'Litre'
-                , plural: 'Litres'
+                singular: 'Liter'
+                , plural: 'Liters'
             }
             , to_anchor: 1
         }
@@ -176,7 +176,7 @@ export const volume = {
     },
     _anchors: {
         metric: {
-            unit: 'l'
+            unit: 'L'
             , ratio: 33.8140226
         }
         , imperial: {

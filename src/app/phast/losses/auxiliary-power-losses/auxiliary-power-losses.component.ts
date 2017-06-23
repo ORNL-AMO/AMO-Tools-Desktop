@@ -52,8 +52,8 @@ export class AuxiliaryPowerLossesComponent implements OnInit {
       this._auxiliaryPowerLosses = new Array();
     }
     if (this.losses.auxiliaryPowerLosses) {
-      this.setCompareVals();
-      this.auxiliaryPowerCompareService.initCompareObjects();
+     // this.setCompareVals();
+     // this.auxiliaryPowerCompareService.initCompareObjects();
       this.losses.auxiliaryPowerLosses.forEach(loss => {
         let tmpLoss = {
           form: this.auxiliaryPowerLossesService.getFormFromLoss(loss),
@@ -117,7 +117,7 @@ export class AuxiliaryPowerLossesComponent implements OnInit {
     this.losses.auxiliaryPowerLosses = tmpAuxLosses;
     this.lossState.numLosses = this.losses.auxiliaryPowerLosses.length;
     this.lossState.saved = true;
-    this.setCompareVals();
+    //this.setCompareVals();
     this.savedLoss.emit(true);
   }
 

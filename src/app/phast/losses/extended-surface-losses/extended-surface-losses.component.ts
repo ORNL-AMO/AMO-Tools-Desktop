@@ -57,8 +57,8 @@ export class ExtendedSurfaceLossesComponent implements OnInit {
       this._surfaceLosses = new Array();
     }
     if (this.losses.extendedSurfaces) {
-      this.setCompareVals();
-      this.extendedSurfaceCompareService.initCompareObjects();
+      //this.setCompareVals();
+      //this.extendedSurfaceCompareService.initCompareObjects();
       this.losses.extendedSurfaces.forEach(loss => {
         let tmpLoss = {
           form: this.extendedSurfaceLossesService.getSurfaceLossForm(loss),
@@ -123,7 +123,7 @@ export class ExtendedSurfaceLossesComponent implements OnInit {
     this.losses.extendedSurfaces = tmpSurfaceLosses;
     this.lossState.numLosses = this.losses.extendedSurfaces.length;
     this.lossState.saved = true;
-    this.setCompareVals();
+   // this.setCompareVals();
     this.savedLoss.emit(true);
   }
 

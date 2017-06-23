@@ -51,8 +51,8 @@ export class AtmosphereLossesComponent implements OnInit {
       this._atmosphereLosses = new Array();
     }
     if (this.losses.atmosphereLosses) {
-      this.setCompareVals();
-      this.atmosphereLossesCompareService.initCompareObjects();
+     // this.setCompareVals();
+     // this.atmosphereLossesCompareService.initCompareObjects();
       this.losses.atmosphereLosses.forEach(loss => {
         let tmpLoss = {
           form: this.atmosphereLossesService.getAtmosphereForm(loss),
@@ -68,7 +68,7 @@ export class AtmosphereLossesComponent implements OnInit {
   ngOnDestroy() {
     this.atmosphereLossesCompareService.baselineAtmosphereLosses = null;
     this.atmosphereLossesCompareService.modifiedAtmosphereLosses = null;
-    console.log(this.atmosphereLossesCompareService.modifiedAtmosphereLosses)
+    //console.log(this.atmosphereLossesCompareService.modifiedAtmosphereLosses)
   }
 
   addLoss() {
@@ -118,7 +118,7 @@ export class AtmosphereLossesComponent implements OnInit {
     this.losses.atmosphereLosses = tmpAtmosphereLosses;
     this.lossState.numLosses = this.losses.atmosphereLosses.length;
     this.lossState.saved = true;
-    this.setCompareVals();
+   // this.setCompareVals();
     this.savedLoss.emit(true);
   }
 

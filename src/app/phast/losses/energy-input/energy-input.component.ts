@@ -51,8 +51,8 @@ export class EnergyInputComponent implements OnInit {
       this._energyInputs = new Array();
     }
     if (this.losses.energyInput) {
-      this.setCompareVals();
-      this.energyInputCompareService.initCompareObjects();
+      //this.setCompareVals();
+     // this.energyInputCompareService.initCompareObjects();
       this.losses.energyInput.forEach(loss => {
         let tmpLoss = {
           form: this.energyInputService.getFormFromLoss(loss),
@@ -131,7 +131,7 @@ export class EnergyInputComponent implements OnInit {
     this.losses.energyInput = tmpEnergyInputs;
     this.lossState.numLosses = this.losses.energyInput.length;
     this.lossState.saved = true;
-    this.setCompareVals();
+    //this.setCompareVals();
     this.savedLoss.emit(true);
   }
 

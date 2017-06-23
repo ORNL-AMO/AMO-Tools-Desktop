@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { length } from '../../../shared/convert-units/definitions/length';
-
+import {SortPipe} from './sort-pipe';
 @Component({
   selector: 'app-unit-converter',
   templateUrl: './unit-converter.component.html',
@@ -9,7 +9,7 @@ import { length } from '../../../shared/convert-units/definitions/length';
 })
 export class UnitConverterComponent implements OnInit {
   possibilities: Array<any> = [];
-  measure: any = 'length';
+  measure: any = 'apparentPower';
   from: string;
   to: string;
   value1: number;
@@ -29,7 +29,7 @@ export class UnitConverterComponent implements OnInit {
     },
     {
       measure: 'volume',
-      display: 'volume'
+      display: 'Volume'
     },
     {
       measure: 'temperature',

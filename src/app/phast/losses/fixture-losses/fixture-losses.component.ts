@@ -51,8 +51,8 @@ export class FixtureLossesComponent implements OnInit {
       this._fixtureLosses = new Array();
     }
     if (this.losses.fixtureLosses) {
-      this.setCompareVals();
-      this.fixtureLossesCompareService.initCompareObjects();
+     // this.setCompareVals();
+     // this.fixtureLossesCompareService.initCompareObjects();
       this.losses.fixtureLosses.forEach(loss => {
         let tmpLoss = {
           form: this.fixtureLossesService.getFormFromLoss(loss),
@@ -115,7 +115,7 @@ export class FixtureLossesComponent implements OnInit {
     this.losses.fixtureLosses = tmpFixtureLosses;
     this.lossState.numLosses = this.losses.fixtureLosses.length;
     this.lossState.saved = true;
-    this.setCompareVals();
+    //this.setCompareVals();
     this.savedLoss.emit(true);
   }
 

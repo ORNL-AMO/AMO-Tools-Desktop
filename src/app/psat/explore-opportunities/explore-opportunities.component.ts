@@ -7,6 +7,13 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ExploreOpportunitiesComponent implements OnInit {
 
+  showOption1: string;
+  showOption2: string;
+  showOption3: string;
+  
+  showHours1: string;
+  showHours2: string;
+  showHours3: string;
   constructor() { }
 
   ngOnInit() {

@@ -53,8 +53,8 @@ export class WallLossesComponent implements OnInit {
       this._wallLosses = new Array();
     }
     if (this.losses.wallLosses) {
-      this.setCompareVals();
-      this.wallLossCompareService.initCompareObjects();
+      //this.setCompareVals();
+      //this.wallLossCompareService.initCompareObjects();
       this.losses.wallLosses.forEach(loss => {
         let tmpLoss = {
           form: this.wallLossesService.getWallLossForm(loss),
@@ -76,8 +76,8 @@ export class WallLossesComponent implements OnInit {
     let tmpForm = this.wallLossesService.initForm();
     let tmpLoss = this.wallLossesService.getWallLossFromForm(tmpForm);
     this.losses.wallLosses.push(tmpLoss);
-    this.setCompareVals();
-    this.wallLossCompareService.initCompareObjects();
+    //this.setCompareVals();
+    //this.wallLossCompareService.initCompareObjects();
 
     this._wallLosses.push({
       form: tmpForm,
