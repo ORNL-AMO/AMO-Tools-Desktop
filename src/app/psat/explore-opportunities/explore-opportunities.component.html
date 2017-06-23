@@ -9,55 +9,65 @@
 				<ul>
 					<li>
 						<div class="checkbox">
-							<label for="general"><input type ="checkbox" id="general" value="'true1'" [(ngModel)]="showOption1" />
-								Adjust General Operation
+							<label for="general"><input type ="checkbox" id="general" value="'true1'" [(ngModel)]="systemData" />
+								Adjust System Data
 							</label>
 						</div>
-						<ul *ngIf="showOption1">
+						<ul *ngIf="systemData">
 							<li>
 								<div class="checkbox">
-									<label for="operatingHours"><input type ="checkbox" id="operatingHours" value="'true2'" [(ngModel)]="showHours1"/>
-										Modify Operating Hours
+									<label for="modifyCost"><input type ="checkbox" id="modifyCost" value="'true'" [(ngModel)]="showCost"/>
+										Modify Cost
 									</label>
 								</div>
-								<form *ngIf="showHours1">
+								<form *ngIf="showCost">
 									<div class="form-group">
-										<label for="initialOperatingHours">Initial Operating Hours</label>
-										<input type="text" id="initialOperatingHours" class="form-control" value="8" />
-										<span class="units">hours</span>
+										<label for="initialCost">Initial Cost</label>
+										<input type="text" id="initialCost" class="form-control" value="{{assessment.psat.inputs.cost}}" />
+										<span class="units">$/KwHr</span>
 									</div>
 									<div class="form-group">
-										<label for="newOperatingHours">New Operating Hours</label>
-										<input type="text" id="newOperatingHours" class="form-control" />
-										<span class="units">hours</span>
+										<label for="newCost">New Cost</label>
+										<input type="text" id="newCost" class="form-control" />
+										<span class="units">$</span>
 									</div>
 								</form>
 							</li>
-						</ul>
-					</li>
-					<li >
-						<div class="checkbox">
-							<label for="general2"><input type ="checkbox" id="general2" value="'true3'" [(ngModel)]="showOption2" />
-								Adjust General Operation
-							</label>
-						</div>
-						<ul *ngIf="showOption2">
 							<li>
 								<div class="checkbox">
-									<label for="operatingHours2"><input type ="checkbox" id="operatingHours2" value="'true4'" [(ngModel)]="showHours2"/>
-										Modify Operating Hours
+									<label for="modifyFlowRate"><input type ="checkbox" id="modifyFlowRate" value="'true'" [(ngModel)]="showFlowRate"/>
+										Modify Flow Rate
 									</label>
 								</div>
-								<form *ngIf="showHours2">
+								<form *ngIf="showFlowRate">
 									<div class="form-group">
-										<label for="initialOperatingHours">Initial Operating Hours</label>
-										<input type="text" id="initialOperatingHours" class="form-control" value="8" />
-										<span class="units">hours</span>
+										<label for="initialFlowRate">Initial Flow Rate</label>
+										<input type="text" id="initialFlowRate" class="form-control" value="{{assessment.psat.inputs.flow_rate}}" />
+										<span class="units">gpm</span>
 									</div>
 									<div class="form-group">
-										<label for="newOperatingHours">New Operating Hours</label>
-										<input type="text" id="newOperatingHours" class="form-control" />
-										<span class="units">hours</span>
+										<label for="newFlowRate">New Flow Rate</label>
+										<input type="text" id="newFlowRate" class="form-control" />
+										<span class="units">gpm</span>
+									</div>
+								</form>
+							</li>
+							<li>
+								<div class="checkbox">
+									<label for="modifyHead"><input type ="checkbox" id="modifyHead" value="'true'" [(ngModel)]="showHead"/>
+										Modify Flow Rate
+									</label>
+								</div>
+								<form *ngIf="showHead">
+									<div class="form-group">
+										<label for="initialHead">Initial head</label>
+										<input type="text" id="initialHead" class="form-control" value="{{assessment.psat.inputs.head}}" />
+										<span class="units">ft</span>
+									</div>
+									<div class="form-group">
+										<label for="newHead">New head</label>
+										<input type="text" id="newHead" class="form-control" />
+										<span class="units">ft</span>
 									</div>
 								</form>
 							</li>
@@ -65,27 +75,96 @@
 					</li>
 					<li>
 						<div class="checkbox">
-							<label for="general3"><input type ="checkbox" id="general3" value="'true5'" [(ngModel)]="showOption3" />
-								Adjust General Operation
+							<label for="general2"><input type ="checkbox" id="general2" value="'true3'" [(ngModel)]="ratedMotorData" />
+								Adjust Rated Motor Data
 							</label>
 						</div>
-						<ul *ngIf="showOption3">
+						<ul *ngIf="ratedMotorData">
 							<li>
 								<div class="checkbox">
-									<label for="operatingHours3"><input type="checkbox" id="operatingHours3" value="'true6'" [(ngModel)]="showHours3"/>
-										Modify Operating Hours
+									<label for="modifyMotorRatedPower"><input type ="checkbox" id="modifyMotorRatedPower" value="'true'" [(ngModel)]="showRatedMotorPower"/>
+										Modify Rated Motor Power
 									</label>
 								</div>
-								<form *ngIf="showHours3">
+								<form *ngIf="showRatedMotorPower">
 									<div class="form-group">
-										<label for="initialOperatingHours">Initial Operating Hours</label>
-										<input type="text" id="initialOperatingHours" class="form-control" value="8" />
-										<span class="units">hours</span>
+										<label for="initialMotorEfficiency">Initial Rated Motor Power</label>
+										<input type="text" id="initialMotorEfficiency" class="form-control" value="100"
+										/>
+										<span class="units">hp</span>
 									</div>
 									<div class="form-group">
-										<label for="newOperatingHours">New Operating Hours</label>
-										<input type="text" id="newOperatingHours" class="form-control" />
-										<span class="units">hours</span>
+										<label for="newRatedMotorEfficiency">New Motor Efficiency</label>
+										<input type="text" id="newMotorEfficiency" class="form-control" />
+										<span class="units">hp</span>
+									</div>
+								</form>
+							</li>
+							<li>
+								<div class="checkbox">
+									<label for="modifyEfficiencyClass"><input type ="checkbox" id="modifyEfficiencyClass" value="'true'" [(ngModel)]="showEfficiencyClass"/>
+										Modify Efficiency Class
+									</label>
+								</div>
+								<form *ngIf="showEfficiencyClass">
+									<div class="form-group">
+										<label for="initialEfficiencyClass">Initial Efficiency Class</label>
+										<select name="efficiencyClass" class="form-control select-input-field" id="efficiencyClass">
+      										<option *ngFor="let efficiencyClass of efficiencyClasses" [ngValue]="efficiencyClass">{{efficiencyClass}}</option>
+    									</select>
+									</div>
+									<div class="form-group">
+										<label for="newEfficiencyClass">New Efficiency Class</label>
+										<select name="efficiencyClass" class="form-control select-input-field" id="efficiencyClass">
+      										<option *ngFor="let efficiencyClass of efficiencyClasses" [ngValue]="efficiencyClass">{{efficiencyClass}}</option>
+    									</select>
+									</div>
+								</form>
+							</li>
+							<li>
+								<div class="checkbox">
+									<label for="modifyMotorEfficiency"><input type ="checkbox" id="modifyMotorEfficiency" value="'true'" [(ngModel)]="showMotorEfficiency"/>
+										Modify Motor Efficiency
+									</label>
+								</div>
+								<form *ngIf="showMotorEfficiency">
+									<div class="form-group">
+										<label for="initialRatedMotorPower">Initial Rated Motor Power</label>
+										<input type="text" id="initialRatedMotorPower" class="form-control" value="8" />
+										<span class="units">%</span>
+									</div>
+									<div class="form-group">
+										<label for="newRatedMotorPower">New Rated Motor Power</label>
+										<input type="text" id="newRatedMotorPower" class="form-control" />
+										<span class="units">%</span>
+									</div>
+								</form>
+							</li>
+						</ul>
+					</li>
+					<li>
+						<div class="checkbox">
+							<label for="general3"><input type ="checkbox" id="general3" value="'true5'" [(ngModel)]="pumpData" />
+								Adjust Pump Data
+							</label>
+						</div>
+						<ul *ngIf="pumpData">
+							<li>
+								<div class="checkbox">
+									<label for="modifyPumpSpeed"><input type="checkbox" id="modifyPumpSpeed" value="'true6'" [(ngModel)]="showPumpSpeed"/>
+										Modify Pump Speed
+									</label>
+								</div>
+								<form *ngIf="showPumpSpeed">
+									<div class="form-group">
+										<label for="initialPumpSpeed">Initial Operating Hours</label>
+										<input type="text" id="initialPumpSpeed" class="form-control" value="8" />
+										<span class="units">rpm</span>
+									</div>
+									<div class="form-group">
+										<label for="newPumpSpeed">New Operating Hours</label>
+										<input type="text" id="newPumpSpeed" class="form-control" />
+										<span class="units">rpm</span>
 									</div>
 								</form>
 							</li>

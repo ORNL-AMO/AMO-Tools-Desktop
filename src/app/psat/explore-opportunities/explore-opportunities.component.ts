@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
+import { PSAT } from '../../shared/models/psat';
+import { Assessment } from '../../shared/models/assessment';
 
 @Component({
   selector: 'app-explore-opportunities',
@@ -6,14 +8,32 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./explore-opportunities.component.css']
 })
 export class ExploreOpportunitiesComponent implements OnInit {
+  @Input()
+  assessment: Assessment;
 
-  showOption1: string;
-  showOption2: string;
-  showOption3: string;
-  
-  showHours1: string;
-  showHours2: string;
-  showHours3: string;
+  showSystemData: string;
+  showRatedMotorData: string;
+  showPumpData: string;
+
+  showCost: string;
+  showFlowRate: string;
+  showHead: string;
+
+  showRatedMotorPower: string;
+  showEfficiencyClass: string;
+  showMotorEfficiency: string;
+
+  showPumpSpeed: string;
+  showPumpType: string;
+  showSpecifiedPumpEfficiency: string;
+
+  efficiencyClasses: Array<string> = [
+    'Standard Efficiency',
+    'Energy Efficient',
+    // When the user chooses specified, they need a place to put the efficiency value
+    'Specified'
+  ];
+
   constructor() { }
 
   ngOnInit() {

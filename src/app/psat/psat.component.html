@@ -76,12 +76,13 @@
   </div>
 
   <div class="tab-content" *ngIf="currentTab == 'explore-opportunities'">
-    <app-explore-opportunities></app-explore-opportunities>
+    <app-explore-opportunities [assessment]="assessment"></app-explore-opportunities>
   </div>
 
 
   <div class="tab-content" *ngIf="currentTab == 'modify-conditions'">
-    <app-modify-conditions [assessment]="assessment" [settings]="settings" [saveClicked]="saveClicked" [(psat)]="_psat" (saved)="save()" [emitPrint]="emitPrint"></app-modify-conditions>
+    <app-modify-conditions [assessment]="assessment" [settings]="settings" [saveClicked]="saveClicked" [(psat)]="_psat" (saved)="save()"
+      [emitPrint]="emitPrint"></app-modify-conditions>
   </div>
 
   <div class="tab-content" *ngIf="currentTab == 'system-curve'">
