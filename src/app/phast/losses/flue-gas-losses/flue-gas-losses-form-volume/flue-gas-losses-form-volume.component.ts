@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, EventEmitter, Output, ViewChild, ElementRef, SimpleChanges } from '@angular/core';
 import { SuiteDbService } from '../../../../suiteDb/suite-db.service';
-
+import { WindowRefService } from '../../../../indexedDb/window-ref.service';
+import { FlueGasCompareService } from "../flue-gas-compare.service";
 @Component({
   selector: 'app-flue-gas-losses-form-volume',
   templateUrl: './flue-gas-losses-form-volume.component.html',
@@ -19,6 +20,8 @@ export class FlueGasLossesFormVolumeComponent implements OnInit {
   changeField = new EventEmitter<string>();
   @Output('saveEmit')
   saveEmit = new EventEmitter<boolean>();
+  @Input()
+  lossIndex: number;
 
   @ViewChild('lossForm') lossForm: ElementRef;
   form: any;
@@ -28,7 +31,7 @@ export class FlueGasLossesFormVolumeComponent implements OnInit {
   firstChange: boolean = true;
   options: any;
   counter: any;
-  constructor(private suiteDbService: SuiteDbService) { }
+  constructor(private suiteDbService: SuiteDbService, private flueGasCompareService: FlueGasCompareService, private windowRefService: WindowRefService) { }
 
   ngOnInit() {
     this.options = this.suiteDbService.selectGasFlueGasMaterials();
@@ -39,9 +42,14 @@ export class FlueGasLossesFormVolumeComponent implements OnInit {
         }
       }
     }
+  }
+
+
+  ngAfterViewInit() {
     if (!this.baselineSelected) {
       this.disableForm();
     }
+    this.initDifferenceMonitor();
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -98,7 +106,7 @@ export class FlueGasLossesFormVolumeComponent implements OnInit {
     })
     this.checkForm();
   }
-  
+
   emitSave() {
     this.saveEmit.emit(true);
   }
@@ -111,6 +119,41 @@ export class FlueGasLossesFormVolumeComponent implements OnInit {
     this.counter = setTimeout(() => {
       this.emitSave();
     }, 3000)
+  }
+
+  initDifferenceMonitor() {
+    if (this.flueGasCompareService.baselineFlueGasLoss && this.flueGasCompareService.modifiedFlueGasLoss && this.flueGasCompareService.differentArray.length != 0) {
+      let doc = this.windowRefService.getDoc();
+
+      //gasTypeId
+      this.flueGasCompareService.differentArray[this.lossIndex].different.flueGasVolumeDifferent.gasTypeId.subscribe((val) => {
+        let gasTypeIdElements = doc.getElementsByName('gasTypeId_' + this.lossIndex);
+        gasTypeIdElements.forEach(element => {
+          element.classList.toggle('indicate-different', val);
+        });
+      })
+      //flueGasTemperature
+      this.flueGasCompareService.differentArray[this.lossIndex].different.flueGasVolumeDifferent.flueGasTemperature.subscribe((val) => {
+        let flueGasTemperatureElements = doc.getElementsByName('flueGasTemperature_' + this.lossIndex);
+        flueGasTemperatureElements.forEach(element => {
+          element.classList.toggle('indicate-different', val);
+        });
+      })
+      //excessAirPercentage
+      this.flueGasCompareService.differentArray[this.lossIndex].different.flueGasVolumeDifferent.excessAirPercentage.subscribe((val) => {
+        let excessAirPercentageElements = doc.getElementsByName('excessAirPercentage_' + this.lossIndex);
+        excessAirPercentageElements.forEach(element => {
+          element.classList.toggle('indicate-different', val);
+        });
+      })
+      //combustionAirTemperature
+      this.flueGasCompareService.differentArray[this.lossIndex].different.flueGasVolumeDifferent.combustionAirTemperature.subscribe((val) => {
+        let combustionAirTemperatureElements = doc.getElementsByName('combustionAirTemperature_' + this.lossIndex);
+        combustionAirTemperatureElements.forEach(element => {
+          element.classList.toggle('indicate-different', val);
+        });
+      })
+    }
   }
 
 }

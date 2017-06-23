@@ -42,7 +42,7 @@
       <div class="wrapper">
         <div class="form">
           <app-pump-fluid (isValid)="setValid()" (isInvalid)="setInvalid()" [saveClicked]="saveClicked" (changeField)="changeField($event)"
-            [(psat)]="_psat" (saved)="save()" [selected]="true" [settings]="settings"></app-pump-fluid>
+            [(psat)]="_psat" (saved)="save()" [selected]="true" [settings]="settings" [baseline]="true"></app-pump-fluid>
         </div>
         <div class="help">
           <app-help-panel [psat]="_psat" [settings]="settings" [currentField]="currentField" [currentTab]="subTab"></app-help-panel>

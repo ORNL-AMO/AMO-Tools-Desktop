@@ -2,7 +2,7 @@
   <div class="form-section">
     <div class="form-group">
       <label class="small" for="type">Select Type</label>
-      <select class="form-control" formControlName="openingType" id="openingType" (change)="startSavePolling()" (focus)="focusField('openingType')">
+      <select name="{{'openingType_'+lossIndex}}" class="form-control" formControlName="openingType" id="openingType" (change)="startSavePolling()" (focus)="focusField('openingType')">
               <option>Round</option>
               <option>Rectangular (Square)</option>
               </select>
@@ -13,14 +13,14 @@
     <small id="numberOfOpeningsHelp" class="form-text text-muted text-help">Same Size and Shape</small>
     </label>
 
-      <input type="number" step="any" class="form-control" formControlName="numberOfOpenings" id="numberOfOpenings" onfocus="this.select();"
+      <input name="{{'numberOfOpenings_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="numberOfOpenings" id="numberOfOpenings" onfocus="this.select();"
         (input)="getArea()" (focus)="focusField('numberOfOpenings')">
     </div>
 
 
     <div class="form-group">
       <label class="small" for="wallThickness">Furnace Wall Thickness</label>
-      <input type="number" step="any" class="form-control" formControlName="wallThickness" id="wallThickness" onfocus="this.select();" (input)="startSavePolling()"
+      <input name="{{'wallThickness_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="wallThickness" id="wallThickness" onfocus="this.select();" (input)="startSavePolling()"
         (focus)="focusField('wallThickness')">
       <span class="units">in</span>
     </div>
@@ -28,13 +28,13 @@
     <div class="form-group">
       <label *ngIf="openingLossesForm.value.openingType != 'Round'" class="small" for="lengthOfOpening">Length of Openings (Inch)</label>
       <label *ngIf="openingLossesForm.value.openingType == 'Round'" class="small" for="lengthOfOpening">Diameter of Openings (Inch)</label>
-      <input type="number" step="any" class="form-control" formControlName="lengthOfOpening" id="lengthOfOpening" onfocus="this.select();"
+      <input name="{{'lengthOfOpening_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="lengthOfOpening" id="lengthOfOpening" onfocus="this.select();"
         (input)="getArea()" (focus)="focusField('lengthOfOpening')">
     </div>
 
     <div class="form-group" *ngIf="openingLossesForm.value.openingType != 'Round'">
       <label class="small" for="heightOfOpening">Height of Openings</label>
-      <input type="number" step="any" class="form-control" formControlName="heightOfOpening" id="heightOfOpening" onfocus="this.select();"
+      <input name="{{'heightOfOpening_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="heightOfOpening" id="heightOfOpening" onfocus="this.select();"
         (input)="getArea()" (focus)="focusField('heightOfOpening')">
       <span class="units">in</span>
     </div>
@@ -51,20 +51,20 @@
     <small id="viewFactorHelp" class="form-text text-muted text-help">User defined if known or from chart</small>
     </label>
 
-      <input type="number" step="any" class="form-control" formControlName="viewFactor" id="viewFactor" onfocus="this.select();" (input)="startSavePolling()"
+      <input name="{{'viewFactor_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="viewFactor" id="viewFactor" onfocus="this.select();" (input)="startSavePolling()"
         (focus)="focusField('viewFactor')">
     </div>
 
     <div class="form-group">
       <label class="small" for="insideTemp">Avg. Zone or Radiation Source Temp.</label>
-      <input type="number" step="any" class="form-control" formControlName="insideTemp" id="insideTemp" onfocus="this.select();" (input)="startSavePolling()"
+      <input name="{{'insideTemp_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="insideTemp" id="insideTemp" onfocus="this.select();" (input)="startSavePolling()"
         (focus)="focusField('insideTemp')">
       <span class="units">&#8457;</span>
     </div>
 
     <div class="form-group">
       <label class="small" for="ambientTemp">Ambient Temp.</label>
-      <input type="number" step="any" class="form-control" formControlName="ambientTemp" id="ambientTemp" onfocus="this.select();" (input)="startSavePolling()"
+      <input name="{{'ambientTemp_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="ambientTemp" id="ambientTemp" onfocus="this.select();" (input)="startSavePolling()"
         (focus)="focusField('ambientTemp')">
       <span class="units">&#8457;</span>
     </div>
@@ -74,13 +74,13 @@
     <small id="emissivityHelp" class="form-text text-muted text-help">Typical - 0.9</small>
     </label>
 
-      <input type="number" step="any" class="form-control" formControlName="emissivity" id="emissivity" onfocus="this.select();" (input)="startSavePolling()"
+      <input name="{{'emissivity_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="emissivity" id="emissivity" onfocus="this.select();" (input)="startSavePolling()"
         (focus)="focusField('emissivity')">
     </div>
 
     <div class="form-group">
       <label class="small" for="percentTimeOpen">% of Time Open</label>
-      <input type="number" step="any" class="form-control" formControlName="percentTimeOpen" id="percentTimeOpen" onfocus="this.select();"
+      <input name="{{'percentTimeOpen_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="percentTimeOpen" id="percentTimeOpen" onfocus="this.select();"
         (input)="startSavePolling()" (focus)="focusField('percentTimeOpen')">
       <span class="units">%</span>
     </div>

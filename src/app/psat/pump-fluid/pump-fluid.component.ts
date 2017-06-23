@@ -2,6 +2,8 @@ import { Component, OnInit, Output, EventEmitter, Input, SimpleChanges, ViewChil
 import { PsatService } from '../psat.service';
 import { PSAT, PsatInputs } from '../../shared/models/psat';
 import { Settings } from '../../shared/models/settings';
+import { CompareService } from '../compare.service';
+import { WindowRefService } from '../../indexedDb/window-ref.service';
 
 @Component({
   selector: 'app-pump-fluid',
@@ -25,6 +27,8 @@ export class PumpFluidComponent implements OnInit {
   selected: boolean;
   @Input()
   settings: Settings;
+  @Input()
+  baseline: boolean;
 
   @ViewChild('formRef') formRef: ElementRef;
   elements: any;
@@ -55,7 +59,10 @@ export class PumpFluidComponent implements OnInit {
   psatForm: any;
   isFirstChange: boolean = true;
   rpmError: string = null;
-  constructor(private psatService: PsatService) { }
+  different: any = {
+    pumpRPM: null
+  }
+  constructor(private psatService: PsatService, private compareService: CompareService, private windowRefService: WindowRefService) { }
 
   ngOnChanges(changes: SimpleChanges) {
     if (!this.isFirstChange) {
@@ -67,6 +74,7 @@ export class PumpFluidComponent implements OnInit {
       } else {
         this.enableForm();
       }
+      this.setCompareVals();
     }
     else {
       this.isFirstChange = false;
@@ -85,6 +93,8 @@ export class PumpFluidComponent implements OnInit {
     if (!this.selected) {
       this.disableForm();
     }
+    this.setCompareVals();
+    this.initDifferenceMonitor();
   }
 
   disableForm() {
@@ -142,7 +152,17 @@ export class PumpFluidComponent implements OnInit {
 
   savePsat(form: any) {
     this.psat.inputs = this.psatService.getPsatInputsFromForm(form);
+    this.setCompareVals();
     this.saved.emit(this.selected);
+  }
+
+  setCompareVals() {
+    if (this.baseline) {
+      this.compareService.baselinePSAT = this.psat;
+    } else {
+      this.compareService.modifiedPSAT = this.psat;
+    }
+    this.compareService.checkPumpDifferent();
   }
 
   checkPumpRpm() {
@@ -181,6 +201,69 @@ export class PumpFluidComponent implements OnInit {
       this.savePsat(this.psatForm)
     }, 3000)
   }
+
+  //used to add classes to inputs with different baseline vs modification values
+  initDifferenceMonitor() {
+    let doc = this.windowRefService.getDoc();
+    //pump style
+    this.compareService.pump_style_different.subscribe((val) => {
+      let pumpStyleElements = doc.getElementsByName('pumpType');
+      pumpStyleElements.forEach(element => {
+        element.classList.toggle('indicate-different', val);
+      });
+    })
+    //pump specified
+    this.compareService.pump_specified_different.subscribe((val) => {
+      let specifiedPumpTypeElements = doc.getElementsByName('specifiedPumpType');
+      specifiedPumpTypeElements.forEach(element => {
+        element.classList.toggle('indicate-different', val);
+      });
+    })
+    //pump rated speed
+    this.compareService.pump_rated_speed_different.subscribe((val) => {
+      let pumpRpmElements = doc.getElementsByName('pumpRPM');
+      pumpRpmElements.forEach(element => {
+        element.classList.toggle('indicate-different', val);
+      });
+    });
+
+    //drive
+    this.compareService.drive_different.subscribe((val) => {
+      let driveElements = doc.getElementsByName('drive');
+      driveElements.forEach(element => {
+        element.classList.toggle('indicate-different', val);
+      });
+    });
+    //kinematic viscosity
+    this.compareService.kinematic_viscosity_different.subscribe((val) => {
+      let viscosityElements = doc.getElementsByName('viscosity');
+      viscosityElements.forEach(element => {
+        element.classList.toggle('indicate-different', val);
+      });
+    });
+    //specific gravity
+    this.compareService.specific_gravity_different.subscribe((val) => {
+      let gravityElements = doc.getElementsByName('gravity');
+      gravityElements.forEach(element => {
+        element.classList.toggle('indicate-different', val);
+      });
+    });
+    //stages
+    this.compareService.stages_different.subscribe((val) => {
+      let stagesElements = doc.getElementsByName('stages');
+      stagesElements.forEach(element => {
+        element.classList.toggle('indicate-different', val);
+      });
+    });
+    //fixed speed
+    this.compareService.fixed_speed_different.subscribe((val) => {
+      let fixedSpeedElements = doc.getElementsByName('fixedSpeed');
+      fixedSpeedElements.forEach(element => {
+        element.classList.toggle('indicate-different', val);
+      });
+    });
+  }
+
 
 }
 

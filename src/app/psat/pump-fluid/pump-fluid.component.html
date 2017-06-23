@@ -7,7 +7,7 @@
 
   <div class="form-group">
     <label for="pumpType">Pump Type</label>
-    <select class="form-control" formControlName="pumpType" id="pumpType" (input)="startSavePolling()" (focus)="focusField('pumpType')"
+    <select class="form-control" name="pumpType" formControlName="pumpType" id="pumpType" (input)="startSavePolling()" (focus)="focusField('pumpType')"
       ngModel="{{psatForm.value.pumpType}}">
       <option *ngFor="let pumpType of pumpTypes" [ngValue]="pumpType">{{pumpType}}</option>
     </select>
@@ -15,13 +15,13 @@
 
   <div class="form-group" *ngIf="psatForm.value.pumpType == 'Specified Optimal Efficiency'">
     <label for="specifiedPumpEfficiency">Specify Pump Efficiency</label>
-    <input type="number" min="0" step="any" class="form-control" formControlName="specifiedPumpEfficiency" id="specifiedPumpEfficiency" onfocus="this.select();" (input)="startSavePolling()"
+    <input name="specifiedPumpEfficiency" type="number" min="0" step="any" class="form-control" formControlName="specifiedPumpEfficiency" id="specifiedPumpEfficiency" onfocus="this.select();" (input)="startSavePolling()"
       (focus)="focusField('pumpType')">
   </div>
 
   <div class="form-group">
     <label for="pumpRPM">Pump Speed</label>
-    <input type="number" min="0" step="any" class="form-control" formControlName="pumpRPM" id="pumpRPM" (input)="startSavePolling()" (focus)="focusField('pumpRPM')"
+    <input type="number" name="pumpRPM" min="0" step="any" class="form-control {{different.pumpRPM}}" formControlName="pumpRPM" id="pumpRPM" (input)="startSavePolling()" (focus)="focusField('pumpRPM')"
       [ngClass]="{'invalid': checkPumpRpm() == false}" onfocus="this.select();">
     <span class="units">rpms</span>
     <span class="alert-danger pull-right small" *ngIf="rpmError !== null">{{rpmError}}</span>
@@ -30,7 +30,7 @@
 
   <div class="form-group">
     <label for="drive">Drive</label>
-    <select class="form-control" formControlName="drive" id="drive" (input)="startSavePolling()" (focus)="focusField('drive')"
+    <select class="form-control" name="drive" formControlName="drive" id="drive" (input)="startSavePolling()" (focus)="focusField('drive')"
       ngModel="{{psatForm.value.drive}}">
       <option *ngFor="let drive of drives" [ngValue]="drive">{{drive}}</option>
     </select>
@@ -38,7 +38,7 @@
 
   <div class="form-group">
     <label for="viscosity">Kinematic Viscosity</label>
-    <div class="incrementor form-control">
+    <div name="viscosity" class="incrementor form-control">
       <button class="btn" [disabled]="!selected" (click)="subtractNum('viscosity')"><i class="fa fa-minus"></i></button>
       <button class="btn" [disabled]="!selected" (click)="addNum('viscosity')"><i class="fa fa-plus"></i></button>
       <input type="number" min="0" step="any" class="form-control" formControlName="viscosity" id="viscosity" ngModel="{{psatForm.value.viscosity}}"
@@ -49,12 +49,12 @@
 
   <div class="form-group">
     <label for="gravity">Specific Gravity</label>
-    <input type="number" min="0" step="any" class="form-control" formControlName="gravity" id="gravity" (input)="startSavePolling()" (focus)="focusField('specificGravity')" onfocus="this.select();">
+    <input type="number" min="0" name="gravity" step="any" class="form-control" formControlName="gravity" id="gravity" (input)="startSavePolling()" (focus)="focusField('specificGravity')" onfocus="this.select();">
   </div>
 
   <div class="form-group">
     <label for="stages">Stages</label>
-    <div class="incrementor form-control">
+    <div name="stages" class="incrementor form-control">
       <button class="btn" [disabled]="!selected" (click)="subtractNum('stages')"><i class="fa fa-minus"></i></button>
       <button class="btn" [disabled]="!selected" (click)="addNum('stages')"><i class="fa fa-plus"></i></button>
       <input type="number" min="1" step="any" class="form-control" formControlName="stages" id="stages" ngModel="{{psatForm.value.stages}}"
@@ -65,12 +65,11 @@
   <div class="form-group">
 
     <label>Fixed specific speed?</label>
-    <div class="form-check">
+    <div name="fixedSpeed" class="form-check">
       <label class="form-check-label">
         <input
           class="form-check-input"
           type="radio"
-          name="fixedSpeed"
           formControlName="fixedSpeed"
           value="Yes"
           (change)="focusField('fixedSpecificSpeed')">Yes
@@ -79,7 +78,6 @@
         <input
           class="form-check-input"
           type="radio"
-          name="fixedSpeed"
           formControlName="fixedSpeed"
           value="No"
           (change)="focusField('fixedSpecificSpeed')">No

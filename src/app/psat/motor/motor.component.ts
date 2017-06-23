@@ -2,6 +2,8 @@ import { Component, OnInit, Output, EventEmitter, Input, SimpleChanges, ViewChil
 import { PsatService } from '../psat.service';
 import { PSAT } from '../../shared/models/psat';
 import { Settings } from '../../shared/models/settings';
+import { CompareService } from '../compare.service';
+import { WindowRefService } from '../../indexedDb/window-ref.service';
 
 @Component({
   selector: 'app-motor',
@@ -25,6 +27,8 @@ export class MotorComponent implements OnInit {
   selected: boolean;
   @Input()
   settings: Settings;
+  @Input()
+  baseline: boolean;
 
   @ViewChild('formRef') formRef: ElementRef;
   elements: any;
@@ -55,7 +59,7 @@ export class MotorComponent implements OnInit {
 
   efficiencyError: string = null;
   marginError: string = null;
-  constructor(private psatService: PsatService) { }
+  constructor(private psatService: PsatService, private compareService: CompareService, private windowRefService: WindowRefService) { }
 
   ngOnInit() {
     this.psatForm = this.psatService.getFormFromPsat(this.psat.inputs);
@@ -74,6 +78,8 @@ export class MotorComponent implements OnInit {
     if (!this.selected) {
       this.disableForm();
     }
+    this.setCompareVals();
+    this.initDifferenceMonitor();
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -86,6 +92,7 @@ export class MotorComponent implements OnInit {
       } else {
         this.enableForm();
       }
+      this.setCompareVals();
     }
     else {
       this.isFirstChange = false;
@@ -292,7 +299,17 @@ export class MotorComponent implements OnInit {
 
   savePsat(form: any) {
     this.psat.inputs = this.psatService.getPsatInputsFromForm(form);
+    this.setCompareVals();
     this.saved.emit(this.selected);
+  }
+
+  setCompareVals() {
+    if (this.baseline) {
+      this.compareService.baselinePSAT = this.psat;
+    } else {
+      this.compareService.modifiedPSAT = this.psat;
+    }
+    this.compareService.checkMotorDifferent();
   }
 
   startSavePolling() {
@@ -303,5 +320,65 @@ export class MotorComponent implements OnInit {
     this.counter = setTimeout(() => {
       this.savePsat(this.psatForm)
     }, 3000)
+  }
+
+  initDifferenceMonitor() {
+    let doc = this.windowRefService.getDoc();
+    //line frequency
+    this.compareService.line_frequency_different.subscribe((val) => {
+      let lineFreqElements = doc.getElementsByName('frequency');
+      lineFreqElements.forEach(element => {
+        element.classList.toggle('indicate-different', val);
+      });
+    })
+    //motor power
+    this.compareService.motor_rated_power_different.subscribe((val) => {
+      let horsePowerElements = doc.getElementsByName('horsePower');
+      horsePowerElements.forEach(element => {
+        element.classList.toggle('indicate-different', val);
+      });
+    })
+    //motor rpm
+    this.compareService.motor_rated_speed_different.subscribe((val) => {
+      let motorRpmElements = doc.getElementsByName('motorRPM');
+      motorRpmElements.forEach(element => {
+        element.classList.toggle('indicate-different', val);
+      });
+    })
+    //efficiency class
+    this.compareService.efficiency_class_different.subscribe((val) => {
+      let efficiencyClassElements = doc.getElementsByName('efficiencyClass');
+      efficiencyClassElements.forEach(element => {
+        element.classList.toggle('indicate-different', val);
+      });
+    })
+    //efficiency
+    this.compareService.efficiency_different.subscribe((val) => {
+      let efficiencyElements = doc.getElementsByName('efficiency');
+      efficiencyElements.forEach(element => {
+        element.classList.toggle('indicate-different', val);
+      });
+    })
+    //rated voltage
+    this.compareService.motor_rated_voltage_different.subscribe((val) => {
+      let motorVoltageElements = doc.getElementsByName('motorVoltage');
+      motorVoltageElements.forEach(element => {
+        element.classList.toggle('indicate-different', val);
+      });
+    })
+    //full load amps
+    this.compareService.motor_rated_fla_different.subscribe((val) => {
+      let motorFlaElements = doc.getElementsByName('fullLoadAmps');
+      motorFlaElements.forEach(element => {
+        element.classList.toggle('indicate-different', val);
+      });
+    })
+    //size margin
+    this.compareService.margin_different.subscribe((val) => {
+      let marginElements = doc.getElementsByName('sizeMargin');
+      marginElements.forEach(element => {
+        element.classList.toggle('indicate-different', val);
+      });
+    })
   }
 }

@@ -4,7 +4,7 @@ import { FlueGasLossesService } from './flue-gas-losses.service';
 import { PhastService } from '../../phast.service';
 import { FlueGas } from '../../../shared/models/losses/flueGas';
 import { Losses } from '../../../shared/models/phast';
-
+import { FlueGasCompareService } from './flue-gas-compare.service';
 @Component({
   selector: 'app-flue-gas-losses',
   templateUrl: './flue-gas-losses.component.html',
@@ -25,18 +25,21 @@ export class FlueGasLossesComponent implements OnInit {
   baselineSelected: boolean;
   @Output('fieldChange')
   fieldChange = new EventEmitter<string>();
-
+  @Input()
+  isBaseline: boolean;
 
   _flueGasLosses: Array<any>;
   firstChange: boolean = true;
 
-  constructor(private phastService: PhastService, private flueGasLossesService: FlueGasLossesService) { }
+  constructor(private phastService: PhastService, private flueGasLossesService: FlueGasLossesService, private flueGasCompareService: FlueGasCompareService) { }
 
   ngOnInit() {
     if (!this._flueGasLosses) {
       this._flueGasLosses = new Array();
     }
     if (this.losses.flueGasLosses) {
+    //  this.setCompareVals();
+    //  this.flueGasCompareService.initCompareObjects();
       this.initFlueGasses()
     }
     this.lossState.numLosses = this._flueGasLosses.length;
@@ -56,6 +59,11 @@ export class FlueGasLossesComponent implements OnInit {
     }
   }
 
+  ngOnDestroy(){
+    this.flueGasCompareService.baselineFlueGasLoss = null;
+    this.flueGasCompareService.modifiedFlueGasLoss = null;
+  }
+
   initFlueGasses() {
     this.losses.flueGasLosses.forEach(loss => {
       if (loss.flueGasType == "By Volume") {
@@ -67,7 +75,7 @@ export class FlueGasLossesComponent implements OnInit {
           heatLoss: 0.0
         }
         this.calculate(tmpLoss);
-        this._flueGasLosses.unshift(tmpLoss);
+        this._flueGasLosses.push(tmpLoss);
       } else if (loss.flueGasType == "By Mass") {
         let tmpLoss = {
           measurementType: 'By Mass',
@@ -77,7 +85,7 @@ export class FlueGasLossesComponent implements OnInit {
           heatLoss: 0.0
         }
         this.calculate(tmpLoss);
-        this._flueGasLosses.unshift(tmpLoss);
+        this._flueGasLosses.push(tmpLoss);
       }
     })
   }
@@ -151,21 +159,35 @@ export class FlueGasLossesComponent implements OnInit {
     this._flueGasLosses.forEach(loss => {
       if (loss.measurementType == "By Volume") {
         let tmpVolumeLoss = this.flueGasLossesService.buildByVolumeLossFromForm(loss.formByVolume);
-        tmpFlueGasLosses.unshift(tmpVolumeLoss);
+        tmpFlueGasLosses.push(tmpVolumeLoss);
       }
       else if (loss.measurementType == "By Mass") {
         let tmpVolumeLoss = this.flueGasLossesService.buildByMassLossFromForm(loss.formByMass);
-        tmpFlueGasLosses.unshift(tmpVolumeLoss);
+        tmpFlueGasLosses.push(tmpVolumeLoss);
       }
     })
     this.losses.flueGasLosses = tmpFlueGasLosses;
     this.lossState.numLosses = this.losses.flueGasLosses.length;
     this.lossState.saved = true;
+   // this.setCompareVals();
     this.savedLoss.emit(true);
   }
 
   changeField(str: string) {
     this.fieldChange.emit(str);
+  }
+
+  setCompareVals() {
+    if (this.isBaseline) {
+      this.flueGasCompareService.baselineFlueGasLoss = this.losses.flueGasLosses;
+    } else {
+      this.flueGasCompareService.modifiedFlueGasLoss = this.losses.flueGasLosses;
+    }
+    if (this.flueGasCompareService.differentArray) {
+      if (this.flueGasCompareService.differentArray.length != 0) {
+        this.flueGasCompareService.checkFlueGasLosses();
+      }
+    }
   }
 }
 

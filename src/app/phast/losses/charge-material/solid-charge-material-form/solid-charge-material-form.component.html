@@ -3,35 +3,35 @@
   <div class="form-section">
     <div class="form-group">
       <label class="small" for="materialName">Name of Material</label>
-      <select class="form-control" id="materialName" formControlName="materialId" (change)="setProperties()" (focus)="focusField('materialName')">
+      <select name="{{'materialName_'+lossIndex}}" class="form-control" id="materialName" formControlName="materialId" (change)="setProperties()" (focus)="focusField('materialName')">
           <option *ngFor="let material of materialTypes" [ngValue]="material.id">{{material.substance}}</option>
         </select>
     </div>
 
     <div class="form-group">
       <label class="small" for="materialSpecificHeatOfSolidMaterial">Average specific heat of the solid material</label>
-      <input type="number" step="any" class="form-control" formControlName="materialSpecificHeatOfSolidMaterial" id="materialSpecificHeatOfSolidMaterial"
+      <input name="{{'materialSpecificHeatOfSolidMaterial_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="materialSpecificHeatOfSolidMaterial" id="materialSpecificHeatOfSolidMaterial"
         onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('materialSpecificHeatOfSolidMaterial')">
       <span class="units">Btu/(lb-&#8457;)</span>
     </div>
 
     <div class="form-group">
       <label class="small" for="materialLatentHeatOfFusion">Latent Heat of Fusion</label>
-      <input type="number" step="any" class="form-control" formControlName="materialLatentHeatOfFusion" id="materialLatentHeatOfFusion" onfocus="this.select();" (input)="startSavePolling()"
+      <input name="{{'materialLatentHeatOfFusion_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="materialLatentHeatOfFusion" id="materialLatentHeatOfFusion" onfocus="this.select();" (input)="startSavePolling()"
         (focus)="focusField('materialLatentHeatOfFusion')">
       <span class="units">Btu/lb</span>
     </div>
 
     <div class="form-group">
       <label class="small" for="materialHeatOfLiquid">Specific heat of liquid from molten material</label>
-      <input type="number" step="any" class="form-control" formControlName="materialHeatOfLiquid" id="materialHeatOfLiquid" onfocus="this.select();" (input)="startSavePolling()"
+      <input name="{{'materialHeatOfLiquid_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="materialHeatOfLiquid" id="materialHeatOfLiquid" onfocus="this.select();" (input)="startSavePolling()"
         (focus)="focusField('materialHeatOfLiquid')">
       <span class="units">Btu/(lb-&#8457;)</span>
     </div>
 
     <div class="form-group">
       <label class="small" for="materialMeltingPoint">Melting Point</label>
-      <input type="number" step="any" class="form-control" formControlName="materialMeltingPoint" id="materialMeltingPoint" onfocus="this.select();" (input)="startSavePolling()"
+      <input name="{{'materialMeltingPoint_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="materialMeltingPoint" id="materialMeltingPoint" onfocus="this.select();" (input)="startSavePolling()"
         (focus)="focusField('materialMeltingPoint')">
       <span class="units">&#8457;</span>
     </div>
@@ -40,27 +40,27 @@
   <div class="form-section">
     <div class="form-group">
       <label class="small" for="feedRate">Charge (wet)-Feed Rate</label>
-      <input type="number" step="any" class="form-control" formControlName="feedRate" id="feedRate" onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('feedRate')">
+      <input name="{{'feedRate_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="feedRate" id="feedRate" onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('feedRate')">
       <span class="units">lb/hr</span>
     </div>
 
     <div class="form-group">
       <label class="small" for="waterContentAsCharged">Water Content as Charged</label>
-      <input type="number" step="any" class="form-control" formControlName="waterContentAsCharged" id="waterContentAsCharged" onfocus="this.select();" (input)="startSavePolling()"
+      <input name="{{'waterContentAsCharged_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="waterContentAsCharged" id="waterContentAsCharged" onfocus="this.select();" (input)="startSavePolling()"
         (focus)="focusField('waterContentAsCharged')">
       <span class="units">%</span>
     </div>
 
     <div class="form-group">
       <label class="small" for="waterContentAsDischarged">Water Content as Discharged</label>
-      <input type="number" step="any" class="form-control" formControlName="waterContentAsDischarged" id="waterContentAsDischarged" onfocus="this.select();" (input)="startSavePolling()"
+      <input name="{{'waterContentAsDischarged_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="waterContentAsDischarged" id="waterContentAsDischarged" onfocus="this.select();" (input)="startSavePolling()"
         (focus)="focusField('waterContentAsDischarged')">
       <span class="units">%</span>
     </div>
 
     <div class="form-group">
       <label class="small" for="initialTemperature">Initial Temperature</label>
-      <input type="number" step="any" class="form-control" formControlName="initialTemperature" id="initialTemperature" onfocus="this.select();" (input)="startSavePolling()"
+      <input name="{{'initialTemperature_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="initialTemperature" id="initialTemperature" onfocus="this.select();" (input)="startSavePolling()"
         (focus)="focusField('initialTemperature')">
       <span class="units">&#8457;</span>
     </div>
@@ -68,14 +68,14 @@
 
     <div class="form-group">
       <label class="small" for="chargeMaterialDischargeTemperature">Charge Material Discharge Temperature</label>
-      <input type="number" step="any" class="form-control" formControlName="chargeMaterialDischargeTemperature" id="chargeMaterialDischargeTemperature"
+      <input name="{{'chargeMaterialDischargeTemperature_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="chargeMaterialDischargeTemperature" id="chargeMaterialDischargeTemperature"
         onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('chargeMaterialDischargeTemperature')">
       <span class="units">&#8457;</span>
     </div>
 
     <div class="form-group">
       <label class="small" for="waterVaporDischargeTemperature">Water Vapor Discharge Temperature</label>
-      <input type="number" step="any" class="form-control" formControlName="waterVaporDischargeTemperature" id="waterVaporDischargeTemperature"
+      <input name="{{'waterVaporDischargeTemperature_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="waterVaporDischargeTemperature" id="waterVaporDischargeTemperature"
         onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('waterVaporDischargeTemperature')">
       <span class="units">&#8457;</span>
     </div>
@@ -83,27 +83,27 @@
 
     <div class="form-group">
       <label class="small" for="percentChargeMelted">Charge Melted</label>
-      <input type="number" step="any" class="form-control" formControlName="percentChargeMelted" id="percentChargeMelted" onfocus="this.select();" (input)="startSavePolling()"
+      <input name="{{'percentChargeMelted_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="percentChargeMelted" id="percentChargeMelted" onfocus="this.select();" (input)="startSavePolling()"
         (focus)="focusField('percentChargeMelted')">
       <span class="units">%</span>
     </div>
 
     <div class="form-group">
       <label class="small" for="percentChargeReacted">Charge Reacted</label>
-      <input type="number" class="form-control" formControlName="percentChargeReacted" id="percentChargeReacted" onfocus="this.select();" (input)="startSavePolling()"
+      <input name="{{'percentChargeReacted_'+lossIndex}}" type="number" class="form-control" formControlName="percentChargeReacted" id="percentChargeReacted" onfocus="this.select();" (input)="startSavePolling()"
         (focus)="focusField('percentChargeReacted')">
       <span class="units">%</span>
     </div>
 
     <div class="form-group">
       <label class="small" for="heatOfReaction">Heat of Reaction</label>
-      <input type="number" class="form-control" formControlName="heatOfReaction" id="heatOfReaction" onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('heatOfReaction')">
+      <input name="{{'heatOfReaction_'+lossIndex}}" type="number" class="form-control" formControlName="heatOfReaction" id="heatOfReaction" onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('heatOfReaction')">
       <span class="units">Btu/lb</span>
     </div>
 
     <div class="form-group">
       <label class="small" for="endothermicOrExothermic">Endothermic/Exothermic</label>
-      <select class="form-control" formControlName="endothermicOrExothermic" id="endothermicOrExothermic" (change)="startSavePolling()"
+      <select name="{{'endothermicOrExothermic_'+lossIndex}}" class="form-control" formControlName="endothermicOrExothermic" id="endothermicOrExothermic" (change)="startSavePolling()"
         (focus)="focusField('endothermicOrExothermic')">
         <option>Endothermic</option>
         <option>Exothermic</option>
@@ -112,7 +112,7 @@
 
     <div class="form-group">
       <label class="small" for="additionalHeatRequired">Additional Heat Required</label>
-      <input type="number" step="any" class="form-control" formControlName="additionalHeatRequired" id="additionalHeatRequired" onfocus="this.select();" (input)="startSavePolling()"
+      <input name="{{'additionalHeatRequired_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="additionalHeatRequired" id="additionalHeatRequired" onfocus="this.select();" (input)="startSavePolling()"
         (focus)="focusField('additionalHeatRequired')">
       <span class="units">Btu/lb</span>
     </div>

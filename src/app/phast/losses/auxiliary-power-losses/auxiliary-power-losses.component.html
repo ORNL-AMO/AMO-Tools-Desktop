@@ -4,7 +4,7 @@
 </div>
 
 
-<div class="card-form" *ngFor="let loss of _auxiliaryPowerLosses">
+<div class="card-form" *ngFor="let loss of _auxiliaryPowerLosses; let lossIndex = index;">
   <div class="row">
     <div class="col-12">
       <div class="pull-left">
@@ -18,7 +18,7 @@
   <div class="row">
     <div class="col-12">
       <app-auxiliary-power-losses-form (changeField)="changeField($event)" [(auxLossesForm)]="loss.form" (calculate)="calculate(loss)"
-        [(lossState)]="lossState" [baselineSelected]="baselineSelected" (saveEmit)="saveLosses()"></app-auxiliary-power-losses-form>
+        [(lossState)]="lossState" [baselineSelected]="baselineSelected" (saveEmit)="saveLosses()" [lossIndex]="lossIndex"></app-auxiliary-power-losses-form>
     </div>
   </div>
   <div class="row">

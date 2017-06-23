@@ -1,4 +1,6 @@
 import { Component, OnInit, Input, EventEmitter, Output, ViewChild, ElementRef, SimpleChanges } from '@angular/core';
+import { WindowRefService } from '../../../../indexedDb/window-ref.service';
+import { ExtendedSurfaceCompareService } from '../extended-surface-compare.service';
 
 @Component({
   selector: 'app-extended-surface-losses-form',
@@ -18,6 +20,8 @@ export class ExtendedSurfaceLossesFormComponent implements OnInit {
   changeField = new EventEmitter<string>();
   @Output('saveEmit')
   saveEmit = new EventEmitter<boolean>();
+  @Input()
+  lossIndex: number;
 
   @ViewChild('lossForm') lossForm: ElementRef;
   form: any;
@@ -25,8 +29,8 @@ export class ExtendedSurfaceLossesFormComponent implements OnInit {
 
   firstChange: boolean = true;
   counter: any;
-  
-  constructor() { }
+
+  constructor(private extendedSurfaceCompareService: ExtendedSurfaceCompareService, private windowRefService: WindowRefService) { }
 
   ngOnChanges(changes: SimpleChanges) {
     if (!this.firstChange) {
@@ -40,10 +44,13 @@ export class ExtendedSurfaceLossesFormComponent implements OnInit {
     }
   }
 
-  ngOnInit() {
+  ngOnInit() { }
+
+  ngAfterViewInit() {
     if (!this.baselineSelected) {
       this.disableForm();
     }
+    this.initDifferenceMonitor();
   }
 
   disableForm() {
@@ -81,5 +88,40 @@ export class ExtendedSurfaceLossesFormComponent implements OnInit {
     this.counter = setTimeout(() => {
       this.emitSave();
     }, 3000)
+  }
+
+  initDifferenceMonitor() {
+    if (this.extendedSurfaceCompareService.baselineSurface && this.extendedSurfaceCompareService.modifiedSurface && this.extendedSurfaceCompareService.differentArray.length != 0) {
+      let doc = this.windowRefService.getDoc();
+
+      //surfaceArea
+      this.extendedSurfaceCompareService.differentArray[this.lossIndex].different.surfaceArea.subscribe((val) => {
+        let surfaceAreaElements = doc.getElementsByName('surfaceArea_' + this.lossIndex);
+        surfaceAreaElements.forEach(element => {
+          element.classList.toggle('indicate-different', val);
+        });
+      })
+      //avgSurfaceTemp
+      this.extendedSurfaceCompareService.differentArray[this.lossIndex].different.surfaceTemperature.subscribe((val) => {
+        let avgSurfaceTempElements = doc.getElementsByName('avgSurfaceTemp_' + this.lossIndex);
+        avgSurfaceTempElements.forEach(element => {
+          element.classList.toggle('indicate-different', val);
+        });
+      })
+      //ambientTemp
+      this.extendedSurfaceCompareService.differentArray[this.lossIndex].different.ambientTemperature.subscribe((val) => {
+        let ambientTempElements = doc.getElementsByName('ambientTemp_' + this.lossIndex);
+        ambientTempElements.forEach(element => {
+          element.classList.toggle('indicate-different', val);
+        });
+      })
+      //surfaceEmissivity
+      this.extendedSurfaceCompareService.differentArray[this.lossIndex].different.surfaceEmissivity.subscribe((val) => {
+        let surfaceEmissivityElements = doc.getElementsByName('surfaceEmissivity_' + this.lossIndex);
+        surfaceEmissivityElements.forEach(element => {
+          element.classList.toggle('indicate-different', val);
+        });
+      })
+    }
   }
 }

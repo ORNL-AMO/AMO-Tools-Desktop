@@ -4,7 +4,7 @@
 </div>
 
 
-<div class="card-form" *ngFor="let loss of _energyInputs">
+<div class="card-form" *ngFor="let loss of _energyInputs; let lossIndex = index">
   <div class="row">
     <div class="col-12">
       <div class="pull-left">
@@ -18,7 +18,7 @@
   <div class="row">
     <div class="col-12">
       <app-energy-input-form (changeField)="changeField($event)" [(energyInputForm)]="loss.form" (calculate)="calculate(loss)"
-        [(lossState)]="lossState" [baselineSelected]="baselineSelected" (saveEmit)="saveLosses()"></app-energy-input-form>
+        [(lossState)]="lossState" [baselineSelected]="baselineSelected" (saveEmit)="saveLosses()" [lossIndex]="lossIndex"></app-energy-input-form>
     </div>
   </div>
   <div class="row">

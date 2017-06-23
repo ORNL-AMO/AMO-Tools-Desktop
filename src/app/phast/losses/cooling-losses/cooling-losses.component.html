@@ -8,7 +8,7 @@
   <h4>Add some now.</h4>
 </div>
 
-<div class="card-form" *ngFor="let loss of _coolingLosses">
+<div class="card-form" *ngFor="let loss of _coolingLosses; let lossIndex = index">
   <div class="row">
     <div class="col-12">
       <div class="pull-left">
@@ -31,12 +31,14 @@
         </select>
       </div>
       <app-water-cooling-losses-form (changeField)="changeField($event)" *ngIf="loss.coolingMedium == 'Water'" [(lossesForm)]="loss.waterCoolingForm"
-        (calculate)="calculate(loss)" [(lossState)]="lossState" [baselineSelected]="baselineSelected" (saveEmit)="saveLosses()"></app-water-cooling-losses-form>
+        (calculate)="calculate(loss)" [(lossState)]="lossState" [baselineSelected]="baselineSelected" (saveEmit)="saveLosses()"
+        [lossIndex]="lossIndex"></app-water-cooling-losses-form>
       <app-liquid-cooling-losses-form (changeField)="changeField($event)" *ngIf="loss.coolingMedium == 'Other Liquid'" [(lossesForm)]="loss.liquidCoolingForm"
-        (calculate)="calculate(loss)" [(lossState)]="lossState" [baselineSelected]="baselineSelected" (saveEmit)="saveLosses()"></app-liquid-cooling-losses-form>
+        (calculate)="calculate(loss)" [(lossState)]="lossState" [baselineSelected]="baselineSelected" (saveEmit)="saveLosses()"
+        [lossIndex]="lossIndex"></app-liquid-cooling-losses-form>
       <app-gas-cooling-losses-form (changeField)="changeField($event)" *ngIf="loss.coolingMedium == 'Other Gas' || loss.coolingMedium == 'Air'"
         [(lossesForm)]="loss.gasCoolingForm" (calculate)="calculate(loss)" [(lossState)]="lossState" [baselineSelected]="baselineSelected"
-        (saveEmit)="saveLosses()"></app-gas-cooling-losses-form>
+        (saveEmit)="saveLosses()" [lossIndex]="lossIndex"></app-gas-cooling-losses-form>
     </div>
   </div>
   <div class="row">
