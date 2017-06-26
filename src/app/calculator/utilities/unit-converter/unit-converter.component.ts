@@ -106,7 +106,8 @@ export class UnitConverterComponent implements OnInit {
       tmpList.forEach(unit => {
         let tmpPossibility = {
           unit: unit,
-          display: this.getUnitName(unit)
+          display: this.getUnitName(unit),
+          displayUnit: this.getUnitDisplay(unit)
         }
         this.possibilities.push(tmpPossibility);
       })
