@@ -1,6 +1,6 @@
 <div class="container-fluid">
 	<div class="row">
-		<div class="col-md-8 offset-md-2">
+		<div class="col-md-8 offset-md-1">
 
 
 			<div class="explore-opportunities">
@@ -23,13 +23,14 @@
 								<form *ngIf="showCost">
 									<div class="form-group">
 										<label for="initialCost">Initial Cost</label>
-										<input type="text" id="initialCost" class="form-control" value="{{assessment.psat.inputs.cost}}" />
+										<input name="initialCost" type="text" id="initialCost" class="form-control" [(ngModel)]="assessment.psat.inputs.cost" />
 										<span class="units">$/KwHr</span>
 									</div>
 									<div class="form-group">
 										<label for="newCost">New Cost</label>
-										<input type="text" id="newCost" class="form-control" />
-										<span class="units">$</span>
+										<input name="newCost" type="text" id="newCost" class="form-control" [(ngModel)]="modification.inputs.cost" (input)="calculate()"
+										/>
+										<span class="units">$/KwHr</span>
 									</div>
 								</form>
 							</li>
@@ -42,13 +43,15 @@
 								<form *ngIf="showFlowRate">
 									<div class="form-group">
 										<label for="initialFlowRate">Initial Flow Rate</label>
-										<input type="text" id="initialFlowRate" class="form-control" value="{{assessment.psat.inputs.flow_rate}}" />
-										<span class="units">gpm</span>
+										<input name="initialFlowRate" type="text" id="initialFlowRate" class="form-control" [(ngModel)]="assessment.psat.inputs.flow_rate"
+										/>
+										<span class="units">{{settings.flowMeasurement}}</span>
 									</div>
 									<div class="form-group">
 										<label for="newFlowRate">New Flow Rate</label>
-										<input type="text" id="newFlowRate" class="form-control" />
-										<span class="units">gpm</span>
+										<input name="newFlowRate" type="text" id="newFlowRate" class="form-control" [(ngModel)]="modification.inputs.flow_rate" (input)="calculate()"
+										/>
+										<span class="units">{{settings.flowMeasurement}}</span>
 									</div>
 								</form>
 							</li>
@@ -61,13 +64,13 @@
 								<form *ngIf="showHead">
 									<div class="form-group">
 										<label for="initialHead">Initial head</label>
-										<input type="text" id="initialHead" class="form-control" value="{{assessment.psat.inputs.head}}" />
-										<span class="units">ft</span>
+										<input name="initialHead" type="text" id="initialHead" class="form-control" [(ngModel)]="assessment.psat.inputs.head" />
+										<span class="units">{{settings.distanceMeasurement}}</span>
 									</div>
 									<div class="form-group">
 										<label for="newHead">New head</label>
-										<input type="text" id="newHead" class="form-control" />
-										<span class="units">ft</span>
+										<input name="newHead" type="text" id="newHead" class="form-control" [(ngModel)]="modification.inputs.flow_rate" />
+										<span class="units">{{settings.distanceMeasurement}}</span>
 									</div>
 								</form>
 							</li>
@@ -89,14 +92,15 @@
 								<form *ngIf="showRatedMotorPower">
 									<div class="form-group">
 										<label for="initialMotorEfficiency">Initial Rated Motor Power</label>
-										<input type="text" id="initialMotorEfficiency" class="form-control" value="100"
+										<input name="initialMotorEfficiency" type="text" id="initialMotorEfficiency" class="form-control" [(ngModel)]="assessment.psat.inputs.efficiency"
 										/>
-										<span class="units">hp</span>
+										<span class="units">{{settings.powerMeasurement}}</span>
 									</div>
 									<div class="form-group">
 										<label for="newRatedMotorEfficiency">New Motor Efficiency</label>
-										<input type="text" id="newMotorEfficiency" class="form-control" />
-										<span class="units">hp</span>
+										<input name="newMotorEfficiency" type="text" id="newMotorEfficiency" class="form-control" [(ngModel)]="modification.inputs.efficiency"
+										 (input)="calculate()" />
+										<span class="units">{{settings.powerMeasurement}}</span>
 									</div>
 								</form>
 							</li>
@@ -109,13 +113,13 @@
 								<form *ngIf="showEfficiencyClass">
 									<div class="form-group">
 										<label for="initialEfficiencyClass">Initial Efficiency Class</label>
-										<select name="efficiencyClass" class="form-control select-input-field" id="efficiencyClass">
+										<select name="oldEfficiencyClass" class="form-control select-input-field" id="efficiencyClass">
       										<option *ngFor="let efficiencyClass of efficiencyClasses" [ngValue]="efficiencyClass">{{efficiencyClass}}</option>
     									</select>
 									</div>
 									<div class="form-group">
 										<label for="newEfficiencyClass">New Efficiency Class</label>
-										<select name="efficiencyClass" class="form-control select-input-field" id="efficiencyClass">
+										<select name="newEfficiencyClass" class="form-control select-input-field" id="efficiencyClass">
       										<option *ngFor="let efficiencyClass of efficiencyClasses" [ngValue]="efficiencyClass">{{efficiencyClass}}</option>
     									</select>
 									</div>
@@ -174,6 +178,11 @@
 			</div>
 
 
+		</div>
+		<div class="col-md-1 chart-summary" *ngIf="modification.outputs">
+			<div class="chart-item">
+				<app-chart-summary [psat]="modification"></app-chart-summary>
+			</div>
 		</div>
 	</div>
 </div>

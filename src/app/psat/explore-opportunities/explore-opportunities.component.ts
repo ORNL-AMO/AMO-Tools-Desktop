@@ -1,6 +1,8 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { PSAT } from '../../shared/models/psat';
+import { PSAT, Modification } from '../../shared/models/psat';
 import { Assessment } from '../../shared/models/assessment';
+import { Settings } from '../../shared/models/settings';
+import { PsatService } from '../psat.service';
 
 @Component({
   selector: 'app-explore-opportunities',
@@ -10,6 +12,8 @@ import { Assessment } from '../../shared/models/assessment';
 export class ExploreOpportunitiesComponent implements OnInit {
   @Input()
   assessment: Assessment;
+  @Input()
+  settings: Settings;
 
   showSystemData: string;
   showRatedMotorData: string;
@@ -34,9 +38,18 @@ export class ExploreOpportunitiesComponent implements OnInit {
     'Specified'
   ];
 
-  constructor() { }
+  modification: PSAT;
+  
+  constructor(private psatService: PsatService) { }
 
   ngOnInit() {
+    this.modification = JSON.parse(JSON.stringify(this.assessment.psat));
+    this.calculate();
+  }
+
+  calculate(){
+      this.modification.outputs = this.psatService.results(this.modification.inputs, this.settings)
+     // console.log(this.modification.outputs);
   }
 
 }
