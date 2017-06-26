@@ -138,4 +138,9 @@ export class UnitConverterComponent implements OnInit {
       return this.convertUnitsService.getUnit(unit).unit.name.plural;
     }
   }
+  getUnitDisplay(unit: any) {
+    if (unit) {
+      return this.convertUnitsService.getUnit(unit).unit.name.display;
+    }
+  }
 }
