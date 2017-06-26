@@ -1,6 +1,6 @@
 <div class="container-fluid">
-	<div class="row">
-		<div class="col-md-8 offset-md-2">
+	<div class="row" style="padding-bottom: 100px">
+		<div class="col-md-7 offset-md-1">
 
 
 			<div class="explore-opportunities">
@@ -9,55 +9,70 @@
 				<ul>
 					<li>
 						<div class="checkbox">
-							<label for="general"><input type ="checkbox" id="general" value="'true1'" [(ngModel)]="showOption1" />
-								Adjust General Operation
+							<label for="general"><input type ="checkbox" id="general" value="'true1'" [(ngModel)]="systemData" />
+								Adjust System Data
 							</label>
 						</div>
-						<ul *ngIf="showOption1">
+						<ul *ngIf="systemData">
 							<li>
 								<div class="checkbox">
-									<label for="operatingHours"><input type ="checkbox" id="operatingHours" value="'true2'" [(ngModel)]="showHours1"/>
-										Modify Operating Hours
+									<label for="modifyCost"><input type ="checkbox" id="modifyCost" value="'true'" [(ngModel)]="showCost"/>
+										Modify Cost
 									</label>
 								</div>
-								<form *ngIf="showHours1">
+								<form *ngIf="showCost">
 									<div class="form-group">
-										<label for="initialOperatingHours">Initial Operating Hours</label>
-										<input type="text" id="initialOperatingHours" class="form-control" value="8" />
-										<span class="units">hours</span>
+										<label for="initialCost">Initial Cost</label>
+										<input name="initialCost" type="text" id="initialCost" class="form-control" [(ngModel)]="assessment.psat.inputs.cost_kw_hour"
+										/>
+										<span class="units">$/KwHr</span>
 									</div>
 									<div class="form-group">
-										<label for="newOperatingHours">New Operating Hours</label>
-										<input type="text" id="newOperatingHours" class="form-control" />
-										<span class="units">hours</span>
+										<label for="newCost">New Cost</label>
+										<input name="newCost" type="text" id="newCost" class="form-control" [(ngModel)]="modification.inputs.cost_kw_hour" (input)="calculate()"
+										/>
+										<span class="units">$/KwHr</span>
 									</div>
 								</form>
 							</li>
-						</ul>
-					</li>
-					<li >
-						<div class="checkbox">
-							<label for="general2"><input type ="checkbox" id="general2" value="'true3'" [(ngModel)]="showOption2" />
-								Adjust General Operation
-							</label>
-						</div>
-						<ul *ngIf="showOption2">
 							<li>
 								<div class="checkbox">
-									<label for="operatingHours2"><input type ="checkbox" id="operatingHours2" value="'true4'" [(ngModel)]="showHours2"/>
-										Modify Operating Hours
+									<label for="modifyFlowRate"><input type ="checkbox" id="modifyFlowRate" value="'true'" [(ngModel)]="showFlowRate"/>
+										Modify Flow Rate
 									</label>
 								</div>
-								<form *ngIf="showHours2">
+								<form *ngIf="showFlowRate">
 									<div class="form-group">
-										<label for="initialOperatingHours">Initial Operating Hours</label>
-										<input type="text" id="initialOperatingHours" class="form-control" value="8" />
-										<span class="units">hours</span>
+										<label for="initialFlowRate">Initial Flow Rate</label>
+										<input name="initialFlowRate" type="text" id="initialFlowRate" class="form-control" [(ngModel)]="assessment.psat.inputs.flow_rate"
+										/>
+										<span class="units">{{settings.flowMeasurement}}</span>
 									</div>
 									<div class="form-group">
-										<label for="newOperatingHours">New Operating Hours</label>
-										<input type="text" id="newOperatingHours" class="form-control" />
-										<span class="units">hours</span>
+										<label for="newFlowRate">New Flow Rate</label>
+										<input name="newFlowRate" type="text" id="newFlowRate" class="form-control" [(ngModel)]="modification.inputs.flow_rate" (input)="calculate()"
+										/>
+										<span class="units">{{settings.flowMeasurement}}</span>
+									</div>
+								</form>
+							</li>
+							<li>
+								<div class="checkbox">
+									<label for="modifyHead"><input type ="checkbox" id="modifyHead" value="'true'" [(ngModel)]="showHead"/>
+										Modify Head
+									</label>
+								</div>
+								<form *ngIf="showHead">
+									<div class="form-group">
+										<label for="initialHead">Initial head</label>
+										<input name="initialHead" type="text" id="initialHead" class="form-control" [(ngModel)]="assessment.psat.inputs.head" />
+										<span class="units">{{settings.distanceMeasurement}}</span>
+									</div>
+									<div class="form-group">
+										<label for="newHead">New head</label>
+										<input name="newHead" type="text" id="newHead" class="form-control" (input)="calculate()" [(ngModel)]="modification.inputs.head"
+										/>
+										<span class="units">{{settings.distanceMeasurement}}</span>
 									</div>
 								</form>
 							</li>
@@ -65,27 +80,145 @@
 					</li>
 					<li>
 						<div class="checkbox">
-							<label for="general3"><input type ="checkbox" id="general3" value="'true5'" [(ngModel)]="showOption3" />
-								Adjust General Operation
+							<label for="general2"><input type ="checkbox" id="general2" value="'true3'" [(ngModel)]="ratedMotorData" />
+								Adjust Rated Motor Data
 							</label>
 						</div>
-						<ul *ngIf="showOption3">
+						<ul *ngIf="ratedMotorData">
 							<li>
 								<div class="checkbox">
-									<label for="operatingHours3"><input type="checkbox" id="operatingHours3" value="'true6'" [(ngModel)]="showHours3"/>
-										Modify Operating Hours
+									<label for="modifyMotorRatedPower"><input type ="checkbox" id="modifyMotorRatedPower" value="'true'" [(ngModel)]="showRatedMotorPower"/>
+										Modify Rated Motor Power
 									</label>
 								</div>
-								<form *ngIf="showHours3">
+								<form *ngIf="showRatedMotorPower">
 									<div class="form-group">
-										<label for="initialOperatingHours">Initial Operating Hours</label>
-										<input type="text" id="initialOperatingHours" class="form-control" value="8" />
-										<span class="units">hours</span>
+										<label for="initialMotorRatedPower">Initial Rated Motor Power</label>
+										<select name="initialMotorRatedPower" class="form-control number-input-field" id="initialMotorRatedPower" [(ngModel)]="assessment.psat.inputs.motor_rated_power">
+											<option  *ngFor="let option of options" [ngValue]="option">{{option}} {{settings.powerMeasurement}}</option>
+										</select>
 									</div>
 									<div class="form-group">
-										<label for="newOperatingHours">New Operating Hours</label>
-										<input type="text" id="newOperatingHours" class="form-control" />
-										<span class="units">hours</span>
+										<label for="newMotorRatedPower">New Motor Rated Power</label>
+										<select name="newMotorRatedPower" class="form-control number-input-field" id="newMotorRatedPower" (change)="calculate()"
+										 [(ngModel)]="modification.inputs.motor_rated_power">
+											<option  *ngFor="let option of options" [ngValue]="option">{{option}} {{settings.powerMeasurement}}</option>
+										</select>
+									</div>
+								</form>
+							</li>
+							<li>
+								<div class="checkbox">
+									<label for="modifyEfficiencyClass"><input type ="checkbox" id="modifyEfficiencyClass" value="'true'" [(ngModel)]="showEfficiencyClass"/>
+										Modify Efficiency Class
+									</label>
+								</div>
+								<form *ngIf="showEfficiencyClass">
+									<div class="form-group">
+										<label for="oldEfficiencyClass">Initial Efficiency Class</label>
+										<select name="oldEfficiencyClass" class="form-control select-input-field" id="oldEfficiencyClass" [(ngModel)]="tmpInitialEfficiencyClass">
+      										<option *ngFor="let efficiencyClass of efficiencyClasses" [ngValue]="efficiencyClass">{{efficiencyClass}}</option>
+    									</select>
+									</div>
+									<div class="form-group">
+										<label for="newEfficiencyClass">New Efficiency Class</label>
+										<select name="newEfficiencyClass" class="form-control select-input-field" id="newEfficiencyClass" (change)="calculate()"
+										 [(ngModel)]="tmpNewEfficiencyClass">
+      										<option *ngFor="let efficiencyClass of efficiencyClasses" [ngValue]="efficiencyClass">{{efficiencyClass}}</option>
+    									</select>
+									</div>
+								</form>
+							</li>
+							<li>
+								<div class="checkbox">
+									<label for="modifyMotorEfficiency"><input type ="checkbox" id="modifyMotorEfficiency" value="'true'" [(ngModel)]="showMotorEfficiency"/>
+										Modify Motor Efficiency
+									</label>
+								</div>
+								<form *ngIf="showMotorEfficiency">
+									<div class="form-group">
+										<label for="initialMotorEfficiency">Initial Motor Efficiency</label>
+										<input name="initialMotorEfficiency" type="text" id="initialMotorEfficiency" class="form-control" [(ngModel)]="assessment.psat.inputs.efficiency"
+										/>
+										<span class="units">%</span>
+									</div>
+									<div class="form-group">
+										<label for="newMotorEfficiency">New Motor Efficiency</label>
+										<input name="newMotorEfficiency" type="text" id="newMotorEfficiency" class="form-control" [(ngModel)]="modification.inputs.efficiency"
+										 (input)="calculate()" />
+										<span class="units">%</span>
+									</div>
+								</form>
+							</li>
+						</ul>
+					</li>
+					<li>
+						<div class="checkbox">
+							<label for="general3"><input type ="checkbox" id="general3" value="'true5'" [(ngModel)]="pumpData" />
+								Adjust Pump Data
+							</label>
+						</div>
+						<ul *ngIf="pumpData">
+							<li>
+								<div class="checkbox">
+									<label for="modifyPumpSpeed"><input type="checkbox" id="modifyPumpSpeed" value="'true'" [(ngModel)]="showPumpSpeed"/>
+										Modify Pump Speed
+									</label>
+								</div>
+								<form *ngIf="showPumpSpeed">
+									<div class="form-group">
+										<label for="initialPumpSpeed">Initial Pump Speed</label>
+										<input name="initialPumpSpeed" type="text" id="initialPumpSpeed" class="form-control" [(ngModel)]="assessment.psat.inputs.pump_rated_speed"
+										/>
+										<span class="units">rpm</span>
+									</div>
+									<div class="form-group">
+										<label for="newPumpSpeed">New Pump Speed</label>
+										<input name="newPumpSpeed" type="text" id="newPumpSpeed" class="form-control" [(ngModel)]="modification.inputs.pump_rated_speed"
+										 (input)="calculate()" />
+										<span class="units">rpm</span>
+									</div>
+								</form>
+							</li>
+							<li>
+								<div class="checkbox">
+									<label for="modifyPumpType"><input type="checkbox" id="modifyPumpType" value="'true'" [(ngModel)]="showPumpType"/>
+										Modify Pump Type
+									</label>
+								</div>
+								<form *ngIf="showPumpType">
+									<div class="form-group">
+										<label for="initialPumpType">Initial Pump Type</label>
+										<select class="form-control" name="pumpType" id="pumpType" [(ngModel)]="tmpInitialPumpType">
+											<option *ngFor="let pumpType of pumpTypes" [ngValue]="pumpType">{{pumpType}}</option>
+										</select>
+									</div>
+									<div class="form-group">
+										<label for="newPumpType">New Pump Type</label>
+										<select class="form-control" name="pumpType" id="pumpType" (change)="calculate()" [(ngModel)]="tmpNewPumpType">
+											<option *ngFor="let pumpType of pumpTypes" [ngValue]="pumpType">{{pumpType}}</option>
+										</select>
+									</div>
+								</form>
+							</li>
+							<li>
+								<div class="checkbox">
+									<label for="modifyPumpSpecified"><input type="checkbox" id="modifyPumpSpecified" value="'true'" [(ngModel)]="showPumpSpecified"/>
+										Modify Pump Specified Efficiency
+									</label>
+								</div>
+								<form *ngIf="showPumpSpecified">
+									<div class="form-group">
+										<label for="initialPumpSpecified">Initial Pump Specified Efficiency</label>
+										<input name="initialPumpSpecified" type="text" id="initialPumpSpecified" class="form-control" [(ngModel)]="assessment.psat.inputs.pump_specified"
+										/>
+										<span class="units">%</span>
+									</div>
+									<div class="form-group">
+										<label for="newPumpSpecified">New Pump Specified Efficiency</label>
+										<input name="newPumpSpecified" type="text" id="newPumpSpecified" class="form-control" [(ngModel)]="modification.inputs.pump_specified"
+										 (input)="calculate()" />
+										<span class="units">%</span>
 									</div>
 								</form>
 							</li>
@@ -95,6 +228,17 @@
 			</div>
 
 
+		</div>
+		<div class="col-md-2 chart-summary justify-content-center" *ngIf="modification.outputs">
+			<dl class="chart">
+				<dd>
+					<app-percent-graph [value]="optimizationRating" [titlePlacement]="titlePlacement" [valueDescription]="'Optimization Rating'"
+					 [title]="title" [unit]="unit"></app-percent-graph>
+				</dd>
+				<dt class="text-center">Optimization Rating</dt>
+				<dd class="savings text-center">{{annualSavings | currency:'USD':true:'4.0-0'}}</dd>
+				<dt class="text-muted text-center">Annual Savings</dt>
+			</dl>
 		</div>
 	</div>
 </div>
