@@ -1,6 +1,6 @@
 <div class="container-fluid">
-	<div class="row">
-		<div class="col-md-8 offset-md-1">
+	<div class="row" style="padding-bottom: 100px">
+		<div class="col-md-7 offset-md-1">
 
 
 			<div class="explore-opportunities">
@@ -23,12 +23,13 @@
 								<form *ngIf="showCost">
 									<div class="form-group">
 										<label for="initialCost">Initial Cost</label>
-										<input name="initialCost" type="text" id="initialCost" class="form-control" [(ngModel)]="assessment.psat.inputs.cost" />
+										<input name="initialCost" type="text" id="initialCost" class="form-control" [(ngModel)]="assessment.psat.inputs.cost_kw_hour"
+										/>
 										<span class="units">$/KwHr</span>
 									</div>
 									<div class="form-group">
 										<label for="newCost">New Cost</label>
-										<input name="newCost" type="text" id="newCost" class="form-control" [(ngModel)]="modification.inputs.cost" (input)="calculate()"
+										<input name="newCost" type="text" id="newCost" class="form-control" [(ngModel)]="modification.inputs.cost_kw_hour" (input)="calculate()"
 										/>
 										<span class="units">$/KwHr</span>
 									</div>
@@ -58,7 +59,7 @@
 							<li>
 								<div class="checkbox">
 									<label for="modifyHead"><input type ="checkbox" id="modifyHead" value="'true'" [(ngModel)]="showHead"/>
-										Modify Flow Rate
+										Modify Head
 									</label>
 								</div>
 								<form *ngIf="showHead">
@@ -69,7 +70,8 @@
 									</div>
 									<div class="form-group">
 										<label for="newHead">New head</label>
-										<input name="newHead" type="text" id="newHead" class="form-control" [(ngModel)]="modification.inputs.flow_rate" />
+										<input name="newHead" type="text" id="newHead" class="form-control" (input)="calculate()" [(ngModel)]="modification.inputs.head"
+										/>
 										<span class="units">{{settings.distanceMeasurement}}</span>
 									</div>
 								</form>
@@ -91,16 +93,17 @@
 								</div>
 								<form *ngIf="showRatedMotorPower">
 									<div class="form-group">
-										<label for="initialMotorEfficiency">Initial Rated Motor Power</label>
-										<input name="initialMotorEfficiency" type="text" id="initialMotorEfficiency" class="form-control" [(ngModel)]="assessment.psat.inputs.efficiency"
-										/>
-										<span class="units">{{settings.powerMeasurement}}</span>
+										<label for="initialMotorRatedPower">Initial Rated Motor Power</label>
+										<select name="initialMotorRatedPower" class="form-control number-input-field" id="initialMotorRatedPower" [(ngModel)]="assessment.psat.inputs.motor_rated_power">
+											<option  *ngFor="let option of options" [ngValue]="option">{{option}} {{settings.powerMeasurement}}</option>
+										</select>
 									</div>
 									<div class="form-group">
-										<label for="newRatedMotorEfficiency">New Motor Efficiency</label>
-										<input name="newMotorEfficiency" type="text" id="newMotorEfficiency" class="form-control" [(ngModel)]="modification.inputs.efficiency"
-										 (input)="calculate()" />
-										<span class="units">{{settings.powerMeasurement}}</span>
+										<label for="newMotorRatedPower">New Motor Rated Power</label>
+										<select name="newMotorRatedPower" class="form-control number-input-field" id="newMotorRatedPower" (change)="calculate()"
+										 [(ngModel)]="modification.inputs.motor_rated_power">
+											<option  *ngFor="let option of options" [ngValue]="option">{{option}} {{settings.powerMeasurement}}</option>
+										</select>
 									</div>
 								</form>
 							</li>
@@ -112,14 +115,15 @@
 								</div>
 								<form *ngIf="showEfficiencyClass">
 									<div class="form-group">
-										<label for="initialEfficiencyClass">Initial Efficiency Class</label>
-										<select name="oldEfficiencyClass" class="form-control select-input-field" id="efficiencyClass">
+										<label for="oldEfficiencyClass">Initial Efficiency Class</label>
+										<select name="oldEfficiencyClass" class="form-control select-input-field" id="oldEfficiencyClass" [(ngModel)]="tmpInitialEfficiencyClass">
       										<option *ngFor="let efficiencyClass of efficiencyClasses" [ngValue]="efficiencyClass">{{efficiencyClass}}</option>
     									</select>
 									</div>
 									<div class="form-group">
 										<label for="newEfficiencyClass">New Efficiency Class</label>
-										<select name="newEfficiencyClass" class="form-control select-input-field" id="efficiencyClass">
+										<select name="newEfficiencyClass" class="form-control select-input-field" id="newEfficiencyClass" (change)="calculate()"
+										 [(ngModel)]="tmpNewEfficiencyClass">
       										<option *ngFor="let efficiencyClass of efficiencyClasses" [ngValue]="efficiencyClass">{{efficiencyClass}}</option>
     									</select>
 									</div>
@@ -133,13 +137,15 @@
 								</div>
 								<form *ngIf="showMotorEfficiency">
 									<div class="form-group">
-										<label for="initialRatedMotorPower">Initial Rated Motor Power</label>
-										<input type="text" id="initialRatedMotorPower" class="form-control" value="8" />
+										<label for="initialMotorEfficiency">Initial Motor Efficiency</label>
+										<input name="initialMotorEfficiency" type="text" id="initialMotorEfficiency" class="form-control" [(ngModel)]="assessment.psat.inputs.efficiency"
+										/>
 										<span class="units">%</span>
 									</div>
 									<div class="form-group">
-										<label for="newRatedMotorPower">New Rated Motor Power</label>
-										<input type="text" id="newRatedMotorPower" class="form-control" />
+										<label for="newMotorEfficiency">New Motor Efficiency</label>
+										<input name="newMotorEfficiency" type="text" id="newMotorEfficiency" class="form-control" [(ngModel)]="modification.inputs.efficiency"
+										 (input)="calculate()" />
 										<span class="units">%</span>
 									</div>
 								</form>
@@ -155,20 +161,64 @@
 						<ul *ngIf="pumpData">
 							<li>
 								<div class="checkbox">
-									<label for="modifyPumpSpeed"><input type="checkbox" id="modifyPumpSpeed" value="'true6'" [(ngModel)]="showPumpSpeed"/>
+									<label for="modifyPumpSpeed"><input type="checkbox" id="modifyPumpSpeed" value="'true'" [(ngModel)]="showPumpSpeed"/>
 										Modify Pump Speed
 									</label>
 								</div>
 								<form *ngIf="showPumpSpeed">
 									<div class="form-group">
-										<label for="initialPumpSpeed">Initial Operating Hours</label>
-										<input type="text" id="initialPumpSpeed" class="form-control" value="8" />
+										<label for="initialPumpSpeed">Initial Pump Speed</label>
+										<input name="initialPumpSpeed" type="text" id="initialPumpSpeed" class="form-control" [(ngModel)]="assessment.psat.inputs.pump_rated_speed"
+										/>
 										<span class="units">rpm</span>
 									</div>
 									<div class="form-group">
-										<label for="newPumpSpeed">New Operating Hours</label>
-										<input type="text" id="newPumpSpeed" class="form-control" />
+										<label for="newPumpSpeed">New Pump Speed</label>
+										<input name="newPumpSpeed" type="text" id="newPumpSpeed" class="form-control" [(ngModel)]="modification.inputs.pump_rated_speed"
+										 (input)="calculate()" />
 										<span class="units">rpm</span>
+									</div>
+								</form>
+							</li>
+							<li>
+								<div class="checkbox">
+									<label for="modifyPumpType"><input type="checkbox" id="modifyPumpType" value="'true'" [(ngModel)]="showPumpType"/>
+										Modify Pump Type
+									</label>
+								</div>
+								<form *ngIf="showPumpType">
+									<div class="form-group">
+										<label for="initialPumpType">Initial Pump Type</label>
+										<select class="form-control" name="pumpType" id="pumpType" [(ngModel)]="tmpInitialPumpType">
+											<option *ngFor="let pumpType of pumpTypes" [ngValue]="pumpType">{{pumpType}}</option>
+										</select>
+									</div>
+									<div class="form-group">
+										<label for="newPumpType">New Pump Type</label>
+										<select class="form-control" name="pumpType" id="pumpType" (change)="calculate()" [(ngModel)]="tmpNewPumpType">
+											<option *ngFor="let pumpType of pumpTypes" [ngValue]="pumpType">{{pumpType}}</option>
+										</select>
+									</div>
+								</form>
+							</li>
+							<li>
+								<div class="checkbox">
+									<label for="modifyPumpSpecified"><input type="checkbox" id="modifyPumpSpecified" value="'true'" [(ngModel)]="showPumpSpecified"/>
+										Modify Pump Specified Efficiency
+									</label>
+								</div>
+								<form *ngIf="showPumpSpecified">
+									<div class="form-group">
+										<label for="initialPumpSpecified">Initial Pump Specified Efficiency</label>
+										<input name="initialPumpSpecified" type="text" id="initialPumpSpecified" class="form-control" [(ngModel)]="assessment.psat.inputs.pump_specified"
+										/>
+										<span class="units">%</span>
+									</div>
+									<div class="form-group">
+										<label for="newPumpSpecified">New Pump Specified Efficiency</label>
+										<input name="newPumpSpecified" type="text" id="newPumpSpecified" class="form-control" [(ngModel)]="modification.inputs.pump_specified"
+										 (input)="calculate()" />
+										<span class="units">%</span>
 									</div>
 								</form>
 							</li>
@@ -179,10 +229,16 @@
 
 
 		</div>
-		<div class="col-md-1 chart-summary" *ngIf="modification.outputs">
-			<div class="chart-item">
-				<app-chart-summary [psat]="modification"></app-chart-summary>
-			</div>
+		<div class="col-md-2 chart-summary justify-content-center" *ngIf="modification.outputs">
+			<dl class="chart">
+				<dd>
+					<app-percent-graph [value]="optimizationRating" [titlePlacement]="titlePlacement" [valueDescription]="'Optimization Rating'"
+					 [title]="title" [unit]="unit"></app-percent-graph>
+				</dd>
+				<dt class="text-center">Optimization Rating</dt>
+				<dd class="savings text-center">{{annualSavings | currency:'USD':true:'4.0-0'}}</dd>
+				<dt class="text-muted text-center">Annual Savings</dt>
+			</dl>
 		</div>
 	</div>
 </div>

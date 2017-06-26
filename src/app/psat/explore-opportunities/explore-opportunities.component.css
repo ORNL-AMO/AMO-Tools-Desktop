@@ -47,3 +47,7 @@
 	.explore-opportunities .units {
 		top: 28px;
 	}
+
+label {
+	width: 100% !important;
+}
