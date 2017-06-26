@@ -268,6 +268,27 @@ select.form-control:not([size]):not([multiple]) {
   box-shadow: 0px 0px 5px #EF6C00;
 }
 
+.indicate-report-field-different{
+    background: #F6DDCC !important;
+    font-weight: bold !important;
+}
+
+.indicate-report-row-different{
+    border: #EF6C00 solid !important;
+}
+
+@media print {
+
+.indicate-report-field-different{
+    background: none;
+    font-weight: bold !important;
+}
+
+.indicate-report-row-different{
+    border: none;
+}
+}
+
 /*
 Pump Fluid CSS
 =============================================== */
