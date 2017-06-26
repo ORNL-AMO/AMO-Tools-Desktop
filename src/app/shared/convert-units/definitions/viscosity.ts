@@ -17,14 +17,16 @@ export const viscosity = {
         'cm2/s': {
             name: {
                 singular: 'Square Centimeter per Second',
-                plural: 'Square Centimeters per Second'
+                plural: 'Square Centimeters per Second',
+                display:  'cm&#x00B2;/s'
             },
             to_anchor: 100
         },
         'm2/s': {
             name: {
                 singular: 'Square Meter per Second',
-                plural: 'Square Meters per Second'
+                plural: 'Square Meters per Second',
+                display: 'm&#x00B2;/s'
             },
             to_anchor: 1000000
         }

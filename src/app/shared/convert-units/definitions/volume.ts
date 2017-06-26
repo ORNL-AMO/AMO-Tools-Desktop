@@ -3,14 +3,16 @@ export const volume = {
         mm3: {
             name: {
                 singular: 'Cubic Millimeter'
-                , plural: 'Cubic Millimeters'
+                , plural: 'Cubic Millimeters',
+                 display:  'mm&‌#x00B3;'
             }
             , to_anchor: 1 / 1000000
         }
         , cm3: {
             name: {
                 singular: 'Cubic Centimeter'
-                , plural: 'Cubic Centimeters'
+                , plural: 'Cubic Centimeters',
+                display:  'cm&‌#x00B3;'
             }
             , to_anchor: 1 / 1000
         }
@@ -45,14 +47,16 @@ export const volume = {
         , m3: {
             name: {
                 singular: 'Cubic meter'
-                , plural: 'Cubic meters'
+                , plural: 'Cubic meters',
+                 display:  'm&‌#x00B3;'
             }
             , to_anchor: 1000
         }
         , km3: {
             name: {
                 singular: 'Cubic kilometer'
-                , plural: 'Cubic kilometers'
+                , plural: 'Cubic kilometers',
+                 display:  'km&‌#x00B3;'
             }
             , to_anchor: 1000000000000
         }
@@ -120,7 +124,8 @@ export const volume = {
         , in3: {
             name: {
                 singular: 'Cubic inch'
-                , plural: 'Cubic inches'
+                , plural: 'Cubic inches',
+                 display:  'in&‌#x00B3;'
             }
             , to_anchor: 0.55411
         }
@@ -169,9 +174,11 @@ export const volume = {
         , yd3: {
             name: {
                 singular: 'Cubic yard'
-                , plural: 'Cubic yards'
+                , plural: 'Cubic yards',
+                 display:  'yd&‌#x00B3;'
             }
             , to_anchor: 25852.7
+
         }
     },
     _anchors: {

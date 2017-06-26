@@ -3,14 +3,16 @@ export const volumeFlowRate = {
         'mm3/s': {
             name: {
                 singular: 'Cubic Millimeter per second'
-                , plural: 'Cubic Millimeters per second'
+                , plural: 'Cubic Millimeters per second',
+              display:  'mm&‌#x00B3;/s'
             }
             , to_anchor: 1 / 1000000
         }
         , 'cm3/s': {
             name: {
                 singular: 'Cubic Centimeter per second'
-                , plural: 'Cubic Centimeters per second'
+                , plural: 'Cubic Centimeters per second',
+                 display:  'cm&‌#x00B3;/s'
             }
             , to_anchor: 1 / 1000
         }
@@ -80,28 +82,32 @@ export const volumeFlowRate = {
         , 'm3/s': {
             name: {
                 singular: 'Cubic meter per second'
-                , plural: 'Cubic meters per second'
+                , plural: 'Cubic meters per second',
+              display:  'm&‌#x00B3;/s'
             }
             , to_anchor: 1000
         }
         , 'm3/min': {
             name: {
                 singular: 'Cubic meter per minute'
-                , plural: 'Cubic meters per minute'
+                , plural: 'Cubic meters per minute',
+                 display:  'm&‌#x00B3;/min'
             }
             , to_anchor: 50 / 3
         }
         , 'm3/h': {
             name: {
                 singular: 'Cubic meter per hour'
-                , plural: 'Cubic meters per hour'
+                , plural: 'Cubic meters per hour',
+                 display:  'm&‌#x00B3;/h'
             }
             , to_anchor: 5 / 18
         }
         , 'km3/s': {
             name: {
                 singular: 'Cubic kilometer per second'
-                , plural: 'Cubic kilometers per second'
+                , plural: 'Cubic kilometers per second',
+                 display:  'km&‌#x00B3;/s'
             }
             , to_anchor: 1000000000000
         }
@@ -124,21 +130,24 @@ export const volumeFlowRate = {
         , 'in3/s': {
             name: {
                 singular: 'Cubic inch per second'
-                , plural: 'Cubic inches per second'
+                , plural: 'Cubic inches per second',
+                 display:  'in&‌#x00B3;/s'
             }
             , to_anchor: 0.55411
         }
         , 'in3/min': {
             name: {
                 singular: 'Cubic inch per minute'
-                , plural: 'Cubic inches per minute'
+                , plural: 'Cubic inches per minute',
+                 display:  'in&‌#x00B3;/min'
             }
             , to_anchor: 0.55411 / 60
         }
         , 'in3/h': {
             name: {
                 singular: 'Cubic inch per hour'
-                , plural: 'Cubic inches per hour'
+                , plural: 'Cubic inches per hour',
+                 display:  'in&‌#x00B3;/h'
             }
             , to_anchor: 0.55411 / 3600
         }
@@ -231,7 +240,8 @@ export const volumeFlowRate = {
         , 'ft3/s': {
             name: {
                 singular: 'Cubic foot per second'
-                , plural: 'Cubic feet per second'
+                , plural: 'Cubic feet per second',
+                 display:  'ft&‌#x00B3;/s'
             }
             , to_anchor: 957.506
         }
@@ -245,28 +255,32 @@ export const volumeFlowRate = {
         , 'ft3/h': {
             name: {
                 singular: 'Cubic foot per hour'
-                , plural: 'Cubic feet per hour'
+                , plural: 'Cubic feet per hour',
+                 display:  'ft&‌#x00B3;/h'
             }
             , to_anchor: 957.506 / 3600
         }
         , 'yd3/s': {
             name: {
                 singular: 'Cubic yard per second'
-                , plural: 'Cubic yards per second'
+                , plural: 'Cubic yards per second',
+                 display:  'yd&‌#x00B3;/s'
             }
             , to_anchor: 25852.7
         }
         , 'yd3/min': {
             name: {
                 singular: 'Cubic yard per minute'
-                , plural: 'Cubic yards per minute'
+                , plural: 'Cubic yards per minute',
+                 display:  'yd&‌#x00B3/min;'
             }
             , to_anchor: 25852.7 / 60
         }
         , 'yd3/h': {
             name: {
                 singular: 'Cubic yard per hour'
-                , plural: 'Cubic yards per hour'
+                , plural: 'Cubic yards per hour',
+                 display:  'yd&‌#x00B3;/h'
             }
             , to_anchor: 25852.7 / 3600
         }
