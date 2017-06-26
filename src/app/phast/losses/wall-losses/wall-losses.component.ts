@@ -29,6 +29,8 @@ export class WallLossesComponent implements OnInit {
   fieldChange = new EventEmitter<string>();
   @Input()
   isBaseline: boolean;
+  @Output('emitDelete')
+  emitDelete = new EventEmitter<WallLoss>();
 
   _wallLosses: Array<any>;
   firstChange: boolean = true;
@@ -53,8 +55,8 @@ export class WallLossesComponent implements OnInit {
       this._wallLosses = new Array();
     }
     if (this.losses.wallLosses) {
-      //this.setCompareVals();
-      //this.wallLossCompareService.initCompareObjects();
+      this.setCompareVals();
+      this.wallLossCompareService.initCompareObjects();
       this.losses.wallLosses.forEach(loss => {
         let tmpLoss = {
           form: this.wallLossesService.getWallLossForm(loss),
@@ -75,7 +77,7 @@ export class WallLossesComponent implements OnInit {
   addLoss() {
     let tmpForm = this.wallLossesService.initForm();
     let tmpLoss = this.wallLossesService.getWallLossFromForm(tmpForm);
-    this.losses.wallLosses.push(tmpLoss);
+    tmpLoss.id = _.uniqueId('wallLoss_');
     //this.setCompareVals();
     //this.wallLossCompareService.initCompareObjects();
 
@@ -84,15 +86,16 @@ export class WallLossesComponent implements OnInit {
       name: 'Loss #' + (this._wallLosses.length + 1),
       heatLoss: 0.0
     });
-    this.lossState.saved = false;
+    //this.lossState.saved = false;
   }
 
   removeLoss(str: string) {
+    let tmpDeleteLoss = _.filter(this._wallLosses, loss => { return loss.name == str });
     this._wallLosses = _.remove(this._wallLosses, loss => {
       return loss.name != str;
     });
-    this.lossState.saved = false;
-    this.renameLossess();
+    //this.lossState.saved = false;
+    //this.renameLossess();
   }
 
   renameLossess() {
@@ -122,11 +125,15 @@ export class WallLossesComponent implements OnInit {
       tmpWallLoss.heatLoss = loss.heatLoss;
       tmpWallLosses.push(tmpWallLoss);
     })
-    let priorLength = this.losses.wallLosses.length;
     this.losses.wallLosses = tmpWallLosses;
-    this.lossState.numLosses = this.losses.wallLosses.length;
-    this.lossState.saved = true;
-    this.setCompareVals();
+    if (this.isBaseline) {
+      this.wallLossCompareService.baselineWallLosses = this.losses.wallLosses;
+    } else {
+      this.wallLossCompareService.modifiedWallLosses = this.losses.wallLosses;
+    }
+    //this.lossState.numLosses = this.losses.wallLosses.length;
+    //this.lossState.saved = true;
+
     //this.checkHeatLoss();
     this.savedLoss.emit(true);
   }
@@ -144,8 +151,6 @@ export class WallLossesComponent implements OnInit {
     if (this.wallLossCompareService.differentArray) {
       if (this.wallLossCompareService.differentArray.length != 0) {
         this.wallLossCompareService.checkWallLosses();
-      } else {
-        this.wallLossCompareService.initCompareObjects();
       }
     }
   }

@@ -3,7 +3,7 @@ import { PHAST, Losses, Modification } from '../../shared/models/phast';
 import { Settings } from '../../shared/models/settings';
 import * as _ from 'lodash';
 import { ModalDirective } from 'ngx-bootstrap';
-
+import { WallLossCompareService } from './wall-losses/wall-loss-compare.service';
 @Component({
   selector: 'app-losses',
   templateUrl: 'losses.component.html',
@@ -18,6 +18,8 @@ export class LossesComponent implements OnInit {
   saved = new EventEmitter<boolean>();
   @Input()
   settings: Settings;
+
+  lossAdded: boolean;
 
   _modifications: Modification[];
   isDropdownOpen: boolean = false;
@@ -88,7 +90,7 @@ export class LossesComponent implements OnInit {
 
   showSetupDialog: boolean;
   isLossesSetup: boolean;
-  constructor() { }
+  constructor(private wallLossCompareService: WallLossCompareService) { }
 
   ngOnInit() {
     this._modifications = new Array<Modification>();
@@ -122,6 +124,12 @@ export class LossesComponent implements OnInit {
   saveModifications() {
     if (this._modifications) {
       this.phast.modifications = (JSON.parse(JSON.stringify(this._modifications)));
+      if (this.lossAdded) {
+        debugger
+
+        this.wallLossCompareService.initCompareObjects();
+        this.lossAdded = false;
+      }
       this.saved.emit(true);
       this.showEditModification = false;
       this.editModification = null;
@@ -151,7 +159,6 @@ export class LossesComponent implements OnInit {
     }
     tmpModification.phast.losses = (JSON.parse(JSON.stringify(this.phast.losses)));
     tmpModification.phast.name = 'Modification ' + (this._modifications.length + 1);
-    console.log(tmpModification);
     this._modifications.unshift(tmpModification);
     this.modificationIndex = this._modifications.length - 1;
     this.modificationSelected = true;
@@ -188,6 +195,7 @@ export class LossesComponent implements OnInit {
   }
 
   addLoss() {
+    this.lossAdded = true;
     this.addLossToggle = !this.addLossToggle;
   }
 

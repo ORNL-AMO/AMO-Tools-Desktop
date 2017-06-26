@@ -13,6 +13,7 @@ export class WallLossCompareService {
   constructor() { }
 
   initCompareObjects() {
+    debugger
     this.differentArray = new Array();
     if (this.baselineWallLosses && this.modifiedWallLosses) {
       if (this.baselineWallLosses.length == this.modifiedWallLosses.length) {
@@ -23,6 +24,7 @@ export class WallLossCompareService {
             different: this.initDifferentObject()
           })
         }
+        debugger
         this.checkWallLosses();
       } else {
         //NO IDEA WHAT TO DO IN THIS CASE
@@ -31,13 +33,9 @@ export class WallLossCompareService {
   }
 
   checkWallLosses() {
-    console.log('check')
     if (this.baselineWallLosses && this.modifiedWallLosses) {
-      console.log('passed 1')
       if (this.baselineWallLosses.length != 0 && this.modifiedWallLosses.length != 0) {
-        console.log('pass 2')
         for (let lossIndex = 0; lossIndex < this.baselineWallLosses.length; lossIndex++) {
-          console.log('for: ' + lossIndex)
           this.checkSurfaceTemperature(lossIndex);
           this.checkAmbientTemperature(lossIndex);
           this.checkSurfaceArea(lossIndex);
@@ -54,7 +52,6 @@ export class WallLossCompareService {
       }
     }
     else if ((this.baselineWallLosses && !this.modifiedWallLosses) || (!this.baselineWallLosses && this.modifiedWallLosses)) {
-      console.log('only one loss');
       for (let lossIndex = 0; lossIndex < this.baselineWallLosses.length; lossIndex++) {
         this.disableAll(lossIndex);
       }
