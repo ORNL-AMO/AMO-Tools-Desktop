@@ -130,6 +130,7 @@ export class WallLossesComponent implements OnInit {
       this.wallLossCompareService.baselineWallLosses = this.losses.wallLosses;
     } else {
       this.wallLossCompareService.modifiedWallLosses = this.losses.wallLosses;
+      this.wallLossCompareService.initCompareObjects();
     }
     //this.lossState.numLosses = this.losses.wallLosses.length;
     //this.lossState.saved = true;
