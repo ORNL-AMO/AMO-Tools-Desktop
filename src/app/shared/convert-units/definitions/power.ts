@@ -3,41 +3,47 @@ export const power = {
         W: {
             name: {
                 singular: 'Watt'
-                , plural: 'Watts'
+                , plural: 'Watts' ,
+                 display:  '(W)'
             }
             , to_anchor: 1
         }
         , mW: {
             name: {
                 singular: 'Milliwatt'
-                , plural: 'Milliwatts'
+                , plural: 'Milliwatts' ,
+                 display:  '(mW)'
             }
             , to_anchor: .001
         }
         , kW: {
             name: {
                 singular: 'Kilowatt'
-                , plural: 'Kilowatts'
+                , plural: 'Kilowatts' ,
+                 display:  '(kW)'
             }
             , to_anchor: 1000
         }
         , MW: {
             name: {
                 singular: 'Megawatt'
-                , plural: 'Megawatts'
+                , plural: 'Megawatts' ,
+                 display:  '(MW)'
             }
             , to_anchor: 1000000
         }
         , GW: {
             name: {
                 singular: 'Gigawatt'
-                , plural: 'Gigawatts'
+                , plural: 'Gigawatts' ,
+                 display:  '(GW)'
             }
             , to_anchor: 1000000000
         }, hp: {
             name: {
-                singular: 'Horse Power',
-                plural: 'Horse Power'
+               singular: 'Horse Power',
+                 plural: 'Horse Power' ,
+                display:  '(hp)'
             },
             to_anchor: 745.7
         }

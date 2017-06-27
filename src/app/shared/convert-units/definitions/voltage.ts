@@ -3,21 +3,24 @@ export const voltage = {
         V: {
             name: {
                 singular: 'Volt'
-                , plural: 'Volts'
+                , plural: 'Volts' ,
+                 display:  '(V)'
             }
             , to_anchor: 1
         }
         , mV: {
             name: {
                 singular: 'Millivolt'
-                , plural: 'Millivolts'
+                , plural: 'Millivolts' ,
+                 display:  '(mV)'
             }
             , to_anchor: .001
         }
         , kV: {
             name: {
                 singular: 'Kilovolt'
-                , plural: 'Kilovolts'
+                , plural: 'Kilovolts' ,
+                 display:  '(kV)'
             }
             , to_anchor: 1000
         }

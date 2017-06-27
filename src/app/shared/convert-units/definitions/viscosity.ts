@@ -3,14 +3,16 @@ export const viscosity = {
         cST: {
             name: {
                 singular: 'Centistoke',
-                plural: 'Centistokes'
+                  plural: 'Centistokes' ,
+                 display:  '(cST)'
             },
             to_anchor: 1
         },
         St: {
             name: {
                 singular: 'Stoke',
-                plural: 'Stokes'
+                  plural: 'Stokes' ,
+                 display:  '(St)'
             },
             to_anchor: 100
         },

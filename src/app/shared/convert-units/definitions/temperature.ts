@@ -3,7 +3,8 @@ export const temperature = {
         C: {
             name: {
                 singular: 'degree Celsius'
-                , plural: 'degrees Celsius'
+                , plural: 'degrees Celsius' ,
+                 display:  '(C)'
             }
             , to_anchor: 1
             , anchor_shift: 0
@@ -11,7 +12,8 @@ export const temperature = {
         K: {
             name: {
                 singular: 'degree Kelvin'
-                , plural: 'degrees Kelvin'
+                , plural: 'degrees Kelvin' ,
+                 display:  '(K)'
             }
             , to_anchor: 1
             , anchor_shift: 273.15
@@ -21,7 +23,8 @@ export const temperature = {
         F: {
             name: {
                 singular: 'degree Fahrenheit'
-                , plural: 'degrees Fahrenheit'
+                , plural: 'degrees Fahrenheit' ,
+                 display:  '(F)'
             }
             , to_anchor: 1
         }

@@ -4,35 +4,40 @@ export const apparentPower = {
         VA: {
             name: {
                 singular: 'Volt-Ampere'
-                , plural: 'Volt-Amperes'
+                , plural: 'Volt-Amperes',
+                 display:  '(VA)'
             }
             , to_anchor: 1
         }
         , mVA: {
             name: {
                 singular: 'Millivolt-Ampere'
-                , plural: 'Millivolt-Amperes'
+                , plural: 'Millivolt-Amperes',
+                 display:  '(mVA)'
             }
             , to_anchor: .001
         }
         , kVA: {
             name: {
                 singular: 'Kilovolt-Ampere'
-                , plural: 'Kilovolt-Amperes'
+                , plural: 'Kilovolt-Amperes',
+                 display:  '(kVA)'
             }
             , to_anchor: 1000
         }
         , MVA: {
             name: {
                 singular: 'Megavolt-Ampere'
-                , plural: 'Megavolt-Amperes'
+                , plural: 'Megavolt-Amperes',
+                 display:  '(MVA)'
             }
             , to_anchor: 1000000
         }
         , GVA: {
             name: {
                 singular: 'Gigavolt-Ampere'
-                , plural: 'Gigavolt-Amperes'
+                , plural: 'Gigavolt-Amperes',
+                 display:  '(GVA)'
             }
             , to_anchor: 1000000000
         }

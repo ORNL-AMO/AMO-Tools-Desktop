@@ -19,28 +19,32 @@ export const volume = {
         , mL: {
             name: {
                 singular: 'Milliliter'
-                , plural: 'Milliliters'
+                , plural: 'Milliliters' ,
+                 display:  '(mL)'
             }
             , to_anchor: 1 / 1000
         }
         , cL: {
             name: {
                 singular: 'Centiliter'
-                , plural: 'Centiliters'
+                , plural: 'Centiliters' ,
+                 display:  '(cL)'
             }
             , to_anchor: 1 / 100
         }
         , dL: {
             name: {
                 singular: 'Deciliter'
-                , plural: 'Deciliters'
+                , plural: 'Deciliters' ,
+              display:  '(dL)'
             }
             , to_anchor: 1 / 10
         }
         , L: {
             name: {
                 singular: 'Liter'
-                , plural: 'Liters'
+                , plural: 'Liters' ,
+                 display:  '(L)'
             }
             , to_anchor: 1
         }
@@ -48,7 +52,7 @@ export const volume = {
             name: {
                 singular: 'Cubic meter'
                 , plural: 'Cubic meters',
-                 display:  'm&‌#x00B3;'
+                 display:  'm&#x00B3;'
             }
             , to_anchor: 1000
         }
@@ -65,42 +69,48 @@ export const volume = {
         , krm: {
             name: {
                 singular: 'Matsked'
-                , plural: 'Matskedar'
+                , plural: 'Matskedar' ,
+              display:  '(krm)'
             }
             , to_anchor: 1 / 1000
         }
         , tsk: {
             name: {
                 singular: 'Tesked'
-                , plural: 'Teskedar'
+                , plural: 'Teskedar' ,
+                 display:  '(tsk)'
             }
             , to_anchor: 5 / 1000
         }
         , msk: {
             name: {
                 singular: 'Matsked'
-                , plural: 'Matskedar'
+                , plural: 'Matskedar' ,
+                 display:  '(msk)'
             }
             , to_anchor: 15 / 1000
         }
         , kkp: {
             name: {
                 singular: 'Kaffekopp'
-                , plural: 'Kaffekoppar'
+                , plural: 'Kaffekoppar' ,
+                 display:  '(kkp)'
             }
             , to_anchor: 150 / 1000
         }
         , glas: {
             name: {
                 singular: 'Glas'
-                , plural: 'Glas'
+                , plural: 'Glas' ,
+                 display:  '(glas)'
             }
             , to_anchor: 200 / 1000
         }
         , kanna: {
             name: {
                 singular: 'Kanna'
-                , plural: 'Kannor'
+                , plural: 'Kannor' ,
+                 display:  '(kanna)'
             }
             , to_anchor: 2.617
         }
@@ -110,14 +120,16 @@ export const volume = {
         tsp: {
             name: {
                 singular: 'Teaspoon'
-                , plural: 'Teaspoons'
+                , plural: 'Teaspoons' ,
+                 display:  '(tsp)'
             }
             , to_anchor: 1 / 6
         }
         , Tbs: {
             name: {
                 singular: 'Tablespoon'
-                , plural: 'Tablespoons'
+                , plural: 'Tablespoons' ,
+                 display:  '(Tbs)'
             }
             , to_anchor: 1 / 2
         }
@@ -132,42 +144,48 @@ export const volume = {
         , 'fl-oz': {
             name: {
                 singular: 'Fluid Ounce'
-                , plural: 'Fluid Ounces'
+                , plural: 'Fluid Ounces' ,
+                 display:  '(fl-oz)'
             }
             , to_anchor: 1
         }
         , cup: {
             name: {
                 singular: 'Cup'
-                , plural: 'Cups'
+                , plural: 'Cups' ,
+              display:  '(cup)'
             }
             , to_anchor: 8
         }
         , pnt: {
             name: {
                 singular: 'Pint'
-                , plural: 'Pints'
+                , plural: 'Pints' ,
+                 display:  '(pnt)'
             }
             , to_anchor: 16
         }
         , qt: {
             name: {
                 singular: 'Quart'
-                , plural: 'Quarts'
+                , plural: 'Quarts' ,
+                 display:  '(qt)'
             }
             , to_anchor: 32
         }
         , gal: {
             name: {
                 singular: 'Gallon'
-                , plural: 'Gallons'
+                , plural: 'Gallons' ,
+                 display:  '(gal)'
             }
             , to_anchor: 128
         }
         , ft3: {
             name: {
                 singular: 'Cubic foot'
-                , plural: 'Cubic feet'
+                , plural: 'Cubic feet' ,
+                 display:  'ft&#x00B3'
             }
             , to_anchor: 957.506
         }
