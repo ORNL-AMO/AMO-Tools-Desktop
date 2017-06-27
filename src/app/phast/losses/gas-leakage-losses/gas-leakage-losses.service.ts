@@ -2,11 +2,29 @@ import { Injectable } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Losses } from '../../../shared/models/phast';
 import { LeakageLoss } from '../../../shared/models/losses/leakageLoss';
-
+import { BehaviorSubject } from 'rxjs';
 @Injectable()
 export class GasLeakageLossesService {
 
-  constructor(private formBuilder: FormBuilder) { }
+  deleteLossIndex: BehaviorSubject<number>;
+  addLossBaselineMonitor: BehaviorSubject<any>;
+  addLossModificationMonitor: BehaviorSubject<any>;
+  constructor(private formBuilder: FormBuilder) {
+    this.deleteLossIndex = new BehaviorSubject<number>(null);
+    this.addLossBaselineMonitor = new BehaviorSubject<any>(null);
+    this.addLossModificationMonitor = new BehaviorSubject<any>(null);
+  }
+
+  setDelete(num: number) {
+    this.deleteLossIndex.next(num);
+  }
+  addLoss(bool: boolean) {
+    if (bool) {
+      this.addLossModificationMonitor.next(true);
+    } else {
+      this.addLossBaselineMonitor.next(true);
+    }
+  }
 
   initForm() {
     return this.formBuilder.group({
