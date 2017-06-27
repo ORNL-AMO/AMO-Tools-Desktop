@@ -68,7 +68,7 @@ export const volumeFlowRate = {
             name: {
                 singular: 'Kiloliter per second'
                 , plural: 'Kiloliters per second' ,
-                 display:  '(kL/S)'
+                 display:  '(kL/s)'
             }
             , to_anchor: 1000
         }
@@ -92,7 +92,7 @@ export const volumeFlowRate = {
             name: {
                 singular: 'Cubic meter per second'
                 , plural: 'Cubic meters per second',
-                 display:  'm&#x00B3;/s'
+                 display:  '(m&#x00B3;/s)'
             }
             , to_anchor: 1000
         }
@@ -100,7 +100,7 @@ export const volumeFlowRate = {
             name: {
                 singular: 'Cubic meter per minute'
                 , plural: 'Cubic meters per minute',
-                 display:  'm&#x00B3;/min'
+                 display:  '(m&#x00B3;/min)'
             }
             , to_anchor: 50 / 3
         }
@@ -108,7 +108,7 @@ export const volumeFlowRate = {
             name: {
                 singular: 'Cubic meter per hour'
                 , plural: 'Cubic meters per hour',
-                 display:  'm&#x00B3;/h'
+                 display:  '(m&#x00B3;/h)'
             }
             , to_anchor: 5 / 18
         }
@@ -116,7 +116,7 @@ export const volumeFlowRate = {
             name: {
                 singular: 'Cubic kilometer per second'
                 , plural: 'Cubic kilometers per second',
-                 display:  'km&#x00B3;/s'
+                 display:  '(km&#x00B3;/s)'
             }
             , to_anchor: 1000000000000
         }
@@ -142,7 +142,7 @@ export const volumeFlowRate = {
             name: {
                 singular: 'Cubic inch per second'
                 , plural: 'Cubic inches per second',
-                 display:  'in&#x00B3;/s'
+                 display:  '(in&#x00B3;/s)'
             }
             , to_anchor: 0.55411
         }
@@ -150,7 +150,7 @@ export const volumeFlowRate = {
             name: {
                 singular: 'Cubic inch per minute'
                 , plural: 'Cubic inches per minute',
-                 display:  'in&#x00B3;/min'
+                 display:  '(in&#x00B3;/min)'
             }
             , to_anchor: 0.55411 / 60
         }
@@ -158,7 +158,7 @@ export const volumeFlowRate = {
             name: {
                 singular: 'Cubic inch per hour'
                 , plural: 'Cubic inches per hour',
-                 display:  'in&#x00B3;/h'
+                 display:  '(in&#x00B3;/h)'
             }
             , to_anchor: 0.55411 / 3600
         }
@@ -264,7 +264,7 @@ export const volumeFlowRate = {
             name: {
                 singular: 'Cubic foot per second'
                 , plural: 'Cubic feet per second',
-                 display:  'ft&#x00B3;/s'
+                 display:  '(ft&#x00B3;/s)'
             }
             , to_anchor: 957.506
         }
@@ -272,7 +272,7 @@ export const volumeFlowRate = {
             name: {
                 singular: 'Cubic foot per minute'
                 , plural: 'Cubic feet per minute' ,
-                 display:  'ft&#x00B3;/min'
+                 display:  '(ft&#x00B3;/min)'
             }
             , to_anchor: 957.506 / 60
         }
@@ -280,7 +280,7 @@ export const volumeFlowRate = {
             name: {
                 singular: 'Cubic foot per hour'
                 , plural: 'Cubic feet per hour',
-                 display:  'ft&#x00B3;/h'
+                 display:  '(ft&#x00B3;/h)'
             }
             , to_anchor: 957.506 / 3600
         }
@@ -288,7 +288,7 @@ export const volumeFlowRate = {
             name: {
                 singular: 'Cubic yard per second'
                 , plural: 'Cubic yards per second',
-                 display:  'yd&#x00B3;/s'
+                 display:  '(yd&#x00B3;/s)'
             }
             , to_anchor: 25852.7
         }
@@ -296,7 +296,7 @@ export const volumeFlowRate = {
             name: {
                 singular: 'Cubic yard per minute'
                 , plural: 'Cubic yards per minute',
-                 display:  'yd&#x00B3;/min'
+                 display:  '(yd&#x00B3;/min)'
             }
             , to_anchor: 25852.7 / 60
         }
@@ -304,7 +304,7 @@ export const volumeFlowRate = {
             name: {
                 singular: 'Cubic yard per hour'
                 , plural: 'Cubic yards per hour',
-                 display:  'yd&#x00B3;/h'
+                 display:  '(yd&#x00B3;/h)'
             }
             , to_anchor: 25852.7 / 3600
         }

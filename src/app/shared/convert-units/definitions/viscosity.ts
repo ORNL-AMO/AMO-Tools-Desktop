@@ -4,7 +4,7 @@ export const viscosity = {
             name: {
                 singular: 'Centistoke',
                   plural: 'Centistokes' ,
-                 display:  '(cST)'
+                 display:  '(cSt)'
             },
             to_anchor: 1
         },
@@ -20,7 +20,7 @@ export const viscosity = {
             name: {
                 singular: 'Square Centimeter per Second',
                 plural: 'Square Centimeters per Second',
-                display:  'cm&#x00B2;/s'
+                display:  '(cm&#x00B2;/s)'
             },
             to_anchor: 100
         },
@@ -28,7 +28,7 @@ export const viscosity = {
             name: {
                 singular: 'Square Meter per Second',
                 plural: 'Square Meters per Second',
-                display: 'm&#x00B2;/s'
+                display: '(m&#x00B2;/s)'
             },
             to_anchor: 1000000
         }
