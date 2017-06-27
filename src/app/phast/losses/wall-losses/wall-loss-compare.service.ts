@@ -13,18 +13,14 @@ export class WallLossCompareService {
   constructor() { }
 
   initCompareObjects() {
-    debugger
+    console.log('init called')
     this.differentArray = new Array();
     if (this.baselineWallLosses && this.modifiedWallLosses) {
       if (this.baselineWallLosses.length == this.modifiedWallLosses.length) {
         let numLosses = this.baselineWallLosses.length;
         for (let i = 0; i < numLosses; i++) {
-          this.differentArray.push({
-            lossIndex: i,
-            different: this.initDifferentObject()
-          })
+          this.addObject(i);
         }
-        debugger
         this.checkWallLosses();
       } else {
         //NO IDEA WHAT TO DO IN THIS CASE
@@ -32,7 +28,17 @@ export class WallLossCompareService {
     }
   }
 
+  addObject(num: number) {
+    this.differentArray.push({
+      lossIndex: num,
+      different: this.initDifferentObject()
+    })
+    console.log('added');
+    console.log(this.differentArray.length);
+  }
+
   checkWallLosses() {
+    console.log('check losses called')
     if (this.baselineWallLosses && this.modifiedWallLosses) {
       if (this.baselineWallLosses.length != 0 && this.modifiedWallLosses.length != 0) {
         for (let lossIndex = 0; lossIndex < this.baselineWallLosses.length; lossIndex++) {

@@ -124,12 +124,6 @@ export class LossesComponent implements OnInit {
   saveModifications() {
     if (this._modifications) {
       this.phast.modifications = (JSON.parse(JSON.stringify(this._modifications)));
-      // if (this.lossAdded) {
-      //   debugger
-
-      //   this.wallLossCompareService.initCompareObjects();
-      //   this.lossAdded = false;
-      // }
       this.saved.emit(true);
       this.showEditModification = false;
       this.editModification = null;

@@ -78,8 +78,12 @@ export class WallLossesComponent implements OnInit {
     let tmpForm = this.wallLossesService.initForm();
     let tmpLoss = this.wallLossesService.getWallLossFromForm(tmpForm);
     tmpLoss.id = _.uniqueId('wallLoss_');
-    //this.setCompareVals();
-    //this.wallLossCompareService.initCompareObjects();
+   
+    //check compare service objects has been initialized
+    //have modify conditions view call so that it isn't called twice
+    if (this.wallLossCompareService.differentArray && !this.isBaseline) {
+      this.wallLossCompareService.addObject(this.wallLossCompareService.differentArray.length - 1);
+    }
 
     this._wallLosses.push({
       form: tmpForm,
@@ -126,12 +130,9 @@ export class WallLossesComponent implements OnInit {
       tmpWallLosses.push(tmpWallLoss);
     })
     this.losses.wallLosses = tmpWallLosses;
-    if (this.isBaseline) {
-      this.wallLossCompareService.baselineWallLosses = this.losses.wallLosses;
-    } else {
-      this.wallLossCompareService.modifiedWallLosses = this.losses.wallLosses;
-      this.wallLossCompareService.initCompareObjects();
-    }
+
+    //set values for compare service
+    this.setCompareVals();
     //this.lossState.numLosses = this.losses.wallLosses.length;
     //this.lossState.saved = true;
 
@@ -149,7 +150,9 @@ export class WallLossesComponent implements OnInit {
     } else {
       this.wallLossCompareService.modifiedWallLosses = this.losses.wallLosses;
     }
-    if (this.wallLossCompareService.differentArray) {
+    //if compare objects have been initialized check them
+    //use modify conditions view to call for the check
+    if (this.wallLossCompareService.differentArray && !this.isBaseline) {
       if (this.wallLossCompareService.differentArray.length != 0) {
         this.wallLossCompareService.checkWallLosses();
       }
