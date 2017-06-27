@@ -13,10 +13,11 @@
   <div class="row">
     <div class="col-12">
       <div class="pull-left">
-        <input *ngIf="isBaseline" type="text" id="{{'wallLossName'+_lossIndex}}" class="form-control" [(ngModel)]="loss.name" />
-        <h6 *ngIf="!isBaseline" >{{loss.name}} Modification</h6>
+        <!--<input *ngIf="isBaseline" type="text" id="{{'wallLossName_'+lossIndex}}" [disabled]="!baselineSelected" class="form-control" [(ngModel)]="loss.name" />-->
+        <h6 *ngIf="isBaseline">{{loss.name}}</h6>
+        <h6 *ngIf="!isBaseline">{{loss.name}} Modification</h6>
       </div>
-      <button *ngIf="isBaseline" class="close pull-right" aria-label="Close" (click)="removeLoss(loss.name)">
+      <button *ngIf="isBaseline" class="close pull-right" aria-label="Close" (click)="removeLoss(lossIndex)">
       <span aria-hidden="true">&times;</span>
     </button>
     </div>
