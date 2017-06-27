@@ -3,7 +3,7 @@ import { PHAST, Losses, Modification } from '../../shared/models/phast';
 import { Settings } from '../../shared/models/settings';
 import * as _ from 'lodash';
 import { ModalDirective } from 'ngx-bootstrap';
-import { WallLossCompareService } from './wall-losses/wall-loss-compare.service';
+
 @Component({
   selector: 'app-losses',
   templateUrl: 'losses.component.html',
@@ -90,7 +90,7 @@ export class LossesComponent implements OnInit {
 
   showSetupDialog: boolean;
   isLossesSetup: boolean;
-  constructor(private wallLossCompareService: WallLossCompareService) { }
+  constructor() { }
 
   ngOnInit() {
     this._modifications = new Array<Modification>();
@@ -101,7 +101,6 @@ export class LossesComponent implements OnInit {
       this.showSetupDialog = true;
     }
     if (this.phast.modifications) {
-      console.log(this.phast.modifications);
       this._modifications = (JSON.parse(JSON.stringify(this.phast.modifications)));
     }
   }
@@ -124,16 +123,11 @@ export class LossesComponent implements OnInit {
   }
   saveModifications() {
     if (this._modifications) {
-      console.log(this._modifications);
-      console.log('mod')
       this.phast.modifications = (JSON.parse(JSON.stringify(this._modifications)));
       this.saved.emit(true);
       this.showEditModification = false;
       this.editModification = null;
     }
-    // else{
-    //   this.saved.emit(true);
-    // }
   }
 
   addModification() {
@@ -221,7 +215,7 @@ export class LossesComponent implements OnInit {
   }
 
   hideSetupDialog() {
-    this.saveModifications();
+    this.saved.emit(true);
     this.showSetupDialog = false;
   }
 
