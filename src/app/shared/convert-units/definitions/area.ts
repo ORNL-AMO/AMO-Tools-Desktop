@@ -3,21 +3,25 @@ export const area = {
         mm2: {
             name: {
                 singular: 'Square Millimeter'
-                , plural: 'Square Millimeters'
+                , plural: 'Square Millimeters' ,
+                 display:  'mm&#x00B2;'
             }
             , to_anchor: 1 / 1000000
         }
         , cm2: {
             name: {
                 singular: 'Centimeter'
-                , plural: 'Centimeters'
+                , plural: 'Centimeters',
+              display:  'cm&#x00B2;'
+
             }
             , to_anchor: 1 / 10000
         }
         , m2: {
             name: {
                 singular: 'Square Meter'
-                , plural: 'Square Meters'
+                , plural: 'Square Meters',
+              display:  'm&#x00B2;'
             }
             , to_anchor: 1
         }
@@ -31,7 +35,8 @@ export const area = {
         , km2: {
             name: {
                 singular: 'Square Kilometer'
-                , plural: 'Square Kilometers'
+                , plural: 'Square Kilometers' ,
+              display:  'km&#x00B2;'
             }
             , to_anchor: 1000000
         }
@@ -40,21 +45,24 @@ export const area = {
         'in2': {
             name: {
                 singular: 'Square Inch'
-                , plural: 'Square Inches'
+                , plural: 'Square Inches',
+              display:  'in&#x00B2;'
             }
             , to_anchor: 1 / 144
         }
         , yd2: {
             name: {
                 singular: 'Square Yard'
-                , plural: 'Square Yards'
+                , plural: 'Square Yards',
+              display:  'yd&#x00B2;'
             }
             , to_anchor: 9
         }
         , ft2: {
             name: {
                 singular: 'Square Foot'
-                , plural: 'Square Feet'
+                , plural: 'Square Feet',
+              display:  'ft&#x00B2;'
             }
             , to_anchor: 1
         }
@@ -68,7 +76,8 @@ export const area = {
         , mi2: {
             name: {
                 singular: 'Square Mile'
-                , plural: 'Square Miles'
+                , plural: 'Square Miles',
+              display:  'mi&#x00B2;'
             }
             , to_anchor: 27878400
         }
