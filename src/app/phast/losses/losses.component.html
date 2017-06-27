@@ -95,8 +95,8 @@
         [(lossState)]="lossesStates.chargeMaterial" *ngIf="lossesTab == 'charge-material'"></app-charge-material>
 
       <app-wall-losses (fieldChange)="changeField($event)" [baselineSelected]="modificationSelected" (savedLoss)="saveModifications()"
-        [(losses)]="_modifications[modificationIndex].phast.losses" [addLossToggle]="addLossToggle" [addLossToggle]="addLossToggle"
-        [saveClicked]="saveClicked" [(lossState)]="lossesStates.wallLosses" *ngIf="lossesTab == 'wall-losses'"></app-wall-losses>
+        [(losses)]="_modifications[modificationIndex].phast.losses" [saveClicked]="saveClicked" [(lossState)]="lossesStates.wallLosses"
+        *ngIf="lossesTab == 'wall-losses'"></app-wall-losses>
 
       <app-atmosphere-losses (fieldChange)="changeField($event)" [baselineSelected]="modificationSelected" (savedLoss)="saveModifications()"
         [(losses)]="_modifications[modificationIndex].phast.losses" [addLossToggle]="addLossToggle" [saveClicked]="saveClicked"
@@ -131,8 +131,8 @@
         [(lossState)]="lossesStates.otherLosses" *ngIf="lossesTab == 'other-losses'"></app-other-losses>
 
       <app-slag (fieldChange)="changeField($event)" [baselineSelected]="modificationSelected" (savedLoss)="saveModifications()"
-        [(losses)]="_modifications[modificationIndex].phast.losses" [addLossToggle]="addLossToggle" [(lossState)]="lossesStates.slagLosses"
-        [saveClicked]="saveClicked" *ngIf="lossesTab == 'slag'"></app-slag>
+        [(losses)]="_modifications[modificationIndex].phast.losses" [(lossState)]="lossesStates.slagLosses" [saveClicked]="saveClicked"
+        *ngIf="lossesTab == 'slag'"></app-slag>
 
       <app-energy-input (fieldChange)="changeField($event)" [baselineSelected]="modificationSelected" (savedLoss)="saveModifications()"
         [(losses)]="_modifications[modificationIndex].phast.losses" [addLossToggle]="addLossToggle" [(lossState)]="lossesStates.energyInput"

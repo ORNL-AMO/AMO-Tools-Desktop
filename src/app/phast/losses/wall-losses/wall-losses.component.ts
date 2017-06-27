@@ -29,8 +29,6 @@ export class WallLossesComponent implements OnInit {
   fieldChange = new EventEmitter<string>();
   @Input()
   isBaseline: boolean;
-  @Output('emitDelete')
-  emitDelete = new EventEmitter<number>();
 
   _wallLosses: Array<any>;
   firstChange: boolean = true;
@@ -91,9 +89,19 @@ export class WallLossesComponent implements OnInit {
       }
     })
 
+    //add monitor so both baseline and modification add loss when clicked
     if (this.isBaseline) {
-      //add monitor to add baseline loss if loss is added from modification
-      this.wallLossesService.addLossMonitor.subscribe((val) => {
+      this.wallLossesService.addLossBaselineMonitor.subscribe((val) => {
+        if (val == true) {
+          this._wallLosses.push({
+            form: this.wallLossesService.initForm(),
+            name: 'Loss #' + (this._wallLosses.length + 1),
+            heatLoss: 0.0
+          })
+        }
+      })
+    } else {
+      this.wallLossesService.addLossModifiedMonitor.subscribe((val) => {
         if (val == true) {
           this._wallLosses.push({
             form: this.wallLossesService.initForm(),
@@ -110,19 +118,18 @@ export class WallLossesComponent implements OnInit {
     this.wallLossCompareService.baselineWallLosses = null;
     this.wallLossCompareService.modifiedWallLosses = null;
     this.wallLossesService.deleteLossIndex.next(null);
-    this.wallLossesService.addLossMonitor.next(false);
-    this.wallLossesService.deleteLossIndex.unsubscribe();
-    this.wallLossesService.addLossMonitor.unsubscribe();
+    this.wallLossesService.addLossBaselineMonitor.next(false);
+    this.wallLossesService.addLossModifiedMonitor.next(false);
+    //this.wallLossesService.deleteLossIndex.unsubscribe();
+    //this.wallLossesService.addLossMonitor.unsubscribe();
   }
 
   addLoss() {
     //if adding loss in modification signal to baseline to add loss
-    if (!this.isBaseline) {
-      this.wallLossesService.addLoss();
-    }
+    this.wallLossesService.addLoss(this.isBaseline);
     //check compare service objects has been initialized
     //have modify conditions view call so that it isn't called twice => (!this.isBaseline)
-    if (this.wallLossCompareService.differentArray && !this.isBaseline) {
+    if (this.wallLossCompareService.differentArray) {
       this.wallLossCompareService.addObject(this.wallLossCompareService.differentArray.length - 1);
     }
     //add new empty loss to component data

@@ -96,43 +96,45 @@ export class SlagFormComponent implements OnInit {
 
   initDifferenceMonitor() {
     if (this.slagCompareService.baselineSlag && this.slagCompareService.modifiedSlag && this.slagCompareService.differentArray.length != 0) {
-      let doc = this.windowRefService.getDoc();
+      if (this.slagCompareService.differentArray[this.lossIndex]) {
+        let doc = this.windowRefService.getDoc();
 
-      //weight
-      this.slagCompareService.differentArray[this.lossIndex].different.weight.subscribe((val) => {
-        let weightElements = doc.getElementsByName('weight_' + this.lossIndex);
-        weightElements.forEach(element => {
-          element.classList.toggle('indicate-different', val);
-        });
-      })
-      //inletTemperature
-      this.slagCompareService.differentArray[this.lossIndex].different.inletTemperature.subscribe((val) => {
-        let inletTemperatureElements = doc.getElementsByName('inletTemperature_' + this.lossIndex);
-        inletTemperatureElements.forEach(element => {
-          element.classList.toggle('indicate-different', val);
-        });
-      })
-      //outletTemperature
-      this.slagCompareService.differentArray[this.lossIndex].different.outletTemperature.subscribe((val) => {
-        let outletTemperatureElements = doc.getElementsByName('outletTemperature_' + this.lossIndex);
-        outletTemperatureElements.forEach(element => {
-          element.classList.toggle('indicate-different', val);
-        });
-      })
-      //specificHeat 
-      this.slagCompareService.differentArray[this.lossIndex].different.specificHeat.subscribe((val) => {
-        let specificHeatElements = doc.getElementsByName('specificHeat_' + this.lossIndex);
-        specificHeatElements.forEach(element => {
-          element.classList.toggle('indicate-different', val);
-        });
-      })
-      //correctionFactor
-      this.slagCompareService.differentArray[this.lossIndex].different.correctionFactor.subscribe((val) => {
-        let correctionFactorElements = doc.getElementsByName('correctionFactor_' + this.lossIndex);
-        correctionFactorElements.forEach(element => {
-          element.classList.toggle('indicate-different', val);
-        });
-      })
+        //weight
+        this.slagCompareService.differentArray[this.lossIndex].different.weight.subscribe((val) => {
+          let weightElements = doc.getElementsByName('weight_' + this.lossIndex);
+          weightElements.forEach(element => {
+            element.classList.toggle('indicate-different', val);
+          });
+        })
+        //inletTemperature
+        this.slagCompareService.differentArray[this.lossIndex].different.inletTemperature.subscribe((val) => {
+          let inletTemperatureElements = doc.getElementsByName('inletTemperature_' + this.lossIndex);
+          inletTemperatureElements.forEach(element => {
+            element.classList.toggle('indicate-different', val);
+          });
+        })
+        //outletTemperature
+        this.slagCompareService.differentArray[this.lossIndex].different.outletTemperature.subscribe((val) => {
+          let outletTemperatureElements = doc.getElementsByName('outletTemperature_' + this.lossIndex);
+          outletTemperatureElements.forEach(element => {
+            element.classList.toggle('indicate-different', val);
+          });
+        })
+        //specificHeat 
+        this.slagCompareService.differentArray[this.lossIndex].different.specificHeat.subscribe((val) => {
+          let specificHeatElements = doc.getElementsByName('specificHeat_' + this.lossIndex);
+          specificHeatElements.forEach(element => {
+            element.classList.toggle('indicate-different', val);
+          });
+        })
+        //correctionFactor
+        this.slagCompareService.differentArray[this.lossIndex].different.correctionFactor.subscribe((val) => {
+          let correctionFactorElements = doc.getElementsByName('correctionFactor_' + this.lossIndex);
+          correctionFactorElements.forEach(element => {
+            element.classList.toggle('indicate-different', val);
+          });
+        })
+      }
     }
   }
 }
