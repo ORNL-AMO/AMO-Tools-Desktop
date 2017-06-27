@@ -12,8 +12,6 @@ export class WallLossesFormComponent implements OnInit {
   @Output('calculate')
   calculate = new EventEmitter<boolean>();
   @Input()
-  lossState: any;
-  @Input()
   baselineSelected: boolean;
   @Output('changeField')
   changeField = new EventEmitter<string>();
@@ -70,7 +68,6 @@ export class WallLossesFormComponent implements OnInit {
   //utility for checking if form is valid
   //if so tell wall-losses.component to calculate results
   checkForm() {
-    this.lossState.saved = false;
     if (this.wallLossesForm.status == "VALID") {
       this.calculate.emit(true);
     }

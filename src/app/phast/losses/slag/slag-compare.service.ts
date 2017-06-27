@@ -32,11 +32,11 @@ export class SlagCompareService {
   }
 
   addObject(num: number) {
+    console.log('add object');
     this.differentArray.push({
       lossIndex: num,
       different: this.initDifferentObject()
     })
-    console.log('added 2')
   }
 
   checkSlagLosses() {

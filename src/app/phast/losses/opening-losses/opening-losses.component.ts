@@ -6,8 +6,6 @@ import { Losses } from '../../../shared/models/phast';
 import { OpeningLoss } from '../../../shared/models/losses/openingLoss';
 import { OpeningLossesCompareService } from './opening-losses-compare.service';
 
-
-
 @Component({
   selector: 'app-opening-losses',
   templateUrl: './opening-losses.component.html',
@@ -16,8 +14,6 @@ import { OpeningLossesCompareService } from './opening-losses-compare.service';
 export class OpeningLossesComponent implements OnInit {
   @Input()
   losses: Losses;
-  @Input()
-  lossState: any;
   @Input()
   saveClicked: boolean;
   @Input()
@@ -55,8 +51,8 @@ export class OpeningLossesComponent implements OnInit {
       this._openingLosses = new Array();
     }
     if (this.losses.openingLosses) {
-    //  this.setCompareVals();
-    //  this.openingLossesCompareService.initCompareObjects();
+      this.setCompareVals();
+      this.openingLossesCompareService.initCompareObjects();
       this.losses.openingLosses.forEach(loss => {
         let tmpLoss = {
           form: this.openingLossesService.getFormFromLoss(loss),
@@ -67,29 +63,62 @@ export class OpeningLossesComponent implements OnInit {
         this._openingLosses.push(tmpLoss);
       })
     }
+
+    this.openingLossesService.deleteLossIndex.subscribe((lossIndex) => {
+      if (lossIndex != undefined) {
+        if (this.losses.wallLosses) {
+          this._openingLosses.splice(lossIndex, 1);
+          if (this.openingLossesCompareService.differentArray && !this.isBaseline) {
+            this.openingLossesCompareService.differentArray.splice(lossIndex, 1);
+          }
+        }
+      }
+    })
+    if (this.isBaseline) {
+      this.openingLossesService.addLossBaselineMonitor.subscribe((val) => {
+        if (val == true) {
+          this._openingLosses.push({
+            form: this.openingLossesService.initForm(),
+            name: 'Loss #' + (this._openingLosses.length + 1),
+            heatLoss: 0.0
+          })
+        }
+      })
+    } else {
+      this.openingLossesService.addLossModificationMonitor.subscribe((val) => {
+        if (val == true) {
+          this._openingLosses.push({
+            form: this.openingLossesService.initForm(),
+            name: 'Loss #' + (this._openingLosses.length + 1),
+            heatLoss: 0.0
+          })
+        }
+      })
+    }
   }
 
-  ngOnDestroy(){
+  ngOnDestroy() {
     this.openingLossesCompareService.baselineOpeningLosses = null;
     this.openingLossesCompareService.modifiedOpeningLosses = null;
+    this.openingLossesService.deleteLossIndex.next(null);
+    this.openingLossesService.addLossBaselineMonitor.next(false);
+    this.openingLossesService.addLossModificationMonitor.next(false);
   }
 
   addLoss() {
-    let tmpName = 'Opening Loss #' + (this._openingLosses.length + 1);
+    this.openingLossesService.addLoss(this.isBaseline);
+    if (this.openingLossesCompareService.differentArray) {
+      this.openingLossesCompareService.addObject(this.openingLossesCompareService.differentArray.length - 1);
+    }
     this._openingLosses.push({
       form: this.openingLossesService.initForm(),
-      name: tmpName,
+      name: 'Opening Loss #' + (this._openingLosses.length + 1),
       totalOpeningLosses: 0.0
     });
-    this.lossState.saved = false;
   }
 
-  removeLoss(str: string) {
-    this._openingLosses = _.remove(this._openingLosses, loss => {
-      return loss.name != str;
-    });
-    this.lossState.saved = false;
-    this.renameLosses();
+  removeLoss(lossIndex: number) {
+    this.openingLossesService.setDelete(lossIndex);
   }
 
   renameLosses() {
@@ -139,23 +168,21 @@ export class OpeningLossesComponent implements OnInit {
       tmpOpeningLosses.push(tmpOpeningLoss);
     })
     this.losses.openingLosses = tmpOpeningLosses;
-    this.lossState.numLosses = this.losses.openingLosses.length;
-    this.lossState.saved = true;
-    //this.setCompareVals();
+    this.setCompareVals();
     this.savedLoss.emit(true);
   }
   changeField(str: string) {
     this.fieldChange.emit(str);
   }
 
- setCompareVals() {
+  setCompareVals() {
     if (this.isBaseline) {
       this.openingLossesCompareService.baselineOpeningLosses = this.losses.openingLosses;
     } else {
       this.openingLossesCompareService.modifiedOpeningLosses = this.losses.openingLosses;
     }
     if (this.openingLossesCompareService.differentArray) {
-      if (this.openingLossesCompareService.differentArray.length != 0) {
+      if (this.openingLossesCompareService.differentArray.length != 0 && !this.isBaseline) {
         this.openingLossesCompareService.checkOpeningLosses();
       }
     }

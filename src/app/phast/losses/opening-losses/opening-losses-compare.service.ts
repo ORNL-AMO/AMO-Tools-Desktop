@@ -31,18 +31,75 @@ export class OpeningLossesCompareService {
     }
   }
 
+  addObject(num: number) {
+    this.differentArray.push({
+      lossIndex: num,
+      different: this.initDifferentObject()
+    })
+  }
+
+
   checkOpeningLosses() {
     if (this.baselineOpeningLosses && this.modifiedOpeningLosses) {
-      this.checkNumberOfOpenings();
-      this.checkEmissivity();
-      this.checkThickness();
-      this.checkAmbientTemperature();
-      this.checkInsideTemperature();
-      this.checkPercentTimeOpen();
-      this.checkViewFactor();
-      this.checkOpeningType();
-      this.checkHeightOfOpening();
-      this.checkLengthOfOpening();
+      if (this.baselineOpeningLosses.length != 0 && this.modifiedOpeningLosses.length != 0) {
+        for (let lossIndex = 0; lossIndex < this.differentArray.length; lossIndex++) {
+          //numberOfOpenings
+          this.differentArray[lossIndex].different.numberOfOpenings.next(this.compare(this.baselineOpeningLosses[lossIndex].numberOfOpenings, this.modifiedOpeningLosses[lossIndex].numberOfOpenings));
+          //emissivity
+          this.differentArray[lossIndex].different.emissivity.next(this.compare(this.baselineOpeningLosses[lossIndex].emissivity, this.modifiedOpeningLosses[lossIndex].emissivity));
+          //thickness
+          this.differentArray[lossIndex].different.thickness.next(this.compare(this.baselineOpeningLosses[lossIndex].thickness, this.modifiedOpeningLosses[lossIndex].thickness));
+          //ambientTemperature
+          this.differentArray[lossIndex].different.ambientTemperature.next(this.compare(this.baselineOpeningLosses[lossIndex].ambientTemperature, this.modifiedOpeningLosses[lossIndex].ambientTemperature));
+          //insideTemperature
+          this.differentArray[lossIndex].different.insideTemperature.next(this.compare(this.baselineOpeningLosses[lossIndex].insideTemperature, this.modifiedOpeningLosses[lossIndex].insideTemperature));
+          //percentTimeOpen
+          this.differentArray[lossIndex].different.percentTimeOpen.next(this.compare(this.baselineOpeningLosses[lossIndex].percentTimeOpen, this.modifiedOpeningLosses[lossIndex].percentTimeOpen));
+          //viewFactor
+          this.differentArray[lossIndex].different.viewFactor.next(this.compare(this.baselineOpeningLosses[lossIndex].viewFactor, this.modifiedOpeningLosses[lossIndex].viewFactor));
+          //openingType
+          this.differentArray[lossIndex].different.openingType.next(this.compare(this.baselineOpeningLosses[lossIndex].openingType, this.modifiedOpeningLosses[lossIndex].openingType));
+          //lengthOfOpening
+          this.differentArray[lossIndex].different.lengthOfOpening.next(this.compare(this.baselineOpeningLosses[lossIndex].lengthOfOpening, this.modifiedOpeningLosses[lossIndex].lengthOfOpening));
+          //heightOfOpening
+          this.differentArray[lossIndex].different.heightOfOpening.next(this.compare(this.baselineOpeningLosses[lossIndex].heightOfOpening, this.modifiedOpeningLosses[lossIndex].heightOfOpening));
+        }
+      } else {
+        this.disableAll();
+      }
+    }
+    else if ((this.baselineOpeningLosses && !this.modifiedOpeningLosses) || (!this.baselineOpeningLosses && this.modifiedOpeningLosses)) {
+      this.disableAll();
+    }
+  }
+
+  disableAll() {
+    for (let lossIndex = 0; lossIndex < this.differentArray.length; lossIndex++) {
+      this.differentArray[lossIndex].different.numberOfOpenings.next(false);
+      this.differentArray[lossIndex].different.emissivity.next(false);
+      this.differentArray[lossIndex].different.thickness.next(false);
+      this.differentArray[lossIndex].different.ambientTemperature.next(false);
+      this.differentArray[lossIndex].different.insideTemperature.next(false);
+      this.differentArray[lossIndex].different.percentTimeOpen.next(false);
+      this.differentArray[lossIndex].different.viewFactor.next(false);
+      this.differentArray[lossIndex].different.openingType.next(false);
+      this.differentArray[lossIndex].different.lengthOfOpening.next(false);
+      this.differentArray[lossIndex].different.heightOfOpening.next(false);
+    }
+  }
+
+  compare(a: any, b: any) {
+    if (a && b) {
+      if (a != b) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+    else if ((a && !b) || (!a && b)) {
+      return true
+    } else {
+      return false;
     }
   }
 
@@ -60,109 +117,6 @@ export class OpeningLossesCompareService {
       heightOfOpening: new BehaviorSubject<boolean>(null),
     }
     return tmpDifferent;
-  }
-
-  //numberOfOpenings
-  checkNumberOfOpenings() {
-    for (let lossIndex = 0; lossIndex < this.baselineOpeningLosses.length; lossIndex++) {
-      if (this.baselineOpeningLosses[lossIndex].numberOfOpenings != this.modifiedOpeningLosses[lossIndex].numberOfOpenings) {
-        this.differentArray[lossIndex].different.numberOfOpenings.next(true);
-      } else {
-        this.differentArray[lossIndex].different.numberOfOpenings.next(false);
-      }
-    }
-  }
-  //emissivity
-  checkEmissivity() {
-    for (let lossIndex = 0; lossIndex < this.baselineOpeningLosses.length; lossIndex++) {
-      if (this.baselineOpeningLosses[lossIndex].emissivity != this.modifiedOpeningLosses[lossIndex].emissivity) {
-        this.differentArray[lossIndex].different.emissivity.next(true);
-      } else {
-        this.differentArray[lossIndex].different.emissivity.next(false);
-      }
-    }
-  }
-
-  //thickness
-  checkThickness() {
-    for (let lossIndex = 0; lossIndex < this.baselineOpeningLosses.length; lossIndex++) {
-      if (this.baselineOpeningLosses[lossIndex].thickness != this.modifiedOpeningLosses[lossIndex].thickness) {
-        this.differentArray[lossIndex].different.thickness.next(true);
-      } else {
-        this.differentArray[lossIndex].different.thickness.next(false);
-      }
-    }
-  }
-  //ambientTemperature
-  checkAmbientTemperature() {
-    for (let lossIndex = 0; lossIndex < this.baselineOpeningLosses.length; lossIndex++) {
-      if (this.baselineOpeningLosses[lossIndex].ambientTemperature != this.modifiedOpeningLosses[lossIndex].ambientTemperature) {
-        this.differentArray[lossIndex].different.ambientTemperature.next(true);
-      } else {
-        this.differentArray[lossIndex].different.ambientTemperature.next(false);
-      }
-    }
-  }
-  //insideTemperature
-  checkInsideTemperature() {
-    for (let lossIndex = 0; lossIndex < this.baselineOpeningLosses.length; lossIndex++) {
-      if (this.baselineOpeningLosses[lossIndex].insideTemperature != this.modifiedOpeningLosses[lossIndex].insideTemperature) {
-        this.differentArray[lossIndex].different.insideTemperature.next(true);
-      } else {
-        this.differentArray[lossIndex].different.insideTemperature.next(false);
-      }
-    }
-  }
-
-  //percentTimeOpen
-  checkPercentTimeOpen() {
-    for (let lossIndex = 0; lossIndex < this.baselineOpeningLosses.length; lossIndex++) {
-      if (this.baselineOpeningLosses[lossIndex].percentTimeOpen != this.modifiedOpeningLosses[lossIndex].percentTimeOpen) {
-        this.differentArray[lossIndex].different.percentTimeOpen.next(true);
-      } else {
-        this.differentArray[lossIndex].different.percentTimeOpen.next(false);
-      }
-    }
-  }
-  //viewFactor
-  checkViewFactor() {
-    for (let lossIndex = 0; lossIndex < this.baselineOpeningLosses.length; lossIndex++) {
-      if (this.baselineOpeningLosses[lossIndex].viewFactor != this.modifiedOpeningLosses[lossIndex].viewFactor) {
-        this.differentArray[lossIndex].different.viewFactor.next(true);
-      } else {
-        this.differentArray[lossIndex].different.viewFactor.next(false);
-      }
-    }
-  }
-  //openingType
-  checkOpeningType() {
-    for (let lossIndex = 0; lossIndex < this.baselineOpeningLosses.length; lossIndex++) {
-      if (this.baselineOpeningLosses[lossIndex].openingType != this.modifiedOpeningLosses[lossIndex].openingType) {
-        this.differentArray[lossIndex].different.openingType.next(true);
-      } else {
-        this.differentArray[lossIndex].different.openingType.next(false);
-      }
-    }
-  }
-  //lengthOfOpening
-  checkLengthOfOpening() {
-    for (let lossIndex = 0; lossIndex < this.baselineOpeningLosses.length; lossIndex++) {
-      if (this.baselineOpeningLosses[lossIndex].lengthOfOpening != this.modifiedOpeningLosses[lossIndex].lengthOfOpening) {
-        this.differentArray[lossIndex].different.lengthOfOpening.next(true);
-      } else {
-        this.differentArray[lossIndex].different.lengthOfOpening.next(false);
-      }
-    }
-  }
-  //heightOfOpening
-  checkHeightOfOpening() {
-    for (let lossIndex = 0; lossIndex < this.baselineOpeningLosses.length; lossIndex++) {
-      if (this.baselineOpeningLosses[lossIndex].heightOfOpening != this.modifiedOpeningLosses[lossIndex].heightOfOpening) {
-        this.differentArray[lossIndex].different.heightOfOpening.next(true);
-      } else {
-        this.differentArray[lossIndex].different.heightOfOpening.next(false);
-      }
-    }
   }
 }
 

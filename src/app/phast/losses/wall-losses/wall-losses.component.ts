@@ -18,8 +18,6 @@ export class WallLossesComponent implements OnInit {
   @Input()
   saveClicked: boolean;
   @Input()
-  lossState: any;
-  @Input()
   addLossToggle: boolean;
   @Output('savedLoss')
   savedLoss = new EventEmitter<boolean>();

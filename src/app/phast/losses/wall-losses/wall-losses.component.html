@@ -22,7 +22,7 @@
   <div class="row">
     <div class="col-12">
       <!--wall losses form with data injected-->
-      <app-wall-losses-form (changeField)="changeField($event)" [(wallLossesForm)]="loss.form" (calculate)="calculate(loss)" [(lossState)]="lossState"
+      <app-wall-losses-form (changeField)="changeField($event)" [(wallLossesForm)]="loss.form" (calculate)="calculate(loss)"
         [baselineSelected]="baselineSelected" (saveEmit)="saveLosses()" [lossIndex]="lossIndex"></app-wall-losses-form>
     </div>
   </div>

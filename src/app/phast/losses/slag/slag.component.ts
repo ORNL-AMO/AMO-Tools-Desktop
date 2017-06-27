@@ -18,8 +18,6 @@ export class SlagComponent implements OnInit {
   @Input()
   saveClicked: boolean;
   @Input()
-  lossState: any;
-  @Input()
   addLossToggle: boolean;
   @Output('savedLoss')
   savedLoss = new EventEmitter<boolean>();
@@ -106,8 +104,6 @@ export class SlagComponent implements OnInit {
     this.slagService.deleteLossIndex.next(null);
     this.slagService.addLossBaselineMonitor.next(false);
     this.slagService.addLossModificationMonitor.next(false);
-    //this.slagService.deleteLossIndex.unsubscribe();
-    //this.slagService.addLossMonitor.unsubscribe();
   }
 
 

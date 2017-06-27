@@ -13,8 +13,6 @@ export class SlagFormComponent implements OnInit {
   @Output('calculate')
   calculate = new EventEmitter<boolean>();
   @Input()
-  lossState: any;
-  @Input()
   baselineSelected: boolean;
   @Output('changeField')
   changeField = new EventEmitter<string>();
@@ -69,7 +67,6 @@ export class SlagFormComponent implements OnInit {
   }
 
   checkForm() {
-    this.lossState.saved = false;
     if (this.slagLossForm.status == "VALID") {
       this.calculate.emit(true);
     }
