@@ -3,28 +3,32 @@ export const partsPer = {
         ppm: {
             name: {
                 singular: 'Part-per Million'
-                , plural: 'Parts-per Million'
+                , plural: 'Parts-per Million' ,
+                 display:  '(ppm)'
             }
             , to_anchor: 1
         }
         , ppb: {
             name: {
                 singular: 'Part-per Billion'
-                , plural: 'Parts-per Billion'
+                , plural: 'Parts-per Billion' ,
+                 display:  '(ppb)'
             }
             , to_anchor: .001
         }
         , ppt: {
             name: {
                 singular: 'Part-per Trillion'
-                , plural: 'Parts-per Trillion'
+                , plural: 'Parts-per Trillion' ,
+                 display:  '(ppt)'
             }
             , to_anchor: .000001
         }
         , ppq: {
             name: {
                 singular: 'Part-per Quadrillion'
-                , plural: 'Parts-per Quadrillion'
+                , plural: 'Parts-per Quadrillion' ,
+                 display:  '(ppq)'
             }
             , to_anchor: .000000001
         }

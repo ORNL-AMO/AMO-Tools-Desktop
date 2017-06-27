@@ -3,28 +3,32 @@ export const length = {
         mm: {
             name: {
                 singular: 'Millimeter'
-                , plural: 'Millimeters'
+                , plural: 'Millimeters' ,
+                 display:  '(mm)'
             }
             , to_anchor: 1 / 1000
         }
         , cm: {
             name: {
                 singular: 'Centimeter'
-                , plural: 'Centimeters'
+                , plural: 'Centimeters' ,
+                 display:  '(cm)'
             }
             , to_anchor: 1 / 100
         }
         , m: {
             name: {
                 singular: 'Meter'
-                , plural: 'Meters'
+                , plural: 'Meters' ,
+                 display:  '(m)'
             }
             , to_anchor: 1
         }
         , km: {
             name: {
                 singular: 'Kilometer'
-                , plural: 'Kilometers'
+                , plural: 'Kilometers' ,
+                 display:  '(km)'
             }
             , to_anchor: 1000
         }
@@ -33,28 +37,32 @@ export const length = {
         'in': {
             name: {
                 singular: 'Inch'
-                , plural: 'Inches'
+                , plural: 'Inches' ,
+                 display:  '(in)'
             }
             , to_anchor: 1 / 12
         }
         , yd: {
             name: {
                 singular: 'Yard'
-                , plural: 'Yards'
+                , plural: 'Yards' ,
+                 display:  '(yd)'
             }
             , to_anchor: 3
         }
         , ft: {
             name: {
                 singular: 'Foot'
-                , plural: 'Feet'
+                , plural: 'Feet' ,
+                 display:  '(ft)'
             }
             , to_anchor: 1
         }
         , mi: {
             name: {
                 singular: 'Mile'
-                , plural: 'Miles'
+                , plural: 'Miles' ,
+                 display:  '(mi)'
             }
             , to_anchor: 5280
         }

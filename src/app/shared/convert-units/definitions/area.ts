@@ -12,7 +12,7 @@ export const area = {
             name: {
                 singular: 'Centimeter'
                 , plural: 'Centimeters',
-              display:  'cm&#x00B2;'
+                 display:  'cm&#x00B2;'
 
             }
             , to_anchor: 1 / 10000
@@ -21,14 +21,15 @@ export const area = {
             name: {
                 singular: 'Square Meter'
                 , plural: 'Square Meters',
-              display:  'm&#x00B2;'
+                 display:  'm&#x00B2;'
             }
             , to_anchor: 1
         }
         , ha: {
             name: {
                 singular: 'Hectare'
-                , plural: 'Hectares'
+                , plural: 'Hectares',
+                 display:  '(ha)'
             }
             , to_anchor: 10000
         }
@@ -36,7 +37,7 @@ export const area = {
             name: {
                 singular: 'Square Kilometer'
                 , plural: 'Square Kilometers' ,
-              display:  'km&#x00B2;'
+                 display:  'km&#x00B2;'
             }
             , to_anchor: 1000000
         }
@@ -46,7 +47,7 @@ export const area = {
             name: {
                 singular: 'Square Inch'
                 , plural: 'Square Inches',
-              display:  'in&#x00B2;'
+                 display:  'in&#x00B2;'
             }
             , to_anchor: 1 / 144
         }
@@ -54,7 +55,7 @@ export const area = {
             name: {
                 singular: 'Square Yard'
                 , plural: 'Square Yards',
-              display:  'yd&#x00B2;'
+                 display:  'yd&#x00B2;'
             }
             , to_anchor: 9
         }
@@ -62,14 +63,15 @@ export const area = {
             name: {
                 singular: 'Square Foot'
                 , plural: 'Square Feet',
-              display:  'ft&#x00B2;'
+                 display:  'ft&#x00B2;'
             }
             , to_anchor: 1
         }
         , ac: {
             name: {
                 singular: 'Acre'
-                , plural: 'Acres'
+                , plural: 'Acres',
+                 display:  '(ac)'
             }
             , to_anchor: 43560
         }
@@ -77,7 +79,7 @@ export const area = {
             name: {
                 singular: 'Square Mile'
                 , plural: 'Square Miles',
-              display:  'mi&#x00B2;'
+                 display:  'mi&#x00B2;'
             }
             , to_anchor: 27878400
         }
