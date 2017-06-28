@@ -13,8 +13,6 @@ export class ExtendedSurfaceLossesFormComponent implements OnInit {
   @Output('calculate')
   calculate = new EventEmitter<boolean>();
   @Input()
-  lossState: any;
-  @Input()
   baselineSelected: boolean;
   @Output('changeField')
   changeField = new EventEmitter<string>();
@@ -67,7 +65,6 @@ export class ExtendedSurfaceLossesFormComponent implements OnInit {
     }
   }
   checkForm() {
-    this.lossState.saved = false;
     if (this.lossesForm.status == "VALID") {
       this.calculate.emit(true);
     }
@@ -92,36 +89,38 @@ export class ExtendedSurfaceLossesFormComponent implements OnInit {
 
   initDifferenceMonitor() {
     if (this.extendedSurfaceCompareService.baselineSurface && this.extendedSurfaceCompareService.modifiedSurface && this.extendedSurfaceCompareService.differentArray.length != 0) {
-      let doc = this.windowRefService.getDoc();
+      if (this.extendedSurfaceCompareService.differentArray[this.lossIndex]) {
+        let doc = this.windowRefService.getDoc();
 
-      //surfaceArea
-      this.extendedSurfaceCompareService.differentArray[this.lossIndex].different.surfaceArea.subscribe((val) => {
-        let surfaceAreaElements = doc.getElementsByName('surfaceArea_' + this.lossIndex);
-        surfaceAreaElements.forEach(element => {
-          element.classList.toggle('indicate-different', val);
-        });
-      })
-      //avgSurfaceTemp
-      this.extendedSurfaceCompareService.differentArray[this.lossIndex].different.surfaceTemperature.subscribe((val) => {
-        let avgSurfaceTempElements = doc.getElementsByName('avgSurfaceTemp_' + this.lossIndex);
-        avgSurfaceTempElements.forEach(element => {
-          element.classList.toggle('indicate-different', val);
-        });
-      })
-      //ambientTemp
-      this.extendedSurfaceCompareService.differentArray[this.lossIndex].different.ambientTemperature.subscribe((val) => {
-        let ambientTempElements = doc.getElementsByName('ambientTemp_' + this.lossIndex);
-        ambientTempElements.forEach(element => {
-          element.classList.toggle('indicate-different', val);
-        });
-      })
-      //surfaceEmissivity
-      this.extendedSurfaceCompareService.differentArray[this.lossIndex].different.surfaceEmissivity.subscribe((val) => {
-        let surfaceEmissivityElements = doc.getElementsByName('surfaceEmissivity_' + this.lossIndex);
-        surfaceEmissivityElements.forEach(element => {
-          element.classList.toggle('indicate-different', val);
-        });
-      })
+        //surfaceArea
+        this.extendedSurfaceCompareService.differentArray[this.lossIndex].different.surfaceArea.subscribe((val) => {
+          let surfaceAreaElements = doc.getElementsByName('surfaceArea_' + this.lossIndex);
+          surfaceAreaElements.forEach(element => {
+            element.classList.toggle('indicate-different', val);
+          });
+        })
+        //avgSurfaceTemp
+        this.extendedSurfaceCompareService.differentArray[this.lossIndex].different.surfaceTemperature.subscribe((val) => {
+          let avgSurfaceTempElements = doc.getElementsByName('avgSurfaceTemp_' + this.lossIndex);
+          avgSurfaceTempElements.forEach(element => {
+            element.classList.toggle('indicate-different', val);
+          });
+        })
+        //ambientTemp
+        this.extendedSurfaceCompareService.differentArray[this.lossIndex].different.ambientTemperature.subscribe((val) => {
+          let ambientTempElements = doc.getElementsByName('ambientTemp_' + this.lossIndex);
+          ambientTempElements.forEach(element => {
+            element.classList.toggle('indicate-different', val);
+          });
+        })
+        //surfaceEmissivity
+        this.extendedSurfaceCompareService.differentArray[this.lossIndex].different.surfaceEmissivity.subscribe((val) => {
+          let surfaceEmissivityElements = doc.getElementsByName('surfaceEmissivity_' + this.lossIndex);
+          surfaceEmissivityElements.forEach(element => {
+            element.classList.toggle('indicate-different', val);
+          });
+        })
+      }
     }
   }
 }

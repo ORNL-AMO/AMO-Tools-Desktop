@@ -27,8 +27,8 @@
         *ngIf="lossesTab == 'atmosphere-losses'" [isBaseline]="true"></app-atmosphere-losses>
 
       <app-fixture-losses (fieldChange)="changeField($event)" [baselineSelected]="baselineSelected" (savedLoss)="saveModifications()"
-        [(losses)]="phast.losses" [addLossToggle]="addLossToggle" [(lossState)]="lossesStates.fixtureLosses" [saveClicked]="saveClicked"
-        *ngIf="lossesTab == 'fixture-losses'" [isBaseline]="true"></app-fixture-losses>
+        [(losses)]="phast.losses" [addLossToggle]="addLossToggle" [saveClicked]="saveClicked" *ngIf="lossesTab == 'fixture-losses'"
+        [isBaseline]="true"></app-fixture-losses>
 
       <app-opening-losses (fieldChange)="changeField($event)" [baselineSelected]="baselineSelected" (savedLoss)="saveModifications()"
         [(losses)]="phast.losses" [addLossToggle]="addLossToggle" [saveClicked]="saveClicked" *ngIf="lossesTab == 'opening-losses'"
@@ -47,8 +47,8 @@
         [isBaseline]="true"></app-gas-leakage-losses>
 
       <app-extended-surface-losses (fieldChange)="changeField($event)" [baselineSelected]="baselineSelected" (savedLoss)="saveModifications()"
-        [(losses)]="phast.losses" [addLossToggle]="addLossToggle" [(lossState)]="lossesStates.surfaceLosses" [saveClicked]="saveClicked"
-        *ngIf="lossesTab == 'extended-surface-losses'" [isBaseline]="true"></app-extended-surface-losses>
+        [(losses)]="phast.losses" [addLossToggle]="addLossToggle" [saveClicked]="saveClicked" *ngIf="lossesTab == 'extended-surface-losses'"
+        [isBaseline]="true"></app-extended-surface-losses>
 
       <app-other-losses (fieldChange)="changeField($event)" [baselineSelected]="baselineSelected" (savedLoss)="saveModifications()"
         [(losses)]="phast.losses" [addLossToggle]="addLossToggle" [(lossState)]="lossesStates.otherLosses" [saveClicked]="saveClicked"
@@ -101,8 +101,7 @@
         *ngIf="lossesTab == 'atmosphere-losses'"></app-atmosphere-losses>
 
       <app-fixture-losses (fieldChange)="changeField($event)" [baselineSelected]="modificationSelected" (savedLoss)="saveModifications()"
-        [(losses)]="_modifications[modificationIndex].phast.losses" [saveClicked]="saveClicked" [(lossState)]="lossesStates.fixtureLosses"
-        *ngIf="lossesTab == 'fixture-losses'"></app-fixture-losses>
+        [(losses)]="_modifications[modificationIndex].phast.losses" [saveClicked]="saveClicked" *ngIf="lossesTab == 'fixture-losses'"></app-fixture-losses>
 
       <app-opening-losses (fieldChange)="changeField($event)" [baselineSelected]="modificationSelected" (savedLoss)="saveModifications()"
         [(losses)]="_modifications[modificationIndex].phast.losses" [saveClicked]="saveClicked" *ngIf="lossesTab == 'opening-losses'"></app-opening-losses>
@@ -118,8 +117,7 @@
         [(losses)]="_modifications[modificationIndex].phast.losses" [saveClicked]="saveClicked" *ngIf="lossesTab == 'gas-leakage-losses'"></app-gas-leakage-losses>
 
       <app-extended-surface-losses (fieldChange)="changeField($event)" [baselineSelected]="modificationSelected" (savedLoss)="saveModifications()"
-        [(losses)]="_modifications[modificationIndex].phast.losses" [saveClicked]="saveClicked" [(lossState)]="lossesStates.surfaceLosses"
-        *ngIf="lossesTab == 'extended-surface-losses'"></app-extended-surface-losses>
+        [(losses)]="_modifications[modificationIndex].phast.losses" [saveClicked]="saveClicked" *ngIf="lossesTab == 'extended-surface-losses'"></app-extended-surface-losses>
 
       <app-other-losses (fieldChange)="changeField($event)" [baselineSelected]="modificationSelected" (savedLoss)="saveModifications()"
         [(losses)]="_modifications[modificationIndex].phast.losses" [saveClicked]="saveClicked" [(lossState)]="lossesStates.otherLosses"
