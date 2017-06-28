@@ -30,6 +30,13 @@ export class AuxiliaryPowerCompareService {
     }
   }
 
+  addObject(num: number) {
+    this.differentArray.push({
+      lossIndex: num,
+      different: this.initDifferentObject()
+    })
+  }
+
   initDifferentObject(): AuxiliaryPowerDifferent {
     let tmpDifferent: AuxiliaryPowerDifferent = {
       motorPhase: new BehaviorSubject<boolean>(null),
@@ -37,90 +44,56 @@ export class AuxiliaryPowerCompareService {
       avgCurrent: new BehaviorSubject<boolean>(null),
       powerFactor: new BehaviorSubject<boolean>(null),
       operatingTime: new BehaviorSubject<boolean>(null),
-     // powerUsed: new BehaviorSubject<boolean>(null)
+      // powerUsed: new BehaviorSubject<boolean>(null)
     }
     return tmpDifferent;
   }
 
-  checkAuxLosses(){
-    this.checkMotorPhase();
-    this.checkSupplyVoltage();
-    this.checkAvgCurrent();
-    this.checkPowerFactor();
-    this.checkOperatingTime();
-   // this.checkPowerUsed();
+  checkAuxLosses() {
+    if (this.baselineAuxLosses && this.modifiedAuxLosses) {
+      if (this.baselineAuxLosses.length != 0 && this.modifiedAuxLosses.length != 0 && this.baselineAuxLosses.length == this.modifiedAuxLosses.length) {
+        for (let lossIndex = 0; lossIndex < this.differentArray.length; lossIndex++) {
+          //motorPhase
+          this.differentArray[lossIndex].different.motorPhase.next(this.compare(this.baselineAuxLosses[lossIndex].motorPhase, this.modifiedAuxLosses[lossIndex].motorPhase));
+          //supplyVoltage
+          this.differentArray[lossIndex].different.supplyVoltage.next(this.compare(this.baselineAuxLosses[lossIndex].supplyVoltage, this.modifiedAuxLosses[lossIndex].supplyVoltage));
+          //avgCurrent
+          this.differentArray[lossIndex].different.avgCurrent.next(this.compare(this.baselineAuxLosses[lossIndex].avgCurrent, this.modifiedAuxLosses[lossIndex].avgCurrent));
+          //powerFactor
+          this.differentArray[lossIndex].different.powerFactor.next(this.compare(this.baselineAuxLosses[lossIndex].powerFactor, this.modifiedAuxLosses[lossIndex].powerFactor));
+          //operatingTime
+          this.differentArray[lossIndex].different.operatingTime.next(this.compare(this.baselineAuxLosses[lossIndex].operatingTime, this.modifiedAuxLosses[lossIndex].operatingTime));
+        }
+      } else {
+        this.disableAll();
+      }
+    } else {
+      this.disableAll();
+    }
   }
 
-  //motorPhase
-  checkMotorPhase(){
-   if (this.baselineAuxLosses && this.modifiedAuxLosses) {
-      for (let lossIndex = 0; lossIndex < this.baselineAuxLosses.length; lossIndex++) {
-        if (this.baselineAuxLosses[lossIndex].motorPhase != this.modifiedAuxLosses[lossIndex].motorPhase) {
-          this.differentArray[lossIndex].different.motorPhase.next(true);
-        } else {
-          this.differentArray[lossIndex].different.motorPhase.next(false);
-        }
-      }
+  disableAll() {
+    for (let lossIndex = 0; lossIndex < this.differentArray.length; lossIndex++) {
+      this.differentArray[lossIndex].different.motorPhase.next(false);
+      this.differentArray[lossIndex].different.supplyVoltage.next(false);
+      this.differentArray[lossIndex].different.avgCurrent.next(false);
+      this.differentArray[lossIndex].different.powerFactor.next(false);
+      this.differentArray[lossIndex].different.operatingTime.next(false);
     }
   }
-  //supplyVoltage
-  checkSupplyVoltage(){
-   if (this.baselineAuxLosses && this.modifiedAuxLosses) {
-      for (let lossIndex = 0; lossIndex < this.baselineAuxLosses.length; lossIndex++) {
-        if (this.baselineAuxLosses[lossIndex].supplyVoltage != this.modifiedAuxLosses[lossIndex].supplyVoltage) {
-          this.differentArray[lossIndex].different.supplyVoltage.next(true);
-        } else {
-          this.differentArray[lossIndex].different.supplyVoltage.next(false);
-        }
+
+  compare(a: any, b: any) {
+    if (a && b) {
+      if (a != b) {
+        return true;
+      } else {
+        return false;
       }
     }
-  }
-  //avgCurrent
-  checkAvgCurrent(){
-   if (this.baselineAuxLosses && this.modifiedAuxLosses) {
-      for (let lossIndex = 0; lossIndex < this.baselineAuxLosses.length; lossIndex++) {
-        if (this.baselineAuxLosses[lossIndex].avgCurrent != this.modifiedAuxLosses[lossIndex].avgCurrent) {
-          this.differentArray[lossIndex].different.avgCurrent.next(true);
-        } else {
-          this.differentArray[lossIndex].different.avgCurrent.next(false);
-        }
-      }
-    }
-  }
-  //powerFactor
-  checkPowerFactor(){
-   if (this.baselineAuxLosses && this.modifiedAuxLosses) {
-      for (let lossIndex = 0; lossIndex < this.baselineAuxLosses.length; lossIndex++) {
-        if (this.baselineAuxLosses[lossIndex].powerFactor != this.modifiedAuxLosses[lossIndex].powerFactor) {
-          this.differentArray[lossIndex].different.powerFactor.next(true);
-        } else {
-          this.differentArray[lossIndex].different.powerFactor.next(false);
-        }
-      }
-    }
-  }
-  //operatingTime
-  checkOperatingTime(){
-   if (this.baselineAuxLosses && this.modifiedAuxLosses) {
-      for (let lossIndex = 0; lossIndex < this.baselineAuxLosses.length; lossIndex++) {
-        if (this.baselineAuxLosses[lossIndex].operatingTime != this.modifiedAuxLosses[lossIndex].operatingTime) {
-          this.differentArray[lossIndex].different.operatingTime.next(true);
-        } else {
-          this.differentArray[lossIndex].different.operatingTime.next(false);
-        }
-      }
-    }
-  }
-  //powerUsed
-  checkPowerUsed(){
-   if (this.baselineAuxLosses && this.modifiedAuxLosses) {
-      for (let lossIndex = 0; lossIndex < this.baselineAuxLosses.length; lossIndex++) {
-        if (this.baselineAuxLosses[lossIndex].powerUsed != this.modifiedAuxLosses[lossIndex].powerUsed) {
-          this.differentArray[lossIndex].different.powerUsed.next(true);
-        } else {
-          this.differentArray[lossIndex].different.powerUsed.next(false);
-        }
-      }
+    else if ((a && !b) || (!a && b)) {
+      return true
+    } else {
+      return false;
     }
   }
 }
@@ -131,5 +104,5 @@ export interface AuxiliaryPowerDifferent {
   avgCurrent: BehaviorSubject<boolean>,
   powerFactor: BehaviorSubject<boolean>,
   operatingTime: BehaviorSubject<boolean>,
- // powerUsed: BehaviorSubject<boolean>
+  // powerUsed: BehaviorSubject<boolean>
 }

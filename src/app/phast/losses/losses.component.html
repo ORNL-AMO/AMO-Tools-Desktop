@@ -64,8 +64,8 @@
       <app-exhaust-gas *ngIf="lossesTab == 'exhaust-gas'"></app-exhaust-gas>
 
       <app-auxiliary-power-losses (fieldChange)="changeField($event)" [baselineSelected]="baselineSelected" (savedLoss)="saveModifications()"
-        [(losses)]="phast.losses" [addLossToggle]="addLossToggle" [(lossState)]="lossesStates.auxiliaryPowerLosses" [saveClicked]="saveClicked"
-        *ngIf="lossesTab == 'auxiliary-power'" [isBaseline]="true"></app-auxiliary-power-losses>
+        [(losses)]="phast.losses" [addLossToggle]="addLossToggle" [saveClicked]="saveClicked" *ngIf="lossesTab == 'auxiliary-power'"
+        [isBaseline]="true"></app-auxiliary-power-losses>
 
 
       <app-heat-storage *ngIf="lossesTab == 'heat-storage'"></app-heat-storage>
@@ -130,8 +130,7 @@
       <app-exhaust-gas *ngIf="lossesTab == 'exhaust-gas'"></app-exhaust-gas>
 
       <app-auxiliary-power-losses (fieldChange)="changeField($event)" [baselineSelected]="modificationSelected" (savedLoss)="saveModifications()"
-        [(losses)]="_modifications[modificationIndex].phast.losses" [(lossState)]="lossesStates.auxiliaryPowerLosses" [saveClicked]="saveClicked"
-        *ngIf="lossesTab == 'auxiliary-power'"></app-auxiliary-power-losses>
+        [(losses)]="_modifications[modificationIndex].phast.losses" [saveClicked]="saveClicked" *ngIf="lossesTab == 'auxiliary-power'"></app-auxiliary-power-losses>
 
       <app-heat-storage *ngIf="lossesTab == 'heat-storage'"></app-heat-storage>
 

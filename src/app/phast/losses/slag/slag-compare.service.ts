@@ -72,7 +72,6 @@ export class SlagCompareService {
     }
   }
 
-
   compare(a: any, b: any) {
     if (a && b) {
       if (a != b) {
