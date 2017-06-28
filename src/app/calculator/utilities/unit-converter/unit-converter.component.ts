@@ -41,7 +41,7 @@ export class UnitConverterComponent implements OnInit {
     },
     {
       measure: 'digital',
-      display: 'Digitial'
+      display: 'Digital'
     },
     {
       measure: 'partsPer',
@@ -87,7 +87,10 @@ export class UnitConverterComponent implements OnInit {
       measure: 'viscosity',
       display: 'Viscosity'
     },
-
+    {
+      measure: 'frequency',
+      display: 'Frequency'
+    },
   ]
 
   constructor(private convertUnitsService: ConvertUnitsService) { }

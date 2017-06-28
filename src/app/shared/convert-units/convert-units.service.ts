@@ -56,7 +56,8 @@ export class ConvertUnitsService {
     reactiveEnergy: reactiveEnergy,
     reactivePower: reactivePower,
     volumeFlowRate: volumeFlowRate,
-    viscosity: viscosity
+    viscosity: viscosity ,
+   /* frequency: frequency */
 
   }
   origin: any;
