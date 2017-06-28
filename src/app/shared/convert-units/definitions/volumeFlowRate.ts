@@ -4,7 +4,7 @@ export const volumeFlowRate = {
             name: {
                 singular: 'Cubic Millimeter per second'
                 , plural: 'Cubic Millimeters per second',
-                 display:  'mm&#x00B3;/s'
+                 display:  '(mm&#x00B3;/s)'
             }
             , to_anchor: 1 / 1000000
         }
@@ -12,7 +12,7 @@ export const volumeFlowRate = {
             name: {
                 singular: 'Cubic Centimeter per second'
                 , plural: 'Cubic Centimeters per second',
-                 display:  'cm&#x00B3;/s'
+                 display:  '(cm&#x00B3;/s)'
             }
             , to_anchor: 1 / 1000
         }
