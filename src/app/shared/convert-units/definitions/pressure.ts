@@ -48,6 +48,14 @@ export const pressure = {
             }
             , to_anchor: 101325 / 760000
         }
+        , atm: {
+            name: {
+              singular: 'Atmospher'
+              , plural: 'Atmospher',
+              display: '(atm)'
+            }
+          , to_anchor: 0.00986923
+        }
     },
     imperial: {
         psi: {

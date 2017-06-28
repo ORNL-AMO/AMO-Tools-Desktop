@@ -95,6 +95,14 @@ export class UnitConverterComponent implements OnInit {
       measure: 'force',
       display: 'Force'
     },
+    {
+      measure: 'pressure',
+      display: 'Pressure'
+    },
+    {
+      measure: 'mass',
+      display: 'Mass'
+    },
   ]
 
   constructor(private convertUnitsService: ConvertUnitsService) { }

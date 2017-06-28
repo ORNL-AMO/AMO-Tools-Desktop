@@ -32,6 +32,30 @@ export const mass = {
             }
             , to_anchor: 1000
         }
+      , t: {
+        name: {
+          singular: 'Ton'
+          , plural: 'Ton' ,
+          display:  '(t)'
+        }
+        , to_anchor: 1000000
+      }
+      , u: {
+        name: {
+          singular: 'Atomic Mass Unite'
+          , plural: 'Atomic Mass Unites' ,
+          display:  '(u)'
+        }
+        , to_anchor: 0.000000000166054 / 100000000000000
+      }
+      , sl: {
+        name: {
+          singular: 'Slug'
+          , plural: 'Slugs' ,
+          display:  '(sl)'
+        }
+        , to_anchor: 14593.9
+      }
     },
 
     imperial: {
