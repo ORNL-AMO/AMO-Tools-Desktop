@@ -1,12 +1,29 @@
 import { Injectable } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ChargeMaterial, GasChargeMaterial, LiquidChargeMaterial, SolidChargeMaterial } from '../../../shared/models/losses/chargeMaterial';
-
+import { BehaviorSubject } from 'rxjs';
 @Injectable()
 export class ChargeMaterialService {
+  
+  deleteLossIndex: BehaviorSubject<number>;
+  addLossBaselineMonitor: BehaviorSubject<any>;
+  addLossModificationMonitor: BehaviorSubject<any>;
+  constructor(private formBuilder: FormBuilder) {
+    this.deleteLossIndex = new BehaviorSubject<number>(null);
+    this.addLossBaselineMonitor = new BehaviorSubject<any>(null);
+    this.addLossModificationMonitor = new BehaviorSubject<any>(null);
+  }
 
-  constructor(private formBuilder: FormBuilder) { }
-
+  setDelete(num: number) {
+    this.deleteLossIndex.next(num);
+  }
+  addLoss(bool: boolean) {
+    if (bool) {
+      this.addLossModificationMonitor.next(true);
+    } else {
+      this.addLossBaselineMonitor.next(true);
+    }
+  }
   //empty gas charge material form
   initGasForm() {
     return this.formBuilder.group({
