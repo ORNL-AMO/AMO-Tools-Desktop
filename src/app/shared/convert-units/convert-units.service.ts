@@ -30,6 +30,8 @@ import { reactiveEnergy } from './definitions/reactiveEnergy';
 import { reactivePower } from './definitions/reactivePower';
 import { volumeFlowRate } from './definitions/volumeFlowRate';
 import { viscosity } from './definitions/viscosity';
+import { frequency } from './definitions/frequency';
+import { force } from './definitions/force';
 import * as _ from 'lodash';
 import * as keys from 'lodash.keys';
 import * as each from 'lodash.foreach';
@@ -56,7 +58,9 @@ export class ConvertUnitsService {
     reactiveEnergy: reactiveEnergy,
     reactivePower: reactivePower,
     volumeFlowRate: volumeFlowRate,
-    viscosity: viscosity
+    viscosity: viscosity ,
+    frequency: frequency,
+    force: force
 
   }
   origin: any;

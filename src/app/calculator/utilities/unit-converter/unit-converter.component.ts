@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { length } from '../../../shared/convert-units/definitions/length';
-import {SortPipe} from './sort-pipe';
+import { SortPipe } from './sort-pipe';
 @Component({
   selector: 'app-unit-converter',
   templateUrl: './unit-converter.component.html',
@@ -41,7 +41,7 @@ export class UnitConverterComponent implements OnInit {
     },
     {
       measure: 'digital',
-      display: 'Digitial'
+      display: 'Digital'
     },
     {
       measure: 'partsPer',
@@ -87,7 +87,22 @@ export class UnitConverterComponent implements OnInit {
       measure: 'viscosity',
       display: 'Viscosity'
     },
-
+    {
+      measure: 'frequency',
+      display: 'Frequency'
+    },
+    {
+      measure: 'force',
+      display: 'Force'
+    },
+    {
+      measure: 'pressure',
+      display: 'Pressure'
+    },
+    {
+      measure: 'mass',
+      display: 'Mass'
+    },
   ]
 
   constructor(private convertUnitsService: ConvertUnitsService) { }
