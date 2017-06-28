@@ -91,6 +91,10 @@ export class UnitConverterComponent implements OnInit {
       measure: 'frequency',
       display: 'Frequency'
     },
+    {
+      measure: 'force',
+      display: 'Force'
+    },
   ]
 
   constructor(private convertUnitsService: ConvertUnitsService) { }
