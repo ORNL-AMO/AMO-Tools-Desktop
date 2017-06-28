@@ -13,8 +13,6 @@ export class GasCoolingLossesFormComponent implements OnInit {
   @Output('calculate')
   calculate = new EventEmitter<boolean>();
   @Input()
-  lossState: any;
-  @Input()
   baselineSelected: boolean;
   @Output('changeField')
   changeField = new EventEmitter<string>();
@@ -68,7 +66,6 @@ export class GasCoolingLossesFormComponent implements OnInit {
   }
 
   checkForm() {
-    this.lossState.saved = false;
     if (this.lossesForm.status == 'VALID') {
       this.calculate.emit(true)
     }
@@ -93,43 +90,45 @@ export class GasCoolingLossesFormComponent implements OnInit {
 
   initDifferenceMonitor() {
     if (this.coolingLossesCompareService.baselineCoolingLosses && this.coolingLossesCompareService.modifiedCoolingLosses && this.coolingLossesCompareService.differentArray.length != 0) {
-      let doc = this.windowRefService.getDoc();
+      if (this.coolingLossesCompareService.differentArray[this.lossIndex]) {
+        let doc = this.windowRefService.getDoc();
 
-      //avgSpecificHeat
-      this.coolingLossesCompareService.differentArray[this.lossIndex].different.gasCoolingLossDifferent.specificHeat.subscribe((val) => {
-        let avgSpecificHeatElements = doc.getElementsByName('avgSpecificHeat_' + this.lossIndex);
-        avgSpecificHeatElements.forEach(element => {
-          element.classList.toggle('indicate-different', val);
-        });
-      })
-      //gasFlow
-      this.coolingLossesCompareService.differentArray[this.lossIndex].different.gasCoolingLossDifferent.flowRate.subscribe((val) => {
-        let gasFlowElements = doc.getElementsByName('gasFlow_' + this.lossIndex);
-        gasFlowElements.forEach(element => {
-          element.classList.toggle('indicate-different', val);
-        });
-      })
-      //inletTemp
-      this.coolingLossesCompareService.differentArray[this.lossIndex].different.gasCoolingLossDifferent.initialTemperature.subscribe((val) => {
-        let inletTempElements = doc.getElementsByName('inletTemp_' + this.lossIndex);
-        inletTempElements.forEach(element => {
-          element.classList.toggle('indicate-different', val);
-        });
-      })
-      //outletTemp
-      this.coolingLossesCompareService.differentArray[this.lossIndex].different.gasCoolingLossDifferent.finalTemperature.subscribe((val) => {
-        let outletTempElements = doc.getElementsByName('outletTemp_' + this.lossIndex);
-        outletTempElements.forEach(element => {
-          element.classList.toggle('indicate-different', val);
-        });
-      })
-      //correctionFactor
-      this.coolingLossesCompareService.differentArray[this.lossIndex].different.gasCoolingLossDifferent.correctionFactor.subscribe((val) => {
-        let correctionFactorElements = doc.getElementsByName('correctionFactor_' + this.lossIndex);
-        correctionFactorElements.forEach(element => {
-          element.classList.toggle('indicate-different', val);
-        });
-      })
+        //avgSpecificHeat
+        this.coolingLossesCompareService.differentArray[this.lossIndex].different.gasCoolingLossDifferent.specificHeat.subscribe((val) => {
+          let avgSpecificHeatElements = doc.getElementsByName('avgSpecificHeat_' + this.lossIndex);
+          avgSpecificHeatElements.forEach(element => {
+            element.classList.toggle('indicate-different', val);
+          });
+        })
+        //gasFlow
+        this.coolingLossesCompareService.differentArray[this.lossIndex].different.gasCoolingLossDifferent.flowRate.subscribe((val) => {
+          let gasFlowElements = doc.getElementsByName('gasFlow_' + this.lossIndex);
+          gasFlowElements.forEach(element => {
+            element.classList.toggle('indicate-different', val);
+          });
+        })
+        //inletTemp
+        this.coolingLossesCompareService.differentArray[this.lossIndex].different.gasCoolingLossDifferent.initialTemperature.subscribe((val) => {
+          let inletTempElements = doc.getElementsByName('inletTemp_' + this.lossIndex);
+          inletTempElements.forEach(element => {
+            element.classList.toggle('indicate-different', val);
+          });
+        })
+        //outletTemp
+        this.coolingLossesCompareService.differentArray[this.lossIndex].different.gasCoolingLossDifferent.finalTemperature.subscribe((val) => {
+          let outletTempElements = doc.getElementsByName('outletTemp_' + this.lossIndex);
+          outletTempElements.forEach(element => {
+            element.classList.toggle('indicate-different', val);
+          });
+        })
+        //correctionFactor
+        this.coolingLossesCompareService.differentArray[this.lossIndex].different.gasCoolingLossDifferent.correctionFactor.subscribe((val) => {
+          let correctionFactorElements = doc.getElementsByName('correctionFactor_' + this.lossIndex);
+          correctionFactorElements.forEach(element => {
+            element.classList.toggle('indicate-different', val);
+          });
+        })
+      }
     }
   }
 }

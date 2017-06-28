@@ -17,8 +17,6 @@ export class CoolingLossesComponent implements OnInit {
   @Input()
   saveClicked: boolean;
   @Input()
-  lossState: any;
-  @Input()
   addLossToggle: boolean;
   @Output('savedLoss')
   savedLoss = new EventEmitter<boolean>();
@@ -52,15 +50,56 @@ export class CoolingLossesComponent implements OnInit {
       this._coolingLosses = new Array();
     }
     if (this.losses.coolingLosses) {
-     // this.setCompareVals();
-     // this.coolingLossesCompareService.initCompareObjects();
+      this.setCompareVals();
+      this.coolingLossesCompareService.initCompareObjects();
       this.initCoolingLosses();
+    }
+
+    this.coolingLossesService.deleteLossIndex.subscribe((lossIndex) => {
+      if (lossIndex != undefined) {
+        if (this.losses.coolingLosses) {
+          this._coolingLosses.splice(lossIndex, 1);
+          if (this.coolingLossesCompareService.differentArray && !this.isBaseline) {
+            this.coolingLossesCompareService.differentArray.splice(lossIndex, 1);
+          }
+        }
+      }
+    })
+    if (this.isBaseline) {
+      this.coolingLossesService.addLossBaselineMonitor.subscribe((val) => {
+        if (val == true) {
+          this._coolingLosses.push({
+            coolingMedium: 'Air',
+            waterCoolingForm: this.coolingLossesService.initWaterCoolingForm(),
+            gasCoolingForm: this.coolingLossesService.initGasCoolingForm(),
+            liquidCoolingForm: this.coolingLossesService.initLiquidCoolingForm(),
+            name: 'Loss #' + (this._coolingLosses.length + 1),
+            heatLoss: 0.0
+          });
+        }
+      })
+    } else {
+      this.coolingLossesService.addLossModificationMonitor.subscribe((val) => {
+        if (val == true) {
+          this._coolingLosses.push({
+            coolingMedium: 'Air',
+            waterCoolingForm: this.coolingLossesService.initWaterCoolingForm(),
+            gasCoolingForm: this.coolingLossesService.initGasCoolingForm(),
+            liquidCoolingForm: this.coolingLossesService.initLiquidCoolingForm(),
+            name: 'Loss #' + (this._coolingLosses.length + 1),
+            heatLoss: 0.0
+          });
+        }
+      })
     }
   }
 
   ngOnDestroy() {
     this.coolingLossesCompareService.baselineCoolingLosses = null;
     this.coolingLossesCompareService.modifiedCoolingLosses = null;
+    this.coolingLossesService.deleteLossIndex.next(null);
+    this.coolingLossesService.addLossBaselineMonitor.next(false);
+    this.coolingLossesService.addLossModificationMonitor.next(false);
   }
 
   initCoolingLosses() {
@@ -101,6 +140,10 @@ export class CoolingLossesComponent implements OnInit {
   }
 
   addLoss() {
+    this.coolingLossesService.addLoss(this.isBaseline);
+    if (this.coolingLossesCompareService.differentArray) {
+      this.coolingLossesCompareService.addObject(this.coolingLossesCompareService.differentArray.length - 1);
+    }
     this._coolingLosses.push({
       coolingMedium: 'Air',
       waterCoolingForm: this.coolingLossesService.initWaterCoolingForm(),
@@ -109,16 +152,10 @@ export class CoolingLossesComponent implements OnInit {
       name: 'Loss #' + (this._coolingLosses.length + 1),
       heatLoss: 0.0
     });
-    this.lossState.saved = false;
   }
 
-  removeLoss(str: string) {
-    this._coolingLosses = _.remove(this._coolingLosses, loss => {
-      return loss.name != str;
-    });
-
-    this.lossState.saved = false;
-    this.renameLosses();
+  removeLoss(lossIndex) {
+    this.coolingLossesService.setDelete(lossIndex);
   }
 
   renameLosses() {
@@ -178,9 +215,7 @@ export class CoolingLossesComponent implements OnInit {
       tmpCoolingLosses.push(tmpCoolingLoss);
     })
     this.losses.coolingLosses = tmpCoolingLosses;
-    this.lossState.numLosses = this.losses.coolingLosses.length;
-    this.lossState.saved = true;
-    //this.setCompareVals();
+    this.setCompareVals();
     this.savedLoss.emit(true);
   }
 
@@ -195,7 +230,7 @@ export class CoolingLossesComponent implements OnInit {
       this.coolingLossesCompareService.modifiedCoolingLosses = this.losses.coolingLosses;
     }
     if (this.coolingLossesCompareService.differentArray) {
-      if (this.coolingLossesCompareService.differentArray.length != 0) {
+      if (this.coolingLossesCompareService.differentArray.length != 0 && !this.isBaseline) {
         this.coolingLossesCompareService.checkCoolingLosses();
       }
     }

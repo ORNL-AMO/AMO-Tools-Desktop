@@ -30,6 +30,13 @@ export class CoolingLossesCompareService {
     }
   }
 
+  addObject(num: number) {
+    this.differentArray.push({
+      lossIndex: num,
+      different: this.initDifferentObject()
+    })
+  }
+
   initDifferentObject(): CoolingLossDifferent {
     let tmpGasDifferent: GasCoolingLossDifferent = {
       flowRate: new BehaviorSubject<boolean>(null),
@@ -62,249 +69,115 @@ export class CoolingLossesCompareService {
   }
 
   checkCoolingLosses() {
-    this.checkCoolingLossType()
-    this.checkFlowRateGas();
-    this.checkInitialTemperatureGas();
-    this.checkFinalTemperatureGas();
-    this.checkSpecificHeatGas();
-    this.checkCorrectFactorGas();
-    this.checkFlowRateLiquid();
-    this.checkDensityLiquid();
-    this.checkInitialTemperatureLiquid();
-    this.checkOutletTemperatureLiquid();
-    this.checkSpecificHeatLiquid();
-    this.checkCorrectionFactorLiquid();
-    this.checkFlowRateWater();
-    this.checkInitialTemperatureWater();
-    this.checkOutletTemperatureWater();
-    this.checkCorrectionFactorWater();
-  }
-
-  //coolingLossType
-  checkCoolingLossType() {
     if (this.baselineCoolingLosses && this.modifiedCoolingLosses) {
-      for (let lossIndex = 0; lossIndex < this.baselineCoolingLosses.length; lossIndex++) {
-        if (this.baselineCoolingLosses[lossIndex].coolingLossType != this.modifiedCoolingLosses[lossIndex].coolingLossType) {
-          this.differentArray[lossIndex].different.coolingLossType.next(true);
-        } else {
-          this.differentArray[lossIndex].different.coolingLossType.next(false);
-        }
-      }
-    }
-  }
-  //gas ( 'Other Gas' )
-  //flowRate
-  checkFlowRateGas() {
-    if (this.baselineCoolingLosses && this.modifiedCoolingLosses) {
-      for (let lossIndex = 0; lossIndex < this.baselineCoolingLosses.length; lossIndex++) {
-        if (this.baselineCoolingLosses[lossIndex].coolingLossType == 'Other Gas' && this.modifiedCoolingLosses[lossIndex].coolingLossType == 'Other Gas') {
-          if (this.baselineCoolingLosses[lossIndex].gasCoolingLoss.flowRate != this.modifiedCoolingLosses[lossIndex].gasCoolingLoss.flowRate) {
-            this.differentArray[lossIndex].different.gasCoolingLossDifferent.flowRate.next(true);
+      if (this.baselineCoolingLosses.length != 0 && this.modifiedCoolingLosses.length != 0 && this.baselineCoolingLosses.length == this.modifiedCoolingLosses.length) {
+        for (let lossIndex = 0; lossIndex < this.differentArray.length; lossIndex++) {
+          this.differentArray[lossIndex].different.coolingLossType.next(this.compare(this.baselineCoolingLosses[lossIndex].coolingLossType, this.modifiedCoolingLosses[lossIndex].coolingLossType));
+          if (this.baselineCoolingLosses[lossIndex].coolingLossType == 'Other Gas' && this.modifiedCoolingLosses[lossIndex].coolingLossType == 'Other Gas') {
+            //flowRate
+            this.differentArray[lossIndex].different.gasCoolingLossDifferent.flowRate.next(this.compare(this.baselineCoolingLosses[lossIndex].gasCoolingLoss.flowRate, this.modifiedCoolingLosses[lossIndex].gasCoolingLoss.flowRate));
+            //initialTemperature
+            this.differentArray[lossIndex].different.gasCoolingLossDifferent.initialTemperature.next(this.compare(this.baselineCoolingLosses[lossIndex].gasCoolingLoss.initialTemperature, this.modifiedCoolingLosses[lossIndex].gasCoolingLoss.initialTemperature));
+            //finalTemperature
+            this.differentArray[lossIndex].different.gasCoolingLossDifferent.finalTemperature.next(this.compare(this.baselineCoolingLosses[lossIndex].gasCoolingLoss.finalTemperature, this.modifiedCoolingLosses[lossIndex].gasCoolingLoss.finalTemperature));
+            //specificHeat
+            this.differentArray[lossIndex].different.gasCoolingLossDifferent.specificHeat.next(this.compare(this.baselineCoolingLosses[lossIndex].gasCoolingLoss.specificHeat, this.modifiedCoolingLosses[lossIndex].gasCoolingLoss.specificHeat));
+            //correctionFactor
+            this.differentArray[lossIndex].different.gasCoolingLossDifferent.correctionFactor.next(this.compare(this.baselineCoolingLosses[lossIndex].gasCoolingLoss.correctionFactor, this.modifiedCoolingLosses[lossIndex].gasCoolingLoss.correctionFactor));
+          }
+          else if (this.baselineCoolingLosses[lossIndex].coolingLossType == 'Other Liquid' && this.modifiedCoolingLosses[lossIndex].coolingLossType == 'Other Liquid') {
+            //flowRate
+            this.differentArray[lossIndex].different.liquidCoolingLossDifferent.flowRate.next(this.compare(this.baselineCoolingLosses[lossIndex].liquidCoolingLoss.flowRate, this.modifiedCoolingLosses[lossIndex].liquidCoolingLoss.flowRate));
+            //density
+            this.differentArray[lossIndex].different.liquidCoolingLossDifferent.density.next(this.compare(this.baselineCoolingLosses[lossIndex].liquidCoolingLoss.density, this.modifiedCoolingLosses[lossIndex].liquidCoolingLoss.density));
+            //initialTemperature
+            this.differentArray[lossIndex].different.liquidCoolingLossDifferent.initialTemperature.next(this.compare(this.baselineCoolingLosses[lossIndex].liquidCoolingLoss.initialTemperature, this.modifiedCoolingLosses[lossIndex].liquidCoolingLoss.initialTemperature));
+            //outletTemperature
+            this.differentArray[lossIndex].different.liquidCoolingLossDifferent.outletTemperature.next(this.compare(this.baselineCoolingLosses[lossIndex].liquidCoolingLoss.outletTemperature, this.modifiedCoolingLosses[lossIndex].liquidCoolingLoss.outletTemperature));
+            //specificHeat
+            this.differentArray[lossIndex].different.liquidCoolingLossDifferent.specificHeat.next(this.compare(this.baselineCoolingLosses[lossIndex].liquidCoolingLoss.specificHeat, this.modifiedCoolingLosses[lossIndex].liquidCoolingLoss.specificHeat));
+            //correctionFactor
+            this.differentArray[lossIndex].different.liquidCoolingLossDifferent.correctionFactor.next(this.compare(this.baselineCoolingLosses[lossIndex].liquidCoolingLoss.correctionFactor, this.modifiedCoolingLosses[lossIndex].liquidCoolingLoss.correctionFactor));
+          }
+          else if (this.baselineCoolingLosses[lossIndex].coolingLossType == 'Water' && this.modifiedCoolingLosses[lossIndex].coolingLossType == 'Water') {
+            //flowRate
+            this.differentArray[lossIndex].different.waterCoolingLossDifferent.flowRate.next(this.compare(this.baselineCoolingLosses[lossIndex].waterCoolingLoss.flowRate, this.modifiedCoolingLosses[lossIndex].waterCoolingLoss.flowRate));
+            //initialTemperature
+            this.differentArray[lossIndex].different.waterCoolingLossDifferent.initialTemperature.next(this.compare(this.baselineCoolingLosses[lossIndex].waterCoolingLoss.initialTemperature, this.modifiedCoolingLosses[lossIndex].waterCoolingLoss.initialTemperature));
+            //outletTemperature
+            this.differentArray[lossIndex].different.waterCoolingLossDifferent.outletTemperature.next(this.compare(this.baselineCoolingLosses[lossIndex].waterCoolingLoss.outletTemperature, this.modifiedCoolingLosses[lossIndex].waterCoolingLoss.outletTemperature));
+            //correctionFactor
+            this.differentArray[lossIndex].different.waterCoolingLossDifferent.correctionFactor.next(this.compare(this.baselineCoolingLosses[lossIndex].waterCoolingLoss.correctionFactor, this.modifiedCoolingLosses[lossIndex].waterCoolingLoss.correctionFactor));
           } else {
-            this.differentArray[lossIndex].different.gasCoolingLossDifferent.flowRate.next(false);
+            this.disableIndexed(lossIndex);
           }
         }
+      } else {
+        this.disableAll();
       }
-    }
-  }
-  //initialTemperature
-  checkInitialTemperatureGas() {
-    if (this.baselineCoolingLosses && this.modifiedCoolingLosses) {
-      for (let lossIndex = 0; lossIndex < this.baselineCoolingLosses.length; lossIndex++) {
-        if (this.baselineCoolingLosses[lossIndex].coolingLossType == 'Other Gas' && this.modifiedCoolingLosses[lossIndex].coolingLossType == 'Other Gas') {
-          if (this.baselineCoolingLosses[lossIndex].gasCoolingLoss.initialTemperature != this.modifiedCoolingLosses[lossIndex].gasCoolingLoss.initialTemperature) {
-            this.differentArray[lossIndex].different.gasCoolingLossDifferent.initialTemperature.next(true);
-          } else {
-            this.differentArray[lossIndex].different.gasCoolingLossDifferent.initialTemperature.next(false);
-          }
-        }
-      }
-    }
-  }
-  //finalTemperature
-  checkFinalTemperatureGas() {
-    if (this.baselineCoolingLosses && this.modifiedCoolingLosses) {
-      for (let lossIndex = 0; lossIndex < this.baselineCoolingLosses.length; lossIndex++) {
-        if (this.baselineCoolingLosses[lossIndex].coolingLossType == 'Other Gas' && this.modifiedCoolingLosses[lossIndex].coolingLossType == 'Other Gas') {
-          if (this.baselineCoolingLosses[lossIndex].gasCoolingLoss.finalTemperature != this.modifiedCoolingLosses[lossIndex].gasCoolingLoss.finalTemperature) {
-            this.differentArray[lossIndex].different.gasCoolingLossDifferent.finalTemperature.next(true);
-          } else {
-            this.differentArray[lossIndex].different.gasCoolingLossDifferent.finalTemperature.next(false);
-          }
-        }
-      }
-    }
-  }
-  //specificHeat
-  checkSpecificHeatGas() {
-    if (this.baselineCoolingLosses && this.modifiedCoolingLosses) {
-      for (let lossIndex = 0; lossIndex < this.baselineCoolingLosses.length; lossIndex++) {
-        if (this.baselineCoolingLosses[lossIndex].coolingLossType == 'Other Gas' && this.modifiedCoolingLosses[lossIndex].coolingLossType == 'Other Gas') {
-          if (this.baselineCoolingLosses[lossIndex].gasCoolingLoss.specificHeat != this.modifiedCoolingLosses[lossIndex].gasCoolingLoss.specificHeat) {
-            this.differentArray[lossIndex].different.gasCoolingLossDifferent.specificHeat.next(true);
-          } else {
-            this.differentArray[lossIndex].different.gasCoolingLossDifferent.specificHeat.next(false);
-          }
-        }
-      }
-    }
-  }
-  //correctionFactor
-  checkCorrectFactorGas() {
-    if (this.baselineCoolingLosses && this.modifiedCoolingLosses) {
-      for (let lossIndex = 0; lossIndex < this.baselineCoolingLosses.length; lossIndex++) {
-        if (this.baselineCoolingLosses[lossIndex].coolingLossType == 'Other Gas' && this.modifiedCoolingLosses[lossIndex].coolingLossType == 'Other Gas') {
-          if (this.baselineCoolingLosses[lossIndex].gasCoolingLoss.correctionFactor != this.modifiedCoolingLosses[lossIndex].gasCoolingLoss.correctionFactor) {
-            this.differentArray[lossIndex].different.gasCoolingLossDifferent.correctionFactor.next(true);
-          } else {
-            this.differentArray[lossIndex].different.gasCoolingLossDifferent.correctionFactor.next(false);
-          }
-        }
-      }
+    } else {
+      this.disableAll();
     }
   }
 
-  //liquid ( 'Other Liquid' )
-  //flowRate
-  checkFlowRateLiquid() {
-    if (this.baselineCoolingLosses && this.modifiedCoolingLosses) {
-      for (let lossIndex = 0; lossIndex < this.baselineCoolingLosses.length; lossIndex++) {
-        if (this.baselineCoolingLosses[lossIndex].coolingLossType == 'Other Liquid' && this.modifiedCoolingLosses[lossIndex].coolingLossType == 'Other Liquid') {
-          if (this.baselineCoolingLosses[lossIndex].liquidCoolingLoss.flowRate != this.modifiedCoolingLosses[lossIndex].liquidCoolingLoss.flowRate) {
-            this.differentArray[lossIndex].different.liquidCoolingLossDifferent.flowRate.next(true);
-          } else {
-            this.differentArray[lossIndex].different.liquidCoolingLossDifferent.flowRate.next(false);
-          }
-        }
-      }
-    }
-  }
-  //density
-  checkDensityLiquid() {
-    if (this.baselineCoolingLosses && this.modifiedCoolingLosses) {
-      for (let lossIndex = 0; lossIndex < this.baselineCoolingLosses.length; lossIndex++) {
-        if (this.baselineCoolingLosses[lossIndex].coolingLossType == 'Other Liquid' && this.modifiedCoolingLosses[lossIndex].coolingLossType == 'Other Liquid') {
-          if (this.baselineCoolingLosses[lossIndex].liquidCoolingLoss.density != this.modifiedCoolingLosses[lossIndex].liquidCoolingLoss.density) {
-            this.differentArray[lossIndex].different.liquidCoolingLossDifferent.density.next(true);
-          } else {
-            this.differentArray[lossIndex].different.liquidCoolingLossDifferent.density.next(false);
-          }
-        }
-      }
-    }
-  }
-  //initialTemperature
-  checkInitialTemperatureLiquid() {
-    if (this.baselineCoolingLosses && this.modifiedCoolingLosses) {
-      for (let lossIndex = 0; lossIndex < this.baselineCoolingLosses.length; lossIndex++) {
-        if (this.baselineCoolingLosses[lossIndex].coolingLossType == 'Other Liquid' && this.modifiedCoolingLosses[lossIndex].coolingLossType == 'Other Liquid') {
-          if (this.baselineCoolingLosses[lossIndex].liquidCoolingLoss.initialTemperature != this.modifiedCoolingLosses[lossIndex].liquidCoolingLoss.initialTemperature) {
-            this.differentArray[lossIndex].different.liquidCoolingLossDifferent.initialTemperature.next(true);
-          } else {
-            this.differentArray[lossIndex].different.liquidCoolingLossDifferent.initialTemperature.next(false);
-          }
-        }
-      }
-    }
-  }
-  //outletTemperature
-  checkOutletTemperatureLiquid() {
-    if (this.baselineCoolingLosses && this.modifiedCoolingLosses) {
-      for (let lossIndex = 0; lossIndex < this.baselineCoolingLosses.length; lossIndex++) {
-        if (this.baselineCoolingLosses[lossIndex].coolingLossType == 'Other Liquid' && this.modifiedCoolingLosses[lossIndex].coolingLossType == 'Other Liquid') {
-          if (this.baselineCoolingLosses[lossIndex].liquidCoolingLoss.outletTemperature != this.modifiedCoolingLosses[lossIndex].liquidCoolingLoss.outletTemperature) {
-            this.differentArray[lossIndex].different.liquidCoolingLossDifferent.outletTemperature.next(true);
-          } else {
-            this.differentArray[lossIndex].different.liquidCoolingLossDifferent.outletTemperature.next(false);
-          }
-        }
-      }
-    }
-  }
-  //specificHeat
-  checkSpecificHeatLiquid() {
-    if (this.baselineCoolingLosses && this.modifiedCoolingLosses) {
-      for (let lossIndex = 0; lossIndex < this.baselineCoolingLosses.length; lossIndex++) {
-        if (this.baselineCoolingLosses[lossIndex].coolingLossType == 'Other Liquid' && this.modifiedCoolingLosses[lossIndex].coolingLossType == 'Other Liquid') {
-          if (this.baselineCoolingLosses[lossIndex].liquidCoolingLoss.specificHeat != this.modifiedCoolingLosses[lossIndex].liquidCoolingLoss.specificHeat) {
-            this.differentArray[lossIndex].different.liquidCoolingLossDifferent.specificHeat.next(true);
-          } else {
-            this.differentArray[lossIndex].different.liquidCoolingLossDifferent.specificHeat.next(false);
-          }
-        }
-      }
-    }
-  }
-  //correctionFactor
-  checkCorrectionFactorLiquid() {
-    if (this.baselineCoolingLosses && this.modifiedCoolingLosses) {
-      for (let lossIndex = 0; lossIndex < this.baselineCoolingLosses.length; lossIndex++) {
-        if (this.baselineCoolingLosses[lossIndex].coolingLossType == 'Other Liquid' && this.modifiedCoolingLosses[lossIndex].coolingLossType == 'Other Liquid') {
-          if (this.baselineCoolingLosses[lossIndex].liquidCoolingLoss.correctionFactor != this.modifiedCoolingLosses[lossIndex].liquidCoolingLoss.correctionFactor) {
-            this.differentArray[lossIndex].different.liquidCoolingLossDifferent.correctionFactor.next(true);
-          } else {
-            this.differentArray[lossIndex].different.liquidCoolingLossDifferent.correctionFactor.next(false);
-          }
-        }
-      }
+  disableAll() {
+    for (let lossIndex = 0; lossIndex < this.differentArray.length; lossIndex++) {
+      this.differentArray[lossIndex].different.coolingLossType.next(false);
+      //gasCooling
+      this.differentArray[lossIndex].different.gasCoolingLossDifferent.flowRate.next(false);
+      this.differentArray[lossIndex].different.gasCoolingLossDifferent.initialTemperature.next(false);
+      this.differentArray[lossIndex].different.gasCoolingLossDifferent.finalTemperature.next(false);
+      this.differentArray[lossIndex].different.gasCoolingLossDifferent.specificHeat.next(false);
+      this.differentArray[lossIndex].different.gasCoolingLossDifferent.correctionFactor.next(false);
+      //liquidCooling
+      this.differentArray[lossIndex].different.liquidCoolingLossDifferent.flowRate.next(false);
+      this.differentArray[lossIndex].different.liquidCoolingLossDifferent.density.next(false);
+      this.differentArray[lossIndex].different.liquidCoolingLossDifferent.initialTemperature.next(false);
+      this.differentArray[lossIndex].different.liquidCoolingLossDifferent.outletTemperature.next(false);
+      this.differentArray[lossIndex].different.liquidCoolingLossDifferent.specificHeat.next(false);
+      this.differentArray[lossIndex].different.liquidCoolingLossDifferent.correctionFactor.next(false);
+      //waterCooling
+      this.differentArray[lossIndex].different.waterCoolingLossDifferent.flowRate.next(false);
+      this.differentArray[lossIndex].different.waterCoolingLossDifferent.initialTemperature.next(false);
+      this.differentArray[lossIndex].different.waterCoolingLossDifferent.outletTemperature.next(false);
+      this.differentArray[lossIndex].different.waterCoolingLossDifferent.correctionFactor.next(false);
     }
   }
 
-  //water ( 'Water' )
-  //flowRate
-  checkFlowRateWater() {
-    if (this.baselineCoolingLosses && this.modifiedCoolingLosses) {
-      for (let lossIndex = 0; lossIndex < this.baselineCoolingLosses.length; lossIndex++) {
-        if (this.baselineCoolingLosses[lossIndex].coolingLossType == 'Water' && this.modifiedCoolingLosses[lossIndex].coolingLossType == 'Water') {
-          if (this.baselineCoolingLosses[lossIndex].waterCoolingLoss.flowRate != this.modifiedCoolingLosses[lossIndex].waterCoolingLoss.flowRate) {
-            this.differentArray[lossIndex].different.waterCoolingLossDifferent.flowRate.next(true);
-          } else {
-            this.differentArray[lossIndex].different.waterCoolingLossDifferent.flowRate.next(false);
-          }
-        }
+  disableIndexed(lossIndex: number) {
+    this.differentArray[lossIndex].different.coolingLossType.next(false);
+    //gasCooling
+    this.differentArray[lossIndex].different.gasCoolingLossDifferent.flowRate.next(false);
+    this.differentArray[lossIndex].different.gasCoolingLossDifferent.initialTemperature.next(false);
+    this.differentArray[lossIndex].different.gasCoolingLossDifferent.finalTemperature.next(false);
+    this.differentArray[lossIndex].different.gasCoolingLossDifferent.specificHeat.next(false);
+    this.differentArray[lossIndex].different.gasCoolingLossDifferent.correctionFactor.next(false);
+    //liquidCooling
+    this.differentArray[lossIndex].different.liquidCoolingLossDifferent.flowRate.next(false);
+    this.differentArray[lossIndex].different.liquidCoolingLossDifferent.density.next(false);
+    this.differentArray[lossIndex].different.liquidCoolingLossDifferent.initialTemperature.next(false);
+    this.differentArray[lossIndex].different.liquidCoolingLossDifferent.outletTemperature.next(false);
+    this.differentArray[lossIndex].different.liquidCoolingLossDifferent.specificHeat.next(false);
+    this.differentArray[lossIndex].different.liquidCoolingLossDifferent.correctionFactor.next(false);
+    //waterCooling
+    this.differentArray[lossIndex].different.waterCoolingLossDifferent.flowRate.next(false);
+    this.differentArray[lossIndex].different.waterCoolingLossDifferent.initialTemperature.next(false);
+    this.differentArray[lossIndex].different.waterCoolingLossDifferent.outletTemperature.next(false);
+    this.differentArray[lossIndex].different.waterCoolingLossDifferent.correctionFactor.next(false);
+  }
+
+  compare(a: any, b: any) {
+    if (a && b) {
+      if (a != b) {
+        return true;
+      } else {
+        return false;
       }
     }
-  }
-  //initialTemperature
-  checkInitialTemperatureWater() {
-    if (this.baselineCoolingLosses && this.modifiedCoolingLosses) {
-      for (let lossIndex = 0; lossIndex < this.baselineCoolingLosses.length; lossIndex++) {
-        if (this.baselineCoolingLosses[lossIndex].coolingLossType == 'Water' && this.modifiedCoolingLosses[lossIndex].coolingLossType == 'Water') {
-          if (this.baselineCoolingLosses[lossIndex].waterCoolingLoss.initialTemperature != this.modifiedCoolingLosses[lossIndex].waterCoolingLoss.initialTemperature) {
-            this.differentArray[lossIndex].different.waterCoolingLossDifferent.initialTemperature.next(true);
-          } else {
-            this.differentArray[lossIndex].different.waterCoolingLossDifferent.initialTemperature.next(false);
-          }
-        }
-      }
-    }
-  }
-  //outletTemperature
-  checkOutletTemperatureWater() {
-    if (this.baselineCoolingLosses && this.modifiedCoolingLosses) {
-      for (let lossIndex = 0; lossIndex < this.baselineCoolingLosses.length; lossIndex++) {
-        if (this.baselineCoolingLosses[lossIndex].coolingLossType == 'Water' && this.modifiedCoolingLosses[lossIndex].coolingLossType == 'Water') {
-          if (this.baselineCoolingLosses[lossIndex].waterCoolingLoss.outletTemperature != this.modifiedCoolingLosses[lossIndex].waterCoolingLoss.outletTemperature) {
-            this.differentArray[lossIndex].different.waterCoolingLossDifferent.outletTemperature.next(true);
-          } else {
-            this.differentArray[lossIndex].different.waterCoolingLossDifferent.outletTemperature.next(false);
-          }
-        }
-      }
-    }
-  }
-  //correctionFactor
-  checkCorrectionFactorWater() {
-    if (this.baselineCoolingLosses && this.modifiedCoolingLosses) {
-      for (let lossIndex = 0; lossIndex < this.baselineCoolingLosses.length; lossIndex++) {
-        if (this.baselineCoolingLosses[lossIndex].coolingLossType == 'Water' && this.modifiedCoolingLosses[lossIndex].coolingLossType == 'Water') {
-          if (this.baselineCoolingLosses[lossIndex].waterCoolingLoss.correctionFactor != this.modifiedCoolingLosses[lossIndex].waterCoolingLoss.correctionFactor) {
-            this.differentArray[lossIndex].different.waterCoolingLossDifferent.correctionFactor.next(true);
-          } else {
-            this.differentArray[lossIndex].different.waterCoolingLossDifferent.correctionFactor.next(false);
-          }
-        }
-      }
+    else if ((a && !b) || (!a && b)) {
+      return true
+    } else {
+      return false;
     }
   }
 }
