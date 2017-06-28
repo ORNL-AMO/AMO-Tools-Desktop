@@ -51,8 +51,8 @@
         [isBaseline]="true"></app-extended-surface-losses>
 
       <app-other-losses (fieldChange)="changeField($event)" [baselineSelected]="baselineSelected" (savedLoss)="saveModifications()"
-        [(losses)]="phast.losses" [addLossToggle]="addLossToggle" [(lossState)]="lossesStates.otherLosses" [saveClicked]="saveClicked"
-        *ngIf="lossesTab == 'other-losses'"></app-other-losses>
+        [(losses)]="phast.losses" [addLossToggle]="addLossToggle" [saveClicked]="saveClicked" *ngIf="lossesTab == 'other-losses'"
+        [isBaseline]="true"></app-other-losses>
 
       <app-slag (fieldChange)="changeField($event)" [baselineSelected]="baselineSelected" (savedLoss)="saveModifications()" [(losses)]="phast.losses"
         [addLossToggle]="addLossToggle" [saveClicked]="saveClicked" *ngIf="lossesTab == 'slag'" [isBaseline]="true"></app-slag>
@@ -117,8 +117,7 @@
         [(losses)]="_modifications[modificationIndex].phast.losses" [saveClicked]="saveClicked" *ngIf="lossesTab == 'extended-surface-losses'"></app-extended-surface-losses>
 
       <app-other-losses (fieldChange)="changeField($event)" [baselineSelected]="modificationSelected" (savedLoss)="saveModifications()"
-        [(losses)]="_modifications[modificationIndex].phast.losses" [saveClicked]="saveClicked" [(lossState)]="lossesStates.otherLosses"
-        *ngIf="lossesTab == 'other-losses'"></app-other-losses>
+        [(losses)]="_modifications[modificationIndex].phast.losses" [saveClicked]="saveClicked" *ngIf="lossesTab == 'other-losses'"></app-other-losses>
 
       <app-slag (fieldChange)="changeField($event)" [baselineSelected]="modificationSelected" (savedLoss)="saveModifications()"
         [(losses)]="_modifications[modificationIndex].phast.losses" [saveClicked]="saveClicked" *ngIf="lossesTab == 'slag'"></app-slag>
