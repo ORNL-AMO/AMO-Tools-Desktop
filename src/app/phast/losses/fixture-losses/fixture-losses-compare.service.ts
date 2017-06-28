@@ -41,86 +41,61 @@ export class FixtureLossesCompareService {
     return tmpDifferent;
   }
 
+  addObject(num: number) {
+    this.differentArray.push({
+      lossIndex: num,
+      different: this.initDifferentObject()
+    })
+  }
 
   checkFixtureLosses() {
-    this.checkSpecificHeat();
-    this.checkFeedRate();
-    this.checkInitialTemperature();
-    this.checkFinalTemperature();
-    this.checkCorrectionFactor();
-    this.checkMaterialName();
+    if (this.baselineFixtureLosses && this.modifiedFixtureLosses) {
+      if (this.baselineFixtureLosses.length != 0 && this.modifiedFixtureLosses.length && this.baselineFixtureLosses.length == this.modifiedFixtureLosses.length) {
+        for (let lossIndex = 0; lossIndex < this.differentArray.length; lossIndex++) {
+          //specificHeat
+          this.differentArray[lossIndex].different.specificHeat.next(this.compare(this.baselineFixtureLosses[lossIndex].specificHeat, this.modifiedFixtureLosses[lossIndex].specificHeat));
+          //feedRate
+          this.differentArray[lossIndex].different.feedRate.next(this.compare(this.baselineFixtureLosses[lossIndex].feedRate, this.modifiedFixtureLosses[lossIndex].feedRate));
+          //initialTemperature
+          this.differentArray[lossIndex].different.initialTemperature.next(this.compare(this.baselineFixtureLosses[lossIndex].initialTemperature, this.modifiedFixtureLosses[lossIndex].initialTemperature));
+          //finalTemperature
+          this.differentArray[lossIndex].different.finalTemperature.next(this.compare(this.baselineFixtureLosses[lossIndex].finalTemperature, this.modifiedFixtureLosses[lossIndex].finalTemperature));
+          //correctionFactor
+          this.differentArray[lossIndex].different.correctionFactor.next(this.compare(this.baselineFixtureLosses[lossIndex].correctionFactor, this.modifiedFixtureLosses[lossIndex].correctionFactor));
+          //materialName
+          this.differentArray[lossIndex].different.materialName.next(this.compare(this.baselineFixtureLosses[lossIndex].materialName, this.modifiedFixtureLosses[lossIndex].materialName));
+        }
+      }else{
+        this.disableAll();
+      }
+    }else{
+      this.disableAll();
+    }
   }
 
-  //specificHeat
-  checkSpecificHeat() {
-    if (this.baselineFixtureLosses && this.modifiedFixtureLosses) {
-      for (let lossIndex = 0; lossIndex < this.baselineFixtureLosses.length; lossIndex++) {
-        if (this.baselineFixtureLosses[lossIndex].specificHeat != this.modifiedFixtureLosses[lossIndex].specificHeat) {
-          this.differentArray[lossIndex].different.specificHeat.next(true);
-        } else {
-          this.differentArray[lossIndex].different.specificHeat.next(false);
-        }
-      }
+  disableAll() {
+    for (let lossIndex = 0; lossIndex < this.differentArray.length; lossIndex++) {
+      this.differentArray[lossIndex].different.specificHeat.next(false);
+      this.differentArray[lossIndex].different.feedRate.next(false);
+      this.differentArray[lossIndex].different.initialTemperature.next(false);
+      this.differentArray[lossIndex].different.finalTemperature.next(false);
+      this.differentArray[lossIndex].different.correctionFactor.next(false);
+      this.differentArray[lossIndex].different.materialName.next(false);
     }
   }
-  //feedRate
-  checkFeedRate() {
-    if (this.baselineFixtureLosses && this.modifiedFixtureLosses) {
-      for (let lossIndex = 0; lossIndex < this.baselineFixtureLosses.length; lossIndex++) {
-        if (this.baselineFixtureLosses[lossIndex].feedRate != this.modifiedFixtureLosses[lossIndex].feedRate) {
-          this.differentArray[lossIndex].different.feedRate.next(true);
-        } else {
-          this.differentArray[lossIndex].different.feedRate.next(false);
-        }
+
+  compare(a: any, b: any) {
+    if (a && b) {
+      if (a != b) {
+        return true;
+      } else {
+        return false;
       }
     }
-  }
-  //initialTemperature
-  checkInitialTemperature() {
-    if (this.baselineFixtureLosses && this.modifiedFixtureLosses) {
-      for (let lossIndex = 0; lossIndex < this.baselineFixtureLosses.length; lossIndex++) {
-        if (this.baselineFixtureLosses[lossIndex].initialTemperature != this.modifiedFixtureLosses[lossIndex].initialTemperature) {
-          this.differentArray[lossIndex].different.initialTemperature.next(true);
-        } else {
-          this.differentArray[lossIndex].different.initialTemperature.next(false);
-        }
-      }
-    }
-  }
-  //finalTemperature
-  checkFinalTemperature() {
-    if (this.baselineFixtureLosses && this.modifiedFixtureLosses) {
-      for (let lossIndex = 0; lossIndex < this.baselineFixtureLosses.length; lossIndex++) {
-        if (this.baselineFixtureLosses[lossIndex].finalTemperature != this.modifiedFixtureLosses[lossIndex].finalTemperature) {
-          this.differentArray[lossIndex].different.finalTemperature.next(true);
-        } else {
-          this.differentArray[lossIndex].different.finalTemperature.next(false);
-        }
-      }
-    }
-  }
-  //correctionFactor
-  checkCorrectionFactor() {
-    if (this.baselineFixtureLosses && this.modifiedFixtureLosses) {
-      for (let lossIndex = 0; lossIndex < this.baselineFixtureLosses.length; lossIndex++) {
-        if (this.baselineFixtureLosses[lossIndex].correctionFactor != this.modifiedFixtureLosses[lossIndex].correctionFactor) {
-          this.differentArray[lossIndex].different.correctionFactor.next(true);
-        } else {
-          this.differentArray[lossIndex].different.correctionFactor.next(false);
-        }
-      }
-    }
-  }
-  //materialName
-  checkMaterialName() {
-    if (this.baselineFixtureLosses && this.modifiedFixtureLosses) {
-      for (let lossIndex = 0; lossIndex < this.baselineFixtureLosses.length; lossIndex++) {
-        if (this.baselineFixtureLosses[lossIndex].materialName != this.modifiedFixtureLosses[lossIndex].materialName) {
-          this.differentArray[lossIndex].different.materialName.next(true);
-        } else {
-          this.differentArray[lossIndex].different.materialName.next(false);
-        }
-      }
+    else if ((a && !b) || (!a && b)) {
+      return true
+    } else {
+      return false;
     }
   }
 }

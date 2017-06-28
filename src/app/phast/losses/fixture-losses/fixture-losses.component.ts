@@ -17,8 +17,6 @@ export class FixtureLossesComponent implements OnInit {
   @Input()
   saveClicked: boolean;
   @Input()
-  lossState: any;
-  @Input()
   addLossToggle: boolean;
   @Output('savedLoss')
   savedLoss = new EventEmitter<boolean>();
@@ -51,8 +49,8 @@ export class FixtureLossesComponent implements OnInit {
       this._fixtureLosses = new Array();
     }
     if (this.losses.fixtureLosses) {
-     // this.setCompareVals();
-     // this.fixtureLossesCompareService.initCompareObjects();
+      this.setCompareVals();
+      this.fixtureLossesCompareService.initCompareObjects();
       this.losses.fixtureLosses.forEach(loss => {
         let tmpLoss = {
           form: this.fixtureLossesService.getFormFromLoss(loss),
@@ -60,31 +58,65 @@ export class FixtureLossesComponent implements OnInit {
           heatLoss: loss.heatLoss || 0.0
         };
         this.calculate(tmpLoss);
-        this._fixtureLosses.unshift(tmpLoss);
+        this._fixtureLosses.push(tmpLoss);
+      })
+    }
+
+    this.fixtureLossesService.deleteLossIndex.subscribe((lossIndex) => {
+      if (lossIndex != undefined) {
+        if (this.losses.fixtureLosses) {
+          this._fixtureLosses.splice(lossIndex, 1);
+          if (this.fixtureLossesCompareService.differentArray && !this.isBaseline) {
+            this.fixtureLossesCompareService.differentArray.splice(lossIndex, 1);
+          }
+        }
+      }
+    })
+    if (this.isBaseline) {
+      this.fixtureLossesService.addLossBaselineMonitor.subscribe((val) => {
+        if (val == true) {
+          this._fixtureLosses.push({
+            form: this.fixtureLossesService.initForm(),
+            name: 'Loss #' + (this._fixtureLosses.length + 1),
+            heatLoss: 0.0
+          })
+        }
+      })
+    } else {
+      this.fixtureLossesService.addLossModificationMonitor.subscribe((val) => {
+        if (val == true) {
+          this._fixtureLosses.push({
+            form: this.fixtureLossesService.initForm(),
+            name: 'Loss #' + (this._fixtureLosses.length + 1),
+            heatLoss: 0.0
+          })
+        }
       })
     }
   }
 
-  ngOnDestroy(){
+  ngOnDestroy() {
     this.fixtureLossesCompareService.baselineFixtureLosses = null;
     this.fixtureLossesCompareService.modifiedFixtureLosses = null;
+    this.fixtureLossesService.deleteLossIndex.next(null);
+    this.fixtureLossesService.addLossBaselineMonitor.next(false);
+    this.fixtureLossesService.addLossModificationMonitor.next(false);
   }
 
   addLoss() {
-    this._fixtureLosses.unshift({
+    this.fixtureLossesService.addLoss(this.isBaseline);
+    if (this.fixtureLossesCompareService.differentArray) {
+      this.fixtureLossesCompareService.addObject(this.fixtureLossesCompareService.differentArray.length - 1);
+    }
+    this._fixtureLosses.push({
       form: this.fixtureLossesService.initForm(),
       name: 'Loss #' + (this._fixtureLosses.length + 1),
       heatLoss: 0.0
     });
-    this.lossState.saved = false;
   }
 
-  removeLoss(str: string) {
-    this._fixtureLosses = _.remove(this._fixtureLosses, fixture => {
-      return fixture.name != str;
-    });
-    this.lossState.saved = false;
-    this.renameLosses();
+  removeLoss(lossIndex: number) {
+    this.fixtureLossesService.setDelete(lossIndex);
   }
 
   renameLosses() {
@@ -110,12 +142,10 @@ export class FixtureLossesComponent implements OnInit {
     this._fixtureLosses.forEach(loss => {
       let tmpFixtureLoss = this.fixtureLossesService.getLossFromForm(loss.form);
       tmpFixtureLoss.heatLoss = loss.heatLoss;
-      tmpFixtureLosses.unshift(tmpFixtureLoss);
+      tmpFixtureLosses.push(tmpFixtureLoss);
     });
     this.losses.fixtureLosses = tmpFixtureLosses;
-    this.lossState.numLosses = this.losses.fixtureLosses.length;
-    this.lossState.saved = true;
-    //this.setCompareVals();
+    this.setCompareVals();
     this.savedLoss.emit(true);
   }
 
@@ -129,7 +159,7 @@ export class FixtureLossesComponent implements OnInit {
     } else {
       this.fixtureLossesCompareService.modifiedFixtureLosses = this.losses.fixtureLosses;
     }
-    if (this.fixtureLossesCompareService.differentArray) {
+    if (this.fixtureLossesCompareService.differentArray && !this.isBaseline) {
       if (this.fixtureLossesCompareService.differentArray.length != 0) {
         this.fixtureLossesCompareService.checkFixtureLosses();
       }

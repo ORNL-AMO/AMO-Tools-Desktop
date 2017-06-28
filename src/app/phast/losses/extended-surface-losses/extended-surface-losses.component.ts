@@ -17,8 +17,6 @@ export class ExtendedSurfaceLossesComponent implements OnInit {
   @Input()
   saveClicked: boolean;
   @Input()
-  lossState: any;
-  @Input()
   addLossToggle: boolean;
   @Output('savedLoss')
   savedLoss = new EventEmitter<boolean>();
@@ -50,6 +48,9 @@ export class ExtendedSurfaceLossesComponent implements OnInit {
   ngOnDestroy() {
     this.extendedSurfaceCompareService.baselineSurface = null;
     this.extendedSurfaceCompareService.modifiedSurface = null;
+    this.extendedSurfaceLossesService.deleteLossIndex.next(null);
+    this.extendedSurfaceLossesService.addLossBaselineMonitor.next(false);
+    this.extendedSurfaceLossesService.addLossModificationMonitor.next(false);
   }
 
   ngOnInit() {
@@ -57,8 +58,8 @@ export class ExtendedSurfaceLossesComponent implements OnInit {
       this._surfaceLosses = new Array();
     }
     if (this.losses.extendedSurfaces) {
-      //this.setCompareVals();
-      //this.extendedSurfaceCompareService.initCompareObjects();
+      this.setCompareVals();
+      this.extendedSurfaceCompareService.initCompareObjects();
       this.losses.extendedSurfaces.forEach(loss => {
         let tmpLoss = {
           form: this.extendedSurfaceLossesService.getSurfaceLossForm(loss),
@@ -66,26 +67,56 @@ export class ExtendedSurfaceLossesComponent implements OnInit {
           heatLoss: loss.heatLoss || 0.0
         };
         this.calculate(tmpLoss);
-        this._surfaceLosses.unshift(tmpLoss);
+        this._surfaceLosses.push(tmpLoss);
+      })
+    }
+    this.extendedSurfaceLossesService.deleteLossIndex.subscribe((lossIndex) => {
+      if (lossIndex != undefined) {
+        if (this.losses.extendedSurfaces) {
+          this._surfaceLosses.splice(lossIndex, 1);
+          if (this.extendedSurfaceCompareService.differentArray && !this.isBaseline) {
+            this.extendedSurfaceCompareService.differentArray.splice(lossIndex, 1);
+          }
+        }
+      }
+    })
+    if (this.isBaseline) {
+      this.extendedSurfaceLossesService.addLossBaselineMonitor.subscribe((val) => {
+        if (val == true) {
+          this._surfaceLosses.push({
+            form: this.extendedSurfaceLossesService.initForm(),
+            name: 'Loss #' + (this._surfaceLosses.length + 1),
+            heatLoss: 0.0
+          })
+        }
+      })
+    } else {
+      this.extendedSurfaceLossesService.addLossModificationMonitor.subscribe((val) => {
+        if (val == true) {
+          this._surfaceLosses.push({
+            form: this.extendedSurfaceLossesService.initForm(),
+            name: 'Loss #' + (this._surfaceLosses.length + 1),
+            heatLoss: 0.0
+          })
+        }
       })
     }
   }
 
   addLoss() {
-    this._surfaceLosses.unshift({
+    this.extendedSurfaceLossesService.addLoss(this.isBaseline);
+    if (this.extendedSurfaceCompareService.differentArray) {
+      this.extendedSurfaceCompareService.addObject(this.extendedSurfaceCompareService.differentArray.length - 1);
+    }
+    this._surfaceLosses.push({
       form: this.extendedSurfaceLossesService.initForm(),
       name: 'Loss #' + (this._surfaceLosses.length + 1),
       heatLoss: 0.0
     });
-    this.lossState.saved = false;
   }
 
-  removeLoss(str: string) {
-    this._surfaceLosses = _.remove(this._surfaceLosses, loss => {
-      return loss.name != str;
-    });
-    this.lossState.saved = false;
-    this.renameLossess();
+  removeLoss(lossIndex: number) {
+    this.extendedSurfaceLossesService.setDelete(lossIndex);
   }
 
   renameLossess() {
@@ -118,12 +149,10 @@ export class ExtendedSurfaceLossesComponent implements OnInit {
     this._surfaceLosses.forEach(loss => {
       let tmpSurfaceLoss = this.extendedSurfaceLossesService.getSurfaceLossFromForm(loss.form);
       tmpSurfaceLoss.heatLoss = loss.heatLoss;
-      tmpSurfaceLosses.unshift(tmpSurfaceLoss);
+      tmpSurfaceLosses.push(tmpSurfaceLoss);
     })
     this.losses.extendedSurfaces = tmpSurfaceLosses;
-    this.lossState.numLosses = this.losses.extendedSurfaces.length;
-    this.lossState.saved = true;
-   // this.setCompareVals();
+    this.setCompareVals();
     this.savedLoss.emit(true);
   }
 
@@ -137,7 +166,7 @@ export class ExtendedSurfaceLossesComponent implements OnInit {
     } else {
       this.extendedSurfaceCompareService.modifiedSurface = this.losses.extendedSurfaces;
     }
-    if (this.extendedSurfaceCompareService.differentArray) {
+    if (this.extendedSurfaceCompareService.differentArray && !this.isBaseline) {
       if (this.extendedSurfaceCompareService.differentArray.length != 0) {
         this.extendedSurfaceCompareService.checkExtendedSurfaceLosses();
       }

@@ -19,6 +19,8 @@ export class LossesComponent implements OnInit {
   @Input()
   settings: Settings;
 
+  lossAdded: boolean;
+
   _modifications: Modification[];
   isDropdownOpen: boolean = false;
   baselineSelected: boolean = true;
@@ -151,7 +153,6 @@ export class LossesComponent implements OnInit {
     }
     tmpModification.phast.losses = (JSON.parse(JSON.stringify(this.phast.losses)));
     tmpModification.phast.name = 'Modification ' + (this._modifications.length + 1);
-    console.log(tmpModification);
     this._modifications.unshift(tmpModification);
     this.modificationIndex = this._modifications.length - 1;
     this.modificationSelected = true;
@@ -188,6 +189,7 @@ export class LossesComponent implements OnInit {
   }
 
   addLoss() {
+    this.lossAdded = true;
     this.addLossToggle = !this.addLossToggle;
   }
 
@@ -213,6 +215,7 @@ export class LossesComponent implements OnInit {
   }
 
   hideSetupDialog() {
+    this.saved.emit(true);
     this.showSetupDialog = false;
   }
 

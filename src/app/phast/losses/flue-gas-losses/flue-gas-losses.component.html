@@ -12,9 +12,10 @@
   <div class="row">
     <div class="col-12">
       <div class="pull-left">
-        <b>{{loss.name}}</b>
+        <h6 *ngIf="isBaseline">{{loss.name}}</h6>
+        <h6 *ngIf="!isBaseline">{{loss.name}} Modification</h6>
       </div>
-      <button class="close pull-right" aria-label="Close" (click)="removeLoss(loss.name)">
+      <button *ngIf="isBaseline" class="close pull-right" aria-label="Close" (click)="removeLoss(lossIndex)">
       <span aria-hidden="true">&times;</span>
     </button>
     </div>
@@ -29,9 +30,9 @@
             </select>
       </div>
       <app-flue-gas-losses-form-mass [(flueGasLossForm)]="loss.formByMass" *ngIf="loss.measurementType == 'By Mass'" (changeField)="changeField($event)"
-        [(lossState)]="lossState" (calculate)="calculate(loss)" [baselineSelected]="baselineSelected" (saveEmit)="saveLosses()" [lossIndex]="lossIndex"></app-flue-gas-losses-form-mass>
+        (calculate)="calculate(loss)" [baselineSelected]="baselineSelected" (saveEmit)="saveLosses()" [lossIndex]="lossIndex"></app-flue-gas-losses-form-mass>
       <app-flue-gas-losses-form-volume [(flueGasLossForm)]="loss.formByVolume" *ngIf="loss.measurementType == 'By Volume'" (changeField)="changeField($event)"
-        [(lossState)]="lossState" (calculate)="calculate(loss)" [baselineSelected]="baselineSelected" (saveEmit)="saveLosses()" [lossIndex]="lossIndex"></app-flue-gas-losses-form-volume>
+        (calculate)="calculate(loss)" [baselineSelected]="baselineSelected" (saveEmit)="saveLosses()" [lossIndex]="lossIndex"></app-flue-gas-losses-form-volume>
     </div>
   </div>
   <div class="row">

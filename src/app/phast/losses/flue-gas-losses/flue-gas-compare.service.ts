@@ -29,6 +29,13 @@ export class FlueGasCompareService {
     }
   }
 
+  addObject(num: number) {
+    this.differentArray.push({
+      lossIndex: num,
+      different: this.initDifferentObject()
+    })
+  }
+
   initDifferentObject(): FlueGasDifferent {
     let tmpByVolume: FlueGasVolumeDifferent = {
       gasTypeId: new BehaviorSubject<boolean>(null),
@@ -55,192 +62,99 @@ export class FlueGasCompareService {
   }
 
   checkFlueGasLosses() {
-    //volume
-    this.checkGasTypeIdVolume();
-    this.checkFlueGasTemperatureVolume();
-    this.checkExcessAirPercentageVolume();
-    this.checkCombustionAirTemperatureVolume();
-    //mass
-    this.checkGasTypeIdMass();
-    this.checkFlueGasTemperatureMass();
-    this.checkCombustionAirTemperatureMass();
-    this.checkFuelTemperature();
-    this.checkAshDischargeTemperature();
-    this.checkMoistureInAirComposition();
-    this.checkUnburnedCarbonInAsh();
-    this.checkExcessAirPercentageMass();
+    if (this.baselineFlueGasLoss && this.modifiedFlueGasLoss) {
+      if (this.baselineFlueGasLoss.length != 0 && this.modifiedFlueGasLoss.length != 0 && this.baselineFlueGasLoss.length == this.modifiedFlueGasLoss.length) {
+        for (let lossIndex = 0; lossIndex < this.differentArray.length; lossIndex++) {
+          //volume
+          if (this.baselineFlueGasLoss[lossIndex].flueGasType == "By Volume" && this.modifiedFlueGasLoss[lossIndex].flueGasType == "By Volume") {
+            //gasTypeId
+            this.differentArray[lossIndex].different.flueGasVolumeDifferent.gasTypeId.next(this.compare(this.baselineFlueGasLoss[lossIndex].flueGasByVolume.gasTypeId, this.modifiedFlueGasLoss[lossIndex].flueGasByVolume.gasTypeId))
+            //flueGasTemperature
+            this.differentArray[lossIndex].different.flueGasVolumeDifferent.flueGasTemperature.next(this.compare(this.baselineFlueGasLoss[lossIndex].flueGasByVolume.flueGasTemperature, this.modifiedFlueGasLoss[lossIndex].flueGasByVolume.flueGasTemperature))
+            //excessAirPercentage
+            this.differentArray[lossIndex].different.flueGasVolumeDifferent.excessAirPercentage.next(this.compare(this.baselineFlueGasLoss[lossIndex].flueGasByVolume.excessAirPercentage, this.modifiedFlueGasLoss[lossIndex].flueGasByVolume.excessAirPercentage))
+            //combustionAirTemperature
+            this.differentArray[lossIndex].different.flueGasVolumeDifferent.combustionAirTemperature.next(this.compare(this.baselineFlueGasLoss[lossIndex].flueGasByVolume.combustionAirTemperature, this.modifiedFlueGasLoss[lossIndex].flueGasByVolume.combustionAirTemperature))
+          }
+          //mass
+          else if (this.baselineFlueGasLoss[lossIndex].flueGasType == "By Mass" && this.modifiedFlueGasLoss[lossIndex].flueGasType == "By Mass") {
+            //gasTypeId
+            this.differentArray[lossIndex].different.flueGasMassDifferent.gasTypeId.next(this.compare(this.baselineFlueGasLoss[lossIndex].flueGasByMass.gasTypeId, this.modifiedFlueGasLoss[lossIndex].flueGasByMass.gasTypeId))
+            //flueGasTemperature
+            this.differentArray[lossIndex].different.flueGasMassDifferent.flueGasTemperature.next(this.compare(this.baselineFlueGasLoss[lossIndex].flueGasByMass.flueGasTemperature, this.modifiedFlueGasLoss[lossIndex].flueGasByMass.flueGasTemperature))
+            //excessAirPercentage
+            this.differentArray[lossIndex].different.flueGasMassDifferent.excessAirPercentage.next(this.compare(this.baselineFlueGasLoss[lossIndex].flueGasByMass.excessAirPercentage, this.modifiedFlueGasLoss[lossIndex].flueGasByMass.excessAirPercentage))
+            //combustionAirTemperature
+            this.differentArray[lossIndex].different.flueGasMassDifferent.combustionAirTemperature.next(this.compare(this.baselineFlueGasLoss[lossIndex].flueGasByMass.combustionAirTemperature, this.modifiedFlueGasLoss[lossIndex].flueGasByMass.combustionAirTemperature))
+            //fuelTemperature
+            this.differentArray[lossIndex].different.flueGasMassDifferent.fuelTemperature.next(this.compare(this.baselineFlueGasLoss[lossIndex].flueGasByMass.fuelTemperature, this.modifiedFlueGasLoss[lossIndex].flueGasByMass.fuelTemperature))
+            //ashDischargeTemperature
+            this.differentArray[lossIndex].different.flueGasMassDifferent.ashDischargeTemperature.next(this.compare(this.baselineFlueGasLoss[lossIndex].flueGasByMass.ashDischargeTemperature, this.modifiedFlueGasLoss[lossIndex].flueGasByMass.ashDischargeTemperature))
+            //moistureInAirComposition
+            this.differentArray[lossIndex].different.flueGasMassDifferent.moistureInAirComposition.next(this.compare(this.baselineFlueGasLoss[lossIndex].flueGasByMass.moistureInAirComposition, this.modifiedFlueGasLoss[lossIndex].flueGasByMass.moistureInAirComposition))
+            //unburnedCarbonInAsh
+            this.differentArray[lossIndex].different.flueGasMassDifferent.unburnedCarbonInAsh.next(this.compare(this.baselineFlueGasLoss[lossIndex].flueGasByMass.unburnedCarbonInAsh, this.modifiedFlueGasLoss[lossIndex].flueGasByMass.unburnedCarbonInAsh))
+          } else {
+            this.disableIndexed(lossIndex);
+          }
+        }
+      } else {
+        this.disableAll();
+      }
+    }
+    else if ((this.baselineFlueGasLoss && !this.modifiedFlueGasLoss) || (!this.baselineFlueGasLoss && this.modifiedFlueGasLoss)) {
+      this.disableAll();
+    }
   }
 
-  //volume
-  //gasTypeId
-  checkGasTypeIdVolume() {
-    if (this.baselineFlueGasLoss && this.modifiedFlueGasLoss) {
-      for (let lossIndex = 0; lossIndex < this.baselineFlueGasLoss.length; lossIndex++) {
-        if (this.baselineFlueGasLoss[lossIndex].flueGasType == "By Volume" && this.modifiedFlueGasLoss[lossIndex].flueGasType == "By Volume") {
-          if (this.baselineFlueGasLoss[lossIndex].flueGasByVolume.gasTypeId != this.modifiedFlueGasLoss[lossIndex].flueGasByVolume.gasTypeId) {
-            this.differentArray[lossIndex].different.flueGasVolumeDifferent.gasTypeId.next(true);
-          } else {
-            this.differentArray[lossIndex].different.flueGasVolumeDifferent.gasTypeId.next(false);
-          }
-        }
-      }
+  disableAll() {
+    for (let lossIndex = 0; lossIndex < this.differentArray.length; lossIndex++) {
+      this.differentArray[lossIndex].different.flueGasVolumeDifferent.gasTypeId.next(false);
+      this.differentArray[lossIndex].different.flueGasVolumeDifferent.flueGasTemperature.next(false);
+      this.differentArray[lossIndex].different.flueGasVolumeDifferent.excessAirPercentage.next(false);
+      this.differentArray[lossIndex].different.flueGasVolumeDifferent.combustionAirTemperature.next(false);
+      this.differentArray[lossIndex].different.flueGasMassDifferent.gasTypeId.next(false);
+      this.differentArray[lossIndex].different.flueGasMassDifferent.flueGasTemperature.next(false);
+      this.differentArray[lossIndex].different.flueGasMassDifferent.excessAirPercentage.next(false);
+      this.differentArray[lossIndex].different.flueGasMassDifferent.combustionAirTemperature.next(false);
+      this.differentArray[lossIndex].different.flueGasMassDifferent.fuelTemperature.next(false);
+      this.differentArray[lossIndex].different.flueGasMassDifferent.ashDischargeTemperature.next(false);
+      this.differentArray[lossIndex].different.flueGasMassDifferent.moistureInAirComposition.next(false);
+      this.differentArray[lossIndex].different.flueGasMassDifferent.unburnedCarbonInAsh.next(false);
     }
   }
-  //flueGasTemperature
-  checkFlueGasTemperatureVolume() {
-    if (this.baselineFlueGasLoss && this.modifiedFlueGasLoss) {
-      for (let lossIndex = 0; lossIndex < this.baselineFlueGasLoss.length; lossIndex++) {
-        if (this.baselineFlueGasLoss[lossIndex].flueGasType == "By Volume" && this.modifiedFlueGasLoss[lossIndex].flueGasType == "By Volume") {
-          if (this.baselineFlueGasLoss[lossIndex].flueGasByVolume.flueGasTemperature != this.modifiedFlueGasLoss[lossIndex].flueGasByVolume.flueGasTemperature) {
-            this.differentArray[lossIndex].different.flueGasVolumeDifferent.flueGasTemperature.next(true);
-          } else {
-            this.differentArray[lossIndex].different.flueGasVolumeDifferent.flueGasTemperature.next(false);
-          }
-        }
+
+  disableIndexed(lossIndex: number) {
+    this.differentArray[lossIndex].different.flueGasVolumeDifferent.gasTypeId.next(false);
+    this.differentArray[lossIndex].different.flueGasVolumeDifferent.flueGasTemperature.next(false);
+    this.differentArray[lossIndex].different.flueGasVolumeDifferent.excessAirPercentage.next(false);
+    this.differentArray[lossIndex].different.flueGasVolumeDifferent.combustionAirTemperature.next(false);
+    this.differentArray[lossIndex].different.flueGasMassDifferent.gasTypeId.next(false);
+    this.differentArray[lossIndex].different.flueGasMassDifferent.flueGasTemperature.next(false);
+    this.differentArray[lossIndex].different.flueGasMassDifferent.excessAirPercentage.next(false);
+    this.differentArray[lossIndex].different.flueGasMassDifferent.combustionAirTemperature.next(false);
+    this.differentArray[lossIndex].different.flueGasMassDifferent.fuelTemperature.next(false);
+    this.differentArray[lossIndex].different.flueGasMassDifferent.ashDischargeTemperature.next(false);
+    this.differentArray[lossIndex].different.flueGasMassDifferent.moistureInAirComposition.next(false);
+    this.differentArray[lossIndex].different.flueGasMassDifferent.unburnedCarbonInAsh.next(false);
+  }
+
+
+  compare(a: any, b: any) {
+    if (a && b) {
+      if (a != b) {
+        return true;
+      } else {
+        return false;
       }
     }
-  }
-  //excessAirPercentage
-  checkExcessAirPercentageVolume() {
-    if (this.baselineFlueGasLoss && this.modifiedFlueGasLoss) {
-      for (let lossIndex = 0; lossIndex < this.baselineFlueGasLoss.length; lossIndex++) {
-        if (this.baselineFlueGasLoss[lossIndex].flueGasType == "By Volume" && this.modifiedFlueGasLoss[lossIndex].flueGasType == "By Volume") {
-          if (this.baselineFlueGasLoss[lossIndex].flueGasByVolume.excessAirPercentage != this.modifiedFlueGasLoss[lossIndex].flueGasByVolume.excessAirPercentage) {
-            this.differentArray[lossIndex].different.flueGasVolumeDifferent.excessAirPercentage.next(true);
-          } else {
-            this.differentArray[lossIndex].different.flueGasVolumeDifferent.excessAirPercentage.next(false);
-          }
-        }
-      }
+    else if ((a && !b) || (!a && b)) {
+      return true
+    } else {
+      return false;
     }
   }
-  //combustionAirTemperature
-  checkCombustionAirTemperatureVolume() {
-    if (this.baselineFlueGasLoss && this.modifiedFlueGasLoss) {
-      for (let lossIndex = 0; lossIndex < this.baselineFlueGasLoss.length; lossIndex++) {
-        if (this.baselineFlueGasLoss[lossIndex].flueGasType == "By Volume" && this.modifiedFlueGasLoss[lossIndex].flueGasType == "By Volume") {
-          if (this.baselineFlueGasLoss[lossIndex].flueGasByVolume.combustionAirTemperature != this.modifiedFlueGasLoss[lossIndex].flueGasByVolume.combustionAirTemperature) {
-            this.differentArray[lossIndex].different.flueGasVolumeDifferent.combustionAirTemperature.next(true);
-          } else {
-            this.differentArray[lossIndex].different.flueGasVolumeDifferent.combustionAirTemperature.next(false);
-          }
-        }
-      }
-    }
-  }
-  //mass
-  //gasTypeId
-  checkGasTypeIdMass() {
-    if (this.baselineFlueGasLoss && this.modifiedFlueGasLoss) {
-      for (let lossIndex = 0; lossIndex < this.baselineFlueGasLoss.length; lossIndex++) {
-        if (this.baselineFlueGasLoss[lossIndex].flueGasType == "By Mass" && this.modifiedFlueGasLoss[lossIndex].flueGasType == "By Mass") {
-          if (this.baselineFlueGasLoss[lossIndex].flueGasByMass.gasTypeId != this.modifiedFlueGasLoss[lossIndex].flueGasByMass.gasTypeId) {
-            this.differentArray[lossIndex].different.flueGasMassDifferent.gasTypeId.next(true);
-          } else {
-            this.differentArray[lossIndex].different.flueGasMassDifferent.gasTypeId.next(false);
-          }
-        }
-      }
-    }
-  }
-  //flueGasTemperature
-  checkFlueGasTemperatureMass() {
-    if (this.baselineFlueGasLoss && this.modifiedFlueGasLoss) {
-      for (let lossIndex = 0; lossIndex < this.baselineFlueGasLoss.length; lossIndex++) {
-        if (this.baselineFlueGasLoss[lossIndex].flueGasType == "By Mass" && this.modifiedFlueGasLoss[lossIndex].flueGasType == "By Mass") {
-          if (this.baselineFlueGasLoss[lossIndex].flueGasByMass.flueGasTemperature != this.modifiedFlueGasLoss[lossIndex].flueGasByMass.flueGasTemperature) {
-            this.differentArray[lossIndex].different.flueGasMassDifferent.flueGasTemperature.next(true);
-          } else {
-            this.differentArray[lossIndex].different.flueGasMassDifferent.flueGasTemperature.next(false);
-          }
-        }
-      }
-    }
-  }
-  //combustionAirTemperature
-  checkCombustionAirTemperatureMass() {
-    if (this.baselineFlueGasLoss && this.modifiedFlueGasLoss) {
-      for (let lossIndex = 0; lossIndex < this.baselineFlueGasLoss.length; lossIndex++) {
-        if (this.baselineFlueGasLoss[lossIndex].flueGasType == "By Mass" && this.modifiedFlueGasLoss[lossIndex].flueGasType == "By Mass") {
-          if (this.baselineFlueGasLoss[lossIndex].flueGasByMass.combustionAirTemperature != this.modifiedFlueGasLoss[lossIndex].flueGasByMass.combustionAirTemperature) {
-            this.differentArray[lossIndex].different.flueGasMassDifferent.combustionAirTemperature.next(true);
-          } else {
-            this.differentArray[lossIndex].different.flueGasMassDifferent.combustionAirTemperature.next(false);
-          }
-        }
-      }
-    }
-  }
-  //fuelTemperature
-  checkFuelTemperature() {
-    if (this.baselineFlueGasLoss && this.modifiedFlueGasLoss) {
-      for (let lossIndex = 0; lossIndex < this.baselineFlueGasLoss.length; lossIndex++) {
-        if (this.baselineFlueGasLoss[lossIndex].flueGasType == "By Mass" && this.modifiedFlueGasLoss[lossIndex].flueGasType == "By Mass") {
-          if (this.baselineFlueGasLoss[lossIndex].flueGasByMass.fuelTemperature != this.modifiedFlueGasLoss[lossIndex].flueGasByMass.fuelTemperature) {
-            this.differentArray[lossIndex].different.flueGasMassDifferent.fuelTemperature.next(true);
-          } else {
-            this.differentArray[lossIndex].different.flueGasMassDifferent.fuelTemperature.next(false);
-          }
-        }
-      }
-    }
-  }
-  //ashDischargeTemperature
-  checkAshDischargeTemperature() {
-    if (this.baselineFlueGasLoss && this.modifiedFlueGasLoss) {
-      for (let lossIndex = 0; lossIndex < this.baselineFlueGasLoss.length; lossIndex++) {
-        if (this.baselineFlueGasLoss[lossIndex].flueGasType == "By Mass" && this.modifiedFlueGasLoss[lossIndex].flueGasType == "By Mass") {
-          if (this.baselineFlueGasLoss[lossIndex].flueGasByMass.ashDischargeTemperature != this.modifiedFlueGasLoss[lossIndex].flueGasByMass.ashDischargeTemperature) {
-            this.differentArray[lossIndex].different.flueGasMassDifferent.ashDischargeTemperature.next(true);
-          } else {
-            this.differentArray[lossIndex].different.flueGasMassDifferent.ashDischargeTemperature.next(false);
-          }
-        }
-      }
-    }
-  }
-  //moistureInAirComposition
-  checkMoistureInAirComposition() {
-    if (this.baselineFlueGasLoss && this.modifiedFlueGasLoss) {
-      for (let lossIndex = 0; lossIndex < this.baselineFlueGasLoss.length; lossIndex++) {
-        if (this.baselineFlueGasLoss[lossIndex].flueGasType == "By Mass" && this.modifiedFlueGasLoss[lossIndex].flueGasType == "By Mass") {
-          if (this.baselineFlueGasLoss[lossIndex].flueGasByMass.moistureInAirComposition != this.modifiedFlueGasLoss[lossIndex].flueGasByMass.moistureInAirComposition) {
-            this.differentArray[lossIndex].different.flueGasMassDifferent.moistureInAirComposition.next(true);
-          } else {
-            this.differentArray[lossIndex].different.flueGasMassDifferent.moistureInAirComposition.next(false);
-          }
-        }
-      }
-    }
-  }
-  //unburnedCarbonInAsh
-  checkUnburnedCarbonInAsh() {
-    if (this.baselineFlueGasLoss && this.modifiedFlueGasLoss) {
-      for (let lossIndex = 0; lossIndex < this.baselineFlueGasLoss.length; lossIndex++) {
-        if (this.baselineFlueGasLoss[lossIndex].flueGasType == "By Mass" && this.modifiedFlueGasLoss[lossIndex].flueGasType == "By Mass") {
-          if (this.baselineFlueGasLoss[lossIndex].flueGasByMass.unburnedCarbonInAsh != this.modifiedFlueGasLoss[lossIndex].flueGasByMass.unburnedCarbonInAsh) {
-            this.differentArray[lossIndex].different.flueGasMassDifferent.unburnedCarbonInAsh.next(true);
-          } else {
-            this.differentArray[lossIndex].different.flueGasMassDifferent.unburnedCarbonInAsh.next(false);
-          }
-        }
-      }
-    }
-  }
-  //excessAirPercentage
-  checkExcessAirPercentageMass(){
-    if (this.baselineFlueGasLoss && this.modifiedFlueGasLoss) {
-      for (let lossIndex = 0; lossIndex < this.baselineFlueGasLoss.length; lossIndex++) {
-        if (this.baselineFlueGasLoss[lossIndex].flueGasType == "By Mass" && this.modifiedFlueGasLoss[lossIndex].flueGasType == "By Mass") {
-          if (this.baselineFlueGasLoss[lossIndex].flueGasByMass.excessAirPercentage != this.modifiedFlueGasLoss[lossIndex].flueGasByMass.excessAirPercentage) {
-            this.differentArray[lossIndex].different.flueGasMassDifferent.excessAirPercentage.next(true);
-          } else {
-            this.differentArray[lossIndex].different.flueGasMassDifferent.excessAirPercentage.next(false);
-          }
-        }
-      }
-    }
-  }
+
 }
 
 export interface FlueGasDifferent {

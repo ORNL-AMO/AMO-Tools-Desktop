@@ -12,8 +12,6 @@ export class AuxiliaryPowerLossesFormComponent implements OnInit {
   @Output('calculate')
   calculate = new EventEmitter<boolean>();
   @Input()
-  lossState: any;
-  @Input()
   baselineSelected: boolean;
   @Output('changeField')
   changeField = new EventEmitter<string>();
@@ -66,7 +64,6 @@ export class AuxiliaryPowerLossesFormComponent implements OnInit {
   }
 
   checkForm() {
-    this.lossState.saved = false;
     if (this.auxLossesForm.status == "VALID") {
       this.calculate.emit(true);
     }
@@ -92,43 +89,45 @@ export class AuxiliaryPowerLossesFormComponent implements OnInit {
 
   initDifferenceMonitor() {
     if (this.auxiliaryPowerCompareService.baselineAuxLosses && this.auxiliaryPowerCompareService.modifiedAuxLosses && this.auxiliaryPowerCompareService.differentArray.length != 0) {
-      let doc = this.windowRefService.getDoc();
+      if (this.auxiliaryPowerCompareService.differentArray[this.lossIndex]) {
+        let doc = this.windowRefService.getDoc();
 
-      //motorPhase
-      this.auxiliaryPowerCompareService.differentArray[this.lossIndex].different.motorPhase.subscribe((val) => {
-        let motorPhaseElements = doc.getElementsByName('motorPhase_' + this.lossIndex);
-        motorPhaseElements.forEach(element => {
-          element.classList.toggle('indicate-different', val);
-        });
-      })
-      //supplyVoltage
-      this.auxiliaryPowerCompareService.differentArray[this.lossIndex].different.supplyVoltage.subscribe((val) => {
-        let supplyVoltageElements = doc.getElementsByName('supplyVoltage_' + this.lossIndex);
-        supplyVoltageElements.forEach(element => {
-          element.classList.toggle('indicate-different', val);
-        });
-      })
-      //avgCurrent
-      this.auxiliaryPowerCompareService.differentArray[this.lossIndex].different.avgCurrent.subscribe((val) => {
-        let avgCurrentElements = doc.getElementsByName('avgCurrent_' + this.lossIndex);
-        avgCurrentElements.forEach(element => {
-          element.classList.toggle('indicate-different', val);
-        });
-      })
-      //powerFactor
-      this.auxiliaryPowerCompareService.differentArray[this.lossIndex].different.powerFactor.subscribe((val) => {
-        let powerFactorElements = doc.getElementsByName('powerFactor_' + this.lossIndex);
-        powerFactorElements.forEach(element => {
-          element.classList.toggle('indicate-different', val);
-        });
-      })
-      //operatingTime
-      this.auxiliaryPowerCompareService.differentArray[this.lossIndex].different.operatingTime.subscribe((val) => {
-        let operatingTimeElements = doc.getElementsByName('operatingTime_' + this.lossIndex);
-        operatingTimeElements.forEach(element => {
-          element.classList.toggle('indicate-different', val);
-        });
-      })
+        //motorPhase
+        this.auxiliaryPowerCompareService.differentArray[this.lossIndex].different.motorPhase.subscribe((val) => {
+          let motorPhaseElements = doc.getElementsByName('motorPhase_' + this.lossIndex);
+          motorPhaseElements.forEach(element => {
+            element.classList.toggle('indicate-different', val);
+          });
+        })
+        //supplyVoltage
+        this.auxiliaryPowerCompareService.differentArray[this.lossIndex].different.supplyVoltage.subscribe((val) => {
+          let supplyVoltageElements = doc.getElementsByName('supplyVoltage_' + this.lossIndex);
+          supplyVoltageElements.forEach(element => {
+            element.classList.toggle('indicate-different', val);
+          });
+        })
+        //avgCurrent
+        this.auxiliaryPowerCompareService.differentArray[this.lossIndex].different.avgCurrent.subscribe((val) => {
+          let avgCurrentElements = doc.getElementsByName('avgCurrent_' + this.lossIndex);
+          avgCurrentElements.forEach(element => {
+            element.classList.toggle('indicate-different', val);
+          });
+        })
+        //powerFactor
+        this.auxiliaryPowerCompareService.differentArray[this.lossIndex].different.powerFactor.subscribe((val) => {
+          let powerFactorElements = doc.getElementsByName('powerFactor_' + this.lossIndex);
+          powerFactorElements.forEach(element => {
+            element.classList.toggle('indicate-different', val);
+          });
+        })
+        //operatingTime
+        this.auxiliaryPowerCompareService.differentArray[this.lossIndex].different.operatingTime.subscribe((val) => {
+          let operatingTimeElements = doc.getElementsByName('operatingTime_' + this.lossIndex);
+          operatingTimeElements.forEach(element => {
+            element.classList.toggle('indicate-different', val);
+          });
+        })
+      }
     }
   }
 }

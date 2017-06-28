@@ -1,4 +1,6 @@
 import { Component, OnInit, Input, EventEmitter, Output, ViewChild, ElementRef, SimpleChanges } from '@angular/core';
+import { OtherLossesCompareService } from '../other-losses-compare.service';
+import { WindowRefService } from '../../../../indexedDb/window-ref.service';
 @Component({
   selector: 'app-other-losses-form',
   templateUrl: './other-losses-form.component.html',
@@ -10,7 +12,7 @@ export class OtherLossesFormComponent implements OnInit {
   @Output('calculate')
   calculate = new EventEmitter<boolean>();
   @Input()
-  lossState: any;
+  lossIndex: number;
   @Input()
   baselineSelected: boolean;
   @Output('changeField')
@@ -25,7 +27,7 @@ export class OtherLossesFormComponent implements OnInit {
   counter: any;
 
   firstChange: boolean = true;
-  constructor() { }
+  constructor(private windowRefService: WindowRefService, private otherLossesCompareService: OtherLossesCompareService) { }
 
   ngOnChanges(changes: SimpleChanges) {
     if (!this.firstChange) {
@@ -40,9 +42,13 @@ export class OtherLossesFormComponent implements OnInit {
   }
 
   ngOnInit() {
+  }
+
+  ngAfterViewInit() {
     if (!this.baselineSelected) {
       this.disableForm();
     }
+    this.initDifferenceMonitor();
   }
 
   disableForm() {
@@ -60,7 +66,6 @@ export class OtherLossesFormComponent implements OnInit {
   }
 
   checkForm() {
-    this.lossState.saved = false;
     if (this.lossesForm.status == "VALID") {
       this.calculate.emit(true);
     }
@@ -84,4 +89,26 @@ export class OtherLossesFormComponent implements OnInit {
     }, 3000)
   }
 
+  initDifferenceMonitor() {
+    if (this.otherLossesCompareService.baselineOtherLoss && this.otherLossesCompareService.modifiedOtherLoss && this.otherLossesCompareService.differentArray.length != 0) {
+      if (this.otherLossesCompareService.differentArray[this.lossIndex]) {
+        let doc = this.windowRefService.getDoc();
+
+        //description
+        this.otherLossesCompareService.differentArray[this.lossIndex].different.description.subscribe((val) => {
+          let descriptionElements = doc.getElementsByName('description_' + this.lossIndex);
+          descriptionElements.forEach(element => {
+            element.classList.toggle('indicate-different', val);
+          });
+        })
+        //heatLoss
+        this.otherLossesCompareService.differentArray[this.lossIndex].different.heatLoss.subscribe((val) => {
+          let heatLossElements = doc.getElementsByName('heatLoss_' + this.lossIndex);
+          heatLossElements.forEach(element => {
+            element.classList.toggle('indicate-different', val);
+          });
+        })
+      }
+    }
+  }
 }

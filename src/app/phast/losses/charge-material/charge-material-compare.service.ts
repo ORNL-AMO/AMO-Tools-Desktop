@@ -29,6 +29,13 @@ export class ChargeMaterialCompareService {
     }
   }
 
+  addObject(num: number) {
+    this.differentArray.push({
+      lossIndex: num,
+      different: this.initDifferentObject()
+    })
+  }
+
   initDifferentObject(): ChargeMaterialDifferent {
     let tmpLiquidMaterialDiff: LiquidChargeMaterialDifferent = {
       materialId: new BehaviorSubject<boolean>(null),
@@ -87,643 +94,221 @@ export class ChargeMaterialCompareService {
   }
 
   checkChargeMaterials() {
-    this.checkChargeMaterialType();
-    this.checkLiquidMaterials();
-    this.checkGasMaterials();
-    this.checkSolidChargeMaterials();
-  }
-
-  checkLiquidMaterials() {
-    this.checkMaterialIdLiquid();
-    this.checkThermicReactionTypeLiquid();
-    this.checkSpecificHeatLiquid();
-    this.checkVaporizingTemperatureLiquid();
-    this.checkLatentHeatLiquid();
-    this.checkSpecificHeatVaporLiquid();
-    this.checkChargeFeedRateLiquid();
-    this.checkInitialTemperatureLiquid();
-    this.checkDischargeTemperatureLiquid();
-    this.checkPercentReactedLiquid();
-    this.checkPercentVaporizedLiquid();
-    this.checkReactionHeatLiquid();
-    this.checkAdditionalHeatLiquid();
-  }
-
-  checkGasMaterials() {
-    this.checkMaterialIdGas();
-    this.checkThermicReactionTypeGas();
-    this.checkSpecificHeatGas();
-    this.checkFeedRateGas();
-    this.checkPercentVapor();
-    this.checkInitialTemperatureGas();
-    this.checkDischargeTemperatureGas();
-    this.checkSpecificHeatVaporGas();
-    this.checkPercentReactedGas();
-    this.checkReactionHeatGas();
-    this.checkAdditionalHeatGas();
-  }
-
-  checkSolidChargeMaterials() {
-    this.checkMaterialIdSolid();
-    this.checkThermicReactionTypeSolid();
-    this.checkSpecificHeatSolid();
-    this.checkLatentHeatSolid();
-    this.checkSpecificHeatLiquidSolid();
-    this.checkMeltingPointSolid();
-    this.checkChargeFeedRateSolid();
-    this.checkWaterContentChargeSolid();
-    this.checkWaterContentDischargedSolid();
-    this.checkInitialTemperatureSolid();
-    this.checkDischargeTemperatureSolid();
-    this.checkWaterVaporDischargeTemperatureSolid();
-    this.checkChargeMeltedSolid();
-    this.checkChargeReactedSolid();
-    this.checkReactionHeatSolid();
-    this.checkAdditionalHeatSolid();
-  }
-
-  //chargeMaterialType
-  checkChargeMaterialType() {
     if (this.baselineMaterials && this.modifiedMaterials) {
-      for (let lossIndex = 0; lossIndex < this.baselineMaterials.length; lossIndex++) {
-        if (this.baselineMaterials[lossIndex].chargeMaterialType != this.modifiedMaterials[lossIndex].chargeMaterialType) {
-          this.differentArray[lossIndex].different.chargeMaterialType.next(true);
-        } else {
-          this.differentArray[lossIndex].different.chargeMaterialType.next(false);
-        }
-      }
-    }
-  }
-
-  //Solid
-  //materialId
-  checkMaterialIdSolid() {
-    if (this.baselineMaterials && this.modifiedMaterials) {
-      for (let lossIndex = 0; lossIndex < this.baselineMaterials.length; lossIndex++) {
-        if (this.baselineMaterials[lossIndex].chargeMaterialType == 'Solid' && this.modifiedMaterials[lossIndex].chargeMaterialType == 'Solid') {
-          if (this.baselineMaterials[lossIndex].solidChargeMaterial.materialId != this.modifiedMaterials[lossIndex].solidChargeMaterial.materialId) {
-            this.differentArray[lossIndex].different.solidChargeMaterialDifferent.materialId.next(true);
-          } else {
-            this.differentArray[lossIndex].different.solidChargeMaterialDifferent.materialId.next(false);
+      if (this.baselineMaterials.length != 0 && this.modifiedMaterials.length != 0 && this.baselineMaterials.length == this.modifiedMaterials.length) {
+        for (let lossIndex = 0; lossIndex < this.baselineMaterials.length; lossIndex++) {
+          this.differentArray[lossIndex].different.chargeMaterialType.next(this.compare(this.baselineMaterials[lossIndex].chargeMaterialType, this.modifiedMaterials[lossIndex].chargeMaterialType));
+          //solid
+          if (this.baselineMaterials[lossIndex].chargeMaterialType == 'Solid' && this.modifiedMaterials[lossIndex].chargeMaterialType == 'Solid') {
+            //materialId
+            this.differentArray[lossIndex].different.solidChargeMaterialDifferent.materialId.next(this.compare(this.baselineMaterials[lossIndex].solidChargeMaterial.materialId, this.modifiedMaterials[lossIndex].solidChargeMaterial.materialId));
+            //thermicReactionType
+            this.differentArray[lossIndex].different.solidChargeMaterialDifferent.thermicReactionType.next(this.compare(this.baselineMaterials[lossIndex].solidChargeMaterial.thermicReactionType, this.modifiedMaterials[lossIndex].solidChargeMaterial.thermicReactionType));
+            //specificHeatSolid
+            this.differentArray[lossIndex].different.solidChargeMaterialDifferent.specificHeatSolid.next(this.compare(this.baselineMaterials[lossIndex].solidChargeMaterial.specificHeatSolid, this.modifiedMaterials[lossIndex].solidChargeMaterial.specificHeatSolid));
+            //latentHeat
+            this.differentArray[lossIndex].different.solidChargeMaterialDifferent.latentHeat.next(this.compare(this.baselineMaterials[lossIndex].solidChargeMaterial.latentHeat, this.modifiedMaterials[lossIndex].solidChargeMaterial.latentHeat));
+            //specificHeatLiquid
+            this.differentArray[lossIndex].different.solidChargeMaterialDifferent.specificHeatLiquid.next(this.compare(this.baselineMaterials[lossIndex].solidChargeMaterial.specificHeatLiquid, this.modifiedMaterials[lossIndex].solidChargeMaterial.specificHeatLiquid));
+            //meltingPoint
+            this.differentArray[lossIndex].different.solidChargeMaterialDifferent.meltingPoint.next(this.compare(this.baselineMaterials[lossIndex].solidChargeMaterial.meltingPoint, this.modifiedMaterials[lossIndex].solidChargeMaterial.meltingPoint));
+            //chargeFeedRate
+            this.differentArray[lossIndex].different.solidChargeMaterialDifferent.chargeFeedRate.next(this.compare(this.baselineMaterials[lossIndex].solidChargeMaterial.chargeFeedRate, this.modifiedMaterials[lossIndex].solidChargeMaterial.chargeFeedRate));
+            //waterContentCharged
+            this.differentArray[lossIndex].different.solidChargeMaterialDifferent.waterContentCharged.next(this.compare(this.baselineMaterials[lossIndex].solidChargeMaterial.waterContentCharged, this.modifiedMaterials[lossIndex].solidChargeMaterial.waterContentCharged));
+            //waterContentDischarged
+            this.differentArray[lossIndex].different.solidChargeMaterialDifferent.waterContentDischarged.next(this.compare(this.baselineMaterials[lossIndex].solidChargeMaterial.waterContentDischarged, this.modifiedMaterials[lossIndex].solidChargeMaterial.waterContentDischarged));
+            //initialTemperature
+            this.differentArray[lossIndex].different.solidChargeMaterialDifferent.initialTemperature.next(this.compare(this.baselineMaterials[lossIndex].solidChargeMaterial.initialTemperature, this.modifiedMaterials[lossIndex].solidChargeMaterial.initialTemperature));
+            //dischargeTemperature
+            this.differentArray[lossIndex].different.solidChargeMaterialDifferent.dischargeTemperature.next(this.compare(this.baselineMaterials[lossIndex].solidChargeMaterial.dischargeTemperature, this.modifiedMaterials[lossIndex].solidChargeMaterial.dischargeTemperature));
+            //waterVaporDischargeTemperature
+            this.differentArray[lossIndex].different.solidChargeMaterialDifferent.waterVaporDischargeTemperature.next(this.compare(this.baselineMaterials[lossIndex].solidChargeMaterial.waterVaporDischargeTemperature, this.modifiedMaterials[lossIndex].solidChargeMaterial.waterVaporDischargeTemperature));
+            //chargeMelted
+            this.differentArray[lossIndex].different.solidChargeMaterialDifferent.chargeMelted.next(this.compare(this.baselineMaterials[lossIndex].solidChargeMaterial.chargeMelted, this.modifiedMaterials[lossIndex].solidChargeMaterial.chargeMelted));
+            //chargeReacted
+            this.differentArray[lossIndex].different.solidChargeMaterialDifferent.chargeReacted.next(this.compare(this.baselineMaterials[lossIndex].solidChargeMaterial.chargeReacted, this.modifiedMaterials[lossIndex].solidChargeMaterial.chargeReacted));
+            //reactionHeat
+            this.differentArray[lossIndex].different.solidChargeMaterialDifferent.reactionHeat.next(this.compare(this.baselineMaterials[lossIndex].solidChargeMaterial.reactionHeat, this.modifiedMaterials[lossIndex].solidChargeMaterial.reactionHeat));
+            //additionalHeat
+            this.differentArray[lossIndex].different.solidChargeMaterialDifferent.additionalHeat.next(this.compare(this.baselineMaterials[lossIndex].solidChargeMaterial.additionalHeat, this.modifiedMaterials[lossIndex].solidChargeMaterial.additionalHeat));
+          }
+          //liquid
+          else if (this.baselineMaterials[lossIndex].chargeMaterialType == 'Liquid' && this.modifiedMaterials[lossIndex].chargeMaterialType == 'Liquid') {
+            // materialId
+            this.differentArray[lossIndex].different.liquidChargeMaterialDifferent.materialId.next(this.compare(this.baselineMaterials[lossIndex].liquidChargeMaterial.materialId, this.modifiedMaterials[lossIndex].liquidChargeMaterial.materialId));
+            // thermicReactionType
+            this.differentArray[lossIndex].different.liquidChargeMaterialDifferent.thermicReactionType.next(this.compare(this.baselineMaterials[lossIndex].liquidChargeMaterial.thermicReactionType, this.modifiedMaterials[lossIndex].liquidChargeMaterial.thermicReactionType));
+            // specificHeatLiquid
+            this.differentArray[lossIndex].different.liquidChargeMaterialDifferent.specificHeatLiquid.next(this.compare(this.baselineMaterials[lossIndex].liquidChargeMaterial.specificHeatLiquid, this.modifiedMaterials[lossIndex].liquidChargeMaterial.specificHeatLiquid));
+            // vaporizingTemperature
+            this.differentArray[lossIndex].different.liquidChargeMaterialDifferent.vaporizingTemperature.next(this.compare(this.baselineMaterials[lossIndex].liquidChargeMaterial.vaporizingTemperature, this.modifiedMaterials[lossIndex].liquidChargeMaterial.vaporizingTemperature));
+            // latentHeat
+            this.differentArray[lossIndex].different.liquidChargeMaterialDifferent.latentHeat.next(this.compare(this.baselineMaterials[lossIndex].liquidChargeMaterial.latentHeat, this.modifiedMaterials[lossIndex].liquidChargeMaterial.latentHeat));
+            // specificHeatVapor
+            this.differentArray[lossIndex].different.liquidChargeMaterialDifferent.specificHeatVapor.next(this.compare(this.baselineMaterials[lossIndex].liquidChargeMaterial.specificHeatVapor, this.modifiedMaterials[lossIndex].liquidChargeMaterial.specificHeatVapor));
+            // chargeFeedRate
+            this.differentArray[lossIndex].different.liquidChargeMaterialDifferent.chargeFeedRate.next(this.compare(this.baselineMaterials[lossIndex].liquidChargeMaterial.chargeFeedRate, this.modifiedMaterials[lossIndex].liquidChargeMaterial.chargeFeedRate));
+            // initialTemperature
+            this.differentArray[lossIndex].different.liquidChargeMaterialDifferent.initialTemperature.next(this.compare(this.baselineMaterials[lossIndex].liquidChargeMaterial.initialTemperature, this.modifiedMaterials[lossIndex].liquidChargeMaterial.initialTemperature));
+            // dischargeTemperature
+            this.differentArray[lossIndex].different.liquidChargeMaterialDifferent.dischargeTemperature.next(this.compare(this.baselineMaterials[lossIndex].liquidChargeMaterial.dischargeTemperature, this.modifiedMaterials[lossIndex].liquidChargeMaterial.dischargeTemperature));
+            // percentVaporized
+            this.differentArray[lossIndex].different.liquidChargeMaterialDifferent.percentVaporized.next(this.compare(this.baselineMaterials[lossIndex].liquidChargeMaterial.percentVaporized, this.modifiedMaterials[lossIndex].liquidChargeMaterial.percentVaporized));
+            // percentReacted
+            this.differentArray[lossIndex].different.liquidChargeMaterialDifferent.percentReacted.next(this.compare(this.baselineMaterials[lossIndex].liquidChargeMaterial.percentReacted, this.modifiedMaterials[lossIndex].liquidChargeMaterial.percentReacted));
+            // reactionHeat
+            this.differentArray[lossIndex].different.liquidChargeMaterialDifferent.reactionHeat.next(this.compare(this.baselineMaterials[lossIndex].liquidChargeMaterial.reactionHeat, this.modifiedMaterials[lossIndex].liquidChargeMaterial.reactionHeat));
+            // additionalHeat
+            this.differentArray[lossIndex].different.liquidChargeMaterialDifferent.additionalHeat.next(this.compare(this.baselineMaterials[lossIndex].liquidChargeMaterial.additionalHeat, this.modifiedMaterials[lossIndex].liquidChargeMaterial.additionalHeat));
+          }
+          //gas
+          else if (this.baselineMaterials[lossIndex].chargeMaterialType == 'Gas' && this.modifiedMaterials[lossIndex].chargeMaterialType == 'Gas') {
+            // materialId
+            this.differentArray[lossIndex].different.gasChargeMaterialDifferent.materialId.next(this.compare(this.baselineMaterials[lossIndex].gasChargeMaterial.materialId, this.modifiedMaterials[lossIndex].gasChargeMaterial.materialId));
+            // thermicReactionType
+            this.differentArray[lossIndex].different.gasChargeMaterialDifferent.thermicReactionType.next(this.compare(this.baselineMaterials[lossIndex].gasChargeMaterial.thermicReactionType, this.modifiedMaterials[lossIndex].gasChargeMaterial.thermicReactionType));
+            // specificHeatGas
+            this.differentArray[lossIndex].different.gasChargeMaterialDifferent.specificHeatGas.next(this.compare(this.baselineMaterials[lossIndex].gasChargeMaterial.specificHeatGas, this.modifiedMaterials[lossIndex].gasChargeMaterial.specificHeatGas));
+            // feedRate
+            this.differentArray[lossIndex].different.gasChargeMaterialDifferent.feedRate.next(this.compare(this.baselineMaterials[lossIndex].gasChargeMaterial.feedRate, this.modifiedMaterials[lossIndex].gasChargeMaterial.feedRate));
+            // percentVapor
+            this.differentArray[lossIndex].different.gasChargeMaterialDifferent.percentVapor.next(this.compare(this.baselineMaterials[lossIndex].gasChargeMaterial.percentVapor, this.modifiedMaterials[lossIndex].gasChargeMaterial.percentVapor));
+            // initialTemperature
+            this.differentArray[lossIndex].different.gasChargeMaterialDifferent.initialTemperature.next(this.compare(this.baselineMaterials[lossIndex].gasChargeMaterial.initialTemperature, this.modifiedMaterials[lossIndex].gasChargeMaterial.initialTemperature));
+            // dischargeTemperature
+            this.differentArray[lossIndex].different.gasChargeMaterialDifferent.dischargeTemperature.next(this.compare(this.baselineMaterials[lossIndex].gasChargeMaterial.dischargeTemperature, this.modifiedMaterials[lossIndex].gasChargeMaterial.dischargeTemperature));
+            // specificHeatVapor
+            this.differentArray[lossIndex].different.gasChargeMaterialDifferent.specificHeatVapor.next(this.compare(this.baselineMaterials[lossIndex].gasChargeMaterial.specificHeatVapor, this.modifiedMaterials[lossIndex].gasChargeMaterial.specificHeatVapor));
+            // percentReacted
+            this.differentArray[lossIndex].different.gasChargeMaterialDifferent.percentReacted.next(this.compare(this.baselineMaterials[lossIndex].gasChargeMaterial.percentReacted, this.modifiedMaterials[lossIndex].gasChargeMaterial.percentReacted));
+            // reactionHeat
+            this.differentArray[lossIndex].different.gasChargeMaterialDifferent.reactionHeat.next(this.compare(this.baselineMaterials[lossIndex].gasChargeMaterial.reactionHeat, this.modifiedMaterials[lossIndex].gasChargeMaterial.reactionHeat));
+            // additionalHeat
+            this.differentArray[lossIndex].different.gasChargeMaterialDifferent.additionalHeat.next(this.compare(this.baselineMaterials[lossIndex].gasChargeMaterial.additionalHeat, this.modifiedMaterials[lossIndex].gasChargeMaterial.additionalHeat));
+          }
+          else {
+            this.disableIndexed(lossIndex);
           }
         }
+      } else {
+        this.disableAll();
       }
-    }
-  }
-  //thermicReactionType
-  checkThermicReactionTypeSolid() {
-    if (this.baselineMaterials && this.modifiedMaterials) {
-      for (let lossIndex = 0; lossIndex < this.baselineMaterials.length; lossIndex++) {
-        if (this.baselineMaterials[lossIndex].chargeMaterialType == 'Solid' && this.modifiedMaterials[lossIndex].chargeMaterialType == 'Solid') {
-          if (this.baselineMaterials[lossIndex].solidChargeMaterial.thermicReactionType != this.modifiedMaterials[lossIndex].solidChargeMaterial.thermicReactionType) {
-            this.differentArray[lossIndex].different.solidChargeMaterialDifferent.thermicReactionType.next(true);
-          } else {
-            this.differentArray[lossIndex].different.solidChargeMaterialDifferent.thermicReactionType.next(false);
-          }
-        }
-      }
-    }
-  }
-  //specificHeatSolid
-  checkSpecificHeatSolid() {
-    if (this.baselineMaterials && this.modifiedMaterials) {
-      for (let lossIndex = 0; lossIndex < this.baselineMaterials.length; lossIndex++) {
-        if (this.baselineMaterials[lossIndex].chargeMaterialType == 'Solid' && this.modifiedMaterials[lossIndex].chargeMaterialType == 'Solid') {
-          if (this.baselineMaterials[lossIndex].solidChargeMaterial.specificHeatSolid != this.modifiedMaterials[lossIndex].solidChargeMaterial.specificHeatSolid) {
-            this.differentArray[lossIndex].different.solidChargeMaterialDifferent.specificHeatSolid.next(true);
-          } else {
-            this.differentArray[lossIndex].different.solidChargeMaterialDifferent.specificHeatSolid.next(false);
-          }
-        }
-      }
-    }
-  }
-  //latentHeat
-  checkLatentHeatSolid() {
-    if (this.baselineMaterials && this.modifiedMaterials) {
-      for (let lossIndex = 0; lossIndex < this.baselineMaterials.length; lossIndex++) {
-        if (this.baselineMaterials[lossIndex].chargeMaterialType == 'Solid' && this.modifiedMaterials[lossIndex].chargeMaterialType == 'Solid') {
-          if (this.baselineMaterials[lossIndex].solidChargeMaterial.latentHeat != this.modifiedMaterials[lossIndex].solidChargeMaterial.latentHeat) {
-            this.differentArray[lossIndex].different.solidChargeMaterialDifferent.latentHeat.next(true);
-          } else {
-            this.differentArray[lossIndex].different.solidChargeMaterialDifferent.latentHeat.next(false);
-          }
-        }
-      }
-    }
-  }
-  //specificHeatLiquid
-  checkSpecificHeatLiquidSolid() {
-    if (this.baselineMaterials && this.modifiedMaterials) {
-      for (let lossIndex = 0; lossIndex < this.baselineMaterials.length; lossIndex++) {
-        if (this.baselineMaterials[lossIndex].chargeMaterialType == 'Solid' && this.modifiedMaterials[lossIndex].chargeMaterialType == 'Solid') {
-          if (this.baselineMaterials[lossIndex].solidChargeMaterial.specificHeatLiquid != this.modifiedMaterials[lossIndex].solidChargeMaterial.specificHeatLiquid) {
-            this.differentArray[lossIndex].different.solidChargeMaterialDifferent.specificHeatLiquid.next(true);
-          } else {
-            this.differentArray[lossIndex].different.solidChargeMaterialDifferent.specificHeatLiquid.next(false);
-          }
-        }
-      }
-    }
-  }
-  //meltingPoint
-  checkMeltingPointSolid() {
-    if (this.baselineMaterials && this.modifiedMaterials) {
-      for (let lossIndex = 0; lossIndex < this.baselineMaterials.length; lossIndex++) {
-        if (this.baselineMaterials[lossIndex].chargeMaterialType == 'Solid' && this.modifiedMaterials[lossIndex].chargeMaterialType == 'Solid') {
-          if (this.baselineMaterials[lossIndex].solidChargeMaterial.meltingPoint != this.modifiedMaterials[lossIndex].solidChargeMaterial.meltingPoint) {
-            this.differentArray[lossIndex].different.solidChargeMaterialDifferent.meltingPoint.next(true);
-          } else {
-            this.differentArray[lossIndex].different.solidChargeMaterialDifferent.meltingPoint.next(false);
-          }
-        }
-      }
-    }
-  }
-  //chargeFeedRate
-  checkChargeFeedRateSolid() {
-    if (this.baselineMaterials && this.modifiedMaterials) {
-      for (let lossIndex = 0; lossIndex < this.baselineMaterials.length; lossIndex++) {
-        if (this.baselineMaterials[lossIndex].chargeMaterialType == 'Solid' && this.modifiedMaterials[lossIndex].chargeMaterialType == 'Solid') {
-          if (this.baselineMaterials[lossIndex].solidChargeMaterial.chargeFeedRate != this.modifiedMaterials[lossIndex].solidChargeMaterial.chargeFeedRate) {
-            this.differentArray[lossIndex].different.solidChargeMaterialDifferent.chargeFeedRate.next(true);
-          } else {
-            this.differentArray[lossIndex].different.solidChargeMaterialDifferent.chargeFeedRate.next(false);
-          }
-        }
-      }
-    }
-  }
-  //waterContentCharged
-  checkWaterContentChargeSolid() {
-    if (this.baselineMaterials && this.modifiedMaterials) {
-      for (let lossIndex = 0; lossIndex < this.baselineMaterials.length; lossIndex++) {
-        if (this.baselineMaterials[lossIndex].chargeMaterialType == 'Solid' && this.modifiedMaterials[lossIndex].chargeMaterialType == 'Solid') {
-          if (this.baselineMaterials[lossIndex].solidChargeMaterial.waterContentCharged != this.modifiedMaterials[lossIndex].solidChargeMaterial.waterContentCharged) {
-            this.differentArray[lossIndex].different.solidChargeMaterialDifferent.waterContentCharged.next(true);
-          } else {
-            this.differentArray[lossIndex].different.solidChargeMaterialDifferent.waterContentCharged.next(false);
-          }
-        }
-      }
-    }
-  }
-  //waterContentDischarged
-  checkWaterContentDischargedSolid() {
-    if (this.baselineMaterials && this.modifiedMaterials) {
-      for (let lossIndex = 0; lossIndex < this.baselineMaterials.length; lossIndex++) {
-        if (this.baselineMaterials[lossIndex].chargeMaterialType == 'Solid' && this.modifiedMaterials[lossIndex].chargeMaterialType == 'Solid') {
-          if (this.baselineMaterials[lossIndex].solidChargeMaterial.waterContentDischarged != this.modifiedMaterials[lossIndex].solidChargeMaterial.waterContentDischarged) {
-            this.differentArray[lossIndex].different.solidChargeMaterialDifferent.waterContentDischarged.next(true);
-          } else {
-            this.differentArray[lossIndex].different.solidChargeMaterialDifferent.waterContentDischarged.next(false);
-          }
-        }
-      }
-    }
-  }
-  //initialTemperature
-  checkInitialTemperatureSolid() {
-    if (this.baselineMaterials && this.modifiedMaterials) {
-      for (let lossIndex = 0; lossIndex < this.baselineMaterials.length; lossIndex++) {
-        if (this.baselineMaterials[lossIndex].chargeMaterialType == 'Solid' && this.modifiedMaterials[lossIndex].chargeMaterialType == 'Solid') {
-          if (this.baselineMaterials[lossIndex].solidChargeMaterial.initialTemperature != this.modifiedMaterials[lossIndex].solidChargeMaterial.initialTemperature) {
-            this.differentArray[lossIndex].different.solidChargeMaterialDifferent.initialTemperature.next(true);
-          } else {
-            this.differentArray[lossIndex].different.solidChargeMaterialDifferent.initialTemperature.next(false);
-          }
-        }
-      }
-    }
-  }
-  //dischargeTemperature
-  checkDischargeTemperatureSolid() {
-    if (this.baselineMaterials && this.modifiedMaterials) {
-      for (let lossIndex = 0; lossIndex < this.baselineMaterials.length; lossIndex++) {
-        if (this.baselineMaterials[lossIndex].chargeMaterialType == 'Solid' && this.modifiedMaterials[lossIndex].chargeMaterialType == 'Solid') {
-          if (this.baselineMaterials[lossIndex].solidChargeMaterial.dischargeTemperature != this.modifiedMaterials[lossIndex].solidChargeMaterial.dischargeTemperature) {
-            this.differentArray[lossIndex].different.solidChargeMaterialDifferent.dischargeTemperature.next(true);
-          } else {
-            this.differentArray[lossIndex].different.solidChargeMaterialDifferent.dischargeTemperature.next(false);
-          }
-        }
-      }
-    }
-  }
-  //waterVaporDischargeTemperature
-  checkWaterVaporDischargeTemperatureSolid() {
-    if (this.baselineMaterials && this.modifiedMaterials) {
-      for (let lossIndex = 0; lossIndex < this.baselineMaterials.length; lossIndex++) {
-        if (this.baselineMaterials[lossIndex].chargeMaterialType == 'Solid' && this.modifiedMaterials[lossIndex].chargeMaterialType == 'Solid') {
-          if (this.baselineMaterials[lossIndex].solidChargeMaterial.waterVaporDischargeTemperature != this.modifiedMaterials[lossIndex].solidChargeMaterial.waterVaporDischargeTemperature) {
-            this.differentArray[lossIndex].different.solidChargeMaterialDifferent.waterVaporDischargeTemperature.next(true);
-          } else {
-            this.differentArray[lossIndex].different.solidChargeMaterialDifferent.waterVaporDischargeTemperature.next(false);
-          }
-        }
-      }
-    }
-  }
-  //chargeMelted
-  checkChargeMeltedSolid() {
-    if (this.baselineMaterials && this.modifiedMaterials) {
-      for (let lossIndex = 0; lossIndex < this.baselineMaterials.length; lossIndex++) {
-        if (this.baselineMaterials[lossIndex].chargeMaterialType == 'Solid' && this.modifiedMaterials[lossIndex].chargeMaterialType == 'Solid') {
-          if (this.baselineMaterials[lossIndex].solidChargeMaterial.chargeMelted != this.modifiedMaterials[lossIndex].solidChargeMaterial.chargeMelted) {
-            this.differentArray[lossIndex].different.solidChargeMaterialDifferent.chargeMelted.next(true);
-          } else {
-            this.differentArray[lossIndex].different.solidChargeMaterialDifferent.chargeMelted.next(false);
-          }
-        }
-      }
-    }
-  }
-  //chargeReacted
-  checkChargeReactedSolid() {
-    if (this.baselineMaterials && this.modifiedMaterials) {
-      for (let lossIndex = 0; lossIndex < this.baselineMaterials.length; lossIndex++) {
-        if (this.baselineMaterials[lossIndex].chargeMaterialType == 'Solid' && this.modifiedMaterials[lossIndex].chargeMaterialType == 'Solid') {
-          if (this.baselineMaterials[lossIndex].solidChargeMaterial.chargeReacted != this.modifiedMaterials[lossIndex].solidChargeMaterial.chargeReacted) {
-            this.differentArray[lossIndex].different.solidChargeMaterialDifferent.chargeReacted.next(true);
-          } else {
-            this.differentArray[lossIndex].different.solidChargeMaterialDifferent.chargeReacted.next(false);
-          }
-        }
-      }
-    }
-  }
-  //reactionHeat
-  checkReactionHeatSolid() {
-    if (this.baselineMaterials && this.modifiedMaterials) {
-      for (let lossIndex = 0; lossIndex < this.baselineMaterials.length; lossIndex++) {
-        if (this.baselineMaterials[lossIndex].chargeMaterialType == 'Solid' && this.modifiedMaterials[lossIndex].chargeMaterialType == 'Solid') {
-          if (this.baselineMaterials[lossIndex].solidChargeMaterial.reactionHeat != this.modifiedMaterials[lossIndex].solidChargeMaterial.reactionHeat) {
-            this.differentArray[lossIndex].different.solidChargeMaterialDifferent.reactionHeat.next(true);
-          } else {
-            this.differentArray[lossIndex].different.solidChargeMaterialDifferent.reactionHeat.next(false);
-          }
-        }
-      }
-    }
-  }
-  //additionalHeat
-  checkAdditionalHeatSolid() {
-    if (this.baselineMaterials && this.modifiedMaterials) {
-      for (let lossIndex = 0; lossIndex < this.baselineMaterials.length; lossIndex++) {
-        if (this.baselineMaterials[lossIndex].chargeMaterialType == 'Solid' && this.modifiedMaterials[lossIndex].chargeMaterialType == 'Solid') {
-          if (this.baselineMaterials[lossIndex].solidChargeMaterial.additionalHeat != this.modifiedMaterials[lossIndex].solidChargeMaterial.additionalHeat) {
-            this.differentArray[lossIndex].different.solidChargeMaterialDifferent.additionalHeat.next(true);
-          } else {
-            this.differentArray[lossIndex].different.solidChargeMaterialDifferent.additionalHeat.next(false);
-          }
-        }
-      }
+    } else {
+      this.disableAll();
     }
   }
 
-  //Gas
-  //materialId
-  checkMaterialIdGas() {
-    if (this.baselineMaterials && this.modifiedMaterials) {
-      for (let lossIndex = 0; lossIndex < this.baselineMaterials.length; lossIndex++) {
-        if (this.baselineMaterials[lossIndex].chargeMaterialType == 'Gas' && this.modifiedMaterials[lossIndex].chargeMaterialType == 'Gas') {
-          if (this.baselineMaterials[lossIndex].gasChargeMaterial.materialId != this.modifiedMaterials[lossIndex].gasChargeMaterial.materialId) {
-            this.differentArray[lossIndex].different.gasChargeMaterialDifferent.materialId.next(true);
-          } else {
-            this.differentArray[lossIndex].different.gasChargeMaterialDifferent.materialId.next(false);
-          }
-        }
-      }
-    }
+  disableIndexed(lossIndex: number) {
+    this.differentArray[lossIndex].different.chargeMaterialType.next(false);
+    //solid
+    this.differentArray[lossIndex].different.solidChargeMaterialDifferent.materialId.next(false);
+    this.differentArray[lossIndex].different.solidChargeMaterialDifferent.thermicReactionType.next(false);
+    this.differentArray[lossIndex].different.solidChargeMaterialDifferent.specificHeatSolid.next(false);
+    this.differentArray[lossIndex].different.solidChargeMaterialDifferent.latentHeat.next(false);
+    this.differentArray[lossIndex].different.solidChargeMaterialDifferent.specificHeatLiquid.next(false);
+    this.differentArray[lossIndex].different.solidChargeMaterialDifferent.meltingPoint.next(false);
+    this.differentArray[lossIndex].different.solidChargeMaterialDifferent.chargeFeedRate.next(false);
+    this.differentArray[lossIndex].different.solidChargeMaterialDifferent.waterContentCharged.next(false);
+    this.differentArray[lossIndex].different.solidChargeMaterialDifferent.waterContentDischarged.next(false);
+    this.differentArray[lossIndex].different.solidChargeMaterialDifferent.initialTemperature.next(false);
+    this.differentArray[lossIndex].different.solidChargeMaterialDifferent.dischargeTemperature.next(false);
+    this.differentArray[lossIndex].different.solidChargeMaterialDifferent.waterVaporDischargeTemperature.next(false);
+    this.differentArray[lossIndex].different.solidChargeMaterialDifferent.chargeMelted.next(false);
+    this.differentArray[lossIndex].different.solidChargeMaterialDifferent.chargeReacted.next(false);
+    this.differentArray[lossIndex].different.solidChargeMaterialDifferent.reactionHeat.next(false);
+    this.differentArray[lossIndex].different.solidChargeMaterialDifferent.additionalHeat.next(false);
+    //liquid
+    this.differentArray[lossIndex].different.liquidChargeMaterialDifferent.materialId.next(false);
+    this.differentArray[lossIndex].different.liquidChargeMaterialDifferent.thermicReactionType.next(false);
+    this.differentArray[lossIndex].different.liquidChargeMaterialDifferent.specificHeatLiquid.next(false);
+    this.differentArray[lossIndex].different.liquidChargeMaterialDifferent.vaporizingTemperature.next(false);
+    this.differentArray[lossIndex].different.liquidChargeMaterialDifferent.latentHeat.next(false);
+    this.differentArray[lossIndex].different.liquidChargeMaterialDifferent.specificHeatVapor.next(false);
+    this.differentArray[lossIndex].different.liquidChargeMaterialDifferent.chargeFeedRate.next(false);
+    this.differentArray[lossIndex].different.liquidChargeMaterialDifferent.initialTemperature.next(false);
+    this.differentArray[lossIndex].different.liquidChargeMaterialDifferent.dischargeTemperature.next(false);
+    this.differentArray[lossIndex].different.liquidChargeMaterialDifferent.percentVaporized.next(false);
+    this.differentArray[lossIndex].different.liquidChargeMaterialDifferent.percentReacted.next(false);
+    this.differentArray[lossIndex].different.liquidChargeMaterialDifferent.reactionHeat.next(false);
+    this.differentArray[lossIndex].different.liquidChargeMaterialDifferent.additionalHeat.next(false);
+    //gas
+    this.differentArray[lossIndex].different.gasChargeMaterialDifferent.materialId.next(false);
+    this.differentArray[lossIndex].different.gasChargeMaterialDifferent.thermicReactionType.next(false);
+    this.differentArray[lossIndex].different.gasChargeMaterialDifferent.specificHeatGas.next(false);
+    this.differentArray[lossIndex].different.gasChargeMaterialDifferent.feedRate.next(false);
+    this.differentArray[lossIndex].different.gasChargeMaterialDifferent.percentVapor.next(false);
+    this.differentArray[lossIndex].different.gasChargeMaterialDifferent.initialTemperature.next(false);
+    this.differentArray[lossIndex].different.gasChargeMaterialDifferent.dischargeTemperature.next(false);
+    this.differentArray[lossIndex].different.gasChargeMaterialDifferent.specificHeatVapor.next(false);
+    this.differentArray[lossIndex].different.gasChargeMaterialDifferent.percentReacted.next(false);
+    this.differentArray[lossIndex].different.gasChargeMaterialDifferent.reactionHeat.next(false);
+    this.differentArray[lossIndex].different.gasChargeMaterialDifferent.additionalHeat.next(false);
   }
-  //thermicReactionType
-  checkThermicReactionTypeGas() {
-    if (this.baselineMaterials && this.modifiedMaterials) {
-      for (let lossIndex = 0; lossIndex < this.baselineMaterials.length; lossIndex++) {
-        if (this.baselineMaterials[lossIndex].chargeMaterialType == 'Gas' && this.modifiedMaterials[lossIndex].chargeMaterialType == 'Gas') {
-          if (this.baselineMaterials[lossIndex].gasChargeMaterial.thermicReactionType != this.modifiedMaterials[lossIndex].gasChargeMaterial.thermicReactionType) {
-            this.differentArray[lossIndex].different.gasChargeMaterialDifferent.thermicReactionType.next(true);
-          } else {
-            this.differentArray[lossIndex].different.gasChargeMaterialDifferent.thermicReactionType.next(false);
-          }
-        }
-      }
-    }
-  }
-  //specificHeatGas
-  checkSpecificHeatGas() {
-    if (this.baselineMaterials && this.modifiedMaterials) {
-      for (let lossIndex = 0; lossIndex < this.baselineMaterials.length; lossIndex++) {
-        if (this.baselineMaterials[lossIndex].chargeMaterialType == 'Gas' && this.modifiedMaterials[lossIndex].chargeMaterialType == 'Gas') {
-          if (this.baselineMaterials[lossIndex].gasChargeMaterial.specificHeatGas != this.modifiedMaterials[lossIndex].gasChargeMaterial.specificHeatGas) {
-            this.differentArray[lossIndex].different.gasChargeMaterialDifferent.specificHeatGas.next(true);
-          } else {
-            this.differentArray[lossIndex].different.gasChargeMaterialDifferent.specificHeatGas.next(false);
-          }
-        }
-      }
-    }
-  }
-  //feedRate
-  checkFeedRateGas() {
-    if (this.baselineMaterials && this.modifiedMaterials) {
-      for (let lossIndex = 0; lossIndex < this.baselineMaterials.length; lossIndex++) {
-        if (this.baselineMaterials[lossIndex].chargeMaterialType == 'Gas' && this.modifiedMaterials[lossIndex].chargeMaterialType == 'Gas') {
-          if (this.baselineMaterials[lossIndex].gasChargeMaterial.feedRate != this.modifiedMaterials[lossIndex].gasChargeMaterial.feedRate) {
-            this.differentArray[lossIndex].different.gasChargeMaterialDifferent.feedRate.next(true);
-          } else {
-            this.differentArray[lossIndex].different.gasChargeMaterialDifferent.feedRate.next(false);
-          }
-        }
-      }
-    }
-  }
-  //percentVapor
-  checkPercentVapor() {
-    if (this.baselineMaterials && this.modifiedMaterials) {
-      for (let lossIndex = 0; lossIndex < this.baselineMaterials.length; lossIndex++) {
-        if (this.baselineMaterials[lossIndex].chargeMaterialType == 'Gas' && this.modifiedMaterials[lossIndex].chargeMaterialType == 'Gas') {
-          if (this.baselineMaterials[lossIndex].gasChargeMaterial.percentVapor != this.modifiedMaterials[lossIndex].gasChargeMaterial.percentVapor) {
-            this.differentArray[lossIndex].different.gasChargeMaterialDifferent.percentVapor.next(true);
-          } else {
-            this.differentArray[lossIndex].different.gasChargeMaterialDifferent.percentVapor.next(false);
-          }
-        }
-      }
-    }
-  }
-  //initialTemperature
-  checkInitialTemperatureGas() {
-    if (this.baselineMaterials && this.modifiedMaterials) {
-      for (let lossIndex = 0; lossIndex < this.baselineMaterials.length; lossIndex++) {
-        if (this.baselineMaterials[lossIndex].chargeMaterialType == 'Gas' && this.modifiedMaterials[lossIndex].chargeMaterialType == 'Gas') {
-          if (this.baselineMaterials[lossIndex].gasChargeMaterial.initialTemperature != this.modifiedMaterials[lossIndex].gasChargeMaterial.initialTemperature) {
-            this.differentArray[lossIndex].different.gasChargeMaterialDifferent.initialTemperature.next(true);
-          } else {
-            this.differentArray[lossIndex].different.gasChargeMaterialDifferent.initialTemperature.next(false);
-          }
-        }
-      }
-    }
-  }
-  //dischargeTemperature
-  checkDischargeTemperatureGas() {
-    if (this.baselineMaterials && this.modifiedMaterials) {
-      for (let lossIndex = 0; lossIndex < this.baselineMaterials.length; lossIndex++) {
-        if (this.baselineMaterials[lossIndex].chargeMaterialType == 'Gas' && this.modifiedMaterials[lossIndex].chargeMaterialType == 'Gas') {
-          if (this.baselineMaterials[lossIndex].gasChargeMaterial.dischargeTemperature != this.modifiedMaterials[lossIndex].gasChargeMaterial.dischargeTemperature) {
-            this.differentArray[lossIndex].different.gasChargeMaterialDifferent.dischargeTemperature.next(true);
-          } else {
-            this.differentArray[lossIndex].different.gasChargeMaterialDifferent.dischargeTemperature.next(false);
-          }
-        }
-      }
-    }
-  }
-  //specificHeatVapor
-  checkSpecificHeatVaporGas() {
-    if (this.baselineMaterials && this.modifiedMaterials) {
-      for (let lossIndex = 0; lossIndex < this.baselineMaterials.length; lossIndex++) {
-        if (this.baselineMaterials[lossIndex].chargeMaterialType == 'Gas' && this.modifiedMaterials[lossIndex].chargeMaterialType == 'Gas') {
-          if (this.baselineMaterials[lossIndex].gasChargeMaterial.specificHeatVapor != this.modifiedMaterials[lossIndex].gasChargeMaterial.specificHeatVapor) {
-            this.differentArray[lossIndex].different.gasChargeMaterialDifferent.specificHeatVapor.next(true);
-          } else {
-            this.differentArray[lossIndex].different.gasChargeMaterialDifferent.specificHeatVapor.next(false);
-          }
-        }
-      }
-    }
-  }
-  //percentReacted
-  checkPercentReactedGas() {
-    if (this.baselineMaterials && this.modifiedMaterials) {
-      for (let lossIndex = 0; lossIndex < this.baselineMaterials.length; lossIndex++) {
-        if (this.baselineMaterials[lossIndex].chargeMaterialType == 'Gas' && this.modifiedMaterials[lossIndex].chargeMaterialType == 'Gas') {
-          if (this.baselineMaterials[lossIndex].gasChargeMaterial.percentReacted != this.modifiedMaterials[lossIndex].gasChargeMaterial.percentReacted) {
-            this.differentArray[lossIndex].different.gasChargeMaterialDifferent.percentReacted.next(true);
-          } else {
-            this.differentArray[lossIndex].different.gasChargeMaterialDifferent.percentReacted.next(false);
-          }
-        }
-      }
-    }
-  }
-  //reactionHeat
-  checkReactionHeatGas() {
-    if (this.baselineMaterials && this.modifiedMaterials) {
-      for (let lossIndex = 0; lossIndex < this.baselineMaterials.length; lossIndex++) {
-        if (this.baselineMaterials[lossIndex].chargeMaterialType == 'Gas' && this.modifiedMaterials[lossIndex].chargeMaterialType == 'Gas') {
-          if (this.baselineMaterials[lossIndex].gasChargeMaterial.reactionHeat != this.modifiedMaterials[lossIndex].gasChargeMaterial.reactionHeat) {
-            this.differentArray[lossIndex].different.gasChargeMaterialDifferent.reactionHeat.next(true);
-          } else {
-            this.differentArray[lossIndex].different.gasChargeMaterialDifferent.reactionHeat.next(false);
-          }
-        }
-      }
-    }
-  }
-  //additionalHeat
-  checkAdditionalHeatGas() {
-    if (this.baselineMaterials && this.modifiedMaterials) {
-      for (let lossIndex = 0; lossIndex < this.baselineMaterials.length; lossIndex++) {
-        if (this.baselineMaterials[lossIndex].chargeMaterialType == 'Gas' && this.modifiedMaterials[lossIndex].chargeMaterialType == 'Gas') {
-          if (this.baselineMaterials[lossIndex].gasChargeMaterial.additionalHeat != this.modifiedMaterials[lossIndex].gasChargeMaterial.additionalHeat) {
-            this.differentArray[lossIndex].different.gasChargeMaterialDifferent.additionalHeat.next(true);
-          } else {
-            this.differentArray[lossIndex].different.gasChargeMaterialDifferent.additionalHeat.next(false);
-          }
-        }
-      }
+
+  disableAll() {
+    for (let lossIndex = 0; lossIndex < this.baselineMaterials.length; lossIndex++) {
+      this.differentArray[lossIndex].different.chargeMaterialType.next(false);
+      //solid
+      this.differentArray[lossIndex].different.solidChargeMaterialDifferent.materialId.next(false);
+      this.differentArray[lossIndex].different.solidChargeMaterialDifferent.thermicReactionType.next(false);
+      this.differentArray[lossIndex].different.solidChargeMaterialDifferent.specificHeatSolid.next(false);
+      this.differentArray[lossIndex].different.solidChargeMaterialDifferent.latentHeat.next(false);
+      this.differentArray[lossIndex].different.solidChargeMaterialDifferent.specificHeatLiquid.next(false);
+      this.differentArray[lossIndex].different.solidChargeMaterialDifferent.meltingPoint.next(false);
+      this.differentArray[lossIndex].different.solidChargeMaterialDifferent.chargeFeedRate.next(false);
+      this.differentArray[lossIndex].different.solidChargeMaterialDifferent.waterContentCharged.next(false);
+      this.differentArray[lossIndex].different.solidChargeMaterialDifferent.waterContentDischarged.next(false);
+      this.differentArray[lossIndex].different.solidChargeMaterialDifferent.initialTemperature.next(false);
+      this.differentArray[lossIndex].different.solidChargeMaterialDifferent.dischargeTemperature.next(false);
+      this.differentArray[lossIndex].different.solidChargeMaterialDifferent.waterVaporDischargeTemperature.next(false);
+      this.differentArray[lossIndex].different.solidChargeMaterialDifferent.chargeMelted.next(false);
+      this.differentArray[lossIndex].different.solidChargeMaterialDifferent.chargeReacted.next(false);
+      this.differentArray[lossIndex].different.solidChargeMaterialDifferent.reactionHeat.next(false);
+      this.differentArray[lossIndex].different.solidChargeMaterialDifferent.additionalHeat.next(false);
+      //liquid
+      this.differentArray[lossIndex].different.liquidChargeMaterialDifferent.materialId.next(false);
+      this.differentArray[lossIndex].different.liquidChargeMaterialDifferent.thermicReactionType.next(false);
+      this.differentArray[lossIndex].different.liquidChargeMaterialDifferent.specificHeatLiquid.next(false);
+      this.differentArray[lossIndex].different.liquidChargeMaterialDifferent.vaporizingTemperature.next(false);
+      this.differentArray[lossIndex].different.liquidChargeMaterialDifferent.latentHeat.next(false);
+      this.differentArray[lossIndex].different.liquidChargeMaterialDifferent.specificHeatVapor.next(false);
+      this.differentArray[lossIndex].different.liquidChargeMaterialDifferent.chargeFeedRate.next(false);
+      this.differentArray[lossIndex].different.liquidChargeMaterialDifferent.initialTemperature.next(false);
+      this.differentArray[lossIndex].different.liquidChargeMaterialDifferent.dischargeTemperature.next(false);
+      this.differentArray[lossIndex].different.liquidChargeMaterialDifferent.percentVaporized.next(false);
+      this.differentArray[lossIndex].different.liquidChargeMaterialDifferent.percentReacted.next(false);
+      this.differentArray[lossIndex].different.liquidChargeMaterialDifferent.reactionHeat.next(false);
+      this.differentArray[lossIndex].different.liquidChargeMaterialDifferent.additionalHeat.next(false);
+      //gas
+      this.differentArray[lossIndex].different.gasChargeMaterialDifferent.materialId.next(false);
+      this.differentArray[lossIndex].different.gasChargeMaterialDifferent.thermicReactionType.next(false);
+      this.differentArray[lossIndex].different.gasChargeMaterialDifferent.specificHeatGas.next(false);
+      this.differentArray[lossIndex].different.gasChargeMaterialDifferent.feedRate.next(false);
+      this.differentArray[lossIndex].different.gasChargeMaterialDifferent.percentVapor.next(false);
+      this.differentArray[lossIndex].different.gasChargeMaterialDifferent.initialTemperature.next(false);
+      this.differentArray[lossIndex].different.gasChargeMaterialDifferent.dischargeTemperature.next(false);
+      this.differentArray[lossIndex].different.gasChargeMaterialDifferent.specificHeatVapor.next(false);
+      this.differentArray[lossIndex].different.gasChargeMaterialDifferent.percentReacted.next(false);
+      this.differentArray[lossIndex].different.gasChargeMaterialDifferent.reactionHeat.next(false);
+      this.differentArray[lossIndex].different.gasChargeMaterialDifferent.additionalHeat.next(false);
     }
   }
 
-
-  //Liquid
-  //materialId
-  checkMaterialIdLiquid() {
-    if (this.baselineMaterials && this.modifiedMaterials) {
-      for (let lossIndex = 0; lossIndex < this.baselineMaterials.length; lossIndex++) {
-
-        if (this.baselineMaterials[lossIndex].chargeMaterialType == 'Liquid' && this.modifiedMaterials[lossIndex].chargeMaterialType == 'Liquid') {
-          if (this.baselineMaterials[lossIndex].liquidChargeMaterial.materialId != this.modifiedMaterials[lossIndex].liquidChargeMaterial.materialId) {
-            this.differentArray[lossIndex].different.liquidChargeMaterialDifferent.materialId.next(true);
-          } else {
-            this.differentArray[lossIndex].different.liquidChargeMaterialDifferent.materialId.next(false);
-          }
-        }
+  compare(a: any, b: any) {
+    if (a && b) {
+      if (a != b) {
+        return true;
+      } else {
+        return false;
       }
     }
-  }
-  //thermicReactionType
-  checkThermicReactionTypeLiquid() {
-    if (this.baselineMaterials && this.modifiedMaterials) {
-      for (let lossIndex = 0; lossIndex < this.baselineMaterials.length; lossIndex++) {
-        if (this.baselineMaterials[lossIndex].chargeMaterialType == 'Liquid' && this.modifiedMaterials[lossIndex].chargeMaterialType == 'Liquid') {
-          if (this.baselineMaterials[lossIndex].liquidChargeMaterial.thermicReactionType != this.modifiedMaterials[lossIndex].liquidChargeMaterial.thermicReactionType) {
-            this.differentArray[lossIndex].different.liquidChargeMaterialDifferent.thermicReactionType.next(true);
-          } else {
-            this.differentArray[lossIndex].different.liquidChargeMaterialDifferent.thermicReactionType.next(false);
-          }
-        }
-      }
+    else if ((a && !b) || (!a && b)) {
+      return true
+    } else {
+      return false;
     }
   }
-  //specificHeatLiquid
-  checkSpecificHeatLiquid() {
-    if (this.baselineMaterials && this.modifiedMaterials) {
-      for (let lossIndex = 0; lossIndex < this.baselineMaterials.length; lossIndex++) {
-        if (this.baselineMaterials[lossIndex].chargeMaterialType == 'Liquid' && this.modifiedMaterials[lossIndex].chargeMaterialType == 'Liquid') {
-          if (this.baselineMaterials[lossIndex].liquidChargeMaterial.specificHeatLiquid != this.modifiedMaterials[lossIndex].liquidChargeMaterial.specificHeatLiquid) {
-            this.differentArray[lossIndex].different.liquidChargeMaterialDifferent.specificHeatLiquid.next(true);
-          } else {
-            this.differentArray[lossIndex].different.liquidChargeMaterialDifferent.specificHeatLiquid.next(false);
-          }
-        }
-      }
-    }
-  }
-  //vaporizingTemperature
-  checkVaporizingTemperatureLiquid() {
-    if (this.baselineMaterials && this.modifiedMaterials) {
-      for (let lossIndex = 0; lossIndex < this.baselineMaterials.length; lossIndex++) {
-        if (this.baselineMaterials[lossIndex].chargeMaterialType == 'Liquid' && this.modifiedMaterials[lossIndex].chargeMaterialType == 'Liquid') {
-          if (this.baselineMaterials[lossIndex].liquidChargeMaterial.vaporizingTemperature != this.modifiedMaterials[lossIndex].liquidChargeMaterial.vaporizingTemperature) {
-            this.differentArray[lossIndex].different.liquidChargeMaterialDifferent.vaporizingTemperature.next(true);
-          } else {
-            this.differentArray[lossIndex].different.liquidChargeMaterialDifferent.vaporizingTemperature.next(false);
-          }
-        }
-      }
-    }
-  }
-  //latentHeat
-  checkLatentHeatLiquid() {
-    if (this.baselineMaterials && this.modifiedMaterials) {
-      for (let lossIndex = 0; lossIndex < this.baselineMaterials.length; lossIndex++) {
-        if (this.baselineMaterials[lossIndex].chargeMaterialType == 'Liquid' && this.modifiedMaterials[lossIndex].chargeMaterialType == 'Liquid') {
-          if (this.baselineMaterials[lossIndex].liquidChargeMaterial.latentHeat != this.modifiedMaterials[lossIndex].liquidChargeMaterial.latentHeat) {
-            this.differentArray[lossIndex].different.liquidChargeMaterialDifferent.latentHeat.next(true);
-          } else {
-            this.differentArray[lossIndex].different.liquidChargeMaterialDifferent.latentHeat.next(false);
-          }
-        }
-      }
-    }
-  }
-  //specificHeatVapor
-  checkSpecificHeatVaporLiquid() {
-    if (this.baselineMaterials && this.modifiedMaterials) {
-      for (let lossIndex = 0; lossIndex < this.baselineMaterials.length; lossIndex++) {
-        if (this.baselineMaterials[lossIndex].chargeMaterialType == 'Liquid' && this.modifiedMaterials[lossIndex].chargeMaterialType == 'Liquid') {
-          if (this.baselineMaterials[lossIndex].liquidChargeMaterial.specificHeatVapor != this.modifiedMaterials[lossIndex].liquidChargeMaterial.specificHeatVapor) {
-            this.differentArray[lossIndex].different.liquidChargeMaterialDifferent.specificHeatVapor.next(true);
-          } else {
-            this.differentArray[lossIndex].different.liquidChargeMaterialDifferent.specificHeatVapor.next(false);
-          }
-        }
-      }
-    }
-  }
-  //chargeFeedRate
-  checkChargeFeedRateLiquid() {
-    if (this.baselineMaterials && this.modifiedMaterials) {
-      for (let lossIndex = 0; lossIndex < this.baselineMaterials.length; lossIndex++) {
-        if (this.baselineMaterials[lossIndex].chargeMaterialType == 'Liquid' && this.modifiedMaterials[lossIndex].chargeMaterialType == 'Liquid') {
-          if (this.baselineMaterials[lossIndex].liquidChargeMaterial.chargeFeedRate != this.modifiedMaterials[lossIndex].liquidChargeMaterial.chargeFeedRate) {
-            this.differentArray[lossIndex].different.liquidChargeMaterialDifferent.chargeFeedRate.next(true);
-          } else {
-            this.differentArray[lossIndex].different.liquidChargeMaterialDifferent.chargeFeedRate.next(false);
-          }
-        }
-      }
-    }
-  }
-  //initialTemperature
-  checkInitialTemperatureLiquid() {
-    if (this.baselineMaterials && this.modifiedMaterials) {
-      for (let lossIndex = 0; lossIndex < this.baselineMaterials.length; lossIndex++) {
-        if (this.baselineMaterials[lossIndex].chargeMaterialType == 'Liquid' && this.modifiedMaterials[lossIndex].chargeMaterialType == 'Liquid') {
-          if (this.baselineMaterials[lossIndex].liquidChargeMaterial.initialTemperature != this.modifiedMaterials[lossIndex].liquidChargeMaterial.initialTemperature) {
-            this.differentArray[lossIndex].different.liquidChargeMaterialDifferent.initialTemperature.next(true);
-          } else {
-            this.differentArray[lossIndex].different.liquidChargeMaterialDifferent.initialTemperature.next(false);
-          }
-        }
-      }
-    }
-  }
-  //dischargeTemperature
-  checkDischargeTemperatureLiquid() {
-    if (this.baselineMaterials && this.modifiedMaterials) {
-      for (let lossIndex = 0; lossIndex < this.baselineMaterials.length; lossIndex++) {
-        if (this.baselineMaterials[lossIndex].chargeMaterialType == 'Liquid' && this.modifiedMaterials[lossIndex].chargeMaterialType == 'Liquid') {
-          if (this.baselineMaterials[lossIndex].liquidChargeMaterial.dischargeTemperature != this.modifiedMaterials[lossIndex].liquidChargeMaterial.dischargeTemperature) {
-            this.differentArray[lossIndex].different.liquidChargeMaterialDifferent.dischargeTemperature.next(true);
-          } else {
-            this.differentArray[lossIndex].different.liquidChargeMaterialDifferent.dischargeTemperature.next(false);
-          }
-        }
-      }
-    }
-  }
-  //percentVaporized
-  checkPercentVaporizedLiquid() {
-    if (this.baselineMaterials && this.modifiedMaterials) {
-      for (let lossIndex = 0; lossIndex < this.baselineMaterials.length; lossIndex++) {
-        if (this.baselineMaterials[lossIndex].chargeMaterialType == 'Liquid' && this.modifiedMaterials[lossIndex].chargeMaterialType == 'Liquid') {
-          if (this.baselineMaterials[lossIndex].liquidChargeMaterial.percentVaporized != this.modifiedMaterials[lossIndex].liquidChargeMaterial.percentVaporized) {
-            this.differentArray[lossIndex].different.liquidChargeMaterialDifferent.percentVaporized.next(true);
-          } else {
-            this.differentArray[lossIndex].different.liquidChargeMaterialDifferent.percentVaporized.next(false);
-          }
-        }
-      }
-    }
-  }
-  //percentReacted
-  checkPercentReactedLiquid() {
-    if (this.baselineMaterials && this.modifiedMaterials) {
-      for (let lossIndex = 0; lossIndex < this.baselineMaterials.length; lossIndex++) {
-        if (this.baselineMaterials[lossIndex].chargeMaterialType == 'Liquid' && this.modifiedMaterials[lossIndex].chargeMaterialType == 'Liquid') {
-          if (this.baselineMaterials[lossIndex].liquidChargeMaterial.percentReacted != this.modifiedMaterials[lossIndex].liquidChargeMaterial.percentReacted) {
-            this.differentArray[lossIndex].different.liquidChargeMaterialDifferent.percentReacted.next(true);
-          } else {
-            this.differentArray[lossIndex].different.liquidChargeMaterialDifferent.percentReacted.next(false);
-          }
-        }
-      }
-    }
-  }
-  //reactionHeat
-  checkReactionHeatLiquid() {
-    if (this.baselineMaterials && this.modifiedMaterials) {
-      for (let lossIndex = 0; lossIndex < this.baselineMaterials.length; lossIndex++) {
-        if (this.baselineMaterials[lossIndex].chargeMaterialType == 'Liquid' && this.modifiedMaterials[lossIndex].chargeMaterialType == 'Liquid') {
-          if (this.baselineMaterials[lossIndex].liquidChargeMaterial.reactionHeat != this.modifiedMaterials[lossIndex].liquidChargeMaterial.reactionHeat) {
-            this.differentArray[lossIndex].different.liquidChargeMaterialDifferent.reactionHeat.next(true);
-          } else {
-            this.differentArray[lossIndex].different.liquidChargeMaterialDifferent.reactionHeat.next(false);
-          }
-        }
-      }
-    }
-  }
-  //additionalHeat
-  checkAdditionalHeatLiquid() {
-    if (this.baselineMaterials && this.modifiedMaterials) {
-      for (let lossIndex = 0; lossIndex < this.baselineMaterials.length; lossIndex++) {
-        if (this.baselineMaterials[lossIndex].chargeMaterialType == 'Liquid' && this.modifiedMaterials[lossIndex].chargeMaterialType == 'Liquid') {
-          if (this.baselineMaterials[lossIndex].liquidChargeMaterial.additionalHeat != this.modifiedMaterials[lossIndex].liquidChargeMaterial.additionalHeat) {
-            this.differentArray[lossIndex].different.liquidChargeMaterialDifferent.additionalHeat.next(true);
-          } else {
-            this.differentArray[lossIndex].different.liquidChargeMaterialDifferent.additionalHeat.next(false);
-          }
-        }
-      }
-    }
-  }
-
-
 }
 
 export interface ChargeMaterialDifferent {

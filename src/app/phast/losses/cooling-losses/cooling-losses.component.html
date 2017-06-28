@@ -12,9 +12,10 @@
   <div class="row">
     <div class="col-12">
       <div class="pull-left">
-        <b>{{loss.name}}</b>
+        <h6 *ngIf="isBaseline">{{loss.name}}</h6>
+        <h6 *ngIf="!isBaseline">{{loss.name}} Modification</h6>
       </div>
-      <button class="close pull-right" aria-label="Close" (click)="removeLoss(loss.name)">
+      <button *ngIf="isBaseline" class="close pull-right" aria-label="Close" (click)="removeLoss(lossIndex)">
       <span aria-hidden="true">&times;</span>
     </button>
     </div>
@@ -31,14 +32,12 @@
         </select>
       </div>
       <app-water-cooling-losses-form (changeField)="changeField($event)" *ngIf="loss.coolingMedium == 'Water'" [(lossesForm)]="loss.waterCoolingForm"
-        (calculate)="calculate(loss)" [(lossState)]="lossState" [baselineSelected]="baselineSelected" (saveEmit)="saveLosses()"
-        [lossIndex]="lossIndex"></app-water-cooling-losses-form>
+        (calculate)="calculate(loss)" [baselineSelected]="baselineSelected" (saveEmit)="saveLosses()" [lossIndex]="lossIndex"></app-water-cooling-losses-form>
       <app-liquid-cooling-losses-form (changeField)="changeField($event)" *ngIf="loss.coolingMedium == 'Other Liquid'" [(lossesForm)]="loss.liquidCoolingForm"
-        (calculate)="calculate(loss)" [(lossState)]="lossState" [baselineSelected]="baselineSelected" (saveEmit)="saveLosses()"
-        [lossIndex]="lossIndex"></app-liquid-cooling-losses-form>
+        (calculate)="calculate(loss)" [baselineSelected]="baselineSelected" (saveEmit)="saveLosses()" [lossIndex]="lossIndex"></app-liquid-cooling-losses-form>
       <app-gas-cooling-losses-form (changeField)="changeField($event)" *ngIf="loss.coolingMedium == 'Other Gas' || loss.coolingMedium == 'Air'"
-        [(lossesForm)]="loss.gasCoolingForm" (calculate)="calculate(loss)" [(lossState)]="lossState" [baselineSelected]="baselineSelected"
-        (saveEmit)="saveLosses()" [lossIndex]="lossIndex"></app-gas-cooling-losses-form>
+        [(lossesForm)]="loss.gasCoolingForm" (calculate)="calculate(loss)" [baselineSelected]="baselineSelected" (saveEmit)="saveLosses()"
+        [lossIndex]="lossIndex"></app-gas-cooling-losses-form>
     </div>
   </div>
   <div class="row">

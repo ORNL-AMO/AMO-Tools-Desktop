@@ -1,4 +1,3 @@
-
 <div class="no-data no-data-phast" *ngIf="_slagLosses.length == 0" (click)="addLoss()">
   <h3>You have no slag losses</h3>
   <h4>Add some now.</h4>
@@ -9,17 +8,18 @@
   <div class="row">
     <div class="col-12">
       <div class="pull-left">
-        <b>{{loss.name}}</b>
+        <h6 *ngIf="isBaseline">{{loss.name}}</h6>
+        <h6 *ngIf="!isBaseline">{{loss.name}} Modification</h6>
       </div>
-      <button class="close pull-right" aria-label="Close" (click)="removeLoss(loss.name)">
+      <button *ngIf="isBaseline" class="close pull-right" aria-label="Close" (click)="removeLoss(lossIndex)">
       <span aria-hidden="true">&times;</span>
     </button>
     </div>
   </div>
   <div class="row">
     <div class="col-12">
-      <app-slag-form (changeField)="changeField($event)" [(slagLossForm)]="loss.form" (calculate)="calculate(loss)" [(lossState)]="lossState"
-        [baselineSelected]="baselineSelected" (saveEmit)="saveLosses()" [lossIndex]="lossIndex"></app-slag-form>
+      <app-slag-form (changeField)="changeField($event)" [(slagLossForm)]="loss.form" (calculate)="calculate(loss)" [baselineSelected]="baselineSelected"
+        (saveEmit)="saveLosses()" [lossIndex]="lossIndex"></app-slag-form>
     </div>
   </div>
   <div class="row">

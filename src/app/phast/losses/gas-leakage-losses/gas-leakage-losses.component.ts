@@ -17,8 +17,6 @@ export class GasLeakageLossesComponent implements OnInit {
   @Input()
   saveClicked: boolean;
   @Input()
-  lossState: any;
-  @Input()
   addLossToggle: boolean;
   @Output('savedLoss')
   savedLoss = new EventEmitter<boolean>();
@@ -52,8 +50,8 @@ export class GasLeakageLossesComponent implements OnInit {
       this._leakageLosses = new Array<any>();
     }
     if (this.losses.leakageLosses) {
-     // this.setCompareVals();
-     // this.gasLeakageCompareService.initCompareObjects();
+      this.setCompareVals();
+      this.gasLeakageCompareService.initCompareObjects();
       this.losses.leakageLosses.forEach(loss => {
         let tmpLoss = {
           form: this.gasLeakageLossesService.initFormFromLoss(loss),
@@ -61,32 +59,66 @@ export class GasLeakageLossesComponent implements OnInit {
           heatLoss: loss.heatLoss || 0.0
         };
         this.calculate(tmpLoss);
-        this._leakageLosses.unshift(tmpLoss);
+        this._leakageLosses.push(tmpLoss);
+      })
+    }
+
+    this.gasLeakageLossesService.deleteLossIndex.subscribe((lossIndex) => {
+      if (lossIndex != undefined) {
+        if (this.losses.leakageLosses) {
+          this._leakageLosses.splice(lossIndex, 1);
+          if (this.gasLeakageCompareService.differentArray && !this.isBaseline) {
+            this.gasLeakageCompareService.differentArray.splice(lossIndex, 1);
+          }
+        }
+      }
+    })
+    if (this.isBaseline) {
+      this.gasLeakageLossesService.addLossBaselineMonitor.subscribe((val) => {
+        if (val == true) {
+          this._leakageLosses.push({
+            form: this.gasLeakageLossesService.initForm(),
+            name: 'Loss #' + (this._leakageLosses.length + 1),
+            heatLoss: 0.0
+          })
+        }
+      })
+    } else {
+      this.gasLeakageLossesService.addLossModificationMonitor.subscribe((val) => {
+        if (val == true) {
+          this._leakageLosses.push({
+            form: this.gasLeakageLossesService.initForm(),
+            name: 'Loss #' + (this._leakageLosses.length + 1),
+            heatLoss: 0.0
+          })
+        }
       })
     }
   }
 
-  ngOnDestroy(){
+  ngOnDestroy() {
     this.gasLeakageCompareService.baselineLeakageLoss = null;
     this.gasLeakageCompareService.modifiedLeakageLoss = null;
+    this.gasLeakageLossesService.deleteLossIndex.next(null);
+    this.gasLeakageLossesService.addLossBaselineMonitor.next(false);
+    this.gasLeakageLossesService.addLossModificationMonitor.next(false);
   }
 
   addLoss() {
-    this._leakageLosses.unshift({
+    this.gasLeakageLossesService.addLoss(this.isBaseline);
+    if(this.gasLeakageCompareService.differentArray){
+      this.gasLeakageCompareService.addObject(this.gasLeakageCompareService.differentArray.length - 1);
+    }
+    this._leakageLosses.push({
       form: this.gasLeakageLossesService.initForm(),
       name: 'Loss #' + (this._leakageLosses.length + 1),
       heatLoss: 0.0
     });
-    this.lossState.saved = false;
   }
 
 
-  removeLoss(str: string) {
-    this._leakageLosses = _.remove(this._leakageLosses, loss => {
-      return loss.name != str;
-    });
-    this.lossState.saved = false;
-    this.renameLossess();
+  removeLoss(lossIndex: number) {
+    this.gasLeakageLossesService.setDelete(lossIndex);
   }
 
   renameLossess() {
@@ -114,12 +146,10 @@ export class GasLeakageLossesComponent implements OnInit {
     this._leakageLosses.forEach(loss => {
       let tmpLeakageLoss = this.gasLeakageLossesService.initLossFromForm(loss.form);
       tmpLeakageLoss.heatLoss = loss.heatLoss;
-      tmpLeakageLosses.unshift(tmpLeakageLoss);
+      tmpLeakageLosses.push(tmpLeakageLoss);
     })
     this.losses.leakageLosses = tmpLeakageLosses;
-    this.lossState.numLosses = this.losses.leakageLosses.length;
-    this.lossState.saved = true;
-    //this.setCompareVals();
+    this.setCompareVals();
     this.savedLoss.emit(true);
   }
   changeField(str: string) {
@@ -132,7 +162,7 @@ export class GasLeakageLossesComponent implements OnInit {
     } else {
       this.gasLeakageCompareService.modifiedLeakageLoss = this.losses.leakageLosses;
     }
-    if (this.gasLeakageCompareService.differentArray) {
+    if (this.gasLeakageCompareService.differentArray && !this.isBaseline) {
       if (this.gasLeakageCompareService.differentArray.length != 0) {
         this.gasLeakageCompareService.checkLeakageLosses();
       }

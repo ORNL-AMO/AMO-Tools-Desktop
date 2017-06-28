@@ -12,8 +12,6 @@ export class FixtureLossesFormComponent implements OnInit {
   @Output('calculate')
   calculate = new EventEmitter<boolean>();
   @Input()
-  lossState: any;
-  @Input()
   baselineSelected: boolean;
   @Output('changeField')
   changeField = new EventEmitter<string>();
@@ -66,12 +64,10 @@ export class FixtureLossesFormComponent implements OnInit {
   }
 
   checkForm() {
-    this.lossState.saved = false;
     if (this.lossesForm.status == 'VALID') {
       this.calculate.emit(true);
     }
   }
-
 
   focusField(str: string) {
     this.changeField.emit(str);
@@ -93,49 +89,51 @@ export class FixtureLossesFormComponent implements OnInit {
 
   initDifferenceMonitor() {
     if (this.fixtureLossesCompareService.baselineFixtureLosses && this.fixtureLossesCompareService.modifiedFixtureLosses && this.fixtureLossesCompareService.differentArray.length != 0) {
-      let doc = this.windowRefService.getDoc();
-      //materialName
-      this.fixtureLossesCompareService.differentArray[this.lossIndex].different.materialName.subscribe((val) => {
-        let materialNameElements = doc.getElementsByName('materialName_' + this.lossIndex);
-        materialNameElements.forEach(element => {
-          element.classList.toggle('indicate-different', val);
-        });
-      })
-      //specificHeat
-      this.fixtureLossesCompareService.differentArray[this.lossIndex].different.specificHeat.subscribe((val) => {
-        let specificHeatElements = doc.getElementsByName('specificHeat_' + this.lossIndex);
-        specificHeatElements.forEach(element => {
-          element.classList.toggle('indicate-different', val);
-        });
-      })
-      //feedRate
-      this.fixtureLossesCompareService.differentArray[this.lossIndex].different.feedRate.subscribe((val) => {
-        let feedRateElements = doc.getElementsByName('feedRate_' + this.lossIndex);
-        feedRateElements.forEach(element => {
-          element.classList.toggle('indicate-different', val);
-        });
-      })
-      //initialTemp
-      this.fixtureLossesCompareService.differentArray[this.lossIndex].different.initialTemperature.subscribe((val) => {
-        let initialTempElements = doc.getElementsByName('initialTemp_' + this.lossIndex);
-        initialTempElements.forEach(element => {
-          element.classList.toggle('indicate-different', val);
-        });
-      })
-      //finalTemp
-      this.fixtureLossesCompareService.differentArray[this.lossIndex].different.finalTemperature.subscribe((val) => {
-        let finalTempElements = doc.getElementsByName('finalTemp_' + this.lossIndex);
-        finalTempElements.forEach(element => {
-          element.classList.toggle('indicate-different', val);
-        });
-      })
-      //correctionFactor
-      this.fixtureLossesCompareService.differentArray[this.lossIndex].different.correctionFactor.subscribe((val) => {
-        let correctionFactorElements = doc.getElementsByName('correctionFactor_' + this.lossIndex);
-        correctionFactorElements.forEach(element => {
-          element.classList.toggle('indicate-different', val);
-        });
-      })
+      if (this.fixtureLossesCompareService.differentArray[this.lossIndex]) {
+        let doc = this.windowRefService.getDoc();
+        //materialName
+        this.fixtureLossesCompareService.differentArray[this.lossIndex].different.materialName.subscribe((val) => {
+          let materialNameElements = doc.getElementsByName('materialName_' + this.lossIndex);
+          materialNameElements.forEach(element => {
+            element.classList.toggle('indicate-different', val);
+          });
+        })
+        //specificHeat
+        this.fixtureLossesCompareService.differentArray[this.lossIndex].different.specificHeat.subscribe((val) => {
+          let specificHeatElements = doc.getElementsByName('specificHeat_' + this.lossIndex);
+          specificHeatElements.forEach(element => {
+            element.classList.toggle('indicate-different', val);
+          });
+        })
+        //feedRate
+        this.fixtureLossesCompareService.differentArray[this.lossIndex].different.feedRate.subscribe((val) => {
+          let feedRateElements = doc.getElementsByName('feedRate_' + this.lossIndex);
+          feedRateElements.forEach(element => {
+            element.classList.toggle('indicate-different', val);
+          });
+        })
+        //initialTemp
+        this.fixtureLossesCompareService.differentArray[this.lossIndex].different.initialTemperature.subscribe((val) => {
+          let initialTempElements = doc.getElementsByName('initialTemp_' + this.lossIndex);
+          initialTempElements.forEach(element => {
+            element.classList.toggle('indicate-different', val);
+          });
+        })
+        //finalTemp
+        this.fixtureLossesCompareService.differentArray[this.lossIndex].different.finalTemperature.subscribe((val) => {
+          let finalTempElements = doc.getElementsByName('finalTemp_' + this.lossIndex);
+          finalTempElements.forEach(element => {
+            element.classList.toggle('indicate-different', val);
+          });
+        })
+        //correctionFactor
+        this.fixtureLossesCompareService.differentArray[this.lossIndex].different.correctionFactor.subscribe((val) => {
+          let correctionFactorElements = doc.getElementsByName('correctionFactor_' + this.lossIndex);
+          correctionFactorElements.forEach(element => {
+            element.classList.toggle('indicate-different', val);
+          });
+        })
+      }
     }
   }
 }

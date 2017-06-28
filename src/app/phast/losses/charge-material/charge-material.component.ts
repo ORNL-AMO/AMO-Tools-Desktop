@@ -18,8 +18,6 @@ export class ChargeMaterialComponent implements OnInit {
   @Input()
   saveClicked: boolean;
   @Input()
-  lossState: any;
-  @Input()
   addLossToggle: boolean;
   @Output('savedLoss')
   savedLoss = new EventEmitter<boolean>();
@@ -53,16 +51,58 @@ export class ChargeMaterialComponent implements OnInit {
       this._chargeMaterial = new Array();
     }
     if (this.losses.chargeMaterials) {
-    //  this.setCompareVals();
-    //  this.chargeMaterialCompareService.initCompareObjects();
+      this.setCompareVals();
+      this.chargeMaterialCompareService.initCompareObjects();
       this.initChargeMaterial();
     }
-    this.lossState.numLosses = this._chargeMaterial.length;
+
+    this.chargeMaterialService.deleteLossIndex.subscribe((lossIndex) => {
+      if (lossIndex != undefined) {
+        if (this.losses.chargeMaterials) {
+          this._chargeMaterial.splice(lossIndex, 1);
+          if (this.chargeMaterialCompareService.differentArray && !this.isBaseline) {
+            this.chargeMaterialCompareService.differentArray.splice(lossIndex, 1);
+          }
+        }
+      }
+    })
+    if (this.isBaseline) {
+      this.chargeMaterialService.addLossBaselineMonitor.subscribe((val) => {
+        if (val == true) {
+          this._chargeMaterial.push({
+            chargeMaterialType: 'Solid',
+            solidForm: this.chargeMaterialService.initSolidForm(),
+            liquidForm: this.chargeMaterialService.initLiquidForm(),
+            gasForm: this.chargeMaterialService.initGasForm(),
+            name: 'Material #' + (this._chargeMaterial.length + 1),
+            heatRequired: 0.0,
+            modifiedHeatRequired: 0.0
+          });
+        }
+      })
+    } else {
+      this.chargeMaterialService.addLossModificationMonitor.subscribe((val) => {
+        if (val == true) {
+          this._chargeMaterial.push({
+            chargeMaterialType: 'Solid',
+            solidForm: this.chargeMaterialService.initSolidForm(),
+            liquidForm: this.chargeMaterialService.initLiquidForm(),
+            gasForm: this.chargeMaterialService.initGasForm(),
+            name: 'Material #' + (this._chargeMaterial.length + 1),
+            heatRequired: 0.0,
+            modifiedHeatRequired: 0.0
+          });
+        }
+      })
+    }
   }
 
-  ngOnDestroy(){
+  ngOnDestroy() {
     this.chargeMaterialCompareService.baselineMaterials = null;
     this.chargeMaterialCompareService.modifiedMaterials = null;
+    this.chargeMaterialService.deleteLossIndex.next(null);
+    this.chargeMaterialService.addLossBaselineMonitor.next(false);
+    this.chargeMaterialService.addLossModificationMonitor.next(false);
   }
 
   initChargeMaterial() {
@@ -107,6 +147,10 @@ export class ChargeMaterialComponent implements OnInit {
   }
 
   addMaterial() {
+    this.chargeMaterialService.addLoss(this.isBaseline);
+    if (this.chargeMaterialCompareService.differentArray) {
+      this.chargeMaterialCompareService.addObject(this.chargeMaterialCompareService.differentArray.length - 1);
+    }
     this._chargeMaterial.push({
       chargeMaterialType: 'Solid',
       solidForm: this.chargeMaterialService.initSolidForm(),
@@ -116,15 +160,11 @@ export class ChargeMaterialComponent implements OnInit {
       heatRequired: 0.0,
       modifiedHeatRequired: 0.0
     });
-    this.lossState.saved = false;
+
   }
 
-  removeMaterial(str: string) {
-    this._chargeMaterial = _.remove(this._chargeMaterial, material => {
-      return material.name != str;
-    });
-    this.renameMaterial();
-    this.lossState.saved = false;
+  removeMaterial(lossIndex: number) {
+    this.chargeMaterialService.setDelete(lossIndex);
   }
 
   renameMaterial() {
@@ -224,9 +264,7 @@ export class ChargeMaterialComponent implements OnInit {
       }
     })
     this.losses.chargeMaterials = tmpChargeMaterials;
-    this.lossState.numLosses = this.losses.chargeMaterials.length;
-    this.lossState.saved = true;
-    //this.setCompareVals();
+    this.setCompareVals();
     this.savedLoss.emit(true);
   }
 
@@ -240,7 +278,7 @@ export class ChargeMaterialComponent implements OnInit {
     } else {
       this.chargeMaterialCompareService.modifiedMaterials = this.losses.chargeMaterials;
     }
-    if (this.chargeMaterialCompareService.differentArray) {
+    if (this.chargeMaterialCompareService.differentArray && !this.isBaseline) {
       if (this.chargeMaterialCompareService.differentArray.length != 0) {
         this.chargeMaterialCompareService.checkChargeMaterials();
       }

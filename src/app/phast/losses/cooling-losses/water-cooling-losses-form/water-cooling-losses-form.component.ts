@@ -12,8 +12,6 @@ export class WaterCoolingLossesFormComponent implements OnInit {
   @Output('calculate')
   calculate = new EventEmitter<boolean>();
   @Input()
-  lossState: any;
-  @Input()
   baselineSelected: boolean;
   @Output('changeField')
   changeField = new EventEmitter<string>();
@@ -65,7 +63,6 @@ export class WaterCoolingLossesFormComponent implements OnInit {
     }
   }
   checkForm() {
-    this.lossState.saved = false;
     if (this.lossesForm.status == 'VALID') {
       this.calculate.emit(true)
     }
@@ -89,36 +86,38 @@ export class WaterCoolingLossesFormComponent implements OnInit {
   }
   initDifferenceMonitor() {
     if (this.coolingLossesCompareService.baselineCoolingLosses && this.coolingLossesCompareService.modifiedCoolingLosses && this.coolingLossesCompareService.differentArray.length != 0) {
-      let doc = this.windowRefService.getDoc();
+      if (this.coolingLossesCompareService.differentArray[this.lossIndex]) {
+        let doc = this.windowRefService.getDoc();
 
-      //liquidFlow
-      this.coolingLossesCompareService.differentArray[this.lossIndex].different.waterCoolingLossDifferent.flowRate.subscribe((val) => {
-        let liquidFlowElements = doc.getElementsByName('liquidFlow_' + this.lossIndex);
-        liquidFlowElements.forEach(element => {
-          element.classList.toggle('indicate-different', val);
-        });
-      })
-      //inletTemp
-      this.coolingLossesCompareService.differentArray[this.lossIndex].different.waterCoolingLossDifferent.initialTemperature.subscribe((val) => {
-        let inletTempElements = doc.getElementsByName('inletTemp_' + this.lossIndex);
-        inletTempElements.forEach(element => {
-          element.classList.toggle('indicate-different', val);
-        });
-      })
-      //outletTemp
-      this.coolingLossesCompareService.differentArray[this.lossIndex].different.waterCoolingLossDifferent.outletTemperature.subscribe((val) => {
-        let outletTempElements = doc.getElementsByName('outletTemp_' + this.lossIndex);
-        outletTempElements.forEach(element => {
-          element.classList.toggle('indicate-different', val);
-        });
-      })
-      //correctionFactor
-      this.coolingLossesCompareService.differentArray[this.lossIndex].different.waterCoolingLossDifferent.correctionFactor.subscribe((val) => {
-        let correctionFactorElements = doc.getElementsByName('correctionFactor_' + this.lossIndex);
-        correctionFactorElements.forEach(element => {
-          element.classList.toggle('indicate-different', val);
-        });
-      })
+        //liquidFlow
+        this.coolingLossesCompareService.differentArray[this.lossIndex].different.waterCoolingLossDifferent.flowRate.subscribe((val) => {
+          let liquidFlowElements = doc.getElementsByName('liquidFlow_' + this.lossIndex);
+          liquidFlowElements.forEach(element => {
+            element.classList.toggle('indicate-different', val);
+          });
+        })
+        //inletTemp
+        this.coolingLossesCompareService.differentArray[this.lossIndex].different.waterCoolingLossDifferent.initialTemperature.subscribe((val) => {
+          let inletTempElements = doc.getElementsByName('inletTemp_' + this.lossIndex);
+          inletTempElements.forEach(element => {
+            element.classList.toggle('indicate-different', val);
+          });
+        })
+        //outletTemp
+        this.coolingLossesCompareService.differentArray[this.lossIndex].different.waterCoolingLossDifferent.outletTemperature.subscribe((val) => {
+          let outletTempElements = doc.getElementsByName('outletTemp_' + this.lossIndex);
+          outletTempElements.forEach(element => {
+            element.classList.toggle('indicate-different', val);
+          });
+        })
+        //correctionFactor
+        this.coolingLossesCompareService.differentArray[this.lossIndex].different.waterCoolingLossDifferent.correctionFactor.subscribe((val) => {
+          let correctionFactorElements = doc.getElementsByName('correctionFactor_' + this.lossIndex);
+          correctionFactorElements.forEach(element => {
+            element.classList.toggle('indicate-different', val);
+          });
+        })
+      }
     }
   }
 }

@@ -13,8 +13,6 @@ export class LiquidCoolingLossesFormComponent implements OnInit {
   @Output('calculate')
   calculate = new EventEmitter<boolean>();
   @Input()
-  lossState: any;
-  @Input()
   baselineSelected: boolean;
   @Output('changeField')
   changeField = new EventEmitter<string>();
@@ -68,7 +66,6 @@ export class LiquidCoolingLossesFormComponent implements OnInit {
   }
 
   checkForm() {
-    this.lossState.saved = false;
     if (this.lossesForm.status == 'VALID') {
       this.calculate.emit(true)
     }
@@ -93,50 +90,52 @@ export class LiquidCoolingLossesFormComponent implements OnInit {
 
   initDifferenceMonitor() {
     if (this.coolingLossesCompareService.baselineCoolingLosses && this.coolingLossesCompareService.modifiedCoolingLosses && this.coolingLossesCompareService.differentArray.length != 0) {
-      let doc = this.windowRefService.getDoc();
+      if (this.coolingLossesCompareService.differentArray[this.lossIndex]) {
+        let doc = this.windowRefService.getDoc();
 
-      //avgSpecificHeat
-      this.coolingLossesCompareService.differentArray[this.lossIndex].different.liquidCoolingLossDifferent.specificHeat.subscribe((val) => {
-        let avgSpecificHeatElements = doc.getElementsByName('avgSpecificHeat_' + this.lossIndex);
-        avgSpecificHeatElements.forEach(element => {
-          element.classList.toggle('indicate-different', val);
-        });
-      })
-      //density
-      this.coolingLossesCompareService.differentArray[this.lossIndex].different.liquidCoolingLossDifferent.density.subscribe((val) => {
-        let densityElements = doc.getElementsByName('density_' + this.lossIndex);
-        densityElements.forEach(element => {
-          element.classList.toggle('indicate-different', val);
-        });
-      })
-      //liquidFlow
-      this.coolingLossesCompareService.differentArray[this.lossIndex].different.liquidCoolingLossDifferent.flowRate.subscribe((val) => {
-        let liquidFlowElements = doc.getElementsByName('liquidFlow_' + this.lossIndex);
-        liquidFlowElements.forEach(element => {
-          element.classList.toggle('indicate-different', val);
-        });
-      })
-      //inletTemp
-      this.coolingLossesCompareService.differentArray[this.lossIndex].different.liquidCoolingLossDifferent.initialTemperature.subscribe((val) => {
-        let inletTempElements = doc.getElementsByName('inletTemp_' + this.lossIndex);
-        inletTempElements.forEach(element => {
-          element.classList.toggle('indicate-different', val);
-        });
-      })
-      //outletTemp
-      this.coolingLossesCompareService.differentArray[this.lossIndex].different.liquidCoolingLossDifferent.outletTemperature.subscribe((val) => {
-        let outletTempElements = doc.getElementsByName('outletTemp_' + this.lossIndex);
-        outletTempElements.forEach(element => {
-          element.classList.toggle('indicate-different', val);
-        });
-      })
-      //correctionFactor
-      this.coolingLossesCompareService.differentArray[this.lossIndex].different.liquidCoolingLossDifferent.correctionFactor.subscribe((val) => {
-        let correctionFactorElements = doc.getElementsByName('correctionFactor_' + this.lossIndex);
-        correctionFactorElements.forEach(element => {
-          element.classList.toggle('indicate-different', val);
-        });
-      })
+        //avgSpecificHeat
+        this.coolingLossesCompareService.differentArray[this.lossIndex].different.liquidCoolingLossDifferent.specificHeat.subscribe((val) => {
+          let avgSpecificHeatElements = doc.getElementsByName('avgSpecificHeat_' + this.lossIndex);
+          avgSpecificHeatElements.forEach(element => {
+            element.classList.toggle('indicate-different', val);
+          });
+        })
+        //density
+        this.coolingLossesCompareService.differentArray[this.lossIndex].different.liquidCoolingLossDifferent.density.subscribe((val) => {
+          let densityElements = doc.getElementsByName('density_' + this.lossIndex);
+          densityElements.forEach(element => {
+            element.classList.toggle('indicate-different', val);
+          });
+        })
+        //liquidFlow
+        this.coolingLossesCompareService.differentArray[this.lossIndex].different.liquidCoolingLossDifferent.flowRate.subscribe((val) => {
+          let liquidFlowElements = doc.getElementsByName('liquidFlow_' + this.lossIndex);
+          liquidFlowElements.forEach(element => {
+            element.classList.toggle('indicate-different', val);
+          });
+        })
+        //inletTemp
+        this.coolingLossesCompareService.differentArray[this.lossIndex].different.liquidCoolingLossDifferent.initialTemperature.subscribe((val) => {
+          let inletTempElements = doc.getElementsByName('inletTemp_' + this.lossIndex);
+          inletTempElements.forEach(element => {
+            element.classList.toggle('indicate-different', val);
+          });
+        })
+        //outletTemp
+        this.coolingLossesCompareService.differentArray[this.lossIndex].different.liquidCoolingLossDifferent.outletTemperature.subscribe((val) => {
+          let outletTempElements = doc.getElementsByName('outletTemp_' + this.lossIndex);
+          outletTempElements.forEach(element => {
+            element.classList.toggle('indicate-different', val);
+          });
+        })
+        //correctionFactor
+        this.coolingLossesCompareService.differentArray[this.lossIndex].different.liquidCoolingLossDifferent.correctionFactor.subscribe((val) => {
+          let correctionFactorElements = doc.getElementsByName('correctionFactor_' + this.lossIndex);
+          correctionFactorElements.forEach(element => {
+            element.classList.toggle('indicate-different', val);
+          });
+        })
+      }
     }
   }
 }

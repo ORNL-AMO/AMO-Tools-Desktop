@@ -1,28 +1,28 @@
-<!--<div class="section-header">
-  <h3 class="pull-left">Wall Losses</h3>
-  <button class="btn btn-secondary pull-right" (click)="addLoss()">+ Add Wall Loss</button>
-</div>-->
-
+<!--no wall losses data currently added to this assessment-->
 <div class="no-data no-data-phast" *ngIf="_wallLosses.length == 0" (click)="addLoss()">
   <h3>You have no Wall Losses</h3>
   <h4>Add some now.</h4>
 </div>
 
-
+<!--Itterate through component data -->
 <div class="card-form" *ngFor="let loss of _wallLosses; let lossIndex = index;">
   <div class="row">
     <div class="col-12">
       <div class="pull-left">
-        <b>{{loss.name}}</b>
+        <!--<input *ngIf="isBaseline" type="text" id="{{'wallLossName_'+lossIndex}}" [disabled]="!baselineSelected" class="form-control" [(ngModel)]="loss.name" />-->
+        <h6 *ngIf="isBaseline">{{loss.name}}</h6>
+        <h6 *ngIf="!isBaseline">{{loss.name}} Modification</h6>
       </div>
-      <button class="close pull-right" aria-label="Close" (click)="removeLoss(loss.name)">
+      <!--delete from baseline only-->
+      <button *ngIf="isBaseline" class="close pull-right" aria-label="Close" (click)="removeLoss(lossIndex)">
       <span aria-hidden="true">&times;</span>
     </button>
     </div>
   </div>
   <div class="row">
     <div class="col-12">
-      <app-wall-losses-form (changeField)="changeField($event)" [(wallLossesForm)]="loss.form" (calculate)="calculate(loss)" [(lossState)]="lossState"
+      <!--wall losses form with data injected-->
+      <app-wall-losses-form (changeField)="changeField($event)" [(wallLossesForm)]="loss.form" (calculate)="calculate(loss)"
         [baselineSelected]="baselineSelected" (saveEmit)="saveLosses()" [lossIndex]="lossIndex"></app-wall-losses-form>
     </div>
   </div>
@@ -31,6 +31,7 @@
       <div class="form-group">
         <label class="small">Heat Loss</label>
         <div class="text-center small">
+          <!--results from calculation--> 
           {{loss.heatLoss | number:'2.2-2'}} Btu/hr
         </div>
       </div>

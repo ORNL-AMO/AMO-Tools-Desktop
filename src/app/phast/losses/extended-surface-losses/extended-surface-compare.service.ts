@@ -30,10 +30,31 @@ export class ExtendedSurfaceCompareService {
   }
 
   checkExtendedSurfaceLosses() {
-    this.checkSurfaceArea();
-    this.checkAmbientTemperature();
-    this.checkSurfaceTemperature();
-    this.checkSurfaceEmissivity();
+    if (this.baselineSurface && this.modifiedSurface) {
+      if (this.baselineSurface.length != 0 && this.modifiedSurface.length && this.baselineSurface.length == this.modifiedSurface.length) {
+        for (let lossIndex = 0; lossIndex < this.differentArray.length; lossIndex++) {
+          //surfaceArea
+          this.differentArray[lossIndex].different.surfaceArea.next(this.compare(this.baselineSurface[lossIndex].surfaceArea, this.modifiedSurface[lossIndex].surfaceArea));
+          //ambientTemperature
+          this.differentArray[lossIndex].different.ambientTemperature.next(this.compare(this.baselineSurface[lossIndex].ambientTemperature, this.modifiedSurface[lossIndex].ambientTemperature));
+          //surfaceTemperature
+          this.differentArray[lossIndex].different.surfaceTemperature.next(this.compare(this.baselineSurface[lossIndex].surfaceTemperature, this.modifiedSurface[lossIndex].surfaceTemperature));
+          //surfaceEmissivity
+          this.differentArray[lossIndex].different.surfaceEmissivity.next(this.compare(this.baselineSurface[lossIndex].surfaceEmissivity, this.modifiedSurface[lossIndex].surfaceEmissivity));
+        }
+      } else {
+        this.disableAll();
+      }
+    } else {
+      this.disableAll();
+    }
+  }
+
+  addObject(num: number) {
+    this.differentArray.push({
+      lossIndex: num,
+      different: this.initDifferentObject()
+    })
   }
 
   initDifferentObject(): ExtendedSurfaceDifferent {
@@ -46,56 +67,30 @@ export class ExtendedSurfaceCompareService {
     return tmpDifferent;
   }
 
-  //surfaceArea
-  checkSurfaceArea() {
-    if (this.baselineSurface && this.modifiedSurface) {
-      for (let lossIndex = 0; lossIndex < this.baselineSurface.length; lossIndex++) {
-        if (this.baselineSurface[lossIndex].surfaceArea != this.modifiedSurface[lossIndex].surfaceArea) {
-          this.differentArray[lossIndex].different.surfaceArea.next(true);
-        } else {
-          this.differentArray[lossIndex].different.surfaceArea.next(false);
-        }
-      }
+  disableAll() {
+    for (let lossIndex = 0; lossIndex < this.differentArray.length; lossIndex++) {
+      this.differentArray[lossIndex].different.surfaceArea.next(false);
+      this.differentArray[lossIndex].different.ambientTemperature.next(false);
+      this.differentArray[lossIndex].different.surfaceTemperature.next(false);
+      this.differentArray[lossIndex].different.surfaceEmissivity.next(false);
     }
   }
-  //ambientTemperature
-  checkAmbientTemperature() {
-    if (this.baselineSurface && this.modifiedSurface) {
-      for (let lossIndex = 0; lossIndex < this.baselineSurface.length; lossIndex++) {
-        if (this.baselineSurface[lossIndex].ambientTemperature != this.modifiedSurface[lossIndex].ambientTemperature) {
-          this.differentArray[lossIndex].different.ambientTemperature.next(true);
-        } else {
-          this.differentArray[lossIndex].different.ambientTemperature.next(false);
-        }
+
+  compare(a: any, b: any) {
+    if (a && b) {
+      if (a != b) {
+        return true;
+      } else {
+        return false;
       }
     }
-  }
-  //surfaceTemperature
-  checkSurfaceTemperature() {
-    if (this.baselineSurface && this.modifiedSurface) {
-      for (let lossIndex = 0; lossIndex < this.baselineSurface.length; lossIndex++) {
-        if (this.baselineSurface[lossIndex].surfaceTemperature != this.modifiedSurface[lossIndex].surfaceTemperature) {
-          this.differentArray[lossIndex].different.surfaceTemperature.next(true);
-        } else {
-          this.differentArray[lossIndex].different.surfaceTemperature.next(false);
-        }
-      }
-    }
-  }
-  //surfaceEmissivity
-  checkSurfaceEmissivity() {
-    if (this.baselineSurface && this.modifiedSurface) {
-      for (let lossIndex = 0; lossIndex < this.baselineSurface.length; lossIndex++) {
-        if (this.baselineSurface[lossIndex].surfaceEmissivity != this.modifiedSurface[lossIndex].surfaceEmissivity) {
-          this.differentArray[lossIndex].different.surfaceEmissivity.next(true);
-        } else {
-          this.differentArray[lossIndex].different.surfaceEmissivity.next(false);
-        }
-      }
+    else if ((a && !b) || (!a && b)) {
+      return true
+    } else {
+      return false;
     }
   }
 }
-
 
 export interface ExtendedSurfaceDifferent {
   surfaceArea: BehaviorSubject<boolean>,

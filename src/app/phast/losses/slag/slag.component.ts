@@ -18,8 +18,6 @@ export class SlagComponent implements OnInit {
   @Input()
   saveClicked: boolean;
   @Input()
-  lossState: any;
-  @Input()
   addLossToggle: boolean;
   @Output('savedLoss')
   savedLoss = new EventEmitter<boolean>();
@@ -54,8 +52,8 @@ export class SlagComponent implements OnInit {
       this._slagLosses = new Array();
     }
     if (this.losses.slagLosses) {
-     // this.setCompareVals();
-      //this.slagCompareService.initCompareObjects();
+      this.setCompareVals();
+      this.slagCompareService.initCompareObjects();
       this.losses.slagLosses.forEach(loss => {
         let tmpLoss = {
           form: this.slagService.getFormFromLoss(loss),
@@ -63,34 +61,68 @@ export class SlagComponent implements OnInit {
           heatLoss: loss.heatLoss || 0.0
         };
         this.calculate(tmpLoss);
-        this._slagLosses.unshift(tmpLoss);
+        this._slagLosses.push(tmpLoss);
+      })
+    }
+
+    this.slagService.deleteLossIndex.subscribe((lossIndex) => {
+      if (lossIndex != undefined) {
+        if (this.losses.slagLosses) {
+          this._slagLosses.splice(lossIndex, 1);
+          if (this.slagCompareService.differentArray && !this.isBaseline) {
+            this.slagCompareService.differentArray.splice(lossIndex, 1);
+          }
+        }
+      }
+    })
+    if (this.isBaseline) {
+      this.slagService.addLossBaselineMonitor.subscribe((val) => {
+        if (val == true) {
+          this._slagLosses.push({
+            form: this.slagService.initForm(),
+            name: 'Loss #' + (this._slagLosses.length + 1),
+            heatLoss: 0.0
+          })
+        }
+      })
+    } else {
+      this.slagService.addLossModificationMonitor.subscribe((val) => {
+        if (val == true) {
+          this._slagLosses.push({
+            form: this.slagService.initForm(),
+            name: 'Loss #' + (this._slagLosses.length + 1),
+            heatLoss: 0.0
+          })
+        }
       })
     }
   }
 
-  ngOnDestroy(){
-   this.slagCompareService.baselineSlag = null;
-   this.slagCompareService.modifiedSlag = null; 
+  ngOnDestroy() {
+    this.slagCompareService.baselineSlag = null;
+    this.slagCompareService.modifiedSlag = null;
+    this.slagService.deleteLossIndex.next(null);
+    this.slagService.addLossBaselineMonitor.next(false);
+    this.slagService.addLossModificationMonitor.next(false);
   }
 
 
   addLoss() {
-    this._slagLosses.unshift({
+    this.slagService.addLoss(this.isBaseline);
+    if (this.slagCompareService.differentArray) {
+      this.slagCompareService.addObject(this.slagCompareService.differentArray.length - 1);
+    }
+    this._slagLosses.push({
       form: this.slagService.initForm(),
       name: 'Loss #' + (this._slagLosses.length + 1),
       heatLoss: 0.0
     });
-    this.lossState.saved = false;
   }
 
-
-  removeLoss(str: string) {
-    this._slagLosses = _.remove(this._slagLosses, loss => {
-      return loss.name != str;
-    });
-    this.lossState.saved = false;
-    this.renameLossess();
+  removeLoss(lossIndex: number) {
+    this.slagService.setDelete(lossIndex);
   }
+
   renameLossess() {
     let index = 1;
     this._slagLosses.forEach(loss => {
@@ -114,12 +146,10 @@ export class SlagComponent implements OnInit {
     this._slagLosses.forEach(loss => {
       let tmpSlag = this.slagService.getLossFromForm(loss.form);
       tmpSlag.heatLoss = loss.heatLoss;
-      tmpSlagLosses.unshift(tmpSlag);
+      tmpSlagLosses.push(tmpSlag);
     })
     this.losses.slagLosses = tmpSlagLosses;
-    this.lossState.numLosses = this.losses.slagLosses.length;
-    this.lossState.saved = true;
-   // this.setCompareVals();
+    this.setCompareVals();
     this.savedLoss.emit(true);
   }
 
@@ -127,15 +157,15 @@ export class SlagComponent implements OnInit {
     this.fieldChange.emit(str);
   }
 
-  setCompareVals(){
-    if(this.isBaseline){
+  setCompareVals() {
+    if (this.isBaseline) {
       this.slagCompareService.baselineSlag = this.losses.slagLosses;
-    }else{
+    } else {
       this.slagCompareService.modifiedSlag = this.losses.slagLosses;
     }
-    if(this.slagCompareService.differentArray){
-      if(this.slagCompareService.differentArray.length != 0){
-      //  this.slagCompareService.checkSlagLosses();
+    if (this.slagCompareService.differentArray && !this.isBaseline) {
+      if (this.slagCompareService.differentArray.length != 0) {
+        this.slagCompareService.checkSlagLosses();
       }
     }
   }

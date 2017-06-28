@@ -4,8 +4,9 @@ import { WallLoss } from '../../../shared/models/losses/wallLoss';
 
 @Injectable()
 export class WallLossCompareService {
-
+  //baseline wall losses
   baselineWallLosses: WallLoss[];
+  //selected modification wall losses
   modifiedWallLosses: WallLoss[];
 
   //used to hold behavior subjects for each modification
@@ -18,10 +19,7 @@ export class WallLossCompareService {
       if (this.baselineWallLosses.length == this.modifiedWallLosses.length) {
         let numLosses = this.baselineWallLosses.length;
         for (let i = 0; i < numLosses; i++) {
-          this.differentArray.push({
-            lossIndex: i,
-            different: this.initDifferentObject()
-          })
+          this.addObject(i);
         }
         this.checkWallLosses();
       } else {
@@ -29,48 +27,63 @@ export class WallLossCompareService {
       }
     }
   }
+  //add different object to different array
+  //called when new loss is added in component
+  addObject(num: number) {
+    this.differentArray.push({
+      lossIndex: num,
+      different: this.initDifferentObject()
+    })
+  }
 
   checkWallLosses() {
-    console.log('check')
+    //check both baseline and modified set
     if (this.baselineWallLosses && this.modifiedWallLosses) {
-      console.log('passed 1')
-      if (this.baselineWallLosses.length != 0 && this.modifiedWallLosses.length != 0) {
-        console.log('pass 2')
-        for (let lossIndex = 0; lossIndex < this.baselineWallLosses.length; lossIndex++) {
-          console.log('for: ' + lossIndex)
-          this.checkSurfaceTemperature(lossIndex);
-          this.checkAmbientTemperature(lossIndex);
-          this.checkSurfaceArea(lossIndex);
-          this.checkSurfaceEmissivity(lossIndex);
-          this.checkSurfaceShape(lossIndex);
-          this.checkWindVelocity(lossIndex);
-          //   this.checkConditionFactor();
-          this.checkCorrectionFactor(lossIndex);
-        }
-      } else {
-        for (let lossIndex = 0; lossIndex < this.baselineWallLosses.length; lossIndex++) {
-          this.disableAll(lossIndex);
+      //check losses exist in baseline and modified
+      //make sure baseline/modified losses are same length
+      if (this.baselineWallLosses.length != 0 && this.modifiedWallLosses.length != 0 && this.baselineWallLosses.length == this.modifiedWallLosses.length) {
+        //iterate each different object and check vals
+        //differnt objects and baseline/modification vals correspond by lossIndex
+        for (let lossIndex = 0; lossIndex < this.differentArray.length; lossIndex++) {
+          //surface area
+          this.differentArray[lossIndex].different.surfaceArea.next(this.compare(this.baselineWallLosses[lossIndex].surfaceArea, this.modifiedWallLosses[lossIndex].surfaceArea));
+          //surfaceTemperature
+          this.differentArray[lossIndex].different.surfaceTemperature.next(this.compare(this.baselineWallLosses[lossIndex].surfaceTemperature, this.modifiedWallLosses[lossIndex].surfaceTemperature));
+          //ambientTemperature
+          this.differentArray[lossIndex].different.ambientTemperature.next(this.compare(this.baselineWallLosses[lossIndex].ambientTemperature, this.modifiedWallLosses[lossIndex].ambientTemperature));
+          //surfaceEmissivity
+          this.differentArray[lossIndex].different.surfaceEmissivity.next(this.compare(this.baselineWallLosses[lossIndex].surfaceEmissivity, this.modifiedWallLosses[lossIndex].surfaceEmissivity));
+          //surfaceShape
+          this.differentArray[lossIndex].different.surfaceShape.next(this.compare(this.baselineWallLosses[lossIndex].surfaceShape, this.modifiedWallLosses[lossIndex].surfaceShape));
+          //windVelocity
+          this.differentArray[lossIndex].different.windVelocity.next(this.compare(this.baselineWallLosses[lossIndex].windVelocity, this.modifiedWallLosses[lossIndex].windVelocity));
+          //correctionFactor
+          this.differentArray[lossIndex].different.correctionFactor.next(this.compare(this.baselineWallLosses[lossIndex].correctionFactor, this.modifiedWallLosses[lossIndex].correctionFactor));
         }
       }
+      //should be called if all losses removed from baseline or modified
+      else {
+        this.disableAll();
+      }
     }
+    //disable all difference classes if only one of baseline/modified exist
     else if ((this.baselineWallLosses && !this.modifiedWallLosses) || (!this.baselineWallLosses && this.modifiedWallLosses)) {
-      console.log('only one loss');
-      for (let lossIndex = 0; lossIndex < this.baselineWallLosses.length; lossIndex++) {
-        this.disableAll(lossIndex);
-      }
+      this.disableAll();
     }
   }
 
-  disableAll(lossIndex: number) {
-    this.differentArray[lossIndex].different.surfaceArea.next(false);
-    this.differentArray[lossIndex].different.ambientTemperature.next(false);
-    this.differentArray[lossIndex].different.surfaceTemperature.next(false);
-    this.differentArray[lossIndex].different.windVelocity.next(false);
-    this.differentArray[lossIndex].different.surfaceEmissivity.next(false);
-    this.differentArray[lossIndex].different.surfaceShape.next(false);
-    this.differentArray[lossIndex].different.correctionFactor.next(false);
+  disableAll() {
+    for (let lossIndex = 0; lossIndex < this.differentArray.length; lossIndex++) {
+      this.differentArray[lossIndex].different.surfaceArea.next(false);
+      this.differentArray[lossIndex].different.ambientTemperature.next(false);
+      this.differentArray[lossIndex].different.surfaceTemperature.next(false);
+      this.differentArray[lossIndex].different.windVelocity.next(false);
+      this.differentArray[lossIndex].different.surfaceEmissivity.next(false);
+      this.differentArray[lossIndex].different.surfaceShape.next(false);
+      this.differentArray[lossIndex].different.correctionFactor.next(false);
+    }
   }
-
+  //init set of behavior subject to go with each loss
   initDifferentObject(): WallLossDifferent {
     let tmpDifferent: WallLossDifferent = {
       surfaceArea: new BehaviorSubject<boolean>(null),
@@ -85,104 +98,27 @@ export class WallLossCompareService {
     return tmpDifferent;
   }
 
-  //surfaceArea
-  checkSurfaceArea(lossIndex: number) {
-    if (this.baselineWallLosses[lossIndex].surfaceArea && this.modifiedWallLosses[lossIndex].surfaceArea) {
-      if (this.baselineWallLosses[lossIndex].surfaceArea != this.modifiedWallLosses[lossIndex].surfaceArea) {
-        this.differentArray[lossIndex].different.surfaceArea.next(true);
+  compare(a: any, b: any) {
+    //if both exist
+    if (a && b) {
+      //compare
+      if (a != b) {
+        //not equal
+        return true;
       } else {
-        this.differentArray[lossIndex].different.surfaceArea.next(false);
+        //equal
+        return false;
       }
+    }
+    //check one exists
+    else if ((a && !b) || (!a && b)) {
+      //not equal
+      return true
     } else {
-      this.differentArray[lossIndex].different.surfaceArea.next(true);
+      //equal
+      return false;
     }
   }
-  //ambientTemperature
-  checkAmbientTemperature(lossIndex: number) {
-    if (this.baselineWallLosses[lossIndex].ambientTemperature && this.modifiedWallLosses[lossIndex].ambientTemperature) {
-      if (this.baselineWallLosses[lossIndex].ambientTemperature != this.modifiedWallLosses[lossIndex].ambientTemperature) {
-        this.differentArray[lossIndex].different.ambientTemperature.next(true);
-      } else {
-        this.differentArray[lossIndex].different.ambientTemperature.next(false);
-      }
-    } else {
-      this.differentArray[lossIndex].different.ambientTemperature.next(true);
-    }
-  }
-  //surfaceTemperature
-  checkSurfaceTemperature(lossIndex: number) {
-    if (this.baselineWallLosses[lossIndex].surfaceTemperature && this.modifiedWallLosses[lossIndex].surfaceTemperature) {
-      if (this.baselineWallLosses[lossIndex].surfaceTemperature != this.modifiedWallLosses[lossIndex].surfaceTemperature) {
-        this.differentArray[lossIndex].different.surfaceTemperature.next(true);
-      } else {
-        this.differentArray[lossIndex].different.surfaceTemperature.next(false);
-      }
-    } else {
-      this.differentArray[lossIndex].different.surfaceTemperature.next(true);
-    }
-  }
-  //windVelocity
-  checkWindVelocity(lossIndex: number) {
-    if (this.baselineWallLosses[lossIndex].windVelocity && this.modifiedWallLosses[lossIndex].windVelocity) {
-      if (this.baselineWallLosses[lossIndex].windVelocity != this.modifiedWallLosses[lossIndex].windVelocity) {
-        this.differentArray[lossIndex].different.windVelocity.next(true);
-      } else {
-        this.differentArray[lossIndex].different.windVelocity.next(false);
-      }
-    } else {
-      this.differentArray[lossIndex].different.windVelocity.next(true);
-    }
-  }
-  //surfaceEmissivity
-  checkSurfaceEmissivity(lossIndex: number) {
-    if (this.baselineWallLosses[lossIndex].surfaceEmissivity && this.modifiedWallLosses[lossIndex].surfaceEmissivity) {
-      if (this.baselineWallLosses[lossIndex].surfaceEmissivity != this.modifiedWallLosses[lossIndex].surfaceEmissivity) {
-        this.differentArray[lossIndex].different.surfaceEmissivity.next(true);
-      } else {
-        this.differentArray[lossIndex].different.surfaceEmissivity.next(false);
-      }
-    } else {
-      this.differentArray[lossIndex].different.surfaceEmissivity.next(true);
-    }
-  }
-
-  //surfaceShape
-  checkSurfaceShape(lossIndex: number) {
-    if (this.baselineWallLosses[lossIndex].surfaceShape && this.modifiedWallLosses[lossIndex].surfaceShape) {
-      if (this.baselineWallLosses[lossIndex].surfaceShape != this.modifiedWallLosses[lossIndex].surfaceShape) {
-        this.differentArray[lossIndex].different.surfaceShape.next(true);
-      } else {
-        this.differentArray[lossIndex].different.surfaceShape.next(false);
-      }
-    } else {
-      this.differentArray[lossIndex].different.surfaceShape.next(true);
-    }
-  }
-  //conditionFactor
-  // checkConditionFactor() {
-  //   if (this.baselineWallLosses && this.modifiedWallLosses) {
-  //     for (let lossIndex = 0; lossIndex < this.baselineWallLosses.length; lossIndex++) {
-  //       if (this.baselineWallLosses[lossIndex].conditionFactor != this.modifiedWallLosses[lossIndex].conditionFactor) {
-  //         this.differentArray[lossIndex].different.conditionFactor.next(true);
-  //       } else {
-  //         this.differentArray[lossIndex].different.conditionFactor.next(false);
-  //       }
-  //     }
-  //   }
-  // }
-  //correctionFactor
-  checkCorrectionFactor(lossIndex: number) {
-    if (this.baselineWallLosses[lossIndex].correctionFactor && this.modifiedWallLosses[lossIndex].correctionFactor) {
-      if (this.baselineWallLosses[lossIndex].correctionFactor != this.modifiedWallLosses[lossIndex].correctionFactor) {
-        this.differentArray[lossIndex].different.correctionFactor.next(true);
-      } else {
-        this.differentArray[lossIndex].different.correctionFactor.next(false);
-      }
-    } else {
-      this.differentArray[lossIndex].different.correctionFactor.next(true);
-    }
-  }
-
 }
 
 export interface WallLossDifferent {

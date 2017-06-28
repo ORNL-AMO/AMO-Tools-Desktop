@@ -12,8 +12,6 @@ export class AtmosphereLossesFormComponent implements OnInit {
   @Output('calculate')
   calculate = new EventEmitter<boolean>();
   @Input()
-  lossState: any;
-  @Input()
   baselineSelected: boolean;
   @Output('changeField')
   changeField = new EventEmitter<string>();
@@ -66,7 +64,6 @@ export class AtmosphereLossesFormComponent implements OnInit {
   }
 
   checkForm() {
-    this.lossState.saved = false;
     if (this.atmosphereLossForm.status == "VALID") {
       this.calculate.emit(true);
     }
@@ -92,51 +89,52 @@ export class AtmosphereLossesFormComponent implements OnInit {
 
   initDifferenceMonitor() {
     if (this.atmosphereLossesCompareService.baselineAtmosphereLosses && this.atmosphereLossesCompareService.modifiedAtmosphereLosses && this.atmosphereLossesCompareService.differentArray.length != 0) {
-      let doc = this.windowRefService.getDoc();
+      if (this.atmosphereLossesCompareService.differentArray[this.lossIndex]) {
+        let doc = this.windowRefService.getDoc();
 
-      //atmosphereGas
-      this.atmosphereLossesCompareService.differentArray[this.lossIndex].different.atmosphereGas.subscribe((val) => {
-        let atmosphereGasElements = doc.getElementsByName('atmosphereGas_' + this.lossIndex);
-        atmosphereGasElements.forEach(element => {
-          element.classList.toggle('indicate-different', val);
-        });
-      })
-      //specificHeat
-      this.atmosphereLossesCompareService.differentArray[this.lossIndex].different.specificHeat.subscribe((val) => {
-        let specificHeatElements = doc.getElementsByName('specificHeat_' + this.lossIndex);
-        specificHeatElements.forEach(element => {
-          element.classList.toggle('indicate-different', val);
-        });
-      })
-      //inletTemp
-      this.atmosphereLossesCompareService.differentArray[this.lossIndex].different.inletTemperature.subscribe((val) => {
-        let inletTempElements = doc.getElementsByName('inletTemp_' + this.lossIndex);
-        inletTempElements.forEach(element => {
-          element.classList.toggle('indicate-different', val);
-        });
-      })
-      //outletTemp
-      this.atmosphereLossesCompareService.differentArray[this.lossIndex].different.outletTemperature.subscribe((val) => {
-        let outletTempElements = doc.getElementsByName('outletTemp_' + this.lossIndex);
-        outletTempElements.forEach(element => {
-          element.classList.toggle('indicate-different', val);
-        });
-      })
-      //flowRate
-      this.atmosphereLossesCompareService.differentArray[this.lossIndex].different.flowRate.subscribe((val) => {
-        let flowRateElements = doc.getElementsByName('flowRate_' + this.lossIndex);
-        flowRateElements.forEach(element => {
-          element.classList.toggle('indicate-different', val);
-        });
-      })
-      //correctionFactor
-      this.atmosphereLossesCompareService.differentArray[this.lossIndex].different.correctionFactor.subscribe((val) => {
-        let correctionFactorElements = doc.getElementsByName('correctionFactor_' + this.lossIndex);
-        correctionFactorElements.forEach(element => {
-          element.classList.toggle('indicate-different', val);
-        });
-      })
-
+        //atmosphereGas
+        this.atmosphereLossesCompareService.differentArray[this.lossIndex].different.atmosphereGas.subscribe((val) => {
+          let atmosphereGasElements = doc.getElementsByName('atmosphereGas_' + this.lossIndex);
+          atmosphereGasElements.forEach(element => {
+            element.classList.toggle('indicate-different', val);
+          });
+        })
+        //specificHeat
+        this.atmosphereLossesCompareService.differentArray[this.lossIndex].different.specificHeat.subscribe((val) => {
+          let specificHeatElements = doc.getElementsByName('specificHeat_' + this.lossIndex);
+          specificHeatElements.forEach(element => {
+            element.classList.toggle('indicate-different', val);
+          });
+        })
+        //inletTemp
+        this.atmosphereLossesCompareService.differentArray[this.lossIndex].different.inletTemperature.subscribe((val) => {
+          let inletTempElements = doc.getElementsByName('inletTemp_' + this.lossIndex);
+          inletTempElements.forEach(element => {
+            element.classList.toggle('indicate-different', val);
+          });
+        })
+        //outletTemp
+        this.atmosphereLossesCompareService.differentArray[this.lossIndex].different.outletTemperature.subscribe((val) => {
+          let outletTempElements = doc.getElementsByName('outletTemp_' + this.lossIndex);
+          outletTempElements.forEach(element => {
+            element.classList.toggle('indicate-different', val);
+          });
+        })
+        //flowRate
+        this.atmosphereLossesCompareService.differentArray[this.lossIndex].different.flowRate.subscribe((val) => {
+          let flowRateElements = doc.getElementsByName('flowRate_' + this.lossIndex);
+          flowRateElements.forEach(element => {
+            element.classList.toggle('indicate-different', val);
+          });
+        })
+        //correctionFactor
+        this.atmosphereLossesCompareService.differentArray[this.lossIndex].different.correctionFactor.subscribe((val) => {
+          let correctionFactorElements = doc.getElementsByName('correctionFactor_' + this.lossIndex);
+          correctionFactorElements.forEach(element => {
+            element.classList.toggle('indicate-different', val);
+          });
+        })
+      }
     }
   }
 }

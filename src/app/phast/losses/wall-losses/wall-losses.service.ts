@@ -2,12 +2,35 @@ import { Injectable } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Losses } from '../../../shared/models/phast';
 import { WallLoss } from '../../../shared/models/losses/wallLoss';
-
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable()
 export class WallLossesService {
+  //components subscribe to BehaviorSubject variables for communication between siblings components
+  deleteLossIndex: BehaviorSubject<number>;
+  addLossBaselineMonitor: BehaviorSubject<any>;
+  addLossModifiedMonitor: BehaviorSubject<any>;
 
-  constructor(private formBuilder: FormBuilder) { }
+  constructor(private formBuilder: FormBuilder) {
+    //init behavior subjects to null;
+    this.deleteLossIndex = new BehaviorSubject<number>(null);
+    this.addLossBaselineMonitor = new BehaviorSubject<any>(null);
+    this.addLossModifiedMonitor = new BehaviorSubject<any>(null);
+  }
+
+  setDelete(num: number) {
+    this.deleteLossIndex.next(num);
+  }
+
+  addLoss(isBaseline: boolean) {
+    //if baseline adds loss, signal modified
+    if (isBaseline) {
+      this.addLossModifiedMonitor.next(true);
+    }else{
+       //signal baseline
+       this.addLossBaselineMonitor.next(true);
+    }
+  }
 
   //init empty wall loss form
   initForm() {
@@ -19,8 +42,7 @@ export class WallLossesService {
       'windVelocity': ['', Validators.required],
       'surfaceShape': ['Vertical Plates', Validators.required],
       'conditionFactor': [1.394, Validators.required],
-      'surfaceEmissivity': ['', Validators.required],
-
+      'surfaceEmissivity': ['', Validators.required]
     })
   }
 
@@ -34,7 +56,7 @@ export class WallLossesService {
       'windVelocity': [wallLoss.windVelocity, Validators.required],
       'conditionFactor': [wallLoss.conditionFactor, Validators.required],
       'surfaceEmissivity': [wallLoss.surfaceEmissivity, Validators.required],
-      'surfaceShape': [wallLoss.surfaceShape, Validators.required],
+      'surfaceShape': [wallLoss.surfaceShape, Validators.required]
     })
   }
   //get WallLoss from form

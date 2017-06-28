@@ -12,8 +12,6 @@ export class WallLossesFormComponent implements OnInit {
   @Output('calculate')
   calculate = new EventEmitter<boolean>();
   @Input()
-  lossState: any;
-  @Input()
   baselineSelected: boolean;
   @Output('changeField')
   changeField = new EventEmitter<string>();
@@ -32,6 +30,7 @@ export class WallLossesFormComponent implements OnInit {
 
   ngOnChanges(changes: SimpleChanges) {
     if (!this.firstChange) {
+      //on changes to baseline selected enable/disable form
       if (!this.baselineSelected) {
         this.disableForm();
       } else {
@@ -45,41 +44,43 @@ export class WallLossesFormComponent implements OnInit {
   ngOnInit() { }
 
   ngAfterViewInit() {
+    //wait for view to init to disable form
     if (!this.baselineSelected) {
       this.disableForm();
     }
+    //initialize difference monitor
     this.initDifferenceMonitor();
   }
-
+  //iterate through form elements and disable
   disableForm() {
     this.elements = this.lossForm.nativeElement.elements;
     for (var i = 0, len = this.elements.length; i < len; ++i) {
       this.elements[i].disabled = true;
     }
   }
-
+  //iterate through form elements and enable
   enableForm() {
     this.elements = this.lossForm.nativeElement.elements;
     for (var i = 0, len = this.elements.length; i < len; ++i) {
       this.elements[i].disabled = false;
     }
   }
-
+  //utility for checking if form is valid
+  //if so tell wall-losses.component to calculate results
   checkForm() {
-    this.lossState.saved = false;
     if (this.wallLossesForm.status == "VALID") {
       this.calculate.emit(true);
     }
   }
-
+  //emits to wall-losses.component the focused field changed
   focusField(str: string) {
     this.changeField.emit(str);
   }
-
+  //emit to wall-losses.component to begin saving process
   emitSave() {
     this.saveEmit.emit(true);
   }
-
+  //on input/change in form startSavePolling is called, if not called again with 3 seconds save process is triggered
   startSavePolling() {
     this.checkForm();
     if (this.counter) {
@@ -89,7 +90,7 @@ export class WallLossesFormComponent implements OnInit {
       this.emitSave();
     }, 3000)
   }
-
+  //method used to subscribe to service monitoring differences in baseline vs modification forms
   initDifferenceMonitor() {
     if (this.wallLossCompareService.baselineWallLosses && this.wallLossCompareService.modifiedWallLosses && this.wallLossCompareService.differentArray.length != 0) {
       if (this.wallLossCompareService.differentArray[this.lossIndex]) {

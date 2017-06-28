@@ -31,72 +31,59 @@ export class SlagCompareService {
     }
   }
 
-  checkSlagLosses() {
-    this.checkWeight();
-    this.checkInletTemperature();
-    this.checkOutletTemperature();
-    this.checkSpecificHeat();
-    this.checkCorrectionFactor();
+  addObject(num: number) {
+    this.differentArray.push({
+      lossIndex: num,
+      different: this.initDifferentObject()
+    })
   }
 
-  //weight
-  checkWeight() {
+  checkSlagLosses() {
     if (this.baselineSlag && this.modifiedSlag) {
-      for (let lossIndex = 0; lossIndex < this.baselineSlag.length; lossIndex++) {
-        if (this.baselineSlag[lossIndex].weight != this.modifiedSlag[lossIndex].weight) {
-          this.differentArray[lossIndex].different.weight.next(true);
-        } else {
-          this.differentArray[lossIndex].different.weight.next(false);
+      if (this.baselineSlag.length != 0 && this.modifiedSlag.length != 0 && this.baselineSlag.length == this.modifiedSlag.length) {
+        for (let lossIndex = 0; lossIndex < this.differentArray.length; lossIndex++) {
+          //weight
+          this.differentArray[lossIndex].different.weight.next(this.compare(this.baselineSlag[lossIndex].weight, this.modifiedSlag[lossIndex].weight));
+          //inletTemperature
+          this.differentArray[lossIndex].different.inletTemperature.next(this.compare(this.baselineSlag[lossIndex].inletTemperature, this.modifiedSlag[lossIndex].inletTemperature));
+          //outletTemperature
+          this.differentArray[lossIndex].different.outletTemperature.next(this.compare(this.baselineSlag[lossIndex].outletTemperature, this.modifiedSlag[lossIndex].outletTemperature));
+          //specificHeat
+          this.differentArray[lossIndex].different.specificHeat.next(this.compare(this.baselineSlag[lossIndex].specificHeat, this.modifiedSlag[lossIndex].specificHeat));
+          //correctionFactor
+          this.differentArray[lossIndex].different.correctionFactor.next(this.compare(this.baselineSlag[lossIndex].correctionFactor, this.modifiedSlag[lossIndex].correctionFactor));
         }
+      } else {
+        this.disableAll();
       }
     }
-  }
-  //inletTemperature
-  checkInletTemperature() {
-    if (this.baselineSlag && this.modifiedSlag) {
-      for (let lossIndex = 0; lossIndex < this.baselineSlag.length; lossIndex++) {
-        if (this.baselineSlag[lossIndex].inletTemperature != this.modifiedSlag[lossIndex].inletTemperature) {
-          this.differentArray[lossIndex].different.inletTemperature.next(true);
-        } else {
-          this.differentArray[lossIndex].different.inletTemperature.next(false);
-        }
-      }
+    else if ((this.baselineSlag && !this.modifiedSlag) || (!this.baselineSlag && this.modifiedSlag)) {
+      this.disableAll();
     }
   }
-  //outletTemperature
-  checkOutletTemperature() {
-    if (this.baselineSlag && this.modifiedSlag) {
-      for (let lossIndex = 0; lossIndex < this.baselineSlag.length; lossIndex++) {
-        if (this.baselineSlag[lossIndex].outletTemperature != this.modifiedSlag[lossIndex].outletTemperature) {
-          this.differentArray[lossIndex].different.outletTemperature.next(true);
-        } else {
-          this.differentArray[lossIndex].different.outletTemperature.next(false);
-        }
-      }
+
+  disableAll() {
+    for (let lossIndex = 0; lossIndex < this.differentArray.length; lossIndex++) {
+      this.differentArray[lossIndex].different.weight.next(false);
+      this.differentArray[lossIndex].different.inletTemperature.next(false);
+      this.differentArray[lossIndex].different.outletTemperature.next(false);
+      this.differentArray[lossIndex].different.specificHeat.next(false);
+      this.differentArray[lossIndex].different.correctionFactor.next(false);
     }
   }
-  //specificHeat
-  checkSpecificHeat() {
-    if (this.baselineSlag && this.modifiedSlag) {
-      for (let lossIndex = 0; lossIndex < this.baselineSlag.length; lossIndex++) {
-        if (this.baselineSlag[lossIndex].specificHeat != this.modifiedSlag[lossIndex].specificHeat) {
-          this.differentArray[lossIndex].different.specificHeat.next(true);
-        } else {
-          this.differentArray[lossIndex].different.specificHeat.next(false);
-        }
+
+  compare(a: any, b: any) {
+    if (a && b) {
+      if (a != b) {
+        return true;
+      } else {
+        return false;
       }
     }
-  }
-  //correctionFactor
-  checkCorrectionFactor() {
-    if (this.baselineSlag && this.modifiedSlag) {
-      for (let lossIndex = 0; lossIndex < this.baselineSlag.length; lossIndex++) {
-        if (this.baselineSlag[lossIndex].correctionFactor != this.modifiedSlag[lossIndex].correctionFactor) {
-          this.differentArray[lossIndex].different.correctionFactor.next(true);
-        } else {
-          this.differentArray[lossIndex].different.correctionFactor.next(false);
-        }
-      }
+    else if ((a && !b) || (!a && b)) {
+      return true
+    } else {
+      return false;
     }
   }
 

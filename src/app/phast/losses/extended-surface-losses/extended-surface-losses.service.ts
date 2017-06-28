@@ -2,12 +2,29 @@ import { Injectable } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Losses } from '../../../shared/models/phast';
 import { ExtendedSurface } from '../../../shared/models/losses/extendedSurface';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable()
 export class ExtendedSurfaceLossesService {
+  deleteLossIndex: BehaviorSubject<number>;
+  addLossBaselineMonitor: BehaviorSubject<any>;
+  addLossModificationMonitor: BehaviorSubject<any>;
+  constructor(private formBuilder: FormBuilder) {
+    this.deleteLossIndex = new BehaviorSubject<number>(null);
+    this.addLossBaselineMonitor = new BehaviorSubject<any>(null);
+    this.addLossModificationMonitor = new BehaviorSubject<any>(null);
+  }
 
-  constructor(private formBuilder: FormBuilder){}
-
+  setDelete(num: number) {
+    this.deleteLossIndex.next(num);
+  }
+  addLoss(bool: boolean) {
+    if (bool) {
+      this.addLossModificationMonitor.next(true);
+    } else {
+      this.addLossBaselineMonitor.next(true);
+    }
+  }
   initForm() {
     return this.formBuilder.group({
       'surfaceArea': ['', Validators.required],

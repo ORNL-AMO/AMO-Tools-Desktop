@@ -18,8 +18,6 @@ export class WallLossesComponent implements OnInit {
   @Input()
   saveClicked: boolean;
   @Input()
-  lossState: any;
-  @Input()
   addLossToggle: boolean;
   @Output('savedLoss')
   savedLoss = new EventEmitter<boolean>();
@@ -36,9 +34,11 @@ export class WallLossesComponent implements OnInit {
 
   ngOnChanges(changes: SimpleChanges) {
     if (!this.firstChange) {
+      //toggle save clicked saves losses
       if (changes.saveClicked) {
         this.saveLosses();
       }
+      //toggle add loss adds loss
       if (changes.addLossToggle) {
         this.addLoss();
       }
@@ -49,52 +49,101 @@ export class WallLossesComponent implements OnInit {
   }
 
   ngOnInit() {
+    //initialize component data array
+    //_wallLosses is array of objects that is used by wall-losses.component
     if (!this._wallLosses) {
       this._wallLosses = new Array();
     }
+    //convert current wall losses to forms and add to component array
     if (this.losses.wallLosses) {
-      //this.setCompareVals();
-      //this.wallLossCompareService.initCompareObjects();
+      //set our baseline or modification losses for comparisons
+      this.setCompareVals();
+      this.wallLossCompareService.initCompareObjects();
       this.losses.wallLosses.forEach(loss => {
+        //create a temp loss object
         let tmpLoss = {
           form: this.wallLossesService.getWallLossForm(loss),
           name: 'Loss #' + (this._wallLosses.length + 1),
           heatLoss: loss.heatLoss || 0.0
         };
+        //attempt to calculate tmpLoss results
         this.calculate(tmpLoss);
+        //add object to component data array
         this._wallLosses.push(tmpLoss);
+      })
+    }
+    //subscribe to deleteLossIndex object in wallLossesService
+    //used to delete from modification and baseline at same time
+    this.wallLossesService.deleteLossIndex.subscribe((lossIndex) => {
+      if (lossIndex != undefined) {
+        //remove at index
+        if (this.losses.wallLosses) {
+          this._wallLosses.splice(lossIndex, 1);
+          //remove comparison object as well
+          if (this.wallLossCompareService.differentArray && !this.isBaseline) {
+            this.wallLossCompareService.differentArray.splice(lossIndex, 1);
+          }
+        }
+      }
+    })
+
+    //add monitor so both baseline and modification add loss when clicked
+    if (this.isBaseline) {
+      this.wallLossesService.addLossBaselineMonitor.subscribe((val) => {
+        if (val == true) {
+          this._wallLosses.push({
+            form: this.wallLossesService.initForm(),
+            name: 'Loss #' + (this._wallLosses.length + 1),
+            heatLoss: 0.0
+          })
+        }
+      })
+    } else {
+      this.wallLossesService.addLossModifiedMonitor.subscribe((val) => {
+        if (val == true) {
+          this._wallLosses.push({
+            form: this.wallLossesService.initForm(),
+            name: 'Loss #' + (this._wallLosses.length + 1),
+            heatLoss: 0.0
+          })
+        }
       })
     }
   }
 
   ngOnDestroy() {
+    //clean up subscriptions on destroy
     this.wallLossCompareService.baselineWallLosses = null;
     this.wallLossCompareService.modifiedWallLosses = null;
+    this.wallLossesService.deleteLossIndex.next(null);
+    this.wallLossesService.addLossBaselineMonitor.next(false);
+    this.wallLossesService.addLossModifiedMonitor.next(false);
+    //this.wallLossesService.deleteLossIndex.unsubscribe();
+    //this.wallLossesService.addLossMonitor.unsubscribe();
   }
 
   addLoss() {
-    let tmpForm = this.wallLossesService.initForm();
-    let tmpLoss = this.wallLossesService.getWallLossFromForm(tmpForm);
-    this.losses.wallLosses.push(tmpLoss);
-    //this.setCompareVals();
-    //this.wallLossCompareService.initCompareObjects();
-
+    //if adding loss in modification signal to baseline to add loss
+    this.wallLossesService.addLoss(this.isBaseline);
+    //check compare service objects has been initialized
+    //have modify conditions view call so that it isn't called twice => (!this.isBaseline)
+    if (this.wallLossCompareService.differentArray) {
+      this.wallLossCompareService.addObject(this.wallLossCompareService.differentArray.length - 1);
+    }
+    //add new empty loss to component data
     this._wallLosses.push({
-      form: tmpForm,
+      form: this.wallLossesService.initForm(),
       name: 'Loss #' + (this._wallLosses.length + 1),
       heatLoss: 0.0
     });
-    this.lossState.saved = false;
   }
 
-  removeLoss(str: string) {
-    this._wallLosses = _.remove(this._wallLosses, loss => {
-      return loss.name != str;
-    });
-    this.lossState.saved = false;
-    this.renameLossess();
+  removeLoss(lossIndex: number) {
+    //signal delete to service
+    this.wallLossesService.setDelete(lossIndex);
   }
 
+  //TODO: need to handle new losses after a loss has been deleted, can currently have same name
   renameLossess() {
     let index = 1;
     this._wallLosses.forEach(loss => {
@@ -103,6 +152,7 @@ export class WallLossesComponent implements OnInit {
     })
   }
 
+  //calculate wall loss results
   calculate(loss: any) {
     loss.heatLoss = this.phastService.wallLosses(
       loss.form.value.surfaceArea,
@@ -116,40 +166,43 @@ export class WallLossesComponent implements OnInit {
   }
 
   saveLosses() {
+    //temp array will hold new losses data
     let tmpWallLosses = new Array<WallLoss>();
+    //iterate through component array to build up new data
     this._wallLosses.forEach(loss => {
       let tmpWallLoss = this.wallLossesService.getWallLossFromForm(loss.form);
       tmpWallLoss.heatLoss = loss.heatLoss;
       tmpWallLosses.push(tmpWallLoss);
     })
-    let priorLength = this.losses.wallLosses.length;
+    //set input data to equal new data for update
     this.losses.wallLosses = tmpWallLosses;
-    this.lossState.numLosses = this.losses.wallLosses.length;
-    this.lossState.saved = true;
+    //set values for compare service
     this.setCompareVals();
-    //this.checkHeatLoss();
+    //emit to losses.component that data is updated and should be saved
     this.savedLoss.emit(true);
   }
-
+  //used for field by field context, send name of current field to losses.component
   changeField(str: string) {
     this.fieldChange.emit(str);
   }
-
+  //used for compare service
   setCompareVals() {
+    //depending on modification/baseline set values for comparison
     if (this.isBaseline) {
       this.wallLossCompareService.baselineWallLosses = this.losses.wallLosses;
     } else {
       this.wallLossCompareService.modifiedWallLosses = this.losses.wallLosses;
     }
-    if (this.wallLossCompareService.differentArray) {
+    //if compare objects have been initialized check them
+    //use modify conditions view to call for the check
+    if (this.wallLossCompareService.differentArray && !this.isBaseline) {
       if (this.wallLossCompareService.differentArray.length != 0) {
         this.wallLossCompareService.checkWallLosses();
-      } else {
-        this.wallLossCompareService.initCompareObjects();
       }
     }
   }
 
+  //TODO: check results data and indicate different
   // checkHeatLoss() {
   //   if (this.wallLossCompareService.baselineWallLosses && this.wallLossCompareService.modifiedWallLosses) {
   //     if (this.wallLossCompareService.baselineWallLosses.length == this.wallLossCompareService.modifiedWallLosses.length) {

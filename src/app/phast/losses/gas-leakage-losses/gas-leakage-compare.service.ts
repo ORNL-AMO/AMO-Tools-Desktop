@@ -13,7 +13,7 @@ export class GasLeakageCompareService {
   initCompareObjects() {
     this.differentArray = new Array();
     if (this.baselineLeakageLoss && this.modifiedLeakageLoss) {
-      if (this.baselineLeakageLoss.length == this.baselineLeakageLoss.length) {
+      if (this.baselineLeakageLoss.length == this.modifiedLeakageLoss.length) {
         let numLosses = this.baselineLeakageLoss.length;
         for (let i = 0; i < numLosses; i++) {
           this.differentArray.push({
@@ -34,119 +34,64 @@ export class GasLeakageCompareService {
       openingArea: new BehaviorSubject<boolean>(null),
       leakageGasTemperature: new BehaviorSubject<boolean>(null),
       ambientTemperature: new BehaviorSubject<boolean>(null),
-      //coefficient: new BehaviorSubject<boolean>(null),
       specificGravity: new BehaviorSubject<boolean>(null),
-      // correctionFactor: new BehaviorSubject<boolean>(null),
-      // heatLoss: new BehaviorSubject<boolean>(null)
     }
     return tmpDifferent;
   }
 
-  checkLeakageLosses() {
-    this.checkDraftPressure();
-    this.checkOpeningArea();
-    this.checkLeakageGasTemperature();
-    this.checkAmbientTemperature();
-    //this.checkCoefficient();
-    this.checkSpecificGravity();
-    // this.checkCorrectionFactor();
-    // this.checkHeatLoss();
+  addObject(num: number) {
+    this.differentArray.push({
+      lossIndex: num,
+      different: this.initDifferentObject()
+    })
   }
 
-  //draftPressure
-  checkDraftPressure() {
+  checkLeakageLosses() {
     if (this.baselineLeakageLoss && this.modifiedLeakageLoss) {
-      for (let lossIndex = 0; lossIndex < this.baselineLeakageLoss.length; lossIndex++) {
-        if (this.baselineLeakageLoss[lossIndex].draftPressure != this.modifiedLeakageLoss[lossIndex].draftPressure) {
-          this.differentArray[lossIndex].different.draftPressure.next(true);
-        } else {
-          this.differentArray[lossIndex].different.draftPressure.next(false);
+      if (this.baselineLeakageLoss.length != 0 && this.modifiedLeakageLoss.length != 0 && this.baselineLeakageLoss.length == this.modifiedLeakageLoss.length) {
+        for (let lossIndex = 0; lossIndex < this.differentArray.length; lossIndex++) {
+          //draftPressure
+          this.differentArray[lossIndex].different.draftPressure.next(this.compare(this.baselineLeakageLoss[lossIndex].draftPressure, this.modifiedLeakageLoss[lossIndex].draftPressure));
+          //openingArea
+          this.differentArray[lossIndex].different.openingArea.next(this.compare(this.baselineLeakageLoss[lossIndex].openingArea, this.modifiedLeakageLoss[lossIndex].openingArea));
+          //leakageGasTemperature
+          this.differentArray[lossIndex].different.leakageGasTemperature.next(this.compare(this.baselineLeakageLoss[lossIndex].leakageGasTemperature, this.modifiedLeakageLoss[lossIndex].leakageGasTemperature));
+          //ambientTemperature
+          this.differentArray[lossIndex].different.ambientTemperature.next(this.compare(this.baselineLeakageLoss[lossIndex].ambientTemperature, this.modifiedLeakageLoss[lossIndex].ambientTemperature));
+          //specificGravity
+          this.differentArray[lossIndex].different.specificGravity.next(this.compare(this.baselineLeakageLoss[lossIndex].specificGravity, this.modifiedLeakageLoss[lossIndex].specificGravity));
         }
+      } else {
+        this.disableAll();
       }
     }
-  }
-  //openingArea
-  checkOpeningArea() {
-    if (this.baselineLeakageLoss && this.modifiedLeakageLoss) {
-      for (let lossIndex = 0; lossIndex < this.baselineLeakageLoss.length; lossIndex++) {
-        if (this.baselineLeakageLoss[lossIndex].openingArea != this.modifiedLeakageLoss[lossIndex].openingArea) {
-          this.differentArray[lossIndex].different.openingArea.next(true);
-        } else {
-          this.differentArray[lossIndex].different.openingArea.next(false);
-        }
-      }
+    else if ((this.baselineLeakageLoss && !this.modifiedLeakageLoss) || (!this.baselineLeakageLoss && this.modifiedLeakageLoss)) {
+      this.disableAll();
     }
   }
-  //leakageGasTemperature
-  checkLeakageGasTemperature() {
-    if (this.baselineLeakageLoss && this.modifiedLeakageLoss) {
-      for (let lossIndex = 0; lossIndex < this.baselineLeakageLoss.length; lossIndex++) {
-        if (this.baselineLeakageLoss[lossIndex].leakageGasTemperature != this.modifiedLeakageLoss[lossIndex].leakageGasTemperature) {
-          this.differentArray[lossIndex].different.leakageGasTemperature.next(true);
-        } else {
-          this.differentArray[lossIndex].different.leakageGasTemperature.next(false);
-        }
-      }
+
+  disableAll() {
+    for (let lossIndex = 0; lossIndex < this.differentArray.length; lossIndex++) {
+      this.differentArray[lossIndex].different.draftPressure.next(false);
+      this.differentArray[lossIndex].different.openingArea.next(false);
+      this.differentArray[lossIndex].different.leakageGasTemperature.next(false);
+      this.differentArray[lossIndex].different.ambientTemperature.next(false);
+      this.differentArray[lossIndex].different.specificGravity.next(false);
     }
   }
-  //ambientTemperature
-  checkAmbientTemperature() {
-    if (this.baselineLeakageLoss && this.modifiedLeakageLoss) {
-      for (let lossIndex = 0; lossIndex < this.baselineLeakageLoss.length; lossIndex++) {
-        if (this.baselineLeakageLoss[lossIndex].ambientTemperature != this.modifiedLeakageLoss[lossIndex].ambientTemperature) {
-          this.differentArray[lossIndex].different.ambientTemperature.next(true);
-        } else {
-          this.differentArray[lossIndex].different.ambientTemperature.next(false);
-        }
+
+  compare(a: any, b: any) {
+    if (a && b) {
+      if (a != b) {
+        return true;
+      } else {
+        return false;
       }
     }
-  }
-  //coefficient
-  checkCoefficient() {
-    if (this.baselineLeakageLoss && this.modifiedLeakageLoss) {
-      for (let lossIndex = 0; lossIndex < this.baselineLeakageLoss.length; lossIndex++) {
-        if (this.baselineLeakageLoss[lossIndex].coefficient != this.modifiedLeakageLoss[lossIndex].coefficient) {
-          this.differentArray[lossIndex].different.coefficient.next(true);
-        } else {
-          this.differentArray[lossIndex].different.coefficient.next(false);
-        }
-      }
-    }
-  }
-  //specificGravity
-  checkSpecificGravity() {
-    if (this.baselineLeakageLoss && this.modifiedLeakageLoss) {
-      for (let lossIndex = 0; lossIndex < this.baselineLeakageLoss.length; lossIndex++) {
-        if (this.baselineLeakageLoss[lossIndex].specificGravity != this.modifiedLeakageLoss[lossIndex].specificGravity) {
-          this.differentArray[lossIndex].different.specificGravity.next(true);
-        } else {
-          this.differentArray[lossIndex].different.specificGravity.next(false);
-        }
-      }
-    }
-  }
-  //correctionFactor
-  checkCorrectionFactor() {
-    if (this.baselineLeakageLoss && this.modifiedLeakageLoss) {
-      for (let lossIndex = 0; lossIndex < this.baselineLeakageLoss.length; lossIndex++) {
-        if (this.baselineLeakageLoss[lossIndex].correctionFactor != this.modifiedLeakageLoss[lossIndex].correctionFactor) {
-          this.differentArray[lossIndex].different.correctionFactor.next(true);
-        } else {
-          this.differentArray[lossIndex].different.correctionFactor.next(false);
-        }
-      }
-    }
-  }
-  //heatLoss
-  checkHeatLoss() {
-    if (this.baselineLeakageLoss && this.modifiedLeakageLoss) {
-      for (let lossIndex = 0; lossIndex < this.baselineLeakageLoss.length; lossIndex++) {
-        if (this.baselineLeakageLoss[lossIndex].heatLoss != this.modifiedLeakageLoss[lossIndex].heatLoss) {
-          this.differentArray[lossIndex].different.heatLoss.next(true);
-        } else {
-          this.differentArray[lossIndex].different.heatLoss.next(false);
-        }
-      }
+    else if ((a && !b) || (!a && b)) {
+      return true
+    } else {
+      return false;
     }
   }
 }
