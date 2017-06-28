@@ -16,12 +16,11 @@ export const force = {
       }
       , to_anchor: 1
     }
-
-    , _anchors: {
-      force: {
-        unit: 'N'
-        , ratio: 1
-      }
+  }
+  , _anchors: {
+    force: {
+      unit: 'N'
+      , ratio: 1
     }
   }
 };
