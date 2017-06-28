@@ -28,6 +28,13 @@ export class AtmosphereLossesCompareService {
     }
   }
 
+  addObject(num: number) {
+    this.differentArray.push({
+      lossIndex: num,
+      different: this.initDifferentObject()
+    })
+  }
+
   initDifferentObject(): AtmosphereLossDifferent {
     let tmpDifferent: AtmosphereLossDifferent = {
       atmosphereGas: new BehaviorSubject<boolean>(null),
@@ -41,84 +48,53 @@ export class AtmosphereLossesCompareService {
   }
 
   checkAtmosphereLosses() {
-    this.checkAtmosphereGas();
-    this.checkSpecificHeat();
-    this.checkInletTemperature();
-    this.checkOutletTemperature();
-    this.checkFlowRate();
-    this.checkCorrectionFactor();
+    if (this.baselineAtmosphereLosses && this.modifiedAtmosphereLosses) {
+      if (this.baselineAtmosphereLosses.length != 0 && this.modifiedAtmosphereLosses.length != 0 && this.baselineAtmosphereLosses.length == this.modifiedAtmosphereLosses.length) {
+        for (let lossIndex = 0; lossIndex < this.differentArray.length; lossIndex++) {
+          //atmosphereGas
+          this.differentArray[lossIndex].different.atmosphereGas.next(this.compare(this.baselineAtmosphereLosses[lossIndex].atmosphereGas, this.modifiedAtmosphereLosses[lossIndex].atmosphereGas));
+          //specificHeat
+          this.differentArray[lossIndex].different.specificHeat.next(this.compare(this.baselineAtmosphereLosses[lossIndex].specificHeat, this.modifiedAtmosphereLosses[lossIndex].specificHeat));
+          //inletTemperature
+          this.differentArray[lossIndex].different.inletTemperature.next(this.compare(this.baselineAtmosphereLosses[lossIndex].inletTemperature, this.modifiedAtmosphereLosses[lossIndex].inletTemperature));
+          //outletTemperature
+          this.differentArray[lossIndex].different.outletTemperature.next(this.compare(this.baselineAtmosphereLosses[lossIndex].outletTemperature, this.modifiedAtmosphereLosses[lossIndex].outletTemperature));
+          //flowRate
+          this.differentArray[lossIndex].different.flowRate.next(this.compare(this.baselineAtmosphereLosses[lossIndex].flowRate, this.modifiedAtmosphereLosses[lossIndex].flowRate));
+          //correctionFactor
+          this.differentArray[lossIndex].different.correctionFactor.next(this.compare(this.baselineAtmosphereLosses[lossIndex].correctionFactor, this.modifiedAtmosphereLosses[lossIndex].correctionFactor));
+        }
+      } else {
+        this.disableAll();
+      }
+    } else {
+      this.disableAll();
+    }
   }
 
-  //atmosphereGas
-  checkAtmosphereGas() {
-    if (this.baselineAtmosphereLosses && this.modifiedAtmosphereLosses) {
-      for (let lossIndex = 0; lossIndex < this.baselineAtmosphereLosses.length; lossIndex++) {
-        if (this.baselineAtmosphereLosses[lossIndex].atmosphereGas != this.modifiedAtmosphereLosses[lossIndex].atmosphereGas) {
-          this.differentArray[lossIndex].different.atmosphereGas.next(true);
-        } else {
-          this.differentArray[lossIndex].different.atmosphereGas.next(false);
-        }
-      }
+  disableAll() {
+    for (let lossIndex = 0; lossIndex < this.differentArray.length; lossIndex++) {
+      this.differentArray[lossIndex].different.atmosphereGas.next(false);
+      this.differentArray[lossIndex].different.specificHeat.next(false);
+      this.differentArray[lossIndex].different.inletTemperature.next(false);
+      this.differentArray[lossIndex].different.outletTemperature.next(false);
+      this.differentArray[lossIndex].different.flowRate.next(false);
+      this.differentArray[lossIndex].different.correctionFactor.next(false);
     }
   }
-  //specificHeat
-  checkSpecificHeat() {
-    if (this.baselineAtmosphereLosses && this.modifiedAtmosphereLosses) {
-      for (let lossIndex = 0; lossIndex < this.baselineAtmosphereLosses.length; lossIndex++) {
-        if (this.baselineAtmosphereLosses[lossIndex].specificHeat != this.modifiedAtmosphereLosses[lossIndex].specificHeat) {
-          this.differentArray[lossIndex].different.specificHeat.next(true);
-        } else {
-          this.differentArray[lossIndex].different.specificHeat.next(false);
-        }
+
+  compare(a: any, b: any) {
+    if (a && b) {
+      if (a != b) {
+        return true;
+      } else {
+        return false;
       }
     }
-  }
-  //inletTemperature
-  checkInletTemperature() {
-    if (this.baselineAtmosphereLosses && this.modifiedAtmosphereLosses) {
-      for (let lossIndex = 0; lossIndex < this.baselineAtmosphereLosses.length; lossIndex++) {
-        if (this.baselineAtmosphereLosses[lossIndex].inletTemperature != this.modifiedAtmosphereLosses[lossIndex].inletTemperature) {
-          this.differentArray[lossIndex].different.inletTemperature.next(true);
-        } else {
-          this.differentArray[lossIndex].different.inletTemperature.next(false);
-        }
-      }
-    }
-  }
-  //outletTemperature
-  checkOutletTemperature() {
-    if (this.baselineAtmosphereLosses && this.modifiedAtmosphereLosses) {
-      for (let lossIndex = 0; lossIndex < this.baselineAtmosphereLosses.length; lossIndex++) {
-        if (this.baselineAtmosphereLosses[lossIndex].outletTemperature != this.modifiedAtmosphereLosses[lossIndex].outletTemperature) {
-          this.differentArray[lossIndex].different.outletTemperature.next(true);
-        } else {
-          this.differentArray[lossIndex].different.outletTemperature.next(false);
-        }
-      }
-    }
-  }
-  //flowRate
-  checkFlowRate() {
-    if (this.baselineAtmosphereLosses && this.modifiedAtmosphereLosses) {
-      for (let lossIndex = 0; lossIndex < this.baselineAtmosphereLosses.length; lossIndex++) {
-        if (this.baselineAtmosphereLosses[lossIndex].flowRate != this.modifiedAtmosphereLosses[lossIndex].flowRate) {
-          this.differentArray[lossIndex].different.flowRate.next(true);
-        } else {
-          this.differentArray[lossIndex].different.flowRate.next(false);
-        }
-      }
-    }
-  }
-  //correctionFactor
-  checkCorrectionFactor() {
-    if (this.baselineAtmosphereLosses && this.modifiedAtmosphereLosses) {
-      for (let lossIndex = 0; lossIndex < this.baselineAtmosphereLosses.length; lossIndex++) {
-        if (this.baselineAtmosphereLosses[lossIndex].correctionFactor != this.modifiedAtmosphereLosses[lossIndex].correctionFactor) {
-          this.differentArray[lossIndex].different.correctionFactor.next(true);
-        } else {
-          this.differentArray[lossIndex].different.correctionFactor.next(false);
-        }
-      }
+    else if ((a && !b) || (!a && b)) {
+      return true
+    } else {
+      return false;
     }
   }
 }
