@@ -39,8 +39,8 @@
         *ngIf="lossesTab == 'cooling-losses'" [isBaseline]="true"></app-cooling-losses>
 
       <app-flue-gas-losses (fieldChange)="changeField($event)" [baselineSelected]="baselineSelected" (savedLoss)="saveModifications()"
-        [(losses)]="phast.losses" [addLossToggle]="addLossToggle" [(lossState)]="lossesStates.flueGasLosses" [saveClicked]="saveClicked"
-        *ngIf="lossesTab == 'flue-gas-losses'" [isBaseline]="true"></app-flue-gas-losses>
+        [(losses)]="phast.losses" [addLossToggle]="addLossToggle" [saveClicked]="saveClicked" *ngIf="lossesTab == 'flue-gas-losses'"
+        [isBaseline]="true"></app-flue-gas-losses>
 
       <app-gas-leakage-losses (fieldChange)="changeField($event)" [baselineSelected]="baselineSelected" (savedLoss)="saveModifications()"
         [(losses)]="phast.losses" [addLossToggle]="addLossToggle" [saveClicked]="saveClicked" *ngIf="lossesTab == 'gas-leakage-losses'"
@@ -112,8 +112,7 @@
         *ngIf="lossesTab == 'cooling-losses'"></app-cooling-losses>
 
       <app-flue-gas-losses (fieldChange)="changeField($event)" [baselineSelected]="modificationSelected" (savedLoss)="saveModifications()"
-        [(losses)]="_modifications[modificationIndex].phast.losses" [saveClicked]="saveClicked" [(lossState)]="lossesStates.flueGasLosses"
-        *ngIf="lossesTab == 'flue-gas-losses'"></app-flue-gas-losses>
+        [(losses)]="_modifications[modificationIndex].phast.losses" [saveClicked]="saveClicked" *ngIf="lossesTab == 'flue-gas-losses'"></app-flue-gas-losses>
 
       <app-gas-leakage-losses (fieldChange)="changeField($event)" [baselineSelected]="modificationSelected" (savedLoss)="saveModifications()"
         [(losses)]="_modifications[modificationIndex].phast.losses" [saveClicked]="saveClicked" *ngIf="lossesTab == 'gas-leakage-losses'"></app-gas-leakage-losses>

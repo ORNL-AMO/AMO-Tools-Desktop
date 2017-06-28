@@ -13,8 +13,6 @@ export class FlueGasLossesFormVolumeComponent implements OnInit {
   @Output('calculate')
   calculate = new EventEmitter<boolean>();
   @Input()
-  lossState: any;
-  @Input()
   baselineSelected: boolean;
   @Output('changeField')
   changeField = new EventEmitter<string>();
@@ -72,7 +70,6 @@ export class FlueGasLossesFormVolumeComponent implements OnInit {
   }
 
   checkForm() {
-    this.lossState.saved = false;
     if (this.flueGasLossForm.status == "VALID") {
       this.calculate.emit(true);
     }
@@ -123,36 +120,38 @@ export class FlueGasLossesFormVolumeComponent implements OnInit {
 
   initDifferenceMonitor() {
     if (this.flueGasCompareService.baselineFlueGasLoss && this.flueGasCompareService.modifiedFlueGasLoss && this.flueGasCompareService.differentArray.length != 0) {
-      let doc = this.windowRefService.getDoc();
+      if (this.flueGasCompareService.differentArray[this.lossIndex]) {
+        let doc = this.windowRefService.getDoc();
 
-      //gasTypeId
-      this.flueGasCompareService.differentArray[this.lossIndex].different.flueGasVolumeDifferent.gasTypeId.subscribe((val) => {
-        let gasTypeIdElements = doc.getElementsByName('gasTypeId_' + this.lossIndex);
-        gasTypeIdElements.forEach(element => {
-          element.classList.toggle('indicate-different', val);
-        });
-      })
-      //flueGasTemperature
-      this.flueGasCompareService.differentArray[this.lossIndex].different.flueGasVolumeDifferent.flueGasTemperature.subscribe((val) => {
-        let flueGasTemperatureElements = doc.getElementsByName('flueGasTemperature_' + this.lossIndex);
-        flueGasTemperatureElements.forEach(element => {
-          element.classList.toggle('indicate-different', val);
-        });
-      })
-      //excessAirPercentage
-      this.flueGasCompareService.differentArray[this.lossIndex].different.flueGasVolumeDifferent.excessAirPercentage.subscribe((val) => {
-        let excessAirPercentageElements = doc.getElementsByName('excessAirPercentage_' + this.lossIndex);
-        excessAirPercentageElements.forEach(element => {
-          element.classList.toggle('indicate-different', val);
-        });
-      })
-      //combustionAirTemperature
-      this.flueGasCompareService.differentArray[this.lossIndex].different.flueGasVolumeDifferent.combustionAirTemperature.subscribe((val) => {
-        let combustionAirTemperatureElements = doc.getElementsByName('combustionAirTemperature_' + this.lossIndex);
-        combustionAirTemperatureElements.forEach(element => {
-          element.classList.toggle('indicate-different', val);
-        });
-      })
+        //gasTypeId
+        this.flueGasCompareService.differentArray[this.lossIndex].different.flueGasVolumeDifferent.gasTypeId.subscribe((val) => {
+          let gasTypeIdElements = doc.getElementsByName('gasTypeId_' + this.lossIndex);
+          gasTypeIdElements.forEach(element => {
+            element.classList.toggle('indicate-different', val);
+          });
+        })
+        //flueGasTemperature
+        this.flueGasCompareService.differentArray[this.lossIndex].different.flueGasVolumeDifferent.flueGasTemperature.subscribe((val) => {
+          let flueGasTemperatureElements = doc.getElementsByName('flueGasTemperature_' + this.lossIndex);
+          flueGasTemperatureElements.forEach(element => {
+            element.classList.toggle('indicate-different', val);
+          });
+        })
+        //excessAirPercentage
+        this.flueGasCompareService.differentArray[this.lossIndex].different.flueGasVolumeDifferent.excessAirPercentage.subscribe((val) => {
+          let excessAirPercentageElements = doc.getElementsByName('excessAirPercentage_' + this.lossIndex);
+          excessAirPercentageElements.forEach(element => {
+            element.classList.toggle('indicate-different', val);
+          });
+        })
+        //combustionAirTemperature
+        this.flueGasCompareService.differentArray[this.lossIndex].different.flueGasVolumeDifferent.combustionAirTemperature.subscribe((val) => {
+          let combustionAirTemperatureElements = doc.getElementsByName('combustionAirTemperature_' + this.lossIndex);
+          combustionAirTemperatureElements.forEach(element => {
+            element.classList.toggle('indicate-different', val);
+          });
+        })
+      }
     }
   }
 

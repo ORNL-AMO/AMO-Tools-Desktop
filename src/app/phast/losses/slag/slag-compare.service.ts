@@ -40,7 +40,7 @@ export class SlagCompareService {
 
   checkSlagLosses() {
     if (this.baselineSlag && this.modifiedSlag) {
-      if (this.baselineSlag.length != 0 && this.modifiedSlag.length != 0) {
+      if (this.baselineSlag.length != 0 && this.modifiedSlag.length != 0 && this.baselineSlag.length == this.modifiedSlag.length) {
         for (let lossIndex = 0; lossIndex < this.differentArray.length; lossIndex++) {
           //weight
           this.differentArray[lossIndex].different.weight.next(this.compare(this.baselineSlag[lossIndex].weight, this.modifiedSlag[lossIndex].weight));
@@ -71,6 +71,7 @@ export class SlagCompareService {
       this.differentArray[lossIndex].different.correctionFactor.next(false);
     }
   }
+
 
   compare(a: any, b: any) {
     if (a && b) {

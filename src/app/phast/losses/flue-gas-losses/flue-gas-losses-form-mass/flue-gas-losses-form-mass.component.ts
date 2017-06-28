@@ -13,8 +13,6 @@ export class FlueGasLossesFormMassComponent implements OnInit {
   @Output('calculate')
   calculate = new EventEmitter<boolean>();
   @Input()
-  lossState: any;
-  @Input()
   baselineSelected: boolean;
   @Output('changeField')
   changeField = new EventEmitter<string>();
@@ -82,7 +80,6 @@ export class FlueGasLossesFormMassComponent implements OnInit {
   }
 
   checkForm() {
-    this.lossState.saved = false;
     if (this.flueGasLossForm.status == "VALID") {
       this.calculate.emit(true);
     }
@@ -121,64 +118,66 @@ export class FlueGasLossesFormMassComponent implements OnInit {
 
   initDifferenceMonitor() {
     if (this.flueGasCompareService.baselineFlueGasLoss && this.flueGasCompareService.modifiedFlueGasLoss && this.flueGasCompareService.differentArray.length != 0) {
-      let doc = this.windowRefService.getDoc();
+      if (this.flueGasCompareService.differentArray[this.lossIndex]) {
+        let doc = this.windowRefService.getDoc();
 
-      //gasTypeId
-      this.flueGasCompareService.differentArray[this.lossIndex].different.flueGasMassDifferent.gasTypeId.subscribe((val) => {
-        let gasTypeIdElements = doc.getElementsByName('gasTypeId_' + this.lossIndex);
-        gasTypeIdElements.forEach(element => {
-          element.classList.toggle('indicate-different', val);
-        });
-      })
-      //flueGasTemperature
-      this.flueGasCompareService.differentArray[this.lossIndex].different.flueGasMassDifferent.flueGasTemperature.subscribe((val) => {
-        let flueGasTemperatureElements = doc.getElementsByName('flueGasTemperature_' + this.lossIndex);
-        flueGasTemperatureElements.forEach(element => {
-          element.classList.toggle('indicate-different', val);
-        });
-      })
-      //excessAirPercentage
-      this.flueGasCompareService.differentArray[this.lossIndex].different.flueGasMassDifferent.excessAirPercentage.subscribe((val) => {
-        let excessAirPercentageElements = doc.getElementsByName('excessAirPercentage_' + this.lossIndex);
-        excessAirPercentageElements.forEach(element => {
-          element.classList.toggle('indicate-different', val);
-        });
-      })
-      //combustionAirTemperature
-      this.flueGasCompareService.differentArray[this.lossIndex].different.flueGasMassDifferent.combustionAirTemperature.subscribe((val) => {
-        let combustionAirTemperatureElements = doc.getElementsByName('combustionAirTemperature_' + this.lossIndex);
-        combustionAirTemperatureElements.forEach(element => {
-          element.classList.toggle('indicate-different', val);
-        });
-      })
-      //fuelTemperature
-      this.flueGasCompareService.differentArray[this.lossIndex].different.flueGasMassDifferent.fuelTemperature.subscribe((val) => {
-        let fuelTemperatureElements = doc.getElementsByName('fuelTemperature_' + this.lossIndex);
-        fuelTemperatureElements.forEach(element => {
-          element.classList.toggle('indicate-different', val);
-        });
-      })
-      //moistureInAirComposition
-      this.flueGasCompareService.differentArray[this.lossIndex].different.flueGasMassDifferent.moistureInAirComposition.subscribe((val) => {
-        let moistureInAirCompositionElements = doc.getElementsByName('moistureInAirComposition_' + this.lossIndex);
-        moistureInAirCompositionElements.forEach(element => {
-          element.classList.toggle('indicate-different', val);
-        });
-      })
-      //ashDischargeTemperature
-      this.flueGasCompareService.differentArray[this.lossIndex].different.flueGasMassDifferent.ashDischargeTemperature.subscribe((val) => {
-        let ashDischargeTemperatureElements = doc.getElementsByName('ashDischargeTemperature_' + this.lossIndex);
-        ashDischargeTemperatureElements.forEach(element => {
-          element.classList.toggle('indicate-different', val);
-        });
-      })
-      //unburnedCarbonInAsh
-      this.flueGasCompareService.differentArray[this.lossIndex].different.flueGasMassDifferent.unburnedCarbonInAsh.subscribe((val) => {
-        let unburnedCarbonInAshElements = doc.getElementsByName('unburnedCarbonInAsh_' + this.lossIndex);
-        unburnedCarbonInAshElements.forEach(element => {
-          element.classList.toggle('indicate-different', val);
-        });
-      })
+        //gasTypeId
+        this.flueGasCompareService.differentArray[this.lossIndex].different.flueGasMassDifferent.gasTypeId.subscribe((val) => {
+          let gasTypeIdElements = doc.getElementsByName('gasTypeId_' + this.lossIndex);
+          gasTypeIdElements.forEach(element => {
+            element.classList.toggle('indicate-different', val);
+          });
+        })
+        //flueGasTemperature
+        this.flueGasCompareService.differentArray[this.lossIndex].different.flueGasMassDifferent.flueGasTemperature.subscribe((val) => {
+          let flueGasTemperatureElements = doc.getElementsByName('flueGasTemperature_' + this.lossIndex);
+          flueGasTemperatureElements.forEach(element => {
+            element.classList.toggle('indicate-different', val);
+          });
+        })
+        //excessAirPercentage
+        this.flueGasCompareService.differentArray[this.lossIndex].different.flueGasMassDifferent.excessAirPercentage.subscribe((val) => {
+          let excessAirPercentageElements = doc.getElementsByName('excessAirPercentage_' + this.lossIndex);
+          excessAirPercentageElements.forEach(element => {
+            element.classList.toggle('indicate-different', val);
+          });
+        })
+        //combustionAirTemperature
+        this.flueGasCompareService.differentArray[this.lossIndex].different.flueGasMassDifferent.combustionAirTemperature.subscribe((val) => {
+          let combustionAirTemperatureElements = doc.getElementsByName('combustionAirTemperature_' + this.lossIndex);
+          combustionAirTemperatureElements.forEach(element => {
+            element.classList.toggle('indicate-different', val);
+          });
+        })
+        //fuelTemperature
+        this.flueGasCompareService.differentArray[this.lossIndex].different.flueGasMassDifferent.fuelTemperature.subscribe((val) => {
+          let fuelTemperatureElements = doc.getElementsByName('fuelTemperature_' + this.lossIndex);
+          fuelTemperatureElements.forEach(element => {
+            element.classList.toggle('indicate-different', val);
+          });
+        })
+        //moistureInAirComposition
+        this.flueGasCompareService.differentArray[this.lossIndex].different.flueGasMassDifferent.moistureInAirComposition.subscribe((val) => {
+          let moistureInAirCompositionElements = doc.getElementsByName('moistureInAirComposition_' + this.lossIndex);
+          moistureInAirCompositionElements.forEach(element => {
+            element.classList.toggle('indicate-different', val);
+          });
+        })
+        //ashDischargeTemperature
+        this.flueGasCompareService.differentArray[this.lossIndex].different.flueGasMassDifferent.ashDischargeTemperature.subscribe((val) => {
+          let ashDischargeTemperatureElements = doc.getElementsByName('ashDischargeTemperature_' + this.lossIndex);
+          ashDischargeTemperatureElements.forEach(element => {
+            element.classList.toggle('indicate-different', val);
+          });
+        })
+        //unburnedCarbonInAsh
+        this.flueGasCompareService.differentArray[this.lossIndex].different.flueGasMassDifferent.unburnedCarbonInAsh.subscribe((val) => {
+          let unburnedCarbonInAshElements = doc.getElementsByName('unburnedCarbonInAsh_' + this.lossIndex);
+          unburnedCarbonInAshElements.forEach(element => {
+            element.classList.toggle('indicate-different', val);
+          });
+        })
+      }
     }
   }
 }

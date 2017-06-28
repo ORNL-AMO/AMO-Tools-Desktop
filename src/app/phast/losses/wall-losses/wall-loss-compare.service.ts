@@ -40,8 +40,10 @@ export class WallLossCompareService {
     //check both baseline and modified set
     if (this.baselineWallLosses && this.modifiedWallLosses) {
       //check losses exist in baseline and modified
-      if (this.baselineWallLosses.length != 0 && this.modifiedWallLosses.length != 0) {
+      //make sure baseline/modified losses are same length
+      if (this.baselineWallLosses.length != 0 && this.modifiedWallLosses.length != 0 && this.baselineWallLosses.length == this.modifiedWallLosses.length) {
         //iterate each different object and check vals
+        //differnt objects and baseline/modification vals correspond by lossIndex
         for (let lossIndex = 0; lossIndex < this.differentArray.length; lossIndex++) {
           //surface area
           this.differentArray[lossIndex].different.surfaceArea.next(this.compare(this.baselineWallLosses[lossIndex].surfaceArea, this.modifiedWallLosses[lossIndex].surfaceArea));

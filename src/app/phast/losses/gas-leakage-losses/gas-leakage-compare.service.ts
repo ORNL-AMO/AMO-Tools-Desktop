@@ -13,7 +13,7 @@ export class GasLeakageCompareService {
   initCompareObjects() {
     this.differentArray = new Array();
     if (this.baselineLeakageLoss && this.modifiedLeakageLoss) {
-      if (this.baselineLeakageLoss.length == this.baselineLeakageLoss.length) {
+      if (this.baselineLeakageLoss.length == this.modifiedLeakageLoss.length) {
         let numLosses = this.baselineLeakageLoss.length;
         for (let i = 0; i < numLosses; i++) {
           this.differentArray.push({
@@ -48,7 +48,7 @@ export class GasLeakageCompareService {
 
   checkLeakageLosses() {
     if (this.baselineLeakageLoss && this.modifiedLeakageLoss) {
-      if (this.baselineLeakageLoss.length != 0 && this.modifiedLeakageLoss.length != 0) {
+      if (this.baselineLeakageLoss.length != 0 && this.modifiedLeakageLoss.length != 0 && this.baselineLeakageLoss.length == this.modifiedLeakageLoss.length) {
         for (let lossIndex = 0; lossIndex < this.differentArray.length; lossIndex++) {
           //draftPressure
           this.differentArray[lossIndex].different.draftPressure.next(this.compare(this.baselineLeakageLoss[lossIndex].draftPressure, this.modifiedLeakageLoss[lossIndex].draftPressure));
