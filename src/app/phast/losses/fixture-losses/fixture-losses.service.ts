@@ -6,7 +6,6 @@ import { BehaviorSubject } from 'rxjs';
 @Injectable()
 export class FixtureLossesService {
 
-
   deleteLossIndex: BehaviorSubject<number>;
   addLossBaselineMonitor: BehaviorSubject<any>;
   addLossModificationMonitor: BehaviorSubject<any>;

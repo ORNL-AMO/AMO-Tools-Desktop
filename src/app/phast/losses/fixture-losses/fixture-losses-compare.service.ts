@@ -65,7 +65,11 @@ export class FixtureLossesCompareService {
           //materialName
           this.differentArray[lossIndex].different.materialName.next(this.compare(this.baselineFixtureLosses[lossIndex].materialName, this.modifiedFixtureLosses[lossIndex].materialName));
         }
+      }else{
+        this.disableAll();
       }
+    }else{
+      this.disableAll();
     }
   }
 

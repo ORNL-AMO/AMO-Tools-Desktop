@@ -16,8 +16,6 @@ export class EnergyInputComponent implements OnInit {
   @Input()
   saveClicked: boolean;
   @Input()
-  lossState: any;
-  @Input()
   addLossToggle: boolean;
   @Output('savedLoss')
   savedLoss = new EventEmitter<boolean>();
@@ -51,8 +49,8 @@ export class EnergyInputComponent implements OnInit {
       this._energyInputs = new Array();
     }
     if (this.losses.energyInput) {
-      //this.setCompareVals();
-     // this.energyInputCompareService.initCompareObjects();
+      this.setCompareVals();
+      this.energyInputCompareService.initCompareObjects();
       this.losses.energyInput.forEach(loss => {
         let tmpLoss = {
           form: this.energyInputService.getFormFromLoss(loss),
@@ -64,18 +62,64 @@ export class EnergyInputComponent implements OnInit {
           }
         };
         this.calculate(tmpLoss);
-        this._energyInputs.unshift(tmpLoss);
+        this._energyInputs.push(tmpLoss);
+      })
+    }
+    this.energyInputService.deleteLossIndex.subscribe((lossIndex) => {
+      if (lossIndex != undefined) {
+        if (this.losses.energyInput) {
+          this._energyInputs.splice(lossIndex, 1);
+          if (this.energyInputCompareService.differentArray && !this.isBaseline) {
+            this.energyInputCompareService.differentArray.splice(lossIndex, 1);
+          }
+        }
+      }
+    })
+    if (this.isBaseline) {
+      this.energyInputService.addLossBaselineMonitor.subscribe((val) => {
+        if (val == true) {
+          this._energyInputs.push({
+            form: this.energyInputService.initForm(),
+            name: 'Loss #' + (this._energyInputs.length + 1),
+            results: {
+              heatDelivered: 0,
+              kwhCycle: 0,
+              totalKwhCycle: 0
+            }
+          });
+        }
+      })
+    } else {
+      this.energyInputService.addLossModificationMonitor.subscribe((val) => {
+        if (val == true) {
+          this._energyInputs.push({
+            form: this.energyInputService.initForm(),
+            name: 'Loss #' + (this._energyInputs.length + 1),
+            results: {
+              heatDelivered: 0,
+              kwhCycle: 0,
+              totalKwhCycle: 0
+            }
+          })
+        }
       })
     }
   }
 
-  ngOnDestroy(){
+  ngOnDestroy() {
     this.energyInputCompareService.baselineEnergyInput = null;
     this.energyInputCompareService.modifiedEnergyInput = null;
+    this.energyInputService.deleteLossIndex.next(null);
+    this.energyInputService.addLossBaselineMonitor.next(false);
+    this.energyInputService.addLossModificationMonitor.next(false);
   }
 
   addLoss() {
-    this._energyInputs.unshift({
+    this.energyInputService.addLoss(this.isBaseline);
+    if (this.energyInputCompareService.differentArray) {
+      this.energyInputCompareService.addObject(this.energyInputCompareService.differentArray.length - 1);
+    }
+    this._energyInputs.push({
       form: this.energyInputService.initForm(),
       name: 'Loss #' + (this._energyInputs.length + 1),
       results: {
@@ -84,15 +128,10 @@ export class EnergyInputComponent implements OnInit {
         totalKwhCycle: 0
       }
     });
-    this.lossState.saved = false;
   }
 
-  removeLoss(str: string) {
-    this._energyInputs = _.remove(this._energyInputs, loss => {
-      return loss.name != str;
-    });
-    this.lossState.saved = false;
-    this.renameLossess();
+  removeLoss(lossIndex: number) {
+    this.energyInputService.setDelete(lossIndex);
   }
 
   renameLossess() {
@@ -126,12 +165,10 @@ export class EnergyInputComponent implements OnInit {
     let tmpEnergyInputs = new Array<EnergyInput>();
     this._energyInputs.forEach(loss => {
       let tmpEnergyInput = this.energyInputService.getLossFromForm(loss.form);
-      tmpEnergyInputs.unshift(tmpEnergyInput);
+      tmpEnergyInputs.push(tmpEnergyInput);
     })
     this.losses.energyInput = tmpEnergyInputs;
-    this.lossState.numLosses = this.losses.energyInput.length;
-    this.lossState.saved = true;
-    //this.setCompareVals();
+    this.setCompareVals();
     this.savedLoss.emit(true);
   }
 
@@ -145,7 +182,7 @@ export class EnergyInputComponent implements OnInit {
     } else {
       this.energyInputCompareService.modifiedEnergyInput = this.losses.energyInput;
     }
-    if (this.energyInputCompareService.differentArray) {
+    if (this.energyInputCompareService.differentArray && !this.isBaseline) {
       if (this.energyInputCompareService.differentArray.length != 0) {
         this.energyInputCompareService.checkEnergyInputs();
       }

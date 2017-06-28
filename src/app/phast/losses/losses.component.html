@@ -58,8 +58,8 @@
         [addLossToggle]="addLossToggle" [saveClicked]="saveClicked" *ngIf="lossesTab == 'slag'" [isBaseline]="true"></app-slag>
 
       <app-energy-input (fieldChange)="changeField($event)" [baselineSelected]="baselineSelected" (savedLoss)="saveModifications()"
-        [(losses)]="phast.losses" [addLossToggle]="addLossToggle" [(lossState)]="lossesStates.energyInput" [saveClicked]="saveClicked"
-        *ngIf="lossesTab == 'energy-input'" [isBaseline]="true"></app-energy-input>
+        [(losses)]="phast.losses" [addLossToggle]="addLossToggle" [saveClicked]="saveClicked" *ngIf="lossesTab == 'energy-input'"
+        [isBaseline]="true"></app-energy-input>
 
       <app-exhaust-gas *ngIf="lossesTab == 'exhaust-gas'"></app-exhaust-gas>
 
@@ -127,8 +127,7 @@
         [(losses)]="_modifications[modificationIndex].phast.losses" [saveClicked]="saveClicked" *ngIf="lossesTab == 'slag'"></app-slag>
 
       <app-energy-input (fieldChange)="changeField($event)" [baselineSelected]="modificationSelected" (savedLoss)="saveModifications()"
-        [(losses)]="_modifications[modificationIndex].phast.losses" [(lossState)]="lossesStates.energyInput" [saveClicked]="saveClicked"
-        *ngIf="lossesTab == 'energy-input'"></app-energy-input>
+        [(losses)]="_modifications[modificationIndex].phast.losses" [saveClicked]="saveClicked" *ngIf="lossesTab == 'energy-input'"></app-energy-input>
 
       <app-exhaust-gas *ngIf="lossesTab == 'exhaust-gas'"></app-exhaust-gas>
 

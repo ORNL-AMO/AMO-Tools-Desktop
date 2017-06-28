@@ -65,7 +65,7 @@ export class GasLeakageLossesComponent implements OnInit {
 
     this.gasLeakageLossesService.deleteLossIndex.subscribe((lossIndex) => {
       if (lossIndex != undefined) {
-        if (this.losses.wallLosses) {
+        if (this.losses.leakageLosses) {
           this._leakageLosses.splice(lossIndex, 1);
           if (this.gasLeakageCompareService.differentArray && !this.isBaseline) {
             this.gasLeakageCompareService.differentArray.splice(lossIndex, 1);

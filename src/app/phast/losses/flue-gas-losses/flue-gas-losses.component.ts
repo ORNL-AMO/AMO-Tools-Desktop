@@ -43,7 +43,7 @@ export class FlueGasLossesComponent implements OnInit {
 
     this.flueGasLossesService.deleteLossIndex.subscribe((lossIndex) => {
       if (lossIndex != undefined) {
-        if (this.losses.wallLosses) {
+        if (this.losses.flueGasLosses) {
           this._flueGasLosses.splice(lossIndex, 1);
           if (this.flueGasCompareService.differentArray && !this.isBaseline) {
             this.flueGasCompareService.differentArray.splice(lossIndex, 1);

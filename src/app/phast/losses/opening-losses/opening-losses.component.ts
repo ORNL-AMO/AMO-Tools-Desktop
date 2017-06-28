@@ -66,7 +66,7 @@ export class OpeningLossesComponent implements OnInit {
 
     this.openingLossesService.deleteLossIndex.subscribe((lossIndex) => {
       if (lossIndex != undefined) {
-        if (this.losses.wallLosses) {
+        if (this.losses.openingLosses) {
           this._openingLosses.splice(lossIndex, 1);
           if (this.openingLossesCompareService.differentArray && !this.isBaseline) {
             this.openingLossesCompareService.differentArray.splice(lossIndex, 1);

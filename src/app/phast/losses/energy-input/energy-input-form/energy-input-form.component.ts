@@ -12,8 +12,6 @@ export class EnergyInputFormComponent implements OnInit {
   @Output('calculate')
   calculate = new EventEmitter<boolean>();
   @Input()
-  lossState: any;
-  @Input()
   baselineSelected: boolean;
   @Output('changeField')
   changeField = new EventEmitter<string>();
@@ -68,7 +66,6 @@ export class EnergyInputFormComponent implements OnInit {
   }
 
   checkForm() {
-    this.lossState.saved = false;
     if (this.energyInputForm.status == "VALID") {
       this.calculate.emit(true);
     }
@@ -95,71 +92,73 @@ export class EnergyInputFormComponent implements OnInit {
 
   initDifferenceMonitor() {
     if (this.energyInputCompareService.baselineEnergyInput && this.energyInputCompareService.modifiedEnergyInput && this.energyInputCompareService.differentArray.length != 0) {
-      let doc = this.windowRefService.getDoc();
+      if (this.energyInputCompareService.differentArray[this.lossIndex]) {
+        let doc = this.windowRefService.getDoc();
 
-      //naturalGasHeatInput
-      this.energyInputCompareService.differentArray[this.lossIndex].different.naturalGasHeatInput.subscribe((val) => {
-        let naturalGasHeatInputElements = doc.getElementsByName('naturalGasHeatInput_' + this.lossIndex);
-        naturalGasHeatInputElements.forEach(element => {
-          element.classList.toggle('indicate-different', val);
-        });
-      })
-      //naturalGasFlow
-      this.energyInputCompareService.differentArray[this.lossIndex].different.naturalGasFlow.subscribe((val) => {
-        let naturalGasFlowElements = doc.getElementsByName('naturalGasFlow_' + this.lossIndex);
-        naturalGasFlowElements.forEach(element => {
-          element.classList.toggle('indicate-different', val);
-        });
-      })
-      //measuredOxygenFlow
-      this.energyInputCompareService.differentArray[this.lossIndex].different.measuredOxygenFlow.subscribe((val) => {
-        let measuredOxygenFlowElements = doc.getElementsByName('measuredOxygenFlow_' + this.lossIndex);
-        measuredOxygenFlowElements.forEach(element => {
-          element.classList.toggle('indicate-different', val);
-        });
-      })
-      //coalCarbonInjection
-      this.energyInputCompareService.differentArray[this.lossIndex].different.coalCarbonInjection.subscribe((val) => {
-        let coalCarbonInjectionInputElements = doc.getElementsByName('coalCarbonInjection_' + this.lossIndex);
-        coalCarbonInjectionInputElements.forEach(element => {
-          element.classList.toggle('indicate-different', val);
-        });
-      })
-      //coalHeatingValue
-      this.energyInputCompareService.differentArray[this.lossIndex].different.coalHeatingValue.subscribe((val) => {
-        let coalHeatingValueElements = doc.getElementsByName('coalHeatingValue_' + this.lossIndex);
-        coalHeatingValueElements.forEach(element => {
-          element.classList.toggle('indicate-different', val);
-        });
-      })
-      //electrodeUse
-      this.energyInputCompareService.differentArray[this.lossIndex].different.electrodeUse.subscribe((val) => {
-        let electrodeUseElements = doc.getElementsByName('electrodeUse_' + this.lossIndex);
-        electrodeUseElements.forEach(element => {
-          element.classList.toggle('indicate-different', val);
-        });
-      })
-      //electrodeHeatingValue
-      this.energyInputCompareService.differentArray[this.lossIndex].different.electrodeHeatingValue.subscribe((val) => {
-        let electrodeHeatingValueElements = doc.getElementsByName('electrodeHeatingValue_' + this.lossIndex);
-        electrodeHeatingValueElements.forEach(element => {
-          element.classList.toggle('indicate-different', val);
-        });
-      })
-      //otherFuels
-      this.energyInputCompareService.differentArray[this.lossIndex].different.otherFuels.subscribe((val) => {
-        let otherFuelsElements = doc.getElementsByName('otherFuels_' + this.lossIndex);
-        otherFuelsElements.forEach(element => {
-          element.classList.toggle('indicate-different', val);
-        });
-      })
-      //electricityInput
-      this.energyInputCompareService.differentArray[this.lossIndex].different.electricityInput.subscribe((val) => {
-        let electricityInputElements = doc.getElementsByName('electricityInput_' + this.lossIndex);
-        electricityInputElements.forEach(element => {
-          element.classList.toggle('indicate-different', val);
-        });
-      })
+        //naturalGasHeatInput
+        this.energyInputCompareService.differentArray[this.lossIndex].different.naturalGasHeatInput.subscribe((val) => {
+          let naturalGasHeatInputElements = doc.getElementsByName('naturalGasHeatInput_' + this.lossIndex);
+          naturalGasHeatInputElements.forEach(element => {
+            element.classList.toggle('indicate-different', val);
+          });
+        })
+        //naturalGasFlow
+        this.energyInputCompareService.differentArray[this.lossIndex].different.naturalGasFlow.subscribe((val) => {
+          let naturalGasFlowElements = doc.getElementsByName('naturalGasFlow_' + this.lossIndex);
+          naturalGasFlowElements.forEach(element => {
+            element.classList.toggle('indicate-different', val);
+          });
+        })
+        //measuredOxygenFlow
+        this.energyInputCompareService.differentArray[this.lossIndex].different.measuredOxygenFlow.subscribe((val) => {
+          let measuredOxygenFlowElements = doc.getElementsByName('measuredOxygenFlow_' + this.lossIndex);
+          measuredOxygenFlowElements.forEach(element => {
+            element.classList.toggle('indicate-different', val);
+          });
+        })
+        //coalCarbonInjection
+        this.energyInputCompareService.differentArray[this.lossIndex].different.coalCarbonInjection.subscribe((val) => {
+          let coalCarbonInjectionInputElements = doc.getElementsByName('coalCarbonInjection_' + this.lossIndex);
+          coalCarbonInjectionInputElements.forEach(element => {
+            element.classList.toggle('indicate-different', val);
+          });
+        })
+        //coalHeatingValue
+        this.energyInputCompareService.differentArray[this.lossIndex].different.coalHeatingValue.subscribe((val) => {
+          let coalHeatingValueElements = doc.getElementsByName('coalHeatingValue_' + this.lossIndex);
+          coalHeatingValueElements.forEach(element => {
+            element.classList.toggle('indicate-different', val);
+          });
+        })
+        //electrodeUse
+        this.energyInputCompareService.differentArray[this.lossIndex].different.electrodeUse.subscribe((val) => {
+          let electrodeUseElements = doc.getElementsByName('electrodeUse_' + this.lossIndex);
+          electrodeUseElements.forEach(element => {
+            element.classList.toggle('indicate-different', val);
+          });
+        })
+        //electrodeHeatingValue
+        this.energyInputCompareService.differentArray[this.lossIndex].different.electrodeHeatingValue.subscribe((val) => {
+          let electrodeHeatingValueElements = doc.getElementsByName('electrodeHeatingValue_' + this.lossIndex);
+          electrodeHeatingValueElements.forEach(element => {
+            element.classList.toggle('indicate-different', val);
+          });
+        })
+        //otherFuels
+        this.energyInputCompareService.differentArray[this.lossIndex].different.otherFuels.subscribe((val) => {
+          let otherFuelsElements = doc.getElementsByName('otherFuels_' + this.lossIndex);
+          otherFuelsElements.forEach(element => {
+            element.classList.toggle('indicate-different', val);
+          });
+        })
+        //electricityInput
+        this.energyInputCompareService.differentArray[this.lossIndex].different.electricityInput.subscribe((val) => {
+          let electricityInputElements = doc.getElementsByName('electricityInput_' + this.lossIndex);
+          electricityInputElements.forEach(element => {
+            element.classList.toggle('indicate-different', val);
+          });
+        })
+      }
     }
   }
 }

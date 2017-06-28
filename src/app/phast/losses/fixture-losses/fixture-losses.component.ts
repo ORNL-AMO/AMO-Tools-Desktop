@@ -64,7 +64,7 @@ export class FixtureLossesComponent implements OnInit {
 
     this.fixtureLossesService.deleteLossIndex.subscribe((lossIndex) => {
       if (lossIndex != undefined) {
-        if (this.losses.wallLosses) {
+        if (this.losses.fixtureLosses) {
           this._fixtureLosses.splice(lossIndex, 1);
           if (this.fixtureLossesCompareService.differentArray && !this.isBaseline) {
             this.fixtureLossesCompareService.differentArray.splice(lossIndex, 1);

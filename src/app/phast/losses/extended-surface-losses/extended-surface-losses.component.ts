@@ -72,7 +72,7 @@ export class ExtendedSurfaceLossesComponent implements OnInit {
     }
     this.extendedSurfaceLossesService.deleteLossIndex.subscribe((lossIndex) => {
       if (lossIndex != undefined) {
-        if (this.losses.wallLosses) {
+        if (this.losses.extendedSurfaces) {
           this._surfaceLosses.splice(lossIndex, 1);
           if (this.extendedSurfaceCompareService.differentArray && !this.isBaseline) {
             this.extendedSurfaceCompareService.differentArray.splice(lossIndex, 1);

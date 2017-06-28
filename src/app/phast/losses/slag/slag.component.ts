@@ -67,7 +67,7 @@ export class SlagComponent implements OnInit {
 
     this.slagService.deleteLossIndex.subscribe((lossIndex) => {
       if (lossIndex != undefined) {
-        if (this.losses.wallLosses) {
+        if (this.losses.slagLosses) {
           this._slagLosses.splice(lossIndex, 1);
           if (this.slagCompareService.differentArray && !this.isBaseline) {
             this.slagCompareService.differentArray.splice(lossIndex, 1);
