@@ -37,6 +37,12 @@ export class ExhaustGasCompareService {
     })
   }
 
+  addOther() {
+    this.differentArray.forEach(diff => {
+      diff.different.otherLossObjects.push(new BehaviorSubject<boolean>(null));
+    })
+  }
+
   initDifferentObject(numOther: number): ExhaustGasDifferent {
     let tmpBehaviorArray = new Array<BehaviorSubject<boolean>>();
     for (let i = 0; i < numOther; i++) {

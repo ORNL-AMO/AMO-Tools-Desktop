@@ -11,12 +11,13 @@ export class ExhaustGasService {
   addLossBaselineMonitor: BehaviorSubject<any>;
   addLossModificationMonitor: BehaviorSubject<any>;
   addOtherMonitor: BehaviorSubject<any>;
-  
+  deleteOtherMonitor: BehaviorSubject<any>;
   constructor(private formBuilder: FormBuilder) {
     this.deleteLossIndex = new BehaviorSubject<number>(null);
     this.addLossBaselineMonitor = new BehaviorSubject<any>(null);
     this.addLossModificationMonitor = new BehaviorSubject<any>(null);
     this.addOtherMonitor = new BehaviorSubject<any>(null);
+    this.deleteOtherMonitor = new BehaviorSubject<any>(null);
   }
 
   setDelete(num: number) {
