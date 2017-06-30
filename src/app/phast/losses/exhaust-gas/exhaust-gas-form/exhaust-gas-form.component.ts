@@ -59,7 +59,7 @@ export class ExhaustGasFormComponent implements OnInit {
     if (!this.baselineSelected) {
       this.disableForm();
     }
-    //this.initDifferenceMonitor();
+    this.initDifferenceMonitor();
   }
 
   disableForm() {
@@ -115,11 +115,93 @@ export class ExhaustGasFormComponent implements OnInit {
       );
       this.otherLossArray.push(lastNum);
     }
-    console.log(this.exhaustGasForm);
   }
 
   removeOther(index: number, lossNumber: number) {
     this.otherLossArray.splice(index, 1);
     this.exhaustGasForm.removeControl('otherLoss' + lossNumber);
   }
+
+  initDifferenceMonitor() {
+    if (this.exhaustGasCompareService.baselineExhaustGasLosses && this.exhaustGasCompareService.modifiedExhaustGasLosses && this.exhaustGasCompareService.differentArray.length != 0) {
+      if (this.exhaustGasCompareService.differentArray[this.lossIndex]) {
+        let doc = this.windowRefService.getDoc();
+        //cycleTime
+        this.exhaustGasCompareService.differentArray[this.lossIndex].different.cycleTime.subscribe((val) => {
+          let cycleTimeElements = doc.getElementsByName('cycleTime_' + this.lossIndex);
+          cycleTimeElements.forEach(element => {
+            element.classList.toggle('indicate-different', val);
+          });
+        })
+        //offGasTemp
+        this.exhaustGasCompareService.differentArray[this.lossIndex].different.offGasTemp.subscribe((val) => {
+          let offGasTempElements = doc.getElementsByName('offGasTemp_' + this.lossIndex);
+          offGasTempElements.forEach(element => {
+            element.classList.toggle('indicate-different', val);
+          });
+        })
+        //CO
+        this.exhaustGasCompareService.differentArray[this.lossIndex].different.CO.subscribe((val) => {
+          let COElements = doc.getElementsByName('CO_' + this.lossIndex);
+          COElements.forEach(element => {
+            element.classList.toggle('indicate-different', val);
+          });
+        })
+        //O2
+        this.exhaustGasCompareService.differentArray[this.lossIndex].different.O2.subscribe((val) => {
+          let O2Elements = doc.getElementsByName('O2_' + this.lossIndex);
+          O2Elements.forEach(element => {
+            element.classList.toggle('indicate-different', val);
+          });
+        })
+        //H2
+        this.exhaustGasCompareService.differentArray[this.lossIndex].different.H2.subscribe((val) => {
+          let H2Elements = doc.getElementsByName('H2_' + this.lossIndex);
+          H2Elements.forEach(element => {
+            element.classList.toggle('indicate-different', val);
+          });
+        })
+        //CO2
+        this.exhaustGasCompareService.differentArray[this.lossIndex].different.CO2.subscribe((val) => {
+          let CO2Elements = doc.getElementsByName('CO2_' + this.lossIndex);
+          CO2Elements.forEach(element => {
+            element.classList.toggle('indicate-different', val);
+          });
+        })
+        //combustibleGases
+        this.exhaustGasCompareService.differentArray[this.lossIndex].different.combustibleGases.subscribe((val) => {
+          let combustibleGasesElements = doc.getElementsByName('combustibleGases_' + this.lossIndex);
+          combustibleGasesElements.forEach(element => {
+            element.classList.toggle('indicate-different', val);
+          });
+        })
+        //vfr
+        this.exhaustGasCompareService.differentArray[this.lossIndex].different.vfr.subscribe((val) => {
+          let vfrElements = doc.getElementsByName('vfr_' + this.lossIndex);
+          vfrElements.forEach(element => {
+            element.classList.toggle('indicate-different', val);
+          });
+        })
+        //dustLoading
+        this.exhaustGasCompareService.differentArray[this.lossIndex].different.dustLoading.subscribe((val) => {
+          let dustLoadingElements = doc.getElementsByName('dustLoading_' + this.lossIndex);
+          dustLoadingElements.forEach(element => {
+            element.classList.toggle('indicate-different', val);
+          });
+        })
+        //otherLoss
+        for (let i = 0; i < this.otherLossArray.length; i++) {
+          this.exhaustGasCompareService.differentArray[this.lossIndex].different.otherLossObjects[i].subscribe((val) => {
+            let otherLossElements = doc.getElementsByName('otherLoss' + this.otherLossArray[i] + '_' + this.lossIndex);
+            otherLossElements.forEach(element => {
+              element.classList.toggle('indicate-different', val);
+            });
+          })
+        }
+      }
+    }
+
+  }
+
 }
+

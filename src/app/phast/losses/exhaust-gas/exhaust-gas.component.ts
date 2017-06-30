@@ -51,8 +51,8 @@ export class ExhaustGasComponent implements OnInit {
       this._exhaustGasLosses = new Array();
     }
     if (this.losses.exhaustGas) {
-      //this.setCompareVals();
-      //this.exhaustGasCompareService.initCompareObjects();
+      this.setCompareVals();
+      this.exhaustGasCompareService.initCompareObjects();
       this.losses.exhaustGas.forEach(loss => {
         let tmpLoss = {
           form: this.exhaustGasService.getFormFromLoss(loss),
@@ -64,52 +64,51 @@ export class ExhaustGasComponent implements OnInit {
       })
     }
 
-    // this.exhaustGasService.deleteLossIndex.subscribe((lossIndex) => {
-    //   if (lossIndex != undefined) {
-    //     if (this.losses.exhaustGas) {
-    //       this._exhaustGasLosses.splice(lossIndex, 1);
-    //       if (this.exhaustGasCompareService.differentArray && !this.isBaseline) {
-    //         this.exhaustGasCompareService.differentArray.splice(lossIndex, 1);
-    //       }
-    //     }
-    //   }
-    // })
-    // if (this.isBaseline) {
-    //   this.exhaustGasService.addLossBaselineMonitor.subscribe((val) => {
-    //     if (val == true) {
-    //       this._exhaustGasLosses.push({
-    //         form: this.exhaustGasService.initForm(),
-    //         name: 'Loss #' + (this._exhaustGasLosses.length + 1),
-    //         heatLoss: 0.0
-    //       })
-    //     }
-    //   })
-    // } else {
-    //   this.exhaustGasService.addLossModificationMonitor.subscribe((val) => {
-    //     if (val == true) {
-    //       this._exhaustGasLosses.push({
-    //         form: this.exhaustGasService.initForm(),
-    //         name: 'Loss #' + (this._exhaustGasLosses.length + 1),
-    //         heatLoss: 0.0
-    //       })
-    //     }
-    //   })
-    // }
+    this.exhaustGasService.deleteLossIndex.subscribe((lossIndex) => {
+      if (lossIndex != undefined) {
+        if (this.losses.exhaustGas) {
+          this._exhaustGasLosses.splice(lossIndex, 1);
+          if (this.exhaustGasCompareService.differentArray && !this.isBaseline) {
+            this.exhaustGasCompareService.differentArray.splice(lossIndex, 1);
+          }
+        }
+      }
+    })
+    if (this.isBaseline) {
+      this.exhaustGasService.addLossBaselineMonitor.subscribe((val) => {
+        if (val == true) {
+          this._exhaustGasLosses.push({
+            form: this.exhaustGasService.initForm(),
+            name: 'Loss #' + (this._exhaustGasLosses.length + 1),
+            heatLoss: 0.0
+          })
+        }
+      })
+    } else {
+      this.exhaustGasService.addLossModificationMonitor.subscribe((val) => {
+        if (val == true) {
+          this._exhaustGasLosses.push({
+            form: this.exhaustGasService.initForm(),
+            name: 'Loss #' + (this._exhaustGasLosses.length + 1),
+            heatLoss: 0.0
+          })
+        }
+      })
+    }
   }
 
-  //   ngOnDestroy() {
-  //   this.exhaustGasService.baselineSlag = null;
-  //   this.exhaustGasService.modifiedSlag = null;
-  //   this.exhaustGasCompareService.deleteLossIndex.next(null);
-  //   this.exhaustGasCompareService.addLossBaselineMonitor.next(false);
-  //   this.exhaustGasCompareService.addLossModificationMonitor.next(false);
-  // }
-
+  ngOnDestroy() {
+    this.exhaustGasCompareService.baselineExhaustGasLosses = null;
+    this.exhaustGasCompareService.modifiedExhaustGasLosses = null;
+    this.exhaustGasService.deleteLossIndex.next(null);
+    this.exhaustGasService.addLossBaselineMonitor.next(false);
+    this.exhaustGasService.addLossModificationMonitor.next(false);
+  }
   addLoss() {
     this.exhaustGasService.addLoss(this.isBaseline);
-    // if (this.exhaustGasCompareService.differentArray) {
-    //   this.exhaustGasCompareService.addObject(this.exhaustGasCompareService.differentArray.length - 1);
-    // }
+    if (this.exhaustGasCompareService.differentArray) {
+      this.exhaustGasCompareService.addObject(this.exhaustGasCompareService.differentArray.length-1);
+    }
     this._exhaustGasLosses.push({
       form: this.exhaustGasService.initForm(),
       name: 'Loss #' + (this._exhaustGasLosses.length + 1),
@@ -150,14 +149,14 @@ export class ExhaustGasComponent implements OnInit {
 
   setCompareVals() {
     if (this.isBaseline) {
-      //this.exhaustGasCompareService.baselineSlag = this.losses.slagLosses;
+      this.exhaustGasCompareService.baselineExhaustGasLosses = this.losses.exhaustGas;
     } else {
-      //this.exhaustGasCompareService.modifiedSlag = this.losses.slagLosses;
+      this.exhaustGasCompareService.modifiedExhaustGasLosses = this.losses.exhaustGas;
     }
-    // if (this.exhaustGasCompareService.differentArray && !this.isBaseline) {
-    //   if (this.exhaustGasCompareService.differentArray.length != 0) {
-    //     this.exhaustGasCompareService.checkSlagLosses();
-    //   }
-    // }
+    if (this.exhaustGasCompareService.differentArray && !this.isBaseline) {
+      if (this.exhaustGasCompareService.differentArray.length != 0) {
+        this.exhaustGasCompareService.checkExhaustGasLosses();
+      }
+    }
   }
 }

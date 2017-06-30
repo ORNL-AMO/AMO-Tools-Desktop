@@ -10,10 +10,13 @@ export class ExhaustGasService {
   deleteLossIndex: BehaviorSubject<number>;
   addLossBaselineMonitor: BehaviorSubject<any>;
   addLossModificationMonitor: BehaviorSubject<any>;
+  addOtherMonitor: BehaviorSubject<any>;
+  
   constructor(private formBuilder: FormBuilder) {
     this.deleteLossIndex = new BehaviorSubject<number>(null);
     this.addLossBaselineMonitor = new BehaviorSubject<any>(null);
     this.addLossModificationMonitor = new BehaviorSubject<any>(null);
+    this.addOtherMonitor = new BehaviorSubject<any>(null);
   }
 
   setDelete(num: number) {
@@ -26,6 +29,8 @@ export class ExhaustGasService {
       this.addLossBaselineMonitor.next(true);
     }
   }
+
+  
 
   initForm() {
     return this.formBuilder.group({
