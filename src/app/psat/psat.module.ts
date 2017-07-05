@@ -41,6 +41,8 @@ import { ToastyModule } from 'ng2-toasty';
 import { EditConditionPropertiesComponent } from './modify-conditions/edit-condition-properties/edit-condition-properties.component';
 import { ExploreOpportunitiesComponent } from './explore-opportunities/explore-opportunities.component';
 import { CompareService } from './compare.service';
+import { ExploreOpportunitiesFormComponent } from './explore-opportunities/explore-opportunities-form/explore-opportunities-form.component';
+import { ExploreOpportunitiesResultsComponent } from './explore-opportunities/explore-opportunities-results/explore-opportunities-results.component';
 
 @NgModule({
   declarations: [
@@ -68,7 +70,9 @@ import { CompareService } from './compare.service';
     ModifyConditionsTabsComponent,
     ModifyConditionsNotesComponent,
     EditConditionPropertiesComponent,
-    ExploreOpportunitiesComponent
+    ExploreOpportunitiesComponent,
+    ExploreOpportunitiesFormComponent,
+    ExploreOpportunitiesResultsComponent
   ],
   exports: [
     PsatReportComponent
