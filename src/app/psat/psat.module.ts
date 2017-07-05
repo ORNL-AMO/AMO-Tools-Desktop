@@ -43,6 +43,7 @@ import { ExploreOpportunitiesComponent } from './explore-opportunities/explore-o
 import { CompareService } from './compare.service';
 import { ExploreOpportunitiesFormComponent } from './explore-opportunities/explore-opportunities-form/explore-opportunities-form.component';
 import { ExploreOpportunitiesResultsComponent } from './explore-opportunities/explore-opportunities-results/explore-opportunities-results.component';
+import { ExploreOpportunitiesHelpComponent } from './explore-opportunities/explore-opportunities-help/explore-opportunities-help.component';
 
 @NgModule({
   declarations: [
@@ -72,7 +73,8 @@ import { ExploreOpportunitiesResultsComponent } from './explore-opportunities/ex
     EditConditionPropertiesComponent,
     ExploreOpportunitiesComponent,
     ExploreOpportunitiesFormComponent,
-    ExploreOpportunitiesResultsComponent
+    ExploreOpportunitiesResultsComponent,
+    ExploreOpportunitiesHelpComponent
   ],
   exports: [
     PsatReportComponent
