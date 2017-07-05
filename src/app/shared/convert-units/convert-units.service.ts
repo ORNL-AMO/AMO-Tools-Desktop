@@ -58,7 +58,7 @@ export class ConvertUnitsService {
     reactiveEnergy: reactiveEnergy,
     reactivePower: reactivePower,
     volumeFlowRate: volumeFlowRate,
-    viscosity: viscosity ,
+    viscosity: viscosity,
     frequency: frequency,
     force: force
 
@@ -227,6 +227,10 @@ export class ConvertUnitsService {
     }
 
     return possibilities;
+  }
+
+  roundVal(val: number, digits: number) {
+    return Number((Math.round(val * 100) / 100).toFixed(digits))
   }
 
   // list(measure?) {
