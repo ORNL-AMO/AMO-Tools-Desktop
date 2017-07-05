@@ -1,3 +1,7 @@
 .inline-label {
   white-space: nowrap;
 }
+
+.label-margin {
+  margin-left: -30px;
+}
