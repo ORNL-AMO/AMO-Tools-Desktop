@@ -8,10 +8,8 @@ import { Component, OnInit, Input } from '@angular/core';
 export class ExploreOpportunitiesHelpComponent implements OnInit {
   @Input()
   currentField: string;
-
   constructor() { }
 
   ngOnInit() {
   }
-
 }

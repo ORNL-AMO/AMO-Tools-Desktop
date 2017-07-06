@@ -36,6 +36,9 @@ export class ExploreOpportunitiesComponent implements OnInit {
   modificationResults: PsatOutputs;
   isFirstChange: boolean = true;
   exploreModIndex: number = 0;
+
+  tabSelect: string = 'results';
+  currentField: string;
   constructor(private psatService: PsatService) { }
 
   ngOnInit() {
@@ -113,5 +116,12 @@ export class ExploreOpportunitiesComponent implements OnInit {
   save() {
     //this.assessment.psat = this.psat;
     this.saved.emit(true);
+  }
+  setTab(str: string){
+    this.tabSelect = str;
+  }
+
+  focusField($event){
+    this.currentField = $event;
   }
 }

@@ -11,14 +11,23 @@
 
 <div class="help-content">
 
-
-  <div class="card">
+  <div class="card" *ngIf="!currentField">
     <div class="card-header">
-      Opportunity
+      Exploring Opportunities
+    </div>
+    <div class="card-header">
+      <label>Description</label>
+      <p>Use the list on the left to see potential opportunites for energy and cost savings within your system.</p>
+    </div>
+  </div>
+
+  <div class="card" *ngIf="currentField == 'systemData'">
+    <div class="card-header">
+      System Data
     </div>
     <div class="card-block">
       <label>Description:</label>
-      <p>DESCRITION HERE</p>
+      <p>Description goes here.</p>
       <label>Input:</label>
       <p>
         Units: <strong>UNIT HERE</strong><br> Minimum Value Allowed: <strong>MAX HERE</strong><br> Maximum Value Allowed:
@@ -26,4 +35,174 @@
       </p>
     </div>
   </div>
+
+  <div class="card" *ngIf="currentField == 'modifyCost'">
+    <div class="card-header">
+      Modify Cost
+    </div>
+    <div class="card-block">
+      <label>Description:</label>
+      <p>Description goes here.</p>
+      <label>Input:</label>
+      <p>
+        Units: <strong>UNIT HERE</strong><br> Minimum Value Allowed: <strong>MAX HERE</strong><br> Maximum Value Allowed:
+        <strong>MIN HERE</strong><br>
+      </p>
+    </div>
+  </div>
+
+  <div class="card" *ngIf="currentField == 'flowRate'">
+    <div class="card-header">
+      Flow Rate
+    </div>
+    <div class="card-block">
+      <label>Description:</label>
+      <p>Description goes here.</p>
+      <label>Input:</label>
+      <p>
+        Units: <strong>UNIT HERE</strong><br> Minimum Value Allowed: <strong>MAX HERE</strong><br> Maximum Value Allowed:
+        <strong>MIN HERE</strong><br>
+      </p>
+    </div>
+  </div>
+
+  <div class="card" *ngIf="currentField == 'head'">
+    <div class="card-header">
+      Head
+    </div>
+    <div class="card-block">
+      <label>Description:</label>
+      <p>Description goes here.</p>
+      <label>Input:</label>
+      <p>
+        Units: <strong>UNIT HERE</strong><br> Minimum Value Allowed: <strong>MAX HERE</strong><br> Maximum Value Allowed:
+        <strong>MIN HERE</strong><br>
+      </p>
+    </div>
+  </div>
+
+
+  <div class="card" *ngIf="currentField == 'motorRatedData'">
+    <div class="card-header">
+      Motor Rated Data
+    </div>
+    <div class="card-block">
+      <label>Description:</label>
+      <p>Description goes here.</p>
+      <label>Input:</label>
+      <p>
+        Units: <strong>UNIT HERE</strong><br> Minimum Value Allowed: <strong>MAX HERE</strong><br> Maximum Value Allowed:
+        <strong>MIN HERE</strong><br>
+      </p>
+    </div>
+  </div>
+
+
+  <div class="card" *ngIf="currentField == 'motorRatedPower'">
+    <div class="card-header">
+      Motor Rated Power
+    </div>
+    <div class="card-block">
+      <label>Description:</label>
+      <p>Description goes here.</p>
+      <label>Input:</label>
+      <p>
+        Units: <strong>UNIT HERE</strong><br> Minimum Value Allowed: <strong>MAX HERE</strong><br> Maximum Value Allowed:
+        <strong>MIN HERE</strong><br>
+      </p>
+    </div>
+  </div>
+
+  <div class="card" *ngIf="currentField == 'efficiencyClass'">
+    <div class="card-header">
+      Efficiency Class
+    </div>
+    <div class="card-block">
+      <label>Description:</label>
+      <p>Description goes here.</p>
+      <label>Input:</label>
+      <p>
+        Units: <strong>UNIT HERE</strong><br> Minimum Value Allowed: <strong>MAX HERE</strong><br> Maximum Value Allowed:
+        <strong>MIN HERE</strong><br>
+      </p>
+    </div>
+  </div>
+
+  <div class="card" *ngIf="currentField == 'motorEfficiency'">
+    <div class="card-header">
+      Motor Efficiency
+    </div>
+    <div class="card-block">
+      <label>Description:</label>
+      <p>Description goes here.</p>
+      <label>Input:</label>
+      <p>
+        Units: <strong>UNIT HERE</strong><br> Minimum Value Allowed: <strong>MAX HERE</strong><br> Maximum Value Allowed:
+        <strong>MIN HERE</strong><br>
+      </p>
+    </div>
+  </div>
+
+  <div class="card" *ngIf="currentField == 'pumpData'">
+    <div class="card-header">
+      Pump Data
+    </div>
+    <div class="card-block">
+      <label>Description:</label>
+      <p>Description goes here.</p>
+      <label>Input:</label>
+      <p>
+        Units: <strong>UNIT HERE</strong><br> Minimum Value Allowed: <strong>MAX HERE</strong><br> Maximum Value Allowed:
+        <strong>MIN HERE</strong><br>
+      </p>
+    </div>
+  </div>
+
+  <div class="card" *ngIf="currentField == 'pumpSpeed'">
+    <div class="card-header">
+      Pump Speed
+    </div>
+    <div class="card-block">
+      <label>Description:</label>
+      <p>Description goes here.</p>
+      <label>Input:</label>
+      <p>
+        Units: <strong>UNIT HERE</strong><br> Minimum Value Allowed: <strong>MAX HERE</strong><br> Maximum Value Allowed:
+        <strong>MIN HERE</strong><br>
+      </p>
+    </div>
+  </div>
+  
+  <div class="card" *ngIf="currentField == 'pumpType'">
+    <div class="card-header">
+      Pump Type
+    </div>
+    <div class="card-block">
+      <label>Description:</label>
+      <p>Description goes here.</p>
+      <label>Input:</label>
+      <p>
+        Units: <strong>UNIT HERE</strong><br> Minimum Value Allowed: <strong>MAX HERE</strong><br> Maximum Value Allowed:
+        <strong>MIN HERE</strong><br>
+      </p>
+    </div>
+  </div>
+
+  <div class="card" *ngIf="currentField == 'pumpSpecified'">
+    <div class="card-header">
+      Pump Specified
+    </div>
+    <div class="card-block">
+      <label>Description:</label>
+      <p>Description goes here.</p>
+      <label>Input:</label>
+      <p>
+        Units: <strong>UNIT HERE</strong><br> Minimum Value Allowed: <strong>MAX HERE</strong><br> Maximum Value Allowed:
+        <strong>MIN HERE</strong><br>
+      </p>
+    </div>
+  </div>
+
+
+
 </div>

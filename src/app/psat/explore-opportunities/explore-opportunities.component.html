@@ -3,13 +3,48 @@
 		<div class="col-md-6" style="box-shadow: 0px 0px 69px -1px rgba(0,0,0,0.2);z-index: 2;">
 			<div class="card" style="border: none;">
 				<div class="card-block">
-					<app-explore-opportunities-form [psat]="psat" (emitCalculate)="getResults()" [settings]="settings" (emitSave)="save()" [exploreModIndex]="exploreModIndex"></app-explore-opportunities-form>
+					<app-explore-opportunities-form [psat]="psat" (emitCalculate)="getResults()" [settings]="settings" (emitSave)="save()" [exploreModIndex]="exploreModIndex" (changeField)="focusField($event)"></app-explore-opportunities-form>
 				</div>
 			</div>
 		</div>
-		<div class="col-md-6 justify-content-center" style="padding-right:0px; padding-left: 0px;">
+		<div class="col-md-6" style="padding: 0px;">
 			<div class="help-panel">
-				<div class="row" style="padding: 25px; border-bottom: solid grey 1px; margin-bottom:15px;">
+				<div class="row">
+					<ul class="tabs primary" style="width: 100%;">
+						<li class="calc-tab" [ngClass]="{'active': tabSelect == 'results'}" style="width: 50%; text-align: center;">
+							<a (click)="setTab('results')">Results</a>
+						</li><!--
+						--><li class="calc-tab" [ngClass]="{'active': tabSelect == 'help'}" style="width: 50%; text-align: center;">
+							<a (click)="setTab('help')">Help</a>
+						</li>
+					</ul>
+				</div>
+				<div class="row justify-content-center align-items-center" *ngIf="tabSelect == 'help'" style="padding-top: 5%;">
+					<div class="col-11">
+						<app-explore-opportunities-help [currentField]="currentField"></app-explore-opportunities-help>
+					</div>
+				</div>
+				<div class="row justify-content-center"  *ngIf="tabSelect == 'results'" style="padding-top: 5%;">
+					<div class="col-3 chart-summary" style="padding:0px">
+						<dl class="chart-item">
+							<dd>
+								<app-percent-graph [value]="optimizationRating" [titlePlacement]="titlePlacement" [valueDescription]="'Optimization Rating'"
+								 [title]="title" [unit]="unit"></app-percent-graph>
+							</dd>
+							<dt class="text-center" style="margin-bottom: 10px;">Optimization Rating</dt>
+							<dd class="savings text-center" style="margin-bottom: 0px;">{{annualSavings | currency:'USD':true:'4.0-0'}}</dd>
+							<dt class="text-muted text-center">Annual Savings</dt>
+						</dl>
+					</div>
+				</div>
+				<div class="row justify-content-center" *ngIf="tabSelect == 'results'">
+					<div class="col-8" style="background: white;">
+						<app-explore-opportunities-results [baselineResults]="baselineResults" [modificationResults]="modificationResults" [settings]="settings"></app-explore-opportunities-results>
+					</div>
+				</div>
+			</div>
+
+			<!--<div class="row" style="padding: 25px; border-bottom: solid grey 1px; margin-bottom:15px;">
 					<app-explore-opportunities-help></app-explore-opportunities-help>
 				</div>
 				<div class="row">
@@ -27,13 +62,7 @@
 							<dt class="text-muted text-center">Annual Savings</dt>
 						</dl>
 					</div>
-				</div>
-			</div>
+				</div>-->
 		</div>
-		<!--<div class="row">
-		<div class="col-md-7 offset-md-1" *ngIf="baselineResults && modificationResults">
-			<app-explore-opportunities-results [baselineResults]="baselineResults" [modificationResults]="modificationResults" [settings]="settings"></app-explore-opportunities-results>
-		</div>
-	</div>-->
 	</div>
 </div>

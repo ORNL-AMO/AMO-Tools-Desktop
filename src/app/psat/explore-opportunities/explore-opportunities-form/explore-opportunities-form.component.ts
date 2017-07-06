@@ -19,6 +19,8 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
   emitSave = new EventEmitter<boolean>();
   @Input()
   exploreModIndex: number;
+  @Output('changeField')
+  changeField = new EventEmitter<string>();
 
   showSystemData: string;
   showRatedMotorData: string;
@@ -80,7 +82,6 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
     this.tmpInitialEfficiencyClass = this.psatService.getEfficiencyClassFromEnum(this.psat.inputs.efficiency_class);
     this.tmpNewPumpType = this.psatService.getPumpStyleFromEnum(this.psat.modifications[this.exploreModIndex].psat.inputs.pump_style);
     this.tmpInitialPumpType = this.psatService.getPumpStyleFromEnum(this.psat.inputs.pump_style);
-    console.log('form '+this.exploreModIndex);
     this.checkValues();
   }
 
@@ -94,6 +95,10 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
     this.psat.modifications[this.exploreModIndex].psat.inputs.efficiency_class = this.psatService.getEfficienyClassEnum(this.tmpNewEfficiencyClass);
     this.psat.inputs.efficiency_class = this.psatService.getEfficienyClassEnum(this.tmpInitialEfficiencyClass);
     this.calculate();
+  }
+
+  focusField(str: string) {
+    this.changeField.emit(str);
   }
 
   calculate() {
