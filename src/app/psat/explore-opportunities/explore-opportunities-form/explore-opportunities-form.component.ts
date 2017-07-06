@@ -69,6 +69,16 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
   kWatts: Array<number> = [3, 3.7, 4, 4.5, 5.5, 6, 7.5, 9.2, 11, 13, 15, 18.5, 22, 26, 30, 37, 45, 55, 75, 90, 110, 132, 150, 160, 185, 200, 225, 250, 280, 300, 315, 335, 355, 400, 450, 500, 560, 630, 710, 800, 900, 1000, 1250, 1500, 1750, 2000, 2250, 2500, 3000, 3500, 4000, 4500, 5000, 5500, 6000, 7000, 8000, 9000, 10000, 11000, 12000, 13000, 14000, 15000, 16000, 17000, 18000, 19000, 20000, 22500, 25000, 27500, 30000, 35000, 40000];
   options: Array<any>;
   counter: any;
+  rpmError1: string;
+  rpmError2: string;
+  costError1: string;
+  costError2: string;
+  flowRateError1: string;
+  flowRateError2: string;
+  efficiencyError1: string;
+  efficiencyError2: string;
+  specifiedError1: string;
+  specifiedError2: string;
 
   constructor(private psatService: PsatService) { }
 
@@ -164,6 +174,137 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
     if (this.psat.inputs.pump_specified != this.psat.modifications[this.exploreModIndex].psat.inputs.pump_specified) {
       this.showPumpSpecified = 'true';
       this.showPumpData = 'true';
+    }
+  }
+
+  checkPumpRpm(num: number) {
+    let min = 0;
+    let max = 0;
+    if (this.psat.inputs.drive == this.psatService.getDriveEnum('Direct Drive')) {
+      min = 540;
+      max = 3960;
+    } else if (this.psat.inputs.drive == this.psatService.getDriveEnum('Belt Drive')) {
+      //TODO UPDATE WITH BELT DRIVE VALS
+      min = 540;
+      max = 3960;
+    }
+    let rpms;
+    if (num == 1) {
+      rpms = this.psat.inputs.pump_rated_speed;
+    } else {
+      rpms = this.psat.modifications[this.exploreModIndex].psat.inputs.pump_rated_speed;
+    }
+
+    if (rpms < min) {
+      if (num == 1) { this.rpmError1 = 'Value is too small. See help panel for assistance.'; }
+      else { this.rpmError2 = 'Value is too small. See help panel for assistance.' }
+      return false;
+    } else if (rpms > max) {
+      if (num == 1) { this.rpmError1 = 'Value is too large. See help panel for assistance.'; }
+      else { this.rpmError2 = 'Value is too large. See help panel for assistance.' }
+      return false;
+    } else if (rpms >= min && rpms <= max) {
+      if (num == 1) { this.rpmError1 = null }
+      else { this.rpmError2 = null }
+      return true;
+    } else {
+      if (num == 1) { this.rpmError1 = null }
+      else { this.rpmError2 = null }
+      return null;
+    }
+  }
+
+
+  checkFlowRate(num: number) {
+    let tmp: any;
+    if (num == 1) {
+      tmp = this.psatService.checkFlowRate(this.psat.inputs.pump_style, this.psat.inputs.flow_rate, this.settings);
+    } else {
+      tmp = this.psatService.checkFlowRate(this.psat.modifications[this.exploreModIndex].psat.inputs.pump_style, this.psat.modifications[this.exploreModIndex].psat.inputs.flow_rate, this.settings);
+    }
+    if (tmp.message) {
+      if (num == 1) {
+        this.flowRateError1 = tmp.message;
+      } else {
+        this.flowRateError2 = tmp.message;
+      }
+    } else {
+      if (num == 1) {
+        this.flowRateError1 = null;
+      } else {
+        this.flowRateError2 = null;
+      }
+    }
+    return tmp.valid;
+  }
+  checkCost(num: number) {
+    let val;
+    if (num == 1) {
+      val = this.psat.inputs.cost_kw_hour;
+    } else {
+      val = this.psat.modifications[this.exploreModIndex].psat.inputs.cost_kw_hour;
+    }
+    if (val < 0) {
+      if (num == 1) {
+        this.costError1 = 'Cannot have negative cost';
+      } else {
+        this.costError2 = 'Cannot have negative cost';
+      }
+      return false;
+    } else if (val > 1) {
+      if (num == 1) {
+        this.costError1 = "Shouldn't be greater then 1";
+      } else {
+        this.costError2 = "Shouldn't be greater then 1";
+      }
+      return false;
+    } else if (val >= 0 && val <= 1) {
+      if (num == 1) {
+        this.costError1 = null;
+      } else {
+        this.costError2 = null
+      }
+      return true;
+    } else {
+      if (num == 1) {
+        this.costError1 = null;
+      } else {
+        this.costError2 = null
+      }
+      return null;
+    }
+  }
+
+
+  checkEfficiency(val: number, num: number) {
+    if (val > 100) {
+      this.setErrorMessage(num, "Unrealistic efficiency, shouldn't be greater then 100%");
+      return false;
+    }
+    else if (val == 0) {
+      this.setErrorMessage(num, "Cannot have 0% efficiency");
+      return false;
+    }
+    else if (val < 0) {
+      this.setErrorMessage(num, "Cannot have negative efficiency");
+      return false;
+    }
+    else {
+      this.setErrorMessage(num, null);
+      return true;
+    }
+  }
+
+  setErrorMessage(num: number, str: string) {
+    if (num == 1) {
+      this.efficiencyError1 = str;
+    } else if (num == 2) {
+      this.efficiencyError2 = str;
+    } else if (num == 3) {
+      this.specifiedError1 = str;
+    } else if (num == 4) {
+      this.specifiedError2 = str;
+
     }
   }
 }
