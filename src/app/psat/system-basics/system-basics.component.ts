@@ -6,6 +6,7 @@ import { Settings } from '../../shared/models/settings';
 import { IndexedDbService } from '../../indexedDb/indexed-db.service';
 import { ModalDirective } from 'ngx-bootstrap';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
+
 @Component({
   selector: 'app-system-basics',
   templateUrl: './system-basics.component.html',
@@ -41,7 +42,7 @@ export class SystemBasicsComponent implements OnInit {
 
   counter: any;
 
-  isEditingName:boolean = false;
+  isEditingName: boolean = false;
   didNameChange: boolean = false;
 
 
@@ -67,7 +68,7 @@ export class SystemBasicsComponent implements OnInit {
   }
 
   saveChanges() {
-  this.newSettings = this.settingsService.getSettingsFromForm(this.settingsForm);
+    this.newSettings = this.settingsService.getSettingsFromForm(this.settingsForm);
     if (
       this.settings.currency != this.newSettings.currency ||
       this.settings.distanceMeasurement != this.newSettings.distanceMeasurement ||
@@ -84,7 +85,7 @@ export class SystemBasicsComponent implements OnInit {
       }
     }
 
-    if(this.didNameChange){
+    if (this.didNameChange) {
       this.updateAssessment.emit(true);
     }
   }
@@ -92,19 +93,11 @@ export class SystemBasicsComponent implements OnInit {
   updateData(bool: boolean) {
     //convert if true
     if (bool == true) {
-      if (this.psat.inputs.flow_rate) {
-        this.psat.inputs.flow_rate = this.convertUnitsService.value(this.psat.inputs.flow_rate).from(this.settings.flowMeasurement).to(this.newSettings.flowMeasurement);
-      }
-      if (this.psat.inputs.head) {
-        this.psat.inputs.head = this.convertUnitsService.value(this.psat.inputs.head).from(this.settings.distanceMeasurement).to(this.newSettings.distanceMeasurement);
-      }
-      if (this.psat.inputs.motor_rated_power) {
-        this.psat.inputs.motor_rated_power = this.convertUnitsService.value(this.psat.inputs.motor_rated_power).from(this.settings.powerMeasurement).to(this.newSettings.powerMeasurement);
-        if (this.newSettings.powerMeasurement == 'hp') {
-          this.psat.inputs.motor_rated_power = this.getClosest(this.psat.inputs.motor_rated_power, this.horsePowers);
-        } else {
-          this.psat.inputs.motor_rated_power = this.getClosest(this.psat.inputs.motor_rated_power, this.kWatts);
-        }
+      this.psat = this.convertPsatData(this.psat);
+      if (this.psat.modifications) {
+        this.psat.modifications.forEach(mod => {
+          mod.psat = this.convertPsatData(mod.psat);
+        })
       }
       this.updateAssessment.emit(true);
     }
@@ -134,6 +127,26 @@ export class SystemBasicsComponent implements OnInit {
     this.hideSettingsModal();
   }
 
+  convertPsatData(psat: PSAT) {
+    if (psat.inputs.flow_rate) {
+      psat.inputs.flow_rate = this.convertUnitsService.value(psat.inputs.flow_rate).from(this.settings.flowMeasurement).to(this.newSettings.flowMeasurement);
+      psat.inputs.flow_rate = this.convertUnitsService.roundVal(psat.inputs.flow_rate, 2);
+    }
+    if (psat.inputs.head) {
+      psat.inputs.head = this.convertUnitsService.value(psat.inputs.head).from(this.settings.distanceMeasurement).to(this.newSettings.distanceMeasurement);
+      psat.inputs.head = this.convertUnitsService.roundVal(psat.inputs.head, 2);
+    }
+    if (psat.inputs.motor_rated_power) {
+      psat.inputs.motor_rated_power = this.convertUnitsService.value(this.psat.inputs.motor_rated_power).from(this.settings.powerMeasurement).to(this.newSettings.powerMeasurement);
+      if (this.newSettings.powerMeasurement == 'hp') {
+        psat.inputs.motor_rated_power = this.getClosest(psat.inputs.motor_rated_power, this.horsePowers);
+      } else {
+        psat.inputs.motor_rated_power = this.getClosest(psat.inputs.motor_rated_power, this.kWatts);
+      }
+    }
+    return psat;
+  }
+
   showSettingsModal() {
     this.settingsModal.show();
   }
@@ -156,16 +169,16 @@ export class SystemBasicsComponent implements OnInit {
 
   }
 
-  editName(){
+  editName() {
     this.isEditingName = true;
   }
 
-  doneEditingName(){
+  doneEditingName() {
     this.isEditingName = false;
   }
 
   startSavePolling(bool?: boolean) {
-    if(bool){
+    if (bool) {
       this.didNameChange = true;
     }
     if (this.counter) {
