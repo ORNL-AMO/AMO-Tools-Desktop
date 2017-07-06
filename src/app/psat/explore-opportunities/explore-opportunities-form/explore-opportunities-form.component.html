@@ -95,7 +95,7 @@
             <div class="form-group">
               <label for="initialMotorRatedPower">Initial Rated Motor Power</label>
               <select name="initialMotorRatedPower" class="form-control number-input-field" id="initialMotorRatedPower" (focus)="focusField('motorRatedPower')"
-                [(ngModel)]="psat.inputs.motor_rated_power">
+                (change)="calculate()" [(ngModel)]="psat.inputs.motor_rated_power">
 											<option  *ngFor="let option of options" [ngValue]="option">{{option}} {{settings.powerMeasurement}}</option>
 										</select>
             </div>
@@ -229,7 +229,7 @@
               <label for="newPumpSpecified">New Pump Specified Efficiency</label>
               <input name="newPumpSpecified" type="number" id="newPumpSpecified" class="form-control" (focus)="focusField('pumpSpecified')"
                 (input)="calculate()" [(ngModel)]="psat.modifications[exploreModIndex].psat.inputs.pump_specified" [ngClass]="{'invalid': checkEfficiency(psat.modifications[exploreModIndex].psat.inputs.pump_specified, 4) == false}"
-                (input)="calculate()" />
+              />
               <span class="units">%</span>
               <span class="alert-danger pull-right small" *ngIf="specifiedError2 !== null">{{specifiedError2}}</span>
             </div>

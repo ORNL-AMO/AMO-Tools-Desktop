@@ -1,13 +1,14 @@
 <div class="container-fluid">
 	<div class="row modify-conditions">
-		<div class="col-md-6" style="box-shadow: 0px 0px 69px -1px rgba(0,0,0,0.2);z-index: 2;">
+		<div class="col-md-6" style="box-shadow: 0px 0px 69px -1px rgba(0,0,0,0.2);z-index: 2; padding-bottom: 100px;">
 			<div class="card" style="border: none;">
 				<div class="card-block">
-					<app-explore-opportunities-form [psat]="psat" (emitCalculate)="getResults()" [settings]="settings" (emitSave)="save()" [exploreModIndex]="exploreModIndex" (changeField)="focusField($event)"></app-explore-opportunities-form>
+					<app-explore-opportunities-form [psat]="psat" (emitCalculate)="getResults()" [settings]="settings" (emitSave)="save()" [exploreModIndex]="exploreModIndex"
+					 (changeField)="focusField($event)"></app-explore-opportunities-form>
 				</div>
 			</div>
 		</div>
-		<div class="col-md-6" style="padding: 0px;">
+		<div class="col-md-6" style="padding: 0px; padding-bottom: 100px;">
 			<div class="help-panel">
 				<div class="row">
 					<ul class="tabs primary" style="width: 100%;">
@@ -24,15 +25,26 @@
 						<app-explore-opportunities-help [currentField]="currentField"></app-explore-opportunities-help>
 					</div>
 				</div>
-				<div class="row justify-content-center"  *ngIf="tabSelect == 'results'" style="padding-top: 5%;">
-					<div class="col-3 chart-summary" style="padding:0px">
+				<div class="row justify-content-center" *ngIf="tabSelect == 'results'" style="padding-top: 5%;">
+					<div class="col-3 chart-summary">
+						<dl class="chart-item">
+							<dd>
+								<app-percent-graph [value]="baselineOptimizationRating" [titlePlacement]="titlePlacement" [valueDescription]="'Optimization Rating'"
+								 [title]="'Baseline'" [unit]="unit"></app-percent-graph>
+							</dd>
+							<dt class="text-center" style="margin-bottom: 10px;">Optimization Rating</dt>
+							<dd class="savings text-center" style="margin-bottom: 0px;">{{baselineSavingsPotential | currency:'USD':true:'4.0-0'}}</dd>
+							<dt class="text-muted text-center">Potential Annual Savings</dt>
+						</dl>
+					</div>
+					<div class="col-3 offset-md-1 chart-summary">
 						<dl class="chart-item">
 							<dd>
 								<app-percent-graph [value]="optimizationRating" [titlePlacement]="titlePlacement" [valueDescription]="'Optimization Rating'"
 								 [title]="title" [unit]="unit"></app-percent-graph>
 							</dd>
 							<dt class="text-center" style="margin-bottom: 10px;">Optimization Rating</dt>
-							<dd class="savings text-center" style="margin-bottom: 0px;">{{annualSavings | currency:'USD':true:'4.0-0'}}</dd>
+							<dd class="savings text-center" style="margin-bottom: 0px;" [ngClass]="{'positive-savings': annualSavings > 0, 'negative-savings': annualSavings < 0}">{{annualSavings | currency:'USD':true:'4.0-0'}}</dd>
 							<dt class="text-muted text-center">Annual Savings</dt>
 						</dl>
 					</div>

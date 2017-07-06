@@ -39,6 +39,8 @@ export class ExploreOpportunitiesComponent implements OnInit {
 
   tabSelect: string = 'results';
   currentField: string;
+  baselineOptimizationRating: number;
+  baselineSavingsPotential: number;
   constructor(private psatService: PsatService) { }
 
   ngOnInit() {
@@ -90,7 +92,7 @@ export class ExploreOpportunitiesComponent implements OnInit {
       }
     }
 
-    this.title = 'Potential Adjustment Results';
+    this.title = 'Potential Adjustment';
     this.unit = '%';
     this.titlePlacement = 'top';
     this.getResults();
@@ -111,7 +113,9 @@ export class ExploreOpportunitiesComponent implements OnInit {
     this.modificationResults = this.psatService.results(this.psat.modifications[this.exploreModIndex].psat.inputs, this.settings);
     this.annualSavings = this.baselineResults.existing.annual_cost - this.modificationResults.existing.annual_cost;
     this.optimizationRating = Number((Math.round(this.modificationResults.existing.optimization_rating * 100 * 100) / 100).toFixed(0));
-  }
+    this.baselineOptimizationRating = Number((Math.round(this.baselineResults.existing.optimization_rating * 100 * 100) / 100).toFixed(0));
+    this.baselineSavingsPotential = this.baselineResults.existing.annual_savings_potential;
+}
 
   save() {
     //this.assessment.psat = this.psat;
