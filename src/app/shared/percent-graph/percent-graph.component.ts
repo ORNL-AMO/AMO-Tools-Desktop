@@ -1,5 +1,6 @@
-import { Component, OnInit, Input, SimpleChange } from '@angular/core';
+import { Component, OnInit, Input, SimpleChange, ViewChild } from '@angular/core';
 import { WindowRefService } from '../../indexedDb/window-ref.service';
+import { BaseChartDirective } from 'ng2-charts';
 @Component({
   selector: 'app-percent-graph',
   templateUrl: './percent-graph.component.html',
@@ -20,6 +21,8 @@ export class PercentGraphComponent implements OnInit {
   fontSize: number;
   @Input()
   unit: string;
+
+  @ViewChild(BaseChartDirective) private baseChart;
 
   doughnutChartLabels: string[];
   doughnutChartData: number[];
@@ -70,7 +73,7 @@ export class PercentGraphComponent implements OnInit {
     let marginTop = (div[0].clientHeight / 2) - (percentValue.clientHeight + (percentValue.clientHeight * .5));
     let marginLeft = (div[0].clientWidth / 2) - (percentValue.clientWidth / 2);
     for (let i = 0; i < valueClass.length; i++) {
-      valueClass[i].style.marginTop = (marginTop+25) + 'px';
+      valueClass[i].style.marginTop = (marginTop + 25) + 'px';
       valueClass[i].style.marginLeft = marginLeft + 'px';
     }
   }
@@ -95,7 +98,7 @@ export class PercentGraphComponent implements OnInit {
     this.doughnutChartLabels = [this.valueDescription, 'Potential']
     if (this.value < 100) {
       this.potential = 100 - this.value;
-    }else{
+    } else {
       this.potential = 0;
     }
     this.doughnutChartData = [this.value, this.potential];
@@ -162,6 +165,9 @@ export class PercentGraphComponent implements OnInit {
           ]
         }
       ]
+    }
+    if (this.baseChart.chart) {
+      this.baseChart.chart.config.data.datasets[0].backgroundColor = this.chartColorDataSet[0].backgroundColor;
     }
   }
 }
