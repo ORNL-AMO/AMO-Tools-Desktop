@@ -83,6 +83,7 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
   constructor(private psatService: PsatService) { }
 
   ngOnInit() {
+    console.log(this.psat);
     if (this.settings.powerMeasurement == 'hp') {
       this.options = this.horsePowers;
     } else {
