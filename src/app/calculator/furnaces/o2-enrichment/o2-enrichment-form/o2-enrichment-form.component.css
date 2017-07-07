@@ -7,21 +7,34 @@
   /*margin-left: -30px;
   white-space: nowrap;*/
   width: 173px;
+  text-align: center;
+  margin-left: -32px;
   }
 
 .label-left {
-  width: 50%;
+  width: 76px;
+  text-align: center;
+  text-indent: -32px;
+  padding-left: 39px;
+  margin-left: 10px;
 }
 
 .input-size {
-  width:90%;
-}
+  width: 150px;
+  height: 20px;
+  border-radius: 0;
+  border-color: #9c9c9c;
+  border: 1px solid ;
+  padding: 2px;
+  line-height: 1;
+  font-size: 16px;
+  }
 
 .units-adj {
   white-space: nowrap;
-  margin-left: 77%;
+  margin-left: 112%;
   position: absolute;
-  top: 47px;
+  top: 50px;
   font-size: 14px;
   color: #a9a9a9;
   pointer-events: none;
@@ -30,8 +43,8 @@
 .units-avg-heat {
   white-space: nowrap;
   position: absolute;
-  margin-left: 37%;
-  top: 27px;
+  margin-left: 72%;
+  top: 31px;
   font-size: 14px;
   color: #a9a9a9;
   pointer-events: none;
@@ -40,8 +53,8 @@
 .units-fuel-cons {
   white-space: nowrap;
   position: absolute;
-  margin-left: 37%;
-  top: 47px;
+  margin-left: 72%;
+  top: 50px;
   font-size: 14px;
   color: #a9a9a9;
   pointer-events: none;
@@ -50,8 +63,8 @@
 .units-flue-gas {
   white-space: nowrap;
   position: absolute;
-  margin-left: 57%;
-  top: 47px;
+  margin-left: 92%;
+  top: 49px;
   font-size: 14px;
   color: #a9a9a9;
   pointer-events: none;
@@ -60,8 +73,8 @@
 .units-fuel-sav {
   white-space: nowrap;
   position: absolute;
-  margin-left: 77%;
-  top: 27px;
+  margin-left: 112%;
+  top: 30px;
   font-size: 14px;
   color: #a9a9a9;
   pointer-events: none;
