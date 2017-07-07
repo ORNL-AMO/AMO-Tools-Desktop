@@ -8,7 +8,8 @@
         </div>
         <div class="col-10 dashboard-page" *ngIf="allDirectories && dashboardView == 'assessment-dashboard'">
             <app-assessment-dashboard [directory]="workingDirectory" (directoryChange)="changeWorkingDirectory($event)" (deleteDataSignal)="showDeleteModal()"
-                (deleteCheckedItems)="showDeleteItemsModal()" (resetDataEmit)="showDeleteModal()" (emitNewDir)="newDir()" (genReport)="generateReport()" (exportEmit)="exportSelected()" (importEmit)="showImportModal()"></app-assessment-dashboard>
+                (deleteCheckedItems)="showDeleteItemsModal()" (resetDataEmit)="showDeleteModal()" (emitNewDir)="newDir()" (genReport)="generateReport()"
+                (exportEmit)="exportSelected()" (importEmit)="showImportModal()"></app-assessment-dashboard>
         </div>
         <div class="col-10 dashboard-page" *ngIf="allDirectories && dashboardView == 'calculator'">
             <app-calculator (selectCalculator)="viewCalculator($event)" [selectedCalculator]="selectedCalculator" [goCalcHome]="goCalcHome"></app-calculator>
@@ -23,7 +24,7 @@
             <app-about-page></app-about-page>
         </div>
         <div class="col-10 dashboard-page" *ngIf="allDirectories && dashboardView == 'settings'">
-            
+
             <div class="row">
                 <div class="col-10 offset-md-1">
                     <div class="content-container default-settings">
@@ -52,19 +53,31 @@
             <div class="modal-header">
                 <h3>Delete Data</h3>
                 <button class="close" aria-label="Close" (click)="hideDeleteModal()">
-          <span aria-hidden="true">&times;</span>
+          <span *ngIf="!deleting" aria-hidden="true">&times;</span>
         </button>
             </div>
             <div class="modal-body">
-                <div class="row">
+                <div *ngIf="!deleting" class="row">
                     <div class="col-12">
                         All of your data will be deleted and your database will be reset to the initial state.
                     </div>
                 </div>
-                <div class="row">
+                <div *ngIf="!deleting" class="row">
                     <div class="col-12">
                         <button class="btn btn-secondary pull-left" (click)="hideDeleteModal()">Cancel</button>
                         <button class="btn btn-danger pull-right" (click)="deleteData()">Delete All Data</button>
+                    </div>
+                </div>
+                <div class="row justify-content-center" *ngIf="deleting">
+                    <div class="col-10">
+                        <div class="main-content" style="text-align: center;">
+                            <div class="spinner">
+                                <div class="bounce1"></div>
+                                <div class="bounce2"></div>
+                                <div class="bounce3"></div>
+                            </div>
+                            <h1>Resetting Data...</h1>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -90,8 +103,8 @@
     </div>
 </div>
 
-<div bsModal #exportModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exportModalLabel"
-    aria-hidden="true" [config]="{backdrop: 'static'}">
+<div bsModal #exportModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exportModalLabel" aria-hidden="true"
+    [config]="{backdrop: 'static'}">
     <div class="modal-dialog modal-lg export-modal">
         <div class="modal-content">
             <div class="modal-header">
@@ -107,8 +120,8 @@
     </div>
 </div>
 
-<div bsModal #importModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="importModalLabel"
-    aria-hidden="true" [config]="{backdrop: 'static'}">
+<div bsModal #importModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="importModalLabel" aria-hidden="true"
+    [config]="{backdrop: 'static'}">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header" *ngIf="!importInProgress">
@@ -122,20 +135,20 @@
             </div>
             <div class="modal-body" *ngIf="showImportExport && isImportView">
                 <app-import-export *ngIf="!importInProgress" [import]="true" (importData)="checkImportData($event)"></app-import-export>
-                 
-                 <div class="row justify-content-center" *ngIf="importInProgress">
+
+                <div class="row justify-content-center" *ngIf="importInProgress">
                     <div class="col-md-10">
-                         <div class="main-content" style="text-align: center;">
-                              <div class="spinner">
-                              <div class="bounce1"></div>
-                              <div class="bounce2"></div>
-                              <div class="bounce3"></div>
+                        <div class="main-content" style="text-align: center;">
+                            <div class="spinner">
+                                <div class="bounce1"></div>
+                                <div class="bounce2"></div>
+                                <div class="bounce3"></div>
                             </div>
                             <h1>Importing Data...</h1>
                         </div>
                     </div>
                 </div>
-                
+
             </div>
         </div>
     </div>

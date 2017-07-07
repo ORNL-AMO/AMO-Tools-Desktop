@@ -42,6 +42,7 @@ export class DashboardComponent implements OnInit {
   reportAssessments: Array<any>;
   selectedItems: Array<any>;
   showImportExport: boolean;
+  deleting: boolean;
   constructor(private indexedDbService: IndexedDbService, private formBuilder: FormBuilder, private assessmentService: AssessmentService, private toastyService: ToastyService,
     private toastyConfig: ToastyConfig, private jsonToCsvService: JsonToCsvService, private suitDbService: SuiteDbService) {
     this.toastyConfig.theme = 'bootstrap';
@@ -50,6 +51,7 @@ export class DashboardComponent implements OnInit {
   }
 
   ngOnInit() {
+
     //start toolts suite database
     this.suitDbService.startup();
     this.selectedItems = new Array();
@@ -210,11 +212,15 @@ export class DashboardComponent implements OnInit {
   }
 
   showDeleteModal() {
+    this.deleting = false;
     this.deleteModal.show();
   }
 
   hideDeleteModal() {
     this.deleteModal.hide();
+    this.deleteModal.onHidden.subscribe(()=> {
+      this.deleting = false;
+    })
   }
 
   showDeleteItemsModal() {
@@ -258,6 +264,7 @@ export class DashboardComponent implements OnInit {
   }
 
   deleteData() {
+    this.deleting = true;
     this.indexedDbService.deleteDb().then(
       results => {
         this.ngOnInit();
