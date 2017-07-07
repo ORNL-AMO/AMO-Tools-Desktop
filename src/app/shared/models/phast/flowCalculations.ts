@@ -11,3 +11,9 @@ export interface FlowCalculations {
     orificePressureDrop: number,
     operatingTime: number
 }
+
+export interface FlowCalculationsOutput {
+    flow: number,
+    heatInput: number,
+    totalFlow: number
+}

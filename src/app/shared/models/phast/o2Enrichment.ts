@@ -9,3 +9,10 @@ export interface O2Enrichment {
     combAirTempEnriched: number,
     fuelConsumption: number
 }
+
+export interface O2EnrichmentOutput {
+    availableHeatEnriched: number,
+    availableHeatInput: number,
+    fuelConsumptionEnriched: number,
+    fuelSavingsEnriched: number
+}

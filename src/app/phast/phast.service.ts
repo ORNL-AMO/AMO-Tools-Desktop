@@ -3,6 +3,7 @@ import { EfficiencyImprovementInputs } from '../shared/models/phast/efficiencyIm
 import { EnergyEquivalencyElectric, EnergyEquivalencyFuel } from '../shared/models/phast/energyEquivalency';
 import { O2Enrichment } from '../shared/models/phast/o2Enrichment';
 import { FlowCalculations } from '../shared/models/phast/flowCalculations';
+import { ExhaustGas } from '../shared/models/losses/exhaustGas';
 declare var phastAddon: any;
 
 
@@ -328,30 +329,7 @@ export class PhastService {
     return phastAddon.energyEquivalencyFuel(inputs);
   }
 
-  exhaustGas(
-    cycleTime: number,
-    offGasTemp: number,
-    CO: number,
-    H2: number,
-    O2: number,
-    CO2: number,
-    combustibleGases: number,
-    vfr: number,
-    dustLoading: number,
-    otherLosses: number
-  ) {
-    let inputs = {
-      cycleTime: cycleTime,
-      offGasTemp: offGasTemp,
-      CO: CO,
-      H2: H2,
-      O2: O2,
-      CO2: CO2,
-      combustibleGases: combustibleGases,
-      vfr: vfr,
-      dustLoading: dustLoading,
-      otherLosses: otherLosses
-    }
+  exhaustGas(inputs: ExhaustGas) {
     return phastAddon.exhaustGas(inputs);
   }
 
