@@ -6,7 +6,7 @@
   </div> -->
   <div class="assessment-name">
     <input type="checkbox" [(ngModel)]="isChecked" (change)="setDelete()" />
-    <a (click)="goToAssessment(assessment, 'explore-opportunities')" *ngIf="isSetup">{{assessment.name}}</a>
+    <a (click)="goToAssessment(assessment, 'modify-conditions')" *ngIf="isSetup">{{assessment.name}}</a>
     <a (click)="goToAssessment(assessment, 'system-setup')" *ngIf="!isSetup">{{assessment.name}}</a>
   </div>
   <div class="actions">
