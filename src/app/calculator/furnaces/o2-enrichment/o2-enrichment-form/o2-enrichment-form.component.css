@@ -1,0 +1,84 @@
+.inline-label {
+  /*white-space: nowrap;*/
+  width: 120px;
+}
+
+.label-right {
+  /*margin-left: -30px;
+  white-space: nowrap;*/
+  width: 173px;
+  }
+
+.label-left {
+  width: 50%;
+}
+
+.input-size {
+  width:90%;
+}
+
+.units-adj {
+  white-space: nowrap;
+  margin-left: 77%;
+  position: absolute;
+  top: 47px;
+  font-size: 14px;
+  color: #a9a9a9;
+  pointer-events: none;
+}
+
+.units-avg-heat {
+  white-space: nowrap;
+  position: absolute;
+  margin-left: 37%;
+  top: 27px;
+  font-size: 14px;
+  color: #a9a9a9;
+  pointer-events: none;
+}
+
+.units-fuel-cons {
+  white-space: nowrap;
+  position: absolute;
+  margin-left: 37%;
+  top: 47px;
+  font-size: 14px;
+  color: #a9a9a9;
+  pointer-events: none;
+}
+
+.units-flue-gas {
+  white-space: nowrap;
+  position: absolute;
+  margin-left: 57%;
+  top: 47px;
+  font-size: 14px;
+  color: #a9a9a9;
+  pointer-events: none;
+}
+
+.units-fuel-sav {
+  white-space: nowrap;
+  position: absolute;
+  margin-left: 77%;
+  top: 27px;
+  font-size: 14px;
+  color: #a9a9a9;
+  pointer-events: none;
+}
+
+.img-width {
+  width: 160%;
+  margin-left: 20%;
+  margin-top: 50%;
+}
+
+h4 {
+   font-size: 20px;
+   font-weight: bold;
+}
+
+p {
+  font-size: 16px;
+  width: 150px;
+}
