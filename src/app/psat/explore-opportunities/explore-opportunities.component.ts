@@ -109,23 +109,26 @@ export class ExploreOpportunitiesComponent implements OnInit {
   }
 
   getResults() {
-    this.baselineResults = this.psatService.results(this.psat.inputs, this.settings);
-    this.modificationResults = this.psatService.results(this.psat.modifications[this.exploreModIndex].psat.inputs, this.settings);
+    //create copies of inputs to use for calcs
+    let psatInputs = JSON.parse(JSON.stringify(this.psat.inputs));
+    let modInputs = JSON.parse(JSON.stringify(this.psat.modifications[this.exploreModIndex].psat.inputs));
+    this.baselineResults = this.psatService.results(psatInputs, this.settings);
+    this.modificationResults = this.psatService.results(modInputs, this.settings);
     this.annualSavings = this.baselineResults.existing.annual_cost - this.modificationResults.existing.annual_cost;
     this.optimizationRating = Number((Math.round(this.modificationResults.existing.optimization_rating * 100 * 100) / 100).toFixed(0));
     this.baselineOptimizationRating = Number((Math.round(this.baselineResults.existing.optimization_rating * 100 * 100) / 100).toFixed(0));
     this.baselineSavingsPotential = this.baselineResults.existing.annual_savings_potential;
-}
+  }
 
   save() {
     //this.assessment.psat = this.psat;
     this.saved.emit(true);
   }
-  setTab(str: string){
+  setTab(str: string) {
     this.tabSelect = str;
   }
 
-  focusField($event){
+  focusField($event) {
     this.currentField = $event;
   }
 }
