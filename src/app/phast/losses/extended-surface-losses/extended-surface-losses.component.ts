@@ -1,8 +1,8 @@
 import { Component, OnInit, Input, SimpleChanges, Output, EventEmitter } from '@angular/core';
 import * as _ from 'lodash';
 import { PhastService } from '../../phast.service';
-import { ExtendedSurface } from '../../../shared/models/losses/extendedSurface';
-import { Losses } from '../../../shared/models/phast';
+import { ExtendedSurface } from '../../../shared/models/phast/losses/extendedSurface';
+import { Losses } from '../../../shared/models/phast/phast';
 import { ExtendedSurfaceLossesService } from './extended-surface-losses.service';
 import { ExtendedSurfaceCompareService } from './extended-surface-compare.service';
 

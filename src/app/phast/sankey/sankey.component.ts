@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
-import { Losses } from '../../shared/models/phast';
+import { Losses } from '../../shared/models/phast/phast';
 import * as _ from 'lodash';
 
 // declare var d3: any;

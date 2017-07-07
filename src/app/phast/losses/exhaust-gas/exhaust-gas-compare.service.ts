@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { ExhaustGas } from '../../../shared/models/losses/exhaustGas';
+import { ExhaustGas } from '../../../shared/models/phast/losses/exhaustGas';
 
 @Injectable()
 export class ExhaustGasCompareService {

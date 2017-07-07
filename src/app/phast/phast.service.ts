@@ -3,7 +3,7 @@ import { EfficiencyImprovementInputs } from '../shared/models/phast/efficiencyIm
 import { EnergyEquivalencyElectric, EnergyEquivalencyFuel } from '../shared/models/phast/energyEquivalency';
 import { O2Enrichment } from '../shared/models/phast/o2Enrichment';
 import { FlowCalculations } from '../shared/models/phast/flowCalculations';
-import { ExhaustGas } from '../shared/models/losses/exhaustGas';
+import { ExhaustGas } from '../shared/models/phast/losses/exhaustGas';
 declare var phastAddon: any;
 
 

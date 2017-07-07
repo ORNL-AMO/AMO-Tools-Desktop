@@ -136,7 +136,7 @@ export class ExhaustGasFormComponent implements OnInit {
       this.otherLossArray.push(index);
     } else {
       let lastNum = this.otherLossArray[this.otherLossArray.length - 1] + 1;
-      if(Number.isNaN(lastNum)){
+      if (Number.isNaN(lastNum)) {
         lastNum = 1;
       }
       let otherControl = new FormControl('', Validators.required);
@@ -144,7 +144,9 @@ export class ExhaustGasFormComponent implements OnInit {
         'otherLoss' + lastNum, otherControl
       );
       this.otherLossArray.push(lastNum);
-      this.addMonitor(this.otherLossArray.length - 1);
+      if (this.exhaustGasCompareService.differentArray.length != 0) {
+        this.addMonitor(this.otherLossArray.length - 1);
+      }
     }
   }
 
@@ -166,7 +168,7 @@ export class ExhaustGasFormComponent implements OnInit {
   removeOther(index: number, lossNumber: number) {
     this.otherLossArray.splice(index, 1);
     //only splice service value once (baseline)
-    if (this.isBaseline) {
+    if (this.isBaseline && this.exhaustGasCompareService.differentArray.length != 0) {
       this.exhaustGasCompareService.differentArray[this.lossIndex].different.otherLossObjects.splice(index, 1);
     }
     this.exhaustGasForm.removeControl('otherLoss' + lossNumber);

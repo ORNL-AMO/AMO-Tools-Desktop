@@ -2,8 +2,8 @@ import { Component, OnInit, Input, SimpleChanges, Output, EventEmitter } from '@
 import * as _ from 'lodash';
 import { PhastService } from '../../phast.service';
 import { OpeningLossesService } from './opening-losses.service';
-import { Losses } from '../../../shared/models/phast';
-import { OpeningLoss } from '../../../shared/models/losses/openingLoss';
+import { Losses } from '../../../shared/models/phast/phast';
+import { OpeningLoss } from '../../../shared/models/phast/losses/openingLoss';
 import { OpeningLossesCompareService } from './opening-losses-compare.service';
 
 @Component({

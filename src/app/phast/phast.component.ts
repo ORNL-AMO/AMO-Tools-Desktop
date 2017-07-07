@@ -6,7 +6,7 @@ import { PhastService } from './phast.service';
 import { IndexedDbService } from '../indexedDb/indexed-db.service';
 import { ActivatedRoute } from '@angular/router';
 import { Settings } from '../shared/models/settings';
-import { PHAST } from '../shared/models/phast';
+import { PHAST } from '../shared/models/phast/phast';
 
 import { ToastyService, ToastyConfig, ToastOptions, ToastData } from 'ng2-toasty';
 
