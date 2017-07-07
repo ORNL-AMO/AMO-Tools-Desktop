@@ -169,7 +169,6 @@ export class AssessmentSettingsComponent implements OnInit {
 
 
   updateAssessments(directory: Directory, oldSettings: Settings, newSettings: Settings) {
-    debugger
     //update directory assessments
     if (directory.assessments) {
       directory.assessments.forEach(assessment => {
