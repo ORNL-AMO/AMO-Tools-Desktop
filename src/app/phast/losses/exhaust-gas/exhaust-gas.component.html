@@ -1,3 +1,35 @@
-<p>
-  exhaust-gas works!
-</p>
+<div class="no-data no-data-phast" *ngIf="_exhaustGasLosses.length == 0" (click)="addLoss()">
+  <h3>You have no exhaust gas losses</h3>
+  <h4>Add some now.</h4>
+</div>
+
+
+<div class="card-form" *ngFor="let loss of _exhaustGasLosses; let lossIndex = index;">
+  <div class="row">
+    <div class="col-12">
+      <div class="pull-left">
+        <h6 *ngIf="isBaseline">{{loss.name}}</h6>
+        <h6 *ngIf="!isBaseline">{{loss.name}} Modification</h6>
+      </div>
+      <button *ngIf="isBaseline" class="close pull-right" aria-label="Close" (click)="removeLoss(lossIndex)">
+      <span aria-hidden="true">&times;</span>
+    </button>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12">
+      <app-exhaust-gas-form (changeField)="changeField($event)" [(exhaustGasForm)]="loss.form" (calculate)="calculate(loss)" [baselineSelected]="baselineSelected"
+        (saveEmit)="saveLosses()" [lossIndex]="lossIndex"></app-exhaust-gas-form>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12">
+      <div class="form-group">
+        <label class="small">Heat Loss</label>
+        <div class="text-center small">
+          {{loss.heatLoss | number:'2.2-2'}} Btu/hr
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

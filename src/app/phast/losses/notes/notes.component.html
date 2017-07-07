@@ -62,3 +62,9 @@
   <label for="notes">Energy Input Modification Notes:</label>
   <textarea class="form-control" rows="5" id="notes" [(ngModel)]="notes.energyInputNotes"></textarea>
 </div>
+
+
+<div class="form-group" *ngIf="currentTab == 'exhaust-gas'">
+  <label for="notes">Exhaust Gas Modification Notes:</label>
+  <textarea class="form-control" rows="5" id="notes" [(ngModel)]="notes.exhaustGasNotes"></textarea>
+</div>
