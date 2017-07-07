@@ -8,6 +8,8 @@ import { ActivatedRoute } from '@angular/router';
 import { Settings } from '../shared/models/settings';
 import { PHAST } from '../shared/models/phast';
 
+import { EfficiencyImprovementInputs } from '../shared/models/efficiencyImprovement';
+
 import { ToastyService, ToastyConfig, ToastOptions, ToastData } from 'ng2-toasty';
 
 @Component({
@@ -51,7 +53,25 @@ export class PhastComponent implements OnInit {
   }
 
   ngOnInit() {
-    //this.phastService.test();
+    let t2 = this.phastService.energyEquivalencyElectric(6.59, 50, 87.3);
+    console.log('Energy Equiv Electric ');
+    console.log(t2);
+    console.log('=====')
+    let t3 = this.phastService.energyEquivalencyFuel(52.3, 58.9, 700);
+    console.log('Energy Equiv Fuel');
+    console.log(t3);
+    console.log('=====')
+    let t4 = this.phastService.o2Enrichment(21, 100, 1800, 1900, 5, 1, 900, 80, 10);
+    console.log('O2 Enrichment');
+    console.log(t4);
+    console.log('=====')
+    let t5 = this.phastService.flowCalculations(7, .14, 5, 9, 1, .6, 7325, 52, 63, 26, 16);
+    console.log('Flow Calcs')
+    console.log(t5);
+    console.log('=====')
+
+
+
     let tmpAssessmentId;
     this.activatedRoute.params.subscribe(params => {
       tmpAssessmentId = params['id'];

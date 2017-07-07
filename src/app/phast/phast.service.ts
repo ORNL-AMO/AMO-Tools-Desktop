@@ -1,4 +1,8 @@
 import { Injectable } from '@angular/core';
+import { EfficiencyImprovementInputs } from '../shared/models/phast/efficiencyImprovement';
+import { EnergyEquivalencyElectric, EnergyEquivalencyFuel } from '../shared/models/phast/energyEquivalency';
+import { O2Enrichment } from '../shared/models/phast/o2Enrichment';
+import { FlowCalculations } from '../shared/models/phast/flowCalculations';
 declare var phastAddon: any;
 
 
@@ -312,5 +316,51 @@ export class PhastService {
     return phastAddon.energyInput(inputs);
   }
 
+  efficiencyImprovement(inputs: EfficiencyImprovementInputs) {
+    return phastAddon.efficiencyImprovement(inputs);
+  }
+
+  energyEquivalencyElectric(inputs: EnergyEquivalencyElectric) {
+    return phastAddon.energyEquivalencyElectric(inputs);
+  }
+
+  energyEquivalencyFuel(inputs: EnergyEquivalencyFuel) {
+    return phastAddon.energyEquivalencyFuel(inputs);
+  }
+
+  exhaustGas(
+    cycleTime: number,
+    offGasTemp: number,
+    CO: number,
+    H2: number,
+    O2: number,
+    CO2: number,
+    combustibleGases: number,
+    vfr: number,
+    dustLoading: number,
+    otherLosses: number
+  ) {
+    let inputs = {
+      cycleTime: cycleTime,
+      offGasTemp: offGasTemp,
+      CO: CO,
+      H2: H2,
+      O2: O2,
+      CO2: CO2,
+      combustibleGases: combustibleGases,
+      vfr: vfr,
+      dustLoading: dustLoading,
+      otherLosses: otherLosses
+    }
+    return phastAddon.exhaustGas(inputs);
+  }
+
+  flowCalculations(inputs: FlowCalculations) {
+    return phastAddon.flowCalculations(inputs);
+  }
+
+  o2Enrichment(inputs: O2Enrichment) {
+    return phastAddon.o2Enrichment(inputs);
+  }
 }
 
