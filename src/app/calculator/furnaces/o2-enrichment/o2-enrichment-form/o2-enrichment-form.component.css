@@ -8,15 +8,15 @@
   white-space: nowrap;*/
   width: 173px;
   text-align: center;
-  margin-left: -32px;
+  margin-left: -11px;
   }
 
 .label-left {
   width: 76px;
   text-align: center;
   text-indent: -32px;
-  padding-left: 39px;
-  margin-left: 10px;
+  padding-left: 29px;
+  margin-left: 33px;
 }
 
 .input-size {
@@ -24,7 +24,7 @@
   height: 20px;
   border-radius: 0;
   border-color: #9c9c9c;
-  border: 1px solid ;
+  border: 1px solid rgba(0, 0, 0, 0.15);
   padding: 2px;
   line-height: 1;
   font-size: 16px;
