@@ -9,3 +9,11 @@ export interface EnergyEquivalencyFuel {
     fuelFiredEfficiency: number,
     electricalHeatInput: number
 }
+
+export interface EnergyEquivalencyFuelOutput {
+    fuelFiredHeatInput: number
+}
+
+export interface EnergyEquivalencyElectricOutput {
+    electricalHeatInput: number
+}
