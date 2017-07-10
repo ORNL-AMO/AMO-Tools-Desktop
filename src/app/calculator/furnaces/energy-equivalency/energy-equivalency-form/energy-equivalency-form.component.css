@@ -24,6 +24,8 @@
 }
 
 
-.form-control{
-  width: 100% !important;
+.results-box{
+    border: solid;
+    border-radius: 10px;
+    border-color: #BF3D00
 }

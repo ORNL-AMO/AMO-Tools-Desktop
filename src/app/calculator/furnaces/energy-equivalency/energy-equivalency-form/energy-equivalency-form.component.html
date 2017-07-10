@@ -1,6 +1,6 @@
-<div class="row justify-content-center">
-  <div class="col-6">
-    <div class="form-section">
+<div class="form-section">
+  <div class="row align-items-center">
+    <div class="col-6">
       <form>
         <div class="form-group">
           <label class="small section-label" style="font-size: 18px">Calculate Equivalent Electrical Energy</label>
@@ -24,15 +24,21 @@
           <span class="units">MM Btu/h</span>
         </div>
       </form>
-      <div class="form-group">
+    </div>
+    <div class="col-3 offset-md-1">
+      <div class="form-group text-center results-box">
         <label class="small">Equivalent Electrical Heat Input</label>
-        <div class="text-center small">
+        <div class="small">
           {{energyEquivalencyElectricOutput.electricalHeatInput | number:'2.2-2'}} kW
         </div>
       </div>
     </div>
+  </div>
+</div>
 
-    <div class="form-section">
+<div class="form-section">
+  <div class="row align-items-center">
+    <div class="col-6">
       <form>
         <div class="form-group">
           <label class="small section-label" style="font-size: 18px">Calculate Equivalent Fuel Heat</label>
@@ -56,9 +62,11 @@
           <span class="units">kW</span>
         </div>
       </form>
-      <div class="form-group">
+    </div>
+    <div class="col-3 offset-md-1">
+      <div class="form-group text-center results-box">
         <label class="small">Equivalent Fuel-Fired Heat Input</label>
-        <div class="text-center small">
+        <div class="small">
           {{energyEquivalencyFuelOutput.fuelFiredHeatInput | number:'2.2-2'}} MM Btu/hr
         </div>
       </div>
