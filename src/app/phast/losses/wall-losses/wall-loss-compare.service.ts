@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { WallLoss } from '../../../shared/models/losses/wallLoss';
+import { WallLoss } from '../../../shared/models/phast/losses/wallLoss';
 
 @Injectable()
 export class WallLossCompareService {

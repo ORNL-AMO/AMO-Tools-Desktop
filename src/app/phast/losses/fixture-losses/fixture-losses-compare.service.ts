@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { FixtureLoss } from "../../../shared/models/losses/fixtureLoss";
+import { FixtureLoss } from "../../../shared/models/phast/losses/fixtureLoss";
 
 @Injectable()
 export class FixtureLossesCompareService {

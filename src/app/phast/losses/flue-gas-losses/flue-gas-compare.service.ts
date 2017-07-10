@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { FlueGas } from "../../../shared/models/losses/flueGas";
+import { FlueGas } from "../../../shared/models/phast/losses/flueGas";
 
 @Injectable()
 export class FlueGasCompareService {

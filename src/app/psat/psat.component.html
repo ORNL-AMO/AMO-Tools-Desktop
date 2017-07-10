@@ -76,7 +76,7 @@
   </div>
 
   <div class="tab-content" *ngIf="currentTab == 'explore-opportunities'">
-    <app-explore-opportunities [assessment]="assessment" [settings]="settings"></app-explore-opportunities>
+    <app-explore-opportunities [assessment]="assessment" [settings]="settings" [saveClicked]="saveClicked" [(psat)]="_psat" (saved)="save()"></app-explore-opportunities>
   </div>
 
 
@@ -111,7 +111,8 @@
       <button class="btn btn-secondary" *ngIf="currentTab != 'system-setup'" (click)="goBack()">Back</button>
     </div>
     <div class="pull-right">
-      <button class="btn btn-secondary" *ngIf="currentTab == 'system-setup' || currentTab == 'modify-conditions'" (click)="toggleSave()">Save</button>
+      <button class="btn btn-secondary" *ngIf="currentTab == 'system-setup' || currentTab == 'modify-conditions' ||  currentTab == 'explore-opportunities'"
+        (click)="toggleSave()">Save</button>
       <button class="btn btn-primary" *ngIf="currentTab == 'system-setup'" [disabled]="!getCanContinue()" (click)="continue()">Continue</button>
       <button class="btn btn-primary" *ngIf="currentTab == 'modify-conditions'" (click)="exportData()">Export</button>
       <!--<button class="btn btn-primary" *ngIf="currentTab == 'modify-conditions'" (click)="togglePrint()"><span class="fa fa-print"></span></button>-->

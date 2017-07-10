@@ -1,8 +1,8 @@
 import { Component, OnInit, Input, SimpleChanges, Output, EventEmitter } from '@angular/core';
 import * as _ from 'lodash';
 import { PhastService } from '../../phast.service';
-import { Losses } from '../../../shared/models/phast';
-import { LeakageLoss } from '../../../shared/models/losses/leakageLoss';
+import { Losses } from '../../../shared/models/phast/phast';
+import { LeakageLoss } from '../../../shared/models/phast/losses/leakageLoss';
 import { GasLeakageLossesService } from './gas-leakage-losses.service';
 import { GasLeakageCompareService } from './gas-leakage-compare.service';
 

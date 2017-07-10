@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { ExhaustGas } from '../../../shared/models/losses/exhaustGas';
+import { ExhaustGas } from '../../../shared/models/phast/losses/exhaustGas';
 
 @Injectable()
 export class ExhaustGasCompareService {
@@ -34,6 +34,12 @@ export class ExhaustGasCompareService {
     this.differentArray.push({
       lossIndex: num,
       different: this.initDifferentObject(1)
+    })
+  }
+
+  addOther() {
+    this.differentArray.forEach(diff => {
+      diff.different.otherLossObjects.push(new BehaviorSubject<boolean>(null));
     })
   }
 

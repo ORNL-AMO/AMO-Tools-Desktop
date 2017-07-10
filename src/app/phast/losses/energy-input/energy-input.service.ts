@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { EnergyInput } from '../../../shared/models/losses/energyInput';
+import { EnergyInput } from '../../../shared/models/phast/losses/energyInput';
 import { BehaviorSubject } from 'rxjs';
 
 @Injectable()

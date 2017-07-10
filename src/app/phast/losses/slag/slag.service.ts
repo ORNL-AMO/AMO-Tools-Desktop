@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Slag } from '../../../shared/models/losses/slag';
+import { Slag } from '../../../shared/models/phast/losses/slag';
 import { FormBuilder, Validators } from '@angular/forms';
 import { BehaviorSubject } from 'rxjs';
 @Injectable()

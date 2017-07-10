@@ -19,7 +19,7 @@
   <div class="row">
     <div class="col-12">
       <app-exhaust-gas-form (changeField)="changeField($event)" [(exhaustGasForm)]="loss.form" (calculate)="calculate(loss)" [baselineSelected]="baselineSelected"
-        (saveEmit)="saveLosses()" [lossIndex]="lossIndex"></app-exhaust-gas-form>
+        (saveEmit)="saveLosses()" [lossIndex]="lossIndex" [isBaseline]="isBaseline"></app-exhaust-gas-form>
     </div>
   </div>
   <div class="row">

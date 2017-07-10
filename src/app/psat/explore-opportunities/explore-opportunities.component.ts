@@ -1,5 +1,5 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { PSAT, Modification } from '../../shared/models/psat';
+import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
+import { PSAT, Modification, PsatOutputs } from '../../shared/models/psat';
 import { Assessment } from '../../shared/models/assessment';
 import { Settings } from '../../shared/models/settings';
 import { PsatService } from '../psat.service';
@@ -13,50 +13,14 @@ export class ExploreOpportunitiesComponent implements OnInit {
   @Input()
   assessment: Assessment;
   @Input()
+  saveClicked: boolean;
+  @Input()
   settings: Settings;
+  @Output('saved')
+  saved = new EventEmitter<boolean>();
+  @Input()
+  psat: PSAT;
 
-  showSystemData: string;
-  showRatedMotorData: string;
-  showPumpData: string;
-
-  showCost: string;
-  showFlowRate: string;
-  showHead: string;
-
-  showRatedMotorPower: string;
-  showEfficiencyClass: string;
-  showMotorEfficiency: string;
-
-  showPumpSpeed: string;
-  showPumpType: string;
-  showPumpSpecified: string;
-
-  efficiencyClasses: Array<string> = [
-    'Standard Efficiency',
-    'Energy Efficient',
-    // When the user chooses specified, they need a place to put the efficiency value
-    'Specified'
-  ];
-
-  pumpTypes: Array<string> = [
-    'End Suction Slurry',
-    'End Suction Sewage',
-    'End Suction Stock',
-    'End Suction Submersible Sewage',
-    'API Double Suction',
-    'Multistage Boiler Feed',
-    'End Suction ANSI/API',
-    'Axial Flow',
-    'Double Suction',
-    'Vertical Turbine',
-    'Large End Suction',
-    // When user selects below they need a way to provide the optimal efficiency
-    'Specified Optimal Efficiency'
-  ];
-  horsePowers: Array<string> = ['5', '7.5', '10', '15', '20', '25', '30', '40', '50', '60', '75', '100', '125', '150', '200', '250', '300', '350', '400', '450', '500', '600', '700', '800', '900', '1000', '1250', '1750', '2000', '2250', '2500', '3000', '3500', '4000', '4500', '5000', '5500', '6000', '7000', '8000', '9000', '10000', '11000', '12000', '13000', '14000', '15000', '16000', '17000', '18000', '19000', '20000', '22500', '25000', '27500', '30000', '35000', '40000', '45000', '50000'];
-  kWatts: Array<string> = ['3', '3.7', '4', '4.5', '5.5', '6', '7.5', '9.2', '11', '13', '15', '18.5', '22', '26', '30', '37', '45', '55', '75', '90', '110', '132', '150', '160', '185', '200', '225', '250', '280', '300', '315', '335', '355', '400', '450', '500', '560', '630', '710', '800', '900', '1000', '1250', '1500', '1750', '2000', '2250', '2500', '3000', '3500', '4000', '4500', '5000', '5500', '6000', '7000', '8000', '9000', '10000', '11000', '12000', '13000', '14000', '15000', '16000', '17000', '18000', '19000', '20000', '22500', '25000', '27500', '30000', '35000', '40000'];
-  options: Array<any>;
-  modification: PSAT;
   annualSavings: number;
   optimizationRating: number;
   title: string;
@@ -67,39 +31,104 @@ export class ExploreOpportunitiesComponent implements OnInit {
   tmpNewEfficiencyClass: string;
   tmpInitialEfficiencyClass: string;
   testVal: string;
+
+  baselineResults: PsatOutputs;
+  modificationResults: PsatOutputs;
+  isFirstChange: boolean = true;
+  exploreModIndex: number = 0;
+
+  tabSelect: string = 'results';
+  currentField: string;
+  baselineOptimizationRating: number;
+  baselineSavingsPotential: number;
   constructor(private psatService: PsatService) { }
 
   ngOnInit() {
-    this.testVal = `mm<sup>2</sup>`;
-    if (this.settings.powerMeasurement == 'hp') {
-      this.options = this.horsePowers;
+    // this.psat = JSON.parse(JSON.stringify(this.assessment.psat));
+    if (!this.psat.modifications) {
+      this.psat.modifications = new Array();
+      this.psat.modifications.push({
+        notes: {
+          systemBasicsNotes: '',
+          pumpFluidNotes: '',
+          motorNotes: '',
+          fieldDataNotes: ''
+        },
+        psat: {
+          inputs: JSON.parse(JSON.stringify(this.assessment.psat.inputs))
+        },
+        exploreOpportunities: true
+      });
+      this.exploreModIndex = 0;
+      this.psat.modifications[this.exploreModIndex].psat.name = 'Opportunities Modification'
     } else {
-      this.options = this.kWatts;
+      let i = 0;
+      let exists = false;
+      //find explore opportunites modificiation
+      this.psat.modifications.forEach(mod => {
+        if (mod.exploreOpportunities) {
+          this.exploreModIndex = i;
+          exists = true;
+        } else {
+          i++;
+        }
+      })
+      //none found add one
+      if (!exists) {
+        this.psat.modifications.push({
+          notes: {
+            systemBasicsNotes: '',
+            pumpFluidNotes: '',
+            motorNotes: '',
+            fieldDataNotes: ''
+          },
+          psat: {
+            inputs: JSON.parse(JSON.stringify(this.assessment.psat.inputs))
+          },
+          exploreOpportunities: true
+        });
+        this.exploreModIndex = this.psat.modifications.length - 1;
+        this.psat.modifications[this.exploreModIndex].psat.name = 'Opportunities Modification'
+      }
     }
-    this.modification = JSON.parse(JSON.stringify(this.assessment.psat));
-    this.tmpNewEfficiencyClass = this.psatService.getEfficiencyClassFromEnum(this.modification.inputs.efficiency_class);
-    this.tmpInitialEfficiencyClass = this.psatService.getEfficiencyClassFromEnum(this.assessment.psat.inputs.efficiency_class);
-    this.getPumpType();
-    this.calculate();
-  }
 
-  calculate() {
-    this.assessment.psat.inputs.pump_style = this.psatService.getPumpStyleEnum(this.tmpInitialPumpType);
-    this.assessment.psat.inputs.efficiency_class = this.psatService.getEfficienyClassEnum(this.tmpInitialEfficiencyClass);
-    this.modification.inputs.pump_style = this.psatService.getPumpStyleEnum(this.tmpNewPumpType);
-    this.modification.inputs.efficiency_class = this.psatService.getEfficienyClassEnum(this.tmpNewEfficiencyClass);
-    this.modification.outputs = this.psatService.results(this.modification.inputs, this.settings);
-    this.assessment.psat.outputs = this.psatService.results(this.assessment.psat.inputs, this.settings);
-    this.annualSavings = this.assessment.psat.outputs.existing.annual_cost - this.modification.outputs.existing.annual_cost;
-    this.optimizationRating = Number((Math.round(this.modification.outputs.existing.optimization_rating * 100 * 100) / 100).toFixed(0));
-    this.title = 'Potential Adjustment Results';
+    this.title = 'Potential Adjustment';
     this.unit = '%';
     this.titlePlacement = 'top';
+    this.getResults();
   }
 
-  getPumpType() {
-    this.tmpInitialPumpType = this.psatService.getPumpStyleFromEnum(this.assessment.psat.inputs.pump_style);
-    this.tmpNewPumpType = this.psatService.getPumpStyleFromEnum(this.modification.inputs.pump_style);
+  ngOnChanges(changes: SimpleChanges) {
+    if (!this.isFirstChange) {
+      if (changes.saveClicked) {
+        this.save();
+      }
+    } else {
+      this.isFirstChange = false;
+    }
   }
 
+  getResults() {
+    //create copies of inputs to use for calcs
+    let psatInputs = JSON.parse(JSON.stringify(this.psat.inputs));
+    let modInputs = JSON.parse(JSON.stringify(this.psat.modifications[this.exploreModIndex].psat.inputs));
+    this.baselineResults = this.psatService.results(psatInputs, this.settings);
+    this.modificationResults = this.psatService.results(modInputs, this.settings);
+    this.annualSavings = this.baselineResults.existing.annual_cost - this.modificationResults.existing.annual_cost;
+    this.optimizationRating = Number((Math.round(this.modificationResults.existing.optimization_rating * 100 * 100) / 100).toFixed(0));
+    this.baselineOptimizationRating = Number((Math.round(this.baselineResults.existing.optimization_rating * 100 * 100) / 100).toFixed(0));
+    this.baselineSavingsPotential = this.baselineResults.existing.annual_savings_potential;
+  }
+
+  save() {
+    //this.assessment.psat = this.psat;
+    this.saved.emit(true);
+  }
+  setTab(str: string) {
+    this.tabSelect = str;
+  }
+
+  focusField($event) {
+    this.currentField = $event;
+  }
 }

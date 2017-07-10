@@ -1,8 +1,8 @@
 import { Component, OnInit, Input, SimpleChanges, SimpleChange, Output, EventEmitter } from '@angular/core';
 import * as _ from 'lodash';
 import { PhastService } from '../../phast.service';
-import { Slag } from '../../../shared/models/losses/slag';
-import { Losses } from '../../../shared/models/phast';
+import { Slag } from '../../../shared/models/phast/losses/slag';
+import { Losses } from '../../../shared/models/phast/phast';
 import { SlagService } from './slag.service';
 import { SlagCompareService } from './slag-compare.service';
 //import { WindowRefService } from '../../../indexedDb/window-ref.service';

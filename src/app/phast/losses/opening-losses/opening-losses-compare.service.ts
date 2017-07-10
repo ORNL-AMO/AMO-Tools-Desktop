@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { OpeningLoss } from '../../../shared/models/losses/openingLoss';
+import { OpeningLoss } from '../../../shared/models/phast/losses/openingLoss';
 
 @Injectable()
 export class OpeningLossesCompareService {

@@ -1,8 +1,8 @@
 import { Component, OnInit, Input, SimpleChanges, SimpleChange, Output, EventEmitter } from '@angular/core';
 import * as _ from 'lodash';
 import { PhastService } from '../../phast.service';
-import { WallLoss } from '../../../shared/models/losses/wallLoss';
-import { Losses } from '../../../shared/models/phast';
+import { WallLoss } from '../../../shared/models/phast/losses/wallLoss';
+import { Losses } from '../../../shared/models/phast/phast';
 import { WallLossesService } from './wall-losses.service';
 import { WallLossCompareService } from './wall-loss-compare.service';
 import { WindowRefService } from '../../../indexedDb/window-ref.service';

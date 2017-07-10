@@ -403,6 +403,7 @@ export class PsatService {
     } else if (lineFreq == '50 Hz') {
       lineFreqEnum = 1;
     }
+
     return lineFreqEnum;
   }
   getLineFreqFromEnum(num: number): string {

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { FixtureLoss } from '../../../shared/models/losses/fixtureLoss';
+import { FixtureLoss } from '../../../shared/models/phast/losses/fixtureLoss';
 import { BehaviorSubject } from 'rxjs';
 
 @Injectable()
