@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { AtmosphereLoss } from '../../../shared/models/losses/atmosphereLoss';
+import { AtmosphereLoss } from '../../../shared/models/phast/losses/atmosphereLoss';
 import { BehaviorSubject } from 'rxjs';
 
 @Injectable()

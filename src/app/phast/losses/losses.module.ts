@@ -35,7 +35,6 @@ import { OpeningLossesHelpComponent } from './losses-help/opening-losses-help/op
 import { OtherLossesHelpComponent } from './losses-help/other-losses-help/other-losses-help.component';
 import { WallLossesHelpComponent } from './losses-help/wall-losses-help/wall-losses-help.component';
 import { SuiteDbModule } from '../../suiteDb/suiteDb.module';
-import { ExhaustGasComponent } from './exhaust-gas/exhaust-gas.component';
 
 import { HeatStorageComponent } from './heat-storage/heat-storage.component';
 import { AuxiliaryPowerLossesHelpComponent } from './losses-help/auxiliary-power-losses-help/auxiliary-power-losses-help.component';
@@ -45,6 +44,8 @@ import { ExhaustGasHelpComponent } from './losses-help/exhaust-gas-help/exhaust-
 import { EditConditionPropertiesComponent } from './edit-condition-properties/edit-condition-properties.component';
 
 import { EnergyInputHelpComponent } from './losses-help/energy-input-help/energy-input-help.component';
+
+import { ExhaustGasModule } from './exhaust-gas/exhaust-gas.module';
 
 @NgModule({
   imports: [
@@ -66,7 +67,8 @@ import { EnergyInputHelpComponent } from './losses-help/energy-input-help/energy
     AuxiliaryPowerLossesModule,
     AtmosphereLossesModule,
     CoolingLossesModule,
-    ChargeMaterialModule
+    ChargeMaterialModule,
+    ExhaustGasModule
   ],
   declarations: [
     LossesComponent,
@@ -84,14 +86,13 @@ import { EnergyInputHelpComponent } from './losses-help/energy-input-help/energy
     OpeningLossesHelpComponent,
     OtherLossesHelpComponent,
     WallLossesHelpComponent,
-    ExhaustGasComponent,
     HeatStorageComponent,
     AuxiliaryPowerLossesHelpComponent,
     HeatStorageHelpComponent,
     SlagHelpComponent,
     ExhaustGasHelpComponent,
     EditConditionPropertiesComponent,
-    EnergyInputHelpComponent
+    EnergyInputHelpComponent,
   ],
   providers: [
   ],

@@ -1,4 +1,9 @@
 import { Injectable } from '@angular/core';
+import { EfficiencyImprovementInputs } from '../shared/models/phast/efficiencyImprovement';
+import { EnergyEquivalencyElectric, EnergyEquivalencyFuel } from '../shared/models/phast/energyEquivalency';
+import { O2Enrichment } from '../shared/models/phast/o2Enrichment';
+import { FlowCalculations } from '../shared/models/phast/flowCalculations';
+import { ExhaustGas } from '../shared/models/phast/losses/exhaustGas';
 declare var phastAddon: any;
 
 
@@ -312,5 +317,28 @@ export class PhastService {
     return phastAddon.energyInput(inputs);
   }
 
+  efficiencyImprovement(inputs: EfficiencyImprovementInputs) {
+    return phastAddon.efficiencyImprovement(inputs);
+  }
+
+  energyEquivalencyElectric(inputs: EnergyEquivalencyElectric) {
+    return phastAddon.energyEquivalencyElectric(inputs);
+  }
+
+  energyEquivalencyFuel(inputs: EnergyEquivalencyFuel) {
+    return phastAddon.energyEquivalencyFuel(inputs);
+  }
+
+  exhaustGas(inputs: ExhaustGas) {
+    return phastAddon.exhaustGas(inputs);
+  }
+
+  flowCalculations(inputs: FlowCalculations) {
+    return phastAddon.flowCalculations(inputs);
+  }
+
+  o2Enrichment(inputs: O2Enrichment) {
+    return phastAddon.o2Enrichment(inputs);
+  }
 }
 

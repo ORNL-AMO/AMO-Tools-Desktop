@@ -2,8 +2,8 @@ import { Component, OnInit, Input, SimpleChanges, Output, EventEmitter } from '@
 import * as _ from 'lodash';
 import { PhastService } from '../../phast.service';
 import { CoolingLossesService } from './cooling-losses.service';
-import { Losses } from '../../../shared/models/phast';
-import { CoolingLoss } from '../../../shared/models/losses/coolingLoss';
+import { Losses } from '../../../shared/models/phast/phast';
+import { CoolingLoss } from '../../../shared/models/phast/losses/coolingLoss';
 import { CoolingLossesCompareService } from './cooling-losses-compare.service';
 
 @Component({

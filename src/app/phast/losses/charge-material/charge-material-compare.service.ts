@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { ChargeMaterial } from '../../../shared/models/losses/chargeMaterial';
+import { ChargeMaterial } from '../../../shared/models/phast/losses/chargeMaterial';
 
 @Injectable()
 export class ChargeMaterialCompareService {

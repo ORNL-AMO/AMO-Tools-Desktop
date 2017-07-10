@@ -288,6 +288,20 @@ export const MockDirectory: Directory = {
               otherFuels: 20,
               electricityInput: 18000
             }
+          ],
+          exhaustGas: [
+            {
+              cycleTime: 2,
+              offGasTemp: 2800,
+              CO: 10,
+              H2: 10,
+              O2: 0,
+              CO2: 5,
+              combustibleGases: 5,
+              vfr: 50000,
+              dustLoading: 0.005,
+              otherLosses: 0
+            }
           ]
         },
         setupDone: true

@@ -1,8 +1,8 @@
 import { Component, OnInit, Input, SimpleChanges, SimpleChange, Output, EventEmitter } from '@angular/core';
 import * as _ from 'lodash';
 import { PhastService } from '../../phast.service';
-import { AuxiliaryPowerLoss } from '../../../shared/models/losses/auxiliaryPowerLoss';
-import { Losses } from '../../../shared/models/phast';
+import { AuxiliaryPowerLoss } from '../../../shared/models/phast/losses/auxiliaryPowerLoss';
+import { Losses } from '../../../shared/models/phast/phast';
 import { AuxiliaryPowerLossesService } from './auxiliary-power-losses.service';
 import { AuxiliaryPowerCompareService } from './auxiliary-power-compare.service';
 

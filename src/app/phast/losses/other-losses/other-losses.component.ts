@@ -1,8 +1,8 @@
 import { Component, OnInit, Input, SimpleChanges, Output, EventEmitter } from '@angular/core';
 import * as _ from 'lodash';
 import { OtherLossesService } from './other-losses.service';
-import { Losses } from '../../../shared/models/phast';
-import { OtherLoss } from '../../../shared/models/losses/otherLoss';
+import { Losses } from '../../../shared/models/phast/phast';
+import { OtherLoss } from '../../../shared/models/phast/losses/otherLoss';
 import { OtherLossesCompareService } from './other-losses-compare.service';
 @Component({
   selector: 'app-other-losses',

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { AuxiliaryPowerLoss } from '../../../shared/models/losses/auxiliaryPowerLoss';
+import { AuxiliaryPowerLoss } from '../../../shared/models/phast/losses/auxiliaryPowerLoss';
 import { BehaviorSubject } from 'rxjs';
 
 @Injectable()

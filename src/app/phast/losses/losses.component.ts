@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, SimpleChanges, Output, EventEmitter } from '@angular/core';
-import { PHAST, Losses, Modification } from '../../shared/models/phast';
+import { PHAST, Losses, Modification } from '../../shared/models/phast/phast';
 import { Settings } from '../../shared/models/settings';
 import * as _ from 'lodash';
 import { ModalDirective } from 'ngx-bootstrap';
@@ -33,60 +33,60 @@ export class LossesComponent implements OnInit {
   showNotes: boolean = false;
   editModification: Modification;
   showEditModification: boolean = false;
-  lossesStates: any = {
-    wallLosses: {
-      numLosses: 0,
-      saved: true,
-    },
-    chargeMaterial: {
-      numLosses: 0,
-      saved: true
-    },
-    atmosphereLosses: {
-      numLosses: 0,
-      saved: true
-    },
-    openingLosses: {
-      numLosses: 0,
-      saved: true
-    },
-    coolingLosses: {
-      numLosses: 0,
-      saved: true
-    },
-    fixtureLosses: {
-      numLosses: 0,
-      saved: true
-    },
-    leakageLosses: {
-      numLosses: 0,
-      saved: true
-    },
-    surfaceLosses: {
-      numLosses: 0,
-      saved: true
-    },
-    otherLosses: {
-      numLosses: 0,
-      saved: true
-    },
-    flueGasLosses: {
-      numLosses: 0,
-      saved: true
-    },
-    slagLosses: {
-      numLosses: 0,
-      saved: true
-    },
-    auxiliaryPowerLosses: {
-      numLosses: 0,
-      saved: true
-    },
-    energyInput: {
-      numLosses: 0,
-      saved: true
-    }
-  }
+  // lossesStates: any = {
+  //   wallLosses: {
+  //     numLosses: 0,
+  //     saved: true,
+  //   },
+  //   chargeMaterial: {
+  //     numLosses: 0,
+  //     saved: true
+  //   },
+  //   atmosphereLosses: {
+  //     numLosses: 0,
+  //     saved: true
+  //   },
+  //   openingLosses: {
+  //     numLosses: 0,
+  //     saved: true
+  //   },
+  //   coolingLosses: {
+  //     numLosses: 0,
+  //     saved: true
+  //   },
+  //   fixtureLosses: {
+  //     numLosses: 0,
+  //     saved: true
+  //   },
+  //   leakageLosses: {
+  //     numLosses: 0,
+  //     saved: true
+  //   },
+  //   surfaceLosses: {
+  //     numLosses: 0,
+  //     saved: true
+  //   },
+  //   otherLosses: {
+  //     numLosses: 0,
+  //     saved: true
+  //   },
+  //   flueGasLosses: {
+  //     numLosses: 0,
+  //     saved: true
+  //   },
+  //   slagLosses: {
+  //     numLosses: 0,
+  //     saved: true
+  //   },
+  //   auxiliaryPowerLosses: {
+  //     numLosses: 0,
+  //     saved: true
+  //   },
+  //   energyInput: {
+  //     numLosses: 0,
+  //     saved: true
+  //   }
+  // }
 
   showSetupDialog: boolean;
   isLossesSetup: boolean;
@@ -106,16 +106,7 @@ export class LossesComponent implements OnInit {
   }
 
   changeTab($event) {
-    this.lossesTab = $event;
-    this.lossesStates.chargeMaterial.saved = true;
-    this.lossesStates.wallLosses.saved = true;
-    this.lossesStates.atmosphereLosses.saved = true;
-    this.lossesStates.openingLosses.saved = true;
-    this.lossesStates.coolingLosses.saved = true;
-    this.lossesStates.fixtureLosses.saved = true;
-    this.lossesStates.flueGasLosses.saved = true;
-    this.lossesStates.slagLosses.saved = true;
-    this.lossesStates.auxiliaryPowerLosses.saved = true;
+    this.lossesTab = $event
   }
 
   changeField($event) {
@@ -148,7 +139,8 @@ export class LossesComponent implements OnInit {
         leakageNotes: '',
         extendedNotes: '',
         slagNotes: '',
-        auxiliaryPowerNotes: ''
+        auxiliaryPowerNotes: '',
+        exhaustGasNotes: ''
       }
     }
     tmpModification.phast.losses = (JSON.parse(JSON.stringify(this.phast.losses)));

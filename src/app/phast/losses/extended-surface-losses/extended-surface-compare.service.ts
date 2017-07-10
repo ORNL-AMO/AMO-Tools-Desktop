@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from "rxjs";
-import { ExtendedSurface } from '../../../shared/models/losses/extendedSurface';
+import { ExtendedSurface } from '../../../shared/models/phast/losses/extendedSurface';
 @Injectable()
 export class ExtendedSurfaceCompareService {
 

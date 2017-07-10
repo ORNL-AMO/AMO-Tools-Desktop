@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { Losses } from '../../../shared/models/phast';
-import { LeakageLoss } from '../../../shared/models/losses/leakageLoss';
+import { Losses } from '../../../shared/models/phast/phast';
+import { LeakageLoss } from '../../../shared/models/phast/losses/leakageLoss';
 import { BehaviorSubject } from 'rxjs';
 @Injectable()
 export class GasLeakageLossesService {
