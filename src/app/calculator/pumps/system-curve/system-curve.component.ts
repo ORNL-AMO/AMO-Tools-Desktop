@@ -5,6 +5,7 @@ import { Settings } from '../../../shared/models/settings';
 import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { PsatService } from '../../../psat/psat.service';
+
 @Component({
   selector: 'app-system-curve',
   templateUrl: './system-curve.component.html',
