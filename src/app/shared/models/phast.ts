@@ -11,6 +11,7 @@ import { ExtendedSurface } from './losses/extendedSurface';
 import { Slag } from './losses/slag';
 import { AuxiliaryPowerLoss } from './losses/auxiliaryPowerLoss';
 import { EnergyInput } from './losses/energyInput';
+import { ExhaustGas } from './losses/exhaustGas';
 
 export interface PHAST {
   name?: string,
@@ -39,7 +40,8 @@ export interface Losses {
   extendedSurfaces?: ExtendedSurface[],
   slagLosses?: Slag[],
   auxiliaryPowerLosses?: AuxiliaryPowerLoss[],
-  energyInput?: EnergyInput[]
+  energyInput?: EnergyInput[],
+  exhaustGas?: ExhaustGas[]
 }
 
 export interface Modification {
@@ -59,5 +61,6 @@ export interface Notes {
   leakageNotes?: string,
   extendedNotes?: string,
   slagNotes?: string,
-  auxiliaryPowerNotes?: string
+  auxiliaryPowerNotes?: string,
+  exhaustGasNotes?: string
 }
