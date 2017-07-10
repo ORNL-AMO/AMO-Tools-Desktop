@@ -19,19 +19,21 @@ export class EnergyEquivalencyComponent implements OnInit {
     electricalHeatInput: 700
   };
 
-  fuelOutput: EnergyEquivalencyFuelOutput = { fuelFiredHeatInput: 0 };
-  electricOutput: EnergyEquivalencyElectricOutput = { electricalHeatInput: 0 };
+  energyEquivalencyFuelOutput: EnergyEquivalencyFuelOutput = { fuelFiredHeatInput: 0 };
+  energyEquivalencyElectricOutput: EnergyEquivalencyElectricOutput = { electricalHeatInput: 0 };
   constructor(private phastService: PhastService) { }
 
   ngOnInit() {
+    this.calculateElectric();
+    this.calculateFuel();
   }
 
   calculateFuel(){
-    this.fuelOutput = this.phastService.energyEquivalencyFuel(this.energyEquivalencyFuel);
+    this.energyEquivalencyFuelOutput = this.phastService.energyEquivalencyFuel(this.energyEquivalencyFuel);
   }
 
   calculateElectric(){
-    this.electricOutput = this.phastService.energyEquivalencyElectric(this.energyEquivalencyElectric);
+    this.energyEquivalencyElectricOutput = this.phastService.energyEquivalencyElectric(this.energyEquivalencyElectric);
   }
 
 }

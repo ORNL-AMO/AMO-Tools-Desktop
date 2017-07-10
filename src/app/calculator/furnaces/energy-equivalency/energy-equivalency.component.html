@@ -1,13 +1,17 @@
 <div class="row">
-  <div class="col-md-3 col-sm-12 input-form">
-    <app-energy-equivalency-form [(energyEquivalencyElectric)]="energyEquivalencyElectric" [(energyEquivalencyFuel)]="energyEquivalencyFuel" (calculateFuel)="calculateFuel()" (calculateElectric)="calculateElectric()"></app-energy-equivalency-form>
+  <div class="col-md-8 col-sm-12">
+    <div class="card card-block">
+      <app-energy-equivalency-form [(energyEquivalencyElectric)]="energyEquivalencyElectric" [(energyEquivalencyFuel)]="energyEquivalencyFuel"
+        (calculateFuel)="calculateFuel()" (calculateElectric)="calculateElectric()" [energyEquivalencyElectricOutput]="energyEquivalencyElectricOutput"
+        [energyEquivalencyFuelOutput]="energyEquivalencyFuelOutput"></app-energy-equivalency-form>
+    </div>
   </div>
 
-  <div class="col-md-6 col-sm-12 calc-graph" style="z-index: +1">
+  <!--<div class="col-md-6 col-sm-12 calc-graph">
     <p>Graph area</p>
-  </div>
+  </div>-->
 
-  <div class="col-md-3 col-sm-12 calc-help">
+  <div class="col-md-4 col-sm-12 calc-help">
     <p>
       Help Field
     </p>

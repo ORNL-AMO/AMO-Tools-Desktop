@@ -10,6 +10,10 @@ export class EnergyEquivalencyFormComponent implements OnInit {
   energyEquivalencyElectric: EnergyEquivalencyElectric;
   @Input()
   energyEquivalencyFuel: EnergyEquivalencyFuel;
+  @Input()
+  energyEquivalencyElectricOutput: EnergyEquivalencyElectricOutput;
+  @Input()
+  energyEquivalencyFuelOutput: EnergyEquivalencyFuelOutput;
   @Output('calculateFuel')
   calculateFuel = new EventEmitter<boolean>();
   @Output('calculateElectric')
@@ -19,5 +23,10 @@ export class EnergyEquivalencyFormComponent implements OnInit {
 
   ngOnInit() {
   }
-
+  calcElectric() {
+    this.calculateElectric.emit(true);
+  }
+  calcFuel() {
+    this.calculateFuel.emit(true);
+  }
 }
