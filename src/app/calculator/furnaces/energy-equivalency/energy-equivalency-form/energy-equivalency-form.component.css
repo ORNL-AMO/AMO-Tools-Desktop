@@ -1,0 +1,24 @@
+.units-inline {
+  position: absolute;
+  font-size: 14px;
+  color: #a9a9a9;
+  top: 28px;
+  left: 133px;
+  margin-right: 49px;
+  padding-left: 22px;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+.units-mm {
+  left: 87px;
+}
+
+.units-kw {
+  left: 125px;
+}
+
+.label-nowrap {
+  white-space: nowrap;
+
+}

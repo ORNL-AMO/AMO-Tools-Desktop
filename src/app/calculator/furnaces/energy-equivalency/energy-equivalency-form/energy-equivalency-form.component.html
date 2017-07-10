@@ -1,3 +1,52 @@
-<p>
-  energy-equivalency-form works!
-</p>
+<div class="form-section">
+  <div class="form-group">
+    <label class="small section-label" style="font-size: 18px">Calculate Equivalent Electrical Energy</label>
+  </div>
+  <div class="form-group">
+    <label class="small label-nowrap" for="fuelFire">Fuel-Fire Equipment Efficiency</label>
+    <input type="number" step="any" class="form-control" id="fuelFire"  (input)="checkInputs()" onfocus="this.select();">
+    <span class="units-inline">%</span>
+  </div>
+  <div class="form-group">
+    <label class="small label-nowrap" for="electricHeat">Electrically Heated Equipment Efficiency</label>
+    <input type="number" step="any" class="form-control" id="electricHeat" (input)="checkInputs()" onfocus="this.select();">
+    <span class="units-inline">%</span>
+  </div>
+  <div class="form-group">
+    <label class="small label-nowrap" for="heatInput">Heat Input for Fuel-Fire Equipment</label>
+    <input type="number" step="any" class="form-control" id="heatInput" (input)="checkInputs()" onfocus="this.select();">
+    <span class="units-inline units-mm">MM Btu/h</span>
+  </div>
+  <div class="form-group">
+    <label class="small label-nowrap" for="eqvElectric">Equivalent Electric Heat Input</label>
+    <input type="number" step="any" class="form-control" id="eqvElectric" (input)="checkInputs()" onfocus="this.select();">
+    <span class="units-inline units-kw">kW</span>
+  </div>
+</div>
+
+<div class="form-section">
+  <div class="form-group">
+    <label class="small section-label" style="font-size: 18px">Calculate Equivalent Fuel Heat</label>
+  </div>
+  <div class="form-group">
+    <label class="small label-nowrap" for="electricEquipment">Electrically Heated Equipment Efficiency</label>
+    <input type="number" step="any" class="form-control" id="electricEquipment"  (input)="checkInputs()" onfocus="this.select();">
+    <span class="units-inline">%</span>
+  </div>
+  <div class="form-group">
+    <label class="small label-nowrap" for="fuelEquipment">Fuel-Fired Equipment Efficiency</label>
+    <input type="number" step="any" class="form-control" id="fuelEquipment" (input)="checkInputs()" onfocus="this.select();">
+    <span class="units-inline">%</span>
+  </div>
+  <div class="form-group">
+    <label class="small label-nowrap" for="electricInput">Heat Input for Electrically Heated Equipment</label>
+    <input type="number" step="any" class="form-control" id="electricInput" (input)="checkInputs()" onfocus="this.select();">
+    <span class="units-inline units-kw">kW</span>
+  </div>
+  <div class="form-group">
+    <label class="small label-nowrap" for="eqvFuel">Equivalent Fuel-Fired Heat Input</label>
+    <input type="number" step="any" class="form-control" id="eqvFuel" (input)="checkInputs()" onfocus="this.select();">
+    <span class="units-inline units-mm">MM Btu/h</span>
+  </div>
+</div>
+
