@@ -1,5 +1,33 @@
-
 <!--<p>Element should go here</p>-->
-<div class="col-md-12 col-lg-12 col-sm-12 calc-form">
-  <app-o2-enrichment-form ></app-o2-enrichment-form>
+
+<div class="row">
+  <div class="col-sm-4 col-md-4 col-lg-4">
+    <app-o2-enrichment-form [(o2Enrichment)]="o2Enrichment" [o2EnrichmentResults]="o2EnrichmentResults" (calculate)="calculate()"></app-o2-enrichment-form>
+  </div>
+  <div class="col-sm-5 col-md-5 col-lg-5">
+    <div class="form">
+      <!--<img src="../../src/assets/images/graph.jpg" class="img-width" alt="Example">-->
+    </div>
+  </div>
+  <div class="col-sm-3 col-md-3 col-lg-3">
+    <div class="form">
+      <h4>O<sub>2</sub> ENRICHMENT
+      </h4>
+      <form>
+        <p>Calculation of available heat (an indication of thermal efficiency) for fuel fired furnaces and expected energy savings
+          when oxygen in combustion, “air”, is changed from standard (21%) to a higher value.</p>
+        <p> Enter data for current (“Combustion with Air”) and new (“Combustion with Oxygen Enriched Air”) configurations.
+        </p>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-sm-12 col-md-12">
+    <div class="alert alert-info">
+      <strong>Note:</strong> Current limitation of the program would result in an error of about 2% to 5% for the value of
+      available heat calculations for oxygen enriched air case.
+    </div>
+  </div>
 </div>
