@@ -11,7 +11,7 @@ export class O2EnrichmentFormComponent implements OnInit {
   @Output('calculate')
   calculate = new EventEmitter<boolean>();
   @Input()
-  o2EnrichmentResults: O2EnrichmentOutput;
+  o2EnrichmentOutput: O2EnrichmentOutput;
   constructor() { }
 
   ngOnInit() {

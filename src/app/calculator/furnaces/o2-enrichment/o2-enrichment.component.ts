@@ -20,7 +20,7 @@ export class O2EnrichmentComponent implements OnInit {
     fuelConsumption: 10
   };
 
-  o2EnrichmentResults: O2EnrichmentOutput = {
+  o2EnrichmentOutput: O2EnrichmentOutput = {
     availableHeatEnriched: 0.0,
     availableHeatInput: 0.0,
     fuelConsumptionEnriched: 0.0,
@@ -34,6 +34,6 @@ export class O2EnrichmentComponent implements OnInit {
   }
 
   calculate() {
-    this.o2EnrichmentResults = this.phastService.o2Enrichment(this.o2Enrichment);
+    this.o2EnrichmentOutput = this.phastService.o2Enrichment(this.o2Enrichment);
   }
 }

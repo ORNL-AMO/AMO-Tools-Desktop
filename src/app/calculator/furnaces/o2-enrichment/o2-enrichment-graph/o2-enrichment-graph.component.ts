@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
-import { PsatService } from '../../../../psat/psat.service';
+import { PhastService } from '../../../../phast/phast.service';
 import { WindowRefService } from '../../../../indexedDb/window-ref.service';
-
+import { O2Enrichment, O2EnrichmentOutput } from '../../../../shared/models/phast/o2Enrichment';
 import * as d3 from 'd3';
 
 @Component({
@@ -10,6 +10,13 @@ import * as d3 from 'd3';
   styleUrls: ['./o2-enrichment-graph.component.css']
 })
 export class O2EnrichmentGraphComponent implements OnInit {
+  //results
+  @Input()
+  o2EnrichmentOutput: O2EnrichmentOutput;
+  //input data
+  @Input()
+  o2Enrichment: O2Enrichment;
+
 
   /*
   @Input()
@@ -41,7 +48,7 @@ export class O2EnrichmentGraphComponent implements OnInit {
   toggleCalculate: boolean;
   // specificSpeed: number = 0;
   // efficiencyCorrection: number = 0;
-  constructor(private psatService: PsatService, private windowRefService: WindowRefService) { }
+  constructor(private PhastService: PhastService, private windowRefService: WindowRefService) { }
 
   ngOnInit() {
     // if (this.checkForm()) {
