@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { Losses } from '../../../shared/models/phast';
-import { ExtendedSurface } from '../../../shared/models/losses/extendedSurface';
+import { Losses } from '../../../shared/models/phast/phast';
+import { ExtendedSurface } from '../../../shared/models/phast/losses/extendedSurface';
 import { BehaviorSubject } from 'rxjs';
 
 @Injectable()

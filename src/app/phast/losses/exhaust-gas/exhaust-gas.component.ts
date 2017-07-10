@@ -1,8 +1,8 @@
 import { Component, OnInit, Input, SimpleChanges, SimpleChange, Output, EventEmitter } from '@angular/core';
 import * as _ from 'lodash';
 import { PhastService } from '../../phast.service';
-import { Losses } from '../../../shared/models/phast';
-import { ExhaustGas } from '../../../shared/models/losses/exhaustGas';
+import { Losses } from '../../../shared/models/phast/phast';
+import { ExhaustGas } from '../../../shared/models/phast/losses/exhaustGas';
 import { ExhaustGasService } from './exhaust-gas.service';
 import { ExhaustGasCompareService } from './exhaust-gas-compare.service';
 
@@ -107,7 +107,7 @@ export class ExhaustGasComponent implements OnInit {
   addLoss() {
     this.exhaustGasService.addLoss(this.isBaseline);
     if (this.exhaustGasCompareService.differentArray) {
-      this.exhaustGasCompareService.addObject(this.exhaustGasCompareService.differentArray.length-1);
+      this.exhaustGasCompareService.addObject(this.exhaustGasCompareService.differentArray.length - 1);
     }
     this._exhaustGasLosses.push({
       form: this.exhaustGasService.initForm(),
@@ -129,7 +129,8 @@ export class ExhaustGasComponent implements OnInit {
   }
 
   calculate(loss: any) {
-
+    let tmpGas = this.exhaustGasService.getLossFromForm(loss.form);
+    loss.heatLoss = this.phastService.exhaustGas(tmpGas);
   }
 
   saveLosses() {

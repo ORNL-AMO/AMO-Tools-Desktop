@@ -87,6 +87,7 @@ export interface PsatCalcResults {
 export interface Modification {
   notes?: Notes,
   psat?: PSAT,
+  exploreOpportunities?: boolean
 }
 
 export interface Notes {

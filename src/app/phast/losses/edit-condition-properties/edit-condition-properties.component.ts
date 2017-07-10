@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter, ViewChild } from '@angular/core';
-import { Modification } from '../../../shared/models/phast';
+import { Modification } from '../../../shared/models/phast/phast';
 import { ModalDirective } from 'ngx-bootstrap';
 
 @Component({

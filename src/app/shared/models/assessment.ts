@@ -1,5 +1,5 @@
 import { PSAT } from './psat';
-import { PHAST } from './phast';
+import { PHAST } from './phast/phast';
 
 export interface Assessment {
   id?: number,

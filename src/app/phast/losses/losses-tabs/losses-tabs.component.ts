@@ -1,5 +1,5 @@
 import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
-import { Losses } from '../../../shared/models/phast';
+import { Losses } from '../../../shared/models/phast/phast';
 import { Settings } from '../../../shared/models/settings';
 @Component({
   selector: 'app-losses-tabs',

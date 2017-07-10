@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, SimpleChanges, Output, EventEmitter } from '@angular/core';
-import { PHAST, Losses, Modification } from '../../shared/models/phast';
+import { PHAST, Losses, Modification } from '../../shared/models/phast/phast';
 import { Settings } from '../../shared/models/settings';
 import * as _ from 'lodash';
 import { ModalDirective } from 'ngx-bootstrap';

@@ -181,6 +181,12 @@ export class AssessmentSettingsComponent implements OnInit {
                 //convert psat
                 let tmpResults = this.convertPsat(assessment.psat, oldSettings, newSettings);
                 assessment.psat = tmpResults.psat;
+                //convert mods
+                if (assessment.psat.modifications) {
+                  assessment.psat.modifications.forEach(mod => {
+                    mod = this.convertPsat(mod.psat, oldSettings, newSettings);
+                  })
+                }
                 if (tmpResults.updated) {
                   //update assessment
                   this.indexedDbService.putAssessment(assessment).then(results => { this.addToast('Assessment Updated') });
@@ -208,6 +214,12 @@ export class AssessmentSettingsComponent implements OnInit {
                       //convert psat
                       let tmpResults = this.convertPsat(assessment.psat, oldSettings, newSettings);
                       assessment.psat = tmpResults.psat;
+                      //convert mods
+                      if (assessment.psat.modifications) {
+                        assessment.psat.modifications.forEach(mod => {
+                          mod = this.convertPsat(mod.psat, oldSettings, newSettings);
+                        })
+                      }
                       if (tmpResults.updated) {
                         //update assessment
                         this.indexedDbService.putAssessment(assessment).then(results => { this.addToast('Assessment Data Updated') });
@@ -256,10 +268,12 @@ export class AssessmentSettingsComponent implements OnInit {
     let updated: boolean = false;
     if (psat.inputs.flow_rate) {
       psat.inputs.flow_rate = this.convertUnitsService.value(psat.inputs.flow_rate).from(oldSettings.flowMeasurement).to(newSettings.flowMeasurement);
+      psat.inputs.flow_rate = this.convertUnitsService.roundVal(psat.inputs.flow_rate, 2);
       updated = true;
     }
     if (psat.inputs.head) {
       psat.inputs.head = this.convertUnitsService.value(psat.inputs.head).from(oldSettings.distanceMeasurement).to(newSettings.distanceMeasurement);
+      psat.inputs.head = this.convertUnitsService.roundVal(psat.inputs.head, 2);
       updated = true;
     }
     if (psat.inputs.motor_rated_power) {

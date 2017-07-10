@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { FlueGas } from '../../../shared/models/losses/flueGas';
+import { FlueGas } from '../../../shared/models/phast/losses/flueGas';
 import { BehaviorSubject } from 'rxjs';
 
 @Injectable()

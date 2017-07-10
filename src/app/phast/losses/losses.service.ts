@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { Losses, PHAST, Modification } from '../../shared/models/phast';
+import { Losses, PHAST, Modification } from '../../shared/models/phast/phast';
 @Injectable()
 export class LossesService {
   lossIndex: BehaviorSubject<number>;
