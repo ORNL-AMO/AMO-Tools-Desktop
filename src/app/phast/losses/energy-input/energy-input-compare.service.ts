@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from "rxjs";
-import { EnergyInput } from '../../../shared/models/losses/energyInput';
+import { EnergyInput } from '../../../shared/models/phast/losses/energyInput';
 
 @Injectable()
 export class EnergyInputCompareService {

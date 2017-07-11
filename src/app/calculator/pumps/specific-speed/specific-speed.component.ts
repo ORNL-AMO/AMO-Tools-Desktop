@@ -16,7 +16,7 @@ export class SpecificSpeedComponent implements OnInit {
   settings: Settings;
   @Input()
   inPsat: boolean;
-  
+
   speedForm: any;
   specificSpeed: number;
   efficiencyCorrection: number;
@@ -36,13 +36,13 @@ export class SpecificSpeedComponent implements OnInit {
       this.speedForm = this.psatService.getFormFromPsat(this.psat.inputs);
     }
 
-    //get settings if standalone    
+    //get settings if standalone
     if (!this.settings) {
       this.indexedDbService.getDirectorySettings(1).then(
         results => {
           //convert defaults if standalone without default system settings
           if (results[0].flowMeasurement != 'gpm') {
-            let tmpVal = this.convertUnitsService.value(this.speedForm.value.flowRate).from('gpm').to(results[0].flowMeasurement)
+            let tmpVal = this.convertUnitsService.value(this.speedForm.value.flowRate).from('gpm').to(results[0].flowMeasurement);
             this.speedForm.patchValue({
               flowRate: this.psatService.roundVal(tmpVal, 2)
             })

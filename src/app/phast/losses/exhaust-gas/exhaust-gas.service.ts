@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ExhaustGas } from '../../../shared/models/losses/exhaustGas';
+import { ExhaustGas } from '../../../shared/models/phast/losses/exhaustGas';
 import { FormBuilder, Validators, FormControl } from '@angular/forms';
 import { BehaviorSubject } from 'rxjs';
 import * as _ from 'lodash';
@@ -11,12 +11,13 @@ export class ExhaustGasService {
   addLossBaselineMonitor: BehaviorSubject<any>;
   addLossModificationMonitor: BehaviorSubject<any>;
   addOtherMonitor: BehaviorSubject<any>;
-  
+  deleteOtherMonitor: BehaviorSubject<any>;
   constructor(private formBuilder: FormBuilder) {
     this.deleteLossIndex = new BehaviorSubject<number>(null);
     this.addLossBaselineMonitor = new BehaviorSubject<any>(null);
     this.addLossModificationMonitor = new BehaviorSubject<any>(null);
     this.addOtherMonitor = new BehaviorSubject<any>(null);
+    this.deleteOtherMonitor = new BehaviorSubject<any>(null);
   }
 
   setDelete(num: number) {
@@ -30,7 +31,7 @@ export class ExhaustGasService {
     }
   }
 
-  
+
 
   initForm() {
     return this.formBuilder.group({
@@ -59,14 +60,16 @@ export class ExhaustGasService {
       'vfr': [exhaustGas.vfr, Validators.required],
       'dustLoading': [exhaustGas.dustLoading, Validators.required],
     })
-    let index = 1;
-    exhaustGas.otherLossObjects.forEach(loss => {
-      let otherControl = new FormControl(loss, Validators.required);
-      tmpGroup.addControl(
-        'otherLoss' + index, otherControl
-      );
-      index++;
-    })
+    if (exhaustGas.otherLossObjects) {
+      let index = 1;
+      exhaustGas.otherLossObjects.forEach(loss => {
+        let otherControl = new FormControl(loss);
+        tmpGroup.addControl(
+          'otherLoss' + index, otherControl
+        );
+        index++;
+      })
+    }
     return tmpGroup;
   }
 

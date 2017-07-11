@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from "rxjs";
-import { AuxiliaryPowerLoss } from '../../../shared/models/losses/auxiliaryPowerLoss';
+import { AuxiliaryPowerLoss } from '../../../shared/models/phast/losses/auxiliaryPowerLoss';
 
 @Injectable()
 export class AuxiliaryPowerCompareService {

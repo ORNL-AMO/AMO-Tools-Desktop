@@ -2,8 +2,8 @@ import { Component, OnInit, Input, SimpleChanges, Output, EventEmitter } from '@
 import { FormBuilder, Validators } from '@angular/forms';
 import * as _ from 'lodash';
 import { PhastService } from '../../phast.service';
-import { Losses } from '../../../shared/models/phast';
-import { ChargeMaterial } from '../../../shared/models/losses/chargeMaterial';
+import { Losses } from '../../../shared/models/phast/phast';
+import { ChargeMaterial } from '../../../shared/models/phast/losses/chargeMaterial';
 import { ChargeMaterialService } from './charge-material.service';
 import { ChargeMaterialCompareService } from './charge-material-compare.service';
 

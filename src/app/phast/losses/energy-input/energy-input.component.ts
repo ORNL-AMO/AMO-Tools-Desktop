@@ -1,9 +1,9 @@
 import { Component, OnInit, Input, SimpleChanges, SimpleChange, Output, EventEmitter } from '@angular/core';
 import * as _ from 'lodash';
 import { PhastService } from '../../phast.service';
-import { Losses } from '../../../shared/models/phast';
+import { Losses } from '../../../shared/models/phast/phast';
 import { EnergyInputService } from './energy-input.service';
-import { EnergyInput } from '../../../shared/models/losses/energyInput';
+import { EnergyInput } from '../../../shared/models/phast/losses/energyInput';
 import { EnergyInputCompareService } from './energy-input-compare.service';
 @Component({
   selector: 'app-energy-input',

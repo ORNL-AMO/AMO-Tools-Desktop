@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { LeakageLoss } from "../../../shared/models/losses/leakageLoss";
+import { LeakageLoss } from "../../../shared/models/phast/losses/leakageLoss";
 @Injectable()
 export class GasLeakageCompareService {
   baselineLeakageLoss: LeakageLoss[];

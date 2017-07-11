@@ -2,8 +2,8 @@ import { Component, OnInit, Input, SimpleChanges, Output, EventEmitter } from '@
 import * as _ from 'lodash';
 import { PhastService } from '../../phast.service';
 import { AtmosphereLossesService } from './atmosphere-losses.service';
-import { Losses } from '../../../shared/models/phast';
-import { AtmosphereLoss } from '../../../shared/models/losses/atmosphereLoss';
+import { Losses } from '../../../shared/models/phast/phast';
+import { AtmosphereLoss } from '../../../shared/models/phast/losses/atmosphereLoss';
 import { AtmosphereLossesCompareService } from './atmosphere-losses-compare.service';
 @Component({
   selector: 'app-atmosphere-losses',

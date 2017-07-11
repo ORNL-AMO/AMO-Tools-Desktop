@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { PSAT, PsatInputs } from '../shared/models/psat';
 import { Assessment } from '../shared/models/assessment';
-import { PHAST } from '../shared/models/phast';
+import { PHAST } from '../shared/models/phast/phast';
 
 @Injectable()
 export class AssessmentService {

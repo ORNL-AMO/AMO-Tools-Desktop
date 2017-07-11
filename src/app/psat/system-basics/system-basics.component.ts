@@ -137,7 +137,7 @@ export class SystemBasicsComponent implements OnInit {
       psat.inputs.head = this.convertUnitsService.roundVal(psat.inputs.head, 2);
     }
     if (psat.inputs.motor_rated_power) {
-      psat.inputs.motor_rated_power = this.convertUnitsService.value(this.psat.inputs.motor_rated_power).from(this.settings.powerMeasurement).to(this.newSettings.powerMeasurement);
+      psat.inputs.motor_rated_power = this.convertUnitsService.value(psat.inputs.motor_rated_power).from(this.settings.powerMeasurement).to(this.newSettings.powerMeasurement);
       if (this.newSettings.powerMeasurement == 'hp') {
         psat.inputs.motor_rated_power = this.getClosest(psat.inputs.motor_rated_power, this.horsePowers);
       } else {

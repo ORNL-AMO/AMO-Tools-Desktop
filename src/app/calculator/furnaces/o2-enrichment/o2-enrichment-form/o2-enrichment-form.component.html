@@ -1,145 +1,134 @@
+<div class="row">
+  <div class="col-sm-6 col-md-6 col-lg-6">
+    <div class="form">
+      <div class="form-section">
+        <div class="form-group label-left">
+          <label class="small">COMBUSTION WITH AIR</label>
+        </div>
 
+        <div class="form-group inline-label">
+          <label class="small" for="o2CombAir">O<sub>2</sub> in combustion air</label>
+          <input type="number" min="1" step="any" max="100" class=" input-size" id="o2CombAir" (keyup)="calc()" [(ngModel)]="o2Enrichment.o2CombAir"
+            onfocus="this.select();">
+          <span class="units-adj">%</span>
+        </div>
 
-    <div class="row">
-      <div class="col-sm-2 col-md-2 col-lg-2">
-            <div class="form">
-              <form>
-                <div class="form-group label-left">
-                  <label class="small">COMBUSTION WITH AIR</label>
-                </div>
+        <div class="form-group inline-label">
+          <label style="width: 153px" class="small" for="combAirTemp">Combustion air preheat temperature</label>
+          <input type="number" min="0" step="any" class=" input-size" id="combAirTemp" (keyup)="calc()" [(ngModel)]="o2Enrichment.combAirTemp"
+            onfocus="this.select();">
+          <span class="units-adj">F</span>
+        </div>
 
-                <div class="form-group inline-label">
-                  <label class="small" for="o2CombustionAir">O<sub>2</sub> in combustion air</label>
-                  <input type="number" min="1" step="any" max="100" class="form-control input-size"  id="o2CombustionAir" (keyup)="calc()" autofocus onfocus="this.select();">
-                  <span class="units-adj">%</span>
-                </div>
+        <div class="form-group inline-label">
+          <label class="small" for="o2FlueGas">O<sub>2</sub> in flue gasses</label>
+          <input type="number" min="1" step="any" max="100" class=" input-size" id="o2FlueGas" (keyup)="calc()" [(ngModel)]="o2Enrichment.o2FlueGas"
+            onfocus="this.select();">
+          <span class="units-flue-gas">% Dry</span>
+        </div>
 
-                <div class="form-group inline-label">
-                  <label style="width: 153px" class="small" for="preHeatTemp">Combustion air preheat temperature</label>
-                  <input type="number" min="0" step="any" class="form-control input-size"  id="preHeatTemp" (keyup)="calc()" autofocus onfocus="this.select();">
-                  <span class="units-adj">F</span>
-                </div>
+        <div class="form-group inline-label">
+          <label class="small" for="flueGasTemp">Flue gas temperature</label>
+          <input type="number" min="1" step="any" class=" input-size" id="flueGasTemp" (keyup)="calc()" [(ngModel)]="o2Enrichment.flueGasTemp"
+            onfocus="this.select();">
+          <span class="units-adj">F</span>
+        </div>
 
-                <div class="form-group inline-label">
-                  <label class="small" for="o2InFlueGas">O<sub>2</sub> in flue gasses</label>
-                  <input type="number" min="1" step="any" max="100" class="form-control input-size"  id="o2InFlueGas" (keyup)="calc()" autofocus onfocus="this.select();">
-                  <span class="units-flue-gas">% Dry</span>
-                </div>
+        <!--<div class="form-group inline-label">
+        <label class="small" for="availableHeat">Available heat</label>
+        <input type="number" min="0" step="any" class=" input-size" id="availableHeat" (keyup)="calc()" onfocus="this.select();">
+        <span class="units-avg-heat">% of HHV</span>
+      </div>-->
 
-                <div class="form-group inline-label">
-                  <label class="small" for="flowGasTemperature">Flue gas temperature</label>
-                  <input type="number" min="1" step="any" class="form-control input-size"  id="flowGasTemperature" (keyup)="calc()" autofocus onfocus="this.select();">
-                  <span class="units-adj">F</span>
-                </div>
-
-                <div class="form-group inline-label">
-                  <label class="small" for="availableHeat">Available heat</label>
-                  <input type="number" min="0" step="any" class="form-control input-size"  id="availableHeat" (keyup)="calc()" autofocus onfocus="this.select();">
-                  <span class="units-avg-heat">% of HHV</span>
-                </div>
-
-                <div class="form-group inline-label">
-                  <label class="small" for="fuelConsumption"><strong>Fuel consumption</strong></label>
-                  <input type="number" min="0" step="any" class="form-control input-size"  id="fuelConsumption" (keyup)="calc()" autofocus onfocus="this.select();">
-                  <span class="units-fuel-cons">MM Btu/h</span>
-                </div>
-
-                <div class="form-group inline-label">
-                  <label class="small" for="fuelSavings"><strong>Fuel savings</strong></label>
-                  <input type="number" min="0" step="any" class="form-control input-size"  id="fuelSavings" (keyup)="calc()" autofocus onfocus="this.select();">
-                  <span class="units-fuel-sav">%</span>
-                </div>
-              </form>
-            </div>
-          </div>
-
-          <div class="col-sm-2 col-md-2 col-lg-2">
-            <div class="form">
-              <form>
-                <div class="form-group label-right">
-                  <label class="small">COMBUSTION WITH OXYGEN ENRICHED AIR</label>
-                </div>
-
-                <div class="form-group inline-label">
-                  <label class="small" for="o2CombustionAirSaving">O<sub>2</sub> in combustion air</label>
-                  <input type="number" min="1" step="any" max="100" class="form-control input-size"  id="o2CombustionAirSaving" (keyup)="calc()" autofocus onfocus="this.select();">
-                  <span class="units-adj">%</span>
-                </div>
-
-                <div class="form-group inline-label">
-                  <label style="width: 153px" class="small" for="preHeatTempSaving">Combustion air preheat temperature</label>
-                  <input type="number" min="0" step="any" class="form-control input-size"  id="preHeatTempSaving" (keyup)="calc()" autofocus onfocus="this.select();">
-                  <span class="units-adj">F</span>
-                </div>
-
-                <div class="form-group inline-label">
-                  <label class="small" for="o2InFlueGasSaving">O<sup>2</sup> in flue gasses</label>
-                  <input type="number" min="1" step="any" max="100" class="form-control input-size"  id="o2InFlueGasSaving" (keyup)="calc()" autofocus onfocus="this.select();">
-                  <span class="units-flue-gas">%  Dry</span>
-                </div>
-
-                <div class="form-group inline-label">
-                  <label class="small" for="flowGasTemperatureSaving">Flue gas temperature</label>
-                  <input type="number" min="1" step="any" class="form-control input-size"  id="flowGasTemperatureSaving" (keyup)="calc()" autofocus onfocus="this.select();">
-                  <span class="units-adj">F</span>
-                </div>
-
-                <div class="form-group inline-label">
-                  <label class="small" for="availableHeatSaving">Available heat</label>
-                  <input type="number" min="0" step="any" class="form-control input-size"  id="availableHeatSaving" (keyup)="calc()" autofocus onfocus="this.select();">
-                  <span class="units-avg-heat">% of HHV</span>
-                </div>
-
-                <div class="form-group inline-label">
-                  <label class="small" for="fuelConsumptionAfter"><strong>Fuel consumption</strong></label>
-                  <input type="number" min="0" step="any" class="form-control input-size"  id="fuelConsumptionAfter" (keyup)="calc()" autofocus onfocus="this.select();">
-                  <span class="units-fuel-cons">MM Btu/h</span>
-                </div>
-
-                <div class="form-group inline-label">
-                  <label class="small" for="fuelSavingsAfter"><strong>Fuel savings</strong></label>
-                  <input type="number" min="0" step="any" class="form-control input-size"  id="fuelSavingsAfter" (keyup)="calc()" autofocus onfocus="this.select();">
-                  <span class="units-fuel-sav">%</span>
-                </div>
-
-
-              </form>
-            </div>
-          </div>
-      <div class="col-sm-5 col-md-5 col-lg-5">
-        <div class="form">
-          <img src="../src/assets/images/graph.jpg" class="img-width" alt="Example">
+        <div class="form-group inline-label">
+          <label class="small" for="fuelConsumption"><strong>Fuel consumption</strong></label>
+          <input type="number" min="0" step="any" class=" input-size" id="fuelConsumption" (keyup)="calc()" [(ngModel)]="o2Enrichment.fuelConsumption"
+            onfocus="this.select();">
+          <span class="units-fuel-cons">MM Btu/h</span>
         </div>
       </div>
 
-        <div class="col-sm-3 col-md-3 col-lg-3">
-          <div class="form">
-            <h4>O<sub>2</sub> ENRICHMENT
-            </h4>
-            <form>
-              <p>Calculation of available heat (an indication of thermal efficiency) for fuel fired furnaces and expected energy savings
-                when oxygen in combustion, “air”, is changed from standard (21%) to a higher value.</p>
-               <p> Enter data for current (“Combustion with Air”) and new (“Combustion with Oxygen Enriched Air”) configurations.
-              </p>
-            </form>
-          </div>
-        </div>
-    </div>
+      <div class="form-group inline-label">
+        <label class="small" for="availableHeat">Available heat</label>
+        <div>{{o2EnrichmentOutput.availableHeatInput | number:'2.2-2'}} <span class="units-avg-heat">% of HHV</span></div>
+      </div>
 
 
-
-<div class="row">
-  <div class="col-sm-12 col-md-12">
-    <div class="alert alert-info">
-      <strong>Note:</strong> Current limitation of the program would result in an error of about 2% to 5% for the value of
-                available heat calculations for oxygen enriched air case.
+      <!--<div class="form-group inline-label">
+        <label class="small" for="fuelSavings"><strong>Fuel savings</strong></label>
+        <input type="number" min="0" step="any" class=" input-size" id="fuelSavings" (keyup)="calc()" onfocus="this.select();">
+        <span class="units-fuel-sav">%</span>
+      </div>-->
     </div>
   </div>
-</div>
 
+  <div class="col-sm-6 col-md-6 col-lg-6">
+    <div class="form">
+      <div class="form-section">
+        <div class="form-group label-right">
+          <label class="small">COMBUSTION WITH OXYGEN ENRICHED AIR</label>
+        </div>
 
+        <div class="form-group inline-label">
+          <label class="small" for="o2CombAirEnriched">O<sub>2</sub> in combustion air</label>
+          <input type="number" min="1" step="any" max="100" class=" input-size" id="o2CombAirEnriched" [(ngModel)]="o2Enrichment.o2CombAirEnriched"
+            (keyup)="calc()" onfocus="this.select();">
+          <span class="units-adj">%</span>
+        </div>
 
+        <div class="form-group inline-label">
+          <label style="width: 153px" class="small" for="combAirTempEnriched">Combustion air preheat temperature</label>
+          <input type="number" min="0" step="any" class=" input-size" id="combAirTempEnriched" [(ngModel)]="o2Enrichment.combAirTempEnriched"
+            (keyup)="calc()" onfocus="this.select();">
+          <span class="units-adj">F</span>
+        </div>
 
+        <div class="form-group inline-label">
+          <label class="small" for="o2FlueGasEnriched">O<sup>2</sup> in flue gasses</label>
+          <input type="number" min="1" step="any" max="100" class=" input-size" id="o2FlueGasEnriched" (keyup)="calc()" [(ngModel)]="o2Enrichment.o2FlueGasEnriched"
+            onfocus="this.select();">
+          <span class="units-flue-gas">%  Dry</span>
+        </div>
 
+        <div class="form-group inline-label">
+          <label class="small" for="flueGasTempEnriched">Flue gas temperature</label>
+          <input type="number" min="1" step="any" class=" input-size" id="flueGasTempEnriched" (keyup)="calc()" [(ngModel)]="o2Enrichment.flueGasTempEnriched"
+            onfocus="this.select();">
+          <span class="units-adj">F</span>
+        </div>
 
+        <!--<div class="form-group inline-label">
+        <label class="small" for="availableHeatSaving">Available heat</label>
+        <input type="number" min="0" step="any" class=" input-size" id="availableHeatSaving" (keyup)="calc()" onfocus="this.select();">
+        <span class="units-avg-heat">% of HHV</span>
+      </div>-->
+      </div>
+      <div class="form-group inline-label">
+        <label class="small" for="availableHeatEnriched">Available heat</label>
+        <div>{{o2EnrichmentOutput.availableHeatEnriched | number:'2.2-2'}}<span class="units-avg-heat">% of HHV</span></div>
+      </div>
 
+      <!--<div class="form-group inline-label">
+        <label class="small" for="fuelConsumptionEnriched"><strong>Fuel consumption</strong></label>
+        <input type="number" min="0" step="any" class=" input-size" id="fuelConsumptionEnriched" (keyup)="calc()" onfocus="this.select();">
+        <span class="units-fuel-cons">MM Btu/h</span>
+      </div>-->
+
+      <div class="form-group inline-label">
+        <label class="small" for="fuelConsumptionEnriched"><strong>Fuel consumption</strong></label>
+        <div>{{o2EnrichmentOutput.fuelConsumptionEnriched | number:'2.2-2'}}<span class="units-fuel-cons">MM Btu/h</span></div>
+      </div>
+
+      <!--<div class="form-group inline-label">
+        <label class="small" for="fuelSavingsEnriched"><strong>Fuel savings</strong></label>
+        <input type="number" min="0" step="any" class=" input-size" id="fuelSavingsEnriched" (keyup)="calc()" onfocus="this.select();">
+        <span class="units-fuel-sav">%</span>
+      </div>-->
+      <div class="form-group inline-label">
+        <label class="small" for="fuelSavingsEnriched"><strong>Fuel savings</strong></label>
+        <div>{{o2EnrichmentOutput.fuelSavingsEnriched | number:'2.2-2'}}
+          <span class="units-fuel-sav">%</span>
+        </div>
+      </div>
+    </div>
+  </div>

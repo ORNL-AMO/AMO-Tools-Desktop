@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from "rxjs";
-import { CoolingLoss } from "../../../shared/models/losses/coolingLoss";
+import { CoolingLoss } from "../../../shared/models/phast/losses/coolingLoss";
 @Injectable()
 export class CoolingLossesCompareService {
 
