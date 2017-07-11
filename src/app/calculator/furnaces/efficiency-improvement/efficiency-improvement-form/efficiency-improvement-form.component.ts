@@ -13,7 +13,8 @@ export class EfficiencyImprovementFormComponent implements OnInit {
   efficiencyImprovementOutputs:EfficiencyImprovementOutputs
   @Output('calculate')
   calculate = new EventEmitter<boolean>();
-
+  @Output('changeField')
+  changeField = new EventEmitter<string>();
   constructor() { }
 
   ngOnInit() {
@@ -22,5 +23,9 @@ export class EfficiencyImprovementFormComponent implements OnInit {
 
   calc(){
     this.calculate.emit(true);
+  }
+
+  focusField(str: string){
+    this.changeField.emit(str);
   }
 }

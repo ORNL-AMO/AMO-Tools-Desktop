@@ -18,7 +18,7 @@ export class EfficiencyImprovementComponent implements OnInit {
     newFlueGasTemp: 1200
   }
   efficiencyImprovementOutputs: EfficiencyImprovementOutputs;
-
+  currentField: string;
   constructor(private phastService: PhastService) { }
 
   ngOnInit() {
@@ -29,4 +29,7 @@ export class EfficiencyImprovementComponent implements OnInit {
     this.efficiencyImprovementOutputs = this.phastService.efficiencyImprovement(this.efficiencyImprovementInputs);
   }
 
+  setCurrentField(str: string){
+    this.currentField = str;
+  }
 }
