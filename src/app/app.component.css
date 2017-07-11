@@ -908,6 +908,10 @@ Banner
   background: #2c2c2c;
   color: #fff;
 }
+  .banner small {
+    font-size: 14px;
+    color: rgba(255,255,255,0.6);
+  }
   .banner.psat {
     background: #2980b9;
   }
