@@ -1,0 +1,108 @@
+<div class="help-panel">
+  <div class="calc-help">
+    <div class="help-header">
+
+      <h3>Energy Equivalency Calculater Help</h3>
+      <p>Description</p>
+      <p class="text-muted">
+        <span class="fa fa-youtube-play"></span> Watch tutorial on entering atmosphere loss data.
+      </p>
+
+    </div>
+
+
+    <div class="help-content">
+      <!--top fuel fired input field-->
+      <div class="card" *ngIf="currentField == 'fuelFiredEfficiency'">
+        <div class="card-header">
+          Fuel Fired Efficiency (Electrical)
+        </div>
+        <div class="card-block">
+          <label>Description:</label>
+          <p>DESCRITION HERE</p>
+          <label>Input:</label>
+          <p>
+            Units: <strong>UNIT HERE</strong><br> Minimum Value Allowed: <strong>MAX HERE</strong><br> Maximum Value Allowed:
+            <strong>MIN HERE</strong><br>
+          </p>
+        </div>
+      </div>
+
+      <!--from top form-->
+      <div class="card" *ngIf="currentField == 'electricallyHeatedEfficiency'">
+        <div class="card-header">
+          Electrical Heated Efficiency (Electrical)
+        </div>
+        <div class="card-block">
+          <label>Description:</label>
+          <p>DESCRITION HERE</p>
+          <label>Input:</label>
+          <p>
+            Units: <strong>UNIT HERE</strong><br> Minimum Value Allowed: <strong>MAX HERE</strong><br> Maximum Value Allowed:
+            <strong>MIN HERE</strong><br>
+          </p>
+        </div>
+      </div>
+
+      <div class="card" *ngIf="currentField == 'fuelFiredHeatInput'">
+        <div class="card-header">
+          Fuel Fired Heat Input (Electrical)
+        </div>
+        <div class="card-block">
+          <label>Description:</label>
+          <p>DESCRITION HERE</p>
+          <label>Input:</label>
+          <p>
+            Units: <strong>UNIT HERE</strong><br> Minimum Value Allowed: <strong>MAX HERE</strong><br> Maximum Value Allowed:
+            <strong>MIN HERE</strong><br>
+          </p>
+        </div>
+      </div>
+
+      <div class="card" *ngIf="currentField == 'electricallyHeatedEfficiencyFuel'">
+        <div class="card-header">
+          Electrically Heated Efficiency (Fuel)
+        </div>
+        <div class="card-block">
+          <label>Description:</label>
+          <p>DESCRITION HERE</p>
+          <label>Input:</label>
+          <p>
+            Units: <strong>UNIT HERE</strong><br> Minimum Value Allowed: <strong>MAX HERE</strong><br> Maximum Value Allowed:
+            <strong>MIN HERE</strong><br>
+          </p>
+        </div>
+      </div>
+
+      <div class="card" *ngIf="currentField == 'fuelFiredEfficiencyFuel'">
+        <div class="card-header">
+          Fuel Fired Efficiency (Fuel)
+        </div>
+        <div class="card-block">
+          <label>Description:</label>
+          <p>DESCRITION HERE</p>
+          <label>Input:</label>
+          <p>
+            Units: <strong>UNIT HERE</strong><br> Minimum Value Allowed: <strong>MAX HERE</strong><br> Maximum Value Allowed:
+            <strong>MIN HERE</strong><br>
+          </p>
+        </div>
+      </div>
+
+      <div class="card" *ngIf="currentField == 'electricalHeatInput'">
+        <div class="card-header">
+          Electrical Heat Input (Fuel)
+        </div>
+        <div class="card-block">
+          <label>Description:</label>
+          <p>DESCRITION HERE</p>
+          <label>Input:</label>
+          <p>
+            Units: <strong>UNIT HERE</strong><br> Minimum Value Allowed: <strong>MAX HERE</strong><br> Maximum Value Allowed:
+            <strong>MIN HERE</strong><br>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,28 +1,63 @@
-<div class="row justify-content-center align-items-center" style="height: 100%;">
-<div class="col-8">
-  <div class="card">
-    <div class="card-block">
-      <h4>
-        This portion of the application is still in active development.
-      </h4>
-      <h5>
-        Below is a description of what you will find here in the future.
-      </h5>
+<div *ngIf="getSelectedTool() == 'none'">
 
-      <blockquote class="blockquote">
-        <p>
-          This section includes several tools or calculators that can be used to quickly assess (calculate) improvements in efficiency,
-          reduction in fuel use and loss calculations for commonly used fuels.
-        </p>
-      </blockquote>
-
-      <blockquote class="blockquote">
-        <p>
-          The calculators include charge material theoretical heat energy requirement, flue gas, hot gas leakage, wall losses, water
-          or air cooling loss, atmosphere loss, fixture or tray loss, and extended surface heat loss calculators.
-        </p>
-      </blockquote>
+  <div class="row">
+    <div class="col-10 offset-md-1">
+      <div class="content-container calculator-list">
+        <h2>Furnace Calculators</h2>
+        <ul>
+          <!--<li>
+            <a (click)="showTool('o2-enrichment')">O2 Enrichment</a>
+            <p>Use the O2 Enrichment calculator to estimate fuel savings from adjusting the oxygen content of combustion and
+              flue gases
+            </p>
+          </li>-->
+          <li>
+            <a (click)="showTool('efficiency-improvement')">Efficiency Improvement</a>
+            <p>Use the Efficiency Improvement calculator to....
+            </p>
+          </li>
+          <li>
+            <a (click)="showTool('energy-equivalency')">Energy Equivalency</a>
+            <p>Use the Energy Equivalency calculator to....
+            </p>
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 </div>
+
+<div class="calculator" *ngIf="getSelectedTool() == 'o2-enrichment'">
+  <div class="row">
+    <div class="col-lg-12">
+      <h2>O2 Enrichment Calculator</h2>
+    </div>
+  </div>
+  <div class="calculator-container">
+    <app-o2-enrichment></app-o2-enrichment>
+  </div>
+</div>
+
+
+<div class="calculator" *ngIf="getSelectedTool() == 'efficiency-improvement'">
+  <div class="row">
+    <div class="col-lg-12">
+      <h2>Efficiency Improvement Calculator</h2>
+    </div>
+  </div>
+  <div class="calculator-container">
+    <app-efficiency-improvement></app-efficiency-improvement>
+  </div>
+</div>
+
+
+<div class="calculator" *ngIf="getSelectedTool() == 'energy-equivalency'">
+  <div class="row">
+    <div class="col-lg-12">
+      <h2>Energy Equivalency Calculator</h2>
+    </div>
+  </div>
+  <div class="calculator-container">
+    <app-energy-equivalency></app-energy-equivalency>
+  </div>
 </div>

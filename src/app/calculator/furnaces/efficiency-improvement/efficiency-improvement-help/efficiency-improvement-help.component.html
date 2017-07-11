@@ -1,0 +1,79 @@
+<div class="help-panel">
+  <div class="calc-help">
+    <div class="help-header">
+
+      <h3>Efficiency Improvement Calculater Help</h3>
+      <p>Description</p>
+      <p class="text-muted">
+        <span class="fa fa-youtube-play"></span> Watch tutorial on entering atmosphere loss data.
+      </p>
+
+    </div>
+
+
+    <div class="help-content">
+      <div class="card" *ngIf="currentField == 'flueGasOxygen'">
+        <div class="card-header">
+          Flue Gas O<sub>2</sub>
+        </div>
+        <div class="card-block">
+          <label>Description:</label>
+          <p>DESCRITION HERE</p>
+          <label>Input:</label>
+          <p>
+            Units: <strong>UNIT HERE</strong><br> Minimum Value Allowed: <strong>MAX HERE</strong><br> Maximum Value Allowed:
+            <strong>MIN HERE</strong><br>
+          </p>
+        </div>
+      </div>
+
+      <div class="card" *ngIf="currentField == 'flueGasTemp'">
+        <div class="card-header">
+          Flue Gas Temperature
+        </div>
+        <div class="card-block">
+          <label>Description:</label>
+          <p>DESCRITION HERE</p>
+          <label>Input:</label>
+          <p>
+            Units: <strong>UNIT HERE</strong><br> Minimum Value Allowed: <strong>MAX HERE</strong><br> Maximum Value Allowed:
+            <strong>MIN HERE</strong><br>
+          </p>
+        </div>
+      </div>
+
+      <div class="card" *ngIf="currentField == 'combustionAirTemp'">
+        <div class="card-header">
+          Combustion Air Temp
+        </div>
+        <div class="card-block">
+          <label>Description:</label>
+          <p>DESCRITION HERE</p>
+          <label>Input:</label>
+          <p>
+            Units: <strong>UNIT HERE</strong><br> Minimum Value Allowed: <strong>MAX HERE</strong><br> Maximum Value Allowed:
+            <strong>MIN HERE</strong><br>
+          </p>
+        </div>
+      </div>
+
+      <div class="card" *ngIf="currentField == 'energyInput'">
+        <div class="card-header">
+          Energy Input
+        </div>
+        <div class="card-block">
+          <label>Description:</label>
+          <p>DESCRITION HERE</p>
+          <label>Input:</label>
+          <p>
+            Units: <strong>UNIT HERE</strong><br> Minimum Value Allowed: <strong>MAX HERE</strong><br> Maximum Value Allowed:
+            <strong>MIN HERE</strong><br>
+          </p>
+        </div>
+      </div>
+
+
+
+    </div>
+  </div>
+</div>

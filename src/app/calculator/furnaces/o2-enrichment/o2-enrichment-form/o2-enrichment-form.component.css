@@ -1,0 +1,97 @@
+.inline-label {
+  /*white-space: nowrap;*/
+  width: 120px;
+}
+
+.label-right {
+  /*margin-left: -30px;
+  white-space: nowrap;*/
+  width: 173px;
+  text-align: center;
+  margin-left: -11px;
+  }
+
+.label-left {
+  width: 76px;
+  text-align: center;
+  text-indent: -32px;
+  padding-left: 29px;
+  margin-left: 33px;
+}
+
+.input-size {
+  width: 150px;
+  height: 20px;
+  border-radius: 0;
+  border-color: #9c9c9c;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  padding: 2px;
+  line-height: 1;
+  font-size: 16px;
+  }
+
+.units-adj {
+  white-space: nowrap;
+  margin-left: 112%;
+  position: absolute;
+  top: 50px;
+  font-size: 14px;
+  color: #a9a9a9;
+  pointer-events: none;
+}
+
+.units-avg-heat {
+  white-space: nowrap;
+  position: absolute;
+  margin-left: 72%;
+  top: 31px;
+  font-size: 14px;
+  color: #a9a9a9;
+  pointer-events: none;
+}
+
+.units-fuel-cons {
+  white-space: nowrap;
+  position: absolute;
+  margin-left: 72%;
+  top: 50px;
+  font-size: 14px;
+  color: #a9a9a9;
+  pointer-events: none;
+}
+
+.units-flue-gas {
+  white-space: nowrap;
+  position: absolute;
+  margin-left: 92%;
+  top: 49px;
+  font-size: 14px;
+  color: #a9a9a9;
+  pointer-events: none;
+}
+
+.units-fuel-sav {
+  white-space: nowrap;
+  position: absolute;
+  margin-left: 112%;
+  top: 30px;
+  font-size: 14px;
+  color: #a9a9a9;
+  pointer-events: none;
+}
+
+.img-width {
+  width: 160%;
+  margin-left: 20%;
+  margin-top: 50%;
+}
+
+h4 {
+   font-size: 20px;
+   font-weight: bold;
+}
+
+p {
+  font-size: 16px;
+  width: 150px;
+}
