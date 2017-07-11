@@ -115,7 +115,7 @@
         (click)="toggleSave()">Save</button>
       <button class="btn btn-primary" *ngIf="currentTab == 'system-setup'" [disabled]="!getCanContinue()" (click)="continue()">Continue</button>
       
-      <button class="btn btn-primary" *ngIf="currentTab == 'explore-opportunities' || 'modify-conditions'" (click)="continue()">View Report</button>
+      <button class="btn btn-primary" *ngIf="currentTab == 'explore-opportunities' || 'modify-conditions'" (click)="goToReport()">View Report</button>
 
       <!-- <button class="btn btn-primary" *ngIf="currentTab == 'modify-conditions'" (click)="exportData()">Export</button> -->
       <!--<button class="btn btn-primary" *ngIf="currentTab == 'modify-conditions'" (click)="togglePrint()"><span class="fa fa-print"></span></button>-->

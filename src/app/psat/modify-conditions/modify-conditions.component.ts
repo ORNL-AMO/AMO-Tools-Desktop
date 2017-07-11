@@ -25,7 +25,7 @@ export class ModifyConditionsComponent implements OnInit {
   assessment: Assessment;
   @Input()
   emitPrint: boolean;
-  
+
   modifyTab: string = 'field-data';
   _modifications: Array<Modification>;
   baselineSelected: boolean = true;
@@ -53,11 +53,18 @@ export class ModifyConditionsComponent implements OnInit {
     this.currentField = 'operatingFraction';
     // let results: PsatOutputs = this.psatService.results(this.psat.inputs);
     // console.log(results)
+
+    this.psatService.changeSubTab.subscribe((val) => {
+      if (val) {
+        this.modifyTab = val;
+      }
+    })
   }
 
-  ngOnDestroy(){
+  ngOnDestroy() {
     this.compareService.baselinePSAT = null;
     this.compareService.modifiedPSAT = null;
+    this.psatService.changeSubTab.next(null);
   }
 
   save() {
@@ -159,10 +166,10 @@ export class ModifyConditionsComponent implements OnInit {
     this.save();
   }
 
-  modalOpen(){
+  modalOpen() {
     this.isModalOpen = true;
   }
-  modalClose(){
+  modalClose() {
     this.isModalOpen = false;
   }
 }

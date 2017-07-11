@@ -268,4 +268,7 @@ export class PsatComponent implements OnInit {
     this.toastyService.success(toastOptions);
   }
 
+  goToReport(){
+    this.psatService.changeSubTab.next('report');
+  }
 }

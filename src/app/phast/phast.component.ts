@@ -182,4 +182,15 @@ export class PhastComponent implements OnInit {
     }
     this.toastyService.success(toastOptions);
   }
+
+
+  addReportToast(msg: string) {
+    let toastOptions: ToastOptions = {
+      title: msg,
+      timeout: 4000,
+      showClose: true,
+      theme: 'default'
+    }
+    this.toastyService.warning(toastOptions);
+  }
 }

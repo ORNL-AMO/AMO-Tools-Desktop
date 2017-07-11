@@ -2,7 +2,7 @@
 
   <div *ngIf="assessment" class="title pull-left">
   	{{assessment.name}}
-  	<small>Last modified: Jul 4, 1776</small>
+  	<small>Last modified: {{assessment.modifiedDate | date:'medium'}}</small>
   </div>
   <a routerLink="/dashboard" class="btn-dashboard"><span>&times;</span> Back To Dashboard</a>
 
