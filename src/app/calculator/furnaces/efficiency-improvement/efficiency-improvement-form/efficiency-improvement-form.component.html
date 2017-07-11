@@ -12,7 +12,7 @@
       <label class="col-4 col-form-label" for="currentFlueGasOxygen">Flue Gas Oxygen</label>
       <div class="col-4">
         <input class="form-control" name="currentFlueGasOxygen" type="number" step="any" id="currentFlueGasOxygen" [(ngModel)]="efficiencyImprovementInputs.currentFlueGasOxygen"
-          (input)="calc()" onfocus="this.select();">
+          (input)="calc()" onfocus="this.select();" autofocus>
         <span class="units">% Dry</span>
       </div>
       <div class="col-4">

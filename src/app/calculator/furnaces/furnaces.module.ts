@@ -14,6 +14,7 @@ import { EfficiencyImprovementGraphComponent } from './efficiency-improvement/ef
 import { EnergyEquivalencyComponent } from './energy-equivalency/energy-equivalency.component';
 import { EnergyEquivalencyFormComponent } from './energy-equivalency/energy-equivalency-form/energy-equivalency-form.component';
 import { EnergyEquivalencyGraphComponent } from './energy-equivalency/energy-equivalency-graph/energy-equivalency-graph.component';
+import { EnergyEquivalencyHelpComponent } from './energy-equivalency/energy-equivalency-help/energy-equivalency-help.component';
 
 @NgModule({
   imports: [
@@ -31,7 +32,8 @@ import { EnergyEquivalencyGraphComponent } from './energy-equivalency/energy-equ
     EfficiencyImprovementGraphComponent,
     EnergyEquivalencyComponent,
     EnergyEquivalencyFormComponent,
-    EnergyEquivalencyGraphComponent
+    EnergyEquivalencyGraphComponent,
+    EnergyEquivalencyHelpComponent
   ],
   exports: [
     FurnacesComponent,

@@ -18,7 +18,8 @@ export class EnergyEquivalencyFormComponent implements OnInit {
   calculateFuel = new EventEmitter<boolean>();
   @Output('calculateElectric')
   calculateElectric = new EventEmitter<boolean>();
-
+  @Output('changeField')
+  changeField = new EventEmitter<string>();
   constructor() { }
 
   ngOnInit() {
@@ -28,5 +29,9 @@ export class EnergyEquivalencyFormComponent implements OnInit {
   }
   calcFuel() {
     this.calculateFuel.emit(true);
+  }
+
+  focusField(str: string){
+    this.changeField.emit(str);
   }
 }
