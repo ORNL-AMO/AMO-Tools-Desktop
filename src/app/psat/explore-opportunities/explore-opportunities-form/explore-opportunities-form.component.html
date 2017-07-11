@@ -4,14 +4,14 @@
   <ul>
     <li>
       <div class="checkbox">
-        <label for="general"><input type ="checkbox" id="general" value="'true'" (focus)="focusField('systemData')" [(ngModel)]="showSystemData" />
+        <label for="general"><input type ="checkbox" id="general" value="'true'" (focus)="focusField('systemData')" (change)="toggleSystemData()" [(ngModel)]="showSystemData" />
 								Adjust System Data
 							</label>
       </div>
       <ul *ngIf="showSystemData">
         <li>
           <div class="checkbox">
-            <label for="modifyCost"><input type ="checkbox" id="modifyCost" value="'true'" (focus)="focusField('modifyCost')" [(ngModel)]="showCost"/>
+            <label for="modifyCost"><input type ="checkbox" id="modifyCost" value="'true'" (focus)="focusField('modifyCost')" (change)="toggleCost()" [(ngModel)]="showCost"/>
 										Modify Cost
 									</label>
           </div>
@@ -34,7 +34,7 @@
         </li>
         <li>
           <div class="checkbox">
-            <label for="modifyFlowRate"><input type ="checkbox" id="modifyFlowRate" value="'true'" (focus)="focusField('flowRate')" [(ngModel)]="showFlowRate"/>
+            <label for="modifyFlowRate"><input type ="checkbox" id="modifyFlowRate" value="'true'" (focus)="focusField('flowRate')" (change)="toggleFlowRate()" [(ngModel)]="showFlowRate"/>
 										Modify Flow Rate
 									</label>
           </div>
@@ -57,7 +57,7 @@
         </li>
         <li>
           <div class="checkbox">
-            <label for="modifyHead"><input type ="checkbox" id="modifyHead" value="'true'" (focus)="focusField('head')" [(ngModel)]="showHead"/>
+            <label for="modifyHead"><input type ="checkbox" id="modifyHead" value="'true'" (focus)="focusField('head')" (change)="toggleHead()" [(ngModel)]="showHead"/>
 										Modify Head
 									</label>
           </div>
@@ -80,14 +80,14 @@
     </li>
     <li>
       <div class="checkbox">
-        <label for="general2"><input type ="checkbox" id="general2" value="'true'" (focus)="focusField('motorRatedData')"  [(ngModel)]="showRatedMotorData" />
+        <label for="general2"><input type ="checkbox" id="general2" value="'true'" (focus)="focusField('motorRatedData')" (change)="toggleRatedMotorData()"  [(ngModel)]="showRatedMotorData" />
 								Adjust Rated Motor Data
 							</label>
       </div>
       <ul *ngIf="showRatedMotorData">
         <li>
           <div class="checkbox">
-            <label for="modifyMotorRatedPower"><input type ="checkbox" id="modifyMotorRatedPower" value="'true'" (focus)="focusField('motorRatedPower')" [(ngModel)]="showRatedMotorPower"/>
+            <label for="modifyMotorRatedPower"><input type ="checkbox" id="modifyMotorRatedPower" value="'true'" (change)="toggleMotorRatedPower()" (focus)="focusField('motorRatedPower')" [(ngModel)]="showRatedMotorPower"/>
 										Modify Rated Motor Power
 									</label>
           </div>
@@ -110,7 +110,7 @@
         </li>
         <li>
           <div class="checkbox">
-            <label for="modifyEfficiencyClass"><input type ="checkbox" id="modifyEfficiencyClass" value="'true'" (focus)="focusField('efficiencyClass')" [(ngModel)]="showEfficiencyClass"/>
+            <label for="modifyEfficiencyClass"><input type ="checkbox" id="modifyEfficiencyClass" value="'true'" (change)="toggleEfficiencyClass()" (focus)="focusField('efficiencyClass')" [(ngModel)]="showEfficiencyClass"/>
 										Modify Efficiency Class
 									</label>
           </div>
@@ -133,7 +133,7 @@
         </li>
         <li>
           <div class="checkbox">
-            <label for="modifyMotorEfficiency"><input type ="checkbox" id="modifyMotorEfficiency" value="'true'" (focus)="focusField('motorEfficiency')" [(ngModel)]="showMotorEfficiency"/>
+            <label for="modifyMotorEfficiency"><input type ="checkbox" id="modifyMotorEfficiency" value="'true'" (change)="toggleMotorEfficiency()" (focus)="focusField('motorEfficiency')" [(ngModel)]="showMotorEfficiency"/>
 										Modify Motor Efficiency
 									</label>
           </div>
@@ -160,14 +160,14 @@
     </li>
     <li>
       <div class="checkbox">
-        <label for="general3"><input type ="checkbox" id="general3" value="'true'" (focus)="focusField('pumpData')" [(ngModel)]="showPumpData" />
+        <label for="general3"><input type ="checkbox" id="general3" value="'true'" (focus)="focusField('pumpData')" (change)="togglePumpData()" [(ngModel)]="showPumpData" />
 								Adjust Pump Data
 							</label>
       </div>
       <ul *ngIf="showPumpData">
         <li>
           <div class="checkbox">
-            <label for="modifyPumpSpeed"><input type="checkbox" id="modifyPumpSpeed" value="'true'" (focus)="focusField('pumpSpeed')" [(ngModel)]="showPumpSpeed"/>
+            <label for="modifyPumpSpeed"><input type="checkbox" id="modifyPumpSpeed" value="'true'" (focus)="focusField('pumpSpeed')" (change)="togglePumpSpeed()" [(ngModel)]="showPumpSpeed"/>
 										Modify Pump Speed
 									</label>
           </div>
@@ -191,7 +191,7 @@
         </li>
         <li>
           <div class="checkbox">
-            <label for="modifyPumpType"><input type="checkbox" id="modifyPumpType" value="'true'" (focus)="focusField('pumpType')" [(ngModel)]="showPumpType"/>
+            <label for="modifyPumpType"><input type="checkbox" id="modifyPumpType" value="'true'" (focus)="focusField('pumpType')" (change)="togglePumpType()" [(ngModel)]="showPumpType"/>
 										Modify Pump Type
 									</label>
           </div>
@@ -212,7 +212,7 @@
         </li>
         <li>
           <div class="checkbox">
-            <label for="modifyPumpSpecified"><input type="checkbox" id="modifyPumpSpecified" value="'true'" (focus)="focusField('pumpSpecified')" [(ngModel)]="showPumpSpecified"/>
+            <label for="modifyPumpSpecified"><input type="checkbox" id="modifyPumpSpecified" value="'true'" (focus)="focusField('pumpSpecified')" (change)="togglePumpSpecified()" [(ngModel)]="showPumpSpecified"/>
 										Modify Pump Specified Efficiency
 									</label>
           </div>
