@@ -3,7 +3,10 @@
     <div class="help-header">
 
       <h3>Energy Equivalency Calculater Help</h3>
-      <p>Description</p>
+      <p>
+        Provides calculations for converting values of energy input requirements when the heat source is changed from
+        fuel-firing (Btu/hr or kJ/hr) to electricity (kW), or vice versa.
+      </p>
       <p class="text-muted">
         <span class="fa fa-youtube-play"></span> Watch tutorial on entering atmosphere loss data.
       </p>
@@ -18,12 +21,15 @@
           Fuel Fired Efficiency (Electrical)
         </div>
         <div class="card-block">
-          <label>Description:</label>
-          <p>DESCRITION HERE</p>
-          <label>Input:</label>
+          <label><u>Description:</u></label>
           <p>
-            Units: <strong>UNIT HERE</strong><br> Minimum Value Allowed: <strong>MAX HERE</strong><br> Maximum Value Allowed:
-            <strong>MIN HERE</strong><br>
+            Furnace efficiency of the baseline (fuel-fired furnace).
+          </p>
+          <label><u>Input:</u></label>
+          <p>
+            Units: <strong>Percentage (%)</strong><br>
+            Minimum Value Allowed: <strong>0</strong><br>
+            Maximum Value Allowed: <strong>100</strong><br>
           </p>
         </div>
       </div>
@@ -34,12 +40,15 @@
           Electrical Heated Efficiency (Electrical)
         </div>
         <div class="card-block">
-          <label>Description:</label>
-          <p>DESCRITION HERE</p>
-          <label>Input:</label>
+          <label><u>Description:</u></label>
           <p>
-            Units: <strong>UNIT HERE</strong><br> Minimum Value Allowed: <strong>MAX HERE</strong><br> Maximum Value Allowed:
-            <strong>MIN HERE</strong><br>
+            Furnace efficiency of the alternate (electric furnace).
+          </p>
+          <label><u>Input:</u></label>
+          <p>
+            Units: <strong>Percentage (%)</strong><br>
+            Minimum Value Allowed: <strong>0</strong><br>
+            Maximum Value Allowed: <strong>100</strong><br>
           </p>
         </div>
       </div>
@@ -49,12 +58,15 @@
           Fuel Fired Heat Input (Electrical)
         </div>
         <div class="card-block">
-          <label>Description:</label>
-          <p>DESCRITION HERE</p>
-          <label>Input:</label>
+          <label><u>Description:</u></label>
           <p>
-            Units: <strong>UNIT HERE</strong><br> Minimum Value Allowed: <strong>MAX HERE</strong><br> Maximum Value Allowed:
-            <strong>MIN HERE</strong><br>
+            Required heat input of fuel-fired equipment (MMBTU/hr or GJ/hr).
+          </p>
+          <label><u>Input:</u></label>
+          <p>
+            Units: <strong>MMBTU/hr or GJ/hr</strong><br>
+            Minimum Value Allowed: <strong>0</strong><br>
+            Maximum Value Allowed: <strong></strong><br>
           </p>
         </div>
       </div>
@@ -64,27 +76,33 @@
           Electrically Heated Efficiency (Fuel)
         </div>
         <div class="card-block">
-          <label>Description:</label>
-          <p>DESCRITION HERE</p>
-          <label>Input:</label>
+          <label><u>Description:</u></label>
           <p>
-            Units: <strong>UNIT HERE</strong><br> Minimum Value Allowed: <strong>MAX HERE</strong><br> Maximum Value Allowed:
-            <strong>MIN HERE</strong><br>
+            Furnace efficiency of the baseline (electric furnace)
+          </p>
+          <label><u>Input:</u></label>
+          <p>
+            Units: <strong>Percentage (%)</strong><br>
+            Minimum Value Allowed: <strong>0</strong><br>
+            Maximum Value Allowed: <strong>100</strong><br>
           </p>
         </div>
       </div>
 
       <div class="card" *ngIf="currentField == 'fuelFiredEfficiencyFuel'">
         <div class="card-header">
-          Fuel Fired Efficiency (Fuel)
+          Fuel-Fired Efficiency (Fuel)
         </div>
         <div class="card-block">
-          <label>Description:</label>
-          <p>DESCRITION HERE</p>
-          <label>Input:</label>
+          <label><u>Description:</u></label>
           <p>
-            Units: <strong>UNIT HERE</strong><br> Minimum Value Allowed: <strong>MAX HERE</strong><br> Maximum Value Allowed:
-            <strong>MIN HERE</strong><br>
+            Furnace efficiency of the alternate (fuel-fired furance)
+          </p>
+          <label><u>Input:</u></label>
+          <p>
+            Units: <strong>Percentage (%)</strong><br>
+            Minimum Value Allowed: <strong>0</strong><br>
+            Maximum Value Allowed: <strong>100</strong><br>
           </p>
         </div>
       </div>
@@ -94,12 +112,15 @@
           Electrical Heat Input (Fuel)
         </div>
         <div class="card-block">
-          <label>Description:</label>
-          <p>DESCRITION HERE</p>
-          <label>Input:</label>
+          <label><u>Description:</u></label>
           <p>
-            Units: <strong>UNIT HERE</strong><br> Minimum Value Allowed: <strong>MAX HERE</strong><br> Maximum Value Allowed:
-            <strong>MIN HERE</strong><br>
+            Required heat input for electrically heated equipment.
+          </p>
+          <label><u>Input:</u></label>
+          <p>
+            Units: <strong>Kilowatt (kW)</strong><br>
+            Minimum Value Allowed: <strong>0</strong><br>
+            Maximum Value Allowed: <strong></strong><br>
           </p>
         </div>
       </div>
