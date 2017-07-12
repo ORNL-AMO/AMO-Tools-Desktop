@@ -12,7 +12,9 @@ export class HeadToolSuctionFormComponent implements OnInit {
   calculate = new EventEmitter<boolean>();
   @Input()
   settings: Settings;
-
+  @Input()
+  inAssessment: boolean;
+  
   smallUnit: string;
 
   constructor() { }

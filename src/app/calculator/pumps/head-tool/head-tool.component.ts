@@ -35,7 +35,7 @@ export class HeadToolComponent implements OnInit {
 
   headToolForm: any;
   headToolSuctionForm: any;
-  headToolType: string = "Suction tank elevation, gas space pressure, and discharged line pressure";
+  headToolType: string = "Suction tank elevation";
   tabSelect: string = 'results';
   showSettings: boolean = false;
   settingsForm: any;

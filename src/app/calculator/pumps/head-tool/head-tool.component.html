@@ -1,33 +1,33 @@
 <div class="pump-head">
 
-  <div class="row" *ngIf="settings && !showSettings">
+  <div class="row align-items-center" *ngIf="settings && !showSettings">
     <div class="col-7">
 
       <select class="form-control" id="type" [(ngModel)]="headToolType">
-          <option>Suction tank elevation, gas space pressure, and discharged line pressure</option>
-          <option>Suction gauge elevation, gas space pressure, and discharged line pressure</option>
+          <option>Suction tank elevation</option>
+          <option>Suction gauge elevation</option>
       </select>
 
       <div class="units-of-measure" *ngIf="settings && !inAssessment">
         <p><strong>Units of Measure:</strong> {{settings.pressureMeasurement}}, {{settings.flowMeasurement}}, {{settings.distanceMeasurement}} <a (click)="editSettings()">change</a></p>
       </div>
 
-      <div *ngIf="headToolType == 'Suction tank elevation, gas space pressure, and discharged line pressure'">
+      <div *ngIf="headToolType == 'Suction tank elevation'">
         <div class="head-diagram text-center">
           <img class="img-fluid mx-auto d-block" aria-describedby="headDiagramHelp" src="assets/images/img-tank-elevation-head.png">
           <small id="headDiagramHelp" class="text-muted text-help">K<sub>s</sub> represents all suction losses from the tank to the pump</small><br>
           <small id="headDiagramHelp" class="text-muted text-help">K<sub>d</sub> represents all discharge losses from the pump to the gauge P<sub>d</sub></small>
         </div>
-        <app-head-tool-suction-form [(headToolSuctionForm)]="headToolSuctionForm" [settings]="settings" (calculate)="calculateHeadToolSuctionTank()"></app-head-tool-suction-form>
+        <app-head-tool-suction-form [(headToolSuctionForm)]="headToolSuctionForm" [settings]="settings" (calculate)="calculateHeadToolSuctionTank()" [inAssessment]="inAssessment"></app-head-tool-suction-form>
       </div>
 
-      <div *ngIf="headToolType == 'Suction gauge elevation, gas space pressure, and discharged line pressure'">
+      <div *ngIf="headToolType == 'Suction gauge elevation'">
         <div class="head-diagram text-center">
           <img class="img-fluid mx-auto d-block" aria-describedby="headDiagramHelp" src="assets/images/img-suction-discharge-head.png">
           <small id="headDiagramHelp" class="text-muted text-help">K<sub>s</sub> represents all suction losses from the tank to the pump</small><br>
           <small id="headDiagramHelp" class="text-muted text-help">K<sub>d</sub> represents all discharge losses from the pump to the gauge P<sub>d</sub></small>
         </div>
-        <app-head-tool-form [(headToolForm)]="headToolForm" [settings]="settings" (calculate)="calculateHeadTool()"></app-head-tool-form>
+        <app-head-tool-form [(headToolForm)]="headToolForm" [settings]="settings" (calculate)="calculateHeadTool()" [inAssessment]="inAssessment"></app-head-tool-form>
       </div>
 
     </div><!-- End .col-7 -->

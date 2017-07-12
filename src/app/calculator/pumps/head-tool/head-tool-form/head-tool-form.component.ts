@@ -13,6 +13,8 @@ export class HeadToolFormComponent implements OnInit {
   calculate = new EventEmitter<boolean>();
   @Input()
   settings: Settings;
+  @Input()
+  inAssessment: boolean;
   smallUnit: string;
   constructor() { }
 
