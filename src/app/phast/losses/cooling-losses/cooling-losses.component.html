@@ -25,17 +25,15 @@
       <div class="form-group">
         <label class="small" for="coolingMedium">Cooling Medium</label>
         <select class="form-control" id="coolingMedium" [(ngModel)]="loss.coolingMedium" [disabled]="!baselineSelected" (focus)="changeField('coolingMedium')">
-          <option>Air</option>
-          <option>Water</option>
-          <option>Other Gas</option>
-          <option>Other Liquid</option>
+          <option>Gas</option>
+          <option>Liquid</option>
         </select>
       </div>
-      <app-water-cooling-losses-form (changeField)="changeField($event)" *ngIf="loss.coolingMedium == 'Water'" [(lossesForm)]="loss.waterCoolingForm"
-        (calculate)="calculate(loss)" [baselineSelected]="baselineSelected" (saveEmit)="saveLosses()" [lossIndex]="lossIndex"></app-water-cooling-losses-form>
-      <app-liquid-cooling-losses-form (changeField)="changeField($event)" *ngIf="loss.coolingMedium == 'Other Liquid'" [(lossesForm)]="loss.liquidCoolingForm"
+      <!--<app-water-cooling-losses-form (changeField)="changeField($event)" *ngIf="loss.coolingMedium == 'Water'" [(lossesForm)]="loss.waterCoolingForm"
+        (calculate)="calculate(loss)" [baselineSelected]="baselineSelected" (saveEmit)="saveLosses()" [lossIndex]="lossIndex"></app-water-cooling-losses-form>-->
+      <app-liquid-cooling-losses-form (changeField)="changeField($event)" *ngIf="loss.coolingMedium == 'Liquid'" [(lossesForm)]="loss.liquidCoolingForm"
         (calculate)="calculate(loss)" [baselineSelected]="baselineSelected" (saveEmit)="saveLosses()" [lossIndex]="lossIndex"></app-liquid-cooling-losses-form>
-      <app-gas-cooling-losses-form (changeField)="changeField($event)" *ngIf="loss.coolingMedium == 'Other Gas' || loss.coolingMedium == 'Air'"
+      <app-gas-cooling-losses-form (changeField)="changeField($event)" *ngIf="loss.coolingMedium == 'Gas'"
         [(lossesForm)]="loss.gasCoolingForm" (calculate)="calculate(loss)" [baselineSelected]="baselineSelected" (saveEmit)="saveLosses()"
         [lossIndex]="lossIndex"></app-gas-cooling-losses-form>
     </div>

@@ -157,7 +157,7 @@ export const MockDirectory: Directory = {
           ],
           coolingLosses: [
             {
-              coolingLossType: 'Other Gas',
+              coolingLossType: 'Gas',
               gasCoolingLoss: {
                 flowRate: 2500.0,
                 initialTemperature: 80.0,
@@ -167,7 +167,7 @@ export const MockDirectory: Directory = {
               }
             },
             {
-              coolingLossType: 'Other Gas',
+              coolingLossType: 'Gas',
               gasCoolingLoss: {
                 flowRate: 600.0,
                 initialTemperature: 80.0,
@@ -177,7 +177,7 @@ export const MockDirectory: Directory = {
               }
             },
             {
-              coolingLossType: 'Other Liquid',
+              coolingLossType: 'Liquid',
               liquidCoolingLoss: {
                 flowRate: 100.0,
                 density: 9.35,
@@ -187,15 +187,15 @@ export const MockDirectory: Directory = {
                 correctionFactor: 1.0
               }
             },
-            {
-              coolingLossType: 'Water',
-              waterCoolingLoss: {
-                flowRate: 100.0,
-                initialTemperature: 80.0,
-                outletTemperature: 120.0,
-                correctionFactor: 1.0
-              }
-            }
+            // {
+            //   coolingLossType: 'Water',
+            //   waterCoolingLoss: {
+            //     flowRate: 100.0,
+            //     initialTemperature: 80.0,
+            //     outletTemperature: 120.0,
+            //     correctionFactor: 1.0
+            //   }
+            // }
           ],
           fixtureLosses: [
             {
