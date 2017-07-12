@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, EventEmitter, Output, ViewChild, ElementRef, SimpleChanges } from '@angular/core';
 import { WindowRefService } from '../../../../indexedDb/window-ref.service';
 import { FixtureLossesCompareService } from "../fixture-losses-compare.service";
+import { SuiteDbService } from '../../../../suiteDb/suite-db.service';
 @Component({
   selector: 'app-fixture-losses-form',
   templateUrl: './fixture-losses-form.component.html',
@@ -26,7 +27,8 @@ export class FixtureLossesFormComponent implements OnInit {
 
   firstChange: boolean = true;
   counter: any;
-  constructor(private windowRefService: WindowRefService, private fixtureLossesCompareService: FixtureLossesCompareService) { }
+  materials: Array<any>;
+  constructor(private windowRefService: WindowRefService, private fixtureLossesCompareService: FixtureLossesCompareService, private suiteDbService: SuiteDbService) { }
 
   ngOnChanges(changes: SimpleChanges) {
     if (!this.firstChange) {
@@ -40,7 +42,9 @@ export class FixtureLossesFormComponent implements OnInit {
     }
   }
 
-  ngOnInit() { }
+  ngOnInit() { 
+    this.materials = this.suiteDbService.selectSolidLoadChargeMaterials();
+  }
 
   ngAfterViewInit() {
     if (!this.baselineSelected) {
@@ -75,6 +79,14 @@ export class FixtureLossesFormComponent implements OnInit {
 
   emitSave() {
     this.saveEmit.emit(true);
+  }
+
+  setSpecificHeat(){
+    let tmpMaterial = this.suiteDbService.selectSolidLoadChargeMaterialById(this.lossesForm.value.materialName);
+    this.lossesForm.patchValue({
+      specificHeat: tmpMaterial.specificHeatSolid
+    })
+    this.startSavePolling();
   }
 
   startSavePolling() {

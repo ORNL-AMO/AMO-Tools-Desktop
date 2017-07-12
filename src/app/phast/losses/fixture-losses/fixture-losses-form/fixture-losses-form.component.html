@@ -2,10 +2,9 @@
   <div class="form-section">
     <div class="form-group">
       <label class="small" for="materialName">Material Name</label>
-      <select name="{{'materialName_'+lossIndex}}" class="form-control" formControlName="materialName" id="materialName" (change)="startSavePolling()"
+      <select name="{{'materialName_'+lossIndex}}" class="form-control" formControlName="materialName" id="materialName" (change)="setSpecificHeat()"
         (focus)="focusField('materialName')">
-        <option>Material 1</option>
-        <option>Material 2</option>
+        <option *ngFor="let material of materials" [ngValue]="material.id">{{material.substance}}</option>
       </select>
     </div>
 
