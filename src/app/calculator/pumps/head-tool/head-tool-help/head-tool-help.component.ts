@@ -10,9 +10,13 @@ export class HeadToolHelpComponent implements OnInit {
   currentField: string;
   @Input()
   headToolType: string;
+  dischargeLineLossCoefficientsExample: boolean = false;
   constructor() { }
 
   ngOnInit() {
   }
 
+  showExample(bool: boolean) {
+    bool != bool;
+  }
 }
