@@ -848,7 +848,6 @@ Calculators
 ================================================ */
 .pump-head select.form-control:not([size]):not([multiple]) {
   width: auto;
-  height: 42px;
   margin-bottom: 20px;
 }
 .units-of-measure {

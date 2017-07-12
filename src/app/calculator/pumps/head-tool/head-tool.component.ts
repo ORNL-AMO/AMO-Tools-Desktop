@@ -33,9 +33,11 @@ export class HeadToolComponent implements OnInit {
     pumpHead: 0.0
   }
 
+  currentField: string;
+
   headToolForm: any;
   headToolSuctionForm: any;
-  headToolType: string = "Suction tank elevation, gas space pressure, and discharged line pressure";
+  headToolType: string = "Suction tank elevation";
   tabSelect: string = 'results';
   showSettings: boolean = false;
   settingsForm: any;
@@ -94,12 +96,6 @@ export class HeadToolComponent implements OnInit {
   }
 
   save() {
-    // this.headToolResults.differentialElevationHead = this.results.differentialElevationHead;
-    // this.headToolResults.differentialPressureHead = this.results.differentialPressureHead;
-    // this.headToolResults.differentialVelocityHead = this.results.differentialVelocityHead;
-    // this.headToolResults.estimatedSuctionFrictionHead = this.results.estimatedSuctionFrictionHead;
-    // this.headToolResults.estimatedDischargeFrictionHead = this.results.estimatedDischargeFrictionHead;
-    // this.headToolResults.pumpHead = this.results.pumpHead;
     this.psat.inputs.head = this.results.pumpHead;
     this.closeTool();
   }
@@ -190,6 +186,10 @@ export class HeadToolComponent implements OnInit {
       'specificGravity': [1, Validators.required],
       'flowRate': [this.convertUnitsService.value(2000).from('gpm').to(settings.flowMeasurement), Validators.required],
     })
+  }
+
+  changeField(str:string){
+    this.currentField = str;
   }
 
 }

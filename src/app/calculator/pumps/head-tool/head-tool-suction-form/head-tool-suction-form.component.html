@@ -1,86 +1,24 @@
-
-<div class="wrapper">
-  <div class="row">
-    <div class="col-6">
-      <div class="form">
-        <form [formGroup]="headToolSuctionForm">
-          <div class="form-group inline-label">
-            <label class="small" for="suctionPipeDiameter">Suction pipe diameter (ID)</label>
-              <input type="number" min="0.1" class="form-control" formControlName="suctionPipeDiameter" id="suctionPipeDiameter" (keyup)="calc()" onfocus="this.select();" autofocus>
-              <span class="units">{{smallUnit}}</span>
-          </div>
-
-
-          <div class="form-group inline-label">
-            <label class="small" for="suctionTankGasOverPressure">Suction tank gas overpressure (Pg)</label>
-            <input type="number" min="0" class="form-control" formControlName="suctionTankGasOverPressure" id="suctionTankGasOverPressure" (keyup)="calc()" onfocus="this.select();">
-               <span class="units">
-                  {{settings.pressureMeasurement}}
-              </span>
-          </div>
-
-
-          <div class="form-group inline-label">
-            <label class="small" for="suctionTankFluidSurfaceElevation">Suction tank fluid surface elevation (Zs)</label>
-            <input type="number" min="0" class="form-control" formControlName="suctionTankFluidSurfaceElevation" id="suctionTankFluidSurfaceElevation"
-              (keyup)="calc()" onfocus="this.select();">
-            <span class="units">
-                  {{settings.distanceMeasurement}}
-              </span>
-          </div>
-
-
-          <div class="form-group inline-label">
-            <label class="small" for="suctionLineLossCoefficients">Suction line loss coefficients (Ks)</label>
-            <input type="number" min="0" class="form-control" formControlName="suctionLineLossCoefficients" id="suctionLineLossCoefficients"
-              (keyup)="calc()" onfocus="this.select();">
-          </div>
-
-          <div class="form-group inline-label">
-            <label class="small" for="specificGravity">Fluid Specific Gravity</label>
-            <input type="number" min="0" class="form-control" formControlName="specificGravity" id="specificGravity" (keyup)="calc()" onfocus="this.select();">
-          </div>
-        </form>
-      </div>
-    </div>
-
-      <div class="col-6">
-        <div class="form">
+<div class="form">
+  <div [ngClass]="{'wrapper': !inAssessment}">
+    <div class="row">
+      <div class="col-lg-6 col-md-12 col-sm-12">
+        <div class="form-section">
           <form [formGroup]="headToolSuctionForm">
-            <div class="form-group inline-label">
-              <label class="small" for="dischargePipeDiameter">Discharge pipe diameter (ID)</label>
-              <input type="number" min="0.1" class="form-control" formControlName="dischargePipeDiameter" id="dischargePipeDiameter" (keyup)="calc()" onfocus="this.select();">
-              <span class="units">
-                  {{smallUnit}}
-                </span>
+            <div class="form-group" [ngClass]="{'inline-label': !inAssessment}">
+              <label class="small" for="specificGravity">Fluid Specific Gravity</label>
+              <input type="number" min="0" class="form-control" formControlName="specificGravity" id="specificGravity" (keyup)="calc()"
+                onfocus="this.select();" (focus)="focusField('specificGravity')" autofocus>
             </div>
+          </form>
+        </div>
+      </div>
 
-            <div class="form-group inline-label">
-              <label class="small" for="dischargeGaugePressure">Discharge gauge pressure (Pd)</label>
-              <input type="number" min="0" class="form-control" formControlName="dischargeGaugePressure" id="dischargeGaugePressure" (keyup)="calc()" onfocus="this.select();">
-              <span class="units">
-                    {{settings.pressureMeasurement}}
-                </span>
-            </div>
-
-            <div class="form-group inline-label">
-              <label class="small" for="dischargeGaugeElevation">Discharge gauge elevation (Zd)</label>
-              <input type="number" min="0" class="form-control" formControlName="dischargeGaugeElevation" id="dischargeGaugeElevation" (keyup)="calc()" onfocus="this.select();">
-              <span class="units">
-                    {{settings.distanceMeasurement}}
-              </span>
-            </div>
-
-            <div class="form-group inline-label">
-              <label class="small" for="dischargeLineLossCoefficients">Discharge line loss coefficients (Kd)</label>
-              <input type="number" min="0" class="form-control" formControlName="dischargeLineLossCoefficients" id="dischargeLineLossCoefficients"
-                (keyup)="calc()" onfocus="this.select();">
-            </div>
-
-            <div class="form-group inline-label">
+      <div class="col-lg-6 col-md-12 col-sm-12">
+        <div class="form-section">
+          <form [formGroup]="headToolSuctionForm">
+            <div class="form-group" [ngClass]="{'inline-label': !inAssessment}">
               <label class="small" for="flowRate">Flow Rate</label>
-
-              <input type="number" min="0" class="form-control" formControlName="flowRate" id="flowRate" (keyup)="calc()" onfocus="this.select();">
+              <input type="number" min="0" class="form-control" formControlName="flowRate" id="flowRate" (keyup)="calc()" onfocus="this.select();" (focus)="focusField('flowRate')">
               <span class="units">
                   {{settings.flowMeasurement}}
               </span>
@@ -88,5 +26,90 @@
           </form>
         </div>
       </div>
+    </div>
+
+
+    <div class="row">
+      <div class="col-lg-6 col-md-12 col-sm-12">
+        <div class="form-section">
+          <form [formGroup]="headToolSuctionForm">
+            <label class="group-label">Suction</label>
+            <div class="form-group" [ngClass]="{'inline-label': !inAssessment}">
+              <label class="small" for="suctionPipeDiameter">Pipe diameter (ID)</label>
+              <input type="number" min="0.1" class="form-control" formControlName="suctionPipeDiameter" id="suctionPipeDiameter" (keyup)="calc()"
+                onfocus="this.select();" (focus)="focusField('suctionPipeDiameter')">
+              <span class="units">{{smallUnit}}</span>
+            </div>
+
+
+            <div class="form-group" [ngClass]="{'inline-label': !inAssessment}">
+              <label class="small" for="suctionTankGasOverPressure">Tank gas overpressure (Pg)</label>
+              <input type="number" min="0" class="form-control" formControlName="suctionTankGasOverPressure" id="suctionTankGasOverPressure"
+                (keyup)="calc()" onfocus="this.select();" (focus)="focusField('suctionTankGasOverPressure')">
+              <span class="units">
+                  {{settings.pressureMeasurement}}
+              </span>
+            </div>
+
+
+            <div class="form-group" [ngClass]="{'inline-label': !inAssessment}">
+              <label class="small" for="suctionTankFluidSurfaceElevation">Tank fluid surface elevation (Zs)</label>
+              <input type="number" min="0" class="form-control" formControlName="suctionTankFluidSurfaceElevation" id="suctionTankFluidSurfaceElevation"
+                (keyup)="calc()" onfocus="this.select();" (focus)="focusField('suctionTankFluidSurfaceElevation')">
+              <span class="units">
+                  {{settings.distanceMeasurement}}
+              </span>
+            </div>
+
+
+            <div class="form-group" [ngClass]="{'inline-label': !inAssessment}">
+              <label class="small" for="suctionLineLossCoefficients">Line loss coefficients (Ks)</label>
+              <input type="number" min="0" class="form-control" formControlName="suctionLineLossCoefficients" id="suctionLineLossCoefficients"
+                (keyup)="calc()" onfocus="this.select();" (focus)="focusField('suctionLineLossCoefficients')">
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <div class="col-lg-6 col-md-12 col-sm-12">
+        <div class="form-section">
+          <form [formGroup]="headToolSuctionForm">
+            <label class="group-label">Discharge</label>
+            <div class="form-group" [ngClass]="{'inline-label': !inAssessment}">
+              <label class="small" for="dischargePipeDiameter">Pipe diameter (ID)</label>
+              <input type="number" min="0.1" class="form-control" formControlName="dischargePipeDiameter" id="dischargePipeDiameter" (keyup)="calc()"
+                onfocus="this.select();" (focus)="focusField('dischargePipeDiameter')">
+              <span class="units">
+                  {{smallUnit}}
+                </span>
+            </div>
+
+            <div class="form-group" [ngClass]="{'inline-label': !inAssessment}">
+              <label class="small" for="dischargeGaugePressure">Gauge pressure (Pd)</label>
+              <input type="number" min="0" class="form-control" formControlName="dischargeGaugePressure" id="dischargeGaugePressure" (keyup)="calc()"
+                onfocus="this.select();" (focus)="focusField('dischargeGaugePressure')">
+              <span class="units">
+                    {{settings.pressureMeasurement}}
+                </span>
+            </div>
+
+            <div class="form-group" [ngClass]="{'inline-label': !inAssessment}">
+              <label class="small" for="dischargeGaugeElevation">Gauge elevation (Zd)</label>
+              <input type="number" min="0" class="form-control" formControlName="dischargeGaugeElevation" id="dischargeGaugeElevation"
+                (keyup)="calc()" onfocus="this.select();" (focus)="focusField('dischargeGaugeElevation')">
+              <span class="units">
+                    {{settings.distanceMeasurement}}
+              </span>
+            </div>
+
+            <div class="form-group" [ngClass]="{'inline-label': !inAssessment}">
+              <label class="small" for="dischargeLineLossCoefficients">Line loss coefficients (Kd)</label>
+              <input type="number" min="0" class="form-control" formControlName="dischargeLineLossCoefficients" id="dischargeLineLossCoefficients"
+                (keyup)="calc()" onfocus="this.select();" (focus)="focusField('dischargeLineLossCoefficients')">
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
