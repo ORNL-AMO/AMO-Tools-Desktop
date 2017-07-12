@@ -56,8 +56,8 @@ export class CoolingLossesService {
 
   initLiquidCoolingForm() {
     return this.formBuilder.group({
-      'avgSpecificHeat': ['', Validators.required],
-      'density': ['', Validators.required],
+      'avgSpecificHeat': [1, Validators.required],
+      'density': [62.35013, Validators.required],
       'liquidFlow': ['', Validators.required],
       'inletTemp': ['', Validators.required],
       'outletTemp': ['', Validators.required],
@@ -78,7 +78,7 @@ export class CoolingLossesService {
 
   initLiquidLossFromForm(form: any): CoolingLoss {
     let tmpLoss: CoolingLoss = {
-      coolingLossType: 'Other Liquid',
+      coolingLossType: 'Liquid',
       liquidCoolingLoss: {
         flowRate: form.value.liquidFlow,
         density: form.value.density,
@@ -93,7 +93,7 @@ export class CoolingLossesService {
 
   initGasCoolingForm() {
     return this.formBuilder.group({
-      'avgSpecificHeat': ['', Validators.required],
+      'avgSpecificHeat': [.2371, Validators.required],
       'gasFlow': ['', Validators.required],
       'inletTemp': ['', Validators.required],
       'outletTemp': ['', Validators.required],
@@ -113,7 +113,7 @@ export class CoolingLossesService {
 
   initGasLossFromForm(form: any): CoolingLoss {
     let tmpLoss: CoolingLoss = {
-      coolingLossType: 'Other Gas',
+      coolingLossType: 'Gas',
       gasCoolingLoss: {
         flowRate: form.value.gasFlow,
         initialTemperature: form.value.inletTemp,
