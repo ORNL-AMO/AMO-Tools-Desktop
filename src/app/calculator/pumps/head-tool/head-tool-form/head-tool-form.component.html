@@ -7,7 +7,7 @@
             <div class="form-group" [ngClass]="{'inline-label': !inAssessment}">
               <label class="small" for="specificGravity">Fluid Specific Gravity</label>
               <input type="number" min="0" step="any" class="form-control" formControlName="specificGravity" id="specificGravity" (keyup)="calc()"
-                onfocus="this.select();" (focus)="focusField('specificGravity')" autofocus>
+                onfocus="this.select();" (focus)="focusField('specificGravity')">
             </div>
           </form>
         </div>

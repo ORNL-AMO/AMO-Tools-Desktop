@@ -33,7 +33,7 @@ export class HeadToolComponent implements OnInit {
     pumpHead: 0.0
   }
 
-  currentField: string;
+  currentField: string = 'headToolType';
 
   headToolForm: any;
   headToolSuctionForm: any;
