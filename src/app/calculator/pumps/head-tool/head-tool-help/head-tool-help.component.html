@@ -1,4 +1,4 @@
-<div class="help-panel">
+<!--<div class="help-panel">
   <div class="help-content">
     <div class="card">
       <div class="card-block">
@@ -16,6 +16,327 @@
           4th power, or 32, The reason for this 4th power scaling is that the velocity varies with the square of the pipe
           diameter, and the velocity head (to which the loss coefficients apply) is proportional to the velocity squared.
         </p>
+      </div>
+    </div>
+  </div>
+</div>-->
+<div class="help-panel">
+  <div class="help-header">
+
+    <h3>Given a measured pressure, elevation, flow rate, and line size data calculate the head for the pump.</h3>
+    <p class="text-muted">
+      <span class="fa fa-youtube-play"></span> Watch tutorial on gathering field data.
+    </p>
+
+  </div>
+
+  <div class="help-content">
+
+    <!--SUCTION TANK ELEVATION-->
+    <div *ngIf="headToolType == 'Suction tank elevation'">
+      <div class="card" *ngIf="currentField == 'specificGravity'">
+        <div class="card-header">
+          Specific Gravity
+        </div>
+        <div class="card-block small">
+          <label><u><strong>Description</strong></u></label>
+          <p>
+            Destipion here...
+          </p>
+          <label><u><strong>Input</strong></u></label>
+          <p>
+            Minimum Value Allowed: <strong>0</strong><br> Maximum Value Allowed: <strong>1</strong><br>
+          </p>
+        </div>
+      </div>
+      <div class="card" *ngIf="currentField == 'flowRate'">
+        <div class="card-header">
+          Flow Rate
+        </div>
+        <div class="card-block small">
+          <label><u><strong>Description</strong></u></label>
+          <p>
+            Destipion here...
+          </p>
+          <label><u><strong>Input</strong></u></label>
+          <p>
+            Minimum Value Allowed: <strong>0</strong><br> Maximum Value Allowed: <strong>1</strong><br>
+          </p>
+        </div>
+      </div>
+      <div class="card" *ngIf="currentField == 'suctionPipeDiameter'">
+        <div class="card-header">
+          Suction Pipe Diameter (ID)
+        </div>
+        <div class="card-block small">
+          <label><u><strong>Description</strong></u></label>
+          <p>
+            Destipion here...
+          </p>
+          <label><u><strong>Input</strong></u></label>
+          <p>
+            Minimum Value Allowed: <strong>0</strong><br> Maximum Value Allowed: <strong>1</strong><br>
+          </p>
+        </div>
+      </div>
+      <div class="card" *ngIf="currentField == 'suctionTankGasOverPressure'">
+        <div class="card-header">
+          Suction Tank gas overpressure (Pg)
+        </div>
+        <div class="card-block small">
+          <label><u><strong>Description</strong></u></label>
+          <p>
+            Destipion here...
+          </p>
+          <label><u><strong>Input</strong></u></label>
+          <p>
+            Minimum Value Allowed: <strong>0</strong><br> Maximum Value Allowed: <strong>1</strong><br>
+          </p>
+        </div>
+      </div>
+      <div class="card" *ngIf="currentField == 'suctionTankFluidSurfaceElevation'">
+        <div class="card-header">
+          Suction Tank fluid surface elevation (Zs)
+        </div>
+        <div class="card-block small">
+          <label><u><strong>Description</strong></u></label>
+          <p>
+            Destipion here...
+          </p>
+          <label><u><strong>Input</strong></u></label>
+          <p>
+            Minimum Value Allowed: <strong>0</strong><br> Maximum Value Allowed: <strong>1</strong><br>
+          </p>
+        </div>
+      </div>
+      <div class="card" *ngIf="currentField == 'suctionLineLossCoefficients'">
+        <div class="card-header">
+          Suction Line loss coefficients (Ks)
+        </div>
+        <div class="card-block small">
+          <label><u><strong>Description</strong></u></label>
+          <p>
+            Destipion here...
+          </p>
+          <label><u><strong>Input</strong></u></label>
+          <p>
+            Minimum Value Allowed: <strong>0</strong><br> Maximum Value Allowed: <strong>1</strong><br>
+          </p>
+        </div>
+      </div>
+      <div class="card" *ngIf="currentField == 'dischargePipeDiameter'">
+        <div class="card-header">
+          Discharge Pipe diameter (ID)
+        </div>
+        <div class="card-block small">
+          <label><u><strong>Description</strong></u></label>
+          <p>
+            Destipion here...
+          </p>
+          <label><u><strong>Input</strong></u></label>
+          <p>
+            Minimum Value Allowed: <strong>0</strong><br> Maximum Value Allowed: <strong>1</strong><br>
+          </p>
+        </div>
+      </div>
+      <div class="card" *ngIf="currentField == 'dischargeGaugePressure'">
+        <div class="card-header">
+          Discharge Gauge pressure (Pd)
+        </div>
+        <div class="card-block small">
+          <label><u><strong>Description</strong></u></label>
+          <p>
+            Destipion here...
+          </p>
+          <label><u><strong>Input</strong></u></label>
+          <p>
+            Minimum Value Allowed: <strong>0</strong><br> Maximum Value Allowed: <strong>1</strong><br>
+          </p>
+        </div>
+      </div>
+      <div class="card" *ngIf="currentField == 'dischargeGaugeElevation'">
+        <div class="card-header">
+          Discharge Gauge elevation (Zd)
+        </div>
+        <div class="card-block small">
+          <label><u><strong>Description</strong></u></label>
+          <p>
+            Destipion here...
+          </p>
+          <label><u><strong>Input</strong></u></label>
+          <p>
+            Minimum Value Allowed: <strong>0</strong><br> Maximum Value Allowed: <strong>1</strong><br>
+          </p>
+        </div>
+      </div>
+      <div class="card" *ngIf="currentField == 'dischargeLineLossCoefficients'">
+        <div class="card-header">
+          Discharge Line loss coefficients (Kd)
+        </div>
+        <div class="card-block small">
+          <label><u><strong>Description</strong></u></label>
+          <p>
+            Destipion here...
+          </p>
+          <label><u><strong>Input</strong></u></label>
+          <p>
+            Minimum Value Allowed: <strong>0</strong><br> Maximum Value Allowed: <strong>1</strong><br>
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!--SUCTION GUAGE ELEVATION-->
+    <div *ngIf="headToolType == 'Suction gauge elevation'">
+      <div class="card" *ngIf="currentField == 'specificGravity'">
+        <div class="card-header">
+          Fluid Specific Gravity
+        </div>
+        <div class="card-block small">
+          <label><u><strong>Description</strong></u></label>
+          <p>
+            Description...
+          </p>
+          <label><u><strong>Input</strong></u></label>
+          <p>
+            Minimum Value Allowed: <strong>0</strong><br> Maximum Value Allowed: <strong>1</strong><br>
+          </p>
+        </div>
+      </div>
+      <div class="card" *ngIf="currentField == 'flowRate'">
+        <div class="card-header">
+          Flow Rate
+        </div>
+        <div class="card-block small">
+          <label><u><strong>Description</strong></u></label>
+          <p>
+            Description...
+          </p>
+          <label><u><strong>Input</strong></u></label>
+          <p>
+            Minimum Value Allowed: <strong>0</strong><br> Maximum Value Allowed: <strong>1</strong><br>
+          </p>
+        </div>
+      </div>
+      <div class="card" *ngIf="currentField == 'suctionPipeDiameter'">
+        <div class="card-header">
+          Suction Pipe diameter (ID)
+        </div>
+        <div class="card-block small">
+          <label><u><strong>Description</strong></u></label>
+          <p>
+            Description...
+          </p>
+          <label><u><strong>Input</strong></u></label>
+          <p>
+            Minimum Value Allowed: <strong>0</strong><br> Maximum Value Allowed: <strong>1</strong><br>
+          </p>
+        </div>
+      </div>
+      <div class="card" *ngIf="currentField == 'suctionGuagePressure'">
+        <div class="card-header">
+          Suction Gauge pressure (Pg)
+        </div>
+        <div class="card-block small">
+          <label><u><strong>Description</strong></u></label>
+          <p>
+            Description...
+          </p>
+          <label><u><strong>Input</strong></u></label>
+          <p>
+            Minimum Value Allowed: <strong>0</strong><br> Maximum Value Allowed: <strong>1</strong><br>
+          </p>
+        </div>
+      </div>
+      <div class="card" *ngIf="currentField == 'suctionGuageElevation'">
+        <div class="card-header">
+          Suction Gauge elevation (Zs)
+        </div>
+        <div class="card-block small">
+          <label><u><strong>Description</strong></u></label>
+          <p>
+            Description...
+          </p>
+          <label><u><strong>Input</strong></u></label>
+          <p>
+            Minimum Value Allowed: <strong>0</strong><br> Maximum Value Allowed: <strong>1</strong><br>
+          </p>
+        </div>
+      </div>
+      <div class="card" *ngIf="currentField == 'suctionLineLossCoefficients'">
+        <div class="card-header">
+          Suction Line loss coefficients (Ks)
+        </div>
+        <div class="card-block small">
+          <label><u><strong>Description</strong></u></label>
+          <p>
+            Description...
+          </p>
+          <label><u><strong>Input</strong></u></label>
+          <p>
+            Minimum Value Allowed: <strong>0</strong><br> Maximum Value Allowed: <strong>1</strong><br>
+          </p>
+        </div>
+      </div>
+      <div class="card" *ngIf="currentField == 'dischargePipeDiameter'">
+        <div class="card-header">
+          Discharge Pipe diameter (ID)
+        </div>
+        <div class="card-block small">
+          <label><u><strong>Description</strong></u></label>
+          <p>
+            Description...
+          </p>
+          <label><u><strong>Input</strong></u></label>
+          <p>
+            Minimum Value Allowed: <strong>0</strong><br> Maximum Value Allowed: <strong>1</strong><br>
+          </p>
+        </div>
+      </div>
+      <div class="card" *ngIf="currentField == 'dischargeGaugePressure'">
+        <div class="card-header">
+          Discharge Gauge pressure (Pd)
+        </div>
+        <div class="card-block small">
+          <label><u><strong>Description</strong></u></label>
+          <p>
+            Description...
+          </p>
+          <label><u><strong>Input</strong></u></label>
+          <p>
+            Minimum Value Allowed: <strong>0</strong><br> Maximum Value Allowed: <strong>1</strong><br>
+          </p>
+        </div>
+      </div>
+      <div class="card" *ngIf="currentField == 'dischargeGaugeElevation'">
+        <div class="card-header">
+          Discharge Gauge elevation (Zd)
+        </div>
+        <div class="card-block small">
+          <label><u><strong>Description</strong></u></label>
+          <p>
+            Description...
+          </p>
+          <label><u><strong>Input</strong></u></label>
+          <p>
+            Minimum Value Allowed: <strong>0</strong><br> Maximum Value Allowed: <strong>1</strong><br>
+          </p>
+        </div>
+      </div>
+            <div class="card" *ngIf="currentField == 'dischargeLineLossCoefficients'">
+        <div class="card-header">
+          Discharge Line loss coefficients (Kd)
+        </div>
+        <div class="card-block small">
+          <label><u><strong>Description</strong></u></label>
+          <p>
+            Description...
+          </p>
+          <label><u><strong>Input</strong></u></label>
+          <p>
+            Minimum Value Allowed: <strong>0</strong><br> Maximum Value Allowed: <strong>1</strong><br>
+          </p>
+        </div>
       </div>
     </div>
   </div>

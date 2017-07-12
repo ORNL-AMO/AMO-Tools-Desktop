@@ -15,6 +15,9 @@ export class HeadToolFormComponent implements OnInit {
   settings: Settings;
   @Input()
   inAssessment: boolean;
+  @Output('changeField')
+  changeField = new EventEmitter<string>();
+
   smallUnit: string;
   constructor() { }
 
@@ -31,6 +34,10 @@ export class HeadToolFormComponent implements OnInit {
     if (this.headToolForm.valid) {
       this.calculate.emit(true);
     }
+  }
+
+  focusField(str: string){
+    this.changeField.emit(str);
   }
 
 }
