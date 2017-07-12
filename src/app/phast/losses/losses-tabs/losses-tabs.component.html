@@ -37,7 +37,7 @@
     Atmosphere
     </a>
   </li><!--
-  --><li *ngIf="settings.energySourceType == 'Fuel'" [ngClass]="{'active': lossesTab == 'fixture-losses'}" (click)="tabChange('fixture-losses')">
+  --><li [ngClass]="{'active': lossesTab == 'fixture-losses'}" (click)="tabChange('fixture-losses')">
     <a class="nav-link small">
     Fixtures, Trays, etc.
     </a>
