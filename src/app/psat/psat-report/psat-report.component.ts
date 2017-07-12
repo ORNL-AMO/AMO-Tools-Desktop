@@ -48,16 +48,25 @@ export class PsatReportComponent implements OnInit {
       this.assessmentDirectories = new Array();
       this.getDirectoryList(this.assessment.directoryId);
     }
+    this.psatService.printReport.subscribe((val) => {
+      if(val){
+        this.print();
+      }
+    })
   }
 
-  ngOnChanges(changes: SimpleChanges) {
-    if (!this.isFirstChange) {
-      if(changes.emitPrint){
-        console.log('clicked');
-      }
-    } else {
-      this.isFirstChange = false;
-    }
+  // ngOnChanges(changes: SimpleChanges) {
+  //   if (!this.isFirstChange) {
+  //     if(changes.emitPrint){
+  //       console.log('clicked');
+  //     }
+  //   } else {
+  //     this.isFirstChange = false;
+  //   }
+  // }
+
+  ngOnDestroy(){
+    this.psatService.printReport.next(null);
   }
 
   getAssessmentSettingsThenResults() {

@@ -77,10 +77,14 @@
       <button class="btn btn-secondary" *ngIf="currentTab != 'system-setup'" (click)="goBack()">Back</button>
     </div>
     <div class="pull-right">
-      <button class="btn btn-primary" (click)="save()">Save</button>
+      <button class="btn btn-secondary" (click)="save()">Save</button>
+
       <!--<button class="btn btn-secondary" *ngIf="currentTab >= 3" (click)="exportData()">Export to CSV...</button>-->
       <button class="btn btn-secondary" *ngIf="subTab == 'system-basics' && currentTab == 'system-setup'" (click)="changeSubTab('operating-hours')">Continue</button>
       <button class="btn btn-secondary" *ngIf="subTab == 'operating-hours' && currentTab == 'system-setup'" (click)="continue()">Continue</button>
+
+      <button class="btn btn-primary" *ngIf="currentTab == 'explore-opportunities' || 'losses' && currentTab != 'system-setup'" (click)="addReportToast('Sorry Report is not developed at this time.')">View Report</button>
+
     </div>
   </div>
 </div>

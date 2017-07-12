@@ -91,8 +91,8 @@
 
 </div>
 
-<div class="row justify-content-center" *ngIf="modifyTab == 'report' && settings">
-  <div class="col-10">
+<div class="row justify-content-center report-container" *ngIf="modifyTab == 'report' && settings">
+  <div class="col-10 report-column">
     <app-psat-report [psat]="psat" [settings]="settings" [assessment]="assessment" [emitPrint]="emitPrint" [inPsat]="true"></app-psat-report>
   </div>
 </div>

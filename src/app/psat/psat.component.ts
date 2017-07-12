@@ -62,7 +62,7 @@ export class PsatComponent implements OnInit {
   doc: any;
   window: any;
   emitPrint: boolean = false;
-
+  viewingReport: boolean = false;
   constructor(
     private location: Location,
     private assessmentService: AssessmentService,
@@ -92,6 +92,14 @@ export class PsatComponent implements OnInit {
       let tmpTab = this.assessmentService.getTab();
       if (tmpTab) {
         this.currentTab = tmpTab;
+      }
+    })
+
+    this.psatService.changeSubTab.subscribe((val) => {
+      if (val == 'report') {
+        this.viewingReport = true;
+      } else {
+        this.viewingReport = false;
       }
     })
   }
@@ -160,8 +168,8 @@ export class PsatComponent implements OnInit {
     this.isValid = false;
   }
 
-  changeTab($event) {
-    this.tabIndex = _.findIndex(this.tabs, function (tab) { return tab == $event });
+  changeTab(str: string) {
+    this.tabIndex = _.findIndex(this.tabs, function (tab) { return tab == str });
     this.currentTab = this.tabs[this.tabIndex];
   }
 
@@ -202,6 +210,10 @@ export class PsatComponent implements OnInit {
     this.canContinue = false;
   }
 
+  printReport(){
+    this.psatService.printReport.next(true);
+  }
+
   getCanContinue() {
     if (this.subTab == 'system-basics') {
       return true;
@@ -223,14 +235,18 @@ export class PsatComponent implements OnInit {
   }
 
   goBack() {
-    this.currentTab = 'system-setup';
+    if (!this.viewingReport) {
+      this.currentTab = 'system-setup';
+    } else {
+      this.psatService.changeSubTab.next('field-data');
+    }
   }
 
   toggleSave() {
     this.saveClicked = !this.saveClicked;
   }
 
-  togglePrint(){
+  togglePrint() {
     this.emitPrint = !this.emitPrint;
   }
 
@@ -252,7 +268,7 @@ export class PsatComponent implements OnInit {
       }
     )
   }
-  
+
   exportData() {
     //TODO: Logic for exporting assessment
     this.jsonToCsvService.exportSinglePsat(this.assessment, this.settings);
@@ -268,4 +284,10 @@ export class PsatComponent implements OnInit {
     this.toastyService.success(toastOptions);
   }
 
+  goToReport() {
+    if(this.currentTab != 'modify-conditions'){
+      this.changeTab('modify-conditions');
+    }
+    this.psatService.changeSubTab.next('report');
+  }
 }

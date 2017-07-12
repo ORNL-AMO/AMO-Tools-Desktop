@@ -6,14 +6,21 @@ import { Settings } from '../shared/models/settings';
 import { ConvertUnitsService } from '../shared/convert-units/convert-units.service';
 import { ValidationService } from '../shared/validation.service';
 declare var psatAddon: any;
-
+import { BehaviorSubject } from 'rxjs'; 
 @Injectable()
 export class PsatService {
   flaRange: any = {
     flaMin: 0,
     flaMax: 0
-  };  
-  constructor(private formBuilder: FormBuilder, private convertUnitsService: ConvertUnitsService, private validationService: ValidationService) { }
+  };
+
+  changeSubTab: BehaviorSubject<string>;
+  printReport: BehaviorSubject<boolean>;
+
+  constructor(private formBuilder: FormBuilder, private convertUnitsService: ConvertUnitsService, private validationService: ValidationService) { 
+    this.changeSubTab = new BehaviorSubject<string>(null);
+    this.printReport = new BehaviorSubject<boolean>(null);
+  }
 
   roundVal(val: number, digits: number) {
     return Number((Math.round(val * 100) / 100).toFixed(digits))
