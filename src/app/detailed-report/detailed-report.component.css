@@ -40,18 +40,18 @@
 
     .created-date{
         position: absolute;
-        top: 94%;
+        top: 870px;
         color: black;
     }
 
     .report-cover{
-        display: inherit;
-        page-break-after: always;
+        display: inherit !important;
+        page-break-after: always !important;
     }
 
     .report-logo{
         left: 75%;
-        top: 86.5%;
+        top: 850px;
         position: absolute;
         color: black;
     }
@@ -69,11 +69,28 @@
     .col-8{
         max-width: none !important;
         flex: none !important;
+        padding-left: 0px;
+        padding-right: 0px;
     }
 
     .assessment-report-item{
         page-break-after: always;
         border-bottom: none;
+    }
+    .report-column{
+        border: none !important;
+        box-shadow: none !important;
+        margin-top: none !important;
+        margin-bottom: none !important;
+    }
+    .report-column{
+        border: none !important;
+        box-shadow: none !important;
+        margin-top: none !important;
+        margin-bottom: none !important;
+    }
+    .col-10{
+        padding: 0px; 
     }
 }
 
@@ -81,4 +98,16 @@
     top: 0;
     padding-top: 15px;
     position: fixed;
+}
+
+.report-container{
+    background-color: #ececec;
+}
+
+.report-column{
+    background-color: white;
+    border: solid #2980b9;
+    box-shadow: 1px 2px 1px 2px #2980b9;
+    margin-top: 15px;
+    margin-bottom: 100px;
 }

@@ -33,7 +33,8 @@ export class PsatComponent implements OnInit {
     'achievable-efficiency',
     'motor-performance',
     'nema-energy-efficiency',
-    'specific-speed'
+    'specific-speed',
+
   ]
   tabIndex: number = 0;
 
@@ -63,6 +64,7 @@ export class PsatComponent implements OnInit {
   window: any;
   emitPrint: boolean = false;
   viewingReport: boolean = false;
+  tabBeforeReport: string;
   constructor(
     private location: Location,
     private assessmentService: AssessmentService,
@@ -92,14 +94,6 @@ export class PsatComponent implements OnInit {
       let tmpTab = this.assessmentService.getTab();
       if (tmpTab) {
         this.currentTab = tmpTab;
-      }
-    })
-
-    this.psatService.changeSubTab.subscribe((val) => {
-      if (val == 'report') {
-        this.viewingReport = true;
-      } else {
-        this.viewingReport = false;
       }
     })
   }
@@ -169,8 +163,9 @@ export class PsatComponent implements OnInit {
   }
 
   changeTab(str: string) {
-    this.tabIndex = _.findIndex(this.tabs, function (tab) { return tab == str });
-    this.currentTab = this.tabs[this.tabIndex];
+    // this.tabIndex = _.findIndex(this.tabs, function (tab) { return tab == str });
+    // this.currentTab = this.tabs[this.tabIndex];
+    this.currentTab = str;
   }
 
   changeSubTab(str: string) {
@@ -209,11 +204,7 @@ export class PsatComponent implements OnInit {
     }
     this.canContinue = false;
   }
-
-  printReport(){
-    this.psatService.printReport.next(true);
-  }
-
+  
   getCanContinue() {
     if (this.subTab == 'system-basics') {
       return true;
@@ -235,11 +226,7 @@ export class PsatComponent implements OnInit {
   }
 
   goBack() {
-    if (!this.viewingReport) {
-      this.currentTab = 'system-setup';
-    } else {
-      this.psatService.changeSubTab.next('field-data');
-    }
+    this.currentTab = 'system-setup';
   }
 
   toggleSave() {
@@ -285,9 +272,15 @@ export class PsatComponent implements OnInit {
   }
 
   goToReport() {
-    if(this.currentTab != 'modify-conditions'){
-      this.changeTab('modify-conditions');
-    }
-    this.psatService.changeSubTab.next('report');
+    // if(this.currentTab != 'modify-conditions'){
+    //   this.changeTab('modify-conditions');
+    // }
+    // this.psatService.changeSubTab.next('report');
+    this.tabBeforeReport = this.currentTab;
+    this.currentTab = 'report';
+  }
+
+  closeReport() {
+    this.currentTab = this.tabBeforeReport;
   }
 }
