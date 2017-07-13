@@ -1227,6 +1227,7 @@ Tabs
 
 .tab-content {
   overflow-y: scroll;
+  max-height: 78vh;
 }
   .tab-content .wrapper {
       max-width: 1024px;
