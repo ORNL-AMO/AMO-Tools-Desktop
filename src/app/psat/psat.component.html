@@ -89,9 +89,14 @@
   </div>
 
   <div class="tab-content" *ngIf="currentTab == 'achievable-efficiency'">
-    <app-achievable-efficiency [inPsat]="true" [settings]="settings" [psat]="_psat"></app-achievable-efficiency>
+    <div class="row justify-content-center">
+      <div class="col-10" style="margin-top: 5%;">
+        <div class="card card-block" style="border: none; background-color: #efefef;">
+          <app-achievable-efficiency [inPsat]="true" [settings]="settings" [psat]="_psat"></app-achievable-efficiency>
+        </div>
+      </div>
+    </div>
   </div>
-
   <div class="tab-content" *ngIf="currentTab == 'motor-performance'">
     <app-motor-performance [inPsat]="true" [psat]="_psat" [settings]="settings"></app-motor-performance>
   </div>
@@ -114,8 +119,7 @@
         (click)="toggleSave()">Save</button>
       <button class="btn btn-primary" *ngIf="currentTab == 'system-setup'" [disabled]="!getCanContinue()" (click)="continue()">Continue</button>
 
-      <button class="btn btn-primary" *ngIf="currentTab == 'explore-opportunities' || currentTab == 'modify-conditions'"
-        (click)="goToReport()">View Report</button>
+      <button class="btn btn-primary" *ngIf="currentTab == 'explore-opportunities' || currentTab == 'modify-conditions'" (click)="goToReport()">View Report</button>
       <!-- <button class="btn btn-primary" *ngIf="currentTab == 'modify-conditions'" (click)="exportData()">Export</button> -->
       <!--<button class="btn btn-primary" *ngIf="currentTab == 'modify-conditions'" (click)="togglePrint()"><span class="fa fa-print"></span></button>-->
     </div>
@@ -125,7 +129,8 @@
 
 <div class="row justify-content-center report-container" *ngIf="currentTab == 'report' && settings">
   <div class="col-10 report-column">
-    <app-psat-report [psat]="psat" [settings]="settings" [assessment]="assessment" [inPsat]="true" (closeReport)="closeReport()" (exportData)="exportData()"></app-psat-report>
+    <app-psat-report [psat]="psat" [settings]="settings" [assessment]="assessment" [inPsat]="true" (closeReport)="closeReport()"
+      (exportData)="exportData()"></app-psat-report>
   </div>
 </div>
 
