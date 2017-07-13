@@ -1,7 +1,7 @@
 <form #lossForm [formGroup]="flueGasLossForm">
   <div class="form-section">
     <div class="form-group">
-      <label class="small" for="gasTypeId">Flue Gas</label>
+      <label class="small" for="gasTypeId">Fuel</label>
       <select name="{{'gasTypeId_'+lossIndex}}" class="form-control" formControlName="gasTypeId" id="gasTypeId" (change)="setProperties()">
       <option *ngFor="let option of options" [ngValue]="option.id">{{option.substance}}</option>
     </select>
