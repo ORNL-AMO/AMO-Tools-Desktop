@@ -44,7 +44,7 @@ export class SystemCurveGraphComponent implements OnInit {
   window: any;
   fontSize: string;
 
-  isFirstChange: boolean = true
+  isFirstChange: boolean = true;
   constructor(private windowRefService: WindowRefService, private convertUnitsService: ConvertUnitsService, private psatService: PsatService) { }
 
   ngOnInit() {
