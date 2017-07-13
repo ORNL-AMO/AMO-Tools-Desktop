@@ -30,7 +30,7 @@ export class PsatReportComponent implements OnInit {
 
   assessmentDirectories: Directory[];
   isFirstChange: boolean = true;
-
+  numMods: number = 0;
   constructor(private psatService: PsatService, private indexedDbService: IndexedDbService, private windowRefService: WindowRefService) { }
 
   ngOnInit() {
@@ -50,26 +50,12 @@ export class PsatReportComponent implements OnInit {
       this.assessmentDirectories = new Array();
       this.getDirectoryList(this.assessment.directoryId);
     }
-    // this.psatService.printReport.subscribe((val) => {
-    //   if(val){
-    //     this.print();
-    //   }
-    // })
+
+    if(this.psat.modifications){
+      this.numMods = this.psat.modifications.length;
+    }
   }
 
-  // ngOnChanges(changes: SimpleChanges) {
-  //   if (!this.isFirstChange) {
-  //     if(changes.emitPrint){
-  //       console.log('clicked');
-  //     }
-  //   } else {
-  //     this.isFirstChange = false;
-  //   }
-  // }
-
-  ngOnDestroy(){
-    this.psatService.printReport.next(null);
-  }
 
   getAssessmentSettingsThenResults() {
     //check for assessment settings
