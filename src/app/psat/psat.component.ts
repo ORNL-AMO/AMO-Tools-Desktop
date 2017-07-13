@@ -33,7 +33,8 @@ export class PsatComponent implements OnInit {
     'achievable-efficiency',
     'motor-performance',
     'nema-energy-efficiency',
-    'specific-speed'
+    'specific-speed',
+
   ]
   tabIndex: number = 0;
 
@@ -62,7 +63,8 @@ export class PsatComponent implements OnInit {
   doc: any;
   window: any;
   emitPrint: boolean = false;
-
+  viewingReport: boolean = false;
+  tabBeforeReport: string;
   constructor(
     private location: Location,
     private assessmentService: AssessmentService,
@@ -160,9 +162,10 @@ export class PsatComponent implements OnInit {
     this.isValid = false;
   }
 
-  changeTab($event) {
-    this.tabIndex = _.findIndex(this.tabs, function (tab) { return tab == $event });
-    this.currentTab = this.tabs[this.tabIndex];
+  changeTab(str: string) {
+    // this.tabIndex = _.findIndex(this.tabs, function (tab) { return tab == str });
+    // this.currentTab = this.tabs[this.tabIndex];
+    this.currentTab = str;
   }
 
   changeSubTab(str: string) {
@@ -201,7 +204,7 @@ export class PsatComponent implements OnInit {
     }
     this.canContinue = false;
   }
-
+  
   getCanContinue() {
     if (this.subTab == 'system-basics') {
       return true;
@@ -230,7 +233,7 @@ export class PsatComponent implements OnInit {
     this.saveClicked = !this.saveClicked;
   }
 
-  togglePrint(){
+  togglePrint() {
     this.emitPrint = !this.emitPrint;
   }
 
@@ -252,7 +255,7 @@ export class PsatComponent implements OnInit {
       }
     )
   }
-  
+
   exportData() {
     //TODO: Logic for exporting assessment
     this.jsonToCsvService.exportSinglePsat(this.assessment, this.settings);
@@ -268,4 +271,16 @@ export class PsatComponent implements OnInit {
     this.toastyService.success(toastOptions);
   }
 
+  goToReport() {
+    // if(this.currentTab != 'modify-conditions'){
+    //   this.changeTab('modify-conditions');
+    // }
+    // this.psatService.changeSubTab.next('report');
+    this.tabBeforeReport = this.currentTab;
+    this.currentTab = 'report';
+  }
+
+  closeReport() {
+    this.currentTab = this.tabBeforeReport;
+  }
 }

@@ -1,3 +1,19 @@
 .form{
     width: 100%;
 }
+.inline-label {
+  white-space: nowrap;
+  max-width: 190px;
+  text-overflow: ellipsis;
+}
+
+.group-label{
+  font-size: large;
+    font-weight: bold;
+    text-decoration: underline;
+}
+
+.form-section{
+  margin-bottom: 0px !important; 
+  padding-bottom: 8px !important;
+}

@@ -4,51 +4,51 @@
   <ul>
     <li>
       <div class="checkbox">
-        <label for="general"><input type ="checkbox" id="general" value="'true'" (focus)="focusField('systemData')" [(ngModel)]="showSystemData" />
+        <label for="general"><input type ="checkbox" id="general" value="'true'" (focus)="focusField('systemData')" (change)="toggleSystemData()" [(ngModel)]="showSystemData" />
 								Adjust System Data
 							</label>
       </div>
       <ul *ngIf="showSystemData">
         <li>
           <div class="checkbox">
-            <label for="modifyCost"><input type ="checkbox" id="modifyCost" value="'true'" (focus)="focusField('modifyCost')" [(ngModel)]="showCost"/>
+            <label for="modifyCost"><input type ="checkbox" id="modifyCost" value="'true'" (focus)="focusField('modifyCost')" (change)="toggleCost()" [(ngModel)]="showCost"/>
 										Modify Cost
 									</label>
           </div>
           <form *ngIf="showCost">
             <div class="form-group">
               <label for="initialCost">Initial Cost</label>
-              <input name="initialCost" type="number" id="initialCost" class="form-control" (focus)="focusField('modifyCost')" (input)="calculate()"
+              <input name="initialCost" type="number" step="any" id="initialCost" class="form-control" (focus)="focusField('modifyCost')" (input)="calculate()"
                 [(ngModel)]="psat.inputs.cost_kw_hour" [ngClass]="{'invalid': checkCost(1) == false}" />
               <span class="alert-danger pull-right small" *ngIf="costError1 !== null">{{costError1}}</span>
-              <span class="units">$/KwHr</span>
+              <span class="units">$/kWH</span>
             </div>
             <div class="form-group">
               <label for="newCost">New Cost</label>
-              <input name="newCost" type="number" id="newCost" class="form-control" (focus)="focusField('modifyCost')" [(ngModel)]="psat.modifications[exploreModIndex].psat.inputs.cost_kw_hour"
+              <input name="newCost" type="number" step="any" id="newCost" class="form-control" (focus)="focusField('modifyCost')" [(ngModel)]="psat.modifications[exploreModIndex].psat.inputs.cost_kw_hour"
                 (input)="calculate()" [ngClass]="{'invalid': checkCost(2) == false}" />
-              <span class="units">$/KwHr</span>
+              <span class="units">$/kWh</span>
               <span class="alert-danger pull-right small" *ngIf="costError2 !== null">{{costError2}}</span>
             </div>
           </form>
         </li>
         <li>
           <div class="checkbox">
-            <label for="modifyFlowRate"><input type ="checkbox" id="modifyFlowRate" value="'true'" (focus)="focusField('flowRate')" [(ngModel)]="showFlowRate"/>
+            <label for="modifyFlowRate"><input type ="checkbox" id="modifyFlowRate" value="'true'" (focus)="focusField('flowRate')" (change)="toggleFlowRate()" [(ngModel)]="showFlowRate"/>
 										Modify Flow Rate
 									</label>
           </div>
           <form *ngIf="showFlowRate">
             <div class="form-group">
               <label for="initialFlowRate">Initial Flow Rate</label>
-              <input name="initialFlowRate" type="number" id="initialFlowRate" class="form-control" (focus)="focusField('flowRate')" (input)="calculate()"
+              <input name="initialFlowRate" type="number" step="any" id="initialFlowRate" class="form-control" (focus)="focusField('flowRate')" (input)="calculate()"
                 [(ngModel)]="psat.inputs.flow_rate" [ngClass]="{'invalid': checkFlowRate(1) == false}" />
               <span class="units">{{settings.flowMeasurement}}</span>
               <span class="alert-danger pull-right small" *ngIf="flowRateError1 !== null">{{flowRateError1}}</span>
             </div>
             <div class="form-group">
               <label for="newFlowRate">New Flow Rate</label>
-              <input name="newFlowRate" type="number" id="newFlowRate" class="form-control" (focus)="focusField('flowRate')" [(ngModel)]="psat.modifications[exploreModIndex].psat.inputs.flow_rate"
+              <input name="newFlowRate" type="number" step="any" id="newFlowRate" class="form-control" (focus)="focusField('flowRate')" [(ngModel)]="psat.modifications[exploreModIndex].psat.inputs.flow_rate"
                 (input)="calculate()" [ngClass]="{'invalid': checkFlowRate(2) == false}" />
               <span class="units">{{settings.flowMeasurement}}</span>
               <span class="alert-danger pull-right small" *ngIf="flowRateError2 !== null">{{flowRateError2}}</span>
@@ -57,20 +57,20 @@
         </li>
         <li>
           <div class="checkbox">
-            <label for="modifyHead"><input type ="checkbox" id="modifyHead" value="'true'" (focus)="focusField('head')" [(ngModel)]="showHead"/>
+            <label for="modifyHead"><input type ="checkbox" id="modifyHead" value="'true'" (focus)="focusField('head')" (change)="toggleHead()" [(ngModel)]="showHead"/>
 										Modify Head
 									</label>
           </div>
           <form *ngIf="showHead">
             <div class="form-group">
               <label for="initialHead">Initial head</label>
-              <input name="initialHead" type="number" id="initialHead" class="form-control" (focus)="focusField('head')" (input)="calculate()"
+              <input name="initialHead" type="number" step="any" id="initialHead" class="form-control" (focus)="focusField('head')" (input)="calculate()"
                 [(ngModel)]="psat.inputs.head" />
               <span class="units">{{settings.distanceMeasurement}}</span>
             </div>
             <div class="form-group">
               <label for="newHead">New head</label>
-              <input name="newHead" type="number" id="newHead" class="form-control" (focus)="focusField('head')" (input)="calculate()"
+              <input name="newHead" type="number" step="any" id="newHead" class="form-control" (focus)="focusField('head')" (input)="calculate()"
                 [(ngModel)]="psat.modifications[exploreModIndex].psat.inputs.head" />
               <span class="units">{{settings.distanceMeasurement}}</span>
             </div>
@@ -80,14 +80,14 @@
     </li>
     <li>
       <div class="checkbox">
-        <label for="general2"><input type ="checkbox" id="general2" value="'true'" (focus)="focusField('motorRatedData')"  [(ngModel)]="showRatedMotorData" />
+        <label for="general2"><input type ="checkbox" id="general2" value="'true'" (focus)="focusField('motorRatedData')" (change)="toggleRatedMotorData()"  [(ngModel)]="showRatedMotorData" />
 								Adjust Rated Motor Data
 							</label>
       </div>
       <ul *ngIf="showRatedMotorData">
         <li>
           <div class="checkbox">
-            <label for="modifyMotorRatedPower"><input type ="checkbox" id="modifyMotorRatedPower" value="'true'" (focus)="focusField('motorRatedPower')" [(ngModel)]="showRatedMotorPower"/>
+            <label for="modifyMotorRatedPower"><input type ="checkbox" id="modifyMotorRatedPower" value="'true'" (change)="toggleMotorRatedPower()" (focus)="focusField('motorRatedPower')" [(ngModel)]="showRatedMotorPower"/>
 										Modify Rated Motor Power
 									</label>
           </div>
@@ -110,7 +110,7 @@
         </li>
         <li>
           <div class="checkbox">
-            <label for="modifyEfficiencyClass"><input type ="checkbox" id="modifyEfficiencyClass" value="'true'" (focus)="focusField('efficiencyClass')" [(ngModel)]="showEfficiencyClass"/>
+            <label for="modifyEfficiencyClass"><input type ="checkbox" id="modifyEfficiencyClass" value="'true'" (change)="toggleEfficiencyClass()" (focus)="focusField('efficiencyClass')" [(ngModel)]="showEfficiencyClass"/>
 										Modify Efficiency Class
 									</label>
           </div>
@@ -133,14 +133,14 @@
         </li>
         <li>
           <div class="checkbox">
-            <label for="modifyMotorEfficiency"><input type ="checkbox" id="modifyMotorEfficiency" value="'true'" (focus)="focusField('motorEfficiency')" [(ngModel)]="showMotorEfficiency"/>
+            <label for="modifyMotorEfficiency"><input type ="checkbox" id="modifyMotorEfficiency" value="'true'" (change)="toggleMotorEfficiency()" (focus)="focusField('motorEfficiency')" [(ngModel)]="showMotorEfficiency"/>
 										Modify Motor Efficiency
 									</label>
           </div>
           <form *ngIf="showMotorEfficiency">
             <div class="form-group">
               <label for="initialMotorEfficiency">Initial Motor Efficiency</label>
-              <input name="initialMotorEfficiency" type="number" id="initialMotorEfficiency" class="form-control" (focus)="focusField('motorEfficiency')"
+              <input name="initialMotorEfficiency" type="number" step="any" id="initialMotorEfficiency" class="form-control" (focus)="focusField('motorEfficiency')"
                 (input)="calculate()" [(ngModel)]="psat.inputs.efficiency" [ngClass]="{'invalid': checkEfficiency(psat.inputs.efficiency, 1) == false}"
               />
               <span class="units">%</span>
@@ -148,7 +148,7 @@
             </div>
             <div class="form-group">
               <label for="newMotorEfficiency">New Motor Efficiency</label>
-              <input name="newMotorEfficiency" type="number" id="newMotorEfficiency" class="form-control" (focus)="focusField('motorEfficiency')"
+              <input name="newMotorEfficiency" type="number" step="any" id="newMotorEfficiency" class="form-control" (focus)="focusField('motorEfficiency')"
                 [(ngModel)]="psat.modifications[exploreModIndex].psat.inputs.efficiency" [ngClass]="{'invalid': checkEfficiency(psat.modifications[exploreModIndex].psat.inputs.efficiency, 2) == false}"
                 (input)="calculate()" />
               <span class="units">%</span>
@@ -160,28 +160,28 @@
     </li>
     <li>
       <div class="checkbox">
-        <label for="general3"><input type ="checkbox" id="general3" value="'true'" (focus)="focusField('pumpData')" [(ngModel)]="showPumpData" />
+        <label for="general3"><input type ="checkbox" id="general3" value="'true'" (focus)="focusField('pumpData')" (change)="togglePumpData()" [(ngModel)]="showPumpData" />
 								Adjust Pump Data
 							</label>
       </div>
       <ul *ngIf="showPumpData">
         <li>
           <div class="checkbox">
-            <label for="modifyPumpSpeed"><input type="checkbox" id="modifyPumpSpeed" value="'true'" (focus)="focusField('pumpSpeed')" [(ngModel)]="showPumpSpeed"/>
+            <label for="modifyPumpSpeed"><input type="checkbox" id="modifyPumpSpeed" value="'true'" (focus)="focusField('pumpSpeed')" (change)="togglePumpSpeed()" [(ngModel)]="showPumpSpeed"/>
 										Modify Pump Speed
 									</label>
           </div>
           <form *ngIf="showPumpSpeed">
             <div class="form-group">
               <label for="initialPumpSpeed">Initial Pump Speed</label>
-              <input name="initialPumpSpeed" type="number" id="initialPumpSpeed" class="form-control" (input)="calculate()" (focus)="focusField('pumpSpeed')"
+              <input name="initialPumpSpeed" type="number" step="any" id="initialPumpSpeed" class="form-control" (input)="calculate()" (focus)="focusField('pumpSpeed')"
                 [(ngModel)]="psat.inputs.pump_rated_speed" [ngClass]="{'invalid': checkPumpRpm(1) == false}" />
               <span class="units">rpm</span>
               <span class="alert-danger pull-right small" *ngIf="rpmError1 !== null">{{rpmError1}}</span>
             </div>
             <div class="form-group">
               <label for="newPumpSpeed">New Pump Speed</label>
-              <input name="newPumpSpeed" type="number" id="newPumpSpeed" class="form-control" (input)="calculate()" (focus)="focusField('pumpSpeed')"
+              <input name="newPumpSpeed" type="number" step="any" id="newPumpSpeed" class="form-control" (input)="calculate()" (focus)="focusField('pumpSpeed')"
                 [(ngModel)]="psat.modifications[exploreModIndex].psat.inputs.pump_rated_speed" [ngClass]="{'invalid': checkPumpRpm(2) == false}"
               />
               <span class="units">rpm</span>
@@ -191,7 +191,7 @@
         </li>
         <li>
           <div class="checkbox">
-            <label for="modifyPumpType"><input type="checkbox" id="modifyPumpType" value="'true'" (focus)="focusField('pumpType')" [(ngModel)]="showPumpType"/>
+            <label for="modifyPumpType"><input type="checkbox" id="modifyPumpType" value="'true'" (focus)="focusField('pumpType')" (change)="togglePumpType()" [(ngModel)]="showPumpType"/>
 										Modify Pump Type
 									</label>
           </div>
@@ -212,14 +212,14 @@
         </li>
         <li>
           <div class="checkbox">
-            <label for="modifyPumpSpecified"><input type="checkbox" id="modifyPumpSpecified" value="'true'" (focus)="focusField('pumpSpecified')" [(ngModel)]="showPumpSpecified"/>
+            <label for="modifyPumpSpecified"><input type="checkbox" id="modifyPumpSpecified" value="'true'" (focus)="focusField('pumpSpecified')" (change)="togglePumpSpecified()" [(ngModel)]="showPumpSpecified"/>
 										Modify Pump Specified Efficiency
 									</label>
           </div>
           <form *ngIf="showPumpSpecified">
             <div class="form-group">
               <label for="initialPumpSpecified">Initial Pump Specified Efficiency</label>
-              <input name="initialPumpSpecified" type="number" id="initialPumpSpecified" class="form-control" (focus)="focusField('pumpSpecified')"
+              <input name="initialPumpSpecified" type="number" step="any" id="initialPumpSpecified" class="form-control" (focus)="focusField('pumpSpecified')"
                 (input)="calculate()" [(ngModel)]="psat.inputs.pump_specified" [ngClass]="{'invalid': checkEfficiency(psat.inputs.pump_specified, 3) == false}"
               />
               <span class="units">%</span>
@@ -227,7 +227,7 @@
             </div>
             <div class="form-group">
               <label for="newPumpSpecified">New Pump Specified Efficiency</label>
-              <input name="newPumpSpecified" type="number" id="newPumpSpecified" class="form-control" (focus)="focusField('pumpSpecified')"
+              <input name="newPumpSpecified" type="number" step="any" id="newPumpSpecified" class="form-control" (focus)="focusField('pumpSpecified')"
                 (input)="calculate()" [(ngModel)]="psat.modifications[exploreModIndex].psat.inputs.pump_specified" [ngClass]="{'invalid': checkEfficiency(psat.modifications[exploreModIndex].psat.inputs.pump_specified, 4) == false}"
               />
               <span class="units">%</span>

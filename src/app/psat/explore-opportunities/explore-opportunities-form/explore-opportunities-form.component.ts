@@ -22,21 +22,21 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
   @Output('changeField')
   changeField = new EventEmitter<string>();
 
-  showSystemData: string;
-  showRatedMotorData: string;
-  showPumpData: string;
+  showSystemData: boolean;
+  showRatedMotorData: boolean;
+  showPumpData: boolean;
 
-  showCost: string;
-  showFlowRate: string;
-  showHead: string;
+  showCost: boolean;
+  showFlowRate: boolean;
+  showHead: boolean;
 
-  showRatedMotorPower: string;
-  showEfficiencyClass: string;
-  showMotorEfficiency: string;
+  showRatedMotorPower: boolean;
+  showEfficiencyClass: boolean;
+  showMotorEfficiency: boolean;
 
-  showPumpSpeed: string;
-  showPumpType: string;
-  showPumpSpecified: string;
+  showPumpSpeed: boolean;
+  showPumpType: boolean;
+  showPumpSpecified: boolean;
 
   tmpNewPumpType: string;
   tmpInitialPumpType: string;
@@ -65,9 +65,10 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
     // When user selects below they need a way to provide the optimal efficiency
     'Specified Optimal Efficiency'
   ];
-  horsePowers: Array<number> = [5, 7.5, 10, 15, 20, 25, 30, 40, 50, 60, 75, 100, 125, 150, 200, 250, 300, 350, 400, 450, 500, 600, 700, 800, 900, 1000, 1250, 1750, 2000, 2250, 2500, 3000, 3500, 4000, 4500, 5000, 5500, 6000, 7000, 8000, 9000, 10000, 11000, 12000, 13000, 14000, 15000, 16000, 17000, 18000, 19000, 20000, 22500, 25000, 27500, 30000, 35000, 40000, 45000, 50000];
-  kWatts: Array<number> = [3, 3.7, 4, 4.5, 5.5, 6, 7.5, 9.2, 11, 13, 15, 18.5, 22, 26, 30, 37, 45, 55, 75, 90, 110, 132, 150, 160, 185, 200, 225, 250, 280, 300, 315, 335, 355, 400, 450, 500, 560, 630, 710, 800, 900, 1000, 1250, 1500, 1750, 2000, 2250, 2500, 3000, 3500, 4000, 4500, 5000, 5500, 6000, 7000, 8000, 9000, 10000, 11000, 12000, 13000, 14000, 15000, 16000, 17000, 18000, 19000, 20000, 22500, 25000, 27500, 30000, 35000, 40000];
   options: Array<any>;
+  horsePowers: Array<string> = ['5', '7.5', '10', '15', '20', '25', '30', '40', '50', '60', '75', '100', '125', '150', '200', '250', '300', '350', '400', '450', '500', '600', '700', '800', '900', '1000', '1250', '1750', '2000', '2250', '2500', '3000', '3500', '4000', '4500', '5000', '5500', '6000', '7000', '8000', '9000', '10000', '11000', '12000', '13000', '14000', '15000', '16000', '17000', '18000', '19000', '20000', '22500', '25000', '27500', '30000', '35000', '40000', '45000', '50000'];
+  kWatts: Array<string> = ['3', '3.7', '4', '4.5', '5.5', '6', '7.5', '9.2', '11', '13', '15', '18.5', '22', '26', '30', '37', '45', '55', '75', '90', '110', '132', '150', '160', '185', '200', '225', '250', '280', '300', '315', '335', '355', '400', '450', '500', '560', '630', '710', '800', '900', '1000', '1250', '1500', '1750', '2000', '2250', '2500', '3000', '3500', '4000', '4500', '5000', '5500', '6000', '7000', '8000', '9000', '10000', '11000', '12000', '13000', '14000', '15000', '16000', '17000', '18000', '19000', '20000', '22500', '25000', '27500', '30000', '35000', '40000'];
+
   counter: any;
   rpmError1: string;
   rpmError2: string;
@@ -93,6 +94,8 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
     this.tmpNewPumpType = this.psatService.getPumpStyleFromEnum(this.psat.modifications[this.exploreModIndex].psat.inputs.pump_style);
     this.tmpInitialPumpType = this.psatService.getPumpStyleFromEnum(this.psat.inputs.pump_style);
     this.checkValues();
+    console.log(this.psat.inputs.motor_rated_power);
+    console.log(this.psat.modifications[this.exploreModIndex].psat.inputs.motor_rated_power);
   }
 
   setPumpTypes() {
@@ -126,57 +129,43 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
   }
 
   checkValues() {
-    // showSystemData: string;
-    // showCost: string;
     if (this.psat.inputs.cost_kw_hour != this.psat.modifications[this.exploreModIndex].psat.inputs.cost_kw_hour) {
-      this.showCost = 'true';
-      this.showSystemData = 'true';
+      this.showCost = true;
+      this.showSystemData = true;
     }
-    // showFlowRate: string;
     if (this.psat.inputs.flow_rate != this.psat.modifications[this.exploreModIndex].psat.inputs.flow_rate) {
-      this.showFlowRate = 'true';
-      this.showSystemData = 'true';
+      this.showFlowRate = true;
+      this.showSystemData = true;
     }
-    // showHead: string;
     if (this.psat.inputs.head != this.psat.modifications[this.exploreModIndex].psat.inputs.head) {
-      this.showHead = 'true';
-      this.showSystemData = 'true';
+      this.showHead = true;
+      this.showSystemData = true;
     }
-
-    // showRatedMotorData: string;
-    // showRatedMotorPower: string;
     if (this.psat.inputs.motor_rated_power != this.psat.modifications[this.exploreModIndex].psat.inputs.motor_rated_power) {
-      this.showRatedMotorPower = 'true';
-      this.showRatedMotorData = 'true';
+      this.showRatedMotorPower = true;
+      this.showRatedMotorData = true;
     }
-    // showEfficiencyClass: string;
     if (this.psat.inputs.efficiency_class != this.psat.modifications[this.exploreModIndex].psat.inputs.efficiency_class) {
-      this.showEfficiencyClass = 'true';
-      this.showRatedMotorData = 'true';
+      this.showEfficiencyClass = true;
+      this.showRatedMotorData = true;
     }
-    // showMotorEfficiency: string;
     if (this.psat.inputs.efficiency != this.psat.modifications[this.exploreModIndex].psat.inputs.efficiency) {
-      this.showMotorEfficiency = 'true';
-      this.showRatedMotorData = 'true';
+      this.showMotorEfficiency = true;
+      this.showRatedMotorData = true;
     }
-    // showPumpData: string;
-    // showPumpSpeed: string;
     if (this.psat.inputs.pump_rated_speed != this.psat.modifications[this.exploreModIndex].psat.inputs.pump_rated_speed) {
-      this.showPumpSpeed = 'true';
-      this.showPumpData = 'true';
+      this.showPumpSpeed = true;
+      this.showPumpData = true;
     }
-    // showPumpType: string;
     if (this.psat.inputs.pump_style != this.psat.modifications[this.exploreModIndex].psat.inputs.pump_style) {
-      this.showPumpType = 'true';
-      this.showPumpData = 'true';
+      this.showPumpType = true;
+      this.showPumpData = true;
     }
-    // showPumpSpecified: string;
     if (this.psat.inputs.pump_specified != this.psat.modifications[this.exploreModIndex].psat.inputs.pump_specified) {
-      this.showPumpSpecified = 'true';
-      this.showPumpData = 'true';
+      this.showPumpSpecified = true;
+      this.showPumpData = true;
     }
   }
-
   checkPumpRpm(num: number) {
     let min = 0;
     let max = 0;
@@ -213,8 +202,6 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
       return null;
     }
   }
-
-
   checkFlowRate(num: number) {
     let tmp: any;
     if (num == 1) {
@@ -274,8 +261,6 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
       return null;
     }
   }
-
-
   checkEfficiency(val: number, num: number) {
     if (val > 100) {
       this.setErrorMessage(num, "Unrealistic efficiency, shouldn't be greater then 100%");
@@ -294,7 +279,6 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
       return true;
     }
   }
-
   setErrorMessage(num: number, str: string) {
     if (num == 1) {
       this.efficiencyError1 = str;
@@ -305,6 +289,97 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
     } else if (num == 4) {
       this.specifiedError2 = str;
 
+    }
+  }
+
+
+  toggleCost() {
+    if (this.showCost == false) {
+      this.psat.modifications[this.exploreModIndex].psat.inputs.cost_kw_hour = this.psat.inputs.cost_kw_hour;
+      this.calculate();
+    }
+  }
+  toggleFlowRate() {
+    if (this.showFlowRate == false) {
+      this.psat.modifications[this.exploreModIndex].psat.inputs.flow_rate = this.psat.inputs.flow_rate;
+      this.calculate();
+    }
+  }
+  toggleHead() {
+    if (this.showHead == false) {
+      this.psat.modifications[this.exploreModIndex].psat.inputs.head = this.psat.inputs.head;
+      this.calculate();
+    }
+  }
+
+  toggleSystemData() {
+    if (this.showSystemData == false) {
+      this.showCost = false;
+      this.showFlowRate = false;
+      this.showHead = false;
+      this.toggleCost();
+      this.toggleFlowRate();
+      this.toggleHead();
+    }
+  }
+
+  toggleMotorRatedPower() {
+    if (this.showRatedMotorPower == false) {
+      this.psat.modifications[this.exploreModIndex].psat.inputs.motor_rated_power = this.psat.inputs.motor_rated_power;
+      this.calculate();
+    }
+  }
+  toggleEfficiencyClass() {
+    if (this.showEfficiencyClass == false) {
+      this.psat.modifications[this.exploreModIndex].psat.inputs.efficiency_class = this.psat.inputs.efficiency_class;
+      this.tmpNewEfficiencyClass = this.psatService.getEfficiencyClassFromEnum(this.psat.inputs.efficiency_class);
+      this.calculate();
+    }
+  }
+  toggleMotorEfficiency() {
+    if (this.showMotorEfficiency == false) {
+      this.psat.modifications[this.exploreModIndex].psat.inputs.efficiency = this.psat.inputs.efficiency;
+      this.calculate();
+    }
+  }
+  toggleRatedMotorData() {
+    if (this.showRatedMotorData == false) {
+      this.showRatedMotorPower = false;
+      this.showEfficiencyClass = false;
+      this.showMotorEfficiency = false;
+      this.toggleMotorEfficiency();
+      this.toggleEfficiencyClass();
+      this.toggleMotorRatedPower();
+    }
+  }
+  togglePumpData() {
+    if (this.showPumpData == false) {
+      this.showPumpSpecified = false;
+      this.showPumpSpeed = false;
+      this.showPumpType = false;
+      this.togglePumpSpecified();
+      this.togglePumpSpeed();
+      this.togglePumpType();
+    }
+  }
+
+  togglePumpSpecified() {
+    if (this.showPumpSpecified == false) {
+      this.psat.modifications[this.exploreModIndex].psat.inputs.pump_specified = this.psat.inputs.pump_specified;
+      this.calculate();
+    }
+  }
+  togglePumpSpeed() {
+    if (this.showPumpSpeed == false) {
+      this.psat.modifications[this.exploreModIndex].psat.inputs.pump_rated_speed = this.psat.inputs.pump_rated_speed;
+      this.calculate();
+    }
+  }
+  togglePumpType() {
+    if (this.showPumpType == false) {
+      this.psat.modifications[this.exploreModIndex].psat.inputs.pump_style = this.psat.inputs.pump_style;
+      this.tmpNewPumpType = this.psatService.getPumpStyleFromEnum(this.psat.inputs.pump_style);
+      this.calculate();
     }
   }
 }

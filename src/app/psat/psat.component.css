@@ -2,4 +2,22 @@
     .hide-print{
         display: none !important;
     }
+    .report-column{
+        border: none !important;
+        box-shadow: none !important;
+        margin-top: none !important;
+        margin-bottom: none !important;
+    }
+}
+
+.report-container{
+    background-color: #ececec;
+}
+
+.report-column{
+    background-color: white;
+    border: solid #2980b9;
+    box-shadow: 1px 2px 1px 2px #2980b9;
+    margin-top: 15px;
+    margin-bottom: 100px;
 }

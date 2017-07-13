@@ -69,7 +69,7 @@ export class CoolingLossesComponent implements OnInit {
       this.coolingLossesService.addLossBaselineMonitor.subscribe((val) => {
         if (val == true) {
           this._coolingLosses.push({
-            coolingMedium: 'Air',
+            coolingMedium: 'Gas',
             waterCoolingForm: this.coolingLossesService.initWaterCoolingForm(),
             gasCoolingForm: this.coolingLossesService.initGasCoolingForm(),
             liquidCoolingForm: this.coolingLossesService.initLiquidCoolingForm(),
@@ -82,7 +82,7 @@ export class CoolingLossesComponent implements OnInit {
       this.coolingLossesService.addLossModificationMonitor.subscribe((val) => {
         if (val == true) {
           this._coolingLosses.push({
-            coolingMedium: 'Air',
+            coolingMedium: 'Gas',
             waterCoolingForm: this.coolingLossesService.initWaterCoolingForm(),
             gasCoolingForm: this.coolingLossesService.initGasCoolingForm(),
             liquidCoolingForm: this.coolingLossesService.initLiquidCoolingForm(),
@@ -105,7 +105,7 @@ export class CoolingLossesComponent implements OnInit {
   initCoolingLosses() {
     this.losses.coolingLosses.forEach(loss => {
       let tmpLoss: any;
-      if (loss.coolingLossType == 'Other Gas' || loss.coolingLossType == 'Air') {
+      if (loss.coolingLossType == 'Gas' || loss.coolingLossType == 'Air') {
         tmpLoss = {
           coolingMedium: loss.coolingLossType,
           waterCoolingForm: this.coolingLossesService.initWaterCoolingForm(),
@@ -114,7 +114,7 @@ export class CoolingLossesComponent implements OnInit {
           name: 'Loss #' + (this._coolingLosses.length + 1),
           heatLoss: loss.heatLoss || 0.0
         };
-      } else if (loss.coolingLossType == 'Other Liquid') {
+      } else if (loss.coolingLossType == 'Liquid') {
         tmpLoss = {
           coolingMedium: loss.coolingLossType,
           waterCoolingForm: this.coolingLossesService.initWaterCoolingForm(),
@@ -145,7 +145,7 @@ export class CoolingLossesComponent implements OnInit {
       this.coolingLossesCompareService.addObject(this.coolingLossesCompareService.differentArray.length - 1);
     }
     this._coolingLosses.push({
-      coolingMedium: 'Air',
+      coolingMedium: 'Gas',
       waterCoolingForm: this.coolingLossesService.initWaterCoolingForm(),
       gasCoolingForm: this.coolingLossesService.initGasCoolingForm(),
       liquidCoolingForm: this.coolingLossesService.initLiquidCoolingForm(),
@@ -167,7 +167,7 @@ export class CoolingLossesComponent implements OnInit {
   }
 
   calculate(loss: any) {
-    if (loss.coolingMedium == 'Other Gas' || loss.coolingMedium == 'Air') {
+    if (loss.coolingMedium == 'Gas' || loss.coolingMedium == 'Air') {
       loss.heatLoss = this.phastService.gasCoolingLosses(
         loss.gasCoolingForm.value.gasFlow,
         loss.gasCoolingForm.value.inletTemp,
@@ -176,7 +176,7 @@ export class CoolingLossesComponent implements OnInit {
         loss.gasCoolingForm.value.correctionFactor
       );
     }
-    else if (loss.coolingMedium == 'Other Liquid') {
+    else if (loss.coolingMedium == 'Liquid') {
       loss.heatLoss = this.phastService.liquidCoolingLosses(
         loss.liquidCoolingForm.value.liquidFlow,
         loss.liquidCoolingForm.value.density,
@@ -200,11 +200,11 @@ export class CoolingLossesComponent implements OnInit {
     let tmpCoolingLosses = new Array<CoolingLoss>();
     this._coolingLosses.forEach(loss => {
       let tmpCoolingLoss: any;
-      if (loss.coolingMedium == 'Other Gas' || loss.coolingMedium == 'Air') {
+      if (loss.coolingMedium == 'Gas' || loss.coolingMedium == 'Air') {
         tmpCoolingLoss = this.coolingLossesService.initGasLossFromForm(loss.gasCoolingForm);
         tmpCoolingLoss.heatLoss = loss.heatLoss;
       }
-      else if (loss.coolingMedium == 'Other Liquid') {
+      else if (loss.coolingMedium == 'Liquid') {
         tmpCoolingLoss = this.coolingLossesService.initLiquidLossFromForm(loss.liquidCoolingForm);
         tmpCoolingLoss.heatLoss = loss.heatLoss;
       }

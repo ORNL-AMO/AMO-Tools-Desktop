@@ -1,4 +1,4 @@
-<div *ngIf="assessment">
+<div *ngIf="assessment && currentTab != 'report'">
   <div class="hide-print" id="psatBanner">
     <app-psat-banner (togglePanel)="toggleOpenPanel($event)" [assessment]="assessment"></app-psat-banner>
   </div>
@@ -75,14 +75,13 @@
     </div>
   </div>
 
-  <div class="tab-content" *ngIf="currentTab == 'explore-opportunities'">
+  <div class="tab-content" *ngIf="currentTab == 'explore-opportunities' && settings">
     <app-explore-opportunities [assessment]="assessment" [settings]="settings" [saveClicked]="saveClicked" [(psat)]="_psat" (saved)="save()"></app-explore-opportunities>
   </div>
 
 
   <div class="tab-content" *ngIf="currentTab == 'modify-conditions'">
-    <app-modify-conditions [assessment]="assessment" [settings]="settings" [saveClicked]="saveClicked" [(psat)]="_psat" (saved)="save()"
-      [emitPrint]="emitPrint"></app-modify-conditions>
+    <app-modify-conditions [assessment]="assessment" [settings]="settings" [saveClicked]="saveClicked" [(psat)]="_psat" (saved)="save()"></app-modify-conditions>
   </div>
 
   <div class="tab-content" *ngIf="currentTab == 'system-curve'">
@@ -114,9 +113,19 @@
       <button class="btn btn-secondary" *ngIf="currentTab == 'system-setup' || currentTab == 'modify-conditions' ||  currentTab == 'explore-opportunities'"
         (click)="toggleSave()">Save</button>
       <button class="btn btn-primary" *ngIf="currentTab == 'system-setup'" [disabled]="!getCanContinue()" (click)="continue()">Continue</button>
-      <button class="btn btn-primary" *ngIf="currentTab == 'modify-conditions'" (click)="exportData()">Export</button>
+
+      <button class="btn btn-primary" *ngIf="currentTab == 'explore-opportunities' || currentTab == 'modify-conditions'"
+        (click)="goToReport()">View Report</button>
+      <!-- <button class="btn btn-primary" *ngIf="currentTab == 'modify-conditions'" (click)="exportData()">Export</button> -->
       <!--<button class="btn btn-primary" *ngIf="currentTab == 'modify-conditions'" (click)="togglePrint()"><span class="fa fa-print"></span></button>-->
     </div>
+  </div>
+</div>
+
+
+<div class="row justify-content-center report-container" *ngIf="currentTab == 'report' && settings">
+  <div class="col-10 report-column">
+    <app-psat-report [psat]="psat" [settings]="settings" [assessment]="assessment" [inPsat]="true" (closeReport)="closeReport()" (exportData)="exportData()"></app-psat-report>
   </div>
 </div>
 

@@ -848,7 +848,6 @@ Calculators
 ================================================ */
 .pump-head select.form-control:not([size]):not([multiple]) {
   width: auto;
-  height: 42px;
   margin-bottom: 20px;
 }
 .units-of-measure {
@@ -908,6 +907,10 @@ Banner
   background: #2c2c2c;
   color: #fff;
 }
+  .banner small {
+    font-size: 14px;
+    color: rgba(255,255,255,0.6);
+  }
   .banner.psat {
     background: #2980b9;
   }
