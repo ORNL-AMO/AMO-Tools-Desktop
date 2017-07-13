@@ -91,48 +91,54 @@
   <div class="tab-content" *ngIf="currentTab == 'achievable-efficiency'">
     <div class="row justify-content-center">
       <div class="col-10">
-        <div class="card card-block" style="border: none; background-color: #efefef; margin-top: 2.5%; margin-bottom: 2.5%; max-height: 70vh;">
+        <div class="card card-block calculator-card">
           <app-achievable-efficiency [inPsat]="true" [settings]="settings" [psat]="_psat"></app-achievable-efficiency>
         </div>
       </div>
     </div>
   </div>
   <div class="tab-content" *ngIf="currentTab == 'motor-performance'">
-    <app-motor-performance [inPsat]="true" [psat]="_psat" [settings]="settings"></app-motor-performance>
-  </div>
-
-  <div class="tab-content" *ngIf="currentTab == 'nema-energy-efficiency'">
-    <app-nema-energy-efficiency [inPsat]="true" [psat]="_psat" [settings]="settings"></app-nema-energy-efficiency>
-  </div>
-
-  <div class="tab-content" *ngIf="currentTab == 'specific-speed'">
-    <app-specific-speed [settings]="settings" [inPsat]="true" [psat]="_psat"></app-specific-speed>
-  </div>
-
-  <div id="psatFooter" class="footer hide-print">
-    <div class="pull-left">
-      <button class="btn btn-secondary" *ngIf="currentTab == 'system-setup'" (click)="close()">Close</button>
-      <button class="btn btn-secondary" *ngIf="currentTab != 'system-setup'" (click)="goBack()">Back</button>
-    </div>
-    <div class="pull-right">
-      <button class="btn btn-secondary" *ngIf="currentTab == 'system-setup' || currentTab == 'modify-conditions' ||  currentTab == 'explore-opportunities'"
-        (click)="toggleSave()">Save</button>
-      <button class="btn btn-primary" *ngIf="currentTab == 'system-setup'" [disabled]="!getCanContinue()" (click)="continue()">Continue</button>
-
-      <button class="btn btn-primary" *ngIf="currentTab == 'explore-opportunities' || currentTab == 'modify-conditions'" (click)="goToReport()">View Report</button>
-      <!-- <button class="btn btn-primary" *ngIf="currentTab == 'modify-conditions'" (click)="exportData()">Export</button> -->
-      <!--<button class="btn btn-primary" *ngIf="currentTab == 'modify-conditions'" (click)="togglePrint()"><span class="fa fa-print"></span></button>-->
+    <div class="row justify-content-center">
+      <div class="col-10">
+        <div class="card card-block calculator-card">
+          <app-motor-performance [inPsat]="true" [psat]="_psat" [settings]="settings"></app-motor-performance>
+        </div>
+      </div>
     </div>
   </div>
-</div>
 
+    <div class="tab-content" *ngIf="currentTab == 'nema-energy-efficiency'">
+      <app-nema-energy-efficiency [inPsat]="true" [psat]="_psat" [settings]="settings"></app-nema-energy-efficiency>
+    </div>
 
-<div class="row justify-content-center report-container" *ngIf="currentTab == 'report' && settings">
-  <div class="col-10 report-column">
-    <app-psat-report [psat]="psat" [settings]="settings" [assessment]="assessment" [inPsat]="true" (closeReport)="closeReport()"
-      (exportData)="exportData()"></app-psat-report>
+    <div class="tab-content" *ngIf="currentTab == 'specific-speed'">
+      <app-specific-speed [settings]="settings" [inPsat]="true" [psat]="_psat"></app-specific-speed>
+    </div>
+
+    <div id="psatFooter" class="footer hide-print">
+      <div class="pull-left">
+        <button class="btn btn-secondary" *ngIf="currentTab == 'system-setup'" (click)="close()">Close</button>
+        <button class="btn btn-secondary" *ngIf="currentTab != 'system-setup'" (click)="goBack()">Back</button>
+      </div>
+      <div class="pull-right">
+        <button class="btn btn-secondary" *ngIf="currentTab == 'system-setup' || currentTab == 'modify-conditions' ||  currentTab == 'explore-opportunities'"
+          (click)="toggleSave()">Save</button>
+        <button class="btn btn-primary" *ngIf="currentTab == 'system-setup'" [disabled]="!getCanContinue()" (click)="continue()">Continue</button>
+
+        <button class="btn btn-primary" *ngIf="currentTab == 'explore-opportunities' || currentTab == 'modify-conditions'" (click)="goToReport()">View Report</button>
+        <!-- <button class="btn btn-primary" *ngIf="currentTab == 'modify-conditions'" (click)="exportData()">Export</button> -->
+        <!--<button class="btn btn-primary" *ngIf="currentTab == 'modify-conditions'" (click)="togglePrint()"><span class="fa fa-print"></span></button>-->
+      </div>
+    </div>
   </div>
-</div>
 
 
-<ng2-toasty></ng2-toasty>
+  <div class="row justify-content-center report-container" *ngIf="currentTab == 'report' && settings">
+    <div class="col-10 report-column">
+      <app-psat-report [psat]="psat" [settings]="settings" [assessment]="assessment" [inPsat]="true" (closeReport)="closeReport()"
+        (exportData)="exportData()"></app-psat-report>
+    </div>
+  </div>
+
+
+  <ng2-toasty></ng2-toasty>
