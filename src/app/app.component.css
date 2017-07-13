@@ -860,8 +860,15 @@ Calculators
 .pump-head .tabs.primary {
   background: transparent;
 }
+
+.calc-tab{
+    width: 50%;
+}
+
 .pump-head .tabs.primary a {
   border-top: #c8c8c8 solid 1px;
+  font-size: large;
+  font-weight: bold;
 }
 .pump-head .tab-content {
   background: #fff;
