@@ -25,6 +25,8 @@ export class PsatReportComponent implements OnInit {
   emitPrint: boolean;
   @Input()
   inPsat: boolean;
+  @Output('exportData')
+  exportData = new EventEmitter<boolean>();
 
   assessmentDirectories: Directory[];
   isFirstChange: boolean = true;
@@ -48,11 +50,11 @@ export class PsatReportComponent implements OnInit {
       this.assessmentDirectories = new Array();
       this.getDirectoryList(this.assessment.directoryId);
     }
-    this.psatService.printReport.subscribe((val) => {
-      if(val){
-        this.print();
-      }
-    })
+    // this.psatService.printReport.subscribe((val) => {
+    //   if(val){
+    //     this.print();
+    //   }
+    // })
   }
 
   // ngOnChanges(changes: SimpleChanges) {
@@ -139,6 +141,10 @@ export class PsatReportComponent implements OnInit {
     let win = this.windowRefService.nativeWindow;
     let doc = this.windowRefService.getDoc();
     win.print();
+  }
+
+  exportToCsv(){
+    this.exportData.emit(true);
   }
 
 }

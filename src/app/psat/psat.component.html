@@ -1,4 +1,4 @@
-<div *ngIf="assessment">
+<div *ngIf="assessment && currentTab != 'report'">
   <div class="hide-print" id="psatBanner">
     <app-psat-banner (togglePanel)="toggleOpenPanel($event)" [assessment]="assessment"></app-psat-banner>
   </div>
@@ -122,6 +122,13 @@
       <!-- <button class="btn btn-primary" *ngIf="currentTab == 'modify-conditions'" (click)="exportData()">Export</button> -->
       <!--<button class="btn btn-primary" *ngIf="currentTab == 'modify-conditions'" (click)="togglePrint()"><span class="fa fa-print"></span></button>-->
     </div>
+  </div>
+</div>
+
+
+<div class="row justify-content-center report-container" *ngIf="currentTab == 'report' && settings">
+  <div class="col-10 report-column">
+    <app-psat-report [psat]="psat" [settings]="settings" [assessment]="assessment" [emitPrint]="emitPrint" [inPsat]="true" (closeReport)="closeReport()" (exportData)="exportData()"></app-psat-report>
   </div>
 </div>
 
