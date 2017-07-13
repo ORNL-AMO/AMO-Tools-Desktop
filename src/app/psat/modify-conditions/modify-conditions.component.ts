@@ -23,8 +23,8 @@ export class ModifyConditionsComponent implements OnInit {
   saved = new EventEmitter<boolean>();
   @Input()
   assessment: Assessment;
-  @Input()
-  emitPrint: boolean;
+  // @Input()
+  // emitPrint: boolean;
 
   modifyTab: string = 'field-data';
   _modifications: Array<Modification>;
@@ -54,17 +54,17 @@ export class ModifyConditionsComponent implements OnInit {
     // let results: PsatOutputs = this.psatService.results(this.psat.inputs);
     // console.log(results)
 
-    this.psatService.changeSubTab.subscribe((val) => {
-      if (val) {
-        this.modifyTab = val;
-      }
-    })
+    // this.psatService.changeSubTab.subscribe((val) => {
+    //   if (val) {
+    //     this.modifyTab = val;
+    //   }
+    // })
   }
 
   ngOnDestroy() {
     this.compareService.baselinePSAT = null;
     this.compareService.modifiedPSAT = null;
-    this.psatService.changeSubTab.next(null);
+  //  this.psatService.changeSubTab.next(null);
   }
 
   save() {

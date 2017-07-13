@@ -34,7 +34,7 @@ export class PsatComponent implements OnInit {
     'motor-performance',
     'nema-energy-efficiency',
     'specific-speed',
-    
+
   ]
   tabIndex: number = 0;
 
@@ -94,14 +94,6 @@ export class PsatComponent implements OnInit {
       let tmpTab = this.assessmentService.getTab();
       if (tmpTab) {
         this.currentTab = tmpTab;
-      }
-    })
-
-    this.psatService.changeSubTab.subscribe((val) => {
-      if (val == 'report') {
-        this.viewingReport = true;
-      } else {
-        this.viewingReport = false;
       }
     })
   }
@@ -212,11 +204,7 @@ export class PsatComponent implements OnInit {
     }
     this.canContinue = false;
   }
-
-  printReport(){
-    this.psatService.printReport.next(true);
-  }
-
+  
   getCanContinue() {
     if (this.subTab == 'system-basics') {
       return true;
@@ -238,11 +226,7 @@ export class PsatComponent implements OnInit {
   }
 
   goBack() {
-    if (!this.viewingReport) {
-      this.currentTab = 'system-setup';
-    } else {
-      this.psatService.changeSubTab.next('field-data');
-    }
+    this.currentTab = 'system-setup';
   }
 
   toggleSave() {
@@ -296,7 +280,7 @@ export class PsatComponent implements OnInit {
     this.currentTab = 'report';
   }
 
-  closeReport(){
+  closeReport() {
     this.currentTab = this.tabBeforeReport;
   }
 }

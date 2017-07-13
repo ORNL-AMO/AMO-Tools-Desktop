@@ -22,8 +22,6 @@ export class PsatReportComponent implements OnInit {
   @Input()
   assessment: Assessment;
   @Input()
-  emitPrint: boolean;
-  @Input()
   inPsat: boolean;
   @Output('exportData')
   exportData = new EventEmitter<boolean>();
