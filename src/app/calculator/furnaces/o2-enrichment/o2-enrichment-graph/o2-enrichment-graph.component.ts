@@ -33,6 +33,7 @@ export class O2EnrichmentGraphComponent implements OnInit {
   pointer: any;
   calcPoint: any;
   focus: any;
+  point: any;
 
   isFirstChange: boolean = true;
   fontSize: string;
@@ -68,8 +69,7 @@ export class O2EnrichmentGraphComponent implements OnInit {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    console.log(changes.o2Enrichment);
-    if (!this.isFirstChange && (changes.o2Enrichment)) {
+    if (!this.isFirstChange && changes) {
       this.onChanges();
     } else {
       this.isFirstChange = false;
@@ -109,11 +109,14 @@ export class O2EnrichmentGraphComponent implements OnInit {
   }
 
   setUp() {
+    this.initGraph();
+    //We can draw the guideCurve now since pump type has no effect on what kind of shape it has.
+    this.drawCurve(this.svg, this.x, this.y);
+  }
 
+  initGraph(){
     //Remove  all previous graphs
     d3.select('app-o2-enrichment-graph').selectAll('svg').remove();
-    let tmpBox = d3.select("#detailBox").remove();
-    var curvePoints = [];
 
     //graph dimensions
     this.margin = { top: 20, right: 120, bottom: 110, left: 120 };
@@ -126,7 +129,7 @@ export class O2EnrichmentGraphComponent implements OnInit {
 
     this.y = d3.scaleLinear()
       .range([this.height, 0])
-      .domain([0, 100]);        //TODO change to better represent
+      .domain([0, 100]);
 
     this.xAxis = d3.axisBottom()
       .scale(this.x)
@@ -264,21 +267,22 @@ export class O2EnrichmentGraphComponent implements OnInit {
       .attr("x", 9)
       .attr("dy", ".35em");
 
-    this.svg.style("display", "none");
-
-    //We can draw the guideCurve now since pump type has no effect on what kind of shape it has.
-    this.drawCurve(this.svg, this.x, this.y);
+    this.svg.style("display", null);
   }
 
   drawCurve(svg, x, y) {
 
     svg.selectAll("path").remove();
 
+    var onGraph = false;
+
     var data = [];
-    for (var i = 0; i <= 100; i++) {
+    console.log(this.o2Enrichment);
+
+    for (var i = 0; i <= 100; i += .5) {
 
       this.o2EnrichmentPoint = {
-        o2CombAir: this.o2Enrichment.o2FlueGas,
+        o2CombAir: this.o2Enrichment.o2CombAir,
         o2CombAirEnriched: i,
         flueGasTemp: this.o2Enrichment.flueGasTemp,
         flueGasTempEnriched: this.o2Enrichment.flueGasTempEnriched,
@@ -290,12 +294,24 @@ export class O2EnrichmentGraphComponent implements OnInit {
       };
       var fuelSavings = this.PhastService.o2Enrichment(this.o2EnrichmentPoint).fuelSavingsEnriched;
       if (fuelSavings > 0 && fuelSavings < 100) {
+        onGraph = true;
         data.push({
           x: i,
           y: fuelSavings
         });
       }
     }
+
+
+    //reload the graph and return if no points are on the graph
+    if(!onGraph){
+      this.detailBox = null;
+      this.pointer = null;
+      this.focus = null;
+      this.initGraph();
+      return;
+    }
+
     var guideLine = d3.line()
       .x(function (d) {
         return x(d.x);
@@ -314,7 +330,6 @@ export class O2EnrichmentGraphComponent implements OnInit {
       .style("fill", "none")
       .style("stroke", "#2ECC71")
       .style('pointer-events', 'none');
-
 
     var format = d3.format(",.2f");
     var bisectDate = d3.bisector(function (d) { return d.x; }).left;
@@ -379,14 +394,11 @@ export class O2EnrichmentGraphComponent implements OnInit {
           .style("padding-right", "10px")
           .style("padding-left", "10px")
           .html(
-            "<p><strong><div>Specific Speed: </div></strong><div>" + format(d.x) + " " + "</div>" +
+            "<p><strong><div>O<sub>2</sub> in Air: </div></strong><div>" + format(d.x) + " %</div>" +
+            "<strong><div>Fuel Savings: </div></strong><div>" + format(d.y) + " %</div></p>")
 
-            "<strong><div>Efficiency Correction: </div></strong><div>" + format(d.y) + " %</div></p>")
-
-          // "<div style='float:left;'>Fluid Power: </div><div style='float: right;'>" + format(d.fluidPower) + " </div></strong></p>")
-
-          .style("left", (this.margin.left + x(d.x) - (detailBoxWidth / 2 - 35)) + "px")
-          .style("top", (this.margin.top + y(d.y) + 45) + "px")
+          .style("left", (this.margin.left + x(d.x) - (detailBoxWidth / 2 - 15)) + "px")
+          .style("top", (this.margin.top + y(d.y) + 25) + "px")
           .style("position", "absolute")
           .style("width", detailBoxWidth + "px")
           .style("height", detailBoxHeight + "px")
@@ -417,162 +429,35 @@ export class O2EnrichmentGraphComponent implements OnInit {
           .style("opacity",0);
       });
 
-    console.log("here");
+    this.drawPoint(x, y);
+
     this.svg.style("display", null);
   }
 
-  drawPoint() {
+  drawPoint(x, y) {
 
+    this.point = this.svg.append("g")
+      .attr("class", "focus")
+      .style("display", "none")
+      .style('pointer-events', 'none');
+
+    this.point.append("circle")
+      .attr("r", 8)
+      .style("fill", "#ff0315");
+
+    this.point.append("text")
+      .attr("x", 9)
+      .attr("dy", ".35em");
+
+    this.point
+      .style("display", null)
+      .style("opacity",1)
+      .style('pointer-events', 'none')
+      .attr("transform", "translate(" + x(this.o2Enrichment.o2CombAirEnriched) + "," + y(this.o2EnrichmentOutput.fuelSavingsEnriched) + ")");
   }
 
   onChanges() {
-
-    this.svg.selectAll("path").remove();
-
-    var data = [];
-    for (var i = 0; i <= 100; i++) {
-
-      this.o2EnrichmentPoint = {
-        o2CombAir: this.o2Enrichment.o2FlueGas,
-        o2CombAirEnriched: i,
-        flueGasTemp: this.o2Enrichment.flueGasTemp,
-        flueGasTempEnriched: this.o2Enrichment.flueGasTempEnriched,
-        o2FlueGas: this.o2Enrichment.o2FlueGas,
-        o2FlueGasEnriched: this.o2Enrichment.o2FlueGasEnriched,
-        combAirTemp: this.o2Enrichment.combAirTemp,
-        combAirTempEnriched: this.o2Enrichment.combAirTempEnriched,
-        fuelConsumption: this.o2Enrichment.fuelConsumption
-      };
-      var fuelSavings = this.PhastService.o2Enrichment(this.o2EnrichmentPoint).fuelSavingsEnriched;
-      if (fuelSavings > 0 && fuelSavings < 100) {
-        data.push({
-          x: i,
-          y: fuelSavings
-        });
-      }
-    }
-    var guideLine = d3.line()
-      .x(function (d) {
-        return this.x(d.x);
-      })
-      .y(function (d) {
-        return this.y(d.y);
-      })
-      .curve(d3.curveNatural);
-
-    this.svg.append("path")
-      .data([data])
-      .attr("class", "line")
-      .attr("d", guideLine)
-      .style("stroke-width", 10)
-      .style("stroke-width", "2px")
-      .style("fill", "none")
-      .style("stroke", "#ff0315")
-      .style('pointer-events', 'none');
-
-    var format = d3.format(",.2f");
-    var bisectDate = d3.bisector(function (d) { return d.x; }).left;
-    this.svg.select('#graph')
-      .attr("width", this.width)
-      .attr("height", this.height)
-      .attr("class", "overlay")
-      .attr("fill", "#ffffff")
-      .style("filter", "url(#drop-shadow)")
-      .on("mouseover", () => {
-
-        this.focus
-          .style("display", null)
-          .style("opacity",1)
-          .style('pointer-events', 'none');
-        this.pointer
-          .style("display", null)
-          .style('pointer-events', 'none');
-        this.detailBox
-          .style("display", null)
-          .style('pointer-events', 'none');
-
-      })
-      .on("mousemove", () => {
-
-        this.focus
-          .style("display", null)
-          .style("opacity", 1)
-          .style('pointer-events', 'none');
-        this.pointer
-          .style("display", null)
-          .style('pointer-events', 'none');
-        this.detailBox
-          .style("display", null)
-          .style('pointer-events', 'none');
-
-        let x0 = this.x.invert(d3.mouse(d3.event.currentTarget)[0]);
-        let i = bisectDate(data, x0, 1);
-        if (i >= data.length) {
-          i = data.length - 1
-        }
-        let d0 = data[i - 1];
-        let d1 = data[i];
-        let d = x0 - d0.x > d1.x - x0 ? d1 : d0;
-        this.focus.attr("transform", "translate(" + this.x(d.x) + "," + this.y(d.y) + ")");
-
-        this.pointer.transition()
-          .style("opacity", 1);
-
-        this.detailBox.transition()
-          .style("opacity", 1);
-
-        var detailBoxWidth = 160;
-        var detailBoxHeight = 90;
-
-        this.pointer
-          .attr("transform", 'translate(' + (this.x(d.x) - (detailBoxWidth / 2)) + ',' + (this.y(d.y) + 27) + ')')
-          .style("fill", "#ffffff")
-          .style("filter", "url(#drop-shadow)");
-
-        this.detailBox
-          .style("padding-right", "10px")
-          .style("padding-left", "10px")
-          .html(
-            "<p><strong><div>Specific Speed: </div></strong><div>" + format(d.x) + " " + "</div>" +
-
-            "<strong><div>Efficiency Correction: </div></strong><div>" + format(d.y) + " %</div></p>")
-
-          // "<div style='float:left;'>Fluid Power: </div><div style='float: right;'>" + format(d.fluidPower) + " </div></strong></p>")
-
-          .style("left", (this.margin.left + this.x(d.x) - (detailBoxWidth / 2 - 35)) + "px")
-          .style("top", (this.margin.top + this.y(d.y) + 45) + "px")
-          .style("position", "absolute")
-          .style("width", detailBoxWidth + "px")
-          .style("height", detailBoxHeight + "px")
-          .style("padding-left", "10px")
-          .style("padding-right", "10px")
-          .style("font", "12px sans-serif")
-          .style("background", "#ffffff")
-          .style("border", "0px")
-          .style("pointer-events", "none");
-      })
-      .on("mouseout", () => {
-        this.pointer
-          .transition()
-          .delay(100)
-          .duration(600)
-          .style("opacity",0);
-
-        this.detailBox
-          .transition()
-          .delay(100)
-          .duration(600)
-          .style("opacity",0);
-
-        this.focus
-          .transition()
-          .delay(100)
-          .duration(600)
-          .style("opacity",0);
-      });
-
-    this.svg.style("display", null);
-
+    this.drawCurve(this.svg, this.x, this.y);
   }
 
 
