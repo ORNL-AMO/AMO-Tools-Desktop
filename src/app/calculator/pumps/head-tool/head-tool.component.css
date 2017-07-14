@@ -3,3 +3,11 @@
     padding-right: 15px;
     font-size: large;
 }
+
+.select-type{
+    margin-bottom: 15px;
+}
+
+.calc-help{
+    padding: 8px !important;
+}

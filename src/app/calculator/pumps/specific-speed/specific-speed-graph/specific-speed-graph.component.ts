@@ -79,8 +79,12 @@ export class SpecificSpeedGraphComponent implements OnInit {
   resizeGraph() {
     let curveGraph = this.doc.getElementById('specificSpeedGraph');
     this.canvasWidth = curveGraph.clientWidth;
-    this.canvasHeight = this.canvasWidth * (2 / 3);
-    this.margin = { top: 20, right: 20, bottom: 110, left: 120 };
+    this.canvasHeight = this.canvasWidth * (3/5);
+    if (this.canvasWidth < 400) {
+      this.margin = { top: 10, right: 10, bottom: 50, left: 75 };
+    } else {
+      this.margin = { top: 20, right: 20, bottom: 75, left: 120 };
+    }
     this.width = this.canvasWidth - this.margin.left - this.margin.right;
     this.height = this.canvasHeight - this.margin.top - this.margin.bottom;
     if (this.checkForm()) {

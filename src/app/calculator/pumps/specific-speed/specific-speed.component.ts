@@ -21,6 +21,7 @@ export class SpecificSpeedComponent implements OnInit {
   specificSpeed: number;
   efficiencyCorrection: number;
   toggleCalculate: boolean = true;
+  tabSelect: string = 'results';
   constructor(private psatService: PsatService, private indexedDbService: IndexedDbService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
@@ -63,5 +64,7 @@ export class SpecificSpeedComponent implements OnInit {
   calculate() {
     this.toggleCalculate = !this.toggleCalculate;
   }
-
+  setTab(str: string) {
+    this.tabSelect = str;
+  }
 }
