@@ -260,7 +260,16 @@ select.form-control:not([size]):not([multiple]) {
           width: 50%;
      min-width: 150px;
  }
+ .incrementor .units{
+   border-top: none;
+   border-right: none;
+   border-bottom: none;
+   border-left: solid;
+ }
 
+ .incrementor .addon-input{
+   border-right: solid 1px #9c9c9c !important;
+ }
 
 .indicate-different{
   border: #EF6C00 solid 2px;
