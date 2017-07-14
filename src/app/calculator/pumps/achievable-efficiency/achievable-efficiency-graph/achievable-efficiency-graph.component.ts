@@ -94,14 +94,14 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
     let curveGraph = this.doc.getElementById('achievableEfficiencyGraph');
 
     this.canvasWidth = curveGraph.clientWidth;
-    this.canvasHeight = this.canvasWidth * (2 / 3);
+    this.canvasHeight = this.canvasWidth * (3/5);
 
     if (this.canvasWidth < 400) {
       this.fontSize = '8px';
-      this.margin = { top: 10, right: 10, bottom: 70, left: 75 };
+      this.margin = { top: 10, right: 10, bottom: 50, left: 75 };
     } else {
       this.fontSize = '11px';
-      this.margin = { top: 20, right: 20, bottom: 110, left: 120 };
+      this.margin = { top: 20, right: 20, bottom: 75, left: 120 };
     }
     this.width = this.canvasWidth - this.margin.left - this.margin.right;
     this.height = this.canvasHeight - this.margin.top - this.margin.bottom;
@@ -186,8 +186,8 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
       .ticks(11);
 
     this.svg = d3.select('app-achievable-efficiency-graph').append('svg')
-      .attr("width", this.width + this.margin.left + this.margin.right + 70)
-      .attr("height", this.height + this.margin.top + this.margin.bottom + 70)
+      .attr("width", this.width + this.margin.left + this.margin.right)
+      .attr("height", this.height + this.margin.top + this.margin.bottom)
       .append("g")
       .attr("transform", "translate(" + this.margin.left + "," + this.margin.top + ")");
 
@@ -592,13 +592,13 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
       .style("font-weight", "bold")
       .style("fill", "#3498DB");
 
-    this.svg.append("text")
-      .attr("x", 20)
-      .attr("y", "80")
-      .text("Pump Type: " + this.efficiencyForm.value.pumpType)
-      .style("font-size", this.fontSize)
-      .style("font-weight", "bold")
-      .style("fill", "#000000");
+    // this.svg.append("text")
+    //   .attr("x", 20)
+    //   .attr("y", "80")
+    //   .text("Pump Type: " + this.efficiencyForm.value.pumpType)
+    //   .style("font-size", this.fontSize)
+    //   .style("font-weight", "bold")
+    //   .style("fill", "#000000");
 
     // this.maxValue
     //   .text(format(this.calculateYmax(this.efficiencyForm.value.flowRate)) + ' %');

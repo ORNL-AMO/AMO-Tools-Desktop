@@ -21,6 +21,8 @@ export class AchievableEfficiencyComponent implements OnInit {
   
   efficiencyForm: any;
   toggleCalculate: boolean = true;
+  tabSelect: string = 'results';
+
   constructor(private formBuilder: FormBuilder, private psatService: PsatService, private indexedDbService: IndexedDbService, private settingsService: SettingsService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
@@ -58,4 +60,7 @@ export class AchievableEfficiencyComponent implements OnInit {
     this.toggleCalculate = !this.toggleCalculate;
   }
 
+  setTab(str: string){
+    this.tabSelect = str;
+  }
 }

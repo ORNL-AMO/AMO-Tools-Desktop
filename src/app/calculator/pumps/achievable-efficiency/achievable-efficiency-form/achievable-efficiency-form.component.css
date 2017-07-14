@@ -1,13 +1,5 @@
-.inline-label {
-  position: absolute;
-  top: 30px;
-  left: 132px;
-  font-size: 14px;
-  color: #a9a9a9;
-  pointer-events: none;
-}
-.input-width{
-  width: 164px;
-  height: 25px;
-  font-size: 16px;
-}
+
+ .calculator-form {
+    padding: 5%;
+ }
+
