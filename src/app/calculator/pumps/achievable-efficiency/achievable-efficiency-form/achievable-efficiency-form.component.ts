@@ -47,6 +47,10 @@ export class AchievableEfficiencyFormComponent implements OnInit {
     })
     this.calculate.emit(true);
   }
+
+  test(){
+    console.log('click')
+  }
 }
 
 

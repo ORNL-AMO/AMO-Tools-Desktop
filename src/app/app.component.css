@@ -305,7 +305,7 @@ In-Assessment Calculators
 }
 .calc-form {
   padding: 20px 30px;
-  height: 100vh;
+  /*height: 100vh;*/
   background: #fff;
   border-right: #bbb solid 1px;
 }
@@ -860,8 +860,15 @@ Calculators
 .pump-head .tabs.primary {
   background: transparent;
 }
+
+.calc-tab{
+    width: 50%;
+}
+
 .pump-head .tabs.primary a {
   border-top: #c8c8c8 solid 1px;
+  font-size: large;
+  font-weight: bold;
 }
 .pump-head .tab-content {
   background: #fff;
@@ -1220,6 +1227,7 @@ Tabs
 
 .tab-content {
   overflow-y: scroll;
+  max-height: 78vh;
 }
   .tab-content .wrapper {
       max-width: 1024px;

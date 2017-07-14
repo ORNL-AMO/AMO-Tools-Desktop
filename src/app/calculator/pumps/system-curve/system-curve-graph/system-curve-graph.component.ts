@@ -80,14 +80,14 @@ export class SystemCurveGraphComponent implements OnInit {
     let curveGraph = this.doc.getElementById('systemCurveGraph');
 
     this.canvasWidth = curveGraph.clientWidth;
-    this.canvasHeight = this.canvasWidth * (2 / 3);
+    this.canvasHeight = this.canvasWidth * (3/5);
 
     if (this.canvasWidth < 400) {
       this.fontSize = '8px';
-      this.margin = { top: 10, right: 10, bottom: 75, left: 80 };
+      this.margin = { top: 10, right: 10, bottom: 50, left: 75 };
     } else {
       this.fontSize = '12px';
-      this.margin = { top: 20, right: 20, bottom: 110, left: 120 };
+      this.margin = { top: 20, right: 20, bottom: 75, left: 120 };
     }
     this.width = this.canvasWidth - this.margin.left - this.margin.right;
     this.height = this.canvasHeight - this.margin.top - this.margin.bottom;
@@ -130,9 +130,8 @@ export class SystemCurveGraphComponent implements OnInit {
       .ticks(11);
 
     this.svg = d3.select('app-system-curve-graph').append('svg')
-      //70px is added to accommodate for the shadow
-      .attr("width", this.width + this.margin.left + this.margin.right + 70)
-      .attr("height", this.height + this.margin.top + this.margin.bottom + 70)
+      .attr("width", this.width + this.margin.left + this.margin.right)
+      .attr("height", this.height + this.margin.top + this.margin.bottom)
       .append("g")
       .attr("transform", "translate(" + this.margin.left + "," + this.margin.top + ")");
 
@@ -310,7 +309,7 @@ export class SystemCurveGraphComponent implements OnInit {
 
         this.focus
           .style("display", null)
-          .style("opacity",1)
+          .style("opacity", 1)
           .style('pointer-events', 'none');
         this.pointer
           .style("display", null)
@@ -324,7 +323,7 @@ export class SystemCurveGraphComponent implements OnInit {
 
         this.focus
           .style("display", null)
-          .style("opacity",1)
+          .style("opacity", 1)
           .style('pointer-events', 'none');
         this.pointer
           .style("display", null)
@@ -378,23 +377,23 @@ export class SystemCurveGraphComponent implements OnInit {
           .style("pointer-events", "none");
       })
       .on("mouseout", () => {
-          this.pointer
-            .transition()
-              .delay(100)
-              .duration(600)
-              .style("opacity",0);
+        this.pointer
+          .transition()
+          .delay(100)
+          .duration(600)
+          .style("opacity", 0);
 
-          this.detailBox
-            .transition()
-              .delay(100)
-              .duration(600)
-              .style("opacity",0);
+        this.detailBox
+          .transition()
+          .delay(100)
+          .duration(600)
+          .style("opacity", 0);
 
-          this.focus
-            .transition()
-              .delay(100)
-              .duration(600)
-              .style("opacity",0);
+        this.focus
+          .transition()
+          .delay(100)
+          .duration(600)
+          .style("opacity", 0);
       });
 
     this.xAxis.remove();

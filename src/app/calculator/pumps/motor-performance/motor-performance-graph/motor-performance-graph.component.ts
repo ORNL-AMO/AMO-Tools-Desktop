@@ -82,8 +82,12 @@ export class MotorPerformanceGraphComponent implements OnInit {
   resizeGraph() {
     let motorGraph = this.doc.getElementById('motorPerformanceGraph');
     this.canvasWidth = motorGraph.clientWidth;
-    this.canvasHeight = this.canvasWidth * (2 / 3);
-    this.margin = { top: 20, right: 20, bottom: 110, left: 120 };
+    this.canvasHeight = this.canvasWidth * (3 / 5);
+    if (this.canvasWidth < 400) {
+      this.margin = { top: 10, right: 10, bottom: 50, left: 75 };
+    } else {
+      this.margin = { top: 20, right: 20, bottom: 75, left: 120 };
+    }
     this.width = this.canvasWidth - this.margin.left - this.margin.right;
     this.height = this.canvasHeight - this.margin.top - this.margin.bottom;
     this.setUp();
@@ -479,17 +483,17 @@ export class MotorPerformanceGraphComponent implements OnInit {
 
         this.focusCurrent
           .style("display", null)
-          .style("opacity",1)
+          .style("opacity", 1)
           .style('pointer-events', 'none');
 
         this.focusEfficiency
           .style("display", null)
-          .style("opacity",1)
+          .style("opacity", 1)
           .style('pointer-events', 'none');
 
         this.focusPowerFactor
           .style("display", null)
-          .style("opacity",1)
+          .style("opacity", 1)
           .style('pointer-events', 'none');
 
       })
@@ -497,17 +501,17 @@ export class MotorPerformanceGraphComponent implements OnInit {
 
         this.focusCurrent
           .style("display", null)
-          .style("opacity",1)
+          .style("opacity", 1)
           .style('pointer-events', 'none');
 
         this.focusEfficiency
           .style("display", null)
-          .style("opacity",1)
+          .style("opacity", 1)
           .style('pointer-events', 'none');
 
         this.focusPowerFactor
           .style("display", null)
-          .style("opacity",1)
+          .style("opacity", 1)
           .style('pointer-events', 'none');
 
         //current
@@ -594,19 +598,19 @@ export class MotorPerformanceGraphComponent implements OnInit {
           .transition()
           .delay(100)
           .duration(600)
-          .style("opacity",0);
+          .style("opacity", 0);
 
         this.focusEfficiency
           .transition()
           .delay(100)
           .duration(600)
-          .style("opacity",0);
+          .style("opacity", 0);
 
         this.focusPowerFactor
           .transition()
           .delay(100)
           .duration(600)
-          .style("opacity",0);
+          .style("opacity", 0);
 
       });
   }
