@@ -1,11 +1,6 @@
 .form{
     width: 100%;
 }
-.inline-label {
-  white-space: nowrap;
-  max-width: 190px;
-  text-overflow: ellipsis;
-}
 
 .group-label{
   font-size: large;
@@ -16,4 +11,11 @@
 .form-section{
   margin-bottom: 0px !important;
     padding-bottom: 8px !important;
+}
+
+.calc-input-group{
+  width: auto;
+}
+.no-unit-input{
+  width: 100%;
 }

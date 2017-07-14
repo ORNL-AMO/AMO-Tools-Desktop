@@ -197,40 +197,15 @@ select.form-control:not([size]):not([multiple]) {
 .incrementor .btn {
   border-right: #c9c9c9 solid 1px;
   background: #ffffff;
-  background: -moz-linear-gradient(top, #ffffff 0%, #f7f7f7 100%);
-  background: -webkit-linear-gradient(top, #ffffff 0%,#f7f7f7 100%);
-  background: linear-gradient(to bottom, #ffffff 0%,#f7f7f7 100%);
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#f7f7f7',GradientType=0 );
   padding: 5px;
   font-size: 10px;
 }
 
-.incrementor .btn{
-    border-right: #c9c9c9 solid 1px;
-  background: #ffffff;
-  background: -moz-linear-gradient(top, #ffffff 0%, #f7f7f7 100%);
-  background: -webkit-linear-gradient(top, #ffffff 0%,#f7f7f7 100%);
-  background: linear-gradient(to bottom, #ffffff 0%,#f7f7f7 100%);
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#f7f7f7',GradientType=0 );
-  padding: 6px;
-  font-size: 8px;
-  float: left;
-}
 
 .incrementor input.form-control {
   border: none;
   padding-left: 4px;
-}
-
-.calculator .btn {
-  border-left: #c9c9c9 solid 1px;
-  background: #ffffff;
-  background: -moz-linear-gradient(top, #ffffff 0%, #f7f7f7 100%);
-  background: -webkit-linear-gradient(top, #ffffff 0%,#f7f7f7 100%);
-  background: linear-gradient(to bottom, #ffffff 0%,#f7f7f7 100%);
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#f7f7f7',GradientType=0 );
-  padding: 12px;
-  font-size: 12px;
 }
 
 .form-spacer{
@@ -254,14 +229,38 @@ select.form-control:not([size]):not([multiple]) {
   border-bottom: #bbb dashed 1px;
 }
 
-.units {
-  position: absolute;
-  top: 3px;
-  right: 5px;
-  font-size: 14px;
-  color: #a9a9a9;
-  pointer-events: none;
-}
+.units{
+    background: white;
+    padding-top: 0px;
+    padding-bottom: 0px;
+    padding-left: 0px;
+    border-radius: 0;
+    padding-right: .25rem;
+    padding-left: .25rem;
+    border-color: #9c9c9c;
+    border-top: solid;
+    border-width: 1px;
+    margin-bottom: 0px;
+    border-style: inset;
+    box-shadow: none;
+    border-left: none;
+      color: #a9a9a9;
+        font-size: 14px;
+             left: 0px;
+     right: 0px;
+     top: 0px;
+     position: inherit;
+ }
+
+ .addon-input{
+     padding-left: 2px;
+ }
+
+ .calc-addon-group{
+          width: 50%;
+     min-width: 150px;
+ }
+
 
 .indicate-different{
   border: #EF6C00 solid 2px;
@@ -838,17 +837,11 @@ Calculators
   background: transparent;
 }
 
-.calculator .units {
-  top: 27px;
-  right: 13%;
-}
-
 
 /* Pump Head
 ================================================ */
 .pump-head select.form-control:not([size]):not([multiple]) {
   width: auto;
-  margin-bottom: 20px;
 }
 .units-of-measure {
   margin-bottom: 30px;

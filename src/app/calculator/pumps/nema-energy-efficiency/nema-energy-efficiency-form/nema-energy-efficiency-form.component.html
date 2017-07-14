@@ -16,15 +16,15 @@
 
     <div class="form-group">
       <label for="motorRPM">Motor RPM</label>
-      <div class="input-group">
+      <div class="input-group calc-addon-group">
         <div class="incrementor input-group-addon">
           <button class="btn" (click)="subtractNum('motorRPM')"><i class="fa fa-minus"></i></button>
         </div>
         <div class="incrementor input-group-addon">
           <button class="btn" (click)="addNum('motorRPM')"><i class="fa fa-plus"></i></button>
         </div>
-        <input type="number" min="1" step="any" class="form-control incrementor-input-field" id="motorRPM" formControlName="motorRPM" ngModel="{{nemaForm.value.motorRPM}}"
-          onfocus="this.select();">
+        <input type="number" min="1" step="any" class="form-control addon-input" id="motorRPM" formControlName="motorRPM"
+          ngModel="{{nemaForm.value.motorRPM}}" onfocus="this.select();">
       </div>
     </div>
 
@@ -37,11 +37,12 @@
 
     <div class="form-group" *ngIf="nemaForm.value.efficiencyClass == 'Specified'">
       <label for="efficiency">Efficiency</label>
-      <input type="number" min="0" step="any" max="100" class="form-control" id="efficiency" formControlName="efficiency" onfocus="this.select();"
-        [ngClass]="{'invalid': checkEfficiency() == false}">
-      <span class="units">%</span>
-      <span class="alert-danger pull-right small" *ngIf="efficiencyError !== null">{{efficiencyError}}</span>
+      <div class="input-group calc-addon-group">
+        <input type="number" min="0" step="any" max="100" class="form-control addon-input" id="efficiency" formControlName="efficiency"
+          onfocus="this.select();" [ngClass]="{'invalid': checkEfficiency() == false}">
+        <span class="input-group-addon units">%</span>
+        <span class="alert-danger pull-right small" *ngIf="efficiencyError !== null">{{efficiencyError}}</span>
+      </div>
     </div>
   </form>
 </div>
-

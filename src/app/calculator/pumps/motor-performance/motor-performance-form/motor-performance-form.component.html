@@ -15,14 +15,15 @@
 
   <div class=" form-group">
     <label for="motorRPM">Motor RPM</label>
-    <div class="input-group">
+    <div class="input-group calc-addon-group">
       <div class="incrementor input-group-addon">
         <button class="btn" (click)="subtractNum('motorRPM')"><i class="fa fa-minus"></i></button>
       </div>
       <div class="incrementor input-group-addon">
         <button class="btn" (click)="addNum('motorRPM')"><i class="fa fa-plus"></i></button>
       </div>
-      <input type="number" step="any" class="form-control" id="motorRPM" [(ngModel)]="tmpMotorRpm" (input)="emitChange()" onfocus="this.select();">
+      <input type="number" step="any" class="form-control addon-input" id="motorRPM" [(ngModel)]="tmpMotorRpm" (input)="emitChange()"
+        onfocus="this.select();">
     </div>
   </div>
 
@@ -37,24 +38,32 @@
 
   <div class="form-group" *ngIf="tmpEfficiencyClass == 'Specified'">
     <label for="efficiency">Efficiency</label>
-    <input type="number" min="0" step="any" max="100" class="form-control" id="efficiency" [(ngModel)]="tmpEfficiency" (input)="emitChange()"
-      onfocus="this.select();" [ngClass]="{'invalid': checkEfficiency() == false}">
-    <span class="units">%</span>
-    <span class="alert-danger pull-right small" *ngIf="efficiencyError !== null">{{efficiencyError}}</span>
+    <div class="input-group calc-addon-group">
+      <input type="number" min="0" step="any" max="100" class="form-control" id="efficiency" [(ngModel)]="tmpEfficiency" (input)="emitChange()"
+        onfocus="this.select();" [ngClass]="{'invalid': checkEfficiency() == false}">
+      <span class="units">%</span>
+      <span class="alert-danger pull-right small" *ngIf="efficiencyError !== null">{{efficiencyError}}</span>
+    </div>
   </div>
 
   <div class="form-group">
     <label for="motorVoltage">Voltage</label>
-    <input type="number" step="any" class="form-control" id="motorVoltage" [(ngModel)]="tmpMotorVoltage" (input)="emitChange()" onfocus="this.select();">
-    <span class="units">V</span>
+    <div class="input-group calc-addon-group">
+      <input type="number" step="any" class="form-control" id="motorVoltage" [(ngModel)]="tmpMotorVoltage" (input)="emitChange()"
+        onfocus="this.select();">
+      <span class="input-group-addon units">V</span>
+    </div>
   </div>
 
   <div class="form-group">
     <label for="fullLoadAmps" aria-describedby="flaHelp">
         Full-Load Amps
       </label>
-    <input type="number" step="any" class="form-control" id="fullLoadAmps" [(ngModel)]="tmpFullLoadAmps" (input)="emitChange()" onfocus="this.select();">
-    <span class="units">A</span>
+    <div class="input-group calc-addon-group">
+      <input type="number" step="any" class="form-control addon-input" id="fullLoadAmps" [(ngModel)]="tmpFullLoadAmps" (input)="emitChange()"
+        onfocus="this.select();">
+      <span class="input-group-addon units">A</span>
+    </div>
   </div>
 
 </div>
