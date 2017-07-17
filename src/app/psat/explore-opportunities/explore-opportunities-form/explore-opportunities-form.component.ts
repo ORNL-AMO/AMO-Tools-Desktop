@@ -94,8 +94,6 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
     this.tmpNewPumpType = this.psatService.getPumpStyleFromEnum(this.psat.modifications[this.exploreModIndex].psat.inputs.pump_style);
     this.tmpInitialPumpType = this.psatService.getPumpStyleFromEnum(this.psat.inputs.pump_style);
     this.checkValues();
-    console.log(this.psat.inputs.motor_rated_power);
-    console.log(this.psat.modifications[this.exploreModIndex].psat.inputs.motor_rated_power);
   }
 
   setPumpTypes() {

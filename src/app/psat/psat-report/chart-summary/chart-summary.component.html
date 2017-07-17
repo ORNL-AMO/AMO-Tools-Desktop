@@ -10,8 +10,8 @@
   <div class="chart-item" *ngFor="let modification of psat.modifications">
     <app-psat-chart [psat]="modification.psat"></app-psat-chart>
     <dl>
-      <dd class="savings text-center">{{modification.psat.outputs.existing.annual_savings_potential | currency:'USD':true:'4.0-0'}}</dd>
-      <dt class="text-muted text-center">Annual Savings Potential</dt>
+      <dd class="savings text-center" [ngClass]="{'positive-savings': checkSavings(modification.psat.outputs.existing.annual_cost) > 0, 'negative-savings': checkSavings(modification.psat.outputs.existing.annual_cost) < 0}">{{psat.outputs.existing.annual_cost - modification.psat.outputs.existing.annual_cost | currency:'USD':true:'4.0-0'}}</dd>
+      <dt class="text-muted text-center">Annual Savings</dt>
     </dl>
   </div>
 </div>
