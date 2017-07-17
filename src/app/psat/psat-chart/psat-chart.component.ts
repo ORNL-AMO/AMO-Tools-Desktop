@@ -9,7 +9,8 @@ import { PSAT } from '../../shared/models/psat';
 export class PsatChartComponent implements OnInit {
   @Input()
   psat: PSAT;
-
+  @Input()
+  modification: PSAT;
   // doughnutChartLabels: string[] = ['Optimization Rating', 'Potential'];
   // doughnutChartData: number[];
   // doughnutChartType: string = 'doughnut';
@@ -24,7 +25,7 @@ export class PsatChartComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    if (this.psat) {
+    if (this.modification) {
       this.initChart();
     }
   }
@@ -34,8 +35,9 @@ export class PsatChartComponent implements OnInit {
   }
 
   initChart() {
-    this.optimizationRating = Number((Math.round(this.psat.outputs.existing.optimization_rating * 100 * 100) / 100).toFixed(0));
-    this.title = this.psat.name || 'Baseline';
+    let tmpOpRating = this.psat.inputs.motor_rated_power / this.modification.inputs.motor_rated_power;
+    this.optimizationRating = Number((Math.round(tmpOpRating* 100 * 100) / 100).toFixed(0));
+    this.title = this.modification.name || 'Baseline';
     this.unit = '%';
     this.titlePlacement = 'top';
   }

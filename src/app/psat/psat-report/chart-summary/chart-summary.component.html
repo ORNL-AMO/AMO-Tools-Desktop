@@ -1,14 +1,14 @@
-<div class="chart-summary" *ngIf="psat.modifications">
+<!--<div class="chart-summary" *ngIf="psat.modifications">
   <div class="chart-item">
     <app-psat-chart [psat]="psat"></app-psat-chart>
     <dl>
-      <dd>{{psat.outputs.existing.annual_savings_potential| currency:'USD':true:'4.0-0'}}</dd>
-      <dt>Annual Savings Potential</dt>
+      <dd>$ &mdash; &mdash; &mdash;</dd>
+      <dt>Annual Savings</dt>
     </dl>
   </div>
 
   <div class="chart-item" *ngFor="let modification of psat.modifications">
-    <app-psat-chart [psat]="modification.psat"></app-psat-chart>
+    <app-psat-chart [psat]="psat" [modification]="modification.psat"></app-psat-chart>
     <dl>
       <dd class="savings text-center" [ngClass]="{'positive-savings': checkSavings(modification.psat.outputs.existing.annual_cost) > 0, 'negative-savings': checkSavings(modification.psat.outputs.existing.annual_cost) < 0}">{{psat.outputs.existing.annual_cost - modification.psat.outputs.existing.annual_cost | currency:'USD':true:'4.0-0'}}</dd>
       <dt class="text-muted text-center">Annual Savings</dt>
@@ -20,8 +20,41 @@
   <div class="chart-item">
     <app-psat-chart [psat]="psat"></app-psat-chart>
     <dl>
-      <dd>{{psat.outputs.existing.annual_savings_potential| currency:'USD':true:'4.2-2'}}</dd>
-      <dt>Annual Savings Potential</dt>
+      <dd>$ &mdash; &mdash; &mdash;</dd>
+      <dt>Annual Savings</dt>
     </dl>
   </div>
-</div>
+</div>-->
+
+<table class="table">
+  <thead>
+    <tr>
+      <th></th>
+      <th>Baseline</th>
+      <th *ngFor="let modification of psat.modifications">{{modification.psat.name}}</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td></td>
+      <td>
+        <div class="chart-item" style="width: 75%">
+          <app-psat-chart [psat]="psat" [modification]="psat"></app-psat-chart>
+          <dl>
+            <dd>$ &mdash; &mdash; &mdash;</dd>
+            <dt>Annual Savings</dt>
+          </dl>
+        </div>
+      </td>
+      <td *ngFor="let modification of psat.modifications">
+        <div class="chart-item" style="width: 75%">
+          <app-psat-chart [psat]="psat" [modification]="modification.psat"></app-psat-chart>
+          <dl>
+            <dd class="savings text-center" [ngClass]="{'positive-savings': checkSavings(modification.psat.outputs.existing.annual_cost) > 0, 'negative-savings': checkSavings(modification.psat.outputs.existing.annual_cost) < 0}">{{psat.outputs.existing.annual_cost - modification.psat.outputs.existing.annual_cost | currency:'USD':true:'4.0-0'}}</dd>
+            <dt class="text-muted text-center">Annual Savings</dt>
+          </dl>
+        </div>
+      </td>
+    </tr>
+  </tbody>
+</table>

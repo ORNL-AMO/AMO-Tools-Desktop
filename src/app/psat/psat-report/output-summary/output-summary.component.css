@@ -12,3 +12,10 @@
 th{
     width: 10%;
 }
+.positive-savings{
+	color: green;
+}
+
+.negative-savings{
+	color: red;
+}

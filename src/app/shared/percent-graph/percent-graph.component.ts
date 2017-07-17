@@ -57,6 +57,7 @@ export class PercentGraphComponent implements OnInit {
     let div = this.doc.getElementsByClassName('chart-container')
     let percentValue = this.doc.getElementById('percent');
     let valueClass = this.doc.getElementsByClassName('value');
+    console.log(div[0].clientHeight)
     if (div[0].clientHeight < 350 && div[0].clientHeight > 200) {
       for (let i = 0; i < valueClass.length; i++) {
         valueClass[i].style.fontSize = '24px';
@@ -83,17 +84,25 @@ export class PercentGraphComponent implements OnInit {
   }
 
   initChart() {
-    this.chartOptions = {
-      legend: {
-        display: false
-      },
-      title: {
-        text: this.title,
-        display: true,
-        position: this.titlePlacement || "bottom",
-        fontStyle: this.fontStyle || "bold",
-        fontSize: this.fontSize || 22
+    if (this.title) {
+      this.chartOptions = {
+        legend: {
+          display: false
+        },
+        title: {
+          text: this.title,
+          display: true,
+          position: this.titlePlacement || "bottom",
+          fontStyle: this.fontStyle || "bold",
+          fontSize: this.fontSize || 22
+        }
       }
+    } else {
+      this.chartOptions = {
+        legend: {
+          display: false
+        }
+      };
     }
     this.doughnutChartLabels = [this.valueDescription, 'Potential']
     if (this.value < 100) {

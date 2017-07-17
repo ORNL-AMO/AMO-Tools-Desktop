@@ -17,4 +17,8 @@ export class OutputSummaryComponent implements OnInit {
   ngOnInit() {
   }
 
+  checkSavings(num: number){
+    return this.psat.outputs.existing.annual_cost - num;
+  }
+
 }

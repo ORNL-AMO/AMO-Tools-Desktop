@@ -24,9 +24,9 @@
   <!-- End .report-header -->
 
   <div class="report-data" *ngIf="psat.setupDone">
-    <div class="charts" [ngClass]="{'mod-page-break': numMods > 3}">
+    <!--<div class="charts" [ngClass]="{'mod-page-break': numMods > 3}">
       <app-chart-summary [psat]="psat"></app-chart-summary>
-    </div>
+    </div>-->
     <div class="results input-data">
       <h3>Assessment Result Data</h3>
       <app-output-summary [psat]="psat" [settings]="settings"></app-output-summary>
