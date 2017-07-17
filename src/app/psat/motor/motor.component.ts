@@ -215,6 +215,9 @@ export class MotorComponent implements OnInit {
         this.rpmError = null;
       }
       return tmp.valid;
+    }else if(this.psatForm.value.motorRPM == ''){
+      this.rpmError = 'Required';
+      return false;
     }
     else {
       return null;
