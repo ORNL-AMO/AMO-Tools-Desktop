@@ -10,30 +10,38 @@
 
     <div class="form-group">
       <label class="small" for="specificHeat">Specific Heat</label>
-      <input name="{{'specificHeat_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="specificHeat"
-        id="specificHeat" onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('specificHeat')">
-      <span class="units">Btu/(lb-&#8457;)</span>
+      <div class="input-group">
+        <input name="{{'specificHeat_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="specificHeat"
+          id="specificHeat" onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('specificHeat')">
+        <span class="input-group-addon units">Btu/(lb-&#8457;)</span>
+      </div>
     </div>
 
     <div class="form-group">
       <label class="small" for="feedRate">Fixture Weight feed rate</label>
-      <input name="{{'feedRate_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="feedRate" id="feedRate"
-        onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('feedRate')">
-      <span class="units">lb/hr</span>
+      <div class="input-group">
+        <input name="{{'feedRate_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="feedRate" id="feedRate"
+          onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('feedRate')">
+        <span class="input-group-addon units">lb/hr</span>
+      </div>
     </div>
 
     <div class="form-group">
       <label class="small" for="initialTemp">Initial Temperature</label>
-      <input name="{{'initialTemp_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="initialTemp" id="initialTemp"
-        onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('initialTemp')">
-      <span class="units">&#8457;</span>
+      <div class="input-group">
+        <input name="{{'initialTemp_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="initialTemp" id="initialTemp"
+          onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('initialTemp')">
+        <span class="input-group-addon units">&#8457;</span>
+      </div>
     </div>
 
     <div class="form-group">
       <label class="small" for="finalTemp">Final Temperature</label>
-      <input name="{{'finalTemp_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="finalTemp" id="finalTemp"
-        onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('finalTemp')">
-      <span class="units">&#8457;</span>
+      <div class="input-group">
+        <input name="{{'finalTemp_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="finalTemp" id="finalTemp"
+          onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('finalTemp')">
+        <span class="input-group-addon units">&#8457;</span>
+      </div>
     </div>
 
     <div class="form-group">
