@@ -35,7 +35,7 @@ export class PsatChartComponent implements OnInit {
   }
 
   initChart() {
-    let tmpOpRating = this.psat.inputs.motor_rated_power / this.modification.inputs.motor_rated_power;
+    let tmpOpRating = this.modification.outputs.existing.motor_power/this.psat.outputs.existing.motor_power;
     this.optimizationRating = Number((Math.round(tmpOpRating* 100 * 100) / 100).toFixed(0));
     this.title = this.modification.name || 'Baseline';
     this.unit = '%';

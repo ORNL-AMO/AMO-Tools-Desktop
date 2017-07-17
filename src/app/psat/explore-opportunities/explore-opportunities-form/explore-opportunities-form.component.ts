@@ -21,7 +21,9 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
   exploreModIndex: number;
   @Output('changeField')
   changeField = new EventEmitter<string>();
-
+  @Output('emitOptimize')
+  emitOptimize = new EventEmitter<boolean>();
+  
   showSystemData: boolean;
   showRatedMotorData: boolean;
   showPumpData: boolean;
@@ -115,6 +117,10 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
   calculate() {
     this.startSavePolling();
     this.emitCalculate.emit(true);
+  }
+
+  optimize(){
+    this.emitOptimize.emit(true);
   }
 
   startSavePolling() {

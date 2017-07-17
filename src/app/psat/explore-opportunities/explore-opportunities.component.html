@@ -2,7 +2,7 @@
 	<div class="row modify-conditions explore-container">
 		<div class="col-md-6 explore-column">
 			<app-explore-opportunities-form [psat]="psat" (emitCalculate)="getResults()" [settings]="settings" (emitSave)="save()" [exploreModIndex]="exploreModIndex"
-			 (changeField)="focusField($event)"></app-explore-opportunities-form>
+			 (changeField)="focusField($event)" (emitOptimize)="optimize()"></app-explore-opportunities-form>
 		</div>
 		<div class="col-md-6 results-column">
 			<div class="help-panel">
@@ -22,7 +22,7 @@
 					</div>
 				</div>
 				<div class="row justify-content-center data-row" *ngIf="tabSelect == 'results'">
-					<div class="col-3 chart-summary">
+					<!--<div class="col-3 chart-summary">
 						<dl class="chart-item">
 							<dd>
 								<app-percent-graph [value]="baselineOptimizationRating" [titlePlacement]="titlePlacement" [valueDescription]="'Optimization Rating'"
@@ -32,7 +32,7 @@
 							<dd class="savings text-center">$ &mdash; &mdash; &mdash;</dd>
 							<dt class="text-muted text-center">Annual Savings</dt>
 						</dl>
-					</div>
+					</div>-->
 					<div class="col-3 offset-md-1 chart-summary">
 						<dl class="chart-item">
 							<dd>
