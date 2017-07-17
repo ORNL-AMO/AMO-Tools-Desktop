@@ -41,8 +41,8 @@
         <input type="number" min="0" step="any" max="100" class="form-control addon-input" id="efficiency" formControlName="efficiency"
           onfocus="this.select();" [ngClass]="{'invalid': checkEfficiency() == false}">
         <span class="input-group-addon units">%</span>
-        <span class="alert-danger pull-right small" *ngIf="efficiencyError !== null">{{efficiencyError}}</span>
       </div>
+        <span class="alert-danger pull-right small" *ngIf="efficiencyError !== null">{{efficiencyError}}</span>
     </div>
   </form>
 </div>

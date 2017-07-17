@@ -26,8 +26,8 @@
         id="pumpRPM" (input)="startSavePolling()" (focus)="focusField('pumpRPM')" [ngClass]="{'invalid': checkPumpRpm() == false}"
         onfocus="this.select();">
       <span class="input-group-addon units">rpms</span>
-      <span class="alert-danger pull-right small" *ngIf="rpmError !== null">{{rpmError}}</span>
     </div>
+      <span class="alert-danger pull-right small" *ngIf="rpmError !== null">{{rpmError}}</span>
   </div>
 
   <div class="form-group">

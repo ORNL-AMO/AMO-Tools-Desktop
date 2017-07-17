@@ -17,8 +17,8 @@
       <input name="costKwHr" type="number" min="0" max="1" step="any" class="form-control" formControlName="costKwHr" id="costKwHr" (input)="startSavePolling()"
         (focus)="focusField('costKwHr')" [ngClass]="{'invalid': checkCost() == false}" onfocus="this.select();">
       <span class="input-group-addon units">$/kWh</span>
-      <span class="alert-danger pull-right small" *ngIf="costError !== null">{{costError}}</span>
     </div>
+      <span class="alert-danger pull-right small" *ngIf="costError !== null">{{costError}}</span>
   </div>
 
   <div class="form-group">
@@ -27,8 +27,8 @@
       <input name="flowRate" type="number" min="0" step="any" class="form-control" formControlName="flowRate" id="flowRate" (input)="startSavePolling()" (focus)="focusField('flowRate')"
         [ngClass]="{'invalid': checkFlowRate() == false}" onfocus="this.select();">
       <span class="input-group-addon units">{{settings.flowMeasurement}}</span>
-      <span class="alert-danger pull-right small" *ngIf="flowError !== null">{{flowError}}</span>
     </div>
+      <span class="alert-danger pull-right small" *ngIf="flowError !== null">{{flowError}}</span>
   </div>
 
   <div class="form-group">
@@ -74,8 +74,8 @@
       <input name="measuredVoltage" type="number" min="1" step="any" class="form-control" formControlName="measuredVoltage" id="measuredVoltage" (input)="startSavePolling()"
         (focus)="focusField('measuredVoltage')" [ngClass]="{'warning': checkVoltage() == false}" onfocus="this.select();">
       <span class="units">V</span>
-      <span class="alert-warning pull-right small" *ngIf="voltageError !== null">{{voltageError}}</span>
     </div>
+    <span class="alert-warning pull-right small" *ngIf="voltageError !== null">{{voltageError}}</span>
   </div>
 
 </form>
