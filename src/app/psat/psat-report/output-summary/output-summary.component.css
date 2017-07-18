@@ -8,3 +8,14 @@
 .section-header{
     font-size: 16px !important;
 }
+
+th{
+    width: 10%;
+}
+.positive-savings{
+	color: green;
+}
+
+.negative-savings{
+	color: red;
+}

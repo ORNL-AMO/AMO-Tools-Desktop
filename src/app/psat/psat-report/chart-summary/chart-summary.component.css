@@ -4,3 +4,16 @@
             padding: 5px;
     }
 }
+
+
+.positive-savings{
+	color: green;
+}
+
+.negative-savings{
+	color: red;
+}
+
+th{
+    width: 10%;
+}

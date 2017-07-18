@@ -115,8 +115,8 @@ export class ExploreOpportunitiesComponent implements OnInit {
     this.baselineResults = this.psatService.resultsExisting(psatInputs, this.settings);
     this.modificationResults = this.psatService.resultsExisting(modInputs, this.settings);
     this.annualSavings = this.baselineResults.annual_cost - this.modificationResults.annual_cost;
-    this.optimizationRating = Number((Math.round(this.modificationResults.optimization_rating * 100 * 100) / 100).toFixed(0));
-    this.baselineOptimizationRating = Number((Math.round(this.baselineResults.optimization_rating * 100 * 100) / 100).toFixed(0));
+    //this.optimizationRating = Number((Math.round((this.modificationResults.motor_power / this.baselineResults.motor_power) * 100 * 100) / 100).toFixed(0));
+    this.baselineOptimizationRating = Number((Math.round((this.modificationResults.motor_power / this.baselineResults.motor_power) * 100 * 100) / 100).toFixed(0));
     this.baselineSavingsPotential = this.baselineResults.annual_savings_potential;
   }
 
@@ -130,5 +130,10 @@ export class ExploreOpportunitiesComponent implements OnInit {
 
   focusField($event) {
     this.currentField = $event;
+  }
+
+  optimize(){
+    let tmpInputs = JSON.parse(JSON.stringify(this.psat.inputs));
+    let baseLineResults = this.psatService.resultsExisting(tmpInputs, this.settings);
   }
 }

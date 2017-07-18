@@ -40,7 +40,7 @@
     "@angular/platform-browser-dynamic": "^4.2.1",
     "@angular/platform-server": "^4.2.1",
     "@angular/router": "^4.2.1",
-    "amo-tools-suite": "file:../AMO-Tools-Suite",
+    "amo-tools-suite": "^0.1.35",
     "bootstrap": "^4.0.0-alpha.6",
     "core-js": "^2.4.1",
     "d3": "4.5.0",

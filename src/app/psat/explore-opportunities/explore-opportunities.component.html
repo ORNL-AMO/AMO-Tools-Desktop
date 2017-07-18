@@ -2,7 +2,7 @@
 	<div class="row modify-conditions explore-container">
 		<div class="col-md-6 explore-column">
 			<app-explore-opportunities-form [psat]="psat" (emitCalculate)="getResults()" [settings]="settings" (emitSave)="save()" [exploreModIndex]="exploreModIndex"
-			 (changeField)="focusField($event)"></app-explore-opportunities-form>
+			 (changeField)="focusField($event)" (emitOptimize)="optimize()"></app-explore-opportunities-form>
 		</div>
 		<div class="col-md-6 results-column">
 			<div class="help-panel">
@@ -22,17 +22,17 @@
 					</div>
 				</div>
 				<div class="row justify-content-center data-row" *ngIf="tabSelect == 'results'">
-					<div class="col-3 chart-summary">
+					<!--<div class="col-3 chart-summary">
 						<dl class="chart-item">
 							<dd>
 								<app-percent-graph [value]="baselineOptimizationRating" [titlePlacement]="titlePlacement" [valueDescription]="'Optimization Rating'"
 								 [title]="'Baseline'" [unit]="unit"></app-percent-graph>
 							</dd>
 							<dt class="text-center op-rating">Optimization Rating</dt>
-							<dd class="savings text-center savings">{{baselineSavingsPotential | currency:'USD':true:'4.0-0'}}</dd>
-							<dt class="text-muted text-center">Potential Annual Savings</dt>
+							<dd class="savings text-center">$ &mdash; &mdash; &mdash;</dd>
+							<dt class="text-muted text-center">Annual Savings</dt>
 						</dl>
-					</div>
+					</div>-->
 					<div class="col-3 offset-md-1 chart-summary">
 						<dl class="chart-item">
 							<dd>
@@ -40,7 +40,7 @@
 								 [title]="title" [unit]="unit"></app-percent-graph>
 							</dd>
 							<dt class="text-center op-rating">Optimization Rating</dt>
-							<dd class="savings text-center savings" [ngClass]="{'positive-savings': annualSavings > 0, 'negative-savings': annualSavings < 0}">{{annualSavings | currency:'USD':true:'4.0-0'}}</dd>
+							<dd class="savings text-center" [ngClass]="{'positive-savings': annualSavings > 0, 'negative-savings': annualSavings < 0}">{{annualSavings | currency:'USD':true:'4.0-0'}}</dd>
 							<dt class="text-muted text-center">Annual Savings</dt>
 						</dl>
 					</div>
