@@ -26,7 +26,7 @@ export class SystemCurveComponent implements OnInit {
 
   staticHead: number;
   lossCoefficient: number;
-
+  tabSelect: string = 'results';
   constructor(private formBuilder: FormBuilder, private indexedDbService: IndexedDbService, private psatService: PsatService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
@@ -170,7 +170,9 @@ export class SystemCurveComponent implements OnInit {
     let tmpStaticHead = headOne - (Math.pow(flowRateOne, 1.9) * (headTwo - headOne) / (Math.pow(flowRateTwo, lossExponent) - Math.pow(flowRateOne, lossExponent)));
     return this.psatService.roundVal(tmpStaticHead, 2);
   }
-
+  setTab(str: string) {
+    this.tabSelect = str;
+  }
 
 
 }

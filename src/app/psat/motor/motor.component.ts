@@ -215,6 +215,9 @@ export class MotorComponent implements OnInit {
         this.rpmError = null;
       }
       return tmp.valid;
+    }else if(this.psatForm.value.motorRPM == ''){
+      this.rpmError = 'Required';
+      return false;
     }
     else {
       return null;
@@ -274,26 +277,28 @@ export class MotorComponent implements OnInit {
   }
 
   checkFLA() {
-    let tmpEfficiency = this.psatService.getEfficiencyFromForm(this.psatForm);
-    let estEfficiency = this.psatService.estFLA(
-      this.psatForm.value.horsePower,
-      this.psatForm.value.motorRPM,
-      this.psatForm.value.frequency,
-      this.psatForm.value.efficiencyClass,
-      tmpEfficiency,
-      this.psatForm.value.motorVoltage,
-      this.settings
-    );
+    if (this.checkMotorRpm()) {
+      let tmpEfficiency = this.psatService.getEfficiencyFromForm(this.psatForm);
+      let estEfficiency = this.psatService.estFLA(
+        this.psatForm.value.horsePower,
+        this.psatForm.value.motorRPM,
+        this.psatForm.value.frequency,
+        this.psatForm.value.efficiencyClass,
+        tmpEfficiency,
+        this.psatForm.value.motorVoltage,
+        this.settings
+      );
 
-    this.psatService.flaRange.flaMax = estEfficiency * 1.05;
-    this.psatService.flaRange.flaMin = estEfficiency * .95;
-    //let test = 1 - (this.psatForm.value.fullLoadAmps / estEfficiency);
-    if (this.psatForm.value.fullLoadAmps < this.psatService.flaRange.flaMin || this.psatForm.value.fullLoadAmps > this.psatService.flaRange.flaMax) {
-      this.flaError = 'Value is outside expected range';
-      return false;
-    } else {
-      this.flaError = null;
-      return true;
+      this.psatService.flaRange.flaMax = estEfficiency * 1.05;
+      this.psatService.flaRange.flaMin = estEfficiency * .95;
+      //let test = 1 - (this.psatForm.value.fullLoadAmps / estEfficiency);
+      if (this.psatForm.value.fullLoadAmps < this.psatService.flaRange.flaMin || this.psatForm.value.fullLoadAmps > this.psatService.flaRange.flaMax) {
+        this.flaError = 'Value is outside expected range';
+        return false;
+      } else {
+        this.flaError = null;
+        return true;
+      }
     }
   }
 

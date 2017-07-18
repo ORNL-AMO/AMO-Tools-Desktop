@@ -8,9 +8,11 @@
 
   <div class="form-group">
     <label class="small" for="heatLoss">Heat Loss</label>
-    <input name="{{'heatLoss_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="heatLoss" id="heatLoss"
-      onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('heatLoss')">
-    <span class="units">Btu/hr</span>
+    <div class="input-group">
+      <input name="{{'heatLoss_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="heatLoss" id="heatLoss"
+        onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('heatLoss')">
+      <span class="input-group-addon units">Btu/hr</span>
+    </div>
   </div>
 
 </form>
