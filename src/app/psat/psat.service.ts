@@ -35,7 +35,7 @@ export class PsatService {
     return psatInputs;
   }
 
-  convertOutputs(psatOutputs: PsatOutputs, settings: Settings): PsatOutputs{
+  convertOutputs(psatOutputs: PsatOutputs, settings: Settings): PsatOutputs {
     if (settings.powerMeasurement != 'hp') {
       psatOutputs.motor_rated_power = this.convertUnitsService.value(psatOutputs.motor_rated_power).from('hp').to(settings.powerMeasurement);
       psatOutputs.motor_shaft_power = this.convertUnitsService.value(psatOutputs.motor_shaft_power).from('hp').to(settings.powerMeasurement);
@@ -68,7 +68,7 @@ export class PsatService {
   }
 
   roundResults(psatResults: PsatOutputs): PsatOutputs {
-    let roundResults:PsatOutputs =  {
+    let roundResults: PsatOutputs = {
       pump_efficiency: this.roundVal(psatResults.pump_efficiency, 2),
       motor_rated_power: this.roundVal(psatResults.motor_rated_power, 2),
       motor_shaft_power: this.roundVal(psatResults.motor_shaft_power, 2),
@@ -602,7 +602,8 @@ export class PsatService {
       'loadEstimatedMethod': ['', Validators.required],
       'motorKW': ['', Validators.required],
       'motorAmps': ['', Validators.required],
-      'measuredVoltage': ['', Validators.required]
+      'measuredVoltage': ['', Validators.required],
+      'calculationMethod': ['', Validators.required]
     })
   }
 
@@ -637,7 +638,8 @@ export class PsatService {
       'loadEstimatedMethod': [loadEstMethod, Validators.required],
       'motorKW': [psatInputs.motor_field_power, Validators.required],
       'motorAmps': [psatInputs.motor_field_current, Validators.required],
-      'measuredVoltage': [psatInputs.motor_field_voltage, Validators.required]
+      'measuredVoltage': [psatInputs.motor_field_voltage, Validators.required],
+      'calculationMethod': [psatInputs.calculation_method, Validators.required]
     })
   }
 
@@ -675,7 +677,8 @@ export class PsatService {
       motor_field_current: form.value.motorAmps,
       motor_field_voltage: form.value.measuredVoltage,
       cost_kw_hour: form.value.costKwHr,
-      cost: form.value.costKwHr
+      cost: form.value.costKwHr,
+      calculation_method: form.value.calculationMethod
     }
     return tmpPsatInputs;
   }

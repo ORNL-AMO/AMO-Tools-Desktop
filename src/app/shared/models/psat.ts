@@ -35,7 +35,8 @@ export interface PsatInputs {
   motor_field_voltage?: number,
   cost_kw_hour?: number
   cost?: number,
-  load_factor?: number
+  load_factor?: number,
+  calculation_method?: string
 }
 
 export interface PsatOutputs {

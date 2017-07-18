@@ -81,7 +81,7 @@ export class PsatComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.psatService.test();
+    //this.psatService.test();
     let tmpAssessmentId;
     this.activatedRoute.params.subscribe(params => {
       tmpAssessmentId = params['id'];

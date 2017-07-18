@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { PsatOutputs } from '../../../shared/models/psat';
+import { PsatOutputs, PSAT } from '../../../shared/models/psat';
 import { Settings } from '../../../shared/models/settings';
 
 @Component({
@@ -14,6 +14,10 @@ export class ExploreOpportunitiesResultsComponent implements OnInit {
   modificationResults: PsatOutputs;
   @Input()
   settings: Settings;
+  @Input()
+  psat: PSAT;
+  @Input()
+  exploreModIndex: number;
   constructor() { }
 
   ngOnInit() {
