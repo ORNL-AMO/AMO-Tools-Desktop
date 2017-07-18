@@ -18,17 +18,21 @@
           <form *ngIf="showCost">
             <div class="form-group">
               <label for="initialCost">Initial Cost</label>
-              <input name="initialCost" type="number" step="any" id="initialCost" class="form-control" (focus)="focusField('modifyCost')" (input)="calculate()"
-                [(ngModel)]="psat.inputs.cost_kw_hour" [ngClass]="{'invalid': checkCost(1) == false}" />
-              <span class="alert-danger pull-right small" *ngIf="costError1 !== null">{{costError1}}</span>
-              <span class="units">$/kWH</span>
+              <div class="input-group">
+                <input name="initialCost" type="number" step="any" id="initialCost" class="form-control" (focus)="focusField('modifyCost')" (input)="calculate()"
+                  [(ngModel)]="psat.inputs.cost_kw_hour" [ngClass]="{'invalid': checkCost(1) == false}" />
+                <span class="input-group-addon units">$/kWH</span>
+              </div>
+                <span class="alert-danger pull-right small" *ngIf="costError1 !== null">{{costError1}}</span>
             </div>
             <div class="form-group">
               <label for="newCost">New Cost</label>
-              <input name="newCost" type="number" step="any" id="newCost" class="form-control" (focus)="focusField('modifyCost')" [(ngModel)]="psat.modifications[exploreModIndex].psat.inputs.cost_kw_hour"
-                (input)="calculate()" [ngClass]="{'invalid': checkCost(2) == false}" />
-              <span class="units">$/kWh</span>
-              <span class="alert-danger pull-right small" *ngIf="costError2 !== null">{{costError2}}</span>
+              <div class="input-group">
+                <input name="newCost" type="number" step="any" id="newCost" class="form-control" (focus)="focusField('modifyCost')" [(ngModel)]="psat.modifications[exploreModIndex].psat.inputs.cost_kw_hour"
+                  (input)="calculate()" [ngClass]="{'invalid': checkCost(2) == false}" />
+                <span class="input-group-addon units">$/kWh</span>
+              </div>
+                <span class="alert-danger pull-right small" *ngIf="costError2 !== null">{{costError2}}</span>
             </div>
           </form>
         </li>
@@ -41,17 +45,21 @@
           <form *ngIf="showFlowRate">
             <div class="form-group">
               <label for="initialFlowRate">Initial Flow Rate</label>
-              <input name="initialFlowRate" type="number" step="any" id="initialFlowRate" class="form-control" (focus)="focusField('flowRate')" (input)="calculate()"
-                [(ngModel)]="psat.inputs.flow_rate" [ngClass]="{'invalid': checkFlowRate(1) == false}" />
-              <span class="units">{{settings.flowMeasurement}}</span>
-              <span class="alert-danger pull-right small" *ngIf="flowRateError1 !== null">{{flowRateError1}}</span>
+              <div class="input-group">
+                <input name="initialFlowRate" type="number" step="any" id="initialFlowRate" class="form-control" (focus)="focusField('flowRate')" (input)="calculate()"
+                  [(ngModel)]="psat.inputs.flow_rate" [ngClass]="{'invalid': checkFlowRate(1) == false}" />
+                <span class="input-group-addon units">{{settings.flowMeasurement}}</span>
+              </div>
+                <span class="alert-danger pull-right small" *ngIf="flowRateError1 !== null">{{flowRateError1}}</span>
             </div>
             <div class="form-group">
               <label for="newFlowRate">New Flow Rate</label>
+              <div class="input-group">
               <input name="newFlowRate" type="number" step="any" id="newFlowRate" class="form-control" (focus)="focusField('flowRate')" [(ngModel)]="psat.modifications[exploreModIndex].psat.inputs.flow_rate"
-                (input)="calculate()" [ngClass]="{'invalid': checkFlowRate(2) == false}" />
-              <span class="units">{{settings.flowMeasurement}}</span>
-              <span class="alert-danger pull-right small" *ngIf="flowRateError2 !== null">{{flowRateError2}}</span>
+                  (input)="calculate()" [ngClass]="{'invalid': checkFlowRate(2) == false}" />
+                <span class="input-group-addon units">{{settings.flowMeasurement}}</span>
+              </div>
+                <span class="alert-danger pull-right small" *ngIf="flowRateError2 !== null">{{flowRateError2}}</span>
             </div>
           </form>
         </li>
@@ -64,15 +72,19 @@
           <form *ngIf="showHead">
             <div class="form-group">
               <label for="initialHead">Initial head</label>
-              <input name="initialHead" type="number" step="any" id="initialHead" class="form-control" (focus)="focusField('head')" (input)="calculate()"
-                [(ngModel)]="psat.inputs.head" />
-              <span class="units">{{settings.distanceMeasurement}}</span>
+              <div class="input-group">
+                <input name="initialHead" type="number" step="any" id="initialHead" class="form-control" (focus)="focusField('head')" (input)="calculate()"
+                  [(ngModel)]="psat.inputs.head" />
+                <span class="input-group-addon units">{{settings.distanceMeasurement}}</span>
+              </div>
             </div>
             <div class="form-group">
               <label for="newHead">New head</label>
-              <input name="newHead" type="number" step="any" id="newHead" class="form-control" (focus)="focusField('head')" (input)="calculate()"
-                [(ngModel)]="psat.modifications[exploreModIndex].psat.inputs.head" />
-              <span class="units">{{settings.distanceMeasurement}}</span>
+              <div class="input-group">
+                <input name="newHead" type="number" step="any" id="newHead" class="form-control" (focus)="focusField('head')" (input)="calculate()"
+                  [(ngModel)]="psat.modifications[exploreModIndex].psat.inputs.head" />
+                <span class="input-group-addon units">{{settings.distanceMeasurement}}</span>
+              </div>
             </div>
           </form>
         </li>
@@ -140,19 +152,22 @@
           <form *ngIf="showMotorEfficiency">
             <div class="form-group">
               <label for="initialMotorEfficiency">Initial Motor Efficiency</label>
-              <input name="initialMotorEfficiency" type="number" step="any" id="initialMotorEfficiency" class="form-control" (focus)="focusField('motorEfficiency')"
-                (input)="calculate()" [(ngModel)]="psat.inputs.efficiency" [ngClass]="{'invalid': checkEfficiency(psat.inputs.efficiency, 1) == false}"
-              />
-              <span class="units">%</span>
-              <span class="alert-danger pull-right small" *ngIf="efficiencyError1 !== null">{{efficiencyError1}}</span>
+              <div class="input-group">
+                <input name="initialMotorEfficiency" type="number" step="any" id="initialMotorEfficiency" class="form-control" (focus)="focusField('motorEfficiency')"
+                  (input)="calculate()" [(ngModel)]="psat.inputs.efficiency" [ngClass]="{'invalid': checkEfficiency(psat.inputs.efficiency, 1) == false}"/>
+                <span class="input-group-addon units">%</span>
+              </div>
+                <span class="alert-danger pull-right small" *ngIf="efficiencyError1 !== null">{{efficiencyError1}}</span>
             </div>
             <div class="form-group">
               <label for="newMotorEfficiency">New Motor Efficiency</label>
-              <input name="newMotorEfficiency" type="number" step="any" id="newMotorEfficiency" class="form-control" (focus)="focusField('motorEfficiency')"
-                [(ngModel)]="psat.modifications[exploreModIndex].psat.inputs.efficiency" [ngClass]="{'invalid': checkEfficiency(psat.modifications[exploreModIndex].psat.inputs.efficiency, 2) == false}"
-                (input)="calculate()" />
-              <span class="units">%</span>
-              <span class="alert-danger pull-right small" *ngIf="efficiencyError2 !== null">{{efficiencyError2}}</span>
+              <div class="input-group">
+                <input name="newMotorEfficiency" type="number" step="any" id="newMotorEfficiency" class="form-control" (focus)="focusField('motorEfficiency')"
+                  [(ngModel)]="psat.modifications[exploreModIndex].psat.inputs.efficiency" [ngClass]="{'invalid': checkEfficiency(psat.modifications[exploreModIndex].psat.inputs.efficiency, 2) == false}"
+                  (input)="calculate()" />
+                <span class="input-group-addon units">%</span>
+              </div>
+                <span class="alert-danger pull-right small" *ngIf="efficiencyError2 !== null">{{efficiencyError2}}</span>
             </div>
           </form>
         </li>
@@ -174,17 +189,21 @@
           <form *ngIf="showPumpSpeed">
             <div class="form-group">
               <label for="initialPumpSpeed">Initial Pump Speed</label>
-              <input name="initialPumpSpeed" type="number" step="any" id="initialPumpSpeed" class="form-control" (input)="calculate()" (focus)="focusField('pumpSpeed')"
-                [(ngModel)]="psat.inputs.pump_rated_speed" [ngClass]="{'invalid': checkPumpRpm(1) == false}" />
-              <span class="units">rpm</span>
-              <span class="alert-danger pull-right small" *ngIf="rpmError1 !== null">{{rpmError1}}</span>
+              <div class="input-group">
+                  <input name="initialPumpSpeed" type="number" step="any" id="initialPumpSpeed" class="form-control" (input)="calculate()" (focus)="focusField('pumpSpeed')"
+                    [(ngModel)]="psat.inputs.pump_rated_speed" [ngClass]="{'invalid': checkPumpRpm(1) == false}" />
+                  <span class="input-group-addon units">rpm</span>
+              </div>
+                <span class="alert-danger pull-right small" *ngIf="rpmError1 !== null">{{rpmError1}}</span>
             </div>
             <div class="form-group">
               <label for="newPumpSpeed">New Pump Speed</label>
+              <div class="input-group">
               <input name="newPumpSpeed" type="number" step="any" id="newPumpSpeed" class="form-control" (input)="calculate()" (focus)="focusField('pumpSpeed')"
                 [(ngModel)]="psat.modifications[exploreModIndex].psat.inputs.pump_rated_speed" [ngClass]="{'invalid': checkPumpRpm(2) == false}"
               />
-              <span class="units">rpm</span>
+              <span class="input-group-addon units">rpm</span>
+            </div>
               <span class="alert-danger pull-right small" *ngIf="rpmError2 !== null">{{rpmError2}}</span>
             </div>
           </form>
@@ -219,19 +238,23 @@
           <form *ngIf="showPumpSpecified">
             <div class="form-group">
               <label for="initialPumpSpecified">Initial Pump Specified Efficiency</label>
-              <input name="initialPumpSpecified" type="number" step="any" id="initialPumpSpecified" class="form-control" (focus)="focusField('pumpSpecified')"
-                (input)="calculate()" [(ngModel)]="psat.inputs.pump_specified" [ngClass]="{'invalid': checkEfficiency(psat.inputs.pump_specified, 3) == false}"
-              />
-              <span class="units">%</span>
-              <span class="alert-danger pull-right small" *ngIf="specifiedError1 !== null">{{specifiedError1}}</span>
+              <div class="input-group">
+                <input name="initialPumpSpecified" type="number" step="any" id="initialPumpSpecified" class="form-control" (focus)="focusField('pumpSpecified')"
+                  (input)="calculate()" [(ngModel)]="psat.inputs.pump_specified" [ngClass]="{'invalid': checkEfficiency(psat.inputs.pump_specified, 3) == false}"
+                />
+                <span class="input-group-addon units">%</span>
+              </div>
+                <span class="alert-danger pull-right small" *ngIf="specifiedError1 !== null">{{specifiedError1}}</span>
             </div>
             <div class="form-group">
               <label for="newPumpSpecified">New Pump Specified Efficiency</label>
-              <input name="newPumpSpecified" type="number" step="any" id="newPumpSpecified" class="form-control" (focus)="focusField('pumpSpecified')"
-                (input)="calculate()" [(ngModel)]="psat.modifications[exploreModIndex].psat.inputs.pump_specified" [ngClass]="{'invalid': checkEfficiency(psat.modifications[exploreModIndex].psat.inputs.pump_specified, 4) == false}"
-              />
-              <span class="units">%</span>
-              <span class="alert-danger pull-right small" *ngIf="specifiedError2 !== null">{{specifiedError2}}</span>
+              <div class="input-group">
+                <input name="newPumpSpecified" type="number" step="any" id="newPumpSpecified" class="form-control" (focus)="focusField('pumpSpecified')"
+                  (input)="calculate()" [(ngModel)]="psat.modifications[exploreModIndex].psat.inputs.pump_specified" [ngClass]="{'invalid': checkEfficiency(psat.modifications[exploreModIndex].psat.inputs.pump_specified, 4) == false}"
+                />
+                <span class="input-group-addon units">%</span>
+              </div>
+                <span class="alert-danger pull-right small" *ngIf="specifiedError2 !== null">{{specifiedError2}}</span>
             </div>
           </form>
         </li>

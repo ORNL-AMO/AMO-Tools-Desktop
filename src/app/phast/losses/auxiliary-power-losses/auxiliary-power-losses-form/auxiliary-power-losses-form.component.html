@@ -9,16 +9,20 @@
 
     <div class="form-group">
       <label class="small" for="supplyVoltage">Supply Voltage</label>
-      <input name="{{'supplyVoltage_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="supplyVoltage" id="supplyVoltage" onfocus="this.select();" (input)="startSavePolling()"
-        (focus)="focusField('supplyVoltage')">
-      <span class="units">V</span>
+      <div class="input-group">
+        <input name="{{'supplyVoltage_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="supplyVoltage" id="supplyVoltage" onfocus="this.select();" (input)="startSavePolling()"
+          (focus)="focusField('supplyVoltage')">
+        <span class="input-group-addon units">V</span>
+      </div>
     </div>
 
     <div class="form-group">
       <label class="small" for="avgCurrent">Average Current</label>
-      <input name="{{'avgCurrent_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="avgCurrent" id="avgCurrent" onfocus="this.select();" (input)="startSavePolling()"
-        (focus)="focusField('avgCurrent')">
-      <span class="units">A</span>
+      <div class="input-group">
+        <input name="{{'avgCurrent_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="avgCurrent" id="avgCurrent" onfocus="this.select();" (input)="startSavePolling()"
+          (focus)="focusField('avgCurrent')">
+        <span class="input-group-addon units">A</span>
+      </div>
     </div>
 
     <div class="form-group">
@@ -29,9 +33,11 @@
 
     <div class="form-group">
       <label class="small" for="operatingTime">Operating Time</label>
-      <input name="{{'operatingTime_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="operatingTime" id="operatingTime" onfocus="this.select();" (input)="startSavePolling()"
-        (focus)="focusField('operatingTime')">
-      <span class="units">%</span>
+      <div class="input-group">
+        <input name="{{'operatingTime_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="operatingTime" id="operatingTime" onfocus="this.select();" (input)="startSavePolling()"
+          (focus)="focusField('operatingTime')">
+        <span class="input-group-addon units">%</span>
+      </div>
     </div>
   </div>
 </form>

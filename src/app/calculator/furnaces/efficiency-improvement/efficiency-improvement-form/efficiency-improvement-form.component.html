@@ -11,27 +11,35 @@
     <div class="form-group row">
       <label class="col-4 col-form-label" for="currentFlueGasOxygen">Flue Gas Oxygen</label>
       <div class="col-4">
-        <input class="form-control" name="currentFlueGasOxygen" type="number" step="any" id="currentFlueGasOxygen" [(ngModel)]="efficiencyImprovementInputs.currentFlueGasOxygen"
-          (input)="calc()" onfocus="this.select();" autofocus (focus)="focusField('flueGasOxygen')">
-        <span class="units">% Dry</span>
+        <div class="input-group">
+          <input class="form-control" name="currentFlueGasOxygen" type="number" step="any" id="currentFlueGasOxygen" [(ngModel)]="efficiencyImprovementInputs.currentFlueGasOxygen"
+            (input)="calc()" onfocus="this.select();" autofocus (focus)="focusField('flueGasOxygen')">
+          <span class="input-group-addon units">% Dry</span>
+        </div>
       </div>
       <div class="col-4">
-        <input class="form-control" name="newFlueGasOxygen" type="number" step="any" id="newFlueGasOxygen" [(ngModel)]="efficiencyImprovementInputs.newFlueGasOxygen"
-          (input)="calc()" onfocus="this.select();" (focus)="focusField('flueGasOxygen')">
-        <span class="units">% Dry</span>
+        <div class="input-group">
+          <input class="form-control" name="newFlueGasOxygen" type="number" step="any" id="newFlueGasOxygen" [(ngModel)]="efficiencyImprovementInputs.newFlueGasOxygen"
+            (input)="calc()" onfocus="this.select();" (focus)="focusField('flueGasOxygen')">
+          <span class="input-group-addon units">% Dry</span>
+        </div>
       </div>
     </div>
     <div class="form-group row">
       <label class="col-4 col-form-label" for="currentFlueGasTemp">Flue Gas Temperature</label>
       <div class="col-4">
-        <input class="form-control" name="currentFlueGasTemp" type="number" step="any" id="currentFlueGasTemp" [(ngModel)]="efficiencyImprovementInputs.currentFlueGasTemp"
-          (input)="calc()" onfocus="this.select();" (focus)="focusField('flueGasTemp')">
-        <span class="units">&#8457;</span>
+        <div class="input-group">
+          <input class="form-control" name="currentFlueGasTemp" type="number" step="any" id="currentFlueGasTemp" [(ngModel)]="efficiencyImprovementInputs.currentFlueGasTemp"
+            (input)="calc()" onfocus="this.select();" (focus)="focusField('flueGasTemp')">
+          <span class="input-group-addon units">&#8457;</span>
+        </div>
       </div>
       <div class="col-4">
-        <input class="form-control" name="newFlueGasTemp" type="number" step="any" id="newFlueGasTemp" [(ngModel)]="efficiencyImprovementInputs.newFlueGasTemp"
-          (input)="calc()" onfocus="this.select();" (focus)="focusField('flueGasTemp')">
-        <span class="units">&#8457;</span>
+        <div class="input-group">
+          <input class="form-control" name="newFlueGasTemp" type="number" step="any" id="newFlueGasTemp" [(ngModel)]="efficiencyImprovementInputs.newFlueGasTemp"
+            (input)="calc()" onfocus="this.select();" (focus)="focusField('flueGasTemp')">
+          <span class="input-group-addon units">&#8457;</span>
+        </div>
       </div>
     </div>
     <div class="form-group row">
@@ -44,14 +52,18 @@
     <div class="form-group row">
       <label class="col-4 col-form-label" for="currentCombustionAirTemp">Combustion Air Temperature</label>
       <div class="col-4">
-        <input class="form-control" name="currentCombustionAirTemp" type="number" step="any" id="currentCombustionAirTemp" [(ngModel)]="efficiencyImprovementInputs.currentCombustionAirTemp"
-          (input)="calc()" onfocus="this.select();" (focus)="focusField('combustionAirTemp')">
-        <span class="units">&#8457;</span>
+        <div class="input-group">
+          <input class="form-control" name="currentCombustionAirTemp" type="number" step="any" id="currentCombustionAirTemp" [(ngModel)]="efficiencyImprovementInputs.currentCombustionAirTemp"
+            (input)="calc()" onfocus="this.select();" (focus)="focusField('combustionAirTemp')">
+          <span class="input-group-addon units">&#8457;</span>
+        </div>
       </div>
       <div class="col-4">
-        <input class="form-control" name="newCombustionAirTemp" type="number" step="any" id="newCombustionAirTemp" [(ngModel)]="efficiencyImprovementInputs.newCombustionAirTemp"
-          (input)="calc()" onfocus="this.select();" (focus)="focusField('combustionAirTemp')">
-        <span class="units">&#8457;</span>
+        <div class="input-group">
+          <input class="form-control" name="newCombustionAirTemp" type="number" step="any" id="newCombustionAirTemp" [(ngModel)]="efficiencyImprovementInputs.newCombustionAirTemp"
+            (input)="calc()" onfocus="this.select();" (focus)="focusField('combustionAirTemp')">
+          <span class="input-group-addon units">&#8457;</span>
+        </div>
       </div>
     </div>
     <div class="form-group row">
@@ -67,9 +79,11 @@
     <div class="form-group row">
       <label class="col-4 col-form-label" for="currentEnergyInput">Energy Input</label>
       <div class="col-4">
-        <input class="form-control" name="currentEnergyInput" type="number" step="any" id="currentEnergyInput" [(ngModel)]="efficiencyImprovementInputs.currentEnergyInput"
-          (input)="calc()" onfocus="this.select();" (focus)="focusField('energyInput')">
-        <span class="units">MM Btu/hr</span>
+        <div class="input-group">
+          <input class="form-control" name="currentEnergyInput" type="number" step="any" id="currentEnergyInput" [(ngModel)]="efficiencyImprovementInputs.currentEnergyInput"
+            (input)="calc()" onfocus="this.select();" (focus)="focusField('energyInput')">
+          <span class="input-group-addon units">MM Btu/hr</span>
+        </div>
       </div>
       <div class="col-4 text-center">{{efficiencyImprovementOutputs.newEnergyInput | number:'2.2-2'}} MM Btu/hr</div>
     </div>
