@@ -252,6 +252,10 @@ select.form-control:not([size]):not([multiple]) {
      position: inherit;
  }
 
+ .disabled .units{
+   background-color: #eceeef;
+ }
+
  .addon-input{
      padding-left: 2px;
  }

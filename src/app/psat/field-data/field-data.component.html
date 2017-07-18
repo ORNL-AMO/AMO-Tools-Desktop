@@ -1,4 +1,4 @@
-<form #formRef [formGroup]="psatForm">
+<form #formRef [formGroup]="psatForm" *ngIf="psatForm">
   <div class="row">
     <div class="col-12">
       <h5>Field Data</h5>
@@ -46,7 +46,7 @@
   <div class="form-group">
     <label for="loadEstimatedMethod">Load Estimation Method</label>
     <select name="loadEstimatedMethod" class="form-control" formControlName="loadEstimatedMethod" id="loadEstimatedMethod" (input)="startSavePolling()"
-      (focus)="focusField('loadEstimatedMethod')" ngModel="{{psatForm.value.loadEstimatedMethod}}">
+      (focus)="focusField('loadEstimatedMethod')">
         <option *ngFor="let method of loadEstimateMethods" [ngValue]="method">{{method}}</option>
     </select>
   </div>

@@ -69,14 +69,14 @@ export class FieldDataComponent implements OnInit {
   ngOnInit() {
     this.psatForm = this.psatService.getFormFromPsat(this.psat.inputs);
     this.checkForm(this.psatForm);
-    if (this.selected) {
-      this.formRef.nativeElement.operatingFraction.focus();
-    }
   }
 
   ngAfterViewInit() {
     if (!this.selected) {
       this.disableForm();
+    }
+    if (this.selected) {
+      this.formRef.nativeElement.operatingFraction.focus();
     }
     this.setCompareVals();
     this.initDifferenceMonitor();
@@ -104,6 +104,7 @@ export class FieldDataComponent implements OnInit {
     for (var i = 0, len = this.elements.length; i < len; ++i) {
       this.elements[i].disabled = true;
     }
+
   }
 
   enableForm() {
