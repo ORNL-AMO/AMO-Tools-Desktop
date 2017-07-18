@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { PSAT, PsatInputs, PsatOutputs, PsatCalcResults } from '../shared/models/psat';
+import { PSAT, PsatInputs, PsatOutputs, PsatCalcResults, PsatOutputsExistingOptimal } from '../shared/models/psat';
 //import { IndexedDbService } from '../indexedDb/indexed-db.service';
 import { Settings } from '../shared/models/settings';
 import { ConvertUnitsService } from '../shared/convert-units/convert-units.service';
 import { ValidationService } from '../shared/validation.service';
 declare var psatAddon: any;
-import { BehaviorSubject } from 'rxjs'; 
+import { BehaviorSubject } from 'rxjs';
 @Injectable()
 export class PsatService {
   flaRange: any = {
@@ -14,23 +14,81 @@ export class PsatService {
     flaMax: 0
   };
 
-  constructor(private formBuilder: FormBuilder, private convertUnitsService: ConvertUnitsService, private validationService: ValidationService) { 
+  constructor(private formBuilder: FormBuilder, private convertUnitsService: ConvertUnitsService, private validationService: ValidationService) {
+  }
+
+  test() {
+    console.log(psatAddon);
   }
 
   roundVal(val: number, digits: number) {
     return Number((Math.round(val * 100) / 100).toFixed(digits))
   }
 
-  //CALCULATORS
-  results(psatInputs: PsatInputs, settings: Settings): PsatOutputs {
+  convertInputs(psatInputs: PsatInputs, settings: Settings) {
     if (settings.distanceMeasurement != 'ft') {
       psatInputs.head = this.convertUnitsService.value(psatInputs.head).from(settings.distanceMeasurement).to('ft');
     }
     if (settings.flowMeasurement != 'gpm') {
       psatInputs.flow_rate = this.convertUnitsService.value(psatInputs.flow_rate).from(settings.flowMeasurement).to('gpm');
     }
+    return psatInputs;
+  }
 
-    let tmpResults = psatAddon.results(psatInputs);
+  convertOutputs(psatOutputs: PsatOutputs, settings: Settings): PsatOutputs{
+    if (settings.powerMeasurement != 'hp') {
+      psatOutputs.motor_rated_power = this.convertUnitsService.value(psatOutputs.motor_rated_power).from('hp').to(settings.powerMeasurement);
+      psatOutputs.motor_shaft_power = this.convertUnitsService.value(psatOutputs.motor_shaft_power).from('hp').to(settings.powerMeasurement);
+      psatOutputs.pump_shaft_power = this.convertUnitsService.value(psatOutputs.pump_shaft_power).from('hp').to(settings.powerMeasurement);
+    }
+    return psatOutputs;
+  }
+
+  //CALCULATORS
+  resultsExisting(psatInputs: PsatInputs, settings: Settings): PsatOutputs {
+    psatInputs = this.convertInputs(psatInputs, settings);
+    //call results existing
+    let tmpResults: PsatOutputs = psatAddon.resultsExisting(psatInputs);
+    if (settings.powerMeasurement != 'hp') {
+      tmpResults = this.convertOutputs(tmpResults, settings);
+    }
+    tmpResults = this.roundResults(tmpResults);
+    return tmpResults;
+  }
+
+  resultsOptimal(psatInputs: PsatInputs, settings: Settings): PsatOutputs {
+    psatInputs = this.convertInputs(psatInputs, settings);
+    //call addon resultsOptimal
+    let tmpResults: PsatOutputs = psatAddon.resultsOptimal(psatInputs);
+    if (settings.powerMeasurement != 'hp') {
+      tmpResults = this.convertOutputs(tmpResults, settings);
+    }
+    tmpResults = this.roundResults(tmpResults);
+    return tmpResults
+  }
+
+  roundResults(psatResults: PsatOutputs): PsatOutputs {
+    let roundResults:PsatOutputs =  {
+      pump_efficiency: this.roundVal(psatResults.pump_efficiency, 2),
+      motor_rated_power: this.roundVal(psatResults.motor_rated_power, 2),
+      motor_shaft_power: this.roundVal(psatResults.motor_shaft_power, 2),
+      pump_shaft_power: this.roundVal(psatResults.pump_shaft_power, 2),
+      motor_efficiency: this.roundVal(psatResults.motor_efficiency, 2),
+      motor_power_factor: this.roundVal(psatResults.motor_power_factor, 2),
+      motor_current: this.roundVal(psatResults.motor_current, 2),
+      motor_power: this.roundVal(psatResults.motor_power, 2),
+      annual_energy: this.roundVal(psatResults.annual_energy, 2),
+      annual_cost: this.roundVal(psatResults.annual_cost, 2),
+      annual_savings_potential: this.roundVal(psatResults.annual_savings_potential, 0),
+      optimization_rating: this.roundVal(psatResults.optimization_rating, 2)
+    }
+    return psatResults;
+  }
+
+  resultsExistingAndOptimal(psatInputs: PsatInputs, settings: Settings): PsatOutputsExistingOptimal {
+    psatInputs = this.convertInputs(psatInputs, settings);
+
+    let tmpResults = psatAddon.resultsExistingAndOptimal(psatInputs);
 
     if (settings.powerMeasurement != 'hp') {
       tmpResults.motor_rated_power[0] = this.convertUnitsService.value(tmpResults.motor_rated_power[0]).from('hp').to(settings.powerMeasurement);
@@ -43,12 +101,12 @@ export class PsatService {
       tmpResults.pump_shaft_power[1] = this.convertUnitsService.value(tmpResults.pump_shaft_power[1]).from('hp').to(settings.powerMeasurement);
 
     }
-    let tmpOutputs: PsatOutputs = this.parseResults(tmpResults);
+    let tmpOutputs: PsatOutputsExistingOptimal = this.parseResultsExistingOptimal(tmpResults);
     return tmpOutputs;
   }
 
-  parseResults(results: PsatCalcResults): PsatOutputs {
-    let tmpOutputs: PsatOutputs = {
+  parseResultsExistingOptimal(results: PsatCalcResults): PsatOutputsExistingOptimal {
+    let tmpOutputs: PsatOutputsExistingOptimal = {
       existing: {
         pump_efficiency: this.roundVal(results.pump_efficiency[0], 2),
         motor_rated_power: this.roundVal(results.motor_rated_power[0], 2),

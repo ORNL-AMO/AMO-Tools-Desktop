@@ -36,7 +36,7 @@ export class JsonToCsvService {
   }
 
   getPsatCsvData(assessment: Assessment, settings: Settings, psat: PSAT) {
-    let tmpResults = this.psatService.results(psat.inputs, settings);
+    let tmpResults = this.psatService.resultsExistingAndOptimal(psat.inputs, settings);
     let tmpPsatCsvData: PsatCsvData = {
       Name: assessment.name,
       CreatedDate: moment(assessment.createdDate).format("YYYY-MM-DD H:mm A"),

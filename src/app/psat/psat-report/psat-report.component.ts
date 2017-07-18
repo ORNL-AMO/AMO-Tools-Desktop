@@ -99,10 +99,10 @@ export class PsatReportComponent implements OnInit {
   }
 
   getResults(psat: PSAT, settings: Settings) {
-    psat.outputs = this.psatService.results(psat.inputs, settings);
+    psat.outputs = this.psatService.resultsExistingAndOptimal(psat.inputs, settings);
     if (psat.modifications) {
       psat.modifications.forEach(modification => {
-        modification.psat.outputs = this.psatService.results(modification.psat.inputs, settings);
+        modification.psat.outputs = this.psatService.resultsExistingAndOptimal(modification.psat.inputs, settings);
       })
     }
     return psat;

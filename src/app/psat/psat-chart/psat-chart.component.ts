@@ -34,7 +34,7 @@ export class PsatChartComponent implements OnInit {
   }
 
   initChart() {
-    this.optimizationRating = Number((Math.round(this.psat.outputs.existing.optimization_rating * 100 * 100) / 100).toFixed(0));
+    this.optimizationRating = Number((Math.round(this.psat.outputs.optimization_rating * 100 * 100) / 100).toFixed(0));
     this.title = this.psat.name || 'Baseline';
     this.unit = '%';
     this.titlePlacement = 'top';

@@ -112,12 +112,12 @@ export class ExploreOpportunitiesComponent implements OnInit {
     //create copies of inputs to use for calcs
     let psatInputs = JSON.parse(JSON.stringify(this.psat.inputs));
     let modInputs = JSON.parse(JSON.stringify(this.psat.modifications[this.exploreModIndex].psat.inputs));
-    this.baselineResults = this.psatService.results(psatInputs, this.settings);
-    this.modificationResults = this.psatService.results(modInputs, this.settings);
-    this.annualSavings = this.baselineResults.existing.annual_cost - this.modificationResults.existing.annual_cost;
-    this.optimizationRating = Number((Math.round(this.modificationResults.existing.optimization_rating * 100 * 100) / 100).toFixed(0));
-    this.baselineOptimizationRating = Number((Math.round(this.baselineResults.existing.optimization_rating * 100 * 100) / 100).toFixed(0));
-    this.baselineSavingsPotential = this.baselineResults.existing.annual_savings_potential;
+    this.baselineResults = this.psatService.resultsExisting(psatInputs, this.settings);
+    this.modificationResults = this.psatService.resultsExisting(modInputs, this.settings);
+    this.annualSavings = this.baselineResults.annual_cost - this.modificationResults.annual_cost;
+    this.optimizationRating = Number((Math.round(this.modificationResults.optimization_rating * 100 * 100) / 100).toFixed(0));
+    this.baselineOptimizationRating = Number((Math.round(this.baselineResults.optimization_rating * 100 * 100) / 100).toFixed(0));
+    this.baselineSavingsPotential = this.baselineResults.annual_savings_potential;
   }
 
   save() {

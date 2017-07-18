@@ -134,10 +134,10 @@ export class DetailedReportComponent implements OnInit {
   }
 
   getResults(psat: PSAT, settings: Settings) {
-    psat.outputs = this.psatService.results(psat.inputs, settings);
+    psat.outputs = this.psatService.resultsExisting(psat.inputs, settings);
     if (psat.modifications) {
       psat.modifications.forEach(modification => {
-        modification.psat.outputs = this.psatService.results(modification.psat.inputs, settings);
+        modification.psat.outputs = this.psatService.resultsExisting(modification.psat.inputs, settings);
       })
     }
     return psat;
@@ -148,7 +148,9 @@ export class DetailedReportComponent implements OnInit {
   }
 
   calcPsatSums() {
-    this.pumpSavingsPotential = _.sumBy(this.psats, 'outputs.existing.annual_savings_potential')
+    //this.pumpSavingsPotential = _.sumBy(this.psats, 'outputs.existing.annual_savings_potential')
+    this.pumpSavingsPotential = 0;
+    //TODO: using updated savings numbers/calculations
   }
 
   selectAssessment(assessment: Assessment) {
