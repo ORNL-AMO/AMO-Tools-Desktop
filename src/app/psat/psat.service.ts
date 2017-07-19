@@ -603,7 +603,7 @@ export class PsatService {
       'motorKW': ['', Validators.required],
       'motorAmps': ['', Validators.required],
       'measuredVoltage': ['', Validators.required],
-      'calculationMethod': ['', Validators.required]
+      'optimizeCalculation': ['', Validators.required]
     })
   }
 
@@ -639,7 +639,7 @@ export class PsatService {
       'motorKW': [psatInputs.motor_field_power, Validators.required],
       'motorAmps': [psatInputs.motor_field_current, Validators.required],
       'measuredVoltage': [psatInputs.motor_field_voltage, Validators.required],
-      'calculationMethod': [psatInputs.calculation_method, Validators.required]
+      'optimizeCalculation': [psatInputs.optimize_calculation, Validators.required]
     })
   }
 
@@ -678,7 +678,7 @@ export class PsatService {
       motor_field_voltage: form.value.measuredVoltage,
       cost_kw_hour: form.value.costKwHr,
       cost: form.value.costKwHr,
-      calculation_method: form.value.calculationMethod
+      optimize_calculation: form.value.optimizeCalculation
     }
     return tmpPsatInputs;
   }

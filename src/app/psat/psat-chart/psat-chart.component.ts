@@ -31,12 +31,14 @@ export class PsatChartComponent implements OnInit {
   }
 
   ngOnChanges() {
-    this.initChart();
+    if (this.modification) {
+      this.initChart();
+    }
   }
 
   initChart() {
-    this.optimizationRating = Number((Math.round(this.psat.outputs.optimization_rating * 100 * 100) / 100).toFixed(0));
-    this.title = this.psat.name || 'Baseline';
+    this.optimizationRating = Number((Math.round((this.modification.outputs.motor_power / this.psat.outputs.motor_power) * 100 * 100) / 100).toFixed(0));
+    this.title = this.modification.name || 'Baseline';
     this.unit = '%';
     this.titlePlacement = 'top';
   }

@@ -81,14 +81,30 @@
     </div>
     <span class="alert-warning pull-right small" *ngIf="voltageError !== null">{{voltageError}}</span>
   </div>
-
-  <div class="form-group">
-    <label for="calculationMethod">Calculation Method</label>
-    <select class="form-control" name="calculationMethod" id="calculationMethod" formControlName="calculationMethod" (change)="calculate()"
-      (focus)="focusField('calculationMethod')" ngModel="{{psatForm.value.calculationMethod}}">
-											<option [ngValue]="'Existing'">Existing</option>
-                      <option [ngValue]="'Optimal'">Optimal</option>
-										</select>
+  <!--<div *ngIf="!baseline" class="form-group">
+    <label class="form-check-label">
+        <input
+        name="optimizeCalculation"
+        id="optimizeCalculation"
+          class="form-control form-check-input"
+          type="checkbox"
+          formControlName="optimizeCalculation"
+          value="true"
+          [checked]="optimizeCalculation"
+          (change)="focusField('modifyCalculationMethod')">Optimize Calculation</label>
+  </div>-->
+</form>
+<form #formRef [formGroup]="psatForm" *ngIf="psatForm">
+  <div *ngIf="!baseline" class="form-group">
+    <label class="form-check-label">
+        <input
+        name="optimizeCalculation"
+        id="optimizeCalculation"
+          class="form-control form-check-input"
+          type="checkbox"
+          formControlName="optimizeCalculation"
+          value="true"
+          (change)="focusField('optimizeCalculation')" >Optimize Calculation</label>
   </div>
 </form>
 

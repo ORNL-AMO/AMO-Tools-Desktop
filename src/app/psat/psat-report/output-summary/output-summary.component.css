@@ -11,7 +11,14 @@
 
 th{
     width: 10%;
+    text-align: center;
 }
+
+td{
+    width: 10%;
+    text-align: center;
+}
+
 .positive-savings{
 	color: green;
 }
@@ -19,3 +26,4 @@ th{
 .negative-savings{
 	color: red;
 }
+

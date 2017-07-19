@@ -165,7 +165,7 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
       this.showPumpSpecified = true;
       this.showPumpData = true;
     }
-    if(this.psat.inputs.calculation_method != this.psat.modifications[this.exploreModIndex].psat.inputs.calculation_method){
+    if(this.psat.inputs.optimize_calculation != this.psat.modifications[this.exploreModIndex].psat.inputs.optimize_calculation){
       this.showCalculationMethod = true;
     }
   }

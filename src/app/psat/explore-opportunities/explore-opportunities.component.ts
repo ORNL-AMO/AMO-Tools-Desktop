@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
-import { PSAT, Modification, PsatOutputs } from '../../shared/models/psat';
+import { PSAT, Modification, PsatOutputs, PsatInputs } from '../../shared/models/psat';
 import { Assessment } from '../../shared/models/assessment';
 import { Settings } from '../../shared/models/settings';
 import { PsatService } from '../psat.service';
@@ -44,10 +44,6 @@ export class ExploreOpportunitiesComponent implements OnInit {
   constructor(private psatService: PsatService) { }
 
   ngOnInit() {
-    // this.psat = JSON.parse(JSON.stringify(this.assessment.psat));
-    if (!this.assessment.psat.inputs.calculation_method) {
-      this.assessment.psat.inputs.calculation_method = 'Existing';
-    }
     if (!this.psat.modifications) {
       this.psat.modifications = new Array();
       this.psat.modifications.push({
@@ -113,17 +109,17 @@ export class ExploreOpportunitiesComponent implements OnInit {
 
   getResults() {
     //create copies of inputs to use for calcs
-    let psatInputs = JSON.parse(JSON.stringify(this.psat.inputs));
-    let modInputs = JSON.parse(JSON.stringify(this.psat.modifications[this.exploreModIndex].psat.inputs));
-    if (psatInputs.calculation_method == 'Existing') {
-      this.baselineResults = this.psatService.resultsExisting(psatInputs, this.settings);
-    } else {
+    let psatInputs: PsatInputs = JSON.parse(JSON.stringify(this.psat.inputs));
+    let modInputs: PsatInputs = JSON.parse(JSON.stringify(this.psat.modifications[this.exploreModIndex].psat.inputs));
+    if (psatInputs.optimize_calculation) {
       this.baselineResults = this.psatService.resultsOptimal(psatInputs, this.settings);
-    }
-    if (modInputs.calculation_method == 'Existing') {
-      this.modificationResults = this.psatService.resultsExisting(modInputs, this.settings);
     } else {
+      this.baselineResults = this.psatService.resultsExisting(psatInputs, this.settings);
+    }
+    if (modInputs.optimize_calculation) {
       this.modificationResults = this.psatService.resultsOptimal(modInputs, this.settings);
+    } else {
+      this.modificationResults = this.psatService.resultsExisting(modInputs, this.settings);
     }
     this.annualSavings = this.baselineResults.annual_cost - this.modificationResults.annual_cost;
     //TODO: UPDATE Optimization Rating Calculation Method

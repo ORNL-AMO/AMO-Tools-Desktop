@@ -76,9 +76,6 @@ export class FieldDataComponent implements OnInit {
     if (this.selected) {
       this.formRef.nativeElement.operatingFraction.focus();
     }
-    if (this.baseline) {
-      this.formRef.nativeElement.calculationMethod.disabled = true;
-    }
     this.setCompareVals();
     this.initDifferenceMonitor();
   }
@@ -111,9 +108,7 @@ export class FieldDataComponent implements OnInit {
   enableForm() {
     this.elements = this.formRef.nativeElement.elements;
     for (var i = 0, len = this.elements.length; i < len; ++i) {
-      if (this.elements[i].id != 'calculationMethod' || !this.baseline) {
-        this.elements[i].disabled = false;
-      }
+      this.elements[i].disabled = false;
     }
   }
 

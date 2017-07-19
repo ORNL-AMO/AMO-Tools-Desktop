@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, SimpleChange, ViewChild } from '@angular/core';
 import { WindowRefService } from '../../indexedDb/window-ref.service';
 import { BaseChartDirective } from 'ng2-charts';
+import * as d3 from 'd3';
 @Component({
   selector: 'app-percent-graph',
   templateUrl: './percent-graph.component.html',
@@ -45,8 +46,15 @@ export class PercentGraphComponent implements OnInit {
   ngAfterViewInit() {
     this.doc = this.windowRefService.getDoc();
     this.window = this.windowRefService.nativeWindow;
-    this.window.onresize = () => { this.setValueMargin() };
-    this.setValueMargin();
+   // this.window.onresize = () => { this.setValueMargin() };
+   // this.setValueMargin();
+    // let tmp = d3.select('#baseChart');
+    // console.log(tmp._groups[0]);
+    // console.log(tmp._groups[0][0])
+
+    //tmp._groups[0][0].innerHTML.append("text")
+       //.attr("text-anchor", "middle")  // this makes it easy to centre the text as the transform is applied to the anchor       .text(this.value);
+    // .attr("transform", "translate(" + (tmp._groups[0][0].clientWidth / 2) + "," + (tmp._groups[0][0].clientHeight/2) + ")")  // centre below axis
   }
 
   ngOnDestroy() {
@@ -54,10 +62,11 @@ export class PercentGraphComponent implements OnInit {
   }
 
   setValueMargin() {
+
     let div = this.doc.getElementsByClassName('chart-container')
     let percentValue = this.doc.getElementById('percent');
     let valueClass = this.doc.getElementsByClassName('value');
-    console.log(div[0].clientHeight)
+    //console.log(div[0].clientHeight)
     if (div[0].clientHeight < 350 && div[0].clientHeight > 200) {
       for (let i = 0; i < valueClass.length; i++) {
         valueClass[i].style.fontSize = '24px';
@@ -177,6 +186,11 @@ export class PercentGraphComponent implements OnInit {
     }
     if (this.baseChart.chart) {
       this.baseChart.chart.config.data.datasets[0].backgroundColor = this.chartColorDataSet[0].backgroundColor;
-    }
+      let canvas = this.baseChart.chart.canvas;
+      let ctx = canvas.getContext('2d');
+      ctx.font = '48px serif';
+      ctx.fillText("WORK PLEASE %", this.baseChart.chart.width/2, this.baseChart.chart.height/2);
+      // console.log(this.baseChart.chart);
+  }
   }
 }

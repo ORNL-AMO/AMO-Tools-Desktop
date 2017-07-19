@@ -49,7 +49,7 @@ export class PsatReportComponent implements OnInit {
       this.getDirectoryList(this.assessment.directoryId);
     }
 
-    if(this.psat.modifications){
+    if (this.psat.modifications) {
       this.numMods = this.psat.modifications.length;
     }
   }
@@ -99,10 +99,18 @@ export class PsatReportComponent implements OnInit {
   }
 
   getResults(psat: PSAT, settings: Settings) {
-    psat.outputs = this.psatService.resultsExisting(psat.inputs, settings);
+    if (psat.inputs.optimize_calculation) {
+      psat.outputs = this.psatService.resultsOptimal(psat.inputs, settings);
+    } else {
+      psat.outputs = this.psatService.resultsExisting(psat.inputs, settings);
+    }
     if (psat.modifications) {
       psat.modifications.forEach(modification => {
-        modification.psat.outputs = this.psatService.resultsExisting(modification.psat.inputs, settings);
+        if (modification.psat.inputs.optimize_calculation) {
+          modification.psat.outputs = this.psatService.resultsOptimal(psat.inputs, settings);
+        } else {
+          modification.psat.outputs = this.psatService.resultsExisting(psat.inputs, settings);
+        }
       })
     }
     return psat;
@@ -127,7 +135,7 @@ export class PsatReportComponent implements OnInit {
     win.print();
   }
 
-  exportToCsv(){
+  exportToCsv() {
     this.exportData.emit(true);
   }
 

@@ -36,7 +36,7 @@ export interface PsatInputs {
   cost_kw_hour?: number
   cost?: number,
   load_factor?: number,
-  calculation_method?: string
+  optimize_calculation?: string
 }
 
 export interface PsatOutputs {

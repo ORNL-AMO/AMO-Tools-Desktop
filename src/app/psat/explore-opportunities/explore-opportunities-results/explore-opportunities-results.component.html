@@ -6,8 +6,8 @@
           <thead>
             <tr>
               <th></th>
-              <th>Baseline ({{psat.inputs.calculation_method}})</th>
-              <th>Modification ({{psat.modifications[exploreModIndex].psat.inputs.calculation_method}})</th>
+              <th>Baseline</th>
+              <th>Modification<span *ngIf="psat.modifications[exploreModIndex].psat.inputs.optimize_calculation"> (Optimized)</span></th>
             </tr>
           </thead>
           <tbody>
