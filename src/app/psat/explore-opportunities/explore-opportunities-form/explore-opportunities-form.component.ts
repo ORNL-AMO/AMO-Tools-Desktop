@@ -44,7 +44,7 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
   tmpBaselinePumpType: string;
   tmpModificationEfficiencyClass: string;
   tmpBaselineEfficiencyClass: string;
-  
+
   efficiencyClasses: Array<string> = [
     'Standard Efficiency',
     'Energy Efficient',
@@ -94,21 +94,56 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
     this.tmpBaselineEfficiencyClass = this.psatService.getEfficiencyClassFromEnum(this.psat.inputs.efficiency_class);
     this.tmpModificationPumpType = this.psatService.getPumpStyleFromEnum(this.psat.modifications[this.exploreModIndex].psat.inputs.pump_style);
     this.tmpBaselinePumpType = this.psatService.getPumpStyleFromEnum(this.psat.inputs.pump_style);
+    this.checkMotorEfficiencies();
+    this.checkPumpTypes();
     this.checkValues();
   }
 
   setPumpTypes() {
+    this.checkPumpTypes();
     this.psat.inputs.pump_style = this.psatService.getPumpStyleEnum(this.tmpBaselinePumpType);
     this.psat.modifications[this.exploreModIndex].psat.inputs.pump_style = this.psatService.getPumpStyleEnum(this.tmpModificationPumpType);
     this.calculate();
   }
 
   setEfficiencyClasses() {
+    this.checkMotorEfficiencies();
     this.psat.modifications[this.exploreModIndex].psat.inputs.efficiency_class = this.psatService.getEfficienyClassEnum(this.tmpModificationEfficiencyClass);
     this.psat.inputs.efficiency_class = this.psatService.getEfficienyClassEnum(this.tmpBaselineEfficiencyClass);
     this.calculate();
   }
 
+  checkMotorEfficiencies() {
+    if (this.tmpModificationEfficiencyClass == 'Specified') {
+      this.showMotorEfficiency = true;
+    } else {
+      this.psat.modifications[this.exploreModIndex].psat.inputs.efficiency = null;
+    }
+    if (this.tmpBaselineEfficiencyClass == 'Specified') {
+      this.showMotorEfficiency = true;
+    } else {
+      this.psat.inputs.efficiency = null;
+    }
+    if (this.tmpBaselineEfficiencyClass != 'Specified' && this.tmpModificationEfficiencyClass != 'Specified') {
+      this.showMotorEfficiency = false;
+    }
+  }
+
+  checkPumpTypes() {
+    if (this.tmpModificationPumpType == 'Specified Optimal Efficiency') {
+      this.showPumpSpecified = true;
+    } else {
+      this.psat.modifications[this.exploreModIndex].psat.inputs.pump_specified = null;
+    }
+    if (this.tmpBaselinePumpType == 'Specified Optimal Efficiency') {
+      this.showPumpSpecified = true;
+    } else {
+      this.psat.inputs.pump_specified = null;
+    }
+    if (this.tmpModificationPumpType != 'Specified Optimal Efficiency' && this.tmpBaselinePumpType != 'Specified Optimal Efficiency') {
+      this.showPumpSpecified = false;
+    }
+  }
 
   focusField(str: string) {
     this.changeField.emit(str);
@@ -165,7 +200,7 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
       this.showPumpSpecified = true;
       this.showPumpData = true;
     }
-    if(this.psat.inputs.optimize_calculation != this.psat.modifications[this.exploreModIndex].psat.inputs.optimize_calculation){
+    if (this.psat.inputs.optimize_calculation != this.psat.modifications[this.exploreModIndex].psat.inputs.optimize_calculation) {
       this.showCalculationMethod = true;
     }
   }

@@ -147,19 +147,19 @@
             </div>
           </form>
         </li>
-        <li>
+        <li *ngIf="tmpBaselineEfficiencyClass == 'Specified' || tmpModificationEfficiencyClass == 'Specified'">
           <div class="checkbox">
-            <label for="modifyMotorEfficiency"><input type ="checkbox" id="modifyMotorEfficiency" value="true" (change)="toggleMotorEfficiency()" (focus)="focusField('motorEfficiency')" [(ngModel)]="showMotorEfficiency"/>
-										Modify Motor Efficiency
+            <label for="modifyMotorEfficiency"><input type="checkbox" disabled="disabled" id="modifyMotorEfficiency" value="true" (change)="toggleMotorEfficiency()" (focus)="focusField('motorEfficiency')" [(ngModel)]="showMotorEfficiency"/>
+										Modify Motor Specified Efficiency
 									</label>
           </div>
-          <form *ngIf="showMotorEfficiency">
+          <form>
             <div class="form-group">
               <label for="baselineMotorEfficiency">Baseline Motor Efficiency</label>
               <div class="input-group">
-                <input name="baselineMotorEfficiency" type="number" step="any" id="baselineMotorEfficiency" class="form-control" (focus)="focusField('motorEfficiency')"
-                  (input)="calculate()" [(ngModel)]="psat.inputs.efficiency" [ngClass]="{'invalid': checkEfficiency(psat.inputs.efficiency, 1) == false}"
-                />
+                <input name="baselineMotorEfficiency" [disabled]="tmpBaselineEfficiencyClass != 'Specified'" type="number" step="any" id="baselineMotorEfficiency"
+                  class="form-control" (focus)="focusField('motorEfficiency')" (input)="calculate()" [(ngModel)]="psat.inputs.efficiency"
+                  [ngClass]="{'invalid': checkEfficiency(psat.inputs.efficiency, 1) == false}" />
                 <span class="input-group-addon units">%</span>
               </div>
               <span class="alert-danger pull-right small" *ngIf="efficiencyError1 !== null">{{efficiencyError1}}</span>
@@ -167,8 +167,8 @@
             <div class="form-group">
               <label for="modificationMotorEfficiency">Modification Motor Efficiency</label>
               <div class="input-group">
-                <input name="modificationMotorEfficiency" type="number" step="any" id="modificationMotorEfficiency" class="form-control"
-                  (focus)="focusField('motorEfficiency')" [(ngModel)]="psat.modifications[exploreModIndex].psat.inputs.efficiency"
+                <input name="modificationMotorEfficiency" [disabled]="tmpModificationEfficiencyClass != 'Specified'" type="number" step="any"
+                  id="modificationMotorEfficiency" class="form-control" (focus)="focusField('motorEfficiency')" [(ngModel)]="psat.modifications[exploreModIndex].psat.inputs.efficiency"
                   [ngClass]="{'invalid': checkEfficiency(psat.modifications[exploreModIndex].psat.inputs.efficiency, 2) == false}"
                   (input)="calculate()" />
                 <span class="input-group-addon units">%</span>
@@ -236,17 +236,17 @@
             </div>
           </form>
         </li>
-        <li>
+        <li *ngIf="tmpBaselinePumpType == 'Specified Optimal Efficiency' || tmpModificationPumpType == 'Specified Optimal Efficiency'">
           <div class="checkbox">
-            <label for="modifyPumpSpecified"><input type="checkbox" id="modifyPumpSpecified" value="true" (focus)="focusField('pumpSpecified')" (change)="togglePumpSpecified()" [(ngModel)]="showPumpSpecified"/>
+            <label for="modifyPumpSpecified"><input type="checkbox" disabled="disabled" id="modifyPumpSpecified" value="true" (focus)="focusField('pumpSpecified')" [(ngModel)]="showPumpSpecified"/>
 										Modify Pump Specified Efficiency
 									</label>
           </div>
-          <form *ngIf="showPumpSpecified">
+          <form>
             <div class="form-group">
               <label for="baselinePumpSpecified">Baseline Pump Specified Efficiency</label>
               <div class="input-group">
-                <input name="baselinePumpSpecified" type="number" step="any" id="baselinePumpSpecified" class="form-control" (focus)="focusField('pumpSpecified')"
+                <input name="baselinePumpSpecified" [disabled]="tmpBaselinePumpType != 'Specified Optimal Efficiency'" type="number" step="any" id="baselinePumpSpecified" class="form-control" (focus)="focusField('pumpSpecified')"
                   (input)="calculate()" [(ngModel)]="psat.inputs.pump_specified" [ngClass]="{'invalid': checkEfficiency(psat.inputs.pump_specified, 3) == false}"
                 />
                 <span class="input-group-addon units">%</span>
@@ -256,7 +256,7 @@
             <div class="form-group">
               <label for="modificationPumpSpecified">Modification Pump Specified Efficiency</label>
               <div class="input-group">
-                <input name="modificationPumpSpecified" type="number" step="any" id="modificationPumpSpecified" class="form-control" (focus)="focusField('pumpSpecified')"
+                <input name="modificationPumpSpecified" [disabled]="tmpModificationPumpType != 'Specified Optimal Efficiency'" type="number" step="any" id="modificationPumpSpecified" class="form-control" (focus)="focusField('pumpSpecified')"
                   (input)="calculate()" [(ngModel)]="psat.modifications[exploreModIndex].psat.inputs.pump_specified" [ngClass]="{'invalid': checkEfficiency(psat.modifications[exploreModIndex].psat.inputs.pump_specified, 4) == false}"
                 />
                 <span class="input-group-addon units">%</span>
@@ -273,27 +273,6 @@
 										Automatically adjust pump and motor sizing based on optimal specific speed for modification
 									</label>
       </div>
-      <!--<ul *ngIf="showCalculationMethod">
-        <li>
-          <form>
-            <div class="form-group">
-              <label for="baselineCalculationMethod">Baseline Calculation</label>
-              <select disabled="disabled" class="form-control" name="baselineCalculationMethod" id="baselineCalculationMethod" (change)="calculate()" (focus)="focusField('modificationMethod')"
-                [(ngModel)]="psat.inputs.calculation_method">
-											<option [ngValue]="'Existing'">Existing</option>
-                      <option [ngValue]="'Optimal'">Optimal</option>
-										</select>
-            </div>
-            <div class="form-group">
-              <label for="modificationCalculationMethod">Modification Calculation</label>
-              <select class="form-control" name="modificationCalculationMethod" id="modificationCalculationMethod" (change)="calculate()" (focus)="focusField('modificationMethod')"
-                [(ngModel)]="psat.modifications[exploreModIndex].psat.inputs.calculation_method">
-											<option [ngValue]="'Existing'">Existing</option>
-                      <option [ngValue]="'Optimal'">Optimal</option>
-										</select>
-            </div>
-          </form>
-        </li>
-      </ul>-->
+    </li>
   </ul>
 </div>
