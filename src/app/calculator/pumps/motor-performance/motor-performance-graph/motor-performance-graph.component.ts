@@ -106,6 +106,7 @@ export class MotorPerformanceGraphComponent implements OnInit {
         this.performanceForm.value.motorVoltage,
         this.performanceForm.value.fullLoadAmps,
         loadFactor,
+
         this.settings
       );
       return results.efficiency;
@@ -301,6 +302,33 @@ export class MotorPerformanceGraphComponent implements OnInit {
       .attr("points", "0,0, 0," + (detailBoxHeight - 2) + "," + detailBoxWidth + "," + (detailBoxHeight - 2) + "," + detailBoxWidth + ", 0," + ((detailBoxWidth / 2) + 12) + ",0," + (detailBoxWidth / 2) + ", -12, " + ((detailBoxWidth / 2) - 12) + ",0")
       .style("opacity", 0);
 
+    this.currentLine = this.svg.append("path")
+      .attr("class", "line")
+      .style("stroke-width", 10)
+      .style("stroke-width", "2px")
+      .style("fill", "none")
+      .style("stroke", "#2ECC71")
+      .style("display", "none")
+      .style('pointer-events', 'none');
+
+    this.powerLine = this.svg.append("path")
+      .attr("class", "line")
+      .style("stroke-width", 10)
+      .style("stroke-width", "2px")
+      .style("fill", "none")
+      .style("stroke", "#3498DB")
+      .style("display", "none")
+      .style('pointer-events', 'none');
+
+    this.efficiencyLine = this.svg.append("path")
+      .attr("class", "line")
+      .style("stroke-width", 10)
+      .style("stroke-width", "2px")
+      .style("fill", "none")
+      .style("stroke", "#A569BD")
+      .style("display", "none")
+      .style('pointer-events', 'none');
+
     this.focusCurrent = this.svg.append("g")
       .attr('id', 'focusCurrent')
       .attr("class", "focus")
@@ -349,32 +377,6 @@ export class MotorPerformanceGraphComponent implements OnInit {
       .attr("x", 9)
       .attr("dy", ".35em");
 
-    this.currentLine = this.svg.append("path")
-      .attr("class", "line")
-      .style("stroke-width", 10)
-      .style("stroke-width", "2px")
-      .style("fill", "none")
-      .style("stroke", "#2ECC71")
-      .style("display", "none")
-      .style('pointer-events', 'none');
-
-    this.powerLine = this.svg.append("path")
-      .attr("class", "line")
-      .style("stroke-width", 10)
-      .style("stroke-width", "2px")
-      .style("fill", "none")
-      .style("stroke", "#3498DB")
-      .style("display", "none")
-      .style('pointer-events', 'none');
-
-    this.efficiencyLine = this.svg.append("path")
-      .attr("class", "line")
-      .style("stroke-width", 10)
-      .style("stroke-width", "2px")
-      .style("fill", "none")
-      .style("stroke", "#A569BD")
-      .style("display", "none")
-      .style('pointer-events', 'none');
 
     this.svg.style("display", "none");
 
