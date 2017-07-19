@@ -18,6 +18,10 @@ export class ExploreOpportunitiesResultsComponent implements OnInit {
   psat: PSAT;
   @Input()
   exploreModIndex: number;
+  @Input()
+  percentSavings: number;
+  @Input()
+  annualSavings: number;
   constructor() { }
 
   ngOnInit() {

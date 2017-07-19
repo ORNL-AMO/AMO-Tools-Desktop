@@ -22,7 +22,7 @@ export class ExploreOpportunitiesComponent implements OnInit {
   psat: PSAT;
 
   annualSavings: number;
-  optimizationRating: number;
+  percentSavings: number;
   title: string;
   unit: string;
   titlePlacement: string;
@@ -30,7 +30,6 @@ export class ExploreOpportunitiesComponent implements OnInit {
   tmpInitialPumpType: string;
   tmpNewEfficiencyClass: string;
   tmpInitialEfficiencyClass: string;
-  testVal: string;
 
   baselineResults: PsatOutputs;
   modificationResults: PsatOutputs;
@@ -39,8 +38,6 @@ export class ExploreOpportunitiesComponent implements OnInit {
 
   tabSelect: string = 'results';
   currentField: string;
-  baselineOptimizationRating: number;
-  baselineSavingsPotential: number;
   constructor(private psatService: PsatService) { }
 
   ngOnInit() {
@@ -122,10 +119,7 @@ export class ExploreOpportunitiesComponent implements OnInit {
       this.modificationResults = this.psatService.resultsExisting(modInputs, this.settings);
     }
     this.annualSavings = this.baselineResults.annual_cost - this.modificationResults.annual_cost;
-    //TODO: UPDATE Optimization Rating Calculation Method
-    this.optimizationRating = Number((Math.round((this.modificationResults.motor_power / this.baselineResults.motor_power) * 100 * 100) / 100).toFixed(0));
-    this.baselineOptimizationRating = Number((Math.round((this.modificationResults.motor_power / this.baselineResults.motor_power) * 100 * 100) / 100).toFixed(0));
-    this.baselineSavingsPotential = this.baselineResults.annual_savings_potential;
+    this.percentSavings = Number(Math.round((((this.annualSavings * 100) / this.baselineResults.annual_cost) * 100) / 100).toFixed(0));
   }
 
   save() {

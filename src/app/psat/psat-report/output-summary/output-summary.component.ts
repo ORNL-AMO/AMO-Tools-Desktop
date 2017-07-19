@@ -12,13 +12,23 @@ export class OutputSummaryComponent implements OnInit {
   psat: PSAT;
   @Input()
   settings: Settings;
+
+  unit: string;
+  titlePlacement: string;
   constructor() { }
 
   ngOnInit() {
+    this.unit = '%';
+    this.titlePlacement = 'top';
   }
 
-  checkSavings(num: number){
+  checkSavings(num: number) {
     return this.psat.outputs.annual_cost - num;
+  }
+
+  getSavingsPercentage(baseline: PSAT, modification: PSAT): number {
+    let tmpSavingsPercent = Number(Math.round(((((baseline.outputs.annual_cost - modification.outputs.annual_cost) * 100) / baseline.outputs.annual_cost) * 100) / 100).toFixed(0));
+    return tmpSavingsPercent;
   }
 
 }

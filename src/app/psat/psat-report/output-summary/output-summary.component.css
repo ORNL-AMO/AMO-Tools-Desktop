@@ -2,6 +2,16 @@
     tr{
         border-bottom: 2px solid black;
     }
+    .show-print{
+        display: inline !important;
+    }
+    .hide-print{
+        display: none !important;
+    }
+}
+
+.show-print{
+    display: none;
 }
 
 
@@ -17,6 +27,7 @@ th{
 td{
     width: 10%;
     text-align: center;
+    vertical-align: middle;
 }
 
 .positive-savings{

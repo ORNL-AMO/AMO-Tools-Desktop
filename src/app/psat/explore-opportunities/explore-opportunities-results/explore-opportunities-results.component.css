@@ -1,6 +1,16 @@
 td{
     text-align: center;
+    vertical-align: middle;
 }
 th{
     text-align: center;
+}
+
+
+.positive-savings{
+	color: green;
+}
+
+.negative-savings{
+	color: red;
 }

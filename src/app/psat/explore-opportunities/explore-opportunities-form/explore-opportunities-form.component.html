@@ -147,7 +147,7 @@
             </div>
           </form>
         </li>
-        <li *ngIf="tmpBaselineEfficiencyClass == 'Specified' || tmpModificationEfficiencyClass == 'Specified'">
+        <li *ngIf="(tmpBaselineEfficiencyClass == 'Specified' || tmpModificationEfficiencyClass == 'Specified') && showEfficiencyClass">
           <div class="checkbox">
             <label for="modifyMotorEfficiency"><input type="checkbox" disabled="disabled" id="modifyMotorEfficiency" value="true" (change)="toggleMotorEfficiency()" (focus)="focusField('motorEfficiency')" [(ngModel)]="showMotorEfficiency"/>
 										Modify Motor Specified Efficiency
@@ -236,7 +236,7 @@
             </div>
           </form>
         </li>
-        <li *ngIf="tmpBaselinePumpType == 'Specified Optimal Efficiency' || tmpModificationPumpType == 'Specified Optimal Efficiency'">
+        <li *ngIf="(tmpBaselinePumpType == 'Specified Optimal Efficiency' || tmpModificationPumpType == 'Specified Optimal Efficiency') && showPumpType">
           <div class="checkbox">
             <label for="modifyPumpSpecified"><input type="checkbox" disabled="disabled" id="modifyPumpSpecified" value="true" (focus)="focusField('pumpSpecified')" [(ngModel)]="showPumpSpecified"/>
 										Modify Pump Specified Efficiency
@@ -270,7 +270,7 @@
     <li>
       <div class="checkbox">
         <label for="modifyCalculationMethod"><input type="checkbox" id="modifyCalculationMethod" value="true" (change)="calculate()" (focus)="focusField('modifyCalculationMethod')" [(ngModel)]="psat.modifications[exploreModIndex].psat.inputs.optimize_calculation"/>
-										Automatically adjust pump and motor sizing based on optimal specific speed for modification
+										Optimize Pump and Motor combination, automatically
 									</label>
       </div>
     </li>

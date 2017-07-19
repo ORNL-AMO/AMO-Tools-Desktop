@@ -11,6 +11,7 @@ export class PsatChartComponent implements OnInit {
   psat: PSAT;
   @Input()
   modification: PSAT;
+  
   // doughnutChartLabels: string[] = ['Optimization Rating', 'Potential'];
   // doughnutChartData: number[];
   // doughnutChartType: string = 'doughnut';
@@ -18,7 +19,7 @@ export class PsatChartComponent implements OnInit {
   // chartColors: Array<any> = [{}];
   // chartColorDataSet: Array<any>;
 
-  optimizationRating: number = 0;
+  annualSavings: number = 0;
   title: string;
   unit: string;
   titlePlacement: string;
@@ -37,7 +38,7 @@ export class PsatChartComponent implements OnInit {
   }
 
   initChart() {
-    this.optimizationRating = Number((Math.round((this.modification.outputs.motor_power / this.psat.outputs.motor_power) * 100 * 100) / 100).toFixed(0));
+    this.annualSavings = Number(Math.round(((((this.psat.outputs.annual_cost - this.modification.outputs.annual_cost)*100) / this.psat.outputs.annual_cost) * 100) / 100).toFixed(0));
     this.title = this.modification.name || 'Baseline';
     this.unit = '%';
     this.titlePlacement = 'top';

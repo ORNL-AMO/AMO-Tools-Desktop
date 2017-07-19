@@ -3,74 +3,67 @@
     <tr>
       <th></th>
       <th>Baseline</th>
-      <!--<th>Optimal</th>-->
       <th *ngFor="let modification of psat.modifications">{{modification.psat.name}} <span *ngIf="modification.psat.inputs.optimize_calculation">(Optimized)</span></th>
     </tr>
   </thead>
   <tbody>
     <tr>
-      <td>Optimization Rating</td>
+      <td>Percent Savings (%)</td>
       <td>
+        &mdash; &mdash;
+      </td>
+      <td class="hide-print" *ngFor="let modification of psat.modifications">
         <div class="row justify-content-center">
-          <div class="col-4">
-            <app-psat-chart [psat]="psat" [modification]="psat"></app-psat-chart>
+          <div class="col-lg-6 col-md-6 col-sm-8" [ngClass]="{'col-lg-4': psat.modifications.length == 1}">
+            <div class="chart-container">
+              <app-percent-graph [value]="getSavingsPercentage(psat, modification.psat)" [titlePlacement]="titlePlacement" [valueDescription]="'Annual Savings'"
+                [unit]="unit"></app-percent-graph>
+            </div>
           </div>
         </div>
       </td>
-      <td *ngFor="let modification of psat.modifications">
-        <div class="row justify-content-center">
-          <div class="col-4">
-            <app-psat-chart [psat]="psat" [modification]="modification.psat"></app-psat-chart>
-          </div>
-        </div>
+      <td class="show-print text-center" *ngFor="let modification of psat.modifications">
+        {{getSavingsPercentage(psat, modification.psat) | number:'1.0-0'}} %
       </td>
     </tr>
     <tr>
       <td>Pump efficiency (%)</td>
       <td>{{psat.outputs.pump_efficiency | number:'2.2-2'}}</td>
-      <!--<td>{{psat.outputs.optimal.pump_efficiency | number:'2.2-2'}}</td>-->
       <td *ngFor="let modification of psat.modifications">{{modification.psat.outputs.pump_efficiency | number:'2.2-2'}}</td>
     </tr>
     <tr>
       <td>Motor rated power ({{settings.powerMeasurement}})</td>
       <td>{{psat.outputs.motor_rated_power | number:'2.2-2'}}</td>
-      <!--<td>{{psat.outputs.optimal.motor_rated_power | number:'2.2-2'}}</td>-->
       <td *ngFor="let modification of psat.modifications">{{modification.psat.outputs.motor_rated_power | number:'2.2-2'}}</td>
     </tr>
     <tr>
       <td>Motor shaft power ({{settings.powerMeasurement}})</td>
       <td>{{psat.outputs.motor_shaft_power | number:'2.2-2'}}</td>
-      <!--<td>{{psat.outputs.optimal.motor_shaft_power | number:'2.2-2'}}</td>-->
       <td *ngFor="let modification of psat.modifications">{{modification.psat.outputs.motor_shaft_power | number:'2.2-2'}}</td>
     </tr>
     <tr>
       <td>Pump shaft power ({{settings.powerMeasurement}})</td>
       <td>{{psat.outputs.pump_shaft_power | number:'2.2-2'}}</td>
-      <!--<td>{{psat.outputs.optimal.pump_shaft_power | number:'2.2-2'}}</td>-->
       <td *ngFor="let modification of psat.modifications">{{modification.psat.outputs.pump_shaft_power | number:'2.2-2'}}</td>
     </tr>
     <tr>
       <td>Motor efficiency (%)</td>
       <td>{{psat.outputs.motor_efficiency | number:'2.2-2'}}</td>
-      <!--<td>{{psat.outputs.optimal.motor_efficiency | number:'2.2-2'}}</td>-->
       <td *ngFor="let modification of psat.modifications">{{modification.psat.outputs.motor_efficiency | number:'2.2-2'}}</td>
     </tr>
     <tr>
       <td>Motor power factor (%)</td>
       <td>{{psat.outputs.motor_power_factor | number:'2.2-2'}}</td>
-      <!--<td>{{psat.outputs.optimal.motor_power_factor | number:'2.2-2'}}</td>-->
       <td *ngFor="let modification of psat.modifications">{{modification.psat.outputs.motor_power_factor | number:'2.2-2'}}</td>
     </tr>
     <tr>
       <td>Motor current (amps)</td>
       <td>{{psat.outputs.motor_current | number:'2.2-2'}}</td>
-      <!--<td>{{psat.outputs.optimal.motor_current | number:'2.2-2'}}</td>-->
       <td *ngFor="let modification of psat.modifications">{{modification.psat.outputs.motor_current | number:'2.2-2'}}</td>
     </tr>
     <tr>
       <td>Motor power ({{settings.powerMeasurement}})</td>
       <td>{{psat.outputs.motor_power | number:'2.2-2'}}</td>
-      <!--<td>{{psat.outputs.optimal.motor_power | number:'2.2-2'}}</td>-->
       <td *ngFor="let modification of psat.modifications">{{modification.psat.outputs.motor_power | number:'2.2-2'}}</td>
     </tr>
   </tbody>
@@ -78,13 +71,11 @@
     <tr>
       <th>Annual Energy (MWh)</th>
       <th>{{psat.outputs.annual_energy | number:'2.2-2'}}</th>
-      <!--<th>{{psat.outputs.optimal.annual_energy | number:'2.2-2'}}</th>-->
       <th *ngFor="let modification of psat.modifications">{{modification.psat.outputs.annual_energy | number:'2.2-2'}}</th>
     </tr>
     <tr>
       <th>Annual Cost</th>
       <th>{{psat.outputs.annual_cost | number:'2.2-2'}}</th>
-      <!--<th>{{psat.outputs.optimal.annual_cost | number:'2.2-2'}}</th>-->
       <th *ngFor="let modification of psat.modifications">{{modification.psat.outputs.annual_cost | number:'2.2-2'}}</th>
     </tr>
     <tr>
@@ -92,10 +83,10 @@
         Annual Savings
       </th>
       <th>
-        $ &mdash; &mdash; &mdash;
+        &mdash; &mdash;
       </th>
-      <th *ngFor="let modification of psat.modifications" [ngClass]="{'positive-savings': checkSavings(modification.psat.outputs.annual_cost) > 0, 'negative-savings': checkSavings(modification.psat.outputs.annual_cost) < 0}">
-        {{psat.outputs.annual_cost - modification.psat.outputs.annual_cost | currency:'USD':true:'4.0-0'}}
+      <th *ngFor="let modification of psat.modifications" [ngClass]="{'positive-savings': getSavingsPercentage(psat, modification.psat) > 10}">
+        {{psat.outputs.annual_cost - modification.psat.outputs.annual_cost | currency:'USD':true:'2.2-2'}}
       </th>
     </tr>
   </tfoot>

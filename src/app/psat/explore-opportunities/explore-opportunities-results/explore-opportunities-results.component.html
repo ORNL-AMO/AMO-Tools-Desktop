@@ -12,6 +12,21 @@
           </thead>
           <tbody>
             <tr>
+              <td>Percent Savings (%)</td>
+              <td>
+                &mdash; &mdash;
+              </td>
+              <td>
+                <div class="row justify-content-center">
+                  <div class="col-lg-8 col-md-8 col-sm-10">
+                    <div class="chart-container">
+                      <app-percent-graph [value]="percentSavings" [titlePlacement]="titlePlacement" [valueDescription]="'Percent Savings'" [unit]="'%'"></app-percent-graph>
+                    </div>
+                  </div>
+                </div>
+              </td>
+            </tr>
+            <tr>
               <td>Pump efficiency (%)</td>
               <td>{{baselineResults.pump_efficiency | number:'2.2-2'}}</td>
               <td>{{modificationResults.pump_efficiency | number:'2.2-2'}}</td>
@@ -60,8 +75,13 @@
             </tr>
             <tr>
               <th>Annual Cost</th>
-              <th>{{baselineResults.annual_cost | number:'2.2-2'}}</th>
-              <th>{{modificationResults.annual_cost | number:'2.2-2'}}</th>
+              <th>{{baselineResults.annual_cost | currency:'USD':true:'2.2-2'}}</th>
+              <th>{{modificationResults.annual_cost | currency:'USD':true:'2.2-2'}}</th>
+            </tr>
+            <tr>
+              <th>Annual Savings</th>
+              <th>&mdash; &mdash;</th>
+              <th class="savings text-center" [ngClass]="{'positive-savings': percentSavings > 10}">{{annualSavings | currency:'USD':true:'2.2-2'}}</th>
             </tr>
           </tfoot>
         </table>
