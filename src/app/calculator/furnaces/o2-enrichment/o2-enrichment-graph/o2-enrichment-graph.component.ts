@@ -115,7 +115,17 @@ export class O2EnrichmentGraphComponent implements OnInit {
   setUp() {
     this.initGraph();
     //We can draw the guideCurve now since pump type has no effect on what kind of shape it has.
-    var lines = ({details: this.o2Enrichment, color: "#2ECC71"});
+    var lines = {
+      o2CombAir: this.o2Enrichment.o2CombAir,
+      o2CombAirEnriched: this.o2Enrichment.o2CombAirEnriched,
+      flueGasTemp: this.o2Enrichment.flueGasTemp,
+      flueGasTempEnriched: this.o2Enrichment.flueGasTempEnriched,
+      o2FlueGas: this.o2Enrichment.o2FlueGas,
+      o2FlueGasEnriched: this.o2Enrichment.o2FlueGasEnriched,
+      combAirTemp: this.o2Enrichment.combAirTemp,
+      combAirTempEnriched: this.o2Enrichment.combAirTempEnriched,
+      fuelConsumption: this.o2Enrichment.fuelConsumption,
+      color: "#2ECC71"};
     this.drawCurve(this.svg, this.x, this.y, lines, true);
   }
 
@@ -297,11 +307,11 @@ export class O2EnrichmentGraphComponent implements OnInit {
         o2CombAir: this.o2Enrichment.o2CombAir,
         o2CombAirEnriched: i,
         flueGasTemp: this.o2Enrichment.flueGasTemp,
-        flueGasTempEnriched: information.details.flueGasTempEnriched,
+        flueGasTempEnriched: information.flueGasTempEnriched,
         o2FlueGas: this.o2Enrichment.o2FlueGas,
-        o2FlueGasEnriched: information.details.o2FlueGasEnriched,
+        o2FlueGasEnriched: information.o2FlueGasEnriched,
         combAirTemp: this.o2Enrichment.combAirTemp,
-        combAirTempEnriched: information.details.combAirTempEnriched,
+        combAirTempEnriched: information.combAirTempEnriched,
         fuelConsumption: this.o2Enrichment.fuelConsumption
       };
       var fuelSavings = this.PhastService.o2Enrichment(this.o2EnrichmentPoint).fuelSavingsEnriched;
@@ -361,8 +371,7 @@ export class O2EnrichmentGraphComponent implements OnInit {
     else{
       svg.append("path")
         .data([data])
-        .attr("class", "plottedLine")
-        .attr("class", "line")
+        .attr("class", "line plottedLine")
         .attr("d", guideLine)
         .style("stroke-width", 10)
         .style("stroke-width", "2px")
@@ -495,7 +504,7 @@ export class O2EnrichmentGraphComponent implements OnInit {
     }
     else{
       this.point = this.svg.append("g")
-        .attr("class", "focus")
+        .attr("class", "focus plottedPoint")
         .style("display", "none")
         .style('pointer-events', 'none');
     }
@@ -510,18 +519,28 @@ export class O2EnrichmentGraphComponent implements OnInit {
       .attr("x", 9)
       .attr("dy", ".35em");
 
-    var fuelSavings = this.PhastService.o2Enrichment(information.details).fuelSavingsEnriched;
+    var fuelSavings = this.PhastService.o2Enrichment(this.o2EnrichmentPoint).fuelSavingsEnriched;
 
     this.point
       .style("display", null)
       .style("opacity",1)
       .style('pointer-events', 'none')
-      .attr("transform", "translate(" + x(information.details.o2CombAirEnriched) + "," + y(fuelSavings) + ")");
+      .attr("transform", "translate(" + x(information.o2CombAirEnriched) + "," + y(fuelSavings) + ")");
   }
 
   onChanges() {
 
-    var line = ({details: this.o2Enrichment, color: "#2ECC71"});
+    var line = {
+        o2CombAir: this.o2Enrichment.o2CombAir,
+        o2CombAirEnriched: this.o2Enrichment.o2CombAirEnriched,
+        flueGasTemp: this.o2Enrichment.flueGasTemp,
+        flueGasTempEnriched: this.o2Enrichment.flueGasTempEnriched,
+        o2FlueGas: this.o2Enrichment.o2FlueGas,
+        o2FlueGasEnriched: this.o2Enrichment.o2FlueGasEnriched,
+        combAirTemp: this.o2Enrichment.combAirTemp,
+        combAirTempEnriched: this.o2Enrichment.combAirTempEnriched,
+        fuelConsumption: this.o2Enrichment.fuelConsumption,
+        color: "#2ECC71"};
 
     this.svg.selectAll("#formLine").remove();
     this.drawCurve(this.svg, this.x, this.y, line, true);
@@ -529,13 +548,32 @@ export class O2EnrichmentGraphComponent implements OnInit {
     this.plotBtn.classed("disabled", false);
     this.change = true;
 
+    this.svg.selectAll(".plottedLine").remove();
+    this.svg.selectAll(".plottedPoint").remove();
+
+    console.log(this.lines.length);
+    for(var i = 0; i < this.lines.length; i++){
+      this.drawCurve(this.svg, this.x, this.y, this.lines[i], false);
+    }
+
   }
 
-  plotLine(){git 
+
+  plotLine(){
     if(this.change) {
       var color = this.getRandomColor();
 
-      var line = {details: this.o2Enrichment, color: color};
+      var line = {
+        o2CombAir: this.o2Enrichment.o2CombAir,
+        o2CombAirEnriched: this.o2Enrichment.o2CombAirEnriched,
+        flueGasTemp: this.o2Enrichment.flueGasTemp,
+        flueGasTempEnriched: this.o2Enrichment.flueGasTempEnriched,
+        o2FlueGas: this.o2Enrichment.o2FlueGas,
+        o2FlueGasEnriched: this.o2Enrichment.o2FlueGasEnriched,
+        combAirTemp: this.o2Enrichment.combAirTemp,
+        combAirTempEnriched: this.o2Enrichment.combAirTempEnriched,
+        fuelConsumption: this.o2Enrichment.fuelConsumption,
+        color: color};
 
       this.drawCurve(this.svg, this.x, this.y, line, false);
 
