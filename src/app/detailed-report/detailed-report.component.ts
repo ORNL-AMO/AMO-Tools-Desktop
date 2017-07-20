@@ -134,10 +134,18 @@ export class DetailedReportComponent implements OnInit {
   }
 
   getResults(psat: PSAT, settings: Settings) {
-    psat.outputs = this.psatService.resultsExisting(psat.inputs, settings);
+    if (psat.inputs.optimize_calculation) {
+      psat.outputs = this.psatService.resultsOptimal(psat.inputs, settings);
+    } else {
+      psat.outputs = this.psatService.resultsExisting(psat.inputs, settings);
+    }
     if (psat.modifications) {
       psat.modifications.forEach(modification => {
-        modification.psat.outputs = this.psatService.resultsExisting(modification.psat.inputs, settings);
+        if (modification.psat.inputs.optimize_calculation) {
+          modification.psat.outputs = this.psatService.resultsOptimal(modification.psat.inputs, settings);
+        } else {
+          modification.psat.outputs = this.psatService.resultsExisting(modification.psat.inputs, settings);
+        }
       })
     }
     return psat;
@@ -148,9 +156,15 @@ export class DetailedReportComponent implements OnInit {
   }
 
   calcPsatSums() {
-    //this.pumpSavingsPotential = _.sumBy(this.psats, 'outputs.existing.annual_savings_potential')
-    this.pumpSavingsPotential = 0;
-    //TODO: using updated savings numbers/calculations
+    let sum = 0;
+    this.psats.forEach(psat => {
+      if (psat.modifications) {
+        let minCost = _.minBy(psat.modifications, (mod) => { return mod.psat.outputs.annual_cost })
+        let diff = psat.outputs.annual_cost - minCost.psat.outputs.annual_cost;
+        sum += diff;
+      }
+    })
+    this.pumpSavingsPotential = sum;
   }
 
   selectAssessment(assessment: Assessment) {

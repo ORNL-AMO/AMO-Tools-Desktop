@@ -1787,6 +1787,11 @@ Toasty Overrides ================================= */
   height:100%;
 }
 
+.psat-name{
+    font-size: large !important;
+    vertical-align: middle !important;
+}
+
 
 @media screen and (min-width: 768px) {
   .rollups .pumps {

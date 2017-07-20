@@ -51,20 +51,11 @@ export class ModifyConditionsComponent implements OnInit {
       this.modifyTab = tmpTab;
     }
     this.currentField = 'operatingFraction';
-    // let results: PsatOutputs = this.psatService.resultsExistingAndOptimal(this.psat.inputs);
-    // console.log(results)
-
-    // this.psatService.changeSubTab.subscribe((val) => {
-    //   if (val) {
-    //     this.modifyTab = val;
-    //   }
-    // })
   }
 
   ngOnDestroy() {
     this.compareService.baselinePSAT = null;
     this.compareService.modifiedPSAT = null;
-  //  this.psatService.changeSubTab.next(null);
   }
 
   save() {

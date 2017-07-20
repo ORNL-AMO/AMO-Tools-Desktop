@@ -6,8 +6,8 @@
           <thead>
             <tr>
               <th></th>
-              <th>Baseline</th>
-              <th>Modification<span *ngIf="psat.modifications[exploreModIndex].psat.inputs.optimize_calculation"> (Optimized)</span></th>
+              <th class="psat-name">Baseline</th>
+              <th class="psat-name">Opportunities Modification</th>
             </tr>
           </thead>
           <tbody>
@@ -66,8 +66,6 @@
               <td>{{baselineResults.motor_power | number:'2.2-2'}}</td>
               <td>{{modificationResults.motor_power | number:'2.2-2'}}</td>
             </tr>
-          </tbody>
-          <tfoot>
             <tr>
               <th>Annual Energy (MWh)</th>
               <th>{{baselineResults.annual_energy | number:'2.2-2'}}</th>
@@ -83,7 +81,12 @@
               <th>&mdash; &mdash;</th>
               <th class="savings text-center" [ngClass]="{'positive-savings': percentSavings > 10}">{{annualSavings | currency:'USD':true:'2.2-2'}}</th>
             </tr>
-          </tfoot>
+            <tr *ngIf="psat.modifications[exploreModIndex].psat.inputs.optimize_calculation">
+              <td></td>
+              <td></td>
+              <td><span class="text-muted">*Optimized</span></td>
+            </tr>
+          </tbody>
         </table>
       </div>
     </div>

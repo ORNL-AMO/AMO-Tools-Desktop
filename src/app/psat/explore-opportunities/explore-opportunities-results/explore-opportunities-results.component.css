@@ -14,3 +14,9 @@ th{
 .negative-savings{
 	color: red;
 }
+
+
+.psat-name{
+    font-size: large !important;
+    vertical-align: middle;
+}

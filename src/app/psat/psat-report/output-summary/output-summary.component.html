@@ -1,9 +1,9 @@
 <table class="table">
   <thead>
     <tr>
-      <th></th>
-      <th>Baseline</th>
-      <th *ngFor="let modification of psat.modifications">{{modification.psat.name}} <span *ngIf="modification.psat.inputs.optimize_calculation">(Optimized)</span></th>
+      <th [ngStyle]="{'width.%': 100 /(psat.modifications.length+2)}"></th>
+      <th [ngStyle]="{'width.%': 100 /(psat.modifications.length+2)}" class="psat-name">Baseline</th>
+      <th [ngStyle]="{'width.%': 100 /(psat.modifications.length+2)}" *ngFor="let modification of psat.modifications" class="psat-name">{{modification.psat.name}}</th>
     </tr>
   </thead>
   <tbody>
@@ -12,19 +12,22 @@
       <td>
         &mdash; &mdash;
       </td>
-      <td class="hide-print" *ngFor="let modification of psat.modifications">
+      <td *ngFor="let modification of psat.modifications">
         <div class="row justify-content-center chart-row">
           <div class="col-lg-6 col-md-6 col-sm-8" [ngClass]="{'col-lg-3': psat.modifications.length == 1, 'col-lg-10': psat.modifications.length > 3}">
-            <div class="chart-container">
+            <div class="chart-container hide-print">
               <app-percent-graph [value]="modification.psat.outputs.percent_annual_savings" [titlePlacement]="titlePlacement" [valueDescription]="'Annual Savings'"
                 [unit]="unit"></app-percent-graph>
+            </div>
+            <div class="show-print text-center">
+              {{getSavingsPercentage(psat, modification.psat) | number:'1.0-0'}} %
             </div>
           </div>
         </div>
       </td>
-      <td class="show-print text-center" *ngFor="let modification of psat.modifications">
+      <!--<td class="show-print text-center" *ngFor="let modification of psat.modifications">
         {{getSavingsPercentage(psat, modification.psat) | number:'1.0-0'}} %
-      </td>
+      </td>-->
     </tr>
     <tr>
       <td>Pump efficiency (%)</td>
@@ -66,8 +69,6 @@
       <td>{{psat.outputs.motor_power | number:'2.2-2'}}</td>
       <td *ngFor="let modification of psat.modifications">{{modification.psat.outputs.motor_power | number:'2.2-2'}}</td>
     </tr>
-  </tbody>
-  <tfoot>
     <tr>
       <th>Annual Energy (MWh)</th>
       <th>{{psat.outputs.annual_energy | number:'2.2-2'}}</th>
@@ -85,9 +86,14 @@
       <th>
         &mdash; &mdash;
       </th>
-      <th *ngFor="let modification of psat.modifications" [ngClass]="{'positive-savings': getSavingsPercentage(psat, modification.psat) > 10}">
+      <th *ngFor="let modification of psat.modifications" [ngClass]="{'positive-savings': getSavingsPercentage(psat, modification.psat) > 10, 'max-savings': psat.outputs.annual_cost - modification.psat.outputs.annual_cost == maxAnnualSavings}">
         {{psat.outputs.annual_cost - modification.psat.outputs.annual_cost | currency:'USD':true:'2.2-2'}}
       </th>
     </tr>
-  </tfoot>
+    <tr>
+      <td></td>
+      <td></td>
+      <td *ngFor="let modification of psat.modifications"><span *ngIf="modification.psat.inputs.optimize_calculation" class="text-muted">*Optimized</span></td>
+    </tr>
+  </tbody>
 </table>
