@@ -8,7 +8,7 @@
   <div class="form-group">
     <label for="flowRate">Flow Rate</label><br>
     <div class="input-group calc-addon-group">
-      <input class="form-control addon-input" type="number" step="any" [(ngModel)]="tmpFlowRate" id="flowRate" (input)="emitChange()" onfocus="this.select();">
+      <input class="form-control addon-input" type="number" min="110" max="5000" step="any"  [(ngModel)]="tmpFlowRate" id="flowRate" (keypress)="maxInput()" (input)="emitChange()" onfocus="this.select();">
       <span class="input-group-addon units">{{settings.flowMeasurement}}</span>
     </div>
   </div>

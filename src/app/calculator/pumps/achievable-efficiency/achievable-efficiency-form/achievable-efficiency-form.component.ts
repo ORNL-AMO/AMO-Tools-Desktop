@@ -28,9 +28,10 @@ export class AchievableEfficiencyFormComponent implements OnInit {
     //NOT USED FOR GRAPH!
     //'Specified Optimal Efficiency'
   ];
-
   tmpPumpType: string;
   tmpFlowRate: number;
+  minValue: number;
+  valueError: string;
   constructor() { }
 
   ngOnInit() {
@@ -50,6 +51,24 @@ export class AchievableEfficiencyFormComponent implements OnInit {
 
   test(){
     console.log('click')
+  }
+    maxInput() {
+    if (this.minValue < 110) {
+      this.valueError = '110';
+      return false;
+    }
+    else if (this.minValue == 0) {
+      this.valueError = '110';
+      return false;
+    }
+    else if (this.minValue > 5000) {
+      this.valueError = '5000';
+      return false;
+    }
+    else {
+      this.minValue = 110;
+      return true;
+    }
   }
 }
 
