@@ -51,7 +51,8 @@ export interface PsatOutputs {
   annual_energy?: number,
   annual_cost?: number,
   annual_savings_potential?: number,
-  optimization_rating?: number
+  optimization_rating?: number,
+  percent_annual_savings?: number
 }
 
 export interface PsatOutputsExistingOptimal {

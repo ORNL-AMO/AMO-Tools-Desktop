@@ -33,11 +33,11 @@ export class PsatReportComponent implements OnInit {
 
   ngOnInit() {
     if (this.psat && this.settings) {
-      this.getResults(this.psat, this.settings);
+     // this.psat = this.getResults(this.psat, this.settings);
     }
     else if (this.assessment.psat && this.settings) {
       this.psat = this.assessment.psat;
-      this.getResults(this.psat, this.settings);
+     // this.psat = this.getResults(this.psat, this.settings);
     }
     else if (this.assessment.psat && !this.settings) {
       this.psat = this.assessment.psat;
@@ -62,7 +62,7 @@ export class PsatReportComponent implements OnInit {
         if (results.length != 0) {
           this.settings = results[0];
           if (!this.psat.outputs) {
-            this.psat = this.getResults(this.psat, this.settings);
+           // this.psat = this.getResults(this.psat, this.settings);
           }
         } else {
           //no assessment settings, find dir settings being usd
@@ -83,7 +83,7 @@ export class PsatReportComponent implements OnInit {
             if (resultSettings.length != 0) {
               this.settings = resultSettings[0];
               if (!this.psat.outputs) {
-                this.psat = this.getResults(this.psat, this.settings);
+               // this.psat = this.getResults(this.psat, this.settings);
               }
             } else {
               //no settings try again with parents parent directory
@@ -98,7 +98,7 @@ export class PsatReportComponent implements OnInit {
     this.closeReport.emit(true);
   }
 
-  getResults(psat: PSAT, settings: Settings) {
+  getResults(psat: PSAT, settings: Settings) : PSAT{
     if (psat.inputs.optimize_calculation) {
       psat.outputs = this.psatService.resultsOptimal(psat.inputs, settings);
     } else {
