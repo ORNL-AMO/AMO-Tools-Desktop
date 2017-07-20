@@ -50,7 +50,7 @@ export class PercentGraphComponent implements OnInit {
     //let object render before resizing initially
     setTimeout(() => {
       this.setValueMargin();
-    }, 20)
+    }, 500)
   }
 
   ngOnDestroy() {
@@ -98,12 +98,18 @@ export class PercentGraphComponent implements OnInit {
           position: this.titlePlacement || "bottom",
           fontStyle: this.fontStyle || "bold",
           fontSize: this.fontSize || 22
+        },
+        tooltips: {
+          enabled: false
         }
       }
     } else {
       this.chartOptions = {
         legend: {
           display: false
+        },
+        tooltips: {
+          enabled: false
         }
       };
     }
