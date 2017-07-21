@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Settings } from '../../../../shared/models/settings';
+import {falseIfMissing} from "protractor/built/util";
 
 @Component({
   selector: 'app-achievable-efficiency-form',
@@ -25,14 +26,13 @@ export class AchievableEfficiencyFormComponent implements OnInit {
     'Vertical Turbine',
     'Large End Suction',
     // When user selects below they need a way to provide the optimal efficiency
-    //NOT USED FOR GRAPH!
-    //'Specified Optimal Efficiency'
+    // NOT USED FOR GRAPH!
+    // 'Specified Optimal Efficiency'
   ];
   tmpPumpType: string;
   tmpFlowRate: number;
-  minValue: number;
-  valueError: string;
-  constructor() { }
+  inputError: string;
+   constructor() { }
 
   ngOnInit() {
     if (this.efficiencyForm) {
@@ -46,30 +46,24 @@ export class AchievableEfficiencyFormComponent implements OnInit {
       pumpType: this.tmpPumpType,
       flowRate: this.tmpFlowRate
     })
-    this.calculate.emit(true);
-  }
-
-  test(){
-    console.log('click')
-  }
-    maxInput() {
-    if (this.minValue < 110) {
-      this.valueError = '110';
+    if (this.tmpFlowRate < 110) {
+      this.tmpFlowRate = null;
       return false;
     }
-    else if (this.minValue == 0) {
-      this.valueError = '110';
-      return false;
-    }
-    else if (this.minValue > 5000) {
-      this.valueError = '5000';
+    else if (this.tmpFlowRate > 5000) {
+      this.tmpFlowRate = null;
       return false;
     }
     else {
-      this.minValue = 110;
-      return true;
+      this.calculate.emit(true);
     }
   }
+  test() {
+    console.log('click');
+  }
 }
+
+
+
 
 
