@@ -9,25 +9,7 @@
 
   <div class="row">
     <div class="rollups col-md-10 offset-md-1">
-      <div class="pumps text-color">
-        <h3><span>Pumps</span></h3>
-        <h3 *ngIf="numPsats == 1">{{numPsats}} pump with a</h3>
-        <h3 *ngIf="numPsats != 1">{{numPsats}} pumps with a</h3>
-        <h4>{{pumpSavingsPotential| currency:'USD':true:'4.2-2'}}</h4>
-        <h5>Maximum annual cost savings</h5>
-        <h4>{{energySavingsPotential| number:'2.2-2'}} MWh</h4>
-        <h5>Maximum annual energy savings</h5>
-        <div class="row" style="padding-top: 10px;">
-          <div class="col-6">
-            <h4 style="font-size: .75rem">{{totalCost | currency:'USD':true:'4.2-2'}}</h4>
-            <h5>Total Cost</h5>
-          </div>
-          <div class="col-6">
-            <h4 style="font-size: .75rem">{{totalEnergy| number:'2.2-2'}} MWh</h4>
-            <h5>Total Energy</h5>
-          </div>
-        </div>
-      </div>
+      <app-psat-summary [pumpSavingsPotential]="pumpSavingsPotential" [numPsats]="numPsats" [energySavingsPotential]="energySavingsPotential" [totalCost]="totalCost" [totalEnergy]="totalEnergy"></app-psat-summary>
     </div>
   </div>
   <!-- End .row -->

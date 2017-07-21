@@ -1590,7 +1590,6 @@ Reporting
 
 
     .rollups .pumps {
-      width: 50%;
       text-align: center;
       border: dashed;
       padding: 5px;
@@ -1815,9 +1814,9 @@ Toasty Overrides ================================= */
 
 
 @media screen and (min-width: 768px) {
-  .rollups .pumps {
+  /*.rollups .pumps {
     width: 25%;
-  }
+  }*/
 }
 
 
