@@ -1,6 +1,7 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { PSAT, PsatOutputs } from '../../../shared/models/psat';
 import { Settings } from '../../../shared/models/settings';
+import { Assessment } from '../../../shared/models/assessment';
 import { PsatService } from '../../psat.service';
 import * as _ from 'lodash';
 @Component({
@@ -15,10 +16,15 @@ export class OutputSummaryComponent implements OnInit {
   settings: Settings;
   @Input()
   inRollup: boolean;
+  @Output('selectModification')
+  selectModification = new EventEmitter<any>();
+  @Input()
+  assessment: Assessment;
 
   unit: string;
   titlePlacement: string;
   maxAnnualSavings: number = 0;
+  selectedModificationIndex: number = 0;
   constructor(private psatService: PsatService) { }
 
   ngOnInit() {
@@ -33,8 +39,6 @@ export class OutputSummaryComponent implements OnInit {
       })
       this.getMaxAnnualSavings();
     }
-
-    console.log(this.inRollup);
   }
 
   checkSavings(num: number) {
@@ -56,8 +60,13 @@ export class OutputSummaryComponent implements OnInit {
 
   getMaxAnnualSavings() {
     let minCost = _.minBy(this.psat.modifications, (mod) => { return mod.psat.outputs.annual_cost })
+    this.selectedModificationIndex = _.findIndex(this.psat.modifications, minCost);
     this.maxAnnualSavings = this.psat.outputs.annual_cost - minCost.psat.outputs.annual_cost;
-    console.log(this.maxAnnualSavings);
+    
+  }
+
+  useModification(){
+    this.selectModification.emit({modIndex: this.selectedModificationIndex, type: 'PSAT', assessment: this.assessment})
   }
 
 }

@@ -15,6 +15,10 @@ export class ReportSummaryComponent implements OnInit {
   numPsats: number;
   @Input()
   energySavingsPotential: number;
+  @Input()
+  totalCost: number;
+  @Input()
+  totalEnergy: number;
   constructor() { }
 
   ngOnInit() {

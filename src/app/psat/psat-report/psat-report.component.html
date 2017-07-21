@@ -29,7 +29,7 @@
     </div>-->
     <div class="results">
       <h3>Assessment Result Data</h3>
-      <app-output-summary [psat]="psat" [settings]="settings" [inRollup]="inRollup"></app-output-summary>
+      <app-output-summary [psat]="psat" [settings]="settings" [inRollup]="inRollup" [assessment]="assessment" (selectModification)="useModification($event)"></app-output-summary>
     </div>
     <div class="input-data results">
       <h3>Assessment Input Data</h3>

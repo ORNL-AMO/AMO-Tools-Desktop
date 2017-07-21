@@ -27,7 +27,8 @@ export class PsatReportComponent implements OnInit {
   exportData = new EventEmitter<boolean>();
   @Input()
   inRollup: boolean;
-  
+  @Output('selectModification')
+  selectModification = new EventEmitter<any>();
   assessmentDirectories: Directory[];
   isFirstChange: boolean = true;
   numMods: number = 0;
@@ -139,6 +140,10 @@ export class PsatReportComponent implements OnInit {
 
   exportToCsv() {
     this.exportData.emit(true);
+  }
+
+  useModification(event: any){
+    this.selectModification.emit(event);
   }
 
 }

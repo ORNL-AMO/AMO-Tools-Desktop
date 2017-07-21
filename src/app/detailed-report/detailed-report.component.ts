@@ -32,10 +32,12 @@ export class DetailedReportComponent implements OnInit {
 
   numAssessments: number;
   reportAssessments: Array<Assessment>;
-  psats: Array<PSAT>;
+  selectedPsats: Array<any>;
   numPsats: number;
   pumpSavingsPotential: number;
   energySavingsPotential: number;
+  totalEnergy: number;
+  totalCost: number;
   gatheringData: any;
   gatheringData2: any;
   assessmentsGathered: boolean;
@@ -49,7 +51,7 @@ export class DetailedReportComponent implements OnInit {
   ngOnInit() {
     //used to hold assessments with outputs
     this.reportAssessments = new Array<Assessment>();
-    this.psats = new Array<PSAT>();
+    this.selectedPsats = new Array<any>();
     this.exportReports = new Array();
     this.createdDate = moment().format('MMMM Do, YYYY');
   }
@@ -96,9 +98,9 @@ export class DetailedReportComponent implements OnInit {
           assessment.psat = this.getResults(assessment.psat, results[0]);
           this.exportReports.push({ assessment: assessment, settings: results[0] });
           this.reportAssessments.push(assessment);
-          this.psats.push(assessment.psat);
-          if (this.psats.length == this.numPsats) {
-            this.calcPsatSums();
+          //this.psats.push(assessment.psat);
+          if (this.reportAssessments.length == this.numPsats) {
+            this.calcPsatSums(true);
           }
         } else {
           //no assessment settings, find dir settings being usd
@@ -120,9 +122,9 @@ export class DetailedReportComponent implements OnInit {
               assessment.psat = this.getResults(assessment.psat, results[0]);
               this.exportReports.push({ assessment: assessment, settings: results[0] });
               this.reportAssessments.push(assessment);
-              this.psats.push(assessment.psat);
-              if (this.psats.length == this.numPsats) {
-                this.calcPsatSums();
+              //this.psats.push(assessment.psat);
+              if (this.reportAssessments.length == this.numPsats) {
+                this.calcPsatSums(true);
               }
             } else {
               //no settings try again with parents parent directory
@@ -155,22 +157,40 @@ export class DetailedReportComponent implements OnInit {
     this.emitCloseReport.emit(true);
   }
 
-  calcPsatSums() {
+
+  calcPsatSums(init?: boolean) {
     let sumSavings = 0;
     let sumEnergy = 0;
-    this.psats.forEach(psat => {
-      if (psat.modifications) {
-        let minCost = _.minBy(psat.modifications, (mod) => { return mod.psat.outputs.annual_cost })
-        let diffCost = psat.outputs.annual_cost - minCost.psat.outputs.annual_cost;
-        sumSavings += diffCost;
+    let sumCost = 0;
+    let sumEnergySavings = 0;
 
-        let minEnergy = _.minBy(psat.modifications, (mod) => { return mod.psat.outputs.annual_energy })
-        let diffEnergy = psat.outputs.annual_energy - minEnergy.psat.outputs.annual_energy;
-        sumEnergy += diffEnergy;
-      }
-    })
+    if (init) {
+      this.reportAssessments.forEach(assessment => {
+        if (assessment.psat.modifications) {
+          let minCost = _.minBy(assessment.psat.modifications, (mod) => { return mod.psat.outputs.annual_cost })
+          let diffCost = assessment.psat.outputs.annual_cost - minCost.psat.outputs.annual_cost;
+          sumSavings += diffCost;
+          sumCost += minCost.psat.outputs.annual_cost;
+          let diffEnergy = assessment.psat.outputs.annual_energy - minCost.psat.outputs.annual_energy;
+          sumEnergySavings += diffEnergy;
+          sumEnergy += minCost.psat.outputs.annual_energy;
+          this.selectedPsats.push({ assessmentId: assessment.id, selectedModification: minCost, assessment: assessment });
+        }
+      });
+    } else {
+      this.selectedPsats.forEach(selectedObj => {
+        let diffCost = selectedObj.assessment.psat.outputs.annual_cost - selectedObj.selectedModification.psat.outputs.annual_cost;
+        let diffEnergy = selectedObj.assessment.psat.outputs.annual_energy - selectedObj.selectedModification.psat.outputs.annual_energy;
+        sumSavings += diffCost;
+        sumCost += selectedObj.selectedModification.psat.outputs.annual_cost;
+        sumEnergySavings += diffEnergy;
+        sumEnergy += selectedObj.selectedModification.psat.outputs.annual_energy;
+      });
+    }
     this.pumpSavingsPotential = sumSavings;
-    this.energySavingsPotential = sumEnergy;
+    this.energySavingsPotential = sumEnergySavings;
+    this.totalCost = sumCost;
+    this.totalEnergy = sumEnergy;
   }
 
   selectAssessment(assessment: Assessment) {
@@ -258,5 +278,13 @@ export class DetailedReportComponent implements OnInit {
       }
     })
     return closestAssessment;
+  }
+
+  updateSummary(event: any) {
+    if (event.type = 'PSAT') {
+      let selectedIndex = _.findIndex(this.selectedPsats, {assessment: event.assessment});
+      this.selectedPsats.splice(selectedIndex, 1, { assessmentId: event.assessment.id, selectedModification: event.assessment.psat.modifications[event.modIndex], assessment: event.assessment })
+      this.calcPsatSums();
+    }
   }
 }

@@ -12,7 +12,7 @@
           </thead>
           <tbody>
             <tr>
-              <td>Percent Savings (%)</td>
+              <td class="percent-savings">Percent Savings (%)</td>
               <td>
                 &mdash; &mdash;
               </td>
@@ -69,7 +69,7 @@
             <tr>
               <th>Annual Energy (MWh)</th>
               <th>{{baselineResults.annual_energy | number:'2.2-2'}}</th>
-              <th>{{modificationResults.annual_energy | number:'2.2-2'}}</th>
+              <th [ngClass]="{'positive-savings': percentSavings > 10}">{{modificationResults.annual_energy | number:'2.2-2'}}</th>
             </tr>
             <tr>
               <th>Annual Energy Savings (MWh)</th>
@@ -79,7 +79,7 @@
             <tr>
               <th>Annual Cost</th>
               <th>{{baselineResults.annual_cost | currency:'USD':true:'2.2-2'}}</th>
-              <th>{{modificationResults.annual_cost | currency:'USD':true:'2.2-2'}}</th>
+              <th [ngClass]="{'positive-savings': percentSavings > 10}">{{modificationResults.annual_cost | currency:'USD':true:'2.2-2'}}</th>
             </tr>
             <tr>
               <th>Annual Savings</th>

@@ -47,7 +47,7 @@
         (input)="startSavePolling()" (focus)="focusField('efficiency')" onfocus="this.select();" [ngClass]="{'invalid': checkEfficiency() == false}">
       <span class="input-group-addon units">%</span>
     </div>
-      <span class="alert-danger pull-right small" *ngIf="efficiencyError !== null">{{efficiencyError}}</span>
+    <span class="alert-danger pull-right small" *ngIf="efficiencyError !== null">{{efficiencyError}}</span>
   </div>
 
   <div class="form-group">
@@ -64,7 +64,7 @@
   <div class="form-group">
     <label for="fullLoadAmps" aria-describedby="flaHelp">
       Full-Load Amps
-      <small *ngIf="!disableFLA()" id="flaHelp" class="form-text text-muted text-help" (click)="getFullLoadAmps()"><a>Estimate Full-Load Amps</a></small>
+      <a [ngClass]="{'disabled-link': !selected}" *ngIf="!disableFLA()" id="flaHelp" class="form-text text-muted text-help" (click)="getFullLoadAmps()">Estimate Full-Load Amps</a>
     </label>
     <div class="input-group">
       <input name="fullLoadAmps" type="number" min="0" step="any" class="form-control number-input-field" id="fullLoadAmps" formControlName="fullLoadAmps"
@@ -76,15 +76,13 @@
 
   <div class="form-group">
     <label for="sizeMargin">Size Margin</label>
-    <!--<button class="btn" [disabled]="!selected" (click)="subtractNum('sizeMargin')"><i class="fa fa-minus"></i></button>
-      <button class="btn" [disabled]="!selected" (click)="addNum('sizeMargin')"><i class="fa fa-plus"></i></button>-->
     <div class="input-group">
       <input name="sizeMargin" type="number" min="0" max="100" step="any" class="form-control" id="sizeMargin" formControlName="sizeMargin"
         ngModel="{{psatForm.value.sizeMargin}}" (input)="startSavePolling()" (focus)="focusField('sizeMargin')" [ngClass]="{'warning': checkMargin() == false}"
         onfocus="this.select();">
       <span class="input-group-addon units">%</span>
     </div>
-      <span class="alert-warning pull-right small" *ngIf="marginError !== null">{{marginError}}</span>
+    <span class="alert-warning pull-right small" *ngIf="marginError !== null">{{marginError}}</span>
   </div>
 
 </form>

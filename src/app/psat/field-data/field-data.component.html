@@ -36,7 +36,7 @@
 
     <label for="head">
         Head
-        <small id="flaHelp" class="form-text text-muted text-help" (click)="showHeadToolModal()"><a>Calculate Head</a></small>
+        <a [ngClass]="{'disabled-link': !selected}" class="form-text text-help small" (click)="showHeadToolModal()">Calculate Head</a>
       </label>
     <div class="input-group">
       <input name="head" type="number" min="0.1" step="any" class="form-control" formControlName="head" id="head" (input)="startSavePolling()"
@@ -81,22 +81,10 @@
     </div>
     <span class="alert-warning pull-right small" *ngIf="voltageError !== null">{{voltageError}}</span>
   </div>
-  <!--<div *ngIf="!baseline" class="form-group">
-    <label class="form-check-label">
-        <input
-        name="optimizeCalculation"
-        id="optimizeCalculation"
-          class="form-control form-check-input"
-          type="checkbox"
-          formControlName="optimizeCalculation"
-          value="true"
-          [checked]="optimizeCalculation"
-          (change)="focusField('modifyCalculationMethod')">Optimize Calculation</label>
-  </div>-->
 </form>
 <form #formRef [formGroup]="psatForm" *ngIf="psatForm">
   <div *ngIf="!baseline" class="form-group">
-    <label class="form-check-label">
+    <label class="form-check-label" style="width: 100%; padding-top: 5px;">
         <input
         name="optimizeCalculation"
         id="optimizeCalculation"

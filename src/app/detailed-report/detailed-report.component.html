@@ -13,7 +13,7 @@
       <!-- End .report-header -->
 
       <div id="reportSummary" class="report-summary">
-        <app-report-summary [numPsats]="numPsats" [pumpSavingsPotential]="pumpSavingsPotential" [energySavingsPotential]="energySavingsPotential"></app-report-summary>
+        <app-report-summary [numPsats]="numPsats" [pumpSavingsPotential]="pumpSavingsPotential" [energySavingsPotential]="energySavingsPotential" [totalCost]="totalCost" [totalEnergy]="totalEnergy"></app-report-summary>
       </div>
       <div class="report-cover">
         <p class="report-notes">{{reportNotes}}</p>
@@ -41,7 +41,7 @@
           <div class="col-8 assessment-report-container">
             <div class="assessment-report-item" *ngFor="let assessment of reportAssessments" id="{{assessment.id}}">
 
-              <app-psat-report style="width: 100%" [assessment]="assessment" [inRollup]="true"></app-psat-report>
+              <app-psat-report style="width: 100%" [assessment]="assessment" [inRollup]="true" (selectModification)="updateSummary($event)"></app-psat-report>
 
             </div>
           </div>

@@ -1,11 +1,12 @@
 <div class="container-fluid">
-  
+
   <div class="row">
     <div class="col-md-10 offset-md-1">
       <h2 class="text-color">Report Summary</h2>
     </div>
-  </div><!-- End .row -->
-  
+  </div>
+  <!-- End .row -->
+
   <div class="row">
     <div class="rollups col-md-10 offset-md-1">
       <div class="pumps text-color">
@@ -16,8 +17,20 @@
         <h5>Maximum annual cost savings</h5>
         <h4>{{energySavingsPotential| number:'2.2-2'}} MWh</h4>
         <h5>Maximum annual energy savings</h5>
+        <div class="row" style="padding-top: 10px;">
+          <div class="col-6">
+            <h4 style="font-size: .75rem">{{totalCost | currency:'USD':true:'4.2-2'}}</h4>
+            <h5>Total Cost</h5>
+          </div>
+          <div class="col-6">
+            <h4 style="font-size: .75rem">{{totalEnergy| number:'2.2-2'}} MWh</h4>
+            <h5>Total Energy</h5>
+          </div>
+        </div>
       </div>
     </div>
-  </div><!-- End .row -->
+  </div>
+  <!-- End .row -->
 
-</div><!-- End .container-fluid -->
+</div>
+<!-- End .container-fluid -->
