@@ -25,7 +25,9 @@ export class PsatReportComponent implements OnInit {
   inPsat: boolean;
   @Output('exportData')
   exportData = new EventEmitter<boolean>();
-
+  @Input()
+  inRollup: boolean;
+  
   assessmentDirectories: Directory[];
   isFirstChange: boolean = true;
   numMods: number = 0;

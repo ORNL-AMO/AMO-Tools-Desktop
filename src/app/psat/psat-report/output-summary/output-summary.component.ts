@@ -13,6 +13,8 @@ export class OutputSummaryComponent implements OnInit {
   psat: PSAT;
   @Input()
   settings: Settings;
+  @Input()
+  inRollup: boolean;
 
   unit: string;
   titlePlacement: string;
@@ -31,6 +33,8 @@ export class OutputSummaryComponent implements OnInit {
       })
       this.getMaxAnnualSavings();
     }
+
+    console.log(this.inRollup);
   }
 
   checkSavings(num: number) {
@@ -53,6 +57,7 @@ export class OutputSummaryComponent implements OnInit {
   getMaxAnnualSavings() {
     let minCost = _.minBy(this.psat.modifications, (mod) => { return mod.psat.outputs.annual_cost })
     this.maxAnnualSavings = this.psat.outputs.annual_cost - minCost.psat.outputs.annual_cost;
+    console.log(this.maxAnnualSavings);
   }
 
 }

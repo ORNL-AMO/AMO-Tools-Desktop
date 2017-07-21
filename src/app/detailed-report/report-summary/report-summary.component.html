@@ -13,7 +13,9 @@
         <h3 *ngIf="numPsats == 1">{{numPsats}} pump with a</h3>
         <h3 *ngIf="numPsats != 1">{{numPsats}} pumps with a</h3>
         <h4>{{pumpSavingsPotential| currency:'USD':true:'4.2-2'}}</h4>
-        <h5>Maximum annual savings potential</h5>
+        <h5>Maximum annual cost savings</h5>
+        <h4>{{energySavingsPotential| number:'2.2-2'}} MWh</h4>
+        <h5>Maximum annual energy savings</h5>
       </div>
     </div>
   </div><!-- End .row -->

@@ -10,9 +10,11 @@ import * as _ from 'lodash';
 })
 export class ReportSummaryComponent implements OnInit {
   @Input()
-  pumpSavingsPotential: number = 0;
+  pumpSavingsPotential: number;
   @Input()
-  numPsats: number = 0;
+  numPsats: number;
+  @Input()
+  energySavingsPotential: number;
   constructor() { }
 
   ngOnInit() {

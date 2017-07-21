@@ -35,7 +35,7 @@ export class DetailedReportComponent implements OnInit {
   psats: Array<PSAT>;
   numPsats: number;
   pumpSavingsPotential: number;
-
+  energySavingsPotential: number;
   gatheringData: any;
   gatheringData2: any;
   assessmentsGathered: boolean;
@@ -156,15 +156,21 @@ export class DetailedReportComponent implements OnInit {
   }
 
   calcPsatSums() {
-    let sum = 0;
+    let sumSavings = 0;
+    let sumEnergy = 0;
     this.psats.forEach(psat => {
       if (psat.modifications) {
         let minCost = _.minBy(psat.modifications, (mod) => { return mod.psat.outputs.annual_cost })
-        let diff = psat.outputs.annual_cost - minCost.psat.outputs.annual_cost;
-        sum += diff;
+        let diffCost = psat.outputs.annual_cost - minCost.psat.outputs.annual_cost;
+        sumSavings += diffCost;
+
+        let minEnergy = _.minBy(psat.modifications, (mod) => { return mod.psat.outputs.annual_energy })
+        let diffEnergy = psat.outputs.annual_energy - minEnergy.psat.outputs.annual_energy;
+        sumEnergy += diffEnergy;
       }
     })
-    this.pumpSavingsPotential = sum;
+    this.pumpSavingsPotential = sumSavings;
+    this.energySavingsPotential = sumEnergy;
   }
 
   selectAssessment(assessment: Assessment) {

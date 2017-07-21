@@ -14,7 +14,7 @@
       </td>
       <td *ngFor="let modification of psat.modifications">
         <div class="row justify-content-center chart-row">
-          <div class="col-lg-6 col-md-6 col-sm-8" [ngClass]="{'col-lg-3': psat.modifications.length == 1, 'col-lg-10': psat.modifications.length > 3}">
+          <div class="col-lg-6 col-md-6 col-sm-8" [ngClass]="{'col-lg-3': psat.modifications.length == 1, 'col-lg-10': psat.modifications.length > 3, 'col-lg-10': inRollup}">
             <div class="chart-container hide-print">
               <app-percent-graph [value]="modification.psat.outputs.percent_annual_savings" [titlePlacement]="titlePlacement" [valueDescription]="'Annual Savings'"
                 [unit]="unit"></app-percent-graph>
@@ -73,6 +73,11 @@
       <th>Annual Energy (MWh)</th>
       <th>{{psat.outputs.annual_energy | number:'2.2-2'}}</th>
       <th *ngFor="let modification of psat.modifications">{{modification.psat.outputs.annual_energy | number:'2.2-2'}}</th>
+    </tr>
+    <tr>
+      <th>Annual Energy Savings (MWh)</th>
+      <th>&mdash; &mdash;</th>
+      <th *ngFor="let modification of psat.modifications" [ngClass]="{'positive-savings': getSavingsPercentage(psat, modification.psat) > 10}">{{psat.outputs.annual_energy - modification.psat.outputs.annual_energy | number:'2.2-2'}}</th>
     </tr>
     <tr>
       <th>Annual Cost</th>

@@ -1593,6 +1593,9 @@ Reporting
     .rollups .pumps {
       width: 50%;
       text-align: center;
+      border: dashed;
+      padding: 5px;
+      padding-top: 15px;
     }
       .rollups .pumps h3:nth-child(2), .rollups .pumps h4 {
         margin-bottom: 8px;
@@ -1640,12 +1643,14 @@ Reporting
 .report-data .table tbody tr:nth-child(even){
   background: #f3f3f3;
 }
-.report-data .table tbody tr td {
+.report-data .table tbody tr td, .report-data .table tbody tr th {
   border-color: transparent;
   border-width: 1px 0;
   border-style: solid;
+  vertical-align: middle;
+  text-align: center;
 }
-.report-data .table tbody tr:hover td {
+.report-data .table tbody tr:hover td, .report-data .table tbody tr:hover th {
   border-color: #333;
 
 }
@@ -1790,6 +1795,7 @@ Toasty Overrides ================================= */
 .psat-name{
     font-size: large !important;
     vertical-align: middle !important;
+    text-align: center !important;
 }
 
 

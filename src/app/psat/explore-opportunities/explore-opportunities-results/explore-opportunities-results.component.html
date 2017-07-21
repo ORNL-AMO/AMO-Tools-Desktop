@@ -72,6 +72,11 @@
               <th>{{modificationResults.annual_energy | number:'2.2-2'}}</th>
             </tr>
             <tr>
+              <th>Annual Energy Savings (MWh)</th>
+              <th>&mdash;</th>
+              <th [ngClass]="{'positive-savings': percentSavings > 10}">{{baselineResults.annual_energy - modificationResults.annual_energy | number:'2.2-2'}}</th>
+            </tr>
+            <tr>
               <th>Annual Cost</th>
               <th>{{baselineResults.annual_cost | currency:'USD':true:'2.2-2'}}</th>
               <th>{{modificationResults.annual_cost | currency:'USD':true:'2.2-2'}}</th>
