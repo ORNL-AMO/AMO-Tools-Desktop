@@ -49,7 +49,6 @@ export class PsatComponent implements OnInit {
 
   saveClicked: boolean = false;
   adjustment: PSAT;
-  currentField: string;
   isValid;
   canContinue;
 
@@ -186,10 +185,6 @@ export class PsatComponent implements OnInit {
       this.subTabIndex = _.findIndex(this.subTabs, function (tab) { return tab == str });
       this.subTab = this.subTabs[this.subTabIndex];
     }
-  }
-
-  changeField($event) {
-    this.currentField = $event;
   }
 
   selectAdjustment($event) {

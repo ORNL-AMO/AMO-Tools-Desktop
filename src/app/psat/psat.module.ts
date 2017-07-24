@@ -8,7 +8,7 @@ import { PumpsModule } from '../calculator/pumps/pumps.module';
 import { ModalModule } from 'ngx-bootstrap';
 import { IndexedDbModule } from '../indexedDb/indexedDb.module';
 import { JsonToCsvModule } from '../shared/json-to-csv/json-to-csv.module';
-
+import { HelpPanelModule } from './help-panel/help-panel.module';
 
 import { PsatComponent } from './psat.component';
 import { PsatBannerComponent } from './psat-banner/psat-banner.component';
@@ -20,16 +20,10 @@ import { FieldDataComponent } from './field-data/field-data.component';
 import { ModifyConditionsComponent } from './modify-conditions/modify-conditions.component';
 import { SettingsPanelComponent } from './settings-panel/settings-panel.component';
 import { DataPanelComponent } from './data-panel/data-panel.component';
-import { HelpPanelComponent } from './help-panel/help-panel.component';
 
 import { PsatReportComponent } from './psat-report/psat-report.component';
 import { InputSummaryComponent } from './psat-report/input-summary/input-summary.component';
 import { OutputSummaryComponent } from './psat-report/output-summary/output-summary.component';
-import { SystemBasicsHelpComponent } from './help-panel/system-basics-help/system-basics-help.component';
-import { PumpFluidHelpComponent } from './help-panel/pump-fluid-help/pump-fluid-help.component';
-import { MotorHelpComponent } from './help-panel/motor-help/motor-help.component';
-import { FieldDataHelpComponent } from './help-panel/field-data-help/field-data-help.component';
-import { ModifyConditionsHelpComponent } from './help-panel/modify-conditions-help/modify-conditions-help.component';
 
 import { PsatService } from './psat.service';
 import { ModifyConditionsTabsComponent } from './modify-conditions/modify-conditions-tabs/modify-conditions-tabs.component';
@@ -55,15 +49,9 @@ import { ExploreOpportunitiesHelpComponent } from './explore-opportunities/explo
     ModifyConditionsComponent,
     SettingsPanelComponent,
     DataPanelComponent,
-    HelpPanelComponent,
     PsatReportComponent,
     InputSummaryComponent,
     OutputSummaryComponent,
-    SystemBasicsHelpComponent,
-    PumpFluidHelpComponent,
-    MotorHelpComponent,
-    FieldDataHelpComponent,
-    ModifyConditionsHelpComponent,
     ModifyConditionsTabsComponent,
     ModifyConditionsNotesComponent,
     EditConditionPropertiesComponent,
@@ -87,7 +75,8 @@ import { ExploreOpportunitiesHelpComponent } from './explore-opportunities/explo
     IndexedDbModule,
     SettingsModule,
     ToastyModule,
-    JsonToCsvModule
+    JsonToCsvModule,
+    HelpPanelModule
   ],
   providers: [
     PsatService,
