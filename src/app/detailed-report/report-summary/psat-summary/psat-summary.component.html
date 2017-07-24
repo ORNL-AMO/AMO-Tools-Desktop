@@ -6,14 +6,14 @@
   <h5>Maximum annual cost savings</h5>
   <h4>{{energySavingsPotential| number:'2.2-2'}} MWh</h4>
   <h5>Maximum annual energy savings</h5>
-  <div class="row" style="padding-top: 10px;">
+  <div class="row total-sum-row">
     <div class="col-6">
-      <h4 style="font-size: .75rem">{{totalCost | currency:'USD':true:'4.2-2'}}</h4>
-      <h5>Total Cost</h5>
+      <h4 class="total-sum">{{totalCost | currency:'USD':true:'4.2-2'}}</h4>
+      <h5>Annual Cost</h5>
     </div>
     <div class="col-6">
-      <h4 style="font-size: .75rem">{{totalEnergy| number:'2.2-2'}} MWh</h4>
-      <h5>Total Energy</h5>
+      <h4 class="total-sum">{{totalEnergy| number:'2.2-2'}} MWh</h4>
+      <h5>Annual Energy</h5>
     </div>
   </div>
 </div>
