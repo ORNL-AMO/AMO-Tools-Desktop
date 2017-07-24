@@ -1,0 +1,117 @@
+<div class="form-section">
+  <div class="row align-items-center">
+    <div class="col-6">
+      <form>
+        <div class="form-group">
+          <label class="small" for="gasType">Select Gas</label>
+          <div class="input-group">
+            <input name="gasType" [(ngModel)]="flowCalculations.gasType" type="number" step="any" class="form-control" id="gasType" (input)="calculate()"
+              onfocus="this.select();" (focus)="focusField('gasType')" autofocus>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="small" for="specificGravity">Specific Gravity</label>
+          <!--Todo: Air == 1 help-->
+          <div class="input-group">
+            <input name="specificGravity" [(ngModel)]="flowCalculations.specificGravity" type="number" step="any" class="form-control"
+              id="specificGravity" (input)="calculate()" onfocus="this.select();" (focus)="focusField('specificGravity')" autofocus>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="small" for="orificeDiameter">Orifice Diameter</label>
+          <div class="input-group">
+            <input name="orificeDiameter" [(ngModel)]="flowCalculations.orificeDiameter" type="number" step="any" class="form-control"
+              id="orificeDiameter" (input)="calculate()" onfocus="this.select();" (focus)="focusField('orificeDiameter')" autofocus>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="small" for="insidePipeDiameter">Inside Pipe Diameter</label>
+          <div class="input-group">
+            <input name="insidePipeDiameter" [(ngModel)]="flowCalculations.insidePipeDiameter" type="number" step="any" class="form-control"
+              id="insidePipeDiameter" (input)="calculate()" onfocus="this.select();" (focus)="focusField('insidePipeDiameter')"
+              autofocus>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="small" for="sectionType">Type of Section</label>
+          <div class="input-group">
+            <input name="sectionType" [(ngModel)]="flowCalculations.sectionType" type="number" step="any" class="form-control" id="sectionType"
+              (input)="calculate()" onfocus="this.select();" (focus)="focusField('sectionType')" autofocus>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="small" for="dischargeCoefficient">Coefficient of Discharge</label>
+          <div class="input-group">
+            <input name="dischargeCoefficient" [(ngModel)]="flowCalculations.dischargeCoefficient" type="number" step="any" class="form-control"
+              id="dischargeCoefficient" (input)="calculate()" onfocus="this.select();" (focus)="focusField('dischargeCoefficient')"
+              autofocus>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="small" for="gasHeatingValue">Heating Value of Gas - HHV</label>
+          <div class="input-group">
+            <input name="gasHeatingValue" [(ngModel)]="flowCalculations.gasHeatingValue" type="number" step="any" class="form-control"
+              id="gasHeatingValue" (input)="calculate()" onfocus="this.select();" (focus)="focusField('gasHeatingValue')" autofocus>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="col-6">
+      <form>
+        <div class="form-group">
+          <label class="small" for="gasTemperature">Temperature of Gas</label>
+          <div class="input-group">
+            <input name="gasTemperature" [(ngModel)]="flowCalculations.gasTemperature" type="number" step="any" class="form-control"
+              id="gasTemperature" (input)="calculate()" onfocus="this.select();" (focus)="focusField('gasTemperature')" autofocus>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="small" for="gasPressure">Pressure of Gas</label>
+          <div class="input-group">
+            <input name="gasTemperature" [(ngModel)]="flowCalculations.gasTemperature" type="number" step="any" class="form-control"
+              id="gasTemperature" (input)="calculate()" onfocus="this.select();" (focus)="focusField('gasTemperature')" autofocus>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="small" for="orificePressureDrop">Orifice Pressure Drop</label>
+          <div class="input-group">
+            <input name="gasTemperature" [(ngModel)]="flowCalculations.gasTemperature" type="number" step="any" class="form-control"
+              id="gasTemperature" (input)="calculate()" onfocus="this.select();" (focus)="focusField('gasTemperature')" autofocus>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="small" for="flow">Flow</label>
+          <div class="input-group">
+            <input name="gasTemperature" [(ngModel)]="flowCalculationResults.gasTemperature" type="number" step="any" class="form-control"
+              id="gasTemperature" (input)="calculate()" onfocus="this.select();" (focus)="focusField('gasTemperature')" autofocus>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="small" for="operatingTime">Operating Time</label>
+          <div class="input-group">
+            <input name="gasTemperature" [(ngModel)]="flowCalculations.gasTemperature" type="number" step="any" class="form-control"
+              id="gasTemperature" (input)="calculate()" onfocus="this.select();" (focus)="focusField('gasTemperature')" autofocus>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="small" for="heatInput">Energy Use</label>
+          <div class="input-group">
+            <input name="gasTemperature" [(ngModel)]="flowCalculationResults.gasTemperature" type="number" step="any" class="form-control"
+              id="gasTemperature" (input)="calculate()" onfocus="this.select();" (focus)="focusField('gasTemperature')" autofocus>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="small" for="totalFlow">Total Flow</label>
+          <div class="input-group">
+            <input name="gasTemperature" [(ngModel)]="flowCalculationResults.gasTemperature" type="number" step="any" class="form-control"
+              id="gasTemperature" (input)="calculate()" onfocus="this.select();" (focus)="focusField('gasTemperature')" autofocus>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

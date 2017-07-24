@@ -340,5 +340,10 @@ export class PhastService {
   o2Enrichment(inputs: O2Enrichment) {
     return phastAddon.o2Enrichment(inputs);
   }
+
+  //TODO:Functions in addon need to be implemented
+  // humidityRatio
+  // flueGasLossesByMassGivenO2
+  // flueGasLossesByVolumeGivenO2
 }
 
