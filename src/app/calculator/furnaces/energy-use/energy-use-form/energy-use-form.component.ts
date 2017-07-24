@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { SuiteDbService } from '../../../../suiteDb/suite-db.service';
 import { FlowCalculations, FlowCalculationsOutput } from '../../../../shared/models/phast/flowCalculations';
 import { PhastService } from '../../../../phast/phast.service';
@@ -12,15 +12,21 @@ export class EnergyUseFormComponent implements OnInit {
   flowCalculations: FlowCalculations;
   @Input()
   flowCalculationResults: FlowCalculationsOutput;
-
+  @Output('changeField')
+  changeField = new EventEmitter<string>();
   constructor(private suiteDbService: SuiteDbService, private phastService: PhastService) { }
 
   ngOnInit() {
-    
+    this.calculate();
   }
 
-  calculate(){
-
+  calculate() {
+    this.flowCalculationResults = this.phastService.flowCalculations(this.flowCalculations);
+    console.log(this.flowCalculationResults);
   }
 
+
+  focusField(str: string) {
+    this.changeField.emit(str);
+  }
 }

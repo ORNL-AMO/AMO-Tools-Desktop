@@ -1,3 +1,11 @@
-<p>
-  energy-use works!
-</p>
+<div class="row">
+  <div class="col-md-8 col-sm-12">
+    <div class="card card-block">
+      <app-energy-use-form [flowCalculations]="flowCalculations" [flowCalculationResults]="flowCalculationResults"></app-energy-use-form>
+    </div>
+  </div>
+
+  <div class="col-md-4 col-sm-12">
+    <app-energy-use-help [currentField]="currentField"></app-energy-use-help>
+  </div>
+</div>

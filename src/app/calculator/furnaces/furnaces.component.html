@@ -14,15 +14,21 @@
           <li>
             <a (click)="showTool('efficiency-improvement')">Efficiency Improvement</a>
             <p>
-              Use the Efficiency Improvement calculator to explore potential fuel savings from adjusting
-              burner operating conditions.
+              Use the Efficiency Improvement calculator to explore potential fuel savings from adjusting burner operating conditions.
             </p>
           </li>
           <li>
             <a (click)="showTool('energy-equivalency')">Energy Equivalency</a>
             <p>
-              Use the Energy Equivalency calculator to learn the required heat input when switching heat
-              source from fuel-fired to electric or vice versa.
+              Use the Energy Equivalency calculator to learn the required heat input when switching heat source from fuel-fired to electric
+              or vice versa.
+            </p>
+          </li>
+          <li>
+            <a (click)="showTool('energy-use')">Flow Calculations Energy Use
+            </a>
+            <p>
+              ENERGY USE DESCRIPTION
             </p>
           </li>
         </ul>
@@ -63,5 +69,16 @@
   </div>
   <div class="calculator-container">
     <app-energy-equivalency></app-energy-equivalency>
+  </div>
+</div>
+
+<div class="calculator" *ngIf="getSelectedTool() == 'energy-use'">
+  <div class="row">
+    <div class="col-lg-12">
+      <h2>Flow Calculations Energy Use</h2>
+    </div>
+  </div>
+  <div class="calculator-container">
+    <app-energy-use></app-energy-use>
   </div>
 </div>

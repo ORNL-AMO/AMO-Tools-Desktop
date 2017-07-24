@@ -16,13 +16,14 @@ import { EnergyEquivalencyFormComponent } from './energy-equivalency/energy-equi
 import { EnergyEquivalencyGraphComponent } from './energy-equivalency/energy-equivalency-graph/energy-equivalency-graph.component';
 import { EnergyEquivalencyHelpComponent } from './energy-equivalency/energy-equivalency-help/energy-equivalency-help.component';
 import { EfficiencyImprovementHelpComponent } from './efficiency-improvement/efficiency-improvement-help/efficiency-improvement-help.component';
-import { EnergyUseComponent } from './energy-use/energy-use.component';
+import { EnergyUseModule } from './energy-use/energy-use.module';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    EnergyUseModule
   ],
   declarations: [
     FurnacesComponent,
@@ -36,8 +37,7 @@ import { EnergyUseComponent } from './energy-use/energy-use.component';
     EnergyEquivalencyFormComponent,
     EnergyEquivalencyGraphComponent,
     EnergyEquivalencyHelpComponent,
-    EfficiencyImprovementHelpComponent,
-    EnergyUseComponent
+    EfficiencyImprovementHelpComponent
   ],
   exports: [
     FurnacesComponent,

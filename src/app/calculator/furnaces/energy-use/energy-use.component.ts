@@ -30,9 +30,15 @@ export class EnergyUseComponent implements OnInit {
     totalFlow: 0
   };
 
+  currentField: string;
+
+
   constructor(private phastService: PhastService) { }
 
   ngOnInit() {
+  }
+  setCurrentField(str: string) {
+    this.currentField = str;
   }
 
 }
