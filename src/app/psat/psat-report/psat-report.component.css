@@ -11,9 +11,9 @@
         padding-bottom: 0px;
     }
 
-    .mod-page-break{
+    /*.mod-page-break{
         page-break-after: always !important;
-    }
+    }*/
 }
 
 .dir-list-item{

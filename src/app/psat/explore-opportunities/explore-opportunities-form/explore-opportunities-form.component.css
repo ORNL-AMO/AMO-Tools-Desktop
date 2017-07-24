@@ -43,6 +43,7 @@
 }
 	.explore-opportunities label {
 		float: none;
+		width: 100%;
 	}
 	.explore-opportunities .form-control {
 		float: none;

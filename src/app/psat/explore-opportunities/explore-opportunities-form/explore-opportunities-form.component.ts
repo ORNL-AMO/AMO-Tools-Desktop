@@ -38,10 +38,12 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
   showPumpType: boolean;
   showPumpSpecified: boolean;
 
-  tmpNewPumpType: string;
-  tmpInitialPumpType: string;
-  tmpNewEfficiencyClass: string;
-  tmpInitialEfficiencyClass: string;
+  showCalculationMethod: boolean;
+
+  tmpModificationPumpType: string;
+  tmpBaselinePumpType: string;
+  tmpModificationEfficiencyClass: string;
+  tmpBaselineEfficiencyClass: string;
 
   efficiencyClasses: Array<string> = [
     'Standard Efficiency',
@@ -80,7 +82,6 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
   efficiencyError2: string;
   specifiedError1: string;
   specifiedError2: string;
-
   constructor(private psatService: PsatService) { }
 
   ngOnInit() {
@@ -89,25 +90,59 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
     } else {
       this.options = this.kWatts;
     }
-    this.tmpNewEfficiencyClass = this.psatService.getEfficiencyClassFromEnum(this.psat.modifications[this.exploreModIndex].psat.inputs.efficiency_class);
-    this.tmpInitialEfficiencyClass = this.psatService.getEfficiencyClassFromEnum(this.psat.inputs.efficiency_class);
-    this.tmpNewPumpType = this.psatService.getPumpStyleFromEnum(this.psat.modifications[this.exploreModIndex].psat.inputs.pump_style);
-    this.tmpInitialPumpType = this.psatService.getPumpStyleFromEnum(this.psat.inputs.pump_style);
+    this.tmpModificationEfficiencyClass = this.psatService.getEfficiencyClassFromEnum(this.psat.modifications[this.exploreModIndex].psat.inputs.efficiency_class);
+    this.tmpBaselineEfficiencyClass = this.psatService.getEfficiencyClassFromEnum(this.psat.inputs.efficiency_class);
+    this.tmpModificationPumpType = this.psatService.getPumpStyleFromEnum(this.psat.modifications[this.exploreModIndex].psat.inputs.pump_style);
+    this.tmpBaselinePumpType = this.psatService.getPumpStyleFromEnum(this.psat.inputs.pump_style);
+    this.checkMotorEfficiencies();
+    this.checkPumpTypes();
     this.checkValues();
-    console.log(this.psat.inputs.motor_rated_power);
-    console.log(this.psat.modifications[this.exploreModIndex].psat.inputs.motor_rated_power);
   }
 
   setPumpTypes() {
-    this.psat.inputs.pump_style = this.psatService.getPumpStyleEnum(this.tmpInitialPumpType);
-    this.psat.modifications[this.exploreModIndex].psat.inputs.pump_style = this.psatService.getPumpStyleEnum(this.tmpNewPumpType);
+    this.checkPumpTypes();
+    this.psat.inputs.pump_style = this.psatService.getPumpStyleEnum(this.tmpBaselinePumpType);
+    this.psat.modifications[this.exploreModIndex].psat.inputs.pump_style = this.psatService.getPumpStyleEnum(this.tmpModificationPumpType);
     this.calculate();
   }
 
   setEfficiencyClasses() {
-    this.psat.modifications[this.exploreModIndex].psat.inputs.efficiency_class = this.psatService.getEfficienyClassEnum(this.tmpNewEfficiencyClass);
-    this.psat.inputs.efficiency_class = this.psatService.getEfficienyClassEnum(this.tmpInitialEfficiencyClass);
+    this.checkMotorEfficiencies();
+    this.psat.modifications[this.exploreModIndex].psat.inputs.efficiency_class = this.psatService.getEfficienyClassEnum(this.tmpModificationEfficiencyClass);
+    this.psat.inputs.efficiency_class = this.psatService.getEfficienyClassEnum(this.tmpBaselineEfficiencyClass);
     this.calculate();
+  }
+
+  checkMotorEfficiencies() {
+    if (this.tmpModificationEfficiencyClass == 'Specified') {
+      this.showMotorEfficiency = true;
+    } else {
+      this.psat.modifications[this.exploreModIndex].psat.inputs.efficiency = null;
+    }
+    if (this.tmpBaselineEfficiencyClass == 'Specified') {
+      this.showMotorEfficiency = true;
+    } else {
+      this.psat.inputs.efficiency = null;
+    }
+    if (this.tmpBaselineEfficiencyClass != 'Specified' && this.tmpModificationEfficiencyClass != 'Specified') {
+      this.showMotorEfficiency = false;
+    }
+  }
+
+  checkPumpTypes() {
+    if (this.tmpModificationPumpType == 'Specified Optimal Efficiency') {
+      this.showPumpSpecified = true;
+    } else {
+      this.psat.modifications[this.exploreModIndex].psat.inputs.pump_specified = null;
+    }
+    if (this.tmpBaselinePumpType == 'Specified Optimal Efficiency') {
+      this.showPumpSpecified = true;
+    } else {
+      this.psat.inputs.pump_specified = null;
+    }
+    if (this.tmpModificationPumpType != 'Specified Optimal Efficiency' && this.tmpBaselinePumpType != 'Specified Optimal Efficiency') {
+      this.showPumpSpecified = false;
+    }
   }
 
   focusField(str: string) {
@@ -164,6 +199,9 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
     if (this.psat.inputs.pump_specified != this.psat.modifications[this.exploreModIndex].psat.inputs.pump_specified) {
       this.showPumpSpecified = true;
       this.showPumpData = true;
+    }
+    if (this.psat.inputs.optimize_calculation != this.psat.modifications[this.exploreModIndex].psat.inputs.optimize_calculation) {
+      this.showCalculationMethod = true;
     }
   }
   checkPumpRpm(num: number) {
@@ -312,6 +350,10 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
     }
   }
 
+  toggleCalculationMethod() {
+
+  }
+
   toggleSystemData() {
     if (this.showSystemData == false) {
       this.showCost = false;
@@ -332,7 +374,7 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
   toggleEfficiencyClass() {
     if (this.showEfficiencyClass == false) {
       this.psat.modifications[this.exploreModIndex].psat.inputs.efficiency_class = this.psat.inputs.efficiency_class;
-      this.tmpNewEfficiencyClass = this.psatService.getEfficiencyClassFromEnum(this.psat.inputs.efficiency_class);
+      this.tmpModificationEfficiencyClass = this.psatService.getEfficiencyClassFromEnum(this.psat.inputs.efficiency_class);
       this.calculate();
     }
   }
@@ -378,7 +420,7 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
   togglePumpType() {
     if (this.showPumpType == false) {
       this.psat.modifications[this.exploreModIndex].psat.inputs.pump_style = this.psat.inputs.pump_style;
-      this.tmpNewPumpType = this.psatService.getPumpStyleFromEnum(this.psat.inputs.pump_style);
+      this.tmpModificationPumpType = this.psatService.getPumpStyleFromEnum(this.psat.inputs.pump_style);
       this.calculate();
     }
   }

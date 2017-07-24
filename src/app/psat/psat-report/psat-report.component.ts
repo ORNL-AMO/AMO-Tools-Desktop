@@ -25,7 +25,10 @@ export class PsatReportComponent implements OnInit {
   inPsat: boolean;
   @Output('exportData')
   exportData = new EventEmitter<boolean>();
-
+  @Input()
+  inRollup: boolean;
+  @Output('selectModification')
+  selectModification = new EventEmitter<any>();
   assessmentDirectories: Directory[];
   isFirstChange: boolean = true;
   numMods: number = 0;
@@ -33,11 +36,11 @@ export class PsatReportComponent implements OnInit {
 
   ngOnInit() {
     if (this.psat && this.settings) {
-      this.getResults(this.psat, this.settings);
+     // this.psat = this.getResults(this.psat, this.settings);
     }
     else if (this.assessment.psat && this.settings) {
       this.psat = this.assessment.psat;
-      this.getResults(this.psat, this.settings);
+     // this.psat = this.getResults(this.psat, this.settings);
     }
     else if (this.assessment.psat && !this.settings) {
       this.psat = this.assessment.psat;
@@ -49,7 +52,7 @@ export class PsatReportComponent implements OnInit {
       this.getDirectoryList(this.assessment.directoryId);
     }
 
-    if(this.psat.modifications){
+    if (this.psat.modifications) {
       this.numMods = this.psat.modifications.length;
     }
   }
@@ -62,7 +65,7 @@ export class PsatReportComponent implements OnInit {
         if (results.length != 0) {
           this.settings = results[0];
           if (!this.psat.outputs) {
-            this.psat = this.getResults(this.psat, this.settings);
+           // this.psat = this.getResults(this.psat, this.settings);
           }
         } else {
           //no assessment settings, find dir settings being usd
@@ -83,7 +86,7 @@ export class PsatReportComponent implements OnInit {
             if (resultSettings.length != 0) {
               this.settings = resultSettings[0];
               if (!this.psat.outputs) {
-                this.psat = this.getResults(this.psat, this.settings);
+               // this.psat = this.getResults(this.psat, this.settings);
               }
             } else {
               //no settings try again with parents parent directory
@@ -98,11 +101,19 @@ export class PsatReportComponent implements OnInit {
     this.closeReport.emit(true);
   }
 
-  getResults(psat: PSAT, settings: Settings) {
-    psat.outputs = this.psatService.results(psat.inputs, settings);
+  getResults(psat: PSAT, settings: Settings) : PSAT{
+    if (psat.inputs.optimize_calculation) {
+      psat.outputs = this.psatService.resultsOptimal(psat.inputs, settings);
+    } else {
+      psat.outputs = this.psatService.resultsExisting(psat.inputs, settings);
+    }
     if (psat.modifications) {
       psat.modifications.forEach(modification => {
-        modification.psat.outputs = this.psatService.results(modification.psat.inputs, settings);
+        if (modification.psat.inputs.optimize_calculation) {
+          modification.psat.outputs = this.psatService.resultsOptimal(psat.inputs, settings);
+        } else {
+          modification.psat.outputs = this.psatService.resultsExisting(psat.inputs, settings);
+        }
       })
     }
     return psat;
@@ -127,8 +138,12 @@ export class PsatReportComponent implements OnInit {
     win.print();
   }
 
-  exportToCsv(){
+  exportToCsv() {
     this.exportData.emit(true);
+  }
+
+  useModification(event: any){
+    this.selectModification.emit(event);
   }
 
 }

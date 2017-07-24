@@ -5,3 +5,7 @@
 .calc-help{
     padding: 8px !important;
 }
+
+.tab-content{
+    max-height: 78vh;
+}

@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, SimpleChange, ViewChild } from '@angular/core';
 import { WindowRefService } from '../../indexedDb/window-ref.service';
 import { BaseChartDirective } from 'ng2-charts';
+import * as d3 from 'd3';
 @Component({
   selector: 'app-percent-graph',
   templateUrl: './percent-graph.component.html',
@@ -46,7 +47,10 @@ export class PercentGraphComponent implements OnInit {
     this.doc = this.windowRefService.getDoc();
     this.window = this.windowRefService.nativeWindow;
     this.window.onresize = () => { this.setValueMargin() };
-    this.setValueMargin();
+    //let object render before resizing initially
+    setTimeout(() => {
+      this.setValueMargin();
+    }, 500)
   }
 
   ngOnDestroy() {
@@ -55,13 +59,12 @@ export class PercentGraphComponent implements OnInit {
 
   setValueMargin() {
     let div = this.doc.getElementsByClassName('chart-container')
-    let percentValue = this.doc.getElementById('percent');
     let valueClass = this.doc.getElementsByClassName('value');
-    if (div[0].clientHeight < 350 && div[0].clientHeight > 200) {
+    if (div[0].clientWidth < 350 && div[0].clientWidth > 200) {
       for (let i = 0; i < valueClass.length; i++) {
         valueClass[i].style.fontSize = '24px';
       }
-    } else if (div[0].clientHeight < 200) {
+    } else if (div[0].clientWidth < 200) {
       for (let i = 0; i < valueClass.length; i++) {
         valueClass[i].style.fontSize = '16px';
       }
@@ -70,10 +73,11 @@ export class PercentGraphComponent implements OnInit {
         valueClass[i].style.fontSize = '32px';
       }
     }
-    let marginTop = (div[0].clientHeight / 2) - (percentValue.clientHeight + (percentValue.clientHeight * .5));
+    let percentValue = this.doc.getElementById('percent');
+    let marginTop = (div[0].clientWidth / 2) - (percentValue.clientHeight / 2);
     let marginLeft = (div[0].clientWidth / 2) - (percentValue.clientWidth / 2);
     for (let i = 0; i < valueClass.length; i++) {
-      valueClass[i].style.marginTop = (marginTop + 25) + 'px';
+      valueClass[i].style.marginTop = marginTop + 'px';
       valueClass[i].style.marginLeft = marginLeft + 'px';
     }
   }
@@ -83,26 +87,42 @@ export class PercentGraphComponent implements OnInit {
   }
 
   initChart() {
-    this.chartOptions = {
-      legend: {
-        display: false
-      },
-      title: {
-        text: this.title,
-        display: true,
-        position: this.titlePlacement || "bottom",
-        fontStyle: this.fontStyle || "bold",
-        fontSize: this.fontSize || 22
+    if (this.title) {
+      this.chartOptions = {
+        legend: {
+          display: false
+        },
+        title: {
+          text: this.title,
+          display: true,
+          position: this.titlePlacement || "bottom",
+          fontStyle: this.fontStyle || "bold",
+          fontSize: this.fontSize || 22
+        },
+        tooltips: {
+          enabled: false
+        }
       }
+    } else {
+      this.chartOptions = {
+        legend: {
+          display: false
+        },
+        tooltips: {
+          enabled: false
+        }
+      };
     }
     this.doughnutChartLabels = [this.valueDescription, 'Potential']
-    if (this.value < 100) {
+    if (this.value <= 100 && this.value > 0) {
       this.potential = 100 - this.value;
-    } else {
+    } else if(this.value < 0){
+      this.potential = 100 + this.value;
+    }else{
       this.potential = 0;
     }
     this.doughnutChartData = [this.value, this.potential];
-    if (this.value >= 70 && this.value <= 100) {
+    if (this.value >= 11 && this.value <= 100) {
       this.chartColorDataSet = [
         {
           options: this.chartOptions,
@@ -117,7 +137,7 @@ export class PercentGraphComponent implements OnInit {
           ]
         }
       ]
-    } else if (this.value < 70 && this.value >= 50) {
+    } else if (this.value < 10 && this.value >= 5) {
       this.chartColorDataSet = [
         {
           options: this.chartOptions,

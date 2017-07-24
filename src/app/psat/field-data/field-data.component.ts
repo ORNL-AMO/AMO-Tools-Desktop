@@ -25,8 +25,6 @@ export class FieldDataComponent implements OnInit {
   @Output('saved')
   saved = new EventEmitter<boolean>();
   @Input()
-  isBaseline: boolean;
-  @Input()
   selected: boolean;
   @Input()
   settings: Settings;

@@ -17,6 +17,10 @@
     width: 100%;
 }
 
+.report-list-nav{
+    padding-top: 30px;
+}
+
 @media print {
     .report-header{
         padding-top: 15%;
@@ -94,9 +98,26 @@
     }
 }
 
+.rollups{
+    position: fixed;
+    color: white;
+    background-color: #2980b9;
+    bottom: 10%;
+    animation-name: rollups;
+    animation-duration: 1s;
+    margin: 10px;
+}
+
+@keyframes rollups{
+    0% { bottom: -350px}
+    100% { bottom: 10%}
+}
+
+
 .fixed-nav{
     top: 0;
-    padding-top: 15px;
+    left: 22%;
+    padding-top: 30px;
     position: fixed;
 }
 
