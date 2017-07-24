@@ -1,6 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Settings } from '../../../../shared/models/settings';
-import {falseIfMissing} from "protractor/built/util";
 
 @Component({
   selector: 'app-achievable-efficiency-form',
@@ -31,8 +30,8 @@ export class AchievableEfficiencyFormComponent implements OnInit {
   ];
   tmpPumpType: string;
   tmpFlowRate: number;
-  inputError: string;
-   constructor() { }
+  flowRateError: string = null;
+  constructor() { }
 
   ngOnInit() {
     if (this.efficiencyForm) {
@@ -42,24 +41,27 @@ export class AchievableEfficiencyFormComponent implements OnInit {
   }
 
   emitChange() {
-    this.efficiencyForm.patchValue({
-      pumpType: this.tmpPumpType,
-      flowRate: this.tmpFlowRate
-    })
-    if (this.tmpFlowRate < 110) {
-      this.tmpFlowRate = null;
-      return false;
-    }
-    else if (this.tmpFlowRate > 5000) {
-      this.tmpFlowRate = null;
-      return false;
-    }
-    else {
+    if (this.checkFlowRate()) {
+      this.efficiencyForm.patchValue({
+        pumpType: this.tmpPumpType,
+        flowRate: this.tmpFlowRate
+      })
       this.calculate.emit(true);
     }
   }
-  test() {
-    console.log('click');
+
+  checkFlowRate() {
+    if (this.tmpFlowRate < 110) {
+      this.flowRateError = 'Flow rate too small';
+      return false;
+    }
+    else if (this.tmpFlowRate > 5000) {
+      this.flowRateError = 'Flow rate too large';
+      return false;
+    } else {
+      this.flowRateError = null;
+      return true;
+    }
   }
 }
 
