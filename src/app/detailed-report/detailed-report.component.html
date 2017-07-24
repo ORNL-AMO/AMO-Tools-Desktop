@@ -5,7 +5,7 @@
         <div class="container-fluid">
           <div class="row">
             <div class="col-md-12">
-              <app-report-banner (emitCloseReport)="closeReport()" (emitExport)="exportToCsv()" (emitPrint)="showPrintModal()"></app-report-banner>
+              <app-report-banner (emitCloseReport)="closeReport()" (emitExport)="exportToCsv()" (emitPrint)="print()"></app-report-banner>
             </div>
           </div>
         </div>
@@ -72,7 +72,7 @@
 </div>
 
 <!--print modal-->
-<div bsModal #printModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="printModalLabel" aria-hidden="true"
+<!--<div bsModal #printModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="printModalLabel" aria-hidden="true"
   [config]="{backdrop: 'static'}">
   <div class="modal-dialog modal-md">
     <div class="modal-content">
@@ -90,4 +90,4 @@
       </div>
     </div>
   </div>
-</div>
+</div>-->
