@@ -43,43 +43,55 @@ export class DashboardComponent implements OnInit {
   selectedItems: Array<any>;
   showImportExport: boolean;
   deleting: boolean;
+  suiteDbInit: boolean = false;
   constructor(private indexedDbService: IndexedDbService, private formBuilder: FormBuilder, private assessmentService: AssessmentService, private toastyService: ToastyService,
-    private toastyConfig: ToastyConfig, private jsonToCsvService: JsonToCsvService, private suitDbService: SuiteDbService) {
+    private toastyConfig: ToastyConfig, private jsonToCsvService: JsonToCsvService, private suiteDbService: SuiteDbService) {
     this.toastyConfig.theme = 'bootstrap';
     this.toastyConfig.position = 'bottom-right';
     this.toastyConfig.limit = 1;
   }
 
   ngOnInit() {
-
     //start toolts suite database
-    this.suitDbService.startup();
+    if (this.suiteDbInit == false) {
+      this.suiteDbService.startup();
+      this.suiteDbInit = true;
+    }
     this.selectedItems = new Array();
     this.showLandingScreen = this.assessmentService.getLandingScreen();
     //open DB and get directories
-    this.indexedDbService.initDb().then(
-      results => {
-        this.indexedDbService.getDirectory(1).then(
-          results => {
-            if (results) {
-              this.rootDirectoryRef = results;
-              this.allDirectories = this.populateDirectories(results);
-              this.workingDirectory = this.allDirectories
-            } else {
-              this.createExampleAssessments();
-              this.createDirectory();
-            }
-          })
-        this.indexedDbService.getDirectorySettings(1).then(
-          results => {
-            if (results.length == 0) {
-              this.createDirectorySettings();
-            }
-          }
-        );
-      }
-    )
+    if (this.indexedDbService.db == undefined) {
+      this.indexedDbService.db = this.indexedDbService.initDb().then(
+        results => {
+          this.getData();
+        }
+      )
+    } else {
+      this.getData();
+    }
   }
+
+  getData() {
+    this.indexedDbService.getDirectory(1).then(
+      results => {
+        if (results) {
+          this.rootDirectoryRef = results;
+          this.allDirectories = this.populateDirectories(results);
+          this.workingDirectory = this.allDirectories
+        } else {
+          this.createExampleAssessments();
+          this.createDirectory();
+        }
+      })
+    this.indexedDbService.getDirectorySettings(1).then(
+      results => {
+        if (results.length == 0) {
+          this.createDirectorySettings();
+        }
+      }
+    );
+  }
+
 
   hideScreen() {
     this.dashboardView = 'assessment-dashboard';
@@ -218,7 +230,7 @@ export class DashboardComponent implements OnInit {
 
   hideDeleteModal() {
     this.deleteModal.hide();
-    this.deleteModal.onHidden.subscribe(()=> {
+    this.deleteModal.onHidden.subscribe(() => {
       this.deleting = false;
     })
   }
