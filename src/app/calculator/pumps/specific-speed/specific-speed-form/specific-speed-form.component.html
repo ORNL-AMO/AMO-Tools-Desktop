@@ -8,19 +8,28 @@
 
   <div class="form-group">
     <label for="pumpRPM">Pump Speed</label>
-    <input type="number" step="any" class="form-control" id="pumpRPM" [(ngModel)]="tmpPumpRpm" (input)="emitCalculate()" onfocus="this.select();">
-    <span class="units">rpm</span>
+    <div class="input-group calc-addon-group">
+      <input type="number" step="any" class="form-control addon-input" id="pumpRPM" [(ngModel)]="tmpPumpRpm" (input)="emitCalculate()"
+        onfocus="this.select();">
+      <span class="input-group-addon units">rpm</span>
+    </div>
   </div>
 
   <div class="form-group">
-      <label for="flowRate">Flow Rate</label>
-      <input type="number" step="any" class="form-control" id="flowRate" [(ngModel)]="tmpFlowRate" (input)="emitCalculate()" onfocus="this.select();">
-    <span class="units">{{settings.flowMeasurement}}</span>
+    <label for="flowRate">Flow Rate</label>
+    <div class="input-group calc-addon-group">
+      <input type="number" step="any" class="form-control addon-input" id="flowRate" [(ngModel)]="tmpFlowRate" (input)="emitCalculate()"
+        onfocus="this.select();">
+      <span class="input-group-addon units">{{settings.flowMeasurement}}</span>
+    </div>
   </div>
 
   <div class="form-group">
-      <label for="head">Head</label>
-      <input type="number" step="any" class="form-control" [(ngModel)]="tmpHead" id="head" (input)="emitCalculate()" onfocus="this.select();">
-    <span class="units">{{settings.distanceMeasurement}}</span>
+    <label for="head">Head</label>
+    <div class="input-group calc-addon-group">
+      <input type="number" step="any" class="form-control addon-input" [(ngModel)]="tmpHead" id="head" (input)="emitCalculate()"
+        onfocus="this.select();">
+      <span class="input-group-addon units">{{settings.distanceMeasurement}}</span>
+    </div>
   </div>
 </div>

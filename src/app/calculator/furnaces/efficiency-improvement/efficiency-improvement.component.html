@@ -1,0 +1,12 @@
+<div class="row">
+  <div class="col-lg-8 col-md-10 col-sm-12">
+    <div class="card card-block">
+      <app-efficiency-improvement-form [(efficiencyImprovementInputs)]="efficiencyImprovementInputs" [efficiencyImprovementOutputs]="efficiencyImprovementOutputs"
+        (calculate)="calculate()" (changeField)="setCurrentField($event)">
+      </app-efficiency-improvement-form>
+    </div>
+  </div>
+  <div class="col-4">
+    <app-efficiency-improvement-help [currentField]="currentField"></app-efficiency-improvement-help>
+  </div>
+</div>

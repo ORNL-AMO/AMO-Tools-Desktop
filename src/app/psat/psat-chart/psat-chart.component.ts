@@ -30,13 +30,11 @@ export class PsatChartComponent implements OnInit {
   }
 
   ngOnChanges() {
-    console.log('change');
     this.initChart();
   }
 
   initChart() {
     this.optimizationRating = Number((Math.round(this.psat.outputs.existing.optimization_rating * 100 * 100) / 100).toFixed(0));
-    console.log(this.optimizationRating);
     this.title = this.psat.name || 'Baseline';
     this.unit = '%';
     this.titlePlacement = 'top';

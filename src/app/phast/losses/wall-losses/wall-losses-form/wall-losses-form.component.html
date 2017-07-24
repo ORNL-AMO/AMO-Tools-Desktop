@@ -2,23 +2,29 @@
   <div class="form-section">
     <div class="form-group">
       <label class="small" for="avgSurfaceTemp">Average Surface Temperature</label>
-      <input name="{{'avgSurfaceTemp_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="avgSurfaceTemp" id="avgSurfaceTemp" onfocus="this.select();" (input)="startSavePolling()"
-        (focus)="focusField('avgSurfaceTemp')">
-      <span class="units">&#8457;</span>
+      <div class="input-group">
+        <input name="{{'avgSurfaceTemp_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="avgSurfaceTemp" id="avgSurfaceTemp" onfocus="this.select();" (input)="startSavePolling()"
+          (focus)="focusField('avgSurfaceTemp')">
+        <span class="input-group-addon units">&#8457;</span>
+      </div>
     </div>
 
     <div class="form-group">
       <label class="small" for="ambientTemp">Ambient Temperature</label>
-      <input name="{{'ambientTemp_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="ambientTemp" id="ambientTemp" onfocus="this.select();" (input)="startSavePolling()"
-        (focus)="focusField('ambientTemp')">
-      <span class="units">&#8457;</span>
+      <div class="input-group">
+        <input name="{{'ambientTemp_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="ambientTemp" id="ambientTemp" onfocus="this.select();" (input)="startSavePolling()"
+          (focus)="focusField('ambientTemp')">
+        <span class="input-group-addon units">&#8457;</span>
+      </div>
     </div>
 
     <div class="form-group">
       <label class="small" for="windVelocity">Wind Velocity</label>
-      <input name="{{'windVelocity_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="windVelocity" id="windVelocity" onfocus="this.select();" (input)="startSavePolling()"
-        (focus)="focusField('windVelocity')">
-      <span class="units">mph</span>
+      <div class="input-group">
+        <input name="{{'windVelocity_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="windVelocity" id="windVelocity" onfocus="this.select();" (input)="startSavePolling()"
+          (focus)="focusField('windVelocity')">
+        <span class=" input-group-addon units">mph</span>
+      </div>
     </div>
 
     <div class="form-group">
@@ -48,9 +54,11 @@
 
     <div class="form-group">
       <label class="small" for="surfaceArea">Total Outside Surface Area</label>
-      <input name="{{'surfaceArea_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="surfaceArea" id="surfaceArea" onfocus="this.select();" (input)="startSavePolling()"
-        (focus)="focusField('surfaceArea')">
-      <span class="units">ft<sup>2</sup></span>
+      <div class="input-group">
+        <input name="{{'surfaceArea_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="surfaceArea" id="surfaceArea" onfocus="this.select();" (input)="startSavePolling()"
+          (focus)="focusField('surfaceArea')">
+        <span class="input-group-addon units">ft<sup>2</sup></span>
+      </div>
     </div>
 
     <div class="form-group">

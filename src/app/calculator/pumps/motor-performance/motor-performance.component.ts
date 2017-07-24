@@ -20,7 +20,7 @@ export class MotorPerformanceComponent implements OnInit {
   performanceForm: any;
 
   toggleCalculate: boolean = false;
-
+  tabSelect: string = 'results';
   constructor(private psatService: PsatService, private indexedDbService: IndexedDbService) { }
 
   ngOnInit() {
@@ -60,5 +60,7 @@ export class MotorPerformanceComponent implements OnInit {
   calculate() {
     this.toggleCalculate = !this.toggleCalculate;
   }
-
+  setTab(str: string){
+    this.tabSelect = str;
+  }
 }

@@ -1,47 +1,50 @@
 <div *ngIf="assessmentsGathered">
-
-  <div class="report-header">
-    <div class="container-fluid">
-      <div class="row">
-        <div class="col-md-10 offset-md-1">
-          <app-report-banner (emitCloseReport)="closeReport()" (emitExport)="exportToCsv()" (emitPrint)="showPrintModal()"></app-report-banner>
+  <div class="row justify-content-center report-container">
+    <div class="col-10 report-column">
+      <div class="report-header">
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-md-12">
+              <app-report-banner (emitCloseReport)="closeReport()" (emitExport)="exportToCsv()" (emitPrint)="showPrintModal()"></app-report-banner>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
-  </div>
-  <!-- End .report-header -->
+      <!-- End .report-header -->
 
-  <div id="reportSummary" class="report-summary">
-    <app-report-summary [numPsats]="numPsats" [pumpSavingsPotential]="pumpSavingsPotential"></app-report-summary>
-  </div>
-  <div class="report-cover">
-    <p class="report-notes">{{reportNotes}}</p>
-    <span class="report-logo">
-    <img src="assets/images/DOE-banner-color.png" class="doe-logo">
-   </span>
-    <span class="created-date">
-    <h4>{{createdDate}}</h4>
-   </span>
-  </div>
-
-  <div id="reportContainer" class="container-fluid">
-
-    <div class="row">
-      <div class="col-md-2 offset-md-1 report-list-nav" style="padding-top: 30px;">
-
-        <div [ngClass]="{'fixed-nav': !isSummaryVisible}">
-          <h5>Pumps</h5>
-          <ul *ngIf="focusedAssessment">
-            <li *ngFor="let assessment of reportAssessments" [ngClass]="{'active': focusedAssessment.id == assessment.id}"><a href="#assessment.id" (click)="selectAssessment(assessment)">{{assessment.name}}</a></li>
-          </ul>
-        </div>
-
+      <div id="reportSummary" class="report-summary">
+        <app-report-summary [numPsats]="numPsats" [pumpSavingsPotential]="pumpSavingsPotential"></app-report-summary>
       </div>
-      <div class="col-8 assessment-report-container">
-        <div class="assessment-report-item" *ngFor="let assessment of reportAssessments" id="{{assessment.id}}">
+      <div class="report-cover">
+        <p class="report-notes">{{reportNotes}}</p>
+        <span class="report-logo">
+          <img src="assets/images/DOE-banner-color.png" class="doe-logo">
+        </span>
+        <span class="created-date">
+          <h4>{{createdDate}}</h4>
+        </span>
+      </div>
 
-          <app-psat-report style="width: 100%" [assessment]="assessment"></app-psat-report>
+      <div id="reportContainer" class="container-fluid">
 
+        <div class="row">
+          <div class="col-md-2 offset-md-1 report-list-nav" style="padding-top: 30px;">
+
+            <div [ngClass]="{'fixed-nav': !isSummaryVisible}">
+              <h5>Pumps</h5>
+              <ul *ngIf="focusedAssessment">
+                <li *ngFor="let assessment of reportAssessments" [ngClass]="{'active': focusedAssessment.id == assessment.id}"><a href="#assessment.id" (click)="selectAssessment(assessment)">{{assessment.name}}</a></li>
+              </ul>
+            </div>
+
+          </div>
+          <div class="col-8 assessment-report-container">
+            <div class="assessment-report-item" *ngFor="let assessment of reportAssessments" id="{{assessment.id}}">
+
+              <app-psat-report style="width: 100%" [assessment]="assessment"></app-psat-report>
+
+            </div>
+          </div>
         </div>
       </div>
     </div>

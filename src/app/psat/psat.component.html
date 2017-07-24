@@ -1,4 +1,4 @@
-<div *ngIf="assessment">
+<div *ngIf="assessment && currentTab != 'report'">
   <div class="hide-print" id="psatBanner">
     <app-psat-banner (togglePanel)="toggleOpenPanel($event)" [assessment]="assessment"></app-psat-banner>
   </div>
@@ -81,28 +81,48 @@
 
 
   <div class="tab-content" *ngIf="currentTab == 'modify-conditions'">
-    <app-modify-conditions [assessment]="assessment" [settings]="settings" [saveClicked]="saveClicked" [(psat)]="_psat" (saved)="save()"
-      [emitPrint]="emitPrint"></app-modify-conditions>
+    <app-modify-conditions [assessment]="assessment" [settings]="settings" [saveClicked]="saveClicked" [(psat)]="_psat" (saved)="save()"></app-modify-conditions>
   </div>
 
-  <div class="tab-content" *ngIf="currentTab == 'system-curve'">
-    <app-system-curve [inPsat]="true" [psat]="_psat" [settings]="settings"></app-system-curve>
+  <div class="row justify-content-center" *ngIf="currentTab == 'system-curve'">
+    <div class="col-10">
+      <div class="card card-block calculator-card">
+        <app-system-curve [inPsat]="true" [psat]="_psat" [settings]="settings"></app-system-curve>
+      </div>
+    </div>
   </div>
 
-  <div class="tab-content" *ngIf="currentTab == 'achievable-efficiency'">
-    <app-achievable-efficiency [inPsat]="true" [settings]="settings" [psat]="_psat"></app-achievable-efficiency>
+  <div class="row justify-content-center" *ngIf="currentTab == 'achievable-efficiency'">
+    <div class="col-10">
+      <div class="card card-block calculator-card">
+        <app-achievable-efficiency [inPsat]="true" [settings]="settings" [psat]="_psat"></app-achievable-efficiency>
+      </div>
+    </div>
   </div>
 
-  <div class="tab-content" *ngIf="currentTab == 'motor-performance'">
-    <app-motor-performance [inPsat]="true" [psat]="_psat" [settings]="settings"></app-motor-performance>
+  <div class="row justify-content-center" *ngIf="currentTab == 'motor-performance'">
+    <div class="col-10">
+      <div class="card card-block calculator-card">
+        <app-motor-performance [inPsat]="true" [psat]="_psat" [settings]="settings"></app-motor-performance>
+      </div>
+    </div>
   </div>
 
-  <div class="tab-content" *ngIf="currentTab == 'nema-energy-efficiency'">
-    <app-nema-energy-efficiency [inPsat]="true" [psat]="_psat" [settings]="settings"></app-nema-energy-efficiency>
+  <div class="row justify-content-center" *ngIf="currentTab == 'nema-energy-efficiency'">
+    <div class="col-10">
+      <div class="card card-block calculator-card">
+        <app-nema-energy-efficiency [inPsat]="true" [psat]="_psat" [settings]="settings"></app-nema-energy-efficiency>
+      </div>
+    </div>
   </div>
 
-  <div class="tab-content" *ngIf="currentTab == 'specific-speed'">
-    <app-specific-speed [settings]="settings" [inPsat]="true" [psat]="_psat"></app-specific-speed>
+
+  <div class="row justify-content-center" *ngIf="currentTab == 'specific-speed'">
+    <div class="col-10">
+      <div class="card card-block calculator-card">
+        <app-specific-speed [settings]="settings" [inPsat]="true" [psat]="_psat"></app-specific-speed>
+      </div>
+    </div>
   </div>
 
   <div id="psatFooter" class="footer hide-print">
@@ -111,17 +131,22 @@
       <button class="btn btn-secondary" *ngIf="currentTab != 'system-setup'" (click)="goBack()">Back</button>
     </div>
     <div class="pull-right">
-      <button class="btn btn-secondary" *ngIf="currentTab == 'system-setup' || currentTab == 'modify-conditions'&& !viewingReport ||  currentTab == 'explore-opportunities' && !viewingReport"
+      <button class="btn btn-secondary" *ngIf="currentTab == 'system-setup' || currentTab == 'modify-conditions' ||  currentTab == 'explore-opportunities'"
         (click)="toggleSave()">Save</button>
-      <button class="btn btn-primary" *ngIf="currentTab == 'system-setup' && !viewingReport" [disabled]="!getCanContinue()" (click)="continue()">Continue</button>
+      <button class="btn btn-primary" *ngIf="currentTab == 'system-setup'" [disabled]="!getCanContinue()" (click)="continue()">Continue</button>
 
-      <button class="btn btn-primary" *ngIf="currentTab == 'explore-opportunities' || currentTab == 'modify-conditions' && !viewingReport"
-        (click)="goToReport()">View Report</button>
-
-      <button class="btn btn-primary" *ngIf="viewingReport" (click)="printReport()">Print / Download</button>
+      <button class="btn btn-primary" *ngIf="currentTab == 'explore-opportunities' || currentTab == 'modify-conditions'" (click)="goToReport()">View Report</button>
       <!-- <button class="btn btn-primary" *ngIf="currentTab == 'modify-conditions'" (click)="exportData()">Export</button> -->
       <!--<button class="btn btn-primary" *ngIf="currentTab == 'modify-conditions'" (click)="togglePrint()"><span class="fa fa-print"></span></button>-->
     </div>
+  </div>
+</div>
+
+
+<div class="row justify-content-center report-container" *ngIf="currentTab == 'report' && settings">
+  <div class="col-10 report-column">
+    <app-psat-report [psat]="psat" [settings]="settings" [assessment]="assessment" [inPsat]="true" (closeReport)="closeReport()"
+      (exportData)="exportData()"></app-psat-report>
   </div>
 </div>
 

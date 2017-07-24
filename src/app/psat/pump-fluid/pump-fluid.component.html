@@ -15,17 +15,19 @@
 
   <div class="form-group" *ngIf="psatForm.value.pumpType == 'Specified Optimal Efficiency'">
     <label for="specifiedPumpEfficiency">Specify Pump Efficiency</label>
-    <input name="specifiedPumpEfficiency" type="number" min="0" step="any" class="form-control" formControlName="specifiedPumpEfficiency" id="specifiedPumpEfficiency" onfocus="this.select();" (input)="startSavePolling()"
-      (focus)="focusField('pumpType')">
+    <input name="specifiedPumpEfficiency" type="number" min="0" step="any" class="form-control" formControlName="specifiedPumpEfficiency"
+      id="specifiedPumpEfficiency" onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('specifiedPumpEfficiency')">
   </div>
 
   <div class="form-group">
     <label for="pumpRPM">Pump Speed</label>
-    <input type="number" name="pumpRPM" min="0" step="any" class="form-control {{different.pumpRPM}}" formControlName="pumpRPM" id="pumpRPM" (input)="startSavePolling()" (focus)="focusField('pumpRPM')"
-      [ngClass]="{'invalid': checkPumpRpm() == false}" onfocus="this.select();">
-    <span class="units">rpms</span>
-    <span class="alert-danger pull-right small" *ngIf="rpmError !== null">{{rpmError}}</span>
-
+    <div class="input-group">
+      <input type="number" name="pumpRPM" min="0" step="any" class="form-control {{different.pumpRPM}}" formControlName="pumpRPM"
+        id="pumpRPM" (input)="startSavePolling()" (focus)="focusField('pumpRPM')" [ngClass]="{'invalid': checkPumpRpm() == false}"
+        onfocus="this.select();">
+      <span class="input-group-addon units">rpms</span>
+    </div>
+      <span class="alert-danger pull-right small" *ngIf="rpmError !== null">{{rpmError}}</span>
   </div>
 
   <div class="form-group">
@@ -38,25 +40,26 @@
 
   <div class="form-group">
     <label for="viscosity">Kinematic Viscosity</label>
-    <div name="viscosity" class="incrementor form-control">
-      <button class="btn" [disabled]="!selected" (click)="subtractNum('viscosity')"><i class="fa fa-minus"></i></button>
-      <button class="btn" [disabled]="!selected" (click)="addNum('viscosity')"><i class="fa fa-plus"></i></button>
-      <input type="number" min="0" step="any" class="form-control" formControlName="viscosity" id="viscosity" ngModel="{{psatForm.value.viscosity}}"
-        (input)="startSavePolling()" (focus)="focusField('kinematicViscosity')"  onfocus="this.select();">
+    <div name="viscosity" class="incrementor form-control input-group">
+      <button class="btn input-group-btn" [disabled]="!selected" (click)="subtractNum('viscosity')"><i class="fa fa-minus"></i></button>
+      <button class="btn input-group-btn" [disabled]="!selected" (click)="addNum('viscosity')"><i class="fa fa-plus"></i></button>
+      <input type="number" min="0" step="any" class="form-control addon-input" formControlName="viscosity" id="viscosity" ngModel="{{psatForm.value.viscosity}}"
+        (input)="startSavePolling()" (focus)="focusField('kinematicViscosity')" onfocus="this.select();">
+      <span class="input-group-addon units">cST</span>
     </div>
-    <span class="units">cST</span>
   </div>
 
   <div class="form-group">
     <label for="gravity">Specific Gravity</label>
-    <input type="number" min="0" name="gravity" step="any" class="form-control" formControlName="gravity" id="gravity" (input)="startSavePolling()" (focus)="focusField('specificGravity')" onfocus="this.select();">
+    <input type="number" min="0" name="gravity" step="any" class="form-control" formControlName="gravity" id="gravity" (input)="startSavePolling()"
+      (focus)="focusField('specificGravity')" onfocus="this.select();">
   </div>
 
   <div class="form-group">
     <label for="stages">Stages</label>
-    <div name="stages" class="incrementor form-control">
-      <button class="btn" [disabled]="!selected" (click)="subtractNum('stages')"><i class="fa fa-minus"></i></button>
-      <button class="btn" [disabled]="!selected" (click)="addNum('stages')"><i class="fa fa-plus"></i></button>
+    <div name="stages" class="incrementor form-control input-group">
+      <button class="btn input-group-btn" [disabled]="!selected" (click)="subtractNum('stages')"><i class="fa fa-minus"></i></button>
+      <button class="btn input-group-btn" [disabled]="!selected" (click)="addNum('stages')"><i class="fa fa-plus"></i></button>
       <input type="number" min="1" step="any" class="form-control" formControlName="stages" id="stages" ngModel="{{psatForm.value.stages}}"
         (input)="startSavePolling()" (focus)="focusField('stages')" onfocus="this.select();">
     </div>

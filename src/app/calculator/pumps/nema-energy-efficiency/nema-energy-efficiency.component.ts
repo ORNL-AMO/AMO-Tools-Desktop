@@ -17,9 +17,9 @@ export class NemaEnergyEfficiencyComponent implements OnInit {
   settings: Settings;
   @Input()
   inPsat: boolean;
-  
-  nemaForm: any;
 
+  nemaForm: any;
+  tabSelect: string = 'results';
   constructor(private psatService: PsatService, private indexedDbService: IndexedDbService) { }
 
   ngOnInit() {
@@ -39,14 +39,17 @@ export class NemaEnergyEfficiencyComponent implements OnInit {
         results => {
           if (results.length != 0) {
             this.settings = results[0];
-            if(this.settings.powerMeasurement != 'hp'){
-                this.nemaForm.patchValue({
-                  horsePower: 150
-                })
+            if (this.settings.powerMeasurement != 'hp') {
+              this.nemaForm.patchValue({
+                horsePower: 150
+              })
             }
           }
         }
       )
     }
+  }
+  setTab(str: string) {
+    this.tabSelect = str;
   }
 }

@@ -1,0 +1,101 @@
+<div class="help-panel">
+  <div class="calc-help">
+    <div class="help-header">
+
+      <h3>Efficiency Improvement Calculater Help</h3>
+      <p>
+        Provides calculation of available heat (the heat that remains within the heating system as a fraction of the
+        heat input, which is an indication of thermal efficiency) and fuel savings for fuel fired furnaces and expected
+        energy savings when the burner operating conditions are changed. Achieving a decrease in flue gas oxygen implies
+        a reduction in excess air, which increases the available heat.  Enter data for “current” and “new”
+        configurations.
+      </p>
+      <p class="text-muted">
+        <span class="fa fa-youtube-play"></span> Watch tutorial on entering atmosphere loss data.
+      </p>
+
+    </div>
+
+
+    <div class="help-content">
+      <div class="card" *ngIf="currentField == 'flueGasOxygen'">
+        <div class="card-header">
+          Flue Gas O<sub>2</sub>
+        </div>
+        <div class="card-block">
+          <label>Description:</label>
+          <p>
+            The volumetric or molar fraction of O<sub>2</sub> in the exhaust (flue) gases (ignoring moisture content).
+            Higher O<sub>2</sub> in the exhaust indicates higher excess air and a greater amount of heat contained
+            within the flue gas (lowering the available heat).
+          </p>
+          <label>Input:</label>
+          <p>
+            Units: <strong>Percent (%)</strong><br>
+            Minimum Value Allowed: <strong>0</strong><br>
+            Maximum Value Allowed: <strong>100</strong><br>
+          </p>
+        </div>
+      </div>
+
+      <div class="card" *ngIf="currentField == 'flueGasTemp'">
+        <div class="card-header">
+          Flue Gas Temperature
+        </div>
+        <div class="card-block">
+          <label>Description:</label>
+          <p>
+            Temperature of the outgoing flue gas (degree F or C). Higher flue gas temperature increases the heat
+            content of flue gases and indicates less heat was retained by the system (lower available heat).
+          </p>
+          <label>Input:</label>
+          <p>
+            Units: <strong>degree F or C</strong><br>
+            Minimum Value Allowed: <strong>0</strong><br>
+            Maximum Value Allowed: <strong>3,000</strong><br>
+          </p>
+        </div>
+      </div>
+
+      <div class="card" *ngIf="currentField == 'combustionAirTemp'">
+        <div class="card-header">
+          Combustion Air Temp
+        </div>
+        <div class="card-block">
+          <label>Description:</label>
+          <p>
+            Temperature of the incoming combustion air after preheating (degree F or C). Use of preheated combustion
+            air increases the available heat (compared to combustion air at ambient temperature).
+          </p>
+          <label>Input:</label>
+          <p>
+            Units: <strong>degree F or C</strong><br>
+            Minimum Value Allowed: <strong>0</strong><br>
+            Maximum Value Allowed: <strong>1,600</strong><br>
+          </p>
+        </div>
+      </div>
+
+      <div class="card" *ngIf="currentField == 'energyInput'">
+        <div class="card-header">
+          Energy Input
+        </div>
+        <div class="card-block">
+          <label>Description:</label>
+          <p>
+            Energy of input fuel (MMBTU/hr or GJ/hr)
+          </p>
+          <label>Input:</label>
+          <p>
+            Units: <strong>MMBTU/hr or GJ/hr</strong><br>
+            Minimum Value Allowed: <strong>0</strong><br>
+            Maximum Value Allowed: <strong>10,000</strong><br>
+          </p>
+        </div>
+      </div>
+
+
+
+    </div>
+  </div>
+</div>

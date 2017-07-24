@@ -2,23 +2,29 @@
   <div class="form-section">
     <div class="form-group">
       <label class="small" for="draftPressure">Furnace Draft Pressure</label>
-      <input name="{{'draftPressure_'+lossIndex}}" type="number" class="form-control" formControlName="draftPressure" id="draftPressure"
-        onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('draftPressure')">
-      <span class="units">in. W.C.</span>
+      <div class="input-group">
+        <input name="{{'draftPressure_'+lossIndex}}" type="number" class="form-control" formControlName="draftPressure" id="draftPressure"
+          onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('draftPressure')">
+        <span class="input-group-addon units">in. W.C.</span>
+      </div>
     </div>
 
     <div class="form-group">
       <label class="small" for="openingArea">Opening Area</label>
-      <input name="{{'openingArea_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="openingArea"
-        id="openingArea" onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('openingArea')">
-      <span class="units">ft<sup>2</sup></span>
+      <div class="input-group">
+        <input name="{{'openingArea_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="openingArea"
+          id="openingArea" onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('openingArea')">
+        <span class="input-group-addon units">ft<sup>2</sup></span>
+      </div>
     </div>
 
     <div class="form-group">
       <label class="small" for="leakageGasTemperature">Temperature of Gases Leaking</label>
-      <input name="{{'leakageGasTemperature_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="leakageGasTemperature"
-        id="leakageGasTemperature" onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('leakageGasTemperature')">
-      <span class="units">&#8457;</span>
+      <div class="input-group">
+        <input name="{{'leakageGasTemperature_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="leakageGasTemperature"
+          id="leakageGasTemperature" onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('leakageGasTemperature')">
+        <span class="input-group-addon units">&#8457;</span>
+      </div>
     </div>
 
     <div class="form-group">
@@ -32,9 +38,11 @@
 
     <div class="form-group">
       <label class="small" for="ambientTemperature">Ambient Temperature</label>
-      <input name="{{'ambientTemperature_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="ambientTemperature"
-        id="ambientTemperature" onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('ambientTemperature')">
-      <span class="units">&#8457;</span>
+      <div class="input-group">
+        <input name="{{'ambientTemperature_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="ambientTemperature"
+          id="ambientTemperature" onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('ambientTemperature')">
+        <span class="input-group-addon units">&#8457;</span>
+      </div>
     </div>
   </div>
 </form>

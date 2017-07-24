@@ -14,12 +14,7 @@ export class PsatService {
     flaMax: 0
   };
 
-  changeSubTab: BehaviorSubject<string>;
-  printReport: BehaviorSubject<boolean>;
-
   constructor(private formBuilder: FormBuilder, private convertUnitsService: ConvertUnitsService, private validationService: ValidationService) { 
-    this.changeSubTab = new BehaviorSubject<string>(null);
-    this.printReport = new BehaviorSubject<boolean>(null);
   }
 
   roundVal(val: number, digits: number) {

@@ -12,15 +12,19 @@ export class HeadToolSuctionFormComponent implements OnInit {
   calculate = new EventEmitter<boolean>();
   @Input()
   settings: Settings;
+  @Input()
+  inAssessment: boolean;
+  @Output('changeField')
+  changeField = new EventEmitter<string>();
 
   smallUnit: string;
 
   constructor() { }
 
   ngOnInit() {
-    if(this.settings.distanceMeasurement == 'ft'){
+    if (this.settings.distanceMeasurement == 'ft') {
       this.smallUnit = 'in'
-    }else{
+    } else {
       this.smallUnit = 'mm'
     }
     this.calc();
@@ -31,4 +35,9 @@ export class HeadToolSuctionFormComponent implements OnInit {
       this.calculate.emit(true);
     }
   }
+
+  focusField(str: string) {
+    this.changeField.emit(str);
+  }
+
 }

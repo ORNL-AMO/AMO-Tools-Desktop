@@ -1,4 +1,4 @@
-<div class="help-panel">
+<!--<div class="help-panel">
   <div class="help-content">
     <div class="card">
       <div class="card-block">
@@ -16,6 +16,360 @@
           4th power, or 32, The reason for this 4th power scaling is that the velocity varies with the square of the pipe
           diameter, and the velocity head (to which the loss coefficients apply) is proportional to the velocity squared.
         </p>
+      </div>
+    </div>
+  </div>
+</div>-->
+<div class="help-panel">
+  <div class="help-header">
+    <h3>Head Tool Help</h3>
+    <p>Given a measured pressure, elevation, flow rate, and line size data calculate the head for a pump.</p>
+    <!--<p class="text-muted">
+      <span class="fa fa-youtube-play"></span> Watch tutorial on gathering field data.
+    </p>-->
+
+  </div>
+
+  <div class="help-content">
+
+    <div class="card" *ngIf="currentField == 'headToolType'">
+      <div class="card-header">
+        Suction Guage Reference Point
+      </div>
+      <div class="card-block small">
+        <label><u><strong>Description</strong></u></label>
+        <p>
+          Choose the location of the suction side gauge (at the tank fluid surface or before the pump).
+        </p>
+      </div>
+    </div>
+    <div class="card" *ngIf="currentField == 'specificGravity'">
+      <div class="card-header">
+        Specific Gravity
+      </div>
+      <div class="card-block small">
+        <label><u><strong>Description</strong></u></label>
+        <p>
+          Specific gravity of the fluid (relative to water)
+        </p>
+        <label><u><strong>Input</strong></u></label>
+        <p>
+          Minimum Value Allowed: <strong>0</strong><br> Maximum Value Allowed: <strong>10,000</strong><br>
+        </p>
+      </div>
+    </div>
+    <div class="card" *ngIf="currentField == 'flowRate'">
+      <div class="card-header">
+        Flow Rate
+      </div>
+      <div class="card-block small">
+        <label><u><strong>Description</strong></u></label>
+        <p>
+          Pump Flow Rate
+        </p>
+        <label><u><strong>Input</strong></u></label>
+        <p>
+          Minimum Value Allowed: <strong>0</strong><br> Maximum Value Allowed: <strong>100,000</strong><br>
+        </p>
+      </div>
+    </div>
+    <!--SUCTION TANK ELEVATION-->
+    <div *ngIf="headToolType == 'Suction tank elevation'">
+      <div class="card" *ngIf="currentField == 'suctionPipeDiameter'">
+        <div class="card-header">
+          Suction Pipe Diameter (ID)
+        </div>
+        <div class="card-block small">
+          <label><u><strong>Description</strong></u></label>
+          <p>
+            Inner diameter of the suction side pipe (in inches or mm). This is used to calculate the fluid velocity in the suction pipe,
+            which is then used to determine the suction velocity head.
+          </p>
+          <label><u><strong>Input</strong></u></label>
+          <p>
+            Minimum Value Allowed: <strong>0</strong><br> Maximum Value Allowed: <strong>2,000</strong><br>
+          </p>
+        </div>
+      </div>
+      <div class="card" *ngIf="currentField == 'suctionTankGasOverPressure'">
+        <div class="card-header">
+          Suction Tank gas overpressure (Pg)
+        </div>
+        <div class="card-block small">
+          <label><u><strong>Description</strong></u></label>
+          <p>
+            The gas overpressure within the suction side tank (in psig or kPA). If the tank (or well, lake, etc.) is open to the atmosphere,
+            the gauge pressure should be set to 0.
+          </p>
+          <label><u><strong>Input</strong></u></label>
+          <p>
+            Minimum Value Allowed: <strong>0</strong><br> Maximum Value Allowed: <strong>10,000</strong><br>
+          </p>
+        </div>
+      </div>
+      <div class="card" *ngIf="currentField == 'suctionTankFluidSurfaceElevation'">
+        <div class="card-header">
+          Suction Tank fluid surface elevation (Zs)
+        </div>
+        <div class="card-block small">
+          <label><u><strong>Description</strong></u></label>
+          <p>
+            The elevation of the tank (or well, lake, etc.) (in feet or meters). Both the suction tank fluid surface elevation and the
+            discharge gauge elevation should be relative to a common elevation, which could be absolute (e.g., sea level)
+            or relative (e.g., floor level).
+          </p>
+          <label><u><strong>Input</strong></u></label>
+          <p>
+            Minimum Value Allowed: <strong>0</strong><br> Maximum Value Allowed: <strong>10,000</strong><br>
+          </p>
+        </div>
+      </div>
+      <div class="card" *ngIf="currentField == 'suctionLineLossCoefficients'">
+        <div class="card-header">
+          Suction Line loss coefficients (Ks)
+        </div>
+        <div class="card-block small">
+          <label><u><strong>Description</strong></u></label>
+          <p>
+            The suction line loss coefficients (the sum of all suction line loss elements) are used to estimate the frictional head losses
+            between the suction reference point (e.g., tank level) and the pump suction flange. Note that these coefficients
+            apply to the Darcy-Weisbach style calculation (loss – K x velocity head). </p>
+          <p>These losses might come from elbows, tees, suction isolation valve, entrance loss from the tank to the pipe, etc.</p>
+          <p><b>IMPORTANT:</b> All losses must be normalized to the specific suction pipe diameter, and loss coefficient adjustments
+            are made to the 4th order of the pipe diameter ratio.</p>
+          <p> For example if there is a 12-inch isolation valve with a loss coefficient (K) of 0.4, but the suction pipe diameter
+            at the point where the pressure is measured is 16-inches (such as in a suction header) the loss coefficient for
+            the valve would be 0.4 x (<sup>16</sup>&frasl;<sub>12</sub>)<sup>4</sup> = 1.26.
+
+          </p>
+          <label><u><strong>Input</strong></u></label>
+          <p>
+            Minimum Value Allowed: <strong>0</strong><br> Maximum Value Allowed: <strong>10,000</strong><br>
+          </p>
+        </div>
+      </div>
+      <div class="card" *ngIf="currentField == 'dischargePipeDiameter'">
+        <div class="card-header">
+          Discharge Pipe diameter (ID)
+        </div>
+        <div class="card-block small">
+          <label><u><strong>Description</strong></u></label>
+          <p>
+            Inner diameter of the discharge pipe (in inches or mm). This is used to calculate the fluid velocity in the discharge pipe,
+            which is then used to determine the discharge velocity head.
+          </p>
+          <label><u><strong>Input</strong></u></label>
+          <p>
+            Minimum Value Allowed: <strong>0</strong><br> Maximum Value Allowed: <strong>2,000</strong><br>
+          </p>
+        </div>
+      </div>
+      <div class="card" *ngIf="currentField == 'dischargeGaugePressure'">
+        <div class="card-header">
+          Discharge Gauge pressure (Pd)
+        </div>
+        <div class="card-block small">
+          <label><u><strong>Description</strong></u></label>
+          <p>
+            Discharge gauge pressure (in psig or kPa)
+          </p>
+          <label><u><strong>Input</strong></u></label>
+          <p>
+            Minimum Value Allowed: <strong>0</strong><br> Maximum Value Allowed: <strong>10,000</strong><br>
+          </p>
+        </div>
+      </div>
+      <div class="card" *ngIf="currentField == 'dischargeGaugeElevation'">
+        <div class="card-header">
+          Discharge Gauge elevation (Zd)
+        </div>
+        <div class="card-block small">
+          <label><u><strong>Description</strong></u></label>
+          <p>
+            The elevation of the discharge gauge (in feet or meters). Both the suction tank fluid surface elevation and the discharge
+            gauge elevation should be relative to a common elevation, which could be absolute (e.g., sea level) or relative
+            (e.g., floor level).
+          </p>
+          <label><u><strong>Input</strong></u></label>
+          <p>
+            Minimum Value Allowed: <strong>0</strong><br> Maximum Value Allowed: <strong>10,000</strong><br>
+          </p>
+        </div>
+      </div>
+      <div class="card" *ngIf="currentField == 'dischargeLineLossCoefficients'">
+        <div class="card-header">
+          Discharge Line loss coefficients (Kd)
+        </div>
+        <div class="card-block small">
+          <label><u><strong>Description</strong></u></label>
+          <p>
+            The discharge line loss coefficients (the sum of all discharge line loss elements) are used to estimate the pump discharge
+            flange and the discharge pressure gauge.</p>
+          <p>Note that these coefficients apply to the Darcy-Weisbach style calculation (loss – K x velocity head). These losses
+            might come from elbows, tees, suction isolation valve, entrance loss from the tank to the pipe, etc.
+          </p>
+          <p><b>IMPORTANT:</b> All losses must be normalized to the specific suction pipe diameter, and loss coefficient adjustments
+            are made to the 4th order of the pipe diameter ratio.</p>
+
+          <p> For example if there is a 12-inch isolation valve with a loss coefficient (K) of 0.4, but the suction pipe diameter
+            at the point where the pressure is measured is 16-inches (such as in a suction header) the loss coefficient for
+            the valve would be 0.4 x (<sup>16</sup>&frasl;<sub>12</sub>)<sup>4</sup> = 1.26.
+          </p>
+          <label><u><strong>Input</strong></u></label>
+          <p>
+            Minimum Value Allowed: <strong>0</strong><br> Maximum Value Allowed: <strong>1</strong><br>
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!--SUCTION GUAGE ELEVATION-->
+    <div *ngIf="headToolType == 'Suction gauge elevation'">
+      <div class="card" *ngIf="currentField == 'suctionPipeDiameter'">
+        <div class="card-header">
+          Suction Pipe diameter (ID)
+        </div>
+        <div class="card-block small">
+          <label><u><strong>Description</strong></u></label>
+          <p>
+            Inner diameter of the suction side pipe (in inches or mm). This is used to calculate the fluid velocity in the suction pipe,
+            which is then used to determine the suction velocity head.
+          </p>
+          <label><u><strong>Input</strong></u></label>
+          <p>
+            Minimum Value Allowed: <strong>0</strong><br> Maximum Value Allowed: <strong>2,000</strong><br>
+          </p>
+        </div>
+      </div>
+      <div class="card" *ngIf="currentField == 'suctionGuagePressure'">
+        <div class="card-header">
+          Suction Gauge pressure (Pg)
+        </div>
+        <div class="card-block small">
+          <label><u><strong>Description</strong></u></label>
+          <p>
+            The gauge pressure of the suction side (in psi or kPa)
+          </p>
+          <label><u><strong>Input</strong></u></label>
+          <p>
+            Minimum Value Allowed: <strong>0</strong><br> Maximum Value Allowed: <strong>1,000</strong><br>
+          </p>
+        </div>
+      </div>
+      <div class="card" *ngIf="currentField == 'suctionGuageElevation'">
+        <div class="card-header">
+          Suction Gauge elevation (Zs)
+        </div>
+        <div class="card-block small">
+          <label><u><strong>Description</strong></u></label>
+          <p>
+            The elevation of the suction gauge (in feet or meters). Both the suction gauge elevation and the discharge gauge elevation
+            should be relative to a common elevation, which could be absolute (e.g., sea level) or relative (e.g., floor
+            level).
+          </p>
+          <label><u><strong>Input</strong></u></label>
+          <p>
+            Minimum Value Allowed: <strong>0</strong><br> Maximum Value Allowed: <strong>10,000</strong><br>
+          </p>
+        </div>
+      </div>
+      <div class="card" *ngIf="currentField == 'suctionLineLossCoefficients'">
+        <div class="card-header">
+          Suction Line loss coefficients (Ks)
+        </div>
+        <div class="card-block small">
+          <label><u><strong>Description</strong></u></label>
+          <p>
+            The suction line loss coefficients (the sum of all suction line loss elements) are used to estimate the frictional head losses
+            between the suction reference point (e.g., suction gauge level) and the pump suction flange.
+          </p>
+          <p>
+            Note that these coefficients apply to the Darcy-Weisbach style calculation (loss – K x velocity head). These losses might
+            come from elbows, tees, suction isolation valve, etc.
+          </p>
+          <p> <b>IMPORTANT:</b> All losses must be normalized to the specific suction pipe diameter, and loss coefficient adjustments
+            are made to the 4th order of the pipe diameter ratio.</p>
+          <p>For example if there is a 12-inch isolation valve with a loss coefficient (K) of 0.4, but the suction pipe diameter
+            at the point where the pressure is measured is 16-inches (such as in a suction header) the loss coefficient for
+            the valve would be 0.4 x (<sup>16</sup>&frasl;<sub>12</sub>)<sup>4</sup> = 1.26
+          </p>
+          <label><u><strong>Input</strong></u></label>
+          <p>
+            Minimum Value Allowed: <strong>0</strong><br> Maximum Value Allowed: <strong>100,000</strong><br>
+          </p>
+        </div>
+      </div>
+      <div class="card" *ngIf="currentField == 'dischargePipeDiameter'">
+        <div class="card-header">
+          Discharge Pipe diameter (ID)
+        </div>
+        <div class="card-block small">
+          <label><u><strong>Description</strong></u></label>
+          <p>
+            Inner diameter of the discharge pipe (in inches or mm). This is used to calculate the fluid velocity in the discharge pipe,
+            which is then used to determine the discharge velocity head.
+          </p>
+          <label><u><strong>Input</strong></u></label>
+          <p>
+            Minimum Value Allowed: <strong>0</strong><br> Maximum Value Allowed: <strong>2,000</strong><br>
+          </p>
+        </div>
+      </div>
+      <div class="card" *ngIf="currentField == 'dischargeGaugePressure'">
+        <div class="card-header">
+          Discharge Gauge pressure (Pd)
+        </div>
+        <div class="card-block small">
+          <label><u><strong>Description</strong></u></label>
+          <p>
+            Discharge gauge pressure (in psig or kPa)
+          </p>
+          <label><u><strong>Input</strong></u></label>
+          <p>
+            Minimum Value Allowed: <strong>0</strong><br> Maximum Value Allowed: <strong>10,000</strong><br>
+          </p>
+        </div>
+      </div>
+      <div class="card" *ngIf="currentField == 'dischargeGaugeElevation'">
+        <div class="card-header">
+          Discharge Gauge elevation (Zd)
+        </div>
+        <div class="card-block small">
+          <label><u><strong>Description</strong></u></label>
+          <p>
+            The elevation of the discharge gauge (in feet or meters). Both the suction gauge elevation and the discharge gauge elevation
+            should be relative to a common elevation, which could be absolute (e.g., sea level) or relative (e.g., floor
+            level).
+          </p>
+          <label><u><strong>Input</strong></u></label>
+          <p>
+            Minimum Value Allowed: <strong>0</strong><br> Maximum Value Allowed: <strong>10,000</strong><br>
+          </p>
+        </div>
+      </div>
+      <div class="card" *ngIf="currentField == 'dischargeLineLossCoefficients'">
+        <div class="card-header">
+          Discharge Line loss coefficients (Kd)
+        </div>
+        <div class="card-block small">
+          <label><u><strong>Description</strong></u></label>
+          <p>
+            The discharge line loss coefficients (the sum of all discharge line loss elements) are used to estimate the pump discharge
+            flange and the discharge pressure gauge.
+          </p>
+          <p>Note that these coefficients apply to the Darcy-Weisbach style calculation (loss – K x velocity head). These losses
+            might come from elbows, tees, suction isolation valve, entrance loss from the tank to the pipe, etc.</p>
+          <p><b>IMPORTANT:</b> All losses must be normalized to the specific suction pipe diameter, and loss coefficient adjustments
+            are made to the 4th order of the pipe diameter ratio. </p>
+          <p> For example if there is a 12-inch isolation valve with a loss coefficient (K) of 0.4, but the suction pipe diameter
+            at the point where the pressure is measured is 16-inches (such as in a suction header) the loss coefficient for
+            the valve would be 0.4 x (<sup>16</sup>&frasl;<sub>12</sub>)<sup>4</sup> = 1.26
+          </p>
+          <label><u><strong>Input</strong></u></label>
+          <p>
+            Minimum Value Allowed: <strong>0</strong><br> Maximum Value Allowed: <strong>10,000</strong><br>
+          </p>
+        </div>
       </div>
     </div>
   </div>
