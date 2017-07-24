@@ -101,7 +101,7 @@
       <td></td>
       <td *ngFor="let modification of psat.modifications; let index = index;" [ngClass]="{'selected-modification': index == selectedModificationIndex}"><span *ngIf="modification.psat.inputs.optimize_calculation" class="text-muted">*Optimized</span></td>
     </tr>
-    <tr *ngIf="inRollup">
+    <tr class="hide-print" *ngIf="inRollup">
       <td>Use for Summary</td>
       <td></td>
       <td *ngFor="let modification of psat.modifications; let index = index;" [ngClass]="{'selected-modification': index == selectedModificationIndex}">

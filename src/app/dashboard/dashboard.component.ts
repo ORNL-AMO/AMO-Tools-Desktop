@@ -533,12 +533,9 @@ export class DashboardComponent implements OnInit {
                 pressureMeasurement: dataObj.settings.pressureMeasurement
               }
               this.indexedDbService.addSettings(tmpSettings).then(
-                results => {
-                  console.log('3')
-                }
+                results => { }
               )
             }
-            console.log('2')
           }
         )
       })
@@ -554,8 +551,6 @@ export class DashboardComponent implements OnInit {
     }
     this.toastyService.warning(toastOptions);
   }
-
-
 }
 
 export interface ImportDataObjects {

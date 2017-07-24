@@ -26,7 +26,7 @@ export class DetailedReportComponent implements OnInit {
     this.checkActiveAssessment();
   }
 
-  @ViewChild('printModal') public printModal: ModalDirective;
+ // @ViewChild('printModal') public printModal: ModalDirective;
 
   assessments: Array<Assessment>;
 
@@ -81,13 +81,13 @@ export class DetailedReportComponent implements OnInit {
     }, 500)
   }
 
-  showPrintModal() {
-    this.printModal.show();
-  }
+  // showPrintModal() {
+  //   this.printModal.show();
+  // }
 
-  hidePrintModal() {
-    this.printModal.hide();
-  }
+  // hidePrintModal() {
+  //   this.printModal.hide();
+  // }
 
 
   getAssessmentSettingsThenResults(assessment: Assessment) {
@@ -216,12 +216,9 @@ export class DetailedReportComponent implements OnInit {
   }
 
   print() {
-    this.hidePrintModal();
-    this.printModal.onHidden.subscribe(() => {
-      let win = this.windowRefService.nativeWindow;
-      let doc = this.windowRefService.getDoc();
-      win.print();
-    });
+    let win = this.windowRefService.nativeWindow;
+    let doc = this.windowRefService.getDoc();
+    win.print();
   }
 
   checkVisibleSummary() {
@@ -282,7 +279,7 @@ export class DetailedReportComponent implements OnInit {
 
   updateSummary(event: any) {
     if (event.type = 'PSAT') {
-      let selectedIndex = _.findIndex(this.selectedPsats, {assessment: event.assessment});
+      let selectedIndex = _.findIndex(this.selectedPsats, { assessment: event.assessment });
       this.selectedPsats.splice(selectedIndex, 1, { assessmentId: event.assessment.id, selectedModification: event.assessment.psat.modifications[event.modIndex], assessment: event.assessment })
       this.calcPsatSums();
     }
