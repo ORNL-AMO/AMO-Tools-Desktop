@@ -25,12 +25,12 @@ export class AchievableEfficiencyFormComponent implements OnInit {
     'Vertical Turbine',
     'Large End Suction',
     // When user selects below they need a way to provide the optimal efficiency
-    //NOT USED FOR GRAPH!
-    //'Specified Optimal Efficiency'
+    // NOT USED FOR GRAPH!
+    // 'Specified Optimal Efficiency'
   ];
-
   tmpPumpType: string;
   tmpFlowRate: number;
+  flowRateError: string = null;
   constructor() { }
 
   ngOnInit() {
@@ -41,16 +41,31 @@ export class AchievableEfficiencyFormComponent implements OnInit {
   }
 
   emitChange() {
-    this.efficiencyForm.patchValue({
-      pumpType: this.tmpPumpType,
-      flowRate: this.tmpFlowRate
-    })
-    this.calculate.emit(true);
+    if (this.checkFlowRate()) {
+      this.efficiencyForm.patchValue({
+        pumpType: this.tmpPumpType,
+        flowRate: this.tmpFlowRate
+      })
+      this.calculate.emit(true);
+    }
   }
 
-  test(){
-    console.log('click')
+  checkFlowRate() {
+    if (this.tmpFlowRate < 110) {
+      this.flowRateError = 'Flow rate too small';
+      return false;
+    }
+    else if (this.tmpFlowRate > 5000) {
+      this.flowRateError = 'Flow rate too large';
+      return false;
+    } else {
+      this.flowRateError = null;
+      return true;
+    }
   }
 }
+
+
+
 
 

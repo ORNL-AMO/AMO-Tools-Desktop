@@ -44,7 +44,7 @@ export class SystemCurveGraphComponent implements OnInit {
   window: any;
   fontSize: string;
 
-  isFirstChange: boolean = true
+  isFirstChange: boolean = true;
   constructor(private windowRefService: WindowRefService, private convertUnitsService: ConvertUnitsService, private psatService: PsatService) { }
 
   ngOnInit() {
@@ -359,14 +359,14 @@ export class SystemCurveGraphComponent implements OnInit {
           .style("padding-bottom", "10px")
           .style("padding-left", "10px")
           .html(
-          "<p><strong><div style='float:left;'>Flow Rate: </div><div style='float:right;'>" + format(d.x) + " " + this.settings.flowMeasurement + "</div><br>" +
+          "<p><strong><div style='float:left; position: relative; top: -10px;'>Flow Rate: </div><div style='float:right; position: relative; top: -10px;'>" + format(d.x) + " " + this.settings.flowMeasurement + "</div><br>" +
 
-          "<div style='float:left;'>Head: </div><div style='float: right;'>" + format(d.y) + " " + this.settings.distanceMeasurement + "</div><br>" +
+          "<div style='float:left; position: relative; top: -10px;'>Head: </div><div style='float: right; position: relative; top: -10px;'>" + format(d.y) + " " + this.settings.distanceMeasurement + "</div><br>" +
 
-          "<div style='float:left;'>Fluid Power: </div><div style='float: right;'>" + format(d.fluidPower) + " " + this.settings.powerMeasurement + "</div></strong></p>")
+          "<div style='float:left; position: relative; top: -10px;'>Fluid Power: </div><div style='float: right; position: relative; top: -10px;'>" + format(d.fluidPower) + " " + this.settings.powerMeasurement + "</div></strong></p>")
 
-          .style("left", (this.margin.left + x(d.x) - (detailBoxWidth / 2 - 15)) + "px")
-          .style("top", (this.margin.top + y(d.y) + 25) + "px")
+          .style("left", (this.margin.left + x(d.x) - (detailBoxWidth / 2 - 17)) + "px")
+          .style("top", (this.margin.top + y(d.y) + 83) + "px")
           .style("position", "absolute")
           .style("width", detailBoxWidth + "px")
           .style("height", detailBoxHeight + "px")
@@ -383,11 +383,6 @@ export class SystemCurveGraphComponent implements OnInit {
           .duration(600)
           .style("opacity", 0);
 
-        this.detailBox
-          .transition()
-          .delay(100)
-          .duration(600)
-          .style("opacity", 0);
 
         this.focus
           .transition()

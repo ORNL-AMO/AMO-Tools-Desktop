@@ -385,8 +385,8 @@ export class SpecificSpeedGraphComponent implements OnInit {
 
           // "<div style='float:left;'>Fluid Power: </div><div style='float: right;'>" + format(d.fluidPower) + " </div></strong></p>")
 
-          .style("left", (this.margin.left + x(d.x) - (detailBoxWidth / 2 - 15)) + "px")
-          .style("top", (this.margin.top + y(d.y) + 25) + "px")
+          .style("left", (this.margin.left + this.x(d.x) - (detailBoxWidth / 2 - 17)) + "px")
+          .style("top", (this.margin.top + this.y(d.y) + 83) + "px")
           .style("position", "absolute")
           .style("width", detailBoxWidth + "px")
           .style("height", detailBoxHeight + "px")
@@ -453,14 +453,6 @@ export class SpecificSpeedGraphComponent implements OnInit {
       .text("Efficiency Correction: " + efficiencyCorrection + ' %')
       .style("font-size", "13px")
       .style("font-weight", "bold");
-
-    this.svg.append("text")
-      .attr("x", (this.width/2)-100)
-      .attr("y", "20")
-      .text("Pump Type: " + this.speedForm.value.pumpType)
-      .style("font-size", "13px")
-      .style("font-weight", "bold")
-      .style("fill", "#000000");
 
     // this.specificSpeedText = this.svg.append("text")
     //   .attr("id", "specificSpeedValue")
