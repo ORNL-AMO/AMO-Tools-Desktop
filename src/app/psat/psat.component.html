@@ -26,50 +26,20 @@
     </nav>
 
 
-    <div class="tab-content" *ngIf="subTab == 'system-basics'">
+    <div class="tab-content">
       <div class="wrapper" *ngIf="settings">
         <div class="form">
-          <app-system-basics [settings]="settings" [saveClicked]="saveClicked" [assessment]="assessment" [(psat)]="_psat" [isAssessmentSettings]="isAssessmentSettings"
-            (updateSettings)="getSettings($event)" (updateAssessment)="save()"></app-system-basics>
-        </div>
-        <div class="help">
-          <app-help-panel [currentField]="currentField" [currentTab]="subTab"></app-help-panel>
-        </div>
-      </div>
-    </div>
-
-    <div class="tab-content" *ngIf="subTab == 'pump-fluid'">
-      <div class="wrapper">
-        <div class="form">
-          <app-pump-fluid (isValid)="setValid()" (isInvalid)="setInvalid()" [saveClicked]="saveClicked" (changeField)="changeField($event)"
+          <app-system-basics *ngIf="subTab == 'system-basics'" [settings]="settings" [saveClicked]="saveClicked" [assessment]="assessment"
+            [(psat)]="_psat" [isAssessmentSettings]="isAssessmentSettings" (updateSettings)="getSettings($event)" (updateAssessment)="save()"></app-system-basics>
+          <app-pump-fluid *ngIf="subTab == 'pump-fluid'" (isValid)="setValid()" (isInvalid)="setInvalid()" [saveClicked]="saveClicked"
             [(psat)]="_psat" (saved)="save()" [selected]="true" [settings]="settings" [baseline]="true"></app-pump-fluid>
-        </div>
-        <div class="help">
-          <app-help-panel [psat]="_psat" [settings]="settings" [currentField]="currentField" [currentTab]="subTab"></app-help-panel>
-        </div>
-      </div>
-    </div>
-
-    <div class="tab-content" *ngIf="subTab == 'motor'">
-      <div class="wrapper">
-        <div class="form">
-          <app-motor (isValid)="setValid()" (isInvalid)="setInvalid()" [saveClicked]="saveClicked" (changeField)="changeField($event)"
-            [(psat)]="_psat" (saved)="save()" [selected]="true" [settings]="settings" [baseline]="true"></app-motor>
-        </div>
-        <div class="help">
-          <app-help-panel [psat]="_psat" [settings]="settings" [currentField]="currentField" [currentTab]="subTab"></app-help-panel>
-        </div>
-      </div>
-    </div>
-
-    <div class="tab-content" *ngIf="subTab == 'field-data'">
-      <div class="wrapper">
-        <div class="form">
-          <app-field-data (isValid)="setValid()" (isInvalid)="setInvalid()" [saveClicked]="saveClicked" (changeField)="changeField($event)"
+          <app-motor *ngIf="subTab == 'motor'" (isValid)="setValid()" (isInvalid)="setInvalid()" [saveClicked]="saveClicked" [(psat)]="_psat"
+            (saved)="save()" [selected]="true" [settings]="settings" [baseline]="true"></app-motor>
+          <app-field-data *ngIf="subTab == 'field-data'" (isValid)="setValid()" (isInvalid)="setInvalid()" [saveClicked]="saveClicked"
             [(psat)]="_psat" (saved)="save()" [selected]="true" [settings]="settings" [baseline]="true"></app-field-data>
         </div>
         <div class="help">
-          <app-help-panel [psat]="_psat" [settings]="settings" [currentField]="currentField" [currentTab]="subTab"></app-help-panel>
+          <app-help-panel [psat]="_psat" [settings]="settings" [currentTab]="subTab"></app-help-panel>
         </div>
       </div>
     </div>

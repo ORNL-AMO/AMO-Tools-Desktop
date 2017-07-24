@@ -12,12 +12,12 @@
     <div class="losses-container">
       <!--<app-system-basics *ngIf="modifyTab == 'system-basics'"></app-system-basics>-->
       <app-pump-fluid *ngIf="modifyTab == 'pump-fluid'" [selected]="baselineSelected" [saveClicked]="saveClicked" [(psat)]="psat"
-        (changeField)="changeField($event)" (saved)="save()" [settings]="settings" [baseline]="true"></app-pump-fluid>
-      <app-motor *ngIf="modifyTab == 'motor'" [selected]="baselineSelected" [saveClicked]="saveClicked" [(psat)]="psat" (changeField)="changeField($event)"
-        (saved)="save()" [settings]="settings" [baseline]="true"></app-motor>
+        (saved)="save()" [settings]="settings" [baseline]="true"></app-pump-fluid>
+      <app-motor *ngIf="modifyTab == 'motor'" [selected]="baselineSelected" [saveClicked]="saveClicked" [(psat)]="psat" (saved)="save()"
+        [settings]="settings" [baseline]="true"></app-motor>
       <app-field-data *ngIf="modifyTab == 'field-data'" [selected]="baselineSelected" [saveClicked]="saveClicked" [(psat)]="psat"
-        (changeField)="changeField($event)" (saved)="save()" [settings]="settings"(saved)="save()" [settings]="settings" (openHeadTool)="modalOpen()"
-        (closeHeadTool)="modalClose()" [baseline]="true"></app-field-data>
+        (saved)="save()" [settings]="settings" (saved)="save()" [settings]="settings" (openHeadTool)="modalOpen()" (closeHeadTool)="modalClose()"
+        [baseline]="true"></app-field-data>
     </div>
   </div>
 
@@ -45,12 +45,11 @@
 
       <!--<app-system-basics *ngIf="modifyTab == 'system-basics'"></app-system-basics>-->
       <app-pump-fluid *ngIf="modifyTab == 'pump-fluid'" [selected]="modifiedSelected" [saveClicked]="saveClicked" [(psat)]="_modifications[modificationIndex].psat"
-        (changeField)="changeField($event)" (saved)="save()" [settings]="settings"></app-pump-fluid>
+        (saved)="save()" [settings]="settings"></app-pump-fluid>
       <app-motor *ngIf="modifyTab == 'motor'" [selected]="modifiedSelected" [saveClicked]="saveClicked" [(psat)]="_modifications[modificationIndex].psat"
-        (changeField)="changeField($event)" (saved)="save()" [settings]="settings"></app-motor>
+        (saved)="save()" [settings]="settings"></app-motor>
       <app-field-data *ngIf="modifyTab == 'field-data'" [saveClicked]="saveClicked" [(psat)]="_modifications[modificationIndex].psat"
-        (changeField)="changeField($event)" [selected]="modifiedSelected" (saved)="save()" [settings]="settings" (openHeadTool)="modalOpen()"
-        (closeHeadTool)="modalClose()"></app-field-data>
+        [selected]="modifiedSelected" (saved)="save()" [settings]="settings" (openHeadTool)="modalOpen()" (closeHeadTool)="modalClose()"></app-field-data>
 
     </div>
 
@@ -87,7 +86,7 @@
   </div>
 
   <!-- Help Panel -->
-  <app-help-panel [psat]="psat" [currentTab]="modifyTab" [settings]="settings" [currentField]="currentField"></app-help-panel>
+  <app-help-panel [psat]="psat" [currentTab]="modifyTab" [settings]="settings"></app-help-panel>
 
 </div>
 

@@ -4,7 +4,7 @@ import { PSAT } from '../../shared/models/psat';
 import { Settings } from '../../shared/models/settings';
 import { CompareService } from '../compare.service';
 import { WindowRefService } from '../../indexedDb/window-ref.service';
-
+import { HelpPanelService } from '../help-panel/help-panel.service';
 @Component({
   selector: 'app-motor',
   templateUrl: './motor.component.html',
@@ -13,8 +13,8 @@ import { WindowRefService } from '../../indexedDb/window-ref.service';
 export class MotorComponent implements OnInit {
   @Input()
   psat: PSAT;
-  @Output('changeField')
-  changeField = new EventEmitter<string>();
+  // @Output('changeField')
+  // changeField = new EventEmitter<string>();
   @Input()
   saveClicked: boolean;
   @Output('isValid')
@@ -59,7 +59,7 @@ export class MotorComponent implements OnInit {
 
   efficiencyError: string = null;
   marginError: string = null;
-  constructor(private psatService: PsatService, private compareService: CompareService, private windowRefService: WindowRefService) { }
+  constructor(private psatService: PsatService, private compareService: CompareService, private windowRefService: WindowRefService, private helpPanelService: HelpPanelService) { }
 
   ngOnInit() {
     this.psatForm = this.psatService.getFormFromPsat(this.psat.inputs);
@@ -72,6 +72,7 @@ export class MotorComponent implements OnInit {
     if (this.selected) {
       this.formRef.nativeElement.frequency.focus();
     }
+    this.helpPanelService.currentField.next('lineFrequency');
   }
 
   ngAfterViewInit() {
@@ -177,7 +178,7 @@ export class MotorComponent implements OnInit {
   }
 
   focusField(str: string) {
-    this.changeField.emit(str);
+    this.helpPanelService.currentField.next(str);
   }
 
   checkForm(form: any) {

@@ -9,8 +9,8 @@ import { Settings } from '../../shared/models/settings';
 export class HelpPanelComponent implements OnInit {
   @Input()
   currentTab:number;
-  @Input()
-  currentField: string;
+  // @Input()
+  // currentField: string;
   @Input()
   settings: Settings;
   @Input()
