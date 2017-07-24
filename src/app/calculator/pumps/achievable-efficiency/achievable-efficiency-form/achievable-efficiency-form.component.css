@@ -3,3 +3,6 @@
     padding: 5%;
  }
 
+.invalid{
+    border-color: red;
+}

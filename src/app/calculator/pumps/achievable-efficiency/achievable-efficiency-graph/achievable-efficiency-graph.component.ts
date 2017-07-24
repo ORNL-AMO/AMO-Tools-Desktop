@@ -475,8 +475,8 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
 
           // "<div style='float:left;'>Fluid Power: </div><div style='float: right;'>" + format(d.fluidPower) + " </div></strong></p>")
 
-          .style("left", (this.margin.left + this.x(avgD.x) - (detailBoxWidth / 2 - 15)) + "px")
-          .style("top", (this.margin.top + this.y(avgD.y) + 25) + "px")
+          .style("left", (this.margin.left + this.x(avgD.x) - (detailBoxWidth / 2 - 17)) + "px")
+          .style("top", (this.margin.top + this.y(avgD.y) + 83) + "px")
           .style("position", "absolute")
           .style("width", detailBoxWidth + "px")
           .style("height", detailBoxHeight + "px")
