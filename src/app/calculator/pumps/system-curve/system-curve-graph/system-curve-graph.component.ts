@@ -381,14 +381,19 @@ export class SystemCurveGraphComponent implements OnInit {
           .transition()
           .delay(100)
           .duration(600)
-          .style("opacity", 0);
+          .style("opacity",0);
 
+        this.detailBox
+          .transition()
+          .delay(100)
+          .duration(600)
+          .style("opacity",0);
 
         this.focus
           .transition()
           .delay(100)
           .duration(600)
-          .style("opacity", 0);
+          .style("opacity",0);
       });
 
     this.xAxis.remove();

@@ -35,6 +35,10 @@ export class O2EnrichmentGraphComponent implements OnInit {
   focus: any;
   point: any;
 
+  plotBtn: any;
+  change: any;
+  lines: any;
+
   isFirstChange: boolean = true;
   fontSize: string;
 
@@ -111,7 +115,18 @@ export class O2EnrichmentGraphComponent implements OnInit {
   setUp() {
     this.initGraph();
     //We can draw the guideCurve now since pump type has no effect on what kind of shape it has.
-    this.drawCurve(this.svg, this.x, this.y);
+    var lines = {
+      o2CombAir: this.o2Enrichment.o2CombAir,
+      o2CombAirEnriched: this.o2Enrichment.o2CombAirEnriched,
+      flueGasTemp: this.o2Enrichment.flueGasTemp,
+      flueGasTempEnriched: this.o2Enrichment.flueGasTempEnriched,
+      o2FlueGas: this.o2Enrichment.o2FlueGas,
+      o2FlueGasEnriched: this.o2Enrichment.o2FlueGasEnriched,
+      combAirTemp: this.o2Enrichment.combAirTemp,
+      combAirTempEnriched: this.o2Enrichment.combAirTempEnriched,
+      fuelConsumption: this.o2Enrichment.fuelConsumption,
+      color: "#2ECC71"};
+    this.drawCurve(this.svg, this.x, this.y, lines, true);
   }
 
   initGraph(){
@@ -268,16 +283,23 @@ export class O2EnrichmentGraphComponent implements OnInit {
       .attr("dy", ".35em");
 
     this.svg.style("display", null);
+
+    this.plotBtn = d3.select('app-o2-enrichment-form').selectAll(".btn-success")
+      .on("click", ()=>{
+        this.plotLine();
+      });
+
+    this.change = true;
+    this.lines = [];
   }
 
-  drawCurve(svg, x, y) {
-
-    svg.selectAll("path").remove();
+  drawCurve(svg, x, y, information, isFromForm) {
 
     var onGraph = false;
 
     var data = [];
-    console.log(this.o2Enrichment);
+
+    var first = false;
 
     for (var i = 0; i <= 100; i += .5) {
 
@@ -285,15 +307,25 @@ export class O2EnrichmentGraphComponent implements OnInit {
         o2CombAir: this.o2Enrichment.o2CombAir,
         o2CombAirEnriched: i,
         flueGasTemp: this.o2Enrichment.flueGasTemp,
-        flueGasTempEnriched: this.o2Enrichment.flueGasTempEnriched,
+        flueGasTempEnriched: information.flueGasTempEnriched,
         o2FlueGas: this.o2Enrichment.o2FlueGas,
-        o2FlueGasEnriched: this.o2Enrichment.o2FlueGasEnriched,
+        o2FlueGasEnriched: information.o2FlueGasEnriched,
         combAirTemp: this.o2Enrichment.combAirTemp,
-        combAirTempEnriched: this.o2Enrichment.combAirTempEnriched,
+        combAirTempEnriched: information.combAirTempEnriched,
         fuelConsumption: this.o2Enrichment.fuelConsumption
       };
       var fuelSavings = this.PhastService.o2Enrichment(this.o2EnrichmentPoint).fuelSavingsEnriched;
+
       if (fuelSavings > 0 && fuelSavings < 100) {
+
+        if(!first){
+          data.push({
+            x: i-.001,
+            y: 0
+          });
+          first = true;
+        }
+
         onGraph = true;
         data.push({
           x: i,
@@ -301,7 +333,6 @@ export class O2EnrichmentGraphComponent implements OnInit {
         });
       }
     }
-
 
     //reload the graph and return if no points are on the graph
     if(!onGraph){
@@ -321,15 +352,46 @@ export class O2EnrichmentGraphComponent implements OnInit {
       })
       .curve(d3.curveNatural);
 
-    svg.append("path")
-      .data([data])
-      .attr("class", "line")
-      .attr("d", guideLine)
-      .style("stroke-width", 10)
-      .style("stroke-width", "2px")
-      .style("fill", "none")
-      .style("stroke", "#2ECC71")
-      .style('pointer-events', 'none');
+    if(isFromForm) {
+      svg.append("path")
+        .attr("id", "formLine")
+        .data([data])
+        .attr("class", "line")
+        .attr("d", guideLine)
+        .style("stroke-width", 10)
+        .style("stroke-width", "2px")
+        .style("fill", "none")
+        .style("stroke", information.color)
+        .style('pointer-events', 'none')
+        .on("click", ()=>{
+          console.log("here");
+          this.hoverCommands(x, y, data);
+        });
+    }
+    else{
+      svg.append("path")
+        .data([data])
+        .attr("class", "line plottedLine")
+        .attr("d", guideLine)
+        .style("stroke-width", 10)
+        .style("stroke-width", "2px")
+        .style("fill", "none")
+        .style("stroke", information.color)
+        .style('pointer-events', 'none')
+        .on("click", ()=>{
+          console.log("here");
+          this.hoverCommands(x, y, data);
+        });
+    }
+
+    this.hoverCommands(x, y, data);
+
+    this.drawPoint(x, y, information, isFromForm);
+
+    this.svg.style("display", null);
+  }
+
+  hoverCommands(x, y, data){
 
     var format = d3.format(",.2f");
     var bisectDate = d3.bisector(function (d) { return d.x; }).left;
@@ -428,36 +490,107 @@ export class O2EnrichmentGraphComponent implements OnInit {
           .duration(600)
           .style("opacity",0);
       });
-
-    this.drawPoint(x, y);
-
-    this.svg.style("display", null);
   }
 
-  drawPoint(x, y) {
+  drawPoint(x, y, information, isFromForm) {
 
-    this.point = this.svg.append("g")
-      .attr("class", "focus")
-      .style("display", "none")
-      .style('pointer-events', 'none');
+    if(isFromForm) {
+      this.svg.selectAll("#formPoint").remove();
+      this.point = this.svg.append("g")
+        .attr("id", "formPoint")
+        .attr("class", "focus")
+        .style("display", "none")
+        .style('pointer-events', 'none');
+    }
+    else{
+      this.point = this.svg.append("g")
+        .attr("class", "focus plottedPoint")
+        .style("display", "none")
+        .style('pointer-events', 'none');
+    }
 
     this.point.append("circle")
-      .attr("r", 8)
-      .style("fill", "#ff0315");
+      .attr("r", 7)
+      .style("fill", "none")
+      .style("stroke", "#000000")
+      .style("stroke-width", "3px");
 
     this.point.append("text")
       .attr("x", 9)
       .attr("dy", ".35em");
 
+    var fuelSavings = this.PhastService.o2Enrichment(information).fuelSavingsEnriched;
+
     this.point
       .style("display", null)
       .style("opacity",1)
       .style('pointer-events', 'none')
-      .attr("transform", "translate(" + x(this.o2Enrichment.o2CombAirEnriched) + "," + y(this.o2EnrichmentOutput.fuelSavingsEnriched) + ")");
+      .attr("transform", "translate(" + x(information.o2CombAirEnriched) + "," + y(fuelSavings) + ")");
   }
 
   onChanges() {
-    this.drawCurve(this.svg, this.x, this.y);
+
+    var line = {
+        o2CombAir: this.o2Enrichment.o2CombAir,
+        o2CombAirEnriched: this.o2Enrichment.o2CombAirEnriched,
+        flueGasTemp: this.o2Enrichment.flueGasTemp,
+        flueGasTempEnriched: this.o2Enrichment.flueGasTempEnriched,
+        o2FlueGas: this.o2Enrichment.o2FlueGas,
+        o2FlueGasEnriched: this.o2Enrichment.o2FlueGasEnriched,
+        combAirTemp: this.o2Enrichment.combAirTemp,
+        combAirTempEnriched: this.o2Enrichment.combAirTempEnriched,
+        fuelConsumption: this.o2Enrichment.fuelConsumption,
+        color: "#2ECC71"};
+
+    this.svg.selectAll("#formLine").remove();
+    this.drawCurve(this.svg, this.x, this.y, line, true);
+
+    this.plotBtn.classed("disabled", false);
+    this.change = true;
+
+    this.svg.selectAll(".plottedLine").remove();
+    this.svg.selectAll(".plottedPoint").remove();
+
+    console.log(this.lines.length);
+    for(var i = 0; i < this.lines.length; i++){
+      this.drawCurve(this.svg, this.x, this.y, this.lines[i], false);
+    }
+
+  }
+
+
+  plotLine(){
+    if(this.change) {
+      var color = this.getRandomColor();
+
+      var line = {
+        o2CombAir: this.o2Enrichment.o2CombAir,
+        o2CombAirEnriched: this.o2Enrichment.o2CombAirEnriched,
+        flueGasTemp: this.o2Enrichment.flueGasTemp,
+        flueGasTempEnriched: this.o2Enrichment.flueGasTempEnriched,
+        o2FlueGas: this.o2Enrichment.o2FlueGas,
+        o2FlueGasEnriched: this.o2Enrichment.o2FlueGasEnriched,
+        combAirTemp: this.o2Enrichment.combAirTemp,
+        combAirTempEnriched: this.o2Enrichment.combAirTempEnriched,
+        fuelConsumption: this.o2Enrichment.fuelConsumption,
+        color: color};
+
+      this.drawCurve(this.svg, this.x, this.y, line, false);
+
+      this.lines.push(line);
+
+      this.plotBtn.classed("disabled", true);
+      this.change = false;
+    }
+  }
+
+  getRandomColor() {
+    var letters = '0123456789ABCDEF';
+    var color = '#';
+    for (var i = 0; i < 6; i++) {
+      color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
   }
 
 
