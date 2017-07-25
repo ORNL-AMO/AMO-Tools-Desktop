@@ -53,19 +53,31 @@
             <div class="modal-header">
                 <h3>Delete Data</h3>
                 <button class="close" aria-label="Close" (click)="hideDeleteModal()">
-          <span aria-hidden="true">&times;</span>
+          <span *ngIf="!deleting" aria-hidden="true">&times;</span>
         </button>
             </div>
             <div class="modal-body">
-                <div class="row">
+                <div *ngIf="!deleting" class="row">
                     <div class="col-12">
                         All of your data will be deleted and your database will be reset to the initial state.
                     </div>
                 </div>
-                <div class="row">
+                <div *ngIf="!deleting" class="row">
                     <div class="col-12">
                         <button class="btn btn-secondary pull-left" (click)="hideDeleteModal()">Cancel</button>
                         <button class="btn btn-danger pull-right" (click)="deleteData()">Delete All Data</button>
+                    </div>
+                </div>
+                <div class="row justify-content-center" *ngIf="deleting">
+                    <div class="col-10">
+                        <div class="main-content" style="text-align: center;">
+                            <div class="spinner">
+                                <div class="bounce1"></div>
+                                <div class="bounce2"></div>
+                                <div class="bounce3"></div>
+                            </div>
+                            <h1>Resetting Data...</h1>
+                        </div>
                     </div>
                 </div>
             </div>

@@ -1,0 +1,17 @@
+.total-sum{
+    font-size: .75rem !important;
+}
+
+.total-sum-row{
+    padding-top: 10px;
+}
+
+@media print {
+    .text-color{
+        color: black !important;
+    }
+}
+
+.text-color{
+  color: white;
+}

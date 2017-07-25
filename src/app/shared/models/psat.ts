@@ -16,7 +16,7 @@ export interface PsatInputs {
   drive?: number,
   kinematic_viscosity?: number,
   specific_gravity?: number,
-  stages?:number,
+  stages?: number,
   fixed_speed?: number,
   line_frequency?: number,
   motor_rated_power?: number,
@@ -35,38 +35,29 @@ export interface PsatInputs {
   motor_field_voltage?: number,
   cost_kw_hour?: number
   cost?: number,
-  load_factor?: number
+  load_factor?: number,
+  optimize_calculation?: string
 }
 
 export interface PsatOutputs {
-  existing: {
-    pump_efficiency?: number,
-    motor_rated_power?: number,
-    motor_shaft_power?: number,
-    pump_shaft_power?: number,
-    motor_efficiency?: number,
-    motor_power_factor?: number,
-    motor_current?: number,
-    motor_power?: number,
-    annual_energy?: number,
-    annual_cost?: number,
-    annual_savings_potential?: number,
-    optimization_rating?: number
-  },
-  optimal: {
-    pump_efficiency?: number,
-    motor_rated_power?: number,
-    motor_shaft_power?: number,
-    pump_shaft_power?: number,
-    motor_efficiency?: number,
-    motor_power_factor?: number,
-    motor_current?: number,
-    motor_power?: number,
-    annual_energy?: number,
-    annual_cost?: number,
-    annual_savings_potential?: number,
-    optimization_rating?: number
-  }
+  pump_efficiency?: number,
+  motor_rated_power?: number,
+  motor_shaft_power?: number,
+  pump_shaft_power?: number,
+  motor_efficiency?: number,
+  motor_power_factor?: number,
+  motor_current?: number,
+  motor_power?: number,
+  annual_energy?: number,
+  annual_cost?: number,
+  annual_savings_potential?: number,
+  optimization_rating?: number,
+  percent_annual_savings?: number
+}
+
+export interface PsatOutputsExistingOptimal {
+  existing: PsatOutputs,
+  optimal: PsatOutputs
 }
 
 export interface PsatCalcResults {

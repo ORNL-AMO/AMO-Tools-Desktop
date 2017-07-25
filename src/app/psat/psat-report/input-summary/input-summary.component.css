@@ -4,7 +4,15 @@
         border-bottom: 2px solid black;
     }
 }
-
 .section-header{
     font-size: 16px !important;
 }
+
+/*th{
+    text-align: center;
+}
+
+td{
+    text-align: center;
+    vertical-align: middle;
+}*/

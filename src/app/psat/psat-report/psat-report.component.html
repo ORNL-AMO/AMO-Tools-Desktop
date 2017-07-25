@@ -1,4 +1,4 @@
-<div class="assessment-report" *ngIf="psat.outputs && settings" [ngClass]="{'assessment-report-padding': inPsat}">
+<div class="assessment-report" *ngIf="psat && settings" [ngClass]="{'assessment-report-padding': inPsat}">
 
   <div class="report-header">
     <div class="row">
@@ -24,14 +24,14 @@
   <!-- End .report-header -->
 
   <div class="report-data" *ngIf="psat.setupDone">
-    <div class="charts" [ngClass]="{'mod-page-break': numMods > 3}">
+    <!--<div class="charts" [ngClass]="{'mod-page-break': numMods > 3}">
       <app-chart-summary [psat]="psat"></app-chart-summary>
-    </div>
+    </div>-->
     <div class="results">
       <h3>Assessment Result Data</h3>
-      <app-output-summary [psat]="psat" [settings]="settings"></app-output-summary>
+      <app-output-summary [psat]="psat" [settings]="settings" [inRollup]="inRollup" [assessment]="assessment" (selectModification)="useModification($event)"></app-output-summary>
     </div>
-    <div class="input-data">
+    <div class="input-data results">
       <h3>Assessment Input Data</h3>
       <app-input-summary [psat]="psat" [settings]="settings"></app-input-summary>
     </div>

@@ -25,7 +25,7 @@ export class JsonToCsvService {
   }
 
   downloadData(dataArr: any, name: string) {
-    let convert2Csv = json2csv({ data: dataArr, fields: PsatCsvDataFields});
+    let convert2Csv = json2csv({ data: dataArr, fields: PsatCsvDataFields });
     convert2Csv = 'data:text/csv;charset=utf-8,' + convert2Csv;
     let doc = this.windowRefService.getDoc();
     let encodedUri = encodeURI(convert2Csv);
@@ -36,7 +36,15 @@ export class JsonToCsvService {
   }
 
   getPsatCsvData(assessment: Assessment, settings: Settings, psat: PSAT) {
-    let tmpResults = this.psatService.results(psat.inputs, settings);
+    let tmpResults;
+    let isOptimized;
+    if (psat.inputs.optimize_calculation) {
+      isOptimized = 'Yes';
+      tmpResults = this.psatService.resultsOptimal(psat.inputs, settings);
+    } else {
+      isOptimized = 'No';
+      tmpResults = this.psatService.resultsExisting(psat.inputs, settings);
+    }
     let tmpPsatCsvData: PsatCsvData = {
       Name: assessment.name,
       CreatedDate: moment(assessment.createdDate).format("YYYY-MM-DD H:mm A"),
@@ -80,50 +88,25 @@ export class JsonToCsvService {
       CostKwHour: psat.inputs.cost_kw_hour,
       CostKwHourUnit: '$/kwh',
       LoadFactor: 1,
-      ExistingPumpEfficiency: tmpResults.existing.pump_efficiency,
-      ExistingPumpEfficiencyUnit: '%',
-      ExistingMotorRatedPower: tmpResults.existing.motor_rated_power,
-      ExistingMotorRatedPowerUnit: settings.powerMeasurement,
-      ExistingMotorShaftPower: tmpResults.existing.motor_shaft_power,
-      ExistingMotorShaftPowerUnit: settings.powerMeasurement,
-      ExistingPumpShaftPower: tmpResults.existing.pump_shaft_power,
-      ExistingPumpShaftPowerUnit: settings.powerMeasurement,
-      ExistingMotorEfficiency: tmpResults.existing.motor_efficiency,
-      ExistingMotorEfficiencyUnit: '%',
-      ExistingMotorPowerFactor: tmpResults.existing.motor_power_factor,
-      ExistingMotorPowerFactorUnit: '%',
-      ExistingMotorCurrent: tmpResults.existing.motor_current,
-      ExistingMotorCurrentUnit: 'amps',
-      ExistingMotorPower: tmpResults.existing.motor_power,
-      ExistingMotorPowerUnit: settings.powerMeasurement,
-      ExistingAnnualEnergy: tmpResults.existing.annual_energy,
-      ExistingAnnualEnergyUnit: 'MWh',
-      ExistingAnnualCost: tmpResults.existing.annual_cost,
-      ExistingAnnualCostUnit: '$',
-      ExistingAnnualSavingPotential: tmpResults.existing.annual_savings_potential,
-      ExistingAnnualSavingPotentialUnit: '$/kwh',
-      ExistingOptimizationRating: tmpResults.existing.optimization_rating,
-      ExistingOptimizationRatingUnit: '%',
-      OptimalPumpEfficiency: tmpResults.optimal.pump_efficiency,
-      OptimalPumpEfficiencyUnit: '%',
-      OptimalMotorRatedPower: tmpResults.optimal.motor_rated_power,
-      OptimalMotorRatedPowerUnit: settings.powerMeasurement,
-      OptimalMotorShaftPower: tmpResults.optimal.motor_shaft_power,
-      OptimalMotorShaftPowerUnit: settings.powerMeasurement,
-      OptimalPumpShaftPower: tmpResults.optimal.pump_shaft_power,
-      OptimalPumpShaftPowerUnit: settings.powerMeasurement,
-      OptimalMotorEfficiency: tmpResults.optimal.motor_efficiency,
-      OptimalMotorEfficiencyUnit: '%',
-      OptimalMotorPowerFactor: tmpResults.optimal.motor_power_factor,
-      OptimalMotorPowerFactorUnit: '%',
-      OptimalMotorCurrent: tmpResults.optimal.motor_current,
-      OptimalMotorCurrentUnit: 'amps',
-      OptimalMotorPower: tmpResults.optimal.motor_power,
-      OptimalMotorPowerUnit: settings.powerMeasurement,
-      OptimalAnnualEnergy: tmpResults.optimal.annual_energy,
-      OptimalAnnualEnergyUnit: 'MWh',
-      OptimalAnnualCost: tmpResults.optimal.annual_cost,
-      OptimalAnnualCostUnit: '$'
+      PumpEfficiency: tmpResults.pump_efficiency,
+      PumpEfficiencyUnit: '%',
+      MotorShaftPower: tmpResults.motor_shaft_power,
+      MotorShaftPowerUnit: settings.powerMeasurement,
+      PumpShaftPower: tmpResults.pump_shaft_power,
+      PumpShaftPowerUnit: settings.powerMeasurement,
+      MotorEfficiency: tmpResults.motor_efficiency,
+      MotorEfficiencyUnit: '%',
+      MotorPowerFactor: tmpResults.motor_power_factor,
+      MotorPowerFactorUnit: '%',
+      MotorCurrent: tmpResults.motor_current,
+      MotorCurrentUnit: 'amps',
+      MotorPower: tmpResults.motor_power,
+      MotorPowerUnit: settings.powerMeasurement,
+      AnnualEnergy: tmpResults.annual_energy,
+      AnnualEnergyUnit: 'MWh',
+      AnnualCost: tmpResults.annual_cost,
+      AnnualCostUnit: '$',
+      Optimized: isOptimized
     }
     return tmpPsatCsvData;
   }
@@ -173,50 +156,25 @@ export interface PsatCsvData {
   CostKwHour: number,
   CostKwHourUnit: string,
   LoadFactor: number,
-  ExistingPumpEfficiency: number,
-  ExistingPumpEfficiencyUnit: string,
-  ExistingMotorRatedPower: number,
-  ExistingMotorRatedPowerUnit: string,
-  ExistingMotorShaftPower: number,
-  ExistingMotorShaftPowerUnit: string,
-  ExistingPumpShaftPower: number,
-  ExistingPumpShaftPowerUnit: string,
-  ExistingMotorEfficiency: number,
-  ExistingMotorEfficiencyUnit: string,
-  ExistingMotorPowerFactor: number,
-  ExistingMotorPowerFactorUnit: string
-  ExistingMotorCurrent: number,
-  ExistingMotorCurrentUnit: string,
-  ExistingMotorPower: number,
-  ExistingMotorPowerUnit: string
-  ExistingAnnualEnergy: number,
-  ExistingAnnualEnergyUnit: string
-  ExistingAnnualCost: number,
-  ExistingAnnualCostUnit: string,
-  ExistingAnnualSavingPotential: number,
-  ExistingAnnualSavingPotentialUnit: string,
-  ExistingOptimizationRating: number,
-  ExistingOptimizationRatingUnit: string,
-  OptimalPumpEfficiency: number,
-  OptimalPumpEfficiencyUnit: string,
-  OptimalMotorRatedPower: number,
-  OptimalMotorRatedPowerUnit: string
-  OptimalMotorShaftPower: number,
-  OptimalMotorShaftPowerUnit: string
-  OptimalPumpShaftPower: number,
-  OptimalPumpShaftPowerUnit: string
-  OptimalMotorEfficiency: number,
-  OptimalMotorEfficiencyUnit: string,
-  OptimalMotorPowerFactor: number,
-  OptimalMotorPowerFactorUnit: string
-  OptimalMotorCurrent: number,
-  OptimalMotorCurrentUnit: string
-  OptimalMotorPower: number,
-  OptimalMotorPowerUnit: string
-  OptimalAnnualEnergy: number,
-  OptimalAnnualEnergyUnit: string
-  OptimalAnnualCost: number,
-  OptimalAnnualCostUnit: string
+  PumpEfficiency: number,
+  PumpEfficiencyUnit: string,
+  MotorShaftPower: number,
+  MotorShaftPowerUnit: string,
+  PumpShaftPower: number,
+  PumpShaftPowerUnit: string,
+  MotorEfficiency: number,
+  MotorEfficiencyUnit: string,
+  MotorPowerFactor: number,
+  MotorPowerFactorUnit: string
+  MotorCurrent: number,
+  MotorCurrentUnit: string,
+  MotorPower: number,
+  MotorPowerUnit: string
+  AnnualEnergy: number,
+  AnnualEnergyUnit: string
+  AnnualCost: number,
+  AnnualCostUnit: string,
+  Optimized:string
 }
 
 export const PsatCsvDataFields = [
@@ -262,34 +220,18 @@ export const PsatCsvDataFields = [
   "CostKwHour",
   "CostKwHourUnit",
   "LoadFactor",
-  "ExistingPumpEfficiency",
-  "ExistingPumpEfficiencyUnit",
-  "ExistingMotorRatedPower",
-  "ExistingMotorShaftPower",
-  "ExistingPumpShaftPower",
-  "ExistingMotorEfficiency",
-  "ExistingMotorEfficiencyUnit",
-  "ExistingMotorPowerFactor",
-  "ExistingMotorCurrent",
-  "ExistingMotorPower",
-  "ExistingAnnualEnergy",
-  "ExistingAnnualCost",
-  "ExistingAnnualCostUnit",
-  "ExistingAnnualSavingPotential",
-  "ExistingAnnualSavingPotentialUnit",
-  "ExistingOptimizationRating",
-  "ExistingOptimizationRatingUnit",
-  "OptimalPumpEfficiency",
-  "OptimalPumpEfficiencyUnit",
-  "OptimalMotorRatedPower",
-  "OptimalMotorShaftPower",
-  "OptimalPumpShaftPower",
-  "OptimalMotorEfficiency",
-  "OptimalMotorEfficiencyUnit",
-  "OptimalMotorPowerFactor",
-  "OptimalMotorCurrent",
-  "OptimalMotorPower",
-  "OptimalAnnualEnergy",
-  "OptimalAnnualCost",
-  "OptimalAnnualCostUnit"
+  "PumpEfficiency",
+  "PumpEfficiencyUnit",
+  "MotorRatedPower",
+  "MotorShaftPower",
+  "PumpShaftPower",
+  "MotorEfficiency",
+  "MotorEfficiencyUnit",
+  "MotorPowerFactor",
+  "MotorCurrent",
+  "MotorPower",
+  "AnnualEnergy",
+  "AnnualCost",
+  "AnnualCostUnit",
+  "Optimized"
 ]

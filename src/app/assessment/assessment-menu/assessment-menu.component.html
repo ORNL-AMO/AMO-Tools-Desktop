@@ -20,14 +20,13 @@
 
 <div class="row main-menu">
   <div class="col-12">
-    <!--<app-assessment-create [(directory)]="directory" class="create-container"></app-assessment-create>-->
     <button (click)="showCreateAssessment()" type="button" class="btn btn-secondary create-btn">Create Assessment</button>
     <app-create-folder [(directory)]="directory" (newDirectory)="emitNewDir()" class="create-container"></app-create-folder>
-    <button type="button" class="btn btn-secondary" (click)="emitGenReport()">Generate Report</button>
-    <button type="button" (click)="signalDeleteItems()" class="btn btn-secondary">Delete...</button>
-    
-    <button type="button" class="btn btn-secondary space-left" (click)="emitImport()">Import...</button>
-    <button type="button" class="btn btn-secondary" (click)="emitExport()">Export...</button>
+    <button [disabled]="!checkSelected()" type="button" class="btn btn-secondary" (click)="emitGenReport()">Generate Report</button>
+    <button [disabled]="!checkSelected()" type="button" (click)="signalDeleteItems()" class="btn btn-secondary">Delete...</button>
+
+    <button [disabled]="!checkSelected()" type="button" class="btn btn-secondary space-left" (click)="emitImport()">Import...</button>
+    <button [disabled]="!checkSelected()" type="button" class="btn btn-secondary" (click)="emitExport()">Export...</button>
   </div>
   <!-- <div class="col-2">
     <div class="btn-group pull-right" role="group">

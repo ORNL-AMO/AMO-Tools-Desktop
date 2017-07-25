@@ -281,7 +281,7 @@ select.form-control:not([size]):not([multiple]) {
 }
 
 .indicate-report-field-different{
-    background: #F6DDCC !important;
+    color: #EF6C00 !important;
     font-weight: bold !important;
 }
 
@@ -1233,7 +1233,7 @@ Tabs
 
 .tab-content {
   overflow-y: scroll;
-  max-height: 78vh;
+  /*max-height: 78vh;*/
 }
   .tab-content .wrapper {
       max-width: 1024px;
@@ -1491,11 +1491,21 @@ Help Panel Cards
 }
 
 
-
-
 /*
 Reporting
 ========================================== */
+.report-container {
+  background: #ececec;
+}
+.assessment-report {
+  background: #fff;
+  border: solid #2980b9;
+  -webkit-box-shadow: 0px 1px 5px 0px rgba(0,0,0,0.75);
+  -moz-box-shadow: 0px 1px 5px 0px rgba(0,0,0,0.75);
+  box-shadow: 0px 1px 5px 0px rgba(0,0,0,0.75);
+  margin-top: 15px;
+  margin-bottom: 100px;
+}
 .assessment-report h3 {
   font-size: 18px;
   color: #0e0e0e;
@@ -1565,7 +1575,6 @@ Reporting
     line-height: 0.5;
     font-size: 1.15rem;
     text-align: center;
-    margin-bottom: 1.5rem;
   }
   .rollups h3 span {
     display: inline-block;
@@ -1591,11 +1600,14 @@ Reporting
 
 
     .rollups .pumps {
-      width: 50%;
       text-align: center;
+      border: dashed;
+      padding: 5px;
+      padding-top: 15px;
     }
       .rollups .pumps h3:nth-child(2), .rollups .pumps h4 {
-        margin-bottom: 8px;
+        margin-bottom: 5px;
+        padding-top: 10px
       }
       .rollups .pumps h3:nth-child(2) {
         font-size: 1rem;
@@ -1640,12 +1652,14 @@ Reporting
 .report-data .table tbody tr:nth-child(even){
   background: #f3f3f3;
 }
-.report-data .table tbody tr td {
+.report-data .table tbody tr td, .report-data .table tbody tr th {
   border-color: transparent;
   border-width: 1px 0;
   border-style: solid;
+  vertical-align: middle;
+  text-align: center;
 }
-.report-data .table tbody tr:hover td {
+.report-data .table tbody tr:hover td, .report-data .table tbody tr:hover th {
   border-color: #333;
 
 }
@@ -1662,9 +1676,19 @@ Reporting
   .chart-container .value {
     font-weight: bold;
     font-size: 28px;
-    margin-top: 62.5px;
-    margin-left: 73px;
   }
+
+
+.percent-savings{
+    font-size: medium !important;
+    font-weight: bold;
+}
+
+@media print{
+  .percent-savings{
+    font-size: 13px !important;
+  }
+}
 
 
 @media (min-width: 576px) {
@@ -1789,11 +1813,33 @@ Toasty Overrides ================================= */
   height:100%;
 }
 
+.psat-name{
+    font-size: large !important;
+    vertical-align: middle !important;
+    text-align: center !important;
+}
+
+@media print{
+  .psat-name{
+    font-size: 13px !important;
+  }
+}
+
+.disabled-link {
+    color: gray !important;
+    pointer-events: none;
+}
+
+
+.disabled-link :hover {
+    text-decoration: none;
+}
+
 
 @media screen and (min-width: 768px) {
-  .rollups .pumps {
+  /*.rollups .pumps {
     width: 25%;
-  }
+  }*/
 }
 
 

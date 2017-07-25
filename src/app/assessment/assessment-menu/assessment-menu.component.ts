@@ -11,8 +11,6 @@ import { ImportExportService } from '../../shared/import-export/import-export.se
 })
 export class AssessmentMenuComponent implements OnInit {
   @Input()
-  allDirectories: Directory;
-  @Input()
   directory: Directory;
   @Input()
   view: string;
@@ -109,5 +107,33 @@ export class AssessmentMenuComponent implements OnInit {
 
   emitImport() {
     this.importEmit.emit(true);
+  }
+
+  checkSelected() {
+    let tmpArray = new Array();
+    let tmpArray2 = new Array();
+    if (this.directory.assessments) {
+      tmpArray = this.directory.assessments.filter(
+        assessment => {
+          if (assessment.selected) {
+            return assessment;
+          }
+        }
+      )
+    }
+    if (this.directory.subDirectory) {
+      tmpArray2 = this.directory.subDirectory.filter(
+        subDir => {
+          if (subDir.selected) {
+            return subDir;
+          }
+        }
+      )
+    }
+    if (tmpArray.length != 0 || tmpArray2.length != 0) {
+      return true;
+    } else {
+      return false;
+    }
   }
 }

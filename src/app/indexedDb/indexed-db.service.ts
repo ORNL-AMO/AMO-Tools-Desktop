@@ -88,6 +88,7 @@ export class IndexedDbService {
   }
 
   deleteDb(): Promise<any> {
+    this.db = undefined;
     return new Promise((resolve, reject) => {
       myDb.instance.close();
       let deleteRequest = this._window.indexedDB.deleteDatabase(myDb.name);
