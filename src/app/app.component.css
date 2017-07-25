@@ -1491,11 +1491,21 @@ Help Panel Cards
 }
 
 
-
-
 /*
 Reporting
 ========================================== */
+.report-container {
+  background: #ececec;
+}
+.assessment-report {
+  background: #fff;
+  border: solid #2980b9;
+  -webkit-box-shadow: 0px 1px 5px 0px rgba(0,0,0,0.75);
+  -moz-box-shadow: 0px 1px 5px 0px rgba(0,0,0,0.75);
+  box-shadow: 0px 1px 5px 0px rgba(0,0,0,0.75);
+  margin-top: 15px;
+  margin-bottom: 100px;
+}
 .assessment-report h3 {
   font-size: 18px;
   color: #0e0e0e;
@@ -1674,6 +1684,13 @@ Reporting
     font-weight: bold;
 }
 
+@media print{
+  .percent-savings{
+    font-size: 13px !important;
+  }
+}
+
+
 @media (min-width: 576px) {
     .chart-item {
     width: 105px;
@@ -1800,6 +1817,12 @@ Toasty Overrides ================================= */
     font-size: large !important;
     vertical-align: middle !important;
     text-align: center !important;
+}
+
+@media print{
+  .psat-name{
+    font-size: 13px !important;
+  }
 }
 
 .disabled-link {

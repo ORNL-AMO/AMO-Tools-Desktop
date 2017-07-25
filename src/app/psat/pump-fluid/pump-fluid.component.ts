@@ -4,7 +4,7 @@ import { PSAT, PsatInputs } from '../../shared/models/psat';
 import { Settings } from '../../shared/models/settings';
 import { CompareService } from '../compare.service';
 import { WindowRefService } from '../../indexedDb/window-ref.service';
-
+import { HelpPanelService } from '../help-panel/help-panel.service';
 @Component({
   selector: 'app-pump-fluid',
   templateUrl: './pump-fluid.component.html',
@@ -13,8 +13,6 @@ import { WindowRefService } from '../../indexedDb/window-ref.service';
 export class PumpFluidComponent implements OnInit {
   @Input()
   psat: PSAT;
-  @Output('changeField')
-  changeField = new EventEmitter<string>();
   @Input()
   saveClicked: boolean;
   @Output('saved')
@@ -62,7 +60,7 @@ export class PumpFluidComponent implements OnInit {
   different: any = {
     pumpRPM: null
   }
-  constructor(private psatService: PsatService, private compareService: CompareService, private windowRefService: WindowRefService) { }
+  constructor(private psatService: PsatService, private compareService: CompareService, private windowRefService: WindowRefService, private helpPanelService: HelpPanelService) { }
 
   ngOnChanges(changes: SimpleChanges) {
     if (!this.isFirstChange) {
@@ -137,7 +135,7 @@ export class PumpFluidComponent implements OnInit {
     if (str == 'fixedSpecificSpeed') {
       this.startSavePolling();
     }
-    this.changeField.emit(str);
+    this.helpPanelService.currentField.next(str);
     this.checkForm(this.psatForm);
   }
 
