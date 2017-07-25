@@ -868,7 +868,11 @@ Calculators
 }
 
 .calc-tab{
-    width: 50%;
+  width: 50%;
+}
+
+.calc-tab-3{
+  width: 33.333%;
 }
 
 .pump-head .tabs.primary a {

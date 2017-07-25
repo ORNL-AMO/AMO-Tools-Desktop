@@ -56,7 +56,7 @@ import { SettingsModule } from '../../settings/settings.module';
         MotorPerformanceFormComponent,
         SpecificSpeedGraphComponent,
         SpecificSpeedFormComponent,
-        NemaEnergyEfficiencyGraphComponent
+        NemaEnergyEfficiencyGraphComponent,
     ],
     exports: [
         SystemCurveComponent,

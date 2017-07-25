@@ -519,7 +519,7 @@ export class O2EnrichmentGraphComponent implements OnInit {
       .attr("x", 9)
       .attr("dy", ".35em");
 
-    var fuelSavings = this.PhastService.o2Enrichment(this.o2EnrichmentPoint).fuelSavingsEnriched;
+    var fuelSavings = this.PhastService.o2Enrichment(information).fuelSavingsEnriched;
 
     this.point
       .style("display", null)
