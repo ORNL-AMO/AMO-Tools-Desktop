@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 
 @Component({
   selector: 'app-o2-enrichment-help',
@@ -6,7 +6,9 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./o2-enrichment-help.component.css']
 })
 export class O2EnrichmentHelpComponent implements OnInit {
-
+  @Input()
+  currentField: string;
+  
   constructor() { }
 
   ngOnInit() {

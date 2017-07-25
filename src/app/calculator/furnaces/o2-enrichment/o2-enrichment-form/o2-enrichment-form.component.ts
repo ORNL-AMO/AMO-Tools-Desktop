@@ -12,11 +12,17 @@ export class O2EnrichmentFormComponent implements OnInit {
   calculate = new EventEmitter<boolean>();
   @Input()
   o2EnrichmentOutput: O2EnrichmentOutput;
+  @Output('changeFieldEmit')
+  changeFieldEmit = new EventEmitter<string>();
   constructor() { }
 
   ngOnInit() {
   }
   calc() {
     this.calculate.emit(true);
+  }
+
+  changeField(str: string){
+    this.changeFieldEmit.emit(str);
   }
 }

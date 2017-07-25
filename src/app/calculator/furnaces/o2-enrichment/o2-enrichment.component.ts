@@ -28,6 +28,7 @@ export class O2EnrichmentComponent implements OnInit {
   };
 
   tabSelect: string = 'results';
+  currentField: string;
   constructor(private phastService: PhastService) { }
 
   ngOnInit() {
@@ -40,5 +41,9 @@ export class O2EnrichmentComponent implements OnInit {
 
   setTab(str: string) {
     this.tabSelect = str;
+  }
+
+  changeField(str: string){
+    this.currentField = str;
   }
 }

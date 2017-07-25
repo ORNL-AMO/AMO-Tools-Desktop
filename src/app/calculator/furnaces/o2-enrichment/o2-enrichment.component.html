@@ -1,7 +1,7 @@
 <div class="pump-head">
   <div class="row">
     <div class="col-md-4 col-sm-12 offset-md-1">
-      <app-o2-enrichment-form [(o2Enrichment)]="o2Enrichment" [o2EnrichmentOutput]="o2EnrichmentOutput" (calculate)="calculate()"></app-o2-enrichment-form>
+      <app-o2-enrichment-form [(o2Enrichment)]="o2Enrichment" [o2EnrichmentOutput]="o2EnrichmentOutput" (calculate)="calculate()" (changeFieldEmit)="changeField($event)"></app-o2-enrichment-form>
     </div>
     <div class="col-md-6 col-sm-12">
       <ul class="tabs primary text-center">
@@ -20,7 +20,7 @@
             of available heat calculations for oxygen enriched air case.
           </div>
         </div>
-        <app-o2-enrichment-help *ngIf="tabSelect == 'help'"></app-o2-enrichment-help>
+        <app-o2-enrichment-help *ngIf="tabSelect == 'help'" [currentField]="currentField"></app-o2-enrichment-help>
       </div>
     </div>
   </div>

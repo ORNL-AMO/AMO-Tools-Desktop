@@ -1,3 +1,28 @@
-<p>
-  o2-enrichment-help works!
-</p>
+<div class="help-panel">
+  <div class="calc-help">
+    <div class="help-header">
+      <h3>O<sub>2</sub> Enrichment Help</h3>
+      <p>
+        Description
+      </p>
+      <p class="text-muted">
+        <span class="fa fa-youtube-play"></span> Watch tutorial on entering O<sub>2</sub> Enrichment data.
+      </p>
+    </div>
+
+    <div class="help-content">
+      <div class="card" *ngIf="currentField == 'o2CombAir'">
+        <div class="card-header">
+          O<sub>2</sub> Combustion Air
+        </div>
+        <div class="card-block">
+          <label><u>Description:</u></label>
+          <p>
+            Description
+          </p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
