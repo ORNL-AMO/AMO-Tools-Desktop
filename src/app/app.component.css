@@ -628,8 +628,8 @@ Sidebar
 
 .sidebar-bg {
   background-color: #fff;
-  border-width: 1px;
-  border-style: solid;
+  /*border-width: 1px;
+  border-style: solid;*/
   -webkit-border-image: -webkit-gradient(linear, 0 0, 0 100%, from(#949494), to(rgba(0, 0, 0, 0))) 1 100%;
   -webkit-border-image: -webkit-linear-gradient(#949494, rgba(0, 0, 0, 0)) 1 100%;
   -moz-border-image:    -moz-linear-gradient(#949494, rgba(0, 0, 0, 0)) 1 100%;
@@ -637,6 +637,9 @@ Sidebar
   border-image:         linear-gradient(to bottom, #949494, rgba(0, 0, 0, 0)) 1 100%;
   padding: 0;
   overflow-y: scroll;
+  	box-shadow: 0px 0px 69px -1px rgba(0,0,0,0.2);
+	z-index: 2;
+
 }
 
 .dashboard-content{
@@ -850,6 +853,10 @@ Calculators
   background: transparent;
 }
 
+
+.calc-row-padding{
+  padding-top: 5%;
+}
 
 /* Pump Head
 ================================================ */

@@ -27,6 +27,7 @@ export class O2EnrichmentComponent implements OnInit {
     fuelSavingsEnriched: 0.0
   };
 
+  tabSelect: string = 'results';
   constructor(private phastService: PhastService) { }
 
   ngOnInit() {
@@ -35,5 +36,9 @@ export class O2EnrichmentComponent implements OnInit {
 
   calculate() {
     this.o2EnrichmentOutput = this.phastService.o2Enrichment(this.o2Enrichment);
+  }
+
+  setTab(str: string) {
+    this.tabSelect = str;
   }
 }

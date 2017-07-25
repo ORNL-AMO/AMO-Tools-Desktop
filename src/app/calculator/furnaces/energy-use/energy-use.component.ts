@@ -33,14 +33,23 @@ export class EnergyUseComponent implements OnInit {
   };
 
   currentField: string;
-
+  tabSelect: string = 'results';
 
   constructor(private phastService: PhastService) { }
 
   ngOnInit() {
+    this.calculate();
   }
   setCurrentField(str: string) {
     this.currentField = str;
+  }
+
+  setTab(str: string) {
+    this.tabSelect = str;
+  }
+
+  calculate() {
+    this.flowCalculationResults = this.phastService.flowCalculations(this.flowCalculations);
   }
 
 }

@@ -1,16 +1,14 @@
 <div class="pump-head">
-	<div class="row align-items-center" *ngIf="settings">
-
-
-		<div class="col-md-4 col-sm-12 ">
+	<div class="row" *ngIf="settings">
+		<div class="col-md-4 col-sm-12 offset-md-1">
 			<app-achievable-efficiency-form [(efficiencyForm)]="efficiencyForm" [settings]="settings" (calculate)="calculate()"></app-achievable-efficiency-form>
 		</div>
-		<div class="col-md-8 col-sm-12">
+		<div class="col-md-6 col-sm-12">
 			<ul class="tabs primary text-center">
 				<li class="calc-tab" [ngClass]="{'active': tabSelect == 'results'}">
 					<a (click)="setTab('results')">Graph</a>
 				</li><!--
-    --><li class="calc-tab" [ngClass]="{'active': tabSelect == 'help'}">
+    		--><li class="calc-tab" [ngClass]="{'active': tabSelect == 'help'}">
 					<a (click)="setTab('help')">Help</a>
 				</li>
 			</ul>

@@ -23,7 +23,7 @@ export class EnergyEquivalencyComponent implements OnInit {
   energyEquivalencyElectricOutput: EnergyEquivalencyElectricOutput = { electricalHeatInput: 0 };
 
   currentField: string;
-
+  tabSelect: string = 'results';
   constructor(private phastService: PhastService) { }
 
   ngOnInit() {
@@ -31,16 +31,21 @@ export class EnergyEquivalencyComponent implements OnInit {
     this.calculateFuel();
   }
 
-  calculateFuel(){
+  calculateFuel() {
     this.energyEquivalencyFuelOutput = this.phastService.energyEquivalencyFuel(this.energyEquivalencyFuel);
   }
 
-  calculateElectric(){
+  calculateElectric() {
     this.energyEquivalencyElectricOutput = this.phastService.energyEquivalencyElectric(this.energyEquivalencyElectric);
   }
 
-  setCurrentField(str: string){
+  setCurrentField(str: string) {
     this.currentField = str;
   }
+
+  setTab(str: string) {
+    this.tabSelect = str;
+  }
+
 
 }

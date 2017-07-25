@@ -1,7 +1,6 @@
 import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { SuiteDbService } from '../../../../suiteDb/suite-db.service';
 import { FlowCalculations, FlowCalculationsOutput } from '../../../../shared/models/phast/flowCalculations';
-import { PhastService } from '../../../../phast/phast.service';
 @Component({
   selector: 'app-energy-use-form',
   templateUrl: './energy-use-form.component.html',
@@ -16,6 +15,9 @@ export class EnergyUseFormComponent implements OnInit {
   changeField = new EventEmitter<string>();
   @Input()
   inPhast: boolean;
+  @Output('emitCalculate')
+  emitCalculate = new EventEmitter<boolean>();
+
   sectionOptions: any = [
     {
       name: 'Square Edge',
@@ -81,15 +83,14 @@ export class EnergyUseFormComponent implements OnInit {
     }
   ]
 
-  constructor(private suiteDbService: SuiteDbService, private phastService: PhastService) { }
+  constructor(private suiteDbService: SuiteDbService) { }
 
   ngOnInit() {
-    this.gasTypeOptions = this.suiteDbService.selectGasFlueGasMaterials();
-    this.calculate();
+    //this.gasTypeOptions = this.suiteDbService.selectGasFlueGasMaterials();
   }
 
   calculate() {
-    this.flowCalculationResults = this.phastService.flowCalculations(this.flowCalculations);
+    this.emitCalculate.emit(true);
   }
 
   focusField(str: string) {
