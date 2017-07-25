@@ -1,3 +1,184 @@
-<p>
-  energy-use-help works!
-</p>
+<div class="help-panel">
+  <div class="calc-help">
+    <div class="help-header">
+
+      <h3>Energy Use Calculater Help</h3>
+      <p>
+        CALCULATOR DESCRIPTION
+      </p>
+      <p class="text-muted">
+        <span class="fa fa-youtube-play"></span> Watch tutorial on entering atmosphere loss data.
+      </p>
+
+    </div>
+
+
+    <div class="help-content">
+      <div class="card" *ngIf="currentField == 'gasType'">
+        <div class="card-header">
+          Gas Type
+        </div>
+        <div class="card-block">
+          <label><u>Description:</u></label>
+          <p>
+            DESCRIPTION
+          </p>
+          <label><u>Input:</u></label>
+          <p>
+            Units: <strong></strong><br> Minimum Value Allowed: <strong>0</strong><br> Maximum Value Allowed: <strong>100</strong><br>
+          </p>
+        </div>
+      </div>
+      <div class="card" *ngIf="currentField == 'orificeDiameter'">
+        <div class="card-header">
+          Orifice Diameter
+        </div>
+        <div class="card-block">
+          <label><u>Description:</u></label>
+          <p>
+            DESCRIPTION
+          </p>
+          <label><u>Input:</u></label>
+          <p>
+            Units: <strong></strong><br> Minimum Value Allowed: <strong>0</strong><br> Maximum Value Allowed: <strong>100</strong><br>
+          </p>
+        </div>
+      </div>
+      <div class="card" *ngIf="currentField == 'insidePipeDiameter'">
+        <div class="card-header">
+          Inside Pipe Diameter
+        </div>
+        <div class="card-block">
+          <label><u>Description:</u></label>
+          <p>
+            DESCRIPTION
+          </p>
+          <label><u>Input:</u></label>
+          <p>
+            Units: <strong></strong><br> Minimum Value Allowed: <strong>0</strong><br> Maximum Value Allowed: <strong>100</strong><br>
+          </p>
+        </div>
+      </div>
+      <div class="card" *ngIf="currentField == 'orificePressureDrop'">
+        <div class="card-header">
+          Orifice Pressure Drop
+        </div>
+        <div class="card-block">
+          <label><u>Description:</u></label>
+          <p>
+            DESCRIPTION
+          </p>
+          <label><u>Input:</u></label>
+          <p>
+            Units: <strong></strong><br> Minimum Value Allowed: <strong>0</strong><br> Maximum Value Allowed: <strong>100</strong><br>
+          </p>
+        </div>
+      </div>
+      <div class="card" *ngIf="currentField == 'operatingTime'">
+        <div class="card-header">
+          Operating Time
+        </div>
+        <div class="card-block">
+          <label><u>Description:</u></label>
+          <p>
+            DESCRIPTION
+          </p>
+          <label><u>Input:</u></label>
+          <p>
+            Units: <strong></strong><br> Minimum Value Allowed: <strong>0</strong><br> Maximum Value Allowed: <strong>100</strong><br>
+          </p>
+        </div>
+      </div>
+      <div class="card" *ngIf="currentField == 'sectionType'">
+        <div class="card-header">
+          Section Type
+        </div>
+        <div class="card-block">
+          <label><u>Description:</u></label>
+          <p>
+            DESCRIPTION
+          </p>
+          <label><u>Input:</u></label>
+          <p>
+            Units: <strong></strong><br> Minimum Value Allowed: <strong>0</strong><br> Maximum Value Allowed: <strong>100</strong><br>
+          </p>
+        </div>
+      </div>
+      <div class="card" *ngIf="currentField == 'gasTemperature'">
+        <div class="card-header">
+          Gas Temperature
+        </div>
+        <div class="card-block">
+          <label><u>Description:</u></label>
+          <p>
+            DESCRIPTION
+          </p>
+          <label><u>Input:</u></label>
+          <p>
+            Units: <strong></strong><br> Minimum Value Allowed: <strong>0</strong><br> Maximum Value Allowed: <strong>100</strong><br>
+          </p>
+        </div>
+      </div>
+      <div class="card" *ngIf="currentField == 'gasPressure'">
+        <div class="card-header">
+          Gas Pressure
+        </div>
+        <div class="card-block">
+          <label><u>Description:</u></label>
+          <p>
+            DESCRIPTION
+          </p>
+          <label><u>Input:</u></label>
+          <p>
+            Units: <strong></strong><br> Minimum Value Allowed: <strong>0</strong><br> Maximum Value Allowed: <strong>100</strong><br>
+          </p>
+        </div>
+      </div>
+      <div class="card" *ngIf="currentField == 'dischargeCoefficient'">
+        <div class="card-header">
+          Discharge Coefficient
+        </div>
+        <div class="card-block">
+          <label><u>Description:</u></label>
+          <p>
+            DESCRIPTION
+          </p>
+          <label><u>Input:</u></label>
+          <p>
+            Units: <strong></strong><br> Minimum Value Allowed: <strong>0</strong><br> Maximum Value Allowed: <strong>100</strong><br>
+          </p>
+        </div>
+      </div>
+      <div class="card" *ngIf="currentField == 'gasHeatingValue'">
+        <div class="card-header">
+          Gas Heating Value - HHV
+        </div>
+        <div class="card-block">
+          <label><u>Description:</u></label>
+          <p>
+            DESCRIPTION
+          </p>
+          <label><u>Input:</u></label>
+          <p>
+            Units: <strong></strong><br> Minimum Value Allowed: <strong>0</strong><br> Maximum Value Allowed: <strong>100</strong><br>
+          </p>
+        </div>
+      </div>
+      <div class="card" *ngIf="currentField == 'specificGravity'">
+        <div class="card-header">
+          Specific Gravity
+        </div>
+        <div class="card-block">
+          <label><u>Description:</u></label>
+          <p>
+            DESCRIPTION
+          </p>
+          <label><u>Input:</u></label>
+          <p>
+            Units: <strong></strong><br> Minimum Value Allowed: <strong>0</strong><br> Maximum Value Allowed: <strong>100</strong><br>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
