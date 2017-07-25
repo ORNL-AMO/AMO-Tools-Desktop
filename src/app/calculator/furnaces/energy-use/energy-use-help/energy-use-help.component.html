@@ -1,7 +1,6 @@
 <div class="help-panel">
   <div class="calc-help">
     <div class="help-header">
-
       <h3>Energy Use Calculater Help</h3>
       <p>
         Calculation of flow rates for commonly used gases using data for an orifice type flow meter and heat input calculations when the gas is a fuel (i.e. natural gas, propane). 
@@ -9,9 +8,7 @@
       <p class="text-muted">
         <span class="fa fa-youtube-play"></span> Watch tutorial on entering atmosphere loss data.
       </p>
-
     </div>
-
 
     <div class="help-content">
       <div class="card" *ngIf="currentField == 'gasType'">
@@ -47,7 +44,7 @@
         <div class="card-block">
           <label><u>Description:</u></label>
           <p>
-            DESCRIPTION
+            Inside diameter of pipe
           </p>
           <label><u>Input:</u></label>
           <p>
@@ -62,7 +59,7 @@
         <div class="card-block">
           <label><u>Description:</u></label>
           <p>
-            DESCRIPTION
+            Pressure drop across the orifice (inches in water column or cm in water column).
           </p>
           <label><u>Input:</u></label>
           <p>
@@ -77,11 +74,11 @@
         <div class="card-block">
           <label><u>Description:</u></label>
           <p>
-            DESCRIPTION
+            Total time for flow / heating 
           </p>
           <label><u>Input:</u></label>
           <p>
-            Units: <strong></strong><br> Minimum Value Allowed: <strong>0</strong><br> Maximum Value Allowed: <strong>100</strong><br>
+            Units: <strong></strong><br> Minimum Value Allowed: <strong>0</strong><br> Maximum Value Allowed: <strong>10,000</strong><br>
           </p>
         </div>
       </div>
@@ -92,7 +89,7 @@
         <div class="card-block">
           <label><u>Description:</u></label>
           <p>
-            DESCRIPTION
+            Type of orifice. Changing this automatically changes the field “Coefficient of Discharge”
           </p>
           <label><u>Input:</u></label>
           <p>
@@ -107,11 +104,11 @@
         <div class="card-block">
           <label><u>Description:</u></label>
           <p>
-            DESCRIPTION
+            Temperature of the gas entering the orifice 
           </p>
           <label><u>Input:</u></label>
           <p>
-            Units: <strong></strong><br> Minimum Value Allowed: <strong>0</strong><br> Maximum Value Allowed: <strong>100</strong><br>
+            Units: <strong></strong><br> Minimum Value Allowed: <strong>0</strong><br> Maximum Value Allowed: <strong>3,000</strong><br>
           </p>
         </div>
       </div>
@@ -122,7 +119,7 @@
         <div class="card-block">
           <label><u>Description:</u></label>
           <p>
-            DESCRIPTION
+            Pressure of the gas entering the orifice
           </p>
           <label><u>Input:</u></label>
           <p>
@@ -137,11 +134,11 @@
         <div class="card-block">
           <label><u>Description:</u></label>
           <p>
-            DESCRIPTION
+            Coefficient to take viscocity and turbulence into account when calculating flow rate.
           </p>
           <label><u>Input:</u></label>
           <p>
-            Units: <strong></strong><br> Minimum Value Allowed: <strong>0</strong><br> Maximum Value Allowed: <strong>100</strong><br>
+            Units: <strong></strong><br> Minimum Value Allowed: <strong>0</strong><br> Maximum Value Allowed: <strong>1</strong><br>
           </p>
         </div>
       </div>
@@ -152,11 +149,11 @@
         <div class="card-block">
           <label><u>Description:</u></label>
           <p>
-            DESCRIPTION
+            Higher heating value of gas (dependent on type of gas).
           </p>
           <label><u>Input:</u></label>
           <p>
-            Units: <strong></strong><br> Minimum Value Allowed: <strong>0</strong><br> Maximum Value Allowed: <strong>100</strong><br>
+            Units: <strong></strong><br> Minimum Value Allowed: <strong>0</strong><br> Maximum Value Allowed: <strong>5,000</strong><br>
           </p>
         </div>
       </div>
@@ -167,11 +164,11 @@
         <div class="card-block">
           <label><u>Description:</u></label>
           <p>
-            DESCRIPTION
+            Specific gravity of the gas relative to air (density of gas / density of air) at standard temperature and pressure
           </p>
           <label><u>Input:</u></label>
           <p>
-            Units: <strong></strong><br> Minimum Value Allowed: <strong>0</strong><br> Maximum Value Allowed: <strong>100</strong><br>
+            Units: <strong></strong><br> Minimum Value Allowed: <strong>0</strong><br> Maximum Value Allowed: <strong>5</strong><br>
           </p>
         </div>
       </div>

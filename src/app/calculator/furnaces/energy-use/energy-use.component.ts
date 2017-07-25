@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { FlowCalculations, FlowCalculationsOutput } from '../../../shared/models/phast/flowCalculations';
 import { PhastService } from '../../../phast/phast.service';
 @Component({
@@ -7,21 +7,23 @@ import { PhastService } from '../../../phast/phast.service';
   styleUrls: ['./energy-use.component.css']
 })
 export class EnergyUseComponent implements OnInit {
+  @Input()
+  inPhast: boolean;
 
   flowCalculations: FlowCalculations = {
-    //helium
-    gasType: 7,
+    //natural gas
+    gasType: 9,
     specificGravity: 0.14,
-    orificeDiameter: 5,
-    insidePipeDiameter: 9,
+    orificeDiameter: 3.5,
+    insidePipeDiameter: 8,
     // 1 is sharp edge
     sectionType: 1,
     dischargeCoefficient: 0.6,
     gasHeatingValue: 7325,
-    gasTemperature: 52,
-    gasPressure: 63,
-    orificePressureDrop: 26,
-    operatingTime: 16
+    gasTemperature: 85,
+    gasPressure: 85,
+    orificePressureDrop: 10,
+    operatingTime: 10
   }
 
   flowCalculationResults: FlowCalculationsOutput = {

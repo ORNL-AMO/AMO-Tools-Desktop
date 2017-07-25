@@ -2,13 +2,13 @@
   <div class="row align-items-center">
     <div class="col-8">
       <div class="row">
-        <div class="col-12">
+        <div *ngIf="inPhast" class="col-12">
           <form>
             <div class="form-group">
               <label class="small" for="gasType">Select Gas</label>
               <div class="input-group">
                 <select id="gasType" name="gasType" class="form-control" [(ngModel)]="flowCalculations.gasType" (focus)="focusField('gasType')"
-                  (change)="calculate()" autofocus>
+                  (change)="calculate()">
               <option *ngFor="let option of tmpGasTypeOptions" [ngValue]="option.value">{{option.name}}</option>
             </select>
               </div>
@@ -21,7 +21,7 @@
               <label class="small" for="orificeDiameter">Orifice Diameter</label>
               <div class="input-group">
                 <input name="orificeDiameter" [(ngModel)]="flowCalculations.orificeDiameter" type="number" step="any" class="form-control"
-                  id="orificeDiameter" (input)="calculate()" onfocus="this.select();" (focus)="focusField('orificeDiameter')">
+                  id="orificeDiameter" (input)="calculate()" onfocus="this.select();" (focus)="focusField('orificeDiameter')" autofocus>
                 <span class="input-group-addon units">Inch</span>
               </div>
             </div>
@@ -54,7 +54,7 @@
               <label class="small" for="sectionType">Type of Section</label>
               <div class="input-group">
                 <select id="sectionType" name="sectionType" class="form-control" [(ngModel)]="flowCalculations.sectionType" (focus)="focusField('sectionType')"
-                  (change)="calculate()">
+                  (change)="setDischargeCoefficient()">
               <option *ngFor="let option of sectionOptions" [ngValue]="option.value">{{option.name}}</option>
             </select>
               </div>

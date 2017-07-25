@@ -14,18 +14,22 @@ export class EnergyUseFormComponent implements OnInit {
   flowCalculationResults: FlowCalculationsOutput;
   @Output('changeField')
   changeField = new EventEmitter<string>();
-
+  @Input()
+  inPhast: boolean;
   sectionOptions: any = [
     {
-      name: 'Sharp Edge',
-      value: 0
-    }, {
       name: 'Square Edge',
-      value: 1
+      value: 0,
+      dischargeCoefficient: .5
+    }, {
+      name: 'Sharp Edge',
+      value: 1,
+      dischargeCoefficient: .6
     },
     {
       name: 'Venturi',
-      value: 2
+      value: 2,
+      dischargeCoefficient: .8
     }
   ]
 
@@ -90,5 +94,16 @@ export class EnergyUseFormComponent implements OnInit {
 
   focusField(str: string) {
     this.changeField.emit(str);
+  }
+
+  setDischargeCoefficient() {
+    if (this.flowCalculations.sectionType == 0) {
+      this.flowCalculations.dischargeCoefficient = .5;
+    } else if (this.flowCalculations.sectionType == 1) {
+      this.flowCalculations.dischargeCoefficient = .6;
+    } else if (this.flowCalculations.sectionType == 2) {
+      this.flowCalculations.dischargeCoefficient = .8;
+    }
+    this.calculate();
   }
 }
