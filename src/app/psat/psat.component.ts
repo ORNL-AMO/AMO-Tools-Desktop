@@ -59,11 +59,9 @@ export class PsatComponent implements OnInit {
   settings: Settings;
   isAssessmentSettings: boolean = false;
 
-  doc: any;
-  window: any;
   emitPrint: boolean = false;
   viewingReport: boolean = false;
-  tabBeforeReport: string;
+  tabBeforeReport: string = 'explore-opportunities';
   constructor(
     private location: Location,
     private assessmentService: AssessmentService,
