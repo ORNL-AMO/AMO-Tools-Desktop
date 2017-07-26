@@ -1,150 +1,120 @@
 <div class="row o2-enrichment">
   <div class="col-sm-6 col-md-6 col-lg-6">
-      <div class="form-section">
-        <div class="form-group label-left">
-          <h3>Combustion With <br/>Air</h3>
-        </div>
+    <div class="form-section">
+      <div class="form-group">
+        <h3>Combustion With <br/>Air</h3>
+      </div>
 
-        <div class="form-group inline-label">
-          <label class="small" for="o2CombAir">O<sub>2</sub> in combustion air</label>
-          <div class="input-group">
-            <input type="number" min="1" step="any" max="100" class="form-control" id="o2CombAir" (keyup)="calc()" [(ngModel)]="o2Enrichment.o2CombAir"
-            onfocus="this.select();">
-            <span class="input-group-addon units">%</span>
-          </div>
-        </div>
-
-        <div class="form-group inline-label">
-          <label class="small" for="combAirTemp">Combustion air preheat temperature</label>
-          <div class="input-group">
-            <input type="number" min="0" step="any" class="form-control" id="combAirTemp" (keyup)="calc()" [(ngModel)]="o2Enrichment.combAirTemp"
-            onfocus="this.select();">
-            <span class="input-group-addon units">F</span>
-          </div>
-        </div>
-
-        <div class="form-group inline-label">
-          <label class="small" for="o2FlueGas">O<sub>2</sub> in flue gasses</label>
-          <div class="input-group">
-            <input type="number" min="1" step="any" max="100" class="form-control" id="o2FlueGas" (keyup)="calc()" [(ngModel)]="o2Enrichment.o2FlueGas"
-            onfocus="this.select();">
-            <span class="input-group-addon units">% Dry</span>
-          </div>
-        </div>
-
-        <div class="form-group inline-label">
-          <label class="small" for="flueGasTemp">Flue gas temperature</label>
-          <div class="input-group">
-            <input type="number" min="1" step="any" class="form-control" id="flueGasTemp" (keyup)="calc()" [(ngModel)]="o2Enrichment.flueGasTemp"
-              onfocus="this.select();">
-            <span class="input-group-addon units">F</span>
-          </div>
-        </div>
-
-        <!--<div class="form-group inline-label">
-        <label class="small" for="availableHeat">Available heat</label>
-        <input type="number" min="0" step="any" class=" input-size" id="availableHeat" (keyup)="calc()" onfocus="this.select();">
-        <span class="units-avg-heat">% of HHV</span>
-      </div>-->
-
-        <div class="form-group inline-label">
-          <label class="small" for="fuelConsumption"><strong>Fuel consumption</strong></label>
-          <div class="input-group">
-            <input type="number" min="0" step="any" class="form-control" id="fuelConsumption" (keyup)="calc()" [(ngModel)]="o2Enrichment.fuelConsumption"
-              onfocus="this.select();">
-            <span class="input-group-addon units">MM Btu/h</span>
-          </div>
+      <div class="form-group">
+        <label class="small" for="o2CombAir">O<sub>2</sub> in combustion air</label>
+        <div class="input-group">
+          <input autofocus type="number" min="1" step="any" max="100" class="form-control" id="o2CombAir" (input)="calc()" (focus)="changeField('o2CombAir')"
+            [(ngModel)]="o2Enrichment.o2CombAir" onfocus="this.select();">
+          <span class="input-group-addon units">%</span>
         </div>
       </div>
 
-      <div class="form-group inline-label">
-        <label class="small">Available heat</label>
-        <div>{{o2EnrichmentOutput.availableHeatInput | number:'2.2-2'}} <span class="units-avg-heat">% of HHV</span></div>
+      <div class="form-group">
+        <label class="small" for="combAirTemp">Combustion air preheat temperature</label>
+        <div class="input-group">
+          <input type="number" min="0" step="any" class="form-control" id="combAirTemp" (input)="calc()" (focus)="changeField('combAirTemp')"
+            [(ngModel)]="o2Enrichment.combAirTemp" onfocus="this.select();">
+          <span class="input-group-addon units">&#8457;</span>
+        </div>
       </div>
 
+      <div class="form-group">
+        <label class="small" for="o2FlueGas">O<sub>2</sub> in flue gasses</label>
+        <div class="input-group">
+          <input type="number" min="1" step="any" max="100" class="form-control" id="o2FlueGas" (input)="calc()" (focus)="changeField('o2FlueGas')"
+            [(ngModel)]="o2Enrichment.o2FlueGas" onfocus="this.select();">
+          <span class="input-group-addon units">% Dry</span>
+        </div>
+      </div>
 
-      <!--<div class="form-group inline-label">
-        <label class="small" for="fuelSavings"><strong>Fuel savings</strong></label>
-        <input type="number" min="0" step="any" class=" input-size" id="fuelSavings" (keyup)="calc()" onfocus="this.select();">
-        <span class="units-fuel-sav">%</span>
-      </div>-->
+      <div class="form-group">
+        <label class="small" for="flueGasTemp">Flue gas temperature</label>
+        <div class="input-group">
+          <input type="number" min="1" step="any" class="form-control" id="flueGasTemp" (input)="calc()" (focus)="changeField('flueGasTemp')"
+            [(ngModel)]="o2Enrichment.flueGasTemp" onfocus="this.select();">
+          <span class="input-group-addon units">&#8457;</span>
+        </div>
+      </div>
 
-  </div><!-- End .col -->
+      <div class="form-group">
+        <label class="small" for="fuelConsumption"><strong>Fuel consumption</strong></label>
+        <div class="input-group">
+          <input type="number" min="0" step="any" class="form-control" id="fuelConsumption" (input)="calc()" (focus)="changeField('fuelConsumption')"
+            [(ngModel)]="o2Enrichment.fuelConsumption" onfocus="this.select();">
+          <span class="input-group-addon units">MM Btu/h</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="small">Available heat</label>
+      <div>{{o2EnrichmentOutput.availableHeatInput | number:'2.2-2'}} % of HHV</div>
+    </div>
+
+  </div>
+  <!-- End .col -->
 
   <div class="col-sm-6 col-md-6 col-lg-6">
-      <div class="form-section">
-        <div class="form-group label-right">
-          <h3>Combustion With Oxygen Enriched Air</h3>
-        </div>
-
-        <div class="form-group inline-label">
-          <label class="small" for="o2CombAirEnriched">O<sub>2</sub> in combustion air</label>
-          <div class="input-group">
-            <input type="number" min="1" step="any" max="100" class="form-control" id="o2CombAirEnriched" [(ngModel)]="o2Enrichment.o2CombAirEnriched"
-              (keyup)="calc()" onfocus="this.select();">
-            <span class="input-group-addon units">%</span>
-          </div>
-        </div>
-
-        <div class="form-group inline-label">
-          <label class="small" for="combAirTempEnriched">Combustion air preheat temperature</label>
-          <div class="input-group">
-            <input type="number" min="0" step="any" class="form-control" id="combAirTempEnriched" [(ngModel)]="o2Enrichment.combAirTempEnriched"
-              (keyup)="calc()" onfocus="this.select();">
-            <span class="input-group-addon units">F</span>
-          </div>
-        </div>
-
-        <div class="form-group inline-label">
-          <label class="small" for="o2FlueGasEnriched">O<sup>2</sup> in flue gasses</label>
-          <div class="input-group">
-            <input type="number" min="1" step="any" max="100" class="form-control" id="o2FlueGasEnriched" (keyup)="calc()" [(ngModel)]="o2Enrichment.o2FlueGasEnriched"
-              onfocus="this.select();">
-            <span class="input-group-addon units">%  Dry</span>
-          </div>
-        </div>
-
-        <div class="form-group inline-label">
-          <label class="small" for="flueGasTempEnriched">Flue gas temperature</label>
-          <div class="input-group">
-            <input type="number" min="1" step="any" class="form-control" id="flueGasTempEnriched" (keyup)="calc()" [(ngModel)]="o2Enrichment.flueGasTempEnriched"
-              onfocus="this.select();">
-            <span class="input-group-addon units">F</span>
-          </div>
-        </div>
-
-        <!--<div class="form-group inline-label">
-        <label class="small" for="availableHeatSaving">Available heat</label>
-        <input type="number" min="0" step="any" class=" input-size" id="availableHeatSaving" (keyup)="calc()" onfocus="this.select();">
-        <span class="units-avg-heat">% of HHV</span>
-      </div>-->
-      </div>
-      <div class="form-group inline-label">
-        <label class="small">Available heat</label>
-        <div>{{o2EnrichmentOutput.availableHeatEnriched | number:'2.2-2'}}<span class="units-avg-heat">% of HHV</span></div>
+    <div class="form-section">
+      <div class="form-group">
+        <h3>Combustion With Oxygen Enriched Air</h3>
       </div>
 
-      <!--<div class="form-group inline-label">
-        <label class="small" for="fuelConsumptionEnriched"><strong>Fuel consumption</strong></label>
-        <input type="number" min="0" step="any" class=" input-size" id="fuelConsumptionEnriched" (keyup)="calc()" onfocus="this.select();">
-        <span class="units-fuel-cons">MM Btu/h</span>
-      </div>-->
-
-      <div class="form-group inline-label">
-        <label class="small"><strong>Fuel consumption</strong></label>
-        <div>{{o2EnrichmentOutput.fuelConsumptionEnriched | number:'2.2-2'}}<span class="units-fuel-cons">MM Btu/h</span></div>
-      </div>
-
-      <!--<div class="form-group inline-label">
-        <label class="small" for="fuelSavingsEnriched"><strong>Fuel savings</strong></label>
-        <input type="number" min="0" step="any" class=" input-size" id="fuelSavingsEnriched" (keyup)="calc()" onfocus="this.select();">
-        <span class="units-fuel-sav">%</span>
-      </div>-->
-      <div class="form-group inline-label">
-        <label class="small"><strong>Fuel savings</strong></label>
-        <div>{{o2EnrichmentOutput.fuelSavingsEnriched | number:'2.2-2'}}
-          <span class="units-fuel-sav">%</span>
+      <div class="form-group">
+        <label class="small" for="o2CombAirEnriched">O<sub>2</sub> in combustion air</label>
+        <div class="input-group">
+          <input type="number" min="1" step="any" max="100" class="form-control" id="o2CombAirEnriched" (focus)="changeField('o2CombAir')"
+            [(ngModel)]="o2Enrichment.o2CombAirEnriched" (input)="calc()" onfocus="this.select();">
+          <span class="input-group-addon units">%</span>
         </div>
       </div>
 
-  </div><!-- End .col -->
+      <div class="form-group">
+        <label class="small" for="combAirTempEnriched">Combustion air preheat temperature</label>
+        <div class="input-group">
+          <input type="number" min="0" step="any" class="form-control" id="combAirTempEnriched" (focus)="changeField('combAirTemp')"
+            [(ngModel)]="o2Enrichment.combAirTempEnriched" (input)="calc()" onfocus="this.select();">
+          <span class="input-group-addon units">&#8457;</span>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="small" for="o2FlueGasEnriched">O<sub>2</sub> in flue gasses</label>
+        <div class="input-group">
+          <input type="number" min="1" step="any" max="100" class="form-control" id="o2FlueGasEnriched" (input)="calc()" (focus)="changeField('o2FlueGas')"
+            [(ngModel)]="o2Enrichment.o2FlueGasEnriched" onfocus="this.select();">
+          <span class="input-group-addon units">%  Dry</span>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="small" for="flueGasTempEnriched">Flue gas temperature</label>
+        <div class="input-group">
+          <input type="number" min="1" step="any" class="form-control" id="flueGasTempEnriched" (input)="calc()" (focus)="changeField('flueGasTemp')"
+            [(ngModel)]="o2Enrichment.flueGasTempEnriched" onfocus="this.select();">
+          <span class="input-group-addon units">&#8457;</span>
+        </div>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="small">Available heat</label>
+      <div>{{o2EnrichmentOutput.availableHeatEnriched | number:'2.2-2'}} % of HHV</div>
+    </div>
+
+    <div class="form-group">
+      <label class="small"><strong>Fuel consumption</strong></label>
+      <div>{{o2EnrichmentOutput.fuelConsumptionEnriched | number:'2.2-2'}} MM Btu/hr</div>
+    </div>
+
+    <div class="form-group">
+      <label class="small"><strong>Fuel savings</strong></label>
+      <div>{{o2EnrichmentOutput.fuelSavingsEnriched | number:'2.2-2'}} %</div>
+    </div>
+
+  </div>
+  <!-- End .col -->

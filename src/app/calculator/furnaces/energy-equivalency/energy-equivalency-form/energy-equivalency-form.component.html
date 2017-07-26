@@ -8,8 +8,8 @@
         <div class="form-group">
           <label class="small" for="fuelFiredEfficiency1">Fuel-Fire Equipment Efficiency</label>
           <div class="input-group">
-            <input name="fuelFiredEfficiency1" [(ngModel)]="energyEquivalencyElectric.fuelFiredEfficiency" type="number" step="any" class="form-control"
-              id="fuelFiredEfficiency1" (input)="calcElectric()" onfocus="this.select();" (focus)="focusField('fuelFiredEfficiency')" autofocus>
+            <input autofocus name="fuelFiredEfficiency1" [(ngModel)]="energyEquivalencyElectric.fuelFiredEfficiency" type="number" step="any" class="form-control"
+              id="fuelFiredEfficiency1" (input)="calcElectric()" onfocus="this.select();" (focus)="focusField('fuelFiredEfficiency')">
             <span class="input-group-addon units">%</span>
           </div>
         </div>
@@ -32,7 +32,7 @@
         </div>
       </form>
     </div>
-    <div class="col-3 offset-md-1">
+    <div class="col-5 offset-md-1">
       <div class="form-group text-center results-box">
         <label class="small">Equivalent Electrical Heat Input</label>
         <div class="small">
@@ -77,7 +77,7 @@
         </div>
       </form>
     </div>
-    <div class="col-3 offset-md-1">
+    <div class="col-5 offset-md-1">
       <div class="form-group text-center results-box">
         <label class="small">Equivalent Fuel-Fired Heat Input</label>
         <div class="small">

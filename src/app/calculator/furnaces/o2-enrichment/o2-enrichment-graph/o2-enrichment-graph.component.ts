@@ -49,22 +49,17 @@ export class O2EnrichmentGraphComponent implements OnInit {
 
   @Input()
   toggleCalculate: boolean;
-  // specificSpeed: number = 0;
-  // efficiencyCorrection: number = 0;
   constructor(private PhastService: PhastService, private windowRefService: WindowRefService) { }
 
   ngOnInit() {
-    this.setUp();
-    // if (this.checkForm()) {
-    //   this.setUp();
-    //   this.drawPoint();
-    //   this.svg.style("display", null);
-    // }
+    //this.setUp();
   }
 
   ngAfterViewInit() {
     this.doc = this.windowRefService.getDoc();
     this.window = this.windowRefService.nativeWindow;
+    this.window.onresize = () => { this.resizeGraph() };
+    this.resizeGraph();
   }
 
 
@@ -79,38 +74,25 @@ export class O2EnrichmentGraphComponent implements OnInit {
       this.isFirstChange = false;
     }
   }
+  resizeGraph() {
+    let curveGraph = this.doc.getElementById('o2EnrichmentGraph');
 
-  getEfficiencyCorrection() {
-    if (this.checkForm()) {
-      //return this.psatService.achievableEfficiency(this.speedForm.value.pumpType, this.getSpecificSpeed());
+    this.canvasWidth = curveGraph.clientWidth;
+    this.canvasHeight = this.canvasWidth * (3/5);
+
+    if (this.canvasWidth < 400) {
+      this.fontSize = '8px';
+      this.margin = { top: 10, right: 10, bottom: 50, left: 75 };
     } else {
-      return 0;
+      this.fontSize = '12px';
+      this.margin = { top: 20, right: 20, bottom: 75, left: 120 };
     }
+    this.width = this.canvasWidth - this.margin.left - this.margin.right;
+    this.height = this.canvasHeight - this.margin.top - this.margin.bottom;
+    this.setUp();
+    this.onChanges();
   }
 
-  getSpecificSpeed(): number {
-    if (this.checkForm()) {
-      //return this.speedForm.value.pumpRPM * Math.pow(this.speedForm.value.flowRate, 0.5) / Math.pow(this.speedForm.value.head, .75);
-    } else {
-      return 0;
-    }
-  }
-
-  checkForm() {
-   /* if (
-      //this.speedForm.controls.pumpType.status == 'VALID' &&
-      //this.speedForm.controls.flowRate.status == 'VALID' &&
-      //this.speedForm.controls.head.status == 'VALID' &&
-      //this.speedForm.controls.pumpRPM.status == 'VALID' &&
-      //this.speedForm.value.pumpType != 'Specified Optimal Efficiency'
-    ) {
-      return true;
-    } else {
-      return false;
-    }
-    */
-   return true;
-  }
 
   setUp() {
     this.initGraph();
@@ -125,18 +107,19 @@ export class O2EnrichmentGraphComponent implements OnInit {
       combAirTemp: this.o2Enrichment.combAirTemp,
       combAirTempEnriched: this.o2Enrichment.combAirTempEnriched,
       fuelConsumption: this.o2Enrichment.fuelConsumption,
-      color: "#2ECC71"};
+      color: "#2ECC71"
+    };
     this.drawCurve(this.svg, this.x, this.y, lines, true);
   }
 
-  initGraph(){
+  initGraph() {
     //Remove  all previous graphs
     d3.select('app-o2-enrichment-graph').selectAll('svg').remove();
 
     //graph dimensions
-    this.margin = { top: 20, right: 120, bottom: 110, left: 120 };
-    this.width = 900 - this.margin.left - this.margin.right;
-    this.height = 600 - this.margin.top - this.margin.bottom;
+    // this.margin = { top: 20, right: 120, bottom: 110, left: 120 };
+    // this.width = 900 - this.margin.left - this.margin.right;
+    // this.height = 600 - this.margin.top - this.margin.bottom;
 
     this.x = d3.scaleLinear()
       .range([0, this.width])
@@ -285,7 +268,7 @@ export class O2EnrichmentGraphComponent implements OnInit {
     this.svg.style("display", null);
 
     this.plotBtn = d3.select('app-o2-enrichment-form').selectAll(".btn-success")
-      .on("click", ()=>{
+      .on("click", () => {
         this.plotLine();
       });
 
@@ -318,9 +301,9 @@ export class O2EnrichmentGraphComponent implements OnInit {
 
       if (fuelSavings > 0 && fuelSavings < 100) {
 
-        if(!first){
+        if (!first) {
           data.push({
-            x: i-.001,
+            x: i - .001,
             y: 0
           });
           first = true;
@@ -335,7 +318,7 @@ export class O2EnrichmentGraphComponent implements OnInit {
     }
 
     //reload the graph and return if no points are on the graph
-    if(!onGraph){
+    if (!onGraph) {
       this.detailBox = null;
       this.pointer = null;
       this.focus = null;
@@ -352,7 +335,7 @@ export class O2EnrichmentGraphComponent implements OnInit {
       })
       .curve(d3.curveNatural);
 
-    if(isFromForm) {
+    if (isFromForm) {
       svg.append("path")
         .attr("id", "formLine")
         .data([data])
@@ -363,12 +346,12 @@ export class O2EnrichmentGraphComponent implements OnInit {
         .style("fill", "none")
         .style("stroke", information.color)
         .style('pointer-events', 'none')
-        .on("click", ()=>{
+        .on("click", () => {
           console.log("here");
           this.hoverCommands(x, y, data);
         });
     }
-    else{
+    else {
       svg.append("path")
         .data([data])
         .attr("class", "line plottedLine")
@@ -378,7 +361,7 @@ export class O2EnrichmentGraphComponent implements OnInit {
         .style("fill", "none")
         .style("stroke", information.color)
         .style('pointer-events', 'none')
-        .on("click", ()=>{
+        .on("click", () => {
           console.log("here");
           this.hoverCommands(x, y, data);
         });
@@ -391,7 +374,7 @@ export class O2EnrichmentGraphComponent implements OnInit {
     this.svg.style("display", null);
   }
 
-  hoverCommands(x, y, data){
+  hoverCommands(x, y, data) {
 
     var format = d3.format(",.2f");
     var bisectDate = d3.bisector(function (d) { return d.x; }).left;
@@ -405,7 +388,7 @@ export class O2EnrichmentGraphComponent implements OnInit {
 
         this.focus
           .style("display", null)
-          .style("opacity",1)
+          .style("opacity", 1)
           .style('pointer-events', 'none');
         this.pointer
           .style("display", null)
@@ -456,8 +439,8 @@ export class O2EnrichmentGraphComponent implements OnInit {
           .style("padding-right", "10px")
           .style("padding-left", "10px")
           .html(
-            "<p><strong><div>O<sub>2</sub> in Air: </div></strong><div>" + format(d.x) + " %</div>" +
-            "<strong><div>Fuel Savings: </div></strong><div>" + format(d.y) + " %</div></p>")
+          "<p><strong><div>O<sub>2</sub> in Air: </div></strong><div>" + format(d.x) + " %</div>" +
+          "<strong><div>Fuel Savings: </div></strong><div>" + format(d.y) + " %</div></p>")
 
           .style("left", (this.margin.left + x(d.x) - (detailBoxWidth / 2 - 15)) + "px")
           .style("top", (this.margin.top + y(d.y) + 25) + "px")
@@ -476,25 +459,25 @@ export class O2EnrichmentGraphComponent implements OnInit {
           .transition()
           .delay(100)
           .duration(600)
-          .style("opacity",0);
+          .style("opacity", 0);
 
         this.detailBox
           .transition()
           .delay(100)
           .duration(600)
-          .style("opacity",0);
+          .style("opacity", 0);
 
         this.focus
           .transition()
           .delay(100)
           .duration(600)
-          .style("opacity",0);
+          .style("opacity", 0);
       });
   }
 
   drawPoint(x, y, information, isFromForm) {
 
-    if(isFromForm) {
+    if (isFromForm) {
       this.svg.selectAll("#formPoint").remove();
       this.point = this.svg.append("g")
         .attr("id", "formPoint")
@@ -502,7 +485,7 @@ export class O2EnrichmentGraphComponent implements OnInit {
         .style("display", "none")
         .style('pointer-events', 'none');
     }
-    else{
+    else {
       this.point = this.svg.append("g")
         .attr("class", "focus plottedPoint")
         .style("display", "none")
@@ -523,7 +506,7 @@ export class O2EnrichmentGraphComponent implements OnInit {
 
     this.point
       .style("display", null)
-      .style("opacity",1)
+      .style("opacity", 1)
       .style('pointer-events', 'none')
       .attr("transform", "translate(" + x(information.o2CombAirEnriched) + "," + y(fuelSavings) + ")");
   }
@@ -531,16 +514,17 @@ export class O2EnrichmentGraphComponent implements OnInit {
   onChanges() {
 
     var line = {
-        o2CombAir: this.o2Enrichment.o2CombAir,
-        o2CombAirEnriched: this.o2Enrichment.o2CombAirEnriched,
-        flueGasTemp: this.o2Enrichment.flueGasTemp,
-        flueGasTempEnriched: this.o2Enrichment.flueGasTempEnriched,
-        o2FlueGas: this.o2Enrichment.o2FlueGas,
-        o2FlueGasEnriched: this.o2Enrichment.o2FlueGasEnriched,
-        combAirTemp: this.o2Enrichment.combAirTemp,
-        combAirTempEnriched: this.o2Enrichment.combAirTempEnriched,
-        fuelConsumption: this.o2Enrichment.fuelConsumption,
-        color: "#2ECC71"};
+      o2CombAir: this.o2Enrichment.o2CombAir,
+      o2CombAirEnriched: this.o2Enrichment.o2CombAirEnriched,
+      flueGasTemp: this.o2Enrichment.flueGasTemp,
+      flueGasTempEnriched: this.o2Enrichment.flueGasTempEnriched,
+      o2FlueGas: this.o2Enrichment.o2FlueGas,
+      o2FlueGasEnriched: this.o2Enrichment.o2FlueGasEnriched,
+      combAirTemp: this.o2Enrichment.combAirTemp,
+      combAirTempEnriched: this.o2Enrichment.combAirTempEnriched,
+      fuelConsumption: this.o2Enrichment.fuelConsumption,
+      color: "#2ECC71"
+    };
 
     this.svg.selectAll("#formLine").remove();
     this.drawCurve(this.svg, this.x, this.y, line, true);
@@ -552,15 +536,15 @@ export class O2EnrichmentGraphComponent implements OnInit {
     this.svg.selectAll(".plottedPoint").remove();
 
     console.log(this.lines.length);
-    for(var i = 0; i < this.lines.length; i++){
+    for (var i = 0; i < this.lines.length; i++) {
       this.drawCurve(this.svg, this.x, this.y, this.lines[i], false);
     }
 
   }
 
 
-  plotLine(){
-    if(this.change) {
+  plotLine() {
+    if (this.change) {
       var color = this.getRandomColor();
 
       var line = {
@@ -573,7 +557,8 @@ export class O2EnrichmentGraphComponent implements OnInit {
         combAirTemp: this.o2Enrichment.combAirTemp,
         combAirTempEnriched: this.o2Enrichment.combAirTempEnriched,
         fuelConsumption: this.o2Enrichment.fuelConsumption,
-        color: color};
+        color: color
+      };
 
       this.drawCurve(this.svg, this.x, this.y, line, false);
 
@@ -594,4 +579,4 @@ export class O2EnrichmentGraphComponent implements OnInit {
   }
 
 
-  }
+}

@@ -12,7 +12,7 @@ export class O2EnrichmentComponent implements OnInit {
     o2CombAir: 21,
     o2CombAirEnriched: 100,
     flueGasTemp: 1800,
-    flueGasTempEnriched: 1900,
+    flueGasTempEnriched: 1800,
     o2FlueGas: 5,
     o2FlueGasEnriched: 1,
     combAirTemp: 900,
@@ -27,6 +27,8 @@ export class O2EnrichmentComponent implements OnInit {
     fuelSavingsEnriched: 0.0
   };
 
+  tabSelect: string = 'results';
+  currentField: string = 'o2CombAir';
   constructor(private phastService: PhastService) { }
 
   ngOnInit() {
@@ -35,5 +37,13 @@ export class O2EnrichmentComponent implements OnInit {
 
   calculate() {
     this.o2EnrichmentOutput = this.phastService.o2Enrichment(this.o2Enrichment);
+  }
+
+  setTab(str: string) {
+    this.tabSelect = str;
+  }
+
+  changeField(str: string){
+    this.currentField = str;
   }
 }

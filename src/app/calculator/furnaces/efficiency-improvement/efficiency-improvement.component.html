@@ -1,12 +1,19 @@
-<div class="row">
-  <div class="col-lg-8 col-md-10 col-sm-12">
-    <div class="card card-block">
+<div class="pump-head">
+  <div class="row">
+    <div class="col-md-5 col-sm-12 offset-md-1">
       <app-efficiency-improvement-form [(efficiencyImprovementInputs)]="efficiencyImprovementInputs" [efficiencyImprovementOutputs]="efficiencyImprovementOutputs"
         (calculate)="calculate()" (changeField)="setCurrentField($event)">
       </app-efficiency-improvement-form>
     </div>
-  </div>
-  <div class="col-4">
-    <app-efficiency-improvement-help [currentField]="currentField"></app-efficiency-improvement-help>
+    <div class="col-md-5 col-sm-12">
+      <ul class="tabs primary">
+        <li class="calc-tab active">
+          <a style="text-align: center;">Help</a>
+        </li>
+      </ul>
+      <div class="tab-content">
+        <app-efficiency-improvement-help [currentField]="currentField"></app-efficiency-improvement-help>
+      </div>
+    </div>
   </div>
 </div>

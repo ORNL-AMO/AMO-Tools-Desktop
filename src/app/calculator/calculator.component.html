@@ -20,69 +20,75 @@
                     <li>
                         <a (click)="showTool('pumps','head-tool')">Head Tool</a>
                         <p>
-                          Use head tool calculator to calculate pump head.
+                            Use head tool calculator to calculate pump head.
                         </p>
                     </li>
                     <li>
                         <a (click)="showTool('pumps','system-curve')">System Curve</a>
                         <p>
-                          Use system curve to graph your pumps flow.
+                            Use system curve to graph your pumps flow.
                         </p>
                     </li>
                     <li>
                         <a (click)="showTool('pumps','nema-energy-efficiency')">NEMA Energy Efficiency</a>
                         <p>
-                          The predicted efficiency of an induction motor from NEMA MG1, based on size, rotating speed
-                          and efficiency class.
+                            The predicted efficiency of an induction motor from NEMA MG1, based on size, rotating speed and efficiency class.
                         </p>
                     </li>
                     <li>
                         <a (click)="showTool('pumps','specific-speed')">Specific Speed</a>
                         <p>
-                          For each pump type there is an optimal specific speed based on size, flow rate, specific
-                          speed. Hydraulic Institute standards also include factors for wear and surface finish on
-                          wetted parts but these two factors are not considered in the PSAT calculations. Operation at
-                          the optimal specific speed allows a pump to operate at maximum efficiency. This calculator
-                          determines the specific speed for a pump at the given conditions and calculates the amount of
-                          efficiency penalty to be deducted from the maximum value due to operation away from the
-                          optimal specific speed.
+                            For each pump type there is an optimal specific speed based on size, flow rate, specific speed. Hydraulic Institute standards
+                            also include factors for wear and surface finish on wetted parts but these two factors are not
+                            considered in the PSAT calculations. Operation at the optimal specific speed allows a pump to
+                            operate at maximum efficiency. This calculator determines the specific speed for a pump at the
+                            given conditions and calculates the amount of efficiency penalty to be deducted from the maximum
+                            value due to operation away from the optimal specific speed.
                         </p>
                     </li>
                     <li>
                         <a (click)="showTool('pumps','achievable-efficiency')">Pump Efficiency Curves</a>
                         <p>
-                          Determine the achievable pump efficiency for vaious pump styles which are based on the
-                          Hydraulic Institute (HI) standard ANSI/HI 1.3-2000
+                            Determine the achievable pump efficiency for vaious pump styles which are based on the Hydraulic Institute (HI) standard
+                            ANSI/HI 1.3-2000
                         </p>
                     </li>
                     <li>
                         <a (click)="showTool('pumps','motor-performance')">Motor Performance</a>
                         <p>
-                          Plots current, efficiency, power factor vs motor shaft load for a given motor description.
+                            Plots current, efficiency, power factor vs motor shaft load for a given motor description.
                         </p>
                     </li>
                 </ul>
 
                 <h3>Furnaces</h3>
                 <ul>
-                    <!--<li>
+                    <li>
                         <a (click)="showTool('furnaces','o2-enrichment')">O2 Enrichment</a>
                         <p>Use the O2 Enrichment calculator to estimate fuel savings from adjusting the oxygen content of combustion
                             and flue gases
                         </p>
-                    </li>-->
+                    </li>
                     <li>
                         <a (click)="showTool('furnaces','efficiency-improvement')">Efficiency Improvement</a>
                         <p>
-                          Use the Efficiency Improvement calculator to explore potential fuel savings from adjusting
-                          burner operating conditions.
+                            Use the Efficiency Improvement calculator to explore potential fuel savings from adjusting burner operating conditions.
                         </p>
                     </li>
                     <li>
                         <a (click)="showTool('furnaces','energy-equivalency')">Energy Equivalency</a>
                         <p>
-                          Use the Energy Equivalency calculator to learn the required heat input when switching heat
-                          source from fuel-fired to electric or vice versa.
+                            Use the Energy Equivalency calculator to learn the required heat input when switching heat source from fuel-fired to electric
+                            or vice versa.
+                        </p>
+                    </li>
+                    <li>
+                        <a (click)="showTool('furnaces', 'energy-use')">Flow Calculations Energy Use</a>
+                        <p>
+                            Calculation of flow rates for commonly used gases using data for an orifice type flow meter and heat input calculations when
+                            the gas is a fuel (i.e. natural gas, propane). This calculator estimates the energy flow into
+                            the furnace by calculating the gas flow from data obtained by an orifice meter. This can then
+                            be compared to the calculations provided by the PHAST tool.
                         </p>
                     </li>
                 </ul>

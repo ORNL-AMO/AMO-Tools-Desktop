@@ -2,5 +2,6 @@
 .results-box{
     border: solid;
     border-radius: 10px;
-    border-color: #BF3D00
+    border-color: #BF3D00;
+    padding: 5px;
 }

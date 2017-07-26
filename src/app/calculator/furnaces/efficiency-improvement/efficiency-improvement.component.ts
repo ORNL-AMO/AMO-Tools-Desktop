@@ -11,14 +11,14 @@ export class EfficiencyImprovementComponent implements OnInit {
   efficiencyImprovementInputs: EfficiencyImprovementInputs = {
     currentFlueGasOxygen: 6,
     newFlueGasOxygen: 2,
-    currentFlueGasTemp: 1600,
+    currentFlueGasTemp: 80,
     currentCombustionAirTemp: 80,
     newCombustionAirTemp: 750,
     currentEnergyInput: 10,
-    newFlueGasTemp: 1200
+    newFlueGasTemp: 1600
   }
   efficiencyImprovementOutputs: EfficiencyImprovementOutputs;
-  currentField: string;
+  currentField: string = 'flueGasOxygen';
   constructor(private phastService: PhastService) { }
 
   ngOnInit() {

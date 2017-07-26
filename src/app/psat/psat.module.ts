@@ -37,6 +37,8 @@ import { ExploreOpportunitiesFormComponent } from './explore-opportunities/explo
 import { ExploreOpportunitiesResultsComponent } from './explore-opportunities/explore-opportunities-results/explore-opportunities-results.component';
 import { ExploreOpportunitiesHelpComponent } from './explore-opportunities/explore-opportunities-help/explore-opportunities-help.component';
 
+//import { ExploreOpportunitiesSankeyComponent } from './explore-opportunities/explore-opportunities-sankey/explore-opportunities-sankey.component';
+
 @NgModule({
   declarations: [
     PsatComponent,
@@ -59,6 +61,7 @@ import { ExploreOpportunitiesHelpComponent } from './explore-opportunities/explo
     ExploreOpportunitiesFormComponent,
     ExploreOpportunitiesResultsComponent,
     ExploreOpportunitiesHelpComponent
+  //  ExploreOpportunitiesSankeyComponent
   ],
   exports: [
     PsatReportComponent

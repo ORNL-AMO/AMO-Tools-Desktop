@@ -1,17 +1,19 @@
-<div class="row">
-  <div class="col-md-8 col-sm-12">
-    <div class="card card-block">
+<div class="pump-head">
+  <div class="row">
+    <div class="col-md-5 col-sm-12 offset-md-1">
       <app-energy-equivalency-form [(energyEquivalencyElectric)]="energyEquivalencyElectric" [(energyEquivalencyFuel)]="energyEquivalencyFuel"
         (calculateFuel)="calculateFuel()" (calculateElectric)="calculateElectric()" [energyEquivalencyElectricOutput]="energyEquivalencyElectricOutput"
         [energyEquivalencyFuelOutput]="energyEquivalencyFuelOutput" (changeField)="setCurrentField($event)"></app-energy-equivalency-form>
     </div>
-  </div>
-
-  <!--<div class="col-md-6 col-sm-12 calc-graph">
-    <p>Graph area</p>
-  </div>-->
-
-  <div class="col-md-4 col-sm-12">
-      <app-energy-equivalency-help [currentField]="currentField"></app-energy-equivalency-help>
+    <div class="col-md-5 col-sm-12">
+      <ul class="tabs primary">
+        <li class="calc-tab active">
+          <a style="text-align: center;">Help</a>
+        </li>
+      </ul>
+      <div class="tab-content">
+        <app-energy-equivalency-help [currentField]="currentField"></app-energy-equivalency-help>
+      </div>
+    </div>
   </div>
 </div>
