@@ -12,7 +12,7 @@ export class O2EnrichmentComponent implements OnInit {
     o2CombAir: 21,
     o2CombAirEnriched: 100,
     flueGasTemp: 1800,
-    flueGasTempEnriched: 1900,
+    flueGasTempEnriched: 1800,
     o2FlueGas: 5,
     o2FlueGasEnriched: 1,
     combAirTemp: 900,

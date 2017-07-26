@@ -9,14 +9,14 @@ import { PhastService } from '../../../phast/phast.service';
 export class EnergyEquivalencyComponent implements OnInit {
 
   energyEquivalencyElectric: EnergyEquivalencyElectric = {
-    fuelFiredEfficiency: 6.59,
-    electricallyHeatedEfficiency: 50,
-    fuelFiredHeatInput: 87.3
+    fuelFiredEfficiency: 60,
+    electricallyHeatedEfficiency: 90,
+    fuelFiredHeatInput: 10
   };
   energyEquivalencyFuel: EnergyEquivalencyFuel = {
-    electricallyHeatedEfficiency: 52.3,
-    fuelFiredEfficiency: 58.9,
-    electricalHeatInput: 700
+    electricallyHeatedEfficiency: 90,
+    fuelFiredEfficiency: 60,
+    electricalHeatInput: 1800
   };
 
   energyEquivalencyFuelOutput: EnergyEquivalencyFuelOutput = { fuelFiredHeatInput: 0 };
