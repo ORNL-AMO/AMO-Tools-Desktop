@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter, HostListener, ViewChild } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, HostListener, ViewChild, TemplateRef } from '@angular/core';
 import { Assessment } from '../shared/models/assessment';
 import { PSAT } from '../shared/models/psat';
 import * as _ from 'lodash';
@@ -26,8 +26,8 @@ export class DetailedReportComponent implements OnInit {
     this.checkActiveAssessment();
   }
 
- // @ViewChild('printModal') public printModal: ModalDirective;
-
+  //@ViewChild('printModal') public printModal: ModalDirective;
+  @ViewChild('reportTemplate') reportTemplate: TemplateRef<any>;
   assessments: Array<Assessment>;
 
   numAssessments: number;
@@ -80,7 +80,6 @@ export class DetailedReportComponent implements OnInit {
       }, 1000);
     }, 500)
   }
-
   // showPrintModal() {
   //   this.printModal.show();
   // }
@@ -194,10 +193,10 @@ export class DetailedReportComponent implements OnInit {
   }
 
   selectAssessment(assessment: Assessment) {
-    let doc = this.windowRefService.getDoc();
-    let content = doc.getElementById(assessment.id);
-    this.focusedAssessment = assessment;
-    content.scrollIntoView();
+     let doc = this.windowRefService.getDoc();
+     let content = doc.getElementById('assessment_'+assessment.id);
+     this.focusedAssessment = assessment;
+     content.scrollIntoView();
   }
 
   exportToCsv() {
@@ -224,12 +223,9 @@ export class DetailedReportComponent implements OnInit {
   checkVisibleSummary() {
     let doc = this.windowRefService.getDoc();
     let summaryDiv = doc.getElementById("reportSummary");
-
     let window = this.windowRefService.nativeWindow;
-
     let y = summaryDiv.offsetTop;
     let height = summaryDiv.offsetHeight;
-
     let maxHeight = y + height;
     this.isSummaryVisible = (y < (window.pageYOffset + window.innerHeight)) && (maxHeight >= window.pageYOffset);
   }
@@ -241,7 +237,7 @@ export class DetailedReportComponent implements OnInit {
     let scrollAmount = (window.pageYOffset !== undefined) ? window.pageYOffset : (doc.documentElement || doc.body.parentNode || doc.body).scrollTop;
     let activeSet: boolean = false;
     let isFirstElement: boolean = true;
-    let firstAssessment = doc.getElementById(this.reportAssessments[0].id);
+    let firstAssessment = doc.getElementById('assessment_'+this.reportAssessments[0].id);
     if (scrollAmount < (firstAssessment.clientHeight - 200)) {
       this.focusedAssessment = this.reportAssessments[0];
     } else {
@@ -261,7 +257,7 @@ export class DetailedReportComponent implements OnInit {
     assessments.forEach(assessment => {
       if (!isFirstElement) {
         if (!activeSet) {
-          let assessmentDiv = doc.getElementById(assessment.id);
+          let assessmentDiv = doc.getElementById('assessment_'+assessment.id);
           if (assessmentDiv) {
             let distanceScrolled = Math.abs(scrollAmount - assessmentDiv.offsetTop);
             let fromBottom = Math.abs(scrollAmount - (assessmentDiv.offsetTop + assessmentDiv.clientHeight));
