@@ -32,7 +32,7 @@ export class EnergyUseComponent implements OnInit {
     totalFlow: 0
   };
 
-  currentField: string;
+  currentField: string = 'orificeDiameter';
   tabSelect: string = 'results';
 
   constructor(private phastService: PhastService) { }

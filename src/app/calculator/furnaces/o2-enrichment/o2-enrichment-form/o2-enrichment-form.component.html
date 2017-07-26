@@ -8,8 +8,8 @@
       <div class="form-group">
         <label class="small" for="o2CombAir">O<sub>2</sub> in combustion air</label>
         <div class="input-group">
-          <input type="number" min="1" step="any" max="100" class="form-control" id="o2CombAir" (keyup)="calc()" (focus)="changeField('o2CombAir')"
-            [(ngModel)]="o2Enrichment.o2CombAir" onfocus="this.select();" autofocus>
+          <input autofocus type="number" min="1" step="any" max="100" class="form-control" id="o2CombAir" (input)="calc()" (focus)="changeField('o2CombAir')"
+            [(ngModel)]="o2Enrichment.o2CombAir" onfocus="this.select();">
           <span class="input-group-addon units">%</span>
         </div>
       </div>
@@ -17,7 +17,7 @@
       <div class="form-group">
         <label class="small" for="combAirTemp">Combustion air preheat temperature</label>
         <div class="input-group">
-          <input type="number" min="0" step="any" class="form-control" id="combAirTemp" (keyup)="calc()" (focus)="changeField('combAirTemp')"
+          <input type="number" min="0" step="any" class="form-control" id="combAirTemp" (input)="calc()" (focus)="changeField('combAirTemp')"
             [(ngModel)]="o2Enrichment.combAirTemp" onfocus="this.select();">
           <span class="input-group-addon units">&#8457;</span>
         </div>
@@ -26,7 +26,7 @@
       <div class="form-group">
         <label class="small" for="o2FlueGas">O<sub>2</sub> in flue gasses</label>
         <div class="input-group">
-          <input type="number" min="1" step="any" max="100" class="form-control" id="o2FlueGas" (keyup)="calc()" (focus)="changeField('o2FlueGas')"
+          <input type="number" min="1" step="any" max="100" class="form-control" id="o2FlueGas" (input)="calc()" (focus)="changeField('o2FlueGas')"
             [(ngModel)]="o2Enrichment.o2FlueGas" onfocus="this.select();">
           <span class="input-group-addon units">% Dry</span>
         </div>
@@ -35,7 +35,7 @@
       <div class="form-group">
         <label class="small" for="flueGasTemp">Flue gas temperature</label>
         <div class="input-group">
-          <input type="number" min="1" step="any" class="form-control" id="flueGasTemp" (keyup)="calc()" (focus)="changeField('flueGasTemp')"
+          <input type="number" min="1" step="any" class="form-control" id="flueGasTemp" (input)="calc()" (focus)="changeField('flueGasTemp')"
             [(ngModel)]="o2Enrichment.flueGasTemp" onfocus="this.select();">
           <span class="input-group-addon units">&#8457;</span>
         </div>
@@ -44,7 +44,7 @@
       <div class="form-group">
         <label class="small" for="fuelConsumption"><strong>Fuel consumption</strong></label>
         <div class="input-group">
-          <input type="number" min="0" step="any" class="form-control" id="fuelConsumption" (keyup)="calc()" (focus)="changeField('fuelConsumption')"
+          <input type="number" min="0" step="any" class="form-control" id="fuelConsumption" (input)="calc()" (focus)="changeField('fuelConsumption')"
             [(ngModel)]="o2Enrichment.fuelConsumption" onfocus="this.select();">
           <span class="input-group-addon units">MM Btu/h</span>
         </div>
@@ -69,7 +69,7 @@
         <label class="small" for="o2CombAirEnriched">O<sub>2</sub> in combustion air</label>
         <div class="input-group">
           <input type="number" min="1" step="any" max="100" class="form-control" id="o2CombAirEnriched" (focus)="changeField('o2CombAir')"
-            [(ngModel)]="o2Enrichment.o2CombAirEnriched" (keyup)="calc()" onfocus="this.select();">
+            [(ngModel)]="o2Enrichment.o2CombAirEnriched" (input)="calc()" onfocus="this.select();">
           <span class="input-group-addon units">%</span>
         </div>
       </div>
@@ -78,7 +78,7 @@
         <label class="small" for="combAirTempEnriched">Combustion air preheat temperature</label>
         <div class="input-group">
           <input type="number" min="0" step="any" class="form-control" id="combAirTempEnriched" (focus)="changeField('combAirTemp')"
-            [(ngModel)]="o2Enrichment.combAirTempEnriched" (keyup)="calc()" onfocus="this.select();">
+            [(ngModel)]="o2Enrichment.combAirTempEnriched" (input)="calc()" onfocus="this.select();">
           <span class="input-group-addon units">&#8457;</span>
         </div>
       </div>
@@ -86,7 +86,7 @@
       <div class="form-group">
         <label class="small" for="o2FlueGasEnriched">O<sub>2</sub> in flue gasses</label>
         <div class="input-group">
-          <input type="number" min="1" step="any" max="100" class="form-control" id="o2FlueGasEnriched" (keyup)="calc()" (focus)="changeField('o2FlueGas')"
+          <input type="number" min="1" step="any" max="100" class="form-control" id="o2FlueGasEnriched" (input)="calc()" (focus)="changeField('o2FlueGas')"
             [(ngModel)]="o2Enrichment.o2FlueGasEnriched" onfocus="this.select();">
           <span class="input-group-addon units">%  Dry</span>
         </div>
@@ -95,7 +95,7 @@
       <div class="form-group">
         <label class="small" for="flueGasTempEnriched">Flue gas temperature</label>
         <div class="input-group">
-          <input type="number" min="1" step="any" class="form-control" id="flueGasTempEnriched" (keyup)="calc()" (focus)="changeField('flueGasTemp')"
+          <input type="number" min="1" step="any" class="form-control" id="flueGasTempEnriched" (input)="calc()" (focus)="changeField('flueGasTemp')"
             [(ngModel)]="o2Enrichment.flueGasTempEnriched" onfocus="this.select();">
           <span class="input-group-addon units">&#8457;</span>
         </div>

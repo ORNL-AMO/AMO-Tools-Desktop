@@ -12,8 +12,8 @@
       <label class="col-4 col-form-label" for="currentFlueGasOxygen">Flue Gas Oxygen</label>
       <div class="col-4">
         <div class="input-group">
-          <input class="form-control" name="currentFlueGasOxygen" type="number" step="any" id="currentFlueGasOxygen" [(ngModel)]="efficiencyImprovementInputs.currentFlueGasOxygen"
-            (input)="calc()" onfocus="this.select();" autofocus (focus)="focusField('flueGasOxygen')">
+          <input autofocus class="form-control" name="currentFlueGasOxygen" type="number" step="any" id="currentFlueGasOxygen" [(ngModel)]="efficiencyImprovementInputs.currentFlueGasOxygen"
+            (input)="calc()" onfocus="this.select();" (focus)="focusField('flueGasOxygen')">
           <span class="input-group-addon units">% Dry</span>
         </div>
       </div>
