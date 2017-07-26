@@ -41,7 +41,7 @@
 </div>
 
 <div class="report" *ngIf="dashboardView == 'detailed-report'">
-    <app-detailed-report [selectedItems]="returnSelected()" (emitCloseReport)="closeReport()"></app-detailed-report>
+    <app-detailed-report [selectedItems]="selectedItems" (emitCloseReport)="closeReport()"></app-detailed-report>
 </div>
 
 

@@ -1,4 +1,4 @@
-<div *ngIf="assessmentsGathered">
+<div #reportTemplate *ngIf="assessmentsGathered">
   <div class="row justify-content-center report-container">
     <div class="col-10 report-column">
       <div class="report-header">
@@ -34,7 +34,7 @@
               <div class="col-md-6 report-list-nav" [ngClass]="{'fixed-nav': !isSummaryVisible}">
                 <h5>Pumps</h5>
                 <ul *ngIf="focusedAssessment">
-                  <li *ngFor="let assessment of reportAssessments" [ngClass]="{'active': focusedAssessment.id == assessment.id}"><a href="#assessment.id" (click)="selectAssessment(assessment)">{{assessment.name}}</a></li>
+                  <li *ngFor="let assessment of reportAssessments" [ngClass]="{'active': focusedAssessment.id == assessment.id}"><a (click)="selectAssessment(assessment)">{{assessment.name}}</a></li>
                 </ul>
               </div>
             </div>
@@ -46,7 +46,7 @@
             </div>
           </div>
           <div class="col-8 assessment-report-container">
-            <div class="assessment-report-item" *ngFor="let assessment of reportAssessments" id="{{assessment.id}}">
+            <div *ngFor="let assessment of reportAssessments" id="{{'assessment_'+assessment.id}}">
               <app-psat-report style="width: 100%" [assessment]="assessment" [inRollup]="true" (selectModification)="updateSummary($event)"></app-psat-report>
             </div>
           </div>

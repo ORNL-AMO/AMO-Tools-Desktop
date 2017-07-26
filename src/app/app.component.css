@@ -1510,7 +1510,7 @@ Reporting
   -moz-box-shadow: 0px 1px 5px 0px rgba(0,0,0,0.75);
   box-shadow: 0px 1px 5px 0px rgba(0,0,0,0.75);
   margin-top: 15px;
-  margin-bottom: 100px;
+  margin-bottom: 20px;
 }
 .assessment-report h3 {
   font-size: 18px;
@@ -1539,9 +1539,7 @@ Reporting
 .assessment-report-container{
   padding-bottom: 15px;
 }
-.assessment-report-item{
-  border-bottom: dashed;
-}
+
 .report-data dl {
   text-align: center;
   margin-top: 10px;
