@@ -1,14 +1,15 @@
 <div class="help-panel">
   <div class="calc-help">
-    <div class="help-header">
+    <!--<div class="help-header">
       <h3>Energy Use Calculater Help</h3>
       <p>
-        Calculation of flow rates for commonly used gases using data for an orifice type flow meter and heat input calculations when the gas is a fuel (i.e. natural gas, propane). 
+        Calculation of flow rates for commonly used gases using data for an orifice type flow meter and heat input calculations when
+        the gas is a fuel (i.e. natural gas, propane).
       </p>
       <p class="text-muted">
         <span class="fa fa-youtube-play"></span> Watch tutorial on entering atmosphere loss data.
       </p>
-    </div>
+    </div>-->
 
     <div class="help-content">
       <div class="card" *ngIf="currentField == 'gasType'">
@@ -18,7 +19,8 @@
         <div class="card-block">
           <label><u>Description:</u></label>
           <p>
-             A drop down list of several gases used within fuel-fired gases.  Changing this automatically changes the field “Specific gravity of gas”.
+            A drop down list of several gases used within fuel-fired gases. Changing this automatically changes the field “Specific gravity
+            of gas”.
           </p>
         </div>
       </div>
@@ -33,7 +35,7 @@
           </p>
           <label><u>Input:</u></label>
           <p>
-            Units: <strong></strong><br> Minimum Value Allowed: <strong>0</strong><br> Maximum Value Allowed: <strong>100</strong><br>
+            Units: <strong>inch or cm</strong><br> Minimum Value Allowed: <strong>0</strong><br> Maximum Value Allowed: <strong>100</strong><br>
           </p>
         </div>
       </div>
@@ -48,7 +50,7 @@
           </p>
           <label><u>Input:</u></label>
           <p>
-            Units: <strong></strong><br> Minimum Value Allowed: <strong>0</strong><br> Maximum Value Allowed: <strong>100</strong><br>
+            Units: <strong>inch or cm</strong><br> Minimum Value Allowed: <strong>0</strong><br> Maximum Value Allowed: <strong>100</strong><br>
           </p>
         </div>
       </div>
@@ -59,11 +61,12 @@
         <div class="card-block">
           <label><u>Description:</u></label>
           <p>
-            Pressure drop across the orifice (inches in water column or cm in water column).
+            Pressure drop across the orifice.
           </p>
           <label><u>Input:</u></label>
           <p>
-            Units: <strong></strong><br> Minimum Value Allowed: <strong>0</strong><br> Maximum Value Allowed: <strong>100</strong><br>
+            Units: <strong>inch W.C. or cm W.C</strong><br> Minimum Value Allowed: <strong>0</strong><br> Maximum Value Allowed:
+            <strong>100</strong><br>
           </p>
         </div>
       </div>
@@ -74,11 +77,11 @@
         <div class="card-block">
           <label><u>Description:</u></label>
           <p>
-            Total time for flow / heating 
+            Total time for flow / heating
           </p>
           <label><u>Input:</u></label>
           <p>
-            Units: <strong></strong><br> Minimum Value Allowed: <strong>0</strong><br> Maximum Value Allowed: <strong>10,000</strong><br>
+            Units: <strong>Hours</strong><br> Minimum Value Allowed: <strong>0</strong><br> Maximum Value Allowed: <strong>10,000</strong><br>
           </p>
         </div>
       </div>
@@ -91,10 +94,6 @@
           <p>
             Type of orifice. Changing this automatically changes the field “Coefficient of Discharge”
           </p>
-          <label><u>Input:</u></label>
-          <p>
-            Units: <strong></strong><br> Minimum Value Allowed: <strong>0</strong><br> Maximum Value Allowed: <strong>100</strong><br>
-          </p>
         </div>
       </div>
       <div class="card" *ngIf="currentField == 'gasTemperature'">
@@ -104,11 +103,12 @@
         <div class="card-block">
           <label><u>Description:</u></label>
           <p>
-            Temperature of the gas entering the orifice 
+            Temperature of the gas entering the orifice
           </p>
           <label><u>Input:</u></label>
           <p>
-            Units: <strong></strong><br> Minimum Value Allowed: <strong>0</strong><br> Maximum Value Allowed: <strong>3,000</strong><br>
+            Units: <strong> &#8457; or &#8451;</strong><br> Minimum Value Allowed: <strong>0</strong><br> Maximum Value Allowed:
+            <strong>3,000</strong><br>
           </p>
         </div>
       </div>
@@ -123,7 +123,8 @@
           </p>
           <label><u>Input:</u></label>
           <p>
-            Units: <strong></strong><br> Minimum Value Allowed: <strong>0</strong><br> Maximum Value Allowed: <strong>100</strong><br>
+            Units: <strong>psig or kPa</strong><br> Minimum Value Allowed: <strong>0</strong><br> Maximum Value Allowed:
+            <strong>100</strong><br>
           </p>
         </div>
       </div>
@@ -138,7 +139,7 @@
           </p>
           <label><u>Input:</u></label>
           <p>
-            Units: <strong></strong><br> Minimum Value Allowed: <strong>0</strong><br> Maximum Value Allowed: <strong>1</strong><br>
+            Minimum Value Allowed: <strong>0</strong><br> Maximum Value Allowed: <strong>1</strong><br>
           </p>
         </div>
       </div>
@@ -153,7 +154,8 @@
           </p>
           <label><u>Input:</u></label>
           <p>
-            Units: <strong></strong><br> Minimum Value Allowed: <strong>0</strong><br> Maximum Value Allowed: <strong>5,000</strong><br>
+            Units: <strong>BTU / ft<sup>3</sup> or MJ/m<sup>3</sup></strong><br> Minimum Value Allowed: <strong>0</strong><br>Maximum
+            Value Allowed: <strong>5,000</strong><br>
           </p>
         </div>
       </div>
@@ -168,7 +170,7 @@
           </p>
           <label><u>Input:</u></label>
           <p>
-            Units: <strong></strong><br> Minimum Value Allowed: <strong>0</strong><br> Maximum Value Allowed: <strong>5</strong><br>
+            Minimum Value Allowed: <strong>0</strong><br> Maximum Value Allowed: <strong>5</strong><br>
           </p>
         </div>
       </div>

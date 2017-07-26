@@ -853,11 +853,6 @@ Calculators
   background: transparent;
 }
 
-
-.calc-row-padding{
-  padding-top: 5%;
-}
-
 /* Pump Head
 ================================================ */
 .pump-head select.form-control:not([size]):not([multiple]) {

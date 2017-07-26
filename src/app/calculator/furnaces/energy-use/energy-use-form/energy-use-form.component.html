@@ -18,8 +18,8 @@
         <div class="form-group">
           <label class="small" for="orificeDiameter">Orifice Diameter</label>
           <div class="input-group">
-            <input name="orificeDiameter" [(ngModel)]="flowCalculations.orificeDiameter" type="number" step="any" class="form-control"
-              id="orificeDiameter" (input)="calculate()" onfocus="this.select();" (focus)="focusField('orificeDiameter')" autofocus>
+            <input autofocus name="orificeDiameter" [(ngModel)]="flowCalculations.orificeDiameter" type="number" step="any" class="form-control"
+              id="orificeDiameter" (input)="calculate()" onfocus="this.select();" (focus)="focusField('orificeDiameter')">
             <span class="input-group-addon units">Inch</span>
           </div>
         </div>
