@@ -941,6 +941,13 @@ Footer
     background: rgba(0,0,0,0.3);
     cursor: pointer;
   }
+  .pills-nav .disabled span {
+    color: rgba(255,255,255,0.5);
+  }
+    .pills-nav .disabled span:hover {
+      background: transparent;
+      cursor: default;
+    }
 
 
 
