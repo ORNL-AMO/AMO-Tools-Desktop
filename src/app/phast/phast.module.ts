@@ -36,8 +36,7 @@ import { SettingsModule } from '../settings/settings.module';
     HelpPanelComponent,
     DataPanelComponent,
     SankeyDiagramComponent,
-    SystemSetupComponent,
-    DesignedEnergyModule
+    SystemSetupComponent
 
   ],
   exports: [
@@ -52,7 +51,8 @@ import { SettingsModule } from '../settings/settings.module';
     LossesModule,
     ToastyModule,
     SettingsModule,
-    MeteredEnergyModule
+    MeteredEnergyModule,
+    DesignedEnergyModule
   ],
   providers: [
     PhastService

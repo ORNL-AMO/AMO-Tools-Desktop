@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DesignedEnergyComponent } from './designed-energy.component';
 import { DesignedEnergyFuelComponent } from './designed-energy-fuel/designed-energy-fuel.component';
 import { DesignedEnergyElectricityComponent } from './designed-energy-electricity/designed-energy-electricity.component';
@@ -14,7 +15,9 @@ import { DesignedEnergyElectricityHelpComponent } from './designed-energy-electr
 
 @NgModule({
   imports: [
-    CommonModule
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule
   ],
   declarations: [
     DesignedEnergyComponent,

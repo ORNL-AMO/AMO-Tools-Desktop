@@ -20,5 +20,10 @@ export interface DesignedEnergyElectricity {
 }
 
 export interface DesignedEnergyResults {
-    
+    designedEnergyUsed: number,
+    designedEnergyIntensity: number,
+    designedElectricityUsed: number,
+    calculatedFuelEnergyUsed: number,
+    calculatedEnergyIntensity: number,
+    calculatedElectricityUsed: number
 }

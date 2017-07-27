@@ -1,3 +1,31 @@
-<p>
-  designed-energy-electricity works!
-</p>
+<div class="container-fluid">
+  <div class="row modify-conditions explore-container">
+    <div class="col-md-6 explore-column">
+      <app-designed-energy-electricity-form [inputs]="inputs" (emitCalculate)="calculate()" (emitSave)="save()" (changeField)="setField($event)"></app-designed-energy-electricity-form>
+    </div>
+    <div class="col-md-6 results-column">
+      <div class="help-panel">
+        <div class="row">
+          <ul class="tabs primary tab-row">
+            <li class="calc-tab tab-item" [ngClass]="{'active': tabSelect == 'results'}">
+              <a (click)="setTab('results')">Results</a>
+            </li><!--
+						--><li class="calc-tab tab-item" [ngClass]="{'active': tabSelect == 'help'}">
+              <a (click)="setTab('help')">Help</a>
+            </li>
+          </ul>
+        </div>
+        <div class="row justify-content-center data-row align-items-center" *ngIf="tabSelect == 'help'">
+          <div class="col-11">
+            <app-designed-energy-electricity-help [currentField]="currentField"></app-designed-energy-electricity-help>
+          </div>
+        </div>
+        <div class="row justify-content-center data-row" *ngIf="tabSelect == 'results'">
+          <div class="col-8 data-table">
+            <app-designed-energy-results [results]="results"></app-designed-energy-results>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
