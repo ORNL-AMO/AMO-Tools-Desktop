@@ -46,9 +46,9 @@
     <app-losses [(phast)]="_phast" [saveClicked]="saveClicked" (saved)="saveDb()" [settings]="settings"></app-losses>
   </div>
 
-  <div class="row tab-content" *ngIf="currentTab == 'designed-energy-use'">
+  <div class="row tab-content" *ngIf="currentTab == 'designed-energy-use' && settings">
     <div class="col-12">
-      <app-designed-energy-use></app-designed-energy-use>
+      <app-designed-energy [settings]="settings"></app-designed-energye>
     </div>
   </div>
 

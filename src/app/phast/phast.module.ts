@@ -7,7 +7,7 @@ import { ModalModule } from 'ngx-bootstrap';
 import { ToastyModule } from 'ng2-toasty';
 import { MeteredEnergyModule } from './metered-energy/metered-energy.module';
 import { LossesModule } from './losses/losses.module';
-
+import { DesignedEnergyModule } from './designed-energy/designed-energy.module';
 import { PhastComponent } from './phast.component';
 import { PhastBannerComponent } from './phast-banner/phast-banner.component';
 import { SankeyComponent } from './sankey/sankey.component';
@@ -15,7 +15,6 @@ import { SankeyDiagramComponent } from './sankey/sankey-diagram/sankey-diagram.c
 import { SystemBasicsComponent } from './system-basics/system-basics.component';
 import { OperatingHoursComponent } from './operating-hours/operating-hours.component';
 import { AuxEquipmentComponent } from './aux-equipment/aux-equipment.component';
-import { DesignedEnergyUseComponent } from './designed-energy-use/designed-energy-use.component';
 import { PhastTabsComponent } from './phast-tabs/phast-tabs.component';
 import { HelpPanelComponent } from './help-panel/help-panel.component';
 import { DataPanelComponent } from './data-panel/data-panel.component';
@@ -34,11 +33,11 @@ import { SettingsModule } from '../settings/settings.module';
     SystemBasicsComponent,
     OperatingHoursComponent,
     AuxEquipmentComponent,
-    DesignedEnergyUseComponent,
     HelpPanelComponent,
     DataPanelComponent,
     SankeyDiagramComponent,
-    SystemSetupComponent
+    SystemSetupComponent,
+    DesignedEnergyModule
 
   ],
   exports: [
