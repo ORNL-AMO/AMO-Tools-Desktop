@@ -1,0 +1,90 @@
+<div class="explore-opportunities">
+  <h2>Metered Energy Use (Fuel)</h2>
+  <p>DESCRIPTION</p>
+  <ul>
+    <li>
+      <label>
+								Total Fuel Consumption
+							</label>
+      <ul>
+        <li>
+          <form>
+            <div class="form-group">
+              <label for="fuelType">Fuel</label>
+              <select name="fuelType" id="fuelType" class="form-control" (focus)="focusField('fuelType')" (change)="calculate()" [(ngModel)]="inputs.fuelType">
+                  <option *ngFor="let type of fuelTypes" [ngValue]="type.value">{{type.name}}</option>
+                </select>
+            </div>
+          </form>
+        </li>
+        <li>
+          <form>
+            <div class="form-group">
+              <label for="heatingValue">Heating Value - HHV</label>
+              <div class="input-group">
+                <input name="heatingValue" type="number" step="any" id="heatingValue" class="form-control" (focus)="focusField('heatingValue')"
+                  [(ngModel)]="inputs.heatingValue" (input)="calculate()" onfocus="this.select();"/>
+                <span class="input-group-addon units">BTU/SCF</span>
+              </div>
+            </div>
+          </form>
+        </li>
+        <li>
+          <form>
+            <div class="form-group">
+              <label for="flowRate">Flow Rate During Collection</label>
+              <div class="input-group">
+                <input name="flowRate" type="number" step="any" id="flowRate" class="form-control" (focus)="focusField('flowRate')" [(ngModel)]="inputs.flowRate"
+                  (input)="calculate()" onfocus="this.select();"/>
+                <span class="input-group-addon units">SCFh</span>
+              </div>
+            </div>
+          </form>
+        </li>
+        <li>
+          <form>
+            <div class="form-group">
+              <label for="collectionTime">Collection Time</label>
+              <div class="input-group">
+                <input name="collectionTime" type="number" step="any" id="collectionTime" class="form-control" (focus)="focusField('collectionTime')"
+                  [(ngModel)]="inputs.collectionTime" (input)="calculate()" onfocus="this.select();"/>
+                <span class="input-group-addon units">hrs</span>
+              </div>
+            </div>
+          </form>
+        </li>
+      </ul>
+    </li>
+    <li>
+      <label>
+								Total Electricity Consumption (Aux. Equipment)
+							</label>
+      <ul>
+        <li>
+          <form>
+            <div class="form-group">
+              <label for="electricityUsed">Electricity Used During Collection</label>
+              <div class="input-group">
+                <input name="electricityUsed" type="number" step="any" id="electricityUsed" class="form-control" (focus)="focusField('electricityUsed')"
+                  [(ngModel)]="inputs.electricityUsed" (input)="calculate()" onfocus="this.select();"/>
+                <span class="input-group-addon units">kWh</span>
+              </div>
+            </div>
+          </form>
+        </li>
+        <li>
+          <form>
+            <div class="form-group">
+              <label for="electricityCollectionTime">Collection Time</label>
+              <div class="input-group">
+                <input name="electricityCollectionTime" type="number" step="any" id="electricityCollectionTime" class="form-control" (focus)="focusField('electricityCollectionTime')"
+                  [(ngModel)]="inputs.electricityCollectionTime" (input)="calculate()" onfocus="this.select();"/>
+                <span class="input-group-addon units">hrs</span>
+              </div>
+            </div>
+          </form>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</div>

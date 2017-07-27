@@ -1,0 +1,73 @@
+<div class="help-header">
+
+  <h3>Metered Energy Help</h3>
+  <p>METERED ENERGY DESCRIPTION</p>
+  <p class="text-muted">
+    <span class="fa fa-youtube-play"></span> Watch tutorial on exploring opportunities
+  </p>
+
+</div>
+
+
+<div class="help-content">
+
+  <div class="card" *ngIf="currentField == 'totalHeatSteam'">
+    <div class="card-header">
+      Total Heat for Steam
+    </div>
+    <div class="card-header">
+      <strong><u>Description:</u></strong>
+      <p>
+        Description
+      </p>
+    </div>
+  </div>
+
+  <div class="card" *ngIf="currentField == 'flowRate'">
+    <div class="card-header">
+      Steam Flow During Calcuation
+    </div>
+    <div class="card-header">
+      <strong><u>Description:</u></strong>
+      <p>
+        Description
+      </p>
+    </div>
+  </div>
+
+  <div class="card" *ngIf="currentField == 'collectionTime'">
+    <div class="card-header">
+      Steam Collection Time
+    </div>
+    <div class="card-header">
+      <strong><u>Description:</u></strong>
+      <p>
+        Description
+      </p>
+    </div>
+  </div>
+
+  <div class="card" *ngIf="currentField == 'electricityUsed'">
+    <div class="card-header">
+      Electicity Used During Calcuation
+    </div>
+    <div class="card-header">
+      <strong><u>Description:</u></strong>
+      <p>
+        Description
+      </p>
+    </div>
+  </div>
+
+  <div class="card" *ngIf="currentField == 'electricityCollectionTime'">
+    <div class="card-header">
+      Collection Time (Aux. Equipment)
+    </div>
+    <div class="card-header">
+      <strong><u>Description:</u></strong>
+      <p>
+        Description
+      </p>
+    </div>
+  </div>
+</div>

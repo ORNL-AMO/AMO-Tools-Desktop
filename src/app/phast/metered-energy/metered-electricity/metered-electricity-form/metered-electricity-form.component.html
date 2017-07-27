@@ -1,0 +1,68 @@
+<div class="explore-opportunities">
+  <h2>Metered Energy Use (Electrotechnology)</h2>
+  <p>DESCRIPTION</p>
+  <ul>
+    <li>
+      <label>
+								Total Electricity Consumption (Process Heating Equipment)
+							</label>
+      <ul>
+        <li>
+          <form>
+            <div class="form-group">
+              <label for="electricityUsed">Electricity Used During Collection</label>
+              <div class="input-group">
+                <input name="electricityUsed" type="number" step="any" id="electricityUsed" class="form-control" (focus)="focusField('electricityUsed')"
+                  [(ngModel)]="inputs.electricityUsed" (input)="calculate()" onfocus="this.select();" />
+                <span class="input-group-addon units">kWh</span>
+              </div>
+            </div>
+          </form>
+        </li>
+        <li>
+          <form>
+            <div class="form-group">
+              <label for="electricityCollectionTime">Collection Time</label>
+              <div class="input-group">
+                <input name="electricityCollectionTime" type="number" step="any" id="electricityCollectionTime" class="form-control" (focus)="focusField('electricityCollectionTime')"
+                  [(ngModel)]="inputs.electricityCollectionTime" (input)="calculate()" onfocus="this.select();" />
+                <span class="input-group-addon units">hrs</span>
+              </div>
+            </div>
+          </form>
+        </li>
+      </ul>
+    </li>
+    <li>
+      <label>
+								Total Electricity Consumption (Aux. Equipment)
+							</label>
+      <ul>
+        <li>
+          <form>
+            <div class="form-group">
+              <label for="auxElectricityUsed">Electricity Used During Collection</label>
+              <div class="input-group">
+                <input name="auxElectricityUsed" type="number" step="any" id="auxElectricityUsed" class="form-control" (focus)="focusField('auxElectricityUsed')"
+                  [(ngModel)]="inputs.auxElectricityUsed" (input)="calculate()" onfocus="this.select();" />
+                <span class="input-group-addon units">kWh</span>
+              </div>
+            </div>
+          </form>
+        </li>
+        <li>
+          <form>
+            <div class="form-group">
+              <label for="auxElectricityCollectionTime">Collection Time</label>
+              <div class="input-group">
+                <input name="auxElectricityCollectionTime" type="number" step="any" id="auxElectricityCollectionTime" class="form-control" (focus)="focusField('auxElectricityCollectionTime')"
+                  [(ngModel)]="inputs.auxElectricityCollectionTime" (input)="calculate()" onfocus="this.select();" />
+                <span class="input-group-addon units">hrs</span>
+              </div>
+            </div>
+          </form>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</div>

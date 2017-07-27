@@ -58,9 +58,9 @@
     </div>
   </div>
 
-  <div class="row tab-content" *ngIf="currentTab == 'metered-energy'">
+  <div class="row tab-content" *ngIf="currentTab == 'metered-energy' && settings">
     <div class="col-12">
-      <app-metered-energy-use></app-metered-energy-use>
+      <app-metered-energy [settings]="settings"></app-metered-energy>
     </div>
   </div>
 

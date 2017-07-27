@@ -1,0 +1,31 @@
+<div class="container-fluid">
+  <div class="row modify-conditions explore-container">
+    <div class="col-md-6 explore-column">
+      <app-metered-fuel-form [inputs]="inputs" (emitCalculate)="calculate()" (emitSave)="save()" (changeField)="setField($event)"></app-metered-fuel-form>
+    </div>
+    <div class="col-md-6 results-column">
+      <div class="help-panel">
+        <div class="row">
+          <ul class="tabs primary tab-row">
+            <li class="calc-tab tab-item" [ngClass]="{'active': tabSelect == 'results'}">
+              <a (click)="setTab('results')">Results</a>
+            </li><!--
+						--><li class="calc-tab tab-item" [ngClass]="{'active': tabSelect == 'help'}">
+              <a (click)="setTab('help')">Help</a>
+            </li>
+          </ul>
+        </div>
+        <div class="row justify-content-center data-row align-items-center" *ngIf="tabSelect == 'help'">
+          <div class="col-11">
+            <app-metered-fuel-help [currentField]="currentField"></app-metered-fuel-help>
+          </div>
+        </div>
+        <div class="row justify-content-center data-row" *ngIf="tabSelect == 'results'">
+          <div class="col-8 data-table">
+            <app-metered-energy-results [results]="results"></app-metered-energy-results>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
