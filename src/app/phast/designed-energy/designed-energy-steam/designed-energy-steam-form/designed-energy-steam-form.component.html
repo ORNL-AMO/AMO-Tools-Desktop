@@ -1,3 +1,58 @@
-<p>
-  designed-energy-steam-form works!
-</p>
+<div class="explore-opportunities">
+  <h2>Designed Energy Use (Steam)</h2>
+  <p>DESCRIPTION</p>
+  <ul>
+    <li>
+      <ul>
+        <li>
+          <form>
+            <div class="form-group">
+              <label for="totalHeat">Total Heat for Steam</label>
+              <div class="input-group">
+                <input name="totalHeat" type="number" step="any" id="totalHeat" class="form-control" (focus)="focusField('totalHeat')" [(ngModel)]="inputs.totalHeat"
+                  (input)="calculate()" onfocus="this.select();" />
+                <span class="input-group-addon units">Btu/lb</span>
+              </div>
+            </div>
+          </form>
+        </li>
+        <li>
+          <form>
+            <div class="form-group">
+              <label for="steamFlow">Steam Flow</label>
+              <div class="input-group">
+                <input name="steamFlow" type="number" step="any" id="steamFlow" class="form-control" (focus)="focusField('steamFlow')" [(ngModel)]="inputs.steamFlow"
+                  (input)="calculate()" onfocus="this.select();" />
+                <span class="input-group-addon units">%</span>
+              </div>
+            </div>
+          </form>
+        </li>
+        <li>
+          <form>
+            <div class="form-group">
+              <label for="percentOperatingHours">% of Operating Hours</label>
+              <div class="input-group">
+                <input name="percentOperatingHours" type="number" step="any" id="percentOperatingHours" class="form-control" (focus)="focusField('percentOperatingHours')"
+                  [(ngModel)]="inputs.percentOperatingHours" (input)="calculate()" onfocus="this.select();" />
+                <span class="input-group-addon units">%</span>
+              </div>
+            </div>
+          </form>
+        </li>
+        <li>
+          <form>
+            <div class="form-group">
+              <label for="percentCapacityUsed">% of Rated Capacity</label>
+              <div class="input-group">
+                <input name="percentCapacityUsed" type="number" step="any" id="percentCapacityUsed" class="form-control" (focus)="focusField('percentCapacityUsed')"
+                  [(ngModel)]="inputs.percentCapacityUsed" (input)="calculate()" onfocus="this.select();" />
+                <span class="input-group-addon units">%</span>
+              </div>
+            </div>
+          </form>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</div>

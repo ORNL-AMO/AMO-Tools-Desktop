@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 
 @Component({
   selector: 'app-designed-energy-steam-help',
@@ -6,7 +6,8 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./designed-energy-steam-help.component.css']
 })
 export class DesignedEnergySteamHelpComponent implements OnInit {
-
+  @Input()
+  currentField: string;
   constructor() { }
 
   ngOnInit() {

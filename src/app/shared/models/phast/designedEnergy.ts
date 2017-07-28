@@ -1,8 +1,8 @@
 export interface DesignedEnergyFuel {
-    zoneNumber: number
+    zoneNumber: number,
     fuelType: number,
+    percentCapacityUsed: number,
     totalBurnerCapacity: number,
-    percentUsed: number,
     percentOperatingHours: number
 }
 export interface DesignedEnergySteam {

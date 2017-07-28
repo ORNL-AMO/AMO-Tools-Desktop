@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 
 @Component({
   selector: 'app-designed-energy-fuel-help',
@@ -6,7 +6,8 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./designed-energy-fuel-help.component.css']
 })
 export class DesignedEnergyFuelHelpComponent implements OnInit {
-
+  @Input()
+  currentField: string;
   constructor() { }
 
   ngOnInit() {

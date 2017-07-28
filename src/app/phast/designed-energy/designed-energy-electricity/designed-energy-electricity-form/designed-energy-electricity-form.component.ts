@@ -1,8 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { DesignedEnergyElectricity } from '../../../../shared/models/phast/designedEnergy';
 
-
-
 @Component({
   selector: 'app-designed-energy-electricity-form',
   templateUrl: './designed-energy-electricity-form.component.html',

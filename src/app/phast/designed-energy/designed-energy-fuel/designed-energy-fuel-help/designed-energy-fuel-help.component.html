@@ -1,3 +1,62 @@
-<p>
-  designed-energy-fuel-help works!
-</p>
+<div class="help-header">
+
+  <h3>Designed Energy Help</h3>
+  <p>Designed ENERGY DESCRIPTION</p>
+  <!--<p class="text-muted">
+    <span class="fa fa-youtube-play"></span> Watch tutorial on exploring opportunities
+  </p>-->
+
+</div>
+
+
+<div class="help-content">
+
+  <div class="card" *ngIf="currentField == 'fuelType'">
+    <div class="card-header">
+      Fuel Type
+    </div>
+    <div class="card-header">
+      <strong><u>Description:</u></strong>
+      <p>
+        Description
+      </p>
+    </div>
+  </div>
+
+  <div class="card" *ngIf="currentField == 'totalBurnerCapacity'">
+    <div class="card-header">
+      Total Burner Rated Capacity
+    </div>
+    <div class="card-header">
+      <strong><u>Description:</u></strong>
+      <p>
+        Description
+      </p>
+    </div>
+  </div>
+
+  <div class="card" *ngIf="currentField == 'percentCapacityUsed'">
+    <div class="card-header">
+      Percent of Rated Capacity Used
+    </div>
+    <div class="card-header">
+      <strong><u>Description:</u></strong>
+      <p>
+        Description
+      </p>
+    </div>
+  </div>
+
+
+  <div class="card" *ngIf="currentField == 'percentOperatingHours'">
+    <div class="card-header">
+      Percent of Operating Hours
+    </div>
+    <div class="card-header">
+      <strong><u>Description:</u></strong>
+      <p>
+        Description
+      </p>
+    </div>
+  </div>
+</div>
