@@ -4,6 +4,11 @@ import { EnergyEquivalencyElectric, EnergyEquivalencyFuel } from '../shared/mode
 import { O2Enrichment } from '../shared/models/phast/o2Enrichment';
 import { FlowCalculations } from '../shared/models/phast/flowCalculations';
 import { ExhaustGas } from '../shared/models/phast/losses/exhaustGas';
+
+import { FixtureLoss } from '../shared/models/phast/losses/fixtureLoss';
+import { GasCoolingLoss, LiquidCoolingLoss, WaterCoolingLoss } from '../shared/models/phast/losses/coolingLoss';
+import { GasChargeMaterial, LiquidChargeMaterial, SolidChargeMaterial } from '../shared/models/phast/losses/chargeMaterial';
+import { OpeningLoss, } from '../shared/models/phast/losses/openingLoss';
 declare var phastAddon: any;
 
 
@@ -15,127 +20,38 @@ export class PhastService {
     console.log(phastAddon)
   }
 
-  fixtureLosses(
-    specificHeat: number,
-    feedRate: number,
-    initialTemperature: number,
-    finalTemperature: number,
-    correctionFactor: number
-  ): number {
-    let inputs = { specificHeat, feedRate, initialTemperature, finalTemperature, correctionFactor }
-    //returns heatLoss
+  fixtureLosses(inputs: FixtureLoss): number {
     return phastAddon.fixtureLosses(inputs)
   }
 
-  gasCoolingLosses(
-    flowRate: number,
-    initialTemperature: number,
-    finalTemperature: number,
-    specificHeat: number,
-    correctionFactor: number
-  ): number {
-    //returns heatLoss
-    let inputs = { flowRate, initialTemperature, finalTemperature, specificHeat, correctionFactor }
+  gasCoolingLosses(inputs: GasCoolingLoss): number {
     return phastAddon.gasCoolingLosses(inputs);
   }
 
-  gasLoadChargeMaterial(
-    thermicReactionType: number,
-    specificHeatGas: number,
-    feedRate: number,
-    percentVapor: number,
-    initialTemperature: number,
-    dischargeTemperature: number,
-    specificHeatVapor: number,
-    percentReacted: number,
-    reactionHeat: number,
-    additionalHeat: number
-  ): number {
-    //returns heatLoss
-    let inputs = { thermicReactionType, specificHeatGas, feedRate, percentVapor, initialTemperature, dischargeTemperature, specificHeatVapor, percentReacted, reactionHeat, additionalHeat }
+  gasLoadChargeMaterial(inputs: GasChargeMaterial): number {
     return phastAddon.gasLoadChargeMaterial(inputs);
   }
 
-  liquidCoolingLosses(
-    flowRate: number,
-    density: number,
-    initialTemperature: number,
-    outletTemperature: number,
-    specificHeat: number,
-    correctionFactor: number
-  ): number {
-    //returns heatLoss
-    let inputs = { flowRate, density, initialTemperature, outletTemperature, specificHeat, correctionFactor }
+  liquidCoolingLosses(inputs: LiquidCoolingLoss): number {
     return phastAddon.liquidCoolingLosses(inputs);
   }
 
-  liquidLoadChargeMaterial(
-    thermicReactionType: number,
-    specificHeatLiquid: number,
-    vaporizingTemperature: number,
-    latentHeat: number,
-    specificHeatVapor: number,
-    chargeFeedRate: number,
-    initialTemperature: number,
-    dischargeTemperature: number,
-    percentVaporized: number,
-    percentReacted: number,
-    reactionHeat: number,
-    additionalHeat: number
-  ): number {
-    //returns heatLoss
-    let inputs = { thermicReactionType, specificHeatLiquid, vaporizingTemperature, latentHeat, specificHeatVapor, chargeFeedRate, initialTemperature, dischargeTemperature, percentVaporized, percentReacted, reactionHeat, additionalHeat }
+  liquidLoadChargeMaterial(inputs: LiquidChargeMaterial): number {
     return phastAddon.liquidLoadChargeMaterial(inputs);
   }
 
-  openingLossesQuad(
-    emissivity: number,
-    length: number,
-    widthHeight: number,
-    thickness: number,
-    ratio: number,
-    ambientTemperature: number,
-    insideTemperature: number,
-    percentTimeOpen: number,
-    viewFactor: number
-  ): number {
-    //TODO: Update call for quad
-    let inputs = { emissivity, length, widthHeight, thickness, ratio, ambientTemperature, insideTemperature, percentTimeOpen, viewFactor }
+  openingLossesQuad(inputs: OpeningLoss): number {
+    inputs.ratio = Math.min(inputs.diameterLength, inputs.widthHeight) / inputs.thickness;
     return phastAddon.openingLossesQuad(inputs);
   }
 
-  openingLossesCircular(
-    emissivity: number,
-    diameterLength: number,
-    thickness: number,
-    ratio: number,
-    ambientTemperature: number,
-    insideTemperature: number,
-    percentTimeOpen: number,
-    viewFactor: number
-  ): number {
+  openingLossesCircular(inputs: OpeningLoss): number {
     //TODO: update call for round
-    let inputs = { emissivity, diameterLength, thickness, ratio, ambientTemperature, insideTemperature, percentTimeOpen, viewFactor }
+    inputs.ratio = inputs.diameterLength / inputs.thickness;
     return phastAddon.openingLossesCircular(inputs);
   }
 
-  solidLoadChargeMaterial(
-    thermicReactionType: number,
-    specificHeatSolid: number,
-    latentHeat: number,
-    specificHeatLiquid: number,
-    meltingPoint: number,
-    chargeFeedRate: number,
-    waterContentCharged: number,
-    waterContentDischarged: number,
-    initialTemperature: number,
-    dischargeTemperature: number,
-    waterVaporDischargeTemperature: number,
-    chargeMelted: number,
-    chargedReacted: number,
-    reactionHeat: number,
-    additionalHeat: number) {
-    let inputs = { thermicReactionType, specificHeatSolid, latentHeat, specificHeatLiquid, meltingPoint, chargeFeedRate, waterContentCharged, waterContentDischarged, initialTemperature, dischargeTemperature, waterVaporDischargeTemperature, chargeMelted, chargedReacted, reactionHeat, additionalHeat }
+  solidLoadChargeMaterial(inputs: SolidChargeMaterial) {
     return phastAddon.solidLoadChargeMaterial(inputs);
   }
 
@@ -153,13 +69,7 @@ export class PhastService {
     return phastAddon.wallLosses(inputs);
   }
 
-  waterCoolingLosses(
-    flowRate: number,
-    initialTemperature: number,
-    outletTemperature: number,
-    correctionFactor: number
-  ) {
-    let inputs = { flowRate, initialTemperature, outletTemperature, correctionFactor }
+  waterCoolingLosses(inputs: WaterCoolingLoss) {
     return phastAddon.waterCoolingLosses(inputs);
   }
 
