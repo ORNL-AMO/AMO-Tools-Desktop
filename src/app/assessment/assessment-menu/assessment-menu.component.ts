@@ -3,6 +3,7 @@ import { Directory } from '../../shared/models/directory';
 import { ModalDirective } from 'ngx-bootstrap';
 import { IndexedDbService } from '../../indexedDb/indexed-db.service';
 import { ImportExportService } from '../../shared/import-export/import-export.service';
+import { AssessmentService } from '../assessment.service';
 
 @Component({
   selector: 'app-assessment-menu',
@@ -37,7 +38,7 @@ export class AssessmentMenuComponent implements OnInit {
 
   isAllSelected: boolean;
   createAssessment: boolean = false;
-  constructor(private indexedDbService: IndexedDbService, private importExportService: ImportExportService) { }
+  constructor(private indexedDbService: IndexedDbService, private importExportService: ImportExportService, private assessmentService: AssessmentService) { }
 
   ngOnInit() {
     this.firstChange = true;
@@ -56,12 +57,12 @@ export class AssessmentMenuComponent implements OnInit {
     }
   }
 
-  hideModal() {
-    this.createAssessment = false;
-  }
+  // hideModal() {
+  //   this.createAssessment = false;
+  // }
 
   showCreateAssessment() {
-    this.createAssessment = true;
+    this.assessmentService.createAssessment.next(true);
   }
 
   setView(view: string) {
