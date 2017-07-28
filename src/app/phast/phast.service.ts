@@ -9,6 +9,11 @@ import { FixtureLoss } from '../shared/models/phast/losses/fixtureLoss';
 import { GasCoolingLoss, LiquidCoolingLoss, WaterCoolingLoss } from '../shared/models/phast/losses/coolingLoss';
 import { GasChargeMaterial, LiquidChargeMaterial, SolidChargeMaterial } from '../shared/models/phast/losses/chargeMaterial';
 import { OpeningLoss, } from '../shared/models/phast/losses/openingLoss';
+
+import { WallLoss } from '../shared/models/phast/losses/wallLoss';
+import { LeakageLoss } from '../shared/models/phast/losses/leakageLoss';
+import { AtmosphereLoss } from '../shared/models/phast/losses/atmosphereLoss';
+
 declare var phastAddon: any;
 
 
@@ -39,15 +44,34 @@ export class PhastService {
   liquidLoadChargeMaterial(inputs: LiquidChargeMaterial): number {
     return phastAddon.liquidLoadChargeMaterial(inputs);
   }
-
-  openingLossesQuad(inputs: OpeningLoss): number {
-    inputs.ratio = Math.min(inputs.diameterLength, inputs.widthHeight) / inputs.thickness;
+  openingLossesQuad(
+    emissivity: number,
+    length: number,
+    widthHeight: number,
+    thickness: number,
+    ratio: number,
+    ambientTemperature: number,
+    insideTemperature: number,
+    percentTimeOpen: number,
+    viewFactor: number
+  ): number {
+    //TODO: Update call for quad
+    let inputs = { emissivity, length, widthHeight, thickness, ratio, ambientTemperature, insideTemperature, percentTimeOpen, viewFactor }
     return phastAddon.openingLossesQuad(inputs);
   }
 
-  openingLossesCircular(inputs: OpeningLoss): number {
+  openingLossesCircular(
+    emissivity: number,
+    diameterLength: number,
+    thickness: number,
+    ratio: number,
+    ambientTemperature: number,
+    insideTemperature: number,
+    percentTimeOpen: number,
+    viewFactor: number
+  ): number {
     //TODO: update call for round
-    inputs.ratio = inputs.diameterLength / inputs.thickness;
+    let inputs = { emissivity, diameterLength, thickness, ratio, ambientTemperature, insideTemperature, percentTimeOpen, viewFactor }
     return phastAddon.openingLossesCircular(inputs);
   }
 
@@ -55,17 +79,8 @@ export class PhastService {
     return phastAddon.solidLoadChargeMaterial(inputs);
   }
 
-  wallLosses(
-    surfaceArea: number,
-    ambientTemperature: number,
-    surfaceTemperature: number,
-    windVelocity: number,
-    surfaceEmissivity: number,
-    conditionFactor: number,
-    correctionFactor: number
-  ) {
+  wallLosses(inputs: WallLoss) {
     //returns heatLoss
-    let inputs = { surfaceArea, ambientTemperature, surfaceTemperature, windVelocity, surfaceEmissivity, conditionFactor, correctionFactor }
     return phastAddon.wallLosses(inputs);
   }
 
@@ -73,16 +88,7 @@ export class PhastService {
     return phastAddon.waterCoolingLosses(inputs);
   }
 
-  leakageLosses(
-    draftPressure: number,
-    openingArea: number,
-    leakageGasTemperature: number,
-    ambientTemperature: number,
-    coefficient: number,
-    specificGravity: number,
-    correctionFactor: number
-  ) {
-    let inputs = { draftPressure, openingArea, leakageGasTemperature, ambientTemperature, coefficient, specificGravity, correctionFactor }
+  leakageLosses(inputs: LeakageLoss) {
     return phastAddon.leakageLosses(inputs)
   }
 
@@ -156,14 +162,8 @@ export class PhastService {
     return phastAddon.flueGasLossesByMass(inputs)
   }
 
-  atmosphere(
-    inletTemperature: number,
-    outletTemperature: number,
-    flowRate: number,
-    correctionFactor: number,
-    specificHeat: number
-  ) {
-    let inputs = { inletTemperature, outletTemperature, flowRate, correctionFactor, specificHeat }
+  atmosphere(inputs: AtmosphereLoss) {
+    // let inputs = { inletTemperature, outletTemperature, flowRate, correctionFactor, specificHeat }
     return phastAddon.atmosphere(inputs);
   }
 
