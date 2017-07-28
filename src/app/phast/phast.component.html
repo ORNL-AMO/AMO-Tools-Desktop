@@ -42,7 +42,7 @@
     </div>
   </div>
 
-  <div class="tab-content" *ngIf="currentTab == 'losses'">
+  <div class="tab-content" *ngIf="currentTab == 'losses' && settings">
     <app-losses [(phast)]="_phast" [saveClicked]="saveClicked" (saved)="saveDb()" [settings]="settings"></app-losses>
   </div>
 
@@ -60,7 +60,7 @@
 
   <div class="row tab-content" *ngIf="currentTab == 'metered-energy' && settings">
     <div class="col-12">
-      <app-metered-energy [settings]="settings"></app-metered-energy>
+      <app-metered-energy [(phast)]="_phast" [settings]="settings"></app-metered-energy>
     </div>
   </div>
 

@@ -4,6 +4,7 @@ import { EnergyEquivalencyElectric, EnergyEquivalencyFuel } from '../shared/mode
 import { O2Enrichment } from '../shared/models/phast/o2Enrichment';
 import { FlowCalculations } from '../shared/models/phast/flowCalculations';
 import { ExhaustGas } from '../shared/models/phast/losses/exhaustGas';
+import { PHAST, Losses } from '../shared/models/phast/phast';
 declare var phastAddon: any;
 
 
@@ -339,6 +340,30 @@ export class PhastService {
 
   o2Enrichment(inputs: O2Enrichment) {
     return phastAddon.o2Enrichment(inputs);
+  }
+
+  sumHeatInput(losses: Losses): number {
+    let grossHeatRequired: number = 0;
+    if(losses.atmosphereLosses){
+      losses.atmosphereLosses.forEach(loss => {
+        
+      })
+      console.log(grossHeatRequired);
+    }
+    losses.auxiliaryPowerLosses
+    losses.chargeMaterials
+    losses.coolingLosses
+    losses.energyInput
+    losses.exhaustGas
+    losses.extendedSurfaces
+    losses.fixtureLosses
+    losses.flueGasLosses
+    losses.leakageLosses
+    losses.openingLosses
+    losses.otherLosses
+    losses.slagLosses
+    losses.wallLosses
+    return
   }
 
   //TODO:Functions in addon need to be implemented
