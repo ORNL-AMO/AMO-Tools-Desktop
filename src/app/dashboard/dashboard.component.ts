@@ -44,6 +44,9 @@ export class DashboardComponent implements OnInit {
   showImportExport: boolean;
   deleting: boolean;
   suiteDbInit: boolean = false;
+
+  createAssessment: boolean = false;
+
   constructor(private indexedDbService: IndexedDbService, private formBuilder: FormBuilder, private assessmentService: AssessmentService, private toastyService: ToastyService,
     private toastyConfig: ToastyConfig, private jsonToCsvService: JsonToCsvService, private suiteDbService: SuiteDbService) {
     this.toastyConfig.theme = 'bootstrap';
@@ -69,6 +72,12 @@ export class DashboardComponent implements OnInit {
     } else {
       this.getData();
     }
+
+    this.assessmentService.createAssessment.subscribe(val => {
+      if(val == true){
+        this.createAssessment = true;
+      }
+    })
   }
 
   getData() {

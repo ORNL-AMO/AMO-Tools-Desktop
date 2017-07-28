@@ -31,6 +31,7 @@ export class AssessmentDashboardComponent implements OnInit {
   isChecked: boolean = false;
   view: string;
   isFirstChange: boolean = true;
+
   constructor() { }
 
   ngOnInit() {

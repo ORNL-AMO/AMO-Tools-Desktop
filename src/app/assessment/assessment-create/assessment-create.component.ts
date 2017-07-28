@@ -88,15 +88,18 @@ export class AssessmentCreateComponent implements OnInit {
     })
   }
 
-  hideCreateModal() {
+  hideCreateModal(bool: boolean) {
     this.showDropdown = false;
     this.createModal.hide();
-    this.hideModal.emit(true);
+    // this.hideModal.emit(true);
+    if (!bool) {
+      this.assessmentService.createAssessment.next(false);
+    }
 
   }
 
   createAssessment() {
-    this.hideCreateModal();
+    this.hideCreateModal(true);
 
     this.createModal.onHidden.subscribe(() => {
       this.assessmentService.tab = 'system-setup';
@@ -128,6 +131,7 @@ export class AssessmentCreateComponent implements OnInit {
             }
 
             this.indexedDbService.putDirectory(tmpDirRef).then(results => {
+              this.assessmentService.createAssessment.next(false);
               this.router.navigateByUrl('/psat/' + tmpAssessment.id)
             });
           })
@@ -158,6 +162,7 @@ export class AssessmentCreateComponent implements OnInit {
               modifiedDate: this.directory.modifiedDate
             }
             this.indexedDbService.putDirectory(tmpDirRef).then(results => {
+              this.assessmentService.createAssessment.next(false);
               this.router.navigateByUrl('/phast/' + tmpAssessment.id)
             });
           })
