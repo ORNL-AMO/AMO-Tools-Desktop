@@ -104,7 +104,9 @@ Buttons
     background: #ffffff;
     border-color: #BBBBBB;
 }
-
+.btn-link {
+  box-shadow: none;
+}
 .numberCircle {
     border-radius: 50%;
     width: 22px;
@@ -457,7 +459,7 @@ Assessments: List View
     content: "";
   }
   .list-row .actions {
-    width: 30%;
+    width: 50%;
     font-size: 14px;
     float: right;
     text-align: right;
@@ -473,7 +475,7 @@ Assessments: List View
   .list-row .assessment-name {
     float: left;
     padding-right: 20px;
-    width: 70%;
+    width: 50%;
     margin-bottom: 0;
   }
   .drag-handle, .list-row input, .assessment-name {

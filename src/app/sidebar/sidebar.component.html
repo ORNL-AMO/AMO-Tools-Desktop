@@ -5,12 +5,12 @@
 </div>
 
 <div class="sidebar-group create-button">
-  <button type="button" class="btn btn-primary btn-block" (click)="showCreateAssessment()">Create Assessment</button> 
+  <button type="button" class="btn btn-primary btn-block" (click)="showCreateAssessment()">Create</button> 
 </div>
 
 <div class="sidebar-group"> 
   <ul>
-    <li [ngClass]="{'selected':selectedDirectoryId == directory.id && dashboardView == 'assessment-dashboard'}"><span (click)="toggleSelected(directory)" >All Assessments</span></li>
+    <li [ngClass]="{'selected':selectedDirectoryId == directory.id && dashboardView == 'assessment-dashboard'}"><span (click)="toggleSelected(directory)" >All Assets</span></li>
     <li *ngIf="directory">
       <app-directory-item [directory]="getDirectory()" [selectedDirectoryId]="selectedDirectoryId" (selectSignal)="toggleSelected($event)"
         (collapseSignal)="toggleDirectoryCollapse($event)" [newDirEventToggle]="newDirEventToggle" [dashboardView]="dashboardView"></app-directory-item>
