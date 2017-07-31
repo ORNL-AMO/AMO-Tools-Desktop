@@ -8,10 +8,16 @@
     <input type="checkbox" [(ngModel)]="isChecked" (change)="setDelete()" />
     <a (click)="goToAssessment(assessment, 'explore-opportunities')" *ngIf="isSetup">{{assessment.name}}</a>
     <a (click)="goToAssessment(assessment, 'system-setup')" *ngIf="!isSetup">{{assessment.name}}</a>
+
+    <div class="text-muted" *ngIf="!isSetup">Asset not setup</div>
+
   </div>
   <div class="actions">
-    <div class="text-muted" *ngIf="!isSetup">&mdash; System Setup Not Complete</div>
-    <a (click)="goToAssessment(assessment, 'report')" *ngIf="isSetup">View Report</a>
-    <a (click)="goToAssessment(assessment, 'system-setup')" *ngIf="isSetup">System Setup</a>
+
+    <a (click)="goToAssessment(assessment, 'system-setup')" *ngIf="isSetup">Pump &amp; Motor</a>
+    <a (click)="goToAssessment(assessment, 'explore-opportunities')" *ngIf="isSetup">Assessment</a>
+    <a>System Diagram</a>
+    <a (click)="goToAssessment(assessment, 'report')" *ngIf="isSetup">Report</a>
+    
   </div>
 </div>
