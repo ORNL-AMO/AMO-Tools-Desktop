@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { FlueGas } from '../../../shared/models/phast/losses/flueGas';
+import { FlueGas, FlueGasByMass, FlueGasByVolume } from '../../../shared/models/phast/losses/flueGas';
 import { BehaviorSubject } from 'rxjs';
 
 @Injectable()
@@ -118,50 +118,44 @@ export class FlueGasLossesService {
     })
   }
 
-  buildByMassLossFromForm(form: any): FlueGas {
-    let tmpFlueGas: FlueGas = {
-      flueGasType: "By Mass",
-      flueGasByMass: {
-        gasTypeId: form.value.gasTypeId,
-        flueGasTemperature: form.value.flueGasTemperature,
-        excessAirPercentage: form.value.excessAirPercentage,
-        combustionAirTemperature: form.value.combustionAirTemperature,
-        fuelTemperature: form.value.fuelTemperature,
-        ashDischargeTemperature: form.value.ashDischargeTemperature,
-        moistureInAirComposition: form.value.moistureInAirComposition,
-        unburnedCarbonInAsh: form.value.unburnedCarbonInAsh,
-        carbon: form.value.carbon,
-        hydrogen: form.value.hydrogen,
-        sulphur: form.value.sulphur,
-        inertAsh: form.value.inertAsh,
-        o2: form.value.o2,
-        moisture: form.value.moisture,
-        nitrogen: form.value.nitrogen
-      }
+  buildByMassLossFromForm(form: any): FlueGasByMass {
+    let tmpFlueGas: FlueGasByMass = {
+      gasTypeId: form.value.gasTypeId,
+      flueGasTemperature: form.value.flueGasTemperature,
+      excessAirPercentage: form.value.excessAirPercentage,
+      combustionAirTemperature: form.value.combustionAirTemperature,
+      fuelTemperature: form.value.fuelTemperature,
+      ashDischargeTemperature: form.value.ashDischargeTemperature,
+      moistureInAirComposition: form.value.moistureInAirComposition,
+      unburnedCarbonInAsh: form.value.unburnedCarbonInAsh,
+      carbon: form.value.carbon,
+      hydrogen: form.value.hydrogen,
+      sulphur: form.value.sulphur,
+      inertAsh: form.value.inertAsh,
+      o2: form.value.o2,
+      moisture: form.value.moisture,
+      nitrogen: form.value.nitrogen
     }
     return tmpFlueGas;
   }
 
-  buildByVolumeLossFromForm(form: any): FlueGas {
-    let tmpFlueGas: FlueGas = {
-      flueGasType: "By Volume",
-      flueGasByVolume: {
-        gasTypeId: form.value.gasTypeId,
-        flueGasTemperature: form.value.flueGasTemperature,
-        excessAirPercentage: form.value.excessAirPercentage,
-        combustionAirTemperature: form.value.combustionAirTemperature,
-        CH4: form.value.CH4,
-        C2H6: form.value.C2H6,
-        N2: form.value.N2,
-        H2: form.value.H2,
-        C3H8: form.value.C3H8,
-        C4H10_CnH2n: form.value.C4H10_CnH2n,
-        H2O: form.value.H2O,
-        CO: form.value.CO,
-        CO2: form.value.CO2,
-        SO2: form.value.SO2,
-        O2: form.value.O2
-      }
+  buildByVolumeLossFromForm(form: any): FlueGasByVolume {
+    let tmpFlueGas: FlueGasByVolume = {
+      gasTypeId: form.value.gasTypeId,
+      flueGasTemperature: form.value.flueGasTemperature,
+      excessAirPercentage: form.value.excessAirPercentage,
+      combustionAirTemperature: form.value.combustionAirTemperature,
+      CH4: form.value.CH4,
+      C2H6: form.value.C2H6,
+      N2: form.value.N2,
+      H2: form.value.H2,
+      C3H8: form.value.C3H8,
+      C4H10_CnH2n: form.value.C4H10_CnH2n,
+      H2O: form.value.H2O,
+      CO: form.value.CO,
+      CO2: form.value.CO2,
+      SO2: form.value.SO2,
+      O2: form.value.O2
     }
     return tmpFlueGas;
   }
