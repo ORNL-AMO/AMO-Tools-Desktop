@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { PSAT, PsatInputs } from '../shared/models/psat';
 import { Assessment } from '../shared/models/assessment';
 import { PHAST } from '../shared/models/phast/phast';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable()
 export class AssessmentService {
@@ -10,7 +11,12 @@ export class AssessmentService {
   tab: string;
   subTab: string;
   showLandingScreen: boolean = true;
-  constructor() { }
+
+  createAssessment: BehaviorSubject<boolean>;
+
+  constructor() { 
+    this.createAssessment = new BehaviorSubject<boolean>(null);
+  }
 
   getNewAssessment(assessmentType: string): Assessment {
     let newAssessment: Assessment = {

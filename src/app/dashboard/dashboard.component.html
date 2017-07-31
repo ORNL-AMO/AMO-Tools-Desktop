@@ -41,7 +41,7 @@
 </div>
 
 <div class="report" *ngIf="dashboardView == 'detailed-report'">
-    <app-detailed-report [selectedItems]="returnSelected()" (emitCloseReport)="closeReport()"></app-detailed-report>
+    <app-detailed-report [selectedItems]="selectedItems" (emitCloseReport)="closeReport()"></app-detailed-report>
 </div>
 
 
@@ -84,6 +84,8 @@
         </div>
     </div>
 </div>
+
+<app-assessment-create *ngIf="createAssessment" (hideModal)="hideModal()" [(directory)]="workingDirectory" class="create-container"></app-assessment-create>
 
 <div bsModal #deleteItemsModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="deleteItemsModalLabel"
     aria-hidden="true" [config]="{backdrop: 'static'}">

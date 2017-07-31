@@ -24,3 +24,13 @@
 .assessment-name{
     padding-top: 15px;
 }
+
+.report-in-psat{
+    border: none !important;
+    box-shadow: none !important;
+}
+
+.report-in-rollup{
+   padding: 10px;
+   margin-bottom: 0px !important;
+}
