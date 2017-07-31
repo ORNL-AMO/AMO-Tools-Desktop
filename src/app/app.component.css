@@ -516,9 +516,6 @@ Assessments: List View
   .folder .assessment-name .fa {
     color: #434343;
   }
-  .assessments .psat, .assessments .phast {
-    font-size: 15px;
-  }
   .assessment-list-type {
     display: block;
     padding: 3px;
@@ -692,7 +689,7 @@ Sidebar
   font-size: 16px;
   display: block;
   color: #0077e3;
-  padding: 8px 20px;
+  padding: 5px 20px;
 }
 .sidebar-group li span.disabled {
   font-size: 15px;
@@ -1571,8 +1568,13 @@ Reporting
   padding: 20px;
 }
 .report-header {
-  padding: 22px 0;
+  padding: 22px;
 }
+  .report-header:after {
+    display: table;
+    content: "";
+    clear: both;
+  }
   .report-header h1 {
     font-size: 1.4rem;
     font-weight: 100;
