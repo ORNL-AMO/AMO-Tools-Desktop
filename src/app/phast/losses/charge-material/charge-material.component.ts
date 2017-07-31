@@ -3,7 +3,7 @@ import { FormBuilder, Validators } from '@angular/forms';
 import * as _ from 'lodash';
 import { PhastService } from '../../phast.service';
 import { Losses } from '../../../shared/models/phast/phast';
-import { ChargeMaterial } from '../../../shared/models/phast/losses/chargeMaterial';
+import { ChargeMaterial, SolidChargeMaterial, GasChargeMaterial, LiquidChargeMaterial } from '../../../shared/models/phast/losses/chargeMaterial';
 import { ChargeMaterialService } from './charge-material.service';
 import { ChargeMaterialCompareService } from './charge-material-compare.service';
 
@@ -177,63 +177,14 @@ export class ChargeMaterialComponent implements OnInit {
 
   calculate(loss: any) {
     if (loss.chargeMaterialType == 'Solid') {
-      let reactionType = 0;
-      if (loss.solidForm.value.endothermicOrExothermic == 'Exothermic') {
-        reactionType = 1;
-      }
-      loss.heatRequired = this.phastService.solidLoadChargeMaterial(
-        reactionType,
-        loss.solidForm.value.materialSpecificHeatOfSolidMaterial,
-        loss.solidForm.value.materialLatentHeatOfFusion,
-        loss.solidForm.value.materialHeatOfLiquid,
-        loss.solidForm.value.materialMeltingPoint,
-        loss.solidForm.value.feedRate,
-        loss.solidForm.value.waterContentAsCharged,
-        loss.solidForm.value.waterContentAsDischarged,
-        loss.solidForm.value.initialTemperature,
-        loss.solidForm.value.chargeMaterialDischargeTemperature,
-        loss.solidForm.value.waterVaporDischargeTemperature,
-        loss.solidForm.value.percentChargeMelted,
-        loss.solidForm.value.percentChargeReacted,
-        loss.solidForm.value.heatOfReaction,
-        loss.solidForm.value.additionalHeatRequired,
-      );
+      let tmpSolidMaterial: SolidChargeMaterial = this.chargeMaterialService.buildSolidChargeMaterial(loss.solidForm);
+      loss.heatRequired = this.phastService.solidLoadChargeMaterial(tmpSolidMaterial);
     } else if (loss.chargeMaterialType == 'Liquid') {
-      let reactionType = 0;
-      if (loss.liquidForm.value.endothermicOrExothermic == 'Exothermic') {
-        reactionType = 1;
-      }
-      loss.heatRequired = this.phastService.liquidLoadChargeMaterial(
-        reactionType,
-        loss.liquidForm.value.materialSpecificHeatLiquid,
-        loss.liquidForm.value.materialVaporizingTemperature,
-        loss.liquidForm.value.materialLatentHeat,
-        loss.liquidForm.value.materialSpecificHeatVapor,
-        loss.liquidForm.value.feedRate,
-        loss.liquidForm.value.initialTemperature,
-        loss.liquidForm.value.dischargeTemperature,
-        loss.liquidForm.value.liquidVaporized,
-        loss.liquidForm.value.liquidReacted,
-        loss.liquidForm.value.heatOfReaction,
-        loss.liquidForm.value.additionalHeatRequired
-      )
+      let tmpLiquidMaterial = this.chargeMaterialService.buildLiquidChargeMaterial(loss.liquidForm);
+      loss.heatRequired = this.phastService.liquidLoadChargeMaterial(tmpLiquidMaterial);
     } else if (loss.chargeMaterialType == 'Gas') {
-      let reactionType = 0;
-      if (loss.gasForm.value.endothermicOrExothermic == 'Exothermic') {
-        reactionType = 1;
-      }
-      loss.heatRequired = this.phastService.gasLoadChargeMaterial(
-        reactionType,
-        loss.gasForm.value.materialSpecificHeat,
-        loss.gasForm.value.feedRate,
-        loss.gasForm.value.vaporInGas,
-        loss.gasForm.value.initialTemperature,
-        loss.gasForm.value.dischargeTemperature,
-        loss.gasForm.value.specificHeatOfVapor,
-        loss.gasForm.value.gasReacted,
-        loss.gasForm.value.heatOfReaction,
-        loss.gasForm.value.additionalHeatRequired,
-      )
+      let tmpGasMaterial = this.chargeMaterialService.buildGasChargeMaterial(loss.gasForm);
+      loss.heatRequired = this.phastService.gasLoadChargeMaterial(tmpGasMaterial)
     }
   }
 

@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { OpeningLoss } from '../../../shared/models/phast/losses/openingLoss';
+import { OpeningLoss, CircularOpeningLoss, QuadOpeningLoss } from '../../../shared/models/phast/losses/openingLoss';
 import { BehaviorSubject } from 'rxjs';
 
 @Injectable()
 export class OpeningLossesService {
-  
+
   deleteLossIndex: BehaviorSubject<number>;
   addLossBaselineMonitor: BehaviorSubject<any>;
   addLossModificationMonitor: BehaviorSubject<any>;
@@ -25,7 +25,7 @@ export class OpeningLossesService {
       this.addLossBaselineMonitor.next(true);
     }
   }
-  
+
   initForm() {
     return this.formBuilder.group({
       'numberOfOpenings': [1, Validators.required],
@@ -72,4 +72,34 @@ export class OpeningLossesService {
     return tmpLoss;
   }
 
+  getQuadLossFromForm(form: any): QuadOpeningLoss {
+    let ratio = Math.min(form.value.lengthOfOpening, form.value.heightOfOpening) / form.value.wallThickness;
+    let tmpLoss: QuadOpeningLoss = {
+      emissivity: form.value.emissivity,
+      length: form.value.lengthOfOpening,
+      widthHeight: form.value.heightOfOpening,
+      thickness: form.value.wallThickness,
+      ratio: ratio,
+      ambientTemperature: form.value.ambientTemp,
+      insideTemperature: form.value.insideTemp,
+      percentTimeOpen: form.value.percentTimeOpen,
+      viewFactor: form.value.viewFactor
+    };
+    return tmpLoss;
+  }
+
+  getCircularLossFromForm(form: any): CircularOpeningLoss {
+    let ratio = form.value.lengthOfOpening / form.value.wallThickness;
+    let tmpLoss: CircularOpeningLoss = {
+      emissivity: form.value.emissivity,
+      diameterLength: form.value.lengthOfOpening,
+      thickness: form.value.wallThickness,
+      ratio: ratio,
+      ambientTemperature: form.value.ambientTemp,
+      insideTemperature: form.value.insideTemp,
+      percentTimeOpen: form.value.percentTimeOpen,
+      viewFactor: form.value.viewFactor
+    }
+    return tmpLoss
+  }
 }

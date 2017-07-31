@@ -5,6 +5,17 @@ import { O2Enrichment } from '../shared/models/phast/o2Enrichment';
 import { FlowCalculations } from '../shared/models/phast/flowCalculations';
 import { ExhaustGas } from '../shared/models/phast/losses/exhaustGas';
 import { PHAST, Losses } from '../shared/models/phast/phast';
+import { FixtureLoss } from '../shared/models/phast/losses/fixtureLoss';
+import { GasCoolingLoss, LiquidCoolingLoss, WaterCoolingLoss } from '../shared/models/phast/losses/coolingLoss';
+import { GasChargeMaterial, LiquidChargeMaterial, SolidChargeMaterial, ChargeMaterial } from '../shared/models/phast/losses/chargeMaterial';
+import { OpeningLoss, CircularOpeningLoss, QuadOpeningLoss } from '../shared/models/phast/losses/openingLoss';
+import { WallLoss } from '../shared/models/phast/losses/wallLoss';
+import { LeakageLoss } from '../shared/models/phast/losses/leakageLoss';
+import { AtmosphereLoss } from '../shared/models/phast/losses/atmosphereLoss';
+import { Slag } from '../shared/models/phast/losses/slag';
+import { AuxiliaryPowerLoss } from '../shared/models/phast/losses/auxiliaryPowerLoss';
+import { EnergyInput } from '../shared/models/phast/losses/energyInput';
+import { FlueGasByMass, FlueGasByVolume } from '../shared/models/phast/losses/flueGas';
 declare var phastAddon: any;
 
 
@@ -16,305 +27,70 @@ export class PhastService {
     console.log(phastAddon)
   }
 
-  fixtureLosses(
-    specificHeat: number,
-    feedRate: number,
-    initialTemperature: number,
-    finalTemperature: number,
-    correctionFactor: number
-  ): number {
-    let inputs = { specificHeat, feedRate, initialTemperature, finalTemperature, correctionFactor }
-    //returns heatLoss
+  fixtureLosses(inputs: FixtureLoss): number {
     return phastAddon.fixtureLosses(inputs)
   }
 
-  gasCoolingLosses(
-    flowRate: number,
-    initialTemperature: number,
-    finalTemperature: number,
-    specificHeat: number,
-    correctionFactor: number
-  ): number {
-    //returns heatLoss
-    let inputs = { flowRate, initialTemperature, finalTemperature, specificHeat, correctionFactor }
+  gasCoolingLosses(inputs: GasCoolingLoss): number {
     return phastAddon.gasCoolingLosses(inputs);
   }
 
-  gasLoadChargeMaterial(
-    thermicReactionType: number,
-    specificHeatGas: number,
-    feedRate: number,
-    percentVapor: number,
-    initialTemperature: number,
-    dischargeTemperature: number,
-    specificHeatVapor: number,
-    percentReacted: number,
-    reactionHeat: number,
-    additionalHeat: number
-  ): number {
-    //returns heatLoss
-    let inputs = { thermicReactionType, specificHeatGas, feedRate, percentVapor, initialTemperature, dischargeTemperature, specificHeatVapor, percentReacted, reactionHeat, additionalHeat }
+  gasLoadChargeMaterial(inputs: GasChargeMaterial): number {
     return phastAddon.gasLoadChargeMaterial(inputs);
   }
 
-  liquidCoolingLosses(
-    flowRate: number,
-    density: number,
-    initialTemperature: number,
-    outletTemperature: number,
-    specificHeat: number,
-    correctionFactor: number
-  ): number {
-    //returns heatLoss
-    let inputs = { flowRate, density, initialTemperature, outletTemperature, specificHeat, correctionFactor }
+  liquidCoolingLosses(inputs: LiquidCoolingLoss): number {
     return phastAddon.liquidCoolingLosses(inputs);
   }
 
-  liquidLoadChargeMaterial(
-    thermicReactionType: number,
-    specificHeatLiquid: number,
-    vaporizingTemperature: number,
-    latentHeat: number,
-    specificHeatVapor: number,
-    chargeFeedRate: number,
-    initialTemperature: number,
-    dischargeTemperature: number,
-    percentVaporized: number,
-    percentReacted: number,
-    reactionHeat: number,
-    additionalHeat: number
-  ): number {
-    //returns heatLoss
-    let inputs = { thermicReactionType, specificHeatLiquid, vaporizingTemperature, latentHeat, specificHeatVapor, chargeFeedRate, initialTemperature, dischargeTemperature, percentVaporized, percentReacted, reactionHeat, additionalHeat }
+  liquidLoadChargeMaterial(inputs: LiquidChargeMaterial): number {
     return phastAddon.liquidLoadChargeMaterial(inputs);
   }
-
-  openingLossesQuad(
-    emissivity: number,
-    length: number,
-    widthHeight: number,
-    thickness: number,
-    ratio: number,
-    ambientTemperature: number,
-    insideTemperature: number,
-    percentTimeOpen: number,
-    viewFactor: number
-  ): number {
-    //TODO: Update call for quad
-    let inputs = { emissivity, length, widthHeight, thickness, ratio, ambientTemperature, insideTemperature, percentTimeOpen, viewFactor }
+  openingLossesQuad(inputs: QuadOpeningLoss): number {
     return phastAddon.openingLossesQuad(inputs);
   }
 
-  openingLossesCircular(
-    emissivity: number,
-    diameterLength: number,
-    thickness: number,
-    ratio: number,
-    ambientTemperature: number,
-    insideTemperature: number,
-    percentTimeOpen: number,
-    viewFactor: number
-  ): number {
-    //TODO: update call for round
-    let inputs = { emissivity, diameterLength, thickness, ratio, ambientTemperature, insideTemperature, percentTimeOpen, viewFactor }
+  openingLossesCircular(inputs: CircularOpeningLoss): number {
     return phastAddon.openingLossesCircular(inputs);
   }
 
-  solidLoadChargeMaterial(
-    thermicReactionType: number,
-    specificHeatSolid: number,
-    latentHeat: number,
-    specificHeatLiquid: number,
-    meltingPoint: number,
-    chargeFeedRate: number,
-    waterContentCharged: number,
-    waterContentDischarged: number,
-    initialTemperature: number,
-    dischargeTemperature: number,
-    waterVaporDischargeTemperature: number,
-    chargeMelted: number,
-    chargedReacted: number,
-    reactionHeat: number,
-    additionalHeat: number) {
-    let inputs = { thermicReactionType, specificHeatSolid, latentHeat, specificHeatLiquid, meltingPoint, chargeFeedRate, waterContentCharged, waterContentDischarged, initialTemperature, dischargeTemperature, waterVaporDischargeTemperature, chargeMelted, chargedReacted, reactionHeat, additionalHeat }
+  solidLoadChargeMaterial(inputs: SolidChargeMaterial) {
     return phastAddon.solidLoadChargeMaterial(inputs);
   }
 
-  wallLosses(
-    surfaceArea: number,
-    ambientTemperature: number,
-    surfaceTemperature: number,
-    windVelocity: number,
-    surfaceEmissivity: number,
-    conditionFactor: number,
-    correctionFactor: number
-  ) {
-    //returns heatLoss
-    let inputs = { surfaceArea, ambientTemperature, surfaceTemperature, windVelocity, surfaceEmissivity, conditionFactor, correctionFactor }
+  wallLosses(inputs: WallLoss) {
     return phastAddon.wallLosses(inputs);
   }
 
-  waterCoolingLosses(
-    flowRate: number,
-    initialTemperature: number,
-    outletTemperature: number,
-    correctionFactor: number
-  ) {
-    let inputs = { flowRate, initialTemperature, outletTemperature, correctionFactor }
+  waterCoolingLosses(inputs: WaterCoolingLoss) {
     return phastAddon.waterCoolingLosses(inputs);
   }
 
-  leakageLosses(
-    draftPressure: number,
-    openingArea: number,
-    leakageGasTemperature: number,
-    ambientTemperature: number,
-    coefficient: number,
-    specificGravity: number,
-    correctionFactor: number
-  ) {
-    let inputs = { draftPressure, openingArea, leakageGasTemperature, ambientTemperature, coefficient, specificGravity, correctionFactor }
+  leakageLosses(inputs: LeakageLoss) {
     return phastAddon.leakageLosses(inputs)
   }
 
-  flueGasByVolume(
-    flueGasTemperature: number,
-    excessAirPercentage: number,
-    combustionAirTemperature: number,
-    CH4: number,
-    C2H6: number,
-    N2: number,
-    H2: number,
-    C3H8: number,
-    C4H10_CnH2n: number,
-    H2O: number,
-    CO: number,
-    CO2: number,
-    SO2: number,
-    O2: number
-  ) {
-    let inputs = {
-      flueGasTemperature: flueGasTemperature,
-      excessAirPercentage: excessAirPercentage,
-      combustionAirTemperature: combustionAirTemperature,
-      CH4: CH4,
-      C2H6: C2H6,
-      N2: N2,
-      H2: H2,
-      C3H8: C3H8,
-      C4H10_CnH2n: C4H10_CnH2n,
-      H2O: H2O,
-      CO: CO,
-      CO2: CO2,
-      SO2: SO2,
-      O2: O2
-    }
+  flueGasByVolume(inputs: FlueGasByVolume) {
     return phastAddon.flueGasLossesByVolume(inputs);
   }
 
-  flueGasByMass(
-    flueGasTemperature: number,
-    excessAirPercentage: number,
-    combustionAirTemperature: number,
-    fuelTemperature: number,
-    ashDischargeTemperature: number,
-    moistureInAirComposition: number,
-    unburnedCarbonInAsh: number,
-    carbon: number,
-    hydrogen: number,
-    sulphur: number,
-    inertAsh: number,
-    o2: number,
-    moisture: number,
-    nitrogen: number
-  ) {
-    let inputs = {
-      flueGasTemperature: flueGasTemperature,
-      excessAirPercentage: excessAirPercentage,
-      combustionAirTemperature: combustionAirTemperature,
-      fuelTemperature: fuelTemperature,
-      ashDischargeTemperature: ashDischargeTemperature,
-      moistureInAirComposition: moistureInAirComposition,
-      unburnedCarbonInAsh: unburnedCarbonInAsh,
-      carbon: carbon,
-      hydrogen: hydrogen,
-      sulphur: sulphur,
-      inertAsh: inertAsh,
-      o2: o2,
-      moisture: moisture,
-      nitrogen: nitrogen
-    }
+  flueGasByMass(inputs: FlueGasByMass) {
     return phastAddon.flueGasLossesByMass(inputs)
   }
 
-  atmosphere(
-    inletTemperature: number,
-    outletTemperature: number,
-    flowRate: number,
-    correctionFactor: number,
-    specificHeat: number
-  ) {
-    let inputs = { inletTemperature, outletTemperature, flowRate, correctionFactor, specificHeat }
+  atmosphere(inputs: AtmosphereLoss) {
     return phastAddon.atmosphere(inputs);
   }
 
-  slagOtherMaterialLosses(
-    weight: number,
-    inletTemperature: number,
-    outletTemperature: number,
-    specificHeat: number,
-    correctionFactor: number
-  ) {
-    let inputs = {
-      weight,
-      inletTemperature,
-      outletTemperature,
-      specificHeat,
-      correctionFactor
-    }
+  slagOtherMaterialLosses(inputs: Slag) {
     return phastAddon.slagOtherMaterialLosses(inputs);
   }
 
-  auxiliaryPowerLoss(
-    motorPhase: number,
-    supplyVoltage: number,
-    avgCurrent: number,
-    powerFactor: number,
-    operatingTime: number,
-  ) {
-    let inputs = {
-      motorPhase: motorPhase,
-      supplyVoltage: supplyVoltage,
-      avgCurrent: avgCurrent,
-      powerFactor: powerFactor,
-      operatingTime: operatingTime,
-    }
+  auxiliaryPowerLoss(inputs: AuxiliaryPowerLoss) {
     return phastAddon.auxiliaryPowerLoss(inputs);
   }
 
-
-  energyInput(
-    naturalGasHeatInput: number,
-    naturalGasFlow: number,
-    measuredOxygenFlow: number,
-    coalCarbonInjection: number,
-    coalHeatingValue: number,
-    electrodeUse: number,
-    electrodeHeatingValue: number,
-    otherFuels: number,
-    electricityInput: number
-  ) {
-    let inputs = {
-      naturalGasHeatInput: naturalGasHeatInput,
-      naturalGasFlow: naturalGasFlow,
-      measuredOxygenFlow: measuredOxygenFlow,
-      coalCarbonInjection: coalCarbonInjection,
-      coalHeatingValue: coalHeatingValue,
-      electrodeUse: electrodeUse,
-      electrodeHeatingValue: electrodeHeatingValue,
-      otherFuels: otherFuels,
-      electricityInput: electricityInput
-    }
+  energyInput(inputs: EnergyInput) {
     return phastAddon.energyInput(inputs);
   }
 
@@ -344,28 +120,83 @@ export class PhastService {
 
   sumHeatInput(losses: Losses): number {
     let grossHeatRequired: number = 0;
-    if(losses.atmosphereLosses){
-      losses.atmosphereLosses.forEach(loss => {
-        
-      })
-      console.log(grossHeatRequired);
+    if (losses.atmosphereLosses) {
+      grossHeatRequired += this.sumAtmosphereLosses(losses.atmosphereLosses);
     }
-    losses.auxiliaryPowerLosses
-    losses.chargeMaterials
-    losses.coolingLosses
-    losses.energyInput
-    losses.exhaustGas
-    losses.extendedSurfaces
-    losses.fixtureLosses
-    losses.flueGasLosses
-    losses.leakageLosses
-    losses.openingLosses
-    losses.otherLosses
-    losses.slagLosses
-    losses.wallLosses
-    return
+    if (losses.auxiliaryPowerLosses) {
+      grossHeatRequired += this.sumAuxilaryPowerLosses(losses.auxiliaryPowerLosses);
+    }
+    if (losses.chargeMaterials) {
+     grossHeatRequired += this.sumChargeMaterials(losses.chargeMaterials);
+    }
+    if (losses.coolingLosses) {
+
+    }
+    if (losses.energyInput) {
+
+    }
+    if (losses.exhaustGas) {
+
+    }
+    if (losses.extendedSurfaces) {
+
+    }
+    if (losses.fixtureLosses) {
+
+    }
+    if (losses.flueGasLosses) {
+
+    }
+    if (losses.leakageLosses) {
+
+    }
+    if (losses.openingLosses) {
+
+    }
+    if (losses.otherLosses) {
+
+    }
+    if (losses.slagLosses) {
+    }
+    if (losses.wallLosses) {
+    }
+
+    console.log(grossHeatRequired);
+    return grossHeatRequired;
   }
 
+  sumAtmosphereLosses(losses: AtmosphereLoss[]): number {
+    let sum = 0;
+    losses.forEach(loss => {
+      sum += this.atmosphere(loss);
+    });
+    console.log('Atmosphere: ' + sum);
+    return sum;
+  }
+
+  sumAuxilaryPowerLosses(losses: AuxiliaryPowerLoss[]): number {
+    let sum = 0;
+    losses.forEach(loss => {
+      sum += this.auxiliaryPowerLoss(loss);
+    });
+    console.log('Aux: ' + sum);
+    return sum;
+  }
+
+  sumChargeMaterials(losses: ChargeMaterial[]) {
+    let sum = 0;
+    losses.forEach(loss => {
+      if (loss.chargeMaterialType == 'Gas') {
+        sum += this.gasLoadChargeMaterial(loss.gasChargeMaterial);
+      } else if (loss.chargeMaterialType == 'Solid') {
+        sum += this.solidLoadChargeMaterial(loss.solidChargeMaterial);
+      } else if (loss.chargeMaterialType == 'Liquid') {
+        sum += this.liquidLoadChargeMaterial(loss.liquidChargeMaterial);
+      }
+    });
+    console.log('Charge: ' + sum);
+    return sum;
+  }
   //TODO:Functions in addon need to be implemented
   // humidityRatio
   // flueGasLossesByMassGivenO2

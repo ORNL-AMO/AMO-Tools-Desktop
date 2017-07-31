@@ -65,9 +65,11 @@
 
     <div class="form-group">
       <label class="small" for="gasReacted">Feed Gas Reacted</label>
-      <input name="{{'gasReacted_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="gasReacted" id="gasReacted"
-        onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('gasReacted')">
-      <span class="units">%</span>
+      <div class="input-group">
+        <input name="{{'gasReacted_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="gasReacted" id="gasReacted"
+          onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('gasReacted')">
+        <span class="units">%</span>
+      </div>
     </div>
 
     <div class="form-group">
@@ -91,9 +93,9 @@
     <div class="form-group">
       <label class="small" for="additionalHeatRequired">Additional Heat Required</label>
       <div class="input-group">
-      <input name="{{'additionalHeatRequired_'+lossIndex}}" type="number" class="form-control" formControlName="additionalHeatRequired"
-        id="additionalHeatRequired" onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('additionalHeatRequired')">
-      <span class="input-group-addon units">Btu/lb</span>
+        <input name="{{'additionalHeatRequired_'+lossIndex}}" type="number" class="form-control" formControlName="additionalHeatRequired"
+          id="additionalHeatRequired" onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('additionalHeatRequired')">
+        <span class="input-group-addon units">Btu/lb</span>
       </div>
     </div>
   </div>

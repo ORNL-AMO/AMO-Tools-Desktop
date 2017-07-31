@@ -41,15 +41,12 @@ export class CoolingLossesService {
     })
   }
 
-  initWaterLossFromForm(form: any): CoolingLoss {
-    let tmpLoss: CoolingLoss = {
-      coolingLossType: 'Water',
-      waterCoolingLoss: {
-        flowRate: form.value.liquidFlow,
-        initialTemperature: form.value.inletTemp,
-        outletTemperature: form.value.outletTemp,
-        correctionFactor: form.value.correctionFactor
-      }
+  initWaterLossFromForm(form: any): WaterCoolingLoss {
+    let tmpLoss: WaterCoolingLoss = {
+      flowRate: form.value.liquidFlow,
+      initialTemperature: form.value.inletTemp,
+      outletTemperature: form.value.outletTemp,
+      correctionFactor: form.value.correctionFactor
     }
     return tmpLoss;
   }
@@ -76,17 +73,14 @@ export class CoolingLossesService {
     })
   }
 
-  initLiquidLossFromForm(form: any): CoolingLoss {
-    let tmpLoss: CoolingLoss = {
-      coolingLossType: 'Liquid',
-      liquidCoolingLoss: {
-        flowRate: form.value.liquidFlow,
-        density: form.value.density,
-        initialTemperature: form.value.inletTemp,
-        outletTemperature: form.value.outletTemp,
-        specificHeat: form.value.avgSpecificHeat,
-        correctionFactor: form.value.correctionFactor
-      }
+  initLiquidLossFromForm(form: any): LiquidCoolingLoss {
+    let tmpLoss: LiquidCoolingLoss = {
+      flowRate: form.value.liquidFlow,
+      density: form.value.density,
+      initialTemperature: form.value.inletTemp,
+      outletTemperature: form.value.outletTemp,
+      specificHeat: form.value.avgSpecificHeat,
+      correctionFactor: form.value.correctionFactor
     }
     return tmpLoss;
   }
@@ -111,16 +105,13 @@ export class CoolingLossesService {
     });
   }
 
-  initGasLossFromForm(form: any): CoolingLoss {
-    let tmpLoss: CoolingLoss = {
-      coolingLossType: 'Gas',
-      gasCoolingLoss: {
-        flowRate: form.value.gasFlow,
-        initialTemperature: form.value.inletTemp,
-        finalTemperature: form.value.outletTemp,
-        specificHeat: form.value.avgSpecificHeat,
-        correctionFactor: form.value.correctionFactor
-      }
+  initGasLossFromForm(form: any): GasCoolingLoss {
+    let tmpLoss: GasCoolingLoss = {
+      flowRate: form.value.gasFlow,
+      initialTemperature: form.value.inletTemp,
+      finalTemperature: form.value.outletTemp,
+      specificHeat: form.value.avgSpecificHeat,
+      correctionFactor: form.value.correctionFactor
     }
     return tmpLoss;
   }

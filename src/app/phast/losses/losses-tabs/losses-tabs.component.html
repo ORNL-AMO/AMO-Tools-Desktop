@@ -67,11 +67,11 @@
     Extended Surface
     </a>
   </li><!--
-  --><li [ngClass]="{'active': lossesTab == 'heat-storage'}" (click)="tabChange('heat-storage')">
+  <li [ngClass]="{'active': lossesTab == 'heat-storage'}" (click)="tabChange('heat-storage')">
     <a class="nav-link small">
     Heat Storage
     </a>
-  </li><!--
+  </li>
   --><li *ngIf="settings.energySourceType == 'Fuel'" [ngClass]="{'active': lossesTab == 'other-losses'}" (click)="tabChange('other-losses')">
     <a class="nav-link small">
     Other

@@ -12,3 +12,26 @@ export interface OpeningLoss {
     openingTotalArea?: number,
     heatLoss?: number
 }
+
+export interface QuadOpeningLoss {
+    emissivity?: number,
+    length?: number,
+    widthHeight?: number,
+    thickness?: number,
+    ratio?: number,
+    ambientTemperature?: number,
+    insideTemperature?: number,
+    percentTimeOpen?: number,
+    viewFactor?: number
+}
+
+export interface CircularOpeningLoss {
+    emissivity?: number,
+    diameterLength?: number,
+    thickness?: number,
+    ratio?: number,
+    ambientTemperature?: number,
+    insideTemperature?: number,
+    percentTimeOpen?: number,
+    viewFactor?: number
+}

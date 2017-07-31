@@ -128,13 +128,8 @@ export class AuxiliaryPowerLossesComponent implements OnInit {
   }
 
   calculate(loss: any) {
-    loss.powerUsed = this.phastService.auxiliaryPowerLoss(
-      loss.form.value.motorPhase,
-      loss.form.value.supplyVoltage,
-      loss.form.value.avgCurrent,
-      loss.form.value.powerFactor,
-      loss.form.value.operatingTime
-    );
+    let tmpLoss: AuxiliaryPowerLoss = this.auxiliaryPowerLossesService.getLossFromForm(loss.form);
+    loss.powerUsed = this.phastService.auxiliaryPowerLoss(tmpLoss);
   }
 
   saveLosses() {
