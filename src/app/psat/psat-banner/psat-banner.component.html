@@ -6,10 +6,10 @@
 			<small>Last modified: {{assessment.modifiedDate | date:'medium'}}</small>
 		</div>
 		<ul class="pills-nav">
-			<li class="active"><span>Pump &amp; Motor</span></li>
-			<li><span>Assessment</span></li>
-			<li class="disabled"><span>Diagram</span></li>
-			<li><span>Report</span></li>
+			<li [ngClass]="{'active': mainTab == 'system-setup'}" (click)="changeTab('system-setup')"><span>Pump &amp; Motor</span></li>
+			<li [ngClass]="{'active': mainTab == 'assessment', 'disabled': !assessment.psat.setupDone}" (click)="changeTab('assessment')"><span>Assessment</span></li>
+			<li [ngClass]="{'active': mainTab == 'diagram', 'disabled': !assessment.psat.setupDone}" (click)="changeTab('diagram')"><span>Diagram</span></li>
+			<li [ngClass]="{'active': mainTab == 'report', 'disabled': !assessment.psat.setupDone}" (click)="changeTab('report')"><span>Report</span></li>
 		</ul>
 	</div>
 
