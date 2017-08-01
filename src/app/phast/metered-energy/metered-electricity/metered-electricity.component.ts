@@ -1,12 +1,16 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { MeteredEnergyElectricity, MeteredEnergyResults } from '../../../shared/models/phast/meteredEnergy';
+import { PHAST } from '../../../shared/models/phast/phast';
+import { PhastService } from '../../phast.service';
 
 @Component({
   selector: 'app-metered-electricity',
   templateUrl: './metered-electricity.component.html',
-  styleUrls: ['./metered-electricity.component.css','../../../psat/explore-opportunities/explore-opportunities.component.css']
+  styleUrls: ['./metered-electricity.component.css', '../../../psat/explore-opportunities/explore-opportunities.component.css']
 })
 export class MeteredElectricityComponent implements OnInit {
+  @Input()
+  phast: PHAST;
   tabSelect: string = 'results';
   inputs: MeteredEnergyElectricity = {
     electricityCollectionTime: 0,
@@ -24,7 +28,7 @@ export class MeteredElectricityComponent implements OnInit {
   };
 
   currentField: string = 'fuelType';
-  constructor() { }
+  constructor(private phastService: PhastService) { }
 
   ngOnInit() {
   }
@@ -33,15 +37,22 @@ export class MeteredElectricityComponent implements OnInit {
     this.tabSelect = str;
   }
 
-  save(){
+  save() {
     console.log('save');
   }
 
-  calculate(){
+  calculate() {
+    //Metered Energy Use
+    //Electricty Used = Electricity used during collection / collection time
     this.results.meteredEnergyUsed = this.inputs.electricityUsed / this.inputs.electricityCollectionTime;
+    //Electricty Used = Electricity used during collection / collection time
+    this.results.meteredElectricityUsed = this.inputs.electricityUsed / this.inputs.electricityCollectionTime;
+    //Energy Intensity for Charge Materials =  Electricity used during collection / Sum(charge material feed rates)
+    let sumFeedRate = this.phastService.sumChargeMaterialFeedRate(this.phast.losses.chargeMaterials);
+    this.results.meteredEnergyIntensity = this.inputs.electricityUsed / sumFeedRate;
   }
 
-  setField(str: string){
+  setField(str: string) {
     this.currentField = str;
   }
 }

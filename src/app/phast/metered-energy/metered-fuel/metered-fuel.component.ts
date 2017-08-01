@@ -1,12 +1,17 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { MeteredEnergyFuel, MeteredEnergyResults } from '../../../shared/models/phast/meteredEnergy';
+import { PHAST } from '../../../shared/models/phast/phast';
+import { PhastService } from '../../phast.service';
+
+
 @Component({
   selector: 'app-metered-fuel',
   templateUrl: './metered-fuel.component.html',
   styleUrls: ['./metered-fuel.component.css', '../../../psat/explore-opportunities/explore-opportunities.component.css']
 })
 export class MeteredFuelComponent implements OnInit {
-
+  @Input()
+  phast: PHAST;
   tabSelect: string = 'results';
   inputs: MeteredEnergyFuel = {
     fuelType: 0,
@@ -27,7 +32,7 @@ export class MeteredFuelComponent implements OnInit {
 
   currentField: string = 'fuelType';
 
-  constructor() { }
+  constructor(private phastService: PhastService) { }
 
   ngOnInit() {
   }
@@ -36,15 +41,30 @@ export class MeteredFuelComponent implements OnInit {
     this.tabSelect = str;
   }
 
-  save(){
+  save() {
     console.log('save');
   }
 
-  calculate(){
+  calculate() {
+    //Metered Energy Use
+    //Metered Fuel Used = HHV * Flow Rate
     this.results.meteredEnergyUsed = this.inputs.heatingValue * this.inputs.flowRate;
-  }
+    //Energy Intensity for Charge Materials =  Metered Energy Used / Sum(charge material feed rates)
+    let sumFeedRate = this.phastService.sumChargeMaterialFeedRate(this.phast.losses.chargeMaterials);
+    this.results.meteredEnergyIntensity = this.results.meteredEnergyUsed / sumFeedRate;
+    //Electricity Used (Auxiliary) = Electricity used during collection / collection time
+    this.results.meteredElectricityUsed = this.inputs.electricityUsed / this.inputs.electricityCollectionTime;
+    
+    //Calculated By PHAST
+    //Fuel energy used
+    this.results.calculatedFuelEnergyUsed = this.phastService.sumHeatInput(this.phast.losses);
+    //energy intensity = fuel energy used / sum(charge material feed rate)
+    this.results.calculatedEnergyIntensity = this.results.calculatedFuelEnergyUsed / sumFeedRate;
+    
+}
 
-  setField(str: string){
+
+  setField(str: string) {
     this.currentField = str;
   }
 }

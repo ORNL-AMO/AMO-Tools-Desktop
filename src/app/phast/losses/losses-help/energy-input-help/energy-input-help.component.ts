@@ -12,7 +12,6 @@ export class EnergyInputHelpComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    console.log(this.currentField)
   }
 
 }
