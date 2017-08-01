@@ -46,7 +46,7 @@ import { EditConditionPropertiesComponent } from './edit-condition-properties/ed
 import { EnergyInputHelpComponent } from './losses-help/energy-input-help/energy-input-help.component';
 
 import { ExhaustGasModule } from './exhaust-gas/exhaust-gas.module';
-
+import { LossesService } from './losses.service';
 @NgModule({
   imports: [
     CommonModule,
@@ -95,6 +95,7 @@ import { ExhaustGasModule } from './exhaust-gas/exhaust-gas.module';
     EnergyInputHelpComponent,
   ],
   providers: [
+    LossesService
   ],
   exports: [
     LossesComponent

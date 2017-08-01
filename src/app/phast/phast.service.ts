@@ -16,12 +16,18 @@ import { AuxiliaryPowerLoss } from '../shared/models/phast/losses/auxiliaryPower
 import { EnergyInput } from '../shared/models/phast/losses/energyInput';
 import { FlueGasByMass, FlueGasByVolume } from '../shared/models/phast/losses/flueGas';
 declare var phastAddon: any;
-
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable()
 export class PhastService {
 
-  constructor() { }
+  mainTab: BehaviorSubject<string>;
+  secondaryTab: BehaviorSubject<string>;
+
+  constructor() {
+    this.mainTab = new BehaviorSubject<string>('system-setup');
+    this.secondaryTab = new BehaviorSubject<string>('explore-opportunities');
+  }
   test() {
     console.log(phastAddon)
   }

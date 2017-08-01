@@ -56,7 +56,7 @@ export class ExploreOpportunitiesComponent implements OnInit {
         exploreOpportunities: true
       });
       this.exploreModIndex = 0;
-      this.psat.modifications[this.exploreModIndex].psat.name = 'Opportunities Modification'
+      this.psat.modifications[this.exploreModIndex].psat.name = 'Opportunities Modification';
     } else {
       let i = 0;
       let exists = false;
@@ -92,6 +92,7 @@ export class ExploreOpportunitiesComponent implements OnInit {
     this.unit = '%';
     this.titlePlacement = 'top';
     this.getResults();
+    this.save();
   }
 
   ngOnChanges(changes: SimpleChanges) {

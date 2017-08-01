@@ -20,7 +20,7 @@ export class AssessmentItemComponent implements OnInit {
     this.assessmentService.tab = 'system-setup';
     if (assessment.type == 'PSAT') {
       if(assessment.psat.setupDone){
-        this.assessmentService.tab = 'explore-opportunities';
+        this.assessmentService.tab = 'assessment';
       }
       this.router.navigateByUrl('/psat/' + assessment.id);
     } else if (assessment.type == 'PHAST') {

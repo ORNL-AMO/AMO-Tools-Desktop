@@ -62,6 +62,7 @@ export class PsatComponent implements OnInit {
   emitPrint: boolean = false;
   viewingReport: boolean = false;
   tabBeforeReport: string = 'explore-opportunities';
+  mainTab: string = 'system-setup';
   constructor(
     private location: Location,
     private assessmentService: AssessmentService,
@@ -91,11 +92,30 @@ export class PsatComponent implements OnInit {
       })
       let tmpTab = this.assessmentService.getTab();
       if (tmpTab) {
-        this.currentTab = tmpTab;
+        this.psatService.mainTab.next(tmpTab);
       }
+      this.psatService.mainTab.subscribe(val => {
+        this.mainTab = val;
+        if (this.mainTab == 'diagram') {
+          this.psatService.secondaryTab.next('system-curve');
+        } 
+        else if (this.mainTab == 'assessment') {
+          if (this.currentTab != 'explore-opportunities' && this.currentTab != 'modify-conditions') {
+            this.psatService.secondaryTab.next('explore-opportunities');
+          }
+        }
+      })
+      this.psatService.secondaryTab.subscribe(val => {
+        this.currentTab = val;
+      })
     })
   }
 
+
+  ngOnDestroy(){
+    this.psatService.secondaryTab.next('explore-opportunities');
+    this.psatService.mainTab.next('system-setup');
+  }
 
   getSettings(update?: boolean) {
     //get assessment settings
@@ -160,12 +180,6 @@ export class PsatComponent implements OnInit {
     this.isValid = false;
   }
 
-  changeTab(str: string) {
-    // this.tabIndex = _.findIndex(this.tabs, function (tab) { return tab == str });
-    // this.currentTab = this.tabs[this.tabIndex];
-    this.currentTab = str;
-  }
-
   changeSubTab(str: string) {
     if (str == 'motor') {
       let tmpBool = this.checkPumpFluid();
@@ -191,14 +205,14 @@ export class PsatComponent implements OnInit {
 
   continue() {
     if (this.subTab == 'field-data') {
-      this.currentTab = 'explore-opportunities';
+      this.psatService.mainTab.next('assessment');
     } else {
       this.subTabIndex++;
       this.subTab = this.subTabs[this.subTabIndex];
     }
     this.canContinue = false;
   }
-  
+
   getCanContinue() {
     if (this.subTab == 'system-basics') {
       return true;
@@ -220,7 +234,7 @@ export class PsatComponent implements OnInit {
   }
 
   goBack() {
-    this.currentTab = 'system-setup';
+    this.psatService.secondaryTab.next('system-setup');
   }
 
   toggleSave() {
@@ -264,17 +278,8 @@ export class PsatComponent implements OnInit {
     }
     this.toastyService.success(toastOptions);
   }
-
   goToReport() {
-    // if(this.currentTab != 'modify-conditions'){
-    //   this.changeTab('modify-conditions');
-    // }
-    // this.psatService.changeSubTab.next('report');
-    this.tabBeforeReport = this.currentTab;
-    this.currentTab = 'report';
+    this.psatService.mainTab.next('report');
   }
 
-  closeReport() {
-    this.currentTab = this.tabBeforeReport;
-  }
 }

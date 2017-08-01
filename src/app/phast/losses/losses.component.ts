@@ -3,7 +3,8 @@ import { PHAST, Losses, Modification } from '../../shared/models/phast/phast';
 import { Settings } from '../../shared/models/settings';
 import * as _ from 'lodash';
 import { ModalDirective } from 'ngx-bootstrap';
-
+import { PhastService } from '../phast.service';
+import { LossesService } from './losses.service';
 @Component({
   selector: 'app-losses',
   templateUrl: 'losses.component.html',
@@ -33,64 +34,10 @@ export class LossesComponent implements OnInit {
   showNotes: boolean = false;
   editModification: Modification;
   showEditModification: boolean = false;
-  // lossesStates: any = {
-  //   wallLosses: {
-  //     numLosses: 0,
-  //     saved: true,
-  //   },
-  //   chargeMaterial: {
-  //     numLosses: 0,
-  //     saved: true
-  //   },
-  //   atmosphereLosses: {
-  //     numLosses: 0,
-  //     saved: true
-  //   },
-  //   openingLosses: {
-  //     numLosses: 0,
-  //     saved: true
-  //   },
-  //   coolingLosses: {
-  //     numLosses: 0,
-  //     saved: true
-  //   },
-  //   fixtureLosses: {
-  //     numLosses: 0,
-  //     saved: true
-  //   },
-  //   leakageLosses: {
-  //     numLosses: 0,
-  //     saved: true
-  //   },
-  //   surfaceLosses: {
-  //     numLosses: 0,
-  //     saved: true
-  //   },
-  //   otherLosses: {
-  //     numLosses: 0,
-  //     saved: true
-  //   },
-  //   flueGasLosses: {
-  //     numLosses: 0,
-  //     saved: true
-  //   },
-  //   slagLosses: {
-  //     numLosses: 0,
-  //     saved: true
-  //   },
-  //   auxiliaryPowerLosses: {
-  //     numLosses: 0,
-  //     saved: true
-  //   },
-  //   energyInput: {
-  //     numLosses: 0,
-  //     saved: true
-  //   }
-  // }
 
   showSetupDialog: boolean;
   isLossesSetup: boolean;
-  constructor() { }
+  constructor(private lossesService: LossesService) { }
 
   ngOnInit() {
     this._modifications = new Array<Modification>();
@@ -103,10 +50,10 @@ export class LossesComponent implements OnInit {
     if (this.phast.modifications) {
       this._modifications = (JSON.parse(JSON.stringify(this.phast.modifications)));
     }
-  }
 
-  changeTab($event) {
-    this.lossesTab = $event
+    this.lossesService.lossesTab.subscribe(val => {
+      this.lossesTab = val;
+    })
   }
 
   changeField($event) {
