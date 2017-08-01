@@ -35,6 +35,7 @@ export class MeteredFuelComponent implements OnInit {
   constructor(private phastService: PhastService) { }
 
   ngOnInit() {
+    this.calculate();
   }
 
   setTab(str: string) {

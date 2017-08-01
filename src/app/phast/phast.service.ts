@@ -19,12 +19,13 @@ import { FlueGasByMass, FlueGasByVolume, FlueGas } from '../shared/models/phast/
 import { ExtendedSurface } from '../shared/models/phast/losses/extendedSurface';
 import { OtherLoss } from '../shared/models/phast/losses/otherLoss';
 declare var phastAddon: any;
-
+import { OpeningLossesService } from './losses/opening-losses/opening-losses.service';
 
 @Injectable()
 export class PhastService {
 
-  constructor() { }
+  constructor(private openingLossesService: OpeningLossesService) { }
+
   test() {
     console.log(phastAddon)
   }
@@ -164,12 +165,11 @@ export class PhastService {
       grossHeatRequired += this.sumOtherLosses(losses.otherLosses);
     }
     if (losses.slagLosses) {
-      grossHeatRequired +=  this.sumSlagLosses(losses.slagLosses);
+      grossHeatRequired += this.sumSlagLosses(losses.slagLosses);
     }
     if (losses.wallLosses) {
       grossHeatRequired += this.sumWallLosses(losses.wallLosses);
     }
-
     console.log(grossHeatRequired);
     return grossHeatRequired;
   }
@@ -287,10 +287,13 @@ export class PhastService {
   sumOpeningLosses(losses: OpeningLoss[]): number {
     let sum = 0;
     losses.forEach(loss => {
+      let tmpForm = this.openingLossesService.getFormFromLoss(loss);
       if (loss.openingType == 'Round') {
-        sum += this.openingLossesCircular(loss) * loss.numberOfOpenings;
+        let tmpLoss = this.openingLossesService.getCircularLossFromForm(tmpForm);
+        sum += this.openingLossesCircular(tmpLoss) * loss.numberOfOpenings;
       } else if (loss.openingType == 'Rectangular (Square)') {
-        sum += this.openingLossesQuad(loss) * loss.numberOfOpenings
+        let tmpLoss = this.openingLossesService.getQuadLossFromForm(tmpForm);
+        sum += this.openingLossesQuad(tmpLoss) * loss.numberOfOpenings
       }
     })
     return sum;
