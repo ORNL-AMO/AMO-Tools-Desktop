@@ -3,7 +3,7 @@ import * as _ from 'lodash';
 import { PhastService } from '../../phast.service';
 import { CoolingLossesService } from './cooling-losses.service';
 import { Losses } from '../../../shared/models/phast/phast';
-import { CoolingLoss } from '../../../shared/models/phast/losses/coolingLoss';
+import { CoolingLoss, GasCoolingLoss, LiquidCoolingLoss, WaterCoolingLoss } from '../../../shared/models/phast/losses/coolingLoss';
 import { CoolingLossesCompareService } from './cooling-losses-compare.service';
 
 @Component({
@@ -168,49 +168,43 @@ export class CoolingLossesComponent implements OnInit {
 
   calculate(loss: any) {
     if (loss.coolingMedium == 'Gas' || loss.coolingMedium == 'Air') {
-      loss.heatLoss = this.phastService.gasCoolingLosses(
-        loss.gasCoolingForm.value.gasFlow,
-        loss.gasCoolingForm.value.inletTemp,
-        loss.gasCoolingForm.value.outletTemp,
-        loss.gasCoolingForm.value.avgSpecificHeat,
-        loss.gasCoolingForm.value.correctionFactor
-      );
+      let tmpGasCoolingLoss: GasCoolingLoss = this.coolingLossesService.initGasLossFromForm(loss.gasCoolingForm);
+      loss.heatLoss = this.phastService.gasCoolingLosses(tmpGasCoolingLoss);
     }
     else if (loss.coolingMedium == 'Liquid') {
-      loss.heatLoss = this.phastService.liquidCoolingLosses(
-        loss.liquidCoolingForm.value.liquidFlow,
-        loss.liquidCoolingForm.value.density,
-        loss.liquidCoolingForm.value.inletTemp,
-        loss.liquidCoolingForm.value.outletTemp,
-        loss.liquidCoolingForm.value.avgSpecificHeat,
-        loss.liquidCoolingForm.value.correctionFactor
-      );
+      let tmpLiquidCoolingLoss: LiquidCoolingLoss = this.coolingLossesService.initLiquidLossFromForm(loss.liquidCoolingForm);
+      loss.heatLoss = this.phastService.liquidCoolingLosses(tmpLiquidCoolingLoss);
     }
     else if (loss.coolingMedium == 'Water') {
-      loss.heatLoss = this.phastService.waterCoolingLosses(
-        loss.waterCoolingForm.value.liquidFlow,
-        loss.waterCoolingForm.value.inletTemp,
-        loss.waterCoolingForm.value.outletTemp,
-        loss.waterCoolingForm.value.correctionFactor
-      );
+      let tmpWaterCoolingLoss: WaterCoolingLoss = this.coolingLossesService.initWaterLossFromForm(loss.waterCoolingForm);
+      loss.heatLoss = this.phastService.waterCoolingLosses(tmpWaterCoolingLoss);
     }
   }
 
   saveLosses() {
     let tmpCoolingLosses = new Array<CoolingLoss>();
     this._coolingLosses.forEach(loss => {
-      let tmpCoolingLoss: any;
+      let tmpCoolingLoss: CoolingLoss;
       if (loss.coolingMedium == 'Gas' || loss.coolingMedium == 'Air') {
-        tmpCoolingLoss = this.coolingLossesService.initGasLossFromForm(loss.gasCoolingForm);
-        tmpCoolingLoss.heatLoss = loss.heatLoss;
+        tmpCoolingLoss = {
+          coolingLossType: 'Gas',
+          gasCoolingLoss: this.coolingLossesService.initGasLossFromForm(loss.gasCoolingForm),
+          heatLoss: loss.heatLoss
+        };
       }
       else if (loss.coolingMedium == 'Liquid') {
-        tmpCoolingLoss = this.coolingLossesService.initLiquidLossFromForm(loss.liquidCoolingForm);
-        tmpCoolingLoss.heatLoss = loss.heatLoss;
+        tmpCoolingLoss = {
+          coolingLossType: 'Liquid',
+          liquidCoolingLoss: this.coolingLossesService.initLiquidLossFromForm(loss.liquidCoolingForm),
+          heatLoss: loss.heatLoss
+        };
       }
       else if (loss.coolingMedium == 'Water') {
-        tmpCoolingLoss = this.coolingLossesService.initWaterLossFromForm(loss.waterCoolingForm);
-        tmpCoolingLoss.heatLoss = loss.heatLoss;
+        tmpCoolingLoss = {
+          coolingLossType: 'Water',
+          waterCoolingLoss: this.coolingLossesService.initWaterLossFromForm(loss.waterCoolingForm),
+          heatLoss: loss.heatLoss
+        };
       }
       tmpCoolingLosses.push(tmpCoolingLoss);
     })

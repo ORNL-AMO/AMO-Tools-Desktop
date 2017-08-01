@@ -3,7 +3,7 @@ import * as _ from 'lodash';
 import { PhastService } from '../../phast.service';
 import { OpeningLossesService } from './opening-losses.service';
 import { Losses } from '../../../shared/models/phast/phast';
-import { OpeningLoss } from '../../../shared/models/phast/losses/openingLoss';
+import { OpeningLoss, QuadOpeningLoss, CircularOpeningLoss } from '../../../shared/models/phast/losses/openingLoss';
 import { OpeningLossesCompareService } from './opening-losses-compare.service';
 
 @Component({
@@ -131,31 +131,12 @@ export class OpeningLossesComponent implements OnInit {
 
   calculate(loss: any) {
     if (loss.form.value.openingType == 'Rectangular (Square)') {
-      let ratio = Math.min(loss.form.value.lengthOfOpening, loss.form.value.heightOfOpening) / loss.form.value.wallThickness;
-      let lossAmount = this.phastService.openingLossesQuad(
-        loss.form.value.emissivity,
-        loss.form.value.lengthOfOpening,
-        loss.form.value.heightOfOpening,
-        loss.form.value.wallThickness,
-        ratio,
-        loss.form.value.ambientTemp,
-        loss.form.value.insideTemp,
-        loss.form.value.percentTimeOpen,
-        loss.form.value.viewFactor
-      );
+      let tmpLoss: QuadOpeningLoss = this.openingLossesService.getQuadLossFromForm(loss.form);
+      let lossAmount = this.phastService.openingLossesQuad(tmpLoss);
       loss.totalOpeningLosses = loss.form.value.numberOfOpenings * lossAmount;
     } else if (loss.form.value.openingType == 'Round') {
-      let ratio = loss.form.value.lengthOfOpening / loss.form.value.wallThickness;
-      let lossAmount = this.phastService.openingLossesCircular(
-        loss.form.value.emissivity,
-        loss.form.value.lengthOfOpening,
-        loss.form.value.wallThickness,
-        ratio,
-        loss.form.value.ambientTemp,
-        loss.form.value.insideTemp,
-        loss.form.value.percentTimeOpen,
-        loss.form.value.viewFactor
-      );
+      let tmpLoss: CircularOpeningLoss = this.openingLossesService.getCircularLossFromForm(loss.form);
+      let lossAmount = this.phastService.openingLossesCircular(tmpLoss);
       loss.totalOpeningLosses = loss.form.value.numberOfOpenings * lossAmount;
     }
   }

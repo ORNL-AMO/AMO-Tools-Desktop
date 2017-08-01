@@ -106,7 +106,7 @@ export class GasLeakageLossesComponent implements OnInit {
 
   addLoss() {
     this.gasLeakageLossesService.addLoss(this.isBaseline);
-    if(this.gasLeakageCompareService.differentArray){
+    if (this.gasLeakageCompareService.differentArray) {
       this.gasLeakageCompareService.addObject(this.gasLeakageCompareService.differentArray.length - 1);
     }
     this._leakageLosses.push({
@@ -130,15 +130,8 @@ export class GasLeakageLossesComponent implements OnInit {
   }
 
   calculate(loss: any) {
-    loss.heatLoss = this.phastService.leakageLosses(
-      loss.form.value.draftPressure,
-      loss.form.value.openingArea,
-      loss.form.value.leakageGasTemperature,
-      loss.form.value.ambientTemperature,
-      loss.form.value.coefficient,
-      loss.form.value.specificGravity,
-      loss.form.value.correctionFactor
-    );
+    let tmpLeakageLoss = this.gasLeakageLossesService.initLossFromForm(loss.form);
+    loss.heatLoss = this.phastService.leakageLosses(tmpLeakageLoss);
   }
 
   saveLosses() {

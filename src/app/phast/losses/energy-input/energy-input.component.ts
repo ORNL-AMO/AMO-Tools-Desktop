@@ -143,17 +143,8 @@ export class EnergyInputComponent implements OnInit {
   }
 
   calculate(loss: any) {
-    let calculation = this.phastService.energyInput(
-      loss.form.value.naturalGasHeatInput,
-      loss.form.value.naturalGasFlow,
-      loss.form.value.measuredOxygenFlow,
-      loss.form.value.coalCarbonInjection,
-      loss.form.value.coalHeatingValue,
-      loss.form.value.electrodeUse,
-      loss.form.value.electrodeHeatingValue,
-      loss.form.value.otherFuels,
-      loss.form.value.electricityInput
-    );
+    let tmpLoss: EnergyInput = this.energyInputService.getLossFromForm(loss.form);
+    let calculation = this.phastService.energyInput(tmpLoss);
     loss.results = {
       heatDelivered: calculation.heatDelivered,
       kwhCycle: calculation.kwhCycle,

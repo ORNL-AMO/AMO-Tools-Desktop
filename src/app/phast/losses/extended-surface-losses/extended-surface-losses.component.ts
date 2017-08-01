@@ -5,7 +5,7 @@ import { ExtendedSurface } from '../../../shared/models/phast/losses/extendedSur
 import { Losses } from '../../../shared/models/phast/phast';
 import { ExtendedSurfaceLossesService } from './extended-surface-losses.service';
 import { ExtendedSurfaceCompareService } from './extended-surface-compare.service';
-
+import { WallLoss } from '../../../shared/models/phast/losses/wallLoss';
 @Component({
   selector: 'app-extended-surface-losses',
   templateUrl: './extended-surface-losses.component.html',
@@ -132,15 +132,17 @@ export class ExtendedSurfaceLossesComponent implements OnInit {
     //windVelocity = 5
     //correctionFactor = 1
     //conditionFactor = 1
-    loss.heatLoss = this.phastService.wallLosses(
-      loss.form.value.surfaceArea,
-      loss.form.value.ambientTemp,
-      loss.form.value.avgSurfaceTemp,
-      5,
-      loss.form.value.surfaceEmissivity,
-      1,
-      1
-    );
+    let tmpLoss: ExtendedSurface = this.extendedSurfaceLossesService.getSurfaceLossFromForm(loss.form);
+    let tmpWallLoss: WallLoss = {
+      surfaceArea: tmpLoss.surfaceArea,
+      ambientTemperature: tmpLoss.ambientTemperature,
+      surfaceTemperature: tmpLoss.surfaceTemperature,
+      windVelocity: 5,
+      surfaceEmissivity: tmpLoss.surfaceEmissivity,
+      conditionFactor: 1,
+      correctionFactor: 1,
+    }
+    loss.heatLoss = this.phastService.wallLosses(tmpWallLoss);
 
   }
 

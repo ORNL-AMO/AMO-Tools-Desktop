@@ -2,7 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@
 import * as _ from 'lodash';
 import { FlueGasLossesService } from './flue-gas-losses.service';
 import { PhastService } from '../../phast.service';
-import { FlueGas } from '../../../shared/models/phast/losses/flueGas';
+import { FlueGas, FlueGasByMass, FlueGasByVolume } from '../../../shared/models/phast/losses/flueGas';
 import { Losses } from '../../../shared/models/phast/phast';
 import { FlueGasCompareService } from './flue-gas-compare.service';
 @Component({
@@ -153,41 +153,12 @@ export class FlueGasLossesComponent implements OnInit {
   }
 
   calculate(loss: any) {
-    //TODO: ADD call to phastService to calculate heat loss
     if (loss.measurementType == "By Volume") {
-      loss.heatLoss = this.phastService.flueGasByVolume(
-        loss.formByVolume.value.flueGasTemperature,
-        loss.formByVolume.value.excessAirPercentage,
-        loss.formByVolume.value.combustionAirTemperature,
-        loss.formByVolume.value.CH4,
-        loss.formByVolume.value.C2H6,
-        loss.formByVolume.value.N2,
-        loss.formByVolume.value.H2,
-        loss.formByVolume.value.C3H8,
-        loss.formByVolume.value.C4H10_CnH2n,
-        loss.formByVolume.value.H2O,
-        loss.formByVolume.value.CO,
-        loss.formByVolume.value.CO2,
-        loss.formByVolume.value.SO2,
-        loss.formByVolume.value.O2
-      );
+      let tmpLoss: FlueGasByVolume = this.flueGasLossesService.buildByVolumeLossFromForm(loss.formByVolume);
+      loss.heatLoss = this.phastService.flueGasByVolume(tmpLoss);
     } else if (loss.measurementType == "By Mass") {
-      loss.heatLoss = this.phastService.flueGasByMass(
-        loss.formByMass.value.flueGasTemperature,
-        loss.formByMass.value.excessAirPercentage,
-        loss.formByMass.value.combustionAirTemperature,
-        loss.formByMass.value.fuelTemperature,
-        loss.formByMass.value.ashDischargeTemperature,
-        loss.formByMass.value.moistureInAirComposition,
-        loss.formByMass.value.unburnedCarbonInAsh,
-        loss.formByMass.value.carbon,
-        loss.formByMass.value.hydrogen,
-        loss.formByMass.value.sulphur,
-        loss.formByMass.value.inertAsh,
-        loss.formByMass.value.o2,
-        loss.formByMass.value.moisture,
-        loss.formByMass.value.nitrogen
-      )
+      let tmpLoss: FlueGasByMass = this.flueGasLossesService.buildByMassLossFromForm(loss.formByMass);
+      loss.heatLoss = this.phastService.flueGasByMass(tmpLoss);
     }
   }
 
@@ -195,11 +166,17 @@ export class FlueGasLossesComponent implements OnInit {
     let tmpFlueGasLosses = new Array<FlueGas>();
     this._flueGasLosses.forEach(loss => {
       if (loss.measurementType == "By Volume") {
-        let tmpVolumeLoss = this.flueGasLossesService.buildByVolumeLossFromForm(loss.formByVolume);
+        let tmpVolumeLoss: FlueGas = {
+          flueGasType: 'By Volume',
+          flueGasByVolume: this.flueGasLossesService.buildByVolumeLossFromForm(loss.formByVolume)
+        };
         tmpFlueGasLosses.push(tmpVolumeLoss);
       }
       else if (loss.measurementType == "By Mass") {
-        let tmpVolumeLoss = this.flueGasLossesService.buildByMassLossFromForm(loss.formByMass);
+        let tmpVolumeLoss: FlueGas = {
+          flueGasType: 'By Mass',
+          flueGasByMass: this.flueGasLossesService.buildByMassLossFromForm(loss.formByMass)
+        }
         tmpFlueGasLosses.push(tmpVolumeLoss);
       }
     })

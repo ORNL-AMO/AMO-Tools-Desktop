@@ -3,8 +3,8 @@
     <div class="form-group">
       <label class="small" for="naturalGasHeatInput">Natural Gas Heat Input</label>
       <div class="input-group">
-        <input name="{{'naturalGasHeatInput_'+lossIndex}}" type="number" class="form-control" formControlName="naturalGasHeatInput" id="naturalGasHeatInput" onfocus="this.select();"
-          (input)="startSavePolling()" (focus)="focusField('naturalGasHeatInput')">
+        <input name="{{'naturalGasHeatInput_'+lossIndex}}" type="number" class="form-control" formControlName="naturalGasHeatInput"
+          id="naturalGasHeatInput" onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('naturalGasHeatInput')">
         <span class="input-group-addon units">mm btu/cycle</span>
       </div>
     </div>
@@ -12,8 +12,8 @@
     <div class="form-group">
       <label class="small" for="naturalGasFlow">Natural Gas Flow</label>
       <div class="input-group">
-        <input name="{{'naturalGasFlow_'+lossIndex}}" type="number" class="form-control" formControlName="naturalGasFlow" id="naturalGasFlow" onfocus="this.select();" (input)="startSavePolling()"
-          (focus)="focusField('naturalGasFlow')">
+        <input name="{{'naturalGasFlow_'+lossIndex}}" type="number" class="form-control" formControlName="naturalGasFlow" id="naturalGasFlow"
+          onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('naturalGasFlow')">
         <span class="input-group-addon units">scfh</span>
       </div>
     </div>
@@ -21,8 +21,8 @@
     <div class="form-group">
       <label class="small" for="measuredOxygenFlow">Measured Oxygen Flow</label>
       <div class="input-group">
-        <input name="{{'measuredOxygenFlow_'+lossIndex}}" type="number" class="form-control" formControlName="measuredOxygenFlow" id="measuredOxygenFlow" onfocus="this.select();"
-          (input)="startSavePolling()" (focus)="focusField('measuredOxygenFlow')">
+        <input name="{{'measuredOxygenFlow_'+lossIndex}}" type="number" class="form-control" formControlName="measuredOxygenFlow"
+          id="measuredOxygenFlow" onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('measuredOxygenFlow')">
         <span class="input-group-addon units">scfh</span>
       </div>
     </div>
@@ -30,8 +30,8 @@
     <div class="form-group">
       <label class="small" for="coalCarbonInjection">Coal Carbon Injection</label>
       <div class="input-group">
-        <input name="{{'coalCarbonInjection_'+lossIndex}}" type="number" class="form-control" formControlName="coalCarbonInjection" id="coalCarbonInjection" onfocus="this.select();"
-          (input)="startSavePolling()" (focus)="focusField('coalCarbonInjection')">
+        <input name="{{'coalCarbonInjection_'+lossIndex}}" type="number" class="form-control" formControlName="coalCarbonInjection"
+          id="coalCarbonInjection" onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('coalCarbonInjection')">
         <span class="input-group-addon units">lbs/cycle</span>
       </div>
     </div>
@@ -39,8 +39,8 @@
     <div class="form-group">
       <label class="small" for="coalHeatingValue">Coal Heating Value</label>
       <div class="input-group">
-        <input name="{{'coalHeatingValue_'+lossIndex}}" type="number" class="form-control" formControlName="coalHeatingValue" id="coalHeatingValue" onfocus="this.select();"
-          (input)="startSavePolling()" (focus)="focusField('coalHeatingValue')">
+        <input name="{{'coalHeatingValue_'+lossIndex}}" type="number" class="form-control" formControlName="coalHeatingValue" id="coalHeatingValue"
+          onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('coalHeatingValue')">
         <span class="input-group-addon units">btu/lb</span>
       </div>
     </div>
@@ -48,8 +48,8 @@
     <div class="form-group">
       <label class="small" for="electrodeUse">Electrode Use</label>
       <div class="input-group">
-        <input name="{{'electrodeUse_'+lossIndex}}" type="number" class="form-control" formControlName="electrodeUse" id="electrodeUse" onfocus="this.select();" (input)="startSavePolling()"
-          (focus)="focusField('electrodeUse')">
+        <input name="{{'electrodeUse_'+lossIndex}}" type="number" class="form-control" formControlName="electrodeUse" id="electrodeUse"
+          onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('electrodeUse')">
         <span class="input-group-addon units">lbs/cycle</span>
       </div>
     </div>
@@ -57,8 +57,8 @@
     <div class="form-group">
       <label class="small" for="electrodeHeatingValue">Electrode Heating Value</label>
       <div class="input-group">
-        <input name="{{'electrodeHeatingValue_'+lossIndex}}" type="number" class="form-control" formControlName="electrodeHeatingValue" id="electrodeHeatingValue" onfocus="this.select();"
-          (input)="startSavePolling()" (focus)="focusField('electrodeHeatingValue')">
+        <input name="{{'electrodeHeatingValue_'+lossIndex}}" type="number" class="form-control" formControlName="electrodeHeatingValue"
+          id="electrodeHeatingValue" onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('electrodeHeatingValue')">
         <span class="input-group-addon units">btu/lb</span>
       </div>
     </div>
@@ -66,17 +66,19 @@
     <div class="form-group">
       <label class="small" for="otherFuels">Other Fuels</label>
       <div class="input-group">
-        <input name="{{'otherFuels_'+lossIndex}}" type="number" class="form-control" formControlName="otherFuels" id="otherFuels" onfocus="this.select();" (input)="startSavePolling()"
-          (focus)="focusField('otherFuels')">
+        <input name="{{'otherFuels_'+lossIndex}}" type="number" class="form-control" formControlName="otherFuels" id="otherFuels"
+          onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('otherFuels')">
         <span class="input-group-addon units">mm btu/cycle</span>
       </div>
     </div>
 
     <div class="form-group">
       <label class="small" for="electricityInput">Other Fuels</label>
-      <input name="{{'electricityInput_'+lossIndex}}" type="number" class="form-control" formControlName="electricityInput" id="electricityInput" onfocus="this.select();"
-        (input)="startSavePolling()" (focus)="focusField('electricityInput')">
-      <span class="units">kwh/cycle</span>
+      <div class="input-group">
+        <input name="{{'electricityInput_'+lossIndex}}" type="number" class="form-control" formControlName="electricityInput" id="electricityInput"
+          onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('electricityInput')">
+        <span class="input-group-addon units">kwh/cycle</span>
+      </div>
     </div>
   </div>
 </form>
