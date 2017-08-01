@@ -92,7 +92,6 @@ export class PsatComponent implements OnInit {
       })
       let tmpTab = this.assessmentService.getTab();
       if (tmpTab) {
-        console.log(tmpTab);
         this.psatService.mainTab.next(tmpTab);
       }
       this.psatService.mainTab.subscribe(val => {

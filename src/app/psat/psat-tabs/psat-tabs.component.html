@@ -1,13 +1,11 @@
-<ul class="tabs primary psat" *ngIf="mainTab == 'assessment'">
+<ul class="tabs primary psat">
   <li [ngClass]="{'active': currentTab == 'explore-opportunities'}">
     <a (click)="changeTab('explore-opportunities')">Explore Opportunities</a>
   </li><!--
   --><li [ngClass]="{'active': currentTab == 'modify-conditions'}">
   <a (click)="changeTab('modify-conditions')">Modify Conditions</a>
-</li>
-</ul>
-<ul class="tabs primary psat" *ngIf="mainTab == 'diagram'">
-  <li [ngClass]="{'active': currentTab == 'system-curve'}">
+  </li><!--
+ --><li [ngClass]="{'active': currentTab == 'system-curve'}">
     <a (click)="changeTab('system-curve')">System Curve</a>
   </li><!--
   --><li [ngClass]="{'active': currentTab == 'achievable-efficiency'}">

@@ -19,8 +19,6 @@ export class PhastComponent implements OnInit {
   assessment: Assessment;
 
   currentTab: string = 'system-setup';
-  panelView: string = 'help-panel';
-  isPanelOpen: boolean = true;
   saveClicked: boolean = false;
 
   tabs: Array<string> = [
@@ -37,6 +35,8 @@ export class PhastComponent implements OnInit {
   continueClicked: boolean = true;
   subTab: string = 'system-basics';
   _phast: PHAST;
+
+  mainTab: string = 'system-setup';
   constructor(
     private location: Location,
     private assessmentService: AssessmentService,
@@ -61,9 +61,23 @@ export class PhastComponent implements OnInit {
         this.getSettings();
       })
       let tmpTab = this.assessmentService.getTab();
-      if (tmpTab == 'modify-conditions') {
-        this.currentTab = 'losses';
+      if (tmpTab) {
+        this.phastService.mainTab.next(tmpTab);
       }
+      this.phastService.mainTab.subscribe(val => {
+        this.mainTab = val; 
+        if(this.mainTab == 'assessment'){
+          if(this.currentTab != 'losses'){
+            this.phastService.secondaryTab.next('losses');
+          }
+        }else if(this.mainTab == 'system-setup'){
+          this.phastService.secondaryTab.next('system-basics');
+        }
+      })
+
+      this.phastService.secondaryTab.subscribe(val => {
+        this.currentTab = val;
+      })
     });
   }
 
@@ -112,27 +126,19 @@ export class PhastComponent implements OnInit {
     this.tabs.forEach(tab => {
       if (tab == $event) {
         this.tabIndex = tmpIndex;
-        this.currentTab = this.tabs[this.tabIndex];
+        this.phastService.secondaryTab.next(this.tabs[this.tabIndex]);
       } else {
         tmpIndex++;
       }
     })
   }
 
-  toggleOpenPanel($event) {
-    if (!this.isPanelOpen) {
-      this.panelView = $event;
-      this.isPanelOpen = true;
-    } else if (this.isPanelOpen && $event != this.panelView) {
-      this.panelView = $event;
-    } else {
-      this.isPanelOpen = false;
-    }
-  }
-
   continue() {
     this.tabIndex++;
-    this.currentTab = this.tabs[this.tabIndex];
+    if(this.tabs[this.tabIndex] == 'losses'){
+      this.phastService.mainTab.next('assessment');
+    }
+    this.phastService.secondaryTab.next(this.tabs[this.tabIndex]);
   }
 
   close() {
@@ -141,7 +147,7 @@ export class PhastComponent implements OnInit {
 
   goBack() {
     this.tabIndex--;
-    this.currentTab = this.tabs[this.tabIndex];
+    this.phastService.secondaryTab.next(this.tabs[this.tabIndex]);
   }
 
   save() {

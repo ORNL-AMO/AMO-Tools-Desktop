@@ -5,12 +5,18 @@ import { O2Enrichment } from '../shared/models/phast/o2Enrichment';
 import { FlowCalculations } from '../shared/models/phast/flowCalculations';
 import { ExhaustGas } from '../shared/models/phast/losses/exhaustGas';
 declare var phastAddon: any;
-
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable()
 export class PhastService {
 
-  constructor() { }
+  mainTab: BehaviorSubject<string>;
+  secondaryTab: BehaviorSubject<string>;
+
+  constructor() {
+    this.mainTab = new BehaviorSubject<string>('system-setup');
+    this.secondaryTab = new BehaviorSubject<string>('explore-opportunities');
+  }
   test() {
     console.log(phastAddon)
   }

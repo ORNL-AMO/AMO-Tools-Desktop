@@ -9,7 +9,7 @@ export const MockDirectory: Directory = {
     {
       createdDate: new Date(),
       modifiedDate: new Date(),
-      name: 'Example PSAT',
+      name: 'Example Pump',
       type: 'PSAT',
       psat:
       {
@@ -46,7 +46,7 @@ export const MockDirectory: Directory = {
 
     },
     {
-      name: 'Example PHAST',
+      name: 'Example Furnace',
       type: 'PHAST',
       createdDate: new Date(),
       modifiedDate: new Date(),

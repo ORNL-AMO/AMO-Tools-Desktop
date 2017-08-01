@@ -43,19 +43,17 @@
   <!--End system-setup-->
   <!--tab (diagram and assessment)-->
   <div class="hide-print" id="psatTabs" *ngIf="mainTab != 'report' && mainTab != 'system-setup'">
-    <app-psat-tabs [currentTab]="currentTab"></app-psat-tabs>
+    <app-psat-tabs></app-psat-tabs>
   </div>
   <!--end tabs-->
   <!--assessment-->
-  <div class="tab-content" *ngIf="mainTab == 'assessment'">
+  <div class="tab-content" *ngIf="mainTab == 'assessment' && (currentTab == 'explore-opportunities' || currentTab == 'modify-conditions')">
     <app-explore-opportunities *ngIf="currentTab == 'explore-opportunities'" [assessment]="assessment" [settings]="settings"
       [saveClicked]="saveClicked" [(psat)]="_psat" (saved)="save()"></app-explore-opportunities>
     <app-modify-conditions *ngIf="currentTab == 'modify-conditions'" [assessment]="assessment" [settings]="settings" [saveClicked]="saveClicked"
       [(psat)]="_psat" (saved)="save()"></app-modify-conditions>
   </div>
-  <!--end assessment-->
-  <!--diagram-->
-  <div class="row justify-content-center" *ngIf="mainTab == 'diagram'">
+  <div class="row justify-content-center" *ngIf="mainTab == 'assessment' && currentTab != 'explore-opportunities' && currentTab != 'modify-conditions'">
     <div class="col-10">
       <div class="card card-block calculator-card" style="margin-bottom: 10% !important;">
         <app-system-curve *ngIf="currentTab == 'system-curve'" [inPsat]="true" [psat]="_psat" [settings]="settings"></app-system-curve>
@@ -65,6 +63,9 @@
         <app-specific-speed *ngIf="currentTab == 'specific-speed'" [settings]="settings" [inPsat]="true" [psat]="_psat"></app-specific-speed>
       </div>
     </div>
+  </div>
+  <div *ngIf="mainTab =='diagram'">
+
   </div>
   <!--end diagram-->
   <!--report-->
