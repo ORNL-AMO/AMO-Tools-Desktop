@@ -1,0 +1,29 @@
+<div class="report-data">
+  <div class="results">
+    <div class="card">
+      <div class="card-block">
+        <table class="table">
+          <thead>
+            <th></th>
+            <th>Total Power Use</th>
+          </thead>
+          <tbody *ngIf="results">
+            <tr *ngFor="let result of results">
+              <td>{{result.name}}</td>
+              <td>{{result.totalPower | number:'2.2-2'}}
+                <span *ngIf="result.motorPower == 'Calculated'">kW</span>
+                <span *ngIf="result.motorPower == 'Rated'">hp</span>
+              </td>
+            </tr>
+          </tbody>
+          <tfoot>
+            <tr>
+              <th class="result-cell">Total Aux Equipment</th>
+              <th class="result-cell">{{resultsSum | number:'2.2-2'}}</th>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
