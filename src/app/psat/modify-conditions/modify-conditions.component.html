@@ -1,4 +1,4 @@
-<nav class="hide-print">
+<nav class="hide-print" *ngIf="currentTab != 'report'">
   <app-modify-conditions-tabs (changeTab)="changeTab($event)" [modifyTab]="modifyTab"></app-modify-conditions-tabs>
 </nav>
 

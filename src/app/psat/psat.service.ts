@@ -14,8 +14,12 @@ export class PsatService {
     flaMax: 0
   };
 
+  mainTab: BehaviorSubject<string>;
+  secondaryTab: BehaviorSubject<string>;
   constructor(private formBuilder: FormBuilder, private convertUnitsService: ConvertUnitsService, private validationService: ValidationService) {
-  }
+    this.mainTab = new BehaviorSubject<string>('system-setup');
+    this.secondaryTab = new BehaviorSubject<string>('explore-opportunities');
+}
 
   test() {
     console.log(psatAddon);

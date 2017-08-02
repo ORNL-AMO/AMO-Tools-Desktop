@@ -2,7 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { MeteredEnergyElectricity, MeteredEnergyResults } from '../../../shared/models/phast/meteredEnergy';
 import { PHAST } from '../../../shared/models/phast/phast';
 import { PhastService } from '../../phast.service';
-
+import { Settings } from '../../../shared/models/settings';
 @Component({
   selector: 'app-metered-electricity',
   templateUrl: './metered-electricity.component.html',
@@ -11,6 +11,9 @@ import { PhastService } from '../../phast.service';
 export class MeteredElectricityComponent implements OnInit {
   @Input()
   phast: PHAST;
+  @Input()
+  settings: Settings;
+
   tabSelect: string = 'results';
   inputs: MeteredEnergyElectricity = {
     electricityCollectionTime: 0,
@@ -50,6 +53,7 @@ export class MeteredElectricityComponent implements OnInit {
     //Energy Intensity for Charge Materials =  Electricity used during collection / Sum(charge material feed rates)
     let sumFeedRate = this.phastService.sumChargeMaterialFeedRate(this.phast.losses.chargeMaterials);
     this.results.meteredEnergyIntensity = this.inputs.electricityUsed / sumFeedRate;
+
   }
 
   setField(str: string) {

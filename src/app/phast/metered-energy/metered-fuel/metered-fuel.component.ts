@@ -61,7 +61,7 @@ export class MeteredFuelComponent implements OnInit {
     this.results.calculatedFuelEnergyUsed = this.phastService.sumHeatInput(this.phast.losses);
     //energy intensity = fuel energy used / sum(charge material feed rate)
     this.results.calculatedEnergyIntensity = this.results.calculatedFuelEnergyUsed / sumFeedRate;
-    
+    //TODO aux equipment results
 }
 
 

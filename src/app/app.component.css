@@ -104,7 +104,9 @@ Buttons
     background: #ffffff;
     border-color: #BBBBBB;
 }
-
+.btn-link {
+  box-shadow: none;
+}
 .numberCircle {
     border-radius: 50%;
     width: 22px;
@@ -457,7 +459,7 @@ Assessments: List View
     content: "";
   }
   .list-row .actions {
-    width: 30%;
+    width: 50%;
     font-size: 14px;
     float: right;
     text-align: right;
@@ -473,7 +475,7 @@ Assessments: List View
   .list-row .assessment-name {
     float: left;
     padding-right: 20px;
-    width: 70%;
+    width: 50%;
     margin-bottom: 0;
   }
   .drag-handle, .list-row input, .assessment-name {
@@ -513,9 +515,6 @@ Assessments: List View
     }
   .folder .assessment-name .fa {
     color: #434343;
-  }
-  .assessments .psat, .assessments .phast {
-    font-size: 15px;
   }
   .assessment-list-type {
     display: block;
@@ -690,7 +689,7 @@ Sidebar
   font-size: 16px;
   display: block;
   color: #0077e3;
-  padding: 8px 20px;
+  padding: 5px 20px;
 }
 .sidebar-group li span.disabled {
   font-size: 15px;
@@ -918,6 +917,39 @@ Footer
   content: "";
 }
 
+
+.pills-nav {
+  margin: 0;
+  padding: 0;
+  display: flex;
+}
+  .pills-nav li {
+    list-style: none;
+    margin: 0 2px;
+  }
+  .pills-nav span {
+    background: rgba(0,0,0,0);
+    padding: 7px 9px;
+    border-radius: 6px;
+    font-size: 20px;
+  }
+  .pills-nav .active span {
+    background: rgba(0,0,0,0.5);
+  }
+  .pills-nav span:hover {
+    background: rgba(0,0,0,0.3);
+    cursor: pointer;
+  }
+  .pills-nav .disabled span {
+    color: rgba(255,255,255,0.3);
+  }
+    .pills-nav .disabled span:hover {
+      background: transparent;
+      cursor: default;
+    }
+
+
+
 /*
 Banner
 =============================================== */
@@ -926,9 +958,15 @@ Banner
   background: #2c2c2c;
   color: #fff;
 }
+  .banner h1 {
+    font-size: 29px;
+    margin-top: 10px;
+    margin-bottom: -14px;
+    color: rgba(255,255,255,1);
+  }
   .banner small {
     font-size: 14px;
-    color: rgba(255,255,255,0.6);
+    color: rgba(255,255,255,0.7);
   }
   .banner.psat {
     background: #2980b9;
@@ -938,7 +976,6 @@ Banner
   }
 .banner:after {
   display: table;
-  display: tbannerable;
   content: "";
   clear: both;
 }
@@ -951,7 +988,7 @@ Banner
 .banner .btn-dashboard {
   float: right;
   font-size: 16px;
-  padding: 12px 20px;
+  padding: 19px 20px;
 }
   .banner .btn-dashboard span {
     font-size: 23px;
@@ -968,6 +1005,15 @@ Banner
 .banner .btn-dashboard:hover {
   text-decoration: none;
   cursor: pointer;
+}
+.banner .title {
+  padding: 0 10px;
+}
+.banner .title, .banner .pills-nav {
+  float: left;
+}
+.banner .pills-nav {
+  margin: 12px 0 0 12px;
 }
 /*.banner.psat .title {
   color: #fff;
@@ -1522,8 +1568,13 @@ Reporting
   padding: 20px;
 }
 .report-header {
-  padding: 22px 0;
+  padding: 22px;
 }
+  .report-header:after {
+    display: table;
+    content: "";
+    clear: both;
+  }
   .report-header h1 {
     font-size: 1.4rem;
     font-weight: 100;

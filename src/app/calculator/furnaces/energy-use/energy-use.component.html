@@ -2,7 +2,7 @@
   <div class="row">
     <div class="col-md-5 col-sm-12 offset-md-1">
       <app-energy-use-form [inPhast]="inPhast" [flowCalculations]="flowCalculations" [flowCalculationResults]="flowCalculationResults"
-        (changeField)="setCurrentField($event)"></app-energy-use-form>
+        (changeField)="setCurrentField($event)" (emitCalculate)="calculate()"></app-energy-use-form>
     </div>
 
     <div class="col-md-5 col-sm-12">

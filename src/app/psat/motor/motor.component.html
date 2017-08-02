@@ -64,7 +64,7 @@
   <div class="form-group">
     <label for="fullLoadAmps" aria-describedby="flaHelp">
       Full-Load Amps
-      <a [ngClass]="{'disabled-link': !selected}" *ngIf="!disableFLA()" id="flaHelp" class="form-text text-muted text-help" (click)="getFullLoadAmps()">Estimate Full-Load Amps</a>
+      <a [ngClass]="{'disabled-link': !selected}" *ngIf="!disableFLA()" id="flaHelp" class="form-text text-help" (click)="getFullLoadAmps()">Estimate Full-Load Amps</a>
     </label>
     <div class="input-group">
       <input name="fullLoadAmps" type="number" min="0" step="any" class="form-control number-input-field" id="fullLoadAmps" formControlName="fullLoadAmps"

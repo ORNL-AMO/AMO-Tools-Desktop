@@ -20,12 +20,18 @@ import { ExtendedSurface } from '../shared/models/phast/losses/extendedSurface';
 import { OtherLoss } from '../shared/models/phast/losses/otherLoss';
 declare var phastAddon: any;
 import { OpeningLossesService } from './losses/opening-losses/opening-losses.service';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable()
 export class PhastService {
 
-  constructor(private openingLossesService: OpeningLossesService) { }
+  mainTab: BehaviorSubject<string>;
+  secondaryTab: BehaviorSubject<string>;
 
+  constructor(private openingLossesService: OpeningLossesService) {
+    this.mainTab = new BehaviorSubject<string>('system-setup');
+    this.secondaryTab = new BehaviorSubject<string>('explore-opportunities');
+  }
   test() {
     console.log(phastAddon)
   }

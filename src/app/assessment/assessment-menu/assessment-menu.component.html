@@ -1,9 +1,13 @@
+
+
+
 <div class="row main-menu">
-  <div class="col-11">
+  <div class="col-12">
+
     <ol class="breadcrumb">
       <li class="breadcrumb-item" *ngFor="let crumb of breadCrumbs; let first = first;">
         <a *ngIf="first" (click)="goToDirectory(crumb)">
-          All Assessments
+          All Assets
         </a>
         <a *ngIf="!first" (click)="goToDirectory(crumb)">
           {{crumb.name}}
@@ -12,21 +16,22 @@
       <li class="breadcrumb-item">{{directory.name}}</li>
       <li class="breadcrumb-item" *ngIf="view == 'settings'">Settings</li>
     </ol>
-  </div>
-  <div class="col-1">
-    <button class="btn btn-secondary pull-right" *ngIf="directory.id != 1" [ngClass]="{'active': view == 'settings'}" (click)="setView('settings')"><i class="fa fa-cog"></i></button>
+
   </div>
 </div>
 
+
+
 <div class="row main-menu">
   <div class="col-12">
-    <button (click)="showCreateAssessment()" type="button" class="btn btn-secondary create-btn">Create Assessment</button>
+    <button (click)="showCreateAssessment()" type="button" class="btn btn-secondary create-btn">Add Asset</button>
     <app-create-folder [(directory)]="directory" (newDirectory)="emitNewDir()" class="create-container"></app-create-folder>
     <button [disabled]="!checkSelected()" type="button" class="btn btn-secondary" (click)="emitGenReport()">Generate Report</button>
     <button [disabled]="!checkSelected()" type="button" (click)="signalDeleteItems()" class="btn btn-secondary">Delete...</button>
-
-    <button [disabled]="!checkSelected()" type="button" class="btn btn-secondary space-left" (click)="emitImport()">Import...</button>
     <button [disabled]="!checkSelected()" type="button" class="btn btn-secondary" (click)="emitExport()">Export...</button>
+
+    <button type="button" class="btn btn-link pull-right" (click)="emitImport()">Import...</button>
+
   </div>
   <!-- <div class="col-2">
     <div class="btn-group pull-right" role="group">
@@ -45,4 +50,4 @@
 </div>
 
 
-<app-assessment-create *ngIf="createAssessment" (hideModal)="hideModal()" [(directory)]="directory" class="create-container"></app-assessment-create>
+<!--<app-assessment-create *ngIf="createAssessment" (hideModal)="hideModal()" [(directory)]="directory" class="create-container"></app-assessment-create>-->

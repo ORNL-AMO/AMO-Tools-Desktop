@@ -127,8 +127,8 @@
 
 .report-column{
     background-color: white;
-    border: solid #2980b9;
-    box-shadow: 1px 2px 1px 2px #2980b9;
+    border: 1px solid #828282;
+    box-shadow: 0px 1px 4px 1px rgba(0, 0, 0, 0.3);
     margin-top: 15px;
     margin-bottom: 100px;
 }

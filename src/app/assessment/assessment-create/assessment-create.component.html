@@ -11,12 +11,12 @@
       <div class="modal-header">
         <h3 *ngIf="directory.id != 1">Create Assessment in {{directory.name}}</h3>
         <h3 *ngIf="directory.id == 1">Create Assessment</h3>
-        <button class="close" aria-label="Close" (click)="hideCreateModal()">
+        <button class="close" (click)="hideCreateModal(false)">
           <span aria-hidden="true">&times;</span>
         </button>
       </div><!-- End .modal-header -->
 
-      <form [formGroup]="newAssessment">
+      <form [formGroup]="newAssessment" (keyup.enter)="createAssessment()">
       
         <div class="modal-body">
         
@@ -67,9 +67,8 @@
 
         <div class="modal-footer">
 
-          <button class="btn btn-secondary pull-left" (click)="hideCreateModal()">Close</button>
           <button class="btn btn-primary pull-right" type="submit" [disabled]="!newAssessment.valid" (click)="createAssessment()">Create</button>
-
+          <button class="btn btn-secondary pull-left" (click)="hideCreateModal()">Close</button>
         </div><!-- End .modal-footer -->
 
       </form>

@@ -1,6 +1,7 @@
 import { Component, OnInit, Output, EventEmitter, Input, SimpleChanges } from '@angular/core';
 import { Directory } from '../shared/models/directory';
 import { Assessment } from '../shared/models/assessment';
+import { AssessmentService } from '../assessment/assessment.service';
 
 @Component({
   selector: 'app-sidebar',
@@ -34,7 +35,7 @@ export class SidebarComponent implements OnInit {
   selectedDirectoryId: number;
   firstChange: boolean = true;
   createAssessment: boolean = false;
-  constructor() { }
+  constructor(private assessmentService: AssessmentService) { }
 
   ngOnInit() {
     this.directory.collapsed = false;
@@ -101,10 +102,6 @@ export class SidebarComponent implements OnInit {
   }
 
   showCreateAssessment() {
-    this.createAssessment = true;
-  }
-
-  hideModal() {
-    this.createAssessment = false;
+    this.assessmentService.createAssessment.next(true);
   }
 }
