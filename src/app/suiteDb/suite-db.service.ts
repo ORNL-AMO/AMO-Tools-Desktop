@@ -13,13 +13,13 @@ export class SuiteDbService {
     this.hasStarted = true;
     return db.startup();
   }
-  preUpdate(){
-    return db.preUpdate();
-  }
+  // preUpdate(){
+  //   return db.preUpdate();
+  // }
 
-  postUpdate(){
-    return db.postUpdate();
-  }
+  // postUpdate(){
+  //   return db.postUpdate();
+  // }
 
   //volume
   selectGasFlueGasMaterials() {
