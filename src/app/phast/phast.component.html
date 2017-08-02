@@ -45,7 +45,7 @@
     <div class="row tab-content" *ngIf="currentTab != 'losses'">
       <div class="col-12">
         <app-designed-energy-use *ngIf="currentTab == 'designed-energy-use'"></app-designed-energy-use>
-        <app-aux-equipment *ngIf="currentTab == 'aux-equipment'" [(phast)]="_phast"></app-aux-equipment>
+        <app-aux-equipment *ngIf="currentTab == 'aux-equipment'" [(phast)]="_phast" (save)="saveDb()"></app-aux-equipment>
         <app-metered-energy-use *ngIf="currentTab == 'metered-energy'"></app-metered-energy-use>
       </div>
     </div>

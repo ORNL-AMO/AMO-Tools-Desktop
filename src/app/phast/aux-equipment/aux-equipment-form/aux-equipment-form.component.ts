@@ -27,7 +27,7 @@ export class AuxEquipmentFormComponent implements OnInit {
   }
 
   calculate() {
-    // this.startSavePolling();
+    this.startSavePolling();
     this.emitCalculate.emit(true);
   }
 

@@ -59,11 +59,7 @@ export class DashboardComponent implements OnInit {
     if (this.suiteDbService.hasStarted == false) {
       this.suiteDbService.startup();
     }
-    this.suiteDbService.test();
-    
-    
-    
-    
+   
     this.selectedItems = new Array();
     this.showLandingScreen = this.assessmentService.getLandingScreen();
     //open DB and get directories

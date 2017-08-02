@@ -5,7 +5,7 @@
         <table class="table">
           <thead>
             <th></th>
-            <th>Total Power Use</th>
+            <th class="result-cell">Total Power Use</th>
           </thead>
           <tbody *ngIf="results">
             <tr *ngFor="let result of results">
@@ -15,13 +15,11 @@
                 <span *ngIf="result.motorPower == 'Rated'">hp</span>
               </td>
             </tr>
-          </tbody>
-          <tfoot>
             <tr>
               <th class="result-cell">Total Aux Equipment</th>
-              <th class="result-cell">{{resultsSum | number:'2.2-2'}}</th>
+              <th class="result-cell">{{resultsSum | number:'2.2-2'}} kW</th>
             </tr>
-          </tfoot>
+          </tbody>
         </table>
       </div>
     </div>
