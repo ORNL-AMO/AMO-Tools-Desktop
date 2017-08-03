@@ -12,3 +12,11 @@ margin-right: 15px;
     margin-top: 15px;
     font-size: smaller;
 }
+
+#default{
+  margin: 0px;
+}
+
+#delete{
+  margin: 0px;
+}

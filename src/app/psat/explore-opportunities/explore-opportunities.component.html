@@ -8,10 +8,12 @@
 			<div class="help-panel">
 				<div class="row">
 					<ul class="tabs primary tab-row">
-						<li class="calc-tab tab-item" [ngClass]="{'active': tabSelect == 'results'}">
+						<li class="tab-item-3" [ngClass]="{'active': tabSelect == 'results'}">
 							<a (click)="setTab('results')">Results</a>
 						</li><!--
-						--><li class="calc-tab tab-item" [ngClass]="{'active': tabSelect == 'help'}">
+						--><li class="tab-item-3" [ngClass]="{'active': tabSelect == 'sankey'}">
+            <a (click)="setTab('sankey')">Sankey</a><!--
+						--><li class="tab-item-3" [ngClass]="{'active': tabSelect == 'help'}">
 							<a (click)="setTab('help')">Help</a>
 						</li>
 					</ul>
@@ -21,6 +23,11 @@
 						<app-explore-opportunities-help [currentField]="currentField" [settings]="settings" [psat]="psat"></app-explore-opportunities-help>
 					</div>
 				</div>
+        <div class="row justify-content-center data-row align-items-center" *ngIf="tabSelect == 'sankey'">
+          <div class="col-11">
+            <app-explore-opportunities-sankey [baselineResults]="baselineResults" [modificationResults]="modificationResults"></app-explore-opportunities-sankey>
+          </div>
+        </div>
 				<!--<div class="row justify-content-center data-row" *ngIf="tabSelect == 'results'">
 					<div class="col-3 chart-summary">
 						<dl class="chart-item">
