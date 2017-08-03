@@ -11,7 +11,7 @@ import { JsonToCsvService } from '../shared/json-to-csv/json-to-csv.service';
 import { Assessment } from '../shared/models/assessment';
 import { ToastyService, ToastyConfig, ToastOptions, ToastData } from 'ng2-toasty';
 import { SuiteDbService } from '../suiteDb/suite-db.service';
-
+import { WindowRefService } from '../indexedDb/window-ref.service';
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
@@ -48,7 +48,7 @@ export class DashboardComponent implements OnInit {
   createAssessment: boolean = false;
 
   constructor(private indexedDbService: IndexedDbService, private formBuilder: FormBuilder, private assessmentService: AssessmentService, private toastyService: ToastyService,
-    private toastyConfig: ToastyConfig, private jsonToCsvService: JsonToCsvService, private suiteDbService: SuiteDbService) {
+    private toastyConfig: ToastyConfig, private jsonToCsvService: JsonToCsvService, private suiteDbService: SuiteDbService, private windowRefService: WindowRefService) {
     this.toastyConfig.theme = 'bootstrap';
     this.toastyConfig.position = 'bottom-right';
     this.toastyConfig.limit = 1;
@@ -78,6 +78,13 @@ export class DashboardComponent implements OnInit {
         this.createAssessment = true;
       }
     })
+  }
+
+  ngAfterViewInit(){
+  }
+
+  takeScreenShot(){
+    this.windowRefService.takeScreenShot();
   }
 
   getData() {
