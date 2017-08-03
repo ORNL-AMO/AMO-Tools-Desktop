@@ -1,12 +1,12 @@
 import { Injectable, Inject } from '@angular/core';
 import { DOCUMENT } from '@angular/platform-browser';
-
-
-declare var webshot;
-
 function getWindow(): any {
   return window;
 }
+
+declare var screenshot;
+declare var Pageres;
+import { ElectronService } from 'ngx-electron';
 
 @Injectable()
 export class WindowRefService {
@@ -19,11 +19,8 @@ export class WindowRefService {
     return this.document;
   }
 
-  takeScreenShot() {
-    let doc = this.getDoc();
-    webshot(doc.documentElement.innerHTML, 'hello_world.png', { siteType: 'html' }, function (err) {
-      // screenshot now saved to hello_world.png 
-    });
-    debugger
+  test() {
   }
+
+ 
 }

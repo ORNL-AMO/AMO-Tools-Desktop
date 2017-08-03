@@ -9,76 +9,88 @@
 	<link rel="icon" type="image/x-icon" href="favicon.ico">
 
 	<style>
-	.loading-screen {
-		background: #eee;
-	}
-  	.loading-screen .sidebar-bg {
-  		height: 100vh;
-  		background-color: #fff;
-	    border-width: 1px;
-	    border-style: solid;
-	    -o-border-image: linear-gradient(to bottom, #949494, rgba(0, 0, 0, 0)) 1 100%;
-	    border-image: -webkit-linear-gradient(top, #949494, rgba(0, 0, 0, 0)) 1 100%;
-	    border-image: linear-gradient(to bottom, #949494, rgba(0, 0, 0, 0)) 1 100%;
-  	}
-  	.loading-screen .main-content {
-  		height: 100vh;
-  		width: 400px;
-  		margin: 200px auto 0;
-  		text-align: center;
-  	}
-  	.loading-screen h1 {
-  		margin-top: 20px;
-  		font-size: 30px;
-  	}
+		.loading-screen {
+			background: #eee;
+		}
 
-  	.loading-screen .doe-logo {
-  		width: 100%;
-    	max-width: 200px;
-  	}
+		.loading-screen .sidebar-bg {
+			height: 100vh;
+			background-color: #fff;
+			border-width: 1px;
+			border-style: solid;
+			-o-border-image: linear-gradient(to bottom, #949494, rgba(0, 0, 0, 0)) 1 100%;
+			border-image: -webkit-linear-gradient(top, #949494, rgba(0, 0, 0, 0)) 1 100%;
+			border-image: linear-gradient(to bottom, #949494, rgba(0, 0, 0, 0)) 1 100%;
+		}
 
-	.loading-screen .spinner {
-	  width: 70px;
-	  margin: auto;
-	  text-align: center;
-	}
+		.loading-screen .main-content {
+			height: 100vh;
+			width: 400px;
+			margin: 200px auto 0;
+			text-align: center;
+		}
 
-	.spinner > div {
-	  width: 18px;
-	  height: 18px;
-	  background-color: #d35400;
+		.loading-screen h1 {
+			margin-top: 20px;
+			font-size: 30px;
+		}
 
-	  border-radius: 100%;
-	  display: inline-block;
-	  -webkit-animation: sk-bouncedelay 1.4s infinite ease-in-out both;
-	  animation: sk-bouncedelay 1.4s infinite ease-in-out both;
-	}
+		.loading-screen .doe-logo {
+			width: 100%;
+			max-width: 200px;
+		}
 
-	.spinner .bounce1 {
-	  -webkit-animation-delay: -0.32s;
-	  animation-delay: -0.32s;
-	}
+		.loading-screen .spinner {
+			width: 70px;
+			margin: auto;
+			text-align: center;
+		}
 
-	.spinner .bounce2 {
-	  -webkit-animation-delay: -0.16s;
-	  animation-delay: -0.16s;
-	}
+		.spinner>div {
+			width: 18px;
+			height: 18px;
+			background-color: #d35400;
 
-	@-webkit-keyframes sk-bouncedelay {
-	  0%, 80%, 100% { -webkit-transform: scale(0) }
-	  40% { -webkit-transform: scale(1.0) }
-	}
+			border-radius: 100%;
+			display: inline-block;
+			-webkit-animation: sk-bouncedelay 1.4s infinite ease-in-out both;
+			animation: sk-bouncedelay 1.4s infinite ease-in-out both;
+		}
 
-	@keyframes sk-bouncedelay {
-	  0%, 80%, 100% { 
-	    -webkit-transform: scale(0);
-	    transform: scale(0);
-	  } 40% { 
-	    -webkit-transform: scale(1.0);
-	    transform: scale(1.0);
-	  }
-	}
-  </style>
+		.spinner .bounce1 {
+			-webkit-animation-delay: -0.32s;
+			animation-delay: -0.32s;
+		}
+
+		.spinner .bounce2 {
+			-webkit-animation-delay: -0.16s;
+			animation-delay: -0.16s;
+		}
+
+		@-webkit-keyframes sk-bouncedelay {
+			0%,
+			80%,
+			100% {
+				-webkit-transform: scale(0)
+			}
+			40% {
+				-webkit-transform: scale(1.0)
+			}
+		}
+
+		@keyframes sk-bouncedelay {
+			0%,
+			80%,
+			100% {
+				-webkit-transform: scale(0);
+				transform: scale(0);
+			}
+			40% {
+				-webkit-transform: scale(1.0);
+				transform: scale(1.0);
+			}
+		}
+	</style>
 
 </head>
 
@@ -110,12 +122,13 @@
 	</app-root>
 
 	<script>
-	//	var d3 = require("d3");
+		//	var d3 = require("d3");
 		var phastAddon = require('../node_modules/amo-tools-suite/build/Release/phast.node');
 		var psatAddon = require('../node_modules/amo-tools-suite/build/Release/psat.node');
 		var db = require('../node_modules/amo-tools-suite/build/Release/db.node');
-		var webshot =require('webshot');
-		console.log(webshot);
+		var screenshot = require('screenshot-desktop');
+		var Pageres = require('pageres');
+		var cesc = require('chrome-ext-screen-capture');+
 		//var json2csv = require("../node_modules/dist/json2csv.js");
 	</script>
 
