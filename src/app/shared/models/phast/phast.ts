@@ -12,13 +12,15 @@ import { Slag } from './losses/slag';
 import { AuxiliaryPowerLoss } from './losses/auxiliaryPowerLoss';
 import { EnergyInput } from './losses/energyInput';
 import { ExhaustGas } from './losses/exhaustGas';
+import { AuxEquipment } from './auxEquipment';
 
 export interface PHAST {
   name?: string,
   phastInputs?: PhastInputs,
   losses?: Losses
   modifications?: Modification[],
-  setupDone?: boolean
+  setupDone?: boolean,
+  auxEquipment?: AuxEquipment[]
 }
 
 export interface PhastInputs {

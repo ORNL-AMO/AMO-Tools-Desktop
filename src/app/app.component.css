@@ -654,8 +654,7 @@ Sidebar
 
 .doe-logo {
   width: 100%;
-  max-width: 200px;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
 }
   .doe-logo:hover {
     cursor: pointer;

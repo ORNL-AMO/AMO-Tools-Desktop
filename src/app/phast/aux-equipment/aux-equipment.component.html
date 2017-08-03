@@ -1,105 +1,55 @@
-<div class="aux-equipment">
-
-    <div class="row">
-        <div class="col-10 offset-md-1">
-            
-            <h2>Aux Equipment</h2>
-
-            <table>
-                <tbody>
-                    <tr>
-                        <td>&nbsp;</td>
-                        <td>Compressor Image</td>
-                        <td>Vac. Pumps Image</td>
-                        <td>Pumps Image</td>
-                        <td>Fans / Blowers Image</td>
-                        <td>Other Motors Image</td>
-                    </tr>
-                    <tr>
-                        <td>&nbsp;</td>
-                        <td>Compressors</td>
-                        <td>Vac. Pumps</td>
-                        <td>Pumps</td>
-                        <td>Fans / Blowers</td>
-                        <td>Other Motors</td>
-                    </tr>
-                    <tr>
-                        
-                    </tr>
-                    <tr>
-                        <td>Electricity Type</td>
-                        <td>
-                            <select class="form-control">
-                                <option>Option 1</option>
-                            </select>
-                        </td>
-                        <td>
-                            <select class="form-control">
-                                <option>Option 1</option>
-                            </select>
-                        </td>
-                        <td>
-                            <select class="form-control">
-                                <option>Option 1</option>
-                            </select>
-                        </td>
-                        <td>
-                            <select class="form-control">
-                                <option>Option 1</option>
-                            </select>
-                        </td>
-                        <td>
-                            <select class="form-control">
-                                <option>Option 1</option>
-                            </select>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Form Group</td>
-                        <td><input type="text" class="form-control" /></td>
-                        <td><input type="text" class="form-control" /></td>
-                        <td><input type="text" class="form-control" /></td>
-                        <td><input type="text" class="form-control" /></td>
-                        <td><input type="text" class="form-control" /></td>
-                    </tr>
-                    <tr>
-                        <td>Form Group</td>
-                        <td><input type="text" class="form-control" /></td>
-                        <td><input type="text" class="form-control" /></td>
-                        <td><input type="text" class="form-control" /></td>
-                        <td><input type="text" class="form-control" /></td>
-                        <td><input type="text" class="form-control" /></td>
-                    </tr>
-                    <tr>
-                        <td>Form Group</td>
-                        <td><input type="text" class="form-control" /></td>
-                        <td><input type="text" class="form-control" /></td>
-                        <td><input type="text" class="form-control" /></td>
-                        <td><input type="text" class="form-control" /></td>
-                        <td><input type="text" class="form-control" /></td>
-                    </tr>
-                    <tr>
-                        <td>Form Group</td>
-                        <td><input type="text" class="form-control" /></td>
-                        <td><input type="text" class="form-control" /></td>
-                        <td><input type="text" class="form-control" /></td>
-                        <td><input type="text" class="form-control" /></td>
-                        <td><input type="text" class="form-control" /></td>
-                    </tr>
-                </tbody>
-                <tfoot>
-                    <tr>
-                        <td>Total Energy Use</td>
-                        <td>1,000.00</td>
-                        <td>1,000.00</td>
-                        <td>1,000.00</td>
-                        <td>1,000.00</td>
-                        <td>1,000.00</td>
-                    </tr>
-                </tfoot>
-            </table>
-
+<div class="modify-conditions">
+    <div class="modification aux-form-panel">
+        <div class="header aux-header">
+            <h3>Auxiliary Equipment</h3>
+            <button class="btn btn-secondary pull-right" (click)="addEquipment()"><span class="fa fa-plus"></span></button>
+        </div>
+        <div class="losses-container">
+            <div class="card-form" *ngFor="let equipment of phast.auxEquipment; let index = index;">
+                <div class="row">
+                    <div class="col-6">
+                        <div class="form-group">
+                            <!--<label for="name">Equipment Name</label>-->
+                            <input name="name" type="text" id="text" class="form-control" (focus)="setField('name')" [(ngModel)]="equipment.name" (input)="calculate()"
+                                onfocus="this.select();" />
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <button class="close pull-right" aria-label="Close" (click)="removeEquipment(index)">
+                                <span aria-hidden="true">&times;</span>
+                         </button>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <app-aux-equipment-form [equipment]="equipment" (emitCalculate)="calculate()" (emitSave)="emitSave()" (changeField)="setField($event)"></app-aux-equipment-form>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-
+    <div class="modification aux-help-panel">
+        <div class="help-panel">
+            <div class="row">
+                <ul class="tabs primary tab-row">
+                    <li class="calc-tab tab-item" [ngClass]="{'active': tabSelect == 'results'}">
+                        <a (click)="setTab('results')">Results</a>
+                    </li><!--
+						--><li class="calc-tab tab-item" [ngClass]="{'active': tabSelect == 'help'}">
+                        <a (click)="setTab('help')">Help</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="row justify-content-center data-row align-items-center" *ngIf="tabSelect == 'help'">
+                <div class="col-11">
+                    <app-aux-equipment-help [currentField]="currentField"></app-aux-equipment-help>
+                </div>
+            </div>
+            <div class="row justify-content-center data-row" *ngIf="tabSelect == 'results'">
+                <div class="col-8 data-table">
+                    <app-aux-equipment-results [results]="results" [resultsSum]="resultsSum"></app-aux-equipment-results>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

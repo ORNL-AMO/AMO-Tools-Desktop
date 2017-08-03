@@ -14,7 +14,6 @@ import { SankeyComponent } from './sankey/sankey.component';
 import { SankeyDiagramComponent } from './sankey/sankey-diagram/sankey-diagram.component';
 import { SystemBasicsComponent } from './system-basics/system-basics.component';
 import { OperatingHoursComponent } from './operating-hours/operating-hours.component';
-import { AuxEquipmentComponent } from './aux-equipment/aux-equipment.component';
 import { PhastTabsComponent } from './phast-tabs/phast-tabs.component';
 import { HelpPanelComponent } from './help-panel/help-panel.component';
 import { DataPanelComponent } from './data-panel/data-panel.component';
@@ -22,7 +21,7 @@ import { DataPanelComponent } from './data-panel/data-panel.component';
 import { PhastService } from './phast.service';
 import { SystemSetupComponent } from './system-setup/system-setup.component';
 import { SettingsModule } from '../settings/settings.module';
-
+import { AuxEquipmentModule } from './aux-equipment/aux-equipment.module';
 
 @NgModule({
   declarations: [
@@ -32,7 +31,6 @@ import { SettingsModule } from '../settings/settings.module';
     PhastTabsComponent,
     SystemBasicsComponent,
     OperatingHoursComponent,
-    AuxEquipmentComponent,
     HelpPanelComponent,
     DataPanelComponent,
     SankeyDiagramComponent,
@@ -51,8 +49,9 @@ import { SettingsModule } from '../settings/settings.module';
     LossesModule,
     ToastyModule,
     SettingsModule,
-    MeteredEnergyModule,
-    DesignedEnergyModule
+    AuxEquipmentModule,
+    DesignedEnergyModule,
+    MeteredEnergyModule
   ],
   providers: [
     PhastService

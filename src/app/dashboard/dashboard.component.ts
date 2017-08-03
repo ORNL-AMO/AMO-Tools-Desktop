@@ -55,11 +55,11 @@ export class DashboardComponent implements OnInit {
   }
 
   ngOnInit() {
-    //start toolts suite database
-    if (this.suiteDbInit == false) {
+    //start toolts suite database if it has not started
+    if (this.suiteDbService.hasStarted == false) {
       this.suiteDbService.startup();
-      this.suiteDbInit = true;
     }
+   
     this.selectedItems = new Array();
     this.showLandingScreen = this.assessmentService.getLandingScreen();
     //open DB and get directories

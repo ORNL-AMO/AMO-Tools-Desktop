@@ -6,11 +6,21 @@ declare var db: any;
 @Injectable()
 export class SuiteDbService {
   db: any = db;
+  hasStarted: boolean = false;
   constructor() { }
-
+  
   startup() {
+    this.hasStarted = true;
     return db.startup();
   }
+  // preUpdate(){
+  //   return db.preUpdate();
+  // }
+
+  // postUpdate(){
+  //   return db.postUpdate();
+  // }
+
   //volume
   selectGasFlueGasMaterials() {
     return db.selectGasFlueGasMaterials()
