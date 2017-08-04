@@ -40,6 +40,7 @@ export class MotorPerformanceGraphComponent implements OnInit {
   powerFactorData: any;
   efficiencyData: any;
   currentData: any;
+  isGridToggled: boolean;
 
   motorPerformanceResults: any = {
     efficiency: 0,
@@ -55,14 +56,21 @@ export class MotorPerformanceGraphComponent implements OnInit {
 
   constructor(private windowRefService: WindowRefService, private psatService: PsatService) { }
 
-  ngOnInit() { }
+  ngOnInit() {
+
+    this.isGridToggled = false;
+
+    d3.select('app-motor-performance').selectAll('#gridToggleBtn')
+      .on("click", () => {
+        this.toggleGrid();
+      });
+  }
 
   ngOnChanges(changes: SimpleChanges) {
     if (!this.firstChange) {
       if (changes.toggleCalculate) {
         if (this.checkForm()) {
-          this.setUp();
-          this.onChanges();
+          this.makeGraph();
         }
       }
     } else {
@@ -90,8 +98,10 @@ export class MotorPerformanceGraphComponent implements OnInit {
     }
     this.width = this.canvasWidth - this.margin.left - this.margin.right;
     this.height = this.canvasHeight - this.margin.top - this.margin.bottom;
-    this.setUp();
-    this.onChanges();
+
+    d3.select("app-motor-performance").select("#gridToggle").style("top", (this.height + 100) + "px");
+
+    this.makeGraph();
   }
 
   calculateEfficiency(loadFactor: number) {
@@ -179,40 +189,10 @@ export class MotorPerformanceGraphComponent implements OnInit {
     this.motorPerformanceResults.motor_power_factor = this.calculatePowerFactor(1);
   }
 
-  setUp() {
+  makeGraph() {
 
     //Remove  all previous graphs
     d3.select('app-motor-performance-graph').selectAll('svg').remove();
-    d3.select('focusCurrent').remove();
-    d3.select('focusEfficiency').remove();
-    d3.select('focusPowerFactor').remove();
-
-
-    this.x = d3.scaleLinear()
-      .range([0, this.width])
-      .domain([0, 1.21]);
-
-    this.xShow = d3.scaleLinear()
-      .range([0, this.width])
-      .domain([0, 120]);
-
-    this.y = d3.scaleLinear()
-      .range([this.height, 0])
-      .domain([0, 120]);
-
-    this.xAxis = d3.axisBottom()
-      .scale(this.xShow)
-      .tickSizeInner(0)
-      .tickSizeOuter(0)
-      .tickPadding(0)
-      .ticks(13);
-
-    this.yAxis = d3.axisLeft()
-      .scale(this.y)
-      .tickSizeInner(0)
-      .tickSizeOuter(0)
-      .tickPadding(15)
-      .ticks(13);
 
     this.svg = d3.select('app-motor-performance-graph').append('svg')
       .attr("width", this.width + this.margin.left + this.margin.right)
@@ -261,14 +241,58 @@ export class MotorPerformanceGraphComponent implements OnInit {
       .style("fill", "#F8F9F9")
       .style("filter", "url(#drop-shadow)");
 
-    this.svg.append("path")
-      .attr("id", "areaUnderCurve");
+    this.x = d3.scaleLinear()
+      .range([0, this.width])
+      .domain([0, 1.21]);
+
+    this.xShow = d3.scaleLinear()
+      .range([0, this.width])
+      .domain([0, 120]);
+
+    this.y = d3.scaleLinear()
+      .range([this.height, 0])
+      .domain([0, 120]);
+
+    if(this.isGridToggled) {
+      this.xAxis = d3.axisBottom()
+        .scale(this.xShow)
+        .tickSizeInner(0)
+        .tickSizeOuter(0)
+        .tickPadding(0)
+        .tickSize(-this.height)
+        .ticks(13);
+
+      this.yAxis = d3.axisLeft()
+        .scale(this.y)
+        .tickSizeInner(0)
+        .tickSizeOuter(0)
+        .tickPadding(15)
+        .tickSize(-this.width)
+        .ticks(13);
+    }
+    else{
+      this.xAxis = d3.axisBottom()
+        .scale(this.xShow)
+        .tickSizeInner(0)
+        .tickSizeOuter(0)
+        .tickPadding(0)
+        .tickSize(0)
+        .ticks(13);
+
+      this.yAxis = d3.axisLeft()
+        .scale(this.y)
+        .tickSizeInner(0)
+        .tickSizeOuter(0)
+        .tickPadding(15)
+        .tickSize(0)
+        .ticks(13);
+    }
 
     this.xAxis = this.svg.append('g')
       .attr("class", "x axis")
       .attr("transform", "translate(0," + this.height + ")")
       .call(this.xAxis)
-      .style("stroke-width", "0")
+      .style("stroke-width", ".5px")
       .selectAll('text')
       .style("text-anchor", "end")
       .style("font-size", "13px")
@@ -278,9 +302,12 @@ export class MotorPerformanceGraphComponent implements OnInit {
     this.yAxis = this.svg.append('g')
       .attr("class", "y axis")
       .call(this.yAxis)
-      .style("stroke-width", "0")
+      .style("stroke-width", ".5px")
       .selectAll('text')
       .style("font-size", "13px");
+
+    this.svg.append("path")
+      .attr("id", "areaUnderCurve");
 
     this.svg.append("text")
       .attr("text-anchor", "middle")  // this makes it easy to centre the text as the transform is applied to the anchor
@@ -302,6 +329,7 @@ export class MotorPerformanceGraphComponent implements OnInit {
       .attr("points", "0,0, 0," + (detailBoxHeight - 2) + "," + detailBoxWidth + "," + (detailBoxHeight - 2) + "," + detailBoxWidth + ", 0," + ((detailBoxWidth / 2) + 12) + ",0," + (detailBoxWidth / 2) + ", -12, " + ((detailBoxWidth / 2) - 12) + ",0")
       .style("opacity", 0);
 
+    ///////////////////////////////////////////////
     this.currentLine = this.svg.append("path")
       .attr("class", "line")
       .style("stroke-width", 10)
@@ -378,12 +406,6 @@ export class MotorPerformanceGraphComponent implements OnInit {
       .attr("dy", ".35em");
 
 
-    this.svg.style("display", "none");
-
-  }
-
-  onChanges() {
-    this.svg.style("display", null);
     this.currentData = this.getCurrentData();
     this.powerFactorData = this.getPowerFactorData();
     this.efficiencyData = this.getEfficiencyData();
@@ -391,12 +413,16 @@ export class MotorPerformanceGraphComponent implements OnInit {
     this.drawPowerFactorLine(this.x, this.y, this.powerFactorData);
     this.drawEfficiencyLine(this.x, this.y, this.efficiencyData);
     this.initFocusCircles(this.powerFactorData, this.efficiencyData, this.currentData, this.x, this.y);
+
+    d3.selectAll("line").style("pointer-events", "none");
+
   }
+
 
   getCurrentData() {
     var data = [];
     let i = .001;
-    for (i; i < 1.2; i = i + 0.01) {
+    for (i; i <= 1.2; i = i + 0.01) {
       let current = this.calculateCurrent(i);
       if (current >= 0 && current <= this.height) {
         data.push({
@@ -410,7 +436,7 @@ export class MotorPerformanceGraphComponent implements OnInit {
 
   getEfficiencyData() {
     var data = [];
-    for (var i = .001; i < 1.20; i = i + .01) {
+    for (var i = .001; i <= 1.2; i = i + .01) {
       let efficiency = this.calculateEfficiency(i)
       if (efficiency >= 0 && efficiency <= 120) {
         data.push({
@@ -424,7 +450,7 @@ export class MotorPerformanceGraphComponent implements OnInit {
 
   getPowerFactorData() {
     var data = [];
-    for (var i = .001; i < 1.20; i = i + .01) {
+    for (var i = .001; i <= 1.2; i = i + .01) {
       let powerFactor = this.calculatePowerFactor(i);
       if (powerFactor >= 0 && powerFactor <= 120) {
         data.push({
@@ -585,11 +611,13 @@ export class MotorPerformanceGraphComponent implements OnInit {
           .style("font-weight", "bold")
           .style("fill", "#A569BD");
 
+        var percentFormat = d3.format(",.0%");
+
         this.svg.append("text")
           .attr("id", "i")
           .attr("x", 20)
           .attr("y", "50")
-          .text("Motor Shaft Load: " + this.psatService.roundVal(efficiencyD.x, 2) + " %")
+          .text("Motor Shaft Load: " + percentFormat(efficiencyD.x))
           .style("font-size", "13px")
           .style("font-weight", "bold")
           .style("fill", "#000000");
@@ -615,6 +643,17 @@ export class MotorPerformanceGraphComponent implements OnInit {
           .style("opacity", 0);
 
       });
+  }
+
+  toggleGrid(){
+    if(this.isGridToggled){
+      this.isGridToggled = false;
+      this.makeGraph();
+    }
+    else{
+      this.isGridToggled = true;
+      this.makeGraph();
+    }
   }
 
 }

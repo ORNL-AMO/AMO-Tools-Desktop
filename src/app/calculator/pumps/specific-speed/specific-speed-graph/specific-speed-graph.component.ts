@@ -28,6 +28,7 @@ export class SpecificSpeedGraphComponent implements OnInit {
   pointer: any;
   calcPoint: any;
   focus: any;
+  isGridToggled: boolean;
 
   firstChange: boolean = true;
 
@@ -43,11 +44,14 @@ export class SpecificSpeedGraphComponent implements OnInit {
   constructor(private psatService: PsatService, private windowRefService: WindowRefService) { }
 
   ngOnInit() {
-    // if (this.checkForm()) {
-    //   this.setUp();
-    //   this.drawPoint();
-    //   this.svg.style("display", null);
-    // }
+
+    this.isGridToggled = false;
+
+    d3.select('app-specific-speed').selectAll('#gridToggleBtn')
+      .on("click", () => {
+        console
+        this.toggleGrid();
+      });
   }
 
   ngAfterViewInit() {
@@ -57,7 +61,6 @@ export class SpecificSpeedGraphComponent implements OnInit {
     this.resizeGraph();
   }
 
-
   ngOnDestroy() {
     this.window.onresize = null;
   }
@@ -65,8 +68,7 @@ export class SpecificSpeedGraphComponent implements OnInit {
     if (!this.firstChange) {
       if (changes.toggleCalculate) {
         if (this.checkForm()) {
-          this.setUp();
-          this.drawPoint();
+          this.makeGraph();
           this.svg.style("display", null);
         }
       }
@@ -87,10 +89,11 @@ export class SpecificSpeedGraphComponent implements OnInit {
     }
     this.width = this.canvasWidth - this.margin.left - this.margin.right;
     this.height = this.canvasHeight - this.margin.top - this.margin.bottom;
+
+    d3.select("app-specific-speed").select("#gridToggle").style("top", (this.height + 100) + "px");
+
     if (this.checkForm()) {
-      this.setUp();
-      this.drawPoint();
-      this.svg.style("display", null);
+      this.makeGraph();
     }
   }
 
@@ -124,35 +127,10 @@ export class SpecificSpeedGraphComponent implements OnInit {
     }
   }
 
-  setUp() {
+  makeGraph() {
 
     //Remove  all previous graphs
     d3.select('app-specific-speed-graph').selectAll('svg').remove();
-    let tmpBox = d3.select("#detailBox").remove();
-    var curvePoints = [];
-
-    //graph dimensions
-    // this.margin = { top: 20, right: 120, bottom: 110, left: 120 };
-    // this.width = 900 - this.margin.left - this.margin.right;
-    // this.height = 600 - this.margin.top - this.margin.bottom;
-
-    this.x = d3.scaleLog()
-      .range([0, this.width])
-      .domain([100, 100000]);
-
-    this.y = d3.scaleLinear()
-      .range([this.height, 0])
-      .domain([0, 6]);
-
-    this.xAxis = d3.axisBottom()
-      .scale(this.x).ticks(3).tickFormat(d3.format("d"));
-
-    this.yAxis = d3.axisLeft()
-      .scale(this.y)
-      .tickSizeInner(0)
-      .tickSizeOuter(0)
-      .tickPadding(15)
-      .ticks(6);
 
     this.svg = d3.select('app-specific-speed-graph').append('svg')
       .attr("width", this.width + this.margin.left + this.margin.right)
@@ -201,14 +179,50 @@ export class SpecificSpeedGraphComponent implements OnInit {
       .style("fill", "#F8F9F9")
       .style("filter", "url(#drop-shadow)");
 
-    this.svg.append("path")
-      .attr("id", "areaUnderCurve");
+    this.x = d3.scaleLog()
+      .range([0, this.width])
+      .domain([100, 100000]);
+
+    this.y = d3.scaleLinear()
+      .range([this.height, 0])
+      .domain([0, 6]);
+
+    if(this.isGridToggled) {
+      this.xAxis = d3.axisBottom()
+        .scale(this.x)
+        .ticks(3)
+        .tickFormat(d3.format("d"))
+        .tickSize(-this.height);
+
+      this.yAxis = d3.axisLeft()
+        .scale(this.y)
+        .tickSizeInner(0)
+        .tickSizeOuter(0)
+        .tickPadding(15)
+        .ticks(6)
+        .tickSize(-this.width);
+    }
+    else{
+      this.xAxis = d3.axisBottom()
+        .scale(this.x)
+        .ticks(3)
+        .tickFormat(d3.format("d"))
+        .tickSize(0);
+
+      this.yAxis = d3.axisLeft()
+        .scale(this.y)
+        .tickSizeInner(0)
+        .tickSizeOuter(0)
+        .tickPadding(15)
+        .ticks(6)
+        .tickSize(0);
+    }
 
     this.xAxis = this.svg.append('g')
       .attr("class", "x axis")
       .attr("transform", "translate(0," + this.height + ")")
       .call(this.xAxis)
-      .style("stroke-width", "0")
+      .style("stroke-width", ".5px")
       .selectAll('text')
       .style("text-anchor", "end")
       .style("font-size", "13px")
@@ -218,9 +232,22 @@ export class SpecificSpeedGraphComponent implements OnInit {
     this.yAxis = this.svg.append('g')
       .attr("class", "y axis")
       .call(this.yAxis)
-      .style("stroke-width", "0")
+      .style("stroke-width", ".5px")
       .selectAll('text')
       .style("font-size", "13px");
+
+    var data = [];
+    for (var i = 100; i < 100000; i = i + 25) {
+      var efficiencyCorrection = this.psatService.achievableEfficiency(this.speedForm.value.pumpType, i);
+      if (efficiencyCorrection <= 5.5) {
+        data.push({
+          x: i,
+          y: efficiencyCorrection
+        });
+      }
+    }
+
+    this.makeCurve(data);
 
     this.svg.append("text")
       .attr("text-anchor", "middle")  // this makes it easy to centre the text as the transform is applied to the anchor
@@ -231,9 +258,6 @@ export class SpecificSpeedGraphComponent implements OnInit {
       .attr("text-anchor", "middle")  // this makes it easy to centre the text as the transform is applied to the anchor
       .attr("transform", "translate(" + (this.width / 2) + "," + (this.height - (-70)) + ")")  // centre below axis
       .text("Specific Speed (U.S.)");
-
-    //We can draw the guideCurve now since pump type has no effect on what kind of shape it has.
-    this.drawGuideCurve(this.svg, this.x, this.y, this.psatService, this.speedForm.value.pumpType);
 
     this.calcPoint = this.svg.append("g")
       .attr("class", "focus")
@@ -278,44 +302,6 @@ export class SpecificSpeedGraphComponent implements OnInit {
       .attr("x", 9)
       .attr("dy", ".35em");
 
-    this.svg.style("display", "none");
-  }
-
-
-  drawGuideCurve(svg, x, y, psatService, type) {
-
-    svg.selectAll("path").remove();
-
-    var data = [];
-    for (var i = 100; i < 100000; i = i + 25) {
-      var efficiencyCorrection = psatService.achievableEfficiency(type, i);
-      if (efficiencyCorrection <= 5.5) {
-        data.push({
-          x: i,
-          y: efficiencyCorrection
-        });
-      }
-    }
-    var guideLine = d3.line()
-      .x(function (d) {
-        return x(d.x);
-      })
-      .y(function (d) {
-        return y(d.y);
-      })
-      .curve(d3.curveNatural);
-
-    svg.append("path")
-      .data([data])
-      .attr("class", "line")
-      .attr("d", guideLine)
-      .style("stroke-width", 10)
-      .style("stroke-width", "2px")
-      .style("fill", "none")
-      .style("stroke", "#2ECC71")
-      .style('pointer-events', 'none');
-
-
     var format = d3.format(",.2f");
     var bisectDate = d3.bisector(function (d) { return d.x; }).left;
     this.svg.select('#graph')
@@ -351,7 +337,7 @@ export class SpecificSpeedGraphComponent implements OnInit {
           .style("display", null)
           .style('pointer-events', 'none');
 
-        let x0 = x.invert(d3.mouse(d3.event.currentTarget)[0]);
+        let x0 = this.x.invert(d3.mouse(d3.event.currentTarget)[0]);
         let i = bisectDate(data, x0, 1);
         if (i >= data.length) {
           i = data.length - 1
@@ -359,7 +345,7 @@ export class SpecificSpeedGraphComponent implements OnInit {
         let d0 = data[i - 1];
         let d1 = data[i];
         let d = x0 - d0.x > d1.x - x0 ? d1 : d0;
-        this.focus.attr("transform", "translate(" + x(d.x) + "," + y(d.y) + ")");
+        this.focus.attr("transform", "translate(" + this.x(d.x) + "," + this.y(d.y) + ")");
 
         this.pointer.transition()
           .style("opacity", 1);
@@ -371,7 +357,7 @@ export class SpecificSpeedGraphComponent implements OnInit {
         var detailBoxHeight = 90;
 
         this.pointer
-          .attr("transform", 'translate(' + (x(d.x) - (detailBoxWidth / 2)) + ',' + (y(d.y) + 27) + ')')
+          .attr("transform", 'translate(' + (this.x(d.x) - (detailBoxWidth / 2)) + ',' + (this.y(d.y) + 27) + ')')
           .style("fill", "#ffffff")
           .style("filter", "url(#drop-shadow)");
 
@@ -416,6 +402,10 @@ export class SpecificSpeedGraphComponent implements OnInit {
           .duration(600)
           .style("opacity",0);
       });
+
+    this.drawPoint();
+
+    d3.selectAll("line").style("pointer-events", "none");
   }
 
   drawPoint() {
@@ -438,8 +428,6 @@ export class SpecificSpeedGraphComponent implements OnInit {
         }
       });
 
-   // this.specificSpeedText.text(specificSpeed);
-   // this.efficiencyCorrectionText.text(efficiencyCorrection + ' %');
     this.svg.append("text")
       .attr("x", "20")
       .attr("y", "20")
@@ -454,20 +442,35 @@ export class SpecificSpeedGraphComponent implements OnInit {
       .style("font-size", "13px")
       .style("font-weight", "bold");
 
-    // this.specificSpeedText = this.svg.append("text")
-    //   .attr("id", "specificSpeedValue")
-    //   .attr("x", "200")
-    //   .attr("y", "20")
-    //   .style("font-size", "13px")
-    //   .style("font-weight", "bold");
+  }
 
-    // this.efficiencyCorrectionText = this.svg.append("text")
-    //   .attr("id", "efficiencyCorrectionValue")
-    //   .attr("x", "200")
-    //   .attr("y", "50")
-    //   .style("font-size", "13px")
-    //   .style("font-weight", "bold");
+  toggleGrid(){
+    if(this.isGridToggled){
+      this.isGridToggled = false;
+      this.makeGraph();
+    }
+    else{
+      this.isGridToggled = true;
+      this.makeGraph();
+    }
+  }
 
+  makeCurve(data){
+
+    var guideLine = d3.line()
+      .x((d)=> { return this.x(d.x); })
+      .y((d)=> { return this.y(d.y); })
+      .curve(d3.curveNatural);
+
+    this.svg.append("path")
+      .data([data])
+      .attr("class", "line")
+      .attr("d", guideLine)
+      .style("stroke-width", 10)
+      .style("stroke-width", "2px")
+      .style("fill", "none")
+      .style("stroke", "#2ECC71")
+      .style('pointer-events', 'none');
   }
 
 }

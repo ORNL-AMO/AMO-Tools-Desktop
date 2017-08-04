@@ -3,6 +3,7 @@ import { PhastService } from '../../../../phast/phast.service';
 import { WindowRefService } from '../../../../indexedDb/window-ref.service';
 import { O2Enrichment, O2EnrichmentOutput } from '../../../../shared/models/phast/o2Enrichment';
 import * as d3 from 'd3';
+import {createElement} from "@angular/core/src/view/element";
 
 @Component({
   selector: 'app-o2-enrichment-graph',
@@ -29,15 +30,16 @@ export class O2EnrichmentGraphComponent implements OnInit {
   margin: any;
   line: any;
   filter: any;
-  detailBox: any;
-  pointer: any;
-  calcPoint: any;
-  focus: any;
   point: any;
+  isGridToggled: boolean;
 
   plotBtn: any;
   change: any;
   lines: any;
+  mainLine: any;
+  selectedLine: number;
+  guideLine: any;
+  xPosition: any;
 
   isFirstChange: boolean = true;
   fontSize: string;
@@ -52,7 +54,19 @@ export class O2EnrichmentGraphComponent implements OnInit {
   constructor(private PhastService: PhastService, private windowRefService: WindowRefService) { }
 
   ngOnInit() {
-    //this.setUp();
+    this.lines = [];
+    this.isGridToggled = false;
+
+    this.plotBtn = d3.select('app-o2-enrichment-form').selectAll(".btn-success")
+      .on("click", () => {
+        this.plotLine();
+      });
+
+    d3.select('app-o2-enrichment').selectAll('#gridToggleBtn')
+      .on("click", () => {
+        this.toggleGrid();
+      });
+
   }
 
   ngAfterViewInit() {
@@ -61,7 +75,6 @@ export class O2EnrichmentGraphComponent implements OnInit {
     this.window.onresize = () => { this.resizeGraph() };
     this.resizeGraph();
   }
-
 
   ngOnDestroy() {
     this.window.onresize = null;
@@ -74,6 +87,7 @@ export class O2EnrichmentGraphComponent implements OnInit {
       this.isFirstChange = false;
     }
   }
+
   resizeGraph() {
     let curveGraph = this.doc.getElementById('o2EnrichmentGraph');
 
@@ -89,15 +103,18 @@ export class O2EnrichmentGraphComponent implements OnInit {
     }
     this.width = this.canvasWidth - this.margin.left - this.margin.right;
     this.height = this.canvasHeight - this.margin.top - this.margin.bottom;
-    this.setUp();
+
+    d3.select("app-o2-enrichment").select("#gridToggle").style("top", (this.height + 100) + "px");
+
+    this.makeGraph();
     this.onChanges();
   }
 
+  makeGraph() {
+    //Remove  all previous graphs
+    d3.select('app-o2-enrichment-graph').selectAll('svg').remove();
 
-  setUp() {
-    this.initGraph();
-    //We can draw the guideCurve now since pump type has no effect on what kind of shape it has.
-    var lines = {
+    this.mainLine = {
       o2CombAir: this.o2Enrichment.o2CombAir,
       o2CombAirEnriched: this.o2Enrichment.o2CombAirEnriched,
       flueGasTemp: this.o2Enrichment.flueGasTemp,
@@ -107,39 +124,11 @@ export class O2EnrichmentGraphComponent implements OnInit {
       combAirTemp: this.o2Enrichment.combAirTemp,
       combAirTempEnriched: this.o2Enrichment.combAirTempEnriched,
       fuelConsumption: this.o2Enrichment.fuelConsumption,
-      color: "#2ECC71"
+      color: "#2ECC71",
+      data: [],
+      x: null,
+      y: null
     };
-    this.drawCurve(this.svg, this.x, this.y, lines, true);
-  }
-
-  initGraph() {
-    //Remove  all previous graphs
-    d3.select('app-o2-enrichment-graph').selectAll('svg').remove();
-
-    //graph dimensions
-    // this.margin = { top: 20, right: 120, bottom: 110, left: 120 };
-    // this.width = 900 - this.margin.left - this.margin.right;
-    // this.height = 600 - this.margin.top - this.margin.bottom;
-
-    this.x = d3.scaleLinear()
-      .range([0, this.width])
-      .domain([0, 100]);
-
-    this.y = d3.scaleLinear()
-      .range([this.height, 0])
-      .domain([0, 100]);
-
-    this.xAxis = d3.axisBottom()
-      .scale(this.x)
-      .ticks(4)
-      .tickFormat(d3.format("d"));
-
-    this.yAxis = d3.axisLeft()
-      .scale(this.y)
-      .tickSizeInner(0)
-      .tickSizeOuter(0)
-      .tickPadding(15)
-      .ticks(4);
 
     this.svg = d3.select('app-o2-enrichment-graph').append('svg')
       .attr("width", this.width + this.margin.left + this.margin.right)
@@ -154,7 +143,8 @@ export class O2EnrichmentGraphComponent implements OnInit {
     // height=130% so that the shadow is not clipped
     this.filter = defs.append("filter")
       .attr("id", "drop-shadow")
-      .attr("height", "130%");
+      .attr("height", "130%")
+      .style("z-index", "+1");
 
     // SourceAlpha refers to opacity of graphic that this filter will be applied to
     // convolve that with a Gaussian with standard deviation 3 and store result
@@ -162,7 +152,8 @@ export class O2EnrichmentGraphComponent implements OnInit {
     this.filter.append("feGaussianBlur")
       .attr("in", "SourceAlpha")
       .attr("stdDeviation", 3)
-      .attr("result", "blur");
+      .attr("result", "blur")
+      .style("z-index", "+1");
 
     // translate output of Gaussian blur to the right and downwards with 2px
     // store result in offsetBlur
@@ -170,7 +161,8 @@ export class O2EnrichmentGraphComponent implements OnInit {
       .attr("in", "blur")
       .attr("dx", 0)
       .attr("dy", 0)
-      .attr("result", "offsetBlur");
+      .attr("result", "offsetBlur")
+      .style("z-index", "+1");
 
     // overlay original SourceGraphic over translated blurred opacity by using
     // feMerge filter. Order of specifying inputs is important!
@@ -186,16 +178,54 @@ export class O2EnrichmentGraphComponent implements OnInit {
       .attr("width", this.width)
       .attr("height", this.height)
       .style("fill", "#F8F9F9")
-      .style("filter", "url(#drop-shadow)");
+      .style("filter", "url(#drop-shadow)")
+      .style("z-index", "+1");
 
-    this.svg.append("path")
-      .attr("id", "areaUnderCurve");
+    this.x = d3.scaleLinear()
+      .range([0, this.width])
+      .domain([0, 100]);
+
+    this.y = d3.scaleLinear()
+      .range([this.height, 0])
+      .domain([0, 100]);
+
+
+    if(this.isGridToggled) {
+      this.xAxis = d3.axisBottom()
+        .scale(this.x)
+        .ticks(4)
+        .tickSize(-this.height)
+        .tickFormat(d3.format("d"));
+
+      this.yAxis = d3.axisLeft()
+        .scale(this.y)
+        .tickSizeInner(0)
+        .tickSizeOuter(0)
+        .tickPadding(15)
+        .tickSize(-this.width)
+        .ticks(4);
+    }
+    else{
+      this.xAxis = d3.axisBottom()
+        .scale(this.x)
+        .ticks(4)
+        .tickSize(0)
+        .tickFormat(d3.format("d"));
+
+      this.yAxis = d3.axisLeft()
+        .scale(this.y)
+        .tickSizeInner(0)
+        .tickSizeOuter(0)
+        .tickPadding(15)
+        .tickSize(0)
+        .ticks(4);
+    }
 
     this.xAxis = this.svg.append('g')
       .attr("class", "x axis")
       .attr("transform", "translate(0," + this.height + ")")
       .call(this.xAxis)
-      .style("stroke-width", "0")
+      .style("stroke-width", ".5px")
       .selectAll('text')
       .style("text-anchor", "end")
       .style("font-size", "13px")
@@ -205,9 +235,12 @@ export class O2EnrichmentGraphComponent implements OnInit {
     this.yAxis = this.svg.append('g')
       .attr("class", "y axis")
       .call(this.yAxis)
-      .style("stroke-width", "0")
+      .style("stroke-width", ".5px")
       .selectAll('text')
       .style("font-size", "13px");
+
+    this.svg.append("path")
+      .attr("id", "areaUnderCurve");
 
     this.svg.append("text")
       .attr("text-anchor", "middle")  // this makes it easy to centre the text as the transform is applied to the anchor
@@ -219,61 +252,13 @@ export class O2EnrichmentGraphComponent implements OnInit {
       .attr("transform", "translate(" + (this.width / 2) + "," + (this.height - (-70)) + ")")  // centre below axis
       .text("O2 in Air (%)");
 
-    //We can draw the guideCurve now since pump type has no effect on what kind of shape it has.
-    //this.drawGuideCurve(this.svg, this.x, this.y, this.psatService, this.speedForm.value.pumpType);
-
-    this.calcPoint = this.svg.append("g")
-      .attr("class", "focus")
-      .style("display", "none")
-      .style('pointer-events', 'none');
-
-    this.calcPoint.append("circle")
-      .attr("r", 6)
-      .style("fill", "none")
-      .style("stroke", "#000000")
-      .style("stroke-width", "3px");
-
-    // Define the div for the tooltip
-    this.detailBox = d3.select("app-o2-enrichment-graph").append("div")
-      .attr("id", "detailBox")
-      .attr("class", "d3-tip")
-      .style("opacity", 0)
-      .style('pointer-events', 'none');
-
-    const detailBoxWidth = 160;
-    const detailBoxHeight = 90;
-
-    this.pointer = this.svg.append("polygon")
-      .attr("id", "pointer")
-      //.attr("points", "0,13, 14,13, 7,-2");
-      .attr("points", "0,0, 0," + (detailBoxHeight - 2) + "," + detailBoxWidth + "," + (detailBoxHeight - 2) + "," + detailBoxWidth + ", 0," + ((detailBoxWidth / 2) + 12) + ",0," + (detailBoxWidth / 2) + ", -12, " + ((detailBoxWidth / 2) - 12) + ",0")
-      .style("display", "none")
-      .style('pointer-events', 'none');
-
-    this.focus = this.svg.append("g")
-      .attr("class", "focus")
-      .style("display", "none")
-      .style('pointer-events', 'none');
-
-    this.focus.append("circle")
-      .attr("r", 8)
-      .style("fill", "none")
-      .style("stroke", "#000000")
-      .style("stroke-width", "3px");
-
-    this.focus.append("text")
-      .attr("x", 9)
-      .attr("dy", ".35em");
-
     this.svg.style("display", null);
 
-    this.plotBtn = d3.select('app-o2-enrichment-form').selectAll(".btn-success")
-      .on("click", () => {
-        this.plotLine();
-      });
+    //draw mailLine curve
+    this.drawCurve(this.svg, this.x, this.y, this.mainLine, true);
+    this.updateDetailBoxs();
 
     this.change = true;
-    this.lines = [];
   }
 
   drawCurve(svg, x, y, information, isFromForm) {
@@ -319,10 +304,7 @@ export class O2EnrichmentGraphComponent implements OnInit {
 
     //reload the graph and return if no points are on the graph
     if (!onGraph) {
-      this.detailBox = null;
-      this.pointer = null;
-      this.focus = null;
-      this.initGraph();
+      this.makeGraph();
       return;
     }
 
@@ -345,11 +327,7 @@ export class O2EnrichmentGraphComponent implements OnInit {
         .style("stroke-width", "2px")
         .style("fill", "none")
         .style("stroke", information.color)
-        .style('pointer-events', 'none')
-        .on("click", () => {
-          console.log("here");
-          this.hoverCommands(x, y, data);
-        });
+        .style('pointer-events', 'none');
     }
     else {
       svg.append("path")
@@ -360,14 +338,28 @@ export class O2EnrichmentGraphComponent implements OnInit {
         .style("stroke-width", "2px")
         .style("fill", "none")
         .style("stroke", information.color)
-        .style('pointer-events', 'none')
-        .on("click", () => {
-          console.log("here");
-          this.hoverCommands(x, y, data);
-        });
+        .style('pointer-events', 'none');
     }
 
+    information.data = data;
+    information.x = x;
+    information.y = y;
+
     this.hoverCommands(x, y, data);
+
+    if(this.guideLine != null) {
+      this.guideLine.remove();
+    }
+
+    this.guideLine = this.svg.append("line")
+      .attr("id", "guideLine")
+      .attr("x1", 0)
+      .attr("y1", 0)
+      .attr("x2", 0)
+      .attr("y2", this.height)
+      .style("stroke", "red")
+      .style('pointer-events', 'none')
+      .style("display", "none");
 
     this.drawPoint(x, y, information, isFromForm);
 
@@ -385,31 +377,9 @@ export class O2EnrichmentGraphComponent implements OnInit {
       .attr("fill", "#ffffff")
       .style("filter", "url(#drop-shadow)")
       .on("mouseover", () => {
-
-        this.focus
-          .style("display", null)
-          .style("opacity", 1)
-          .style('pointer-events', 'none');
-        this.pointer
-          .style("display", null)
-          .style('pointer-events', 'none');
-        this.detailBox
-          .style("display", null)
-          .style('pointer-events', 'none');
-
+        this.guideLine.style("display", null);
       })
       .on("mousemove", () => {
-
-        this.focus
-          .style("display", null)
-          .style("opacity", 1)
-          .style('pointer-events', 'none');
-        this.pointer
-          .style("display", null)
-          .style('pointer-events', 'none');
-        this.detailBox
-          .style("display", null)
-          .style('pointer-events', 'none');
 
         let x0 = x.invert(d3.mouse(d3.event.currentTarget)[0]);
         let i = bisectDate(data, x0, 1);
@@ -419,59 +389,16 @@ export class O2EnrichmentGraphComponent implements OnInit {
         let d0 = data[i - 1];
         let d1 = data[i];
         let d = x0 - d0.x > d1.x - x0 ? d1 : d0;
-        this.focus.attr("transform", "translate(" + x(d.x) + "," + y(d.y) + ")");
 
-        this.pointer.transition()
-          .style("opacity", 1);
+        this.xPosition = d.x;
 
-        this.detailBox.transition()
-          .style("opacity", 1);
+        this.updateDetailBoxs();
+        this.moveGuideLine();
 
-        var detailBoxWidth = 160;
-        var detailBoxHeight = 90;
-
-        this.pointer
-          .attr("transform", 'translate(' + (x(d.x) - (detailBoxWidth / 2)) + ',' + (y(d.y) + 27) + ')')
-          .style("fill", "#ffffff")
-          .style("filter", "url(#drop-shadow)");
-
-        this.detailBox
-          .style("padding-right", "10px")
-          .style("padding-left", "10px")
-          .html(
-          "<p><strong><div>O<sub>2</sub> in Air: </div></strong><div>" + format(d.x) + " %</div>" +
-          "<strong><div>Fuel Savings: </div></strong><div>" + format(d.y) + " %</div></p>")
-
-          .style("left", (this.margin.left + x(d.x) - (detailBoxWidth / 2 - 15)) + "px")
-          .style("top", (this.margin.top + y(d.y) + 25) + "px")
-          .style("position", "absolute")
-          .style("width", detailBoxWidth + "px")
-          .style("height", detailBoxHeight + "px")
-          .style("padding-left", "10px")
-          .style("padding-right", "10px")
-          .style("font", "12px sans-serif")
-          .style("background", "#ffffff")
-          .style("border", "0px")
-          .style("pointer-events", "none");
       })
       .on("mouseout", () => {
-        this.pointer
-          .transition()
-          .delay(100)
-          .duration(600)
-          .style("opacity", 0);
-
-        this.detailBox
-          .transition()
-          .delay(100)
-          .duration(600)
-          .style("opacity", 0);
-
-        this.focus
-          .transition()
-          .delay(100)
-          .duration(600)
-          .style("opacity", 0);
+        this.guideLine.style("display", "none");
+        this.clearDetails();
       });
   }
 
@@ -512,8 +439,12 @@ export class O2EnrichmentGraphComponent implements OnInit {
   }
 
   onChanges() {
+    this.change = true;
+    this.redrawLines();
+  }
 
-    var line = {
+  redrawLines(){
+    this.mainLine = {
       o2CombAir: this.o2Enrichment.o2CombAir,
       o2CombAirEnriched: this.o2Enrichment.o2CombAirEnriched,
       flueGasTemp: this.o2Enrichment.flueGasTemp,
@@ -523,25 +454,35 @@ export class O2EnrichmentGraphComponent implements OnInit {
       combAirTemp: this.o2Enrichment.combAirTemp,
       combAirTempEnriched: this.o2Enrichment.combAirTempEnriched,
       fuelConsumption: this.o2Enrichment.fuelConsumption,
-      color: "#2ECC71"
+      color: "#2ECC71",
+      data: [],
+      x: null,
+      y: null
     };
 
     this.svg.selectAll("#formLine").remove();
-    this.drawCurve(this.svg, this.x, this.y, line, true);
+    this.drawCurve(this.svg, this.x, this.y, this.mainLine, true);
 
     this.plotBtn.classed("disabled", false);
-    this.change = true;
 
     this.svg.selectAll(".plottedLine").remove();
     this.svg.selectAll(".plottedPoint").remove();
 
-    console.log(this.lines.length);
+    //Update and draw lines
     for (var i = 0; i < this.lines.length; i++) {
+
+      this.lines[i].o2CombAir = this.o2Enrichment.o2CombAir;
+      this.lines[i].flueGasTemp = this.o2Enrichment.flueGasTemp;
+      this.lines[i].o2FlueGas = this.o2Enrichment.o2FlueGas;
+      this.lines[i].combAirTemp = this.o2Enrichment.combAirTemp;
+      this.lines[i].fuelConsumption = this.o2Enrichment.fuelConsumption;
+
       this.drawCurve(this.svg, this.x, this.y, this.lines[i], false);
     }
 
+    //Set mailLine as default after every change
+    this.hoverCommands(this.mainLine.x, this.mainLine.y, this.mainLine.data);
   }
-
 
   plotLine() {
     if (this.change) {
@@ -557,7 +498,10 @@ export class O2EnrichmentGraphComponent implements OnInit {
         combAirTemp: this.o2Enrichment.combAirTemp,
         combAirTempEnriched: this.o2Enrichment.combAirTempEnriched,
         fuelConsumption: this.o2Enrichment.fuelConsumption,
-        color: color
+        color: color,
+        data: [],
+        x: null,
+        y: null
       };
 
       this.drawCurve(this.svg, this.x, this.y, line, false);
@@ -566,6 +510,8 @@ export class O2EnrichmentGraphComponent implements OnInit {
 
       this.plotBtn.classed("disabled", true);
       this.change = false;
+
+      this.updateDetailBoxs();
     }
   }
 
@@ -578,5 +524,178 @@ export class O2EnrichmentGraphComponent implements OnInit {
     return color;
   }
 
+  updateDetailBoxs(){
+
+    d3.select('app-o2-enrichment').selectAll("#lineDetails").selectAll("tr").remove();
+
+    var lineDetail = d3.select('app-o2-enrichment').selectAll("#lineDetails").append("tr");
+
+    //Always display mainLine details to detail box
+    lineDetail.append("td")
+      .attr("class", "text-center")
+      .style("background-color", this.mainLine.color);
+
+    lineDetail.append("td")
+      .attr("class", "text-center")
+      .html(() => {
+        if(this.xPosition != null) {
+          var format = d3.format(",.2f");
+          return "<p style='margin: 0px; font-size: 1vw'>" + format(this.xPosition) + "%</p>";
+        }
+        else{
+          return "<i class='fa fa-minus' style='margin: 0px; font-size: 1vw; vertical-align: middle: height: 100%;'></i>" +
+            " <i class='fa fa-minus' style='margin: 0px; font-size: 1vw; vertical-align: middle: height: 100%;'></i>" +
+            " <i class='fa fa-minus' style='margin: 0px; font-size: 1vw; vertical-align: middle: height: 100%;'></i>";
+        }
+      });
+
+    lineDetail.append("td")
+      .attr("class", "text-center fuelSavings")
+      .html(() => {
+
+        var format = d3.format(",.2f");
+        var o2EnrichmentPoint = {
+          o2CombAir: this.o2Enrichment.o2CombAir,
+          o2CombAirEnriched: this.xPosition,
+          flueGasTemp: this.o2Enrichment.flueGasTemp,
+          flueGasTempEnriched: this.mainLine.flueGasTempEnriched,
+          o2FlueGas: this.o2Enrichment.o2FlueGas,
+          o2FlueGasEnriched: this.mainLine.o2FlueGasEnriched,
+          combAirTemp: this.o2Enrichment.combAirTemp,
+          combAirTempEnriched: this.mainLine.combAirTempEnriched,
+          fuelConsumption: this.o2Enrichment.fuelConsumption
+        };
+
+        var fuelSavings = this.PhastService.o2Enrichment(o2EnrichmentPoint).fuelSavingsEnriched;
+
+        if(fuelSavings < 0 || fuelSavings > 100 || this.xPosition == null) {
+          return "<i class='fa fa-minus' style='margin: 0px; font-size: 1vw; vertical-align: middle: height: 100%;'></i>" +
+            " <i class='fa fa-minus' style='margin: 0px; font-size: 1vw; vertical-align: middle: height: 100%;'></i>" +
+            " <i class='fa fa-minus' style='margin: 0px; font-size: 1vw; vertical-align: middle: height: 100%;'></i>";
+        }
+        else{
+          return "<p style='margin: 0px; font-size: 1vw'>" +  format(fuelSavings) + "%</p>";
+        }
+      });
+
+
+    if(this.lines != null){
+      this.lines.forEach((d, i) => {
+
+        var lineDetail = d3.select('app-o2-enrichment').selectAll("#lineDetails").append("tr");
+
+        lineDetail.append("td")
+          .attr("class", "text-center")
+          .style("background-color", d.color);
+
+        lineDetail.append("td")
+          .attr("class", "text-center")
+          .html(() => {
+            if(this.xPosition != null) {
+              var format = d3.format(",.2f");
+              return "<p style='margin: 0px; font-size: 1vw'>" + format(this.xPosition) + "%</p>";
+            }
+            else{
+              return "<i class='fa fa-minus' style='margin: 0px; font-size: 1vw; vertical-align: middle: height: 100%;'></i>" +
+                " <i class='fa fa-minus' style='margin: 0px; font-size: 1vw; vertical-align: middle: height: 100%;'></i>" +
+                " <i class='fa fa-minus' style='margin: 0px; font-size: 1vw; vertical-align: middle: height: 100%;'></i>";
+            }
+          });
+
+        lineDetail.append("td")
+          .attr("class", "text-center fuelSavings")
+          .html(() => {
+
+            var format = d3.format(",.2f");
+            var o2EnrichmentPoint = {
+              o2CombAir: this.o2Enrichment.o2CombAir,
+              o2CombAirEnriched: this.xPosition,
+              flueGasTemp: this.o2Enrichment.flueGasTemp,
+              flueGasTempEnriched: d.flueGasTempEnriched,
+              o2FlueGas: this.o2Enrichment.o2FlueGas,
+              o2FlueGasEnriched: d.o2FlueGasEnriched,
+              combAirTemp: this.o2Enrichment.combAirTemp,
+              combAirTempEnriched: d.combAirTempEnriched,
+              fuelConsumption: this.o2Enrichment.fuelConsumption
+            };
+            var fuelSavings = this.PhastService.o2Enrichment(o2EnrichmentPoint).fuelSavingsEnriched;
+
+            if(fuelSavings < 0 || fuelSavings > 100 || this.xPosition == null) {
+              return "<i class='fa fa-minus' style='margin: 0px; font-size: 1vw; vertical-align: middle: height: 100%;'></i>" +
+                     " <i class='fa fa-minus' style='margin: 0px; font-size: 1vw; vertical-align: middle: height: 100%;'></i>" +
+                     " <i class='fa fa-minus' style='margin: 0px; font-size: 1vw; vertical-align: middle: height: 100%;'></i>";
+            }
+            else{
+              return "<p style='margin: 0px; font-size: 1vw'>" + format(fuelSavings) + "%</p>";
+            }
+          });
+
+        var deleteBtn = lineDetail.append("td")
+          .style("padding", "0px")
+          .style("vertical-align", "middle")
+          .append("div")
+            .style("padding", "0px")
+            .attr("class", "text-center")
+              .append("button")
+                .attr("class", "btn deleteBtn")
+                .attr("type", "button")
+                .style("padding", "0px")
+                .style("width", "40px")
+                .style("height", "40px")
+                .style("background-color", "#cc0200")
+                .on("click", () => {
+                  this.selectedLine = i;
+                  this.deleteLine();
+                })
+                .append("span")
+                  .attr("class", "fa fa-minus deleteMinus");
+
+          deleteBtn.select("before")
+            .style("height", "40px")
+            .style("font-size", "18")
+            .style("vertical-align", "middle")
+            .style("background-color", "#cc0200");
+
+      });
+    }
+  }
+
+  clearDetails(){
+    d3.selectAll(".fuelSavings")
+      .html("<i class='fa fa-minus' style='margin: 0px; font-size: 1vw; vertical-align: middle: height: 100%;'></i>" +
+            " <i class='fa fa-minus' style='margin: 0px; font-size: 1vw; vertical-align: middle: height: 100%;'></i>" +
+            " <i class='fa fa-minus' style='margin: 0px; font-size: 1vw; vertical-align: middle: height: 100%;'></i>");
+  }
+
+  moveGuideLine(){
+
+    this.guideLine
+      .attr("transform", 'translate(' + this.x(this.xPosition) + ', 0)');
+
+  }
+
+  deleteLine(){
+    if(this.lines != null) {
+      if (this.selectedLine != -1) {
+        this.lines.splice(this.selectedLine, 1);
+        this.onChanges();
+        this.updateDetailBoxs();
+        this.change = true;
+      }
+    }
+  }
+
+  toggleGrid(){
+    if(this.isGridToggled){
+      this.isGridToggled = false;
+      this.makeGraph();
+      this.redrawLines();
+    }
+    else{
+      this.isGridToggled = true;
+      this.makeGraph();
+      this.redrawLines();
+    }
+  }
 
 }
