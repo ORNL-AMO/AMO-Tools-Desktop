@@ -1,10 +1,10 @@
 import { Component, OnInit, Input } from '@angular/core';
-
+import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
+import { Settings } from '../../../shared/models/settings';
 
 // declare var d3: any;
 import * as d3 from 'd3';
 var svg;
-
 
 @Component({
   selector: 'app-explore-opportunities-sankey',
@@ -16,6 +16,8 @@ export class ExploreOpportunitiesSankeyComponent implements OnInit {
   baselineResults: any;
   @Input()
   modificationResults: any;
+  @Input()
+  settings: Settings;
 
   motor: number;
   drive: number;
@@ -28,7 +30,7 @@ export class ExploreOpportunitiesSankeyComponent implements OnInit {
 
   //Max width of Sankey
   baseSize: number = 50;
-  constructor() {
+  constructor(private convertUnitsService: ConvertUnitsService) {
   }
 
   ngOnInit() {
@@ -78,7 +80,7 @@ export class ExploreOpportunitiesSankeyComponent implements OnInit {
     nodes.push(
       /*0*/{
         name: "Input",
-        value: this.baselineResults.motor_power,
+        value:  results.motor_power,
         displaySize: this.baseSize,
         width: 300,
         x: (this.width * .15),
@@ -361,7 +363,7 @@ export class ExploreOpportunitiesSankeyComponent implements OnInit {
       })
       .text(function(d) {
         if(!d.inter) {
-          return "Btu/Hr.";
+          return "kW";
         }
       })
       .style("font-size", "12px");
@@ -705,9 +707,27 @@ export class ExploreOpportunitiesSankeyComponent implements OnInit {
   }
 
   calcLosses(results){
+    console.log(results);
+
+    var motorShaftPower;
+    var pumpShaftPower;
+
+    if(this.settings.powerMeasurement === "hp") {
+      console.log(results.motor_shaft_power);
+      motorShaftPower = this.convertUnitsService.value(results.motor_shaft_power).from("hp").to('kW');
+      console.log(motorShaftPower);
+      pumpShaftPower = this.convertUnitsService.value(results.pump_shaft_power).from("hp").to('kW');
+    }
+    else{
+      motorShaftPower = results.motor_shaft_power;
+      pumpShaftPower = results.pump_shaft_power;
+    }
+
     this.motor = results.motor_power*(1 - (results.motor_efficiency/100));
-    this.drive = results.motor_shaft_power - results.pump_shaft_power;
-    this.pump = (results.motor_power - this.motor - this.drive)*(1 - (results.motor_efficiency/100));
+
+    this.drive = motorShaftPower - pumpShaftPower;
+
+    this.pump = (results.motor_power - this.motor - this.drive)*(1 - (results.pump_efficiency/100));
 
   }
 

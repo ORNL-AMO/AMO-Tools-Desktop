@@ -552,21 +552,21 @@ export class O2EnrichmentGraphComponent implements OnInit {
     lineDetail.append("td")
       .attr("class", "text-center fuelSavings")
       .html(() => {
-        if(this.xPosition != null) {
-          var format = d3.format(",.2f");
-          var o2EnrichmentPoint = {
-            o2CombAir: this.o2Enrichment.o2CombAir,
-            o2CombAirEnriched: this.xPosition,
-            flueGasTemp: this.o2Enrichment.flueGasTemp,
-            flueGasTempEnriched: this.mainLine.flueGasTempEnriched,
-            o2FlueGas: this.o2Enrichment.o2FlueGas,
-            o2FlueGasEnriched: this.mainLine.o2FlueGasEnriched,
-            combAirTemp: this.o2Enrichment.combAirTemp,
-            combAirTempEnriched: this.mainLine.combAirTempEnriched,
-            fuelConsumption: this.o2Enrichment.fuelConsumption
-          };
-          var fuelSavings = this.PhastService.o2Enrichment(o2EnrichmentPoint).fuelSavingsEnriched;
-        }
+
+        var format = d3.format(",.2f");
+        var o2EnrichmentPoint = {
+          o2CombAir: this.o2Enrichment.o2CombAir,
+          o2CombAirEnriched: this.xPosition,
+          flueGasTemp: this.o2Enrichment.flueGasTemp,
+          flueGasTempEnriched: this.mainLine.flueGasTempEnriched,
+          o2FlueGas: this.o2Enrichment.o2FlueGas,
+          o2FlueGasEnriched: this.mainLine.o2FlueGasEnriched,
+          combAirTemp: this.o2Enrichment.combAirTemp,
+          combAirTempEnriched: this.mainLine.combAirTempEnriched,
+          fuelConsumption: this.o2Enrichment.fuelConsumption
+        };
+
+        var fuelSavings = this.PhastService.o2Enrichment(o2EnrichmentPoint).fuelSavingsEnriched;
 
         if(fuelSavings < 0 || fuelSavings > 100 || this.xPosition == null) {
           return "<i class='fa fa-minus' style='margin: 0px; font-size: 1vw; vertical-align: middle: height: 100%;'></i>" +
@@ -606,21 +606,19 @@ export class O2EnrichmentGraphComponent implements OnInit {
           .attr("class", "text-center fuelSavings")
           .html(() => {
 
-            if(this.xPosition != null) {
-              var format = d3.format(",.2f");
-              var o2EnrichmentPoint = {
-                o2CombAir: this.o2Enrichment.o2CombAir,
-                o2CombAirEnriched: this.xPosition,
-                flueGasTemp: this.o2Enrichment.flueGasTemp,
-                flueGasTempEnriched: this.mainLine.flueGasTempEnriched,
-                o2FlueGas: this.o2Enrichment.o2FlueGas,
-                o2FlueGasEnriched: this.mainLine.o2FlueGasEnriched,
-                combAirTemp: this.o2Enrichment.combAirTemp,
-                combAirTempEnriched: this.mainLine.combAirTempEnriched,
-                fuelConsumption: this.o2Enrichment.fuelConsumption
-              };
-              var fuelSavings = this.PhastService.o2Enrichment(o2EnrichmentPoint).fuelSavingsEnriched;
-            }
+            var format = d3.format(",.2f");
+            var o2EnrichmentPoint = {
+              o2CombAir: this.o2Enrichment.o2CombAir,
+              o2CombAirEnriched: this.xPosition,
+              flueGasTemp: this.o2Enrichment.flueGasTemp,
+              flueGasTempEnriched: d.flueGasTempEnriched,
+              o2FlueGas: this.o2Enrichment.o2FlueGas,
+              o2FlueGasEnriched: d.o2FlueGasEnriched,
+              combAirTemp: this.o2Enrichment.combAirTemp,
+              combAirTempEnriched: d.combAirTempEnriched,
+              fuelConsumption: this.o2Enrichment.fuelConsumption
+            };
+            var fuelSavings = this.PhastService.o2Enrichment(o2EnrichmentPoint).fuelSavingsEnriched;
 
             if(fuelSavings < 0 || fuelSavings > 100 || this.xPosition == null) {
               return "<i class='fa fa-minus' style='margin: 0px; font-size: 1vw; vertical-align: middle: height: 100%;'></i>" +
