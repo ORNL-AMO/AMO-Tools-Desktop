@@ -19,7 +19,7 @@ export class PsatService {
   constructor(private formBuilder: FormBuilder, private convertUnitsService: ConvertUnitsService, private validationService: ValidationService) {
     this.mainTab = new BehaviorSubject<string>('system-setup');
     this.secondaryTab = new BehaviorSubject<string>('explore-opportunities');
-}
+  }
 
   test() {
     console.log(psatAddon);
@@ -41,6 +41,8 @@ export class PsatService {
 
   convertOutputs(psatOutputs: PsatOutputs, settings: Settings): PsatOutputs {
     if (settings.powerMeasurement != 'hp') {
+      //console.log(psatOutputs.motor_rated_power);
+     // psatOutputs.motor_power = this.convertUnitsService.value(psatOutputs.motor_power).from('hp').to(settings.powerMeasurement);
       psatOutputs.motor_rated_power = this.convertUnitsService.value(psatOutputs.motor_rated_power).from('hp').to(settings.powerMeasurement);
       psatOutputs.motor_shaft_power = this.convertUnitsService.value(psatOutputs.motor_shaft_power).from('hp').to(settings.powerMeasurement);
       psatOutputs.pump_shaft_power = this.convertUnitsService.value(psatOutputs.pump_shaft_power).from('hp').to(settings.powerMeasurement);
@@ -51,8 +53,10 @@ export class PsatService {
   //CALCULATORS
   resultsExisting(psatInputs: PsatInputs, settings: Settings): PsatOutputs {
     psatInputs = this.convertInputs(psatInputs, settings);
+    console.log(psatInputs);
     //call results existing
     let tmpResults: PsatOutputs = psatAddon.resultsExisting(psatInputs);
+    console.log(tmpResults.motor_power);
     if (settings.powerMeasurement != 'hp') {
       tmpResults = this.convertOutputs(tmpResults, settings);
     }
@@ -64,6 +68,7 @@ export class PsatService {
     psatInputs = this.convertInputs(psatInputs, settings);
     //call addon resultsOptimal
     let tmpResults: PsatOutputs = psatAddon.resultsOptimal(psatInputs);
+    console.log(tmpResults.motor_power);
     if (settings.powerMeasurement != 'hp') {
       tmpResults = this.convertOutputs(tmpResults, settings);
     }
@@ -86,6 +91,7 @@ export class PsatService {
       annual_savings_potential: this.roundVal(psatResults.annual_savings_potential, 0),
       optimization_rating: this.roundVal(psatResults.optimization_rating, 2)
     }
+    console.log(roundResults.motor_power);
     return psatResults;
   }
 
