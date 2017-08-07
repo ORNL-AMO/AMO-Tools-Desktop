@@ -44,12 +44,7 @@ export class PsatService {
 
   convertOutputs(psatOutputs: PsatOutputs, settings: Settings): PsatOutputs {
     if (settings.powerMeasurement != 'hp') {
-      //console.log(psatOutputs.motor_rated_power);
-      // psatOutputs.motor_power = this.convertUnitsService.value(psatOutputs.motor_power).from('hp').to(settings.powerMeasurement);
-      console.log(settings.powerMeasurement)
-      console.log('rated power before: ' + psatOutputs.motor_rated_power)
       psatOutputs.motor_rated_power = this.convertUnitsService.value(psatOutputs.motor_rated_power).from('hp').to(settings.powerMeasurement);
-      console.log('rated power after: ' + psatOutputs.motor_rated_power)
       psatOutputs.motor_shaft_power = this.convertUnitsService.value(psatOutputs.motor_shaft_power).from('hp').to(settings.powerMeasurement);
       psatOutputs.pump_shaft_power = this.convertUnitsService.value(psatOutputs.pump_shaft_power).from('hp').to(settings.powerMeasurement);
     }
@@ -71,9 +66,7 @@ export class PsatService {
   resultsOptimal(psatInputs: PsatInputs, settings: Settings): PsatOutputs {
     psatInputs = this.convertInputs(psatInputs, settings);
     //call addon resultsOptimal
-    let tmpResults: PsatOutputs = psatAddon.resultsOptimal(psatInputs);
-    console.log(tmpResults.motor_power);
-    if (settings.powerMeasurement != 'hp') {
+    let tmpResults: PsatOutputs = psatAddon.resultsOptimal(psatInputs);    if (settings.powerMeasurement != 'hp') {
       tmpResults = this.convertOutputs(tmpResults, settings);
     }
     tmpResults = this.roundResults(tmpResults);
@@ -95,7 +88,6 @@ export class PsatService {
       annual_savings_potential: this.roundVal(psatResults.annual_savings_potential, 0),
       optimization_rating: this.roundVal(psatResults.optimization_rating, 2)
     }
-    console.log(roundResults.motor_power);
     return psatResults;
   }
 
