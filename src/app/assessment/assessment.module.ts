@@ -54,7 +54,7 @@ import { ImportExportModule } from '../shared/import-export/import-export.module
     ModalModule,
     IndexedDbModule,
     SettingsModule,
-    ToastyModule.forRoot(),
+    ToastyModule,
     ImportExportModule
   ],
   providers: []

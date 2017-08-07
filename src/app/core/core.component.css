@@ -33,3 +33,10 @@
 	    transform: scale(1.0);
 	  }
 	}
+
+
+	.fake-toasty{
+		position: fixed;
+		bottom: 5%;
+		right: 5%;
+	}
