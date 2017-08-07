@@ -18,6 +18,7 @@ export class MeteredEnergyComponent implements OnInit {
   constructor(private phastService: PhastService) { }
 
   ngOnInit() {
+    console.log(this.phast);
     this.phastService.sumHeatInput(this.phast.losses);
   }
 

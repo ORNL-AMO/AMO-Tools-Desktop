@@ -21,14 +21,14 @@ import { OtherLoss } from '../shared/models/phast/losses/otherLoss';
 declare var phastAddon: any;
 import { OpeningLossesService } from './losses/opening-losses/opening-losses.service';
 import { BehaviorSubject } from 'rxjs';
-
+import { ConvertUnitsService } from '../shared/convert-units/convert-units.service';
 @Injectable()
 export class PhastService {
 
   mainTab: BehaviorSubject<string>;
   secondaryTab: BehaviorSubject<string>;
 
-  constructor(private openingLossesService: OpeningLossesService) {
+  constructor(private openingLossesService: OpeningLossesService, private convertUnitsService: ConvertUnitsService) {
     this.mainTab = new BehaviorSubject<string>('system-setup');
     this.secondaryTab = new BehaviorSubject<string>('explore-opportunities');
   }
@@ -341,6 +341,23 @@ export class PhastService {
       }
     })
     return sum;
+  }
+
+
+
+
+  sumAuxiliaryEquipment(phast: PHAST, results: Array<any>) {
+    let sum = 0;
+    results.forEach(result => {
+      if (result.motorPower == 'Calculated') {
+        sum += result.totalPower;
+      } else if (result.motorPower == 'Rated') {
+        if (result.totalPower != 0) {
+          let convert = this.convertUnitsService.value(result.totalPower).from('hp').to('kW');
+          sum += convert;
+        }
+      }
+    }
   }
 }
 
