@@ -186,7 +186,7 @@
 							</label>
       </div>
       <ul *ngIf="showPumpData">
-        <li>
+        <!--<li>
           <div class="checkbox">
             <label for="modifyPumpSpeed"><input type="checkbox" id="modifyPumpSpeed" value="true" (focus)="focusField('pumpSpeed')" (change)="togglePumpSpeed()" [(ngModel)]="showPumpSpeed"/>
 										Modify Pump Speed
@@ -214,7 +214,7 @@
               <span class="alert-danger pull-right small" *ngIf="rpmError2 !== null">{{rpmError2}}</span>
             </div>
           </form>
-        </li>
+        </li>-->
         <li>
           <div class="checkbox">
             <label for="modifyPumpType"><input type="checkbox" id="modifyPumpType" value="true" (focus)="focusField('pumpType')" (change)="togglePumpType()" [(ngModel)]="showPumpType"/>
