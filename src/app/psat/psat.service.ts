@@ -36,14 +36,20 @@ export class PsatService {
     if (settings.flowMeasurement != 'gpm') {
       psatInputs.flow_rate = this.convertUnitsService.value(psatInputs.flow_rate).from(settings.flowMeasurement).to('gpm');
     }
+    if (settings.powerMeasurement != 'hp') {
+      psatInputs.motor_rated_power = this.convertUnitsService.value(psatInputs.motor_rated_power).from(settings.powerMeasurement).to('hp');
+    }
     return psatInputs;
   }
 
   convertOutputs(psatOutputs: PsatOutputs, settings: Settings): PsatOutputs {
     if (settings.powerMeasurement != 'hp') {
       //console.log(psatOutputs.motor_rated_power);
-     // psatOutputs.motor_power = this.convertUnitsService.value(psatOutputs.motor_power).from('hp').to(settings.powerMeasurement);
+      // psatOutputs.motor_power = this.convertUnitsService.value(psatOutputs.motor_power).from('hp').to(settings.powerMeasurement);
+      console.log(settings.powerMeasurement)
+      console.log('rated power before: ' + psatOutputs.motor_rated_power)
       psatOutputs.motor_rated_power = this.convertUnitsService.value(psatOutputs.motor_rated_power).from('hp').to(settings.powerMeasurement);
+      console.log('rated power after: ' + psatOutputs.motor_rated_power)
       psatOutputs.motor_shaft_power = this.convertUnitsService.value(psatOutputs.motor_shaft_power).from('hp').to(settings.powerMeasurement);
       psatOutputs.pump_shaft_power = this.convertUnitsService.value(psatOutputs.pump_shaft_power).from('hp').to(settings.powerMeasurement);
     }
@@ -53,10 +59,8 @@ export class PsatService {
   //CALCULATORS
   resultsExisting(psatInputs: PsatInputs, settings: Settings): PsatOutputs {
     psatInputs = this.convertInputs(psatInputs, settings);
-    console.log(psatInputs);
     //call results existing
     let tmpResults: PsatOutputs = psatAddon.resultsExisting(psatInputs);
-    console.log(tmpResults.motor_power);
     if (settings.powerMeasurement != 'hp') {
       tmpResults = this.convertOutputs(tmpResults, settings);
     }
