@@ -6,7 +6,7 @@ import { Settings } from '../../../shared/models/settings';
 @Component({
   selector: 'app-metered-electricity',
   templateUrl: './metered-electricity.component.html',
-  styleUrls: ['./metered-electricity.component.css', '../../../psat/explore-opportunities/explore-opportunities.component.css']
+  styleUrls: ['./metered-electricity.component.css', '../../aux-equipment/aux-equipment.component.css']
 })
 export class MeteredElectricityComponent implements OnInit {
   @Input()

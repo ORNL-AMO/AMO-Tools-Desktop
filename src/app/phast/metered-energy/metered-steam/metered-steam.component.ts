@@ -6,7 +6,7 @@ import { PhastService } from '../../phast.service';
 @Component({
   selector: 'app-metered-steam',
   templateUrl: './metered-steam.component.html',
-  styleUrls: ['./metered-steam.component.css', '../../../psat/explore-opportunities/explore-opportunities.component.css']
+  styleUrls: ['./metered-steam.component.css','../../aux-equipment/aux-equipment.component.css']
 })
 export class MeteredSteamComponent implements OnInit {
   @Input()
