@@ -357,7 +357,7 @@ export class PhastService {
           sum += convert;
         }
       }
-    }
+    })
   }
 }
 

@@ -69,7 +69,7 @@ export class AuxEquipmentComponent implements OnInit {
   calcTotalPower(equipment: AuxEquipment): number {
     let tmpPower = 0;
     if (equipment.motorPower == 'Calculated') {
-      tmpPower = (Math.pow(equipment.motorPhase, .5) * equipment.supplyVoltage * equipment.averageCurrent * equipment.powerFactor * (equipment.dutyCycle / 100)) / 1000;
+      tmpPower = (Math.pow(Number(equipment.motorPhase), .5) * equipment.supplyVoltage * equipment.averageCurrent * equipment.powerFactor * (equipment.dutyCycle / 100)) / 1000;
     } else if (equipment.motorPower == 'Rated') {
       tmpPower = equipment.totalConnectedPower * (equipment.ratedCapacity / 100) * (equipment.dutyCycle / 100)
     }
@@ -87,12 +87,12 @@ export class AuxEquipmentComponent implements OnInit {
     }
     let tmpAuxEquipment: AuxEquipment = {
       name: 'Equipment #' + eqNum,
-      dutyCycle: 0,
+      dutyCycle: 100,
       motorPower: 'Calculated',
-      motorPhase: 1,
+      motorPhase: '3',
       supplyVoltage: 0,
       averageCurrent: 0,
-      powerFactor: 0,
+      powerFactor: .85,
       totalConnectedPower: 0,
       ratedCapacity: 0
     }
