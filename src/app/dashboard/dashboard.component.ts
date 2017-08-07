@@ -56,12 +56,12 @@ export class DashboardComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.importExportService.test();
+    // this.importExportService.test();
     //start toolts suite database if it has not started
     if (this.suiteDbService.hasStarted == false) {
       this.suiteDbService.startup();
     }
-   
+
     this.selectedItems = new Array();
     this.showLandingScreen = this.assessmentService.getLandingScreen();
     //open DB and get directories
@@ -76,17 +76,17 @@ export class DashboardComponent implements OnInit {
     }
 
     this.assessmentService.createAssessment.subscribe(val => {
-      if(val == true){
+      if (val == true) {
         this.createAssessment = true;
       }
     })
   }
 
-  ngAfterViewInit(){
+  ngOnDestroy() {
+    this.assessmentService.createAssessment.next(false);
   }
 
-  takeScreenShot(){
-    this.importExportService.takeScreenShot();
+  ngAfterViewInit() {
   }
 
   getData() {
@@ -219,7 +219,7 @@ export class DashboardComponent implements OnInit {
 
   createDirectory() {
     let tmpDirectory: DirectoryDbRef = {
-      name: 'All Assessments',
+      name: 'All Assets',
       createdDate: new Date(),
       modifiedDate: new Date(),
       parentDirectoryId: null,
@@ -517,8 +517,12 @@ export class DashboardComponent implements OnInit {
           name: dir.directory.name,
           parentDirectoryId: this.workingDirectory.id
         }
+        let checkParentArr = dirIdPairs.filter(pair => { return dir.directory.parentDirectoryId == pair.oldId })
+        if(checkParentArr.length != 0){
+          tmpDirDbRef.parentDirectoryId = checkParentArr[0].newId;
+        }
         this.indexedDbService.addDirectory(tmpDirDbRef).then(results => {
-          dirIdPairs.push({ oldId: dir.directory.id, newId: results })
+          dirIdPairs.push({ oldId: dir.directory.id, newId: results });
         });
       }
     })

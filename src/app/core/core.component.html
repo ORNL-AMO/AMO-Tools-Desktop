@@ -18,13 +18,28 @@
                     <button (click)="cancel()">Cancel</button>
                 </div>
                 <div *ngIf="updateSelected">
-					<div class="spinner">
-						<div class="bounce1"></div>
-						<div class="bounce2"></div>
-						<div class="bounce3"></div>
-					</div>
+                    <div class="spinner">
+                        <div class="bounce1"></div>
+                        <div class="bounce2"></div>
+                        <div class="bounce3"></div>
+                    </div>
                 </div>
             </div>
+        </div>
+    </div>
+</div>
+
+<div class="card fake-toasty">
+    <div class="card-header">
+        Provide Feedback
+    </div>
+    <div class="card-block">
+        <div class="row justify-content-center">
+            <button class="btn-sm btn-secondary" (click)="mailTo()">Email Feedback</button>
+        </div>
+        <div class="row justify-content-center">
+            <button class="btn-sm btn-primary pull-left" (click)="takeScreenShot()">Take Application Screenshot</button>
+            <button class="btn-sm btn-primary pull-right" (click)="downloadData()">Copy Data</button>
         </div>
     </div>
 </div>
