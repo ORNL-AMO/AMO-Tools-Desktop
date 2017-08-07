@@ -16,6 +16,8 @@ export class CoreComponent implements OnInit {
 
   @ViewChild('updateModal') public updateModal: ModalDirective;
 
+  gettingData: boolean = false;
+  showFeedback: boolean = true;
   constructor(private ElectronService: ElectronService, private toastyService: ToastyService,
     private toastyConfig: ToastyConfig, private importExportService: ImportExportService) {
     this.toastyConfig.theme = 'bootstrap';
@@ -23,7 +25,6 @@ export class CoreComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log('init');
     this.ElectronService.ipcRenderer.once('available', (event, arg) => {
       if (arg == true) {
         this.showUpdateModal();
@@ -36,21 +37,24 @@ export class CoreComponent implements OnInit {
 
   takeScreenShot() {
     this.importExportService.takeScreenShot();
+  }
 
+  hideFeedback(){
+    this.showFeedback = false;
   }
 
   downloadData() {
+    this.gettingData = true;
     this.importExportService.initAllDirectories().then((allDirs) => {
       this.importExportService.selectedItems = new Array<any>();
       this.importExportService.getSelected(allDirs);
       setTimeout(() => {
-        console.log(this.importExportService.selectedItems);
         this.importExportService.exportData = new Array();
         this.importExportService.selectedItems.forEach(item => {
           this.importExportService.getAssessmentSettings(item);
         })
         setTimeout(() => {
-          console.log(this.importExportService.exportData);
+          this.gettingData = false;
           this.importExportService.downloadData(this.importExportService.exportData);
         }, 1000)
       }, 500)
