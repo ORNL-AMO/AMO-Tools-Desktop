@@ -28,63 +28,63 @@
             </tr>
             <tr>
               <td>Pump efficiency (%)</td>
-              <td>{{baselineResults.pump_efficiency | number:'2.2-2'}}</td>
-              <td>{{modificationResults.pump_efficiency | number:'2.2-2'}}</td>
+              <td>{{baselineResults.pump_efficiency | number:'2.0-1'}}</td>
+              <td>{{modificationResults.pump_efficiency | number:'2.0-1'}}</td>
             </tr>
             <tr>
               <td>Motor rated power ({{settings.powerMeasurement}})</td>
-              <td>{{baselineResults.motor_rated_power | number:'2.2-2'}}</td>
-              <td>{{modificationResults.motor_rated_power | number:'2.2-2'}}</td>
+              <td>{{baselineResults.motor_rated_power | number:'2.0-0'}}</td>
+              <td>{{modificationResults.motor_rated_power | number:'2.0-0'}}</td>
             </tr>
             <tr>
               <td>Motor shaft power ({{settings.powerMeasurement}})</td>
-              <td>{{baselineResults.motor_shaft_power | number:'2.2-2'}}</td>
-              <td>{{modificationResults.motor_shaft_power | number:'2.2-2'}}</td>
+              <td>{{baselineResults.motor_shaft_power | number:'2.0-1'}}</td>
+              <td>{{modificationResults.motor_shaft_power | number:'2.0-1'}}</td>
             </tr>
             <tr>
               <td>Pump shaft power ({{settings.powerMeasurement}})</td>
-              <td>{{baselineResults.pump_shaft_power | number:'2.2-2'}}</td>
-              <td>{{modificationResults.pump_shaft_power | number:'2.2-2'}}</td>
+              <td>{{baselineResults.pump_shaft_power | number:'2.0-1'}}</td>
+              <td>{{modificationResults.pump_shaft_power | number:'2.0-1'}}</td>
             </tr>
             <tr>
               <td>Motor efficiency (%)</td>
-              <td>{{baselineResults.motor_efficiency | number:'2.2-2'}}</td>
-              <td>{{modificationResults.motor_efficiency | number:'2.2-2'}}</td>
+              <td>{{baselineResults.motor_efficiency | number:'2.0-1'}}</td>
+              <td>{{modificationResults.motor_efficiency | number:'2.0-1'}}</td>
             </tr>
             <tr>
               <td>Motor power factor (%)</td>
-              <td>{{baselineResults.motor_power_factor | number:'2.2-2'}}</td>
-              <td>{{modificationResults.motor_power_factor | number:'2.2-2'}}</td>
+              <td>{{baselineResults.motor_power_factor | number:'2.0-1'}}</td>
+              <td>{{modificationResults.motor_power_factor | number:'2.0-1'}}</td>
             </tr>
             <tr>
               <td>Motor current (amps)</td>
-              <td>{{baselineResults.motor_current | number:'2.2-2'}}</td>
-              <td>{{modificationResults.motor_current | number:'2.2-2'}}</td>
+              <td>{{baselineResults.motor_current | number:'2.0-1'}}</td>
+              <td>{{modificationResults.motor_current | number:'2.0-1'}}</td>
             </tr>
             <tr>
               <td>Motor power (kW)</td>
-              <td>{{baselineResults.motor_power | number:'2.2-2'}}</td>
-              <td>{{modificationResults.motor_power | number:'2.2-2'}}</td>
+              <td>{{baselineResults.motor_power | number:'2.0-1'}}</td>
+              <td>{{modificationResults.motor_power | number:'2.0-1'}}</td>
             </tr>
             <tr>
               <th>Annual Energy (MWh)</th>
-              <th>{{baselineResults.annual_energy | number:'2.2-2'}}</th>
-              <th [ngClass]="{'positive-savings': percentSavings > 10}">{{modificationResults.annual_energy | number:'2.2-2'}}</th>
+              <th>{{baselineResults.annual_energy | number:'2.0-0'}}</th>
+              <th [ngClass]="{'positive-savings': percentSavings > 10}">{{modificationResults.annual_energy | number:'2.0-0'}}</th>
             </tr>
             <tr>
               <th>Annual Energy Savings (MWh)</th>
               <th>&mdash;</th>
-              <th [ngClass]="{'positive-savings': percentSavings > 10}">{{baselineResults.annual_energy - modificationResults.annual_energy | number:'2.2-2'}}</th>
+              <th [ngClass]="{'positive-savings': percentSavings > 10}">{{baselineResults.annual_energy - modificationResults.annual_energy | number:'2.0-0'}}</th>
             </tr>
             <tr>
               <th>Annual Cost</th>
-              <th>{{baselineResults.annual_cost | currency:'USD':true:'2.2-2'}}</th>
-              <th [ngClass]="{'positive-savings': percentSavings > 10}">{{modificationResults.annual_cost | currency:'USD':true:'2.2-2'}}</th>
+              <th>{{baselineResults.annual_cost | currency:'USD':true:'2.0-0'}}</th>
+              <th [ngClass]="{'positive-savings': percentSavings > 10}">{{modificationResults.annual_cost | currency:'USD':true:'2.0-0'}}</th>
             </tr>
             <tr>
               <th>Annual Savings</th>
               <th>&mdash; &mdash;</th>
-              <th class="savings text-center" [ngClass]="{'positive-savings': percentSavings > 10}">{{annualSavings | currency:'USD':true:'2.2-2'}}</th>
+              <th class="savings text-center" [ngClass]="{'positive-savings': percentSavings > 10}">{{annualSavings | currency:'USD':true:'2.0-0'}}</th>
             </tr>
             <tr *ngIf="psat.modifications[exploreModIndex].psat.inputs.optimize_calculation">
               <td></td>
