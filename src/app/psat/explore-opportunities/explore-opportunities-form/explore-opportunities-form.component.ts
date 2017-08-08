@@ -34,7 +34,7 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
   showEfficiencyClass: boolean;
   showMotorEfficiency: boolean;
 
-  showPumpSpeed: boolean;
+  showOperatingFraction: boolean;
   showPumpType: boolean;
   showPumpSpecified: boolean;
 
@@ -82,6 +82,8 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
   efficiencyError2: string;
   specifiedError1: string;
   specifiedError2: string;
+  opFractionError1: string;
+  opFractionError2: string;
   constructor(private psatService: PsatService) { }
 
   ngOnInit() {
@@ -186,10 +188,10 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
     }
     if (this.psat.inputs.efficiency != this.psat.modifications[this.exploreModIndex].psat.inputs.efficiency) {
       this.showMotorEfficiency = true;
-      this.showRatedMotorData = true;
+      this.showSystemData = true;
     }
-    if (this.psat.inputs.pump_rated_speed != this.psat.modifications[this.exploreModIndex].psat.inputs.pump_rated_speed) {
-      this.showPumpSpeed = true;
+    if (this.psat.inputs.operating_fraction != this.psat.modifications[this.exploreModIndex].psat.inputs.operating_fraction) {
+      this.showOperatingFraction = true;
       this.showPumpData = true;
     }
     if (this.psat.inputs.pump_style != this.psat.modifications[this.exploreModIndex].psat.inputs.pump_style) {
@@ -326,7 +328,40 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
       this.specifiedError1 = str;
     } else if (num == 4) {
       this.specifiedError2 = str;
+    }
+  }
 
+
+  checkOpFraction(num: number) {
+    let val;
+    if (num == 1) {
+      val = this.psat.inputs.operating_fraction;
+    } else if (num == 2) {
+      val = this.psat.modifications[this.exploreModIndex].psat.inputs.operating_fraction;
+    }
+    if (val > 1) {
+      if (num == 1) {
+        this.opFractionError1 = 'Operating fraction needs to be between 0 - 1';
+      } else if (num == 2) {
+        this.opFractionError2 = 'Operating fraction needs to be between 0 - 1';
+      }
+      return false;
+    }
+    else if (val < 0) {
+      if (num == 1) {
+        this.opFractionError1 = "Cannot have negative operating fraction";
+      } else if (num == 2) {
+        this.opFractionError2 = "Cannot have negative operating fraction";
+      }
+      return false;
+    }
+    else {
+      if (num == 1) {
+        this.opFractionError1 = null;
+      } else if (num == 2) {
+        this.opFractionError2 = null;
+      }
+      return true;
     }
   }
 
@@ -359,9 +394,11 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
       this.showCost = false;
       this.showFlowRate = false;
       this.showHead = false;
+      this.showOperatingFraction = false;
       this.toggleCost();
       this.toggleFlowRate();
       this.toggleHead();
+      this.toggleOperatingFraction();
     }
   }
 
@@ -397,10 +434,8 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
   togglePumpData() {
     if (this.showPumpData == false) {
       this.showPumpSpecified = false;
-      this.showPumpSpeed = false;
       this.showPumpType = false;
       this.togglePumpSpecified();
-      this.togglePumpSpeed();
       this.togglePumpType();
     }
   }
@@ -411,9 +446,9 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
       this.calculate();
     }
   }
-  togglePumpSpeed() {
-    if (this.showPumpSpeed == false) {
-      this.psat.modifications[this.exploreModIndex].psat.inputs.pump_rated_speed = this.psat.inputs.pump_rated_speed;
+  toggleOperatingFraction() {
+    if (this.showOperatingFraction == false) {
+      this.psat.modifications[this.exploreModIndex].psat.inputs.operating_fraction = this.psat.inputs.operating_fraction;
       this.calculate();
     }
   }
@@ -424,4 +459,5 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
       this.calculate();
     }
   }
+
 }
