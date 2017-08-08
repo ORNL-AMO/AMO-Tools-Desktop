@@ -3,7 +3,6 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { LocationStrategy, HashLocationStrategy } from '@angular/common';
-
 import { AppComponent } from './app.component';
 
 import { SharedModule } from './shared/shared.module';
@@ -23,7 +22,7 @@ import { IndexedDbModule } from './indexedDb/indexedDb.module';
     SharedModule,
     CoreModule,
     routing,
-    IndexedDbModule
+    IndexedDbModule,
   ],
   providers: [
     appRoutingProviders

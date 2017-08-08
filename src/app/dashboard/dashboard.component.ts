@@ -11,7 +11,8 @@ import { JsonToCsvService } from '../shared/json-to-csv/json-to-csv.service';
 import { Assessment } from '../shared/models/assessment';
 import { ToastyService, ToastyConfig, ToastOptions, ToastData } from 'ng2-toasty';
 import { SuiteDbService } from '../suiteDb/suite-db.service';
-
+import { WindowRefService } from '../indexedDb/window-ref.service';
+import { ImportExportService } from '../shared/import-export/import-export.service';
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
@@ -48,18 +49,19 @@ export class DashboardComponent implements OnInit {
   createAssessment: boolean = false;
 
   constructor(private indexedDbService: IndexedDbService, private formBuilder: FormBuilder, private assessmentService: AssessmentService, private toastyService: ToastyService,
-    private toastyConfig: ToastyConfig, private jsonToCsvService: JsonToCsvService, private suiteDbService: SuiteDbService) {
+    private toastyConfig: ToastyConfig, private jsonToCsvService: JsonToCsvService, private suiteDbService: SuiteDbService, private importExportService: ImportExportService) {
     this.toastyConfig.theme = 'bootstrap';
     this.toastyConfig.position = 'bottom-right';
     this.toastyConfig.limit = 1;
   }
 
   ngOnInit() {
+    // this.importExportService.test();
     //start toolts suite database if it has not started
     if (this.suiteDbService.hasStarted == false) {
       this.suiteDbService.startup();
     }
-   
+
     this.selectedItems = new Array();
     this.showLandingScreen = this.assessmentService.getLandingScreen();
     //open DB and get directories
@@ -74,10 +76,17 @@ export class DashboardComponent implements OnInit {
     }
 
     this.assessmentService.createAssessment.subscribe(val => {
-      if(val == true){
+      if (val == true) {
         this.createAssessment = true;
       }
     })
+  }
+
+  ngOnDestroy() {
+    this.assessmentService.createAssessment.next(false);
+  }
+
+  ngAfterViewInit() {
   }
 
   getData() {
@@ -210,7 +219,7 @@ export class DashboardComponent implements OnInit {
 
   createDirectory() {
     let tmpDirectory: DirectoryDbRef = {
-      name: 'All Assessments',
+      name: 'All Assets',
       createdDate: new Date(),
       modifiedDate: new Date(),
       parentDirectoryId: null,
@@ -508,8 +517,12 @@ export class DashboardComponent implements OnInit {
           name: dir.directory.name,
           parentDirectoryId: this.workingDirectory.id
         }
+        let checkParentArr = dirIdPairs.filter(pair => { return dir.directory.parentDirectoryId == pair.oldId })
+        if(checkParentArr.length != 0){
+          tmpDirDbRef.parentDirectoryId = checkParentArr[0].newId;
+        }
         this.indexedDbService.addDirectory(tmpDirDbRef).then(results => {
-          dirIdPairs.push({ oldId: dir.directory.id, newId: results })
+          dirIdPairs.push({ oldId: dir.directory.id, newId: results });
         });
       }
     })

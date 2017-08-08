@@ -915,6 +915,9 @@ Footer
   clear: both;
   content: "";
 }
+.footer .btn {
+  padding: 12px;
+}
 
 
 .pills-nav {
@@ -930,7 +933,7 @@ Footer
     background: rgba(0,0,0,0);
     padding: 7px 9px;
     border-radius: 6px;
-    font-size: 20px;
+    font-size: 16px;
   }
   .pills-nav .active span {
     background: rgba(0,0,0,0.5);
@@ -958,13 +961,13 @@ Banner
   color: #fff;
 }
   .banner h1 {
-    font-size: 29px;
+    font-size: 22px;
     margin-top: 10px;
     margin-bottom: -14px;
     color: rgba(255,255,255,1);
   }
   .banner small {
-    font-size: 14px;
+    font-size: 12px;
     color: rgba(255,255,255,0.7);
   }
   .banner.psat {
@@ -986,8 +989,8 @@ Banner
 }
 .banner .btn-dashboard {
   float: right;
-  font-size: 16px;
-  padding: 19px 20px;
+  font-size: 13px;
+  padding: 12px 20px;
 }
   .banner .btn-dashboard span {
     font-size: 23px;
@@ -1012,7 +1015,7 @@ Banner
   float: left;
 }
 .banner .pills-nav {
-  margin: 12px 0 0 12px;
+  margin: 5px 0 0 12px;
 }
 /*.banner.psat .title {
   color: #fff;
@@ -1195,8 +1198,8 @@ Tabs
 
   .tabs.subtabs.progress-tabs a {
     color: #000;
-    font-size: 16px;
-    padding: 19px 18px;
+    font-size: 14px;
+    padding: 14px 10px;
   }
     .tabs.subtabs.progress-tabs a:hover {
       background: #fff;
