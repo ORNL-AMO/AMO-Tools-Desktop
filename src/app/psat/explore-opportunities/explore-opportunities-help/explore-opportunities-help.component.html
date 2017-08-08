@@ -176,21 +176,19 @@
       <p>Within the Pump Data tab you can edit Pump Speed, Pump Type, and Pump Specified Efficiency.</p>
     </div>
   </div>
-
-  <div class="card" *ngIf="currentField == 'pumpSpeed'">
+  <div class="card" *ngIf="currentField == 'operatingFraction'">
     <div class="card-header">
-      Pump Speed
+      Operating Fraction
     </div>
-    <div class="card-block">
-      <label><u><strong>Description:</strong></u></label>
+    <div class="card-block small">
+      <label><u><strong>Description</strong></u></label>
       <p>
-        The operating or nameplate speed at which the pump is running at. Used along with the measure/required flow rate, head, and
-        number of stages, to calculate the pump specific speed. The specific speed is used to determine efficiency penalty
-        associated with the particular pump application.
+        Operating Fraction represents the fraction of calender hours the equipment is running. It is used in calculating the annual
+        cost results.
       </p>
       <label><u><strong>Input</strong></u></label>
       <p>
-        Units: <strong>RPM</strong><br> Minimum Value Allowed: <strong>0</strong><br> Maximum Value Allowed: <strong>None</strong><br>
+        Minimum Value Allowed: <strong>0</strong><br> Maximum Value Allowed: <strong>1</strong><br>
       </p>
     </div>
   </div>
