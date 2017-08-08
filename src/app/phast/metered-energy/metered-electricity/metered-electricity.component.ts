@@ -3,6 +3,7 @@ import { MeteredEnergyElectricity, MeteredEnergyResults } from '../../../shared/
 import { PHAST } from '../../../shared/models/phast/phast';
 import { PhastService } from '../../phast.service';
 import { Settings } from '../../../shared/models/settings';
+
 @Component({
   selector: 'app-metered-electricity',
   templateUrl: './metered-electricity.component.html',
@@ -49,11 +50,16 @@ export class MeteredElectricityComponent implements OnInit {
     //Metered Energy Use
     //Electricty Used = Electricity used during collection / collection time
     this.results.meteredEnergyUsed = this.inputs.electricityUsed / this.inputs.electricityCollectionTime;
-    //Electricty Used = Electricity used during collection / collection time
-    this.results.meteredElectricityUsed = this.inputs.electricityUsed / this.inputs.electricityCollectionTime;
+    //Electricty Used = (aux) Electricity used during collection / (aux) collection time
+    this.results.meteredElectricityUsed = this.inputs.auxElectricityUsed / this.inputs.auxElectricityCollectionTime;
     //Energy Intensity for Charge Materials =  Electricity used during collection / Sum(charge material feed rates)
     let sumFeedRate = this.phastService.sumChargeMaterialFeedRate(this.phast.losses.chargeMaterials);
     this.results.meteredEnergyIntensity = this.inputs.electricityUsed / sumFeedRate;
+
+    //calculated by phast
+
+   // this.results.calculatedElectricityUsed = this.phastService.sumAuxiliaryEquipment(this.phast)
+
 
   }
 

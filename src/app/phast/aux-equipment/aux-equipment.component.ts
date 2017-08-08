@@ -3,6 +3,7 @@ import { AuxEquipment } from '../../shared/models/phast/auxEquipment';
 import { PHAST } from '../../shared/models/phast/phast';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
 import * as _ from 'lodash';
+import { AuxEquipmentService } from './aux-equipment.service';
 @Component({
   selector: 'app-aux-equipment',
   templateUrl: 'aux-equipment.component.html',
@@ -19,7 +20,7 @@ export class AuxEquipmentComponent implements OnInit {
 
   results: any;
   resultsSum: number = 0;
-  constructor(private convertUnitsService: ConvertUnitsService) { }
+  constructor(private convertUnitsService: ConvertUnitsService, private auxEquipmentService: AuxEquipmentService) { }
 
   ngOnInit() {
     if (!this.phast.auxEquipment) {
@@ -39,41 +40,8 @@ export class AuxEquipmentComponent implements OnInit {
   }
 
   calculate() {
-    this.results = new Array<any>();
-    this.phast.auxEquipment.forEach(equipment => {
-      this.results.push({
-        name: equipment.name,
-        totalPower: this.calcTotalPower(equipment),
-        motorPower: equipment.motorPower
-      })
-    })
-    this.getResultsSum();
-  }
-
-
-  getResultsSum() {
-    let sum = 0;
-    this.results.forEach(result => {
-      if (result.motorPower == 'Calculated') {
-        sum += result.totalPower;
-      } else if (result.motorPower == 'Rated') {
-        if (result.totalPower != 0) {
-          let convert = this.convertUnitsService.value(result.totalPower).from('hp').to('kW');
-          sum += convert;
-        }
-      }
-    })
-    this.resultsSum = sum;
-  }
-
-  calcTotalPower(equipment: AuxEquipment): number {
-    let tmpPower = 0;
-    if (equipment.motorPower == 'Calculated') {
-      tmpPower = (Math.pow(Number(equipment.motorPhase), .5) * equipment.supplyVoltage * equipment.averageCurrent * equipment.powerFactor * (equipment.dutyCycle / 100)) / 1000;
-    } else if (equipment.motorPower == 'Rated') {
-      tmpPower = equipment.totalConnectedPower * (equipment.ratedCapacity / 100) * (equipment.dutyCycle / 100)
-    }
-    return tmpPower;
+    this.results = this.auxEquipmentService.calculate(this.phast);
+    this.resultsSum = this.auxEquipmentService.getResultsSum(this.results);
   }
 
   setField(str: string) {
