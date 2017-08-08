@@ -92,6 +92,29 @@
             </div>
           </form>
         </li>
+        <li>
+          <div class="checkbox">
+            <label for="modifyOperatingFraction"><input type ="checkbox" id="modifyOperatingFraction" value="true" (focus)="focusField('operatingFraction')" (change)="toggleOperatingFraction()" [(ngModel)]="showOperatingFraction"/>
+										Modify Operating Fraction
+									</label>
+          </div>
+          <form *ngIf="showOperatingFraction">
+            <div class="form-group">
+              <label for="baselineOperatingFraction">Baseline operating fractiong</label>
+              <input name="baselineOperatingFraction" type="number" step="any" id="baselineOperatingFraction" class="form-control" (focus)="focusField('operatingFraction')"
+                (input)="calculate()" [(ngModel)]="psat.inputs.operating_fraction" [ngClass]="{'invalid': checkOpFraction(1) == false}"
+              />
+              <span class="alert-danger pull-right small" *ngIf="opFractionError1 !== null">{{opFractionError1}}</span>
+            </div>
+            <div class="form-group">
+              <label for="modificationOperatingFraction">Modification operating fraction</label>
+              <input name="modificationOperatingFraction" type="number" step="any" id="modificationOperatingFraction" class="form-control"
+                (focus)="focusField('operatingFraction')" (input)="calculate()" [(ngModel)]="psat.modifications[exploreModIndex].psat.inputs.operating_fraction"
+                [ngClass]="{'invalid': checkOpFraction(2) == false}" />
+                <span class="alert-danger pull-right small" *ngIf="opFractionError2 !== null">{{opFractionError2}}</span>
+            </div>
+          </form>
+        </li>
       </ul>
     </li>
     <li>
@@ -186,35 +209,6 @@
 							</label>
       </div>
       <ul *ngIf="showPumpData">
-        <!--<li>
-          <div class="checkbox">
-            <label for="modifyPumpSpeed"><input type="checkbox" id="modifyPumpSpeed" value="true" (focus)="focusField('pumpSpeed')" (change)="togglePumpSpeed()" [(ngModel)]="showPumpSpeed"/>
-										Modify Pump Speed
-									</label>
-          </div>
-          <form *ngIf="showPumpSpeed">
-            <div class="form-group">
-              <label for="baselinePumpSpeed">Baseline Pump Speed</label>
-              <div class="input-group">
-                <input name="baselinePumpSpeed" type="number" step="any" id="baselinePumpSpeed" class="form-control" (input)="calculate()"
-                  (focus)="focusField('pumpSpeed')" [(ngModel)]="psat.inputs.pump_rated_speed" [ngClass]="{'invalid': checkPumpRpm(1) == false}"
-                />
-                <span class="input-group-addon units">rpm</span>
-              </div>
-              <span class="alert-danger pull-right small" *ngIf="rpmError1 !== null">{{rpmError1}}</span>
-            </div>
-            <div class="form-group">
-              <label for="modificationPumpSpeed">Modification Pump Speed</label>
-              <div class="input-group">
-                <input name="modificationPumpSpeed" type="number" step="any" id="modificationPumpSpeed" class="form-control" (input)="calculate()"
-                  (focus)="focusField('pumpSpeed')" [(ngModel)]="psat.modifications[exploreModIndex].psat.inputs.pump_rated_speed"
-                  [ngClass]="{'invalid': checkPumpRpm(2) == false}" />
-                <span class="input-group-addon units">rpm</span>
-              </div>
-              <span class="alert-danger pull-right small" *ngIf="rpmError2 !== null">{{rpmError2}}</span>
-            </div>
-          </form>
-        </li>-->
         <li>
           <div class="checkbox">
             <label for="modifyPumpType"><input type="checkbox" id="modifyPumpType" value="true" (focus)="focusField('pumpType')" (change)="togglePumpType()" [(ngModel)]="showPumpType"/>
@@ -246,8 +240,9 @@
             <div class="form-group">
               <label for="baselinePumpSpecified">Baseline Pump Specified Efficiency</label>
               <div class="input-group">
-                <input name="baselinePumpSpecified" [disabled]="tmpBaselinePumpType != 'Specified Optimal Efficiency'" type="number" step="any" id="baselinePumpSpecified" class="form-control" (focus)="focusField('pumpSpecified')"
-                  (input)="calculate()" [(ngModel)]="psat.inputs.pump_specified" [ngClass]="{'invalid': checkEfficiency(psat.inputs.pump_specified, 3) == false}"
+                <input name="baselinePumpSpecified" [disabled]="tmpBaselinePumpType != 'Specified Optimal Efficiency'" type="number" step="any"
+                  id="baselinePumpSpecified" class="form-control" (focus)="focusField('pumpSpecified')" (input)="calculate()"
+                  [(ngModel)]="psat.inputs.pump_specified" [ngClass]="{'invalid': checkEfficiency(psat.inputs.pump_specified, 3) == false}"
                 />
                 <span class="input-group-addon units">%</span>
               </div>
@@ -256,8 +251,9 @@
             <div class="form-group">
               <label for="modificationPumpSpecified">Modification Pump Specified Efficiency</label>
               <div class="input-group">
-                <input name="modificationPumpSpecified" [disabled]="tmpModificationPumpType != 'Specified Optimal Efficiency'" type="number" step="any" id="modificationPumpSpecified" class="form-control" (focus)="focusField('pumpSpecified')"
-                  (input)="calculate()" [(ngModel)]="psat.modifications[exploreModIndex].psat.inputs.pump_specified" [ngClass]="{'invalid': checkEfficiency(psat.modifications[exploreModIndex].psat.inputs.pump_specified, 4) == false}"
+                <input name="modificationPumpSpecified" [disabled]="tmpModificationPumpType != 'Specified Optimal Efficiency'" type="number"
+                  step="any" id="modificationPumpSpecified" class="form-control" (focus)="focusField('pumpSpecified')" (input)="calculate()"
+                  [(ngModel)]="psat.modifications[exploreModIndex].psat.inputs.pump_specified" [ngClass]="{'invalid': checkEfficiency(psat.modifications[exploreModIndex].psat.inputs.pump_specified, 4) == false}"
                 />
                 <span class="input-group-addon units">%</span>
               </div>
