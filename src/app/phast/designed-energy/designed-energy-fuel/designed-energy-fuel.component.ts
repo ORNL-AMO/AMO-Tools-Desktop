@@ -4,7 +4,7 @@ import { DesignedEnergyFuel, DesignedEnergyResults } from '../../../shared/model
 @Component({
   selector: 'app-designed-energy-fuel',
   templateUrl: './designed-energy-fuel.component.html',
-  styleUrls: ['./designed-energy-fuel.component.css','../../../psat/explore-opportunities/explore-opportunities.component.css']
+  styleUrls: ['./designed-energy-fuel.component.css', '../../aux-equipment/aux-equipment.component.css', '../../../psat/explore-opportunities/explore-opportunities.component.css']
 })
 export class DesignedEnergyFuelComponent implements OnInit {
   tabSelect: string = 'results';

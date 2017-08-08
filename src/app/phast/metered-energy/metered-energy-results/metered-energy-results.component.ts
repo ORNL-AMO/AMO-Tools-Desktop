@@ -12,6 +12,7 @@ export class MeteredEnergyResultsComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
+    console.log(this.results);
   }
 
 }

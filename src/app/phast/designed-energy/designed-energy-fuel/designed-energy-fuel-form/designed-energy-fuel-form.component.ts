@@ -4,7 +4,7 @@ import { DesignedEnergyFuel } from '../../../../shared/models/phast/designedEner
 @Component({
   selector: 'app-designed-energy-fuel-form',
   templateUrl: './designed-energy-fuel-form.component.html',
-  styleUrls: ['./designed-energy-fuel-form.component.css','../../../../psat/explore-opportunities/explore-opportunities-form/explore-opportunities-form.component.css']
+  styleUrls: ['./designed-energy-fuel-form.component.css']
 })
 export class DesignedEnergyFuelFormComponent implements OnInit {
   @Input()

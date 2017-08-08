@@ -6,7 +6,7 @@ import { Settings } from '../../../shared/models/settings';
 @Component({
   selector: 'app-metered-electricity',
   templateUrl: './metered-electricity.component.html',
-  styleUrls: ['./metered-electricity.component.css', '../../aux-equipment/aux-equipment.component.css']
+  styleUrls: ['./metered-electricity.component.css','../../aux-equipment/aux-equipment.component.css', '../../../psat/explore-opportunities/explore-opportunities.component.css']
 })
 export class MeteredElectricityComponent implements OnInit {
   @Input()
@@ -34,6 +34,7 @@ export class MeteredElectricityComponent implements OnInit {
   constructor(private phastService: PhastService) { }
 
   ngOnInit() {
+    this.calculate();
   }
 
   setTab(str: string) {

@@ -4,7 +4,7 @@ import { DesignedEnergyElectricity } from '../../../../shared/models/phast/desig
 @Component({
   selector: 'app-designed-energy-electricity-form',
   templateUrl: './designed-energy-electricity-form.component.html',
-  styleUrls: ['./designed-energy-electricity-form.component.css','../../../../psat/explore-opportunities/explore-opportunities-form/explore-opportunities-form.component.css']
+  styleUrls: ['./designed-energy-electricity-form.component.css']
 })
 export class DesignedEnergyElectricityFormComponent implements OnInit {
   @Input()

@@ -4,7 +4,7 @@ import { DesignedEnergySteam, DesignedEnergyResults } from '../../../shared/mode
 @Component({
   selector: 'app-designed-energy-steam',
   templateUrl: './designed-energy-steam.component.html',
-  styleUrls: ['./designed-energy-steam.component.css', '../../../psat/explore-opportunities/explore-opportunities.component.css']
+  styleUrls: ['./designed-energy-steam.component.css', '../../aux-equipment/aux-equipment.component.css', '../../../psat/explore-opportunities/explore-opportunities.component.css']
 })
 export class DesignedEnergySteamComponent implements OnInit {
   tabSelect: string = 'results';

@@ -5,7 +5,7 @@ import { DesignedEnergySteam } from '../../../../shared/models/phast/designedEne
 @Component({
   selector: 'app-designed-energy-steam-form',
   templateUrl: './designed-energy-steam-form.component.html',
-  styleUrls: ['./designed-energy-steam-form.component.css','../../../../psat/explore-opportunities/explore-opportunities-form/explore-opportunities-form.component.css']
+  styleUrls: ['./designed-energy-steam-form.component.css']
 })
 export class DesignedEnergySteamFormComponent implements OnInit {
   @Input()

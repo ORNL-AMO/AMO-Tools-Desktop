@@ -3,7 +3,7 @@ import { AuxEquipment } from '../../../shared/models/phast/auxEquipment';
 @Component({
   selector: 'app-aux-equipment-form',
   templateUrl: './aux-equipment-form.component.html',
-  styleUrls: ['./aux-equipment-form.component.css', '../../../psat/explore-opportunities/explore-opportunities-form/explore-opportunities-form.component.css']
+  styleUrls: ['./aux-equipment-form.component.css']
 })
 export class AuxEquipmentFormComponent implements OnInit {
   @Input()
