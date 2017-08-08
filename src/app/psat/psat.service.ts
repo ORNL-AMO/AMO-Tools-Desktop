@@ -19,7 +19,7 @@ export class PsatService {
   constructor(private formBuilder: FormBuilder, private convertUnitsService: ConvertUnitsService, private validationService: ValidationService) {
     this.mainTab = new BehaviorSubject<string>('system-setup');
     this.secondaryTab = new BehaviorSubject<string>('explore-opportunities');
-}
+  }
 
   test() {
     console.log(psatAddon);
@@ -35,6 +35,9 @@ export class PsatService {
     }
     if (settings.flowMeasurement != 'gpm') {
       psatInputs.flow_rate = this.convertUnitsService.value(psatInputs.flow_rate).from(settings.flowMeasurement).to('gpm');
+    }
+    if (settings.powerMeasurement != 'hp') {
+      psatInputs.motor_rated_power = this.convertUnitsService.value(psatInputs.motor_rated_power).from(settings.powerMeasurement).to('hp');
     }
     return psatInputs;
   }
@@ -63,8 +66,7 @@ export class PsatService {
   resultsOptimal(psatInputs: PsatInputs, settings: Settings): PsatOutputs {
     psatInputs = this.convertInputs(psatInputs, settings);
     //call addon resultsOptimal
-    let tmpResults: PsatOutputs = psatAddon.resultsOptimal(psatInputs);
-    if (settings.powerMeasurement != 'hp') {
+    let tmpResults: PsatOutputs = psatAddon.resultsOptimal(psatInputs);    if (settings.powerMeasurement != 'hp') {
       tmpResults = this.convertOutputs(tmpResults, settings);
     }
     tmpResults = this.roundResults(tmpResults);

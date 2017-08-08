@@ -18,6 +18,10 @@ Run `ng generate component component-name` to generate a new component. You can 
 
 Run `ng github-pages:deploy` to deploy to GitHub Pages.
 
+## Database Information
+
+The `db` folder contains the SQLite database file, used for storing and selecting materials. Upon app update, backups with the current date and time in the filename will be made and stored here. 
+
 ## Further help
 
 To get more help on the `angular-cli` use `ng help` or go check out the [Angular-CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
@@ -49,7 +53,7 @@ latest.yml will be in ../output
   * electron-builder v13.9.0+  
   * electron-packager v8.5.2  
 
-Run `npm run linux` to build a tar.gz, .deb, and .rpm in x64 
+Run `npm run linux` to build a tar.gz, .deb, and .rpm in x64
 Packages will be in ../output  
 
 *Cannot build cross platform on Linux due to building the amo-tools-suite node module. To build for ia32 on 32bit Linux, run `./node_modules/.bin/build -l --ia32`
@@ -61,7 +65,7 @@ Packages will be in ../output
   * electron-builder v13.9.0+  
   * electron-packager v8.5.2  
   * An Apple Developer account and correct code signing certificate  
-  
+
 Run `npm run mac` to build a .zip and .dmg in x64 and ia32.  
 Packages will be in ../output/mac  
 latest-mac.json will be in ../output/github  
@@ -77,7 +81,7 @@ latest-mac.json will be in ../output/github
   * electron-log v1.3.0  
   * electron-builder v13.9.0+  
   * electron-packager v8.5.2  
-  
+
 Build the application as directed above. electron-builder will create the installer/executable AND a file named latest.yml or latest-mac.json (when building Mac packages).
 
 Go to the AMO-Tools-Desktop releases page in GitHub.  

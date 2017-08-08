@@ -8,10 +8,12 @@
 			<div class="help-panel">
 				<div class="row">
 					<ul class="tabs primary tab-row">
-						<li class="calc-tab tab-item" [ngClass]="{'active': tabSelect == 'results'}">
+						<li class="tab-item-3" [ngClass]="{'active': tabSelect == 'results'}">
 							<a (click)="setTab('results')">Results</a>
 						</li><!--
-						--><li class="calc-tab tab-item" [ngClass]="{'active': tabSelect == 'help'}">
+						--><li class="tab-item-3" [ngClass]="{'active': tabSelect == 'sankey'}">
+            <a (click)="setTab('sankey')">Sankey</a><!--
+						--><li class="tab-item-3" [ngClass]="{'active': tabSelect == 'help'}">
 							<a (click)="setTab('help')">Help</a>
 						</li>
 					</ul>
@@ -21,6 +23,38 @@
 						<app-explore-opportunities-help [currentField]="currentField" [settings]="settings" [psat]="psat"></app-explore-opportunities-help>
 					</div>
 				</div>
+<<<<<<< HEAD
+=======
+        <div class="row justify-content-center data-row align-items-center" *ngIf="tabSelect == 'sankey'">
+          <div class="col-11">
+            <app-explore-opportunities-sankey [baselineResults]="baselineResults" [modificationResults]="modificationResults" [settings]="settings"></app-explore-opportunities-sankey>
+          </div>
+        </div>
+				<!--<div class="row justify-content-center data-row" *ngIf="tabSelect == 'results'">
+					<div class="col-3 chart-summary">
+						<dl class="chart-item">
+							<dd>
+								<app-percent-graph [value]="baselineOptimizationRating" [titlePlacement]="titlePlacement" [valueDescription]="'Optimization Rating'"
+								 [title]="'Baseline'" [unit]="unit"></app-percent-graph>
+							</dd>
+							<dt class="text-center op-rating">Optimization Rating</dt>
+							<dd class="savings text-center">$ &mdash; &mdash; &mdash;</dd>
+							<dt class="text-muted text-center">Annual Savings</dt>
+						</dl>
+					</div>
+					<div class="col-3 offset-md-1 chart-summary">
+						<dl class="chart-item">
+							<dd>
+								<app-percent-graph [value]="percentSavings" [titlePlacement]="titlePlacement" [valueDescription]="'Percent Savings'"
+								 [title]="title" [unit]="unit"></app-percent-graph>
+							</dd>
+							<dt class="text-center op-rating">Percent Savings</dt>
+							<dd class="savings text-center" [ngClass]="{'positive-savings': annualSavings > 0, 'negative-savings': annualSavings < 0}">{{annualSavings | currency:'USD':true:'4.0-0'}}</dd>
+							<dt class="text-muted text-center">Annual Savings</dt>
+						</dl>
+					</div>
+				</div>-->
+>>>>>>> develop
 				<div class="row justify-content-center data-row" *ngIf="tabSelect == 'results'">
 					<div class="col-8 data-table">
 						<app-explore-opportunities-results [percentSavings]="percentSavings" [psat]="psat" [exploreModIndex]="exploreModIndex" [baselineResults]="baselineResults"

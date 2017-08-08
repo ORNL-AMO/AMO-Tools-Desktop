@@ -42,11 +42,12 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
   maxPoint: any;
 
   firstChange: boolean = true;
+  isGridToggled: boolean;
 
   results: any = {
     max: 0,
     average: 0
-  }
+  };
 
   canvasWidth: number;
   canvasHeight: number;
@@ -59,10 +60,12 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
   constructor(private psatService: PsatService, private convertUnitsService: ConvertUnitsService, private windowRefService: WindowRefService) { }
 
   ngOnInit() {
-    // this.setUp();
-    // if (this.checkForm()) {
-    //   this.onChanges();
-    // }
+    this.isGridToggled = false;
+
+    d3.select('app-achievable-efficiency').selectAll('#gridToggleBtn')
+      .on("click", () => {
+        this.toggleGrid();
+      });
   }
 
 
@@ -70,8 +73,7 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
     if (!this.firstChange) {
       if (changes.toggleCalculate) {
         if (this.checkForm()) {
-          this.setUp();
-          this.onChanges();
+          this.makeGraph();
         }
       }
     } else {
@@ -105,8 +107,10 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
     }
     this.width = this.canvasWidth - this.margin.left - this.margin.right;
     this.height = this.canvasHeight - this.margin.top - this.margin.bottom;
-    this.setUp();
-    this.onChanges();
+
+    d3.select("app-achievable-efficiency").select("#gridToggle").style("top", (this.height + 100) + "px");
+
+    this.makeGraph();
   }
 
 
@@ -145,17 +149,11 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
     }
   }
 
-  setUp() {
+  makeGraph() {
 
     //Remove  all previous graphs
     d3.select('app-achievable-efficiency-graph').selectAll('svg').remove();
-    d3.select("#detailBox").remove();
     var curvePoints = [];
-
-    //graph dimensions
-    // this.margin = { top: 20, right: 120, bottom: 110, left: 120 };
-    // this.width = 900 - this.margin.left - this.margin.right;
-    // this.height = 600 - this.margin.top - this.margin.bottom;
 
     this.avgData = this.getAvgData();
     this.maxData = this.getMaxData();
@@ -163,27 +161,6 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
     let tmpMin: any = _.minBy(_.union(this.avgData, this.maxData), (val: { x: number, y: number }) => { return val.y; });
     let max = tmpMax.y;
     let min = tmpMin.y;
-    this.x = d3.scaleLinear()
-      .range([0, this.width])
-      .domain([100, 5000]);
-
-    this.y = d3.scaleLinear()
-      .range([this.height, 0])
-      .domain([(min - 10), (max + 10)]);
-
-    this.xAxis = d3.axisBottom()
-      .scale(this.x)
-      .tickSizeInner(0)
-      .tickSizeOuter(0)
-      .tickPadding(0)
-      .ticks(16);
-
-    this.yAxis = d3.axisLeft()
-      .scale(this.y)
-      .tickSizeInner(0)
-      .tickSizeOuter(0)
-      .tickPadding(15)
-      .ticks(11);
 
     this.svg = d3.select('app-achievable-efficiency-graph').append('svg')
       .attr("width", this.width + this.margin.left + this.margin.right)
@@ -234,14 +211,54 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
       .style("fill", "#F8F9F9")
       .style("filter", "url(#drop-shadow)");
 
-    this.svg.append("path")
-      .attr("id", "areaUnderCurve");
+    this.x = d3.scaleLinear()
+      .range([0, this.width])
+      .domain([0, 5000]);
+
+    this.y = d3.scaleLinear()
+      .range([this.height, 0])
+      .domain([(min - 10), (max + 10)]);
+
+    if(this.isGridToggled) {
+      this.xAxis = d3.axisBottom()
+        .scale(this.x)
+        .tickSizeInner(0)
+        .tickSizeOuter(0)
+        .tickPadding(0)
+        .tickSize(-this.height)
+        .ticks(16);
+
+      this.yAxis = d3.axisLeft()
+        .scale(this.y)
+        .tickSizeInner(0)
+        .tickSizeOuter(0)
+        .tickPadding(15)
+        .tickSize(-this.width)
+        .ticks(11);
+    }
+    else{
+      this.xAxis = d3.axisBottom()
+        .scale(this.x)
+        .tickSizeInner(0)
+        .tickSizeOuter(0)
+        .tickPadding(0)
+        .tickSize(0)
+        .ticks(16);
+
+      this.yAxis = d3.axisLeft()
+        .scale(this.y)
+        .tickSizeInner(0)
+        .tickSizeOuter(0)
+        .tickPadding(15)
+        .tickSize(0)
+        .ticks(11);
+    }
 
     this.xAxis = this.svg.append('g')
       .attr("class", "x axis")
       .attr("transform", "translate(0," + this.height + ")")
       .call(this.xAxis)
-      .style("stroke-width", "0")
+      .style("stroke-width", ".5px")
       .selectAll('text')
       .style("text-anchor", "end")
       .style("font-size", this.fontSize)
@@ -251,7 +268,7 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
     this.yAxis = this.svg.append('g')
       .attr("class", "y axis")
       .call(this.yAxis)
-      .style("stroke-width", "0")
+      .style("stroke-width", ".5px")
       .selectAll('text')
       .style("font-size", this.fontSize);
 
@@ -373,12 +390,6 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
       .attr("x", 9)
       .attr("dy", ".35em");
 
-    this.svg.style("display", "none");
-
-  }
-
-  onChanges() {
-    this.svg.style("display", null);
     this.drawMaxLine();
     this.drawAverageLine();
     this.updateValues();
@@ -513,12 +524,12 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
           .style("opacity",0);
       });
 
-
+    this.svg.selectAll("line").style("pointer-events", "none");
   }
 
   getAvgData() {
     let data = new Array();
-    for (var i = 100; i < 5000; i = i + 10) {
+    for (var i = 0; i < 5000; i = i + 10) {
       if (this.calculateYaverage(i) <= 100) {
         data.push({
           x: i,
@@ -532,7 +543,7 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
 
   getMaxData() {
     let data = new Array();
-    for (var i = 100; i < 5000; i = i + 10) {
+    for (var i = 0; i < 5000; i = i + 10) {
       if (this.calculateYmax(i) <= 100) {
         data.push({
           x: i,
@@ -592,19 +603,6 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
       .style("font-weight", "bold")
       .style("fill", "#3498DB");
 
-    // this.svg.append("text")
-    //   .attr("x", 20)
-    //   .attr("y", "80")
-    //   .text("Pump Type: " + this.efficiencyForm.value.pumpType)
-    //   .style("font-size", this.fontSize)
-    //   .style("font-weight", "bold")
-    //   .style("fill", "#000000");
-
-    // this.maxValue
-    //   .text(format(this.calculateYmax(this.efficiencyForm.value.flowRate)) + ' %');
-
-    // this.averageValue
-    //   .text(format(this.calculateYaverage(this.efficiencyForm.value.flowRate)) + ' %');
   }
 
   drawPoints() {
@@ -636,5 +634,17 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
         }
       });
   }
+
+  toggleGrid(){
+    if(this.isGridToggled){
+      this.isGridToggled = false;
+      this.makeGraph();
+    }
+    else{
+      this.isGridToggled = true;
+      this.makeGraph();
+    }
+  }
+
 
 }
