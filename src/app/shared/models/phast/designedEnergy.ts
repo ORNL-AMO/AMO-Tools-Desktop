@@ -1,19 +1,26 @@
+export interface DesignedEnergy {
+    designedEnergyFuel?: DesignedEnergyFuel[]
+    designedEnergySteam?: DesignedEnergySteam[]
+    designedEnergyElectricity?: DesignedEnergyElectricity[]
+}
+
+
 export interface DesignedEnergyFuel {
-    zoneNumber: number,
+    name: string,
     fuelType: number,
     percentCapacityUsed: number,
     totalBurnerCapacity: number,
     percentOperatingHours: number
 }
 export interface DesignedEnergySteam {
-    zoneNumber: number,
+    name: string,
     totalHeat: number,
     steamFlow: number,
     percentCapacityUsed: number,
     percentOperatingHours: number
 }
 export interface DesignedEnergyElectricity {
-    zoneNumber: number,
+    name: string,
     kwRating: number,
     percentCapacityUsed: number,
     percentOperatingHours: number

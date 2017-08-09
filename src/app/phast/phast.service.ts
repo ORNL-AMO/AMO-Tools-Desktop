@@ -176,7 +176,6 @@ export class PhastService {
     if (losses.wallLosses) {
       grossHeatRequired += this.sumWallLosses(losses.wallLosses);
     }
-    console.log(grossHeatRequired);
     return grossHeatRequired;
   }
 

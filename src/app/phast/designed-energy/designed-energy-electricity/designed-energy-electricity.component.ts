@@ -1,34 +1,35 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { DesignedEnergyElectricity, DesignedEnergyResults } from '../../../shared/models/phast/designedEnergy';
+import { PHAST } from '../../../shared/models/phast/phast';
+import { Settings } from '../../../shared/models/settings';
+import { DesignedEnergyService } from '../designed-energy.service';
 
 @Component({
   selector: 'app-designed-energy-electricity',
   templateUrl: './designed-energy-electricity.component.html',
-  styleUrls: ['./designed-energy-electricity.component.css', '../../../psat/explore-opportunities/explore-opportunities.component.css','../../aux-equipment/aux-equipment.component.css']
+  styleUrls: ['./designed-energy-electricity.component.css', '../../../psat/explore-opportunities/explore-opportunities.component.css', '../../aux-equipment/aux-equipment.component.css']
 })
 export class DesignedEnergyElectricityComponent implements OnInit {
+  @Input()
+  settings: Settings;
+  @Input()
+  phast: PHAST;
+  @Output('emitSave')
+  emitSave = new EventEmitter<boolean>();
 
   tabSelect: string = 'results';
-  inputs: DesignedEnergyElectricity = {
-    zoneNumber: 0,
-    kwRating: 0,
-    percentCapacityUsed: 0,
-    percentOperatingHours: 0
-  };
-  results: DesignedEnergyResults = {
-    designedEnergyUsed: 0,
-    designedEnergyIntensity: 0,
-    designedElectricityUsed: 0,
-    calculatedFuelEnergyUsed: 0,
-    calculatedEnergyIntensity: 0,
-    calculatedElectricityUsed: 0
-  };
+  results: DesignedEnergyResults;
 
   currentField: string = 'fuelType';
 
-  constructor() { }
+  constructor(private designedEnergyService: DesignedEnergyService) { }
 
   ngOnInit() {
+    if(this.phast.designedEnergy.designedEnergyElectricity.length == 0){
+      this.addZone();
+    }else{
+      this.calculate();
+    }
   }
 
   setTab(str: string) {
@@ -36,15 +37,33 @@ export class DesignedEnergyElectricityComponent implements OnInit {
   }
 
   save() {
-    console.log('save');
+    this.emitSave.emit(true);
   }
 
   calculate() {
-   // this.results.designedEnergyUsed = this.inputs.totalHeatSteam * this.inputs.flowRate;
+    this.results = this.designedEnergyService.designedEnergyElectricity(this.phast.designedEnergy.designedEnergyElectricity, this.phast);
   }
 
   setField(str: string) {
     this.currentField = str;
   }
+  addZone() {
+    let eqNum = 1;
+    if (this.phast.designedEnergy.designedEnergyElectricity) {
+      eqNum = this.phast.designedEnergy.designedEnergyElectricity.length + 1;
+    }
+    let tmpZone: DesignedEnergyElectricity = {
+      name: 'Zone #'+eqNum,          
+      kwRating: 0,
+      percentCapacityUsed: 0,
+      percentOperatingHours: 0
+    }
+    this.phast.designedEnergy.designedEnergyElectricity.push(tmpZone);
+    this.calculate();
+  }
 
+  removeZone(index: number) {
+    this.phast.designedEnergy.designedEnergyElectricity.splice(index, 1);
+    this.calculate();
+  }
 }

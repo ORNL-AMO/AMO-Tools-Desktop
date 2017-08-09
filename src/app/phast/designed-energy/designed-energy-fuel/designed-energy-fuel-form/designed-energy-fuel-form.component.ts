@@ -43,7 +43,7 @@ export class DesignedEnergyFuelFormComponent implements OnInit {
   }
 
   calculate() {
-    // this.startSavePolling();
+    this.startSavePolling();
     this.emitCalculate.emit(true);
   }
 
