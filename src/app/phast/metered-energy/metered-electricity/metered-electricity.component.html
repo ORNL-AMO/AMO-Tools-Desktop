@@ -1,4 +1,3 @@
-
 <div class="modify-conditions">
   <div class="modification aux-form-panel">
     <div class="header aux-header">
@@ -8,7 +7,8 @@
       <div class="card-form">
         <div class="row">
           <div class="col-12">
-         <app-metered-electricity-form [inputs]="inputs" (emitCalculate)="calculate()" (emitSave)="save()" (changeField)="setField($event)"></app-metered-electricity-form>
+            <app-metered-electricity-form [inputs]="phast.meteredEnergy.meteredEnergyElectricity" (emitCalculate)="calculate()" (emitSave)="save()"
+              (changeField)="setField($event)"></app-metered-electricity-form>
           </div>
         </div>
       </div>
@@ -28,12 +28,12 @@
       </div>
       <div class="row justify-content-center data-row align-items-center" *ngIf="tabSelect == 'help'">
         <div class="col-11">
-            <app-metered-electricity-help [currentField]="currentField"></app-metered-electricity-help>
+          <app-metered-electricity-help [currentField]="currentField"></app-metered-electricity-help>
         </div>
       </div>
       <div class="row justify-content-center data-row" *ngIf="tabSelect == 'results'">
         <div class="col-10 data-table">
-                   <app-metered-energy-results [results]="results"></app-metered-energy-results>
+          <app-metered-energy-results [results]="results" [settings]="settings"></app-metered-energy-results>
         </div>
       </div>
     </div>

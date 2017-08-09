@@ -1,3 +1,10 @@
+export interface MeteredEnergy {
+    meteredEnergyFuel?: MeteredEnergyFuel,
+    meteredEnergyElectricity?: MeteredEnergyElectricity,
+    meteredEnergySteam?: MeteredEnergySteam
+}
+
+
 export interface MeteredEnergyFuel {
     fuelType: number,
     heatingValue: number,

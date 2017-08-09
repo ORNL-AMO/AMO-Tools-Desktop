@@ -13,6 +13,7 @@ import { AuxiliaryPowerLoss } from './losses/auxiliaryPowerLoss';
 import { EnergyInput } from './losses/energyInput';
 import { ExhaustGas } from './losses/exhaustGas';
 import { AuxEquipment } from './auxEquipment';
+import { MeteredEnergy } from './meteredEnergy';
 
 export interface PHAST {
   name?: string,
@@ -20,7 +21,8 @@ export interface PHAST {
   losses?: Losses
   modifications?: Modification[],
   setupDone?: boolean,
-  auxEquipment?: AuxEquipment[]
+  auxEquipment?: AuxEquipment[],
+  meteredEnergy?: MeteredEnergy
 }
 
 export interface PhastInputs {

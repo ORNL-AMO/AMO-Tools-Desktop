@@ -1,8 +1,9 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { MeteredEnergyFuel, MeteredEnergyResults } from '../../../shared/models/phast/meteredEnergy';
 import { PHAST } from '../../../shared/models/phast/phast';
 import { PhastService } from '../../phast.service';
-
+import { MeteredEnergyService } from '../metered-energy.service';
+import { Settings } from '../../../shared/models/settings';
 
 @Component({
   selector: 'app-metered-fuel',
@@ -12,15 +13,12 @@ import { PhastService } from '../../phast.service';
 export class MeteredFuelComponent implements OnInit {
   @Input()
   phast: PHAST;
+  @Output('emitSave')
+  emitSave = new EventEmitter<boolean>();
+  @Input()
+  settings: Settings;
+
   tabSelect: string = 'results';
-  inputs: MeteredEnergyFuel = {
-    fuelType: 0,
-    heatingValue: 0,
-    collectionTime: 0,
-    electricityUsed: 0,
-    electricityCollectionTime: 0,
-    flowRate: 0
-  };
   results: MeteredEnergyResults = {
     meteredEnergyUsed: 0,
     meteredEnergyIntensity: 0,
@@ -32,9 +30,19 @@ export class MeteredFuelComponent implements OnInit {
 
   currentField: string = 'fuelType';
 
-  constructor(private phastService: PhastService) { }
+  constructor(private phastService: PhastService, private meteredEnergyService: MeteredEnergyService) { }
 
   ngOnInit() {
+    if (!this.phast.meteredEnergy.meteredEnergyFuel) {
+      this.phast.meteredEnergy.meteredEnergyFuel = {
+        fuelType: 0,
+        heatingValue: 0,
+        collectionTime: 0,
+        electricityUsed: 0,
+        electricityCollectionTime: 0,
+        flowRate: 0
+      };
+    }
     this.calculate();
   }
 
@@ -43,27 +51,12 @@ export class MeteredFuelComponent implements OnInit {
   }
 
   save() {
-    console.log('save');
+    this.emitSave.emit(true);
   }
 
   calculate() {
-    //Metered Energy Use
-    //Metered Fuel Used = HHV * Flow Rate
-    this.results.meteredEnergyUsed = this.inputs.heatingValue * this.inputs.flowRate;
-    //Energy Intensity for Charge Materials =  Metered Energy Used / Sum(charge material feed rates)
-    let sumFeedRate = this.phastService.sumChargeMaterialFeedRate(this.phast.losses.chargeMaterials);
-    this.results.meteredEnergyIntensity = this.results.meteredEnergyUsed / sumFeedRate;
-    //Electricity Used (Auxiliary) = Electricity used during collection / collection time
-    this.results.meteredElectricityUsed = this.inputs.electricityUsed / this.inputs.electricityCollectionTime;
-    
-    //Calculated By PHAST
-    //Fuel energy used
-    this.results.calculatedFuelEnergyUsed = this.phastService.sumHeatInput(this.phast.losses);
-    //energy intensity = fuel energy used / sum(charge material feed rate)
-    this.results.calculatedEnergyIntensity = this.results.calculatedFuelEnergyUsed / sumFeedRate;
-    //TODO aux equipment results
-}
-
+    this.results = this.meteredEnergyService.meteredFuel(this.phast.meteredEnergy.meteredEnergyFuel, this.phast);
+  }
 
   setField(str: string) {
     this.currentField = str;

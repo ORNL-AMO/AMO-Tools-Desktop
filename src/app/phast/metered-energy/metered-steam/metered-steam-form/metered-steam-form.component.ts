@@ -5,7 +5,7 @@ import { MeteredEnergySteam } from '../../../../shared/models/phast/meteredEnerg
 @Component({
   selector: 'app-metered-steam-form',
   templateUrl: './metered-steam-form.component.html',
-  styleUrls: ['./metered-steam-form.component.css','../../../../psat/explore-opportunities/explore-opportunities-form/explore-opportunities-form.component.css']
+  styleUrls: ['./metered-steam-form.component.css', '../../../../psat/explore-opportunities/explore-opportunities-form/explore-opportunities-form.component.css']
 })
 export class MeteredSteamFormComponent implements OnInit {
   @Input()
@@ -29,7 +29,7 @@ export class MeteredSteamFormComponent implements OnInit {
   }
 
   calculate() {
-   // this.startSavePolling();
+    this.startSavePolling();
     this.emitCalculate.emit(true);
   }
 

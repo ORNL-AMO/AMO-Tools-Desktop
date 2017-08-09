@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Settings } from '../../shared/models/settings';
 import { PHAST } from '../../shared/models/phast/phast';
 import { PhastService } from '../phast.service';
@@ -12,14 +12,23 @@ export class MeteredEnergyComponent implements OnInit {
   settings: Settings;
   @Input()
   phast: PHAST;
-
-  // energyType: string = 'steam';
+  @Output('save')
+  save = new EventEmitter<boolean>();
 
   constructor(private phastService: PhastService) { }
 
   ngOnInit() {
-    console.log(this.phast);
-    this.phastService.sumHeatInput(this.phast.losses);
+    if(!this.phast.meteredEnergy){
+      this.phast.meteredEnergy = {
+        meteredEnergyElectricity: null,
+        meteredEnergyFuel: null,
+        meteredEnergySteam: null
+      }
+    }
+  }
+
+  emitSave(){
+    this.save.emit(true);
   }
 
 }

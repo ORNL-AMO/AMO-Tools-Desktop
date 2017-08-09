@@ -1,3 +1,3 @@
-<app-metered-steam *ngIf="settings.energySourceType == 'Steam'" [phast]="phast"></app-metered-steam>
-<app-metered-fuel *ngIf="settings.energySourceType == 'Fuel'" [phast]="phast"></app-metered-fuel>
-<app-metered-electricity *ngIf="settings.energySourceType == 'Electricity'" [phast]="phast"></app-metered-electricity>
+<app-metered-steam *ngIf="settings.energySourceType == 'Steam'" [phast]="phast" [settings]="settings" (emitSave)="emitSave()"></app-metered-steam>
+<app-metered-fuel *ngIf="settings.energySourceType == 'Fuel'" [phast]="phast" [settings]="settings" (emitSave)="emitSave()"></app-metered-fuel>
+<app-metered-electricity *ngIf="settings.energySourceType == 'Electricity'" [phast]="phast" [settings]="settings" (emitSave)="emitSave()"></app-metered-electricity>
