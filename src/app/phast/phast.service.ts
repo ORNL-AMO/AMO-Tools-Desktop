@@ -330,15 +330,17 @@ export class PhastService {
 
   sumChargeMaterialFeedRate(materials: ChargeMaterial[]): number {
     let sum = 0;
-    materials.forEach(material => {
-      if (material.chargeMaterialType == 'Gas') {
-        sum += material.gasChargeMaterial.feedRate;
-      } else if (material.chargeMaterialType == 'Solid') {
-        sum += material.solidChargeMaterial.chargeFeedRate;
-      } else if (material.chargeMaterialType == 'Liquid') {
-        sum += material.liquidChargeMaterial.chargeFeedRate;
-      }
-    })
+    if (materials) {
+      materials.forEach(material => {
+        if (material.chargeMaterialType == 'Gas') {
+          sum += material.gasChargeMaterial.feedRate;
+        } else if (material.chargeMaterialType == 'Solid') {
+          sum += material.solidChargeMaterial.chargeFeedRate;
+        } else if (material.chargeMaterialType == 'Liquid') {
+          sum += material.liquidChargeMaterial.chargeFeedRate;
+        }
+      })
+    }
     return sum;
   }
 
