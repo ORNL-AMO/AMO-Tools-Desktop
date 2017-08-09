@@ -10,13 +10,15 @@ export class AuxEquipmentService {
 
   calculate(phast: PHAST) {
     let results = new Array<any>();
-    phast.auxEquipment.forEach(equipment => {
-      results.push({
-        name: equipment.name,
-        totalPower: this.calcTotalPower(equipment),
-        motorPower: equipment.motorPower
+    if (phast.auxEquipment) {
+      phast.auxEquipment.forEach(equipment => {
+        results.push({
+          name: equipment.name,
+          totalPower: this.calcTotalPower(equipment),
+          motorPower: equipment.motorPower
+        })
       })
-    })
+    }
     return results;
   }
 
@@ -35,7 +37,7 @@ export class AuxEquipmentService {
     })
     return sum;
   }
-  
+
   calcTotalPower(equipment: AuxEquipment): number {
     let tmpPower = 0;
     if (equipment.motorPower == 'Calculated') {
