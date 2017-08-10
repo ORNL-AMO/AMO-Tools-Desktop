@@ -707,15 +707,14 @@ export class ExploreOpportunitiesSankeyComponent implements OnInit {
   }
 
   calcLosses(results){
-    console.log(results);
 
     var motorShaftPower;
     var pumpShaftPower;
 
+    console.log(results);
+
     if(this.settings.powerMeasurement === "hp") {
-      console.log(results.motor_shaft_power);
       motorShaftPower = this.convertUnitsService.value(results.motor_shaft_power).from("hp").to('kW');
-      console.log(motorShaftPower);
       pumpShaftPower = this.convertUnitsService.value(results.pump_shaft_power).from("hp").to('kW');
     }
     else{
