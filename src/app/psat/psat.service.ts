@@ -30,13 +30,13 @@ export class PsatService {
   }
 
   convertInputs(psatInputs: PsatInputs, settings: Settings) {
-    if (settings.distanceMeasurement != 'ft') {
+    if (settings.distanceMeasurement != 'ft'&& psatInputs.head) {
       psatInputs.head = this.convertUnitsService.value(psatInputs.head).from(settings.distanceMeasurement).to('ft');
     }
-    if (settings.flowMeasurement != 'gpm') {
+    if (settings.flowMeasurement != 'gpm' && psatInputs.flow_rate) {
       psatInputs.flow_rate = this.convertUnitsService.value(psatInputs.flow_rate).from(settings.flowMeasurement).to('gpm');
     }
-    if (settings.powerMeasurement != 'hp') {
+    if (settings.powerMeasurement != 'hp' && psatInputs.motor_rated_power) {
       psatInputs.motor_rated_power = this.convertUnitsService.value(psatInputs.motor_rated_power).from(settings.powerMeasurement).to('hp');
     }
     return psatInputs;
@@ -790,8 +790,8 @@ export class PsatService {
   getFlowRateMinMax(pumpStyle: number) {
     //min/max values from Daryl
     let flowRate = {
-      min: 0,
-      max: 0
+      min: 1,
+      max: 10000000000000000000
     }
     if (pumpStyle == 0) {
       flowRate.min = 100;

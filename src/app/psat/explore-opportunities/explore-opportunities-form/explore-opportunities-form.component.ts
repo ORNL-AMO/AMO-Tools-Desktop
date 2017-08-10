@@ -243,12 +243,26 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
     }
   }
   checkFlowRate(num: number) {
-    let tmp: any;
+    let tmp: any = {
+      message: null,
+      valid: null
+    };
     if (num == 1) {
-      tmp = this.psatService.checkFlowRate(this.psat.inputs.pump_style, this.psat.inputs.flow_rate, this.settings);
+      if (this.psat.inputs.flow_rate) {
+        tmp = this.psatService.checkFlowRate(this.psat.inputs.pump_style, this.psat.inputs.flow_rate, this.settings);
+      } else {
+        tmp.message = 'Flow Rate Required';
+        tmp.valid = false;
+      }
     } else {
-      tmp = this.psatService.checkFlowRate(this.psat.modifications[this.exploreModIndex].psat.inputs.pump_style, this.psat.modifications[this.exploreModIndex].psat.inputs.flow_rate, this.settings);
+      if (this.psat.modifications[this.exploreModIndex].psat.inputs.flow_rate) {
+        tmp = this.psatService.checkFlowRate(this.psat.modifications[this.exploreModIndex].psat.inputs.pump_style, this.psat.modifications[this.exploreModIndex].psat.inputs.flow_rate, this.settings);
+      } else {
+        tmp.message = 'Flow Rate Required';
+        tmp.valid = false;
+      }
     }
+
     if (tmp.message) {
       if (num == 1) {
         this.flowRateError1 = tmp.message;
