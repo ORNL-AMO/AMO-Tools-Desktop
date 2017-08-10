@@ -1,4 +1,8 @@
 import { Injectable } from '@angular/core';
+import { FlueGasMaterial, GasLoadChargeMaterial, LiquidLoadChargeMaterial, SolidLiquidFlueGasMaterial, SolidLoadChargeMaterial } from '../shared/models/phast/materials';
+
+
+
 
 declare var db: any;
 
@@ -8,18 +12,22 @@ export class SuiteDbService {
   db: any = db;
   hasStarted: boolean = false;
   constructor() { }
-  
+
   startup() {
     this.hasStarted = true;
     return db.startup();
   }
-  // preUpdate(){
-  //   return db.preUpdate();
-  // }
+  preUpdate() {
+    return db.preUpdate();
+  }
 
-  // postUpdate(){
-  //   return db.postUpdate();
-  // }
+  postUpdate() {
+    return db.postUpdate();
+  }
+
+  test() {
+    console.log(db);
+  }
 
   //volume
   selectGasFlueGasMaterials() {
@@ -65,4 +73,18 @@ export class SuiteDbService {
   update() {
     return db.update()
   }
+
+  insertAtmosphereSpecificHeat() { }
+
+  insertGasFlueGasMaterial(material: FlueGasMaterial) { }
+
+  insertGasLoadChargeMaterial(material: GasLoadChargeMaterial) { }
+
+  insertLiquidLoadChargeMaterial(material: LiquidLoadChargeMaterial) { }
+
+  insertSolidLiquidFlueGasMaterial(material: SolidLiquidFlueGasMaterial) { }
+
+  insertSolidLoadChargeMaterial(material: SolidLoadChargeMaterial) { }
+
+  insertWallLossesSurface() { }
 }

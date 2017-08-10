@@ -60,8 +60,23 @@ export class DashboardComponent implements OnInit {
     //start toolts suite database if it has not started
     if (this.suiteDbService.hasStarted == false) {
       this.suiteDbService.startup();
-    }
+      //this.suiteDbService.test();
+      console.log('gasLoadChargeMaterial')
+      let tmp = this.suiteDbService.selectGasLoadChargeMaterialById(1);
+      console.log(tmp);
+      
+      console.log('liquidLoadChargeMaterial')
+      tmp = this.suiteDbService.selectLiquidLoadChargeMaterialById(1);
+      console.log(tmp);
 
+      console.log('solidLiquidFlueGasMaterial')
+      tmp = this.suiteDbService.selectSolidLiquidFlueGasMaterialById(1);
+      console.log(tmp);
+
+      console.log('SolidLoadChargeMaterial')
+      tmp = this.suiteDbService.selectSolidLoadChargeMaterialById(1);
+      console.log(tmp);
+    }
     this.selectedItems = new Array();
     this.showLandingScreen = this.assessmentService.getLandingScreen();
     //open DB and get directories
@@ -518,7 +533,7 @@ export class DashboardComponent implements OnInit {
           parentDirectoryId: this.workingDirectory.id
         }
         let checkParentArr = dirIdPairs.filter(pair => { return dir.directory.parentDirectoryId == pair.oldId })
-        if(checkParentArr.length != 0){
+        if (checkParentArr.length != 0) {
           tmpDirDbRef.parentDirectoryId = checkParentArr[0].newId;
         }
         this.indexedDbService.addDirectory(tmpDirDbRef).then(results => {
