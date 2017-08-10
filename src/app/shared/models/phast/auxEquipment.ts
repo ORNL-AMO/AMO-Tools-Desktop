@@ -2,7 +2,7 @@ export interface AuxEquipment {
     name: string,
     dutyCycle: number,
     motorPower: string,
-    motorPhase: number,
+    motorPhase: string,
     supplyVoltage: number,
     averageCurrent: number,
     powerFactor: number,
