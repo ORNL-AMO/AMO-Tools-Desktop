@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
 import { Losses } from '../../shared/models/phast/phast';
 import * as _ from 'lodash';
-
+import { PhastService } from '../phast.service';
 // declare var d3: any;
 import * as d3 from 'd3';
 var svg;
@@ -32,10 +32,11 @@ export class SankeyComponent implements OnInit {
   firstChange: boolean = true;
 
   baseSize: number = 300;
-  constructor() {
+  constructor(private phastService: PhastService) {
   }
 
   ngOnInit() {
+    console.log(this.losses);
     if (this.losses) {
       this.getTotals();
     }
@@ -54,7 +55,11 @@ export class SankeyComponent implements OnInit {
   // }
 
   getTotals() {
-    this.totalWallLoss = _.sumBy(this.losses.wallLosses, 'heatLoss');
+    //Not this anymore
+    //this.totalWallLoss = _.sumBy(this.losses.wallLosses, 'heatLoss');
+    //Do this
+    this.totalWallLoss = this.phastService.sumWallLosses(this.losses.wallLosses);
+
     this.totalAtmosphereLoss = _.sumBy(this.losses.atmosphereLosses, 'heatLoss');
     this.totalOtherLoss = _.sumBy(this.losses.otherLosses, 'heatLoss');
     this.totalCoolingLoss = _.sumBy(this.losses.coolingLosses, 'heatLoss');

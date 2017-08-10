@@ -10,8 +10,7 @@ import { LossesModule } from './losses/losses.module';
 import { DesignedEnergyModule } from './designed-energy/designed-energy.module';
 import { PhastComponent } from './phast.component';
 import { PhastBannerComponent } from './phast-banner/phast-banner.component';
-import { SankeyComponent } from './sankey/sankey.component';
-import { SankeyDiagramComponent } from './sankey/sankey-diagram/sankey-diagram.component';
+
 import { SystemBasicsComponent } from './system-basics/system-basics.component';
 import { OperatingHoursComponent } from './operating-hours/operating-hours.component';
 import { PhastTabsComponent } from './phast-tabs/phast-tabs.component';
@@ -22,20 +21,17 @@ import { PhastService } from './phast.service';
 import { SystemSetupComponent } from './system-setup/system-setup.component';
 import { SettingsModule } from '../settings/settings.module';
 import { AuxEquipmentModule } from './aux-equipment/aux-equipment.module';
-
+import { SankeyModule } from './sankey/sankey.module';
 @NgModule({
   declarations: [
     PhastComponent,
     PhastBannerComponent,
-    SankeyComponent,
     PhastTabsComponent,
     SystemBasicsComponent,
     OperatingHoursComponent,
     HelpPanelComponent,
     DataPanelComponent,
-    SankeyDiagramComponent,
     SystemSetupComponent
-
   ],
   exports: [
   ],
@@ -51,7 +47,8 @@ import { AuxEquipmentModule } from './aux-equipment/aux-equipment.module';
     SettingsModule,
     AuxEquipmentModule,
     DesignedEnergyModule,
-    MeteredEnergyModule
+    MeteredEnergyModule,
+    SankeyModule
   ],
   providers: [
     PhastService
