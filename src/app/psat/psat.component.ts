@@ -11,7 +11,7 @@ import { Settings } from '../shared/models/settings';
 
 import { ToastyService, ToastyConfig, ToastOptions, ToastData } from 'ng2-toasty';
 import { JsonToCsvService } from '../shared/json-to-csv/json-to-csv.service';
-
+import { CompareService } from './compare.service';
 @Component({
   selector: 'app-psat',
   templateUrl: './psat.component.html',
@@ -71,7 +71,8 @@ export class PsatComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private toastyService: ToastyService,
     private toastyConfig: ToastyConfig,
-    private jsonToCsvService: JsonToCsvService) {
+    private jsonToCsvService: JsonToCsvService,
+    private compareService: CompareService) {
 
     this.toastyConfig.theme = 'bootstrap';
     this.toastyConfig.position = 'bottom-right';
@@ -98,7 +99,7 @@ export class PsatComponent implements OnInit {
         this.mainTab = val;
         if (this.mainTab == 'diagram') {
           this.psatService.secondaryTab.next('system-curve');
-        } 
+        }
         else if (this.mainTab == 'assessment') {
           if (this.currentTab != 'explore-opportunities' && this.currentTab != 'modify-conditions') {
             this.psatService.secondaryTab.next('explore-opportunities');
@@ -112,7 +113,7 @@ export class PsatComponent implements OnInit {
   }
 
 
-  ngOnDestroy(){
+  ngOnDestroy() {
     this.psatService.secondaryTab.next('explore-opportunities');
     this.psatService.mainTab.next('system-setup');
   }
@@ -256,6 +257,15 @@ export class PsatComponent implements OnInit {
     } else {
       this._psat.setupDone = false;
     }
+    if(this._psat.modifications){
+      this._psat.modifications.forEach(mod => {
+        mod.psat.inputs.load_estimation_method = this._psat.inputs.load_estimation_method;
+        mod.psat.inputs.motor_field_current = this._psat.inputs.motor_field_current;
+        mod.psat.inputs.motor_field_power = this._psat.inputs.motor_field_power;
+        mod.psat.inputs.motor_field_voltage = this._psat.inputs.motor_field_voltage;
+      })
+    }
+
     this.assessment.psat = (JSON.parse(JSON.stringify(this._psat)));
     this.indexedDbService.putAssessment(this.assessment).then(
       results => {

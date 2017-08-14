@@ -16,6 +16,7 @@ export class PsatService {
 
   mainTab: BehaviorSubject<string>;
   secondaryTab: BehaviorSubject<string>;
+  baseline: PSAT;
   constructor(private formBuilder: FormBuilder, private convertUnitsService: ConvertUnitsService, private validationService: ValidationService) {
     this.mainTab = new BehaviorSubject<string>('system-setup');
     this.secondaryTab = new BehaviorSubject<string>('explore-opportunities');
@@ -30,7 +31,7 @@ export class PsatService {
   }
 
   convertInputs(psatInputs: PsatInputs, settings: Settings) {
-    if (settings.distanceMeasurement != 'ft'&& psatInputs.head) {
+    if (settings.distanceMeasurement != 'ft' && psatInputs.head) {
       psatInputs.head = this.convertUnitsService.value(psatInputs.head).from(settings.distanceMeasurement).to('ft');
     }
     if (settings.flowMeasurement != 'gpm' && psatInputs.flow_rate) {
@@ -51,7 +52,7 @@ export class PsatService {
     return psatOutputs;
   }
 
-  //CALCULATORS
+  //results
   resultsExisting(psatInputs: PsatInputs, settings: Settings): PsatOutputs {
     psatInputs = this.convertInputs(psatInputs, settings);
     //call results existing
@@ -66,11 +67,25 @@ export class PsatService {
   resultsOptimal(psatInputs: PsatInputs, settings: Settings): PsatOutputs {
     psatInputs = this.convertInputs(psatInputs, settings);
     //call addon resultsOptimal
-    let tmpResults: PsatOutputs = psatAddon.resultsOptimal(psatInputs);    if (settings.powerMeasurement != 'hp') {
+    let tmpResults: PsatOutputs = psatAddon.resultsOptimal(psatInputs);
+    if (settings.powerMeasurement != 'hp') {
       tmpResults = this.convertOutputs(tmpResults, settings);
     }
     tmpResults = this.roundResults(tmpResults);
     return tmpResults
+  }
+
+  resultsModified(psatInputs: PsatInputs, settings: Settings, baseline_pump_efficiency: number): PsatOutputs {
+    let tmpInputs: any;
+    tmpInputs = psatInputs;
+    tmpInputs.baseline_pump_efficiency = baseline_pump_efficiency;
+    let tmpResults: PsatOutputs = psatAddon.resultsModified(tmpInputs);
+    console.log(tmpResults);
+    if (settings.powerMeasurement != 'hp') {
+      tmpResults = this.convertOutputs(tmpResults, settings);
+    }
+    tmpResults = this.roundResults(tmpResults);
+    return tmpResults;
   }
 
   roundResults(psatResults: PsatOutputs): PsatOutputs {
@@ -144,7 +159,7 @@ export class PsatService {
     }
     return tmpOutputs;
   }
-
+  //CALCULATORS
   headToolSuctionTank(
     specificGravity: number,
     flowRate: number,
