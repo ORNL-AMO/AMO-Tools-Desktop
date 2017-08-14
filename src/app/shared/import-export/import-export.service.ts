@@ -6,13 +6,20 @@ import { ElectronService } from 'ngx-electron';
 import { IndexedDbService } from '../../indexedDb/indexed-db.service';
 import { DirectoryDbRef, Directory } from '../models/directory';
 
+import { BehaviorSubject } from 'rxjs';
+
 @Injectable()
 export class ImportExportService {
 
   exportData: Array<any>;
   allDirectories: Directory;
   selectedItems: Array<any>;
-  constructor(private windowRefService: WindowRefService, private electronService: ElectronService, private indexedDbService: IndexedDbService) { }
+
+  toggleDownload: BehaviorSubject<boolean>;
+
+  constructor(private windowRefService: WindowRefService, private electronService: ElectronService, private indexedDbService: IndexedDbService) {
+    this.toggleDownload = new BehaviorSubject<boolean>(null);
+   }
 
   test() { }
 

@@ -12,7 +12,7 @@ import { IndexedDbModule } from './indexedDb/indexedDb.module';
 
 @NgModule({
   declarations: [
-    AppComponent,
+    AppComponent
   ],
   imports: [
     BrowserModule,
