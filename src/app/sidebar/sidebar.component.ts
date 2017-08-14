@@ -31,7 +31,9 @@ export class SidebarComponent implements OnInit {
   dashboardView: string;
   @Output('emitGoToSettings')
   emitGoToSettings = new EventEmitter<boolean>();
-
+  @Output('emitGoToContact')
+  emitGoToContact = new EventEmitter<boolean>();
+  
   selectedDirectoryId: number;
   firstChange: boolean = true;
   createAssessment: boolean = false;
@@ -103,5 +105,9 @@ export class SidebarComponent implements OnInit {
 
   showCreateAssessment() {
     this.assessmentService.createAssessment.next(true);
+  }
+
+  showContact(){
+    this.emitGoToContact.emit(true);
   }
 }
