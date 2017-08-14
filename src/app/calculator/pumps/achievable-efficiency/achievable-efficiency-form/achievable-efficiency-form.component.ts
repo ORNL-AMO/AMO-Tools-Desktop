@@ -51,7 +51,7 @@ export class AchievableEfficiencyFormComponent implements OnInit {
   }
 
   checkFlowRate() {
-    if (this.tmpFlowRate < 110) {
+    if (this.tmpFlowRate < 0) {
       this.flowRateError = 'Flow rate too small';
       return false;
     }
