@@ -63,6 +63,9 @@
     <li [ngClass]="{'selected': dashboardView == 'about-page'}">
       <span (click)="showAbout()">About</span>
     </li>
-    <li><a href="mailto:accawigk@ornl.gov">Contact</a></li>
+    <li [ngClass]="{'selected': dashboardView == 'contact'}">
+      <span (click)="showContact()">Contact</span>
+    </li>
+      <!--<a href="mailto:accawigk@ornl.gov">Contact</a></li>-->
   </ul>
 </div>

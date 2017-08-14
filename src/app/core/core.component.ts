@@ -32,6 +32,12 @@ export class CoreComponent implements OnInit {
     })
 
     this.ElectronService.ipcRenderer.send('ready', null);
+
+    this.importExportService.toggleDownload.subscribe((val) => {
+      if(val == true){
+        this.downloadData();
+      }
+    })
   }
 
 

@@ -4,7 +4,7 @@
             <app-sidebar *ngIf="allDirectories" [selectedCalculator]="selectedCalculator" [directory]="getAllDirectories()" [newDirEventToggle]="newDirEventToggle"
                 [workingDirectory]="getWorkingDirectory()" [dashboardView]="dashboardView" (directoryChange)="changeWorkingDirectory($event)"
                 (selectCalculator)="viewCalculator($event)" (emitGoHome)="goHome()" (emitShowAbout)="showAbout()" (emitShowTutorials)="showTutorials()"
-                (emitGoToSettings)="showSettings()"></app-sidebar>
+                (emitGoToSettings)="showSettings()" (emitGoToContact)="showContact()"></app-sidebar>
         </div>
         <div class="col-10 dashboard-page" *ngIf="allDirectories && dashboardView == 'assessment-dashboard'">
             <app-assessment-dashboard [directory]="workingDirectory" (directoryChange)="changeWorkingDirectory($event)" (deleteDataSignal)="showDeleteModal()"
@@ -22,6 +22,9 @@
         </div>
         <div class="col-10 dashboard-page" *ngIf="allDirectories && dashboardView == 'about-page'">
             <app-about-page></app-about-page>
+        </div>
+        <div class="col-10 dashboard-page" *ngIf="allDirectories && dashboardView == 'contact'">
+            <app-contact-page></app-contact-page>
         </div>
         <div class="col-10 dashboard-page" *ngIf="allDirectories && dashboardView == 'settings'">
 
