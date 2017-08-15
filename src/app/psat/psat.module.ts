@@ -4,11 +4,20 @@ import { RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SharedModule } from '../shared/shared.module';
 import { ChartsModule } from 'ng2-charts';
-import { PumpsModule } from '../calculator/pumps/pumps.module';
 import { ModalModule } from 'ngx-bootstrap';
 import { IndexedDbModule } from '../indexedDb/indexedDb.module';
 import { JsonToCsvModule } from '../shared/json-to-csv/json-to-csv.module';
 import { HelpPanelModule } from './help-panel/help-panel.module';
+
+import { SystemCurveModule } from '../calculator/pumps/system-curve/system-curve.module';
+import { HeadToolModule } from '../calculator/pumps//head-tool/head-tool.module';
+import { NemaEnergyEfficiencyModule} from '../calculator/pumps/nema-energy-efficiency/nema-energy-efficiency.module';
+import { MotorPerformanceModule } from '../calculator/pumps/motor-performance/motor-performance.module';
+import { AchievableEfficiencyModule } from '../calculator/pumps/achievable-efficiency/achievable-efficiency.module';
+import { SpecificSpeedModule } from '../calculator/pumps/specific-speed/specific-speed.module';
+
+
+
 
 import { PsatComponent } from './psat.component';
 import { PsatBannerComponent } from './psat-banner/psat-banner.component';
@@ -73,13 +82,18 @@ import { ExploreOpportunitiesSankeyComponent } from './explore-opportunities/exp
     ReactiveFormsModule,
     SharedModule,
     ChartsModule,
-    PumpsModule,
     ModalModule.forRoot(),
     IndexedDbModule,
     SettingsModule,
     ToastyModule,
     JsonToCsvModule,
-    HelpPanelModule
+    HelpPanelModule,
+    SystemCurveModule,
+    SpecificSpeedModule,
+    NemaEnergyEfficiencyModule,
+    MotorPerformanceModule,
+    HeadToolModule,
+    AchievableEfficiencyModule
   ],
   providers: [
     PsatService,
