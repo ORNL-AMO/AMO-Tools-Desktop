@@ -35,12 +35,9 @@ export class PsatReportComponent implements OnInit {
   constructor(private psatService: PsatService, private indexedDbService: IndexedDbService, private windowRefService: WindowRefService) { }
 
   ngOnInit() {
-    if (this.psat && this.settings) {
-     // this.psat = this.getResults(this.psat, this.settings);
-    }
-    else if (this.assessment.psat && this.settings) {
+
+    if (this.assessment.psat && this.settings) {
       this.psat = this.assessment.psat;
-     // this.psat = this.getResults(this.psat, this.settings);
     }
     else if (this.assessment.psat && !this.settings) {
       this.psat = this.assessment.psat;
@@ -57,16 +54,12 @@ export class PsatReportComponent implements OnInit {
     }
   }
 
-
   getAssessmentSettingsThenResults() {
     //check for assessment settings
     this.indexedDbService.getAssessmentSettings(this.assessment.id).then(
       results => {
         if (results.length != 0) {
           this.settings = results[0];
-          if (!this.psat.outputs) {
-           // this.psat = this.getResults(this.psat, this.settings);
-          }
         } else {
           //no assessment settings, find dir settings being usd
           this.getParentDirSettingsThenResults(this.assessment.directoryId);
@@ -86,7 +79,7 @@ export class PsatReportComponent implements OnInit {
             if (resultSettings.length != 0) {
               this.settings = resultSettings[0];
               if (!this.psat.outputs) {
-               // this.psat = this.getResults(this.psat, this.settings);
+                // this.psat = this.getResults(this.psat, this.settings);
               }
             } else {
               //no settings try again with parents parent directory
@@ -99,24 +92,6 @@ export class PsatReportComponent implements OnInit {
 
   closeAssessment() {
     this.closeReport.emit(true);
-  }
-
-  getResults(psat: PSAT, settings: Settings) : PSAT{
-    if (psat.inputs.optimize_calculation) {
-      psat.outputs = this.psatService.resultsOptimal(psat.inputs, settings);
-    } else {
-      psat.outputs = this.psatService.resultsExisting(psat.inputs, settings);
-    }
-    if (psat.modifications) {
-      psat.modifications.forEach(modification => {
-        if (modification.psat.inputs.optimize_calculation) {
-          modification.psat.outputs = this.psatService.resultsOptimal(psat.inputs, settings);
-        } else {
-          modification.psat.outputs = this.psatService.resultsExisting(psat.inputs, settings);
-        }
-      })
-    }
-    return psat;
   }
 
   getDirectoryList(id: number) {
@@ -142,7 +117,7 @@ export class PsatReportComponent implements OnInit {
     this.exportData.emit(true);
   }
 
-  useModification(event: any){
+  useModification(event: any) {
     this.selectModification.emit(event);
   }
 
