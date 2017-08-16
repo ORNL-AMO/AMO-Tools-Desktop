@@ -1,11 +1,11 @@
 <div class="pump-head">
   <div class="row">
-    <div class="col-md-5 col-sm-12 offset-md-1">
+    <div class="col-md-5 col-sm-12  mx-auto">
       <app-energy-use-form [inPhast]="inPhast" [flowCalculations]="flowCalculations" [flowCalculationResults]="flowCalculationResults"
         (changeField)="setCurrentField($event)" (emitCalculate)="calculate()"></app-energy-use-form>
     </div>
 
-    <div class="col-md-5 col-sm-12">
+    <div class="col-md-5 col-sm-12 mx-auto">
       <ul class="tabs primary text-center">
         <li class="calc-tab" [ngClass]="{'active': tabSelect == 'results'}">
           <a (click)="setTab('results')">Results</a>
