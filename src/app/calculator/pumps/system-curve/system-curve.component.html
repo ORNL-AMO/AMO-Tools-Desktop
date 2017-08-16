@@ -1,10 +1,10 @@
 <div class="pump-head">
   <div class="row" *ngIf="settings">
-    <div class="col-md-4 col-sm-12 offset-md-1">
+    <div class="col-md-4 col-sm-12  mx-auto">
       <app-system-curve-form [psat]="psat" [settings]="settings" [(pointOne)]="pointOne" [(pointTwo)]="pointTwo" [(curveConstants)]="curveConstants"
         (calculate)="calculateValues()" (calculateP1)="calculateP1Flow()" (calculateP2)="calculateP2Flow()"></app-system-curve-form>
     </div>
-    <div class="col-md-6 col-sm-12">
+    <div class="col-md-6 col-sm-12 mx-auto">
       <ul class="tabs primary text-center">
         <li class="calc-tab" [ngClass]="{'active': tabSelect == 'results'}">
           <a (click)="setTab('results')">Graph</a>
