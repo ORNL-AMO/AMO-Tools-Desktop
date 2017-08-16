@@ -45,7 +45,7 @@
     </div>
   </div>
 
-  <div class="form-group">
+  <div class="form-group" *ngIf="baseline">
     <label for="loadEstimatedMethod">Load Estimation Method</label>
     <select name="loadEstimatedMethod" class="form-control" formControlName="loadEstimatedMethod" id="loadEstimatedMethod" (input)="startSavePolling()"
       (focus)="focusField('loadEstimatedMethod')">
@@ -53,25 +53,27 @@
     </select>
   </div>
 
-  <div class="form-group" *ngIf="psatForm.value.loadEstimatedMethod == 'Power'">
+  <div class="form-group" *ngIf="psatForm.value.loadEstimatedMethod == 'Power' && baseline">
     <label for="motorKW">Motor Power</label>
     <div class="input-group">
       <input name="motorKW" type="number" min="0" step="any" class="form-control" formControlName="motorKW" id="motorKW" (input)="startSavePolling()"
-        (focus)="focusField('motorPower')" onfocus="this.select();">
+        (focus)="focusField('motorPower')" onfocus="this.select();" [ngClass]="{'warning': checkRatedPower() == false}">
       <span class="input-group units">kW</span>
     </div>
+    <span class="alert-danger pull-right small" *ngIf="ratedPowerError !== null">{{ratedPowerError}}</span>
   </div>
 
-  <div class="form-group" *ngIf="psatForm.value.loadEstimatedMethod == 'Current'">
+  <div class="form-group" *ngIf="psatForm.value.loadEstimatedMethod == 'Current' && baseline">
     <label for="motorAmps">Motor Power</label>
     <div class="input-group">
       <input name="motorAmps" type="number" min="0" step="any" class="form-control" formControlName="motorAmps" id="motorAmps"
-        (input)="startSavePolling()" (focus)="focusField('motorPower')" onfocus="this.select();">
+        (input)="startSavePolling()" (focus)="focusField('motorPower')" onfocus="this.select();" [ngClass]="{'warning': checkRatedPower() == false}">
       <span class="input-group-addon units">A</span>
     </div>
+    <span class="alert-danger pull-right small" *ngIf="ratedPowerError !== null">{{ratedPowerError}}</span>
   </div>
 
-  <div class="form-group">
+  <div class="form-group" *ngIf="baseline">
     <label for="measuredVoltage">Measured Voltage</label>
     <div class="input-group">
       <input name="measuredVoltage" type="number" min="1" step="any" class="form-control" formControlName="measuredVoltage" id="measuredVoltage"
