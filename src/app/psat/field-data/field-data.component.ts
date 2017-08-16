@@ -253,7 +253,7 @@ export class FieldDataComponent implements OnInit {
         val = tmpVal;
         compare = this.psat.inputs.motor_rated_power;
       }
-      val = val * 1.5;
+      compare = compare * 1.5;
       if (val > compare) {
         this.ratedPowerError = 'The Field Data Motor Power is to high compared to the Rated Motor Power, please adjust the input values.';
         return false
