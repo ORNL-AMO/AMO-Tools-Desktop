@@ -16,7 +16,16 @@ export class PumpCurveFormComponent implements OnInit {
   ngOnInit() {
   }
 
-  focusField(str: string){
+  focusField(str: string) {
     this.changeField.emit(str);
+  }
+
+  addRow() {
+    let tmpRow: PumpCurveDataRow = {
+      head: 0,
+      flow: 0,
+      pumpEfficiency: 0
+    }
+    this.pumpCurveForm.dataRows.push(tmpRow)
   }
 }

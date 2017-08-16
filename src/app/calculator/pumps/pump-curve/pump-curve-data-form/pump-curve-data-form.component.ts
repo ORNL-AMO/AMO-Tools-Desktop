@@ -20,4 +20,8 @@ export class PumpCurveDataFormComponent implements OnInit {
   focusField(str: string) {
     this.changeField.emit(str);
   }
+
+  removeRow(num: number){
+    this.pumpCurveForm.dataRows.splice(num, 1);
+  }
 }

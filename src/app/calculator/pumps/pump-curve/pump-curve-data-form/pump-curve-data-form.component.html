@@ -1,19 +1,19 @@
 <div *ngFor="let dataRow of pumpCurveForm.dataRows; let index = index;">
   <div class="row">
-    <div class="form-group col-4">
+    <div class="form-group col-3">
       <label *ngIf="index == 0" for="head">Head</label>
       <div class="input-group">
         <input name="head" [(ngModel)]="dataRow.head" type="number" step="any" class="form-control" id="head" onfocus="this.select();"
           (focus)="focusField('head')">
-        <span class="input-group-addon units">{{index}}</span>
+        <span class="input-group-addon units">ft</span>
       </div>
     </div>
-    <div class="form-group col-4">
+    <div class="form-group col-3">
       <label *ngIf="index == 0" for="flow">Flow</label>
       <div class="input-group">
         <input name="flow" [(ngModel)]="dataRow.flow" type="number" step="any" class="form-control" id="flow" onfocus="this.select();"
           (focus)="focusField('flow')">
-        <span class="input-group-addon units">in</span>
+        <span class="input-group-addon units">gpm</span>
       </div>
     </div>
     <div class="form-group col-4">
@@ -21,7 +21,8 @@
       <div class="input-group">
         <input name="pumpEfficiency" [(ngModel)]="dataRow.pumpEfficiency" type="number" step="any" class="form-control" id="pumpEfficiency"
           onfocus="this.select();" (focus)="focusField('pumpEfficiency')">
-        <span class="input-group-addon units">in</span>
+        <span class="input-group-addon units">%</span>
+        <span class="fa fa-times" (click)="removeRow(index)"></span>
       </div>
     </div>
   </div>
