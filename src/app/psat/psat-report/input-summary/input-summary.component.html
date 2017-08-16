@@ -141,13 +141,13 @@
     <tr *ngIf="psat.inputs.load_estimation_method == 1">
       <td [ngClass]="{'indicate-report-field-different': ampsDiff == true}">Motor Power (amps)</td>
       <td [ngClass]="{'indicate-report-field-different': ampsDiff == true}">{{psat.inputs.motor_field_current | number:'1.0-0'}}</td>
-      <td *ngFor="let modification of psat.modifications" [ngClass]="{'indicate-report-field-different': modification.psat.inputs.motor_field_current != psat.inputs.motor_field_current}">{{modification.psat.inputs.motor_field_current | number:'1.0-1'}}</td>
+      <td *ngFor="let modification of psat.modifications" [ngClass]="{'indicate-report-field-different': modification.psat.inputs.motor_field_current != psat.inputs.motor_field_current}">{{modification.psat.inputs.motor_field_current | number:'1.0-0'}}</td>
     </tr>
 
     <tr *ngIf="psat.inputs.load_estimation_method == 0">
       <td [ngClass]="{'indicate-report-field-different': kwDiff == true}">Motor Power (kW)</td>
       <td [ngClass]="{'indicate-report-field-different': kwDiff == true}">{{psat.inputs.motor_field_power | number:'1.0-0'}}</td>
-      <td *ngFor="let modification of psat.modifications" [ngClass]="{'indicate-report-field-different': modification.psat.inputs.motor_field_power != psat.inputs.motor_field_power}">{{modification.psat.inputs.motor_field_power | number:'1.0-1'}}</td>
+      <td *ngFor="let modification of psat.modifications" [ngClass]="{'indicate-report-field-different': modification.psat.inputs.motor_field_power != psat.inputs.motor_field_power}">{{modification.psat.inputs.motor_field_power | number:'1.0-0'}}</td>
     </tr>
 
     <tr>

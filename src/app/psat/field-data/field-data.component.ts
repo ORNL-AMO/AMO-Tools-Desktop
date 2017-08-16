@@ -6,7 +6,7 @@ import { Settings } from '../../shared/models/settings';
 import { CompareService } from '../compare.service';
 import { WindowRefService } from '../../indexedDb/window-ref.service';
 import { HelpPanelService } from '../help-panel/help-panel.service';
-
+import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
 @Component({
   selector: 'app-field-data',
   templateUrl: './field-data.component.html',
@@ -63,7 +63,8 @@ export class FieldDataComponent implements OnInit {
   voltageError: string = null;
   costError: string = null;
   opFractionError: string = null;
-  constructor(private psatService: PsatService, private compareService: CompareService, private windowRefService: WindowRefService, private helpPanelService: HelpPanelService) { }
+  ratedPowerError: string = null;
+  constructor(private psatService: PsatService, private compareService: CompareService, private windowRefService: WindowRefService, private helpPanelService: HelpPanelService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
     this.psatForm = this.psatService.getFormFromPsat(this.psat.inputs);
@@ -172,7 +173,6 @@ export class FieldDataComponent implements OnInit {
   }
 
   checkFlowRate() {
-    console.log(this.psatForm.value.flowRate);
     if (this.psatForm.controls.flowRate.pristine == false && this.psatForm.value.flowRate != '') {
       let tmp = this.psatService.checkFlowRate(this.psat.inputs.pump_style, this.psatForm.value.flowRate, this.settings);
       if (tmp.message) {
@@ -236,7 +236,35 @@ export class FieldDataComponent implements OnInit {
       return true;
     }
   }
+  checkRatedPower() {
+    let tmpVal;
+    if (this.psatForm.value.loadEstimatedMethod == 'Power') {
+      tmpVal = this.psatForm.value.motorKW;
+    } else {
+      tmpVal = this.psatForm.value.motorAmps;
+    }
 
+    if (this.psat.inputs.motor_rated_power && tmpVal) {
+      let val, compare;
+      if (this.settings.powerMeasurement == 'hp') {
+        val = this.convertUnitsService.value(tmpVal).from(this.settings.powerMeasurement).to('kW');
+        compare = this.convertUnitsService.value(this.psat.inputs.motor_rated_power).from(this.settings.powerMeasurement).to('kW');
+      } else {
+        val = tmpVal;
+        compare = this.psat.inputs.motor_rated_power;
+      }
+      val = val * 1.5;
+      if (val > compare) {
+        this.ratedPowerError = 'The Field Data Motor Power is to high compared to the Rated Motor Power, please adjust the input values.';
+        return false
+      } else {
+        this.ratedPowerError = null;
+        return true
+      }
+    } else {
+      return true;
+    }
+  }
 
   //used to add classes to inputs with different baseline vs modification values
   initDifferenceMonitor() {
@@ -270,33 +298,29 @@ export class FieldDataComponent implements OnInit {
         element.classList.toggle('indicate-different', val);
       });
     });
-    //load estimation method
-    this.compareService.load_estimation_method_different.subscribe((val) => {
-      let loadEstimationElements = doc.getElementsByName('loadEstimatedMethod');
-      loadEstimationElements.forEach(element => {
-        element.classList.toggle('indicate-different', val);
-      });
-    });
-    //motor power A
-    this.compareService.motor_field_power_different.subscribe((val) => {
-      let motorFieldPowerElements = doc.getElementsByName('motorKW');
-      motorFieldPowerElements.forEach(element => {
-        element.classList.toggle('indicate-different', val);
-      });
-    });
-    //motor power kw
-    this.compareService.motor_field_current_different.subscribe((val) => {
-      let motorFieldCurrentElements = doc.getElementsByName('motorAmps');
-      motorFieldCurrentElements.forEach(element => {
-        element.classList.toggle('indicate-different', val);
-      });
-    });
-    //measured voltage
-    this.compareService.motor_field_voltage_different.subscribe((val) => {
-      let motorFieldVoltageElements = doc.getElementsByName('measuredVoltage');
-      motorFieldVoltageElements.forEach(element => {
-        element.classList.toggle('indicate-different', val);
-      });
-    });
+    // //load estimation method
+    // this.compareService.load_estimation_method_different.subscribe((val) => {
+    //   if (val && !this.baseline) {
+    //     this.psat.inputs.load_estimation_method = this.compareService.baselinePSAT.inputs.load_estimation_method;
+    //   }
+    // });
+    // //motor power A
+    // this.compareService.motor_field_power_different.subscribe((val) => {
+    //   if (val && !this.baseline) {
+    //     this.psat.inputs.motor_field_power = this.compareService.baselinePSAT.inputs.motor_field_power;
+    //   }
+    // });
+    // //motor power kw
+    // this.compareService.motor_field_current_different.subscribe((val) => {
+    //   if (val && !this.baseline) {
+    //     this.psat.inputs.motor_field_current = this.compareService.baselinePSAT.inputs.motor_field_current;
+    //   }
+    // });
+    // //measured voltage
+    // this.compareService.motor_field_voltage_different.subscribe((val) => {
+    //   if (val && !this.baseline) {
+    //     this.psat.inputs.motor_field_voltage = this.compareService.baselinePSAT.inputs.motor_field_voltage;
+    //   }
+    // });
   }
 }
