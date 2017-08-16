@@ -146,9 +146,9 @@ label {
   border-radius: 0;
   border-color: #9c9c9c;
   width: inherit;
-  padding: 2px;
+  padding: 0 2px;
   line-height: 1;
-  font-size: 16px;
+  font-size: 14px;
 }
 .form-text {
   margin-top: 0;
@@ -1313,7 +1313,7 @@ Tabs
 Modify Conditions
 ========================================= */
 .modify-conditions {
-  height: 100vh;
+  /*height: 100vh;*/
   display: flex;
 }
   .modify-conditions .col-4 {
@@ -1329,6 +1329,9 @@ Modify Conditions
 
 .modification {
   background: #fff;
+  border-color: #6d6d6d;
+  border-style: solid;
+  border-width: 0 1px;
   -webkit-box-shadow: 0px 0px 69px -1px rgba(0,0,0,0.2);
   -moz-box-shadow: 0px 0px 69px -1px rgba(0,0,0,0.2);
   box-shadow: 0px 0px 69px -1px rgba(0,0,0,0.2);
@@ -1368,7 +1371,7 @@ Modify Conditions
       }
 
   .modification.disabled, .modification.disabled button, .modification.disabled textarea {
-    background: #efefef;
+    background: #fff;
     -webkit-box-shadow: none;
     -moz-box-shadow: none;
     box-shadow: none;
@@ -1376,7 +1379,7 @@ Modify Conditions
   }
     .modification.disabled:hover, .modify-conditions .no-data:hover {
       cursor: pointer;
-      border: #4990E2 solid 3px;
+      border-color: #4990E2;
     }
 
     .modify-conditions .no-data {
@@ -1853,7 +1856,7 @@ Toasty Overrides ================================= */
 .losses-container{
     height: 100%;
     max-height: 100%;
-    overflow-y: scroll;
+    /*overflow-y: scroll;*/
     padding-top: 30px;
     padding-right: 50px;
     padding-left: 50px;

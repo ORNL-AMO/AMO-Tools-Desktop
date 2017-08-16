@@ -1,70 +1,55 @@
-<div class="form-group" *ngIf="currentTab == 'charge-material'">
-  <label for="notes">Charge Material Modification Notes:</label>
-  <textarea class="form-control" rows="5" id="notes" [(ngModel)]="notes.chargeNotes"></textarea>
+<div class="note-form" *ngIf="currentTab == 'charge-material'">
+  <textarea rows="2" id="notes" [(ngModel)]="notes.chargeNotes" placeholder="Add note for charge material"></textarea>
 </div>
 
-<div class="form-group" *ngIf="currentTab == 'wall-losses'">
-  <label for="notes">Wall Loss Modification Notes:</label>
-  <textarea class="form-control" rows="5" id="notes" [(ngModel)]="notes.wallNotes"></textarea>
+<div class="note-form" *ngIf="currentTab == 'wall-losses'">
+  <textarea rows="2" id="notes" [(ngModel)]="notes.wallNotes" placeholder="Add note for wall losses"></textarea>
 </div>
 
-<div class="form-group" *ngIf="currentTab == 'atmosphere-losses'">
-  <label for="notes">Atmosphere Loss Modification Notes:</label>
-  <textarea class="form-control" rows="5" id="notes" [(ngModel)]="notes.atmosphereNotes"></textarea>
+<div class="note-form" *ngIf="currentTab == 'atmosphere-losses'">
+  <textarea rows="2" id="notes" [(ngModel)]="notes.atmosphereNotes" placeholder="Add note for atmosphere losses"></textarea>
 </div>
 
-<div class="form-group" *ngIf="currentTab == 'fixture-losses'">
-  <label for="notes">Fixture Loss Modification Notes:</label>
-  <textarea class="form-control" rows="5" id="notes" [(ngModel)]="notes.fixtureNotes"></textarea>
+<div class="note-form" *ngIf="currentTab == 'fixture-losses'">
+  <textarea rows="2" id="notes" [(ngModel)]="notes.fixtureNotes" placeholder="Add note for fixture losses"></textarea>
 </div>
 
-<div class="form-group" *ngIf="currentTab == 'opening-losses'">
-  <label for="notes">Opening Loss Modification Notes:</label>
-  <textarea class="form-control" rows="5" id="notes" [(ngModel)]="notes.openingNotes"></textarea>
+<div class="note-form" *ngIf="currentTab == 'opening-losses'">
+  <textarea rows="2" id="notes" [(ngModel)]="notes.openingNotes" placeholder="Add note for opening losses"></textarea>
 </div>
 
-<div class="form-group" *ngIf="currentTab == 'cooling-losses'">
-  <label for="notes">Cooling Loss Modification Notes:</label>
-  <textarea class="form-control" rows="5" id="notes" [(ngModel)]="notes.coolingNotes"></textarea>
+<div class="note-form" *ngIf="currentTab == 'cooling-losses'">
+  <textarea rows="2" id="notes" [(ngModel)]="notes.coolingNotes" placeholder="Add note for cooling losses"></textarea>
 </div>
 
-<div class="form-group" *ngIf="currentTab == 'flue-gas-losses'">
-  <label for="notes">Flue Gas Loss Modification Notes:</label>
-  <textarea class="form-control" rows="5" id="notes" [(ngModel)]="notes.flueGasNotes"></textarea>
+<div class="note-form" *ngIf="currentTab == 'flue-gas-losses'">
+  <textarea rows="2" id="notes" [(ngModel)]="notes.flueGasNotes" placeholder="Add note for flue gas losses"></textarea>
 </div>
 
-<div class="form-group" *ngIf="currentTab == 'gas-leakage-losses'">
-  <label for="notes">Gas Leakage Loss Modification Notes:</label>
-  <textarea class="form-control" rows="5" id="notes" [(ngModel)]="notes.leakageNotes"></textarea>
+<div class="note-form" *ngIf="currentTab == 'gas-leakage-losses'">
+  <textarea rows="2" id="notes" [(ngModel)]="notes.leakageNotes" placeholder="Add note for gas leakage"></textarea>
 </div>
 
-<div class="form-group" *ngIf="currentTab == 'extended-surface-losses'">
-  <label for="notes">Extended Surface Loss Modification Notes:</label>
-  <textarea class="form-control" rows="5" id="notes" [(ngModel)]="notes.extendedNotes"></textarea>
+<div class="note-form" *ngIf="currentTab == 'extended-surface-losses'">
+  <textarea rows="2" id="notes" [(ngModel)]="notes.extendedNotes" placeholder="Add note for extended surfaces"></textarea>
 </div>
 
-<div class="form-group" *ngIf="currentTab == 'other-losses'">
-  <label for="notes">Other Loss Modification Notes:</label>
-  <textarea class="form-control" rows="5" id="notes" [(ngModel)]="notes.otherNotes"></textarea>
+<div class="note-form" *ngIf="currentTab == 'other-losses'">
+  <textarea rows="2" id="notes" [(ngModel)]="notes.otherNotes" placeholder="Add note for other losses"></textarea>
 </div>
 
-<div class="form-group" *ngIf="currentTab == 'slag'">
-  <label for="notes">Slag Loss Modification Notes:</label>
-  <textarea class="form-control" rows="5" id="notes" [(ngModel)]="notes.slagNotes"></textarea>
+<div class="note-form" *ngIf="currentTab == 'slag'">
+  <textarea rows="2" id="notes" [(ngModel)]="notes.slagNotes" placeholder="Add note for slag loss"></textarea>
 </div>
 
-<div class="form-group" *ngIf="currentTab == 'auxiliary-power'">
-  <label for="notes">Auxiliary Power Loss Modification Notes:</label>
-  <textarea class="form-control" rows="5" id="notes" [(ngModel)]="notes.auxiliaryPowerNotes"></textarea>
+<div class="note-form" *ngIf="currentTab == 'auxiliary-power'">
+  <textarea rows="2" id="notes" [(ngModel)]="notes.auxiliaryPowerNotes" placeholder="Add note for aux power"></textarea>
 </div>
 
-<div class="form-group" *ngIf="currentTab == 'energy-input'">
-  <label for="notes">Energy Input Modification Notes:</label>
-  <textarea class="form-control" rows="5" id="notes" [(ngModel)]="notes.energyInputNotes"></textarea>
+<div class="note-form" *ngIf="currentTab == 'energy-input'">
+  <textarea rows="2" id="notes" [(ngModel)]="notes.energyInputNotes" placeholder="Add note for energy input"></textarea>
 </div>
 
-
-<div class="form-group" *ngIf="currentTab == 'exhaust-gas'">
-  <label for="notes">Exhaust Gas Modification Notes:</label>
-  <textarea class="form-control" rows="5" id="notes" [(ngModel)]="notes.exhaustGasNotes"></textarea>
+<div class="note-form" *ngIf="currentTab == 'exhaust-gas'">
+  <textarea rows="2" id="notes" [(ngModel)]="notes.exhaustGasNotes" placeholder="Add note for exhaust gas"></textarea>
 </div>
