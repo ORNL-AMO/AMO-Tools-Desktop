@@ -1,7 +1,7 @@
 <div *ngIf="getSelectedTool() == 'none'">
 
   <div class="row">
-    <div class="col-10 offset-md-1">
+    <div class="col-10 mx-auto">
       <div class="content-container calculator-list">
         <h2>Furnace Calculators</h2>
         <ul>
@@ -42,7 +42,7 @@
 
 <div class="calculator" *ngIf="getSelectedTool() == 'o2-enrichment'">
   <div class="row">
-    <div class="col-lg-10 offset-lg-1">
+    <div class="col-lg-10 mx-auto">
       <h2>O<sub>2</sub> Enrichment</h2>
       <p>Calculation of available heat (an indication of thermal efficiency) for fuel fired furnaces and expected energy savings
         when oxygen in combustion, “air”, is changed from standard (21%) to a higher value. Enter data for current (“Combustion
@@ -57,7 +57,7 @@
 
 <div class="calculator" *ngIf="getSelectedTool() == 'efficiency-improvement'">
   <div class="row">
-    <div class="col-lg-10 offset-lg-1">
+    <div class="col-lg-10 mx-auto">
       <h2>Efficiency Improvement Calculator</h2>
       <p> Provides calculation of available heat (the heat that remains within the heating system as a fraction of the heat input,
         which is an indication of thermal efficiency) and fuel savings for fuel fired furnaces and expected energy savings
@@ -74,7 +74,7 @@
 
 <div class="calculator" *ngIf="getSelectedTool() == 'energy-equivalency'">
   <div class="row">
-    <div class="col-lg-10 offset-lg-1">
+    <div class="col-lg-10 mx-auto">
       <h2>Energy Equivalency Calculator</h2>
       <p> Provides calculations for converting values of energy input requirements when the heat source is changed from fuel-firing
         (Btu/hr or kJ/hr) to electricity (kW), or vice versa.</p>
@@ -87,7 +87,7 @@
 
 <div class="calculator" *ngIf="getSelectedTool() == 'energy-use'">
   <div class="row">
-    <div class="col-lg-10 offset-lg-1">
+    <div class="col-lg-10 mx-auto">
       <h2>Flow Calculations Energy Use</h2>
       <p> Calculation of flow rates for commonly used gases using data for an orifice type flow meter and heat input calculations
         when the gas is a fuel (i.e. natural gas, propane).</p>
