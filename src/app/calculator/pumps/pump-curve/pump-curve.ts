@@ -1,5 +1,7 @@
 export interface PumpCurveForm {
   dataRows?: PumpCurveDataRow[],
+  dataPumpEfficiencyOrder?: number,
+  dataHeadFlowOrder?: number,
   baselineDiameter?: number,
   modifiedDiameter?: number,
   exploreLine?: number,

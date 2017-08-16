@@ -22,8 +22,29 @@
         <input name="pumpEfficiency" [(ngModel)]="dataRow.pumpEfficiency" type="number" step="any" class="form-control" id="pumpEfficiency"
           onfocus="this.select();" (focus)="focusField('pumpEfficiency')">
         <span class="input-group-addon units">%</span>
-        <span class="fa fa-times" (click)="removeRow(index)"></span>
       </div>
     </div>
+    <div class="col-1">
+      <span class="fa fa-times pull-right" (click)="removeRow(index)"></span>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="form-group col-4">
+    <label>Order</label>
+  </div>
+  <div class="form-group col-4">
+    <select id="dataPumpEfficiencyOrder" name="dataPumpEfficiencyOrder" class="form-control" [(ngModel)]="dataPumpEfficiencyOrder" (focus)="focusField('dataPumpEfficiencyOrder')">
+              <option *ngFor="let order of orderOptions" [ngValue]="order">{{order}}</option>
+            </select>
+    <!--<input name="dataPumpEfficiencyOrder" [(ngModel)]="dataPumpEfficiencyOrder" type="number" step="any" class="form-control"
+      id="dataPumpEfficiencyOrder" onfocus="this.select();" (focus)="focusField('dataPumpEfficiencyOrder')">-->
+  </div>
+  <div class="form-group col-4">
+        <select id="dataHeadFlowOrder" name="dataHeadFlowOrder" class="form-control" [(ngModel)]="dataHeadFlowOrder" (focus)="focusField('dataHeadFlowOrder')">
+              <option *ngFor="let order of orderOptions" [ngValue]="order">{{order}}</option>
+            </select>
+    <!--<input name="dataHeadFlowOrder" [(ngModel)]="dataHeadFlowOrder" type="number" step="any" class="form-control" id="dataHeadFlowOrder"
+      onfocus="this.select();" (focus)="focusField('dataHeadFlowOrder')">-->
   </div>
 </div>

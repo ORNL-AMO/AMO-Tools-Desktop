@@ -46,6 +46,8 @@ export class PumpCurveComponent implements OnInit {
   initForm() {
     this.pumpCurveForm = {
       dataRows: new Array<PumpCurveDataRow>({head: 0, flow: 0, pumpEfficiency: 0}),
+      dataPumpEfficiencyOrder: 0,
+      dataHeadFlowOrder: 0,
       baselineDiameter: 0,
       modifiedDiameter: 0,
       exploreLine: 0,

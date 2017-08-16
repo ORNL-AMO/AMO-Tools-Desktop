@@ -12,6 +12,10 @@ export class PumpCurveDataFormComponent implements OnInit {
   @Output('changeField')
   changeField = new EventEmitter<string>();
 
+  orderOptions: Array<number> = [
+    2,3,4,5,6
+  ]
+
   constructor() { }
 
   ngOnInit() {
