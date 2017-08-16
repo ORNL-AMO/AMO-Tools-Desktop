@@ -1,3 +1,23 @@
-<p>
-  pump-curve works!
-</p>
+<div class="pump-head">
+  <div class="row" *ngIf="settings">
+    <div class="col-md-4 col-sm-12 offset-md-1">
+      <app-pump-curve-form [(pumpCurveForm)]="pumpCurveForm"></app-pump-curve-form>
+    </div>
+    <div class="col-md-6 col-sm-12">
+      <ul class="tabs primary text-center">
+        <li class="calc-tab" [ngClass]="{'active': tabSelect == 'results'}">
+          <a (click)="setTab('results')">Graph</a>
+        </li><!--
+    --><li class="calc-tab" [ngClass]="{'active': tabSelect == 'help'}">
+          <a (click)="setTab('help')">Help</a>
+        </li>
+      </ul>
+      <div class="tab-content efficiency-results" id="systemCurveGraph">
+        <app-pump-curve-graph></app-pump-curve-graph>
+        <div *ngIf="tabSelect == 'help'" class="help-panel">
+          <app-pump-curve-help></app-pump-curve-help>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
