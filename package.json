@@ -1,6 +1,6 @@
 {
   "name": "amo-tools-desktop",
-  "version": "0.1.30",
+  "version": "0.1.41",
   "main": "main.js",
   "license": "MIT",
   "description": "AMO-Tools-Desktop",
@@ -40,7 +40,7 @@
     "@angular/platform-browser-dynamic": "^4.2.1",
     "@angular/platform-server": "^4.2.1",
     "@angular/router": "^4.2.1",
-    "amo-tools-suite": "0.1.40",
+    "amo-tools-suite": "0.1.41",
     "bootstrap": "^4.0.0-alpha.6",
     "core-js": "^2.4.1",
     "d3": "4.5.0",
