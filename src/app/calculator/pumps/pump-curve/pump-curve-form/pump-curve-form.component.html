@@ -1,0 +1,74 @@
+<div class="row">
+  <div class="col-8">
+    <form>
+      <div class="form-group form-check">
+        <label class="form-check-label">
+            <input name="selectedFormView" class="form-check-input" type="radio" [(ngModel)]="selectedFormView" value="Equation">Equation</label>
+        <label class="form-check-label">
+            <input name="selectedFormView" class="form-check-input" type="radio" [(ngModel)]="selectedFormView" value="Data">Data</label>
+      </div>
+    </form>
+  </div>
+  <div class="col-4">
+    <span *ngIf="selectedFormView == 'Data'" class="fa fa-plus pull-right" (click)="addRow()"></span>
+  </div>
+</div>
+<div class="row form-row">
+  <div class="col-12">
+    <app-pump-curve-data-form *ngIf="selectedFormView == 'Data'" [(pumpCurveForm)]="pumpCurveForm"></app-pump-curve-data-form>
+    <app-pump-curve-equation-form *ngIf="selectedFormView == 'Equation'" [(pumpCurveForm)]="pumpCurveForm"></app-pump-curve-equation-form>
+  </div>
+</div>
+<div class="row form-row">
+  <div class="col-6">
+    <label class="section-label">Baseline Condition</label>
+    <div class="form-group">
+      <label class="small" for="baselineDiameter">Diameter</label>
+      <div class="input-group">
+        <input name="baselineDiameter" [(ngModel)]="pumpCurveForm.baselineDiameter" type="number" step="any" class="form-control"
+          id="baselineDiameter" onfocus="this.select();" (focus)="focusField('baselineDiameter')">
+        <span class="input-group-addon units">in</span>
+      </div>
+    </div>
+  </div>
+  <div class="col-6">
+    <label class="section-label">Modified Condition</label>
+    <div class="form-group">
+      <label class="small" for="modifiedDiameter">Diameter</label>
+      <div class="input-group">
+        <input name="modifiedDiameter" [(ngModel)]="pumpCurveForm.modifiedDiameter" type="number" step="any" class="form-control"
+          id="modifiedDiameter" onfocus="this.select();" (focus)="focusField('modifiedDiameter')">
+        <span class="input-group-addon units">in</span>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row form-row">
+  <div class="col-6">
+    <label class="section-label">Explore</label>
+    <div class="form-group">
+      <label class="small" for="exploreHead">Head</label>
+      <div class="input-group">
+        <input name="exploreHead" [(ngModel)]="pumpCurveForm.exploreHead" type="number" step="any" class="form-control" id="exploreHead"
+          onfocus="this.select();" (focus)="focusField('exploreHead')">
+        <span class="input-group-addon units">ft</span>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="small" for="exploreFlow">Flow</label>
+      <div class="input-group">
+        <input name="exploreFlow" [(ngModel)]="pumpCurveForm.exploreFlow" type="number" step="any" class="form-control" id="modifiedDiameter"
+          onfocus="this.select();" (focus)="focusField('exploreFlow')">
+        <span class="input-group-addon units">gpm</span>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="small" for="explorePumpEfficiency">Pump Efficiency</label>
+      <div class="input-group">
+        <input name="explorePumpEfficiency" [(ngModel)]="pumpCurveForm.explorePumpEfficiency" type="number" step="any" class="form-control"
+          id="explorePumpEfficiency" onfocus="this.select();" (focus)="focusField('explorePumpEfficiency')">
+        <span class="input-group-addon units">%</span>
+      </div>
+    </div>
+  </div>
+</div>
