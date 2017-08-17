@@ -53,23 +53,23 @@ export class OutputSummaryComponent implements OnInit {
   getResults(psat: PSAT, settings: Settings, isModification?: boolean): PsatOutputs {
     if (psat.inputs.optimize_calculation) {
       return this.psatService.resultsOptimal(psat.inputs, settings);
-    } else if(!isModification) {
+    } else if (!isModification) {
       return this.psatService.resultsExisting(psat.inputs, settings);
-    }else{
-      console.log(this.psat.outputs.pump_efficiency);
+    } else {
       return this.psatService.resultsModified(psat.inputs, settings, this.psat.outputs.pump_efficiency);
     }
   }
 
   getMaxAnnualSavings() {
     let minCost = _.minBy(this.psat.modifications, (mod) => { return mod.psat.outputs.annual_cost })
-    this.selectedModificationIndex = _.findIndex(this.psat.modifications, minCost);
-    this.maxAnnualSavings = this.psat.outputs.annual_cost - minCost.psat.outputs.annual_cost;
-    
+    if (minCost) {
+      this.selectedModificationIndex = _.findIndex(this.psat.modifications, minCost);
+      this.maxAnnualSavings = this.psat.outputs.annual_cost - minCost.psat.outputs.annual_cost;
+    }
   }
 
-  useModification(){
-    this.selectModification.emit({modIndex: this.selectedModificationIndex, type: 'PSAT', assessment: this.assessment})
+  useModification() {
+    this.selectModification.emit({ modIndex: this.selectedModificationIndex, type: 'PSAT', assessment: this.assessment })
   }
 
 }

@@ -6,7 +6,7 @@ import { Settings } from '../../shared/models/settings';
 import { CompareService } from '../compare.service';
 import { WindowRefService } from '../../indexedDb/window-ref.service';
 import { HelpPanelService } from '../help-panel/help-panel.service';
-
+import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
 @Component({
   selector: 'app-field-data',
   templateUrl: './field-data.component.html',
@@ -63,7 +63,8 @@ export class FieldDataComponent implements OnInit {
   voltageError: string = null;
   costError: string = null;
   opFractionError: string = null;
-  constructor(private psatService: PsatService, private compareService: CompareService, private windowRefService: WindowRefService, private helpPanelService: HelpPanelService) { }
+  ratedPowerError: string = null;
+  constructor(private psatService: PsatService, private compareService: CompareService, private windowRefService: WindowRefService, private helpPanelService: HelpPanelService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
     this.psatForm = this.psatService.getFormFromPsat(this.psat.inputs);
@@ -235,7 +236,35 @@ export class FieldDataComponent implements OnInit {
       return true;
     }
   }
+  checkRatedPower() {
+    let tmpVal;
+    if (this.psatForm.value.loadEstimatedMethod == 'Power') {
+      tmpVal = this.psatForm.value.motorKW;
+    } else {
+      tmpVal = this.psatForm.value.motorAmps;
+    }
 
+    if (this.psat.inputs.motor_rated_power && tmpVal) {
+      let val, compare;
+      if (this.settings.powerMeasurement == 'hp') {
+        val = this.convertUnitsService.value(tmpVal).from(this.settings.powerMeasurement).to('kW');
+        compare = this.convertUnitsService.value(this.psat.inputs.motor_rated_power).from(this.settings.powerMeasurement).to('kW');
+      } else {
+        val = tmpVal;
+        compare = this.psat.inputs.motor_rated_power;
+      }
+      compare = compare * 1.5;
+      if (val > compare) {
+        this.ratedPowerError = 'The Field Data Motor Power is to high compared to the Rated Motor Power, please adjust the input values.';
+        return false
+      } else {
+        this.ratedPowerError = null;
+        return true
+      }
+    } else {
+      return true;
+    }
+  }
 
   //used to add classes to inputs with different baseline vs modification values
   initDifferenceMonitor() {

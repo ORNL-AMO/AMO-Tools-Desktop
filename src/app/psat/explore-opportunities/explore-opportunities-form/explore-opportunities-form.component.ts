@@ -2,7 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { PSAT } from '../../../shared/models/psat';
 import { PsatService } from '../../psat.service';
 import { Settings } from '../../../shared/models/settings';
-
+import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 @Component({
   selector: 'app-explore-opportunities-form',
   templateUrl: './explore-opportunities-form.component.html',
@@ -84,7 +84,10 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
   specifiedError2: string;
   opFractionError1: string;
   opFractionError2: string;
-  constructor(private psatService: PsatService) { }
+  ratedPowerError1: string;
+  ratedPowerError2: string;
+
+  constructor(private psatService: PsatService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
     if (this.settings.powerMeasurement == 'hp') {
@@ -379,6 +382,40 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
     }
   }
 
+  checkRatedPower(num: number) {
+    let val;
+    if (num == 1) {
+      if (this.settings.powerMeasurement == 'hp') {
+        val = this.convertUnitsService.value(this.psat.inputs.motor_rated_power).from(this.settings.powerMeasurement).to('kW');
+      } else {
+        val = this.psat.inputs.motor_rated_power;
+      }
+      val = val * 1.5;
+    } else if (num == 2) {
+      if (this.settings.powerMeasurement == 'hp') {
+        val = this.convertUnitsService.value(this.psat.modifications[this.exploreModIndex].psat.inputs.motor_rated_power).from(this.settings.powerMeasurement).to('kW');
+      } else {
+        val = this.psat.modifications[this.exploreModIndex].psat.inputs.motor_rated_power;
+      }
+      val = val * 1.5;
+    }
+    let compareVal = this.psat.inputs.motor_field_power;
+    if (compareVal > val) {
+      if (num == 1) {
+        this.ratedPowerError1 = 'The Field Data Motor Power is to high compared to the Rated Motor Power, please adjust the input values.';
+      } else if (num == 2) {
+        this.ratedPowerError2 = 'The Field Data Motor Power is to high compared to the Rated Motor Power, please adjust the input values.';
+      }
+      return false;
+    } else {
+      if (num == 1) {
+        this.ratedPowerError1 = null;
+      } else if (num == 2) {
+        this.ratedPowerError2 = null;
+      }
+      return true
+    }
+  }
 
   toggleCost() {
     if (this.showCost == false) {
@@ -397,10 +434,6 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
       this.psat.modifications[this.exploreModIndex].psat.inputs.head = this.psat.inputs.head;
       this.calculate();
     }
-  }
-
-  toggleCalculationMethod() {
-
   }
 
   toggleSystemData() {
