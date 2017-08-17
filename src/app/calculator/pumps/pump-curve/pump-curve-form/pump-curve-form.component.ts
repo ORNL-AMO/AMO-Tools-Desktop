@@ -11,6 +11,11 @@ export class PumpCurveFormComponent implements OnInit {
   @Output('changeField')
   changeField = new EventEmitter<string>();
   selectedFormView: string = 'Equation';
+
+  options: Array<string> = [
+    'Diameter',
+    'Speed'
+  ]
   constructor() { }
 
   ngOnInit() {

@@ -46,21 +46,22 @@ export class PumpCurveComponent implements OnInit {
   initForm() {
     this.pumpCurveForm = {
       dataRows: new Array<PumpCurveDataRow>({head: 0, flow: 0, pumpEfficiency: 0}),
-      dataPumpEfficiencyOrder: 0,
-      dataHeadFlowOrder: 0,
-      baselineDiameter: 0,
-      modifiedDiameter: 0,
+      dataPumpEfficiencyOrder: 3,
+      dataHeadFlowOrder: 3,
+      baselineMeasurement: 0,
+      modifiedMeasurement: 0,
       exploreLine: 0,
       exploreFlow: 0,
       exploreHead: 0,
       explorePumpEfficiency: 0,
-      headOrder: 0,
+      headOrder: 3,
       headConstant: 0,
       headFlow: 0,
       headFlow2: 0,
       headFlow3: 0,
-      pumpEfficiencyOrder: 0,
-      pumpEfficiencyConstant: 0
+      pumpEfficiencyOrder: 3,
+      pumpEfficiencyConstant: 0,
+      measurementOption: 'Diameter'
     }
   }
 }
