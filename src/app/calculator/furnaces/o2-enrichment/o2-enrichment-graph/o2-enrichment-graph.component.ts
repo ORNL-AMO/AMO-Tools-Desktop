@@ -669,6 +669,8 @@ export class O2EnrichmentGraphComponent implements OnInit {
 
   moveGuideLine(){
 
+    console.log(this.xPosition);
+    console.log(this.x(this.xPosition));
     this.guideLine
       .attr("transform", 'translate(' + this.x(this.xPosition) + ', 0)');
 

@@ -29,7 +29,7 @@ export class ExploreOpportunitiesSankeyComponent implements OnInit {
   firstChange: boolean = true;
 
   //Max width of Sankey
-  baseSize: number = 50;
+  baseSize: number;
   constructor(private convertUnitsService: ConvertUnitsService) {
   }
 
@@ -56,6 +56,8 @@ export class ExploreOpportunitiesSankeyComponent implements OnInit {
   }
 
   sankey(location, results) {
+
+    this.baseSize = 50 * (results.motor_power/this.baselineResults.motor_power);
 
     // Remove  all Sankeys
     d3.select(location).selectAll('svg').remove();
@@ -710,8 +712,6 @@ export class ExploreOpportunitiesSankeyComponent implements OnInit {
 
     var motorShaftPower;
     var pumpShaftPower;
-
-    console.log(results);
 
     if(this.settings.powerMeasurement === "hp") {
       motorShaftPower = this.convertUnitsService.value(results.motor_shaft_power).from("hp").to('kW');

@@ -12,8 +12,10 @@
           <a (click)="setTab('help')">Help</a>
         </li>
       </ul>
-      <div class="tab-content efficiency-results" id="systemCurveGraph">
-        <app-pump-curve-graph></app-pump-curve-graph>
+      <div class="tab-content curve-results" id="pumpCurveGraph">
+        <div *ngIf="tabSelect == 'results'" class="help-panel">
+          <app-pump-curve-graph></app-pump-curve-graph>
+        </div>
         <div *ngIf="tabSelect == 'help'" class="help-panel">
           <app-pump-curve-help></app-pump-curve-help>
         </div>

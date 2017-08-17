@@ -13,7 +13,6 @@ export class SpecificSpeedGraphComponent implements OnInit {
   @Input()
   speedForm: any;
 
-
   svg: any;
   xAxis: any;
   yAxis: any;
