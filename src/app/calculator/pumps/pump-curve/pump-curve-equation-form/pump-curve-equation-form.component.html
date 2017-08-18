@@ -1,9 +1,61 @@
-<!--<div *ngFor="let dataRow of pumpCurveForm.dataRows; let index = index;">
-  <div class="form-group">
-  <label *ngIf="index == 1" for="head">
-        <div class="input-group">
-        <input name="baselineDiameter" [(ngModel)]="pumpCurveForm.baselineDiameter" type="number" step="any" class="form-control"
-          id="baselineDiameter" onfocus="this.select();" (focus)="focusField('baselineDiameter')">
-        <span class="input-group-addon units">in</span>
-      </div>
-</div>-->
+<div class="row justify-content-end">
+  <div class="col-4">
+    <label class="section-label">Head</label>
+  </div>
+  <div class="col-4">
+    <label class="section-label">Pump Efficiency</label>
+  </div>
+</div>
+
+<div class="form-group row">
+  <label class="col-4 col-form-label">Order</label>
+  <div class="col-4">
+    <select id="headOrder" name="headOrder" class="form-control" [(ngModel)]="pumpCurveForm.headOrder" (focus)="focusField('headOrder')">
+              <option *ngFor="let order of orderOptions" [ngValue]="order">{{order}}</option>
+            </select>
+  </div>
+  <div class="col-4">
+    <select id="pumpEfficiencyOrder" name="pumpEfficiencyOrder" class="form-control" [(ngModel)]="pumpCurveForm.pumpEfficiencyOrder"
+      (focus)="focusField('pumpEfficiencyOrder')">
+              <option *ngFor="let order of orderOptions" [ngValue]="order">{{order}}</option>
+            </select>
+  </div>
+</div>
+
+<div class="form-group row">
+  <label class="col-4 col-form-label">Constant</label>
+  <div class="col-4">
+    <input name="headConstant" [(ngModel)]="pumpCurveForm.headConstant" type="number" step="any" class="form-control" id="headConstant"
+      onfocus="this.select();" (focus)="focusField('headConstant')">
+  </div>
+  <div class="col-4">
+    <input name="pumpEfficiencyConstant" [(ngModel)]="pumpCurveForm.pumpEfficiencyConstant" type="number" step="any" class="form-control"
+      id="pumpEfficiencyConstant" onfocus="this.select();" (focus)="focusField('pumpEfficiencyConstant')">
+  </div>
+</div>
+
+<div class="form-group row">
+  <label class="col-4 col-form-label">flow</label>
+  <div class="col-4">
+    <input name="headFlow" [(ngModel)]="pumpCurveForm.headFlow" type="number" step="any" class="form-control" id="headFlow"
+      onfocus="this.select();" (focus)="focusField('headFlow')">
+  </div>
+</div>
+
+
+<div class="form-group row">
+  <label class="col-4 col-form-label">flow<sup>2</sup></label>
+  <div class="col-4">
+    <input name="headFlow2" [(ngModel)]="pumpCurveForm.headFlow2" type="number" step="any" class="form-control" id="headFlow2"
+      onfocus="this.select();" (focus)="focusField('headFlow2')">
+  </div>
+</div>
+
+
+<div class="form-group row">
+  <label class="col-4 col-form-label">flow<sup>3</sup></label>
+  <div class="col-4">
+    <input name="headFlow3" [(ngModel)]="pumpCurveForm.headFlow3" type="number" step="any" class="form-control" id="headFlow3"
+      onfocus="this.select();" (focus)="focusField('headFlow3')">
+  </div>
+</div>

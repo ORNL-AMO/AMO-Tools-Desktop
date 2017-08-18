@@ -23,22 +23,29 @@
   <div class="col-6">
     <label class="section-label">Baseline Condition</label>
     <div class="form-group">
-      <label class="small" for="baselineDiameter">Diameter</label>
+      <select id="measurementOption" name="measurementOption" class="form-control" [(ngModel)]="pumpCurveForm.measurementOption"
+        (focus)="focusField('measurementOption')">
+              <option *ngFor="let option of options" [ngValue]="option">{{option}}</option>
+            </select>
+    </div>
+    <div class="form-group">
       <div class="input-group">
-        <input name="baselineDiameter" [(ngModel)]="pumpCurveForm.baselineDiameter" type="number" step="any" class="form-control"
-          id="baselineDiameter" onfocus="this.select();" (focus)="focusField('baselineDiameter')">
-        <span class="input-group-addon units">in</span>
+        <input name="baselineMeasurement" [(ngModel)]="pumpCurveForm.baselineMeasurement" type="number" step="any" class="form-control"
+          id="baselineMeasurement" onfocus="this.select();" (focus)="focusField('baselineMeasurement')">
+        <span *ngIf="pumpCurveForm.measurementOption == 'Diameter'" class="input-group-addon units">in</span>
+        <span *ngIf="pumpCurveForm.measurementOption == 'Speed'" class="input-group-addon units">gpm</span>
       </div>
     </div>
   </div>
   <div class="col-6">
     <label class="section-label">Modified Condition</label>
     <div class="form-group">
-      <label class="small" for="modifiedDiameter">Diameter</label>
+      <label class="small" for="modifiedMeasurement">{{pumpCurveForm.measurementOption}}</label>
       <div class="input-group">
-        <input name="modifiedDiameter" [(ngModel)]="pumpCurveForm.modifiedDiameter" type="number" step="any" class="form-control"
-          id="modifiedDiameter" onfocus="this.select();" (focus)="focusField('modifiedDiameter')">
-        <span class="input-group-addon units">in</span>
+        <input name="modifiedMeasurement" [(ngModel)]="pumpCurveForm.modifiedMeasurement" type="number" step="any" class="form-control"
+          id="modifiedMeasurement" onfocus="this.select();" (focus)="focusField('modifiedMeasurement')">
+        <span *ngIf="pumpCurveForm.measurementOption == 'Diameter'" class="input-group-addon units">in</span>
+        <span *ngIf="pumpCurveForm.measurementOption == 'Speed'" class="input-group-addon units">gpm</span>
       </div>
     </div>
   </div>
@@ -57,7 +64,7 @@
     <div class="form-group">
       <label class="small" for="exploreFlow">Flow</label>
       <div class="input-group">
-        <input name="exploreFlow" [(ngModel)]="pumpCurveForm.exploreFlow" type="number" step="any" class="form-control" id="modifiedDiameter"
+        <input name="exploreFlow" [(ngModel)]="pumpCurveForm.exploreFlow" type="number" step="any" class="form-control" id="modifiedMeasurement"
           onfocus="this.select();" (focus)="focusField('exploreFlow')">
         <span class="input-group-addon units">gpm</span>
       </div>
