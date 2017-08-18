@@ -44,45 +44,71 @@ export class SankeyComponent implements OnInit {
   ngOnInit() {
     if (this.losses) {
       this.getTotals();
-      this.sankey();
+      this.makeSankey();
     }
   }
 
-  // For dynamic sankey, will calculate totals when losses input changes value
-  // ngOnChanges(changes: SimpleChanges) {
-  //   if (!this.firstChange) {
-  //     if (changes.losses) {
-  //       this.getTotals();
-  //     }
-  //   }
-  //   else {
-  //     this.firstChange = false;
-  //   }
-  // }
-
   getTotals() {
-    //Not this anymore
-    //this.totalWallLoss = _.sumBy(this.losses.wallLosses, 'heatLoss');
-    //Do this
-    this.totalWallLoss = this.phastService.sumWallLosses(this.losses.wallLosses)/1000000;
+    this.totalWallLoss = 0;
+    this.totalAtmosphereLoss = 0;
+    this.totalAtmosphereLoss = 0;
+    this.totalCoolingLoss = 0;
+    this.totalOpeningLoss = 0;
+    this.totalFixtureLoss = 0;
+    this.totalLeakageLoss = 0;
 
-    this.totalAtmosphereLoss = _.sumBy(this.losses.atmosphereLosses, 'heatLoss')/1000000;
-    this.totalOtherLoss = _.sumBy(this.losses.otherLosses, 'heatLoss')/1000000;
-    this.totalCoolingLoss = _.sumBy(this.losses.coolingLosses, 'heatLoss')/1000000;
-    this.totalOpeningLoss = _.sumBy(this.losses.openingLosses, 'heatLoss')/1000000;
-    this.totalFixtureLoss = _.sumBy(this.losses.fixtureLosses, 'heatLoss')/1000000;
+    if(this.losses.wallLosses != null){
+      this.totalWallLoss = this.phastService.sumWallLosses(this.losses.wallLosses) / 1000000;
+    }
 
-    this.totalLeakageLoss = _.sumBy(this.losses.leakageLosses, 'heatLoss')/1000000;
-    this.totalExtSurfaceLoss = _.sumBy(this.losses.extendedSurfaces, 'heatLoss')/1000000;
-    this.totalChargeMaterialLoss = (_.sumBy(this.losses.chargeMaterials, 'gasChargeMaterial.heatRequired') + _.sumBy(this.losses.chargeMaterials, 'liquidChargeMaterial.heatRequired') + _.sumBy(this.losses.chargeMaterials, 'solidChargeMaterial.heatRequired'))/1000000;
+    if(this.losses.wallLosses != null) {
+      this.totalAtmosphereLoss = _.sumBy(this.losses.atmosphereLosses, 'heatLoss') / 1000000;
+    }
+
+    if(this.losses.otherLosses != null) {
+      this.totalOtherLoss = _.sumBy(this.losses.otherLosses, 'heatLoss') / 1000000;
+    }
+
+    if(this.losses.coolingLosses != null) {
+      this.totalCoolingLoss = _.sumBy(this.losses.coolingLosses, 'heatLoss') / 1000000;
+    }
+
+    if(this.losses.openingLosses != null) {
+      this.totalOpeningLoss = _.sumBy(this.losses.openingLosses, 'heatLoss') / 1000000;
+    }
+
+    if(this.losses.fixtureLosses != null) {
+      this.totalFixtureLoss = _.sumBy(this.losses.fixtureLosses, 'heatLoss') / 1000000;
+    }
+
+    if(this.losses.leakageLosses != null) {
+      this.totalLeakageLoss = _.sumBy(this.losses.leakageLosses, 'heatLoss') / 1000000;
+    }
+
+    if(this.losses.extendedSurfaces != null) {
+      this.totalExtSurfaceLoss = _.sumBy(this.losses.extendedSurfaces, 'heatLoss') / 1000000;
+    }
+
+    this.totalAtmosphereLoss = 0;
+    if(this.losses.chargeMaterials != null) {
+      if(_.sumBy(this.losses.chargeMaterials, 'gasChargeMaterial.heatRequired') != null){
+        this.totalChargeMaterialLoss += (_.sumBy(this.losses.chargeMaterials, 'gasChargeMaterial.heatRequired'));
+      }
+      if(_.sumBy(this.losses.chargeMaterials, 'liquidChargeMaterial.heatRequired') != null){
+        this.totalChargeMaterialLoss += (_.sumBy(this.losses.chargeMaterials, 'liquidChargeMaterial.heatRequired'));
+      }
+      if(_.sumBy(this.losses.chargeMaterials, 'solidChargeMaterial.heatRequired') != null){
+        this.totalChargeMaterialLoss += (_.sumBy(this.losses.chargeMaterials, 'solidChargeMaterial.heatRequired'));
+      }
+
+      this.totalChargeMaterialLoss /= 1000000;
+    }
 
     this.totalInput = this.totalWallLoss + this.totalAtmosphereLoss + this.totalOtherLoss + this.totalCoolingLoss + this.totalOpeningLoss + this.totalFixtureLoss + this.totalLeakageLoss + this.totalExtSurfaceLoss + this.totalChargeMaterialLoss;
   }
 
   makeSankey() {
-    // Sankey will not be made if even a single loss has not been entered
-    if (this.totalWallLoss != null && this.totalAtmosphereLoss != null && this.totalOtherLoss != null && this.totalCoolingLoss != null && this.totalOpeningLoss != null
-      && this.totalFixtureLoss != null && this.totalLeakageLoss != null && this.totalExtSurfaceLoss != null && this.totalChargeMaterialLoss != null) {
+    if(this.totalInput > 0){
       this.sankey();
     }
   }
@@ -96,7 +122,7 @@ export class SankeyComponent implements OnInit {
       /*0*/{ name: "Input", value: this.totalInput, displaySize: this.baseSize, width: 300, x: 200, y: 0, input: true, usefulOutput: false, inter: false, top: false, units: "MMBtu/hr" },
       /*1*/{ name: "inter1", value: 0, displaySize: 0, width: 0, x: 350, y: 0, input: false, usefulOutput: false, inter: true, top: true, units: "MMBtu/hr" },
       //TODO Flue Gass still need to get loss value
-      /*2*/{ name: "Flue Gas Losses", value: 12, displaySize: 0, width: 0, x: 600, y: 0, input: false, usefulOutput: false, inter: false, top: true, units: "MMBtu/hr" },
+      /*2*/{ name: "Flue Gas Losses", value: 0, displaySize: 0, width: 0, x: 600, y: 0, input: false, usefulOutput: false, inter: false, top: true, units: "MMBtu/hr" },
       /*3*/{ name: "inter2", value: 0, displaySize: 0, width: 0, x: 600, y: 0, input: false, usefulOutput: false, inter: true, top: false, units: "MMBtu/hr" },
       /*4*/{ name: "Atmosphere Losses", value: this.totalAtmosphereLoss , displaySize: 0, width: 0, x: 850, y: 0, input: false, usefulOutput: false, inter: false, top: false, units: "MMBtu/hr" },
       /*5*/{ name: "inter3", value: 0, displaySize: 0, width: 0, x: 850, y: 0, input: false, usefulOutput: false, inter: true, top: true, units: "MMBtu/hr" },
@@ -653,5 +679,4 @@ export class SankeyComponent implements OnInit {
       .style("fill", "#bae4ce")
       .style("stroke", "black");
   }
-
 }
