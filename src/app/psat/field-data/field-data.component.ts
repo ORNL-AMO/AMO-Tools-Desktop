@@ -70,6 +70,12 @@ export class FieldDataComponent implements OnInit {
     this.psatForm = this.psatService.getFormFromPsat(this.psat.inputs);
     this.checkForm(this.psatForm);
     this.helpPanelService.currentField.next('operatingFraction');
+    //init warning messages;
+    this.checkCost(true);
+    this.checkFlowRate(true);
+    this.checkOpFraction(true);
+    this.checkRatedPower(true);
+    this.checkVoltage(true);
   }
 
   ngAfterViewInit() {
@@ -172,7 +178,10 @@ export class FieldDataComponent implements OnInit {
     }, 3000)
   }
 
-  checkFlowRate() {
+  checkFlowRate(bool?: boolean) {
+    if (!bool) {
+      this.startSavePolling();
+    }
     if (this.psatForm.controls.flowRate.pristine == false && this.psatForm.value.flowRate != '') {
       let tmp = this.psatService.checkFlowRate(this.psat.inputs.pump_style, this.psatForm.value.flowRate, this.settings);
       if (tmp.message) {
@@ -187,7 +196,10 @@ export class FieldDataComponent implements OnInit {
     }
   }
 
-  checkVoltage() {
+  checkVoltage(bool?: boolean) {
+    if (!bool) {
+      this.startSavePolling();
+    }
     if (this.psatForm.value.measuredVoltage < 1 || this.psatForm.value.measuredVoltage == 0) {
       this.voltageError = 'Outside estimated voltage range';
       return false;
@@ -206,7 +218,10 @@ export class FieldDataComponent implements OnInit {
   }
 
 
-  checkCost() {
+  checkCost(bool?: boolean) {
+    if(!bool) {
+      this.startSavePolling();
+    }
     if (this.psatForm.value.costKwHr < 0) {
       this.costError = 'Cannot have negative cost';
       return false;
@@ -222,7 +237,10 @@ export class FieldDataComponent implements OnInit {
     }
   }
 
-  checkOpFraction() {
+  checkOpFraction(bool?: boolean) {
+    if (!bool) {
+      this.startSavePolling();
+    }
     if (this.psatForm.value.operatingFraction > 1) {
       this.opFractionError = 'Operating fraction needs to be between 0 - 1';
       return false;
@@ -236,7 +254,10 @@ export class FieldDataComponent implements OnInit {
       return true;
     }
   }
-  checkRatedPower() {
+  checkRatedPower(bool?: boolean) {
+    if (!bool) {
+      this.startSavePolling();
+    }
     let tmpVal;
     if (this.psatForm.value.loadEstimatedMethod == 'Power') {
       tmpVal = this.psatForm.value.motorKW;
@@ -255,7 +276,7 @@ export class FieldDataComponent implements OnInit {
       }
       compare = compare * 1.5;
       if (val > compare) {
-        this.ratedPowerError = 'The Field Data Motor Power is to high compared to the Rated Motor Power, please adjust the input values.';
+        this.ratedPowerError = 'The Field Data Motor Power is too high compared to the Rated Motor Power, please adjust the input values.';
         return false
       } else {
         this.ratedPowerError = null;

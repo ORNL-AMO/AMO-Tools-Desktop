@@ -29,6 +29,7 @@ export class LiquidChargeMaterialFormComponent implements OnInit {
   materialTypes: any;
   selectedMaterial: any;
   counter: any;
+  dischargeTempError: string = null;
   constructor(private suiteDbService: SuiteDbService, private chargeMaterialCompareService: ChargeMaterialCompareService, private windowRefService: WindowRefService) { }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -52,7 +53,7 @@ export class LiquidChargeMaterialFormComponent implements OnInit {
         }
       }
     }
-
+    this.checkDischargeTemp();
   }
 
   ngAfterViewInit() {
@@ -87,6 +88,15 @@ export class LiquidChargeMaterialFormComponent implements OnInit {
     this.changeField.emit(str);
   }
 
+  checkDischargeTemp() {
+    if ((this.chargeMaterialForm.value.dischargeTemperature > this.chargeMaterialForm.value.materialVaporizingTemperature) && this.chargeMaterialForm.value.liquidVaporized == 0) {
+      this.dischargeTempError = 'The discharge temperature is higher than the Vaporizing Temperature, please enter proper percentage for charge vaporized.';
+    } else if ((this.chargeMaterialForm.value.dischargeTemperature < this.chargeMaterialForm.value.materialVaporizingTemperature) && this.chargeMaterialForm.value.liquidVaporized > 0) {
+      this.dischargeTempError = 'The discharge temperature is lower than the vaporizing temperature, the percentage for charge liquid vaporized should be 0%.';
+    }else{
+      this.dischargeTempError = null;
+    }
+  }
 
   setProperties() {
     let selectedMaterial = this.suiteDbService.selectLiquidLoadChargeMaterialById(this.chargeMaterialForm.value.materialId);
@@ -104,6 +114,7 @@ export class LiquidChargeMaterialFormComponent implements OnInit {
 
   startSavePolling() {
     this.checkForm();
+    this.checkDischargeTemp();
     if (this.counter) {
       clearTimeout(this.counter);
     }

@@ -80,7 +80,6 @@ export class PsatService {
     tmpInputs = psatInputs;
     tmpInputs.baseline_pump_efficiency = baseline_pump_efficiency;
     let tmpResults: PsatOutputs = psatAddon.resultsModified(tmpInputs);
-    console.log(tmpResults);
     if (settings.powerMeasurement != 'hp') {
       tmpResults = this.convertOutputs(tmpResults, settings);
     }
