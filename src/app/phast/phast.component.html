@@ -18,7 +18,7 @@
         <div class="form">
           <app-system-basics *ngIf="subTab == 'system-basics'" [settings]="settings" [saveClicked]="saveClicked" [assessment]="assessment"
             [isAssessmentSettings]="isAssessmentSettings" (updateSettings)="getSettings($event)" (updateAssessment)="save()"></app-system-basics>
-          <app-operating-hours *ngIf="subTab == 'operating-hours'"></app-operating-hours>
+          <app-operating-hours *ngIf="subTab == 'operating-hours'" [phast]="_phast" (save)="save()"></app-operating-hours>
         </div>
         <div class="help">
           <app-help-panel></app-help-panel>

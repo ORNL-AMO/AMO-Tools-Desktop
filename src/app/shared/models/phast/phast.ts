@@ -18,19 +18,20 @@ import { DesignedEnergy } from './designedEnergy';
 
 export interface PHAST {
   name?: string,
-  phastInputs?: PhastInputs,
+  //phastInputs?: PhastInputs,
   losses?: Losses
   modifications?: Modification[],
   setupDone?: boolean,
   auxEquipment?: AuxEquipment[],
   meteredEnergy?: MeteredEnergy,
   designedEnergy?: DesignedEnergy
+  operatingHours?: OperatingHours
 }
 
 export interface PhastInputs {
   heatSource?: any,
   energySource?: any,
-  operatingHoursPerYear?: number
+  operatingHours?: OperatingHours
 }
 
 export interface Losses {
@@ -69,4 +70,13 @@ export interface Notes {
   slagNotes?: string,
   auxiliaryPowerNotes?: string,
   exhaustGasNotes?: string
+}
+
+export interface OperatingHours {
+  weeksPerYear?: number,
+  daysPerWeek?: number,
+  shiftsPerDay?: number,
+  hoursPerShift?: number,
+  hoursPerYear?: number,
+  isCalculated?: boolean
 }

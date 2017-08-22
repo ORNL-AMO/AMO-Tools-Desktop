@@ -39,7 +39,6 @@ export class PhastSettingsComponent implements OnInit {
   }
 
   setOptions() {
-    console.log('set')
     if (this.settingsForm.value.energySourceType == 'Fuel') {
       this.settingsForm.patchValue({
         furnaceType: 'Ladle Heater 1'
