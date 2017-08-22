@@ -1,33 +1,63 @@
 <div class="container-fluid">
 	<div class="row modify-conditions explore-container">
 		<div class="col-md-6 explore-column">
-			<app-explore-opportunities-form [psat]="psat" (emitCalculate)="getResults()" [settings]="settings" (emitSave)="save()" [exploreModIndex]="exploreModIndex"
-			 (changeField)="focusField($event)" (emitOptimize)="optimize()"></app-explore-opportunities-form>
+
+			<app-explore-opportunities-form 
+				[psat]="psat" 
+				(emitCalculate)="getResults()" 
+				[settings]="settings" 
+				(emitSave)="save()" 
+				[exploreModIndex]="exploreModIndex"
+				(changeField)="focusField($event)" 
+				(emitOptimize)="optimize()">
+			</app-explore-opportunities-form>
+
 		</div>
-		<div class="col-md-6 results-column">
+		<div class="col-md-6">
 			<div class="help-panel">
-				<div class="row">
-					<ul class="tabs primary tab-row">
-						<li class="tab-item-3" [ngClass]="{'active': tabSelect == 'results'}">
-							<a (click)="setTab('results')">Results</a>
-						</li><!--
-						--><li class="tab-item-3" [ngClass]="{'active': tabSelect == 'sankey'}">
-            <a (click)="setTab('sankey')">Sankey</a><!--
-						--><li class="tab-item-3" [ngClass]="{'active': tabSelect == 'help'}">
-							<a (click)="setTab('help')">Help</a>
-						</li>
-					</ul>
+
+
+				<div class="btn-group" role="group" aria-label="Basic example">
+					<button 
+						type="button" 
+						class="btn btn-secondary" 
+						[ngClass]="{'active': tabSelect == 'results'}" 
+						(click)="setTab('results')">
+						Results
+					</button>
+					<button 
+						type="button" 
+						class="btn btn-secondary" 
+						[ngClass]="{'active': tabSelect == 'sankey'}" 
+						(click)="setTab('sankey')">
+						Sankey
+					</button>
+					<button 
+						type="button" 
+						class="btn btn-secondary" 
+						[ngClass]="{'active': tabSelect == 'help'}" 
+						(click)="setTab('help')">
+						Help
+					</button>
 				</div>
-				<div class="row justify-content-center data-row align-items-center" *ngIf="tabSelect == 'help'">
-					<div class="col-11">
-						<app-explore-opportunities-help [currentField]="currentField" [settings]="settings" [psat]="psat"></app-explore-opportunities-help>
-					</div>
-				</div>
-        <div class="row justify-content-center data-row align-items-center" *ngIf="tabSelect == 'sankey'">
-          <div class="col-11">
-            <app-explore-opportunities-sankey [baselineResults]="baselineResults" [modificationResults]="modificationResults" [settings]="settings"></app-explore-opportunities-sankey>
-          </div>
-        </div>
+
+
+				<app-explore-opportunities-help 
+					[currentField]="currentField" 
+					[settings]="settings" 
+					[psat]="psat" 
+					*ngIf="tabSelect == 'help'">
+				</app-explore-opportunities-help>
+
+
+				<app-explore-opportunities-sankey 
+					[baselineResults]="baselineResults" 
+					[modificationResults]="modificationResults" 
+					[settings]="settings" 
+					*ngIf="tabSelect == 'sankey'">
+				</app-explore-opportunities-sankey>
+
+
 				<!--<div class="row justify-content-center data-row" *ngIf="tabSelect == 'results'">
 					<div class="col-3 chart-summary">
 						<dl class="chart-item">
@@ -52,13 +82,21 @@
 						</dl>
 					</div>
 				</div>-->
-				<div class="row justify-content-center data-row" *ngIf="tabSelect == 'results'">
-					<div class="col-8 data-table">
-						<app-explore-opportunities-results [percentSavings]="percentSavings" [psat]="psat" [exploreModIndex]="exploreModIndex" [baselineResults]="baselineResults"
-						 [modificationResults]="modificationResults" [settings]="settings" [annualSavings]="annualSavings"></app-explore-opportunities-results>
-					</div>
-				</div>
-			</div>
+
+
+				<app-explore-opportunities-results 
+					[percentSavings]="percentSavings" 
+					[psat]="psat" 
+					[exploreModIndex]="exploreModIndex" 
+					[baselineResults]="baselineResults"
+					[modificationResults]="modificationResults"
+					[settings]="settings"
+					[annualSavings]="annualSavings"
+					*ngIf="tabSelect == 'results'">
+				</app-explore-opportunities-results>
+
+
+			</div><!-- End .help-panel -->
 		</div>
 	</div>
 </div>

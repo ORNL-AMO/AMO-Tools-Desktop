@@ -1313,6 +1313,7 @@ Modify Conditions
 .modify-conditions {
   align-items: stretch;
   display: flex;
+  min-height: 100vh;
 }
 
   .modify-conditions .col-4 {
@@ -1321,11 +1322,21 @@ Modify Conditions
   }
 
 .modify-conditions .help-panel {
-  padding-left: 20px;
-  padding-right: 20px;
-  background: #efefef;
+  padding: 20px;
   height: 100%;
+  text-align: center;
 }
+  .modify-conditions .help-panel .btn-group {
+    margin-bottom: 20px;
+  }
+  .modify-conditions .help-panel .btn-group .btn {
+    padding: 10px 15px 9px;
+  }
+  .modify-conditions .help-panel .help-header, .modify-conditions .help-panel .help-content {
+    text-align: left;
+  }
+
+
 
 .modification {
   background: #fff;
@@ -1371,7 +1382,6 @@ Modify Conditions
       }
 
   .modification.disabled, .modification.disabled button, .modification.disabled textarea {
-    background: #efefef;
     border-color: #ddd;
     -webkit-box-shadow: none;
     -moz-box-shadow: none;
@@ -1379,8 +1389,8 @@ Modify Conditions
     z-index: 1;
   }
     .modification.disabled:hover, .modify-conditions .no-data:hover {
+      background: #fff;
       cursor: pointer;
-      border-color: #4990E2;
     }
 
     .modify-conditions .no-data {
