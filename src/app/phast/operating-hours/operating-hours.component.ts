@@ -10,7 +10,10 @@ import { PHAST, OperatingHours } from '../../shared/models/phast/phast';
 export class OperatingHoursComponent implements OnInit {
   @Input()
   phast: PHAST;
+  @Output('save')
+  save = new EventEmitter<boolean>();
 
+  counter: any;
   constructor(private formBuilder: FormBuilder) { }
 
   ngOnInit() {
@@ -27,11 +30,13 @@ export class OperatingHoursComponent implements OnInit {
   }
 
   calculatHrsPerYear() {
+    this.startSavePolling();
     this.phast.operatingHours.isCalculated = true;
     this.phast.operatingHours.hoursPerYear = this.phast.operatingHours.hoursPerShift * this.phast.operatingHours.shiftsPerDay * this.phast.operatingHours.daysPerWeek * this.phast.operatingHours.weeksPerYear;
   }
 
   setNotCalculated() {
+    this.startSavePolling();
     this.phast.operatingHours.isCalculated = false;
   }
 
@@ -71,4 +76,15 @@ export class OperatingHoursComponent implements OnInit {
     this.phast.operatingHours.weeksPerYear -= 1;
     this.calculatHrsPerYear();
   }
+
+  startSavePolling() {
+    if (this.counter) {
+      clearTimeout(this.counter);
+    }
+    this.counter = setTimeout(() => {
+      this.save.emit(true);
+      console.log('emit save');
+    }, 3000)
+  }
+
 }
