@@ -29,6 +29,9 @@ export class OpeningLossesFormComponent implements OnInit {
   elements: any;
   counter: any;
   firstChange: boolean = true;
+  temperatureError: string = null;
+  emissivityError: string = null;
+  timeOpenError: string = null;
   constructor(private convertUnitsService: ConvertUnitsService, private windowRefService: WindowRefService, private openingLossesCompareService: OpeningLossesCompareService) { }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -46,6 +49,9 @@ export class OpeningLossesFormComponent implements OnInit {
 
   ngOnInit() {
     this.getArea();
+    this.checkSurfaceEmissivity(true);
+    this.checkTemperature(true);
+    this.checkTimeOpen(true);
   }
 
   ngAfterViewInit() {
@@ -72,6 +78,39 @@ export class OpeningLossesFormComponent implements OnInit {
   checkForm() {
     if (this.openingLossesForm.status == 'VALID') {
       this.calculate.emit(true);
+    }
+  }
+
+  checkTemperature(bool?: boolean) {
+    if (!bool) {
+      this.startSavePolling();
+    }
+    if (this.openingLossesForm.value.ambientTemp > this.openingLossesForm.value.insideTemp) {
+      this.temperatureError = 'Ambient Temperature is greater than Average Zone Temperature';
+    } else {
+      this.temperatureError = null;
+    }
+  }
+
+  checkSurfaceEmissivity(bool?: boolean) {
+    if (!bool) {
+      this.startSavePolling();
+    }
+    if (this.openingLossesForm.value.emissivity > 1) {
+      this.emissivityError = 'Surface emissivity cannot be greater than 1';
+    } else {
+      this.emissivityError = null;
+    }
+  }
+
+  checkTimeOpen(bool?: boolean) {
+    if (!bool) {
+      this.startSavePolling();
+    }
+    if (this.openingLossesForm.value.percentTimeOpen > 100) {
+      this.timeOpenError = '% of Time Open cannot be greater than 100%';
+    } else {
+      this.timeOpenError = null;
     }
   }
 
