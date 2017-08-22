@@ -42,6 +42,7 @@ html, body {
   font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
   font-weight: 100;
   font-size: 18px;
+  height: 100%;
 }
 h1, h2, h3, h4, h5 {
   font-weight: 300;
@@ -148,7 +149,7 @@ label {
   width: inherit;
   padding: 2px;
   line-height: 1;
-  font-size: 16px;
+  font-size: 14px;
 }
 .form-text {
   margin-top: 0;
@@ -1286,8 +1287,7 @@ Tabs
 
 
 .tab-content {
-  overflow-y: scroll;
-  /*max-height: 78vh;*/
+  min-height: 100%;
 }
   .tab-content .wrapper {
       max-width: 1024px;
@@ -1307,19 +1307,19 @@ Tabs
 
 
 
-
-
 /*
 Modify Conditions
 ========================================= */
 .modify-conditions {
-  height: 100vh;
+  align-items: stretch;
   display: flex;
 }
+
   .modify-conditions .col-4 {
     padding-right: 0;
     padding-left: 0;
   }
+
 .modify-conditions .help-panel {
   padding-left: 20px;
   padding-right: 20px;
@@ -1329,6 +1329,9 @@ Modify Conditions
 
 .modification {
   background: #fff;
+  border-color: #333;
+  border-width: 0 1px;
+  border-style: solid;
   -webkit-box-shadow: 0px 0px 69px -1px rgba(0,0,0,0.2);
   -moz-box-shadow: 0px 0px 69px -1px rgba(0,0,0,0.2);
   box-shadow: 0px 0px 69px -1px rgba(0,0,0,0.2);
@@ -1369,6 +1372,7 @@ Modify Conditions
 
   .modification.disabled, .modification.disabled button, .modification.disabled textarea {
     background: #efefef;
+    border-color: #ddd;
     -webkit-box-shadow: none;
     -moz-box-shadow: none;
     box-shadow: none;
@@ -1376,7 +1380,7 @@ Modify Conditions
   }
     .modification.disabled:hover, .modify-conditions .no-data:hover {
       cursor: pointer;
-      border: #4990E2 solid 3px;
+      border-color: #4990E2;
     }
 
     .modify-conditions .no-data {
@@ -1484,6 +1488,21 @@ Modify Conditions
   .edit-modification a.btn-primary, .edit-modification a:not([href]):not([tabindex]).btn-primary {
     color: #fff;
   }
+
+.note-form textarea {
+  width: 100%;
+    border: #efefef solid 1px;
+    padding: 6px 8px;
+    font-size: 15px;
+    
+}
+  .note-form textarea::placeholder {
+    font-style: italic;
+    color: #929292; 
+  }
+
+
+
 
 /*
 Help Panel Cards
@@ -1853,7 +1872,6 @@ Toasty Overrides ================================= */
 .losses-container{
     height: 100%;
     max-height: 100%;
-    overflow-y: scroll;
     padding-top: 30px;
     padding-right: 50px;
     padding-left: 50px;

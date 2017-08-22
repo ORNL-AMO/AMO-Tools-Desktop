@@ -1,19 +1,15 @@
-<div class="form-group" *ngIf="currentTab == 'system-basics'">
-  <label for="notes">Assessment Settings Notes:</label>
-  <textarea class="form-control note-form" rows="3" id="notes" [(ngModel)]="notes.systemBasicsNotes"></textarea>
+<div class="note-form" *ngIf="currentTab == 'system-basics'">
+  <textarea rows="2" id="notes" [(ngModel)]="notes.systemBasicsNotes" placeholder="Add note for system basics"></textarea>
 </div>
 
-<div class="form-group" *ngIf="currentTab == 'pump-fluid'">
-  <label for="notes">Pump Fluid Notes:</label>
-  <textarea class="form-control note-form" rows="3" id="notes" [(ngModel)]="notes.pumpFluidNotes"></textarea>
+<div class="note-form" *ngIf="currentTab == 'pump-fluid'">
+  <textarea rows="2" id="notes" [(ngModel)]="notes.pumpFluidNotes" placeholder="Add note for pump & fluid"></textarea>
 </div>
 
-<div class="form-group" *ngIf="currentTab == 'motor'">
-  <label for="notes">Motor Notes:</label>
-  <textarea class="form-control note-form" rows="3" id="notes" [(ngModel)]="notes.motorNotes"></textarea>
+<div class="note-form" *ngIf="currentTab == 'motor'">
+  <textarea rows="2" id="notes" [(ngModel)]="notes.motorNotes" placeholder="Add note for motor"></textarea>
 </div>
 
-<div class="form-group" *ngIf="currentTab == 'field-data'">
-  <label for="notes">Field Data Notes:</label>
-  <textarea class="form-control note-form" rows="3" id="notes" [(ngModel)]="notes.fieldDataNotes"></textarea>
+<div class="note-form" *ngIf="currentTab == 'field-data'">
+  <textarea rows="2" id="notes" [(ngModel)]="notes.fieldDataNotes" placeholder="Add note for field data"></textarea>
 </div>
