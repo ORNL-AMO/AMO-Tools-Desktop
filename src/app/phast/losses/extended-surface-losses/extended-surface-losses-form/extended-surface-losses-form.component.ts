@@ -27,7 +27,8 @@ export class ExtendedSurfaceLossesFormComponent implements OnInit {
 
   firstChange: boolean = true;
   counter: any;
-
+  temperatureError: string = null;
+  emissivityError: string = null;
   constructor(private extendedSurfaceCompareService: ExtendedSurfaceCompareService, private windowRefService: WindowRefService) { }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -42,7 +43,10 @@ export class ExtendedSurfaceLossesFormComponent implements OnInit {
     }
   }
 
-  ngOnInit() { }
+  ngOnInit() { 
+    this.checkEmissivity(true);
+    this.checkTemperature(true);
+  }
 
   ngAfterViewInit() {
     if (!this.baselineSelected) {
@@ -67,6 +71,28 @@ export class ExtendedSurfaceLossesFormComponent implements OnInit {
   checkForm() {
     if (this.lossesForm.status == "VALID") {
       this.calculate.emit(true);
+    }
+  }
+
+  checkEmissivity(bool?: boolean){
+    if(!bool){
+      this.startSavePolling();
+    }
+    if(this.lossesForm.value.surfaceEmissivity >> 1){
+      this.emissivityError = 'Surface emissivity cannot be greater than 1';
+    }else{
+      this.emissivityError = null;
+    }
+  }
+
+  checkTemperature(bool?: boolean){
+    if(!bool){
+      this.startSavePolling();
+    }
+    if(this.lossesForm.value.ambientTemp > this.lossesForm.value.avgSurfaceTemp){
+      this.temperatureError = 'Ambient Temperature is greater than Surface Temperature';
+    }else{
+      this.temperatureError = null;
     }
   }
 
