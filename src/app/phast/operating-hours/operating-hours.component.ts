@@ -1,5 +1,6 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
+import { PHAST, OperatingHours } from '../../shared/models/phast/phast';
 
 @Component({
   selector: 'app-operating-hours',
@@ -7,34 +8,83 @@ import { FormBuilder } from '@angular/forms';
   styleUrls: ['operating-hours.component.css']
 })
 export class OperatingHoursComponent implements OnInit {
-  @Output('continue')
-  continue = new EventEmitter<string>();
+  @Input()
+  phast: PHAST;
+  @Output('save')
+  save = new EventEmitter<boolean>();
 
-  hoursForm: any;
+  counter: any;
   constructor(private formBuilder: FormBuilder) { }
 
   ngOnInit() {
-    this.hoursForm = this.initForm();
+    if (!this.phast.operatingHours) {
+      let defaultHours: OperatingHours = {
+        weeksPerYear: 52,
+        daysPerWeek: 7,
+        shiftsPerDay: 3,
+        hoursPerShift: 8,
+      }
+      this.phast.operatingHours = defaultHours;
+      this.calculatHrsPerYear();
+    }
   }
 
-  initForm(){
-    return this.formBuilder.group({
-      'weeksPerYear': [''],
-      'daysPerWeek': [''],
-      'shiftsPerDay': [''],
-      'hoursPerShift': [''],
-      'totalHoursPerYear': [''],
-    })
+  calculatHrsPerYear() {
+    this.startSavePolling();
+    this.phast.operatingHours.isCalculated = true;
+    this.phast.operatingHours.hoursPerYear = this.phast.operatingHours.hoursPerShift * this.phast.operatingHours.shiftsPerDay * this.phast.operatingHours.daysPerWeek * this.phast.operatingHours.weeksPerYear;
   }
 
-  saveContinue(){
-    //TODO: Save Logic
-
-    this.continue.emit('losses');
+  setNotCalculated() {
+    this.startSavePolling();
+    this.phast.operatingHours.isCalculated = false;
   }
 
-  back(){
-    this.continue.emit('system-basics');
+  addShift() {
+    this.phast.operatingHours.shiftsPerDay += 1;
+    this.calculatHrsPerYear();
+  }
+
+  subtractShift() {
+    this.phast.operatingHours.shiftsPerDay -= 1;
+    this.calculatHrsPerYear();
+  }
+  subtractShiftHr() {
+    this.phast.operatingHours.hoursPerShift -= 1;
+    this.calculatHrsPerYear();
+  }
+  addShiftHr() {
+    this.phast.operatingHours.hoursPerShift += 1;
+    this.calculatHrsPerYear();
+  }
+
+  subtractWeekDay() {
+    this.phast.operatingHours.daysPerWeek -= 1;
+    this.calculatHrsPerYear();
+  }
+  addWeekDay() {
+    this.phast.operatingHours.daysPerWeek += 1;
+    this.calculatHrsPerYear();
+  }
+
+  addWeek(num: number) {
+    this.phast.operatingHours.weeksPerYear += 1;
+    this.calculatHrsPerYear();
+  }
+
+  subtractWeek(num: number) {
+    this.phast.operatingHours.weeksPerYear -= 1;
+    this.calculatHrsPerYear();
+  }
+
+  startSavePolling() {
+    if (this.counter) {
+      clearTimeout(this.counter);
+    }
+    this.counter = setTimeout(() => {
+      this.save.emit(true);
+      console.log('emit save');
+    }, 3000)
   }
 
 }

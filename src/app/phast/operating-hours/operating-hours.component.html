@@ -1,61 +1,42 @@
-<form [formGroup]="hoursForm">
-  <div class="calc-border">
-    <div class="row form-group">
-      <label class="col-6 col-form-label" for="weeksPerYear">Weeks / year</label>
-      <div class="col-6">
-        <input type="number" step="any" class="form-control" id="weeksPerYear">
-        <app-control-messages [control]="hoursForm.controls.weeksPerYear"></app-control-messages>
-      </div>
-    </div>
-
-    <div class="row form-group">
-      <label class="col-6 col-form-label" for="daysPerWeek">Days / week</label>
-      <div class="col-6 input-group">
-        <div class="incrementor input-group-addon">
-          <div class="btn"><i class="fa fa-minus"></i></div>
-        </div>
-        <div class="incrementor input-group-addon">
-          <div class="btn"><i class="fa fa-plus"></i></div>
-        </div>
-        <input type="number" step="any" class="form-control" id="daysPerWeek">
-        <app-control-messages [control]="hoursForm.controls.daysPerWeek"></app-control-messages>
-      </div>
-    </div>
-
-    <div class="row form-group">
-      <label class="col-6 col-form-label" for="shiftsPerDay">Shifts / day</label>
-      <div class="col-6 input-group">
-        <div class="incrementor input-group-addon">
-          <div class="btn"><i class="fa fa-minus"></i></div>
-        </div>
-        <div class="incrementor input-group-addon">
-          <div class="btn"><i class="fa fa-plus"></i></div>
-        </div>
-        <input type="number" step="any" class="form-control" id="shiftsPerDay">
-        <app-control-messages [control]="hoursForm.controls.shiftsPerDay"></app-control-messages>
-      </div>
-    </div>
-
-    <div class="row form-group">
-      <label class="col-6 col-form-label" for="hoursPerShift">Hours / shift</label>
-      <div class="col-6 input-group">
-        <div class="incrementor input-group-addon">
-          <div class="btn"><i class="fa fa-minus"></i></div>
-        </div>
-        <div class="incrementor input-group-addon">
-          <div class="btn"><i class="fa fa-plus"></i></div>
-        </div>
-        <input type="number" step="any" class="form-control" id="hoursPerShift">
-
-        <app-control-messages [control]="hoursForm.controls.hoursPerShift"></app-control-messages>
-      </div>
+<div class="form-section">
+  <div class="form-group">
+    <label for="weeksPerYear">Weeks / Year</label>
+    <div class="incrementor form-control input-group">
+      <button class="btn input-group-btn" (click)="subtractWeek()" [disabled]="phast.operatingHours.weeksPerYear == 0"><i class="fa fa-minus"></i></button>
+      <button class="btn input-group-btn" (click)="addWeek()" [disabled]="phast.operatingHours.weeksPerYear == 52"><i class="fa fa-plus"></i></button>
+      <input name="weeksPerYear" type="number" step="any" class="form-control" id="weeksPerYear" (input)="calculatHrsPerYear()"
+        [(ngModel)]="phast.operatingHours.weeksPerYear">
     </div>
   </div>
-  <div class="row form-group total-row">
-    <label class="col-6 col-form-label bold" for="totalHoursPerYear">Total Hours / year</label>
-    <div class="col-6">
-      <input type="number" step="any" class="form-control" id="totalHoursPerYear">
-      <app-control-messages [control]="hoursForm.controls.totalHoursPerYear"></app-control-messages>
+  <div class="form-group">
+    <label for="daysPerWeek">Days / Week</label>
+    <div class="incrementor form-control input-group">
+      <button class="btn input-group-btn" (click)="subtractWeekDay()" [disabled]="phast.operatingHours.daysPerWeek == 0"><i class="fa fa-minus"></i></button>
+      <button class="btn input-group-btn" (click)="addWeekDay()" [disabled]="phast.operatingHours.daysPerWeek == 7"><i class="fa fa-plus"></i></button>
+      <input name="daysPerWeek" type="number" step="any" class="form-control" id="daysPerWeek" (input)="calculatHrsPerYear()" [(ngModel)]="phast.operatingHours.daysPerWeek">
     </div>
   </div>
-</form>
+  <div class="form-group">
+    <label for="shiftsPerDay">Shifts / Day</label>
+    <div class="incrementor form-control input-group">
+      <button class="btn input-group-btn" (click)="subtractShift()" [disabled]="phast.operatingHours.shiftsPerDay == 0"><i class="fa fa-minus"></i></button>
+      <button class="btn input-group-btn" (click)="addShift()" [disabled]="phast.operatingHours.shiftsPerDay == 3"><i class="fa fa-plus"></i></button>
+      <input name="shiftsPerDay" type="number" step="any" class="form-control" id="shiftsPerDay" (input)="calculatHrsPerYear()"
+        [(ngModel)]="phast.operatingHours.shiftsPerDay">
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="hoursPerShift">Hours / Shift</label>
+    <div class="incrementor form-control input-group">
+      <button class="btn input-group-btn" (click)="subtractShiftHr()" [disabled]="phast.operatingHours.hoursPerShift == 0"><i class="fa fa-minus"></i></button>
+      <button class="btn input-group-btn" (click)="addShiftHr()" [disabled]="phast.operatingHours.hoursPerShift == 8"><i class="fa fa-plus"></i></button>
+      <input name="hoursPerShift" type="number" step="any" class="form-control" id="hoursPerShift" (input)="calculatHrsPerYear()"
+        [(ngModel)]="phast.operatingHours.hoursPerShift">
+    </div>
+  </div>
+    <span class="alert-warning pull-right small"  *ngIf="!phast.operatingHours.isCalculated">Above values not used.</span>
+</div>
+<div class="form-group">
+  <label for="hoursPerYear">Hours / Year</label>
+  <input name="hoursPerYear" type="number" step="any" class="form-control" id="hoursPerYear" (input)="setNotCalculated()" [(ngModel)]="phast.operatingHours.hoursPerYear">
+</div>
