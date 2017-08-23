@@ -32,6 +32,7 @@ export class SolidChargeMaterialFormComponent implements OnInit {
   selectedMaterialId: any;
   selectedMaterial: any;
   counter: any;
+  dischargeTempError: string = null;
   constructor(private suiteDbService: SuiteDbService, private chargeMaterialCompareService: ChargeMaterialCompareService, private windowRefService: WindowRefService) { }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -85,6 +86,20 @@ export class SolidChargeMaterialFormComponent implements OnInit {
     }
   }
 
+  checkDischargeTemp() {
+    if ((this.chargeMaterialForm.value.chargeMaterialDischargeTemperature > this.chargeMaterialForm.value.materialMeltingPoint) && this.chargeMaterialForm.value.percentChargeMelted == 0) {
+      this.dischargeTempError = 'The discharge temperature is higher than the melting point, please enter proper percentage for charge melted.';
+      return false;
+    } else if ((this.chargeMaterialForm.value.chargeMaterialDischargeTemperature < this.chargeMaterialForm.value.materialMeltingPoint) && this.chargeMaterialForm.value.percentChargeMelted > 0) {
+      this.dischargeTempError = 'The discharge temperature is lower than the melting point, the percentage for charge melted should be 0%.';
+      return false;
+    } else {
+      this.dischargeTempError = null;
+      return true;
+    }
+  }
+
+
   focusField(str: string) {
     this.changeField.emit(str);
   }
@@ -99,6 +114,7 @@ export class SolidChargeMaterialFormComponent implements OnInit {
     })
     this.checkForm();
   }
+
   emitSave() {
     this.saveEmit.emit(true);
   }

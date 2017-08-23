@@ -26,6 +26,8 @@ export class WallLossesFormComponent implements OnInit {
 
   firstChange: boolean = true;
   counter: any;
+  surfaceTmpError: string = null;
+  emissivityError: string = null;
   constructor(private windowRefService: WindowRefService, private wallLossCompareService: WallLossCompareService) { }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -41,7 +43,11 @@ export class WallLossesFormComponent implements OnInit {
     }
   }
 
-  ngOnInit() { }
+  ngOnInit() {
+    //init warnings
+    this.checkEmissivity(true);
+    this.checkSurfaceTemp(true);
+   }
 
   ngAfterViewInit() {
     //wait for view to init to disable form
@@ -72,6 +78,30 @@ export class WallLossesFormComponent implements OnInit {
       this.calculate.emit(true);
     }
   }
+  //checkSurfaceTemp and ambientTemp for needed warnings
+  checkSurfaceTemp(bool?: boolean){
+    //bool = true on call from ngOnInit to skip save line
+    if(!bool){
+      this.startSavePolling();
+    }
+    if(this.wallLossesForm.value.avgSurfaceTemp < this.wallLossesForm.value.ambientTemp){
+      this.surfaceTmpError = 'Surface temperature lower is than ambient temperature';
+    }else{
+      this.surfaceTmpError = null;
+    }
+  }
+  //same as above for emissivity
+  checkEmissivity(bool?:boolean){
+    if(!bool){
+      this.startSavePolling();
+    }
+    if(this.wallLossesForm.value.surfaceEmissivity > 1){
+      this.emissivityError = 'Surface emissivity cannot be greater than 1';
+    }else{
+      this.emissivityError = null;
+    }
+  }
+
   //emits to wall-losses.component the focused field changed
   focusField(str: string) {
     this.changeField.emit(str);

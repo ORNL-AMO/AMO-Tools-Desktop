@@ -15,7 +15,7 @@ export class AtmosphereLossesFormComponent implements OnInit {
   baselineSelected: boolean;
   @Output('changeField')
   changeField = new EventEmitter<string>();
-  @Output('saveEmit')
+  @Output('saveEmit')                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       
   saveEmit = new EventEmitter<boolean>();
   @Input()
   lossIndex: number;
@@ -25,6 +25,8 @@ export class AtmosphereLossesFormComponent implements OnInit {
 
   firstChange: boolean = true;
   counter: any;
+
+  temperatureError: string = null;
   constructor(private windowRefService: WindowRefService, private atmosphereLossesCompareService: AtmosphereLossesCompareService) { }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -39,7 +41,9 @@ export class AtmosphereLossesFormComponent implements OnInit {
     }
   }
 
-  ngOnInit() { }
+  ngOnInit() { 
+    this.checkTempError(true);
+  }
 
   ngAfterViewInit() {
     if (!this.baselineSelected) {
@@ -66,6 +70,17 @@ export class AtmosphereLossesFormComponent implements OnInit {
   checkForm() {
     if (this.atmosphereLossForm.status == "VALID") {
       this.calculate.emit(true);
+    }
+  }
+
+  checkTempError(bool?: boolean){
+    if(!bool){
+      this.startSavePolling();
+    }
+    if(this.atmosphereLossForm.value.inletTemp > this.atmosphereLossForm.value.outletTemp){
+      this.temperatureError = 'Inlet temperature is greater than outlet temperature'
+    }else{
+      this.temperatureError = null;
     }
   }
 

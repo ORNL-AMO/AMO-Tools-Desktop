@@ -76,6 +76,13 @@ export class MotorComponent implements OnInit {
       this.formRef.nativeElement.frequency.focus();
     }
     this.helpPanelService.currentField.next('lineFrequency');
+    //init alert meessages
+    this.checkEfficiency(true);
+    this.checkFLA(true);
+    this.checkMargin(true);
+    this.checkMotorRpm(true);
+    this.checkMotorVoltage(true);
+    this.checkRatedPower(true);
   }
 
   ngAfterViewInit() {
@@ -231,7 +238,10 @@ export class MotorComponent implements OnInit {
     }
   }
 
-  checkMotorRpm() {
+  checkMotorRpm(bool?: boolean) {
+    if(!bool){
+      this.startSavePolling();
+    }
     if (this.psatForm.value.frequency && this.psatForm.value.motorRPM != '') {
       let frequencyEnum = this.psatService.getLineFreqEnum(this.psatForm.value.frequency);
       let tmp = this.psatService.checkMotorRpm(frequencyEnum, this.psatForm.value.motorRPM);
@@ -250,7 +260,10 @@ export class MotorComponent implements OnInit {
     }
   }
 
-  checkMotorVoltage() {
+  checkMotorVoltage(bool?: boolean) {
+    if(!bool){
+      this.startSavePolling();
+    }
     if (this.psatForm.value.motorVoltage != '') {
       let tmp = this.psatService.checkMotorVoltage(this.psatForm.value.motorVoltage);
       if (tmp.message) {
@@ -266,7 +279,10 @@ export class MotorComponent implements OnInit {
   }
 
 
-  checkEfficiency() {
+  checkEfficiency(bool?: boolean) {
+    if(!bool){
+      this.startSavePolling();
+    }
     if (this.psatForm.value.efficiency > 100) {
       this.efficiencyError = "Unrealistic efficiency, shouldn't be greater then 100%";
       return false;
@@ -285,7 +301,10 @@ export class MotorComponent implements OnInit {
     }
   }
 
-  checkRatedPower() {
+  checkRatedPower(bool?: boolean) {
+    if(!bool){
+      this.startSavePolling();
+    }
     if (this.psat.inputs.motor_field_power && this.psatForm.value.horsePower) {
       let val, compare;
       if (this.settings.powerMeasurement == 'hp') {
@@ -308,7 +327,10 @@ export class MotorComponent implements OnInit {
     }
   }
 
-  checkMargin() {
+  checkMargin(bool?: boolean) {
+    if(!bool){
+      this.startSavePolling();
+    }
     if (this.psatForm.value.sizeMargin > 100) {
       this.marginError = "Unrealistic size margin, shouldn't be greater then 100%";
       return false;
@@ -323,7 +345,10 @@ export class MotorComponent implements OnInit {
     }
   }
 
-  checkFLA() {
+  checkFLA(bool?: boolean) {
+    if(!bool){
+      this.startSavePolling();
+    }
     if (this.checkMotorRpm()) {
       let tmpEfficiency = this.psatService.getEfficiencyFromForm(this.psatForm);
       let estEfficiency = this.psatService.estFLA(
