@@ -67,8 +67,6 @@
         [(losses)]="phast.losses" [addLossToggle]="addLossToggle" [saveClicked]="saveClicked" *ngIf="lossesTab == 'auxiliary-power'"
         [isBaseline]="true"></app-auxiliary-power-losses>
 
-
-      <app-heat-storage *ngIf="lossesTab == 'heat-storage'"></app-heat-storage>
     </div>
   </div>
   <!--Modification Start -->
@@ -130,8 +128,6 @@
 
       <app-auxiliary-power-losses (fieldChange)="changeField($event)" [baselineSelected]="modificationSelected" (savedLoss)="saveModifications()"
         [(losses)]="_modifications[modificationIndex].phast.losses" [saveClicked]="saveClicked" *ngIf="lossesTab == 'auxiliary-power'"></app-auxiliary-power-losses>
-
-      <app-heat-storage *ngIf="lossesTab == 'heat-storage'"></app-heat-storage>
 
     </div>
 

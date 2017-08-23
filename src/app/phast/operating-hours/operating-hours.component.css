@@ -1,29 +1,5 @@
-.input-row-border-left{
-  border-left: groove;
-  border-left-width: 1px;
-  border-left-color: lightgray;
-  padding-left: 10px;
+.form-section{
+    margin-bottom: 10px;
+  padding-bottom: 18px !important;
+  border-bottom: #bbb dashed 1px;
 }
-
-.input-row-border-right{
-  border-right: groove;
-  border-right-width: 1px;
-  border-right-color: lightgray;
-  padding-right: 10px;
-}
-
-.input-row-border-top{
-  border-top: groove;
-  border-top-width: 1px;
-  border-top-color: lightgray;
-  padding-top: 10px;
-}
-
-
-.input-row-border-bottom{
-  border-bottom: groove;
-  border-bottom-width: 1px;
-  border-bottom-color: lightgray;
-  padding-bottom: 10px;
-}
-

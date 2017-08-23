@@ -87,8 +87,10 @@ export class ConvertUnitsService {
   }
 
   from(from: any) {
-    if (!this.val)
+    if (!this.val){
+      if(this.val != 0)
       throw new Error('need to set value before call to .from');
+    }
     if (this.destination)
       throw new Error('.from must be called before .to');
     this.origin = this.getUnit(from);

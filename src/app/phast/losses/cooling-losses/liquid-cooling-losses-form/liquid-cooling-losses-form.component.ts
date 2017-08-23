@@ -26,6 +26,7 @@ export class LiquidCoolingLossesFormComponent implements OnInit {
 
   firstChange: boolean = true;
   counter: any;
+  temperatureError: string = null;
   constructor(private windowRefService: WindowRefService, private coolingLossesCompareService: CoolingLossesCompareService) { }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -41,7 +42,9 @@ export class LiquidCoolingLossesFormComponent implements OnInit {
   }
 
 
-  ngOnInit() { }
+  ngOnInit() { 
+    this.checkTemperature(true);
+  }
 
   ngAfterViewInit() {
     if (!this.baselineSelected) {
@@ -68,6 +71,17 @@ export class LiquidCoolingLossesFormComponent implements OnInit {
   checkForm() {
     if (this.lossesForm.status == 'VALID') {
       this.calculate.emit(true)
+    }
+  }
+
+  checkTemperature(bool?: boolean){
+    if(!bool){
+      this.startSavePolling();
+    }
+    if(this.lossesForm.value.inletTemp > this.lossesForm.value.outletTemp){
+      this.temperatureError = 'Inlet temperature is greater than outlet temperature'
+    }else{
+      this.temperatureError = null;
     }
   }
 

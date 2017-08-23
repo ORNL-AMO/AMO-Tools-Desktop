@@ -31,7 +31,7 @@ import { SuiteDbModule } from '../suiteDb/suiteDb.module';
 import { LandingScreenComponent } from '../landing-screen/landing-screen.component';
 import { AboutPageComponent } from '../about-page/about-page.component';
 import { TutorialsComponent } from '../tutorials/tutorials.component';
-
+import { ContactPageComponent } from '../contact-page/contact-page.component';
 @NgModule({
   declarations: [
     CoreComponent,
@@ -41,7 +41,8 @@ import { TutorialsComponent } from '../tutorials/tutorials.component';
     DirectoryItemComponent,
     LandingScreenComponent,
     AboutPageComponent,
-    TutorialsComponent
+    TutorialsComponent,
+    ContactPageComponent
   ],
   imports: [
     CommonModule,

@@ -1,0 +1,34 @@
+<div class="report-data">
+  <div class="results">
+    <div class="card">
+      <div class="card-block">
+        <table class="table">
+          <thead>
+            <tr>
+              <th></th>
+              <th style="text-align: center">Metered Energy Use</th>
+              <th style="text-align: center">Calculated By Phast</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Fuel Energy Used</td>
+              <td>{{results.meteredEnergyUsed | number:'2.2-2'}} {{resultUnits.meteredEnergyUsed}}</td>
+              <td>{{results.calculatedFuelEnergyUsed | number:'2.2-2'}} {{resultUnits.calculatedFuelEnergyUsed}}</td>
+            </tr>
+            <tr>
+              <td>Energy Intensity for Charge Materials</td>
+              <td>{{results.meteredEnergyIntensity | number:'2.2-2'}} {{resultUnits.meteredEnergyIntensity}}</td>
+              <td>{{results.calculatedEnergyIntensity | number:'2.2-2'}} {{resultUnits.calculatedEnergyIntensity}}</td>
+            </tr>
+            <tr>
+              <td>Electricity Used (Auxiliary)</td>
+              <td>{{results.meteredElectricityUsed | number:'2.2-2'}} {{resultUnits.meteredElectricityUsed}}</td>
+              <td>{{results.calculatedElectricityUsed | number:'2.2-2'}} {{resultUnits.calculatedElectricityUsed}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

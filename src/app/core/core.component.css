@@ -50,27 +50,9 @@
 	color: #fff;
 }
 .feedback h2 {
-	font-size: 12px;
+	font-size: 14px;
     margin-bottom: 0;
 }
-.feedback p, .feedback .btn {
-	display: none;
-	opacity: 0;
-}
-.feedback:hover h2, .feedback:hover p, .feedback:hover .btn {
-	-webkit-transition: all 250ms ease-out;
-	-moz-transition: all 250ms ease-out;
-	-o-transition: all 250ms ease-out;
-	transition: all 250ms ease-out;
-}
-.feedback:hover h2 {
-	font-size: 14px;
-}
-.feedback:hover p, .feedback:hover .btn {
-	display: block;
-	opacity: 1;
-}
-
 .feedback p {
 	font-size: 14px;
 	margin-bottom: 0;

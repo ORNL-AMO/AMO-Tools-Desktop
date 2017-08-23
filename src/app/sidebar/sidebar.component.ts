@@ -2,7 +2,7 @@ import { Component, OnInit, Output, EventEmitter, Input, SimpleChanges } from '@
 import { Directory } from '../shared/models/directory';
 import { Assessment } from '../shared/models/assessment';
 import { AssessmentService } from '../assessment/assessment.service';
-
+declare const packageJson;
 @Component({
   selector: 'app-sidebar',
   templateUrl: './sidebar.component.html',
@@ -31,15 +31,20 @@ export class SidebarComponent implements OnInit {
   dashboardView: string;
   @Output('emitGoToSettings')
   emitGoToSettings = new EventEmitter<boolean>();
-
+  @Output('emitGoToContact')
+  emitGoToContact = new EventEmitter<boolean>();
+  
   selectedDirectoryId: number;
   firstChange: boolean = true;
   createAssessment: boolean = false;
+  versionNum: any;
   constructor(private assessmentService: AssessmentService) { }
 
   ngOnInit() {
+    this.versionNum = packageJson.version;
     this.directory.collapsed = false;
     this.selectedDirectoryId = this.directory.id;
+    
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -103,5 +108,9 @@ export class SidebarComponent implements OnInit {
 
   showCreateAssessment() {
     this.assessmentService.createAssessment.next(true);
+  }
+
+  showContact(){
+    this.emitGoToContact.emit(true);
   }
 }

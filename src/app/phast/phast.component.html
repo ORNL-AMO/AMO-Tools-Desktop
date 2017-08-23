@@ -18,24 +18,13 @@
         <div class="form">
           <app-system-basics *ngIf="subTab == 'system-basics'" [settings]="settings" [saveClicked]="saveClicked" [assessment]="assessment"
             [isAssessmentSettings]="isAssessmentSettings" (updateSettings)="getSettings($event)" (updateAssessment)="save()"></app-system-basics>
-          <app-operating-hours *ngIf="subTab == 'operating-hours'"></app-operating-hours>
+          <app-operating-hours *ngIf="subTab == 'operating-hours'" [phast]="_phast" (save)="saveDb()"></app-operating-hours>
         </div>
         <div class="help">
           <app-help-panel></app-help-panel>
         </div>
       </div>
     </div>
-
-    <!--<div class="tab-content">
-      <div class="wrapper" *ngIf="subTab == 'operating-hours'">
-        <div class="form">
-          <app-operating-hours></app-operating-hours>
-        </div>
-        <div class="help">
-          <app-help-panel></app-help-panel>
-        </div>
-      </div>
-    </div>-->
   </div>
 
   <div class="tab-content" *ngIf="mainTab == 'assessment'">
@@ -44,50 +33,31 @@
 
     <div class="row tab-content" *ngIf="currentTab != 'losses'">
       <div class="col-12">
-        <app-designed-energy-use *ngIf="currentTab == 'designed-energy-use'"></app-designed-energy-use>
+        <app-designed-energy *ngIf="currentTab == 'designed-energy-use'" [(phast)]="_phast" [settings]="settings" (save)="saveDb()"></app-designed-energy>
         <app-aux-equipment *ngIf="currentTab == 'aux-equipment'" [(phast)]="_phast" (save)="saveDb()"></app-aux-equipment>
-        <app-metered-energy-use *ngIf="currentTab == 'metered-energy'"></app-metered-energy-use>
+        <app-metered-energy *ngIf="currentTab == 'metered-energy'" [(phast)]="_phast" [settings]="settings" (save)="saveDb()"></app-metered-energy>
       </div>
     </div>
   </div>
 
-    <!--<div class="row tab-content" *ngIf="currentTab == 'aux-equipment' && settings">
-    <div class="col-12">
-      <app-aux-equipment></app-aux-equipment>
+  <div class="footer">
+    <div class="pull-left">
+      <button class="btn btn-secondary" *ngIf="mainTab == 'system-setup'" (click)="close()">Close</button>
+      <button class="btn btn-secondary" *ngIf="mainTab != 'system-setup'" (click)="goBack()">Back</button>
+    </div>
+    <div class="pull-right">
+      <button class="btn btn-secondary" (click)="save()">Save</button>
+
+      <!--<button class="btn btn-secondary" *ngIf="currentTab >= 3" (click)="exportData()">Export to CSV...</button>-->
+      <button class="btn btn-secondary" *ngIf="subTab == 'system-basics' && mainTab == 'system-setup'" (click)="changeSubTab('operating-hours')">Continue</button>
+      <button class="btn btn-secondary" *ngIf="subTab == 'operating-hours' && mainTab == 'system-setup'" (click)="continue()">Continue</button>
+
+      <button class="btn btn-primary" *ngIf="mainTab == 'assessment'" (click)="addReportToast('Sorry Report is not developed at this time.')">View Report</button>
+
     </div>
   </div>
-
-  <div class="row tab-content" *ngIf="currentTab == 'metered-energy'">
-    <div class="col-12">
-      <app-metered-energy-use></app-metered-energy-use>
-    </div>
-  </div>-->
-
-    <!--<div class="row tab-content" *ngIf="currentTab == 'sankey'">
-    <div class="col-12">
-      <app-sankey [losses]="assessment.phast.losses"></app-sankey>
-    </div>
-  </div>-->
-
-
-    <div class="footer">
-      <div class="pull-left">
-        <button class="btn btn-secondary" *ngIf="mainTab == 'system-setup'" (click)="close()">Close</button>
-        <button class="btn btn-secondary" *ngIf="mainTab != 'system-setup'" (click)="goBack()">Back</button>
-      </div>
-      <div class="pull-right">
-        <button class="btn btn-secondary" (click)="save()">Save</button>
-
-        <!--<button class="btn btn-secondary" *ngIf="currentTab >= 3" (click)="exportData()">Export to CSV...</button>-->
-        <button class="btn btn-secondary" *ngIf="subTab == 'system-basics' && mainTab == 'system-setup'" (click)="changeSubTab('operating-hours')">Continue</button>
-        <button class="btn btn-secondary" *ngIf="subTab == 'operating-hours' && mainTab == 'system-setup'" (click)="continue()">Continue</button>
-
-        <button class="btn btn-primary" *ngIf="mainTab == 'assessment'" (click)="addReportToast('Sorry Report is not developed at this time.')">View Report</button>
-
-      </div>
-    </div>
-  </div>
+</div>
 
 
 
-  <ng2-toasty class="disclaimer"></ng2-toasty>
+<ng2-toasty class="disclaimer"></ng2-toasty>

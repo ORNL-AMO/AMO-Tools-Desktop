@@ -163,7 +163,10 @@ export class PumpFluidComponent implements OnInit {
     this.compareService.checkPumpDifferent();
   }
 
-  checkPumpRpm() {
+  checkPumpRpm(bool?: boolean) {
+    if(!bool){
+      this.startSavePolling();
+    }
     let min = 0;
     let max = 0;
     if (this.psatForm.value.drive == 'Direct Drive') {

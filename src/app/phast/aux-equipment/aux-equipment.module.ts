@@ -5,7 +5,7 @@ import { AuxEquipmentFormComponent } from './aux-equipment-form/aux-equipment-fo
 import { AuxEquipmentHelpComponent } from './aux-equipment-help/aux-equipment-help.component';
 import { AuxEquipmentResultsComponent } from './aux-equipment-results/aux-equipment-results.component';
 import { AuxEquipmentComponent } from './aux-equipment.component';
-
+import { AuxEquipmentService } from './aux-equipment.service';
 @NgModule({
   imports: [
     CommonModule,
@@ -20,6 +20,9 @@ import { AuxEquipmentComponent } from './aux-equipment.component';
   ],
   exports: [
     AuxEquipmentComponent
+  ],
+  providers: [
+    AuxEquipmentService
   ]
 })
 export class AuxEquipmentModule { }

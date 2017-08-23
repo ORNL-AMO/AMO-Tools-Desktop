@@ -143,7 +143,9 @@ export class AssessmentCreateComponent implements OnInit {
 
           let tmpPhast = this.assessmentService.getNewPhast();
           tmpAssessment.phast = tmpPhast;
+          tmpAssessment.phast.setupDone = true;
           tmpAssessment.directoryId = this.directory.id;
+
           this.indexedDbService.addAssessment(tmpAssessment).then(assessmentId => {
             this.indexedDbService.getAssessment(assessmentId).then(assessment => {
               tmpAssessment = assessment;

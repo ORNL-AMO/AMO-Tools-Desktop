@@ -2,7 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { PSAT } from '../../../shared/models/psat';
 import { PsatService } from '../../psat.service';
 import { Settings } from '../../../shared/models/settings';
-
+import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 @Component({
   selector: 'app-explore-opportunities-form',
   templateUrl: './explore-opportunities-form.component.html',
@@ -84,7 +84,10 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
   specifiedError2: string;
   opFractionError1: string;
   opFractionError2: string;
-  constructor(private psatService: PsatService) { }
+  ratedPowerError1: string;
+  ratedPowerError2: string;
+
+  constructor(private psatService: PsatService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
     if (this.settings.powerMeasurement == 'hp') {
@@ -99,6 +102,19 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
     this.checkMotorEfficiencies();
     this.checkPumpTypes();
     this.checkValues();
+    //init error msgs
+    this.checkCost(1);
+    this.checkCost(2);
+    this.checkFlowRate(1);
+    this.checkFlowRate(2);
+    this.checkOpFraction(1);
+    this.checkOpFraction(2);
+    this.checkRatedPower(1);
+    this.checkRatedPower(2);
+    this.checkEfficiency(this.psat.inputs.efficiency, 1);
+    this.checkEfficiency(this.psat.modifications[this.exploreModIndex].psat.inputs.efficiency, 2);
+    this.checkEfficiency(this.psat.inputs.pump_specified, 3);
+    this.checkEfficiency(this.psat.modifications[this.exploreModIndex].psat.inputs.pump_specified, 4)
   }
 
   setPumpTypes() {
@@ -207,6 +223,7 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
     }
   }
   checkPumpRpm(num: number) {
+    this.calculate();
     let min = 0;
     let max = 0;
     if (this.psat.inputs.drive == this.psatService.getDriveEnum('Direct Drive')) {
@@ -243,12 +260,27 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
     }
   }
   checkFlowRate(num: number) {
-    let tmp: any;
+    this.calculate();
+    let tmp: any = {
+      message: null,
+      valid: null
+    };
     if (num == 1) {
-      tmp = this.psatService.checkFlowRate(this.psat.inputs.pump_style, this.psat.inputs.flow_rate, this.settings);
+      if (this.psat.inputs.flow_rate) {
+        tmp = this.psatService.checkFlowRate(this.psat.inputs.pump_style, this.psat.inputs.flow_rate, this.settings);
+      } else {
+        tmp.message = 'Flow Rate Required';
+        tmp.valid = false;
+      }
     } else {
-      tmp = this.psatService.checkFlowRate(this.psat.modifications[this.exploreModIndex].psat.inputs.pump_style, this.psat.modifications[this.exploreModIndex].psat.inputs.flow_rate, this.settings);
+      if (this.psat.modifications[this.exploreModIndex].psat.inputs.flow_rate) {
+        tmp = this.psatService.checkFlowRate(this.psat.modifications[this.exploreModIndex].psat.inputs.pump_style, this.psat.modifications[this.exploreModIndex].psat.inputs.flow_rate, this.settings);
+      } else {
+        tmp.message = 'Flow Rate Required';
+        tmp.valid = false;
+      }
     }
+
     if (tmp.message) {
       if (num == 1) {
         this.flowRateError1 = tmp.message;
@@ -265,6 +297,7 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
     return tmp.valid;
   }
   checkCost(num: number) {
+    this.calculate();
     let val;
     if (num == 1) {
       val = this.psat.inputs.cost_kw_hour;
@@ -302,6 +335,7 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
     }
   }
   checkEfficiency(val: number, num: number) {
+    this.calculate();
     if (val > 100) {
       this.setErrorMessage(num, "Unrealistic efficiency, shouldn't be greater then 100%");
       return false;
@@ -333,6 +367,7 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
 
 
   checkOpFraction(num: number) {
+    this.calculate();
     let val;
     if (num == 1) {
       val = this.psat.inputs.operating_fraction;
@@ -365,6 +400,41 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
     }
   }
 
+  checkRatedPower(num: number) {
+    this.calculate();
+    let val;
+    if (num == 1) {
+      if (this.settings.powerMeasurement == 'hp') {
+        val = this.convertUnitsService.value(this.psat.inputs.motor_rated_power).from(this.settings.powerMeasurement).to('kW');
+      } else {
+        val = this.psat.inputs.motor_rated_power;
+      }
+      val = val * 1.5;
+    } else if (num == 2) {
+      if (this.settings.powerMeasurement == 'hp') {
+        val = this.convertUnitsService.value(this.psat.modifications[this.exploreModIndex].psat.inputs.motor_rated_power).from(this.settings.powerMeasurement).to('kW');
+      } else {
+        val = this.psat.modifications[this.exploreModIndex].psat.inputs.motor_rated_power;
+      }
+      val = val * 1.5;
+    }
+    let compareVal = this.psat.inputs.motor_field_power;
+    if (compareVal > val) {
+      if (num == 1) {
+        this.ratedPowerError1 = 'The Field Data Motor Power is to high compared to the Rated Motor Power, please adjust the input values.';
+      } else if (num == 2) {
+        this.ratedPowerError2 = 'The Field Data Motor Power is to high compared to the Rated Motor Power, please adjust the input values.';
+      }
+      return false;
+    } else {
+      if (num == 1) {
+        this.ratedPowerError1 = null;
+      } else if (num == 2) {
+        this.ratedPowerError2 = null;
+      }
+      return true
+    }
+  }
 
   toggleCost() {
     if (this.showCost == false) {
@@ -383,10 +453,6 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
       this.psat.modifications[this.exploreModIndex].psat.inputs.head = this.psat.inputs.head;
       this.calculate();
     }
-  }
-
-  toggleCalculationMethod() {
-
   }
 
   toggleSystemData() {

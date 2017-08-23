@@ -158,6 +158,11 @@ export class DashboardComponent implements OnInit {
     this.dashboardView = 'settings';
   }
 
+  showContact(){
+    this.selectedCalculator = '';
+    this.dashboardView = 'contact';
+  }
+
   populateDirectories(directoryRef: DirectoryDbRef): Directory {
     let tmpDirectory: Directory = {
       name: directoryRef.name,

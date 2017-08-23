@@ -20,8 +20,7 @@
               <label for="baselineCost">Baseline Cost</label>
               <div class="input-group">
                 <input name="baselineCost" type="number" step="any" id="baselineCost" class="form-control" (focus)="focusField('modifyCost')"
-                  (input)="calculate()" [(ngModel)]="psat.inputs.cost_kw_hour" [ngClass]="{'invalid': checkCost(1) == false}"
-                />
+                  (input)="checkCost(1)" [(ngModel)]="psat.inputs.cost_kw_hour" />
                 <span class="input-group-addon units">$/kWH</span>
               </div>
               <span class="alert-danger pull-right small" *ngIf="costError1 !== null">{{costError1}}</span>
@@ -30,8 +29,7 @@
               <label for="modificationCost">Modification Cost</label>
               <div class="input-group">
                 <input name="modificationCost" type="number" step="any" id="modificationCost" class="form-control" (focus)="focusField('modifyCost')"
-                  [(ngModel)]="psat.modifications[exploreModIndex].psat.inputs.cost_kw_hour" (input)="calculate()" [ngClass]="{'invalid': checkCost(2) == false}"
-                />
+                  [(ngModel)]="psat.modifications[exploreModIndex].psat.inputs.cost_kw_hour" (input)="checkCost(2)" />
                 <span class="input-group-addon units">$/kWh</span>
               </div>
               <span class="alert-danger pull-right small" *ngIf="costError2 !== null">{{costError2}}</span>
@@ -49,8 +47,7 @@
               <label for="baselineFlowRate">Baseline Flow Rate</label>
               <div class="input-group">
                 <input name="baselineFlowRate" type="number" step="any" id="baselineFlowRate" class="form-control" (focus)="focusField('flowRate')"
-                  (input)="calculate()" [(ngModel)]="psat.inputs.flow_rate" [ngClass]="{'invalid': checkFlowRate(1) == false}"
-                />
+                  (input)="checkFlowRate(1)" [(ngModel)]="psat.inputs.flow_rate" />
                 <span class="input-group-addon units">{{settings.flowMeasurement}}</span>
               </div>
               <span class="alert-danger pull-right small" *ngIf="flowRateError1 !== null">{{flowRateError1}}</span>
@@ -59,8 +56,7 @@
               <label for="modificationFlowRate">Modification Flow Rate</label>
               <div class="input-group">
                 <input name="modificationFlowRate" type="number" step="any" id="modificationFlowRate" class="form-control" (focus)="focusField('flowRate')"
-                  [(ngModel)]="psat.modifications[exploreModIndex].psat.inputs.flow_rate" (input)="calculate()" [ngClass]="{'invalid': checkFlowRate(2) == false}"
-                />
+                  [(ngModel)]="psat.modifications[exploreModIndex].psat.inputs.flow_rate" (input)="checkFlowRate(2)" />
                 <span class="input-group-addon units">{{settings.flowMeasurement}}</span>
               </div>
               <span class="alert-danger pull-right small" *ngIf="flowRateError2 !== null">{{flowRateError2}}</span>
@@ -102,16 +98,15 @@
             <div class="form-group">
               <label for="baselineOperatingFraction">Baseline operating fractiong</label>
               <input name="baselineOperatingFraction" type="number" step="any" id="baselineOperatingFraction" class="form-control" (focus)="focusField('operatingFraction')"
-                (input)="calculate()" [(ngModel)]="psat.inputs.operating_fraction" [ngClass]="{'invalid': checkOpFraction(1) == false}"
-              />
+                (input)="checkOpFraction(1)" [(ngModel)]="psat.inputs.operating_fraction" />
               <span class="alert-danger pull-right small" *ngIf="opFractionError1 !== null">{{opFractionError1}}</span>
             </div>
             <div class="form-group">
               <label for="modificationOperatingFraction">Modification operating fraction</label>
               <input name="modificationOperatingFraction" type="number" step="any" id="modificationOperatingFraction" class="form-control"
-                (focus)="focusField('operatingFraction')" (input)="calculate()" [(ngModel)]="psat.modifications[exploreModIndex].psat.inputs.operating_fraction"
-                [ngClass]="{'invalid': checkOpFraction(2) == false}" />
-                <span class="alert-danger pull-right small" *ngIf="opFractionError2 !== null">{{opFractionError2}}</span>
+                (focus)="focusField('operatingFraction')" (input)="checkOpFraction(2)" [(ngModel)]="psat.modifications[exploreModIndex].psat.inputs.operating_fraction"
+              />
+              <span class="alert-danger pull-right small" *ngIf="opFractionError2 !== null">{{opFractionError2}}</span>
             </div>
           </form>
         </li>
@@ -134,16 +129,20 @@
             <div class="form-group">
               <label for="baselineMotorRatedPower">Baseline Rated Motor Power</label>
               <select name="baselineMotorRatedPower" class="form-control number-input-field" id="baselineMotorRatedPower" (focus)="focusField('motorRatedPower')"
-                (change)="calculate()" [(ngModel)]="psat.inputs.motor_rated_power">
+                (change)="checkRatedPower(1)" [(ngModel)]="psat.inputs.motor_rated_power">
 											<option  *ngFor="let option of options" [ngValue]="option">{{option}} {{settings.powerMeasurement}}</option>
 										</select>
+              <span class="alert-danger pull-right small" *ngIf="ratedPowerError1 !== null">{{ratedPowerError1}}</span>
+
             </div>
             <div class="form-group">
               <label for="modificationMotorRatedPower">Modification Motor Rated Power</label>
               <select name="modificationMotorRatedPower" class="form-control number-input-field" id="modificationMotorRatedPower" (focus)="focusField('motorRatedPower')"
-                (change)="calculate()" [(ngModel)]="psat.modifications[exploreModIndex].psat.inputs.motor_rated_power">
+                (change)="checkRatedPower(2)" [(ngModel)]="psat.modifications[exploreModIndex].psat.inputs.motor_rated_power"
+                [disabled]="psat.modifications[exploreModIndex].psat.inputs.optimize_calculation">
 											<option  *ngFor="let option2 of options" [ngValue]="option2">{{option2}} {{settings.powerMeasurement}}</option>
 										</select>
+              <span class="alert-danger pull-right small" *ngIf="ratedPowerError2 !== null && !psat.modifications[exploreModIndex].psat.inputs.optimize_calculation">{{ratedPowerError2}}</span>
             </div>
           </form>
         </li>
@@ -164,7 +163,7 @@
             <div class="form-group">
               <label for="modificationEfficiencyClass">Modification Efficiency Class</label>
               <select name="modificationEfficiencyClass" class="form-control select-input-field" id="modificationEfficiencyClass" (change)="setEfficiencyClasses()"
-                (focus)="focusField('efficiencyClass')" [(ngModel)]="tmpModificationEfficiencyClass">
+                (focus)="focusField('efficiencyClass')" [(ngModel)]="tmpModificationEfficiencyClass" [disabled]="psat.modifications[exploreModIndex].psat.inputs.optimize_calculation">
       										<option *ngFor="let efficiencyClass of efficiencyClasses" [ngValue]="efficiencyClass">{{efficiencyClass}}</option>
     									</select>
             </div>
@@ -181,8 +180,8 @@
               <label for="baselineMotorEfficiency">Baseline Motor Efficiency</label>
               <div class="input-group">
                 <input name="baselineMotorEfficiency" [disabled]="tmpBaselineEfficiencyClass != 'Specified'" type="number" step="any" id="baselineMotorEfficiency"
-                  class="form-control" (focus)="focusField('motorEfficiency')" (input)="calculate()" [(ngModel)]="psat.inputs.efficiency"
-                  [ngClass]="{'invalid': checkEfficiency(psat.inputs.efficiency, 1) == false}" />
+                  class="form-control" (focus)="focusField('motorEfficiency')" (input)="checkEfficiency(psat.inputs.efficiency, 1)"
+                  [(ngModel)]="psat.inputs.efficiency" />
                 <span class="input-group-addon units">%</span>
               </div>
               <span class="alert-danger pull-right small" *ngIf="efficiencyError1 !== null">{{efficiencyError1}}</span>
@@ -190,13 +189,13 @@
             <div class="form-group">
               <label for="modificationMotorEfficiency">Modification Motor Efficiency</label>
               <div class="input-group">
-                <input name="modificationMotorEfficiency" [disabled]="tmpModificationEfficiencyClass != 'Specified'" type="number" step="any"
-                  id="modificationMotorEfficiency" class="form-control" (focus)="focusField('motorEfficiency')" [(ngModel)]="psat.modifications[exploreModIndex].psat.inputs.efficiency"
-                  [ngClass]="{'invalid': checkEfficiency(psat.modifications[exploreModIndex].psat.inputs.efficiency, 2) == false}"
-                  (input)="calculate()" />
+                <input name="modificationMotorEfficiency" [disabled]="tmpModificationEfficiencyClass != 'Specified' || psat.modifications[exploreModIndex].psat.inputs.optimize_calculation"
+                  type="number" step="any" id="modificationMotorEfficiency" class="form-control" (focus)="focusField('motorEfficiency')"
+                  [(ngModel)]="psat.modifications[exploreModIndex].psat.inputs.efficiency" (input)="checkEfficiency(psat.modifications[exploreModIndex].psat.inputs.efficiency, 2)"
+                />
                 <span class="input-group-addon units">%</span>
               </div>
-              <span class="alert-danger pull-right small" *ngIf="efficiencyError2 !== null">{{efficiencyError2}}</span>
+              <span class="alert-danger pull-right small" *ngIf="efficiencyError2 !== null && !psat.modifications[exploreModIndex].psat.inputs.optimize_calculation">{{efficiencyError2}}</span>
             </div>
           </form>
         </li>
@@ -241,9 +240,8 @@
               <label for="baselinePumpSpecified">Baseline Pump Specified Efficiency</label>
               <div class="input-group">
                 <input name="baselinePumpSpecified" [disabled]="tmpBaselinePumpType != 'Specified Optimal Efficiency'" type="number" step="any"
-                  id="baselinePumpSpecified" class="form-control" (focus)="focusField('pumpSpecified')" (input)="calculate()"
-                  [(ngModel)]="psat.inputs.pump_specified" [ngClass]="{'invalid': checkEfficiency(psat.inputs.pump_specified, 3) == false}"
-                />
+                  id="baselinePumpSpecified" class="form-control" (focus)="focusField('pumpSpecified')" (input)="checkEfficiency(psat.inputs.pump_specified, 3)"
+                  [(ngModel)]="psat.inputs.pump_specified"/>
                 <span class="input-group-addon units">%</span>
               </div>
               <span class="alert-danger pull-right small" *ngIf="specifiedError1 !== null">{{specifiedError1}}</span>
@@ -252,9 +250,8 @@
               <label for="modificationPumpSpecified">Modification Pump Specified Efficiency</label>
               <div class="input-group">
                 <input name="modificationPumpSpecified" [disabled]="tmpModificationPumpType != 'Specified Optimal Efficiency'" type="number"
-                  step="any" id="modificationPumpSpecified" class="form-control" (focus)="focusField('pumpSpecified')" (input)="calculate()"
-                  [(ngModel)]="psat.modifications[exploreModIndex].psat.inputs.pump_specified" [ngClass]="{'invalid': checkEfficiency(psat.modifications[exploreModIndex].psat.inputs.pump_specified, 4) == false}"
-                />
+                  step="any" id="modificationPumpSpecified" class="form-control" (focus)="focusField('pumpSpecified')" (input)="checkEfficiency(psat.modifications[exploreModIndex].psat.inputs.pump_specified, 4)"
+                  [(ngModel)]="psat.modifications[exploreModIndex].psat.inputs.pump_specified"/>
                 <span class="input-group-addon units">%</span>
               </div>
               <span class="alert-danger pull-right small" *ngIf="specifiedError2 !== null">{{specifiedError2}}</span>
