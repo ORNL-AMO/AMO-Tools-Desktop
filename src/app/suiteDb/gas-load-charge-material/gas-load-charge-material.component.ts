@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { GasLoadChargeMaterial } from '../../shared/models/materials';
+import { SuiteDbService } from '../suite-db.service';
 
 @Component({
   selector: 'app-gas-load-charge-material',
@@ -7,9 +9,16 @@ import { Component, OnInit } from '@angular/core';
 })
 export class GasLoadChargeMaterialComponent implements OnInit {
 
-  constructor() { }
+  newMaterial: GasLoadChargeMaterial = {
+    substance: 'New Material',
+    specificHeatVapor: 0.0
+  };
+
+  allMaterials: Array<GasLoadChargeMaterial>;
+  constructor(private suiteDbService: SuiteDbService) { }
 
   ngOnInit() {
+    this.allMaterials = this.suiteDbService.selectGasLoadChargeMaterials();
   }
 
 }

@@ -9,12 +9,13 @@ export class LossesService {
   modification: BehaviorSubject<Modification>;
 
   lossesTab: BehaviorSubject<string>;
-
+  modalOpen: BehaviorSubject<boolean>;
   constructor() { 
     this.lossIndex = new BehaviorSubject<number>(0);
     this.baseline = new BehaviorSubject<PHAST>(null);
     this.modification = new BehaviorSubject<Modification>(null);
-    this.lossesTab = new BehaviorSubject<string>('charge-material')
+    this.lossesTab = new BehaviorSubject<string>('charge-material');
+    this.modalOpen = new BehaviorSubject<boolean>(false);
   }
 
   setBaseline(phast: PHAST){

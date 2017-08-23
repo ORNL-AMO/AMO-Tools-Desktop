@@ -11,3 +11,7 @@
     background: white;
     padding: 40px;
 }
+
+.modal-open {
+    z-index: initial !important;
+}
