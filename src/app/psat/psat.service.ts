@@ -226,8 +226,8 @@ export class PsatService {
     specificGravity: number,
     flowRate: number,
     suctionPipeDiameter: number,
-    suctionGuagePressure: number,
-    suctionGuageElevation: number,
+    suctionGaugePressure: number,
+    suctionGaugeElevation: number,
     suctionLineLossCoefficients: number,
     dischargePipeDiameter: number,
     dischargeGaugePressure: number,
@@ -245,7 +245,7 @@ export class PsatService {
     if (settings.distanceMeasurement != 'ft') {
       suctionPipeDiameter = this.convertUnitsService.value(suctionPipeDiameter).from('mm').to('in');
       dischargePipeDiameter = this.convertUnitsService.value(dischargePipeDiameter).from('mm').to('in');
-      suctionGuageElevation = this.convertUnitsService.value(suctionGuageElevation).from('m').to('ft');
+      suctionGaugeElevation = this.convertUnitsService.value(suctionGaugeElevation).from('m').to('ft');
       dischargeGaugeElevation = this.convertUnitsService.value(dischargeGaugeElevation).from('m').to('ft');
     }
 
@@ -257,8 +257,8 @@ export class PsatService {
       specificGravity: specificGravity,
       flowRate: flowRate,
       suctionPipeDiameter: suctionPipeDiameter,
-      suctionGuagePressure: suctionGuagePressure,
-      suctionGuageElevation: suctionGuageElevation,
+      suctionGaugePressure: suctionGaugePressure,
+      suctionGaugeElevation: suctionGaugeElevation,
       suctionLineLossCoefficients: suctionLineLossCoefficients,
       dischargePipeDiameter: dischargePipeDiameter,
       dischargeGaugePressure: dischargeGaugePressure,
