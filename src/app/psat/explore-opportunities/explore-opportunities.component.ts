@@ -118,6 +118,7 @@ export class ExploreOpportunitiesComponent implements OnInit {
       this.modificationResults = this.psatService.resultsOptimal(modInputs, this.settings);
     } else {
       this.modificationResults = this.psatService.resultsModified(modInputs, this.settings, this.baselineResults.pump_efficiency);
+      console.log('get mod results');
     }
     this.annualSavings = this.baselineResults.annual_cost - this.modificationResults.annual_cost;
     this.percentSavings = Number(Math.round((((this.annualSavings * 100) / this.baselineResults.annual_cost) * 100) / 100).toFixed(0));

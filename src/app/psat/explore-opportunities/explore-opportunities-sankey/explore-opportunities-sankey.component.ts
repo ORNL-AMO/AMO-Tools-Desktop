@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { Settings } from '../../../shared/models/settings';
 
@@ -11,7 +11,7 @@ var svg;
   templateUrl: './explore-opportunities-sankey.component.html',
   styleUrls: ['./explore-opportunities-sankey.component.css']
 })
-export class ExploreOpportunitiesSankeyComponent implements OnInit {
+export class ExploreOpportunitiesSankeyComponent implements OnInit, OnChanges {
   @Input()
   baselineResults: any;
   @Input()
@@ -30,25 +30,39 @@ export class ExploreOpportunitiesSankeyComponent implements OnInit {
 
   //Max width of Sankey
   baseSize: number = 50;
+
+
+  selectedView: string = 'Baseline';
+
   constructor(private convertUnitsService: ConvertUnitsService) {
   }
 
   ngOnInit() {
-    //Default with baseline
-    this.sankey("app-explore-opportunities-sankey", this.baselineResults);
-
-    d3.select("app-explore-opportunities-sankey").select("#baseline")
-      .on("click", () => {
-        this.sankey("app-explore-opportunities-sankey", this.baselineResults);
-      })
-      .attr("checked", true);
-
-    d3.select("app-explore-opportunities-sankey").select("#modified")
-      .on("click", () => {
-        this.sankey("app-explore-opportunities-sankey", this.modificationResults);
-      });
-
+    this.createSankey();
   }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.baselineResults) {
+      if (this.selectedView == 'Baseline') {
+        this.createSankey();
+      }
+    }
+    if (changes.modificationResults) {
+      if (this.selectedView == 'Modified') {
+        this.createSankey();
+      }
+    }
+  }
+  createSankey() {
+    if (this.selectedView == 'Baseline') {
+      this.sankey("app-explore-opportunities-sankey", this.baselineResults);
+    } else if (this.selectedView == 'Modified') {
+      console.log('create modified 2');
+      this.sankey("app-explore-opportunities-sankey", this.modificationResults);
+    }
+  }
+
+
 
   closeSankey(location) {
     // Remove Sankey
@@ -66,12 +80,6 @@ export class ExploreOpportunitiesSankeyComponent implements OnInit {
     svg = d3.select(location).append('svg')
       .attr("viewBox", "0 0 " + this.width + " " + this.height)
       .attr("preserveAspectRatio", "xMinYMin")
-      .style("height", "75%")
-      .style("width", "75%")
-      .style("position", "relative")
-      .style("top", "15%")
-      .style("left", "15%")
-      .style("border", "1px solid black")
       .append("g");
 
     this.calcLosses(results);
@@ -80,7 +88,7 @@ export class ExploreOpportunitiesSankeyComponent implements OnInit {
     nodes.push(
       /*0*/{
         name: "Input",
-        value:  results.motor_power,
+        value: results.motor_power,
         displaySize: this.baseSize,
         width: 300,
         x: (this.width * .15),
@@ -116,19 +124,19 @@ export class ExploreOpportunitiesSankeyComponent implements OnInit {
       });
 
 
-    if(this.drive > 0) {
+    if (this.drive > 0) {
       nodes.push(/*3*/{
-          name: "inter2",
-          value: 0,
-          displaySize: 0,
-          width: 0,
-          x: (this.width * .35),
-          y: 0,
-          input: false,
-          output: false,
-          inter: true,
-          top: false
-        },
+        name: "inter2",
+        value: 0,
+        displaySize: 0,
+        width: 0,
+        x: (this.width * .35),
+        y: 0,
+        input: false,
+        output: false,
+        inter: true,
+        top: false
+      },
         /*4*/{
           name: "Drive",
           value: this.drive,
@@ -191,10 +199,10 @@ export class ExploreOpportunitiesSankeyComponent implements OnInit {
       { source: 1, target: 3 });
 
 
-    if(this.drive > 0) {
+    if (this.drive > 0) {
       links.push(
-        {source: 3, target: 4},
-        {source: 3, target: 5},
+        { source: 3, target: 4 },
+        { source: 3, target: 5 },
 
         // interNode3 to Other and interNode4
         { source: 5, target: 6 },
@@ -203,8 +211,8 @@ export class ExploreOpportunitiesSankeyComponent implements OnInit {
     else {
       links.push(
         // interNode3 to Other and interNode4
-        {source: 3, target: 4},
-        {source: 3, target: 5});
+        { source: 3, target: 4 },
+        { source: 3, target: 5 });
     }
 
     svg.call(() => {
@@ -265,20 +273,20 @@ export class ExploreOpportunitiesSankeyComponent implements OnInit {
       .enter()
       .append("text")
       .attr("text-anchor", "middle")
-      .attr("dx", function(d){
-        if(d.input){
+      .attr("dx", function (d) {
+        if (d.input) {
           return d.x - 30;
         }
-        else if(d.output){
-          return d.x + (d.displaySize*.7)  + 24;
+        else if (d.output) {
+          return d.x + (d.displaySize * .7) + 24;
         }
         else {
           return d.x;
         }
       })
-      .attr("dy", function(d){
-        if(d.input || d.output){
-          return d.y + (d.displaySize/2) - 9;
+      .attr("dy", function (d) {
+        if (d.input || d.output) {
+          return d.y + (d.displaySize / 2) - 9;
         }
         else {
           if (d.top) {
@@ -289,8 +297,8 @@ export class ExploreOpportunitiesSankeyComponent implements OnInit {
           }
         }
       })
-      .text(function(d) {
-        if(!d.inter) {
+      .text(function (d) {
+        if (!d.inter) {
           return d.name;
         }
       })
@@ -308,7 +316,7 @@ export class ExploreOpportunitiesSankeyComponent implements OnInit {
           return d.x - 30;
         }
         else if (d.output) {
-          return d.x + (d.displaySize*.7) + 24;
+          return d.x + (d.displaySize * .7) + 24;
         }
         else {
           return d.x;
@@ -325,8 +333,8 @@ export class ExploreOpportunitiesSankeyComponent implements OnInit {
           return d.y + 110;
         }
       })
-      .text(function(d) {
-        if(!d.inter) {
+      .text(function (d) {
+        if (!d.inter) {
           return twoDecimalFormat(d.value);
         }
       })
@@ -337,20 +345,20 @@ export class ExploreOpportunitiesSankeyComponent implements OnInit {
       .enter()
       .append("text")
       .attr("text-anchor", "middle")
-      .attr("dx", function(d){
-        if(d.input){
+      .attr("dx", function (d) {
+        if (d.input) {
           return d.x - 30;
         }
-        else if(d.output){
-          return d.x + (d.displaySize*.7)  + 24;
+        else if (d.output) {
+          return d.x + (d.displaySize * .7) + 24;
         }
         else {
           return d.x;
         }
       })
-      .attr("dy", function(d){
-        if(d.input || d.output){
-          return d.y + (d.displaySize/2) + 21;
+      .attr("dy", function (d) {
+        if (d.input || d.output) {
+          return d.y + (d.displaySize / 2) + 21;
         }
         else {
           if (d.top) {
@@ -361,8 +369,8 @@ export class ExploreOpportunitiesSankeyComponent implements OnInit {
           }
         }
       })
-      .text(function(d) {
-        if(!d.inter) {
+      .text(function (d) {
+        if (!d.inter) {
           return "kW";
         }
       })
@@ -397,12 +405,12 @@ export class ExploreOpportunitiesSankeyComponent implements OnInit {
       else {
         if (!d.input) {
           if (d.output) {
-            if(d.top) {
+            if (d.top) {
               d.value = (nodes[i - 2].value - nodes[i - 1].value);
               d.displaySize = this.calcDisplayValue(this.baseSize, d.value, nodes[0].value);
               d.y = d.y + alterVal;
             }
-            else{
+            else {
               d.value = (nodes[i - 2].value - nodes[i - 1].value);
               d.displaySize = this.calcDisplayValue(this.baseSize, d.value, nodes[0].value);
               d.y = d.y + alterVal + nodes[i - 1].displaySize;
@@ -706,28 +714,23 @@ export class ExploreOpportunitiesSankeyComponent implements OnInit {
     () => this.changePlaceHolders(nodes);
   }
 
-  calcLosses(results){
-    console.log(results);
-
+  calcLosses(results) {
     var motorShaftPower;
     var pumpShaftPower;
-
-    if(this.settings.powerMeasurement === "hp") {
-      console.log(results.motor_shaft_power);
+    if (this.settings.powerMeasurement === "hp") {
       motorShaftPower = this.convertUnitsService.value(results.motor_shaft_power).from("hp").to('kW');
-      console.log(motorShaftPower);
       pumpShaftPower = this.convertUnitsService.value(results.pump_shaft_power).from("hp").to('kW');
     }
-    else{
+    else {
       motorShaftPower = results.motor_shaft_power;
       pumpShaftPower = results.pump_shaft_power;
     }
 
-    this.motor = results.motor_power*(1 - (results.motor_efficiency/100));
+    this.motor = results.motor_power * (1 - (results.motor_efficiency / 100));
 
     this.drive = motorShaftPower - pumpShaftPower;
 
-    this.pump = (results.motor_power - this.motor - this.drive)*(1 - (results.pump_efficiency/100));
+    this.pump = (results.motor_power - this.motor - this.drive) * (1 - (results.pump_efficiency / 100));
 
   }
 
