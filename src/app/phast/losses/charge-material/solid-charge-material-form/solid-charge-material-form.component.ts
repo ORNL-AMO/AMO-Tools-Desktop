@@ -67,6 +67,10 @@ export class SolidChargeMaterialFormComponent implements OnInit {
     }
     this.initDifferenceMonitor();
   }
+  ngOnDestroy() {
+    this.lossesService.modalOpen.next(false);
+  }
+
 
   disableForm() {
     this.elements = this.lossForm.nativeElement.elements;
@@ -251,13 +255,23 @@ export class SolidChargeMaterialFormComponent implements OnInit {
       }
     }
   }
-  
+
   showMaterialModal() {
     this.lossesService.modalOpen.next(true);
     this.materialModal.show();
   }
 
-  hideMaterialModal(){
+  hideMaterialModal(event?: any) {
+    if (event) {
+      this.materialTypes = this.suiteDbService.selectLiquidLoadChargeMaterials();
+      let newMaterial = this.materialTypes.filter(material => { return material.substance == event.substance })
+      if (newMaterial) {
+        this.chargeMaterialForm.patchValue({
+          materialId: newMaterial[0].id
+        })
+        this.setProperties();
+      }
+    }
     this.materialModal.hide();
     this.lossesService.modalOpen.next(false);
   }

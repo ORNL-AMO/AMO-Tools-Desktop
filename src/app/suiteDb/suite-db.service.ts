@@ -75,15 +75,19 @@ export class SuiteDbService {
 
   insertGasFlueGasMaterial(material: FlueGasMaterial) { }
 
-  insertGasLoadChargeMaterial(material: GasLoadChargeMaterial) { 
+  insertGasLoadChargeMaterial(material: GasLoadChargeMaterial) {
     return db.insertGasLoadChargeMaterial(material);
   }
 
-  insertLiquidLoadChargeMaterial(material: LiquidLoadChargeMaterial) { }
+  insertLiquidLoadChargeMaterial(material: LiquidLoadChargeMaterial) {
+    return db.insertLiquidLoadChargeMaterial(material)
+  }
 
   insertSolidLiquidFlueGasMaterial(material: SolidLiquidFlueGasMaterial) { }
 
-  insertSolidLoadChargeMaterial(material: SolidLoadChargeMaterial) { }
+  insertSolidLoadChargeMaterial(material: SolidLoadChargeMaterial) {
+    return db.insertSolidLoadChargeMaterial(material);
+  }
 
   insertWallLossesSurface() { }
 }

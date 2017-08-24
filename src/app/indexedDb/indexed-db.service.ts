@@ -4,7 +4,7 @@ import { MockDirectory } from '../shared/mocks/mock-directory';
 import { DirectoryDbRef } from '../shared/models/directory';
 import { Assessment } from '../shared/models/assessment';
 import { Settings } from '../shared/models/settings';
-import { GasLoadChargeMaterial } from '../shared/models/materials'
+import { GasLoadChargeMaterial, LiquidLoadChargeMaterial, SolidLoadChargeMaterial } from '../shared/models/materials'
 import { SuiteDbService } from '../suiteDb/suite-db.service';
 
 
@@ -84,11 +84,30 @@ export class IndexedDbService {
           console.log('creating gasLoadChargeMaterial store...');
           let settingsObjStore = newVersion.createObjectStore(myDb.storeNames.gasLoadChargeMaterial, {
             autoIncrement: true,
-            keyPath: 'id'
+            keyPath: 'substance'
           })
-          settingsObjStore.createIndex('id', 'id', { unique: false });
+          settingsObjStore.createIndex('substance', 'substance', { unique: false });
         }
 
+        //liquidLoadChargeMaterial
+        if (!newVersion.objectStoreNames.contains(myDb.storeNames.liquidLoadChargeMaterial)) {
+          console.log('creating liquidLoadChargeMaterial store...');
+          let settingsObjStore = newVersion.createObjectStore(myDb.storeNames.liquidLoadChargeMaterial, {
+            autoIncrement: true,
+            keyPath: 'substance'
+          })
+          settingsObjStore.createIndex('substance', 'substance', { unique: false });
+        }
+
+        //solidLoadChargeMaterial
+        if (!newVersion.objectStoreNames.contains(myDb.storeNames.solidLoadChargeMaterial)) {
+          console.log('creating solidLoadChargeMaterial store...');
+          let settingsObjStore = newVersion.createObjectStore(myDb.storeNames.solidLoadChargeMaterial, {
+            autoIncrement: true,
+            keyPath: 'substance'
+          })
+          settingsObjStore.createIndex('substance', 'substance', { unique: false });
+        }
       }
       myDb.setDefaultErrorHandler(this.request, myDb);
 
@@ -464,5 +483,95 @@ export class IndexedDbService {
       }
     })
   }
+  //liquidLoadChargeMaterial
+  addLiquidLoadChargeMaterial(_material: LiquidLoadChargeMaterial): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let transaction = myDb.instance.transaction([myDb.storeNames.liquidLoadChargeMaterial], 'readwrite');
+      let store = transaction.objectStore(myDb.storeNames.liquidLoadChargeMaterial);
+      let addRequest = store.add(_material);
+      myDb.setDefaultErrorHandler(addRequest, myDb);
+      addRequest.onsuccess = (e) => {
+        resolve(e.target.result);
+      }
+      addRequest.onerror = (e) => {
+        reject(e.target.result)
+      }
+    });
+  }
 
+  getLiquidLoadChargeMaterial(id: number): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let transaction = myDb.instance.transaction([myDb.storeNames.liquidLoadChargeMaterial], 'readonly');
+      let store = transaction.objectStore(myDb.storeNames.liquidLoadChargeMaterial);
+      let getRequest = store.get(id);
+      myDb.setDefaultErrorHandler(getRequest, myDb);
+      getRequest.onsuccess = (e) => {
+        resolve(e.target.result);
+      }
+      getRequest.onerror = (error) => {
+        reject(error.target.result)
+      }
+    })
+  }
+
+  getAllLiquidLoadChargeMaterial(): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let transaction = myDb.instance.transaction([myDb.storeNames.liquidLoadChargeMaterial], 'readonly');
+      let store = transaction.objectStore(myDb.storeNames.liquidLoadChargeMaterial);
+      let getRequest = store.getAll();
+      myDb.setDefaultErrorHandler(getRequest, myDb);
+      getRequest.onsuccess = (e) => {
+        resolve(e.target.result);
+      }
+      getRequest.onerror = (error) => {
+        reject(error.target.result)
+      }
+    })
+  }
+
+  //solidLoadChargeMaterial
+  addSolidLoadChargeMaterial(_material: SolidLoadChargeMaterial): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let transaction = myDb.instance.transaction([myDb.storeNames.solidLoadChargeMaterial], 'readwrite');
+      let store = transaction.objectStore(myDb.storeNames.solidLoadChargeMaterial);
+      let addRequest = store.add(_material);
+      myDb.setDefaultErrorHandler(addRequest, myDb);
+      addRequest.onsuccess = (e) => {
+        resolve(e.target.result);
+      }
+      addRequest.onerror = (e) => {
+        reject(e.target.result)
+      }
+    });
+  }
+
+  getSolidLoadChargeMaterial(id: number): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let transaction = myDb.instance.transaction([myDb.storeNames.solidLoadChargeMaterial], 'readonly');
+      let store = transaction.objectStore(myDb.storeNames.solidLoadChargeMaterial);
+      let getRequest = store.get(id);
+      myDb.setDefaultErrorHandler(getRequest, myDb);
+      getRequest.onsuccess = (e) => {
+        resolve(e.target.result);
+      }
+      getRequest.onerror = (error) => {
+        reject(error.target.result)
+      }
+    })
+  }
+
+  getAllSolidLoadChargeMaterial(): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let transaction = myDb.instance.transaction([myDb.storeNames.solidLoadChargeMaterial], 'readonly');
+      let store = transaction.objectStore(myDb.storeNames.solidLoadChargeMaterial);
+      let getRequest = store.getAll();
+      myDb.setDefaultErrorHandler(getRequest, myDb);
+      getRequest.onsuccess = (e) => {
+        resolve(e.target.result);
+      }
+      getRequest.onerror = (error) => {
+        reject(error.target.result)
+      }
+    })
+  }
 }

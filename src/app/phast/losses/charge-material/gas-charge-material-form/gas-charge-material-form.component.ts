@@ -31,6 +31,7 @@ export class GasChargeMaterialFormComponent implements OnInit {
   materialTypes: any;
   selectedMaterial: any;
   counter: any;
+  showModal: boolean = false;
   constructor(private suiteDbService: SuiteDbService, private chargeMaterialCompareService: ChargeMaterialCompareService, private windowRefService: WindowRefService, private lossesService: LossesService) { }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -63,7 +64,7 @@ export class GasChargeMaterialFormComponent implements OnInit {
     this.initDifferenceMonitor();
   }
 
-  ngOnDestroy(){
+  ngOnDestroy() {
     this.lossesService.modalOpen.next(false);
   }
 
@@ -199,12 +200,25 @@ export class GasChargeMaterialFormComponent implements OnInit {
   }
 
   showMaterialModal() {
-    this.lossesService.modalOpen.next(true);
+    this.showModal = true;
+    this.lossesService.modalOpen.next(this.showModal);
     this.materialModal.show();
   }
 
-  hideMaterialModal(){
+  hideMaterialModal(event?: any) {
+    if (event) {
+      this.materialTypes = this.suiteDbService.selectGasLoadChargeMaterials();
+      let newMaterial = this.materialTypes.filter(material => {return material.substance == event.substance})
+      if(newMaterial){
+        this.chargeMaterialForm.patchValue({
+          materialId: newMaterial[0].id
+        })
+        this.setProperties();
+      }
+    }
     this.materialModal.hide();
-    this.lossesService.modalOpen.next(false);
+    this.showModal = false;
+    this.lossesService.modalOpen.next(this.showModal);
+    this.checkForm();
   }
 }

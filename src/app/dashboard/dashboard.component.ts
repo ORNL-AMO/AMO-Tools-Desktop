@@ -13,7 +13,7 @@ import { ToastyService, ToastyConfig, ToastOptions, ToastData } from 'ng2-toasty
 import { SuiteDbService } from '../suiteDb/suite-db.service';
 import { WindowRefService } from '../indexedDb/window-ref.service';
 import { ImportExportService } from '../shared/import-export/import-export.service';
-import { GasLoadChargeMaterial } from '../shared/models/materials';
+import { GasLoadChargeMaterial, LiquidLoadChargeMaterial, SolidLoadChargeMaterial } from '../shared/models/materials';
 
 @Component({
   selector: 'app-dashboard',
@@ -70,7 +70,7 @@ export class DashboardComponent implements OnInit {
       this.indexedDbService.db = this.indexedDbService.initDb().then(
         results => {
           this.getData();
-          if(this.suiteDbService.hasStarted == true && this.indexedDbService.initCustomObjects == true){
+          if (this.suiteDbService.hasStarted == true && this.indexedDbService.initCustomObjects == true) {
             this.initCustomDbMaterials();
           }
         }
@@ -98,7 +98,18 @@ export class DashboardComponent implements OnInit {
       let customGasLoadChargeMaterials: GasLoadChargeMaterial[] = results;
       customGasLoadChargeMaterials.forEach(material => {
         let suiteResult = this.suiteDbService.insertGasLoadChargeMaterial(material);
-        console.log(suiteResult)
+      })
+    })
+    this.indexedDbService.getAllLiquidLoadChargeMaterial().then(results => {
+      let customLiquidLoadChargeMaterials: LiquidLoadChargeMaterial[] = results;
+      customLiquidLoadChargeMaterials.forEach(material => {
+        let suiteResult = this.suiteDbService.insertLiquidLoadChargeMaterial(material);
+      })
+    })
+    this.indexedDbService.getAllSolidLoadChargeMaterial().then(results => {
+      let customLiquidLoadChargeMaterials: SolidLoadChargeMaterial[] = results;
+      customLiquidLoadChargeMaterials.forEach(material => {
+        let suiteResult = this.suiteDbService.insertSolidLoadChargeMaterial(material);
       })
     })
   }
