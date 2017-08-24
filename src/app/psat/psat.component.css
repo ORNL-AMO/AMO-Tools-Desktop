@@ -26,5 +26,7 @@
     border: none; 
     background-color: #efefef; 
     margin-top: 2.5%; 
-    margin-bottom: 2.5%; 
+    margin-bottom: 2.5%;
+    padding-top: 5%;
+    padding-bottom: 5%;
 }
