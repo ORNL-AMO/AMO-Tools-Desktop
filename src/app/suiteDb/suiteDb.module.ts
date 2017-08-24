@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-
+import { CommonModule } from '@angular/common';
 import { SuiteDbService } from './suite-db.service';
 import { FlueGasMaterialComponent } from './flue-gas-material/flue-gas-material.component';
 import { GasLoadChargeMaterialComponent } from './gas-load-charge-material/gas-load-charge-material.component';
@@ -10,7 +10,8 @@ import { SolidLoadChargeMaterialComponent } from './solid-load-charge-material/s
 @NgModule({
     imports: [
         FormsModule,
-        ReactiveFormsModule
+        ReactiveFormsModule,
+        CommonModule
     ],
     providers: [
         SuiteDbService
@@ -25,7 +26,9 @@ import { SolidLoadChargeMaterialComponent } from './solid-load-charge-material/s
     exports: [
         GasLoadChargeMaterialComponent,
         SolidLoadChargeMaterialComponent,
-        LiquidLoadChargeMaterialComponent
+        LiquidLoadChargeMaterialComponent,
+        SolidLiquidFlueGasMaterialComponent,
+        FlueGasMaterialComponent
     ]
 })
 

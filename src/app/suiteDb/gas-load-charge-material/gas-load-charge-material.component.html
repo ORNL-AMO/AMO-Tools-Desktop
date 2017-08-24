@@ -1,6 +1,12 @@
 <div class="card">
   <div class="card-block">
     <div class="form-group">
+      <label>Start with existing material</label>
+      <select class="form-control" id="selectedMaterial" (change)="setExisting()" [(ngModel)]="selectedMaterial">
+        <option *ngFor="let material of allMaterials" [ngValue]="material">{{material.substance}}</option>
+      </select>
+    </div>
+    <div class="form-group">
       <label for="materialName">Material Name</label>
       <input type="text" id="materialName" name="materialName" class="form-control" [(ngModel)]="newMaterial.substance" />
     </div>
@@ -9,5 +15,8 @@
       <input type="number" id="specificHeatVapor" name="specificHeatVapor" class="from-control" [(ngModel)]="newMaterial.specificHeatVapor"
       />
     </div>
+  </div>
+  <div class="card-footer">
+    <button class="btn btn-primary pull-right" (click)="addMaterial()">Submit</button>
   </div>
 </div>

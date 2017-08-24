@@ -1,9 +1,6 @@
 import { Injectable } from '@angular/core';
 import { FlueGasMaterial, GasLoadChargeMaterial, LiquidLoadChargeMaterial, SolidLiquidFlueGasMaterial, SolidLoadChargeMaterial } from '../shared/models/phast/materials';
 
-
-
-
 declare var db: any;
 
 
@@ -78,7 +75,9 @@ export class SuiteDbService {
 
   insertGasFlueGasMaterial(material: FlueGasMaterial) { }
 
-  insertGasLoadChargeMaterial(material: GasLoadChargeMaterial) { }
+  insertGasLoadChargeMaterial(material: GasLoadChargeMaterial) { 
+    return db.insertGasLoadChargeMaterial(material);
+  }
 
   insertLiquidLoadChargeMaterial(material: LiquidLoadChargeMaterial) { }
 

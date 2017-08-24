@@ -4,15 +4,19 @@ import { MockDirectory } from '../shared/mocks/mock-directory';
 import { DirectoryDbRef } from '../shared/models/directory';
 import { Assessment } from '../shared/models/assessment';
 import { Settings } from '../shared/models/settings';
+import { GasLoadChargeMaterial } from '../shared/models/materials'
+import { SuiteDbService } from '../suiteDb/suite-db.service';
+
 
 var myDb: any = {
   name: 'CrudDB',
-  version: 2,
+  version: 3,
   instance: {},
   storeNames: {
     assessments: 'assessments',
     directories: 'directories',
-    settings: 'settings'
+    settings: 'settings',
+    gasLoadChargeMaterial: 'gasLoadChargeMaterial'
   },
   defaultErrorHandler: function (e) {
     //todo: implement error handling
@@ -35,7 +39,10 @@ export class IndexedDbService {
   db: any;
   request: any;
   private _window: Window;
-  constructor(private windowRef: WindowRefService) {
+
+  initCustomObjects: boolean = true;
+
+  constructor(private windowRef: WindowRefService, private suiteDbService: SuiteDbService) {
     this._window = windowRef.nativeWindow;
   }
 
@@ -71,6 +78,15 @@ export class IndexedDbService {
           })
           settingsObjStore.createIndex('directoryId', 'directoryId', { unique: false });
           settingsObjStore.createIndex('assessmentId', 'assessmentId', { unique: false });
+        }
+        //gasLoadChargeMaterial
+        if (!newVersion.objectStoreNames.contains(myDb.storeNames.gasLoadChargeMaterial)) {
+          console.log('creating gasLoadChargeMaterial store...');
+          let settingsObjStore = newVersion.createObjectStore(myDb.storeNames.gasLoadChargeMaterial, {
+            autoIncrement: true,
+            keyPath: 'id'
+          })
+          settingsObjStore.createIndex('id', 'id', { unique: false });
         }
 
       }
@@ -402,4 +418,51 @@ export class IndexedDbService {
       }
     })
   }
+
+  //gasLoadChargeMaterial
+  addGasLoadChargeMaterial(_material: GasLoadChargeMaterial): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let transaction = myDb.instance.transaction([myDb.storeNames.gasLoadChargeMaterial], 'readwrite');
+      let store = transaction.objectStore(myDb.storeNames.gasLoadChargeMaterial);
+      let addRequest = store.add(_material);
+      myDb.setDefaultErrorHandler(addRequest, myDb);
+      addRequest.onsuccess = (e) => {
+        resolve(e.target.result);
+      }
+      addRequest.onerror = (e) => {
+        reject(e.target.result)
+      }
+    });
+  }
+
+  getGasLoadChargeMaterial(id: number): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let transaction = myDb.instance.transaction([myDb.storeNames.gasLoadChargeMaterial], 'readonly');
+      let store = transaction.objectStore(myDb.storeNames.gasLoadChargeMaterial);
+      let getRequest = store.get(id);
+      myDb.setDefaultErrorHandler(getRequest, myDb);
+      getRequest.onsuccess = (e) => {
+        resolve(e.target.result);
+      }
+      getRequest.onerror = (error) => {
+        reject(error.target.result)
+      }
+    })
+  }
+
+  getAllGasLoadChargeMaterial(): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let transaction = myDb.instance.transaction([myDb.storeNames.gasLoadChargeMaterial], 'readonly');
+      let store = transaction.objectStore(myDb.storeNames.gasLoadChargeMaterial);
+      let getRequest = store.getAll();
+      myDb.setDefaultErrorHandler(getRequest, myDb);
+      getRequest.onsuccess = (e) => {
+        resolve(e.target.result);
+      }
+      getRequest.onerror = (error) => {
+        reject(error.target.result)
+      }
+    })
+  }
+
 }

@@ -13,6 +13,8 @@ import { ToastyService, ToastyConfig, ToastOptions, ToastData } from 'ng2-toasty
 import { SuiteDbService } from '../suiteDb/suite-db.service';
 import { WindowRefService } from '../indexedDb/window-ref.service';
 import { ImportExportService } from '../shared/import-export/import-export.service';
+import { GasLoadChargeMaterial } from '../shared/models/materials';
+
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
@@ -60,22 +62,6 @@ export class DashboardComponent implements OnInit {
     //start toolts suite database if it has not started
     if (this.suiteDbService.hasStarted == false) {
       this.suiteDbService.startup();
-      //this.suiteDbService.test();
-      console.log('gasLoadChargeMaterial')
-      let tmp = this.suiteDbService.selectGasLoadChargeMaterialById(1);
-      console.log(tmp);
-      
-      console.log('liquidLoadChargeMaterial')
-      tmp = this.suiteDbService.selectLiquidLoadChargeMaterialById(1);
-      console.log(tmp);
-
-      console.log('solidLiquidFlueGasMaterial')
-      tmp = this.suiteDbService.selectSolidLiquidFlueGasMaterialById(1);
-      console.log(tmp);
-
-      console.log('SolidLoadChargeMaterial')
-      tmp = this.suiteDbService.selectSolidLoadChargeMaterialById(1);
-      console.log(tmp);
     }
     this.selectedItems = new Array();
     this.showLandingScreen = this.assessmentService.getLandingScreen();
@@ -84,6 +70,9 @@ export class DashboardComponent implements OnInit {
       this.indexedDbService.db = this.indexedDbService.initDb().then(
         results => {
           this.getData();
+          if(this.suiteDbService.hasStarted == true && this.indexedDbService.initCustomObjects == true){
+            this.initCustomDbMaterials();
+          }
         }
       )
     } else {
@@ -102,6 +91,16 @@ export class DashboardComponent implements OnInit {
   }
 
   ngAfterViewInit() {
+  }
+
+  initCustomDbMaterials() {
+    this.indexedDbService.getAllGasLoadChargeMaterial().then(results => {
+      let customGasLoadChargeMaterials: GasLoadChargeMaterial[] = results;
+      customGasLoadChargeMaterials.forEach(material => {
+        let suiteResult = this.suiteDbService.insertGasLoadChargeMaterial(material);
+        console.log(suiteResult)
+      })
+    })
   }
 
   getData() {
@@ -158,7 +157,7 @@ export class DashboardComponent implements OnInit {
     this.dashboardView = 'settings';
   }
 
-  showContact(){
+  showContact() {
     this.selectedCalculator = '';
     this.dashboardView = 'contact';
   }
