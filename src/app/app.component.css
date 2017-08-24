@@ -1307,9 +1307,9 @@ Tabs
 }
 
 
-.tab-content {
+/*.tab-content {
   min-height: 100%;
-}
+}*/
   .tab-content .wrapper {
       max-width: 1024px;
       width: 100%;
@@ -1525,11 +1525,11 @@ Modify Conditions
     border: #efefef solid 1px;
     padding: 6px 8px;
     font-size: 15px;
-    
+
 }
   .note-form textarea::placeholder {
     font-style: italic;
-    color: #929292; 
+    color: #929292;
   }
 
 
