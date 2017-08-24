@@ -2,7 +2,8 @@ import { Component, OnInit, Input, EventEmitter, Output, ViewChild, ElementRef, 
 import { SuiteDbService } from '../../../../suiteDb/suite-db.service';
 import { WindowRefService } from '../../../../indexedDb/window-ref.service';
 import { ChargeMaterialCompareService } from '../charge-material-compare.service';
-
+import { ModalDirective } from 'ngx-bootstrap';
+import { LossesService } from '../../losses.service';
 @Component({
   selector: 'app-solid-charge-material-form',
   templateUrl: './solid-charge-material-form.component.html',
@@ -21,6 +22,7 @@ export class SolidChargeMaterialFormComponent implements OnInit {
   saveEmit = new EventEmitter<boolean>();
   @Input()
   lossIndex: number;
+  @ViewChild('materialModal') public materialModal: ModalDirective;
 
   @ViewChild('lossForm') lossForm: ElementRef;
   form: any;
@@ -33,7 +35,7 @@ export class SolidChargeMaterialFormComponent implements OnInit {
   selectedMaterial: any;
   counter: any;
   dischargeTempError: string = null;
-  constructor(private suiteDbService: SuiteDbService, private chargeMaterialCompareService: ChargeMaterialCompareService, private windowRefService: WindowRefService) { }
+  constructor(private suiteDbService: SuiteDbService, private chargeMaterialCompareService: ChargeMaterialCompareService, private windowRefService: WindowRefService, private lossesService: LossesService) { }
 
   ngOnChanges(changes: SimpleChanges) {
     if (!this.firstChange) {
@@ -248,5 +250,15 @@ export class SolidChargeMaterialFormComponent implements OnInit {
         })
       }
     }
+  }
+  
+  showMaterialModal() {
+    this.lossesService.modalOpen.next(true);
+    this.materialModal.show();
+  }
+
+  hideMaterialModal(){
+    this.materialModal.hide();
+    this.lossesService.modalOpen.next(false);
   }
 }

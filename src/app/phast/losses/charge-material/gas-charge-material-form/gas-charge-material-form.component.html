@@ -2,7 +2,7 @@
   <div class="form-section">
     <div class="form-group">
       <label class="small" for="materialName">Name of Material
-          <small id="materialHelp" class="form-text text-help"><a (click)="showMaterialModal()">Add New Material</a></small>
+          <small id="materialHelp" class="form-text text-help"><a (click)="showMaterialModal()">Add New Gas Material</a></small>
       </label>
       <select name="{{'materialName_'+lossIndex}}" class="form-control" id="materialName" formControlName="materialId" (change)="setProperties()"
         (focus)="focusField('materialName')">
@@ -110,7 +110,7 @@
      [config]="{backdrop: 'static'}">
   <div class="modal-dialog modal-md">
     <div class="modal-header">
-        <h3>Create Material</h3>
+        <h3>Create Gas Material</h3>
         <button class="close" (click)="hideMaterialModal()">
           <span aria-hidden="true">&times;</span>
         </button>

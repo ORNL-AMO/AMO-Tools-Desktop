@@ -2,6 +2,9 @@ import { Component, OnInit, Input, EventEmitter, Output, ViewChild, ElementRef, 
 import { WindowRefService } from '../../../../indexedDb/window-ref.service';
 import { FixtureLossesCompareService } from "../fixture-losses-compare.service";
 import { SuiteDbService } from '../../../../suiteDb/suite-db.service';
+import { ModalDirective } from 'ngx-bootstrap';
+import { LossesService } from '../../losses.service';
+
 @Component({
   selector: 'app-fixture-losses-form',
   templateUrl: './fixture-losses-form.component.html',
@@ -20,7 +23,7 @@ export class FixtureLossesFormComponent implements OnInit {
   saveEmit = new EventEmitter<boolean>();
   @Input()
   lossIndex: number;
-
+  @ViewChild('materialModal') public materialModal: ModalDirective;
   @ViewChild('lossForm') lossForm: ElementRef;
   form: any;
   elements: any;
@@ -28,7 +31,7 @@ export class FixtureLossesFormComponent implements OnInit {
   firstChange: boolean = true;
   counter: any;
   materials: Array<any>;
-  constructor(private windowRefService: WindowRefService, private fixtureLossesCompareService: FixtureLossesCompareService, private suiteDbService: SuiteDbService) { }
+  constructor(private windowRefService: WindowRefService, private fixtureLossesCompareService: FixtureLossesCompareService, private suiteDbService: SuiteDbService, private lossesService: LossesService) { }
 
   ngOnChanges(changes: SimpleChanges) {
     if (!this.firstChange) {
@@ -147,5 +150,14 @@ export class FixtureLossesFormComponent implements OnInit {
         })
       }
     }
+  }
+  showMaterialModal() {
+    this.lossesService.modalOpen.next(true);
+    this.materialModal.show();
+  }
+
+  hideMaterialModal(){
+    this.materialModal.hide();
+    this.lossesService.modalOpen.next(false);
   }
 }

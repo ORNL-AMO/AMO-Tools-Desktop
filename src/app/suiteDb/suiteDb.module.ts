@@ -23,7 +23,9 @@ import { SolidLoadChargeMaterialComponent } from './solid-load-charge-material/s
         SolidLoadChargeMaterialComponent
     ],
     exports: [
-        GasLoadChargeMaterialComponent
+        GasLoadChargeMaterialComponent,
+        SolidLoadChargeMaterialComponent,
+        LiquidLoadChargeMaterialComponent
     ]
 })
 
