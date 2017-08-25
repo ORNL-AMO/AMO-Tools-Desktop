@@ -18,6 +18,7 @@ export class HeadToolFormComponent implements OnInit {
   @Output('changeField')
   changeField = new EventEmitter<string>();
   diameterError: string = null;
+  diameterErrorOut : string = null;
   smallUnit: string;
 
   constructor() { }
@@ -32,7 +33,7 @@ export class HeadToolFormComponent implements OnInit {
   }
 
   calc() {
-    if (this.headToolForm.valid && this.checkPipeDiameter()) {
+    if (this.headToolForm.valid && this.checkPipeDiameterSuction() && this.checkPipeDiameterDischarge()) {
       this.headToolForm.patchValue({
      })
         this.calculate.emit(true);
@@ -43,8 +44,8 @@ export class HeadToolFormComponent implements OnInit {
     this.changeField.emit(str);
   }
 
-  checkPipeDiameter() {
-     if (this.headToolForm.value.suctionPipeDiameter == 0) {
+  checkPipeDiameterSuction() {
+    if (this.headToolForm.value.suctionPipeDiameter == 0) {
       this.diameterError = "Cannot have 0 diameter";
       return false;
     }
@@ -56,5 +57,19 @@ export class HeadToolFormComponent implements OnInit {
       this.diameterError = null;
       return true;
     }
+  }
+    checkPipeDiameterDischarge() {
+      if (this.headToolForm.value.dischargePipeDiameter == 0) {
+        this.diameterErrorOut = "Cannot have 0 diameter";
+        return false;
+      }
+      else if (this.headToolForm.value.dischargePipeDiameter < 0) {
+        this.diameterErrorOut = "Cannot have negative diameter";
+        return false;
+      }
+      else {
+        this.diameterErrorOut = null;
+        return true;
+      }
   }
 }

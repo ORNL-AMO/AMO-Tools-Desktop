@@ -91,6 +91,7 @@
                     {{smallUnit}}
                 </span>
               </div>
+              <span class="alert-danger pull-right small" *ngIf="diameterErrorOut !== null">{{diameterErrorOut}}</span>
             </div>
             <div class="form-group">
               <label class="small" for="dischargeGaugePressure">Gauge pressure (Pd)</label>
