@@ -19,13 +19,10 @@ export class HeadToolFormComponent implements OnInit {
   changeField = new EventEmitter<string>();
   diameterError: string = null;
   smallUnit: string;
-  tmpPipeDiameter: number;
+
   constructor() { }
 
   ngOnInit() {
-    if (this.headToolForm) {
-      this.tmpPipeDiameter = this.headToolForm.value.suctionPipeDiameter;
-    }
     if (this.settings.distanceMeasurement == 'ft') {
       this.smallUnit = 'in'
     } else {
@@ -37,23 +34,21 @@ export class HeadToolFormComponent implements OnInit {
   calc() {
     if (this.checkPipeDiameter()) {
       this.headToolForm.patchValue({
-        suctionPipeDiameter: this.tmpPipeDiameter
-      })
-      this.calculate.emit(true);
+     })
+        this.calculate.emit(true);
+      }
     }
-  }
-
 
   focusField(str: string){
     this.changeField.emit(str);
   }
 
   checkPipeDiameter() {
-     if (this.headToolForm.value.tmpPipeDiameter == 0) {
+     if (this.headToolForm.value.suctionPipeDiameter == 0) {
       this.diameterError = "Cannot have 0 diameter";
       return false;
     }
-    else if (this.headToolForm.value.tmpPipeDiameter < 0) {
+    else if (this.headToolForm.value.suctionPipeDiameter < 0) {
       this.diameterError = "Cannot have negative diameter";
       return false;
     }
