@@ -5,6 +5,7 @@ import { AtmosphereLossesService } from './atmosphere-losses.service';
 import { Losses } from '../../../shared/models/phast/phast';
 import { AtmosphereLoss } from '../../../shared/models/phast/losses/atmosphereLoss';
 import { AtmosphereLossesCompareService } from './atmosphere-losses-compare.service';
+
 @Component({
   selector: 'app-atmosphere-losses',
   templateUrl: './atmosphere-losses.component.html',

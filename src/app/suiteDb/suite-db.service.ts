@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import { FlueGasMaterial, GasLoadChargeMaterial, LiquidLoadChargeMaterial, SolidLiquidFlueGasMaterial, SolidLoadChargeMaterial } from '../shared/models/phast/materials';
+import { FlueGasMaterial, GasLoadChargeMaterial, LiquidLoadChargeMaterial, SolidLiquidFlueGasMaterial, SolidLoadChargeMaterial } from '../shared/models/materials';
+import { AtmosphereSpecificHeat } from '../shared/models/materials';
 
 declare var db: any;
 
@@ -71,7 +72,16 @@ export class SuiteDbService {
     return db.update()
   }
 
-  insertAtmosphereSpecificHeat() { }
+  selectAtmosphereSpecificHeat(){
+    return db.selectAtmosphereSpecificHeat();
+  }
+  selectAtmosphereSpecificHeatById(id: number){
+    return db.selectAtmosphereSpecificHeatById(id);
+  }
+
+  insertAtmosphereSpecificHeat(material: AtmosphereSpecificHeat) { 
+    return db.insertAtmosphereSpecificHeat(material)
+  }
 
   insertGasFlueGasMaterial(material: FlueGasMaterial) { }
 

@@ -1,4 +1,19 @@
 export interface FlueGasMaterial {
+    C2H6: number,
+    C3H8: number,
+    C4H10_CnH2n: number,
+    CH4: number,
+    CO: number,
+    CO2: number,
+    H2: number,
+    H2O: number,
+    N2: number,
+    O2: number,
+    SO2: number,
+    heatingValue: number,
+    id?: number,
+    specificGravity: number,
+    substance: string
 }
 
 export interface GasLoadChargeMaterial {
@@ -35,5 +50,11 @@ export interface SolidLoadChargeMaterial {
     meltingPoint: number,
     specificHeatLiquid: number,
     specificHeatSolid: number,
+    substance: string
+}
+
+export interface AtmosphereSpecificHeat {
+    id?: number,
+    specificHeat: number,
     substance: string
 }

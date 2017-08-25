@@ -263,9 +263,9 @@ export class SolidChargeMaterialFormComponent implements OnInit {
 
   hideMaterialModal(event?: any) {
     if (event) {
-      this.materialTypes = this.suiteDbService.selectLiquidLoadChargeMaterials();
+      this.materialTypes = this.suiteDbService.selectSolidLoadChargeMaterials();
       let newMaterial = this.materialTypes.filter(material => { return material.substance == event.substance })
-      if (newMaterial) {
+      if (newMaterial.length != 0) {
         this.chargeMaterialForm.patchValue({
           materialId: newMaterial[0].id
         })

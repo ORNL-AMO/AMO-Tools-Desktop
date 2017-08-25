@@ -1,9 +1,13 @@
 <form #lossForm [formGroup]="atmosphereLossForm">
   <div class="form-section">
     <div class="form-group">
-      <label class="small" for="atmosphereGas">Atmosphere Gas</label>
-      <input name="{{'atmosphereGas_'+lossIndex}}" type="text" class="form-control" formControlName="atmosphereGas" id="atmosphereGas"
-        onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('atmosphereGas')">
+      <label class="small" for="atmosphereGas">Atmosphere Gas
+        <small id="materialHelp" class="form-text text-help"><a (click)="showMaterialModal()">Add New Gas</a></small>
+      </label>
+      <select name="{{'atmosphereGas'+lossIndex}}" class="form-control" id="atmosphereGas" formControlName="atmosphereGas" (change)="setProperties()"
+        (focus)="focusField('materialName')">
+          <option *ngFor="let gas of materialTypes" [ngValue]="gas.id">{{gas.substance}}</option>
+        </select>
     </div>
 
     <div class="form-group">
@@ -52,3 +56,20 @@
     </div>
   </div>
 </form>
+
+
+<!--CREATE Folder MODAL-->
+<div bsModal #materialModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="materialModalLabel"
+  aria-hidden="true" [config]="{backdrop: 'static'}">
+  <div class="modal-dialog modal-md">
+    <div class="modal-header">
+      <h3>Create Gas Material</h3>
+      <button class="close" (click)="hideMaterialModal()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-content">
+      <app-atmosphere-specific-heat-material *ngIf="showModal" (closeModal)="hideMaterialModal($event)"></app-atmosphere-specific-heat-material>
+    </div>
+  </div>
+</div>

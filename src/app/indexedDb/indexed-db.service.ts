@@ -4,7 +4,7 @@ import { MockDirectory } from '../shared/mocks/mock-directory';
 import { DirectoryDbRef } from '../shared/models/directory';
 import { Assessment } from '../shared/models/assessment';
 import { Settings } from '../shared/models/settings';
-import { GasLoadChargeMaterial, LiquidLoadChargeMaterial, SolidLoadChargeMaterial } from '../shared/models/materials'
+import { GasLoadChargeMaterial, LiquidLoadChargeMaterial, SolidLoadChargeMaterial, AtmosphereSpecificHeat } from '../shared/models/materials'
 import { SuiteDbService } from '../suiteDb/suite-db.service';
 
 
@@ -16,7 +16,10 @@ var myDb: any = {
     assessments: 'assessments',
     directories: 'directories',
     settings: 'settings',
-    gasLoadChargeMaterial: 'gasLoadChargeMaterial'
+    gasLoadChargeMaterial: 'gasLoadChargeMaterial',
+    solidLoadChargeMaterial: 'solidLoadChargeMaterial',
+    liquidLoadChargeMaterial: 'liquidLoadChargeMaterial',
+    atmosphereSpecificHeat: 'atmosphereSpecificHeat'
   },
   defaultErrorHandler: function (e) {
     //todo: implement error handling
@@ -84,9 +87,9 @@ export class IndexedDbService {
           console.log('creating gasLoadChargeMaterial store...');
           let settingsObjStore = newVersion.createObjectStore(myDb.storeNames.gasLoadChargeMaterial, {
             autoIncrement: true,
-            keyPath: 'substance'
+            keyPath: 'id'
           })
-          settingsObjStore.createIndex('substance', 'substance', { unique: false });
+          settingsObjStore.createIndex('id', 'id', { unique: false });
         }
 
         //liquidLoadChargeMaterial
@@ -94,9 +97,9 @@ export class IndexedDbService {
           console.log('creating liquidLoadChargeMaterial store...');
           let settingsObjStore = newVersion.createObjectStore(myDb.storeNames.liquidLoadChargeMaterial, {
             autoIncrement: true,
-            keyPath: 'substance'
+            keyPath: 'id'
           })
-          settingsObjStore.createIndex('substance', 'substance', { unique: false });
+          settingsObjStore.createIndex('id', 'id', { unique: false });
         }
 
         //solidLoadChargeMaterial
@@ -104,10 +107,20 @@ export class IndexedDbService {
           console.log('creating solidLoadChargeMaterial store...');
           let settingsObjStore = newVersion.createObjectStore(myDb.storeNames.solidLoadChargeMaterial, {
             autoIncrement: true,
-            keyPath: 'substance'
+            keyPath: 'id'
           })
-          settingsObjStore.createIndex('substance', 'substance', { unique: false });
+          settingsObjStore.createIndex('id', 'id', { unique: false });
         }
+        //atmosphereSpecificHeat
+        if (!newVersion.objectStoreNames.contains(myDb.storeNames.atmosphereSpecificHeat)) {
+          console.log('creating atmosphereSpecificHeat store...');
+          let settingsObjStore = newVersion.createObjectStore(myDb.storeNames.atmosphereSpecificHeat, {
+            autoIncrement: true,
+            keyPath: 'id'
+          })
+          settingsObjStore.createIndex('id', 'id', { unique: false });
+        }
+
       }
       myDb.setDefaultErrorHandler(this.request, myDb);
 
@@ -564,6 +577,52 @@ export class IndexedDbService {
     return new Promise((resolve, reject) => {
       let transaction = myDb.instance.transaction([myDb.storeNames.solidLoadChargeMaterial], 'readonly');
       let store = transaction.objectStore(myDb.storeNames.solidLoadChargeMaterial);
+      let getRequest = store.getAll();
+      myDb.setDefaultErrorHandler(getRequest, myDb);
+      getRequest.onsuccess = (e) => {
+        resolve(e.target.result);
+      }
+      getRequest.onerror = (error) => {
+        reject(error.target.result)
+      }
+    })
+  }
+
+  //atmosphereSpecificHeat
+  addAtmosphereSpecificHeat(_material: AtmosphereSpecificHeat): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let transaction = myDb.instance.transaction([myDb.storeNames.atmosphereSpecificHeat], 'readwrite');
+      let store = transaction.objectStore(myDb.storeNames.atmosphereSpecificHeat);
+      let addRequest = store.add(_material);
+      myDb.setDefaultErrorHandler(addRequest, myDb);
+      addRequest.onsuccess = (e) => {
+        resolve(e.target.result);
+      }
+      addRequest.onerror = (e) => {
+        reject(e.target.result)
+      }
+    });
+  }
+
+  getAtmosphereSpecificHeatById(id: number): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let transaction = myDb.instance.transaction([myDb.storeNames.atmosphereSpecificHeat], 'readonly');
+      let store = transaction.objectStore(myDb.storeNames.atmosphereSpecificHeat);
+      let getRequest = store.get(id);
+      myDb.setDefaultErrorHandler(getRequest, myDb);
+      getRequest.onsuccess = (e) => {
+        resolve(e.target.result);
+      }
+      getRequest.onerror = (error) => {
+        reject(error.target.result)
+      }
+    })
+  }
+
+  getAtmosphereSpecificHeat(): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let transaction = myDb.instance.transaction([myDb.storeNames.atmosphereSpecificHeat], 'readonly');
+      let store = transaction.objectStore(myDb.storeNames.atmosphereSpecificHeat);
       let getRequest = store.getAll();
       myDb.setDefaultErrorHandler(getRequest, myDb);
       getRequest.onsuccess = (e) => {
