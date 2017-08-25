@@ -50,7 +50,6 @@ export class AtmosphereLossesFormComponent implements OnInit {
 
   ngOnInit() {
     this.materialTypes = this.suiteDbService.selectAtmosphereSpecificHeat();
-    console.log(this.materialTypes)
     this.checkTempError(true);
   }
 

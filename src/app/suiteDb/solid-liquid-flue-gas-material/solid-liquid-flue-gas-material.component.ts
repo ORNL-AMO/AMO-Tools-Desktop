@@ -1,5 +1,5 @@
 import { Component, OnInit, EventEmitter, Output } from '@angular/core';
-import { SolidLoadChargeMaterial } from '../../shared/models/materials';
+import { SolidLiquidFlueGasMaterial } from '../../shared/models/materials';
 import { SuiteDbService } from '../suite-db.service';
 import { IndexedDbService } from '../../indexedDb/indexed-db.service';
 import * as _ from 'lodash';
@@ -11,32 +11,35 @@ import * as _ from 'lodash';
 })
 export class SolidLiquidFlueGasMaterialComponent implements OnInit {
   @Output('closeModal')
-  closeModal = new EventEmitter<SolidLoadChargeMaterial>();
+  closeModal = new EventEmitter<SolidLiquidFlueGasMaterial>();
 
+  newMaterial: SolidLiquidFlueGasMaterial = {
+    substance: 'New Fuel',
+    carbon: 0,
+    hydrogen: 0,
+    inertAsh: 0,
+    moisture: 0,
+    nitrogen: 0,
+    o2: 0,
+    sulphur: 0
 
-  newMaterial: SolidLoadChargeMaterial = {
-    substance: 'New Material',
-    latentHeat: 0,
-    meltingPoint: 0,
-    specificHeatLiquid: 0,
-    specificHeatSolid: 0,
   };
-  selectedMaterial: SolidLoadChargeMaterial;
-  allMaterials: Array<SolidLoadChargeMaterial>;
+  selectedMaterial: SolidLiquidFlueGasMaterial;
+  allMaterials: Array<SolidLiquidFlueGasMaterial>;
   isValidMaterialName: boolean = true;
   nameError: string = null;
   constructor(private suiteDbService: SuiteDbService, private indexedDbService: IndexedDbService) { }
 
   ngOnInit() {
-    this.allMaterials = this.suiteDbService.selectSolidLoadChargeMaterials();
+    this.allMaterials = this.suiteDbService.selectSolidLiquidFlueGasMaterials();
     this.checkMaterialName();
     // this.selectedMaterial = this.allMaterials[0];
   }
 
   addMaterial() {
-    let suiteDbResult = this.suiteDbService.insertSolidLoadChargeMaterial(this.newMaterial);
+    let suiteDbResult = this.suiteDbService.insertSolidLiquidFlueGasMaterial(this.newMaterial);
     if (suiteDbResult == true) {
-      this.indexedDbService.addSolidLoadChargeMaterial(this.newMaterial).then(idbResults => {
+      this.indexedDbService.addSolidLiquidFlueGasMaterial(this.newMaterial).then(idbResults => {
         this.closeModal.emit(this.newMaterial);
       })
     }
@@ -46,10 +49,13 @@ export class SolidLiquidFlueGasMaterialComponent implements OnInit {
     if (this.selectedMaterial) {
       this.newMaterial = {
         substance: this.selectedMaterial.substance + ' (mod)',
-        latentHeat: this.selectedMaterial.latentHeat,
-        meltingPoint: this.selectedMaterial.meltingPoint,
-        specificHeatLiquid: this.selectedMaterial.specificHeatLiquid,
-        specificHeatSolid: this.selectedMaterial.specificHeatSolid,
+        carbon: this.selectedMaterial.carbon,
+        hydrogen: this.selectedMaterial.hydrogen,
+        inertAsh: this.selectedMaterial.inertAsh,
+        moisture: this.selectedMaterial.moisture,
+        nitrogen: this.selectedMaterial.nitrogen,
+        o2: this.selectedMaterial.o2,
+        sulphur: this.selectedMaterial.sulphur
       }
     }
   }

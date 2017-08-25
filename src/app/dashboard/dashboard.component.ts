@@ -13,7 +13,7 @@ import { ToastyService, ToastyConfig, ToastOptions, ToastData } from 'ng2-toasty
 import { SuiteDbService } from '../suiteDb/suite-db.service';
 import { WindowRefService } from '../indexedDb/window-ref.service';
 import { ImportExportService } from '../shared/import-export/import-export.service';
-import { GasLoadChargeMaterial, LiquidLoadChargeMaterial, SolidLoadChargeMaterial, AtmosphereSpecificHeat } from '../shared/models/materials';
+import { WallLossesSurface, GasLoadChargeMaterial, LiquidLoadChargeMaterial, SolidLoadChargeMaterial, AtmosphereSpecificHeat, FlueGasMaterial, SolidLiquidFlueGasMaterial } from '../shared/models/materials';
 
 @Component({
   selector: 'app-dashboard',
@@ -94,6 +94,7 @@ export class DashboardComponent implements OnInit {
   }
 
   initCustomDbMaterials() {
+    this.suiteDbService.test();
     this.indexedDbService.getAllGasLoadChargeMaterial().then(results => {
       let customGasLoadChargeMaterials: GasLoadChargeMaterial[] = results;
       customGasLoadChargeMaterials.forEach(material => {
@@ -116,6 +117,24 @@ export class DashboardComponent implements OnInit {
       let customAtmosphereSpecificHeatMaterials: AtmosphereSpecificHeat[] = results;
       customAtmosphereSpecificHeatMaterials.forEach(material => {
         let suiteResult = this.suiteDbService.insertAtmosphereSpecificHeat(material);
+      })
+    })
+    this.indexedDbService.getWallLossesSurface().then(results => {
+      let customWallLossesSurfaces: WallLossesSurface[] = results;
+      customWallLossesSurfaces.forEach(material => {
+        let suiteResult = this.suiteDbService.insertWallLossesSurface(material);
+      })
+    })
+    this.indexedDbService.getFlueGasMaterials().then(results => {
+      let customFluesGasses: FlueGasMaterial[] = results;
+      customFluesGasses.forEach(material => {
+        let suiteResult = this.suiteDbService.insertGasFlueGasMaterial(material);
+      })
+    })
+    this.indexedDbService.getSolidLiquidFlueGasMaterials().then(results => {
+      let customSolidLiquidFlueGasses: SolidLiquidFlueGasMaterial[] = results;
+      customSolidLiquidFlueGasses.forEach(material => {
+        let suiteResult = this.suiteDbService.insertSolidLiquidFlueGasMaterial(material);
       })
     })
   }

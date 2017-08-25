@@ -48,8 +48,6 @@ export class GasChargeMaterialFormComponent implements OnInit {
 
   ngOnInit() {
     this.materialTypes = this.suiteDbService.selectGasLoadChargeMaterials();
-    console.log(this.materialTypes);
-    console.log(this.chargeMaterialForm.value.materialId)
     if (this.chargeMaterialForm) {
       if (this.chargeMaterialForm.value.materialId && this.chargeMaterialForm.value.materialId != '') {
         if (this.chargeMaterialForm.value.materialSpecificHeat == '') {

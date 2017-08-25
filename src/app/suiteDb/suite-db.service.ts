@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
-import { FlueGasMaterial, GasLoadChargeMaterial, LiquidLoadChargeMaterial, SolidLiquidFlueGasMaterial, SolidLoadChargeMaterial } from '../shared/models/materials';
-import { AtmosphereSpecificHeat } from '../shared/models/materials';
+import { FlueGasMaterial, GasLoadChargeMaterial, LiquidLoadChargeMaterial, SolidLiquidFlueGasMaterial, SolidLoadChargeMaterial, AtmosphereSpecificHeat, WallLossesSurface } from '../shared/models/materials';
 
 declare var db: any;
 
@@ -72,18 +71,20 @@ export class SuiteDbService {
     return db.update()
   }
 
-  selectAtmosphereSpecificHeat(){
+  selectAtmosphereSpecificHeat() {
     return db.selectAtmosphereSpecificHeat();
   }
-  selectAtmosphereSpecificHeatById(id: number){
+  selectAtmosphereSpecificHeatById(id: number) {
     return db.selectAtmosphereSpecificHeatById(id);
   }
 
-  insertAtmosphereSpecificHeat(material: AtmosphereSpecificHeat) { 
+  insertAtmosphereSpecificHeat(material: AtmosphereSpecificHeat) {
     return db.insertAtmosphereSpecificHeat(material)
   }
 
-  insertGasFlueGasMaterial(material: FlueGasMaterial) { }
+  insertGasFlueGasMaterial(material: FlueGasMaterial) {
+    return db.insertGasFlueGasMaterial(material);
+  }
 
   insertGasLoadChargeMaterial(material: GasLoadChargeMaterial) {
     return db.insertGasLoadChargeMaterial(material);
@@ -93,11 +94,22 @@ export class SuiteDbService {
     return db.insertLiquidLoadChargeMaterial(material)
   }
 
-  insertSolidLiquidFlueGasMaterial(material: SolidLiquidFlueGasMaterial) { }
+  insertSolidLiquidFlueGasMaterial(material: SolidLiquidFlueGasMaterial) {
+    return db.insertSolidLiquidFlueGasMaterial(material);
+  }
 
   insertSolidLoadChargeMaterial(material: SolidLoadChargeMaterial) {
     return db.insertSolidLoadChargeMaterial(material);
   }
 
-  insertWallLossesSurface() { }
+  insertWallLossesSurface(material: WallLossesSurface) {
+    return db.insertWallLossesSurface(material);
+  }
+
+  selectWallLossesSurface() {
+    return db.selectWallLossesSurface();
+  }
+  selectWallLossesSurfaceById(id: number) {
+    return db.selectWallLossesSurfaceById(id);
+  }
 }

@@ -58,3 +58,10 @@ export interface AtmosphereSpecificHeat {
     specificHeat: number,
     substance: string
 }
+
+
+export interface WallLossesSurface {
+    conditionFactor: number,
+    id?: number,
+    surface: string
+}
