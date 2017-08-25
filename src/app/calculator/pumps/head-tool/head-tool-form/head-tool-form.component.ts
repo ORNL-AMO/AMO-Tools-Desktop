@@ -32,7 +32,7 @@ export class HeadToolFormComponent implements OnInit {
   }
 
   calc() {
-    if (this.checkPipeDiameter()) {
+    if (this.headToolForm.valid && this.checkPipeDiameter()) {
       this.headToolForm.patchValue({
      })
         this.calculate.emit(true);
