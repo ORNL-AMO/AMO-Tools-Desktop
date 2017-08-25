@@ -22,12 +22,14 @@ export class PsatBannerComponent implements OnInit {
   }
 
   changeTab(str: string) {
+
+    console.log("here");
+
     if (str == 'system-setup') {
       this.psatService.mainTab.next(str);
     } else if (this.assessment.psat.setupDone) {
-      if (str != 'diagram') {
-        this.psatService.mainTab.next(str);
-      }
+      console.log("here two");
+      this.psatService.mainTab.next(str);
     }
   }
 }
