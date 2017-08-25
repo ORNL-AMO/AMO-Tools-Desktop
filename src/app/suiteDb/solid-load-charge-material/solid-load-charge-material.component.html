@@ -10,40 +10,43 @@
       </select>
         </div>
       </div>
-      <div class="form-group">
-        <label class="small" for="materialName">Material Name</label>
-        <input type="text" id="materialName" name="materialName" class="form-control" [(ngModel)]="newMaterial.substance" (input)="checkMaterialName()"
-        />
-        <span class="alert-warning pull-right small" *ngIf="nameError !== null">{{nameError}}</span>
-      </div>
-      <div class="form-group">
-        <label class="small" for="latentHeat">Latent Heat of Fusion</label>
-        <div class="input-group">
-          <input type="number" id="latentHeat" name="latentHeat" class="form-control" [(ngModel)]="newMaterial.latentHeat" />
-          <span class="input-group-addon units">Btu/lb</span>
-        </div>
-      </div>
-      <div class="form-group">
-        <label class="small" for="meltingPoint">Melting Point</label>
-        <div class="input-group">
-          <input type="number" id="meltingPoint" name="meltingPoint" class="form-control" [(ngModel)]="newMaterial.meltingPoint" />
-          <span class="input-group-addon units">&#8457;</span>
-        </div>
-      </div>
-      <div class="form-group">
-        <label class="small" for="specificHeatLiquid">Specific heat of liquid from molten material</label>
-        <div class="input-group">
-          <input type="number" id="specificHeatLiquid" name="specificHeatLiquid" class="form-control" [(ngModel)]="newMaterial.specificHeatLiquid"
+      <div class="form-section">
+        <label><h6>New Material:</h6></label>
+        <div class="form-group">
+          <label class="small" for="materialName">Material Name</label>
+          <input type="text" id="materialName" name="materialName" class="form-control" [(ngModel)]="newMaterial.substance" (input)="checkMaterialName()"
           />
-          <span class="input-group-addon units">Btu/(lb-&#8457;)</span>
+          <span class="alert-warning pull-right small" *ngIf="nameError !== null">{{nameError}}</span>
         </div>
-      </div>
-      <div class="form-group">
-        <label class="small" for="specificHeatSolid">Average specific heat of the solid material</label>
-        <div class="input-group">
-          <input type="number" id="specificHeatSolid" name="specificHeatSolid" class="form-control" [(ngModel)]="newMaterial.specificHeatSolid"
-          />
-          <span class="input-group-addon units">Btu/(lb-&#8457;)</span>
+        <div class="form-group">
+          <label class="small" for="latentHeat">Latent Heat of Fusion</label>
+          <div class="input-group">
+            <input type="number" id="latentHeat" name="latentHeat" class="form-control" [(ngModel)]="newMaterial.latentHeat" />
+            <span class="input-group-addon units">Btu/lb</span>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="small" for="meltingPoint">Melting Point</label>
+          <div class="input-group">
+            <input type="number" id="meltingPoint" name="meltingPoint" class="form-control" [(ngModel)]="newMaterial.meltingPoint" />
+            <span class="input-group-addon units">&#8457;</span>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="small" for="specificHeatLiquid">Specific heat of liquid from molten material</label>
+          <div class="input-group">
+            <input type="number" id="specificHeatLiquid" name="specificHeatLiquid" class="form-control" [(ngModel)]="newMaterial.specificHeatLiquid"
+            />
+            <span class="input-group-addon units">Btu/(lb-&#8457;)</span>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="small" for="specificHeatSolid">Average specific heat of the solid material</label>
+          <div class="input-group">
+            <input type="number" id="specificHeatSolid" name="specificHeatSolid" class="form-control" [(ngModel)]="newMaterial.specificHeatSolid"
+            />
+            <span class="input-group-addon units">Btu/(lb-&#8457;)</span>
+          </div>
         </div>
       </div>
     </form>
