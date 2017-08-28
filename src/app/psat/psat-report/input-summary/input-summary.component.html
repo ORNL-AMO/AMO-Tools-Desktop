@@ -67,8 +67,8 @@
       <td *ngFor="let modification of psat.modifications" [ngClass]="{'indicate-report-field-different': modification.psat.inputs.line_frequency != psat.inputs.line_frequency}">{{getLineFreq(modification.psat.inputs.line_frequency)}}</td>
     </tr>
     <tr>
-      <td [ngClass]="{'indicate-report-field-different': hpDiff == true}">Motor Rated Power (kW)</td>
-      <td [ngClass]="{'indicate-report-field-different': hpDiff == true}">{{psat.inputs.motor_rated_power}} {{settings.powerMeasurement}}</td>
+      <td [ngClass]="{'indicate-report-field-different': hpDiff == true}">Horse Power</td>
+      <td [ngClass]="{'indicate-report-field-different': hpDiff == true}">{{psat.inputs.motor_rated_power | number:'1.0-1'}} {{settings.powerMeasurement}}</td>
       <td *ngFor="let modification of psat.modifications" [ngClass]="{'indicate-report-field-different': modification.psat.inputs.motor_rated_power != psat.inputs.motor_rated_power}">{{modification.psat.inputs.motor_rated_power | number:'1.0-1'}} {{settings.powerMeasurement}}</td>
     </tr>
 
@@ -121,7 +121,7 @@
     </tr>
 
     <tr>
-      <td [ngClass]="{'indicate-report-field-different': flowRateDiff == true}">Flow Rate ({{settings.flowMeasurement}})</td>
+      <td [ngClass]="{'indicate-report-field-different': flowRateDiff == true}">Flow Rate <span>{{getUnit(settings.flowMeasurement)}}</span></td>
       <td [ngClass]="{'indicate-report-field-different': flowRateDiff == true}">{{psat.inputs.flow_rate | number:'1.0-1'}}</td>
       <td *ngFor="let modification of psat.modifications" [ngClass]="{'indicate-report-field-different': modification.psat.inputs.flow_rate != psat.inputs.flow_rate}">{{modification.psat.inputs.flow_rate | number:'1.0-1'}}</td>
     </tr>

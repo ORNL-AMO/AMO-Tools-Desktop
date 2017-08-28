@@ -37,6 +37,8 @@ export class LossesComponent implements OnInit {
 
   showSetupDialog: boolean;
   isLossesSetup: boolean;
+
+  isModalOpen: boolean = false;
   constructor(private lossesService: LossesService) { }
 
   ngOnInit() {
@@ -53,6 +55,9 @@ export class LossesComponent implements OnInit {
 
     this.lossesService.lossesTab.subscribe(val => {
       this.lossesTab = val;
+    })
+    this.lossesService.modalOpen.subscribe(val => {
+      this.isModalOpen = val;
     })
   }
 
@@ -161,5 +166,13 @@ export class LossesComponent implements OnInit {
   lossesSetup() {
     this.saved.emit(true);
     this.isLossesSetup = true;
+  }
+
+  openModal(){
+    this.isModalOpen = true;
+  }
+
+  closeModal(){
+    this.isModalOpen = false;
   }
 }

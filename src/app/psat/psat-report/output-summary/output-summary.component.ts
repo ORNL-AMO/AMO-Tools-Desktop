@@ -4,7 +4,6 @@ import { Settings } from '../../../shared/models/settings';
 import { Assessment } from '../../../shared/models/assessment';
 import { PsatService } from '../../psat.service';
 import * as _ from 'lodash';
-import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 @Component({
   selector: 'app-output-summary',
   templateUrl: './output-summary.component.html',
@@ -26,16 +25,16 @@ export class OutputSummaryComponent implements OnInit {
   titlePlacement: string;
   maxAnnualSavings: number = 0;
   selectedModificationIndex: number = 0;
-  constructor(private psatService: PsatService, private convertUnitsService: ConvertUnitsService) { }
+  constructor(private psatService: PsatService) { }
 
   ngOnInit() {
     this.unit = '%';
     this.titlePlacement = 'top';
-    this.psat.outputs = this.getResults(this.psat, this.settings);
+    this.psat.outputs = this.getResults(JSON.parse(JSON.stringify(this.psat)), this.settings);
     this.psat.outputs.percent_annual_savings = 0;
     if (this.psat.modifications) {
       this.psat.modifications.forEach(mod => {
-        mod.psat.outputs = this.getResults(mod.psat, this.settings, true);
+        mod.psat.outputs = this.getResults(JSON.parse(JSON.stringify(mod.psat)), this.settings, true);
         mod.psat.outputs.percent_annual_savings = this.getSavingsPercentage(this.psat, mod.psat);
       })
       this.getMaxAnnualSavings();
@@ -53,11 +52,11 @@ export class OutputSummaryComponent implements OnInit {
 
   getResults(psat: PSAT, settings: Settings, isModification?: boolean): PsatOutputs {
     if (psat.inputs.optimize_calculation) {
-      return this.psatService.resultsOptimal(psat.inputs, settings);
+      return this.psatService.resultsOptimal(JSON.parse(JSON.stringify(psat.inputs)), settings);
     } else if (!isModification) {
-      return this.psatService.resultsExisting(psat.inputs, settings);
+      return this.psatService.resultsExisting(JSON.parse(JSON.stringify(psat.inputs)), settings);
     } else {
-      return this.psatService.resultsModified(psat.inputs, settings, this.psat.outputs.pump_efficiency);
+      return this.psatService.resultsModified(JSON.parse(JSON.stringify(psat.inputs)), settings, this.psat.outputs.pump_efficiency);
     }
   }
 
@@ -71,11 +70,5 @@ export class OutputSummaryComponent implements OnInit {
 
   useModification() {
     this.selectModification.emit({ modIndex: this.selectedModificationIndex, type: 'PSAT', assessment: this.assessment })
-  }
-
-
-  getUnit(unit: string){
-    let tmpUnit = this.convertUnitsService.getUnit(unit);
-    return tmpUnit.unit.display;
   }
 }

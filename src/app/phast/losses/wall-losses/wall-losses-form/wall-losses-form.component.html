@@ -30,14 +30,14 @@
     </div>
 
     <div class="form-group">
-      <label class="small" for="surfaceShape">Surface shape/orientation</label>
-      <select name="{{'surfaceShape_'+lossIndex}}" class="form-control" formControlName="surfaceShape" id="surfaceShape" (change)="startSavePolling()"
+      <label class="small" for="surfaceShape">Surface shape/orientation
+        <small id="materialHelp" class="form-text text-help"><a (click)="showMaterialModal()">Add New Surface</a></small>
+      </label>
+      <select name="{{'surfaceShape'+lossIndex}}" class="form-control" id="surfaceShape" formControlName="surfaceShape" (change)="setProperties()"
         (focus)="focusField('surfaceShape')">
-        <option>Vertical Plates</option>
-        <option>Shape 2</option>
-      </select>
+          <option *ngFor="let option of surfaceOptions" [ngValue]="option.id">{{option.surface}}</option>
+        </select>
     </div>
-
 
     <div class="form-group">
       <label class="small" for="conditionFactor">Surface shape/orientation factor</label>
@@ -72,3 +72,20 @@
   </div>
 
 </form>
+
+
+<!--CREATE material MODAL-->
+<div bsModal #materialModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="materialModalLabel"
+  aria-hidden="true" [config]="{backdrop: 'static'}">
+  <div class="modal-dialog modal-md">
+    <div class="modal-header">
+      <h3>Create Surface</h3>
+      <button class="close" (click)="hideMaterialModal()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-content">
+      <app-wall-losses-surface *ngIf="showModal" (closeModal)="hideMaterialModal($event)"></app-wall-losses-surface>
+    </div>
+  </div>
+</div>

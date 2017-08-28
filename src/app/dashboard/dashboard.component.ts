@@ -13,6 +13,8 @@ import { ToastyService, ToastyConfig, ToastOptions, ToastData } from 'ng2-toasty
 import { SuiteDbService } from '../suiteDb/suite-db.service';
 import { WindowRefService } from '../indexedDb/window-ref.service';
 import { ImportExportService } from '../shared/import-export/import-export.service';
+import { WallLossesSurface, GasLoadChargeMaterial, LiquidLoadChargeMaterial, SolidLoadChargeMaterial, AtmosphereSpecificHeat, FlueGasMaterial, SolidLiquidFlueGasMaterial } from '../shared/models/materials';
+
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
@@ -61,7 +63,6 @@ export class DashboardComponent implements OnInit {
     if (this.suiteDbService.hasStarted == false) {
       this.suiteDbService.startup();
     }
-
     this.selectedItems = new Array();
     this.showLandingScreen = this.assessmentService.getLandingScreen();
     //open DB and get directories
@@ -69,6 +70,9 @@ export class DashboardComponent implements OnInit {
       this.indexedDbService.db = this.indexedDbService.initDb().then(
         results => {
           this.getData();
+          if (this.suiteDbService.hasStarted == true && this.indexedDbService.initCustomObjects == true) {
+            this.initCustomDbMaterials();
+          }
         }
       )
     } else {
@@ -76,9 +80,7 @@ export class DashboardComponent implements OnInit {
     }
 
     this.assessmentService.createAssessment.subscribe(val => {
-      if (val == true) {
-        this.createAssessment = true;
-      }
+      this.createAssessment = val;
     })
   }
 
@@ -87,6 +89,52 @@ export class DashboardComponent implements OnInit {
   }
 
   ngAfterViewInit() {
+  }
+
+  initCustomDbMaterials() {
+    //this.suiteDbService.test();
+    this.indexedDbService.getAllGasLoadChargeMaterial().then(results => {
+      let customGasLoadChargeMaterials: GasLoadChargeMaterial[] = results;
+      customGasLoadChargeMaterials.forEach(material => {
+        let suiteResult = this.suiteDbService.insertGasLoadChargeMaterial(material);
+      })
+    })
+    this.indexedDbService.getAllLiquidLoadChargeMaterial().then(results => {
+      let customLiquidLoadChargeMaterials: LiquidLoadChargeMaterial[] = results;
+      customLiquidLoadChargeMaterials.forEach(material => {
+        let suiteResult = this.suiteDbService.insertLiquidLoadChargeMaterial(material);
+      })
+    })
+    this.indexedDbService.getAllSolidLoadChargeMaterial().then(results => {
+      let customLiquidLoadChargeMaterials: SolidLoadChargeMaterial[] = results;
+      customLiquidLoadChargeMaterials.forEach(material => {
+        let suiteResult = this.suiteDbService.insertSolidLoadChargeMaterial(material);
+      })
+    })
+    this.indexedDbService.getAtmosphereSpecificHeat().then(results => {
+      let customAtmosphereSpecificHeatMaterials: AtmosphereSpecificHeat[] = results;
+      customAtmosphereSpecificHeatMaterials.forEach(material => {
+        let suiteResult = this.suiteDbService.insertAtmosphereSpecificHeat(material);
+      })
+    })
+    this.indexedDbService.getWallLossesSurface().then(results => {
+      let customWallLossesSurfaces: WallLossesSurface[] = results;
+      customWallLossesSurfaces.forEach(material => {
+        let suiteResult = this.suiteDbService.insertWallLossesSurface(material);
+      })
+    })
+    this.indexedDbService.getFlueGasMaterials().then(results => {
+      let customFluesGasses: FlueGasMaterial[] = results;
+      customFluesGasses.forEach(material => {
+        let suiteResult = this.suiteDbService.insertGasFlueGasMaterial(material);
+      })
+    })
+    this.indexedDbService.getSolidLiquidFlueGasMaterials().then(results => {
+      let customSolidLiquidFlueGasses: SolidLiquidFlueGasMaterial[] = results;
+      customSolidLiquidFlueGasses.forEach(material => {
+        let suiteResult = this.suiteDbService.insertSolidLiquidFlueGasMaterial(material);
+      })
+    })
   }
 
   getData() {
@@ -143,7 +191,7 @@ export class DashboardComponent implements OnInit {
     this.dashboardView = 'settings';
   }
 
-  showContact(){
+  showContact() {
     this.selectedCalculator = '';
     this.dashboardView = 'contact';
   }
@@ -302,6 +350,7 @@ export class DashboardComponent implements OnInit {
     this.deleting = true;
     this.indexedDbService.deleteDb().then(
       results => {
+        this.suiteDbService.startup();
         this.ngOnInit();
         this.hideDeleteModal()
       }
@@ -523,7 +572,7 @@ export class DashboardComponent implements OnInit {
           parentDirectoryId: this.workingDirectory.id
         }
         let checkParentArr = dirIdPairs.filter(pair => { return dir.directory.parentDirectoryId == pair.oldId })
-        if(checkParentArr.length != 0){
+        if (checkParentArr.length != 0) {
           tmpDirDbRef.parentDirectoryId = checkParentArr[0].newId;
         }
         this.indexedDbService.addDirectory(tmpDirDbRef).then(results => {
