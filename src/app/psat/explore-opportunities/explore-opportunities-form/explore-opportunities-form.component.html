@@ -21,7 +21,7 @@
               <div class="input-group">
                 <input name="baselineCost" type="number" step="any" id="baselineCost" class="form-control" (focus)="focusField('modifyCost')"
                   (input)="checkCost(1)" [(ngModel)]="psat.inputs.cost_kw_hour" />
-                <span class="input-group-addon units">$/kWH</span>
+                <span class="input-group-addon units">($/kWH)</span>
               </div>
               <span class="alert-danger pull-right small" *ngIf="costError1 !== null">{{costError1}}</span>
             </div>
@@ -30,7 +30,7 @@
               <div class="input-group">
                 <input name="modificationCost" type="number" step="any" id="modificationCost" class="form-control" (focus)="focusField('modifyCost')"
                   [(ngModel)]="psat.modifications[exploreModIndex].psat.inputs.cost_kw_hour" (input)="checkCost(2)" />
-                <span class="input-group-addon units">$/kWh</span>
+                <span class="input-group-addon units">($/kWh)</span>
               </div>
               <span class="alert-danger pull-right small" *ngIf="costError2 !== null">{{costError2}}</span>
             </div>
@@ -48,7 +48,8 @@
               <div class="input-group">
                 <input name="baselineFlowRate" type="number" step="any" id="baselineFlowRate" class="form-control" (focus)="focusField('flowRate')"
                   (input)="checkFlowRate(1)" [(ngModel)]="psat.inputs.flow_rate" />
-                <span class="input-group-addon units">{{settings.flowMeasurement}}</span>
+                <span class="input-group-addon units" [innerHTML]="getUnit(settings.flowMeasurement)"></span>
+                <!--<span class="input-group-addon units">{{settings.flowMeasurement}}</span>-->
               </div>
               <span class="alert-danger pull-right small" *ngIf="flowRateError1 !== null">{{flowRateError1}}</span>
             </div>
@@ -57,7 +58,8 @@
               <div class="input-group">
                 <input name="modificationFlowRate" type="number" step="any" id="modificationFlowRate" class="form-control" (focus)="focusField('flowRate')"
                   [(ngModel)]="psat.modifications[exploreModIndex].psat.inputs.flow_rate" (input)="checkFlowRate(2)" />
-                <span class="input-group-addon units">{{settings.flowMeasurement}}</span>
+                <span class="input-group-addon units" [innerHTML]="getUnit(settings.flowMeasurement)"></span>
+                <!--<span class="input-group-addon units">{{settings.flowMeasurement}}</span>-->
               </div>
               <span class="alert-danger pull-right small" *ngIf="flowRateError2 !== null">{{flowRateError2}}</span>
             </div>
@@ -75,7 +77,8 @@
               <div class="input-group">
                 <input name="baselineHead" type="number" step="any" id="baselineHead" class="form-control" (focus)="focusField('head')" (input)="calculate()"
                   [(ngModel)]="psat.inputs.head" />
-                <span class="input-group-addon units">{{settings.distanceMeasurement}}</span>
+                <span class="input-group-addon units" [innerHTML]="getUnit(settings.distanceMeasurement)"></span>
+
               </div>
             </div>
             <div class="form-group">
@@ -83,7 +86,7 @@
               <div class="input-group">
                 <input name="modificationHead" type="number" step="any" id="modificationHead" class="form-control" (focus)="focusField('head')"
                   (input)="calculate()" [(ngModel)]="psat.modifications[exploreModIndex].psat.inputs.head" />
-                <span class="input-group-addon units">{{settings.distanceMeasurement}}</span>
+                <span class="input-group-addon units" [innerHTML]="getUnit(settings.distanceMeasurement)"></span>
               </div>
             </div>
           </form>
@@ -182,7 +185,7 @@
                 <input name="baselineMotorEfficiency" [disabled]="tmpBaselineEfficiencyClass != 'Specified'" type="number" step="any" id="baselineMotorEfficiency"
                   class="form-control" (focus)="focusField('motorEfficiency')" (input)="checkEfficiency(psat.inputs.efficiency, 1)"
                   [(ngModel)]="psat.inputs.efficiency" />
-                <span class="input-group-addon units">%</span>
+                <span class="input-group-addon units">(%)</span>
               </div>
               <span class="alert-danger pull-right small" *ngIf="efficiencyError1 !== null">{{efficiencyError1}}</span>
             </div>
@@ -193,7 +196,7 @@
                   type="number" step="any" id="modificationMotorEfficiency" class="form-control" (focus)="focusField('motorEfficiency')"
                   [(ngModel)]="psat.modifications[exploreModIndex].psat.inputs.efficiency" (input)="checkEfficiency(psat.modifications[exploreModIndex].psat.inputs.efficiency, 2)"
                 />
-                <span class="input-group-addon units">%</span>
+                <span class="input-group-addon units">(%)</span>
               </div>
               <span class="alert-danger pull-right small" *ngIf="efficiencyError2 !== null && !psat.modifications[exploreModIndex].psat.inputs.optimize_calculation">{{efficiencyError2}}</span>
             </div>
