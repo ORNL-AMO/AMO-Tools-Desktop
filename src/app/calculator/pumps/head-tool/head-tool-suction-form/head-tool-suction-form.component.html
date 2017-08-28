@@ -44,6 +44,7 @@
                   onfocus="this.select();" (focus)="focusField('suctionPipeDiameter')">
                 <span class="input-group-addon units">{{smallUnit}}</span>
               </div>
+              <span class="alert-danger pull-right small" *ngIf="diameterSuctionError !== null">{{diameterSuctionError}}</span>
             </div>
 
             <div class="form-group">
@@ -92,6 +93,7 @@
                   {{smallUnit}}
                 </span>
                  </div>
+              <span class="alert-danger pull-right small" *ngIf="diameterSuctionErrorOut !== null">{{diameterSuctionErrorOut}}</span>
             </div>
 
             <div class="form-group">
