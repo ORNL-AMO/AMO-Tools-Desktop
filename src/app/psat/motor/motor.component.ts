@@ -76,6 +76,13 @@ export class MotorComponent implements OnInit {
       this.formRef.nativeElement.frequency.focus();
     }
     this.helpPanelService.currentField.next('lineFrequency');
+    //init alert meessages
+    this.checkEfficiency(true);
+    this.checkFLA(true);
+    this.checkMargin(true);
+    this.checkMotorRpm(true);
+    this.checkMotorVoltage(true);
+    this.checkRatedPower(true);
   }
 
   ngAfterViewInit() {
@@ -122,6 +129,7 @@ export class MotorComponent implements OnInit {
       this.psatForm.patchValue({
         fullLoadAmps: estEfficiency
       });
+      this.checkFLA();
     }
   }
 
@@ -147,7 +155,7 @@ export class MotorComponent implements OnInit {
       else {
         return true;
       }
-    }else{
+    } else {
       return true;
     }
   }
@@ -231,7 +239,10 @@ export class MotorComponent implements OnInit {
     }
   }
 
-  checkMotorRpm() {
+  checkMotorRpm(bool?: boolean) {
+    if (!bool) {
+      this.startSavePolling();
+    }
     if (this.psatForm.value.frequency && this.psatForm.value.motorRPM != '') {
       let frequencyEnum = this.psatService.getLineFreqEnum(this.psatForm.value.frequency);
       let tmp = this.psatService.checkMotorRpm(frequencyEnum, this.psatForm.value.motorRPM);
@@ -250,7 +261,10 @@ export class MotorComponent implements OnInit {
     }
   }
 
-  checkMotorVoltage() {
+  checkMotorVoltage(bool?: boolean) {
+    if (!bool) {
+      this.startSavePolling();
+    }
     if (this.psatForm.value.motorVoltage != '') {
       let tmp = this.psatService.checkMotorVoltage(this.psatForm.value.motorVoltage);
       if (tmp.message) {
@@ -266,7 +280,10 @@ export class MotorComponent implements OnInit {
   }
 
 
-  checkEfficiency() {
+  checkEfficiency(bool?: boolean) {
+    if (!bool) {
+      this.startSavePolling();
+    }
     if (this.psatForm.value.efficiency > 100) {
       this.efficiencyError = "Unrealistic efficiency, shouldn't be greater then 100%";
       return false;
@@ -285,15 +302,25 @@ export class MotorComponent implements OnInit {
     }
   }
 
-  checkRatedPower() {
-    if (this.psat.inputs.motor_field_power && this.psatForm.value.horsePower) {
+  checkRatedPower(bool?: boolean) {
+    if (!bool) {
+      this.startSavePolling();
+    }
+    this.checkFLA();
+    let motorFieldPower;
+    if (this.psatForm.value.loadEstimatedMethod == 'Power') {
+      motorFieldPower = this.psatForm.value.motorKW;
+    } else if (this.psatForm.value.loadEstimatedMethod == 'Current') {
+      motorFieldPower = this.psatForm.value.motorAmps;
+    }
+    if (motorFieldPower && this.psatForm.value.horsePower) {
       let val, compare;
       if (this.settings.powerMeasurement == 'hp') {
         val = this.convertUnitsService.value(this.psatForm.value.horsePower).from(this.settings.powerMeasurement).to('kW');
-        compare = this.convertUnitsService.value(this.psat.inputs.motor_field_power).from(this.settings.powerMeasurement).to('kW');
+        compare = this.convertUnitsService.value(motorFieldPower).from(this.settings.powerMeasurement).to('kW');
       } else {
         val = this.psatForm.value.horsePower;
-        compare = this.psat.inputs.motor_field_power;
+        compare = motorFieldPower;
       }
       val = val * 1.5;
       if (compare > val) {
@@ -308,7 +335,10 @@ export class MotorComponent implements OnInit {
     }
   }
 
-  checkMargin() {
+  checkMargin(bool?: boolean) {
+    if (!bool) {
+      this.startSavePolling();
+    }
     if (this.psatForm.value.sizeMargin > 100) {
       this.marginError = "Unrealistic size margin, shouldn't be greater then 100%";
       return false;
@@ -323,29 +353,34 @@ export class MotorComponent implements OnInit {
     }
   }
 
-  checkFLA() {
-    if (this.checkMotorRpm()) {
-      let tmpEfficiency = this.psatService.getEfficiencyFromForm(this.psatForm);
-      let estEfficiency = this.psatService.estFLA(
-        this.psatForm.value.horsePower,
-        this.psatForm.value.motorRPM,
-        this.psatForm.value.frequency,
-        this.psatForm.value.efficiencyClass,
-        tmpEfficiency,
-        this.psatForm.value.motorVoltage,
-        this.settings
-      );
+  checkFLA(bool?: boolean) {
+    if (!bool) {
+      this.startSavePolling();
+    }
+    let tmpEfficiency = this.psatService.getEfficiencyFromForm(this.psatForm);
+    let estEfficiency = this.psatService.estFLA(
+      this.psatForm.value.horsePower,
+      this.psatForm.value.motorRPM,
+      this.psatForm.value.frequency,
+      this.psatForm.value.efficiencyClass,
+      tmpEfficiency,
+      this.psatForm.value.motorVoltage,
+      this.settings
+    );
+    this.psatService.flaRange.flaMax = estEfficiency * 1.05;
+    this.psatService.flaRange.flaMin = estEfficiency * .95;
 
-      this.psatService.flaRange.flaMax = estEfficiency * 1.05;
-      this.psatService.flaRange.flaMin = estEfficiency * .95;
-      //let test = 1 - (this.psatForm.value.fullLoadAmps / estEfficiency);
-      if (this.psatForm.value.fullLoadAmps < this.psatService.flaRange.flaMin || this.psatForm.value.fullLoadAmps > this.psatService.flaRange.flaMax) {
+    if (this.psatForm.value.fullLoadAmps) {
+      if ((this.psatForm.value.fullLoadAmps < this.psatService.flaRange.flaMin) || (this.psatForm.value.fullLoadAmps > this.psatService.flaRange.flaMax)) {
         this.flaError = 'Value is outside expected range';
         return false;
       } else {
         this.flaError = null;
         return true;
       }
+    } else {
+      this.flaError = null;
+      return true;
     }
   }
 

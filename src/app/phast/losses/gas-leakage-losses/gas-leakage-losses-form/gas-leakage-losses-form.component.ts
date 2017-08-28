@@ -27,6 +27,7 @@ export class GasLeakageLossesFormComponent implements OnInit {
 
   firstChange: boolean = true;
   counter: any;
+  temperatureError: string = null;
   constructor(private gasLeakageCompareService: GasLeakageCompareService, private windowRefService: WindowRefService) { }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -42,6 +43,7 @@ export class GasLeakageLossesFormComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.checkTemperature(true);
   }
 
   ngAfterViewInit() {
@@ -68,6 +70,17 @@ export class GasLeakageLossesFormComponent implements OnInit {
   checkForm() {
     if (this.lossesForm.status == "VALID") {
       this.calculate.emit(true);
+    }
+  }
+
+  checkTemperature(bool?: boolean) {
+    if (!bool) {
+      this.startSavePolling();
+    }
+    if (this.lossesForm.value.ambientTemperature > this.lossesForm.value.leakageGasTemperature) {
+      this.temperatureError = 'Ambient Temperature is greater than Temperature of Gases Leaking';
+    } else {
+      this.temperatureError = null;
     }
   }
 

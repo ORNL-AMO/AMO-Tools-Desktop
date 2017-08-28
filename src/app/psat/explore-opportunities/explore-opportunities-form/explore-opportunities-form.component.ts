@@ -102,6 +102,19 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
     this.checkMotorEfficiencies();
     this.checkPumpTypes();
     this.checkValues();
+    //init error msgs
+    this.checkCost(1);
+    this.checkCost(2);
+    this.checkFlowRate(1);
+    this.checkFlowRate(2);
+    this.checkOpFraction(1);
+    this.checkOpFraction(2);
+    this.checkRatedPower(1);
+    this.checkRatedPower(2);
+    this.checkEfficiency(this.psat.inputs.efficiency, 1);
+    this.checkEfficiency(this.psat.modifications[this.exploreModIndex].psat.inputs.efficiency, 2);
+    this.checkEfficiency(this.psat.inputs.pump_specified, 3);
+    this.checkEfficiency(this.psat.modifications[this.exploreModIndex].psat.inputs.pump_specified, 4)
   }
 
   setPumpTypes() {
@@ -210,6 +223,7 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
     }
   }
   checkPumpRpm(num: number) {
+    this.calculate();
     let min = 0;
     let max = 0;
     if (this.psat.inputs.drive == this.psatService.getDriveEnum('Direct Drive')) {
@@ -246,6 +260,7 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
     }
   }
   checkFlowRate(num: number) {
+    this.calculate();
     let tmp: any = {
       message: null,
       valid: null
@@ -282,6 +297,7 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
     return tmp.valid;
   }
   checkCost(num: number) {
+    this.calculate();
     let val;
     if (num == 1) {
       val = this.psat.inputs.cost_kw_hour;
@@ -319,6 +335,7 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
     }
   }
   checkEfficiency(val: number, num: number) {
+    this.calculate();
     if (val > 100) {
       this.setErrorMessage(num, "Unrealistic efficiency, shouldn't be greater then 100%");
       return false;
@@ -350,6 +367,7 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
 
 
   checkOpFraction(num: number) {
+    this.calculate();
     let val;
     if (num == 1) {
       val = this.psat.inputs.operating_fraction;
@@ -383,6 +401,7 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
   }
 
   checkRatedPower(num: number) {
+    this.calculate();
     let val;
     if (num == 1) {
       if (this.settings.powerMeasurement == 'hp') {
@@ -505,6 +524,11 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
       this.tmpModificationPumpType = this.psatService.getPumpStyleFromEnum(this.psat.inputs.pump_style);
       this.calculate();
     }
+  }
+  getUnit(unit: string){
+    console.log(unit);
+    let tmpUnit = this.convertUnitsService.getUnit(unit);
+    return tmpUnit.unit.name.display;
   }
 
 }

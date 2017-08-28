@@ -1,6 +1,10 @@
 import { Component, OnInit, Input, EventEmitter, Output, ViewChild, ElementRef, SimpleChanges } from '@angular/core';
 import { WindowRefService } from '../../../../indexedDb/window-ref.service';
 import { WallLossCompareService } from '../wall-loss-compare.service';
+import { SuiteDbService } from '../../../../suiteDb/suite-db.service';
+import { WallLossesSurface } from '../../../../shared/models/materials';
+import { ModalDirective } from 'ngx-bootstrap';
+import { LossesService } from '../../losses.service';
 @Component({
   selector: 'app-wall-losses-form',
   templateUrl: './wall-losses-form.component.html',
@@ -19,14 +23,18 @@ export class WallLossesFormComponent implements OnInit {
   saveEmit = new EventEmitter<boolean>();
   @Input()
   lossIndex: number;
-
+  @ViewChild('materialModal') public materialModal: ModalDirective;
   @ViewChild('lossForm') lossForm: ElementRef;
   form: any;
   elements: any;
 
   firstChange: boolean = true;
   counter: any;
-  constructor(private windowRefService: WindowRefService, private wallLossCompareService: WallLossCompareService) { }
+  surfaceTmpError: string = null;
+  emissivityError: string = null;
+  surfaceOptions: Array<WallLossesSurface>;
+  showModal: boolean = false;
+  constructor(private windowRefService: WindowRefService, private wallLossCompareService: WallLossCompareService, private suiteDbService: SuiteDbService, private lossesService: LossesService) { }
 
   ngOnChanges(changes: SimpleChanges) {
     if (!this.firstChange) {
@@ -41,7 +49,12 @@ export class WallLossesFormComponent implements OnInit {
     }
   }
 
-  ngOnInit() { }
+  ngOnInit() {
+    this.surfaceOptions = this.suiteDbService.selectWallLossesSurface();
+    //init warnings
+    this.checkEmissivity(true);
+    this.checkSurfaceTemp(true);
+  }
 
   ngAfterViewInit() {
     //wait for view to init to disable form
@@ -72,6 +85,30 @@ export class WallLossesFormComponent implements OnInit {
       this.calculate.emit(true);
     }
   }
+  //checkSurfaceTemp and ambientTemp for needed warnings
+  checkSurfaceTemp(bool?: boolean) {
+    //bool = true on call from ngOnInit to skip save line
+    if (!bool) {
+      this.startSavePolling();
+    }
+    if (this.wallLossesForm.value.avgSurfaceTemp < this.wallLossesForm.value.ambientTemp) {
+      this.surfaceTmpError = 'Surface temperature lower is than ambient temperature';
+    } else {
+      this.surfaceTmpError = null;
+    }
+  }
+  //same as above for emissivity
+  checkEmissivity(bool?: boolean) {
+    if (!bool) {
+      this.startSavePolling();
+    }
+    if (this.wallLossesForm.value.surfaceEmissivity > 1) {
+      this.emissivityError = 'Surface emissivity cannot be greater than 1';
+    } else {
+      this.emissivityError = null;
+    }
+  }
+
   //emits to wall-losses.component the focused field changed
   focusField(str: string) {
     this.changeField.emit(str);
@@ -153,5 +190,35 @@ export class WallLossesFormComponent implements OnInit {
         })
       }
     }
+  }
+
+  setProperties() {
+    let tmpFactor = this.suiteDbService.selectWallLossesSurfaceById(this.wallLossesForm.value.surfaceShape);
+    this.wallLossesForm.patchValue({
+      conditionFactor: tmpFactor.conditionFactor
+    })
+  }
+
+  showMaterialModal() {
+    this.showModal = true;
+    this.lossesService.modalOpen.next(this.showModal);
+    this.materialModal.show();
+  }
+
+  hideMaterialModal(event?: any) {
+    if (event) {
+      this.surfaceOptions = this.suiteDbService.selectWallLossesSurface();
+      let newMaterial = this.surfaceOptions.filter(material => { return material.surface == event.surface })
+      if (newMaterial.length != 0) {
+        this.wallLossesForm.patchValue({
+          surfaceShape: newMaterial[0].id
+        })
+        this.setProperties();
+      }
+    }
+    this.materialModal.hide();
+    this.showModal = false;
+    this.lossesService.modalOpen.next(this.showModal);
+    this.checkForm();
   }
 }

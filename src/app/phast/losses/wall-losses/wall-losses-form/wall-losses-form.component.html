@@ -3,38 +3,41 @@
     <div class="form-group">
       <label class="small" for="avgSurfaceTemp">Average Surface Temperature</label>
       <div class="input-group">
-        <input name="{{'avgSurfaceTemp_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="avgSurfaceTemp" id="avgSurfaceTemp" onfocus="this.select();" (input)="startSavePolling()"
-          (focus)="focusField('avgSurfaceTemp')">
+        <input name="{{'avgSurfaceTemp_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="avgSurfaceTemp"
+          id="avgSurfaceTemp" onfocus="this.select();" (input)="checkSurfaceTemp()" (focus)="focusField('avgSurfaceTemp')">
         <span class="input-group-addon units">&#8457;</span>
       </div>
+      <span class="alert-warning pull-right small" *ngIf="surfaceTmpError !== null">{{surfaceTmpError}}</span>
     </div>
 
     <div class="form-group">
       <label class="small" for="ambientTemp">Ambient Temperature</label>
       <div class="input-group">
-        <input name="{{'ambientTemp_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="ambientTemp" id="ambientTemp" onfocus="this.select();" (input)="startSavePolling()"
-          (focus)="focusField('ambientTemp')">
+        <input name="{{'ambientTemp_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="ambientTemp" id="ambientTemp"
+          onfocus="this.select();" (input)="checkSurfaceTemp()" (focus)="focusField('ambientTemp')">
         <span class="input-group-addon units">&#8457;</span>
       </div>
+      <span class="alert-warning pull-right small" *ngIf="surfaceTmpError !== null">{{surfaceTmpError}}</span>
     </div>
 
     <div class="form-group">
       <label class="small" for="windVelocity">Wind Velocity</label>
       <div class="input-group">
-        <input name="{{'windVelocity_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="windVelocity" id="windVelocity" onfocus="this.select();" (input)="startSavePolling()"
-          (focus)="focusField('windVelocity')">
+        <input name="{{'windVelocity_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="windVelocity"
+          id="windVelocity" onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('windVelocity')">
         <span class=" input-group-addon units">mph</span>
       </div>
     </div>
 
     <div class="form-group">
-      <label class="small" for="surfaceShape">Surface shape/orientation</label>
-      <select name="{{'surfaceShape_'+lossIndex}}" class="form-control" formControlName="surfaceShape" id="surfaceShape" (change)="startSavePolling()" (focus)="focusField('surfaceShape')">
-        <option>Vertical Plates</option>
-        <option>Shape 2</option>
-      </select>
+      <label class="small" for="surfaceShape">Surface shape/orientation
+        <small id="materialHelp" class="form-text text-help"><a (click)="showMaterialModal()">Add New Surface</a></small>
+      </label>
+      <select name="{{'surfaceShape'+lossIndex}}" class="form-control" id="surfaceShape" formControlName="surfaceShape" (change)="setProperties()"
+        (focus)="focusField('surfaceShape')">
+          <option *ngFor="let option of surfaceOptions" [ngValue]="option.id">{{option.surface}}</option>
+        </select>
     </div>
-
 
     <div class="form-group">
       <label class="small" for="conditionFactor">Surface shape/orientation factor</label>
@@ -47,25 +50,42 @@
       <label class="small" for="surfaceEmissivity" aria-describedby="emissivityHelp">Surface Emissivity
     <small id="emissivityHelp" class="form-text text-muted text-help">Typical - 0.9</small>
     </label>
-
-      <input name="{{'surfaceEmissivity_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="surfaceEmissivity" id="surfaceEmissivity" onfocus="this.select();"
-        (input)="startSavePolling()" (focus)="focusField('surfaceEmissivity')">
+      <input name="{{'surfaceEmissivity_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="surfaceEmissivity"
+        id="surfaceEmissivity" onfocus="this.select();" (input)="checkEmissivity()" (focus)="focusField('surfaceEmissivity')">
+          <span class="alert-warning pull-right small" *ngIf="emissivityError !== null">{{emissivityError}}</span>
     </div>
 
     <div class="form-group">
       <label class="small" for="surfaceArea">Total Outside Surface Area</label>
       <div class="input-group">
-        <input name="{{'surfaceArea_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="surfaceArea" id="surfaceArea" onfocus="this.select();" (input)="startSavePolling()"
-          (focus)="focusField('surfaceArea')">
+        <input name="{{'surfaceArea_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="surfaceArea" id="surfaceArea"
+          onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('surfaceArea')">
         <span class="input-group-addon units">ft<sup>2</sup></span>
       </div>
     </div>
 
     <div class="form-group">
       <label class="small" for="correctionFactor">Correction Factor</label>
-      <input name="{{'correctionFactor_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="correctionFactor" id="correctionFactor" onfocus="this.select();"
-        (input)="startSavePolling()" (focus)="focusField('correctionFactor')">
+      <input name="{{'correctionFactor_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="correctionFactor"
+        id="correctionFactor" onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('correctionFactor')">
     </div>
   </div>
 
 </form>
+
+
+<!--CREATE material MODAL-->
+<div bsModal #materialModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="materialModalLabel"
+  aria-hidden="true" [config]="{backdrop: 'static'}">
+  <div class="modal-dialog modal-md">
+    <div class="modal-header">
+      <h3>Create Surface</h3>
+      <button class="close" (click)="hideMaterialModal()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-content">
+      <app-wall-losses-surface *ngIf="showModal" (closeModal)="hideMaterialModal($event)"></app-wall-losses-surface>
+    </div>
+  </div>
+</div>

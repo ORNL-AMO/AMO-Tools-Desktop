@@ -2,7 +2,8 @@ import { Component, OnInit, Input, EventEmitter, Output, ViewChild, ElementRef, 
 import { SuiteDbService } from '../../../../suiteDb/suite-db.service';
 import { WindowRefService } from '../../../../indexedDb/window-ref.service';
 import { ChargeMaterialCompareService } from '../charge-material-compare.service';
-
+import { ModalDirective } from 'ngx-bootstrap';
+import { LossesService } from '../../losses.service';
 @Component({
   selector: 'app-solid-charge-material-form',
   templateUrl: './solid-charge-material-form.component.html',
@@ -21,6 +22,7 @@ export class SolidChargeMaterialFormComponent implements OnInit {
   saveEmit = new EventEmitter<boolean>();
   @Input()
   lossIndex: number;
+  @ViewChild('materialModal') public materialModal: ModalDirective;
 
   @ViewChild('lossForm') lossForm: ElementRef;
   form: any;
@@ -32,7 +34,8 @@ export class SolidChargeMaterialFormComponent implements OnInit {
   selectedMaterialId: any;
   selectedMaterial: any;
   counter: any;
-  constructor(private suiteDbService: SuiteDbService, private chargeMaterialCompareService: ChargeMaterialCompareService, private windowRefService: WindowRefService) { }
+  dischargeTempError: string = null;
+  constructor(private suiteDbService: SuiteDbService, private chargeMaterialCompareService: ChargeMaterialCompareService, private windowRefService: WindowRefService, private lossesService: LossesService) { }
 
   ngOnChanges(changes: SimpleChanges) {
     if (!this.firstChange) {
@@ -49,7 +52,6 @@ export class SolidChargeMaterialFormComponent implements OnInit {
   ngOnInit() {
     //get material types from ToolSuiteDb
     this.materialTypes = this.suiteDbService.selectSolidLoadChargeMaterials();
-    console.log(this.materialTypes);
     if (this.chargeMaterialForm) {
       if (this.chargeMaterialForm.value.materialId && this.chargeMaterialForm.value.materialId != '') {
         if (this.chargeMaterialForm.value.materialLatentHeatOfFusion == '') {
@@ -65,6 +67,10 @@ export class SolidChargeMaterialFormComponent implements OnInit {
     }
     this.initDifferenceMonitor();
   }
+  ngOnDestroy() {
+    this.lossesService.modalOpen.next(false);
+  }
+
 
   disableForm() {
     this.elements = this.lossForm.nativeElement.elements;
@@ -86,6 +92,20 @@ export class SolidChargeMaterialFormComponent implements OnInit {
     }
   }
 
+  checkDischargeTemp() {
+    if ((this.chargeMaterialForm.value.chargeMaterialDischargeTemperature > this.chargeMaterialForm.value.materialMeltingPoint) && this.chargeMaterialForm.value.percentChargeMelted == 0) {
+      this.dischargeTempError = 'The discharge temperature is higher than the melting point, please enter proper percentage for charge melted.';
+      return false;
+    } else if ((this.chargeMaterialForm.value.chargeMaterialDischargeTemperature < this.chargeMaterialForm.value.materialMeltingPoint) && this.chargeMaterialForm.value.percentChargeMelted > 0) {
+      this.dischargeTempError = 'The discharge temperature is lower than the melting point, the percentage for charge melted should be 0%.';
+      return false;
+    } else {
+      this.dischargeTempError = null;
+      return true;
+    }
+  }
+
+
   focusField(str: string) {
     this.changeField.emit(str);
   }
@@ -100,6 +120,7 @@ export class SolidChargeMaterialFormComponent implements OnInit {
     })
     this.checkForm();
   }
+
   emitSave() {
     this.saveEmit.emit(true);
   }
@@ -233,5 +254,25 @@ export class SolidChargeMaterialFormComponent implements OnInit {
         })
       }
     }
+  }
+
+  showMaterialModal() {
+    this.lossesService.modalOpen.next(true);
+    this.materialModal.show();
+  }
+
+  hideMaterialModal(event?: any) {
+    if (event) {
+      this.materialTypes = this.suiteDbService.selectSolidLoadChargeMaterials();
+      let newMaterial = this.materialTypes.filter(material => { return material.substance == event.substance })
+      if (newMaterial.length != 0) {
+        this.chargeMaterialForm.patchValue({
+          materialId: newMaterial[0].id
+        })
+        this.setProperties();
+      }
+    }
+    this.materialModal.hide();
+    this.lossesService.modalOpen.next(false);
   }
 }

@@ -13,7 +13,6 @@ export class PhastSettingsComponent implements OnInit {
   startSavePolling = new EventEmitter<boolean>();
 
   fuelFiredOptions: Array<string> = [
-    'Electric Arc Furnace',
     'Ladle Heater 1',
     'Ladle Heater 2',
     'Reheat Furnace',
@@ -29,19 +28,25 @@ export class PhastSettingsComponent implements OnInit {
     'Electric Arc Furnace (EAF)'
   ]
 
-  options: Array<string>;
+  // electricOptions: Array<string>;
 
   constructor() { }
 
   ngOnInit() {
-    this.setOptions();
+    if (!this.settingsForm.furnaceType || this.settingsForm.furnaceType == '') {
+      this.setOptions();
+    }
   }
 
-  setOptions(){
-    if(this.settingsForm.value.energySourceType == 'Fuel'){
-      this.options = this.fuelFiredOptions;
-    }else if(this.settingsForm.value.energySourceType == 'Electricity'){
-      this.options = this.electrotechOptions;
+  setOptions() {
+    if (this.settingsForm.value.energySourceType == 'Fuel') {
+      this.settingsForm.patchValue({
+        furnaceType: 'Ladle Heater 1'
+      })
+    } else if (this.settingsForm.value.energySourceType == 'Electricity') {
+      this.settingsForm.patchValue({
+        furnaceType: 'Electrical Infrared'
+      })
     }
   }
 

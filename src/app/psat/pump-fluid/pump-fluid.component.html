@@ -23,8 +23,7 @@
     <label for="pumpRPM">Pump Speed</label>
     <div class="input-group">
       <input type="number" name="pumpRPM" min="0" step="any" class="form-control {{different.pumpRPM}}" formControlName="pumpRPM"
-        id="pumpRPM" (input)="startSavePolling()" (focus)="focusField('pumpRPM')" [ngClass]="{'invalid': checkPumpRpm() == false}"
-        onfocus="this.select();">
+        id="pumpRPM" (input)="checkPumpRpm()" (focus)="focusField('pumpRPM')" onfocus="this.select();">
       <span class="input-group-addon units">rpms</span>
     </div>
       <span class="alert-danger pull-right small" *ngIf="rpmError !== null">{{rpmError}}</span>

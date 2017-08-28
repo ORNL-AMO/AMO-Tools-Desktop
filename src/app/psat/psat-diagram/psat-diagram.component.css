@@ -1,0 +1,47 @@
+
+.psat-diagram {
+    padding-top: 40px;
+}
+.psat-diagram .data, .psat-diagram .inputs {
+    padding-left: 0;
+}
+.psat-diagram .data {
+    counter-reset: diagram-counter;
+}
+.psat-diagram .data li {
+    position: relative;
+    padding-left: 30px;
+}
+.psat-diagram .data li:before {
+    content: counter(diagram-counter);
+    counter-increment: diagram-counter;
+    position: absolute;
+    left: 0;
+    top: 0;
+    font: bold 14px/1 Sans-Serif;
+    background: #2980b9;
+    color: #fff;
+    border-radius: 50%;
+    padding: 3px 7px;
+}
+.psat-diagram li {
+    list-style: none;
+}
+.psat-diagram h3 {
+    font-size: 15px;
+    font-weight: bold;
+    margin-bottom: 6px;
+    text-transform: uppercase;
+}
+.psat-diagram dl {
+    margin-bottom: 10px;    
+}
+.psat-diagram dt {
+    line-height: 16px;
+    font-size: 14px;
+}
+.psat-diagram dd {
+    margin-bottom: 6px;
+    line-height: 21px;
+    font-size: 16px;
+}

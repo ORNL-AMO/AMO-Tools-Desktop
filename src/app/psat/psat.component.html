@@ -64,107 +64,14 @@
       </div>
     </div>
   </div>
-  <div class="tab-content psat-diagram" *ngIf="mainTab =='diagram'">
-
-    <div class="container">
-      <div class="row">
-        <div class="col-2">
-
-
-          <ul class="inputs">
-            <li>  
-              <h3>Inputs</h3>
-              <dl>
-                <dt>Rated Motor Power</dt>
-                <dd>Data <span class="muted">lbs / sq. in.</span></dd>
-                <dt>Full Load Amps</dt>
-                <dd>Data <span class="muted">lbs / sq. in.</span></dd>
-                <dt>Rated Motor Voltage</dt>
-                <dd>Data <span class="muted">lbs / sq. in.</span></dd>
-                <dt>Specific Gravity</dt>
-                <dd>Data <span class="muted">lbs / sq. in.</span></dd>
-                <dt>Flow Rate</dt>
-                <dd>Data <span class="muted">lbs / sq. in.</span></dd>
-                <dt>Head</dt>
-                <dd>Data <span class="muted">lbs / sq. in.</span></dd>
-                <dt>Pump Type</dt>
-                <dd>Data <span class="muted">lbs / sq. in.</span></dd>
-                <dt>Pump RPM</dt>
-                <dd>Data <span class="muted">lbs / sq. in.</span></dd>
-              </dl>
-            </li>
-          </ul>
-
-
-        </div><!-- End .col-2 -->
-        <div class="col-8">
-
-
-          <div class="diagram">&nbsp;</div>
-
-
-        </div><!-- End .col-8 -->
-        <div class="col-2">
-
-
-          <ul class="data">
-            <li>
-              <h3>Motor</h3>
-              <dl>
-                <dt>Efficiency</dt>
-                <dd>Data <span class="muted">lbs / sq. in.</span></dd>
-                <dt>Power</dt>
-                <dd>Data <span class="muted">lbs / sq. in.</span></dd>
-                <dt>Current</dt>
-                <dd>Data <span class="muted">lbs / sq. in.</span></dd>
-              </dl>
-            </li>
-            <li>
-              <h3>Rated Motor</h3>
-              <dl>
-                <dt>Power</dt>
-                <dd>Data <span class="muted">lbs / sq. in.</span></dd>
-                <dt>Full Load Amps</dt>
-                <dd>Data <span class="muted">lbs / sq. in.</span></dd>
-                <dt>Voltage</dt>
-                <dd>Data <span class="muted">lbs / sq. in.</span></dd>
-              </dl>
-            </li>
-            <li>
-              <h3>Fluid</h3>
-              <dl>
-                <dt>Specific Gravity</dt>
-                <dd>Data <span class="muted">lbs / sq. in.</span></dd>
-                <dt>Flow Rate</dt>
-                <dd>Data <span class="muted">lbs / sq. in.</span></dd>
-                <dt>Head</dt>
-                <dd>Data <span class="muted">lbs / sq. in.</span></dd>
-              </dl>
-            </li>
-            <li>
-              <h3>Pump</h3>
-              <dl>
-                <dt>Type</dt>
-                <dd>Data <span class="muted">lbs / sq. in.</span></dd>
-                <dt>RPM</dt>
-                <dd>Data <span class="muted">lbs / sq. in.</span></dd>
-                <dt>Efficiency</dt>
-                <dd>Data <span class="muted">lbs / sq. in.</span></dd>
-              </dl>
-            </li>
-          </ul>
-
-
-        </div><!-- End .col-2 -->
-      </div>
-    </div><!-- End .container -->
-
+  <div class="tab-content" *ngIf="mainTab =='diagram'">
+    <app-psat-diagram [psat]="_psat" [settings]="settings"></app-psat-diagram>
   </div>
   <!--end diagram-->
   <!--report-->
   <div class="row justify-content-center report-container" *ngIf="mainTab == 'report'">
     <div class="col-10 report-column">
-      <app-psat-report [psat]="psat" [settings]="settings" [assessment]="assessment" [inPsat]="true" (closeReport)="closeReport()"
+      <app-psat-report [psat]="_psat" [settings]="settings" [assessment]="assessment" [inPsat]="true" (closeReport)="closeReport()"
         (exportData)="exportData()"></app-psat-report>
     </div>
   </div>

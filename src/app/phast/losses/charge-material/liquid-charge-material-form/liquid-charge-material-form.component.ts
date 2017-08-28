@@ -2,6 +2,9 @@ import { Component, OnInit, Input, EventEmitter, Output, ViewChild, ElementRef, 
 import { SuiteDbService } from '../../../../suiteDb/suite-db.service';
 import { WindowRefService } from '../../../../indexedDb/window-ref.service';
 import { ChargeMaterialCompareService } from '../charge-material-compare.service';
+import { ModalDirective } from 'ngx-bootstrap';
+import { LossesService } from '../../losses.service';
+
 @Component({
   selector: 'app-liquid-charge-material-form',
   templateUrl: './liquid-charge-material-form.component.html',
@@ -20,7 +23,7 @@ export class LiquidChargeMaterialFormComponent implements OnInit {
   saveEmit = new EventEmitter<boolean>();
   @Input()
   lossIndex: number;
-
+  @ViewChild('materialModal') public materialModal: ModalDirective;
   @ViewChild('lossForm') lossForm: ElementRef;
   form: any;
   elements: any;
@@ -29,7 +32,8 @@ export class LiquidChargeMaterialFormComponent implements OnInit {
   materialTypes: any;
   selectedMaterial: any;
   counter: any;
-  constructor(private suiteDbService: SuiteDbService, private chargeMaterialCompareService: ChargeMaterialCompareService, private windowRefService: WindowRefService) { }
+  dischargeTempError: string = null;
+  constructor(private suiteDbService: SuiteDbService, private chargeMaterialCompareService: ChargeMaterialCompareService, private windowRefService: WindowRefService,private lossesService: LossesService) { }
 
   ngOnChanges(changes: SimpleChanges) {
     if (!this.firstChange) {
@@ -52,7 +56,7 @@ export class LiquidChargeMaterialFormComponent implements OnInit {
         }
       }
     }
-
+    this.checkDischargeTemp();
   }
 
   ngAfterViewInit() {
@@ -60,6 +64,10 @@ export class LiquidChargeMaterialFormComponent implements OnInit {
       this.disableForm();
     }
     this.initDifferenceMonitor();
+  }
+
+  ngOnDestroy() {
+    this.lossesService.modalOpen.next(false);
   }
 
   disableForm() {
@@ -87,6 +95,15 @@ export class LiquidChargeMaterialFormComponent implements OnInit {
     this.changeField.emit(str);
   }
 
+  checkDischargeTemp() {
+    if ((this.chargeMaterialForm.value.dischargeTemperature > this.chargeMaterialForm.value.materialVaporizingTemperature) && this.chargeMaterialForm.value.liquidVaporized == 0) {
+      this.dischargeTempError = 'The discharge temperature is higher than the Vaporizing Temperature, please enter proper percentage for charge vaporized.';
+    } else if ((this.chargeMaterialForm.value.dischargeTemperature < this.chargeMaterialForm.value.materialVaporizingTemperature) && this.chargeMaterialForm.value.liquidVaporized > 0) {
+      this.dischargeTempError = 'The discharge temperature is lower than the vaporizing temperature, the percentage for charge liquid vaporized should be 0%.';
+    }else{
+      this.dischargeTempError = null;
+    }
+  }
 
   setProperties() {
     let selectedMaterial = this.suiteDbService.selectLiquidLoadChargeMaterialById(this.chargeMaterialForm.value.materialId);
@@ -104,6 +121,7 @@ export class LiquidChargeMaterialFormComponent implements OnInit {
 
   startSavePolling() {
     this.checkForm();
+    this.checkDischargeTemp();
     if (this.counter) {
       clearTimeout(this.counter);
     }
@@ -209,5 +227,26 @@ export class LiquidChargeMaterialFormComponent implements OnInit {
         })
       }
     }
+  }
+
+  showMaterialModal() {
+    this.lossesService.modalOpen.next(true);
+    this.materialModal.show();
+  }
+
+
+  hideMaterialModal(event?: any) {
+    if (event) {
+      this.materialTypes = this.suiteDbService.selectLiquidLoadChargeMaterials();
+      let newMaterial = this.materialTypes.filter(material => {return material.substance == event.substance})
+      if(newMaterial.length != 0){
+        this.chargeMaterialForm.patchValue({
+          materialId: newMaterial[0].id
+        })
+        this.setProperties();
+      }
+    }
+    this.materialModal.hide();
+    this.lossesService.modalOpen.next(false);
   }
 }

@@ -1,0 +1,98 @@
+<div class="psat-diagram">
+  <div class="container">
+    <div class="row">
+      <!--<div class="col-2">
+
+
+        <ul class="inputs">
+          <li>
+            <h3>Inputs</h3>
+            <dl>
+              <dt>Rated Motor Power</dt>
+              <dd>{{psat.inputs.motor_rated_power| number:'1.0-1'}} <span class="muted">{{settings.powerMeasurement}}</span></dd>
+              <dt>Full Load Amps</dt>
+              <dd>{{psat.inputs.motor_rated_fla | number:'1.0-1'}}</dd>
+              <dt>Rated Motor Voltage</dt>
+              <dd>{{psat.inputs.motor_rated_voltage | number:'1.0-1'}}</dd>
+              <dt>Specific Gravity</dt>
+              <dd>{{psat.inputs.specific_gravity}}</dd>
+              <dt>Flow Rate</dt>
+              <dd>{{psat.inputs.flow_rate | number:'1.0-1'}} <span class="muted" [innerHTML]="getUnit(settings.flowMeasurement)"></span></dd>
+              <dt>Head</dt>
+              <dd>{{psat.inputs.head | number:'1.0-1'}} <span class="muted" [innerHTML]="getUnit(settings.distanceMeasurement)"></span></dd>
+              <dt>Pump Type</dt>
+              <dd>{{getPumpType(psat.inputs.pump_style)}}</dd>
+              <dt>Pump RPM</dt>
+              <dd>{{psat.inputs.pump_rated_speed | number:'1.0-1'}}</dd>
+            </dl>
+          </li>
+        </ul>
+
+
+      </div>-->
+      <!-- End .col-2 -->
+      <div class="col-9">
+
+
+        <div class="diagram">&nbsp;</div>
+
+
+      </div>
+      <!-- End .col-8 -->
+      <div class="col-3">
+
+
+        <ul class="data">
+          <li>
+            <h3>Motor</h3>
+            <dl>
+              <dt>Efficiency</dt>
+              <dd>{{results.motor_efficiency | number:'1.0-1'}} <span class="muted">%</span></dd>
+              <dt>Power</dt>
+              <dd>{{results.motor_power | number:'1.0-1'}} <span class="muted">(kW)</span></dd>
+              <dt>Current</dt>
+              <dd>{{results.motor_current | number:'1.0-1'}} <span class="muted">(kW)</span></dd>
+            </dl>
+          </li>
+          <li>
+            <h3>Rated Motor</h3>
+            <dl>
+              <dt>Power</dt>
+              <dd>{{psat.inputs.motor_rated_power| number:'1.0-1'}} <span class="muted">({{settings.powerMeasurement}})</span></dd>
+              <dt>Full Load Amps</dt>
+              <dd>{{psat.inputs.motor_rated_fla | number:'1.0-1'}}</dd>
+              <dt>Voltage</dt>
+              <dd>{{psat.inputs.motor_rated_voltage | number:'1.0-1'}}</dd>
+            </dl>
+          </li>
+          <li>
+            <h3>Fluid</h3>
+            <dl>
+              <dt>Specific Gravity</dt>
+              <dd>{{psat.inputs.specific_gravity}}</dd>
+              <dt>Flow Rate</dt>
+              <dd>{{psat.inputs.flow_rate | number:'1.0-1'}} <span class="muted" [innerHTML]="getUnit(settings.flowMeasurement)"></span></dd>
+              <dt>Head</dt>
+              <dd>{{psat.inputs.head | number:'1.0-1'}} <span class="muted" [innerHTML]="getUnit(settings.distanceMeasurement)"></span></dd>
+            </dl>
+          </li>
+          <li>
+            <h3>Pump</h3>
+            <dl>
+              <dt>Type</dt>
+              <dd>{{getPumpType(psat.inputs.pump_style)}}</dd>
+              <dt>RPM</dt>
+              <dd>{{psat.inputs.pump_rated_speed | number:'1.0-1'}}</dd>
+              <dt>Efficiency</dt>
+              <dd>{{results.pump_efficiency | number:'1.0-1'}} <span class="muted">%</span></dd>
+            </dl>
+          </li>
+        </ul>
+
+
+      </div>
+      <!-- End .col-2 -->
+    </div>
+  </div>
+  <!-- End .container -->
+</div>

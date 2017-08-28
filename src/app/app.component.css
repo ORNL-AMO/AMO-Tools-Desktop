@@ -304,6 +304,27 @@ select.form-control:not([size]):not([multiple]) {
 }
 }
 
+/*.input-warning{
+    border: #fff3cd solid 4px;
+    padding: 4px;
+}*/
+
+.alert-warning{
+    text-align: center;
+            margin-top: 5px;
+    margin-bottom: 5px;
+    width: 100%;
+    padding: 2px;
+}
+
+.alert-danger{
+      text-align: center;
+    padding: 2px;
+                margin-top: 5px;
+    margin-bottom: 5px;
+    width: 100%;
+}
+
 /*
 Pump Fluid CSS
 =============================================== */
@@ -1286,9 +1307,9 @@ Tabs
 }
 
 
-.tab-content {
+/*.tab-content {
   min-height: 100%;
-}
+}*/
   .tab-content .wrapper {
       max-width: 1024px;
       width: 100%;
@@ -1504,11 +1525,11 @@ Modify Conditions
     border: #efefef solid 1px;
     padding: 6px 8px;
     font-size: 15px;
-    
+
 }
   .note-form textarea::placeholder {
     font-style: italic;
-    color: #929292; 
+    color: #929292;
   }
 
 

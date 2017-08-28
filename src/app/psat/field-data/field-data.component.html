@@ -16,7 +16,7 @@
     <label for="costKwHr">Cost</label>
     <div class="input-group">
       <input name="costKwHr" type="number" min="0" max="1" step="any" class="form-control" formControlName="costKwHr" id="costKwHr"
-        (input)="startSavePolling()" (focus)="focusField('costKwHr')" [ngClass]="{'invalid': checkCost() == false}" onfocus="this.select();">
+        (input)="checkCost()" (focus)="focusField('costKwHr')" onfocus="this.select();">
       <span class="input-group-addon units">$/kWh</span>
     </div>
     <span class="alert-danger pull-right small" *ngIf="costError !== null">{{costError}}</span>
@@ -25,8 +25,8 @@
   <div class="form-group">
     <label for="flowRate">Flow Rate</label>
     <div class="input-group">
-      <input name="flowRate" type="number" min="0" step="any" class="form-control" formControlName="flowRate" id="flowRate" (input)="startSavePolling()"
-        (focus)="focusField('flowRate')" [ngClass]="{'invalid': checkFlowRate() == false}" onfocus="this.select();">
+      <input name="flowRate" type="number" min="0" step="any" class="form-control" formControlName="flowRate" id="flowRate" (input)="checkFlowRate()"
+        (focus)="focusField('flowRate')" onfocus="this.select();">
       <span class="input-group-addon units">{{settings.flowMeasurement}}</span>
     </div>
     <span class="alert-danger pull-right small" *ngIf="flowError !== null">{{flowError}}</span>
@@ -56,8 +56,8 @@
   <div class="form-group" *ngIf="psatForm.value.loadEstimatedMethod == 'Power' && baseline">
     <label for="motorKW">Motor Power</label>
     <div class="input-group">
-      <input name="motorKW" type="number" min="0" step="any" class="form-control" formControlName="motorKW" id="motorKW" (input)="startSavePolling()"
-        (focus)="focusField('motorPower')" onfocus="this.select();" [ngClass]="{'warning': checkRatedPower() == false}">
+      <input name="motorKW" type="number" min="0" step="any" class="form-control" formControlName="motorKW" id="motorKW" (input)="checkRatedPower()"
+        (focus)="focusField('motorPower')" onfocus="this.select();">
       <span class="input-group units">kW</span>
     </div>
     <span class="alert-danger pull-right small" *ngIf="ratedPowerError !== null">{{ratedPowerError}}</span>
@@ -67,7 +67,7 @@
     <label for="motorAmps">Motor Power</label>
     <div class="input-group">
       <input name="motorAmps" type="number" min="0" step="any" class="form-control" formControlName="motorAmps" id="motorAmps"
-        (input)="startSavePolling()" (focus)="focusField('motorPower')" onfocus="this.select();" [ngClass]="{'warning': checkRatedPower() == false}">
+        (input)="checkRatedPower()" (focus)="focusField('motorPower')" onfocus="this.select();">
       <span class="input-group-addon units">A</span>
     </div>
     <span class="alert-danger pull-right small" *ngIf="ratedPowerError !== null">{{ratedPowerError}}</span>
@@ -77,8 +77,7 @@
     <label for="measuredVoltage">Measured Voltage</label>
     <div class="input-group">
       <input name="measuredVoltage" type="number" min="1" step="any" class="form-control" formControlName="measuredVoltage" id="measuredVoltage"
-        (input)="startSavePolling()" (focus)="focusField('measuredVoltage')" [ngClass]="{'warning': checkVoltage() == false}"
-        onfocus="this.select();">
+        (input)="checkVoltage()" (focus)="focusField('measuredVoltage')" onfocus="this.select();">
       <span class="units">V</span>
     </div>
     <span class="alert-warning pull-right small" *ngIf="voltageError !== null">{{voltageError}}</span>
