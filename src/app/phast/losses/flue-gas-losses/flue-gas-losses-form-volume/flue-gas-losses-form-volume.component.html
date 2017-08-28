@@ -1,7 +1,9 @@
 <form #lossForm [formGroup]="flueGasLossForm">
   <div class="form-section">
     <div class="form-group">
-      <label class="small" for="gasTypeId">Fuel</label>
+      <label class="small" for="gasTypeId">Fuel
+        <small id="materialHelp" class="form-text text-help"><a (click)="showMaterialModal()">Add New Fuel</a></small>
+      </label>
       <select name="{{'gasTypeId_'+lossIndex}}" class="form-control" formControlName="gasTypeId" id="gasTypeId" (change)="setProperties()">
       <option *ngFor="let option of options" [ngValue]="option.id">{{option.substance}}</option>
     </select>
@@ -35,3 +37,19 @@
     </div>
   </div>
 </form>
+
+<!--CREATE material MODAL-->
+<div bsModal #materialModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="materialModalLabel"
+  aria-hidden="true" [config]="{backdrop: 'static'}">
+  <div class="modal-dialog modal-md">
+    <div class="modal-header">
+      <h3>Create Fuel</h3>
+      <button class="close" (click)="hideMaterialModal()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-content">
+            <app-flue-gas-material *ngIf="showModal" (closeModal)="hideMaterialModal($event)"></app-flue-gas-material>
+    </div>
+  </div>
+</div>

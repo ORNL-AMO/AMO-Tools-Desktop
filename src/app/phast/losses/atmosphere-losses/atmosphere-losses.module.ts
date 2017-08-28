@@ -2,6 +2,8 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SharedModule } from '../../../shared/shared.module';
+import { ModalModule } from 'ngx-bootstrap';
+import { SuiteDbModule } from '../../../suiteDb/suiteDb.module';
 
 import { AtmosphereLossesCompareService } from "./atmosphere-losses-compare.service";
 import { AtmosphereLossesService } from "./atmosphere-losses.service";
@@ -12,7 +14,9 @@ import { AtmosphereLossesComponent } from "./atmosphere-losses.component";
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    SharedModule
+    SharedModule,
+    ModalModule,
+    SuiteDbModule
   ],
   declarations: [
     AtmosphereLossesComponent,

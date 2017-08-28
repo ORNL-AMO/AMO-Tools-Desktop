@@ -9,13 +9,16 @@ import { FlueGasLossesFormMassComponent } from "./flue-gas-losses-form-mass/flue
 
 import { FlueGasCompareService } from "./flue-gas-compare.service";
 import { FlueGasLossesService } from "./flue-gas-losses.service";
-
+import { SuiteDbModule } from '../../../suiteDb/suiteDb.module';
+import { ModalModule } from 'ngx-bootstrap';
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    SharedModule
+    SharedModule,
+    SuiteDbModule,
+    ModalModule
   ],
   declarations: [
     FlueGasLossesComponent,

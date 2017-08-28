@@ -1,6 +1,10 @@
 import { Component, OnInit, Input, EventEmitter, Output, ViewChild, ElementRef, SimpleChanges } from '@angular/core';
 import { WindowRefService } from "../../../../indexedDb/window-ref.service";
 import { AtmosphereLossesCompareService } from '../atmosphere-losses-compare.service';
+import { SuiteDbService } from '../../../../suiteDb/suite-db.service';
+import { AtmosphereSpecificHeat } from '../../../../shared/models/materials';
+import { ModalDirective } from 'ngx-bootstrap';
+import { LossesService } from '../../losses.service';
 @Component({
   selector: 'app-atmosphere-losses-form',
   templateUrl: './atmosphere-losses-form.component.html',
@@ -15,10 +19,11 @@ export class AtmosphereLossesFormComponent implements OnInit {
   baselineSelected: boolean;
   @Output('changeField')
   changeField = new EventEmitter<string>();
-  @Output('saveEmit')                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       
+  @Output('saveEmit')
   saveEmit = new EventEmitter<boolean>();
   @Input()
   lossIndex: number;
+  @ViewChild('materialModal') public materialModal: ModalDirective;
   @ViewChild('lossForm') lossForm: ElementRef;
   form: any;
   elements: any;
@@ -27,7 +32,9 @@ export class AtmosphereLossesFormComponent implements OnInit {
   counter: any;
 
   temperatureError: string = null;
-  constructor(private windowRefService: WindowRefService, private atmosphereLossesCompareService: AtmosphereLossesCompareService) { }
+  materialTypes: Array<AtmosphereSpecificHeat>;
+  showModal: boolean = false;
+  constructor(private windowRefService: WindowRefService, private atmosphereLossesCompareService: AtmosphereLossesCompareService, private suiteDbService: SuiteDbService, private lossesService: LossesService) { }
 
   ngOnChanges(changes: SimpleChanges) {
     if (!this.firstChange) {
@@ -41,7 +48,8 @@ export class AtmosphereLossesFormComponent implements OnInit {
     }
   }
 
-  ngOnInit() { 
+  ngOnInit() {
+    this.materialTypes = this.suiteDbService.selectAtmosphereSpecificHeat();
     this.checkTempError(true);
   }
 
@@ -52,6 +60,13 @@ export class AtmosphereLossesFormComponent implements OnInit {
     this.initDifferenceMonitor();
   }
 
+  setProperties() {
+    let selectedMaterial = this.suiteDbService.selectAtmosphereSpecificHeatById(this.atmosphereLossForm.value.atmosphereGas);
+    this.atmosphereLossForm.patchValue({
+      specificHeat: selectedMaterial.specificHeat,
+    });
+    this.startSavePolling();
+  }
 
   disableForm() {
     this.elements = this.lossForm.nativeElement.elements;
@@ -73,13 +88,13 @@ export class AtmosphereLossesFormComponent implements OnInit {
     }
   }
 
-  checkTempError(bool?: boolean){
-    if(!bool){
+  checkTempError(bool?: boolean) {
+    if (!bool) {
       this.startSavePolling();
     }
-    if(this.atmosphereLossForm.value.inletTemp > this.atmosphereLossForm.value.outletTemp){
+    if (this.atmosphereLossForm.value.inletTemp > this.atmosphereLossForm.value.outletTemp) {
       this.temperatureError = 'Inlet temperature is greater than outlet temperature'
-    }else{
+    } else {
       this.temperatureError = null;
     }
   }
@@ -151,5 +166,28 @@ export class AtmosphereLossesFormComponent implements OnInit {
         })
       }
     }
+  }
+
+  showMaterialModal() {
+    this.showModal = true;
+    this.lossesService.modalOpen.next(this.showModal);
+    this.materialModal.show();
+  }
+
+  hideMaterialModal(event?: any) {
+    if (event) {
+      this.materialTypes = this.suiteDbService.selectAtmosphereSpecificHeat();
+      let newMaterial = this.materialTypes.filter(material => { return material.substance == event.substance })
+      if (newMaterial.length != 0) {
+        this.atmosphereLossForm.patchValue({
+          atmosphereGas: newMaterial[0].id
+        })
+        this.setProperties();
+      }
+    }
+    this.materialModal.hide();
+    this.showModal = false;
+    this.lossesService.modalOpen.next(this.showModal);
+    this.checkForm();
   }
 }
