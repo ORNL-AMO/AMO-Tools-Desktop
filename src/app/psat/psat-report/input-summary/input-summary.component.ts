@@ -2,7 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { PSAT } from '../../../shared/models/psat';
 import { PsatService } from '../../psat.service';
 import { Settings } from '../../../shared/models/settings';
-
+import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 @Component({
   selector: 'app-input-summary',
   templateUrl: './input-summary.component.html',
@@ -37,7 +37,7 @@ export class InputSummaryComponent implements OnInit {
   kwDiff: boolean = false;
   fieldVoltageDiff: boolean = false;
 
-  constructor(private psatService: PsatService) { }
+  constructor(private psatService: PsatService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
     this.checkInputs();
@@ -67,6 +67,12 @@ export class InputSummaryComponent implements OnInit {
     return this.psatService.getLoadEstimationFromEnum(num);
   }
 
+
+  getUnit(unit: string){
+    console.log(unit);
+    let tmpUnit = this.convertUnitsService.getUnit(unit);
+    return tmpUnit.unit.name.display;
+  }
   checkInputs() {
     if (this.psat.modifications) {
       this.psat.modifications.forEach(mod => {

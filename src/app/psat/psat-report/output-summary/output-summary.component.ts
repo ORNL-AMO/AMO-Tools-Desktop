@@ -71,5 +71,4 @@ export class OutputSummaryComponent implements OnInit {
   useModification() {
     this.selectModification.emit({ modIndex: this.selectedModificationIndex, type: 'PSAT', assessment: this.assessment })
   }
-
 }
