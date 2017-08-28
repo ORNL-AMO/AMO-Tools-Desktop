@@ -77,7 +77,7 @@ export class GasLeakageLossesFormComponent implements OnInit {
     if (!bool) {
       this.startSavePolling();
     }
-    if (this.lossesForm.value.ambientTemperature >> this.lossesForm.value.leakageGasTemperature) {
+    if (this.lossesForm.value.ambientTemperature > this.lossesForm.value.leakageGasTemperature) {
       this.temperatureError = 'Ambient Temperature is greater than Temperature of Gases Leaking';
     } else {
       this.temperatureError = null;

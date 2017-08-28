@@ -42,7 +42,6 @@ export class FlueGasMaterialComponent implements OnInit {
 
   addMaterial() {
     let suiteDbResult = this.suiteDbService.insertGasFlueGasMaterial(this.newMaterial);
-    debugger
     if (suiteDbResult == true) {
       this.indexedDbService.addFlueGasMaterial(this.newMaterial).then(idbResults => {
         this.closeModal.emit(this.newMaterial);

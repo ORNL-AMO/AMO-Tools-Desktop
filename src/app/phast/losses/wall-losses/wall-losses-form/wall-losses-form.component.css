@@ -8,3 +8,8 @@
     border: none;
     border-radius: 0px;
 }
+
+
+.modal-dialog{
+    top: 20%;
+}

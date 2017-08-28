@@ -45,7 +45,7 @@ export class FixtureLossesFormComponent implements OnInit {
     }
   }
 
-  ngOnInit() { 
+  ngOnInit() {
     this.materials = this.suiteDbService.selectSolidLoadChargeMaterials();
   }
 
@@ -84,7 +84,7 @@ export class FixtureLossesFormComponent implements OnInit {
     this.saveEmit.emit(true);
   }
 
-  setSpecificHeat(){
+  setSpecificHeat() {
     let tmpMaterial = this.suiteDbService.selectSolidLoadChargeMaterialById(this.lossesForm.value.materialName);
     this.lossesForm.patchValue({
       specificHeat: tmpMaterial.specificHeatSolid
@@ -151,12 +151,31 @@ export class FixtureLossesFormComponent implements OnInit {
       }
     }
   }
+
+  setProperties() {
+    let selectedMaterial = this.suiteDbService.selectSolidLoadChargeMaterialById(this.lossesForm.value.materialName);
+    this.lossesForm.patchValue({
+      specificHeat: selectedMaterial.specificHeatSolid
+    })
+    this.checkForm();
+  }
+
   showMaterialModal() {
     this.lossesService.modalOpen.next(true);
     this.materialModal.show();
   }
 
-  hideMaterialModal(){
+  hideMaterialModal(event: any) {
+    if (event) {
+      this.materials = this.suiteDbService.selectSolidLoadChargeMaterials();
+      let newMaterial = this.materials.filter(material => { return material.substance == event.substance })
+      if (newMaterial.length != 0) {
+        this.lossesForm.patchValue({
+          materialName: newMaterial[0].id
+        })
+        this.setProperties();
+      }
+    }
     this.materialModal.hide();
     this.lossesService.modalOpen.next(false);
   }

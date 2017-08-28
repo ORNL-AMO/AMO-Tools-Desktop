@@ -94,7 +94,7 @@ export class DashboardComponent implements OnInit {
   }
 
   initCustomDbMaterials() {
-    this.suiteDbService.test();
+    //this.suiteDbService.test();
     this.indexedDbService.getAllGasLoadChargeMaterial().then(results => {
       let customGasLoadChargeMaterials: GasLoadChargeMaterial[] = results;
       customGasLoadChargeMaterials.forEach(material => {

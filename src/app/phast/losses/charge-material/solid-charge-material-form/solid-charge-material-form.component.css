@@ -12,3 +12,9 @@
 .modal-header{
     background: #fff;
 }
+
+
+
+.modal-dialog{
+    top: 20%;
+}

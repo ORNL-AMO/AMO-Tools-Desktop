@@ -168,7 +168,7 @@ export class FlueGasLossesFormVolumeComponent implements OnInit {
     if (event) {
       this.options = this.suiteDbService.selectGasFlueGasMaterials();
       let newMaterial = this.options.filter(material => { return material.substance == event.substance })
-      console.log(newMaterial);
+      //console.log(newMaterial);
       if (newMaterial.length != 0) {
          this.flueGasLossForm.patchValue({
            gasTypeId: newMaterial[0].id
