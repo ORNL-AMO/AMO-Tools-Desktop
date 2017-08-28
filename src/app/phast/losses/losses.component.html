@@ -6,7 +6,7 @@
     <app-losses-sidebar [losses]="phast.losses" [lossesStates]="lossesStates" (changeTab)="changeTab($event)" [lossesTab]="lossesTab"></app-losses-sidebar>
   </nav>-->
   <!--Baseline-->
-  <div class="modification baseline" (click)="togglePanel(baselineSelected)" [ngClass]="{'disabled': baselineSelected == false}">
+  <div class="modification baseline" (click)="togglePanel(baselineSelected)" [ngClass]="{'disabled': baselineSelected == false, 'modal-open': isModalOpen == true}">
     <div class="header">
       <h3>Baseline</h3>
       <button class="btn btn-secondary pull-right" (click)="addLoss()" [disabled]="!baselineSelected"><span class="fa fa-plus"></span></button>
@@ -70,7 +70,7 @@
     </div>
   </div>
   <!--Modification Start -->
-  <div class="modification" *ngIf="_modifications.length != 0" (click)="togglePanel(modificationSelected)" [ngClass]="{'disabled': modificationSelected == false}">
+  <div class="modification" *ngIf="_modifications.length != 0" (click)="togglePanel(modificationSelected)" [ngClass]="{'disabled': modificationSelected == false, 'modal-open': isModalOpen == true}">
 
     <!-- Modification Header -->
     <!--<div class="header" *ngIf="!editModification">-->

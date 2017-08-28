@@ -1,7 +1,9 @@
 <form #lossForm [formGroup]="lossesForm">
   <div class="form-section">
     <div class="form-group">
-      <label class="small" for="materialName">Material Name</label>
+      <label class="small" for="materialName">Material Name
+        <small id="materialHelp" class="form-text text-help"><a (click)="showMaterialModal()">Add New Material</a></small>       
+      </label>
       <select name="{{'materialName_'+lossIndex}}" class="form-control" formControlName="materialName" id="materialName" (change)="setSpecificHeat()"
         (focus)="focusField('materialName')">
         <option *ngFor="let material of materials" [ngValue]="material.id">{{material.substance}}</option>
@@ -51,3 +53,19 @@
     </div>
   </div>
 </form>
+
+<!--CREATE Folder MODAL-->
+<div bsModal #materialModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="materialModalLabel"
+  aria-hidden="true" [config]="{backdrop: 'static'}">
+  <div class="modal-dialog modal-md">
+    <div class="modal-header">
+      <h3>Create Solid Material</h3>
+      <button class="close" (click)="hideMaterialModal()">
+     <span aria-hidden="true">&times;</span>
+   </button>
+    </div>
+    <div class="modal-content">
+      <app-solid-load-charge-material (closeModal)="hideMaterialModal($event)"></app-solid-load-charge-material>
+    </div>
+  </div>
+</div>

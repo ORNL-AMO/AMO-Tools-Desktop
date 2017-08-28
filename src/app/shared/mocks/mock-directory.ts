@@ -123,7 +123,7 @@ export const MockDirectory: Directory = {
           ],
           atmosphereLosses: [
             {
-              atmosphereGas: 'Test Gas',
+              atmosphereGas: 1,
               specificHeat: 0.02,
               inletTemperature: 100.0,
               outletTemperature: 1400.0,

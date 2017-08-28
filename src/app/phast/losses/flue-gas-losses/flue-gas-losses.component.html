@@ -25,8 +25,8 @@
       <div class="form-group">
         <label class="small" for="type">Type of fuel</label>
         <select class="form-control" id="type" [(ngModel)]="loss.measurementType" [disabled]="!baselineSelected" (focus)="changeField('measurementType')">
-            <option [ngValue]="'By Volume'">Gas/Liquid</option>
-            <option [ngValue]="'By Mass'">Solid</option>
+            <option [ngValue]="'By Volume'">Gas</option>
+            <option [ngValue]="'By Mass'">Solid/Liquid</option>
             </select>
       </div>
       <app-flue-gas-losses-form-mass [(flueGasLossForm)]="loss.formByMass" *ngIf="loss.measurementType == 'By Mass'" (changeField)="changeField($event)"

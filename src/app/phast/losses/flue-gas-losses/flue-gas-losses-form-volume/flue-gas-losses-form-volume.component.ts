@@ -2,6 +2,8 @@ import { Component, OnInit, Input, EventEmitter, Output, ViewChild, ElementRef, 
 import { SuiteDbService } from '../../../../suiteDb/suite-db.service';
 import { WindowRefService } from '../../../../indexedDb/window-ref.service';
 import { FlueGasCompareService } from "../flue-gas-compare.service";
+import { ModalDirective } from 'ngx-bootstrap';
+import { LossesService } from '../../losses.service';
 @Component({
   selector: 'app-flue-gas-losses-form-volume',
   templateUrl: './flue-gas-losses-form-volume.component.html',
@@ -20,7 +22,7 @@ export class FlueGasLossesFormVolumeComponent implements OnInit {
   saveEmit = new EventEmitter<boolean>();
   @Input()
   lossIndex: number;
-
+  @ViewChild('materialModal') public materialModal: ModalDirective;
   @ViewChild('lossForm') lossForm: ElementRef;
   form: any;
   elements: any;
@@ -29,7 +31,8 @@ export class FlueGasLossesFormVolumeComponent implements OnInit {
   firstChange: boolean = true;
   options: any;
   counter: any;
-  constructor(private suiteDbService: SuiteDbService, private flueGasCompareService: FlueGasCompareService, private windowRefService: WindowRefService) { }
+  showModal: boolean = false;
+  constructor(private suiteDbService: SuiteDbService, private flueGasCompareService: FlueGasCompareService, private windowRefService: WindowRefService, private lossesService: LossesService) { }
 
   ngOnInit() {
     this.options = this.suiteDbService.selectGasFlueGasMaterials();
@@ -155,4 +158,27 @@ export class FlueGasLossesFormVolumeComponent implements OnInit {
     }
   }
 
+  showMaterialModal() {
+    this.showModal = true;
+    this.lossesService.modalOpen.next(this.showModal);
+    this.materialModal.show();
+  }
+
+  hideMaterialModal(event?: any) {
+    if (event) {
+      this.options = this.suiteDbService.selectGasFlueGasMaterials();
+      let newMaterial = this.options.filter(material => { return material.substance == event.substance })
+      //console.log(newMaterial);
+      if (newMaterial.length != 0) {
+         this.flueGasLossForm.patchValue({
+           gasTypeId: newMaterial[0].id
+         })
+        this.setProperties();
+      }
+    }
+    this.materialModal.hide();
+    this.showModal = false;
+    this.lossesService.modalOpen.next(this.showModal);
+    this.checkForm();
+  }
 }
