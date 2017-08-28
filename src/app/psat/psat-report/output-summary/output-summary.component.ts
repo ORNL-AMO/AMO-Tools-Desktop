@@ -4,6 +4,7 @@ import { Settings } from '../../../shared/models/settings';
 import { Assessment } from '../../../shared/models/assessment';
 import { PsatService } from '../../psat.service';
 import * as _ from 'lodash';
+import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 @Component({
   selector: 'app-output-summary',
   templateUrl: './output-summary.component.html',
@@ -25,7 +26,7 @@ export class OutputSummaryComponent implements OnInit {
   titlePlacement: string;
   maxAnnualSavings: number = 0;
   selectedModificationIndex: number = 0;
-  constructor(private psatService: PsatService) { }
+  constructor(private psatService: PsatService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
     this.unit = '%';
@@ -72,4 +73,9 @@ export class OutputSummaryComponent implements OnInit {
     this.selectModification.emit({ modIndex: this.selectedModificationIndex, type: 'PSAT', assessment: this.assessment })
   }
 
+
+  getUnit(unit: string){
+    let tmpUnit = this.convertUnitsService.getUnit(unit);
+    return tmpUnit.unit.display;
+  }
 }
