@@ -136,7 +136,6 @@ export class FieldDataComponent implements OnInit {
 
   savePsat(form: any) {
     this.psat.inputs = this.psatService.getPsatInputsFromForm(form);
-    console.log(this.psat.inputs.flow_rate);
     this.setCompareVals();
     this.saved.emit(true);
   }
@@ -184,6 +183,9 @@ export class FieldDataComponent implements OnInit {
       this.startSavePolling();
     }
     if (this.psatForm.controls.flowRate.pristine == false && this.psatForm.value.flowRate != '') {
+      
+      console.log(this.psat.inputs.pump_style);
+      console.log(this.psatForm.value.pumpType);
       let tmp = this.psatService.checkFlowRate(this.psat.inputs.pump_style, this.psatForm.value.flowRate, this.settings);
       if (tmp.message) {
         this.flowError = tmp.message;
@@ -266,14 +268,14 @@ export class FieldDataComponent implements OnInit {
       tmpVal = this.psatForm.value.motorAmps;
     }
 
-    if (this.psat.inputs.motor_rated_power && tmpVal) {
+    if (this.psatForm.value.horsePower && tmpVal) {
       let val, compare;
       if (this.settings.powerMeasurement == 'hp') {
         val = this.convertUnitsService.value(tmpVal).from(this.settings.powerMeasurement).to('kW');
-        compare = this.convertUnitsService.value(this.psat.inputs.motor_rated_power).from(this.settings.powerMeasurement).to('kW');
+        compare = this.convertUnitsService.value(this.psatForm.value.horsePower).from(this.settings.powerMeasurement).to('kW');
       } else {
         val = tmpVal;
-        compare = this.psat.inputs.motor_rated_power;
+        compare = this.psatForm.value.horsePower;
       }
       compare = compare * 1.5;
       if (val > compare) {

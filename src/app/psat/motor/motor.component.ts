@@ -129,6 +129,7 @@ export class MotorComponent implements OnInit {
       this.psatForm.patchValue({
         fullLoadAmps: estEfficiency
       });
+      this.checkFLA();
     }
   }
 
@@ -154,7 +155,7 @@ export class MotorComponent implements OnInit {
       else {
         return true;
       }
-    }else{
+    } else {
       return true;
     }
   }
@@ -239,7 +240,7 @@ export class MotorComponent implements OnInit {
   }
 
   checkMotorRpm(bool?: boolean) {
-    if(!bool){
+    if (!bool) {
       this.startSavePolling();
     }
     if (this.psatForm.value.frequency && this.psatForm.value.motorRPM != '') {
@@ -261,7 +262,7 @@ export class MotorComponent implements OnInit {
   }
 
   checkMotorVoltage(bool?: boolean) {
-    if(!bool){
+    if (!bool) {
       this.startSavePolling();
     }
     if (this.psatForm.value.motorVoltage != '') {
@@ -280,7 +281,7 @@ export class MotorComponent implements OnInit {
 
 
   checkEfficiency(bool?: boolean) {
-    if(!bool){
+    if (!bool) {
       this.startSavePolling();
     }
     if (this.psatForm.value.efficiency > 100) {
@@ -302,17 +303,24 @@ export class MotorComponent implements OnInit {
   }
 
   checkRatedPower(bool?: boolean) {
-    if(!bool){
+    if (!bool) {
       this.startSavePolling();
     }
-    if (this.psat.inputs.motor_field_power && this.psatForm.value.horsePower) {
+    this.checkFLA();
+    let motorFieldPower;
+    if (this.psatForm.value.loadEstimatedMethod == 'Power') {
+      motorFieldPower = this.psatForm.value.motorKW;
+    } else if (this.psatForm.value.loadEstimatedMethod == 'Current') {
+      motorFieldPower = this.psatForm.value.motorAmps;
+    }
+    if (motorFieldPower && this.psatForm.value.horsePower) {
       let val, compare;
       if (this.settings.powerMeasurement == 'hp') {
         val = this.convertUnitsService.value(this.psatForm.value.horsePower).from(this.settings.powerMeasurement).to('kW');
-        compare = this.convertUnitsService.value(this.psat.inputs.motor_field_power).from(this.settings.powerMeasurement).to('kW');
+        compare = this.convertUnitsService.value(motorFieldPower).from(this.settings.powerMeasurement).to('kW');
       } else {
         val = this.psatForm.value.horsePower;
-        compare = this.psat.inputs.motor_field_power;
+        compare = motorFieldPower;
       }
       val = val * 1.5;
       if (compare > val) {
@@ -328,7 +336,7 @@ export class MotorComponent implements OnInit {
   }
 
   checkMargin(bool?: boolean) {
-    if(!bool){
+    if (!bool) {
       this.startSavePolling();
     }
     if (this.psatForm.value.sizeMargin > 100) {
@@ -346,31 +354,33 @@ export class MotorComponent implements OnInit {
   }
 
   checkFLA(bool?: boolean) {
-    if(!bool){
+    if (!bool) {
       this.startSavePolling();
     }
-    if (this.checkMotorRpm()) {
-      let tmpEfficiency = this.psatService.getEfficiencyFromForm(this.psatForm);
-      let estEfficiency = this.psatService.estFLA(
-        this.psatForm.value.horsePower,
-        this.psatForm.value.motorRPM,
-        this.psatForm.value.frequency,
-        this.psatForm.value.efficiencyClass,
-        tmpEfficiency,
-        this.psatForm.value.motorVoltage,
-        this.settings
-      );
+    let tmpEfficiency = this.psatService.getEfficiencyFromForm(this.psatForm);
+    let estEfficiency = this.psatService.estFLA(
+      this.psatForm.value.horsePower,
+      this.psatForm.value.motorRPM,
+      this.psatForm.value.frequency,
+      this.psatForm.value.efficiencyClass,
+      tmpEfficiency,
+      this.psatForm.value.motorVoltage,
+      this.settings
+    );
+    this.psatService.flaRange.flaMax = estEfficiency * 1.05;
+    this.psatService.flaRange.flaMin = estEfficiency * .95;
 
-      this.psatService.flaRange.flaMax = estEfficiency * 1.05;
-      this.psatService.flaRange.flaMin = estEfficiency * .95;
-      //let test = 1 - (this.psatForm.value.fullLoadAmps / estEfficiency);
-      if (this.psatForm.value.fullLoadAmps < this.psatService.flaRange.flaMin || this.psatForm.value.fullLoadAmps > this.psatService.flaRange.flaMax) {
+    if (this.psatForm.value.fullLoadAmps) {
+      if ((this.psatForm.value.fullLoadAmps < this.psatService.flaRange.flaMin) || (this.psatForm.value.fullLoadAmps > this.psatService.flaRange.flaMax)) {
         this.flaError = 'Value is outside expected range';
         return false;
       } else {
         this.flaError = null;
         return true;
       }
+    } else {
+      this.flaError = null;
+      return true;
     }
   }
 
