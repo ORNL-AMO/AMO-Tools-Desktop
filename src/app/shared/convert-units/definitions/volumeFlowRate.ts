@@ -238,7 +238,7 @@ export const volumeFlowRate = {
             name: {
                 singular: 'Gallon per minute'
                 , plural: 'Gallons per minute' ,
-                 display:  '(fl-oz/s)'
+                 display:  '(gpm)'
             }
             , to_anchor: 32 / 15
         },

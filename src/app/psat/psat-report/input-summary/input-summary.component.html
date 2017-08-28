@@ -121,7 +121,7 @@
     </tr>
 
     <tr>
-      <td [ngClass]="{'indicate-report-field-different': flowRateDiff == true}">Flow Rate <span>{{getUnit(settings.flowMeasurement)}}</span></td>
+      <td [ngClass]="{'indicate-report-field-different': flowRateDiff == true}">Flow Rate <span [innerHTML]="getUnit(settings.flowMeasurement)"></span></td>
       <td [ngClass]="{'indicate-report-field-different': flowRateDiff == true}">{{psat.inputs.flow_rate | number:'1.0-1'}}</td>
       <td *ngFor="let modification of psat.modifications" [ngClass]="{'indicate-report-field-different': modification.psat.inputs.flow_rate != psat.inputs.flow_rate}">{{modification.psat.inputs.flow_rate | number:'1.0-1'}}</td>
     </tr>
