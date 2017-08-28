@@ -68,7 +68,7 @@
     </tr>
     <tr>
       <td [ngClass]="{'indicate-report-field-different': hpDiff == true}">Horse Power</td>
-      <td [ngClass]="{'indicate-report-field-different': hpDiff == true}">{{psat.inputs.motor_rated_power}} {{settings.powerMeasurement}}</td>
+      <td [ngClass]="{'indicate-report-field-different': hpDiff == true}">{{psat.inputs.motor_rated_power | number:'1.0-1'}} {{settings.powerMeasurement}}</td>
       <td *ngFor="let modification of psat.modifications" [ngClass]="{'indicate-report-field-different': modification.psat.inputs.motor_rated_power != psat.inputs.motor_rated_power}">{{modification.psat.inputs.motor_rated_power | number:'1.0-1'}} {{settings.powerMeasurement}}</td>
     </tr>
 

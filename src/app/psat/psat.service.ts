@@ -76,6 +76,7 @@ export class PsatService {
   }
 
   resultsModified(psatInputs: PsatInputs, settings: Settings, baseline_pump_efficiency: number): PsatOutputs {
+    psatInputs = this.convertInputs(psatInputs, settings);    
     let tmpInputs: any;
     tmpInputs = psatInputs;
     tmpInputs.baseline_pump_efficiency = baseline_pump_efficiency;
@@ -198,16 +199,16 @@ export class PsatService {
     }
 
     let inputs: any = {
-    specificGravity: specificGravity,
-    flowRate: flowRate,
-    suctionPipeDiameter: suctionPipeDiameter,
-    suctionTankGasOverPressure: suctionTankGasOverPressure,
-    suctionTankFluidSurfaceElevation: suctionTankFluidSurfaceElevation,
-    suctionLineLossCoefficients: suctionLineLossCoefficients,
-    dischargePipeDiameter: dischargePipeDiameter,
-    dischargeGaugePressure: dischargeGaugePressure,
-    dischargeGaugeElevation: dischargeGaugeElevation,
-    dischargeLineLossCoefficients: dischargeLineLossCoefficients
+      specificGravity: specificGravity,
+      flowRate: flowRate,
+      suctionPipeDiameter: suctionPipeDiameter,
+      suctionTankGasOverPressure: suctionTankGasOverPressure,
+      suctionTankFluidSurfaceElevation: suctionTankFluidSurfaceElevation,
+      suctionLineLossCoefficients: suctionLineLossCoefficients,
+      dischargePipeDiameter: dischargePipeDiameter,
+      dischargeGaugePressure: dischargeGaugePressure,
+      dischargeGaugeElevation: dischargeGaugeElevation,
+      dischargeLineLossCoefficients: dischargeLineLossCoefficients
     }
 
     let tmpResults = psatAddon.headToolSuctionTank(inputs);

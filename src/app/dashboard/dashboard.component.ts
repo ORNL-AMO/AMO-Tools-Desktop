@@ -80,9 +80,7 @@ export class DashboardComponent implements OnInit {
     }
 
     this.assessmentService.createAssessment.subscribe(val => {
-      if (val == true) {
-        this.createAssessment = true;
-      }
+      this.createAssessment = val;
     })
   }
 

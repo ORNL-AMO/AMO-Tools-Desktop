@@ -35,8 +35,7 @@ export class PsatReportComponent implements OnInit {
   constructor(private psatService: PsatService, private indexedDbService: IndexedDbService, private windowRefService: WindowRefService) { }
 
   ngOnInit() {
-
-    if (this.assessment.psat && this.settings) {
+    if (this.assessment.psat && this.settings && !this.psat) {
       this.psat = this.assessment.psat;
     }
     else if (this.assessment.psat && !this.settings) {
@@ -79,7 +78,7 @@ export class PsatReportComponent implements OnInit {
             if (resultSettings.length != 0) {
               this.settings = resultSettings[0];
               if (!this.psat.outputs) {
-                // this.psat = this.getResults(this.psat, this.settings);
+                //this.psat = this.getResults(this.psat, this.settings);
               }
             } else {
               //no settings try again with parents parent directory

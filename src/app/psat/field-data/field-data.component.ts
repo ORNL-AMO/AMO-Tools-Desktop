@@ -136,6 +136,7 @@ export class FieldDataComponent implements OnInit {
 
   savePsat(form: any) {
     this.psat.inputs = this.psatService.getPsatInputsFromForm(form);
+    console.log(this.psat.inputs.flow_rate);
     this.setCompareVals();
     this.saved.emit(true);
   }
