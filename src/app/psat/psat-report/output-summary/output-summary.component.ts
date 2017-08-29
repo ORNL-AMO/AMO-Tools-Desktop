@@ -65,10 +65,20 @@ export class OutputSummaryComponent implements OnInit {
     if (minCost) {
       this.selectedModificationIndex = _.findIndex(this.psat.modifications, minCost);
       this.maxAnnualSavings = this.psat.outputs.annual_cost - minCost.psat.outputs.annual_cost;
+
     }
   }
 
   useModification() {
     this.selectModification.emit({ modIndex: this.selectedModificationIndex, type: 'PSAT', assessment: this.assessment })
+  }
+
+  getDiff(num1: number, num2: number) {
+    let diff = num1 - num2;
+    if ((diff < .005) && (diff > -.005)) {
+      return null;
+    } else {
+      return diff;
+    }
   }
 }

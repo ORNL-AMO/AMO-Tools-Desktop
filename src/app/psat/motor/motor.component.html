@@ -14,7 +14,7 @@
 
   <div class="form-group">
     <label for="horsePower">Rated Motor Power</label>
-    <select name="horsePower" class="form-control number-input-field" id="horsePower" formControlName="horsePower" (input)="checkRatedPower()"
+    <select name="horsePower" class="form-control number-input-field" id="horsePower" formControlName="horsePower" (change)="checkRatedPower()"
       (focus)="focusField('horsePower')" ngModel="{{psatForm.value.horsePower}}">
         <option  *ngFor="let option of options" [ngValue]="option">{{option}} {{settings.powerMeasurement}}</option>
     </select>
@@ -36,7 +36,7 @@
   <div class="form-group">
     <label for="efficiencyClass">Efficiency Class</label>
     <select name="efficiencyClass" class="form-control select-input-field" id="efficiencyClass" formControlName="efficiencyClass"
-      (input)="startSavePolling()" (focus)="focusField('efficiencyClass')" ngModel="{{psatForm.value.efficiencyClass}}">
+      (change)="startSavePolling()" (focus)="focusField('efficiencyClass')" ngModel="{{psatForm.value.efficiencyClass}}">
       <option *ngFor="let efficiencyClass of efficiencyClasses" [ngValue]="efficiencyClass">{{efficiencyClass}}</option>
     </select>
   </div>

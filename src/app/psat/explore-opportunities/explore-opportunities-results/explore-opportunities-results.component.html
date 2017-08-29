@@ -79,8 +79,8 @@
             <tr>
               <th>Annual Energy Savings (MWh)</th>
               <th>&mdash;</th>
-              <th *ngIf="modificationResults.annual_energy" [ngClass]="{'positive-savings': percentSavings > 10}">{{baselineResults.annual_energy - modificationResults.annual_energy | number:'2.0-0'}}</th>
-              <td *ngIf="!modificationResults.annual_energy">&mdash;</td>
+              <th *ngIf="getDiff(baselineResults.annual_energy, modificationResults.annual_energy)" [ngClass]="{'positive-savings': percentSavings > 10}">{{getDiff(baselineResults.annual_energy, modificationResults.annual_energy) | number:'2.0-0'}}</th>
+              <td *ngIf="!getDiff(baselineResults.annual_energy, modificationResults.annual_energy)">&mdash;</td>
             </tr>
             <tr>
               <th>Annual Cost</th>
