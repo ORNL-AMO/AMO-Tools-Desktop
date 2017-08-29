@@ -165,7 +165,7 @@ export class FixtureLossesFormComponent implements OnInit {
     this.materialModal.show();
   }
 
-  hideMaterialModal(event: any) {
+  hideMaterialModal(event?: any) {
     if (event) {
       this.materials = this.suiteDbService.selectSolidLoadChargeMaterials();
       let newMaterial = this.materials.filter(material => { return material.substance == event.substance })

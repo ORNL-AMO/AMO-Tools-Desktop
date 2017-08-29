@@ -19,7 +19,6 @@ import { MotorComponent } from './motor/motor.component';
 import { FieldDataComponent } from './field-data/field-data.component';
 import { ModifyConditionsComponent } from './modify-conditions/modify-conditions.component';
 import { SettingsPanelComponent } from './settings-panel/settings-panel.component';
-import { DataPanelComponent } from './data-panel/data-panel.component';
 
 import { PsatReportComponent } from './psat-report/psat-report.component';
 import { InputSummaryComponent } from './psat-report/input-summary/input-summary.component';
@@ -50,7 +49,6 @@ import { ExploreOpportunitiesSankeyComponent } from './explore-opportunities/exp
     FieldDataComponent,
     ModifyConditionsComponent,
     SettingsPanelComponent,
-    DataPanelComponent,
     PsatReportComponent,
     InputSummaryComponent,
     OutputSummaryComponent,

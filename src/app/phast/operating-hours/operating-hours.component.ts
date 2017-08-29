@@ -67,12 +67,12 @@ export class OperatingHoursComponent implements OnInit {
     this.calculatHrsPerYear();
   }
 
-  addWeek(num: number) {
+  addWeek() {
     this.phast.operatingHours.weeksPerYear += 1;
     this.calculatHrsPerYear();
   }
 
-  subtractWeek(num: number) {
+  subtractWeek() {
     this.phast.operatingHours.weeksPerYear -= 1;
     this.calculatHrsPerYear();
   }
