@@ -24,7 +24,7 @@
     "e2e": "ng e2e",
     "pack": "build --dir",
     "dist": "build",
-    "postinstall": "./node_modules/.bin/electron-rebuild",
+    "postinstall": "electron-builder install-app-deps",
     "windows": "./node_modules/.bin/build -w --x64 --ia32",
     "linux": "./node_modules/.bin/build -l --x64",
     "mac": "./node_modules/.bin/build -m --x64"
@@ -104,7 +104,6 @@
     "electron": "^1.7.6",
     "electron-builder": "^19.26.0",
     "electron-packager": "^8.7.1",
-    "electron-rebuild": "^1.5.11",
     "jasmine-core": "~2.5.2",
     "jasmine-spec-reporter": "~3.2.0",
     "json2csv": "^3.7.3",
