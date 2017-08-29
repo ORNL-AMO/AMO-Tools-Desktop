@@ -1,6 +1,6 @@
 {
   "name": "amo-tools-desktop",
-  "version": "0.1.45",
+  "version": "0.1.46",
   "main": "main.js",
   "license": "MIT",
   "description": "AMO-Tools-Desktop",
@@ -68,7 +68,8 @@
       "output": "../output/"
     },
     "win": {
-      "target": "nsis"
+      "target": "nsis",
+      "icon": "../src/assets/icons/win/icon.ico"
     },
     "nsis": {
       "oneClick": false,
@@ -83,6 +84,7 @@
         "tar.gz",
         "deb"
       ],
+      "icon": "../src/assets/icons/png/256x256.png",
       "executableName": "AMO-Tools-Desktop",
       "maintainer": "Advanced Manufacturing Office"
     },
@@ -90,7 +92,8 @@
       "target": [
         "dmg",
         "zip"
-      ]
+      ],
+      "icon": "../src/assets/icons/mac/icon.icns"
     }
   },
   "devDependencies": {
