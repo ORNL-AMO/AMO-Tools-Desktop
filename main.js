@@ -23,7 +23,7 @@ let available = null;
 app.on('ready', function () {
 
   // Initialize the window to our specified dimensions
-  win = new BrowserWindow({ width: 1000, height: 600, icon: path.join(___dirname, 'assets/icons/png/64x64.png')});
+  win = new BrowserWindow({ width: 1000, height: 600 });
   win.maximize();
 
   // Specify entry point
