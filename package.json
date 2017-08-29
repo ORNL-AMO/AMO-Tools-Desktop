@@ -15,6 +15,7 @@
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
+    "build-prod": "ng build --prod --aot --env=prod",
     "clean": "rm -rf node_modules && rm -rf dist && rm package-lock.json",
     "electron": "electron .",
     "lint": "ng lint",

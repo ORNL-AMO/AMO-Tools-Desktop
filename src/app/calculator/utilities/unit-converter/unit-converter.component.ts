@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { length } from '../../../shared/convert-units/definitions/length';
-import { SortPipe } from './sort-pipe';
+
 @Component({
   selector: 'app-unit-converter',
   templateUrl: './unit-converter.component.html',

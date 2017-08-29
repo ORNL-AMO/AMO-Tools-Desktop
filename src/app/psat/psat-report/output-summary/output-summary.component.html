@@ -15,7 +15,7 @@
       </td>
       <td *ngFor="let modification of psat.modifications; let index = index;" [ngClass]="{'selected-modification': index == selectedModificationIndex}">
         <div class="row justify-content-center chart-row">
-          <div class="col-lg-6 col-md-6 col-sm-8" [ngClass]="{'col-lg-3': psat.modifications.length == 1, 'col-lg-10': psat.modifications.length > 3, 'col-lg-10': inRollup}">
+          <div class="col-lg-6 col-md-6 col-sm-8" [ngClass]="{'col-lg-3': psat.modifications.length == 1, 'col-lg-10': (psat.modifications.length > 3 || inRollup)}">
             <div class="chart-container hide-print">
               <app-percent-graph [value]="modification.psat.outputs.percent_annual_savings" [titlePlacement]="titlePlacement" [valueDescription]="'Annual Savings'"
                 [unit]="unit"></app-percent-graph>
