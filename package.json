@@ -69,7 +69,7 @@
     },
     "win": {
       "target": "nsis",
-      "icon": "../src/assets/icons/win/icon.ico"
+      "icon": "src/assets/icons/win/icon.ico"
     },
     "nsis": {
       "oneClick": false,
@@ -84,7 +84,7 @@
         "tar.gz",
         "deb"
       ],
-      "icon": "../src/assets/icons/png/256x256.png",
+      "icon": "src/assets/icons/png/",
       "executableName": "AMO-Tools-Desktop",
       "maintainer": "Advanced Manufacturing Office"
     },
@@ -93,7 +93,7 @@
         "dmg",
         "zip"
       ],
-      "icon": "../src/assets/icons/mac/icon.icns"
+      "icon": "src/assets/icons/mac/icon.icns"
     }
   },
   "devDependencies": {
