@@ -18,10 +18,6 @@ Run `ng generate component component-name` to generate a new component. You can 
 
 Run `ng github-pages:deploy` to deploy to GitHub Pages.
 
-## Database Information
-
-The `db` folder contains the SQLite database file, used for storing and selecting materials. Upon app update, backups with the current date and time in the filename will be made and stored here. 
-
 ## Further help
 
 To get more help on the `angular-cli` use `ng help` or go check out the [Angular-CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
@@ -29,6 +25,7 @@ To get more help on the `angular-cli` use `ng help` or go check out the [Angular
 ## Building Packages
 
 *Due to issues from building the amo-tools-suite node modules, packages cannot be built cross platform.*
+For all builds, run `npm run clean` followed by `npm run build` before building for `mac`, `linux` or `windows`.
 
 ## Building for Windows
 
@@ -88,7 +85,7 @@ Go to the AMO-Tools-Desktop releases page in GitHub.
 
 Draft a new release. For the tag version, make sure to include a `v` before the version number (example: v0.0.1).  
 
-Upload BOTH the installer/executable AND the latest.yml and latest-mac.json. (the autoUpdater looks for the latest.yml and latest-mac.json in the release. If they is not present, it will not work.)  
+Upload BOTH the installer/executable AND the latest.yml and latest-mac.json. (the autoUpdater looks for the latest.yml and latest-mac.json in the release. If they are not present, it will not work.)  
 
 Publish the release.  
 
