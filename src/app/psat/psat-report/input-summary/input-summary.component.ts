@@ -69,7 +69,6 @@ export class InputSummaryComponent implements OnInit {
 
 
   getUnit(unit: string){
-    console.log(unit);
     let tmpUnit = this.convertUnitsService.getUnit(unit);
     return tmpUnit.unit.name.display;
   }
