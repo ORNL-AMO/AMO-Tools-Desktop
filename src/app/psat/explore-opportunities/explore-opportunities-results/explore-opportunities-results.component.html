@@ -20,7 +20,7 @@
                 <div class="row justify-content-center" style="padding: 15px;">
                   <div class="col-lg-8 col-md-8 col-sm-10" style="min-width: 150px;">
                     <div class="chart-container">
-                      <app-percent-graph [value]="percentSavings" [titlePlacement]="titlePlacement" [valueDescription]="'Percent Savings'" [unit]="'%'"></app-percent-graph>
+                      <app-percent-graph [value]="percentSavings" [valueDescription]="'Percent Savings'" [unit]="'%'"></app-percent-graph>
                     </div>
                   </div>
                 </div>
@@ -91,8 +91,8 @@
             <tr>
               <th>Annual Savings</th>
               <th>&mdash;</th>
-              <th *ngIf="modificationResults.annualSavings" class="savings text-center" [ngClass]="{'positive-savings': percentSavings > 10}">{{annualSavings | currency:'USD':true:'2.0-0'}}</th>
-              <td *ngIf="!modificationResults.annualSavings">&mdash;</td>
+              <th *ngIf="annualSavings" class="savings text-center" [ngClass]="{'positive-savings': percentSavings > 10}">{{annualSavings | currency:'USD':true:'2.0-0'}}</th>
+              <td *ngIf="!annualSavings">&mdash;</td>
             </tr>
             <tr *ngIf="psat.modifications[exploreModIndex].psat.inputs.optimize_calculation">
               <td></td>

@@ -16,7 +16,6 @@ import { SystemBasicsComponent } from './system-basics/system-basics.component';
 import { OperatingHoursComponent } from './operating-hours/operating-hours.component';
 import { PhastTabsComponent } from './phast-tabs/phast-tabs.component';
 import { HelpPanelComponent } from './help-panel/help-panel.component';
-import { DataPanelComponent } from './data-panel/data-panel.component';
 
 import { PhastService } from './phast.service';
 import { SystemSetupComponent } from './system-setup/system-setup.component';
@@ -32,7 +31,6 @@ import { AuxEquipmentModule } from './aux-equipment/aux-equipment.module';
     SystemBasicsComponent,
     OperatingHoursComponent,
     HelpPanelComponent,
-    DataPanelComponent,
     SankeyDiagramComponent,
     SystemSetupComponent
 

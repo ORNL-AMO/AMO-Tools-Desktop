@@ -5,7 +5,6 @@ import { RouterModule } from '@angular/router';
 import { SharedModule } from '../shared/shared.module';
 import { ModalModule } from 'ngx-bootstrap';
 
-import { AssessmentComponent } from './assessment.component';
 import { AssessmentDashboardComponent } from './assessment-dashboard/assessment-dashboard.component';
 import { AssessmentBannerComponent } from './assessment-banner/assessment-banner.component';
 import { AssessmentMenuComponent } from './assessment-menu/assessment-menu.component';
@@ -26,7 +25,6 @@ import { ImportExportModule } from '../shared/import-export/import-export.module
 
 @NgModule({
   declarations: [
-    AssessmentComponent,
     AssessmentDashboardComponent,
     AssessmentBannerComponent,
     AssessmentMenuComponent,
