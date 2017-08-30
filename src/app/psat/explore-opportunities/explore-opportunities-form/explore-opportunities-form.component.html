@@ -244,7 +244,7 @@
               <div class="input-group">
                 <input name="baselinePumpSpecified" [disabled]="tmpBaselinePumpType != 'Specified Optimal Efficiency'" type="number" step="any"
                   id="baselinePumpSpecified" class="form-control" (focus)="focusField('pumpSpecified')" (input)="checkEfficiency(psat.inputs.pump_specified, 3)"
-                  [(ngModel)]="psat.inputs.pump_specified"/>
+                  [(ngModel)]="psat.inputs.pump_specified" />
                 <span class="input-group-addon units">%</span>
               </div>
               <span class="alert-danger pull-right small" *ngIf="specifiedError1 !== null">{{specifiedError1}}</span>
@@ -254,7 +254,7 @@
               <div class="input-group">
                 <input name="modificationPumpSpecified" [disabled]="tmpModificationPumpType != 'Specified Optimal Efficiency'" type="number"
                   step="any" id="modificationPumpSpecified" class="form-control" (focus)="focusField('pumpSpecified')" (input)="checkEfficiency(psat.modifications[exploreModIndex].psat.inputs.pump_specified, 4)"
-                  [(ngModel)]="psat.modifications[exploreModIndex].psat.inputs.pump_specified"/>
+                  [(ngModel)]="psat.modifications[exploreModIndex].psat.inputs.pump_specified" />
                 <span class="input-group-addon units">%</span>
               </div>
               <span class="alert-danger pull-right small" *ngIf="specifiedError2 !== null">{{specifiedError2}}</span>
@@ -265,10 +265,85 @@
     </li>
     <li>
       <div class="checkbox">
-        <label for="modifyCalculationMethod"><input type="checkbox" id="modifyCalculationMethod" value="true" (change)="calculate()" (focus)="focusField('modifyCalculationMethod')" [(ngModel)]="psat.modifications[exploreModIndex].psat.inputs.optimize_calculation"/>
+        <label for="modifyCalculationMethod"><input type="checkbox" id="modifyCalculationMethod" value="true" (change)="toggleOptimized()" (focus)="focusField('modifyCalculationMethod')" [(ngModel)]="psat.modifications[exploreModIndex].psat.inputs.optimize_calculation"/>
 										Optimize Pump and Motor combination, automatically
 									</label>
       </div>
+      <ul *ngIf="psat.modifications[exploreModIndex].psat.inputs.optimize_calculation">
+        <li>
+          <div class="checkbox">
+            <label for="viscosity"><input name="showViscosity" type="checkbox" id="viscosity" value="true" (focus)="focusField('viscosity')" [(ngModel)]="showViscosity"/>
+										Kinematic Viscosity
+									</label>
+          </div>
+          <form *ngIf="showViscosity">
+            <div class="form-group">
+            </div>
+            <div class="form-group">
+              <div name="viscosity" class="incrementor form-control input-group">
+                <button class="btn input-group-btn" (click)="subtractNum()"><i class="fa fa-minus"></i></button>
+                <button class="btn input-group-btn" (click)="addNum()"><i class="fa fa-plus"></i></button>
+                <input name="kinematicViscosity" type="number" min="0" step="any" class="form-control addon-input" id="viscosity" [(ngModel)]="psat.modifications[exploreModIndex].psat.inputs.kinematic_viscosity"
+                  (input)="calculate()" (focus)="focusField('kinematicViscosity')" onfocus="this.select();">
+                <span class="input-group-addon units">cST</span>
+              </div>
+            </div>
+          </form>
+        </li>
+
+        <li>
+          <div class="checkbox">
+            <label for="showSpeed"><input name="showSpeed" type="checkbox" id="showSpeed" value="true" (focus)="focusField('specificSpeed')" [(ngModel)]="showSpeed"/>
+										Fixed specific speed?
+									</label>
+          </div>
+          <form *ngIf="showSpeed">
+            <div class="form-group">
+            </div>
+            <div class="form-group">
+              <div name="fixedSpeed" class="form-check">
+                <label class="form-check-label">
+                <input
+                  class="form-check-input"
+                  name="fixedSpeed"
+                  type="radio"
+                  [(ngModel)]="psat.modifications[exploreModIndex].psat.inputs.fixed_speed"
+                  [value]='1'
+                  (change)="calculate()">Yes
+                </label>
+                <label class="form-check-label">
+                <input
+                  name="fixedSpeed"
+                  class="form-check-input"
+                  type="radio"
+                  [(ngModel)]="psat.modifications[exploreModIndex].psat.inputs.fixed_speed"
+                  [value]='0'
+                  (change)="calculate()">No
+              </label>
+              </div>
+            </div>
+          </form>
+        </li>
+
+        <li>
+          <div class="checkbox">
+            <label for="showSizeMargin"><input name="showSizeMargin" type="checkbox" id="showSizeMargin" value="true" (focus)="focusField('sizeMargin')" [(ngModel)]="showSizeMargin"/>
+										Size Margin
+									</label>
+          </div>
+          <form *ngIf="showSizeMargin">
+            <div class="form-group">
+            </div>
+            <div class="form-group">
+              <div name="sizeMargin" class="input-group">
+                <input name="sizeMargin" type="number" min="0" step="any" class="form-control addon-input" id="sizeMargin" [(ngModel)]="psat.modifications[exploreModIndex].psat.inputs.margin"
+                  (input)="calculate()" (focus)="focusField('kinematicViscosity')" onfocus="this.select();">
+                <span class="input-group-addon units">%</span>
+              </div>
+            </div>
+          </form>
+        </li>
+      </ul>
     </li>
   </ul>
 </div>
