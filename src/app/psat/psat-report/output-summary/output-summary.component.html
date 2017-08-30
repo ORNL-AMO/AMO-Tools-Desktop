@@ -100,9 +100,9 @@
     </tr>
     <tr>
       <th>Annual Cost</th>
-      <th>{{psat.outputs.annual_cost | currency:'USD':'2.0-0'}}</th>
+      <th>{{psat.outputs.annual_cost | currency:'USD':true:'2.0-0'}}</th>
       <th *ngFor="let modification of psat.modifications; let index = index;" [ngClass]="{'positive-savings': getSavingsPercentage(psat, modification.psat) > 10, 'selected-modification': index == selectedModificationIndex}">
-        <span *ngIf="modification.psat.outputs.annual_cost">{{modification.psat.outputs.annual_cost | currency:'USD':'2.0-0'}}</span>
+        <span *ngIf="modification.psat.outputs.annual_cost">{{modification.psat.outputs.annual_cost | currency:'USD':true:'2.0-0'}}</span>
         <span *ngIf="!modification.psat.outputs.annual_cost">&mdash;</span>
       </th>
     </tr>
@@ -114,7 +114,7 @@
         &mdash;
       </th>
       <th *ngFor="let modification of psat.modifications; let index = index;" [ngClass]="{'positive-savings': getSavingsPercentage(psat, modification.psat) > 10, 'selected-modification': index == selectedModificationIndex}">
-        <span *ngIf="getDiff(modification.psat.outputs.annual_cost, modification.psat.outputs.annual_cost)">{{getDiff(modification.psat.outputs.annual_cost, modification.psat.outputs.annual_cost)| currency:'USD':'2.0-0'}}</span>
+        <span *ngIf="getDiff(modification.psat.outputs.annual_cost, modification.psat.outputs.annual_cost)">{{getDiff(modification.psat.outputs.annual_cost, modification.psat.outputs.annual_cost)| currency:'USD':true:'2.0-0'}}</span>
         <span *ngIf="!getDiff(modification.psat.outputs.annual_cost, modification.psat.outputs.annual_cost)">&mdash;</span>
       </th>
     </tr>

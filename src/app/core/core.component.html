@@ -2,47 +2,32 @@
 
     <div class="feedback-header">
         <h2>Provide Feedback: Tell us how we can improve this app!</h2>
-        <p>Help us further understand your request by downloading and attaching a <a (click)="takeScreenShot()">screenshot of this interface</a> or <a (click)="downloadData()">your current data set</a>.</p>
+        <p>Help us further understand your request by downloading and attaching a <a (click)="takeScreenShot()">screenshot of this interface</a>            or <a (click)="downloadData()">your current data set</a>.</p>
     </div>
     <button type="button" class="btn btn-secondary btn-sm" (click)="mailTo()"><i class="fa fa-external-link" aria-hidden="true"></i> Email Feedback</button>
-    <!-- <button class="close" (click)="hideFeedback()">
-      <span aria-hidden="true">&times;</span>
-    </button> -->
-    
-    <!-- <div class="card-block" *ngIf="gettingData">
-        <div class="row justify-content-center">
-            <div class="col-md-10">
-                <div class="main-content" style="text-align: center;">
-                    <div class="spinner">
-                        <div class="bounce1"></div>
-                        <div class="bounce2"></div>
-                        <div class="bounce3"></div>
-                    </div>
-                    <h6>Gathering Data</h6>
-                </div>
-            </div>
-        </div>
-    </div> -->
 </div>
 
 <router-outlet></router-outlet>
 <div bsModal #updateModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="updateModalLabel" aria-hidden="true"
     [config]="{backdrop: 'static'}">
     <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
+        <div class="modal-content card">
+            <div class="modal-header card-title">
                 <div *ngIf="!updateSelected">
-                    Updates Available...
+                    AMO-Tools-Desktop Update Available
                 </div>
                 <div *ngIf="updateSelected">
                     Downloading...
                 </div>
+                <button class="close pull-right" (click)="cancel()">
+                  <span aria-hidden="true">&times;</span>
+                </button>
             </div>
-            <div class="modal-body">
+            <div class="modal-body card-body">
                 <div *ngIf="!updateSelected">
-                    <div>When the download is complete, the program will automatically exit and install the updates</div>
-                    <button (click)="updateClick()">Download Now</button>
-                    <button (click)="cancel()">Cancel</button>
+                    <p class="card-text">When the download is complete, the program will automatically exit and install the updates</p>
+                    <button class="btn-sm btn-primary" (click)="updateClick()">Download Now</button>
+                    <button class="btn-sm btn-secondary pull-right" (click)="cancel()">Cancel</button>
                 </div>
                 <div *ngIf="updateSelected">
                     <div class="spinner">
@@ -55,4 +40,3 @@
         </div>
     </div>
 </div>
-
