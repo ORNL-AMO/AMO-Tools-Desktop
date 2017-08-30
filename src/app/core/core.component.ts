@@ -18,26 +18,30 @@ export class CoreComponent implements OnInit {
 
   gettingData: boolean = false;
   showFeedback: boolean = true;
-  constructor(private ElectronService: ElectronService, private toastyService: ToastyService,
+
+  showScreenshot: boolean = true;
+  constructor(private electronService: ElectronService, private toastyService: ToastyService,
     private toastyConfig: ToastyConfig, private importExportService: ImportExportService) {
     this.toastyConfig.theme = 'bootstrap';
     this.toastyConfig.limit = 1;
   }
 
   ngOnInit() {
-    this.ElectronService.ipcRenderer.once('available', (event, arg) => {
+    this.electronService.ipcRenderer.once('available', (event, arg) => {
       if (arg == true) {
         this.showUpdateModal();
       }
     })
-
-    this.ElectronService.ipcRenderer.send('ready', null);
-
+    this.electronService.ipcRenderer.send('ready', null);
     this.importExportService.toggleDownload.subscribe((val) => {
-      if(val == true){
+      if (val == true) {
         this.downloadData();
       }
     })
+
+    if(this.electronService.process.platform == 'win32'){
+      this.showScreenshot = false;
+    }
   }
 
 
@@ -45,7 +49,7 @@ export class CoreComponent implements OnInit {
     this.importExportService.takeScreenShot();
   }
 
-  hideFeedback(){
+  hideFeedback() {
     this.showFeedback = false;
   }
 
@@ -82,11 +86,11 @@ export class CoreComponent implements OnInit {
   updateClick() {
     this.updateSelected = true;
     this.updateAvailable = false;
-    this.ElectronService.ipcRenderer.send('update', null);
+    this.electronService.ipcRenderer.send('update', null);
   }
 
   cancel() {
     this.updateModal.hide();
-    this.ElectronService.ipcRenderer.send('later', null);
+    this.electronService.ipcRenderer.send('later', null);
   }
 }
