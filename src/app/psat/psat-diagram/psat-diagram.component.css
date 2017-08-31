@@ -47,5 +47,34 @@
 }
 
 .psat-diagram .diagram {
-    /*background: url('../assets/images/assessment-icon-psat.png') no-repeat 14px;*/
+    background: url('../../../assets/images/psat-diagram.png') no-repeat center 20%;
+    height: 100%;
+    position: relative;
 }
+    .diagram .motor, .diagram .rated-motor, .diagram .fluid, .diagram .pump {
+        font: bold 14px/1 Sans-Serif;
+        background: #2980b9;
+        color: #fff;
+        border-radius: 50%;
+        padding: 3px 7px;
+        position: absolute;
+    }
+    .diagram .motor {
+        top: 26%;
+        left: 22%;
+    }
+    .diagram .rated-motor {
+        top: 33%;
+        left: 7%;
+    }
+    .diagram .fluid {
+        top: 43%;
+        left: 88%;
+    }
+    .diagram .pump {
+        top: 42%;
+        left: 69%;
+    }
+
+
+
