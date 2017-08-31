@@ -5,11 +5,8 @@
 
 
         <ul class="tabs vertical">
-          <li class="active"><a href="">Baseline</a></li>
-          <li><a href="">Modification 1</a></li>
-          <li><a href="">Modification 2</a></li>
-          <li><a href="">Modification 3</a></li>
-          <li><a href="">Modification 4</a></li>
+          <li [ngClass]="{'active': psat.name == selectedPsat.name}" (click)="setPsat(psat)"><a>Baseline</a></li>
+          <li *ngFor="let mod of psat.modifications" [ngClass]="{'active': mod.psat.name == selectedPsat.name}" (click)="setPsat(mod.psat)"><a>{{mod.psat.name}}</a></li>
         </ul>
 
 
@@ -36,31 +33,31 @@
             <h3>Rated Motor</h3>
             <dl>
               <dt>Power</dt>
-              <dd>{{psat.inputs.motor_rated_power| number:'1.0-1'}} <span class="muted">({{settings.powerMeasurement}})</span></dd>
+              <dd>{{selectedPsat.inputs.motor_rated_power| number:'1.0-1'}} <span class="muted">({{settings.powerMeasurement}})</span></dd>
               <dt>Full Load Amps</dt>
-              <dd>{{psat.inputs.motor_rated_fla | number:'1.0-1'}}</dd>
+              <dd>{{selectedPsat.inputs.motor_rated_fla | number:'1.0-1'}}</dd>
               <dt>Voltage</dt>
-              <dd>{{psat.inputs.motor_rated_voltage | number:'1.0-1'}}</dd>
+              <dd>{{selectedPsat.inputs.motor_rated_voltage | number:'1.0-1'}}</dd>
             </dl>
           </li>
           <li>
             <h3>Fluid</h3>
             <dl>
               <dt>Specific Gravity</dt>
-              <dd>{{psat.inputs.specific_gravity}}</dd>
+              <dd>{{selectedPsat.inputs.specific_gravity}}</dd>
               <dt>Flow Rate</dt>
-              <dd>{{psat.inputs.flow_rate | number:'1.0-1'}} <span class="muted" [innerHTML]="getUnit(settings.flowMeasurement)"></span></dd>
+              <dd>{{selectedPsat.inputs.flow_rate | number:'1.0-1'}} <span class="muted" [innerHTML]="getUnit(settings.flowMeasurement)"></span></dd>
               <dt>Head</dt>
-              <dd>{{psat.inputs.head | number:'1.0-1'}} <span class="muted" [innerHTML]="getUnit(settings.distanceMeasurement)"></span></dd>
+              <dd>{{selectedPsat.inputs.head | number:'1.0-1'}} <span class="muted" [innerHTML]="getUnit(settings.distanceMeasurement)"></span></dd>
             </dl>
           </li>
           <li>
             <h3>Pump</h3>
             <dl>
               <dt>Type</dt>
-              <dd>{{getPumpType(psat.inputs.pump_style)}}</dd>
+              <dd>{{getPumpType(selectedPsat.inputs.pump_style)}}</dd>
               <dt>RPM</dt>
-              <dd>{{psat.inputs.pump_rated_speed | number:'1.0-1'}}</dd>
+              <dd>{{selectedPsat.inputs.pump_rated_speed | number:'1.0-1'}}</dd>
               <dt>Efficiency</dt>
               <dd>{{results.pump_efficiency | number:'1.0-1'}} <span class="muted">%</span></dd>
             </dl>
