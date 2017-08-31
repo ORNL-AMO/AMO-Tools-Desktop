@@ -30,7 +30,7 @@
 .psat-diagram h3 {
     font-size: 15px;
     font-weight: bold;
-    margin-bottom: 6px;
+    margin-bottom: 4px;
     text-transform: uppercase;
 }
 .psat-diagram dl {
@@ -41,7 +41,11 @@
     font-size: 14px;
 }
 .psat-diagram dd {
-    margin-bottom: 6px;
+    margin-bottom: 3px;
     line-height: 21px;
     font-size: 16px;
+}
+
+.psat-diagram .diagram {
+    /*background: url('../assets/images/assessment-icon-psat.png') no-repeat 14px;*/
 }
