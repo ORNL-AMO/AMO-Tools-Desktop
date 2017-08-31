@@ -14,14 +14,15 @@ export class PsatDiagramComponent implements OnInit {
   @Input()
   settings: Settings;
 
+  selectedPsat: PSAT;
 
   results: PsatOutputs;
   constructor(private psatService: PsatService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
+    this.selectedPsat = this.psat;
     if (this.psat.inputs && this.settings) {
-      this.results = this.psatService.resultsExisting(this.psat.inputs, this.settings);
-      console.log(this.results);
+      this.getResults();
     }
   }
 
@@ -33,5 +34,14 @@ export class PsatDiagramComponent implements OnInit {
   getUnit(unit: string) {
     let tmpUnit = this.convertUnitsService.getUnit(unit);
     return tmpUnit.unit.name.display;
+  }
+
+  getResults() {
+    this.results = this.psatService.resultsExisting(this.selectedPsat.inputs, this.settings);
+  }
+
+  setPsat(psat: PSAT) {
+    this.selectedPsat = psat;
+    this.getResults();
   }
 }
