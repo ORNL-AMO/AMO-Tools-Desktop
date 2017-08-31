@@ -39,7 +39,9 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
   showPumpSpecified: boolean;
 
   showCalculationMethod: boolean;
-
+  showViscosity: boolean;
+  showSpeed: boolean;
+  showSizeMargin: boolean;
   tmpModificationPumpType: string;
   tmpBaselinePumpType: string;
   tmpModificationEfficiencyClass: string;
@@ -114,7 +116,8 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
     this.checkEfficiency(this.psat.inputs.efficiency, 1);
     this.checkEfficiency(this.psat.modifications[this.exploreModIndex].psat.inputs.efficiency, 2);
     this.checkEfficiency(this.psat.inputs.pump_specified, 3);
-    this.checkEfficiency(this.psat.modifications[this.exploreModIndex].psat.inputs.pump_specified, 4)
+    this.checkEfficiency(this.psat.modifications[this.exploreModIndex].psat.inputs.pump_specified, 4);
+    this.checkOptimized();
   }
 
   setPumpTypes() {
@@ -167,7 +170,11 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
     this.changeField.emit(str);
   }
 
-  calculate() {
+  calculate(str?: string) {
+    if (str == 'fixedSpecificSpeed') {
+      this.focusField('fixedSpecificSpeed');
+      console.log()
+    }
     this.startSavePolling();
     this.emitCalculate.emit(true);
   }
@@ -525,10 +532,49 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
       this.calculate();
     }
   }
-  getUnit(unit: string){
-    console.log(unit);
+  getUnit(unit: string) {
     let tmpUnit = this.convertUnitsService.getUnit(unit);
     return tmpUnit.unit.name.display;
+  }
+
+
+  //optimized
+  addNum() {
+    this.psat.modifications[this.exploreModIndex].psat.inputs.kinematic_viscosity = this.psat.modifications[this.exploreModIndex].psat.inputs.kinematic_viscosity + 1;
+    this.calculate();
+  }
+
+  subtractNum() {
+    if (this.psat.modifications[this.exploreModIndex].psat.inputs.kinematic_viscosity != 0) {
+      this.psat.modifications[this.exploreModIndex].psat.inputs.kinematic_viscosity = this.psat.modifications[this.exploreModIndex].psat.inputs.kinematic_viscosity - 1;
+    }
+    this.calculate();
+  }
+
+  toggleOptimized() {
+    this.calculate();
+    if (!this.psat.modifications[this.exploreModIndex].psat.inputs.optimize_calculation) {
+      this.psat.modifications[this.exploreModIndex].psat.inputs.kinematic_viscosity = 1;
+      this.psat.modifications[this.exploreModIndex].psat.inputs.fixed_speed = 0;
+      this.psat.modifications[this.exploreModIndex].psat.inputs.margin = 0;
+      this.showViscosity = false;
+      this.showSpeed = false;
+      this.showSizeMargin = false;
+    }
+  }
+
+  checkOptimized() {
+    if (this.psat.modifications[this.exploreModIndex].psat.inputs.optimize_calculation) {
+      if (this.psat.modifications[this.exploreModIndex].psat.inputs.kinematic_viscosity != 1) {
+        this.showViscosity = true;
+      }
+      if (this.psat.modifications[this.exploreModIndex].psat.inputs.fixed_speed != 0) {
+        this.showSpeed = true;
+      }
+      if (this.psat.modifications[this.exploreModIndex].psat.inputs.margin != 0) {
+        this.showSizeMargin = true;
+      }
+    }
   }
 
 }

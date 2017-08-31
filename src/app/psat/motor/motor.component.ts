@@ -59,7 +59,6 @@ export class MotorComponent implements OnInit {
   flaError: string = null;
 
   efficiencyError: string = null;
-  marginError: string = null;
   ratedPowerError: string = null;
   disableFLAOptimized: boolean = false;
   constructor(private psatService: PsatService, private compareService: CompareService, private windowRefService: WindowRefService, private helpPanelService: HelpPanelService, private convertUnitsService: ConvertUnitsService) { }
@@ -79,7 +78,6 @@ export class MotorComponent implements OnInit {
     //init alert meessages
     this.checkEfficiency(true);
     this.checkFLA(true);
-    this.checkMargin(true);
     this.checkMotorRpm(true);
     this.checkMotorVoltage(true);
     this.checkRatedPower(true);
@@ -331,24 +329,6 @@ export class MotorComponent implements OnInit {
         return true
       }
     } else {
-      return true;
-    }
-  }
-
-  checkMargin(bool?: boolean) {
-    if (!bool) {
-      this.startSavePolling();
-    }
-    if (this.psatForm.value.sizeMargin > 100) {
-      this.marginError = "Unrealistic size margin, shouldn't be greater then 100%";
-      return false;
-    }
-    else if (this.psatForm.value.sizeMargin < 0) {
-      this.marginError = "Shouldn't have negative size margin";
-      return false;
-    }
-    else {
-      this.marginError = null;
       return true;
     }
   }

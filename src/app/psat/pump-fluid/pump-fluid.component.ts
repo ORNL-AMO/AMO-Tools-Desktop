@@ -110,20 +110,14 @@ export class PumpFluidComponent implements OnInit {
   }
 
   addNum(str: string) {
-    if (str == 'viscosity') {
-      this.psatForm.value.viscosity++;
-    } else if (str == 'stages') {
+    if (str == 'stages') {
       this.psatForm.value.stages++;
     }
     this.checkForm(this.psatForm);
   }
 
   subtractNum(str: string) {
-    if (str == 'viscosity') {
-      if (this.psatForm.value.viscosity != 0) {
-        this.psatForm.value.viscosity--;
-      }
-    } else if (str == 'stages') {
+    if (str == 'stages') {
       if (this.psatForm.value.stages != 0) {
         this.psatForm.value.stages--;
       }
@@ -132,9 +126,9 @@ export class PumpFluidComponent implements OnInit {
   }
 
   focusField(str: string) {
-    if (str == 'fixedSpecificSpeed') {
-      this.startSavePolling();
-    }
+    // if (str == 'fixedSpecificSpeed') {
+    //   this.startSavePolling();
+    // }
     this.helpPanelService.currentField.next(str);
     this.checkForm(this.psatForm);
   }
@@ -164,7 +158,7 @@ export class PumpFluidComponent implements OnInit {
   }
 
   checkPumpRpm(bool?: boolean) {
-    if(!bool){
+    if (!bool) {
       this.startSavePolling();
     }
     let min = 0;
@@ -236,12 +230,12 @@ export class PumpFluidComponent implements OnInit {
       });
     });
     //kinematic viscosity
-    this.compareService.kinematic_viscosity_different.subscribe((val) => {
-      let viscosityElements = doc.getElementsByName('viscosity');
-      viscosityElements.forEach(element => {
-        element.classList.toggle('indicate-different', val);
-      });
-    });
+    // this.compareService.kinematic_viscosity_different.subscribe((val) => {
+    //   let viscosityElements = doc.getElementsByName('viscosity');
+    //   viscosityElements.forEach(element => {
+    //     element.classList.toggle('indicate-different', val);
+    //   });
+    // });
     //specific gravity
     this.compareService.specific_gravity_different.subscribe((val) => {
       let gravityElements = doc.getElementsByName('gravity');
@@ -257,12 +251,12 @@ export class PumpFluidComponent implements OnInit {
       });
     });
     //fixed speed
-    this.compareService.fixed_speed_different.subscribe((val) => {
-      let fixedSpeedElements = doc.getElementsByName('fixedSpeed');
-      fixedSpeedElements.forEach(element => {
-        element.classList.toggle('indicate-different', val);
-      });
-    });
+    // this.compareService.fixed_speed_different.subscribe((val) => {
+    //   let fixedSpeedElements = doc.getElementsByName('fixedSpeed');
+    //   fixedSpeedElements.forEach(element => {
+    //     element.classList.toggle('indicate-different', val);
+    //   });
+    // });
   }
 
 
