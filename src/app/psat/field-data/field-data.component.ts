@@ -39,6 +39,8 @@ export class FieldDataComponent implements OnInit {
   counter: any;
 
   @ViewChild('formRef') formRef: ElementRef;
+
+  @ViewChild('formRef2') formRef2: ElementRef;
   elements: any;
 
   formValid: boolean;
@@ -64,6 +66,7 @@ export class FieldDataComponent implements OnInit {
   costError: string = null;
   opFractionError: string = null;
   ratedPowerError: string = null;
+  marginError: string = null;
   constructor(private psatService: PsatService, private compareService: CompareService, private windowRefService: WindowRefService, private helpPanelService: HelpPanelService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
@@ -76,6 +79,9 @@ export class FieldDataComponent implements OnInit {
     this.checkOpFraction(true);
     this.checkRatedPower(true);
     this.checkVoltage(true);
+    if (this.psatForm.value.optimizeCalculation == true) {
+      this.checkMargin(true);
+    }
   }
 
   ngAfterViewInit() {
@@ -111,11 +117,19 @@ export class FieldDataComponent implements OnInit {
     for (var i = 0, len = this.elements.length; i < len; ++i) {
       this.elements[i].disabled = true;
     }
+    this.elements = this.formRef2.nativeElement.elements;
+    for (var i = 0, len = this.elements.length; i < len; ++i) {
+      this.elements[i].disabled = true;
+    }
 
   }
 
   enableForm() {
     this.elements = this.formRef.nativeElement.elements;
+    for (var i = 0, len = this.elements.length; i < len; ++i) {
+      this.elements[i].disabled = false;
+    }
+    this.elements = this.formRef2.nativeElement.elements;
     for (var i = 0, len = this.elements.length; i < len; ++i) {
       this.elements[i].disabled = false;
     }
@@ -183,9 +197,6 @@ export class FieldDataComponent implements OnInit {
       this.startSavePolling();
     }
     if (this.psatForm.controls.flowRate.pristine == false && this.psatForm.value.flowRate != '') {
-      
-      console.log(this.psat.inputs.pump_style);
-      console.log(this.psatForm.value.pumpType);
       let tmp = this.psatService.checkFlowRate(this.psat.inputs.pump_style, this.psatForm.value.flowRate, this.settings);
       if (tmp.message) {
         this.flowError = tmp.message;
@@ -222,7 +233,7 @@ export class FieldDataComponent implements OnInit {
 
 
   checkCost(bool?: boolean) {
-    if(!bool) {
+    if (!bool) {
       this.startSavePolling();
     }
     if (this.psatForm.value.costKwHr < 0) {
@@ -288,6 +299,35 @@ export class FieldDataComponent implements OnInit {
     } else {
       return true;
     }
+  }
+
+  checkMargin(bool?: boolean) {
+    if (!bool) {
+      this.startSavePolling();
+    }
+    if (this.psatForm.value.sizeMargin > 100) {
+      this.marginError = "Unrealistic size margin, shouldn't be greater then 100%";
+      return false;
+    }
+    else if (this.psatForm.value.sizeMargin < 0) {
+      this.marginError = "Shouldn't have negative size margin";
+      return false;
+    }
+    else {
+      this.marginError = null;
+      return true;
+    }
+  }
+
+  subtractViscosity() {
+    this.psatForm.value.viscosity = this.psatForm.value.viscosity - 1
+    this.startSavePolling();
+
+  }
+
+  addViscosity() {
+    this.psatForm.value.viscosity = this.psatForm.value.viscosity + 1
+    this.startSavePolling();
   }
 
   //used to add classes to inputs with different baseline vs modification values

@@ -309,7 +309,7 @@
                   type="radio"
                   [(ngModel)]="psat.modifications[exploreModIndex].psat.inputs.fixed_speed"
                   [value]='1'
-                  (change)="calculate()">Yes
+                  (change)="calculate('fixedSpecificSpeed')">Yes
                 </label>
                 <label class="form-check-label">
                 <input
@@ -318,7 +318,7 @@
                   type="radio"
                   [(ngModel)]="psat.modifications[exploreModIndex].psat.inputs.fixed_speed"
                   [value]='0'
-                  (change)="calculate()">No
+                  (change)="calculate('fixedSpecificSpeed')">No
               </label>
               </div>
             </div>
@@ -337,7 +337,7 @@
             <div class="form-group">
               <div name="sizeMargin" class="input-group">
                 <input name="sizeMargin" type="number" min="0" step="any" class="form-control addon-input" id="sizeMargin" [(ngModel)]="psat.modifications[exploreModIndex].psat.inputs.margin"
-                  (input)="calculate()" (focus)="focusField('kinematicViscosity')" onfocus="this.select();">
+                  (input)="calculate()" (focus)="focusField('sizeMargin')" onfocus="this.select();">
                 <span class="input-group-addon units">%</span>
               </div>
             </div>

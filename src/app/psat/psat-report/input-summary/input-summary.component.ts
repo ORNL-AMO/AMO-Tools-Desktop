@@ -17,17 +17,17 @@ export class InputSummaryComponent implements OnInit {
   pumpDiff: boolean = false;
   pumpRpmDiff: boolean = false;
   driveDiff: boolean = false;
-  viscosityDiff: boolean = false;
+ // viscosityDiff: boolean = false;
   gravityDiff: boolean = false;
   stagesDiff: boolean = false;
-  fixedDiff: boolean = false;
+ // fixedDiff: boolean = false;
   freqDiff: boolean = false;
   hpDiff: boolean = false;
   motorRpmDiff: boolean = false;
   effClassDiff: boolean = false;
   motorVoltageDiff: boolean = false;
   flaDiff: boolean = false;
-  marginDiff: boolean = false;
+  //marginDiff: boolean = false;
   opFracDiff: boolean = false;
   costDiff: boolean = false;
   flowRateDiff: boolean = false;
@@ -36,7 +36,7 @@ export class InputSummaryComponent implements OnInit {
   ampsDiff: boolean = false;
   kwDiff: boolean = false;
   fieldVoltageDiff: boolean = false;
-
+  anyOptimized: boolean = false;
   constructor(private psatService: PsatService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
@@ -84,18 +84,18 @@ export class InputSummaryComponent implements OnInit {
         if (mod.psat.inputs.drive != this.psat.inputs.drive) {
           this.driveDiff = true;
         }
-        if (mod.psat.inputs.kinematic_viscosity != this.psat.inputs.kinematic_viscosity) {
-          this.viscosityDiff = true;
-        }
+        // if (mod.psat.inputs.kinematic_viscosity != this.psat.inputs.kinematic_viscosity) {
+        //   this.viscosityDiff = true;
+        // }
         if (mod.psat.inputs.specific_gravity != this.psat.inputs.specific_gravity) {
           this.gravityDiff = true;
         }
         if (mod.psat.inputs.stages != this.psat.inputs.stages) {
           this.stagesDiff = true;
         }
-        if (mod.psat.inputs.fixed_speed != this.psat.inputs.fixed_speed) {
-          this.fixedDiff = true;
-        }
+        // if (mod.psat.inputs.fixed_speed != this.psat.inputs.fixed_speed) {
+        //   this.fixedDiff = true;
+        // }
         if (mod.psat.inputs.line_frequency != this.psat.inputs.line_frequency) {
           this.freqDiff = true;
         }
@@ -114,9 +114,9 @@ export class InputSummaryComponent implements OnInit {
         if (mod.psat.inputs.motor_rated_fla != this.psat.inputs.motor_rated_fla) {
           this.flaDiff = true;
         }
-        if (mod.psat.inputs.margin != this.psat.inputs.margin) {
-          this.marginDiff = true;
-        }
+        // if (mod.psat.inputs.margin != this.psat.inputs.margin) {
+        //   this.marginDiff = true;
+        // }
         if (mod.psat.inputs.operating_fraction != this.psat.inputs.operating_fraction) {
           this.opFracDiff = true;
         }
@@ -142,6 +142,9 @@ export class InputSummaryComponent implements OnInit {
         // fieldVoltageDiff
         if (mod.psat.inputs.motor_field_voltage != this.psat.inputs.motor_field_voltage) {
           this.fieldVoltageDiff = true;
+        }
+        if(mod.psat.inputs.optimize_calculation){
+          this.anyOptimized = true;
         }
       })
     }

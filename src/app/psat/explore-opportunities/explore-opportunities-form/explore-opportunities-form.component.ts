@@ -170,7 +170,11 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
     this.changeField.emit(str);
   }
 
-  calculate() {
+  calculate(str?: string) {
+    if (str == 'fixedSpecificSpeed') {
+      this.focusField('fixedSpecificSpeed');
+      console.log()
+    }
     this.startSavePolling();
     this.emitCalculate.emit(true);
   }
