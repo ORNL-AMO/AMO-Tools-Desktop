@@ -1,17 +1,17 @@
 <form>
   <div class="form-section">
-    <div class="form-group">
+    <!--<div class="form-group">
       <label for="fuelType">Fuel</label>
       <select name="fuelType" id="fuelType" class="form-control" (focus)="focusField('fuelType')" (change)="calculate()" [(ngModel)]="inputs.fuelType">
                   <option *ngFor="let type of fuelTypes" [ngValue]="type.value">{{type.name}}</option>
                 </select>
-    </div>
+    </div>-->
     <div class="form-group">
       <label for="totalBurnerCapacity">Total Burner Rated Capacity</label>
       <div class="input-group">
         <input name="totalBurnerCapacity" type="number" step="any" id="totalBurnerCapacity" class="form-control" (focus)="focusField('totalBurnerCapacity')"
           [(ngModel)]="inputs.totalBurnerCapacity" (input)="calculate()" onfocus="this.select();" />
-        <span class="input-group-addon units">%</span>
+        <span class="input-group-addon units">MMBTU/hr</span>
       </div>
     </div>
     <div class="form-group">

@@ -39,7 +39,7 @@ export class DesignedEnergyService {
     let designedEnergyUsed = 0;
     //
     inputs.forEach(input => {
-      designedEnergyUsed += (input.totalBurnerCapacity / Math.pow(10, 6)) * (input.percentCapacityUsed / 100) * (input.percentOperatingHours / 100);
+      designedEnergyUsed += (input.totalBurnerCapacity * Math.pow(10, 6)) * (input.percentCapacityUsed / 100) * (input.percentOperatingHours / 100);
     })
     let sumFeedRate = this.phastService.sumChargeMaterialFeedRate(phast.losses.chargeMaterials);
     let designedEnergyIntensity = (designedEnergyUsed / sumFeedRate) || 0;
