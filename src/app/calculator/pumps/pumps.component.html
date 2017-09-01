@@ -37,6 +37,10 @@
             <a (click)="showTool('motor-performance')">Motor Performance</a>
             <p>Plots current, efficiency, power factor vs motor shaft load for a given motor description.</p>
           </li>
+          <li>
+            <a (click)="showTool('pump-curve')">Pump Curve</a>
+            <p>DESCRIPTION NEEDED</p>
+          </li>
         </ul>
 
       </div>
@@ -59,7 +63,6 @@
   </div>
 </div>
 
-
 <div class="calculator" *ngIf="getSelectedTool() == 'system-curve'">
   <div class="row">
     <div class="col-lg-10  mx-auto">
@@ -70,10 +73,6 @@
     <app-system-curve></app-system-curve>
   </div>
 </div>
-
-
-
-
 
 <div class="calculator" *ngIf="getSelectedTool() == 'nema-energy-efficiency'">
   <div class="row">
@@ -86,7 +85,6 @@
   </div>
 </div>
 
-
 <div class="calculator" *ngIf="getSelectedTool() == 'specific-speed'">
   <div class="row">
     <div class="col-lg-10  mx-auto">
@@ -97,7 +95,6 @@
     <app-specific-speed></app-specific-speed>
   </div>
 </div>
-
 
 <div class="calculator" *ngIf="getSelectedTool() == 'achievable-efficiency'">
   <div class="row">
@@ -110,7 +107,6 @@
   </div>
 </div>
 
-
 <div class="calculator" *ngIf="getSelectedTool() == 'motor-performance'">
   <div class="row">
     <div class="col-lg-10  mx-auto">
@@ -119,5 +115,16 @@
   </div>
   <div class="calculator-container">
     <app-motor-performance></app-motor-performance>
+  </div>
+</div>
+
+<div class="calculator" *ngIf="getSelectedTool() == 'pump-curve'">
+  <div class="row">
+    <div class="col-lg-10 offset-lg-1">
+      <h2>Pump Curve Calculator</h2>
+    </div>
+  </div>
+  <div class="calculator-container">
+    <app-pump-curve></app-pump-curve>
   </div>
 </div>

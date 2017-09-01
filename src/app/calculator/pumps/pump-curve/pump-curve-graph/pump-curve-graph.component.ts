@@ -1,17 +1,19 @@
 import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
 import { PsatService } from '../../../../psat/psat.service';
 import { WindowRefService } from '../../../../indexedDb/window-ref.service';
-
+import { PumpCurveForm } from '../pump-curve';
 //declare const d3: any;
 import * as d3 from 'd3';
+import * as regression from 'regression';
 @Component({
-  selector: 'app-specific-speed-graph',
-  templateUrl: './specific-speed-graph.component.html',
-  styleUrls: ['./specific-speed-graph.component.css']
+  selector: 'app-pump-curve-graph',
+  templateUrl: './pump-curve-graph.component.html',
+  styleUrls: ['./pump-curve-graph.component.css']
 })
-export class SpecificSpeedGraphComponent implements OnInit {
+export class PumpCurveGraphComponent implements OnInit {
+  //PumpCurveForm object holding data from form
   @Input()
-  speedForm: any;
+  pumpCurveForm: PumpCurveForm;
 
   svg: any;
   xAxis: any;
@@ -43,14 +45,19 @@ export class SpecificSpeedGraphComponent implements OnInit {
   constructor(private psatService: PsatService, private windowRefService: WindowRefService) { }
 
   ngOnInit() {
-
     this.isGridToggled = false;
-
-    d3.select('app-specific-speed').selectAll('#gridToggleBtn')
+    d3.select('app-pump-curve-graph').selectAll('#gridToggleBtn')
       .on("click", () => {
-        console
+
         this.toggleGrid();
       });
+
+    let result = regression.linear([[0, 1], [32, 67], [12, 79]]);
+    console.log(result);
+    let gradient = result.equation[0];
+    console.log(gradient)
+    let yIntercept = result.equation[1];
+    console.log(yIntercept)
   }
 
   ngAfterViewInit() {
@@ -63,9 +70,14 @@ export class SpecificSpeedGraphComponent implements OnInit {
   ngOnDestroy() {
     this.window.onresize = null;
   }
+
   ngOnChanges(changes: SimpleChanges) {
     if (!this.firstChange) {
+      //pump-curve.component toggles the toggleCalculate value when calculating
+      //check for changes to toggleCalculate 
       if (changes.toggleCalculate) {
+        //if changes draw new graph
+        console.log(this.pumpCurveForm)
         if (this.checkForm()) {
           this.makeGraph();
           this.svg.style("display", null);
@@ -76,11 +88,10 @@ export class SpecificSpeedGraphComponent implements OnInit {
     }
   }
 
-
   resizeGraph() {
-    let curveGraph = this.doc.getElementById('specificSpeedGraph');
+    let curveGraph = this.doc.getElementById('pumpCurveGraph');
     this.canvasWidth = curveGraph.clientWidth;
-    this.canvasHeight = this.canvasWidth * (3/5);
+    this.canvasHeight = this.canvasWidth * (3 / 5);
     if (this.canvasWidth < 400) {
       this.margin = { top: 10, right: 10, bottom: 50, left: 75 };
     } else {
@@ -89,13 +100,14 @@ export class SpecificSpeedGraphComponent implements OnInit {
     this.width = this.canvasWidth - this.margin.left - this.margin.right;
     this.height = this.canvasHeight - this.margin.top - this.margin.bottom;
 
-    d3.select("app-specific-speed").select("#gridToggle").style("top", (this.height + 100) + "px");
+    d3.select("app-pump-curve").select("#gridToggle").style("top", (this.height + 100) + "px");
 
     if (this.checkForm()) {
       this.makeGraph();
     }
   }
 
+  /*
   getEfficiencyCorrection() {
     if (this.checkForm()) {
       return this.psatService.achievableEfficiency(this.speedForm.value.pumpType, this.getSpecificSpeed());
@@ -111,8 +123,10 @@ export class SpecificSpeedGraphComponent implements OnInit {
       return 0;
     }
   }
+  */
 
   checkForm() {
+    /*
     if (
       this.speedForm.controls.pumpType.status == 'VALID' &&
       this.speedForm.controls.flowRate.status == 'VALID' &&
@@ -123,15 +137,16 @@ export class SpecificSpeedGraphComponent implements OnInit {
       return true;
     } else {
       return false;
-    }
+    }*/
+    return true;
   }
 
   makeGraph() {
 
     //Remove  all previous graphs
-    d3.select('app-specific-speed-graph').selectAll('svg').remove();
+    d3.select('app-pump-curve-graph').selectAll('svg').remove();
 
-    this.svg = d3.select('app-specific-speed-graph').append('svg')
+    this.svg = d3.select('app-pump-curve-graph').append('svg')
       .attr("width", this.width + this.margin.left + this.margin.right)
       .attr("height", this.height + this.margin.top + this.margin.bottom)
       .append("g")
@@ -186,7 +201,7 @@ export class SpecificSpeedGraphComponent implements OnInit {
       .range([this.height, 0])
       .domain([0, 6]);
 
-    if(this.isGridToggled) {
+    if (this.isGridToggled) {
       this.xAxis = d3.axisBottom()
         .scale(this.x)
         .ticks(3)
@@ -201,7 +216,7 @@ export class SpecificSpeedGraphComponent implements OnInit {
         .ticks(6)
         .tickSize(-this.width);
     }
-    else{
+    else {
       this.xAxis = d3.axisBottom()
         .scale(this.x)
         .ticks(3)
@@ -235,6 +250,7 @@ export class SpecificSpeedGraphComponent implements OnInit {
       .selectAll('text')
       .style("font-size", "13px");
 
+    /*
     var data = [];
     for (var i = 100; i < 100000; i = i + 25) {
       var efficiencyCorrection = this.psatService.achievableEfficiency(this.speedForm.value.pumpType, i);
@@ -245,18 +261,18 @@ export class SpecificSpeedGraphComponent implements OnInit {
         });
       }
     }
-
     this.makeCurve(data);
+    */
 
     this.svg.append("text")
       .attr("text-anchor", "middle")  // this makes it easy to centre the text as the transform is applied to the anchor
       .attr("transform", "translate(" + (-60) + "," + (this.height / 2) + ")rotate(-90)")  // text is drawn off the screen top left, move down and out and rotate
-      .text("Efficiency Correction (%)");
+      .text("Head (ft)");
 
     this.svg.append("text")
       .attr("text-anchor", "middle")  // this makes it easy to centre the text as the transform is applied to the anchor
       .attr("transform", "translate(" + (this.width / 2) + "," + (this.height - (-70)) + ")")  // centre below axis
-      .text("Specific Speed (U.S.)");
+      .text("Flow (gpm)");
 
     this.calcPoint = this.svg.append("g")
       .attr("class", "focus")
@@ -270,7 +286,7 @@ export class SpecificSpeedGraphComponent implements OnInit {
       .style("stroke-width", "3px");
 
     // Define the div for the tooltip
-    this.detailBox = d3.select("app-specific-speed-graph").append("div")
+    this.detailBox = d3.select("app-pump-curve-graph").append("div")
       .attr("id", "detailBox")
       .attr("class", "d3-tip")
       .style("opacity", 0)
@@ -303,6 +319,7 @@ export class SpecificSpeedGraphComponent implements OnInit {
 
     var format = d3.format(",.2f");
     var bisectDate = d3.bisector(function (d) { return d.x; }).left;
+    /*
     this.svg.select('#graph')
       .attr("width", this.width)
       .attr("height", this.height)
@@ -364,9 +381,9 @@ export class SpecificSpeedGraphComponent implements OnInit {
           .style("padding-right", "10px")
           .style("padding-left", "10px")
           .html(
-          "<p><strong><div>Specific Speed: </div></strong><div>" + format(d.x) + " " + "</div>" +
+            "<p><strong><div>Specific Speed: </div></strong><div>" + format(d.x) + " " + "</div>" +
 
-          "<strong><div>Efficiency Correction: </div></strong><div>" + format(d.y) + " %</div></p>")
+            "<strong><div>Efficiency Correction: </div></strong><div>" + format(d.y) + " %</div></p>")
 
           // "<div style='float:left;'>Fluid Power: </div><div style='float: right;'>" + format(d.fluidPower) + " </div></strong></p>")
 
@@ -403,13 +420,15 @@ export class SpecificSpeedGraphComponent implements OnInit {
       });
 
     this.drawPoint();
+    */
 
     d3.selectAll("line").style("pointer-events", "none");
   }
 
+  /*
   drawPoint() {
     var specificSpeed = this.psatService.roundVal(this.getSpecificSpeed(), 3);
-    var efficiencyCorrection = this.psatService.achievableEfficiency(this.speedForm.value.pumpType, specificSpeed);
+    //var efficiencyCorrection = this.psatService.achievableEfficiency(this.speedForm.value.pumpType, specificSpeed);
 
     this.calcPoint
       .attr("transform", () => {
@@ -442,23 +461,24 @@ export class SpecificSpeedGraphComponent implements OnInit {
       .style("font-weight", "bold");
 
   }
+  */
 
-  toggleGrid(){
-    if(this.isGridToggled){
+  toggleGrid() {
+    if (this.isGridToggled) {
       this.isGridToggled = false;
       this.makeGraph();
     }
-    else{
+    else {
       this.isGridToggled = true;
       this.makeGraph();
     }
   }
 
-  makeCurve(data){
+  makeCurve(data) {
 
     var guideLine = d3.line()
-      .x((d)=> { return this.x(d.x); })
-      .y((d)=> { return this.y(d.y); })
+      .x((d) => { return this.x(d.x); })
+      .y((d) => { return this.y(d.y); })
       .curve(d3.curveNatural);
 
     this.svg.append("path")

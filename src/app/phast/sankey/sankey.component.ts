@@ -1,13 +1,13 @@
 import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
 import { Losses } from '../../shared/models/phast/phast';
 import * as _ from 'lodash';
-
+import { PhastService } from '../phast.service';
 // declare var d3: any;
 import * as d3 from 'd3';
 var svg;
 
-const width = 1950,
-  height = 1200;
+const width = 2650,
+  height = 1400;
 
 @Component({
   selector: 'app-sankey',
@@ -19,6 +19,10 @@ export class SankeyComponent implements OnInit {
   @Input()
   losses: Losses;
 
+  @Input()
+  location: string;
+
+  totalInput: number = 0;
   totalChargeMaterialLoss: number = 0;
   totalWallLoss: number = 0;
   totalOtherLoss: number = 0;
@@ -31,95 +35,111 @@ export class SankeyComponent implements OnInit {
 
   firstChange: boolean = true;
 
+
+
   baseSize: number = 300;
-  constructor() {
+  constructor(private phastService: PhastService) {
   }
 
   ngOnInit() {
     if (this.losses) {
       this.getTotals();
+      this.makeSankey();
     }
   }
-
-  // For dynamic sankey, will calculate totals when losses input changes value
-  // ngOnChanges(changes: SimpleChanges) {
-  //   if (!this.firstChange) {
-  //     if (changes.losses) {
-  //       this.getTotals();
-  //     }
-  //   }
-  //   else {
-  //     this.firstChange = false;
-  //   }
-  // }
 
   getTotals() {
-    this.totalWallLoss = _.sumBy(this.losses.wallLosses, 'heatLoss');
-    this.totalAtmosphereLoss = _.sumBy(this.losses.atmosphereLosses, 'heatLoss');
-    this.totalOtherLoss = _.sumBy(this.losses.otherLosses, 'heatLoss');
-    this.totalCoolingLoss = _.sumBy(this.losses.coolingLosses, 'heatLoss');
-    this.totalOpeningLoss = _.sumBy(this.losses.openingLosses, 'heatLoss');
-    this.totalFixtureLoss = _.sumBy(this.losses.fixtureLosses, 'heatLoss');
+    this.totalWallLoss = 0;
+    this.totalAtmosphereLoss = 0;
+    this.totalAtmosphereLoss = 0;
+    this.totalCoolingLoss = 0;
+    this.totalOpeningLoss = 0;
+    this.totalFixtureLoss = 0;
+    this.totalLeakageLoss = 0;
 
-    this.totalLeakageLoss = _.sumBy(this.losses.leakageLosses, 'heatLoss');
-    this.totalExtSurfaceLoss = _.sumBy(this.losses.extendedSurfaces, 'heatLoss');
-    this.totalChargeMaterialLoss = (_.sumBy(this.losses.chargeMaterials, 'gasChargeMaterial.heatRequired') + _.sumBy(this.losses.chargeMaterials, 'liquidChargeMaterial.heatRequired') + _.sumBy(this.losses.chargeMaterials, 'solidChargeMaterial.heatRequired'))
+    if(this.losses.wallLosses != null){
+      this.totalWallLoss = this.phastService.sumWallLosses(this.losses.wallLosses) / 1000000;
+    }
 
+    if(this.losses.wallLosses != null) {
+      this.totalAtmosphereLoss = _.sumBy(this.losses.atmosphereLosses, 'heatLoss') / 1000000;
+    }
+
+    if(this.losses.otherLosses != null) {
+      this.totalOtherLoss = _.sumBy(this.losses.otherLosses, 'heatLoss') / 1000000;
+    }
+
+    if(this.losses.coolingLosses != null) {
+      this.totalCoolingLoss = _.sumBy(this.losses.coolingLosses, 'heatLoss') / 1000000;
+    }
+
+    if(this.losses.openingLosses != null) {
+      this.totalOpeningLoss = _.sumBy(this.losses.openingLosses, 'heatLoss') / 1000000;
+    }
+
+    if(this.losses.fixtureLosses != null) {
+      this.totalFixtureLoss = _.sumBy(this.losses.fixtureLosses, 'heatLoss') / 1000000;
+    }
+
+    if(this.losses.leakageLosses != null) {
+      this.totalLeakageLoss = _.sumBy(this.losses.leakageLosses, 'heatLoss') / 1000000;
+    }
+
+    if(this.losses.extendedSurfaces != null) {
+      this.totalExtSurfaceLoss = _.sumBy(this.losses.extendedSurfaces, 'heatLoss') / 1000000;
+    }
+
+    this.totalAtmosphereLoss = 0;
+    if(this.losses.chargeMaterials != null) {
+      if(_.sumBy(this.losses.chargeMaterials, 'gasChargeMaterial.heatRequired') != null){
+        this.totalChargeMaterialLoss += (_.sumBy(this.losses.chargeMaterials, 'gasChargeMaterial.heatRequired'));
+      }
+      if(_.sumBy(this.losses.chargeMaterials, 'liquidChargeMaterial.heatRequired') != null){
+        this.totalChargeMaterialLoss += (_.sumBy(this.losses.chargeMaterials, 'liquidChargeMaterial.heatRequired'));
+      }
+      if(_.sumBy(this.losses.chargeMaterials, 'solidChargeMaterial.heatRequired') != null){
+        this.totalChargeMaterialLoss += (_.sumBy(this.losses.chargeMaterials, 'solidChargeMaterial.heatRequired'));
+      }
+
+      this.totalChargeMaterialLoss /= 1000000;
+    }
+
+    this.totalInput = this.totalWallLoss + this.totalAtmosphereLoss + this.totalOtherLoss + this.totalCoolingLoss + this.totalOpeningLoss + this.totalFixtureLoss + this.totalLeakageLoss + this.totalExtSurfaceLoss + this.totalChargeMaterialLoss;
   }
 
-  closeSankey(location) {
-    // Remove Sankey
-    d3.select(location).selectAll('svg').remove();
-  }
-
-  zoom(location) {
-    d3.select(location).selectAll('svg')
-      .attr("width", "100%")
-      .attr("height", "700");
-  }
-
-  unZoom() {
-    svg
-      .attr("width", "900")
-      .attr("height", "600")
-  }
-
-  makeSankey(location) {
-    // Sankey will not be made if even a single loss has not been entered
-    if (this.totalWallLoss != null && this.totalAtmosphereLoss != null && this.totalOtherLoss != null && this.totalCoolingLoss != null && this.totalOpeningLoss != null
-      && this.totalFixtureLoss != null && this.totalLeakageLoss != null && this.totalExtSurfaceLoss != null && this.totalChargeMaterialLoss != null) {
-      this.sankey(location);
+  makeSankey() {
+    if(this.totalInput > 0){
+      this.sankey();
     }
   }
 
-  sankey(location) {
+  sankey() {
 
     // Remove  all Sankeys
-    d3.select(location).selectAll('svg').remove();
+    d3.select(this.location).selectAll('svg').remove();
 
     var nodes = [
-      /*0*/{ name: "Input", value: 20000000, displaySize: this.baseSize, width: 300, x: 150, y: 0, input: true, usefulOutput: false, inter: false, top: false },
-      /*1*/{ name: "inter1", value: 0, displaySize: 0, width: 0, x: 300, y: 0, input: false, usefulOutput: false, inter: true, top: true },
-      /*2*/{ name: "Flue Gas Losses", value: 0, displaySize: 0, width: 0, x: 480, y: 0, input: false, usefulOutput: false, inter: false, top: true },
-      /*3*/{ name: "inter2", value: 0, displaySize: 0, width: 0, x: 410, y: 0, input: false, usefulOutput: false, inter: true, top: false },
-      /*4*/{ name: "Atmosphere Losses", value: this.totalAtmosphereLoss, displaySize: 0, width: 0, x: 550, y: 0, input: false, usefulOutput: false, inter: false, top: false },
-      /*5*/{ name: "inter3", value: 0, displaySize: 0, width: 0, x: 590, y: 0, input: false, usefulOutput: false, inter: true, top: true },
-      /*6*/{ name: "Other Losses", value: this.totalOtherLoss, displaySize: 0, width: 0, x: 720, y: 0, input: false, usefulOutput: false, inter: false, top: true },
-      /*7*/{ name: "inter4", value: 0, displaySize: 0, width: 0, x: 700, y: 0, input: false, usefulOutput: false, inter: true, top: false },
-      /*8*/{ name: "Water Cooling Losses", value: this.totalCoolingLoss, displaySize: 0, width: 0, x: 840, y: 0, input: false, usefulOutput: false, inter: false, top: false },
-      /*9*/{ name: "inter5", value: 0, displaySize: 0, width: 0, x: 810, y: 0, input: false, usefulOutput: false, inter: true, top: true },
-      /*10*/{ name: "Wall Losses", value: this.totalWallLoss, displaySize: 0, width: 0, x: 970, y: 0, input: false, usefulOutput: false, inter: false, top: true },
-      /*11*/{ name: "inter6", value: 0, displaySize: 0, width: 0, x: 920, y: 0, input: false, usefulOutput: false, inter: true, top: false },
-      /*12*/{ name: "Opening Losses", value: this.totalOpeningLoss, displaySize: 0, width: 0, x: 1090, y: 0, input: false, usefulOutput: false, inter: false, top: false },
-      /*13*/{ name: "inter7", value: 0, displaySize: 0, width: 0, x: 1060, y: 0, input: false, usefulOutput: false, inter: true, top: true },
-      /*14*/{ name: "Fixture/Conveyor Losses", value: this.totalFixtureLoss, displaySize: 0, width: 0, x: 1230, y: 0, input: false, usefulOutput: false, inter: false, top: true },
-      /*15*/{ name: "inter8", value: 0, displaySize: 0, width: 0, x: 1170, y: 0, input: false, usefulOutput: false, inter: true, top: false },
-      /*16*/{ name: "Leakage Losses", value: this.totalLeakageLoss, displaySize: 0, width: 0, x: 1330, y: 0, input: false, usefulOutput: false, inter: false, top: false },
-      /*17*/{ name: "inter9", value: 0, displaySize: 0, width: 0, x: 1310, y: 0, input: false, usefulOutput: false, inter: true, top: true },
-      /*18*/{ name: "External SurfaceLosses", value: this.totalExtSurfaceLoss, displaySize: 0, width: 0, x: 1480, y: 0, input: false, usefulOutput: false, inter: false, top: true },
-      /*19*/{ name: "inter10", value: 0, displaySize: 0, width: 0, x: 1440, y: 0, input: false, usefulOutput: false, inter: true, top: false },
-      /*20*/{ name: "Charge Material Losses", value: this.totalChargeMaterialLoss, displaySize: 0, width: 0, x: 1580, y: 0, input: false, usefulOutput: false, inter: false, top: false },
-      /*21*/{ name: "Useful Output", value: 0, displaySize: 0, width: 0, x: 1650, y: 0, input: false, usefulOutput: true, inter: false, top: false }
+      /*0*/{ name: "Input", value: this.totalInput, displaySize: this.baseSize, width: 300, x: 200, y: 0, input: true, usefulOutput: false, inter: false, top: false, units: "MMBtu/hr" },
+      /*1*/{ name: "inter1", value: 0, displaySize: 0, width: 0, x: 350, y: 0, input: false, usefulOutput: false, inter: true, top: true, units: "MMBtu/hr" },
+      //TODO Flue Gass still need to get loss value
+      /*2*/{ name: "Flue Gas Losses", value: 0, displaySize: 0, width: 0, x: 600, y: 0, input: false, usefulOutput: false, inter: false, top: true, units: "MMBtu/hr" },
+      /*3*/{ name: "inter2", value: 0, displaySize: 0, width: 0, x: 600, y: 0, input: false, usefulOutput: false, inter: true, top: false, units: "MMBtu/hr" },
+      /*4*/{ name: "Atmosphere Losses", value: this.totalAtmosphereLoss , displaySize: 0, width: 0, x: 850, y: 0, input: false, usefulOutput: false, inter: false, top: false, units: "MMBtu/hr" },
+      /*5*/{ name: "inter3", value: 0, displaySize: 0, width: 0, x: 850, y: 0, input: false, usefulOutput: false, inter: true, top: true, units: "MMBtu/hr" },
+      /*6*/{ name: "Other Losses", value: this.totalOpeningLoss, displaySize: 0, width: 0, x: 1100, y: 0, input: false, usefulOutput: false, inter: false, top: true, units: "MMBtu/hr" },
+      /*7*/{ name: "inter4", value: 0, displaySize: 0, width: 0, x: 1100, y: 0, input: false, usefulOutput: false, inter: true, top: false, units: "MMBtu/hr" },
+      /*8*/{ name: "Water Cooling Losses", value: this.totalCoolingLoss, displaySize: 0, width: 0, x: 1350, y: 0, input: false, usefulOutput: false, inter: false, top: false, units: "MMBtu/hr" },
+      /*9*/{ name: "inter5", value: 0, displaySize: 0, width: 0, x: 1350, y: 0, input: false, usefulOutput: false, inter: true, top: true, units: "MMBtu/hr" },
+      /*10*/{ name: "Wall Losses", value: this.totalWallLoss, displaySize: 0, width: 0, x: 1600, y: 0, input: false, usefulOutput: false, inter: false, top: true, units: "MMBtu/hr" },
+      /*11*/{ name: "inter6", value: 0, displaySize: 0, width: 0, x: 1600, y: 0, input: false, usefulOutput: false, inter: true, top: false, units: "MMBtu/hr" },
+      /*12*/{ name: "Opening Losses", value: this.totalOpeningLoss, displaySize: 0, width: 0, x: 1850, y: 0, input: false, usefulOutput: false, inter: false, top: false, units: "MMBtu/hr" },
+      /*13*/{ name: "inter7", value: 0, displaySize: 0, width: 0, x: 1850, y: 0, input: false, usefulOutput: false, inter: true, top: true, units: "MMBtu/hr" },
+      /*14*/{ name: "Fixture/Conveyor Losses", value: this.totalFixtureLoss, displaySize: 0, width: 0, x: 2100, y: 0, input: false, usefulOutput: false, inter: false, top: true, units: "MMBtu/hr" },
+      /*15*/{ name: "inter8", value: 0, displaySize: 0, width: 0, x: 2100, y: 0, input: false, usefulOutput: false, inter: true, top: false, units: "MMBtu/hr" },
+      /*16*/{ name: "Leakage Losses", value: this.totalLeakageLoss, displaySize: 0, width: 0, x: 2350, y: 0, input: false, usefulOutput: false, inter: false, top: false, units: "MMBtu/hr" },
+      /*17*/{ name: "inter9", value: 0, displaySize: 0, width: 0, x: 2350, y: 0, input: false, usefulOutput: false, inter: true, top: true, units: "MMBtu/hr" },
+      /*18*/{ name: "External Surface Losses", value: this.totalExtSurfaceLoss, displaySize: 0, width: 0, x: 2600, y: 0, input: false, usefulOutput: false, inter: false, top: true, units: "MMBtu/hr" },
+      /*21*/{ name: "Useful Output", value: 0, displaySize: 0, width: 0, x: 2800, y: 0, input: false, usefulOutput: true, inter: false, top: false, units: "MMBtu/hr" }
     ];
 
     var links = [
@@ -151,18 +171,15 @@ export class SankeyComponent implements OnInit {
       { source: 15, target: 17 },
       // interNode9 to External and interNode10
       { source: 17, target: 18 },
-      { source: 17, target: 19 },
-      // interNode10 to Charge and usefulOutput
-      { source: 19, target: 20 },
-      { source: 19, target: 21 },
+      { source: 17, target: 19 }
     ];
 
-    svg = d3.select(location).append('svg')
+    svg = d3.select(this.location).append('svg')
       .call(() => {
         this.calcSankey(nodes);
       })
-      .attr("width", "900")
-      .attr("height", "600")
+      .attr("width", "100%")
+      .attr("height", "80%")
       .attr("viewBox", "0 0 " + width + " " + height)
       .attr("preserveAspectRatio", "xMinYMin")
       .style("border", "1px solid black")
@@ -237,7 +254,7 @@ export class SankeyComponent implements OnInit {
       })
       .attr("dy", (d) => {
         if (d.input || d.usefulOutput) {
-          return d.y + (d.displaySize / 2);
+          return d.y + (d.displaySize / 2) - 15;
         }
         else {
           if (d.top) {
@@ -273,7 +290,7 @@ export class SankeyComponent implements OnInit {
       })
       .attr("dy", function (d) {
         if (d.input || d.usefulOutput) {
-          return d.y + (d.displaySize / 2) + 95;
+          return d.y + (d.displaySize / 2) + 80;
         }
         else {
           if (d.top) {
@@ -286,7 +303,7 @@ export class SankeyComponent implements OnInit {
       })
       .text(function (d) {
         if (!d.inter) {
-          return "Btu/Hr.";
+          return d.units;
         }
       })
       .style("font-size", "30px");
@@ -294,131 +311,34 @@ export class SankeyComponent implements OnInit {
     nodes.forEach((d, i) => {
       var node_val = d, i = i;
       if (!node_val.inter) {
-        svg.append('foreignObject')
-          .attr("id", "inputObject")
+        svg.append("text")
           .attr("x", function () {
             if (node_val.input) {
-              return node_val.x - 150;
+              return node_val.x - 130;
             }
             else if (node_val.usefulOutput) {
-              return d.x + (d.displaySize * .7) + 30;
+              return d.x + (d.displaySize * .7) + 50;
             }
             else {
-              return node_val.x - 70;
+              return node_val.x - 50;
             }
           })
           .attr("y", function () {
             if (node_val.input || node_val.usefulOutput) {
-              return (node_val.y + (node_val.displaySize / 2)) + 10;
+              return (node_val.y + (node_val.displaySize / 2)) + 35;
             }
             else if (node_val.top) {
-              return node_val.y - 100;
+              return node_val.y - 70;
             }
             else {
-              return node_val.y + 80;
+              return node_val.y + 110;
             }
           })
-          .attr("width", 100)
-          .attr("height", 50)
-          .append("xhtml:sankey-diagram")
-          .append("input")
-          .attr("id", ("inputBox" + i))
-          .data(nodes)
-          .attr("type", "text")
-          .attr("id", node_val.name)
-          .attr("value", function () {
+          .text(function () {
             var format = d3.format(",.3f");
             return format(node_val.value);
           })
-          .style("width", "140px")
           .style("font-size", "30px");
-        /*
-        .on("change", (inputBox) => {
-
-          console.log("value: " + inputBox.value);
-          if (isNaN(parseFloat(inputBox.value))) {
-            nodes[i].value = 0;
-          }
-          else {
-            inputBox.value = inputBox.value.toString();
-            nodes[i].value = parseFloat(inputBox.value.replace(new RegExp(",", "g"), ""));
-          }
-
-          nodes = this.calcSankey(nodes);
-          console.log("nodes after: ");
-          console.log(nodes);
-          this.updateColors(nodes, links);
-
-          link
-            .attr("d", (d) => {
-              return this.makeLinks(d, nodes);
-            })
-            .style("stroke-width", (d) => {
-              //returns a links width equal to the target's value
-              return nodes[d.target].displaySize;
-            })
-            .attr("marker-end", (d) => {
-              return this.getEndMarker(d, nodes);
-            });
-          link
-            .style("stroke", (d, i) => {
-              return "url(" + window.location + "#linear-gradient-" + i + ")"
-            });
-          nodes_text
-            .attr("dx", function(d){
-              if(d.input){
-                return d.x - 70;
-              }
-              else if(d.usefulOutput){
-                return d.x + (d.displaySize*.7)  + 100;
-              }
-              else {
-                return d.x;
-              }
-            })
-            .attr("dy", function(d){
-              if(d.input || d.usefulOutput){
-                return d.y + (d.displaySize/2);
-              }
-              else {
-                if (d.top) {
-                  return d.y - 100;
-                }
-                else {
-                  return d.y + 60;
-                }
-              }
-            });
-          nodes_units
-            .attr("dx", (d) => {
-              if(d.input){
-                return d.x - 70;
-              }
-              else if(d.usefulOutput){
-                return d.x + (d.displaySize*.7)  + 100;
-              }
-              else {
-                return d.x;
-              }
-            })
-            .attr("dy", function(d){
-              if(d.input || d.usefulOutput){
-                return d.y + (d.displaySize/2) + 60;
-              }
-              else {
-                if (d.top) {
-                  return d.y - 30;
-                }
-                else {
-                  return d.y + 130;
-                }
-              }
-            });
-          this.changePlaceHolders(nodes);
-
-
-        });
-        */
       }
     });
 
@@ -453,6 +373,10 @@ export class SankeyComponent implements OnInit {
           if (d.usefulOutput) {
             d.value = (nodes[i - 2].value - nodes[i - 1].value);
             d.displaySize = this.calcDisplayValue(this.baseSize, d.value, nodes[0].value);
+
+            //Since this is a static diagram this can be place, but if the final output is off take out the bellow code.
+            alterVal += (nodes[i - 2].displaySize - d.displaySize);
+
             d.y = d.y + alterVal;
           }
           else {
@@ -750,10 +674,9 @@ export class SankeyComponent implements OnInit {
     var furnace = svg.append("g")
       .append("polygon")
       .attr("points", function () {
-        return (480 - 100) + "," + ((height / 2) - 500) + "," + (480 - 150) + "," + ((height / 2) - 500) + "," + (480 - 150) + "," + ((height / 2) - 350) + "," + 250 + "," + ((height / 2) - 350) + "," + 250 + "," + ((height / 2) + 350) + "," + 1400 + "," + ((height / 2) + 350) + "," + 1400 + "," + ((height / 2) - 350) + "," + (480 + 150) + "," + ((height / 2) - 350) + "," + (480 + 150) + "," + ((height / 2) - 500) + "," + (480 + 100) + "," + ((height / 2) - 500) + "," + (480 + 100) + "," + ((height / 2) - 300) + "," + (1400 - 50) + "," + ((height / 2) - 300) + "," + (1400 - 50) + "," + ((height / 2) + 300) + "," + 300 + "," + ((height / 2) + 300) + "," + 300 + "," + ((height / 2) - 300) + "," + (480 - 100) + "," + ((height / 2) - 300) + "," + (480 - 100) + "," + ((height / 2) - 500);
+        return (580 - 100) + "," + ((height / 2) - 500) + "," + (580 - 150) + "," + ((height / 2) - 500) + "," + (580 - 150) + "," + ((height / 2) - 350) + "," + 250 + "," + ((height / 2) - 350) + "," + 250 + "," + ((height / 2) + 350) + "," + 2700 + "," + ((height / 2) + 350) + "," + 2700 + "," + ((height / 2) - 350) + "," + (580 + 150) + "," + ((height / 2) - 350) + "," + (580 + 150) + "," + ((height / 2) - 500) + "," + (580 + 100) + "," + ((height / 2) - 500) + "," + (580 + 100) + "," + ((height / 2) - 300) + "," + (2700 - 50) + "," + ((height / 2) - 300) + "," + (2700 - 50) + "," + ((height / 2) + 300) + "," + 300 + "," + ((height / 2) + 300) + "," + 300 + "," + ((height / 2) - 300) + "," + (580 - 100) + "," + ((height / 2) - 300) + "," + (580 - 100) + "," + ((height / 2) - 500);
       })
       .style("fill", "#bae4ce")
       .style("stroke", "black");
   }
-
 }

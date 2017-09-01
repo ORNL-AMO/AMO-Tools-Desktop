@@ -29,10 +29,12 @@ export class ExploreOpportunitiesSankeyComponent implements OnInit, OnChanges {
   firstChange: boolean = true;
 
   //Max width of Sankey
+
   baseSize: number = 50;
 
 
   selectedView: string = 'Baseline';
+
 
   constructor(private convertUnitsService: ConvertUnitsService) {
   }
@@ -70,6 +72,8 @@ export class ExploreOpportunitiesSankeyComponent implements OnInit, OnChanges {
   }
 
   sankey(location, results) {
+
+    this.baseSize = 50 * (results.motor_power/this.baselineResults.motor_power);
 
     // Remove  all Sankeys
     d3.select(location).selectAll('svg').remove();
@@ -713,6 +717,7 @@ export class ExploreOpportunitiesSankeyComponent implements OnInit, OnChanges {
       });
     () => this.changePlaceHolders(nodes);
   }
+
 
   calcLosses(results) {
     var motorShaftPower;
