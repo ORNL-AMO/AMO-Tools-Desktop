@@ -1,0 +1,17 @@
+.changeAdd{
+    pointer-events: none;
+}
+
+.setup-dialog{
+    width: 100%;
+    height: 75%;
+    position: absolute;
+    left: 0;
+    z-index: 10;
+    background: white;
+    padding: 40px;
+}
+
+.modal-open {
+    z-index: initial !important;
+}

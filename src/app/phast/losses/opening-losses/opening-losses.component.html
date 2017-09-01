@@ -1,0 +1,39 @@
+<!--<div class="section-header">
+  <h3 class="pull-left">Opening Losses</h3>
+  <button class="btn btn-secondary pull-right" (click)="addLoss()">+ Add Opening Loss</button>
+</div>-->
+
+<div class="no-data no-data-phast" *ngIf="_openingLosses.length == 0" (click)="addLoss()">
+  <h3>You have no Opening Losses</h3>
+  <h4>Add some now.</h4>
+</div>
+
+<div class="card-form" *ngFor="let loss of _openingLosses; let lossIndex = index;">
+  <div class="row">
+    <div class="col-12">
+      <div class="pull-left">
+        <h6 *ngIf="isBaseline">{{loss.name}}</h6>
+        <h6 *ngIf="!isBaseline">{{loss.name}} Modification</h6>
+      </div>
+      <button *ngIf="isBaseline" class="close pull-right" aria-label="Close" (click)="removeLoss(lossIndex)">
+      <span aria-hidden="true">&times;</span>
+    </button>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12">
+      <app-opening-losses-form (changeField)="changeField($event)" [(openingLossesForm)]="loss.form" (calculate)="calculate(loss)"
+        [baselineSelected]="baselineSelected" (saveEmit)="saveLosses()" [lossIndex]="lossIndex"></app-opening-losses-form>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12">
+      <div class="form-group">
+        <label class="small">Radiation Losses</label>
+        <div class="small text-center">
+          {{loss.totalOpeningLosses | number:'2.2-2'}} Btu/hr
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

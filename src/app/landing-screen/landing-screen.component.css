@@ -1,0 +1,75 @@
+.landing * {
+	box-sizing: border-box;
+}
+.landing {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-direction: column;
+}
+	.landing h1, .landing h2 {
+		width: 70%;
+	}
+	.landing h1 {
+		text-align: center;
+		color: #333;
+		font-size: 32px;
+    	margin-top: 7%;
+	}
+	.landing h2 {
+		margin: 0;
+		font-size: 24px;
+		font-weight: normal;
+		text-align: center;
+		color: #717171;
+	}
+	.landing h3 {
+		color: #333;
+		font-size: 22px;
+		text-align: center;
+		font-weight: normal;
+	}
+	.landing p {
+		font-size: 16px;
+	}
+	.landing a {
+		display: block;
+		margin-top: 14px;
+	}
+
+.landing > ul {
+	margin: 60px 0 20px;
+	padding: 0;
+    background: #fff;
+    -webkit-box-shadow: 0px 2px 5px -1px rgba(0,0,0,0.28);
+	-moz-box-shadow: 0px 2px 5px -1px rgba(0,0,0,0.28);
+	box-shadow: 0px 2px 5px -1px rgba(0,0,0,0.28);
+	border: #ddd solid 1px;
+	border-radius: 4px;
+	display: flex;
+}
+.landing li {
+	list-style: none;
+	padding: 0;
+}
+	.landing > ul > li {
+		width: 50%;
+		padding: 20px;
+	}
+	.landing > ul > li:first-of-type {
+		border-right: #ddd solid 1px;
+	}
+	.landing > ul > li > div {
+		display: inline-block;
+		width: 30%;
+	}
+
+.landing .help {
+    text-align: center;
+    margin-top: 60px;
+    padding-top: 60px;
+    border-top: #ddd solid 1px;
+}
+.landing .nav-item span:hover {
+	cursor: pointer;
+}

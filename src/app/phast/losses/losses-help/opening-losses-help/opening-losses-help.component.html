@@ -1,0 +1,142 @@
+<div class="help-header">
+
+  <h3>Opening Losses Help</h3>
+  <p>Enter loss data</p>
+  <p class="text-muted">
+    <span class="fa fa-youtube-play"></span> Watch tutorial on gathering opening loss data.
+  </p>
+
+</div>
+
+
+<div class="help-content">
+  <div class="card" *ngIf="currentField == 'openingType'">
+    <div class="card-header">
+      Opening Type
+    </div>
+    <div class="card-block">
+      <label>Description:</label>
+      <ul>
+        <li>Round</li>
+        <li>Rectangular (Square)</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card" *ngIf="currentField == 'numberOfOpenings'">
+    <div class="card-header">
+      Number of Openings of Same Size and Shape
+    </div>
+    <div class="card-block">
+      <label>Description:</label>
+      <p>
+        Give number of openings of the same shape and size.
+      </p>
+    </div>
+  </div>
+
+  <div class="card" *ngIf="currentField == 'wallThickness'">
+    <div class="card-header">
+      Furnace Wall Thickness (Inch)
+    </div>
+    <div class="card-block">
+      <label>Description:</label>
+      <p>
+        Value of wall thickness (insulation - refractory etc.) at the location of openings in the wall or doors etc.
+        Use actual measurements if possible or information from the current furnace drawings.
+      </p>
+    </div>
+  </div>
+
+  <div class="card" *ngIf="currentField == 'lengthOfOpening'">
+    <div class="card-header">
+      Length of Openings (Inch) Or Diameter of Openings (Inch)
+    </div>
+    <div class="card-block">
+      <label>Description:</label>
+      <p>
+        Value of length of the openings for square or rectangular openings in the wall or doors etc. Use actual
+        measurements if possible or information from the current furnace drawings. Use value for a typical opening or
+        average value. This value is used only to calculate view factor and not for calculation of heat loss area.
+      </p>
+    </div>
+  </div>
+
+  <div class="card" *ngIf="currentField == 'heightOfOpening'">
+    <div class="card-header">
+      Height of Openings (Inch)
+    </div>
+    <div class="card-block">
+      <label>Description:</label>
+      <p>
+        Value of height of the openings for square or rectangular openings in the wall or doors etc. Use actual
+        measurements if possible or information from the current furnace drawings. Use value for a typical opening or
+        average value. This value is used only to calculate view factor and not for calculation of heat loss area.
+      </p>
+    </div>
+  </div>
+
+  <div class="card" *ngIf="currentField == 'viewFactor'">
+    <div class="card-header">
+      View Factor - User defined if known or from chart
+    </div>
+    <div class="card-block">
+      <label>Description:</label>
+    </div>
+  </div>
+
+  <div class="card" *ngIf="currentField == 'insideTemp'">
+    <div class="card-header">
+      Avg. Zone or Radiation Source Temp. (&#8457;)
+    </div>
+    <div class="card-block">
+      <label>Description:</label>
+      <p>
+        Use the furnace zone temperature at the location of the openings. This can be obtained from furnace temperature
+        recorder-indicator. Use an 'average" value of temperature if the openings are in different zones or at
+        different locations.
+      </p>
+    </div>
+  </div>
+
+  <div class="card" *ngIf="currentField == 'ambientTemp'">
+    <div class="card-header">
+      Ambient Temp. (&#8457;)
+    </div>
+    <div class="card-block">
+      <label>Description:</label>
+      <p>
+        Temperature of the area outside the furnace where the openings are located. In most cases this is the ambient
+        temperature in the area where the furnace and openings are located.
+      </p>
+    </div>
+  </div>
+
+  <div class="card" *ngIf="currentField == 'emissivity'">
+    <div class="card-header">
+      Emissivity of the Source (Typical - 0.9)
+    </div>
+    <div class="card-block">
+      <label>Description:</label>
+      <p>
+        Emissivity of the radiation source (usually interior of the furnace). The default or suggested value is 0.9
+      </p>
+    </div>
+  </div>
+
+  <div class="card" *ngIf="currentField == 'percentTimeOpen'">
+    <div class="card-header">
+      % of Time Open
+    </div>
+    <div class="card-block">
+      <label>Description:</label>
+      <p>
+        This represents the time during which the furnace interior is exposed or open to the ambient and heat is lost
+        by radiation. it is expressed as percentage of the total operating time or cycle time. Typical examples
+        including opening of a door for charging and discharging load or opening of a damper for part of the operating
+        time.
+      </p>
+    </div>
+  </div>
+
+</div>

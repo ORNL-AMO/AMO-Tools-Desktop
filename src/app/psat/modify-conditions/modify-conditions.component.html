@@ -1,0 +1,97 @@
+<nav class="hide-print">
+  <app-modify-conditions-tabs (changeTab)="changeTab($event)" [modifyTab]="modifyTab"></app-modify-conditions-tabs>
+</nav>
+
+<div class="modify-conditions" *ngIf="settings">
+
+  <!-- Baseline -->
+  <div class="modification baseline" (click)="togglePanel(baselineSelected)" [ngClass]="{'disabled': baselineSelected == false, 'modal-open': isModalOpen == true}">
+    <div class="header">
+      <h3>Baseline</h3>
+    </div>
+    <div class="losses-container">
+      <!--<app-system-basics *ngIf="modifyTab == 'system-basics'"></app-system-basics>-->
+      <app-pump-fluid *ngIf="modifyTab == 'pump-fluid'" [selected]="baselineSelected" [saveClicked]="saveClicked" [(psat)]="psat"
+        (saved)="save()" [settings]="settings" [baseline]="true"></app-pump-fluid>
+      <app-motor *ngIf="modifyTab == 'motor'" [selected]="baselineSelected" [saveClicked]="saveClicked" [(psat)]="psat" (saved)="save()"
+        [settings]="settings" [baseline]="true"></app-motor>
+      <app-field-data *ngIf="modifyTab == 'field-data'" [selected]="baselineSelected" [saveClicked]="saveClicked" [(psat)]="psat"
+        (saved)="save()" [settings]="settings" (saved)="save()" [settings]="settings" (openHeadTool)="modalOpen()" (closeHeadTool)="modalClose()"
+        [baseline]="true"></app-field-data>
+    </div>
+  </div>
+
+
+  <!-- Modifications Start -->
+  <div class="modification" (click)="togglePanel(modifiedSelected)" *ngIf="_modifications.length != 0" [ngClass]="{'disabled': modifiedSelected == false, 'modal-open': isModalOpen == true}">
+
+    <!-- Modification Header -->
+    <div class="header" *ngIf="!editModification">
+      <h3 *ngIf="_modifications[modificationIndex]">{{_modifications[modificationIndex].psat.name}}</h3>
+      <button class="pull-right" (click)="toggleDropdown()" [disabled]="!modifiedSelected">
+<!--         <span class="fa fa-caret-down" *ngIf="!isDropdownOpen"></span>
+        <span class="fa fa-caret-up" *ngIf="isDropdownOpen"></span> -->
+
+        <span class="" *ngIf="!isDropdownOpen">Change / Add</span>
+        <span class="" *ngIf="isDropdownOpen">Cancel</span>
+      </button>
+    </div>
+
+    <!-- Forms -->
+    <div class="losses-container" *ngIf="!isDropdownOpen">
+
+      <!-- Notes -->
+      <app-modify-conditions-notes [(notes)]="_modifications[modificationIndex].notes" [currentTab]="modifyTab"></app-modify-conditions-notes>
+
+      <!--<app-system-basics *ngIf="modifyTab == 'system-basics'"></app-system-basics>-->
+      <app-pump-fluid *ngIf="modifyTab == 'pump-fluid'" [selected]="modifiedSelected" [saveClicked]="saveClicked" [(psat)]="_modifications[modificationIndex].psat"
+        (saved)="save()" [settings]="settings"></app-pump-fluid>
+      <app-motor *ngIf="modifyTab == 'motor'" [selected]="modifiedSelected" [saveClicked]="saveClicked" [(psat)]="_modifications[modificationIndex].psat"
+        (saved)="save()" [settings]="settings"></app-motor>
+      <app-field-data *ngIf="modifyTab == 'field-data'" [saveClicked]="saveClicked" [(psat)]="_modifications[modificationIndex].psat"
+        [selected]="modifiedSelected" (saved)="save()" [settings]="settings" (openHeadTool)="modalOpen()" (closeHeadTool)="modalClose()"></app-field-data>
+
+    </div>
+
+    <!-- Modifications List -->
+    <div class="modifications-list" *ngIf="isDropdownOpen">
+      <ul *ngIf="!showEditModification">
+        <li *ngFor="let modification of _modifications">
+          <button>
+          <a (click)="selectModification(modification)">
+            {{modification.psat.name}}
+          </a>
+          <a class="pull-right" (click)="dispEditModification(modification)">Edit / Delete</a>
+          </button>
+        </li>
+        <li class="add-modification">
+          <button (click)="addModification()">Add Modified Condition</button>
+          <p>Data will be copied from <br/> your baseline operating condition</p>
+        </li>
+      </ul>
+      <div class="losses-container edit-modification" *ngIf="showEditModification && editModification">
+        <app-edit-condition-properties [modification]="editModification" (deleteMod)="deleteModification()" (saveMod)="save()" (cancelEdit)="cancelEdit()"></app-edit-condition-properties>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- No content message -->
+  <div class="no-data" *ngIf="_modifications.length == 0" (click)="addModification()">
+    <h3>Now that you have setup your system and have baseline information, create duplicate baseline conditions to find efficiency
+      opportunities.
+    </h3>
+    <button type="button">Add Modified Condition</button>
+    <p>Data will be copied from your current baseline condition.</p>
+  </div>
+
+  <!-- Help Panel -->
+  <app-help-panel [psat]="psat" [currentTab]="modifyTab" [settings]="settings"></app-help-panel>
+
+</div>
+
+<!--<div class="row justify-content-center report-container" *ngIf="modifyTab == 'report' && settings">
+  <div class="col-10 report-column">
+    <app-psat-report [psat]="psat" [settings]="settings" [assessment]="assessment" [emitPrint]="emitPrint" [inPsat]="true"></app-psat-report>
+  </div>
+</div>-->

@@ -1,0 +1,24 @@
+<div class="list-card">
+
+  <input type="checkbox" [(ngModel)]="isChecked" (change)="setDelete()"/>
+  <div class="assessment-name">
+    <a (click)="goToAssessment(assessment)">{{assessment.name}}</a>
+    <span>Box Type Annealing Furnace</span>
+  </div>
+
+  <div class="assessment-details">
+    Assessment details go here
+  </div>
+
+  <button type="button">Menu</button>
+  <ul class="menu">
+    <li><a href=""></a></li>
+    <li><a href=""></a></li>
+    <li><a href=""></a></li>
+    <li><a href=""></a></li>
+  </ul>
+
+  <!-- <div class="last-updated">{{assessment.date | date}}</div> -->
+  <div class="last-updated">Last updated {{assessment.modifiedDate | date }}</div>
+
+</div>

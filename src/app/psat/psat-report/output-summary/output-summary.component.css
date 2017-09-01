@@ -1,0 +1,55 @@
+@media print {
+    tr{
+        border-bottom: 2px solid black;
+    }
+    .show-print{
+        display: inline !important;
+    }
+    .hide-print{
+        display: none !important;
+    }
+
+    .chart-row{
+        padding: 0px !important;
+    }
+}
+
+.show-print{
+    display: none;
+}
+
+
+.section-header{
+    font-size: 16px !important;
+}
+
+/*th{
+    text-align: center;
+}
+
+td{
+    text-align: center;
+    vertical-align: middle;
+}*/
+
+.positive-savings{
+    color: #27AE60;
+}
+
+.negative-savings{
+	color: red;
+}
+
+.chart-row{
+    margin: 0;
+    padding: 15px;
+}
+
+.max-savings{
+    border: solid 4px #27AE60;
+}
+
+.selected-modification{
+    box-shadow: 0px 0px 6px 0px #27AE60;
+    z-index: 2;
+}

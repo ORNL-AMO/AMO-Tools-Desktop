@@ -1,0 +1,104 @@
+
+
+<div class="help-header">
+
+  <h3>Wall Losses Help</h3>
+  <p>Enter loss data</p>
+  <p class="text-muted">
+    <span class="fa fa-youtube-play"></span> Watch tutorial on gathering wall loss data.
+  </p>
+
+</div>
+
+
+<div class="help-content">
+
+
+  <div class="card" *ngIf="currentField == 'avgSurfaceTemp'">
+    <div class="card-header">
+      Average Surface Temperature
+    </div>
+    <div class="card-block">
+      <label>Description:</label>
+      <p>Average temperature for the exposed wall surfaces. The average value should be calculated based on actual
+        measurement at several locations for the furnace outside areas. The actual temperatures can vary over a wide
+        range and care should be taken to use weighted average. use infra-red radiation temperature measurement (with
+        proper emissivity correction) whenever possible.
+      </p>
+    </div>
+  </div>
+
+
+  <div class="card" *ngIf="currentField == 'ambientTemp'">
+    <div class="card-header">
+      Ambient Temperature
+    </div>
+    <div class="card-block">
+      <label>Description:</label>
+      <p>
+        Temperature of the area where the equipment is located. In some cases it may be necessary to take temperature
+        reading at the bottom or top of the equipment to make sure that the temperature is not much higher than the
+        room-ambient temperature. Use weighted average if the temperature readings vary too much.
+      </p>
+    </div>
+  </div>
+
+  <div class="card" *ngIf="currentField == 'windVelocity'">
+    <div class="card-header">
+      Wind Velocity (mph)
+    </div>
+    <div class="card-block">
+      <label>Description:</label>
+      <p>
+        This is average wind velocity over the entire surface. For most indoor installation this can be assumed to be
+        zero. For outdoor installations it is necessary to measure wind velocity or use available data from other
+        sources such as weather report.
+      </p>
+    </div>
+  </div>
+
+  <div class="card" *ngIf="currentField == 'surfaceShape'">
+    <div class="card-header">
+      Surface shape/orientation
+    </div>
+    <div class="card-block">
+      <label>Description:</label>
+    </div>
+  </div>
+
+  <div class="card" *ngIf="currentField == 'surfaceEmissivity'">
+    <div class="card-header">
+      Surface Emissivity (Typical - 0.9)
+    </div>
+    <div class="card-block">
+      <label>Description:</label>
+      <p>
+        Surface emissivity of the outside surface of heat loss. Default value is 0.8. The user can change this value
+        for their specific case.
+      </p>
+    </div>
+  </div>
+
+  <div class="card" *ngIf="currentField == 'surfaceArea'">
+    <div class="card-header">
+      Total Outside Surface Area (ft<sup>2</sup>)
+    </div>
+    <div class="card-block">
+      <label>Description:</label>
+      <p>
+        Total surface area for the wall being considered and exposed to the ambient. Use actual measurement or
+        calculate/estimate based on the equipment drawings.
+      </p>
+    </div>
+  </div>
+
+  <div class="card" *ngIf="currentField == 'correctionFactor'">
+    <div class="card-header">
+      Correction Factor
+    </div>
+    <div class="card-block">
+      <label>Description:</label>
+    </div>
+  </div>
+
+</div>

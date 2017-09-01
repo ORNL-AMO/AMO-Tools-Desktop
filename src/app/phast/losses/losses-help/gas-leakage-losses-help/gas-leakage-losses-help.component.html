@@ -1,0 +1,77 @@
+<div class="help-header">
+
+  <h3>Gas Leakage Losses Help</h3>
+  <p>Enter loss data</p>
+  <p class="text-muted">
+    <span class="fa fa-youtube-play"></span> Watch tutorial on entering gas leakage loss data.
+  </p>
+
+</div>
+
+
+<div class="help-content">
+  <div class="card" *ngIf="currentField == 'draftPressure'">
+    <div class="card-header">
+      Furnace Draft Pressure (Inch W.C.)
+    </div>
+    <div class="card-block">
+      <label>Description:</label>
+      <p>Furnace pressure measured at the level of the opening. It is measured by using an inclined tube manometer or a
+        digital gage. Units of measurement is in terms of inch water column. Hot gases leak out when the pressure is
+        positive. Cold air leaks into the furnace when pressure is negative.
+      </p>
+    </div>
+  </div>
+
+  <div class="card" *ngIf="currentField == 'openingArea'">
+    <div class="card-header">
+      Opening Area (ft<sup>2</sup>)
+    </div>
+    <div class="card-block">
+      <label>Description:</label>
+      <p>
+        This is value of open area from where hot gases are leaking out.
+      </p>
+    </div>
+  </div>
+
+  <div class="card" *ngIf="currentField == 'leakageGasTemperature'">
+    <div class="card-header">
+      Temperature of Gases Leaking (&#8457;)
+    </div>
+    <div class="card-block">
+      <label>Description:</label>
+      <p>
+        Temperature of gases leaking out of the opening. In most cases it is safe and accurate enough to measure and
+        use furnace (or zone) temperature for this value.
+      </p>
+    </div>
+  </div>
+
+  <div class="card" *ngIf="currentField == 'specificGravity'">
+    <div class="card-header">
+      Specific Density of Flue Gases (Air = 1.0)
+    </div>
+    <div class="card-block">
+      <label>Description:</label>
+      <p>
+        Specific density of gases at standard temperature - pressure (STP) measured relative to air using air specific
+        density as 1.0 which translates as 0.0763 lb./scf.
+      </p>
+    </div>
+  </div>
+
+  <div class="card" *ngIf="currentField == 'ambientTemperature'">
+    <div class="card-header">
+      Ambient Temperature (&#8457;)
+    </div>
+    <div class="card-block">
+      <label>Description:</label>
+      <p>
+        Ambient temperature at the location where opening is present. Normally this is room temperature in the area
+        where furnace is located.
+      </p>
+    </div>
+  </div>
+
+</div>

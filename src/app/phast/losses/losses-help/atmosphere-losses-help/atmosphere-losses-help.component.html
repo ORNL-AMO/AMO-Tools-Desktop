@@ -1,0 +1,88 @@
+<div class="help-header">
+
+  <h3>Atmosphere Losses Help</h3>
+  <p>Enter loss data</p>
+  <p class="text-muted">
+    <span class="fa fa-youtube-play"></span> Watch tutorial on entering atmosphere loss data.
+  </p>
+
+</div>
+
+
+<div class="help-content">
+
+  <div class="card" *ngIf="currentField == 'atmosphereGas'">
+    <div class="card-header">
+      Atmosphere Gas
+    </div>
+    <div class="card-block">
+      <label>Description:</label>
+      <p>Select gas from the drop down list. The gas properties cell below the drop down list will be filled in if the
+        gas is selected from the list. If it is different from the gas listed, then select Other.
+      </p>
+    </div>
+  </div>
+
+  <div class="card" *ngIf="currentField == 'specificHeat'">
+    <div class="card-header">
+      Specific heat of gas (Btu/(SCF-(&#8457;)))
+    </div>
+    <div class="card-block">
+      <label>Description:</label>
+      <p>
+        Give average value of the specific heat for the temperature range of the gas inlet temperature and outlet
+        temperature.
+      </p>
+    </div>
+  </div>
+
+  <div class="card" *ngIf="currentField == 'inletTemp'">
+    <div class="card-header">
+      Initial temperature (&#8457;)
+    </div>
+    <div class="card-block">
+      <label>Description:</label>
+      <p>
+        Inlet temperature (Celsius) of the process atmosphere as it enters the heating equipment or reaction chamber.
+        Use temperature recorder/indicator reading or actual measurement.
+      </p>
+    </div>
+  </div>
+
+  <div class="card" *ngIf="currentField == 'outletTemp'">
+    <div class="card-header">
+      Final temperature (&#8457;)
+    </div>
+    <div class="card-block">
+      <label>Description:</label>
+      <p>
+        Outlet temperature (Celsius) of the process atmosphere as it leaves the heating equipment or reaction chamber.
+        Use temperature recorder/indicator reading or actual measurement.
+      </p>
+    </div>
+  </div>
+
+  <div class="card" *ngIf="currentField == 'flowRate'">
+    <div class="card-header">
+      Flow Rate (SCF/hr)
+    </div>
+    <div class="card-block">
+      <label>Description:</label>
+      <p>
+        Atmosphere flow rate in terms of standard volume flow rate. Note that it is at standard conditions and actual
+        flow values given by a flow meter should be corrected for the pressure-temperature condition at the measurement
+        point. Use readings from a flow meter.
+      </p>
+    </div>
+  </div>
+
+  <div class="card" *ngIf="currentField == 'correctionFactor'">
+    <div class="card-header">
+      Correction Factor
+    </div>
+    <div class="card-block">
+      <label>Description:</label>
+    </div>
+  </div>
+
+</div>

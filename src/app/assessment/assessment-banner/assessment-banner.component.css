@@ -1,0 +1,17 @@
+
+.assessment-list-header {
+	
+}
+.assessment-list-header:after {
+	display: table;
+	clear: both;
+	content: "";
+}
+.assessment-list-header h1 {
+	font-size: 24px;
+    float: left;
+    padding: 9px 0 0px 13px;
+}
+.assessment-list-header .pills-nav {
+	float: right;
+}

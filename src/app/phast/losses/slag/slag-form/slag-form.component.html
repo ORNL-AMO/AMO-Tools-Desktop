@@ -1,0 +1,46 @@
+<form #lossForm [formGroup]="slagLossForm">
+  <div class="form-section">
+    <div class="form-group">
+      <label class="small" for="weight">Weight</label>
+      <div class="input-group">
+        <input name="{{'weight_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="weight" id="weight"
+          onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('weight')">
+        <span class="input-group-addon units">Lb/cycle</span>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="small" for="inletTemperature">Inlet Temperature</label>
+      <div class="input-group">
+        <input name="{{'inletTemperature_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="inletTemperature"
+          id="inletTemperature" onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('inletTemperature')">
+        <span class="input-group-addon units">&#8457;</span>
+      </div>
+    </div>
+
+
+    <div class="form-group">
+      <label class="small" for="outletTemperature">Outlet Temperature</label>
+      <div class="input-group">
+        <input name="{{'outletTemperature_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="outletTemperature"
+          id="outletTemperature" onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('outletTemperature')">
+        <span class="input-group-addon units">&#8457;</span>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="small" for="specificHeat">Specific Heat</label>
+      <div class="input-group">
+        <input name="{{'specificHeat_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="specificHeat"
+          id="specificHeat" onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('specificHeat')">
+        <span class="input-group-addon units">Btu/(lb-&#8457;)</span>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="small" for="correctionFactor">Correction Factor</label>
+      <input name="{{'correctionFactor_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="correctionFactor"
+        id="correctionFactor" onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('correctionFactor')">
+    </div>
+  </div>
+</form>

@@ -1,0 +1,23 @@
+<div class="list-row" [ngClass]="{ 'phast' : assessment.type == 'PHAST', 'psat': assessment.type == 'PSAT' }">
+  <!-- <div class="drag-handle">
+    <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
+    <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
+    <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
+  </div> -->
+  <div class="assessment-name">
+    <input type="checkbox" [(ngModel)]="isChecked" (change)="setDelete()" />
+    <a (click)="goToAssessment(assessment, 'assessment')" *ngIf="isSetup">{{assessment.name}}</a>
+    <a (click)="goToAssessment(assessment, 'system-setup')" *ngIf="!isSetup">{{assessment.name}}</a>
+
+    <div class="text-muted" *ngIf="!isSetup">Asset not setup</div>
+
+  </div>
+  <div class="actions" *ngIf="isSetup">
+
+    <a (click)="goToAssessment(assessment, 'system-setup')">Pump &amp; Motor</a>
+    <a (click)="goToAssessment(assessment, 'assessment')">Assessment</a>
+    <a (click)="goToAssessment(assessment, 'diagram')">System Diagram</a>
+    <a (click)="goToAssessment(assessment, 'report')">Report</a>
+
+  </div>
+</div>

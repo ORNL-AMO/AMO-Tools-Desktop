@@ -1,0 +1,33 @@
+<div class="list-card" *ngIf="directory">
+
+  <input type="checkbox" [(ngModel)]="isChecked" (change)="setDelete()" />
+  <div class="assessment-name">
+    <a (click)="goToDirectory(directory)">{{directory.name}}</a>
+    <span>Folder / Plant</span>
+  </div>
+
+  <div class="assessment-details">
+    <ul *ngIf="directory.subDirectory">
+      <li *ngFor="let directory of directory.subDirectory">
+        <i class="fa fa-folder-o" aria-hidden="true"></i> {{directory.name}}
+      </li>
+    </ul>
+    <ul *ngIf="directory.assessments">
+      <li *ngFor="let assessment of directory.assessments">
+        <i class="fa fa-bar-chart-o" aria-hidden="true"></i> {{assessment.name}}
+      </li>
+    </ul>
+  </div>
+
+  <button type="button">Menu</button>
+  <ul class="menu">
+    <li><a href=""></a></li>
+    <li><a href=""></a></li>
+    <li><a href=""></a></li>
+    <li><a href=""></a></li>
+  </ul>
+
+  <!-- <div class="last-updated">{{directory.date | date}}</div> -->
+  <div class="last-updated">Last updated {{directory.modifiedDate | date }}</div>
+
+</div>

@@ -1,0 +1,26 @@
+
+.modal-content{
+    height: 95%;
+    max-height: 95%;
+}
+
+.modal-dialog{
+    max-width: 95%;
+    top: 20vh;
+}
+
+.invalid{
+    border-color: red;
+}
+
+.valid{
+    border-color: green;
+}
+
+.warning{
+  border-color:darkorange;
+}
+
+.form-check-input{
+    width: auto !important;
+}

@@ -1,0 +1,3 @@
+<app-designed-energy-steam *ngIf="settings.energySourceType == 'Steam'" [phast]="phast" [settings]="settings" (emitSave)="emitSave()"></app-designed-energy-steam>
+<app-designed-energy-fuel *ngIf="settings.energySourceType == 'Fuel'" [phast]="phast" [settings]="settings" (emitSave)="emitSave()"></app-designed-energy-fuel>
+<app-designed-energy-electricity *ngIf="settings.energySourceType == 'Electricity'" [phast]="phast" [settings]="settings" (emitSave)="emitSave()"></app-designed-energy-electricity>

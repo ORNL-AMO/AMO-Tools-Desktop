@@ -1,0 +1,35 @@
+<div class="pump-head">
+	<div class="row" *ngIf="settings">
+		<div class="col-md-4 col-sm-12 mx-auto">
+			<app-achievable-efficiency-form [(efficiencyForm)]="efficiencyForm" [settings]="settings" (calculate)="calculate()"></app-achievable-efficiency-form>
+		</div>
+		<div class="col-md-6 col-sm-12  mx-auto">
+			<ul class="tabs primary text-center">
+				<li class="calc-tab" [ngClass]="{'active': tabSelect == 'results'}">
+					<a (click)="setTab('results')">Graph</a>
+				</li><!--
+    		--><li class="calc-tab" [ngClass]="{'active': tabSelect == 'help'}">
+					<a (click)="setTab('help')">Help</a>
+				</li>
+			</ul>
+			<div class="tab-content efficiency-results" id="achievableEfficiencyGraph">
+				<app-achievable-efficiency-graph *ngIf="tabSelect == 'results'" [efficiencyForm]="efficiencyForm" [settings]="settings" [toggleCalculate]="toggleCalculate"></app-achievable-efficiency-graph>
+
+				<div *ngIf="tabSelect == 'help'" class="help-panel">
+					<div class="calc-help">
+						<h3>Achievable Efficiency Calculator Help</h3>
+						<p>Determine the achievable pump efficiency for various pump styles which are based on the Hydraulic Institute (HI) standard
+							ANSI/HI 1.3-2000.
+						</p>
+						<p>
+							<u>Pump Type-</u> represents what style of pump is being used based off of the listings in the standard ANSI/HI 1.3-2000.
+						</p>
+						<p>
+							<u>Flow Rate-</u> represents either the measured or required rate of flow.
+						</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

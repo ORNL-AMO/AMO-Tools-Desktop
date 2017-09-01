@@ -1,0 +1,66 @@
+<div class="help-header">
+
+  <h3>Extended Surface Losses Help</h3>
+  <p>Enter loss data</p>
+  <p class="text-muted">
+    <span class="fa fa-youtube-play"></span> Watch tutorial on entering extended surface loss data.
+  </p>
+
+</div>
+
+
+<div class="help-content">
+  <div class="card" *ngIf="currentField == 'surfaceArea'">
+    <div class="card-header">
+      Total Outside Surface Area (ft<sup>2</sup>)
+    </div>
+    <div class="card-block">
+      <label>Description:</label>
+      <p>Total area of the exposed parts such as shafts, structural components of the furnace, part of the charge being
+        heated (if applicable), burner or radiant tubes, material handling system (conveyors, belts) etc. Estimate
+        based on actual measurements or use furnace drawings.
+      </p>
+    </div>
+  </div>
+</div>
+
+<div class="card" *ngIf="currentField == 'avgSurfaceTemp'">
+  <div class="card-header">
+    Average Surface Temperature (&#8457;)
+  </div>
+  <div class="card-block">
+    <label>Description:</label>
+    <p>
+      Average temperature for the exposed areas. The average should be calculated based on actual measurement at
+      several locations for the exposed parts or areas. The actual temperature can vary over a wide range and care
+      should be taken to use weighted average. Use infra-red radiation temperature measurement instrument (with
+      proper emissivity correction) whenever possible.
+    </p>
+  </div>
+</div>
+
+<div class="card" *ngIf="currentField == 'ambientTemp'">
+  <div class="card-header">
+    Ambient Temperature (&#8457;)
+  </div>
+  <div class="card-block">
+    <label>Description:</label>
+    <p>
+      Temperature of the area outside the furnace where the exposed areas are located. In most cases this is the
+      ambient temperature in the area where the furnace and exposed areas are located.
+    </p>
+  </div>
+</div>
+
+<div class="card" *ngIf="currentField == 'surfaceEmissivity'">
+  <div class="card-header">
+    Surface Emissivity (Typical - 0.9)
+  </div>
+  <div class="card-block">
+    <label>Description:</label>
+    <p>
+      Emissivity of the surface from heat is dissipated or lost. This can be in the range of 07 to 0.9 for commonly
+      encountered surfaces but the user should use appropriate value for the specific case.
+    </p>
+  </div>
+</div>

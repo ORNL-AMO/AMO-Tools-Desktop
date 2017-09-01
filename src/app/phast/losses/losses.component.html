@@ -1,0 +1,176 @@
+<nav>
+  <app-losses-tabs [settings]="settings"></app-losses-tabs>
+</nav>
+<div class="modify-conditions">
+  <!--<nav class="col-2 sidebar losses-sidebar">
+    <app-losses-sidebar [losses]="phast.losses" [lossesStates]="lossesStates" (changeTab)="changeTab($event)" [lossesTab]="lossesTab"></app-losses-sidebar>
+  </nav>-->
+  <!--Baseline-->
+  <div class="modification baseline" (click)="togglePanel(baselineSelected)" [ngClass]="{'disabled': baselineSelected == false, 'modal-open': isModalOpen == true}">
+    <div class="header">
+      <h3>Baseline</h3>
+      <button class="btn btn-secondary pull-right" (click)="addLoss()" [disabled]="!baselineSelected"><span class="fa fa-plus"></span></button>
+    </div>
+
+    <div class="losses-container">
+      <app-charge-material (fieldChange)="changeField($event)" [baselineSelected]="baselineSelected" (savedLoss)="saveModifications()"
+        [(losses)]="phast.losses" [addLossToggle]="addLossToggle" [saveClicked]="saveClicked" *ngIf="lossesTab == 'charge-material'"
+        [isBaseline]="true"></app-charge-material>
+
+      <app-wall-losses (fieldChange)="changeField($event)" [baselineSelected]="baselineSelected" (savedLoss)="saveModifications()"
+        [addLossToggle]="addLossToggle" [(losses)]="phast.losses" [saveClicked]="saveClicked" *ngIf="lossesTab == 'wall-losses'"
+        [isBaseline]="true" (emitDelete)="removeWallLoss($event)"></app-wall-losses>
+
+      <app-atmosphere-losses (fieldChange)="changeField($event)" [baselineSelected]="baselineSelected" (savedLoss)="saveModifications()"
+        [(losses)]="phast.losses" [addLossToggle]="addLossToggle" [saveClicked]="saveClicked" *ngIf="lossesTab == 'atmosphere-losses'"
+        [isBaseline]="true"></app-atmosphere-losses>
+
+      <app-fixture-losses (fieldChange)="changeField($event)" [baselineSelected]="baselineSelected" (savedLoss)="saveModifications()"
+        [(losses)]="phast.losses" [addLossToggle]="addLossToggle" [saveClicked]="saveClicked" *ngIf="lossesTab == 'fixture-losses'"
+        [isBaseline]="true"></app-fixture-losses>
+
+      <app-opening-losses (fieldChange)="changeField($event)" [baselineSelected]="baselineSelected" (savedLoss)="saveModifications()"
+        [(losses)]="phast.losses" [addLossToggle]="addLossToggle" [saveClicked]="saveClicked" *ngIf="lossesTab == 'opening-losses'"
+        [isBaseline]="true"></app-opening-losses>
+
+      <app-cooling-losses (fieldChange)="changeField($event)" [baselineSelected]="baselineSelected" (savedLoss)="saveModifications()"
+        [(losses)]="phast.losses" [addLossToggle]="addLossToggle" [saveClicked]="saveClicked" *ngIf="lossesTab == 'cooling-losses'"
+        [isBaseline]="true"></app-cooling-losses>
+
+      <app-flue-gas-losses (fieldChange)="changeField($event)" [baselineSelected]="baselineSelected" (savedLoss)="saveModifications()"
+        [(losses)]="phast.losses" [addLossToggle]="addLossToggle" [saveClicked]="saveClicked" *ngIf="lossesTab == 'flue-gas-losses'"
+        [isBaseline]="true"></app-flue-gas-losses>
+
+      <app-gas-leakage-losses (fieldChange)="changeField($event)" [baselineSelected]="baselineSelected" (savedLoss)="saveModifications()"
+        [(losses)]="phast.losses" [addLossToggle]="addLossToggle" [saveClicked]="saveClicked" *ngIf="lossesTab == 'gas-leakage-losses'"
+        [isBaseline]="true"></app-gas-leakage-losses>
+
+      <app-extended-surface-losses (fieldChange)="changeField($event)" [baselineSelected]="baselineSelected" (savedLoss)="saveModifications()"
+        [(losses)]="phast.losses" [addLossToggle]="addLossToggle" [saveClicked]="saveClicked" *ngIf="lossesTab == 'extended-surface-losses'"
+        [isBaseline]="true"></app-extended-surface-losses>
+
+      <app-other-losses (fieldChange)="changeField($event)" [baselineSelected]="baselineSelected" (savedLoss)="saveModifications()"
+        [(losses)]="phast.losses" [addLossToggle]="addLossToggle" [saveClicked]="saveClicked" *ngIf="lossesTab == 'other-losses'"
+        [isBaseline]="true"></app-other-losses>
+
+      <app-slag (fieldChange)="changeField($event)" [baselineSelected]="baselineSelected" (savedLoss)="saveModifications()" [(losses)]="phast.losses"
+        [addLossToggle]="addLossToggle" [saveClicked]="saveClicked" *ngIf="lossesTab == 'slag'" [isBaseline]="true"></app-slag>
+
+      <app-energy-input (fieldChange)="changeField($event)" [baselineSelected]="baselineSelected" (savedLoss)="saveModifications()"
+        [(losses)]="phast.losses" [addLossToggle]="addLossToggle" [saveClicked]="saveClicked" *ngIf="lossesTab == 'energy-input'"
+        [isBaseline]="true"></app-energy-input>
+
+      <app-exhaust-gas (fieldChange)="changeField($event)" [baselineSelected]="baselineSelected" (savedLoss)="saveModifications()"
+        [(losses)]="phast.losses" [addLossToggle]="addLossToggle" [saveClicked]="saveClicked" [isBaseline]="true" *ngIf="lossesTab == 'exhaust-gas'"></app-exhaust-gas>
+
+      <app-auxiliary-power-losses (fieldChange)="changeField($event)" [baselineSelected]="baselineSelected" (savedLoss)="saveModifications()"
+        [(losses)]="phast.losses" [addLossToggle]="addLossToggle" [saveClicked]="saveClicked" *ngIf="lossesTab == 'auxiliary-power'"
+        [isBaseline]="true"></app-auxiliary-power-losses>
+
+    </div>
+  </div>
+  <!--Modification Start -->
+  <div class="modification" *ngIf="_modifications.length != 0" (click)="togglePanel(modificationSelected)" [ngClass]="{'disabled': modificationSelected == false, 'modal-open': isModalOpen == true}">
+
+    <!-- Modification Header -->
+    <!--<div class="header" *ngIf="!editModification">-->
+    <div class="header">
+      <h3 *ngIf="_modifications[modificationIndex] && !isDropdownOpen">{{_modifications[modificationIndex].phast.name}}</h3>
+      <button class="pull-right" (click)="toggleDropdown()" [disabled]="!modificationSelected">
+        <span class="changeAdd" *ngIf="!isDropdownOpen">Change / Add</span>
+        <span class="changeAdd" *ngIf="isDropdownOpen">Cancel</span>
+      </button>
+    </div>
+
+
+    <div class="losses-container" *ngIf="!isDropdownOpen">
+
+      <app-notes [(notes)]="_modifications[modificationIndex].notes" [currentTab]="lossesTab"></app-notes>
+
+      <app-charge-material (fieldChange)="changeField($event)" [baselineSelected]="modificationSelected" (savedLoss)="saveModifications()"
+        [(losses)]="_modifications[modificationIndex].phast.losses" [saveClicked]="saveClicked" *ngIf="lossesTab == 'charge-material'"></app-charge-material>
+
+      <app-wall-losses (fieldChange)="changeField($event)" [baselineSelected]="modificationSelected" (savedLoss)="saveModifications()"
+        [(losses)]="_modifications[modificationIndex].phast.losses" [saveClicked]="saveClicked" *ngIf="lossesTab == 'wall-losses'"></app-wall-losses>
+
+      <app-atmosphere-losses (fieldChange)="changeField($event)" [baselineSelected]="modificationSelected" (savedLoss)="saveModifications()"
+        [(losses)]="_modifications[modificationIndex].phast.losses" [saveClicked]="saveClicked" *ngIf="lossesTab == 'atmosphere-losses'"></app-atmosphere-losses>
+
+      <app-fixture-losses (fieldChange)="changeField($event)" [baselineSelected]="modificationSelected" (savedLoss)="saveModifications()"
+        [(losses)]="_modifications[modificationIndex].phast.losses" [saveClicked]="saveClicked" *ngIf="lossesTab == 'fixture-losses'"></app-fixture-losses>
+
+      <app-opening-losses (fieldChange)="changeField($event)" [baselineSelected]="modificationSelected" (savedLoss)="saveModifications()"
+        [(losses)]="_modifications[modificationIndex].phast.losses" [saveClicked]="saveClicked" *ngIf="lossesTab == 'opening-losses'"></app-opening-losses>
+
+      <app-cooling-losses (fieldChange)="changeField($event)" [baselineSelected]="modificationSelected" (savedLoss)="saveModifications()"
+        [(losses)]="_modifications[modificationIndex].phast.losses" [saveClicked]="saveClicked" *ngIf="lossesTab == 'cooling-losses'"></app-cooling-losses>
+
+      <app-flue-gas-losses (fieldChange)="changeField($event)" [baselineSelected]="modificationSelected" (savedLoss)="saveModifications()"
+        [(losses)]="_modifications[modificationIndex].phast.losses" [saveClicked]="saveClicked" *ngIf="lossesTab == 'flue-gas-losses'"></app-flue-gas-losses>
+
+      <app-gas-leakage-losses (fieldChange)="changeField($event)" [baselineSelected]="modificationSelected" (savedLoss)="saveModifications()"
+        [(losses)]="_modifications[modificationIndex].phast.losses" [saveClicked]="saveClicked" *ngIf="lossesTab == 'gas-leakage-losses'"></app-gas-leakage-losses>
+
+      <app-extended-surface-losses (fieldChange)="changeField($event)" [baselineSelected]="modificationSelected" (savedLoss)="saveModifications()"
+        [(losses)]="_modifications[modificationIndex].phast.losses" [saveClicked]="saveClicked" *ngIf="lossesTab == 'extended-surface-losses'"></app-extended-surface-losses>
+
+      <app-other-losses (fieldChange)="changeField($event)" [baselineSelected]="modificationSelected" (savedLoss)="saveModifications()"
+        [(losses)]="_modifications[modificationIndex].phast.losses" [saveClicked]="saveClicked" *ngIf="lossesTab == 'other-losses'"></app-other-losses>
+
+      <app-slag (fieldChange)="changeField($event)" [baselineSelected]="modificationSelected" (savedLoss)="saveModifications()"
+        [(losses)]="_modifications[modificationIndex].phast.losses" [saveClicked]="saveClicked" *ngIf="lossesTab == 'slag'"></app-slag>
+
+      <app-energy-input (fieldChange)="changeField($event)" [baselineSelected]="modificationSelected" (savedLoss)="saveModifications()"
+        [(losses)]="_modifications[modificationIndex].phast.losses" [saveClicked]="saveClicked" *ngIf="lossesTab == 'energy-input'"></app-energy-input>
+
+      <app-exhaust-gas (fieldChange)="changeField($event)" [baselineSelected]="modificationSelected" (savedLoss)="saveModifications()"
+        [(losses)]="_modifications[modificationIndex].phast.losses" [saveClicked]="saveClicked" *ngIf="lossesTab == 'exhaust-gas'"></app-exhaust-gas>
+
+      <app-auxiliary-power-losses (fieldChange)="changeField($event)" [baselineSelected]="modificationSelected" (savedLoss)="saveModifications()"
+        [(losses)]="_modifications[modificationIndex].phast.losses" [saveClicked]="saveClicked" *ngIf="lossesTab == 'auxiliary-power'"></app-auxiliary-power-losses>
+
+    </div>
+
+    <div class="modifications-list" *ngIf="isDropdownOpen">
+      <ul *ngIf="!showEditModification">
+        <li *ngFor="let modification of _modifications">
+          <button>
+          <a (click)="selectModification(modification)">
+            {{modification.phast.name}}
+          </a>
+          <a class="pull-right" (click)="dispEditModification(modification)">Edit / Delete</a>
+          </button>
+        </li>
+        <li class="add-modification">
+          <button (click)="addModification()">Add Modified Condition</button>
+          <p>Data will be copied from <br/> your baseline operating condition</p>
+        </li>
+      </ul>
+      <div class="losses-container edit-modification" *ngIf="showEditModification && editModification">
+        <app-edit-condition-properties [modification]="editModification" (deleteMod)="deleteModification()" (saveMod)="saveModifications()"
+          (cancelEdit)="toggleDropdown()"></app-edit-condition-properties>
+      </div>
+    </div>
+  </div>
+  <div class="no-data" *ngIf="_modifications.length == 0">
+    <h3>Once you have your baseline set up, click below to start adding modifications.</h3>
+    <button type="button" (click)="addModification()" *ngIf="isLossesSetup">Add Modified Condition</button>
+    <button type="button" (click)="lossesSetup()" *ngIf="!isLossesSetup">Baseline Done?</button>
+    <p>Data will be copied from your current baseline condition.</p>
+  </div>
+  <app-losses-help [lossesTab]="lossesTab" [currentField]="currentField"></app-losses-help>
+
+
+  <div class="setup-dialog" *ngIf="showSetupDialog == true">
+    <button class="btn pull-right" (click)="hideSetupDialog()">
+        <span aria-hidden="true">&times;</span>
+        </button>
+    <h4>Setup Your Process Heating Losses</h4>
+    <p>In this section you will input your process heating losses.</p>
+    <p>Once you have added the data for your current system you can add modifications to explore potential savings within your
+      system.
+    </p>
+    <p>We strongly encourage you to completely setup your system by adding all of your losses prior to adding modifications.</p>
+    <button class="btn btn-primary" (click)="hideSetupDialog()">Got It!</button>
+  </div>
+</div>

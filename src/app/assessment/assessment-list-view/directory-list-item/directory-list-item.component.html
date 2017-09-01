@@ -1,0 +1,12 @@
+<div class="list-row folder">
+  <!-- <div class="drag-handle">
+    <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
+    <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
+    <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
+  </div> -->
+  <div class="assessment-name">
+    <input type="checkbox" [(ngModel)]="isChecked" (change)="setDelete()" />
+    <i class="fa fa-folder" aria-hidden="true"></i>
+    <a (click)="goToDirectory(directory)">{{directory.name}}</a>
+  </div>
+</div>

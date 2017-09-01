@@ -1,0 +1,71 @@
+<form #lossForm [formGroup]="lossesForm">
+  <div class="form-section">
+    <div class="form-group">
+      <label class="small" for="materialName">Material Name
+        <small id="materialHelp" class="form-text text-help"><a (click)="showMaterialModal()">Add New Material</a></small>       
+      </label>
+      <select name="{{'materialName_'+lossIndex}}" class="form-control" formControlName="materialName" id="materialName" (change)="setSpecificHeat()"
+        (focus)="focusField('materialName')">
+        <option *ngFor="let material of materials" [ngValue]="material.id">{{material.substance}}</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label class="small" for="specificHeat">Specific Heat</label>
+      <div class="input-group">
+        <input name="{{'specificHeat_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="specificHeat"
+          id="specificHeat" onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('specificHeat')">
+        <span class="input-group-addon units">Btu/(lb-&#8457;)</span>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="small" for="feedRate">Fixture Weight feed rate</label>
+      <div class="input-group">
+        <input name="{{'feedRate_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="feedRate" id="feedRate"
+          onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('feedRate')">
+        <span class="input-group-addon units">lb/hr</span>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="small" for="initialTemp">Initial Temperature</label>
+      <div class="input-group">
+        <input name="{{'initialTemp_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="initialTemp" id="initialTemp"
+          onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('initialTemp')">
+        <span class="input-group-addon units">&#8457;</span>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="small" for="finalTemp">Final Temperature</label>
+      <div class="input-group">
+        <input name="{{'finalTemp_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="finalTemp" id="finalTemp"
+          onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('finalTemp')">
+        <span class="input-group-addon units">&#8457;</span>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="small" for="correctionFactor">Correction Factor</label>
+      <input name="{{'correctionFactor_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="correctionFactor"
+        id="correctionFactor" onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('correctionFactor')">
+    </div>
+  </div>
+</form>
+
+<!--CREATE Folder MODAL-->
+<div bsModal #materialModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="materialModalLabel"
+  aria-hidden="true" [config]="{backdrop: 'static'}">
+  <div class="modal-dialog modal-md">
+    <div class="modal-header">
+      <h3>Create Solid Material</h3>
+      <button class="close" (click)="hideMaterialModal()">
+     <span aria-hidden="true">&times;</span>
+   </button>
+    </div>
+    <div class="modal-content">
+      <app-solid-load-charge-material (closeModal)="hideMaterialModal($event)"></app-solid-load-charge-material>
+    </div>
+  </div>
+</div>

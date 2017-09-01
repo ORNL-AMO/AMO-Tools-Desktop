@@ -1,0 +1,119 @@
+<div class="help-panel">
+  <div class="calc-help">
+    <!--    <div class="help-header">
+      <h3>Energy Equivalency Calculater Help</h3>
+      <p>
+        Provides calculations for converting values of energy input requirements when the heat source is changed from
+        fuel-firing (Btu/hr or kJ/hr) to electricity (kW), or vice versa.
+      </p>
+      <p class="text-muted">
+        <span class="fa fa-youtube-play"></span> Watch tutorial on entering atmosphere loss data.
+      </p>
+    </div>-->
+
+
+    <div class="help-content">
+      <!--top fuel fired input field-->
+      <div class="card" *ngIf="currentField == 'fuelFiredEfficiency'">
+        <div class="card-header">
+          Fuel Fired Efficiency (Electrical)
+        </div>
+        <div class="card-block">
+          <label><u>Description:</u></label>
+          <p>
+            Furnace efficiency of the baseline (fuel-fired furnace).
+          </p>
+          <label><u>Input:</u></label>
+          <p>
+            Units: <strong>Percentage (%)</strong><br> Minimum Value Allowed: <strong>0</strong><br> Maximum Value Allowed:
+            <strong>100</strong><br>
+          </p>
+        </div>
+      </div>
+
+      <!--from top form-->
+      <div class="card" *ngIf="currentField == 'electricallyHeatedEfficiency'">
+        <div class="card-header">
+          Electrical Heated Efficiency (Electrical)
+        </div>
+        <div class="card-block">
+          <label><u>Description:</u></label>
+          <p>
+            Furnace efficiency of the alternate (electric furnace).
+          </p>
+          <label><u>Input:</u></label>
+          <p>
+            Units: <strong>Percentage (%)</strong><br> Minimum Value Allowed: <strong>0</strong><br> Maximum Value Allowed:
+            <strong>100</strong><br>
+          </p>
+        </div>
+      </div>
+
+      <div class="card" *ngIf="currentField == 'fuelFiredHeatInput'">
+        <div class="card-header">
+          Fuel Fired Heat Input (Electrical)
+        </div>
+        <div class="card-block">
+          <label><u>Description:</u></label>
+          <p>
+            Required heat input of fuel-fired equipment.
+          </p>
+          <label><u>Input:</u></label>
+          <p>
+            Units: <strong>MMBTU/hr or GJ/hr</strong><br> Minimum Value Allowed: <strong>0</strong>
+          </p>
+        </div>
+      </div>
+
+      <div class="card" *ngIf="currentField == 'electricallyHeatedEfficiencyFuel'">
+        <div class="card-header">
+          Electrically Heated Efficiency (Fuel)
+        </div>
+        <div class="card-block">
+          <label><u>Description:</u></label>
+          <p>
+            Furnace efficiency of the baseline (electric furnace)
+          </p>
+          <label><u>Input:</u></label>
+          <p>
+            Units: <strong>Percentage (%)</strong><br> Minimum Value Allowed: <strong>0</strong><br> Maximum Value Allowed:
+            <strong>100</strong><br>
+          </p>
+        </div>
+      </div>
+
+      <div class="card" *ngIf="currentField == 'fuelFiredEfficiencyFuel'">
+        <div class="card-header">
+          Fuel-Fired Efficiency (Fuel)
+        </div>
+        <div class="card-block">
+          <label><u>Description:</u></label>
+          <p>
+            Furnace efficiency of the alternate (fuel-fired furance)
+          </p>
+          <label><u>Input:</u></label>
+          <p>
+            Units: <strong>Percentage (%)</strong><br> Minimum Value Allowed: <strong>0</strong><br> Maximum Value Allowed:
+            <strong>100</strong><br>
+          </p>
+        </div>
+      </div>
+
+      <div class="card" *ngIf="currentField == 'electricalHeatInput'">
+        <div class="card-header">
+          Electrical Heat Input (Fuel)
+        </div>
+        <div class="card-block">
+          <label><u>Description:</u></label>
+          <p>
+            Required heat input for electrically heated equipment.
+          </p>
+          <label><u>Input:</u></label>
+          <p>
+            Units: <strong>Kilowatt (kW)</strong><br> Minimum Value Allowed: <strong>0</strong>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

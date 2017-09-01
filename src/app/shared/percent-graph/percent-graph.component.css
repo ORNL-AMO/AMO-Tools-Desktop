@@ -1,0 +1,15 @@
+.percent-chart-container{
+    display: block;
+}
+
+.value{
+    position: absolute;
+    animation-name: value-entrance;
+    animation-duration: 1s;
+}
+
+@keyframes value-entrance{
+    0% {opacity: 0;}
+    50% {opacity: 0;}
+    100% {opacity: 100;}
+}

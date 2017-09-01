@@ -1,0 +1,35 @@
+
+.modal.create-assessment-modal {
+  margin-top: 7%;
+}
+
+.create-assessment-modal label {
+  font-weight: bold;
+}
+.create-assessment-modal .form-check {
+  margin-bottom: 0;
+}
+.create-assessment-modal label.form-check-label {
+  font-weight: normal;
+}
+
+.create-assessment-modal input[type=text] {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 2px;
+}
+
+.create-assessment-modal .form-group {
+  margin-bottom: 10px;
+}
+
+.create-assessment-modal select {
+  margin-bottom: 6px;
+}
+
+.create-assessment-modal .help-text {
+  margin-bottom: 10px;
+}
+.create-assessment-modal .help-text p {
+  margin-bottom: 0;
+}

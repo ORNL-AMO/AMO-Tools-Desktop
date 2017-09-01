@@ -1,0 +1,19 @@
+<div class="pump-head">
+  <div class="row">
+    <div class="col-md-5 col-sm-12  mx-auto">
+      <app-efficiency-improvement-form [(efficiencyImprovementInputs)]="efficiencyImprovementInputs" [efficiencyImprovementOutputs]="efficiencyImprovementOutputs"
+        (calculate)="calculate()" (changeField)="setCurrentField($event)">
+      </app-efficiency-improvement-form>
+    </div>
+    <div class="col-md-5 col-sm-12 mx-auto">
+      <ul class="tabs primary">
+        <li class="calc-tab active">
+          <a style="text-align: center;">Help</a>
+        </li>
+      </ul>
+      <div class="tab-content">
+        <app-efficiency-improvement-help [currentField]="currentField"></app-efficiency-improvement-help>
+      </div>
+    </div>
+  </div>
+</div>

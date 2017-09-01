@@ -1,0 +1,36 @@
+<div class="pump-head">
+  <div class="row">
+    <div class="col-md-5 col-sm-12  mx-auto">
+      <app-energy-use-form [inPhast]="inPhast" [flowCalculations]="flowCalculations" [flowCalculationResults]="flowCalculationResults"
+        (changeField)="setCurrentField($event)" (emitCalculate)="calculate()"></app-energy-use-form>
+    </div>
+
+    <div class="col-md-5 col-sm-12 mx-auto">
+      <ul class="tabs primary text-center">
+        <li class="calc-tab" [ngClass]="{'active': tabSelect == 'results'}">
+          <a (click)="setTab('results')">Results</a>
+        </li><!--
+    --><li class="calc-tab" [ngClass]="{'active': tabSelect == 'help'}">
+          <a (click)="setTab('help')">Help</a>
+        </li>
+      </ul>
+      <div class="tab-content">
+        <div *ngIf="tabSelect == 'results'" class="form-group text-center results-box">
+          <label class="small">Flow</label>
+          <div class="small">
+            {{flowCalculationResults.flow | number:'2.2-2'}} Scfh
+          </div>
+          <label class="small">Total Flow</label>
+          <div class="small">
+            {{flowCalculationResults.totalFlow | number:'2.2-2'}} Scf
+          </div>
+          <label class="small">Energy Use</label>
+          <div class="small">
+            {{flowCalculationResults.heatInput | number:'2.2-2'}} Million Btu
+          </div>
+        </div>
+        <app-energy-use-help *ngIf="tabSelect == 'help'" [currentField]="currentField"></app-energy-use-help>
+      </div>
+    </div>
+  </div>
+</div>
