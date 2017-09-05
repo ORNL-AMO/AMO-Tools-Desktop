@@ -18,9 +18,9 @@ export class HeadToolFormComponent implements OnInit {
   @Output('changeField')
   changeField = new EventEmitter<string>();
   diameterError: string = null;
-  diameterErrorOut : string = null;
+  diameterErrorOut: string = null;
   smallUnit: string;
-
+  pressureError: string = null;
   constructor() { }
 
   ngOnInit() {
@@ -33,14 +33,13 @@ export class HeadToolFormComponent implements OnInit {
   }
 
   calc() {
+    this.checkPressure();
     if (this.headToolForm.valid && this.checkPipeDiameterSuction() && this.checkPipeDiameterDischarge()) {
-      this.headToolForm.patchValue({
-     })
-        this.calculate.emit(true);
-      }
+      this.calculate.emit(true);
     }
+  }
 
-  focusField(str: string){
+  focusField(str: string) {
     this.changeField.emit(str);
   }
 
@@ -58,18 +57,28 @@ export class HeadToolFormComponent implements OnInit {
       return true;
     }
   }
-    checkPipeDiameterDischarge() {
-      if (this.headToolForm.value.dischargePipeDiameter == 0) {
-        this.diameterErrorOut = "Cannot have 0 diameter";
-        return false;
-      }
-      else if (this.headToolForm.value.dischargePipeDiameter < 0) {
-        this.diameterErrorOut = "Cannot have negative diameter";
-        return false;
-      }
-      else {
-        this.diameterErrorOut = null;
-        return true;
-      }
+  checkPipeDiameterDischarge() {
+    if (this.headToolForm.value.dischargePipeDiameter == 0) {
+      this.diameterErrorOut = "Cannot have 0 diameter";
+      return false;
+    }
+    else if (this.headToolForm.value.dischargePipeDiameter < 0) {
+      this.diameterErrorOut = "Cannot have negative diameter";
+      return false;
+    }
+    else {
+      this.diameterErrorOut = null;
+      return true;
+    }
+  }
+
+  checkPressure() {
+    if (this.headToolForm.value.suctionGuagePressure > this.headToolForm.value.dischargeGaugePressure) {
+      this.pressureError = 'Suction Pressure cannot be greater than Discharge Pressure'
+      return false;
+    } else {
+      this.pressureError = null;
+      return true;
+    }
   }
 }
