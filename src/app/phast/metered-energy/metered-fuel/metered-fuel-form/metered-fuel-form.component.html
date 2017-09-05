@@ -5,8 +5,8 @@
 							</label>
     <div class="form-group">
       <label for="fuelType">Fuel</label>
-      <select name="fuelType" id="fuelType" class="form-control" (focus)="focusField('fuelType')" (change)="calculate()" [(ngModel)]="inputs.fuelType">
-                  <option *ngFor="let type of fuelTypes" [ngValue]="type.value">{{type.name}}</option>
+      <select name="fuelType" id="fuelType" class="form-control" (focus)="focusField('fuelType')" (change)="setProperties()" [(ngModel)]="inputs.fuelType">
+                  <option *ngFor="let type of fuelTypes" [ngValue]="type.id">{{type.substance}}</option>
                 </select>
     </div>
     <div class="form-group">

@@ -18,20 +18,6 @@ export class DesignedEnergyFuelFormComponent implements OnInit {
   @Output('changeField')
   changeField = new EventEmitter<string>();
   counter: any;
-  fuelTypes: any = [
-    {
-      name: 'Fuel Type',
-      value: 0
-    },
-    {
-      name: 'Fuel Type 1',
-      value: 1
-    },
-    {
-      name: 'Fuel Type 2',
-      value: 2
-    }
-  ]
 
   constructor() { }
 
