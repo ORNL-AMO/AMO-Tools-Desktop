@@ -763,8 +763,7 @@ export class PsatService {
       form.controls.motorRPM.status == 'VALID' &&
       form.controls.efficiencyClass.status == 'VALID' &&
       form.controls.motorVoltage.status == 'VALID' &&
-      form.controls.fullLoadAmps.status == 'VALID' &&
-      form.controls.sizeMargin.status == 'VALID'
+      form.controls.fullLoadAmps.status == 'VALID'
     ) {
       if (form.value.efficiencyClass != 'Specified') {
         return true;
