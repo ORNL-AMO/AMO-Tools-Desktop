@@ -1,20 +1,19 @@
 <div class="help-header">
 
-  <h3>Auxilary Power Losses Help</h3>
-  <p>Enter loss data</p>
-  <p class="text-muted">
-    <span class="fa fa-youtube-play"></span> Watch tutorial on gathering loss data.
-  </p>
+  <h3>Exhaust Gas Help</h3>
+  <p>Enter exhaust gas data</p>
+  <!--<p class="text-muted">
+    <span class="fa fa-youtube-play"></span> Watch tutorial on entering cooling loss data.
+  </p>-->
 
 </div>
 
 
 <div class="help-content">
-
-
-  <div class="card" *ngIf="currentField == 'motorPhase'">
+  <!-- All -->
+  <div class="card" *ngIf="currentField == 'totalHeatInput'">
     <div class="card-header">
-      Motor Current Phase
+      Total Heat Input
     </div>
     <div class="card-block">
       <label>Description:</label>
@@ -27,9 +26,9 @@
     </div>
   </div>
 
-  <div class="card" *ngIf="currentField == 'supplyVoltage'">
+  <div class="card" *ngIf="currentField == 'electricalPowerInput'">
     <div class="card-header">
-      Supply Voltage
+      Electrical Power Input
     </div>
     <div class="card-block">
       <label>Description:</label>
@@ -42,9 +41,9 @@
     </div>
   </div>
 
-  <div class="card" *ngIf="currentField == 'avgCurrent'">
+  <div class="card" *ngIf="currentField == 'excessAir'">
     <div class="card-header">
-      Average Current
+      Excess Air
     </div>
     <div class="card-block">
       <label>Description:</label>
@@ -57,9 +56,9 @@
     </div>
   </div>
 
-  <div class="card" *ngIf="currentField == 'powerFactor'">
+  <div class="card" *ngIf="currentField == 'combustionAirTemp'">
     <div class="card-header">
-      Power Factor
+      Combustion Air Temperature
     </div>
     <div class="card-block">
       <label>Description:</label>
@@ -72,9 +71,39 @@
     </div>
   </div>
 
-  <div class="card" *ngIf="currentField == 'operatingTime'">
+  <div class="card" *ngIf="currentField == 'exhaustGasTemp'">
     <div class="card-header">
-      Operating Time
+      Exhaust Gas Temperature
+    </div>
+    <div class="card-block">
+      <label>Description:</label>
+      <p>DESCRITION HERE</p>
+      <label>Input:</label>
+      <p>
+        Units: <strong>UNIT HERE</strong><br> Minimum Value Allowed: <strong>MAX HERE</strong><br> Maximum Value Allowed:
+        <strong>MIN HERE</strong><br>
+      </p>
+    </div>
+  </div>
+
+  <!--<div class="card" *ngIf="currentField == 'availableHeat'">
+    <div class="card-header">
+     Available Heat
+    </div>
+    <div class="card-block">
+      <label>Description:</label>
+            <p>DESCRITION HERE</p>
+      <label>Input:</label>
+      <p>
+        Units: <strong>UNIT HERE</strong><br> Minimum Value Allowed: <strong>MAX HERE</strong><br> Maximum Value Allowed:
+        <strong>MIN HERE</strong><br>
+      </p>
+    </div>
+  </div>-->
+
+  <div class="card" *ngIf="currentField == 'otherLoss'">
+    <div class="card-header">
+      Other Losses
     </div>
     <div class="card-block">
       <label>Description:</label>
