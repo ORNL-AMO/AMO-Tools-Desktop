@@ -47,6 +47,7 @@ import { EnergyInputHelpComponent } from './losses-help/energy-input-help/energy
 
 import { ExhaustGasModule } from './exhaust-gas/exhaust-gas.module';
 import { LossesService } from './losses.service';
+import { EnergyInputExhaustGasLossesModule } from './energy-input-exhaust-gas-losses/energy-input-exhaust-gas-losses.module';
 @NgModule({
   imports: [
     CommonModule,
@@ -68,7 +69,8 @@ import { LossesService } from './losses.service';
     AtmosphereLossesModule,
     CoolingLossesModule,
     ChargeMaterialModule,
-    ExhaustGasModule
+    ExhaustGasModule,
+    EnergyInputExhaustGasLossesModule
   ],
   declarations: [
     LossesComponent,
@@ -92,7 +94,7 @@ import { LossesService } from './losses.service';
     SlagHelpComponent,
     ExhaustGasHelpComponent,
     EditConditionPropertiesComponent,
-    EnergyInputHelpComponent,
+    EnergyInputHelpComponent
   ],
   providers: [
     LossesService

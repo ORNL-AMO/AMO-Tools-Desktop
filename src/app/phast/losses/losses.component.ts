@@ -92,7 +92,8 @@ export class LossesComponent implements OnInit {
         extendedNotes: '',
         slagNotes: '',
         auxiliaryPowerNotes: '',
-        exhaustGasNotes: ''
+        exhaustGasNotes: '',
+        energyInputExhaustGasNotes: ''
       }
     }
     tmpModification.phast.losses = (JSON.parse(JSON.stringify(this.phast.losses)));

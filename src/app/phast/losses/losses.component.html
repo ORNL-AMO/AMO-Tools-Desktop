@@ -67,6 +67,9 @@
         [(losses)]="phast.losses" [addLossToggle]="addLossToggle" [saveClicked]="saveClicked" *ngIf="lossesTab == 'auxiliary-power'"
         [isBaseline]="true"></app-auxiliary-power-losses>
 
+      <app-energy-input-exhaust-gas-losses (fieldChange)="changeField($event)" [baselineSelected]="baselineSelected" (savedLoss)="saveModifications()"
+        [(losses)]="phast.losses" [addLossToggle]="addLossToggle" [saveClicked]="saveClicked" [isBaseline]="true" *ngIf="lossesTab == 'energy-input-exhaust-gas'"></app-energy-input-exhaust-gas-losses>
+
     </div>
   </div>
   <!--Modification Start -->
@@ -129,6 +132,8 @@
       <app-auxiliary-power-losses (fieldChange)="changeField($event)" [baselineSelected]="modificationSelected" (savedLoss)="saveModifications()"
         [(losses)]="_modifications[modificationIndex].phast.losses" [saveClicked]="saveClicked" *ngIf="lossesTab == 'auxiliary-power'"></app-auxiliary-power-losses>
 
+      <app-energy-input-exhaust-gas-losses (fieldChange)="changeField($event)" [baselineSelected]="modificationSelected" (savedLoss)="saveModifications()"
+        [(losses)]="_modifications[modificationIndex].phast.losses" [saveClicked]="saveClicked" *ngIf="lossesTab == 'energy-input-exhaust-gas'"></app-energy-input-exhaust-gas-losses>
     </div>
 
     <div class="modifications-list" *ngIf="isDropdownOpen">

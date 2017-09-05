@@ -1,0 +1,70 @@
+<form #lossForm [formGroup]="exhaustGasForm">
+  <div class="form-section">
+    <div class="form-group">
+      <label class="small" for="totalHeatInput">Total Heat Input for Burners</label>
+      <div class="input-group">
+        <input name="{{'totalHeatInput_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="totalHeatInput"
+          id="totalHeatInput" onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('totalHeatInput')">
+        <span class="input-group-addon units">Btu/hr</span>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="small" for="electricalPowerInput">Electrical Power Input</label>
+      <div class="input-group">
+        <input name="{{'electricalPowerInput_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="electricalPowerInput"
+          id="electricalPowerInput" onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('electricalPowerInput')">
+        <span class="input-group-addon units">Kw</span>
+      </div>
+    </div>
+  </div>
+  <div class="form-section">
+    <div class="form-group">
+      <label class="small" for="excessAir">Excess Air</label>
+      <div class="input-group">
+        <input name="{{'excessAir_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="excessAir" id="excessAir"
+          onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('excessAir')">
+        <span class="input-group-addon units">%</span>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="small" for="combustionAirTemp">Combustion Air Temp</label>
+      <div class="input-group">
+        <input name="{{'combustionAirTemp_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="combustionAirTemp"
+          id="combustionAirTemp" onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('combustionAirTemp')">
+        <span class="input-group-addon units">&#8457;</span>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="small" for="exhaustGasTemp">Exhaust Gas Temp</label>
+      <div class="input-group">
+        <input name="{{'exhaustGasTemp_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="exhaustGasTemp"
+          id="exhaustGasTemp" onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('exhaustGasTemp')">
+        <span class="input-group-addon units">&#8457;</span>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="small" for="availableHeat">Available Heat</label>
+      <div class="text-center small">
+        {{availableHeat | number:'2.2-2'}} %
+      </div>
+    </div>
+  </div>
+  <div class="form-section">
+    <div *ngFor="let lossNumber of otherLossArray; let index = index;">
+      <div class="form-group">
+        <label class="small" for="{{'otherLoss'+lossNumber}}">
+          <span *ngIf="isBaseline" class="fa fa-times" (click)="signalRemove(index, lossNumber)"></span>
+          Other Loss for Other Areas {{lossNumber}}
+          </label>
+        <div class="input-group">
+          <input name="{{'otherLoss'+lossNumber+'_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="{{'otherLoss'+lossNumber}}"
+            id="{{'otherLoss'+lossNumber}}" onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('otherLoss')">
+          <span class="input-group-addon units">Btu/Cycle</span>
+        </div>
+      </div>
+    </div>
+    <div class="form-group" *ngIf="isBaseline">
+      <a class="text-center small" (click)="addOtherSignal()">Add Other Loss</a>
+    </div>
+  </div>
+</form>

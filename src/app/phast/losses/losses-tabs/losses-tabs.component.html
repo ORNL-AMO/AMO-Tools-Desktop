@@ -22,7 +22,13 @@
       Energy Input
     </a>
   </li><!--
-  --><li *ngIf="settings.energySourceType == 'Electricity'" [ngClass]="{'active': lossesTab == 'exhaust-gas'}" (click)="tabChange('exhaust-gas')">
+  --><li *ngIf="settings.energySourceType == 'Electricity' && settings.furnaceType != 'Electric Arc Furnace (EAF)'" [ngClass]="{'active': lossesTab == 'energy-input-exhaust-gas'}"
+    (click)="tabChange('energy-input-exhaust-gas')">
+    <a class="nav-link small">
+      Energy Input
+    </a>
+  </li><!--
+  --><li *ngIf="settings.energySourceType == 'Electricity' && settings.furnaceType == 'Electric Arc Furnace (EAF)'" [ngClass]="{'active': lossesTab == 'exhaust-gas'}" (click)="tabChange('exhaust-gas')">
     <a class="nav-link small">
       Exhaust Gas
     </a>
