@@ -107,7 +107,15 @@
       </div>
     </div>
     <div class="form-group">
-
+      <label for="sizeMargin">Size Margin</label>
+      <div class="input-group">
+        <input name="sizeMargin" type="number" min="0" max="100" step="any" class="form-control" id="sizeMargin" formControlName="sizeMargin"
+          ngModel="{{psatForm.value.sizeMargin}}" (input)="checkMargin()" (focus)="focusField('sizeMargin')" onfocus="this.select();">
+        <span class="input-group-addon units">%</span>
+      </div>
+      <span class="alert-warning pull-right small" *ngIf="marginError !== null">{{marginError}}</span>
+    </div>
+    <div class="form-group">
       <label>Fixed specific speed?</label>
       <div name="fixedSpeed" class="form-check">
         <label class="form-check-label">
@@ -127,15 +135,6 @@
           (change)="focusField('fixedSpecificSpeed')">No
       </label>
       </div>
-    </div>
-    <div class="form-group">
-      <label for="sizeMargin">Size Margin</label>
-      <div class="input-group">
-        <input name="sizeMargin" type="number" min="0" max="100" step="any" class="form-control" id="sizeMargin" formControlName="sizeMargin"
-          ngModel="{{psatForm.value.sizeMargin}}" (input)="checkMargin()" (focus)="focusField('sizeMargin')" onfocus="this.select();">
-        <span class="input-group-addon units">%</span>
-      </div>
-      <span class="alert-warning pull-right small" *ngIf="marginError !== null">{{marginError}}</span>
     </div>
   </div>
 </form>
