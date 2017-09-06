@@ -13,9 +13,10 @@ export class AssessmentService {
   showLandingScreen: boolean = true;
 
   createAssessment: BehaviorSubject<boolean>;
-
+  checkForUpdates: BehaviorSubject<boolean>;
   constructor() { 
     this.createAssessment = new BehaviorSubject<boolean>(null);
+    this.checkForUpdates = new BehaviorSubject<boolean>(null);
   }
 
   getNewAssessment(assessmentType: string): Assessment {

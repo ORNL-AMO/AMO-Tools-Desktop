@@ -61,6 +61,10 @@ app.on('ready', function () {
     event.sender.send('available', autoUpdater.updateAvailable);
   });
 
+  ipcMain.on('check-for-updates', (event, arg) => {
+    autoUpdater.checkForUpdates();
+  })
+
   autoUpdater.on('update-not-available', (event, info) => {
   });
 
