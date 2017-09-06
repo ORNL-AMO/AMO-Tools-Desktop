@@ -64,7 +64,8 @@ export class AssessmentService {
 
   getNewPhast(): PHAST {
     let newPhast: PHAST = {
-      name: null
+      name: null,
+      systemEfficiency: 90
     }
     return newPhast;
   }

@@ -77,5 +77,10 @@
     <a class="nav-link small">
     Other
     </a>
+  </li><!--
+    --><li *ngIf="settings.energySourceType == 'Steam'" [ngClass]="{'active': lossesTab == 'heat-system-efficiency'}" (click)="tabChange('heat-system-efficiency')">
+    <a class="nav-link small">
+    Heat System Efficiency
+    </a>
   </li>
 </ul>

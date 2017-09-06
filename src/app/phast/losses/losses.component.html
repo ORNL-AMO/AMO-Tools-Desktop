@@ -9,7 +9,7 @@
   <div class="modification baseline" (click)="togglePanel(baselineSelected)" [ngClass]="{'disabled': baselineSelected == false, 'modal-open': isModalOpen == true}">
     <div class="header">
       <h3>Baseline</h3>
-      <button class="btn btn-secondary pull-right" (click)="addLoss()" [disabled]="!baselineSelected"><span class="fa fa-plus"></span></button>
+      <button *ngIf="showAddBtn" class="btn btn-secondary pull-right" (click)="addLoss()" [disabled]="!baselineSelected"><span class="fa fa-plus"></span></button>
     </div>
 
     <div class="losses-container">
@@ -70,6 +70,7 @@
       <app-energy-input-exhaust-gas-losses (fieldChange)="changeField($event)" [baselineSelected]="baselineSelected" (savedLoss)="saveModifications()"
         [(losses)]="phast.losses" [addLossToggle]="addLossToggle" [saveClicked]="saveClicked" [isBaseline]="true" *ngIf="lossesTab == 'energy-input-exhaust-gas'"></app-energy-input-exhaust-gas-losses>
 
+      <app-heat-system-efficiency *ngIf="lossesTab == 'heat-system-efficiency'" [(losses)]="phast.losses" [(systemEfficiency)]="phast.systemEfficiency" [saveClicked]="saveClicked" [isBaseline]="true" (fieldChange)="changeField($event)" [baselineSelected]="baselineSelected" (savedLoss)="saveModifications()"></app-heat-system-efficiency>
     </div>
   </div>
   <!--Modification Start -->
@@ -84,7 +85,6 @@
         <span class="changeAdd" *ngIf="isDropdownOpen">Cancel</span>
       </button>
     </div>
-
 
     <div class="losses-container" *ngIf="!isDropdownOpen">
 
@@ -134,6 +134,8 @@
 
       <app-energy-input-exhaust-gas-losses (fieldChange)="changeField($event)" [baselineSelected]="modificationSelected" (savedLoss)="saveModifications()"
         [(losses)]="_modifications[modificationIndex].phast.losses" [saveClicked]="saveClicked" *ngIf="lossesTab == 'energy-input-exhaust-gas'"></app-energy-input-exhaust-gas-losses>
+    
+      <app-heat-system-efficiency *ngIf="lossesTab == 'heat-system-efficiency'" [(losses)]="_modifications[modificationIndex].phast.losses" [(systemEfficiency)]="_modifications[modificationIndex].phast.systemEfficiency" [saveClicked]="saveClicked" [isBaseline]="true" (fieldChange)="changeField($event)" [baselineSelected]="modificationSelected" (savedLoss)="saveModifications()"></app-heat-system-efficiency>
     </div>
 
     <div class="modifications-list" *ngIf="isDropdownOpen">

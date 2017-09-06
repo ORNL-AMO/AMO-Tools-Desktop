@@ -24,14 +24,15 @@ export interface PHAST {
   setupDone?: boolean,
   auxEquipment?: AuxEquipment[],
   meteredEnergy?: MeteredEnergy,
-  designedEnergy?: DesignedEnergy
-  operatingHours?: OperatingHours
+  designedEnergy?: DesignedEnergy,
+  operatingHours?: OperatingHours,
+  systemEfficiency?: number
 }
 
 export interface PhastInputs {
   heatSource?: any,
   energySource?: any,
-  operatingHours?: OperatingHours
+  operatingHours?: OperatingHours,
 }
 
 export interface Losses {
@@ -71,7 +72,8 @@ export interface Notes {
   slagNotes?: string,
   auxiliaryPowerNotes?: string,
   exhaustGasNotes?: string,
-  energyInputExhaustGasNotes?: string
+  energyInputExhaustGasNotes?: string,
+  heatSystemEfficiencyNotes?: string
 }
 
 export interface OperatingHours {
