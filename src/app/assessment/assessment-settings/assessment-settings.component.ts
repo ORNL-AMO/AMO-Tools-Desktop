@@ -51,9 +51,9 @@ export class AssessmentSettingsComponent implements OnInit {
     )
   }
 
-  checkForUpdates(){
+  // checkForUpdates(){
 
-  }
+  // }
 
   showSettingsModal(_oldSettings?: Settings, _newSettings?: Settings) {
     let settingsChanged;

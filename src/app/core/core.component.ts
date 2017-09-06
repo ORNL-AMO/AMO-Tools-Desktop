@@ -44,11 +44,11 @@ export class CoreComponent implements OnInit {
       this.showScreenshot = false;
     }
 
-    this.assessmentService.checkForUpdates.subscribe(val => {
-      if(val == true){
-        this.electronService.ipcRenderer.send('check-for-updates', null);
-      }
-    })
+    // this.assessmentService.checkForUpdates.subscribe(val => {
+    //   if(val == true){
+    //     this.electronService.ipcRenderer.send('check-for-updates', null);
+    //   }
+    // })
   }
 
 
