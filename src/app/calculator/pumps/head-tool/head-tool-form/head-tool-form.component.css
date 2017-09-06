@@ -12,12 +12,3 @@
   margin-bottom: 0px !important; 
   padding-bottom: 8px !important;
 }
-
-/*Overides for head tool forms*/
-.calc-input-group{
-  width: auto;
-}
-
-.no-unit-input{
-  width: 100%;
-}

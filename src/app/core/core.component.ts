@@ -3,6 +3,7 @@ import { ModalDirective } from 'ngx-bootstrap';
 import { ElectronService } from 'ngx-electron';
 import { ToastyService, ToastyConfig, ToastOptions, ToastData } from 'ng2-toasty';
 import { ImportExportService } from '../shared/import-export/import-export.service';
+import { AssessmentService } from '../assessment/assessment.service';
 
 @Component({
   selector: 'app-core',
@@ -21,7 +22,7 @@ export class CoreComponent implements OnInit {
 
   showScreenshot: boolean = true;
   constructor(private electronService: ElectronService, private toastyService: ToastyService,
-    private toastyConfig: ToastyConfig, private importExportService: ImportExportService) {
+    private toastyConfig: ToastyConfig, private importExportService: ImportExportService, private assessmentService: AssessmentService) {
     this.toastyConfig.theme = 'bootstrap';
     this.toastyConfig.limit = 1;
   }
@@ -42,6 +43,12 @@ export class CoreComponent implements OnInit {
     if(this.electronService.process.platform == 'win32'){
       this.showScreenshot = false;
     }
+
+    this.assessmentService.checkForUpdates.subscribe(val => {
+      if(val == true){
+        this.electronService.ipcRenderer.send('check-for-updates', null);
+      }
+    })
   }
 
 

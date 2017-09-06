@@ -41,6 +41,7 @@ export class HeadToolComponent implements OnInit {
   tabSelect: string = 'results';
   showSettings: boolean = false;
   settingsForm: any;
+  canSave: boolean = false;
   constructor(private formBuilder: FormBuilder, private psatService: PsatService, private indexedDbService: IndexedDbService, private settingsService: SettingsService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
@@ -120,6 +121,9 @@ export class HeadToolComponent implements OnInit {
     this.results.estimatedSuctionFrictionHead = result.estimatedSuctionFrictionHead;
     this.results.estimatedDischargeFrictionHead = result.estimatedDischargeFrictionHead;
     this.results.pumpHead = result.pumpHead;
+    if (this.results.pumpHead > 0 && this.inAssessment) {
+      this.canSave = true;
+    }
   }
 
 
@@ -144,6 +148,9 @@ export class HeadToolComponent implements OnInit {
     this.results.estimatedSuctionFrictionHead = result.estimatedSuctionFrictionHead;
     this.results.estimatedDischargeFrictionHead = result.estimatedDischargeFrictionHead;
     this.results.pumpHead = result.pumpHead;
+    if (this.results.pumpHead > 0 && this.inAssessment) {
+      this.canSave = true;
+    }
   }
 
   initHeadToolSuctionForm(settings: Settings) {
@@ -155,11 +162,11 @@ export class HeadToolComponent implements OnInit {
     }
     return this.formBuilder.group({
       'suctionPipeDiameter': [this.convertUnitsService.value(12).from('in').to(smallUnit), Validators.required],
-      'suctionTankGasOverPressure': [5, Validators.required],
+      'suctionTankGasOverPressure': [0, Validators.required],
       'suctionTankFluidSurfaceElevation': [this.convertUnitsService.value(10).from('ft').to(settings.distanceMeasurement), Validators.required],
       'suctionLineLossCoefficients': [.5, Validators.required],
       'dischargePipeDiameter': [this.convertUnitsService.value(12).from('in').to(smallUnit), Validators.required],
-      'dischargeGaugePressure': [0, Validators.required],
+      'dischargeGaugePressure': [124, Validators.required],
       'dischargeGaugeElevation': [this.convertUnitsService.value(10).from('ft').to(settings.distanceMeasurement), Validators.required],
       'dischargeLineLossCoefficients': [1, Validators.required],
       'specificGravity': [1, Validators.required],
@@ -176,11 +183,11 @@ export class HeadToolComponent implements OnInit {
     }
     return this.formBuilder.group({
       'suctionPipeDiameter': [this.convertUnitsService.value(12).from('in').to(smallUnit), Validators.required],
-      'suctionGuagePressure': [0, Validators.required],
+      'suctionGuagePressure': [5, Validators.required],
       'suctionGuageElevation': [this.convertUnitsService.value(10).from('ft').to(settings.distanceMeasurement), Validators.required],
       'suctionLineLossCoefficients': [.5, Validators.required],
       'dischargePipeDiameter': [this.convertUnitsService.value(12).from('in').to(smallUnit), Validators.required],
-      'dischargeGaugePressure': [0, Validators.required],
+      'dischargeGaugePressure': [124, Validators.required],
       'dischargeGaugeElevation': [this.convertUnitsService.value(10).from('ft').to(settings.distanceMeasurement), Validators.required],
       'dischargeLineLossCoefficients': [1, Validators.required],
       'specificGravity': [1, Validators.required],
@@ -188,7 +195,7 @@ export class HeadToolComponent implements OnInit {
     })
   }
 
-  changeField(str:string){
+  changeField(str: string) {
     this.currentField = str;
   }
 

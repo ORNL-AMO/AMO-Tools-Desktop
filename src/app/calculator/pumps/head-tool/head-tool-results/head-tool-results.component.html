@@ -4,7 +4,7 @@
   <dd>{{results.differentialElevationHead | number:'1.1-2'}} {{settings.distanceMeasurement}}</dd>
 
   <dt>Differential Pressure Head</dt>
-  <dd>{{results.differentialPressureHead | number:'1.1-2'}} {{settings.distanceMeasurement}}</dd>
+  <dd [ngClass]="{'invalid': results.differentialPressureHead < 0}">{{results.differentialPressureHead | number:'1.1-2'}} {{settings.distanceMeasurement}}</dd>
 
   <dt>Differential Velocity Head</dt>
   <dd>{{results.differentialVelocityHead | number:'1.1-2'}} {{settings.distanceMeasurement}}</dd>
@@ -16,6 +16,6 @@
   <dd>{{results.estimatedDischargeFrictionHead | number:'1.1-2'}} {{settings.distanceMeasurement}}</dd>
 
   <dt>Pump Head</dt>
-  <dd>{{results.pumpHead | number:'1.1-2'}} {{settings.distanceMeasurement}}</dd>
+  <dd [ngClass]="{'invalid': results.pumpHead < 0}">{{results.pumpHead | number:'1.1-2'}} {{settings.distanceMeasurement}}</dd>
 
 </dl>
