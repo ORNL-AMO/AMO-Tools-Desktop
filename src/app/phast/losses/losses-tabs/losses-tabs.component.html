@@ -16,12 +16,6 @@
       Auxiliary Power
     </a>
   </li><!--
-  --><li *ngIf="settings.energySourceType == 'Electricity' && settings.furnaceType == 'Electric Arc Furnace (EAF)'" [ngClass]="{'active': lossesTab == 'energy-input'}"
-    (click)="tabChange('energy-input')">
-    <a class="nav-link small">
-      Energy Input
-    </a>
-  </li><!--
   --><li *ngIf="settings.energySourceType == 'Electricity' && settings.furnaceType != 'Electric Arc Furnace (EAF)'" [ngClass]="{'active': lossesTab == 'energy-input-exhaust-gas'}"
     (click)="tabChange('energy-input-exhaust-gas')">
     <a class="nav-link small">
@@ -58,11 +52,6 @@
     Cooling
     </a>
   </li><!--
-  --><li *ngIf="settings.energySourceType == 'Fuel'" [ngClass]="{'active': lossesTab == 'flue-gas-losses'}" (click)="tabChange('flue-gas-losses')">
-    <a class="nav-link small">
-    Flue Gas
-    </a>
-  </li><!--
   --><li [ngClass]="{'active': lossesTab == 'gas-leakage-losses'}" (click)="tabChange('gas-leakage-losses')">
     <a class="nav-link small">
     Gas Leakage
@@ -73,7 +62,7 @@
     Extended Surface
     </a>
   </li><!--
-    --><li *ngIf="settings.energySourceType == 'Fuel'" [ngClass]="{'active': lossesTab == 'other-losses'}" (click)="tabChange('other-losses')">
+    --><li *ngIf="settings.energySourceType == 'Fuel' || settings.energySourceType == 'Steam'" [ngClass]="{'active': lossesTab == 'other-losses'}" (click)="tabChange('other-losses')">
     <a class="nav-link small">
     Other
     </a>
@@ -81,6 +70,17 @@
     --><li *ngIf="settings.energySourceType == 'Steam'" [ngClass]="{'active': lossesTab == 'heat-system-efficiency'}" (click)="tabChange('heat-system-efficiency')">
     <a class="nav-link small">
     Heat System Efficiency
+    </a>
+  </li><!--
+  --><li *ngIf="settings.energySourceType == 'Fuel'" [ngClass]="{'active': lossesTab == 'flue-gas-losses'}" (click)="tabChange('flue-gas-losses')">
+    <a class="nav-link small">
+    Flue Gas
+    </a>
+  </li><!--
+  --><li *ngIf="settings.energySourceType == 'Electricity' && settings.furnaceType == 'Electric Arc Furnace (EAF)'" [ngClass]="{'active': lossesTab == 'energy-input'}"
+    (click)="tabChange('energy-input')">
+    <a class="nav-link small">
+      Energy Input
     </a>
   </li>
 </ul>

@@ -38,9 +38,21 @@
   <div class="row">
     <div class="col-12">
       <div class="form-group">
-        <label class="small">Heat Loss</label>
+        <label class="small">Available Heat</label>
         <div class="text-center small">
-          {{loss.heatLoss | number:'2.2-2'}} Btu/hr
+          {{loss.availableHeat | number:'2.0-2'}} %
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="small">Gross Heat</label>
+        <div class="text-center small">
+          {{loss.grossHeat | number:'2.0-2'}}  Btu/hr
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="small">System Losses</label>
+        <div class="text-center small">
+          {{loss.systemLosses | number:'2.0-2'}} Btu/hr
         </div>
       </div>
     </div>
