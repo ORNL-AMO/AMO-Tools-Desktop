@@ -53,7 +53,7 @@ export class MeteredElectricityComponent implements OnInit {
   }
 
   calculate() {
-    this.results = this.meteredEnergyService.meteredElectricity(this.phast.meteredEnergy.meteredEnergyElectricity, this.phast);
+    this.results = this.meteredEnergyService.meteredElectricity(this.phast.meteredEnergy.meteredEnergyElectricity, this.phast, this.settings);
   }
 
   setField(str: string) {

@@ -41,7 +41,7 @@ export class DesignedEnergyElectricityComponent implements OnInit {
   }
 
   calculate() {
-    this.results = this.designedEnergyService.designedEnergyElectricity(this.phast.designedEnergy.designedEnergyElectricity, this.phast);
+    this.results = this.designedEnergyService.designedEnergyElectricity(this.phast.designedEnergy.designedEnergyElectricity, this.phast, this.settings);
   }
 
   setField(str: string) {

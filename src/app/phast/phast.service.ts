@@ -23,6 +23,8 @@ declare var phastAddon: any;
 import { OpeningLossesService } from './losses/opening-losses/opening-losses.service';
 import { BehaviorSubject } from 'rxjs';
 import { ConvertUnitsService } from '../shared/convert-units/convert-units.service';
+import { Settings } from '../shared/models/settings';
+
 @Injectable()
 export class PhastService {
 
@@ -68,8 +70,19 @@ export class PhastService {
     return phastAddon.solidLoadChargeMaterial(inputs);
   }
 
-  wallLosses(inputs: WallLoss) {
-    return phastAddon.wallLosses(inputs);
+  wallLosses(inputs: WallLoss, settings: Settings) {
+    let results = 0;
+    if (settings.unitsOfMeasure == 'Metric') {
+      inputs.ambientTemperature = this.convertUnitsService.value(inputs.ambientTemperature).from('F').to('C');
+      inputs.surfaceTemperature = this.convertUnitsService.value(inputs.surfaceTemperature).from('F').to('C');
+      inputs.windVelocity = this.convertUnitsService.value(inputs.windVelocity).from('mph').to('km/h');
+      inputs.surfaceArea = this.convertUnitsService.value(inputs.surfaceArea).from('ft2').to('m2');
+      results = phastAddon.wallLosses(inputs);
+      results = this.convertUnitsService.value(results).from('Btu').to('kJ');
+    } else {
+      results = phastAddon.wallLosses(inputs);
+    }
+    return results;
   }
 
   waterCoolingLosses(inputs: WaterCoolingLoss) {
@@ -146,7 +159,7 @@ export class PhastService {
   // flueGasLossesByMassGivenO2
   // flueGasLossesByVolumeGivenO2
 
-  sumHeatInput(losses: Losses): number {
+  sumHeatInput(losses: Losses, settings: Settings): number {
     let grossHeatRequired: number = 0;
     if (losses.atmosphereLosses) {
       grossHeatRequired += this.sumAtmosphereLosses(losses.atmosphereLosses);
@@ -170,7 +183,7 @@ export class PhastService {
       grossHeatRequired += this.sumEnergyInputExhaustGas(losses.energyInputExhaustGasLoss);
     }
     if (losses.extendedSurfaces) {
-      grossHeatRequired += this.sumExtendedSurface(losses.extendedSurfaces);
+      grossHeatRequired += this.sumExtendedSurface(losses.extendedSurfaces, settings);
     }
     if (losses.fixtureLosses) {
       grossHeatRequired += this.sumFixtureLosses(losses.fixtureLosses);
@@ -191,7 +204,7 @@ export class PhastService {
       grossHeatRequired += this.sumSlagLosses(losses.slagLosses);
     }
     if (losses.wallLosses) {
-      grossHeatRequired += this.sumWallLosses(losses.wallLosses);
+      grossHeatRequired += this.sumWallLosses(losses.wallLosses, settings);
     }
     return grossHeatRequired;
   }
@@ -269,7 +282,7 @@ export class PhastService {
     return sum;
   }
 
-  sumExtendedSurface(losses: ExtendedSurface[]): number {
+  sumExtendedSurface(losses: ExtendedSurface[], settings: Settings): number {
     let sum = 0;
     losses.forEach(loss => {
       let tmpWallLoss: WallLoss = {
@@ -281,7 +294,7 @@ export class PhastService {
         conditionFactor: 1,
         correctionFactor: 1,
       }
-      sum += this.wallLosses(tmpWallLoss);
+      sum += this.wallLosses(tmpWallLoss, settings);
     })
     return sum;
   }
@@ -345,10 +358,10 @@ export class PhastService {
     return sum;
   }
 
-  sumWallLosses(losses: WallLoss[]): number {
+  sumWallLosses(losses: WallLoss[], settings: Settings): number {
     let sum = 0;
     losses.forEach(loss => {
-      sum += this.wallLosses(loss);
+      sum += this.wallLosses(loss, settings);
     })
     return sum;
   }

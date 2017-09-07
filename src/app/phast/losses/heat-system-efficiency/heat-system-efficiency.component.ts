@@ -2,6 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges, ViewChil
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { PhastService } from '../../phast.service';
 import { Losses } from '../../../shared/models/phast/phast';
+import { Settings } from '../../../shared/models/settings';
 @Component({
   selector: 'app-heat-system-efficiency',
   templateUrl: './heat-system-efficiency.component.html',
@@ -20,6 +21,9 @@ export class HeatSystemEfficiencyComponent implements OnInit {
   fieldChange = new EventEmitter<string>();
   @Input()
   baselineSelected: boolean;
+  @Input()
+  settings: Settings;
+
   @Output('savedLoss')
   savedLoss = new EventEmitter<boolean>();
   @ViewChild('lossForm') lossForm: ElementRef;
@@ -113,7 +117,7 @@ export class HeatSystemEfficiencyComponent implements OnInit {
     if (!bool) {
       this.startSavePolling();
     }
-    this.grossHeat = this.phastService.sumHeatInput(this.losses) / this.efficiencyForm.value.efficiency;
+    this.grossHeat = this.phastService.sumHeatInput(this.losses, this.settings) / this.efficiencyForm.value.efficiency;
     this.systemLosses = this.grossHeat * (1 - (this.efficiencyForm.value.efficiency/100));
   }
 }
