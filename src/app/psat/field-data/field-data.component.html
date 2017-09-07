@@ -39,10 +39,11 @@
         <a [ngClass]="{'disabled-link': !selected}" class="form-text text-help small" (click)="showHeadToolModal()">Calculate Head</a>
       </label>
     <div class="input-group">
-      <input name="head" type="number" min="0.1" step="any" class="form-control" formControlName="head" id="head" (input)="startSavePolling()"
+      <input name="head" type="number" min="0.1" step="any" class="form-control" formControlName="head" id="head" (input)="checkHead()"
         (focus)="focusField('head')" onfocus="this.select();">
       <span class="input-group-addon units">{{settings.distanceMeasurement}}</span>
     </div>
+    <span class="alert-danger pull-right small" *ngIf="headError !== null">{{headError}}</span>
   </div>
 
   <div class="form-group" *ngIf="baseline">
@@ -107,7 +108,15 @@
       </div>
     </div>
     <div class="form-group">
-
+      <label for="sizeMargin">Size Margin</label>
+      <div class="input-group">
+        <input name="sizeMargin" type="number" min="0" max="100" step="any" class="form-control" id="sizeMargin" formControlName="sizeMargin"
+          ngModel="{{psatForm.value.sizeMargin}}" (input)="checkMargin()" (focus)="focusField('sizeMargin')" onfocus="this.select();">
+        <span class="input-group-addon units">%</span>
+      </div>
+      <span class="alert-warning pull-right small" *ngIf="marginError !== null">{{marginError}}</span>
+    </div>
+    <div class="form-group">
       <label>Fixed specific speed?</label>
       <div name="fixedSpeed" class="form-check">
         <label class="form-check-label">
@@ -127,15 +136,6 @@
           (change)="focusField('fixedSpecificSpeed')">No
       </label>
       </div>
-    </div>
-    <div class="form-group">
-      <label for="sizeMargin">Size Margin</label>
-      <div class="input-group">
-        <input name="sizeMargin" type="number" min="0" max="100" step="any" class="form-control" id="sizeMargin" formControlName="sizeMargin"
-          ngModel="{{psatForm.value.sizeMargin}}" (input)="checkMargin()" (focus)="focusField('sizeMargin')" onfocus="this.select();">
-        <span class="input-group-addon units">%</span>
-      </div>
-      <span class="alert-warning pull-right small" *ngIf="marginError !== null">{{marginError}}</span>
     </div>
   </div>
 </form>
