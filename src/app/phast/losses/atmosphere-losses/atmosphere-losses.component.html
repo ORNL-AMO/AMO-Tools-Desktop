@@ -23,7 +23,7 @@
   <div class="row">
     <div class="col-12">
       <app-atmosphere-losses-form [(atmosphereLossForm)]="loss.form" (changeField)="changeField($event)" (calculate)="calculate(loss)"
-        [baselineSelected]="baselineSelected" (saveEmit)="saveLosses()" [lossIndex]="lossIndex"></app-atmosphere-losses-form>
+        [baselineSelected]="baselineSelected" (saveEmit)="saveLosses()" [lossIndex]="lossIndex" [settings]="settings"></app-atmosphere-losses-form>
     </div>
   </div>
   <div class="row">
@@ -31,7 +31,9 @@
       <div class="form-group">
         <label class="small">Total Heat Loss</label>
         <div class="text-center small">
-          {{loss.heatLoss | number:'2.2-2'}} Btu/hr
+          {{loss.heatLoss | number:'2.2-2'}}
+          <span *ngIf="settings.unitsOfMeasure == 'Imperial'">Btu/hr</span>
+          <span *ngIf="settings.unitsOfMeasure == 'Metric'">kJ/hr</span>
         </div>
       </div>
     </div>
