@@ -56,7 +56,6 @@ export class LossesComponent implements OnInit {
 
     this.lossesService.lossesTab.subscribe(val => {
       this.lossesTab = val;
-      console.log(this.lossesTab);
       if(this.lossesTab == 'heat-system-efficiency'){
         this.showAddBtn = false;
       }else{

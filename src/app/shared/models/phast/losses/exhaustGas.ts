@@ -8,6 +8,6 @@ export interface ExhaustGas {
     combustibleGases?: number,
     vfr?: number,
     dustLoading?: number,
-    otherLossObjects?: number[]
+    //otherLossObjects?: number[]
     otherLosses?: number
 }

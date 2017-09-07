@@ -4,29 +4,6 @@
     Charge Material
     </a>
   </li><!--
-  --><li *ngIf="settings.energySourceType == 'Electricity' && settings.furnaceType == 'Electric Arc Furnace (EAF)'" [ngClass]="{'active': lossesTab == 'slag'}"
-    (click)="tabChange('slag')">
-    <a class="nav-link small">
-    Slag
-    </a>
-  </li><!--
-  --><li *ngIf="settings.energySourceType == 'Electricity' && settings.furnaceType != 'Electric Arc Furnace (EAF)'" [ngClass]="{'active': lossesTab == 'auxiliary-power'}"
-    (click)="tabChange('auxiliary-power')">
-    <a class="nav-link small">
-      Auxiliary Power
-    </a>
-  </li><!--
-  --><li *ngIf="settings.energySourceType == 'Electricity' && settings.furnaceType != 'Electric Arc Furnace (EAF)'" [ngClass]="{'active': lossesTab == 'energy-input-exhaust-gas'}"
-    (click)="tabChange('energy-input-exhaust-gas')">
-    <a class="nav-link small">
-      Energy Input
-    </a>
-  </li><!--
-  --><li *ngIf="settings.energySourceType == 'Electricity' && settings.furnaceType == 'Electric Arc Furnace (EAF)'" [ngClass]="{'active': lossesTab == 'exhaust-gas'}" (click)="tabChange('exhaust-gas')">
-    <a class="nav-link small">
-      Exhaust Gas
-    </a>
-  </li><!--
   --><li [ngClass]="{'active': lossesTab == 'wall-losses'}" (click)="tabChange('wall-losses')">
     <a class="nav-link small">
     Wall
@@ -62,23 +39,46 @@
     Extended Surface
     </a>
   </li><!--
-    --><li *ngIf="settings.energySourceType == 'Fuel' || settings.energySourceType == 'Steam'" [ngClass]="{'active': lossesTab == 'other-losses'}" (click)="tabChange('other-losses')">
+    --><li [ngClass]="{'active': lossesTab == 'other-losses'}" (click)="tabChange('other-losses')">
     <a class="nav-link small">
     Other
     </a>
   </li><!--
-    --><li *ngIf="settings.energySourceType == 'Steam'" [ngClass]="{'active': lossesTab == 'heat-system-efficiency'}" (click)="tabChange('heat-system-efficiency')">
+  --><li *ngIf="showSlag" [ngClass]="{'active': lossesTab == 'slag'}"
+    (click)="tabChange('slag')">
+    <a class="nav-link small">
+    Slag
+    </a>
+  </li><!--
+  --><li *ngIf="showAuxPower" [ngClass]="{'active': lossesTab == 'auxiliary-power'}"
+    (click)="tabChange('auxiliary-power')">
+    <a class="nav-link small">
+      Auxiliary Power
+    </a>
+  </li><!--
+  --><li *ngIf="showExGas" [ngClass]="{'active': lossesTab == 'exhaust-gas'}" (click)="tabChange('exhaust-gas')">
+    <a class="nav-link small">
+      Exhaust Gas
+    </a>
+  </li><!--
+    --><li *ngIf="showSystemEff" [ngClass]="{'active': lossesTab == 'heat-system-efficiency'}" (click)="tabChange('heat-system-efficiency')">
     <a class="nav-link small">
     Heat System Efficiency
     </a>
   </li><!--
-  --><li *ngIf="settings.energySourceType == 'Fuel'" [ngClass]="{'active': lossesTab == 'flue-gas-losses'}" (click)="tabChange('flue-gas-losses')">
+  --><li *ngIf="showFlueGas" [ngClass]="{'active': lossesTab == 'flue-gas-losses'}" (click)="tabChange('flue-gas-losses')">
     <a class="nav-link small">
     Flue Gas
     </a>
   </li><!--
-  --><li *ngIf="settings.energySourceType == 'Electricity' && settings.furnaceType == 'Electric Arc Furnace (EAF)'" [ngClass]="{'active': lossesTab == 'energy-input'}"
+  --><li *ngIf="showEnInput1" [ngClass]="{'active': lossesTab == 'energy-input'}"
     (click)="tabChange('energy-input')">
+    <a class="nav-link small">
+      Energy Input
+    </a>
+  </li><!--
+  --><li *ngIf="showEnInput1" [ngClass]="{'active': lossesTab == 'energy-input-exhaust-gas'}"
+    (click)="tabChange('energy-input-exhaust-gas')">
     <a class="nav-link small">
       Energy Input
     </a>

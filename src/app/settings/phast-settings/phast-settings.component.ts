@@ -25,7 +25,8 @@ export class PhastSettingsComponent implements OnInit {
     'Induction Heating and Melting',
     'Electrical Resistance',
     'Vacuum Furnace',
-    'Electric Arc Furnace (EAF)'
+    'Electric Arc Furnace (EAF)',
+    'Custom Electrotechnology'
   ]
 
   // electricOptions: Array<string>;
