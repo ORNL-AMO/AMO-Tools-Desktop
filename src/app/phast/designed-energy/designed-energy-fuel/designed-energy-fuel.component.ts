@@ -41,7 +41,7 @@ export class DesignedEnergyFuelComponent implements OnInit {
   }
 
   calculate() {
-    this.results = this.designedEnergyService.designedEnergyFuel(this.phast.designedEnergy.designedEnergyFuel, this.phast);
+    this.results = this.designedEnergyService.designedEnergyFuel(this.phast.designedEnergy.designedEnergyFuel, this.phast, this.settings);
   }
 
   setField(str: string) {

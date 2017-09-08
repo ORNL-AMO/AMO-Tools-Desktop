@@ -2,6 +2,7 @@ import { Component, OnInit, Input, EventEmitter, Output, ViewChild, ElementRef, 
 import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
 import { WindowRefService } from '../../../../indexedDb/window-ref.service';
 import { OpeningLossesCompareService } from '../opening-losses-compare.service';
+import { Settings } from '../../../../shared/models/settings';
 
 @Component({
   selector: 'app-opening-losses-form',
@@ -21,6 +22,8 @@ export class OpeningLossesFormComponent implements OnInit {
   saveEmit = new EventEmitter<boolean>();
   @Input()
   lossIndex: number;
+  @Input()
+  settings: Settings;
 
   @ViewChild('lossForm') lossForm: ElementRef;
   totalArea: number = 0.0;

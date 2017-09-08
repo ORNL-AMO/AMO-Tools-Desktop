@@ -4,6 +4,8 @@ import { WindowRefService } from '../../../../indexedDb/window-ref.service';
 import { ChargeMaterialCompareService } from '../charge-material-compare.service';
 import { ModalDirective } from 'ngx-bootstrap';
 import { LossesService } from '../../losses.service';
+import { Settings } from '../../../../shared/models/settings';
+
 @Component({
   selector: 'app-solid-charge-material-form',
   templateUrl: './solid-charge-material-form.component.html',
@@ -22,6 +24,9 @@ export class SolidChargeMaterialFormComponent implements OnInit {
   saveEmit = new EventEmitter<boolean>();
   @Input()
   lossIndex: number;
+  @Input()
+  settings: Settings;
+  
   @ViewChild('materialModal') public materialModal: ModalDirective;
 
   @ViewChild('lossForm') lossForm: ElementRef;

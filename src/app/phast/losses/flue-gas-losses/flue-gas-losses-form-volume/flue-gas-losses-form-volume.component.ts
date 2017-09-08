@@ -4,6 +4,8 @@ import { WindowRefService } from '../../../../indexedDb/window-ref.service';
 import { FlueGasCompareService } from "../flue-gas-compare.service";
 import { ModalDirective } from 'ngx-bootstrap';
 import { LossesService } from '../../losses.service';
+import { Settings } from '../../../../shared/models/settings';
+
 @Component({
   selector: 'app-flue-gas-losses-form-volume',
   templateUrl: './flue-gas-losses-form-volume.component.html',
@@ -22,6 +24,8 @@ export class FlueGasLossesFormVolumeComponent implements OnInit {
   saveEmit = new EventEmitter<boolean>();
   @Input()
   lossIndex: number;
+  @Input()
+  settings: Settings;
   @ViewChild('materialModal') public materialModal: ModalDirective;
   @ViewChild('lossForm') lossForm: ElementRef;
   form: any;

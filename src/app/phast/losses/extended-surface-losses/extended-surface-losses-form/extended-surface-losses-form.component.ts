@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, EventEmitter, Output, ViewChild, ElementRef, SimpleChanges } from '@angular/core';
 import { WindowRefService } from '../../../../indexedDb/window-ref.service';
 import { ExtendedSurfaceCompareService } from '../extended-surface-compare.service';
-
+import { Settings } from '../../../../shared/models/settings';
 @Component({
   selector: 'app-extended-surface-losses-form',
   templateUrl: './extended-surface-losses-form.component.html',
@@ -20,6 +20,8 @@ export class ExtendedSurfaceLossesFormComponent implements OnInit {
   saveEmit = new EventEmitter<boolean>();
   @Input()
   lossIndex: number;
+  @Input()
+  settings: Settings;
 
   @ViewChild('lossForm') lossForm: ElementRef;
   form: any;

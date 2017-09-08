@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { DesignedEnergyFuel } from '../../../../shared/models/phast/designedEnergy';
+import { Settings } from '../../../../shared/models/settings';
 
 @Component({
   selector: 'app-designed-energy-fuel-form',
@@ -11,27 +12,13 @@ export class DesignedEnergyFuelFormComponent implements OnInit {
   inputs: DesignedEnergyFuel;
   @Output('emitCalculate')
   emitCalculate = new EventEmitter<boolean>();
-  // @Input()
-  // settings: Settings;
+  @Input()
+  settings: Settings;
   @Output('emitSave')
   emitSave = new EventEmitter<boolean>();
   @Output('changeField')
   changeField = new EventEmitter<string>();
   counter: any;
-  fuelTypes: any = [
-    {
-      name: 'Fuel Type',
-      value: 0
-    },
-    {
-      name: 'Fuel Type 1',
-      value: 1
-    },
-    {
-      name: 'Fuel Type 2',
-      value: 2
-    }
-  ]
 
   constructor() { }
 

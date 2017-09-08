@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { DesignedEnergySteam } from '../../../../shared/models/phast/designedEnergy';
-
+import { Settings } from '../../../../shared/models/settings';
 
 @Component({
   selector: 'app-designed-energy-steam-form',
@@ -12,8 +12,8 @@ export class DesignedEnergySteamFormComponent implements OnInit {
   inputs: DesignedEnergySteam;
   @Output('emitCalculate')
   emitCalculate = new EventEmitter<boolean>();
-  // @Input()
-  // settings: Settings;
+  @Input()
+  settings: Settings;
   @Output('emitSave')
   emitSave = new EventEmitter<boolean>();
   @Output('changeField')

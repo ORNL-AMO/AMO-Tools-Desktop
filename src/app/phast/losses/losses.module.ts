@@ -36,9 +36,7 @@ import { OtherLossesHelpComponent } from './losses-help/other-losses-help/other-
 import { WallLossesHelpComponent } from './losses-help/wall-losses-help/wall-losses-help.component';
 import { SuiteDbModule } from '../../suiteDb/suiteDb.module';
 
-import { HeatStorageComponent } from './heat-storage/heat-storage.component';
 import { AuxiliaryPowerLossesHelpComponent } from './losses-help/auxiliary-power-losses-help/auxiliary-power-losses-help.component';
-import { HeatStorageHelpComponent } from './losses-help/heat-storage-help/heat-storage-help.component';
 import { SlagHelpComponent } from './losses-help/slag-help/slag-help.component';
 import { ExhaustGasHelpComponent } from './losses-help/exhaust-gas-help/exhaust-gas-help.component';
 import { EditConditionPropertiesComponent } from './edit-condition-properties/edit-condition-properties.component';
@@ -47,6 +45,10 @@ import { EnergyInputHelpComponent } from './losses-help/energy-input-help/energy
 
 import { ExhaustGasModule } from './exhaust-gas/exhaust-gas.module';
 import { LossesService } from './losses.service';
+import { EnergyInputExhaustGasLossesModule } from './energy-input-exhaust-gas-losses/energy-input-exhaust-gas-losses.module';
+import { EnergyInputExhaustGasLossesHelpComponent } from './losses-help/energy-input-exhaust-gas-losses-help/energy-input-exhaust-gas-losses-help.component';
+import { HeatSystemEfficiencyComponent } from './heat-system-efficiency/heat-system-efficiency.component';
+import { HeatSystemEfficiencyHelpComponent } from './losses-help/heat-system-efficiency-help/heat-system-efficiency-help.component';
 @NgModule({
   imports: [
     CommonModule,
@@ -68,7 +70,8 @@ import { LossesService } from './losses.service';
     AtmosphereLossesModule,
     CoolingLossesModule,
     ChargeMaterialModule,
-    ExhaustGasModule
+    ExhaustGasModule,
+    EnergyInputExhaustGasLossesModule
   ],
   declarations: [
     LossesComponent,
@@ -86,13 +89,14 @@ import { LossesService } from './losses.service';
     OpeningLossesHelpComponent,
     OtherLossesHelpComponent,
     WallLossesHelpComponent,
-    HeatStorageComponent,
     AuxiliaryPowerLossesHelpComponent,
-    HeatStorageHelpComponent,
     SlagHelpComponent,
     ExhaustGasHelpComponent,
     EditConditionPropertiesComponent,
     EnergyInputHelpComponent,
+    EnergyInputExhaustGasLossesHelpComponent,
+    HeatSystemEfficiencyComponent,
+    HeatSystemEfficiencyHelpComponent
   ],
   providers: [
     LossesService

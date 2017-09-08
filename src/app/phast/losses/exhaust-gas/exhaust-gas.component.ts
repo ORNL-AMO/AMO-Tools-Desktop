@@ -5,6 +5,7 @@ import { Losses } from '../../../shared/models/phast/phast';
 import { ExhaustGas } from '../../../shared/models/phast/losses/exhaustGas';
 import { ExhaustGasService } from './exhaust-gas.service';
 import { ExhaustGasCompareService } from './exhaust-gas-compare.service';
+import { Settings } from '../../../shared/models/settings';
 
 @Component({
   selector: 'app-exhaust-gas',
@@ -26,6 +27,8 @@ export class ExhaustGasComponent implements OnInit {
   fieldChange = new EventEmitter<string>();
   @Input()
   isBaseline: boolean;
+  @Input()
+  settings: Settings;
 
   _exhaustGasLosses: Array<any>;
   firstChange: boolean = true;

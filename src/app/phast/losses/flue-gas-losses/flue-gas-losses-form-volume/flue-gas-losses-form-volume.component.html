@@ -14,7 +14,9 @@
       <div class="input-group">
         <input name="{{'flueGasTemperature_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="flueGasTemperature"
           id="flueGasTemperature" onfocus="this.select();" (input)="startSavePolling()">
-        <span class="input-group-addon units">&#8457;</span>
+        <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">&#8457;</span>
+        <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
+
       </div>
     </div>
 
@@ -32,7 +34,9 @@
       <div class="input-group">
         <input name="{{'combustionAirTemperature_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="combustionAirTemperature"
           id="combustionAirTemperature" onfocus="this.select();" (input)="startSavePolling()">
-        <span class="input-group-addon units">&#8457;</span>
+        <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">&#8457;</span>
+        <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
+
       </div>
     </div>
   </div>
@@ -49,7 +53,7 @@
         </button>
     </div>
     <div class="modal-content">
-            <app-flue-gas-material *ngIf="showModal" (closeModal)="hideMaterialModal($event)"></app-flue-gas-material>
+      <app-flue-gas-material *ngIf="showModal" (closeModal)="hideMaterialModal($event)"></app-flue-gas-material>
     </div>
   </div>
 </div>

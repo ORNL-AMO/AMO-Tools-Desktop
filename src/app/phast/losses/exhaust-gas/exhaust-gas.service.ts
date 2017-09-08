@@ -10,14 +10,14 @@ export class ExhaustGasService {
   deleteLossIndex: BehaviorSubject<number>;
   addLossBaselineMonitor: BehaviorSubject<any>;
   addLossModificationMonitor: BehaviorSubject<any>;
-  addOtherMonitor: BehaviorSubject<any>;
-  deleteOtherMonitor: BehaviorSubject<any>;
+  // addOtherMonitor: BehaviorSubject<any>;
+  // deleteOtherMonitor: BehaviorSubject<any>;
   constructor(private formBuilder: FormBuilder) {
     this.deleteLossIndex = new BehaviorSubject<number>(null);
     this.addLossBaselineMonitor = new BehaviorSubject<any>(null);
     this.addLossModificationMonitor = new BehaviorSubject<any>(null);
-    this.addOtherMonitor = new BehaviorSubject<any>(null);
-    this.deleteOtherMonitor = new BehaviorSubject<any>(null);
+    // this.addOtherMonitor = new BehaviorSubject<any>(null);
+    // this.deleteOtherMonitor = new BehaviorSubject<any>(null);
   }
 
   setDelete(num: number) {
@@ -44,7 +44,7 @@ export class ExhaustGasService {
       'combustibleGases': ['', Validators.required],
       'vfr': ['', Validators.required],
       'dustLoading': ['', Validators.required],
-      'otherLoss1': ['', Validators.required]
+     // 'otherLoss1': ['', Validators.required]
     })
   }
 
@@ -60,16 +60,16 @@ export class ExhaustGasService {
       'vfr': [exhaustGas.vfr, Validators.required],
       'dustLoading': [exhaustGas.dustLoading, Validators.required],
     })
-    if (exhaustGas.otherLossObjects) {
-      let index = 1;
-      exhaustGas.otherLossObjects.forEach(loss => {
-        let otherControl = new FormControl(loss);
-        tmpGroup.addControl(
-          'otherLoss' + index, otherControl
-        );
-        index++;
-      })
-    }
+    // if (exhaustGas.otherLossObjects) {
+    //   let index = 1;
+    //   exhaustGas.otherLossObjects.forEach(loss => {
+    //     let otherControl = new FormControl(loss);
+    //     tmpGroup.addControl(
+    //       'otherLoss' + index, otherControl
+    //     );
+    //     index++;
+    //   })
+    // }
     return tmpGroup;
   }
 
@@ -84,19 +84,19 @@ export class ExhaustGasService {
       combustibleGases: form.value.combustibleGases,
       vfr: form.value.vfr,
       dustLoading: form.value.dustLoading,
-      otherLossObjects: new Array(),
+     // otherLossObjects: new Array(),
       otherLosses: 0.0
     }
-    let tmpOtherLosses = new Array();
-    Object.keys(form.controls).forEach(key => {
-      if (_.includes(key, "otherLoss")) {
-        tmpOtherLosses.push(
-          form.get(key).value
-        )
-      }
-    })
-    tmpExhaustGas.otherLossObjects = tmpOtherLosses;
-    tmpExhaustGas.otherLosses = _.sum(tmpOtherLosses);
+    // let tmpOtherLosses = new Array();
+    // Object.keys(form.controls).forEach(key => {
+    //   if (_.includes(key, "otherLoss")) {
+    //     tmpOtherLosses.push(
+    //       form.get(key).value
+    //     )
+    //   }
+    // })
+    // tmpExhaustGas.otherLossObjects = tmpOtherLosses;
+    // tmpExhaustGas.otherLosses = _.sum(tmpOtherLosses);
     return tmpExhaustGas;
   }
 }

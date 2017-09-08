@@ -5,6 +5,7 @@ import { FormControl, Validators } from '@angular/forms'
 import * as _ from 'lodash';
 //used for other loss monitoring
 import { ExhaustGasService } from '../exhaust-gas.service';
+import { Settings } from '../../../../shared/models/settings';
 
 @Component({
   selector: 'app-exhaust-gas-form',
@@ -24,7 +25,9 @@ export class ExhaustGasFormComponent implements OnInit {
   saveEmit = new EventEmitter<boolean>();
   @Input()
   lossIndex: number;
-
+  @Input()
+  settings: Settings;
+  
   //different for other losses monitoring
   @Input()
   isBaseline: boolean;
@@ -36,7 +39,7 @@ export class ExhaustGasFormComponent implements OnInit {
   firstChange: boolean = true;
   counter: any;
 
-  otherLossArray: Array<number>;
+ // otherLossArray: Array<number>;
   constructor(private windowRefService: WindowRefService, private exhaustGasCompareService: ExhaustGasCompareService, private exhaustGasService: ExhaustGasService) { }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -52,25 +55,25 @@ export class ExhaustGasFormComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.otherLossArray = new Array<number>();
-    let i = 1;
-    Object.keys(this.exhaustGasForm.controls).forEach(key => {
-      if (_.includes(key, "otherLoss")) {
-        this.addOther(i);
-        i++;
-      }
-    })
+    // this.otherLossArray = new Array<number>();
+    // let i = 1;
+    // Object.keys(this.exhaustGasForm.controls).forEach(key => {
+    //   if (_.includes(key, "otherLoss")) {
+    //     this.addOther(i);
+    //     i++;
+    //   }
+    // })
 
-    this.exhaustGasService.addOtherMonitor.subscribe((val) => {
-      if (val) {
-        this.addOther();
-      }
-    })
-    this.exhaustGasService.deleteOtherMonitor.subscribe((val) => {
-      if (val) {
-        this.removeOther(val.index, val.lossNumber);
-      }
-    })
+    // this.exhaustGasService.addOtherMonitor.subscribe((val) => {
+    //   if (val) {
+    //     this.addOther();
+    //   }
+    // })
+    // this.exhaustGasService.deleteOtherMonitor.subscribe((val) => {
+    //   if (val) {
+    //     this.removeOther(val.index, val.lossNumber);
+    //   }
+    // })
   }
 
   ngAfterViewInit() {
@@ -81,7 +84,7 @@ export class ExhaustGasFormComponent implements OnInit {
   }
 
   ngOnDestroy() {
-    this.exhaustGasService.deleteOtherMonitor.next(null);
+//    this.exhaustGasService.deleteOtherMonitor.next(null);
     this.exhaustGasService.addLossBaselineMonitor.next(null);
   }
 
@@ -123,56 +126,56 @@ export class ExhaustGasFormComponent implements OnInit {
     }, 3000)
   }
 
-  addOtherSignal() {
-    this.exhaustGasService.addOtherMonitor.next(true);
-  }
+  // addOtherSignal() {
+  //   this.exhaustGasService.addOtherMonitor.next(true);
+  // }
 
-  addOther(index?: number) {
-    if (index) {
-      let otherControl = new FormControl('', Validators.required);
-      this.exhaustGasForm.addControl(
-        'otherLoss' + index, otherControl
-      );
-      this.otherLossArray.push(index);
-    } else {
-      let lastNum = this.otherLossArray[this.otherLossArray.length - 1] + 1;
-      if (Number.isNaN(lastNum)) {
-        lastNum = 1;
-      }
-      let otherControl = new FormControl('', Validators.required);
-      this.exhaustGasForm.addControl(
-        'otherLoss' + lastNum, otherControl
-      );
-      this.otherLossArray.push(lastNum);
-      if (this.exhaustGasCompareService.differentArray.length != 0) {
-        this.addMonitor(this.otherLossArray.length - 1);
-      }
-    }
-  }
+  // addOther(index?: number) {
+  //   if (index) {
+  //     let otherControl = new FormControl('', Validators.required);
+  //     this.exhaustGasForm.addControl(
+  //       'otherLoss' + index, otherControl
+  //     );
+  //     this.otherLossArray.push(index);
+  //   } else {
+  //     let lastNum = this.otherLossArray[this.otherLossArray.length - 1] + 1;
+  //     if (Number.isNaN(lastNum)) {
+  //       lastNum = 1;
+  //     }
+  //     let otherControl = new FormControl('', Validators.required);
+  //     this.exhaustGasForm.addControl(
+  //       'otherLoss' + lastNum, otherControl
+  //     );
+  //     this.otherLossArray.push(lastNum);
+  //     if (this.exhaustGasCompareService.differentArray.length != 0) {
+  //       this.addMonitor(this.otherLossArray.length - 1);
+  //     }
+  //   }
+  // }
 
-  addMonitor(index: number) {
-    this.exhaustGasCompareService.addOther();
-    let doc = this.windowRefService.getDoc();
-    this.exhaustGasCompareService.differentArray[this.lossIndex].different.otherLossObjects[index].subscribe((val) => {
-      let otherLossElements = doc.getElementsByName('otherLoss' + this.otherLossArray[index] + '_' + this.lossIndex);
-      otherLossElements.forEach(element => {
-        element.classList.toggle('indicate-different', val);
-      });
-    })
-  }
+  // addMonitor(index: number) {
+  //   this.exhaustGasCompareService.addOther();
+  //   let doc = this.windowRefService.getDoc();
+  //   this.exhaustGasCompareService.differentArray[this.lossIndex].different.otherLossObjects[index].subscribe((val) => {
+  //     let otherLossElements = doc.getElementsByName('otherLoss' + this.otherLossArray[index] + '_' + this.lossIndex);
+  //     otherLossElements.forEach(element => {
+  //       element.classList.toggle('indicate-different', val);
+  //     });
+  //   })
+  // }
 
-  signalRemove(index: number, lossNumber: number) {
-    this.exhaustGasService.deleteOtherMonitor.next({ index: index, lossNumber: lossNumber })
-  }
+  // signalRemove(index: number, lossNumber: number) {
+  //   this.exhaustGasService.deleteOtherMonitor.next({ index: index, lossNumber: lossNumber })
+  // }
 
-  removeOther(index: number, lossNumber: number) {
-    this.otherLossArray.splice(index, 1);
-    //only splice service value once (baseline)
-    if (this.isBaseline && this.exhaustGasCompareService.differentArray.length != 0) {
-      this.exhaustGasCompareService.differentArray[this.lossIndex].different.otherLossObjects.splice(index, 1);
-    }
-    this.exhaustGasForm.removeControl('otherLoss' + lossNumber);
-  }
+  // removeOther(index: number, lossNumber: number) {
+  //   this.otherLossArray.splice(index, 1);
+  //   //only splice service value once (baseline)
+  //   if (this.isBaseline && this.exhaustGasCompareService.differentArray.length != 0) {
+  //     this.exhaustGasCompareService.differentArray[this.lossIndex].different.otherLossObjects.splice(index, 1);
+  //   }
+  //   this.exhaustGasForm.removeControl('otherLoss' + lossNumber);
+  // }
 
   initDifferenceMonitor() {
     if (this.exhaustGasCompareService.baselineExhaustGasLosses && this.exhaustGasCompareService.modifiedExhaustGasLosses && this.exhaustGasCompareService.differentArray.length != 0) {
@@ -242,14 +245,14 @@ export class ExhaustGasFormComponent implements OnInit {
           });
         })
         //otherLoss
-        for (let i = 0; i < this.otherLossArray.length; i++) {
-          this.exhaustGasCompareService.differentArray[this.lossIndex].different.otherLossObjects[i].subscribe((val) => {
-            let otherLossElements = doc.getElementsByName('otherLoss' + this.otherLossArray[i] + '_' + this.lossIndex);
-            otherLossElements.forEach(element => {
-              element.classList.toggle('indicate-different', val);
-            });
-          })
-        }
+        // for (let i = 0; i < this.otherLossArray.length; i++) {
+        //   this.exhaustGasCompareService.differentArray[this.lossIndex].different.otherLossObjects[i].subscribe((val) => {
+        //     let otherLossElements = doc.getElementsByName('otherLoss' + this.otherLossArray[i] + '_' + this.lossIndex);
+        //     otherLossElements.forEach(element => {
+        //       element.classList.toggle('indicate-different', val);
+        //     });
+        //   })
+        // }
       }
     }
 

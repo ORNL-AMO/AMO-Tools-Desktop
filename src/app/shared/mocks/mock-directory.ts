@@ -51,6 +51,7 @@ export const MockDirectory: Directory = {
       createdDate: new Date(),
       modifiedDate: new Date(),
       phast: {
+        systemEfficiency: 90,
         losses: {
           chargeMaterials: [
             {

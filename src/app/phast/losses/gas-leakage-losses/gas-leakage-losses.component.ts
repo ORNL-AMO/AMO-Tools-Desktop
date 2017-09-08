@@ -5,6 +5,7 @@ import { Losses } from '../../../shared/models/phast/phast';
 import { LeakageLoss } from '../../../shared/models/phast/losses/leakageLoss';
 import { GasLeakageLossesService } from './gas-leakage-losses.service';
 import { GasLeakageCompareService } from './gas-leakage-compare.service';
+import { Settings } from '../../../shared/models/settings';
 
 @Component({
   selector: 'app-gas-leakage-losses',
@@ -26,6 +27,9 @@ export class GasLeakageLossesComponent implements OnInit {
   fieldChange = new EventEmitter<string>();
   @Input()
   isBaseline: boolean;
+  @Input()
+  settings: Settings;
+
 
   _leakageLosses: Array<any>;
   firstChange: boolean = true;
