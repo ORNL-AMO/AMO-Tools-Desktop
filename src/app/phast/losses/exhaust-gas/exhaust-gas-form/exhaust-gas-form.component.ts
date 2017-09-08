@@ -5,6 +5,7 @@ import { FormControl, Validators } from '@angular/forms'
 import * as _ from 'lodash';
 //used for other loss monitoring
 import { ExhaustGasService } from '../exhaust-gas.service';
+import { Settings } from '../../../../shared/models/settings';
 
 @Component({
   selector: 'app-exhaust-gas-form',
@@ -24,7 +25,9 @@ export class ExhaustGasFormComponent implements OnInit {
   saveEmit = new EventEmitter<boolean>();
   @Input()
   lossIndex: number;
-
+  @Input()
+  settings: Settings;
+  
   //different for other losses monitoring
   @Input()
   isBaseline: boolean;

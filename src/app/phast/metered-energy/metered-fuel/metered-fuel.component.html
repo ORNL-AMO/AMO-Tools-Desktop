@@ -7,7 +7,7 @@
       <div class="card-form">
         <div class="row">
           <div class="col-12">
-            <app-metered-fuel-form [inputs]="phast.meteredEnergy.meteredEnergyFuel" (emitCalculate)="calculate()" (emitSave)="save()" (changeField)="setField($event)"></app-metered-fuel-form>
+            <app-metered-fuel-form [inputs]="phast.meteredEnergy.meteredEnergyFuel" (emitCalculate)="calculate()" (emitSave)="save()" (changeField)="setField($event)" [settings]="settings"></app-metered-fuel-form>
           </div>
         </div>
       </div>

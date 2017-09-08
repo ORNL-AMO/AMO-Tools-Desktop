@@ -13,7 +13,8 @@
       <div class="input-group">
         <input name="{{'offGasTemp_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="offGasTemp" id="offGasTemp"
           onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('offGasTemp')">
-        <span class="input-group-addon units">&#8457;</span>
+        <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">&#8457;</span>
+        <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
       </div>
     </div>
   </div>
@@ -65,7 +66,8 @@
       <div class="input-group">
         <input name="{{'vfr_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="vfr" id="vfr" onfocus="this.select();"
           (input)="startSavePolling()" (focus)="focusField('vfr')">
-        <span class="input-group-addon units">cfm</span>
+        <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">cfm</span>
+        <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">m<sup>3</sup>/min</span>
       </div>
     </div>
     <div class="form-group">
@@ -73,7 +75,8 @@
       <div class="input-group">
         <input name="{{'dustLoading_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="dustLoading" id="dustLoading"
           onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('dustLoading')">
-        <span class="input-group-addon units">lb/scf</span>
+        <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">lb/scf</span>
+        <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kg/Nm<sup>3</sup></span>
       </div>
     </div>
   </div>

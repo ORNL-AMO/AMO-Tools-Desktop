@@ -6,7 +6,7 @@ import { Losses } from '../../../shared/models/phast/phast';
 import { SlagService } from './slag.service';
 import { SlagCompareService } from './slag-compare.service';
 //import { WindowRefService } from '../../../indexedDb/window-ref.service';
-
+import { Settings } from '../../../shared/models/settings';
 @Component({
   selector: 'app-slag',
   templateUrl: './slag.component.html',
@@ -27,6 +27,8 @@ export class SlagComponent implements OnInit {
   fieldChange = new EventEmitter<string>();
   @Input()
   isBaseline: boolean;
+  @Input()
+  settings: Settings;
 
   _slagLosses: Array<any>;
   firstChange: boolean = true;

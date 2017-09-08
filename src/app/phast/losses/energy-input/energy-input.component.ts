@@ -5,6 +5,8 @@ import { Losses } from '../../../shared/models/phast/phast';
 import { EnergyInputService } from './energy-input.service';
 import { EnergyInput } from '../../../shared/models/phast/losses/energyInput';
 import { EnergyInputCompareService } from './energy-input-compare.service';
+import { Settings } from '../../../shared/models/settings';
+
 @Component({
   selector: 'app-energy-input',
   templateUrl: './energy-input.component.html',
@@ -25,6 +27,8 @@ export class EnergyInputComponent implements OnInit {
   fieldChange = new EventEmitter<string>();
   @Input()
   isBaseline: boolean;
+  @Input()
+  settings: Settings;
 
   _energyInputs: Array<any>;
   firstChange: boolean = true;

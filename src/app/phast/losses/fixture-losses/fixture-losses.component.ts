@@ -5,6 +5,7 @@ import { FixtureLossesService } from './fixture-losses.service';
 import { Losses } from '../../../shared/models/phast/phast';
 import { FixtureLoss } from '../../../shared/models/phast/losses/fixtureLoss';
 import { FixtureLossesCompareService } from "./fixture-losses-compare.service";
+import { Settings } from '../../../shared/models/settings';
 
 @Component({
   selector: 'app-fixture-losses',
@@ -26,6 +27,8 @@ export class FixtureLossesComponent implements OnInit {
   fieldChange = new EventEmitter<string>();
   @Input()
   isBaseline: boolean;
+  @Input()
+  settings: Settings;
 
   _fixtureLosses: Array<any>;
   firstChange: boolean = true;

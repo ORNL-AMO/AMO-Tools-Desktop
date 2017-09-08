@@ -6,6 +6,8 @@ import * as _ from 'lodash';
 //used for other loss monitoring
 import { EnergyInputExhaustGasService } from '../energy-input-exhaust-gas.service';
 import { PhastService } from '../../../phast.service';
+import { Settings } from '../../../../shared/models/settings';
+
 @Component({
   selector: 'app-energy-input-exhaust-gas-form',
   templateUrl: './energy-input-exhaust-gas-form.component.html',
@@ -29,6 +31,8 @@ export class EnergyInputExhaustGasFormComponent implements OnInit {
   //different for other losses monitoring
   @Input()
   isBaseline: boolean;
+  @Input()
+  settings: Settings;
 
   @ViewChild('lossForm') lossForm: ElementRef;
   form: any;

@@ -5,6 +5,7 @@ import { Losses } from '../../../shared/models/phast/phast';
 import { EnergyInputExhaustGasLoss } from '../../../shared/models/phast/losses/energyInputExhaustGasLosses';
 import { EnergyInputExhaustGasService } from './energy-input-exhaust-gas.service';
 import { EnergyInputExhaustGasCompareService } from './energy-input-exhaust-gas-compare.service';
+import { Settings } from '../../../shared/models/settings';
 
 @Component({
   selector: 'app-energy-input-exhaust-gas-losses',
@@ -26,6 +27,8 @@ export class EnergyInputExhaustGasLossesComponent implements OnInit {
   fieldChange = new EventEmitter<string>();
   @Input()
   isBaseline: boolean;
+  @Input()
+  settings: Settings; 
 
   _exhaustGasLosses: Array<any>;
   firstChange: boolean = true;

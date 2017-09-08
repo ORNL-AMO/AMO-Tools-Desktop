@@ -1,6 +1,8 @@
 import { Component, OnInit, Input, Output, EventEmitter, ViewChild, ElementRef, SimpleChanges } from '@angular/core';
 import { WindowRefService } from '../../../../indexedDb/window-ref.service';
 import { EnergyInputCompareService } from '../energy-input-compare.service';
+import { Settings } from '../../../../shared/models/settings';
+
 @Component({
   selector: 'app-energy-input-form',
   templateUrl: './energy-input-form.component.html',
@@ -20,6 +22,8 @@ export class EnergyInputFormComponent implements OnInit {
   @ViewChild('lossForm') lossForm: ElementRef;
   @Input()
   lossIndex: number;
+  @Input()
+  settings: Settings;
 
   form: any;
   elements: any;

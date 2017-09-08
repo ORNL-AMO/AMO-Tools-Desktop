@@ -19,7 +19,7 @@
   <div class="row">
     <div class="col-12">
       <app-energy-input-form (changeField)="changeField($event)" [(energyInputForm)]="loss.form" (calculate)="calculate(loss)"
-        [baselineSelected]="baselineSelected" (saveEmit)="saveLosses()" [lossIndex]="lossIndex"></app-energy-input-form>
+        [baselineSelected]="baselineSelected" (saveEmit)="saveLosses()" [lossIndex]="lossIndex" [settings]="settings"></app-energy-input-form>
     </div>
   </div>
   <div class="row">
@@ -28,16 +28,18 @@
         <label class="small">Heat Delivered</label>
         <div class="text-center small">
           {{loss.results.heatDelivered | number:'2.2-2'}}
+          <span *ngIf="settings.unitsOfMeasure == 'Imperial'">Btu/hr</span>
+          <span *ngIf="settings.unitsOfMeasure == 'Metric'">kJ/hr</span>
         </div>
       </div>
       <div class="form-group">
-        <label class="small">Kwh Cycle</label>
+        <label class="small">Kw</label>
         <div class="text-center small">
           {{loss.results.kwhCycle | number:'2.2-2'}}
         </div>
       </div>
       <div class="form-group">
-        <label class="small">Total Kwh Cycle</label>
+        <label class="small">Total Kw</label>
         <div class="text-center small">
           {{loss.results.totalKwhCycle | number:'2.2-2'}}
         </div>

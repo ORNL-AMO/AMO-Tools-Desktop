@@ -30,9 +30,11 @@
             </select>
       </div>
       <app-flue-gas-losses-form-mass [(flueGasLossForm)]="loss.formByMass" *ngIf="loss.measurementType == 'By Mass'" (changeField)="changeField($event)"
-        (calculate)="calculate(loss)" [baselineSelected]="baselineSelected" (saveEmit)="saveLosses()" [lossIndex]="lossIndex"></app-flue-gas-losses-form-mass>
+        (calculate)="calculate(loss)" [baselineSelected]="baselineSelected" (saveEmit)="saveLosses()" [lossIndex]="lossIndex"
+        [settings]="settings"></app-flue-gas-losses-form-mass>
       <app-flue-gas-losses-form-volume [(flueGasLossForm)]="loss.formByVolume" *ngIf="loss.measurementType == 'By Volume'" (changeField)="changeField($event)"
-        (calculate)="calculate(loss)" [baselineSelected]="baselineSelected" (saveEmit)="saveLosses()" [lossIndex]="lossIndex"></app-flue-gas-losses-form-volume>
+        (calculate)="calculate(loss)" [baselineSelected]="baselineSelected" (saveEmit)="saveLosses()" [lossIndex]="lossIndex"
+        [settings]="settings"></app-flue-gas-losses-form-volume>
     </div>
   </div>
   <div class="row">
@@ -46,13 +48,17 @@
       <div class="form-group">
         <label class="small">Gross Heat</label>
         <div class="text-center small">
-          {{loss.grossHeat | number:'2.0-2'}}  Btu/hr
+          {{loss.grossHeat | number:'2.0-2'}}
+          <span *ngIf="settings.unitsOfMeasure == 'Imperial'">Btu/hr</span>
+          <span *ngIf="settings.unitsOfMeasure == 'Metric'">kJ/hr</span>
         </div>
       </div>
       <div class="form-group">
         <label class="small">System Losses</label>
         <div class="text-center small">
-          {{loss.systemLosses | number:'2.0-2'}} Btu/hr
+          {{loss.systemLosses | number:'2.0-2'}} 
+          <span *ngIf="settings.unitsOfMeasure == 'Imperial'">Btu/hr</span>
+          <span *ngIf="settings.unitsOfMeasure == 'Metric'">kJ/hr</span>
         </div>
       </div>
     </div>
