@@ -34,7 +34,7 @@ export class PhastSettingsComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    if (!this.settingsForm.furnaceType || this.settingsForm.furnaceType == '') {
+    if (!this.settingsForm.value.furnaceType || this.settingsForm.value.furnaceType == '') {
       this.setOptions();
     }
   }

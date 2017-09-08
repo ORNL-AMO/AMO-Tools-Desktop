@@ -10,7 +10,8 @@ export class ApplicationSettingsComponent implements OnInit {
   settingsForm: any;
   @Output('startSavePolling')
   startSavePolling = new EventEmitter<boolean>();
-
+  @Input()
+  inPhast: boolean;
 
   languages: Array<string> = [
     'English'
