@@ -1,8 +1,9 @@
-import { Component, OnInit, EventEmitter, Output } from '@angular/core';
+import { Component, OnInit, EventEmitter, Output, Input } from '@angular/core';
 import { SolidLiquidFlueGasMaterial } from '../../shared/models/materials';
 import { SuiteDbService } from '../suite-db.service';
 import { IndexedDbService } from '../../indexedDb/indexed-db.service';
 import * as _ from 'lodash';
+import { Settings } from '../../shared/models/settings';
 
 @Component({
   selector: 'app-solid-liquid-flue-gas-material',
@@ -12,7 +13,8 @@ import * as _ from 'lodash';
 export class SolidLiquidFlueGasMaterialComponent implements OnInit {
   @Output('closeModal')
   closeModal = new EventEmitter<SolidLiquidFlueGasMaterial>();
-
+  // @Input()
+  // settings: Settings;
   newMaterial: SolidLiquidFlueGasMaterial = {
     substance: 'New Fuel',
     carbon: 0,
@@ -34,6 +36,11 @@ export class SolidLiquidFlueGasMaterialComponent implements OnInit {
     this.allMaterials = this.suiteDbService.selectSolidLiquidFlueGasMaterials();
     this.checkMaterialName();
     // this.selectedMaterial = this.allMaterials[0];
+    // if (!this.settings) {
+    //   this.indexedDbService.getSettings(1).then(results => {
+    //     this.settings = results;
+    //   })
+    // }
   }
 
   addMaterial() {

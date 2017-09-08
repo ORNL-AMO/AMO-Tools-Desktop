@@ -123,7 +123,7 @@
         </button>
     </div>
     <div class="modal-content">
-      <app-gas-load-charge-material *ngIf="showModal" (closeModal)="hideMaterialModal($event)"></app-gas-load-charge-material>
+      <app-gas-load-charge-material *ngIf="showModal" (closeModal)="hideMaterialModal($event)" [settings]="settings"></app-gas-load-charge-material>
     </div>
   </div>
 </div>

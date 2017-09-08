@@ -22,7 +22,8 @@
           <div class="input-group">
             <input type="number" id="specificHeatLiquid" name="specificHeatLiquid" class="form-control" [(ngModel)]="newMaterial.specificHeatLiquid"
             />
-            <span class="input-group-addon units">Btu/(lb-&#8457;)</span>
+            <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">Btu/(lb-&#8457;)</span>
+            <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kJ/(kg-&#8451;)</span>
           </div>
         </div>
         <div class="form-group">
@@ -30,14 +31,16 @@
           <div class="input-group">
             <input type="number" id="vaporizationTemperature" name="vaporizationTemperature" class="form-control" [(ngModel)]="newMaterial.vaporizationTemperature"
             />
-            <span class="input-group-addon units">&#8457;</span>
+            <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">&#8457;</span>
+            <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
           </div>
         </div>
         <div class="form-group">
           <label for="latentHeat">Latent Heat of Vaporization</label>
           <div class="input-group">
             <input type="number" id="latentHeat" name="latentHeat" class="form-control" [(ngModel)]="newMaterial.latentHeat" />
-            <span class="input-group-addon units">&#8457;</span>
+            <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">&#8457;</span>
+            <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
           </div>
         </div>
         <div class="form-group">
@@ -45,7 +48,8 @@
           <div class="input-group">
             <input type="number" id="specificHeatVapor" name="specificHeatVapor" class="form-control" [(ngModel)]="newMaterial.specificHeatVapor"
             />
-            <span class="input-group-addon units">Btu/(lb-&#8457;)</span>
+            <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">Btu/(lb-&#8457;)</span>
+            <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kJ/(kg-&#8451;)</span>
           </div>
         </div>
       </div>

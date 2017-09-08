@@ -1,8 +1,10 @@
-import { Component, OnInit, EventEmitter, Output } from '@angular/core';
+import { Component, OnInit, EventEmitter, Output, Input } from '@angular/core';
 import { GasLoadChargeMaterial } from '../../shared/models/materials';
 import { SuiteDbService } from '../suite-db.service';
 import { IndexedDbService } from '../../indexedDb/indexed-db.service';
 import * as _ from 'lodash';
+import { Settings } from '../../shared/models/settings';
+
 @Component({
   selector: 'app-gas-load-charge-material',
   templateUrl: './gas-load-charge-material.component.html',
@@ -11,7 +13,8 @@ import * as _ from 'lodash';
 export class GasLoadChargeMaterialComponent implements OnInit {
   @Output('closeModal')
   closeModal = new EventEmitter<GasLoadChargeMaterial>();
-
+  @Input()
+  settings: Settings;
 
   newMaterial: GasLoadChargeMaterial = {
     substance: 'New Material',
@@ -27,6 +30,11 @@ export class GasLoadChargeMaterialComponent implements OnInit {
     this.allMaterials = this.suiteDbService.selectGasLoadChargeMaterials();
     this.checkMaterialName();
     // this.selectedMaterial = this.allMaterials[0];
+    if (!this.settings) {
+      this.indexedDbService.getSettings(1).then(results => {
+        this.settings = results;
+      })
+    }
   }
 
   addMaterial() {

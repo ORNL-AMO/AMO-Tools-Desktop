@@ -89,7 +89,7 @@
         </button>
     </div>
     <div class="modal-content">
-      <app-wall-losses-surface *ngIf="showModal" (closeModal)="hideMaterialModal($event)"></app-wall-losses-surface>
+      <app-wall-losses-surface *ngIf="showModal" (closeModal)="hideMaterialModal($event)" [settings]="settings"></app-wall-losses-surface>
     </div>
   </div>
 </div>
