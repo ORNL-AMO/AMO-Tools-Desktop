@@ -33,17 +33,19 @@
         </div>
       </div>
       <div class="form-group">
-        <label class="small">Kw</label>
+        <label class="small">Total Chemical Energy Input</label>
         <div class="text-center small">
-          {{loss.results.kwhCycle | number:'2.2-2'}}
+          {{loss.results.totalChemicalEnergyInput | number:'2.2-2'}}
+          <span *ngIf="settings.unitsOfMeasure == 'Imperial'">Btu/hr</span>
+          <span *ngIf="settings.unitsOfMeasure == 'Metric'">kJ/hr</span>
         </div>
       </div>
-      <div class="form-group">
+      <!--<div class="form-group">
         <label class="small">Total Kw</label>
         <div class="text-center small">
           {{loss.results.totalKwhCycle | number:'2.2-2'}}
         </div>
-      </div>
+      </div>-->
     </div>
   </div>
 </div>

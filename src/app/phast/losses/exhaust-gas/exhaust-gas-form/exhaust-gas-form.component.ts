@@ -182,12 +182,12 @@ export class ExhaustGasFormComponent implements OnInit {
       if (this.exhaustGasCompareService.differentArray[this.lossIndex]) {
         let doc = this.windowRefService.getDoc();
         //cycleTime
-        this.exhaustGasCompareService.differentArray[this.lossIndex].different.cycleTime.subscribe((val) => {
-          let cycleTimeElements = doc.getElementsByName('cycleTime_' + this.lossIndex);
-          cycleTimeElements.forEach(element => {
-            element.classList.toggle('indicate-different', val);
-          });
-        })
+        // this.exhaustGasCompareService.differentArray[this.lossIndex].different.cycleTime.subscribe((val) => {
+        //   let cycleTimeElements = doc.getElementsByName('cycleTime_' + this.lossIndex);
+        //   cycleTimeElements.forEach(element => {
+        //     element.classList.toggle('indicate-different', val);
+        //   });
+        // })
         //offGasTemp
         this.exhaustGasCompareService.differentArray[this.lossIndex].different.offGasTemp.subscribe((val) => {
           let offGasTempElements = doc.getElementsByName('offGasTemp_' + this.lossIndex);
@@ -203,12 +203,12 @@ export class ExhaustGasFormComponent implements OnInit {
           });
         })
         //O2
-        this.exhaustGasCompareService.differentArray[this.lossIndex].different.O2.subscribe((val) => {
-          let O2Elements = doc.getElementsByName('O2_' + this.lossIndex);
-          O2Elements.forEach(element => {
-            element.classList.toggle('indicate-different', val);
-          });
-        })
+        // this.exhaustGasCompareService.differentArray[this.lossIndex].different.O2.subscribe((val) => {
+        //   let O2Elements = doc.getElementsByName('O2_' + this.lossIndex);
+        //   O2Elements.forEach(element => {
+        //     element.classList.toggle('indicate-different', val);
+        //   });
+        // })
         //H2
         this.exhaustGasCompareService.differentArray[this.lossIndex].different.H2.subscribe((val) => {
           let H2Elements = doc.getElementsByName('H2_' + this.lossIndex);
@@ -217,12 +217,12 @@ export class ExhaustGasFormComponent implements OnInit {
           });
         })
         //CO2
-        this.exhaustGasCompareService.differentArray[this.lossIndex].different.CO2.subscribe((val) => {
-          let CO2Elements = doc.getElementsByName('CO2_' + this.lossIndex);
-          CO2Elements.forEach(element => {
-            element.classList.toggle('indicate-different', val);
-          });
-        })
+        // this.exhaustGasCompareService.differentArray[this.lossIndex].different.CO2.subscribe((val) => {
+        //   let CO2Elements = doc.getElementsByName('CO2_' + this.lossIndex);
+        //   CO2Elements.forEach(element => {
+        //     element.classList.toggle('indicate-different', val);
+        //   });
+        // })
         //combustibleGases
         this.exhaustGasCompareService.differentArray[this.lossIndex].different.combustibleGases.subscribe((val) => {
           let combustibleGasesElements = doc.getElementsByName('combustibleGases_' + this.lossIndex);

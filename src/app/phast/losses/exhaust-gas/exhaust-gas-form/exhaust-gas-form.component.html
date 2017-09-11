@@ -1,13 +1,13 @@
 <form #lossForm [formGroup]="exhaustGasForm">
   <div class="form-section">
-    <div class="form-group">
+    <!--<div class="form-group">
       <label class="small" for="cycleTime">Cycle Time</label>
       <div class="input-group">
         <input name="{{'cycleTime_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="cycleTime" id="cycleTime"
           onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('cycleTime')">
         <span class="input-group-addon units">hrs</span>
       </div>
-    </div>
+    </div>-->
     <div class="form-group">
       <label class="small" for="offGasTemp">Off (Exhaust) Gas Temp</label>
       <div class="input-group">
@@ -27,14 +27,14 @@
         <span class="input-group-addon units">%</span>
       </div>
     </div>
-    <div class="form-group">
+    <!--<div class="form-group">
       <label class="small" for="O2">O2</label>
       <div class="input-group">
         <input name="{{'O2_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="O2" id="O2" onfocus="this.select();"
           (input)="startSavePolling()" (focus)="focusField('O2')">
         <span class="input-group-addon units">%</span>
       </div>
-    </div>
+    </div>-->
     <div class="form-group">
       <label class="small" for="H2">H2</label>
       <div class="input-group">
@@ -43,14 +43,14 @@
         <span class="input-group-addon units">%</span>
       </div>
     </div>
-    <div class="form-group">
+    <!--<div class="form-group">
       <label class="small" for="CO2">CO2</label>
       <div class="input-group">
         <input name="{{'CO2_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="CO2" id="CO2" onfocus="this.select();"
           (input)="startSavePolling()" (focus)="focusField('CO2')">
         <span class="input-group-addon units">%</span>
       </div>
-    </div>
+    </div>-->
     <div class="form-group">
       <label class="small" for="combustibleGases">Combustible Gas as CH4</label>
       <div class="input-group">
