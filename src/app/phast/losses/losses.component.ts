@@ -56,9 +56,16 @@ export class LossesComponent implements OnInit {
 
     this.lossesService.lossesTab.subscribe(val => {
       this.lossesTab = val;
-      if(this.lossesTab == 'heat-system-efficiency'){
+      if (this.lossesTab == 'heat-system-efficiency'
+        || this.lossesTab == 'atmosphere-losses'
+        || this.lossesTab == 'exhaust-gas'
+        || this.lossesTab == 'heat-system-efficiency'
+        || this.lossesTab == 'flue-gas-losses'
+        || this.lossesTab == 'energy-input'
+        || this.lossesTab == 'energy-input-exhaust-gas'
+      ) {
         this.showAddBtn = false;
-      }else{
+      } else {
         this.showAddBtn = true;
       }
     })
@@ -67,7 +74,7 @@ export class LossesComponent implements OnInit {
     })
   }
 
-  ngOnDestroy(){
+  ngOnDestroy() {
     this.lossesService.lossesTab.next('charge-material');
   }
 
@@ -179,11 +186,11 @@ export class LossesComponent implements OnInit {
     this.isLossesSetup = true;
   }
 
-  openModal(){
+  openModal() {
     this.isModalOpen = true;
   }
 
-  closeModal(){
+  closeModal() {
     this.isModalOpen = false;
   }
 }

@@ -21,6 +21,7 @@ export interface GasCoolingLoss {
     finalTemperature?: number,
     specificHeat?: number,
     correctionFactor?: number,
+    gasDensity?: number
 }
 
 

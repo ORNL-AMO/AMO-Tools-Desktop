@@ -56,6 +56,7 @@ export class MeteredFuelComponent implements OnInit {
 
   calculate() {
     this.results = this.meteredEnergyService.meteredFuel(this.phast.meteredEnergy.meteredEnergyFuel, this.phast, this.settings);
+    console.log(this.results);
   }
 
   setField(str: string) {

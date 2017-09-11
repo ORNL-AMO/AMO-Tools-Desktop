@@ -174,7 +174,8 @@ export const MockDirectory: Directory = {
                 initialTemperature: 80.0,
                 finalTemperature: 350.0,
                 specificHeat: 0.02,
-                correctionFactor: 1.0
+                correctionFactor: 1.0,
+                gasDensity: 1.0
               }
             },
             {
