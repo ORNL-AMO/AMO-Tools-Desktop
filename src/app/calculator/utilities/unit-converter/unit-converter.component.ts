@@ -84,6 +84,10 @@ export class UnitConverterComponent implements OnInit {
       display: 'Volumetric Flow Rate'
     },
     {
+      measure: 'volumetricHeat',
+      display: 'Volumetric Specific Heat'
+    },
+    {
       measure: 'viscosity',
       display: 'Viscosity'
     },
@@ -102,6 +106,14 @@ export class UnitConverterComponent implements OnInit {
     {
       measure: 'mass',
       display: 'Mass'
+    },
+    // {
+    //   measure: 'kineViscosity',
+    //   display: 'Kinematic Viscosity'
+    // },
+    {
+      measure: 'specificHeat',
+      display: 'Specific Heat'
     },
   ]
 
