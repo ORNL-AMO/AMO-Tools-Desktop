@@ -54,6 +54,7 @@ export class MeteredSteamComponent implements OnInit {
 
   calculate() {
     this.results = this.meteredEnergyService.meteredSteam(this.phast.meteredEnergy.meteredEnergySteam, this.phast, this.settings);
+    console.log(this.results);
   }
 
   setField(str: string) {

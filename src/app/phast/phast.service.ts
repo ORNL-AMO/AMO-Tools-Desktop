@@ -20,18 +20,39 @@ import { ExtendedSurface } from '../shared/models/phast/losses/extendedSurface';
 import { OtherLoss } from '../shared/models/phast/losses/otherLoss';
 import { EnergyInputExhaustGasLoss } from '../shared/models/phast/losses/energyInputExhaustGasLosses';
 declare var phastAddon: any;
-import { OpeningLossesService } from './losses/opening-losses/opening-losses.service';
 import { BehaviorSubject } from 'rxjs';
 import { ConvertUnitsService } from '../shared/convert-units/convert-units.service';
 import { Settings } from '../shared/models/settings';
 
+import { OpeningLossesService } from './losses/opening-losses/opening-losses.service';
+import { AtmosphereLossesService } from './losses/atmosphere-losses/atmosphere-losses.service';
+import { AuxiliaryPowerLossesService } from './losses/auxiliary-power-losses/auxiliary-power-losses.service';
+import { ChargeMaterialService } from './losses/charge-material/charge-material.service';
+import { CoolingLossesService } from './losses/cooling-losses/cooling-losses.service';
+import { WallLossesService } from './losses/wall-losses/wall-losses.service';
+import { FixtureLossesService } from './losses/fixture-losses/fixture-losses.service';
+import { GasLeakageLossesService } from './losses/gas-leakage-losses/gas-leakage-losses.service';
+import { OtherLossesService } from './losses/other-losses/other-losses.service';
+import { SlagService } from './losses/slag/slag.service';
 @Injectable()
 export class PhastService {
 
   mainTab: BehaviorSubject<string>;
   secondaryTab: BehaviorSubject<string>;
 
-  constructor(private openingLossesService: OpeningLossesService, private convertUnitsService: ConvertUnitsService) {
+  constructor(
+    private openingLossesService: OpeningLossesService,
+    private convertUnitsService: ConvertUnitsService,
+    private atmosphereLossesService: AtmosphereLossesService,
+    private auxiliaryPowerLossesService: AuxiliaryPowerLossesService,
+    private chargeMaterialService: ChargeMaterialService,
+    private coolingLossesService: CoolingLossesService,
+    private wallLossesService: WallLossesService,
+    private fixtureLossesService: FixtureLossesService,
+    private gasLeakageLossesService: GasLeakageLossesService,
+    private otherLossessService: OtherLossesService,
+    private slagService: SlagService
+  ) {
     this.mainTab = new BehaviorSubject<string>('system-setup');
     this.secondaryTab = new BehaviorSubject<string>('explore-opportunities');
   }
@@ -174,23 +195,11 @@ export class PhastService {
     if (losses.coolingLosses) {
       grossHeatRequired += this.sumCoolingLosses(losses.coolingLosses);
     }
-    // if (losses.energyInput) {
-
-    // }
-    if (losses.exhaustGasEAF) {
-      grossHeatRequired += this.sumExhaustGasEAF(losses.exhaustGasEAF);
-    }
-    if (losses.energyInputExhaustGasLoss) {
-      grossHeatRequired += this.sumEnergyInputExhaustGas(losses.energyInputExhaustGasLoss);
-    }
     if (losses.extendedSurfaces) {
       grossHeatRequired += this.sumExtendedSurface(losses.extendedSurfaces, settings);
     }
     if (losses.fixtureLosses) {
       grossHeatRequired += this.sumFixtureLosses(losses.fixtureLosses);
-    }
-    if (losses.flueGasLosses) {
-      grossHeatRequired += this.sumFlueGasLosses(losses.flueGasLosses);
     }
     if (losses.leakageLosses) {
       grossHeatRequired += this.sumLeakageLosses(losses.leakageLosses);
@@ -213,7 +222,10 @@ export class PhastService {
   sumAtmosphereLosses(losses: AtmosphereLoss[]): number {
     let sum = 0;
     losses.forEach(loss => {
-      sum += this.atmosphere(loss);
+      let tmpForm = this.atmosphereLossesService.getAtmosphereForm(loss);
+      if (tmpForm.status == 'VALID') {
+        sum += this.atmosphere(loss);
+      }
     });
     return sum;
   }
@@ -221,7 +233,10 @@ export class PhastService {
   sumAuxilaryPowerLosses(losses: AuxiliaryPowerLoss[]): number {
     let sum = 0;
     losses.forEach(loss => {
-      sum += this.auxiliaryPowerLoss(loss);
+      let tmpForm = this.auxiliaryPowerLossesService.getFormFromLoss(loss);
+      if (tmpForm.status == 'VALID') {
+        sum += this.auxiliaryPowerLoss(loss);
+      }
     });
     return sum;
   }
@@ -230,11 +245,20 @@ export class PhastService {
     let sum = 0;
     losses.forEach(loss => {
       if (loss.chargeMaterialType == 'Gas') {
-        sum += this.gasLoadChargeMaterial(loss.gasChargeMaterial);
+        let tmpForm = this.chargeMaterialService.getGasChargeMaterialForm(loss.gasChargeMaterial);
+        if (tmpForm.status == 'VALID') {
+          sum += this.gasLoadChargeMaterial(loss.gasChargeMaterial);
+        }
       } else if (loss.chargeMaterialType == 'Solid') {
-        sum += this.solidLoadChargeMaterial(loss.solidChargeMaterial);
+        let tmpForm = this.chargeMaterialService.getSolidChargeMaterialForm(loss.solidChargeMaterial);
+        if (tmpForm.status == 'VALID') {
+          sum += this.solidLoadChargeMaterial(loss.solidChargeMaterial);
+        }
       } else if (loss.chargeMaterialType == 'Liquid') {
-        sum += this.liquidLoadChargeMaterial(loss.liquidChargeMaterial);
+        let tmpForm = this.chargeMaterialService.getLiquidChargeMaterialForm(loss.liquidChargeMaterial);
+        if (tmpForm.status == 'VALID') {
+          sum += this.liquidLoadChargeMaterial(loss.liquidChargeMaterial);
+        }
       }
     });
     return sum;
@@ -244,44 +268,50 @@ export class PhastService {
     let sum = 0;
     losses.forEach(loss => {
       if (loss.coolingLossType == 'Gas') {
-        sum += this.gasCoolingLosses(loss.gasCoolingLoss);
+        let tmpForm = this.coolingLossesService.initGasFormFromLoss(loss.gasCoolingLoss);
+        if (tmpForm.status == 'VALID') {
+          sum += this.gasCoolingLosses(loss.gasCoolingLoss);
+        }
       } else if (loss.coolingLossType == 'Liquid') {
-        sum += this.liquidCoolingLosses(loss.liquidCoolingLoss);
+        let tmpForm = this.coolingLossesService.initLiquidFormFromLoss(loss.liquidCoolingLoss);
+        if (tmpForm.status == 'VALID') {
+          sum += this.liquidCoolingLosses(loss.liquidCoolingLoss);
+        }
       }
     })
     return sum;
   }
 
-  sumEnergyInputEAF(losses: EnergyInputEAF[]): number {
-    let sum: any = {
-      heatDelivered: 0,
-      kwhCycle: 0,
-      totalKwhCycle: 0
-    };
-    losses.forEach(loss => {
-      let tmpResult = this.energyInputEAF(loss);
-      sum.heatDelivered += tmpResult.heatDelivered;
-      sum.kwhCycle += tmpResult.kwhCycle;
-      sum.totalKwhCycle += tmpResult.totalKwhCycle;
-    })
-    return sum;
-  }
+  // sumEnergyInputEAF(losses: EnergyInputEAF[]): number {
+  //   let sum: any = {
+  //     heatDelivered: 0,
+  //     kwhCycle: 0,
+  //     totalKwhCycle: 0
+  //   };
+  //   losses.forEach(loss => {
+  //     let tmpResult = this.energyInputEAF(loss);
+  //     sum.heatDelivered += tmpResult.heatDelivered;
+  //     sum.kwhCycle += tmpResult.kwhCycle;
+  //     sum.totalKwhCycle += tmpResult.totalKwhCycle;
+  //   })
+  //   return sum;
+  // }
 
-  sumExhaustGasEAF(losses: ExhaustGasEAF[]): number {
-    let sum = 0;
-    losses.forEach(loss => {
-      sum += this.exhaustGasEAF(loss);
-    })
-    return sum;
-  }
+  // sumExhaustGasEAF(losses: ExhaustGasEAF[]): number {
+  //   let sum = 0;
+  //   losses.forEach(loss => {
+  //     sum += this.exhaustGasEAF(loss);
+  //   })
+  //   return sum;
+  // }
 
-  sumEnergyInputExhaustGas(losses: EnergyInputExhaustGasLoss[]): number {
-    let sum = 0;
-    losses.forEach(loss => {
-      sum += this.energyInputExhaustGasLosses(loss);
-    })
-    return sum;
-  }
+  // sumEnergyInputExhaustGas(losses: EnergyInputExhaustGasLoss[]): number {
+  //   let sum = 0;
+  //   losses.forEach(loss => {
+  //     sum += this.energyInputExhaustGasLosses(loss);
+  //   })
+  //   return sum;
+  // }
 
   sumExtendedSurface(losses: ExtendedSurface[], settings: Settings): number {
     let sum = 0;
@@ -295,7 +325,10 @@ export class PhastService {
         conditionFactor: 1,
         correctionFactor: 1,
       }
-      sum += this.wallLosses(tmpWallLoss, settings);
+      let tmpForm = this.wallLossesService.getWallLossForm(tmpWallLoss);
+      if (tmpForm.status == 'VALID') {
+        sum += this.wallLosses(tmpWallLoss, settings);
+      }
     })
     return sum;
   }
@@ -303,27 +336,33 @@ export class PhastService {
   sumFixtureLosses(losses: FixtureLoss[]): number {
     let sum = 0;
     losses.forEach(loss => {
-      sum += this.fixtureLosses(loss);
-    })
-    return sum;
-  }
-
-  sumFlueGasLosses(losses: FlueGas[]): number {
-    let sum = 0;
-    losses.forEach(loss => {
-      if (loss.flueGasType == 'By Mass') {
-        sum += this.flueGasByMass(loss.flueGasByMass);
-      } else if (loss.flueGasType == 'By Volume') {
-        sum += this.flueGasByVolume(loss.flueGasByVolume);
+      let tmpForm = this.fixtureLossesService.getFormFromLoss(loss);
+      if (tmpForm.status == 'VALID') {
+        sum += this.fixtureLosses(loss);
       }
     })
     return sum;
   }
 
+  // sumFlueGasLosses(losses: FlueGas[]): number {
+  //   let sum = 0;
+  //   losses.forEach(loss => {
+  //     if (loss.flueGasType == 'By Mass') {
+  //       sum += this.flueGasByMass(loss.flueGasByMass);
+  //     } else if (loss.flueGasType == 'By Volume') {
+  //       sum += this.flueGasByVolume(loss.flueGasByVolume);
+  //     }
+  //   })
+  //   return sum;
+  // }
+
   sumLeakageLosses(losses: LeakageLoss[]): number {
     let sum = 0;
     losses.forEach(loss => {
-      sum += this.leakageLosses(loss);
+      let tmpForm = this.gasLeakageLossesService.initFormFromLoss(loss);
+      if (tmpForm.status == 'VALID') {
+        sum += this.leakageLosses(loss);
+      }
     })
     return sum;
   }
@@ -332,21 +371,27 @@ export class PhastService {
     let sum = 0;
     losses.forEach(loss => {
       let tmpForm = this.openingLossesService.getFormFromLoss(loss);
-      if (loss.openingType == 'Round') {
-        let tmpLoss = this.openingLossesService.getCircularLossFromForm(tmpForm);
-        sum += this.openingLossesCircular(tmpLoss) * loss.numberOfOpenings;
-      } else if (loss.openingType == 'Rectangular (Square)') {
-        let tmpLoss = this.openingLossesService.getQuadLossFromForm(tmpForm);
-        sum += this.openingLossesQuad(tmpLoss) * loss.numberOfOpenings
+      if (tmpForm.status == 'VALID') {
+        if (loss.openingType == 'Round') {
+          let tmpLoss = this.openingLossesService.getCircularLossFromForm(tmpForm);
+          sum += this.openingLossesCircular(tmpLoss) * loss.numberOfOpenings;
+        } else if (loss.openingType == 'Rectangular (Square)') {
+          let tmpLoss = this.openingLossesService.getQuadLossFromForm(tmpForm);
+          sum += this.openingLossesQuad(tmpLoss) * loss.numberOfOpenings
+        }
       }
     })
+
     return sum;
   }
 
   sumOtherLosses(losses: OtherLoss[]): number {
     let sum = 0;
     losses.forEach(loss => {
-      sum += loss.heatLoss;
+      let tmpForm = this.otherLossessService.getFormFromLoss(loss);
+      if (tmpForm.status == 'VALID') {
+        sum += loss.heatLoss;
+      }
     })
     return sum;
   }
@@ -354,7 +399,10 @@ export class PhastService {
   sumSlagLosses(losses: Slag[]): number {
     let sum = 0;
     losses.forEach(loss => {
-      sum += this.slagOtherMaterialLosses(loss);
+      let tmpForm = this.slagService.getFormFromLoss(loss);
+      if (tmpForm.status == 'VALID') {
+        sum += this.slagOtherMaterialLosses(loss);
+      }
     })
     return sum;
   }
@@ -362,7 +410,10 @@ export class PhastService {
   sumWallLosses(losses: WallLoss[], settings: Settings): number {
     let sum = 0;
     losses.forEach(loss => {
-      sum += this.wallLosses(loss, settings);
+      let tmpForm = this.wallLossesService.getWallLossForm(loss);
+      if (tmpForm.status == 'VALID') {
+        sum += this.wallLosses(loss, settings);
+      }
     })
     return sum;
   }
@@ -383,9 +434,6 @@ export class PhastService {
     return sum;
   }
 
-
-
-
   sumAuxiliaryEquipment(phast: PHAST, results: Array<any>) {
     let sum = 0;
     results.forEach(result => {
@@ -398,6 +446,7 @@ export class PhastService {
         }
       }
     })
+    return sum;
   }
 }
 
