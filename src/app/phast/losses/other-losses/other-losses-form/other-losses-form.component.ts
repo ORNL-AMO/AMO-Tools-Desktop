@@ -1,6 +1,8 @@
 import { Component, OnInit, Input, EventEmitter, Output, ViewChild, ElementRef, SimpleChanges } from '@angular/core';
 import { OtherLossesCompareService } from '../other-losses-compare.service';
 import { WindowRefService } from '../../../../indexedDb/window-ref.service';
+import { Settings } from '../../../../shared/models/settings';
+
 @Component({
   selector: 'app-other-losses-form',
   templateUrl: './other-losses-form.component.html',
@@ -19,6 +21,8 @@ export class OtherLossesFormComponent implements OnInit {
   changeField = new EventEmitter<string>();
   @Output('saveEmit')
   saveEmit = new EventEmitter<boolean>();
+  @Input()
+  settings: Settings;
 
   @ViewChild('lossForm') lossForm: ElementRef;
   form: any;

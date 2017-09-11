@@ -17,14 +17,25 @@ export class DesignedEnergyResultsComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    if (this.settings.energySourceType == 'Fuel') {
-      this.resultUnits = {
-        designedEnergyUsed: 'Btu/hr',
-        designedEnergyIntensity: 'Btu/lb',
-        designedElectricityUsed: 'kW',
-        calculatedFuelEnergyUsed: 'Btu/hr',
-        calculatedEnergyIntensity: 'Btu/lb',
-        calculatedElectricityUsed: 'kW'
+    if (this.settings.energySourceType == 'Fuel' || this.settings.energySourceType == 'Steam') {
+      if (this.settings.unitsOfMeasure == 'Imperial') {
+        this.resultUnits = {
+          designedEnergyUsed: 'Btu/hr',
+          designedEnergyIntensity: 'Btu/lb',
+          designedElectricityUsed: 'kW',
+          calculatedFuelEnergyUsed: 'Btu/hr',
+          calculatedEnergyIntensity: 'Btu/lb',
+          calculatedElectricityUsed: 'kW'
+        }
+      } else if (this.settings.unitsOfMeasure == 'Metric') {
+        this.resultUnits = {
+          designedEnergyUsed: 'kJ/hr',
+          designedEnergyIntensity: 'kJ/kg',
+          designedElectricityUsed: 'kW',
+          calculatedFuelEnergyUsed: 'kJ/hr',
+          calculatedEnergyIntensity: 'kJ/kg',
+          calculatedElectricityUsed: 'kW'
+        }
       }
     } else if (this.settings.energySourceType == 'Electricity') {
       this.resultUnits = {
@@ -33,15 +44,6 @@ export class DesignedEnergyResultsComponent implements OnInit {
         designedElectricityUsed: 'kW',
         calculatedFuelEnergyUsed: 'kW',
         calculatedEnergyIntensity: 'kW',
-        calculatedElectricityUsed: 'kW'
-      }
-    } else if (this.settings.energySourceType == 'Steam') {
-      this.resultUnits = {
-        designedEnergyUsed: 'Btu/hr',
-        designedEnergyIntensity: 'Btu/lb',
-        designedElectricityUsed: 'kW',
-        calculatedFuelEnergyUsed: 'Btu/hr',
-        calculatedEnergyIntensity: 'Btu/lb',
         calculatedElectricityUsed: 'kW'
       }
     }

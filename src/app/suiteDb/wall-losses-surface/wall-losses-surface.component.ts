@@ -1,8 +1,10 @@
-import { Component, OnInit, EventEmitter, Output } from '@angular/core';
+import { Component, OnInit, EventEmitter, Output, Input } from '@angular/core';
 import { WallLossesSurface } from '../../shared/models/materials';
 import { SuiteDbService } from '../suite-db.service';
 import { IndexedDbService } from '../../indexedDb/indexed-db.service';
 import * as _ from 'lodash';
+import { Settings } from '../../shared/models/settings';
+
 @Component({
   selector: 'app-wall-losses-surface',
   templateUrl: './wall-losses-surface.component.html',
@@ -11,7 +13,8 @@ import * as _ from 'lodash';
 export class WallLossesSurfaceComponent implements OnInit {
   @Output('closeModal')
   closeModal = new EventEmitter<WallLossesSurface>();
-
+  @Input()
+  settings: Settings;
 
   newMaterial: WallLossesSurface = {
     surface: 'New Surface',
@@ -27,6 +30,11 @@ export class WallLossesSurfaceComponent implements OnInit {
     this.allMaterials = this.suiteDbService.selectWallLossesSurface();
     this.checkMaterialName();
     // this.selectedMaterial = this.allMaterials[0];
+    if(!this.settings){
+      this.indexedDbService.getSettings(1).then(results => {
+        this.settings = results;
+      })
+    }
   }
 
   addMaterial() {

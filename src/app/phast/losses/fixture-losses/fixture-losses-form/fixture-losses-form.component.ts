@@ -4,6 +4,7 @@ import { FixtureLossesCompareService } from "../fixture-losses-compare.service";
 import { SuiteDbService } from '../../../../suiteDb/suite-db.service';
 import { ModalDirective } from 'ngx-bootstrap';
 import { LossesService } from '../../losses.service';
+import { Settings } from '../../../../shared/models/settings';
 
 @Component({
   selector: 'app-fixture-losses-form',
@@ -23,6 +24,9 @@ export class FixtureLossesFormComponent implements OnInit {
   saveEmit = new EventEmitter<boolean>();
   @Input()
   lossIndex: number;
+  @Input()
+  settings: Settings;
+  
   @ViewChild('materialModal') public materialModal: ModalDirective;
   @ViewChild('lossForm') lossForm: ElementRef;
   form: any;

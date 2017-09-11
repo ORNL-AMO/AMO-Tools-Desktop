@@ -1,4 +1,3 @@
-
 <div class="help-header">
 
   <h3>Auxilary Power Losses Help</h3>
@@ -13,16 +12,77 @@
 <div class="help-content">
 
 
-  <div class="card" *ngIf="currentField == 'atmosphereGas'">
+  <div class="card" *ngIf="currentField == 'motorPhase'">
     <div class="card-header">
-      Weight
+      Motor Current Phase
     </div>
     <div class="card-block">
       <label>Description:</label>
       <p>DESCRITION HERE</p>
       <label>Input:</label>
       <p>
-        Units: <strong>UNIT HERE</strong><br> Minimum Value Allowed: <strong>MAX HERE</strong><br> Maximum Value Allowed: <strong>MIN HERE</strong><br>
+        Units: <strong>UNIT HERE</strong><br> Minimum Value Allowed: <strong>MAX HERE</strong><br> Maximum Value Allowed:
+        <strong>MIN HERE</strong><br>
+      </p>
+    </div>
+  </div>
+
+  <div class="card" *ngIf="currentField == 'supplyVoltage'">
+    <div class="card-header">
+      Supply Voltage
+    </div>
+    <div class="card-block">
+      <label>Description:</label>
+      <p>DESCRITION HERE</p>
+      <label>Input:</label>
+      <p>
+        Units: <strong>UNIT HERE</strong><br> Minimum Value Allowed: <strong>MAX HERE</strong><br> Maximum Value Allowed:
+        <strong>MIN HERE</strong><br>
+      </p>
+    </div>
+  </div>
+
+  <div class="card" *ngIf="currentField == 'avgCurrent'">
+    <div class="card-header">
+      Average Current
+    </div>
+    <div class="card-block">
+      <label>Description:</label>
+      <p>DESCRITION HERE</p>
+      <label>Input:</label>
+      <p>
+        Units: <strong>UNIT HERE</strong><br> Minimum Value Allowed: <strong>MAX HERE</strong><br> Maximum Value Allowed:
+        <strong>MIN HERE</strong><br>
+      </p>
+    </div>
+  </div>
+
+  <div class="card" *ngIf="currentField == 'powerFactor'">
+    <div class="card-header">
+      Power Factor
+    </div>
+    <div class="card-block">
+      <label>Description:</label>
+      <p>DESCRITION HERE</p>
+      <label>Input:</label>
+      <p>
+        Units: <strong>UNIT HERE</strong><br> Minimum Value Allowed: <strong>MAX HERE</strong><br> Maximum Value Allowed:
+        <strong>MIN HERE</strong><br>
+      </p>
+    </div>
+  </div>
+
+  <div class="card" *ngIf="currentField == 'operatingTime'">
+    <div class="card-header">
+      Operating Time
+    </div>
+    <div class="card-block">
+      <label>Description:</label>
+      <p>DESCRITION HERE</p>
+      <label>Input:</label>
+      <p>
+        Units: <strong>UNIT HERE</strong><br> Minimum Value Allowed: <strong>MAX HERE</strong><br> Maximum Value Allowed:
+        <strong>MIN HERE</strong><br>
       </p>
     </div>
   </div>

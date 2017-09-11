@@ -11,8 +11,8 @@
     <div class="input-group">
       <input name="{{'heatLoss_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="heatLoss" id="heatLoss"
         onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('heatLoss')">
-      <span class="input-group-addon units">Btu/hr</span>
+      <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">Btu/hr</span>
+      <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kJ/hr</span>
     </div>
   </div>
-
 </form>

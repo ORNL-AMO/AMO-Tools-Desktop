@@ -89,7 +89,7 @@ export class SystemCurveGraphComponent implements OnInit {
     let curveGraph = this.doc.getElementById('systemCurveGraph');
 
     this.canvasWidth = curveGraph.clientWidth;
-    this.canvasHeight = this.canvasWidth * (3/5);
+    this.canvasHeight = this.canvasWidth * (3 / 5);
 
     if (this.canvasWidth < 400) {
       this.fontSize = '8px';
@@ -178,20 +178,46 @@ export class SystemCurveGraphComponent implements OnInit {
       .range([this.height, 0]);
 
     if (this.pointOne.form.value.flowRate > this.pointTwo.form.value.flowRate) {
-      x.domain([0, this.pointOne.form.value.flowRate]);
+      if (this.pointOne.form.value.flowRate > 50 && this.pointOne.form.value.flowRate < 25000) {
+        x.domain([0, this.pointOne.form.value.flowRate]);
+      } else if (this.pointOne.form.value.flowRate > 50 && this.pointOne.form.value.flowRate > 25000) {
+        x.domain([0, 25000]);
+      } else {
+        x.domain([0, 50]);
+      }
     }
     else {
-      x.domain([0, this.pointTwo.form.value.flowRate]);
+      if (this.pointTwo.form.value.flowRate > 50 && this.pointTwo.form.value.flowRate < 25000) {
+        x.domain([0, this.pointTwo.form.value.flowRate]);
+      } else if (this.pointTwo.form.value.flowRate > 50 && this.pointTwo.form.value.flowRate > 25000) {
+        x.domain([0, 25000]);
+      } else {
+        x.domain([0, 50]);
+      }
     }
 
     if (this.pointOne.form.value.head > this.pointTwo.form.value.head) {
-      y.domain([0, (this.pointOne.form.value.head + (this.pointOne.form.value.head / 10))]);
+      let domainVal = this.pointOne.form.value.head + (this.pointOne.form.value.head / 10)
+      if (domainVal > 50 && domainVal < 25000) {
+        y.domain([0, domainVal]);
+      } else if (domainVal > 50 && domainVal > 25000) {
+        y.domain([0, 25000]);
+      } else {
+        y.domain([0, 50]);
+      }
     }
     else {
-      y.domain([0, (this.pointTwo.form.value.head + (this.pointTwo.form.value.head / 10))]);
+      let domainVal = this.pointTwo.form.value.head + (this.pointTwo.form.value.head / 10)
+      if (domainVal > 50 && domainVal < 25000) {
+        y.domain([0, domainVal]);
+      } else if (domainVal > 50 && domainVal > 25000) {
+        y.domain([0, 25000]);
+      } else {
+        y.domain([0, 50]);
+      }
     }
 
-    if(this.isGridToggled) {
+    if (this.isGridToggled) {
       this.xAxis = d3.axisBottom()
         .scale(x)
         .tickSizeInner(0)
@@ -210,7 +236,7 @@ export class SystemCurveGraphComponent implements OnInit {
         .tickSize(-this.width)
         .tickFormat(d3.format(".2s"));
     }
-    else{
+    else {
       this.xAxis = d3.axisBottom()
         .scale(x)
         .tickSizeInner(0)
@@ -357,11 +383,11 @@ export class SystemCurveGraphComponent implements OnInit {
           .style("padding-bottom", "10px")
           .style("padding-left", "10px")
           .html(
-            "<p><strong><div style='float:left; position: relative; top: -10px;'>Flow Rate: </div><div style='float:right; position: relative; top: -10px;'>" + format(d.x) + " " + this.settings.flowMeasurement + "</div><br>" +
+          "<p><strong><div style='float:left; position: relative; top: -10px;'>Flow Rate: </div><div style='float:right; position: relative; top: -10px;'>" + format(d.x) + " " + this.settings.flowMeasurement + "</div><br>" +
 
-            "<div style='float:left; position: relative; top: -10px;'>Head: </div><div style='float: right; position: relative; top: -10px;'>" + format(d.y) + " " + this.settings.distanceMeasurement + "</div><br>" +
+          "<div style='float:left; position: relative; top: -10px;'>Head: </div><div style='float: right; position: relative; top: -10px;'>" + format(d.y) + " " + this.settings.distanceMeasurement + "</div><br>" +
 
-            "<div style='float:left; position: relative; top: -10px;'>Fluid Power: </div><div style='float: right; position: relative; top: -10px;'>" + format(d.fluidPower) + " " + this.settings.powerMeasurement + "</div></strong></p>")
+          "<div style='float:left; position: relative; top: -10px;'>Fluid Power: </div><div style='float: right; position: relative; top: -10px;'>" + format(d.fluidPower) + " " + this.settings.powerMeasurement + "</div></strong></p>")
 
           .style("left", (this.margin.left + x(d.x) - (detailBoxWidth / 2 - 17)) + "px")
           .style("top", (this.margin.top + y(d.y) + 83) + "px")
@@ -379,19 +405,19 @@ export class SystemCurveGraphComponent implements OnInit {
           .transition()
           .delay(100)
           .duration(600)
-          .style("opacity",0);
+          .style("opacity", 0);
 
         this.detailBox
           .transition()
           .delay(100)
           .duration(600)
-          .style("opacity",0);
+          .style("opacity", 0);
 
         this.focus
           .transition()
           .delay(100)
           .duration(600)
-          .style("opacity",0);
+          .style("opacity", 0);
       });
 
     this.svg.append("text")
@@ -496,12 +522,12 @@ export class SystemCurveGraphComponent implements OnInit {
     return data;
   }
 
-  toggleGrid(){
-    if(this.isGridToggled){
+  toggleGrid() {
+    if (this.isGridToggled) {
       this.isGridToggled = false;
       this.makeGraph();
     }
-    else{
+    else {
       this.isGridToggled = true;
       this.makeGraph();
     }

@@ -3,7 +3,7 @@ import { EfficiencyImprovementInputs } from '../shared/models/phast/efficiencyIm
 import { EnergyEquivalencyElectric, EnergyEquivalencyFuel } from '../shared/models/phast/energyEquivalency';
 import { O2Enrichment } from '../shared/models/phast/o2Enrichment';
 import { FlowCalculations } from '../shared/models/phast/flowCalculations';
-import { ExhaustGas } from '../shared/models/phast/losses/exhaustGas';
+import { ExhaustGasEAF } from '../shared/models/phast/losses/exhaustGasEAF';
 import { PHAST, Losses } from '../shared/models/phast/phast';
 import { FixtureLoss } from '../shared/models/phast/losses/fixtureLoss';
 import { GasCoolingLoss, LiquidCoolingLoss, WaterCoolingLoss, CoolingLoss } from '../shared/models/phast/losses/coolingLoss';
@@ -14,14 +14,17 @@ import { LeakageLoss } from '../shared/models/phast/losses/leakageLoss';
 import { AtmosphereLoss } from '../shared/models/phast/losses/atmosphereLoss';
 import { Slag } from '../shared/models/phast/losses/slag';
 import { AuxiliaryPowerLoss } from '../shared/models/phast/losses/auxiliaryPowerLoss';
-import { EnergyInput } from '../shared/models/phast/losses/energyInput';
+import { EnergyInputEAF } from '../shared/models/phast/losses/energyInputEAF';
 import { FlueGasByMass, FlueGasByVolume, FlueGas } from '../shared/models/phast/losses/flueGas';
 import { ExtendedSurface } from '../shared/models/phast/losses/extendedSurface';
 import { OtherLoss } from '../shared/models/phast/losses/otherLoss';
+import { EnergyInputExhaustGasLoss } from '../shared/models/phast/losses/energyInputExhaustGasLosses';
 declare var phastAddon: any;
 import { OpeningLossesService } from './losses/opening-losses/opening-losses.service';
 import { BehaviorSubject } from 'rxjs';
 import { ConvertUnitsService } from '../shared/convert-units/convert-units.service';
+import { Settings } from '../shared/models/settings';
+
 @Injectable()
 export class PhastService {
 
@@ -67,8 +70,20 @@ export class PhastService {
     return phastAddon.solidLoadChargeMaterial(inputs);
   }
 
-  wallLosses(inputs: WallLoss) {
-    return phastAddon.wallLosses(inputs);
+  wallLosses(inputs: WallLoss, settings: Settings) {
+    let results = 0;
+    // if (settings.unitsOfMeasure == 'Metric') {
+    //   inputs.ambientTemperature = this.convertUnitsService.value(inputs.ambientTemperature).from('F').to('C');
+    //   inputs.surfaceTemperature = this.convertUnitsService.value(inputs.surfaceTemperature).from('F').to('C');
+    //   inputs.windVelocity = this.convertUnitsService.value(inputs.windVelocity).from('mph').to('km/h');
+    //   inputs.surfaceArea = this.convertUnitsService.value(inputs.surfaceArea).from('ft2').to('m2');
+    //   results = phastAddon.wallLosses(inputs);
+    //   results = this.convertUnitsService.value(results).from('Btu').to('kJ');
+    // } else {
+    //   results = phastAddon.wallLosses(inputs);
+    // }
+    results = phastAddon.wallLosses(inputs);
+    return results;
   }
 
   waterCoolingLosses(inputs: WaterCoolingLoss) {
@@ -99,8 +114,25 @@ export class PhastService {
     return phastAddon.auxiliaryPowerLoss(inputs);
   }
 
-  energyInput(inputs: EnergyInput) {
-    return phastAddon.energyInput(inputs);
+  //Electric Arc Furnace
+  energyInputEAF(inputs: EnergyInputEAF) {
+    return phastAddon.energyInputEAF(inputs);
+  }
+
+  //Electric Arc Furnace
+  exhaustGasEAF(inputs: ExhaustGasEAF) {
+    return phastAddon.exhaustGasEAF(inputs);
+  }
+
+  //used in energyInputExhaustGasLosses
+  availableHeat(inputs: EnergyInputExhaustGasLoss) {
+    return phastAddon.availableHeat(inputs);
+  }
+
+  //energy input for non-EAF Electric process heating
+  energyInputExhaustGasLosses(inputs: EnergyInputExhaustGasLoss) {
+    inputs.availableHeat = this.availableHeat(inputs);
+    return phastAddon.energyInputExhaustGasLosses(inputs);
   }
 
   efficiencyImprovement(inputs: EfficiencyImprovementInputs) {
@@ -113,10 +145,6 @@ export class PhastService {
 
   energyEquivalencyFuel(inputs: EnergyEquivalencyFuel) {
     return phastAddon.energyEquivalencyFuel(inputs);
-  }
-
-  exhaustGas(inputs: ExhaustGas) {
-    return phastAddon.exhaustGas(inputs);
   }
 
   flowCalculations(inputs: FlowCalculations) {
@@ -132,7 +160,7 @@ export class PhastService {
   // flueGasLossesByMassGivenO2
   // flueGasLossesByVolumeGivenO2
 
-  sumHeatInput(losses: Losses): number {
+  sumHeatInput(losses: Losses, settings: Settings): number {
     let grossHeatRequired: number = 0;
     if (losses.atmosphereLosses) {
       grossHeatRequired += this.sumAtmosphereLosses(losses.atmosphereLosses);
@@ -149,11 +177,14 @@ export class PhastService {
     // if (losses.energyInput) {
 
     // }
-    if (losses.exhaustGas) {
-      grossHeatRequired += this.sumExhaustGas(losses.exhaustGas);
+    if (losses.exhaustGasEAF) {
+      grossHeatRequired += this.sumExhaustGasEAF(losses.exhaustGasEAF);
+    }
+    if (losses.energyInputExhaustGasLoss) {
+      grossHeatRequired += this.sumEnergyInputExhaustGas(losses.energyInputExhaustGasLoss);
     }
     if (losses.extendedSurfaces) {
-      grossHeatRequired += this.sumExtendedSurface(losses.extendedSurfaces);
+      grossHeatRequired += this.sumExtendedSurface(losses.extendedSurfaces, settings);
     }
     if (losses.fixtureLosses) {
       grossHeatRequired += this.sumFixtureLosses(losses.fixtureLosses);
@@ -174,7 +205,7 @@ export class PhastService {
       grossHeatRequired += this.sumSlagLosses(losses.slagLosses);
     }
     if (losses.wallLosses) {
-      grossHeatRequired += this.sumWallLosses(losses.wallLosses);
+      grossHeatRequired += this.sumWallLosses(losses.wallLosses, settings);
     }
     return grossHeatRequired;
   }
@@ -221,14 +252,14 @@ export class PhastService {
     return sum;
   }
 
-  sumEnergyInput(losses: EnergyInput[]): number {
+  sumEnergyInputEAF(losses: EnergyInputEAF[]): number {
     let sum: any = {
       heatDelivered: 0,
       kwhCycle: 0,
       totalKwhCycle: 0
     };
     losses.forEach(loss => {
-      let tmpResult = this.energyInput(loss);
+      let tmpResult = this.energyInputEAF(loss);
       sum.heatDelivered += tmpResult.heatDelivered;
       sum.kwhCycle += tmpResult.kwhCycle;
       sum.totalKwhCycle += tmpResult.totalKwhCycle;
@@ -236,15 +267,23 @@ export class PhastService {
     return sum;
   }
 
-  sumExhaustGas(losses: ExhaustGas[]): number {
+  sumExhaustGasEAF(losses: ExhaustGasEAF[]): number {
     let sum = 0;
     losses.forEach(loss => {
-      sum += this.exhaustGas(loss);
+      sum += this.exhaustGasEAF(loss);
     })
     return sum;
   }
 
-  sumExtendedSurface(losses: ExtendedSurface[]): number {
+  sumEnergyInputExhaustGas(losses: EnergyInputExhaustGasLoss[]): number {
+    let sum = 0;
+    losses.forEach(loss => {
+      sum += this.energyInputExhaustGasLosses(loss);
+    })
+    return sum;
+  }
+
+  sumExtendedSurface(losses: ExtendedSurface[], settings: Settings): number {
     let sum = 0;
     losses.forEach(loss => {
       let tmpWallLoss: WallLoss = {
@@ -256,7 +295,7 @@ export class PhastService {
         conditionFactor: 1,
         correctionFactor: 1,
       }
-      sum += this.wallLosses(tmpWallLoss);
+      sum += this.wallLosses(tmpWallLoss, settings);
     })
     return sum;
   }
@@ -320,10 +359,10 @@ export class PhastService {
     return sum;
   }
 
-  sumWallLosses(losses: WallLoss[]): number {
+  sumWallLosses(losses: WallLoss[], settings: Settings): number {
     let sum = 0;
     losses.forEach(loss => {
-      sum += this.wallLosses(loss);
+      sum += this.wallLosses(loss, settings);
     })
     return sum;
   }

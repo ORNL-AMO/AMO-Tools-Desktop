@@ -6,7 +6,7 @@ import { Losses } from '../../../shared/models/phast/phast';
 import { WallLossesService } from './wall-losses.service';
 import { WallLossCompareService } from './wall-loss-compare.service';
 import { WindowRefService } from '../../../indexedDb/window-ref.service';
-
+import { Settings } from '../../../shared/models/settings';
 @Component({
   selector: 'app-wall-losses',
   templateUrl: './wall-losses.component.html',
@@ -27,6 +27,8 @@ export class WallLossesComponent implements OnInit {
   fieldChange = new EventEmitter<string>();
   @Input()
   isBaseline: boolean;
+  @Input()
+  settings: Settings;
 
   _wallLosses: Array<any>;
   firstChange: boolean = true;
@@ -155,7 +157,7 @@ export class WallLossesComponent implements OnInit {
   //calculate wall loss results
   calculate(loss: any) {
     let tmpWallLoss: WallLoss = this.wallLossesService.getWallLossFromForm(loss.form);
-    loss.heatLoss = this.phastService.wallLosses(tmpWallLoss);
+    loss.heatLoss = this.phastService.wallLosses(tmpWallLoss, this.settings);
   }
 
   saveLosses() {

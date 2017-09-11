@@ -24,7 +24,8 @@
       <div class="input-group">
         <input name="{{'wallThickness_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="wallThickness"
           id="wallThickness" onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('wallThickness')">
-        <span class="input-group-addon units">in</span>
+        <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">in</span>
+        <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">mm</span>
       </div>
     </div>
 
@@ -40,14 +41,17 @@
       <div class="input-group">
         <input name="{{'heightOfOpening_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="heightOfOpening"
           id="heightOfOpening" onfocus="this.select();" (input)="getArea()" (focus)="focusField('heightOfOpening')">
-        <span class="input-group-addon units">in</span>
+        <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">in</span>
+        <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">mm</span>
       </div>
     </div>
 
     <div class="form-group">
       <label class="small">Total Opening Area</label>
       <div class="text-center small">
-        {{totalArea | number:'2.2-2'}} ft<sup>2</sup>
+        {{totalArea | number:'2.2-2'}} 
+        <span *ngIf="settings.unitsOfMeasure == 'Imperial'">ft<sup>2</sup></span>
+        <span *ngIf="settings.unitsOfMeasure == 'Metric'">mm<sup>2</sup></span>
       </div>
     </div>
 
@@ -65,7 +69,8 @@
       <div class="input-group">
         <input name="{{'insideTemp_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="insideTemp" id="insideTemp"
           onfocus="this.select();" (input)="checkTemperature()" (focus)="focusField('insideTemp')">
-        <span class="input-group-addon units">&#8457;</span>
+        <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">&#8457;</span>
+        <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
       </div>
       <span class="alert-warning pull-right small" *ngIf="temperatureError !== null">{{temperatureError}}</span>
     </div>
@@ -75,7 +80,8 @@
       <div class="input-group">
         <input name="{{'ambientTemp_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="ambientTemp" id="ambientTemp"
           onfocus="this.select();" (input)="checkTemperature()" (focus)="focusField('ambientTemp')">
-        <span class="input-group-addon units">&#8457;</span>
+        <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">&#8457;</span>
+        <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
       </div>
       <span class="alert-warning pull-right small" *ngIf="temperatureError !== null">{{temperatureError}}</span>
     </div>

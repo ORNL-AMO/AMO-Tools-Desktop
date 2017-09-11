@@ -5,6 +5,7 @@ import { CoolingLossesService } from './cooling-losses.service';
 import { Losses } from '../../../shared/models/phast/phast';
 import { CoolingLoss, GasCoolingLoss, LiquidCoolingLoss, WaterCoolingLoss } from '../../../shared/models/phast/losses/coolingLoss';
 import { CoolingLossesCompareService } from './cooling-losses-compare.service';
+import { Settings } from '../../../shared/models/settings';
 
 @Component({
   selector: 'app-cooling-losses',
@@ -26,6 +27,8 @@ export class CoolingLossesComponent implements OnInit {
   fieldChange = new EventEmitter<string>();
   @Input()
   isBaseline: boolean;
+  @Input()
+  settings: Settings;
 
   _coolingLosses: Array<any>;
   firstChange: boolean = true;

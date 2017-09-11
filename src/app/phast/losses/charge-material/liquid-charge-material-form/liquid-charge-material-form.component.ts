@@ -4,6 +4,7 @@ import { WindowRefService } from '../../../../indexedDb/window-ref.service';
 import { ChargeMaterialCompareService } from '../charge-material-compare.service';
 import { ModalDirective } from 'ngx-bootstrap';
 import { LossesService } from '../../losses.service';
+import { Settings } from '../../../../shared/models/settings';
 
 @Component({
   selector: 'app-liquid-charge-material-form',
@@ -23,6 +24,8 @@ export class LiquidChargeMaterialFormComponent implements OnInit {
   saveEmit = new EventEmitter<boolean>();
   @Input()
   lossIndex: number;
+  @Input()
+  settings: Settings;
   @ViewChild('materialModal') public materialModal: ModalDirective;
   @ViewChild('lossForm') lossForm: ElementRef;
   form: any;
@@ -33,7 +36,7 @@ export class LiquidChargeMaterialFormComponent implements OnInit {
   selectedMaterial: any;
   counter: any;
   dischargeTempError: string = null;
-  constructor(private suiteDbService: SuiteDbService, private chargeMaterialCompareService: ChargeMaterialCompareService, private windowRefService: WindowRefService,private lossesService: LossesService) { }
+  constructor(private suiteDbService: SuiteDbService, private chargeMaterialCompareService: ChargeMaterialCompareService, private windowRefService: WindowRefService, private lossesService: LossesService) { }
 
   ngOnChanges(changes: SimpleChanges) {
     if (!this.firstChange) {
@@ -100,7 +103,7 @@ export class LiquidChargeMaterialFormComponent implements OnInit {
       this.dischargeTempError = 'The discharge temperature is higher than the Vaporizing Temperature, please enter proper percentage for charge vaporized.';
     } else if ((this.chargeMaterialForm.value.dischargeTemperature < this.chargeMaterialForm.value.materialVaporizingTemperature) && this.chargeMaterialForm.value.liquidVaporized > 0) {
       this.dischargeTempError = 'The discharge temperature is lower than the vaporizing temperature, the percentage for charge liquid vaporized should be 0%.';
-    }else{
+    } else {
       this.dischargeTempError = null;
     }
   }
@@ -238,8 +241,8 @@ export class LiquidChargeMaterialFormComponent implements OnInit {
   hideMaterialModal(event?: any) {
     if (event) {
       this.materialTypes = this.suiteDbService.selectLiquidLoadChargeMaterials();
-      let newMaterial = this.materialTypes.filter(material => {return material.substance == event.substance})
-      if(newMaterial.length != 0){
+      let newMaterial = this.materialTypes.filter(material => { return material.substance == event.substance })
+      if (newMaterial.length != 0) {
         this.chargeMaterialForm.patchValue({
           materialId: newMaterial[0].id
         })
