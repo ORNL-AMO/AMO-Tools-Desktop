@@ -93,17 +93,22 @@ export class PhastService {
 
   wallLosses(inputs: WallLoss, settings: Settings) {
     let results = 0;
-    // if (settings.unitsOfMeasure == 'Metric') {
-    //   inputs.ambientTemperature = this.convertUnitsService.value(inputs.ambientTemperature).from('F').to('C');
-    //   inputs.surfaceTemperature = this.convertUnitsService.value(inputs.surfaceTemperature).from('F').to('C');
-    //   inputs.windVelocity = this.convertUnitsService.value(inputs.windVelocity).from('mph').to('km/h');
-    //   inputs.surfaceArea = this.convertUnitsService.value(inputs.surfaceArea).from('ft2').to('m2');
-    //   results = phastAddon.wallLosses(inputs);
-    //   results = this.convertUnitsService.value(results).from('Btu').to('kJ');
-    // } else {
-    //   results = phastAddon.wallLosses(inputs);
-    // }
-    results = phastAddon.wallLosses(inputs);
+    if (settings.unitsOfMeasure == 'Metric') {
+      //TODO: Update temperature conversion method
+      inputs.ambientTemperature = this.convertUnitsService.value(inputs.ambientTemperature).from('F').to('C');
+      inputs.surfaceTemperature = this.convertUnitsService.value(inputs.surfaceTemperature).from('F').to('C');
+      inputs.windVelocity = this.convertUnitsService.value(inputs.windVelocity).from('mph').to('km/h');
+      inputs.surfaceArea = this.convertUnitsService.value(inputs.surfaceArea).from('ft2').to('m2');
+      results = phastAddon.wallLosses(inputs);
+      if (isNaN(results) == false) {
+        results = this.convertUnitsService.value(results).from('Btu').to('kJ');
+      } else {
+        results = 0;
+      }
+    } else {
+      results = phastAddon.wallLosses(inputs);
+    }
+    //results = phastAddon.wallLosses(inputs);
     return results;
   }
 
