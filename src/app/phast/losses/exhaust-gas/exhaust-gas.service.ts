@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ExhaustGas } from '../../../shared/models/phast/losses/exhaustGas';
+import { ExhaustGasEAF } from '../../../shared/models/phast/losses/exhaustGasEAF';
 import { FormBuilder, Validators, FormControl } from '@angular/forms';
 import { BehaviorSubject } from 'rxjs';
 import * as _ from 'lodash';
@@ -35,12 +35,12 @@ export class ExhaustGasService {
 
   initForm() {
     return this.formBuilder.group({
-      'cycleTime': ['', Validators.required],
+    //  'cycleTime': ['', Validators.required],
       'offGasTemp': ['', Validators.required],
       'CO': ['', Validators.required],
-      'O2': ['', Validators.required],
+     // 'O2': ['', Validators.required],
       'H2': ['', Validators.required],
-      'CO2': ['', Validators.required],
+     // 'CO2': ['', Validators.required],
       'combustibleGases': ['', Validators.required],
       'vfr': ['', Validators.required],
       'dustLoading': ['', Validators.required],
@@ -48,14 +48,14 @@ export class ExhaustGasService {
     })
   }
 
-  getFormFromLoss(exhaustGas: ExhaustGas) {
+  getFormFromLoss(exhaustGas: ExhaustGasEAF) {
     let tmpGroup = this.formBuilder.group({
-      'cycleTime': [exhaustGas.cycleTime, Validators.required],
+      //'cycleTime': [exhaustGas.cycleTime, Validators.required],
       'offGasTemp': [exhaustGas.offGasTemp, Validators.required],
       'CO': [exhaustGas.CO, Validators.required],
-      'O2': [exhaustGas.O2, Validators.required],
+      //'O2': [exhaustGas.O2, Validators.required],
       'H2': [exhaustGas.H2, Validators.required],
-      'CO2': [exhaustGas.CO2, Validators.required],
+      //'CO2': [exhaustGas.CO2, Validators.required],
       'combustibleGases': [exhaustGas.combustibleGases, Validators.required],
       'vfr': [exhaustGas.vfr, Validators.required],
       'dustLoading': [exhaustGas.dustLoading, Validators.required],
@@ -73,14 +73,14 @@ export class ExhaustGasService {
     return tmpGroup;
   }
 
-  getLossFromForm(form: any): ExhaustGas {
-    let tmpExhaustGas: ExhaustGas = {
-      cycleTime: form.value.cycleTime,
+  getLossFromForm(form: any): ExhaustGasEAF {
+    let tmpExhaustGas: ExhaustGasEAF = {
+     // cycleTime: form.value.cycleTime,
       offGasTemp: form.value.offGasTemp,
       CO: form.value.CO,
-      O2: form.value.O2,
+     // O2: form.value.O2,
       H2: form.value.H2,
-      CO2: form.value.CO2,
+     // CO2: form.value.CO2,
       combustibleGases: form.value.combustibleGases,
       vfr: form.value.vfr,
       dustLoading: form.value.dustLoading,

@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { ExhaustGas } from '../../../shared/models/phast/losses/exhaustGas';
+import { ExhaustGasEAF } from '../../../shared/models/phast/losses/exhaustGasEAF';
 
 @Injectable()
 export class ExhaustGasCompareService {
 
-  baselineExhaustGasLosses: ExhaustGas[];
-  modifiedExhaustGasLosses: ExhaustGas[];
+  baselineExhaustGasLosses: ExhaustGasEAF[];
+  modifiedExhaustGasLosses: ExhaustGasEAF[];
 
   differentArray: Array<any>;
 
@@ -50,12 +50,12 @@ export class ExhaustGasCompareService {
     // }
 
     let tmpDifferent: ExhaustGasDifferent = {
-      cycleTime: new BehaviorSubject<boolean>(null),
+      //  cycleTime: new BehaviorSubject<boolean>(null),
       offGasTemp: new BehaviorSubject<boolean>(null),
       CO: new BehaviorSubject<boolean>(null),
-      O2: new BehaviorSubject<boolean>(null),
+      // O2: new BehaviorSubject<boolean>(null),
       H2: new BehaviorSubject<boolean>(null),
-      CO2: new BehaviorSubject<boolean>(null),
+      // CO2: new BehaviorSubject<boolean>(null),
       combustibleGases: new BehaviorSubject<boolean>(null),
       vfr: new BehaviorSubject<boolean>(null),
       dustLoading: new BehaviorSubject<boolean>(null),
@@ -69,17 +69,17 @@ export class ExhaustGasCompareService {
       if (this.baselineExhaustGasLosses.length != 0 && this.modifiedExhaustGasLosses.length != 0 && this.baselineExhaustGasLosses.length == this.modifiedExhaustGasLosses.length) {
         for (let lossIndex = 0; lossIndex < this.differentArray.length; lossIndex++) {
           //cycleTime
-          this.differentArray[lossIndex].different.cycleTime.next(this.compare(this.baselineExhaustGasLosses[lossIndex].cycleTime, this.modifiedExhaustGasLosses[lossIndex].cycleTime));
+          // this.differentArray[lossIndex].different.cycleTime.next(this.compare(this.baselineExhaustGasLosses[lossIndex].cycleTime, this.modifiedExhaustGasLosses[lossIndex].cycleTime));
           //offGasTemp
           this.differentArray[lossIndex].different.offGasTemp.next(this.compare(this.baselineExhaustGasLosses[lossIndex].offGasTemp, this.modifiedExhaustGasLosses[lossIndex].offGasTemp));
           //CO
           this.differentArray[lossIndex].different.CO.next(this.compare(this.baselineExhaustGasLosses[lossIndex].CO, this.modifiedExhaustGasLosses[lossIndex].CO));
           //O2
-          this.differentArray[lossIndex].different.O2.next(this.compare(this.baselineExhaustGasLosses[lossIndex].O2, this.modifiedExhaustGasLosses[lossIndex].O2));
+          // this.differentArray[lossIndex].different.O2.next(this.compare(this.baselineExhaustGasLosses[lossIndex].O2, this.modifiedExhaustGasLosses[lossIndex].O2));
           //H2
           this.differentArray[lossIndex].different.H2.next(this.compare(this.baselineExhaustGasLosses[lossIndex].H2, this.modifiedExhaustGasLosses[lossIndex].H2));
           //CO2
-          this.differentArray[lossIndex].different.CO2.next(this.compare(this.baselineExhaustGasLosses[lossIndex].CO2, this.modifiedExhaustGasLosses[lossIndex].CO2));
+          //  this.differentArray[lossIndex].different.CO2.next(this.compare(this.baselineExhaustGasLosses[lossIndex].CO2, this.modifiedExhaustGasLosses[lossIndex].CO2));
           //combustibleGases
           this.differentArray[lossIndex].different.combustibleGases.next(this.compare(this.baselineExhaustGasLosses[lossIndex].combustibleGases, this.modifiedExhaustGasLosses[lossIndex].combustibleGases));
           //vfr
@@ -103,12 +103,12 @@ export class ExhaustGasCompareService {
 
   disableAll() {
     for (let lossIndex = 0; lossIndex < this.differentArray.length; lossIndex++) {
-      this.differentArray[lossIndex].different.cycleTime.next(false);
+      //  this.differentArray[lossIndex].different.cycleTime.next(false);
       this.differentArray[lossIndex].different.offGasTemp.next(false);
       this.differentArray[lossIndex].different.CO.next(false);
-      this.differentArray[lossIndex].different.O2.next(false);
+      //  this.differentArray[lossIndex].different.O2.next(false);
       this.differentArray[lossIndex].different.H2.next(false);
-      this.differentArray[lossIndex].different.CO2.next(false);
+      //  this.differentArray[lossIndex].different.CO2.next(false);
       this.differentArray[lossIndex].different.combustibleGases.next(false);
       this.differentArray[lossIndex].different.vfr.next(false);
       this.differentArray[lossIndex].different.dustLoading.next(false);
@@ -137,12 +137,12 @@ export class ExhaustGasCompareService {
 }
 
 export interface ExhaustGasDifferent {
-  cycleTime: BehaviorSubject<boolean>,
+ // cycleTime: BehaviorSubject<boolean>,
   offGasTemp: BehaviorSubject<boolean>,
   CO: BehaviorSubject<boolean>,
-  O2: BehaviorSubject<boolean>,
+ // O2: BehaviorSubject<boolean>,
   H2: BehaviorSubject<boolean>,
-  CO2: BehaviorSubject<boolean>,
+//  CO2: BehaviorSubject<boolean>,
   combustibleGases: BehaviorSubject<boolean>,
   vfr: BehaviorSubject<boolean>,
   dustLoading: BehaviorSubject<boolean>,

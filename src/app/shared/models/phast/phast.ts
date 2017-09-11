@@ -10,8 +10,8 @@ import { LeakageLoss } from './losses/leakageLoss';
 import { ExtendedSurface } from './losses/extendedSurface';
 import { Slag } from './losses/slag';
 import { AuxiliaryPowerLoss } from './losses/auxiliaryPowerLoss';
-import { EnergyInput } from './losses/energyInput';
-import { ExhaustGas } from './losses/exhaustGas';
+import { EnergyInputEAF } from './losses/energyInputEAF';
+import { ExhaustGasEAF } from './losses/exhaustGasEAF';
 import { AuxEquipment } from './auxEquipment';
 import { MeteredEnergy } from './meteredEnergy';
 import { DesignedEnergy } from './designedEnergy';
@@ -48,8 +48,8 @@ export interface Losses {
   extendedSurfaces?: ExtendedSurface[],
   slagLosses?: Slag[],
   auxiliaryPowerLosses?: AuxiliaryPowerLoss[],
-  energyInput?: EnergyInput[],
-  exhaustGas?: ExhaustGas[],
+  energyInputEAF?: EnergyInputEAF[],
+  exhaustGasEAF?: ExhaustGasEAF[],
   energyInputExhaustGasLoss?: EnergyInputExhaustGasLoss[]
 }
 
