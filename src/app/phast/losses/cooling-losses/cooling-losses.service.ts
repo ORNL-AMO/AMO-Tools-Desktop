@@ -92,6 +92,7 @@ export class CoolingLossesService {
       'inletTemp': ['', Validators.required],
       'outletTemp': ['', Validators.required],
       'correctionFactor': ['', Validators.required],
+      'gasDensity': ['',Validators.required]
     });
   }
 
@@ -102,6 +103,7 @@ export class CoolingLossesService {
       'inletTemp': [loss.initialTemperature, Validators.required],
       'outletTemp': [loss.finalTemperature, Validators.required],
       'correctionFactor': [loss.correctionFactor, Validators.required],
+      'gasDensity': [loss.gasDensity, Validators.required]
     });
   }
 
@@ -111,7 +113,8 @@ export class CoolingLossesService {
       initialTemperature: form.value.inletTemp,
       finalTemperature: form.value.outletTemp,
       specificHeat: form.value.avgSpecificHeat,
-      correctionFactor: form.value.correctionFactor
+      correctionFactor: form.value.correctionFactor,
+      gasDensity: form.value.gasDensity
     }
     return tmpLoss;
   }
