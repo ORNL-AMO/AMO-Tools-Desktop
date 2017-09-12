@@ -11,15 +11,14 @@
 
 
       </div><!-- End .col-2 -->
-      <div class="col-7">
+      <div class="col-5">
         <div class="diagram">
           <span class="motor">1</span>
-          <span class="rated-motor">2</span>
-          <span class="fluid">3</span>
-          <span class="pump">4</span>
+          <span class="fluid">2</span>
+          <span class="pump">3</span>
         </div>
       </div><!-- End .col-7 -->
-      <div class="col-3">
+      <div class="col-5">
 
 
         <ul class="data">
@@ -32,16 +31,12 @@
               <dd>{{results.motor_power | number:'1.0-1'}} <span class="muted">(kW)</span></dd>
               <dt>Current</dt>
               <dd>{{results.motor_current | number:'1.0-1'}} <span class="muted">(kW)</span></dd>
-            </dl>
-          </li>
-          <li>
-            <h3>Rated Motor</h3>
-            <dl>
-              <dt>Power</dt>
+
+              <dt>Rated Power</dt>
               <dd>{{selectedPsat.inputs.motor_rated_power| number:'1.0-1'}} <span class="muted">({{settings.powerMeasurement}})</span></dd>
-              <dt>Full Load Amps</dt>
+              <dt>Rated Full Load Amps</dt>
               <dd>{{selectedPsat.inputs.motor_rated_fla | number:'1.0-1'}}</dd>
-              <dt>Voltage</dt>
+              <dt>Rated Voltage</dt>
               <dd>{{selectedPsat.inputs.motor_rated_voltage | number:'1.0-1'}}</dd>
             </dl>
           </li>

@@ -39,15 +39,23 @@
 .psat-diagram dt {
     line-height: 16px;
     font-size: 14px;
+    float: left;
+    clear: left;
+    width: 168px;
 }
+    .psat-diagram dt:after {
+        content: ":";
+    }
 .psat-diagram dd {
     margin-bottom: 3px;
     line-height: 21px;
     font-size: 16px;
+    margin-left: 170px;
 }
 
 .psat-diagram .diagram {
     background: url('../../../assets/images/psat-diagram.png') no-repeat center 20%;
+    background-size: 70%;
     height: 100%;
     position: relative;
 }
@@ -60,20 +68,20 @@
         position: absolute;
     }
     .diagram .motor {
-        top: 26%;
-        left: 22%;
+        top: 40%;
+        left: 69%;
     }
     .diagram .rated-motor {
         top: 33%;
         left: 7%;
     }
     .diagram .fluid {
-        top: 43%;
-        left: 88%;
+        top: 40%;
+        left: 20%;
     }
     .diagram .pump {
-        top: 42%;
-        left: 69%;
+        top: 30%;
+        left: 30%;
     }
 
 
