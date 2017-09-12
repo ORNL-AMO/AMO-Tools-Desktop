@@ -131,8 +131,12 @@ export class FixtureLossesComponent implements OnInit {
   }
 
   calculate(loss: any) {
-    let tmpLoss: FixtureLoss = this.fixtureLossesService.getLossFromForm(loss.form);
-    loss.heatLoss = this.phastService.fixtureLosses(tmpLoss);
+    if (loss.form.status == 'VALID') {
+      let tmpLoss: FixtureLoss = this.fixtureLossesService.getLossFromForm(loss.form);
+      loss.heatLoss = this.phastService.fixtureLosses(tmpLoss, this.settings);
+    }else{
+      loss.heatLoss = null;
+    }
   }
 
   saveLosses() {

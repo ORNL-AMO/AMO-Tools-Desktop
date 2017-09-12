@@ -82,13 +82,6 @@ export class WallLossesFormComponent implements OnInit {
       this.elements[i].disabled = false;
     }
   }
-  //utility for checking if form is valid
-  //if so tell wall-losses.component to calculate results
-  checkForm() {
-    if (this.wallLossesForm.status == "VALID") {
-      this.calculate.emit(true);
-    }
-  }
   //checkSurfaceTemp and ambientTemp for needed warnings
   checkSurfaceTemp(bool?: boolean) {
     //bool = true on call from ngOnInit to skip save line
@@ -123,7 +116,7 @@ export class WallLossesFormComponent implements OnInit {
   }
   //on input/change in form startSavePolling is called, if not called again with 3 seconds save process is triggered
   startSavePolling() {
-    this.checkForm();
+    this.calculate.emit(true);
     if (this.counter) {
       clearTimeout(this.counter);
     }
@@ -201,6 +194,7 @@ export class WallLossesFormComponent implements OnInit {
     this.wallLossesForm.patchValue({
       conditionFactor: tmpFactor.conditionFactor
     })
+    this.calculate.emit(true);
   }
 
   showMaterialModal() {
@@ -223,6 +217,5 @@ export class WallLossesFormComponent implements OnInit {
     this.materialModal.hide();
     this.showModal = false;
     this.lossesService.modalOpen.next(this.showModal);
-    this.checkForm();
   }
 }

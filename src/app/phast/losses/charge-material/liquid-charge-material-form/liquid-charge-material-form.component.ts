@@ -87,13 +87,6 @@ export class LiquidChargeMaterialFormComponent implements OnInit {
     }
   }
 
-
-  checkForm() {
-    if (this.chargeMaterialForm.status == "VALID") {
-      this.calculate.emit(true);
-    }
-  }
-
   focusField(str: string) {
     this.changeField.emit(str);
   }
@@ -116,14 +109,14 @@ export class LiquidChargeMaterialFormComponent implements OnInit {
       materialSpecificHeatVapor: selectedMaterial.specificHeatVapor,
       materialVaporizingTemperature: selectedMaterial.vaporizationTemperature
     })
-    this.checkForm();
+    this.calculate.emit(true);
   }
   emitSave() {
     this.saveEmit.emit(true);
   }
 
   startSavePolling() {
-    this.checkForm();
+    this.calculate.emit(true);
     this.checkDischargeTemp();
     if (this.counter) {
       clearTimeout(this.counter);
