@@ -37,7 +37,7 @@
     margin-bottom: 10px;    
 }
 .psat-diagram dt {
-    line-height: 16px;
+    line-height: 20px;
     font-size: 14px;
     float: left;
     clear: left;
@@ -48,8 +48,8 @@
     }
 .psat-diagram dd {
     margin-bottom: 3px;
-    line-height: 21px;
-    font-size: 16px;
+    line-height: 20px;
+    font-size: 14px;
     margin-left: 170px;
 }
 
