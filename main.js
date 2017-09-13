@@ -43,7 +43,7 @@ app.on('ready', function () {
   });
 
 
-  ipcMain.on('ready', (event, arg) => {
+  ipcMain.on('ready', (coreCompEvent, arg) => {
     log.info('isDev... checking for updates..');
     autoUpdater.checkForUpdates();
 
@@ -51,9 +51,8 @@ app.on('ready', function () {
       log.info('done checking for updates..');
     });
     autoUpdater.on('update-available', (event, info) => {
-      event.sender.send('available', autoUpdater.updateAvailable);
+      coreCompEvent.sender.send('available', autoUpdater.updateAvailable);
     });
-
   })
 
 
