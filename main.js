@@ -33,58 +33,26 @@ app.on('ready', function () {
     slashes: true
   }));
 
-  // if (isDev()) {
-  win.toggleDevTools();
-  //};
+  if (isDev()) {
+    win.toggleDevTools();
+  };
 
   // Remove window once app is closed
   win.on('closed', function () {
     win = null;
   });
 
-
+  //signal from core.component to check for update
   ipcMain.on('ready', (coreCompEvent, arg) => {
-    log.info('isDev... checking for updates..');
     autoUpdater.checkForUpdates();
-
-    autoUpdater.on('checking-for-update', () => {
-      log.info('done checking for updates..');
-    });
+    log.info('checking for update..');
     autoUpdater.on('update-available', (event, info) => {
       coreCompEvent.sender.send('available', autoUpdater.updateAvailable);
     });
+    autoUpdater.on('update-not-available', (event, info) => {
+      log.info('no update available..');
+    });
   })
-
-
-
-  // If isDev = true, don't check for updates. If false, check for update
-  // if (isDev()) {
-  //   update = null;
-  // } else {
- // log.info('isDev... checking for updates..');
- // autoUpdater.checkForUpdates();
-  // };
-
-  // autoUpdater.on('checking-for-update', () => {
-  //   log.info('done checking for updates..');
-  // });
-
-  // autoUpdater.on('update-available', (event, info) => {
-  //   //ipcMain.send('available', autoUpdater.updateAvailable);
-  // });
-
-  // Send message to core.component when an update is available
-  // ipcMain.on('ready', (event, arg) => {
-  //   log.info('autoUpdate.updateAvailable = ' + autoUpdater.updateAvailable);
-  //   event.sender.send('available', autoUpdater);
-  // });
-
-  // ipcMain.on('check-for-updates', (event, arg) => {
-  //   autoUpdater.checkForUpdates();
-  // })
-
-  autoUpdater.on('update-not-available', (event, info) => {
-  });
 
   autoUpdater.on('error', (event, error) => {
   });

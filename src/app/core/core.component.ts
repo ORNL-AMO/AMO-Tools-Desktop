@@ -28,29 +28,16 @@ export class CoreComponent implements OnInit {
   }
 
   ngOnInit() {
-    // autoUpdater.on('update-available', () => {
-    //   console.log('CHECKING FOR UPDATE')
-    //   this.showUpdateModal();
-    // })
-
-    // autoUpdater.on('checking-for-update', () => {
-    //   console.log('CHECKING IF UPDATE HAS STARTED')
-    // })
-
-    // autoUpdater.on('update-not-available', () => {
-    //   console.log('UPDATE NOT AVAILABLE');
-    // })
+    //set up listener for update
     this.electronService.ipcRenderer.once('available', (event, arg) => {
-      console.log(arg);
+      console.log('update available: ' + arg);
       if (arg == true) {
         this.showUpdateModal();
       }
     })
 
-    // setTimeout(() => {
-    console.log('call ready for update');
+    //send signal to main.js to check for update
     this.electronService.ipcRenderer.send('ready', null);
-    // }, 3000);
 
     this.importExportService.toggleDownload.subscribe((val) => {
       if (val == true) {
