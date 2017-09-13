@@ -33,9 +33,9 @@ app.on('ready', function () {
     slashes: true
   }));
 
-  if (isDev()) {
+  // if (isDev()) {
     win.toggleDevTools();
-  };
+  //};
 
   // Remove window once app is closed
   win.on('closed', function () {
@@ -46,10 +46,12 @@ app.on('ready', function () {
   if (isDev()) {
     update = null;
   } else {
+    log.info('isDev... checking for updates..');
     autoUpdater.checkForUpdates();
   };
 
   autoUpdater.on('checking-for-update', () => {
+    log.info('done checking for updates..');
   });
 
   autoUpdater.on('update-available', (event, info) => {
