@@ -47,7 +47,7 @@ export class OpeningLossesService {
       'openingType': [loss.openingType, Validators.required],
       'wallThickness': [loss.thickness, Validators.required],
       'lengthOfOpening': [loss.lengthOfOpening, Validators.required],
-      'heightOfOpening': [loss.heightOfOpening, Validators.required],
+      'heightOfOpening': [loss.heightOfOpening],
       'viewFactor': [loss.viewFactor, Validators.required],
       'insideTemp': [loss.insideTemperature, Validators.required],
       'ambientTemp': [loss.ambientTemperature, Validators.required],

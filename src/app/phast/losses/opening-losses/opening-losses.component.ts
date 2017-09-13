@@ -29,7 +29,7 @@ export class OpeningLossesComponent implements OnInit {
   isBaseline: boolean;
   @Input()
   settings: Settings;
-  
+
   _openingLosses: Array<any>;
   firstChange: boolean = true;
 
@@ -133,14 +133,20 @@ export class OpeningLossesComponent implements OnInit {
   }
 
   calculate(loss: any) {
-    if (loss.form.value.openingType == 'Rectangular (Square)') {
-      let tmpLoss: QuadOpeningLoss = this.openingLossesService.getQuadLossFromForm(loss.form);
-      let lossAmount = this.phastService.openingLossesQuad(tmpLoss);
-      loss.totalOpeningLosses = loss.form.value.numberOfOpenings * lossAmount;
-    } else if (loss.form.value.openingType == 'Round') {
-      let tmpLoss: CircularOpeningLoss = this.openingLossesService.getCircularLossFromForm(loss.form);
-      let lossAmount = this.phastService.openingLossesCircular(tmpLoss);
-      loss.totalOpeningLosses = loss.form.value.numberOfOpenings * lossAmount;
+    if (loss.form.status == 'VALID') {
+      if (loss.form.value.openingType == 'Rectangular (Square)' && loss.form.value.heightOfOpening != '') {
+        let tmpLoss: QuadOpeningLoss = this.openingLossesService.getQuadLossFromForm(loss.form);
+        let lossAmount = this.phastService.openingLossesQuad(tmpLoss, this.settings);
+        loss.totalOpeningLosses = loss.form.value.numberOfOpenings * lossAmount;
+      } else if (loss.form.value.openingType == 'Round') {
+        let tmpLoss: CircularOpeningLoss = this.openingLossesService.getCircularLossFromForm(loss.form);
+        let lossAmount = this.phastService.openingLossesCircular(tmpLoss, this.settings);
+        loss.totalOpeningLosses = loss.form.value.numberOfOpenings * lossAmount;
+      } else {
+        loss.totalOpeningLosses = null;
+      }
+    } else {
+      loss.totalOpeningLosses = null;
     }
   }
 

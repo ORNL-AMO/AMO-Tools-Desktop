@@ -78,12 +78,6 @@ export class OpeningLossesFormComponent implements OnInit {
     }
   }
 
-  checkForm() {
-    if (this.openingLossesForm.status == 'VALID') {
-      this.calculate.emit(true);
-    }
-  }
-
   checkTemperature(bool?: boolean) {
     if (!bool) {
       this.startSavePolling();
@@ -125,7 +119,8 @@ export class OpeningLossesFormComponent implements OnInit {
         //let radiusFeet = (radiusInches * .08333333) / 2;
         let radiusFeet = this.convertUnitsService.value(radiusInches).from('in').to('ft') / 2;
         this.totalArea = Math.PI * Math.pow(radiusFeet, 2) * this.openingLossesForm.value.numberOfOpenings;
-        this.checkForm();
+
+        this.calculate.emit(true);
       }
     } else if (this.openingLossesForm.value.openingType == 'Rectangular (Square)') {
       if (this.openingLossesForm.controls.lengthOfOpening.status == "VALID" && this.openingLossesForm.controls.heightOfOpening.status == "VALID") {
@@ -140,7 +135,8 @@ export class OpeningLossesFormComponent implements OnInit {
           heightFeet = this.convertUnitsService.value(heightInches).from('in').to('ft');
         }
         this.totalArea = lengthFeet * heightFeet * this.openingLossesForm.value.numberOfOpenings;
-        this.checkForm();
+
+        this.calculate.emit(true);
       }
     } else {
       this.totalArea = 0.0;
@@ -156,7 +152,7 @@ export class OpeningLossesFormComponent implements OnInit {
   }
 
   startSavePolling() {
-    this.checkForm();
+    this.calculate.emit(true);
     if (this.counter) {
       clearTimeout(this.counter);
     }
