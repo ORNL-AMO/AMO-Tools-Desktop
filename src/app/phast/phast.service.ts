@@ -284,7 +284,7 @@ export class PhastService {
   sumHeatInput(losses: Losses, settings: Settings): number {
     let grossHeatRequired: number = 0;
     if (losses.atmosphereLosses) {
-      grossHeatRequired += this.sumAtmosphereLosses(losses.atmosphereLosses);
+      grossHeatRequired += this.sumAtmosphereLosses(losses.atmosphereLosses, settings);
     }
     if (losses.auxiliaryPowerLosses) {
       grossHeatRequired += this.sumAuxilaryPowerLosses(losses.auxiliaryPowerLosses);
@@ -319,12 +319,12 @@ export class PhastService {
     return grossHeatRequired;
   }
 
-  sumAtmosphereLosses(losses: AtmosphereLoss[]): number {
+  sumAtmosphereLosses(losses: AtmosphereLoss[], settings: Settings): number {
     let sum = 0;
     losses.forEach(loss => {
       let tmpForm = this.atmosphereLossesService.getAtmosphereForm(loss);
       if (tmpForm.status == 'VALID') {
-        sum += this.atmosphere(loss);
+        sum += this.atmosphere(loss, settings);
       }
     });
     return sum;

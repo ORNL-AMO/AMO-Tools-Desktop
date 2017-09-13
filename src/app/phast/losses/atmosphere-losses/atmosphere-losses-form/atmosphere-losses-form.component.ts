@@ -87,12 +87,6 @@ export class AtmosphereLossesFormComponent implements OnInit {
     }
   }
 
-  checkForm() {
-    if (this.atmosphereLossForm.status == "VALID") {
-      this.calculate.emit(true);
-    }
-  }
-
   checkTempError(bool?: boolean) {
     if (!bool) {
       this.startSavePolling();
@@ -113,7 +107,7 @@ export class AtmosphereLossesFormComponent implements OnInit {
   }
 
   startSavePolling() {
-    this.checkForm();
+    this.calculate.emit(true);
     if (this.counter) {
       clearTimeout(this.counter);
     }
@@ -193,6 +187,5 @@ export class AtmosphereLossesFormComponent implements OnInit {
     this.materialModal.hide();
     this.showModal = false;
     this.lossesService.modalOpen.next(this.showModal);
-    this.checkForm();
   }
 }
