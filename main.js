@@ -55,13 +55,14 @@ app.on('ready', function () {
   });
 
   autoUpdater.on('update-available', (event, info) => {
+    ipcMain.send('available', autoUpdater.updateAvailable);
   });
 
   // Send message to core.component when an update is available
-  ipcMain.on('ready', (event, arg) => {
-    log.info('autoUpdate.updateAvailable = ' + autoUpdater.updateAvailable);
-    event.sender.send('available', autoUpdater.updateAvailable);
-  });
+  // ipcMain.on('ready', (event, arg) => {
+  //   log.info('autoUpdate.updateAvailable = ' + autoUpdater.updateAvailable);
+  //   event.sender.send('available', autoUpdater.updateAvailable);
+  // });
 
   // ipcMain.on('check-for-updates', (event, arg) => {
   //   autoUpdater.checkForUpdates();

@@ -35,10 +35,10 @@ export class CoreComponent implements OnInit {
       }
     })
 
-    setTimeout(() => {
-      console.log('call ready for update');
-      this.electronService.ipcRenderer.send('ready', null);
-    }, 3000);
+    // setTimeout(() => {
+    //   console.log('call ready for update');
+    //   this.electronService.ipcRenderer.send('ready', null);
+    // }, 3000);
 
     this.importExportService.toggleDownload.subscribe((val) => {
       if (val == true) {
