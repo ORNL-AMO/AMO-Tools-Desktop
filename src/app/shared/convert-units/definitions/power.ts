@@ -75,7 +75,7 @@ export const power = {
        , plural: 'British thermal units per second',
        display: '(Btu/s)'
      }
-     , to_anchor: 0.000947817222222222
+     , to_anchor: 1.4148532
    }
    , btuhr: {
      name: {
@@ -83,17 +83,17 @@ export const power = {
        , plural: 'British thermal unit per hour' ,
        display: '(Btu/hr)'
      }
-     , to_anchor: 3.412142
+     , to_anchor: 1/2544.43
    }
   },
   _anchors: {
     metric: {
       unit: 'W'
-      , ratio: 745.7
+      , ratio: 1/745.7
     }
     , imperial: {
       unit: 'hp'
-      , ratio: 1 / 745.7
+      , ratio: 745.7
     }
   }
 };

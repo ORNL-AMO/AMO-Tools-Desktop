@@ -106,13 +106,13 @@ export const energy = {
         , plural: 'Millions British Thermal Units',
         dispaly: '(MMBTU)'
       }
-      , to_anchor: 10000
+      , to_anchor: 1000000
     }
   }
   , _anchors: {
     metric: {
       unit: 'J'
-      , ratio: 1
+      , ratio: 1/1055.06
     }
     , imperial: {
       unit: 'Btu'
