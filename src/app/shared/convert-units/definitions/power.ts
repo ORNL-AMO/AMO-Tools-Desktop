@@ -1,5 +1,5 @@
 export const power = {
-  power: {
+  metric: {
     W: {
       name: {
         singular: 'Watt'
@@ -40,14 +40,7 @@ export const power = {
       }
       , to_anchor: 1000000000
     }
-    , hp: {
-      name: {
-        singular: 'Horse Power',
-        plural: 'Horse Power',
-        display: '(hp)'
-      },
-      to_anchor: 745.7
-    }
+
     , cals: {
       name: {
         singular: 'Calorie per Second'
@@ -65,27 +58,42 @@ export const power = {
       }
       , to_anchor: 4186.8
     }
+
+  },
+  imperial: {
+     hp: {
+      name: {
+        singular: 'Horse Power',
+        plural: 'Horse Power',
+        display: '(hp)'
+      },
+      to_anchor: 1
+    }
     , btus: {
-      name: {
-        singular: 'British thermal unit per second'
-        , plural: 'British thermal units per second',
-        display: '(Btu/s)'
-      }
-      , to_anchor: 1055.05584955
-    }
-    , btuhr: {
-      name: {
-        singular: 'British thermal unit per hour'
-        , plural: 'British thermal unit per hour' ,
-        display: '(Btu/hr)'
-      }
-      , to_anchor: 0.2928749999929
-    }
+     name: {
+       singular: 'British thermal unit per second'
+       , plural: 'British thermal units per second',
+       display: '(Btu/s)'
+     }
+     , to_anchor: 1.4148532
+   }
+   , btuhr: {
+     name: {
+       singular: 'British thermal unit per hour'
+       , plural: 'British thermal unit per hour' ,
+       display: '(Btu/hr)'
+     }
+     , to_anchor: 1/2544.43
+   }
   },
   _anchors: {
     metric: {
       unit: 'W'
-      , ratio: 1
+      , ratio: 1/745.7
+    }
+    , imperial: {
+      unit: 'hp'
+      , ratio: 745.7
     }
   }
 };
