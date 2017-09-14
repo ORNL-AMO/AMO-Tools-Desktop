@@ -6,3 +6,8 @@ select{
     font-weight: bold;
     text-align: center;
 }
+
+
+.fa-times-circle:hover{
+    cursor: pointer;
+}

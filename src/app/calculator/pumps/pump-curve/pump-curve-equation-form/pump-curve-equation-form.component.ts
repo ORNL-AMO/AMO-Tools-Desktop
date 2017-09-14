@@ -21,7 +21,7 @@ export class PumpCurveEquationFormComponent implements OnInit {
   ]
   pumpForm: any;
 
-  constructor() {}
+  constructor() { }
 
   ngOnInit() {
   }
@@ -32,5 +32,21 @@ export class PumpCurveEquationFormComponent implements OnInit {
 
   emitCalculateChanges() {
     this.calculate.emit(true);
+  }
+
+  setOrder() {
+    if (this.pumpCurveForm.headOrder < 3) {
+      this.pumpCurveForm.headFlow3 = 0;
+    }
+    if (this.pumpCurveForm.headOrder < 4) {
+      this.pumpCurveForm.headFlow4 = 0;
+    }
+    if (this.pumpCurveForm.headOrder < 5) {
+      this.pumpCurveForm.headFlow5 = 0;
+    }
+    if (this.pumpCurveForm.headOrder < 6) {
+      this.pumpCurveForm.headFlow6 = 0;
+    }
+    this.emitCalculateChanges();
   }
 }

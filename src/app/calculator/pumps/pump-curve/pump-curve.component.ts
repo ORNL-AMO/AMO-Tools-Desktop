@@ -44,9 +44,9 @@ export class PumpCurveComponent implements OnInit {
 
   initForm() {
     this.pumpCurveForm = {
-      dataRows: new Array<PumpCurveDataRow>({head: 0, flow: 0, pumpEfficiency: 0}),
-      dataPumpEfficiencyOrder: 3,
-      dataHeadFlowOrder: 3,
+      dataRows: new Array<PumpCurveDataRow>({ head: 10, flow: 356}, {head: 200, flow: 1020}),
+      maxFlow: 1020,
+      dataOrder: 3,
       baselineMeasurement: 0,
       modifiedMeasurement: 0,
       exploreLine: 0,
@@ -54,20 +54,21 @@ export class PumpCurveComponent implements OnInit {
       exploreHead: 0,
       explorePumpEfficiency: 0,
       headOrder: 3,
-      headConstant: 0,
-      headFlow: 0,
-      headFlow2: 0,
-      headFlow3: 0,
+      headConstant: 356.96,
+      headFlow: -0.0686,
+      headFlow2: 0.000005,
+      headFlow3: -0.00000008,
       headFlow4: 0,
       headFlow5: 0,
       headFlow6: 0,
       pumpEfficiencyOrder: 3,
       pumpEfficiencyConstant: 0,
-      measurementOption: 'Diameter'
+      measurementOption: 'Diameter',
+      selectedFormView: 'Equation'
     }
   }
 
-  calculate(){
+  calculate() {
     this.toggleCalculate = !this.toggleCalculate;
   }
 }

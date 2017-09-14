@@ -1,7 +1,6 @@
 export interface PumpCurveForm {
   dataRows?: PumpCurveDataRow[],
-  dataPumpEfficiencyOrder?: number,
-  dataHeadFlowOrder?: number,
+  dataOrder?: number,
   measurementOption?: string,
   baselineMeasurement?: number,
   modifiedMeasurement?: number,
@@ -16,13 +15,14 @@ export interface PumpCurveForm {
   headFlow3?: number,
   headFlow4?: number,
   headFlow5?: number,
-  headFlow6?:number,
+  headFlow6?: number,
   pumpEfficiencyOrder?: number,
-  pumpEfficiencyConstant?: number
+  pumpEfficiencyConstant?: number,
+  maxFlow?: number,
+  selectedFormView?: string
 }
 
 export interface PumpCurveDataRow {
   head: number,
-  flow: number,
-  pumpEfficiency: number
+  flow: number
 }

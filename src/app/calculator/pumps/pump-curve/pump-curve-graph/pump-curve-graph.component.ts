@@ -5,6 +5,8 @@ import { PumpCurveForm } from '../pump-curve';
 //declare const d3: any;
 import * as d3 from 'd3';
 import * as regression from 'regression';
+import * as _ from 'lodash';
+
 @Component({
   selector: 'app-pump-curve-graph',
   templateUrl: './pump-curve-graph.component.html',
@@ -53,12 +55,12 @@ export class PumpCurveGraphComponent implements OnInit {
         this.toggleGrid();
       });
 
-    let result = regression.linear([[0, 1], [32, 67], [12, 79]]);
-    console.log(result);
-    let gradient = result.equation[0];
-    console.log(gradient)
-    let yIntercept = result.equation[1];
-    console.log(yIntercept)
+    // let result = regression.linear([[0, 1], [32, 67], [12, 79]]);
+    // console.log(result);
+    // let gradient = result.equation[0];
+    // console.log(gradient)
+    // let yIntercept = result.equation[1];
+    // console.log(yIntercept)
   }
 
   ngAfterViewInit() {
@@ -78,7 +80,6 @@ export class PumpCurveGraphComponent implements OnInit {
       //check for changes to toggleCalculate
       if (changes.toggleCalculate) {
         //if changes draw new graph
-        console.log(this.pumpCurveForm)
         if (this.checkForm()) {
           this.makeGraph();
           this.svg.style("display", null);
@@ -102,48 +103,59 @@ export class PumpCurveGraphComponent implements OnInit {
     this.height = this.canvasHeight - this.margin.top - this.margin.bottom;
 
     d3.select("app-pump-curve").select("#gridToggle").style("top", (this.height + 100) + "px");
-
     if (this.checkForm()) {
       this.makeGraph();
     }
   }
 
-// To test user inputs
-  getHeadFlow() {
-    if (this.checkForm()) {
-      return this.tmpHeadFlow = [[this.pumpCurveForm.headFlow, this.pumpCurveForm.headFlow2], [this.pumpCurveForm.headFlow3, this.pumpCurveForm.headFlow4]
-        , [this.pumpCurveForm.headFlow5, this.pumpCurveForm.headFlow6]];
-
-    } else {
-      return 0;
-    }
-  }
-  /*
-    getSpecificSpeed(): number {
-      if (this.checkForm()) {
-        return this.speedForm.value.pumpRPM * Math.pow(this.speedForm.value.flowRate, 0.5) / Math.pow(this.speedForm.value.head, .75);
-      } else {
-        return 0;
-      }
-    }
-    */
-checkTmpFlow() {
-  console.log("!!!!!!!!!!!!!!!!!!!!!!" + this.tmpHeadFlow + "!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-}
   checkForm() {
-
-    if (this.pumpCurveForm.headFlow >= 0 && this.pumpCurveForm.headFlow2 >= 0 && this.pumpCurveForm.headFlow3 >= 0 &&
-      this.pumpCurveForm.headFlow4 >= 0 && this.pumpCurveForm.headFlow5 >= 0 && this.pumpCurveForm.headFlow6 >= 0) {
+    if (this.pumpCurveForm.maxFlow > 0) {
       return true;
-    }
-    else {
-      return false;
-    }
+    } else { return false }
+  }
+
+
+  calculateY(formData: PumpCurveForm, flow: number) {
+    let result = 0;
+    result = formData.headConstant + formData.headFlow * flow + formData.headFlow2 * Math.pow(flow, 2) + formData.headFlow3 * Math.pow(flow, 3) + formData.headFlow4 * Math.pow(flow, 4) + formData.headFlow5 * Math.pow(flow, 5) + formData.headFlow6 * Math.pow(flow, 6);
+    return result;
   }
 
 
   makeGraph() {
+    // Data for graph
+    let data = new Array<any>();
+    if (this.pumpCurveForm.selectedFormView == 'Data') {
+      let maxDataFlow = _.maxBy(this.pumpCurveForm.dataRows, (val) => { return val.flow });
+      let tmpArr = new Array<any>();
+      this.pumpCurveForm.dataRows.forEach(val => {
+        tmpArr.push([val.head, val.flow]);
+      })
+      let results = regression.polynomial(tmpArr, { order: this.pumpCurveForm.dataOrder, precision: 10 });
+      for (let i = 0; i <= maxDataFlow.flow; i = i + 10) {
+        let yVal = results.predict(i);
+        if (yVal[1] > 0) {
+          data.push({
+            x: i,
+            y: yVal[1]
+          })
+        }
+      }
+    } else if (this.pumpCurveForm.selectedFormView == 'Equation') {
+      for (let i = 0; i <= this.pumpCurveForm.maxFlow; i = i + 10) {
+        let yVal = this.calculateY(this.pumpCurveForm, i);
+        if (yVal > 0) {
+          data.push({
+            x: i,
+            y: yVal
+          })
+        }
+      }
+    }
+    debugger;
+    let maxX = _.maxBy(data, (val) => { return val.x });
 
+    let maxY = _.maxBy(data, (val) => { return val.y });
     //Remove  all previous graphs
     d3.select('app-pump-curve-graph').selectAll('svg').remove();
 
@@ -194,13 +206,13 @@ checkTmpFlow() {
       .style("fill", "#F8F9F9")
       .style("filter", "url(#drop-shadow)");
 
-    this.x = d3.scaleLog()
+    this.x = d3.scaleLinear()
       .range([0, this.width])
-      .domain([100, 100000]);
+      .domain([0, maxX.x]);
 
     this.y = d3.scaleLinear()
       .range([this.height, 0])
-      .domain([0, 800]);
+      .domain([0, maxY.y + 100]);
 
     if (this.isGridToggled) {
       this.xAxis = d3.axisBottom()
@@ -251,21 +263,6 @@ checkTmpFlow() {
       .selectAll('text')
       .style("font-size", "13px");
 
-// Data for graph
-    var data = [];
-    for (var i = 1; i < 10; i = i + 25) {
-      let tmpHeadF = this.getHeadFlow();
-      let linear = regression.linear(tmpHeadF);
-      let newYInterc = linear.equation[0];
-      console.log("This is linear" + linear);
-      console.log("This is newYInterc" + newYInterc);
-      if (newYInterc <= 5.5) {
-        data.push({
-          x: i,
-          y: newYInterc
-        });
-      }
-    }
     this.makeCurve(data);
 
 
@@ -323,7 +320,7 @@ checkTmpFlow() {
       .attr("dy", ".35em");
 
     var format = d3.format(",.2f");
-    var bisectDate = d3.bisector(function(d) { return d.x; }).left;
+    var bisectDate = d3.bisector(function (d) { return d.x; }).left;
 
     this.svg.select('#graph')
       .attr("width", this.width)
@@ -335,7 +332,7 @@ checkTmpFlow() {
 
         this.focus
           .style("display", null)
-          .style("opacity",1)
+          .style("opacity", 1)
           .style('pointer-events', 'none');
         this.pointer
           .style("display", null)
@@ -366,107 +363,106 @@ checkTmpFlow() {
         let d0 = data[i - 1];
         let d1 = data[i];
         let d = x0 - d0.x > d1.x - x0 ? d1 : d0;
-        this.focus.attr("transform", "translate(" + this.x(d.x) + "," + this.y(d.y) + ")");
+        let xVal = this.x(d.x);
+        if (isNaN(xVal) == false) {
+          this.focus.attr("transform", "translate(" + this.x(d.x) + "," + this.y(d.y) + ")");
 
-        this.pointer.transition()
-          .style("opacity", 1);
+          this.pointer.transition()
+            .style("opacity", 1);
 
-        this.detailBox.transition()
-          .style("opacity", 1);
+          this.detailBox.transition()
+            .style("opacity", 1);
 
-        var detailBoxWidth = 160;
-        var detailBoxHeight = 90;
+          var detailBoxWidth = 160;
+          var detailBoxHeight = 90;
 
-        this.pointer
-          .attr("transform", 'translate(' + (this.x(d.x) - (detailBoxWidth / 2)) + ',' + (this.y(d.y) + 27) + ')')
-          .style("fill", "#ffffff")
-          .style("filter", "url(#drop-shadow)");
+          this.pointer
+            .attr("transform", 'translate(' + (this.x(d.x) - (detailBoxWidth / 2)) + ',' + (this.y(d.y) + 27) + ')')
+            .style("fill", "#ffffff")
+            .style("filter", "url(#drop-shadow)");
 
-        this.detailBox
-          .style("padding-right", "10px")
-          .style("padding-left", "10px")
-          .html(
-            "<p><strong><div>Flow: </div></strong><div>" + format(d.x) + " " + "</div>" +
+          this.detailBox
+            .style("padding-right", "10px")
+            .style("padding-left", "10px")
+            .html(
+            "<p><strong><div>Flow: </div></strong><div>" + format(d.x) + " " + " gal/min</div>" +
 
-            "<strong><div>Head Flow: </div></strong><div>" + format(d.y) + " %</div></p>")
+            "<strong><div>Head: </div></strong><div>" + format(d.y) + " ft</div></p>")
 
-          // "<div style='float:left;'>Fluid Power: </div><div style='float: right;'>" + format(d.fluidPower) + " </div></strong></p>")
+            // "<div style='float:left;'>Fluid Power: </div><div style='float: right;'>" + format(d.fluidPower) + " </div></strong></p>")
 
-          .style("left", (this.margin.left + this.x(d.x) - (detailBoxWidth / 2 - 17)) + "px")
-          .style("top", (this.margin.top + this.y(d.y) + 83) + "px")
-          .style("position", "absolute")
-          .style("width", detailBoxWidth + "px")
-          .style("height", detailBoxHeight + "px")
-          .style("padding-left", "10px")
-          .style("padding-right", "10px")
-          .style("font", "12px sans-serif")
-          .style("background", "#ffffff")
-          .style("border", "0px")
-          .style("pointer-events", "none");
+            .style("left", (this.margin.left + this.x(d.x) - (detailBoxWidth / 2 - 17)) + "px")
+            .style("top", (this.margin.top + this.y(d.y) + 83) + "px")
+            .style("position", "absolute")
+            .style("width", detailBoxWidth + "px")
+            .style("height", detailBoxHeight + "px")
+            .style("padding-left", "10px")
+            .style("padding-right", "10px")
+            .style("font", "12px sans-serif")
+            .style("background", "#ffffff")
+            .style("border", "0px")
+            .style("pointer-events", "none");
+        }
       })
       .on("mouseout", () => {
         this.pointer
           .transition()
           .delay(100)
           .duration(600)
-          .style("opacity",0);
+          .style("opacity", 0);
 
         this.detailBox
           .transition()
           .delay(100)
           .duration(600)
-          .style("opacity",0);
+          .style("opacity", 0);
 
         this.focus
           .transition()
           .delay(100)
           .duration(600)
-          .style("opacity",0);
+          .style("opacity", 0);
       });
 
-    this.drawPoint();
+    // this.drawPoint();
 
 
     //d3.selectAll("line").style("pointer-events", "none");
   }
 
 
-  drawPoint() {
-    // to test
-    var flow = [[288],[550],[8000]]
-    //var efficiencyCorrection = this.psatService.achievableEfficiency(this.speedForm.value.pumpType, flow);
+  // drawPoint() {
+  //   this.calcPoint
+  //     .attr("transform", () => {
 
-    this.calcPoint
-      .attr("transform", () => {
+  //       if (this.y(this.tmpHeadFlow) >= 0) {
+  //         return "translate(" + this.x(flow) + "," + this.y(this.tmpHeadFlow) + ")";
+  //       }
+  //     })
+  //     .style("display", () => {
+  //       if (this.y(this.tmpHeadFlow) >= 0) {
+  //         return null;
+  //       }
+  //       else {
+  //         return "none";
+  //       }
+  //     });
 
-        if (this.y(this.tmpHeadFlow) >= 0) {
-          return "translate(" + this.x(flow) + "," + this.y(this.tmpHeadFlow) + ")";
-        }
-      })
-      .style("display", () => {
-        if (this.y(this.tmpHeadFlow) >= 0) {
-          return null;
-        }
-        else {
-          return "none";
-        }
-      });
+  //   this.svg.append("text")
+  //     .attr("x", "20")
+  //     .attr("y", "20")
+  //     .text("Flow: " + flow)
+  //     .style("font-size", "13px")
+  //     .style("font-weight", "bold");
 
-    this.svg.append("text")
-      .attr("x", "20")
-      .attr("y", "20")
-      .text("Flow: " + flow)
-      .style("font-size", "13px")
-      .style("font-weight", "bold");
+  //   this.svg.append("text")
+  //     .attr("x", this.width - 200)
+  //     .attr("y", "20")
+  //     .text("Head Flow: " + this.tmpHeadFlow)
+  //     .style("font-size", "13px")
+  //     .style("font-weight", "bold");
 
-    this.svg.append("text")
-      .attr("x", this.width - 200)
-      .attr("y", "20")
-      .text("Head Flow: " + this.tmpHeadFlow)
-      .style("font-size", "13px")
-      .style("font-weight", "bold");
-
-  }
+  // }
 
 
   toggleGrid() {
@@ -481,21 +477,32 @@ checkTmpFlow() {
   }
 
   makeCurve(data) {
-
     var guideLine = d3.line()
       .x((d) => { return this.x(d.x); })
       .y((d) => { return this.y(d.y); })
       .curve(d3.curveNatural);
 
-    this.svg.append("path")
-      .data([data])
+    let line = this.svg.append("path")
       .attr("class", "line")
-      .attr("d", guideLine)
+      .attr("id", "avgLine")
       .style("stroke-width", 10)
       .style("stroke-width", "2px")
       .style("fill", "none")
-      .style("stroke", "#2ECC71")
+      .style("stroke", "#3498DB")
       .style('pointer-events', 'none');
+
+    line.data([data]).attr("d", guideLine);
+
+
+    // = this.svg.append("path")
+    //   .data(data)
+    //   .attr("class", "line")
+    //   .attr("d", guideLine)
+    //   .style("stroke-width", 10)
+    //   .style("stroke-width", "2px")
+    //   .style("fill", "none")
+    //   .style("stroke", "#2ECC71")
+    //   .style('pointer-events', 'none');
   }
 
 }

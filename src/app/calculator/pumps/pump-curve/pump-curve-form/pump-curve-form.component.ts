@@ -13,7 +13,7 @@ export class PumpCurveFormComponent implements OnInit {
   @Output('emitCalculate')
   emitCalculate = new EventEmitter<boolean>();
 
-  selectedFormView: string = 'Equation';
+  //selectedFormView: string = 'Equation';
 
   options: Array<string> = [
     'Diameter',
@@ -31,14 +31,12 @@ export class PumpCurveFormComponent implements OnInit {
   addRow() {
     let tmpRow: PumpCurveDataRow = {
       head: 0,
-      flow: 0,
-      pumpEfficiency: 0
+      flow: 0
     }
     this.pumpCurveForm.dataRows.push(tmpRow)
   }
 
   calculate(){
-    console.log('update')
     this.emitCalculate.emit(true);
   }
 }
