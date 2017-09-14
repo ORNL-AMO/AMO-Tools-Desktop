@@ -40,8 +40,9 @@ export class PumpCurveGraphComponent implements OnInit {
 
   @Input()
   toggleCalculate: boolean;
-  // specificSpeed: number = 0;
+  // flow: number = 0;
   // efficiencyCorrection: number = 0;
+  tmpHeadFlow: any;
   constructor(private psatService: PsatService, private windowRefService: WindowRefService) { }
 
   ngOnInit() {
@@ -74,7 +75,7 @@ export class PumpCurveGraphComponent implements OnInit {
   ngOnChanges(changes: SimpleChanges) {
     if (!this.firstChange) {
       //pump-curve.component toggles the toggleCalculate value when calculating
-      //check for changes to toggleCalculate 
+      //check for changes to toggleCalculate
       if (changes.toggleCalculate) {
         //if changes draw new graph
         console.log(this.pumpCurveForm)
@@ -107,39 +108,39 @@ export class PumpCurveGraphComponent implements OnInit {
     }
   }
 
+// To test user inputs
+  getHeadFlow() {
+    if (this.checkForm()) {
+      return this.tmpHeadFlow = [[this.pumpCurveForm.headFlow, this.pumpCurveForm.headFlow2], [this.pumpCurveForm.headFlow3, this.pumpCurveForm.headFlow4]
+        , [this.pumpCurveForm.headFlow5, this.pumpCurveForm.headFlow6]];
+
+    } else {
+      return 0;
+    }
+  }
   /*
-  getEfficiencyCorrection() {
-    if (this.checkForm()) {
-      return this.psatService.achievableEfficiency(this.speedForm.value.pumpType, this.getSpecificSpeed());
-    } else {
-      return 0;
+    getSpecificSpeed(): number {
+      if (this.checkForm()) {
+        return this.speedForm.value.pumpRPM * Math.pow(this.speedForm.value.flowRate, 0.5) / Math.pow(this.speedForm.value.head, .75);
+      } else {
+        return 0;
+      }
     }
-  }
-
-  getSpecificSpeed(): number {
-    if (this.checkForm()) {
-      return this.speedForm.value.pumpRPM * Math.pow(this.speedForm.value.flowRate, 0.5) / Math.pow(this.speedForm.value.head, .75);
-    } else {
-      return 0;
-    }
-  }
-  */
-
+    */
+checkTmpFlow() {
+  console.log("!!!!!!!!!!!!!!!!!!!!!!" + this.tmpHeadFlow + "!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+}
   checkForm() {
-    /*
-    if (
-      this.speedForm.controls.pumpType.status == 'VALID' &&
-      this.speedForm.controls.flowRate.status == 'VALID' &&
-      this.speedForm.controls.head.status == 'VALID' &&
-      this.speedForm.controls.pumpRPM.status == 'VALID' &&
-      this.speedForm.value.pumpType != 'Specified Optimal Efficiency'
-    ) {
+
+    if (this.pumpCurveForm.headFlow >= 0 && this.pumpCurveForm.headFlow2 >= 0 && this.pumpCurveForm.headFlow3 >= 0 &&
+      this.pumpCurveForm.headFlow4 >= 0 && this.pumpCurveForm.headFlow5 >= 0 && this.pumpCurveForm.headFlow6 >= 0) {
       return true;
-    } else {
+    }
+    else {
       return false;
-    }*/
-    return true;
+    }
   }
+
 
   makeGraph() {
 
@@ -199,7 +200,7 @@ export class PumpCurveGraphComponent implements OnInit {
 
     this.y = d3.scaleLinear()
       .range([this.height, 0])
-      .domain([0, 6]);
+      .domain([0, 800]);
 
     if (this.isGridToggled) {
       this.xAxis = d3.axisBottom()
@@ -250,19 +251,23 @@ export class PumpCurveGraphComponent implements OnInit {
       .selectAll('text')
       .style("font-size", "13px");
 
-    /*
+// Data for graph
     var data = [];
-    for (var i = 100; i < 100000; i = i + 25) {
-      var efficiencyCorrection = this.psatService.achievableEfficiency(this.speedForm.value.pumpType, i);
-      if (efficiencyCorrection <= 5.5) {
+    for (var i = 1; i < 10; i = i + 25) {
+      let tmpHeadF = this.getHeadFlow();
+      let linear = regression.linear(tmpHeadF);
+      let newYInterc = linear.equation[0];
+      console.log("This is linear" + linear);
+      console.log("This is newYInterc" + newYInterc);
+      if (newYInterc <= 5.5) {
         data.push({
           x: i,
-          y: efficiencyCorrection
+          y: newYInterc
         });
       }
     }
     this.makeCurve(data);
-    */
+
 
     this.svg.append("text")
       .attr("text-anchor", "middle")  // this makes it easy to centre the text as the transform is applied to the anchor
@@ -318,8 +323,8 @@ export class PumpCurveGraphComponent implements OnInit {
       .attr("dy", ".35em");
 
     var format = d3.format(",.2f");
-    var bisectDate = d3.bisector(function (d) { return d.x; }).left;
-    /*
+    var bisectDate = d3.bisector(function(d) { return d.x; }).left;
+
     this.svg.select('#graph')
       .attr("width", this.width)
       .attr("height", this.height)
@@ -381,9 +386,9 @@ export class PumpCurveGraphComponent implements OnInit {
           .style("padding-right", "10px")
           .style("padding-left", "10px")
           .html(
-            "<p><strong><div>Specific Speed: </div></strong><div>" + format(d.x) + " " + "</div>" +
+            "<p><strong><div>Flow: </div></strong><div>" + format(d.x) + " " + "</div>" +
 
-            "<strong><div>Efficiency Correction: </div></strong><div>" + format(d.y) + " %</div></p>")
+            "<strong><div>Head Flow: </div></strong><div>" + format(d.y) + " %</div></p>")
 
           // "<div style='float:left;'>Fluid Power: </div><div style='float: right;'>" + format(d.fluidPower) + " </div></strong></p>")
 
@@ -420,25 +425,26 @@ export class PumpCurveGraphComponent implements OnInit {
       });
 
     this.drawPoint();
-    */
 
-    d3.selectAll("line").style("pointer-events", "none");
+
+    //d3.selectAll("line").style("pointer-events", "none");
   }
 
-  /*
+
   drawPoint() {
-    var specificSpeed = this.psatService.roundVal(this.getSpecificSpeed(), 3);
-    //var efficiencyCorrection = this.psatService.achievableEfficiency(this.speedForm.value.pumpType, specificSpeed);
+    // to test
+    var flow = [[288],[550],[8000]]
+    //var efficiencyCorrection = this.psatService.achievableEfficiency(this.speedForm.value.pumpType, flow);
 
     this.calcPoint
       .attr("transform", () => {
 
-        if (this.y(efficiencyCorrection) >= 0) {
-          return "translate(" + this.x(specificSpeed) + "," + this.y(efficiencyCorrection) + ")";
+        if (this.y(this.tmpHeadFlow) >= 0) {
+          return "translate(" + this.x(flow) + "," + this.y(this.tmpHeadFlow) + ")";
         }
       })
       .style("display", () => {
-        if (this.y(efficiencyCorrection) >= 0) {
+        if (this.y(this.tmpHeadFlow) >= 0) {
           return null;
         }
         else {
@@ -449,19 +455,19 @@ export class PumpCurveGraphComponent implements OnInit {
     this.svg.append("text")
       .attr("x", "20")
       .attr("y", "20")
-      .text("Specific Speed: " + specificSpeed)
+      .text("Flow: " + flow)
       .style("font-size", "13px")
       .style("font-weight", "bold");
 
     this.svg.append("text")
       .attr("x", this.width - 200)
       .attr("y", "20")
-      .text("Efficiency Correction: " + efficiencyCorrection + ' %')
+      .text("Head Flow: " + this.tmpHeadFlow)
       .style("font-size", "13px")
       .style("font-weight", "bold");
 
   }
-  */
+
 
   toggleGrid() {
     if (this.isGridToggled) {
