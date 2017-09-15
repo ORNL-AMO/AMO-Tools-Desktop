@@ -6,7 +6,6 @@ import { PumpCurveForm } from '../pump-curve';
 import * as d3 from 'd3';
 import * as regression from 'regression';
 import * as _ from 'lodash';
-
 @Component({
   selector: 'app-pump-curve-graph',
   templateUrl: './pump-curve-graph.component.html',
@@ -121,18 +120,16 @@ export class PumpCurveGraphComponent implements OnInit {
     return result;
   }
 
-
-  makeGraph() {
-    // Data for graph
+  getData(): Array<any> {
     let data = new Array<any>();
     if (this.pumpCurveForm.selectedFormView == 'Data') {
       let maxDataFlow = _.maxBy(this.pumpCurveForm.dataRows, (val) => { return val.flow });
       let tmpArr = new Array<any>();
       this.pumpCurveForm.dataRows.forEach(val => {
-        tmpArr.push([val.head, val.flow]);
+        tmpArr.push([val.flow, val.head]);
       })
       let results = regression.polynomial(tmpArr, { order: this.pumpCurveForm.dataOrder, precision: 10 });
-      for (let i = 0; i <= maxDataFlow.flow; i = i + 10) {
+      for (let i = 10; i <= maxDataFlow.flow; i = i + 10) {
         let yVal = results.predict(i);
         if (yVal[1] > 0) {
           data.push({
@@ -142,7 +139,7 @@ export class PumpCurveGraphComponent implements OnInit {
         }
       }
     } else if (this.pumpCurveForm.selectedFormView == 'Equation') {
-      for (let i = 0; i <= this.pumpCurveForm.maxFlow; i = i + 10) {
+      for (let i = 10; i <= this.pumpCurveForm.maxFlow; i = i + 10) {
         let yVal = this.calculateY(this.pumpCurveForm, i);
         if (yVal > 0) {
           data.push({
@@ -152,9 +149,48 @@ export class PumpCurveGraphComponent implements OnInit {
         }
       }
     }
-    debugger;
-    let maxX = _.maxBy(data, (val) => { return val.x });
+    return data;
+  }
 
+  getModifiedData(baseline: number, modified: number): Array<any> {
+    let data = new Array<any>();
+    let ratio = baseline / modified;
+    if (this.pumpCurveForm.selectedFormView == 'Data') {
+      let maxDataFlow = _.maxBy(this.pumpCurveForm.dataRows, (val) => { return val.flow });
+      let tmpArr = new Array<any>();
+      this.pumpCurveForm.dataRows.forEach(val => {
+        tmpArr.push([val.flow, val.head]);
+      })
+      let results = regression.polynomial(tmpArr, { order: this.pumpCurveForm.dataOrder, precision: 10 });
+      for (let i = 10; i <= maxDataFlow.flow; i = i + 10) {
+        let yVal = results.predict(i);
+        if (yVal[1] > 0) {
+          data.push({
+            x: i * ratio,
+            y: yVal[1] * Math.pow(ratio, 2)
+          })
+        }
+      }
+    } else if (this.pumpCurveForm.selectedFormView == 'Equation') {
+      for (let i = 10; i <= this.pumpCurveForm.maxFlow; i = i + 10) {
+        let yVal = this.calculateY(this.pumpCurveForm, i);
+        if (yVal > 0) {
+          data.push({
+            x: i * ratio,
+            y: yVal * Math.pow(ratio, 2)
+          })
+        }
+      }
+    }
+    return data;
+  }
+
+
+  makeGraph() {
+    // Data for graph
+    let data = new Array<any>();
+    data = this.getData();
+    let maxX = _.maxBy(data, (val) => { return val.x });
     let maxY = _.maxBy(data, (val) => { return val.y });
     //Remove  all previous graphs
     d3.select('app-pump-curve-graph').selectAll('svg').remove();
@@ -208,7 +244,7 @@ export class PumpCurveGraphComponent implements OnInit {
 
     this.x = d3.scaleLinear()
       .range([0, this.width])
-      .domain([0, maxX.x]);
+      .domain([0, maxX.x + 200]);
 
     this.y = d3.scaleLinear()
       .range([this.height, 0])
@@ -263,9 +299,11 @@ export class PumpCurveGraphComponent implements OnInit {
       .selectAll('text')
       .style("font-size", "13px");
 
-    this.makeCurve(data);
-
-
+    this.makeBaselineCurve(data);
+    if(this.pumpCurveForm.baselineMeasurement != this.pumpCurveForm.modifiedMeasurement){
+      let modifiedData = this.getModifiedData(this.pumpCurveForm.baselineMeasurement, this.pumpCurveForm.modifiedMeasurement);
+      this.makeModifiedCurve(modifiedData);
+    }
     this.svg.append("text")
       .attr("text-anchor", "middle")  // this makes it easy to centre the text as the transform is applied to the anchor
       .attr("transform", "translate(" + (-60) + "," + (this.height / 2) + ")rotate(-90)")  // text is drawn off the screen top left, move down and out and rotate
@@ -423,47 +461,7 @@ export class PumpCurveGraphComponent implements OnInit {
           .duration(600)
           .style("opacity", 0);
       });
-
-    // this.drawPoint();
-
-
-    //d3.selectAll("line").style("pointer-events", "none");
   }
-
-
-  // drawPoint() {
-  //   this.calcPoint
-  //     .attr("transform", () => {
-
-  //       if (this.y(this.tmpHeadFlow) >= 0) {
-  //         return "translate(" + this.x(flow) + "," + this.y(this.tmpHeadFlow) + ")";
-  //       }
-  //     })
-  //     .style("display", () => {
-  //       if (this.y(this.tmpHeadFlow) >= 0) {
-  //         return null;
-  //       }
-  //       else {
-  //         return "none";
-  //       }
-  //     });
-
-  //   this.svg.append("text")
-  //     .attr("x", "20")
-  //     .attr("y", "20")
-  //     .text("Flow: " + flow)
-  //     .style("font-size", "13px")
-  //     .style("font-weight", "bold");
-
-  //   this.svg.append("text")
-  //     .attr("x", this.width - 200)
-  //     .attr("y", "20")
-  //     .text("Head Flow: " + this.tmpHeadFlow)
-  //     .style("font-size", "13px")
-  //     .style("font-weight", "bold");
-
-  // }
-
 
   toggleGrid() {
     if (this.isGridToggled) {
@@ -476,7 +474,25 @@ export class PumpCurveGraphComponent implements OnInit {
     }
   }
 
-  makeCurve(data) {
+  makeBaselineCurve(data) {
+    var guideLine = d3.line()
+      .x((d) => { return this.x(d.x); })
+      .y((d) => { return this.y(d.y); })
+      .curve(d3.curveNatural);
+
+    let line = this.svg.append("path")
+      .attr("class", "line")
+      .attr("id", "avgLine")
+      .style("stroke-width", 10)
+      .style("stroke-width", "2px")
+      .style("fill", "none")
+      .style("stroke", "#2ECC71")
+      .style('pointer-events', 'none');
+
+    line.data([data]).attr("d", guideLine);
+  }
+  makeModifiedCurve(data) {
+    console.log(data);
     var guideLine = d3.line()
       .x((d) => { return this.x(d.x); })
       .y((d) => { return this.y(d.y); })
@@ -492,17 +508,5 @@ export class PumpCurveGraphComponent implements OnInit {
       .style('pointer-events', 'none');
 
     line.data([data]).attr("d", guideLine);
-
-
-    // = this.svg.append("path")
-    //   .data(data)
-    //   .attr("class", "line")
-    //   .attr("d", guideLine)
-    //   .style("stroke-width", 10)
-    //   .style("stroke-width", "2px")
-    //   .style("fill", "none")
-    //   .style("stroke", "#2ECC71")
-    //   .style('pointer-events', 'none');
   }
-
 }

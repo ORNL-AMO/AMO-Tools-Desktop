@@ -1,5 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { PumpCurveForm, PumpCurveDataRow } from '../pump-curve';
+import * as regression from 'regression';
+
 @Component({
   selector: 'app-pump-curve-form',
   templateUrl: './pump-curve-form.component.html',

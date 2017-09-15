@@ -16,10 +16,10 @@ export class PumpCurveDataFormComponent implements OnInit {
   calculate = new EventEmitter<boolean>();
 
   orderOptions: Array<number> = [
-    2,3,4,5,6
+    2, 3, 4, 5, 6
   ]
-  regEquation: string = null;
-  rSq: string = null;
+  //regEquation: string = null;
+  //rSq: string = null;
   constructor() { }
 
   ngOnInit() {
@@ -30,23 +30,12 @@ export class PumpCurveDataFormComponent implements OnInit {
     this.changeField.emit(str);
   }
 
-  removeRow(num: number){
+  removeRow(num: number) {
     this.pumpCurveForm.dataRows.splice(num, 1);
+    this.emitCalculateChanges();
   }
 
-  emitCalculateChanges(){
-   this.calculate.emit(true);
-   //console.log(this.pumpCurveForm.dataRows);
-   let tmpArr = new Array<any>();
-   this.pumpCurveForm.dataRows.forEach(val => {
-     tmpArr.push([val.head, val.flow]);
-   })
-   let results = regression.polynomial(tmpArr, {order: this.pumpCurveForm.dataOrder, precision: 10});
-   console.log(results);
-   this.regEquation = results.string;
-   this.rSq = results.r2;
-   let test = results.predict(1020);
-   console.log(test);
-  //  let equation = regression.linear()
+  emitCalculateChanges() {
+    this.calculate.emit(true);
   }
 }

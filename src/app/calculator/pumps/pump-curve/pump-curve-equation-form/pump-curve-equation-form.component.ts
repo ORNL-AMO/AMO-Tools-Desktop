@@ -24,6 +24,7 @@ export class PumpCurveEquationFormComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
+    this.emitCalculateChanges();
   }
 
   focusField(str: string) {

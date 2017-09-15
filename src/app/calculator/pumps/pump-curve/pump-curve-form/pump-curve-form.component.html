@@ -15,8 +15,8 @@
 </div>
 <div class="row form-row">
   <div class="col-12">
-    <app-pump-curve-data-form *ngIf="pumpCurveForm.selectedFormView == 'Data'" (calculate)="calculate()" [(pumpCurveForm)]="pumpCurveForm"></app-pump-curve-data-form>
-    <app-pump-curve-equation-form *ngIf="pumpCurveForm.selectedFormView == 'Equation'" (calculate)="calculate()" [(pumpCurveForm)]="pumpCurveForm"></app-pump-curve-equation-form>
+    <app-pump-curve-data-form *ngIf="pumpCurveForm.selectedFormView == 'Data'" (calculate)="calculate()" [(pumpCurveForm)]="pumpCurveForm" (changeField)="focusField($event)"></app-pump-curve-data-form>
+    <app-pump-curve-equation-form *ngIf="pumpCurveForm.selectedFormView == 'Equation'" (calculate)="calculate()" [(pumpCurveForm)]="pumpCurveForm" (changeField)="focusField($event)"></app-pump-curve-equation-form>
   </div>
 </div>
 <div class="row form-row">
@@ -51,8 +51,20 @@
   </div>
 </div>
 <div class="row form-row">
-  <div class="col-6">
+  <div class="col-12">
     <label class="section-label">Explore</label>
+  </div>
+  <div class="col-6">
+    <div class="form-group">
+      <label class="small" for="exploreFlow">Flow</label>
+      <div class="input-group">
+        <input name="exploreFlow" [(ngModel)]="pumpCurveForm.exploreFlow" type="number" step="any" class="form-control" id="modifiedMeasurement"
+          onfocus="this.select();" (focus)="focusField('exploreFlow')" (input)="calculate()">
+        <span class="input-group-addon units">gpm</span>
+      </div>
+    </div>
+  </div>
+  <div class="col-6">
     <div class="form-group">
       <label class="small" aria-describedby="exploreHead">Head</label>
 
@@ -63,23 +75,17 @@
         <span class="input-group-addon units">ft</span>
 
       </div>
-      <span><a [ngClass]="{'disabled-link': !selected}" id="exploreHead" class="form-text text-help" >Estimate Head</a></span>
+      <!--<span><a [ngClass]="{'disabled-link': !selected}" id="exploreHead" class="form-text text-help" >Estimate Head</a></span>-->
     </div>
-    <div class="form-group">
-      <label class="small" for="exploreFlow">Flow</label>
-      <div class="input-group">
-        <input name="exploreFlow" [(ngModel)]="pumpCurveForm.exploreFlow" type="number" step="any" class="form-control" id="modifiedMeasurement"
-          onfocus="this.select();" (focus)="focusField('exploreFlow')"  (input)="calculate()">
-        <span class="input-group-addon units">gpm</span>
-      </div>
-    </div>
-    <div class="form-group">
+  </div>
+</div>
+<!--<div class="form-group">
       <label class="small" for="explorePumpEfficiency">Pump Efficiency</label>
       <div class="input-group">
         <input name="explorePumpEfficiency" [(ngModel)]="pumpCurveForm.explorePumpEfficiency" type="number" step="any" class="form-control"
           id="explorePumpEfficiency" onfocus="this.select();" (focus)="focusField('explorePumpEfficiency')" (input)="calculate()">
         <span class="input-group-addon units">%</span>
       </div>
-    </div>
-  </div>
-</div>
+    </div>-->
+<!--</div>
+</div>-->
