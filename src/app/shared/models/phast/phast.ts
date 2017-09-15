@@ -10,12 +10,12 @@ import { LeakageLoss } from './losses/leakageLoss';
 import { ExtendedSurface } from './losses/extendedSurface';
 import { Slag } from './losses/slag';
 import { AuxiliaryPowerLoss } from './losses/auxiliaryPowerLoss';
-import { EnergyInput } from './losses/energyInput';
-import { ExhaustGas } from './losses/exhaustGas';
+import { EnergyInputEAF } from './losses/energyInputEAF';
+import { ExhaustGasEAF } from './losses/exhaustGasEAF';
 import { AuxEquipment } from './auxEquipment';
 import { MeteredEnergy } from './meteredEnergy';
 import { DesignedEnergy } from './designedEnergy';
-
+import { EnergyInputExhaustGasLoss } from './losses/energyInputExhaustGasLosses';
 export interface PHAST {
   name?: string,
   //phastInputs?: PhastInputs,
@@ -24,14 +24,15 @@ export interface PHAST {
   setupDone?: boolean,
   auxEquipment?: AuxEquipment[],
   meteredEnergy?: MeteredEnergy,
-  designedEnergy?: DesignedEnergy
-  operatingHours?: OperatingHours
+  designedEnergy?: DesignedEnergy,
+  operatingHours?: OperatingHours,
+  systemEfficiency?: number
 }
 
 export interface PhastInputs {
   heatSource?: any,
   energySource?: any,
-  operatingHours?: OperatingHours
+  operatingHours?: OperatingHours,
 }
 
 export interface Losses {
@@ -47,8 +48,9 @@ export interface Losses {
   extendedSurfaces?: ExtendedSurface[],
   slagLosses?: Slag[],
   auxiliaryPowerLosses?: AuxiliaryPowerLoss[],
-  energyInput?: EnergyInput[],
-  exhaustGas?: ExhaustGas[]
+  energyInputEAF?: EnergyInputEAF[],
+  exhaustGasEAF?: ExhaustGasEAF[],
+  energyInputExhaustGasLoss?: EnergyInputExhaustGasLoss[]
 }
 
 export interface Modification {
@@ -69,7 +71,9 @@ export interface Notes {
   extendedNotes?: string,
   slagNotes?: string,
   auxiliaryPowerNotes?: string,
-  exhaustGasNotes?: string
+  exhaustGasNotes?: string,
+  energyInputExhaustGasNotes?: string,
+  heatSystemEfficiencyNotes?: string
 }
 
 export interface OperatingHours {

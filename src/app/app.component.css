@@ -1269,10 +1269,14 @@ Tabs
 .tabs.vertical a {
   display: block;
   padding: 10px;
-  border-bottom: #ccc solid 1px;
+  border-bottom: #eaeaea solid 1px;
+  border-left: #eaeaea solid 1px;
   border-top: #fff solid 1px;
   border-right: #ccc solid 1px;
 }
+  .tabs.vertical li:first-of-type a {
+    border-top: #eaeaea solid 1px;
+  }
 .tabs.vertical a:hover {
   text-decoration: none;
 }
@@ -1282,7 +1286,7 @@ Tabs
   background: #fff;
   border-color: #bbb;
   border-style: solid;
-  border-width: 1px 0;
+  border-width: 1px 0 1px 1px;
 }
 
 .tabs.horizontal a {

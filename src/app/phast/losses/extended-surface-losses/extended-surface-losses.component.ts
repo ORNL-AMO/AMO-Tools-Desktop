@@ -6,6 +6,7 @@ import { Losses } from '../../../shared/models/phast/phast';
 import { ExtendedSurfaceLossesService } from './extended-surface-losses.service';
 import { ExtendedSurfaceCompareService } from './extended-surface-compare.service';
 import { WallLoss } from '../../../shared/models/phast/losses/wallLoss';
+import { Settings } from '../../../shared/models/settings';
 @Component({
   selector: 'app-extended-surface-losses',
   templateUrl: './extended-surface-losses.component.html',
@@ -26,6 +27,8 @@ export class ExtendedSurfaceLossesComponent implements OnInit {
   fieldChange = new EventEmitter<string>();
   @Input()
   isBaseline: boolean;
+  @Input()
+  settings: Settings;
 
   _surfaceLosses: Array<any>;
   firstChange: boolean = true;
@@ -142,7 +145,7 @@ export class ExtendedSurfaceLossesComponent implements OnInit {
       conditionFactor: 1,
       correctionFactor: 1,
     }
-    loss.heatLoss = this.phastService.wallLosses(tmpWallLoss);
+    loss.heatLoss = this.phastService.wallLosses(tmpWallLoss, this.settings);
 
   }
 

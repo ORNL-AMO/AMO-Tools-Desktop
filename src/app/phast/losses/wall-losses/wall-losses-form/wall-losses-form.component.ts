@@ -5,6 +5,7 @@ import { SuiteDbService } from '../../../../suiteDb/suite-db.service';
 import { WallLossesSurface } from '../../../../shared/models/materials';
 import { ModalDirective } from 'ngx-bootstrap';
 import { LossesService } from '../../losses.service';
+import { Settings } from '../../../../shared/models/settings';
 @Component({
   selector: 'app-wall-losses-form',
   templateUrl: './wall-losses-form.component.html',
@@ -23,6 +24,9 @@ export class WallLossesFormComponent implements OnInit {
   saveEmit = new EventEmitter<boolean>();
   @Input()
   lossIndex: number;
+  @Input()
+  settings: Settings;
+
   @ViewChild('materialModal') public materialModal: ModalDirective;
   @ViewChild('lossForm') lossForm: ElementRef;
   form: any;

@@ -4,6 +4,8 @@ import { OtherLossesService } from './other-losses.service';
 import { Losses } from '../../../shared/models/phast/phast';
 import { OtherLoss } from '../../../shared/models/phast/losses/otherLoss';
 import { OtherLossesCompareService } from './other-losses-compare.service';
+import { Settings } from '../../../shared/models/settings';
+
 @Component({
   selector: 'app-other-losses',
   templateUrl: './other-losses.component.html',
@@ -24,6 +26,9 @@ export class OtherLossesComponent implements OnInit {
   fieldChange = new EventEmitter<string>();
   @Input()
   isBaseline: boolean;
+  @Input()
+  settings: Settings;
+
   _otherLosses: Array<any>;
   firstChange: boolean = true;
   constructor(private otherLossesService: OtherLossesService, private otherLossCompareService: OtherLossesCompareService) { }

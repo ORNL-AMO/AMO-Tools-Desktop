@@ -1,8 +1,9 @@
-import { Component, OnInit, EventEmitter, Output } from '@angular/core';
+import { Component, OnInit, EventEmitter, Output, Input } from '@angular/core';
 import { SolidLoadChargeMaterial } from '../../shared/models/materials';
 import { SuiteDbService } from '../suite-db.service';
 import { IndexedDbService } from '../../indexedDb/indexed-db.service';
 import * as _ from 'lodash';
+import { Settings } from '../../shared/models/settings';
 
 @Component({
   selector: 'app-solid-load-charge-material',
@@ -13,7 +14,8 @@ export class SolidLoadChargeMaterialComponent implements OnInit {
 
   @Output('closeModal')
   closeModal = new EventEmitter<SolidLoadChargeMaterial>();
-
+  @Input()
+  settings: Settings;
 
   newMaterial: SolidLoadChargeMaterial = {
     substance: 'New Material',
@@ -32,6 +34,11 @@ export class SolidLoadChargeMaterialComponent implements OnInit {
     this.allMaterials = this.suiteDbService.selectSolidLoadChargeMaterials();
     this.checkMaterialName();
     // this.selectedMaterial = this.allMaterials[0];
+    if (!this.settings) {
+      this.indexedDbService.getSettings(1).then(results => {
+        this.settings = results;
+      })
+    }
   }
 
   addMaterial() {

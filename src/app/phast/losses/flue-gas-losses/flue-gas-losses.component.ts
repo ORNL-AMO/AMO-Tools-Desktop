@@ -5,6 +5,7 @@ import { PhastService } from '../../phast.service';
 import { FlueGas, FlueGasByMass, FlueGasByVolume } from '../../../shared/models/phast/losses/flueGas';
 import { Losses } from '../../../shared/models/phast/phast';
 import { FlueGasCompareService } from './flue-gas-compare.service';
+import { Settings } from '../../../shared/models/settings';
 @Component({
   selector: 'app-flue-gas-losses',
   templateUrl: './flue-gas-losses.component.html',
@@ -25,7 +26,9 @@ export class FlueGasLossesComponent implements OnInit {
   fieldChange = new EventEmitter<string>();
   @Input()
   isBaseline: boolean;
-
+  @Input()
+  settings: Settings;
+  
   _flueGasLosses: Array<any>;
   firstChange: boolean = true;
 
@@ -118,7 +121,9 @@ export class FlueGasLossesComponent implements OnInit {
           formByVolume: this.flueGasLossesService.initFormVolume(),
           formByMass: this.flueGasLossesService.initByMassFormFromLoss(loss),
           name: 'Loss #' + (this._flueGasLosses.length + 1),
-          heatLoss: 0.0
+          availableHeat: 0.0,
+          grossHeat: 0.0,
+          systemLosses: 0.0
         }
         this.calculate(tmpLoss);
         this._flueGasLosses.push(tmpLoss);
@@ -136,7 +141,9 @@ export class FlueGasLossesComponent implements OnInit {
       formByVolume: this.flueGasLossesService.initFormVolume(),
       formByMass: this.flueGasLossesService.initFormMass(),
       name: 'Loss #' + (this._flueGasLosses.length + 1),
-      heatLoss: 0.0
+      availableHeat: 0.0,
+      grossHeat: 0.0,
+      systemLosses: 0.0
     });
   }
 
@@ -155,10 +162,16 @@ export class FlueGasLossesComponent implements OnInit {
   calculate(loss: any) {
     if (loss.measurementType == "By Volume") {
       let tmpLoss: FlueGasByVolume = this.flueGasLossesService.buildByVolumeLossFromForm(loss.formByVolume);
-      loss.heatLoss = this.phastService.flueGasByVolume(tmpLoss);
+      let tmpResult = this.phastService.flueGasByVolume(tmpLoss);
+      loss.availableHeat = tmpResult * 100;
+      loss.grossHeat = this.phastService.sumHeatInput(this.losses, this.settings) / tmpResult;
+      loss.systemLosses = loss.grossHeat * (1 - tmpResult);
     } else if (loss.measurementType == "By Mass") {
       let tmpLoss: FlueGasByMass = this.flueGasLossesService.buildByMassLossFromForm(loss.formByMass);
-      loss.heatLoss = this.phastService.flueGasByMass(tmpLoss);
+      let tmpResult = this.phastService.flueGasByMass(tmpLoss);
+      loss.availableHeat = tmpResult * 100;
+      loss.grossHeat = this.phastService.sumHeatInput(this.losses, this.settings) / tmpResult;
+      loss.systemLosses = loss.grossHeat * (1 - tmpResult);
     }
   }
 

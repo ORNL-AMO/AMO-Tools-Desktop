@@ -6,6 +6,7 @@ import { Losses } from '../../../shared/models/phast/phast';
 import { ChargeMaterial, SolidChargeMaterial, GasChargeMaterial, LiquidChargeMaterial } from '../../../shared/models/phast/losses/chargeMaterial';
 import { ChargeMaterialService } from './charge-material.service';
 import { ChargeMaterialCompareService } from './charge-material-compare.service';
+import { Settings } from '../../../shared/models/settings';
 
 @Component({
   selector: 'app-charge-material',
@@ -27,6 +28,9 @@ export class ChargeMaterialComponent implements OnInit {
   fieldChange = new EventEmitter<string>();
   @Input()
   isBaseline: boolean;
+  @Input()
+  settings: Settings;
+
 
   _chargeMaterial: Array<any>;
   firstChange: boolean = true;

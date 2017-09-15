@@ -25,9 +25,7 @@ export class PsatBannerComponent implements OnInit {
     if (str == 'system-setup') {
       this.psatService.mainTab.next(str);
     } else if (this.assessment.psat.setupDone) {
-      if (str != 'diagram') {
-        this.psatService.mainTab.next(str);
-      }
+      this.psatService.mainTab.next(str);
     }
   }
 }

@@ -22,8 +22,8 @@
   <div class="row">
     <div class="col-12">
       <!--wall losses form with data injected-->
-      <app-wall-losses-form (changeField)="changeField($event)" [(wallLossesForm)]="loss.form" (calculate)="calculate(loss)"
-        [baselineSelected]="baselineSelected" (saveEmit)="saveLosses()" [lossIndex]="lossIndex"></app-wall-losses-form>
+      <app-wall-losses-form (changeField)="changeField($event)" [(wallLossesForm)]="loss.form" (calculate)="calculate(loss)" [baselineSelected]="baselineSelected"
+        (saveEmit)="saveLosses()" [lossIndex]="lossIndex" [settings]="settings"></app-wall-losses-form>
     </div>
   </div>
   <div class="row">
@@ -31,8 +31,10 @@
       <div class="form-group">
         <label class="small">Heat Loss</label>
         <div class="text-center small">
-          <!--results from calculation--> 
-          {{loss.heatLoss | number:'2.2-2'}} Btu/hr
+          <!--results from calculation-->
+          {{loss.heatLoss | number:'2.2-2'}}
+          <span *ngIf="settings.unitsOfMeasure == 'Imperial'">Btu/hr</span>
+          <span *ngIf="settings.unitsOfMeasure == 'Metric'">kJ/hr</span>
         </div>
       </div>
     </div>

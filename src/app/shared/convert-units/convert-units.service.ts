@@ -32,6 +32,9 @@ import { volumeFlowRate } from './definitions/volumeFlowRate';
 import { viscosity } from './definitions/viscosity';
 import { frequency } from './definitions/frequency';
 import { force } from './definitions/force';
+//import {kineViscosity} from './definitions/kineViscosity'
+import {specificHeat} from './definitions/specificHeat'
+import {volumetricHeat} from './definitions/volumetricHeat';
 import * as _ from 'lodash';
 import * as keys from 'lodash.keys';
 import * as each from 'lodash.foreach';
@@ -60,7 +63,10 @@ export class ConvertUnitsService {
     volumeFlowRate: volumeFlowRate,
     viscosity: viscosity,
     frequency: frequency,
-    force: force
+    force: force,
+    //kineViscosity: kineViscosity,
+    specificHeat: specificHeat,
+    volumetricHeat: volumetricHeat
 
   }
   origin: any;

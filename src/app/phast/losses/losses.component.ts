@@ -39,6 +39,7 @@ export class LossesComponent implements OnInit {
   isLossesSetup: boolean;
 
   isModalOpen: boolean = false;
+  showAddBtn: boolean = true;
   constructor(private lossesService: LossesService) { }
 
   ngOnInit() {
@@ -55,10 +56,26 @@ export class LossesComponent implements OnInit {
 
     this.lossesService.lossesTab.subscribe(val => {
       this.lossesTab = val;
+      if (this.lossesTab == 'heat-system-efficiency'
+        || this.lossesTab == 'atmosphere-losses'
+        || this.lossesTab == 'exhaust-gas'
+        || this.lossesTab == 'heat-system-efficiency'
+        || this.lossesTab == 'flue-gas-losses'
+        || this.lossesTab == 'energy-input'
+        || this.lossesTab == 'energy-input-exhaust-gas'
+      ) {
+        this.showAddBtn = false;
+      } else {
+        this.showAddBtn = true;
+      }
     })
     this.lossesService.modalOpen.subscribe(val => {
       this.isModalOpen = val;
     })
+  }
+
+  ngOnDestroy() {
+    this.lossesService.lossesTab.next('charge-material');
   }
 
   changeField($event) {
@@ -92,7 +109,8 @@ export class LossesComponent implements OnInit {
         extendedNotes: '',
         slagNotes: '',
         auxiliaryPowerNotes: '',
-        exhaustGasNotes: ''
+        exhaustGasNotes: '',
+        energyInputExhaustGasNotes: ''
       }
     }
     tmpModification.phast.losses = (JSON.parse(JSON.stringify(this.phast.losses)));
@@ -168,11 +186,11 @@ export class LossesComponent implements OnInit {
     this.isLossesSetup = true;
   }
 
-  openModal(){
+  openModal() {
     this.isModalOpen = true;
   }
 
-  closeModal(){
+  closeModal() {
     this.isModalOpen = false;
   }
 }

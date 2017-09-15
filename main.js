@@ -42,27 +42,17 @@ app.on('ready', function () {
     win = null;
   });
 
-  // If isDev = true, don't check for updates. If false, check for update
-  if (isDev()) {
-    update = null;
-  } else {
+  //signal from core.component to check for update
+  ipcMain.on('ready', (coreCompEvent, arg) => {
     autoUpdater.checkForUpdates();
-  };
-
-  autoUpdater.on('checking-for-update', () => {
-  });
-
-  autoUpdater.on('update-available', (event, info) => {
-  });
-
-  // Send message to core.component when an update is available
-  ipcMain.on('ready', (event, arg) => {
-    log.info('autoUpdate.updateAvailable = ' + autoUpdater.updateAvailable);
-    event.sender.send('available', autoUpdater.updateAvailable);
-  });
-
-  autoUpdater.on('update-not-available', (event, info) => {
-  });
+    log.info('checking for update..');
+    autoUpdater.on('update-available', (event, info) => {
+      coreCompEvent.sender.send('available', autoUpdater.updateAvailable);
+    });
+    autoUpdater.on('update-not-available', (event, info) => {
+      log.info('no update available..');
+    });
+  })
 
   autoUpdater.on('error', (event, error) => {
   });

@@ -1,5 +1,5 @@
 <div class="no-data no-data-phast" *ngIf="_exhaustGasLosses.length == 0" (click)="addLoss()">
-  <h3>You have no exhaust gas losses</h3>
+  <h3>You have no Exhaust Gas Losses</h3>
   <h4>Add some now.</h4>
 </div>
 
@@ -19,7 +19,7 @@
   <div class="row">
     <div class="col-12">
       <app-exhaust-gas-form (changeField)="changeField($event)" [(exhaustGasForm)]="loss.form" (calculate)="calculate(loss)" [baselineSelected]="baselineSelected"
-        (saveEmit)="saveLosses()" [lossIndex]="lossIndex" [isBaseline]="isBaseline"></app-exhaust-gas-form>
+        (saveEmit)="saveLosses()" [lossIndex]="lossIndex" [isBaseline]="isBaseline" [settings]="settings"></app-exhaust-gas-form>
     </div>
   </div>
   <div class="row">
@@ -27,7 +27,9 @@
       <div class="form-group">
         <label class="small">Heat Loss</label>
         <div class="text-center small">
-          {{loss.heatLoss | number:'2.2-2'}} Btu/hr
+          {{loss.heatLoss | number:'2.2-2'}}
+          <span *ngIf="settings.unitsOfMeasure == 'Imperial'">Btu/hr</span>
+          <span *ngIf="settings.unitsOfMeasure == 'Metric'">kJ/hr</span>
         </div>
       </div>
     </div>

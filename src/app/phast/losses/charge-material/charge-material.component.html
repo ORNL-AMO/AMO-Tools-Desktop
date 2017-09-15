@@ -1,5 +1,5 @@
 <div class="no-data no-data-phast" *ngIf="_chargeMaterial.length == 0" (click)="addMaterial()">
-  <h3>You have no charge material</h3>
+  <h3>You have no Charge Material</h3>
   <h4>Add some now.</h4>
 </div>
 
@@ -28,11 +28,14 @@
         </div>
       </div>
       <app-solid-charge-material-form *ngIf="material.chargeMaterialType == 'Solid'" (changeField)="changeField($event)" [(chargeMaterialForm)]="material.solidForm"
-        (calculate)="calculate(material)" [baselineSelected]="baselineSelected" (saveEmit)="saveLosses()" [lossIndex]="lossIndex"></app-solid-charge-material-form>
+        (calculate)="calculate(material)" [baselineSelected]="baselineSelected" (saveEmit)="saveLosses()" [lossIndex]="lossIndex"
+        [settings]="settings"></app-solid-charge-material-form>
       <app-liquid-charge-material-form *ngIf="material.chargeMaterialType == 'Liquid'" (changeField)="changeField($event)" [(chargeMaterialForm)]="material.liquidForm"
-        (calculate)="calculate(material)" [baselineSelected]="baselineSelected" (saveEmit)="saveLosses()" [lossIndex]="lossIndex"></app-liquid-charge-material-form>
+        (calculate)="calculate(material)" [baselineSelected]="baselineSelected" (saveEmit)="saveLosses()" [lossIndex]="lossIndex"
+        [settings]="settings"></app-liquid-charge-material-form>
       <app-gas-charge-material-form *ngIf="material.chargeMaterialType == 'Gas'" (changeField)="changeField($event)" [(chargeMaterialForm)]="material.gasForm"
-        (calculate)="calculate(material)" [baselineSelected]="baselineSelected" (saveEmit)="saveLosses()" [lossIndex]="lossIndex"></app-gas-charge-material-form>
+        (calculate)="calculate(material)" [baselineSelected]="baselineSelected" (saveEmit)="saveLosses()" [lossIndex]="lossIndex"
+        [settings]="settings"></app-gas-charge-material-form>
     </div>
   </div>
   <div class="row">
@@ -40,7 +43,9 @@
       <div class="form-group">
         <label class="small">Total Heat Required For Charge Material</label>
         <div class="text-center small">
-          {{material.heatRequired |number:'2.2-2'}} Btu/hr
+          {{material.heatRequired |number:'2.2-2'}}
+          <span *ngIf="settings.unitsOfMeasure == 'Imperial'">Btu/hr</span>
+          <span *ngIf="settings.unitsOfMeasure == 'Metric'">kJ/hr</span>
         </div>
       </div>
     </div>
