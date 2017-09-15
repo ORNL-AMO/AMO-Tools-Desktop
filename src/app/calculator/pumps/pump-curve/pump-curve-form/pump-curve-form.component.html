@@ -3,20 +3,22 @@
     <form>
       <div class="form-group form-check">
         <label class="form-check-label">
-            <input name="selectedFormView" class="form-check-input" type="radio" [(ngModel)]="pumpCurveForm.selectedFormView" value="Equation">Equation</label>
+            <input name="selectedFormView" class="form-check-input" type="radio" [(ngModel)]="selectedFormView" (input)="setView()" value="Equation">Equation</label>
         <label class="form-check-label">
-            <input name="selectedFormView" class="form-check-input" type="radio" [(ngModel)]="pumpCurveForm.selectedFormView" value="Data">Data</label>
+            <input name="selectedFormView" class="form-check-input" type="radio" [(ngModel)]="selectedFormView" value="Data" (input)="setView()">Data</label>
       </div>
     </form>
   </div>
   <div class="col-4">
-    <span *ngIf="pumpCurveForm.selectedFormView == 'Data'" class="fa fa-plus pull-right" (click)="addRow()"></span>
+    <span *ngIf="selectedFormView == 'Data'" class="fa fa-plus pull-right" (click)="addRow()"></span>
   </div>
 </div>
 <div class="row form-row">
   <div class="col-12">
-    <app-pump-curve-data-form *ngIf="pumpCurveForm.selectedFormView == 'Data'" (calculate)="calculate()" [(pumpCurveForm)]="pumpCurveForm" (changeField)="focusField($event)"></app-pump-curve-data-form>
-    <app-pump-curve-equation-form *ngIf="pumpCurveForm.selectedFormView == 'Equation'" (calculate)="calculate()" [(pumpCurveForm)]="pumpCurveForm" (changeField)="focusField($event)"></app-pump-curve-equation-form>
+    <app-pump-curve-data-form *ngIf="selectedFormView == 'Data'" (calculate)="calculate()" [(pumpCurveForm)]="pumpCurveForm"
+      (changeField)="focusField($event)"></app-pump-curve-data-form>
+    <app-pump-curve-equation-form *ngIf="selectedFormView == 'Equation'" (calculate)="calculate()" [(pumpCurveForm)]="pumpCurveForm"
+      (changeField)="focusField($event)"></app-pump-curve-equation-form>
   </div>
 </div>
 <div class="row form-row">
@@ -62,6 +64,7 @@
           onfocus="this.select();" (focus)="focusField('exploreFlow')" (input)="calculate()">
         <span class="input-group-addon units">gpm</span>
       </div>
+      <!--<span><a id="exploreFlow" class="form-text text-help small" (click)="estimateFlow()">Estimate Flow</a></span>-->
     </div>
   </div>
   <div class="col-6">
@@ -75,7 +78,7 @@
         <span class="input-group-addon units">ft</span>
 
       </div>
-      <!--<span><a [ngClass]="{'disabled-link': !selected}" id="exploreHead" class="form-text text-help" >Estimate Head</a></span>-->
+      <span><a id="exploreHead" class="form-text text-help small" (click)="estimateHead()">Estimate Head</a></span>
     </div>
   </div>
 </div>
