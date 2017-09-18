@@ -8,5 +8,8 @@
 
 
 .tab-content{
-    min-height: none;
+
+    max-height: 78vh;
+    /*min-height: none;*/
 }
+

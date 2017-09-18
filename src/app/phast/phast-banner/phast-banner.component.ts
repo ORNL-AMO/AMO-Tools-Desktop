@@ -19,7 +19,7 @@ export class PhastBannerComponent implements OnInit {
   }
 
   changeTab(str: string) {
-    if (str == 'system-setup' || str == 'assessment') {
+    if (str == 'system-setup' || str == 'assessment' || str == 'sankey') {
       this.phastService.mainTab.next(str);
     } 
     // else if (this.assessment.phast.setupDone) {
