@@ -126,6 +126,7 @@
     "protractor": "~5.1.0",
     "style-loader": "^0.13.2",
     "ts-node": "^3.3.0",
-    "tslint": "~4.4.2"
+    "tslint": "~4.4.2",
+    "webpack": "^3.6.0"
   }
 }
