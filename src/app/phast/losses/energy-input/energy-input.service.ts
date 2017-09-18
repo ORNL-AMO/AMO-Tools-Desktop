@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { EnergyInput } from '../../../shared/models/phast/losses/energyInput';
+import { EnergyInputEAF } from '../../../shared/models/phast/losses/energyInputEAF';
 import { BehaviorSubject } from 'rxjs';
 
 @Injectable()
@@ -28,8 +28,8 @@ export class EnergyInputService {
   initForm() {
     return this.formBuilder.group({
       naturalGasHeatInput: ['', Validators.required],
-      naturalGasFlow: ['', Validators.required],
-      measuredOxygenFlow: ['', Validators.required],
+     // naturalGasFlow: ['', Validators.required],
+     // measuredOxygenFlow: ['', Validators.required],
       coalCarbonInjection: ['', Validators.required],
       coalHeatingValue: ['', Validators.required],
       electrodeUse: ['', Validators.required],
@@ -39,11 +39,11 @@ export class EnergyInputService {
     })
   }
 
-  getLossFromForm(form: any): EnergyInput {
-    let tmpEnergyInput: EnergyInput = {
+  getLossFromForm(form: any): EnergyInputEAF {
+    let tmpEnergyInput: EnergyInputEAF = {
       naturalGasHeatInput: form.value.naturalGasHeatInput,
-      naturalGasFlow: form.value.naturalGasFlow,
-      measuredOxygenFlow: form.value.measuredOxygenFlow,
+     // naturalGasFlow: form.value.naturalGasFlow,
+     // measuredOxygenFlow: form.value.measuredOxygenFlow,
       coalCarbonInjection: form.value.coalCarbonInjection,
       coalHeatingValue: form.value.coalHeatingValue,
       electrodeUse: form.value.electrodeUse,
@@ -54,11 +54,11 @@ export class EnergyInputService {
     return tmpEnergyInput;
   }
 
-  getFormFromLoss(loss: EnergyInput) {
+  getFormFromLoss(loss: EnergyInputEAF) {
     return this.formBuilder.group({
       naturalGasHeatInput: [loss.naturalGasHeatInput, Validators.required],
-      naturalGasFlow: [loss.naturalGasFlow, Validators.required],
-      measuredOxygenFlow: [loss.measuredOxygenFlow, Validators.required],
+     // naturalGasFlow: [loss.naturalGasFlow, Validators.required],
+     // measuredOxygenFlow: [loss.measuredOxygenFlow, Validators.required],
       coalCarbonInjection: [loss.coalCarbonInjection, Validators.required],
       coalHeatingValue: [loss.coalHeatingValue, Validators.required],
       electrodeUse: [loss.electrodeUse, Validators.required],

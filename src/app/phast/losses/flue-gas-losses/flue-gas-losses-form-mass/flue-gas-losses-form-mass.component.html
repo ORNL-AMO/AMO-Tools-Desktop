@@ -14,7 +14,8 @@
       <div class="input-group">
         <input name="{{'flueGasTemperature_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="flueGasTemperature"
           id="flueGasTemperature" onfocus="this.select();" (input)="startSavePolling()">
-        <span class="input-group-addon units">&#8457;</span>
+        <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">&#8457;</span>
+        <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
       </div>
     </div>
 
@@ -32,7 +33,8 @@
       <div class="input-group">
         <input name="{{'combustionAirTemperature_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="combustionAirTemperature"
           id="combustionAirTemperature" onfocus="this.select();" (input)="startSavePolling()">
-        <span class="input-group-addon units">&#8457;</span>
+        <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">&#8457;</span>
+        <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
       </div>
     </div>
 
@@ -41,7 +43,8 @@
       <div class="input-group">
         <input name="{{'fuelTemperature_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="fuelTemperature"
           id="fuelTemperature" onfocus="this.select();" (input)="startSavePolling()">
-        <span class="input-group-addon units">&#8457;</span>
+        <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">&#8457;</span>
+        <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
       </div>
     </div>
 
@@ -56,7 +59,8 @@
       <div class="input-group">
         <input name="{{'ashDischargeTemperature_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="ashDischargeTemperature"
           id="ashDischargeTemperature" onfocus="this.select();" (input)="startSavePolling()">
-        <span class="input-group-addon units">&#8457;</span>
+        <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">&#8457;</span>
+        <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
       </div>
     </div>
 

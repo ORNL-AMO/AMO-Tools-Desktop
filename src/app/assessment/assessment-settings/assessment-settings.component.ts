@@ -8,7 +8,6 @@ import { ModalDirective } from 'ngx-bootstrap';
 import { Assessment } from '../../shared/models/assessment';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
 import { PSAT } from '../../shared/models/psat';
-
 @Component({
   selector: 'app-assessment-settings',
   templateUrl: './assessment-settings.component.html',
@@ -50,8 +49,11 @@ export class AssessmentSettingsComponent implements OnInit {
         }
       }
     )
-
   }
+
+  // checkForUpdates(){
+
+  // }
 
   showSettingsModal(_oldSettings?: Settings, _newSettings?: Settings) {
     let settingsChanged;

@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, EventEmitter, Output, ViewChild, ElementRef, SimpleChanges } from '@angular/core';
 import { GasLeakageCompareService } from "../gas-leakage-compare.service";
 import { WindowRefService } from "../../../../indexedDb/window-ref.service";
+import { Settings } from '../../../../shared/models/settings';
 
 @Component({
   selector: 'app-gas-leakage-losses-form',
@@ -20,6 +21,9 @@ export class GasLeakageLossesFormComponent implements OnInit {
   saveEmit = new EventEmitter<boolean>();
   @Input()
   lossIndex: number;
+  @Input()
+  settings: Settings;
+
 
   @ViewChild('lossForm') lossForm: ElementRef;
   form: any;

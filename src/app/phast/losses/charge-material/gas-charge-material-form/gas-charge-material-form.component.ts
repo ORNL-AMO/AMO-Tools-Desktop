@@ -4,6 +4,8 @@ import { WindowRefService } from '../../../../indexedDb/window-ref.service';
 import { ChargeMaterialCompareService } from '../charge-material-compare.service';
 import { ModalDirective } from 'ngx-bootstrap';
 import { LossesService } from '../../losses.service';
+import { Settings } from '../../../../shared/models/settings';
+
 @Component({
   selector: 'app-gas-charge-material-form',
   templateUrl: './gas-charge-material-form.component.html',
@@ -22,6 +24,9 @@ export class GasChargeMaterialFormComponent implements OnInit {
   saveEmit = new EventEmitter<boolean>();
   @Input()
   lossIndex: number;
+  @Input()
+  settings: Settings;
+  
   @ViewChild('materialModal') public materialModal: ModalDirective;
   @ViewChild('lossForm') lossForm: ElementRef;
   form: any;
@@ -208,8 +213,8 @@ export class GasChargeMaterialFormComponent implements OnInit {
   hideMaterialModal(event?: any) {
     if (event) {
       this.materialTypes = this.suiteDbService.selectGasLoadChargeMaterials();
-      let newMaterial = this.materialTypes.filter(material => {return material.substance == event.substance})
-      if(newMaterial.length != 0){
+      let newMaterial = this.materialTypes.filter(material => { return material.substance == event.substance })
+      if (newMaterial.length != 0) {
         this.chargeMaterialForm.patchValue({
           materialId: newMaterial[0].id
         })

@@ -5,7 +5,8 @@
       <div class="input-group">
         <input name="{{'surfaceArea_'+lossIndex}}" type="number" class="form-control" formControlName="surfaceArea" id="surfaceArea"
           onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('surfaceArea')">
-        <span class="input-group-addon units"><span>ft<sup>2</sup></span></span>
+        <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units"><span>ft<sup>2</sup></span></span>
+        <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units"><span>m<sup>2</sup></span></span>
       </div>
     </div>
 
@@ -14,7 +15,8 @@
       <div class="input-group">
         <input name="{{'avgSurfaceTemp_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="avgSurfaceTemp"
           id="avgSurfaceTemp" onfocus="this.select();" (input)="checkTemperature()" (focus)="focusField('avgSurfaceTemp')">
-        <span class="input-group-addon units">&#8457;</span>
+        <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">&#8457;</span>
+        <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
       </div>
       <span class="alert-warning pull-right small" *ngIf="temperatureError !== null">{{temperatureError}}</span>
     </div>
@@ -24,7 +26,8 @@
       <div class="input-group">
         <input name="{{'ambientTemp_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="ambientTemp" id="ambientTemp"
           onfocus="this.select();" (input)="checkTemperature()" (focus)="focusField('ambientTemp')">
-        <span class="input-group-addon units">&#8457;</span>
+        <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">&#8457;</span>
+        <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
       </div>
       <span class="alert-warning pull-right small" *ngIf="temperatureError !== null">{{temperatureError}}</span>
     </div>

@@ -40,7 +40,7 @@ export class DesignedEnergySteamComponent implements OnInit {
   }
 
   calculate() {
-    this.results = this.designedEnergyService.designedEnergySteam(this.phast.designedEnergy.designedEnergySteam, this.phast);
+    this.results = this.designedEnergyService.designedEnergySteam(this.phast.designedEnergy.designedEnergySteam, this.phast, this.settings);
   }
 
   setField(str: string) {

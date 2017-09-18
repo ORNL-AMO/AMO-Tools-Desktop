@@ -1,5 +1,5 @@
 <div class="pump-head">
-  <div class="row" *ngIf="settings">
+  <div class="row" *ngIf="settings && pumpCurveForm">
     <div class="col-md-5 col-sm-12 mx-auto">
       <app-pump-curve-form [(pumpCurveForm)]="pumpCurveForm" (emitCalculate)="calculate()" (changeField)="setField($event)"></app-pump-curve-form>
     </div>

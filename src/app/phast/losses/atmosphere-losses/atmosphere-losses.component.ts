@@ -5,6 +5,7 @@ import { AtmosphereLossesService } from './atmosphere-losses.service';
 import { Losses } from '../../../shared/models/phast/phast';
 import { AtmosphereLoss } from '../../../shared/models/phast/losses/atmosphereLoss';
 import { AtmosphereLossesCompareService } from './atmosphere-losses-compare.service';
+import { Settings } from '../../../shared/models/settings';
 
 @Component({
   selector: 'app-atmosphere-losses',
@@ -26,6 +27,8 @@ export class AtmosphereLossesComponent implements OnInit {
   fieldChange = new EventEmitter<string>();
   @Input()
   isBaseline: boolean;
+  @Input()
+  settings: Settings;
 
   _atmosphereLosses: Array<any>;
   firstChange: boolean = true;

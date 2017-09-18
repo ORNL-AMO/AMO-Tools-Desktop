@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { HeatStorageComponent } from './heat-storage.component';
+import { PsatDiagramComponent } from './psat-diagram.component';
 
-describe('HeatStorageComponent', () => {
-  let component: HeatStorageComponent;
-  let fixture: ComponentFixture<HeatStorageComponent>;
+describe('PsatDiagramComponent', () => {
+  let component: PsatDiagramComponent;
+  let fixture: ComponentFixture<PsatDiagramComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ HeatStorageComponent ]
+      declarations: [ PsatDiagramComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(HeatStorageComponent);
+    fixture = TestBed.createComponent(PsatDiagramComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

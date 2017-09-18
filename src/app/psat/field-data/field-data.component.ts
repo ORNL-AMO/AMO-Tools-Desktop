@@ -67,6 +67,7 @@ export class FieldDataComponent implements OnInit {
   opFractionError: string = null;
   ratedPowerError: string = null;
   marginError: string = null;
+  headError: string = null;
   constructor(private psatService: PsatService, private compareService: CompareService, private windowRefService: WindowRefService, private helpPanelService: HelpPanelService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
@@ -82,6 +83,7 @@ export class FieldDataComponent implements OnInit {
     if (this.psatForm.value.optimizeCalculation == true) {
       this.checkMargin(true);
     }
+    this.checkHead(true);
   }
 
   ngAfterViewInit() {
@@ -318,6 +320,18 @@ export class FieldDataComponent implements OnInit {
       return true;
     }
   }
+
+  checkHead(bool?: boolean){
+    if(!bool){
+      this.startSavePolling();
+    }
+    if(this.psatForm.value.head < 0){
+      this.headError = 'Head cannot be negative';
+    }else{
+      this.headError = null;
+    }
+  }
+
 
   subtractViscosity() {
     this.psatForm.value.viscosity = this.psatForm.value.viscosity - 1

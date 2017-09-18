@@ -83,7 +83,6 @@ export class OperatingHoursComponent implements OnInit {
     }
     this.counter = setTimeout(() => {
       this.save.emit(true);
-      console.log('emit save');
     }, 3000)
   }
 

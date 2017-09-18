@@ -5,34 +5,38 @@
       <div class="input-group">
         <input name="{{'naturalGasHeatInput_'+lossIndex}}" type="number" class="form-control" formControlName="naturalGasHeatInput"
           id="naturalGasHeatInput" onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('naturalGasHeatInput')">
-        <span class="input-group-addon units">mm btu/cycle</span>
+        <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">MM Btu/hr</span>
+        <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">GJ/hr</span>
       </div>
     </div>
 
-    <div class="form-group">
+    <!--<div class="form-group">
       <label class="small" for="naturalGasFlow">Natural Gas Flow</label>
       <div class="input-group">
         <input name="{{'naturalGasFlow_'+lossIndex}}" type="number" class="form-control" formControlName="naturalGasFlow" id="naturalGasFlow"
           onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('naturalGasFlow')">
-        <span class="input-group-addon units">scfh</span>
+        <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">scfh</span>
+        <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">Nm<sup>3</sup>/hr</span>
       </div>
-    </div>
+    </div>-->
 
-    <div class="form-group">
+    <!--<div class="form-group">
       <label class="small" for="measuredOxygenFlow">Measured Oxygen Flow</label>
       <div class="input-group">
         <input name="{{'measuredOxygenFlow_'+lossIndex}}" type="number" class="form-control" formControlName="measuredOxygenFlow"
           id="measuredOxygenFlow" onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('measuredOxygenFlow')">
-        <span class="input-group-addon units">scfh</span>
+        <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">scfh</span>
+        <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">Nm<sup>3</sup>/hr</span>
       </div>
-    </div>
+    </div>-->
 
     <div class="form-group">
       <label class="small" for="coalCarbonInjection">Coal Carbon Injection</label>
       <div class="input-group">
         <input name="{{'coalCarbonInjection_'+lossIndex}}" type="number" class="form-control" formControlName="coalCarbonInjection"
           id="coalCarbonInjection" onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('coalCarbonInjection')">
-        <span class="input-group-addon units">lbs/cycle</span>
+        <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">lbs/hr</span>
+        <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kg/hr</span>
       </div>
     </div>
 
@@ -41,7 +45,9 @@
       <div class="input-group">
         <input name="{{'coalHeatingValue_'+lossIndex}}" type="number" class="form-control" formControlName="coalHeatingValue" id="coalHeatingValue"
           onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('coalHeatingValue')">
-        <span class="input-group-addon units">btu/lb</span>
+        <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">Btu/lb</span>
+        <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kg/lb</span>
+
       </div>
     </div>
 
@@ -50,7 +56,8 @@
       <div class="input-group">
         <input name="{{'electrodeUse_'+lossIndex}}" type="number" class="form-control" formControlName="electrodeUse" id="electrodeUse"
           onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('electrodeUse')">
-        <span class="input-group-addon units">lbs/cycle</span>
+        <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">lbs/hr</span>
+        <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kg/hr</span>
       </div>
     </div>
 
@@ -59,7 +66,8 @@
       <div class="input-group">
         <input name="{{'electrodeHeatingValue_'+lossIndex}}" type="number" class="form-control" formControlName="electrodeHeatingValue"
           id="electrodeHeatingValue" onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('electrodeHeatingValue')">
-        <span class="input-group-addon units">btu/lb</span>
+        <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">Btu/lb</span>
+        <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kg/lb</span>
       </div>
     </div>
 
@@ -68,7 +76,8 @@
       <div class="input-group">
         <input name="{{'otherFuels_'+lossIndex}}" type="number" class="form-control" formControlName="otherFuels" id="otherFuels"
           onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('otherFuels')">
-        <span class="input-group-addon units">mm btu/cycle</span>
+        <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">mm Btu/hr</span>
+        <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">GJ/hr</span>
       </div>
     </div>
 
@@ -77,7 +86,7 @@
       <div class="input-group">
         <input name="{{'electricityInput_'+lossIndex}}" type="number" class="form-control" formControlName="electricityInput" id="electricityInput"
           onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('electricityInput')">
-        <span class="input-group-addon units">kwh/cycle</span>
+        <span class="input-group-addon units">kWh/hr</span>
       </div>
     </div>
   </div>
