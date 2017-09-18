@@ -65,8 +65,7 @@ export class PhastService {
     if (settings.unitsOfMeasure == 'Metric') {
       inputs.initialTemperature = this.convertUnitsService.value(inputs.initialTemperature).from('C').to('F');
       inputs.finalTemperature = this.convertUnitsService.value(inputs.finalTemperature).from('C').to('F');
-      //TODO: Specific heat conversion
-      //inputs.specificHeat
+      inputs.specificHeat = this.convertUnitsService.value(inputs.specificHeat).from('kJkgC').to('btulblF');
       inputs.feedRate = this.convertUnitsService.value(inputs.feedRate).from('kg').to('lb');
       results = phastAddon.fixtureLosses(inputs);
       if (isNaN(results) == false) {
@@ -83,9 +82,8 @@ export class PhastService {
   gasCoolingLosses(inputs: GasCoolingLoss, settings: Settings): number {
     let results = 0;
     if (settings.unitsOfMeasure == 'Metric') {
-      //TODO: Btu/(lb-F) -> kJ/(kg - C)
-      //inputs.specificHeat
-      inputs.flowRate = this.convertUnitsService.value(inputs.flowRate).from('m3/h').to('f3/h');
+      inputs.specificHeat = this.convertUnitsService.value(inputs.specificHeat).from('kJkgC').to('btulblF');
+      inputs.flowRate = this.convertUnitsService.value(inputs.flowRate).from('m3').to('ft3');
       inputs.finalTemperature = this.convertUnitsService.value(inputs.finalTemperature).from('C').to('F');
       inputs.initialTemperature = this.convertUnitsService.value(inputs.initialTemperature).from('C').to('F');
       results = phastAddon.gasCoolingLosses(inputs);
@@ -110,9 +108,8 @@ export class PhastService {
       //TODO: kJ/kg -> Btu/lb
       // inputs.reactionHeat
       // inputs.additionalHeat
-      //TODO: kJ/(kg - C) -> Btu(lb - F)
-      // inputs.specificHeatVapor
-      // inputs.specificHeatGas
+      inputs.specificHeatVapor = this.convertUnitsService.value(inputs.specificHeatVapor).from('kJkgC').to('btulblF');
+      inputs.specificHeatGas = this.convertUnitsService.value(inputs.specificHeatGas).from('kJkgC').to('btulblF');
       results = phastAddon.gasLoadChargeMaterial(inputs);
       if (isNaN(results) == false) {
         results = this.convertUnitsService.value(results).from('Btu').to('kJ');
@@ -129,8 +126,7 @@ export class PhastService {
   liquidCoolingLosses(inputs: LiquidCoolingLoss, settings: Settings): number {
     let results = 0;
     if (settings.unitsOfMeasure == 'Metric') {
-      //TODO: Btu/(lb-F) -> kJ/(kg - C)
-      //inputs.specificHeat
+      inputs.specificHeat = this.convertUnitsService.value(inputs.specificHeat).from('kJkgC').to('btulblF');
       //TODO: lb/SCF -> kg/Nm3
       inputs.flowRate = this.convertUnitsService.value(inputs.flowRate).from('L').to('gal');
       inputs.initialTemperature = this.convertUnitsService.value(inputs.initialTemperature).from('C').to('F');
@@ -160,8 +156,8 @@ export class PhastService {
       // inputs.reactionHeat
       // inputs.additionalHeat
       //TODO: kJ/(kg - C) -> Btu(lb - F)
-      // inputs.specificHeatLiquid
-      // inputs.specificHeatVapor
+      inputs.specificHeatLiquid = this.convertUnitsService.value(inputs.specificHeatLiquid).from('kJkgC').to('btulblF');
+      inputs.specificHeatVapor = this.convertUnitsService.value(inputs.specificHeatVapor).from('kJkgC').to('btulblF');
       results = phastAddon.liquidLoadChargeMaterial(inputs);
       if (isNaN(results) == false) {
         results = this.convertUnitsService.value(results).from('Btu').to('kJ');
@@ -224,8 +220,8 @@ export class PhastService {
       //inputs.reactionHeat
       //inputs.additionalHeat
       //TODO: kJ/(kg - C) -> Btu(lb - F)
-      //inputs.specificHeatLiquid
-      //inputs.specificHeatSolid
+      inputs.specificHeatLiquid = this.convertUnitsService.value(inputs.specificHeatLiquid).from('kJkgC').to('btulblF');
+      inputs.specificHeatSolid = this.convertUnitsService.value(inputs.specificHeatSolid).from('kJkgC').to('btulblF');
       results = phastAddon.solidLoadChargeMaterial(inputs);
       if (isNaN(results) == false) {
         results = this.convertUnitsService.value(results).from('Btu').to('kJ');
@@ -337,32 +333,114 @@ export class PhastService {
     return phastAddon.atmosphere(inputs);
   }
 
-  slagOtherMaterialLosses(inputs: Slag) {
-    return phastAddon.slagOtherMaterialLosses(inputs);
+  slagOtherMaterialLosses(inputs: Slag, settings: Settings) {
+    let results = 0;
+    if (settings.unitsOfMeasure == 'Metric') {
+      inputs.weight = this.convertUnitsService.value(inputs.weight).from('kg').to('lb');
+      inputs.inletTemperature = this.convertUnitsService.value(inputs.inletTemperature).from('C').to('F');
+      inputs.outletTemperature = this.convertUnitsService.value(inputs.outletTemperature).from('C').to('F');
+      inputs.specificHeat  = this.convertUnitsService.value(inputs.specificHeat).from('kJkgC').to('btulblF');
+      results = phastAddon.slagOtherMaterialLosses(inputs);
+      if (isNaN(results) == false) {
+        results = this.convertUnitsService.value(results).from('Btu').to('kJ');
+      } else {
+        results = 0;
+      }
+    } else {
+      results = phastAddon.slagOtherMaterialLosses(inputs);
+    }
+    return results;
   }
 
   auxiliaryPowerLoss(inputs: AuxiliaryPowerLoss) {
+    //No Conversions
     return phastAddon.auxiliaryPowerLoss(inputs);
   }
 
   //Electric Arc Furnace
-  energyInputEAF(inputs: EnergyInputEAF) {
-    return phastAddon.energyInputEAF(inputs);
+  energyInputEAF(inputs: EnergyInputEAF, settings: Settings) {
+    let results = {
+      heatDelivered: 0,
+      totalChemicalEnergyInput: 0
+    };
+    if (settings.unitsOfMeasure == 'Metric') {
+      //TODO: mm btu -> GJ
+      //inputs.naturalGasHeatInput
+      //inputs.otherFuels
+      inputs.coalCarbonInjection = this.convertUnitsService.value(inputs.coalCarbonInjection).from('kg').to('lb');
+      //TODO: btu/lb -> kJ/kg
+      //inputs.coalHeatingValue
+      //inputs.electrodeHeatingValue
+      inputs.electrodeUse = this.convertUnitsService.value(inputs.electrodeUse).from('kg').to('lb');
+      results = phastAddon.energyInputEAF(inputs);
+      if (isNaN(results.heatDelivered) == false) {
+        results.heatDelivered = this.convertUnitsService.value(results.heatDelivered).from('Btu').to('kJ');
+      } else {
+        results.heatDelivered = 0;
+      }
+      if (isNaN(results.totalChemicalEnergyInput) == false) {
+        results.totalChemicalEnergyInput = this.convertUnitsService.value(results.totalChemicalEnergyInput).from('Btu').to('kJ');
+      } else {
+        results.totalChemicalEnergyInput = 0;
+      }
+    } else {
+      results = phastAddon.energyInputEAF(inputs);
+    }
+    return results;
   }
 
   //Electric Arc Furnace
-  exhaustGasEAF(inputs: ExhaustGasEAF) {
-    return phastAddon.exhaustGasEAF(inputs);
+  exhaustGasEAF(inputs: ExhaustGasEAF, settings: Settings) {
+    let results = 0;
+    if (settings.unitsOfMeasure == 'Metric') {
+      inputs.offGasTemp = this.convertUnitsService.value(inputs.offGasTemp).from('C').to('F');
+      inputs.vfr = this.convertUnitsService.value(inputs.vfr).from('m3').to('ft3');
+      //TODO: lb/scf -> kg/Nm3
+      //inputs.dustLoading
+      results = phastAddon.exhaustGasEAF(inputs);
+      if (isNaN(results) == false) {
+        results = this.convertUnitsService.value(results).from('Btu').to('kJ');
+      } else {
+        results = 0;
+      }
+    } else {
+      results = phastAddon.exhaustGasEAF(inputs);
+    }
+    return results;
   }
 
   //used in energyInputExhaustGasLosses
-  availableHeat(inputs: EnergyInputExhaustGasLoss) {
-    return phastAddon.availableHeat(inputs);
+  availableHeat(inputs: EnergyInputExhaustGasLoss, settings: Settings) {
+    let results = 0;
+    if (settings.unitsOfMeasure == 'Metric') {
+      inputs.combustionAirTemp = this.convertUnitsService.value(inputs.combustionAirTemp).from('C').to('F');
+      inputs.exhaustGasTemp = this.convertUnitsService.value(inputs.exhaustGasTemp).from('C').to('F');
+      inputs.totalHeatInput = this.convertUnitsService.value(inputs.totalHeatInput).from('kJ').to('Btu');
+      results = phastAddon.availableHeat(inputs);
+      if (isNaN(results)) {
+        results = 0;
+      }
+    } else {
+      results = phastAddon.availableHeat(inputs);
+    }
+    return results;
   }
 
   //energy input for non-EAF Electric process heating
-  energyInputExhaustGasLosses(inputs: EnergyInputExhaustGasLoss) {
-    inputs.availableHeat = this.availableHeat(inputs);
+  energyInputExhaustGasLosses(inputs: EnergyInputExhaustGasLoss, settings: Settings) {
+    inputs.availableHeat = this.availableHeat(inputs, settings);
+    let results = 0;
+    if (settings.unitsOfMeasure == 'Metric') {
+      inputs.combustionAirTemp = this.convertUnitsService.value(inputs.combustionAirTemp).from('C').to('F');
+      inputs.exhaustGasTemp = this.convertUnitsService.value(inputs.exhaustGasTemp).from('C').to('F');
+      inputs.totalHeatInput = this.convertUnitsService.value(inputs.totalHeatInput).from('kJ').to('Btu');
+      results = phastAddon.energyInputExhaustGasLosses(inputs);
+      if (isNaN(results)) {
+        results = 0;
+      }
+    } else {
+      results = phastAddon.energyInputExhaustGasLosses(inputs);
+    }
     return phastAddon.energyInputExhaustGasLosses(inputs);
   }
 
@@ -421,7 +499,7 @@ export class PhastService {
       grossHeatRequired += this.sumOtherLosses(losses.otherLosses);
     }
     if (losses.slagLosses) {
-      grossHeatRequired += this.sumSlagLosses(losses.slagLosses);
+      grossHeatRequired += this.sumSlagLosses(losses.slagLosses, settings);
     }
     if (losses.wallLosses) {
       grossHeatRequired += this.sumWallLosses(losses.wallLosses, settings);
@@ -606,12 +684,12 @@ export class PhastService {
     return sum;
   }
 
-  sumSlagLosses(losses: Slag[]): number {
+  sumSlagLosses(losses: Slag[], settings: Settings): number {
     let sum = 0;
     losses.forEach(loss => {
       let tmpForm = this.slagService.getFormFromLoss(loss);
       if (tmpForm.status == 'VALID') {
-        sum += this.slagOtherMaterialLosses(loss);
+        sum += this.slagOtherMaterialLosses(loss, settings);
       }
     })
     return sum;
