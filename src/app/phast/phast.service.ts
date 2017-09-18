@@ -80,8 +80,24 @@ export class PhastService {
     return results;
   }
 
-  gasCoolingLosses(inputs: GasCoolingLoss): number {
-    return phastAddon.gasCoolingLosses(inputs);
+  gasCoolingLosses(inputs: GasCoolingLoss, settings: Settings): number {
+    let results = 0;
+    if (settings.unitsOfMeasure == 'Metric') {
+      //TODO: Btu/(lb-F) -> kJ/(kg - C)
+      //inputs.specificHeat
+      inputs.flowRate = this.convertUnitsService.value(inputs.flowRate).from('m3/h').to('f3/h');
+
+      results = phastAddon.gasCoolingLosses(inputs);
+      if (isNaN(results) == false) {
+        results = this.convertUnitsService.value(results).from('Btu').to('kJ');
+      } else {
+        results = 0;
+      }
+    }
+    else {
+      results = phastAddon.gasCoolingLosses(inputs);
+    }
+    return results;
   }
 
   gasLoadChargeMaterial(inputs: GasChargeMaterial, settings: Settings): number {
