@@ -5,6 +5,7 @@ import { PhastService } from '../phast.service';
 // declare var d3: any;
 import * as d3 from 'd3';
 var svg;
+import { Settings } from '../../shared/models/settings';
 
 const width = 2650,
   height = 1400;
@@ -18,7 +19,8 @@ const width = 2650,
 export class SankeyComponent implements OnInit {
   @Input()
   losses: Losses;
-
+  @Input()
+  settings: Settings;
   @Input()
   location: string;
 
@@ -58,7 +60,7 @@ export class SankeyComponent implements OnInit {
     this.totalLeakageLoss = 0;
 
     if(this.losses.wallLosses != null){
-      this.totalWallLoss = this.phastService.sumWallLosses(this.losses.wallLosses) / 1000000;
+      this.totalWallLoss = this.phastService.sumWallLosses(this.losses.wallLosses, this.settings) / 1000000;
     }
 
     if(this.losses.wallLosses != null) {
