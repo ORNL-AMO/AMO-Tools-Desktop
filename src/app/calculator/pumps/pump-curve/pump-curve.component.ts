@@ -49,19 +49,19 @@ export class PumpCurveComponent implements OnInit {
   initForm() {
     this.pumpCurveForm = {
       dataRows: new Array<PumpCurveDataRow>(
-        { flow: 0, head: 355.5731 },
-        { flow: 100, head: 351.2857 },
-        { flow: 200, head: 343.6188 },
-        { flow: 300, head: 335.9542 },
-        { flow: 400, head: 324.9089 },
-        { flow: 480, head: 314.7216 },
-        { flow: 560, head: 304.5332 },
-        { flow: 630, head: 294.3559 },
-        { flow: 690, head: 284.1775 },
-        { flow: 800, head: 264.6842 },
-        { flow: 900, head: 241.8114 },
-        { flow: 970, head: 222.3425 },
-        { flow: 1020, head: 202.0412 }
+        { flow: 0, head: 355 },
+        { flow: 100, head: 351 },
+        // { flow: 200, head: 343.6188 },
+        // { flow: 300, head: 335.9542 },
+        // { flow: 400, head: 324.9089 },
+        // { flow: 480, head: 314.7216 },
+        // { flow: 560, head: 304.5332 },
+        { flow: 630, head: 294 },
+        // { flow: 690, head: 284.1775 },
+        // { flow: 800, head: 264.6842 },
+        // { flow: 900, head: 241.8114 },
+        // { flow: 970, head: 222.3425 },
+        { flow: 1020, head: 202 }
       ),
       maxFlow: 1020,
       dataOrder: 3,
