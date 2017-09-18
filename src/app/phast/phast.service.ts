@@ -86,7 +86,8 @@ export class PhastService {
       //TODO: Btu/(lb-F) -> kJ/(kg - C)
       //inputs.specificHeat
       inputs.flowRate = this.convertUnitsService.value(inputs.flowRate).from('m3/h').to('f3/h');
-
+      inputs.finalTemperature = this.convertUnitsService.value(inputs.finalTemperature).from('C').to('F');
+      inputs.initialTemperature = this.convertUnitsService.value(inputs.initialTemperature).from('C').to('F');
       results = phastAddon.gasCoolingLosses(inputs);
       if (isNaN(results) == false) {
         results = this.convertUnitsService.value(results).from('Btu').to('kJ');
@@ -125,8 +126,26 @@ export class PhastService {
     return results;
   }
 
-  liquidCoolingLosses(inputs: LiquidCoolingLoss): number {
-    return phastAddon.liquidCoolingLosses(inputs);
+  liquidCoolingLosses(inputs: LiquidCoolingLoss, settings: Settings): number {
+    let results = 0;
+    if (settings.unitsOfMeasure == 'Metric') {
+      //TODO: Btu/(lb-F) -> kJ/(kg - C)
+      //inputs.specificHeat
+      //TODO: lb/SCF -> kg/Nm3
+      inputs.flowRate = this.convertUnitsService.value(inputs.flowRate).from('L').to('gal');
+      inputs.initialTemperature = this.convertUnitsService.value(inputs.initialTemperature).from('C').to('F');
+      inputs.outletTemperature = this.convertUnitsService.value(inputs.outletTemperature).from('C').to('F');
+      results = phastAddon.liquidCoolingLosses(inputs);
+      if (isNaN(results) == false) {
+        results = this.convertUnitsService.value(results).from('Btu').to('kJ');
+      } else {
+        results = 0;
+      }
+    }
+    else {
+      results = phastAddon.liquidCoolingLosses(inputs);
+    }
+    return results;
   }
 
   liquidLoadChargeMaterial(inputs: LiquidChargeMaterial, settings: Settings): number {
@@ -242,16 +261,60 @@ export class PhastService {
     return phastAddon.waterCoolingLosses(inputs);
   }
 
-  leakageLosses(inputs: LeakageLoss) {
-    return phastAddon.leakageLosses(inputs)
+  leakageLosses(inputs: LeakageLoss, settings: Settings) {
+    let results = 0;
+    if (settings.unitsOfMeasure == 'Metric') {
+      //TODO: in. H20 -> Pa
+      //inputs.draftPressure
+      inputs.openingArea = this.convertUnitsService.value(inputs.openingArea).from('m2').to('ft2');
+      inputs.ambientTemperature = this.convertUnitsService.value(inputs.ambientTemperature).from('C').to('F');
+      inputs.leakageGasTemperature = this.convertUnitsService.value(inputs.leakageGasTemperature).from('C').to('F');
+      if (isNaN(results) == false) {
+        results = this.convertUnitsService.value(results).from('Btu').to('kJ');
+      } else {
+        results = 0;
+      }
+    } else {
+      results = phastAddon.flueGasLossesByVolume(inputs);
+    }
+    return results;
   }
 
-  flueGasByVolume(inputs: FlueGasByVolume) {
-    return phastAddon.flueGasLossesByVolume(inputs);
+  flueGasByVolume(inputs: FlueGasByVolume, settings: Settings) {
+    let results = 0;
+    if (settings.unitsOfMeasure == 'Metric') {
+      inputs.combustionAirTemperature = this.convertUnitsService.value(inputs.combustionAirTemperature).from('C').to('F');
+      inputs.flueGasTemperature = this.convertUnitsService.value(inputs.flueGasTemperature).from('C').to('F');
+      results = phastAddon.flueGasLossesByVolume(inputs);
+      if (isNaN(results) == false) {
+        results = this.convertUnitsService.value(results).from('Btu').to('kJ');
+      } else {
+        results = 0;
+      }
+    } else {
+      results = phastAddon.flueGasLossesByVolume(inputs);
+    }
+
+    return results;
   }
 
-  flueGasByMass(inputs: FlueGasByMass) {
-    return phastAddon.flueGasLossesByMass(inputs)
+  flueGasByMass(inputs: FlueGasByMass, settings: Settings) {
+    let results = 0;
+    if (settings.unitsOfMeasure == 'Metric') {
+      inputs.combustionAirTemperature = this.convertUnitsService.value(inputs.combustionAirTemperature).from('C').to('F');
+      inputs.flueGasTemperature = this.convertUnitsService.value(inputs.flueGasTemperature).from('C').to('F');
+      inputs.ashDischargeTemperature = this.convertUnitsService.value(inputs.ashDischargeTemperature).from('C').to('F');
+      inputs.fuelTemperature = this.convertUnitsService.value(inputs.fuelTemperature).from('C').to('F');
+      results = phastAddon.flueGasByMass(inputs);
+      if (isNaN(results) == false) {
+        results = this.convertUnitsService.value(results).from('Btu').to('kJ');
+      } else {
+        results = 0;
+      }
+    } else {
+      results = phastAddon.flueGasByMass(inputs);
+    }
+    return results;
   }
 
   atmosphere(inputs: AtmosphereLoss, settings: Settings) {
@@ -340,7 +403,7 @@ export class PhastService {
       grossHeatRequired += this.sumChargeMaterials(losses.chargeMaterials, settings);
     }
     if (losses.coolingLosses) {
-      grossHeatRequired += this.sumCoolingLosses(losses.coolingLosses);
+      grossHeatRequired += this.sumCoolingLosses(losses.coolingLosses, settings);
     }
     if (losses.extendedSurfaces) {
       grossHeatRequired += this.sumExtendedSurface(losses.extendedSurfaces, settings);
@@ -349,7 +412,7 @@ export class PhastService {
       grossHeatRequired += this.sumFixtureLosses(losses.fixtureLosses, settings);
     }
     if (losses.leakageLosses) {
-      grossHeatRequired += this.sumLeakageLosses(losses.leakageLosses);
+      grossHeatRequired += this.sumLeakageLosses(losses.leakageLosses, settings);
     }
     if (losses.openingLosses) {
       grossHeatRequired += this.sumOpeningLosses(losses.openingLosses, settings);
@@ -411,18 +474,18 @@ export class PhastService {
     return sum;
   }
 
-  sumCoolingLosses(losses: CoolingLoss[]): number {
+  sumCoolingLosses(losses: CoolingLoss[], settings: Settings): number {
     let sum = 0;
     losses.forEach(loss => {
       if (loss.coolingLossType == 'Gas') {
         let tmpForm = this.coolingLossesService.initGasFormFromLoss(loss.gasCoolingLoss);
         if (tmpForm.status == 'VALID') {
-          sum += this.gasCoolingLosses(loss.gasCoolingLoss);
+          sum += this.gasCoolingLosses(loss.gasCoolingLoss, settings);
         }
       } else if (loss.coolingLossType == 'Liquid') {
         let tmpForm = this.coolingLossesService.initLiquidFormFromLoss(loss.liquidCoolingLoss);
         if (tmpForm.status == 'VALID') {
-          sum += this.liquidCoolingLosses(loss.liquidCoolingLoss);
+          sum += this.liquidCoolingLosses(loss.liquidCoolingLoss, settings);
         }
       }
     })
@@ -503,12 +566,12 @@ export class PhastService {
   //   return sum;
   // }
 
-  sumLeakageLosses(losses: LeakageLoss[]): number {
+  sumLeakageLosses(losses: LeakageLoss[], settings: Settings): number {
     let sum = 0;
     losses.forEach(loss => {
       let tmpForm = this.gasLeakageLossesService.initFormFromLoss(loss);
       if (tmpForm.status == 'VALID') {
-        sum += this.leakageLosses(loss);
+        sum += this.leakageLosses(loss, settings);
       }
     })
     return sum;
