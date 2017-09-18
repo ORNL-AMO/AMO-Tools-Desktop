@@ -51,6 +51,7 @@ export const MockDirectory: Directory = {
       createdDate: new Date(),
       modifiedDate: new Date(),
       phast: {
+        systemEfficiency: 90,
         losses: {
           chargeMaterials: [
             {
@@ -173,7 +174,8 @@ export const MockDirectory: Directory = {
                 initialTemperature: 80.0,
                 finalTemperature: 350.0,
                 specificHeat: 0.02,
-                correctionFactor: 1.0
+                correctionFactor: 1.0,
+                gasDensity: 1.0
               }
             },
             {
@@ -276,11 +278,11 @@ export const MockDirectory: Directory = {
               operatingTime: 100,
             }
           ],
-          energyInput: [
+          energyInputEAF: [
             {
               naturalGasHeatInput: 50,
-              naturalGasFlow: 0,
-              measuredOxygenFlow: 6500,
+              //naturalGasFlow: 0,
+             // measuredOxygenFlow: 6500,
               coalCarbonInjection: 3300,
               coalHeatingValue: 9000,
               electrodeUse: 500,
@@ -289,14 +291,14 @@ export const MockDirectory: Directory = {
               electricityInput: 18000
             }
           ],
-          exhaustGas: [
+          exhaustGasEAF: [
             {
-              cycleTime: 2,
+             // cycleTime: 2,
               offGasTemp: 2800,
               CO: 10,
               H2: 10,
-              O2: 0,
-              CO2: 5,
+             // O2: 0,
+             // CO2: 5,
               combustibleGases: 5,
               vfr: 50000,
               dustLoading: 0.005,

@@ -736,10 +736,8 @@ export class PsatService {
       form.controls.pumpType.status == 'VALID' &&
       form.controls.pumpRPM.status == 'VALID' &&
       form.controls.drive.status == 'VALID' &&
-      form.controls.viscosity.status == 'VALID' &&
       form.controls.gravity.status == 'VALID' &&
-      form.controls.stages.status == 'VALID' &&
-      form.controls.fixedSpeed.status == 'VALID'
+      form.controls.stages.status == 'VALID'
     ) {
       //TODO: Check pumpType for custom
       if (form.value.pumpType != "Specified Optimal Efficiency") {
@@ -763,8 +761,7 @@ export class PsatService {
       form.controls.motorRPM.status == 'VALID' &&
       form.controls.efficiencyClass.status == 'VALID' &&
       form.controls.motorVoltage.status == 'VALID' &&
-      form.controls.fullLoadAmps.status == 'VALID' &&
-      form.controls.sizeMargin.status == 'VALID'
+      form.controls.fullLoadAmps.status == 'VALID'
     ) {
       if (form.value.efficiencyClass != 'Specified') {
         return true;

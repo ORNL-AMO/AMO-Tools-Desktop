@@ -1,0 +1,43 @@
+<div class="card-form">
+  <!--<div class="row">
+    <div class="col-12">
+      <div class="pull-left">
+        <h6 *ngIf="isBaseline">Heat System Efficiency</h6>
+        <h6 *ngIf="!isBaseline">Heat System Efficiency Modification</h6>
+      </div>
+    </div>
+  </div>-->
+  <div class="row">
+    <div class="col-12">
+      <form #lossForm [formGroup]="efficiencyForm">
+        <div class="form-section">
+          <div class="form-group">
+            <label *ngIf="isBaseline" class="small" for="efficiency">Heat System Efficiency</label>
+            <label *ngIf="!isBaseline" class="small" for="efficiency">Heat System Efficiency Modification</label>
+            <div class="input-group">
+              <input name="efficiency" type="number" step="any" class="form-control" formControlName="efficiency" id="efficiency"
+                onfocus="this.select();" (input)="calculate()" (focus)="focusField('efficiency')">
+              <span class="input-group-addon units">%</span>
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="small" for="grossHeat">Gross Heat</label>
+          <div class="text-center small">
+            {{grossHeat | number:'2.2-2'}}
+            <span *ngIf="settings.unitsOfMeasure == 'Imperial'">Btu/hr</span>
+            <span *ngIf="settings.unitsOfMeasure == 'Metric'">kJ/hr</span>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="small" for="systemLosses">System Losses</label>
+          <div class="text-center small">
+            {{systemLosses | number:'2.2-2'}}
+            <span *ngIf="settings.unitsOfMeasure == 'Imperial'">Btu/hr</span>
+            <span *ngIf="settings.unitsOfMeasure == 'Metric'">kJ/hr</span>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

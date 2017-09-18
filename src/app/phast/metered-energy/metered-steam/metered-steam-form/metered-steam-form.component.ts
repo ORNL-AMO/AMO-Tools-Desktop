@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { MeteredEnergySteam } from '../../../../shared/models/phast/meteredEnergy';
-
+import { Settings } from '../../../../shared/models/settings';
 
 @Component({
   selector: 'app-metered-steam-form',
@@ -12,8 +12,8 @@ export class MeteredSteamFormComponent implements OnInit {
   inputs: MeteredEnergySteam;
   @Output('emitCalculate')
   emitCalculate = new EventEmitter<boolean>();
-  // @Input()
-  // settings: Settings;
+  @Input()
+  settings: Settings;
   @Output('emitSave')
   emitSave = new EventEmitter<boolean>();
   @Output('changeField')

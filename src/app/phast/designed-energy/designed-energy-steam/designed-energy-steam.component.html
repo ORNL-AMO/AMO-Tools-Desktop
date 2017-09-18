@@ -1,7 +1,7 @@
 <div class="modify-conditions">
   <div class="modification aux-form-panel">
     <div class="header aux-header">
-      <h3>Design Energy (Electricity)</h3>
+      <h3>Design Energy (Steam)</h3>
       <button class="btn btn-secondary pull-right" (click)="addZone()"><span class="fa fa-plus"></span></button>
     </div>
     <div class="losses-container">
@@ -22,7 +22,7 @@
         </div>
         <div class="row">
           <div class="col-12">
-           <app-designed-energy-steam-form [inputs]="zone" (emitCalculate)="calculate()" (emitSave)="save()" (changeField)="setField($event)"></app-designed-energy-steam-form>
+           <app-designed-energy-steam-form [inputs]="zone" (emitCalculate)="calculate()" (emitSave)="save()" (changeField)="setField($event)" [settings]="settings"></app-designed-energy-steam-form>
           </div>
         </div>
       </div>

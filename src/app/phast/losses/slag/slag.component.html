@@ -19,7 +19,7 @@
   <div class="row">
     <div class="col-12">
       <app-slag-form (changeField)="changeField($event)" [(slagLossForm)]="loss.form" (calculate)="calculate(loss)" [baselineSelected]="baselineSelected"
-        (saveEmit)="saveLosses()" [lossIndex]="lossIndex"></app-slag-form>
+        (saveEmit)="saveLosses()" [lossIndex]="lossIndex" [settings]="settings"></app-slag-form>
     </div>
   </div>
   <div class="row">
@@ -27,7 +27,9 @@
       <div class="form-group">
         <label class="small">Heat Loss</label>
         <div class="text-center small">
-          {{loss.heatLoss | number:'2.2-2'}} Btu/hr
+          {{loss.heatLoss | number:'2.2-2'}} 
+          <span *ngIf="settings.unitsOfMeasure == 'Imperial'">Btu/hr</span>
+          <span *ngIf="settings.unitsOfMeasure == 'Metric'">kJ/hr</span>
         </div>
       </div>
     </div>

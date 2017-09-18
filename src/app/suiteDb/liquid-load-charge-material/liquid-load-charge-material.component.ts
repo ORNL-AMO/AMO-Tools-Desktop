@@ -1,8 +1,9 @@
-import { Component, OnInit, EventEmitter, Output } from '@angular/core';
+import { Component, OnInit, EventEmitter, Output, Input } from '@angular/core';
 import { LiquidLoadChargeMaterial } from '../../shared/models/materials';
 import { SuiteDbService } from '../suite-db.service';
 import { IndexedDbService } from '../../indexedDb/indexed-db.service';
 import * as _ from 'lodash';
+import { Settings } from '../../shared/models/settings';
 
 @Component({
   selector: 'app-liquid-load-charge-material',
@@ -12,7 +13,8 @@ import * as _ from 'lodash';
 export class LiquidLoadChargeMaterialComponent implements OnInit {
   @Output('closeModal')
   closeModal = new EventEmitter<LiquidLoadChargeMaterial>();
-
+  @Input()
+  settings: Settings;
 
   newMaterial: LiquidLoadChargeMaterial = {
     latentHeat: 0,
@@ -31,6 +33,11 @@ export class LiquidLoadChargeMaterialComponent implements OnInit {
     this.allMaterials = this.suiteDbService.selectLiquidLoadChargeMaterials();
     this.checkMaterialName();
     //this.selectedMaterial = this.allMaterials[0];
+    if (!this.settings) {
+      this.indexedDbService.getSettings(1).then(results => {
+        this.settings = results;
+      })
+    }
   }
 
   addMaterial() {

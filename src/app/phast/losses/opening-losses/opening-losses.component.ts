@@ -5,6 +5,7 @@ import { OpeningLossesService } from './opening-losses.service';
 import { Losses } from '../../../shared/models/phast/phast';
 import { OpeningLoss, QuadOpeningLoss, CircularOpeningLoss } from '../../../shared/models/phast/losses/openingLoss';
 import { OpeningLossesCompareService } from './opening-losses-compare.service';
+import { Settings } from '../../../shared/models/settings';
 
 @Component({
   selector: 'app-opening-losses',
@@ -26,7 +27,9 @@ export class OpeningLossesComponent implements OnInit {
   fieldChange = new EventEmitter<string>();
   @Input()
   isBaseline: boolean;
-
+  @Input()
+  settings: Settings;
+  
   _openingLosses: Array<any>;
   firstChange: boolean = true;
 

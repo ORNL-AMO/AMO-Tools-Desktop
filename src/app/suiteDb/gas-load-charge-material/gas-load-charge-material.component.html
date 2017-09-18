@@ -23,8 +23,8 @@
           <div class="input-group">
             <input type="number" id="specificHeatVapor" name="specificHeatVapor" class="form-control" [(ngModel)]="newMaterial.specificHeatVapor"
             />
-            <span class="input-group-addon units">Btu/(lb-&#8457;)</span>
-          </div>
+            <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">Btu/(lb-&#8457;)</span>
+            <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kJ/(kg-&#8451;)</span> </div>
         </div>
       </div>
     </form>

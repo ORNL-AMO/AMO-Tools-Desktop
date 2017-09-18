@@ -43,7 +43,7 @@ export class PumpCurveComponent implements OnInit {
     this.tabSelect = str;
   }
 
-  setField(str: string){
+  setField(str: string) {
     this.currentField = str;
   }
   initForm() {
@@ -65,8 +65,8 @@ export class PumpCurveComponent implements OnInit {
       ),
       maxFlow: 1020,
       dataOrder: 3,
-      baselineMeasurement: 0,
-      modifiedMeasurement: 0,
+      baselineMeasurement: 1,
+      modifiedMeasurement: 1,
       exploreLine: 0,
       exploreFlow: 0,
       exploreHead: 0,
@@ -87,6 +87,12 @@ export class PumpCurveComponent implements OnInit {
   }
 
   calculate() {
-    this.toggleCalculate = !this.toggleCalculate;
+    if (this.pumpCurveForm.modifiedMeasurement != this.pumpCurveForm.baselineMeasurement) {
+      if (this.pumpCurveForm.modifiedMeasurement != 0 && this.pumpCurveForm.baselineMeasurement != 0) {
+        this.toggleCalculate = !this.toggleCalculate;
+      }
+    } else {
+      this.toggleCalculate = !this.toggleCalculate;
+    }
   }
 }

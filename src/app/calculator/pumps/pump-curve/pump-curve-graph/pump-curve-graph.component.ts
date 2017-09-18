@@ -30,6 +30,7 @@ export class PumpCurveGraphComponent implements OnInit {
   pointer: any;
   calcPoint: any;
   focus: any;
+  focusMod: any;
   isGridToggled: boolean;
 
   firstChange: boolean = true;
@@ -190,8 +191,22 @@ export class PumpCurveGraphComponent implements OnInit {
     // Data for graph
     let data = new Array<any>();
     data = this.getData();
+
+    let modifiedData = new Array<any>();
     let maxX = _.maxBy(data, (val) => { return val.x });
     let maxY = _.maxBy(data, (val) => { return val.y });
+    if (this.pumpCurveForm.baselineMeasurement != this.pumpCurveForm.modifiedMeasurement) {
+      modifiedData = this.getModifiedData(this.pumpCurveForm.baselineMeasurement, this.pumpCurveForm.modifiedMeasurement);
+      let modMaxX = _.maxBy(modifiedData, (val) => { return val.x });
+      let modMaxY = _.maxBy(modifiedData, (val) => { return val.y });
+      if (maxX.x < modMaxX.x) {
+        maxX = modMaxX;
+      }
+      if (maxY.y < modMaxY.y) {
+        maxY = modMaxY;
+      }
+    }
+
     //Remove  all previous graphs
     d3.select('app-pump-curve-graph').selectAll('svg').remove();
 
@@ -300,8 +315,7 @@ export class PumpCurveGraphComponent implements OnInit {
       .style("font-size", "13px");
 
     this.makeBaselineCurve(data);
-    if(this.pumpCurveForm.baselineMeasurement != this.pumpCurveForm.modifiedMeasurement){
-      let modifiedData = this.getModifiedData(this.pumpCurveForm.baselineMeasurement, this.pumpCurveForm.modifiedMeasurement);
+    if (this.pumpCurveForm.baselineMeasurement != this.pumpCurveForm.modifiedMeasurement) {
       this.makeModifiedCurve(modifiedData);
     }
     this.svg.append("text")
@@ -331,10 +345,14 @@ export class PumpCurveGraphComponent implements OnInit {
       .attr("class", "d3-tip")
       .style("opacity", 0)
       .style('pointer-events', 'none');
+    let detailBoxWidth = 160;
+    let detailBoxHeight = 90;
 
-    const detailBoxWidth = 160;
-    const detailBoxHeight = 90;
+    if (this.pumpCurveForm.baselineMeasurement != this.pumpCurveForm.modifiedMeasurement) {
+      detailBoxWidth = 160;
+      detailBoxHeight = 160;
 
+    }
     this.pointer = this.svg.append("polygon")
       .attr("id", "pointer")
       //.attr("points", "0,13, 14,13, 7,-2");
@@ -350,13 +368,28 @@ export class PumpCurveGraphComponent implements OnInit {
     this.focus.append("circle")
       .attr("r", 8)
       .style("fill", "none")
-      .style("stroke", "#000000")
+      .style("stroke", "#2ECC71")
       .style("stroke-width", "3px");
 
     this.focus.append("text")
       .attr("x", 9)
       .attr("dy", ".35em");
+    if (this.pumpCurveForm.baselineMeasurement != this.pumpCurveForm.modifiedMeasurement) {
+      this.focusMod = this.svg.append("g")
+        .attr("class", "focus")
+        .style("display", "none")
+        .style('pointer-events', 'none');
 
+      this.focusMod.append("circle")
+        .attr("r", 8)
+        .style("fill", "none")
+        .style("stroke", "#3498DB")
+        .style("stroke-width", "3px");
+
+      this.focusMod.append("text")
+        .attr("x", 9)
+        .attr("dy", ".35em");
+    }
     var format = d3.format(",.2f");
     var bisectDate = d3.bisector(function (d) { return d.x; }).left;
 
@@ -372,6 +405,12 @@ export class PumpCurveGraphComponent implements OnInit {
           .style("display", null)
           .style("opacity", 1)
           .style('pointer-events', 'none');
+        if (this.pumpCurveForm.baselineMeasurement != this.pumpCurveForm.modifiedMeasurement) {
+          this.focusMod
+            .style("display", null)
+            .style("opacity", 1)
+            .style('pointer-events', 'none');
+        }
         this.pointer
           .style("display", null)
           .style('pointer-events', 'none');
@@ -386,6 +425,12 @@ export class PumpCurveGraphComponent implements OnInit {
           .style("display", null)
           .style("opacity", 1)
           .style('pointer-events', 'none');
+        if (this.pumpCurveForm.baselineMeasurement != this.pumpCurveForm.modifiedMeasurement) {
+          this.focusMod
+            .style("display", null)
+            .style("opacity", 1)
+            .style('pointer-events', 'none');
+        }
         this.pointer
           .style("display", null)
           .style('pointer-events', 'none');
@@ -402,44 +447,129 @@ export class PumpCurveGraphComponent implements OnInit {
         let d1 = data[i];
         let d = x0 - d0.x > d1.x - x0 ? d1 : d0;
         let xVal = this.x(d.x);
+
+
         if (isNaN(xVal) == false) {
-          this.focus.attr("transform", "translate(" + this.x(d.x) + "," + this.y(d.y) + ")");
+          if (this.pumpCurveForm.baselineMeasurement != this.pumpCurveForm.modifiedMeasurement) {
+            i = bisectDate(modifiedData, x0, 1);
+            let modD0 = modifiedData[i - 1];
+            let modD1 = modifiedData[i];
+            if (modD0 && modD1) {
+              let modD = x0 - modD0.x > modD1.x - x0 ? modD1 : modD0;
+              xVal = this.x(modD.x);
+              if (isNaN(xVal) == false) {
+                let minBaseline = _.minBy(data, (val) => { return val.y });
+                let minMod = _.minBy(modifiedData, (val) => { return val.y });
+                this.focus.attr("transform", "translate(" + this.x(d.x) + "," + this.y(d.y) + ")");
+                this.focusMod.attr("transform", "translate(" + this.x(d.x) + "," + this.y(modD.y) + ")");
 
-          this.pointer.transition()
-            .style("opacity", 1);
+                if (minMod.y < minBaseline.y) {
+                  this.pointer
+                    .attr("transform", 'translate(' + (this.x(d.x) - (detailBoxWidth / 2)) + ',' + (this.y(modD.y) + 27) + ')')
+                    .style("fill", "#ffffff")
+                    .style("filter", "url(#drop-shadow)");
 
-          this.detailBox.transition()
-            .style("opacity", 1);
+                  this.detailBox
+                    .style("padding-right", "10px")
+                    .style("padding-left", "10px")
+                    .html(
+                    "<p><strong><div>Baseline Flow: </div></strong><div>" + format(d.x) + " " + " gal/min</div>" +
 
-          var detailBoxWidth = 160;
-          var detailBoxHeight = 90;
+                    "<strong><div>Basleline Head: </div></strong><div>" + format(d.y) + " ft</div></p>" +
+                    "<p><strong><div>Modified Flow: </div></strong><div>" + format(d.x) + " " + " gal/min</div>" +
 
-          this.pointer
-            .attr("transform", 'translate(' + (this.x(d.x) - (detailBoxWidth / 2)) + ',' + (this.y(d.y) + 27) + ')')
-            .style("fill", "#ffffff")
-            .style("filter", "url(#drop-shadow)");
+                    "<strong><div>Modified Head: </div></strong><div>" + format(modD.y) + " ft</div></p>")
 
-          this.detailBox
-            .style("padding-right", "10px")
-            .style("padding-left", "10px")
-            .html(
-            "<p><strong><div>Flow: </div></strong><div>" + format(d.x) + " " + " gal/min</div>" +
+                    // "<div style='float:left;'>Fluid Power: </div><div style='float: right;'>" + format(d.fluidPower) + " </div></strong></p>")
 
-            "<strong><div>Head: </div></strong><div>" + format(d.y) + " ft</div></p>")
+                    .style("left", (this.margin.left + this.x(d.x) - (detailBoxWidth / 2 - 17)) + "px")
+                    .style("top", (this.margin.top + this.y(modD.y) + 83) + "px")
+                    .style("position", "absolute")
+                    .style("width", detailBoxWidth + "px")
+                    .style("height", detailBoxHeight + "px")
+                    .style("padding-left", "10px")
+                    .style("padding-right", "10px")
+                    .style("font", "12px sans-serif")
+                    .style("background", "#ffffff")
+                    .style("border", "0px")
+                    .style("pointer-events", "none");
+                }
+              } else {
+                this.pointer
+                  .attr("transform", 'translate(' + (this.x(d.x) - (detailBoxWidth / 2)) + ',' + (this.y(d.y) + 27) + ')')
+                  .style("fill", "#ffffff")
+                  .style("filter", "url(#drop-shadow)");
 
-            // "<div style='float:left;'>Fluid Power: </div><div style='float: right;'>" + format(d.fluidPower) + " </div></strong></p>")
+                this.detailBox
+                  .style("padding-right", "10px")
+                  .style("padding-left", "10px")
+                  .html(
+                  "<p><strong><div>Baseline Flow: </div></strong><div>" + format(d.x) + " " + " gal/min</div>" +
 
-            .style("left", (this.margin.left + this.x(d.x) - (detailBoxWidth / 2 - 17)) + "px")
-            .style("top", (this.margin.top + this.y(d.y) + 83) + "px")
-            .style("position", "absolute")
-            .style("width", detailBoxWidth + "px")
-            .style("height", detailBoxHeight + "px")
-            .style("padding-left", "10px")
-            .style("padding-right", "10px")
-            .style("font", "12px sans-serif")
-            .style("background", "#ffffff")
-            .style("border", "0px")
-            .style("pointer-events", "none");
+                  "<strong><div>Basleline Head: </div></strong><div>" + format(d.y) + " ft</div></p>" +
+                  "<p><strong><div>Modified Flow: </div></strong><div>" + format(d.x) + " " + " gal/min</div>" +
+
+                  "<strong><div>Modified Head: </div></strong><div>" + format(modD.y) + " ft</div></p>")
+
+                  // "<div style='float:left;'>Fluid Power: </div><div style='float: right;'>" + format(d.fluidPower) + " </div></strong></p>")
+
+                  .style("left", (this.margin.left + this.x(d.x) - (detailBoxWidth / 2 - 17)) + "px")
+                  .style("top", (this.margin.top + this.y(d.y) + 83) + "px")
+                  .style("position", "absolute")
+                  .style("width", detailBoxWidth + "px")
+                  .style("height", detailBoxHeight + "px")
+                  .style("padding-left", "10px")
+                  .style("padding-right", "10px")
+                  .style("font", "12px sans-serif")
+                  .style("background", "#ffffff")
+                  .style("border", "0px")
+                  .style("pointer-events", "none");
+              }
+
+              this.pointer.transition()
+                .style("opacity", 1);
+
+              this.detailBox.transition()
+                .style("opacity", 1);
+            }
+          }
+          else {
+            this.focus.attr("transform", "translate(" + this.x(d.x) + "," + this.y(d.y) + ")");
+
+            this.pointer.transition()
+              .style("opacity", 1);
+
+            this.detailBox.transition()
+              .style("opacity", 1);
+
+            this.pointer
+              .attr("transform", 'translate(' + (this.x(d.x) - (detailBoxWidth / 2)) + ',' + (this.y(d.y) + 27) + ')')
+              .style("fill", "#ffffff")
+              .style("filter", "url(#drop-shadow)");
+
+
+            this.detailBox
+              .style("padding-right", "10px")
+              .style("padding-left", "10px")
+              .html(
+              "<p><strong><div>Flow: </div></strong><div>" + format(d.x) + " " + " gal/min</div>" +
+
+              "<strong><div>Head: </div></strong><div>" + format(d.y) + " ft</div></p>")
+
+              // "<div style='float:left;'>Fluid Power: </div><div style='float: right;'>" + format(d.fluidPower) + " </div></strong></p>")
+
+              .style("left", (this.margin.left + this.x(d.x) - (detailBoxWidth / 2 - 17)) + "px")
+              .style("top", (this.margin.top + this.y(d.y) + 83) + "px")
+              .style("position", "absolute")
+              .style("width", detailBoxWidth + "px")
+              .style("height", detailBoxHeight + "px")
+              .style("padding-left", "10px")
+              .style("padding-right", "10px")
+              .style("font", "12px sans-serif")
+              .style("background", "#ffffff")
+              .style("border", "0px")
+              .style("pointer-events", "none");
+          }
         }
       })
       .on("mouseout", () => {
@@ -460,6 +590,13 @@ export class PumpCurveGraphComponent implements OnInit {
           .delay(100)
           .duration(600)
           .style("opacity", 0);
+        if (this.pumpCurveForm.baselineMeasurement != this.pumpCurveForm.modifiedMeasurement) {
+          this.focusMod
+            .transition()
+            .delay(100)
+            .duration(600)
+            .style("opacity", 0);
+        }
       });
   }
 
@@ -492,7 +629,6 @@ export class PumpCurveGraphComponent implements OnInit {
     line.data([data]).attr("d", guideLine);
   }
   makeModifiedCurve(data) {
-    console.log(data);
     var guideLine = d3.line()
       .x((d) => { return this.x(d.x); })
       .y((d) => { return this.y(d.y); })

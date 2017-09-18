@@ -43,7 +43,7 @@
 
   <div class="row tab-content" *ngIf="mainTab == 'sankey'">
     <div class="col-12">
-      <app-sankey [losses]="_phast.losses" [location]="'app-sankey-diagram'"></app-sankey>
+      <app-sankey [losses]="_phast.losses" [location]="'app-sankey-diagram'" [settings]="settings"></app-sankey>
     </div>
   </div>
 

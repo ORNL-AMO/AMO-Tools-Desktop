@@ -6,7 +6,8 @@
       <div class="input-group">
         <input name="{{'avgSpecificHeat_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="avgSpecificHeat"
           id="avgSpecificHeat" onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('avgSpecificHeat')">
-        <span class="input-group-addon units">Btu/(lb-&#8457;)</span>
+        <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">Btu/(lb-&#8457;)</span>
+        <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kJ/(kg-&#8451;)</span>
       </div>
     </div>
 
@@ -15,7 +16,8 @@
       <div class="input-group">
         <input name="{{'density_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="density" id="density"
           onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('density')">
-        <span class="input-group-addon units">lb/SCF</span>
+        <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">lb/SCF</span>
+        <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kg/Nm<sup>3</sup></span>
       </div>
     </div>
 
@@ -24,7 +26,8 @@
       <div class="input-group">
         <input name="{{'liquidFlow_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="liquidFlow" id="liquidFlow"
           onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('liquidFlow')">
-        <span class="input-group-addon units">gal/min</span>
+        <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">gal/min</span>
+        <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">L/min</span>
       </div>
     </div>
 
@@ -33,7 +36,8 @@
       <div class="input-group">
         <input name="{{'inletTemp_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="inletTemp" id="inletTemp"
           onfocus="this.select();" (input)="checkTemperature()" (focus)="focusField('inletTemp')">
-        <span class="input-group-addon units">&#8457;</span>
+        <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">&#8457;</span>
+        <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
       </div>
       <span class="alert-warning pull-right small" *ngIf="temperatureError !== null">{{temperatureError}}</span>
     </div>
@@ -43,7 +47,8 @@
       <div class="input-group">
         <input name="{{'outletTemp_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="outletTemp" id="outletTemp"
           onfocus="this.select();" (input)="checkTemperature()" (focus)="focusField('outletTemp')">
-        <span class="input-group-addon units">&#8457;</span>
+        <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">&#8457;</span>
+        <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
       </div>
       <span class="alert-warning pull-right small" *ngIf="temperatureError !== null">{{temperatureError}}</span>
     </div>

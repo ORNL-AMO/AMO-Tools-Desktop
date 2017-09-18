@@ -1,9 +1,9 @@
-import { Component, OnInit, EventEmitter, Output } from '@angular/core';
+import { Component, OnInit, EventEmitter, Output, Input } from '@angular/core';
 import { AtmosphereSpecificHeat } from '../../shared/models/materials';
 import { SuiteDbService } from '../suite-db.service';
 import { IndexedDbService } from '../../indexedDb/indexed-db.service';
 import * as _ from 'lodash';
-
+import { Settings } from '../../shared/models/settings';
 @Component({
   selector: 'app-atmosphere-specific-heat-material',
   templateUrl: './atmosphere-specific-heat-material.component.html',
@@ -13,7 +13,8 @@ export class AtmosphereSpecificHeatMaterialComponent implements OnInit {
 
   @Output('closeModal')
   closeModal = new EventEmitter<AtmosphereSpecificHeat>();
-
+  @Input()
+  settings: Settings;
 
   newMaterial: AtmosphereSpecificHeat = {
     substance: 'New Material',
@@ -29,6 +30,11 @@ export class AtmosphereSpecificHeatMaterialComponent implements OnInit {
     this.allMaterials = this.suiteDbService.selectAtmosphereSpecificHeat();
     this.checkMaterialName();
     // this.selectedMaterial = this.allMaterials[0];
+    if (!this.settings) {
+      this.indexedDbService.getSettings(1).then(results => {
+        this.settings = results;
+      })
+    }
   }
 
   addMaterial() {

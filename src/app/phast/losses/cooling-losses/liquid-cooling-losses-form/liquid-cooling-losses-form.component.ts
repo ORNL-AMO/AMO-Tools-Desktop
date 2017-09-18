@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, EventEmitter, Output, ViewChild, ElementRef, SimpleChanges } from '@angular/core';
 import { WindowRefService } from '../../../../indexedDb/window-ref.service';
 import { CoolingLossesCompareService } from '../cooling-losses-compare.service';
+import { Settings } from '../../../../shared/models/settings';
 
 @Component({
   selector: 'app-liquid-cooling-losses-form',
@@ -20,6 +21,9 @@ export class LiquidCoolingLossesFormComponent implements OnInit {
   saveEmit = new EventEmitter<boolean>();
   @Input()
   lossIndex: number;
+  @Input()
+  settings: Settings;
+
   @ViewChild('lossForm') lossForm: ElementRef;
   form: any;
   elements: any;
