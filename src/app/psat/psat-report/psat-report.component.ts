@@ -32,6 +32,8 @@ export class PsatReportComponent implements OnInit {
   assessmentDirectories: Directory[];
   isFirstChange: boolean = true;
   numMods: number = 0;
+  currentTab: string = 'results';
+
   constructor(private psatService: PsatService, private indexedDbService: IndexedDbService, private windowRefService: WindowRefService) { }
 
   ngOnInit() {
@@ -51,6 +53,10 @@ export class PsatReportComponent implements OnInit {
     if (this.psat.modifications) {
       this.numMods = this.psat.modifications.length;
     }
+  }
+
+  setTab(str: string) {
+    this.currentTab = str;
   }
 
   getAssessmentSettingsThenResults() {
