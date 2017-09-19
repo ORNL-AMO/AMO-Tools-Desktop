@@ -28,7 +28,7 @@ export class EnergyInputService {
   initForm() {
     return this.formBuilder.group({
       naturalGasHeatInput: ['', Validators.required],
-      flowRateInput: ['', Validators.required],
+      flowRateInput: [''],
      // naturalGasFlow: ['', Validators.required],
      // measuredOxygenFlow: ['', Validators.required],
       coalCarbonInjection: ['', Validators.required],
@@ -59,7 +59,7 @@ export class EnergyInputService {
   getFormFromLoss(loss: EnergyInputEAF) {
     return this.formBuilder.group({
       naturalGasHeatInput: [loss.naturalGasHeatInput, Validators.required],
-      flowRateInput: [loss.flowRateInput, Validators.required],
+      flowRateInput: [loss.flowRateInput],
      // naturalGasFlow: [loss.naturalGasFlow, Validators.required],
      // measuredOxygenFlow: [loss.measuredOxygenFlow, Validators.required],
       coalCarbonInjection: [loss.coalCarbonInjection, Validators.required],

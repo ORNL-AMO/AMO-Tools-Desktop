@@ -45,7 +45,9 @@ export class EnergyInputFormComponent implements OnInit {
   }
 
   ngOnInit() {
-
+    if (this.energyInputForm.value.flowRateInput) {
+      this.flowInput = true;
+    }
   }
 
   ngAfterViewInit() {
@@ -53,6 +55,14 @@ export class EnergyInputFormComponent implements OnInit {
       this.disableForm();
     }
     this.initDifferenceMonitor();
+  }
+
+  setHeatInput() {
+    let heatVal = this.energyInputForm.value.flowRateInput * (1020 / (Math.pow(10, 6)));
+    this.energyInputForm.patchValue({
+      'naturalGasHeatInput': heatVal
+    })
+    this.checkForm();
   }
 
   disableForm() {
@@ -93,9 +103,9 @@ export class EnergyInputFormComponent implements OnInit {
     }, 3000)
   }
 
-showHideInputField () {
-  this.flowInput = !this.flowInput;
-}
+  showHideInputField() {
+    this.flowInput = !this.flowInput;
+  }
 
   initDifferenceMonitor() {
     if (this.energyInputCompareService.baselineEnergyInput && this.energyInputCompareService.modifiedEnergyInput && this.energyInputCompareService.differentArray.length != 0) {
