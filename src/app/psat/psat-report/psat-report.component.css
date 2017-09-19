@@ -1,36 +1,14 @@
-@media print {
-    .input-data{
-        page-break-before: always;
+.assessment-report {
+    background: #fff;
+    -webkit-box-shadow: 0px 1px 10px 0px rgba(0,0,0,0.1);
+    -moz-box-shadow: 0px 1px 10px 0px rgba(0,0,0,0.1);
+    box-shadow: 0px 1px 10px 0px rgba(0,0,0,0.1);
+    border: #ababab solid 1px;
+}
+
+    .report-header, .report-data {
+        padding: 10px 20px;
     }
-
-    .hide-print{
-        display: none !important;
+    .report-header {
+        border-bottom: #ddd solid 1px;
     }
-
-    .assessment-report-padding{
-        padding-bottom: 0px;
-    }
-
-    /*.mod-page-break{
-        page-break-after: always !important;
-    }*/
-}
-
-.dir-list-item{
-    color: #808B96;
-}
-
-
-.assessment-name{
-    padding-top: 15px;
-}
-
-.report-in-psat{
-    border: none !important;
-    box-shadow: none !important;
-}
-
-.report-in-rollup{
-   padding: 10px;
-   margin-bottom: 0px !important;
-}
