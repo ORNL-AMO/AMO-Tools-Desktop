@@ -144,7 +144,8 @@ export class O2EnrichmentGraphComponent implements OnInit {
     this.filter = defs.append("filter")
       .attr("id", "drop-shadow")
       .attr("height", "130%")
-      .style("z-index", "+1");
+      .style("position", "relative")
+      .style("z-index", "1");
 
     // SourceAlpha refers to opacity of graphic that this filter will be applied to
     // convolve that with a Gaussian with standard deviation 3 and store result
@@ -153,7 +154,8 @@ export class O2EnrichmentGraphComponent implements OnInit {
       .attr("in", "SourceAlpha")
       .attr("stdDeviation", 3)
       .attr("result", "blur")
-      .style("z-index", "+1");
+      .style("position", "relative")
+      .style("z-index", "1");
 
     // translate output of Gaussian blur to the right and downwards with 2px
     // store result in offsetBlur
@@ -162,7 +164,8 @@ export class O2EnrichmentGraphComponent implements OnInit {
       .attr("dx", 0)
       .attr("dy", 0)
       .attr("result", "offsetBlur")
-      .style("z-index", "+1");
+      .style("position", "relative")
+      .style("z-index", "1");
 
     // overlay original SourceGraphic over translated blurred opacity by using
     // feMerge filter. Order of specifying inputs is important!
@@ -179,7 +182,8 @@ export class O2EnrichmentGraphComponent implements OnInit {
       .attr("height", this.height)
       .style("fill", "#F8F9F9")
       .style("filter", "url(#drop-shadow)")
-      .style("z-index", "+1");
+      .style("position", "relative")
+      .style("z-index", "1");
 
     this.x = d3.scaleLinear()
       .range([0, this.width])
@@ -381,16 +385,7 @@ export class O2EnrichmentGraphComponent implements OnInit {
       })
       .on("mousemove", () => {
 
-        let x0 = x.invert(d3.mouse(d3.event.currentTarget)[0]);
-        let i = bisectDate(data, x0, 1);
-        if (i >= data.length) {
-          i = data.length - 1
-        }
-        let d0 = data[i - 1];
-        let d1 = data[i];
-        let d = x0 - d0.x > d1.x - x0 ? d1 : d0;
-
-        this.xPosition = d.x;
+        this.xPosition = x.invert(d3.mouse(d3.event.currentTarget)[0]);
 
         this.updateDetailBoxs();
         this.moveGuideLine();
@@ -669,6 +664,8 @@ export class O2EnrichmentGraphComponent implements OnInit {
 
   moveGuideLine(){
 
+    console.log(this.xPosition);
+    console.log(this.x(this.xPosition));
     this.guideLine
       .attr("transform", 'translate(' + this.x(this.xPosition) + ', 0)');
 

@@ -40,6 +40,13 @@
     </div>
   </div>
 
+
+  <div class="row tab-content" *ngIf="mainTab == 'sankey'">
+    <div class="col-12">
+      <app-sankey [losses]="_phast.losses" [location]="'app-sankey-diagram'" [settings]="settings"></app-sankey>
+    </div>
+  </div>
+
   <div class="footer">
     <div class="pull-left">
       <button class="btn btn-secondary" *ngIf="mainTab == 'system-setup'" (click)="close()">Close</button>
@@ -47,6 +54,24 @@
     </div>
     <div class="pull-right">
       <button class="btn btn-secondary" (click)="save()">Save</button>
+
+      <!--<div class="row tab-content" *ngIf="currentTab == 'aux-equipment' && settings">
+    <div class="col-12">
+      <app-aux-equipment></app-aux-equipment>
+    </div>
+  </div>
+
+  <div class="row tab-content" *ngIf="currentTab == 'metered-energy'">
+    <div class="col-12">
+      <app-metered-energy-use></app-metered-energy-use>
+    </div>
+  </div>-->
+      <!--
+    <div class="row tab-content" *ngIf="mainTab == 'sankey'">
+      <div class="col-12">
+        <app-sankey-diagram [losses]="assessment.phast.losses"></app-sankey-diagram>
+      </div>
+    </div>-->
 
       <!--<button class="btn btn-secondary" *ngIf="currentTab >= 3" (click)="exportData()">Export to CSV...</button>-->
       <button class="btn btn-secondary" *ngIf="subTab == 'system-basics' && mainTab == 'system-setup'" (click)="changeSubTab('operating-hours')">Continue</button>
@@ -57,7 +82,5 @@
     </div>
   </div>
 </div>
-
-
 
 <ng2-toasty class="disclaimer"></ng2-toasty>
