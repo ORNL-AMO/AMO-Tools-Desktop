@@ -9,6 +9,12 @@
     .report-header, .report-data .results {
         padding: 10px 20px;
     }
+    .report-header {
+        
+    }
+    .report-data {
+        border-top: #ddd solid 1px;
+    }
 
 .assessment-report.report-in-psat .assessment-name, .assessment-report.report-in-rollup .assessment-name {
     background-image: url('../../../assets/images/ico-psat-diagram.png');
