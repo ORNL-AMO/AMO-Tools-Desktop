@@ -6,9 +6,13 @@
     border: #ababab solid 1px;
 }
 
-    .report-header, .report-data {
+    .report-header, .report-data .results {
         padding: 10px 20px;
     }
     .report-header {
-        border-bottom: #ddd solid 1px;
+        
+    }
+    .report-data {
+        border-top: #ddd solid 1px;
+        padding-top: 2px;
     }

@@ -447,7 +447,10 @@ Data Tables
 /*
 Assessments: Grid & List View Shared Styles
 =========================================== */
-
+.assessment-name {
+  
+  
+}
 .assessment-name span {
   display: block;
   color: #999;

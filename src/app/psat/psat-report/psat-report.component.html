@@ -32,15 +32,13 @@
 
     <div class="report-data" *ngIf="psat.setupDone">
 
-        <ul>
-            <li class="current">
-                <span>Results</span>
-            </li>
-            <li>
-                <span>Input Data</span>
+        <ul class="tabs primary">
+            <li class="active">
+                <a>Results</a>
+            </li><li>
+                <a>Input Data</a>
             </li>
         </ul>
-
         <!--<div class="charts" [ngClass]="{'mod-page-break': numMods > 3}">
             <app-chart-summary [psat]="psat"></app-chart-summary>
         </div>-->
@@ -50,7 +48,7 @@
         <div class="input-data results">
             <app-input-summary [psat]="psat" [settings]="settings"></app-input-summary>
         </div>
-        
+
     </div>
     <!-- End .report-data -->
 
