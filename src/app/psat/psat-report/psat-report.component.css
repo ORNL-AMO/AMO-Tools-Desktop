@@ -7,6 +7,13 @@
     margin-bottom: 4em;
 }
 
+    .assessment-report .tabs.primary li:first-of-type a {
+        border-left: none;
+    }
+    .assessment-report .tabs.primary a {
+        padding: 10px 44px;
+    }
+
     .report-header, .report-data .results {
         padding: 10px 20px;
     }

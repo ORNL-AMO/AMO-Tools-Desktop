@@ -22,7 +22,7 @@
     height: 100%;
 }
     .report-container .sidebar ul {
-        margin: 18px 0 0;
+        margin: 0;
         padding: 0;
     }
         .report-container .sidebar ul li {
@@ -31,7 +31,7 @@
         }
             .report-container .sidebar ul li a {
                 display: inline-block;
-                padding: 3px;
+                padding: 10px;
                 width: 220px;
                 font-size: 15px;
                 border-top: #efefef solid 1px;
