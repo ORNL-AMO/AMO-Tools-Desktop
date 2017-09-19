@@ -118,6 +118,10 @@ export class UnitConverterComponent implements OnInit {
     {
       measure: 'specificEnergy',
       display: 'Specific Energy'
+    },
+    {
+      measure: 'density',
+      display: 'Density'
     }
   ]
 

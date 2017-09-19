@@ -126,8 +126,7 @@ export class PhastService {
     let results = 0;
     if (settings.unitsOfMeasure == 'Metric') {
       inputs.specificHeat = this.convertUnitsService.value(inputs.specificHeat).from('kJkgC').to('btulblF');
-      //TODO: lb/SCF -> kg/Nm3
-      //inputs.density
+      inputs.density = this.convertUnitsService.value(inputs.density).from('kgNm3').to('lbscf');
       inputs.flowRate = this.convertUnitsService.value(inputs.flowRate).from('L').to('gal');
       inputs.initialTemperature = this.convertUnitsService.value(inputs.initialTemperature).from('C').to('F');
       inputs.outletTemperature = this.convertUnitsService.value(inputs.outletTemperature).from('C').to('F');
@@ -277,14 +276,14 @@ export class PhastService {
     if (settings.unitsOfMeasure == 'Metric') {
       inputs.combustionAirTemperature = this.convertUnitsService.value(inputs.combustionAirTemperature).from('C').to('F');
       inputs.flueGasTemperature = this.convertUnitsService.value(inputs.flueGasTemperature).from('C').to('F');
-      results = phastAddon.flueGasByVolume(inputs);
+      results = phastAddon.flueGasLossesByVolume(inputs);
       if (isNaN(results) == false) {
         results = this.convertUnitsService.value(results).from('Btu').to('kJ');
       } else {
         results = 0;
       }
     } else {
-      results = phastAddon.flueGasByVolume(inputs);
+      results = phastAddon.flueGasLossesByVolume(inputs);
     }
 
     return results;
@@ -297,14 +296,14 @@ export class PhastService {
       inputs.flueGasTemperature = this.convertUnitsService.value(inputs.flueGasTemperature).from('C').to('F');
       inputs.ashDischargeTemperature = this.convertUnitsService.value(inputs.ashDischargeTemperature).from('C').to('F');
       inputs.fuelTemperature = this.convertUnitsService.value(inputs.fuelTemperature).from('C').to('F');
-      results = phastAddon.flueGasByMass(inputs);
+      results = phastAddon.flueGasLossesByMass(inputs);
       if (isNaN(results) == false) {
         results = this.convertUnitsService.value(results).from('Btu').to('kJ');
       } else {
         results = 0;
       }
     } else {
-      results = phastAddon.flueGasByMass(inputs);
+      results = phastAddon.flueGasLossesByMass(inputs);
     }
     return results;
   }
@@ -315,8 +314,7 @@ export class PhastService {
       inputs.inletTemperature = this.convertUnitsService.value(inputs.inletTemperature).from('C').to('F');
       inputs.outletTemperature = this.convertUnitsService.value(inputs.inletTemperature).from('C').to('F');
       inputs.flowRate = this.convertUnitsService.value(inputs.flowRate).from('m3/h').to('ft3/h')
-      //TODO: kJ/(Nm3 - C) -> Btu(lb - F)
-      //inputs.specificHeat
+      inputs.specificHeat = this.convertUnitsService.value(inputs.specificHeat).from('kJm3C').to('btuScfF');
       results = phastAddon.atmosphere(inputs);
       if (isNaN(results) == false) {
         results = this.convertUnitsService.value(results).from('Btu').to('kJ');
@@ -360,13 +358,9 @@ export class PhastService {
       totalChemicalEnergyInput: 0
     };
     if (settings.unitsOfMeasure == 'Metric') {
-      //TODO: mm btu -> GJ
-      //inputs.naturalGasHeatInput
-      //inputs.otherFuels
+      inputs.naturalGasHeatInput = this.convertUnitsService.value(inputs.naturalGasHeatInput).from('GJ').to('MMBTU');
+      inputs.otherFuels = this.convertUnitsService.value(inputs.otherFuels).from('GJ').to('MMBTU');
       inputs.coalCarbonInjection = this.convertUnitsService.value(inputs.coalCarbonInjection).from('kg').to('lb');
-      //TODO: btu/lb -> kJ/kg
-      //inputs.coalHeatingValue
-      //inputs.electrodeHeatingValue
       inputs.coalHeatingValue = this.convertUnitsService.value(inputs.coalHeatingValue).from('kJkg').to('btuLb');
       inputs.electrodeHeatingValue = this.convertUnitsService.value(inputs.electrodeHeatingValue).from('kJkg').to('btuLb');
 
@@ -394,8 +388,7 @@ export class PhastService {
     if (settings.unitsOfMeasure == 'Metric') {
       inputs.offGasTemp = this.convertUnitsService.value(inputs.offGasTemp).from('C').to('F');
       inputs.vfr = this.convertUnitsService.value(inputs.vfr).from('m3').to('ft3');
-      //TODO: lb/scf -> kg/Nm3
-      //inputs.dustLoading
+      inputs.dustLoading = this.convertUnitsService.value(inputs.dustLoading).from('kgNm3').to('lbscf');
       results = phastAddon.exhaustGasEAF(inputs);
       if (isNaN(results) == false) {
         results = this.convertUnitsService.value(results).from('Btu').to('kJ');

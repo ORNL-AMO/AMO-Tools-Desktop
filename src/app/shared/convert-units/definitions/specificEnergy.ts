@@ -2,8 +2,8 @@ export const specificEnergy = {
     metric: {
         kJkg: {
             name: {
-                singular: 'Kilo Jule per Kilo Gram'
-                , plural: 'Kilo Jules per Kilo Grams',
+                singular: 'Kilojoule per Kilogram'
+                , plural: 'Kilojoules per Kilograms',
                 display: '(kJ/kg)'
             }
             , to_anchor: 1

@@ -36,6 +36,7 @@ import { force } from './definitions/force';
 import { specificHeat } from './definitions/specificHeat'
 import { volumetricHeat } from './definitions/volumetricHeat';
 import { specificEnergy } from './definitions/specificEnergy';
+import { density } from './definitions/density';
 import * as _ from 'lodash';
 import * as keys from 'lodash.keys';
 import * as each from 'lodash.foreach';
@@ -68,7 +69,8 @@ export class ConvertUnitsService {
     //kineViscosity: kineViscosity,
     specificHeat: specificHeat,
     volumetricHeat: volumetricHeat,
-    specificEnergy: specificEnergy
+    specificEnergy: specificEnergy,
+    density: density
   }
   origin: any;
   destination: any;
