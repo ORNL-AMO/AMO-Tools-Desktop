@@ -115,6 +115,10 @@ export class UnitConverterComponent implements OnInit {
       measure: 'specificHeat',
       display: 'Specific Heat'
     },
+    {
+      measure: 'specificEnergy',
+      display: 'Specific Energy'
+    }
   ]
 
   constructor(private convertUnitsService: ConvertUnitsService) { }
