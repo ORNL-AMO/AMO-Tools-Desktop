@@ -447,15 +447,6 @@ Data Tables
 /*
 Assessments: Grid & List View Shared Styles
 =========================================== */
-.assessment-name {
-  
-  
-}
-.assessment-name span {
-  display: block;
-  color: #999;
-  font-size: 13px;
-}
 .list-row input, .list-card input {
   margin-right: 8px;
 }

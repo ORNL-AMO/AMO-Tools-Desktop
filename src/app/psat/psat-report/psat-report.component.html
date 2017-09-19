@@ -15,6 +15,7 @@
         <!--<button class="btn btn-link pull-right hide-print" aria-label="Close" (click)="closeAssessment()">Close Report</button>-->
 
         <h2 *ngIf="!assessment" class="assessment-name">Assessment Report</h2>
+        
         <h2 *ngIf="assessment" class="assessment-name">
             <span 
                 class="dir-list-item" 
@@ -23,7 +24,7 @@
             </span>
             {{assessment.name}}
             <!--<button *ngIf="inPsat" class="btn-sm btn-secondary pull-right hide-print" (click)="print()"><span class="fa fa-print"></span></button>-->
-            <span class="pull-right small">Last Modified {{assessment.modifiedDate | date:'medium'}}</span>
+            <span>Last Modified {{assessment.modifiedDate | date:'medium'}}</span>
         </h2>
 
     </div>

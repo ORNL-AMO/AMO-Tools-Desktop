@@ -9,10 +9,20 @@
     .report-header, .report-data .results {
         padding: 10px 20px;
     }
-    .report-header {
-        
-    }
-    .report-data {
-        border-top: #ddd solid 1px;
-        padding-top: 2px;
-    }
+
+.assessment-report.report-in-psat .assessment-name, .assessment-report.report-in-rollup .assessment-name {
+    background-image: url('../../../assets/images/ico-psat-diagram.png');
+    background-repeat: no-repeat;
+    background-position: left center;
+    background-size: 33px;
+    padding: 9px 0 0px 48px;
+    width: 100%;
+}
+
+.assessment-report .assessment-name span {
+    float: right;
+    display: block;
+    color: #999;
+    font-size: 13px;
+    margin-top: 12px;
+}
