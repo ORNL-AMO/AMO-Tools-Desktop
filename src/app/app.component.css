@@ -1688,19 +1688,17 @@ Toasty Overrides ================================= */
 }
 
 .psat-name{
-    font-size: large !important;
-    vertical-align: middle !important;
-    text-align: center !important;
+    text-align: center;
 }
 
 @media print{
   .psat-name{
-    font-size: 13px !important;
+    font-size: 13px;
   }
 }
 
 .disabled-link {
-    color: gray !important;
+    color: gray;
     pointer-events: none;
 }
 
