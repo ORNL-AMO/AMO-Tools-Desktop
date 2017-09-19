@@ -1,5 +1,12 @@
+.output-summary .table {
+    font-size: 14px;
+}
 .output-summary .table thead th {
     border: none;
+    padding: 0;
+}
+.output-summary .table td {
+    padding: 2px 0px;
 }
 
 
