@@ -24,7 +24,7 @@ export class EnergyInputFormComponent implements OnInit {
   lossIndex: number;
   @Input()
   settings: Settings;
-
+  flowInput: boolean;
   form: any;
   elements: any;
 
@@ -93,6 +93,9 @@ export class EnergyInputFormComponent implements OnInit {
     }, 3000)
   }
 
+showHideInputField () {
+  this.flowInput = !this.flowInput;
+}
 
   initDifferenceMonitor() {
     if (this.energyInputCompareService.baselineEnergyInput && this.energyInputCompareService.modifiedEnergyInput && this.energyInputCompareService.differentArray.length != 0) {
@@ -103,6 +106,12 @@ export class EnergyInputFormComponent implements OnInit {
         this.energyInputCompareService.differentArray[this.lossIndex].different.naturalGasHeatInput.subscribe((val) => {
           let naturalGasHeatInputElements = doc.getElementsByName('naturalGasHeatInput_' + this.lossIndex);
           naturalGasHeatInputElements.forEach(element => {
+            element.classList.toggle('indicate-different', val);
+          });
+        })
+        this.energyInputCompareService.differentArray[this.lossIndex].different.flowRateInput.subscribe((val) => {
+          let flowRateInputElements = doc.getElementsByName('flowRateInput_' + this.lossIndex);
+          flowRateInputElements.forEach(element => {
             element.classList.toggle('indicate-different', val);
           });
         })
@@ -166,3 +175,4 @@ export class EnergyInputFormComponent implements OnInit {
     }
   }
 }
+

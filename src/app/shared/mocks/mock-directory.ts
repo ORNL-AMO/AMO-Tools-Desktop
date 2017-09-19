@@ -281,6 +281,7 @@ export const MockDirectory: Directory = {
           energyInputEAF: [
             {
               naturalGasHeatInput: 50,
+              flowRateInput: 0,
               //naturalGasFlow: 0,
              // measuredOxygenFlow: 6500,
               coalCarbonInjection: 3300,
