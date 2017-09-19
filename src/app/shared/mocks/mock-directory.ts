@@ -282,7 +282,7 @@ export const MockDirectory: Directory = {
             {
               naturalGasHeatInput: 50,
               flowRateInput: 0,
-              //naturalGasFlow: 0,
+              // naturalGasFlow: 0,
              // measuredOxygenFlow: 6500,
               coalCarbonInjection: 3300,
               coalHeatingValue: 9000,

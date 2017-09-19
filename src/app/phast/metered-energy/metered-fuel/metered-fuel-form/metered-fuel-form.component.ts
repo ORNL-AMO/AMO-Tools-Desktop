@@ -11,6 +11,8 @@ import { Settings } from '../../../../shared/models/settings';
 })
 export class MeteredFuelFormComponent implements OnInit {
   @Input()
+  energyForm: any;
+  @Input()
   inputs: MeteredEnergyFuel;
   @Output('emitCalculate')
   emitCalculate = new EventEmitter<boolean>();
@@ -21,7 +23,7 @@ export class MeteredFuelFormComponent implements OnInit {
   @Output('changeField')
   changeField = new EventEmitter<string>();
   fuelTypes: FlueGasMaterial[];
-
+  fuelFlowInput: boolean;
   counter: any;
   constructor(private suiteDbService: SuiteDbService) { }
 
@@ -32,13 +34,20 @@ export class MeteredFuelFormComponent implements OnInit {
   focusField(str: string) {
     this.changeField.emit(str);
   }
-
+  showHideInputField() {
+    this.fuelFlowInput = !this.fuelFlowInput;
+  }
   setProperties() {
     let fuel = this.suiteDbService.selectGasFlueGasMaterialById(this.inputs.fuelType);
     this.inputs.heatingValue = fuel.heatingValue;
     this.calculate();
   }
-
+  // setFuelEnergyInput() {
+  //   let fuelEnergyVal = this.inputs.flowRateInput * this.energyForm.heatingValue ;
+  //     this.energyForm.patchValue({
+  //       'flowRate': fuelEnergyVal
+  //     });
+  // }
   calculate() {
     this.startSavePolling();
     this.emitCalculate.emit(true);
