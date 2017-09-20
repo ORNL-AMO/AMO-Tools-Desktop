@@ -43,6 +43,7 @@ html, body {
   font-weight: 100;
   font-size: 18px;
   height: 100%;
+  background: #ececec;
 }
 h1, h2, h3, h4, h5 {
   font-weight: 300;
@@ -494,6 +495,19 @@ Assessments: List View
     width: 50%;
     margin-bottom: 0;
   }
+    
+    .list-row.psat .assessment-name a,
+    .list-row.phast .assessment-name a {
+      background-repeat: no-repeat;
+      background-size: 15px;
+      padding-left: 22px;
+    }
+    .list-row.psat .assessment-name a {
+      background-image: url('../assets/images/ico-psat-diagram.png');
+    }
+    .list-row.phast .assessment-name a {
+      background-image: url('../assets/images/ico-comingSoon-diagram.png');
+    }
   .drag-handle, .list-row input, .assessment-name {
     display: inline-block;
     vertical-align: top;
@@ -696,9 +710,9 @@ Sidebar
   line-height: 1;
 }
 .sidebar-group li span, .sidebar-group li > a, .sidebar-group li > a:not([href]):not([tabindex])  {
-  font-size: 16px;
+  font-size: 17px;
   display: block;
-  color: #0077e3;
+  color: #2d2d2d;
   padding: 5px 20px;
 }
 .sidebar-group li span.disabled {
@@ -730,17 +744,18 @@ Sidebar
 .sidebar-group li.sub-directory > span {
   padding: 0;
 }
-
-.sidebar-group .assessments span > div {
-  display: inline-block;
-  padding: 0px 6px;
-  border-radius: 50%;
-}
-  .sidebar-group .assessments .psat > div {
-    background: #2980b9;
+  .sidebar-group .assessments .psat,
+  .sidebar-group .assessments .phast {
+    background-repeat: no-repeat;
+    background-size: 16px;
+    background-position: left 4px;
+    margin-left: 18px;
   }
-  .sidebar-group .assessments .phast > div {
-    background: #BF3D00;
+  .sidebar-group .assessments .psat  {
+    background-image: url('../assets/images/ico-psat-diagram-small.png');
+  }
+  .sidebar-group .assessments .phast {
+    background-image: url('../assets/images/ico-comingSoon-diagram.png');
   }
 
 
@@ -1686,6 +1701,11 @@ Toasty Overrides ================================= */
 }
 
 @media print{
+
+  .hide-print {
+    display: none;
+  }
+
   .psat-name{
     font-size: 13px;
   }

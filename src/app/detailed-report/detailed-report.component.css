@@ -53,6 +53,24 @@
     margin-left: 220px;
 }
 
+.report-cover {
+    display: none;
+}
+
+
+@media print {
+
+    .report-cover {
+        display: block;
+        width: 400px;
+        text-align: center;
+    }
+    .report-header {
+        border: none;
+        background: none;
+        page-break-after: auto;
+    }
+}
 
 
 
