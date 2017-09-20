@@ -1,4 +1,18 @@
 
+.output-summary .table {
+    font-size: 14px;
+}
+.output-summary .table th {
+    border: none;
+    padding: 0;
+}
+.output-summary .table td {
+    padding: 2px 0px;
+}
+
+
+
+
 @media print {
     tr{
         border-bottom: 2px solid black;

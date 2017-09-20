@@ -1,19 +1,17 @@
-<div class="pumps text-color">
-  <h3><span>Pumps</span></h3>
-  <h3 *ngIf="numPsats == 1">{{numPsats}} pump with a</h3>
-  <h3 *ngIf="numPsats != 1">{{numPsats}} pumps with a</h3>
-  <h4>{{pumpSavingsPotential| currency:'USD':true:'4.2-2'}}</h4>
-  <h5>Maximum annual cost savings</h5>
-  <h4>{{energySavingsPotential| number:'2.2-2'}} MWh</h4>
-  <h5>Maximum annual energy savings</h5>
-  <div class="row total-sum-row">
-    <div class="col-6">
-      <h4 class="total-sum">{{totalCost | currency:'USD':true:'4.2-2'}}</h4>
-      <h5>Annual Cost</h5>
-    </div>
-    <div class="col-6">
-      <h4 class="total-sum">{{totalEnergy| number:'2.2-2'}} MWh</h4>
-      <h5>Annual Energy</h5>
-    </div>
-  </div>
+
+<div class="summary-header pumps">
+    <h3>Pumps</h3>
+    <span><span>{{numPsats}}</span></span>
 </div>
+<dl class="summary-list">
+    <dt>Maximum Annual<br/>Cost Savings</dt>
+    <dd>{{pumpSavingsPotential| currency:'USD':true:'4.2-2'}}</dd>
+    <dt>Annual Cost</dt>
+    <dd>{{totalCost | currency:'USD':true:'4.2-2'}}</dd>
+</dl>
+<dl class="summary-list">
+    <dt>Maximum Annual<br/>Energy Savings</dt>
+    <dd>{{energySavingsPotential| number:'2.2-2'}} MWh</dd>
+    <dt>Annual Energy</dt>
+    <dd>{{totalEnergy| number:'2.2-2'}} MWh</dd>
+</dl>

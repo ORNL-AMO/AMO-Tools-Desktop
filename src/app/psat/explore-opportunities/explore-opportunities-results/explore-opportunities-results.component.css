@@ -1,10 +1,15 @@
-/*td{
-    text-align: center;
-    vertical-align: middle;
+.output-summary .table {
+    font-size: 14px;
 }
-th{
-    text-align: center;
-}*/
+.output-summary .table th {
+    border: none;
+    padding: 0px 10px;
+    text-align: left;
+    font-size: 12px;
+}
+.output-summary .table td {
+    padding: 0px 8px;
+}
 
 
 .positive-savings{
@@ -13,10 +18,4 @@ th{
 
 .negative-savings{
 	color: red;
-}
-
-
-.psat-name{
-    font-size: large !important;
-    vertical-align: middle;
 }

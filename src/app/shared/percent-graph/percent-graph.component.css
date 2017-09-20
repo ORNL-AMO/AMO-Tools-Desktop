@@ -2,10 +2,22 @@
     display: block;
 }
 
-.value{
-    position: absolute;
+h1 {
     animation-name: value-entrance;
     animation-duration: 1s;
+    float: left;
+    font-size: 18px;
+    font-weight: bold;
+    padding-top: 6px;
+    margin-bottom: 0;
+}
+
+canvas {
+	display: block;
+    float: left;
+    height: 20px !important;
+    width: 20px !important;
+    margin: 5px 5px 0 0;
 }
 
 @keyframes value-entrance{

@@ -43,44 +43,44 @@ export class PercentGraphComponent implements OnInit {
     this.initChart();
   }
 
-  ngAfterViewInit() {
-    this.doc = this.windowRefService.getDoc();
-    this.window = this.windowRefService.nativeWindow;
-    this.window.onresize = () => { this.setValueMargin() };
-    //let object render before resizing initially
-    setTimeout(() => {
-      this.setValueMargin();
-    }, 500)
-  }
+  // ngAfterViewInit() {
+  //   this.doc = this.windowRefService.getDoc();
+  //   this.window = this.windowRefService.nativeWindow;
+  //   this.window.onresize = () => { this.setValueMargin() };
+  //   //let object render before resizing initially
+  //   setTimeout(() => {
+  //     this.setValueMargin();
+  //   }, 500)
+  // }
 
-  ngOnDestroy() {
-    this.window.onresize = null;
-  }
+  // ngOnDestroy() {
+  //   this.window.onresize = null;
+  // }
 
-  setValueMargin() {
-    let div = this.doc.getElementsByClassName('chart-container')
-    let valueClass = this.doc.getElementsByClassName('value');
-    if (div[0].clientWidth < 350 && div[0].clientWidth > 200) {
-      for (let i = 0; i < valueClass.length; i++) {
-        valueClass[i].style.fontSize = '24px';
-      }
-    } else if (div[0].clientWidth < 200) {
-      for (let i = 0; i < valueClass.length; i++) {
-        valueClass[i].style.fontSize = '16px';
-      }
-    } else {
-      for (let i = 0; i < valueClass.length; i++) {
-        valueClass[i].style.fontSize = '32px';
-      }
-    }
-    let percentValue = this.doc.getElementById('percent');
-    let marginTop = (div[0].clientWidth / 2) - (percentValue.clientHeight / 2);
-    let marginLeft = (div[0].clientWidth / 2) - (percentValue.clientWidth / 2);
-    for (let i = 0; i < valueClass.length; i++) {
-      valueClass[i].style.marginTop = marginTop + 'px';
-      valueClass[i].style.marginLeft = marginLeft + 'px';
-    }
-  }
+  // setValueMargin() {
+  //   let div = this.doc.getElementsByClassName('chart-container')
+  //   let valueClass = this.doc.getElementsByClassName('value');
+  //   if (div[0].clientWidth < 350 && div[0].clientWidth > 200) {
+  //     for (let i = 0; i < valueClass.length; i++) {
+  //       valueClass[i].style.fontSize = '24px';
+  //     }
+  //   } else if (div[0].clientWidth < 200) {
+  //     for (let i = 0; i < valueClass.length; i++) {
+  //       valueClass[i].style.fontSize = '16px';
+  //     }
+  //   } else {
+  //     for (let i = 0; i < valueClass.length; i++) {
+  //       valueClass[i].style.fontSize = '32px';
+  //     }
+  //   }
+  //   let percentValue = this.doc.getElementById('percent');
+  //   let marginTop = (div[0].clientWidth / 2) - (percentValue.clientHeight / 2);
+  //   let marginLeft = (div[0].clientWidth / 2) - (percentValue.clientWidth / 2);
+  //   for (let i = 0; i < valueClass.length; i++) {
+  //     valueClass[i].style.marginTop = marginTop + 'px';
+  //     valueClass[i].style.marginLeft = marginLeft + 'px';
+  //   }
+  // }
 
   ngOnChanges() {
     this.initChart();

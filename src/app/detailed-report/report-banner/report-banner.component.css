@@ -1,6 +1,21 @@
-
-@media print {
-    .hide-print {
-        display: none !important;
-    }
+.report-banner {
+	border-bottom: #ddd solid 1px;
+	padding: 8px;
 }
+
+	.report-banner:after {
+        display: table;
+        content: "";
+        clear: both;
+    }
+
+    .report-banner h1 {
+    	font-size: 22px;
+    	margin-top: 2px;
+    	margin-bottom: 0;
+    }
+    .report-banner .btn {
+		font-size: 12px;
+		line-height: 14px;
+		padding: 6px 10px;
+    }
