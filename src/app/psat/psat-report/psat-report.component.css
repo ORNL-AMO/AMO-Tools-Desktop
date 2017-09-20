@@ -55,3 +55,15 @@
     margin-top: 5px;
     margin-left: 0;
 }
+
+
+@media print {
+
+    .assessment-report {
+        page-break-after: auto;
+    }
+
+}
+
+
+

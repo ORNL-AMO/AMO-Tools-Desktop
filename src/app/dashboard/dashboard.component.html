@@ -1,16 +1,42 @@
 <div class="container-fluid">
     <div class="row dashboard-content" *ngIf="dashboardView != 'detailed-report'">
+
         <div class="col-2 sidebar-bg">
-            <app-sidebar *ngIf="allDirectories" [selectedCalculator]="selectedCalculator" [directory]="getAllDirectories()" [newDirEventToggle]="newDirEventToggle"
-                [workingDirectory]="getWorkingDirectory()" [dashboardView]="dashboardView" (directoryChange)="changeWorkingDirectory($event)"
-                (selectCalculator)="viewCalculator($event)" (emitGoHome)="goHome()" (emitShowAbout)="showAbout()" (emitShowTutorials)="showTutorials()"
-                (emitGoToSettings)="showSettings()" (emitGoToContact)="showContact()"></app-sidebar>
+            <app-sidebar 
+                *ngIf="allDirectories" 
+                [selectedCalculator]="selectedCalculator" 
+                [directory]="getAllDirectories()" 
+                [newDirEventToggle]="newDirEventToggle"
+                [workingDirectory]="getWorkingDirectory()" 
+                [dashboardView]="dashboardView" 
+                (directoryChange)="changeWorkingDirectory($event)"
+                (selectCalculator)="viewCalculator($event)" 
+                (emitGoHome)="goHome()" 
+                (emitShowAbout)="showAbout()" 
+                (emitShowTutorials)="showTutorials()"
+                (emitGoToSettings)="showSettings()" 
+                (emitGoToContact)="showContact()">
+            </app-sidebar>
         </div>
-        <div class="col-10 dashboard-page" *ngIf="allDirectories && dashboardView == 'assessment-dashboard'">
-            <app-assessment-dashboard [directory]="workingDirectory" (directoryChange)="changeWorkingDirectory($event)" (deleteDataSignal)="showDeleteModal()"
-                (deleteCheckedItems)="showDeleteItemsModal()" (resetDataEmit)="showDeleteModal()" (emitNewDir)="newDir()" (genReport)="generateReport()"
-                (exportEmit)="exportSelected()" (importEmit)="showImportModal()"></app-assessment-dashboard>
+
+        <div 
+            class="col-10 dashboard-page" 
+            *ngIf="allDirectories && dashboardView == 'assessment-dashboard'">
+            
+            <app-assessment-dashboard 
+                [directory]="workingDirectory" 
+                (directoryChange)="changeWorkingDirectory($event)" 
+                (deleteDataSignal)="showDeleteModal()"
+                (deleteCheckedItems)="showDeleteItemsModal()" 
+                (resetDataEmit)="showDeleteModal()" 
+                (emitNewDir)="newDir()" 
+                (genReport)="generateReport()"
+                (exportEmit)="exportSelected()" 
+                (importEmit)="showImportModal()">
+            </app-assessment-dashboard>
+
         </div>
+        
         <div class="col-10 dashboard-page" *ngIf="allDirectories && dashboardView == 'calculator'">
             <app-calculator (selectCalculator)="viewCalculator($event)" [selectedCalculator]="selectedCalculator" [goCalcHome]="goCalcHome"></app-calculator>
         </div>
@@ -50,8 +76,6 @@
 <div class="report" *ngIf="dashboardView == 'detailed-report'">
     <app-detailed-report [selectedItems]="selectedItems" (emitCloseReport)="closeReport()"></app-detailed-report>
 </div>
-
-
 
 <div bsModal #deleteModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true"
     [config]="{backdrop: 'static'}">

@@ -1,6 +1,17 @@
 <div #reportTemplate *ngIf="assessmentsGathered">
 
 
+    <div class="report-cover">
+      <p class="report-notes">{{reportNotes}}</p>
+      <span class="report-logo">
+        <img src="assets/images/DOE-banner-color.png" class="doe-logo">
+      </span>
+      <span class="created-date">
+        <h4>{{createdDate}}</h4>
+      </span>
+    </div>
+
+
     <div class="report-header">
         <app-report-banner 
             (emitCloseReport)="closeReport()" 
@@ -19,7 +30,7 @@
 
 
     <div id="reportContainer" class="report-container">
-        <div class="sidebar">
+        <div class="sidebar hide-print">
             <ul *ngIf="focusedAssessment">
                 <li 
                     *ngFor="let assessment of reportAssessments" 
@@ -29,17 +40,6 @@
             </ul>
         </div><!-- End .sidebar -->
         <div class="content">
-
-            <!-- <div class="report-cover">
-            <p class="report-notes">{{reportNotes}}</p>
-            <span class="report-logo">
-            <img src="assets/images/DOE-banner-color.png" class="doe-logo">
-            </span>
-            <span class="created-date">
-            <h4>{{createdDate}}</h4>
-            </span>
-            </div> -->
-
             <div *ngFor="let assessment of reportAssessments" id="{{'assessment_'+assessment.id}}">
                 <app-psat-report 
                     [assessment]="assessment" 

@@ -1,10 +1,39 @@
 <div class="row justify-content-center dashboard-content">
 	<div class="col-10">
 		<!--<app-assessment-banner [workingDirectoryName]="directory.name"></app-assessment-banner>-->
-		<app-assessment-menu (viewChange)="changeView($event)" (directoryChange)="changeDirectory($event)" [directory]="directory"
-			[view]="view" (deleteItems)="signalDeleteItems()" (selectAll)="selectAllItems($event)" (newDir)="newDir()" (genReport)="emitGenReport()" (exportEmit)="emitExport()" (importEmit)="emitImport()"></app-assessment-menu>
-		<app-assessment-grid-view *ngIf="view == 'grid'" [isChecked]="isChecked" [directory]="directory" (directoryChange)="changeDirectory($event)"></app-assessment-grid-view>
-		<app-assessment-list-view *ngIf="view == 'list'" [isChecked]="isChecked" [directory]="directory" (directoryChange)="changeDirectory($event)"></app-assessment-list-view>
-		<app-assessment-settings *ngIf="view == 'settings'" [directory]="directory" (resetDataEmit)="resetData()" (emitUpdateDirectory)="newDir()"></app-assessment-settings>
+		<app-assessment-menu 
+			(viewChange)="changeView($event)" 
+			(directoryChange)="changeDirectory($event)" 
+			[directory]="directory"
+			[view]="view" 
+			(deleteItems)="signalDeleteItems()" 
+			(selectAll)="selectAllItems($event)" 
+			(newDir)="newDir()" 
+			(genReport)="emitGenReport()" 
+			(exportEmit)="emitExport()" 
+			(importEmit)="emitImport()">
+		</app-assessment-menu>
+		
+		<app-assessment-grid-view 
+			*ngIf="view == 'grid'" 
+			[isChecked]="isChecked" 
+			[directory]="directory" 
+			(directoryChange)="changeDirectory($event)">
+		</app-assessment-grid-view>
+		
+		<app-assessment-list-view 
+			*ngIf="view == 'list'" 
+			[isChecked]="isChecked" 
+			[directory]="directory" 
+			(directoryChange)="changeDirectory($event)">
+		</app-assessment-list-view>
+		
+		<app-assessment-settings 
+			*ngIf="view == 'settings'" 
+			[directory]="directory" 
+			(resetDataEmit)="resetData()" 
+			(emitUpdateDirectory)="newDir()">
+		</app-assessment-settings>
+		
 	</div>
 </div>
