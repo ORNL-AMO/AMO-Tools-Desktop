@@ -9,7 +9,7 @@ import { CalculatorComponent } from './calculator.component';
 import { FansComponent } from './fans/fans.component';
 
 import { SteamComponent } from './steam/steam.component';
-import { MotorsComponent } from './motors/motors.component';
+import { MotorsModule } from './motors/motors.module';
 
 import { PumpsModule } from './pumps/pumps.module';
 import { UtilitiesModule } from './utilities/utilities.module';
@@ -21,7 +21,6 @@ import { CompressedAirComponent } from './compressed-air/compressed-air.componen
     CalculatorComponent,
     FansComponent,
     SteamComponent,
-    MotorsComponent,
     CompressedAirComponent
   ],
   exports: [
@@ -35,7 +34,8 @@ import { CompressedAirComponent } from './compressed-air/compressed-air.componen
     CommonModule,
     PumpsModule,
     UtilitiesModule,
-    FurnacesModule
+    FurnacesModule,
+    MotorsModule
   ],
   providers: [
   ]
