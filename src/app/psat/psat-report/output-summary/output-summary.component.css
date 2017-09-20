@@ -58,16 +58,12 @@ td{
 	color: red;
 }
 
-.chart-row{
-    margin: 0;
-    padding: 15px;
-}
 
 .max-savings{
     border: solid 4px #27AE60;
 }
 
 .selected-modification{
-    box-shadow: 0px 0px 6px 0px #27AE60;
     z-index: 2;
+    background: #e5efe9;
 }

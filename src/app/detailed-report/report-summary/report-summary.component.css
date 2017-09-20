@@ -59,11 +59,11 @@
 .coming-soon .summary-header > span {
     float: right;
     border-radius: 50%;
-    background: #efefef;
+    background: #dadada;
 }
     .coming-soon .summary-header > span span {
         font-size: 16px;
-        color: #afafaf;
+        color: #dadada;
         font-weight: bold;
         padding: 2px 10px;
     }

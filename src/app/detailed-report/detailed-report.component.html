@@ -21,7 +21,11 @@
     <div id="reportContainer" class="report-container">
         <div class="sidebar">
             <ul *ngIf="focusedAssessment">
-                <li *ngFor="let assessment of reportAssessments" [ngClass]="{'active': focusedAssessment.id == assessment.id}"><a (click)="selectAssessment(assessment)">{{assessment.name}}</a></li>
+                <li 
+                    *ngFor="let assessment of reportAssessments" 
+                    [ngClass]="{'active': focusedAssessment.id == assessment.id}">
+                    <a (click)="selectAssessment(assessment)">{{assessment.name}}</a>
+                </li>
             </ul>
         </div><!-- End .sidebar -->
         <div class="content">

@@ -642,18 +642,13 @@ Sidebar
 
 
 .sidebar-bg {
+  height: 100vh;
   background-color: #fff;
-  /*border-width: 1px;
-  border-style: solid;*/
-  -webkit-border-image: -webkit-gradient(linear, 0 0, 0 100%, from(#949494), to(rgba(0, 0, 0, 0))) 1 100%;
-  -webkit-border-image: -webkit-linear-gradient(#949494, rgba(0, 0, 0, 0)) 1 100%;
-  -moz-border-image:    -moz-linear-gradient(#949494, rgba(0, 0, 0, 0)) 1 100%;
-  -o-border-image:      -o-linear-gradient(#949494, rgba(0, 0, 0, 0)) 1 100%;
-  border-image:         linear-gradient(to bottom, #949494, rgba(0, 0, 0, 0)) 1 100%;
-  padding: 0;
-  overflow-y: scroll;
-  	box-shadow: 0px 0px 69px -1px rgba(0,0,0,0.2);
-	z-index: 2;
+  border-width: 1px;
+  border-style: solid;
+  -o-border-image: linear-gradient(to bottom, #949494, rgba(0, 0, 0, 0)) 1 100%;
+  border-image: -webkit-linear-gradient(top, #949494, rgba(0, 0, 0, 0)) 1 100%;
+  border-image: linear-gradient(to bottom, #949494, rgba(0, 0, 0, 0)) 1 100%;
 
 }
 
