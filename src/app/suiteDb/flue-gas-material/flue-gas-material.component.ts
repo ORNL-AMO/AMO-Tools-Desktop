@@ -1,8 +1,11 @@
-import { Component, OnInit, EventEmitter, Output } from '@angular/core';
+import { Component, OnInit, EventEmitter, Input, Output } from '@angular/core';
 import { FlueGasMaterial } from '../../shared/models/materials';
 import { SuiteDbService } from '../suite-db.service';
 import { IndexedDbService } from '../../indexedDb/indexed-db.service';
 import * as _ from 'lodash';
+import { Settings } from '../../shared/models/settings';
+import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
+
 @Component({
   selector: 'app-flue-gas-material',
   templateUrl: './flue-gas-material.component.html',
@@ -11,7 +14,8 @@ import * as _ from 'lodash';
 export class FlueGasMaterialComponent implements OnInit {
   @Output('closeModal')
   closeModal = new EventEmitter<FlueGasMaterial>();
-
+  @Input()
+  settings: Settings;
   newMaterial: FlueGasMaterial = {
     substance: 'New Fuel',
     C2H6: 0,
@@ -32,7 +36,7 @@ export class FlueGasMaterialComponent implements OnInit {
   allMaterials: Array<FlueGasMaterial>;
   isValidMaterialName: boolean = true;
   nameError: string = null;
-  constructor(private suiteDbService: SuiteDbService, private indexedDbService: IndexedDbService) { }
+  constructor(private suiteDbService: SuiteDbService, private indexedDbService: IndexedDbService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
     this.allMaterials = this.suiteDbService.selectGasFlueGasMaterials();
@@ -41,6 +45,9 @@ export class FlueGasMaterialComponent implements OnInit {
   }
 
   addMaterial() {
+    if (this.settings.unitsOfMeasure == 'Metric') {
+      this.newMaterial.heatingValue = this.convertUnitsService.value(this.newMaterial.heatingValue).from('kJNm3').to('btuSCF');
+    }
     let suiteDbResult = this.suiteDbService.insertGasFlueGasMaterial(this.newMaterial);
     if (suiteDbResult == true) {
       this.indexedDbService.addFlueGasMaterial(this.newMaterial).then(idbResults => {

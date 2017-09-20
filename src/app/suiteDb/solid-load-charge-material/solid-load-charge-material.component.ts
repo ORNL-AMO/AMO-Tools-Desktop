@@ -4,6 +4,7 @@ import { SuiteDbService } from '../suite-db.service';
 import { IndexedDbService } from '../../indexedDb/indexed-db.service';
 import * as _ from 'lodash';
 import { Settings } from '../../shared/models/settings';
+import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
 
 @Component({
   selector: 'app-solid-load-charge-material',
@@ -28,7 +29,7 @@ export class SolidLoadChargeMaterialComponent implements OnInit {
   allMaterials: Array<SolidLoadChargeMaterial>;
   isValidMaterialName: boolean = true;
   nameError: string = null;
-  constructor(private suiteDbService: SuiteDbService, private indexedDbService: IndexedDbService) { }
+  constructor(private suiteDbService: SuiteDbService, private indexedDbService: IndexedDbService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
     this.allMaterials = this.suiteDbService.selectSolidLoadChargeMaterials();
@@ -42,6 +43,12 @@ export class SolidLoadChargeMaterialComponent implements OnInit {
   }
 
   addMaterial() {
+    if (this.settings.unitsOfMeasure == 'Metric') {
+      this.newMaterial.meltingPoint = this.convertUnitsService.value(this.newMaterial.meltingPoint).from('C').to('F');
+      this.newMaterial.specificHeatLiquid = this.convertUnitsService.value(this.newMaterial.specificHeatLiquid).from('kJkgC').to('btulbF');
+      this.newMaterial.specificHeatSolid = this.convertUnitsService.value(this.newMaterial.specificHeatSolid).from('kJkgC').to('btulbF');
+      this.newMaterial.latentHeat = this.convertUnitsService.value(this.newMaterial.latentHeat).from('kJkg').to('btuLb');
+    }
     let suiteDbResult = this.suiteDbService.insertSolidLoadChargeMaterial(this.newMaterial);
     if (suiteDbResult == true) {
       this.indexedDbService.addSolidLoadChargeMaterial(this.newMaterial).then(idbResults => {

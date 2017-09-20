@@ -37,6 +37,8 @@ import { specificHeat } from './definitions/specificHeat'
 import { volumetricHeat } from './definitions/volumetricHeat';
 import { specificEnergy } from './definitions/specificEnergy';
 import { density } from './definitions/density';
+import { volumetricEnergy } from './definitions/volumetricEnergy';
+
 import * as _ from 'lodash';
 import * as keys from 'lodash.keys';
 import * as each from 'lodash.foreach';
@@ -70,7 +72,8 @@ export class ConvertUnitsService {
     specificHeat: specificHeat,
     volumetricHeat: volumetricHeat,
     specificEnergy: specificEnergy,
-    density: density
+    density: density,
+    volumetricEnergy: volumetricEnergy
   }
   origin: any;
   destination: any;

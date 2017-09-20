@@ -65,7 +65,7 @@ export class PhastService {
     if (settings.unitsOfMeasure == 'Metric') {
       inputs.initialTemperature = this.convertUnitsService.value(inputs.initialTemperature).from('C').to('F');
       inputs.finalTemperature = this.convertUnitsService.value(inputs.finalTemperature).from('C').to('F');
-      inputs.specificHeat = this.convertUnitsService.value(inputs.specificHeat).from('kJkgC').to('btulblF');
+      inputs.specificHeat = this.convertUnitsService.value(inputs.specificHeat).from('kJkgC').to('btulbF');
       inputs.feedRate = this.convertUnitsService.value(inputs.feedRate).from('kg').to('lb');
       results = phastAddon.fixtureLosses(inputs);
       if (isNaN(results) == false) {
@@ -82,7 +82,7 @@ export class PhastService {
   gasCoolingLosses(inputs: GasCoolingLoss, settings: Settings): number {
     let results = 0;
     if (settings.unitsOfMeasure == 'Metric') {
-      inputs.specificHeat = this.convertUnitsService.value(inputs.specificHeat).from('kJkgC').to('btulblF');
+      inputs.specificHeat = this.convertUnitsService.value(inputs.specificHeat).from('kJkgC').to('btulbF');
       inputs.flowRate = this.convertUnitsService.value(inputs.flowRate).from('m3').to('ft3');
       inputs.finalTemperature = this.convertUnitsService.value(inputs.finalTemperature).from('C').to('F');
       inputs.initialTemperature = this.convertUnitsService.value(inputs.initialTemperature).from('C').to('F');
@@ -107,8 +107,8 @@ export class PhastService {
       inputs.feedRate = this.convertUnitsService.value(inputs.feedRate).from('kg').to('lb')
       inputs.reactionHeat = this.convertUnitsService.value(inputs.reactionHeat).from('kJkg').to('btuLb');
       inputs.additionalHeat = this.convertUnitsService.value(inputs.additionalHeat).from('kJkg').to('btuLb');
-      inputs.specificHeatVapor = this.convertUnitsService.value(inputs.specificHeatVapor).from('kJkgC').to('btulblF');
-      inputs.specificHeatGas = this.convertUnitsService.value(inputs.specificHeatGas).from('kJkgC').to('btulblF');
+      inputs.specificHeatVapor = this.convertUnitsService.value(inputs.specificHeatVapor).from('kJkgC').to('btulbF');
+      inputs.specificHeatGas = this.convertUnitsService.value(inputs.specificHeatGas).from('kJkgC').to('btulbF');
       results = phastAddon.gasLoadChargeMaterial(inputs);
       if (isNaN(results) == false) {
         results = this.convertUnitsService.value(results).from('Btu').to('kJ');
@@ -125,7 +125,7 @@ export class PhastService {
   liquidCoolingLosses(inputs: LiquidCoolingLoss, settings: Settings): number {
     let results = 0;
     if (settings.unitsOfMeasure == 'Metric') {
-      inputs.specificHeat = this.convertUnitsService.value(inputs.specificHeat).from('kJkgC').to('btulblF');
+      inputs.specificHeat = this.convertUnitsService.value(inputs.specificHeat).from('kJkgC').to('btulbF');
       inputs.density = this.convertUnitsService.value(inputs.density).from('kgNm3').to('lbscf');
       inputs.flowRate = this.convertUnitsService.value(inputs.flowRate).from('L').to('gal');
       inputs.initialTemperature = this.convertUnitsService.value(inputs.initialTemperature).from('C').to('F');
@@ -153,8 +153,8 @@ export class PhastService {
       inputs.chargeFeedRate = this.convertUnitsService.value(inputs.chargeFeedRate).from('kg').to('lb')
       inputs.reactionHeat = this.convertUnitsService.value(inputs.reactionHeat).from('kJkg').to('btuLb');
       inputs.additionalHeat = this.convertUnitsService.value(inputs.additionalHeat).from('kJkg').to('btuLb');
-      inputs.specificHeatLiquid = this.convertUnitsService.value(inputs.specificHeatLiquid).from('kJkgC').to('btulblF');
-      inputs.specificHeatVapor = this.convertUnitsService.value(inputs.specificHeatVapor).from('kJkgC').to('btulblF');
+      inputs.specificHeatLiquid = this.convertUnitsService.value(inputs.specificHeatLiquid).from('kJkgC').to('btulbF');
+      inputs.specificHeatVapor = this.convertUnitsService.value(inputs.specificHeatVapor).from('kJkgC').to('btulbF');
       results = phastAddon.liquidLoadChargeMaterial(inputs);
       if (isNaN(results) == false) {
         results = this.convertUnitsService.value(results).from('Btu').to('kJ');
@@ -215,8 +215,8 @@ export class PhastService {
       inputs.chargeFeedRate = this.convertUnitsService.value(inputs.chargeFeedRate).from('kg').to('lb');
       inputs.reactionHeat = this.convertUnitsService.value(inputs.reactionHeat).from('kJkg').to('btuLb');
       inputs.additionalHeat = this.convertUnitsService.value(inputs.additionalHeat).from('kJkg').to('btuLb');
-      inputs.specificHeatLiquid = this.convertUnitsService.value(inputs.specificHeatLiquid).from('kJkgC').to('btulblF');
-      inputs.specificHeatSolid = this.convertUnitsService.value(inputs.specificHeatSolid).from('kJkgC').to('btulblF');
+      inputs.specificHeatLiquid = this.convertUnitsService.value(inputs.specificHeatLiquid).from('kJkgC').to('btulbF');
+      inputs.specificHeatSolid = this.convertUnitsService.value(inputs.specificHeatSolid).from('kJkgC').to('btulbF');
       results = phastAddon.solidLoadChargeMaterial(inputs);
       if (isNaN(results) == false) {
         results = this.convertUnitsService.value(results).from('Btu').to('kJ');
@@ -333,7 +333,7 @@ export class PhastService {
       inputs.weight = this.convertUnitsService.value(inputs.weight).from('kg').to('lb');
       inputs.inletTemperature = this.convertUnitsService.value(inputs.inletTemperature).from('C').to('F');
       inputs.outletTemperature = this.convertUnitsService.value(inputs.outletTemperature).from('C').to('F');
-      inputs.specificHeat = this.convertUnitsService.value(inputs.specificHeat).from('kJkgC').to('btulblF');
+      inputs.specificHeat = this.convertUnitsService.value(inputs.specificHeat).from('kJkgC').to('btulbF');
       results = phastAddon.slagOtherMaterialLosses(inputs);
       if (isNaN(results) == false) {
         results = this.convertUnitsService.value(results).from('Btu').to('kJ');

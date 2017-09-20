@@ -122,6 +122,10 @@ export class UnitConverterComponent implements OnInit {
     {
       measure: 'density',
       display: 'Density'
+    },
+    {
+      measure: 'volumetricEnergy',
+      display: 'Volumetric Energy'
     }
   ]
 

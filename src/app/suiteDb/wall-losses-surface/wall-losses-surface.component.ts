@@ -4,6 +4,7 @@ import { SuiteDbService } from '../suite-db.service';
 import { IndexedDbService } from '../../indexedDb/indexed-db.service';
 import * as _ from 'lodash';
 import { Settings } from '../../shared/models/settings';
+import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
 
 @Component({
   selector: 'app-wall-losses-surface',
@@ -24,7 +25,7 @@ export class WallLossesSurfaceComponent implements OnInit {
   allMaterials: Array<WallLossesSurface>;
   isValidMaterialName: boolean = true;
   nameError: string = null;
-  constructor(private suiteDbService: SuiteDbService, private indexedDbService: IndexedDbService) { }
+  constructor(private suiteDbService: SuiteDbService, private indexedDbService: IndexedDbService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
     this.allMaterials = this.suiteDbService.selectWallLossesSurface();
@@ -38,6 +39,9 @@ export class WallLossesSurfaceComponent implements OnInit {
   }
 
   addMaterial() {
+    if(this.settings.unitsOfMeasure == 'Metric'){
+      this.newMaterial.conditionFactor = this.convertUnitsService.value(this.newMaterial.conditionFactor).from('kJkgC').to('btulbF');
+    }
     let suiteDbResult = this.suiteDbService.insertWallLossesSurface(this.newMaterial);
     if (suiteDbResult == true) {
       this.indexedDbService.addWallLossesSurface(this.newMaterial).then(idbResults => {

@@ -4,6 +4,7 @@ import { SuiteDbService } from '../suite-db.service';
 import { IndexedDbService } from '../../indexedDb/indexed-db.service';
 import * as _ from 'lodash';
 import { Settings } from '../../shared/models/settings';
+import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
 @Component({
   selector: 'app-atmosphere-specific-heat-material',
   templateUrl: './atmosphere-specific-heat-material.component.html',
@@ -24,7 +25,7 @@ export class AtmosphereSpecificHeatMaterialComponent implements OnInit {
   allMaterials: Array<AtmosphereSpecificHeat>;
   isValidMaterialName: boolean = true;
   nameError: string = null;
-  constructor(private suiteDbService: SuiteDbService, private indexedDbService: IndexedDbService) { }
+  constructor(private suiteDbService: SuiteDbService, private indexedDbService: IndexedDbService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
     this.allMaterials = this.suiteDbService.selectAtmosphereSpecificHeat();
@@ -38,6 +39,9 @@ export class AtmosphereSpecificHeatMaterialComponent implements OnInit {
   }
 
   addMaterial() {
+    if (this.settings.unitsOfMeasure == 'Metric') {
+      this.newMaterial.specificHeat = this.convertUnitsService.value(this.newMaterial.specificHeat).from('kJkgC').to('btulbF');
+    }
     let suiteDbResult = this.suiteDbService.insertAtmosphereSpecificHeat(this.newMaterial);
     if (suiteDbResult == true) {
       this.indexedDbService.addAtmosphereSpecificHeat(this.newMaterial).then(idbResults => {
