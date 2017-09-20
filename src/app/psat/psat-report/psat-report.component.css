@@ -41,6 +41,10 @@
 .assessment-report .report-header .btn-group {
     float: right;
 }
+    .assessment-report .report-header .btn {
+        padding: 8px 14px;
+        margin-top: 20px;
+    }
 .assessment-report .assessment-name {
     float: left;
 }
