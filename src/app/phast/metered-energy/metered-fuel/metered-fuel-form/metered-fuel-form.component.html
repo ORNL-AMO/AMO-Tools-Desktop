@@ -19,9 +19,9 @@
       </div>
     </div>
     <div class="form-group">
-      <label for="flowRate">Fuel Energy</label>
+      <label for="fuelEnergy">Fuel Energy</label>
       <div class="input-group">
-        <input name="flowRate" type="number" step="any" id="flowRate" class="form-control" (focus)="focusField('flowRate')" [(ngModel)]="inputs.flowRate"
+        <input name="fuelEnergy" type="number" step="any" id="fuelEnergy" class="form-control" (focus)="focusField('fuelEnergy')" [(ngModel)]="inputs.fuelEnergy"
           (input)="calculate()" onfocus="this.select();" />
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">Btu/hr</span>
         <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kJ/hr</span>

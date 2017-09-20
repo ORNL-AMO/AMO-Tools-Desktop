@@ -12,7 +12,7 @@ export interface MeteredEnergyFuel {
     fuelFlowRateInput?: number,
     electricityUsed: number,
     electricityCollectionTime: number,
-    flowRate: number
+    fuelEnergy: number
 }
 export interface MeteredEnergyResults {
     meteredEnergyUsed: number,

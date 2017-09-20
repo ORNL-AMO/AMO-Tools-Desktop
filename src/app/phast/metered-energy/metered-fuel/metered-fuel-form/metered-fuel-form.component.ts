@@ -43,7 +43,7 @@ export class MeteredFuelFormComponent implements OnInit {
   setFlowRate() {
     //added if so that HHV input also calls setFlowRate() before calculate()
     if (this.fuelFlowInput) {
-      this.inputs.flowRate = this.inputs.fuelFlowRateInput * this.inputs.heatingValue;
+      this.inputs.fuelEnergy = this.inputs.fuelFlowRateInput * this.inputs.heatingValue;
     }
     this.calculate();
   }

@@ -40,7 +40,7 @@ export class MeteredFuelComponent implements OnInit {
         collectionTime: 0,
         electricityUsed: 0,
         electricityCollectionTime: 0,
-        flowRate: 0
+        fuelEnergy: 0
       };
     }
     this.calculate();
