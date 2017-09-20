@@ -5,9 +5,12 @@
     <thead>
       <tr>
         <th [ngStyle]="{'width.%': 100 /(psat.modifications.length+2)}"></th>
-        <th [ngStyle]="{'width.%': 100 /(psat.modifications.length+2)}" class="psat-name">Baseline</th>
-        <th [ngStyle]="{'width.%': 100 /(psat.modifications.length+2)}" *ngFor="let modification of psat.modifications; let index = index;"
-          class="psat-name" [ngClass]="{'selected-modification': index == selectedModificationIndex}">{{modification.psat.name}}</th>
+        <th [ngStyle]="{'width.%': 100 /(psat.modifications.length+2)}">Baseline</th>
+        <th 
+          [ngStyle]="{'width.%': 100 /(psat.modifications.length+2)}" 
+          *ngFor="let modification of psat.modifications; let index = index;"
+          [ngClass]="{'selected-modification': index == selectedModificationIndex}">{{modification.psat.name}}
+        </th>
       </tr>
     </thead>
     <tbody>
