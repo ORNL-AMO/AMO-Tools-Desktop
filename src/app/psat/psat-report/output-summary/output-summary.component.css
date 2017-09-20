@@ -1,7 +1,7 @@
 .output-summary .table {
     font-size: 14px;
 }
-.output-summary .table thead th {
+.output-summary .table th {
     border: none;
     padding: 0;
 }

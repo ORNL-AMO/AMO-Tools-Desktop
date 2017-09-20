@@ -13,13 +13,14 @@
 .report-container {
     display: flex;
     z-index: 1;
-    margin-top: 160px;
+    margin-top: 158px;
+
 }
 .report-container .sidebar {
     background: #fff;
     border-right: #d0d0d0 solid 1px;
     position: fixed;
-    height: 100%;
+    height: 100%;   
 }
     .report-container .sidebar ul {
         margin: 0;
