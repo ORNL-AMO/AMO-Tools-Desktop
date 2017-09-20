@@ -55,6 +55,14 @@ export const energy = {
         display: '(kJ)'
       }
       , to_anchor: 1000
+    },
+    GJ: {
+      name: {
+        singular: 'Gigajoule'
+        , plural: 'Gigajoules',
+        display: '(GJ)'
+      }
+      , to_anchor: 1000000000
     }
 
     , cal: {
@@ -112,7 +120,7 @@ export const energy = {
   , _anchors: {
     metric: {
       unit: 'J'
-      , ratio: 1/1055.06
+      , ratio: 1 / 1055.06
     }
     , imperial: {
       unit: 'Btu'

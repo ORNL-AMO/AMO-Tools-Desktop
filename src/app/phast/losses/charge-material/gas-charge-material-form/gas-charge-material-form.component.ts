@@ -26,7 +26,7 @@ export class GasChargeMaterialFormComponent implements OnInit {
   lossIndex: number;
   @Input()
   settings: Settings;
-  
+
   @ViewChild('materialModal') public materialModal: ModalDirective;
   @ViewChild('lossForm') lossForm: ElementRef;
   form: any;
@@ -88,12 +88,6 @@ export class GasChargeMaterialFormComponent implements OnInit {
     }
   }
 
-  checkForm() {
-    if (this.chargeMaterialForm.status == "VALID") {
-      this.calculate.emit(true);
-    }
-  }
-
   focusField(str: string) {
     this.changeField.emit(str);
   }
@@ -109,7 +103,7 @@ export class GasChargeMaterialFormComponent implements OnInit {
   }
 
   startSavePolling() {
-    this.checkForm();
+    this.calculate.emit(true);
     if (this.counter) {
       clearTimeout(this.counter);
     }
@@ -224,6 +218,6 @@ export class GasChargeMaterialFormComponent implements OnInit {
     this.materialModal.hide();
     this.showModal = false;
     this.lossesService.modalOpen.next(this.showModal);
-    this.checkForm();
+    this.calculate.emit(true);
   }
 }

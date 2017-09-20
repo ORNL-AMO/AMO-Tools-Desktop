@@ -64,23 +64,22 @@ export const pressure = {
       }
       , to_anchor: 0.133322
     }
-    , ftH2O: {
-      name:{
+    , mH2o: {
+      name: {
+        singular: 'Meter of Water'
+        , plural: 'Meters of Water',
+        display: '(m H₂O)'
+      }
+      , to_anchor: 9.8064
+    },
+    ftH2o: {
+      name: {
         singular: 'Foot of Water'
-        , plural: 'Feet of Water' ,
+        , plural: 'Feet of Water',
         display: '(ft H&#x2082;O)'
       }
       , to_anchor: 2.98898
     }
-    , mH2o: {
-      name: {
-        singular: 'Meter of Water'
-        , plural: 'Meters of Water' ,
-        display: '(m H₂O)'
-      }
-      , to_anchor: 9.8064
-    }
-
   }
   , imperial: {
     psi: {
@@ -98,6 +97,14 @@ export const pressure = {
         display: '(ksi)'
       }
       , to_anchor: 1
+    },
+    inH2o: {
+      name: {
+        singular: 'Inch of Water'
+        , plural: 'Inches of Water',
+        display: '(in H&#x2082;O)'
+      }
+      , to_anchor: 1 / 27707.6
     }
 
   },

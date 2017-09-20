@@ -30,10 +30,14 @@
     </div>
 
     <div class="form-group">
-      <label *ngIf="openingLossesForm.value.openingType != 'Round'" class="small" for="lengthOfOpening">Length of Openings (Inch)</label>
-      <label *ngIf="openingLossesForm.value.openingType == 'Round'" class="small" for="lengthOfOpening">Diameter of Openings (Inch)</label>
-      <input name="{{'lengthOfOpening_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="lengthOfOpening"
-        id="lengthOfOpening" onfocus="this.select();" (input)="getArea()" (focus)="focusField('lengthOfOpening')">
+      <label *ngIf="openingLossesForm.value.openingType != 'Round'" class="small" for="lengthOfOpening">Length of Openings</label>
+      <label *ngIf="openingLossesForm.value.openingType == 'Round'" class="small" for="lengthOfOpening">Diameter of Openings</label>
+      <div class="input-group">
+        <input name="{{'lengthOfOpening_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="lengthOfOpening"
+          id="lengthOfOpening" onfocus="this.select();" (input)="getArea()" (focus)="focusField('lengthOfOpening')">
+        <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">in</span>
+        <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">mm</span>
+      </div>
     </div>
 
     <div class="form-group" *ngIf="openingLossesForm.value.openingType != 'Round'">
@@ -49,7 +53,7 @@
     <div class="form-group">
       <label class="small">Total Opening Area</label>
       <div class="text-center small">
-        {{totalArea | number:'2.2-2'}} 
+        {{totalArea | number:'2.2-2'}}
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'">ft<sup>2</sup></span>
         <span *ngIf="settings.unitsOfMeasure == 'Metric'">mm<sup>2</sup></span>
       </div>

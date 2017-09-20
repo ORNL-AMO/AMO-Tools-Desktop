@@ -39,8 +39,15 @@ export class DesignedEnergyService {
     //Design Results
     let designedEnergyUsed = 0;
     //
+    let constant;
+    if (settings.unitsOfMeasure == 'Metric') {
+      constant = 1;
+    } else {
+      constant = Math.pow(10, 6);
+    }
     inputs.forEach(input => {
-      designedEnergyUsed += (input.totalBurnerCapacity * Math.pow(10, 6)) * (input.percentCapacityUsed / 100) * (input.percentOperatingHours / 100);
+      let totalBurnerCap
+      designedEnergyUsed += (input.totalBurnerCapacity * constant) * (input.percentCapacityUsed / 100) * (input.percentOperatingHours / 100);
     })
     let sumFeedRate = this.phastService.sumChargeMaterialFeedRate(phast.losses.chargeMaterials);
     let designedEnergyIntensity = (designedEnergyUsed / sumFeedRate) || 0;

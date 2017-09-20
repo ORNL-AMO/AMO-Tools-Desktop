@@ -26,7 +26,7 @@ export class SolidChargeMaterialFormComponent implements OnInit {
   lossIndex: number;
   @Input()
   settings: Settings;
-  
+
   @ViewChild('materialModal') public materialModal: ModalDirective;
 
   @ViewChild('lossForm') lossForm: ElementRef;
@@ -91,12 +91,6 @@ export class SolidChargeMaterialFormComponent implements OnInit {
     }
   }
 
-  checkForm() {
-    if (this.chargeMaterialForm.status == "VALID") {
-      this.calculate.emit(true);
-    }
-  }
-
   checkDischargeTemp() {
     if ((this.chargeMaterialForm.value.chargeMaterialDischargeTemperature > this.chargeMaterialForm.value.materialMeltingPoint) && this.chargeMaterialForm.value.percentChargeMelted == 0) {
       this.dischargeTempError = 'The discharge temperature is higher than the melting point, please enter proper percentage for charge melted.';
@@ -123,7 +117,7 @@ export class SolidChargeMaterialFormComponent implements OnInit {
       materialHeatOfLiquid: selectedMaterial.specificHeatLiquid,
       materialSpecificHeatOfSolidMaterial: selectedMaterial.specificHeatSolid
     })
-    this.checkForm();
+    this.calculate.emit(true);
   }
 
   emitSave() {
@@ -131,7 +125,7 @@ export class SolidChargeMaterialFormComponent implements OnInit {
   }
 
   startSavePolling() {
-    this.checkForm();
+    this.calculate.emit(true);
     if (this.counter) {
       clearTimeout(this.counter);
     }

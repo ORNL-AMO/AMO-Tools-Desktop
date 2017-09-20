@@ -26,7 +26,7 @@ export class FixtureLossesFormComponent implements OnInit {
   lossIndex: number;
   @Input()
   settings: Settings;
-  
+
   @ViewChild('materialModal') public materialModal: ModalDirective;
   @ViewChild('lossForm') lossForm: ElementRef;
   form: any;
@@ -74,12 +74,6 @@ export class FixtureLossesFormComponent implements OnInit {
     }
   }
 
-  checkForm() {
-    if (this.lossesForm.status == 'VALID') {
-      this.calculate.emit(true);
-    }
-  }
-
   focusField(str: string) {
     this.changeField.emit(str);
   }
@@ -97,7 +91,7 @@ export class FixtureLossesFormComponent implements OnInit {
   }
 
   startSavePolling() {
-    this.checkForm();
+    this.calculate.emit(true);
     if (this.counter) {
       clearTimeout(this.counter);
     }
@@ -161,7 +155,7 @@ export class FixtureLossesFormComponent implements OnInit {
     this.lossesForm.patchValue({
       specificHeat: selectedMaterial.specificHeatSolid
     })
-    this.checkForm();
+    this.calculate.emit(true);
   }
 
   showMaterialModal() {
