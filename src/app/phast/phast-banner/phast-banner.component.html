@@ -10,7 +10,7 @@
       </li>
       <li [ngClass]="{'active': mainTab == 'assessment', 'disabled': !assessment.phast.setupDone}" (click)="changeTab('assessment')"><span>Assessment</span></li>
       <li [ngClass]="{'active': mainTab == 'diagram'}" class="disabled" (click)="changeTab('diagram')"><span>Diagram</span></li>
-      <li [ngClass]="{'active': mainTab == 'report'}" class="disabled" (click)="changeTab('report')"><span>Report</span></li>
+      <li [ngClass]="{'active': mainTab == 'report'}" (click)="changeTab('report')"><span>Report</span></li>
       <!--<li [ngClass]="{'active': mainTab == 'sankey'}" class="disabled" (click)="changeTab('sankey')"><span>Sankey</span></li>-->
     </ul>
   </div>
