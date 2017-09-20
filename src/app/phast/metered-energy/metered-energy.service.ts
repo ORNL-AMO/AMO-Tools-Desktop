@@ -12,7 +12,7 @@ export class MeteredEnergyService {
 
   meteredElectricity(input: MeteredEnergyElectricity, phast: PHAST, settings: Settings): MeteredEnergyResults {
     //Metered Energy Use
-    //meteredEnergyUsed = Electricity Used during collection / Collection Time 
+    //meteredEnergyUsed = Electricity Used during collection / Collection Time
     let meteredEnergyUsed = (input.electricityUsed / input.electricityCollectionTime) || 0;
     //Energy Intensity for Charge Material = meteredEnergyUsed / sum(charge material feed rates)
     let sumFeedRate = this.phastService.sumChargeMaterialFeedRate(phast.losses.chargeMaterials);
@@ -44,7 +44,7 @@ export class MeteredEnergyService {
   meteredFuel(inputs: MeteredEnergyFuel, phast: PHAST, settings: Settings): MeteredEnergyResults {
     //Metered Energy Use
     //Metered Fuel Used = HHV * Flow Rate
-    let meteredEnergyUsed = inputs.heatingValue * inputs.flowRate;
+    let meteredEnergyUsed =  inputs.fuelEnergy;
     //Energy Intensity for Charge Materials =  Metered Energy Used / Sum(charge material feed rates)
     let sumFeedRate = this.phastService.sumChargeMaterialFeedRate(phast.losses.chargeMaterials);
     let meteredEnergyIntensity = (meteredEnergyUsed / sumFeedRate) || 0;

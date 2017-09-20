@@ -25,7 +25,7 @@ export class EnergyInputCompareService {
         }
         this.checkEnergyInputs();
       } else {
-        //NO IDEA WHAT TO DO IN THIS CASE
+        // NO IDEA WHAT TO DO IN THIS CASE
       }
     }
   }
@@ -33,6 +33,7 @@ export class EnergyInputCompareService {
   initDifferentObject(): EnergyInputDifferent {
     let tmpDifferent: EnergyInputDifferent = {
       naturalGasHeatInput: new BehaviorSubject<boolean>(null),
+      flowRateInput: new BehaviorSubject<boolean>(null),
       // naturalGasFlow: new BehaviorSubject<boolean>(null),
       // measuredOxygenFlow: new BehaviorSubject<boolean>(null),
       coalCarbonInjection: new BehaviorSubject<boolean>(null),
@@ -113,7 +114,7 @@ export class EnergyInputCompareService {
     }
   }
 
-  //naturalGasHeatInput
+  // naturalGasHeatInput
   checkNaturalGasHeatInput() {
     if (this.baselineEnergyInput && this.modifiedEnergyInput) {
       for (let lossIndex = 0; lossIndex < this.baselineEnergyInput.length; lossIndex++) {
@@ -125,7 +126,7 @@ export class EnergyInputCompareService {
       }
     }
   }
-  //naturalGasFlow
+  // naturalGasFlow
   // checkNaturalGasFlow() {
   //   if (this.baselineEnergyInput && this.modifiedEnergyInput) {
   //     for (let lossIndex = 0; lossIndex < this.baselineEnergyInput.length; lossIndex++) {
@@ -137,7 +138,7 @@ export class EnergyInputCompareService {
   //     }
   //   }
   // }
-  //measuredOxygenFlow
+  // measuredOxygenFlow
   // checkMeasureOxygenFlow() {
   //   if (this.baselineEnergyInput && this.modifiedEnergyInput) {
   //     for (let lossIndex = 0; lossIndex < this.baselineEnergyInput.length; lossIndex++) {
@@ -149,7 +150,7 @@ export class EnergyInputCompareService {
   //     }
   //   }
   // }
-  //coalCarbonInjection
+  // coalCarbonInjection
   checkCoalCarbonInjection() {
     if (this.baselineEnergyInput && this.modifiedEnergyInput) {
       for (let lossIndex = 0; lossIndex < this.baselineEnergyInput.length; lossIndex++) {
@@ -161,7 +162,7 @@ export class EnergyInputCompareService {
       }
     }
   }
-  //coalHeatingValue
+  // coalHeatingValue
   checkCoalHeatingValue() {
     if (this.baselineEnergyInput && this.modifiedEnergyInput) {
       for (let lossIndex = 0; lossIndex < this.baselineEnergyInput.length; lossIndex++) {
@@ -173,7 +174,7 @@ export class EnergyInputCompareService {
       }
     }
   }
-  //electrodeUse
+  // electrodeUse
   checkElectrodeUse() {
     if (this.baselineEnergyInput && this.modifiedEnergyInput) {
       for (let lossIndex = 0; lossIndex < this.baselineEnergyInput.length; lossIndex++) {
@@ -185,7 +186,7 @@ export class EnergyInputCompareService {
       }
     }
   }
-  //electrodeHeatingValue
+  // electrodeHeatingValue
   checkElectrodeHeatingValue() {
     if (this.baselineEnergyInput && this.modifiedEnergyInput) {
       for (let lossIndex = 0; lossIndex < this.baselineEnergyInput.length; lossIndex++) {
@@ -197,7 +198,7 @@ export class EnergyInputCompareService {
       }
     }
   }
-  //otherFuels
+  // otherFuels
   checkOtherFuels() {
     if (this.baselineEnergyInput && this.modifiedEnergyInput) {
       for (let lossIndex = 0; lossIndex < this.baselineEnergyInput.length; lossIndex++) {
@@ -209,7 +210,7 @@ export class EnergyInputCompareService {
       }
     }
   }
-  //electricityInput
+  // electricityInput
   checkElectricityInput() {
     if (this.baselineEnergyInput && this.modifiedEnergyInput) {
       for (let lossIndex = 0; lossIndex < this.baselineEnergyInput.length; lossIndex++) {
@@ -226,7 +227,8 @@ export class EnergyInputCompareService {
 
 export interface EnergyInputDifferent {
   naturalGasHeatInput: BehaviorSubject<boolean>,
-  //naturalGasFlow: BehaviorSubject<boolean>,
+  flowRateInput: BehaviorSubject<boolean>,
+  // naturalGasFlow: BehaviorSubject<boolean>,
   // measuredOxygenFlow: BehaviorSubject<boolean>,
   coalCarbonInjection: BehaviorSubject<boolean>,
   coalHeatingValue: BehaviorSubject<boolean>,

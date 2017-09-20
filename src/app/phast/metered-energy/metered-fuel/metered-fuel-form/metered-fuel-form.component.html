@@ -13,18 +13,27 @@
       <label for="heatingValue">Heating Value - HHV</label>
       <div class="input-group">
         <input name="heatingValue" type="number" step="any" id="heatingValue" class="form-control" (focus)="focusField('heatingValue')"
-          [(ngModel)]="inputs.heatingValue" (input)="calculate()" onfocus="this.select();" />
+          [(ngModel)]="inputs.heatingValue" (input)="setFlowRate()" onfocus="this.select();" />
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">BTU/SCF</span>
         <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kJ/Nm<sup>3</sup></span>
       </div>
     </div>
     <div class="form-group">
-      <label for="flowRate">Flow Rate During Collection</label>
+      <label for="fuelEnergy">Fuel Energy</label>
       <div class="input-group">
-        <input name="flowRate" type="number" step="any" id="flowRate" class="form-control" (focus)="focusField('flowRate')" [(ngModel)]="inputs.flowRate"
+        <input name="fuelEnergy" type="number" step="any" id="fuelEnergy" class="form-control" (focus)="focusField('fuelEnergy')" [(ngModel)]="inputs.fuelEnergy"
           (input)="calculate()" onfocus="this.select();" />
-        <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">SCFh</span>
-        <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">Nm<sup>3</sup>/hr</span>
+        <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">Btu/hr</span>
+        <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kJ/hr</span>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="small"><a (click)="showHideInputField()"><font size="2">Calculate using flow rate</font></a></label>
+      <div class="input-group">
+        <input *ngIf="fuelFlowInput" id="fuelFlowRateInput" name="fuelFlowRateInput" type="number" step="any" class="form-control"
+               (focus)="focusField('fuelFlowRateInput')" [(ngModel)]="inputs.fuelFlowRateInput" (input)="setFlowRate()" onfocus="this.select();">
+        <span *ngIf="fuelFlowInput && settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">scf/hr</span>
+        <span *ngIf="fuelFlowInput && settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">Nm<sup>3</sup>/hr</span>
       </div>
     </div>
     <div class="form-group">

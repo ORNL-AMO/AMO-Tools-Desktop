@@ -21,7 +21,7 @@ export class MeteredFuelFormComponent implements OnInit {
   @Output('changeField')
   changeField = new EventEmitter<string>();
   fuelTypes: FlueGasMaterial[];
-
+  fuelFlowInput: boolean;
   counter: any;
   constructor(private suiteDbService: SuiteDbService) { }
 
@@ -32,13 +32,21 @@ export class MeteredFuelFormComponent implements OnInit {
   focusField(str: string) {
     this.changeField.emit(str);
   }
-
+  showHideInputField() {
+    this.fuelFlowInput = !this.fuelFlowInput;
+  }
   setProperties() {
     let fuel = this.suiteDbService.selectGasFlueGasMaterialById(this.inputs.fuelType);
     this.inputs.heatingValue = fuel.heatingValue;
     this.calculate();
   }
-
+  setFlowRate() {
+    //added if so that HHV input also calls setFlowRate() before calculate()
+    if (this.fuelFlowInput) {
+      this.inputs.fuelEnergy = this.inputs.fuelFlowRateInput * this.inputs.heatingValue;
+    }
+    this.calculate();
+  }
   calculate() {
     this.startSavePolling();
     this.emitCalculate.emit(true);
