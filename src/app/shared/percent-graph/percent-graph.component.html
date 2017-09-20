@@ -1,8 +1,13 @@
 <div class="percent-chart-container">
-  <h1 class="value">
-    <div id="percent">{{value | number:'1.0-0'}} {{unit}}</div>
-  </h1>
-  <canvas id="baseChart" baseChart [data]="doughnutChartData" [datasets]="chartColorDataSet" [labels]="doughnutChartLabels"
-    [chartType]="doughnutChartType" [options]="chartOptions" [colors]="chartColors">
-  </canvas>
+	<canvas 
+		id="baseChart" 
+		baseChart 
+		[data]="doughnutChartData" 
+		[datasets]="chartColorDataSet" 
+		[labels]="doughnutChartLabels"
+		[chartType]="doughnutChartType" 
+		[options]="chartOptions" 
+		[colors]="chartColors">
+	</canvas>
+	<h1>{{value | number:'1.0-0'}} {{unit}}</h1>
 </div>

@@ -10,6 +10,10 @@
 }
 
 
+.output-summary .table tr.callout td {
+    font-weight: bold;
+}
+
 
 
 @media print {
