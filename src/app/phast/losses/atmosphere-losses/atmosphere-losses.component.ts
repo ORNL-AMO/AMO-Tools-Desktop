@@ -133,8 +133,12 @@ export class AtmosphereLossesComponent implements OnInit {
   }
 
   calculate(loss: any) {
-    let tmpAtmosphereLoss = this.atmosphereLossesService.getLossFromForm(loss.form);
-    loss.heatLoss = this.phastService.atmosphere(tmpAtmosphereLoss);
+    if (loss.form.status == 'VALID') {
+      let tmpAtmosphereLoss = this.atmosphereLossesService.getLossFromForm(loss.form);
+      loss.heatLoss = this.phastService.atmosphere(tmpAtmosphereLoss, this.settings);
+    }else{
+      loss.heatLoss = null;
+    }
   }
 
   saveLosses() {

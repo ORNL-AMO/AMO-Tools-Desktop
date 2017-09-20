@@ -4,7 +4,7 @@ import { AuxEquipmentService } from '../aux-equipment/aux-equipment.service';
 import { PhastService } from '../phast.service';
 import { PHAST } from '../../shared/models/phast/phast';
 import { Settings } from '../../shared/models/settings';
-
+import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
 @Injectable()
 export class MeteredEnergyService {
 

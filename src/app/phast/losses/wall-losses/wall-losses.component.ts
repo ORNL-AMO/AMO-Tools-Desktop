@@ -156,8 +156,12 @@ export class WallLossesComponent implements OnInit {
 
   //calculate wall loss results
   calculate(loss: any) {
-    let tmpWallLoss: WallLoss = this.wallLossesService.getWallLossFromForm(loss.form);
-    loss.heatLoss = this.phastService.wallLosses(tmpWallLoss, this.settings);
+    if (loss.form.status == 'VALID') {
+      let tmpWallLoss: WallLoss = this.wallLossesService.getWallLossFromForm(loss.form);
+      loss.heatLoss = this.phastService.wallLosses(tmpWallLoss, this.settings);
+    } else {
+      loss.heatLoss = null;
+    }
   }
 
   saveLosses() {

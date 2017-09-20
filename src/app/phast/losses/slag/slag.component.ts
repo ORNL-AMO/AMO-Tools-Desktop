@@ -135,7 +135,7 @@ export class SlagComponent implements OnInit {
 
   calculate(loss: any) {
     let tmpLoss: Slag = this.slagService.getLossFromForm(loss.form);
-    loss.heatLoss = this.phastService.slagOtherMaterialLosses(tmpLoss);
+    loss.heatLoss = this.phastService.slagOtherMaterialLosses(tmpLoss, this.settings);
   }
 
   saveLosses() {
