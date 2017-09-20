@@ -11,8 +11,6 @@ import { Settings } from '../../../../shared/models/settings';
 })
 export class MeteredFuelFormComponent implements OnInit {
   @Input()
-  energyForm: any;
-  @Input()
   inputs: MeteredEnergyFuel;
   @Output('emitCalculate')
   emitCalculate = new EventEmitter<boolean>();
@@ -42,12 +40,13 @@ export class MeteredFuelFormComponent implements OnInit {
     this.inputs.heatingValue = fuel.heatingValue;
     this.calculate();
   }
-  // setFuelEnergyInput() {
-  //   let fuelEnergyVal = this.inputs.flowRateInput * this.energyForm.heatingValue ;
-  //     this.energyForm.patchValue({
-  //       'flowRate': fuelEnergyVal
-  //     });
-  // }
+  setFlowRate() {
+    //added if so that HHV input also calls setFlowRate() before calculate()
+    if (this.fuelFlowInput) {
+      this.inputs.flowRate = this.inputs.fuelFlowRateInput * this.inputs.heatingValue;
+    }
+    this.calculate();
+  }
   calculate() {
     this.startSavePolling();
     this.emitCalculate.emit(true);
