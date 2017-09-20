@@ -30,13 +30,24 @@
     background-position: left center;
     background-size: 33px;
     padding: 9px 0 0px 48px;
-    width: 100%;
+}
+
+
+.assessment-report .report-header:after {
+    display: table;
+    content: "";
+    clear: both;
+}
+.assessment-report .report-header .btn-group {
+    float: right;
+}
+.assessment-report .assessment-name {
+    float: left;
 }
 
 .assessment-report .assessment-name span {
-    float: right;
-    display: block;
     color: #999;
-    font-size: 13px;
-    margin-top: 12px;
+    font-size: 12px;
+    margin-top: 5px;
+    margin-left: 0;
 }

@@ -85,41 +85,41 @@
           <span *ngIf="!modification.psat.outputs.motor_power">&mdash;</span>
         </td>
       </tr>
-      <tr>
-        <th>Annual Energy (MWh)</th>
-        <th>{{psat.outputs.annual_energy | number:'2.0-0'}}</th>
-        <th *ngFor="let modification of psat.modifications; let index = index;" [ngClass]="{'positive-savings': getSavingsPercentage(psat, modification.psat) > 10, 'selected-modification': index == selectedModificationIndex}">
+      <tr class="callout">
+        <td>Annual Energy (MWh)</td>
+        <td>{{psat.outputs.annual_energy | number:'2.0-0'}}</td>
+        <td *ngFor="let modification of psat.modifications; let index = index;" [ngClass]="{'positive-savings': getSavingsPercentage(psat, modification.psat) > 10, 'selected-modification': index == selectedModificationIndex}">
           <span *ngIf="modification.psat.outputs.annual_energy">{{modification.psat.outputs.annual_energy | number:'2.0-0'}}</span>
           <span *ngIf="!modification.psat.outputs.annual_energy">&mdash;</span>
-        </th>
+        </td>
       </tr>
       <tr>
-        <th>Annual Energy Savings (MWh)</th>
-        <th>&mdash;</th>
-        <th *ngFor="let modification of psat.modifications; let index = index;" [ngClass]="{'positive-savings': getSavingsPercentage(psat, modification.psat) > 10, 'selected-modification': index == selectedModificationIndex}">
+        <td>Annual Energy Savings (MWh)</td>
+        <td>&mdash;</td>
+        <td *ngFor="let modification of psat.modifications; let index = index;" [ngClass]="{'positive-savings': getSavingsPercentage(psat, modification.psat) > 10, 'selected-modification': index == selectedModificationIndex}">
           <span *ngIf="getDiff(psat.outputs.annual_energy, modification.psat.outputs.annual_energy)">{{getDiff(psat.outputs.annual_energy, modification.psat.outputs.annual_energy)  | number:'2.0-0'}}</span>
           <span *ngIf="!getDiff(psat.outputs.annual_energy, modification.psat.outputs.annual_energy)">&mdash;</span>
-        </th>
+        </td>
       </tr>
       <tr>
-        <th>Annual Cost</th>
-        <th>{{psat.outputs.annual_cost | currency:'USD':true:'2.0-0'}}</th>
-        <th *ngFor="let modification of psat.modifications; let index = index;" [ngClass]="{'positive-savings': getSavingsPercentage(psat, modification.psat) > 10, 'selected-modification': index == selectedModificationIndex}">
+        <td>Annual Cost</td>
+        <td>{{psat.outputs.annual_cost | currency:'USD':true:'2.0-0'}}</td>
+        <td *ngFor="let modification of psat.modifications; let index = index;" [ngClass]="{'positive-savings': getSavingsPercentage(psat, modification.psat) > 10, 'selected-modification': index == selectedModificationIndex}">
           <span *ngIf="modification.psat.outputs.annual_cost">{{modification.psat.outputs.annual_cost | currency:'USD':true:'2.0-0'}}</span>
           <span *ngIf="!modification.psat.outputs.annual_cost">&mdash;</span>
-        </th>
+        </td>
       </tr>
       <tr>
-        <th>
+        <td>
           Annual Savings
-        </th>
-        <th>
+        </td>
+        <td>
           &mdash;
-        </th>
-        <th *ngFor="let modification of psat.modifications; let index = index;" [ngClass]="{'positive-savings': getSavingsPercentage(psat, modification.psat) > 10, 'selected-modification': index == selectedModificationIndex}">
+        </td>
+        <td *ngFor="let modification of psat.modifications; let index = index;" [ngClass]="{'positive-savings': getSavingsPercentage(psat, modification.psat) > 10, 'selected-modification': index == selectedModificationIndex}">
           <span *ngIf="getDiff(modification.psat.outputs.annual_cost, modification.psat.outputs.annual_cost)">{{getDiff(modification.psat.outputs.annual_cost, modification.psat.outputs.annual_cost)| currency:'USD':true:'2.0-0'}}</span>
           <span *ngIf="!getDiff(modification.psat.outputs.annual_cost, modification.psat.outputs.annual_cost)">&mdash;</span>
-        </th>
+        </td>
       </tr>
       <tr>
         <td></td>
