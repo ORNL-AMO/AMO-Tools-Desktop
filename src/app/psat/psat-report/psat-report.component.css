@@ -24,7 +24,8 @@
         border-top: #ddd solid 1px;
     }
 
-.assessment-report.report-in-psat .assessment-name, .assessment-report.report-in-rollup .assessment-name {
+.assessment-report.report-in-psat .assessment-name, 
+.assessment-report.report-in-rollup .assessment-name {
     background-image: url('../../../assets/images/ico-psat-diagram.png');
     background-repeat: no-repeat;
     background-position: left center;
@@ -59,8 +60,17 @@
 
 @media print {
 
+
     .assessment-report {
-        page-break-after: auto;
+        background: #fff;
+        box-shadow: none;
+        border: none;
+        page-break-before: always;
+    }
+
+    .assessment-report.report-in-psat .assessment-name, 
+    .assessment-report.report-in-rollup .assessment-name {
+        padding-left: 0;
     }
 
 }

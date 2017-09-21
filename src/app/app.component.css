@@ -1702,6 +1702,10 @@ Toasty Overrides ================================= */
 
 @media print{
 
+  html, body {
+    background: transparent;
+  }
+
   .hide-print {
     display: none;
   }
