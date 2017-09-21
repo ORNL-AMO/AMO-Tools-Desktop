@@ -5,6 +5,7 @@ import { SuiteDbService } from '../../../../suiteDb/suite-db.service';
 import { ModalDirective } from 'ngx-bootstrap';
 import { LossesService } from '../../losses.service';
 import { Settings } from '../../../../shared/models/settings';
+import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
 
 @Component({
   selector: 'app-fixture-losses-form',
@@ -35,7 +36,7 @@ export class FixtureLossesFormComponent implements OnInit {
   firstChange: boolean = true;
   counter: any;
   materials: Array<any>;
-  constructor(private windowRefService: WindowRefService, private fixtureLossesCompareService: FixtureLossesCompareService, private suiteDbService: SuiteDbService, private lossesService: LossesService) { }
+  constructor(private windowRefService: WindowRefService, private fixtureLossesCompareService: FixtureLossesCompareService, private suiteDbService: SuiteDbService, private lossesService: LossesService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnChanges(changes: SimpleChanges) {
     if (!this.firstChange) {
@@ -152,6 +153,10 @@ export class FixtureLossesFormComponent implements OnInit {
 
   setProperties() {
     let selectedMaterial = this.suiteDbService.selectSolidLoadChargeMaterialById(this.lossesForm.value.materialName);
+        if (this.settings.unitsOfMeasure == 'Metric') {
+      selectedMaterial.specificHeatSolid = this.convertUnitsService.value(selectedMaterial.specificHeatSolid).from('btulbF').to('kJkgC');
+    }
+    
     this.lossesForm.patchValue({
       specificHeat: selectedMaterial.specificHeatSolid
     })

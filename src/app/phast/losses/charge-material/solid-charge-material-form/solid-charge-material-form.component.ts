@@ -5,6 +5,7 @@ import { ChargeMaterialCompareService } from '../charge-material-compare.service
 import { ModalDirective } from 'ngx-bootstrap';
 import { LossesService } from '../../losses.service';
 import { Settings } from '../../../../shared/models/settings';
+import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
 
 @Component({
   selector: 'app-solid-charge-material-form',
@@ -40,7 +41,7 @@ export class SolidChargeMaterialFormComponent implements OnInit {
   selectedMaterial: any;
   counter: any;
   dischargeTempError: string = null;
-  constructor(private suiteDbService: SuiteDbService, private chargeMaterialCompareService: ChargeMaterialCompareService, private windowRefService: WindowRefService, private lossesService: LossesService) { }
+  constructor(private suiteDbService: SuiteDbService, private chargeMaterialCompareService: ChargeMaterialCompareService, private windowRefService: WindowRefService, private lossesService: LossesService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnChanges(changes: SimpleChanges) {
     if (!this.firstChange) {
@@ -111,6 +112,14 @@ export class SolidChargeMaterialFormComponent implements OnInit {
 
   setProperties() {
     let selectedMaterial = this.suiteDbService.selectSolidLoadChargeMaterialById(this.chargeMaterialForm.value.materialId);
+
+    if (this.settings.unitsOfMeasure == 'Metric') {
+      selectedMaterial.latentHeat = this.convertUnitsService.value(selectedMaterial.latentHeat).from('btuLb').to('kJkg');
+      selectedMaterial.meltingPoint = this.convertUnitsService.value(selectedMaterial.meltingPoint).from('F').to('C');
+      selectedMaterial.specificHeatLiquid = this.convertUnitsService.value(selectedMaterial.specificHeatLiquid).from('btulbF').to('kJkgC');
+      selectedMaterial.specificHeatSolid = this.convertUnitsService.value(selectedMaterial.specificHeatSolid).from('btulbF').to('kJkgC');
+    }
+
     this.chargeMaterialForm.patchValue({
       materialLatentHeatOfFusion: selectedMaterial.latentHeat,
       materialMeltingPoint: selectedMaterial.meltingPoint,

@@ -106,7 +106,7 @@ export class FlueGasLossesFormVolumeComponent implements OnInit {
       CO: tmpFlueGas.CO,
       CO2: tmpFlueGas.CO2,
       SO2: tmpFlueGas.SO2,
-      O2: tmpFlueGas.O2
+      O2: tmpFlueGas.O2,
     })
     this.checkForm();
   }
@@ -172,7 +172,6 @@ export class FlueGasLossesFormVolumeComponent implements OnInit {
     if (event) {
       this.options = this.suiteDbService.selectGasFlueGasMaterials();
       let newMaterial = this.options.filter(material => { return material.substance == event.substance })
-      //console.log(newMaterial);
       if (newMaterial.length != 0) {
          this.flueGasLossForm.patchValue({
            gasTypeId: newMaterial[0].id
