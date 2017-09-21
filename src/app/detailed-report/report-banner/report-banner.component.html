@@ -1,12 +1,13 @@
+<div class="report-banner">
+	<h1 class="pull-left">Efficiency Report</h1>
 
-
-<h1 class="pull-left">Assessments Efficiency Report</h1>
-
-<div class="btn-group pull-left hide-print">
-	<button class="btn btn-secondary" (click)="print()">Print / Download</button>
-	<button class="btn btn-secondary" (click)="exportToCsv()">Export to CSV</button>
+	<div class="btn-toolbar pull-right hide-print" role="toolbar">
+		<div class="btn-group mr-2" role="group">
+			<button class="btn btn-secondary" (click)="print()">Print</button>
+			<button class="btn btn-secondary" (click)="exportToCsv()">Export to CSV</button>
+		</div>
+		<div class="btn-group" role="group">
+			<button class="btn btn-secondary" aria-label="Close" (click)="closeReport()">Close Report</button>
+		</div>
+	</div>
 </div>
-
-
-<button class="btn btn-link pull-right hide-print" aria-label="Close" (click)="closeReport()">Close Report</button>
-

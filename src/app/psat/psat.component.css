@@ -15,16 +15,12 @@
 }
 
 .report-column{
-    background-color: white;
-    border: solid #2980b9;
-    box-shadow: 1px 2px 1px 2px #2980b9;
-    margin-top: 15px;
+    margin-top: 50px;
     margin-bottom: 100px;
 }
 
 .calculator-card{
     border: none; 
-    background-color: #efefef; 
     margin-top: 2.5%; 
     margin-bottom: 2.5%; 
 }

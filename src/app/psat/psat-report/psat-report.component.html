@@ -1,45 +1,70 @@
-<div class="assessment-report" *ngIf="psat && settings" [ngClass]="{'assessment-report-padding': inPsat, 'report-in-psat': inPsat, 'report-in-rollup': !inPsat}">
 
-  <div class="report-header">
-    <div class="row">
-      <div class="col-12" *ngIf="inPsat">
-        <div class="btn-group pull-left hide-print">
-          <button class="btn btn-secondary" (click)="print()">Print / Download</button>
-          <button class="btn btn-secondary" (click)="exportToCsv()">Export to CSV</button>
+
+<div 
+    class="assessment-report" 
+    *ngIf="psat && settings" 
+    [ngClass]="{'assessment-report-padding': inPsat, 'report-in-psat': inPsat, 'report-in-rollup': !inPsat}">
+
+
+    <div class="report-header">  
+       
+        <div *ngIf="inPsat" class="btn-group">
+            <button class="btn btn-secondary" (click)="print()">Print</button>
+            <button class="btn btn-secondary" (click)="exportToCsv()">Export to CSV</button>
         </div>
         <!--<button class="btn btn-link pull-right hide-print" aria-label="Close" (click)="closeAssessment()">Close Report</button>-->
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-12 assessment-name">
-        <h2 *ngIf="!assessment">Assessment Report
-        </h2>
-        <h2 *ngIf="assessment"><span class="dir-list-item" *ngFor="let directory of assessmentDirectories">{{directory.name}} / </span>{{assessment.name}}
-          <!--<button *ngIf="inPsat" class="btn-sm btn-secondary pull-right hide-print" (click)="print()"><span class="fa fa-print"></span></button>-->
-          <span class="pull-right small">Last Modified {{assessment.modifiedDate | date:'medium'}}</span>
-        </h2>
-      </div>
-    </div>
-  </div>
-  <!-- End .report-header -->
 
-  <div class="report-data" *ngIf="psat.setupDone">
-    <!--<div class="charts" [ngClass]="{'mod-page-break': numMods > 3}">
-      <app-chart-summary [psat]="psat"></app-chart-summary>
-    </div>-->
-    <div class="results">
-      <h3>Assessment Result Data</h3>
-      <app-output-summary [psat]="psat" [settings]="settings" [inRollup]="inRollup" [assessment]="assessment" (selectModification)="useModification($event)"></app-output-summary>
-    </div>
-    <div class="input-data results">
-      <h3>Assessment Input Data</h3>
-      <app-input-summary [psat]="psat" [settings]="settings"></app-input-summary>
-    </div>
-  </div>
-  <!-- End .report-data -->
+        <h2 *ngIf="!assessment" class="assessment-name">Assessment Report</h2>
+        
+        <h2 *ngIf="assessment" class="assessment-name">
+            <span 
+                class="dir-list-item" 
+                *ngFor="let directory of assessmentDirectories">
+                {{directory.name}} / 
+            </span>
+            {{assessment.name}}
+            <!--<button *ngIf="inPsat" class="btn-sm btn-secondary pull-right hide-print" (click)="print()"><span class="fa fa-print"></span></button>-->
+            <span>Last Modified {{assessment.modifiedDate | date:'medium'}}</span>
+        </h2>
 
-  <div *ngIf="!psat.setupDone">
-    <p class="alert-warning text-center">This assessment has not been completed, please complete this assessment to see the resulting data.</p>
-  </div>
+    </div>
+    <!-- End .report-header -->
+
+
+    <div class="report-data" *ngIf="psat.setupDone">
+
+        <ul class="tabs primary hide-print">
+            <li (click)="setTab('results')" [ngClass]="{'active': currentTab == 'results'}">
+                <a>Results</a>
+            </li><li (click)="setTab('inputData')" [ngClass]="{'active': currentTab == 'inputData'}">
+                <a>Input Data</a>
+            </li>
+        </ul>
+        <!--<div class="charts" [ngClass]="{'mod-page-break': numMods > 3}">
+            <app-chart-summary [psat]="psat"></app-chart-summary>
+        </div>-->
+        <div class="results" *ngIf="currentTab == 'results'">
+            <app-output-summary 
+                [psat]="psat" 
+                [settings]="settings" 
+                [inRollup]="inRollup" 
+                [assessment]="assessment" 
+                (selectModification)="useModification($event)">
+            </app-output-summary>
+        </div>
+        <div class="input-data results" *ngIf="currentTab == 'inputData'">
+            <app-input-summary 
+                [psat]="psat" 
+                [settings]="settings">
+            </app-input-summary>
+        </div>
+
+    </div>
+    <!-- End .report-data -->
+
+    <div *ngIf="!psat.setupDone">
+        <p class="alert-warning text-center">This assessment has not been completed, please complete this assessment to see the resulting data.</p>
+    </div>
+
 
 </div>

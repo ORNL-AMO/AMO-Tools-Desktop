@@ -1,36 +1,79 @@
+.assessment-report {
+    background: #fff;
+    -webkit-box-shadow: 0px 1px 10px 0px rgba(0,0,0,0.1);
+    -moz-box-shadow: 0px 1px 10px 0px rgba(0,0,0,0.1);
+    box-shadow: 0px 1px 10px 0px rgba(0,0,0,0.1);
+    border: #ababab solid 1px;
+    margin-bottom: 4em;
+}
+
+    .assessment-report .tabs.primary li:first-of-type a {
+        border-left: none;
+    }
+    .assessment-report .tabs.primary a {
+        padding: 10px 44px;
+    }
+
+    .report-header, .report-data .results {
+        padding: 10px 20px;
+    }
+    .report-header {
+        
+    }
+    .report-data {
+        border-top: #ddd solid 1px;
+    }
+
+.assessment-report.report-in-psat .assessment-name, 
+.assessment-report.report-in-rollup .assessment-name {
+    background-image: url('../../../assets/images/ico-psat-diagram.png');
+    background-repeat: no-repeat;
+    background-position: left center;
+    background-size: 33px;
+    padding: 9px 0 0px 48px;
+}
+
+
+.assessment-report .report-header:after {
+    display: table;
+    content: "";
+    clear: both;
+}
+.assessment-report .report-header .btn-group {
+    float: right;
+}
+    .assessment-report .report-header .btn {
+        padding: 8px 14px;
+        margin-top: 20px;
+    }
+.assessment-report .assessment-name {
+    float: left;
+}
+
+.assessment-report .assessment-name span {
+    color: #999;
+    font-size: 12px;
+    margin-top: 5px;
+    margin-left: 0;
+}
+
+
 @media print {
-    .input-data{
+
+
+    .assessment-report {
+        background: #fff;
+        box-shadow: none;
+        border: none;
         page-break-before: always;
     }
 
-    .hide-print{
-        display: none !important;
+    .assessment-report.report-in-psat .assessment-name, 
+    .assessment-report.report-in-rollup .assessment-name {
+        padding-left: 0;
     }
 
-    .assessment-report-padding{
-        padding-bottom: 0px;
-    }
-
-    /*.mod-page-break{
-        page-break-after: always !important;
-    }*/
-}
-
-.dir-list-item{
-    color: #808B96;
 }
 
 
-.assessment-name{
-    padding-top: 15px;
-}
 
-.report-in-psat{
-    border: none !important;
-    box-shadow: none !important;
-}
-
-.report-in-rollup{
-   padding: 10px;
-   margin-bottom: 0px !important;
-}

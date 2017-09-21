@@ -18,17 +18,20 @@
   </ul>
 </div>
 
-<div class="sidebar-group">
+<div class="sidebar-group secondary">
   <ul>
     <li [ngClass]="{'selected': selectedCalculator == 'all'}">
       <span (click)="chooseCalculator('all')">All Calculators</span>
+    </li>
+    <li [ngClass]="{'selected': selectedCalculator == 'motors'}">
+      <span (click)="chooseCalculator('motors')">Motors</span>
     </li>
     <li [ngClass]="{'selected': selectedCalculator == 'pumps'}">
       <span (click)="chooseCalculator('pumps')">Pumps</span>
     </li>
 
     <!--    <li [ngClass]="{'selected': selectedCalculator == 'fans'}">
-      <span (click)="chooseCalculator('fans')">Fans</span> 
+      <span (click)="chooseCalculator('fans')">Fans</span>
     </li>-->
     <li [ngClass]="{'selected': selectedCalculator == 'furnaces'}">
       <span (click)="chooseCalculator('furnaces')">Process Heating</span>

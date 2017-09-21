@@ -1,18 +1,70 @@
-<div class="container-fluid">
+<div class="report-summary">
 
-  <div class="row">
-    <div class="col-md-10 mx-auto">
-      <h2 class="text-color">Report Summary</h2>
-    </div>
-  </div>
-  <!-- End .row -->
-
-  <div class="row">
-    <div class="rollups col-md-10 mx-auto">
-      <app-psat-summary [pumpSavingsPotential]="pumpSavingsPotential" [numPsats]="numPsats" [energySavingsPotential]="energySavingsPotential" [totalCost]="totalCost" [totalEnergy]="totalEnergy"></app-psat-summary>
-    </div>
-  </div>
-  <!-- End .row -->
+    <ul>
+        <li>
+            <app-psat-summary 
+                [pumpSavingsPotential]="pumpSavingsPotential" 
+                [numPsats]="numPsats" 
+                [energySavingsPotential]="energySavingsPotential" 
+                [totalCost]="totalCost" 
+                [totalEnergy]="totalEnergy">
+            </app-psat-summary>
+        </li>
+        <li class="coming-soon hide-print">
+            <div class="summary-header furnaces">
+                <h3>Furnaces</h3>
+                <span><span>--</span></span>
+            </div>
+            <dl class="summary-list">
+                <dt>Maximum Annual<br/>Cost Savings</dt>
+                <dd>$----</dd>
+                <dt>Annual Cost</dt>
+                <dd>$----</dd>
+            </dl>
+            <dl class="summary-list">
+                <dt>Maximum Annual<br/>Energy Savings</dt>
+                <dd>---- MWh</dd>
+                <dt>Annual Energy</dt>
+                <dd>---- MWh</dd>
+            </dl>
+        </li>
+        <li class="coming-soon hide-print">
+            <div class="summary-header fans">
+                <h3>Fans</h3>
+                <span><span>--</span></span>
+            </div>
+            <dl class="summary-list">
+                <dt>Maximum Annual<br/>Cost Savings</dt>
+                <dd>$----</dd>
+                <dt>Annual Cost</dt>
+                <dd>$----</dd>
+            </dl>
+            <dl class="summary-list">
+                <dt>Maximum Annual<br/>Energy Savings</dt>
+                <dd>---- MWh</dd>
+                <dt>Annual Energy</dt>
+                <dd>---- MWh</dd>
+            </dl>
+        </li>
+        <li class="coming-soon hide-print">
+            <div class="summary-header motors">
+                <h3>Motors</h3>
+                <span><span>--</span></span>
+            </div>
+            <dl class="summary-list">
+                <dt>Maximum Annual<br/>Cost Savings</dt>
+                <dd>$----</dd>
+                <dt>Annual Cost</dt>
+                <dd>$----</dd>
+            </dl>
+            <dl class="summary-list">
+                <dt>Maximum Annual<br/>Energy Savings</dt>
+                <dd>---- MWh</dd>
+                <dt>Annual Energy</dt>
+                <dd>---- MWh</dd>
+            </dl>
+        </li>  
+    </ul>
 
 </div>
-<!-- End .container-fluid -->
+

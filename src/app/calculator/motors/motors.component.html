@@ -1,28 +1,48 @@
-<div class="row justify-content-center align-items-center" style="height: 100%;">
-<div class="col-8">
-  <div class="card">
-    <div class="card-block">
-      <h4>
-        This portion of the application is still in active development.
-      </h4>
-      <h5>
-        Below is a description of what you will find here in the future.
-      </h5>
-      <blockquote class="blockquote">
-        <p>
-          MotorMaster is designed for industrial energy coordinators, facility managers and engineers, plant electricians and maintenance
-          staff, procurement personnel, and utility auditors who are interested in improving the energy efficiency of motor
-          systems at industrial facilities.
-        </p>
-      </blockquote>
-      <blockquote class="blockquote">
-        <p>
-          The tool includes a catalog of more than 20,000 low-voltage induction motors,
-          and features motor inventory management tools, maintenance log tracking, efficiency analysis, energy accounting,
-          and environmental reporting capabilities.
-        </p>
-      </blockquote>
+<div *ngIf="getSelectedTool() == 'none'">
+
+  <div class="row">
+    <div class="col-10  mx-auto">
+      <div class="content-container calculator-list">
+        <h2>Motors Calculators</h2>
+        <ul>
+          <li>
+            <a (click)="showTool('nema-energy-efficiency')">NEMA Energy Efficiency</a>
+            <p>The predicted efficiency of an induction motor from NEMA MG1, based on size, rotating speed and efficiency class.
+            </p>
+          </li>
+          <li>
+            <a (click)="showTool('motor-performance')">Motor Performance</a>
+            <p>Plots current, efficiency, power factor vs motor shaft load for a given motor description.</p>
+          </li>
+        </ul>
+
+      </div>
     </div>
   </div>
+
 </div>
+
+
+
+<div class="calculator" *ngIf="getSelectedTool() == 'nema-energy-efficiency'">
+  <div class="row">
+    <div class="col-lg-10  mx-auto">
+      <h2>NEMA Energy Efficiency Calculator</h2>
+    </div>
+  </div>
+  <div class="calculator-container">
+    <app-nema-energy-efficiency></app-nema-energy-efficiency>
+  </div>
+</div>
+
+
+<div class="calculator" *ngIf="getSelectedTool() == 'motor-performance'">
+  <div class="row">
+    <div class="col-lg-10  mx-auto">
+      <h2>Motor Performance Calculator</h2>
+    </div>
+  </div>
+  <div class="calculator-container">
+    <app-motor-performance></app-motor-performance>
+  </div>
 </div>

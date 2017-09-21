@@ -1,134 +1,88 @@
-.report-container{
-    width: 100vw;
+.report-header {
+    background: #fff;
+    border-bottom: #bbb solid 1px;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    -webkit-box-shadow: 0px 1px 4px 0px rgba(0,0,0,0.2);
+    -moz-box-shadow: 0px 1px 4px 0px rgba(0,0,0,0.2);
+    box-shadow: 0px 1px 4px 0px rgba(0,0,0,0.2);
+    z-index: 2;
 }
 
+.report-container {
+    display: flex;
+    z-index: 1;
+    margin-top: 158px;
 
-.print-assessments{
-    max-height: 64vh;
-    overflow: scroll;
+}
+.report-container .sidebar {
+    background: #fff;
+    border-right: #d0d0d0 solid 1px;
+    position: fixed;
+    height: 100%;   
+}
+    .report-container .sidebar ul {
+        margin: 0;
+        padding: 0;
+    }
+        .report-container .sidebar ul li {
+            list-style: none;
+            padding: 0;
+        }
+            .report-container .sidebar ul li a {
+                display: inline-block;
+                padding: 10px;
+                width: 220px;
+                font-size: 15px;
+                border-top: #efefef solid 1px;
+            }
+                .report-container .sidebar ul li:last-of-type a {
+                    border-bottom: #efefef solid 1px;
+                }
+            .report-container .sidebar ul li.active a {
+                color: #000;
+                font-weight: bold;
+            }
+
+.report-container .content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 28px 42px;
+    background: #f5f5f5;
+    margin-left: 220px;
 }
 
-.report-cover{
+.report-cover {
     display: none;
 }
 
-.report-notes-form{
-    max-width: none;
-    width: 100%;
-}
-
-.report-list-nav{
-    padding-top: 30px;
-}
 
 @media print {
-    .report-header{
-        padding-top: 15%;
+
+    .report-cover {
+        display: block;
+        width: 200px;
+        text-align: center;
+    }
+    .report-header {
+        position: static;
+        border: none;
+        background: none;
+        page-break-before: always;
     }
 
-    .report-notes{
-        top: 50%;
-        left: 25%;
-        position: absolute;
-        max-width: 50%;
-        overflow-wrap: normal;
+    .report-container .content {
+        padding: 0;
+        margin-left: 0;
     }
 
-    .print-content{
-        width: 100%;
-        height: 100%;
-        top: 0;
-        left: 0;
-        margin: 0;
-    }
 
-    .created-date{
-        position: absolute;
-        top: 870px;
-        color: black;
-    }
-
-    .report-cover{
-        display: inherit !important;
-        page-break-after: always !important;
-    }
-
-    .report-logo{
-        left: 75%;
-        top: 850px;
-        position: absolute;
-        color: black;
-    }
-    .doe-logo{
-        margin-bottom: none;
-    }
-
-    .print-assessments{
-        max-height: none;
-    }
-    .report-list-nav{
-        display: none !important;
-    }
-
-    .col-8{
-        max-width: none !important;
-        flex: none !important;
-        padding-left: 0px;
-        padding-right: 0px;
-    }
-
-    .assessment-report-item{
-        page-break-after: always;
-        border-bottom: none;
-    }
-    .report-column{
-        border: none !important;
-        box-shadow: none !important;
-        margin-top: none !important;
-        margin-bottom: none !important;
-    }
-    .report-column{
-        border: none !important;
-        box-shadow: none !important;
-        margin-top: none !important;
-        margin-bottom: none !important;
-    }
-    .col-10{
-        padding: 0px; 
-    }
-}
-
-.rollups{
-    position: fixed;
-    color: white;
-    background-color: #2980b9;
-    bottom: 10%;
-    animation-name: rollups;
-    animation-duration: 1s;
-    margin: 10px;
-}
-
-@keyframes rollups{
-    0% { bottom: -350px}
-    100% { bottom: 10%}
 }
 
 
-.fixed-nav{
-    top: 0;
-    left: 22%;
-    padding-top: 30px;
-    position: fixed;
-}
 
-.report-container{
-    background-color: #ececec;
-}
 
-.report-column{
-    background-color: white;
-    border: 1px solid #828282;
-    box-shadow: 0px 1px 4px 1px rgba(0, 0, 0, 0.3);
-    margin-top: 15px;
-    margin-bottom: 100px;
-}
+
+
+

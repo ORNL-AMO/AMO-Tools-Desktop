@@ -133,6 +133,10 @@ export class PhastComponent implements OnInit {
     })
   }
 
+  goToReport(){
+    this.phastService.mainTab.next('report');
+  }
+
   continue() {
     this.tabIndex++;
     if(this.tabs[this.tabIndex] == 'losses'){

@@ -7,5 +7,6 @@ export interface EnergyInputEAF {
     electrodeUse?: number,
     electrodeHeatingValue?: number,
     otherFuels?: number,
-    electricityInput?: number
+    electricityInput?: number,
+    flowRateInput?: number
 }
