@@ -18,8 +18,7 @@ export interface PumpCurveForm {
   headFlow6?: number,
   pumpEfficiencyOrder?: number,
   pumpEfficiencyConstant?: number,
-  maxFlow?: number,
-  selectedFormView?: string
+  maxFlow?: number
 }
 
 export interface PumpCurveDataRow {

@@ -8,6 +8,8 @@ import { PumpCurveEquationFormComponent } from './pump-curve-equation-form/pump-
 import { PumpCurveFormComponent } from './pump-curve-form/pump-curve-form.component';
 import { PumpCurveGraphComponent } from './pump-curve-graph/pump-curve-graph.component';
 import { PumpCurveHelpComponent } from './pump-curve-help/pump-curve-help.component';
+import { PumpCurveService } from './pump-curve.service';
+
 @NgModule({
   imports: [
     CommonModule,
@@ -24,6 +26,9 @@ import { PumpCurveHelpComponent } from './pump-curve-help/pump-curve-help.compon
   ],
   exports: [
     PumpCurveComponent
+  ],
+  providers: [
+    PumpCurveService
   ]
 })
 export class PumpCurveModule { }

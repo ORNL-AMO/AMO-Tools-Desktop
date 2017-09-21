@@ -6,6 +6,7 @@ import { PumpCurveForm } from '../pump-curve';
 import * as d3 from 'd3';
 import * as regression from 'regression';
 import * as _ from 'lodash';
+import { PumpCurveService } from '../pump-curve.service';
 @Component({
   selector: 'app-pump-curve-graph',
   templateUrl: './pump-curve-graph.component.html',
@@ -15,7 +16,8 @@ export class PumpCurveGraphComponent implements OnInit {
   //PumpCurveForm object holding data from form
   @Input()
   pumpCurveForm: PumpCurveForm;
-
+  @Input()
+  selectedFormView: string;
   svg: any;
   xAxis: any;
   yAxis: any;
@@ -45,22 +47,14 @@ export class PumpCurveGraphComponent implements OnInit {
   // flow: number = 0;
   // efficiencyCorrection: number = 0;
   tmpHeadFlow: any;
-  constructor(private psatService: PsatService, private windowRefService: WindowRefService) { }
+  constructor(private psatService: PsatService, private windowRefService: WindowRefService, private pumpCurveService: PumpCurveService) { }
 
   ngOnInit() {
     this.isGridToggled = false;
     d3.select('app-pump-curve-graph').selectAll('#gridToggleBtn')
       .on("click", () => {
-
         this.toggleGrid();
       });
-
-    // let result = regression.linear([[0, 1], [32, 67], [12, 79]]);
-    // console.log(result);
-    // let gradient = result.equation[0];
-    // console.log(gradient)
-    // let yIntercept = result.equation[1];
-    // console.log(yIntercept)
   }
 
   ngAfterViewInit() {
@@ -123,13 +117,14 @@ export class PumpCurveGraphComponent implements OnInit {
 
   getData(): Array<any> {
     let data = new Array<any>();
-    if (this.pumpCurveForm.selectedFormView == 'Data') {
+    if (this.selectedFormView == 'Data') {
       let maxDataFlow = _.maxBy(this.pumpCurveForm.dataRows, (val) => { return val.flow });
       let tmpArr = new Array<any>();
       this.pumpCurveForm.dataRows.forEach(val => {
         tmpArr.push([val.flow, val.head]);
       })
       let results = regression.polynomial(tmpArr, { order: this.pumpCurveForm.dataOrder, precision: 10 });
+      this.pumpCurveService.regEquation.next(results.string);
       for (let i = 10; i <= maxDataFlow.flow; i = i + 10) {
         let yVal = results.predict(i);
         if (yVal[1] > 0) {
@@ -139,7 +134,8 @@ export class PumpCurveGraphComponent implements OnInit {
           })
         }
       }
-    } else if (this.pumpCurveForm.selectedFormView == 'Equation') {
+    } else if (this.selectedFormView == 'Equation') {
+      this.pumpCurveService.regEquation.next(null);
       for (let i = 10; i <= this.pumpCurveForm.maxFlow; i = i + 10) {
         let yVal = this.calculateY(this.pumpCurveForm, i);
         if (yVal > 0) {
@@ -156,7 +152,7 @@ export class PumpCurveGraphComponent implements OnInit {
   getModifiedData(baseline: number, modified: number): Array<any> {
     let data = new Array<any>();
     let ratio = baseline / modified;
-    if (this.pumpCurveForm.selectedFormView == 'Data') {
+    if (this.selectedFormView == 'Data') {
       let maxDataFlow = _.maxBy(this.pumpCurveForm.dataRows, (val) => { return val.flow });
       let tmpArr = new Array<any>();
       this.pumpCurveForm.dataRows.forEach(val => {
@@ -172,7 +168,7 @@ export class PumpCurveGraphComponent implements OnInit {
           })
         }
       }
-    } else if (this.pumpCurveForm.selectedFormView == 'Equation') {
+    } else if (this.selectedFormView == 'Equation') {
       for (let i = 10; i <= this.pumpCurveForm.maxFlow; i = i + 10) {
         let yVal = this.calculateY(this.pumpCurveForm, i);
         if (yVal > 0) {
