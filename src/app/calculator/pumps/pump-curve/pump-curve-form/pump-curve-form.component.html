@@ -3,9 +3,9 @@
     <form>
       <div class="form-group form-check">
         <label class="form-check-label">
-            <input name="selectedFormView" class="form-check-input" type="radio" [(ngModel)]="selectedFormView" (input)="setView()" value="Equation">Equation</label>
+            <input name="selectedFormViewInput" class="form-check-input" type="radio" [(ngModel)]="selectedFormView" (change)="setView()" value="Equation">Equation</label>
         <label class="form-check-label">
-            <input name="selectedFormView" class="form-check-input" type="radio" [(ngModel)]="selectedFormView" value="Data" (input)="setView()">Data</label>
+            <input name="selectedFormViewInput" class="form-check-input" type="radio" [(ngModel)]="selectedFormView" value="Data" (change)="setView()">Data</label>
       </div>
     </form>
   </div>
