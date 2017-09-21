@@ -62,14 +62,22 @@
 
     .report-cover {
         display: block;
-        width: 400px;
+        width: 200px;
         text-align: center;
     }
     .report-header {
+        position: static;
         border: none;
         background: none;
-        page-break-after: auto;
+        page-break-before: always;
     }
+
+    .report-container .content {
+        padding: 0;
+        margin-left: 0;
+    }
+
+
 }
 
 

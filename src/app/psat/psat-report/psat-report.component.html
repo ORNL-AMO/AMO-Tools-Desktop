@@ -33,7 +33,7 @@
 
     <div class="report-data" *ngIf="psat.setupDone">
 
-        <ul class="tabs primary">
+        <ul class="tabs primary hide-print">
             <li (click)="setTab('results')" [ngClass]="{'active': currentTab == 'results'}">
                 <a>Results</a>
             </li><li (click)="setTab('inputData')" [ngClass]="{'active': currentTab == 'inputData'}">
@@ -44,10 +44,19 @@
             <app-chart-summary [psat]="psat"></app-chart-summary>
         </div>-->
         <div class="results" *ngIf="currentTab == 'results'">
-            <app-output-summary [psat]="psat" [settings]="settings" [inRollup]="inRollup" [assessment]="assessment" (selectModification)="useModification($event)"></app-output-summary>
+            <app-output-summary 
+                [psat]="psat" 
+                [settings]="settings" 
+                [inRollup]="inRollup" 
+                [assessment]="assessment" 
+                (selectModification)="useModification($event)">
+            </app-output-summary>
         </div>
         <div class="input-data results" *ngIf="currentTab == 'inputData'">
-            <app-input-summary [psat]="psat" [settings]="settings"></app-input-summary>
+            <app-input-summary 
+                [psat]="psat" 
+                [settings]="settings">
+            </app-input-summary>
         </div>
 
     </div>
