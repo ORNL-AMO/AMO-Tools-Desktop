@@ -4,7 +4,7 @@ import { SuiteDbService } from '../suite-db.service';
 import { IndexedDbService } from '../../indexedDb/indexed-db.service';
 import * as _ from 'lodash';
 import { Settings } from '../../shared/models/settings';
-
+import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
 @Component({
   selector: 'app-gas-load-charge-material',
   templateUrl: './gas-load-charge-material.component.html',
@@ -24,7 +24,7 @@ export class GasLoadChargeMaterialComponent implements OnInit {
   allMaterials: Array<GasLoadChargeMaterial>;
   isValidMaterialName: boolean = true;
   nameError: string = null;
-  constructor(private suiteDbService: SuiteDbService, private indexedDbService: IndexedDbService) { }
+  constructor(private suiteDbService: SuiteDbService, private indexedDbService: IndexedDbService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
     this.allMaterials = this.suiteDbService.selectGasLoadChargeMaterials();
@@ -38,6 +38,9 @@ export class GasLoadChargeMaterialComponent implements OnInit {
   }
 
   addMaterial() {
+    if (this.settings.unitsOfMeasure == 'Metric') {
+      this.newMaterial.specificHeatVapor = this.convertUnitsService.value(this.newMaterial.specificHeatVapor).from('kJkgC').to('btulbF');
+    }
     let suiteDbResult = this.suiteDbService.insertGasLoadChargeMaterial(this.newMaterial);
     if (suiteDbResult == true) {
       this.indexedDbService.addGasLoadChargeMaterial(this.newMaterial).then(idbResults => {

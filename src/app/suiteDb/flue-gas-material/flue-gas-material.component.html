@@ -97,7 +97,8 @@
         <label class="small" for="heatingValue">HHV</label>
         <div class="input-group">
           <input type="number" id="heatingValue" name="heatingValue" class="form-control" [(ngModel)]="newMaterial.heatingValue" />
-          <span class="input-group-addon units">%</span>
+          <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">Btu/SCF</span>
+          <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kJ/Nm<sup>3</sup></span>
         </div>
       </div>
       <div class="form-group">

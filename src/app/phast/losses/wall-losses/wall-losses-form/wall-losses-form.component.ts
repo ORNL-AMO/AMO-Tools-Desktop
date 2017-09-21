@@ -6,6 +6,8 @@ import { WallLossesSurface } from '../../../../shared/models/materials';
 import { ModalDirective } from 'ngx-bootstrap';
 import { LossesService } from '../../losses.service';
 import { Settings } from '../../../../shared/models/settings';
+import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
+
 @Component({
   selector: 'app-wall-losses-form',
   templateUrl: './wall-losses-form.component.html',
@@ -38,7 +40,7 @@ export class WallLossesFormComponent implements OnInit {
   emissivityError: string = null;
   surfaceOptions: Array<WallLossesSurface>;
   showModal: boolean = false;
-  constructor(private windowRefService: WindowRefService, private wallLossCompareService: WallLossCompareService, private suiteDbService: SuiteDbService, private lossesService: LossesService) { }
+  constructor(private windowRefService: WindowRefService, private wallLossCompareService: WallLossCompareService, private suiteDbService: SuiteDbService, private lossesService: LossesService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnChanges(changes: SimpleChanges) {
     if (!this.firstChange) {
@@ -191,6 +193,9 @@ export class WallLossesFormComponent implements OnInit {
 
   setProperties() {
     let tmpFactor = this.suiteDbService.selectWallLossesSurfaceById(this.wallLossesForm.value.surfaceShape);
+    if(this.settings.unitsOfMeasure == 'Metric'){
+      tmpFactor.conditionFactor = this.convertUnitsService.value(tmpFactor.conditionFactor).from('btulbF').to('kJkgC');
+    }
     this.wallLossesForm.patchValue({
       conditionFactor: tmpFactor.conditionFactor
     })

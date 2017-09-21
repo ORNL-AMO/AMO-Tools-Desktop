@@ -53,7 +53,7 @@
         </button>
     </div>
     <div class="modal-content">
-      <app-flue-gas-material *ngIf="showModal" (closeModal)="hideMaterialModal($event)"></app-flue-gas-material>
+      <app-flue-gas-material *ngIf="showModal" (closeModal)="hideMaterialModal($event)" [settings]="settings"></app-flue-gas-material>
     </div>
   </div>
 </div>

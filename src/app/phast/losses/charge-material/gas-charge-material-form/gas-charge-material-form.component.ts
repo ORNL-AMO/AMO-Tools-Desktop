@@ -5,7 +5,7 @@ import { ChargeMaterialCompareService } from '../charge-material-compare.service
 import { ModalDirective } from 'ngx-bootstrap';
 import { LossesService } from '../../losses.service';
 import { Settings } from '../../../../shared/models/settings';
-
+import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
 @Component({
   selector: 'app-gas-charge-material-form',
   templateUrl: './gas-charge-material-form.component.html',
@@ -37,7 +37,7 @@ export class GasChargeMaterialFormComponent implements OnInit {
   selectedMaterial: any;
   counter: any;
   showModal: boolean = false;
-  constructor(private suiteDbService: SuiteDbService, private chargeMaterialCompareService: ChargeMaterialCompareService, private windowRefService: WindowRefService, private lossesService: LossesService) { }
+  constructor(private suiteDbService: SuiteDbService, private chargeMaterialCompareService: ChargeMaterialCompareService, private windowRefService: WindowRefService, private lossesService: LossesService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnChanges(changes: SimpleChanges) {
     if (!this.firstChange) {
@@ -94,6 +94,9 @@ export class GasChargeMaterialFormComponent implements OnInit {
 
   setProperties() {
     let selectedMaterial = this.suiteDbService.selectGasLoadChargeMaterialById(this.chargeMaterialForm.value.materialId);
+        if (this.settings.unitsOfMeasure == 'Metric') {
+      selectedMaterial.specificHeatVapor = this.convertUnitsService.value(selectedMaterial.specificHeatVapor).from('btulbF').to('kJkgC');
+    }
     this.chargeMaterialForm.patchValue({
       materialSpecificHeat: selectedMaterial.specificHeatVapor,
     });

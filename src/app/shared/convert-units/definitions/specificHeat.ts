@@ -29,7 +29,7 @@ export const specificHeat = {
     },
 
   imperial: {
-    btulblF: {
+    btulbF: {
       name: {
         singular: 'British Thermal Unit per Pound Fahrenheit'
         , plural: 'British Thermal Units per Pound Fahrenheit',

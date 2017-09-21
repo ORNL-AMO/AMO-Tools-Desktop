@@ -5,6 +5,7 @@ import { ChargeMaterialCompareService } from '../charge-material-compare.service
 import { ModalDirective } from 'ngx-bootstrap';
 import { LossesService } from '../../losses.service';
 import { Settings } from '../../../../shared/models/settings';
+import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
 
 @Component({
   selector: 'app-liquid-charge-material-form',
@@ -36,7 +37,7 @@ export class LiquidChargeMaterialFormComponent implements OnInit {
   selectedMaterial: any;
   counter: any;
   dischargeTempError: string = null;
-  constructor(private suiteDbService: SuiteDbService, private chargeMaterialCompareService: ChargeMaterialCompareService, private windowRefService: WindowRefService, private lossesService: LossesService) { }
+  constructor(private suiteDbService: SuiteDbService, private chargeMaterialCompareService: ChargeMaterialCompareService, private windowRefService: WindowRefService, private lossesService: LossesService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnChanges(changes: SimpleChanges) {
     if (!this.firstChange) {
@@ -103,6 +104,15 @@ export class LiquidChargeMaterialFormComponent implements OnInit {
 
   setProperties() {
     let selectedMaterial = this.suiteDbService.selectLiquidLoadChargeMaterialById(this.chargeMaterialForm.value.materialId);
+       if (this.settings.unitsOfMeasure == 'Metric') {
+      selectedMaterial.vaporizationTemperature = this.convertUnitsService.value(selectedMaterial.vaporizationTemperature).from('F').to('C');
+      selectedMaterial.latentHeat = this.convertUnitsService.value(selectedMaterial.latentHeat).from('F').to('C');
+      selectedMaterial.specificHeatLiquid = this.convertUnitsService.value(selectedMaterial.specificHeatLiquid).from('btulbF').to('kJkgC');
+      selectedMaterial.specificHeatVapor = this.convertUnitsService.value(selectedMaterial.specificHeatVapor).from('btulbF').to('kJkgC');
+    }
+   
+   
+   
     this.chargeMaterialForm.patchValue({
       materialLatentHeat: selectedMaterial.latentHeat,
       materialSpecificHeatLiquid: selectedMaterial.specificHeatLiquid,

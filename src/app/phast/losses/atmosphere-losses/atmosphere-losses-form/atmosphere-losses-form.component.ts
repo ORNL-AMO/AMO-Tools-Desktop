@@ -6,6 +6,7 @@ import { AtmosphereSpecificHeat } from '../../../../shared/models/materials';
 import { ModalDirective } from 'ngx-bootstrap';
 import { LossesService } from '../../losses.service';
 import { Settings } from '../../../../shared/models/settings';
+import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
 
 @Component({
   selector: 'app-atmosphere-losses-form',
@@ -39,7 +40,7 @@ export class AtmosphereLossesFormComponent implements OnInit {
   temperatureError: string = null;
   materialTypes: Array<AtmosphereSpecificHeat>;
   showModal: boolean = false;
-  constructor(private windowRefService: WindowRefService, private atmosphereLossesCompareService: AtmosphereLossesCompareService, private suiteDbService: SuiteDbService, private lossesService: LossesService) { }
+  constructor(private windowRefService: WindowRefService, private atmosphereLossesCompareService: AtmosphereLossesCompareService, private suiteDbService: SuiteDbService, private lossesService: LossesService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnChanges(changes: SimpleChanges) {
     if (!this.firstChange) {
@@ -67,6 +68,10 @@ export class AtmosphereLossesFormComponent implements OnInit {
 
   setProperties() {
     let selectedMaterial = this.suiteDbService.selectAtmosphereSpecificHeatById(this.atmosphereLossForm.value.atmosphereGas);
+    if (this.settings.unitsOfMeasure == 'Metric') {
+      selectedMaterial.specificHeat = this.convertUnitsService.value(selectedMaterial.specificHeat).from('btulbF').to('kJkgC');
+    }
+
     this.atmosphereLossForm.patchValue({
       specificHeat: selectedMaterial.specificHeat,
     });
