@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { PumpCurveForm, PumpCurveDataRow } from '../pump-curve';
 import * as regression from 'regression';
-
+import { PumpCurveService } from '../pump-curve.service';
 @Component({
   selector: 'app-pump-curve-form',
   templateUrl: './pump-curve-form.component.html',
@@ -14,14 +14,16 @@ export class PumpCurveFormComponent implements OnInit {
   changeField = new EventEmitter<string>();
   @Output('emitCalculate')
   emitCalculate = new EventEmitter<boolean>();
-
-  selectedFormView: string = 'Equation';
+  @Input()
+  selectedFormView: string;
 
   options: Array<string> = [
     'Diameter',
     'Speed'
   ]
-  constructor() { }
+
+
+  constructor(private pumpCurveService: PumpCurveService) { }
 
   ngOnInit() {
   }
@@ -43,11 +45,11 @@ export class PumpCurveFormComponent implements OnInit {
   }
 
   setView(){
-    this.pumpCurveForm.selectedFormView = this.selectedFormView;
+    this.pumpCurveService.calcMethod.next(this.selectedFormView);
   }
 
   estimateHead() {
-    if (this.pumpCurveForm.selectedFormView == 'Data') {
+    if (this.selectedFormView == 'Data') {
       let tmpArr = new Array<any>();
       this.pumpCurveForm.dataRows.forEach(val => {
         tmpArr.push([val.flow, val.head]);
@@ -55,7 +57,7 @@ export class PumpCurveFormComponent implements OnInit {
       let results = regression.polynomial(tmpArr, { order: this.pumpCurveForm.dataOrder, precision: 10 });
       let newVal = results.predict(this.pumpCurveForm.exploreFlow);
       this.pumpCurveForm.exploreHead = newVal[1];
-    } else if (this.pumpCurveForm.selectedFormView == 'Equation') {
+    } else if (this.selectedFormView == 'Equation') {
       let result = 0;
       result = this.pumpCurveForm.headConstant + this.pumpCurveForm.headFlow * this.pumpCurveForm.exploreFlow + this.pumpCurveForm.headFlow2 * Math.pow(this.pumpCurveForm.exploreFlow, 2) + this.pumpCurveForm.headFlow3 * Math.pow(this.pumpCurveForm.exploreFlow, 3) + this.pumpCurveForm.headFlow4 * Math.pow(this.pumpCurveForm.exploreFlow, 4) + this.pumpCurveForm.headFlow5 * Math.pow(this.pumpCurveForm.exploreFlow, 5) + this.pumpCurveForm.headFlow6 * Math.pow(this.pumpCurveForm.exploreFlow, 6);
       this.pumpCurveForm.exploreHead = result;
@@ -63,7 +65,7 @@ export class PumpCurveFormComponent implements OnInit {
   }
 
   estimateFlow() {
-    if (this.pumpCurveForm.selectedFormView == 'Data') {
+    if (this.selectedFormView == 'Data') {
       let tmpArr = new Array<any>();
       this.pumpCurveForm.dataRows.forEach(val => {
         tmpArr.push([val.head, val.flow]);

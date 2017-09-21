@@ -5,6 +5,7 @@ import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { PsatService } from '../../../psat/psat.service';
 import { PumpCurveForm, PumpCurveDataRow } from './pump-curve';
+import { PumpCurveService } from './pump-curve.service';
 @Component({
   selector: 'app-pump-curve',
   templateUrl: './pump-curve.component.html',
@@ -23,7 +24,9 @@ export class PumpCurveComponent implements OnInit {
   pumpCurveForm: PumpCurveForm;
   toggleCalculate: boolean = false;
   currentField: string = 'maxFlow';
-  constructor(private indexedDbService: IndexedDbService, private psatService: PsatService, private convertUnitsService: ConvertUnitsService) { }
+  selectedFormView: string;
+  regEquation: string;
+  constructor(private indexedDbService: IndexedDbService, private psatService: PsatService, private convertUnitsService: ConvertUnitsService, private pumpCurveService: PumpCurveService) { }
 
   ngOnInit() {
     //get systen settings if using stand alone calculator
@@ -38,7 +41,49 @@ export class PumpCurveComponent implements OnInit {
     if (!this.inPsat) {
       this.initForm();
     }
+    this.pumpCurveService.calcMethod.subscribe(val => {
+      this.selectedFormView = val;
+    })
+
+    this.pumpCurveService.regEquation.subscribe(val => {
+      if (val) {
+        this.regEquation = val;
+        for (let i = 0; i < this.pumpCurveForm.dataOrder; i++) {
+          this.regEquation = this.regEquation.replace(/x/, '(flow)');
+          this.regEquation = this.regEquation.replace('+ -', '- ');
+        }
+        this.regEquation = this.regEquation.replace('y', 'Head');
+        this.regEquation = this.regEquation.replace('^2', '&#x00B2;');
+        this.regEquation = this.regEquation.replace('^3', '&#x00B3;');
+        this.regEquation = this.regEquation.replace('^4', '&#x2074;');
+        this.regEquation = this.regEquation.replace('^5', '&#x2075;');
+        this.regEquation = this.regEquation.replace('^6', '&#x2076;');
+      } else {
+        let tmpStr = this.pumpCurveForm.headFlow2 + '(flow)&#x00B2; + ' + this.pumpCurveForm.headFlow + ('(flow) +') + this.pumpCurveForm.headConstant;
+        if (this.pumpCurveForm.headOrder > 2 && this.pumpCurveForm.headFlow3) {
+          tmpStr = this.pumpCurveForm.headFlow3 + '(flow)&#x00B3; + ' + tmpStr;
+        }
+        if (this.pumpCurveForm.headOrder > 3 && this.pumpCurveForm.headFlow4) {
+          tmpStr = this.pumpCurveForm.headFlow4 + '(flow)&#x2074; + ' + tmpStr;
+        }
+        if (this.pumpCurveForm.headOrder > 4 && this.pumpCurveForm.headFlow5) {
+          tmpStr = this.pumpCurveForm.headFlow5 + '(flow)&#x2075; + ' + tmpStr;
+        }
+        if (this.pumpCurveForm.headOrder > 5 && this.pumpCurveForm.headFlow6) {
+          tmpStr = this.pumpCurveForm.headFlow6 + '(flow)&#x2076; + ' + tmpStr;
+        }
+        this.regEquation = 'Head = '+ tmpStr;
+        for (let i = 0; i < this.pumpCurveForm.headOrder; i++) {
+          this.regEquation = this.regEquation.replace('+ -', '- ');
+        }
+      }
+    })
   }
+
+  ngOnDestroy() {
+    this.pumpCurveService.calcMethod.next('Equation')
+  }
+
   setTab(str: string) {
     this.tabSelect = str;
   }
@@ -81,8 +126,7 @@ export class PumpCurveComponent implements OnInit {
       headFlow6: 0,
       pumpEfficiencyOrder: 3,
       pumpEfficiencyConstant: 0,
-      measurementOption: 'Diameter',
-      selectedFormView: 'Equation'
+      measurementOption: 'Diameter'
     }
   }
 
