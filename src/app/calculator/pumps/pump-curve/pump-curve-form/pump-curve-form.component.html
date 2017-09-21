@@ -35,7 +35,7 @@
         <input name="baselineMeasurement" [(ngModel)]="pumpCurveForm.baselineMeasurement" type="number" step="any" class="form-control"
           id="baselineMeasurement" onfocus="this.select();" (focus)="focusField('baselineMeasurement')" (input)="calculate()">
         <span *ngIf="pumpCurveForm.measurementOption == 'Diameter'" class="input-group-addon units">in</span>
-        <span *ngIf="pumpCurveForm.measurementOption == 'Speed'" class="input-group-addon units">gpm</span>
+        <span *ngIf="pumpCurveForm.measurementOption == 'Speed'" class="input-group-addon units">rpm</span>
       </div>
     </div>
   </div>
@@ -47,7 +47,7 @@
         <input name="modifiedMeasurement" [(ngModel)]="pumpCurveForm.modifiedMeasurement" type="number" step="any" class="form-control"
           id="modifiedMeasurement" onfocus="this.select();" (focus)="focusField('modifiedMeasurement')" (input)="calculate()">
         <span *ngIf="pumpCurveForm.measurementOption == 'Diameter'" class="input-group-addon units">in</span>
-        <span *ngIf="pumpCurveForm.measurementOption == 'Speed'" class="input-group-addon units">gpm</span>
+        <span *ngIf="pumpCurveForm.measurementOption == 'Speed'" class="input-group-addon units">rpm</span>
       </div>
     </div>
   </div>
@@ -64,7 +64,7 @@
           onfocus="this.select();" (focus)="focusField('exploreFlow')" (input)="calculate()">
         <span class="input-group-addon units">gpm</span>
       </div>
-      <!--<span><a id="exploreFlow" class="form-text text-help small" (click)="estimateFlow()">Estimate Flow</a></span>-->
+      <span><a id="exploreFlow" class="form-text text-help small" (click)="estimateFlow()">Estimate Flow</a></span>
     </div>
   </div>
   <div class="col-6">
@@ -78,7 +78,7 @@
         <span class="input-group-addon units">ft</span>
 
       </div>
-      <span><a id="exploreHead" class="form-text text-help small" (click)="estimateHead()">Estimate Head</a></span>
+      <!--<span><a id="exploreHead" class="form-text text-help small" (click)="estimateHead()">Estimate Head</a></span>-->
     </div>
   </div>
 </div>
