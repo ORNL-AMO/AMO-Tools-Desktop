@@ -59,58 +59,48 @@ export class SankeyComponent implements OnInit {
     this.totalFixtureLoss = 0;
     this.totalLeakageLoss = 0;
 
-    if(this.losses.wallLosses != null){
+    if (this.losses.wallLosses != null) {
       this.totalWallLoss = this.phastService.sumWallLosses(this.losses.wallLosses, this.settings) / 1000000;
     }
 
-    if(this.losses.wallLosses != null) {
-      this.totalAtmosphereLoss = _.sumBy(this.losses.atmosphereLosses, 'heatLoss') / 1000000;
+    if (this.losses.wallLosses != null) {
+      this.totalAtmosphereLoss = this.phastService.sumAtmosphereLosses(this.losses.atmosphereLosses, this.settings) / 1000000;
     }
 
-    if(this.losses.otherLosses != null) {
-      this.totalOtherLoss = _.sumBy(this.losses.otherLosses, 'heatLoss') / 1000000;
+    if (this.losses.otherLosses != null) {
+      this.totalOtherLoss = this.phastService.sumOtherLosses(this.losses.otherLosses)/ 1000000;
     }
 
-    if(this.losses.coolingLosses != null) {
-      this.totalCoolingLoss = _.sumBy(this.losses.coolingLosses, 'heatLoss') / 1000000;
+    if (this.losses.coolingLosses != null) {
+      this.totalCoolingLoss = this.phastService.sumCoolingLosses(this.losses.coolingLosses, this.settings) / 1000000;
     }
 
-    if(this.losses.openingLosses != null) {
-      this.totalOpeningLoss = _.sumBy(this.losses.openingLosses, 'heatLoss') / 1000000;
+    if (this.losses.openingLosses != null) {
+      this.totalOpeningLoss = this.phastService.sumOpeningLosses(this.losses.openingLosses, this.settings) / 1000000;
     }
 
-    if(this.losses.fixtureLosses != null) {
-      this.totalFixtureLoss = _.sumBy(this.losses.fixtureLosses, 'heatLoss') / 1000000;
+    if (this.losses.fixtureLosses != null) {
+      this.totalFixtureLoss = this.phastService.sumFixtureLosses(this.losses.fixtureLosses, this.settings) / 1000000;
     }
 
-    if(this.losses.leakageLosses != null) {
-      this.totalLeakageLoss = _.sumBy(this.losses.leakageLosses, 'heatLoss') / 1000000;
+    if (this.losses.leakageLosses != null) {
+      this.totalLeakageLoss = this.phastService.sumLeakageLosses(this.losses.leakageLosses, this.settings) / 1000000;
     }
 
-    if(this.losses.extendedSurfaces != null) {
-      this.totalExtSurfaceLoss = _.sumBy(this.losses.extendedSurfaces, 'heatLoss') / 1000000;
+    if (this.losses.extendedSurfaces != null) {
+      this.totalExtSurfaceLoss = this.phastService.sumExtendedSurface(this.losses.extendedSurfaces, this.settings) / 1000000;
     }
 
     this.totalAtmosphereLoss = 0;
-    if(this.losses.chargeMaterials != null) {
-      if(_.sumBy(this.losses.chargeMaterials, 'gasChargeMaterial.heatRequired') != null){
-        this.totalChargeMaterialLoss += (_.sumBy(this.losses.chargeMaterials, 'gasChargeMaterial.heatRequired'));
-      }
-      if(_.sumBy(this.losses.chargeMaterials, 'liquidChargeMaterial.heatRequired') != null){
-        this.totalChargeMaterialLoss += (_.sumBy(this.losses.chargeMaterials, 'liquidChargeMaterial.heatRequired'));
-      }
-      if(_.sumBy(this.losses.chargeMaterials, 'solidChargeMaterial.heatRequired') != null){
-        this.totalChargeMaterialLoss += (_.sumBy(this.losses.chargeMaterials, 'solidChargeMaterial.heatRequired'));
-      }
-
-      this.totalChargeMaterialLoss /= 1000000;
+    if (this.losses.chargeMaterials != null) {
+      this.totalChargeMaterialLoss = this.phastService.sumChargeMaterials(this.losses.chargeMaterials, this.settings) / 1000000;
     }
 
     this.totalInput = this.totalWallLoss + this.totalAtmosphereLoss + this.totalOtherLoss + this.totalCoolingLoss + this.totalOpeningLoss + this.totalFixtureLoss + this.totalLeakageLoss + this.totalExtSurfaceLoss + this.totalChargeMaterialLoss;
   }
 
   makeSankey() {
-    if(this.totalInput > 0){
+    if (this.totalInput > 0) {
       this.sankey();
     }
   }
@@ -126,7 +116,7 @@ export class SankeyComponent implements OnInit {
       //TODO Flue Gass still need to get loss value
       /*2*/{ name: "Flue Gas Losses", value: 0, displaySize: 0, width: 0, x: 600, y: 0, input: false, usefulOutput: false, inter: false, top: true, units: "MMBtu/hr" },
       /*3*/{ name: "inter2", value: 0, displaySize: 0, width: 0, x: 600, y: 0, input: false, usefulOutput: false, inter: true, top: false, units: "MMBtu/hr" },
-      /*4*/{ name: "Atmosphere Losses", value: this.totalAtmosphereLoss , displaySize: 0, width: 0, x: 850, y: 0, input: false, usefulOutput: false, inter: false, top: false, units: "MMBtu/hr" },
+      /*4*/{ name: "Atmosphere Losses", value: this.totalAtmosphereLoss, displaySize: 0, width: 0, x: 850, y: 0, input: false, usefulOutput: false, inter: false, top: false, units: "MMBtu/hr" },
       /*5*/{ name: "inter3", value: 0, displaySize: 0, width: 0, x: 850, y: 0, input: false, usefulOutput: false, inter: true, top: true, units: "MMBtu/hr" },
       /*6*/{ name: "Other Losses", value: this.totalOpeningLoss, displaySize: 0, width: 0, x: 1100, y: 0, input: false, usefulOutput: false, inter: false, top: true, units: "MMBtu/hr" },
       /*7*/{ name: "inter4", value: 0, displaySize: 0, width: 0, x: 1100, y: 0, input: false, usefulOutput: false, inter: true, top: false, units: "MMBtu/hr" },
