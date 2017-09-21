@@ -44,15 +44,17 @@ app.on('ready', function () {
 
   //signal from core.component to check for update
   ipcMain.on('ready', (coreCompEvent, arg) => {
+    if (!isDev()) {
     autoUpdater.checkForUpdates();
     log.info('checking for update..');
     autoUpdater.on('update-available', (event, info) => {
       coreCompEvent.sender.send('available', autoUpdater.updateAvailable);
-    });
+  });
     autoUpdater.on('update-not-available', (event, info) => {
       log.info('no update available..');
-    });
-  })
+  });
+  }
+})
 
   autoUpdater.on('error', (event, error) => {
   });

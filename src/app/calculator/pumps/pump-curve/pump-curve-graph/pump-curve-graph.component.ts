@@ -473,10 +473,10 @@ export class PumpCurveGraphComponent implements OnInit {
                     .style("padding-right", "10px")
                     .style("padding-left", "10px")
                     .html(
-                    "<p><strong><div>Baseline Flow: </div></strong><div>" + format(d.x) + " " + " gal/min</div>" +
+                    "<p><strong><div>Baseline Flow: </div></strong><div>" + format(d.x) + " " + " gpm</div>" +
 
                     "<strong><div>Basleline Head: </div></strong><div>" + format(d.y) + " ft</div></p>" +
-                    "<p><strong><div>Modified Flow: </div></strong><div>" + format(d.x) + " " + " gal/min</div>" +
+                    "<p><strong><div>Modified Flow: </div></strong><div>" + format(d.x) + " " + " gpm</div>" +
 
                     "<strong><div>Modified Head: </div></strong><div>" + format(modD.y) + " ft</div></p>")
 
@@ -504,10 +504,10 @@ export class PumpCurveGraphComponent implements OnInit {
                   .style("padding-right", "10px")
                   .style("padding-left", "10px")
                   .html(
-                  "<p><strong><div>Baseline Flow: </div></strong><div>" + format(d.x) + " " + " gal/min</div>" +
+                  "<p><strong><div>Baseline Flow: </div></strong><div>" + format(d.x) + " " + " gpm</div>" +
 
                   "<strong><div>Basleline Head: </div></strong><div>" + format(d.y) + " ft</div></p>" +
-                  "<p><strong><div>Modified Flow: </div></strong><div>" + format(d.x) + " " + " gal/min</div>" +
+                  "<p><strong><div>Modified Flow: </div></strong><div>" + format(d.x) + " " + " gpm</div>" +
 
                   "<strong><div>Modified Head: </div></strong><div>" + format(modD.y) + " ft</div></p>")
 
@@ -552,7 +552,7 @@ export class PumpCurveGraphComponent implements OnInit {
               .style("padding-right", "10px")
               .style("padding-left", "10px")
               .html(
-              "<p><strong><div>Flow: </div></strong><div>" + format(d.x) + " " + " gal/min</div>" +
+              "<p><strong><div>Flow: </div></strong><div>" + format(d.x) + " " + " gpm</div>" +
 
               "<strong><div>Head: </div></strong><div>" + format(d.y) + " ft</div></p>")
 
