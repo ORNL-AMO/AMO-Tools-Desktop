@@ -34,7 +34,7 @@ export class SankeyComponent implements OnInit {
   totalExtSurfaceLoss: number = 0;
   totalCoolingLoss: number = 0;
   totalAtmosphereLoss: number = 0;
-
+  totalFlueGas: number = 0;
   firstChange: boolean = true;
 
 
@@ -91,10 +91,19 @@ export class SankeyComponent implements OnInit {
       this.totalExtSurfaceLoss = this.phastService.sumExtendedSurface(this.losses.extendedSurfaces, this.settings) / 1000000;
     }
 
-    this.totalAtmosphereLoss = 0;
     if (this.losses.chargeMaterials != null) {
       this.totalChargeMaterialLoss = this.phastService.sumChargeMaterials(this.losses.chargeMaterials, this.settings) / 1000000;
     }
+
+    if(this.losses.flueGasLosses != null){
+      if(this.losses.flueGasLosses[0].flueGasType == 'By Volume'){
+        this.totalFlueGas = this.phastService.flueGasByVolume(this.losses.flueGasLosses[0].flueGasByVolume, this.settings);
+      }else if(this.losses.flueGasLosses[0].flueGasType == 'By Mass'){
+        this.totalFlueGas = this.phastService.flueGasByMass(this.losses.flueGasLosses[0].flueGasByMass, this.settings);
+      }
+
+    }
+
 
     this.totalInput = this.totalWallLoss + this.totalAtmosphereLoss + this.totalOtherLoss + this.totalCoolingLoss + this.totalOpeningLoss + this.totalFixtureLoss + this.totalLeakageLoss + this.totalExtSurfaceLoss + this.totalChargeMaterialLoss;
   }
@@ -114,11 +123,11 @@ export class SankeyComponent implements OnInit {
       /*0*/{ name: "Input", value: this.totalInput, displaySize: this.baseSize, width: 300, x: 200, y: 0, input: true, usefulOutput: false, inter: false, top: false, units: "MMBtu/hr" },
       /*1*/{ name: "inter1", value: 0, displaySize: 0, width: 0, x: 350, y: 0, input: false, usefulOutput: false, inter: true, top: true, units: "MMBtu/hr" },
       //TODO Flue Gass still need to get loss value
-      /*2*/{ name: "Flue Gas Losses", value: 0, displaySize: 0, width: 0, x: 600, y: 0, input: false, usefulOutput: false, inter: false, top: true, units: "MMBtu/hr" },
+      /*2*/{ name: "Flue Gas Losses", value: this.totalFlueGas, displaySize: 0, width: 0, x: 600, y: 0, input: false, usefulOutput: false, inter: false, top: true, units: "MMBtu/hr" },
       /*3*/{ name: "inter2", value: 0, displaySize: 0, width: 0, x: 600, y: 0, input: false, usefulOutput: false, inter: true, top: false, units: "MMBtu/hr" },
       /*4*/{ name: "Atmosphere Losses", value: this.totalAtmosphereLoss, displaySize: 0, width: 0, x: 850, y: 0, input: false, usefulOutput: false, inter: false, top: false, units: "MMBtu/hr" },
       /*5*/{ name: "inter3", value: 0, displaySize: 0, width: 0, x: 850, y: 0, input: false, usefulOutput: false, inter: true, top: true, units: "MMBtu/hr" },
-      /*6*/{ name: "Other Losses", value: this.totalOpeningLoss, displaySize: 0, width: 0, x: 1100, y: 0, input: false, usefulOutput: false, inter: false, top: true, units: "MMBtu/hr" },
+      /*6*/{ name: "Other Losses", value: this.totalOtherLoss, displaySize: 0, width: 0, x: 1100, y: 0, input: false, usefulOutput: false, inter: false, top: true, units: "MMBtu/hr" },
       /*7*/{ name: "inter4", value: 0, displaySize: 0, width: 0, x: 1100, y: 0, input: false, usefulOutput: false, inter: true, top: false, units: "MMBtu/hr" },
       /*8*/{ name: "Water Cooling Losses", value: this.totalCoolingLoss, displaySize: 0, width: 0, x: 1350, y: 0, input: false, usefulOutput: false, inter: false, top: false, units: "MMBtu/hr" },
       /*9*/{ name: "inter5", value: 0, displaySize: 0, width: 0, x: 1350, y: 0, input: false, usefulOutput: false, inter: true, top: true, units: "MMBtu/hr" },
