@@ -162,6 +162,7 @@ export class FlueGasLossesComponent implements OnInit {
   calculate(loss: any) {
     if (loss.measurementType == "By Volume") {
       let tmpLoss: FlueGasByVolume = this.flueGasLossesService.buildByVolumeLossFromForm(loss.formByVolume);
+      console.log(tmpLoss);
       let tmpResult = this.phastService.flueGasByVolume(tmpLoss, this.settings);
       loss.availableHeat = tmpResult * 100;
       loss.grossHeat = this.phastService.sumHeatInput(this.losses, this.settings) / tmpResult;

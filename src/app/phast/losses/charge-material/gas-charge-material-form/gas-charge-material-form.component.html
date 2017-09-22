@@ -30,16 +30,6 @@
       </div>
     </div>
 
-
-    <div class="form-group">
-      <label class="small" for="vaporInGas">Vapor in Gas Mixture</label>
-      <div class="input-group">
-        <input name="{{'vaporInGas_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="vaporInGas" id="vaporInGas"
-          onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('vaporInGas')">
-        <span class="input-group-addon units">%</span>
-      </div>
-    </div>
-
     <div class="form-group">
       <label class="small" for="initialTemperature">Initial Temperature</label>
       <div class="input-group">
@@ -60,6 +50,15 @@
       </div>
     </div>
 
+    <div class="form-group">
+      <label class="small" for="vaporInGas">Vapor in Gas Mixture</label>
+      <div class="input-group">
+        <input name="{{'vaporInGas_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="vaporInGas" id="vaporInGas"
+          onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('vaporInGas')">
+        <span class="input-group-addon units">%</span>
+      </div>
+    </div>
+    
     <div class="form-group">
       <label class="small" for="specificHeatOfVapor">Specific Heat of Vapor</label>
       <div class="input-group">

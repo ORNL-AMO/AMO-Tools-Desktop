@@ -30,14 +30,14 @@ export class ChargeMaterialService {
       'materialId': [1, Validators.required],
       'materialSpecificHeat': ['', Validators.required],
       'feedRate': ['', Validators.required],
-      'vaporInGas': ['', Validators.required],
+      'vaporInGas': [0, Validators.required],
       'initialTemperature': ['', Validators.required],
       'dischargeTemperature': ['', Validators.required],
-      'specificHeatOfVapor': ['', Validators.required],
-      'gasReacted': ['', Validators.required],
-      'heatOfReaction': ['', Validators.required],
-      'endothermicOrExothermic': ['', Validators.required],
-      'additionalHeatRequired': ['', Validators.required],
+      'specificHeatOfVapor': [0, Validators.required],
+      'gasReacted': [0, Validators.required],
+      'heatOfReaction': [0, Validators.required],
+      'endothermicOrExothermic': ['Endothermic', Validators.required],
+      'additionalHeatRequired': [0, Validators.required],
 
     })
   }
@@ -94,11 +94,11 @@ export class ChargeMaterialService {
       'feedRate': ['', Validators.required],
       'initialTemperature': ['', Validators.required],
       'dischargeTemperature': ['', Validators.required],
-      'liquidVaporized': ['', Validators.required],
-      'liquidReacted': ['', Validators.required],
-      'heatOfReaction': ['', Validators.required],
-      'endothermicOrExothermic': ['', Validators.required],
-      'additionalHeatRequired': ['', Validators.required],
+      'liquidVaporized': [0, Validators.required],
+      'liquidReacted': [0, Validators.required],
+      'heatOfReaction': [0, Validators.required],
+      'endothermicOrExothermic': ['Endothermic', Validators.required],
+      'additionalHeatRequired': [0, Validators.required],
     })
   }
 
@@ -159,16 +159,16 @@ export class ChargeMaterialService {
       'materialHeatOfLiquid': ['', Validators.required],
       'materialMeltingPoint': ['', Validators.required],
       'feedRate': ['', Validators.required],
-      'waterContentAsCharged': ['', Validators.required],
-      'waterContentAsDischarged': ['', Validators.required],
+      'waterContentAsCharged': [0, Validators.required],
+      'waterContentAsDischarged': [0, Validators.required],
       'initialTemperature': ['', Validators.required],
       'chargeMaterialDischargeTemperature': ['', Validators.required],
-      'waterVaporDischargeTemperature': ['', Validators.required],
-      'percentChargeMelted': ['', Validators.required],
-      'percentChargeReacted': ['', Validators.required],
-      'heatOfReaction': ['', Validators.required],
-      'endothermicOrExothermic': ['', Validators.required],
-      'additionalHeatRequired': ['', Validators.required],
+      'waterVaporDischargeTemperature': [0, Validators.required],
+      'percentChargeMelted': [0, Validators.required],
+      'percentChargeReacted': [0, Validators.required],
+      'heatOfReaction': [0, Validators.required],
+      'endothermicOrExothermic': ['Endothermic', Validators.required],
+      'additionalHeatRequired': [0, Validators.required],
     })
   }
 
