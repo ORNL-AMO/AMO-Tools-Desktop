@@ -16,7 +16,7 @@
         <input name="{{'openingArea_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="openingArea" id="openingArea"
           onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('openingArea')">
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units"><span>ft<sup>2</sup></span></span>
-        <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units"><span>m<sup>2</sup></span></span>
+        <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units"><span>m<sup>2</sup></span></span>
       </div>
     </div>
 
