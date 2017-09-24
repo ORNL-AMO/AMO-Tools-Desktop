@@ -6,7 +6,7 @@ import { PhastService } from '../phast.service';
 import * as d3 from 'd3';
 var svg;
 import { Settings } from '../../shared/models/settings';
-
+import { SankeyService, FuelResults } from './sankey.service';
 const width = 2650,
   height = 1400;
 
@@ -24,160 +24,176 @@ export class SankeyComponent implements OnInit {
   @Input()
   location: string;
 
-  totalInput: number = 0;
-  totalChargeMaterialLoss: number = 0;
-  totalWallLoss: number = 0;
-  totalOtherLoss: number = 0;
-  totalOpeningLoss: number = 0;
-  totalLeakageLoss: number = 0;
-  totalFixtureLoss: number = 0;
-  totalExtSurfaceLoss: number = 0;
-  totalCoolingLoss: number = 0;
-  totalAtmosphereLoss: number = 0;
-  totalFlueGas: number = 0;
+  // totalInput: number = 0;
+  // totalChargeMaterialLoss: number = 0;
+  // totalWallLoss: number = 0;
+  // totalOtherLoss: number = 0;
+  // totalOpeningLoss: number = 0;
+  // totalLeakageLoss: number = 0;
+  // totalFixtureLoss: number = 0;
+  // totalExtSurfaceLoss: number = 0;
+  // totalCoolingLoss: number = 0;
+  // totalAtmosphereLoss: number = 0;
+  // totalFlueGas: number = 0;
   firstChange: boolean = true;
 
 
 
   baseSize: number = 300;
-  constructor(private phastService: PhastService) {
+  constructor(private phastService: PhastService, private sankeyService: SankeyService) {
   }
 
   ngOnInit() {
     if (this.losses) {
-      this.getTotals();
+      //this.getTotals();
       this.makeSankey();
     }
   }
 
-  getTotals() {
-    this.totalWallLoss = 0;
-    this.totalAtmosphereLoss = 0;
-    this.totalAtmosphereLoss = 0;
-    this.totalCoolingLoss = 0;
-    this.totalOpeningLoss = 0;
-    this.totalFixtureLoss = 0;
-    this.totalLeakageLoss = 0;
+  // getTotals() {
+  //   this.totalWallLoss = 0;
+  //   this.totalAtmosphereLoss = 0;
+  //   this.totalAtmosphereLoss = 0;
+  //   this.totalCoolingLoss = 0;
+  //   this.totalOpeningLoss = 0;
+  //   this.totalFixtureLoss = 0;
+  //   this.totalLeakageLoss = 0;
 
-    if (this.losses.wallLosses != null) {
-      this.totalWallLoss = this.phastService.sumWallLosses(this.losses.wallLosses, this.settings) / 1000000;
-    }
+  //   if (this.losses.wallLosses != null) {
+  //     this.totalWallLoss = this.phastService.sumWallLosses(this.losses.wallLosses, this.settings) / 1000000;
+  //   }
 
-    if (this.losses.wallLosses != null) {
-      this.totalAtmosphereLoss = this.phastService.sumAtmosphereLosses(this.losses.atmosphereLosses, this.settings) / 1000000;
-    }
+  //   if (this.losses.wallLosses != null) {
+  //     this.totalAtmosphereLoss = this.phastService.sumAtmosphereLosses(this.losses.atmosphereLosses, this.settings) / 1000000;
+  //   }
 
-    if (this.losses.otherLosses != null) {
-      this.totalOtherLoss = this.phastService.sumOtherLosses(this.losses.otherLosses)/ 1000000;
-    }
+  //   if (this.losses.otherLosses != null) {
+  //     this.totalOtherLoss = this.phastService.sumOtherLosses(this.losses.otherLosses)/ 1000000;
+  //   }
 
-    if (this.losses.coolingLosses != null) {
-      this.totalCoolingLoss = this.phastService.sumCoolingLosses(this.losses.coolingLosses, this.settings) / 1000000;
-    }
+  //   if (this.losses.coolingLosses != null) {
+  //     this.totalCoolingLoss = this.phastService.sumCoolingLosses(this.losses.coolingLosses, this.settings) / 1000000;
+  //   }
 
-    if (this.losses.openingLosses != null) {
-      this.totalOpeningLoss = this.phastService.sumOpeningLosses(this.losses.openingLosses, this.settings) / 1000000;
-    }
+  //   if (this.losses.openingLosses != null) {
+  //     this.totalOpeningLoss = this.phastService.sumOpeningLosses(this.losses.openingLosses, this.settings) / 1000000;
+  //   }
 
-    if (this.losses.fixtureLosses != null) {
-      this.totalFixtureLoss = this.phastService.sumFixtureLosses(this.losses.fixtureLosses, this.settings) / 1000000;
-    }
+  //   if (this.losses.fixtureLosses != null) {
+  //     this.totalFixtureLoss = this.phastService.sumFixtureLosses(this.losses.fixtureLosses, this.settings) / 1000000;
+  //   }
 
-    if (this.losses.leakageLosses != null) {
-      this.totalLeakageLoss = this.phastService.sumLeakageLosses(this.losses.leakageLosses, this.settings) / 1000000;
-    }
+  //   if (this.losses.leakageLosses != null) {
+  //     this.totalLeakageLoss = this.phastService.sumLeakageLosses(this.losses.leakageLosses, this.settings) / 1000000;
+  //   }
 
-    if (this.losses.extendedSurfaces != null) {
-      this.totalExtSurfaceLoss = this.phastService.sumExtendedSurface(this.losses.extendedSurfaces, this.settings) / 1000000;
-    }
+  //   if (this.losses.extendedSurfaces != null) {
+  //     this.totalExtSurfaceLoss = this.phastService.sumExtendedSurface(this.losses.extendedSurfaces, this.settings) / 1000000;
+  //   }
 
-    if (this.losses.chargeMaterials != null) {
-      this.totalChargeMaterialLoss = this.phastService.sumChargeMaterials(this.losses.chargeMaterials, this.settings) / 1000000;
-    }
+  //   if (this.losses.chargeMaterials != null) {
+  //     this.totalChargeMaterialLoss = this.phastService.sumChargeMaterials(this.losses.chargeMaterials, this.settings) / 1000000;
+  //   }
 
-    if(this.losses.flueGasLosses != null){
-      if(this.losses.flueGasLosses[0].flueGasType == 'By Volume'){
-        this.totalFlueGas = this.phastService.flueGasByVolume(this.losses.flueGasLosses[0].flueGasByVolume, this.settings);
-      }else if(this.losses.flueGasLosses[0].flueGasType == 'By Mass'){
-        this.totalFlueGas = this.phastService.flueGasByMass(this.losses.flueGasLosses[0].flueGasByMass, this.settings);
-      }
+  //   if(this.losses.flueGasLosses != null){
+  //     if(this.losses.flueGasLosses[0].flueGasType == 'By Volume'){
+  //       this.totalFlueGas = this.phastService.flueGasByVolume(this.losses.flueGasLosses[0].flueGasByVolume, this.settings);
+  //     }else if(this.losses.flueGasLosses[0].flueGasType == 'By Mass'){
+  //       this.totalFlueGas = this.phastService.flueGasByMass(this.losses.flueGasLosses[0].flueGasByMass, this.settings);
+  //     }
 
-    }
+  //   }
 
 
-    this.totalInput = this.totalWallLoss + this.totalAtmosphereLoss + this.totalOtherLoss + this.totalCoolingLoss + this.totalOpeningLoss + this.totalFixtureLoss + this.totalLeakageLoss + this.totalExtSurfaceLoss + this.totalChargeMaterialLoss;
-  }
+  //   this.totalInput = this.totalWallLoss + this.totalAtmosphereLoss + this.totalOtherLoss + this.totalCoolingLoss + this.totalOpeningLoss + this.totalFixtureLoss + this.totalLeakageLoss + this.totalExtSurfaceLoss + this.totalChargeMaterialLoss;
+  // }
 
   makeSankey() {
-    if (this.totalInput > 0) {
-      this.sankey();
+    let results = this.sankeyService.getFuelTotals(this.losses, this.settings);
+    if (results.totalInput > 0) {
+      this.sankey(results);
     }
   }
 
-  sankey() {
-
+  sankey(results: FuelResults) {
     // Remove  all Sankeys
     d3.select(this.location).selectAll('svg').remove();
 
-    var nodes = [
-      /*0*/{ name: "Input", value: this.totalInput, displaySize: this.baseSize, width: 300, x: 200, y: 0, input: true, usefulOutput: false, inter: false, top: false, units: "MMBtu/hr" },
-      /*1*/{ name: "inter1", value: 0, displaySize: 0, width: 0, x: 350, y: 0, input: false, usefulOutput: false, inter: true, top: true, units: "MMBtu/hr" },
-      //TODO Flue Gass still need to get loss value
-      /*2*/{ name: "Flue Gas Losses", value: this.totalFlueGas, displaySize: 0, width: 0, x: 600, y: 0, input: false, usefulOutput: false, inter: false, top: true, units: "MMBtu/hr" },
-      /*3*/{ name: "inter2", value: 0, displaySize: 0, width: 0, x: 600, y: 0, input: false, usefulOutput: false, inter: true, top: false, units: "MMBtu/hr" },
-      /*4*/{ name: "Atmosphere Losses", value: this.totalAtmosphereLoss, displaySize: 0, width: 0, x: 850, y: 0, input: false, usefulOutput: false, inter: false, top: false, units: "MMBtu/hr" },
-      /*5*/{ name: "inter3", value: 0, displaySize: 0, width: 0, x: 850, y: 0, input: false, usefulOutput: false, inter: true, top: true, units: "MMBtu/hr" },
-      /*6*/{ name: "Other Losses", value: this.totalOtherLoss, displaySize: 0, width: 0, x: 1100, y: 0, input: false, usefulOutput: false, inter: false, top: true, units: "MMBtu/hr" },
-      /*7*/{ name: "inter4", value: 0, displaySize: 0, width: 0, x: 1100, y: 0, input: false, usefulOutput: false, inter: true, top: false, units: "MMBtu/hr" },
-      /*8*/{ name: "Water Cooling Losses", value: this.totalCoolingLoss, displaySize: 0, width: 0, x: 1350, y: 0, input: false, usefulOutput: false, inter: false, top: false, units: "MMBtu/hr" },
-      /*9*/{ name: "inter5", value: 0, displaySize: 0, width: 0, x: 1350, y: 0, input: false, usefulOutput: false, inter: true, top: true, units: "MMBtu/hr" },
-      /*10*/{ name: "Wall Losses", value: this.totalWallLoss, displaySize: 0, width: 0, x: 1600, y: 0, input: false, usefulOutput: false, inter: false, top: true, units: "MMBtu/hr" },
-      /*11*/{ name: "inter6", value: 0, displaySize: 0, width: 0, x: 1600, y: 0, input: false, usefulOutput: false, inter: true, top: false, units: "MMBtu/hr" },
-      /*12*/{ name: "Opening Losses", value: this.totalOpeningLoss, displaySize: 0, width: 0, x: 1850, y: 0, input: false, usefulOutput: false, inter: false, top: false, units: "MMBtu/hr" },
-      /*13*/{ name: "inter7", value: 0, displaySize: 0, width: 0, x: 1850, y: 0, input: false, usefulOutput: false, inter: true, top: true, units: "MMBtu/hr" },
-      /*14*/{ name: "Fixture/Conveyor Losses", value: this.totalFixtureLoss, displaySize: 0, width: 0, x: 2100, y: 0, input: false, usefulOutput: false, inter: false, top: true, units: "MMBtu/hr" },
-      /*15*/{ name: "inter8", value: 0, displaySize: 0, width: 0, x: 2100, y: 0, input: false, usefulOutput: false, inter: true, top: false, units: "MMBtu/hr" },
-      /*16*/{ name: "Leakage Losses", value: this.totalLeakageLoss, displaySize: 0, width: 0, x: 2350, y: 0, input: false, usefulOutput: false, inter: false, top: false, units: "MMBtu/hr" },
-      /*17*/{ name: "inter9", value: 0, displaySize: 0, width: 0, x: 2350, y: 0, input: false, usefulOutput: false, inter: true, top: true, units: "MMBtu/hr" },
-      /*18*/{ name: "External Surface Losses", value: this.totalExtSurfaceLoss, displaySize: 0, width: 0, x: 2600, y: 0, input: false, usefulOutput: false, inter: false, top: true, units: "MMBtu/hr" },
-      /*21*/{ name: "Useful Output", value: 0, displaySize: 0, width: 0, x: 2800, y: 0, input: false, usefulOutput: true, inter: false, top: false, units: "MMBtu/hr" }
-    ];
+    // var nodes = [
+    //   /*0*/{ name: "Input", value: results.totalInput, displaySize: this.baseSize, width: 300, x: 200, y: 0, input: true, usefulOutput: false, inter: false, top: false, units: "MMBtu/hr" },
+    //   /*1*/{ name: "inter1", value: 0, displaySize: 0, width: 0, x: 350, y: 0, input: false, usefulOutput: false, inter: true, top: true, units: "MMBtu/hr" },
+    //   /*2*/{ name: "Flue Gas Losses", value: results.totalFlueGas, displaySize: 0, width: 0, x: 600, y: 0, input: false, usefulOutput: false, inter: false, top: true, units: "MMBtu/hr" },
+    //   /*3*/{ name: "inter2", value: 0, displaySize: 0, width: 0, x: 600, y: 0, input: false, usefulOutput: false, inter: true, top: false, units: "MMBtu/hr" },
+    //   /*4*/{ name: "Atmosphere Losses", value: results.totalAtmosphereLoss, displaySize: 0, width: 0, x: 850, y: 0, input: false, usefulOutput: false, inter: false, top: false, units: "MMBtu/hr" },
+    //   /*5*/{ name: "inter3", value: 0, displaySize: 0, width: 0, x: 850, y: 0, input: false, usefulOutput: false, inter: true, top: true, units: "MMBtu/hr" },
+    //   /*6*/{ name: "Other Losses", value: results.totalOtherLoss, displaySize: 0, width: 0, x: 1100, y: 0, input: false, usefulOutput: false, inter: false, top: true, units: "MMBtu/hr" },
+    //   /*7*/{ name: "inter4", value: 0, displaySize: 0, width: 0, x: 1100, y: 0, input: false, usefulOutput: false, inter: true, top: false, units: "MMBtu/hr" },
+    //   /*8*/{ name: "Water Cooling Losses", value: results.totalCoolingLoss, displaySize: 0, width: 0, x: 1350, y: 0, input: false, usefulOutput: false, inter: false, top: false, units: "MMBtu/hr" },
+    //   /*9*/{ name: "inter5", value: 0, displaySize: 0, width: 0, x: 1350, y: 0, input: false, usefulOutput: false, inter: true, top: true, units: "MMBtu/hr" },
+    //   /*10*/{ name: "Wall Losses", value: results.totalWallLoss, displaySize: 0, width: 0, x: 1600, y: 0, input: false, usefulOutput: false, inter: false, top: true, units: "MMBtu/hr" },
+    //   /*11*/{ name: "inter6", value: 0, displaySize: 0, width: 0, x: 1600, y: 0, input: false, usefulOutput: false, inter: true, top: false, units: "MMBtu/hr" },
+    //   /*12*/{ name: "Opening Losses", value: results.totalOpeningLoss, displaySize: 0, width: 0, x: 1850, y: 0, input: false, usefulOutput: false, inter: false, top: false, units: "MMBtu/hr" },
+    //   /*13*/{ name: "inter7", value: 0, displaySize: 0, width: 0, x: 1850, y: 0, input: false, usefulOutput: false, inter: true, top: true, units: "MMBtu/hr" },
+    //   /*14*/{ name: "Fixture/Conveyor Losses", value: results.totalFixtureLoss, displaySize: 0, width: 0, x: 2100, y: 0, input: false, usefulOutput: false, inter: false, top: true, units: "MMBtu/hr" },
+    //   /*15*/{ name: "inter8", value: 0, displaySize: 0, width: 0, x: 2100, y: 0, input: false, usefulOutput: false, inter: true, top: false, units: "MMBtu/hr" },
+    //   /*16*/{ name: "Leakage Losses", value: results.totalLeakageLoss, displaySize: 0, width: 0, x: 2350, y: 0, input: false, usefulOutput: false, inter: false, top: false, units: "MMBtu/hr" },
+    //   /*17*/{ name: "inter9", value: 0, displaySize: 0, width: 0, x: 2350, y: 0, input: false, usefulOutput: false, inter: true, top: true, units: "MMBtu/hr" },
+    //   /*18*/{ name: "External Surface Losses", value: results.totalExtSurfaceLoss, displaySize: 0, width: 0, x: 2600, y: 0, input: false, usefulOutput: false, inter: false, top: true, units: "MMBtu/hr" },
+    //   /*21*/{ name: "Useful Output", value: 0, displaySize: 0, width: 0, x: 2800, y: 0, input: false, usefulOutput: true, inter: false, top: false, units: "MMBtu/hr" }
+    // ];
+    let links = new Array<any>();
+    let i = 0;
+    for (i; i < results.nodes.length -2;) {
+      links.push({ source: i, target: i + 1 });
+      if (i != 0) {
+        links.push({ source: i, target: i + 2 });
+        i = i + 2;
+      } else {
+        i = i + 1;
+      }
+    }
+    console.log(results.totalChargeMaterialLoss)
 
-    var links = [
-      // linking to the first interNode
-      { source: 0, target: 1 },
-      // interNode1 to Flue Gas and interNode2
-      { source: 1, target: 2 },
-      { source: 1, target: 3 },
-      // interNode2 to Atmosphere and interNode3
-      { source: 3, target: 4 },
-      { source: 3, target: 5 },
-      // interNode3 to Other and interNode4
-      { source: 5, target: 6 },
-      { source: 5, target: 7 },
-      // interNode4 to Water and interNode5
-      { source: 7, target: 8 },
-      { source: 7, target: 9 },
-      // interNode5 to Wall and interNode6
-      { source: 9, target: 10 },
-      { source: 9, target: 11 },
-      // interNode6 to Opening and interNode7
-      { source: 11, target: 12 },
-      { source: 11, target: 13 },
-      // interNode7 to Fixture and interNode8
-      { source: 13, target: 14 },
-      { source: 13, target: 15 },
-      // interNode8 to Leakage and interNode9
-      { source: 15, target: 16 },
-      { source: 15, target: 17 },
-      // interNode9 to External and interNode10
-      { source: 17, target: 18 },
-      { source: 17, target: 19 }
-    ];
+    links.push({source: i, target: i+1})
+    // var links = [
+    //   // linking to the first interNode
+    //   { source: 0, target: 1 },
+    //   // interNode1 to Flue Gas and interNode2
+    //   { source: 1, target: 2 },
+    //   { source: 1, target: 3 },
+    //   // interNode2 to Atmosphere and interNode3
+    //   { source: 3, target: 4 },
+    //   { source: 3, target: 5 },
+    //   // interNode3 to Other and interNode4
+    //   { source: 5, target: 6 },
+    //   { source: 5, target: 7 },
+    //   // interNode4 to Water and interNode5
+    //   { source: 7, target: 8 },
+    //   { source: 7, target: 9 },
+    //   // interNode5 to Wall and interNode6
+    //   { source: 9, target: 10 },
+    //   { source: 9, target: 11 },
+    //   // interNode6 to Opening and interNode7
+    //   { source: 11, target: 12 },
+    //   { source: 11, target: 13 },
+    //   // interNode7 to Fixture and interNode8
+    //   { source: 13, target: 14 },
+    //   { source: 13, target: 15 },
+    //   // interNode8 to Leakage and interNode9
+    //   { source: 15, target: 16 },
+    //   { source: 15, target: 17 },
+    //   // interNode9 to External and interNode10
+    //   { source: 17, target: 18 },
+    //   { source: 17, target: 19 }
+    // ];
+    // console.log(links);
+    // console.log(testLinks);
+    // debugger;
+
 
     svg = d3.select(this.location).append('svg')
       .call(() => {
-        this.calcSankey(nodes);
+        this.calcSankey(results.nodes);
       })
       .attr("width", "100%")
       .attr("height", "80%")
@@ -188,9 +204,9 @@ export class SankeyComponent implements OnInit {
 
     this.drawFurnace();
 
-    var color = this.findColor(nodes[0].value);
+    var color = this.findColor(results.nodes[0].value);
 
-    this.makeGradient(color, nodes, links);
+    this.makeGradient(color, results.nodes, links);
 
     svg.selectAll('marker')
       .data(links)
@@ -204,7 +220,7 @@ export class SankeyComponent implements OnInit {
       .attr("viewBox", "0 -5 10 10")
       .style("border", "1px solid black")
       .attr("fill", (d) => {
-        return color(nodes[d.target].value);
+        return color(results.nodes[d.target].value);
       })
       .append('svg:path')
       .attr("d", "M0,-2.5L2,0L0,2.5");
@@ -216,29 +232,29 @@ export class SankeyComponent implements OnInit {
       .data(links)
       .enter().append('path')
       .attr("d", (d) => {
-        return this.makeLinks(d, nodes);
+        return this.makeLinks(d, results.nodes);
       })
       .style("stroke", (d, i) => {
         return "url(" + window.location + "#linear-gradient-" + i + ")";
       })
       .style("fill", "none")
       .style("stroke-width", (d) => {
-        return nodes[d.target].displaySize;
+        return results.nodes[d.target].displaySize;
       })
       .attr('marker-end', (d) => {
-        return this.getEndMarker(d, nodes);
+        return this.getEndMarker(d, results.nodes);
       });
 
     // Draw nodes to the svg
     var node = svg.selectAll('.node')
-      .data(nodes)
+      .data(results.nodes)
       .enter()
       .append('g')
       .append("polygon")
       .attr('class', 'node');
 
     var nodes_text = svg.selectAll(".nodetext")
-      .data(nodes)
+      .data(results.nodes)
       .enter()
       .append("text")
       .attr("text-anchor", "middle")
@@ -274,7 +290,7 @@ export class SankeyComponent implements OnInit {
       .style("font-size", "30px");
 
     var nodes_units = svg.selectAll(".nodetext")
-      .data(nodes)
+      .data(results.nodes)
       .enter()
       .append("text")
       .attr("text-anchor", "middle")
@@ -309,7 +325,7 @@ export class SankeyComponent implements OnInit {
       })
       .style("font-size", "30px");
 
-    nodes.forEach((d, i) => {
+    results.nodes.forEach((d, i) => {
       var node_val = d, i = i;
       if (!node_val.inter) {
         svg.append("text")
@@ -372,13 +388,13 @@ export class SankeyComponent implements OnInit {
       else {
         if (!d.input) {
           if (d.usefulOutput) {
-            d.value = (nodes[i - 2].value - nodes[i - 1].value);
+           // d.value = (nodes[i - 2].value - nodes[i - 1].value);
             d.displaySize = this.calcDisplayValue(this.baseSize, d.value, nodes[0].value);
 
             //Since this is a static diagram this can be place, but if the final output is off take out the bellow code.
-            alterVal += (nodes[i - 2].displaySize - d.displaySize);
+           // alterVal += (nodes[i - 2].displaySize - d.displaySize);
 
-            d.y = d.y + alterVal;
+            d.y += d.displaySize;
           }
           else {
             if (d.top) {
