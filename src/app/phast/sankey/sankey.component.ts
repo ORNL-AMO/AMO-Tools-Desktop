@@ -143,7 +143,7 @@ export class SankeyComponent implements OnInit {
     // ];
     let links = new Array<any>();
     let i = 0;
-    for (i; i < results.nodes.length -2;) {
+    for (i; i < results.nodes.length - 2;) {
       links.push({ source: i, target: i + 1 });
       if (i != 0) {
         links.push({ source: i, target: i + 2 });
@@ -152,9 +152,9 @@ export class SankeyComponent implements OnInit {
         i = i + 1;
       }
     }
-    console.log(results.totalChargeMaterialLoss)
+    // console.log(results.totalChargeMaterialLoss)
 
-    links.push({source: i, target: i+1})
+    links.push({ source: i, target: i + 1 })
     // var links = [
     //   // linking to the first interNode
     //   { source: 0, target: 1 },
@@ -341,8 +341,10 @@ export class SankeyComponent implements OnInit {
             }
           })
           .attr("y", function () {
-            if (node_val.input || node_val.usefulOutput) {
+            if (node_val.input) {
               return (node_val.y + (node_val.displaySize / 2)) + 35;
+            } else if (node_val.usefulOutput) {
+              return (node_val.y);
             }
             else if (node_val.top) {
               return node_val.y - 70;
@@ -388,13 +390,13 @@ export class SankeyComponent implements OnInit {
       else {
         if (!d.input) {
           if (d.usefulOutput) {
-           // d.value = (nodes[i - 2].value - nodes[i - 1].value);
+            // d.value = (nodes[i - 2].value - nodes[i - 1].value);
             d.displaySize = this.calcDisplayValue(this.baseSize, d.value, nodes[0].value);
 
             //Since this is a static diagram this can be place, but if the final output is off take out the bellow code.
-           // alterVal += (nodes[i - 2].displaySize - d.displaySize);
+            alterVal -= d.displaySize;
 
-            d.y += d.displaySize;
+            d.y += (d.displaySize + alterVal);
           }
           else {
             if (d.top) {
@@ -444,6 +446,7 @@ export class SankeyComponent implements OnInit {
         points.push([(nodes[d.target].x), (nodes[d.target].y - (nodes[d.target].displaySize / 2))]);
       }
     }
+
     return linkGen(points);
   };
 

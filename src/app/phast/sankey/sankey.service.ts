@@ -8,6 +8,7 @@ export class SankeyService {
   constructor(private phastService: PhastService) { }
 
   getFuelTotals(losses: Losses, settings: Settings): FuelResults {
+    console.log(losses);
     let results: FuelResults = this.initFuelResults();
     if (losses.wallLosses != null) {
       results.totalWallLoss = this.phastService.sumWallLosses(losses.wallLosses, settings) / 1000000;
@@ -59,7 +60,7 @@ export class SankeyService {
       }
       results.numValues++;
     }
-    results.totalInput = results.totalWallLoss + results.totalAtmosphereLoss + results.totalOtherLoss + results.totalCoolingLoss + results.totalOpeningLoss + results.totalFixtureLoss + results.totalLeakageLoss + results.totalExtSurfaceLoss + results.totalChargeMaterialLoss;
+    results.totalInput = results.totalWallLoss + results.totalAtmosphereLoss + results.totalOtherLoss + results.totalCoolingLoss + results.totalOpeningLoss + results.totalFixtureLoss + results.totalLeakageLoss + results.totalExtSurfaceLoss + results.totalChargeMaterialLoss + results.totalFlueGas;
     results.nodes = this.getNodes(results);
     return results;
 
@@ -74,8 +75,8 @@ export class SankeyService {
 
     let top: boolean = false;
     //Output
-    tmpNode = this.createNode("Useful Output", results.totalChargeMaterialLoss, 0, 0, 2800, 0, false, true, false, false, "MMBtu/hr")
-    results.nodes.push(tmpNode);
+    // tmpNode = this.createNode("Useful Output", results.totalChargeMaterialLoss, 0, 0, 2800, 0, false, true, false, false, "MMBtu/hr")
+    // results.nodes.push(tmpNode);
 
     //Flue Gas
     if (results.totalFlueGas) {
@@ -150,6 +151,7 @@ export class SankeyService {
     }
     //External Surface
     if (results.totalExtSurfaceLoss) {
+      console.log(results.totalExtSurfaceLoss);
       tmpNode = this.createNode("External Surface Losses", results.totalExtSurfaceLoss, 0, 0, 100 + (250 * interIndex), 0, false, false, false, top, "MMBtu/hr")
       results.nodes.push(tmpNode);
       tmpNode = this.createNode("inter" + interIndex, 0, 0, 0, 100 + (250 * interIndex), 0, false, false, true, !top, "MMBtu/hr");
@@ -158,6 +160,8 @@ export class SankeyService {
       top = !top;
     }
 
+    tmpNode = this.createNode("Useful Output", results.totalChargeMaterialLoss, 0, 0, 2800, 0, false, true, false, false, "MMBtu/hr")
+    results.nodes.push(tmpNode);
     return results.nodes;
   }
 
