@@ -22,6 +22,26 @@ export class SankeyService {
 
 
   getFuelTotals(phast: PHAST, settings: Settings): FuelResults {
+    let showFlueGas, showSlag, showExGas, showEnInput1, showEnInput2, showAuxPower, showSystemEff: boolean = false;
+
+    if (settings.energySourceType == 'Fuel') {
+      showFlueGas = true;
+    } else if (settings.energySourceType == 'Electricity') {
+      if (settings.furnaceType == 'Electric Arc Furnace (EAF)') {
+        showSlag = true;
+        showExGas = true;
+        showEnInput1 = true;
+      } else if (settings.furnaceType != 'Custom Electrotechnology') {
+        showAuxPower = true;
+        showEnInput2 = true;
+      } else if (settings.furnaceType == 'Custom Electrotechnology') {
+        showSystemEff = true;
+      }
+    } else if (settings.energySourceType == 'Steam') {
+      showSystemEff = true;
+    }
+
+
     let results: FuelResults = this.initFuelResults();
     if (this.checkLoss(phast.losses.wallLosses)) {
       results.totalWallLoss = this.phastService.sumWallLosses(phast.losses.wallLosses, settings) / 1000000;
@@ -51,7 +71,7 @@ export class SankeyService {
       results.totalChargeMaterialLoss = this.phastService.sumChargeMaterials(phast.losses.chargeMaterials, settings) / 1000000;
     }
 
-    if (this.checkLoss(phast.losses.flueGasLosses)) {
+    if (showFlueGas && this.checkLoss(phast.losses.flueGasLosses)) {
       if (phast.losses.flueGasLosses[0].flueGasType == 'By Volume') {
         let tmpResult = this.phastService.flueGasByVolume(phast.losses.flueGasLosses[0].flueGasByVolume, settings);
         let grossHeat = this.phastService.sumHeatInput(phast.losses, settings) / tmpResult;
@@ -64,26 +84,26 @@ export class SankeyService {
       }
     }
 
-    if (this.checkLoss(phast.losses.auxiliaryPowerLosses)) {
+    if (showAuxPower && this.checkLoss(phast.losses.auxiliaryPowerLosses)) {
       results.totalAuxPower = this.phastService.sumAuxilaryPowerLosses(phast.losses.auxiliaryPowerLosses) / 1000000;
     }
 
-    if (this.checkLoss(phast.losses.slagLosses)) {
+    if (showSlag && this.checkLoss(phast.losses.slagLosses)) {
       results.totalSlag = this.phastService.sumSlagLosses(phast.losses.slagLosses, settings) / 1000000;
     }
-    if (this.checkLoss(phast.losses.exhaustGasEAF)) {
+    if (showExGas && this.checkLoss(phast.losses.exhaustGasEAF)) {
       results.totalExhaustGas = this.phastService.sumExhaustGasEAF(phast.losses.exhaustGasEAF, settings) / 1000000;
     }
-    if (this.checkLoss(phast.losses.energyInputExhaustGasLoss)) {
+    if (showEnInput2 && this.checkLoss(phast.losses.energyInputExhaustGasLoss)) {
       let tmpResults = this.phastService.energyInputExhaustGasLosses(phast.losses.energyInputExhaustGasLoss[0], settings)
       results.totalExhaustGas = tmpResults.exhaustGasLosses / 1000000;
     }
-    if (phast.systemEfficiency && (settings.unitsOfMeasure == 'Steam' || settings.furnaceType == 'Custom Electrotech')) {
+    if (phast.systemEfficiency && showSystemEff) {
       let grossHeatInput = this.phastService.sumHeatInput(phast.losses, settings) / phast.systemEfficiency;
       results.totalSystemLosses = grossHeatInput * (1 - (phast.systemEfficiency / 100)) / 1000000;
     }
 
-    results.totalInput = results.totalWallLoss + results.totalAtmosphereLoss + results.totalOtherLoss + results.totalCoolingLoss + results.totalOpeningLoss + results.totalFixtureLoss + results.totalLeakageLoss + results.totalExtSurfaceLoss + results.totalChargeMaterialLoss + results.totalFlueGas + results.totalAuxPower + results.totalSlag + results.totalExhaustGas +  results.totalSystemLosses;
+    results.totalInput = results.totalWallLoss + results.totalAtmosphereLoss + results.totalOtherLoss + results.totalCoolingLoss + results.totalOpeningLoss + results.totalFixtureLoss + results.totalLeakageLoss + results.totalExtSurfaceLoss + results.totalChargeMaterialLoss + results.totalFlueGas + results.totalAuxPower + results.totalSlag + results.totalExhaustGas + results.totalSystemLosses;
     results.nodes = this.getNodes(results, settings);
     return results;
 

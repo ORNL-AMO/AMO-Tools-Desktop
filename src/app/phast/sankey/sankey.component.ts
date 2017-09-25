@@ -71,7 +71,6 @@ export class SankeyComponent implements OnInit {
       .attr("height", "80%")
       .attr("viewBox", "0 0 " + width + " " + height)
       .attr("preserveAspectRatio", "xMinYMin")
-      .style("border", "1px solid black")
       .append("g");
 
     this.drawFurnace();
@@ -90,7 +89,6 @@ export class SankeyComponent implements OnInit {
       .attr('refX', .1)
       .attr('refY', 0)
       .attr("viewBox", "0 -5 10 10")
-      .style("border", "1px solid black")
       .attr("fill", (d) => {
         return color(results.nodes[d.target].value);
       })
@@ -213,10 +211,8 @@ export class SankeyComponent implements OnInit {
             }
           })
           .attr("y", function () {
-            if (node_val.input) {
+            if (node_val.input || node_val.usefulOutput) {
               return (node_val.y + (node_val.displaySize / 2)) + 35;
-            } else if (node_val.usefulOutput) {
-              return (node_val.y);
             }
             else if (node_val.top) {
               return node_val.y - 70;
