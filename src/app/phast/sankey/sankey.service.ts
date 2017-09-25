@@ -112,7 +112,7 @@ export class SankeyService {
   getNodes(results: FuelResults, settings: Settings) {
     let unit: string = 'MMBtu/hr';
     if (settings.unitsOfMeasure == 'Metric') {
-      unit = 'kJ/hr'
+      unit = 'GJ/hr'
     }
 
     let tmpNode = this.createNode("Input", results.totalInput, this.baseSize, 300, 200, 0, true, false, false, false, unit)
