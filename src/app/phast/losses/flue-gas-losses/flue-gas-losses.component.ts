@@ -200,6 +200,7 @@ export class FlueGasLossesComponent implements OnInit {
   }
 
   changeField(str: string) {
+    console.log(str);
     this.fieldChange.emit(str);
   }
 
