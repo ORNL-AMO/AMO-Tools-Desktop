@@ -18,8 +18,9 @@
   </div>
   <div class="row">
     <div class="col-12">
-      <app-energy-input-exhaust-gas-form (changeField)="changeField($event)" [(exhaustGasForm)]="loss.form" (calculate)="calculate(loss)" [baselineSelected]="baselineSelected"
-        (saveEmit)="saveLosses()" [lossIndex]="lossIndex" [isBaseline]="isBaseline" [availableHeat]="availableHeat" [settings]="settings"></app-energy-input-exhaust-gas-form>
+      <app-energy-input-exhaust-gas-form (changeField)="changeField($event)" [(exhaustGasForm)]="loss.form" (calculate)="calculate(loss)"
+        [baselineSelected]="baselineSelected" (saveEmit)="saveLosses()" [lossIndex]="lossIndex" [isBaseline]="isBaseline" [availableHeat]="availableHeat"
+        [settings]="settings"></app-energy-input-exhaust-gas-form>
     </div>
   </div>
   <div class="row">
@@ -27,7 +28,19 @@
       <div class="form-group">
         <label class="small">Fuel Heat Delivered</label>
         <div class="text-center small">
-          {{loss.heatLoss | number:'2.2-2'}} kW
+          {{loss.heatLoss | number:'2.2-2'}}
+          <span *ngIf="settings.unitsOfMeasure == 'Imperial'">Btu/hr</span>
+          <span *ngIf="settings.unitsOfMeasure == 'Metric'">kJ/hr</span>
+        </div>
+      </div>
+    </div>
+    <div class="col-12">
+      <div class="form-group">
+        <label class="small">Exhaust Gas Losses</label>
+        <div class="text-center small">
+          {{loss.exhaustGas | number:'2.2-2'}}
+          <span *ngIf="settings.unitsOfMeasure == 'Imperial'">Btu/hr</span>
+          <span *ngIf="settings.unitsOfMeasure == 'Metric'">kJ/hr</span>
         </div>
       </div>
     </div>
