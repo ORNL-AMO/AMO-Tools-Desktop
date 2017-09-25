@@ -64,24 +64,6 @@
     </div>
 
     <div class="form-group">
-      <label class="small" for="waterContentAsCharged">Water Content as Charged</label>
-      <div class="input-group">
-        <input name="{{'waterContentAsCharged_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="waterContentAsCharged"
-          id="waterContentAsCharged" onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('waterContentAsCharged')">
-        <span class="input-group-addon units">%</span>
-      </div>
-    </div>
-
-    <div class="form-group">
-      <label class="small" for="waterContentAsDischarged">Water Content as Discharged</label>
-      <div class="input-group">
-        <input name="{{'waterContentAsDischarged_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="waterContentAsDischarged"
-          id="waterContentAsDischarged" onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('waterContentAsDischarged')">
-        <span class="input-group-addon units">%</span>
-      </div>
-    </div>
-
-    <div class="form-group">
       <label class="small" for="initialTemperature">Initial Temperature</label>
       <div class="input-group">
         <input name="{{'initialTemperature_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="initialTemperature"
@@ -102,6 +84,23 @@
       </div>
       <span class="alert-warning pull-right small" *ngIf="dischargeTempError !== null">{{dischargeTempError}}</span>
 
+    </div>
+    <div class="form-group">
+      <label class="small" for="waterContentAsCharged">Water Content as Charged</label>
+      <div class="input-group">
+        <input name="{{'waterContentAsCharged_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="waterContentAsCharged"
+          id="waterContentAsCharged" onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('waterContentAsCharged')">
+        <span class="input-group-addon units">%</span>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="small" for="waterContentAsDischarged">Water Content as Discharged</label>
+      <div class="input-group">
+        <input name="{{'waterContentAsDischarged_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="waterContentAsDischarged"
+          id="waterContentAsDischarged" onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('waterContentAsDischarged')">
+        <span class="input-group-addon units">%</span>
+      </div>
     </div>
 
     <div class="form-group">

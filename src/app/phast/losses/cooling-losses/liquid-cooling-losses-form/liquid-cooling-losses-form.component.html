@@ -16,8 +16,8 @@
       <div class="input-group">
         <input name="{{'density_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="density" id="density"
           onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('density')">
-        <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">lb/SCF</span>
-        <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kg/Nm<sup>3</sup></span>
+        <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">lb/gal</span>
+        <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kg/L</span>
       </div>
     </div>
 
