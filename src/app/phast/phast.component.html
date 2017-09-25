@@ -53,6 +53,10 @@
     </div>
   </div>
 
+  <div class="tab-content" *ngIf="mainTab =='diagram'">
+    <app-phast-diagram></app-phast-diagram>
+  </div>
+
   <div class="footer">
     <div class="pull-left">
       <button class="btn btn-secondary" *ngIf="mainTab == 'system-setup'" (click)="close()">Close</button>

@@ -19,11 +19,10 @@ export class PhastBannerComponent implements OnInit {
   }
 
   changeTab(str: string) {
-    if (str != 'diagram') {
-      this.phastService.mainTab.next(str);
-      // else if (this.assessment.phast.setupDone) {
-      //   this.phastService.mainTab.next(str);
-      // }
-    }
+
+    this.phastService.mainTab.next(str);
+    // else if (this.assessment.phast.setupDone) {
+    //   this.phastService.mainTab.next(str);
+    // }
   }
 }
