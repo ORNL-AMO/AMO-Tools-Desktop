@@ -12,13 +12,17 @@
 <div class="help-content">
   <div class="card" *ngIf="currentField == 'surfaceArea'">
     <div class="card-header">
-      Total Outside Surface Area (ft<sup>2</sup>)
+      Total Outside Surface Area
     </div>
     <div class="card-block">
-      <label>Description:</label>
+      <label><u><strong>Description</strong></u></label>
       <p>Total area of the exposed parts such as shafts, structural components of the furnace, part of the charge being
         heated (if applicable), burner or radiant tubes, material handling system (conveyors, belts) etc. Estimate
         based on actual measurements or use furnace drawings.
+      </p>
+      <label><u><strong>Input</strong></u></label>
+      <p>
+        Units: <strong>ft<sup>2</sup></strong> or <strong>m<sup>2</sup></strong>
       </p>
     </div>
   </div>
@@ -29,12 +33,16 @@
     Average Surface Temperature (&#8457;)
   </div>
   <div class="card-block">
-    <label>Description:</label>
+    <label><u><strong>Description</strong></u></label>
     <p>
       Average temperature for the exposed areas. The average should be calculated based on actual measurement at
       several locations for the exposed parts or areas. The actual temperature can vary over a wide range and care
       should be taken to use weighted average. Use infra-red radiation temperature measurement instrument (with
       proper emissivity correction) whenever possible.
+    </p>
+    <label><u><strong>Input</strong></u></label>
+    <p>
+      Units: <strong><sup>o</sup>F</strong> or <strong><sup>o</sup>C</strong>
     </p>
   </div>
 </div>
@@ -44,10 +52,14 @@
     Ambient Temperature (&#8457;)
   </div>
   <div class="card-block">
-    <label>Description:</label>
+    <label><u><strong>Description</strong></u></label>
     <p>
       Temperature of the area outside the furnace where the exposed areas are located. In most cases this is the
       ambient temperature in the area where the furnace and exposed areas are located.
+    </p>
+    <label><u><strong>Input</strong></u></label>
+    <p>
+      Units: <strong><sup>o</sup>F</strong> or <strong><sup>o</sup>C</strong>
     </p>
   </div>
 </div>
@@ -57,10 +69,13 @@
     Surface Emissivity (Typical - 0.9)
   </div>
   <div class="card-block">
-    <label>Description:</label>
+    <label><u><strong>Description</strong></u></label>
     <p>
-      Emissivity of the surface from heat is dissipated or lost. This can be in the range of 07 to 0.9 for commonly
-      encountered surfaces but the user should use appropriate value for the specific case.
+      Emissivity of the radiation source (usually interior of the furnace). The default or suggested value is 0.9
+    </p>
+    <label><u><strong>Input</strong></u></label>
+    <p>
+      Units:  Minimum Value Allowed: <strong>0</strong><br>  Maximum Value Allowed: <strong>1</strong>
     </p>
   </div>
 </div>

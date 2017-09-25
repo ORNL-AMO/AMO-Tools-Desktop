@@ -14,19 +14,34 @@
 <div class="help-content">
 
 
-  <div class="card" *ngIf="currentField == 'gasTypeId'">
+  <div class="card" *ngIf="currentField == 'measurementType'">
     <div class="card-header">
-      Weight
+      Type of Fuel
     </div>
     <div class="card-block">
-      <label>Description:</label>
-      <p>DESCRITION HERE</p>
-      <label>Input:</label>
+      <label><u><strong>Description</strong></u></label>
       <p>
-        Units: <strong>UNIT HERE</strong><br>
-        Minimum Value Allowed: <strong>MAX HERE</strong><br>
-        Maximum Value Allowed: <strong>MIN HERE</strong><br>
+        Gas or Solid/liquid fuel.
+      </p>
+      <label><u><strong>Input</strong></u></label>
+      <p>
+        Units:  Minimum Value Allowed: <strong>0</strong>
       </p>
     </div>
   </div>
+
+  <div class="card" *ngIf="currentField == 'gasTypeId'">
+    <div class="card-header">
+      Fuel
+    </div>
+    <div class="card-block">
+      <label><u><strong>Description</strong></u></label>
+      <p>
+        Type of fuel used within the heating equipment or reaction chamber To add a new fuel, click “Add New Fuel”.
+        You can “start with existing fuel” and edit the composition or add a completely new material.
+        You cannot use the name of a fuel already in the database.
+      </p>
+    </div>
+  </div>
+
 </div>
