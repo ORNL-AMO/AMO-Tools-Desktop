@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
-import { Losses } from '../../shared/models/phast/phast';
+import { Losses, PHAST } from '../../shared/models/phast/phast';
 import * as _ from 'lodash';
 import { PhastService } from '../phast.service';
 // declare var d3: any;
@@ -18,7 +18,7 @@ const width = 2650,
 
 export class SankeyComponent implements OnInit {
   @Input()
-  losses: Losses;
+  phast: PHAST;
   @Input()
   settings: Settings;
   @Input()
@@ -31,14 +31,14 @@ export class SankeyComponent implements OnInit {
   }
 
   ngOnInit() {
-    if (this.losses) {
+    if (this.phast.losses) {
       this.makeSankey();
     }
   }
 
 
   makeSankey() {
-    let results = this.sankeyService.getFuelTotals(this.losses, this.settings);
+    let results = this.sankeyService.getFuelTotals(this.phast, this.settings);
     if (results.totalInput > 0) {
       this.sankey(results);
     }

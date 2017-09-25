@@ -115,7 +115,8 @@ export class EnergyInputExhaustGasLossesComponent implements OnInit {
     this._exhaustGasLosses.push({
       form: this.energyInputExhaustGasService.initForm(),
       name: 'Loss #' + (this._exhaustGasLosses.length + 1),
-      heatLoss: 0.0
+      heatLoss: 0.0,
+      exhaustGas:0.0
     });
   }
 
@@ -134,7 +135,10 @@ export class EnergyInputExhaustGasLossesComponent implements OnInit {
   calculate(loss: any) {
     let tmpLoss = this.energyInputExhaustGasService.getLossFromForm(loss.form);
     this.availableHeat = this.phastService.availableHeat(tmpLoss, this.settings);
-    loss.heatLoss = this.phastService.energyInputExhaustGasLosses(tmpLoss, this.settings);
+    tmpLoss.availableHeat = this.availableHeat;
+    let results = this.phastService.energyInputExhaustGasLosses(tmpLoss, this.settings);
+    loss.heatLoss = results.heatDelivered;
+    loss.exhaustGas = results.exhaustGasLosses;
   }
 
   saveLosses() {

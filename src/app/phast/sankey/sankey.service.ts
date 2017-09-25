@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { PhastService } from '../phast.service';
 import { Losses } from '../../shared/models/phast/phast';
 import { Settings } from '../../shared/models/settings';
+import { PHAST } from '../../shared/models/phast/phast';
+
 @Injectable()
 export class SankeyService {
   baseSize: number = 300;
@@ -19,60 +21,69 @@ export class SankeyService {
   }
 
 
-  getFuelTotals(losses: Losses, settings: Settings): FuelResults {
+  getFuelTotals(phast: PHAST, settings: Settings): FuelResults {
     let results: FuelResults = this.initFuelResults();
-    if (this.checkLoss(losses.wallLosses)) {
-      results.totalWallLoss = this.phastService.sumWallLosses(losses.wallLosses, settings) / 1000000;
+    if (this.checkLoss(phast.losses.wallLosses)) {
+      results.totalWallLoss = this.phastService.sumWallLosses(phast.losses.wallLosses, settings) / 1000000;
     }
-    if (this.checkLoss(losses.wallLosses)) {
-      results.totalAtmosphereLoss = this.phastService.sumAtmosphereLosses(losses.atmosphereLosses, settings) / 1000000;
+    if (this.checkLoss(phast.losses.wallLosses)) {
+      results.totalAtmosphereLoss = this.phastService.sumAtmosphereLosses(phast.losses.atmosphereLosses, settings) / 1000000;
     }
-    if (this.checkLoss(losses.otherLosses)) {
-      results.totalOtherLoss = this.phastService.sumOtherLosses(losses.otherLosses) / 1000000;
+    if (this.checkLoss(phast.losses.otherLosses)) {
+      results.totalOtherLoss = this.phastService.sumOtherLosses(phast.losses.otherLosses) / 1000000;
     }
-    if (this.checkLoss(losses.coolingLosses)) {
-      results.totalCoolingLoss = this.phastService.sumCoolingLosses(losses.coolingLosses, settings) / 1000000;
+    if (this.checkLoss(phast.losses.coolingLosses)) {
+      results.totalCoolingLoss = this.phastService.sumCoolingLosses(phast.losses.coolingLosses, settings) / 1000000;
     }
-    if (this.checkLoss(losses.openingLosses)) {
-      results.totalOpeningLoss = this.phastService.sumOpeningLosses(losses.openingLosses, settings) / 1000000;
+    if (this.checkLoss(phast.losses.openingLosses)) {
+      results.totalOpeningLoss = this.phastService.sumOpeningLosses(phast.losses.openingLosses, settings) / 1000000;
     }
-    if (this.checkLoss(losses.fixtureLosses)) {
-      results.totalFixtureLoss = this.phastService.sumFixtureLosses(losses.fixtureLosses, settings) / 1000000;
+    if (this.checkLoss(phast.losses.fixtureLosses)) {
+      results.totalFixtureLoss = this.phastService.sumFixtureLosses(phast.losses.fixtureLosses, settings) / 1000000;
     }
-    if (this.checkLoss(losses.leakageLosses)) {
-      results.totalLeakageLoss = this.phastService.sumLeakageLosses(losses.leakageLosses, settings) / 1000000;
+    if (this.checkLoss(phast.losses.leakageLosses)) {
+      results.totalLeakageLoss = this.phastService.sumLeakageLosses(phast.losses.leakageLosses, settings) / 1000000;
     }
-    if (this.checkLoss(losses.extendedSurfaces)) {
-      results.totalExtSurfaceLoss = this.phastService.sumExtendedSurface(losses.extendedSurfaces, settings) / 1000000;
+    if (this.checkLoss(phast.losses.extendedSurfaces)) {
+      results.totalExtSurfaceLoss = this.phastService.sumExtendedSurface(phast.losses.extendedSurfaces, settings) / 1000000;
     }
-    if (this.checkLoss(losses.chargeMaterials)) {
-      results.totalChargeMaterialLoss = this.phastService.sumChargeMaterials(losses.chargeMaterials, settings) / 1000000;
+    if (this.checkLoss(phast.losses.chargeMaterials)) {
+      results.totalChargeMaterialLoss = this.phastService.sumChargeMaterials(phast.losses.chargeMaterials, settings) / 1000000;
     }
 
-    if (this.checkLoss(losses.flueGasLosses)) {
-      if (losses.flueGasLosses[0].flueGasType == 'By Volume') {
-        let tmpResult = this.phastService.flueGasByVolume(losses.flueGasLosses[0].flueGasByVolume, settings);
-        let grossHeat = this.phastService.sumHeatInput(losses, settings) / tmpResult;
+    if (this.checkLoss(phast.losses.flueGasLosses)) {
+      if (phast.losses.flueGasLosses[0].flueGasType == 'By Volume') {
+        let tmpResult = this.phastService.flueGasByVolume(phast.losses.flueGasLosses[0].flueGasByVolume, settings);
+        let grossHeat = this.phastService.sumHeatInput(phast.losses, settings) / tmpResult;
         results.totalFlueGas = grossHeat * (1 - tmpResult) / 1000000;;
 
-      } else if (losses.flueGasLosses[0].flueGasType == 'By Mass') {
-        let tmpResult = this.phastService.flueGasByMass(losses.flueGasLosses[0].flueGasByMass, settings);
-        let grossHeat = this.phastService.sumHeatInput(losses, settings) / tmpResult;
+      } else if (phast.losses.flueGasLosses[0].flueGasType == 'By Mass') {
+        let tmpResult = this.phastService.flueGasByMass(phast.losses.flueGasLosses[0].flueGasByMass, settings);
+        let grossHeat = this.phastService.sumHeatInput(phast.losses, settings) / tmpResult;
         results.totalFlueGas = grossHeat * (1 - tmpResult) / 1000000;
       }
     }
 
-    if (this.checkLoss(losses.auxiliaryPowerLosses)) {
-      results.totalAuxPower = this.phastService.sumAuxilaryPowerLosses(losses.auxiliaryPowerLosses) / 1000000;
+    if (this.checkLoss(phast.losses.auxiliaryPowerLosses)) {
+      results.totalAuxPower = this.phastService.sumAuxilaryPowerLosses(phast.losses.auxiliaryPowerLosses) / 1000000;
     }
 
-    if (this.checkLoss(losses.slagLosses)) {
-      results.totalSlag = this.phastService.sumSlagLosses(losses.slagLosses, settings) / 1000000;
+    if (this.checkLoss(phast.losses.slagLosses)) {
+      results.totalSlag = this.phastService.sumSlagLosses(phast.losses.slagLosses, settings) / 1000000;
     }
-    if (this.checkLoss(losses.exhaustGasEAF)) {
-      results.totalExhaustGas = this.phastService.sumExhaustGasEAF(losses.exhaustGasEAF, settings)/ 1000000;
+    if (this.checkLoss(phast.losses.exhaustGasEAF)) {
+      results.totalExhaustGas = this.phastService.sumExhaustGasEAF(phast.losses.exhaustGasEAF, settings) / 1000000;
     }
-    results.totalInput = results.totalWallLoss + results.totalAtmosphereLoss + results.totalOtherLoss + results.totalCoolingLoss + results.totalOpeningLoss + results.totalFixtureLoss + results.totalLeakageLoss + results.totalExtSurfaceLoss + results.totalChargeMaterialLoss + results.totalFlueGas + results.totalAuxPower + results.totalSlag + results.totalExhaustGas;
+    if (this.checkLoss(phast.losses.energyInputExhaustGasLoss)) {
+      let tmpResults = this.phastService.energyInputExhaustGasLosses(phast.losses.energyInputExhaustGasLoss[0], settings)
+      results.totalExhaustGas = tmpResults.exhaustGasLosses / 1000000;
+    }
+    if (phast.systemEfficiency) {
+      let grossHeatInput = this.phastService.sumHeatInput(phast.losses, settings) / phast.systemEfficiency;
+      results.totalSystemLosses = grossHeatInput * (1 - (phast.systemEfficiency / 100)) / 1000000;
+    }
+
+    results.totalInput = results.totalWallLoss + results.totalAtmosphereLoss + results.totalOtherLoss + results.totalCoolingLoss + results.totalOpeningLoss + results.totalFixtureLoss + results.totalLeakageLoss + results.totalExtSurfaceLoss + results.totalChargeMaterialLoss + results.totalFlueGas + results.totalAuxPower + results.totalSlag + results.totalExhaustGas +  results.totalSystemLosses;
     results.nodes = this.getNodes(results, settings);
     return results;
 
@@ -91,7 +102,8 @@ export class SankeyService {
     let interIndex = 2;
 
     let top: boolean = false;
-
+    //FLUE GAS ARROW
+    //one of three
     //Flue Gas
     if (results.totalFlueGas) {
       tmpNode = this.createNode("Flue Gas Losses", results.totalFlueGas, 0, 0, 100 + (250 * interIndex), 0, false, false, false, true, unit)
@@ -108,6 +120,15 @@ export class SankeyService {
       results.nodes.push(tmpNode);
       interIndex++;
     }
+
+    if (results.totalSystemLosses) {
+      tmpNode = this.createNode("System Losses", results.totalSystemLosses, 0, 0, 100 + (250 * interIndex), 0, false, false, false, true, unit)
+      results.nodes.push(tmpNode);
+      tmpNode = this.createNode("inter" + interIndex, 0, 0, 0, 100 + (250 * interIndex), 0, false, false, true, false, unit)
+      results.nodes.push(tmpNode);
+      interIndex++;
+    }
+    //end flue gas arrow  
     //Atmoshpere
     if (results.totalAtmosphereLoss) {
       tmpNode = this.createNode("Atmosphere Losses", results.totalAtmosphereLoss, 0, 0, 100 + (250 * interIndex), 0, false, false, false, top, unit)
@@ -240,6 +261,7 @@ export class SankeyService {
       totalEnergyInputEAF: 0,
       totalEnergyInput: 0,
       totalExhaustGas: 0,
+      totalSystemLosses: 0,
       nodes: new Array<SankeyNode>()
     }
     return results;
@@ -263,6 +285,7 @@ export interface FuelResults {
   totalEnergyInputEAF: number,
   totalEnergyInput: number,
   totalExhaustGas: number,
+  totalSystemLosses: number,
   nodes: Array<SankeyNode>
 }
 

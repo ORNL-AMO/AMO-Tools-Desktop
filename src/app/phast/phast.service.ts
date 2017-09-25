@@ -421,19 +421,22 @@ export class PhastService {
   //energy input for non-EAF Electric process heating
   energyInputExhaustGasLosses(inputs: EnergyInputExhaustGasLoss, settings: Settings) {
     inputs.availableHeat = this.availableHeat(inputs, settings);
-    let results = 0;
+    let results: any = {
+      heatDelivered: 0,
+      exhaustGasLosses: 0
+    }
     if (settings.unitsOfMeasure == 'Metric') {
       inputs.combustionAirTemp = this.convertUnitsService.value(inputs.combustionAirTemp).from('C').to('F');
       inputs.exhaustGasTemp = this.convertUnitsService.value(inputs.exhaustGasTemp).from('C').to('F');
       inputs.totalHeatInput = this.convertUnitsService.value(inputs.totalHeatInput).from('kJ').to('Btu');
       results = phastAddon.energyInputExhaustGasLosses(inputs);
-      if (isNaN(results)) {
-        results = 0;
+      if (isNaN(results.heatDelivered)) {
+        results.heatDelivered = 0;
       }
     } else {
       results = phastAddon.energyInputExhaustGasLosses(inputs);
     }
-    return phastAddon.energyInputExhaustGasLosses(inputs);
+    return results;
   }
 
   efficiencyImprovement(inputs: EfficiencyImprovementInputs) {
@@ -586,7 +589,8 @@ export class PhastService {
   sumEnergyInputExhaustGas(losses: EnergyInputExhaustGasLoss[], settings: Settings): number {
     let sum = 0;
     losses.forEach(loss => {
-      sum += this.energyInputExhaustGasLosses(loss, settings);
+      let result = this.energyInputExhaustGasLosses(loss, settings);
+      sum += result.heatDelivered;
     })
     return sum;
   }
