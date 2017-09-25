@@ -71,6 +71,12 @@ export class SankeyService {
     tmpNode = this.createNode("inter1", 0, 0, 0, 350, 0, false, false, true, true, "MMBtu/hr")
     results.nodes.push(tmpNode);
     let interIndex = 2;
+
+    let top: boolean = false;
+    //Output
+    tmpNode = this.createNode("Useful Output", results.totalChargeMaterialLoss, 0, 0, 2800, 0, false, true, false, false, "MMBtu/hr")
+    results.nodes.push(tmpNode);
+
     //Flue Gas
     if (results.totalFlueGas) {
       tmpNode = this.createNode("Flue Gas Losses", results.totalFlueGas, 0, 0, 100 + (250 * interIndex), 0, false, false, false, true, "MMBtu/hr")
@@ -81,72 +87,77 @@ export class SankeyService {
     }
     //Atmoshpere
     if (results.totalAtmosphereLoss) {
-      tmpNode = this.createNode("Atmosphere Losses", results.totalAtmosphereLoss, 0, 0, 100 + (250 * interIndex), 0, false, false, false, false, "MMBtu/hr")
+      tmpNode = this.createNode("Atmosphere Losses", results.totalAtmosphereLoss, 0, 0, 100 + (250 * interIndex), 0, false, false, false, top, "MMBtu/hr")
       results.nodes.push(tmpNode);
-      tmpNode = this.createNode("inter" + interIndex, 0, 0, 0, 100 + (250 * interIndex), 0, false, false, true, true, "MMBtu/hr");
+      tmpNode = this.createNode("inter" + interIndex, 0, 0, 0, 100 + (250 * interIndex), 0, false, false, true, !top, "MMBtu/hr");
       results.nodes.push(tmpNode);
       interIndex++;
+      top = !top;
     }
     //Other
     if (results.totalOtherLoss) {
-      tmpNode = this.createNode("Other Losses", results.totalOtherLoss, 0, 0, 100 + (250 * interIndex), 0, false, false, false, true, "MMBtu/hr")
+      tmpNode = this.createNode("Other Losses", results.totalOtherLoss, 0, 0, 100 + (250 * interIndex), 0, false, false, false, top, "MMBtu/hr")
       results.nodes.push(tmpNode);
-      tmpNode = this.createNode("inter" + interIndex, 0, 0, 0, 100 + (250 * interIndex), 0, false, false, true, false, "MMBtu/hr");
+      tmpNode = this.createNode("inter" + interIndex, 0, 0, 0, 100 + (250 * interIndex), 0, false, false, true, !top, "MMBtu/hr");
       results.nodes.push(tmpNode);
       interIndex++;
+      top = !top;
     }
     //Cooling
     if (results.totalCoolingLoss) {
-      tmpNode = this.createNode("Water Cooling Losses", results.totalCoolingLoss, 0, 0, 100 + (250 * interIndex), 0, false, false, false, false, "MMBtu/hr")
+      tmpNode = this.createNode("Water Cooling Losses", results.totalCoolingLoss, 0, 0, 100 + (250 * interIndex), 0, false, false, false, top, "MMBtu/hr")
       results.nodes.push(tmpNode);
-      tmpNode = this.createNode("inter" + interIndex, 0, 0, 0, 100 + (250 * interIndex), 0, false, false, true, true, "MMBtu/hr");
+      tmpNode = this.createNode("inter" + interIndex, 0, 0, 0, 100 + (250 * interIndex), 0, false, false, true, !top, "MMBtu/hr");
       results.nodes.push(tmpNode);
       interIndex++;
+      top = !top;
     }
     //Wall
     if (results.totalWallLoss) {
-      tmpNode = this.createNode("Wall Losses", results.totalWallLoss, 0, 0, 100 + (250 * interIndex), 0, false, false, false, true, "MMBtu/hr")
+      tmpNode = this.createNode("Wall Losses", results.totalWallLoss, 0, 0, 100 + (250 * interIndex), 0, false, false, false, top, "MMBtu/hr")
       results.nodes.push(tmpNode);
-      tmpNode = this.createNode("inter" + interIndex, 0, 0, 0, 100 + (250 * interIndex), 0, false, false, true, false, "MMBtu/hr");
+      tmpNode = this.createNode("inter" + interIndex, 0, 0, 0, 100 + (250 * interIndex), 0, false, false, true, !top, "MMBtu/hr");
       results.nodes.push(tmpNode);
       interIndex++;
+      top = !top;
     }
     //Opening
     if (results.totalOpeningLoss) {
-      tmpNode = this.createNode("Opening Losses", results.totalOpeningLoss, 0, 0, 100 + (250 * interIndex), 0, false, false, false, false, "MMBtu/hr")
+      tmpNode = this.createNode("Opening Losses", results.totalOpeningLoss, 0, 0, 100 + (250 * interIndex), 0, false, false, false, top, "MMBtu/hr")
       results.nodes.push(tmpNode);
-      tmpNode = this.createNode("inter" + interIndex, 0, 0, 0, 100 + (250 * interIndex), 0, false, false, true, true, "MMBtu/hr");
+      tmpNode = this.createNode("inter" + interIndex, 0, 0, 0, 100 + (250 * interIndex), 0, false, false, true, !top, "MMBtu/hr");
       results.nodes.push(tmpNode);
       interIndex++;
+      top = !top;
     }
     //Fixture
     if (results.totalFixtureLoss) {
-      tmpNode = this.createNode("Fixture/Conveyor Losses", results.totalFixtureLoss, 0, 0, 100 + (250 * interIndex), 0, false, false, false, true, "MMBtu/hr")
+      tmpNode = this.createNode("Fixture/Conveyor Losses", results.totalFixtureLoss, 0, 0, 100 + (250 * interIndex), 0, false, false, false, top, "MMBtu/hr")
       results.nodes.push(tmpNode);
-      tmpNode = this.createNode("inter" + interIndex, 0, 0, 0, 100 + (250 * interIndex), 0, false, false, true, false, "MMBtu/hr");
+      tmpNode = this.createNode("inter" + interIndex, 0, 0, 0, 100 + (250 * interIndex), 0, false, false, true, !top, "MMBtu/hr");
       results.nodes.push(tmpNode);
       interIndex++;
+      top = !top;
     }
     //Leakage
     if (results.totalLeakageLoss) {
-      tmpNode = this.createNode("Leakage Losses", results.totalLeakageLoss, 0, 0, 100 + (250 * interIndex), 0, false, false, false, false, "MMBtu/hr")
+      tmpNode = this.createNode("Leakage Losses", results.totalLeakageLoss, 0, 0, 100 + (250 * interIndex), 0, false, false, false, top, "MMBtu/hr")
       results.nodes.push(tmpNode);
-      tmpNode = this.createNode("inter" + interIndex, 0, 0, 0, 100 + (250 * interIndex), 0, false, false, true, true, "MMBtu/hr");
+      tmpNode = this.createNode("inter" + interIndex, 0, 0, 0, 100 + (250 * interIndex), 0, false, false, true, !top, "MMBtu/hr");
       results.nodes.push(tmpNode);
       interIndex++;
+      top = !top;
     }
     //External Surface
     if (results.totalExtSurfaceLoss) {
-      tmpNode = this.createNode("External Surface Losses", results.totalExtSurfaceLoss, 0, 0, 100 + (250 * interIndex), 0, false, false, false, true, "MMBtu/hr")
+      tmpNode = this.createNode("External Surface Losses", results.totalExtSurfaceLoss, 0, 0, 100 + (250 * interIndex), 0, false, false, false, top, "MMBtu/hr")
       results.nodes.push(tmpNode);
-      tmpNode = this.createNode("inter" + interIndex, 0, 0, 0, 100 + (250 * interIndex), 0, false, false, true, true, "MMBtu/hr");
+      tmpNode = this.createNode("inter" + interIndex, 0, 0, 0, 100 + (250 * interIndex), 0, false, false, true, !top, "MMBtu/hr");
       results.nodes.push(tmpNode);
       interIndex++;
+      top = !top;
     }
-    //Output
-    tmpNode = this.createNode("Useful Output", results.totalChargeMaterialLoss, 0, 0, 2800, 0, false, true, false, false, "MMBtu/hr")
-    results.nodes.push(tmpNode);
-    interIndex++;
+
     return results.nodes;
   }
 
