@@ -1,104 +1,128 @@
-<div class="row">
-  <div class="col-6">
-    <table class="table">
-      <thead>
-        <tr>
-          <th>Energy use or loss category</th>
-          <th></th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>Charge Materials</td>
-          <td>{{sumChargeMaterials | number:'2.2-2'}}</td>
-        </tr>
-        <tr>
-          <td>Fixtures, trays etc.</td>
-          <td>{{sumFixtures | number:'2.2-2'}}</td>
-        </tr>
-        <tr>
-          <td>Wall Losses</td>
-          <td>{{sumWallLosses | number:'2.2-2'}}</td>
-        </tr>
-        <tr>
-          <td>Cooling Losses</td>
-          <td>{{sumCoolingLosses | number:'2.2-2'}}</td>
-        </tr>
-        <tr>
-          <td>Atmosphere Losses</td>
-          <td>{{sumAtmosphereLosses | number:'2.2-2'}}</td>
-        </tr>
-        <tr>
-          <td>Opening Losses</td>
-          <td>{{sumOpeningLosses | number:'2.2-2'}}</td>
-        </tr>
-        <tr>
-          <td>Leakage Losses</td>
-          <td>{{sumLeakage | number:'2.2-2'}}</td>
-        </tr>
-        <tr>
-          <td>Extended Surface Losses</td>
-          <td>{{sumExtendedSurface | number:'2.2-2'}}</td>
-        </tr>
-        <tr *ngIf="showAuxPower">
-          <td>Aux Power Losses</td>
-          <td>{{sumAux | number:'2.2-2'}}</td>
-        </tr>
-        <tr *ngIf="showSlag">
-          <td>Slag Losses</td>
-          <td>{{slagSum | number:'2.2-2'}}</td>
-        </tr>
-        <tr>
-          <td>Other Losses</td>
-          <td>{{sumOther | number:'2.2-2'}}</td>
-        </tr>
-        <tr>
-          <th>Total Net Heat Required</th>
-          <th>{{sumHeatRequired | number:'2.2-2'}}</th>
-        </tr>
-        <tr *ngIf="showEnInput2">
-          <td>Energy Input Available Heat</td>
-          <td>{{availableHeatPercent | number:'2.2-2'}} %</td>
-        </tr>
-        <tr *ngIf="showSystemEff">
-          <td>System Efficiency</td>
-          <td>{{heatingSystemEfficiency | number:'2.2-2'}} %</td>
-        </tr>
-        <tr *ngIf="showSystemEff">
-          <td>Gross Heat Input</td>
-          <td>{{grossHeatInput | number:'2.2-2'}}</td>
-        </tr>
-        <tr *ngIf="showSystemEff">
-          <td>Total System Losses</td>
-          <td>{{systemLosses | number:'2.2-2'}}</td>
-        </tr>
-        <tr *ngIf="showFlueGas">
-          <td>Flue Gas Available Heat</td>
-          <td>{{flueGasAvailableHeat | number:'2.2-2'}} %</td>
-        </tr>
-        <tr *ngIf="showFlueGas">
-          <td>Flue Gas Gross Heat</td>
-          <td>{{flueGasGrossHeat | number:'2.2-2'}}</td>
-        </tr>
-        <tr *ngIf="showFlueGas">
-          <td>Flue Gas System Losses</td>
-          <td>{{flueGasSystemLosses | number:'2.2-2'}} </td>
-        </tr>
-        <tr *ngIf="showEnInput1 || showEnInput2">
-          <td>Energy Input Heat Delivered</td>
-          <td>{{energyInputHeatDelivered | number:'2.2-2'}}</td>
-        </tr>
-        <tr *ngIf="showEnInput1">
-          <td>Energy Input Total Chemical Energy Delivered</td>
-          <td>{{energyInputTotalChemEnergy | number:'2.2-2'}}</td>
-        </tr>
+<div class="assessment-report" [ngClass]="{'assessment-report-padding': inPhast, 'report-in-psat': inPhast, 'report-in-rollup': !inPhast}">
+  <div class="report-header">
 
-        <tr>
-          <td>Exothermic Heat from Process</td>
-          <td>{{exothermicHeat | number:'2.2-2'}}</td>
-        </tr>
-      </tbody>
-    </table>
+    <div *ngIf="inPhast" class="btn-group">
+      <button class="btn btn-secondary" [disabled]="true" (click)="print()">Print</button>
+      <button class="btn btn-secondary" [disabled]="true" (click)="exportToCsv()">Export to CSV</button>
+    </div>
+    <!--<button class="btn btn-link pull-right hide-print" aria-label="Close" (click)="closeAssessment()">Close Report</button>-->
 
+    <h2 *ngIf="!assessment" class="assessment-name">Assessment Report</h2>
+
+    <h2 *ngIf="assessment" class="assessment-name">
+      <span class="dir-list-item" *ngFor="let directory of assessmentDirectories">
+                {{directory.name}} / 
+            </span> {{assessment.name}}
+      <!--<button *ngIf="inPsat" class="btn-sm btn-secondary pull-right hide-print" (click)="print()"><span class="fa fa-print"></span></button>-->
+      <span>Last Modified {{assessment.modifiedDate | date:'medium'}}</span>
+    </h2>
+
+  </div>
+
+
+  <div class="report-data">
+    <div class="results">
+      <div class="output-summary">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Energy use or loss category</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Charge Materials</td>
+              <td>{{sumChargeMaterials | number:'2.2-2'}}</td>
+            </tr>
+            <tr>
+              <td>Fixtures, trays etc.</td>
+              <td>{{sumFixtures | number:'2.2-2'}}</td>
+            </tr>
+            <tr>
+              <td>Wall Losses</td>
+              <td>{{sumWallLosses | number:'2.2-2'}}</td>
+            </tr>
+            <tr>
+              <td>Cooling Losses</td>
+              <td>{{sumCoolingLosses | number:'2.2-2'}}</td>
+            </tr>
+            <tr>
+              <td>Atmosphere Losses</td>
+              <td>{{sumAtmosphereLosses | number:'2.2-2'}}</td>
+            </tr>
+            <tr>
+              <td>Opening Losses</td>
+              <td>{{sumOpeningLosses | number:'2.2-2'}}</td>
+            </tr>
+            <tr>
+              <td>Leakage Losses</td>
+              <td>{{sumLeakage | number:'2.2-2'}}</td>
+            </tr>
+            <tr>
+              <td>Extended Surface Losses</td>
+              <td>{{sumExtendedSurface | number:'2.2-2'}}</td>
+            </tr>
+            <tr *ngIf="showAuxPower">
+              <td>Aux Power Losses</td>
+              <td>{{sumAux | number:'2.2-2'}}</td>
+            </tr>
+            <tr *ngIf="showSlag">
+              <td>Slag Losses</td>
+              <td>{{slagSum | number:'2.2-2'}}</td>
+            </tr>
+            <tr>
+              <td>Other Losses</td>
+              <td>{{sumOther | number:'2.2-2'}}</td>
+            </tr>
+            <tr>
+              <td style="font-weight: bold;">Total Net Heat Required</td>
+              <td style="font-weight: bold;">{{sumHeatRequired | number:'2.2-2'}}</td>
+            </tr>
+            <tr *ngIf="showEnInput2">
+              <td>Energy Input Available Heat</td>
+              <td>{{availableHeatPercent | number:'2.2-2'}} %</td>
+            </tr>
+            <tr *ngIf="showSystemEff">
+              <td>System Efficiency</td>
+              <td>{{heatingSystemEfficiency | number:'2.2-2'}} %</td>
+            </tr>
+            <tr *ngIf="showSystemEff">
+              <td>Gross Heat Input</td>
+              <td>{{grossHeatInput | number:'2.2-2'}}</td>
+            </tr>
+            <tr *ngIf="showSystemEff">
+              <td>Total System Losses</td>
+              <td>{{systemLosses | number:'2.2-2'}}</td>
+            </tr>
+            <tr *ngIf="showFlueGas">
+              <td>Available Heat</td>
+              <td>{{flueGasAvailableHeat | number:'2.2-2'}} %</td>
+            </tr>
+            <tr *ngIf="showFlueGas">
+              <td>Gross Heat</td>
+              <td>{{flueGasGrossHeat | number:'2.2-2'}}</td>
+            </tr>
+            <tr *ngIf="showFlueGas">
+              <td>Flue Gas Losses</td>
+              <td>{{flueGasSystemLosses | number:'2.2-2'}} </td>
+            </tr>
+            <tr *ngIf="showEnInput1 || showEnInput2">
+              <td>Energy Input Heat Delivered</td>
+              <td>{{energyInputHeatDelivered | number:'2.2-2'}}</td>
+            </tr>
+            <tr *ngIf="showEnInput1">
+              <td>Energy Input Total Chemical Energy Delivered</td>
+              <td>{{energyInputTotalChemEnergy | number:'2.2-2'}}</td>
+            </tr>
+
+            <tr>
+              <td>Exothermic Heat from Process</td>
+              <td>{{exothermicHeat | number:'2.2-2'}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
   </div>
 </div>
