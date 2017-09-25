@@ -16,7 +16,7 @@
       Charge Material Type
     </div>
     <div class="card-block">
-      <label>Description:</label>
+      <label><u><strong>Description</strong></u></label>
       <ul>
         <li>Solid</li>
         <li>Liquid</li>
@@ -30,7 +30,7 @@
       Material Name
     </div>
     <div class="card-block">
-      <label>Description:</label>
+      <label><u><strong>Description</strong></u></label>
       <p>
         Select material from the drop down list. The material properties cells below this will be filled in if the
         material is selected from the list.
@@ -41,13 +41,18 @@
   <!--Solid Charge Material-->
   <div class="card" *ngIf="currentField == 'materialSpecificHeatOfSolidMaterial'">
     <div class="card-header">
-      Average specific heat of the solid material (Btu/(lb-F))
+      Average Heat of the solid material
     </div>
     <div class="card-block">
-      <label>Description:</label>
+      <label><u><strong>Description</strong></u></label>
       <p>
-        Give average value of the specific heat for the temperature range of the material inlet temperature and
-        outlet temperature.
+        Amount of heat per unit mass required to raise the temperature by one degree of temperature.
+        Default given from database; may be more accurate to compute as the average of specific heat
+        based on inlet and outlet temperature.
+      </p>
+      <label><u><strong>Input</strong></u></label>
+      <p>
+        Units: <strong> Btu/(lb-<sup>o</sup>F)</strong> or <strong>kJ/(kg-<sup>o</sup>C)</strong><br> Minimum Value Allowed: <strong>0</strong>
       </p>
     </div>
   </div>
@@ -57,7 +62,7 @@
       Latent Heat of Fusion (Btu/lb)
     </div>
     <div class="card-block">
-      <label>Description:</label>
+      <label><u><strong>Description</strong></u></label>
       <p>
         Latent heat of melting or fusion or phase change for the solid material.
       </p>
@@ -66,13 +71,18 @@
 
   <div class="card" *ngIf="currentField == 'materialHeatOfLiquid'">
     <div class="card-header">
-      Specific heat of liquid from molten material (Btu/(lb-F))
+      Specific Heat of liquid from molten material
     </div>
     <div class="card-block">
-      <label>Description:</label>
+      <label><u><strong>Description</strong></u></label>
       <p>
-        Give specific heat value for the liquid at the temperature range of the melting temperature and final
-        temperature (discharge temperature) material.
+        Amount of heat per unit mass required to raise the temperature by one degree of temperature.
+        Default given from database; may be more accurate to compute as the average of specific heat based on
+        inlet and outlet temperature.
+      </p>
+      <label><u><strong>Input</strong></u></label>
+      <p>
+        Units: <strong> Btu/(lb-<sup>o</sup>F)</strong> or <strong>kJ/(kg-<sup>o</sup>C)</strong><br> Minimum Value Allowed: <strong>0</strong>
       </p>
     </div>
   </div>
@@ -82,61 +92,82 @@
       Melting Point (&#8457;)
     </div>
     <div class="card-block">
-      <label>Description:</label>
+      <label><u><strong>Description</strong></u></label>
       <p>
         Temperature of melting for the solid material.
+      </p>
+      </p>
+      <label><u><strong>Input</strong></u></label>
+      <p>
+        Units: <strong><sup>o</sup>F</strong> or <strong><sup>o</sup>C</strong>
       </p>
     </div>
   </div>
 
   <div class="card" *ngIf="currentField == 'waterContentAsCharged'">
     <div class="card-header">
-      Water Content as Charged (%)
+      Water Content as Charged
     </div>
     <div class="card-block">
-      <label>Description:</label>
+      <label><u><strong>Description</strong></u>/label>
       <p>
         Water content of the charge material as percentage of total charge weight - wet basis. This value can be
         obtained from moisture tests or specifications for the material charged.
+      </p>
+      <label><u><strong>Input</strong></u></label>
+      <p>
+        Units: <strong>%</strong><br> Minimum Value Allowed: <strong>0</strong> <br>Maximum Value Allowed: <strong>100</strong>
       </p>
     </div>
   </div>
 
   <div class="card" *ngIf="currentField == 'waterContentAsDischarged'">
     <div class="card-header">
-      Water Content as Discharged (%)
+      Water Content as Discharged
     </div>
     <div class="card-block">
-      <label>Description:</label>
+      <label><u><strong>Description</strong></u></label>
       <p>
         Water content of the discharged material as percentage of total discharged weight - wet basis. This value can
         be obtained from moisture tests or specifications for the material discharged.
+      </p>
+      <label><u><strong>Input</strong></u></label>
+      <p>
+        Units: <strong>%</strong><br> Minimum Value Allowed: <strong>0</strong> <br>Maximum Value Allowed: <strong>100</strong>
       </p>
     </div>
   </div>
 
   <div class="card" *ngIf="currentField == 'percentChargeMelted'">
     <div class="card-header">
-      Charge Melted (% of Dry Charge)
+      Charge Melted
     </div>
     <div class="card-block">
-      <label>Description:</label>
+      <label><u><strong>Description</strong></u></label>
       <p>
         Charge material melted (as % of solid material charged). Use value or data from process/production engineering
         or measurement of the final product.
+      </p>
+      <label><u><strong>Input</strong></u></label>
+      <p>
+        Units: <strong>%</strong><br> Minimum Value Allowed: <strong>0</strong> <br>Maximum Value Allowed: <strong>100</strong>
       </p>
     </div>
   </div>
 
   <div class="card" *ngIf="currentField == 'percentChargeReacted'">
     <div class="card-header">
-      Charge Reacted (% of Dry Charge)
+      Charge Reacted
     </div>
     <div class="card-block">
-      <label>Description:</label>
+      <label><u><strong>Description</strong></u></label>
       <p>
         Charge material (as % of dry material) reacted. Use value or data from process/production engineering or
         measurement of the final product.
+      </p>
+      <label><u><strong>Input</strong></u></label>
+      <p>
+        Units: <strong>%</strong><br> Minimum Value Allowed: <strong>0</strong> <br>Maximum Value Allowed: <strong>100</strong>
       </p>
     </div>
   </div>
@@ -146,10 +177,14 @@
       Water Vapor Discharge Temperature (&#8457;)
     </div>
     <div class="card-block">
-      <label>Description:</label>
+      <label><u><strong>Description</strong></u></label>
       <p>
         Temperature of water vapor (usually mixed with exhaust air or flue gases) as it is discharged form the
         furnace/oven.
+      </p>
+      <label><u><strong>Input</strong></u></label>
+      <p>
+        Units: <strong><sup>o</sup>F</strong> or <strong><sup>o</sup>C</strong>
       </p>
     </div>
   </div>
@@ -159,10 +194,14 @@
       Charge Material Discharge Temperature (&#8457;)
     </div>
     <div class="card-block">
-      <label>Description:</label>
+      <label><u><strong>Description</strong></u></label>
       <p>
         Discharge temperature for the material as it is discharged from the furnace or oven. Use production data or
         actual measurement.
+      </p>
+      <label><u><strong>Input</strong></u></label>
+      <p>
+        Units: <strong><sup>o</sup>F</strong> or <strong><sup>o</sup>C</strong>
       </p>
     </div>
   </div>
@@ -172,9 +211,13 @@
       Additional Heat Required (Btu/lb)
     </div>
     <div class="card-block">
-      <label>Description:</label>
+      <label><u><strong>Description</strong></u></label>
       <p>
         Insert value of additional heat required and not accounted for in the above calculations.
+      </p>
+      <label><u><strong>Input</strong></u></label>
+      <p>
+        Units: <strong>Btu/lb</strong> or <strong>kJ/kg</strong>
       </p>
     </div>
   </div>
@@ -183,13 +226,18 @@
   <!--Liquid Charge Material-->
   <div class="card" *ngIf="currentField == 'materialSpecificHeatLiquid'">
     <div class="card-header">
-      Specific Heat of Liquid (Btu/(lb-F))
+      Specific Heat of the Liquid
     </div>
     <div class="card-block">
-      <label>Description:</label>
+      <label><u><strong>Description</strong></u></label>
       <p>
-        Give average value of the specific heat for the temperature range of the material inlet temperature and outlet
-        temperature.
+        Amount of heat per unit mass required to raise the temperature by one degree of temperature.
+        Default given from database; may be more accurate to compute as the average of specific heat based on inlet
+        and outlet temperature.
+      </p>
+      <label><u><strong>Input</strong></u></label>
+      <p>
+        Units: <strong> Btu/(lb-<sup>o</sup>F)</strong> or <strong>kJ/(kg-<sup>o</sup>C)</strong><br> Minimum Value Allowed: <strong>0</strong>
       </p>
     </div>
   </div>
@@ -199,9 +247,13 @@
       Vaporizing Temperature of Liquid(&#8457;)
     </div>
     <div class="card-block">
-      <label>Description:</label>
+      <label><u><strong>Description</strong></u></label>
       <p>
         Vaporizing temperature of the liquid.
+      </p>
+      <label><u><strong>Input</strong></u></label>
+      <p>
+        Units: <strong><sup>o</sup>F</strong> or <strong><sup>o</sup>C</strong>
       </p>
     </div>
   </div>
@@ -211,35 +263,47 @@
       Latent Heat of Vaporization (&#8457;)
     </div>
     <div class="card-block">
-      <label>Description:</label>
+      <label><u><strong>Description</strong></u></label>
       <p>
         Latent heat of vaporizing or evaporation for the liquid.
+      </p>
+      <label><u><strong>Input</strong></u></label>
+      <p>
+        Units: <strong><sup>o</sup>F</strong> or <strong><sup>o</sup>C</strong>
       </p>
     </div>
   </div>
 
   <div class="card" *ngIf="currentField == 'materialSpecificHeatVapor'">
     <div class="card-header">
-      Specific Heat of Vapor (Btu/(lb-F))
+      Specific Heat of Vapor
     </div>
     <div class="card-block">
-      <label>Description:</label>
+      <label><u><strong>Description</strong></u></label>
       <p>
         Give specific heat value for the vapor resulting from vaporizing of the liquid at the temperature range of the
         vaporizing temperature and final temperature (discharge temperature) of the liquid/vapor.
+      </p>
+      <label><u><strong>Input</strong></u></label>
+      <p>
+        Units: <strong> Btu/(lb-<sup>o</sup>F)</strong> or <strong>kJ/(kg-<sup>o</sup>C)</strong>
       </p>
     </div>
   </div>
 
   <div class="card" *ngIf="currentField == 'liquidVaporized'">
     <div class="card-header">
-      Charge Liquid Vaporized (% of Charge)
+      Charge Liquid Vaporized
     </div>
     <div class="card-block">
-      <label>Description:</label>
+      <label><u><strong>Description</strong></u></label>
       <p>
         Charge liquid vaporized (% liquid charged) during the heating process. Get the value (data) from
         process/production engineering or measurement of the final product.
+      </p>
+      <label><u><strong>Input</strong></u></label>
+      <p>
+        Units: <strong>%</strong><br> Minimum Value Allowed: <strong>0</strong> <br>Maximum Value Allowed: <strong>100</strong>
       </p>
     </div>
   </div>
@@ -249,9 +313,13 @@
       Charge Liquid Reacted (% of Charge)
     </div>
     <div class="card-block">
-      <label>Description:</label>
+      <label><u><strong>Description</strong></u></label>
       <p>
-        Charge Liquid Reacted (as % of Liquid Feed).
+        Charge Liquid Reacted
+      </p>
+      <label><u><strong>Input</strong></u></label>
+      <p>
+        Units: <strong>%</strong><br> Minimum Value Allowed: <strong>0</strong> <br>Maximum Value Allowed: <strong>100</strong>
       </p>
     </div>
   </div>
@@ -260,50 +328,68 @@
   <!--Gas Charge Material-->
   <div class="card" *ngIf="currentField == 'materialSpecificHeat'">
     <div class="card-header">
-      Specific Heat of Gas (Btu/(lb-F))
+      Specific Heat of gas
     </div>
     <div class="card-block">
-      <label>Description:</label>
+      <label><u><strong>Description</strong></u></label>
       <p>
-        Give average value of the specific heat for the temperature range of the gas inlet temperature and outlet
-        temperature.
+        Amount of heat per unit mass required to raise the temperature by one degree of temperature.
+        Default given from database; may be more accurate to compute as the average of specific heat based on inlet
+        and outlet temperature.
+      </p>
+      <label><u><strong>Input</strong></u></label>
+      <p>
+        Units: <strong> Btu/(lb-<sup>o</sup>F)</strong> or <strong>kJ/(kg-<sup>o</sup>C)</strong><br> Minimum Value Allowed: <strong>0</strong>
       </p>
     </div>
   </div>
 
   <div class="card" *ngIf="currentField == 'vaporInGas'">
     <div class="card-header">
-      Vapor in Gas Mixture (% of Total)
+      Vapor in Gas Mixture
     </div>
     <div class="card-block">
-      <label>Description:</label>
+      <label><u><strong>Description</strong></u></label>
       <p>
         Vapor mixed with the feed gas expressed as % of the total mixture charge weight. Use test data or charge
         material specifications.
+      </p>
+      <label><u><strong>Input</strong></u></label>
+      <p>
+        Units: <strong>%</strong><br> Minimum Value Allowed: <strong>0</strong> <br>Maximum Value Allowed: <strong>100</strong>
       </p>
     </div>
   </div>
 
   <div class="card" *ngIf="currentField == 'specificHeatOfVapor'">
     <div class="card-header">
-      Specific Heat of Vapor (Btu/(lb-F))
+      Specific Heat of vapor
     </div>
     <div class="card-block">
-      <label>Description:</label>
+      <label><u><strong>Description</strong></u></label>
       <p>
-        Use available data from handbooks or other sources.
+        Amount of heat per unit mass required to raise the temperature by one degree of temperature.
+        Use available data from handbooks based on average of inlet and outlet temperature.
+      </p>
+      <label><u><strong>Input</strong></u></label>
+      <p>
+        Units: <strong> Btu/(lb-<sup>o</sup>F)</strong> or <strong>kJ/(kg-<sup>o</sup>C)</strong><br> Minimum Value Allowed: <strong>0</strong>
       </p>
     </div>
   </div>
 
   <div class="card" *ngIf="currentField == 'gasReacted'">
     <div class="card-header">
-      Feed Gas Reacted (% of Total)
+      Feed Gas Reacted
     </div>
     <div class="card-block">
-      <label>Description:</label>
+      <label><u><strong>Description</strong></u></label>
       <p>
-        Charge Gas Reacted (as % of DRY Gas Feed).
+        Fraction of DRY gas feed that reacts in system.
+      </p>
+      <label><u><strong>Input</strong></u></label>
+      <p>
+        Units: <strong>%</strong><br> Minimum Value Allowed: <strong>0</strong> <br>Maximum Value Allowed: <strong>100</strong>
       </p>
     </div>
   </div>
@@ -314,9 +400,13 @@
       Initial Temperature (&#8457;)
     </div>
     <div class="card-block">
-      <label>Description:</label>
+      <label><u><strong>Description</strong></u></label>
       <p>
         Inlet temperature for the charge material. Use production data or actual measurement.
+      </p>
+      <label><u><strong>Input</strong></u></label>
+      <p>
+        Units: <strong><sup>o</sup>F</strong> or <strong><sup>o</sup>C</strong>
       </p>
     </div>
   </div>
@@ -326,22 +416,31 @@
       Discharge Temperature (&#8457;)
     </div>
     <div class="card-block">
-      <label>Description:</label>
+      <label><u><strong>Description</strong></u></label>
       <p>
         Discharge temperature for the material as it is discharged from the furnace or oven. Use production data or
         actual measurement.
+      </p>
+      <label><u><strong>Input</strong></u></label>
+      <p>
+        Units: <strong><sup>o</sup>F</strong> or <strong><sup>o</sup>C</strong>
       </p>
     </div>
   </div>
 
   <div class="card" *ngIf="currentField == 'heatOfReaction'">
     <div class="card-header">
-      Heat of Reaction (Btu/lb)
+      Heat of Reaction
     </div>
     <div class="card-block">
-      <label>Description:</label>
+      <label><u><strong>Description</strong></u></label>
       <p>
-        Insert value of heat of reaction when chemical or metallurgical reactions are involved during heating.
+        Mass based change in enthalpy due to a reaction.
+        Do not use negative values for exothermic reactions, instead change the below dropdown menu.
+      </p>
+      <label><u><strong>Input</strong></u></label>
+      <p>
+        Units: <strong> Btu/(lb-<sup>o</sup>F)</strong> or <strong>kJ/(kg-<sup>o</sup>C)</strong><br> Minimum Value Allowed: <strong>0</strong>
       </p>
     </div>
   </div>
@@ -351,7 +450,7 @@
       Endothermic/Exothermic
     </div>
     <div class="card-block">
-      <label>Description:</label>
+      <label><u><strong>Description</strong></u></label>
       <p>
         Type of reaction. Select from the drop down menu and select endothermic or exothermic. Use positive number
         (+ve) in either one of these cases.
@@ -364,7 +463,7 @@
       Feed Rate for Gas Mixture (lb/hr)
     </div>
     <div class="card-block">
-      <label>Description:</label>
+      <label><u><strong>Description</strong></u></label>
       <p>
         Weight of material charged per hour. Use total weight including moisture in the charge material. Note that for
         batch furnaces the total weight should be corrected for cycle time to obtain weight per hour value.
