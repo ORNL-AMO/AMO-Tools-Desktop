@@ -2,6 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { PhastService } from '../phast.service';
 import { PHAST } from '../../shared/models/phast/phast';
 import { Settings } from '../../shared/models/settings';
+import { Assessment } from '../../shared/models/assessment';
 
 @Component({
   selector: 'app-phast-report',
@@ -14,6 +15,10 @@ export class PhastReportComponent implements OnInit {
   settings: Settings;
   @Input()
   phast: PHAST;
+  @Input()
+  inPhast: boolean;
+  @Input()
+  assessment: Assessment;
 
   sumChargeMaterials: number = 0;
   sumExtendedSurface: number = 0;
@@ -100,18 +105,20 @@ export class PhastReportComponent implements OnInit {
     }
     //fuel
     if (this.showFlueGas) {
-      let tmpFlueGas = this.phast.losses.flueGasLosses[0];
-      if (tmpFlueGas) {
-        if (tmpFlueGas.flueGasType == 'By Mass') {
-          let tmpVal = this.phastService.flueGasByMass(tmpFlueGas.flueGasByMass, this.settings);
-          this.flueGasAvailableHeat = tmpVal * 100;
-          this.flueGasGrossHeat = this.phastService.sumHeatInput(this.phast.losses, this.settings) / tmpVal;
-          this.flueGasSystemLosses = this.flueGasGrossHeat * (1 - tmpVal);
-        } else if (tmpFlueGas.flueGasType == 'By Volume') {
-          let tmpVal = this.phastService.flueGasByVolume(tmpFlueGas.flueGasByVolume, this.settings);
-          this.flueGasAvailableHeat = tmpVal * 100;
-          this.flueGasGrossHeat = this.phastService.sumHeatInput(this.phast.losses, this.settings) / tmpVal;
-          this.flueGasSystemLosses = this.flueGasGrossHeat * (1 - tmpVal);
+      if (this.phast.losses.flueGasLosses) {
+        let tmpFlueGas = this.phast.losses.flueGasLosses[0];
+        if (tmpFlueGas) {
+          if (tmpFlueGas.flueGasType == 'By Mass') {
+            let tmpVal = this.phastService.flueGasByMass(tmpFlueGas.flueGasByMass, this.settings);
+            this.flueGasAvailableHeat = tmpVal * 100;
+            this.flueGasGrossHeat = this.phastService.sumHeatInput(this.phast.losses, this.settings) / tmpVal;
+            this.flueGasSystemLosses = this.flueGasGrossHeat * (1 - tmpVal);
+          } else if (tmpFlueGas.flueGasType == 'By Volume') {
+            let tmpVal = this.phastService.flueGasByVolume(tmpFlueGas.flueGasByVolume, this.settings);
+            this.flueGasAvailableHeat = tmpVal * 100;
+            this.flueGasGrossHeat = this.phastService.sumHeatInput(this.phast.losses, this.settings) / tmpVal;
+            this.flueGasSystemLosses = this.flueGasGrossHeat * (1 - tmpVal);
+          }
         }
       }
     }

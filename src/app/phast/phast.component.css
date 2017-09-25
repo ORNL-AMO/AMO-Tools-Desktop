@@ -14,3 +14,12 @@
   font-weight: bold !important;
   opacity: 1 !important;
 }
+
+.report-container{
+    background-color: #ececec;
+}
+
+.report-column{
+    margin-top: 50px;
+    margin-bottom: 100px;
+}

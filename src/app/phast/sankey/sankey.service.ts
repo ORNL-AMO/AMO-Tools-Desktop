@@ -78,7 +78,7 @@ export class SankeyService {
       let tmpResults = this.phastService.energyInputExhaustGasLosses(phast.losses.energyInputExhaustGasLoss[0], settings)
       results.totalExhaustGas = tmpResults.exhaustGasLosses / 1000000;
     }
-    if (phast.systemEfficiency) {
+    if (phast.systemEfficiency && (settings.unitsOfMeasure == 'Steam' || settings.furnaceType == 'Custom Electrotech')) {
       let grossHeatInput = this.phastService.sumHeatInput(phast.losses, settings) / phast.systemEfficiency;
       results.totalSystemLosses = grossHeatInput * (1 - (phast.systemEfficiency / 100)) / 1000000;
     }
