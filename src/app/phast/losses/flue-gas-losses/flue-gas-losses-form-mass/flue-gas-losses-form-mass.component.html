@@ -4,7 +4,7 @@
       <label class="small" for="gasTypeId">Fuel
         <small id="materialHelp" class="form-text text-help"><a (click)="showMaterialModal()">Add New Fuel</a></small>
       </label>
-      <select name="{{'gasTypeId_'+lossIndex}}" class="form-control" formControlName="gasTypeId" id="gasTypeId" (change)="setProperties()">
+      <select name="{{'gasTypeId_'+lossIndex}}" class="form-control" formControlName="gasTypeId" id="gasTypeId" (change)="setProperties()" (focus)="focusField('gasTypeId')">
       <option *ngFor="let option of options" [ngValue]="option.id">{{option.substance}}</option>
     </select>
     </div>
