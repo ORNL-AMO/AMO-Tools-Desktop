@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SankeyDiagramComponent } from './sankey-diagram/sankey-diagram.component';
 import { SankeyComponent } from './sankey.component';
-
+import { SankeyService } from './sankey.service';
 @NgModule({
   imports: [
     CommonModule
@@ -13,6 +13,9 @@ import { SankeyComponent } from './sankey.component';
   ],
   exports: [
     SankeyComponent
+  ],
+  providers: [
+    SankeyService
   ]
 })
 export class SankeyModule { }

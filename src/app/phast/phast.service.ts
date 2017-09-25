@@ -421,19 +421,22 @@ export class PhastService {
   //energy input for non-EAF Electric process heating
   energyInputExhaustGasLosses(inputs: EnergyInputExhaustGasLoss, settings: Settings) {
     inputs.availableHeat = this.availableHeat(inputs, settings);
-    let results = 0;
+    let results: any = {
+      heatDelivered: 0,
+      exhaustGasLosses: 0
+    }
     if (settings.unitsOfMeasure == 'Metric') {
       inputs.combustionAirTemp = this.convertUnitsService.value(inputs.combustionAirTemp).from('C').to('F');
       inputs.exhaustGasTemp = this.convertUnitsService.value(inputs.exhaustGasTemp).from('C').to('F');
       inputs.totalHeatInput = this.convertUnitsService.value(inputs.totalHeatInput).from('kJ').to('Btu');
       results = phastAddon.energyInputExhaustGasLosses(inputs);
-      if (isNaN(results)) {
-        results = 0;
+      if (isNaN(results.heatDelivered)) {
+        results.heatDelivered = 0;
       }
     } else {
       results = phastAddon.energyInputExhaustGasLosses(inputs);
     }
-    return phastAddon.energyInputExhaustGasLosses(inputs);
+    return results;
   }
 
   efficiencyImprovement(inputs: EfficiencyImprovementInputs) {
@@ -562,36 +565,35 @@ export class PhastService {
     return sum;
   }
 
-  // sumEnergyInputEAF(losses: EnergyInputEAF[]): number {
-  //   let sum: any = {
-  //     heatDelivered: 0,
-  //     kwhCycle: 0,
-  //     totalKwhCycle: 0
-  //   };
-  //   losses.forEach(loss => {
-  //     let tmpResult = this.energyInputEAF(loss);
-  //     sum.heatDelivered += tmpResult.heatDelivered;
-  //     sum.kwhCycle += tmpResult.kwhCycle;
-  //     sum.totalKwhCycle += tmpResult.totalKwhCycle;
-  //   })
-  //   return sum;
-  // }
+  sumEnergyInputEAF(losses: EnergyInputEAF[], settings: Settings): number {
+    let sum: any = {
+      heatDelivered: 0,
+      kwhCycle: 0,
+      totalKwhCycle: 0
+    };
+    losses.forEach(loss => {
+      let tmpResult = this.energyInputEAF(loss, settings);
+      sum.heatDelivered += tmpResult.heatDelivered;
+    })
+    return sum;
+  }
 
-  // sumExhaustGasEAF(losses: ExhaustGasEAF[]): number {
-  //   let sum = 0;
-  //   losses.forEach(loss => {
-  //     sum += this.exhaustGasEAF(loss);
-  //   })
-  //   return sum;
-  // }
+  sumExhaustGasEAF(losses: ExhaustGasEAF[], settings: Settings): number {
+    let sum = 0;
+    losses.forEach(loss => {
+      sum += this.exhaustGasEAF(loss, settings);
+    })
+    return sum;
+  }
 
-  // sumEnergyInputExhaustGas(losses: EnergyInputExhaustGasLoss[]): number {
-  //   let sum = 0;
-  //   losses.forEach(loss => {
-  //     sum += this.energyInputExhaustGasLosses(loss);
-  //   })
-  //   return sum;
-  // }
+  sumEnergyInputExhaustGas(losses: EnergyInputExhaustGasLoss[], settings: Settings): number {
+    let sum = 0;
+    losses.forEach(loss => {
+      let result = this.energyInputExhaustGasLosses(loss, settings);
+      sum += result.heatDelivered;
+    })
+    return sum;
+  }
 
   sumExtendedSurface(losses: ExtendedSurface[], settings: Settings): number {
     let sum = 0;
@@ -606,7 +608,8 @@ export class PhastService {
         correctionFactor: 1,
       }
       let tmpForm = this.wallLossesService.getWallLossForm(tmpWallLoss);
-      if (tmpForm.status == 'VALID') {
+      let lossVal = this.wallLosses(tmpWallLoss, settings);
+      if (isNaN(lossVal) == false) {
         sum += this.wallLosses(tmpWallLoss, settings);
       }
     })
