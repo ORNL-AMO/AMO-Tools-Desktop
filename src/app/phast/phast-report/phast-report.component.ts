@@ -126,10 +126,12 @@ export class PhastReportComponent implements OnInit {
       }
     }
     if (this.showEnInput1) {
-      if (this.phast.losses.energyInputEAF[0]) {
-        let tmpResult = this.phastService.energyInputEAF(this.phast.losses.energyInputEAF[0], this.settings);
-        this.energyInputHeatDelivered = tmpResult.heatDelivered;
-        this.energyInputTotalChemEnergy = tmpResult.totalChemicalEnergyInput;
+      if (this.phast.losses.energyInputEAF) {
+        if (this.phast.losses.energyInputEAF[0]) {
+          let tmpResult = this.phastService.energyInputEAF(this.phast.losses.energyInputEAF[0], this.settings);
+          this.energyInputHeatDelivered = tmpResult.heatDelivered;
+          this.energyInputTotalChemEnergy = tmpResult.totalChemicalEnergyInput;
+        }
       }
     }
     if (this.showAuxPower) {
@@ -138,10 +140,11 @@ export class PhastReportComponent implements OnInit {
       }
     }
     if (this.showEnInput2) {
-      if (this.phast.losses.energyInputExhaustGasLoss[0]) {
-        this.energyInputHeatDelivered = this.phastService.energyInputExhaustGasLosses(this.phast.losses.energyInputExhaustGasLoss[0], this.settings);
-        this.availableHeatPercent = this.phastService.availableHeat(this.phast.losses.energyInputExhaustGasLoss[0], this.settings);
-
+      if (this.phast.losses.energyInputExhaustGasLoss) {
+        if (this.phast.losses.energyInputExhaustGasLoss[0]) {
+          this.energyInputHeatDelivered = this.phastService.energyInputExhaustGasLosses(this.phast.losses.energyInputExhaustGasLoss[0], this.settings);
+          this.availableHeatPercent = this.phastService.availableHeat(this.phast.losses.energyInputExhaustGasLoss[0], this.settings);
+        }
       }
     }
     if (this.showSystemEff) {
