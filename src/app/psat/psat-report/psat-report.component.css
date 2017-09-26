@@ -57,15 +57,7 @@
     margin-left: 0;
 }
 
-.show-print{
-    display: none;
-}
-
-
 @media print {
-    .show-print{
-        display: inherit;
-    }
     .assessment-report {
         background: #fff;
         box-shadow: none;

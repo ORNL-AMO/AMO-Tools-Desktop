@@ -1700,31 +1700,18 @@ Toasty Overrides ================================= */
     text-align: center;
 }
 
-@media print{
-
-  html, body {
-    background: transparent;
-  }
-
-  .hide-print {
-    display: none;
-  }
-
-  .psat-name{
-    font-size: 13px;
-  }
-}
-
 .disabled-link {
     color: gray;
     pointer-events: none;
 }
 
-
 .disabled-link :hover {
     text-decoration: none;
 }
 
+.show-print{
+    display: none;
+}
 
 @media screen and (min-width: 768px) {
   /*.rollups .pumps {
@@ -1733,3 +1720,26 @@ Toasty Overrides ================================= */
 }
 
 
+@media print{
+
+  html, body {
+    background: transparent;
+  }
+
+  .show-print{
+      display: inherit;
+  }
+  .hide-print {
+    display: none;
+  }
+
+  .psat-name{
+    font-size: 13px;
+  }
+
+  .output-summary {
+    margin-bottom: 40px;
+  }
+
+
+}
