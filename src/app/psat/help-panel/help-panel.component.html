@@ -1,7 +1,7 @@
 <div class="help-panel">
     <app-system-basics-help *ngIf="currentTab == 'system-basics'"></app-system-basics-help>
     
-    <app-pump-fluid-help *ngIf="currentTab == 'pump-fluid'"></app-pump-fluid-help>
+    <app-pump-fluid-help [psat]="psat" *ngIf="currentTab == 'pump-fluid'"></app-pump-fluid-help>
     
     <app-motor-help  [settings]="settings" [psat]="psat" *ngIf="currentTab == 'motor'"></app-motor-help>
     

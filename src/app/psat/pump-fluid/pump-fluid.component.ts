@@ -168,8 +168,8 @@ export class PumpFluidComponent implements OnInit {
       max = 3960;
     } else if (this.psatForm.value.drive == 'Belt Drive') {
       //TODO UPDATE WITH BELT DRIVE VALS
-      min = 540;
-      max = 3960;
+      min = 1;
+      max = Infinity;
     }
     if (this.psatForm.value.pumpRPM < min) {
       this.rpmError = 'Value is too small';
