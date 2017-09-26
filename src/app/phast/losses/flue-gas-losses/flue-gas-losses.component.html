@@ -42,13 +42,13 @@
       <div class="form-group">
         <label class="small">Available Heat</label>
         <div class="text-center small">
-          {{loss.availableHeat | number:'2.0-2'}} %
+          {{loss.availableHeat | number:'2.0-0'}} %
         </div>
       </div>
       <div class="form-group">
         <label class="small">Gross Heat</label>
         <div class="text-center small">
-          {{loss.grossHeat | number:'2.0-2'}}
+          {{loss.grossHeat | number:'2.0-0'}}
           <span *ngIf="settings.unitsOfMeasure == 'Imperial'">Btu/hr</span>
           <span *ngIf="settings.unitsOfMeasure == 'Metric'">kJ/hr</span>
         </div>
@@ -56,7 +56,7 @@
       <div class="form-group">
         <label class="small">System Losses</label>
         <div class="text-center small">
-          {{loss.systemLosses | number:'2.0-2'}} 
+          {{loss.systemLosses | number:'2.0-0'}} 
           <span *ngIf="settings.unitsOfMeasure == 'Imperial'">Btu/hr</span>
           <span *ngIf="settings.unitsOfMeasure == 'Metric'">kJ/hr</span>
         </div>

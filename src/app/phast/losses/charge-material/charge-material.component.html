@@ -43,7 +43,7 @@
       <div class="form-group">
         <label class="small">Total Heat Required For Charge Material</label>
         <div *ngIf="material.heatRequired" class="text-center small">
-          {{material.heatRequired |number:'2.2-2'}}
+          {{material.heatRequired | number:'2.0-0'}}
           <span *ngIf="settings.unitsOfMeasure == 'Imperial'">Btu/hr</span>
           <span *ngIf="settings.unitsOfMeasure == 'Metric'">kJ/hr</span>
         </div>
