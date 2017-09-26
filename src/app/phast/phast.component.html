@@ -41,16 +41,20 @@
   </div>
 
 
-  <div class="row tab-content" *ngIf="mainTab == 'report'">
-    <div class="col-12">
-      <app-phast-report [phast]="_phast" [settings]="settings"></app-phast-report>
+  <div class="row justify-content-center report-container" *ngIf="mainTab == 'report'">
+    <div class="col-10 report-column">
+      <app-phast-report [phast]="_phast" [settings]="settings" [assessment]="assessment" [inPhast]="true"></app-phast-report>
     </div>
   </div>
 
   <div class="row tab-content" *ngIf="mainTab == 'sankey'">
     <div class="col-12">
-      <app-sankey [losses]="_phast.losses" [location]="'app-sankey-diagram'" [settings]="settings"></app-sankey>
+      <app-sankey [phast]="_phast" [location]="'app-sankey-diagram'" [settings]="settings"></app-sankey>
     </div>
+  </div>
+
+  <div class="tab-content" *ngIf="mainTab =='diagram'">
+    <app-phast-diagram></app-phast-diagram>
   </div>
 
   <div class="footer">

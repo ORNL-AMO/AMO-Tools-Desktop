@@ -14,4 +14,8 @@ export class FlueGasLossesHelpComponent implements OnInit {
   ngOnInit() {
   }
 
+  ngOnChanges(){
+    console.log(this.currentField);
+  }
+
 }

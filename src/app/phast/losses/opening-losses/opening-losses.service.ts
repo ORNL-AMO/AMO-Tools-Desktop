@@ -37,7 +37,7 @@ export class OpeningLossesService {
       'insideTemp': ['', Validators.required],
       'ambientTemp': ['', Validators.required],
       'percentTimeOpen': ['', Validators.required],
-      'emissivity': ['', Validators.required]
+      'emissivity': [0.9, Validators.required]
     })
   }
 

@@ -2,6 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { PhastService } from '../phast.service';
 import { PHAST } from '../../shared/models/phast/phast';
 import { Settings } from '../../shared/models/settings';
+import { Assessment } from '../../shared/models/assessment';
 
 @Component({
   selector: 'app-phast-report',
@@ -14,6 +15,10 @@ export class PhastReportComponent implements OnInit {
   settings: Settings;
   @Input()
   phast: PHAST;
+  @Input()
+  inPhast: boolean;
+  @Input()
+  assessment: Assessment;
 
   sumChargeMaterials: number = 0;
   sumExtendedSurface: number = 0;
@@ -100,18 +105,20 @@ export class PhastReportComponent implements OnInit {
     }
     //fuel
     if (this.showFlueGas) {
-      let tmpFlueGas = this.phast.losses.flueGasLosses[0];
-      if (tmpFlueGas) {
-        if (tmpFlueGas.flueGasType == 'By Mass') {
-          let tmpVal = this.phastService.flueGasByMass(tmpFlueGas.flueGasByMass, this.settings);
-          this.flueGasAvailableHeat = tmpVal * 100;
-          this.flueGasGrossHeat = this.phastService.sumHeatInput(this.phast.losses, this.settings) / tmpVal;
-          this.flueGasSystemLosses = this.flueGasGrossHeat * (1 - tmpVal);
-        } else if (tmpFlueGas.flueGasType == 'By Volume') {
-          let tmpVal = this.phastService.flueGasByVolume(tmpFlueGas.flueGasByVolume, this.settings);
-          this.flueGasAvailableHeat = tmpVal * 100;
-          this.flueGasGrossHeat = this.phastService.sumHeatInput(this.phast.losses, this.settings) / tmpVal;
-          this.flueGasSystemLosses = this.flueGasGrossHeat * (1 - tmpVal);
+      if (this.phast.losses.flueGasLosses) {
+        let tmpFlueGas = this.phast.losses.flueGasLosses[0];
+        if (tmpFlueGas) {
+          if (tmpFlueGas.flueGasType == 'By Mass') {
+            let tmpVal = this.phastService.flueGasByMass(tmpFlueGas.flueGasByMass, this.settings);
+            this.flueGasAvailableHeat = tmpVal * 100;
+            this.flueGasGrossHeat = this.phastService.sumHeatInput(this.phast.losses, this.settings) / tmpVal;
+            this.flueGasSystemLosses = this.flueGasGrossHeat * (1 - tmpVal);
+          } else if (tmpFlueGas.flueGasType == 'By Volume') {
+            let tmpVal = this.phastService.flueGasByVolume(tmpFlueGas.flueGasByVolume, this.settings);
+            this.flueGasAvailableHeat = tmpVal * 100;
+            this.flueGasGrossHeat = this.phastService.sumHeatInput(this.phast.losses, this.settings) / tmpVal;
+            this.flueGasSystemLosses = this.flueGasGrossHeat * (1 - tmpVal);
+          }
         }
       }
     }
@@ -126,10 +133,12 @@ export class PhastReportComponent implements OnInit {
       }
     }
     if (this.showEnInput1) {
-      if (this.phast.losses.energyInputEAF[0]) {
-        let tmpResult = this.phastService.energyInputEAF(this.phast.losses.energyInputEAF[0], this.settings);
-        this.energyInputHeatDelivered = tmpResult.heatDelivered;
-        this.energyInputTotalChemEnergy = tmpResult.totalChemicalEnergyInput;
+      if (this.phast.losses.energyInputEAF) {
+        if (this.phast.losses.energyInputEAF[0]) {
+          let tmpResult = this.phastService.energyInputEAF(this.phast.losses.energyInputEAF[0], this.settings);
+          this.energyInputHeatDelivered = tmpResult.heatDelivered;
+          this.energyInputTotalChemEnergy = tmpResult.totalChemicalEnergyInput;
+        }
       }
     }
     if (this.showAuxPower) {
@@ -138,10 +147,11 @@ export class PhastReportComponent implements OnInit {
       }
     }
     if (this.showEnInput2) {
-      if (this.phast.losses.energyInputExhaustGasLoss[0]) {
-        this.energyInputHeatDelivered = this.phastService.energyInputExhaustGasLosses(this.phast.losses.energyInputExhaustGasLoss[0], this.settings);
-        this.availableHeatPercent = this.phastService.availableHeat(this.phast.losses.energyInputExhaustGasLoss[0], this.settings);
-
+      if (this.phast.losses.energyInputExhaustGasLoss) {
+        if (this.phast.losses.energyInputExhaustGasLoss[0]) {
+          this.energyInputHeatDelivered = this.phastService.energyInputExhaustGasLosses(this.phast.losses.energyInputExhaustGasLoss[0], this.settings);
+          this.availableHeatPercent = this.phastService.availableHeat(this.phast.losses.energyInputExhaustGasLoss[0], this.settings);
+        }
       }
     }
     if (this.showSystemEff) {
