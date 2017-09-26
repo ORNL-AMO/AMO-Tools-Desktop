@@ -72,9 +72,7 @@ export class GasLeakageLossesFormComponent implements OnInit {
   }
 
   checkForm() {
-    if (this.lossesForm.status == "VALID") {
-      this.calculate.emit(true);
-    }
+    this.calculate.emit(true);
   }
 
   checkTemperature(bool?: boolean) {

@@ -147,11 +147,18 @@ export class EnergyInputComponent implements OnInit {
   }
 
   calculate(loss: any) {
-    let tmpLoss: EnergyInputEAF = this.energyInputService.getLossFromForm(loss.form);
-    let calculation = this.phastService.energyInputEAF(tmpLoss, this.settings);
-    loss.results = {
-      heatDelivered: calculation.heatDelivered,
-      totalChemicalEnergyInput: calculation.totalChemicalEnergyInput
+    if (loss.form.status == 'VALID') {
+      let tmpLoss: EnergyInputEAF = this.energyInputService.getLossFromForm(loss.form);
+      let calculation = this.phastService.energyInputEAF(tmpLoss, this.settings);
+      loss.results = {
+        heatDelivered: calculation.heatDelivered,
+        totalChemicalEnergyInput: calculation.totalChemicalEnergyInput
+      }
+    } else {
+      loss.results = {
+        heatDelivered: null,
+        totalChemicalEnergyInput: null
+      }
     }
   }
 

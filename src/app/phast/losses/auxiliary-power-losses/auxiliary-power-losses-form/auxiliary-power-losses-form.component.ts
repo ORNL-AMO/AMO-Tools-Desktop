@@ -64,9 +64,7 @@ export class AuxiliaryPowerLossesFormComponent implements OnInit {
   }
 
   checkForm() {
-    if (this.auxLossesForm.status == "VALID") {
-      this.calculate.emit(true);
-    }
+    this.calculate.emit(true);
   }
 
   focusField(str: string) {

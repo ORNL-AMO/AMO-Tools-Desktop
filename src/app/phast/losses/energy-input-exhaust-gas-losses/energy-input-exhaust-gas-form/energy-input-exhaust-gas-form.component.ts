@@ -105,9 +105,7 @@ export class EnergyInputExhaustGasFormComponent implements OnInit {
   }
 
   checkForm() {
-    if (this.exhaustGasForm.status == "VALID") {
-      this.calculate.emit(true);
-    }
+    this.calculate.emit(true);
   }
 
   focusField(str: string) {

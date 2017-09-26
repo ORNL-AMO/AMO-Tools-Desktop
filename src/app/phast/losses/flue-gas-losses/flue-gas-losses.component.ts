@@ -161,18 +161,29 @@ export class FlueGasLossesComponent implements OnInit {
 
   calculate(loss: any) {
     if (loss.measurementType == "By Volume") {
-      let tmpLoss: FlueGasByVolume = this.flueGasLossesService.buildByVolumeLossFromForm(loss.formByVolume);
-      console.log(tmpLoss);
-      let tmpResult = this.phastService.flueGasByVolume(tmpLoss, this.settings);
-      loss.availableHeat = tmpResult * 100;
-      loss.grossHeat = this.phastService.sumHeatInput(this.losses, this.settings) / tmpResult;
-      loss.systemLosses = loss.grossHeat * (1 - tmpResult);
+      if (loss.formByVolume.status == 'VALID') {
+        let tmpLoss: FlueGasByVolume = this.flueGasLossesService.buildByVolumeLossFromForm(loss.formByVolume);
+        let tmpResult = this.phastService.flueGasByVolume(tmpLoss, this.settings);
+        loss.availableHeat = tmpResult * 100;
+        loss.grossHeat = this.phastService.sumHeatInput(this.losses, this.settings) / tmpResult;
+        loss.systemLosses = loss.grossHeat * (1 - tmpResult);
+      } else {
+        loss.availableHeat = null;
+        loss.grossHeat = null;
+        loss.systemLosses = null;
+      }
     } else if (loss.measurementType == "By Mass") {
-      let tmpLoss: FlueGasByMass = this.flueGasLossesService.buildByMassLossFromForm(loss.formByMass);
-      let tmpResult = this.phastService.flueGasByMass(tmpLoss, this.settings);
-      loss.availableHeat = tmpResult * 100;
-      loss.grossHeat = this.phastService.sumHeatInput(this.losses, this.settings) / tmpResult;
-      loss.systemLosses = loss.grossHeat * (1 - tmpResult);
+      if (loss.formByMass.status == 'VALID') {
+        let tmpLoss: FlueGasByMass = this.flueGasLossesService.buildByMassLossFromForm(loss.formByMass);
+        let tmpResult = this.phastService.flueGasByMass(tmpLoss, this.settings);
+        loss.availableHeat = tmpResult * 100;
+        loss.grossHeat = this.phastService.sumHeatInput(this.losses, this.settings) / tmpResult;
+        loss.systemLosses = loss.grossHeat * (1 - tmpResult);
+      } else {
+        loss.availableHeat = null;
+        loss.grossHeat = null;
+        loss.systemLosses = null;
+      }
     }
   }
 

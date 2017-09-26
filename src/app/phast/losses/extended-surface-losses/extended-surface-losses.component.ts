@@ -131,21 +131,25 @@ export class ExtendedSurfaceLossesComponent implements OnInit {
   }
 
   calculate(loss: any) {
-    //EXTENDED SURFACE LOSS = WALL LOSS WITH ASSUMPTIONS:
-    //windVelocity = 5
-    //correctionFactor = 1
-    //conditionFactor = 1
-    let tmpLoss: ExtendedSurface = this.extendedSurfaceLossesService.getSurfaceLossFromForm(loss.form);
-    let tmpWallLoss: WallLoss = {
-      surfaceArea: tmpLoss.surfaceArea,
-      ambientTemperature: tmpLoss.ambientTemperature,
-      surfaceTemperature: tmpLoss.surfaceTemperature,
-      windVelocity: 5,
-      surfaceEmissivity: tmpLoss.surfaceEmissivity,
-      conditionFactor: 1,
-      correctionFactor: 1,
+    if (loss.form.status == 'VALID') {
+      //EXTENDED SURFACE LOSS = WALL LOSS WITH ASSUMPTIONS:
+      //windVelocity = 5
+      //correctionFactor = 1
+      //conditionFactor = 1
+      let tmpLoss: ExtendedSurface = this.extendedSurfaceLossesService.getSurfaceLossFromForm(loss.form);
+      let tmpWallLoss: WallLoss = {
+        surfaceArea: tmpLoss.surfaceArea,
+        ambientTemperature: tmpLoss.ambientTemperature,
+        surfaceTemperature: tmpLoss.surfaceTemperature,
+        windVelocity: 5,
+        surfaceEmissivity: tmpLoss.surfaceEmissivity,
+        conditionFactor: 1,
+        correctionFactor: 1,
+      }
+      loss.heatLoss = this.phastService.wallLosses(tmpWallLoss, this.settings);
+    } else {
+      loss.heatLoss = null;
     }
-    loss.heatLoss = this.phastService.wallLosses(tmpWallLoss, this.settings);
 
   }
 
