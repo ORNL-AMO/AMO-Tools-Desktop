@@ -84,3 +84,23 @@ export interface OperatingHours {
   hoursPerYear?: number,
   isCalculated?: boolean
 }
+
+export interface PhastResults {
+  totalInput: number,
+  totalChargeMaterialLoss: number,
+  totalWallLoss: number,
+  totalOtherLoss: number,
+  totalOpeningLoss: number,
+  totalLeakageLoss: number,
+  totalFixtureLoss: number,
+  totalExtSurfaceLoss: number,
+  totalCoolingLoss: number,
+  totalAtmosphereLoss: number,
+  totalFlueGas: number,
+  totalSlag: number,
+  totalAuxPower: number,
+  totalEnergyInputEAF: number,
+  totalEnergyInput: number,
+  totalExhaustGas: number,
+  totalSystemLosses: number
+}
