@@ -495,7 +495,7 @@ Assessments: List View
     width: 50%;
     margin-bottom: 0;
   }
-    
+
     .list-row.psat .assessment-name a,
     .list-row.phast .assessment-name a {
       background-repeat: no-repeat;
@@ -1590,6 +1590,10 @@ Help Panel Cards
   color: #222;
 }
 
+.help-general {
+  font-size: 16px;
+  color: #222;
+}
 .wrapper .help-panel {
   padding-left: 40px;
   border-width:  0 0 0 1px;
