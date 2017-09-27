@@ -193,9 +193,6 @@ export class WallLossesFormComponent implements OnInit {
 
   setProperties() {
     let tmpFactor = this.suiteDbService.selectWallLossesSurfaceById(this.wallLossesForm.value.surfaceShape);
-    if(this.settings.unitsOfMeasure == 'Metric'){
-      tmpFactor.conditionFactor = this.convertUnitsService.value(tmpFactor.conditionFactor).from('btulbF').to('kJkgC');
-    }
     this.wallLossesForm.patchValue({
       conditionFactor: tmpFactor.conditionFactor
     })

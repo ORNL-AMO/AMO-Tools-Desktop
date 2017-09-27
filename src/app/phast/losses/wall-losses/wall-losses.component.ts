@@ -200,49 +200,4 @@ export class WallLossesComponent implements OnInit {
       }
     }
   }
-
-  //TODO: check results data and indicate different
-  // checkHeatLoss() {
-  //   if (this.wallLossCompareService.baselineWallLosses && this.wallLossCompareService.modifiedWallLosses) {
-  //     if (this.wallLossCompareService.baselineWallLosses.length == this.wallLossCompareService.modifiedWallLosses.length) {
-  //       for (let index = 0; index < this.wallLossCompareService.baselineWallLosses.length; index++) {
-  //         let baselineHeatLoss = this.phastService.wallLosses(
-  //           this.wallLossCompareService.baselineWallLosses[index].surfaceArea,
-  //           this.wallLossCompareService.baselineWallLosses[index].ambientTemperature,
-  //           this.wallLossCompareService.baselineWallLosses[index].surfaceTemperature,
-  //           this.wallLossCompareService.baselineWallLosses[index].windVelocity,
-  //           this.wallLossCompareService.baselineWallLosses[index].surfaceEmissivity,
-  //           this.wallLossCompareService.baselineWallLosses[index].conditionFactor,
-  //           this.wallLossCompareService.baselineWallLosses[index].correctionFactor
-  //         );
-  //         let modifiedHeatLoss = this.phastService.wallLosses(
-  //           this.wallLossCompareService.modifiedWallLosses[index].surfaceArea,
-  //           this.wallLossCompareService.modifiedWallLosses[index].ambientTemperature,
-  //           this.wallLossCompareService.modifiedWallLosses[index].surfaceTemperature,
-  //           this.wallLossCompareService.modifiedWallLosses[index].windVelocity,
-  //           this.wallLossCompareService.modifiedWallLosses[index].surfaceEmissivity,
-  //           this.wallLossCompareService.modifiedWallLosses[index].conditionFactor,
-  //           this.wallLossCompareService.modifiedWallLosses[index].correctionFactor
-  //         )
-  //         if (baselineHeatLoss != modifiedHeatLoss) {
-  //           console.log('dif')
-  //           let doc = this.windowRefService.getDoc();
-  //           let heatLossElements = doc.getElementsByClassName('heatLoss_' + index);
-  //           debugger;
-  //           heatLossElements.forEach(element => {
-  //             element.classList.toggle('indicate-different', true);
-  //           });
-  //         } else {
-  //           console.log('same')
-  //           let doc = this.windowRefService.getDoc();
-  //           debugger
-  //           let heatLossElements = doc.getElementsByClassName('heatLoss_' + index);
-  //           heatLossElements.forEach(element => {
-  //             element.classList.toggle('indicate-different', false);
-  //           });
-  //         }
-  //       }
-  //     }
-  //   }
-  // }
 }
