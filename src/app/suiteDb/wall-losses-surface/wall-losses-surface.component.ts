@@ -31,7 +31,7 @@ export class WallLossesSurfaceComponent implements OnInit {
     this.allMaterials = this.suiteDbService.selectWallLossesSurface();
     this.checkMaterialName();
     // this.selectedMaterial = this.allMaterials[0];
-    if(!this.settings){
+    if (!this.settings) {
       this.indexedDbService.getSettings(1).then(results => {
         this.settings = results;
       })
@@ -39,9 +39,6 @@ export class WallLossesSurfaceComponent implements OnInit {
   }
 
   addMaterial() {
-    if(this.settings.unitsOfMeasure == 'Metric'){
-      this.newMaterial.conditionFactor = this.convertUnitsService.value(this.newMaterial.conditionFactor).from('kJkgC').to('btulbF');
-    }
     let suiteDbResult = this.suiteDbService.insertWallLossesSurface(this.newMaterial);
     if (suiteDbResult == true) {
       this.indexedDbService.addWallLossesSurface(this.newMaterial).then(idbResults => {

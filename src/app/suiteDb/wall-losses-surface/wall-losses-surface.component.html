@@ -20,12 +20,8 @@
         </div>
         <div class="form-group" *ngIf="settings">
           <label class="small" for="conditionFactor">Condition Factor</label>
-          <div class="input-group">
-            <input type="number" id="conditionFactor" name="conditionFactor" class="form-control" [(ngModel)]="newMaterial.conditionFactor"
-            />
-            <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">Btu/(lb-&#8457;)</span>
-            <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kJ/(kg-&#8451;)</span>
-          </div>
+          <input type="number" id="conditionFactor" name="conditionFactor" class="form-control" [(ngModel)]="newMaterial.conditionFactor"
+          />
         </div>
       </div>
     </form>
