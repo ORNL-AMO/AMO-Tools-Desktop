@@ -88,9 +88,7 @@ export class FlueGasLossesFormMassComponent implements OnInit {
   }
 
   checkForm() {
-    if (this.flueGasLossForm.status == "VALID") {
-      this.calculate.emit(true);
-    }
+    this.calculate.emit(true);
   }
 
   focusField(str: string) {

@@ -63,9 +63,7 @@ export class WaterCoolingLossesFormComponent implements OnInit {
     }
   }
   checkForm() {
-    if (this.lossesForm.status == 'VALID') {
-      this.calculate.emit(true)
-    }
+    this.calculate.emit(true)
   }
 
   focusField(str: string) {

@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges, ViewChild, ElementRef } from '@angular/core';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { PhastService } from '../../phast.service';
-import { Losses } from '../../../shared/models/phast/phast';
+import { Losses, PHAST } from '../../../shared/models/phast/phast';
 import { Settings } from '../../../shared/models/settings';
 @Component({
   selector: 'app-heat-system-efficiency',
@@ -10,7 +10,7 @@ import { Settings } from '../../../shared/models/settings';
 })
 export class HeatSystemEfficiencyComponent implements OnInit {
   @Input()
-  systemEfficiency: number;
+  phast: PHAST;
   @Input()
   losses: Losses;
   @Input()
@@ -41,7 +41,7 @@ export class HeatSystemEfficiencyComponent implements OnInit {
   constructor(private formBuilder: FormBuilder, private phastService: PhastService) { }
 
   ngOnInit() {
-    this.initForm(this.systemEfficiency);
+    this.initForm(JSON.parse(JSON.stringify(this.phast.systemEfficiency)));
     if (!this.baselineSelected) {
       this.disableForm();
     } else {
@@ -51,6 +51,7 @@ export class HeatSystemEfficiencyComponent implements OnInit {
   }
 
   initForm(val?: number) {
+    console.log(val);
     if (val) {
       this.efficiencyForm = this.formBuilder.group({
         efficiency: [val, Validators.required]
@@ -95,7 +96,7 @@ export class HeatSystemEfficiencyComponent implements OnInit {
 
   saveLosses() {
     if (this.efficiencyForm.status == 'VALID') {
-      this.systemEfficiency = this.efficiencyForm.value.efficiency;
+      this.phast.systemEfficiency = this.efficiencyForm.value.efficiency;
       this.savedLoss.emit(true);
     }
   }

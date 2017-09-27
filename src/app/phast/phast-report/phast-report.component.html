@@ -33,92 +33,114 @@
           <tbody>
             <tr>
               <td>Charge Materials</td>
-              <td>{{sumChargeMaterials | number:'2.2-2'}}</td>
+              <td *ngIf="sumChargeMaterials">{{sumChargeMaterials| number:'2.0-0'}}</td>
+              <td *ngIf="!sumChargeMaterials">&mdash; &mdash;</td>
             </tr>
             <tr>
               <td>Fixtures, trays etc.</td>
-              <td>{{sumFixtures | number:'2.2-2'}}</td>
+              <td *ngIf="sumFixtures">{{sumFixtures| number:'2.0-0'}}</td>
+              <td *ngIf="!sumFixtures">&mdash; &mdash;</td>
             </tr>
             <tr>
               <td>Wall Losses</td>
-              <td>{{sumWallLosses | number:'2.2-2'}}</td>
+              <td *ngIf="sumWallLosses">{{sumWallLosses| number:'2.0-0'}}</td>
+              <td *ngIf="!sumWallLosses">&mdash; &mdash;</td>
             </tr>
             <tr>
               <td>Cooling Losses</td>
-              <td>{{sumCoolingLosses | number:'2.2-2'}}</td>
+              <td *ngIf="sumCoolingLosses">{{sumCoolingLosses| number:'2.0-0'}}</td>
+              <td *ngIf="!sumCoolingLosses">&mdash; &mdash;</td>
             </tr>
             <tr>
               <td>Atmosphere Losses</td>
-              <td>{{sumAtmosphereLosses | number:'2.2-2'}}</td>
+              <td *ngIf="sumAtmosphereLosses">{{sumAtmosphereLosses| number:'2.0-0'}}</td>
+              <td *ngIf="!sumAtmosphereLosses">&mdash; &mdash;</td>
             </tr>
             <tr>
               <td>Opening Losses</td>
-              <td>{{sumOpeningLosses | number:'2.2-2'}}</td>
+              <td *ngIf="sumOpeningLosses">{{sumOpeningLosses| number:'2.0-0'}}</td>
+              <td *ngIf="!sumOpeningLosses">&mdash; &mdash;</td>
             </tr>
             <tr>
               <td>Leakage Losses</td>
-              <td>{{sumLeakage | number:'2.2-2'}}</td>
+              <td *ngIf="sumLeakage">{{sumLeakage| number:'2.0-0'}}</td>
+              <td *ngIf="!sumLeakage">&mdash; &mdash;</td>
             </tr>
             <tr>
               <td>Extended Surface Losses</td>
-              <td>{{sumExtendedSurface | number:'2.2-2'}}</td>
+              <td *ngIf="sumExtendedSurface">{{sumExtendedSurface| number:'2.0-0'}}</td>
+              <td *ngIf="!sumExtendedSurface">&mdash; &mdash;</td>
             </tr>
             <tr *ngIf="showAuxPower">
               <td>Aux Power Losses</td>
-              <td>{{sumAux | number:'2.2-2'}}</td>
+              <td *ngIf="sumAux">{{sumAux| number:'2.0-0'}}</td>
+              <td *ngIf="!sumAux">&mdash; &mdash;</td>
             </tr>
             <tr *ngIf="showSlag">
               <td>Slag Losses</td>
-              <td>{{slagSum | number:'2.2-2'}}</td>
+              <td *ngIf="slagSum">{{slagSum| number:'2.0-0'}}</td>
+              <td *ngIf="!slagSum">&mdash; &mdash;</td>
             </tr>
             <tr>
               <td>Other Losses</td>
-              <td>{{sumOther | number:'2.2-2'}}</td>
+              <td *ngIf="sumOther">{{sumOther| number:'2.0-0'}}</td>
+              <td *ngIf="!sumOther">&mdash; &mdash;</td>
             </tr>
             <tr>
               <td style="font-weight: bold;">Total Net Heat Required</td>
-              <td style="font-weight: bold;">{{sumHeatRequired | number:'2.2-2'}}</td>
+              <td *ngIf="sumHeatRequired" style="font-weight: bold;">{{sumHeatRequired| number:'2.0-0'}}</td>
+              <td *ngIf="!sumHeatRequired">&mdash; &mdash;</td>
             </tr>
             <tr *ngIf="showEnInput2">
               <td>Energy Input Available Heat</td>
-              <td>{{availableHeatPercent | number:'2.2-2'}} %</td>
+              <td *ngIf="availableHeatPercent">{{availableHeatPercent| number:'2.0-0'}} %</td>
+              <td *ngIf="!availableHeatPercent">&mdash; &mdash;</td>
             </tr>
             <tr *ngIf="showSystemEff">
               <td>System Efficiency</td>
-              <td>{{heatingSystemEfficiency | number:'2.2-2'}} %</td>
+              <td *ngIf="heatingSystemEfficiency">{{heatingSystemEfficiency| number:'2.0-0'}} %</td>
+              <td *ngIf="!heatingSystemEfficiency">&mdash; &mdash;</td>
             </tr>
             <tr *ngIf="showSystemEff">
               <td>Gross Heat Input</td>
-              <td>{{grossHeatInput | number:'2.2-2'}}</td>
+              <td *ngIf="grossHeatInput">{{grossHeatInput| number:'2.0-0'}}</td>
+              <td *ngIf="!grossHeatInput">&mdash; &mdash;</td>
             </tr>
             <tr *ngIf="showSystemEff">
               <td>Total System Losses</td>
-              <td>{{systemLosses | number:'2.2-2'}}</td>
+              <td *ngIf="systemLosses">{{systemLosses| number:'2.0-0'}}</td>
+              <td *ngIf="!systemLosses">&mdash; &mdash;</td>
             </tr>
             <tr *ngIf="showFlueGas">
               <td>Available Heat</td>
-              <td>{{flueGasAvailableHeat | number:'2.2-2'}} %</td>
+              <td *ngIf="flueGasAvailableHeat">{{flueGasAvailableHeat| number:'2.0-0'}} %</td>
+              <td *ngIf="!flueGasAvailableHeat">&mdash; &mdash;</td>
             </tr>
             <tr *ngIf="showFlueGas">
               <td>Gross Heat</td>
-              <td>{{flueGasGrossHeat | number:'2.2-2'}}</td>
+              <td *ngIf="flueGasGrossHeat">{{flueGasGrossHeat| number:'2.0-0'}}</td>
+              <td *ngIf="!flueGasGrossHeat">&mdash; &mdash;</td>
             </tr>
             <tr *ngIf="showFlueGas">
               <td>Flue Gas Losses</td>
-              <td>{{flueGasSystemLosses | number:'2.2-2'}} </td>
+              <td *ngIf="flueGasSystemLosses">{{flueGasSystemLosses| number:'2.0-0'}} </td>
+              <td *ngIf="!flueGasSystemLosses">&mdash; &mdash;</td>
             </tr>
             <tr *ngIf="showEnInput1 || showEnInput2">
               <td>Energy Input Heat Delivered</td>
-              <td>{{energyInputHeatDelivered | number:'2.2-2'}}</td>
+              <td *ngIf="energyInputHeatDelivered">{{energyInputHeatDelivered| number:'2.0-0'}}</td>
+              <td *ngIf="!energyInputHeatDelivered">&mdash; &mdash;</td>
             </tr>
             <tr *ngIf="showEnInput1">
               <td>Energy Input Total Chemical Energy Delivered</td>
-              <td>{{energyInputTotalChemEnergy | number:'2.2-2'}}</td>
+              <td *ngIf="energyInputTotalChemEnergy">{{energyInputTotalChemEnergy| number:'2.0-0'}}</td>
+              <td *ngIf="!energyInputTotalChemEnergy">&mdash; &mdash;</td>
             </tr>
 
             <tr>
               <td>Exothermic Heat from Process</td>
-              <td>{{exothermicHeat | number:'2.2-2'}}</td>
+              <td *ngIf="exothermicHeat">{{exothermicHeat| number:'2.0-0'}}</td>
+              <td *ngIf="!exothermicHeat">&mdash; &mdash;</td>
             </tr>
           </tbody>
         </table>

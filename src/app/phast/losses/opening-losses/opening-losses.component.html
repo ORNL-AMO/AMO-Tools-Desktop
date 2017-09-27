@@ -31,7 +31,7 @@
       <div class="form-group">
         <label class="small">Radiation Losses</label>
         <div *ngIf="loss.totalOpeningLosses" class="small text-center">
-          {{loss.totalOpeningLosses | number:'2.2-2'}}
+          {{loss.totalOpeningLosses | number:'2.0-0'}}
           <span *ngIf="settings.unitsOfMeasure == 'Imperial'">Btu/hr</span>
           <span *ngIf="settings.unitsOfMeasure == 'Metric'">kJ/hr</span>
         </div>
