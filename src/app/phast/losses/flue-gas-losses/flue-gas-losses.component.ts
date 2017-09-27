@@ -165,7 +165,8 @@ export class FlueGasLossesComponent implements OnInit {
         let tmpLoss: FlueGasByVolume = this.flueGasLossesService.buildByVolumeLossFromForm(loss.formByVolume);
         let tmpResult = this.phastService.flueGasByVolume(tmpLoss, this.settings);
         loss.availableHeat = tmpResult * 100;
-        loss.grossHeat = this.phastService.sumHeatInput(this.losses, this.settings) / tmpResult;
+        let sumHeat =  this.phastService.sumHeatInput(this.losses, this.settings);
+        loss.grossHeat = sumHeat / tmpResult;
         loss.systemLosses = loss.grossHeat * (1 - tmpResult);
       } else {
         loss.availableHeat = null;
@@ -177,7 +178,8 @@ export class FlueGasLossesComponent implements OnInit {
         let tmpLoss: FlueGasByMass = this.flueGasLossesService.buildByMassLossFromForm(loss.formByMass);
         let tmpResult = this.phastService.flueGasByMass(tmpLoss, this.settings);
         loss.availableHeat = tmpResult * 100;
-        loss.grossHeat = this.phastService.sumHeatInput(this.losses, this.settings) / tmpResult;
+        let heatInput = this.phastService.sumHeatInput(this.losses, this.settings);
+        loss.grossHeat = heatInput / tmpResult;
         loss.systemLosses = loss.grossHeat * (1 - tmpResult);
       } else {
         loss.availableHeat = null;
@@ -211,7 +213,6 @@ export class FlueGasLossesComponent implements OnInit {
   }
 
   changeField(str: string) {
-    console.log(str);
     this.fieldChange.emit(str);
   }
 
