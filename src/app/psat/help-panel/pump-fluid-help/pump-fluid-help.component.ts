@@ -1,5 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { HelpPanelService } from '../help-panel.service';
+import { PSAT } from '../../../shared/models/psat';
+
 @Component({
   selector: 'app-pump-fluid-help',
   templateUrl: './pump-fluid-help.component.html',
@@ -7,7 +9,8 @@ import { HelpPanelService } from '../help-panel.service';
 })
 export class PumpFluidHelpComponent implements OnInit {
 
-  //  @Input()
+  @Input()
+  psat: PSAT;
   currentField: string;
 
   constructor(private helpPanelService: HelpPanelService) { }
