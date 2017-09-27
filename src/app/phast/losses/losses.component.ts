@@ -43,7 +43,7 @@ export class LossesComponent implements OnInit {
   constructor(private lossesService: LossesService) { }
 
   ngOnInit() {
-    this.changeField('default');
+    // this.changeField('default');
     this._modifications = new Array<Modification>();
     if (!this.phast.losses) {
       //initialize losses
@@ -64,6 +64,7 @@ export class LossesComponent implements OnInit {
         || this.lossesTab == 'flue-gas-losses'
         || this.lossesTab == 'energy-input'
         || this.lossesTab == 'energy-input-exhaust-gas'
+        || this.changeField('default')
       ) {
         this.showAddBtn = false;
       } else {
