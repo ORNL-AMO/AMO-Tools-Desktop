@@ -158,7 +158,7 @@ export class UnitConverterComponent implements OnInit {
   }
 
   getValue1() {
-    if (this.from && this.to && this.value2) {
+    if (this.from && this.to && (this.value2 || this.value2 == 0)) {
       this.value1 = this.convertUnitsService.value(this.value2).from(this.to).to(this.from);
     } else {
       this.value1 = 0;
@@ -166,7 +166,7 @@ export class UnitConverterComponent implements OnInit {
   }
 
   getValue2() {
-    if (this.from && this.to && this.value1) {
+    if (this.from && this.to && (this.value1 || this.value1 == 0)) {
       this.value2 = this.convertUnitsService.value(this.value1).from(this.from).to(this.to);
     } else {
       this.value2 = 0;
