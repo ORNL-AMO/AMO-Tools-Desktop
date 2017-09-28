@@ -1787,5 +1787,9 @@ Toasty Overrides ================================= */
       margin: 0;
   }
 
+  #toasty {
+    display: none;
+  }
+
 
 }
