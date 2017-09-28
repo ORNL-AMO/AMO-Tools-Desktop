@@ -5,16 +5,19 @@ import { SharedModule } from  '../../shared/shared.module';
 import { UtilitiesComponent } from './utilities.component';
 import { UnitConverterComponent } from './unit-converter/unit-converter.component';
 import { SortByPipe } from './unit-converter/sort-by.pipe';
+import { CashFlowComponent } from './cash-flow/cash-flow.component';
 @NgModule({
     declarations: [
         UtilitiesComponent,
         UnitConverterComponent,
-        SortByPipe
+        SortByPipe,
+        CashFlowComponent
     ],
     exports: [
         UnitConverterComponent,
-        UtilitiesComponent
-    ], 
+        UtilitiesComponent,
+        CashFlowComponent
+    ],
     imports: [
         CommonModule,
         FormsModule,
