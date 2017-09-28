@@ -22,5 +22,6 @@
 .calculator-card{
     border: none; 
     margin-top: 2.5%; 
-    margin-bottom: 2.5%; 
+    margin-bottom: 2.5%;
+    background: inherit;
 }

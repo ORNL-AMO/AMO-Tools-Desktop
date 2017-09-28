@@ -46,7 +46,7 @@ export class LiquidCoolingLossesFormComponent implements OnInit {
   }
 
 
-  ngOnInit() { 
+  ngOnInit() {
     this.checkTemperature(true);
   }
 
@@ -73,18 +73,16 @@ export class LiquidCoolingLossesFormComponent implements OnInit {
   }
 
   checkForm() {
-    if (this.lossesForm.status == 'VALID') {
-      this.calculate.emit(true)
-    }
+    this.calculate.emit(true)
   }
 
-  checkTemperature(bool?: boolean){
-    if(!bool){
+  checkTemperature(bool?: boolean) {
+    if (!bool) {
       this.startSavePolling();
     }
-    if(this.lossesForm.value.inletTemp > this.lossesForm.value.outletTemp){
+    if (this.lossesForm.value.inletTemp > this.lossesForm.value.outletTemp) {
       this.temperatureError = 'Inlet temperature is greater than outlet temperature'
-    }else{
+    } else {
       this.temperatureError = null;
     }
   }

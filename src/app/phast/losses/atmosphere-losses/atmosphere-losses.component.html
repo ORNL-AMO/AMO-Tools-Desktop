@@ -31,7 +31,7 @@
       <div class="form-group">
         <label class="small">Total Heat Loss</label>
         <div *ngIf="loss.heatLoss" class="text-center small">
-          {{loss.heatLoss | number:'2.2-2'}}
+          {{loss.heatLoss | number:'2.0-0'}}
           <span *ngIf="settings.unitsOfMeasure == 'Imperial'">Btu/hr</span>
           <span *ngIf="settings.unitsOfMeasure == 'Metric'">kJ/hr</span>
         </div>

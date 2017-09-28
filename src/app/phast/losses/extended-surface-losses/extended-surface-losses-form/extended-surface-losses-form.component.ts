@@ -45,7 +45,7 @@ export class ExtendedSurfaceLossesFormComponent implements OnInit {
     }
   }
 
-  ngOnInit() { 
+  ngOnInit() {
     this.checkEmissivity(true);
     this.checkTemperature(true);
   }
@@ -71,29 +71,27 @@ export class ExtendedSurfaceLossesFormComponent implements OnInit {
     }
   }
   checkForm() {
-    if (this.lossesForm.status == "VALID") {
-      this.calculate.emit(true);
-    }
+    this.calculate.emit(true);
   }
 
-  checkEmissivity(bool?: boolean){
-    if(!bool){
+  checkEmissivity(bool?: boolean) {
+    if (!bool) {
       this.startSavePolling();
     }
-    if(this.lossesForm.value.surfaceEmissivity >> 1){
+    if (this.lossesForm.value.surfaceEmissivity >> 1) {
       this.emissivityError = 'Surface emissivity cannot be greater than 1';
-    }else{
+    } else {
       this.emissivityError = null;
     }
   }
 
-  checkTemperature(bool?: boolean){
-    if(!bool){
+  checkTemperature(bool?: boolean) {
+    if (!bool) {
       this.startSavePolling();
     }
-    if(this.lossesForm.value.ambientTemp > this.lossesForm.value.avgSurfaceTemp){
+    if (this.lossesForm.value.ambientTemp > this.lossesForm.value.avgSurfaceTemp) {
       this.temperatureError = 'Ambient Temperature is greater than Surface Temperature';
-    }else{
+    } else {
       this.temperatureError = null;
     }
   }

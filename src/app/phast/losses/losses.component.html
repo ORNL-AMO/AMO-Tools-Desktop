@@ -72,7 +72,7 @@
         [(losses)]="phast.losses" [addLossToggle]="addLossToggle" [saveClicked]="saveClicked" [isBaseline]="true" *ngIf="lossesTab == 'energy-input-exhaust-gas'"
         [settings]="settings"></app-energy-input-exhaust-gas-losses>
 
-      <app-heat-system-efficiency *ngIf="lossesTab == 'heat-system-efficiency'" [(losses)]="phast.losses" [(systemEfficiency)]="phast.systemEfficiency"
+      <app-heat-system-efficiency *ngIf="lossesTab == 'heat-system-efficiency'" [(losses)]="phast.losses" [(phast)]="phast"
         [saveClicked]="saveClicked" [isBaseline]="true" (fieldChange)="changeField($event)" [baselineSelected]="baselineSelected"
         (savedLoss)="saveModifications()" [settings]="settings"></app-heat-system-efficiency>
     </div>
@@ -154,7 +154,7 @@
         [settings]="settings"></app-energy-input-exhaust-gas-losses>
 
       <app-heat-system-efficiency *ngIf="lossesTab == 'heat-system-efficiency'" [(losses)]="_modifications[modificationIndex].phast.losses"
-        [(systemEfficiency)]="_modifications[modificationIndex].phast.systemEfficiency" [saveClicked]="saveClicked" [isBaseline]="true"
+        [(phast)]="_modifications[modificationIndex].phast" [saveClicked]="saveClicked" [isBaseline]="true"
         (fieldChange)="changeField($event)" [baselineSelected]="modificationSelected" (savedLoss)="saveModifications()" [settings]="settings"></app-heat-system-efficiency>
     </div>
 

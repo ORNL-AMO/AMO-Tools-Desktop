@@ -6,7 +6,7 @@
       <label class="small" for="avgSpecificHeat">Average Specific Heat</label>
       <div class="input-group">
         <input name="{{'avgSpecificHeat_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="avgSpecificHeat"
-          id="avgSpecificHeat" onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('avgSpecificHeat')">
+          id="avgSpecificHeat" onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('avgSpecificHeatGas')">
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">Btu/(lb-&#8457;)</span>
         <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kJ/(kg-&#8451;)</span>
       </div>

@@ -15,43 +15,79 @@
       Material Name
     </div>
     <div class="card-block">
-      <label>Description:</label>
+      <label><u><strong>Description</strong></u></label>
+      <p>
+        Type of material used as a fixture within the heating equipment or reaction chamber The word fixture is used to represent
+        fixtures, trays, baskets, conveyor belt, etc. used for material handling during the heating process.
+        To add a new material, click “Add New Material”.  You can “start with existing material” and edit the material
+        properties or add a completely new material.  You cannot use the name of a material already in the database.
+      </p>
     </div>
   </div>
 
   <div class="card" *ngIf="currentField == 'specificHeat'">
     <div class="card-header">
-      Specific Heat (Btu/(lb-f))
-    </div>
-    <div class="card-block">
-      <label>Description:</label>
+      Specific Heat
+  </div>
+  <div class="card-block">
+    <label><u><strong>Description</strong></u></label>
+    <p>
+      Amount of heat per unit mass required to raise the temperature by one degree of temperature. Default given from database;
+      may be more accurate to compute as the average of specific heat based on inlet and outlet temperature.
+    </p>
+    <label><u><strong>Input</strong></u></label>
+    <p>
+      Units: <strong>Btu/(lb-&#8457;)</strong> or <strong>kJ/(kg-&#8451;)</strong><br> Minimum Value Allowed: <strong>0</strong>
+    </p>
     </div>
   </div>
 
   <div class="card" *ngIf="currentField == 'feedRate'">
     <div class="card-header">
-      Fixture Weight feed rate (lb/hr)
+      Fixture Weight feed rate
     </div>
     <div class="card-block">
-      <label>Description:</label>
+      <label><u><strong>Description</strong></u></label>
+      <p>
+        Weight of fixture material fed into the unit per hour. Note that for batch furnaces the total weight should be
+        corrected for cycle time to obtain weight per hour value.
+      </p>
+      <label><u><strong>Input</strong></u></label>
+      <p>
+        Units: <strong>lb/hr</strong> or <strong>kJ/kg</strong><br> Minimum Value Allowed: <strong>0</strong>
+      </p>
     </div>
   </div>
 
   <div class="card" *ngIf="currentField == 'initialTemp'">
     <div class="card-header">
-      Initial Temperature (&#8457;)
+      Initial Temperature
     </div>
     <div class="card-block">
-      <label>Description:</label>
+      <label><u><strong>Description</strong></u></label>
+      <p>
+        The temperature of the fixture as it enters the unit. Use production data or actual measurement.
+      </p>
+      <label><u><strong>Input</strong></u></label>
+      <p>
+        Units: <strong>&#8457;</strong> or <strong>&#8451;</strong><br> Minimum Value Allowed: <strong>0</strong>
+      </p>
     </div>
   </div>
 
   <div class="card" *ngIf="currentField == 'finalTemp'">
     <div class="card-header">
-      Final Temperature (&#8457;)
+      Final temperature
     </div>
     <div class="card-block">
-      <label>Description:</label>
+      <label><u><strong>Description</strong></u></label>
+      <p>
+        The temperature of the fixture as it enters the unit. Use production data or actual measurement.
+      </p>
+      <label><u><strong>Input</strong></u></label>
+      <p>
+        Units: <strong>&#8457;</strong> or <strong>&#8451;</strong><br> Minimum Value Allowed: <strong>0</strong>
+      </p>
     </div>
   </div>
 
@@ -60,7 +96,29 @@
       Correction Factor
     </div>
     <div class="card-block">
-      <label>Description:</label>
+      <label><u><strong>Description</strong></u></label>
+      <p>
+        Engineering correction factor multiplied to the result to account for a known systematic error.
+      </p>
+      <label><u><strong>Input</strong></u></label>
+      <p>
+        Minimum Value Allowed: <strong>0</strong>
+      </p>
+    </div>
+  </div>
+
+  <div class="card" *ngIf="currentField == 'default'">
+    <div class="card-header">
+      Fixtures
+    </div>
+    <div class="card-block">
+      <label><u><strong>Description</strong></u></label>
+      <ul>
+        <li class="help-general">Review design of fixtures or baskets or other material handling to reduce weight</li>
+        <li class="help-general">Investigate alternate high strength material to reduce weight of the fixtures etc.</li>
+        <li class="help-general">Where possible reduce cooling of conveyors, belts, fixtures baskets etc. during their return from unloading to loading station</li>
+        <li class="help-general"><strong>Note:</strong> These energy saving measures are for guidance only. Not all measures are applicable under all operating conditions. There may additional measures when considering specific situations and the user is encouraged to review and apply the appropriate measures</li>
+      </ul>
     </div>
   </div>
 

@@ -60,7 +60,13 @@ export class PhastService {
     console.log(phastAddon)
   }
 
-  fixtureLosses(inputs: FixtureLoss, settings: Settings): number {
+  createInputCopy(inputs: any) {
+    let cpy = JSON.parse(JSON.stringify(inputs));
+    return cpy;
+  }
+
+  fixtureLosses(input: FixtureLoss, settings: Settings): number {
+    let inputs = this.createInputCopy(input);
     let results = 0;
     if (settings.unitsOfMeasure == 'Metric') {
       inputs.initialTemperature = this.convertUnitsService.value(inputs.initialTemperature).from('C').to('F');
@@ -79,7 +85,8 @@ export class PhastService {
     return results;
   }
 
-  gasCoolingLosses(inputs: GasCoolingLoss, settings: Settings): number {
+  gasCoolingLosses(input: GasCoolingLoss, settings: Settings): number {
+    let inputs = this.createInputCopy(input);
     let results = 0;
     if (settings.unitsOfMeasure == 'Metric') {
       inputs.specificHeat = this.convertUnitsService.value(inputs.specificHeat).from('kJkgC').to('btulbF');
@@ -99,7 +106,8 @@ export class PhastService {
     return results;
   }
 
-  gasLoadChargeMaterial(inputs: GasChargeMaterial, settings: Settings): number {
+  gasLoadChargeMaterial(input: GasChargeMaterial, settings: Settings): number {
+    let inputs = this.createInputCopy(input);
     let results = 0;
     if (settings.unitsOfMeasure == 'Metric') {
       inputs.initialTemperature = this.convertUnitsService.value(inputs.initialTemperature).from('C').to('F');
@@ -122,7 +130,8 @@ export class PhastService {
     return results;
   }
 
-  liquidCoolingLosses(inputs: LiquidCoolingLoss, settings: Settings): number {
+  liquidCoolingLosses(input: LiquidCoolingLoss, settings: Settings): number {
+    let inputs = this.createInputCopy(input);
     let results = 0;
     if (settings.unitsOfMeasure == 'Metric') {
       inputs.specificHeat = this.convertUnitsService.value(inputs.specificHeat).from('kJkgC').to('btulbF');
@@ -143,7 +152,8 @@ export class PhastService {
     return results;
   }
 
-  liquidLoadChargeMaterial(inputs: LiquidChargeMaterial, settings: Settings): number {
+  liquidLoadChargeMaterial(input: LiquidChargeMaterial, settings: Settings): number {
+    let inputs = this.createInputCopy(input);
     let results = 0;
     if (settings.unitsOfMeasure == 'Metric') {
       inputs.vaporizingTemperature = this.convertUnitsService.value(inputs.vaporizingTemperature).from('C').to('F');
@@ -166,7 +176,8 @@ export class PhastService {
     }
     return results
   }
-  openingLossesQuad(inputs: QuadOpeningLoss, settings: Settings): number {
+  openingLossesQuad(input: QuadOpeningLoss, settings: Settings): number {
+    let inputs = this.createInputCopy(input);
     let results = 0;
     if (settings.unitsOfMeasure == 'Metric') {
       inputs.ambientTemperature = this.convertUnitsService.value(inputs.ambientTemperature).from('C').to('F');
@@ -186,7 +197,8 @@ export class PhastService {
     return results
   }
 
-  openingLossesCircular(inputs: CircularOpeningLoss, settings: Settings): number {
+  openingLossesCircular(input: CircularOpeningLoss, settings: Settings): number {
+    let inputs = this.createInputCopy(input);
     let results = 0;
     if (settings.unitsOfMeasure == 'Metric') {
       inputs.ambientTemperature = this.convertUnitsService.value(inputs.ambientTemperature).from('C').to('F');
@@ -205,7 +217,8 @@ export class PhastService {
     return results;
   }
 
-  solidLoadChargeMaterial(inputs: SolidChargeMaterial, settings: Settings) {
+  solidLoadChargeMaterial(input: SolidChargeMaterial, settings: Settings) {
+    let inputs = this.createInputCopy(input);
     let results = 0;
     if (settings.unitsOfMeasure == 'Metric') {
       inputs.meltingPoint = this.convertUnitsService.value(inputs.meltingPoint).from('C').to('F');
@@ -229,7 +242,8 @@ export class PhastService {
     return results;
   }
 
-  wallLosses(inputs: WallLoss, settings: Settings) {
+  wallLosses(input: WallLoss, settings: Settings) {
+    let inputs = this.createInputCopy(input);
     let results = 0;
     if (settings.unitsOfMeasure == 'Metric') {
       inputs.ambientTemperature = this.convertUnitsService.value(inputs.ambientTemperature).from('C').to('F');
@@ -252,7 +266,8 @@ export class PhastService {
     return phastAddon.waterCoolingLosses(inputs);
   }
 
-  leakageLosses(inputs: LeakageLoss, settings: Settings) {
+  leakageLosses(input: LeakageLoss, settings: Settings) {
+    let inputs = this.createInputCopy(input);
     let results = 0;
     if (settings.unitsOfMeasure == 'Metric') {
       inputs.draftPressure = this.convertUnitsService.value(inputs.draftPressure).from('Pa').to('inH2o')
@@ -271,7 +286,8 @@ export class PhastService {
     return results;
   }
 
-  flueGasByVolume(inputs: FlueGasByVolume, settings: Settings) {
+  flueGasByVolume(input: FlueGasByVolume, settings: Settings) {
+    let inputs = this.createInputCopy(input);
     let results = 0;
     if (settings.unitsOfMeasure == 'Metric') {
       inputs.combustionAirTemperature = this.convertUnitsService.value(inputs.combustionAirTemperature).from('C').to('F');
@@ -289,7 +305,8 @@ export class PhastService {
     return results;
   }
 
-  flueGasByMass(inputs: FlueGasByMass, settings: Settings) {
+  flueGasByMass(input: FlueGasByMass, settings: Settings) {
+    let inputs = this.createInputCopy(input);
     let results = 0;
     if (settings.unitsOfMeasure == 'Metric') {
       inputs.combustionAirTemperature = this.convertUnitsService.value(inputs.combustionAirTemperature).from('C').to('F');
@@ -308,7 +325,8 @@ export class PhastService {
     return results;
   }
 
-  atmosphere(inputs: AtmosphereLoss, settings: Settings) {
+  atmosphere(input: AtmosphereLoss, settings: Settings) {
+    let inputs = this.createInputCopy(input);
     let results = 0;
     if (settings.unitsOfMeasure == 'Metric') {
       inputs.inletTemperature = this.convertUnitsService.value(inputs.inletTemperature).from('C').to('F');
@@ -327,7 +345,8 @@ export class PhastService {
     return phastAddon.atmosphere(inputs);
   }
 
-  slagOtherMaterialLosses(inputs: Slag, settings: Settings) {
+  slagOtherMaterialLosses(input: Slag, settings: Settings) {
+    let inputs = this.createInputCopy(input);
     let results = 0;
     if (settings.unitsOfMeasure == 'Metric') {
       inputs.weight = this.convertUnitsService.value(inputs.weight).from('kg').to('lb');
@@ -352,7 +371,8 @@ export class PhastService {
   }
 
   //Electric Arc Furnace
-  energyInputEAF(inputs: EnergyInputEAF, settings: Settings) {
+  energyInputEAF(input: EnergyInputEAF, settings: Settings) {
+    let inputs = this.createInputCopy(input);
     let results = {
       heatDelivered: 0,
       totalChemicalEnergyInput: 0
@@ -383,7 +403,8 @@ export class PhastService {
   }
 
   //Electric Arc Furnace
-  exhaustGasEAF(inputs: ExhaustGasEAF, settings: Settings) {
+  exhaustGasEAF(input: ExhaustGasEAF, settings: Settings) {
+    let inputs = this.createInputCopy(input);
     let results = 0;
     if (settings.unitsOfMeasure == 'Metric') {
       inputs.offGasTemp = this.convertUnitsService.value(inputs.offGasTemp).from('C').to('F');
@@ -402,7 +423,8 @@ export class PhastService {
   }
 
   //used in energyInputExhaustGasLosses
-  availableHeat(inputs: EnergyInputExhaustGasLoss, settings: Settings) {
+  availableHeat(input: EnergyInputExhaustGasLoss, settings: Settings) {
+    let inputs = this.createInputCopy(input);
     let results = 0;
     if (settings.unitsOfMeasure == 'Metric') {
       inputs.combustionAirTemp = this.convertUnitsService.value(inputs.combustionAirTemp).from('C').to('F');
@@ -419,7 +441,8 @@ export class PhastService {
   }
 
   //energy input for non-EAF Electric process heating
-  energyInputExhaustGasLosses(inputs: EnergyInputExhaustGasLoss, settings: Settings) {
+  energyInputExhaustGasLosses(input: EnergyInputExhaustGasLoss, settings: Settings) {
+    let inputs = this.createInputCopy(input);
     inputs.availableHeat = this.availableHeat(inputs, settings);
     let results: any = {
       heatDelivered: 0,

@@ -27,7 +27,7 @@ export class ExhaustGasFormComponent implements OnInit {
   lossIndex: number;
   @Input()
   settings: Settings;
-  
+
   //different for other losses monitoring
   @Input()
   isBaseline: boolean;
@@ -39,7 +39,7 @@ export class ExhaustGasFormComponent implements OnInit {
   firstChange: boolean = true;
   counter: any;
 
- // otherLossArray: Array<number>;
+  // otherLossArray: Array<number>;
   constructor(private windowRefService: WindowRefService, private exhaustGasCompareService: ExhaustGasCompareService, private exhaustGasService: ExhaustGasService) { }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -84,7 +84,7 @@ export class ExhaustGasFormComponent implements OnInit {
   }
 
   ngOnDestroy() {
-//    this.exhaustGasService.deleteOtherMonitor.next(null);
+    //    this.exhaustGasService.deleteOtherMonitor.next(null);
     this.exhaustGasService.addLossBaselineMonitor.next(null);
   }
 
@@ -103,9 +103,7 @@ export class ExhaustGasFormComponent implements OnInit {
   }
 
   checkForm() {
-    if (this.exhaustGasForm.status == "VALID") {
-      this.calculate.emit(true);
-    }
+    this.calculate.emit(true);
   }
 
   focusField(str: string) {

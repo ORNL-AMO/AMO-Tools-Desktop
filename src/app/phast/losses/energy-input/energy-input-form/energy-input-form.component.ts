@@ -80,9 +80,7 @@ export class EnergyInputFormComponent implements OnInit {
   }
 
   checkForm() {
-    if (this.energyInputForm.status == "VALID") {
-      this.calculate.emit(true);
-    }
+    this.calculate.emit(true);
   }
 
   focusField(str: string) {

@@ -134,8 +134,13 @@ export class GasLeakageLossesComponent implements OnInit {
   }
 
   calculate(loss: any) {
-    let tmpLeakageLoss = this.gasLeakageLossesService.initLossFromForm(loss.form);
-    loss.heatLoss = this.phastService.leakageLosses(tmpLeakageLoss, this.settings);
+    if (loss.form.status == 'VALID') {
+      let tmpLeakageLoss = this.gasLeakageLossesService.initLossFromForm(loss.form);
+      loss.heatLoss = this.phastService.leakageLosses(tmpLeakageLoss, this.settings);
+    }
+    else {
+      loss.heatLoss = null;
+    }
   }
 
   saveLosses() {

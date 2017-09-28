@@ -61,6 +61,7 @@
         <app-motor-performance *ngIf="currentTab == 'motor-performance'" [inPsat]="true" [psat]="_psat" [settings]="settings"></app-motor-performance>
         <app-nema-energy-efficiency *ngIf="currentTab == 'nema-energy-efficiency'" [inPsat]="true" [psat]="_psat" [settings]="settings"></app-nema-energy-efficiency>
         <app-specific-speed *ngIf="currentTab == 'specific-speed'" [settings]="settings" [inPsat]="true" [psat]="_psat"></app-specific-speed>
+        <app-pump-curve *ngIf="currentTab == 'pump-curve'"></app-pump-curve>
       </div>
     </div>
   </div>
