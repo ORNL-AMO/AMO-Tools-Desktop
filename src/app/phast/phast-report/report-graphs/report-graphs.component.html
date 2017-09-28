@@ -1,3 +1,15 @@
-<p>
-  report-graphs works!
-</p>
+<div class="row">
+  <div class="col-6">
+    <h5>Baseline</h5>
+    <app-phast-pie-chart [results]="baseLineResults" [resultCats]="showResultsCats"></app-phast-pie-chart>
+  </div>
+  <div class="col-6" *ngIf="modExists">
+    <h5>Modification</h5>
+    <app-phast-pie-chart [results]="modificationResults[0]" [resultCats]="showResultsCats"></app-phast-pie-chart>
+  </div>
+</div>
+<div class="row" *ngIf="modExists" style="padding-top: 25px;">
+  <div class="col-12">
+    <app-phast-bar-chart [resultCats]="showResultsCats" [modResults]="modificationResults[0]" [results]="baseLineResults"></app-phast-bar-chart>
+  </div>
+</div>

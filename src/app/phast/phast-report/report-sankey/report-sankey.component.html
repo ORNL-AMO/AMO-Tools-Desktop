@@ -1,14 +1,11 @@
-<div class="row justify-content-center" style="padding-top: 20px;">
-  <div class="col-10">
+<div class="row justify-content-center">
+  <div class="col-6">
     <h5 *ngIf="phast.name">{{phast.name}}</h5>
     <h5 *ngIf="!phast.name">Baseline</h5>
     <!--<div id="baseline-sankey"></div>-->
     <app-sankey [phast]="phast" [settings]="settings" [location]="'baseline-sankey'"></app-sankey>
   </div>
-</div>
-<hr class="my-10">
-<div class="row justify-content-center" *ngIf="modification">
-  <div class="col-10">
+  <div class="col-6" *ngIf="modification">
     <h5>{{modification.name}}</h5>
     <!--<div id="modification-sankey"></div>-->
     <app-sankey [phast]="modification" [settings]="settings" [location]="'modification-sankey'"></app-sankey>

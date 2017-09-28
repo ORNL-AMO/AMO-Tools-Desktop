@@ -7,12 +7,16 @@ import { ResultsDataComponent } from './results-data/results-data.component';
 import { ReportGraphsComponent } from './report-graphs/report-graphs.component';
 import { ReportSankeyComponent } from './report-sankey/report-sankey.component';
 import { SankeyModule } from '../sankey/sankey.module';
+import { PhastPieChartComponent } from './report-graphs/phast-pie-chart/phast-pie-chart.component';
+import { PhastBarChartComponent } from './report-graphs/phast-bar-chart/phast-bar-chart.component';
+import { ChartsModule } from 'ng2-charts';
 @NgModule({
   imports: [
     CommonModule,
-    SankeyModule
+    SankeyModule,
+    ChartsModule
   ],
-  declarations: [PhastReportComponent, EnergyUsedComponent, ExecutiveSummaryComponent, ResultsDataComponent, ReportGraphsComponent, ReportSankeyComponent],
+  declarations: [PhastReportComponent, EnergyUsedComponent, ExecutiveSummaryComponent, ResultsDataComponent, ReportGraphsComponent, ReportSankeyComponent, PhastPieChartComponent, PhastBarChartComponent],
   exports: [PhastReportComponent]
 })
 export class PhastReportModule { }

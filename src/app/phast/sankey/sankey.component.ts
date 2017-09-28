@@ -207,7 +207,7 @@ export class SankeyComponent implements OnInit {
               return node_val.x - 130;
             }
             else if (node_val.usefulOutput) {
-              return d.x + (d.displaySize * .7) + 50;
+              return d.x + (d.displaySize * .7) - 50;
             }
             else {
               return node_val.x - 75;

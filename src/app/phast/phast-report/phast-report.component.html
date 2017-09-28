@@ -44,19 +44,19 @@
                 <a>Sankey</a>
             </li>
         </ul>
-        <div class="results" *ngIf="currentTab == 'energy-used'">
+        <div class="results" *ngIf="currentTab == 'energy-used'"  style="padding-top: 20px;">
           <app-energy-used></app-energy-used>
         </div>        
-        <div class="results" *ngIf="currentTab == 'executive-summary'">
+        <div class="results" *ngIf="currentTab == 'executive-summary'"  style="padding-top: 20px;">
           <app-executive-summary></app-executive-summary>
         </div>
-        <div class="results" *ngIf="currentTab == 'results-data'">
+        <div class="results" *ngIf="currentTab == 'results-data'"  style="padding-top: 20px;">
           <app-results-data [phast]="phast" [settings]="settings" [assessment]="assessment" [inPhast]="true"></app-results-data>
         </div>        
-        <div class="results" *ngIf="currentTab == 'report-graphs'">
-          <app-report-graphs></app-report-graphs>
+        <div class="results" *ngIf="currentTab == 'report-graphs'"  style="padding-top: 20px;">
+          <app-report-graphs [phast]="phast" [settings]="settings"></app-report-graphs>
         </div>
-        <div class="results" *ngIf="currentTab == 'report-sankey'">
+        <div class="results" *ngIf="currentTab == 'report-sankey'"  style="padding-top: 20px;">
           <app-report-sankey [phast]="phast" [settings]="settings" ></app-report-sankey>
         </div>
     </div>
