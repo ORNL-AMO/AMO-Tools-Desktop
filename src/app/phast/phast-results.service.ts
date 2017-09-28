@@ -37,6 +37,14 @@ export class PhastResultsService {
       totalEnergyInput: 0,
       totalExhaustGas: 0,
       totalSystemLosses: 0,
+      exothermicHeat: 0,
+      energyInputTotalChemEnergy: 0,
+      energyInputHeatDelivered: 0,
+      flueGasSystemLosses: 0,
+      flueGasGrossHeat: 0,
+      flueGasAvailableHeat: 0,
+      grossHeatInput: 0,
+      heatingSystemEfficiency: 0
     }
     return results;
   }

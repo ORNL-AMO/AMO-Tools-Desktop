@@ -102,5 +102,23 @@ export interface PhastResults {
   totalEnergyInputEAF: number,
   totalEnergyInput: number,
   totalExhaustGas: number,
-  totalSystemLosses: number
+  totalSystemLosses: number,
+  exothermicHeat: number,
+  energyInputTotalChemEnergy: number,
+  energyInputHeatDelivered: number,
+  flueGasSystemLosses: number,
+  flueGasGrossHeat: number,
+  flueGasAvailableHeat: number,
+  grossHeatInput: number,
+  heatingSystemEfficiency: number
+}
+
+export interface ShowResultsCategories {
+  showSlag: boolean;
+  showAuxPower: boolean;
+  showSystemEff: boolean;
+  showFlueGas: boolean;
+  showEnInput1: boolean;
+  showEnInput2: boolean;
+  showExGas: boolean;
 }
