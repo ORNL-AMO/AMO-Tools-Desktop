@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { PHAST, PhastResults, Losses } from '../shared/models/phast/phast';
+import { PHAST, PhastResults, Losses, ShowResultsCategories } from '../shared/models/phast/phast';
 import { PhastService } from './phast.service';
 import { Settings } from '../shared/models/settings';
 
@@ -36,6 +36,7 @@ export class PhastResultsService {
       totalEnergyInputEAF: 0,
       totalEnergyInput: 0,
       totalExhaustGas: 0,
+      totalExhaustGasEAF: 0,
       totalSystemLosses: 0,
       exothermicHeat: 0,
       energyInputTotalChemEnergy: 0,
@@ -50,23 +51,7 @@ export class PhastResultsService {
   }
 
   getResults(phast: PHAST, settings: Settings): PhastResults {
-    let showFlueGas, showSlag, showExGas, showEnInput1, showEnInput2, showAuxPower, showSystemEff: boolean = false;
-    if (settings.energySourceType == 'Fuel') {
-      showFlueGas = true;
-    } else if (settings.energySourceType == 'Electricity') {
-      if (settings.furnaceType == 'Electric Arc Furnace (EAF)') {
-        showSlag = true;
-        showExGas = true;
-        showEnInput1 = true;
-      } else if (settings.furnaceType != 'Custom Electrotechnology') {
-        showAuxPower = true;
-        showEnInput2 = true;
-      } else if (settings.furnaceType == 'Custom Electrotechnology') {
-        showSystemEff = true;
-      }
-    } else if (settings.energySourceType == 'Steam') {
-      showSystemEff = true;
-    }
+    let resultCats: ShowResultsCategories = this.getResultCategories(settings);
     let results: PhastResults = this.initResults();
     if (this.checkLoss(phast.losses.wallLosses)) {
       results.totalWallLoss = this.phastService.sumWallLosses(phast.losses.wallLosses, settings);
@@ -95,40 +80,76 @@ export class PhastResultsService {
     if (this.checkLoss(phast.losses.chargeMaterials)) {
       results.totalChargeMaterialLoss = this.phastService.sumChargeMaterials(phast.losses.chargeMaterials, settings);
     }
-
-    if (showFlueGas && this.checkLoss(phast.losses.flueGasLosses)) {
-      if (phast.losses.flueGasLosses[0].flueGasType == 'By Volume') {
-        let tmpResult = this.phastService.flueGasByVolume(phast.losses.flueGasLosses[0].flueGasByVolume, settings);
-        let grossHeat = this.phastService.sumHeatInput(phast.losses, settings) / tmpResult;
-        results.totalFlueGas = grossHeat * (1 - tmpResult);;
-
-      } else if (phast.losses.flueGasLosses[0].flueGasType == 'By Mass') {
-        let tmpResult = this.phastService.flueGasByMass(phast.losses.flueGasLosses[0].flueGasByMass, settings);
-        let grossHeat = this.phastService.sumHeatInput(phast.losses, settings) / tmpResult;
-        results.totalFlueGas = grossHeat * (1 - tmpResult);
-      }
-    }
-
-    if (showAuxPower && this.checkLoss(phast.losses.auxiliaryPowerLosses)) {
+    if (resultCats.showAuxPower && this.checkLoss(phast.losses.auxiliaryPowerLosses)) {
       results.totalAuxPower = this.phastService.sumAuxilaryPowerLosses(phast.losses.auxiliaryPowerLosses);
     }
 
-    if (showSlag && this.checkLoss(phast.losses.slagLosses)) {
+    if (resultCats.showSlag && this.checkLoss(phast.losses.slagLosses)) {
       results.totalSlag = this.phastService.sumSlagLosses(phast.losses.slagLosses, settings);
     }
-    if (showExGas && this.checkLoss(phast.losses.exhaustGasEAF)) {
-      results.totalExhaustGas = this.phastService.sumExhaustGasEAF(phast.losses.exhaustGasEAF, settings);
+    if (resultCats.showExGas && this.checkLoss(phast.losses.exhaustGasEAF)) {
+      results.totalExhaustGasEAF = this.phastService.sumExhaustGasEAF(phast.losses.exhaustGasEAF, settings);
     }
-    if (showEnInput2 && this.checkLoss(phast.losses.energyInputExhaustGasLoss)) {
+    if (resultCats.showEnInput2 && this.checkLoss(phast.losses.energyInputExhaustGasLoss)) {
       let tmpResults = this.phastService.energyInputExhaustGasLosses(phast.losses.energyInputExhaustGasLoss[0], settings)
       results.totalExhaustGas = tmpResults.exhaustGasLosses;
     }
-    if (phast.systemEfficiency && showSystemEff) {
+    if (phast.systemEfficiency && resultCats.showSystemEff) {
+      results.heatingSystemEfficiency = phast.systemEfficiency;
       let grossHeatInput = this.phastService.sumHeatInput(phast.losses, settings) / phast.systemEfficiency;
       results.totalSystemLosses = grossHeatInput * (1 - (phast.systemEfficiency / 100));
     }
-    results.totalInput = results.totalWallLoss + results.totalAtmosphereLoss + results.totalOtherLoss + results.totalCoolingLoss + results.totalOpeningLoss + results.totalFixtureLoss + results.totalLeakageLoss + results.totalExtSurfaceLoss + results.totalChargeMaterialLoss + results.totalFlueGas + results.totalAuxPower + results.totalSlag + results.totalExhaustGas + results.totalSystemLosses;
+
+    if (resultCats.showFlueGas && this.checkLoss(phast.losses.flueGasLosses)) {
+      let tmpFlueGas = phast.losses.flueGasLosses[0];
+      if (tmpFlueGas) {
+        if (tmpFlueGas.flueGasType == 'By Mass') {
+          let tmpVal = this.phastService.flueGasByMass(tmpFlueGas.flueGasByMass, settings);
+          results.flueGasAvailableHeat = tmpVal * 100;
+          results.flueGasGrossHeat = this.phastService.sumHeatInput(phast.losses, settings) / tmpVal;
+          results.flueGasSystemLosses = results.flueGasGrossHeat * (1 - tmpVal);
+          results.totalFlueGas = results.flueGasSystemLosses;
+        } else if (tmpFlueGas.flueGasType == 'By Volume') {
+          let tmpVal = this.phastService.flueGasByVolume(tmpFlueGas.flueGasByVolume, settings);
+          results.flueGasAvailableHeat = tmpVal * 100;
+          results.flueGasGrossHeat = this.phastService.sumHeatInput(phast.losses, settings) / tmpVal;
+          results.flueGasSystemLosses = results.flueGasGrossHeat * (1 - tmpVal);
+          results.totalFlueGas = results.flueGasSystemLosses;
+        }
+      }
+    }
+    results.totalInput = this.phastService.sumHeatInput(phast.losses, settings);
+    results.grossHeatInput = results.totalWallLoss + results.totalAtmosphereLoss + results.totalOtherLoss + results.totalCoolingLoss + results.totalOpeningLoss + results.totalFixtureLoss + results.totalLeakageLoss + results.totalExtSurfaceLoss + results.totalChargeMaterialLoss + results.totalFlueGas + results.totalAuxPower + results.totalSlag + results.totalExhaustGas + results.totalExhaustGasEAF + results.totalSystemLosses;
     return results;
+  }
+
+  getResultCategories(settings: Settings): ShowResultsCategories {
+    let tmpResultCategories: ShowResultsCategories = {
+      showSlag: false,
+      showAuxPower: false,
+      showSystemEff: false,
+      showFlueGas: false,
+      showEnInput1: false,
+      showEnInput2: false,
+      showExGas: false
+    }
+    if (settings.energySourceType == 'Fuel') {
+      tmpResultCategories.showFlueGas = true;
+    } else if (settings.energySourceType == 'Electricity') {
+      if (settings.furnaceType == 'Electric Arc Furnace (EAF)') {
+        tmpResultCategories.showSlag = true;
+        tmpResultCategories.showExGas = true;
+        tmpResultCategories.showEnInput1 = true;
+      } else if (settings.furnaceType != 'Custom Electrotechnology') {
+        tmpResultCategories.showAuxPower = true;
+        tmpResultCategories.showEnInput2 = true;
+      } else if (settings.furnaceType == 'Custom Electrotechnology') {
+        tmpResultCategories.showSystemEff = true;
+      }
+    } else if (settings.energySourceType == 'Steam') {
+      tmpResultCategories.showSystemEff = true;
+    }
+    return tmpResultCategories;
   }
 
 }

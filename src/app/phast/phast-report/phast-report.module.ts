@@ -6,10 +6,11 @@ import { ExecutiveSummaryComponent } from './executive-summary/executive-summary
 import { ResultsDataComponent } from './results-data/results-data.component';
 import { ReportGraphsComponent } from './report-graphs/report-graphs.component';
 import { ReportSankeyComponent } from './report-sankey/report-sankey.component';
-
+import { SankeyModule } from '../sankey/sankey.module';
 @NgModule({
   imports: [
-    CommonModule
+    CommonModule,
+    SankeyModule
   ],
   declarations: [PhastReportComponent, EnergyUsedComponent, ExecutiveSummaryComponent, ResultsDataComponent, ReportGraphsComponent, ReportSankeyComponent],
   exports: [PhastReportComponent]

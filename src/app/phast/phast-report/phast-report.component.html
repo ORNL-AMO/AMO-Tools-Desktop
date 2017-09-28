@@ -57,7 +57,7 @@
           <app-report-graphs></app-report-graphs>
         </div>
         <div class="results" *ngIf="currentTab == 'report-sankey'">
-          <app-report-sankey></app-report-sankey>
+          <app-report-sankey [phast]="phast" [settings]="settings" ></app-report-sankey>
         </div>
     </div>
 
