@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-cash-flow',
@@ -7,9 +7,21 @@ import { Component, OnInit } from '@angular/core';
 })
 export class CashFlowComponent implements OnInit {
 
+  tabSelect: string = 'diagram';
+  currentField: string;
   constructor() { }
 
   ngOnInit() {
+      }
+
+  setTab(str: string) {
+    this.tabSelect = str;
   }
+
+  setField(str: string) {
+    this.currentField = str;
+  }
+
+
 
 }
