@@ -53,41 +53,11 @@
     margin-left: 220px;
 }
 
-.report-cover {
-    display: none;
-}
-
-.report-title {
-    display: block;
-    width: 100%;
-    text-align: center;
-    margin: 40px 0 100px;
-}
-    .report-title h4 {
-        font-size: 38px;
-    }
-    .report-title h5 {
-        font-size: 18px;
-    }
 
 
 @media print {
 
-    .report-cover {
-        display: block;
-        width: 100%;
-        text-align: center;
-    }
-    .doe-logo {
-        width: 200px;
-        display: inline-block;
-        margin-top: 100px;
-    }
-    .report-header {
-        position: static;
-        border: none;
-        background: none;
-    }
+    
 
     .report-container .content {
         padding: 0;

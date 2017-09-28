@@ -6,9 +6,21 @@
     [ngClass]="{'assessment-report-padding': inPsat, 'report-in-psat': inPsat, 'report-in-rollup': !inPsat}">
 
 
+    <div class="report-cover">
+        <img src="assets/images/DOE-banner-color.png" class="doe-logo">
+        
+        <div class="report-title">
+            <h4>Efficiency Report</h4>
+            <h5>{{createdDate}}</h5>
+        </div>
+        
+        <p class="report-notes">{{reportNotes}}</p>
+    </div>
+
+
     <div class="report-header">  
        
-        <div *ngIf="inPsat" class="btn-group">
+        <div *ngIf="inPsat" class="btn-group hide-print">
             <button class="btn btn-secondary" (click)="print()">Print</button>
             <button class="btn btn-secondary" (click)="exportToCsv()">Export to CSV</button>
         </div>

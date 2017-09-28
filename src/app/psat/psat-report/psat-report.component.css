@@ -58,11 +58,12 @@
 }
 
 @media print {
+ 
+ 
     .assessment-report {
         background: #fff;
         box-shadow: none;
         border: none;
-        page-break-before: always;
     }
 
     .assessment-report.report-in-psat .assessment-name, 
