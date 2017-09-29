@@ -11,11 +11,11 @@ import { HelpPanelModule } from './help-panel/help-panel.module';
 
 import { SystemCurveModule } from '../calculator/pumps/system-curve/system-curve.module';
 import { HeadToolModule } from '../calculator/pumps//head-tool/head-tool.module';
-import { NemaEnergyEfficiencyModule} from '../calculator/motors/nema-energy-efficiency/nema-energy-efficiency.module';
+import { NemaEnergyEfficiencyModule } from '../calculator/motors/nema-energy-efficiency/nema-energy-efficiency.module';
 import { MotorPerformanceModule } from '../calculator/motors/motor-performance/motor-performance.module';
 import { AchievableEfficiencyModule } from '../calculator/pumps/achievable-efficiency/achievable-efficiency.module';
 import { SpecificSpeedModule } from '../calculator/pumps/specific-speed/specific-speed.module';
-
+import { PumpCurveModule } from '../calculator/pumps/pump-curve/pump-curve.module';
 
 
 
@@ -93,7 +93,8 @@ import { PsatDiagramComponent } from './psat-diagram/psat-diagram.component';
     NemaEnergyEfficiencyModule,
     MotorPerformanceModule,
     HeadToolModule,
-    AchievableEfficiencyModule
+    AchievableEfficiencyModule, 
+    PumpCurveModule
   ],
   providers: [
     PsatService,

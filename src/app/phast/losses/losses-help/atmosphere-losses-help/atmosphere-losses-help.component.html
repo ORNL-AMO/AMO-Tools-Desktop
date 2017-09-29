@@ -11,67 +11,84 @@
 
 <div class="help-content">
 
-  <div class="card" *ngIf="currentField == 'atmosphereGas'">
+  <div class="card" *ngIf="currentField == 'materialName'">
     <div class="card-header">
       Atmosphere Gas
     </div>
     <div class="card-block">
-      <label>Description:</label>
-      <p>Select gas from the drop down list. The gas properties cell below the drop down list will be filled in if the
-        gas is selected from the list. If it is different from the gas listed, then select Other.
+      <label><u><strong>Description</strong></u></label>
+      <p>
+        Type of gas used as a process atmosphere within the heating equipment or reaction chamber To add a new gas,
+        click “Add New Gas”.  You can “start with existing gas” and edit the condition factor or add a completely new gas.
+        You cannot use the name of a gas already in the database.
       </p>
     </div>
   </div>
 
   <div class="card" *ngIf="currentField == 'specificHeat'">
     <div class="card-header">
-      Specific heat of gas (Btu/(SCF-(&#8457;)))
+      Specific heat of gas
     </div>
     <div class="card-block">
-      <label>Description:</label>
+      <label><u><strong>Description</strong></u></label>
       <p>
         Give average value of the specific heat for the temperature range of the gas inlet temperature and outlet
         temperature.
+      </p>
+      <label><u><strong>Input</strong></u></label>
+      <p>
+        Units: <strong>Btu/(SCF-&#8457;)</strong> or <strong>kJ/(Nm<sup>3</sup>-&#8451;)</strong>
       </p>
     </div>
   </div>
 
   <div class="card" *ngIf="currentField == 'inletTemp'">
     <div class="card-header">
-      Initial temperature (&#8457;)
+      Initial temperature
     </div>
     <div class="card-block">
-      <label>Description:</label>
+      <label><u><strong>Description</strong></u></label>
       <p>
         Inlet temperature (Celsius) of the process atmosphere as it enters the heating equipment or reaction chamber.
         Use temperature recorder/indicator reading or actual measurement.
+      </p>
+      <label><u><strong>Input</strong></u></label>
+      <p>
+        Units: <strong>&#8457;</strong> or <strong>&#8451;</strong>
       </p>
     </div>
   </div>
 
   <div class="card" *ngIf="currentField == 'outletTemp'">
     <div class="card-header">
-      Final temperature (&#8457;)
+      Outlet temperature
     </div>
     <div class="card-block">
-      <label>Description:</label>
+      <label><u><strong>Description</strong></u></label>
       <p>
         Outlet temperature (Celsius) of the process atmosphere as it leaves the heating equipment or reaction chamber.
         Use temperature recorder/indicator reading or actual measurement.
+      </p>
+      <label><u><strong>Input</strong></u></label>
+      <p>
+        Units: <strong>&#8457;</strong> or <strong>&#8451;</strong>
       </p>
     </div>
   </div>
 
   <div class="card" *ngIf="currentField == 'flowRate'">
     <div class="card-header">
-      Flow Rate (SCF/hr)
+      Flow Rate
     </div>
     <div class="card-block">
-      <label>Description:</label>
+      <label><u><strong>Description</strong></u></label>
       <p>
-        Atmosphere flow rate in terms of standard volume flow rate. Note that it is at standard conditions and actual
-        flow values given by a flow meter should be corrected for the pressure-temperature condition at the measurement
-        point. Use readings from a flow meter.
+        Flow rate of atmosphere gas, in terms of volume per hour from flow meter readings. Assumed to be at standard conditions and actual flow values given by a flow meter should be corrected for the pressure-temperature condition at the measurement point.
+        <strong>Note</strong> that for batch furnaces the total weight should be corrected for cycle time to obtain weight per hour value.
+      </p>
+      <label><u><strong>Input</strong></u></label>
+      <p>
+        Units: <strong>SCF/hr</strong> or <strong>Nm<sup>3</sup></strong>
       </p>
     </div>
   </div>
@@ -81,7 +98,28 @@
       Correction Factor
     </div>
     <div class="card-block">
-      <label>Description:</label>
+      <label><u><strong>Description</strong></u></label>
+      <p>
+        Engineering correction factor multiplied to the result to account for a known systematic error.
+      </p>
+      <label><u><strong>Input</strong></u></label>
+      <p>
+         Minimum Value Allowed: <strong>0</strong>
+      </p>
+    </div>
+  </div>
+
+  <div class="card" *ngIf="currentField == 'default'">
+    <div class="card-header">
+      Atmosphere
+    </div>
+    <div class="card-block">
+      <label><u><strong>Description</strong></u></label>
+      <ul>
+        <li class="help-general">Optimize (minimize) use of process atmosphere flow rate</li>
+        <li class="help-general">Preheat atmosphere to a higher temperature entering the furnace</li>
+        <li class="help-general"><strong>Note:</strong> These energy saving measures are for guidance only. Not all measures are applicable under all operating conditions. There may additional measures when considering specific situations and the user is encouraged to review and apply the appropriate measures</li>
+      </ul>
     </div>
   </div>
 

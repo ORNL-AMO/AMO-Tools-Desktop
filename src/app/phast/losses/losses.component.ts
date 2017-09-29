@@ -43,6 +43,7 @@ export class LossesComponent implements OnInit {
   constructor(private lossesService: LossesService) { }
 
   ngOnInit() {
+    // this.changeField('default');
     this._modifications = new Array<Modification>();
     if (!this.phast.losses) {
       //initialize losses
@@ -55,6 +56,7 @@ export class LossesComponent implements OnInit {
     }
 
     this.lossesService.lossesTab.subscribe(val => {
+      this.changeField('default');
       this.lossesTab = val;
       if (this.lossesTab == 'heat-system-efficiency'
         || this.lossesTab == 'atmosphere-losses'
@@ -63,9 +65,10 @@ export class LossesComponent implements OnInit {
         || this.lossesTab == 'flue-gas-losses'
         || this.lossesTab == 'energy-input'
         || this.lossesTab == 'energy-input-exhaust-gas'
-      ) {
+        ) {
         this.showAddBtn = false;
       } else {
+
         this.showAddBtn = true;
       }
     })
