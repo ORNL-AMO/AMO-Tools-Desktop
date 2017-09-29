@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-
+import { CashFlowForm } from './cash-flow';
 @Component({
   selector: 'app-cash-flow',
   templateUrl: './cash-flow.component.html',
@@ -7,12 +7,23 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 })
 export class CashFlowComponent implements OnInit {
 
+  cashFlowForm: CashFlowForm;
+
   tabSelect: string = 'diagram';
   currentField: string;
   constructor() { }
 
   ngOnInit() {
-      }
+    this.cashFlowForm = {
+      lifeYears: 0,
+      energySavings: 0,
+      salvageInput: 0,
+      installationCost: 0,
+      operationCost: 0,
+      fuelCost: 0,
+      junkCost: 0
+    }
+  }
 
   setTab(str: string) {
     this.tabSelect = str;
@@ -22,6 +33,15 @@ export class CashFlowComponent implements OnInit {
     this.currentField = str;
   }
 
+
+  calculate(){
+    //cashFlowForm object has data from form
+    console.log(this.cashFlowForm.lifeYears);
+    console.log(this.cashFlowForm.energySavings);
+    let test = this.cashFlowForm.lifeYears + this.cashFlowForm.energySavings;
+
+    //I would create a results object for the calculations and then use it as an input for the cash-flow-diagram
+  }
 
 
 }

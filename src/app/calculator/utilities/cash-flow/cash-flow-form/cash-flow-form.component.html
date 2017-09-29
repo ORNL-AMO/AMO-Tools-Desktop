@@ -3,7 +3,7 @@
     <label class="small">Lifetime</label>
     <div class="input-group calc-addon-group">
       <input type="number" class="form-control addon-input" step="any"  id="lifeYears" [(ngModel)]="cashFlowForm.lifeYears"
-             onfocus="this.select();" (focus)="focusField('lifeYears')">
+             onfocus="this.select();" (focus)="focusField('lifeYears')" (input)="calculate()">
       <span class="input-group-addon units">yr</span>
     </div>
   </div>
@@ -16,7 +16,7 @@
   <div class="form-group">
     <label class="small">Annual Energy Savings</label>
     <div class="input-group calc-addon-group">
-      <input type="number" step="any" class="form-control addon-input"  id="energySavings">
+      <input type="number" step="any" class="form-control addon-input"  id="energySavings" [(ngModel)]="cashFlowForm.energySavings" (input)="calculate()">
       <span class="input-group-addon units">$/yr</span>
     </div>
   </div>

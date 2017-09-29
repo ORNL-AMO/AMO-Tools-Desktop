@@ -1,5 +1,5 @@
-import {Component, OnInit, Output, EventEmitter, Input} from '@angular/core';
-import {CashFlowForm} from '../cash-flow';
+import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
+import { CashFlowForm } from '../cash-flow';
 
 @Component({
   selector: 'app-cash-flow-form',
@@ -7,16 +7,22 @@ import {CashFlowForm} from '../cash-flow';
   styleUrls: ['./cash-flow-form.component.css']
 })
 export class CashFlowFormComponent implements OnInit {
- @Input()
+  @Input()
   cashFlowForm: CashFlowForm;
- lifetime: number;
- // benefits: number;
- // cost: number;
-   constructor() { }
+  @Output('emitCalculate')
+  emitCalculate = new EventEmitter<boolean>();
+
+  //lifetime: number;
+  // benefits: number;
+  // cost: number;
+  constructor() { }
 
   ngOnInit() {
-    this.lifetime = this.cashFlowForm.lifeYears;
-    console.log(this.lifetime);
 
+  }
 
-}}
+  calculate(){
+    this.emitCalculate.emit(true)
+  }
+
+}

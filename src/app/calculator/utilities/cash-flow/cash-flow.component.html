@@ -1,7 +1,7 @@
 
   <div class="row">
     <div class="col-md-4 col-sm-12 mx-auto">
-      <app-cash-flow-form></app-cash-flow-form>
+      <app-cash-flow-form [cashFlowForm]="cashFlowForm" (emitCalculate)="calculate()"></app-cash-flow-form>
     </div>
     <div class="col-md-6 col-sm-12 mx-auto">
       <ul class="tabs primary text-center">
