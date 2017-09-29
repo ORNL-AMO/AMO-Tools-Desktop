@@ -21,8 +21,9 @@ import { SystemSetupComponent } from './system-setup/system-setup.component';
 import { SettingsModule } from '../settings/settings.module';
 import { AuxEquipmentModule } from './aux-equipment/aux-equipment.module';
 import { SankeyModule } from './sankey/sankey.module';
-import { PhastReportComponent } from './phast-report/phast-report.component';
+import { PhastReportModule } from './phast-report/phast-report.module';
 import { PhastDiagramComponent } from './phast-diagram/phast-diagram.component';
+import { PhastResultsService } from './phast-results.service';
 @NgModule({
   declarations: [
     PhastComponent,
@@ -32,7 +33,6 @@ import { PhastDiagramComponent } from './phast-diagram/phast-diagram.component';
     OperatingHoursComponent,
     HelpPanelComponent,
     SystemSetupComponent,
-    PhastReportComponent,
     PhastDiagramComponent
   ],
   exports: [
@@ -50,10 +50,12 @@ import { PhastDiagramComponent } from './phast-diagram/phast-diagram.component';
     AuxEquipmentModule,
     DesignedEnergyModule,
     MeteredEnergyModule,
-    SankeyModule
+    SankeyModule,
+    PhastReportModule
   ],
   providers: [
-    PhastService
+    PhastService,
+    PhastResultsService
   ]
 })
 

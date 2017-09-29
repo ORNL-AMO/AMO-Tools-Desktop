@@ -1,0 +1,15 @@
+<div class="row justify-content-center">
+  <div class="col-lg-5 col-md-5 col-sm-6">
+    <h5>Baseline</h5>
+    <app-phast-pie-chart [results]="baseLineResults" [resultCats]="showResultsCats"></app-phast-pie-chart>
+  </div>
+  <div class="col-lg-5 col-md-5 col-sm-6" *ngIf="modExists">
+    <h5>Modification</h5>
+    <app-phast-pie-chart [results]="modificationResults[0]" [resultCats]="showResultsCats"></app-phast-pie-chart>
+  </div>
+</div>
+<div class="row justify-content-center" *ngIf="modExists" style="padding-top: 50px;">
+  <div class="col-md-10 col-lg-8 col-sm-10">
+    <app-phast-bar-chart [resultCats]="showResultsCats" [modResults]="modificationResults[0]" [results]="baseLineResults"></app-phast-bar-chart>
+  </div>
+</div>

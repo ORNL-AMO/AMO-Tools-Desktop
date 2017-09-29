@@ -1,109 +1,68 @@
 import { Injectable } from '@angular/core';
 import { PhastService } from '../phast.service';
-import { Losses } from '../../shared/models/phast/phast';
+import { Losses, ShowResultsCategories, PhastResults } from '../../shared/models/phast/phast';
 import { Settings } from '../../shared/models/settings';
 import { PHAST } from '../../shared/models/phast/phast';
-
+import { PhastResultsService } from '../phast-results.service';
 @Injectable()
 export class SankeyService {
   baseSize: number = 300;
-  constructor(private phastService: PhastService) { }
-
-  checkLoss(loss: any) {
-    if (!loss) {
-      return false;
-    }
-    else if (loss.length == 0) {
-      return false;
-    } else {
-      return true;
-    }
-  }
-
+  constructor(private phastService: PhastService, private phastResultsService: PhastResultsService) { }
 
   getFuelTotals(phast: PHAST, settings: Settings): FuelResults {
-    let showFlueGas, showSlag, showExGas, showEnInput1, showEnInput2, showAuxPower, showSystemEff: boolean = false;
-
-    if (settings.energySourceType == 'Fuel') {
-      showFlueGas = true;
-    } else if (settings.energySourceType == 'Electricity') {
-      if (settings.furnaceType == 'Electric Arc Furnace (EAF)') {
-        showSlag = true;
-        showExGas = true;
-        showEnInput1 = true;
-      } else if (settings.furnaceType != 'Custom Electrotechnology') {
-        showAuxPower = true;
-        showEnInput2 = true;
-      } else if (settings.furnaceType == 'Custom Electrotechnology') {
-        showSystemEff = true;
-      }
-    } else if (settings.energySourceType == 'Steam') {
-      showSystemEff = true;
-    }
-
-
+    let resultCats: ShowResultsCategories = this.phastResultsService.getResultCategories(settings);
+    let phastResults: PhastResults = this.phastResultsService.getResults(phast, settings);
     let results: FuelResults = this.initFuelResults();
-    if (this.checkLoss(phast.losses.wallLosses)) {
-      results.totalWallLoss = this.phastService.sumWallLosses(phast.losses.wallLosses, settings) / 1000000;
+    if (phastResults.totalWallLoss) {
+      results.totalWallLoss = phastResults.totalWallLoss / 1000000;
     }
-    if (this.checkLoss(phast.losses.wallLosses)) {
-      results.totalAtmosphereLoss = this.phastService.sumAtmosphereLosses(phast.losses.atmosphereLosses, settings) / 1000000;
+    if (phastResults.totalAtmosphereLoss) {
+      results.totalAtmosphereLoss = phastResults.totalAtmosphereLoss / 1000000;
     }
-    if (this.checkLoss(phast.losses.otherLosses)) {
-      results.totalOtherLoss = this.phastService.sumOtherLosses(phast.losses.otherLosses) / 1000000;
+    if (phastResults.totalOtherLoss) {
+      results.totalOtherLoss = phastResults.totalOtherLoss / 1000000;
     }
-    if (this.checkLoss(phast.losses.coolingLosses)) {
-      results.totalCoolingLoss = this.phastService.sumCoolingLosses(phast.losses.coolingLosses, settings) / 1000000;
+    if (phastResults.totalCoolingLoss) {
+      results.totalCoolingLoss = phastResults.totalCoolingLoss / 1000000;
     }
-    if (this.checkLoss(phast.losses.openingLosses)) {
-      results.totalOpeningLoss = this.phastService.sumOpeningLosses(phast.losses.openingLosses, settings) / 1000000;
+    if (phastResults.totalOpeningLoss) {
+      results.totalOpeningLoss = phastResults.totalOpeningLoss / 1000000;
     }
-    if (this.checkLoss(phast.losses.fixtureLosses)) {
-      results.totalFixtureLoss = this.phastService.sumFixtureLosses(phast.losses.fixtureLosses, settings) / 1000000;
+    if (phastResults.totalFixtureLoss) {
+      results.totalFixtureLoss = phastResults.totalFixtureLoss / 1000000;
     }
-    if (this.checkLoss(phast.losses.leakageLosses)) {
-      results.totalLeakageLoss = this.phastService.sumLeakageLosses(phast.losses.leakageLosses, settings) / 1000000;
+    if (phastResults.totalLeakageLoss) {
+      results.totalLeakageLoss = phastResults.totalLeakageLoss / 1000000;
     }
-    if (this.checkLoss(phast.losses.extendedSurfaces)) {
-      results.totalExtSurfaceLoss = this.phastService.sumExtendedSurface(phast.losses.extendedSurfaces, settings) / 1000000;
+    if (phastResults.totalExtSurfaceLoss) {
+      results.totalExtSurfaceLoss = phastResults.totalExtSurfaceLoss / 1000000;
     }
-    if (this.checkLoss(phast.losses.chargeMaterials)) {
-      results.totalChargeMaterialLoss = this.phastService.sumChargeMaterials(phast.losses.chargeMaterials, settings) / 1000000;
-    }
-
-    if (showFlueGas && this.checkLoss(phast.losses.flueGasLosses)) {
-      if (phast.losses.flueGasLosses[0].flueGasType == 'By Volume') {
-        let tmpResult = this.phastService.flueGasByVolume(phast.losses.flueGasLosses[0].flueGasByVolume, settings);
-        let grossHeat = this.phastService.sumHeatInput(phast.losses, settings) / tmpResult;
-        results.totalFlueGas = grossHeat * (1 - tmpResult) / 1000000;;
-
-      } else if (phast.losses.flueGasLosses[0].flueGasType == 'By Mass') {
-        let tmpResult = this.phastService.flueGasByMass(phast.losses.flueGasLosses[0].flueGasByMass, settings);
-        let grossHeat = this.phastService.sumHeatInput(phast.losses, settings) / tmpResult;
-        results.totalFlueGas = grossHeat * (1 - tmpResult) / 1000000;
-      }
+    if (phastResults.totalChargeMaterialLoss) {
+      results.totalChargeMaterialLoss = phastResults.totalChargeMaterialLoss / 1000000;
     }
 
-    if (showAuxPower && this.checkLoss(phast.losses.auxiliaryPowerLosses)) {
-      results.totalAuxPower = this.phastService.sumAuxilaryPowerLosses(phast.losses.auxiliaryPowerLosses) / 1000000;
+    if (resultCats.showFlueGas && phastResults.totalFlueGas) {
+      results.totalFlueGas = phastResults.totalFlueGas / 1000000;
     }
 
-    if (showSlag && this.checkLoss(phast.losses.slagLosses)) {
-      results.totalSlag = this.phastService.sumSlagLosses(phast.losses.slagLosses, settings) / 1000000;
-    }
-    if (showExGas && this.checkLoss(phast.losses.exhaustGasEAF)) {
-      results.totalExhaustGas = this.phastService.sumExhaustGasEAF(phast.losses.exhaustGasEAF, settings) / 1000000;
-    }
-    if (showEnInput2 && this.checkLoss(phast.losses.energyInputExhaustGasLoss)) {
-      let tmpResults = this.phastService.energyInputExhaustGasLosses(phast.losses.energyInputExhaustGasLoss[0], settings)
-      results.totalExhaustGas = tmpResults.exhaustGasLosses / 1000000;
-    }
-    if (phast.systemEfficiency && showSystemEff) {
-      let grossHeatInput = this.phastService.sumHeatInput(phast.losses, settings) / phast.systemEfficiency;
-      results.totalSystemLosses = grossHeatInput * (1 - (phast.systemEfficiency / 100)) / 1000000;
+    if (resultCats.showAuxPower && phastResults.totalAuxPower) {
+      results.totalAuxPower = phastResults.totalAuxPower / 1000000;
     }
 
-    results.totalInput = results.totalWallLoss + results.totalAtmosphereLoss + results.totalOtherLoss + results.totalCoolingLoss + results.totalOpeningLoss + results.totalFixtureLoss + results.totalLeakageLoss + results.totalExtSurfaceLoss + results.totalChargeMaterialLoss + results.totalFlueGas + results.totalAuxPower + results.totalSlag + results.totalExhaustGas + results.totalSystemLosses;
+    if (resultCats.showSlag && phastResults.totalSlag) {
+      results.totalSlag = phastResults.totalSlag / 1000000;
+    }
+    if (resultCats.showExGas && phastResults.totalExhaustGasEAF) {
+      results.totalExhaustGas = phastResults.totalExhaustGasEAF / 1000000;
+    }
+    if (resultCats.showEnInput2 && phastResults.totalExhaustGas) {
+      results.totalExhaustGas = phastResults.totalExhaustGas / 1000000;
+    }
+    if (phastResults.totalSystemLosses && resultCats.showSystemEff) {
+      results.totalSystemLosses = phastResults.totalSystemLosses / 1000000;
+    }
+
+    results.totalInput = phastResults.grossHeatInput / 1000000;
     results.nodes = this.getNodes(results, settings);
     return results;
 
@@ -239,7 +198,7 @@ export class SankeyService {
       interIndex++;
       top = !top;
     }
-    tmpNode = this.createNode("Useful Output", results.totalChargeMaterialLoss, 0, 0, 2800, 0, false, true, false, false, unit)
+    tmpNode = this.createNode("Useful Output", results.totalChargeMaterialLoss, 0, 0, 2400, 0, false, true, false, false, unit)
     results.nodes.push(tmpNode);
     return results.nodes;
   }
