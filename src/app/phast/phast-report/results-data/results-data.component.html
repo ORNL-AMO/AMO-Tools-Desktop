@@ -80,7 +80,7 @@
           <span *ngIf="!mod.totalExtSurfaceLoss">&mdash; &mdash;</span>
         </td>
       </tr>
-      <tr *ngIf="showAuxPower">
+      <tr *ngIf="showResultsCats.showAuxPower">
         <td>Aux Power Losses</td>
         <td *ngIf="baseLineResults.totalAuxPower">{{baseLineResults.totalAuxPower| number:'2.0-0'}}</td>
         <td *ngIf="!baseLineResults.totalAuxPower">&mdash; &mdash;</td>
@@ -89,7 +89,7 @@
           <span *ngIf="!mod.totalAuxPower">&mdash; &mdash;</span>
         </td>
       </tr>
-      <tr *ngIf="showSlag">
+      <tr *ngIf="showResultsCats.showSlag">
         <td>Slag Losses</td>
         <td *ngIf="baseLineResults.totalSlag">{{baseLineResults.totalSlag| number:'2.0-0'}}</td>
         <td *ngIf="!baseLineResults.totalSlag">&mdash; &mdash;</td>
@@ -111,7 +111,7 @@
         <td style="font-weight: bold;">Total Net Heat Required</td>
         <td *ngIf="baseLineResults.totalInput" style="font-weight: bold;">{{baseLineResults.totalInput| number:'2.0-0'}}</td>
         <td *ngIf="!baseLineResults.totalInput">&mdash; &mdash;</td>
-        <td *ngFor="let mod of modificationResults">
+        <td *ngFor="let mod of modificationResults" style="font-weight: bold;">
           <span *ngIf="mod.totalInput">{{mod.totalInput| number:'2.0-0'}}</span>
           <span *ngIf="!mod.totalInput">&mdash; &mdash;</span>
         </td>
