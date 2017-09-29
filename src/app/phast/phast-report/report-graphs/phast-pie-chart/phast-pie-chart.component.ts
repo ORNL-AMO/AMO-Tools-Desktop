@@ -16,12 +16,15 @@ export class PhastPieChartComponent implements OnInit {
     pieChartData: new Array<number>()
   }
 
+  chartColors: Array<any>;
+  //chartColorDataSet: Array<any>;
   @ViewChild(BaseChartDirective) private baseChart;
 
   constructor() { }
 
   ngOnInit() {
     this.getData(this.results, this.resultCats);
+    this.getColors();
   }
 
   getData(phastResults: PhastResults, resultCats: ShowResultsCategories) {
@@ -113,5 +116,23 @@ export class PhastPieChartComponent implements OnInit {
   }
   roundVal(val: number, digits: number) {
     return Number((Math.round(val * 100) / 100).toFixed(digits))
+  }
+
+  getColors(){
+    this.chartColors = [
+      {
+        backgroundColor: [
+          '#BA4A00',
+          '#CA6F1E',
+          '#F39C12',
+          '#F1C40F',
+          '#DC7633',
+          '#E74C3C',
+          '#F9E79F',
+          '#909497',
+          '#D2B4DE',
+        ]
+      }
+    ]
   }
 }

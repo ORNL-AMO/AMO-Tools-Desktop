@@ -15,16 +15,20 @@ export class PhastBarChartComponent implements OnInit {
   resultCats: ShowResultsCategories;
   chartData: any = {
     barChartLabels: new Array<string>(),
-    barChartData: new Array<any>()
+    barChartData: new Array<any>(),
+    backgroundColor: [{}]
   }
 
+  chartColors: any = [{}];
   baselineData: any = {
     data: new Array<number>(),
-    label: 'Baseline'
+    label: 'Baseline',
+    backgroundColor: '#BA4A00'
   };
   modificationData: any = {
     data: new Array<number>(),
-    label: 'Modification'
+    label: 'Modification',
+    backgroundColor: '#F7DC6F'
   };;
 
   @ViewChild(BaseChartDirective) private baseChart;
@@ -33,6 +37,7 @@ export class PhastBarChartComponent implements OnInit {
 
   ngOnInit() {
     this.getData(this.results, this.modResults, this.resultCats);
+    this.getColors();
   }
 
   getData(phastResults: PhastResults, modResults: PhastResults, resultCats: ShowResultsCategories) {
@@ -149,11 +154,18 @@ export class PhastBarChartComponent implements OnInit {
   }
 
   getMMBtu(loss: number): number {
-    
+
     let percent = this.roundVal(loss, 0);
     return percent;
   }
   roundVal(val: number, digits: number) {
     return Number((Math.round(val * 100) / 100).toFixed(digits))
+  }
+
+  getColors() {
+    this.chartColors = [
+      '#BA4A00',
+      '#CA6F1E'
+    ]
   }
 }

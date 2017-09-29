@@ -45,7 +45,7 @@
             </li>
         </ul>
         <div class="results" *ngIf="currentTab == 'energy-used'"  style="padding-top: 20px;">
-          <app-energy-used></app-energy-used>
+          <app-energy-used [phast]="phast" [settings]="settings"></app-energy-used>
         </div>        
         <div class="results" *ngIf="currentTab == 'executive-summary'"  style="padding-top: 20px;">
           <app-executive-summary></app-executive-summary>
