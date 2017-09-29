@@ -16,10 +16,10 @@ export class ReportSankeyComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    
-    if (this.phast.modifications[0]) {
-      this.modification = this.phast.modifications[0].phast;
-      console.log(this.modification);
+    if (this.phast.modifications) {
+      if (this.phast.modifications[0]) {
+        this.modification = this.phast.modifications[0].phast;
+      }
     }
   }
 

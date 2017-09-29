@@ -30,14 +30,18 @@ export class ResultsDataComponent implements OnInit {
   ngOnInit() {
     this.modificationResults = new Array<PhastResults>();
     this.showResultsCats = this.phastResultsService.getResultCategories(this.settings);
-    this.baseLineResults = this.phastResultsService.getResults(this.phast, this.settings);
-    if(this.phast.modifications){
-      if(this.phast.modifications.length != 0){
-        this.phast.modifications.forEach(mod => {
-          let tmpResults =  this.phastResultsService.getResults(mod.phast, this.settings);
-          this.modificationResults.push(tmpResults);
-        })
+    if (this.phast.losses) {
+      this.baseLineResults = this.phastResultsService.getResults(this.phast, this.settings);
+      if (this.phast.modifications) {
+        if (this.phast.modifications.length != 0) {
+          this.phast.modifications.forEach(mod => {
+            let tmpResults = this.phastResultsService.getResults(mod.phast, this.settings);
+            this.modificationResults.push(tmpResults);
+          })
+        }
       }
+    }else{
+      this.baseLineResults = this.phastResultsService.initResults();
     }
   }
 }
