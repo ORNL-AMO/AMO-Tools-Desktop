@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit, Output, EventEmitter, Input} from '@angular/core';
+import {CashFlowForm} from '../cash-flow';
 
 @Component({
   selector: 'app-cash-flow-form',
@@ -6,10 +7,16 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./cash-flow-form.component.css']
 })
 export class CashFlowFormComponent implements OnInit {
-
-  constructor() { }
+ @Input()
+  cashFlowForm: CashFlowForm;
+ lifetime: number;
+ // benefits: number;
+ // cost: number;
+   constructor() { }
 
   ngOnInit() {
-  }
+    this.lifetime = this.cashFlowForm.lifeYears;
+    console.log(this.lifetime);
 
-}
+
+}}

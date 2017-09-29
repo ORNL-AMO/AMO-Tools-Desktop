@@ -2,7 +2,8 @@
   <div class="form-group">
     <label class="small">Lifetime</label>
     <div class="input-group calc-addon-group">
-      <input type="number" class="form-control addon-input" step="any"  id="lifeYears">
+      <input type="number" class="form-control addon-input" step="any"  id="lifeYears" [(ngModel)]="cashFlowForm.lifeYears"
+             onfocus="this.select();" (focus)="focusField('lifeYears')">
       <span class="input-group-addon units">yr</span>
     </div>
   </div>
@@ -62,24 +63,4 @@
   </div>
 </div>
 
-<div class="form-section">
-  <div class="form-group">
-    <label class="small section-label">Output</label>
-  </div>
-  <div class="row">
-    <div class="col-6">
-      <small>Benefit / Cost Ratio </small>
-    </div>
-    <div class="col-6 text-center">
-      <small>Total</small>
-    </div>
-  </div>
-  <div class="row">
-    <div class="col-6">
-      <small>Simple Payback Period </small>
-    </div>
-    <div class="col-6 text-center">
-      <small>Value in months</small>
-    </div>
-  </div>
-</div>
+
