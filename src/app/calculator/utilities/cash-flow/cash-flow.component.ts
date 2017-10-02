@@ -35,12 +35,19 @@ export class CashFlowComponent implements OnInit {
 
 
   calculate(){
-    //cashFlowForm object has data from form
-    console.log(this.cashFlowForm.lifeYears);
-    console.log(this.cashFlowForm.energySavings);
-    let test = this.cashFlowForm.lifeYears + this.cashFlowForm.energySavings;
+    // cashFlowForm object has data from form
+    // console.log(this.cashFlowForm.lifeYears);
+    // console.log(this.cashFlowForm.energySavings);
+    // let test = this.cashFlowForm.lifeYears + this.cashFlowForm.energySavings;
+    // console.log(test);
+    let benefits = this.cashFlowForm.energySavings + this.cashFlowForm.salvageInput;
+    console.log(benefits);
+    let cost = this.cashFlowForm.installationCost + this.cashFlowForm.operationCost + this.cashFlowForm.fuelCost + this.cashFlowForm.junkCost;
+    console.log(cost);
+    let results = benefits / cost;
+    console.log(results);
 
-    //I would create a results object for the calculations and then use it as an input for the cash-flow-diagram
+    // I would create a results object for the calculations and then use it as an input for the cash-flow-diagram
   }
 
 

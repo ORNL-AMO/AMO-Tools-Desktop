@@ -3,7 +3,7 @@
     <label class="small">Lifetime</label>
     <div class="input-group calc-addon-group">
       <input type="number" class="form-control addon-input" step="any"  id="lifeYears" [(ngModel)]="cashFlowForm.lifeYears"
-             onfocus="this.select();" (focus)="focusField('lifeYears')" (input)="calculate()">
+              (input)="calculate()">
       <span class="input-group-addon units">yr</span>
     </div>
   </div>
@@ -23,7 +23,7 @@
   <div class="form-group">
     <label class="small">Salvage</label>
     <div class="input-group calc-addon-group">
-      <input type="number" step="any" class="form-control addon-input"  id="salvageInput">
+      <input type="number" step="any" class="form-control addon-input"  id="salvageInput" [(ngModel)]="cashFlowForm.salvageInput" (input)="calculate()">
       <span class="input-group-addon units">$</span>
     </div>
   </div>
@@ -36,28 +36,28 @@
   <div class="form-group">
     <label class="small">Installation Cost</label>
     <div class="input-group calc-addon-group">
-      <input type="number" step="any" class="form-control addon-input"  id="installationCost">
+      <input type="number" step="any" class="form-control addon-input"  id="installationCost" [(ngModel)]="cashFlowForm.installationCost" (input)="calculate()">
       <span class="input-group-addon units">$</span>
     </div>
   </div>
   <div class="form-group">
     <label class="small">Annual Operation Cost</label>
     <div class="input-group calc-addon-group">
-      <input type="number" step="any" class="form-control addon-input"  id="operationCost">
+      <input type="number" step="any" class="form-control addon-input"  id="operationCost" [(ngModel)]="cashFlowForm.operationCost" (input)="calculate()">
       <span class="input-group-addon units">$/yr</span>
     </div>
   </div>
   <div class="form-group">
     <label class="small">Annual Fuel Cost</label>
     <div class="input-group calc-addon-group">
-      <input type="number" step="any" class="form-control addon-input"  id="fuelCost">
+      <input type="number" step="any" class="form-control addon-input"  id="fuelCost" [(ngModel)]="cashFlowForm.fuelCost" (input)="calculate()">
       <span class="input-group-addon units">$/yr</span>
     </div>
   </div>
   <div class="form-group">
     <label class="small">Junk</label>
     <div class="input-group calc-addon-group">
-      <input type="number" step="any" class="form-control addon-input"  id="junkCost">
+      <input type="number" step="any" class="form-control addon-input"  id="junkCost" [(ngModel)]="cashFlowForm.junkCost" (input)="calculate()">
       <span class="input-group-addon units">$</span>
     </div>
   </div>

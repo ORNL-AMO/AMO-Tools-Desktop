@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
+
 @Component({
   selector: 'app-cash-flow-diagram',
   templateUrl: './cash-flow-diagram.component.html',
