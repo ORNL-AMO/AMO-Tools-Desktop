@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { CashFlowForm } from './cash-flow';
+import { CashFlowForm, CashFlowResults } from './cash-flow';
 @Component({
   selector: 'app-cash-flow',
   templateUrl: './cash-flow.component.html',
@@ -8,6 +8,7 @@ import { CashFlowForm } from './cash-flow';
 export class CashFlowComponent implements OnInit {
 
   cashFlowForm: CashFlowForm;
+  cashFlowResults: CashFlowResults;
 
   tabSelect: string = 'diagram';
   currentField: string;
@@ -40,12 +41,12 @@ export class CashFlowComponent implements OnInit {
     // console.log(this.cashFlowForm.energySavings);
     // let test = this.cashFlowForm.lifeYears + this.cashFlowForm.energySavings;
     // console.log(test);
-    let benefits = this.cashFlowForm.energySavings + this.cashFlowForm.salvageInput;
-    console.log(benefits);
-    let cost = this.cashFlowForm.installationCost + this.cashFlowForm.operationCost + this.cashFlowForm.fuelCost + this.cashFlowForm.junkCost;
-    console.log(cost);
-    let results = benefits / cost;
-    console.log(results);
+    this.cashFlowResults.benefits = this.cashFlowForm.energySavings + this.cashFlowForm.salvageInput;
+    console.log(this.cashFlowResults.benefits);
+    this.cashFlowResults.cost = this.cashFlowForm.installationCost + this.cashFlowForm.operationCost + this.cashFlowForm.fuelCost + this.cashFlowForm.junkCost;
+    console.log(this.cashFlowResults.cost);
+    this.cashFlowResults.results = this.cashFlowResults.benefits / this.cashFlowResults.cost;
+    console.log(this.cashFlowResults.results);
 
     // I would create a results object for the calculations and then use it as an input for the cash-flow-diagram
   }

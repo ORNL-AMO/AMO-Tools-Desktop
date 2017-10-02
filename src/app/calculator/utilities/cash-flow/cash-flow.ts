@@ -7,3 +7,9 @@ export interface CashFlowForm {
   fuelCost?: number,
   junkCost?: number
 }
+
+export interface CashFlowResults {
+  benefits?: number,
+  cost?: number,
+  results?: number
+}
