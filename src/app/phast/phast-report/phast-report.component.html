@@ -1,150 +1,64 @@
-<div class="assessment-report" [ngClass]="{'assessment-report-padding': inPhast, 'report-in-psat': inPhast, 'report-in-rollup': !inPhast}">
-  <div class="report-header">
+<div 
+    class="assessment-report" 
+    *ngIf="phast && settings" 
+    [ngClass]="{'assessment-report-padding': inPhast, 'report-in-rollup': !inPhast}">
 
-    <div *ngIf="inPhast" class="btn-group">
-      <button class="btn btn-secondary" [disabled]="true" (click)="print()">Print</button>
-      <button class="btn btn-secondary" [disabled]="true" (click)="exportToCsv()">Export to CSV</button>
-    </div>
-    <!--<button class="btn btn-link pull-right hide-print" aria-label="Close" (click)="closeAssessment()">Close Report</button>-->
 
-    <h2 *ngIf="!assessment" class="assessment-name">Assessment Report</h2>
+    <div class="report-header">  
+       
+        <div *ngIf="inPsat" class="btn-group">
+            <button class="btn btn-secondary" [disabled]="true" (click)="print()">Print</button>
+            <button class="btn btn-secondary" [disabled]="true" (click)="exportToCsv()">Export to CSV</button>
+        </div>
+        <!--<button class="btn btn-link pull-right hide-print" aria-label="Close" (click)="closeAssessment()">Close Report</button>-->
 
-    <h2 *ngIf="assessment" class="assessment-name">
-      <span class="dir-list-item" *ngFor="let directory of assessmentDirectories">
+        <h2 *ngIf="!assessment" class="assessment-name">Assessment Report</h2>
+        
+        <h2 *ngIf="assessment" class="assessment-name">
+            <span 
+                class="dir-list-item" 
+                *ngFor="let directory of assessmentDirectories">
                 {{directory.name}} / 
-            </span> {{assessment.name}}
-      <!--<button *ngIf="inPsat" class="btn-sm btn-secondary pull-right hide-print" (click)="print()"><span class="fa fa-print"></span></button>-->
-      <span>Last Modified {{assessment.modifiedDate | date:'medium'}}</span>
-    </h2>
+            </span>
+            {{assessment.name}}
+            <!--<button *ngIf="inPsat" class="btn-sm btn-secondary pull-right hide-print" (click)="print()"><span class="fa fa-print"></span></button>-->
+            <span>Last Modified {{assessment.modifiedDate | date:'medium'}}</span>
+        </h2>
 
-  </div>
-
-
-  <div class="report-data">
-    <div class="results">
-      <div class="output-summary">
-        <table class="table">
-          <thead>
-            <tr>
-              <th>Energy use or loss category</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>Charge Materials</td>
-              <td *ngIf="sumChargeMaterials">{{sumChargeMaterials| number:'2.0-0'}}</td>
-              <td *ngIf="!sumChargeMaterials">&mdash; &mdash;</td>
-            </tr>
-            <tr>
-              <td>Fixtures, trays etc.</td>
-              <td *ngIf="sumFixtures">{{sumFixtures| number:'2.0-0'}}</td>
-              <td *ngIf="!sumFixtures">&mdash; &mdash;</td>
-            </tr>
-            <tr>
-              <td>Wall Losses</td>
-              <td *ngIf="sumWallLosses">{{sumWallLosses| number:'2.0-0'}}</td>
-              <td *ngIf="!sumWallLosses">&mdash; &mdash;</td>
-            </tr>
-            <tr>
-              <td>Cooling Losses</td>
-              <td *ngIf="sumCoolingLosses">{{sumCoolingLosses| number:'2.0-0'}}</td>
-              <td *ngIf="!sumCoolingLosses">&mdash; &mdash;</td>
-            </tr>
-            <tr>
-              <td>Atmosphere Losses</td>
-              <td *ngIf="sumAtmosphereLosses">{{sumAtmosphereLosses| number:'2.0-0'}}</td>
-              <td *ngIf="!sumAtmosphereLosses">&mdash; &mdash;</td>
-            </tr>
-            <tr>
-              <td>Opening Losses</td>
-              <td *ngIf="sumOpeningLosses">{{sumOpeningLosses| number:'2.0-0'}}</td>
-              <td *ngIf="!sumOpeningLosses">&mdash; &mdash;</td>
-            </tr>
-            <tr>
-              <td>Leakage Losses</td>
-              <td *ngIf="sumLeakage">{{sumLeakage| number:'2.0-0'}}</td>
-              <td *ngIf="!sumLeakage">&mdash; &mdash;</td>
-            </tr>
-            <tr>
-              <td>Extended Surface Losses</td>
-              <td *ngIf="sumExtendedSurface">{{sumExtendedSurface| number:'2.0-0'}}</td>
-              <td *ngIf="!sumExtendedSurface">&mdash; &mdash;</td>
-            </tr>
-            <tr *ngIf="showAuxPower">
-              <td>Aux Power Losses</td>
-              <td *ngIf="sumAux">{{sumAux| number:'2.0-0'}}</td>
-              <td *ngIf="!sumAux">&mdash; &mdash;</td>
-            </tr>
-            <tr *ngIf="showSlag">
-              <td>Slag Losses</td>
-              <td *ngIf="slagSum">{{slagSum| number:'2.0-0'}}</td>
-              <td *ngIf="!slagSum">&mdash; &mdash;</td>
-            </tr>
-            <tr>
-              <td>Other Losses</td>
-              <td *ngIf="sumOther">{{sumOther| number:'2.0-0'}}</td>
-              <td *ngIf="!sumOther">&mdash; &mdash;</td>
-            </tr>
-            <tr>
-              <td style="font-weight: bold;">Total Net Heat Required</td>
-              <td *ngIf="sumHeatRequired" style="font-weight: bold;">{{sumHeatRequired| number:'2.0-0'}}</td>
-              <td *ngIf="!sumHeatRequired">&mdash; &mdash;</td>
-            </tr>
-            <tr *ngIf="showEnInput2">
-              <td>Energy Input Available Heat</td>
-              <td *ngIf="availableHeatPercent">{{availableHeatPercent| number:'2.0-0'}} %</td>
-              <td *ngIf="!availableHeatPercent">&mdash; &mdash;</td>
-            </tr>
-            <tr *ngIf="showSystemEff">
-              <td>System Efficiency</td>
-              <td *ngIf="heatingSystemEfficiency">{{heatingSystemEfficiency| number:'2.0-0'}} %</td>
-              <td *ngIf="!heatingSystemEfficiency">&mdash; &mdash;</td>
-            </tr>
-            <tr *ngIf="showSystemEff">
-              <td>Gross Heat Input</td>
-              <td *ngIf="grossHeatInput">{{grossHeatInput| number:'2.0-0'}}</td>
-              <td *ngIf="!grossHeatInput">&mdash; &mdash;</td>
-            </tr>
-            <tr *ngIf="showSystemEff">
-              <td>Total System Losses</td>
-              <td *ngIf="systemLosses">{{systemLosses| number:'2.0-0'}}</td>
-              <td *ngIf="!systemLosses">&mdash; &mdash;</td>
-            </tr>
-            <tr *ngIf="showFlueGas">
-              <td>Available Heat</td>
-              <td *ngIf="flueGasAvailableHeat">{{flueGasAvailableHeat| number:'2.0-0'}} %</td>
-              <td *ngIf="!flueGasAvailableHeat">&mdash; &mdash;</td>
-            </tr>
-            <tr *ngIf="showFlueGas">
-              <td>Gross Heat</td>
-              <td *ngIf="flueGasGrossHeat">{{flueGasGrossHeat| number:'2.0-0'}}</td>
-              <td *ngIf="!flueGasGrossHeat">&mdash; &mdash;</td>
-            </tr>
-            <tr *ngIf="showFlueGas">
-              <td>Flue Gas Losses</td>
-              <td *ngIf="flueGasSystemLosses">{{flueGasSystemLosses| number:'2.0-0'}} </td>
-              <td *ngIf="!flueGasSystemLosses">&mdash; &mdash;</td>
-            </tr>
-            <tr *ngIf="showEnInput1 || showEnInput2">
-              <td>Energy Input Heat Delivered</td>
-              <td *ngIf="energyInputHeatDelivered">{{energyInputHeatDelivered| number:'2.0-0'}}</td>
-              <td *ngIf="!energyInputHeatDelivered">&mdash; &mdash;</td>
-            </tr>
-            <tr *ngIf="showEnInput1">
-              <td>Energy Input Total Chemical Energy Delivered</td>
-              <td *ngIf="energyInputTotalChemEnergy">{{energyInputTotalChemEnergy| number:'2.0-0'}}</td>
-              <td *ngIf="!energyInputTotalChemEnergy">&mdash; &mdash;</td>
-            </tr>
-
-            <tr>
-              <td>Exothermic Heat from Process</td>
-              <td *ngIf="exothermicHeat">{{exothermicHeat| number:'2.0-0'}}</td>
-              <td *ngIf="!exothermicHeat">&mdash; &mdash;</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
     </div>
-  </div>
+    <!-- End .report-header -->
+
+
+    <div class="report-data">
+
+        <ul class="tabs primary hide-print">
+            <li (click)="setTab('energy-used')" [ngClass]="{'active': currentTab == 'energy-used'}">
+                <a>Energy Used</a>
+            </li><li (click)="setTab('executive-summary')" [ngClass]="{'active': currentTab == 'executive-summary'}">
+                <a>Executive Summary</a>
+            </li><li (click)="setTab('results-data')" [ngClass]="{'active': currentTab == 'results-data'}">
+                <a>Result Data</a>
+            </li><li (click)="setTab('report-graphs')" [ngClass]="{'active': currentTab == 'report-graphs'}">
+                <a>Report Graphs</a>
+            </li><li (click)="setTab('report-sankey')" [ngClass]="{'active': currentTab == 'report-sankey'}">
+                <a>Sankey</a>
+            </li>
+        </ul>
+        <div class="results" *ngIf="currentTab == 'energy-used'"  style="padding-top: 20px;">
+          <app-energy-used [phast]="phast" [settings]="settings"></app-energy-used>
+        </div>        
+        <div class="results" *ngIf="currentTab == 'executive-summary'"  style="padding-top: 20px;">
+          <app-executive-summary></app-executive-summary>
+        </div>
+        <div class="results" *ngIf="currentTab == 'results-data'"  style="padding-top: 20px;">
+          <app-results-data [phast]="phast" [settings]="settings" [assessment]="assessment" [inPhast]="true"></app-results-data>
+        </div>        
+        <div class="results" *ngIf="currentTab == 'report-graphs'"  style="padding-top: 20px;">
+          <app-report-graphs [phast]="phast" [settings]="settings"></app-report-graphs>
+        </div>
+        <div class="results" *ngIf="currentTab == 'report-sankey'"  style="padding-top: 20px;">
+          <app-report-sankey [phast]="phast" [settings]="settings" ></app-report-sankey>
+        </div>
+    </div>
+
 </div>

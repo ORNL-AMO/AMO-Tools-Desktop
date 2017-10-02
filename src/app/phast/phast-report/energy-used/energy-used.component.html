@@ -1,0 +1,64 @@
+<div class="output-summary">
+  <h5>Summary of Energy Sources Used</h5>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Energy Name</th>
+        <th>Energy Used</th>
+        <th>Cost per Unit</th>
+        <th>Units</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Natural Gas</td>
+        <td></td>
+        <td></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>Electricity</td>
+        <td></td>
+        <td></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>Steam</td>
+        <td></td>
+        <td></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5>Compare PHAST Calculations</h5>
+  <table class="table">
+    <thead>
+      <tr>
+        <th></th>
+        <th>Calculated By PHAST</th>
+        <th>Metered Comparison</th>
+        <th>Design Comparison</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Fuel Used</td>
+        <td>{{meteredResults.calculatedFuelEnergyUsed | number:'1.0-0'}}</td>
+        <td>{{meteredResults.meteredEnergyUsed | number:'1.0-0'}}</td>
+        <td>{{designedResults.designedEnergyUsed | number:'1.0-0'}}</td>
+      </tr>
+      <tr>
+        <td>Energy Intensity for Charge Materials</td>
+        <td>{{meteredResults.calculatedEnergyIntensity | number:'1.0-0'}}</td>
+        <td>{{meteredResults.meteredEnergyIntensity | number:'1.0-0'}}</td>
+        <td>{{designedResults.designedEnergyIntensity | number:'1.0-0'}}</td>
+      </tr>
+      <tr>
+        <td>Electricity Used</td>
+        <td>{{meteredResults.calculatedElectricityUsed | number:'1.0-0'}}</td>
+        <td>{{meteredResults.meteredElectricityUsed | number:'1.0-0'}}</td>
+        <td>{{designedResults.designedElectricityUsed | number:'1.0-0'}}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>

@@ -31,6 +31,9 @@ export class SankeyComponent implements OnInit {
   }
 
   ngOnInit() {
+  }
+
+  ngAfterViewInit(){
     if (this.phast.losses) {
       this.makeSankey();
     }
@@ -46,7 +49,7 @@ export class SankeyComponent implements OnInit {
 
   sankey(results: FuelResults) {
     // Remove  all Sankeys
-    d3.select(this.location).selectAll('svg').remove();
+    d3.select('#'+this.location).selectAll('svg').remove();
 
     //create node linkes
     let links = new Array<any>();
@@ -63,7 +66,7 @@ export class SankeyComponent implements OnInit {
     //extra push for output
     links.push({ source: i, target: i + 1 })
 
-    svg = d3.select(this.location).append('svg')
+    svg = d3.select('#'+this.location).append('svg')
       .call(() => {
         this.calcSankey(results.nodes);
       })
@@ -157,43 +160,43 @@ export class SankeyComponent implements OnInit {
           return d.name;
         }
       })
-      .style("font-size", "30px");
+      .style("font-size", "32px");
 
-    var nodes_units = svg.selectAll(".nodetext")
-      .data(results.nodes)
-      .enter()
-      .append("text")
-      .attr("text-anchor", "middle")
-      .attr("dx", function (d) {
-        if (d.input) {
-          return d.x - 70;
-        }
-        else if (d.usefulOutput) {
-          return d.x + (d.displaySize * .7) + 100;
-        }
-        else {
-          return d.x;
-        }
-      })
-      .attr("dy", function (d) {
-        if (d.input || d.usefulOutput) {
-          return d.y + (d.displaySize / 2) + 80;
-        }
-        else {
-          if (d.top) {
-            return d.y - 20;
-          }
-          else {
-            return d.y + 160;
-          }
-        }
-      })
-      .text(function (d) {
-        if (!d.inter) {
-          return d.units;
-        }
-      })
-      .style("font-size", "30px");
+    // var nodes_units = svg.selectAll(".nodetext")
+    //   .data(results.nodes)
+    //   .enter()
+    //   .append("text")
+    //   .attr("text-anchor", "middle")
+    //   .attr("dx", function (d) {
+    //     if (d.input) {
+    //       return d.x - 70;
+    //     }
+    //     else if (d.usefulOutput) {
+    //       return d.x + (d.displaySize * .7) + 100;
+    //     }
+    //     else {
+    //       return d.x;
+    //     }
+    //   })
+    //   .attr("dy", function (d) {
+    //     if (d.input || d.usefulOutput) {
+    //       return d.y + (d.displaySize / 2) + 80;
+    //     }
+    //     else {
+    //       if (d.top) {
+    //         return d.y - 20;
+    //       }
+    //       else {
+    //         return d.y + 160;
+    //       }
+    //     }
+    //   })
+    //   .text(function (d) {
+    //     if (!d.inter) {
+    //       return d.units;
+    //     }
+    //   })
+    //   .style("font-size", "30px");
 
     results.nodes.forEach((d, i) => {
       var node_val = d, i = i;
@@ -204,10 +207,10 @@ export class SankeyComponent implements OnInit {
               return node_val.x - 130;
             }
             else if (node_val.usefulOutput) {
-              return d.x + (d.displaySize * .7) + 50;
+              return d.x + (d.displaySize * .7) - 50;
             }
             else {
-              return node_val.x - 50;
+              return node_val.x - 75;
             }
           })
           .attr("y", function () {
@@ -223,9 +226,9 @@ export class SankeyComponent implements OnInit {
           })
           .text(function () {
             var format = d3.format(",.3f");
-            return format(node_val.value);
+            return format(node_val.value)+ ' ' + node_val.units;
           })
-          .style("font-size", "30px");
+          .style("font-size", "32px");
       }
     });
 
@@ -511,7 +514,7 @@ export class SankeyComponent implements OnInit {
           return d.x - 70;
         }
         else if (d.usefulOutput) {
-          return d.x + (d.displaySize * .7) + 100;
+          return d.x + (d.displaySize * .7);
         }
         else {
           return d.x;
@@ -536,7 +539,7 @@ export class SankeyComponent implements OnInit {
           return d.x - 70;
         }
         else if (d.usefulOutput) {
-          return d.x + (d.displaySize * .7) + 100;
+          return d.x + (d.displaySize * .7);
         }
         else {
           return d.x;
@@ -562,7 +565,7 @@ export class SankeyComponent implements OnInit {
     var furnace = svg.append("g")
       .append("polygon")
       .attr("points", function () {
-        return (580 - 100) + "," + ((height / 2) - 500) + "," + (580 - 150) + "," + ((height / 2) - 500) + "," + (580 - 150) + "," + ((height / 2) - 350) + "," + 250 + "," + ((height / 2) - 350) + "," + 250 + "," + ((height / 2) + 350) + "," + 2700 + "," + ((height / 2) + 350) + "," + 2700 + "," + ((height / 2) - 350) + "," + (580 + 150) + "," + ((height / 2) - 350) + "," + (580 + 150) + "," + ((height / 2) - 500) + "," + (580 + 100) + "," + ((height / 2) - 500) + "," + (580 + 100) + "," + ((height / 2) - 300) + "," + (2700 - 50) + "," + ((height / 2) - 300) + "," + (2700 - 50) + "," + ((height / 2) + 300) + "," + 300 + "," + ((height / 2) + 300) + "," + 300 + "," + ((height / 2) - 300) + "," + (580 - 100) + "," + ((height / 2) - 300) + "," + (580 - 100) + "," + ((height / 2) - 500);
+        return (580 - 100) + "," + ((height / 2) - 500) + "," + (580 - 150) + "," + ((height / 2) - 500) + "," + (580 - 150) + "," + ((height / 2) - 350) + "," + 250 + "," + ((height / 2) - 350) + "," + 250 + "," + ((height / 2) + 350) + "," + (width - 300) + "," + ((height / 2) + 350) + "," + (width - 300) + "," + ((height / 2) - 350) + "," + (580 + 150) + "," + ((height / 2) - 350) + "," + (580 + 150) + "," + ((height / 2) - 500) + "," + (580 + 100) + "," + ((height / 2) - 500) + "," + (580 + 100) + "," + ((height / 2) - 300) + "," + ((width - 300) - 50) + "," + ((height / 2) - 300) + "," + ((width - 300) - 50) + "," + ((height / 2) + 300) + "," + 300 + "," + ((height / 2) + 300) + "," + 300 + "," + ((height / 2) - 300) + "," + (580 - 100) + "," + ((height / 2) - 300) + "," + (580 - 100) + "," + ((height / 2) - 500);
       })
       .style("fill", "#bae4ce")
       .style("stroke", "black");
