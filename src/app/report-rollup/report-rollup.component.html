@@ -1,0 +1,55 @@
+<div #reportTemplate *ngIf="assessmentsGathered">
+
+
+    <!--<div class="report-cover">
+      <p class="report-notes">{{reportNotes}}</p>
+      <span class="report-logo">
+        <img src="assets/images/DOE-banner-color.png" class="doe-logo">
+      </span>
+      <span class="created-date">
+        <h4>{{createdDate}}</h4>
+      </span>
+    </div>-->
+
+
+    <div class="report-header">
+        <app-report-banner (emitCloseReport)="closeReport()" (emitExport)="exportToCsv()" (emitPrint)="print()">
+        </app-report-banner>
+        <app-report-summary id="reportSummary"></app-report-summary>
+    </div>
+    <!-- End .report-header -->
+
+
+    <div class="report-container">
+        <div class="sidebar hide-print">
+            <ul>
+                <li *ngFor="let assessment of _reportAssessments" [ngClass]="{'active': focusedAssessment.id == assessment.id}">
+                    <a (click)="selectAssessment(assessment)">{{assessment.name}}</a>
+                </li>
+            </ul>
+        </div>
+        <!-- End .sidebar -->
+        <div id="reportContainer" class="content">
+            <div *ngFor="let assessment of _reportAssessments" id="{{'assessment_'+assessment.id}}">
+                <app-psat-report *ngIf="assessment.psat" [assessment]="assessment" [inRollup]="true" (selectModification)="updateSummary($event)">
+                </app-psat-report>
+                <app-phast-report *ngIf="assessment.phast" [phast]="assessment.phast" [assessment]="assessment"></app-phast-report>
+            </div>
+        </div>
+        <!-- End .content -->
+    </div>
+    <!-- End .report-container -->
+</div>
+
+<div class="row" *ngIf="!assessmentsGathered">
+    <div class="col-md-10 mx-auto">
+        <div class="main-content" style="text-align: center; padding-top: 30%;">
+            <div class="spinner">
+                <div class="bounce1"></div>
+                <div class="bounce2"></div>
+                <div class="bounce3"></div>
+            </div>
+            <h1>Gathering Results</h1>
+        </div>
+    </div>
+</div>

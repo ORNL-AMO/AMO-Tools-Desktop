@@ -14,6 +14,7 @@ import { SuiteDbService } from '../suiteDb/suite-db.service';
 import { WindowRefService } from '../indexedDb/window-ref.service';
 import { ImportExportService } from '../shared/import-export/import-export.service';
 import { WallLossesSurface, GasLoadChargeMaterial, LiquidLoadChargeMaterial, SolidLoadChargeMaterial, AtmosphereSpecificHeat, FlueGasMaterial, SolidLiquidFlueGasMaterial } from '../shared/models/materials';
+import { ReportRollupService } from '../report-rollup/report-rollup.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -51,7 +52,8 @@ export class DashboardComponent implements OnInit {
   createAssessment: boolean = false;
 
   constructor(private indexedDbService: IndexedDbService, private formBuilder: FormBuilder, private assessmentService: AssessmentService, private toastyService: ToastyService,
-    private toastyConfig: ToastyConfig, private jsonToCsvService: JsonToCsvService, private suiteDbService: SuiteDbService, private importExportService: ImportExportService) {
+    private toastyConfig: ToastyConfig, private jsonToCsvService: JsonToCsvService, private suiteDbService: SuiteDbService, private importExportService: ImportExportService,
+    private reportRollupService: ReportRollupService) {
     this.toastyConfig.theme = 'bootstrap';
     this.toastyConfig.position = 'bottom-right';
     this.toastyConfig.limit = 1;
@@ -457,7 +459,8 @@ export class DashboardComponent implements OnInit {
   generateReport() {
     if (this.checkSelected()) {
       this.selectedItems = new Array();
-      this.getSelected(this.workingDirectory);
+      this.reportRollupService.getReportData(this.workingDirectory);
+      //this.getSelected(this.workingDirectory);
       this.dashboardView = 'detailed-report';
     } else {
       this.addToast('No items have been selected');

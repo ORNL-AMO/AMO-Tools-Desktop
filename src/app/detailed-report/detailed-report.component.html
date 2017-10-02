@@ -1,4 +1,4 @@
-<div #reportTemplate *ngIf="assessmentsGathered">
+<!--<div #reportTemplate *ngIf="assessmentsGathered">
 
 
     <div class="report-cover">
@@ -26,9 +26,9 @@
             [totalCost]="totalCost" 
             [totalEnergy]="totalEnergy">
         </app-report-summary>
-    </div><!-- End .report-header -->
+    </div> End .report-header -->
 
-
+<!--
     <div id="reportContainer" class="report-container">
         <div class="sidebar hide-print">
             <ul *ngIf="focusedAssessment">
@@ -38,8 +38,8 @@
                     <a (click)="selectAssessment(assessment)">{{assessment.name}}</a>
                 </li>
             </ul>
-        </div><!-- End .sidebar -->
-        <div class="content">
+        </div> End .sidebar -->
+        <!--<div class="content">
             <div *ngFor="let assessment of reportAssessments" id="{{'assessment_'+assessment.id}}">
                 <app-psat-report 
                     [assessment]="assessment" 
@@ -48,7 +48,7 @@
                 </app-psat-report>
             </div>
         </div><!-- End .content -->
-    </div><!-- End .report-container -->
+    <!--</div> End .report-container 
 
 
 </div>
@@ -64,7 +64,7 @@
       <h1>Gathering Results</h1>
     </div>
   </div>
-</div>
+</div>-->
 
 <!--print modal-->
 <!--<div bsModal #printModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="printModalLabel" aria-hidden="true"

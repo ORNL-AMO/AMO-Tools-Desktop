@@ -32,6 +32,7 @@ import { LandingScreenComponent } from '../landing-screen/landing-screen.compone
 import { AboutPageComponent } from '../about-page/about-page.component';
 import { TutorialsComponent } from '../tutorials/tutorials.component';
 import { ContactPageComponent } from '../contact-page/contact-page.component';
+import { ReportRollupModule } from '../report-rollup/report-rollup.module';
 @NgModule({
   declarations: [
     CoreComponent,
@@ -61,7 +62,8 @@ import { ContactPageComponent } from '../contact-page/contact-page.component';
     ToastyModule.forRoot(),
     JsonToCsvModule,
     SuiteDbModule,
-    ImportExportModule
+    ImportExportModule,
+    ReportRollupModule
   ],
   providers: [
     AssessmentService

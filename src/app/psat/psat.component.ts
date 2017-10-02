@@ -141,6 +141,7 @@ export class PsatComponent implements OnInit {
       results => {
         if (results.length != 0) {
           this.settings = results[0];
+          
         }
         else {
           //if no settings for directory check parent directory
