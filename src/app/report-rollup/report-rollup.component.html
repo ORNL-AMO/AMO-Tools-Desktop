@@ -1,4 +1,4 @@
-<div #reportTemplate>
+<div #reportTemplate *ngIf="assessmentsGathered">
 
 
     <!--<div class="report-cover">
@@ -20,7 +20,7 @@
     <!-- End .report-header -->
 
 
-    <div class="report-container" *ngIf="assessmentsGathered">
+    <div class="report-container">
         <div class="sidebar hide-print">
             <ul>
                 <li *ngFor="let assessment of _reportAssessments" [ngClass]="{'active': focusedAssessment.id == assessment.id}">

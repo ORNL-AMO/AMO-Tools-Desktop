@@ -50,54 +50,6 @@ export class ReportRollupService {
         this.getChildDirectories(subDir);
       }
     })
-
-    //  if (directory.assessments) {
-    //     directory.assessments.forEach(
-    //       assessment => {
-    //         let assessmentDir;
-    //         if (directory.id != workingDirectoryId) {
-    //           assessmentDir = directory;
-    //         }
-    //         if (assessment.selected) {
-    //           this.selectedItems.push({ assessment: assessment, directory: assessmentDir });
-    //         } else if (directory.id != workingDirectoryId) {
-    //           this.selectedItems.push({ assessment: assessment, directory: assessmentDir });
-    //         }
-    //       }
-    //     )
-    //   } else {
-    //     //get assessments of directory if non passed in
-    //     this.indexedDbService.getDirectoryAssessments(directory.id).then(
-    //       resultAssessments => {
-    //         if (resultAssessments.length != 0) {
-    //           resultAssessments.forEach(assessment => { this.selectedItems.push({ assessment: assessment, directory: dir }) })
-    //         }
-    //       }
-    //     )
-    //   }
-
-    //   //process selected sub directories of working directory
-    //   if (directory.id == workingDirectoryId) {
-    //     if (directory.subDirectory) {
-    //       directory.subDirectory.forEach(
-    //         subDir => {
-    //           if (subDir.selected) {
-    //             this.getSelected(subDir);
-    //           }
-    //         }
-    //       )
-    //     }
-    //   }
-    //   //get subdirectories of selected non working directories
-    //   else {
-    //     this.indexedDbService.getChildrenDirectories(directory.id).then(
-    //       resultDir => {
-    //         if (resultDir.length != 0) {
-    //           resultDir.forEach(dir => this.getSelected(dir));
-    //         }
-    //       }
-    //     )
-    //   }
   }
 
   getChildDirectories(subDir: Directory) {

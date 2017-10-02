@@ -113,5 +113,10 @@ export class ReportRollupComponent implements OnInit {
     })
     return closestAssessment;
   }
-
+  selectAssessment(assessment: Assessment) {
+     let doc = this.windowRefService.getDoc();
+     let content = doc.getElementById('assessment_'+assessment.id);
+     this.focusedAssessment = assessment;
+     content.scrollIntoView();
+  }
 }
