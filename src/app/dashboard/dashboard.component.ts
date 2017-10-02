@@ -459,7 +459,8 @@ export class DashboardComponent implements OnInit {
   generateReport() {
     if (this.checkSelected()) {
       this.selectedItems = new Array();
-      this.getSelected(this.workingDirectory);
+      this.reportRollupService.getReportData(this.workingDirectory);
+      //this.getSelected(this.workingDirectory);
       this.dashboardView = 'detailed-report';
     } else {
       this.addToast('No items have been selected');

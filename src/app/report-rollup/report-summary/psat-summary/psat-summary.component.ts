@@ -19,7 +19,7 @@ export class PsatSummaryComponent implements OnInit {
   constructor(private reportRollupService: ReportRollupService) { }
 
   ngOnInit() {
-    this.reportRollupService.psats.subscribe(val => {
+    this.reportRollupService.psatAssessments.subscribe(val => {
       this.numPsats = val.length
     })
     this.pumpSavingsPotential = 0;

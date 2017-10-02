@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, HostListener, ViewChild, TemplateRef } from '@angular/core';
 import { Assessment } from '../shared/models/assessment';
 import { ReportRollupService } from './report-rollup.service';
 import { WindowRefService } from '../indexedDb/window-ref.service';
@@ -8,27 +8,32 @@ import { WindowRefService } from '../indexedDb/window-ref.service';
   styleUrls: ['./report-rollup.component.css']
 })
 export class ReportRollupComponent implements OnInit {
-  @Input()
-  selectedItems: Array<Assessment>;
+
   @Output('emitCloseReport')
   emitCloseReport = new EventEmitter<boolean>();
   
+  @HostListener('window:scroll', ['$event']) onScrollEvent($event) {
+    this.checkVisibleSummary();
+    this.checkActiveAssessment();
+  }
+  @ViewChild('reportTemplate') reportTemplate: TemplateRef<any>;
+
+  _reportAssessments: Array<Assessment>;
+  focusedAssessment: Assessment;
+
+  assessmentsGathered: boolean = false;
+  isSummaryVisible: boolean = true;
   constructor(private reportRollupService: ReportRollupService,
     private windowRefService: WindowRefService) { }
 
   ngOnInit() {
-    let phastItems = new Array<Assessment>();
-    let psatItems = new Array<Assessment>();
-    console.log(this.selectedItems);
-    this.selectedItems.forEach(item => {
-      if (item.psat) {
-        psatItems.push(item);
-        this.reportRollupService.psats.next(psatItems);
-      } else if (item.phast) {
-        phastItems.push(item);
-        this.reportRollupService.phasts.next(phastItems);
-      }
-    });
+    this.reportRollupService.reportAssessments.subscribe(assesments => {
+      this._reportAssessments = assesments;
+      this.focusedAssessment = this._reportAssessments[0];
+    })
+    setTimeout(() => {
+      this.assessmentsGathered = true;
+    }, 2000)
   }
 
   exportToCsv() {
@@ -54,6 +59,59 @@ export class ReportRollupComponent implements OnInit {
 
   closeReport() {
     this.emitCloseReport.emit(true);
+  }
+
+    checkVisibleSummary() {
+    let doc = this.windowRefService.getDoc();
+    let summaryDiv = doc.getElementById("reportSummary");
+    let window = this.windowRefService.nativeWindow;
+    let y = summaryDiv.offsetTop;
+    let height = summaryDiv.offsetHeight;
+    let maxHeight = y + height;
+    this.isSummaryVisible = (y < (window.pageYOffset + window.innerHeight)) && (maxHeight >= window.pageYOffset);
+  }
+
+  checkActiveAssessment() {
+    let doc = this.windowRefService.getDoc();
+    let window = this.windowRefService.nativeWindow;
+    let container = doc.getElementById('reportContainer');
+    let scrollAmount = (window.pageYOffset !== undefined) ? window.pageYOffset : (doc.documentElement || doc.body.parentNode || doc.body).scrollTop;
+    let activeSet: boolean = false;
+    let isFirstElement: boolean = true;
+    let firstAssessment = doc.getElementById('assessment_'+this._reportAssessments[0].id);
+    if (scrollAmount < (firstAssessment.clientHeight - 200)) {
+      this.focusedAssessment = this._reportAssessments[0];
+    } else {
+      let check = this.checkDistance(this._reportAssessments, scrollAmount);
+      if (check) {
+        this.focusedAssessment = check;
+      }
+    }
+  }
+
+  checkDistance(assessments: Assessment[], scrollAmount: number) {
+    let doc = this.windowRefService.getDoc();
+    let window = this.windowRefService.nativeWindow;
+    let activeSet: boolean = false;
+    let isFirstElement: boolean = true;
+    let closestAssessment;
+    assessments.forEach(assessment => {
+      if (!isFirstElement) {
+        if (!activeSet) {
+          let assessmentDiv = doc.getElementById('assessment_'+assessment.id);
+          if (assessmentDiv) {
+            let distanceScrolled = Math.abs(scrollAmount - assessmentDiv.offsetTop);
+            let fromBottom = Math.abs(scrollAmount - (assessmentDiv.offsetTop + assessmentDiv.clientHeight));
+            if (distanceScrolled > 0 && distanceScrolled < 200 || fromBottom > 0 && fromBottom < 200) {
+              closestAssessment = assessment;
+            }
+          }
+        }
+      } else {
+        isFirstElement = false;
+      }
+    })
+    return closestAssessment;
   }
 
 }
