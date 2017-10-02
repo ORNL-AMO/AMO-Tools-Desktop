@@ -8,7 +8,11 @@ import { CashFlowForm, CashFlowResults } from './cash-flow';
 export class CashFlowComponent implements OnInit {
 
   cashFlowForm: CashFlowForm;
-  cashFlowResults: CashFlowResults;
+  cashFlowResults: CashFlowResults = {
+    benefits: 0,
+    cost: 0,
+    results: 0
+  };
 
   tabSelect: string = 'diagram';
   currentField: string;
@@ -35,7 +39,7 @@ export class CashFlowComponent implements OnInit {
   }
 
 
-  calculate(){
+  calculate() {
     // cashFlowForm object has data from form
     // console.log(this.cashFlowForm.lifeYears);
     // console.log(this.cashFlowForm.energySavings);
