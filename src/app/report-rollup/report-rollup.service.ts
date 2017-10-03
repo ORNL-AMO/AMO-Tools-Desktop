@@ -110,14 +110,14 @@ export class ReportRollupService {
     psatArr.forEach(val => {
       if (val.psat.setupDone) {
         this.indexedDbService.getAssessmentSettings(val.id).then(settings => {
-          let baselineResults = this.psatService.resultsExisting(val.psat.inputs, settings[0]);
+          let baselineResults = this.psatService.resultsExisting(JSON.parse(JSON.stringify(val.psat.inputs)), settings[0]);
           let modResultsArr = new Array<PsatOutputs>();
           val.psat.modifications.forEach(mod => {
             let tmpResults;
             if (mod.psat.inputs.optimize_calculation) {
-              tmpResults = this.psatService.resultsOptimal(mod.psat.inputs, settings[0]);
+              tmpResults = this.psatService.resultsOptimal(JSON.parse(JSON.stringify(mod.psat.inputs)), settings[0]);
             } else {
-              tmpResults = this.psatService.resultsModified(mod.psat.inputs, settings[0], baselineResults.pump_efficiency);
+              tmpResults = this.psatService.resultsModified(JSON.parse(JSON.stringify(mod.psat.inputs)), settings[0], baselineResults.pump_efficiency);
             }
             modResultsArr.push(tmpResults);
           })
@@ -133,11 +133,11 @@ export class ReportRollupService {
     selectedPsats.forEach(val => {
       this.indexedDbService.getAssessmentSettings(val.assessmentId).then(settings => {
         let modificationResults;
-        let baselineResults = this.psatService.resultsExisting(val.baseline.inputs, settings[0]);
+        let baselineResults = this.psatService.resultsExisting(JSON.parse(JSON.stringify(val.baseline.inputs)), settings[0]);
         if (val.modification.inputs.optimize_calculation) {
-          modificationResults = this.psatService.resultsOptimal(val.modification.inputs, settings[0]);
+          modificationResults = this.psatService.resultsOptimal(JSON.parse(JSON.stringify(val.modification.inputs)), settings[0]);
         } else {
-          modificationResults = this.psatService.resultsModified(val.modification.inputs, settings[0], baselineResults.pump_efficiency);
+          modificationResults = this.psatService.resultsModified(JSON.parse(JSON.stringify(val.modification.inputs)), settings[0], baselineResults.pump_efficiency);
         }
         tmpResultsArr.push({ baselineResults: baselineResults, modificationResults: modificationResults, assessmentId: val.assessmentId });
         this.psatResults.next(tmpResultsArr);
