@@ -27,7 +27,6 @@ import { PumpFluidComponent } from './pump-fluid/pump-fluid.component';
 import { MotorComponent } from './motor/motor.component';
 import { FieldDataComponent } from './field-data/field-data.component';
 import { ModifyConditionsComponent } from './modify-conditions/modify-conditions.component';
-import { SettingsPanelComponent } from './settings-panel/settings-panel.component';
 
 import { PsatReportComponent } from './psat-report/psat-report.component';
 import { InputSummaryComponent } from './psat-report/input-summary/input-summary.component';
@@ -58,7 +57,6 @@ import { PsatDiagramComponent } from './psat-diagram/psat-diagram.component';
     MotorComponent,
     FieldDataComponent,
     ModifyConditionsComponent,
-    SettingsPanelComponent,
     PsatReportComponent,
     InputSummaryComponent,
     OutputSummaryComponent,

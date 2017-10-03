@@ -9,7 +9,7 @@ import { Settings } from '../shared/models/settings';
 import { PHAST } from '../shared/models/phast/phast';
 
 import { ToastyService, ToastyConfig, ToastOptions, ToastData } from 'ng2-toasty';
-
+import { SettingsService } from '../settings/settings.service';
 @Component({
   selector: 'app-phast',
   templateUrl: './phast.component.html',
@@ -44,7 +44,8 @@ export class PhastComponent implements OnInit {
     private indexedDbService: IndexedDbService,
     private activatedRoute: ActivatedRoute,
     private toastyService: ToastyService,
-    private toastyConfig: ToastyConfig) {
+    private toastyConfig: ToastyConfig,
+    private settingsService: SettingsService) {
     this.toastyConfig.theme = 'bootstrap';
     this.toastyConfig.position = 'bottom-right';
     // this.toastyConfig.limit = 1;
@@ -65,12 +66,12 @@ export class PhastComponent implements OnInit {
         this.phastService.mainTab.next(tmpTab);
       }
       this.phastService.mainTab.subscribe(val => {
-        this.mainTab = val; 
-        if(this.mainTab == 'assessment'){
-          if(this.currentTab != 'losses'){
+        this.mainTab = val;
+        if (this.mainTab == 'assessment') {
+          if (this.currentTab != 'losses') {
             this.phastService.secondaryTab.next('losses');
           }
-        }else if(this.mainTab == 'system-setup'){
+        } else if (this.mainTab == 'system-setup') {
           this.phastService.secondaryTab.next('system-basics');
         }
       })
@@ -103,7 +104,17 @@ export class PhastComponent implements OnInit {
     this.indexedDbService.getDirectorySettings(parentId).then(
       results => {
         if (results.length != 0) {
-          this.settings = results[0];
+          let settingsForm = this.settingsService.getFormFromSettings(results[0]);
+          let tmpSettings: Settings = this.settingsService.getSettingsFromForm(settingsForm);
+          tmpSettings.createdDate = new Date();
+          tmpSettings.modifiedDate = new Date();
+          tmpSettings.assessmentId = this.assessment.id;
+          //create settings for assessment
+          this.indexedDbService.addSettings(tmpSettings).then(
+            results => {
+              this.addToast('Settings Saved');
+              this.getSettings();
+            })
         }
         else {
           //if no settings for directory check parent directory
@@ -133,13 +144,13 @@ export class PhastComponent implements OnInit {
     })
   }
 
-  goToReport(){
+  goToReport() {
     this.phastService.mainTab.next('report');
   }
 
   continue() {
     this.tabIndex++;
-    if(this.tabs[this.tabIndex] == 'losses'){
+    if (this.tabs[this.tabIndex] == 'losses') {
       this.phastService.mainTab.next('assessment');
     }
     this.phastService.secondaryTab.next(this.tabs[this.tabIndex]);
