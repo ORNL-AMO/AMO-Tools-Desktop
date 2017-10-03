@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { PhastInputs, PHAST } from '../../shared/models/phast/phast';
+import { PHAST } from '../../shared/models/phast/phast';
 import { AuxEquipment } from '../../shared/models/phast/auxEquipment';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
 @Injectable()
