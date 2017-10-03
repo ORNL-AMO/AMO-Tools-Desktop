@@ -24,13 +24,14 @@ export class PsatSummaryComponent implements OnInit {
 
   ngOnInit() {
     this.reportRollupService.psatAssessments.subscribe(val => {
+      this.numPsats = val.length
       if (val.length != 0) {
         this.reportRollupService.initResultsArr(val);
       }
     })
 
     this.reportRollupService.allPsatResults.subscribe(val => {
-      if(val.length != 0){
+      if (val.length != 0) {
         this.reportRollupService.initPsatCompare(val);
       }
     })
@@ -41,7 +42,6 @@ export class PsatSummaryComponent implements OnInit {
     })
 
     this.reportRollupService.psatResults.subscribe(val => {
-      this.numPsats = val.length
       if (val.length != 0) {
         this.calcPsatSums(val);
       }

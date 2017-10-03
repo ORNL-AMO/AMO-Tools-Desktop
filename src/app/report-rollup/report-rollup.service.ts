@@ -35,10 +35,8 @@ export class ReportRollupService {
     this.assessmentsArray.push(assessment);
     this.reportAssessments.next(this.assessmentsArray);
     if (assessment.psat) {
-      if (assessment.psat.setupDone) {
-        this.psatArray.push(assessment);
-        this.psatAssessments.next(this.psatArray);
-      }
+      this.psatArray.push(assessment);
+      this.psatAssessments.next(this.psatArray);
     } else if (assessment.phast) {
       this.phastArray.push(assessment);
       this.phastAssessments.next(this.phastArray);
@@ -110,21 +108,23 @@ export class ReportRollupService {
   initResultsArr(psatArr: Array<Assessment>) {
     let tmpResultsArr = new Array<AllResultsData>();
     psatArr.forEach(val => {
-      this.indexedDbService.getAssessmentSettings(val.id).then(settings => {
-        let baselineResults = this.psatService.resultsExisting(val.psat.inputs, settings[0]);
-        let modResultsArr = new Array<PsatOutputs>();
-        val.psat.modifications.forEach(mod => {
-          let tmpResults;
-          if (mod.psat.inputs.optimize_calculation) {
-            tmpResults = this.psatService.resultsOptimal(mod.psat.inputs, settings[0]);
-          } else {
-            tmpResults = this.psatService.resultsModified(mod.psat.inputs, settings[0], baselineResults.pump_efficiency);
-          }
-          modResultsArr.push(tmpResults);
+      if (val.psat.setupDone) {
+        this.indexedDbService.getAssessmentSettings(val.id).then(settings => {
+          let baselineResults = this.psatService.resultsExisting(val.psat.inputs, settings[0]);
+          let modResultsArr = new Array<PsatOutputs>();
+          val.psat.modifications.forEach(mod => {
+            let tmpResults;
+            if (mod.psat.inputs.optimize_calculation) {
+              tmpResults = this.psatService.resultsOptimal(mod.psat.inputs, settings[0]);
+            } else {
+              tmpResults = this.psatService.resultsModified(mod.psat.inputs, settings[0], baselineResults.pump_efficiency);
+            }
+            modResultsArr.push(tmpResults);
+          })
+          tmpResultsArr.push({ baselineResults: baselineResults, modificationResults: modResultsArr, assessmentId: val.id });
+          this.allPsatResults.next(tmpResultsArr);
         })
-        tmpResultsArr.push({ baselineResults: baselineResults, modificationResults: modResultsArr, assessmentId: val.id });
-        this.allPsatResults.next(tmpResultsArr);
-      })
+      }
     })
   }
 
