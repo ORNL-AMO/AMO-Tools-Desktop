@@ -11,7 +11,8 @@ export class CashFlowComponent implements OnInit {
   cashFlowResults: CashFlowResults = {
     benefits: 0,
     cost: 0,
-    results: 0
+    results: 0,
+    payback: 0
   };
 
   tabSelect: string = 'diagram';
@@ -40,19 +41,13 @@ export class CashFlowComponent implements OnInit {
 
 
   calculate() {
-    // cashFlowForm object has data from form
-    // console.log(this.cashFlowForm.lifeYears);
-    // console.log(this.cashFlowForm.energySavings);
-    // let test = this.cashFlowForm.lifeYears + this.cashFlowForm.energySavings;
-    // console.log(test);
-    this.cashFlowResults.benefits = this.cashFlowForm.energySavings + this.cashFlowForm.salvageInput;
-    console.log(this.cashFlowResults.benefits);
-    this.cashFlowResults.cost = this.cashFlowForm.installationCost + this.cashFlowForm.operationCost + this.cashFlowForm.fuelCost + this.cashFlowForm.junkCost;
-    console.log(this.cashFlowResults.cost);
-    this.cashFlowResults.results = this.cashFlowResults.benefits / this.cashFlowResults.cost;
+  // Benefits/Cost Ratio
+    this.cashFlowResults.results = ((this.cashFlowForm.energySavings * this.cashFlowForm.lifeYears) + this.cashFlowForm.salvageInput) /
+    (((this.cashFlowForm.installationCost + this.cashFlowForm.junkCost) + (this.cashFlowForm.operationCost + this.cashFlowForm.fuelCost)) * this.cashFlowForm.lifeYears);
     console.log(this.cashFlowResults.results);
+  // Payback
+    this.cashFlowResults.payback = (this.cashFlowForm.installationCost * 12) / this.cashFlowForm.energySavings;
 
-    // I would create a results object for the calculations and then use it as an input for the cash-flow-diagram
   }
 
 

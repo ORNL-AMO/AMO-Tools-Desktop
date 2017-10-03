@@ -11,5 +11,6 @@ export interface CashFlowForm {
 export interface CashFlowResults {
   benefits?: number,
   cost?: number,
-  results?: number
+  results?: number,
+  payback?: number
 }
