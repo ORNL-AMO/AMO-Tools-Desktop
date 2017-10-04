@@ -101,29 +101,15 @@ export class SystemBasicsComponent implements OnInit {
       }
       this.updateAssessment.emit(true);
     }
+    //update settings
     this.newSettings.assessmentId = this.assessment.id;
-    //assessment has existing settings
-    if (this.isAssessmentSettings) {
-      this.newSettings.id = this.settings.id;
-      this.indexedDbService.putSettings(this.newSettings).then(
-        results => {
-          //get updated settings
-          this.updateSettings.emit(true);
-        }
-      )
-    }
-    //create settings for assessment
-    else {
-      this.newSettings.createdDate = new Date();
-      this.newSettings.modifiedDate = new Date();
-      this.indexedDbService.addSettings(this.newSettings).then(
-        results => {
-          this.isAssessmentSettings = true;
-          //get updated settings
-          this.updateSettings.emit(true);
-        }
-      )
-    }
+    this.newSettings.id = this.settings.id;
+    this.indexedDbService.putSettings(this.newSettings).then(
+      results => {
+        //get updated settings
+        this.updateSettings.emit(true);
+      }
+    )
     this.hideSettingsModal();
   }
 

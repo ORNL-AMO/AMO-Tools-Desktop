@@ -12,6 +12,8 @@ import { Settings } from '../shared/models/settings';
 import { ToastyService, ToastyConfig, ToastOptions, ToastData } from 'ng2-toasty';
 import { JsonToCsvService } from '../shared/json-to-csv/json-to-csv.service';
 import { CompareService } from './compare.service';
+import { SettingsService } from '../settings/settings.service';
+
 @Component({
   selector: 'app-psat',
   templateUrl: './psat.component.html',
@@ -24,18 +26,6 @@ export class PsatComponent implements OnInit {
   isPanelOpen: boolean = true;
   currentTab: string = 'system-setup';
 
-  //TODO update tabs
-  tabs: Array<string> = [
-    'system-setup',
-    'explore-opportunities',
-    'modify-conditions',
-    'system-curve',
-    'achievable-efficiency',
-    'motor-performance',
-    'nema-energy-efficiency',
-    'specific-speed',
-
-  ]
   tabIndex: number = 0;
 
   subTabs: Array<string> = [
@@ -72,7 +62,8 @@ export class PsatComponent implements OnInit {
     private toastyService: ToastyService,
     private toastyConfig: ToastyConfig,
     private jsonToCsvService: JsonToCsvService,
-    private compareService: CompareService) {
+    private compareService: CompareService,
+    private settingsService: SettingsService) {
 
     this.toastyConfig.theme = 'bootstrap';
     this.toastyConfig.position = 'bottom-right';
@@ -140,7 +131,17 @@ export class PsatComponent implements OnInit {
     this.indexedDbService.getDirectorySettings(parentId).then(
       results => {
         if (results.length != 0) {
-          this.settings = results[0];
+          let settingsForm = this.settingsService.getFormFromSettings(results[0]);
+          let tmpSettings: Settings = this.settingsService.getSettingsFromForm(settingsForm);
+          tmpSettings.createdDate = new Date();
+          tmpSettings.modifiedDate = new Date();
+          tmpSettings.assessmentId = this.assessment.id;
+          //create settings for assessment
+          this.indexedDbService.addSettings(tmpSettings).then(
+            results => {
+              this.addToast('Settings Saved');
+              this.getSettings();
+            })
         }
         else {
           //if no settings for directory check parent directory
@@ -150,8 +151,8 @@ export class PsatComponent implements OnInit {
             }
           )
         }
-      }
-    )
+      })
+
   }
 
   checkPumpFluid() {

@@ -74,7 +74,7 @@
 </div>
 
 <div class="report" *ngIf="dashboardView == 'detailed-report'">
-    <app-detailed-report [selectedItems]="selectedItems" (emitCloseReport)="closeReport()"></app-detailed-report>
+    <app-report-rollup (emitCloseReport)="closeReport()"></app-report-rollup>
 </div>
 
 <div bsModal #deleteModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true"
