@@ -10,6 +10,8 @@ import { PHAST } from '../shared/models/phast/phast';
 
 import { ToastyService, ToastyConfig, ToastOptions, ToastData } from 'ng2-toasty';
 import { SettingsService } from '../settings/settings.service';
+import { PhastResultsService } from './phast-results.service';
+
 @Component({
   selector: 'app-phast',
   templateUrl: './phast.component.html',
@@ -45,7 +47,8 @@ export class PhastComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private toastyService: ToastyService,
     private toastyConfig: ToastyConfig,
-    private settingsService: SettingsService) {
+    private settingsService: SettingsService,
+    private phastResultsService: PhastResultsService) {
     this.toastyConfig.theme = 'bootstrap';
     this.toastyConfig.position = 'bottom-right';
     // this.toastyConfig.limit = 1;
@@ -174,11 +177,74 @@ export class PhastComponent implements OnInit {
   }
 
   saveDb() {
+    this._phast.setupDone = this.checkSetupDone(this.settings);
     this.assessment.phast = (JSON.parse(JSON.stringify(this._phast)));
     this.indexedDbService.putAssessment(this.assessment).then(
       results => { this.addToast('Assessment Saved') }
     )
   }
+
+  checkSetupDone(settings: Settings) {
+    let isDone, chargeDone, grossHeat = false;
+    if (this._phast.losses) {
+      if (this._phast.losses.chargeMaterials) {
+        if (this._phast.losses.chargeMaterials.length != 0) {
+          let test = this.phastService.sumChargeMaterials(this._phast.losses.chargeMaterials, this.settings);
+          if (test != 0) {
+            chargeDone = true;
+          }
+        }
+      }
+    }
+    let categories = this.phastResultsService.getResultCategories(this.settings);
+    if (categories.showEnInput1) {
+      if (this._phast.losses.energyInputEAF) {
+        if (this._phast.losses.energyInputEAF.length != 0) {
+          let test = this.phastService.sumEnergyInputEAF(this._phast.losses.energyInputEAF, this.settings);
+          if (test != 0) {
+            grossHeat = true;
+          }
+        }
+      }
+    }
+    else if (categories.showEnInput2) {
+      if (this._phast.losses.energyInputExhaustGasLoss) {
+        if (this._phast.losses.energyInputExhaustGasLoss.length != 0) {
+          let test = this.phastService.sumEnergyInputExhaustGas(this._phast.losses.energyInputExhaustGasLoss, this.settings);
+          if (test != 0) {
+            grossHeat = true;
+          }
+        }
+      }
+    }
+    else if (categories.showFlueGas) {
+      if (this._phast.losses.flueGasLosses) {
+        if (this._phast.losses.flueGasLosses.length != 0) {
+          let flueGas = this._phast.losses.flueGasLosses[0];
+          if (flueGas.flueGasType == 'By Mass') {
+            let test = this.phastService.flueGasByMass(flueGas.flueGasByMass, this.settings);
+            if (test != 0) {
+              grossHeat = true;
+            }
+          } else if (flueGas.flueGasType == 'By Volume') {
+            let test = this.phastService.flueGasByVolume(flueGas.flueGasByVolume, this.settings);
+            if (test != 0) {
+              grossHeat = true;
+            }
+          }
+        }
+      }
+    }
+    else if (categories.showSystemEff) {
+      if (this._phast.systemEfficiency) {
+        grossHeat = true;
+      }
+    }
+
+    isDone = (grossHeat && chargeDone);
+    return isDone;
+  }
+
 
   exportData() {
     //TODO: Logic for exporting data

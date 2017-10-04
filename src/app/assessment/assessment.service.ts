@@ -13,10 +13,10 @@ export class AssessmentService {
   showLandingScreen: boolean = true;
 
   createAssessment: BehaviorSubject<boolean>;
- // checkForUpdates: BehaviorSubject<boolean>;
-  constructor() { 
+  // checkForUpdates: BehaviorSubject<boolean>;
+  constructor() {
     this.createAssessment = new BehaviorSubject<boolean>(null);
-   // this.checkForUpdates = new BehaviorSubject<boolean>(null);
+    // this.checkForUpdates = new BehaviorSubject<boolean>(null);
   }
 
   getNewAssessment(assessmentType: string): Assessment {
@@ -65,7 +65,18 @@ export class AssessmentService {
   getNewPhast(): PHAST {
     let newPhast: PHAST = {
       name: null,
-      systemEfficiency: 90
+      systemEfficiency: 90,
+      operatingHours: {
+        weeksPerYear: 52,
+        daysPerWeek: 7,
+        shiftsPerDay: 3,
+        hoursPerShift: 8,
+      },
+      operatingCosts: {
+        fuelCost: 8.00,
+        steamCost: 10.00,
+        electricityCost: .080
+      },
     }
     return newPhast;
   }
@@ -82,11 +93,11 @@ export class AssessmentService {
     return this.subTab;
   }
 
-  getLandingScreen(){
+  getLandingScreen() {
     return this.showLandingScreen;
   }
 
-  setLandingScreen(bool: boolean){
+  setLandingScreen(bool: boolean) {
     this.showLandingScreen = bool;
   }
 

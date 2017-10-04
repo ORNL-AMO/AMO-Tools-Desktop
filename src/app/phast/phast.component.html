@@ -1,7 +1,5 @@
-<app-phast-banner [assessment]="assessment"></app-phast-banner>
-
 <div *ngIf="assessment && settings">
-
+  <app-phast-banner [assessment]="assessment"></app-phast-banner>
   <div *ngIf="mainTab == 'system-setup'">
     <nav>
       <ul class="tabs subtabs progress-tabs">
