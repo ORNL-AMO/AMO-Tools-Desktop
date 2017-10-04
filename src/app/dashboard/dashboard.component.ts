@@ -241,7 +241,7 @@ export class DashboardComponent implements OnInit {
     let tmpAssessment = MockDirectory.assessments[0];
     tmpAssessment.directoryId = 1;
     this.indexedDbService.addAssessment(tmpAssessment).then(assessmentId => {
-
+      
     })
 
     tmpAssessment = MockDirectory.assessments[1];
@@ -270,6 +270,11 @@ export class DashboardComponent implements OnInit {
       results => {
       }
     )
+
+    tmpSettings.assessmentId = 1;
+    this.indexedDbService.addSettings(tmpSettings).then(results => {});
+    tmpSettings.assessmentId = 2;
+    this.indexedDbService.addSettings(tmpSettings).then(results => {});
   }
 
   createDirectory() {

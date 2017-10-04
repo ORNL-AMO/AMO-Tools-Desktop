@@ -25,10 +25,12 @@ export class ExecutiveSummaryComponent implements OnInit {
   ngOnInit() {
     this.baseline = this.getSummary(this.phast, false);
     this.modifications = new Array<ExecutiveSummary>();
-    this.phast.modifications.forEach(mod => {
-      let tmpSummary = this.getSummary(mod.phast, true);
-      this.modifications.push(tmpSummary);
-    })
+    if (this.phast.modifications) {
+      this.phast.modifications.forEach(mod => {
+        let tmpSummary = this.getSummary(mod.phast, true);
+        this.modifications.push(tmpSummary);
+      })
+    }
   }
 
   getSummary(phast: PHAST, isMod: boolean): ExecutiveSummary {

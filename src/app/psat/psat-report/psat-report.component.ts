@@ -52,6 +52,8 @@ export class PsatReportComponent implements OnInit {
 
     if (this.psat.modifications) {
       this.numMods = this.psat.modifications.length;
+    }else{
+      this.psat.modifications = new Array();
     }
   }
 
