@@ -130,3 +130,14 @@ export interface ShowResultsCategories {
   showEnInput2: boolean;
   showExGas: boolean;
 }
+
+export interface ExecutiveSummary {
+  percentSavings?: number,
+  annualEnergyUsed?: number,
+  energyPerMass?: number,
+  annualEnergySavings?: number,
+  annualCost?: number,
+  annualCostSavings?: number,
+  implementationCosts?: number,
+  paybackPeriod?: number
+}

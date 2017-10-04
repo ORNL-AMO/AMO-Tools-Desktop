@@ -37,7 +37,6 @@ export class EnergyUsedComponent implements OnInit {
   constructor(private designedEnergyService: DesignedEnergyService, private meteredEnergyService: MeteredEnergyService) { }
 
   ngOnInit() {
-
     if (this.settings.energySourceType == 'Steam') {
       if (this.phast.meteredEnergy) {
         this.meteredResults = this.meteredEnergyService.meteredSteam(this.phast.meteredEnergy.meteredEnergySteam, this.phast, this.settings);

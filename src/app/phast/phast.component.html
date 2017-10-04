@@ -70,7 +70,8 @@
       <button class="btn btn-secondary" (click)="save()">Save</button>
       <!--<button class="btn btn-secondary" *ngIf="currentTab >= 3" (click)="exportData()">Export to CSV...</button>-->
       <button class="btn btn-secondary" *ngIf="subTab == 'system-basics' && mainTab == 'system-setup'" (click)="changeSubTab('operating-hours')">Continue</button>
-      <button class="btn btn-secondary" *ngIf="subTab == 'operating-hours' && mainTab == 'system-setup'" (click)="continue()">Continue</button>
+      <button class="btn btn-secondary" *ngIf="subTab == 'operating-hours' && mainTab == 'system-setup'" (click)="changeSubTab('energy-costs')">Continue</button>
+      <button class="btn btn-secondary" *ngIf="subTab == 'energy-costs' && mainTab == 'system-setup'" (click)="continue()">Continue</button>
 
       <button class="btn btn-primary" *ngIf="mainTab == 'assessment'" (click)="goToReport()">View Report</button>
 
