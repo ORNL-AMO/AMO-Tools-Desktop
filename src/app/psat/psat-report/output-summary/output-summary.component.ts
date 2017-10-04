@@ -4,6 +4,8 @@ import { Settings } from '../../../shared/models/settings';
 import { Assessment } from '../../../shared/models/assessment';
 import { PsatService } from '../../psat.service';
 import * as _ from 'lodash';
+import { ReportRollupService } from '../../../report-rollup/report-rollup.service';
+
 @Component({
   selector: 'app-output-summary',
   templateUrl: './output-summary.component.html',
@@ -25,7 +27,7 @@ export class OutputSummaryComponent implements OnInit {
   titlePlacement: string;
   maxAnnualSavings: number = 0;
   selectedModificationIndex: number = 0;
-  constructor(private psatService: PsatService) { }
+  constructor(private psatService: PsatService, private reportRollupService: ReportRollupService) { }
 
   ngOnInit() {
     this.unit = '%';
@@ -70,7 +72,7 @@ export class OutputSummaryComponent implements OnInit {
   }
 
   useModification() {
-    this.selectModification.emit({ modIndex: this.selectedModificationIndex, type: 'PSAT', assessment: this.assessment })
+    this.reportRollupService.updateSelectedPsats(this.assessment, this.selectedModificationIndex);
   }
 
   getDiff(num1: number, num2: number) {

@@ -11,9 +11,9 @@ export class ReportRollupComponent implements OnInit {
 
   @Output('emitCloseReport')
   emitCloseReport = new EventEmitter<boolean>();
-  
+
   @HostListener('window:scroll', ['$event']) onScrollEvent($event) {
-    this.checkVisibleSummary();
+    // this.checkVisibleSummary();
     this.checkActiveAssessment();
   }
   @ViewChild('reportTemplate') reportTemplate: TemplateRef<any>;
@@ -29,6 +29,7 @@ export class ReportRollupComponent implements OnInit {
   ngOnInit() {
     this.reportRollupService.reportAssessments.subscribe(assesments => {
       this._reportAssessments = assesments;
+      console.log(this._reportAssessments);
       this.focusedAssessment = this._reportAssessments[0];
     })
     setTimeout(() => {
@@ -61,62 +62,25 @@ export class ReportRollupComponent implements OnInit {
     this.emitCloseReport.emit(true);
   }
 
-    checkVisibleSummary() {
-    let doc = this.windowRefService.getDoc();
-    let summaryDiv = doc.getElementById("reportSummary");
-    let window = this.windowRefService.nativeWindow;
-    let y = summaryDiv.offsetTop;
-    let height = summaryDiv.offsetHeight;
-    let maxHeight = y + height;
-    this.isSummaryVisible = (y < (window.pageYOffset + window.innerHeight)) && (maxHeight >= window.pageYOffset);
-  }
-
   checkActiveAssessment() {
     let doc = this.windowRefService.getDoc();
     let window = this.windowRefService.nativeWindow;
-    let container = doc.getElementById('reportContainer');
+    let container = doc.getElementById('reportHeader');
     let scrollAmount = (window.pageYOffset !== undefined) ? window.pageYOffset : (doc.documentElement || doc.body.parentNode || doc.body).scrollTop;
-    let activeSet: boolean = false;
-    let isFirstElement: boolean = true;
-    let firstAssessment = doc.getElementById('assessment_'+this._reportAssessments[0].id);
-    if (scrollAmount < (firstAssessment.clientHeight - 200)) {
-      this.focusedAssessment = this._reportAssessments[0];
-    } else {
-      let check = this.checkDistance(this._reportAssessments, scrollAmount);
-      if (check) {
-        this.focusedAssessment = check;
-      }
-    }
-  }
-
-  checkDistance(assessments: Assessment[], scrollAmount: number) {
-    let doc = this.windowRefService.getDoc();
-    let window = this.windowRefService.nativeWindow;
-    let activeSet: boolean = false;
-    let isFirstElement: boolean = true;
-    let closestAssessment;
-    assessments.forEach(assessment => {
-      if (!isFirstElement) {
-        if (!activeSet) {
-          let assessmentDiv = doc.getElementById('assessment_'+assessment.id);
-          if (assessmentDiv) {
-            let distanceScrolled = Math.abs(scrollAmount - assessmentDiv.offsetTop);
-            let fromBottom = Math.abs(scrollAmount - (assessmentDiv.offsetTop + assessmentDiv.clientHeight));
-            if (distanceScrolled > 0 && distanceScrolled < 200 || fromBottom > 0 && fromBottom < 200) {
-              closestAssessment = assessment;
-            }
-          }
-        }
-      } else {
-        isFirstElement = false;
+    this._reportAssessments.forEach(assessment => {
+      let element = doc.getElementById('assessment_' + assessment.id);
+      let diff = Math.abs(Math.abs(container.clientHeight - element.offsetTop) - scrollAmount);
+      if (diff > 0 && diff < 50) {
+        this.focusedAssessment = assessment;
       }
     })
-    return closestAssessment;
   }
+
   selectAssessment(assessment: Assessment) {
-     let doc = this.windowRefService.getDoc();
-     let content = doc.getElementById('assessment_'+assessment.id);
-     this.focusedAssessment = assessment;
-     content.scrollIntoView();
+    let doc = this.windowRefService.getDoc();
+    let element = doc.getElementById('assessment_' + assessment.id);
+    let container = doc.getElementById('reportHeader');
+    this.focusedAssessment = assessment;
+    element.scrollIntoView({ behavior: 'smooth' });
   }
 }

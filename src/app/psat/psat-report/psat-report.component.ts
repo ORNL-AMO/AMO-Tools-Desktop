@@ -66,35 +66,9 @@ export class PsatReportComponent implements OnInit {
         if (results.length != 0) {
           this.settings = results[0];
         }
-        // } else {
-        //   //no assessment settings, find dir settings being usd
-        //   this.getParentDirSettingsThenResults(this.assessment.directoryId);
-        // }
       }
     )
   }
-
-  // getParentDirSettingsThenResults(parentDirectoryId: number) {
-  //   //get parent directory
-  //   this.indexedDbService.getDirectory(parentDirectoryId).then(
-  //     results => {
-  //       let parentDirectory = results;
-  //       //get parent directory settings
-  //       this.indexedDbService.getDirectorySettings(parentDirectory.id).then(
-  //         resultSettings => {
-  //           if (resultSettings.length != 0) {
-  //             this.settings = resultSettings[0];
-  //             if (!this.psat.outputs) {
-  //               //this.psat = this.getResults(this.psat, this.settings);
-  //             }
-  //           } else {
-  //             //no settings try again with parents parent directory
-  //             this.getParentDirSettingsThenResults(parentDirectory.parentDirectoryId)
-  //           }
-  //         })
-  //     }
-  //   )
-  // }
 
   closeAssessment() {
     this.closeReport.emit(true);
