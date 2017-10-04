@@ -157,7 +157,7 @@
         <td *ngIf="baseLineResults.flueGasAvailableHeat">{{baseLineResults.flueGasAvailableHeat| number:'2.0-0'}} %</td>
         <td *ngIf="!baseLineResults.flueGasAvailableHeat">&mdash; &mdash;</td>
         <td *ngFor="let mod of modificationResults">
-          <span *ngIf="mod.flueGasAvailableHeat">{{mod.flueGasAvailableHeat| number:'2.0-0'}}</span>
+          <span *ngIf="mod.flueGasAvailableHeat">{{mod.flueGasAvailableHeat| number:'2.0-0'}} %</span>
           <span *ngIf="!mod.flueGasAvailableHeat">&mdash; &mdash;</span>
         </td>
       </tr>

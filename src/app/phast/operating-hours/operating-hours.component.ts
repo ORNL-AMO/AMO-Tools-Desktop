@@ -1,5 +1,4 @@
 import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
 import { PHAST, OperatingHours } from '../../shared/models/phast/phast';
 
 @Component({
@@ -14,7 +13,7 @@ export class OperatingHoursComponent implements OnInit {
   save = new EventEmitter<boolean>();
 
   counter: any;
-  constructor(private formBuilder: FormBuilder) { }
+  constructor() { }
 
   ngOnInit() {
     if (!this.phast.operatingHours) {

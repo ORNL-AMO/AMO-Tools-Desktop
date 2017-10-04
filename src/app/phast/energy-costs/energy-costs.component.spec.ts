@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { SystemSetupComponent } from './system-setup.component';
+import { EnergyCostsComponent } from './energy-costs.component';
 
-describe('SystemSetupComponent', () => {
-  let component: SystemSetupComponent;
-  let fixture: ComponentFixture<SystemSetupComponent>;
+describe('EnergyCostsComponent', () => {
+  let component: EnergyCostsComponent;
+  let fixture: ComponentFixture<EnergyCostsComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ SystemSetupComponent ]
+      declarations: [ EnergyCostsComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(SystemSetupComponent);
+    fixture = TestBed.createComponent(EnergyCostsComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

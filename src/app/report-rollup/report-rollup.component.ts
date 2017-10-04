@@ -29,7 +29,6 @@ export class ReportRollupComponent implements OnInit {
   ngOnInit() {
     this.reportRollupService.reportAssessments.subscribe(assesments => {
       this._reportAssessments = assesments;
-      console.log(this._reportAssessments);
       this.focusedAssessment = this._reportAssessments[0];
     })
     setTimeout(() => {
@@ -67,13 +66,15 @@ export class ReportRollupComponent implements OnInit {
     let window = this.windowRefService.nativeWindow;
     let container = doc.getElementById('reportHeader');
     let scrollAmount = (window.pageYOffset !== undefined) ? window.pageYOffset : (doc.documentElement || doc.body.parentNode || doc.body).scrollTop;
-    this._reportAssessments.forEach(assessment => {
-      let element = doc.getElementById('assessment_' + assessment.id);
-      let diff = Math.abs(Math.abs(container.clientHeight - element.offsetTop) - scrollAmount);
-      if (diff > 0 && diff < 50) {
-        this.focusedAssessment = assessment;
-      }
-    })
+    if (container && scrollAmount) {
+      this._reportAssessments.forEach(assessment => {
+        let element = doc.getElementById('assessment_' + assessment.id);
+        let diff = Math.abs(Math.abs(container.clientHeight - element.offsetTop) - scrollAmount);
+        if (diff > 0 && diff < 50) {
+          this.focusedAssessment = assessment;
+        }
+      })
+    }
   }
 
   selectAssessment(assessment: Assessment) {

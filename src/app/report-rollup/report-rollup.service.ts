@@ -108,7 +108,7 @@ export class ReportRollupService {
   initResultsArr(psatArr: Array<Assessment>) {
     let tmpResultsArr = new Array<AllResultsData>();
     psatArr.forEach(val => {
-      if (val.psat.setupDone) {
+      if (val.psat.setupDone && (val.psat.modifications.length != 0)) {
         this.indexedDbService.getAssessmentSettings(val.id).then(settings => {
           let baselineResults = this.psatService.resultsExisting(JSON.parse(JSON.stringify(val.psat.inputs)), settings[0]);
           let modResultsArr = new Array<PsatOutputs>();
