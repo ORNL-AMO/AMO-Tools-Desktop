@@ -46,10 +46,17 @@
     padding-left: 23px;
     float: left;
 }
-    .coming-soon .summary-header.furnaces h3, 
     .coming-soon .summary-header.fans h3,
     .coming-soon .summary-header.motors h3 {
         background-image: url('../../../assets/images/ico-comingSoon-diagram.png');
+        background-repeat: no-repeat;
+        background-position: left center;
+        background-size: 20px;
+        padding: 7px 0 3px 31px;
+        font-weight: bold;
+    }
+    .coming-soon .summary-header.furnaces h3 {
+        background-image: url('../../../assets/images/ico-phast-diagram.png');
         background-repeat: no-repeat;
         background-position: left center;
         background-size: 20px;
