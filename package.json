@@ -43,7 +43,7 @@
     "@angular/platform-server": "^4.2.1",
     "@angular/router": "^4.2.1",
     "ajv": "^5.2.2",
-    "amo-tools-suite": "0.2.1",
+    "amo-tools-suite": "^0.2.2",
     "bootstrap": "^4.0.0-alpha.6",
     "core-js": "^2.4.1",
     "d3": "4.5.0",

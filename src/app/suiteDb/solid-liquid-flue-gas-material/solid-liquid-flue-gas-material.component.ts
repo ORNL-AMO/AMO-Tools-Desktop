@@ -4,7 +4,7 @@ import { SuiteDbService } from '../suite-db.service';
 import { IndexedDbService } from '../../indexedDb/indexed-db.service';
 import * as _ from 'lodash';
 import { Settings } from '../../shared/models/settings';
-
+import { PhastService } from '../../phast/phast.service';
 @Component({
   selector: 'app-solid-liquid-flue-gas-material',
   templateUrl: './solid-liquid-flue-gas-material.component.html',
@@ -23,14 +23,14 @@ export class SolidLiquidFlueGasMaterialComponent implements OnInit {
     moisture: 0,
     nitrogen: 0,
     o2: 0,
-    sulphur: 0
-
+    sulphur: 0,
+    heatingValue: 0
   };
   selectedMaterial: SolidLiquidFlueGasMaterial;
   allMaterials: Array<SolidLiquidFlueGasMaterial>;
   isValidMaterialName: boolean = true;
   nameError: string = null;
-  constructor(private suiteDbService: SuiteDbService, private indexedDbService: IndexedDbService) { }
+  constructor(private suiteDbService: SuiteDbService, private indexedDbService: IndexedDbService, private phastService: PhastService) { }
 
   ngOnInit() {
     this.allMaterials = this.suiteDbService.selectSolidLiquidFlueGasMaterials();
@@ -62,10 +62,22 @@ export class SolidLiquidFlueGasMaterialComponent implements OnInit {
         moisture: this.selectedMaterial.moisture,
         nitrogen: this.selectedMaterial.nitrogen,
         o2: this.selectedMaterial.o2,
-        sulphur: this.selectedMaterial.sulphur
+        sulphur: this.selectedMaterial.sulphur,
+        heatingValue: 0
       }
+      this.setHHV();
     }
   }
+
+  setHHV() {
+    let tmpHeatingVals = this.phastService.flueGasByMassCalculateHeatingValue(this.newMaterial);
+    if (isNaN(tmpHeatingVals) == false) {
+      this.newMaterial.heatingValue = tmpHeatingVals;
+    } else {
+      this.newMaterial.heatingValue = 0;
+    }
+  }
+
 
 
   checkMaterialName() {

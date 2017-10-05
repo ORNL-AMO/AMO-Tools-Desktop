@@ -25,6 +25,8 @@ export class OperatingHoursComponent implements OnInit {
       }
       this.phast.operatingHours = defaultHours;
       this.calculatHrsPerYear();
+    } else if (!this.phast.operatingHours.hoursPerYear) {
+      this.calculatHrsPerYear();
     }
   }
 

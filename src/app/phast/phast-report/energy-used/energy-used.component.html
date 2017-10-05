@@ -5,8 +5,8 @@
       <tr>
         <th>Energy Name</th>
         <th>Energy Used</th>
+        <th>Heating Value (HHV)</th>
         <th>Cost per Unit</th>
-        <th>Units</th>
       </tr>
     </thead>
     <tbody>
@@ -14,19 +14,19 @@
         <td>Natural Gas</td>
         <td></td>
         <td></td>
-        <td></td>
+        <td>{{phast.operatingCosts.fuelCost | currency:'USD':true:'1.2-2'}}</td>
       </tr>
       <tr>
         <td>Electricity</td>
         <td></td>
         <td></td>
-        <td></td>
+        <td>{{phast.operatingCosts.electricityCost | currency:'USD':true:'1.2-2'}}</td>
       </tr>
       <tr>
         <td>Steam</td>
         <td></td>
         <td></td>
-        <td></td>
+        <td>{{phast.operatingCosts.steamCost | currency:'USD':true:'1.2-2'}}</td>
       </tr>
     </tbody>
   </table>

@@ -13,7 +13,6 @@ export class PhastBannerComponent implements OnInit {
   constructor(private phastService: PhastService) { }
 
   ngOnInit() {
-    console.log(this.assessment)
     this.phastService.mainTab.subscribe(val => {
       this.mainTab = val;
     })

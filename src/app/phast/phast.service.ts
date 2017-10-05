@@ -34,6 +34,7 @@ import { FixtureLossesService } from './losses/fixture-losses/fixture-losses.ser
 import { GasLeakageLossesService } from './losses/gas-leakage-losses/gas-leakage-losses.service';
 import { OtherLossesService } from './losses/other-losses/other-losses.service';
 import { SlagService } from './losses/slag/slag.service';
+import { FlueGasMaterial, SolidLiquidFlueGasMaterial } from '../shared/models/materials';
 @Injectable()
 export class PhastService {
 
@@ -480,6 +481,14 @@ export class PhastService {
 
   o2Enrichment(inputs: O2Enrichment) {
     return phastAddon.o2Enrichment(inputs);
+  }
+
+  flueGasByVolumeCalculateHeatingValue(inputs: FlueGasMaterial) {
+    return phastAddon.flueGasByVolumeCalculateHeatingValue(inputs);
+  }
+
+  flueGasByMassCalculateHeatingValue(inputs: SolidLiquidFlueGasMaterial) {
+    return phastAddon.flueGasByMassCalculateHeatingValue(inputs);
   }
 
   //TODO:Functions in addon need to be implemented

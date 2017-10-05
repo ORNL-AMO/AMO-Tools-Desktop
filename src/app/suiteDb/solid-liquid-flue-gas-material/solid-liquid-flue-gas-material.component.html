@@ -10,59 +10,71 @@
       </select>
         </div>
       </div>
-      <div class="form-group">
-        <label class="small" for="substance">Substance Name</label>
-        <input type="text" id="substance" name="substance" class="form-control" [(ngModel)]="newMaterial.substance" (input)="checkMaterialName()"
-        />
-        <span class="alert-warning pull-right small" *ngIf="nameError !== null">{{nameError}}</span>
-      </div>
-      <div class="form-group">
-        <label class="small" for="carbon">Carbon</label>
-        <div class="input-group">
-          <input type="number" id="carbon" name="carbon" class="form-control" [(ngModel)]="newMaterial.carbon" />
-          <span class="input-group-addon units">%</span>
+      <div class="form-section">
+        <div class="form-group">
+          <label class="small" for="substance">Substance Name</label>
+          <input type="text" id="substance" name="substance" class="form-control" [(ngModel)]="newMaterial.substance" (input)="checkMaterialName()"
+          />
+          <span class="alert-warning pull-right small" *ngIf="nameError !== null">{{nameError}}</span>
+        </div>
+        <div class="form-group">
+          <label class="small" for="carbon">Carbon</label>
+          <div class="input-group">
+            <input type="number" id="carbon" name="carbon" class="form-control" [(ngModel)]="newMaterial.carbon" />
+            <span class="input-group-addon units">%</span>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="small" for="hydrogen">Hydrogen</label>
+          <div class="input-group">
+            <input type="number" id="hydrogen" name="hydrogen" class="form-control" [(ngModel)]="newMaterial.hydrogen" />
+            <span class="input-group-addon units">%</span>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="small" for="inertAsh">Inert Ash</label>
+          <div class="input-group">
+            <input type="number" id="inertAsh" name="inertAsh" class="form-control" [(ngModel)]="newMaterial.inertAsh" />
+            <span class="input-group-addon units">%</span>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="small" for="moisture">Moisture</label>
+          <div class="input-group">
+            <input type="number" id="moisture" name="moisture" class="form-control" [(ngModel)]="newMaterial.moisture" />
+            <span class="input-group-addon units">%</span>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="small" for="nitrogen">Nitrogen</label>
+          <div class="input-group">
+            <input type="number" id="nitrogen" name="nitrogen" class="form-control" [(ngModel)]="newMaterial.nitrogen" />
+            <span class="input-group-addon units">%</span>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="small" for="o2">O<sub>2</sub></label>
+          <div class="input-group">
+            <input type="number" id="o2" name="o2" class="form-control" [(ngModel)]="newMaterial.o2" />
+            <span class="input-group-addon units">%</span>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="small" for="sulphur">Sulphur</label>
+          <div class="input-group">
+            <input type="number" id="sulphur" name="sulphur" class="form-control" [(ngModel)]="newMaterial.sulphur" />
+            <span class="input-group-addon units">%</span>
+          </div>
         </div>
       </div>
       <div class="form-group">
-        <label class="small" for="hydrogen">Hydrogen</label>
+        <label class="small" for="heatingValue">Heating Value
+          <a id="setHHV" class="form-text text-help" (click)="setHHV()">Calculate from Gas Composition</a>
+        </label>
         <div class="input-group">
-          <input type="number" id="hydrogen" name="hydrogen" class="form-control" [(ngModel)]="newMaterial.hydrogen" />
-          <span class="input-group-addon units">%</span>
-        </div>
-      </div>
-      <div class="form-group">
-        <label class="small" for="inertAsh">Inert Ash</label>
-        <div class="input-group">
-          <input type="number" id="inertAsh" name="inertAsh" class="form-control" [(ngModel)]="newMaterial.inertAsh" />
-          <span class="input-group-addon units">%</span>
-        </div>
-      </div>
-      <div class="form-group">
-        <label class="small" for="moisture">Moisture</label>
-        <div class="input-group">
-          <input type="number" id="moisture" name="moisture" class="form-control" [(ngModel)]="newMaterial.moisture" />
-          <span class="input-group-addon units">%</span>
-        </div>
-      </div>
-      <div class="form-group">
-        <label class="small" for="nitrogen">Nitrogen</label>
-        <div class="input-group">
-          <input type="number" id="nitrogen" name="nitrogen" class="form-control" [(ngModel)]="newMaterial.nitrogen" />
-          <span class="input-group-addon units">%</span>
-        </div>
-      </div>
-      <div class="form-group">
-        <label class="small" for="moisture">O<sub>2</sub></label>
-        <div class="input-group">
-          <input type="number" id="moisture" name="moisture" class="form-control" [(ngModel)]="newMaterial.moisture" />
-          <span class="input-group-addon units">%</span>
-        </div>
-      </div>
-      <div class="form-group">
-        <label class="small" for="sulphur">Sulphur</label>
-        <div class="input-group">
-          <input type="number" id="sulphur" name="sulphur" class="form-control" [(ngModel)]="newMaterial.sulphur" />
-          <span class="input-group-addon units">%</span>
+          <input type="number" id="heatingValue" name="heatingValue" class="form-control" [(ngModel)]="newMaterial.heatingValue" />
+          <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">Btu/SCF</span>
+          <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kJ/Nm<sup>3</sup></span>
         </div>
       </div>
     </form>
