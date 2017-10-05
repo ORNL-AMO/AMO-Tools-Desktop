@@ -10,3 +10,8 @@
 .tab-content{
     min-height: none;
 }
+
+.efficiency-results canvas {
+    height: inherit !important;
+    width: inherit !important;
+}

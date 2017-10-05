@@ -42,8 +42,9 @@
         border-top: #ddd solid 1px;
     }
 
-.assessment-report.report-in-psat .assessment-name, 
+.assessment-report.report-in-phast .assessment-name, 
 .assessment-report.report-in-rollup .assessment-name {
+    background-image: url('../../../assets/images/ico-phast-diagram.png');
     background-repeat: no-repeat;
     background-position: left center;
     background-size: 33px;
