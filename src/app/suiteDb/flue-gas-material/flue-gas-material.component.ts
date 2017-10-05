@@ -5,6 +5,7 @@ import { IndexedDbService } from '../../indexedDb/indexed-db.service';
 import * as _ from 'lodash';
 import { Settings } from '../../shared/models/settings';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
+import { PhastService } from '../../phast/phast.service';
 
 @Component({
   selector: 'app-flue-gas-material',
@@ -36,7 +37,7 @@ export class FlueGasMaterialComponent implements OnInit {
   allMaterials: Array<FlueGasMaterial>;
   isValidMaterialName: boolean = true;
   nameError: string = null;
-  constructor(private suiteDbService: SuiteDbService, private indexedDbService: IndexedDbService, private convertUnitsService: ConvertUnitsService) { }
+  constructor(private suiteDbService: SuiteDbService, private indexedDbService: IndexedDbService, private convertUnitsService: ConvertUnitsService, private phastService: PhastService) { }
 
   ngOnInit() {
     this.allMaterials = this.suiteDbService.selectGasFlueGasMaterials();
@@ -77,6 +78,16 @@ export class FlueGasMaterialComponent implements OnInit {
     }
   }
 
+  setHHV() {
+    let tmpHeatingVals = this.phastService.flueGasByVolumeCalculateHeatingValue(this.newMaterial);
+    if (isNaN(tmpHeatingVals.heatingValue) == false && isNaN(tmpHeatingVals.specificGravity) == false) {
+      this.newMaterial.heatingValue = tmpHeatingVals.heatingValue;
+      this.newMaterial.specificGravity = tmpHeatingVals.specificGravity;
+    } else {
+      this.newMaterial.heatingValue = 0;
+      this.newMaterial.specificGravity = 0;
+    }
+  }
 
   checkMaterialName() {
     let test = _.filter(this.allMaterials, (material) => { return material.substance == this.newMaterial.substance })
