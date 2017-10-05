@@ -503,10 +503,10 @@ Assessments: List View
       padding-left: 22px;
     }
     .list-row.psat .assessment-name a {
-      background-image: url('../assets/images/ico-psat-diagram.png');
+      background-image: url('../assets/images/ico-psat-diagram-small.png');
     }
     .list-row.phast .assessment-name a {
-      background-image: url('../assets/images/ico-comingSoon-diagram.png');
+      background-image: url('../assets/images/ico-phast-diagram-small.png');
     }
   .drag-handle, .list-row input, .assessment-name {
     display: inline-block;
@@ -678,7 +678,7 @@ Sidebar
 }
 
 .doe-logo {
-  width: 100%;
+  width: 210px;
   margin-bottom: 10px;
 }
   .doe-logo:hover {
@@ -755,7 +755,7 @@ Sidebar
     background-image: url('../assets/images/ico-psat-diagram-small.png');
   }
   .sidebar-group .assessments .phast {
-    background-image: url('../assets/images/ico-comingSoon-diagram.png');
+    background-image: url('../assets/images/ico-phast-diagram-small.png');
   }
 
 
@@ -1704,31 +1704,18 @@ Toasty Overrides ================================= */
     text-align: center;
 }
 
-@media print{
-
-  html, body {
-    background: transparent;
-  }
-
-  .hide-print {
-    display: none;
-  }
-
-  .psat-name{
-    font-size: 13px;
-  }
-}
-
 .disabled-link {
     color: gray;
     pointer-events: none;
 }
 
-
 .disabled-link :hover {
     text-decoration: none;
 }
 
+.show-print{
+    display: none;
+}
 
 @media screen and (min-width: 768px) {
   /*.rollups .pumps {
@@ -1737,3 +1724,72 @@ Toasty Overrides ================================= */
 }
 
 
+.report-cover {
+    display: none;
+}
+
+.report-title {
+    display: block;
+    width: 100%;
+    text-align: center;
+    margin: 40px 0 100px;
+}
+    .report-title h4 {
+        font-size: 38px;
+    }
+    .report-title h5 {
+        font-size: 18px;
+    }
+
+
+@media print{
+
+  html, body {
+    background: transparent;
+  }
+
+  .show-print{
+      display: inherit;
+  }
+  .hide-print {
+    display: none;
+  }
+
+  .psat-name{
+    font-size: 13px;
+  }
+
+  .output-summary {
+    margin-bottom: 20px;
+  }
+
+  .output-summary table td {
+    font-size: 11px;
+    padding: 0px 8px;
+  }
+
+  .report-cover {
+        display: block;
+        width: 100%;
+        text-align: center;
+    }
+    .doe-logo {
+        width: 200px;
+        display: inline-block;
+        margin-top: 100px;
+    }
+    .report-header {
+        position: static;
+        border: none;
+        background: none;
+    }
+  .report-column {
+      margin: 0;
+  }
+
+  #toasty {
+    display: none;
+  }
+
+
+}

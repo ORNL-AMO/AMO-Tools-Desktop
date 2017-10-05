@@ -53,25 +53,12 @@
     margin-left: 220px;
 }
 
-.report-cover {
-    display: none;
-}
 
 
 
 @media print {
 
-    .report-cover {
-        display: block;
-        width: 200px;
-        text-align: center;
-    }
-    .report-header {
-        position: static;
-        border: none;
-        background: none;
-        page-break-before: always;
-    }
+    
 
     .report-container .content {
         padding: 0;

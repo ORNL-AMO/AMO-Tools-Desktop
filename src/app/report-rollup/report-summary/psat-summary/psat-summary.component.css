@@ -57,5 +57,16 @@ dl.summary-list {
 }
 
 
+@media print {
+
+    .summary-header h3 {
+        padding: 0;
+        background: none;
+    }
+
+    dl.summary-list {
+        margin-bottom: 10px;
+    }
 
 
+}
