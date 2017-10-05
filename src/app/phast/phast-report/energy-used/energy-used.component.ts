@@ -5,7 +5,8 @@ import { MeteredEnergyResults } from '../../../shared/models/phast/meteredEnergy
 import { DesignedEnergyResults } from '../../../shared/models/phast/designedEnergy';
 import { MeteredEnergyService } from '../../metered-energy/metered-energy.service';
 import { DesignedEnergyService } from '../../designed-energy/designed-energy.service';
-
+import { PhastResultsService } from '../../phast-results.service';
+import { SuiteDbService } from '../../../suiteDb/suite-db.service';
 @Component({
   selector: 'app-energy-used',
   templateUrl: './energy-used.component.html',
@@ -34,7 +35,9 @@ export class EnergyUsedComponent implements OnInit {
     calculatedElectricityUsed: 0
   };
 
-  constructor(private designedEnergyService: DesignedEnergyService, private meteredEnergyService: MeteredEnergyService) { }
+  baseLineResults: PhastResults;
+  heatingValue: number = 0;
+  constructor(private designedEnergyService: DesignedEnergyService, private meteredEnergyService: MeteredEnergyService, private phastResultsService: PhastResultsService, private suiteDbService: SuiteDbService) { }
 
   ngOnInit() {
     if (this.settings.energySourceType == 'Steam') {
@@ -55,7 +58,16 @@ export class EnergyUsedComponent implements OnInit {
       } if (this.phast.designedEnergy) {
         this.designedResults = this.designedEnergyService.designedEnergyFuel(this.phast.designedEnergy.designedEnergyFuel, this.phast, this.settings);
       }
+      if (this.phast.losses.flueGasLosses[0].flueGasType == 'By Mass') {
+        let gas = this.suiteDbService.selectSolidLiquidFlueGasMaterialById(this.phast.losses.flueGasLosses[0].flueGasByMass.gasTypeId);
+        console.log(gas);
+      } else if (this.phast.losses.flueGasLosses[0].flueGasType == 'By Volume') {
+        let gas = this.suiteDbService.selectGasFlueGasMaterialById(this.phast.losses.flueGasLosses[0].flueGasByVolume.gasTypeId);
+        console.log(gas);
+      }
     }
+    this.baseLineResults = this.phastResultsService.getResults(this.phast, this.settings);
+    console.log(this.baseLineResults);
   }
 
 }
