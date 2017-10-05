@@ -26,14 +26,21 @@ export interface PHAST {
   meteredEnergy?: MeteredEnergy,
   designedEnergy?: DesignedEnergy,
   operatingHours?: OperatingHours,
-  systemEfficiency?: number
+  systemEfficiency?: number,
+  operatingCosts?: OperatingCosts
 }
 
-export interface PhastInputs {
-  heatSource?: any,
-  energySource?: any,
-  operatingHours?: OperatingHours,
+export interface OperatingCosts{
+  fuelCost?: number,
+  steamCost?: number,
+  electricityCost?: number
 }
+
+// export interface PhastInputs {
+//   heatSource?: any,
+//   energySource?: any,
+//   operatingHours?: OperatingHours,
+// }
 
 export interface Losses {
   chargeMaterials?: ChargeMaterial[],
@@ -122,4 +129,15 @@ export interface ShowResultsCategories {
   showEnInput1: boolean;
   showEnInput2: boolean;
   showExGas: boolean;
+}
+
+export interface ExecutiveSummary {
+  percentSavings?: number,
+  annualEnergyUsed?: number,
+  energyPerMass?: number,
+  annualEnergySavings?: number,
+  annualCost?: number,
+  annualCostSavings?: number,
+  implementationCosts?: number,
+  paybackPeriod?: number
 }

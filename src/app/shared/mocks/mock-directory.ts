@@ -52,6 +52,17 @@ export const MockDirectory: Directory = {
       modifiedDate: new Date(),
       phast: {
         systemEfficiency: 90,
+        operatingHours: {
+          weeksPerYear: 52,
+          daysPerWeek: 7,
+          shiftsPerDay: 3,
+          hoursPerShift: 8,
+        },
+        operatingCosts: {
+          fuelCost: 8.00,
+          steamCost: 10.00,
+          electricityCost: .080
+        },
         losses: {
           chargeMaterials: [
             {

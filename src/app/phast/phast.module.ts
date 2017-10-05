@@ -17,13 +17,13 @@ import { PhastTabsComponent } from './phast-tabs/phast-tabs.component';
 import { HelpPanelComponent } from './help-panel/help-panel.component';
 
 import { PhastService } from './phast.service';
-import { SystemSetupComponent } from './system-setup/system-setup.component';
 import { SettingsModule } from '../settings/settings.module';
 import { AuxEquipmentModule } from './aux-equipment/aux-equipment.module';
 import { SankeyModule } from './sankey/sankey.module';
 import { PhastReportModule } from './phast-report/phast-report.module';
 import { PhastDiagramComponent } from './phast-diagram/phast-diagram.component';
 import { PhastResultsService } from './phast-results.service';
+import { EnergyCostsComponent } from './energy-costs/energy-costs.component';
 @NgModule({
   declarations: [
     PhastComponent,
@@ -32,8 +32,8 @@ import { PhastResultsService } from './phast-results.service';
     SystemBasicsComponent,
     OperatingHoursComponent,
     HelpPanelComponent,
-    SystemSetupComponent,
-    PhastDiagramComponent
+    PhastDiagramComponent,
+    EnergyCostsComponent
   ],
   exports: [
   ],
