@@ -6,7 +6,7 @@
         <input name="totalHeat" type="number" step="any" id="totalHeat" class="form-control" (focus)="focusField('totalHeat')" [(ngModel)]="inputs.totalHeat"
           (input)="calculate()" onfocus="this.select();" />
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">Btu/lb</span>
-        <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">kJ/kg</span>
+        <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kJ/kg</span>
       </div>
     </div>
     <div class="form-group">
