@@ -41,7 +41,8 @@ export interface SolidLiquidFlueGasMaterial {
     nitrogen: number,
     o2: number,
     substance: string,
-    sulphur: number
+    sulphur: number,
+    heatingValue: number
 }
 
 export interface SolidLoadChargeMaterial {
