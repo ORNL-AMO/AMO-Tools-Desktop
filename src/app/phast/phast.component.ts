@@ -195,52 +195,52 @@ export class PhastComponent implements OnInit {
           }
         }
       }
-    }
-    let categories = this.phastResultsService.getResultCategories(this.settings);
-    if (categories.showEnInput1) {
-      if (this._phast.losses.energyInputEAF) {
-        if (this._phast.losses.energyInputEAF.length != 0) {
-          let test = this.phastService.sumEnergyInputEAF(this._phast.losses.energyInputEAF, this.settings);
-          if (test != 0) {
-            grossHeat = true;
-          }
-        }
-      }
-    }
-    else if (categories.showEnInput2) {
-      if (this._phast.losses.energyInputExhaustGasLoss) {
-        if (this._phast.losses.energyInputExhaustGasLoss.length != 0) {
-          let test = this.phastService.sumEnergyInputExhaustGas(this._phast.losses.energyInputExhaustGasLoss, this.settings);
-          if (test != 0) {
-            grossHeat = true;
-          }
-        }
-      }
-    }
-    else if (categories.showFlueGas) {
-      if (this._phast.losses.flueGasLosses) {
-        if (this._phast.losses.flueGasLosses.length != 0) {
-          let flueGas = this._phast.losses.flueGasLosses[0];
-          if (flueGas.flueGasType == 'By Mass') {
-            let test = this.phastService.flueGasByMass(flueGas.flueGasByMass, this.settings);
-            if (test != 0) {
-              grossHeat = true;
-            }
-          } else if (flueGas.flueGasType == 'By Volume') {
-            let test = this.phastService.flueGasByVolume(flueGas.flueGasByVolume, this.settings);
-            if (test != 0) {
-              grossHeat = true;
-            }
-          }
-        }
-      }
-    }
-    else if (categories.showSystemEff) {
-      if (this._phast.systemEfficiency) {
-        grossHeat = true;
-      }
-    }
 
+      let categories = this.phastResultsService.getResultCategories(this.settings);
+      if (categories.showEnInput1) {
+        if (this._phast.losses.energyInputEAF) {
+          if (this._phast.losses.energyInputEAF.length != 0) {
+            let test = this.phastService.sumEnergyInputEAF(this._phast.losses.energyInputEAF, this.settings);
+            if (test != 0) {
+              grossHeat = true;
+            }
+          }
+        }
+      }
+      else if (categories.showEnInput2) {
+        if (this._phast.losses.energyInputExhaustGasLoss) {
+          if (this._phast.losses.energyInputExhaustGasLoss.length != 0) {
+            let test = this.phastService.sumEnergyInputExhaustGas(this._phast.losses.energyInputExhaustGasLoss, this.settings);
+            if (test != 0) {
+              grossHeat = true;
+            }
+          }
+        }
+      }
+      else if (categories.showFlueGas) {
+        if (this._phast.losses.flueGasLosses) {
+          if (this._phast.losses.flueGasLosses.length != 0) {
+            let flueGas = this._phast.losses.flueGasLosses[0];
+            if (flueGas.flueGasType == 'By Mass') {
+              let test = this.phastService.flueGasByMass(flueGas.flueGasByMass, this.settings);
+              if (test != 0) {
+                grossHeat = true;
+              }
+            } else if (flueGas.flueGasType == 'By Volume') {
+              let test = this.phastService.flueGasByVolume(flueGas.flueGasByVolume, this.settings);
+              if (test != 0) {
+                grossHeat = true;
+              }
+            }
+          }
+        }
+      }
+      else if (categories.showSystemEff) {
+        if (this._phast.systemEfficiency) {
+          grossHeat = true;
+        }
+      }
+    }
     isDone = (grossHeat && chargeDone);
     return isDone;
   }
