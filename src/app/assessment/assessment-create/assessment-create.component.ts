@@ -27,7 +27,7 @@ export class AssessmentCreateComponent implements OnInit {
   allAssessments: any[] = new Array();
   filteredAssessments: any[] = new Array();
   settings: Settings;
-
+  canCreate: boolean;
   constructor(
     private formBuilder: FormBuilder,
     private assessmentService: AssessmentService,
@@ -47,6 +47,7 @@ export class AssessmentCreateComponent implements OnInit {
     this.newAssessment = this.initForm();
     this.allAssessments = this.directory.assessments;
     this.filteredAssessments = this.allAssessments;
+    this.canCreate = true;
   }
 
   getParentDirectorySettings(parentDirectoryId: number) {
@@ -99,7 +100,8 @@ export class AssessmentCreateComponent implements OnInit {
   }
 
   createAssessment() {
-    if (this.newAssessment.valid) {
+    if (this.newAssessment.valid && this.canCreate) {
+      this.canCreate = false;
       this.hideCreateModal(true);
       this.createModal.onHidden.subscribe(() => {
         this.assessmentService.tab = 'system-setup';
