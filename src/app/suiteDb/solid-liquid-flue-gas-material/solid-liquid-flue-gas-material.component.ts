@@ -73,6 +73,7 @@ export class SolidLiquidFlueGasMaterialComponent implements OnInit {
         heatingValue: 0
       }
       this.setHHV();
+      this.checkMaterialName();
     }
   }
 

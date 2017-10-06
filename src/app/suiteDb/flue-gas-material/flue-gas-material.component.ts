@@ -82,6 +82,8 @@ export class FlueGasMaterialComponent implements OnInit {
         heatingValue: this.selectedMaterial.heatingValue,
         specificGravity: this.selectedMaterial.specificGravity
       }
+      this.checkMaterialName();
+      this.setHHV();
     }
   }
 
