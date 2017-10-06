@@ -24,9 +24,11 @@ export class GasLoadChargeMaterialComponent implements OnInit {
   allMaterials: Array<GasLoadChargeMaterial>;
   isValidMaterialName: boolean = true;
   nameError: string = null;
+  canAdd: boolean;
   constructor(private suiteDbService: SuiteDbService, private indexedDbService: IndexedDbService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
+    this.canAdd = true;
     this.allMaterials = this.suiteDbService.selectGasLoadChargeMaterials();
     this.checkMaterialName();
     // this.selectedMaterial = this.allMaterials[0];
@@ -38,14 +40,17 @@ export class GasLoadChargeMaterialComponent implements OnInit {
   }
 
   addMaterial() {
-    if (this.settings.unitsOfMeasure == 'Metric') {
-      this.newMaterial.specificHeatVapor = this.convertUnitsService.value(this.newMaterial.specificHeatVapor).from('kJkgC').to('btulbF');
-    }
-    let suiteDbResult = this.suiteDbService.insertGasLoadChargeMaterial(this.newMaterial);
-    if (suiteDbResult == true) {
-      this.indexedDbService.addGasLoadChargeMaterial(this.newMaterial).then(idbResults => {
-        this.closeModal.emit(this.newMaterial);
-      })
+    if (this.canAdd) {
+      this.canAdd = false;
+      if (this.settings.unitsOfMeasure == 'Metric') {
+        this.newMaterial.specificHeatVapor = this.convertUnitsService.value(this.newMaterial.specificHeatVapor).from('kJkgC').to('btulbF');
+      }
+      let suiteDbResult = this.suiteDbService.insertGasLoadChargeMaterial(this.newMaterial);
+      if (suiteDbResult == true) {
+        this.indexedDbService.addGasLoadChargeMaterial(this.newMaterial).then(idbResults => {
+          this.closeModal.emit(this.newMaterial);
+        })
+      }
     }
   }
 

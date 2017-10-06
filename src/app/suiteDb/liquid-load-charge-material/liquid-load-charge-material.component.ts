@@ -27,9 +27,11 @@ export class LiquidLoadChargeMaterialComponent implements OnInit {
   allMaterials: Array<LiquidLoadChargeMaterial>;
   isValidMaterialName: boolean = true;
   nameError: string = null;
+  canAdd: boolean;
   constructor(private suiteDbService: SuiteDbService, private indexedDbService: IndexedDbService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
+    this.canAdd = true;
     this.allMaterials = this.suiteDbService.selectLiquidLoadChargeMaterials();
     this.checkMaterialName();
     //this.selectedMaterial = this.allMaterials[0];
@@ -41,17 +43,20 @@ export class LiquidLoadChargeMaterialComponent implements OnInit {
   }
 
   addMaterial() {
-    if (this.settings.unitsOfMeasure == 'Metric') {
-      this.newMaterial.vaporizationTemperature = this.convertUnitsService.value(this.newMaterial.vaporizationTemperature).from('C').to('F');
-      this.newMaterial.latentHeat = this.convertUnitsService.value(this.newMaterial.latentHeat).from('C').to('F');
-      this.newMaterial.specificHeatLiquid = this.convertUnitsService.value(this.newMaterial.specificHeatLiquid).from('kJkgC').to('btulbF');
-      this.newMaterial.specificHeatVapor = this.convertUnitsService.value(this.newMaterial.specificHeatVapor).from('kJkgC').to('btulbF');
-    }
-    let suiteDbResult = this.suiteDbService.insertLiquidLoadChargeMaterial(this.newMaterial);
-    if (suiteDbResult == true) {
-      this.indexedDbService.addLiquidLoadChargeMaterial(this.newMaterial).then(idbResults => {
-        this.closeModal.emit(this.newMaterial);
-      })
+    if (this.canAdd) {
+      this.canAdd = false;
+      if (this.settings.unitsOfMeasure == 'Metric') {
+        this.newMaterial.vaporizationTemperature = this.convertUnitsService.value(this.newMaterial.vaporizationTemperature).from('C').to('F');
+        this.newMaterial.latentHeat = this.convertUnitsService.value(this.newMaterial.latentHeat).from('C').to('F');
+        this.newMaterial.specificHeatLiquid = this.convertUnitsService.value(this.newMaterial.specificHeatLiquid).from('kJkgC').to('btulbF');
+        this.newMaterial.specificHeatVapor = this.convertUnitsService.value(this.newMaterial.specificHeatVapor).from('kJkgC').to('btulbF');
+      }
+      let suiteDbResult = this.suiteDbService.insertLiquidLoadChargeMaterial(this.newMaterial);
+      if (suiteDbResult == true) {
+        this.indexedDbService.addLiquidLoadChargeMaterial(this.newMaterial).then(idbResults => {
+          this.closeModal.emit(this.newMaterial);
+        })
+      }
     }
   }
 

@@ -29,9 +29,11 @@ export class SolidLoadChargeMaterialComponent implements OnInit {
   allMaterials: Array<SolidLoadChargeMaterial>;
   isValidMaterialName: boolean = true;
   nameError: string = null;
+  canAdd: boolean;
   constructor(private suiteDbService: SuiteDbService, private indexedDbService: IndexedDbService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
+    this.canAdd = true;
     this.allMaterials = this.suiteDbService.selectSolidLoadChargeMaterials();
     this.checkMaterialName();
     // this.selectedMaterial = this.allMaterials[0];
@@ -43,17 +45,20 @@ export class SolidLoadChargeMaterialComponent implements OnInit {
   }
 
   addMaterial() {
-    if (this.settings.unitsOfMeasure == 'Metric') {
-      this.newMaterial.meltingPoint = this.convertUnitsService.value(this.newMaterial.meltingPoint).from('C').to('F');
-      this.newMaterial.specificHeatLiquid = this.convertUnitsService.value(this.newMaterial.specificHeatLiquid).from('kJkgC').to('btulbF');
-      this.newMaterial.specificHeatSolid = this.convertUnitsService.value(this.newMaterial.specificHeatSolid).from('kJkgC').to('btulbF');
-      this.newMaterial.latentHeat = this.convertUnitsService.value(this.newMaterial.latentHeat).from('kJkg').to('btuLb');
-    }
-    let suiteDbResult = this.suiteDbService.insertSolidLoadChargeMaterial(this.newMaterial);
-    if (suiteDbResult == true) {
-      this.indexedDbService.addSolidLoadChargeMaterial(this.newMaterial).then(idbResults => {
-        this.closeModal.emit(this.newMaterial);
-      })
+    if (this.canAdd) {
+      this.canAdd = false;
+      if (this.settings.unitsOfMeasure == 'Metric') {
+        this.newMaterial.meltingPoint = this.convertUnitsService.value(this.newMaterial.meltingPoint).from('C').to('F');
+        this.newMaterial.specificHeatLiquid = this.convertUnitsService.value(this.newMaterial.specificHeatLiquid).from('kJkgC').to('btulbF');
+        this.newMaterial.specificHeatSolid = this.convertUnitsService.value(this.newMaterial.specificHeatSolid).from('kJkgC').to('btulbF');
+        this.newMaterial.latentHeat = this.convertUnitsService.value(this.newMaterial.latentHeat).from('kJkg').to('btuLb');
+      }
+      let suiteDbResult = this.suiteDbService.insertSolidLoadChargeMaterial(this.newMaterial);
+      if (suiteDbResult == true) {
+        this.indexedDbService.addSolidLoadChargeMaterial(this.newMaterial).then(idbResults => {
+          this.closeModal.emit(this.newMaterial);
+        })
+      }
     }
   }
 

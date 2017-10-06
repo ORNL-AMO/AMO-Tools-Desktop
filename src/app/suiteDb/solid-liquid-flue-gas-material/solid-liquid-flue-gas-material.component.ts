@@ -13,8 +13,8 @@ import { PhastService } from '../../phast/phast.service';
 export class SolidLiquidFlueGasMaterialComponent implements OnInit {
   @Output('closeModal')
   closeModal = new EventEmitter<SolidLiquidFlueGasMaterial>();
-  // @Input()
-  // settings: Settings;
+  @Input()
+  settings: Settings;
   newMaterial: SolidLiquidFlueGasMaterial = {
     substance: 'New Fuel',
     carbon: 0,
@@ -28,13 +28,16 @@ export class SolidLiquidFlueGasMaterialComponent implements OnInit {
   };
   selectedMaterial: SolidLiquidFlueGasMaterial;
   allMaterials: Array<SolidLiquidFlueGasMaterial>;
-  isValidMaterialName: boolean = true;
+  isValid: boolean = true;
   nameError: string = null;
+  canAdd: boolean;
   constructor(private suiteDbService: SuiteDbService, private indexedDbService: IndexedDbService, private phastService: PhastService) { }
 
   ngOnInit() {
+    this.canAdd = true;
     this.allMaterials = this.suiteDbService.selectSolidLiquidFlueGasMaterials();
     this.checkMaterialName();
+    this.setHHV();
     // this.selectedMaterial = this.allMaterials[0];
     // if (!this.settings) {
     //   this.indexedDbService.getSettings(1).then(results => {
@@ -44,11 +47,14 @@ export class SolidLiquidFlueGasMaterialComponent implements OnInit {
   }
 
   addMaterial() {
-    let suiteDbResult = this.suiteDbService.insertSolidLiquidFlueGasMaterial(this.newMaterial);
-    if (suiteDbResult == true) {
-      this.indexedDbService.addSolidLiquidFlueGasMaterial(this.newMaterial).then(idbResults => {
-        this.closeModal.emit(this.newMaterial);
-      })
+    if (this.canAdd) {
+      this.canAdd = false;
+      let suiteDbResult = this.suiteDbService.insertSolidLiquidFlueGasMaterial(this.newMaterial);
+      if (suiteDbResult == true) {
+        this.indexedDbService.addSolidLiquidFlueGasMaterial(this.newMaterial).then(idbResults => {
+          this.closeModal.emit(this.newMaterial);
+        })
+      }
     }
   }
 
@@ -72,8 +78,10 @@ export class SolidLiquidFlueGasMaterialComponent implements OnInit {
   setHHV() {
     let tmpHeatingVals = this.phastService.flueGasByMassCalculateHeatingValue(this.newMaterial);
     if (isNaN(tmpHeatingVals) == false) {
+      this.isValid = true;
       this.newMaterial.heatingValue = tmpHeatingVals;
     } else {
+      this.isValid = false;
       this.newMaterial.heatingValue = 0;
     }
   }
@@ -84,9 +92,9 @@ export class SolidLiquidFlueGasMaterialComponent implements OnInit {
     let test = _.filter(this.allMaterials, (material) => { return material.substance == this.newMaterial.substance })
     if (test.length > 0) {
       this.nameError = 'Cannot have same name as existing material';
-      this.isValidMaterialName = false;
+      this.isValid = false;
     } else {
-      this.isValidMaterialName = true;
+      this.isValid = true;
       this.nameError = null;
     }
   }

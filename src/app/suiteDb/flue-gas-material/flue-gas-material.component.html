@@ -6,7 +6,6 @@
           <label class="small" for="selectedMaterial">Start with existing material</label>
           <select name="selectedMaterial" class="form-control" id="selectedMaterial" (change)="setExisting()" [(ngModel)]="selectedMaterial">
         <option *ngFor="let material of allMaterials" [ngValue]="material">{{material.substance}}</option>
-                <option [ngValue]="null"></option>
       </select>
         </div>
       </div>
@@ -116,6 +115,6 @@
     </form>
   </div>
   <div class="card-body">
-    <button type="button" class="btn-primary btn-sm pull-right" (click)="addMaterial()" [disabled]="!isValidMaterialName">Submit</button>
+    <button type="button" class="btn-primary btn-sm pull-right" (click)="addMaterial()" [disabled]="!isValid">Submit</button>
   </div>
 </div>
