@@ -86,7 +86,7 @@
         </button>
     </div>
     <div class="modal-content">
-      <app-solid-liquid-flue-gas-material *ngIf="showModal" (closeModal)="hideMaterialModal($event)"></app-solid-liquid-flue-gas-material>
+      <app-solid-liquid-flue-gas-material *ngIf="showModal" (closeModal)="hideMaterialModal($event)" [settings]="settings"></app-solid-liquid-flue-gas-material>
     </div>
   </div>
 </div>
