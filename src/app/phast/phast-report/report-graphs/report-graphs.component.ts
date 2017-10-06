@@ -20,8 +20,8 @@ export class ReportGraphsComponent implements OnInit {
   @Input()
   assessment: Assessment;
 
-  selectedPhast1: PHAST;
-  selectedPhast2: PHAST;
+  selectedPhast1: any;
+  selectedPhast2: any;
 
   resultsArray: Array<any>;
   modExists: boolean = false;
@@ -30,14 +30,18 @@ export class ReportGraphsComponent implements OnInit {
   baselineResults: PhastResults;
   colors: Array<string> = [
     '#BA4A00',
+    '#E74C3C',
+    '#DC7633',
     '#CA6F1E',
     '#F39C12',
     '#F1C40F',
-    '#DC7633',
-    '#E74C3C',
-    '#F9E79F',
+    '#7B241C',
     '#909497',
     '#D2B4DE',
+    '#BB8FCE',
+    '#F9E79F',
+    '#212F3C',
+    '#4A235A'
   ]
   constructor(private phastService: PhastService, private phastResultsService: PhastResultsService) { }
 
@@ -61,11 +65,11 @@ export class ReportGraphsComponent implements OnInit {
     } else {
       this.baselineResults = this.phastResultsService.initResults();
       this.resultsArray.push({ name: 'Baseline', data: this.baselineResults })
+      this.selectedPhast1 = this.resultsArray[0];
     }
     this.pieLabels = new Array();
     this.getPieLabels(this.baselineResults, this.showResultsCats);
   }
-
 
   getPieLabels(phastResults: PhastResults, resultCats: ShowResultsCategories) {
     let i = 0;
@@ -106,7 +110,7 @@ export class ReportGraphsComponent implements OnInit {
     }
     if (phastResults.totalFixtureLoss) {
       this.pieLabels.push({
-        label: 'Fixture Losses',
+        name: 'Fixture Losses',
         color: this.colors[i]
       })
       i++;
@@ -127,7 +131,7 @@ export class ReportGraphsComponent implements OnInit {
     }
     if (phastResults.totalChargeMaterialLoss) {
       this.pieLabels.push({
-        name: 'Charge Material Losses',
+        name: 'Charge Materials',
         color: this.colors[i]
       })
       i++;
@@ -173,5 +177,6 @@ export class ReportGraphsComponent implements OnInit {
         color: this.colors[i]
       })
     }
+    console.log(this.pieLabels);
   }
 }

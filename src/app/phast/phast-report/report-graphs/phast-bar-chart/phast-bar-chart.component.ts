@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, SimpleChanges } from '@angular/core';
 import { PHAST, PhastResults, ShowResultsCategories } from '../../../../shared/models/phast/phast';
 import { BaseChartDirective } from 'ng2-charts';
 import { Settings } from '../../../../shared/models/settings';
@@ -25,6 +25,13 @@ export class PhastBarChartComponent implements OnInit {
   chartColors: any = [{}];
   baselineData: any = {};
   modificationData: any = {};
+
+
+  options: any = {
+    legend: {
+      display: false
+    }
+  }
   @ViewChild(BaseChartDirective) private baseChart;
 
   constructor() { }
@@ -42,13 +49,28 @@ export class PhastBarChartComponent implements OnInit {
     this.modificationData = {
       data: new Array<number>(),
       label: ' Modification (' + units + ')',
-      backgroundColor: '#F7DC6F'
+      backgroundColor: '#E74C3C'
     };
     this.getData(this.results, this.modResults, this.resultCats);
     this.getColors();
   }
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.modResults) {
+      if (!changes.modResults.firstChange) {
+        this.getData(this.results, this.modResults, this.resultCats);
+      }
+    } else if (changes.results) {
+      if (!changes.results.firstChange) {
+        this.getData(this.results, this.modResults, this.resultCats);
+      }
+    }
+  }
 
   getData(phastResults: PhastResults, modResults: PhastResults, resultCats: ShowResultsCategories) {
+    this.modificationData.data = new Array<number>();
+    this.baselineData.data = new Array<number>();
+    this.chartData.barChartData = new Array<number>();
+    this.chartData.barChartLabels = new Array<string>();
     if (phastResults.totalWallLoss) {
       let totalWallLoss = this.getMMBtu(phastResults.totalWallLoss);
       this.baselineData.data.push(totalWallLoss);
@@ -173,7 +195,7 @@ export class PhastBarChartComponent implements OnInit {
   getColors() {
     this.chartColors = [
       '#BA4A00',
-      '#CA6F1E'
+      '#E74C3C',
     ]
   }
 }

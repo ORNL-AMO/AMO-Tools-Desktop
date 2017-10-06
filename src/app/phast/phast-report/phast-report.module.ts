@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { PhastReportComponent } from './phast-report.component';
 import { EnergyUsedComponent } from './energy-used/energy-used.component';
 import { ExecutiveSummaryComponent } from './executive-summary/executive-summary.component';
@@ -13,6 +14,8 @@ import { ChartsModule } from 'ng2-charts';
 @NgModule({
   imports: [
     CommonModule,
+    ReactiveFormsModule,
+    FormsModule,
     SankeyModule,
     ChartsModule
   ],

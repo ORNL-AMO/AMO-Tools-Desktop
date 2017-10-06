@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, SimpleChanges } from '@angular/core';
 import { PHAST, PhastResults, ShowResultsCategories } from '../../../../shared/models/phast/phast';
 import { BaseChartDirective } from 'ng2-charts';
 @Component({
@@ -34,7 +34,16 @@ export class PhastPieChartComponent implements OnInit {
     this.getColors();
   }
 
+  ngOnChanges(changes: SimpleChanges) {
+    if (!changes.results.firstChange) {
+      this.getData(this.results, this.resultCats);
+    }
+  }
+
   getData(phastResults: PhastResults, resultCats: ShowResultsCategories) {
+    this.chartData.pieChartData = new Array<number>();
+    this.chartData.pieChartLabels = new Array<string>();
+    
     if (phastResults.totalWallLoss) {
       let totalWallLoss = this.getLossPercent(phastResults.grossHeatInput, phastResults.totalWallLoss);
       this.chartData.pieChartData.push(totalWallLoss);
@@ -130,14 +139,18 @@ export class PhastPieChartComponent implements OnInit {
       {
         backgroundColor: [
           '#BA4A00',
+          '#E74C3C',
+          '#DC7633',
           '#CA6F1E',
           '#F39C12',
           '#F1C40F',
-          '#DC7633',
-          '#E74C3C',
-          '#F9E79F',
+          '#7B241C',
           '#909497',
           '#D2B4DE',
+          '#BB8FCE',
+          '#F9E79F',
+          '#212F3C',
+          '#4A235A'
         ]
       }
     ]
