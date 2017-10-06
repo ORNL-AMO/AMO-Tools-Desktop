@@ -1,13 +1,21 @@
-<div class="row justify-content-center">
+<div class="row justify-content-center align-items-center">
   <div class="col-2">
-
+    <ul>
+      <li *ngFor="let label of pieLabels"><span class="badge" [ngStyle]="{'background-color': label.color}">{{label.name}}</span></li>
+    </ul>
   </div>
   <div class="col-5">
-    <h5>Baseline</h5>
+    <div class="form-group">
+      <select name="selectedPhast1" class="form-control" id="selectedPhast1" (change)="setPhast1()" [(ngModel)]="selectedPhast1">
+        <option *ngFor="let result of resultsArray" [ngValue]="result.data">{{result.name}}</option>
+      </select>
+    </div>
     <app-phast-pie-chart [results]="baseLineResults" [resultCats]="showResultsCats"></app-phast-pie-chart>
   </div>
   <div class="col-5" *ngIf="modExists">
-    <h5>Modification</h5>
+    <select name="selectedPhast2" class="form-control" id="selectedPhast1" (change)="setPhast2()" [(ngModel)]="selectedPhast2">
+        <option *ngFor="let result of resultsArray" [ngValue]="result.data">{{result.name}}</option>
+      </select>
     <app-phast-pie-chart [results]="modificationResults[0]" [resultCats]="showResultsCats"></app-phast-pie-chart>
   </div>
 </div>
