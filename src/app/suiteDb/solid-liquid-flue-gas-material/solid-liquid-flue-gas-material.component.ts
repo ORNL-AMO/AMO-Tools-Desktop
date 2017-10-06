@@ -28,9 +28,10 @@ export class SolidLiquidFlueGasMaterialComponent implements OnInit {
   };
   selectedMaterial: SolidLiquidFlueGasMaterial;
   allMaterials: Array<SolidLiquidFlueGasMaterial>;
-  isValid: boolean = true;
+  isValid: boolean;
   nameError: string = null;
   canAdd: boolean;
+  isNameValid: boolean;
   constructor(private suiteDbService: SuiteDbService, private indexedDbService: IndexedDbService, private phastService: PhastService) { }
 
   ngOnInit() {
@@ -92,9 +93,9 @@ export class SolidLiquidFlueGasMaterialComponent implements OnInit {
     let test = _.filter(this.allMaterials, (material) => { return material.substance == this.newMaterial.substance })
     if (test.length > 0) {
       this.nameError = 'Cannot have same name as existing material';
-      this.isValid = false;
+      this.isNameValid = false;
     } else {
-      this.isValid = true;
+      this.isNameValid = true;
       this.nameError = null;
     }
   }

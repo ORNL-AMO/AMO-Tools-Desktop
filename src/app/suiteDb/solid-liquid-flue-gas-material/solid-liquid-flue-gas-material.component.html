@@ -83,6 +83,6 @@
     </form>
   </div>
   <div class="card-body">
-    <button type="button" class="btn-primary btn-sm pull-right" (click)="addMaterial()" [disabled]="!isValid">Submit</button>
+    <button type="button" class="btn-primary btn-sm pull-right" (click)="addMaterial()"  [disabled]="!isValid || !isNameValid">Submit</button>
   </div>
 </div>
