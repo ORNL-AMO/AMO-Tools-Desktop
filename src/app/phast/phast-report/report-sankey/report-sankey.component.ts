@@ -13,13 +13,21 @@ export class ReportSankeyComponent implements OnInit {
   settings: Settings;
 
   modification: PHAST;
+
+  phastOptions: Array<any>;
+  phast1: PHAST;
+  phast2: PHAST;
   constructor() { }
 
   ngOnInit() {
+    this.phastOptions = new Array<any>();
+    this.phastOptions.push({name: 'Baseline', phast: this.phast});
+    this.phast1 = this.phastOptions[0];
     if (this.phast.modifications) {
-      if (this.phast.modifications[0]) {
-        this.modification = this.phast.modifications[0].phast;
-      }
+      this.phast.modifications.forEach(mod => {
+        this.phastOptions.push({name: mod.phast.name, phast: mod.phast});
+      })
+      this.phast2 = this.phastOptions[1];
     }
   }
 

@@ -177,6 +177,5 @@ export class ReportGraphsComponent implements OnInit {
         color: this.colors[i]
       })
     }
-    console.log(this.pieLabels);
   }
 }
