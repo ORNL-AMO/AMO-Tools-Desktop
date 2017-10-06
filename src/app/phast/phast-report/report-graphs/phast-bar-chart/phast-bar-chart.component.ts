@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import { PHAST, PhastResults, ShowResultsCategories } from '../../../../shared/models/phast/phast';
 import { BaseChartDirective } from 'ng2-charts';
+import { Settings } from '../../../../shared/models/settings';
 @Component({
   selector: 'app-phast-bar-chart',
   templateUrl: './phast-bar-chart.component.html',
@@ -13,6 +14,8 @@ export class PhastBarChartComponent implements OnInit {
   modResults: PhastResults;
   @Input()
   resultCats: ShowResultsCategories;
+  @Input()
+  settings: Settings;
   chartData: any = {
     barChartLabels: new Array<string>(),
     barChartData: new Array<any>(),
@@ -20,22 +23,27 @@ export class PhastBarChartComponent implements OnInit {
   }
 
   chartColors: any = [{}];
-  baselineData: any = {
-    data: new Array<number>(),
-    label: 'Baseline',
-    backgroundColor: '#BA4A00'
-  };
-  modificationData: any = {
-    data: new Array<number>(),
-    label: 'Modification',
-    backgroundColor: '#F7DC6F'
-  };;
-
+  baselineData: any = {};
+  modificationData: any = {};
   @ViewChild(BaseChartDirective) private baseChart;
 
   constructor() { }
 
   ngOnInit() {
+    let units = 'Btu/lb';
+    if (this.settings.unitsOfMeasure == 'Metric') {
+      units = 'kJ/kg';
+    }
+    this.baselineData = {
+      data: new Array<number>(),
+      label: ' Baseline (' + units + ')',
+      backgroundColor: '#BA4A00'
+    };
+    this.modificationData = {
+      data: new Array<number>(),
+      label: ' Modification (' + units + ')',
+      backgroundColor: '#F7DC6F'
+    };
     this.getData(this.results, this.modResults, this.resultCats);
     this.getColors();
   }
@@ -144,7 +152,7 @@ export class PhastBarChartComponent implements OnInit {
     }
     if (phastResults.totalSystemLosses && resultCats.showSystemEff) {
       let totalSystemLosses = this.getMMBtu(phastResults.totalSystemLosses);
-      this.baselineData.data.push(totalSystemLosses + '%');
+      this.baselineData.data.push(totalSystemLosses);
       totalSystemLosses = this.getMMBtu(modResults.totalSystemLosses);
       this.modificationData.data.push(totalSystemLosses);
       this.chartData.barChartLabels.push('System Losses')

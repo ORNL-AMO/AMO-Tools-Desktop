@@ -18,6 +18,13 @@ export class PhastPieChartComponent implements OnInit {
 
   chartColors: Array<any>;
   //chartColorDataSet: Array<any>;
+
+  options: any = {
+    legend: {
+      display: false
+    }
+  }
+
   @ViewChild(BaseChartDirective) private baseChart;
 
   constructor() { }
@@ -103,7 +110,7 @@ export class PhastPieChartComponent implements OnInit {
     }
     if (phastResults.totalSystemLosses && resultCats.showSystemEff) {
       let totalSystemLosses = this.getLossPercent(phastResults.grossHeatInput, phastResults.totalSystemLosses);
-      this.chartData.pieChartData.push(totalSystemLosses +'%');
+      this.chartData.pieChartData.push(totalSystemLosses + '%');
       this.chartData.pieChartLabels.push('System Losses')
     }
 
@@ -118,7 +125,7 @@ export class PhastPieChartComponent implements OnInit {
     return Number((Math.round(val * 100) / 100).toFixed(digits))
   }
 
-  getColors(){
+  getColors() {
     this.chartColors = [
       {
         backgroundColor: [
