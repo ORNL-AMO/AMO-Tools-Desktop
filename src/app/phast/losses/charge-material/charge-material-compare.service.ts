@@ -247,7 +247,7 @@ export class ChargeMaterialCompareService {
   }
 
   disableAll() {
-    for (let lossIndex = 0; lossIndex < this.baselineMaterials.length; lossIndex++) {
+    for (let lossIndex = 0; lossIndex < this.differentArray.length; lossIndex++) {
       this.differentArray[lossIndex].different.chargeMaterialType.next(false);
       //solid
       this.differentArray[lossIndex].different.solidChargeMaterialDifferent.materialId.next(false);
