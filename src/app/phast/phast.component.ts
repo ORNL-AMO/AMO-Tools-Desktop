@@ -68,6 +68,7 @@ export class PhastComponent implements OnInit {
             daysPerWeek: 7,
             shiftsPerDay: 3,
             hoursPerShift: 8,
+            hoursPerYear: 8736
           }
         }
         if (!this._phast.operatingCosts) {
