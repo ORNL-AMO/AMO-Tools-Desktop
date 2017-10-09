@@ -8,7 +8,7 @@ import { DesignedEnergyService } from '../../designed-energy/designed-energy.ser
 import { PhastResultsService } from '../../phast-results.service';
 import { SuiteDbService } from '../../../suiteDb/suite-db.service';
 import { PhastService } from '../../phast.service';
-
+import * as _ from 'lodash';
 @Component({
   selector: 'app-energy-used',
   templateUrl: './energy-used.component.html',
@@ -51,8 +51,13 @@ export class EnergyUsedComponent implements OnInit {
       this.steamEnergyUsed = this.phastService.sumHeatInput(this.phast.losses, this.settings);
       if (this.phast.meteredEnergy) {
         this.meteredResults = this.meteredEnergyService.meteredSteam(this.phast.meteredEnergy.meteredEnergySteam, this.phast, this.settings);
+        this.steamHeatingValue = this.phast.meteredEnergy.meteredEnergySteam.totalHeatSteam;
       } if (this.phast.designedEnergy) {
         this.designedResults = this.designedEnergyService.designedEnergySteam(this.phast.designedEnergy.designedEnergySteam, this.phast, this.settings);
+        if (!this.steamHeatingValue) {
+          let hhvSum = _.sumBy(this.phast.designedEnergy.designedEnergySteam, 'totalHeat')
+          this.steamHeatingValue = hhvSum / this.phast.designedEnergy.designedEnergySteam.length;
+        }
       }
     } else if (this.settings.energySourceType == 'Electricity') {
       this.electricEnergyUsed = this.phastService.sumHeatInput(this.phast.losses, this.settings);

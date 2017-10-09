@@ -56,7 +56,7 @@ export class PhastResultsService {
     if (this.checkLoss(phast.losses.wallLosses)) {
       results.totalWallLoss = this.phastService.sumWallLosses(phast.losses.wallLosses, settings);
     }
-    if (this.checkLoss(phast.losses.wallLosses)) {
+    if (this.checkLoss(phast.losses.atmosphereLosses)) {
       results.totalAtmosphereLoss = this.phastService.sumAtmosphereLosses(phast.losses.atmosphereLosses, settings);
     }
     if (this.checkLoss(phast.losses.otherLosses)) {

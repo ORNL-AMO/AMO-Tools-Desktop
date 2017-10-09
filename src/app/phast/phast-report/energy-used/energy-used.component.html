@@ -41,7 +41,7 @@
           <span *ngIf="!steamEnergyUsed">&mdash; &mdash;</span>
         </td>
         <td>
-          <span *ngIf="steamHeatingValue">{{steamHeatingValue | number:'1.2-2'}}</span>
+          <span *ngIf="steamHeatingValue">{{steamHeatingValue | number:'1.0-0'}}</span>
           <span *ngIf="!steamHeatingValue">&mdash; &mdash;</span>
         </td>
         <td>{{phast.operatingCosts.steamCost | currency:'USD':true:'1.2-2'}}</td>

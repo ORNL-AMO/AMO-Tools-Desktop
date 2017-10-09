@@ -119,7 +119,7 @@ export class PhastPieChartComponent implements OnInit {
     }
     if (phastResults.totalSystemLosses && resultCats.showSystemEff) {
       let totalSystemLosses = this.getLossPercent(phastResults.grossHeatInput, phastResults.totalSystemLosses);
-      this.chartData.pieChartData.push(totalSystemLosses + '%');
+      this.chartData.pieChartData.push(totalSystemLosses);
       this.chartData.pieChartLabels.push('System Losses')
     }
 
