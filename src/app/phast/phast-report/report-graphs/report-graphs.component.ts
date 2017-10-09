@@ -5,6 +5,7 @@ import { Settings } from '../../../shared/models/settings';
 import { Assessment } from '../../../shared/models/assessment';
 import { PhastResultsService } from '../../phast-results.service';
 import { graphColors } from './graphColors';
+import { PhastReportService } from '../phast-report.service';
 @Component({
   selector: 'app-report-graphs',
   templateUrl: './report-graphs.component.html',
@@ -30,22 +31,10 @@ export class ReportGraphsComponent implements OnInit {
   pieLabels: any;
   baselineResults: PhastResults;
   colors: Array<string>;
-  //  = [
-  //   '#BA4A00',
-  //   '#E74C3C',
-  //   '#DC7633',
-  //   '#CA6F1E',
-  //   '#F39C12',
-  //   '#F1C40F',
-  //   '#7B241C',
-  //   '#909497',
-  //   '#D2B4DE',
-  //   '#BB8FCE',
-  //   '#F9E79F',
-  //   '#212F3C',
-  //   '#4A235A'
-  // ]
-  constructor(private phastService: PhastService, private phastResultsService: PhastResultsService) { }
+  baselineLabels: Array<string>;
+  modifiedLabels: Array<string>;
+
+  constructor(private phastService: PhastService, private phastResultsService: PhastResultsService, private phastReportService: PhastReportService) { }
 
   ngOnInit() {
     this.colors = graphColors;
@@ -70,115 +59,23 @@ export class ReportGraphsComponent implements OnInit {
       this.resultsArray.push({ name: 'Baseline', data: this.baselineResults })
       this.selectedPhast1 = this.resultsArray[0];
     }
-    this.pieLabels = new Array();
-    this.getPieLabels(this.baselineResults, this.showResultsCats);
+    this.phastReportService.baselineChartLabels.subscribe(val => {
+      if (val) {
+        this.getPieLabels(val);
+      }
+    })
   }
 
-  getPieLabels(phastResults: PhastResults, resultCats: ShowResultsCategories) {
+
+  getPieLabels(labels: Array<string>) {
+    this.pieLabels = new Array();
     let i = 0;
-    if (phastResults.totalWallLoss) {
+    labels.forEach(label => {
       this.pieLabels.push({
-        name: 'Wall Losses',
+        name: label,
         color: this.colors[i]
       })
       i++;
-    }
-    if (phastResults.totalAtmosphereLoss) {
-      this.pieLabels.push({
-        name: 'Atmosphere Losses',
-        color: this.colors[i]
-      })
-      i++;
-    }
-    if (phastResults.totalOtherLoss) {
-      this.pieLabels.push({
-        name: 'Other Losses',
-        color: this.colors[i]
-      })
-      i++;
-    }
-    if (phastResults.totalCoolingLoss) {
-      this.pieLabels.push({
-        name: 'Cooling Losses',
-        color: this.colors[i]
-      })
-      i++;
-    }
-    if (phastResults.totalOpeningLoss) {
-      this.pieLabels.push({
-        name: 'Opening Losses',
-        color: this.colors[i]
-      })
-      i++;
-    }
-    if (phastResults.totalFixtureLoss) {
-      this.pieLabels.push({
-        name: 'Fixture Losses',
-        color: this.colors[i]
-      })
-      i++;
-    }
-    if (phastResults.totalLeakageLoss) {
-      this.pieLabels.push({
-        name: 'Leakage Losses',
-        color: this.colors[i]
-      })
-      i++;
-    }
-    if (phastResults.totalExtSurfaceLoss) {
-      this.pieLabels.push({
-        name: 'Extended Surface Losses',
-        color: this.colors[i]
-      })
-      i++;
-    }
-    if (phastResults.totalChargeMaterialLoss) {
-      this.pieLabels.push({
-        name: 'Charge Materials',
-        color: this.colors[i]
-      })
-      i++;
-    }
-    if (resultCats.showFlueGas && phastResults.totalFlueGas) {
-      this.pieLabels.push({
-        name: 'Flue Gas Losses',
-        color: this.colors[i]
-      })
-      i++;
-    }
-    if (resultCats.showAuxPower && phastResults.totalAuxPower) {
-      this.pieLabels.push({
-        name: 'Auxiliary Power Losses',
-        color: this.colors[i]
-      })
-      i++;
-    }
-    if (resultCats.showSlag && phastResults.totalSlag) {
-      this.pieLabels.push({
-        name: 'Slag Losses',
-        color: this.colors[i]
-      })
-      i++;
-    }
-    if (resultCats.showExGas && phastResults.totalExhaustGasEAF) {
-      this.pieLabels.push({
-        name: 'Exhaust Gas',
-        color: this.colors[i]
-      })
-      i++;
-    }
-    if (resultCats.showEnInput2 && phastResults.totalExhaustGas) {
-      this.pieLabels.push({
-        name: 'Exhaust Gas',
-        color: this.colors[i]
-      })
-      i++;
-    }
-    if (phastResults.totalSystemLosses && resultCats.showSystemEff) {
-      this.pieLabels.push({
-        name: 'System Losses',
-        color: this.colors[i]
-      })
-    }
+    })
   }
 }

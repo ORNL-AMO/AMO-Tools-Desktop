@@ -10,7 +10,7 @@
         <option *ngFor="let result of resultsArray" [ngValue]="result">{{result.name}}</option>
       </select>
     </div>
-    <app-phast-pie-chart [results]="selectedPhast1.data" [resultCats]="showResultsCats"></app-phast-pie-chart>
+    <app-phast-pie-chart [results]="selectedPhast1.data" [resultCats]="showResultsCats" [isBaseline]="true"></app-phast-pie-chart>
   </div>
   <div class="col-5" *ngIf="modExists">
     <div class="form-group">

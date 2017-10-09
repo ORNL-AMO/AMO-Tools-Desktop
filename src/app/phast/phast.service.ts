@@ -302,7 +302,6 @@ export class PhastService {
     } else {
       results = phastAddon.flueGasLossesByVolume(inputs);
     }
-
     return results;
   }
 

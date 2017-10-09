@@ -11,6 +11,7 @@ import { SankeyModule } from '../sankey/sankey.module';
 import { PhastPieChartComponent } from './report-graphs/phast-pie-chart/phast-pie-chart.component';
 import { PhastBarChartComponent } from './report-graphs/phast-bar-chart/phast-bar-chart.component';
 import { ChartsModule } from 'ng2-charts';
+import { PhastReportService } from './phast-report.service';
 @NgModule({
   imports: [
     CommonModule,
@@ -20,6 +21,7 @@ import { ChartsModule } from 'ng2-charts';
     ChartsModule
   ],
   declarations: [PhastReportComponent, EnergyUsedComponent, ExecutiveSummaryComponent, ResultsDataComponent, ReportGraphsComponent, ReportSankeyComponent, PhastPieChartComponent, PhastBarChartComponent],
-  exports: [PhastReportComponent]
+  exports: [PhastReportComponent],
+  providers: [PhastReportService]
 })
 export class PhastReportModule { }
