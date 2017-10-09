@@ -101,11 +101,14 @@ export class OpeningLossesComponent implements OnInit {
   }
 
   ngOnDestroy() {
-    this.openingLossesCompareService.baselineOpeningLosses = null;
-    this.openingLossesCompareService.modifiedOpeningLosses = null;
+    if (this.isBaseline) {
+      this.openingLossesService.addLossBaselineMonitor.next(false);
+      this.openingLossesCompareService.baselineOpeningLosses = null;
+    } else {
+      this.openingLossesCompareService.modifiedOpeningLosses = null;
+      this.openingLossesService.addLossModificationMonitor.next(false);
+    };
     this.openingLossesService.deleteLossIndex.next(null);
-    this.openingLossesService.addLossBaselineMonitor.next(false);
-    this.openingLossesService.addLossModificationMonitor.next(false);
   }
 
   addLoss() {

@@ -7,6 +7,8 @@ import { MeteredEnergyService } from '../../metered-energy/metered-energy.servic
 import { DesignedEnergyService } from '../../designed-energy/designed-energy.service';
 import { PhastResultsService } from '../../phast-results.service';
 import { SuiteDbService } from '../../../suiteDb/suite-db.service';
+import { PhastService } from '../../phast.service';
+import * as _ from 'lodash';
 @Component({
   selector: 'app-energy-used',
   templateUrl: './energy-used.component.html',
@@ -36,23 +38,36 @@ export class EnergyUsedComponent implements OnInit {
   };
 
   baseLineResults: PhastResults;
-  heatingValue: number = 0;
-  constructor(private designedEnergyService: DesignedEnergyService, private meteredEnergyService: MeteredEnergyService, private phastResultsService: PhastResultsService, private suiteDbService: SuiteDbService) { }
+  fuelHeatingValue: number = 0;
+  steamHeatingValue: number = 0;
+  fuelName: string;
+  electricEnergyUsed: number = 0;
+  fuelEnergyUsed: number = 0;
+  steamEnergyUsed: number = 0;
+  constructor(private designedEnergyService: DesignedEnergyService, private meteredEnergyService: MeteredEnergyService, private phastResultsService: PhastResultsService, private suiteDbService: SuiteDbService, private phastService: PhastService) { }
 
   ngOnInit() {
     if (this.settings.energySourceType == 'Steam') {
+      this.steamEnergyUsed = this.phastService.sumHeatInput(this.phast.losses, this.settings);
       if (this.phast.meteredEnergy) {
         this.meteredResults = this.meteredEnergyService.meteredSteam(this.phast.meteredEnergy.meteredEnergySteam, this.phast, this.settings);
+        this.steamHeatingValue = this.phast.meteredEnergy.meteredEnergySteam.totalHeatSteam;
       } if (this.phast.designedEnergy) {
         this.designedResults = this.designedEnergyService.designedEnergySteam(this.phast.designedEnergy.designedEnergySteam, this.phast, this.settings);
+        if (!this.steamHeatingValue) {
+          let hhvSum = _.sumBy(this.phast.designedEnergy.designedEnergySteam, 'totalHeat')
+          this.steamHeatingValue = hhvSum / this.phast.designedEnergy.designedEnergySteam.length;
+        }
       }
     } else if (this.settings.energySourceType == 'Electricity') {
+      this.electricEnergyUsed = this.phastService.sumHeatInput(this.phast.losses, this.settings);
       if (this.phast.meteredEnergy) {
         this.meteredResults = this.meteredEnergyService.meteredElectricity(this.phast.meteredEnergy.meteredEnergyElectricity, this.phast, this.settings);
       } if (this.phast.designedEnergy) {
         this.designedResults = this.designedEnergyService.designedEnergyElectricity(this.phast.designedEnergy.designedEnergyElectricity, this.phast, this.settings);
       }
     } else if (this.settings.energySourceType == 'Fuel') {
+      this.fuelEnergyUsed = this.phastService.sumHeatInput(this.phast.losses, this.settings);
       if (this.phast.meteredEnergy) {
         this.meteredResults = this.meteredEnergyService.meteredFuel(this.phast.meteredEnergy.meteredEnergyFuel, this.phast, this.settings);
       } if (this.phast.designedEnergy) {
@@ -60,14 +75,15 @@ export class EnergyUsedComponent implements OnInit {
       }
       if (this.phast.losses.flueGasLosses[0].flueGasType == 'By Mass') {
         let gas = this.suiteDbService.selectSolidLiquidFlueGasMaterialById(this.phast.losses.flueGasLosses[0].flueGasByMass.gasTypeId);
-        console.log(gas);
+        this.fuelHeatingValue = gas.heatingValue;
+        this.fuelName = gas.substance;
       } else if (this.phast.losses.flueGasLosses[0].flueGasType == 'By Volume') {
         let gas = this.suiteDbService.selectGasFlueGasMaterialById(this.phast.losses.flueGasLosses[0].flueGasByVolume.gasTypeId);
-        console.log(gas);
+        this.fuelHeatingValue = gas.heatingValue;
+        this.fuelName = gas.substance;
       }
     }
     this.baseLineResults = this.phastResultsService.getResults(this.phast, this.settings);
-    console.log(this.baseLineResults);
   }
 
 }

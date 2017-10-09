@@ -98,11 +98,14 @@ export class CoolingLossesComponent implements OnInit {
   }
 
   ngOnDestroy() {
-    this.coolingLossesCompareService.baselineCoolingLosses = null;
-    this.coolingLossesCompareService.modifiedCoolingLosses = null;
+    if (this.isBaseline) {
+      this.coolingLossesService.addLossBaselineMonitor.next(false);
+      this.coolingLossesCompareService.baselineCoolingLosses = null;
+    } else {
+      this.coolingLossesService.addLossModificationMonitor.next(false);
+      this.coolingLossesCompareService.modifiedCoolingLosses = null;
+    }
     this.coolingLossesService.deleteLossIndex.next(null);
-    this.coolingLossesService.addLossBaselineMonitor.next(false);
-    this.coolingLossesService.addLossModificationMonitor.next(false);
   }
 
   initCoolingLosses() {
