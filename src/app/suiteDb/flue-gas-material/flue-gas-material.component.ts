@@ -17,6 +17,8 @@ export class FlueGasMaterialComponent implements OnInit {
   closeModal = new EventEmitter<FlueGasMaterial>();
   @Input()
   settings: Settings;
+  @Input()
+  currentField: string;
   newMaterial: FlueGasMaterial = {
     substance: 'New Fuel',
     C2H6: 0,
