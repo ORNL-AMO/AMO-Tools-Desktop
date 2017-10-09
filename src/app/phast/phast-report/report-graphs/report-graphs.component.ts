@@ -4,6 +4,7 @@ import { PHAST, PhastResults, ShowResultsCategories } from '../../../shared/mode
 import { Settings } from '../../../shared/models/settings';
 import { Assessment } from '../../../shared/models/assessment';
 import { PhastResultsService } from '../../phast-results.service';
+import { graphColors } from './graphColors';
 @Component({
   selector: 'app-report-graphs',
   templateUrl: './report-graphs.component.html',
@@ -28,24 +29,26 @@ export class ReportGraphsComponent implements OnInit {
   showResultsCats: ShowResultsCategories;
   pieLabels: any;
   baselineResults: PhastResults;
-  colors: Array<string> = [
-    '#BA4A00',
-    '#E74C3C',
-    '#DC7633',
-    '#CA6F1E',
-    '#F39C12',
-    '#F1C40F',
-    '#7B241C',
-    '#909497',
-    '#D2B4DE',
-    '#BB8FCE',
-    '#F9E79F',
-    '#212F3C',
-    '#4A235A'
-  ]
+  colors: Array<string>;
+  //  = [
+  //   '#BA4A00',
+  //   '#E74C3C',
+  //   '#DC7633',
+  //   '#CA6F1E',
+  //   '#F39C12',
+  //   '#F1C40F',
+  //   '#7B241C',
+  //   '#909497',
+  //   '#D2B4DE',
+  //   '#BB8FCE',
+  //   '#F9E79F',
+  //   '#212F3C',
+  //   '#4A235A'
+  // ]
   constructor(private phastService: PhastService, private phastResultsService: PhastResultsService) { }
 
   ngOnInit() {
+    this.colors = graphColors;
     this.resultsArray = new Array<any>();
     this.showResultsCats = this.phastResultsService.getResultCategories(this.settings);
     if (this.phast.losses) {

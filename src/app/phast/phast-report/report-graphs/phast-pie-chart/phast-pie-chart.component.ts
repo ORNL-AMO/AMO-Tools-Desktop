@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, ViewChild, SimpleChanges } from '@angular/core';
 import { PHAST, PhastResults, ShowResultsCategories } from '../../../../shared/models/phast/phast';
 import { BaseChartDirective } from 'ng2-charts';
+import { graphColors } from '../graphColors';
 @Component({
   selector: 'app-phast-pie-chart',
   templateUrl: './phast-pie-chart.component.html',
@@ -137,21 +138,7 @@ export class PhastPieChartComponent implements OnInit {
   getColors() {
     this.chartColors = [
       {
-        backgroundColor: [
-          '#BA4A00',
-          '#E74C3C',
-          '#DC7633',
-          '#CA6F1E',
-          '#F39C12',
-          '#F1C40F',
-          '#7B241C',
-          '#909497',
-          '#D2B4DE',
-          '#BB8FCE',
-          '#F9E79F',
-          '#212F3C',
-          '#4A235A'
-        ]
+        backgroundColor: graphColors
       }
     ]
   }

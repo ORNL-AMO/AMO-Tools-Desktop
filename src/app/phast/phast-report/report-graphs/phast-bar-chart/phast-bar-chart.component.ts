@@ -2,6 +2,7 @@ import { Component, OnInit, Input, ViewChild, SimpleChanges } from '@angular/cor
 import { PHAST, PhastResults, ShowResultsCategories } from '../../../../shared/models/phast/phast';
 import { BaseChartDirective } from 'ng2-charts';
 import { Settings } from '../../../../shared/models/settings';
+import { graphColors } from '../graphColors';
 @Component({
   selector: 'app-phast-bar-chart',
   templateUrl: './phast-bar-chart.component.html',
@@ -44,12 +45,12 @@ export class PhastBarChartComponent implements OnInit {
     this.baselineData = {
       data: new Array<number>(),
       label: ' Baseline (' + units + ')',
-      backgroundColor: '#BA4A00'
+      backgroundColor: graphColors[0]
     };
     this.modificationData = {
       data: new Array<number>(),
       label: ' Modification (' + units + ')',
-      backgroundColor: '#E74C3C'
+      backgroundColor: graphColors[1]
     };
     this.getData(this.results, this.modResults, this.resultCats);
     this.getColors();
@@ -194,8 +195,8 @@ export class PhastBarChartComponent implements OnInit {
 
   getColors() {
     this.chartColors = [
-      '#BA4A00',
-      '#E74C3C',
+      graphColors[0],
+      graphColors[1],
     ]
   }
 }
