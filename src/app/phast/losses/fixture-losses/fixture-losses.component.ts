@@ -99,11 +99,14 @@ export class FixtureLossesComponent implements OnInit {
   }
 
   ngOnDestroy() {
-    this.fixtureLossesCompareService.baselineFixtureLosses = null;
-    this.fixtureLossesCompareService.modifiedFixtureLosses = null;
+    if (this.isBaseline) {
+      this.fixtureLossesService.addLossBaselineMonitor.next(false);
+      this.fixtureLossesCompareService.baselineFixtureLosses = null;
+    } else {
+      this.fixtureLossesService.addLossModificationMonitor.next(false);
+      this.fixtureLossesCompareService.modifiedFixtureLosses = null;
+    }
     this.fixtureLossesService.deleteLossIndex.next(null);
-    this.fixtureLossesService.addLossBaselineMonitor.next(false);
-    this.fixtureLossesService.addLossModificationMonitor.next(false);
   }
 
   addLoss() {
@@ -134,7 +137,7 @@ export class FixtureLossesComponent implements OnInit {
     if (loss.form.status == 'VALID') {
       let tmpLoss: FixtureLoss = this.fixtureLossesService.getLossFromForm(loss.form);
       loss.heatLoss = this.phastService.fixtureLosses(tmpLoss, this.settings);
-    }else{
+    } else {
       loss.heatLoss = null;
     }
   }

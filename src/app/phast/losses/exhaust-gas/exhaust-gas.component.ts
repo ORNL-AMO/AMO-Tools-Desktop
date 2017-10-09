@@ -101,11 +101,14 @@ export class ExhaustGasComponent implements OnInit {
   }
 
   ngOnDestroy() {
-    this.exhaustGasCompareService.baselineExhaustGasLosses = null;
-    this.exhaustGasCompareService.modifiedExhaustGasLosses = null;
+    if (this.isBaseline) {
+      this.exhaustGasService.addLossBaselineMonitor.next(false);
+      this.exhaustGasCompareService.baselineExhaustGasLosses = null;
+    } else {
+      this.exhaustGasService.addLossModificationMonitor.next(false);
+      this.exhaustGasCompareService.modifiedExhaustGasLosses = null;
+    }
     this.exhaustGasService.deleteLossIndex.next(null);
-    this.exhaustGasService.addLossBaselineMonitor.next(false);
-    this.exhaustGasService.addLossModificationMonitor.next(false);
   }
   addLoss() {
     this.exhaustGasService.addLoss(this.isBaseline);
@@ -135,7 +138,7 @@ export class ExhaustGasComponent implements OnInit {
     if (loss.form.status == 'VALID') {
       let tmpGas = this.exhaustGasService.getLossFromForm(loss.form);
       loss.heatLoss = this.phastService.exhaustGasEAF(tmpGas, this.settings);
-    }else {
+    } else {
       loss.heatLoss = null;
     }
   }

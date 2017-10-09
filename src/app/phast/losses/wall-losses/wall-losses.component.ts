@@ -115,13 +115,14 @@ export class WallLossesComponent implements OnInit {
 
   ngOnDestroy() {
     //clean up subscriptions on destroy
-    this.wallLossCompareService.baselineWallLosses = null;
-    this.wallLossCompareService.modifiedWallLosses = null;
+    if (this.isBaseline) {
+      this.wallLossesService.addLossBaselineMonitor.next(false);
+      this.wallLossCompareService.baselineWallLosses = null;
+    } else {
+      this.wallLossCompareService.modifiedWallLosses = null;
+      this.wallLossesService.addLossModifiedMonitor.next(false);
+    }
     this.wallLossesService.deleteLossIndex.next(null);
-    this.wallLossesService.addLossBaselineMonitor.next(false);
-    this.wallLossesService.addLossModifiedMonitor.next(false);
-    //this.wallLossesService.deleteLossIndex.unsubscribe();
-    //this.wallLossesService.addLossMonitor.unsubscribe();
   }
 
   addLoss() {

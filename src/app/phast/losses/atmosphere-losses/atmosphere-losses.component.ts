@@ -99,12 +99,14 @@ export class AtmosphereLossesComponent implements OnInit {
   }
 
   ngOnDestroy() {
-    this.atmosphereLossesCompareService.baselineAtmosphereLosses = null;
-    this.atmosphereLossesCompareService.modifiedAtmosphereLosses = null;
+    if (this.isBaseline) {
+      this.atmosphereLossesService.addLossBaselineMonitor.next(false);
+      this.atmosphereLossesCompareService.baselineAtmosphereLosses = null;
+    } else {
+      this.atmosphereLossesCompareService.modifiedAtmosphereLosses = null;
+      this.atmosphereLossesService.addLossModificationMonitor.next(false);
+    }
     this.atmosphereLossesService.deleteLossIndex.next(null);
-    this.atmosphereLossesService.addLossBaselineMonitor.next(false);
-    this.atmosphereLossesService.addLossModificationMonitor.next(false);
-
   }
 
   addLoss() {
@@ -136,7 +138,7 @@ export class AtmosphereLossesComponent implements OnInit {
     if (loss.form.status == 'VALID') {
       let tmpAtmosphereLoss = this.atmosphereLossesService.getLossFromForm(loss.form);
       loss.heatLoss = this.phastService.atmosphere(tmpAtmosphereLoss, this.settings);
-    }else{
+    } else {
       loss.heatLoss = null;
     }
   }

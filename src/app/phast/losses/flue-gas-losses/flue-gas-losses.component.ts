@@ -96,11 +96,14 @@ export class FlueGasLossesComponent implements OnInit {
   }
 
   ngOnDestroy() {
-    this.flueGasCompareService.baselineFlueGasLoss = null;
-    this.flueGasCompareService.modifiedFlueGasLoss = null;
+    if (this.isBaseline) {
+      this.flueGasLossesService.addLossBaselineMonitor.next(false);
+      this.flueGasCompareService.baselineFlueGasLoss = null;
+    } else {
+      this.flueGasLossesService.addLossModificationMonitor.next(false);
+      this.flueGasCompareService.modifiedFlueGasLoss = null;
+    }
     this.flueGasLossesService.deleteLossIndex.next(null);
-    this.flueGasLossesService.addLossBaselineMonitor.next(false);
-    this.flueGasLossesService.addLossModificationMonitor.next(false);
   }
 
   initFlueGasses() {
@@ -165,7 +168,7 @@ export class FlueGasLossesComponent implements OnInit {
         let tmpLoss: FlueGasByVolume = this.flueGasLossesService.buildByVolumeLossFromForm(loss.formByVolume);
         let tmpResult = this.phastService.flueGasByVolume(tmpLoss, this.settings);
         loss.availableHeat = tmpResult * 100;
-        let sumHeat =  this.phastService.sumHeatInput(this.losses, this.settings);
+        let sumHeat = this.phastService.sumHeatInput(this.losses, this.settings);
         loss.grossHeat = sumHeat / tmpResult;
         loss.systemLosses = loss.grossHeat * (1 - tmpResult);
       } else {

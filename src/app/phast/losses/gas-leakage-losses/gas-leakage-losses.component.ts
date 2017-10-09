@@ -101,11 +101,14 @@ export class GasLeakageLossesComponent implements OnInit {
   }
 
   ngOnDestroy() {
-    this.gasLeakageCompareService.baselineLeakageLoss = null;
-    this.gasLeakageCompareService.modifiedLeakageLoss = null;
+    if (this.isBaseline) {
+      this.gasLeakageLossesService.addLossBaselineMonitor.next(false);
+      this.gasLeakageCompareService.baselineLeakageLoss = null;
+    } else {
+      this.gasLeakageCompareService.modifiedLeakageLoss = null;
+      this.gasLeakageLossesService.addLossModificationMonitor.next(false);
+    }
     this.gasLeakageLossesService.deleteLossIndex.next(null);
-    this.gasLeakageLossesService.addLossBaselineMonitor.next(false);
-    this.gasLeakageLossesService.addLossModificationMonitor.next(false);
   }
 
   addLoss() {

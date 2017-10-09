@@ -101,11 +101,14 @@ export class SlagComponent implements OnInit {
   }
 
   ngOnDestroy() {
-    this.slagCompareService.baselineSlag = null;
-    this.slagCompareService.modifiedSlag = null;
+    if (this.isBaseline) {
+      this.slagCompareService.baselineSlag = null;
+      this.slagService.addLossBaselineMonitor.next(false);
+    } else {
+      this.slagCompareService.modifiedSlag = null;
+      this.slagService.addLossModificationMonitor.next(false);
+    }
     this.slagService.deleteLossIndex.next(null);
-    this.slagService.addLossBaselineMonitor.next(false);
-    this.slagService.addLossModificationMonitor.next(false);
   }
 
 

@@ -51,7 +51,6 @@ export class HeatSystemEfficiencyComponent implements OnInit {
   }
 
   initForm(val?: number) {
-    console.log(val);
     if (val) {
       this.efficiencyForm = this.formBuilder.group({
         efficiency: [val, Validators.required]
