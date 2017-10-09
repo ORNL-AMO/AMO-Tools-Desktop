@@ -1,3 +1,126 @@
-<p>
-  combined-heat-power-form works!
-</p>
+<div class="form-section">
+  <div class="row">
+    <div class="col-6">
+      <form>
+        <div class="form-group">
+          <label class="small" for="annualOperatingHours">Orifice Diameter</label>
+          <div class="input-group">
+            <input autofocus name="annualOperatingHours" [(ngModel)]="combinedHeatPowerCalculations.annualOperatingHours" type="number" step="any" class="form-control"
+                   id="annualOperatingHours" (input)="calculate()" onfocus="this.select();" (focus)="focusField('annualOperatingHours')">
+            <span class="input-group-addon units">Inch</span>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="small" for="annualElectricityConsumption">Inside Pipe Diameter</label>
+          <div class="input-group">
+            <input name="annualElectricityConsumption" [(ngModel)]="combinedHeatPowerCalculations.annualElectricityConsumption" type="number" step="any" class="form-control"
+                   id="annualElectricityConsumption" (input)="calculate()" onfocus="this.select();" (focus)="focusField('annualElectricityConsumption')">
+            <span class="input-group-addon units">Inch</span>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="small" for="annualThermalDemand">Orifice Pressure Drop</label>
+          <div class="input-group">
+            <input name="annualThermalDemand" [(ngModel)]="combinedHeatPowerCalculations.annualThermalDemand" type="number" step="any" class="form-control"
+                   id="annualThermalDemand" (input)="calculate()" onfocus="this.select();" (focus)="focusField('annualThermalDemand')">
+            <span class="input-group-addon units">Inch W.C.</span>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="small" for="boilerThermalFuelCosts">Operating Time</label>
+          <div class="input-group">
+            <input name="boilerThermalFuelCosts" [(ngModel)]="combinedHeatPowerCalculations.boilerThermalFuelCosts" type="number" step="any" class="form-control" id="boilerThermalFuelCosts"
+                   (input)="calculate()" onfocus="this.select();" (focus)="focusField('boilerThermalFuelCosts')">
+            <span class="input-group-addon units">Hrs</span>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="small" for="calculationOption">Type of Section</label>
+          <div class="input-group">
+            <select id="calculationOption" name="calculationOption" class="form-control" [(ngModel)]="combinedHeatPowerCalculations.calculationOption" (focus)="focusField('calculationOption')"
+                    (change)="setCalculationOption()">
+              <option *ngFor="let option of calculationOptions" [ngValue]="option.value">{{option.name}}</option>
+            </select>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="col-6">
+      <form>
+        <div class="form-group">
+          <label class="small" for="avgElectricityCosts">Temperature of Gas</label>
+          <div class="input-group">
+            <input name="avgElectricityCosts" [(ngModel)]="combinedHeatPowerCalculations.avgElectricityCosts" type="number" step="any" class="form-control"
+                   id="avgElectricityCosts" (input)="calculate()" onfocus="this.select();" (focus)="focusField('avgElectricityCosts')">
+            <span class="input-group-addon units">&#8457;</span>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="small" for="boilerThermalFuelCostsCHPcase">Pressure of Gas</label>
+          <div class="input-group">
+            <input name="boilerThermalFuelCostsCHPcase" [(ngModel)]="combinedHeatPowerCalculations.boilerThermalFuelCostsCHPcase" type="number" step="any" class="form-control" id="boilerThermalFuelCostsCHPcase"
+                   (input)="calculate()" onfocus="this.select();" (focus)="focusField('boilerThermalFuelCostsCHPcase')">
+            <span class="input-group-addon units">Psig</span>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="small" for="CHPfuelCosts">Coefficient of Discharge</label>
+          <div class="input-group">
+            <input name="CHPfuelCosts" [(ngModel)]="combinedHeatPowerCalculations.CHPfuelCosts" type="number" step="any" class="form-control"
+                   id="CHPfuelCosts" (input)="calculate()" onfocus="this.select();" (focus)="focusField('CHPfuelCosts')">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="small" for="percentAvgkWhElectricCostAvoidedOrStandbyRate">Heating Value of Gas - HHV</label>
+          <div class="input-group">
+            <input name="percentAvgkWhElectricCostAvoidedOrStandbyRate" [(ngModel)]="combinedHeatPowerCalculations.percentAvgkWhElectricCostAvoidedOrStandbyRate" type="number" step="any" class="form-control"
+                   id="percentAvgkWhElectricCostAvoidedOrStandbyRate" (input)="calculate()" onfocus="this.select();" (focus)="focusField('percentAvgkWhElectricCostAvoidedOrStandbyRate')">
+            <span class="input-group-addon units"><span>Btu/ft<sup>3</sup></span></span>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="small" for="displacedThermalEfficiency">Specific Gravity</label>
+          <!--Todo: Air == 1 help-->
+          <div class="input-group">
+            <input name="displacedThermalEfficiency" [(ngModel)]="combinedHeatPowerCalculations.displacedThermalEfficiency" type="number" step="any" class="form-control"
+                   id="displacedThermalEfficiency" (input)="calculate()" onfocus="this.select();" (focus)="focusField('displacedThermalEfficiency')">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="small" for="chpAvailability">Specific Gravity</label>
+          <!--Todo: Air == 1 help-->
+          <div class="input-group">
+            <input name="chpAvailability" [(ngModel)]="combinedHeatPowerCalculations.chpAvailability" type="number" step="any" class="form-control"
+                   id="chpAvailability" (input)="calculate()" onfocus="this.select();" (focus)="focusField('chpAvailability')">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="small" for="thermalUtilization">Specific Gravity</label>
+          <!--Todo: Air == 1 help-->
+          <div class="input-group">
+            <input name="thermalUtilization" [(ngModel)]="combinedHeatPowerCalculations.thermalUtilization" type="number" step="any" class="form-control"
+                   id="thermalUtilization" (input)="calculate()" onfocus="this.select();" (focus)="focusField('thermalUtilization')">
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<!--<div class="col-3 offset-md-1">
+      <div class="form-group text-center results-box">
+        <label class="small">Flow</label>
+        <div class="small">
+          {{flowCalculationResults.flow | number:'2.2-2'}} Scfh
+        </div>
+        <label class="small">Total Flow</label>
+        <div class="small">
+          {{flowCalculationResults.totalFlow | number:'2.2-2'}} Scf
+        </div>
+        <label class="small">Energy Use</label>
+        <div class="small">
+          {{flowCalculationResults.heatInput | number:'2.2-2'}} Million Btu
+        </div>
+      </div>
+    </div>-->
+<!--</div>
+</div>-->
