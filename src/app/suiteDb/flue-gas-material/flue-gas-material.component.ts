@@ -17,8 +17,7 @@ export class FlueGasMaterialComponent implements OnInit {
   closeModal = new EventEmitter<FlueGasMaterial>();
   @Input()
   settings: Settings;
-  @Input()
-  currentField: string;
+
   newMaterial: FlueGasMaterial = {
     substance: 'New Fuel',
     C2H6: 0,
@@ -41,6 +40,7 @@ export class FlueGasMaterialComponent implements OnInit {
   nameError: string = null;
   canAdd: boolean;
   isNameValid: boolean;
+  currentField: string;
   constructor(private suiteDbService: SuiteDbService, private indexedDbService: IndexedDbService, private convertUnitsService: ConvertUnitsService, private phastService: PhastService) { }
 
   ngOnInit() {
@@ -111,6 +111,10 @@ export class FlueGasMaterialComponent implements OnInit {
       this.isNameValid = true;
       this.nameError = null;
     }
+  }
+
+  focusField(str: string){
+    this.currentField = str;
   }
 
 }
