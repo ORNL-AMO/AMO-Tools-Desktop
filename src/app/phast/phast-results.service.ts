@@ -95,8 +95,9 @@ export class PhastResultsService {
       results.totalExhaustGas = tmpResults.exhaustGasLosses;
     }
     if (phast.systemEfficiency && resultCats.showSystemEff) {
+      let additionalHeat = this.phastService.sumChargeMaterialExothermic(phast.losses.chargeMaterials);
       results.heatingSystemEfficiency = phast.systemEfficiency;
-      let grossHeatInput = this.phastService.sumHeatInput(phast.losses, settings) / phast.systemEfficiency;
+      let grossHeatInput = (this.phastService.sumHeatInput(phast.losses, settings) / phast.systemEfficiency) - additionalHeat;
       results.totalSystemLosses = grossHeatInput * (1 - (phast.systemEfficiency / 100));
     }
 
