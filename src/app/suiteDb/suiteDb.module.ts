@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { SuiteDbService } from './suite-db.service';
@@ -9,6 +9,8 @@ import { SolidLiquidFlueGasMaterialComponent } from './solid-liquid-flue-gas-mat
 import { SolidLoadChargeMaterialComponent } from './solid-load-charge-material/solid-load-charge-material.component';
 import { AtmosphereSpecificHeatMaterialComponent } from './atmosphere-specific-heat-material/atmosphere-specific-heat-material.component';
 import { WallLossesSurfaceComponent } from './wall-losses-surface/wall-losses-surface.component';
+import { FlueGasMaterialHelpComponent } from './flue-gas-material/flue-gas-material-help/flue-gas-material-help.component';
+import { SolidLiquidFlueGasMaterialHelpComponent } from './solid-liquid-flue-gas-material/solid-liquid-flue-gas-material-help/solid-liquid-flue-gas-material-help.component';
 @NgModule({
     imports: [
         FormsModule,
@@ -25,7 +27,9 @@ import { WallLossesSurfaceComponent } from './wall-losses-surface/wall-losses-su
         SolidLiquidFlueGasMaterialComponent,
         SolidLoadChargeMaterialComponent,
         AtmosphereSpecificHeatMaterialComponent,
-        WallLossesSurfaceComponent
+        WallLossesSurfaceComponent,
+        FlueGasMaterialHelpComponent,
+        SolidLiquidFlueGasMaterialHelpComponent
     ],
     exports: [
         GasLoadChargeMaterialComponent,
@@ -33,8 +37,10 @@ import { WallLossesSurfaceComponent } from './wall-losses-surface/wall-losses-su
         LiquidLoadChargeMaterialComponent,
         SolidLiquidFlueGasMaterialComponent,
         FlueGasMaterialComponent,
-        AtmosphereSpecificHeatMaterialComponent, 
-        WallLossesSurfaceComponent
+        AtmosphereSpecificHeatMaterialComponent,
+        WallLossesSurfaceComponent,
+        FlueGasMaterialHelpComponent,
+        SolidLiquidFlueGasMaterialHelpComponent
     ]
 })
 
