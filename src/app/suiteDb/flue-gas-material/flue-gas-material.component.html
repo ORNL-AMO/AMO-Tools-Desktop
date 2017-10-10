@@ -22,7 +22,7 @@
             <div class="form-group">
               <label class="small" for="C2H6">C<sub>2</sub>H<sub>6</sub></label>
               <div class="input-group">
-                <input type="number" id="C2H6" name="C2H6" class="form-control" [(ngModel)]="newMaterial.C2H6" (input)="setHHV()" (focus)="focusField('C2H6')"
+                <input type="number" step="any" min="0" max="100" id="C2H6" name="C2H6" class="form-control" [(ngModel)]="newMaterial.C2H6" (input)="setHHV()" (focus)="focusField('C2H6')"
                 />
                 <span class="input-group-addon units">%</span>
               </div>
@@ -30,7 +30,7 @@
             <div class="form-group">
               <label class="small" for="C3H8">C<sub>3</sub>H<sub>8</sub></label>
               <div class="input-group">
-                <input type="number" id="C3H8" name="C3H8" class="form-control" [(ngModel)]="newMaterial.C3H8" (input)="setHHV()" (focus)="focusField('C3H8')"
+                <input type="number" step="any" min="0" max="100" id="C3H8" name="C3H8" class="form-control" [(ngModel)]="newMaterial.C3H8" (input)="setHHV()" (focus)="focusField('C3H8')"
                 />
                 <span class="input-group-addon units">%</span>
               </div>
@@ -38,7 +38,7 @@
             <div class="form-group">
               <label class="small" for="C4H10_CnH2n">C<sub>4</sub> H<sub>10</sub> CnH<sub>2</sub>n</label>
               <div class="input-group">
-                <input type="number" id="C4H10_CnH2n" name="C4H10_CnH2n" class="form-control" [(ngModel)]="newMaterial.C4H10_CnH2n" (input)="setHHV()"
+                <input type="number" step="any" min="0" max="100" id="C4H10_CnH2n" name="C4H10_CnH2n" class="form-control" [(ngModel)]="newMaterial.C4H10_CnH2n" (input)="setHHV()"
                   (focus)="focusField('C4H10_CnH2n')" />
                 <span class="input-group-addon units">%</span>
               </div>
@@ -46,7 +46,7 @@
             <div class="form-group">
               <label class="small" for="CH4">CH<sub>4</sub></label>
               <div class="input-group">
-                <input type="number" id="CH4" name="CH4" class="form-control" [(ngModel)]="newMaterial.CH4" (input)="setHHV()" (focus)="focusField('CH4')"
+                <input type="number" step="any" min="0" max="100" id="CH4" name="CH4" class="form-control" [(ngModel)]="newMaterial.CH4" (input)="setHHV()" (focus)="focusField('CH4')"
                 />
                 <span class="input-group-addon units">%</span>
               </div>
@@ -54,7 +54,7 @@
             <div class="form-group">
               <label class="small" for="CO">CO</label>
               <div class="input-group">
-                <input type="number" id="CO" name="CO" class="form-control" [(ngModel)]="newMaterial.CO" (input)="setHHV()" (focus)="focusField('CO')"
+                <input type="number" step="any" min="0" max="100" id="CO" name="CO" class="form-control" [(ngModel)]="newMaterial.CO" (input)="setHHV()" (focus)="focusField('CO')"
                 />
                 <span class="input-group-addon units">%</span>
               </div>
@@ -62,7 +62,7 @@
             <div class="form-group">
               <label class="small" for="CO2">CO<sub>2</sub></label>
               <div class="input-group">
-                <input type="number" id="CO2" name="CO2" class="form-control" [(ngModel)]="newMaterial.CO2" (input)="setHHV()" (focus)="focusField('CO2')"
+                <input type="number" step="any" min="0" max="100" id="CO2" name="CO2" class="form-control" [(ngModel)]="newMaterial.CO2" (input)="setHHV()" (focus)="focusField('CO2')"
                 />
                 <span class="input-group-addon units">%</span>
               </div>
@@ -70,7 +70,7 @@
             <div class="form-group">
               <label class="small" for="H2">H<sub>2</sub></label>
               <div class="input-group">
-                <input type="number" id="H2" name="H2" class="form-control" [(ngModel)]="newMaterial.H2" (input)="setHHV()" (focus)="focusField('H2')"
+                <input type="number" step="any" min="0" max="100" id="H2" name="H2" class="form-control" [(ngModel)]="newMaterial.H2" (input)="setHHV()" (focus)="focusField('H2')"
                 />
                 <span class="input-group-addon units">%</span>
               </div>
@@ -78,7 +78,7 @@
             <div class="form-group">
               <label class="small" for="H2O">H<sub>2</sub>O</label>
               <div class="input-group">
-                <input type="number" id="H2O" name="H2OH2" class="form-control" [(ngModel)]="newMaterial.H2O" (input)="setHHV()" (focus)="focusField('H2O')"
+                <input type="number" step="any" min="0" max="100" id="H2O" name="H2OH2" class="form-control" [(ngModel)]="newMaterial.H2O" (input)="setHHV()" (focus)="focusField('H2O')"
                 />
                 <span class="input-group-addon units">%</span>
               </div>
@@ -86,7 +86,7 @@
             <div class="form-group">
               <label class="small" for="N2">N<sub>2</sub></label>
               <div class="input-group">
-                <input type="number" id="N2" name="N2" class="form-control" [(ngModel)]="newMaterial.N2" (input)="setHHV()" (focus)="focusField('N2')"
+                <input type="number" step="any" min="0" max="100" id="N2" name="N2" class="form-control" [(ngModel)]="newMaterial.N2" (input)="setHHV()" (focus)="focusField('N2')"
                 />
                 <span class="input-group-addon units">%</span>
               </div>
@@ -94,7 +94,7 @@
             <div class="form-group">
               <label class="small" for="O2">O<sub>2</sub></label>
               <div class="input-group">
-                <input type="number" id="O2" name="O2" class="form-control" [(ngModel)]="newMaterial.O2" (input)="setHHV()" (focus)="focusField('O2')"
+                <input type="number" step="any" min="0" max="100" id="O2" name="O2" class="form-control" [(ngModel)]="newMaterial.O2" (input)="setHHV()" (focus)="focusField('O2')"
                 />
                 <span class="input-group-addon units">%</span>
               </div>
@@ -102,7 +102,7 @@
             <div class="form-group">
               <label class="small" for="SO2">SO<sub>2</sub></label>
               <div class="input-group">
-                <input type="number" id="SO2" name="SO2" class="form-control" [(ngModel)]="newMaterial.SO2" (input)="setHHV()" (focus)="focusField('SO2')"
+                <input type="number" step="any" min="0" max="100" id="SO2" name="SO2" class="form-control" [(ngModel)]="newMaterial.SO2" (input)="setHHV()" (focus)="focusField('SO2')"
                 />
                 <span class="input-group-addon units">%</span>
               </div>
@@ -129,11 +129,11 @@
       </div>
 
       <div class="col-sm-5 col-md-5">
-        <ul>
-          <li class="calc-tab active">
-            <a style="text-align: center;">Help</a>
-          </li>
-        </ul>
+
+
+            <h3 style="text-align: center;">Help</h3>
+
+
         <div class="tab-content">
           <app-flue-gas-material-help [currentField]="currentField"></app-flue-gas-material-help>
           <!--<div class="help-header">-->

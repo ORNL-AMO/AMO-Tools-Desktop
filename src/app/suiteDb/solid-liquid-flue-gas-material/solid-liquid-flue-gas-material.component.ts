@@ -32,6 +32,7 @@ export class SolidLiquidFlueGasMaterialComponent implements OnInit {
   nameError: string = null;
   canAdd: boolean;
   isNameValid: boolean;
+  currentField: string = 'carbon';
   constructor(private suiteDbService: SuiteDbService, private indexedDbService: IndexedDbService, private phastService: PhastService) { }
 
   ngOnInit() {
@@ -99,6 +100,10 @@ export class SolidLiquidFlueGasMaterialComponent implements OnInit {
       this.isNameValid = true;
       this.nameError = null;
     }
+  }
+
+  focusField(str: string){
+    this.currentField = str;
   }
 
 }

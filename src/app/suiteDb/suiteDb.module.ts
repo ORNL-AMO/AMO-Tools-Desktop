@@ -10,6 +10,7 @@ import { SolidLoadChargeMaterialComponent } from './solid-load-charge-material/s
 import { AtmosphereSpecificHeatMaterialComponent } from './atmosphere-specific-heat-material/atmosphere-specific-heat-material.component';
 import { WallLossesSurfaceComponent } from './wall-losses-surface/wall-losses-surface.component';
 import { FlueGasMaterialHelpComponent } from './flue-gas-material/flue-gas-material-help/flue-gas-material-help.component';
+import { SolidLiquidFlueGasMaterialHelpComponent } from './solid-liquid-flue-gas-material/solid-liquid-flue-gas-material-help/solid-liquid-flue-gas-material-help.component';
 @NgModule({
     imports: [
         FormsModule,
@@ -27,7 +28,8 @@ import { FlueGasMaterialHelpComponent } from './flue-gas-material/flue-gas-mater
         SolidLoadChargeMaterialComponent,
         AtmosphereSpecificHeatMaterialComponent,
         WallLossesSurfaceComponent,
-        FlueGasMaterialHelpComponent
+        FlueGasMaterialHelpComponent,
+        SolidLiquidFlueGasMaterialHelpComponent
     ],
     exports: [
         GasLoadChargeMaterialComponent,
@@ -37,7 +39,8 @@ import { FlueGasMaterialHelpComponent } from './flue-gas-material/flue-gas-mater
         FlueGasMaterialComponent,
         AtmosphereSpecificHeatMaterialComponent,
         WallLossesSurfaceComponent,
-        FlueGasMaterialHelpComponent
+        FlueGasMaterialHelpComponent,
+        SolidLiquidFlueGasMaterialHelpComponent
     ]
 })
 

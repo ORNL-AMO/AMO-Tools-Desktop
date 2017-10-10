@@ -40,7 +40,7 @@ export class FlueGasMaterialComponent implements OnInit {
   nameError: string = null;
   canAdd: boolean;
   isNameValid: boolean;
-  currentField: string;
+  currentField: string = 'C2H6';
   constructor(private suiteDbService: SuiteDbService, private indexedDbService: IndexedDbService, private convertUnitsService: ConvertUnitsService, private phastService: PhastService) { }
 
   ngOnInit() {
