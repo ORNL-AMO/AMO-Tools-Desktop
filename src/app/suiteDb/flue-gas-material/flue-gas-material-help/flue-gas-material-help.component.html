@@ -1,181 +1,212 @@
- <!--Gasses Help-->
-<div class="help-content">
-  <div class="card" *ngIf="currentField == 'C2H6'">
-    <div class="card-header">
-      Ethane
-    </div>
-    <div class="card-block">
-      <label><u><strong>Description</strong></u></label>
+<!--Gasses Help-->
+<div class="help-panel">
+  <div class="help-header">
+
+    <h3>Enter Chemical Makeup of your Custom Fuel</h3>
+    <!--<p class="text-muted">
+      <span class="fa fa-youtube-play"></span> Watch tutorial on gathering field data.
+    </p>-->
+
+  </div>
+  <div class="help-content">
+    <div class="card" *ngIf="currentField == 'selectedMaterial'">
+      <div class="card-header">
+        Start With Existing
+      </div>
+      <div class="card-block">
+        <label><u><strong>Description</strong></u></label>
         <p>
-        Ethane composition of gas/liquid fuel by volume
+          Use an existing fuel's properties to get started.
         </p>
-      <label><u><strong>Input</strong></u></label>
+      </div>
+    </div>
+    <div class="card" *ngIf="currentField == 'substance'">
+      <div class="card-header">
+        Name of New Substance
+      </div>
+      <div class="card-block">
+        <label><u><strong>Description</strong></u></label>
         <p>
-        Minimum Value Allowed: <strong>0</strong> <br> Maximum Value Allowed: <strong>100</strong>
+          Use a unique name for your new substance. Duplicates will not be saved.
         </p>
+      </div>
     </div>
+    <div class="card" *ngIf="currentField == 'C2H6'">
+      <div class="card-header">
+        Ethane
+      </div>
+      <div class="card-block">
+        <label><u><strong>Description</strong></u></label>
+        <p>
+          Ethane composition of gas/liquid fuel by volume
+        </p>
+        <label><u><strong>Input</strong></u></label>
+        <p>
+          Minimum Value Allowed: <strong>0</strong> <br> Maximum Value Allowed: <strong>100</strong>
+        </p>
+      </div>
+    </div>
+
+    <div class="card" *ngIf="currentField == 'C3H8'">
+      <div class="card-header">
+        Propane
+      </div>
+      <div class="card-block">
+        <label><u><strong>Description</strong></u></label>
+        <p>
+          Propane composition of gas/liquid fuel by volume
+        </p>
+        <label><u><strong>Input</strong></u></label>
+        <p>
+          Minimum Value Allowed: <strong>0</strong> <br> Maximum Value Allowed: <strong>100</strong>
+        </p>
+      </div>
+    </div>
+
+    <div class="card" *ngIf="currentField == 'C4H10_CnH2n'">
+      <div class="card-header">
+        Butane
+      </div>
+      <div class="card-block">
+        <label><u><strong>Description</strong></u></label>
+        <p>
+          Butane and heavier hydrocarbons composition of gas/liquid fuel by volume
+        </p>
+        <label><u><strong>Input</strong></u></label>
+        <p>
+          Minimum Value Allowed: <strong>0</strong> <br> Maximum Value Allowed: <strong>100</strong>
+        </p>
+      </div>
+    </div>
+
+    <div class="card" *ngIf="currentField == 'CH4'">
+      <div class="card-header">
+        Methane
+      </div>
+      <div class="card-block">
+        <label><u><strong>Description</strong></u></label>
+        <p>
+          Methane composition of gas/liquid fuel by volume
+        </p>
+        <label><u><strong>Input</strong></u></label>
+        <p>
+          Minimum Value Allowed: <strong>0</strong> <br> Maximum Value Allowed: <strong>100</strong>
+        </p>
+      </div>
+    </div>
+
+    <div class="card" *ngIf="currentField == 'CO'">
+      <div class="card-header">
+        Carbon Monoxide
+      </div>
+      <div class="card-block">
+        <label><u><strong>Description</strong></u></label>
+        <p>
+          Carbon Monoxide composition of gas/liquid fuel by volume
+        </p>
+        <label><u><strong>Input</strong></u></label>
+        <p>
+          Minimum Value Allowed: <strong>0</strong> <br> Maximum Value Allowed: <strong>100</strong>
+        </p>
+      </div>
+    </div>
+
+    <div class="card" *ngIf="currentField == 'CO2'">
+      <div class="card-header">
+        Carbon Dioxide
+      </div>
+      <div class="card-block">
+        <label><u><strong>Description</strong></u></label>
+        <p>
+          Carbon Dioxide composition of gas/liquid fuel by volume
+        </p>
+        <label><u><strong>Input</strong></u></label>
+        <p>
+          Minimum Value Allowed: <strong>0</strong> <br> Maximum Value Allowed: <strong>100</strong>
+        </p>
+      </div>
+    </div>
+
+    <div class="card" *ngIf="currentField == 'H2'">
+      <div class="card-header">
+        Hydrogen
+      </div>
+      <div class="card-block">
+        <label><u><strong>Description</strong></u></label>
+        <p>
+          Hydrogen composition of gas/liquid fuel by volume
+        </p>
+        <label><u><strong>Input</strong></u></label>
+        <p>
+          Minimum Value Allowed: <strong>0</strong> <br> Maximum Value Allowed: <strong>100</strong>
+        </p>
+      </div>
+    </div>
+
+    <div class="card" *ngIf="currentField == 'H2O'">
+      <div class="card-header">
+        Moisture
+      </div>
+      <div class="card-block">
+        <label><u><strong>Description</strong></u></label>
+        <p>
+          Moisture composition of gas/liquid fuel by volume
+        </p>
+        <label><u><strong>Input</strong></u></label>
+        <p>
+          Minimum Value Allowed: <strong>0</strong> <br> Maximum Value Allowed: <strong>100</strong>
+        </p>
+      </div>
+    </div>
+
+    <div class="card" *ngIf="currentField == 'N2'">
+      <div class="card-header">
+        Nitrogen
+      </div>
+      <div class="card-block">
+        <label><u><strong>Description</strong></u></label>
+        <p>
+          Nitrogen composition of gas/liquid fuel by volume
+        </p>
+        <label><u><strong>Input</strong></u></label>
+        <p>
+          Minimum Value Allowed: <strong>0</strong> <br> Maximum Value Allowed: <strong>100</strong>
+        </p>
+      </div>
+    </div>
+
+    <div class="card" *ngIf="currentField == 'O2'">
+      <div class="card-header">
+        Oxygen
+      </div>
+      <div class="card-block">
+        <label><u><strong>Description</strong></u></label>
+        <p>
+          Oxygen composition of gas/liquid fuel by volume
+        </p>
+        <label><u><strong>Input</strong></u></label>
+        <p>
+          Minimum Value Allowed: <strong>0</strong> <br> Maximum Value Allowed: <strong>100</strong>
+        </p>
+      </div>
+    </div>
+
+    <div class="card" *ngIf="currentField == 'SO2'">
+      <div class="card-header">
+        Sulfur Dioxide
+      </div>
+      <div class="card-block">
+        <label><u><strong>Description</strong></u></label>
+        <p>
+          Sulfur Dioxide composition of gas/liquid fuel by volume
+        </p>
+        <label><u><strong>Input</strong></u></label>
+        <p>
+          Minimum Value Allowed: <strong>0</strong> <br> Maximum Value Allowed: <strong>100</strong>
+        </p>
+      </div>
+    </div>
+
+
   </div>
-
-  <div class="card" *ngIf="currentField == 'C3H8'">
-    <div class="card-header">
-      Propane
-    </div>
-    <div class="card-block">
-      <label><u><strong>Description</strong></u></label>
-      <p>
-        Propane composition of gas/liquid fuel by volume
-      </p>
-      <label><u><strong>Input</strong></u></label>
-      <p>
-        Minimum Value Allowed: <strong>0</strong> <br> Maximum Value Allowed: <strong>100</strong>
-      </p>
-    </div>
-  </div>
-
-  <div class="card" *ngIf="currentField == 'C4H10_CnH2n'">
-    <div class="card-header">
-      Butane
-    </div>
-    <div class="card-block">
-      <label><u><strong>Description</strong></u></label>
-      <p>
-        Butane and heavier hydrocarbons composition of gas/liquid fuel by volume
-      </p>
-      <label><u><strong>Input</strong></u></label>
-      <p>
-        Minimum Value Allowed: <strong>0</strong> <br> Maximum Value Allowed: <strong>100</strong>
-      </p>
-    </div>
-  </div>
-
-  <div class="card" *ngIf="currentField == 'CH4'">
-    <div class="card-header">
-      Methane
-    </div>
-    <div class="card-block">
-      <label><u><strong>Description</strong></u></label>
-      <p>
-        Methane composition of gas/liquid fuel by volume
-      </p>
-      <label><u><strong>Input</strong></u></label>
-      <p>
-        Minimum Value Allowed: <strong>0</strong> <br> Maximum Value Allowed: <strong>100</strong>
-      </p>
-    </div>
-  </div>
-
-  <div class="card" *ngIf="currentField == 'CO'">
-    <div class="card-header">
-      Carbon Monoxide
-    </div>
-    <div class="card-block">
-      <label><u><strong>Description</strong></u></label>
-      <p>
-        Carbon Monoxide composition of gas/liquid fuel by volume
-      </p>
-      <label><u><strong>Input</strong></u></label>
-      <p>
-        Minimum Value Allowed: <strong>0</strong> <br> Maximum Value Allowed: <strong>100</strong>
-      </p>
-    </div>
-  </div>
-
-  <div class="card" *ngIf="currentField == 'CO2'">
-    <div class="card-header">
-      Carbon Dioxide
-    </div>
-    <div class="card-block">
-      <label><u><strong>Description</strong></u></label>
-      <p>
-        Carbon Dioxide composition of gas/liquid fuel by volume
-      </p>
-      <label><u><strong>Input</strong></u></label>
-      <p>
-        Minimum Value Allowed: <strong>0</strong> <br> Maximum Value Allowed: <strong>100</strong>
-      </p>
-    </div>
-  </div>
-
-  <div class="card" *ngIf="currentField == 'H2'">
-    <div class="card-header">
-      Hydrogen
-    </div>
-    <div class="card-block">
-      <label><u><strong>Description</strong></u></label>
-      <p>
-        Hydrogen composition of gas/liquid fuel by volume
-      </p>
-      <label><u><strong>Input</strong></u></label>
-      <p>
-        Minimum Value Allowed: <strong>0</strong> <br> Maximum Value Allowed: <strong>100</strong>
-      </p>
-    </div>
-  </div>
-
-  <div class="card" *ngIf="currentField == 'H2O'">
-    <div class="card-header">
-      Moisture
-    </div>
-    <div class="card-block">
-      <label><u><strong>Description</strong></u></label>
-      <p>
-        Moisture composition of gas/liquid fuel by volume
-      </p>
-      <label><u><strong>Input</strong></u></label>
-      <p>
-        Minimum Value Allowed: <strong>0</strong> <br> Maximum Value Allowed: <strong>100</strong>
-      </p>
-    </div>
-  </div>
-
-  <div class="card" *ngIf="currentField == 'N2'">
-    <div class="card-header">
-      Nitrogen
-    </div>
-    <div class="card-block">
-      <label><u><strong>Description</strong></u></label>
-      <p>
-        Nitrogen composition of gas/liquid fuel by volume
-      </p>
-      <label><u><strong>Input</strong></u></label>
-      <p>
-        Minimum Value Allowed: <strong>0</strong> <br> Maximum Value Allowed: <strong>100</strong>
-      </p>
-    </div>
-  </div>
-
-  <div class="card" *ngIf="currentField == 'O2'">
-    <div class="card-header">
-      Oxygen
-    </div>
-    <div class="card-block">
-      <label><u><strong>Description</strong></u></label>
-      <p>
-        Oxygen composition of gas/liquid fuel by volume
-      </p>
-      <label><u><strong>Input</strong></u></label>
-      <p>
-        Minimum Value Allowed: <strong>0</strong> <br> Maximum Value Allowed: <strong>100</strong>
-      </p>
-    </div>
-  </div>
-
-  <div class="card" *ngIf="currentField == 'SO2'">
-    <div class="card-header">
-      Sulfur Dioxide
-    </div>
-    <div class="card-block">
-      <label><u><strong>Description</strong></u></label>
-      <p>
-        Sulfur Dioxide composition of gas/liquid fuel by volume
-      </p>
-      <label><u><strong>Input</strong></u></label>
-      <p>
-        Minimum Value Allowed: <strong>0</strong> <br> Maximum Value Allowed: <strong>100</strong>
-      </p>
-    </div>
-  </div>
-
-
-
 </div>

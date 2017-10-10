@@ -6,7 +6,7 @@
           <div class="form-section">
             <div class="form-group">
               <label class="small" for="selectedMaterial">Start with existing material</label>
-              <select name="selectedMaterial" class="form-control" id="selectedMaterial" (change)="setExisting()" [(ngModel)]="selectedMaterial">
+              <select name="selectedMaterial" class="form-control" id="selectedMaterial" (change)="setExisting()" [(ngModel)]="selectedMaterial" (focus)="focusField('selectedMaterial')">
             <option *ngFor="let material of allMaterials" [ngValue]="material">{{material.substance}}</option>
           </select>
             </div>
@@ -14,7 +14,7 @@
           <div class="form-section">
             <div class="form-group">
               <label class="small" for="substance">Substance Name</label>
-              <input type="text" id="substance" name="substance" class="form-control" [(ngModel)]="newMaterial.substance" (input)="checkMaterialName()"
+              <input type="text" id="substance" name="substance" class="form-control" [(ngModel)]="newMaterial.substance" (input)="checkMaterialName()" (focus)="focusField('substance')"
               />
               <span class="alert-warning pull-right small" *ngIf="nameError !== null">{{nameError}}</span>
             </div>
@@ -86,7 +86,6 @@
       </div>
 
       <div class="col-sm-5 col-md-5">
-        <h3 style="text-align: center;">Help</h3>
         <div class="tab-content">
           <app-solid-liquid-flue-gas-material-help [currentField]="currentField"></app-solid-liquid-flue-gas-material-help>
         </div>

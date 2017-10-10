@@ -32,7 +32,7 @@ export class SolidLiquidFlueGasMaterialComponent implements OnInit {
   nameError: string = null;
   canAdd: boolean;
   isNameValid: boolean;
-  currentField: string = 'carbon';
+  currentField: string = 'selectedMaterial';
   constructor(private suiteDbService: SuiteDbService, private indexedDbService: IndexedDbService, private phastService: PhastService) { }
 
   ngOnInit() {
