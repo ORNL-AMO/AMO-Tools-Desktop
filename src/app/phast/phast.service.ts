@@ -772,19 +772,19 @@ export class PhastService {
     return sumAdditionalHeat;
   }
 
-  sumAuxiliaryEquipment(phast: PHAST, results: Array<any>) {
-    let sum = 0;
-    results.forEach(result => {
-      if (result.motorPower == 'Calculated') {
-        sum += result.totalPower;
-      } else if (result.motorPower == 'Rated') {
-        if (result.totalPower != 0) {
-          let convert = this.convertUnitsService.value(result.totalPower).from('hp').to('kW');
-          sum += convert;
-        }
-      }
-    })
-    return sum;
-  }
+  // sumAuxiliaryEquipment(phast: PHAST, results: Array<any>) {
+  //   let sum = 0;
+  //   results.forEach(result => {
+  //     if (result.motorPower == 'Calculated') {
+  //       sum += result.totalPower;
+  //     } else if (result.motorPower == 'Rated') {
+  //       if (result.totalPower != 0) {
+  //         let convert = this.convertUnitsService.value(result.totalPower).from('hp').to('kW');
+  //         sum += convert;
+  //       }
+  //     }
+  //   })
+  //   return sum;
+  // }
 }
 
