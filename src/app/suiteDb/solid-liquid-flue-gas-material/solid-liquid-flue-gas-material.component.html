@@ -6,7 +6,6 @@
           <label class="small" for="selectedMaterial">Start with existing material</label>
           <select name="selectedMaterial" class="form-control" id="selectedMaterial" (change)="setExisting()" [(ngModel)]="selectedMaterial">
         <option *ngFor="let material of allMaterials" [ngValue]="material">{{material.substance}}</option>
-                <option [ngValue]="null"></option>
       </select>
         </div>
       </div>
@@ -20,66 +19,70 @@
         <div class="form-group">
           <label class="small" for="carbon">Carbon</label>
           <div class="input-group">
-            <input type="number" id="carbon" name="carbon" class="form-control" [(ngModel)]="newMaterial.carbon" />
+            <input type="number" id="carbon" name="carbon" class="form-control" [(ngModel)]="newMaterial.carbon" (input)="setHHV()" />
             <span class="input-group-addon units">%</span>
           </div>
         </div>
         <div class="form-group">
           <label class="small" for="hydrogen">Hydrogen</label>
           <div class="input-group">
-            <input type="number" id="hydrogen" name="hydrogen" class="form-control" [(ngModel)]="newMaterial.hydrogen" />
+            <input type="number" id="hydrogen" name="hydrogen" class="form-control" [(ngModel)]="newMaterial.hydrogen" (input)="setHHV()"
+            />
             <span class="input-group-addon units">%</span>
           </div>
         </div>
         <div class="form-group">
           <label class="small" for="inertAsh">Inert Ash</label>
           <div class="input-group">
-            <input type="number" id="inertAsh" name="inertAsh" class="form-control" [(ngModel)]="newMaterial.inertAsh" />
+            <input type="number" id="inertAsh" name="inertAsh" class="form-control" [(ngModel)]="newMaterial.inertAsh" (input)="setHHV()"
+            />
             <span class="input-group-addon units">%</span>
           </div>
         </div>
         <div class="form-group">
           <label class="small" for="moisture">Moisture</label>
           <div class="input-group">
-            <input type="number" id="moisture" name="moisture" class="form-control" [(ngModel)]="newMaterial.moisture" />
+            <input type="number" id="moisture" name="moisture" class="form-control" [(ngModel)]="newMaterial.moisture" (input)="setHHV()"
+            />
             <span class="input-group-addon units">%</span>
           </div>
         </div>
         <div class="form-group">
           <label class="small" for="nitrogen">Nitrogen</label>
           <div class="input-group">
-            <input type="number" id="nitrogen" name="nitrogen" class="form-control" [(ngModel)]="newMaterial.nitrogen" />
+            <input type="number" id="nitrogen" name="nitrogen" class="form-control" [(ngModel)]="newMaterial.nitrogen" (input)="setHHV()"
+            />
             <span class="input-group-addon units">%</span>
           </div>
         </div>
         <div class="form-group">
           <label class="small" for="o2">O<sub>2</sub></label>
           <div class="input-group">
-            <input type="number" id="o2" name="o2" class="form-control" [(ngModel)]="newMaterial.o2" />
+            <input type="number" id="o2" name="o2" class="form-control" [(ngModel)]="newMaterial.o2" (input)="setHHV()" />
             <span class="input-group-addon units">%</span>
           </div>
         </div>
         <div class="form-group">
           <label class="small" for="sulphur">Sulphur</label>
           <div class="input-group">
-            <input type="number" id="sulphur" name="sulphur" class="form-control" [(ngModel)]="newMaterial.sulphur" />
+            <input type="number" id="sulphur" name="sulphur" class="form-control" [(ngModel)]="newMaterial.sulphur" (input)="setHHV()"
+            />
             <span class="input-group-addon units">%</span>
           </div>
         </div>
       </div>
       <div class="form-group">
         <label class="small" for="heatingValue">Heating Value
-          <a id="setHHV" class="form-text text-help" (click)="setHHV()">Calculate from Gas Composition</a>
+          <!--<a id="setHHV" class="form-text text-help" (click)="setHHV()">Calculate from Gas Composition</a>-->
         </label>
-        <div class="input-group">
-          <input type="number" id="heatingValue" name="heatingValue" class="form-control" [(ngModel)]="newMaterial.heatingValue" />
-          <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">Btu/SCF</span>
-          <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kJ/Nm<sup>3</sup></span>
+        <div class="text-center small">
+          <span *ngIf="settings.unitsOfMeasure == 'Imperial'">{{newMaterial.heatingValue | number:'2.0-3'}} Btu/SCF</span>
+          <span *ngIf="settings.unitsOfMeasure == 'Metric'">{{newMaterial.heatingValue | number:'2.0-3'}} kJ/Nm<sup>3</sup></span>
         </div>
       </div>
     </form>
   </div>
   <div class="card-body">
-    <button type="button" class="btn-primary btn-sm pull-right" (click)="addMaterial()" [disabled]="!isValidMaterialName">Submit</button>
+    <button type="button" class="btn-primary btn-sm pull-right" (click)="addMaterial()"  [disabled]="!isValid || !isNameValid">Submit</button>
   </div>
 </div>

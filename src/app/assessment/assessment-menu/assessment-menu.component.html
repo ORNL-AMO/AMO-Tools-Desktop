@@ -1,11 +1,11 @@
 
 
 
-<div class="row main-menu">
+<div class="row">
   <div class="col-12">
 
     <ol class="breadcrumb">
-      <li class="breadcrumb-item" *ngFor="let crumb of breadCrumbs; let first = first;">
+      <li *ngFor="let crumb of breadCrumbs; let first = first;">
         <a *ngIf="first" (click)="goToDirectory(crumb)">
           All Assets
         </a>
@@ -13,8 +13,8 @@
           {{crumb.name}}
         </a>
       </li>
-      <li class="breadcrumb-item">{{directory.name}}</li>
-      <li class="breadcrumb-item" *ngIf="view == 'settings'">Settings</li>
+      <li>{{directory.name}}</li>
+      <li *ngIf="view == 'settings'">Settings</li>
     </ol>
 
   </div>
@@ -22,15 +22,26 @@
 
 
 
-<div class="row main-menu">
+<div class="row">
   <div class="col-12">
-    <button (click)="showCreateAssessment()" type="button" class="btn btn-secondary create-btn">Add Asset</button>
-    <app-create-folder [(directory)]="directory" (newDirectory)="emitNewDir()" class="create-container"></app-create-folder>
-    <button [disabled]="!checkSelected()" type="button" class="btn btn-secondary" (click)="emitGenReport()">Generate Report</button>
-    <button [disabled]="!checkSelected()" type="button" (click)="signalDeleteItems()" class="btn btn-secondary">Delete...</button>
-    <button [disabled]="!checkSelected()" type="button" class="btn btn-secondary" (click)="emitExport()">Export...</button>
 
-    <button type="button" class="btn btn-link pull-right" (click)="emitImport()">Import...</button>
+    <div class="table-header">
+
+      <div class="actions">
+        <button (click)="showCreateAssessment()" type="button" class="btn btn-secondary create-btn">Add Asset</button>
+        <app-create-folder [(directory)]="directory" (newDirectory)="emitNewDir()" class="create-container"></app-create-folder>
+        <button [disabled]="!checkSelected()" type="button" class="btn btn-secondary" (click)="emitGenReport()">Generate Report</button>
+        <button [disabled]="!checkSelected()" type="button" (click)="signalDeleteItems()" class="btn btn-secondary">Delete...</button>
+        <button [disabled]="!checkSelected()" type="button" class="btn btn-secondary" (click)="emitExport()">Export...</button>
+
+        <button type="button" class="btn btn-link pull-right" (click)="emitImport()">Import...</button>
+      </div><!-- End .table-actions -->
+
+      <div class="header" *ngIf="view != 'settings'">
+        <label><input type="checkbox" [(ngModel)]="isAllSelected" (change)="signalSelectAll()"/> Select all</label>
+      </div>
+
+    </div>
 
   </div>
   <!-- <div class="col-2">
@@ -40,14 +51,5 @@
     </div>
   </div> -->
 </div>
-
-<div class="table-header" *ngIf="view != 'settings'">
-  <div class="row">
-    <div class="col-12">
-      <label><input type="checkbox" [(ngModel)]="isAllSelected" (change)="signalSelectAll()"/> Select all</label>
-    </div>
-  </div>
-</div>
-
 
 <!--<app-assessment-create *ngIf="createAssessment" (hideModal)="hideModal()" [(directory)]="directory" class="create-container"></app-assessment-create>-->

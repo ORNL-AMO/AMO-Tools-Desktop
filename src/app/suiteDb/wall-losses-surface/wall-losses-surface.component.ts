@@ -25,9 +25,11 @@ export class WallLossesSurfaceComponent implements OnInit {
   allMaterials: Array<WallLossesSurface>;
   isValidMaterialName: boolean = true;
   nameError: string = null;
+  canAdd: boolean;
   constructor(private suiteDbService: SuiteDbService, private indexedDbService: IndexedDbService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
+    this.canAdd = true;
     this.allMaterials = this.suiteDbService.selectWallLossesSurface();
     this.checkMaterialName();
     // this.selectedMaterial = this.allMaterials[0];
@@ -39,11 +41,14 @@ export class WallLossesSurfaceComponent implements OnInit {
   }
 
   addMaterial() {
-    let suiteDbResult = this.suiteDbService.insertWallLossesSurface(this.newMaterial);
-    if (suiteDbResult == true) {
-      this.indexedDbService.addWallLossesSurface(this.newMaterial).then(idbResults => {
-        this.closeModal.emit(this.newMaterial);
-      })
+    if (this.canAdd) {
+      this.canAdd = false;
+      let suiteDbResult = this.suiteDbService.insertWallLossesSurface(this.newMaterial);
+      if (suiteDbResult == true) {
+        this.indexedDbService.addWallLossesSurface(this.newMaterial).then(idbResults => {
+          this.closeModal.emit(this.newMaterial);
+        })
+      }
     }
   }
 

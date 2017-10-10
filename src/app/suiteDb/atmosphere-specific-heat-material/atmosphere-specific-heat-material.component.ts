@@ -25,9 +25,11 @@ export class AtmosphereSpecificHeatMaterialComponent implements OnInit {
   allMaterials: Array<AtmosphereSpecificHeat>;
   isValidMaterialName: boolean = true;
   nameError: string = null;
+  canAdd: boolean;
   constructor(private suiteDbService: SuiteDbService, private indexedDbService: IndexedDbService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
+    this.canAdd = true;
     this.allMaterials = this.suiteDbService.selectAtmosphereSpecificHeat();
     this.checkMaterialName();
     // this.selectedMaterial = this.allMaterials[0];
@@ -39,14 +41,17 @@ export class AtmosphereSpecificHeatMaterialComponent implements OnInit {
   }
 
   addMaterial() {
-    if (this.settings.unitsOfMeasure == 'Metric') {
-      this.newMaterial.specificHeat = this.convertUnitsService.value(this.newMaterial.specificHeat).from('kJkgC').to('btulbF');
-    }
-    let suiteDbResult = this.suiteDbService.insertAtmosphereSpecificHeat(this.newMaterial);
-    if (suiteDbResult == true) {
-      this.indexedDbService.addAtmosphereSpecificHeat(this.newMaterial).then(idbResults => {
-        this.closeModal.emit(this.newMaterial);
-      })
+    if (this.canAdd) {
+      this.canAdd = false;
+      if (this.settings.unitsOfMeasure == 'Metric') {
+        this.newMaterial.specificHeat = this.convertUnitsService.value(this.newMaterial.specificHeat).from('kJkgC').to('btulbF');
+      }
+      let suiteDbResult = this.suiteDbService.insertAtmosphereSpecificHeat(this.newMaterial);
+      if (suiteDbResult == true) {
+        this.indexedDbService.addAtmosphereSpecificHeat(this.newMaterial).then(idbResults => {
+          this.closeModal.emit(this.newMaterial);
+        })
+      }
     }
   }
 
