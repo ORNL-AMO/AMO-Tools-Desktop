@@ -102,9 +102,10 @@ Buttons
 }
 .btn-primary.disabled, .btn-primary:disabled,
 .btn-secondary.disabled, .btn-secondary:disabled {
-    color: #9E9E9E;
+    color: #c5c5c5;
     background: #ffffff;
-    border-color: #BBBBBB;
+    border-color: #d8d8d8;
+    box-shadow: none;
 }
 .btn-link {
   box-shadow: none;
@@ -400,6 +401,7 @@ Popovers (Contextual Help)
   height: 75px;
 }
 
+
 /*
 Modals
 =============================================== */
@@ -428,21 +430,120 @@ Modals
 /*
 Data Tables
 =========================================== */
+
 .table-header {
-  margin-top: 18px;
-  padding: 7px 15px;
-  border-bottom: #ddd solid 1px;
-  vertical-align: middle;
+  background: #fff;
+  padding: 15px 15px 6px;
+  border-top: #bfbfbf solid 1px;
+  border-left: #ddd solid 1px;
+  border-right: #ddd solid 1px;
+  border-bottom: #bfbfbf solid 1px;
+  box-shadow: 0px 1px 2px 0px rgba(0,0,0,0.1);
 }
-  .table-header input {
+
+  .table-header .actions {
+    margin-bottom: 8px;
+  }
+  .table-header .actions .btn {
+    padding: 8px 10px 6px;
+    font-size: 15px;
+  }
+  .table-header .header input {
     margin: 7px 10px 0 0;
     vertical-align: top;
   }
-  .table-header label {
+  .table-header .header label {
     display: inline-block;
     margin-top: 2px;
   }
 
+
+/* 
+Reports
+========================================== */
+.output-summary .table {
+    font-size: 14px;
+}
+.output-summary .table th {
+    border: none;
+    padding: 0px 10px;
+    text-align: left;
+    font-size: 12px;
+}
+.output-summary .table td {
+    padding: 0px 8px;
+}
+
+
+.output-summary .table tr.callout td {
+    font-weight: bold;
+}
+.assessment-report {
+    background: #fff;
+    -webkit-box-shadow: 0px 1px 10px 0px rgba(0,0,0,0.1);
+    -moz-box-shadow: 0px 1px 10px 0px rgba(0,0,0,0.1);
+    box-shadow: 0px 1px 10px 0px rgba(0,0,0,0.1);
+    border: #ababab solid 1px;
+    margin-bottom: 4em;
+}
+
+    .assessment-report .tabs.primary li:first-of-type a {
+        border-left: none;
+    }
+    .assessment-report .tabs.primary a {
+        padding: 10px 44px;
+    }
+
+    .report-header, .report-data .results {
+        padding: 10px 20px;
+    }
+    .report-header {
+        
+    }
+    .report-data {
+        border-top: #ddd solid 1px;
+    }
+
+.assessment-report.report-in-psat .assessment-name, 
+.assessment-report.report-in-rollup .assessment-name {
+    background-image: url('../assets/images/ico-psat-diagram.png');
+    background-repeat: no-repeat;
+    background-position: left center;
+    background-size: 33px;
+    padding: 9px 0 0px 48px;
+}
+.assessment-report.report-in-phast .assessment-name, 
+.assessment-report.report-in-rollup .assessment-name {
+    background-image: url('../assets/images/ico-phast-diagram.png');
+    background-repeat: no-repeat;
+    background-position: left center;
+    background-size: 33px;
+    padding: 9px 0 0px 48px;
+}
+
+
+.assessment-report .report-header:after {
+    display: table;
+    content: "";
+    clear: both;
+}
+.assessment-report .report-header .btn-group {
+    float: right;
+}
+    .assessment-report .report-header .btn {
+        padding: 8px 14px;
+        margin-top: 20px;
+    }
+.assessment-report .assessment-name {
+    float: left;
+}
+
+.assessment-report .assessment-name span {
+    color: #999;
+    font-size: 12px;
+    margin-top: 5px;
+    margin-left: 0;
+}
 
 
 /*
@@ -455,17 +556,12 @@ Assessments: Grid & List View Shared Styles
 /*
 Assessments: List View
 =========================================== */
-.list-view {
-  -webkit-box-shadow: 0px 1px 6px 0px rgba(0,0,0,0.1);
-  -moz-box-shadow: 0px 1px 6px 0px rgba(0,0,0,0.1);
-  box-shadow: 0px 1px 6px 0px rgba(0,0,0,0.1);
+.list-view .list-item:nth-child(even) .list-row {
+  background: #f2f5f7;
 }
-  .list-view .list-item:nth-child(even) .list-row {
-    background: #f2f5f7;
-  }
 .list-row {
   padding: 14px;
-  background: #fff;
+  background: #fbfbfb;
   border-color: #d6d6d6;
   border-style: solid;
   border-width: 0 1px 1px;
@@ -638,7 +734,31 @@ Breadcrumb
 .breadcrumb {
   background-color: transparent;
   padding: 0;
+  margin-bottom: 6px;
+  font-size: 18px;
 }
+
+.list-menu {
+  margin-top: 20px;
+}
+
+  .breadcrumb .active a {
+    color: #333;
+  }
+  .breadcrumb .active a:hover {
+    text-decoration: none;
+  }
+
+
+.main-menu .btn {
+  padding: 8px 10px 6px;
+  font-size: 15px;
+}
+
+.space-left {
+  margin-left: 20px;
+}
+
 
 
 /*
@@ -666,15 +786,16 @@ Sidebar
 
 }
 
-.dashboard-content{
-  height: 100vh;
-  min-height: 100%;
-  background-color: #ececec;
-}
 
-.dashboard-content .dashboard-page{
-  height: 100%;
-  overflow: scroll;
+.dashboard-content{
+    max-height: 100vh;
+    overflow-y: scroll;
+    padding-bottom: 15px;
+    height: 100vh;
+    background-color: #ececec;
+}
+.dashboard-page {
+  margin-top: 4%;
 }
 
 .doe-logo {
@@ -1766,6 +1887,19 @@ Toasty Overrides ================================= */
   .output-summary table td {
     font-size: 11px;
     padding: 0px 8px;
+  }
+
+  .assessment-report {
+      background: #fff;
+      box-shadow: none;
+      border: none;
+      page-break-before: always;
+  }
+
+  .assessment-report.report-in-psat .assessment-name, 
+  .assessment-report.report-in-phast .assessment-name, 
+  .assessment-report.report-in-rollup .assessment-name {
+      padding-left: 0;
   }
 
   .report-cover {
