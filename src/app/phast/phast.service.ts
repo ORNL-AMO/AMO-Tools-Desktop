@@ -372,7 +372,6 @@ export class PhastService {
 
   //Electric Arc Furnace
   energyInputEAF(input: EnergyInputEAF, settings: Settings) {
-    //TODO: SUBTRACT EXOTHERMIC ADDITIONAL HEAT (CHARGE MATERIALS) FROM HEAT DELIVERED
     let inputs = this.createInputCopy(input);
     let results = {
       heatDelivered: 0,
@@ -443,7 +442,6 @@ export class PhastService {
 
   //energy input for non-EAF Electric process heating
   energyInputExhaustGasLosses(input: EnergyInputExhaustGasLoss, settings: Settings) {
-    //TODO: SUBTRACT EXOTHERMIC ADDITIONAL HEAT (CHARGE MATERIALS) FROM HEAT DELIVERED
     let inputs = this.createInputCopy(input);
     inputs.availableHeat = this.availableHeat(inputs, settings);
     let results: any = {
