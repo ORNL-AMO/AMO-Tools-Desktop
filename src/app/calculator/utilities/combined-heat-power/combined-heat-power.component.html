@@ -1,35 +1,24 @@
-<app-combined-heat-power-form></app-combined-heat-power-form>
-
-<div class="combined-heat-power">
+<div class="pump-head">
   <div class="row">
-    <div class="col-md-5 col-sm-12  mx-auto">
-      <app-combined-heat-power-form [combinedHeatPowerCalculations]="combinedHeatPowerCalculations" [combinedHeatPowerCalculationResults]="combinedHeatPowerCalculationsResults"
-                           (changeField)="setCurrentField($event)" (emitCalculate)="calculate()"></app-combined-heat-power-form>
+    <div class="col-md-6 col-sm-12  mx-auto">
+      <app-combined-heat-power-form [inputs]="inputs" (changeField)="setCurrentField($event)" (emitCalculate)="calculate()"></app-combined-heat-power-form>
     </div>
 
-    <div class="col-md-5 col-sm-12 mx-auto">
+    <div class="col-md-6 col-sm-12 mx-auto">
       <ul class="tabs primary text-center">
         <li class="calc-tab" [ngClass]="{'active': tabSelect == 'results'}">
           <a (click)="setTab('results')">Results</a>
         </li><!--
     --><li class="calc-tab" [ngClass]="{'active': tabSelect == 'help'}">
-        <a (click)="setTab('help')">Help</a>
-      </li>
+          <a (click)="setTab('help')">Help</a>
+        </li>
       </ul>
       <div class="tab-content">
-        <div *ngIf="tabSelect == 'results'" class="form-group text-center results-box">
-          <label class="small">Annual Operations Savings</label>
-          <div class="small">
-            {{combinedHeatPowerCalculationResults.annualOperationsSavings | number:'2.2-2'}} dollars
-          </div>
-          <label class="small">Simple Payback</label>
-          <div class="small">
-            {{combinedHeatPowerCalculationResults.simplePayback | number:'2.2-2'}} years
-          </div>
-          <label class="small">Fuel Costs</label>
-          <div class="small">
-            {{combinedHeatPowerCalculationResults.fuelCosts | number:'2.2-2'}} dollars
-          </div>
+        <div *ngIf="tabSelect == 'results'" class="form-group text-center">
+          <app-combined-heat-power-results [results]="results"></app-combined-heat-power-results>
+        </div>
+        <div *ngIf="tabSelect == 'help'">
+          <app-combined-heat-power-help [currentField]="currentField"></app-combined-heat-power-help>
         </div>
       </div>
     </div>

@@ -1,6 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { CombinedHeatPowerCalculations, CombinedHeatPowerCalculationsOutput } from '../CombinedHeatPowerComponent';
-
+import { CombinedHeatPower } from '../../../../shared/models/combinedHeatPower';
 @Component({
   selector: 'app-combined-heat-power-form',
   templateUrl: './combined-heat-power-form.component.html',
@@ -8,9 +7,7 @@ import { CombinedHeatPowerCalculations, CombinedHeatPowerCalculationsOutput } fr
 })
 export class CombinedHeatPowerFormComponent implements OnInit {
   @Input()
-  combinedHeatPowerCalculations: CombinedHeatPowerCalculations;
-  @Input()
-  combinedHeatPowerCalculationResults: CombinedHeatPowerCalculationsOutput;
+  inputs: CombinedHeatPower;
   @Output('changeField')
   changeField = new EventEmitter<string>();
   @Output('emitCalculate')
