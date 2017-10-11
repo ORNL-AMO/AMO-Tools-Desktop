@@ -154,8 +154,7 @@
         [settings]="settings"></app-energy-input-exhaust-gas-losses>
 
       <app-heat-system-efficiency *ngIf="lossesTab == 'heat-system-efficiency'" [(losses)]="_modifications[modificationIndex].phast.losses"
-        [(phast)]="_modifications[modificationIndex].phast" [saveClicked]="saveClicked" [isBaseline]="true"
-        (fieldChange)="changeField($event)" [baselineSelected]="modificationSelected" (savedLoss)="saveModifications()" [settings]="settings"></app-heat-system-efficiency>
+        [phast]="_modifications[modificationIndex].phast" [saveClicked]="saveClicked" (fieldChange)="changeField($event)" [baselineSelected]="modificationSelected" (savedLoss)="saveModifications()" [settings]="settings"></app-heat-system-efficiency>
     </div>
 
     <div class="modifications-list" *ngIf="isDropdownOpen">

@@ -46,7 +46,6 @@ export class DesignedEnergyService {
       constant = Math.pow(10, 6);
     }
     inputs.forEach(input => {
-      let totalBurnerCap
       designedEnergyUsed += (input.totalBurnerCapacity * constant) * (input.percentCapacityUsed / 100) * (input.percentOperatingHours / 100);
     })
     let sumFeedRate = this.phastService.sumChargeMaterialFeedRate(phast.losses.chargeMaterials);

@@ -41,7 +41,8 @@ export class HeatSystemEfficiencyComponent implements OnInit {
   constructor(private formBuilder: FormBuilder, private phastService: PhastService) { }
 
   ngOnInit() {
-    this.initForm(JSON.parse(JSON.stringify(this.phast.systemEfficiency)));
+    this.initForm(this.phast.systemEfficiency);
+
     if (!this.baselineSelected) {
       this.disableForm();
     } else {
@@ -117,7 +118,8 @@ export class HeatSystemEfficiencyComponent implements OnInit {
     if (!bool) {
       this.startSavePolling();
     }
-    this.grossHeat = this.phastService.sumHeatInput(this.losses, this.settings) / this.efficiencyForm.value.efficiency;
+    let additionalHeat = this.phastService.sumChargeMaterialExothermic(this.losses.chargeMaterials);
+    this.grossHeat = (this.phastService.sumHeatInput(this.losses, this.settings) / this.efficiencyForm.value.efficiency)-additionalHeat;
     this.systemLosses = this.grossHeat * (1 - (this.efficiencyForm.value.efficiency/100));
   }
 }
