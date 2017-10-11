@@ -754,15 +754,15 @@ export class PhastService {
       materials.forEach(val => {
         if (val.chargeMaterialType == 'Solid') {
           if (val.solidChargeMaterial.thermicReactionType == 1) {
-            sumAdditionalHeat += val.solidChargeMaterial.additionalHeat;
+            sumAdditionalHeat += ((val.solidChargeMaterial.chargeFeedRate * val.solidChargeMaterial.reactionHeat * val.solidChargeMaterial.chargeReacted)/100);
           }
         } else if (val.chargeMaterialType == 'Liquid') {
           if (val.liquidChargeMaterial.thermicReactionType == 1) {
-            sumAdditionalHeat += val.liquidChargeMaterial.additionalHeat;
+            sumAdditionalHeat += ((val.liquidChargeMaterial.chargeFeedRate * val.liquidChargeMaterial.reactionHeat * val.liquidChargeMaterial.percentReacted)/100);
           }
         } else if (val.chargeMaterialType == 'Gas') {
           if (val.gasChargeMaterial.thermicReactionType == 1) {
-            sumAdditionalHeat += val.gasChargeMaterial.additionalHeat;
+            sumAdditionalHeat += ((val.gasChargeMaterial.feedRate * val.gasChargeMaterial.reactionHeat * val.gasChargeMaterial.percentReacted)/100);
           }
         }
       })
