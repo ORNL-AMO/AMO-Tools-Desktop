@@ -274,9 +274,9 @@ export const MockDirectory: Directory = {
           ],
           slagLosses: [
             {
-              weight: 3,
-              inletTemperature: 500,
-              outletTemperature: 550,
+              weight: 0,
+              inletTemperature: 0,
+              outletTemperature: 0,
               specificHeat: 0.2479,
               correctionFactor: 1.0
             }
@@ -284,37 +284,37 @@ export const MockDirectory: Directory = {
           auxiliaryPowerLosses: [
             {
               motorPhase: 3,
-              supplyVoltage: 460,
-              avgCurrent: 19,
-              powerFactor: .85,
+              supplyVoltage: 480,
+              avgCurrent: 0,
+              powerFactor: .9,
               operatingTime: 100,
             }
           ],
           energyInputEAF: [
             {
-              naturalGasHeatInput: 50,
+              naturalGasHeatInput: 0,
               flowRateInput: 0,
               // naturalGasFlow: 0,
               // measuredOxygenFlow: 6500,
-              coalCarbonInjection: 3300,
-              coalHeatingValue: 9000,
-              electrodeUse: 500,
-              electrodeHeatingValue: 12000,
-              otherFuels: 20,
-              electricityInput: 18000
+              coalCarbonInjection: 0,
+              coalHeatingValue: 13000,
+              electrodeUse: 0,
+              electrodeHeatingValue: 14000,
+              otherFuels: 0,
+              electricityInput: 0
             }
           ],
           exhaustGasEAF: [
             {
               // cycleTime: 2,
-              offGasTemp: 2800,
-              CO: 10,
-              H2: 10,
+              offGasTemp: 0,
+              CO: 0,
+              H2: 0,
               // O2: 0,
               // CO2: 5,
-              combustibleGases: 5,
-              vfr: 50000,
-              dustLoading: 0.005,
+              combustibleGases: 0,
+              vfr: 0,
+              dustLoading: 0,
               otherLosses: 0
             }
           ]
