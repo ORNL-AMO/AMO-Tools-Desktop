@@ -770,6 +770,10 @@ export class PhastService {
     return sumAdditionalHeat;
   }
 
+  sumGrossHeat(losses: Losses){
+    
+  }
+
   // sumAuxiliaryEquipment(phast: PHAST, results: Array<any>) {
   //   let sum = 0;
   //   results.forEach(result => {

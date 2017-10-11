@@ -98,7 +98,7 @@ export class PhastResultsService {
     }
     if (phast.systemEfficiency && resultCats.showSystemEff) {
       results.heatingSystemEfficiency = phast.systemEfficiency;
-      let grossHeatInput = (results.totalInput / phast.systemEfficiency) - results.exothermicHeat;
+      let grossHeatInput = (results.totalInput / (phast.systemEfficiency/100));
       results.totalSystemLosses = grossHeatInput * (1 - (phast.systemEfficiency / 100));
     }
 
@@ -108,19 +108,19 @@ export class PhastResultsService {
         if (tmpFlueGas.flueGasType == 'By Mass') {
           let tmpVal = this.phastService.flueGasByMass(tmpFlueGas.flueGasByMass, settings);
           results.flueGasAvailableHeat = tmpVal * 100;
-          results.flueGasGrossHeat = (results.totalInput / tmpVal) -  results.exothermicHeat;
+          results.flueGasGrossHeat = (results.totalInput / tmpVal);
           results.flueGasSystemLosses = results.flueGasGrossHeat * (1 - tmpVal);
           results.totalFlueGas = results.flueGasSystemLosses;
         } else if (tmpFlueGas.flueGasType == 'By Volume') {
           let tmpVal = this.phastService.flueGasByVolume(tmpFlueGas.flueGasByVolume, settings);
           results.flueGasAvailableHeat = tmpVal * 100;
-          results.flueGasGrossHeat = (results.totalInput / tmpVal) -  results.exothermicHeat;
+          results.flueGasGrossHeat = (results.totalInput / tmpVal);
           results.flueGasSystemLosses = results.flueGasGrossHeat * (1 - tmpVal);
           results.totalFlueGas = results.flueGasSystemLosses;
         }
       }
     }
-    results.grossHeatInput = results.totalWallLoss + results.totalAtmosphereLoss + results.totalOtherLoss + results.totalCoolingLoss + results.totalOpeningLoss + results.totalFixtureLoss + results.totalLeakageLoss + results.totalExtSurfaceLoss + results.totalChargeMaterialLoss + results.totalFlueGas + results.totalAuxPower + results.totalSlag + results.totalExhaustGas + results.totalExhaustGasEAF + results.totalSystemLosses;
+    results.grossHeatInput = results.totalWallLoss + results.totalAtmosphereLoss + results.totalOtherLoss + results.totalCoolingLoss + results.totalOpeningLoss + results.totalFixtureLoss + results.totalLeakageLoss + results.totalExtSurfaceLoss + results.totalChargeMaterialLoss + results.totalFlueGas + results.totalAuxPower + results.totalSlag + results.totalExhaustGas + results.totalExhaustGasEAF + results.totalSystemLosses - results.exothermicHeat;
     return results;
   }
 

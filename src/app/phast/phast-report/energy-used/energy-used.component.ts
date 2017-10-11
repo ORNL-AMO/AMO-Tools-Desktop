@@ -47,8 +47,9 @@ export class EnergyUsedComponent implements OnInit {
   constructor(private designedEnergyService: DesignedEnergyService, private meteredEnergyService: MeteredEnergyService, private phastResultsService: PhastResultsService, private suiteDbService: SuiteDbService, private phastService: PhastService) { }
 
   ngOnInit() {
+    let tmpResults = this.phastResultsService.getResults(this.phast, this.settings);
     if (this.settings.energySourceType == 'Steam') {
-      this.steamEnergyUsed = this.phastService.sumHeatInput(this.phast.losses, this.settings);
+      this.steamEnergyUsed = tmpResults.grossHeatInput;
       if (this.phast.meteredEnergy) {
         this.meteredResults = this.meteredEnergyService.meteredSteam(this.phast.meteredEnergy.meteredEnergySteam, this.phast, this.settings);
         this.steamHeatingValue = this.phast.meteredEnergy.meteredEnergySteam.totalHeatSteam;
@@ -60,14 +61,14 @@ export class EnergyUsedComponent implements OnInit {
         }
       }
     } else if (this.settings.energySourceType == 'Electricity') {
-      this.electricEnergyUsed = this.phastService.sumHeatInput(this.phast.losses, this.settings);
+      this.electricEnergyUsed = tmpResults.grossHeatInput;
       if (this.phast.meteredEnergy) {
         this.meteredResults = this.meteredEnergyService.meteredElectricity(this.phast.meteredEnergy.meteredEnergyElectricity, this.phast, this.settings);
       } if (this.phast.designedEnergy) {
         this.designedResults = this.designedEnergyService.designedEnergyElectricity(this.phast.designedEnergy.designedEnergyElectricity, this.phast, this.settings);
       }
     } else if (this.settings.energySourceType == 'Fuel') {
-      this.fuelEnergyUsed = this.phastService.sumHeatInput(this.phast.losses, this.settings);
+      this.fuelEnergyUsed = tmpResults.grossHeatInput;
       if (this.phast.meteredEnergy) {
         this.meteredResults = this.meteredEnergyService.meteredFuel(this.phast.meteredEnergy.meteredEnergyFuel, this.phast, this.settings);
       } if (this.phast.designedEnergy) {
