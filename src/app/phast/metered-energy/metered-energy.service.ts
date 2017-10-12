@@ -5,10 +5,11 @@ import { PhastService } from '../phast.service';
 import { PHAST } from '../../shared/models/phast/phast';
 import { Settings } from '../../shared/models/settings';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
+import { PhastResultsService } from '../phast-results.service';
 @Injectable()
 export class MeteredEnergyService {
 
-  constructor(private auxEquipmentService: AuxEquipmentService, private phastService: PhastService) { }
+  constructor(private auxEquipmentService: AuxEquipmentService, private phastService: PhastService, private phastResultsService: PhastResultsService) { }
 
   meteredElectricity(input: MeteredEnergyElectricity, phast: PHAST, settings: Settings): MeteredEnergyResults {
     //Metered Energy Use
@@ -21,8 +22,9 @@ export class MeteredEnergyService {
     let meteredElectricityUsed = (input.auxElectricityUsed / input.auxElectricityCollectionTime) || 0;
 
     //Calculated by PHAST
-    //Electricity used = Sum of heat input
-    let calculatedFuelEnergyUsed = this.phastService.sumHeatInput(phast.losses, settings);
+    //Electricity used = Gross heat from results
+    let phastResults = this.phastResultsService.getResults(phast, settings);
+    let calculatedFuelEnergyUsed = phastResults.grossHeatInput;
     //Energy Intensity for Charge Materials =  Metered Energy Used / Sum(charge material feed rates)
     let calculatedEnergyIntensity = (calculatedFuelEnergyUsed / sumFeedRate) || 0;
     //total electricty used from auxiliary equipment
@@ -44,7 +46,7 @@ export class MeteredEnergyService {
   meteredFuel(inputs: MeteredEnergyFuel, phast: PHAST, settings: Settings): MeteredEnergyResults {
     //Metered Energy Use
     //Metered Fuel Used = HHV * Flow Rate (if flow rate given)
-    let meteredEnergyUsed =  inputs.fuelEnergy;
+    let meteredEnergyUsed = inputs.fuelEnergy;
     //Energy Intensity for Charge Materials =  Metered Energy Used / Sum(charge material feed rates)
     let sumFeedRate = this.phastService.sumChargeMaterialFeedRate(phast.losses.chargeMaterials);
     let meteredEnergyIntensity = (meteredEnergyUsed / sumFeedRate) || 0;
@@ -53,7 +55,8 @@ export class MeteredEnergyService {
 
     //Calculated By PHAST
     //Fuel energy used
-    let calculatedFuelEnergyUsed = this.phastService.sumHeatInput(phast.losses, settings);
+    let phastResults = this.phastResultsService.getResults(phast, settings);
+    let calculatedFuelEnergyUsed = phastResults.grossHeatInput;
     //energy intensity = fuel energy used / sum(charge material feed rate)
     let calculatedEnergyIntensity = (calculatedFuelEnergyUsed / sumFeedRate) || 0;
     //total electricty used from auxiliary equipment
@@ -83,7 +86,8 @@ export class MeteredEnergyService {
 
     //Calculated By PHAST
     //Fuel energy used
-    let calculatedFuelEnergyUsed = this.phastService.sumHeatInput(phast.losses, settings);
+    let phastResults = this.phastResultsService.getResults(phast, settings);
+    let calculatedFuelEnergyUsed = phastResults.grossHeatInput;
     //energy intensity = fuel energy used / sum(charge material feed rate)
     let calculatedEnergyIntensity = (calculatedFuelEnergyUsed / sumFeedRate) || 0;
     //total electricty used from auxiliary equipment

@@ -95,11 +95,13 @@ export class PhastResultsService {
     if (resultCats.showEnInput2 && this.checkLoss(phast.losses.energyInputExhaustGasLoss)) {
       let tmpResults = this.phastService.energyInputExhaustGasLosses(phast.losses.energyInputExhaustGasLoss[0], settings)
       results.totalExhaustGas = tmpResults.exhaustGasLosses;
+      results.grossHeatInput = results.totalInput + results.totalExhaustGas - results.exothermicHeat;
     }
     if (phast.systemEfficiency && resultCats.showSystemEff) {
       results.heatingSystemEfficiency = phast.systemEfficiency;
-      let grossHeatInput = (results.totalInput / phast.systemEfficiency) - results.exothermicHeat;
+      let grossHeatInput = (results.totalInput / (phast.systemEfficiency / 100));
       results.totalSystemLosses = grossHeatInput * (1 - (phast.systemEfficiency / 100));
+      results.grossHeatInput = results.totalInput + results.totalSystemLosses - results.exothermicHeat;
     }
 
     if (resultCats.showFlueGas && this.checkLoss(phast.losses.flueGasLosses)) {
@@ -108,19 +110,19 @@ export class PhastResultsService {
         if (tmpFlueGas.flueGasType == 'By Mass') {
           let tmpVal = this.phastService.flueGasByMass(tmpFlueGas.flueGasByMass, settings);
           results.flueGasAvailableHeat = tmpVal * 100;
-          results.flueGasGrossHeat = (results.totalInput / tmpVal) -  results.exothermicHeat;
+          results.flueGasGrossHeat = (results.totalInput / tmpVal);
           results.flueGasSystemLosses = results.flueGasGrossHeat * (1 - tmpVal);
           results.totalFlueGas = results.flueGasSystemLosses;
         } else if (tmpFlueGas.flueGasType == 'By Volume') {
           let tmpVal = this.phastService.flueGasByVolume(tmpFlueGas.flueGasByVolume, settings);
           results.flueGasAvailableHeat = tmpVal * 100;
-          results.flueGasGrossHeat = (results.totalInput / tmpVal) -  results.exothermicHeat;
+          results.flueGasGrossHeat = (results.totalInput / tmpVal);
           results.flueGasSystemLosses = results.flueGasGrossHeat * (1 - tmpVal);
           results.totalFlueGas = results.flueGasSystemLosses;
         }
+        results.grossHeatInput = results.totalInput + results.flueGasSystemLosses - results.exothermicHeat;
       }
     }
-    results.grossHeatInput = results.totalWallLoss + results.totalAtmosphereLoss + results.totalOtherLoss + results.totalCoolingLoss + results.totalOpeningLoss + results.totalFixtureLoss + results.totalLeakageLoss + results.totalExtSurfaceLoss + results.totalChargeMaterialLoss + results.totalFlueGas + results.totalAuxPower + results.totalSlag + results.totalExhaustGas + results.totalExhaustGasEAF + results.totalSystemLosses;
     return results;
   }
 
