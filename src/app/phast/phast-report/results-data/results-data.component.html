@@ -198,15 +198,6 @@
           <span *ngIf="!mod.exothermicHeat">&mdash; &mdash;</span>
         </td>
       </tr>
-      <tr *ngIf="showResultsCats.showFlueGas">
-        <td>Total Flue Gas Gross Heat</td>
-        <td *ngIf="baseLineResults.flueGasGrossHeat">{{baseLineResults.flueGasGrossHeat| number:'2.0-0'}}</td>
-        <td *ngIf="!baseLineResults.flueGasGrossHeat">&mdash; &mdash;</td>
-        <td *ngFor="let mod of modificationResults">
-          <span *ngIf="mod.flueGasGrossHeat">{{mod.flueGasGrossHeat| number:'2.0-0'}}</span>
-          <span *ngIf="!mod.flueGasGrossHeat">&mdash; &mdash;</span>
-        </td>
-      </tr>
       <tr>
         <td>Total Net Heat Required</td>
         <td *ngIf="baseLineResults.totalInput">{{baseLineResults.totalInput| number:'2.0-0'}}</td>
