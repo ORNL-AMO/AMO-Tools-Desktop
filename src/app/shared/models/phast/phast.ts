@@ -31,7 +31,7 @@ export interface PHAST {
   implementationCost?: number
 }
 
-export interface OperatingCosts{
+export interface OperatingCosts {
   fuelCost?: number,
   steamCost?: number,
   electricityCost?: number
@@ -142,4 +142,11 @@ export interface ExecutiveSummary {
   annualCostSavings?: number,
   implementationCosts?: number,
   paybackPeriod?: number
+}
+
+
+export interface CalculatedByPhast {
+  fuelEnergyUsed: number,
+  energyIntensity: number,
+  electricityUsed: number
 }

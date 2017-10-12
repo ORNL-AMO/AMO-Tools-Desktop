@@ -62,8 +62,8 @@
       <tr>
         <td>Fuel Used</td>
         <td>
-          <span *ngIf="meteredResults.calculatedFuelEnergyUsed">{{meteredResults.calculatedFuelEnergyUsed | number:'1.0-0'}}</span>
-          <span *ngIf="!meteredResults.calculatedFuelEnergyUsed">&mdash; &mdash;</span>
+          <span *ngIf="calculatedResults.fuelEnergyUsed">{{calculatedResults.fuelEnergyUsed | number:'1.0-0'}}</span>
+          <span *ngIf="!calculatedResults.fuelEnergyUsed">&mdash; &mdash;</span>
         </td>
         <td>
           <span *ngIf="meteredResults.meteredEnergyUsed">{{meteredResults.meteredEnergyUsed | number:'1.0-0'}}</span>
@@ -77,8 +77,8 @@
       <tr>
         <td>Energy Intensity for Charge Materials</td>
         <td>
-          <span *ngIf="meteredResults.calculatedEnergyIntensity">{{meteredResults.calculatedEnergyIntensity | number:'1.0-0'}}</span>
-          <span *ngIf="!meteredResults.calculatedEnergyIntensity">&mdash; &mdash;</span>
+          <span *ngIf="calculatedResults.energyIntensity">{{calculatedResults.energyIntensity | number:'1.0-0'}}</span>
+          <span *ngIf="!calculatedResults.energyIntensity">&mdash; &mdash;</span>
         </td>
         <td>
           <span *ngIf="meteredResults.meteredEnergyIntensity">{{meteredResults.meteredEnergyIntensity | number:'1.0-0'}}</span>
@@ -92,8 +92,8 @@
       <tr>
         <td>Electricity Used</td>
         <td>
-          <span *ngIf="meteredResults.calculatedElectricityUsed">{{meteredResults.calculatedElectricityUsed | number:'1.0-0'}}</span>
-          <span *ngIf="!meteredResults.calculatedElectricityUsed">&mdash; &mdash;</span>
+          <span *ngIf="calculatedResults.electricityUsed">{{calculatedResults.electricityUsed | number:'1.0-0'}}</span>
+          <span *ngIf="!calculatedResults.electricityUsed">&mdash; &mdash;</span>
         </td>
         <td>
           <span *ngIf="meteredResults.meteredElectricityUsed">{{meteredResults.meteredElectricityUsed | number:'1.0-0'}}</span>

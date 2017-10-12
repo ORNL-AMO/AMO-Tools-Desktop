@@ -22,23 +22,16 @@ export class MeteredEnergyService {
     let meteredElectricityUsed = (input.auxElectricityUsed / input.auxElectricityCollectionTime) || 0;
 
     //Calculated by PHAST
-    //Electricity used = Gross heat from results
-    let phastResults = this.phastResultsService.getResults(phast, settings);
-    let calculatedFuelEnergyUsed = phastResults.grossHeatInput;
-    //Energy Intensity for Charge Materials =  Metered Energy Used / Sum(charge material feed rates)
-    let calculatedEnergyIntensity = (calculatedFuelEnergyUsed / sumFeedRate) || 0;
-    //total electricty used from auxiliary equipment
-    let tmpAuxResults = this.auxEquipmentService.calculate(phast);
-    let calculatedElectricityUsed = this.auxEquipmentService.getResultsSum(tmpAuxResults);
+    let calculated = this.phastResultsService.calculatedByPhast(phast, settings);
 
 
     let tmpResults: MeteredEnergyResults = {
       meteredEnergyUsed: meteredEnergyUsed,
       meteredEnergyIntensity: meteredEnergyIntensity,
       meteredElectricityUsed: meteredElectricityUsed,
-      calculatedFuelEnergyUsed: calculatedFuelEnergyUsed,
-      calculatedEnergyIntensity: calculatedEnergyIntensity,
-      calculatedElectricityUsed: calculatedElectricityUsed
+      calculatedFuelEnergyUsed: calculated.fuelEnergyUsed,
+      calculatedEnergyIntensity: calculated.energyIntensity,
+      calculatedElectricityUsed: calculated.electricityUsed
     }
     return tmpResults;
   }
@@ -54,22 +47,15 @@ export class MeteredEnergyService {
     let meteredElectricityUsed = (inputs.electricityUsed / inputs.electricityCollectionTime) || 0;
 
     //Calculated By PHAST
-    //Fuel energy used
-    let phastResults = this.phastResultsService.getResults(phast, settings);
-    let calculatedFuelEnergyUsed = phastResults.grossHeatInput;
-    //energy intensity = fuel energy used / sum(charge material feed rate)
-    let calculatedEnergyIntensity = (calculatedFuelEnergyUsed / sumFeedRate) || 0;
-    //total electricty used from auxiliary equipment
-    let tmpAuxResults = this.auxEquipmentService.calculate(phast);
-    let calculatedElectricityUsed = this.auxEquipmentService.getResultsSum(tmpAuxResults);
+    let calculated = this.phastResultsService.calculatedByPhast(phast, settings);
 
     let tmpResults: MeteredEnergyResults = {
       meteredEnergyUsed: meteredEnergyUsed,
       meteredEnergyIntensity: meteredEnergyIntensity,
       meteredElectricityUsed: meteredElectricityUsed,
-      calculatedFuelEnergyUsed: calculatedFuelEnergyUsed,
-      calculatedEnergyIntensity: calculatedEnergyIntensity,
-      calculatedElectricityUsed: calculatedElectricityUsed
+      calculatedFuelEnergyUsed: calculated.fuelEnergyUsed,
+      calculatedEnergyIntensity: calculated.energyIntensity,
+      calculatedElectricityUsed: calculated.electricityUsed
     }
     return tmpResults;
   }
@@ -85,22 +71,15 @@ export class MeteredEnergyService {
     let meteredElectricityUsed = (inputs.electricityUsed / inputs.electricityCollectionTime) || 0;
 
     //Calculated By PHAST
-    //Fuel energy used
-    let phastResults = this.phastResultsService.getResults(phast, settings);
-    let calculatedFuelEnergyUsed = phastResults.grossHeatInput;
-    //energy intensity = fuel energy used / sum(charge material feed rate)
-    let calculatedEnergyIntensity = (calculatedFuelEnergyUsed / sumFeedRate) || 0;
-    //total electricty used from auxiliary equipment
-    let tmpAuxResults = this.auxEquipmentService.calculate(phast);
-    let calculatedElectricityUsed = this.auxEquipmentService.getResultsSum(tmpAuxResults);
+    let calculated = this.phastResultsService.calculatedByPhast(phast, settings);
 
     let tmpResults: MeteredEnergyResults = {
       meteredEnergyUsed: meteredEnergyUsed,
       meteredEnergyIntensity: meteredEnergyIntensity,
       meteredElectricityUsed: meteredElectricityUsed,
-      calculatedFuelEnergyUsed: calculatedFuelEnergyUsed,
-      calculatedEnergyIntensity: calculatedEnergyIntensity,
-      calculatedElectricityUsed: calculatedElectricityUsed
+      calculatedFuelEnergyUsed: calculated.fuelEnergyUsed,
+      calculatedEnergyIntensity: calculated.energyIntensity,
+      calculatedElectricityUsed: calculated.electricityUsed
     }
     return tmpResults;
   }

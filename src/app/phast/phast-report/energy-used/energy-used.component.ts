@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Settings } from '../../../shared/models/settings';
-import { PHAST, PhastResults } from '../../../shared/models/phast/phast';
+import { PHAST, PhastResults, CalculatedByPhast } from '../../../shared/models/phast/phast';
 import { MeteredEnergyResults } from '../../../shared/models/phast/meteredEnergy';
 import { DesignedEnergyResults } from '../../../shared/models/phast/designedEnergy';
 import { MeteredEnergyService } from '../../metered-energy/metered-energy.service';
@@ -37,6 +37,12 @@ export class EnergyUsedComponent implements OnInit {
     calculatedElectricityUsed: 0
   };
 
+  calculatedResults: CalculatedByPhast = {
+    fuelEnergyUsed: 0,
+    energyIntensity: 0,
+    electricityUsed: 0
+  }
+
   baseLineResults: PhastResults;
   fuelHeatingValue: number = 0;
   steamHeatingValue: number = 0;
@@ -48,6 +54,8 @@ export class EnergyUsedComponent implements OnInit {
 
   ngOnInit() {
     let tmpResults = this.phastResultsService.getResults(this.phast, this.settings);
+    this.calculatedResults = this.phastResultsService.calculatedByPhast(this.phast, this.settings);
+    
     if (this.settings.energySourceType == 'Steam') {
       this.steamEnergyUsed = tmpResults.grossHeatInput;
       if (this.phast.meteredEnergy) {
