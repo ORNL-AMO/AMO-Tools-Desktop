@@ -61,16 +61,16 @@
         <td>Implementation Costs</td>
         <td>&mdash; &mdash;</td>
         <td *ngFor="let mod of modifications">
-          <!--<span *ngIf="mod.percentSavings">{{mod.percentSavings | number:'1.0-0'}} %</span>-->
-          <span>&mdash; &mdash;</span>
+          <span *ngIf="mod.implementationCosts">{{mod.implementationCosts | currency:'USD':true:'1.0-0'}}</span>
+          <span *ngIf="!mod.implementationCosts">&mdash; &mdash;</span>
         </td>
       </tr>
       <tr>
         <td>Simple Payback Period</td>
         <td>&mdash; &mdash;</td>
         <td *ngFor="let mod of modifications">
-          <!--<span *ngIf="mod.percentSavings">{{mod.percentSavings | number:'1.0-0'}} %</span>-->
-          <span>&mdash; &mdash;</span>
+          <span *ngIf="mod.paybackPeriod">{{mod.paybackPeriod | number:'1.0-0'}}</span>
+          <span *ngIf="!mod.paybackPeriod">&mdash; &mdash;</span>
         </td>
       </tr>
     </tbody>

@@ -49,6 +49,8 @@ import { EnergyInputExhaustGasLossesModule } from './energy-input-exhaust-gas-lo
 import { EnergyInputExhaustGasLossesHelpComponent } from './losses-help/energy-input-exhaust-gas-losses-help/energy-input-exhaust-gas-losses-help.component';
 import { HeatSystemEfficiencyComponent } from './heat-system-efficiency/heat-system-efficiency.component';
 import { HeatSystemEfficiencyHelpComponent } from './losses-help/heat-system-efficiency-help/heat-system-efficiency-help.component';
+import { OperationsModule } from './operations/operations.module';
+import { OperationsHelpComponent } from './losses-help/operations-help/operations-help.component';
 @NgModule({
   imports: [
     CommonModule,
@@ -71,7 +73,8 @@ import { HeatSystemEfficiencyHelpComponent } from './losses-help/heat-system-eff
     CoolingLossesModule,
     ChargeMaterialModule,
     ExhaustGasModule,
-    EnergyInputExhaustGasLossesModule
+    EnergyInputExhaustGasLossesModule,
+    OperationsModule
   ],
   declarations: [
     LossesComponent,
@@ -96,7 +99,8 @@ import { HeatSystemEfficiencyHelpComponent } from './losses-help/heat-system-eff
     EnergyInputHelpComponent,
     EnergyInputExhaustGasLossesHelpComponent,
     HeatSystemEfficiencyComponent,
-    HeatSystemEfficiencyHelpComponent
+    HeatSystemEfficiencyHelpComponent,
+    OperationsHelpComponent
   ],
   providers: [
     LossesService

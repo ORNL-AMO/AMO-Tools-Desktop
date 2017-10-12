@@ -27,7 +27,8 @@ export interface PHAST {
   designedEnergy?: DesignedEnergy,
   operatingHours?: OperatingHours,
   systemEfficiency?: number,
-  operatingCosts?: OperatingCosts
+  operatingCosts?: OperatingCosts,
+  implementationCost?: number
 }
 
 export interface OperatingCosts{
@@ -80,7 +81,8 @@ export interface Notes {
   auxiliaryPowerNotes?: string,
   exhaustGasNotes?: string,
   energyInputExhaustGasNotes?: string,
-  heatSystemEfficiencyNotes?: string
+  heatSystemEfficiencyNotes?: string,
+  operationsNotes?: string
 }
 
 export interface OperatingHours {
