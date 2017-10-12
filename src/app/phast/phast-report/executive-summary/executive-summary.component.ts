@@ -43,6 +43,10 @@ export class ExecutiveSummaryComponent implements OnInit {
       tmpResultsSummary.annualCostSavings = this.baseline.annualCost - tmpResultsSummary.annualCost;
       tmpResultsSummary.annualEnergySavings = this.baseline.annualEnergyUsed - tmpResultsSummary.annualEnergyUsed;
       tmpResultsSummary.percentSavings = Number(Math.round(((((tmpResultsSummary.annualCostSavings) * 100) / this.baseline.annualCost) * 100) / 100).toFixed(0));
+      tmpResultsSummary.implementationCosts = phast.implementationCost;
+      if (tmpResultsSummary.annualCostSavings > 0) {
+        tmpResultsSummary.paybackPeriod = (phast.implementationCost / tmpResultsSummary.annualCostSavings) * 12;
+      }
     }
     return tmpResultsSummary;
   }

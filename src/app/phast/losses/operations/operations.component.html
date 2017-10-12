@@ -1,0 +1,16 @@
+<div class="card-form">
+  <div class="row">
+    <div class="col-12">
+      <div class="pull-left">
+        <h6 *ngIf="isBaseline">Baseline Operations Settings</h6>
+        <h6 *ngIf="!isBaseline">Modification Operations Settings</h6>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12">
+      <app-operations-form (changeField)="changeField($event)" [(operationsForm)]="operationsForm" [baselineSelected]="baselineSelected"
+        (saveEmit)="saveLosses()" [isBaseline]="isBaseline"></app-operations-form>
+    </div>
+  </div>
+</div>
