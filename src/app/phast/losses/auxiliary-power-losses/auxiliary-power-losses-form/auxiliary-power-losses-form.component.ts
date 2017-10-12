@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, EventEmitter, Output, ViewChild, ElementRef, SimpleChanges } from '@angular/core';
 import { WindowRefService } from '../../../../indexedDb/window-ref.service';
-import { AuxiliaryPowerCompareService } from "../auxiliary-power-compare.service";
+import { AuxiliaryPowerCompareService } from '../auxiliary-power-compare.service';
 @Component({
   selector: 'app-auxiliary-power-losses-form',
   templateUrl: './auxiliary-power-losses-form.component.html',

@@ -34,10 +34,10 @@ export class EnergyInputExhaustGasService {
 
   initForm() {
     return this.formBuilder.group({
-      'excessAir': ['', Validators.required],
+      'excessAir': [20, Validators.required],
       'combustionAirTemp': ['', Validators.required],
       'exhaustGasTemp': ['', Validators.required],
-      'totalHeatInput': ['', Validators.required],
+      'totalHeatInput': [3, Validators.required],
       'electricalPowerInput': ['', Validators.required],
      // 'otherLoss1': ['', Validators.required]
     })
