@@ -34,7 +34,7 @@
     <div class="form-group">
       <label class="small" for="operatingTime">Operating Time</label>
       <div class="input-group">
-        <input name="{{'operatingTime_'+lossIndex}}" type="number" min="0" max="0" step="any" class="form-control" formControlName="operatingTime" id="operatingTime" onfocus="this.select();" (input)="startSavePolling()"
+        <input name="{{'operatingTime_'+lossIndex}}" type="number" min="0" max="100" step="any" class="form-control" formControlName="operatingTime" id="operatingTime" onfocus="this.select();" (input)="startSavePolling()"
           (focus)="focusField('operatingTime')">
         <span class="input-group-addon units">%</span>
       </div>
