@@ -66,3 +66,6 @@
 </div>
 
 
+<div class="note-form" *ngIf="currentTab == 'operations'">
+  <textarea rows="2" id="notes" [(ngModel)]="notes.operationsNotes" placeholder="Add note for operations changes"></textarea>
+</div>

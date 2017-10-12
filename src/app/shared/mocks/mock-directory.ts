@@ -57,6 +57,7 @@ export const MockDirectory: Directory = {
           daysPerWeek: 7,
           shiftsPerDay: 3,
           hoursPerShift: 8,
+          hoursPerYear: 8736
         },
         operatingCosts: {
           fuelCost: 8.00,

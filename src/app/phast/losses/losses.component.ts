@@ -113,11 +113,14 @@ export class LossesComponent implements OnInit {
         slagNotes: '',
         auxiliaryPowerNotes: '',
         exhaustGasNotes: '',
-        energyInputExhaustGasNotes: ''
+        energyInputExhaustGasNotes: '',
+        operationsNotes: ''
       }
     }
     tmpModification.phast.losses = (JSON.parse(JSON.stringify(this.phast.losses)));
     tmpModification.phast.name = 'Modification ' + (this._modifications.length + 1);
+    tmpModification.phast.operatingCosts = (JSON.parse(JSON.stringify(this.phast.operatingCosts)));
+    tmpModification.phast.operatingHours = (JSON.parse(JSON.stringify(this.phast.operatingHours)));
     this._modifications.unshift(tmpModification);
     this.modificationIndex = this._modifications.length - 1;
     this.modificationSelected = true;
