@@ -15,7 +15,7 @@
           <div class="input-group">
             <input name="annualElectricityConsumption" [(ngModel)]="inputs.annualElectricityConsumption" type="number" step="any" class="form-control"
                    id="annualElectricityConsumption" (input)="calculate()" onfocus="this.select();" (focus)="focusField('annualElectricityConsumption')">
-            <span class="input-group-addon units">--Todo</span>
+            <span class="input-group-addon units">kWh</span>
           </div>
         </div>
         <div class="form-group">
@@ -23,7 +23,7 @@
           <div class="input-group">
             <input name="annualThermalDemand" [(ngModel)]="inputs.annualThermalDemand" type="number" step="any" class="form-control"
                    id="annualThermalDemand" (input)="calculate()" onfocus="this.select();" (focus)="focusField('annualThermalDemand')">
-            <span class="input-group-addon units">--Todo</span>
+            <span class="input-group-addon units">MMBtu</span>
           </div>
         </div>
         <div class="form-group">
@@ -31,7 +31,7 @@
           <div class="input-group">
             <input name="boilerThermalFuelCosts" [(ngModel)]="inputs.boilerThermalFuelCosts" type="number" step="any" class="form-control" id="boilerThermalFuelCosts"
                    (input)="calculate()" onfocus="this.select();" (focus)="focusField('boilerThermalFuelCosts')">
-            <span class="input-group-addon units">$</span>
+            <span class="input-group-addon units">$/MMBtu</span>
           </div>
         </div>
         <!--<div class="form-group">
@@ -52,7 +52,7 @@
           <div class="input-group">
             <input name="avgElectricityCosts" [(ngModel)]="inputs.avgElectricityCosts" type="number" step="any" class="form-control"
                    id="avgElectricityCosts" (input)="calculate()" onfocus="this.select();" (focus)="focusField('avgElectricityCosts')">
-            <span class="input-group-addon units">$</span>
+            <span class="input-group-addon units">$/kWh</span>
           </div>
         </div>
         <div class="form-group">
@@ -60,7 +60,7 @@
           <div class="input-group">
             <input name="boilerThermalFuelCostsCHPcase" [(ngModel)]="inputs.boilerThermalFuelCostsCHPcase" type="number" step="any" class="form-control" id="boilerThermalFuelCostsCHPcase"
                    (input)="calculate()" onfocus="this.select();" (focus)="focusField('boilerThermalFuelCostsCHPcase')">
-            <span class="input-group-addon units">--Todo</span>
+            <span class="input-group-addon units">$/MMBtu</span>
           </div>
         </div>
         <div class="form-group">
@@ -68,7 +68,7 @@
           <div class="input-group">
             <input name="CHPfuelCosts" [(ngModel)]="inputs.CHPfuelCosts" type="number" step="any" class="form-control"
                    id="CHPfuelCosts" (input)="calculate()" onfocus="this.select();" (focus)="focusField('CHPfuelCosts')">
-          <span class="input-group-addon units">--Todo</span>
+          <span class="input-group-addon units">$/MMBtu</span>
           </div>
         </div>
         <div class="form-group">
@@ -76,31 +76,34 @@
           <div class="input-group">
             <input name="percentAvgkWhElectricCostAvoidedOrStandbyRate" [(ngModel)]="inputs.percentAvgkWhElectricCostAvoidedOrStandbyRate" type="number" step="any" class="form-control"
                    id="percentAvgkWhElectricCostAvoidedOrStandbyRate" (input)="calculate()" onfocus="this.select();" (focus)="focusField('percentAvgkWhElectricCostAvoidedOrStandbyRate')">
-            <span class="input-group-addon units">--Todo</span>
+            <span class="input-group-addon units">$/kW</span>
           </div>
         </div>
         <div class="form-group">
           <label class="small" for="displacedThermalEfficiency">Displaced Thermal Efficiency</label>
           <!--Todo: Air == 1 help-->
           <div class="input-group">
-            <input name="displacedThermalEfficiency" [(ngModel)]="inputs.displacedThermalEfficiency" type="number" step="any" class="form-control"
+            <input name="displacedThermalEfficiency" [(ngModel)]="inputs.displacedThermalEfficiency" type="number" step="any" min="0" max="100" class="form-control"
                    id="displacedThermalEfficiency" (input)="calculate()" onfocus="this.select();" (focus)="focusField('displacedThermalEfficiency')">
+            <span class="input-group-addon units">%</span>
           </div>
         </div>
         <div class="form-group">
           <label class="small" for="chpAvailability">CHP Availability</label>
           <!--Todo: Air == 1 help-->
           <div class="input-group">
-            <input name="chpAvailability" [(ngModel)]="inputs.chpAvailability" type="number" step="any" class="form-control"
+            <input name="chpAvailability" [(ngModel)]="inputs.chpAvailability" type="number" step="any" min="0" max="100" class="form-control"
                    id="chpAvailability" (input)="calculate()" onfocus="this.select();" (focus)="focusField('chpAvailability')">
+            <span class="input-group-addon units">%</span>
           </div>
         </div>
         <div class="form-group">
           <label class="small" for="thermalUtilization">Thermal Utilitzation</label>
           <!--Todo: Air == 1 help-->
           <div class="input-group">
-            <input name="thermalUtilization" [(ngModel)]="inputs.thermalUtilization" type="number" step="any" class="form-control"
+            <input name="thermalUtilization" [(ngModel)]="inputs.thermalUtilization" type="number" step="any" min="0" max="100" class="form-control"
                    id="thermalUtilization" (input)="calculate()" onfocus="this.select();" (focus)="focusField('thermalUtilization')">
+            <span class="input-group-addon units">%</span>
           </div>
         </div>
       </form>
