@@ -1,0 +1,29 @@
+
+  <div class="row">
+    <div class="col-md-4 col-sm-12 mx-auto">
+      <app-cash-flow-form [cashFlowForm]="cashFlowForm" (emitCalculate)="calculate()"></app-cash-flow-form>
+    </div>
+    <div class="col-md-6 col-sm-12 mx-auto">
+      <ul class="tabs primary text-center">
+        <li class="calc-tab" [ngClass]="{'active': tabSelect == 'diagram'}">
+          <a (click)="setTab('diagram')">Diagram</a>
+        </li><!--
+      --><li class="calc-tab" [ngClass]="{'active': tabSelect == 'help'}">
+        <a (click)="setTab('help')">Help</a>
+      </li>
+      </ul>
+      <div class="tab-content curve-results" id="pumpCurveGraph">
+        <div *ngIf="tabSelect == 'diagram'" class="help-panel">
+          <app-cash-flow-diagram [cashFlowResults]="cashFlowResults"></app-cash-flow-diagram>
+        </div>
+        <div *ngIf="tabSelect == 'results'" class="row justify-content-center">
+          <div class="col-10">
+          </div>
+        </div>
+        <div *ngIf="tabSelect == 'help'" class="help-panel">
+          <app-cash-flow-help></app-cash-flow-help>
+        </div>
+      </div>
+    </div>
+  </div>
+
