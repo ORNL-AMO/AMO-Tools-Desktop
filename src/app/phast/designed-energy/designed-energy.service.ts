@@ -22,18 +22,15 @@ export class DesignedEnergyService {
     let tmpAuxResults = this.auxEquipmentService.calculate(phast);
     let designedElectricityUsed = this.auxEquipmentService.getResultsSum(tmpAuxResults);
     //Calculated by phast
-    let phastResults = this.phastResultsService.getResults(phast, settings);
-    let calculatedFuelEnergyUsed = phastResults.grossHeatInput;
-    let calculatedEnergyIntensity = (calculatedFuelEnergyUsed / sumFeedRate) || 0;
-    let calculatedElectricityUsed = this.auxEquipmentService.getResultsSum(tmpAuxResults);
+    let calculated = this.phastResultsService.calculatedByPhast(phast, settings);
 
     let tmpResults: DesignedEnergyResults = {
       designedEnergyUsed: designedEnergyUsed,
       designedEnergyIntensity: designedEnergyIntensity,
       designedElectricityUsed: designedElectricityUsed,
-      calculatedFuelEnergyUsed: calculatedFuelEnergyUsed,
-      calculatedEnergyIntensity: calculatedEnergyIntensity,
-      calculatedElectricityUsed: calculatedElectricityUsed
+      calculatedFuelEnergyUsed: calculated.fuelEnergyUsed,
+      calculatedEnergyIntensity: calculated.energyIntensity,
+      calculatedElectricityUsed: calculated.electricityUsed
     };
     return tmpResults;
   }
@@ -56,18 +53,15 @@ export class DesignedEnergyService {
     let tmpAuxResults = this.auxEquipmentService.calculate(phast);
     let designedElectricityUsed = this.auxEquipmentService.getResultsSum(tmpAuxResults);
     //Calculated by phast
-    let phastResults = this.phastResultsService.getResults(phast, settings);
-    let calculatedFuelEnergyUsed = phastResults.grossHeatInput;
-    let calculatedEnergyIntensity = (calculatedFuelEnergyUsed / sumFeedRate) || 0;
-    let calculatedElectricityUsed = this.auxEquipmentService.getResultsSum(tmpAuxResults);
+    let calculated = this.phastResultsService.calculatedByPhast(phast, settings);
 
     let tmpResults: DesignedEnergyResults = {
       designedEnergyUsed: designedEnergyUsed,
       designedEnergyIntensity: designedEnergyIntensity,
       designedElectricityUsed: designedElectricityUsed,
-      calculatedFuelEnergyUsed: calculatedFuelEnergyUsed,
-      calculatedEnergyIntensity: calculatedEnergyIntensity,
-      calculatedElectricityUsed: calculatedElectricityUsed
+      calculatedFuelEnergyUsed: calculated.fuelEnergyUsed,
+      calculatedEnergyIntensity: calculated.energyIntensity,
+      calculatedElectricityUsed: calculated.electricityUsed
     };
     return tmpResults;
   }
@@ -84,18 +78,15 @@ export class DesignedEnergyService {
     let tmpAuxResults = this.auxEquipmentService.calculate(phast);
     let designedElectricityUsed = this.auxEquipmentService.getResultsSum(tmpAuxResults);
     //Calculated by phast
-    let phastResults = this.phastResultsService.getResults(phast, settings);
-    let calculatedFuelEnergyUsed = phastResults.grossHeatInput;
-    let calculatedEnergyIntensity = (calculatedFuelEnergyUsed / sumFeedRate) || 0;
-    let calculatedElectricityUsed = this.auxEquipmentService.getResultsSum(tmpAuxResults);
+    let calculated = this.phastResultsService.calculatedByPhast(phast, settings);
 
     let tmpResults: DesignedEnergyResults = {
       designedEnergyUsed: designedEnergyUsed,
       designedEnergyIntensity: designedEnergyIntensity,
       designedElectricityUsed: designedElectricityUsed,
-      calculatedFuelEnergyUsed: calculatedFuelEnergyUsed,
-      calculatedEnergyIntensity: calculatedEnergyIntensity,
-      calculatedElectricityUsed: calculatedElectricityUsed
+      calculatedFuelEnergyUsed: calculated.fuelEnergyUsed,
+      calculatedEnergyIntensity: calculated.energyIntensity,
+      calculatedElectricityUsed: calculated.electricityUsed
     };
     return tmpResults;
   }

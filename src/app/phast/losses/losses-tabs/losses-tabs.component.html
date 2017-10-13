@@ -82,5 +82,11 @@
     <a class="nav-link small">
       Energy Input
     </a>
+  </li><!--
+  --><li [ngClass]="{'active': lossesTab == 'operations'}"
+    (click)="tabChange('operations')">
+     <a class="nav-link small">
+      Operations
+    </a>
   </li>
 </ul>

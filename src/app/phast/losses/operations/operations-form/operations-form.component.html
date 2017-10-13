@@ -1,0 +1,81 @@
+<form #lossForm [formGroup]="operationsForm">
+  <div class="form-section">
+    <label>Operating Hours</label>
+    <div class="form-group">
+      <label for="weeksPerYear">Weeks / Year</label>
+      <div class="incrementor form-control input-group">
+        <button class="btn input-group-btn" (click)="subtractWeek()"><i class="fa fa-minus"></i></button>
+        <button class="btn input-group-btn" (click)="addWeek()"><i class="fa fa-plus"></i></button>
+        <input name="weeksPerYear" type="number" step="any" class="form-control" id="weeksPerYear" (input)="calculatHrsPerYear()"
+          formControlName="weeksPerYear" (focus)="focusField('operatingHours')">
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="daysPerWeek">Days / Week</label>
+      <div class="incrementor form-control input-group">
+        <button class="btn input-group-btn" (click)="subtractWeekDay()"><i class="fa fa-minus"></i></button>
+        <button class="btn input-group-btn" (click)="addWeekDay()"><i class="fa fa-plus"></i></button>
+        <input name="daysPerWeek" type="number" step="any" class="form-control" id="daysPerWeek" (input)="calculatHrsPerYear()" formControlName="daysPerWeek"
+          (focus)="focusField('operatingHours')">
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="shiftsPerDay">Shifts / Day</label>
+      <div class="incrementor form-control input-group">
+        <button class="btn input-group-btn" (click)="subtractShift()"><i class="fa fa-minus"></i></button>
+        <button class="btn input-group-btn" (click)="addShift()"><i class="fa fa-plus"></i></button>
+        <input name="shiftsPerDay" type="number" step="any" class="form-control" id="shiftsPerDay" (input)="calculatHrsPerYear()"
+          formControlName="shiftsPerDay" (focus)="focusField('operatingHours')">
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="hoursPerShift">Hours / Shift</label>
+      <div class="incrementor form-control input-group">
+        <button class="btn input-group-btn" (click)="subtractShiftHr()"><i class="fa fa-minus"></i></button>
+        <button class="btn input-group-btn" (click)="addShiftHr()"><i class="fa fa-plus"></i></button>
+        <input name="hoursPerShift" type="number" step="any" class="form-control" id="hoursPerShift" (input)="calculatHrsPerYear()"
+          formControlName="hoursPerShift" (focus)="focusField('operatingHours')">
+      </div>
+    </div>
+    <!--<span class="alert-warning pull-right small" *ngIf="!isCalculated">Above values not used.</span>-->
+    <div class="form-group">
+      <label for="hoursPerYear">Hours / Year</label>
+      <input name="hoursPerYear" type="number" step="any" class="form-control" id="hoursPerYear" (input)="setNotCalculated()" formControlName="hoursPerYear" (focus)="focusField('operatingHours')">
+    </div>
+  </div>
+  <div class="form-section">
+    <label>Operating Costs</label>
+    <div class="form-group">
+      <label for="fuelCost">Fuel</label>
+      <div class="input-group">
+        <input name="fuelCost" type="number" step="any" class="form-control" id="fuelCost" (input)="startSavePolling()" formControlName="fuelCost" (focus)="focusField('operatingCosts')">
+        <span class="units input-group-addon">$/BTU</span>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="steamCost">Steam</label>
+      <div class="input-group">
+        <input name="steamCost" type="number" step="any" class="form-control" id="steamCost" (input)="startSavePolling()" formControlName="steamCost" (focus)="focusField('operatingCosts')">
+        <span class="units input-group-addon">$/BTU</span>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="electricityCost">Electricity</label>
+      <div class="input-group">
+        <input name="electricityCost" type="number" step="any" class="form-control" id="electricityCost" (input)="startSavePolling()"
+          formControlName="electricityCost" (focus)="focusField('operatingCosts')">
+        <span class="units input-group-addon">$/kWh</span>
+      </div>
+    </div>
+  </div>
+  <div class="form-section" *ngIf="!isBaseline">
+    <div class="form-group">
+      <label for="implementationCost">Implementation Cost</label>
+      <div class="input-group">
+        <input name="implementationCost" type="number" step="any" class="form-control" id="implementationCost" (input)="startSavePolling()"
+          formControlName="implementationCost" (focus)="focusField('implementationCost')">
+        <span class="units input-group-addon">$</span>
+      </div>
+    </div>
+  </div>
+</form>

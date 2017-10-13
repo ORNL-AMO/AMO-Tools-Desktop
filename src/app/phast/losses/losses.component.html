@@ -72,9 +72,12 @@
         [(losses)]="phast.losses" [addLossToggle]="addLossToggle" [saveClicked]="saveClicked" [isBaseline]="true" *ngIf="lossesTab == 'energy-input-exhaust-gas'"
         [settings]="settings"></app-energy-input-exhaust-gas-losses>
 
-      <app-heat-system-efficiency *ngIf="lossesTab == 'heat-system-efficiency'" [(losses)]="phast.losses" [(phast)]="phast"
-        [saveClicked]="saveClicked" [isBaseline]="true" (fieldChange)="changeField($event)" [baselineSelected]="baselineSelected"
-        (savedLoss)="saveModifications()" [settings]="settings"></app-heat-system-efficiency>
+      <app-heat-system-efficiency *ngIf="lossesTab == 'heat-system-efficiency'" [(losses)]="phast.losses" [(phast)]="phast" [saveClicked]="saveClicked"
+        [isBaseline]="true" (fieldChange)="changeField($event)" [baselineSelected]="baselineSelected" (savedLoss)="saveModifications()"
+        [settings]="settings"></app-heat-system-efficiency>
+
+      <app-operations *ngIf="lossesTab == 'operations'" [(phast)]="phast" [saveClicked]="saveClicked" [isBaseline]="true" (fieldChange)="changeField($event)"
+        [baselineSelected]="baselineSelected" (savedLoss)="saveModifications()" [settings]="settings"></app-operations>
     </div>
   </div>
   <!--Modification Start -->
@@ -154,7 +157,12 @@
         [settings]="settings"></app-energy-input-exhaust-gas-losses>
 
       <app-heat-system-efficiency *ngIf="lossesTab == 'heat-system-efficiency'" [(losses)]="_modifications[modificationIndex].phast.losses"
-        [phast]="_modifications[modificationIndex].phast" [saveClicked]="saveClicked" (fieldChange)="changeField($event)" [baselineSelected]="modificationSelected" (savedLoss)="saveModifications()" [settings]="settings"></app-heat-system-efficiency>
+        [phast]="_modifications[modificationIndex].phast" [saveClicked]="saveClicked" (fieldChange)="changeField($event)" [baselineSelected]="modificationSelected"
+        (savedLoss)="saveModifications()" [settings]="settings"></app-heat-system-efficiency>
+
+      <app-operations *ngIf="lossesTab == 'operations'" [(phast)]="_modifications[modificationIndex].phast" [saveClicked]="saveClicked" [isBaseline]="false" (fieldChange)="changeField($event)"
+        [baselineSelected]="modificationSelected" (savedLoss)="saveModifications()" [settings]="settings"></app-operations>
+
     </div>
 
     <div class="modifications-list" *ngIf="isDropdownOpen">
