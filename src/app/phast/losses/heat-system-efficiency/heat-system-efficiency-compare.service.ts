@@ -24,7 +24,7 @@ export class HeatSystemEfficiencyCompareService {
       this.disableAll();
     }
   }
-  
+
   disableAll() {
     this.differentObject.efficiency.next(false);
   }
@@ -57,7 +57,7 @@ export class HeatSystemEfficiencyCompareService {
       return false;
     }
   }
-}
+
 }
 export interface EfficiencyDifferentObject {
   efficiency: BehaviorSubject<boolean>;
