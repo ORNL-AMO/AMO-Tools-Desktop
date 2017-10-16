@@ -15,7 +15,7 @@ export class CashFlowComponent implements OnInit {
     payback: 0
   };
 
-  tabSelect: string = 'diagram';
+  tabSelect: string = 'results';
   currentField: string;
   constructor() { }
 
