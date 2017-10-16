@@ -33,7 +33,7 @@
   <div class="row">
     <div class="col-lg-8 col-md-9 col-sm-10  mx-auto">
       <div class="calculator-container">
-        <div class="card background-color" >
+        <div class="card background-color">
           <div class="card-block">
             <app-unit-converter></app-unit-converter>
           </div>
@@ -45,19 +45,11 @@
 
 <div class="calculator" *ngIf="selectedTool == 'cash-flow'">
   <div class="row">
-    <div class="col-10  mx-auto">
+    <div class="col-11  mx-auto">
       <h2>Cash Flow Diagram</h2>
     </div>
   </div>
-  <div class="row">
-    <div class="col-lg-8 col-md-9 col-sm-10">
-      <div class="calculator-container">
-        <div class="card background-color" >
-          <div class="card-block">
-            <app-cash-flow></app-cash-flow>
-          </div>
-        </div>
-      </div>
-    </div>
+  <div class="calculator-container">
+    <app-cash-flow></app-cash-flow>
   </div>
 </div>
