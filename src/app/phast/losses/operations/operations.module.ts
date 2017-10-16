@@ -4,6 +4,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { OperationsFormComponent } from './operations-form/operations-form.component';
 import { OperationsComponent } from './operations.component';
 import { OperationsService } from './operations.service';
+import { OperationsCompareService } from './operations-compare.service';
 @NgModule({
   imports: [
     CommonModule,
@@ -11,7 +12,7 @@ import { OperationsService } from './operations.service';
     ReactiveFormsModule
   ],
   declarations: [OperationsFormComponent, OperationsComponent],
-  providers: [OperationsService],
+  providers: [OperationsService, OperationsCompareService],
   exports: [OperationsComponent]
 })
 export class OperationsModule { }

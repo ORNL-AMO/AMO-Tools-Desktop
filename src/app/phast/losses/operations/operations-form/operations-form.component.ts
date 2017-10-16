@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges, ViewChild, ElementRef } from '@angular/core';
-
+import { OperationsCompareService } from '../operations-compare.service';
+import { WindowRefService } from '../../../../indexedDb/window-ref.service';
 @Component({
   selector: 'app-operations-form',
   templateUrl: './operations-form.component.html',
@@ -24,7 +25,7 @@ export class OperationsFormComponent implements OnInit {
   elements: any;
   counter: any;
   firstChange: boolean = true;
-  constructor() { }
+  constructor(private operationsCompareService: OperationsCompareService, private windowRefService: WindowRefService) { }
 
   ngOnInit() {
   }
@@ -35,6 +36,7 @@ export class OperationsFormComponent implements OnInit {
     } else {
       this.enableForm();
     }
+    this.initDifferenceMonitor();
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -161,5 +163,61 @@ export class OperationsFormComponent implements OnInit {
     this.counter = setTimeout(() => {
       this.saveEmit.emit(true);
     }, 3000)
+  }
+
+  initDifferenceMonitor() {
+    if (this.operationsCompareService.baseline && this.operationsCompareService.modification) {
+      if (this.operationsCompareService.differentObject) {
+        let doc = this.windowRefService.getDoc();
+        this.operationsCompareService.differentObject.daysPerWeek.subscribe(val => {
+          let daysPerWeekElements = doc.getElementsByName('daysPerWeek');
+          daysPerWeekElements.forEach(element => {
+            element.classList.toggle('indicate-different', val);
+          });
+        })
+        this.operationsCompareService.differentObject.weeksPerYear.subscribe(val => {
+          let weeksPerYearElements = doc.getElementsByName('weeksPerYear');
+          weeksPerYearElements.forEach(element => {
+            element.classList.toggle('indicate-different', val);
+          });
+        })
+        this.operationsCompareService.differentObject.shiftsPerDay.subscribe(val => {
+          let shiftsPerDayElements = doc.getElementsByName('shiftsPerDay');
+          shiftsPerDayElements.forEach(element => {
+            element.classList.toggle('indicate-different', val);
+          });
+        })
+        this.operationsCompareService.differentObject.hoursPerShift.subscribe(val => {
+          let hoursPerShiftElements = doc.getElementsByName('hoursPerShift');
+          hoursPerShiftElements.forEach(element => {
+            element.classList.toggle('indicate-different', val);
+          });
+        })
+        this.operationsCompareService.differentObject.hoursPerYear.subscribe(val => {
+          let hoursPerYearElements = doc.getElementsByName('hoursPerYear');
+          hoursPerYearElements.forEach(element => {
+            element.classList.toggle('indicate-different', val);
+          });
+        })
+        this.operationsCompareService.differentObject.fuelCost.subscribe(val => {
+          let fuelCostElements = doc.getElementsByName('fuelCost');
+          fuelCostElements.forEach(element => {
+            element.classList.toggle('indicate-different', val);
+          });
+        })
+        this.operationsCompareService.differentObject.steamCost.subscribe(val => {
+          let steamCostElements = doc.getElementsByName('steamCost');
+          steamCostElements.forEach(element => {
+            element.classList.toggle('indicate-different', val);
+          });
+        })
+        this.operationsCompareService.differentObject.electricityCost.subscribe(val => {
+          let electricityCostElements = doc.getElementsByName('electricityCost');
+          electricityCostElements.forEach(element => {
+            element.classList.toggle('indicate-different', val);
+          });
+        })
+      }
+    }
   }
 }

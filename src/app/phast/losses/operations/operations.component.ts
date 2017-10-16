@@ -5,6 +5,7 @@ import { PHAST, OperatingCosts, OperatingHours } from '../../../shared/models/ph
 import { WindowRefService } from '../../../indexedDb/window-ref.service';
 import { Settings } from '../../../shared/models/settings';
 import { OperationsService } from './operations.service';
+import { OperationsCompareService } from './operations-compare.service';
 @Component({
   selector: 'app-operations',
   templateUrl: './operations.component.html',
@@ -29,11 +30,13 @@ export class OperationsComponent implements OnInit {
   operationsForm: any;
   firstChange: boolean = true;
   isCalculated: boolean;
-  constructor(private operationsService: OperationsService) { }
+  constructor(private operationsService: OperationsService, private operationsCompareService: OperationsCompareService) { }
 
   ngOnInit() {
     this.operationsForm = this.operationsService.initForm(this.phast);
     this.isCalculated = this.phast.operatingHours.isCalculated;
+    this.setCompareVals();
+    this.operationsCompareService.initCompareObjects();
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -46,6 +49,15 @@ export class OperationsComponent implements OnInit {
       this.firstChange = false;
     }
   }
+
+  ngOnDestroy() {
+    if (this.isBaseline) {
+      this.operationsCompareService.baseline = null;
+    } else {
+      this.operationsCompareService.modification = null;
+    }
+  }
+
   saveLosses() {
     if (this.operationsForm.status == 'VALID') {
       let tmpOpHours: OperatingHours = {
@@ -67,10 +79,23 @@ export class OperationsComponent implements OnInit {
       this.phast.implementationCost = implementationCost;
       this.savedLoss.emit(true);
     }
+    this.setCompareVals();
   }
 
   changeField(str: string) {
     this.fieldChange.emit(str);
+  }
+
+  setCompareVals() {
+    if (this.isBaseline) {
+      this.operationsCompareService.baseline = this.phast;
+    } else {
+      this.operationsCompareService.modification = this.phast;
+    }
+    if (this.operationsCompareService.differentObject && !this.isBaseline) {
+      this.operationsCompareService.checkDifferent();
+    }
+
   }
 
 }
