@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { StandaloneService } from '../../standalone.service';
-import { CombinedHeatPower, CombinedHeatPowerOutput} from '../../../shared/models/combinedHeatPower';
+import { CombinedHeatPower, CombinedHeatPowerOutput } from '../../../shared/models/combinedHeatPower';
 
 @Component({
   selector: 'app-combined-heat-power',
@@ -18,7 +18,7 @@ export class CombinedHeatPowerComponent implements OnInit {
     option: 0,
     boilerThermalFuelCostsCHPcase: 0,
     CHPfuelCosts: 0,
-    percentAvgkWhElectricCostAvoidedOrStandbyRate: 0,
+    percentAvgkWhElectricCostAvoidedOrStandbyRate: 75,
     displacedThermalEfficiency: 0,
     chpAvailability: 0,
     thermalUtilization: 0
@@ -47,7 +47,7 @@ export class CombinedHeatPowerComponent implements OnInit {
     this.tabSelect = str;
   }
 
-  calculate(){
+  calculate() {
     this.results = this.standaloneService.CHPcalculator(this.inputs);
   }
 

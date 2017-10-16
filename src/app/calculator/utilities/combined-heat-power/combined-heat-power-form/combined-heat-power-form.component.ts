@@ -15,10 +15,10 @@ export class CombinedHeatPowerFormComponent implements OnInit {
 
   calculationOptions: any = [
     {
-      name: 'option 1',
+      name: 'Cost Avoided',
       value: 0,
     }, {
-      name: 'option 2',
+      name: 'Standby Rate',
       value: 1,
     }
   ];
@@ -41,6 +41,11 @@ export class CombinedHeatPowerFormComponent implements OnInit {
   }
 
   setCalculationOption() {
+    if (this.inputs.option == 0) {
+      this.inputs.percentAvgkWhElectricCostAvoidedOrStandbyRate = 75;
+    } else if (this.inputs.option == 1) {
+      this.inputs.percentAvgkWhElectricCostAvoidedOrStandbyRate = 0;
+    }
     this.calculate();
   }
 
