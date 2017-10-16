@@ -56,6 +56,14 @@ export class HeatSystemEfficiencyComponent implements OnInit {
     this.initDifferenceMonitor();
   }
 
+  ngOnDestory(){
+    if(this.isBaseline){
+      this.heatSystemEfficiencyCompareService.baseline = null;
+    }else{
+      this.heatSystemEfficiencyCompareService.modification = null;
+    }
+  }
+
   initForm(val?: number) {
     if (val) {
       this.efficiencyForm = this.formBuilder.group({
