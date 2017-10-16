@@ -92,26 +92,91 @@
             <span class="input-group-addon units">%</span>
           </div>
         </div>
-        <div class="form-group">
-          <label class="small" for="percentAvgkWhElectricCostAvoidedOrStandbyRate">Stand By Rate</label>
-          <div class="input-group">
-            <input name="percentAvgkWhElectricCostAvoidedOrStandbyRate" [(ngModel)]="inputs.percentAvgkWhElectricCostAvoidedOrStandbyRate" type="number" step="any" class="form-control"
-                   id="percentAvgkWhElectricCostAvoidedOrStandbyRate" (input)="calculate()" onfocus="this.select();" (focus)="focusField('percentAvgkWhElectricCostAvoidedOrStandbyRate')">
-            <span class="input-group-addon units">$/kW</span>
-          </div>
-        </div>
-        <div class="form-group">
-          <label class="small" for="boilerThermalFuelCostsCHPcase">Boiler Thermal Fuel Costs CHP Case</label>
-          <div class="input-group">
-            <input name="boilerThermalFuelCostsCHPcase" [(ngModel)]="inputs.boilerThermalFuelCostsCHPcase" type="number" step="any" class="form-control" id="boilerThermalFuelCostsCHPcase"
-                   (input)="calculate()" onfocus="this.select();" (focus)="focusField('boilerThermalFuelCostsCHPcase')">
-            <span class="input-group-addon units">$/MMBtu</span>
-          </div>
-        </div>
+        <!--<div class="form-group">-->
+          <!--<label class="small" for="percentAvgkWhElectricCostAvoidedOrStandbyRate">Stand By Rate</label>-->
+          <!--<div class="input-group">-->
+            <!--<input name="percentAvgkWhElectricCostAvoidedOrStandbyRate" [(ngModel)]="inputs.percentAvgkWhElectricCostAvoidedOrStandbyRate" type="number" step="any" class="form-control"-->
+                   <!--id="percentAvgkWhElectricCostAvoidedOrStandbyRate" (input)="calculate()" onfocus="this.select();" (focus)="focusField('percentAvgkWhElectricCostAvoidedOrStandbyRate')">-->
+            <!--<span class="input-group-addon units">$/kW</span>-->
+          <!--</div>-->
+        <!--</div>-->
+        <!--<div class="form-group">-->
+          <!--<label class="small" for="boilerThermalFuelCostsCHPcase">Boiler Thermal Fuel Costs CHP Case</label>-->
+          <!--<div class="input-group">-->
+            <!--<input name="boilerThermalFuelCostsCHPcase" [(ngModel)]="inputs.boilerThermalFuelCostsCHPcase" type="number" step="any" class="form-control" id="boilerThermalFuelCostsCHPcase"-->
+                   <!--(input)="calculate()" onfocus="this.select();" (focus)="focusField('boilerThermalFuelCostsCHPcase')">-->
+            <!--<span class="input-group-addon units">$/MMBtu</span>-->
+          <!--</div>-->
+        <!--</div>-->
       </form>
     </div>
   </div>
 </div>
+
+<div class="form-section">
+  <div class="row">
+    <div class="col-6">
+      <h5><strong>Existing System</strong></h5>
+      <form>
+        <div class="form-group">
+          <label class="small" for="boilerThermalFuelCostsExisting">Boiler/Thermal Fuel Cost</label>
+          <div class="input-group">
+            <input name="boilerThermalFuelCostsExisting"  type="number" step="any" class="form-control"
+                   id="boilerThermalFuelCostsExisting" (input)="calculate()" onfocus="this.select();" (focus)="focusField('boilerThermalFuelCostsExisting')">
+            <span class="input-group-addon units">$/MMBtu</span>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="small" for="avgElectricityCostsExisting">Average Electricity Costs</label>
+          <div class="input-group">
+            <input name="avgElectricityCostsExisting" [(ngModel)]="inputs.avgElectricityCostsExisting" type="number" step="any" class="form-control"
+                   id="avgElectricityCostsExisting" (input)="calculate()" onfocus="this.select();" (focus)="focusField('avgElectricityCostsExisting')">
+            <span class="input-group-addon units">$/kWh </span>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="col-6">
+      <h5><strong>CHP System</strong></h5>
+      <form>
+        <div class="form-group">
+          <select id="calculationOption" name="calculationOption" class="form-control"
+                  (focus)="focusField('calculationOption')">
+            <option *ngFor="let option of options" [ngValue]="option">{{option}}</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="small" for="boilerThermalFuelCostsCHP">Boiler/Thermal Fuel Cost</label>
+          <div class="input-group">
+            <input name="boilerThermalFuelCostsCHP"  type="number" step="any" class="form-control"
+                   id="boilerThermalFuelCostsCHP" (input)="calculate()" onfocus="this.select();" (focus)="focusField('boilerThermalFuelCostsCHP')">
+            <span class="input-group-addon units">$/MMBtu</span>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="small" for="fuelCostCHP">CHP Fuel Cost Costs</label>
+          <div class="input-group">
+            <input name="fuelCostCHP" [(ngModel)]="inputs.fuelCostCHP" type="number" step="any" class="form-control"
+                   id="fuelCostCHP" (input)="calculate()" onfocus="this.select();" (focus)="focusField('fuelCostCHP')">
+            <span class="input-group-addon units">$/kWh </span>
+          </div>
+        </div>
+        <div class="form-group">
+          <!--<label class="small" *ngIf="calculationOption == 'Cost Avoided'" for="switchOption">Cost Avoided</label>-->
+          <!--<label class="small" *ngIf="calculationOption == 'Standby Rate'" for="switchOption">Standby Rate</label>-->
+          <div class="input-group">
+            <input name="switchOption" [(ngModel)]="inputs.fuelCostCHP" type="number" step="any" class="form-control"
+                   id="switchOption" (input)="calculate()" onfocus="this.select();" (focus)="focusField('switchOption')">
+            <span class="input-group-addon units">$/kWh </span>
+          </div>
+        </div>
+      </form>
+    </div>
+
+  </div>
+
+</div>
+
 <!--<div class="col-3 offset-md-1">
       <div class="form-group text-center results-box">
         <label class="small">Flow</label>

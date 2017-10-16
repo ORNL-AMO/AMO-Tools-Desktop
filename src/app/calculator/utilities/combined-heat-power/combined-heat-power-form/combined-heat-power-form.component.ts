@@ -22,6 +22,11 @@ export class CombinedHeatPowerFormComponent implements OnInit {
       value: 1,
     }
   ];
+
+  options: Array<string> = [
+    'Cost Avoided',
+    'Standby Rate'
+  ]
   constructor() { }
 
   ngOnInit() {
