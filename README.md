@@ -1,3 +1,5 @@
+[![Waffle.io - Columns and their card count](https://badge.waffle.io/ORNL-AMO/AMO-Tools-Desktop.svg?columns=all)](http://waffle.io/ORNL-AMO/AMO-Tools-Desktop)
+
 # AMOToolsDesktop
 
 This project was generated with [angular-cli](https://github.com/angular/angular-cli) version 1.0.0-beta.26.
