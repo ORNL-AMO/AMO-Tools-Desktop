@@ -36,20 +36,20 @@
       </div>
     </div>
     <div class="card" *ngIf="currentField == 'annualThermalDemand'">
-    <div class="card-header">
-      ANNUAL THERMAL DEMAND
+      <div class="card-header">
+        ANNUAL THERMAL DEMAND
+      </div>
+      <div class="card-block small">
+        <label><u><strong>Description</strong></u></label>
+        <p>
+          Annual fuel consumption.
+        </p>
+        <label><u><strong>Input</strong></u></label>
+        <p>
+          Units: <strong>MMBtu</strong>
+        </p>
+      </div>
     </div>
-    <div class="card-block small">
-      <label><u><strong>Description</strong></u></label>
-      <p>
-        Annual fuel consumption.
-      </p>
-      <label><u><strong>Input</strong></u></label>
-      <p>
-        Units: <strong>MMBtu</strong>
-      </p>
-    </div>
-  </div>
     <div class="card" *ngIf="currentField == 'chpAvailability'">
       <div class="card-header">
         CHP AVAILABILITY
@@ -87,8 +87,8 @@
       <div class="card-block small">
         <label><u><strong>Description</strong></u></label>
         <p>
-          Efficiency of the equipment currently providing thermal energy to the facility. This can be boilers producing
-          steam or hot water, or direct processes heaters. <br> Typical range: 75-82%
+          Efficiency of the equipment currently providing thermal energy to the facility. This can be boilers producing steam or hot
+          water, or direct processes heaters. <br> Typical range: 75-82%
         </p>
         <label><u><strong>Input</strong></u></label>
         <p>
@@ -118,8 +118,8 @@
       <div class="card-block small">
         <label><u><strong>Description</strong></u></label>
         <p>
-          Total price of electricity at the facility. To calculate this value, take the total bill amount for a representative
-          month and divide by the energy consumed (kWh).
+          Total price of electricity at the facility. To calculate this value, take the total bill amount for a representative month
+          and divide by the energy consumed (kWh).
         </p>
         <label><u><strong>Input</strong></u></label>
         <p>
@@ -128,22 +128,22 @@
       </div>
     </div>
     <div class="card" *ngIf="currentField == 'CHPfuelCosts'">
-    <div class="card-header">
-      CHP FUEL COSTS
+      <div class="card-header">
+        CHP FUEL COSTS
+      </div>
+      <div class="card-block small">
+        <label><u><strong>Description</strong></u></label>
+        <p>
+          In most cases, CHP fuel costs will be same as the existing fuel costs. However, in certain states, fuel for CHP Systems is
+          provided at a special rate. If your state/utility offers a discounted CHP fuel price enter it in this subsection
+          else enter the same fuel price as existing system.
+        </p>
+        <label><u><strong>Input</strong></u></label>
+        <p>
+          Units: <strong>$/MMBtu</strong><br>
+        </p>
+      </div>
     </div>
-    <div class="card-block small">
-      <label><u><strong>Description</strong></u></label>
-      <p>
-        In most cases, CHP fuel costs will be same as the existing fuel costs. However, in certain states, fuel for CHP Systems
-        is provided at a special rate. If your state/utility offers a discounted CHP fuel price enter it in this subsection
-        else enter the same fuel price as existing system.
-      </p>
-      <label><u><strong>Input</strong></u></label>
-      <p>
-        Units: <strong>$/MMBtu</strong><br>
-      </p>
-    </div>
-  </div>
     <div class="card" *ngIf="currentField == 'boilerThermalFuelCostsCHPcase'">
       <div class="card-header">
         CHP FUEL COSTS
@@ -159,8 +159,7 @@
         </p>
       </div>
     </div>
-    percentAvgkWhElectricCostAvoidedOrStandbyRate
-    <div class="card" *ngIf="currentField == 'boilerThermalFuelCostsCHPcase'">
+    <div class="card" *ngIf="currentField == 'percentAvgkWhElectricCostAvoidedOrStandbyRate' && inputs.option == 1">
       <div class="card-header">
         STANDBY RATE
       </div>
@@ -175,15 +174,14 @@
         </p>
       </div>
     </div>
-    <div class="card" *ngIf="currentField == 'boilerThermalFuelCostsCHPcase'">
+    <div class="card" *ngIf="currentField == 'percentAvgkWhElectricCostAvoidedOrStandbyRate' && inputs.option == 0">
       <div class="card-header">
         PERCENT AVERAGE PER kWh ELECTRIC COST AVOIDED
       </div>
       <div class="card-block small">
         <label><u><strong>Description</strong></u></label>
         <p>
-          Percent of average electricity costs per kWh saved by one kWh of CHP electricity. <br>
-          Typical range: 70-95%
+          Percent of average electricity costs per kWh saved by one kWh of CHP electricity. <br> Typical range: 70-95%
         </p>
         <label><u><strong>Input</strong></u></label>
         <p>
