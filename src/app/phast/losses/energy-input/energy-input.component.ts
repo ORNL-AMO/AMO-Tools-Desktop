@@ -111,11 +111,14 @@ export class EnergyInputComponent implements OnInit {
   }
 
   ngOnDestroy() {
-    this.energyInputCompareService.baselineEnergyInput = null;
-    this.energyInputCompareService.modifiedEnergyInput = null;
+    if (this.isBaseline) {
+      this.energyInputService.addLossBaselineMonitor.next(false);
+      this.energyInputCompareService.baselineEnergyInput = null;
+    } else {
+      this.energyInputCompareService.modifiedEnergyInput = null;
+      this.energyInputService.addLossModificationMonitor.next(false);
+    }
     this.energyInputService.deleteLossIndex.next(null);
-    this.energyInputService.addLossBaselineMonitor.next(false);
-    this.energyInputService.addLossModificationMonitor.next(false);
   }
 
   addLoss() {

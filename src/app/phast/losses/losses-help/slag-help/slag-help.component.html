@@ -18,12 +18,80 @@
       Weight
     </div>
     <div class="card-block">
-      <label>Description:</label>
-      <p>DESCRITION HERE</p>
-      <label>Input:</label>
+      <label><u><strong>Description</strong></u></label>
       <p>
-        Units: <strong>UNIT HERE</strong><br> Minimum Value Allowed: <strong>MAX HERE</strong><br> Maximum Value Allowed: <strong>MIN HERE</strong><br>
+        Weight of material discharged. Note that the values vary with time during the cycle and this is average over the cycle time.
+      </p>
+      <label><u><strong>Input</strong></u></label>
+      <p>
+        Units: <strong>Lb/hr</strong> or <strong>kg/hr</strong><br> Minimum Value: <strong>0</strong><br>
       </p>
     </div>
   </div>
+
+  <div class="card" *ngIf="currentField == 'inletTemperature'">
+    <div class="card-header">
+      Inlet Temperature
+    </div>
+    <div class="card-block">
+      <label><u><strong>Description</strong></u></label>
+      <p>
+        Inlet temperature for the material discharged.
+      </p>
+      <label><u><strong>Input</strong></u></label>
+      <p>
+        Units: <strong>&#8457;</strong> or <strong>&#8451;</strong><br> Minimum Value: <strong>0</strong><br>
+      </p>
+    </div>
+  </div>
+
+  <div class="card" *ngIf="currentField == 'outletTemperature'">
+    <div class="card-header">
+      Outlet Temperature
+    </div>
+    <div class="card-block">
+      <label><u><strong>Description</strong></u></label>
+      <p>
+        Outlet temperature for the material discharged.
+      </p>
+      <label><u><strong>Input</strong></u></label>
+      <p>
+        Units: <strong>&#8457;</strong> or <strong>&#8451;</strong><br> Minimum Value: <strong>0</strong><br>
+      </p>
+    </div>
+  </div>
+
+  <div class="card" *ngIf="currentField == 'specificHeat'">
+    <div class="card-header">
+      Specific Heat
+    </div>
+    <div class="card-block">
+      <label><u><strong>Description</strong></u></label>
+      <p>
+        Specific Heat of the slag material.
+      </p>
+      <label><u><strong>Input</strong></u></label>
+      <p>
+        Units: <strong>&#8457;</strong> or <strong>&#8451;</strong><br> Minimum Value: <strong>0</strong><br>
+      </p>
+    </div>
+  </div>
+
+  <div class="card" *ngIf="currentField == 'correctionFactor'">
+    <div class="card-header">
+      Correction Factor
+    </div>
+    <div class="card-block">
+      <label><u><strong>Description</strong></u></label>
+      <p>
+        Engineering correction factor multiplied to the result to account for a known systematic error.
+      </p>
+      <label><u><strong>Input</strong></u></label>
+      <p>
+        Units: <strong>Btu/(SCF-&#8457;)</strong> or <strong>kJ/(kg-&#8451;)</strong><br> Minimum Value: <strong>0</strong><br>
+      </p>
+    </div>
+  </div>
+
+
 </div>

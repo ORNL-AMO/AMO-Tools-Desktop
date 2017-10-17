@@ -47,8 +47,10 @@ import { ExhaustGasModule } from './exhaust-gas/exhaust-gas.module';
 import { LossesService } from './losses.service';
 import { EnergyInputExhaustGasLossesModule } from './energy-input-exhaust-gas-losses/energy-input-exhaust-gas-losses.module';
 import { EnergyInputExhaustGasLossesHelpComponent } from './losses-help/energy-input-exhaust-gas-losses-help/energy-input-exhaust-gas-losses-help.component';
-import { HeatSystemEfficiencyComponent } from './heat-system-efficiency/heat-system-efficiency.component';
+import { HeatSystemEfficiencyModule } from './heat-system-efficiency/heat-system-efficiency.module';
 import { HeatSystemEfficiencyHelpComponent } from './losses-help/heat-system-efficiency-help/heat-system-efficiency-help.component';
+import { OperationsModule } from './operations/operations.module';
+import { OperationsHelpComponent } from './losses-help/operations-help/operations-help.component';
 @NgModule({
   imports: [
     CommonModule,
@@ -71,7 +73,9 @@ import { HeatSystemEfficiencyHelpComponent } from './losses-help/heat-system-eff
     CoolingLossesModule,
     ChargeMaterialModule,
     ExhaustGasModule,
-    EnergyInputExhaustGasLossesModule
+    EnergyInputExhaustGasLossesModule,
+    OperationsModule,
+    HeatSystemEfficiencyModule
   ],
   declarations: [
     LossesComponent,
@@ -95,8 +99,8 @@ import { HeatSystemEfficiencyHelpComponent } from './losses-help/heat-system-eff
     EditConditionPropertiesComponent,
     EnergyInputHelpComponent,
     EnergyInputExhaustGasLossesHelpComponent,
-    HeatSystemEfficiencyComponent,
-    HeatSystemEfficiencyHelpComponent
+    HeatSystemEfficiencyHelpComponent,
+    OperationsHelpComponent
   ],
   providers: [
     LossesService

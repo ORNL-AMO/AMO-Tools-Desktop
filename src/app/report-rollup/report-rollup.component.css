@@ -13,7 +13,8 @@
 .report-container {
     display: flex;
     z-index: 1;
-    margin-top: 158px;
+    margin-top: 178px;
+    background-color: #ececec;
 
 }
 .report-container .sidebar {
@@ -53,11 +54,35 @@
     margin-left: 220px;
 }
 
+.report-column{
+    margin-top: 50px;
+    margin-bottom: 100px;
+}
+.calculator-card{
+    border: none; 
+    margin-top: 2.5%; 
+    margin-bottom: 2.5%;
+    background: inherit;
+}
+
+.disclaimer{
+  font-weight: bold !important;
+  opacity: 1 !important;
+}
 
 
 
 @media print {
 
+    .hide-print{
+        display: none !important;
+    }
+    .report-column{
+        border: none !important;
+        box-shadow: none !important;
+        margin-top: none !important;
+        margin-bottom: none !important;
+    }
     
 
     .report-container .content {

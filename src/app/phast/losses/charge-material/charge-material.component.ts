@@ -102,11 +102,14 @@ export class ChargeMaterialComponent implements OnInit {
   }
 
   ngOnDestroy() {
-    this.chargeMaterialCompareService.baselineMaterials = null;
-    this.chargeMaterialCompareService.modifiedMaterials = null;
+    if (this.isBaseline) {
+      this.chargeMaterialCompareService.baselineMaterials = null;
+      this.chargeMaterialService.addLossBaselineMonitor.next(false);
+    } else {
+      this.chargeMaterialCompareService.modifiedMaterials = null;
+      this.chargeMaterialService.addLossModificationMonitor.next(false);
+    }
     this.chargeMaterialService.deleteLossIndex.next(null);
-    this.chargeMaterialService.addLossBaselineMonitor.next(false);
-    this.chargeMaterialService.addLossModificationMonitor.next(false);
   }
 
   initChargeMaterial() {

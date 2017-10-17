@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { PhastReportComponent } from './phast-report.component';
 import { EnergyUsedComponent } from './energy-used/energy-used.component';
 import { ExecutiveSummaryComponent } from './executive-summary/executive-summary.component';
@@ -10,13 +11,17 @@ import { SankeyModule } from '../sankey/sankey.module';
 import { PhastPieChartComponent } from './report-graphs/phast-pie-chart/phast-pie-chart.component';
 import { PhastBarChartComponent } from './report-graphs/phast-bar-chart/phast-bar-chart.component';
 import { ChartsModule } from 'ng2-charts';
+import { PhastReportService } from './phast-report.service';
 @NgModule({
   imports: [
     CommonModule,
+    ReactiveFormsModule,
+    FormsModule,
     SankeyModule,
     ChartsModule
   ],
   declarations: [PhastReportComponent, EnergyUsedComponent, ExecutiveSummaryComponent, ResultsDataComponent, ReportGraphsComponent, ReportSankeyComponent, PhastPieChartComponent, PhastBarChartComponent],
-  exports: [PhastReportComponent]
+  exports: [PhastReportComponent],
+  providers: [PhastReportService]
 })
 export class PhastReportModule { }

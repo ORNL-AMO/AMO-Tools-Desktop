@@ -28,7 +28,7 @@ export class EnergyInputExhaustGasLossesComponent implements OnInit {
   @Input()
   isBaseline: boolean;
   @Input()
-  settings: Settings; 
+  settings: Settings;
 
   _exhaustGasLosses: Array<any>;
   firstChange: boolean = true;
@@ -101,11 +101,14 @@ export class EnergyInputExhaustGasLossesComponent implements OnInit {
   }
 
   ngOnDestroy() {
-    this.energyInputExhaustGasCompareService.baselineEnergyInputExhaustGasLosses = null;
-    this.energyInputExhaustGasCompareService.modifiedEnergyInputExhaustGasLosses = null;
+    if (this.isBaseline) {
+      this.energyInputExhaustGasCompareService.baselineEnergyInputExhaustGasLosses = null;
+      this.energyInputExhaustGasService.addLossBaselineMonitor.next(false);
+    } else {
+      this.energyInputExhaustGasCompareService.modifiedEnergyInputExhaustGasLosses = null;
+      this.energyInputExhaustGasService.addLossModificationMonitor.next(false);
+    }
     this.energyInputExhaustGasService.deleteLossIndex.next(null);
-    this.energyInputExhaustGasService.addLossBaselineMonitor.next(false);
-    this.energyInputExhaustGasService.addLossModificationMonitor.next(false);
   }
   addLoss() {
     this.energyInputExhaustGasService.addLoss(this.isBaseline);
@@ -116,7 +119,7 @@ export class EnergyInputExhaustGasLossesComponent implements OnInit {
       form: this.energyInputExhaustGasService.initForm(),
       name: 'Loss #' + (this._exhaustGasLosses.length + 1),
       heatLoss: 0.0,
-      exhaustGas:0.0
+      exhaustGas: 0.0
     });
   }
 

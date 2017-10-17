@@ -96,11 +96,14 @@ export class FlueGasLossesComponent implements OnInit {
   }
 
   ngOnDestroy() {
-    this.flueGasCompareService.baselineFlueGasLoss = null;
-    this.flueGasCompareService.modifiedFlueGasLoss = null;
+    if (this.isBaseline) {
+      this.flueGasLossesService.addLossBaselineMonitor.next(false);
+      this.flueGasCompareService.baselineFlueGasLoss = null;
+    } else {
+      this.flueGasLossesService.addLossModificationMonitor.next(false);
+      this.flueGasCompareService.modifiedFlueGasLoss = null;
+    }
     this.flueGasLossesService.deleteLossIndex.next(null);
-    this.flueGasLossesService.addLossBaselineMonitor.next(false);
-    this.flueGasLossesService.addLossModificationMonitor.next(false);
   }
 
   initFlueGasses() {
@@ -160,13 +163,14 @@ export class FlueGasLossesComponent implements OnInit {
   }
 
   calculate(loss: any) {
+    let sumAdditionalHeat = this.phastService.sumChargeMaterialExothermic(this.losses.chargeMaterials);
     if (loss.measurementType == "By Volume") {
       if (loss.formByVolume.status == 'VALID') {
         let tmpLoss: FlueGasByVolume = this.flueGasLossesService.buildByVolumeLossFromForm(loss.formByVolume);
         let tmpResult = this.phastService.flueGasByVolume(tmpLoss, this.settings);
         loss.availableHeat = tmpResult * 100;
-        let sumHeat =  this.phastService.sumHeatInput(this.losses, this.settings);
-        loss.grossHeat = sumHeat / tmpResult;
+        let sumHeat = this.phastService.sumHeatInput(this.losses, this.settings);
+        loss.grossHeat = (sumHeat / tmpResult) - sumAdditionalHeat;
         loss.systemLosses = loss.grossHeat * (1 - tmpResult);
       } else {
         loss.availableHeat = null;
@@ -179,7 +183,7 @@ export class FlueGasLossesComponent implements OnInit {
         let tmpResult = this.phastService.flueGasByMass(tmpLoss, this.settings);
         loss.availableHeat = tmpResult * 100;
         let heatInput = this.phastService.sumHeatInput(this.losses, this.settings);
-        loss.grossHeat = heatInput / tmpResult;
+        loss.grossHeat = (heatInput / tmpResult) - sumAdditionalHeat;;
         loss.systemLosses = loss.grossHeat * (1 - tmpResult);
       } else {
         loss.availableHeat = null;

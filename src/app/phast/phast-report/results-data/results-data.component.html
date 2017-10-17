@@ -107,22 +107,31 @@
           <span *ngIf="!mod.totalOtherLoss">&mdash; &mdash;</span>
         </td>
       </tr>
-      <tr>
-        <td style="font-weight: bold;">Total Net Heat Required</td>
-        <td *ngIf="baseLineResults.totalInput" style="font-weight: bold;">{{baseLineResults.totalInput| number:'2.0-0'}}</td>
-        <td *ngIf="!baseLineResults.totalInput">&mdash; &mdash;</td>
-        <td *ngFor="let mod of modificationResults" style="font-weight: bold;">
-          <span *ngIf="mod.totalInput">{{mod.totalInput| number:'2.0-0'}}</span>
-          <span *ngIf="!mod.totalInput">&mdash; &mdash;</span>
-        </td>
-      </tr>
       <tr *ngIf="showResultsCats.showEnInput2">
         <td>Energy Input Available Heat</td>
         <td *ngIf="baseLineResults.availableHeatPercent">{{baseLineResults.availableHeatPercent| number:'2.0-0'}} %</td>
         <td *ngIf="!baseLineResults.availableHeatPercent">&mdash; &mdash;</td>
         <td *ngFor="let mod of modificationResults">
-          <span *ngIf="mod.availableHeatPercent">{{mod.availableHeatPercent| number:'2.0-0'}}</span>
+          <span *ngIf="mod.availableHeatPercent">{{mod.availableHeatPercent| number:'2.0-0'}} %</span>
           <span *ngIf="!mod.availableHeatPercent">&mdash; &mdash;</span>
+        </td>
+      </tr>
+      <tr *ngIf="showResultsCats.showEnInput2">
+        <td>Exhaust Gas Losses</td>
+        <td *ngIf="baseLineResults.totalExhaustGas">{{baseLineResults.totalExhaustGas| number:'2.0-0'}}</td>
+        <td *ngIf="!baseLineResults.totalExhaustGas">&mdash; &mdash;</td>
+        <td *ngFor="let mod of modificationResults">
+          <span *ngIf="mod.totalExhaustGas">{{mod.totalExhaustGas| number:'2.0-0'}}</span>
+          <span *ngIf="!mod.totalExhaustGas">&mdash; &mdash;</span>
+        </td>
+      </tr>
+      <tr *ngIf="showResultsCats.showExGas">
+        <td>Exhaust Gas Losses</td>
+        <td *ngIf="baseLineResults.totalExhaustGasEAF">{{baseLineResults.totalExhaustGasEAF| number:'2.0-0'}} </td>
+        <td *ngIf="!baseLineResults.totalExhaustGasEAF">&mdash; &mdash;</td>
+        <td *ngFor="let mod of modificationResults">
+          <span *ngIf="mod.totalExhaustGasEAF">{{mod.totalExhaustGasEAF| number:'2.0-0'}}</span>
+          <span *ngIf="!mod.totalExhaustGasEAF">&mdash; &mdash;</span>
         </td>
       </tr>
       <tr *ngIf="showResultsCats.showSystemEff">
@@ -132,15 +141,6 @@
         <td *ngFor="let mod of modificationResults">
           <span *ngIf="mod.heatingSystemEfficiency">{{mod.heatingSystemEfficiency| number:'2.0-0'}}</span>
           <span *ngIf="!mod.heatingSystemEfficiency">&mdash; &mdash;</span>
-        </td>
-      </tr>
-      <tr *ngIf="showResultsCats.showSystemEff">
-        <td>Gross Heat Input</td>
-        <td *ngIf="baseLineResults.grossHeatInput">{{baseLineResults.grossHeatInput| number:'2.0-0'}}</td>
-        <td *ngIf="!baseLineResults.grossHeatInput">&mdash; &mdash;</td>
-        <td *ngFor="let mod of modificationResults">
-          <span *ngIf="mod.grossHeatInput">{{mod.grossHeatInput| number:'2.0-0'}}</span>
-          <span *ngIf="!mod.grossHeatInput">&mdash; &mdash;</span>
         </td>
       </tr>
       <tr *ngIf="showResultsCats.showSystemEff">
@@ -198,13 +198,22 @@
           <span *ngIf="!mod.exothermicHeat">&mdash; &mdash;</span>
         </td>
       </tr>
-      <tr *ngIf="showResultsCats.showFlueGas">
-        <td>Total Gross Heat Input Required</td>
-        <td *ngIf="baseLineResults.flueGasGrossHeat">{{baseLineResults.flueGasGrossHeat| number:'2.0-0'}}</td>
-        <td *ngIf="!baseLineResults.flueGasGrossHeat">&mdash; &mdash;</td>
+      <tr>
+        <td>Total Net Heat Required</td>
+        <td *ngIf="baseLineResults.totalInput">{{baseLineResults.totalInput| number:'2.0-0'}}</td>
+        <td *ngIf="!baseLineResults.totalInput">&mdash; &mdash;</td>
         <td *ngFor="let mod of modificationResults">
-          <span *ngIf="mod.flueGasGrossHeat">{{mod.flueGasGrossHeat| number:'2.0-0'}}</span>
-          <span *ngIf="!mod.flueGasGrossHeat">&mdash; &mdash;</span>
+          <span *ngIf="mod.totalInput">{{mod.totalInput| number:'2.0-0'}}</span>
+          <span *ngIf="!mod.totalInput">&mdash; &mdash;</span>
+        </td>
+      </tr>
+      <tr>
+        <td style="font-weight: bold;">Gross Heat Input</td>
+        <td *ngIf="baseLineResults.grossHeatInput" style="font-weight: bold;">{{baseLineResults.grossHeatInput| number:'2.0-0'}}</td>
+        <td *ngIf="!baseLineResults.grossHeatInput" style="font-weight: bold;">&mdash; &mdash;</td>
+        <td *ngFor="let mod of modificationResults" style="font-weight: bold;">
+          <span *ngIf="mod.grossHeatInput">{{mod.grossHeatInput| number:'2.0-0'}}</span>
+          <span *ngIf="!mod.grossHeatInput">&mdash; &mdash;</span>
         </td>
       </tr>
     </tbody>

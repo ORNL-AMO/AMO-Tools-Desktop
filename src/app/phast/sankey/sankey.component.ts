@@ -33,12 +33,19 @@ export class SankeyComponent implements OnInit {
   ngOnInit() {
   }
 
-  ngAfterViewInit(){
+  ngAfterViewInit() {
     if (this.phast.losses) {
       this.makeSankey();
     }
   }
 
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.phast) {
+      if (!changes.phast.firstChange) {
+        this.makeSankey();
+      }
+    }
+  }
 
   makeSankey() {
     let results = this.sankeyService.getFuelTotals(this.phast, this.settings);
@@ -49,7 +56,7 @@ export class SankeyComponent implements OnInit {
 
   sankey(results: FuelResults) {
     // Remove  all Sankeys
-    d3.select('#'+this.location).selectAll('svg').remove();
+    d3.select('#' + this.location).selectAll('svg').remove();
 
     //create node linkes
     let links = new Array<any>();
@@ -66,7 +73,7 @@ export class SankeyComponent implements OnInit {
     //extra push for output
     links.push({ source: i, target: i + 1 })
 
-    svg = d3.select('#'+this.location).append('svg')
+    svg = d3.select('#' + this.location).append('svg')
       .call(() => {
         this.calcSankey(results.nodes);
       })
@@ -226,7 +233,7 @@ export class SankeyComponent implements OnInit {
           })
           .text(function () {
             var format = d3.format(",.3f");
-            return format(node_val.value)+ ' ' + node_val.units;
+            return format(node_val.value) + ' ' + node_val.units;
           })
           .style("font-size", "32px");
       }

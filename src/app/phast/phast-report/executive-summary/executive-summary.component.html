@@ -11,45 +11,67 @@
       <tr>
         <td>Percent Savings</td>
         <td>&mdash; &mdash;</td>
-        <td *ngFor="let mod of modifications">{{mod.percentSavings | number:'1.0-0'}}</td>
+        <td *ngFor="let mod of modifications">
+          <span *ngIf="mod.percentSavings">{{mod.percentSavings | number:'1.0-0'}} %</span>
+          <span *ngIf="!mod.percentSavings">&mdash; &mdash;</span>
+        </td>
       </tr>
       <tr>
         <td *ngIf="settings.unitsOfMeasure == 'Imperial'">BTU/lb</td>
         <td *ngIf="settings.unitsOfMeasure == 'Metric'">kJ/kg</td>
         <td>{{baseline.energyPerMass | number:'1.0-0'}}</td>
-        <td *ngFor="let mod of modifications">{{mod.energyPerMass | number:'1.0-0'}}</td>
+        <td *ngFor="let mod of modifications">
+          <span *ngIf="mod.energyPerMass">{{mod.energyPerMass | number:'1.0-0'}}</span>
+          <span *ngIf="!mod.energyPerMass">&mdash; &mdash;</span>
+        </td>
       </tr>
       <tr>
         <td>Annual Energy Used</td>
         <td>{{baseline.annualEnergyUsed | number:'1.0-0'}}</td>
         <td *ngFor="let mod of modifications">
-          {{mod.annualEnergyUsed | number:'1.0-0'}}
+          <span *ngIf="mod.annualEnergyUsed">{{mod.annualEnergyUsed | number:'1.0-0'}}</span>
+          <span *ngIf="!mod.annualEnergyUsed">&mdash; &mdash;</span>
         </td>
       </tr>
       <tr>
         <td>Annual Energy Savings</td>
         <td>&mdash; &mdash;</td>
-        <td *ngFor="let mod of modifications">{{mod.annualEnergySavings | number:'1.0-0'}}</td>
+        <td *ngFor="let mod of modifications">
+          <span *ngIf="mod.annualEnergySavings">{{mod.annualEnergySavings | number:'1.0-0'}}</span>
+          <span *ngIf="!mod.annualEnergySavings">&mdash; &mdash;</span>
+        </td>
       </tr>
       <tr>
         <td>Annual Cost</td>
         <td>{{baseline.annualCost | currency:'USD':true:'1.0-0'}}</td>
-        <td *ngFor="let mod of modifications">{{mod.annualCost | currency:'USD':true:'1.0-0'}}</td>
+        <td *ngFor="let mod of modifications">
+          <span *ngIf="mod.annualCost">{{mod.annualCost | currency:'USD':true:'1.0-0'}}</span>
+          <span *ngIf="!mod.annualCost">&mdash; &mdash;</span>
+        </td>
       </tr>
       <tr>
         <td>Annual Cost Savings</td>
         <td>&mdash; &mdash;</td>
-        <td *ngFor="let mod of modifications">{{mod.annualCostSavings | currency:'USD':true:'1.0-0'}}</td>
+        <td *ngFor="let mod of modifications">
+          <span *ngIf="mod.annualCostSavings">{{mod.annualCostSavings | currency:'USD':true:'1.0-0'}}</span>
+          <span *ngIf="!mod.annualCostSavings">&mdash; &mdash;</span>
+        </td>
       </tr>
       <tr>
         <td>Implementation Costs</td>
-        <td></td>
-        <td *ngFor="let mod of modifications"></td>
+        <td>&mdash; &mdash;</td>
+        <td *ngFor="let mod of modifications">
+          <span *ngIf="mod.implementationCosts">{{mod.implementationCosts | currency:'USD':true:'1.0-0'}}</span>
+          <span *ngIf="!mod.implementationCosts">&mdash; &mdash;</span>
+        </td>
       </tr>
       <tr>
         <td>Simple Payback Period</td>
-        <td></td>
-        <td *ngFor="let mod of modifications"></td>
+        <td>&mdash; &mdash;</td>
+        <td *ngFor="let mod of modifications">
+          <span *ngIf="mod.paybackPeriod">{{mod.paybackPeriod | number:'1.0-0'}}</span>
+          <span *ngIf="!mod.paybackPeriod">&mdash; &mdash;</span>
+        </td>
       </tr>
     </tbody>
   </table>

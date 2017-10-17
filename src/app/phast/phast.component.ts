@@ -62,6 +62,22 @@ export class PhastComponent implements OnInit {
       this.indexedDbService.getAssessment(parseInt(tmpAssessmentId)).then(dbAssessment => {
         this.assessment = dbAssessment;
         this._phast = (JSON.parse(JSON.stringify(this.assessment.phast)));
+        if (!this._phast.operatingHours) {
+          this._phast.operatingHours = {
+            weeksPerYear: 52,
+            daysPerWeek: 7,
+            shiftsPerDay: 3,
+            hoursPerShift: 8,
+            hoursPerYear: 8736
+          }
+        }
+        if (!this._phast.operatingCosts) {
+          this._phast.operatingCosts = {
+            fuelCost: 8.00,
+            steamCost: 10.00,
+            electricityCost: .080
+          }
+        }
         this.getSettings();
       })
       let tmpTab = this.assessmentService.getTab();

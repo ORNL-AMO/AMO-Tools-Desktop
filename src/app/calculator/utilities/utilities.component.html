@@ -22,13 +22,17 @@
           </li>
         </ul>
 
+        <ul>
+          <li>
+            <a (click)="showTool('cash-flow')">Cash Flow Diagram</a>
+            <p>Description:</p>
+          </li>
+        </ul>
+
       </div>
     </div>
   </div>
-
 </div>
-
-
 
 <div class="calculator" *ngIf="selectedTool == 'convert-units'">
   <div class="row">
@@ -52,12 +56,12 @@
 
 <div class="calculator" *ngIf="selectedTool == 'combined-heat-power'">
   <div class="row">
-    <div class="col-10  mx-auto">
+    <div class="col-11  mx-auto">
       <h2>Combined Heat and Power</h2>
     </div>
   </div>
   <div class="row">
-    <div class="col-lg-10 col-md-10 col-sm-10  mx-auto">
+    <div class="col-11  mx-auto">
       <div class="calculator-container">
         <div class="card background-color">
           <div class="card-block">
@@ -66,5 +70,16 @@
         </div>
       </div>
     </div>
+  </div>
+</div>
+
+<div class="calculator" *ngIf="selectedTool == 'cash-flow'">
+  <div class="row">
+    <div class="col-11  mx-auto">
+      <h2>Cash Flow Diagram</h2>
+    </div>
+  </div>
+  <div class="calculator-container">
+    <app-cash-flow></app-cash-flow>
   </div>
 </div>

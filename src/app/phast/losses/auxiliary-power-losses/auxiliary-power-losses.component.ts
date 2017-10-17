@@ -96,11 +96,14 @@ export class AuxiliaryPowerLossesComponent implements OnInit {
   }
 
   ngOnDestroy() {
-    this.auxiliaryPowerCompareService.baselineAuxLosses = null;
-    this.auxiliaryPowerCompareService.modifiedAuxLosses = null;
+    if (this.isBaseline) {
+      this.auxiliaryPowerLossesService.addLossBaselineMonitor.next(false);
+      this.auxiliaryPowerCompareService.baselineAuxLosses = null;
+    } else {
+      this.auxiliaryPowerLossesService.addLossModificationMonitor.next(false);
+      this.auxiliaryPowerCompareService.modifiedAuxLosses = null;
+    }
     this.auxiliaryPowerLossesService.deleteLossIndex.next(null);
-    this.auxiliaryPowerLossesService.addLossBaselineMonitor.next(false);
-    this.auxiliaryPowerLossesService.addLossModificationMonitor.next(false);
   }
 
   addLoss() {
@@ -131,7 +134,7 @@ export class AuxiliaryPowerLossesComponent implements OnInit {
     if (loss.form.status == 'VALID') {
       let tmpLoss: AuxiliaryPowerLoss = this.auxiliaryPowerLossesService.getLossFromForm(loss.form);
       loss.powerUsed = this.phastService.auxiliaryPowerLoss(tmpLoss);
-    }else{
+    } else {
       loss.powerUsed = null;
     }
   }

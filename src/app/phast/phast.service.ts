@@ -302,7 +302,6 @@ export class PhastService {
     } else {
       results = phastAddon.flueGasLossesByVolume(inputs);
     }
-
     return results;
   }
 
@@ -749,19 +748,45 @@ export class PhastService {
     return sum;
   }
 
-  sumAuxiliaryEquipment(phast: PHAST, results: Array<any>) {
-    let sum = 0;
-    results.forEach(result => {
-      if (result.motorPower == 'Calculated') {
-        sum += result.totalPower;
-      } else if (result.motorPower == 'Rated') {
-        if (result.totalPower != 0) {
-          let convert = this.convertUnitsService.value(result.totalPower).from('hp').to('kW');
-          sum += convert;
+  sumChargeMaterialExothermic(materials: ChargeMaterial[]): number {
+    let sumAdditionalHeat = 0;
+    if (materials) {
+      materials.forEach(val => {
+        if (val.chargeMaterialType == 'Solid') {
+          if (val.solidChargeMaterial.thermicReactionType == 1) {
+            sumAdditionalHeat += ((val.solidChargeMaterial.chargeFeedRate * val.solidChargeMaterial.reactionHeat * val.solidChargeMaterial.chargeReacted)/100);
+          }
+        } else if (val.chargeMaterialType == 'Liquid') {
+          if (val.liquidChargeMaterial.thermicReactionType == 1) {
+            sumAdditionalHeat += ((val.liquidChargeMaterial.chargeFeedRate * val.liquidChargeMaterial.reactionHeat * val.liquidChargeMaterial.percentReacted)/100);
+          }
+        } else if (val.chargeMaterialType == 'Gas') {
+          if (val.gasChargeMaterial.thermicReactionType == 1) {
+            sumAdditionalHeat += ((val.gasChargeMaterial.feedRate * val.gasChargeMaterial.reactionHeat * val.gasChargeMaterial.percentReacted)/100);
+          }
         }
-      }
-    })
-    return sum;
+      })
+    }
+    return sumAdditionalHeat;
   }
+
+  sumGrossHeat(losses: Losses){
+    
+  }
+
+  // sumAuxiliaryEquipment(phast: PHAST, results: Array<any>) {
+  //   let sum = 0;
+  //   results.forEach(result => {
+  //     if (result.motorPower == 'Calculated') {
+  //       sum += result.totalPower;
+  //     } else if (result.motorPower == 'Rated') {
+  //       if (result.totalPower != 0) {
+  //         let convert = this.convertUnitsService.value(result.totalPower).from('hp').to('kW');
+  //         sum += convert;
+  //       }
+  //     }
+  //   })
+  //   return sum;
+  // }
 }
 

@@ -15,7 +15,7 @@
             <label *ngIf="isBaseline" class="small" for="efficiency">Heat System Efficiency</label>
             <label *ngIf="!isBaseline" class="small" for="efficiency">Heat System Efficiency Modification</label>
             <div class="input-group">
-              <input name="efficiency" type="number" step="any" class="form-control" formControlName="efficiency" id="efficiency" onfocus="this.select();"
+              <input name="efficiency" type="number" step="any" min="0" max="100" class="form-control" formControlName="efficiency" id="efficiency" onfocus="this.select();"
                 (input)="calculate()" (focus)="focusField('efficiency')">
               <span class="input-group-addon units">%</span>
             </div>

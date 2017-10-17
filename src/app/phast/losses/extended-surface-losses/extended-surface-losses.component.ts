@@ -49,11 +49,14 @@ export class ExtendedSurfaceLossesComponent implements OnInit {
   }
 
   ngOnDestroy() {
-    this.extendedSurfaceCompareService.baselineSurface = null;
-    this.extendedSurfaceCompareService.modifiedSurface = null;
+    if (this.isBaseline) {
+      this.extendedSurfaceLossesService.addLossBaselineMonitor.next(false);
+      this.extendedSurfaceCompareService.baselineSurface = null;
+    } else {
+      this.extendedSurfaceLossesService.addLossModificationMonitor.next(false);
+      this.extendedSurfaceCompareService.modifiedSurface = null;
+    }
     this.extendedSurfaceLossesService.deleteLossIndex.next(null);
-    this.extendedSurfaceLossesService.addLossBaselineMonitor.next(false);
-    this.extendedSurfaceLossesService.addLossModificationMonitor.next(false);
   }
 
   ngOnInit() {

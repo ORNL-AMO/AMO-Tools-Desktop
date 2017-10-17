@@ -4,10 +4,12 @@ import { DesignedEnergy, DesignedEnergyElectricity, DesignedEnergyFuel, Designed
 import { AuxEquipmentService } from '../aux-equipment/aux-equipment.service';
 import { PhastService } from '../phast.service';
 import { Settings } from '../../shared/models/settings';
+import { PhastResultsService } from '../phast-results.service';
+
 @Injectable()
 export class DesignedEnergyService {
 
-  constructor(private auxEquipmentService: AuxEquipmentService, private phastService: PhastService) { }
+  constructor(private auxEquipmentService: AuxEquipmentService, private phastService: PhastService, private phastResultsService: PhastResultsService) { }
 
   designedEnergyElectricity(inputs: DesignedEnergyElectricity[], phast: PHAST, settings: Settings): DesignedEnergyResults {
     //Design Results
@@ -20,17 +22,15 @@ export class DesignedEnergyService {
     let tmpAuxResults = this.auxEquipmentService.calculate(phast);
     let designedElectricityUsed = this.auxEquipmentService.getResultsSum(tmpAuxResults);
     //Calculated by phast
-    let calculatedFuelEnergyUsed = this.phastService.sumHeatInput(phast.losses, settings);
-    let calculatedEnergyIntensity = (calculatedFuelEnergyUsed / sumFeedRate) || 0;
-    let calculatedElectricityUsed = this.auxEquipmentService.getResultsSum(tmpAuxResults);
+    let calculated = this.phastResultsService.calculatedByPhast(phast, settings);
 
     let tmpResults: DesignedEnergyResults = {
       designedEnergyUsed: designedEnergyUsed,
       designedEnergyIntensity: designedEnergyIntensity,
       designedElectricityUsed: designedElectricityUsed,
-      calculatedFuelEnergyUsed: calculatedFuelEnergyUsed,
-      calculatedEnergyIntensity: calculatedEnergyIntensity,
-      calculatedElectricityUsed: calculatedElectricityUsed
+      calculatedFuelEnergyUsed: calculated.fuelEnergyUsed,
+      calculatedEnergyIntensity: calculated.energyIntensity,
+      calculatedElectricityUsed: calculated.electricityUsed
     };
     return tmpResults;
   }
@@ -46,7 +46,6 @@ export class DesignedEnergyService {
       constant = Math.pow(10, 6);
     }
     inputs.forEach(input => {
-      let totalBurnerCap
       designedEnergyUsed += (input.totalBurnerCapacity * constant) * (input.percentCapacityUsed / 100) * (input.percentOperatingHours / 100);
     })
     let sumFeedRate = this.phastService.sumChargeMaterialFeedRate(phast.losses.chargeMaterials);
@@ -54,17 +53,15 @@ export class DesignedEnergyService {
     let tmpAuxResults = this.auxEquipmentService.calculate(phast);
     let designedElectricityUsed = this.auxEquipmentService.getResultsSum(tmpAuxResults);
     //Calculated by phast
-    let calculatedFuelEnergyUsed = this.phastService.sumHeatInput(phast.losses, settings);
-    let calculatedEnergyIntensity = (calculatedFuelEnergyUsed / sumFeedRate) || 0;
-    let calculatedElectricityUsed = this.auxEquipmentService.getResultsSum(tmpAuxResults);
+    let calculated = this.phastResultsService.calculatedByPhast(phast, settings);
 
     let tmpResults: DesignedEnergyResults = {
       designedEnergyUsed: designedEnergyUsed,
       designedEnergyIntensity: designedEnergyIntensity,
       designedElectricityUsed: designedElectricityUsed,
-      calculatedFuelEnergyUsed: calculatedFuelEnergyUsed,
-      calculatedEnergyIntensity: calculatedEnergyIntensity,
-      calculatedElectricityUsed: calculatedElectricityUsed
+      calculatedFuelEnergyUsed: calculated.fuelEnergyUsed,
+      calculatedEnergyIntensity: calculated.energyIntensity,
+      calculatedElectricityUsed: calculated.electricityUsed
     };
     return tmpResults;
   }
@@ -81,17 +78,15 @@ export class DesignedEnergyService {
     let tmpAuxResults = this.auxEquipmentService.calculate(phast);
     let designedElectricityUsed = this.auxEquipmentService.getResultsSum(tmpAuxResults);
     //Calculated by phast
-    let calculatedFuelEnergyUsed = this.phastService.sumHeatInput(phast.losses, settings);
-    let calculatedEnergyIntensity = (calculatedFuelEnergyUsed / sumFeedRate) || 0;
-    let calculatedElectricityUsed = this.auxEquipmentService.getResultsSum(tmpAuxResults);
+    let calculated = this.phastResultsService.calculatedByPhast(phast, settings);
 
     let tmpResults: DesignedEnergyResults = {
       designedEnergyUsed: designedEnergyUsed,
       designedEnergyIntensity: designedEnergyIntensity,
       designedElectricityUsed: designedElectricityUsed,
-      calculatedFuelEnergyUsed: calculatedFuelEnergyUsed,
-      calculatedEnergyIntensity: calculatedEnergyIntensity,
-      calculatedElectricityUsed: calculatedElectricityUsed
+      calculatedFuelEnergyUsed: calculated.fuelEnergyUsed,
+      calculatedEnergyIntensity: calculated.energyIntensity,
+      calculatedElectricityUsed: calculated.electricityUsed
     };
     return tmpResults;
   }
