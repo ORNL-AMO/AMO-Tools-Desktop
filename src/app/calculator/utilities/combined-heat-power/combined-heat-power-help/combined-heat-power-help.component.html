@@ -10,16 +10,83 @@
 
   <div class="help-content">
 
-    <div class="card" *ngIf="currentField == 'CHPfuelCosts'">
+    <div class="card" *ngIf="currentField == 'annualOperatingHours'">
       <div class="card-header">
-        CHP Fuel Costs
+        ANNUAL OPERATING HOURS
       </div>
       <div class="card-block small">
         <label><u><strong>Description</strong></u></label>
         <p>
-          TODO...
+          Annual operating hours with loads facilitating CHP
+        </p>
+        <label><u><strong>Input</strong></u></label>
+        <p>
+          Units: <strong>hrs/yr</strong>
         </p>
       </div>
     </div>
+    <div class="card" *ngIf="currentField == 'annualElectricityConsumption'">
+      <div class="card-header">
+        ANNUAL ELECTRICITY CONSUMPTION
+      </div>
+      <div class="card-block small">
+        <label><u><strong>Description</strong></u></label>
+        <p>
+          Total energy consumed by the plant.
+        </p>
+        <label><u><strong>Input</strong></u></label>
+        <p>
+          Units: <strong>kWh</strong>
+        </p>
+      </div>
+    </div>
+    <div class="card" *ngIf="currentField == 'annualThermalDemand'">
+    <div class="card-header">
+      ANNUAL THERMAL DEMAND
+    </div>
+    <div class="card-block small">
+      <label><u><strong>Description</strong></u></label>
+      <p>
+        Annual fuel consumption.
+      </p>
+      <label><u><strong>Input</strong></u></label>
+      <p>
+        Units: <strong>MMBtu</strong>
+      </p>
+    </div>
+  </div>
+    <div class="card" *ngIf="currentField == 'chpAvailability'">
+      <div class="card-header">
+        CHP AVAILABILITY
+      </div>
+      <div class="card-block small">
+        <label><u><strong>Description</strong></u></label>
+        <p>
+          The percentage of time that a CHP system is either up and running or available for use. <br>Typical range: 90-98%.
+        </p>
+        <label><u><strong>Input</strong></u></label>
+        <p>
+          Units: <strong>%</strong><br> Minimum Value Allowed: <strong>0</strong><br> Maximum Value Allowed: <strong>100</strong><br>
+        </p>
+      </div>
+    </div>
+    <div class="card" *ngIf="currentField == 'thermalUtilization'">
+      <div class="card-header">
+        THERMAL UTILIZATION
+      </div>
+      <div class="card-block small">
+        <label><u><strong>Description</strong></u></label>
+        <p>
+          Amount of available thermal energy captured and used for CHP Generation. <br>Typical range: 80-100%
+
+        </p>
+        <label><u><strong>Input</strong></u></label>
+        <p>
+          Units: <strong>%</strong><br> Minimum Value Allowed: <strong>0</strong><br> Maximum Value Allowed: <strong>100</strong><br>
+        </p>
+      </div>
+    </div>
+
+
   </div>
 </div>
