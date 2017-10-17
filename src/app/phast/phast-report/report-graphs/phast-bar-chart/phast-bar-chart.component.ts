@@ -28,11 +28,7 @@ export class PhastBarChartComponent implements OnInit {
   modificationData: any = {};
 
 
-  options: any = {
-    legend: {
-      display: false
-    }
-  }
+  options: any = { }
   @ViewChild(BaseChartDirective) private baseChart;
 
   constructor() { }
@@ -42,6 +38,23 @@ export class PhastBarChartComponent implements OnInit {
     if (this.settings.unitsOfMeasure == 'Metric') {
       units = 'kJ/kg';
     }
+
+    this.options = {
+      legend: {
+        display: false
+      },
+      scales: {
+        yAxes: [{
+          scaleLabel: {
+            display: true,
+            labelString: 'Heat Loss (' + units + ')',
+            fontStyle: 'bold',
+            fontSize: 16
+          }
+        }]
+      }
+    }
+
     this.baselineData = {
       data: new Array<number>(),
       label: ' Baseline (' + units + ')',
