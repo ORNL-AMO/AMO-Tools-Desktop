@@ -18,7 +18,7 @@ before_install:
       sudo apt-get install npm;
     fi
 
-install: npm install
+install: sudo npm install npm@latest -g
 
 script:
-  - npm run build
+  - sudo npm run build
