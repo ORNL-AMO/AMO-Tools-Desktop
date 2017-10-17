@@ -18,7 +18,9 @@ before_install:
       sudo apt-get install npm;
     fi
 
-  - npm install npm@latest -g
+  - npm cache clean -f
+  - sudo npm install n -g
+  - sudo n latest
 
 install: npm install
 
