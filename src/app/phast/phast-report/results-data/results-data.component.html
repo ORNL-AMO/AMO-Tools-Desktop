@@ -3,8 +3,14 @@
     <thead>
       <tr>
         <th></th>
-        <th>Baseline</th>
-        <th *ngFor="let mod of phast.modifications">{{mod.phast.name}}</th>
+        <th>Baseline
+          <span *ngIf="settings.unitsOfMeasure == 'Imperial'"> (BTU/hr)</span>
+          <span *ngIf="settings.unitsOfMeasure ==  'Metric'"> (kJ/hr)</span>
+        </th>
+        <th *ngFor="let mod of phast.modifications">{{mod.phast.name}}
+          <span *ngIf="settings.unitsOfMeasure == 'Imperial'"> (BTU/hr)</span>
+          <span *ngIf="settings.unitsOfMeasure ==  'Metric'"> (kJ/hr)</span>
+        </th>
       </tr>
     </thead>
     <tbody>
