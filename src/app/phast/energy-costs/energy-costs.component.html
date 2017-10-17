@@ -3,14 +3,16 @@
     <label for="fuelCost">Fuel</label>
     <div class="input-group">
       <input name="fuelCost" type="number" step="any" class="form-control" id="fuelCost" (input)="startSavePolling()" [(ngModel)]="phast.operatingCosts.fuelCost">
-      <span class="units input-group-addon">$/BTU</span>
+      <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure == 'Imperial'">$/MMBTU</span>
+      <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure == 'Metric'">$/GJ</span>
     </div>
   </div>
   <div class="form-group">
     <label for="steamCost">Steam</label>
     <div class="input-group">
       <input name="steamCost" type="number" step="any" class="form-control" id="steamCost" (input)="startSavePolling()" [(ngModel)]="phast.operatingCosts.steamCost">
-      <span class="units input-group-addon">$/BTU</span>
+      <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure == 'Imperial'">$/MMBTU</span>
+      <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure == 'Metric'">$/GJ</span>
     </div>
   </div>
   <div class="form-group">

@@ -73,11 +73,11 @@ export class ExecutiveSummaryComponent implements OnInit {
     //gross heat * operating hours * cost
     let tmpAnnualCost = 0;
     if (this.settings.energySourceType == 'Fuel') {
-      tmpAnnualCost = annualEnergyUsed * this.phast.operatingCosts.fuelCost;
+      tmpAnnualCost = annualEnergyUsed * (this.phast.operatingCosts.fuelCost/1000000);
     } else if (this.settings.energySourceType == 'Electricity') {
       tmpAnnualCost = annualEnergyUsed * this.phast.operatingCosts.electricityCost;
     } else if (this.settings.energySourceType == 'Steam') {
-      tmpAnnualCost = annualEnergyUsed * this.phast.operatingCosts.steamCost;
+      tmpAnnualCost = annualEnergyUsed * (this.phast.operatingCosts.steamCost/1000000);
     }
     return tmpAnnualCost;
   }

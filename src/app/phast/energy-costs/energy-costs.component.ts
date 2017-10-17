@@ -1,6 +1,6 @@
 import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 import { PHAST, OperatingCosts } from '../../shared/models/phast/phast';
-
+import { Settings } from '../../shared/models/settings';
 @Component({
   selector: 'app-energy-costs',
   templateUrl: './energy-costs.component.html',
@@ -11,6 +11,8 @@ export class EnergyCostsComponent implements OnInit {
   phast: PHAST;
   @Output('save')
   save = new EventEmitter<boolean>();
+  @Input()
+  settings: Settings;
 
   counter: any;
   constructor() { }
