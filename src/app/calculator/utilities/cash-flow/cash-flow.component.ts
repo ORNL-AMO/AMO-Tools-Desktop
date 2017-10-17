@@ -7,7 +7,7 @@ import { CashFlowForm, CashFlowResults } from './cash-flow';
 })
 export class CashFlowComponent implements OnInit {
   @Input()
-  currentField: string;
+  currentField: string  = 'lifeYears';
   cashFlowForm: CashFlowForm;
   cashFlowResults: CashFlowResults = {
     benefits: 0,
@@ -21,13 +21,13 @@ export class CashFlowComponent implements OnInit {
 
   ngOnInit() {
     this.cashFlowForm = {
-      lifeYears: 0,
-      energySavings: 0,
-      salvageInput: 0,
-      installationCost: 0,
-      operationCost: 0,
-      fuelCost: 0,
-      junkCost: 0
+      lifeYears: 10,
+      energySavings: 1000,
+      salvageInput: 3000,
+      installationCost: 10000,
+      operationCost: 500,
+      fuelCost: 500,
+      junkCost: 500
     }
   }
 
