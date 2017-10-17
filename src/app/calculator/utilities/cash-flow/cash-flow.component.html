@@ -1,7 +1,7 @@
 <div class="pump-head">
   <div class="row">
-    <div class="col-md-5 col-sm-12 mx-auto">
-      <app-cash-flow-form [cashFlowForm]="cashFlowForm" (emitCalculate)="calculate()"></app-cash-flow-form>
+    <div class="col-md-4 col-sm-12 mx-auto">
+      <app-cash-flow-form [cashFlowForm]="cashFlowForm" (emitCalculate)="calculate()" (changeField)="setField($event)"></app-cash-flow-form>
     </div>
     <div class="col-md-5 col-sm-12 mx-auto">
       <ul class="tabs primary text-center">
@@ -17,9 +17,11 @@
            <app-cash-flow-diagram [cashFlowResults]="cashFlowResults"></app-cash-flow-diagram>
         </div>
         <div *ngIf="tabSelect == 'help'" class="help-panel">
-          <app-cash-flow-help></app-cash-flow-help>
+          <app-cash-flow-help [currentField]="currentField"></app-cash-flow-help>
         </div>
       </div>
     </div>
   </div>
+
 </div>
+

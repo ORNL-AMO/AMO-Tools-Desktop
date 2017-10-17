@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 
 @Component({
   selector: 'app-cash-flow-help',
@@ -6,7 +6,8 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./cash-flow-help.component.css']
 })
 export class CashFlowHelpComponent implements OnInit {
-
+  @Input()
+  currentField: string;
   constructor() { }
 
   ngOnInit() {

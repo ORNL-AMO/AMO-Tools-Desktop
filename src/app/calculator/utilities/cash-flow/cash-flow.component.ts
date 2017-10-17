@@ -6,7 +6,8 @@ import { CashFlowForm, CashFlowResults } from './cash-flow';
   styleUrls: ['./cash-flow.component.css']
 })
 export class CashFlowComponent implements OnInit {
-
+  @Input()
+  currentField: string;
   cashFlowForm: CashFlowForm;
   cashFlowResults: CashFlowResults = {
     benefits: 0,
@@ -16,8 +17,7 @@ export class CashFlowComponent implements OnInit {
   };
 
   tabSelect: string = 'results';
-  currentField: string;
-  constructor() { }
+   constructor() { }
 
   ngOnInit() {
     this.cashFlowForm = {
