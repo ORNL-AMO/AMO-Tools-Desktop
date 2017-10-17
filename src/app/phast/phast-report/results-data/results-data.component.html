@@ -171,7 +171,8 @@
         </td>
       </tr>
       <tr *ngIf="showResultsCats.showEnInput1 || showResultsCats.showEnInput2">
-        <td>Energy Input Heat Delivered</td>
+        <td *ngIf="showResultsCats.showEnInput1">Heat Delivered</td>
+        <td *ngIf="showResultsCats.showEnInput2">User Defined Heat Delivered</td>
         <td *ngIf="baseLineResults.energyInputHeatDelivered">{{baseLineResults.energyInputHeatDelivered| number:'2.0-0'}}</td>
         <td *ngIf="!baseLineResults.energyInputHeatDelivered">&mdash; &mdash;</td>
         <td *ngFor="let mod of modificationResults">
@@ -180,7 +181,7 @@
         </td>
       </tr>
       <tr *ngIf="showResultsCats.showEnInput1">
-        <td>Energy Input Total Chemical Energy Delivered</td>
+        <td>User Defined Total Chemical Energy Delivered</td>
         <td *ngIf="baseLineResults.energyInputTotalChemEnergy">{{baseLineResults.energyInputTotalChemEnergy| number:'2.0-0'}}</td>
         <td *ngIf="!baseLineResults.energyInputTotalChemEnergy">&mdash; &mdash;</td>
         <td *ngFor="let mod of modificationResults">

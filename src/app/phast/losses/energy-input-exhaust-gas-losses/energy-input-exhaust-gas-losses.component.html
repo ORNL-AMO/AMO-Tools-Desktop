@@ -32,7 +32,7 @@
           <span *ngIf="settings.unitsOfMeasure == 'Imperial'">Btu/hr</span>
           <span *ngIf="settings.unitsOfMeasure == 'Metric'">kJ/hr</span>
         </div>
-        <div *ngIf="loss.heatLoss" class="text-center small">
+        <div *ngIf="!loss.heatLoss" class="text-center small">
           &mdash; &mdash;
         </div>
       </div>
