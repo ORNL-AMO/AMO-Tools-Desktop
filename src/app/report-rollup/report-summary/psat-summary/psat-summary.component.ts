@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Assessment } from '../../../shared/models/assessment';
-import { ReportRollupService, PsatCompare, ResultsData } from '../../report-rollup.service';
+import { ReportRollupService, PsatCompare, PsatResultsData } from '../../report-rollup.service';
 import * as _ from 'lodash';
 import { PsatService } from '../../../psat/psat.service';
 import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
@@ -49,12 +49,11 @@ export class PsatSummaryComponent implements OnInit {
   }
 
 
-  calcPsatSums(resultsData: Array<ResultsData>) {
+  calcPsatSums(resultsData: Array<PsatResultsData>) {
     let sumSavings = 0;
     let sumEnergy = 0;
     let sumCost = 0;
     let sumEnergySavings = 0;
-    //TODO: Refactor Settings before calculating this.
     resultsData.forEach(result => {
       let diffCost = result.baselineResults.annual_cost - result.modificationResults.annual_cost;
       sumSavings += diffCost;

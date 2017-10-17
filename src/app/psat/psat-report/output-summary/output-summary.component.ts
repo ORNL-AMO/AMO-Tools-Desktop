@@ -26,7 +26,7 @@ export class OutputSummaryComponent implements OnInit {
   unit: string;
   titlePlacement: string;
   maxAnnualSavings: number = 0;
-  selectedModificationIndex: number = 0;
+  selectedModificationIndex: number;
   constructor(private psatService: PsatService, private reportRollupService: ReportRollupService) { }
 
   ngOnInit() {
@@ -39,8 +39,14 @@ export class OutputSummaryComponent implements OnInit {
         mod.psat.outputs = this.getResults(JSON.parse(JSON.stringify(mod.psat)), this.settings, true);
         mod.psat.outputs.percent_annual_savings = this.getSavingsPercentage(this.psat, mod.psat);
       })
-      this.getMaxAnnualSavings();
+      if (this.inRollup) {
+        this.getMaxAnnualSavings();
+      }
     }
+  }
+
+  ngOnDestroy() {
+    console.log('destroy')
   }
 
   checkSavings(num: number) {

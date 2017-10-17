@@ -48,7 +48,7 @@
           <app-energy-used [phast]="phast" [settings]="settings"></app-energy-used>
         </div>        
         <div class="results" *ngIf="currentTab == 'executive-summary'"  style="padding-top: 20px;">
-          <app-executive-summary  [settings]="settings" [phast]="phast"></app-executive-summary>
+          <app-executive-summary  [settings]="settings" [phast]="phast" [assessment]="assessment" [inPhast]="inPhast"></app-executive-summary>
         </div>
         <div class="results" *ngIf="currentTab == 'results-data'"  style="padding-top: 20px;">
           <app-results-data [phast]="phast" [settings]="settings" [assessment]="assessment" [inPhast]="true"></app-results-data>

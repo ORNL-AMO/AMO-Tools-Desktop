@@ -12,6 +12,7 @@ import { PhastPieChartComponent } from './report-graphs/phast-pie-chart/phast-pi
 import { PhastBarChartComponent } from './report-graphs/phast-bar-chart/phast-bar-chart.component';
 import { ChartsModule } from 'ng2-charts';
 import { PhastReportService } from './phast-report.service';
+import { ExecutiveSummaryService } from './executive-summary.service';
 @NgModule({
   imports: [
     CommonModule,
@@ -22,6 +23,6 @@ import { PhastReportService } from './phast-report.service';
   ],
   declarations: [PhastReportComponent, EnergyUsedComponent, ExecutiveSummaryComponent, ResultsDataComponent, ReportGraphsComponent, ReportSankeyComponent, PhastPieChartComponent, PhastBarChartComponent],
   exports: [PhastReportComponent],
-  providers: [PhastReportService]
+  providers: [PhastReportService, ExecutiveSummaryService]
 })
 export class PhastReportModule { }
