@@ -1,0 +1,51 @@
+<table class="table">
+ <tr>
+  <td>Fuel Costs</td>
+  <td>
+    <span *ngIf="results.fuelCosts">{{results.fuelCosts | currency:'USD':true:'2.0-2'}}</span>
+    <span *ngIf="!results.fuelCosts">&mdash; &mdash;</span>
+  </td>
+  </tr>
+  <tr>
+    <td>Thermal Credit</td>
+    <td>
+      <span *ngIf="results.thermalCredit">{{results.thermalCredit | number:'2.2-2'}}</span>
+      <span *ngIf="!results.thermalCredit">&mdash; &mdash;</span>
+    </td>
+  </tr>
+  <tr>
+    <td>Incremental O&M Cost</td>
+    <td>
+      <span *ngIf="results.incrementalOandM">{{results.incrementalOandM | number:'2.2-2'}}</span>
+      <span *ngIf="!results.incrementalOandM">&mdash; &mdash;</span>
+    </td>
+  </tr>
+  <tr>
+    <td><strong><u>Total Operating Costs</u></strong></td>
+    <td>
+      <span *ngIf="results.totalOperatingCosts">{{results.totalOperatingCosts | currency:'USD':true:'2.0-2'}}</span>
+      <span *ngIf="!results.totalOperatingCosts">&mdash; &mdash;</span>
+    </td>
+  </tr>
+  <tr>
+    <td>Annual Operating Savings</td>
+    <td>
+      <span *ngIf="results.annualOperationSavings">{{results.annualOperationSavings | currency:'USD':true:'2.0-2'}}</span>
+      <span *ngIf="!results.annualOperationSavings">&mdash; &mdash;</span>
+    </td>
+  </tr>
+  <tr>
+    <td>Total Installed Costs</td>
+    <td>
+      <span *ngIf="results.totalInstalledCostsPayback">{{results.totalInstalledCostsPayback | number:'2.2-2'}}</span>
+      <span *ngIf="!results.totalInstalledCostsPayback">&mdash; &mdash;</span>
+    </td>
+  </tr>
+  <tr>
+    <td><strong><u>Simple Payback</u></strong></td>
+    <td>
+      <span *ngIf="results.simplePayback">{{results.simplePayback | number:'2.2-2'}} years</span>
+      <span *ngIf="!results.simplePayback">&mdash; &mdash;</span>
+    </td>
+  </tr>
+</table>

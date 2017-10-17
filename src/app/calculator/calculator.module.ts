@@ -14,7 +14,7 @@ import { MotorsModule } from './motors/motors.module';
 import { PumpsModule } from './pumps/pumps.module';
 import { UtilitiesModule } from './utilities/utilities.module';
 import { CompressedAirComponent } from './compressed-air/compressed-air.component';
-
+import { StandaloneService } from './standalone.service';
 
 @NgModule({
   declarations: [
@@ -38,6 +38,7 @@ import { CompressedAirComponent } from './compressed-air/compressed-air.componen
     MotorsModule
   ],
   providers: [
+    StandaloneService
   ]
 })
 

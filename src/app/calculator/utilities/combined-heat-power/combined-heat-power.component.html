@@ -1,0 +1,26 @@
+<div class="pump-head">
+  <div class="row">
+    <div class="col-md-6 col-sm-12  mx-auto">
+      <app-combined-heat-power-form [inputs]="inputs" (changeField)="setCurrentField($event)" (emitCalculate)="calculate()"></app-combined-heat-power-form>
+    </div>
+
+    <div class="col-md-6 col-sm-12 mx-auto">
+      <ul class="tabs primary text-center">
+        <li class="calc-tab" [ngClass]="{'active': tabSelect == 'results'}">
+          <a (click)="setTab('results')">Results</a>
+        </li><!--
+    --><li class="calc-tab" [ngClass]="{'active': tabSelect == 'help'}">
+          <a (click)="setTab('help')">Help</a>
+        </li>
+      </ul>
+      <div class="tab-content">
+        <div *ngIf="tabSelect == 'results'" class="form-group text-center">
+          <app-combined-heat-power-results [results]="results"></app-combined-heat-power-results>
+        </div>
+        <div *ngIf="tabSelect == 'help'">
+          <app-combined-heat-power-help [currentField]="currentField" [inputs]="inputs"></app-combined-heat-power-help>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

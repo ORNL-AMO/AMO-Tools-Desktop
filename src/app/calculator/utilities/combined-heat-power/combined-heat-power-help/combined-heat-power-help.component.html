@@ -1,0 +1,193 @@
+<div class="help-panel">
+  <div class="help-header">
+    <h3>Combined Heat and Power Help</h3>
+  </div>
+
+  <div class="help-content">
+
+    <div class="card" *ngIf="currentField == 'annualOperatingHours'">
+      <div class="card-header">
+        ANNUAL OPERATING HOURS
+      </div>
+      <div class="card-block small">
+        <label><u><strong>Description</strong></u></label>
+        <p>
+          Annual operating hours with loads facilitating CHP
+        </p>
+        <label><u><strong>Input</strong></u></label>
+        <p>
+          Units: <strong>hrs/yr</strong>
+        </p>
+      </div>
+    </div>
+    <div class="card" *ngIf="currentField == 'annualElectricityConsumption'">
+      <div class="card-header">
+        ANNUAL ELECTRICITY CONSUMPTION
+      </div>
+      <div class="card-block small">
+        <label><u><strong>Description</strong></u></label>
+        <p>
+          Total energy consumed by the plant.
+        </p>
+        <label><u><strong>Input</strong></u></label>
+        <p>
+          Units: <strong>kWh</strong>
+        </p>
+      </div>
+    </div>
+    <div class="card" *ngIf="currentField == 'annualThermalDemand'">
+      <div class="card-header">
+        ANNUAL THERMAL DEMAND
+      </div>
+      <div class="card-block small">
+        <label><u><strong>Description</strong></u></label>
+        <p>
+          Annual fuel consumption.
+        </p>
+        <label><u><strong>Input</strong></u></label>
+        <p>
+          Units: <strong>MMBtu</strong>
+        </p>
+      </div>
+    </div>
+    <div class="card" *ngIf="currentField == 'chpAvailability'">
+      <div class="card-header">
+        CHP AVAILABILITY
+      </div>
+      <div class="card-block small">
+        <label><u><strong>Description</strong></u></label>
+        <p>
+          The percentage of time that a CHP system is either up and running or available for use. <br>Typical range: 90-98%.
+        </p>
+        <label><u><strong>Input</strong></u></label>
+        <p>
+          Units: <strong>%</strong><br> Minimum Value Allowed: <strong>0</strong><br> Maximum Value Allowed: <strong>100</strong><br>
+        </p>
+      </div>
+    </div>
+    <div class="card" *ngIf="currentField == 'thermalUtilization'">
+      <div class="card-header">
+        THERMAL UTILIZATION
+      </div>
+      <div class="card-block small">
+        <label><u><strong>Description</strong></u></label>
+        <p>
+          Amount of available thermal energy captured and used for CHP Generation. <br>Typical range: 80-100%
+        </p>
+        <label><u><strong>Input</strong></u></label>
+        <p>
+          Units: <strong>%</strong><br> Minimum Value Allowed: <strong>0</strong><br> Maximum Value Allowed: <strong>100</strong><br>
+        </p>
+      </div>
+    </div>
+    <div class="card" *ngIf="currentField == 'displacedThermalEfficiency'">
+      <div class="card-header">
+        DISPLACED THERMAL EFFICIENCY
+      </div>
+      <div class="card-block small">
+        <label><u><strong>Description</strong></u></label>
+        <p>
+          Efficiency of the equipment currently providing thermal energy to the facility. This can be boilers producing steam or hot
+          water, or direct processes heaters. <br> Typical range: 75-82%
+        </p>
+        <label><u><strong>Input</strong></u></label>
+        <p>
+          Units: <strong>%</strong><br> Minimum Value Allowed: <strong>0</strong><br> Maximum Value Allowed: <strong>100</strong><br>
+        </p>
+      </div>
+    </div>
+    <div class="card" *ngIf="currentField == 'boilerThermalFuelCosts'">
+      <div class="card-header">
+        BOILER/THERMAL FUEL COSTS
+      </div>
+      <div class="card-block small">
+        <label><u><strong>Description</strong></u></label>
+        <p>
+          Cost of fuel currently used to produce thermal energy at the facility.
+        </p>
+        <label><u><strong>Input</strong></u></label>
+        <p>
+          Units: <strong>$/MMBtu</strong><br>
+        </p>
+      </div>
+    </div>
+    <div class="card" *ngIf="currentField == 'avgElectricityCosts'">
+      <div class="card-header">
+        AVERAGE ELECTRICITY COST
+      </div>
+      <div class="card-block small">
+        <label><u><strong>Description</strong></u></label>
+        <p>
+          Total price of electricity at the facility. To calculate this value, take the total bill amount for a representative month
+          and divide by the energy consumed (kWh).
+        </p>
+        <label><u><strong>Input</strong></u></label>
+        <p>
+          Units: <strong>$/kWh</strong><br>
+        </p>
+      </div>
+    </div>
+    <div class="card" *ngIf="currentField == 'CHPfuelCosts'">
+      <div class="card-header">
+        CHP FUEL COSTS
+      </div>
+      <div class="card-block small">
+        <label><u><strong>Description</strong></u></label>
+        <p>
+          In most cases, CHP fuel costs will be same as the existing fuel costs. However, in certain states, fuel for CHP Systems is
+          provided at a special rate. If your state/utility offers a discounted CHP fuel price enter it in this subsection
+          else enter the same fuel price as existing system.
+        </p>
+        <label><u><strong>Input</strong></u></label>
+        <p>
+          Units: <strong>$/MMBtu</strong><br>
+        </p>
+      </div>
+    </div>
+    <div class="card" *ngIf="currentField == 'boilerThermalFuelCostsCHPcase'">
+      <div class="card-header">
+        CHP FUEL COSTS
+      </div>
+      <div class="card-block small">
+        <label><u><strong>Description</strong></u></label>
+        <p>
+          Cost of fuel currently used to produce thermal energy at the facility.
+        </p>
+        <label><u><strong>Input</strong></u></label>
+        <p>
+          Units: <strong>$/MMBtu</strong><br>
+        </p>
+      </div>
+    </div>
+    <div class="card" *ngIf="currentField == 'percentAvgkWhElectricCostAvoidedOrStandbyRate' && inputs.option == 1">
+      <div class="card-header">
+        STANDBY RATE
+      </div>
+      <div class="card-block small">
+        <label><u><strong>Description</strong></u></label>
+        <p>
+          Standby rates are charges levied by utilities when an on-site CHP system, experiences a scheduled or emergency outage.
+        </p>
+        <label><u><strong>Input</strong></u></label>
+        <p>
+          Units: <strong>$/kW</strong><br>
+        </p>
+      </div>
+    </div>
+    <div class="card" *ngIf="currentField == 'percentAvgkWhElectricCostAvoidedOrStandbyRate' && inputs.option == 0">
+      <div class="card-header">
+        PERCENT AVERAGE PER kWh ELECTRIC COST AVOIDED
+      </div>
+      <div class="card-block small">
+        <label><u><strong>Description</strong></u></label>
+        <p>
+          Percent of average electricity costs per kWh saved by one kWh of CHP electricity. <br> Typical range: 70-95%
+        </p>
+        <label><u><strong>Input</strong></u></label>
+        <p>
+          Units: <strong>%</strong><br> Minimum Value Allowed: <strong>0</strong><br> Maximum Value Allowed: <strong>100</strong><br>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
