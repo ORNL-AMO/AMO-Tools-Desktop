@@ -106,4 +106,9 @@
       </tr>
     </tbody>
   </table>
+  <div class="row" *ngIf="phast.operatingHours.operatingConditions">
+    <div class="col">
+      <p><small><b>Operating Conditions:</b> {{phast.operatingHours.operatingConditions}}</small></p>
+    </div>
+  </div>
 </div>

@@ -91,7 +91,8 @@ export interface OperatingHours {
   shiftsPerDay?: number,
   hoursPerShift?: number,
   hoursPerYear?: number,
-  isCalculated?: boolean
+  isCalculated?: boolean,
+  operatingConditions?: string
 }
 
 export interface PhastResults {
