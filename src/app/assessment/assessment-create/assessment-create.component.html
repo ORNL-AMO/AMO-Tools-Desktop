@@ -9,8 +9,8 @@
     <div class="modal-content">
 
       <div class="modal-header">
-        <h3 *ngIf="directory.id != 1">Create Assessment in {{directory.name}}</h3>
-        <h3 *ngIf="directory.id == 1">Create Assessment</h3>
+        <h3 *ngIf="directory.id != 1">Add Asset in {{directory.name}}</h3>
+        <h3 *ngIf="directory.id == 1">Add Asset</h3>
         <button class="close" (click)="hideCreateModal(false)">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -21,7 +21,7 @@
         <div class="modal-body">
         
             <div class="form-group">
-              <label class="form-control-label" for="assessmentName">Assessment Name</label>
+              <label class="form-control-label" for="assessmentName">Asset Name</label>
               <input #assessmentName class="form-control" formControlName="assessmentName" id="assessmentName" type="text" />
               <div class="help-text">
                 <p *ngIf="newAssessment.value.assessmentType == 'Pump'">Example: "Pump123" or "ORNL Pump 3"</p>
@@ -30,7 +30,7 @@
             </div><!-- End .form-group -->
 
             <div class="form-group">
-              <label>Equipment</label>
+              <label>Asset Type</label>
               <select class="form-control type-select" formControlName="assessmentType">
                 <option>Pump</option>
                 <option>Furnace</option>
@@ -38,12 +38,12 @@
 
               <div class="form-check">
                 <label class="form-check-label">
-                  <input class="form-check-input" type="radio" name="chooseEquipment" value="createNew" checked (click)="selectEquip('new')"> Add New Equipment
+                  <input class="form-check-input" type="radio" name="chooseEquipment" value="createNew" checked (click)="selectEquip('new')"> This is a new asset
                 </label>
               </div>
               <div class="form-check">
                 <label class="form-check-label">
-                  <input class="form-check-input" type="radio" name="chooseEquipment" value="useExisting" (click)="selectEquip('existing')"> Select Equipment from Another Assessment
+                  <input class="form-check-input" type="radio" name="chooseEquipment" value="useExisting" (click)="selectEquip('existing')"> Select from existing assets
                 </label>
               </div>
 
@@ -67,7 +67,7 @@
 
         <div class="modal-footer">
 
-          <button class="btn btn-primary pull-right" type="submit" [disabled]="!newAssessment.valid" (click)="createAssessment()">Create</button>
+          <button class="btn btn-primary pull-right" type="submit" [disabled]="!newAssessment.valid" (click)="createAssessment()">Add Asset</button>
           <button class="btn btn-secondary pull-left" (click)="hideCreateModal()">Close</button>
         </div><!-- End .modal-footer -->
 
