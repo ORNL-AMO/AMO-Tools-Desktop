@@ -1,0 +1,29 @@
+language: node_js
+
+node_js:
+  - "8"
+
+os:
+  - linux
+  - osx
+
+#compiler:
+#  - gcc
+##  - clang
+
+before_install:
+  - npm i -g npm@5.3.0
+
+#  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
+#      brew update;
+#      brew upgrade node;
+#
+#    else
+#      sudo apt-get update;
+#      sudo apt-get install npm;
+#    fi
+
+install: npm install
+
+script:
+  - npm run build
