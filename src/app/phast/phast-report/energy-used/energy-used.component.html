@@ -1,53 +1,64 @@
 <div class="output-summary">
-  <h5>Summary of Energy Sources Used</h5>
-  <table class="table">
-    <thead>
-      <tr>
-        <th>Energy Name</th>
-        <th>Energy Used</th>
-        <th>Heating Value (HHV)</th>
-        <th>Cost per Unit</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td>
-          <span *ngIf="fuelName">{{fuelName}}</span>
-          <span *ngIf="!fuelName">Fuel</span>
-        </td>
-        <td>
-          <span *ngIf="fuelEnergyUsed">{{fuelEnergyUsed | number:'1.0-0'}} {{energyPerTimeUnit}}</span>
-          <span *ngIf="!fuelEnergyUsed">&mdash; &mdash;</span>
-        </td>
-        <td>
-          <span *ngIf="fuelHeatingValue">{{fuelHeatingValue | number:'1.2-2'}} {{energyPerMassUnit}}</span>
-          <span *ngIf="!fuelHeatingValue">&mdash; &mdash;</span>
-        </td>
-        <td>{{phast.operatingCosts.fuelCost | currency:'USD':true:'1.2-2'}} {{energyCostUnit}}</td>
-      </tr>
-      <tr>
-        <td>Electricity</td>
-        <td>
-          <span *ngIf="electricEnergyUsed">{{electricEnergyUsed | number:'1.0-0'}} kW</span>
-          <span *ngIf="!electricEnergyUsed">&mdash; &mdash;</span>
-        </td>
-        <td>9,800 {{energyPerMassUnit}}</td>
-        <td>{{phast.operatingCosts.electricityCost | currency:'USD':true:'1.2-2'}} /kWh</td>
-      </tr>
-      <tr>
-        <td>Steam</td>
-        <td>
-          <span *ngIf="steamEnergyUsed">{{steamEnergyUsed | number:'1.0-0'}} {{energyPerTimeUnit}}</span>
-          <span *ngIf="!steamEnergyUsed">&mdash; &mdash;</span>
-        </td>
-        <td>
-          <span *ngIf="steamHeatingValue">{{steamHeatingValue | number:'1.0-0'}} {{energyPerMassUnit}}</span>
-          <span *ngIf="!steamHeatingValue">&mdash; &mdash;</span>
-        </td>
-        <td>{{phast.operatingCosts.steamCost | currency:'USD':true:'1.2-2'}} {{energyCostUnit}}</td>
-      </tr>
-    </tbody>
-  </table>
+  <div class="summary-table">
+    <h5>Summary of Energy Sources Used</h5>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Energy Name</th>
+          <th>Energy Used</th>
+          <th>Heating Value (HHV)</th>
+          <th>Cost per Unit</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <span *ngIf="fuelName">{{fuelName}}</span>
+            <span *ngIf="!fuelName">Fuel</span>
+          </td>
+          <td>
+            <span *ngIf="fuelEnergyUsed">{{fuelEnergyUsed | number:'1.0-0'}} {{energyPerTimeUnit}}</span>
+            <span *ngIf="!fuelEnergyUsed">&mdash; &mdash;</span>
+          </td>
+          <td>
+            <span *ngIf="fuelHeatingValue">{{fuelHeatingValue | number:'1.2-2'}} {{energyPerMassUnit}}</span>
+            <span *ngIf="!fuelHeatingValue">&mdash; &mdash;</span>
+          </td>
+          <td>{{phast.operatingCosts.fuelCost | currency:'USD':true:'1.2-2'}} {{energyCostUnit}}</td>
+        </tr>
+        <tr>
+          <td>Electricity</td>
+          <td>
+            <span *ngIf="electricEnergyUsed">{{electricEnergyUsed | number:'1.0-0'}} kW</span>
+            <span *ngIf="!electricEnergyUsed">&mdash; &mdash;</span>
+          </td>
+          <td>9,800 {{energyPerMassUnit}}</td>
+          <td>{{phast.operatingCosts.electricityCost | currency:'USD':true:'1.2-2'}} /kWh</td>
+        </tr>
+        <tr>
+          <td>Steam</td>
+          <td>
+            <span *ngIf="steamEnergyUsed">{{steamEnergyUsed | number:'1.0-0'}} {{energyPerTimeUnit}}</span>
+            <span *ngIf="!steamEnergyUsed">&mdash; &mdash;</span>
+          </td>
+          <td>
+            <span *ngIf="steamHeatingValue">{{steamHeatingValue | number:'1.0-0'}} {{energyPerMassUnit}}</span>
+            <span *ngIf="!steamHeatingValue">&mdash; &mdash;</span>
+          </td>
+          <td>{{phast.operatingCosts.steamCost | currency:'USD':true:'1.2-2'}} {{energyCostUnit}}</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="row">
+      <div class="col">
+        <p>
+          <small>
+          <b>Operating Conditions &mdash;</b> {{phast.operatingHours.operatingConditions}}
+          </small>
+        </p>
+      </div>
+    </div>
+  </div>
   <h5>Compare PHAST Calculations</h5>
   <table class="table">
     <thead>
@@ -106,9 +117,19 @@
       </tr>
     </tbody>
   </table>
-  <div class="row" *ngIf="phast.operatingHours.operatingConditions">
+  <div class="row">
     <div class="col">
-      <p><small><b>Operating Conditions:</b> {{phast.operatingHours.operatingConditions}}</small></p>
+      <p>
+        <small> 
+          <b>Calculated By PHAST &mdash;</b> This method calculates total energy used by a furnace using bottom-up heat balance
+            analysis. The heat balance analysis includes heat to load and various heat losses.<br>
+          <b>Metered Energy Use &mdash;</b> This method calculates total energy used by a furnace by multiplying metered fuel
+            energy used by the measurement period.<br>
+          <b>Design Energy Use &mdash;</b> This method calculates total energy used by a furnace by multiplying total rated capacity
+            of burners ({{energyPerTimeUnit}}) used in different heat zones with annual operating hours, percentage rated capacity
+            used and duty cycle.
+       </small>
+      </p>
     </div>
   </div>
 </div>
