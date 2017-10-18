@@ -19,8 +19,8 @@
         <div class="form">
           <app-system-basics *ngIf="subTab == 'system-basics'" [settings]="settings" [saveClicked]="saveClicked" [assessment]="assessment"
             [isAssessmentSettings]="isAssessmentSettings" (updateSettings)="getSettings($event)" (updateAssessment)="save()"></app-system-basics>
-          <app-operating-hours *ngIf="subTab == 'operating-hours'" [phast]="_phast" (save)="saveDb()"></app-operating-hours>
-          <app-energy-costs *ngIf="subTab == 'energy-costs'" [phast]="_phast" (save)="saveDb()"></app-energy-costs>
+          <app-operating-hours *ngIf="subTab == 'operating-hours'" [phast]="_phast" [saveClicked]="saveClicked" (save)="saveDb()"></app-operating-hours>
+          <app-energy-costs *ngIf="subTab == 'energy-costs'" [phast]="_phast" [saveClicked]="saveClicked" (save)="saveDb()" [settings]="settings"></app-energy-costs>
         </div>
         <div class="help">
           <app-help-panel></app-help-panel>

@@ -36,6 +36,9 @@ export class PhastReportComponent implements OnInit {
       this.assessmentDirectories = new Array<Directory>();
       this.getDirectoryList(this.assessment.directoryId);
     }
+    if(!this.inPhast){
+      this.currentTab = 'executive-summary';
+    }
   }
 
   setTab(str: string) {

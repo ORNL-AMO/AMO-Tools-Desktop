@@ -50,6 +50,10 @@ export class EnergyUsedComponent implements OnInit {
   electricEnergyUsed: number = 0;
   fuelEnergyUsed: number = 0;
   steamEnergyUsed: number = 0;
+
+  energyPerMassUnit: string = 'BTU/lb';
+  energyPerTimeUnit: string = 'BTU/hr';
+  energyCostUnit: string = '/MMBTU';
   constructor(private designedEnergyService: DesignedEnergyService, private meteredEnergyService: MeteredEnergyService, private phastResultsService: PhastResultsService, private suiteDbService: SuiteDbService, private phastService: PhastService) { }
 
   ngOnInit() {
@@ -93,6 +97,12 @@ export class EnergyUsedComponent implements OnInit {
       }
     }
     this.baseLineResults = this.phastResultsService.getResults(this.phast, this.settings);
+
+    if(this.settings.unitsOfMeasure == 'Metric'){
+      this.energyPerMassUnit = 'kJ/kg';
+      this.energyPerTimeUnit = 'kJ/hr';
+      this.energyCostUnit = '/GJ';
+    }
   }
 
 }
