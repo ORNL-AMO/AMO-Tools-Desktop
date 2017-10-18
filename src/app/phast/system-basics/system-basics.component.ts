@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, Input, SimpleChanges, ViewChild } from '@angular/core';
 import { Assessment } from '../../shared/models/assessment';
 import { SettingsService } from '../../settings/settings.service';
 
@@ -23,6 +23,8 @@ export class SystemBasicsComponent implements OnInit {
   @Input()
   assessment: Assessment;
 
+  @ViewChild('settingsModal') public settingsModal: ModalDirective;
+
   settingsForm: any;
   unitChange: boolean = false;
 
@@ -46,25 +48,15 @@ export class SystemBasicsComponent implements OnInit {
   saveChanges() {
     this.newSettings = this.settingsService.getSettingsFromForm(this.settingsForm);
     //TODO: Check data when we have dependent units
-    // if (
-    //   this.settings.currency != this.newSettings.currency ||
-    //   this.settings.distanceMeasurement != this.newSettings.distanceMeasurement ||
-    //   this.settings.flowMeasurement != this.newSettings.flowMeasurement ||
-    //   this.settings.language != this.newSettings.language ||
-    //   this.settings.powerMeasurement != this.newSettings.powerMeasurement ||
-    //   this.settings.pressureMeasurement != this.newSettings.pressureMeasurement ||
-    //   this.settings.unitsOfMeasure != this.newSettings.unitsOfMeasure
-    // ) {
-    //   if (this.psat.inputs.flow_rate || this.psat.inputs.head || this.psat.inputs.motor_rated_power) {
-    //     this.showSettingsModal();
-    //   } else {
-    //     this.updateData(false);
-    //   }
-    // }
-    this.updateData();
+    if (
+      this.settings.currency != this.newSettings.currency ||
+      this.settings.unitsOfMeasure != this.newSettings.unitsOfMeasure
+    ) {
+      this.showSettingsModal();
+    }
   }
 
-  updateData() {
+  updateData(bool?: boolean) {
     this.newSettings.assessmentId = this.assessment.id;
     //assessment has existing settings
     if (this.isAssessmentSettings) {
@@ -90,6 +82,13 @@ export class SystemBasicsComponent implements OnInit {
     }
   }
 
+  showSettingsModal() {
+    this.settingsModal.show();
+  }
+
+  hideSettingsModal() {
+    this.settingsModal.hide();
+  }
   startSavePolling() {
     if (this.counter) {
       clearTimeout(this.counter);
