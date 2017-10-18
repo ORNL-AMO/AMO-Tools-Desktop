@@ -31,7 +31,7 @@ export class SlagService {
       'inletTemperature': ['', Validators.required],
       'outletTemperature': ['', Validators.required],
       'specificHeat': ['', Validators.required],
-      'correctionFactor': ['', Validators.required]
+      'correctionFactor': [1.0, Validators.required]
     })
   }
 

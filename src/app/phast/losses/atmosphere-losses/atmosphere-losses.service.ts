@@ -35,7 +35,7 @@ export class AtmosphereLossesService {
       'inletTemp': ['', Validators.required],
       'outletTemp': ['', Validators.required],
       'flowRate': ['', Validators.required],
-      'correctionFactor': ['', Validators.required],
+      'correctionFactor': [1.0, Validators.required],
     });
   }
 

@@ -132,7 +132,7 @@ export const MockDirectory: Directory = {
               conditionFactor: 1.016,
               surfaceShape: 1,
               correctionFactor: 1.0
-            },
+            }
           ],
           atmosphereLosses: [
             {
@@ -141,7 +141,7 @@ export const MockDirectory: Directory = {
               inletTemperature: 100.0,
               outletTemperature: 1400.0,
               flowRate: 1200.0,
-              correctionFactor: 1.0,
+              correctionFactor: 1.0
             }
           ],
           openingLosses: [

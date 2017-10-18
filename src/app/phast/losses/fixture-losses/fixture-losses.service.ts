@@ -32,7 +32,7 @@ export class FixtureLossesService {
       'feedRate': ['', Validators.required],
       'initialTemp': ['', Validators.required],
       'finalTemp': ['', Validators.required],
-      'correctionFactor': ['', Validators.required],
+      'correctionFactor': [1.0, Validators.required],
       'specificHeat': ['', Validators.required]
     })
   }
