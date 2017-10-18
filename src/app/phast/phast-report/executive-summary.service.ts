@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { PhastService } from '../phast.service';
-import { PHAST, PhastResults, ExecutiveSummary } from '../../shared/models/phast/phast';
+import { PHAST, PhastResults, ExecutiveSummary, Modification } from '../../shared/models/phast/phast';
 import { Settings } from '../../shared/models/settings';
 import { Assessment } from '../../shared/models/assessment';
 import { PhastResultsService } from '../phast-results.service';
@@ -9,7 +9,7 @@ import { PhastResultsService } from '../phast-results.service';
 export class ExecutiveSummaryService {
 
   constructor(private phastService: PhastService, private phastResultsService: PhastResultsService) { }
-  getSummary(phast: PHAST, isMod: boolean,  settings: Settings, baseline: PHAST, baselineSummary?: ExecutiveSummary): ExecutiveSummary {
+  getSummary(phast: PHAST, isMod: boolean, settings: Settings, baseline: PHAST, baselineSummary?: ExecutiveSummary): ExecutiveSummary {
     let tmpResultsSummary = this.initSummary();
     let tmpPhastResults = this.phastResultsService.getResults(phast, settings);
     tmpResultsSummary.annualEnergyUsed = this.calcAnnualEnergy(tmpPhastResults, baseline);
@@ -49,11 +49,11 @@ export class ExecutiveSummaryService {
     //gross heat * operating hours * cost
     let tmpAnnualCost = 0;
     if (settings.energySourceType == 'Fuel') {
-      tmpAnnualCost = annualEnergyUsed * (phast.operatingCosts.fuelCost/1000000);
+      tmpAnnualCost = annualEnergyUsed * (phast.operatingCosts.fuelCost / 1000000);
     } else if (settings.energySourceType == 'Electricity') {
       tmpAnnualCost = annualEnergyUsed * phast.operatingCosts.electricityCost;
     } else if (settings.energySourceType == 'Steam') {
-      tmpAnnualCost = annualEnergyUsed * (phast.operatingCosts.steamCost/1000000);
+      tmpAnnualCost = annualEnergyUsed * (phast.operatingCosts.steamCost / 1000000);
     }
     return tmpAnnualCost;
   }
@@ -72,4 +72,94 @@ export class ExecutiveSummaryService {
     return tmpSummary;
   }
 
+  buildSummaryNotes(modifications: Modification[]): Array<SummaryNote> {
+    let tmpNotesArr: Array<SummaryNote> = new Array<SummaryNote>();
+    modifications.forEach(mod => {
+      if (mod.notes) {
+        if (mod.notes.atmosphereNotes) {
+          let note = this.buildNoteObject(mod.phast.name, 'Atmosphere Losses', mod.notes.atmosphereNotes);
+          tmpNotesArr.push(note);
+        }
+        if (mod.notes.auxiliaryPowerNotes) {
+          let note = this.buildNoteObject(mod.phast.name, 'Auxiliary Power Losses', mod.notes.auxiliaryPowerNotes);
+          tmpNotesArr.push(note);
+        }
+        if (mod.notes.chargeNotes) {
+          let note = this.buildNoteObject(mod.phast.name, 'Charge Materials', mod.notes.chargeNotes);
+          tmpNotesArr.push(note);
+        }
+        if (mod.notes.coolingNotes) {
+          let note = this.buildNoteObject(mod.phast.name, 'Cooling Losses', mod.notes.coolingNotes);
+          tmpNotesArr.push(note);
+        }
+        if (mod.notes.energyInputExhaustGasNotes) {
+          let note = this.buildNoteObject(mod.phast.name, 'Energy Input', mod.notes.energyInputExhaustGasNotes);
+          tmpNotesArr.push(note);
+        }
+        if (mod.notes.exhaustGasNotes) {
+          let note = this.buildNoteObject(mod.phast.name, 'Exhaust Gas Losses', mod.notes.exhaustGasNotes);
+          tmpNotesArr.push(note);
+        }
+        if (mod.notes.extendedNotes) {
+          let note = this.buildNoteObject(mod.phast.name, 'Extended Surface Losses', mod.notes.extendedNotes);
+          tmpNotesArr.push(note);
+        }
+        if (mod.notes.fixtureNotes) {
+          let note = this.buildNoteObject(mod.phast.name, 'Fixture Losses', mod.notes.fixtureNotes);
+          tmpNotesArr.push(note);
+        }
+        if (mod.notes.flueGasNotes) {
+          let note = this.buildNoteObject(mod.phast.name, 'Flue Gas Losses', mod.notes.flueGasNotes);
+          tmpNotesArr.push(note);
+        }
+        if (mod.notes.heatSystemEfficiencyNotes) {
+          let note = this.buildNoteObject(mod.phast.name, 'Heat System Efficiency', mod.notes.heatSystemEfficiencyNotes);
+          tmpNotesArr.push(note);
+        }
+        if (mod.notes.leakageNotes) {
+          let note = this.buildNoteObject(mod.phast.name, 'Leakage Losses', mod.notes.leakageNotes);
+          tmpNotesArr.push(note);
+        }
+        if (mod.notes.openingNotes) {
+          let note = this.buildNoteObject(mod.phast.name, 'Opening Losses', mod.notes.openingNotes);
+          tmpNotesArr.push(note);
+        }
+        if (mod.notes.operationsNotes) {
+          let note = this.buildNoteObject(mod.phast.name, 'Operations', mod.notes.operationsNotes);
+          tmpNotesArr.push(note);
+        }
+        if (mod.notes.otherNotes) {
+          let note = this.buildNoteObject(mod.phast.name, 'Other Losses', mod.notes.otherNotes);
+          tmpNotesArr.push(note);
+        }
+        if (mod.notes.slagNotes) {
+          let note = this.buildNoteObject(mod.phast.name, 'Slag Losses', mod.notes.slagNotes);
+          tmpNotesArr.push(note);
+        }
+        if (mod.notes.wallNotes) {
+          let note = this.buildNoteObject(mod.phast.name, 'Wall Losses', mod.notes.wallNotes);
+          tmpNotesArr.push(note);
+        }
+      }
+    })
+    return tmpNotesArr;
+  }
+  buildNoteObject(modName: string, lossName: string, note: string): SummaryNote {
+    let summaryNote: SummaryNote = {
+      modificationName: modName,
+      lossName: lossName,
+      note: note
+    }
+    return summaryNote;
+  }
+
+
+
+}
+
+
+export interface SummaryNote {
+  modificationName: string,
+  lossName: string,
+  note: string
 }

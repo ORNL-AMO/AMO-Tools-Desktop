@@ -1,4 +1,5 @@
 <div class="output-summary">
+  <h5>Assessment Executive Summary</h5>
   <table class="table">
     <thead>
       <tr>
@@ -90,4 +91,15 @@
       </tr>
     </tbody>
   </table>
+  <div class="row" *ngIf="notes">
+    <div class="col">
+    <h5>Modification Notes</h5>
+      <p>
+        <small> 
+          <span *ngFor="let note of notes">
+            <b>{{note.modificationName}} &mdash; {{note.lossName}}:</b> {{note.note}}<br>
+          </span>
+        </small>
+      </p>
+  </div>
 </div>
