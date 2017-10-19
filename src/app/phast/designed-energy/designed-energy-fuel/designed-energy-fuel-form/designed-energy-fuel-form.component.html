@@ -5,7 +5,7 @@
       <div class="input-group">
         <input name="totalBurnerCapacity" type="number" step="any" id="totalBurnerCapacity" class="form-control" (focus)="focusField('totalBurnerCapacity')"
           [(ngModel)]="inputs.totalBurnerCapacity" (input)="calculate()" onfocus="this.select();" />
-        <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">MM Btu/hr</span>
+        <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">MMBtu/hr</span>
         <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">GJ/hr</span>
       </div>
     </div>

@@ -55,6 +55,9 @@ export class SystemBasicsComponent implements OnInit {
       this.settings.unitsOfMeasure != this.newSettings.unitsOfMeasure
     ) {
       this.showSettingsModal();
+    } else if (this.settings.energySourceType != this.newSettings.energySourceType ||
+      this.settings.furnaceType != this.newSettings.furnaceType) {
+      this.updateData(false);
     }
   }
 
@@ -63,10 +66,22 @@ export class SystemBasicsComponent implements OnInit {
     if (bool) {
       if (this.phast.losses) {
         this.phast.losses = this.convertPhastService.convertPhastLosses(this.phast.losses, this.settings, this.newSettings);
-        if(this.phast.modifications){
+        if (this.phast.meteredEnergy) {
+          this.phast.meteredEnergy = this.convertPhastService.convertMeteredEnergy(this.phast.meteredEnergy, this.settings, this.newSettings);
+        }
+        if (this.phast.designedEnergy) {
+          this.phast.designedEnergy = this.convertPhastService.convertDesignedEnergy(this.phast.designedEnergy, this.settings, this.newSettings);
+        }
+        if (this.phast.modifications) {
           this.phast.modifications.forEach(mod => {
-            if(mod.phast.losses){
+            if (mod.phast.losses) {
               mod.phast.losses = this.convertPhastService.convertPhastLosses(mod.phast.losses, this.settings, this.newSettings);
+            }
+            if (mod.phast.meteredEnergy) {
+              mod.phast.meteredEnergy = this.convertPhastService.convertMeteredEnergy(mod.phast.meteredEnergy, this.settings, this.newSettings);
+            }
+            if (mod.phast.designedEnergy) {
+              mod.phast.designedEnergy = this.convertPhastService.convertDesignedEnergy(mod.phast.designedEnergy, this.settings, this.newSettings);
             }
           })
         }
