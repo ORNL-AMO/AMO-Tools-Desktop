@@ -1,9 +1,8 @@
 export interface AuxiliaryPowerLoss {
     motorPhase?: number,
     supplyVoltage?: number,
-    avgCurrent?:number,
+    avgCurrent?: number,
     powerFactor?: number,
-    operatingTime?:number,
-    powerUsed?: number,
-    powerUnit?: string;
+    operatingTime?: number,
+    powerUsed?: number
 }

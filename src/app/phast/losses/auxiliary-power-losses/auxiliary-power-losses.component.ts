@@ -29,9 +29,9 @@ export class AuxiliaryPowerLossesComponent implements OnInit {
   isBaseline: boolean;
   @Input()
   settings: Settings;
-  @Input()
-  result:AuxiliaryPowerLoss;
-  resultUnits: any;
+  // @Input()
+  // result:AuxiliaryPowerLoss;
+  // resultUnits: any;
   _auxiliaryPowerLosses: Array<any>;
   firstChange: boolean = true;
   constructor(private phastService: PhastService, private auxiliaryPowerLossesService: AuxiliaryPowerLossesService, private auxiliaryPowerCompareService: AuxiliaryPowerCompareService) { }
