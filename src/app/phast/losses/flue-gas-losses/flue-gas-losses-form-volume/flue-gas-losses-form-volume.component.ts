@@ -107,8 +107,7 @@ export class FlueGasLossesFormVolumeComponent implements OnInit {
       CO2: tmpFlueGas.CO2,
       SO2: tmpFlueGas.SO2,
       O2: tmpFlueGas.O2,
-    })
-    console.log('Properties set')
+    });
     this.checkForm();
   }
 

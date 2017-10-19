@@ -330,7 +330,7 @@ export class PhastService {
     let results = 0;
     if (settings.unitsOfMeasure == 'Metric') {
       inputs.inletTemperature = this.convertUnitsService.value(inputs.inletTemperature).from('C').to('F');
-      inputs.outletTemperature = this.convertUnitsService.value(inputs.inletTemperature).from('C').to('F');
+      inputs.outletTemperature = this.convertUnitsService.value(inputs.outletTemperature).from('C').to('F');
       inputs.flowRate = this.convertUnitsService.value(inputs.flowRate).from('m3/h').to('ft3/h')
       inputs.specificHeat = this.convertUnitsService.value(inputs.specificHeat).from('kJm3C').to('btuScfF');
       results = phastAddon.atmosphere(inputs);

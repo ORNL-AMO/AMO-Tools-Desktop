@@ -43,6 +43,7 @@ export class LossesComponent implements OnInit {
   constructor(private lossesService: LossesService) { }
 
   ngOnInit() {
+    console.log(this.phast);
     // this.changeField('default');
     this._modifications = new Array<Modification>();
     if (!this.phast.losses) {
