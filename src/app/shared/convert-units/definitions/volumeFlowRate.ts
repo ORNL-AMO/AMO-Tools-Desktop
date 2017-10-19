@@ -308,6 +308,14 @@ export const volumeFlowRate = {
             }
             , to_anchor: 25852.7 / 3600
         }
+        , 'impgpm': {
+          name: {
+            singular: 'Imperial Gallon per minute'
+            , plural: 'Imperial Gallons per minute',
+            display:  '(imp gpm)'
+          }
+          , to_anchor: 2.56203
+        }
     }
     , _anchors: {
         metric: {
