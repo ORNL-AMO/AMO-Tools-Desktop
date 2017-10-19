@@ -112,12 +112,21 @@ export class OpeningLossesFormComponent implements OnInit {
   }
 
   getArea() {
+    
+    let smallUnit = 'in';
+    let largeUnit = 'ft';
+    if(this.settings.unitsOfMeasure == 'Metric'){
+      smallUnit == 'mm';
+      largeUnit == 'm';
+    }
+
     if (this.openingLossesForm.value.openingType == 'Round') {
       if (this.openingLossesForm.controls.lengthOfOpening.status == "VALID") {
         this.openingLossesForm.controls.heightOfOpening.setValue(0);
         let radiusInches = this.openingLossesForm.value.lengthOfOpening;
         //let radiusFeet = (radiusInches * .08333333) / 2;
-        let radiusFeet = this.convertUnitsService.value(radiusInches).from('in').to('ft') / 2;
+
+        let radiusFeet = this.convertUnitsService.value(radiusInches).from(smallUnit).to(largeUnit) / 2;
         this.totalArea = Math.PI * Math.pow(radiusFeet, 2) * this.openingLossesForm.value.numberOfOpenings;
 
         this.calculate.emit(true);
@@ -129,10 +138,10 @@ export class OpeningLossesFormComponent implements OnInit {
         let lengthFeet = 0;
         let heightFeet = 0;
         if (lengthInches) {
-          lengthFeet = this.convertUnitsService.value(lengthInches).from('in').to('ft');
+          lengthFeet = this.convertUnitsService.value(lengthInches).from(smallUnit).to(largeUnit);
         }
         if (heightInches) {
-          heightFeet = this.convertUnitsService.value(heightInches).from('in').to('ft');
+          heightFeet = this.convertUnitsService.value(heightInches).from(smallUnit).to(largeUnit);
         }
         this.totalArea = lengthFeet * heightFeet * this.openingLossesForm.value.numberOfOpenings;
 
