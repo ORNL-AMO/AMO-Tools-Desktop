@@ -19,8 +19,7 @@
       </tr>
       <tr>
         <td>Energy Intensity
-          <span *ngIf="settings.unitsOfMeasure == 'Imperial'">(BTU/lb)</span>
-          <span *ngIf="settings.unitsOfMeasure ==  'Metric'">(kJ/kg)</span>
+          <span> ({{energyUnit}})</span>
         </td>
         <td>{{baseline.energyPerMass | number:'1.0-0'}}</td>
         <td *ngFor="let mod of modifications; let index = index;" [ngClass]="{'selected-modification': index == selectedModificationIndex}">
@@ -30,8 +29,7 @@
       </tr>
       <tr>
         <td>Annual Energy Used
-          <span *ngIf="settings.unitsOfMeasure == 'Imperial'">(BTU/yr)</span>
-          <span *ngIf="settings.unitsOfMeasure ==  'Metric'">(kJ/yr)</span>
+          <span> ({{timeUnit}})</span>
         </td>
         <td>{{baseline.annualEnergyUsed | number:'1.0-0'}}</td>
         <td *ngFor="let mod of modifications; let index = index;" [ngClass]="{'selected-modification': index == selectedModificationIndex}">
@@ -41,8 +39,7 @@
       </tr>
       <tr>
         <td>Annual Energy Savings
-          <span *ngIf="settings.unitsOfMeasure == 'Imperial'">(BTU/yr)</span>
-          <span *ngIf="settings.unitsOfMeasure ==  'Metric'">(kJ/yr)</span>
+          <span> ({{timeUnit}})</span>
         </td>
         <td>&mdash; &mdash;</td>
         <td *ngFor="let mod of modifications; let index = index;" [ngClass]="{'selected-modification': index == selectedModificationIndex}">

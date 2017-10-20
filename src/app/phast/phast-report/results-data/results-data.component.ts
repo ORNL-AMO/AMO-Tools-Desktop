@@ -25,6 +25,8 @@ export class ResultsDataComponent implements OnInit {
   modificationResults: Array<PhastResults>;
 
   showResultsCats: ShowResultsCategories;
+  lossUnit: string;
+
   constructor(private phastService: PhastService, private phastResultsService: PhastResultsService) { }
 
   ngOnInit() {
@@ -40,8 +42,17 @@ export class ResultsDataComponent implements OnInit {
           })
         }
       }
-    }else{
+    } else {
       this.baseLineResults = this.phastResultsService.initResults();
+    }
+    if (this.settings.energySourceType == 'Electricity') {
+      this.lossUnit = 'kW';
+    } else {
+      if (this.settings.unitsOfMeasure == 'Metric') {
+        this.lossUnit = 'kJ/hr';
+      } else if (this.settings.unitsOfMeasure == 'Imperial') {
+        this.lossUnit = 'Btu/hr';
+      }
     }
   }
 }
