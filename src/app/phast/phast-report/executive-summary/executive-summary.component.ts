@@ -20,14 +20,17 @@ export class ExecutiveSummaryComponent implements OnInit {
   @Input()
   assessment: Assessment;
   @Input()
-  inPhast: boolean; 
-  
+  inPhast: boolean;
+
   baseline: ExecutiveSummary;
 
   modifications: Array<ExecutiveSummary>;
   phastMods: Array<any>;
   selectedModificationIndex: number = 0;
   notes: Array<SummaryNote>;
+  timeUnit: string;
+  energyUnit: string;
+
   constructor(private executiveSummaryService: ExecutiveSummaryService, private reportRollupService: ReportRollupService) { }
 
   ngOnInit() {
@@ -41,6 +44,19 @@ export class ExecutiveSummaryComponent implements OnInit {
       })
       this.initMaxAnnualSavings();
       this.notes = this.executiveSummaryService.buildSummaryNotes(this.phast.modifications);
+    }
+
+    if (this.settings.energySourceType == 'Electricity') {
+      this.timeUnit = 'kW/yr';
+      this.energyUnit = 'kW';
+    } else {
+      if (this.settings.unitsOfMeasure == 'Metric') {
+        this.timeUnit = 'kJ/yr';
+        this.energyUnit = 'kJ/kg';
+      } else if (this.settings.unitsOfMeasure == 'Imperial') {
+        this.timeUnit = 'BTU/yr';
+        this.energyUnit = 'BTU/lb';
+      }
     }
   }
 
