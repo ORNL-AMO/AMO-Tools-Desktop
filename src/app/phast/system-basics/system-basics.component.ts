@@ -1,11 +1,11 @@
-import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, Input, SimpleChanges, ViewChild } from '@angular/core';
 import { Assessment } from '../../shared/models/assessment';
 import { SettingsService } from '../../settings/settings.service';
-
+import { PHAST } from '../../shared/models/phast/phast';
 import { Settings } from '../../shared/models/settings';
 import { IndexedDbService } from '../../indexedDb/indexed-db.service';
 import { ModalDirective } from 'ngx-bootstrap';
-import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
+import { ConvertPhastService } from '../convert-phast.service';
 @Component({
   selector: 'app-system-basics',
   templateUrl: 'system-basics.component.html',
@@ -22,6 +22,10 @@ export class SystemBasicsComponent implements OnInit {
   updateSettings = new EventEmitter<boolean>();
   @Input()
   assessment: Assessment;
+  @Input()
+  phast: PHAST;
+
+  @ViewChild('settingsModal') public settingsModal: ModalDirective;
 
   settingsForm: any;
   unitChange: boolean = false;
@@ -29,7 +33,7 @@ export class SystemBasicsComponent implements OnInit {
   isFirstChange: boolean = true;
   counter: any;
   newSettings: Settings;
-  constructor(private settingsService: SettingsService, private indexedDbService: IndexedDbService, private convertUnitsService: ConvertUnitsService) { }
+  constructor(private settingsService: SettingsService, private indexedDbService: IndexedDbService, private convertPhastService: ConvertPhastService) { }
 
   ngOnInit() {
     this.settingsForm = this.settingsService.getFormFromSettings(this.settings);
@@ -46,26 +50,43 @@ export class SystemBasicsComponent implements OnInit {
   saveChanges() {
     this.newSettings = this.settingsService.getSettingsFromForm(this.settingsForm);
     //TODO: Check data when we have dependent units
-    // if (
-    //   this.settings.currency != this.newSettings.currency ||
-    //   this.settings.distanceMeasurement != this.newSettings.distanceMeasurement ||
-    //   this.settings.flowMeasurement != this.newSettings.flowMeasurement ||
-    //   this.settings.language != this.newSettings.language ||
-    //   this.settings.powerMeasurement != this.newSettings.powerMeasurement ||
-    //   this.settings.pressureMeasurement != this.newSettings.pressureMeasurement ||
-    //   this.settings.unitsOfMeasure != this.newSettings.unitsOfMeasure
-    // ) {
-    //   if (this.psat.inputs.flow_rate || this.psat.inputs.head || this.psat.inputs.motor_rated_power) {
-    //     this.showSettingsModal();
-    //   } else {
-    //     this.updateData(false);
-    //   }
-    // }
-    this.updateData();
+    if (
+      this.settings.currency != this.newSettings.currency ||
+      this.settings.unitsOfMeasure != this.newSettings.unitsOfMeasure
+    ) {
+      this.showSettingsModal();
+    } else if (this.settings.energySourceType != this.newSettings.energySourceType ||
+      this.settings.furnaceType != this.newSettings.furnaceType) {
+      this.updateData(false);
+    }
   }
 
-  updateData() {
+  updateData(bool?: boolean) {
     this.newSettings.assessmentId = this.assessment.id;
+    if (bool) {
+      if (this.phast.losses) {
+        this.phast.losses = this.convertPhastService.convertPhastLosses(this.phast.losses, this.settings, this.newSettings);
+        if (this.phast.meteredEnergy) {
+          this.phast.meteredEnergy = this.convertPhastService.convertMeteredEnergy(this.phast.meteredEnergy, this.settings, this.newSettings);
+        }
+        if (this.phast.designedEnergy) {
+          this.phast.designedEnergy = this.convertPhastService.convertDesignedEnergy(this.phast.designedEnergy, this.settings, this.newSettings);
+        }
+        if (this.phast.modifications) {
+          this.phast.modifications.forEach(mod => {
+            if (mod.phast.losses) {
+              mod.phast.losses = this.convertPhastService.convertPhastLosses(mod.phast.losses, this.settings, this.newSettings);
+            }
+            if (mod.phast.meteredEnergy) {
+              mod.phast.meteredEnergy = this.convertPhastService.convertMeteredEnergy(mod.phast.meteredEnergy, this.settings, this.newSettings);
+            }
+            if (mod.phast.designedEnergy) {
+              mod.phast.designedEnergy = this.convertPhastService.convertDesignedEnergy(mod.phast.designedEnergy, this.settings, this.newSettings);
+            }
+          })
+        }
+      }
+    }
     //assessment has existing settings
     if (this.isAssessmentSettings) {
       this.newSettings.id = this.settings.id;
@@ -73,6 +94,7 @@ export class SystemBasicsComponent implements OnInit {
         results => {
           //get updated settings
           this.updateSettings.emit(true);
+          this.hideSettingsModal();
         }
       )
     }
@@ -85,11 +107,19 @@ export class SystemBasicsComponent implements OnInit {
           this.isAssessmentSettings = true;
           //get updated settings
           this.updateSettings.emit(true);
+          this.hideSettingsModal();
         }
       )
     }
   }
 
+  showSettingsModal() {
+    this.settingsModal.show();
+  }
+
+  hideSettingsModal() {
+    this.settingsModal.hide();
+  }
   startSavePolling() {
     if (this.counter) {
       clearTimeout(this.counter);

@@ -27,7 +27,7 @@ export class PsatService {
   }
 
   roundVal(val: number, digits: number) {
-    return Number((Math.round(val * 100) / 100).toFixed(digits))
+    return Number(val.toFixed(digits))
   }
 
   convertInputs(psatInputs: PsatInputs, settings: Settings) {
