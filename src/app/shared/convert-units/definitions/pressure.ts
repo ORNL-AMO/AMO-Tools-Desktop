@@ -106,7 +106,6 @@ export const pressure = {
       }
       , to_anchor: 1 / 27707.6
     }
-
   },
   _anchors: {
     metric: {
