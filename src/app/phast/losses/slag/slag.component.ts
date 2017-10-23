@@ -32,7 +32,7 @@ export class SlagComponent implements OnInit {
 
   _slagLosses: Array<any>;
   firstChange: boolean = true;
-
+  resultsUnit: string = 'Btu/hr';
   constructor(private phastService: PhastService, private slagService: SlagService, private slagCompareService: SlagCompareService) { }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -50,6 +50,11 @@ export class SlagComponent implements OnInit {
   }
 
   ngOnInit() {
+    if (this.settings.energySourceType == 'Electricity') {
+      this.resultsUnit = 'kW';
+    } else if (this.settings.unitsOfMeasure == 'Metric') {
+      this.resultsUnit = 'kJ/hr';
+    }
     if (!this._slagLosses) {
       this._slagLosses = new Array();
     }

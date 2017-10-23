@@ -27,10 +27,7 @@
       <div class="form-group">
         <label class="small">Heat Used</label>
         <div *ngIf="loss.powerUsed" class="text-center small">
-          {{loss.powerUsed | number:'2.0-0'}}
-
-          <span *ngIf="settings.unitsOfMeasure == 'Imperial'"> (BTU/hr)</span>
-          <span *ngIf="settings.unitsOfMeasure ==  'Metric'"> (kJ/hr)</span>
+          {{loss.powerUsed | number:'2.0-0'}} <span>{{resultsUnit}}</span>
         </div>
         <div *ngIf="!loss.powerUsed" class="text-center small">
           &mdash; &mdash;

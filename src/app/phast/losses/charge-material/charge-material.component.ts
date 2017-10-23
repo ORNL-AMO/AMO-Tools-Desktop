@@ -34,6 +34,7 @@ export class ChargeMaterialComponent implements OnInit {
 
   _chargeMaterial: Array<any>;
   firstChange: boolean = true;
+  resultsUnit: string = 'Btu/hr';
   constructor(private formBuilder: FormBuilder, private phastService: PhastService, private chargeMaterialService: ChargeMaterialService, private chargeMaterialCompareService: ChargeMaterialCompareService) { }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -51,6 +52,11 @@ export class ChargeMaterialComponent implements OnInit {
   }
 
   ngOnInit() {
+    if(this.settings.energySourceType == 'Electricity'){
+      this.resultsUnit = 'kW';
+    }else if(this.settings.unitsOfMeasure == 'Metric'){
+      this.resultsUnit = 'kJ/hr';
+    }
     if (!this._chargeMaterial) {
       this._chargeMaterial = new Array();
     }

@@ -32,6 +32,7 @@ export class EnergyInputComponent implements OnInit {
 
   _energyInputs: Array<any>;
   firstChange: boolean = true;
+  resultsUnit: string = 'Btu/hr';
   constructor(private energyInputService: EnergyInputService, private phastService: PhastService, private energyInputCompareService: EnergyInputCompareService) { }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -49,6 +50,12 @@ export class EnergyInputComponent implements OnInit {
   }
 
   ngOnInit() {
+    if(this.settings.energySourceType == 'Electricity'){
+      this.resultsUnit = 'kW';
+    }else if(this.settings.unitsOfMeasure == 'Metric'){
+      this.resultsUnit = 'kJ/hr';
+    }
+
     if (!this._energyInputs) {
       this._energyInputs = new Array();
     }

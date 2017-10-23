@@ -33,6 +33,7 @@ export class EnergyInputExhaustGasLossesComponent implements OnInit {
   _exhaustGasLosses: Array<any>;
   firstChange: boolean = true;
   availableHeat: number = 0;
+  resultsUnit: string = 'Btu/hr';
   constructor(private phastService: PhastService, private energyInputExhaustGasService: EnergyInputExhaustGasService, private energyInputExhaustGasCompareService: EnergyInputExhaustGasCompareService) { }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -50,6 +51,12 @@ export class EnergyInputExhaustGasLossesComponent implements OnInit {
   }
 
   ngOnInit() {
+    if (this.settings.energySourceType == 'Electricity') {
+      this.resultsUnit = 'kW';
+    } else if (this.settings.unitsOfMeasure == 'Metric') {
+      this.resultsUnit = 'kJ/hr';
+    }
+
     if (!this._exhaustGasLosses) {
       this._exhaustGasLosses = new Array();
     }

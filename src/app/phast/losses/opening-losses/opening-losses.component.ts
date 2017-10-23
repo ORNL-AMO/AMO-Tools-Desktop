@@ -32,7 +32,7 @@ export class OpeningLossesComponent implements OnInit {
 
   _openingLosses: Array<any>;
   firstChange: boolean = true;
-
+  resultsUnit: string = 'Btu/hr';
   constructor(private phastService: PhastService, private openingLossesService: OpeningLossesService, private openingLossesCompareService: OpeningLossesCompareService) { }
 
 
@@ -50,6 +50,12 @@ export class OpeningLossesComponent implements OnInit {
     }
   }
   ngOnInit() {
+    if (this.settings.energySourceType == 'Electricity') {
+      this.resultsUnit = 'kW';
+    } else if (this.settings.unitsOfMeasure == 'Metric') {
+      this.resultsUnit = 'kJ/hr';
+    }
+
     if (!this._openingLosses) {
       this._openingLosses = new Array();
     }
