@@ -5,7 +5,7 @@ import { AuxiliaryPowerLoss } from '../../../shared/models/phast/losses/auxiliar
 import { Losses } from '../../../shared/models/phast/phast';
 import { AuxiliaryPowerLossesService } from './auxiliary-power-losses.service';
 import { AuxiliaryPowerCompareService } from './auxiliary-power-compare.service';
-import {Settings} from '../../../shared/models/settings';
+import { Settings } from '../../../shared/models/settings';
 
 @Component({
   selector: 'app-auxiliary-power-losses',
@@ -29,9 +29,8 @@ export class AuxiliaryPowerLossesComponent implements OnInit {
   isBaseline: boolean;
   @Input()
   settings: Settings;
-  // @Input()
-  // result:AuxiliaryPowerLoss;
-  // resultUnits: any;
+
+  resultsUnit: string = 'Btu/hr';
   _auxiliaryPowerLosses: Array<any>;
   firstChange: boolean = true;
   constructor(private phastService: PhastService, private auxiliaryPowerLossesService: AuxiliaryPowerLossesService, private auxiliaryPowerCompareService: AuxiliaryPowerCompareService) { }
@@ -51,15 +50,11 @@ export class AuxiliaryPowerLossesComponent implements OnInit {
   }
 
   ngOnInit() {
-    // if (this.settings.unitsOfMeasure == 'Imperial') {
-    //   this.resultUnits = {
-    //     powerUnit: 'Btu/hr'
-    //   }
-    // } else if (this.settings.unitsOfMeasure == 'Metric') {
-    //   this.resultUnits = {
-    //     powerUnit: 'kJ/hr',
-    //   }
-    // }
+    if (this.settings.energySourceType == 'Electricity') {
+      this.resultsUnit = 'kW';
+    } else if (this.settings.unitsOfMeasure == 'Metric') {
+      this.resultsUnit = 'kJ/hr';
+    }
     if (!this._auxiliaryPowerLosses) {
       this._auxiliaryPowerLosses = new Array();
     }

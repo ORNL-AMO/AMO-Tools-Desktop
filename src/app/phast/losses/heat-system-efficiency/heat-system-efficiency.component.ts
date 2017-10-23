@@ -40,9 +40,16 @@ export class HeatSystemEfficiencyComponent implements OnInit {
 
   systemLosses: number = 0;
   grossHeat: number = 0;
+  resultsUnit: string = 'Btu/hr';
   constructor(private formBuilder: FormBuilder, private phastService: PhastService, private heatSystemEfficiencyCompareService: HeatSystemEfficiencyCompareService, private windowRefService: WindowRefService) { }
 
   ngOnInit() {
+    if(this.settings.energySourceType == 'Electricity'){
+      this.resultsUnit = 'kW';
+    }else if(this.settings.unitsOfMeasure == 'Metric'){
+      this.resultsUnit = 'kJ/hr';
+    }
+
     this.initForm(this.phast.systemEfficiency);
 
     if (!this.baselineSelected) {
