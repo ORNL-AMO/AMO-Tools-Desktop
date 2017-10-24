@@ -12,6 +12,7 @@
             [(ngModel)]="o2Enrichment.o2CombAir" onfocus="this.select();">
           <span class="input-group-addon units">%</span>
         </div>
+        <span class="alert-danger pull-right small" *ngIf="error.o2CombAir !== null">{{error.o2CombAir}}</span>
       </div>
 
       <div class="form-group">
@@ -21,6 +22,7 @@
             [(ngModel)]="o2Enrichment.combAirTemp" onfocus="this.select();">
           <span class="input-group-addon units">&#8457;</span>
         </div>
+        <span class="alert-danger pull-right small" *ngIf="error.combAirTemp !== null">{{error.combAirTemp}}</span>
       </div>
 
       <div class="form-group">
@@ -30,6 +32,7 @@
             [(ngModel)]="o2Enrichment.o2FlueGas" onfocus="this.select();">
           <span class="input-group-addon units">% Dry</span>
         </div>
+        <span class="alert-danger pull-right small" *ngIf="error.o2FlueGas !== null">{{error.o2FlueGas}}</span>
       </div>
 
       <div class="form-group">
@@ -39,7 +42,7 @@
             [(ngModel)]="o2Enrichment.flueGasTemp" onfocus="this.select();">
           <span class="input-group-addon units">&#8457;</span>
         </div>
-        <span class="alert-danger pull-right small" *ngIf="errorFlueGasTemp !== null">{{error}}</span>
+        <span class="alert-danger pull-right small" *ngIf="error.flueGasTemp !== null">{{error.flueGasTemp}}</span>
       </div>
 
       <div class="form-group">
@@ -73,6 +76,7 @@
             [(ngModel)]="o2Enrichment.o2CombAirEnriched" (input)="calc()" onfocus="this.select();">
           <span class="input-group-addon units">%</span>
         </div>
+        <span class="alert-danger pull-right small" *ngIf="error.o2CombAirEnriched !== null">{{error.o2CombAirEnriched}}</span>
       </div>
 
       <div class="form-group">
@@ -82,6 +86,7 @@
             [(ngModel)]="o2Enrichment.combAirTempEnriched" (input)="calc()" onfocus="this.select();">
           <span class="input-group-addon units">&#8457;</span>
         </div>
+        <span class="alert-danger pull-right small" *ngIf="error.combAirTempEnriched !== null">{{error.combAirTempEnriched}}</span>
       </div>
 
       <div class="form-group">
@@ -91,6 +96,7 @@
             [(ngModel)]="o2Enrichment.o2FlueGasEnriched" onfocus="this.select();">
           <span class="input-group-addon units">%  Dry</span>
         </div>
+        <span class="alert-danger pull-right small" *ngIf="error.o2FlueGasEnriched !== null">{{error.o2FlueGasEnriched}}</span>
       </div>
 
       <div class="form-group">
@@ -100,7 +106,7 @@
             [(ngModel)]="o2Enrichment.flueGasTempEnriched" onfocus="this.select();">
           <span class="input-group-addon units">&#8457;</span>
         </div>
-        <span class="alert-danger pull-right small" *ngIf="errorFlueGasTempEnriched !== null">{{error}}</span>
+        <span class="alert-danger pull-right small" *ngIf="error.flueGasTempEnriched !== null">{{error.flueGasTempEnriched}}</span>
       </div>
     </div>
     <div class="form-group">
