@@ -668,10 +668,11 @@ export class PhastService {
       grossHeatRequired += this.sumWallLosses(losses.wallLosses, settings);
     }
     if (losses.energyInputExhaustGasLoss) {
-      grossHeatRequired += this.sumEnergyInputExhaustGas(losses.energyInputExhaustGasLoss, settings);
+      let tmpResults = this.energyInputExhaustGasLosses(losses.energyInputExhaustGasLoss[0], settings)
+      grossHeatRequired += tmpResults.exhaustGasLosses;
     }
-    if (losses.energyInputEAF) {
-      grossHeatRequired += this.sumEnergyInputEAF(losses.energyInputEAF, settings);
+    if (losses.exhaustGasEAF) {
+      grossHeatRequired += this.sumExhaustGasEAF(losses.exhaustGasEAF, settings);
     }
     return grossHeatRequired;
   }
