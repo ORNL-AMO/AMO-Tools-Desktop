@@ -24,6 +24,9 @@ export class SystemBasicsComponent implements OnInit {
   assessment: Assessment;
   @Input()
   phast: PHAST;
+  @Output('save')
+  save = new EventEmitter<boolean>();
+
 
   @ViewChild('settingsModal') public settingsModal: ModalDirective;
 
@@ -86,6 +89,8 @@ export class SystemBasicsComponent implements OnInit {
           })
         }
       }
+      console.log('converted')
+      this.save.emit(true);
     }
     //assessment has existing settings
     if (this.isAssessmentSettings) {
