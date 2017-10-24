@@ -39,9 +39,10 @@ export class O2EnrichmentGraphComponent implements OnInit {
   mainLine: any;
   selectedLine: number;
   guideLine: any;
-  xPosition: any;
+  xPosition: any = 0;
 
-  isFirstChange: boolean = true;
+  removeLines: any = true;
+  isFirstChange: any = true;
   fontSize: string;
 
   canvasWidth: number;
@@ -273,23 +274,23 @@ export class O2EnrichmentGraphComponent implements OnInit {
 
     var first = false;
 
-    for (var i = 0; i <= 100; i += .5) {
+    this.o2EnrichmentPoint = {
+      o2CombAir: this.o2Enrichment.o2CombAir,
+      o2CombAirEnriched: 0,
+      flueGasTemp: this.o2Enrichment.flueGasTemp,
+      flueGasTempEnriched: information.flueGasTempEnriched,
+      o2FlueGas: this.o2Enrichment.o2FlueGas,
+      o2FlueGasEnriched: information.o2FlueGasEnriched,
+      combAirTemp: this.o2Enrichment.combAirTemp,
+      combAirTempEnriched: information.combAirTempEnriched,
+      fuelConsumption: this.o2Enrichment.fuelConsumption
+    };
 
-      this.o2EnrichmentPoint = {
-        o2CombAir: this.o2Enrichment.o2CombAir,
-        o2CombAirEnriched: i,
-        flueGasTemp: this.o2Enrichment.flueGasTemp,
-        flueGasTempEnriched: information.flueGasTempEnriched,
-        o2FlueGas: this.o2Enrichment.o2FlueGas,
-        o2FlueGasEnriched: information.o2FlueGasEnriched,
-        combAirTemp: this.o2Enrichment.combAirTemp,
-        combAirTempEnriched: information.combAirTempEnriched,
-        fuelConsumption: this.o2Enrichment.fuelConsumption
-      };
-      var fuelSavings = this.phastService.o2Enrichment(this.o2EnrichmentPoint).fuelSavingsEnriched;
+    for (var i = 0; i <= 100; i += .5) {
+      this.o2EnrichmentPoint.o2CombAirEnriched = i;
+      const fuelSavings = this.phastService.o2Enrichment(this.o2EnrichmentPoint).fuelSavingsEnriched;
 
       if (fuelSavings > 0 && fuelSavings < 100) {
-
         if (!first) {
           data.push({
             x: i - .001,
@@ -306,9 +307,11 @@ export class O2EnrichmentGraphComponent implements OnInit {
       }
     }
 
-    //reload the graph and return if no points are on the graph
+    // reload the graph and return if no points are on the graph
+    // edit: ensure no recursive infinite loop occurs
     if (!onGraph) {
-      this.makeGraph();
+      this.removeLines = false;
+      // this.makeGraph();
       return;
     }
 
@@ -423,8 +426,8 @@ export class O2EnrichmentGraphComponent implements OnInit {
     this.point.append("text")
       .attr("x", 9)
       .attr("dy", ".35em");
-    
-    var fuelSavings = this.phastService.o2Enrichment(information).fuelSavingsEnriched;
+
+    const fuelSavings = this.phastService.o2Enrichment(information).fuelSavingsEnriched;
 
     this.point
       .style("display", null)
@@ -457,6 +460,10 @@ export class O2EnrichmentGraphComponent implements OnInit {
 
     this.svg.selectAll("#formLine").remove();
     this.drawCurve(this.svg, this.x, this.y, this.mainLine, true);
+    if (!this.removeLines) {
+      this.removeLines = true;
+      return;
+    }
 
     this.plotBtn.classed("disabled", false);
 
@@ -561,7 +568,7 @@ export class O2EnrichmentGraphComponent implements OnInit {
             fuelConsumption: this.o2Enrichment.fuelConsumption
           };
 
-          var fuelSavings = this.phastService.o2Enrichment(o2EnrichmentPoint).fuelSavingsEnriched;
+          const fuelSavings = this.phastService.o2Enrichment(o2EnrichmentPoint).fuelSavingsEnriched;
 
           if (fuelSavings < 0 || fuelSavings > 100 || this.xPosition == null) {
             return "<i class='fa fa-minus' style='margin: 0px; font-size: 1vw; vertical-align: middle: height: 100%;'></i>" +
@@ -614,8 +621,8 @@ export class O2EnrichmentGraphComponent implements OnInit {
               combAirTempEnriched: d.combAirTempEnriched,
               fuelConsumption: this.o2Enrichment.fuelConsumption
             };
-            
-            var fuelSavings = this.phastService.o2Enrichment(o2EnrichmentPoint).fuelSavingsEnriched;
+
+            const fuelSavings = this.phastService.o2Enrichment(o2EnrichmentPoint).fuelSavingsEnriched;
 
             if (fuelSavings < 0 || fuelSavings > 100 || this.xPosition == null) {
               return "<i class='fa fa-minus' style='margin: 0px; font-size: 1vw; vertical-align: middle: height: 100%;'></i>" +

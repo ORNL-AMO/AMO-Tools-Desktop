@@ -39,6 +39,7 @@
             [(ngModel)]="o2Enrichment.flueGasTemp" onfocus="this.select();">
           <span class="input-group-addon units">&#8457;</span>
         </div>
+        <span class="alert-danger pull-right small" *ngIf="errorFlueGasTemp !== null">{{error}}</span>
       </div>
 
       <div class="form-group">
@@ -99,6 +100,7 @@
             [(ngModel)]="o2Enrichment.flueGasTempEnriched" onfocus="this.select();">
           <span class="input-group-addon units">&#8457;</span>
         </div>
+        <span class="alert-danger pull-right small" *ngIf="errorFlueGasTempEnriched !== null">{{error}}</span>
       </div>
     </div>
     <div class="form-group">

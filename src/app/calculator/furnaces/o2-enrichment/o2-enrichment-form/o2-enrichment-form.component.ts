@@ -14,15 +14,24 @@ export class O2EnrichmentFormComponent implements OnInit {
   o2EnrichmentOutput: O2EnrichmentOutput;
   @Output('changeFieldEmit')
   changeFieldEmit = new EventEmitter<string>();
+  errorFlueGasTemp: string = null;
+  errorFlueGasTempEnriched: string = null;
   constructor() { }
 
-  ngOnInit() {
-  }
+  ngOnInit() { }
   calc() {
+    if (this.o2Enrichment.flueGasTemp < 0) {
+      this.errorFlueGasTemp = 'FlueGasTemp must be greater than 0';
+      return;
+    }
+    if (this.o2Enrichment.flueGasTempEnriched < 0) {
+      this.errorFlueGasTempEnriched = 'FlueGasTempEnriched must be greater than 0';
+      return;
+    }
     this.calculate.emit(true);
   }
 
-  changeField(str: string){
+  changeField(str: string) {
     this.changeFieldEmit.emit(str);
   }
 }
