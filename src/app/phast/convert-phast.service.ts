@@ -66,9 +66,9 @@ export class ConvertPhastService {
     if (meteredEnergy.meteredEnergyFuel) {
       if (oldSettings.unitsOfMeasure == 'Metric' && newSettings.unitsOfMeasure == 'Imperial') {
         //phast.meteredEnergy.meteredEnergyFuel.heatingValue = this.convertVal(phast.meteredEnergy.meteredEnergyFuel.heatingValue, 'btuScfF', 'kjnm');
-        meteredEnergy.meteredEnergyFuel.fuelFlowRateInput = this.convertVal(meteredEnergy.meteredEnergyFuel.fuelFlowRateInput, 'kJ', 'btu');
+        meteredEnergy.meteredEnergyFuel.fuelFlowRateInput = this.convertVal(meteredEnergy.meteredEnergyFuel.fuelFlowRateInput, 'kJ', 'Btu');
       } else if (oldSettings.unitsOfMeasure == 'Imperial' && newSettings.unitsOfMeasure == 'Metric') {
-        meteredEnergy.meteredEnergyFuel.fuelFlowRateInput = this.convertVal(meteredEnergy.meteredEnergyFuel.fuelFlowRateInput, 'btu', 'kJ');
+        meteredEnergy.meteredEnergyFuel.fuelFlowRateInput = this.convertVal(meteredEnergy.meteredEnergyFuel.fuelFlowRateInput, 'Btu', 'kJ');
       }
     }
     if (meteredEnergy.meteredEnergySteam) {
@@ -193,7 +193,7 @@ export class ConvertPhastService {
       loss.dischargeTemperature = this.convertVal(loss.dischargeTemperature, 'C', 'F');
       loss.chargeFeedRate = this.convertVal(loss.chargeFeedRate, 'kg', 'lb')
       loss.reactionHeat = this.convertVal(loss.reactionHeat, 'kJkg', 'btuLb');
-      loss.additionalHeat = this.convertVal(loss.additionalHeat, 'kJkg', 'btuLb');
+      loss.additionalHeat = this.convertVal(loss.additionalHeat, 'kJ', 'Btu');
       loss.specificHeatLiquid = this.convertVal(loss.specificHeatLiquid, 'kJkgC', 'btulbF');
       loss.specificHeatVapor = this.convertVal(loss.specificHeatVapor, 'kJkgC', 'btulbF');
     } else if (oldSettings.unitsOfMeasure == 'Imperial' && newSettings.unitsOfMeasure == 'Metric') {
@@ -203,7 +203,7 @@ export class ConvertPhastService {
       loss.dischargeTemperature = this.convertVal(loss.dischargeTemperature, 'F', 'C');
       loss.chargeFeedRate = this.convertVal(loss.chargeFeedRate, 'lb', 'kg')
       loss.reactionHeat = this.convertVal(loss.reactionHeat, 'btuLb', 'kJkg');
-      loss.additionalHeat = this.convertVal(loss.additionalHeat, 'btuLb', 'kJkg');
+      loss.additionalHeat = this.convertVal(loss.additionalHeat, 'Btu', 'kJ');
       loss.specificHeatLiquid = this.convertVal(loss.specificHeatLiquid, 'btulbF', 'kJkgC');
       loss.specificHeatVapor = this.convertVal(loss.specificHeatVapor, 'btulbF', 'kJkgC');
     }
@@ -218,9 +218,10 @@ export class ConvertPhastService {
       loss.waterVaporDischargeTemperature = this.convertVal(loss.waterVaporDischargeTemperature, 'C', 'F');
       loss.chargeFeedRate = this.convertVal(loss.chargeFeedRate, 'kg', 'lb');
       loss.reactionHeat = this.convertVal(loss.reactionHeat, 'kJkg', 'btuLb');
-      loss.additionalHeat = this.convertVal(loss.additionalHeat, 'kJkg', 'btuLb');
+      loss.additionalHeat = this.convertVal(loss.additionalHeat, 'kJ', 'Btu');
       loss.specificHeatLiquid = this.convertVal(loss.specificHeatLiquid, 'kJkgC', 'btulbF');
       loss.specificHeatSolid = this.convertVal(loss.specificHeatSolid, 'kJkgC', 'btulbF');
+      loss.latentHeat = this.convertVal(loss.latentHeat, 'kJkg', 'btuLb')
     } else if (oldSettings.unitsOfMeasure == 'Imperial' && newSettings.unitsOfMeasure == 'Metric') {
       loss.meltingPoint = this.convertVal(loss.meltingPoint, 'F', 'C');
       loss.initialTemperature = this.convertVal(loss.initialTemperature, 'F', 'C');
@@ -228,9 +229,10 @@ export class ConvertPhastService {
       loss.waterVaporDischargeTemperature = this.convertVal(loss.waterVaporDischargeTemperature, 'F', 'C');
       loss.chargeFeedRate = this.convertVal(loss.chargeFeedRate, 'lb', 'kg');
       loss.reactionHeat = this.convertVal(loss.reactionHeat, 'btuLb', 'kJkg');
-      loss.additionalHeat = this.convertVal(loss.additionalHeat, 'btuLb', 'kJkg');
+      loss.additionalHeat = this.convertVal(loss.additionalHeat, 'Btu', 'kJ');
       loss.specificHeatLiquid = this.convertVal(loss.specificHeatLiquid, 'btulbF', 'kJkgC');
       loss.specificHeatSolid = this.convertVal(loss.specificHeatSolid, 'btulbF', 'kJkgC');
+      loss.latentHeat = this.convertVal(loss.latentHeat, 'btuLb', 'kJkg')
     }
     return loss;
   }
@@ -241,15 +243,15 @@ export class ConvertPhastService {
       loss.dischargeTemperature = this.convertVal(loss.dischargeTemperature, 'C', 'F');
       loss.feedRate = this.convertVal(loss.feedRate, 'kg', 'lb')
       loss.reactionHeat = this.convertVal(loss.reactionHeat, 'kJkg', 'btuLb');
-      loss.additionalHeat = this.convertVal(loss.additionalHeat, 'kJkg', 'btuLb');
+      loss.additionalHeat = this.convertVal(loss.additionalHeat, 'kJ', 'Btu');
       loss.specificHeatVapor = this.convertVal(loss.specificHeatVapor, 'kJkgC', 'btulbF');
       loss.specificHeatGas = this.convertVal(loss.specificHeatGas, 'kJkgC', 'btulbF');
     } else if (oldSettings.unitsOfMeasure == 'Imperial' && newSettings.unitsOfMeasure == 'Metric') {
       loss.initialTemperature = this.convertVal(loss.initialTemperature, 'F', 'C');
       loss.dischargeTemperature = this.convertVal(loss.dischargeTemperature, 'F', 'C');
-      loss.feedRate = this.convertVal(loss.feedRate, 'lb', 'lb')
+      loss.feedRate = this.convertVal(loss.feedRate, 'lb', 'kg')
       loss.reactionHeat = this.convertVal(loss.reactionHeat, 'btuLb', 'kJkg');
-      loss.additionalHeat = this.convertVal(loss.additionalHeat, 'btuLb', 'kJkg');
+      loss.additionalHeat = this.convertVal(loss.additionalHeat, 'Btu', 'kJ');
       loss.specificHeatVapor = this.convertVal(loss.specificHeatVapor, 'btulbF', 'kJkgC');
       loss.specificHeatGas = this.convertVal(loss.specificHeatGas, 'btulbF', 'kJkgC');
     }
@@ -285,13 +287,13 @@ export class ConvertPhastService {
   convertLiquidCoolingLoss(loss: LiquidCoolingLoss, oldSettings: Settings, newSettings: Settings): LiquidCoolingLoss {
     if (oldSettings.unitsOfMeasure == 'Metric' && newSettings.unitsOfMeasure == 'Imperial') {
       loss.specificHeat = this.convertVal(loss.specificHeat, 'kJkgC', 'btulbF');
-      loss.density = this.convertVal(loss.density, 'kgNm3', 'lbscf');
+      loss.density = this.convertVal(loss.density, 'kgL', 'lbgal');
       loss.flowRate = this.convertVal(loss.flowRate, 'L', 'gal');
       loss.initialTemperature = this.convertVal(loss.initialTemperature, 'C', 'F');
       loss.outletTemperature = this.convertVal(loss.outletTemperature, 'C', 'F');
     } else if (oldSettings.unitsOfMeasure == 'Imperial' && newSettings.unitsOfMeasure == 'Metric') {
       loss.specificHeat = this.convertVal(loss.specificHeat, 'btulbF', 'kJkgC');
-      loss.density = this.convertVal(loss.density, 'lbscf', 'kgNm3');
+      loss.density = this.convertVal(loss.density, 'lbgal', 'kgL');
       loss.flowRate = this.convertVal(loss.flowRate, 'gal', 'L');
       loss.initialTemperature = this.convertVal(loss.initialTemperature, 'F', 'C');
       loss.outletTemperature = this.convertVal(loss.outletTemperature, 'F', 'C');
@@ -452,10 +454,10 @@ export class ConvertPhastService {
   convertOtherLoss(loss: OtherLoss, oldSettings: Settings, newSettings: Settings): OtherLoss {
     //heatLoss
     if (oldSettings.unitsOfMeasure == 'Metric' && newSettings.unitsOfMeasure == 'Imperial') {
-      loss.heatLoss = this.convertVal(loss.heatLoss, 'btu', 'kJ');
+      loss.heatLoss = this.convertVal(loss.heatLoss, 'kJ', 'Btu');
     }
     else if (oldSettings.unitsOfMeasure == 'Imperial' && newSettings.unitsOfMeasure == 'Metric') {
-      loss.heatLoss = this.convertVal(loss.heatLoss, 'kJ', 'btu');
+      loss.heatLoss = this.convertVal(loss.heatLoss, 'Btu', 'kJ');
     }
     return loss;
   }

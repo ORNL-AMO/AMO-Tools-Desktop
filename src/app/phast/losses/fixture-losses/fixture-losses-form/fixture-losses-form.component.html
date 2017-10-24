@@ -26,7 +26,7 @@
         <input name="{{'feedRate_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="feedRate" id="feedRate"
           onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('feedRate')">
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">lb/hr</span>
-        <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kJ/kg</span>
+        <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kg/hr</span>
       </div>
     </div>
 
