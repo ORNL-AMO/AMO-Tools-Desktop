@@ -76,7 +76,7 @@ export class PsatService {
   }
 
   resultsModified(psatInputs: PsatInputs, settings: Settings, baseline_pump_efficiency: number): PsatOutputs {
-    psatInputs = this.convertInputs(psatInputs, settings);    
+    psatInputs = this.convertInputs(psatInputs, settings);
     let tmpInputs: any;
     tmpInputs = psatInputs;
     tmpInputs.baseline_pump_efficiency = baseline_pump_efficiency;
@@ -189,10 +189,10 @@ export class PsatService {
       dischargeGaugeElevation = this.convertUnitsService.value(dischargeGaugeElevation).from('m').to('ft');
     }
 
-    // if (settings.pressureMeasurement != 'psi') {
-    //   suctionTankGasOverPressure = this.convertUnitsService.value(suctionTankGasOverPressure).from(settings.pressureMeasurement).to('psi');
-    //   dischargeGaugePressure = this.convertUnitsService.value(dischargeGaugePressure).from(settings.pressureMeasurement).to('psi');
-    // }
+    if (settings.pressureMeasurement != 'psi') {
+      suctionTankGasOverPressure = this.convertUnitsService.value(suctionTankGasOverPressure).from(settings.pressureMeasurement).to('psi');
+      dischargeGaugePressure = this.convertUnitsService.value(dischargeGaugePressure).from(settings.pressureMeasurement).to('psi');
+    }
 
     if (settings.flowMeasurement != 'gpm') {
       flowRate = this.convertUnitsService.value(flowRate).from(settings.flowMeasurement).to('gpm');
@@ -212,6 +212,14 @@ export class PsatService {
     }
 
     let tmpResults = psatAddon.headToolSuctionTank(inputs);
+    if (settings.distanceMeasurement != 'ft') {
+      tmpResults.differentialElevationHead = this.convertUnitsService.value(tmpResults.differentialElevationHead).from('ft').to(settings.distanceMeasurement);
+      tmpResults.differentialPressureHead = this.convertUnitsService.value(tmpResults.differentialPressureHead).from('ft').to(settings.distanceMeasurement);
+      tmpResults.differentialVelocityHead = this.convertUnitsService.value(tmpResults.differentialVelocityHead).from('ft').to(settings.distanceMeasurement);
+      tmpResults.estimatedDischargeFrictionHead = this.convertUnitsService.value(tmpResults.estimatedDischargeFrictionHead).from('ft').to(settings.distanceMeasurement);
+      tmpResults.estimatedSuctionFrictionHead = this.convertUnitsService.value(tmpResults.estimatedSuctionFrictionHead).from('ft').to(settings.distanceMeasurement);
+      tmpResults.pumpHead = this.convertUnitsService.value(tmpResults.pumpHead).from('ft').to(settings.distanceMeasurement);
+    }
     let results = {
       differentialElevationHead: this.roundVal(tmpResults.differentialElevationHead, 2),
       differentialPressureHead: this.roundVal(tmpResults.differentialPressureHead, 2),
@@ -220,6 +228,7 @@ export class PsatService {
       estimatedSuctionFrictionHead: this.roundVal(tmpResults.estimatedSuctionFrictionHead, 2),
       pumpHead: this.roundVal(tmpResults.pumpHead, 2)
     }
+
     return results;
   }
 
@@ -254,6 +263,11 @@ export class PsatService {
       flowRate = this.convertUnitsService.value(flowRate).from(settings.flowMeasurement).to('gpm');
     }
 
+    if (settings.pressureMeasurement != 'psi') {
+      dischargeGaugePressure = this.convertUnitsService.value(dischargeGaugePressure).from(settings.pressureMeasurement).to('psi');
+      suctionGaugePressure = this.convertUnitsService.value(suctionGaugePressure).from(settings.pressureMeasurement).to('psi');
+    }
+
     let inputs: any = {
       specificGravity: specificGravity,
       flowRate: flowRate,
@@ -268,6 +282,14 @@ export class PsatService {
     }
 
     let tmpResults = psatAddon.headTool(inputs);
+    if (settings.distanceMeasurement != 'ft') {
+      tmpResults.differentialElevationHead = this.convertUnitsService.value(tmpResults.differentialElevationHead).from('ft').to(settings.distanceMeasurement);
+      tmpResults.differentialPressureHead = this.convertUnitsService.value(tmpResults.differentialPressureHead).from('ft').to(settings.distanceMeasurement);
+      tmpResults.differentialVelocityHead = this.convertUnitsService.value(tmpResults.differentialVelocityHead).from('ft').to(settings.distanceMeasurement);
+      tmpResults.estimatedDischargeFrictionHead = this.convertUnitsService.value(tmpResults.estimatedDischargeFrictionHead).from('ft').to(settings.distanceMeasurement);
+      tmpResults.estimatedSuctionFrictionHead = this.convertUnitsService.value(tmpResults.estimatedSuctionFrictionHead).from('ft').to(settings.distanceMeasurement);
+      tmpResults.pumpHead = this.convertUnitsService.value(tmpResults.pumpHead).from('ft').to(settings.distanceMeasurement);
+    }
     let results = {
       differentialElevationHead: this.roundVal(tmpResults.differentialElevationHead, 2),
       differentialPressureHead: this.roundVal(tmpResults.differentialPressureHead, 2),
