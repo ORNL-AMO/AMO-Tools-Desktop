@@ -17,6 +17,8 @@ export class O2EnrichmentGraphComponent implements OnInit {
   //input data
   @Input()
   o2Enrichment: O2Enrichment;
+  @Input()
+  lines: any;
 
   o2EnrichmentPoint: O2Enrichment;
 
@@ -28,14 +30,12 @@ export class O2EnrichmentGraphComponent implements OnInit {
   width: any;
   height: any;
   margin: any;
-  line: any;
   filter: any;
   point: any;
   isGridToggled: boolean;
 
   plotBtn: any;
   change: any;
-  lines: any;
   mainLine: any;
   selectedLine: number;
   guideLine: any;
@@ -56,7 +56,7 @@ export class O2EnrichmentGraphComponent implements OnInit {
   constructor(private phastService: PhastService, private windowRefService: WindowRefService) { }
 
   ngOnInit() {
-    this.lines = [];
+    // this.lines = [];
     this.isGridToggled = false;
 
     this.plotBtn = d3.select('app-o2-enrichment-form').selectAll(".btn-success")
@@ -68,7 +68,6 @@ export class O2EnrichmentGraphComponent implements OnInit {
       .on("click", () => {
         this.toggleGrid();
       });
-
   }
 
   ngAfterViewInit() {

@@ -8,7 +8,7 @@
       <div class="form-group">
         <label class="small" for="o2CombAir">O<sub>2</sub> in combustion air</label>
         <div class="input-group">
-          <input autofocus type="number" min="1" step="any" max="100" class="form-control" id="o2CombAir" (input)="calc()" (focus)="changeField('o2CombAir')"
+          <input autofocus type="number" [disabled]="true" min="1" step="any" max="100" class="form-control" id="o2CombAir" (input)="calc()" (focus)="changeField('o2CombAir')"
             [(ngModel)]="o2Enrichment.o2CombAir" onfocus="this.select();">
           <span class="input-group-addon units">%</span>
         </div>

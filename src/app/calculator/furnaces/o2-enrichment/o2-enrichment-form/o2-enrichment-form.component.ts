@@ -12,6 +12,8 @@ export class O2EnrichmentFormComponent implements OnInit {
   calculate = new EventEmitter<boolean>();
   @Input()
   o2EnrichmentOutput: O2EnrichmentOutput;
+  @Input()
+  lines: any;
   @Output('changeFieldEmit')
   changeFieldEmit = new EventEmitter<string>();
   error = {
@@ -32,10 +34,6 @@ export class O2EnrichmentFormComponent implements OnInit {
     this.error.flueGasTemp = this.error.flueGasTempEnriched = this.error.o2CombAir = this.error.o2CombAirEnriched = null;
     this.error.combAirTemp = this.error.combAirTempEnriched = this.error.o2FlueGas = this.error.o2FlueGasEnriched = null;
     let canCalculate: any = true;
-    if (this.o2Enrichment.o2CombAir < 0 || this.o2Enrichment.o2CombAir > 100) {
-      canCalculate = false;
-      this.error.o2CombAir = 'O2 in combustion air must be between 0 and 100 percent';
-    }
     if (this.o2Enrichment.o2CombAirEnriched < 0 || this.o2Enrichment.o2CombAirEnriched > 100) {
       canCalculate = false;
       this.error.o2CombAirEnriched = 'O2 in combustion air must be between 0 and 100 percent';

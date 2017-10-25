@@ -27,6 +27,7 @@ export class O2EnrichmentComponent implements OnInit {
     fuelSavingsEnriched: 0.0
   };
 
+  lines = [];
   tabSelect: string = 'results';
   currentField: string = 'o2CombAir';
   constructor(private phastService: PhastService) { }
