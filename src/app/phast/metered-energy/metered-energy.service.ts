@@ -37,6 +37,7 @@ export class MeteredEnergyService {
   }
 
   meteredFuel(inputs: MeteredEnergyFuel, phast: PHAST, settings: Settings): MeteredEnergyResults {
+    debugger
     //Metered Energy Use
     //Metered Fuel Used = HHV * Flow Rate (if flow rate given)
     let meteredEnergyUsed = inputs.fuelEnergy;

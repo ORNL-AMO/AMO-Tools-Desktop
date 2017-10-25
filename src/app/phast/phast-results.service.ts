@@ -56,7 +56,7 @@ export class PhastResultsService {
     let results: PhastResults = this.initResults();
     results.exothermicHeat = this.phastService.sumChargeMaterialExothermic(phast.losses.chargeMaterials);
     results.totalInput = this.phastService.sumHeatInput(phast.losses, settings);
-
+    results.grossHeatInput = results.totalInput;
 
     if (this.checkLoss(phast.losses.wallLosses)) {
       results.totalWallLoss = this.phastService.sumWallLosses(phast.losses.wallLosses, settings);
