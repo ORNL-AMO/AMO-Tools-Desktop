@@ -47,15 +47,15 @@ export class ExecutiveSummaryComponent implements OnInit {
     }
 
     if (this.settings.energySourceType == 'Electricity') {
-      this.timeUnit = 'kW/yr';
-      this.energyUnit = 'kW';
+      this.timeUnit = 'GW/yr';
+      this.energyUnit = 'GW';
     } else {
       if (this.settings.unitsOfMeasure == 'Metric') {
-        this.timeUnit = 'kJ/yr';
-        this.energyUnit = 'kJ/kg';
+        this.timeUnit = 'GJ/yr';
+        this.energyUnit = 'GJ/kg';
       } else if (this.settings.unitsOfMeasure == 'Imperial') {
-        this.timeUnit = 'BTU/yr';
-        this.energyUnit = 'BTU/lb';
+        this.timeUnit = 'MMBTU/yr';
+        this.energyUnit = 'MMBTU/lb';
       }
     }
   }
