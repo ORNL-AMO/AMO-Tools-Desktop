@@ -44,9 +44,9 @@ export class HeatSystemEfficiencyComponent implements OnInit {
   constructor(private formBuilder: FormBuilder, private phastService: PhastService, private heatSystemEfficiencyCompareService: HeatSystemEfficiencyCompareService, private windowRefService: WindowRefService) { }
 
   ngOnInit() {
-    if(this.settings.energySourceType == 'Electricity'){
+    if (this.settings.energySourceType == 'Electricity') {
       this.resultsUnit = 'kW';
-    }else if(this.settings.unitsOfMeasure == 'Metric'){
+    } else if (this.settings.unitsOfMeasure == 'Metric') {
       this.resultsUnit = 'kJ/hr';
     }
 
@@ -63,11 +63,13 @@ export class HeatSystemEfficiencyComponent implements OnInit {
     this.initDifferenceMonitor();
   }
 
-  ngOnDestory(){
-    if(this.isBaseline){
+  ngOnDestroy() {
+    if (this.isBaseline) {
       this.heatSystemEfficiencyCompareService.baseline = null;
-    }else{
+      console.log('baseline null');
+    } else {
       this.heatSystemEfficiencyCompareService.modification = null;
+      console.log('mod null')
     }
   }
 

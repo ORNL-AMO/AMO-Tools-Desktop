@@ -11,7 +11,7 @@ import { PHAST } from '../shared/models/phast/phast';
 import { ToastyService, ToastyConfig, ToastOptions, ToastData } from 'ng2-toasty';
 import { SettingsService } from '../settings/settings.service';
 import { PhastResultsService } from './phast-results.service';
-
+import { LossesService } from './losses/losses.service';
 @Component({
   selector: 'app-phast',
   templateUrl: './phast.component.html',
@@ -48,7 +48,8 @@ export class PhastComponent implements OnInit {
     private toastyService: ToastyService,
     private toastyConfig: ToastyConfig,
     private settingsService: SettingsService,
-    private phastResultsService: PhastResultsService) {
+    private phastResultsService: PhastResultsService,
+    private lossesService: LossesService) {
     this.toastyConfig.theme = 'bootstrap';
     this.toastyConfig.position = 'bottom-right';
     // this.toastyConfig.limit = 1;
@@ -101,6 +102,16 @@ export class PhastComponent implements OnInit {
     });
   }
 
+
+  ngAfterViewInit() {
+    this.disclaimerToast();
+  }
+
+  ngOnDestroy(){
+    this.lossesService.lossesTab.next('charge-material');
+  }
+
+
   getSettings(update?: boolean) {
     //get assessment settings
     this.indexedDbService.getAssessmentSettings(this.assessment.id).then(
@@ -145,10 +156,6 @@ export class PhastComponent implements OnInit {
         }
       }
     )
-  }
-
-  ngAfterViewInit() {
-    this.disclaimerToast();
   }
 
   changeTab($event) {
