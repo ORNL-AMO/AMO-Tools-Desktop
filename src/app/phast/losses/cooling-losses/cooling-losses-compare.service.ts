@@ -74,7 +74,7 @@ export class CoolingLossesCompareService {
       if (this.baselineCoolingLosses.length != 0 && this.modifiedCoolingLosses.length != 0 && this.baselineCoolingLosses.length == this.modifiedCoolingLosses.length) {
         for (let lossIndex = 0; lossIndex < this.differentArray.length; lossIndex++) {
           this.differentArray[lossIndex].different.coolingLossType.next(this.compare(this.baselineCoolingLosses[lossIndex].coolingLossType, this.modifiedCoolingLosses[lossIndex].coolingLossType));
-          if (this.baselineCoolingLosses[lossIndex].coolingLossType == 'Other Gas' && this.modifiedCoolingLosses[lossIndex].coolingLossType == 'Other Gas') {
+          if (this.baselineCoolingLosses[lossIndex].coolingLossType == 'Gas' && this.modifiedCoolingLosses[lossIndex].coolingLossType == 'Gas') {
             //flowRate
             this.differentArray[lossIndex].different.gasCoolingLossDifferent.flowRate.next(this.compare(this.baselineCoolingLosses[lossIndex].gasCoolingLoss.flowRate, this.modifiedCoolingLosses[lossIndex].gasCoolingLoss.flowRate));
             //initialTemperature
@@ -86,10 +86,10 @@ export class CoolingLossesCompareService {
             //correctionFactor
             this.differentArray[lossIndex].different.gasCoolingLossDifferent.correctionFactor.next(this.compare(this.baselineCoolingLosses[lossIndex].gasCoolingLoss.correctionFactor, this.modifiedCoolingLosses[lossIndex].gasCoolingLoss.correctionFactor));
             //gasDensity
-            this.differentArray[lossIndex].different.gasCoolingLossDifferent.correctionFactor.next(this.compare(this.baselineCoolingLosses[lossIndex].gasCoolingLoss.gasDensity, this.modifiedCoolingLosses[lossIndex].gasCoolingLoss.gasDensity));
+            this.differentArray[lossIndex].different.gasCoolingLossDifferent.gasDensity.next(this.compare(this.baselineCoolingLosses[lossIndex].gasCoolingLoss.gasDensity, this.modifiedCoolingLosses[lossIndex].gasCoolingLoss.gasDensity));
 
           }
-          else if (this.baselineCoolingLosses[lossIndex].coolingLossType == 'Other Liquid' && this.modifiedCoolingLosses[lossIndex].coolingLossType == 'Other Liquid') {
+          else if (this.baselineCoolingLosses[lossIndex].coolingLossType == 'Liquid' && this.modifiedCoolingLosses[lossIndex].coolingLossType == 'Liquid') {
             //flowRate
             this.differentArray[lossIndex].different.liquidCoolingLossDifferent.flowRate.next(this.compare(this.baselineCoolingLosses[lossIndex].liquidCoolingLoss.flowRate, this.modifiedCoolingLosses[lossIndex].liquidCoolingLoss.flowRate));
             //density
