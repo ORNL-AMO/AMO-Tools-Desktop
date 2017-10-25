@@ -51,15 +51,22 @@ export class EnergyUsedComponent implements OnInit {
   fuelEnergyUsed: number = 0;
   steamEnergyUsed: number = 0;
 
-  energyPerMassUnit: string = 'BTU/lb';
-  energyPerTimeUnit: string = 'BTU/hr';
-  energyCostUnit: string = '/MMBTU';
-  constructor(private designedEnergyService: DesignedEnergyService, private meteredEnergyService: MeteredEnergyService, private phastResultsService: PhastResultsService, private suiteDbService: SuiteDbService, private phastService: PhastService) { }
+  energyPerMassUnit: string;
+  energyPerTimeUnit: string;
+  energyCostUnit: string;
+  fuelUsedUnit: string;
+  baseEnergyUnit: string;
+  // energyBaseUnit: string;
+  // energyPerMassUnit: string = 'BTU/lb';
+  // energyPerTimeUnit: string = 'BTU/hr';
+  // energyCostUnit: string = '/BTU';
+  // energyPerEnergyUnit: string = 'BTU/lb';
+    constructor(private designedEnergyService: DesignedEnergyService, private meteredEnergyService: MeteredEnergyService, private phastResultsService: PhastResultsService, private suiteDbService: SuiteDbService, private phastService: PhastService) { }
 
   ngOnInit() {
     let tmpResults = this.phastResultsService.getResults(this.phast, this.settings);
     this.calculatedResults = this.phastResultsService.calculatedByPhast(this.phast, this.settings);
-    
+
     if (this.settings.energySourceType == 'Steam') {
       this.steamEnergyUsed = tmpResults.grossHeatInput;
       if (this.phast.meteredEnergy) {
@@ -98,10 +105,26 @@ export class EnergyUsedComponent implements OnInit {
     }
     this.baseLineResults = this.phastResultsService.getResults(this.phast, this.settings);
 
-    if(this.settings.unitsOfMeasure == 'Metric'){
+    if (this.settings.unitsOfMeasure == 'Metric') {
       this.energyPerMassUnit = 'kJ/kg';
-      this.energyPerTimeUnit = 'kJ/hr';
+      this.energyPerTimeUnit = 'kJ/kWh';
       this.energyCostUnit = '/GJ';
+      this.baseEnergyUnit = 'kJ/hr';
+      } else if (this.settings.unitsOfMeasure == 'Metric' && this.settings.energySourceType == 'Electricity') {
+      this.energyPerMassUnit = 'kWh/kg';
+      this.energyPerTimeUnit = 'kJ/kWh';
+      this.energyCostUnit = '/GJ';
+      this.baseEnergyUnit = 'kW';
+      } else if (this.settings.unitsOfMeasure == 'Imperial') {
+      this.energyPerMassUnit = 'BTU/lb';
+      this.energyPerTimeUnit = 'BTU/hr';
+      this.energyCostUnit = '/BTU';
+      this.baseEnergyUnit = 'BTU/hr';
+      } else if (this.settings.unitsOfMeasure == 'Imperial' && this.settings.energySourceType == 'Electricity') {
+      this.energyPerMassUnit = 'kWh/lb';
+      this.energyPerTimeUnit = 'kWh/kWh';
+      this.energyCostUnit = '/BTU';
+      this.baseEnergyUnit = 'kW';
     }
   }
 
