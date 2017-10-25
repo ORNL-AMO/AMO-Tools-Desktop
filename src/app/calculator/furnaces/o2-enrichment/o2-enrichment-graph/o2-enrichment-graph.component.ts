@@ -111,10 +111,7 @@ export class O2EnrichmentGraphComponent implements OnInit {
     this.onChanges();
   }
 
-  makeGraph() {
-    //Remove  all previous graphs
-    d3.select('app-o2-enrichment-graph').selectAll('svg').remove();
-
+  drawMainLine() {
     this.mainLine = {
       o2CombAir: this.o2Enrichment.o2CombAir,
       o2CombAirEnriched: this.o2Enrichment.o2CombAirEnriched,
@@ -125,11 +122,17 @@ export class O2EnrichmentGraphComponent implements OnInit {
       combAirTemp: this.o2Enrichment.combAirTemp,
       combAirTempEnriched: this.o2Enrichment.combAirTempEnriched,
       fuelConsumption: this.o2Enrichment.fuelConsumption,
-      color: "#2ECC71",
+      color: '#2ECC71',
       data: [],
       x: null,
       y: null
     };
+    this.drawCurve(this.svg, this.x, this.y, this.mainLine, true);
+  }
+
+  makeGraph() {
+    // Remove  all previous graphs
+    d3.select('app-o2-enrichment-graph').selectAll('svg').remove();
 
     this.svg = d3.select('app-o2-enrichment-graph').append('svg')
       .attr("width", this.width + this.margin.left + this.margin.right)
@@ -138,7 +141,7 @@ export class O2EnrichmentGraphComponent implements OnInit {
       .attr("transform", "translate(" + this.margin.left + "," + this.margin.top + ")");
 
     // filters go in defs element
-    var defs = this.svg.append("defs");
+    const defs = this.svg.append("defs");
 
     // create filter with id #drop-shadow
     // height=130% so that the shadow is not clipped
@@ -170,7 +173,7 @@ export class O2EnrichmentGraphComponent implements OnInit {
 
     // overlay original SourceGraphic over translated blurred opacity by using
     // feMerge filter. Order of specifying inputs is important!
-    var feMerge = this.filter.append("feMerge");
+    const feMerge = this.filter.append("feMerge");
 
     feMerge.append("feMergeNode")
       .attr("in", "offsetBlur");
@@ -259,8 +262,7 @@ export class O2EnrichmentGraphComponent implements OnInit {
 
     this.svg.style("display", null);
 
-    //draw mailLine curve
-    this.drawCurve(this.svg, this.x, this.y, this.mainLine, true);
+    this.drawMainLine();
     this.updateDetailBoxs();
 
     this.change = true;
@@ -268,11 +270,8 @@ export class O2EnrichmentGraphComponent implements OnInit {
 
   drawCurve(svg, x, y, information, isFromForm) {
 
-    var onGraph = false;
-
-    var data = [];
-
-    var first = false;
+    let onGraph = false;
+    let data = [];
 
     this.o2EnrichmentPoint = {
       o2CombAir: this.o2Enrichment.o2CombAir,
@@ -286,17 +285,16 @@ export class O2EnrichmentGraphComponent implements OnInit {
       fuelConsumption: this.o2Enrichment.fuelConsumption
     };
 
-    for (var i = 0; i <= 100; i += .5) {
+    for (let i = 0; i <= 100; i += .5) {
       this.o2EnrichmentPoint.o2CombAirEnriched = i;
       const fuelSavings = this.phastService.o2Enrichment(this.o2EnrichmentPoint).fuelSavingsEnriched;
 
       if (fuelSavings > 0 && fuelSavings < 100) {
-        if (!first) {
+        if (!data.length) {
           data.push({
             x: i - .001,
             y: 0
           });
-          first = true;
         }
 
         onGraph = true;
@@ -315,7 +313,7 @@ export class O2EnrichmentGraphComponent implements OnInit {
       return;
     }
 
-    var guideLine = d3.line()
+    const guideLine = d3.line()
       .x(function (d) {
         return x(d.x);
       })
@@ -375,8 +373,8 @@ export class O2EnrichmentGraphComponent implements OnInit {
 
   hoverCommands(x, y, data) {
 
-    var format = d3.format(",.2f");
-    var bisectDate = d3.bisector(function (d) { return d.x; }).left;
+    const format = d3.format(",.2f");
+    const bisectDate = d3.bisector(function (d) { return d.x; }).left;
     this.svg.select('#graph')
       .attr("width", this.width)
       .attr("height", this.height)
@@ -442,24 +440,8 @@ export class O2EnrichmentGraphComponent implements OnInit {
   }
 
   redrawLines() {
-    this.mainLine = {
-      o2CombAir: this.o2Enrichment.o2CombAir,
-      o2CombAirEnriched: this.o2Enrichment.o2CombAirEnriched,
-      flueGasTemp: this.o2Enrichment.flueGasTemp,
-      flueGasTempEnriched: this.o2Enrichment.flueGasTempEnriched,
-      o2FlueGas: this.o2Enrichment.o2FlueGas,
-      o2FlueGasEnriched: this.o2Enrichment.o2FlueGasEnriched,
-      combAirTemp: this.o2Enrichment.combAirTemp,
-      combAirTempEnriched: this.o2Enrichment.combAirTempEnriched,
-      fuelConsumption: this.o2Enrichment.fuelConsumption,
-      color: "#2ECC71",
-      data: [],
-      x: null,
-      y: null
-    };
-
     this.svg.selectAll("#formLine").remove();
-    this.drawCurve(this.svg, this.x, this.y, this.mainLine, true);
+    this.drawMainLine();
     if (!this.removeLines) {
       this.removeLines = true;
       return;
@@ -470,8 +452,8 @@ export class O2EnrichmentGraphComponent implements OnInit {
     this.svg.selectAll(".plottedLine").remove();
     this.svg.selectAll(".plottedPoint").remove();
 
-    //Update and draw lines
-    for (var i = 0; i < this.lines.length; i++) {
+    // Update and draw lines
+    for (let i = 0; i < this.lines.length; i++) {
 
       this.lines[i].o2CombAir = this.o2Enrichment.o2CombAir;
       this.lines[i].flueGasTemp = this.o2Enrichment.flueGasTemp;
@@ -482,15 +464,13 @@ export class O2EnrichmentGraphComponent implements OnInit {
       this.drawCurve(this.svg, this.x, this.y, this.lines[i], false);
     }
 
-    //Set mailLine as default after every change
+    // Set mainLine as default after every change
     this.hoverCommands(this.mainLine.x, this.mainLine.y, this.mainLine.data);
   }
 
   plotLine() {
     if (this.change) {
-      var color = this.getRandomColor();
-
-      var line = {
+      let line = {
         o2CombAir: this.o2Enrichment.o2CombAir,
         o2CombAirEnriched: this.o2Enrichment.o2CombAirEnriched,
         flueGasTemp: this.o2Enrichment.flueGasTemp,
@@ -500,7 +480,7 @@ export class O2EnrichmentGraphComponent implements OnInit {
         combAirTemp: this.o2Enrichment.combAirTemp,
         combAirTempEnriched: this.o2Enrichment.combAirTempEnriched,
         fuelConsumption: this.o2Enrichment.fuelConsumption,
-        color: color,
+        color: this.getRandomColor(),
         data: [],
         x: null,
         y: null
@@ -518,21 +498,20 @@ export class O2EnrichmentGraphComponent implements OnInit {
   }
 
   getRandomColor() {
-    var letters = '0123456789ABCDEF';
-    var color = '#';
-    for (var i = 0; i < 6; i++) {
+    const letters = '0123456789ABCDEF';
+    let color = '#';
+    for (let i = 0; i < 6; i++) {
       color += letters[Math.floor(Math.random() * 16)];
     }
     return color;
   }
 
   updateDetailBoxs() {
-
     d3.select('app-o2-enrichment').selectAll("#lineDetails").selectAll("tr").remove();
 
-    var lineDetail = d3.select('app-o2-enrichment').selectAll("#lineDetails").append("tr");
+    const lineDetail = d3.select('app-o2-enrichment').selectAll("#lineDetails").append("tr");
 
-    //Always display mainLine details to detail box
+    // Always display mainLine details to detail box
     lineDetail.append("td")
       .attr("class", "text-center")
       .style("background-color", this.mainLine.color);
@@ -541,7 +520,7 @@ export class O2EnrichmentGraphComponent implements OnInit {
       .attr("class", "text-center")
       .html(() => {
         if (this.xPosition != null) {
-          var format = d3.format(",.2f");
+          const format = d3.format(",.2f");
           return "<p style='margin: 0px; font-size: 1vw'>" + format(this.xPosition) + "%</p>";
         }
         else {
@@ -555,8 +534,8 @@ export class O2EnrichmentGraphComponent implements OnInit {
       .attr("class", "text-center fuelSavings")
       .html(() => {
         if (this.xPosition) {
-          var format = d3.format(",.2f");
-          var o2EnrichmentPoint = {
+          const format = d3.format(",.2f");
+          const o2EnrichmentPoint = {
             o2CombAir: this.o2Enrichment.o2CombAir,
             o2CombAirEnriched: this.xPosition,
             flueGasTemp: this.o2Enrichment.flueGasTemp,
@@ -585,17 +564,17 @@ export class O2EnrichmentGraphComponent implements OnInit {
     if (this.lines != null) {
       this.lines.forEach((d, i) => {
 
-        var lineDetail = d3.select('app-o2-enrichment').selectAll("#lineDetails").append("tr");
+        const lineDetail2 = d3.select('app-o2-enrichment').selectAll("#lineDetails").append("tr");
 
-        lineDetail.append("td")
+        lineDetail2.append("td")
           .attr("class", "text-center")
           .style("background-color", d.color);
 
-        lineDetail.append("td")
+        lineDetail2.append("td")
           .attr("class", "text-center")
           .html(() => {
             if (this.xPosition != null) {
-              var format = d3.format(",.2f");
+              const format = d3.format(",.2f");
               return "<p style='margin: 0px; font-size: 1vw'>" + format(this.xPosition) + "%</p>";
             }
             else {
@@ -605,12 +584,12 @@ export class O2EnrichmentGraphComponent implements OnInit {
             }
           });
 
-        lineDetail.append("td")
+        lineDetail2.append("td")
           .attr("class", "text-center fuelSavings")
           .html(() => {
 
-            var format = d3.format(",.2f");
-            var o2EnrichmentPoint = {
+            const format = d3.format(",.2f");
+            const o2EnrichmentPoint = {
               o2CombAir: this.o2Enrichment.o2CombAir,
               o2CombAirEnriched: this.xPosition,
               flueGasTemp: this.o2Enrichment.flueGasTemp,
@@ -634,7 +613,7 @@ export class O2EnrichmentGraphComponent implements OnInit {
             }
           });
 
-        var deleteBtn = lineDetail.append("td")
+        const deleteBtn = lineDetail2.append("td")
           .style("padding", "0px")
           .style("vertical-align", "middle")
           .append("div")
