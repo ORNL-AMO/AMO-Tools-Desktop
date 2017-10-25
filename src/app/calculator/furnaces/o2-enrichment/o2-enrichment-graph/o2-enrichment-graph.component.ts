@@ -41,6 +41,7 @@ export class O2EnrichmentGraphComponent implements OnInit {
   guideLine: any;
   xPosition: any = 0;
 
+  maxFuelSavings: any;
   removeLines: any = true;
   isFirstChange: any = true;
   fontSize: string;
@@ -90,7 +91,7 @@ export class O2EnrichmentGraphComponent implements OnInit {
   }
 
   resizeGraph() {
-    let curveGraph = this.doc.getElementById('o2EnrichmentGraph');
+    const curveGraph = this.doc.getElementById('o2EnrichmentGraph');
 
     this.canvasWidth = curveGraph.clientWidth;
     this.canvasHeight = this.canvasWidth * (3 / 5);
@@ -111,7 +112,7 @@ export class O2EnrichmentGraphComponent implements OnInit {
     this.onChanges();
   }
 
-  drawMainLine() {
+  drawMainLine(putOnGraph = true) {
     this.mainLine = {
       o2CombAir: this.o2Enrichment.o2CombAir,
       o2CombAirEnriched: this.o2Enrichment.o2CombAirEnriched,
@@ -123,11 +124,12 @@ export class O2EnrichmentGraphComponent implements OnInit {
       combAirTempEnriched: this.o2Enrichment.combAirTempEnriched,
       fuelConsumption: this.o2Enrichment.fuelConsumption,
       color: '#2ECC71',
+      fuelSavings: 0,
       data: [],
       x: null,
       y: null
     };
-    this.drawCurve(this.svg, this.x, this.y, this.mainLine, true);
+    this.drawCurve(this.svg, this.x, this.y, this.mainLine, true, putOnGraph);
   }
 
   makeGraph() {
@@ -195,8 +197,7 @@ export class O2EnrichmentGraphComponent implements OnInit {
 
     this.y = d3.scaleLinear()
       .range([this.height, 0])
-      .domain([0, 100]);
-
+      .domain([0, Math.floor((this.maxFuelSavings + 10.0) / 10) * 10 ]);
 
     if (this.isGridToggled) {
       this.xAxis = d3.axisBottom()
@@ -261,15 +262,10 @@ export class O2EnrichmentGraphComponent implements OnInit {
       .text("O2 in Air (%)");
 
     this.svg.style("display", null);
-
-    this.drawMainLine();
-    this.updateDetailBoxs();
-
     this.change = true;
   }
 
-  drawCurve(svg, x, y, information, isFromForm) {
-
+  drawCurve(svg, x, y, information, isFromForm, putOnGraph = true) {
     let onGraph = false;
     let data = [];
 
@@ -290,6 +286,9 @@ export class O2EnrichmentGraphComponent implements OnInit {
       const fuelSavings = this.phastService.o2Enrichment(this.o2EnrichmentPoint).fuelSavingsEnriched;
 
       if (fuelSavings > 0 && fuelSavings < 100) {
+        if (fuelSavings > information.fuelSavings) {
+          information.fuelSavings = fuelSavings;
+        }
         if (!data.length) {
           data.push({
             x: i - .001,
@@ -305,11 +304,14 @@ export class O2EnrichmentGraphComponent implements OnInit {
       }
     }
 
+    if (!putOnGraph) {
+      return;
+    }
+
     // reload the graph and return if no points are on the graph
     // edit: ensure no recursive infinite loop occurs
     if (!onGraph) {
       this.removeLines = false;
-      // this.makeGraph();
       return;
     }
 
@@ -388,7 +390,7 @@ export class O2EnrichmentGraphComponent implements OnInit {
 
         this.xPosition = x.invert(d3.mouse(d3.event.currentTarget)[0]);
 
-        this.updateDetailBoxs();
+        this.updateDetailBoxes();
         this.moveGuideLine();
 
       })
@@ -436,7 +438,19 @@ export class O2EnrichmentGraphComponent implements OnInit {
 
   onChanges() {
     this.change = true;
+    this.maxFuelSavings = 0.0;
+    this.drawMainLine(false);
+    if (this.mainLine.fuelSavings > this.maxFuelSavings) {
+      this.maxFuelSavings = this.mainLine.fuelSavings;
+    }
+    for (let i = 0; i < this.lines.length; i++) {
+      if (this.lines[i].fuelSavings > this.maxFuelSavings) {
+        this.maxFuelSavings = this.lines[i].fuelSavings;
+      }
+    }
+    this.makeGraph();
     this.redrawLines();
+    this.updateDetailBoxes();
   }
 
   redrawLines() {
@@ -454,7 +468,6 @@ export class O2EnrichmentGraphComponent implements OnInit {
 
     // Update and draw lines
     for (let i = 0; i < this.lines.length; i++) {
-
       this.lines[i].o2CombAir = this.o2Enrichment.o2CombAir;
       this.lines[i].flueGasTemp = this.o2Enrichment.flueGasTemp;
       this.lines[i].o2FlueGas = this.o2Enrichment.o2FlueGas;
@@ -480,6 +493,7 @@ export class O2EnrichmentGraphComponent implements OnInit {
         combAirTemp: this.o2Enrichment.combAirTemp,
         combAirTempEnriched: this.o2Enrichment.combAirTempEnriched,
         fuelConsumption: this.o2Enrichment.fuelConsumption,
+        fuelSavings: 0,
         color: this.getRandomColor(),
         data: [],
         x: null,
@@ -493,7 +507,7 @@ export class O2EnrichmentGraphComponent implements OnInit {
       this.plotBtn.classed("disabled", true);
       this.change = false;
 
-      this.updateDetailBoxs();
+      this.updateDetailBoxes();
     }
   }
 
@@ -506,7 +520,7 @@ export class O2EnrichmentGraphComponent implements OnInit {
     return color;
   }
 
-  updateDetailBoxs() {
+  updateDetailBoxes() {
     d3.select('app-o2-enrichment').selectAll("#lineDetails").selectAll("tr").remove();
 
     const lineDetail = d3.select('app-o2-enrichment').selectAll("#lineDetails").append("tr");
@@ -661,7 +675,6 @@ export class O2EnrichmentGraphComponent implements OnInit {
       if (this.selectedLine != -1) {
         this.lines.splice(this.selectedLine, 1);
         this.onChanges();
-        this.updateDetailBoxs();
         this.change = true;
       }
     }
