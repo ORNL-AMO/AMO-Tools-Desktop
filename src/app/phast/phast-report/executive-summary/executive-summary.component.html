@@ -10,9 +10,8 @@
     </thead>
     <tbody>
       <tr>
-        <td>Percent Savings</td>
-        <span> %</span>
-        <td>&mdash; &mdash;</td>
+        <td>Percent Savings (%)</td>
+         <td>&mdash; &mdash;</td>
         <td *ngFor="let mod of modifications; let index = index;" [ngClass]="{'selected-modification': index == selectedModificationIndex}">
           <span *ngIf="mod.percentSavings">{{mod.percentSavings | number:'1.0-0'}} %</span>
           <span *ngIf="!mod.percentSavings">&mdash; &mdash;</span>
