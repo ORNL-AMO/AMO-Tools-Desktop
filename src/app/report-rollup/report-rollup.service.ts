@@ -30,6 +30,10 @@ export class ReportRollupService {
   allPhastResults: BehaviorSubject<Array<AllPhastResultsData>>;
 
   constructor(private indexedDbService: IndexedDbService, private psatService: PsatService, private phastResultsService: PhastResultsService, private executiveSummaryService: ExecutiveSummaryService) {
+    this.initSummary();
+  }
+
+  initSummary() {
     this.reportAssessments = new BehaviorSubject<Array<Assessment>>(new Array<Assessment>());
     this.phastAssessments = new BehaviorSubject<Array<Assessment>>(new Array<Assessment>())
     this.psatAssessments = new BehaviorSubject<Array<Assessment>>(new Array<Assessment>())
@@ -42,6 +46,7 @@ export class ReportRollupService {
     this.phastResults = new BehaviorSubject<Array<PhastResultsData>>(new Array<PhastResultsData>());
     this.allPhastResults = new BehaviorSubject<Array<AllPhastResultsData>>(new Array<AllPhastResultsData>());
   }
+
 
   pushAssessment(assessment: Assessment) {
     this.assessmentsArray.push(assessment);
@@ -59,7 +64,8 @@ export class ReportRollupService {
     this.assessmentsArray = new Array<Assessment>();
     this.phastArray = new Array<Assessment>();
     this.psatArray = new Array<Assessment>();
-
+    this.psatAssessments.next(this.psatArray);
+    this.phastAssessments.next(this.phastArray);
     directory.assessments.forEach(assessment => {
       if (assessment.selected) {
         this.pushAssessment(assessment);

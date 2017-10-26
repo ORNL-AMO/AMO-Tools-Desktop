@@ -8,7 +8,7 @@ import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
 @Component({
   selector: 'app-phast-summary',
   templateUrl: './phast-summary.component.html',
-  styleUrls: ['./phast-summary.component.css']
+  styleUrls: ['./phast-summary.component.css', '../report-summary.component.css']
 })
 export class PhastSummaryComponent implements OnInit {
   furnaceSavingsPotential: number = 0;
