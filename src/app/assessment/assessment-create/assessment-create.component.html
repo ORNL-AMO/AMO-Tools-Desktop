@@ -67,8 +67,9 @@
 
         <div class="modal-footer">
 
-          <button class="btn btn-primary pull-right" type="submit" [disabled]="!newAssessment.valid" (click)="createAssessment()">Add Asset</button>
           <button class="btn btn-secondary pull-left" (click)="hideCreateModal()">Close</button>
+          <button class="btn btn-primary pull-right" type="submit" [disabled]="!newAssessment.valid" (click)="createAssessment()">Add Asset</button>
+          
         </div><!-- End .modal-footer -->
 
       </form>
