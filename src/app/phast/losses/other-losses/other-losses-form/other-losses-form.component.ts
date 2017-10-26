@@ -31,6 +31,7 @@ export class OtherLossesFormComponent implements OnInit {
   counter: any;
 
   firstChange: boolean = true;
+  resultsUnit: string = 'Btu/hr';
   constructor(private windowRefService: WindowRefService, private otherLossesCompareService: OtherLossesCompareService) { }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -46,6 +47,11 @@ export class OtherLossesFormComponent implements OnInit {
   }
 
   ngOnInit() {
+    if (this.settings.energySourceType == 'Electricity') {
+      this.resultsUnit = 'kW';
+    } else if (this.settings.unitsOfMeasure == 'Metric') {
+      this.resultsUnit = 'kJ/hr';
+    }
   }
 
   ngAfterViewInit() {

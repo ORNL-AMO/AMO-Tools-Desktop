@@ -24,7 +24,7 @@
     <div class="col-12">
       <div class="form-group">
         <label class="small" for="coolingMedium">Cooling Medium</label>
-        <select class="form-control" id="coolingMedium" [(ngModel)]="loss.coolingMedium" [disabled]="!baselineSelected" (focus)="changeField('coolingMedium')">
+        <select class="form-control" id="coolingMedium" [(ngModel)]="loss.coolingMedium" (change)="calculate(loss)" [disabled]="!baselineSelected" (focus)="changeField('coolingMedium')">
           <option>Gas</option>
           <option>Liquid</option>
         </select>
@@ -44,9 +44,7 @@
       <div class="form-group">
         <label class="small">Heat Loss for Cooling</label>
         <div *ngIf="loss.heatLoss" class="text-center small">
-          {{loss.heatLoss| number:'2.0-0'}}
-          <span *ngIf="settings.unitsOfMeasure == 'Imperial'">Btu/hr</span>
-          <span *ngIf="settings.unitsOfMeasure == 'Metric'">kJ/hr</span>
+          {{loss.heatLoss| number:'2.0-0'}} <span>{{resultsUnit}}</span>
         </div>
         <div *ngIf="!loss.heatLoss" class="text-center small">
           &mdash; &mdash;

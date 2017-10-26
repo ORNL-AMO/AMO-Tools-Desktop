@@ -28,11 +28,9 @@
       <div class="form-group">
         <label class="small">Fuel Heat Delivered</label>
         <div *ngIf="loss.heatLoss" class="text-center small">
-          {{loss.heatLoss | number:'2.0-0'}}
-          <span *ngIf="settings.unitsOfMeasure == 'Imperial'">Btu/hr</span>
-          <span *ngIf="settings.unitsOfMeasure == 'Metric'">kJ/hr</span>
+          {{loss.heatLoss | number:'2.0-0'}} <span>{{resultsUnit}}</span>
         </div>
-        <div *ngIf="loss.heatLoss" class="text-center small">
+        <div *ngIf="!loss.heatLoss" class="text-center small">
           &mdash; &mdash;
         </div>
       </div>
@@ -41,9 +39,7 @@
       <div class="form-group">
         <label class="small">Exhaust Gas Losses</label>
         <div *ngIf="loss.exhaustGas" class="text-center small">
-          {{loss.exhaustGas | number:'2.0-0'}}
-          <span *ngIf="settings.unitsOfMeasure == 'Imperial'">Btu/hr</span>
-          <span *ngIf="settings.unitsOfMeasure == 'Metric'">kJ/hr</span>
+          {{loss.exhaustGas | number:'2.0-0'}} <span>{{resultsUnit}}</span>
         </div>
         <div *ngIf="!loss.exhaustGas" class="text-center small">
           &mdash; &mdash;

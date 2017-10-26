@@ -57,7 +57,8 @@ export const MockDirectory: Directory = {
           daysPerWeek: 7,
           shiftsPerDay: 3,
           hoursPerShift: 8,
-          hoursPerYear: 8736
+          hoursPerYear: 8736,
+          isCalculated: true
         },
         operatingCosts: {
           fuelCost: 8.00,
@@ -132,7 +133,7 @@ export const MockDirectory: Directory = {
               conditionFactor: 1.016,
               surfaceShape: 1,
               correctionFactor: 1.0
-            },
+            }
           ],
           atmosphereLosses: [
             {
@@ -141,7 +142,7 @@ export const MockDirectory: Directory = {
               inletTemperature: 100.0,
               outletTemperature: 1400.0,
               flowRate: 1200.0,
-              correctionFactor: 1.0,
+              correctionFactor: 1.0
             }
           ],
           openingLosses: [

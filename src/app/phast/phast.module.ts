@@ -24,6 +24,7 @@ import { PhastReportModule } from './phast-report/phast-report.module';
 import { PhastDiagramComponent } from './phast-diagram/phast-diagram.component';
 import { PhastResultsService } from './phast-results.service';
 import { EnergyCostsComponent } from './energy-costs/energy-costs.component';
+import { ConvertPhastService } from './convert-phast.service';
 @NgModule({
   declarations: [
     PhastComponent,
@@ -55,7 +56,8 @@ import { EnergyCostsComponent } from './energy-costs/energy-costs.component';
   ],
   providers: [
     PhastService,
-    PhastResultsService
+    PhastResultsService,
+    ConvertPhastService
   ]
 })
 

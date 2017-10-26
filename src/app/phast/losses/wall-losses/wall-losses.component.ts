@@ -32,6 +32,7 @@ export class WallLossesComponent implements OnInit {
 
   _wallLosses: Array<any>;
   firstChange: boolean = true;
+  resultsUnit: string = 'Btu/hr';
   constructor(private phastService: PhastService, private wallLossesService: WallLossesService, private wallLossCompareService: WallLossCompareService, private windowRefService: WindowRefService) { }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -51,6 +52,11 @@ export class WallLossesComponent implements OnInit {
   }
 
   ngOnInit() {
+    if (this.settings.energySourceType == 'Electricity') {
+      this.resultsUnit = 'kW';
+    } else if (this.settings.unitsOfMeasure == 'Metric') {
+      this.resultsUnit = 'kJ/hr';
+    }
     //initialize component data array
     //_wallLosses is array of objects that is used by wall-losses.component
     if (!this._wallLosses) {

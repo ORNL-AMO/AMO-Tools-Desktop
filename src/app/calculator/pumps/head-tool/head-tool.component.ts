@@ -101,6 +101,10 @@ export class HeadToolComponent implements OnInit {
     this.closeTool();
   }
 
+  roundVal(val: number, digits: number) {
+    return Number(val.toFixed(digits))
+  }
+
   calculateHeadTool() {
     let result = this.psatService.headTool(
       this.headToolForm.value.specificGravity,
@@ -154,23 +158,24 @@ export class HeadToolComponent implements OnInit {
   }
 
   initHeadToolSuctionForm(settings: Settings) {
-    let smallUnit;
+    let smallUnit, pressureUnit;
     if (settings.distanceMeasurement == 'ft') {
       smallUnit = 'in'
     } else {
       smallUnit = 'mm'
     }
+
     return this.formBuilder.group({
-      'suctionPipeDiameter': [this.convertUnitsService.value(12).from('in').to(smallUnit), Validators.required],
+      'suctionPipeDiameter': [this.roundVal(this.convertUnitsService.value(12).from('in').to(smallUnit), 2), Validators.required],
       'suctionTankGasOverPressure': [0, Validators.required],
-      'suctionTankFluidSurfaceElevation': [this.convertUnitsService.value(10).from('ft').to(settings.distanceMeasurement), Validators.required],
+      'suctionTankFluidSurfaceElevation': [this.roundVal(this.convertUnitsService.value(10).from('ft').to(settings.distanceMeasurement), 2), Validators.required],
       'suctionLineLossCoefficients': [.5, Validators.required],
-      'dischargePipeDiameter': [this.convertUnitsService.value(12).from('in').to(smallUnit), Validators.required],
-      'dischargeGaugePressure': [124, Validators.required],
-      'dischargeGaugeElevation': [this.convertUnitsService.value(10).from('ft').to(settings.distanceMeasurement), Validators.required],
+      'dischargePipeDiameter': [this.roundVal(this.convertUnitsService.value(12).from('in').to(smallUnit), 2), Validators.required],
+      'dischargeGaugePressure': [this.roundVal(this.convertUnitsService.value(124).from('psi').to(settings.pressureMeasurement), 2), Validators.required],
+      'dischargeGaugeElevation': [this.roundVal(this.convertUnitsService.value(10).from('ft').to(settings.distanceMeasurement), 2), Validators.required],
       'dischargeLineLossCoefficients': [1, Validators.required],
       'specificGravity': [1, Validators.required],
-      'flowRate': [this.convertUnitsService.value(2000).from('gpm').to(settings.flowMeasurement), Validators.required],
+      'flowRate': [this.roundVal(this.convertUnitsService.value(2000).from('gpm').to(settings.flowMeasurement), 2), Validators.required],
     })
   }
 
@@ -182,16 +187,16 @@ export class HeadToolComponent implements OnInit {
       smallUnit = 'mm'
     }
     return this.formBuilder.group({
-      'suctionPipeDiameter': [this.convertUnitsService.value(12).from('in').to(smallUnit), Validators.required],
-      'suctionGuagePressure': [5, Validators.required],
-      'suctionGuageElevation': [this.convertUnitsService.value(10).from('ft').to(settings.distanceMeasurement), Validators.required],
+      'suctionPipeDiameter': [this.roundVal(this.convertUnitsService.value(12).from('in').to(smallUnit), 2), Validators.required],
+      'suctionGuagePressure': [this.roundVal(this.convertUnitsService.value(5).from('psi').to(settings.pressureMeasurement), 2), Validators.required],
+      'suctionGuageElevation': [this.roundVal(this.convertUnitsService.value(10).from('ft').to(settings.distanceMeasurement), 2), Validators.required],
       'suctionLineLossCoefficients': [.5, Validators.required],
-      'dischargePipeDiameter': [this.convertUnitsService.value(12).from('in').to(smallUnit), Validators.required],
-      'dischargeGaugePressure': [124, Validators.required],
-      'dischargeGaugeElevation': [this.convertUnitsService.value(10).from('ft').to(settings.distanceMeasurement), Validators.required],
+      'dischargePipeDiameter': [this.roundVal(this.convertUnitsService.value(12).from('in').to(smallUnit), 2), Validators.required],
+      'dischargeGaugePressure': [this.roundVal(this.convertUnitsService.value(124).from('psi').to(settings.pressureMeasurement), 2), Validators.required],
+      'dischargeGaugeElevation': [this.roundVal(this.convertUnitsService.value(10).from('ft').to(settings.distanceMeasurement), 2), Validators.required],
       'dischargeLineLossCoefficients': [1, Validators.required],
       'specificGravity': [1, Validators.required],
-      'flowRate': [this.convertUnitsService.value(2000).from('gpm').to(settings.flowMeasurement), Validators.required],
+      'flowRate': [this.roundVal(this.convertUnitsService.value(2000).from('gpm').to(settings.flowMeasurement), 2), Validators.required],
     })
   }
 

@@ -428,9 +428,9 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
     let compareVal = this.psat.inputs.motor_field_power;
     if (compareVal > val) {
       if (num == 1) {
-        this.ratedPowerError1 = 'The Field Data Motor Power is to high compared to the Rated Motor Power, please adjust the input values.';
+        this.ratedPowerError1 = 'The Field Data Motor Power is too high compared to the Rated Motor Power, please adjust the input values.';
       } else if (num == 2) {
-        this.ratedPowerError2 = 'The Field Data Motor Power is to high compared to the Rated Motor Power, please adjust the input values.';
+        this.ratedPowerError2 = 'The Field Data Motor Power is too high compared to the Rated Motor Power, please adjust the input values.';
       }
       return false;
     } else {

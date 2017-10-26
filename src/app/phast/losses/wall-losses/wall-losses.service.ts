@@ -38,7 +38,7 @@ export class WallLossesService {
       'surfaceArea': ['', Validators.required],
       'avgSurfaceTemp': ['', Validators.required],
       'ambientTemp': ['', Validators.required],
-      'correctionFactor': ['', Validators.required],
+      'correctionFactor': [1.0, Validators.required],
       'windVelocity': ['', Validators.required],
       'surfaceShape': ['Vertical Plates', Validators.required],
       'conditionFactor': [1.394, Validators.required],

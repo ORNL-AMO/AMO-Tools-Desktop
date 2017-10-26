@@ -4,6 +4,9 @@ import { BehaviorSubject } from 'rxjs';
 import { Directory } from '../shared/models/directory';
 import { IndexedDbService } from '../indexedDb/indexed-db.service';
 import { PSAT, PsatOutputs } from '../shared/models/psat';
+import { PHAST, ExecutiveSummary } from '../shared/models/phast/phast';
+import { PhastResultsService } from '../phast/phast-results.service';
+import { ExecutiveSummaryService } from '../phast/phast-report/executive-summary.service';
 import * as _ from 'lodash';
 import { PsatService } from '../psat/psat.service';
 
@@ -19,16 +22,25 @@ export class ReportRollupService {
   psatArray: Array<Assessment>;
 
   selectedPsats: BehaviorSubject<Array<PsatCompare>>;
-  psatResults: BehaviorSubject<Array<ResultsData>>;
-  allPsatResults: BehaviorSubject<Array<AllResultsData>>;
-  constructor(private indexedDbService: IndexedDbService, private psatService: PsatService) {
+  psatResults: BehaviorSubject<Array<PsatResultsData>>;
+  allPsatResults: BehaviorSubject<Array<AllPsatResultsData>>;
+
+  selectedPhasts: BehaviorSubject<Array<PhastCompare>>;
+  phastResults: BehaviorSubject<Array<PhastResultsData>>;
+  allPhastResults: BehaviorSubject<Array<AllPhastResultsData>>;
+
+  constructor(private indexedDbService: IndexedDbService, private psatService: PsatService, private phastResultsService: PhastResultsService, private executiveSummaryService: ExecutiveSummaryService) {
     this.reportAssessments = new BehaviorSubject<Array<Assessment>>(new Array<Assessment>());
     this.phastAssessments = new BehaviorSubject<Array<Assessment>>(new Array<Assessment>())
     this.psatAssessments = new BehaviorSubject<Array<Assessment>>(new Array<Assessment>())
 
     this.selectedPsats = new BehaviorSubject<Array<PsatCompare>>(new Array<PsatCompare>());
-    this.psatResults = new BehaviorSubject<Array<ResultsData>>(new Array<ResultsData>());
-    this.allPsatResults = new BehaviorSubject<Array<AllResultsData>>(new Array<AllResultsData>());
+    this.psatResults = new BehaviorSubject<Array<PsatResultsData>>(new Array<PsatResultsData>());
+    this.allPsatResults = new BehaviorSubject<Array<AllPsatResultsData>>(new Array<AllPsatResultsData>());
+
+    this.selectedPhasts = new BehaviorSubject<Array<PhastCompare>>(new Array<PhastCompare>());
+    this.phastResults = new BehaviorSubject<Array<PhastResultsData>>(new Array<PhastResultsData>());
+    this.allPhastResults = new BehaviorSubject<Array<AllPhastResultsData>>(new Array<AllPhastResultsData>());
   }
 
   pushAssessment(assessment: Assessment) {
@@ -85,7 +97,7 @@ export class ReportRollupService {
 
 
   //USED FOR PSAT SUMMARY
-  initPsatCompare(resultsArr: Array<AllResultsData>) {
+  initPsatCompare(resultsArr: Array<AllPsatResultsData>) {
     let tmpResults: Array<PsatCompare> = new Array<PsatCompare>();
     resultsArr.forEach(result => {
       let minCost = _.minBy(result.modificationResults, (result) => { return result.annual_cost })
@@ -106,7 +118,7 @@ export class ReportRollupService {
   }
 
   initResultsArr(psatArr: Array<Assessment>) {
-    let tmpResultsArr = new Array<AllResultsData>();
+    let tmpResultsArr = new Array<AllPsatResultsData>();
     psatArr.forEach(val => {
       if (val.psat.setupDone && (val.psat.modifications.length != 0)) {
         this.indexedDbService.getAssessmentSettings(val.id).then(settings => {
@@ -129,7 +141,7 @@ export class ReportRollupService {
   }
 
   getResultsFromSelected(selectedPsats: Array<PsatCompare>) {
-    let tmpResultsArr = new Array<ResultsData>();
+    let tmpResultsArr = new Array<PsatResultsData>();
     selectedPsats.forEach(val => {
       this.indexedDbService.getAssessmentSettings(val.assessmentId).then(settings => {
         let modificationResults;
@@ -144,6 +156,62 @@ export class ReportRollupService {
       })
     })
   }
+
+  //USED FORM PSAT SUMMARY
+  initPhastCompare(resultsArr: Array<AllPhastResultsData>) {
+    let tmpResults: Array<PhastCompare> = new Array<PhastCompare>();
+    resultsArr.forEach(result => {
+      let minCost = _.minBy(result.modificationResults, (result) => { return result.annualCost })
+      if (minCost) {
+        let modIndex = _.findIndex(result.modificationResults, { annualCost: minCost.annualCost });
+        if (modIndex != -1) {
+          let phastAssessments = this.phastAssessments.value;
+          let assessmentIndex = _.findIndex(phastAssessments, { id: result.assessmentId });
+          let assessment = phastAssessments[assessmentIndex];
+          tmpResults.push({ baseline: assessment.phast, modification: assessment.phast.modifications[modIndex].phast, assessmentId: result.assessmentId });
+        }
+      }
+    });
+    this.selectedPhasts.next(tmpResults);
+  }
+
+  updateSelectedPhasts(assessment: Assessment, modIndex: number) {
+    let tmpSelected = this.selectedPhasts.value;
+    let selectedIndex = _.findIndex(tmpSelected, { assessmentId: assessment.id });
+    tmpSelected.splice(selectedIndex, 1, { baseline: assessment.phast, modification: assessment.phast.modifications[modIndex].phast, assessmentId: assessment.id });
+    this.selectedPhasts.next(tmpSelected);
+  }
+
+  initPhastResultsArr(phastArray: Array<Assessment>) {
+    let tmpResultsArr = new Array<AllPhastResultsData>();
+    phastArray.forEach(val => {
+      if (val.phast.setupDone && (val.phast.modifications.length != 0)) {
+        this.indexedDbService.getAssessmentSettings(val.id).then(settings => {
+          let baselineResults = this.executiveSummaryService.getSummary(val.phast, false, settings[0], val.phast)
+          let modResultsArr = new Array<ExecutiveSummary>();
+          val.phast.modifications.forEach(mod => {
+            let tmpResults = this.executiveSummaryService.getSummary(mod.phast, true, settings[0], val.phast, baselineResults);
+            modResultsArr.push(tmpResults);
+          })
+          tmpResultsArr.push({ baselineResults: baselineResults, modificationResults: modResultsArr, assessmentId: val.id });
+          this.allPhastResults.next(tmpResultsArr);
+        })
+      }
+    })
+  }
+
+  getPhastResultsFromSelected(selectedPhasts: Array<PhastCompare>) {
+    let tmpResultsArr = new Array<PhastResultsData>();
+    selectedPhasts.forEach(val => {
+      this.indexedDbService.getAssessmentSettings(val.assessmentId).then(settings => {
+        let baselineResults = this.executiveSummaryService.getSummary(val.baseline, false, settings[0], val.baseline);
+        let modificationResults = this.executiveSummaryService.getSummary(val.modification, true, settings[0], val.baseline, baselineResults);
+        tmpResultsArr.push({ baselineResults: baselineResults, modificationResults: modificationResults, assessmentId: val.assessmentId });
+        this.phastResults.next(tmpResultsArr);
+      })
+    })
+  }
+
 }
 
 export interface PsatCompare {
@@ -153,15 +221,36 @@ export interface PsatCompare {
 }
 
 
-export interface ResultsData {
+export interface PsatResultsData {
   baselineResults: PsatOutputs,
   modificationResults: PsatOutputs,
   assessmentId: number
 }
 
 
-export interface AllResultsData {
+export interface AllPsatResultsData {
   baselineResults: PsatOutputs,
   modificationResults: Array<PsatOutputs>,
+  assessmentId: number
+}
+
+
+export interface PhastCompare {
+  baseline: PHAST,
+  modification: PHAST,
+  assessmentId: number
+}
+
+
+export interface PhastResultsData {
+  baselineResults: ExecutiveSummary,
+  modificationResults: ExecutiveSummary,
+  assessmentId: number
+}
+
+
+export interface AllPhastResultsData {
+  baselineResults: ExecutiveSummary,
+  modificationResults: Array<ExecutiveSummary>,
   assessmentId: number
 }

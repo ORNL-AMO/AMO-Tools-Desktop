@@ -72,7 +72,8 @@ export class PsatSettingsComponent implements OnInit {
     })
     tmpList = [
       'kPa',
-      'psi'
+      'psi',
+      'bar'
     ];
     tmpList.forEach(unit => {
       let tmpPossibility = {

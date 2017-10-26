@@ -28,20 +28,38 @@ export class PhastBarChartComponent implements OnInit {
   modificationData: any = {};
 
 
-  options: any = {
-    legend: {
-      display: false
-    }
-  }
+  options: any = {}
   @ViewChild(BaseChartDirective) private baseChart;
 
   constructor() { }
 
   ngOnInit() {
-    let units = 'Btu/lb';
-    if (this.settings.unitsOfMeasure == 'Metric') {
+
+    let units;
+    if (this.settings.energySourceType == 'Electricity') {
+      units = 'kW';
+    } else if (this.settings.unitsOfMeasure == 'Metric') {
       units = 'kJ/kg';
+    } else if (this.settings.unitsOfMeasure == 'Imperial') {
+      units = 'Btu/lb';
     }
+
+    this.options = {
+      legend: {
+        display: false
+      },
+      scales: {
+        yAxes: [{
+          scaleLabel: {
+            display: true,
+            labelString: 'Heat Loss (' + units + ')',
+            fontStyle: 'bold',
+            fontSize: 16
+          }
+        }]
+      }
+    }
+
     this.baselineData = {
       data: new Array<number>(),
       label: ' Baseline (' + units + ')',

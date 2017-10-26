@@ -58,7 +58,7 @@ export class CoolingLossesService {
       'liquidFlow': ['', Validators.required],
       'inletTemp': ['', Validators.required],
       'outletTemp': ['', Validators.required],
-      'correctionFactor': [1, Validators.required],
+      'correctionFactor': [1.0, Validators.required],
     });
   }
 
@@ -91,7 +91,7 @@ export class CoolingLossesService {
       'gasFlow': ['', Validators.required],
       'inletTemp': ['', Validators.required],
       'outletTemp': ['', Validators.required],
-      'correctionFactor': ['', Validators.required],
+      'correctionFactor': [1.0, Validators.required],
       'gasDensity': [0.074887, Validators.required]
     });
   }

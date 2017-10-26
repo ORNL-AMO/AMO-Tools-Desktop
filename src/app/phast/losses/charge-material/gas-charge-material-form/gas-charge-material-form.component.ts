@@ -100,6 +100,7 @@ export class GasChargeMaterialFormComponent implements OnInit {
     this.chargeMaterialForm.patchValue({
       materialSpecificHeat: selectedMaterial.specificHeatVapor,
     });
+    this.calculate.emit(true);
   }
   emitSave() {
     this.saveEmit.emit(true);

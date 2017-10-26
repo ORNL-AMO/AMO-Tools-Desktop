@@ -91,7 +91,8 @@ export interface OperatingHours {
   shiftsPerDay?: number,
   hoursPerShift?: number,
   hoursPerYear?: number,
-  isCalculated?: boolean
+  isCalculated?: boolean,
+  operatingConditions?: string
 }
 
 export interface PhastResults {
@@ -120,7 +121,8 @@ export interface PhastResults {
   flueGasGrossHeat: number,
   flueGasAvailableHeat: number,
   grossHeatInput: number,
-  heatingSystemEfficiency: number
+  heatingSystemEfficiency: number,
+  availableHeatPercent: number
 }
 
 export interface ShowResultsCategories {

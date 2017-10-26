@@ -32,6 +32,8 @@ export class AtmosphereLossesComponent implements OnInit {
 
   _atmosphereLosses: Array<any>;
   firstChange: boolean = true;
+
+  resultsUnit: string = 'Btu/hr';
   constructor(private atmosphereLossesService: AtmosphereLossesService, private phastService: PhastService, private atmosphereLossesCompareService: AtmosphereLossesCompareService) { }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -49,6 +51,12 @@ export class AtmosphereLossesComponent implements OnInit {
   }
 
   ngOnInit() {
+    if(this.settings.energySourceType == 'Electricity'){
+      this.resultsUnit = 'kW';
+    }else if(this.settings.unitsOfMeasure == 'Metric'){
+      this.resultsUnit = 'kJ/hr';
+    }
+
     if (!this._atmosphereLosses) {
       this._atmosphereLosses = new Array();
     }

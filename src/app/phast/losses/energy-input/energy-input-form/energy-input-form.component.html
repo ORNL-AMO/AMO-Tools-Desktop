@@ -51,7 +51,7 @@
       <div class="input-group">
         <input name="{{'coalHeatingValue_'+lossIndex}}" type="number" step="any" min="0" class="form-control" formControlName="coalHeatingValue" id="coalHeatingValue" onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('coalHeatingValue')">
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">Btu/lb</span>
-        <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kg/lb</span>
+        <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kJ/kg</span>
 
       </div>
     </div>
@@ -70,7 +70,7 @@
       <div class="input-group">
         <input name="{{'electrodeHeatingValue_'+lossIndex}}" type="number" step="any" min="0" class="form-control" formControlName="electrodeHeatingValue" id="electrodeHeatingValue" onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('electrodeHeatingValue')">
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">Btu/lb</span>
-        <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kg/lb</span>
+        <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kJ/kg/</span>
       </div>
     </div>
 
@@ -78,7 +78,7 @@
       <label class="small" for="otherFuels">Other Fuels</label>
       <div class="input-group">
         <input name="{{'otherFuels_'+lossIndex}}" type="number" step="any" min="0" class="form-control" formControlName="otherFuels" id="otherFuels" onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('otherFuels')">
-        <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">mm Btu/hr</span>
+        <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">MM Btu/hr</span>
         <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">GJ/hr</span>
       </div>
     </div>
@@ -87,7 +87,7 @@
       <label class="small" for="electricityInput">Electricty Input</label>
       <div class="input-group">
         <input name="{{'electricityInput_'+lossIndex}}" type="number" step="any" min="0" class="form-control" formControlName="electricityInput" id="electricityInput" onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('electricityInput')">
-        <span class="input-group-addon units">kWh/hr</span>
+        <span class="input-group-addon units">kW</span>
       </div>
     </div>
   </div>
