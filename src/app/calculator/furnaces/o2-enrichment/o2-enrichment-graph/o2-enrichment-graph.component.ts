@@ -39,7 +39,7 @@ export class O2EnrichmentGraphComponent implements OnInit {
   mainLine: any;
   selectedLine: number;
   guideLine: any;
-  xPosition: any = 0;
+  xPosition: any = null;
 
   maxFuelSavings: any;
   removeLines: any = true;
@@ -600,7 +600,6 @@ export class O2EnrichmentGraphComponent implements OnInit {
         lineDetail2.append("td")
           .attr("class", "text-center fuelSavings")
           .html(() => {
-
             const format = d3.format(",.2f");
             const o2EnrichmentPoint = {
               o2CombAir: this.o2Enrichment.o2CombAir,
