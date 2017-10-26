@@ -43,8 +43,6 @@ export class LossesComponent implements OnInit {
   constructor(private lossesService: LossesService) { }
 
   ngOnInit() {
-    console.log(this.phast);
-    // this.changeField('default');
     this._modifications = new Array<Modification>();
     if (!this.phast.losses) {
       //initialize losses
@@ -79,7 +77,7 @@ export class LossesComponent implements OnInit {
   }
 
   ngOnDestroy() {
-    this.lossesService.lossesTab.next('charge-material');
+   // this.lossesService.lossesTab.next('charge-material');
   }
 
   changeField($event) {
@@ -122,6 +120,7 @@ export class LossesComponent implements OnInit {
     tmpModification.phast.name = 'Modification ' + (this._modifications.length + 1);
     tmpModification.phast.operatingCosts = (JSON.parse(JSON.stringify(this.phast.operatingCosts)));
     tmpModification.phast.operatingHours = (JSON.parse(JSON.stringify(this.phast.operatingHours)));
+    tmpModification.phast.systemEfficiency = (JSON.parse(JSON.stringify(this.phast.systemEfficiency)));
     this._modifications.unshift(tmpModification);
     this.modificationIndex = this._modifications.length - 1;
     this.modificationSelected = true;

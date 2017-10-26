@@ -25,6 +25,7 @@ export class OperatingHoursComponent implements OnInit {
         daysPerWeek: 7,
         shiftsPerDay: 3,
         hoursPerShift: 8,
+        hoursPerYear: 8736
       }
       this.phast.operatingHours = defaultHours;
       this.calculatHrsPerYear();

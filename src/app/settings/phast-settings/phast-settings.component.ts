@@ -13,11 +13,9 @@ export class PhastSettingsComponent implements OnInit {
   startSavePolling = new EventEmitter<boolean>();
 
   fuelFiredOptions: Array<string> = [
-    'Ladle Heater 1',
-    'Ladle Heater 2',
+    'Ladle Heater',
     'Reheat Furnace',
-    'Tundish Heater 1',
-    'Tundish Heater 2'
+    'Tundish Heater'
   ]
 
   electrotechOptions: Array<string> = [
@@ -42,7 +40,7 @@ export class PhastSettingsComponent implements OnInit {
   setOptions() {
     if (this.settingsForm.value.energySourceType == 'Fuel') {
       this.settingsForm.patchValue({
-        furnaceType: 'Ladle Heater 1'
+        furnaceType: 'Ladle Heater'
       })
     } else if (this.settingsForm.value.energySourceType == 'Electricity') {
       this.settingsForm.patchValue({
