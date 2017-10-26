@@ -1,22 +1,22 @@
 <ul class="tabs subtabs">
   <li [ngClass]="{'active': lossesTab == 'charge-material'}" (click)="tabChange('charge-material')">
     <a class="nav-link small">
-    Charge Material
+    <span class="required-asterisk">*</span>Charge Material <span class="badge gray-badge"><strong>2</strong> losses</span>
     </a>
   </li><!--
   --><li [ngClass]="{'active': lossesTab == 'fixture-losses'}" (click)="tabChange('fixture-losses')">
   <a class="nav-link small">
-    Fixtures, Trays, etc.
+    <span class="required-asterisk">*</span>Fixtures, Trays, etc. <span class="badge gray-badge"><strong>8</strong> losses</span>
   </a>
   </li><!--
   --><li [ngClass]="{'active': lossesTab == 'wall-losses'}" (click)="tabChange('wall-losses')">
     <a class="nav-link small">
-    Wall
+    <span class="required-asterisk">*</span>Wall <span class="badge gray-badge"><strong>10</strong> losses</span>
     </a>
   </li><!--
   --><li [ngClass]="{'active': lossesTab == 'cooling-losses'}" (click)="tabChange('cooling-losses')">
   <a class="nav-link small">
-    Cooling
+    Cooling <span class="badge gray-badge"><strong>1</strong> losses</span>
   </a>
   </li><!--
   --><li [ngClass]="{'active': lossesTab == 'atmosphere-losses'}" (click)="tabChange('atmosphere-losses')">
