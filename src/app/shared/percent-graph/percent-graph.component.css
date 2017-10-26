@@ -12,14 +12,6 @@ h1 {
     margin-bottom: 0;
 }
 
-canvas {
-	display: block;
-    float: left;
-    height: 30px !important;
-    width: 30px !important;
-    margin: 0px 5px 0 0;
-}
-
 @keyframes value-entrance{
     0% {opacity: 0;}
     50% {opacity: 0;}
