@@ -5,6 +5,9 @@ import { Settings } from '../../shared/models/settings';
 import { Assessment } from '../../shared/models/assessment';
 import { IndexedDbService } from '../../indexedDb/indexed-db.service';
 import { Directory } from '../../shared/models/directory';
+import { ReportRollupService } from '../../report-rollup/report-rollup.service';
+
+
 @Component({
   selector: 'app-phast-report',
   templateUrl: './phast-report.component.html',
@@ -23,9 +26,10 @@ export class PhastReportComponent implements OnInit {
 
   currentTab: string = 'energy-used';
   assessmentDirectories: Array<Directory>;
-  constructor(private phastService: PhastService, private indexedDbService: IndexedDbService) { }
+  constructor(private phastService: PhastService, private indexedDbService: IndexedDbService, private reportRollupService: ReportRollupService) { }
 
   ngOnInit() {
+    console.log(this.inPhast)
     if (this.assessment.phast && this.settings && !this.phast) {
       this.phast = this.assessment.phast;
     } else if (this.assessment.phast && !this.settings) {

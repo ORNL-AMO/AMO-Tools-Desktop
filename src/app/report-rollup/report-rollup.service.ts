@@ -105,7 +105,7 @@ export class ReportRollupService {
       let psatAssessments = this.psatAssessments.value;
       let assessmentIndex = _.findIndex(psatAssessments, { id: result.assessmentId });
       let assessment = psatAssessments[assessmentIndex];
-      tmpResults.push({ baseline: assessment.psat, modification: assessment.psat.modifications[modIndex].psat, assessmentId: result.assessmentId });
+      tmpResults.push({ baseline: assessment.psat, modification: assessment.psat.modifications[modIndex].psat, assessmentId: result.assessmentId, selectedIndex: modIndex });
     });
     this.selectedPsats.next(tmpResults);
   }
@@ -113,7 +113,7 @@ export class ReportRollupService {
   updateSelectedPsats(assessment: Assessment, modIndex: number) {
     let tmpSelected = this.selectedPsats.value;
     let selectedIndex = _.findIndex(tmpSelected, { assessmentId: assessment.id });
-    tmpSelected.splice(selectedIndex, 1, { baseline: assessment.psat, modification: assessment.psat.modifications[modIndex].psat, assessmentId: assessment.id });
+    tmpSelected.splice(selectedIndex, 1, { baseline: assessment.psat, modification: assessment.psat.modifications[modIndex].psat, assessmentId: assessment.id, selectedIndex: modIndex });
     this.selectedPsats.next(tmpSelected);
   }
 
@@ -168,7 +168,7 @@ export class ReportRollupService {
           let phastAssessments = this.phastAssessments.value;
           let assessmentIndex = _.findIndex(phastAssessments, { id: result.assessmentId });
           let assessment = phastAssessments[assessmentIndex];
-          tmpResults.push({ baseline: assessment.phast, modification: assessment.phast.modifications[modIndex].phast, assessmentId: result.assessmentId });
+          tmpResults.push({ baseline: assessment.phast, modification: assessment.phast.modifications[modIndex].phast, assessmentId: result.assessmentId, selectedIndex: assessmentIndex });
         }
       }
     });
@@ -178,24 +178,26 @@ export class ReportRollupService {
   updateSelectedPhasts(assessment: Assessment, modIndex: number) {
     let tmpSelected = this.selectedPhasts.value;
     let selectedIndex = _.findIndex(tmpSelected, { assessmentId: assessment.id });
-    tmpSelected.splice(selectedIndex, 1, { baseline: assessment.phast, modification: assessment.phast.modifications[modIndex].phast, assessmentId: assessment.id });
+    tmpSelected.splice(selectedIndex, 1, { baseline: assessment.phast, modification: assessment.phast.modifications[modIndex].phast, assessmentId: assessment.id, selectedIndex: modIndex });
     this.selectedPhasts.next(tmpSelected);
   }
 
   initPhastResultsArr(phastArray: Array<Assessment>) {
     let tmpResultsArr = new Array<AllPhastResultsData>();
     phastArray.forEach(val => {
-      if (val.phast.setupDone && (val.phast.modifications.length != 0)) {
-        this.indexedDbService.getAssessmentSettings(val.id).then(settings => {
-          let baselineResults = this.executiveSummaryService.getSummary(val.phast, false, settings[0], val.phast)
-          let modResultsArr = new Array<ExecutiveSummary>();
-          val.phast.modifications.forEach(mod => {
-            let tmpResults = this.executiveSummaryService.getSummary(mod.phast, true, settings[0], val.phast, baselineResults);
-            modResultsArr.push(tmpResults);
+      if (val.phast.setupDone && val.phast.modifications) {
+        if (val.phast.modifications.length != 1) {
+          this.indexedDbService.getAssessmentSettings(val.id).then(settings => {
+            let baselineResults = this.executiveSummaryService.getSummary(val.phast, false, settings[0], val.phast)
+            let modResultsArr = new Array<ExecutiveSummary>();
+            val.phast.modifications.forEach(mod => {
+              let tmpResults = this.executiveSummaryService.getSummary(mod.phast, true, settings[0], val.phast, baselineResults);
+              modResultsArr.push(tmpResults);
+            })
+            tmpResultsArr.push({ baselineResults: baselineResults, modificationResults: modResultsArr, assessmentId: val.id });
+            this.allPhastResults.next(tmpResultsArr);
           })
-          tmpResultsArr.push({ baselineResults: baselineResults, modificationResults: modResultsArr, assessmentId: val.id });
-          this.allPhastResults.next(tmpResultsArr);
-        })
+        }
       }
     })
   }
@@ -217,7 +219,8 @@ export class ReportRollupService {
 export interface PsatCompare {
   baseline: PSAT,
   modification: PSAT,
-  assessmentId: number
+  assessmentId: number,
+  selectedIndex: number
 }
 
 
@@ -238,7 +241,8 @@ export interface AllPsatResultsData {
 export interface PhastCompare {
   baseline: PHAST,
   modification: PHAST,
-  assessmentId: number
+  assessmentId: number,
+  selectedIndex: number
 }
 
 

@@ -54,6 +54,8 @@ export class EnergyUsedComponent implements OnInit {
   energyPerMassUnit: string = 'BTU/lb';
   energyPerTimeUnit: string = 'BTU/hr';
   energyCostUnit: string = '/MMBTU';
+
+
   constructor(private designedEnergyService: DesignedEnergyService, private meteredEnergyService: MeteredEnergyService, private phastResultsService: PhastResultsService, private suiteDbService: SuiteDbService, private phastService: PhastService) { }
 
   ngOnInit() {
