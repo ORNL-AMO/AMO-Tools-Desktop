@@ -1,9 +1,9 @@
 <div *ngIf="assessment && settings">
   <div class="sticky-top">
     <app-phast-banner [assessment]="assessment"></app-phast-banner>
-    <app-phast-tabs *ngIf="mainTab != 'system-setup'"></app-phast-tabs>
+    <app-phast-tabs *ngIf="mainTab == 'assessment'"></app-phast-tabs>
     <nav>
-      <app-losses-tabs *ngIf="currentTab == 'losses'" [settings]="settings"></app-losses-tabs>
+      <app-losses-tabs *ngIf="currentTab == 'losses' && mainTab == 'assessment'" [settings]="settings"></app-losses-tabs>
     </nav>
   </div>
 

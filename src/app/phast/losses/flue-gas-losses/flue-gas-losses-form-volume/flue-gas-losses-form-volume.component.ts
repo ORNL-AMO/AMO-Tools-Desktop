@@ -77,9 +77,7 @@ export class FlueGasLossesFormVolumeComponent implements OnInit {
   }
 
   checkForm() {
-    if (this.flueGasLossForm.status == "VALID") {
-      this.calculate.emit(true);
-    }
+    this.calculate.emit(true);
   }
 
   focusField(str: string) {
@@ -173,9 +171,9 @@ export class FlueGasLossesFormVolumeComponent implements OnInit {
       this.options = this.suiteDbService.selectGasFlueGasMaterials();
       let newMaterial = this.options.filter(material => { return material.substance == event.substance })
       if (newMaterial.length != 0) {
-         this.flueGasLossForm.patchValue({
-           gasTypeId: newMaterial[0].id
-         })
+        this.flueGasLossForm.patchValue({
+          gasTypeId: newMaterial[0].id
+        })
         this.setProperties();
       }
     }

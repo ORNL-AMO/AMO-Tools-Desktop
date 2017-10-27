@@ -51,6 +51,7 @@ import { HeatSystemEfficiencyHelpComponent } from './losses-help/heat-system-eff
 import { OperationsModule } from './operations/operations.module';
 import { OperationsHelpComponent } from './losses-help/operations-help/operations-help.component';
 import { LossesSplashPageComponent } from './losses-splash-page/losses-splash-page.component';
+
 @NgModule({
   imports: [
     CommonModule,
