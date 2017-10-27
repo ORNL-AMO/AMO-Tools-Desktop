@@ -264,11 +264,11 @@ export class O2EnrichmentGraphComponent implements OnInit {
 
     this.svg.style("display", null);
 
-    this.detailBox = d3.select('app-o2-enrichment-graph').append('div')
-      .attr('id', 'detailBox')
-      .attr('class', 'd3-tip')
-      .style('opacity', 0)
-      .style('pointer-events', 'none');
+    // this.detailBox = d3.select('app-o2-enrichment-graph').append('div')
+    //   .attr('id', 'detailBox')
+    //   .attr('class', 'd3-tip')
+    //   .style('opacity', 0)
+    //   .style('pointer-events', 'none');
 
     this.change = true;
   }
@@ -534,24 +534,34 @@ export class O2EnrichmentGraphComponent implements OnInit {
     // Always display mainLine details to detail box
     lineDetail.append("td")
       .attr("class", "text-center")
+      .style("padding", "0px")
+      .style("width", "30px")
       .style("background-color", this.mainLine.color);
 
     lineDetail.append("td")
       .attr("class", "text-center")
+      .style("vertical-align", "middle")
+      .style("padding", "1px")
       .html(() => {
         if (this.xPosition != null) {
           const format = d3.format(",.2f");
           return "<p style='margin: 0px; font-size: 1vw'>" + format(this.xPosition) + "%</p>";
         }
         else {
-          return "<i class='fa fa-minus' style='margin: 0px; font-size: 1vw; vertical-align: middle: height: 100%;'></i>" +
-            " <i class='fa fa-minus' style='margin: 0px; font-size: 1vw; vertical-align: middle: height: 100%;'></i>" +
-            " <i class='fa fa-minus' style='margin: 0px; font-size: 1vw; vertical-align: middle: height: 100%;'></i>";
+          // return "<i class='fa fa-minus' style='margin: 0px; font-size: 0.75vw; vertical-align: middle: height: 100%;'></i>" +
+          //   " <i class='fa fa-minus' style='margin: 0px; font-size: 0.75vw; vertical-align: middle: height: 100%;'></i>" +
+          //   " <i class='fa fa-minus' style='margin: 0px; font-size: 0.75vw; vertical-align: middle: height: 100%;'></i>";
+          return "<i class='fa fa-minus' style='margin: 0px; font-size: 0.75vw;'></i>" +
+            " <i class='fa fa-minus' style='margin: 0px; font-size: 0.75vw;'></i>" +
+            " <i class='fa fa-minus' style='margin: 0px; font-size: 0.75vw;'></i>";
         }
       });
 
     lineDetail.append("td")
       .attr("class", "text-center fuelSavings")
+      .style("vertical-align", "middle")
+      .style("padding", "1px")
+      .style('font', '13px sans-serif')
       .html(() => {
         if (this.xPosition) {
           const format = d3.format(",.2f");
@@ -570,9 +580,15 @@ export class O2EnrichmentGraphComponent implements OnInit {
           const fuelSavings = this.phastService.o2Enrichment(o2EnrichmentPoint).fuelSavingsEnriched;
 
           if (fuelSavings < 0 || fuelSavings > 100 || this.xPosition == null) {
-            return "<i class='fa fa-minus' style='margin: 0px; font-size: 1vw; vertical-align: middle: height: 100%;'></i>" +
-              " <i class='fa fa-minus' style='margin: 0px; font-size: 1vw; vertical-align: middle: height: 100%;'></i>" +
-              " <i class='fa fa-minus' style='margin: 0px; font-size: 1vw; vertical-align: middle: height: 100%;'></i>";
+            // return "<i class='fa fa-minus' style='margin: 0px; font-size: 0.75vw; vertical-align: middle: height: 100%;'></i>" +
+            //   " <i class='fa fa-minus' style='margin: 0px; font-size: 0.75vw; vertical-align: middle: height: 100%;'></i>" +
+            //   " <i class='fa fa-minus' style='margin: 0px; font-size: 0.75vw; vertical-align: middle: height: 100%;'></i>";
+            return "<i class='fa fa-minus' style='margin: 0px; font-size: 0.75vw;'></i>" +
+              " <i class='fa fa-minus' style='margin: 0px; font-size: 0.75vw;'></i>" +
+              " <i class='fa fa-minus' style='margin: 0px; font-size: 0.75vw;'></i>";
+            // return "<i class='fa fa-minus' style='margin: 0px;'></i>" +
+            //   " <i class='fa fa-minus' style='margin: 0px;'></i>" +
+            //   " <i class='fa fa-minus' style='margin: 0px;'></i>";
           }
           else {
             return "<p style='margin: 0px; font-size: 1vw'>" + format(fuelSavings) + "%</p>";
@@ -580,75 +596,52 @@ export class O2EnrichmentGraphComponent implements OnInit {
         }
       });
 
+    lineDetail.append('td')
+      .attr('class', 'text-center')
+      .style("vertical-align", "middle")
+      .style('padding', '1px')
+      .style('font', '13px sans-serif')
+      .html(
+        '<strong><div>Current Conditions</strong></div>'
+      );
+
 
     if (this.lines != null) {
       this.lines.forEach((d, i) => {
 
         const lineDetail2 = d3.select('app-o2-enrichment').selectAll('#lineDetails').append('tr')
-          .on('mouseover', () => {
-            this.detailBox
-              .style('display', null)
-              .style('pointer-events', 'none');
-
-            this.detailBox.transition()
-              .style('opacity', 1);
-
-            const format = d3.format(',.2f');
-            this.detailBox
-              .style('padding-right', '3px')
-              .style('padding-left', '3px')
-              .style('padding-top', '3px')
-              .style('padding-bottom', '3px')
-              .html(
-                '<strong><div>Combustion Air Preheat Temperature: </strong>' + format(d.combAirTempEnriched) + ' &#8457;</div>' +
-                '<strong><div>O<sub>2</sub> in Enriched Flue Gasses: </strong>' + format(d.o2FlueGasEnriched) + ' %</div>' +
-                '<strong><div>Flue Gas Temperature: </strong>' + format(d.flueGasTempEnriched) + ' ' + ' &#8457;</div>'
-              )
-              .style('left', (this.margin.left) + 'px')
-              // .style('left', (this.margin.left + this.x(-73)) + 'px')
-              // TODO would be nice to have this move along side the detailBoxes
-              // .style('top', (this.margin.top + this.y(-5 - 3 * i)) + 'px')
-              .style('top', (this.margin.top) + 'px')
-              .style('position', 'absolute')
-              .style('width', 250 + 'px')
-              .style('height', 51 + 'px')
-              .style('font', '11px sans-serif')
-              .style('background', '#ffffff')
-              .style('border', '1px')
-              .style('pointer-events', 'none');
-
-            this.detailBox
-              .style('display', null)
-              .style('pointer-events', 'none');
-          })
-          .on('mouseout', () => {
-            this.detailBox
-              .transition()
-              .delay(100)
-              .duration(600)
-              .style('opacity', 0);
-          });
+          //   this.detailBox
+          //     .style('padding-right', '3px')
+          //     .style('padding-left', '3px')
+          //     .style('padding-top', '3px')
+          //     .style('padding-bottom', '3px')
 
         lineDetail2.append('td')
           .attr('class', 'text-center')
+          .style("padding", "0px")
+          .style("width", "40px")
           .style('background-color', d.color);
 
         lineDetail2.append('td')
           .attr('class', 'text-center')
+          .style("padding", "1px")
+          .style("vertical-align", "middle")
           .html(() => {
             if (this.xPosition != null) {
               const format = d3.format(',.2f');
               return "<p style='margin: 0px; font-size: 1vw'>" + format(this.xPosition) + '%</p>';
             }
             else {
-              return "<i class='fa fa-minus' style='margin: 0px; font-size: 1vw; vertical-align: middle: height: 100%;'></i>" +
-                " <i class='fa fa-minus' style='margin: 0px; font-size: 1vw; vertical-align: middle: height: 100%;'></i>" +
-                " <i class='fa fa-minus' style='margin: 0px; font-size: 1vw; vertical-align: middle: height: 100%;'></i>";
+              return "<i class='fa fa-minus' style='margin: 0px; font-size: 0.75vw; vertical-align: middle: height: 100%;'></i>" +
+                " <i class='fa fa-minus' style='margin: 0px; font-size: 0.75vw; vertical-align: middle: height: 100%;'></i>" +
+                " <i class='fa fa-minus' style='margin: 0px; font-size: 0.75vw; vertical-align: middle: height: 100%;'></i>";
             }
           });
 
         lineDetail2.append('td')
           .attr('class', 'text-center fuelSavings')
+          .style("padding", "1px")
+          .style("vertical-align", "middle")
           .html(() => {
             const format = d3.format(',.2f');
             const o2EnrichmentPoint = {
@@ -666,14 +659,26 @@ export class O2EnrichmentGraphComponent implements OnInit {
             const fuelSavings = this.phastService.o2Enrichment(o2EnrichmentPoint).fuelSavingsEnriched;
 
             if (fuelSavings < 0 || fuelSavings > 100 || this.xPosition == null) {
-              return "<i class='fa fa-minus' style='margin: 0px; font-size: 1vw; vertical-align: middle: height: 100%;'></i>" +
-                " <i class='fa fa-minus' style='margin: 0px; font-size: 1vw; vertical-align: middle: height: 100%;'></i>" +
-                " <i class='fa fa-minus' style='margin: 0px; font-size: 1vw; vertical-align: middle: height: 100%;'></i>";
+              return "<i class='fa fa-minus' style='margin: 0px; font-size: 0.75vw; vertical-align: middle: height: 100%;'></i>" +
+                " <i class='fa fa-minus' style='margin: 0px; font-size: 0.75vw; vertical-align: middle: height: 100%;'></i>" +
+                " <i class='fa fa-minus' style='margin: 0px; font-size: 0.75vw; vertical-align: middle: height: 100%;'></i>";
             }
             else {
               return "<p style='margin: 0px; font-size: 1vw'>" + format(fuelSavings) + "%</p>";
             }
           });
+
+        const format = d3.format(',.2f');
+        lineDetail2.append('td')
+          .attr('class', 'text-center')
+          .style("padding", "1px")
+          .style('font', '12px sans-serif')
+          .style("vertical-align", "middle")
+          .html(
+            '<strong><div>Combustion Air Preheat Temp: </strong>' + format(d.combAirTempEnriched) + ' &#8457;</div>' +
+            '<strong><div>O<sub>2</sub> in Enriched Flue Gasses: </strong>' + format(d.o2FlueGasEnriched) + ' %</div>' +
+            '<strong><div>Flue Gas Temperature: </strong>' + format(d.flueGasTempEnriched) + ' ' + ' &#8457;</div>'
+          );
 
         const deleteBtn = lineDetail2.append("td")
           .style("padding", "0px")
@@ -685,15 +690,15 @@ export class O2EnrichmentGraphComponent implements OnInit {
           .attr("class", "btn deleteBtn")
           .attr("type", "button")
           .style("padding", "0px")
-          .style("width", "40px")
+          .style("width", "30px")
           .style("height", "40px")
           .style("background-color", "#cc0200")
           .on("click", () => {
-            this.detailBox
-              .transition()
-              .delay(100)
-              .duration(600)
-              .style('opacity', 0);
+            // this.detailBox
+            //   .transition()
+            //   .delay(100)
+            //   .duration(600)
+            //   .style('opacity', 0);
             this.selectedLine = i;
             this.deleteLine();
           })
@@ -712,9 +717,9 @@ export class O2EnrichmentGraphComponent implements OnInit {
 
   clearDetails() {
     d3.selectAll(".fuelSavings")
-      .html("<i class='fa fa-minus' style='margin: 0px; font-size: 1vw; vertical-align: middle: height: 100%;'></i>" +
-      " <i class='fa fa-minus' style='margin: 0px; font-size: 1vw; vertical-align: middle: height: 100%;'></i>" +
-      " <i class='fa fa-minus' style='margin: 0px; font-size: 1vw; vertical-align: middle: height: 100%;'></i>");
+      .html("<i class='fa fa-minus' style='margin: 0px; font-size: 0.75vw; vertical-align: middle: height: 100%;'></i>" +
+      " <i class='fa fa-minus' style='margin: 0px; font-size: 0.75vw; vertical-align: middle: height: 100%;'></i>" +
+      " <i class='fa fa-minus' style='margin: 0px; font-size: 0.75vw; vertical-align: middle: height: 100%;'></i>");
   }
 
   moveGuideLine() {
