@@ -1,7 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { PumpCurveForm, PumpCurveDataRow } from '../pump-curve';
-
-import * as regression from 'regression';
+import { Settings } from '../../../../shared/models/settings';
 @Component({
   selector: 'app-pump-curve-data-form',
   templateUrl: './pump-curve-data-form.component.html',
@@ -14,7 +13,11 @@ export class PumpCurveDataFormComponent implements OnInit {
   changeField = new EventEmitter<string>();
   @Output('calculate')
   calculate = new EventEmitter<boolean>();
-
+  @Input()
+  settings: Settings;
+  @Input()
+  inPsat: boolean;
+  dataForm: any;
   orderOptions: Array<number> = [
     2, 3, 4, 5, 6
   ]
@@ -22,9 +25,7 @@ export class PumpCurveDataFormComponent implements OnInit {
   //rSq: string = null;
   constructor() { }
 
-  ngOnInit() {
-    this.emitCalculateChanges();
-  }
+  ngOnInit() { }
 
   focusField(str: string) {
     this.changeField.emit(str);

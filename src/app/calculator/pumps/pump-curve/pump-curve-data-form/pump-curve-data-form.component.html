@@ -18,7 +18,7 @@
       <div class="input-group">
         <input name="flow" [(ngModel)]="dataRow.flow" type="number" step="any" class="form-control" id="flow" onfocus="this.select();"
           (focus)="focusField('flow')" (input)="emitCalculateChanges()">
-        <span class="input-group-addon units">gpm</span>
+        <span class="input-group-addon units">{{settings.flowMeasurement}}</span>
       </div>
     </div>
     <div class="form-group col-5">
@@ -26,7 +26,7 @@
       <div class="input-group">
         <input name="head" [(ngModel)]="dataRow.head" type="number" step="any" class="form-control" id="head" onfocus="this.select();"
           (focus)="focusField('head')" (input)="emitCalculateChanges()">
-        <span class="input-group-addon units">ft</span>
+        <span class="input-group-addon units">{{settings.distanceMeasurement}}</span>
       </div>
     </div>
     <div class="col-2" style="height: 100%;" *ngIf="pumpCurveForm.dataRows.length != 1">

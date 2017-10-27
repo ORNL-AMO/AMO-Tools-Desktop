@@ -16,9 +16,9 @@
 <div class="row form-row">
   <div class="col-12">
     <app-pump-curve-data-form *ngIf="selectedFormView == 'Data'" (calculate)="calculate()" [(pumpCurveForm)]="pumpCurveForm"
-      (changeField)="focusField($event)"></app-pump-curve-data-form>
+      (changeField)="focusField($event)" [settings]="settings"></app-pump-curve-data-form>
     <app-pump-curve-equation-form *ngIf="selectedFormView == 'Equation'" (calculate)="calculate()" [(pumpCurveForm)]="pumpCurveForm"
-      (changeField)="focusField($event)"></app-pump-curve-equation-form>
+      (changeField)="focusField($event)" [settings]="settings"></app-pump-curve-equation-form>
   </div>
 </div>
 <div class="row form-row">
@@ -34,7 +34,7 @@
       <div class="input-group">
         <input name="baselineMeasurement" [(ngModel)]="pumpCurveForm.baselineMeasurement" type="number" step="any" class="form-control"
           id="baselineMeasurement" onfocus="this.select();" (focus)="focusField('baselineMeasurement')" (input)="calculate()">
-        <span *ngIf="pumpCurveForm.measurementOption == 'Diameter'" class="input-group-addon units">in</span>
+        <span *ngIf="pumpCurveForm.measurementOption == 'Diameter'" class="input-group-addon units">{{settings.distanceMeasurement}}</span>
         <span *ngIf="pumpCurveForm.measurementOption == 'Speed'" class="input-group-addon units">rpm</span>
       </div>
     </div>
@@ -46,7 +46,7 @@
       <div class="input-group">
         <input name="modifiedMeasurement" [(ngModel)]="pumpCurveForm.modifiedMeasurement" type="number" step="any" class="form-control"
           id="modifiedMeasurement" onfocus="this.select();" (focus)="focusField('modifiedMeasurement')" (input)="calculate()">
-        <span *ngIf="pumpCurveForm.measurementOption == 'Diameter'" class="input-group-addon units">in</span>
+        <span *ngIf="pumpCurveForm.measurementOption == 'Diameter'" class="input-group-addon units">{{settings.distanceMeasurement}}</span>
         <span *ngIf="pumpCurveForm.measurementOption == 'Speed'" class="input-group-addon units">rpm</span>
       </div>
     </div>
@@ -62,7 +62,7 @@
       <div class="input-group">
         <input name="exploreFlow" [(ngModel)]="pumpCurveForm.exploreFlow" type="number" step="any" class="form-control" id="modifiedMeasurement"
           onfocus="this.select();" (focus)="focusField('exploreFlow')" (input)="calculate()">
-        <span class="input-group-addon units">gpm</span>
+        <span class="input-group-addon units">{{settings.flowMeasurement}}</span>
       </div>
       <span><a id="exploreFlow" class="form-text text-help small" (click)="estimateFlow()">Estimate Flow</a></span>
     </div>
@@ -75,7 +75,7 @@
       <div class="input-group">
         <input name="exploreHead" [(ngModel)]="pumpCurveForm.exploreHead" type="number" step="any" class="form-control" id="exploreHead"
           onfocus="this.select();" (focus)="focusField('exploreHead')" (input)="calculate()">
-        <span class="input-group-addon units">ft</span>
+        <span class="input-group-addon units">{{settings.distanceMeasurement}}</span>
 
       </div>
       <!--<span><a id="exploreHead" class="form-text text-help small" (click)="estimateHead()">Estimate Head</a></span>-->
