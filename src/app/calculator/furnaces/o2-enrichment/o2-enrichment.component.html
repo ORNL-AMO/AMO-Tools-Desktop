@@ -1,7 +1,7 @@
 <div class="pump-head">
   <div class="row">
     <div class="col-md-4 col-sm-12  mx-auto">
-      <app-o2-enrichment-form [(o2Enrichment)]="o2Enrichment" [o2EnrichmentOutput]="o2EnrichmentOutput" (calculate)="calculate()" (changeFieldEmit)="changeField($event)"></app-o2-enrichment-form>
+      <app-o2-enrichment-form [(o2Enrichment)]="o2Enrichment" [o2EnrichmentOutput]="o2EnrichmentOutput" [lines]="lines" (calculate)="calculate()" (changeFieldEmit)="changeField($event)"></app-o2-enrichment-form>
     </div>
     <div class="col-md-6 col-sm-12 mx-auto">
       <ul class="tabs primary text-center">
@@ -14,7 +14,7 @@
       </ul>
       <div class="tab-content efficiency-results" id="o2EnrichmentGraph">
         <div *ngIf="tabSelect == 'results'">
-          <app-o2-enrichment-graph *ngIf="tabSelect == 'results'" [o2Enrichment]="o2Enrichment" [o2EnrichmentOutput]="o2EnrichmentOutput"></app-o2-enrichment-graph>
+          <app-o2-enrichment-graph *ngIf="tabSelect == 'results'" [o2Enrichment]="o2Enrichment" [o2EnrichmentOutput]="o2EnrichmentOutput" [lines]="lines"></app-o2-enrichment-graph>
 
           <table class="table table-bordered">
             <thead>
