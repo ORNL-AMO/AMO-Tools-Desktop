@@ -593,28 +593,27 @@ export class O2EnrichmentGraphComponent implements OnInit {
             this.detailBox.transition()
               .style('opacity', 1);
 
-            const detailBoxWidth = 250;
-            const detailBoxHeight = 100;
             const format = d3.format(',.2f');
             this.detailBox
-              .style('padding-right', '5px')
-              .style('padding-left', '5px')
+              .style('padding-right', '3px')
+              .style('padding-left', '3px')
+              .style('padding-top', '3px')
+              .style('padding-bottom', '3px')
               .html(
-                '<p><strong><div>Combustion Air Preheat Temperature: </strong>' + format(d.combAirTempEnriched) + ' F</div>' +
-                '<strong><div>O2 in Enriched Flue Gasses: </strong>' + format(d.o2FlueGasEnriched) + ' F</div>' +
-                '<strong><div>Flue Gas Temperature: </strong>' + format(d.flueGasTempEnriched) + ' ' + ' F</div></p>'
+                '<strong><div>Combustion Air Preheat Temperature: </strong>' + format(d.combAirTempEnriched) + ' &#8457;</div>' +
+                '<strong><div>O<sub>2</sub> in Enriched Flue Gasses: </strong>' + format(d.o2FlueGasEnriched) + ' %</div>' +
+                '<strong><div>Flue Gas Temperature: </strong>' + format(d.flueGasTempEnriched) + ' ' + ' &#8457;</div>'
               )
-
-              // TODO actually position this correctly
-              .style('left', (this.margin.left + this.x(-50)) + 'px')
-              .style('top', (this.margin.top + this.y(-25)) + 'px')
+              .style('left', (this.margin.left) + 'px')
+              // .style('left', (this.margin.left + this.x(-73)) + 'px')
+              // TODO would be nice to have this move along side the detailBoxes
+              // .style('top', (this.margin.top + this.y(-5 - 3 * i)) + 'px')
+              .style('top', (this.margin.top) + 'px')
               .style('position', 'absolute')
-              .style('width', detailBoxWidth + 'px')
-              .style('height', detailBoxHeight + 'px')
-              .style('padding-left', '5px')
-              .style('padding-right', '5px')
-              .style('font', '10px sans-serif')
-              // .style('background', '#ffffff')
+              .style('width', 250 + 'px')
+              .style('height', 51 + 'px')
+              .style('font', '11px sans-serif')
+              .style('background', '#ffffff')
               .style('border', '1px')
               .style('pointer-events', 'none');
 
