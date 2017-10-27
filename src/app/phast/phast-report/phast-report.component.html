@@ -29,7 +29,7 @@
     <!-- End .report-header -->
 
 
-    <div class="report-data">
+    <div class="report-data" *ngIf="phast.setupDone">
 
         <ul class="tabs primary hide-print">
             <li (click)="setTab('energy-used')" [ngClass]="{'active': currentTab == 'energy-used'}">
@@ -59,6 +59,9 @@
         <div class="results" *ngIf="currentTab == 'report-sankey'"  style="padding-top: 20px;">
           <app-report-sankey [phast]="phast" [settings]="settings" ></app-report-sankey>
         </div>
+    </div>
+    <div *ngIf="!phast.setupDone">
+        <p class="alert-warning text-center">This assessment has not been completed, please complete this assessment to see the resulting data.</p>
     </div>
 
 </div>
