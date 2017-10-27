@@ -1,7 +1,7 @@
 <div class="pump-head">
   <div class="row" *ngIf="settings && pumpCurveForm">
     <div class="col-md-5 col-sm-12 mx-auto">
-      <app-pump-curve-form [(pumpCurveForm)]="pumpCurveForm" (emitCalculate)="calculate()" (changeField)="setField($event)" [selectedFormView]="selectedFormView"></app-pump-curve-form>
+      <app-pump-curve-form [(pumpCurveForm)]="pumpCurveForm" [settings]="settings" (emitCalculate)="calculate()" (changeField)="setField($event)" [selectedFormView]="selectedFormView"></app-pump-curve-form>
     </div>
     <div class="col-md-6 col-sm-12 mx-auto">
       <ul class="tabs primary text-center">
@@ -14,7 +14,7 @@
       </ul>
       <div class="tab-content curve-results" id="pumpCurveGraph">
         <div *ngIf="tabSelect == 'results'" class="help-panel">
-          <app-pump-curve-graph [pumpCurveForm]="pumpCurveForm" [toggleCalculate]="toggleCalculate" [selectedFormView]="selectedFormView"></app-pump-curve-graph>
+          <app-pump-curve-graph [pumpCurveForm]="pumpCurveForm" [settings]="settings" [toggleCalculate]="toggleCalculate" [selectedFormView]="selectedFormView"></app-pump-curve-graph>
           <!--<span *ngIf"selectedFormView == 'Equation'">TEST EQUATION HERE</span>-->
         </div>
         <div *ngIf="tabSelect == 'results'" class="row justify-content-center">
