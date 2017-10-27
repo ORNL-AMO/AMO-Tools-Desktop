@@ -2,11 +2,11 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { PumpCurveForm, PumpCurveDataRow } from '../pump-curve';
 import * as regression from 'regression';
 import { PumpCurveService } from '../pump-curve.service';
-import {PsatService} from '../../../../psat/psat.service';
-import {IndexedDbService} from '../../../../indexedDb/indexed-db.service';
-import {ConvertUnitsService} from '../../../../shared/convert-units/convert-units.service';
-import {PSAT} from '../../../../shared/models/psat';
-import {Settings} from '../../../../shared/models/settings';
+import { PsatService } from '../../../../psat/psat.service';
+import { IndexedDbService } from '../../../../indexedDb/indexed-db.service';
+import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
+import { PSAT } from '../../../../shared/models/psat';
+import { Settings } from '../../../../shared/models/settings';
 @Component({
   selector: 'app-pump-curve-form',
   templateUrl: './pump-curve-form.component.html',
@@ -36,38 +36,24 @@ export class PumpCurveFormComponent implements OnInit {
 
   constructor(private pumpCurveService: PumpCurveService, private psatService: PsatService, private indexedDbService: IndexedDbService, private convertUnitsService: ConvertUnitsService) { }
 
-  ngOnInit() {
-    if (!this.psat) {
-      this.curveForm = this.psatService.initForm();
-      this.curveForm.patchValue({
-        flow: 0,
-        head: 0,
-      })
-    } else {
-      this.curveForm = this.psatService.getFormFromPsat(this.psat.inputs);
-    }
-    if (!this.settings) {
-      this.indexedDbService.getDirectorySettings(1).then(
-        results => {
-          // convert defaults if standalone without default system settings
-          if (results[0].flowMeasurement != 'gpm') {
-            let tmpVal = this.convertUnitsService.value(this.curveForm.value.flowRate).from('gpm').to(results[0].flowMeasurement);
-            this.curveForm.patchValue({
-              flowRate: this.psatService.roundVal(tmpVal, 2)
-            })
-          }
-          if (results[0].distanceMeasurement != 'ft') {
-            let tmpVal = this.convertUnitsService.value(this.curveForm.value.head).from('ft').to(results[0].distanceMeasurement);
+  ngOnInit() { }
 
-            this.curveForm.patchValue({
-              head: this.psatService.roundVal(tmpVal, 2)
-            })
-          }
-          this.settings = results[0];
-        }
-      )
-    }
-  }
+  // setFormVals(settings: Settings) {
+  //   if (settings.flowMeasurement != 'gpm') {
+  //     let tmpVal = this.convertUnitsService.value(this.curveForm.value.flowRate).from('gpm').to(settings.flowMeasurement);
+  //     this.curveForm.patchValue({
+  //       flowRate: this.psatService.roundVal(tmpVal, 2)
+  //     })
+  //   }
+  //   if (settings.distanceMeasurement != 'ft') {
+  //     let tmpVal = this.convertUnitsService.value(this.curveForm.value.head).from('ft').to(settings.distanceMeasurement);
+
+  //     this.curveForm.patchValue({
+  //       head: this.psatService.roundVal(tmpVal, 2)
+  //     })
+  //   }
+  // }
+
 
   focusField(str: string) {
     this.changeField.emit(str);
@@ -85,7 +71,7 @@ export class PumpCurveFormComponent implements OnInit {
     this.emitCalculate.emit(true);
   }
 
-  setView(){
+  setView() {
     this.pumpCurveService.calcMethod.next(this.selectedFormView);
   }
 

@@ -16,9 +16,9 @@
 <div class="row form-row">
   <div class="col-12">
     <app-pump-curve-data-form *ngIf="selectedFormView == 'Data'" (calculate)="calculate()" [(pumpCurveForm)]="pumpCurveForm"
-      (changeField)="focusField($event)"></app-pump-curve-data-form>
+      (changeField)="focusField($event)" [settings]="settings"></app-pump-curve-data-form>
     <app-pump-curve-equation-form *ngIf="selectedFormView == 'Equation'" (calculate)="calculate()" [(pumpCurveForm)]="pumpCurveForm"
-      (changeField)="focusField($event)"></app-pump-curve-equation-form>
+      (changeField)="focusField($event)" [settings]="settings"></app-pump-curve-equation-form>
   </div>
 </div>
 <div class="row form-row">

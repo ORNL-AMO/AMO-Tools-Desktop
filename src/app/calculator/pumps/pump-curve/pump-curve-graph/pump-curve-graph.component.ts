@@ -7,8 +7,8 @@ import * as d3 from 'd3';
 import * as regression from 'regression';
 import * as _ from 'lodash';
 import { PumpCurveService } from '../pump-curve.service';
-import {Settings} from '../../../../shared/models/settings';
-import {ConvertUnitsService} from '../../../../shared/convert-units/convert-units.service';
+import { Settings } from '../../../../shared/models/settings';
+
 @Component({
   selector: 'app-pump-curve-graph',
   templateUrl: './pump-curve-graph.component.html',
@@ -51,7 +51,7 @@ export class PumpCurveGraphComponent implements OnInit {
   // flow: number = 0;
   // efficiencyCorrection: number = 0;
   tmpHeadFlow: any;
-  constructor(private psatService: PsatService, private convertUnitsService: ConvertUnitsService, private windowRefService: WindowRefService, private pumpCurveService: PumpCurveService) { }
+  constructor(private psatService: PsatService, private windowRefService: WindowRefService, private pumpCurveService: PumpCurveService) { }
 
   ngOnInit() {
     this.isGridToggled = false;
@@ -506,7 +506,7 @@ export class PumpCurveGraphComponent implements OnInit {
                   .html(
                   "<p><strong><div>Baseline Flow: </div></strong><div>" + format(d.x) + " " + this.settings.flowMeasurement + "</div>" +
 
-                  "<strong><div>Basleline Head: </div></strong><div>" + format(d.y) +  " " + this.settings.distanceMeasurement + "/div></p>" +
+                  "<strong><div>Basleline Head: </div></strong><div>" + format(d.y) + " " + this.settings.distanceMeasurement + "/div></p>" +
                   "<p><strong><div>Modified Flow: </div></strong><div>" + format(d.x) + " " + this.settings.flowMeasurement + "</div>" +
 
                   "<strong><div>Modified Head: </div></strong><div>" + format(modD.y) + " " + this.settings.distanceMeasurement + "</div></p>")
