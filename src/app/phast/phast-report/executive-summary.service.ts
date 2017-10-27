@@ -33,7 +33,7 @@ export class ExecutiveSummaryService {
 
   calcAnnualEnergy(results: PhastResults, phast: PHAST): number {
     //gross heat * operating hours
-    let tmpAnnualEnergy = results.grossHeatInput * phast.operatingHours.hoursPerYear;
+    let tmpAnnualEnergy = results.grossHeatInput * phast.operatingHours.hoursPerYear / 1000000;
     return tmpAnnualEnergy;
   }
 

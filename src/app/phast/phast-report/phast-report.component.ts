@@ -39,6 +39,10 @@ export class PhastReportComponent implements OnInit {
     if(!this.inPhast){
       this.currentTab = 'executive-summary';
     }
+
+    if(!this.phast.operatingHours.hoursPerYear){
+      this.phast.operatingHours.hoursPerYear = 8736;
+    }
   }
 
   setTab(str: string) {

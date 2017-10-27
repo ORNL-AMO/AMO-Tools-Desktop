@@ -25,6 +25,8 @@ import { PhastDiagramComponent } from './phast-diagram/phast-diagram.component';
 import { PhastResultsService } from './phast-results.service';
 import { EnergyCostsComponent } from './energy-costs/energy-costs.component';
 import { ConvertPhastService } from './convert-phast.service';
+import { LossesTabsComponent } from './losses/losses-tabs/losses-tabs.component';
+
 @NgModule({
   declarations: [
     PhastComponent,
@@ -34,7 +36,8 @@ import { ConvertPhastService } from './convert-phast.service';
     OperatingHoursComponent,
     HelpPanelComponent,
     PhastDiagramComponent,
-    EnergyCostsComponent
+    EnergyCostsComponent,
+    LossesTabsComponent
   ],
   exports: [
   ],

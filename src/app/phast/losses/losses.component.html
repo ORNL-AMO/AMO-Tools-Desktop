@@ -1,6 +1,8 @@
-<nav>
-  <app-losses-tabs [settings]="settings"></app-losses-tabs>
-</nav>
+<!-- <div class="sticky-top">
+  <nav>
+    <app-losses-tabs [settings]="settings"></app-losses-tabs>
+  </nav>
+</div> -->
 <div class="modify-conditions">
   <!--<nav class="col-2 sidebar losses-sidebar">
     <app-losses-sidebar [losses]="phast.losses" [lossesStates]="lossesStates" (changeTab)="changeTab($event)" [lossesTab]="lossesTab"></app-losses-sidebar>
@@ -160,8 +162,9 @@
         [phast]="_modifications[modificationIndex].phast" [saveClicked]="saveClicked" (fieldChange)="changeField($event)" [baselineSelected]="modificationSelected"
         (savedLoss)="saveModifications()" [settings]="settings"></app-heat-system-efficiency>
 
-      <app-operations *ngIf="lossesTab == 'operations'" [(phast)]="_modifications[modificationIndex].phast" [saveClicked]="saveClicked" [isBaseline]="false" (fieldChange)="changeField($event)"
-        [baselineSelected]="modificationSelected" (savedLoss)="saveModifications()" [settings]="settings"></app-operations>
+      <app-operations *ngIf="lossesTab == 'operations'" [(phast)]="_modifications[modificationIndex].phast" [saveClicked]="saveClicked"
+        [isBaseline]="false" (fieldChange)="changeField($event)" [baselineSelected]="modificationSelected" (savedLoss)="saveModifications()"
+        [settings]="settings"></app-operations>
 
     </div>
 
@@ -196,15 +199,6 @@
 
 
   <div class="setup-dialog" *ngIf="showSetupDialog == true">
-    <button class="btn pull-right" (click)="hideSetupDialog()">
-        <span aria-hidden="true">&times;</span>
-        </button>
-    <h4>Setup Your Process Heating Losses</h4>
-    <p>In this section you will input your process heating losses.</p>
-    <p>Once you have added the data for your current system you can add modifications to explore potential savings within your
-      system.
-    </p>
-    <p>We strongly encourage you to completely setup your system by adding all of your losses prior to adding modifications.</p>
-    <button class="btn btn-primary" (click)="hideSetupDialog()">Got It!</button>
+    <app-losses-splash-page (hidePage)="hideSetupDialog()"></app-losses-splash-page>
   </div>
 </div>

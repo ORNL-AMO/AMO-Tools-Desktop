@@ -22,7 +22,7 @@ export class LossesTabsComponent implements OnInit {
   showEnInput1: boolean = false;
   showEnInput2: boolean = false;
   showExGas: boolean = false;
-  constructor(private lossesService: LossesService) { }
+  constructor(private lossesService: LossesService ) { }
 
   ngOnInit() {
     this.lossesService.lossesTab.subscribe(val => {
@@ -30,6 +30,11 @@ export class LossesTabsComponent implements OnInit {
     })
 
     this.setTabs()
+
+    this.lossesService.baseline.subscribe(val => {
+      console.log('change')
+      console.log(val);
+    })
   }
 
   tabChange(str: string) {

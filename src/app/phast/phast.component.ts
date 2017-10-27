@@ -11,7 +11,7 @@ import { PHAST } from '../shared/models/phast/phast';
 import { ToastyService, ToastyConfig, ToastOptions, ToastData } from 'ng2-toasty';
 import { SettingsService } from '../settings/settings.service';
 import { PhastResultsService } from './phast-results.service';
-
+import { LossesService } from './losses/losses.service';
 @Component({
   selector: 'app-phast',
   templateUrl: './phast.component.html',
@@ -48,7 +48,8 @@ export class PhastComponent implements OnInit {
     private toastyService: ToastyService,
     private toastyConfig: ToastyConfig,
     private settingsService: SettingsService,
-    private phastResultsService: PhastResultsService) {
+    private phastResultsService: PhastResultsService,
+    private lossesService: LossesService) {
     this.toastyConfig.theme = 'bootstrap';
     this.toastyConfig.position = 'bottom-right';
     // this.toastyConfig.limit = 1;
@@ -62,6 +63,7 @@ export class PhastComponent implements OnInit {
       this.indexedDbService.getAssessment(parseInt(tmpAssessmentId)).then(dbAssessment => {
         this.assessment = dbAssessment;
         this._phast = (JSON.parse(JSON.stringify(this.assessment.phast)));
+        this.lossesService.baseline.next(this._phast);
         if (!this._phast.operatingHours) {
           this._phast.operatingHours = {
             weeksPerYear: 52,
@@ -100,6 +102,17 @@ export class PhastComponent implements OnInit {
       })
     });
   }
+
+
+  ngAfterViewInit() {
+    this.disclaimerToast();
+  }
+
+  ngOnDestroy(){
+    this.lossesService.lossesTab.next('charge-material');
+    this.lossesService.baseline.next(null);
+  }
+
 
   getSettings(update?: boolean) {
     //get assessment settings
@@ -147,10 +160,6 @@ export class PhastComponent implements OnInit {
     )
   }
 
-  ngAfterViewInit() {
-    this.disclaimerToast();
-  }
-
   changeTab($event) {
     let tmpIndex = 0;
     this.tabs.forEach(tab => {
@@ -195,6 +204,7 @@ export class PhastComponent implements OnInit {
   saveDb() {
     this._phast.setupDone = this.checkSetupDone(this.settings);
     this.assessment.phast = (JSON.parse(JSON.stringify(this._phast)));
+    this.lossesService.baseline.next(this._phast);
     this.indexedDbService.putAssessment(this.assessment).then(
       results => { this.addToast('Assessment Saved') }
     )
