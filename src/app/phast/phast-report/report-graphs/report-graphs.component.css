@@ -5,3 +5,7 @@ ul {
 .form-group{
     margin-bottom: 25px;
 }
+
+.badge{
+    color: white;
+}
