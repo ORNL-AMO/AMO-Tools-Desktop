@@ -40,6 +40,7 @@ export class PhastComponent implements OnInit {
 
   mainTab: string = 'system-setup';
   init: boolean = true;
+  saveDbToggle: string;
   constructor(
     private location: Location,
     private assessmentService: AssessmentService,
@@ -123,7 +124,7 @@ export class PhastComponent implements OnInit {
           this.settings = results[0];
           this.isAssessmentSettings = true;
           if (this.init) {
-            this.checkSetupDone(this.settings);
+            this.lossesService.checkSetupDone(this._phast, this.settings);
             this.init = false;
           }
           if (update) {
@@ -207,109 +208,13 @@ export class PhastComponent implements OnInit {
   }
 
   saveDb() {
-    this._phast.setupDone = this.checkSetupDone(this.settings);
+    this._phast.setupDone = this.lossesService.checkSetupDone((JSON.parse(JSON.stringify(this._phast))), this.settings);
     this.assessment.phast = (JSON.parse(JSON.stringify(this._phast)));
     this.lossesService.baseline.next(this._phast);
+    this.saveDbToggle = 'saveDb' + Math.random();
     this.indexedDbService.putAssessment(this.assessment).then(
       results => { this.addToast('Assessment Saved') }
     )
-  }
-
-  checkSetupDone(settings: Settings) {
-    let isDone, chargeDone, grossHeat = false;
-    if (this._phast.losses) {
-      if (this._phast.losses.chargeMaterials) {
-        if (this._phast.losses.chargeMaterials.length != 0) {
-          let test = this.phastService.sumChargeMaterials(this._phast.losses.chargeMaterials, this.settings);
-          if (test != 0) {
-            chargeDone = true;
-            this.lossesService.chargeDone.next(true);
-          } else {
-            this.lossesService.chargeDone.next(false);
-          }
-        } else {
-          this.lossesService.chargeDone.next(false);
-        }
-      } else {
-        this.lossesService.chargeDone.next(false);
-      }
-
-      let categories = this.phastResultsService.getResultCategories(this.settings);
-      if (categories.showEnInput1) {
-        if (this._phast.losses.energyInputEAF) {
-          if (this._phast.losses.energyInputEAF.length != 0) {
-            let test = this.phastService.sumEnergyInputEAF(this._phast.losses.energyInputEAF, this.settings);
-            if (test != 0) {
-              grossHeat = true;
-              this.lossesService.enInput1Done.next(true);
-            } else {
-              this.lossesService.enInput1Done.next(false);
-            }
-          } else {
-            this.lossesService.enInput1Done.next(false);
-          }
-        } else {
-          this.lossesService.enInput1Done.next(false);
-        }
-      }
-      else if (categories.showEnInput2) {
-        if (this._phast.losses.energyInputExhaustGasLoss) {
-          if (this._phast.losses.energyInputExhaustGasLoss.length != 0) {
-            let test = this.phastService.sumEnergyInputExhaustGas(this._phast.losses.energyInputExhaustGasLoss, this.settings);
-            if (test != 0) {
-              grossHeat = true;
-              this.lossesService.enInput2Done.next(true);
-            } else {
-              this.lossesService.enInput2Done.next(false);
-            }
-          } else {
-            this.lossesService.enInput2Done.next(false);
-          }
-        } else {
-          this.lossesService.enInput2Done.next(false);
-        }
-      }
-      else if (categories.showFlueGas) {
-        if (this._phast.losses.flueGasLosses) {
-          if (this._phast.losses.flueGasLosses.length != 0) {
-            let flueGas = this._phast.losses.flueGasLosses[0];
-            if (flueGas.flueGasType == 'By Mass') {
-              let test = this.phastService.flueGasByMass(flueGas.flueGasByMass, this.settings);
-              if (test != 0) {
-                grossHeat = true;
-                this.lossesService.flueGasDone.next(true);
-              } else {
-                this.lossesService.flueGasDone.next(false);
-              }
-            } else if (flueGas.flueGasType == 'By Volume') {
-              let test = this.phastService.flueGasByVolume(flueGas.flueGasByVolume, this.settings);
-              if (test != 0) {
-                grossHeat = true;
-                this.lossesService.flueGasDone.next(true);
-              } else {
-                this.lossesService.flueGasDone.next(false);
-              }
-            }
-          } else {
-            this.lossesService.flueGasDone.next(false);
-          }
-        } else {
-          this.lossesService.flueGasDone.next(false);
-        }
-      }
-      else if (categories.showSystemEff) {
-        if (this._phast.systemEfficiency) {
-          grossHeat = true;
-          this.lossesService.efficiencyDone.next(true);
-        } else {
-          this.lossesService.efficiencyDone.next(false);
-        }
-      } else {
-        this.lossesService.efficiencyDone.next(false);
-      }
-    }
-    isDone = (grossHeat && chargeDone);
-    return isDone;
   }
 
 

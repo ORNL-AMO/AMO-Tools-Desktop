@@ -1,8 +1,9 @@
-import { Component, OnInit, Output, EventEmitter, Input, ChangeDetectorRef } from '@angular/core';
-import { Losses } from '../../../shared/models/phast/phast';
+import { Component, OnInit, Output, EventEmitter, Input, SimpleChanges } from '@angular/core';
+import { PHAST, Losses } from '../../../shared/models/phast/phast';
 import { Settings } from '../../../shared/models/settings';
 import { PhastService } from '../../phast.service';
 import { LossesService } from '../losses.service';
+
 @Component({
   selector: 'app-losses-tabs',
   templateUrl: './losses-tabs.component.html',
@@ -10,10 +11,13 @@ import { LossesService } from '../losses.service';
 })
 export class LossesTabsComponent implements OnInit {
   lossesTab: string;
-  // @Input()
-  // losses: Losses;
+  @Input()
+  saveDbToggle: boolean;
+
   @Input()
   settings: Settings;
+  @Input()
+  phast: PHAST;
 
   showSlag: boolean = false;
   showAuxPower: boolean = false;
@@ -47,84 +51,26 @@ export class LossesTabsComponent implements OnInit {
     this.lossesService.lossesTab.subscribe(val => {
       this.lossesTab = val;
     })
-
     this.setTabs()
-
-    // this.lossesService.baseline.subscribe(val => {
-    //   if (val) {
-    //     if (val.losses) {
-    //       this.getNumLosses(val.losses);
-    //     }
-    //   }
-    // })
-
-    // this.lossesService.chargeDone.subscribe(val => {
-    //   if (val != null) {
-    //     this.chargeDone = val;
-    //   }
-    // });
-    // this.lossesService.efficiencyDone.subscribe(val => {
-    //   if (val != null) {
-    //     this.efficiencyDone = val;
-    //   }
-    // });
-    // this.lossesService.enInput1Done.subscribe(val => {
-    //   if (val != null) {
-    //     this.enInput1Done = val;
-    //   }
-    // });
-    // this.lossesService.enInput2Done.subscribe(val => {
-    //   if (val != null) {
-    //     this.enInput2Done = val;
-    //   }
-    // });
-    // this.lossesService.flueGasDone.subscribe(val => {
-    //   if (val != null) {
-    //     this.flueGasDone = val;
-    //   }
-    // });
+    this.checkDone();
   }
 
-  ngOnDestroy() {
+  ngOnChanges(changes: SimpleChanges) {
+    if (this.phast.losses) {
+      this.getNumLosses(this.phast.losses);
+    }
+    this.checkDone();
   }
 
-  ngAfterContentInit() {
-    this.lossesService.baseline.subscribe(val => {
-      if (val) {
-        if (val.losses) {
-          this.getNumLosses(val.losses);
-        }
-      }
-    })
 
-    this.lossesService.chargeDone.subscribe(val => {
-      if (val != null) {
-        this.chargeDone = val;
-      }
-    });
-    this.lossesService.efficiencyDone.subscribe(val => {
-      if (val != null) {
-        this.efficiencyDone = val;
-      }
-    });
-    this.lossesService.enInput1Done.subscribe(val => {
-      if (val != null) {
-        this.enInput1Done = val;
-      }
-    });
-    this.lossesService.enInput2Done.subscribe(val => {
-      if (val != null) {
-        this.enInput2Done = val;
-      }
-    });
-    this.lossesService.flueGasDone.subscribe(val => {
-      if (val != null) {
-        this.flueGasDone = val;
-      }
-    });
-
-
+  checkDone() {
+    this.chargeDone = this.lossesService.chargeDone;
+    this.efficiencyDone = this.lossesService.efficiencyDone;
+    this.enInput1Done = this.lossesService.enInput1Done;
+    this.enInput2Done = this.lossesService.enInput2Done;
+    this.flueGasDone = this.lossesService.flueGasDone;
   }
+
 
 
   tabChange(str: string) {
