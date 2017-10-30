@@ -169,7 +169,7 @@ export class FlueGasLossesComponent implements OnInit {
   }
 
   calculate(loss: any) {
-    let sumAdditionalHeat = this.phastService.sumChargeMaterialExothermic(this.losses.chargeMaterials);
+    let sumAdditionalHeat = this.phastService.sumChargeMaterialExothermic(this.losses.chargeMaterials, this.settings);
     if (loss.measurementType == "By Volume") {
       if (loss.formByVolume.status == 'VALID') {
         let tmpLoss: FlueGasByVolume = this.flueGasLossesService.buildByVolumeLossFromForm(loss.formByVolume);

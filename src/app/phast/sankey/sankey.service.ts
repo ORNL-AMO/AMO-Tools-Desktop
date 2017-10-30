@@ -70,7 +70,9 @@ export class SankeyService {
 
   getNodes(results: FuelResults, settings: Settings) {
     let unit: string = 'MMBtu/hr';
-    if (settings.unitsOfMeasure == 'Metric') {
+    if (settings.energySourceType == 'Electricity') {
+      unit = 'kW'
+    } else if (settings.unitsOfMeasure == 'Metric') {
       unit = 'GJ/hr'
     }
 

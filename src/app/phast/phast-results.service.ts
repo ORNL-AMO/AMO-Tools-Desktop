@@ -54,7 +54,7 @@ export class PhastResultsService {
   getResults(phast: PHAST, settings: Settings): PhastResults {
     let resultCats: ShowResultsCategories = this.getResultCategories(settings);
     let results: PhastResults = this.initResults();
-    results.exothermicHeat = this.phastService.sumChargeMaterialExothermic(phast.losses.chargeMaterials);
+    results.exothermicHeat = this.phastService.sumChargeMaterialExothermic(phast.losses.chargeMaterials, settings);
     results.totalInput = this.phastService.sumHeatInput(phast.losses, settings);
     results.grossHeatInput = results.totalInput;
 
