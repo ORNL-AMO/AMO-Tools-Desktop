@@ -32,7 +32,6 @@ export class O2EnrichmentGraphComponent implements OnInit {
   margin: any;
   filter: any;
   point: any;
-  detailBox: any;
   isGridToggled: boolean;
 
   plotBtn: any;
@@ -263,13 +262,6 @@ export class O2EnrichmentGraphComponent implements OnInit {
       .text("O2 in Air (%)");
 
     this.svg.style("display", null);
-
-    // this.detailBox = d3.select('app-o2-enrichment-graph').append('div')
-    //   .attr('id', 'detailBox')
-    //   .attr('class', 'd3-tip')
-    //   .style('opacity', 0)
-    //   .style('pointer-events', 'none');
-
     this.change = true;
   }
 
@@ -398,11 +390,13 @@ export class O2EnrichmentGraphComponent implements OnInit {
         this.xPosition = x.invert(d3.mouse(d3.event.currentTarget)[0]);
         this.updateDetailBoxes();
         this.moveGuideLine();
-
       })
       .on("mouseout", () => {
         this.guideLine.style("display", "none");
-        this.clearDetails();
+        this.xPosition = null;
+        this.updateDetailBoxes();
+        // this.redrawLines();
+        // this.clearDetails();
       });
   }
 
@@ -527,6 +521,7 @@ export class O2EnrichmentGraphComponent implements OnInit {
   }
 
   updateDetailBoxes() {
+    const format = d3.format(",.2f");
     d3.select('app-o2-enrichment').selectAll("#lineDetails").selectAll("tr").remove();
 
     const lineDetail = d3.select('app-o2-enrichment').selectAll("#lineDetails").append("tr");
@@ -545,16 +540,12 @@ export class O2EnrichmentGraphComponent implements OnInit {
       .style("padding", "4px")
       .html(() => {
         if (this.xPosition != null) {
-          const format = d3.format(",.2f");
           return "<p style='margin: 0px; font-size: 1vw'>" + format(this.xPosition) + "%</p>";
-        }
-        else {
-          // return "<i class='fa fa-minus' style='margin: 0px; font-size: 1vw; vertical-align: middle: height: 100%;'></i>" +
-          //   " <i class='fa fa-minus' style='margin: 0px; font-size: 1vw; vertical-align: middle: height: 100%;'></i>" +
-          //   " <i class='fa fa-minus' style='margin: 0px; font-size: 1vw; vertical-align: middle: height: 100%;'></i>";
-          return "<i class='fa fa-minus' style='margin: 0px; font-size: 1vw;'></i>" +
-            " <i class='fa fa-minus' style='margin: 0px; font-size: 1vw;'></i>" +
-            " <i class='fa fa-minus' style='margin: 0px; font-size: 1vw;'></i>";
+        } else {
+          return "<p style='margin: 0px; font-size: 1vw'>" + format(this.o2Enrichment.o2CombAirEnriched) + "%</p>";
+          // return "<i class='fa fa-minus' style='margin: 0px; font-size: 1vw;'></i>" +
+          //   " <i class='fa fa-minus' style='margin: 0px; font-size: 1vw;'></i>" +
+          //   " <i class='fa fa-minus' style='margin: 0px; font-size: 1vw;'></i>";
         }
       });
 
@@ -564,8 +555,7 @@ export class O2EnrichmentGraphComponent implements OnInit {
       .style("padding", "4px")
       .style('font', '13px sans-serif')
       .html(() => {
-        if (this.xPosition) {
-          const format = d3.format(",.2f");
+        if (this.xPosition != null) {
           const o2EnrichmentPoint = {
             o2CombAir: this.o2Enrichment.o2CombAir,
             o2CombAirEnriched: this.xPosition,
@@ -580,21 +570,34 @@ export class O2EnrichmentGraphComponent implements OnInit {
 
           const fuelSavings = this.phastService.o2Enrichment(o2EnrichmentPoint).fuelSavingsEnriched;
 
-          if (fuelSavings < 0 || fuelSavings > 100 || this.xPosition == null) {
-            // return "<i class='fa fa-minus' style='margin: 0px; font-size: 1vw; vertical-align: middle: height: 100%;'></i>" +
-            //   " <i class='fa fa-minus' style='margin: 0px; font-size: 1vw; vertical-align: middle: height: 100%;'></i>" +
-            //   " <i class='fa fa-minus' style='margin: 0px; font-size: 1vw; vertical-align: middle: height: 100%;'></i>";
+          if (fuelSavings < 0 || fuelSavings > 100) {
             return "<i class='fa fa-minus' style='margin: 0px; font-size: 1vw;'></i>" +
               " <i class='fa fa-minus' style='margin: 0px; font-size: 1vw;'></i>" +
               " <i class='fa fa-minus' style='margin: 0px; font-size: 1vw;'></i>";
-          }
-          else {
+          } else {
             return "<p style='margin: 0px; font-size: 1vw'>" + format(fuelSavings) + "%</p>";
           }
         } else {
-          return "<i class='fa fa-minus' style='margin: 0px; font-size: 1vw;'></i>" +
-            " <i class='fa fa-minus' style='margin: 0px; font-size: 1vw;'></i>" +
-            " <i class='fa fa-minus' style='margin: 0px; font-size: 1vw;'></i>";
+          const o2EnrichmentPoint = {
+            o2CombAir: this.o2Enrichment.o2CombAir,
+            o2CombAirEnriched: this.o2Enrichment.o2CombAirEnriched,
+            flueGasTemp: this.o2Enrichment.flueGasTemp,
+            flueGasTempEnriched: this.mainLine.flueGasTempEnriched,
+            o2FlueGas: this.o2Enrichment.o2FlueGas,
+            o2FlueGasEnriched: this.mainLine.o2FlueGasEnriched,
+            combAirTemp: this.o2Enrichment.combAirTemp,
+            combAirTempEnriched: this.mainLine.combAirTempEnriched,
+            fuelConsumption: this.o2Enrichment.fuelConsumption
+          };
+          const fuelSavings = this.phastService.o2Enrichment(o2EnrichmentPoint).fuelSavingsEnriched;
+
+          if (fuelSavings < 0 || fuelSavings > 100) {
+            return "<i class='fa fa-minus' style='margin: 0px; font-size: 1vw;'></i>" +
+              " <i class='fa fa-minus' style='margin: 0px; font-size: 1vw;'></i>" +
+              " <i class='fa fa-minus' style='margin: 0px; font-size: 1vw;'></i>";
+          } else {
+            return "<p style='margin: 0px; font-size: 1vw'>" + format(fuelSavings) + "%</p>";
+          }
         }
       });
 
@@ -611,7 +614,6 @@ export class O2EnrichmentGraphComponent implements OnInit {
 
     if (this.lines != null) {
       this.lines.forEach((d, i) => {
-
         const lineDetail2 = d3.select('app-o2-enrichment').selectAll('#lineDetails').append('tr')
 
         lineDetail2.append('td')
@@ -626,13 +628,12 @@ export class O2EnrichmentGraphComponent implements OnInit {
           .style("vertical-align", "middle")
           .html(() => {
             if (this.xPosition != null) {
-              const format = d3.format(',.2f');
               return "<p style='margin: 0px; font-size: 1vw'>" + format(this.xPosition) + '%</p>';
-            }
-            else {
-              return "<i class='fa fa-minus' style='margin: 0px; font-size: 1vw; vertical-align: middle: height: 100%;'></i>" +
-                " <i class='fa fa-minus' style='margin: 0px; font-size: 1vw; vertical-align: middle: height: 100%;'></i>" +
-                " <i class='fa fa-minus' style='margin: 0px; font-size: 1vw; vertical-align: middle: height: 100%;'></i>";
+            } else {
+              return "<p style='margin: 0px; font-size: 1vw'>" + format(d.o2CombAirEnriched) + '%</p>';
+              // return "<i class='fa fa-minus' style='margin: 0px; font-size: 1vw; vertical-align: middle: height: 100%;'></i>" +
+              //   " <i class='fa fa-minus' style='margin: 0px; font-size: 1vw; vertical-align: middle: height: 100%;'></i>" +
+              //   " <i class='fa fa-minus' style='margin: 0px; font-size: 1vw; vertical-align: middle: height: 100%;'></i>";
             }
           });
 
@@ -641,7 +642,6 @@ export class O2EnrichmentGraphComponent implements OnInit {
           .style("padding", "1px")
           .style("vertical-align", "middle")
           .html(() => {
-            const format = d3.format(',.2f');
             const o2EnrichmentPoint = {
               o2CombAir: this.o2Enrichment.o2CombAir,
               o2CombAirEnriched: this.xPosition,
@@ -654,19 +654,22 @@ export class O2EnrichmentGraphComponent implements OnInit {
               fuelConsumption: this.o2Enrichment.fuelConsumption
             };
 
+            if (this.xPosition == null) {
+              o2EnrichmentPoint.o2CombAirEnriched = d.o2CombAirEnriched;
+            }
+
             const fuelSavings = this.phastService.o2Enrichment(o2EnrichmentPoint).fuelSavingsEnriched;
 
-            if (fuelSavings < 0 || fuelSavings > 100 || this.xPosition == null) {
+            if (fuelSavings < 0 || fuelSavings > 100) {
               return "<i class='fa fa-minus' style='margin: 0px; font-size: 1vw; vertical-align: middle: height: 100%;'></i>" +
                 " <i class='fa fa-minus' style='margin: 0px; font-size: 1vw; vertical-align: middle: height: 100%;'></i>" +
                 " <i class='fa fa-minus' style='margin: 0px; font-size: 1vw; vertical-align: middle: height: 100%;'></i>";
-            }
-            else {
+            } else {
               return "<p style='margin: 0px; font-size: 1vw'>" + format(fuelSavings) + "%</p>";
             }
           });
 
-        const format = d3.format(',.2f');
+        const format2 = d3.format(',.0f');
         lineDetail2.append('td')
           .attr('class', 'text-center')
           .style("padding", "1px")
@@ -674,9 +677,9 @@ export class O2EnrichmentGraphComponent implements OnInit {
           .style('font-size', '0.85vw')
           .style("vertical-align", "middle")
           .html(
-            '<strong><div>Combustion Air Preheat Temp: </strong>' + format(d.combAirTempEnriched) + ' &#8457;</div>' +
+            '<strong><div>Combustion Air Preheat Temp: </strong>' + format2(d.combAirTempEnriched) + ' &#8457;</div>' +
             '<strong><div>O<sub>2</sub> in Enriched Flue Gasses: </strong>' + format(d.o2FlueGasEnriched) + ' %</div>' +
-            '<strong><div>Flue Gas Temperature: </strong>' + format(d.flueGasTempEnriched) + ' ' + ' &#8457;</div>'
+            '<strong><div>Flue Gas Temperature: </strong>' + format2(d.flueGasTempEnriched) + ' ' + ' &#8457;</div>'
           );
 
         const deleteBtn = lineDetail2.append("td")
@@ -710,6 +713,7 @@ export class O2EnrichmentGraphComponent implements OnInit {
   }
 
   clearDetails() {
+    this.xPosition = null;
     d3.selectAll(".fuelSavings")
       .html("<i class='fa fa-minus' style='margin: 0px; font-size: 1vw; vertical-align: middle: height: 100%;'></i>" +
       " <i class='fa fa-minus' style='margin: 0px; font-size: 1vw; vertical-align: middle: height: 100%;'></i>" +
@@ -736,8 +740,7 @@ export class O2EnrichmentGraphComponent implements OnInit {
       this.isGridToggled = false;
       this.makeGraph();
       this.redrawLines();
-    }
-    else {
+    } else {
       this.isGridToggled = true;
       this.makeGraph();
       this.redrawLines();
