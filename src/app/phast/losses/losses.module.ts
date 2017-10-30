@@ -19,7 +19,6 @@ import { CoolingLossesModule } from "./cooling-losses/cooling-losses.module";
 import { ChargeMaterialModule } from './charge-material/charge-material.module';
 
 import { LossesComponent } from './losses.component';
-import { LossesSidebarComponent } from './losses-sidebar/losses-sidebar.component';
 import { LossesTabsComponent } from './losses-tabs/losses-tabs.component';
 
 import { NotesComponent } from './notes/notes.component';
@@ -80,7 +79,6 @@ import { LossesSplashPageComponent } from './losses-splash-page/losses-splash-pa
   ],
   declarations: [
     LossesComponent,
-    LossesSidebarComponent,
     LossesTabsComponent,
     NotesComponent,
     LossesHelpComponent,

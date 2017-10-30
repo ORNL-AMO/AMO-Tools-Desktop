@@ -93,6 +93,7 @@ export class LossesComponent implements OnInit {
   }
 
   addModification() {
+    console.log('add mod');
     let tmpModification: Modification = {
       phast: {
         losses: {},
@@ -158,6 +159,7 @@ export class LossesComponent implements OnInit {
   }
 
   addLoss() {
+    console.log('add loss');
     this.lossAdded = true;
     this.addLossToggle = !this.addLossToggle;
   }
