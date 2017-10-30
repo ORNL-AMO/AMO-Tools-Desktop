@@ -43,10 +43,17 @@ export class OutputSummaryComponent implements OnInit {
         this.getMaxAnnualSavings();
       }
     }
-  }
-
-  ngOnDestroy() {
-    console.log('destroy')
+    if (this.inRollup) {
+      this.reportRollupService.selectedPsats.forEach(val => {
+        if (val) {
+          val.forEach(assessment => {
+            if (assessment.assessmentId == this.assessment.id) {
+              this.selectedModificationIndex = assessment.selectedIndex;
+            }
+          })
+        }
+      })
+    }
   }
 
   checkSavings(num: number) {
@@ -71,9 +78,7 @@ export class OutputSummaryComponent implements OnInit {
   getMaxAnnualSavings() {
     let minCost = _.minBy(this.psat.modifications, (mod) => { return mod.psat.outputs.annual_cost })
     if (minCost) {
-      this.selectedModificationIndex = _.findIndex(this.psat.modifications, minCost);
       this.maxAnnualSavings = this.psat.outputs.annual_cost - minCost.psat.outputs.annual_cost;
-
     }
   }
 

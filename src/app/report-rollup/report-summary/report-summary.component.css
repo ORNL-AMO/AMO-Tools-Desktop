@@ -55,14 +55,6 @@
         padding: 7px 0 3px 31px;
         font-weight: bold;
     }
-    .coming-soon .summary-header.furnaces h3 {
-        background-image: url('../../../assets/images/ico-phast-diagram.png');
-        background-repeat: no-repeat;
-        background-position: left center;
-        background-size: 20px;
-        padding: 7px 0 3px 31px;
-        font-weight: bold;
-    }
 .coming-soon .summary-header > span {
     float: right;
     border-radius: 50%;
@@ -94,8 +86,72 @@
     margin-bottom: 2px;
 }
 
+.summary-header {
+    border-bottom: #ddd solid 1px;
+    padding: 6px;
+}
+.summary-header:after {
+    display: table;
+    content: "";
+    clear: both;
+}
+.summary-header h3 {
+    font-size: 17px;
+    margin: 0;
+    padding-left: 23px;
+    float: left;
+    background-repeat: no-repeat;
+    background-position: left center;
+    background-size: 20px;
+    padding: 7px 0 3px 31px;
+    font-weight: bold;
+}
+.summary-header > span {
+    float: right;
+    border-radius: 50%;
+    background: #2980b9;
+    -webkit-box-shadow: inset 0px 0px 2px 0px rgba(0,0,0,0.5);
+    -moz-box-shadow: inset 0px 0px 2px 0px rgba(0,0,0,0.5);
+    box-shadow: inset 0px 0px 2px 0px rgba(0,0,0,0.5);
+}
+    .summary-header > span span {
+        font-size: 16px;
+        color: #fff;
+        font-weight: bold;
+        padding: 2px 10px;
+    }
+
+dl.summary-list {
+    padding: 8px 8px 0;
+    float: left;
+    margin-right: 2px;
+    margin-bottom: 0;
+}
+.summary-list dt, .summary-list dd {
+    padding: 0 8px;
+}
+.summary-list dt {
+    font-size: 12px;
+    font-weight: normal;
+    color: #7b7b7b;
+}
+.summary-list dd {
+    font-size: 16px;
+    margin-bottom: 2px;
+}
+
 
 @media print {
+
+    .summary-header h3 {
+        padding: 0;
+        background: none;
+    }
+
+    dl.summary-list {
+        margin-bottom: 10px;
+    }
+
     .report-summary ul li {
         float: left;
     }

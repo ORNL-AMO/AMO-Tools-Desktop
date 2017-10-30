@@ -50,7 +50,7 @@ export class PercentGraphComponent implements OnInit {
     //let object render before resizing initially
     setTimeout(() => {
       this.setValueMargin();
-    }, 1000)
+    }, 1500)
   }
 
   ngOnDestroy() {

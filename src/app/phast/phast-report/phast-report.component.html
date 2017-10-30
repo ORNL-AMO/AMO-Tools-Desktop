@@ -1,7 +1,7 @@
 <div 
-    class="assessment-report" 
+    class="assessment-report report-in-phast" 
     *ngIf="phast && settings" 
-    [ngClass]="{'assessment-report-padding': inPhast, 'report-in-phast': inPsat, 'report-in-rollup': !inPhast}">
+    [ngClass]="{'assessment-report-padding': inPhast, 'report-in-rollup': !inPhast}">
 
 
     <div class="report-header">  
@@ -29,7 +29,7 @@
     <!-- End .report-header -->
 
 
-    <div class="report-data">
+    <div class="report-data" *ngIf="phast.setupDone">
 
         <ul class="tabs primary hide-print">
             <li (click)="setTab('energy-used')" [ngClass]="{'active': currentTab == 'energy-used'}">
@@ -51,7 +51,7 @@
           <app-executive-summary  [settings]="settings" [phast]="phast" [assessment]="assessment" [inPhast]="inPhast"></app-executive-summary>
         </div>
         <div class="results" *ngIf="currentTab == 'results-data'"  style="padding-top: 20px;">
-          <app-results-data [phast]="phast" [settings]="settings" [assessment]="assessment" [inPhast]="true"></app-results-data>
+          <app-results-data [phast]="phast" [settings]="settings" [assessment]="assessment" [inPhast]="inPhast"></app-results-data>
         </div>        
         <div class="results" *ngIf="currentTab == 'report-graphs'"  style="padding-top: 20px;">
           <app-report-graphs [phast]="phast" [settings]="settings"></app-report-graphs>
@@ -59,6 +59,9 @@
         <div class="results" *ngIf="currentTab == 'report-sankey'"  style="padding-top: 20px;">
           <app-report-sankey [phast]="phast" [settings]="settings" ></app-report-sankey>
         </div>
+    </div>
+    <div *ngIf="!phast.setupDone">
+        <p class="alert-warning text-center">This assessment has not been completed, please complete this assessment to see the resulting data.</p>
     </div>
 
 </div>

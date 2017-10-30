@@ -38,9 +38,7 @@ export class PumpCurveComponent implements OnInit {
       )
     }
 
-    if (!this.inPsat) {
-      this.initForm();
-    }
+    this.initForm();
     this.pumpCurveService.calcMethod.subscribe(val => {
       this.selectedFormView = val;
     })
@@ -72,7 +70,7 @@ export class PumpCurveComponent implements OnInit {
         if (this.pumpCurveForm.headOrder > 5 && this.pumpCurveForm.headFlow6) {
           tmpStr = this.pumpCurveForm.headFlow6 + '(flow)&#x2076; + ' + tmpStr;
         }
-        this.regEquation = 'Head = '+ tmpStr;
+        this.regEquation = 'Head = ' + tmpStr;
         for (let i = 0; i < this.pumpCurveForm.headOrder; i++) {
           this.regEquation = this.regEquation.replace('+ -', '- ');
         }

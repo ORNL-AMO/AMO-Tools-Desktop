@@ -26,7 +26,7 @@ export class ExecutiveSummaryComponent implements OnInit {
 
   modifications: Array<ExecutiveSummary>;
   phastMods: Array<any>;
-  selectedModificationIndex: number = 0;
+  selectedModificationIndex: number;
   notes: Array<SummaryNote>;
   timeUnit: string;
   energyUnit: string;
@@ -42,7 +42,7 @@ export class ExecutiveSummaryComponent implements OnInit {
         let tmpSummary = this.executiveSummaryService.getSummary(mod.phast, true, this.settings, this.phast, this.baseline);
         this.modifications.push(tmpSummary);
       })
-      this.initMaxAnnualSavings();
+      // this.initMaxAnnualSavings();
       this.notes = this.executiveSummaryService.buildSummaryNotes(this.phast.modifications);
     }
 
@@ -58,14 +58,19 @@ export class ExecutiveSummaryComponent implements OnInit {
         this.energyUnit = 'MMBTU/lb';
       }
     }
-  }
-
-  initMaxAnnualSavings() {
-    let min = _.minBy(this.modifications, 'annualCost');
-    if (min) {
-      this.selectedModificationIndex = _.findIndex(this.modifications, min);
+    if (!this.inPhast) {
+      this.reportRollupService.selectedPhasts.subscribe(val => {
+        if (val) {
+          val.forEach(assessment => {
+            if (assessment.assessmentId == this.assessment.id) {
+              this.selectedModificationIndex = assessment.selectedIndex;
+            }
+          })
+        }
+      });
     }
   }
+
   useModification() {
     this.reportRollupService.updateSelectedPhasts(this.assessment, this.selectedModificationIndex);
   }

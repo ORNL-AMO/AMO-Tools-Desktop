@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
 import { FormGroup, FormBuilder, FormControl, Validators, NgModel, FormsModule } from '@angular/forms';
 import { PumpCurveForm, PumpCurveDataRow } from '../pump-curve';
+import { Settings } from '../../../../shared/models/settings';
 
 @Component({
   selector: 'app-pump-curve-equation-form',
@@ -10,17 +11,20 @@ import { PumpCurveForm, PumpCurveDataRow } from '../pump-curve';
 export class PumpCurveEquationFormComponent implements OnInit {
   @Input()
   pumpCurveForm: PumpCurveForm;
-
+  @Input()
+  settings: Settings;
+  @Input()
+  inPsat: boolean;
   @Output('calculate')
   calculate = new EventEmitter<boolean>();
   @Output('changeField')
   changeField = new EventEmitter<string>();
-
+  
   orderOptions: Array<number> = [
     2, 3, 4, 5, 6
   ]
-  pumpForm: any;
 
+  // maxFlow
   constructor() { }
 
   ngOnInit() {

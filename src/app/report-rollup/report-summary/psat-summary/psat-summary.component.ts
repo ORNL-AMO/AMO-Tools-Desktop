@@ -8,7 +8,7 @@ import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
 @Component({
   selector: 'app-psat-summary',
   templateUrl: './psat-summary.component.html',
-  styleUrls: ['./psat-summary.component.css']
+  styleUrls: ['./psat-summary.component.css', '../report-summary.component.css']
 })
 export class PsatSummaryComponent implements OnInit {
 

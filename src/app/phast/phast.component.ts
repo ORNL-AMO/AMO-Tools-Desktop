@@ -110,9 +110,8 @@ export class PhastComponent implements OnInit {
     this.disclaimerToast();
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(){
     this.lossesService.lossesTab.next('charge-material');
-    this.lossesService.baseline.next(null);
   }
 
 

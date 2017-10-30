@@ -36,6 +36,10 @@ export class ReportRollupComponent implements OnInit {
     }, 2000)
   }
 
+  ngOnDestroy() {
+    this.reportRollupService.initSummary();
+  }
+
   exportToCsv() {
     // let tmpDataArr = new Array();
     // this.exportReports.forEach(report => {

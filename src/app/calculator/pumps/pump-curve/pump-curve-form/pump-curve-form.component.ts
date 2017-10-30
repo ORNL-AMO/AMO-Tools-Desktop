@@ -2,12 +2,19 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { PumpCurveForm, PumpCurveDataRow } from '../pump-curve';
 import * as regression from 'regression';
 import { PumpCurveService } from '../pump-curve.service';
+import { PsatService } from '../../../../psat/psat.service';
+import { IndexedDbService } from '../../../../indexedDb/indexed-db.service';
+import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
+import { PSAT } from '../../../../shared/models/psat';
+import { Settings } from '../../../../shared/models/settings';
 @Component({
   selector: 'app-pump-curve-form',
   templateUrl: './pump-curve-form.component.html',
   styleUrls: ['./pump-curve-form.component.css']
 })
 export class PumpCurveFormComponent implements OnInit {
+  @Input()
+  psat: PSAT;
   @Input()
   pumpCurveForm: PumpCurveForm;
   @Output('changeField')
@@ -16,17 +23,37 @@ export class PumpCurveFormComponent implements OnInit {
   emitCalculate = new EventEmitter<boolean>();
   @Input()
   selectedFormView: string;
-
+  @Input()
+  settings: Settings;
+  @Input()
+  inPsat: boolean;
+  curveForm: any;
   options: Array<string> = [
     'Diameter',
     'Speed'
   ]
 
 
-  constructor(private pumpCurveService: PumpCurveService) { }
+  constructor(private pumpCurveService: PumpCurveService, private psatService: PsatService, private indexedDbService: IndexedDbService, private convertUnitsService: ConvertUnitsService) { }
 
-  ngOnInit() {
-  }
+  ngOnInit() { }
+
+  // setFormVals(settings: Settings) {
+  //   if (settings.flowMeasurement != 'gpm') {
+  //     let tmpVal = this.convertUnitsService.value(this.curveForm.value.flowRate).from('gpm').to(settings.flowMeasurement);
+  //     this.curveForm.patchValue({
+  //       flowRate: this.psatService.roundVal(tmpVal, 2)
+  //     })
+  //   }
+  //   if (settings.distanceMeasurement != 'ft') {
+  //     let tmpVal = this.convertUnitsService.value(this.curveForm.value.head).from('ft').to(settings.distanceMeasurement);
+
+  //     this.curveForm.patchValue({
+  //       head: this.psatService.roundVal(tmpVal, 2)
+  //     })
+  //   }
+  // }
+
 
   focusField(str: string) {
     this.changeField.emit(str);
@@ -44,7 +71,7 @@ export class PumpCurveFormComponent implements OnInit {
     this.emitCalculate.emit(true);
   }
 
-  setView(){
+  setView() {
     this.pumpCurveService.calcMethod.next(this.selectedFormView);
   }
 

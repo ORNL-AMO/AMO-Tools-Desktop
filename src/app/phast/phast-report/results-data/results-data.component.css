@@ -16,3 +16,7 @@
     font-weight: bold;
 }
 */
+.selected-modification{
+    z-index: 2;
+    background: #e5efe9;
+}

@@ -77,7 +77,7 @@ export class LossesComponent implements OnInit {
   }
 
   ngOnDestroy() {
-    // this.lossesService.lossesTab.next('charge-material');
+   // this.lossesService.lossesTab.next('charge-material');
   }
 
   changeField($event) {

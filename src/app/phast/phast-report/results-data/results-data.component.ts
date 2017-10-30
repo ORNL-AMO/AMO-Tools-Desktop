@@ -4,6 +4,7 @@ import { PHAST, PhastResults, ShowResultsCategories } from '../../../shared/mode
 import { Settings } from '../../../shared/models/settings';
 import { Assessment } from '../../../shared/models/assessment';
 import { PhastResultsService } from '../../phast-results.service';
+import { ReportRollupService } from '../../../report-rollup/report-rollup.service';
 
 @Component({
   selector: 'app-results-data',
@@ -23,11 +24,11 @@ export class ResultsDataComponent implements OnInit {
 
   baseLineResults: PhastResults;
   modificationResults: Array<PhastResults>;
-
+  phastMods: Array<any>;
   showResultsCats: ShowResultsCategories;
   lossUnit: string;
-
-  constructor(private phastService: PhastService, private phastResultsService: PhastResultsService) { }
+  selectedModificationIndex: number;
+  constructor(private phastService: PhastService, private phastResultsService: PhastResultsService, private reportRollupService: ReportRollupService) { }
 
   ngOnInit() {
     this.modificationResults = new Array<PhastResults>();
@@ -35,6 +36,7 @@ export class ResultsDataComponent implements OnInit {
     if (this.phast.losses) {
       this.baseLineResults = this.phastResultsService.getResults(this.phast, this.settings);
       if (this.phast.modifications) {
+        this.phastMods = this.phast.modifications;
         if (this.phast.modifications.length != 0) {
           this.phast.modifications.forEach(mod => {
             let tmpResults = this.phastResultsService.getResults(mod.phast, this.settings);
@@ -54,5 +56,19 @@ export class ResultsDataComponent implements OnInit {
         this.lossUnit = 'Btu/hr';
       }
     }
+    if (!this.inPhast) {
+      this.reportRollupService.selectedPhasts.subscribe(val => {
+        if (val) {
+          val.forEach(assessment => {
+            if (assessment.assessmentId == this.assessment.id) {
+              this.selectedModificationIndex = assessment.selectedIndex;
+            }
+          })
+        }
+      });
+    }
+  }
+  useModification() {
+    this.reportRollupService.updateSelectedPhasts(this.assessment, this.selectedModificationIndex);
   }
 }
