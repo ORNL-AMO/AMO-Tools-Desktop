@@ -5,25 +5,33 @@
     <nav>
       <app-losses-tabs *ngIf="currentTab == 'losses' && mainTab == 'assessment'" [phast]="_phast" [settings]="settings" [saveDbToggle]="saveDbToggle"></app-losses-tabs>
     </nav>
+
+    <div *ngIf="mainTab == 'system-setup'">
+      <nav>
+        <ul class="tabs subtabs progress-tabs">
+          <li [ngClass]="{'active': subTab == 'system-basics'}">
+            <a (click)="changeSubTab('system-basics')"><span class="step-number">1</span> Assessment Settings</a>
+          </li>
+          <li [ngClass]="{'active': subTab == 'operating-hours'}">
+            <a (click)="changeSubTab('operating-hours')"><span class="step-number">2</span> Operating Hours</a>
+          </li>
+          <li [ngClass]="{'active': subTab == 'energy-costs'}">
+            <a (click)="changeSubTab('energy-costs')"><span class="step-number">3</span> Operating Costs</a>
+          </li>
+          <li [ngClass]="{'active': subTab == 'heat-balance'}">
+            <a (click)="changeSubTab('heat-balance')"><span class="step-number">4</span> Heat Balance</a>
+          </li>
+        </ul>
+      </nav>
+      <nav *ngIf="subTab == 'heat-balance'">
+        <app-losses-tabs [phast]="_phast" [settings]="settings" [saveDbToggle]="saveDbToggle"></app-losses-tabs>
+      </nav>
+    </div>
   </div>
 
-
   <div *ngIf="mainTab == 'system-setup'">
-    <nav>
-      <ul class="tabs subtabs progress-tabs">
-        <li [ngClass]="{'active': subTab == 'system-basics'}">
-          <a (click)="changeSubTab('system-basics')"><span class="step-number">1</span> Assessment Settings</a>
-        </li>
-        <li [ngClass]="{'active': subTab == 'operating-hours'}">
-          <a (click)="changeSubTab('operating-hours')"><span class="step-number">2</span> Operating Hours</a>
-        </li>
-        <li [ngClass]="{'active': subTab == 'energy-costs'}">
-          <a (click)="changeSubTab('energy-costs')"><span class="step-number">3</span> Operating Costs</a>
-        </li>
-      </ul>
-    </nav>
     <div class="tab-content">
-      <div class="wrapper">
+      <div class="wrapper" *ngIf="subTab != 'heat-balance'">
         <div class="form">
           <app-system-basics *ngIf="subTab == 'system-basics'" [phast]="_phast" [settings]="settings" [saveClicked]="saveClicked" [assessment]="assessment"
             [isAssessmentSettings]="isAssessmentSettings" (updateSettings)="getSettings($event)" (save)="saveDb()"></app-system-basics>
@@ -34,6 +42,8 @@
           <app-help-panel></app-help-panel>
         </div>
       </div>
+      <app-losses *ngIf="subTab == 'heat-balance'" [(phast)]="_phast" [saveClicked]="saveClicked" (saved)="saveDb()" [settings]="settings"
+        [inSetup]="true"></app-losses>
     </div>
   </div>
 

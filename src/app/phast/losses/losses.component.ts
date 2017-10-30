@@ -19,7 +19,9 @@ export class LossesComponent implements OnInit {
   saved = new EventEmitter<boolean>();
   @Input()
   settings: Settings;
-
+  @Input()
+  inSetup: boolean;
+  
   lossAdded: boolean;
 
   _modifications: Modification[];

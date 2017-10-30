@@ -83,7 +83,7 @@
     </div>
   </div>
   <!--Modification Start -->
-  <div class="modification" *ngIf="_modifications.length != 0" (click)="togglePanel(modificationSelected)" [ngClass]="{'disabled': modificationSelected == false, 'modal-open': isModalOpen == true}">
+  <div class="modification" *ngIf="_modifications.length != 0 && !inSetup" (click)="togglePanel(modificationSelected)" [ngClass]="{'disabled': modificationSelected == false, 'modal-open': isModalOpen == true}">
 
     <!-- Modification Header -->
     <!--<div class="header" *ngIf="!editModification">-->
