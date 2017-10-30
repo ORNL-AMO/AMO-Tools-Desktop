@@ -39,6 +39,8 @@ export class PhastComponent implements OnInit {
   _phast: PHAST;
 
   mainTab: string = 'system-setup';
+  init: boolean = true;
+  saveDbToggle: string;
   constructor(
     private location: Location,
     private assessmentService: AssessmentService,
@@ -63,6 +65,7 @@ export class PhastComponent implements OnInit {
       this.indexedDbService.getAssessment(parseInt(tmpAssessmentId)).then(dbAssessment => {
         this.assessment = dbAssessment;
         this._phast = (JSON.parse(JSON.stringify(this.assessment.phast)));
+        this.lossesService.baseline.next(this._phast);
         if (!this._phast.operatingHours) {
           this._phast.operatingHours = {
             weeksPerYear: 52,
@@ -119,6 +122,10 @@ export class PhastComponent implements OnInit {
         if (results.length != 0) {
           this.settings = results[0];
           this.isAssessmentSettings = true;
+          if (this.init) {
+            this.lossesService.checkSetupDone(this._phast, this.settings);
+            this.init = false;
+          }
           if (update) {
             this.addToast('Settings Saved');
           }
@@ -200,72 +207,13 @@ export class PhastComponent implements OnInit {
   }
 
   saveDb() {
-    this._phast.setupDone = this.checkSetupDone(this.settings);
+    this._phast.setupDone = this.lossesService.checkSetupDone((JSON.parse(JSON.stringify(this._phast))), this.settings);
     this.assessment.phast = (JSON.parse(JSON.stringify(this._phast)));
+    this.lossesService.baseline.next(this._phast);
+    this.saveDbToggle = 'saveDb' + Math.random();
     this.indexedDbService.putAssessment(this.assessment).then(
       results => { this.addToast('Assessment Saved') }
     )
-  }
-
-  checkSetupDone(settings: Settings) {
-    let isDone, chargeDone, grossHeat = false;
-    if (this._phast.losses) {
-      if (this._phast.losses.chargeMaterials) {
-        if (this._phast.losses.chargeMaterials.length != 0) {
-          let test = this.phastService.sumChargeMaterials(this._phast.losses.chargeMaterials, this.settings);
-          if (test != 0) {
-            chargeDone = true;
-          }
-        }
-      }
-
-      let categories = this.phastResultsService.getResultCategories(this.settings);
-      if (categories.showEnInput1) {
-        if (this._phast.losses.energyInputEAF) {
-          if (this._phast.losses.energyInputEAF.length != 0) {
-            let test = this.phastService.sumEnergyInputEAF(this._phast.losses.energyInputEAF, this.settings);
-            if (test != 0) {
-              grossHeat = true;
-            }
-          }
-        }
-      }
-      else if (categories.showEnInput2) {
-        if (this._phast.losses.energyInputExhaustGasLoss) {
-          if (this._phast.losses.energyInputExhaustGasLoss.length != 0) {
-            let test = this.phastService.sumEnergyInputExhaustGas(this._phast.losses.energyInputExhaustGasLoss, this.settings);
-            if (test != 0) {
-              grossHeat = true;
-            }
-          }
-        }
-      }
-      else if (categories.showFlueGas) {
-        if (this._phast.losses.flueGasLosses) {
-          if (this._phast.losses.flueGasLosses.length != 0) {
-            let flueGas = this._phast.losses.flueGasLosses[0];
-            if (flueGas.flueGasType == 'By Mass') {
-              let test = this.phastService.flueGasByMass(flueGas.flueGasByMass, this.settings);
-              if (test != 0) {
-                grossHeat = true;
-              }
-            } else if (flueGas.flueGasType == 'By Volume') {
-              let test = this.phastService.flueGasByVolume(flueGas.flueGasByVolume, this.settings);
-              if (test != 0) {
-                grossHeat = true;
-              }
-            }
-          }
-        }
-      }
-      else if (categories.showSystemEff) {
-        if (this._phast.systemEfficiency) {
-          grossHeat = true;
-        }
-      }
-    }
-    isDone = (grossHeat && chargeDone);
-    return isDone;
   }
 
 

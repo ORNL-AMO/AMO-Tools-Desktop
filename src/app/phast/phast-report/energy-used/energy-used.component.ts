@@ -51,7 +51,6 @@ export class EnergyUsedComponent implements OnInit {
   fuelEnergyUsed: number = 0;
   steamEnergyUsed: number = 0;
 
-
   energyPerMassUnit: string;
   energyPerTimeUnit: string;
   energyCostUnit: string;

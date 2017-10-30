@@ -64,7 +64,7 @@ export class LossesComponent implements OnInit {
         || this.lossesTab == 'flue-gas-losses'
         || this.lossesTab == 'energy-input'
         || this.lossesTab == 'energy-input-exhaust-gas'
-        ) {
+      ) {
         this.showAddBtn = false;
       } else {
 

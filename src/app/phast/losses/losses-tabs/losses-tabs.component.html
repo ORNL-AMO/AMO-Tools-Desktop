@@ -1,64 +1,64 @@
 <ul class="tabs subtabs">
   <li [ngClass]="{'active': lossesTab == 'charge-material'}" (click)="tabChange('charge-material')">
     <a class="nav-link small">
-    Charge Material
+    <span class="required-asterisk" *ngIf="!chargeDone">*</span>Charge Material <span class="badge gray-badge" *ngIf="numCharge"><strong>{{numCharge}}</strong></span>
     </a>
   </li><!--
   --><li [ngClass]="{'active': lossesTab == 'fixture-losses'}" (click)="tabChange('fixture-losses')">
   <a class="nav-link small">
-    Fixtures, Trays, etc.
+    Fixtures, Trays, etc. <span class="badge gray-badge" *ngIf="numFixture"><strong>{{numFixture}}</strong></span>
   </a>
   </li><!--
   --><li [ngClass]="{'active': lossesTab == 'wall-losses'}" (click)="tabChange('wall-losses')">
     <a class="nav-link small">
-    Wall
+    Wall <span class="badge gray-badge" *ngIf="numWall"><strong>{{numWall}}</strong></span>
     </a>
   </li><!--
   --><li [ngClass]="{'active': lossesTab == 'cooling-losses'}" (click)="tabChange('cooling-losses')">
   <a class="nav-link small">
-    Cooling
+    Cooling <span class="badge gray-badge" *ngIf="numCooling"><strong>{{numCooling}}</strong></span>
   </a>
   </li><!--
   --><li [ngClass]="{'active': lossesTab == 'atmosphere-losses'}" (click)="tabChange('atmosphere-losses')">
     <a class="nav-link small">
-    Atmosphere
+    Atmosphere <span class="badge gray-badge" *ngIf="numAtmosphere"><strong>{{numAtmosphere}}</strong></span>
     </a>
   </li><!--
   --><li [ngClass]="{'active': lossesTab == 'opening-losses'}" (click)="tabChange('opening-losses')">
     <a class="nav-link small">
-    Opening
-    </a>
+    Opening <span class="badge gray-badge" *ngIf="numOpening"><strong>{{numOpening}}</strong></span>
+    </a> 
   </li><!--
   --><li [ngClass]="{'active': lossesTab == 'gas-leakage-losses'}" (click)="tabChange('gas-leakage-losses')">
     <a class="nav-link small">
-    Gas Leakage
+    Gas Leakage <span class="badge gray-badge" *ngIf="numLeakage"><strong>{{numLeakage}}</strong></span>
     </a>
   </li><!--
   --><li [ngClass]="{'active': lossesTab == 'extended-surface-losses'}" (click)="tabChange('extended-surface-losses')">
     <a class="nav-link small">
-    Extended Surface
+    Extended Surface <span class="badge gray-badge" *ngIf="numExtended"><strong>{{numExtended}}</strong></span>
     </a>
   </li><!--
     --><li [ngClass]="{'active': lossesTab == 'other-losses'}" (click)="tabChange('other-losses')">
     <a class="nav-link small">
-    Other
+    Other <span class="badge gray-badge" *ngIf="numOther"><strong>{{numOther}}</strong></span>
     </a>
   </li><!--
   --><li *ngIf="showSlag" [ngClass]="{'active': lossesTab == 'slag'}"
          (click)="tabChange('slag')">
   <a class="nav-link small">
-    Slag
+    Slag <span class="badge gray-badge" *ngIf="numSlag"><strong>{{numSlag}}</strong></span>
   </a>
   </li><!--
   --><li *ngIf="showFlueGas" [ngClass]="{'active': lossesTab == 'flue-gas-losses'}" (click)="tabChange('flue-gas-losses')">
   <a class="nav-link small">
-    Flue Gas
+    <span class="required-asterisk" *ngIf="!flueGasDone">*</span> Flue Gas
   </a>
   </li><!--
   --><li *ngIf="showAuxPower" [ngClass]="{'active': lossesTab == 'auxiliary-power'}"
     (click)="tabChange('auxiliary-power')">
     <a class="nav-link small">
-      Auxiliary Power
+      Auxiliary Power  <span class="badge gray-badge" *ngIf="numAuxPower"><strong>{{numAuxPower}}</strong></span>
     </a>
   </li><!--
   --><li *ngIf="showExGas" [ngClass]="{'active': lossesTab == 'exhaust-gas'}" (click)="tabChange('exhaust-gas')">
@@ -68,19 +68,19 @@
   </li><!--
     --><li *ngIf="showSystemEff" [ngClass]="{'active': lossesTab == 'heat-system-efficiency'}" (click)="tabChange('heat-system-efficiency')">
     <a class="nav-link small">
-    Heat System Efficiency
+    <span class="required-asterisk" *ngIf="!efficiencyDone">*</span> Heat System Efficiency
     </a>
   </li><!--
   --><li *ngIf="showEnInput1" [ngClass]="{'active': lossesTab == 'energy-input'}"
     (click)="tabChange('energy-input')">
     <a class="nav-link small">
-      Energy Input
+     <span class="required-asterisk" *ngIf="!enInput2Done">*</span>  Energy Input
     </a>
   </li><!--
   --><li *ngIf="showEnInput2" [ngClass]="{'active': lossesTab == 'energy-input-exhaust-gas'}"
     (click)="tabChange('energy-input-exhaust-gas')">
     <a class="nav-link small">
-      Energy Input
+     <span class="required-asterisk" *ngIf="!enInput2Done">*</span> Energy Input
     </a>
   </li><!--
   --><li [ngClass]="{'active': lossesTab == 'operations'}"
