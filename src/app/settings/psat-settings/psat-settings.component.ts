@@ -39,7 +39,8 @@ export class PsatSettingsComponent implements OnInit {
       'MGD',
       'm3/h',
       'L/s',
-      'm3/min'
+      'm3/min',
+      'impgpm'
     ];
     tmpList.forEach(unit => {
       let tmpPossibility = {
