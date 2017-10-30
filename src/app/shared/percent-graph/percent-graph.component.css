@@ -5,11 +5,9 @@
 h1 {
     animation-name: value-entrance;
     animation-duration: 1s;
-    float: left;
+    position: absolute;
     font-size: 18px;
     font-weight: bold;
-    padding-top: 6px;
-    margin-bottom: 0;
 }
 
 @keyframes value-entrance{
