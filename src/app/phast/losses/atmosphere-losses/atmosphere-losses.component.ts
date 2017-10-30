@@ -29,7 +29,8 @@ export class AtmosphereLossesComponent implements OnInit {
   isBaseline: boolean;
   @Input()
   settings: Settings;
-
+  @Input()
+  isLossesSetup: boolean;
   _atmosphereLosses: Array<any>;
   firstChange: boolean = true;
 
@@ -51,9 +52,9 @@ export class AtmosphereLossesComponent implements OnInit {
   }
 
   ngOnInit() {
-    if(this.settings.energySourceType == 'Electricity'){
+    if (this.settings.energySourceType == 'Electricity') {
       this.resultsUnit = 'kW';
-    }else if(this.settings.unitsOfMeasure == 'Metric'){
+    } else if (this.settings.unitsOfMeasure == 'Metric') {
       this.resultsUnit = 'kJ/hr';
     }
 
@@ -118,7 +119,9 @@ export class AtmosphereLossesComponent implements OnInit {
   }
 
   addLoss() {
-    this.atmosphereLossesService.addLoss(this.isBaseline);
+    if (this.isLossesSetup) {
+      this.atmosphereLossesService.addLoss(this.isBaseline);
+    }
     if (this.atmosphereLossesCompareService.differentArray) {
       this.atmosphereLossesCompareService.addObject(this.atmosphereLossesCompareService.differentArray.length - 1);
     }

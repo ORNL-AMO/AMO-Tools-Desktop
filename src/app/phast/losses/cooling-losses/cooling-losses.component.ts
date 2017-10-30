@@ -29,6 +29,8 @@ export class CoolingLossesComponent implements OnInit {
   isBaseline: boolean;
   @Input()
   settings: Settings;
+  @Input()
+  isLossesSetup: boolean;
 
   _coolingLosses: Array<any>;
   firstChange: boolean = true;
@@ -153,7 +155,9 @@ export class CoolingLossesComponent implements OnInit {
   }
 
   addLoss() {
-    this.coolingLossesService.addLoss(this.isBaseline);
+    if (this.isLossesSetup) {
+      this.coolingLossesService.addLoss(this.isBaseline);
+    }
     if (this.coolingLossesCompareService.differentArray) {
       this.coolingLossesCompareService.addObject(this.coolingLossesCompareService.differentArray.length - 1);
     }

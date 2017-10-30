@@ -28,7 +28,8 @@ export class OtherLossesComponent implements OnInit {
   isBaseline: boolean;
   @Input()
   settings: Settings;
-
+  @Input()
+  isLossesSetup: boolean;
   _otherLosses: Array<any>;
   firstChange: boolean = true;
   constructor(private otherLossesService: OtherLossesService, private otherLossCompareService: OtherLossesCompareService) { }
@@ -97,7 +98,9 @@ export class OtherLossesComponent implements OnInit {
   }
 
   addLoss() {
-    this.otherLossesService.addLoss(this.isBaseline);
+    if (this.isLossesSetup) {
+      this.otherLossesService.addLoss(this.isBaseline);
+    }
     if (this.otherLossCompareService.differentArray) {
       this.otherLossCompareService.addObject(this.otherLossCompareService.differentArray.length - 1);
     }

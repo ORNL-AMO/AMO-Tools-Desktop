@@ -29,6 +29,8 @@ export class EnergyInputComponent implements OnInit {
   isBaseline: boolean;
   @Input()
   settings: Settings;
+  @Input()
+  isLossesSetup: boolean;
 
   _energyInputs: Array<any>;
   firstChange: boolean = true;
@@ -50,9 +52,9 @@ export class EnergyInputComponent implements OnInit {
   }
 
   ngOnInit() {
-    if(this.settings.energySourceType == 'Electricity'){
+    if (this.settings.energySourceType == 'Electricity') {
       this.resultsUnit = 'kW';
-    }else if(this.settings.unitsOfMeasure == 'Metric'){
+    } else if (this.settings.unitsOfMeasure == 'Metric') {
       this.resultsUnit = 'kJ/hr';
     }
 
@@ -129,7 +131,9 @@ export class EnergyInputComponent implements OnInit {
   }
 
   addLoss() {
-    this.energyInputService.addLoss(this.isBaseline);
+    if (this.isLossesSetup) {
+      this.energyInputService.addLoss(this.isBaseline);
+    }
     if (this.energyInputCompareService.differentArray) {
       this.energyInputCompareService.addObject(this.energyInputCompareService.differentArray.length - 1);
     }

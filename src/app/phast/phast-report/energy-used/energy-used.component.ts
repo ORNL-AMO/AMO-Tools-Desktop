@@ -61,7 +61,7 @@ export class EnergyUsedComponent implements OnInit {
   // energyPerTimeUnit: string = 'BTU/hr';
   // energyCostUnit: string = '/BTU';
   // energyPerEnergyUnit: string = 'BTU/lb';
-    constructor(private designedEnergyService: DesignedEnergyService, private meteredEnergyService: MeteredEnergyService, private phastResultsService: PhastResultsService, private suiteDbService: SuiteDbService, private phastService: PhastService) { }
+  constructor(private designedEnergyService: DesignedEnergyService, private meteredEnergyService: MeteredEnergyService, private phastResultsService: PhastResultsService, private suiteDbService: SuiteDbService, private phastService: PhastService) { }
 
   ngOnInit() {
     let tmpResults = this.phastResultsService.getResults(this.phast, this.settings);
@@ -104,27 +104,27 @@ export class EnergyUsedComponent implements OnInit {
       }
     }
     this.baseLineResults = this.phastResultsService.getResults(this.phast, this.settings);
-
-    if (this.settings.unitsOfMeasure == 'Metric') {
-      this.energyPerMassUnit = 'kJ/kg';
-      this.energyPerTimeUnit = 'kJ/kWh';
-      this.energyCostUnit = '/GJ';
-      this.baseEnergyUnit = 'kJ/hr';
-      } else if (this.settings.unitsOfMeasure == 'Metric' && this.settings.energySourceType == 'Electricity') {
+    if (this.settings.unitsOfMeasure == 'Metric' && this.settings.energySourceType == 'Electricity') {
       this.energyPerMassUnit = 'kWh/kg';
       this.energyPerTimeUnit = 'kJ/kWh';
       this.energyCostUnit = '/GJ';
       this.baseEnergyUnit = 'kW';
-      } else if (this.settings.unitsOfMeasure == 'Imperial') {
+    } else if (this.settings.unitsOfMeasure == 'Metric') {
+      this.energyPerMassUnit = 'kJ/kg';
+      this.energyPerTimeUnit = 'kJ/kWh';
+      this.energyCostUnit = '/GJ';
+      this.baseEnergyUnit = 'kJ/hr';
+    } else if (this.settings.unitsOfMeasure == 'Imperial' && this.settings.energySourceType == 'Electricity') {
+      this.energyPerMassUnit = 'kWh/lb';
+      this.energyPerTimeUnit = 'Btu/kWh';
+      this.energyCostUnit = '/BTU';
+      this.baseEnergyUnit = 'kW';
+    }
+    else if (this.settings.unitsOfMeasure == 'Imperial') {
       this.energyPerMassUnit = 'BTU/lb';
       this.energyPerTimeUnit = 'BTU/hr';
       this.energyCostUnit = '/BTU';
       this.baseEnergyUnit = 'BTU/hr';
-      } else if (this.settings.unitsOfMeasure == 'Imperial' && this.settings.energySourceType == 'Electricity') {
-      this.energyPerMassUnit = 'kWh/lb';
-      this.energyPerTimeUnit = 'kWh/kWh';
-      this.energyCostUnit = '/BTU';
-      this.baseEnergyUnit = 'kW';
     }
   }
 

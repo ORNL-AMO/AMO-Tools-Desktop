@@ -29,6 +29,8 @@ export class SlagComponent implements OnInit {
   isBaseline: boolean;
   @Input()
   settings: Settings;
+  @Input()
+  isLossesSetup: boolean;
 
   _slagLosses: Array<any>;
   firstChange: boolean = true;
@@ -118,7 +120,9 @@ export class SlagComponent implements OnInit {
 
 
   addLoss() {
-    this.slagService.addLoss(this.isBaseline);
+    if (this.isLossesSetup) {
+      this.slagService.addLoss(this.isBaseline);
+    }
     if (this.slagCompareService.differentArray) {
       this.slagCompareService.addObject(this.slagCompareService.differentArray.length - 1);
     }

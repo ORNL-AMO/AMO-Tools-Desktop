@@ -29,7 +29,8 @@ export class ExhaustGasComponent implements OnInit {
   isBaseline: boolean;
   @Input()
   settings: Settings;
-
+  @Input()
+  isLossesSetup: boolean;
   _exhaustGasLosses: Array<any>;
   firstChange: boolean = true;
   resultsUnit: string = 'Btu/hr';
@@ -50,9 +51,9 @@ export class ExhaustGasComponent implements OnInit {
   }
 
   ngOnInit() {
-    if(this.settings.energySourceType == 'Electricity'){
+    if (this.settings.energySourceType == 'Electricity') {
       this.resultsUnit = 'kW';
-    }else if(this.settings.unitsOfMeasure == 'Metric'){
+    } else if (this.settings.unitsOfMeasure == 'Metric') {
       this.resultsUnit = 'kJ/hr';
     }
 
@@ -117,7 +118,9 @@ export class ExhaustGasComponent implements OnInit {
     this.exhaustGasService.deleteLossIndex.next(null);
   }
   addLoss() {
-    this.exhaustGasService.addLoss(this.isBaseline);
+    if (this.isLossesSetup) {
+      this.exhaustGasService.addLoss(this.isBaseline);
+    }
     if (this.exhaustGasCompareService.differentArray) {
       this.exhaustGasCompareService.addObject(this.exhaustGasCompareService.differentArray.length - 1);
     }

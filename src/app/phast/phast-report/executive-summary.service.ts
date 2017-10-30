@@ -49,11 +49,11 @@ export class ExecutiveSummaryService {
     //gross heat * operating hours * cost
     let tmpAnnualCost = 0;
     if (settings.energySourceType == 'Fuel') {
-      tmpAnnualCost = annualEnergyUsed * (phast.operatingCosts.fuelCost / 1000000);
+      tmpAnnualCost = annualEnergyUsed * (phast.operatingCosts.fuelCost);
     } else if (settings.energySourceType == 'Electricity') {
       tmpAnnualCost = annualEnergyUsed * phast.operatingCosts.electricityCost;
     } else if (settings.energySourceType == 'Steam') {
-      tmpAnnualCost = annualEnergyUsed * (phast.operatingCosts.steamCost / 1000000);
+      tmpAnnualCost = annualEnergyUsed * (phast.operatingCosts.steamCost);
     }
     return tmpAnnualCost;
   }
