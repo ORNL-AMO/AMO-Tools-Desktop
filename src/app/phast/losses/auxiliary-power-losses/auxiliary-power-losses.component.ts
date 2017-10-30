@@ -29,6 +29,8 @@ export class AuxiliaryPowerLossesComponent implements OnInit {
   isBaseline: boolean;
   @Input()
   settings: Settings;
+  @Input()
+  isLossesSetup: boolean;
 
   resultsUnit: string = 'Btu/hr';
   _auxiliaryPowerLosses: Array<any>;
@@ -116,7 +118,9 @@ export class AuxiliaryPowerLossesComponent implements OnInit {
   }
 
   addLoss() {
-    this.auxiliaryPowerLossesService.addLoss(this.isBaseline);
+    if (this.isLossesSetup) {
+      this.auxiliaryPowerLossesService.addLoss(this.isBaseline);
+    }
     if (this.auxiliaryPowerCompareService.differentArray) {
       this.auxiliaryPowerCompareService.addObject(this.auxiliaryPowerCompareService.differentArray.length - 1);
     }

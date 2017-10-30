@@ -29,7 +29,8 @@ export class OpeningLossesComponent implements OnInit {
   isBaseline: boolean;
   @Input()
   settings: Settings;
-
+  @Input()
+  isLossesSetup: boolean;
   _openingLosses: Array<any>;
   firstChange: boolean = true;
   resultsUnit: string = 'Btu/hr';
@@ -118,7 +119,9 @@ export class OpeningLossesComponent implements OnInit {
   }
 
   addLoss() {
-    this.openingLossesService.addLoss(this.isBaseline);
+    if (this.isLossesSetup) {
+      this.openingLossesService.addLoss(this.isBaseline);
+    }
     if (this.openingLossesCompareService.differentArray) {
       this.openingLossesCompareService.addObject(this.openingLossesCompareService.differentArray.length - 1);
     }

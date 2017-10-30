@@ -29,7 +29,8 @@ export class ExtendedSurfaceLossesComponent implements OnInit {
   isBaseline: boolean;
   @Input()
   settings: Settings;
-
+  @Input()
+  isLossesSetup: boolean;
   _surfaceLosses: Array<any>;
   firstChange: boolean = true;
   resultsUnit: string = 'Btu/hr';
@@ -117,7 +118,9 @@ export class ExtendedSurfaceLossesComponent implements OnInit {
   }
 
   addLoss() {
-    this.extendedSurfaceLossesService.addLoss(this.isBaseline);
+    if (this.isLossesSetup) {
+      this.extendedSurfaceLossesService.addLoss(this.isBaseline);
+    }
     if (this.extendedSurfaceCompareService.differentArray) {
       this.extendedSurfaceCompareService.addObject(this.extendedSurfaceCompareService.differentArray.length - 1);
     }

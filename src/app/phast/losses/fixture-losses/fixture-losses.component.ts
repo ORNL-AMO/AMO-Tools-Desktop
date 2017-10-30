@@ -29,6 +29,8 @@ export class FixtureLossesComponent implements OnInit {
   isBaseline: boolean;
   @Input()
   settings: Settings;
+  @Input()
+  isLossesSetup: boolean;
   resultsUnit: string = 'Btu/hr';
   _fixtureLosses: Array<any>;
   firstChange: boolean = true;
@@ -115,7 +117,9 @@ export class FixtureLossesComponent implements OnInit {
   }
 
   addLoss() {
-    this.fixtureLossesService.addLoss(this.isBaseline);
+    if (this.isLossesSetup) {
+      this.fixtureLossesService.addLoss(this.isBaseline);
+    }
     if (this.fixtureLossesCompareService.differentArray) {
       this.fixtureLossesCompareService.addObject(this.fixtureLossesCompareService.differentArray.length - 1);
     }

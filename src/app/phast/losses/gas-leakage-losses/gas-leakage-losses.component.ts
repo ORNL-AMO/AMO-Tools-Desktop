@@ -29,7 +29,8 @@ export class GasLeakageLossesComponent implements OnInit {
   isBaseline: boolean;
   @Input()
   settings: Settings;
-
+  @Input()
+  isLossesSetup: boolean;
 
   _leakageLosses: Array<any>;
   firstChange: boolean = true;
@@ -117,7 +118,9 @@ export class GasLeakageLossesComponent implements OnInit {
   }
 
   addLoss() {
-    this.gasLeakageLossesService.addLoss(this.isBaseline);
+    if (this.isLossesSetup) {
+      this.gasLeakageLossesService.addLoss(this.isBaseline);
+    }
     if (this.gasLeakageCompareService.differentArray) {
       this.gasLeakageCompareService.addObject(this.gasLeakageCompareService.differentArray.length - 1);
     }

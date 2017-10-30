@@ -30,7 +30,8 @@ export class ChargeMaterialComponent implements OnInit {
   isBaseline: boolean;
   @Input()
   settings: Settings;
-
+  @Input()
+  isLossesSetup: boolean;
 
   _chargeMaterial: Array<any>;
   firstChange: boolean = true;
@@ -52,9 +53,9 @@ export class ChargeMaterialComponent implements OnInit {
   }
 
   ngOnInit() {
-    if(this.settings.energySourceType == 'Electricity'){
+    if (this.settings.energySourceType == 'Electricity') {
       this.resultsUnit = 'kW';
-    }else if(this.settings.unitsOfMeasure == 'Metric'){
+    } else if (this.settings.unitsOfMeasure == 'Metric') {
       this.resultsUnit = 'kJ/hr';
     }
     if (!this._chargeMaterial) {
@@ -160,7 +161,9 @@ export class ChargeMaterialComponent implements OnInit {
   }
 
   addMaterial() {
-    this.chargeMaterialService.addLoss(this.isBaseline);
+    if (this.isLossesSetup) {
+      this.chargeMaterialService.addLoss(this.isBaseline);
+    }
     if (this.chargeMaterialCompareService.differentArray) {
       this.chargeMaterialCompareService.addObject(this.chargeMaterialCompareService.differentArray.length - 1);
     }

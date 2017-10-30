@@ -7,17 +7,21 @@ import * as d3 from 'd3';
 import * as regression from 'regression';
 import * as _ from 'lodash';
 import { PumpCurveService } from '../pump-curve.service';
+import { Settings } from '../../../../shared/models/settings';
+
 @Component({
   selector: 'app-pump-curve-graph',
   templateUrl: './pump-curve-graph.component.html',
   styleUrls: ['./pump-curve-graph.component.css']
 })
 export class PumpCurveGraphComponent implements OnInit {
-  //PumpCurveForm object holding data from form
+  // PumpCurveForm object holding data from form
   @Input()
   pumpCurveForm: PumpCurveForm;
   @Input()
   selectedFormView: string;
+  @Input()
+  settings: Settings;
   svg: any;
   xAxis: any;
   yAxis: any;
@@ -317,12 +321,12 @@ export class PumpCurveGraphComponent implements OnInit {
     this.svg.append("text")
       .attr("text-anchor", "middle")  // this makes it easy to centre the text as the transform is applied to the anchor
       .attr("transform", "translate(" + (-60) + "," + (this.height / 2) + ")rotate(-90)")  // text is drawn off the screen top left, move down and out and rotate
-      .text("Head (ft)");
+      .text("Head (" + this.settings.distanceMeasurement + ")");
 
     this.svg.append("text")
       .attr("text-anchor", "middle")  // this makes it easy to centre the text as the transform is applied to the anchor
       .attr("transform", "translate(" + (this.width / 2) + "," + (this.height - (-70)) + ")")  // centre below axis
-      .text("Flow (gpm)");
+      .text("Flow (" + this.settings.flowMeasurement + ")");
 
     this.calcPoint = this.svg.append("g")
       .attr("class", "focus")
@@ -469,12 +473,12 @@ export class PumpCurveGraphComponent implements OnInit {
                     .style("padding-right", "10px")
                     .style("padding-left", "10px")
                     .html(
-                    "<p><strong><div>Baseline Flow: </div></strong><div>" + format(d.x) + " " + " gpm</div>" +
+                    "<p><strong><div>Baseline Flow: </div></strong><div>" + format(d.x) + " " + this.settings.flowMeasurement + "</div>" +
 
-                    "<strong><div>Basleline Head: </div></strong><div>" + format(d.y) + " ft</div></p>" +
-                    "<p><strong><div>Modified Flow: </div></strong><div>" + format(d.x) + " " + " gpm</div>" +
+                    "<strong><div>Basleline Head: </div></strong><div>" + format(d.y) + " " + this.settings.distanceMeasurement + "</div></p>" +
+                    "<p><strong><div>Modified Flow: </div></strong><div>" + format(d.x) + " " + this.settings.flowMeasurement + "</div>" +
 
-                    "<strong><div>Modified Head: </div></strong><div>" + format(modD.y) + " ft</div></p>")
+                    "<strong><div>Modified Head: </div></strong><div>" + format(modD.y) + " " + this.settings.distanceMeasurement + "</div></p>")
 
                     // "<div style='float:left;'>Fluid Power: </div><div style='float: right;'>" + format(d.fluidPower) + " </div></strong></p>")
 
@@ -500,12 +504,12 @@ export class PumpCurveGraphComponent implements OnInit {
                   .style("padding-right", "10px")
                   .style("padding-left", "10px")
                   .html(
-                  "<p><strong><div>Baseline Flow: </div></strong><div>" + format(d.x) + " " + " gpm</div>" +
+                  "<p><strong><div>Baseline Flow: </div></strong><div>" + format(d.x) + " " + this.settings.flowMeasurement + "</div>" +
 
-                  "<strong><div>Basleline Head: </div></strong><div>" + format(d.y) + " ft</div></p>" +
-                  "<p><strong><div>Modified Flow: </div></strong><div>" + format(d.x) + " " + " gpm</div>" +
+                  "<strong><div>Basleline Head: </div></strong><div>" + format(d.y) + " " + this.settings.distanceMeasurement + "/div></p>" +
+                  "<p><strong><div>Modified Flow: </div></strong><div>" + format(d.x) + " " + this.settings.flowMeasurement + "</div>" +
 
-                  "<strong><div>Modified Head: </div></strong><div>" + format(modD.y) + " ft</div></p>")
+                  "<strong><div>Modified Head: </div></strong><div>" + format(modD.y) + " " + this.settings.distanceMeasurement + "</div></p>")
 
                   // "<div style='float:left;'>Fluid Power: </div><div style='float: right;'>" + format(d.fluidPower) + " </div></strong></p>")
 
@@ -548,11 +552,12 @@ export class PumpCurveGraphComponent implements OnInit {
               .style("padding-right", "10px")
               .style("padding-left", "10px")
               .html(
-              "<p><strong><div>Flow: </div></strong><div>" + format(d.x) + " " + " gpm</div>" +
+              "<p><strong><div>Flow: </div></strong><div>" + format(d.x) + " " + " " + this.settings.flowMeasurement + "</div>" +
 
-              "<strong><div>Head: </div></strong><div>" + format(d.y) + " ft</div></p>")
+              "<strong><div>Head: </div></strong><div>" + format(d.y) + " " + this.settings.distanceMeasurement + "</div></p>")
 
               // "<div style='float:left;'>Fluid Power: </div><div style='float: right;'>" + format(d.fluidPower) + " </div></strong></p>")
+
 
               .style("left", (this.margin.left + this.x(d.x) - (detailBoxWidth / 2 - 17)) + "px")
               .style("top", (this.margin.top + this.y(d.y) + 83) + "px")

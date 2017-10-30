@@ -28,6 +28,8 @@ export class FlueGasLossesComponent implements OnInit {
   isBaseline: boolean;
   @Input()
   settings: Settings;
+  @Input()
+  isLossesSetup: boolean;
 
   _flueGasLosses: Array<any>;
   firstChange: boolean = true;
@@ -141,7 +143,9 @@ export class FlueGasLossesComponent implements OnInit {
   }
 
   addLoss() {
-    this.flueGasLossesService.addLoss(this.isBaseline);
+    if (this.isLossesSetup) {
+      this.flueGasLossesService.addLoss(this.isBaseline);
+    }
     if (this.flueGasCompareService.differentArray) {
       this.flueGasCompareService.addObject(this.flueGasCompareService.differentArray.length - 1);
     }

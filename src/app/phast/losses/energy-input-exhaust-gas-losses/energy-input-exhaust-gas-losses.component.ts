@@ -29,6 +29,8 @@ export class EnergyInputExhaustGasLossesComponent implements OnInit {
   isBaseline: boolean;
   @Input()
   settings: Settings;
+  @Input()
+  isLossesSetup: boolean;
 
   _exhaustGasLosses: Array<any>;
   firstChange: boolean = true;
@@ -118,7 +120,9 @@ export class EnergyInputExhaustGasLossesComponent implements OnInit {
     this.energyInputExhaustGasService.deleteLossIndex.next(null);
   }
   addLoss() {
-    this.energyInputExhaustGasService.addLoss(this.isBaseline);
+    if (this.isLossesSetup) {
+      this.energyInputExhaustGasService.addLoss(this.isBaseline);
+    }
     if (this.energyInputExhaustGasCompareService.differentArray) {
       this.energyInputExhaustGasCompareService.addObject(this.energyInputExhaustGasCompareService.differentArray.length - 1);
     }

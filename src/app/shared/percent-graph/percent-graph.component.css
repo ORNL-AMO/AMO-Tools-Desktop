@@ -4,20 +4,10 @@
 
 h1 {
     animation-name: value-entrance;
-    animation-duration: 1s;
-    float: left;
+    animation-duration: 3.5s;
+    position: absolute;
     font-size: 18px;
     font-weight: bold;
-    padding-top: 6px;
-    margin-bottom: 0;
-}
-
-canvas {
-	display: block;
-    float: left;
-    height: 30px !important;
-    width: 30px !important;
-    margin: 0px 5px 0 0;
 }
 
 @keyframes value-entrance{
