@@ -29,7 +29,6 @@ export class PhastReportComponent implements OnInit {
   constructor(private phastService: PhastService, private indexedDbService: IndexedDbService, private reportRollupService: ReportRollupService) { }
 
   ngOnInit() {
-    console.log(this.inPhast)
     if (this.assessment.phast && this.settings && !this.phast) {
       this.phast = this.assessment.phast;
     } else if (this.assessment.phast && !this.settings) {

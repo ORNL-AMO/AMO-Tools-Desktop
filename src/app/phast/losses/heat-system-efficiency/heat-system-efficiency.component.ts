@@ -66,10 +66,8 @@ export class HeatSystemEfficiencyComponent implements OnInit {
   ngOnDestroy() {
     if (this.isBaseline) {
       this.heatSystemEfficiencyCompareService.baseline = null;
-      console.log('baseline null');
     } else {
       this.heatSystemEfficiencyCompareService.modification = null;
-      console.log('mod null')
     }
   }
 
@@ -141,7 +139,7 @@ export class HeatSystemEfficiencyComponent implements OnInit {
     if (!bool) {
       this.startSavePolling();
     }
-    let additionalHeat = this.phastService.sumChargeMaterialExothermic(this.losses.chargeMaterials);
+    let additionalHeat = this.phastService.sumChargeMaterialExothermic(this.losses.chargeMaterials, this.settings);
     this.grossHeat = (this.phastService.sumHeatInput(this.losses, this.settings) / this.efficiencyForm.value.efficiency) - additionalHeat;
     this.systemLosses = this.grossHeat * (1 - (this.efficiencyForm.value.efficiency / 100));
   }

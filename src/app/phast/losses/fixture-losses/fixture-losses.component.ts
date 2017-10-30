@@ -29,7 +29,7 @@ export class FixtureLossesComponent implements OnInit {
   isBaseline: boolean;
   @Input()
   settings: Settings;
-
+  resultsUnit: string = 'Btu/hr';
   _fixtureLosses: Array<any>;
   firstChange: boolean = true;
   constructor(private phastService: PhastService, private fixtureLossesService: FixtureLossesService, private fixtureLossesCompareService: FixtureLossesCompareService) { }
@@ -48,6 +48,11 @@ export class FixtureLossesComponent implements OnInit {
   }
 
   ngOnInit() {
+    if (this.settings.energySourceType == 'Electricity') {
+      this.resultsUnit = 'kW';
+    } else if (this.settings.unitsOfMeasure == 'Metric') {
+      this.resultsUnit = 'kJ/hr';
+    }
     if (!this._fixtureLosses) {
       this._fixtureLosses = new Array();
     }
