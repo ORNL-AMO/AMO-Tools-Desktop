@@ -23,12 +23,12 @@ export class O2EnrichmentGraphComponent implements OnInit {
   o2EnrichmentPoint: O2Enrichment;
 
   lineColors = [
+    '#84B641',
     '#7030A0',
     '#E1CD00',
     '#A03123',
     '#2ABDDA',
     '#DE762D',
-    '#84B641',
     '#306DBE',
     '#1E7640'
   ];
@@ -403,8 +403,6 @@ export class O2EnrichmentGraphComponent implements OnInit {
         this.guideLine.style("display", "none");
         this.xPosition = null;
         this.updateDetailBoxes();
-        // this.redrawLines();
-        // this.clearDetails();
       });
   }
 
@@ -439,7 +437,7 @@ export class O2EnrichmentGraphComponent implements OnInit {
 
     this.point
       .style("display", null)
-      .style("opacity", 1)
+      .style("opacity", (fuelSavings < 0) ? 0 : 1)
       .style('pointer-events', 'none')
       .attr("transform", "translate(" + x(information.o2CombAirEnriched) + "," + y(fuelSavings) + ")");
   }
