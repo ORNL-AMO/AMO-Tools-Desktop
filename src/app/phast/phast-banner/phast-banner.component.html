@@ -6,9 +6,9 @@
       <small>Last modified: {{assessment.modifiedDate | date:'medium'}}</small>
     </div>
     <ul class="pills-nav">
-      <li [ngClass]="{'active': mainTab == 'system-setup'}" (click)="changeTab('system-setup')"> <span>Furnace</span>
+      <li [ngClass]="{'active': mainTab == 'system-setup'}" (click)="changeTab('system-setup')"> <span>Furnace Setup</span>
       </li>
-      <li [ngClass]="{'active': mainTab == 'assessment'}" (click)="changeTab('assessment')"><span>Assessment</span></li>
+      <li [ngClass]="{'active': mainTab == 'assessment', 'disabled': !assessment.phast.setupDone}" (click)="changeTab('assessment')"><span>Assessment</span></li>
       <li [ngClass]="{'active': mainTab == 'diagram', 'disabled': !assessment.phast.setupDone}" (click)="changeTab('diagram')"><span>Diagram</span></li>
       <li [ngClass]="{'active': mainTab == 'report', 'disabled': !assessment.phast.setupDone}" (click)="changeTab('report')"><span>Report</span></li>
       <li [ngClass]="{'active': mainTab == 'sankey', 'disabled': !assessment.phast.setupDone}" (click)="changeTab('sankey')"><span>Sankey</span></li>

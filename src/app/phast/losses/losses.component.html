@@ -1,14 +1,8 @@
-<!-- <div class="sticky-top">
-  <nav>
-    <app-losses-tabs [settings]="settings"></app-losses-tabs>
-  </nav>
-</div> -->
+
 <div class="modify-conditions">
-  <!--<nav class="col-2 sidebar losses-sidebar">
-    <app-losses-sidebar [losses]="phast.losses" [lossesStates]="lossesStates" (changeTab)="changeTab($event)" [lossesTab]="lossesTab"></app-losses-sidebar>
-  </nav>-->
-  <!--Baseline-->
-  <div class="modification baseline" (click)="togglePanel(baselineSelected)" [ngClass]="{'disabled': baselineSelected == false, 'modal-open': isModalOpen == true}">
+  <div class="modification baseline" (click)="togglePanel(baselineSelected)" 
+  [ngClass]="{'disabled': baselineSelected == false, 'modal-open': isModalOpen == true}">
+  <!-- use inSetup with ngClass for styling in system setup (inSetup == true) or in assessment (inSetup == false) -->
     <div class="header">
       <h3>Baseline</h3>
       <button *ngIf="showAddBtn" class="btn btn-secondary pull-right" (click)="addLoss()" [disabled]="!baselineSelected"><span class="fa fa-plus"></span></button>
@@ -189,10 +183,10 @@
       </div>
     </div>
   </div>
-  <div class="no-data" *ngIf="_modifications.length == 0">
-    <h3>Once you have your baseline set up, click below to start adding modifications.</h3>
-    <button type="button" (click)="addModification()" *ngIf="isLossesSetup">Add Modified Condition</button>
-    <button type="button" (click)="lossesSetup()" *ngIf="!isLossesSetup">Baseline Done?</button>
+  <div class="no-data" *ngIf="_modifications.length == 0 && !inSetup">
+    <h3>Now that your baseline set up, click below to start adding modifications.</h3>
+    <button type="button" (click)="addModification()">Add Modified Condition</button>
+    <!--<button type="button" (click)="lossesSetup()" *ngIf="!isLossesSetup">Baseline Done?</button>-->
     <p>Data will be copied from your current baseline condition.</p>
   </div>
   <app-losses-help [lossesTab]="lossesTab" [currentField]="currentField"></app-losses-help>
