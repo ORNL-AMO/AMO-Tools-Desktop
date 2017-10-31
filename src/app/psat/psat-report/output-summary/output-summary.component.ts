@@ -94,4 +94,15 @@ export class OutputSummaryComponent implements OnInit {
       return diff;
     }
   }
+
+  getPaybackPeriod(modification: PSAT) {
+    let result = 0;
+    let annualCostSavings = this.getDiff(this.psat.outputs.annual_cost, modification.outputs.annual_cost);
+    if (isNaN(annualCostSavings) == false) {
+      if (annualCostSavings > 1) {
+        result = (modification.inputs.implementationCosts / annualCostSavings) * 12;
+      }
+    }
+    return result;
+  }
 }
