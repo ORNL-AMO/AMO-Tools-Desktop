@@ -140,11 +140,12 @@ export class SankeyComponent implements OnInit {
       .attr("text-anchor", "middle")
       .attr("dx", (d) => {
         if (d.input) {
-          return d.x - 70;
+          return d.x - 90;
         }
         else if (d.usefulOutput) {
           return d.x + (d.displaySize * .7) + 100;
         }
+
         else {
           return d.x;
         }
@@ -155,10 +156,10 @@ export class SankeyComponent implements OnInit {
         }
         else {
           if (d.top) {
-            return d.y - 120;
+            return d.y - 170;
           }
           else {
-            return d.y + 60;
+            return d.y + 80;
           }
         }
       })
@@ -211,24 +212,24 @@ export class SankeyComponent implements OnInit {
         svg.append("text")
           .attr("x", function () {
             if (node_val.input) {
-              return node_val.x - 130;
+              return node_val.x - 150;
             }
             else if (node_val.usefulOutput) {
-              return d.x + (d.displaySize * .7) - 50;
+              return d.x + (d.displaySize * .7) + 10;
             }
             else {
-              return node_val.x - 75;
+              return node_val.x - 120;
             }
           })
           .attr("y", function () {
             if (node_val.input || node_val.usefulOutput) {
-              return (node_val.y + (node_val.displaySize / 2)) + 35;
+              return (node_val.y + (node_val.displaySize / 2)) + 30;
             }
             else if (node_val.top) {
-              return node_val.y - 70;
+              return node_val.y - 120;
             }
             else {
-              return node_val.y + 110;
+              return node_val.y + 120;
             }
           })
           .text(function () {
