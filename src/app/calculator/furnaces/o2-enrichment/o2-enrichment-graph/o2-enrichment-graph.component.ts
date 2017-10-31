@@ -1,20 +1,19 @@
-import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, SimpleChanges, DoCheck, KeyValueDiffers } from '@angular/core';
 import { PhastService } from '../../../../phast/phast.service';
 import { WindowRefService } from '../../../../indexedDb/window-ref.service';
 import { O2Enrichment, O2EnrichmentOutput } from '../../../../shared/models/phast/o2Enrichment';
 import * as d3 from 'd3';
-import { createElement } from "@angular/core/src/view/element";
 
 @Component({
   selector: 'app-o2-enrichment-graph',
   templateUrl: './o2-enrichment-graph.component.html',
   styleUrls: ['./o2-enrichment-graph.component.css']
 })
-export class O2EnrichmentGraphComponent implements OnInit {
-  //results
+export class O2EnrichmentGraphComponent implements OnInit, DoCheck {
+  // results
   @Input()
   o2EnrichmentOutput: O2EnrichmentOutput;
-  //input data
+  // input data
   @Input()
   o2Enrichment: O2Enrichment;
   @Input()
@@ -47,6 +46,8 @@ export class O2EnrichmentGraphComponent implements OnInit {
 
   plotBtn: any;
   change: any;
+  baselineChange: any;
+  differ: any;
   mainLine: any;
   guideLine: any;
   xPosition: any = null;
@@ -63,7 +64,25 @@ export class O2EnrichmentGraphComponent implements OnInit {
 
   @Input()
   toggleCalculate: boolean;
-  constructor(private phastService: PhastService, private windowRefService: WindowRefService) { }
+  constructor(private phastService: PhastService, private windowRefService: WindowRefService, private differs: KeyValueDiffers) {
+    this.differ = differs.find({}).create(null);
+  }
+
+  ngDoCheck() {
+    const baseline = {
+      o2CombAir: null,
+      flueGasTemp: null,
+      o2FlueGas: null,
+      combAirTemp: null
+    };
+
+    const changes = this.differ.diff(this.o2Enrichment);
+    if (changes) {
+      changes.forEachChangedItem(r => {
+        (r.key in baseline) ? this.baselineChange = true : this.baselineChange = false;
+      });
+    }
+  }
 
   ngOnInit() {
     this.isGridToggled = false;
@@ -488,7 +507,7 @@ export class O2EnrichmentGraphComponent implements OnInit {
   }
 
   plotLine() {
-    if (this.change) {
+    if (this.change && (!this.lines.length || !this.baselineChange)) {
       let line = {
         o2CombAir: this.o2Enrichment.o2CombAir,
         o2CombAirEnriched: this.o2Enrichment.o2CombAirEnriched,
