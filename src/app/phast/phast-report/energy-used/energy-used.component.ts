@@ -106,7 +106,7 @@ export class EnergyUsedComponent implements OnInit {
     this.baseLineResults = this.phastResultsService.getResults(this.phast, this.settings);
     if (this.settings.unitsOfMeasure == 'Metric' && this.settings.energySourceType == 'Electricity') {
       this.energyPerMassUnit = 'kWh/kg';
-      this.energyPerTimeUnit = 'kJ/kWh';
+      this.energyPerTimeUnit = 'kWh/kWh';
       this.energyCostUnit = '/GJ';
       this.baseEnergyUnit = 'kW';
     } else if (this.settings.unitsOfMeasure == 'Metric') {
@@ -116,13 +116,13 @@ export class EnergyUsedComponent implements OnInit {
       this.baseEnergyUnit = 'kJ/hr';
     } else if (this.settings.unitsOfMeasure == 'Imperial' && this.settings.energySourceType == 'Electricity') {
       this.energyPerMassUnit = 'kWh/lb';
-      this.energyPerTimeUnit = 'Btu/kWh';
+      this.energyPerTimeUnit = 'kWh/kWh';
       this.energyCostUnit = '/BTU';
       this.baseEnergyUnit = 'kW';
     }
     else if (this.settings.unitsOfMeasure == 'Imperial') {
       this.energyPerMassUnit = 'BTU/lb';
-      this.energyPerTimeUnit = 'BTU/hr';
+      this.energyPerTimeUnit = 'BTU/kWh';
       this.energyCostUnit = '/BTU';
       this.baseEnergyUnit = 'BTU/hr';
     }
