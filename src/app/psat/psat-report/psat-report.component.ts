@@ -33,10 +33,12 @@ export class PsatReportComponent implements OnInit {
   isFirstChange: boolean = true;
   numMods: number = 0;
   currentTab: string = 'results';
+  createdDate: Date;
 
   constructor(private psatService: PsatService, private indexedDbService: IndexedDbService, private windowRefService: WindowRefService) { }
 
   ngOnInit() {
+    this.createdDate = new Date();
     if (this.assessment.psat && this.settings && !this.psat) {
       this.psat = this.assessment.psat;
     }

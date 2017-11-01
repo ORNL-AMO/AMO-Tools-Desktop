@@ -1921,6 +1921,7 @@ Toasty Overrides ================================= */
 
   .output-summary {
     margin-bottom: 20px;
+    page-break-inside: avoid;
   }
 
   .output-summary table td {
@@ -1932,7 +1933,6 @@ Toasty Overrides ================================= */
       background: #fff;
       box-shadow: none;
       border: none;
-      page-break-before: always;
   }
 
   .assessment-report.report-in-psat .assessment-name, 
@@ -1945,6 +1945,7 @@ Toasty Overrides ================================= */
         display: block;
         width: 100%;
         text-align: center;
+        page-break-after: always;
     }
     .doe-logo {
         width: 200px;
