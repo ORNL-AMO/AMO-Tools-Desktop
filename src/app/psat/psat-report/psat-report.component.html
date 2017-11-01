@@ -6,7 +6,7 @@
     [ngClass]="{'assessment-report-padding': inPsat, 'report-in-rollup': !inPsat}">
 
 
-    <div class="report-cover">
+    <div *ngIf="inPsat" class="report-cover">
         <img src="assets/images/DOE-banner-color.png" class="doe-logo">
         
         <div class="report-title">
@@ -19,7 +19,7 @@
     </div>
 
 
-    <div class="report-header hide-print">  
+    <div class="report-header" [ngClass]="{'hide-print': inPsat}">  
        
         <div *ngIf="inPsat" class="btn-group">
             <button class="btn btn-secondary" (click)="print()">Print</button>
@@ -44,7 +44,7 @@
     <!-- End .report-header -->
 
 
-    <div class="report-data" *ngIf="psat.setupDone" [ngSwitch]="currentTab">
+    <div class="report-data" *ngIf="psat.setupDone">
 
         <ul class="tabs primary hide-print">
             <li (click)="setTab('results')" [ngClass]="{'active': currentTab == 'results'}">
@@ -56,7 +56,7 @@
         <!--<div class="charts" [ngClass]="{'mod-page-break': numMods > 3}">
             <app-chart-summary [psat]="psat"></app-chart-summary>
         </div>-->
-        <div class="results" *ngSwitchCase="'results'">
+        <div class="results" [ngClass]="{'show-print': currentTab != 'results'}">
             <app-output-summary 
                 [psat]="psat" 
                 [settings]="settings" 
@@ -64,22 +64,9 @@
                 [assessment]="assessment" 
                 (selectModification)="useModification($event)">
             </app-output-summary>
-            <app-input-summary
-                class="show-print"
-                [psat]="psat" 
-                [settings]="settings">
-            </app-input-summary>
 
         </div>
-        <div class="input-data results" *ngSwitchCase="'inputData'">
-            <app-output-summary 
-                class="show-print"
-                [psat]="psat" 
-                [settings]="settings" 
-                [inRollup]="inRollup" 
-                [assessment]="assessment" 
-                (selectModification)="useModification($event)">
-            </app-output-summary>
+        <div class="input-data results" [ngClass]="{'show-print': currentTab != 'inputData'}">
             <app-input-summary 
                 [psat]="psat" 
                 [settings]="settings">

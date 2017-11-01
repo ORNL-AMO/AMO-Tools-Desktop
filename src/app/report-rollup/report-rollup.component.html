@@ -1,18 +1,16 @@
 <div #reportTemplate *ngIf="assessmentsGathered">
 
-
-    <!--<div class="report-cover">
-      <p class="report-notes">{{reportNotes}}</p>
-      <span class="report-logo">
+    <div class="report-cover">
         <img src="assets/images/DOE-banner-color.png" class="doe-logo">
-      </span>
-      <span class="created-date">
-        <h4>{{createdDate}}</h4>
-      </span>
-    </div>-->
 
+        <div class="report-title">
+            <h4>Asset Efficiency Report:</h4>
+            <h5>{{createdDate| date:'medium'}}</h5>
+        </div>
 
-    <div class="report-header" id="reportHeader">
+        <p class="report-notes">{{reportNotes}}</p>
+    </div>
+    <div class="report-header hide-print" id="reportHeader">
         <app-report-banner (emitCloseReport)="closeReport()" (emitExport)="exportToCsv()" (emitPrint)="print()">
         </app-report-banner>
         <app-report-summary id="reportSummary"></app-report-summary>
@@ -30,10 +28,10 @@
         </div>
         <!-- End .sidebar -->
         <div class="content">
-            <div *ngFor="let assessment of _reportAssessments" id="{{'assessment_'+assessment.id}}">
+            <div *ngFor="let assessment of _reportAssessments" id="{{'assessment_'+assessment.id}}" class="assessment-item">
                 <app-psat-report *ngIf="assessment.psat" [assessment]="assessment" [inRollup]="true" (selectModification)="updateSummary($event)">
                 </app-psat-report>
-                <app-phast-report *ngIf="assessment.phast" [phast]="assessment.phast" [assessment]="assessment"></app-phast-report>
+                <app-phast-report *ngIf="assessment.phast" [phast]="assessment.phast" [assessment]="assessment" [inRollup]="true"></app-phast-report>
             </div>
         </div>
         <!-- End .content -->

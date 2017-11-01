@@ -1,34 +1,36 @@
-<div class="row justify-content-center align-items-center">
-  <div class="col-2">
-    <ul>
-      <li *ngFor="let label of pieLabels"><span class="badge" [ngStyle]="{'background-color': label.color}">{{label.name}}</span></li>
-    </ul>
-  </div>
-  <div class="col-5">
-    <div class="form-group">
-      <select name="selectedPhast1" class="form-control mx-auto" id="selectedPhast1" [(ngModel)]="selectedPhast1">
+<div class="output-summary hide-print">
+  <div class="row justify-content-center align-items-center">
+    <div class="col-2">
+      <ul>
+        <li *ngFor="let label of pieLabels"><span class="badge" [ngStyle]="{'background-color': label.color}">{{label.name}}</span></li>
+      </ul>
+    </div>
+    <div class="col-5">
+      <div class="form-group">
+        <select name="selectedPhast1" class="form-control mx-auto" id="selectedPhast1" [(ngModel)]="selectedPhast1">
         <option *ngFor="let result of resultsArray" [ngValue]="result">{{result.name}}</option>
       </select>
+      </div>
+      <app-phast-pie-chart [results]="selectedPhast1.data" [resultCats]="showResultsCats" [isBaseline]="true"></app-phast-pie-chart>
     </div>
-    <app-phast-pie-chart [results]="selectedPhast1.data" [resultCats]="showResultsCats" [isBaseline]="true"></app-phast-pie-chart>
-  </div>
-  <div class="col-5" *ngIf="modExists">
-    <div class="form-group">
-      <select name="selectedPhast2" class="form-control mx-auto" id="selectedPhast1" [(ngModel)]="selectedPhast2">
+    <div class="col-5" *ngIf="modExists">
+      <div class="form-group">
+        <select name="selectedPhast2" class="form-control mx-auto" id="selectedPhast1" [(ngModel)]="selectedPhast2">
         <option *ngFor="let result of resultsArray" [ngValue]="result">{{result.name}}</option>
       </select>
+      </div>
+      <app-phast-pie-chart [results]="selectedPhast2.data" [resultCats]="showResultsCats"></app-phast-pie-chart>
     </div>
-    <app-phast-pie-chart [results]="selectedPhast2.data" [resultCats]="showResultsCats"></app-phast-pie-chart>
   </div>
-</div>
-<div class="row align-items-center" *ngIf="modExists" style="padding-top: 50px;">
-  <div class="col-2">
-    <ul>
-      <li><span class="badge" style="background-color: #BA4A00">{{selectedPhast1.name}}</span></li>
-      <li><span class="badge" style="background-color: #E74C3C">{{selectedPhast2.name}}</span></li>
-    </ul>
-  </div>
-  <div class="col-7 mx-auto">
-    <app-phast-bar-chart [resultCats]="showResultsCats" [modResults]="selectedPhast2.data" [results]="selectedPhast1.data" [settings]="settings"></app-phast-bar-chart>
+  <div class="row align-items-center" *ngIf="modExists" style="padding-top: 50px;">
+    <div class="col-2">
+      <ul>
+        <li><span class="badge" style="background-color: #BA4A00">{{selectedPhast1.name}}</span></li>
+        <li><span class="badge" style="background-color: #E74C3C">{{selectedPhast2.name}}</span></li>
+      </ul>
+    </div>
+    <div class="col-7 mx-auto">
+      <app-phast-bar-chart [resultCats]="showResultsCats" [modResults]="selectedPhast2.data" [results]="selectedPhast1.data" [settings]="settings"></app-phast-bar-chart>
+    </div>
   </div>
 </div>
