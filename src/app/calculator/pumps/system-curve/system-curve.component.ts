@@ -118,7 +118,7 @@ export class SystemCurveComponent implements OnInit {
     if (psat) {
       return this.formBuilder.group({
         'specificGravity': [psat.inputs.specific_gravity, Validators.required],
-        'systemLossExponent': [2.5, Validators.required]
+        'systemLossExponent': [1.9, Validators.required]
       })
     } else {
       return this.formBuilder.group({
