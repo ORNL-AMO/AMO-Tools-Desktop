@@ -10,17 +10,18 @@
         <img src="assets/images/DOE-banner-color.png" class="doe-logo">
         
         <div class="report-title">
-            <h4>Efficiency Report</h4>
-            <h5>{{createdDate}}</h5>
+            <h4>Pump Efficiency Report:</h4>
+            <h4>{{assessment.name}}</h4>
+            <h5>{{createdDate| date:'medium'}}</h5>
         </div>
         
         <p class="report-notes">{{reportNotes}}</p>
     </div>
 
 
-    <div class="report-header">  
+    <div class="report-header hide-print">  
        
-        <div *ngIf="inPsat" class="btn-group hide-print">
+        <div *ngIf="inPsat" class="btn-group">
             <button class="btn btn-secondary" (click)="print()">Print</button>
             <button class="btn btn-secondary" (click)="exportToCsv()">Export to CSV</button>
         </div>
