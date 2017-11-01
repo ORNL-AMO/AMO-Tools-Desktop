@@ -6,7 +6,7 @@ import { Assessment } from '../../shared/models/assessment';
 import { IndexedDbService } from '../../indexedDb/indexed-db.service';
 import { Directory } from '../../shared/models/directory';
 import { ReportRollupService } from '../../report-rollup/report-rollup.service';
-
+import { WindowRefService } from '../../indexedDb/window-ref.service';
 
 @Component({
   selector: 'app-phast-report',
@@ -23,12 +23,16 @@ export class PhastReportComponent implements OnInit {
   inPhast: boolean;
   @Input()
   assessment: Assessment;
-
+  @Input()
+  inRollup: boolean;
+  
   currentTab: string = 'energy-used';
   assessmentDirectories: Array<Directory>;
-  constructor(private phastService: PhastService, private indexedDbService: IndexedDbService, private reportRollupService: ReportRollupService) { }
+  createdDate: Date;
+  constructor(private phastService: PhastService, private indexedDbService: IndexedDbService, private reportRollupService: ReportRollupService, private windowRefService: WindowRefService) { }
 
   ngOnInit() {
+    this.createdDate = new Date();
     if (this.assessment.phast && this.settings && !this.phast) {
       this.phast = this.assessment.phast;
     } else if (this.assessment.phast && !this.settings) {
@@ -39,11 +43,11 @@ export class PhastReportComponent implements OnInit {
       this.assessmentDirectories = new Array<Directory>();
       this.getDirectoryList(this.assessment.directoryId);
     }
-    if(!this.inPhast){
+    if (!this.inPhast) {
       this.currentTab = 'executive-summary';
     }
 
-    if(!this.phast.operatingHours.hoursPerYear){
+    if (!this.phast.operatingHours.hoursPerYear) {
       this.phast.operatingHours.hoursPerYear = 8736;
     }
   }
@@ -91,5 +95,11 @@ export class PhastReportComponent implements OnInit {
         }
       )
     }
+  }
+
+  print() {
+    let win = this.windowRefService.nativeWindow;
+    let doc = this.windowRefService.getDoc();
+    win.print();
   }
 }

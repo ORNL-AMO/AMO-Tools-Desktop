@@ -83,12 +83,18 @@
         margin-top: none !important;
         margin-bottom: none !important;
     }
-    
+    .report-container{
+        margin-top: 0;
+    }
 
     .report-container .content {
+        padding-top: 0px;
         padding: 0;
         margin-left: 0;
     }
 
-
+    .assessment-item{
+        page-break-before: always;
+        padding-top: 0px !important;
+    }
 }

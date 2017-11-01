@@ -34,6 +34,7 @@ export class ExecutiveSummaryComponent implements OnInit {
   constructor(private executiveSummaryService: ExecutiveSummaryService, private reportRollupService: ReportRollupService) { }
 
   ngOnInit() {
+    this.notes = new Array();
     this.baseline = this.executiveSummaryService.getSummary(this.phast, false, this.settings, this.phast);
     this.modifications = new Array<ExecutiveSummary>();
     if (this.phast.modifications) {

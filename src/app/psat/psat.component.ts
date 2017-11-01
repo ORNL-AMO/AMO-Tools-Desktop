@@ -49,7 +49,6 @@ export class PsatComponent implements OnInit {
   settings: Settings;
   isAssessmentSettings: boolean = false;
 
-  emitPrint: boolean = false;
   viewingReport: boolean = false;
   tabBeforeReport: string = 'explore-opportunities';
   mainTab: string = 'system-setup';
@@ -241,10 +240,6 @@ export class PsatComponent implements OnInit {
 
   toggleSave() {
     this.saveClicked = !this.saveClicked;
-  }
-
-  togglePrint() {
-    this.emitPrint = !this.emitPrint;
   }
 
   save() {

@@ -79,16 +79,9 @@
   <!--end report-->
   <!--footer-->
   <div id="psatFooter" class="footer hide-print" *ngIf="mainTab == 'system-setup' || mainTab == 'assessment'">
-    <!--<div class="pull-left">
-      <button class="btn btn-secondary" *ngIf="currentTab == 'system-setup'" (click)="close()">Close</button>
-      <button class="btn btn-secondary" *ngIf="currentTab != 'system-setup'" (click)="goBack()">Back</button>
-    </div>-->
     <div class="pull-right">
       <button class="btn btn-secondary" *ngIf="mainTab == 'system-setup' || mainTab == 'assessment'" (click)="toggleSave()">Save</button>
       <button class="btn btn-primary" *ngIf="mainTab == 'system-setup'" [disabled]="!getCanContinue()" (click)="continue()">Continue</button>
-      <!--<button class="btn btn-primary" *ngIf="mainTab == 'assessment'" (click)="goToReport()">View Report</button>-->
-      <!-- <button class="btn btn-primary" *ngIf="currentTab == 'modify-conditions'" (click)="exportData()">Export</button> -->
-      <!--<button class="btn btn-primary" *ngIf="currentTab == 'modify-conditions'" (click)="togglePrint()"><span class="fa fa-print"></span></button>-->
     </div>
   </div>
   <!--end footer-->
