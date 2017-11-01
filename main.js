@@ -1,7 +1,7 @@
 // ./main.js
 //require('electron-reload')(__dirname);
 
-const { app, BrowserWindow, ipcMain } = require('electron');
+const { app, BrowserWindow, ipcMain, crashReporter } = require('electron');
 const path = require('path');
 const url = require('url');
 const log = require('electron-log');
@@ -69,6 +69,13 @@ app.on('ready', function () {
 
   //Check for updates and install
   autoUpdater.autoDownload = false;
+
+  crashReporter.start({
+    productName: "ORNL-AMO",
+    companyName: "ornl-amo",
+    submitURL: "https://ornl-amo.sp.backtrace.io:6098/post?format=minidump&token=9e914fbd14a36589b7e2ce09cf8c3b4b5b3e37368da52bf1dabff576f156126c",
+    uploadToServer: true
+  });
 });
 
 // Listen for message from core.component to either download updates or not
