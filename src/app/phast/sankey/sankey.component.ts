@@ -139,27 +139,35 @@ export class SankeyComponent implements OnInit {
       .append("text")
       .attr("text-anchor", "middle")
       .attr("dx", (d) => {
+       if (d.extSurfaceLoss) {
+         return d.x - 240;
+       }
+       if (d.usefulOutput) {
+          return d.x + (d.displaySize * .7) + 67;
+        }
         if (d.input) {
-          return d.x - 90;
-        }
-        else if (d.usefulOutput) {
-          return d.x + (d.displaySize * .7) + 100;
-        }
-
-        else {
+          return d.x + 70;
+       }
+       else {
           return d.x;
         }
       })
       .attr("dy", (d) => {
-        if (d.input || d.usefulOutput) {
-          return d.y + (d.displaySize / 2) - 15;
+        if (d.input) {
+          return d.y + (d.displaySize / 2) + 10;
+        }
+        else if (d.usefulOutput) {
+          return d.y + (d.displaySize / 2) - 63;
         }
         else {
           if (d.top) {
-            return d.y - 170;
+            return d.y - 155;
+          }
+          else if (d.extSurfaceLoss) {
+            return d.y + 45;
           }
           else {
-            return d.y + 80;
+            return d.y + 140;
           }
         }
       })
@@ -212,24 +220,33 @@ export class SankeyComponent implements OnInit {
         svg.append("text")
           .attr("x", function () {
             if (node_val.input) {
-              return node_val.x - 150;
+              return node_val.x + 10;
+            }
+            else if (node_val.extSurfaceLoss) {
+              return d.x - 340;
             }
             else if (node_val.usefulOutput) {
-              return d.x + (d.displaySize * .7) + 10;
+              return d.x + (d.displaySize * .7) - 40 ;
             }
             else {
               return node_val.x - 120;
             }
           })
           .attr("y", function () {
-            if (node_val.input || node_val.usefulOutput) {
-              return (node_val.y + (node_val.displaySize / 2)) + 30;
+            if (node_val.input) {
+              return (node_val.y + (node_val.displaySize / 2)) + 43;
+            }
+            else if (node_val.usefulOutput) {
+              return (node_val.y + (node_val.displaySize / 2)) - 30;
             }
             else if (node_val.top) {
               return node_val.y - 120;
             }
+            else if (node_val.extSurfaceLoss) {
+              return node_val.y + 80;
+            }
             else {
-              return node_val.y + 120;
+              return node_val.y + 170;
             }
           })
           .text(function () {
@@ -247,7 +264,7 @@ export class SankeyComponent implements OnInit {
     nodes.forEach((d, i) => {
       d.y = (height / 2 - nodes[0].displaySize / 2);
       if (d.inter) {
-        // Reset height
+        // Reset heightbn
         if (i == 1) {
           // First interNode
           d.value = nodes[i - 1].value;
