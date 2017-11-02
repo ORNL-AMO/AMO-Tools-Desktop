@@ -84,9 +84,9 @@ export class SankeyService {
     let interIndex = 2;
 
     let top: boolean = false;
-    //FLUE GAS ARROW
-    //one of three
-    //Flue Gas
+    // FLUE GAS ARROW
+    // one of three
+    // Flue Gas
     if (results.totalFlueGas) {
       tmpNode = this.createNode("Flue Gas Losses", results.totalFlueGas, 0, 0, 100 + (250 * interIndex), 0, false, false, false, true, unit, false)
       results.nodes.push(tmpNode);
@@ -94,7 +94,7 @@ export class SankeyService {
       results.nodes.push(tmpNode);
       interIndex++;
     }
-    //Exhaust Gas EAF
+    // Exhaust Gas EAF
     if (results.totalExhaustGas) {
       tmpNode = this.createNode("Exhaust Gas Losses", results.totalExhaustGas, 0, 0, 100 + (250 * interIndex), 0, false, false, false, true, unit, false)
       results.nodes.push(tmpNode);
@@ -110,8 +110,8 @@ export class SankeyService {
       results.nodes.push(tmpNode);
       interIndex++;
     }
-    //end flue gas arrow
-    //Atmoshpere
+    // end flue gas arrow
+    // Atmoshpere
     if (results.totalAtmosphereLoss) {
       tmpNode = this.createNode("Atmosphere Losses", results.totalAtmosphereLoss, 0, 0, 100 + (250 * interIndex), 0, false, false, false, top, unit, false)
       results.nodes.push(tmpNode);
@@ -120,7 +120,7 @@ export class SankeyService {
       interIndex++;
       top = !top;
     }
-    //Other
+    // Other
     if (results.totalOtherLoss) {
       tmpNode = this.createNode("Other Losses", results.totalOtherLoss, 0, 0, 100 + (250 * interIndex), 0, false, false, false, top, unit, false)
       results.nodes.push(tmpNode);
@@ -129,7 +129,7 @@ export class SankeyService {
       interIndex++;
       top = !top;
     }
-    //Cooling
+    // Cooling
     if (results.totalCoolingLoss) {
       tmpNode = this.createNode("Water Cooling Losses", results.totalCoolingLoss, 0, 0, 100 + (250 * interIndex), 0, false, false, false, top, unit, false)
       results.nodes.push(tmpNode);
@@ -138,7 +138,7 @@ export class SankeyService {
       interIndex++;
       top = !top;
     }
-    //Wall
+    // Wall
     if (results.totalWallLoss) {
       tmpNode = this.createNode("Wall Losses", results.totalWallLoss, 0, 0, 100 + (250 * interIndex), 0, false, false, false, top, unit, false)
       results.nodes.push(tmpNode);
@@ -147,7 +147,7 @@ export class SankeyService {
       interIndex++;
       top = !top;
     }
-    //Opening
+    // Opening
     if (results.totalOpeningLoss) {
       tmpNode = this.createNode("Opening Losses", results.totalOpeningLoss, 0, 0, 100 + (250 * interIndex), 0, false, false, false, top, unit, false)
       results.nodes.push(tmpNode);
@@ -156,7 +156,7 @@ export class SankeyService {
       interIndex++;
       top = !top;
     }
-    //Fixture
+    // Fixture
     if (results.totalFixtureLoss) {
       tmpNode = this.createNode("Fixture/Conveyor Losses", results.totalFixtureLoss, 0, 0, 100 + (250 * interIndex), 0, false, false, false, top, unit, false)
       results.nodes.push(tmpNode);
@@ -165,7 +165,7 @@ export class SankeyService {
       interIndex++;
       top = !top;
     }
-    //Leakage
+    // Leakage
     if (results.totalLeakageLoss) {
       tmpNode = this.createNode("Leakage Losses", results.totalLeakageLoss, 0, 0, 100 + (250 * interIndex), 0, false, false, false, top, unit, false)
       results.nodes.push(tmpNode);
@@ -174,7 +174,7 @@ export class SankeyService {
       interIndex++;
       top = !top;
     }
-    //External Surface
+    // External Surface
     if (results.totalExtSurfaceLoss) {
       tmpNode = this.createNode("External Surface \n  Losses", results.totalExtSurfaceLoss, 0, 0, 100 + (250 * interIndex), 0, false, false, false, top, unit, true)
       results.nodes.push(tmpNode);
@@ -183,7 +183,7 @@ export class SankeyService {
       interIndex++;
       top = !top;
     }
-    //auxiliary power losses
+    // auxiliary power losses
     if (results.totalAuxPower) {
       tmpNode = this.createNode("Auxiliary Power Losses", results.totalAuxPower, 0, 0, 100 + (250 * interIndex), 0, false, false, false, top, unit, false)
       results.nodes.push(tmpNode);
@@ -192,7 +192,7 @@ export class SankeyService {
       interIndex++;
       top = !top;
     }
-    //slag
+    // slag
     if (results.totalSlag) {
       tmpNode = this.createNode("Slag Losses", results.totalSlag, 0, 0, 100 + (250 * interIndex), 0, false, false, false, top, unit, false)
       results.nodes.push(tmpNode);
