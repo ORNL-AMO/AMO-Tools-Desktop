@@ -32,7 +32,7 @@
             <td *ngFor="let result of resultsArr" class="data-cell">{{result.output.motor_power| number:'1.0-1'}}</td>
           </tr>
           <tr>
-            <td class="data-cell data-cell-label">Current <span class="muted">(kW)</span>:</td>
+            <td class="data-cell data-cell-label">Current <span class="muted">(A)</span>:</td>
             <td *ngFor="let result of resultsArr" class="data-cell">{{result.output.motor_current| number:'1.0-1'}}</td>
           </tr>
           <tr>
@@ -40,7 +40,7 @@
             <td *ngFor="let result of resultsArr" class="data-cell">{{result.psat.inputs.motor_rated_power| number:'1.0-1'}}</td>
           </tr>
           <tr>
-            <td class="data-cell data-cell-label">Rated Full Load Amps <span class="muted" [innerHTML]="getUnit(settings.flowMeasurement)"></span>:</td>
+            <td class="data-cell data-cell-label">Rated Full Load Amps:</td>
             <td *ngFor="let result of resultsArr" class="data-cell">{{result.psat.inputs.motor_rated_fla| number:'1.0-1'}}</td>
           </tr>
           <tr>
