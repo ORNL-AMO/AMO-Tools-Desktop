@@ -65,7 +65,7 @@ export class O2EnrichmentGraphComponent implements OnInit, DoCheck {
   @Input()
   toggleCalculate: boolean;
   constructor(private phastService: PhastService, private windowRefService: WindowRefService, private differs: KeyValueDiffers) {
-    this.differ = differs.find({}).create(null);
+    this.differ = differs.find({}).create();
   }
 
   ngDoCheck() {

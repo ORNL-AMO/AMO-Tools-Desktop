@@ -2,7 +2,7 @@
  <tr>
   <td>Fuel Costs</td>
   <td>
-    <span *ngIf="results.fuelCosts">{{results.fuelCosts | currency:'USD':true:'2.0-2'}}</span>
+    <span *ngIf="results.fuelCosts">{{results.fuelCosts | currency:'USD':'symbol':'2.0-2'}}</span>
     <span *ngIf="!results.fuelCosts">&mdash; &mdash;</span>
   </td>
   </tr>
@@ -23,14 +23,14 @@
   <tr>
     <td><strong><u>Total Operating Costs</u></strong></td>
     <td>
-      <span *ngIf="results.totalOperatingCosts">{{results.totalOperatingCosts | currency:'USD':true:'2.0-2'}}</span>
+      <span *ngIf="results.totalOperatingCosts">{{results.totalOperatingCosts | currency:'USD':'symbol':'2.0-2'}}</span>
       <span *ngIf="!results.totalOperatingCosts">&mdash; &mdash;</span>
     </td>
   </tr>
   <tr>
     <td>Annual Operating Savings</td>
     <td>
-      <span *ngIf="results.annualOperationSavings">{{results.annualOperationSavings | currency:'USD':true:'2.0-2'}}</span>
+      <span *ngIf="results.annualOperationSavings">{{results.annualOperationSavings | currency:'USD':'symbol':'2.0-2'}}</span>
       <span *ngIf="!results.annualOperationSavings">&mdash; &mdash;</span>
     </td>
   </tr>
