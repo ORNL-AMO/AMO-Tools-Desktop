@@ -31,17 +31,17 @@
   },
   "private": true,
   "dependencies": {
-    "@angular/animations": "^4.2.1",
-    "@angular/common": "^4.2.1",
-    "@angular/compiler": "^4.2.1",
-    "@angular/compiler-cli": "^4.2.1",
-    "@angular/core": "^4.2.1",
-    "@angular/forms": "^4.2.1",
-    "@angular/http": "^4.2.1",
-    "@angular/platform-browser": "^4.2.1",
-    "@angular/platform-browser-dynamic": "^4.2.1",
-    "@angular/platform-server": "^4.2.1",
-    "@angular/router": "^4.2.1",
+    "@angular/animations": "^5.0.0",
+    "@angular/common": "^5.0.0",
+    "@angular/compiler": "^5.0.0",
+    "@angular/compiler-cli": "^5.0.0",
+    "@angular/core": "^5.0.0",
+    "@angular/forms": "^5.0.0",
+    "@angular/http": "^5.0.0",
+    "@angular/platform-browser": "^5.0.0",
+    "@angular/platform-browser-dynamic": "^5.0.0",
+    "@angular/platform-server": "^5.0.0",
+    "@angular/router": "^5.0.0",
     "ajv": "^5.2.2",
     "amo-tools-suite": "^0.2.3",
     "bootstrap": "^4.0.0-alpha.6",
@@ -52,11 +52,10 @@
     "electron-updater": "^2.8.9",
     "font-awesome": "^4.7.0",
     "jquery": "^3.2.1",
-    "ngx-bootstrap": "^1.9.3",
     "ngx-electron": "1.0.2",
     "popper.js": "^1.12.3",
     "regression": "^2.0.0",
-    "rxjs": "^5.1.0",
+    "rxjs": "^5.5.2",
     "ts-helpers": "^1.1.1",
     "typescript": "^2.5.1",
     "zone.js": "^0.8.12"
@@ -98,7 +97,7 @@
     }
   },
   "devDependencies": {
-    "@angular/cli": "^1.4.1",
+    "@angular/cli": "^1.5.0",
     "@types/jasmine": "2.5.38",
     "@types/lodash": "^4.14.74",
     "@types/node": "^8.0.28",
@@ -126,7 +125,6 @@
     "protractor": "~5.1.0",
     "style-loader": "^0.13.2",
     "ts-node": "^3.3.0",
-    "tslint": "~4.4.2",
-    "webpack": "^3.6.0"
+    "tslint": "~4.4.2"
   }
 }
