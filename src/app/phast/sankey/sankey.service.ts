@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Input } from '@angular/core';
 import { PhastService } from '../phast.service';
 import { Losses, ShowResultsCategories, PhastResults } from '../../shared/models/phast/phast';
 import { Settings } from '../../shared/models/settings';
@@ -6,67 +6,122 @@ import { PHAST } from '../../shared/models/phast/phast';
 import { PhastResultsService } from '../phast-results.service';
 @Injectable()
 export class SankeyService {
+  @Input()
+    settings: Settings;
   baseSize: number = 300;
+
   constructor(private phastService: PhastService, private phastResultsService: PhastResultsService) { }
 
   getFuelTotals(phast: PHAST, settings: Settings): FuelResults {
     let resultCats: ShowResultsCategories = this.phastResultsService.getResultCategories(settings);
     let phastResults: PhastResults = this.phastResultsService.getResults(phast, settings);
     let results: FuelResults = this.initFuelResults();
-    if (phastResults.totalWallLoss) {
-      results.totalWallLoss = phastResults.totalWallLoss / 1000000;
+    if (this.settings.unitsOfMeasure == 'Imperial') {
+      if (phastResults.totalWallLoss) {
+        results.totalWallLoss = phastResults.totalWallLoss / 1000000;
+      }
+      if (phastResults.totalAtmosphereLoss) {
+        results.totalAtmosphereLoss = phastResults.totalAtmosphereLoss / 1000000;
+      }
+      if (phastResults.totalOtherLoss) {
+        results.totalOtherLoss = phastResults.totalOtherLoss / 1000000;
+      }
+      if (phastResults.totalCoolingLoss) {
+        results.totalCoolingLoss = phastResults.totalCoolingLoss / 1000000;
+      }
+      if (phastResults.totalOpeningLoss) {
+        results.totalOpeningLoss = phastResults.totalOpeningLoss / 1000000;
+      }
+      if (phastResults.totalFixtureLoss) {
+        results.totalFixtureLoss = phastResults.totalFixtureLoss / 1000000;
+      }
+      if (phastResults.totalLeakageLoss) {
+        results.totalLeakageLoss = phastResults.totalLeakageLoss / 1000000;
+      }
+      if (phastResults.totalExtSurfaceLoss) {
+        results.totalExtSurfaceLoss = phastResults.totalExtSurfaceLoss / 1000000;
+      }
+      if (phastResults.totalChargeMaterialLoss) {
+        results.totalChargeMaterialLoss = phastResults.totalChargeMaterialLoss / 1000000;
+      }
+
+      if (resultCats.showFlueGas && phastResults.totalFlueGas) {
+        results.totalFlueGas = phastResults.totalFlueGas / 1000000;
+      }
+
+      if (resultCats.showAuxPower && phastResults.totalAuxPower) {
+        results.totalAuxPower = phastResults.totalAuxPower / 1000000;
+      }
+
+      if (resultCats.showSlag && phastResults.totalSlag) {
+        results.totalSlag = phastResults.totalSlag / 1000000;
+      }
+      if (resultCats.showExGas && phastResults.totalExhaustGasEAF) {
+        results.totalExhaustGas = phastResults.totalExhaustGasEAF / 1000000;
+      }
+      if (resultCats.showEnInput2 && phastResults.totalExhaustGas) {
+        results.totalExhaustGas = phastResults.totalExhaustGas / 1000000;
+      }
+      if (phastResults.totalSystemLosses && resultCats.showSystemEff) {
+        results.totalSystemLosses = phastResults.totalSystemLosses / 1000000;
+      }
+      results.totalInput = phastResults.grossHeatInput / 1000000;
     }
-    if (phastResults.totalAtmosphereLoss) {
-      results.totalAtmosphereLoss = phastResults.totalAtmosphereLoss / 1000000;
-    }
-    if (phastResults.totalOtherLoss) {
-      results.totalOtherLoss = phastResults.totalOtherLoss / 1000000;
-    }
-    if (phastResults.totalCoolingLoss) {
-      results.totalCoolingLoss = phastResults.totalCoolingLoss / 1000000;
-    }
-    if (phastResults.totalOpeningLoss) {
-      results.totalOpeningLoss = phastResults.totalOpeningLoss / 1000000;
-    }
-    if (phastResults.totalFixtureLoss) {
-      results.totalFixtureLoss = phastResults.totalFixtureLoss / 1000000;
-    }
-    if (phastResults.totalLeakageLoss) {
-      results.totalLeakageLoss = phastResults.totalLeakageLoss / 1000000;
-    }
-    if (phastResults.totalExtSurfaceLoss) {
-      results.totalExtSurfaceLoss = phastResults.totalExtSurfaceLoss / 1000000;
-    }
-    if (phastResults.totalChargeMaterialLoss) {
-      results.totalChargeMaterialLoss = phastResults.totalChargeMaterialLoss / 1000000;
+    else if (this.settings.energySourceType == 'Electricity') {
+      if (phastResults.totalWallLoss) {
+        results.totalWallLoss = phastResults.totalWallLoss;
+      }
+      if (phastResults.totalAtmosphereLoss) {
+        results.totalAtmosphereLoss = phastResults.totalAtmosphereLoss;
+      }
+      if (phastResults.totalOtherLoss) {
+        results.totalOtherLoss = phastResults.totalOtherLoss;
+      }
+      if (phastResults.totalCoolingLoss) {
+        results.totalCoolingLoss = phastResults.totalCoolingLoss;
+      }
+      if (phastResults.totalOpeningLoss) {
+        results.totalOpeningLoss = phastResults.totalOpeningLoss;
+      }
+      if (phastResults.totalFixtureLoss) {
+        results.totalFixtureLoss = phastResults.totalFixtureLoss;
+      }
+      if (phastResults.totalLeakageLoss) {
+        results.totalLeakageLoss = phastResults.totalLeakageLoss;
+      }
+      if (phastResults.totalExtSurfaceLoss) {
+        results.totalExtSurfaceLoss = phastResults.totalExtSurfaceLoss;
+      }
+      if (phastResults.totalChargeMaterialLoss) {
+        results.totalChargeMaterialLoss = phastResults.totalChargeMaterialLoss;
+      }
+
+      if (resultCats.showFlueGas && phastResults.totalFlueGas) {
+        results.totalFlueGas = phastResults.totalFlueGas;
+      }
+
+      if (resultCats.showAuxPower && phastResults.totalAuxPower) {
+        results.totalAuxPower = phastResults.totalAuxPower;
+      }
+
+      if (resultCats.showSlag && phastResults.totalSlag) {
+        results.totalSlag = phastResults.totalSlag;
+      }
+      if (resultCats.showExGas && phastResults.totalExhaustGasEAF) {
+        results.totalExhaustGas = phastResults.totalExhaustGasEAF;
+      }
+      if (resultCats.showEnInput2 && phastResults.totalExhaustGas) {
+        results.totalExhaustGas = phastResults.totalExhaustGas;
+      }
+      if (phastResults.totalSystemLosses && resultCats.showSystemEff) {
+        results.totalSystemLosses = phastResults.totalSystemLosses;
+      }
+      results.totalInput = phastResults.grossHeatInput;
     }
 
-    if (resultCats.showFlueGas && phastResults.totalFlueGas) {
-      results.totalFlueGas = phastResults.totalFlueGas / 1000000;
-    }
-
-    if (resultCats.showAuxPower && phastResults.totalAuxPower) {
-      results.totalAuxPower = phastResults.totalAuxPower / 1000000;
-    }
-
-    if (resultCats.showSlag && phastResults.totalSlag) {
-      results.totalSlag = phastResults.totalSlag / 1000000;
-    }
-    if (resultCats.showExGas && phastResults.totalExhaustGasEAF) {
-      results.totalExhaustGas = phastResults.totalExhaustGasEAF / 1000000;
-    }
-    if (resultCats.showEnInput2 && phastResults.totalExhaustGas) {
-      results.totalExhaustGas = phastResults.totalExhaustGas / 1000000;
-    }
-    if (phastResults.totalSystemLosses && resultCats.showSystemEff) {
-      results.totalSystemLosses = phastResults.totalSystemLosses / 1000000;
-    }
-
-    results.totalInput = phastResults.grossHeatInput / 1000000;
     results.nodes = this.getNodes(results, settings);
     return results;
-
-  }
+    }
 
   getNodes(results: FuelResults, settings: Settings) {
     let unit: string = 'MMBtu/hr';
