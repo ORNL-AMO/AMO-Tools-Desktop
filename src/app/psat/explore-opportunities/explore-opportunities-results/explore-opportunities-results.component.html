@@ -77,15 +77,15 @@
       </tr>
       <tr>
         <th>Annual Cost</th>
-        <th>{{baselineResults.annual_cost | currency:'USD':true:'2.0-0'}}</th>
-        <th *ngIf="modificationResults.annual_cost" [ngClass]="{'positive-savings': percentSavings > 10}">{{modificationResults.annual_cost | currency:'USD':true:'2.0-0'}}</th>
+        <th>{{baselineResults.annual_cost | currency:'USD':'symbol':'2.0-0'}}</th>
+        <th *ngIf="modificationResults.annual_cost" [ngClass]="{'positive-savings': percentSavings > 10}">{{modificationResults.annual_cost | currency:'USD':'symbol':'2.0-0'}}</th>
         <td *ngIf="!modificationResults.annual_cost">&mdash;</td>
       </tr>
       <tr>
         <th>Annual Savings</th>
         <th>&mdash;</th>
         <th *ngIf="annualSavings" [ngClass]="{'positive-savings': percentSavings > 10}">
-          {{annualSavings | currency:'USD':true:'2.0-0'}}
+          {{annualSavings | currency:'USD':'symbol':'2.0-0'}}
         </th>
         <td *ngIf="!annualSavings">&mdash;</td>
       </tr>

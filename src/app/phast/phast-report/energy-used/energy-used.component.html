@@ -24,7 +24,7 @@
             <span *ngIf="fuelHeatingValue">{{fuelHeatingValue | number:'1.2-2'}} {{energyPerMassUnit}}</span>
             <span *ngIf="!fuelHeatingValue">&mdash; &mdash;</span>
           </td>
-          <td>{{phast.operatingCosts.fuelCost | currency:'USD':true:'1.2-2'}} {{energyCostUnit}}</td>
+          <td>{{phast.operatingCosts.fuelCost | currency:'USD':'symbol':'1.2-2'}} {{energyCostUnit}}</td>
         </tr>
         <tr>
           <td>Electricity</td>
@@ -33,7 +33,7 @@
             <span *ngIf="!electricEnergyUsed">&mdash; &mdash;</span>
           </td>
           <td>9,800 {{energyPerTimeUnit}}</td>
-          <td>{{phast.operatingCosts.electricityCost | currency:'USD':true:'1.2-2'}} /kWh</td>
+          <td>{{phast.operatingCosts.electricityCost | currency:'USD':'symbol':'1.2-2'}} /kWh</td>
         </tr>
         <tr>
           <td>Steam</td>
@@ -45,7 +45,7 @@
             <span *ngIf="steamHeatingValue">{{steamHeatingValue | number:'1.0-0'}} {{energyPerMassUnit}}</span>
             <span *ngIf="!steamHeatingValue">&mdash; &mdash;</span>
           </td>
-          <td>{{phast.operatingCosts.steamCost | currency:'USD':true:'1.2-2'}} {{energyCostUnit}}</td>
+          <td>{{phast.operatingCosts.steamCost | currency:'USD':'symbol':'1.2-2'}} {{energyCostUnit}}</td>
         </tr>
       </tbody>
     </table>
