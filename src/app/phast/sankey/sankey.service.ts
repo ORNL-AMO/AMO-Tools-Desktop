@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Input } from '@angular/core';
 import { PhastService } from '../phast.service';
 import { Losses, ShowResultsCategories, PhastResults } from '../../shared/models/phast/phast';
 import { Settings } from '../../shared/models/settings';
@@ -6,66 +6,67 @@ import { PHAST } from '../../shared/models/phast/phast';
 import { PhastResultsService } from '../phast-results.service';
 @Injectable()
 export class SankeyService {
+
   baseSize: number = 300;
+
   constructor(private phastService: PhastService, private phastResultsService: PhastResultsService) { }
 
   getFuelTotals(phast: PHAST, settings: Settings): FuelResults {
     let resultCats: ShowResultsCategories = this.phastResultsService.getResultCategories(settings);
     let phastResults: PhastResults = this.phastResultsService.getResults(phast, settings);
     let results: FuelResults = this.initFuelResults();
+    let constant = 1;
+    if (settings.energySourceType != 'Electricity') {
+      constant = 1000000
+    }
     if (phastResults.totalWallLoss) {
-      results.totalWallLoss = phastResults.totalWallLoss / 1000000;
+      results.totalWallLoss = phastResults.totalWallLoss / constant;
     }
     if (phastResults.totalAtmosphereLoss) {
-      results.totalAtmosphereLoss = phastResults.totalAtmosphereLoss / 1000000;
+      results.totalAtmosphereLoss = phastResults.totalAtmosphereLoss / constant;
     }
     if (phastResults.totalOtherLoss) {
-      results.totalOtherLoss = phastResults.totalOtherLoss / 1000000;
+      results.totalOtherLoss = phastResults.totalOtherLoss / constant;
     }
     if (phastResults.totalCoolingLoss) {
-      results.totalCoolingLoss = phastResults.totalCoolingLoss / 1000000;
+      results.totalCoolingLoss = phastResults.totalCoolingLoss / constant;
     }
     if (phastResults.totalOpeningLoss) {
-      results.totalOpeningLoss = phastResults.totalOpeningLoss / 1000000;
+      results.totalOpeningLoss = phastResults.totalOpeningLoss / constant;
     }
     if (phastResults.totalFixtureLoss) {
-      results.totalFixtureLoss = phastResults.totalFixtureLoss / 1000000;
+      results.totalFixtureLoss = phastResults.totalFixtureLoss / constant;
     }
     if (phastResults.totalLeakageLoss) {
-      results.totalLeakageLoss = phastResults.totalLeakageLoss / 1000000;
+      results.totalLeakageLoss = phastResults.totalLeakageLoss / constant;
     }
     if (phastResults.totalExtSurfaceLoss) {
-      results.totalExtSurfaceLoss = phastResults.totalExtSurfaceLoss / 1000000;
+      results.totalExtSurfaceLoss = phastResults.totalExtSurfaceLoss / constant;
     }
     if (phastResults.totalChargeMaterialLoss) {
-      results.totalChargeMaterialLoss = phastResults.totalChargeMaterialLoss / 1000000;
+      results.totalChargeMaterialLoss = phastResults.totalChargeMaterialLoss / constant;
     }
-
     if (resultCats.showFlueGas && phastResults.totalFlueGas) {
-      results.totalFlueGas = phastResults.totalFlueGas / 1000000;
+      results.totalFlueGas = phastResults.totalFlueGas / constant;
     }
-
     if (resultCats.showAuxPower && phastResults.totalAuxPower) {
-      results.totalAuxPower = phastResults.totalAuxPower / 1000000;
+      results.totalAuxPower = phastResults.totalAuxPower / constant;
     }
-
     if (resultCats.showSlag && phastResults.totalSlag) {
-      results.totalSlag = phastResults.totalSlag / 1000000;
+      results.totalSlag = phastResults.totalSlag / constant;
     }
     if (resultCats.showExGas && phastResults.totalExhaustGasEAF) {
-      results.totalExhaustGas = phastResults.totalExhaustGasEAF / 1000000;
+      results.totalExhaustGas = phastResults.totalExhaustGasEAF / constant;
     }
     if (resultCats.showEnInput2 && phastResults.totalExhaustGas) {
-      results.totalExhaustGas = phastResults.totalExhaustGas / 1000000;
+      results.totalExhaustGas = phastResults.totalExhaustGas / constant;
     }
     if (phastResults.totalSystemLosses && resultCats.showSystemEff) {
-      results.totalSystemLosses = phastResults.totalSystemLosses / 1000000;
+      results.totalSystemLosses = phastResults.totalSystemLosses / constant;
     }
-
-    results.totalInput = phastResults.grossHeatInput / 1000000;
+    results.totalInput = phastResults.grossHeatInput / constant;
     results.nodes = this.getNodes(results, settings);
     return results;
-
   }
 
   getNodes(results: FuelResults, settings: Settings) {
@@ -83,9 +84,9 @@ export class SankeyService {
     let interIndex = 2;
 
     let top: boolean = false;
-    //FLUE GAS ARROW
-    //one of three
-    //Flue Gas
+    // FLUE GAS ARROW
+    // one of three
+    // Flue Gas
     if (results.totalFlueGas) {
       tmpNode = this.createNode("Flue Gas Losses", results.totalFlueGas, 0, 0, 100 + (250 * interIndex), 0, false, false, false, true, unit, false)
       results.nodes.push(tmpNode);
@@ -93,7 +94,7 @@ export class SankeyService {
       results.nodes.push(tmpNode);
       interIndex++;
     }
-    //Exhaust Gas EAF
+    // Exhaust Gas EAF
     if (results.totalExhaustGas) {
       tmpNode = this.createNode("Exhaust Gas Losses", results.totalExhaustGas, 0, 0, 100 + (250 * interIndex), 0, false, false, false, true, unit, false)
       results.nodes.push(tmpNode);
@@ -109,8 +110,8 @@ export class SankeyService {
       results.nodes.push(tmpNode);
       interIndex++;
     }
-    //end flue gas arrow
-    //Atmoshpere
+    // end flue gas arrow
+    // Atmoshpere
     if (results.totalAtmosphereLoss) {
       tmpNode = this.createNode("Atmosphere Losses", results.totalAtmosphereLoss, 0, 0, 100 + (250 * interIndex), 0, false, false, false, top, unit, false)
       results.nodes.push(tmpNode);
@@ -119,7 +120,7 @@ export class SankeyService {
       interIndex++;
       top = !top;
     }
-    //Other
+    // Other
     if (results.totalOtherLoss) {
       tmpNode = this.createNode("Other Losses", results.totalOtherLoss, 0, 0, 100 + (250 * interIndex), 0, false, false, false, top, unit, false)
       results.nodes.push(tmpNode);
@@ -128,7 +129,7 @@ export class SankeyService {
       interIndex++;
       top = !top;
     }
-    //Cooling
+    // Cooling
     if (results.totalCoolingLoss) {
       tmpNode = this.createNode("Water Cooling Losses", results.totalCoolingLoss, 0, 0, 100 + (250 * interIndex), 0, false, false, false, top, unit, false)
       results.nodes.push(tmpNode);
@@ -137,7 +138,7 @@ export class SankeyService {
       interIndex++;
       top = !top;
     }
-    //Wall
+    // Wall
     if (results.totalWallLoss) {
       tmpNode = this.createNode("Wall Losses", results.totalWallLoss, 0, 0, 100 + (250 * interIndex), 0, false, false, false, top, unit, false)
       results.nodes.push(tmpNode);
@@ -146,7 +147,7 @@ export class SankeyService {
       interIndex++;
       top = !top;
     }
-    //Opening
+    // Opening
     if (results.totalOpeningLoss) {
       tmpNode = this.createNode("Opening Losses", results.totalOpeningLoss, 0, 0, 100 + (250 * interIndex), 0, false, false, false, top, unit, false)
       results.nodes.push(tmpNode);
@@ -155,7 +156,7 @@ export class SankeyService {
       interIndex++;
       top = !top;
     }
-    //Fixture
+    // Fixture
     if (results.totalFixtureLoss) {
       tmpNode = this.createNode("Fixture/Conveyor Losses", results.totalFixtureLoss, 0, 0, 100 + (250 * interIndex), 0, false, false, false, top, unit, false)
       results.nodes.push(tmpNode);
@@ -164,7 +165,7 @@ export class SankeyService {
       interIndex++;
       top = !top;
     }
-    //Leakage
+    // Leakage
     if (results.totalLeakageLoss) {
       tmpNode = this.createNode("Leakage Losses", results.totalLeakageLoss, 0, 0, 100 + (250 * interIndex), 0, false, false, false, top, unit, false)
       results.nodes.push(tmpNode);
@@ -173,7 +174,7 @@ export class SankeyService {
       interIndex++;
       top = !top;
     }
-    //External Surface
+    // External Surface
     if (results.totalExtSurfaceLoss) {
       tmpNode = this.createNode("External Surface \n  Losses", results.totalExtSurfaceLoss, 0, 0, 100 + (250 * interIndex), 0, false, false, false, top, unit, true)
       results.nodes.push(tmpNode);
@@ -182,7 +183,7 @@ export class SankeyService {
       interIndex++;
       top = !top;
     }
-    //auxiliary power losses
+    // auxiliary power losses
     if (results.totalAuxPower) {
       tmpNode = this.createNode("Auxiliary Power Losses", results.totalAuxPower, 0, 0, 100 + (250 * interIndex), 0, false, false, false, top, unit, false)
       results.nodes.push(tmpNode);
@@ -191,7 +192,7 @@ export class SankeyService {
       interIndex++;
       top = !top;
     }
-    //slag
+    // slag
     if (results.totalSlag) {
       tmpNode = this.createNode("Slag Losses", results.totalSlag, 0, 0, 100 + (250 * interIndex), 0, false, false, false, top, unit, false)
       results.nodes.push(tmpNode);
