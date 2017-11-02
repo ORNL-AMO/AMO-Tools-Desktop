@@ -121,6 +121,7 @@
     "moment": "^2.18.1",
     "ng2-charts": "^1.5.0",
     "ng2-toasty": "^4.0.2",
+    "ngx-bootstrap": "^2.0.0-beta.7",
     "node-loader": "^0.6.0",
     "protractor": "~5.1.0",
     "style-loader": "^0.13.2",
