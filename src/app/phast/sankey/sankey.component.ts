@@ -157,7 +157,7 @@ export class SankeyComponent implements OnInit {
           return d.y + (d.displaySize / 2) + 10;
         }
         else if (d.usefulOutput) {
-          return d.y + (d.displaySize / 2) - 63;
+          return d.y + (d.displaySize / 2) - 95;
         }
         else {
           if (d.top) {
@@ -226,10 +226,10 @@ export class SankeyComponent implements OnInit {
               return d.x - 340;
             }
             else if (node_val.usefulOutput) {
-              return d.x + (d.displaySize * .7) - 40 ;
+              return d.x + (d.displaySize * .7) - 10 ;
             }
             else {
-              return node_val.x - 120;
+              return node_val.x - 70;
             }
           })
           .attr("y", function () {
@@ -237,7 +237,7 @@ export class SankeyComponent implements OnInit {
               return (node_val.y + (node_val.displaySize / 2)) + 43;
             }
             else if (node_val.usefulOutput) {
-              return (node_val.y + (node_val.displaySize / 2)) - 30;
+              return (node_val.y + (node_val.displaySize / 2)) - 60;
             }
             else if (node_val.top) {
               return node_val.y - 120;
@@ -246,11 +246,11 @@ export class SankeyComponent implements OnInit {
               return node_val.y + 80;
             }
             else {
-              return node_val.y + 170;
+              return node_val.y + 175;
             }
           })
           .text(function () {
-            var format = d3.format(",.3f");
+            var format = d3.format(",.2f");
             return format(node_val.value) + ' ' + node_val.units;
           })
           .style("font-size", "32px");
