@@ -3,6 +3,7 @@ import { Directory } from '../shared/models/directory';
 import { Assessment } from '../shared/models/assessment';
 import { AssessmentService } from '../assessment/assessment.service';
 declare const packageJson;
+import { ElectronService } from 'ngx-electron';
 @Component({
   selector: 'app-sidebar',
   templateUrl: './sidebar.component.html',
@@ -33,18 +34,23 @@ export class SidebarComponent implements OnInit {
   emitGoToSettings = new EventEmitter<boolean>();
   @Output('emitGoToContact')
   emitGoToContact = new EventEmitter<boolean>();
-  
+
   selectedDirectoryId: number;
   firstChange: boolean = true;
   createAssessment: boolean = false;
   versionNum: any;
-  constructor(private assessmentService: AssessmentService) { }
+  isUpdateAvailable: boolean;
+  constructor(private assessmentService: AssessmentService, private electronService: ElectronService) { }
 
   ngOnInit() {
     this.versionNum = packageJson.version;
     this.directory.collapsed = false;
     this.selectedDirectoryId = this.directory.id;
-    
+    this.electronService.ipcRenderer.once('available', (event, arg) => {
+      this.isUpdateAvailable = arg;
+      console.log(this.isUpdateAvailable);
+    })
+
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -90,7 +96,7 @@ export class SidebarComponent implements OnInit {
     return this.directory;
   }
 
-  goToSettings(){
+  goToSettings() {
     this.emitGoToSettings.emit(true);
   }
 
@@ -110,7 +116,11 @@ export class SidebarComponent implements OnInit {
     this.assessmentService.createAssessment.next(true);
   }
 
-  showContact(){
+  showContact() {
     this.emitGoToContact.emit(true);
+  }
+
+  update() {
+    this.electronService.ipcRenderer.send('update', null);
   }
 }
