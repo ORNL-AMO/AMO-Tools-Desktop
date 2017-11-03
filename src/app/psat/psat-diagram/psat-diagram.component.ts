@@ -13,16 +13,22 @@ export class PsatDiagramComponent implements OnInit {
   psat: PSAT;
   @Input()
   settings: Settings;
-
-  selectedPsat: PSAT;
-
-  results: PsatOutputs;
+  resultsArr: Array<DiagramResults>;
   constructor(private psatService: PsatService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
-    this.selectedPsat = this.psat;
+    this.resultsArr = new Array<DiagramResults>();
     if (this.psat.inputs && this.settings) {
-      this.getResults();
+      let tmpResults: PsatOutputs = this.getResults(this.psat, this.settings, false);
+      this.psat.outputs = tmpResults;
+      this.resultsArr.push({ output: tmpResults, name: 'Baseline', psat: this.psat })
+      if (this.psat.modifications) {
+        this.psat.modifications.forEach(val => {
+          tmpResults = this.getResults(val.psat, this.settings, true);
+          this.resultsArr.push({ output: tmpResults, name: val.psat.name, psat: val.psat })
+        })
+      }
+      console.log(this.resultsArr);
     }
   }
 
@@ -36,12 +42,21 @@ export class PsatDiagramComponent implements OnInit {
     return tmpUnit.unit.name.display;
   }
 
-  getResults() {
-    this.results = this.psatService.resultsExisting(this.selectedPsat.inputs, this.settings);
+  getResults(psat: PSAT, settings: Settings, isModification?: boolean): PsatOutputs {
+    if (psat.inputs.optimize_calculation) {
+      return this.psatService.resultsOptimal(JSON.parse(JSON.stringify(psat.inputs)), settings);
+    } else if (!isModification) {
+      console.log('existing')
+      return this.psatService.resultsExisting(JSON.parse(JSON.stringify(psat.inputs)), settings);
+    } else {
+      return this.psatService.resultsModified(JSON.parse(JSON.stringify(psat.inputs)), settings, this.psat.outputs.pump_efficiency);
+    }
   }
+}
 
-  setPsat(psat: PSAT) {
-    this.selectedPsat = psat;
-    this.getResults();
-  }
+
+interface DiagramResults {
+  output: PsatOutputs,
+  name: string,
+  psat: PSAT
 }

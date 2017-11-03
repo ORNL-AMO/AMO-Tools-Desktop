@@ -1,73 +1,92 @@
 <div class="psat-diagram">
-  <div class="container">
-    <div class="row">
-      <div class="col-2">
-
-
-        <ul class="tabs vertical">
-          <li [ngClass]="{'active': psat.name == selectedPsat.name}" (click)="setPsat(psat)"><a>Baseline</a></li>
-          <li *ngFor="let mod of psat.modifications" [ngClass]="{'active': mod.psat.name == selectedPsat.name}" (click)="setPsat(mod.psat)"><a>{{mod.psat.name}}</a></li>
-        </ul>
-
-
-      </div><!-- End .col-2 -->
-      <div class="col-5">
-        <div class="diagram">
-          <span class="motor">1</span>
-          <span class="fluid">2</span>
-          <span class="pump">3</span>
-        </div>
-      </div><!-- End .col-7 -->
-      <div class="col-5">
-
-
-        <ul class="data">
-          <li>
-            <h3>Motor</h3>
-            <dl>
-              <dt>Efficiency</dt>
-              <dd>{{results.motor_efficiency | number:'1.0-1'}} <span class="muted">%</span></dd>
-              <dt>Power</dt>
-              <dd>{{results.motor_power | number:'1.0-1'}} <span class="muted">(kW)</span></dd>
-              <dt>Current</dt>
-              <dd>{{results.motor_current | number:'1.0-1'}} <span class="muted">(kW)</span></dd>
-
-              <dt>Rated Power</dt>
-              <dd>{{selectedPsat.inputs.motor_rated_power| number:'1.0-1'}} <span class="muted">({{settings.powerMeasurement}})</span></dd>
-              <dt>Rated Full Load Amps</dt>
-              <dd>{{selectedPsat.inputs.motor_rated_fla | number:'1.0-1'}}</dd>
-              <dt>Rated Voltage</dt>
-              <dd>{{selectedPsat.inputs.motor_rated_voltage | number:'1.0-1'}}</dd>
-            </dl>
-          </li>
-          <li>
-            <h3>Fluid</h3>
-            <dl>
-              <dt>Specific Gravity</dt>
-              <dd>{{selectedPsat.inputs.specific_gravity}}</dd>
-              <dt>Flow Rate</dt>
-              <dd>{{selectedPsat.inputs.flow_rate | number:'1.0-1'}} <span class="muted" [innerHTML]="getUnit(settings.flowMeasurement)"></span></dd>
-              <dt>Head</dt>
-              <dd>{{selectedPsat.inputs.head | number:'1.0-1'}} <span class="muted" [innerHTML]="getUnit(settings.distanceMeasurement)"></span></dd>
-            </dl>
-          </li>
-          <li>
-            <h3>Pump</h3>
-            <dl>
-              <dt>Type</dt>
-              <dd>{{getPumpType(selectedPsat.inputs.pump_style)}}</dd>
-              <dt>RPM</dt>
-              <dd>{{selectedPsat.inputs.pump_rated_speed | number:'1.0-1'}}</dd>
-              <dt>Efficiency</dt>
-              <dd>{{results.pump_efficiency | number:'1.0-1'}} <span class="muted">%</span></dd>
-            </dl>
-          </li>
-        </ul>
-
-
+  <div class="row">
+    <div class="col-5">
+      <div class="diagram">
+        <span class="motor">1</span>
+        <span class="fluid">2</span>
+        <span class="pump">3</span>
       </div>
-      <!-- End .col-2 -->
+    </div>
+    <div class="col-7">
+      <table class="table table-responsive table-hover">
+        <thead>
+          <tr>
+            <th></th>
+            <th *ngFor="let result of resultsArr" class="psat-column-name">{{result.name}}</th>
+          </tr>
+        </thead>
+        <tbody class="data">
+          <!--motor-->
+          <tr>
+            <th class="data-header">
+              <h3><span class="num-label">1</span>Motor</h3>
+            </th>
+            <th *ngFor="let result of resultsArr"></th>
+          </tr>
+          <tr>
+            <td class="data-cell data-cell-label">Efficiency <span class="muted">(%)</span>:</td>
+            <td *ngFor="let result of resultsArr" class="data-cell">{{result.output.motor_efficiency| number:'1.0-1'}}</td>
+          </tr>
+          <tr>
+            <td class="data-cell data-cell-label">Power <span class="muted">(kW)</span>:</td>
+            <td *ngFor="let result of resultsArr" class="data-cell">{{result.output.motor_power| number:'1.0-1'}}</td>
+          </tr>
+          <tr>
+            <td class="data-cell data-cell-label">Current <span class="muted">(A)</span>:</td>
+            <td *ngFor="let result of resultsArr" class="data-cell">{{result.output.motor_current| number:'1.0-1'}}</td>
+          </tr>
+          <tr>
+            <td class="data-cell data-cell-label">Rated Power <span class="muted">({{settings.powerMeasurement}})</span>:</td>
+            <td *ngFor="let result of resultsArr" class="data-cell">{{result.psat.inputs.motor_rated_power| number:'1.0-1'}}</td>
+          </tr>
+          <tr>
+            <td class="data-cell data-cell-label">Rated Full Load Amps:</td>
+            <td *ngFor="let result of resultsArr" class="data-cell">{{result.psat.inputs.motor_rated_fla| number:'1.0-1'}}</td>
+          </tr>
+          <tr>
+            <td class="data-cell data-cell-label">Rated Voltage:</td>
+            <td *ngFor="let result of resultsArr" class="data-cell">{{result.psat.inputs.motor_rated_voltage | number:'1.0-1'}}</td>
+          </tr>
+          <!--Fluid-->
+          <tr>
+            <th class="data-header">
+              <h3><span class="num-label">2</span>Fluid</h3>
+            </th>
+            <th *ngFor="let result of resultsArr"></th>
+          </tr>
+          <tr>
+            <td class="data-cell data-cell-label">Specific Gravity:</td>
+            <td *ngFor="let result of resultsArr" class="data-cell">{{result.psat.inputs.specific_gravity| number:'1.0-1'}}</td>
+          </tr>
+          <tr>
+            <td class="data-cell data-cell-label">Flow Rate <span class="muted" [innerHTML]="getUnit(settings.flowMeasurement)"></span>:</td>
+            <td *ngFor="let result of resultsArr" class="data-cell">{{result.psat.inputs.flow_rate| number:'1.0-1'}}</td>
+          </tr>
+          <tr>
+            <td class="data-cell data-cell-label">Head <span class="muted" [innerHTML]="getUnit(settings.distanceMeasurement)"></span>:</td>
+            <td *ngFor="let result of resultsArr" class="data-cell">{{result.psat.inputs.head| number:'1.0-1'}}</td>
+          </tr>
+          <!--Pump-->
+          <tr>
+            <th class="data-header">
+              <h3><span class="num-label">3</span>Pump</h3>
+            </th>
+            <th *ngFor="let result of resultsArr"></th>
+          </tr>
+          <tr>
+            <td class="data-cell data-cell-label">Type:</td>
+            <td *ngFor="let result of resultsArr" class="data-cell">{{getPumpType(result.psat.inputs.pump_style)}}</td>
+          </tr>
+          <tr>
+            <td class="data-cell data-cell-label">RPM:</td>
+            <td *ngFor="let result of resultsArr" class="data-cell">{{result.psat.inputs.pump_rated_speed| number:'1.0-1'}}</td>
+          </tr>
+          <tr>
+            <td class="data-cell data-cell-label">Efficiency <span class="muted">(%)</span>:</td>
+            <td *ngFor="let result of resultsArr" class="data-cell">{{result.output.pump_efficiency| number:'1.0-1'}}</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </div>
-  <!-- End .container -->
 </div>

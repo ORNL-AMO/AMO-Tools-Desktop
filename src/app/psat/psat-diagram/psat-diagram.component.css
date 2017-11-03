@@ -1,4 +1,17 @@
 
+td, th{
+    padding-left: 5px;
+    padding-right: 5px;
+    padding-top: 0px;
+    padding-bottom: 0px;
+}
+
+.psat-column-name{
+        padding-left: 5px;
+    padding-right: 5px;
+    font-size: 14px;
+}
+
 .psat-diagram {
     padding-top: 40px;
 }
@@ -12,10 +25,7 @@
     position: relative;
     padding-left: 30px;
 }
-.psat-diagram .data li:before {
-    content: counter(diagram-counter);
-    counter-increment: diagram-counter;
-    position: absolute;
+.psat-diagram .data .num-label {
     left: 0;
     top: 0;
     font: bold 14px/1 Sans-Serif;
@@ -23,6 +33,7 @@
     color: #fff;
     border-radius: 50%;
     padding: 3px 7px;
+    margin-right: 5px;
 }
 .psat-diagram li {
     list-style: none;
@@ -33,24 +44,29 @@
     margin-bottom: 4px;
     text-transform: uppercase;
 }
-.psat-diagram dl {
+.psat-diagram tbody {
     margin-bottom: 10px;    
 }
-.psat-diagram dt {
+.psat-diagram .data-cell .data-cell-label {
     line-height: 20px;
     font-size: 14px;
-    float: left;
-    clear: left;
     width: 168px;
+    font-weight: bold;
 }
-    .psat-diagram dt:after {
-        content: ":";
-    }
-.psat-diagram dd {
+
+.psat-diagram .data-header h3:nth-of-type(n+1) {
+    padding-top: 8px;
+}
+.psat-diagram .data-cell {
     margin-bottom: 3px;
     line-height: 20px;
     font-size: 14px;
     margin-left: 170px;
+}
+
+.psat-diagram .data-cell-label{
+    padding-left: 35px;
+    font-weight: bold;
 }
 
 .psat-diagram .diagram {
