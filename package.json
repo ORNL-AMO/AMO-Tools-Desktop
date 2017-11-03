@@ -1,6 +1,6 @@
 {
   "name": "amo-tools-desktop",
-  "version": "0.2.1",
+  "version": "0.2.2-beta",
   "main": "main.js",
   "license": "MIT",
   "description": "AMO-Tools-Desktop",
@@ -15,7 +15,9 @@
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
-    "build-prod": "ng build --prod --aot --env=prod",
+    "build-aot": "ng build --aot",
+    "build-watch": "ng build --op dist -w",
+    "build-prod": "ng build --aot --env=prod",
     "clean": "rm -rf node_modules && rm -rf dist && rm -f package-lock.json",
     "electron": "electron .",
     "lint": "ng lint",
