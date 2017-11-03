@@ -77,10 +77,14 @@
 <div class="sidebar-group">
   <ul>
     <li>
-      <span class="version-num">v{{versionNum}}</span>
+      <span class="version-num">v{{versionNum}} <i class="fa fa-info-circle" (click)="openVersionModal()"></i></span>
     </li>
     <li>
-      <span class="version-num">Update Available</span>
+      <span *ngIf="isUpdateAvailable" class="update-available" (click)="openModal()">Update Available!</span>
     </li>
   </ul>
 </div>
+
+
+<app-update-modal *ngIf="showModal" (closeModal)="closeModal()"></app-update-modal>
+<app-version-modal *ngIf="showVersionModal" (closeModal)="closeVersionModal()"></app-version-modal>

@@ -40,6 +40,8 @@ export class SidebarComponent implements OnInit {
   createAssessment: boolean = false;
   versionNum: any;
   isUpdateAvailable: boolean;
+  showModal: boolean;
+  showVersionModal: boolean;
   constructor(private assessmentService: AssessmentService, private electronService: ElectronService) { }
 
   ngOnInit() {
@@ -120,7 +122,19 @@ export class SidebarComponent implements OnInit {
     this.emitGoToContact.emit(true);
   }
 
-  update() {
-    this.electronService.ipcRenderer.send('update', null);
+  closeModal(){
+    this.showModal = false;
+  }
+
+  openModal(){
+    this.showModal = true;
+  }
+
+  openVersionModal(){
+    this.showVersionModal = true;
+  }
+
+  closeVersionModal(){
+    this.showVersionModal = false;
   }
 }
