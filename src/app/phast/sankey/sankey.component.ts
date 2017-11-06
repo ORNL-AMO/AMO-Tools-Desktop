@@ -143,7 +143,7 @@ export class SankeyComponent implements OnInit {
          return d.x - 240;
        }
        if (d.usefulOutput) {
-          return d.x + (d.displaySize * .7) + 67;
+          return d.x + (d.displaySize * .7) + 5;
         }
         if (d.input) {
           return d.x + 70;
@@ -157,7 +157,7 @@ export class SankeyComponent implements OnInit {
           return d.y + (d.displaySize / 2) + 10;
         }
         else if (d.usefulOutput) {
-          return d.y + (d.displaySize / 2) - 95;
+          return d.y + (d.displaySize / 2) - 140;
         }
         else {
           if (d.top) {
@@ -226,7 +226,7 @@ export class SankeyComponent implements OnInit {
               return d.x - 340;
             }
             else if (node_val.usefulOutput) {
-              return d.x + (d.displaySize * .7) - 10 ;
+              return d.x + (d.displaySize * .7) - 70 ;
             }
             else {
               return node_val.x - 70;
@@ -237,7 +237,7 @@ export class SankeyComponent implements OnInit {
               return (node_val.y + (node_val.displaySize / 2)) + 43;
             }
             else if (node_val.usefulOutput) {
-              return (node_val.y + (node_val.displaySize / 2)) - 60;
+              return (node_val.y + (node_val.displaySize / 2)) - 110;
             }
             else if (node_val.top) {
               return node_val.y - 120;
