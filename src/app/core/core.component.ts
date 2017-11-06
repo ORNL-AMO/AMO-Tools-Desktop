@@ -27,9 +27,33 @@ export class CoreComponent implements OnInit {
   }
 
   ngOnInit() {
+    // //set up listener for update
+    // this.electronService.ipcRenderer.once('available', (event, arg) => {
+    //   console.log('update available: ' + arg);
+    //   if (arg == true) {
+    //     this.showUpdateModal = true;
+    //   }
+    // })
+
+    // //send signal to main.js to check for update
+    // this.electronService.ipcRenderer.send('ready', null);
+
+    // this.importExportService.toggleDownload.subscribe((val) => {
+    //   if (val == true) {
+    //     this.downloadData();
+    //   }
+    // })
+
+    if (this.electronService.process.platform == 'win32') {
+      this.showScreenshot = false;
+    }
+  }
+
+  ngAfterViewInit() {
     //set up listener for update
     this.electronService.ipcRenderer.once('available', (event, arg) => {
       console.log('update available: ' + arg);
+      console.log('Core');
       if (arg == true) {
         this.showUpdateModal = true;
       }
@@ -44,11 +68,7 @@ export class CoreComponent implements OnInit {
       }
     })
 
-    if (this.electronService.process.platform == 'win32') {
-      this.showScreenshot = false;
-    }
   }
-
 
   takeScreenShot() {
     this.importExportService.takeScreenShot();
@@ -80,7 +100,7 @@ export class CoreComponent implements OnInit {
     this.importExportService.openMailTo();
   }
 
-  closeModal(){
+  closeModal() {
     this.showUpdateModal = false;
   }
 

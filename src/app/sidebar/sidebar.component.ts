@@ -50,7 +50,7 @@ export class SidebarComponent implements OnInit {
     this.selectedDirectoryId = this.directory.id;
     this.electronService.ipcRenderer.once('available', (event, arg) => {
       this.isUpdateAvailable = arg;
-      console.log(this.isUpdateAvailable);
+      console.log('Sidebar ' + this.isUpdateAvailable);
     })
 
   }
