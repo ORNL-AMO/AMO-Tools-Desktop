@@ -106,5 +106,19 @@ export class SettingsService {
       })
     }
     return settingsForm;
-}
+  }
+
+  setEnergyResultUnitSetting(settings: Settings): Settings {
+    if (settings.unitsOfMeasure == 'Imperial') {
+      settings.energyResultUnit = 'Btu'
+    }
+    else if (settings.unitsOfMeasure == 'Metric') {
+      settings.energyResultUnit = 'kJ';
+    }
+
+    if (settings.energySourceType == 'Electricity') {
+      settings.energyResultUnit = 'kWh';
+    }
+    return settings;
+  }
 }
