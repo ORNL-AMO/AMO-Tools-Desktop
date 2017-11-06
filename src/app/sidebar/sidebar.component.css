@@ -1,4 +1,13 @@
 .version-num{
-    cursor: inherit;
+    cursor: default !important;
+    color: darkslategray;
+}
+
+.fa-info-circle{
+    cursor: pointer;
+}
+
+.update-available{
+    cursor: pointer;
     color: darkslategray;
 }

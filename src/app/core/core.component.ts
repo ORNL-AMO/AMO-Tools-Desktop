@@ -12,8 +12,7 @@ import { AssessmentService } from '../assessment/assessment.service';
 })
 
 export class CoreComponent implements OnInit {
-  updateAvailable: boolean;
-  updateSelected: boolean;
+  showUpdateModal: boolean;
 
   @ViewChild('updateModal') public updateModal: ModalDirective;
 
@@ -32,7 +31,7 @@ export class CoreComponent implements OnInit {
     this.electronService.ipcRenderer.once('available', (event, arg) => {
       console.log('update available: ' + arg);
       if (arg == true) {
-        this.showUpdateModal();
+        this.showUpdateModal = true;
       }
     })
 
@@ -81,22 +80,8 @@ export class CoreComponent implements OnInit {
     this.importExportService.openMailTo();
   }
 
-  showUpdateModal() {
-    this.updateModal.show();
+  closeModal(){
+    this.showUpdateModal = false;
   }
 
-  hideUpdateModal() {
-    this.updateModal.hide();
-  }
-
-  updateClick() {
-    this.updateSelected = true;
-    this.updateAvailable = false;
-    this.electronService.ipcRenderer.send('update', null);
-  }
-
-  cancel() {
-    this.updateModal.hide();
-    this.electronService.ipcRenderer.send('later', null);
-  }
 }
