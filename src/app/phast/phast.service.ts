@@ -66,6 +66,15 @@ export class PhastService {
     return cpy;
   }
 
+  convertResult(val: number, to: string) {
+    if (isNaN(val) == false) {
+      val = this.convertUnitsService.value(val).from('Btu').to(to);
+    } else {
+      val = 0;
+    }
+    return val;
+  }
+
   fixtureLosses(input: FixtureLoss, settings: Settings): number {
     let inputs = this.createInputCopy(input);
     let results = 0;
@@ -75,25 +84,10 @@ export class PhastService {
       inputs.specificHeat = this.convertUnitsService.value(inputs.specificHeat).from('kJkgC').to('btulbF');
       inputs.feedRate = this.convertUnitsService.value(inputs.feedRate).from('kg').to('lb');
       results = phastAddon.fixtureLosses(inputs);
-      if (isNaN(results) == false) {
-        if (settings.energySourceType == 'Electricity') {
-          results = this.convertUnitsService.value(results).from('Btu').to('kWh');
-        } else {
-          results = this.convertUnitsService.value(results).from('Btu').to('kJ');
-        }
-      } else {
-        results = 0;
-      }
     } else {
       results = phastAddon.fixtureLosses(inputs);
-      if (isNaN(results) == false) {
-        if (settings.energySourceType == 'Electricity') {
-          results = this.convertUnitsService.value(results).from('Btu').to('kWh');
-        }
-      } else {
-        results = 0;
-      }
     }
+    results = this.convertResult(results, settings.energyResultUnit);
     return results;
   }
 
@@ -106,26 +100,11 @@ export class PhastService {
       inputs.finalTemperature = this.convertUnitsService.value(inputs.finalTemperature).from('C').to('F');
       inputs.initialTemperature = this.convertUnitsService.value(inputs.initialTemperature).from('C').to('F');
       results = phastAddon.gasCoolingLosses(inputs);
-      if (isNaN(results) == false) {
-        if (settings.energySourceType == 'Electricity') {
-          results = this.convertUnitsService.value(results).from('Btu').to('kWh');
-        } else {
-          results = this.convertUnitsService.value(results).from('Btu').to('kJ');
-        }
-      } else {
-        results = 0;
-      }
     }
     else {
       results = phastAddon.gasCoolingLosses(inputs);
-      if (isNaN(results) == false) {
-        if (settings.energySourceType == 'Electricity') {
-          results = this.convertUnitsService.value(results).from('Btu').to('kWh');
-        }
-      } else {
-        results = 0;
-      }
     }
+    results = this.convertResult(results, settings.energyResultUnit);
     return results;
   }
 
@@ -141,26 +120,11 @@ export class PhastService {
       inputs.specificHeatVapor = this.convertUnitsService.value(inputs.specificHeatVapor).from('kJkgC').to('btulbF');
       inputs.specificHeatGas = this.convertUnitsService.value(inputs.specificHeatGas).from('kJkgC').to('btulbF');
       results = phastAddon.gasLoadChargeMaterial(inputs);
-      if (isNaN(results) == false) {
-        if (settings.energySourceType == 'Electricity') {
-          results = this.convertUnitsService.value(results).from('Btu').to('kWh');
-        } else {
-          results = this.convertUnitsService.value(results).from('Btu').to('kJ');
-        }
-      } else {
-        results = 0;
-      }
     }
     else {
       results = phastAddon.gasLoadChargeMaterial(inputs);
-      if (isNaN(results) == false) {
-        if (settings.energySourceType == 'Electricity') {
-          results = this.convertUnitsService.value(results).from('Btu').to('kWh');
-        }
-      } else {
-        results = 0;
-      }
     }
+    results = this.convertResult(results, settings.energyResultUnit);
     return results;
   }
 
@@ -174,26 +138,11 @@ export class PhastService {
       inputs.initialTemperature = this.convertUnitsService.value(inputs.initialTemperature).from('C').to('F');
       inputs.outletTemperature = this.convertUnitsService.value(inputs.outletTemperature).from('C').to('F');
       results = phastAddon.liquidCoolingLosses(inputs);
-      if (isNaN(results) == false) {
-        if (settings.energySourceType == 'Electricity') {
-          results = this.convertUnitsService.value(results).from('Btu').to('kWh');
-        } else {
-          results = this.convertUnitsService.value(results).from('Btu').to('kJ');
-        }
-      } else {
-        results = 0;
-      }
     }
     else {
       results = phastAddon.liquidCoolingLosses(inputs);
-      if (isNaN(results) == false) {
-        if (settings.energySourceType == 'Electricity') {
-          results = this.convertUnitsService.value(results).from('Btu').to('kWh');
-        }
-      } else {
-        results = 0;
-      }
     }
+    results = this.convertResult(results, settings.energyResultUnit);
     return results;
   }
 
@@ -211,25 +160,10 @@ export class PhastService {
       inputs.specificHeatLiquid = this.convertUnitsService.value(inputs.specificHeatLiquid).from('kJkgC').to('btulbF');
       inputs.specificHeatVapor = this.convertUnitsService.value(inputs.specificHeatVapor).from('kJkgC').to('btulbF');
       results = phastAddon.liquidLoadChargeMaterial(inputs);
-      if (isNaN(results) == false) {
-        if (settings.energySourceType == 'Electricity') {
-          results = this.convertUnitsService.value(results).from('Btu').to('kWh');
-        } else {
-          results = this.convertUnitsService.value(results).from('Btu').to('kJ');
-        }
-      } else {
-        results = 0;
-      }
     } else {
       results = phastAddon.liquidLoadChargeMaterial(inputs);
-      if (isNaN(results) == false) {
-        if (settings.energySourceType == 'Electricity') {
-          results = this.convertUnitsService.value(results).from('Btu').to('kWh');
-        }
-      } else {
-        results = 0;
-      }
     }
+    results = this.convertResult(results, settings.energyResultUnit);
     return results
   }
   openingLossesQuad(input: QuadOpeningLoss, settings: Settings): number {
@@ -241,26 +175,11 @@ export class PhastService {
       inputs.thickness = this.convertUnitsService.value(inputs.thickness).from('mm').to('in');
       inputs.length = this.convertUnitsService.value(inputs.length).from('mm').to('in');
       results = phastAddon.openingLossesQuad(inputs);
-      if (isNaN(results) == false) {
-        if (settings.energySourceType == 'Electricity') {
-          results = this.convertUnitsService.value(results).from('Btu').to('kWh');
-        } else {
-          results = this.convertUnitsService.value(results).from('Btu').to('kJ');
-        }
-      } else {
-        results = 0;
-      }
     }
     else {
       results = phastAddon.openingLossesQuad(inputs);
-      if (isNaN(results) == false) {
-        if (settings.energySourceType == 'Electricity') {
-          results = this.convertUnitsService.value(results).from('Btu').to('kWh');
-        }
-      } else {
-        results = 0;
-      }
     }
+    results = this.convertResult(results, settings.energyResultUnit);
     return results
   }
 
@@ -273,25 +192,10 @@ export class PhastService {
       inputs.thickness = this.convertUnitsService.value(inputs.thickness).from('mm').to('in');
       inputs.diameterLength = this.convertUnitsService.value(inputs.diameterLength).from('mm').to('in');
       results = phastAddon.openingLossesCircular(inputs);
-      if (isNaN(results) == false) {
-        if (settings.energySourceType == 'Electricity') {
-          results = this.convertUnitsService.value(results).from('Btu').to('kWh');
-        } else {
-          results = this.convertUnitsService.value(results).from('Btu').to('kJ');
-        }
-      } else {
-        results = 0;
-      }
     } else {
       results = phastAddon.openingLossesCircular(inputs);
-      if (isNaN(results) == false) {
-        if (settings.energySourceType == 'Electricity') {
-          results = this.convertUnitsService.value(results).from('Btu').to('kWh');
-        }
-      } else {
-        results = 0;
-      }
     }
+    results = this.convertResult(results, settings.energyResultUnit);
     return results;
   }
 
@@ -310,25 +214,10 @@ export class PhastService {
       inputs.specificHeatSolid = this.convertUnitsService.value(inputs.specificHeatSolid).from('kJkgC').to('btulbF');
       inputs.latentHeat = this.convertUnitsService.value(inputs.latentHeat).from('kJkg').to('btuLb');
       results = phastAddon.solidLoadChargeMaterial(inputs);
-      if (isNaN(results) == false) {
-        if (settings.energySourceType == 'Electricity') {
-          results = this.convertUnitsService.value(results).from('Btu').to('kWh');
-        } else {
-          results = this.convertUnitsService.value(results).from('Btu').to('kJ');
-        }
-      } else {
-        results = 0;
-      }
     } else {
       results = phastAddon.solidLoadChargeMaterial(inputs);
-      if (isNaN(results) == false) {
-        if (settings.energySourceType == 'Electricity') {
-          results = this.convertUnitsService.value(results).from('Btu').to('kWh');
-        }
-      } else {
-        results = 0
-      }
     }
+    results = this.convertResult(results, settings.energyResultUnit);
     return results;
   }
 
@@ -341,25 +230,10 @@ export class PhastService {
       inputs.windVelocity = this.convertUnitsService.value(inputs.windVelocity).from('km/h').to('mph');
       inputs.surfaceArea = this.convertUnitsService.value(inputs.surfaceArea).from('m2').to('ft2');
       results = phastAddon.wallLosses(inputs);
-      if (isNaN(results) == false) {
-        if (settings.energySourceType == 'Electricity') {
-          results = this.convertUnitsService.value(results).from('Btu').to('kWh');
-        } else {
-          results = this.convertUnitsService.value(results).from('Btu').to('kJ');
-        }
-      } else {
-        results = 0;
-      }
     } else {
       results = phastAddon.wallLosses(inputs);
-      if (isNaN(results) == false) {
-        if (settings.energySourceType == 'Electricity') {
-          results = this.convertUnitsService.value(results).from('Btu').to('kWh');
-        }
-      } else {
-        results = 0;
-      }
     }
+    results = this.convertResult(results, settings.energyResultUnit);
     return results;
   }
 
@@ -376,25 +250,10 @@ export class PhastService {
       inputs.ambientTemperature = this.convertUnitsService.value(inputs.ambientTemperature).from('C').to('F');
       inputs.leakageGasTemperature = this.convertUnitsService.value(inputs.leakageGasTemperature).from('C').to('F');
       results = phastAddon.leakageLosses(inputs);
-      if (isNaN(results) == false) {
-        if (settings.energySourceType == 'Electricity') {
-          results = this.convertUnitsService.value(results).from('Btu').to('kWh');
-        } else {
-          results = this.convertUnitsService.value(results).from('Btu').to('kJ');
-        }
-      } else {
-        results = 0;
-      }
     } else {
       results = phastAddon.leakageLosses(inputs);
-      if (isNaN(results) == false) {
-        if (settings.energySourceType == 'Electricity') {
-          results = this.convertUnitsService.value(results).from('Btu').to('kWh');
-        }
-      } else {
-        results = 0;
-      }
     }
+    results = this.convertResult(results, settings.energyResultUnit);
     return results;
   }
 
@@ -405,25 +264,10 @@ export class PhastService {
       inputs.combustionAirTemperature = this.convertUnitsService.value(inputs.combustionAirTemperature).from('C').to('F');
       inputs.flueGasTemperature = this.convertUnitsService.value(inputs.flueGasTemperature).from('C').to('F');
       results = phastAddon.flueGasLossesByVolume(inputs);
-      if (isNaN(results) == false) {
-        if (settings.energySourceType == 'Electricity') {
-          results = this.convertUnitsService.value(results).from('Btu').to('kWh');
-        } else {
-          results = this.convertUnitsService.value(results).from('Btu').to('kJ');
-        }
-      } else {
-        results = 0;
-      }
     } else {
       results = phastAddon.flueGasLossesByVolume(inputs);
-      if (isNaN(results) == false) {
-        if (settings.energySourceType == 'Electricity') {
-          results = this.convertUnitsService.value(results).from('Btu').to('kWh');
-        }
-      } else {
-        results = 0;
-      }
     }
+    results = this.convertResult(results, settings.energyResultUnit);
     return results;
   }
 
@@ -436,25 +280,10 @@ export class PhastService {
       inputs.ashDischargeTemperature = this.convertUnitsService.value(inputs.ashDischargeTemperature).from('C').to('F');
       inputs.fuelTemperature = this.convertUnitsService.value(inputs.fuelTemperature).from('C').to('F');
       results = phastAddon.flueGasLossesByMass(inputs);
-      if (isNaN(results) == false) {
-        if (settings.energySourceType == 'Electricity') {
-          results = this.convertUnitsService.value(results).from('Btu').to('kWh');
-        } else {
-          results = this.convertUnitsService.value(results).from('Btu').to('kJ');
-        }
-      } else {
-        results = 0;
-      }
     } else {
       results = phastAddon.flueGasLossesByMass(inputs);
-      if (isNaN(results) == false) {
-        if (settings.energySourceType == 'Electricity') {
-          results = this.convertUnitsService.value(results).from('Btu').to('kWh');
-        }
-      } else {
-        results = 0;
-      }
     }
+    results = this.convertResult(results, settings.energyResultUnit);
     return results;
   }
 
@@ -467,25 +296,10 @@ export class PhastService {
       inputs.flowRate = this.convertUnitsService.value(inputs.flowRate).from('m3/h').to('ft3/h')
       inputs.specificHeat = this.convertUnitsService.value(inputs.specificHeat).from('kJm3C').to('btuScfF');
       results = phastAddon.atmosphere(inputs);
-      if (isNaN(results) == false) {
-        if (settings.energySourceType == 'Electricity') {
-          results = this.convertUnitsService.value(results).from('Btu').to('kWh');
-        } else {
-          results = this.convertUnitsService.value(results).from('Btu').to('kJ');
-        }
-      } else {
-        results = 0;
-      }
     } else {
       results = phastAddon.atmosphere(inputs);
-      if (isNaN(results) == false) {
-        if (settings.energySourceType == 'Electricity') {
-          results = this.convertUnitsService.value(results).from('Btu').to('kWh');
-        }
-      } else {
-        results = 0;
-      }
     }
+    results = this.convertResult(results, settings.energyResultUnit);
     return results;
   }
 
@@ -498,25 +312,10 @@ export class PhastService {
       inputs.outletTemperature = this.convertUnitsService.value(inputs.outletTemperature).from('C').to('F');
       inputs.specificHeat = this.convertUnitsService.value(inputs.specificHeat).from('kJkgC').to('btulbF');
       results = phastAddon.slagOtherMaterialLosses(inputs);
-      if (isNaN(results) == false) {
-        if (settings.energySourceType == 'Electricity') {
-          results = this.convertUnitsService.value(results).from('Btu').to('kWh');
-        } else {
-          results = this.convertUnitsService.value(results).from('Btu').to('kJ');
-        }
-      } else {
-        results = 0;
-      }
     } else {
       results = phastAddon.slagOtherMaterialLosses(inputs);
-      if (isNaN(results) == false) {
-        if (settings.energySourceType == 'Electricity') {
-          results = this.convertUnitsService.value(results).from('Btu').to('kWh');
-        }
-      } else {
-        results = 0;
-      }
     }
+    results = this.convertResult(results, settings.energyResultUnit);
     return results;
   }
 
@@ -538,39 +337,13 @@ export class PhastService {
       inputs.coalCarbonInjection = this.convertUnitsService.value(inputs.coalCarbonInjection).from('kg').to('lb');
       inputs.coalHeatingValue = this.convertUnitsService.value(inputs.coalHeatingValue).from('kJkg').to('btuLb');
       inputs.electrodeHeatingValue = this.convertUnitsService.value(inputs.electrodeHeatingValue).from('kJkg').to('btuLb');
-
       inputs.electrodeUse = this.convertUnitsService.value(inputs.electrodeUse).from('kg').to('lb');
       results = phastAddon.energyInputEAF(inputs);
-      if (isNaN(results.heatDelivered) == false) {
-        if (settings.energySourceType == 'Electricity') {
-          results.heatDelivered = this.convertUnitsService.value(results.heatDelivered).from('Btu').to('kWh');
-        } else {
-          results.heatDelivered = this.convertUnitsService.value(results.heatDelivered).from('Btu').to('kJ');
-        }
-      } else {
-        results.heatDelivered = 0;
-      }
-      if (isNaN(results.totalChemicalEnergyInput) == false) {
-        if (settings.energySourceType == 'Electricity') {
-          results.totalChemicalEnergyInput = this.convertUnitsService.value(results.totalChemicalEnergyInput).from('Btu').to('kWh');
-        } else {
-          results.totalChemicalEnergyInput = this.convertUnitsService.value(results.totalChemicalEnergyInput).from('Btu').to('kJ');
-        }
-      } else {
-        results.totalChemicalEnergyInput = 0;
-      }
     } else {
       results = phastAddon.energyInputEAF(inputs);
-      if (isNaN(results.totalChemicalEnergyInput) == false && isNaN(results.heatDelivered) == false) {
-        if (settings.energySourceType == 'Electricity') {
-          results.totalChemicalEnergyInput = this.convertUnitsService.value(results.totalChemicalEnergyInput).from('Btu').to('kWh');
-          results.heatDelivered = this.convertUnitsService.value(results.heatDelivered).from('Btu').to('kWh');
-        }
-      } else {
-        results.totalChemicalEnergyInput = 0;
-        results.heatDelivered = 0
-      }
     }
+    results.totalChemicalEnergyInput = this.convertResult(results.totalChemicalEnergyInput, settings.energyResultUnit);
+    results.heatDelivered = this.convertResult(results.heatDelivered, settings.energyResultUnit);
     return results;
   }
 
@@ -583,25 +356,10 @@ export class PhastService {
       inputs.vfr = this.convertUnitsService.value(inputs.vfr).from('m3').to('ft3');
       inputs.dustLoading = this.convertUnitsService.value(inputs.dustLoading).from('kgNm3').to('lbscf');
       results = phastAddon.exhaustGasEAF(inputs);
-      if (isNaN(results) == false) {
-        if (settings.energySourceType == 'Electricity') {
-          results = this.convertUnitsService.value(results).from('Btu').to('kWh');
-        } else {
-          results = this.convertUnitsService.value(results).from('Btu').to('kJ');
-        }
-      } else {
-        results = 0;
-      }
     } else {
       results = phastAddon.exhaustGasEAF(inputs);
-      if (isNaN(results) == false) {
-        if (settings.energySourceType == 'Electricity') {
-          results = this.convertUnitsService.value(results).from('Btu').to('kWh');
-        }
-      } else {
-        results = 0;
-      }
     }
+    results = this.convertResult(results, settings.energyResultUnit);
     return results;
   }
 
@@ -619,6 +377,9 @@ export class PhastService {
       }
     } else {
       results = phastAddon.availableHeat(inputs);
+      if (isNaN(results)) {
+        results = 0;
+      }
     }
     return results;
   }
@@ -636,39 +397,12 @@ export class PhastService {
       inputs.exhaustGasTemp = this.convertUnitsService.value(inputs.exhaustGasTemp).from('C').to('F');
       inputs.totalHeatInput = this.convertUnitsService.value(inputs.totalHeatInput).from('kJ').to('Btu');
       results = phastAddon.energyInputExhaustGasLosses(inputs);
-      if (isNaN(results.heatDelivered) == false) {
-        if (settings.energySourceType == 'Electricity') {
-          results.heatDelivered = this.convertUnitsService.value(results.heatDelivered).from('Btu').to('kWh');
-        } else {
-          results.heatDelivered = this.convertUnitsService.value(results.heatDelivered).from('Btu').to('kJ');
-        }
-      } else {
-        results.heatDelivered = 0;
-      }
-      if (isNaN(results.exhaustGasLosses) == false) {
-        if (settings.energySourceType == 'Electricity') {
-          results.exhaustGasLosses = this.convertUnitsService.value(results.exhaustGasLosses).from('Btu').to('kWh');
-        } else {
-          results.exhaustGasLosses = this.convertUnitsService.value(results.exhaustGasLosses).from('Btu').to('kJ');
-        }
-      } else {
-        results.exhaustGasLosses = 0;
-      }
     } else {
       results = phastAddon.energyInputExhaustGasLosses(inputs);
-      if (settings.energySourceType == 'Electricity') {
-        if (isNaN(results.exhaustGasLosses) == false) {
-          results.exhaustGasLosses = this.convertUnitsService.value(results.exhaustGasLosses).from('Btu').to('kWh');
-        } else {
-          results.exhaustGasLosses = 0;
-        }
-        if (isNaN(results.heatDelivered) == false) {
-          results.heatDelivered = this.convertUnitsService.value(results.heatDelivered).from('Btu').to('kWh');
-        } else {
-          results.heatDelivered = 0;
-        }
-      }
     }
+    results.heatDelivered = this.convertResult(results.heatDelivered, settings.energyResultUnit);
+    results.exhaustGasLosses = this.convertResult(results.exhaustGasLosses, settings.energyResultUnit);
+
     return results;
   }
 
@@ -984,11 +718,11 @@ export class PhastService {
         }
       })
     }
-    if(sumAdditionalHeat != 0){
-      if(settings.energySourceType == 'Electricity'){
-        if(settings.unitsOfMeasure == 'Imperial'){
-        sumAdditionalHeat = this.convertUnitsService.value(sumAdditionalHeat).from('Btu').to('kWh');
-        }else if(settings.unitsOfMeasure == 'Metric'){
+    if (sumAdditionalHeat != 0) {
+      if (settings.energySourceType == 'Electricity') {
+        if (settings.unitsOfMeasure == 'Imperial') {
+          sumAdditionalHeat = this.convertUnitsService.value(sumAdditionalHeat).from('Btu').to('kWh');
+        } else if (settings.unitsOfMeasure == 'Metric') {
           sumAdditionalHeat = this.convertUnitsService.value(sumAdditionalHeat).from('kJ').to('kWh')
         }
       }
