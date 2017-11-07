@@ -12,7 +12,7 @@ os:
 ##  - clang
 
 before_install:
-  - npm i -g npm@5.3.0
+  - travis_retry npm i -g npm@5.3.0
 
 #  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
 #      brew update;
@@ -23,7 +23,7 @@ before_install:
 #      sudo apt-get install npm;
 #    fi
 
-install: npm install
+install: travis_retry npm install
 
 script:
   - npm run build
