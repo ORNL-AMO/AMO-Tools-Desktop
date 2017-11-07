@@ -12,10 +12,10 @@ export class UpdateModalComponent implements OnInit {
 
   @ViewChild('updateModal') public updateModal: ModalDirective;
   updateAvailable: boolean;
+  updateSelected: boolean = false;
   constructor(private electronService: ElectronService) { }
 
   ngOnInit() {
-
   }
   ngAfterViewInit() {
     this.showUpdateModal();
@@ -33,11 +33,12 @@ export class UpdateModalComponent implements OnInit {
 
   updateClick() {
     this.updateAvailable = false;
+    this.updateSelected = true;
     this.electronService.ipcRenderer.send('update', null);
   }
 
   cancel() {
     this.hideUpdateModal();
-    this.electronService.ipcRenderer.send('later', null);
+    //this.electronService.ipcRenderer.send('later', null);
   }
 }
