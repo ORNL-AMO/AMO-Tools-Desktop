@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, Input, SimpleChanges } from '@angular/core';
+import { Component, OnInit, ViewChild, Input, SimpleChanges, ChangeDetectorRef } from '@angular/core';
 import { ModalDirective } from 'ngx-bootstrap';
 import { ElectronService } from 'ngx-electron';
 import { ToastyService, ToastyConfig, ToastOptions, ToastData } from 'ng2-toasty';
@@ -21,41 +21,17 @@ export class CoreComponent implements OnInit {
 
   showScreenshot: boolean = true;
   constructor(private electronService: ElectronService, private toastyService: ToastyService,
-    private toastyConfig: ToastyConfig, private importExportService: ImportExportService, private assessmentService: AssessmentService) {
+    private toastyConfig: ToastyConfig, private importExportService: ImportExportService, private assessmentService: AssessmentService, private changeDetectorRef: ChangeDetectorRef) {
     this.toastyConfig.theme = 'bootstrap';
     this.toastyConfig.limit = 1;
   }
 
   ngOnInit() {
-    // //set up listener for update
-    // this.electronService.ipcRenderer.once('available', (event, arg) => {
-    //   console.log('update available: ' + arg);
-    //   if (arg == true) {
-    //     this.showUpdateModal = true;
-    //   }
-    // })
-
-    // //send signal to main.js to check for update
-    // this.electronService.ipcRenderer.send('ready', null);
-
-    // this.importExportService.toggleDownload.subscribe((val) => {
-    //   if (val == true) {
-    //     this.downloadData();
-    //   }
-    // })
-
-    if (this.electronService.process.platform == 'win32') {
-      this.showScreenshot = false;
-    }
-  }
-
-  ngAfterViewInit() {
-    //set up listener for update
     this.electronService.ipcRenderer.once('available', (event, arg) => {
-      console.log('update available: ' + arg);
-      console.log('Core');
       if (arg == true) {
         this.showUpdateModal = true;
+        this.assessmentService.updateAvailable.next(true);
+        this.changeDetectorRef.detectChanges();
       }
     })
 
@@ -67,7 +43,13 @@ export class CoreComponent implements OnInit {
         this.downloadData();
       }
     })
+    if (this.electronService.process.platform == 'win32') {
+      this.showScreenshot = false;
+    }
+  }
 
+  ngAfterViewInit(){
+    this.showUpdateModal = true;
   }
 
   takeScreenShot() {

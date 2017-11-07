@@ -16,7 +16,6 @@ export class UpdateModalComponent implements OnInit {
   constructor(private electronService: ElectronService) { }
 
   ngOnInit() {
-
   }
   ngAfterViewInit() {
     this.showUpdateModal();
@@ -40,6 +39,6 @@ export class UpdateModalComponent implements OnInit {
 
   cancel() {
     this.hideUpdateModal();
-    this.electronService.ipcRenderer.send('later', null);
+    //this.electronService.ipcRenderer.send('later', null);
   }
 }

@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter, Input, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, Input, SimpleChanges, ChangeDetectorRef } from '@angular/core';
 import { Directory } from '../shared/models/directory';
 import { Assessment } from '../shared/models/assessment';
 import { AssessmentService } from '../assessment/assessment.service';
@@ -48,11 +48,10 @@ export class SidebarComponent implements OnInit {
     this.versionNum = packageJson.version;
     this.directory.collapsed = false;
     this.selectedDirectoryId = this.directory.id;
-    this.electronService.ipcRenderer.once('available', (event, arg) => {
-      this.isUpdateAvailable = arg;
-      console.log('Sidebar ' + this.isUpdateAvailable);
+    this.assessmentService.updateAvailable.subscribe(val => {
+      this.isUpdateAvailable = val;
+      console.log('sidebar :' + val);
     })
-
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -122,19 +121,19 @@ export class SidebarComponent implements OnInit {
     this.emitGoToContact.emit(true);
   }
 
-  closeModal(){
+  closeModal() {
     this.showModal = false;
   }
 
-  openModal(){
+  openModal() {
     this.showModal = true;
   }
 
-  openVersionModal(){
+  openVersionModal() {
     this.showVersionModal = true;
   }
 
-  closeVersionModal(){
+  closeVersionModal() {
     this.showVersionModal = false;
   }
 }
