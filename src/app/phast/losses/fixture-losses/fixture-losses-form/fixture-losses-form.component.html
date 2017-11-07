@@ -2,10 +2,10 @@
   <div class="form-section">
     <div class="form-group">
       <label class="small" for="materialName">Material Name
-        <small id="materialHelp" class="form-text text-help"><a (click)="showMaterialModal()">Add New Material</a></small>       
+        <small id="materialHelp" class="form-text text-help"><a (click)="showMaterialModal()">Add New Material</a></small>
       </label>
       <select name="{{'materialName_'+lossIndex}}" class="form-control" formControlName="materialName" id="materialName" (change)="setSpecificHeat()"
-        (focus)="focusField('materialName')">
+        (focus)="focusField('materialName')" (blur)="focusOut()">
         <option *ngFor="let material of materials" [ngValue]="material.id">{{material.substance}}</option>
       </select>
     </div>
@@ -14,7 +14,7 @@
       <label class="small" for="specificHeat">Specific Heat</label>
       <div class="input-group">
         <input name="{{'specificHeat_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="specificHeat"
-          id="specificHeat" onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('specificHeat')">
+          id="specificHeat" onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('specificHeat')" (blur)="focusOut()">
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">Btu/(lb-&#8457;)</span>
         <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kJ/(kg-&#8451;)</span>
       </div>
@@ -24,7 +24,7 @@
       <label class="small" for="feedRate">Fixture Weight feed rate</label>
       <div class="input-group">
         <input name="{{'feedRate_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="feedRate" id="feedRate"
-          onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('feedRate')">
+          onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('feedRate')" (blur)="focusOut()">
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">lb/hr</span>
         <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kg/hr</span>
       </div>
@@ -34,7 +34,7 @@
       <label class="small" for="initialTemp">Initial Temperature</label>
       <div class="input-group">
         <input name="{{'initialTemp_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="initialTemp" id="initialTemp"
-          onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('initialTemp')">
+          onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('initialTemp')" (blur)="focusOut()">
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">&#8457;</span>
         <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
       </div>
@@ -44,7 +44,7 @@
       <label class="small" for="finalTemp">Final Temperature</label>
       <div class="input-group">
         <input name="{{'finalTemp_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="finalTemp" id="finalTemp"
-          onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('finalTemp')">
+          onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('finalTemp')" (blur)="focusOut()">
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">&#8457;</span>
         <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
       </div>
@@ -53,7 +53,7 @@
     <div class="form-group">
       <label class="small" for="correctionFactor">Correction Factor</label>
       <input name="{{'correctionFactor_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="correctionFactor"
-        id="correctionFactor" onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('correctionFactor')">
+        id="correctionFactor" onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('correctionFactor')" (blur)="focusOut()">
     </div>
   </div>
 </form>

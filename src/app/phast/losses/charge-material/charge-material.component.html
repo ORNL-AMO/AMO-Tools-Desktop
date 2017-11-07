@@ -20,7 +20,7 @@
       <div class="form-section">
         <div class="form-group">
           <label class="small" for="type">Select Type</label>
-          <select class="form-control" id="type" [(ngModel)]="material.chargeMaterialType" [disabled]="!baselineSelected" (focus)="changeField('chargeMaterialType')">
+          <select class="form-control" id="type" [(ngModel)]="material.chargeMaterialType" [disabled]="!baselineSelected" (focus)="changeField('chargeMaterialType')" (blur)="focusOut()">
             <option>Solid</option>
             <option>Liquid</option>
             <option>Gas</option>

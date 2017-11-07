@@ -56,7 +56,9 @@ export class GasLeakageLossesFormComponent implements OnInit {
     }
     this.initDifferenceMonitor();
   }
-
+  focusOut() {
+    this.changeField.emit('default');
+  }
   disableForm() {
     this.elements = this.lossForm.nativeElement.elements;
     for (var i = 0, len = this.elements.length; i < len; ++i) {
