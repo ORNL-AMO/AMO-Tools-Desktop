@@ -48,10 +48,6 @@ export class CoreComponent implements OnInit {
     }
   }
 
-  ngAfterViewInit(){
-    this.showUpdateModal = true;
-  }
-
   takeScreenShot() {
     this.importExportService.takeScreenShot();
   }
