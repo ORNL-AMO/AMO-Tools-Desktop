@@ -3,10 +3,11 @@ import { PHAST, PhastResults, Losses, ShowResultsCategories, CalculatedByPhast }
 import { PhastService } from './phast.service';
 import { Settings } from '../shared/models/settings';
 import { AuxEquipmentService } from './aux-equipment/aux-equipment.service';
+import { ConvertUnitsService } from '../shared/convert-units/convert-units.service';
 @Injectable()
 export class PhastResultsService {
 
-  constructor(private phastService: PhastService, private auxEquipmentService: AuxEquipmentService) { }
+  constructor(private phastService: PhastService, private auxEquipmentService: AuxEquipmentService, private convertUnitsService: ConvertUnitsService) { }
   checkLoss(loss: any) {
     if (!loss) {
       return false;
@@ -177,6 +178,14 @@ export class PhastResultsService {
     let calculatedEnergyIntensity = (calculatedFuelEnergyUsed / sumFeedRate) || 0;
     let tmpAuxResults = this.auxEquipmentService.calculate(phast);
     let calculatedElectricityUsed = this.auxEquipmentService.getResultsSum(tmpAuxResults);
+
+    if(settings.unitsOfMeasure == 'Metric'){
+      calculatedFuelEnergyUsed = this.convertUnitsService.value(calculatedFuelEnergyUsed).from('kJ').to(settings.energyResultUnit);
+      calculatedEnergyIntensity = this.convertUnitsService.value(calculatedEnergyIntensity).from('kJ').to(settings.energyResultUnit);
+    }else{
+      calculatedFuelEnergyUsed = this.convertUnitsService.value(calculatedFuelEnergyUsed).from('Btu').to(settings.energyResultUnit);
+      calculatedEnergyIntensity = this.convertUnitsService.value(calculatedEnergyIntensity).from('Btu').to(settings.energyResultUnit);
+    }
     let phastCalcs: CalculatedByPhast = {
       fuelEnergyUsed: calculatedFuelEnergyUsed,
       energyIntensity: calculatedEnergyIntensity,

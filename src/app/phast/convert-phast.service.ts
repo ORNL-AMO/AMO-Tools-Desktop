@@ -44,9 +44,9 @@ export class ConvertPhastService {
     if (designedEnergy.designedEnergyFuel) {
       designedEnergy.designedEnergyFuel.forEach(val => {
         if (oldSettings.unitsOfMeasure == 'Metric' && newSettings.unitsOfMeasure == 'Imperial') {
-          val.totalBurnerCapacity = this.convertVal(val.totalBurnerCapacity, 'MMBTU', 'GJ');
+          val.totalBurnerCapacity = this.convertVal(val.totalBurnerCapacity, 'MMBtu', 'GJ');
         } else if (oldSettings.unitsOfMeasure == 'Imperial' && newSettings.unitsOfMeasure == 'Metric') {
-          val.totalBurnerCapacity = this.convertVal(val.totalBurnerCapacity, 'GJ', 'MMBTU');
+          val.totalBurnerCapacity = this.convertVal(val.totalBurnerCapacity, 'GJ', 'MMBtu');
         }
       })
     }
@@ -303,16 +303,16 @@ export class ConvertPhastService {
   //energyInputEAF
   convertEnergyInputEAF(loss: EnergyInputEAF, oldSettings: Settings, newSettings: Settings): EnergyInputEAF {
     if (oldSettings.unitsOfMeasure == 'Metric' && newSettings.unitsOfMeasure == 'Imperial') {
-      loss.naturalGasHeatInput = this.convertVal(loss.naturalGasHeatInput, 'GJ', 'MMBTU');
-      loss.otherFuels = this.convertVal(loss.otherFuels, 'GJ', 'MMBTU');
+      loss.naturalGasHeatInput = this.convertVal(loss.naturalGasHeatInput, 'GJ', 'MMBtu');
+      loss.otherFuels = this.convertVal(loss.otherFuels, 'GJ', 'MMBtu');
       loss.coalCarbonInjection = this.convertVal(loss.coalCarbonInjection, 'kg', 'lb');
       loss.coalHeatingValue = this.convertVal(loss.coalHeatingValue, 'kJkg', 'btuLb');
       loss.electrodeHeatingValue = this.convertVal(loss.electrodeHeatingValue, 'kJkg', 'btuLb');
       loss.electrodeUse = this.convertVal(loss.electrodeUse, 'kg', 'lb');
     }
     else if (oldSettings.unitsOfMeasure == 'Imperial' && newSettings.unitsOfMeasure == 'Metric') {
-      loss.naturalGasHeatInput = this.convertVal(loss.naturalGasHeatInput, 'MMBTU', 'GJ');
-      loss.otherFuels = this.convertVal(loss.otherFuels, 'MMBTU', 'GJ');
+      loss.naturalGasHeatInput = this.convertVal(loss.naturalGasHeatInput, 'MMBtu', 'GJ');
+      loss.otherFuels = this.convertVal(loss.otherFuels, 'MMBtu', 'GJ');
       loss.coalCarbonInjection = this.convertVal(loss.coalCarbonInjection, 'lb', 'kg');
       loss.coalHeatingValue = this.convertVal(loss.coalHeatingValue, 'btuLb', 'kJkg');
       loss.electrodeHeatingValue = this.convertVal(loss.electrodeHeatingValue, 'btuLb', 'kJkg');

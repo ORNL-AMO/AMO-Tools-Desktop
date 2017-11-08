@@ -10,18 +10,18 @@
     <tbody>
       <tr>
         <td>Fuel Energy Used</td>
-        <td>{{results.meteredEnergyUsed | number:'2.2-2'}} {{resultUnits.meteredEnergyUsed}}</td>
-        <td>{{results.calculatedFuelEnergyUsed | number:'2.2-2'}} {{resultUnits.calculatedFuelEnergyUsed}}</td>
+        <td>{{results.meteredEnergyUsed | number:'2.2-2'}} {{resultUnits.energyPerTimeUnit}}</td>
+        <td>{{results.calculatedFuelEnergyUsed | number:'2.2-2'}} {{resultUnits.energyPerTimeUnit}}</td>
       </tr>
       <tr>
         <td>Energy Intensity for Charge Materials</td>
-        <td>{{results.meteredEnergyIntensity | number:'2.2-2'}} {{resultUnits.meteredEnergyIntensity}}</td>
-        <td>{{results.calculatedEnergyIntensity | number:'2.2-2'}} {{resultUnits.calculatedEnergyIntensity}}</td>
+        <td>{{results.meteredEnergyIntensity | number:'2.2-2'}} {{resultUnits.energyPerMassUnit}}</td>
+        <td>{{results.calculatedEnergyIntensity | number:'2.2-2'}} {{resultUnits.energyPerMassUnit}}</td>
       </tr>
       <tr>
         <td>Electricity Used (Auxiliary)</td>
-        <td>{{results.meteredElectricityUsed | number:'2.2-2'}} {{resultUnits.meteredElectricityUsed}}</td>
-        <td>{{results.calculatedElectricityUsed | number:'2.2-2'}} {{resultUnits.calculatedElectricityUsed}}</td>
+        <td>{{results.meteredElectricityUsed | number:'2.2-2'}} {{resultUnits.electricityUsedUnit}}</td>
+        <td>{{results.calculatedElectricityUsed | number:'2.2-2'}} {{resultUnits.electricityUsedUnit}}</td>
       </tr>
     </tbody>
   </table>

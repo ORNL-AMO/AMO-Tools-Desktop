@@ -267,7 +267,7 @@ export class PhastService {
     } else {
       results = phastAddon.flueGasLossesByVolume(inputs);
     }
-    results = this.convertResult(results, settings.energyResultUnit);
+
     return results;
   }
 
@@ -283,7 +283,6 @@ export class PhastService {
     } else {
       results = phastAddon.flueGasLossesByMass(inputs);
     }
-    results = this.convertResult(results, settings.energyResultUnit);
     return results;
   }
 
@@ -332,8 +331,8 @@ export class PhastService {
       totalChemicalEnergyInput: 0
     };
     if (settings.unitsOfMeasure == 'Metric') {
-      inputs.naturalGasHeatInput = this.convertUnitsService.value(inputs.naturalGasHeatInput).from('GJ').to('MMBTU');
-      inputs.otherFuels = this.convertUnitsService.value(inputs.otherFuels).from('GJ').to('MMBTU');
+      inputs.naturalGasHeatInput = this.convertUnitsService.value(inputs.naturalGasHeatInput).from('GJ').to('MMBtu');
+      inputs.otherFuels = this.convertUnitsService.value(inputs.otherFuels).from('GJ').to('MMBtu');
       inputs.coalCarbonInjection = this.convertUnitsService.value(inputs.coalCarbonInjection).from('kg').to('lb');
       inputs.coalHeatingValue = this.convertUnitsService.value(inputs.coalHeatingValue).from('kJkg').to('btuLb');
       inputs.electrodeHeatingValue = this.convertUnitsService.value(inputs.electrodeHeatingValue).from('kJkg').to('btuLb');
@@ -719,14 +718,13 @@ export class PhastService {
       })
     }
     if (sumAdditionalHeat != 0) {
-      if (settings.energySourceType == 'Electricity') {
-        if (settings.unitsOfMeasure == 'Imperial') {
-          sumAdditionalHeat = this.convertUnitsService.value(sumAdditionalHeat).from('Btu').to('kWh');
-        } else if (settings.unitsOfMeasure == 'Metric') {
-          sumAdditionalHeat = this.convertUnitsService.value(sumAdditionalHeat).from('kJ').to('kWh')
-        }
+      if (settings.unitsOfMeasure == 'Imperial') {
+        sumAdditionalHeat = this.convertUnitsService.value(sumAdditionalHeat).from('Btu').to(settings.energyResultUnit);
+      } else if (settings.unitsOfMeasure == 'Metric') {
+        sumAdditionalHeat = this.convertUnitsService.value(sumAdditionalHeat).from('kJ').to(settings.energyResultUnit);
       }
     }
+
     return sumAdditionalHeat;
   }
 

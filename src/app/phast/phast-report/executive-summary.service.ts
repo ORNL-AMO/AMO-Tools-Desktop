@@ -4,11 +4,12 @@ import { PHAST, PhastResults, ExecutiveSummary, Modification } from '../../share
 import { Settings } from '../../shared/models/settings';
 import { Assessment } from '../../shared/models/assessment';
 import { PhastResultsService } from '../phast-results.service';
-
+import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
 @Injectable()
 export class ExecutiveSummaryService {
 
-  constructor(private phastService: PhastService, private phastResultsService: PhastResultsService) { }
+  constructor(private phastService: PhastService, private phastResultsService: PhastResultsService, private convertUnitsService: ConvertUnitsService) { }
+  
   getSummary(phast: PHAST, isMod: boolean, settings: Settings, baseline: PHAST, baselineSummary?: ExecutiveSummary): ExecutiveSummary {
     let tmpResultsSummary = this.initSummary();
     let tmpPhastResults = this.phastResultsService.getResults(phast, settings);
@@ -33,7 +34,7 @@ export class ExecutiveSummaryService {
 
   calcAnnualEnergy(results: PhastResults, phast: PHAST): number {
     //gross heat * operating hours
-    let tmpAnnualEnergy = results.grossHeatInput * phast.operatingHours.hoursPerYear / 1000000;
+    let tmpAnnualEnergy = results.grossHeatInput * phast.operatingHours.hoursPerYear;
     return tmpAnnualEnergy;
   }
 
@@ -48,12 +49,22 @@ export class ExecutiveSummaryService {
   calcAnnualCost(annualEnergyUsed: number, settings: Settings, phast: PHAST): number {
     //gross heat * operating hours * cost
     let tmpAnnualCost = 0;
+    let rates = JSON.parse(JSON.stringify(phast.operatingCosts));
+    if(settings.unitsOfMeasure == 'Metric'){
+      rates.electricityCost = this.convertUnitsService.value(rates.electricityCost).from('kWh').to(settings.energyResultUnit);
+      rates.fuelCost = this.convertUnitsService.value(rates.fuelCost).from('GJ').to(settings.energyResultUnit);
+      rates.steamCost = this.convertUnitsService.value(rates.steamCost).from('GJ').to(settings.energyResultUnit);
+    }else{
+      rates.electricityCost = this.convertUnitsService.value(rates.electricityCost).from('kWh').to(settings.energyResultUnit);
+      rates.fuelCost = this.convertUnitsService.value(rates.fuelCost).from('MMBtu').to(settings.energyResultUnit);
+      rates.steamCost = this.convertUnitsService.value(rates.steamCost).from('MMBtu').to(settings.energyResultUnit);
+    }
     if (settings.energySourceType == 'Fuel') {
-      tmpAnnualCost = annualEnergyUsed * (phast.operatingCosts.fuelCost);
+      tmpAnnualCost = annualEnergyUsed * (rates.fuelCost);
     } else if (settings.energySourceType == 'Electricity') {
-      tmpAnnualCost = annualEnergyUsed * phast.operatingCosts.electricityCost;
+      tmpAnnualCost = annualEnergyUsed * rates.electricityCost;
     } else if (settings.energySourceType == 'Steam') {
-      tmpAnnualCost = annualEnergyUsed * (phast.operatingCosts.steamCost);
+      tmpAnnualCost = annualEnergyUsed * (rates.steamCost);
     }
     return tmpAnnualCost;
   }

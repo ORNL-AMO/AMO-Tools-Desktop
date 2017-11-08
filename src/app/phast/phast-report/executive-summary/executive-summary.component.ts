@@ -47,18 +47,13 @@ export class ExecutiveSummaryComponent implements OnInit {
       this.notes = this.executiveSummaryService.buildSummaryNotes(this.phast.modifications);
     }
 
-    if (this.settings.energySourceType == 'Electricity') {
-      this.timeUnit = 'GW/yr';
-      this.energyUnit = 'GW';
-    } else {
-      if (this.settings.unitsOfMeasure == 'Metric') {
-        this.timeUnit = 'GJ/yr';
-        this.energyUnit = 'GJ/kg';
-      } else if (this.settings.unitsOfMeasure == 'Imperial') {
-        this.timeUnit = 'MMBTU/yr';
-        this.energyUnit = 'MMBTU/lb';
-      }
+    this.timeUnit = this.settings.energyResultUnit + '/yr';
+    if (this.settings.unitsOfMeasure == 'Metric') {
+      this.energyUnit = this.settings.energyResultUnit + '/kg';
+    } else if (this.settings.unitsOfMeasure == 'Imperial') {
+      this.energyUnit = this.settings.energyResultUnit + '/lb';
     }
+
     if (!this.inPhast) {
       this.reportRollupService.selectedPhasts.subscribe(val => {
         if (val) {
