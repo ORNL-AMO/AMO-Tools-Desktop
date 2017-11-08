@@ -93,7 +93,9 @@ export class LiquidCoolingLossesFormComponent implements OnInit {
   emitSave() {
     this.saveEmit.emit(true);
   }
-
+  focusOut() {
+    this.changeField.emit('default');
+  }
   startSavePolling() {
     this.checkForm();
     if (this.counter) {

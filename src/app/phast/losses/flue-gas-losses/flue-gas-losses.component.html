@@ -24,7 +24,7 @@
     <div class="col-12">
       <div class="form-group">
         <label class="small" for="type">Type of fuel</label>
-        <select class="form-control" id="type" [(ngModel)]="loss.measurementType" [disabled]="!baselineSelected" (focus)="changeField('measurementType')">
+        <select class="form-control" id="type" [(ngModel)]="loss.measurementType" [disabled]="!baselineSelected" (focus)="changeField('measurementType')" (blur)="focusOut()">
             <option [ngValue]="'By Volume'">Gas</option>
             <option [ngValue]="'By Mass'">Solid/Liquid</option>
             </select>

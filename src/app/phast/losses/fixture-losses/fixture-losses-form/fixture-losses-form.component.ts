@@ -60,8 +60,7 @@ export class FixtureLossesFormComponent implements OnInit {
     }
     this.initDifferenceMonitor();
   }
-
-  disableForm() {
+    disableForm() {
     this.elements = this.lossForm.nativeElement.elements;
     for (var i = 0, len = this.elements.length; i < len; ++i) {
       this.elements[i].disabled = true;
@@ -83,6 +82,9 @@ export class FixtureLossesFormComponent implements OnInit {
     this.saveEmit.emit(true);
   }
 
+  focusOut() {
+    this.changeField.emit('default');
+  }
   setSpecificHeat() {
     let tmpMaterial = this.suiteDbService.selectSolidLoadChargeMaterialById(this.lossesForm.value.materialName);
     this.lossesForm.patchValue({
@@ -156,7 +158,7 @@ export class FixtureLossesFormComponent implements OnInit {
         if (this.settings.unitsOfMeasure == 'Metric') {
       selectedMaterial.specificHeatSolid = this.convertUnitsService.value(selectedMaterial.specificHeatSolid).from('btulbF').to('kJkgC');
     }
-    
+
     this.lossesForm.patchValue({
       specificHeat: selectedMaterial.specificHeatSolid
     })
