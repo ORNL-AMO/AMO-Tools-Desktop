@@ -89,7 +89,6 @@ export class SystemBasicsComponent implements OnInit {
           })
         }
       }
-      console.log('converted')
       this.save.emit(true);
     }
     //assessment has existing settings

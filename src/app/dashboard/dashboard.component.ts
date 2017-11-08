@@ -15,7 +15,7 @@ import { WindowRefService } from '../indexedDb/window-ref.service';
 import { ImportExportService } from '../shared/import-export/import-export.service';
 import { WallLossesSurface, GasLoadChargeMaterial, LiquidLoadChargeMaterial, SolidLoadChargeMaterial, AtmosphereSpecificHeat, FlueGasMaterial, SolidLiquidFlueGasMaterial } from '../shared/models/materials';
 import { ReportRollupService } from '../report-rollup/report-rollup.service';
-
+import { SettingsService } from '../settings/settings.service'; 
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
@@ -53,7 +53,7 @@ export class DashboardComponent implements OnInit {
 
   constructor(private indexedDbService: IndexedDbService, private formBuilder: FormBuilder, private assessmentService: AssessmentService, private toastyService: ToastyService,
     private toastyConfig: ToastyConfig, private jsonToCsvService: JsonToCsvService, private suiteDbService: SuiteDbService, private importExportService: ImportExportService,
-    private reportRollupService: ReportRollupService) {
+    private reportRollupService: ReportRollupService, private settingsService: SettingsService) {
     this.toastyConfig.theme = 'bootstrap';
     this.toastyConfig.position = 'bottom-right';
     this.toastyConfig.limit = 1;
@@ -241,7 +241,7 @@ export class DashboardComponent implements OnInit {
     let tmpAssessment = MockDirectory.assessments[0];
     tmpAssessment.directoryId = 1;
     this.indexedDbService.addAssessment(tmpAssessment).then(assessmentId => {
-      
+
     })
 
     tmpAssessment = MockDirectory.assessments[1];
@@ -272,9 +272,9 @@ export class DashboardComponent implements OnInit {
     )
 
     tmpSettings.assessmentId = 1;
-    this.indexedDbService.addSettings(tmpSettings).then(results => {});
+    this.indexedDbService.addSettings(tmpSettings).then(results => { });
     tmpSettings.assessmentId = 2;
-    this.indexedDbService.addSettings(tmpSettings).then(results => {});
+    this.indexedDbService.addSettings(tmpSettings).then(results => { });
   }
 
   createDirectory() {
@@ -605,21 +605,11 @@ export class DashboardComponent implements OnInit {
         this.indexedDbService.addAssessment(tmpAssessment).then(
           results => {
             //check for psat until phast has settings
-            if (tmpAssessment.psat) {
-              let tmpSettings: Settings = {
-                language: dataObj.settings.language,
-                currency: dataObj.settings.currency,
-                unitsOfMeasure: dataObj.settings.unitsOfMeasure,
-                assessmentId: results,
-                flowMeasurement: dataObj.settings.flowMeasurement,
-                powerMeasurement: dataObj.settings.powerMeasurement,
-                distanceMeasurement: dataObj.settings.distanceMeasurement,
-                pressureMeasurement: dataObj.settings.pressureMeasurement
-              }
-              this.indexedDbService.addSettings(tmpSettings).then(
-                results => { }
-              )
-            }
+            let tmpSettings: Settings = this.settingsService.getNewSettingFromSetting(dataObj.settings);
+            tmpSettings.assessmentId = results;
+            this.indexedDbService.addSettings(tmpSettings).then(
+              results => { }
+            )
           }
         )
       })

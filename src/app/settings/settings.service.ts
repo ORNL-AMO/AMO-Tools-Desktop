@@ -57,4 +57,22 @@ export class SettingsService {
     };
     return tmpSettings;
   }
+
+  getNewSettingFromSetting(settings: Settings): Settings{
+    let newSettings: Settings = {
+      language: settings.language,
+      currency: settings.currency,
+      unitsOfMeasure: settings.unitsOfMeasure,
+      distanceMeasurement: settings.distanceMeasurement,
+      flowMeasurement: settings.flowMeasurement,
+      powerMeasurement: settings.powerMeasurement,
+      pressureMeasurement: settings.pressureMeasurement,
+      currentMeasurement: settings.currentMeasurement,
+      viscosityMeasurement: settings.viscosityMeasurement,
+      voltageMeasurement: settings.voltageMeasurement,
+      energySourceType: settings.energySourceType,
+      furnaceType: settings.furnaceType
+    }
+    return newSettings;
+  }
 }
