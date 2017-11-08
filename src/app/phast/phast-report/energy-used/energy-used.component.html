@@ -17,7 +17,7 @@
             <span *ngIf="!fuelName">Fuel</span>
           </td>
           <td>
-            <span *ngIf="fuelEnergyUsed">{{fuelEnergyUsed | number:'1.0-0'}} {{baseEnergyUnit}}</span>
+            <span>{{fuelEnergyUsed | sigFigs:'5'}} {{baseEnergyUnit}}</span>
             <span *ngIf="!fuelEnergyUsed">&mdash; &mdash;</span>
           </td>
           <td>
@@ -29,7 +29,7 @@
         <tr>
           <td>Electricity</td>
           <td>
-            <span *ngIf="electricEnergyUsed">{{electricEnergyUsed | number:'1.0-0'}} kW</span>
+            <span *ngIf="electricEnergyUsed">{{electricEnergyUsed | sigFigs:'5'}} kW</span>
             <span *ngIf="!electricEnergyUsed">&mdash; &mdash;</span>
           </td>
           <td>9,800 {{energyPerTimeUnit}}</td>
