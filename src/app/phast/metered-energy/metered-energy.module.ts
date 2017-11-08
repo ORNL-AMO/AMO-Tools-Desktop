@@ -34,7 +34,11 @@ import { MeteredEnergyResultsComponent } from './metered-energy-results/metered-
     MeteredEnergyResultsComponent
   ],
   exports: [
-    MeteredEnergyComponent
+    MeteredEnergyComponent,
+    MeteredElectricityFormComponent,
+    MeteredFuelFormComponent,
+    MeteredSteamFormComponent,
+    MeteredEnergyResultsComponent
   ],
   providers: [
     MeteredEnergyService

@@ -1,0 +1,48 @@
+<div class="pump-head">
+  <div class="row">
+    <div class="col-md-5 col-sm-12  mx-auto">
+      <div class="row">
+        <div class="col-6">
+          <div class="form-group">
+            <label>Units of Measure</label>
+            <div class="form-check">
+              <label class="form-check-label">
+                <input class="form-check-input" type="radio" name="unitsOfMeasure" [(ngModel)]="unitsOfMeasure" value="Imperial">Imperial
+              </label>
+              <label class="form-check-label">
+                <input class="form-check-input" type="radio" name="unitsOfMeasure" [(ngModel)]="unitsOfMeasure" value="Metric">Metric
+              </label>
+            </div>
+          </div>
+        </div>
+        <div class="col-6">
+          <button class="btn btn-default fa fa-plus" (click)="addPreAssessment()"></button>
+        </div>
+      </div>
+      <div class="row" *ngFor="let assessment of preAssessments">
+        <div class="col-12">
+            <app-pre-assessment-form [assessment]="assessment"></app-pre-assessment-form>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-5 col-sm-12 mx-auto">
+      <ul class="tabs primary text-center">
+        <li class="calc-tab" [ngClass]="{'active': tabSelect == 'results'}">
+          <a (click)="setTab('results')">Results</a>
+        </li>
+        <!--
+    -->
+        <li class="calc-tab" [ngClass]="{'active': tabSelect == 'help'}">
+          <a (click)="setTab('help')">Help</a>
+        </li>
+      </ul>
+      <div class="tab-content">
+        <div *ngIf="tabSelect == 'results'" class="form-group text-center results-box">
+          <app-pre-assessment-graph></app-pre-assessment-graph>
+        </div>
+        <app-pre-assessment-help *ngIf="tabSelect == 'help'"></app-pre-assessment-help>
+      </div>
+    </div>
+  </div>
+</div>

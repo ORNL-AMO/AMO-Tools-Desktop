@@ -34,6 +34,11 @@
               provided by the PHAST tool.
             </p>
           </li>
+          <li>
+            <a (click)="showTool('pre-assessment')">Pre Assessment Calculator</a>
+            <p>Description
+            </p>
+          </li>
         </ul>
       </div>
     </div>
@@ -95,5 +100,18 @@
   </div>
   <div class="calculator-container">
     <app-energy-use></app-energy-use>
+  </div>
+</div>
+
+
+<div class="calculator" *ngIf="getSelectedTool() == 'pre-assessment'">
+  <div class="row">
+    <div class="col-lg-11 mx-auto">
+      <h2>Pre Assessment Calculator</h2>
+      <p>Description</p>
+    </div>
+  </div>
+  <div class="calculator-container">
+    <app-pre-assessment></app-pre-assessment>
   </div>
 </div>
