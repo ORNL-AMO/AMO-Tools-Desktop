@@ -9,7 +9,7 @@ import { ConvertUnitsService } from '../../shared/convert-units/convert-units.se
 export class ExecutiveSummaryService {
 
   constructor(private phastService: PhastService, private phastResultsService: PhastResultsService, private convertUnitsService: ConvertUnitsService) { }
-  
+
   getSummary(phast: PHAST, isMod: boolean, settings: Settings, baseline: PHAST, baselineSummary?: ExecutiveSummary): ExecutiveSummary {
     let tmpResultsSummary = this.initSummary();
     let tmpPhastResults = this.phastResultsService.getResults(phast, settings);
@@ -49,22 +49,20 @@ export class ExecutiveSummaryService {
   calcAnnualCost(annualEnergyUsed: number, settings: Settings, phast: PHAST): number {
     //gross heat * operating hours * cost
     let tmpAnnualCost = 0;
-    let rates = JSON.parse(JSON.stringify(phast.operatingCosts));
-    if(settings.unitsOfMeasure == 'Metric'){
-      rates.electricityCost = this.convertUnitsService.value(rates.electricityCost).from('kWh').to(settings.energyResultUnit);
-      rates.fuelCost = this.convertUnitsService.value(rates.fuelCost).from('GJ').to(settings.energyResultUnit);
-      rates.steamCost = this.convertUnitsService.value(rates.steamCost).from('GJ').to(settings.energyResultUnit);
-    }else{
-      rates.electricityCost = this.convertUnitsService.value(rates.electricityCost).from('kWh').to(settings.energyResultUnit);
-      rates.fuelCost = this.convertUnitsService.value(rates.fuelCost).from('MMBtu').to(settings.energyResultUnit);
-      rates.steamCost = this.convertUnitsService.value(rates.steamCost).from('MMBtu').to(settings.energyResultUnit);
+    let tmpAnnualEnergy = JSON.parse(JSON.stringify(annualEnergyUsed));
+
+    if (settings.unitsOfMeasure == 'Metric') {
+      tmpAnnualEnergy = this.convertUnitsService.value(tmpAnnualEnergy).from(settings.energyResultUnit).to('GJ');
+    } else {
+      tmpAnnualEnergy = this.convertUnitsService.value(tmpAnnualEnergy).from(settings.energyResultUnit).to('MMBtu');
     }
+
     if (settings.energySourceType == 'Fuel') {
-      tmpAnnualCost = annualEnergyUsed * (rates.fuelCost);
+      tmpAnnualCost = annualEnergyUsed * phast.operatingCosts.fuelCost;
     } else if (settings.energySourceType == 'Electricity') {
-      tmpAnnualCost = annualEnergyUsed * rates.electricityCost;
+      tmpAnnualCost = annualEnergyUsed * phast.operatingCosts.electricityCost;
     } else if (settings.energySourceType == 'Steam') {
-      tmpAnnualCost = annualEnergyUsed * (rates.steamCost);
+      tmpAnnualCost = annualEnergyUsed * phast.operatingCosts.steamCost;
     }
     return tmpAnnualCost;
   }
