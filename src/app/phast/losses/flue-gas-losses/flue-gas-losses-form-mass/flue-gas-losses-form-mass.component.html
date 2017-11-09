@@ -42,7 +42,7 @@
       <label class="small" for="fuelTemperature">Fuel Temperature</label>
       <div class="input-group">
         <input name="{{'fuelTemperature_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="fuelTemperature"
-          id="fuelTemperature" onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('flueGasTemperature')" (blur)="focusOut()">
+          id="fuelTemperature" onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('fuelTemperature')" (blur)="focusOut()">
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">&#8457;</span>
         <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
       </div>
