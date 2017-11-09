@@ -109,6 +109,9 @@ export class SolidChargeMaterialFormComponent implements OnInit {
   focusField(str: string) {
     this.changeField.emit(str);
   }
+  focusOut() {
+    this.changeField.emit('default');
+  }
 
   setProperties() {
     let selectedMaterial = this.suiteDbService.selectSolidLoadChargeMaterialById(this.chargeMaterialForm.value.materialId);

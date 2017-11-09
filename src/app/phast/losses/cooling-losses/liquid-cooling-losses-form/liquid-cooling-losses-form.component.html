@@ -5,7 +5,7 @@
       <label class="small" for="avgSpecificHeat">Average Specific Heat</label>
       <div class="input-group">
         <input name="{{'avgSpecificHeat_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="avgSpecificHeat"
-          id="avgSpecificHeat" onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('avgSpecificHeatLiquid')">
+          id="avgSpecificHeat" onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('avgSpecificHeatLiquid')" (blur)="focusOut()">
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">Btu/(lb-&#8457;)</span>
         <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kJ/(kg-&#8451;)</span>
       </div>
@@ -15,7 +15,7 @@
       <label class="small" for="density">Density</label>
       <div class="input-group">
         <input name="{{'density_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="density" id="density"
-          onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('density')">
+          onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('density')" (blur)="focusOut()">
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">lb/gal</span>
         <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kg/L</span>
       </div>
@@ -25,7 +25,7 @@
       <label class="small" for="liquidFlow">Liquid Flow</label>
       <div class="input-group">
         <input name="{{'liquidFlow_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="liquidFlow" id="liquidFlow"
-          onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('liquidFlow')">
+          onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('liquidFlow')" (blur)="focusOut()">
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">gal/min</span>
         <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">L/min</span>
       </div>
@@ -35,7 +35,7 @@
       <label class="small" for="inletTemp">Inlet Temperature</label>
       <div class="input-group">
         <input name="{{'inletTemp_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="inletTemp" id="inletTemp"
-          onfocus="this.select();" (input)="checkTemperature()" (focus)="focusField('inletTemp')">
+          onfocus="this.select();" (input)="checkTemperature()" (focus)="focusField('inletTemp')" (blur)="focusOut()">
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">&#8457;</span>
         <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
       </div>
@@ -46,7 +46,7 @@
       <label class="small" for="outletTemp">Outlet Temperature</label>
       <div class="input-group">
         <input name="{{'outletTemp_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="outletTemp" id="outletTemp"
-          onfocus="this.select();" (input)="checkTemperature()" (focus)="focusField('outletTemp')">
+          onfocus="this.select();" (input)="checkTemperature()" (focus)="focusField('outletTemp')" (blur)="focusOut()">
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">&#8457;</span>
         <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
       </div>
@@ -56,7 +56,7 @@
     <div class="form-group">
       <label class="small" for="correctionFactor">Correction Factor</label>
       <input name="{{'correctionFactor_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="correctionFactor"
-        id="correctionFactor" onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('correctionFactor')">
+        id="correctionFactor" onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('correctionFactor')" (blur)="focusOut()">
     </div>
   </div>
 </form>

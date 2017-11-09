@@ -1,8 +1,9 @@
-import { Component, OnInit, Output, EventEmitter, Input, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, Input, SimpleChanges, ChangeDetectorRef } from '@angular/core';
 import { Directory } from '../shared/models/directory';
 import { Assessment } from '../shared/models/assessment';
 import { AssessmentService } from '../assessment/assessment.service';
 declare const packageJson;
+import { ElectronService } from 'ngx-electron';
 @Component({
   selector: 'app-sidebar',
   templateUrl: './sidebar.component.html',
@@ -33,18 +34,24 @@ export class SidebarComponent implements OnInit {
   emitGoToSettings = new EventEmitter<boolean>();
   @Output('emitGoToContact')
   emitGoToContact = new EventEmitter<boolean>();
-  
+
   selectedDirectoryId: number;
   firstChange: boolean = true;
   createAssessment: boolean = false;
   versionNum: any;
-  constructor(private assessmentService: AssessmentService) { }
+  isUpdateAvailable: boolean;
+  showModal: boolean;
+  showVersionModal: boolean;
+  constructor(private assessmentService: AssessmentService, private electronService: ElectronService) { }
 
   ngOnInit() {
     this.versionNum = packageJson.version;
     this.directory.collapsed = false;
     this.selectedDirectoryId = this.directory.id;
-    
+    this.assessmentService.updateAvailable.subscribe(val => {
+      this.isUpdateAvailable = val;
+      console.log('sidebar :' + val);
+    })
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -90,7 +97,7 @@ export class SidebarComponent implements OnInit {
     return this.directory;
   }
 
-  goToSettings(){
+  goToSettings() {
     this.emitGoToSettings.emit(true);
   }
 
@@ -110,7 +117,23 @@ export class SidebarComponent implements OnInit {
     this.assessmentService.createAssessment.next(true);
   }
 
-  showContact(){
+  showContact() {
     this.emitGoToContact.emit(true);
+  }
+
+  closeModal() {
+    this.showModal = false;
+  }
+
+  openModal() {
+    this.showModal = true;
+  }
+
+  openVersionModal() {
+    this.showVersionModal = true;
+  }
+
+  closeVersionModal() {
+    this.showVersionModal = false;
   }
 }

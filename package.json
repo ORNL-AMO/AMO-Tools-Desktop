@@ -1,6 +1,6 @@
 {
   "name": "amo-tools-desktop",
-  "version": "0.2.2",
+  "version": "0.2.2-beta",
   "main": "main.js",
   "license": "MIT",
   "description": "AMO-Tools-Desktop",
