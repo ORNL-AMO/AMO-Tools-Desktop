@@ -1,3 +1,9 @@
-<app-designed-electricity-form *ngIf="assessment.settings.energySourceType == 'Electricity'" [inputs]="assessment.meteredEnergy.meteredEnergyElectricity"></app-designed-electricity-form>
-<app-designed-fuel-form *ngIf="assessment.settings.energySourceType == 'Fuel'" [inputs]="assessment.meteredEnergy.meteredEnergyFuel" [settings]="assessment.settings"></app-designed-fuel-form>
-<app-designed-steam-form *ngIf="assessment.settings.energySourceType == 'Steam'"  [inputs]="assessment.meteredEnergy.meteredEnergySteam" [settings]="assessment.settings"></app-designed-steam-form>
+<div *ngIf="assessment.settings.energySourceType == 'Electricity'">
+    <app-designed-energy-electricity-form *ngFor="let inputs of assessment.designedEnergy.designedEnergyElectricity" [inputs]="inputs"></app-designed-energy-electricity-form>
+</div>
+<div *ngIf="assessment.settings.energySourceType == 'Fuel'">
+    <app-designed-energy-fuel-form *ngFor="let inputs of assessment.designedEnergy.designedEnergyFuel" [inputs]="inputs" [settings]="assessment.settings"></app-designed-energy-fuel-form>
+</div>
+<div *ngIf="assessment.settings.energySourceType == 'Steam'">
+    <app-designed-energy-steam-form *ngFor="let inputs of assessment.designedEnergy.designedEnergySteam" [inputs]="inputs" [settings]="assessment.settings"></app-designed-energy-steam-form>
+</div>

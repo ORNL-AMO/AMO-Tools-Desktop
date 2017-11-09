@@ -1,6 +1,6 @@
 <div class="pump-head">
   <div class="row">
-    <div class="col-md-5 col-sm-12  mx-auto">
+    <div class="col-6 form">
       <div class="row">
         <div class="col-6">
           <div class="form-group">
@@ -16,7 +16,7 @@
           </div>
         </div>
         <div class="col-6">
-          <button class="btn btn-default fa fa-plus" (click)="addPreAssessment()"></button>
+          <a class="pull-right" (click)="addPreAssessment()">Add Furnace</a>
         </div>
       </div>
       <div class="row" *ngFor="let assessment of preAssessments">
@@ -26,7 +26,7 @@
       </div>
     </div>
 
-    <div class="col-md-5 col-sm-12 mx-auto">
+    <div class="col-6">
       <ul class="tabs primary text-center">
         <li class="calc-tab" [ngClass]="{'active': tabSelect == 'results'}">
           <a (click)="setTab('results')">Results</a>

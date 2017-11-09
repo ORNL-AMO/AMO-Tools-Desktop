@@ -35,7 +35,7 @@ import { DesignedEnergyService } from './designed-energy.service';
   exports: [
     DesignedEnergyComponent,
     DesignedEnergyElectricityFormComponent,
-    DesignedEnergyFuelComponent,
+    DesignedEnergyFuelFormComponent,
     DesignedEnergySteamFormComponent,
     DesignedEnergyResultsComponent
   ],
