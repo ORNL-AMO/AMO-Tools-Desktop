@@ -1,7 +1,7 @@
 <div class="pre-assessment-furnace">
   <div class="row">
     <div class="col">
-      FURNACE 1
+      {{assessment.name}}
       <div class="pull-right">
         <div class="form-group">
           <select class="form-control select-type" id="assessmentType" name="assessmentType" [(ngModel)]="assessment.type">
@@ -21,9 +21,9 @@
   </div>
   <div class="row">
     <div class="mx-auto col-12" *ngIf="assessment.type == 'Metered'">
-      <app-pre-assessment-metered [assessment]="assessment"></app-pre-assessment-metered>
+      <app-pre-assessment-metered [assessment]="assessment" (emitCalculate)="calculate()"></app-pre-assessment-metered>
     </div>
     <div class="mx-auto col-12" *ngIf="assessment.type == 'Designed'">
-      <app-pre-assessment-designed [assessment]="assessment"></app-pre-assessment-designed>
+      <app-pre-assessment-designed [assessment]="assessment" (emitCalculate)="calculate()"></app-pre-assessment-designed>
     </div>
   </div>

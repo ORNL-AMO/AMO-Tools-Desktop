@@ -14,7 +14,7 @@ export class MeteredEnergyService {
   meteredElectricity(input: MeteredEnergyElectricity, phast: PHAST, settings: Settings): MeteredEnergyResults {
     //Metered Energy Use
     //meteredEnergyUsed = Electricity Used during collection / Collection Time
-    let meteredEnergyUsed = (input.electricityUsed / input.electricityCollectionTime) || 0;
+    let meteredEnergyUsed = this.calcElectricityUsed(input);
     //Energy Intensity for Charge Material = meteredEnergyUsed / sum(charge material feed rates)
     let sumFeedRate = this.phastService.sumChargeMaterialFeedRate(phast.losses.chargeMaterials);
     let meteredEnergyIntensity = (meteredEnergyUsed / sumFeedRate) || 0;
@@ -36,10 +36,14 @@ export class MeteredEnergyService {
     return tmpResults;
   }
 
+  calcElectricityUsed(input: MeteredEnergyElectricity):number{
+    return (input.electricityUsed / input.electricityCollectionTime) || 0;
+  }
+
   meteredFuel(inputs: MeteredEnergyFuel, phast: PHAST, settings: Settings): MeteredEnergyResults {
     //Metered Energy Use
     //Metered Fuel Used = HHV * Flow Rate (if flow rate given)
-    let meteredEnergyUsed = inputs.fuelEnergy;
+    let meteredEnergyUsed = this.calcFuelUsed(inputs);
     //Energy Intensity for Charge Materials =  Metered Energy Used / Sum(charge material feed rates)
     let sumFeedRate = this.phastService.sumChargeMaterialFeedRate(phast.losses.chargeMaterials);
     let meteredEnergyIntensity = (meteredEnergyUsed / sumFeedRate) || 0;
@@ -58,12 +62,16 @@ export class MeteredEnergyService {
       calculatedElectricityUsed: calculated.electricityUsed
     }
     return tmpResults;
+  }
+
+  calcFuelUsed(inputs: MeteredEnergyFuel): number {
+    return inputs.fuelEnergy  || 0;
   }
 
   meteredSteam(inputs: MeteredEnergySteam, phast: PHAST, settings: Settings): MeteredEnergyResults {
     //Metered Energy Use
     //Metered Fuel Used = HHV * Flow Rate
-    let meteredEnergyUsed = inputs.totalHeatSteam * inputs.flowRate;
+    let meteredEnergyUsed = this.calcSteamEnergyUsed(inputs);
     //Energy Intensity for Charge Materials =  Metered Energy Used / Sum(charge material feed rates)
     let sumFeedRate = this.phastService.sumChargeMaterialFeedRate(phast.losses.chargeMaterials);
     let meteredEnergyIntensity = (meteredEnergyUsed / sumFeedRate) || 0;
@@ -84,4 +92,7 @@ export class MeteredEnergyService {
     return tmpResults;
   }
 
+  calcSteamEnergyUsed(inputs: MeteredEnergySteam): number{
+    return inputs.totalHeatSteam * inputs.flowRate || 0;
+  }
 }

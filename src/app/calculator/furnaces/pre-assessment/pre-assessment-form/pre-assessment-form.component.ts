@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { PreAssessment } from '../pre-assessment';
 @Component({
   selector: 'app-pre-assessment-form',
@@ -8,10 +8,16 @@ import { PreAssessment } from '../pre-assessment';
 export class PreAssessmentFormComponent implements OnInit {
   @Input()
   assessment: PreAssessment;
+  @Output('emitCalculate')
+  emitCalcualte = new EventEmitter<boolean>();
 
   constructor() { }
 
   ngOnInit() {
+  }
+
+  calculate(){
+    this.emitCalcualte.emit(true);
   }
 
 }

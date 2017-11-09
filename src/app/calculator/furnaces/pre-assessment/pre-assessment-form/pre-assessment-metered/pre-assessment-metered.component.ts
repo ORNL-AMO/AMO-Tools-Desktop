@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { PreAssessment } from '../../pre-assessment';
 
 @Component({
@@ -9,6 +9,9 @@ import { PreAssessment } from '../../pre-assessment';
 export class PreAssessmentMeteredComponent implements OnInit {
   @Input()
   assessment: PreAssessment;
+  @Output('emitCalculate')
+  emitCalculate = new EventEmitter<boolean>();
+
   constructor() { }
 
   ngOnInit() {
@@ -38,5 +41,11 @@ export class PreAssessmentMeteredComponent implements OnInit {
       }
     }
   }
+
+  calculate(){
+    console.log(this.assessment.meteredEnergy);
+    this.emitCalculate.emit(true);
+  }
+
 
 }

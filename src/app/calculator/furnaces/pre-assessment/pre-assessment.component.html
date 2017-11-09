@@ -21,7 +21,7 @@
       </div>
       <div class="row" *ngFor="let assessment of preAssessments">
         <div class="col-12">
-            <app-pre-assessment-form [assessment]="assessment"></app-pre-assessment-form>
+            <app-pre-assessment-form [assessment]="assessment" (emitCalculate)="calculate()"></app-pre-assessment-form>
         </div>
       </div>
     </div>
@@ -30,16 +30,14 @@
       <ul class="tabs primary text-center">
         <li class="calc-tab" [ngClass]="{'active': tabSelect == 'results'}">
           <a (click)="setTab('results')">Results</a>
-        </li>
-        <!--
-    -->
-        <li class="calc-tab" [ngClass]="{'active': tabSelect == 'help'}">
+        </li><!--
+    --><li class="calc-tab" [ngClass]="{'active': tabSelect == 'help'}">
           <a (click)="setTab('help')">Help</a>
         </li>
       </ul>
       <div class="tab-content">
         <div *ngIf="tabSelect == 'results'" class="form-group text-center results-box">
-          <app-pre-assessment-graph></app-pre-assessment-graph>
+          <app-pre-assessment-graph [results]="results"></app-pre-assessment-graph>
         </div>
         <app-pre-assessment-help *ngIf="tabSelect == 'help'"></app-pre-assessment-help>
       </div>

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { PreAssessment } from '../../pre-assessment';
 import { DesignedEnergyElectricity, DesignedEnergyFuel, DesignedEnergySteam } from '../../../../../shared/models/phast/designedEnergy'
 
@@ -10,6 +10,9 @@ import { DesignedEnergyElectricity, DesignedEnergyFuel, DesignedEnergySteam } fr
 export class PreAssessmentDesignedComponent implements OnInit {
   @Input()
   assessment: PreAssessment;
+  @Output('emitCalculate')
+  emitCalculate = new EventEmitter<boolean>();
+  
   constructor() { }
 
   ngOnInit() {
@@ -23,6 +26,10 @@ export class PreAssessmentDesignedComponent implements OnInit {
       this.addFuelZone();
       this.addSteamZone();
     }
+  }
+
+  calculate(){
+    
   }
 
 

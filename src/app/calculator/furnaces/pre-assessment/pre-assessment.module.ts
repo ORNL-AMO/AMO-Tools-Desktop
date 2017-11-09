@@ -7,7 +7,7 @@ import { MeteredEnergyModule } from '../../../phast/metered-energy/metered-energ
 import { PreAssessmentFormComponent } from './pre-assessment-form/pre-assessment-form.component';
 import { PreAssessmentGraphComponent } from './pre-assessment-graph/pre-assessment-graph.component';
 import { PreAssessmentHelpComponent } from './pre-assessment-help/pre-assessment-help.component';
-
+import { ChartsModule } from 'ng2-charts';
 import { PreAssessmentMeteredComponent } from './pre-assessment-form/pre-assessment-metered/pre-assessment-metered.component';
 import { PreAssessmentDesignedComponent } from './pre-assessment-form/pre-assessment-designed/pre-assessment-designed.component';
 @NgModule({
@@ -16,7 +16,8 @@ import { PreAssessmentDesignedComponent } from './pre-assessment-form/pre-assess
     FormsModule,
     ReactiveFormsModule,
     DesignedEnergyModule,
-    MeteredEnergyModule
+    MeteredEnergyModule,
+    ChartsModule
   ],
   declarations: [
     PreAssessmentComponent,
