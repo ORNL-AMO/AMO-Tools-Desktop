@@ -63,7 +63,9 @@ export class OpeningLossesFormComponent implements OnInit {
     }
     this.initDifferenceMonitor();
   }
-
+  focusOut() {
+    this.changeField.emit('default');
+  }
   disableForm() {
     this.elements = this.lossForm.nativeElement.elements;
     for (var i = 0, len = this.elements.length; i < len; ++i) {
@@ -112,7 +114,7 @@ export class OpeningLossesFormComponent implements OnInit {
   }
 
   getArea() {
-    
+
     let smallUnit = 'in';
     let largeUnit = 'ft';
     if(this.settings.unitsOfMeasure == 'Metric'){

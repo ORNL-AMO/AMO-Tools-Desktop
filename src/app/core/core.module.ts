@@ -32,6 +32,9 @@ import { AboutPageComponent } from '../about-page/about-page.component';
 import { TutorialsComponent } from '../tutorials/tutorials.component';
 import { ContactPageComponent } from '../contact-page/contact-page.component';
 import { ReportRollupModule } from '../report-rollup/report-rollup.module';
+
+import { VersionModalComponent } from '../version-modal/version-modal.component';
+import { UpdateModalComponent } from '../update-modal/update-modal.component';
 @NgModule({
   declarations: [
     CoreComponent,
@@ -42,7 +45,9 @@ import { ReportRollupModule } from '../report-rollup/report-rollup.module';
     LandingScreenComponent,
     AboutPageComponent,
     TutorialsComponent,
-    ContactPageComponent
+    ContactPageComponent,
+    UpdateModalComponent,
+    VersionModalComponent
   ],
   imports: [
     CommonModule,

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, EventEmitter, Output, ViewChild, ElementRef, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output, ViewChild, ElementRef, SimpleChanges, HostListener } from '@angular/core';
 import { WindowRefService } from '../../../../indexedDb/window-ref.service';
 import { WallLossCompareService } from '../wall-loss-compare.service';
 import { SuiteDbService } from '../../../../suiteDb/suite-db.service';
@@ -112,6 +112,11 @@ export class WallLossesFormComponent implements OnInit {
   focusField(str: string) {
     this.changeField.emit(str);
   }
+  //emits to default help on blur of input elements
+  focusOut() {
+    this.changeField.emit('default');
+  }
+
   //emit to wall-losses.component to begin saving process
   emitSave() {
     this.saveEmit.emit(true);

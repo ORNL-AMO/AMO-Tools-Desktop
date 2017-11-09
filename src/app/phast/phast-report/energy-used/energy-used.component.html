@@ -17,11 +17,11 @@
             <span *ngIf="!fuelName">Fuel</span>
           </td>
           <td>
-            <span *ngIf="fuelEnergyUsed">{{fuelEnergyUsed | number:'1.0-0'}} {{baseEnergyUnit}}</span>
+            <span>{{fuelEnergyUsed | sigFigs:'5'}} {{baseEnergyUnit}}</span>
             <span *ngIf="!fuelEnergyUsed">&mdash; &mdash;</span>
           </td>
           <td>
-            <span *ngIf="fuelHeatingValue">{{fuelHeatingValue | number:'1.2-2'}} {{energyPerMassUnit}}</span>
+            <span *ngIf="fuelHeatingValue">{{fuelHeatingValue | sigFigs:'5'}} {{energyPerMassUnit}}</span>
             <span *ngIf="!fuelHeatingValue">&mdash; &mdash;</span>
           </td>
           <td>{{phast.operatingCosts.fuelCost | currency:'USD':'symbol':'1.2-2'}} {{energyCostUnit}}</td>
@@ -29,20 +29,20 @@
         <tr>
           <td>Electricity</td>
           <td>
-            <span *ngIf="electricEnergyUsed">{{electricEnergyUsed | number:'1.0-0'}} kW</span>
+            <span *ngIf="electricEnergyUsed">{{electricEnergyUsed | sigFigs:'5'}} kW</span>
             <span *ngIf="!electricEnergyUsed">&mdash; &mdash;</span>
           </td>
-          <td>{{electricityHeatingValue | number:'1.0-4'}} {{energyPerTimeUnit}}</td>
+          <td>{{electricityHeatingValue | sigFigs:'5'}} {{energyPerTimeUnit}}</td>
           <td>{{phast.operatingCosts.electricityCost | currency:'USD':'symbol':'1.2-2'}} /kWh</td>
         </tr>
         <tr>
           <td>Steam</td>
           <td>
-            <span *ngIf="steamEnergyUsed">{{steamEnergyUsed | number:'1.0-0'}} {{baseEnergyUnit}}</span>
+            <span *ngIf="steamEnergyUsed">{{steamEnergyUsed | sigFigs:'5'}} {{baseEnergyUnit}}</span>
             <span *ngIf="!steamEnergyUsed">&mdash; &mdash;</span>
           </td>
           <td>
-            <span *ngIf="steamHeatingValue">{{steamHeatingValue | number:'1.0-0'}} {{energyPerMassUnit}}</span>
+            <span *ngIf="steamHeatingValue">{{steamHeatingValue | sigFigs:'5'}} {{energyPerMassUnit}}</span>
             <span *ngIf="!steamHeatingValue">&mdash; &mdash;</span>
           </td>
           <td>{{phast.operatingCosts.steamCost | currency:'USD':'symbol':'1.2-2'}} {{energyCostUnit}}</td>
@@ -73,45 +73,45 @@
       <tr>
         <td>Fuel Used</td>
         <td>
-          <span *ngIf="calculatedResults.fuelEnergyUsed">{{calculatedResults.fuelEnergyUsed | number:'1.0-0'}} {{baseEnergyUnit}}</span>
+          <span *ngIf="calculatedResults.fuelEnergyUsed">{{calculatedResults.fuelEnergyUsed | sigFigs:'5'}} {{baseEnergyUnit}}</span>
           <span *ngIf="!calculatedResults.fuelEnergyUsed">&mdash; &mdash;</span>
         </td>
         <td>
-          <span *ngIf="meteredResults.meteredEnergyUsed">{{meteredResults.meteredEnergyUsed | number:'1.0-0'}} {{baseEnergyUnit}}</span>
+          <span *ngIf="meteredResults.meteredEnergyUsed">{{meteredResults.meteredEnergyUsed | sigFigs:'5'}} {{baseEnergyUnit}}</span>
           <span *ngIf="!meteredResults.meteredEnergyUsed">&mdash; &mdash;</span>
         </td>
         <td>
-          <span *ngIf="designedResults.designedEnergyUsed">{{designedResults.designedEnergyUsed | number:'1.0-0'}} {{baseEnergyUnit}}</span>
+          <span *ngIf="designedResults.designedEnergyUsed">{{designedResults.designedEnergyUsed | sigFigs:'5'}} {{baseEnergyUnit}}</span>
           <span *ngIf="!designedResults.designedEnergyUsed">&mdash; &mdash;</span>
         </td>
       </tr>
       <tr>
         <td>Energy Intensity for Charge Materials</td>
         <td>
-          <span *ngIf="calculatedResults.energyIntensity">{{calculatedResults.energyIntensity | number:'1.0-0'}} {{energyPerMassUnit}}</span>
+          <span *ngIf="calculatedResults.energyIntensity">{{calculatedResults.energyIntensity | sigFigs:'5'}} {{energyPerMassUnit}}</span>
           <span *ngIf="!calculatedResults.energyIntensity">&mdash; &mdash;</span>
         </td>
         <td>
-          <span *ngIf="meteredResults.meteredEnergyIntensity">{{meteredResults.meteredEnergyIntensity | number:'1.0-0'}} {{energyPerMassUnit}}</span>
+          <span *ngIf="meteredResults.meteredEnergyIntensity">{{meteredResults.meteredEnergyIntensity | sigFigs:'5'}} {{energyPerMassUnit}}</span>
           <span *ngIf="!meteredResults.meteredEnergyIntensity">&mdash; &mdash;</span>
         </td>
         <td>
-          <span *ngIf="designedResults.designedEnergyIntensity">{{designedResults.designedEnergyIntensity | number:'1.0-0'}} {{energyPerMassUnit}}</span>
+          <span *ngIf="designedResults.designedEnergyIntensity">{{designedResults.designedEnergyIntensity | sigFigs:'5'}} {{energyPerMassUnit}}</span>
           <span *ngIf="!designedResults.designedEnergyIntensity">&mdash; &mdash;</span>
         </td>
       </tr>
       <tr>
         <td>Electricity Used</td>
         <td>
-          <span *ngIf="calculatedResults.electricityUsed">{{calculatedResults.electricityUsed | number:'1.0-0'}} kW</span>
+          <span *ngIf="calculatedResults.electricityUsed">{{calculatedResults.electricityUsed | sigFigs:'5'}} kW</span>
           <span *ngIf="!calculatedResults.electricityUsed">&mdash; &mdash;</span>
         </td>
         <td>
-          <span *ngIf="meteredResults.meteredElectricityUsed">{{meteredResults.meteredElectricityUsed | number:'1.0-0'}} kW</span>
+          <span *ngIf="meteredResults.meteredElectricityUsed">{{meteredResults.meteredElectricityUsed | sigFigs:'5'}} kW</span>
           <span *ngIf="!meteredResults.meteredElectricityUsed">&mdash; &mdash;</span>
         </td>
         <td>
-          <span *ngIf="designedResults.designedElectricityUsed">{{designedResults.designedElectricityUsed | number:'1.0-0'}} kW</span>
+          <span *ngIf="designedResults.designedElectricityUsed">{{designedResults.designedElectricityUsed | sigFigs:'5'}} kW</span>
           <span *ngIf="!designedResults.designedElectricityUsed">&mdash; &mdash;</span>
         </td>
       </tr>

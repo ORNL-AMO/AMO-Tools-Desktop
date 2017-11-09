@@ -245,7 +245,9 @@ export class CoolingLossesComponent implements OnInit {
   changeField(str: string) {
     this.fieldChange.emit(str);
   }
-
+  focusOut() {
+    this.fieldChange.emit('default');
+  }
   setCompareVals() {
     if (this.isBaseline) {
       this.coolingLossesCompareService.baselineCoolingLosses = this.losses.coolingLosses;

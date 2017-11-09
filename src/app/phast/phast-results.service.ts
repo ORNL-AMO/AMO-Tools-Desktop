@@ -176,16 +176,10 @@ export class PhastResultsService {
     let phastResults = this.getResults(phast, settings);
     let calculatedFuelEnergyUsed = phastResults.grossHeatInput;
     let calculatedEnergyIntensity = (calculatedFuelEnergyUsed / sumFeedRate);
+    //calculates aux equipment
     let tmpAuxResults = this.auxEquipmentService.calculate(phast);
+    //sum aux equipment results
     let calculatedElectricityUsed = this.auxEquipmentService.getResultsSum(tmpAuxResults);
-
-    if(settings.unitsOfMeasure == 'Metric'){
-      calculatedFuelEnergyUsed = this.convertUnitsService.value(calculatedFuelEnergyUsed).from('kJ').to(settings.energyResultUnit);
-      calculatedEnergyIntensity = this.convertUnitsService.value(calculatedEnergyIntensity).from('kJ').to(settings.energyResultUnit);
-    }else{
-      calculatedFuelEnergyUsed = this.convertUnitsService.value(calculatedFuelEnergyUsed).from('Btu').to(settings.energyResultUnit);
-      calculatedEnergyIntensity = this.convertUnitsService.value(calculatedEnergyIntensity).from('Btu').to(settings.energyResultUnit);
-    }
     let phastCalcs: CalculatedByPhast = {
       fuelEnergyUsed: calculatedFuelEnergyUsed,
       energyIntensity: calculatedEnergyIntensity,

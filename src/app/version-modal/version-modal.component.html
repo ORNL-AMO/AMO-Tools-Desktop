@@ -1,0 +1,33 @@
+<div bsModal #versionModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="versionModalLabel"
+  aria-hidden="true" [config]="{backdrop: 'static'}">
+  <div class="modal-dialog">
+    <div class="modal-content card">
+      <div class="modal-header">
+        <h3>Release Notes for v{{versionNum}}</h3>
+        <button class="close" (click)="hideVersionModal()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <h5>Added:</h5>
+        <ul>
+          <li>
+            PHAST Reports</li>
+          <li>
+            Printing for multiple assessments</li>
+          <li>
+            Conversions for PHAST Calculations in metric</li>
+          <li>
+            Implementation costs for PSAT</li>
+        </ul>
+        <h5>Changes:</h5>
+        <ul>
+          <li>
+            O2 Enrichment graph updates, now makes more sense and gives more information</li>
+          <li>
+            Other UI Enhancements</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>

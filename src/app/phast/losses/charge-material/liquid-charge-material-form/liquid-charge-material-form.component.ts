@@ -91,7 +91,9 @@ export class LiquidChargeMaterialFormComponent implements OnInit {
   focusField(str: string) {
     this.changeField.emit(str);
   }
-
+  focusOut() {
+    this.changeField.emit('default');
+  }
   checkDischargeTemp() {
     if ((this.chargeMaterialForm.value.dischargeTemperature > this.chargeMaterialForm.value.materialVaporizingTemperature) && this.chargeMaterialForm.value.liquidVaporized == 0) {
       this.dischargeTempError = 'The discharge temperature is higher than the Vaporizing Temperature, please enter proper percentage for charge vaporized.';
@@ -110,9 +112,9 @@ export class LiquidChargeMaterialFormComponent implements OnInit {
       selectedMaterial.specificHeatLiquid = this.convertUnitsService.value(selectedMaterial.specificHeatLiquid).from('btulbF').to('kJkgC');
       selectedMaterial.specificHeatVapor = this.convertUnitsService.value(selectedMaterial.specificHeatVapor).from('btulbF').to('kJkgC');
     }
-   
-   
-   
+
+
+
     this.chargeMaterialForm.patchValue({
       materialLatentHeat: selectedMaterial.latentHeat,
       materialSpecificHeatLiquid: selectedMaterial.specificHeatLiquid,

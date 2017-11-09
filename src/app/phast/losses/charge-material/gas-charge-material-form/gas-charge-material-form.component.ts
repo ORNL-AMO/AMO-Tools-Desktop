@@ -91,7 +91,9 @@ export class GasChargeMaterialFormComponent implements OnInit {
   focusField(str: string) {
     this.changeField.emit(str);
   }
-
+  focusOut() {
+    this.changeField.emit('default');
+  }
   setProperties() {
     let selectedMaterial = this.suiteDbService.selectGasLoadChargeMaterialById(this.chargeMaterialForm.value.materialId);
         if (this.settings.unitsOfMeasure == 'Metric') {

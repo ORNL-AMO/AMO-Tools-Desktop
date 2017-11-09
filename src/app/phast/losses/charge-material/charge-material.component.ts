@@ -250,7 +250,9 @@ export class ChargeMaterialComponent implements OnInit {
   changeField(str: string) {
     this.fieldChange.emit(str);
   }
-
+  focusOut() {
+    this.fieldChange.emit('default');
+  }
   setCompareVals() {
     if (this.isBaseline) {
       this.chargeMaterialCompareService.baselineMaterials = this.losses.chargeMaterials;

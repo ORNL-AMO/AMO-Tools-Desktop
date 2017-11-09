@@ -40,13 +40,9 @@ export class DesignedEnergyService {
   designedEnergyFuel(inputs: DesignedEnergyFuel[], phast: PHAST, settings: Settings): DesignedEnergyResults {
     //Design Results
     let designedEnergyUsed = 0;
-    //
-    let constant;
-    if (settings.unitsOfMeasure == 'Metric') {
-      constant = 1;
-    } else {
-      constant = Math.pow(10, 6);
-    }
+    //used to convert burner capacity from MMBtu -> Btu or GJ -> kJ
+    //results for designedEnergyUsed end up in Btu or kJ
+    let constant = Math.pow(10, 6);
     inputs.forEach(input => {
       designedEnergyUsed += (input.totalBurnerCapacity * constant) * (input.percentCapacityUsed / 100) * (input.percentOperatingHours / 100);
     })
@@ -54,7 +50,7 @@ export class DesignedEnergyService {
     let designedEnergyIntensity = (designedEnergyUsed / sumFeedRate) || 0;
     let tmpAuxResults = this.auxEquipmentService.calculate(phast);
     let designedElectricityUsed = this.auxEquipmentService.getResultsSum(tmpAuxResults);
-
+    //convert to resultsUnit
     designedEnergyUsed = this.convertResult(designedEnergyUsed, settings);
     designedEnergyIntensity = this.convertResult(designedEnergyIntensity, settings);
     //Calculated by phast

@@ -229,7 +229,9 @@ export class FlueGasLossesComponent implements OnInit {
   changeField(str: string) {
     this.fieldChange.emit(str);
   }
-
+  focusOut() {
+    this.fieldChange.emit('default');
+  }
   setCompareVals() {
     if (this.isBaseline) {
       this.flueGasCompareService.baselineFlueGasLoss = this.losses.flueGasLosses;
