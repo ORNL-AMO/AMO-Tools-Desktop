@@ -12,6 +12,31 @@ export class PreAssessmentMeteredComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
+    if (!this.assessment.meteredEnergy) {
+      this.assessment.meteredEnergy = {
+        meteredEnergyFuel: {
+          fuelType: 0,
+          heatingValue: 0,
+          collectionTime: 0,
+          electricityUsed: 0,
+          electricityCollectionTime: 0,
+          fuelEnergy: 0
+        },
+        meteredEnergyElectricity: {
+          electricityCollectionTime: 0,
+          electricityUsed: 0,
+          auxElectricityUsed: 0,
+          auxElectricityCollectionTime: 0
+        },
+        meteredEnergySteam: {
+          totalHeatSteam: 0,
+          flowRate: 0,
+          collectionTime: 0,
+          electricityUsed: 0,
+          electricityCollectionTime: 0
+        }
+      }
+    }
   }
 
 }
