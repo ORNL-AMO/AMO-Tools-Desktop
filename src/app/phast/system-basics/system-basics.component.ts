@@ -40,6 +40,10 @@ export class SystemBasicsComponent implements OnInit {
 
   ngOnInit() {
     this.settingsForm = this.settingsService.getFormFromSettings(this.settings);
+    if (this.settingsForm.value.energyResultUnit == '' || !this.settingsForm.value.energyResultUnit) {
+      this.settingsForm = this.settingsService.setEnergyResultUnit(this.settingsForm);
+      this.saveChanges();
+    }
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -52,14 +56,14 @@ export class SystemBasicsComponent implements OnInit {
 
   saveChanges() {
     this.newSettings = this.settingsService.getSettingsFromForm(this.settingsForm);
-    //TODO: Check data when we have dependent units
     if (
       this.settings.currency != this.newSettings.currency ||
       this.settings.unitsOfMeasure != this.newSettings.unitsOfMeasure
     ) {
       this.showSettingsModal();
     } else if (this.settings.energySourceType != this.newSettings.energySourceType ||
-      this.settings.furnaceType != this.newSettings.furnaceType) {
+      this.settings.furnaceType != this.newSettings.furnaceType ||
+      this.settings.energyResultUnit != this.newSettings.energyResultUnit) {
       this.updateData(false);
     }
   }
@@ -89,7 +93,6 @@ export class SystemBasicsComponent implements OnInit {
           })
         }
       }
-      console.log('converted')
       this.save.emit(true);
     }
     //assessment has existing settings

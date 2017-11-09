@@ -19,7 +19,8 @@ export class SettingsService {
       'viscosityMeasurement': [''],
       'voltageMeasurement': [''],
       'energySourceType': [''],
-      'furnaceType': ['']
+      'furnaceType': [''],
+      'energyResultUnit': ['']
     });
   }
 
@@ -36,7 +37,8 @@ export class SettingsService {
       'viscosityMeasurement': [settings.viscosityMeasurement],
       'voltageMeasurement': [settings.voltageMeasurement],
       'energySourceType': [settings.energySourceType],
-      'furnaceType': [settings.furnaceType]
+      'furnaceType': [settings.furnaceType],
+      'energyResultUnit': [settings.energyResultUnit]
     });
   }
 
@@ -53,8 +55,70 @@ export class SettingsService {
       viscosityMeasurement: form.value.viscosityMeasurement,
       voltageMeasurement: form.value.voltageMeasurement,
       energySourceType: form.value.energySourceType,
-      furnaceType: form.value.furnaceType
+      furnaceType: form.value.furnaceType,
+      energyResultUnit: form.value.energyResultUnit
     };
     return tmpSettings;
+  }
+
+  setUnits(settingsForm: any): any {
+    if (settingsForm.value.unitsOfMeasure == 'Imperial') {
+      settingsForm.patchValue({
+        powerMeasurement: 'hp',
+        flowMeasurement: 'gpm',
+        distanceMeasurement: 'ft',
+        pressureMeasurement: 'psi'
+        // currentMeasurement: 'A',
+        // viscosityMeasurement: 'cST',
+        // voltageMeasurement: 'V'
+      })
+
+    } else if (settingsForm.value.unitsOfMeasure == 'Metric') {
+      settingsForm.patchValue({
+        powerMeasurement: 'kW',
+        flowMeasurement: 'm3/h',
+        distanceMeasurement: 'm',
+        pressureMeasurement: 'kPa'
+        // currentMeasurement: 'A',
+        // viscosityMeasurement: 'cST',
+        // voltageMeasurement: 'V'
+      })
+    }
+    settingsForm = this.setEnergyResultUnit(settingsForm);
+    return settingsForm;
+  }
+
+  setEnergyResultUnit(settingsForm: any): any {
+    if (settingsForm.value.unitsOfMeasure == 'Imperial') {
+      settingsForm.patchValue({
+        energyResultUnit: 'Btu'
+      })
+    }
+    else if (settingsForm.value.unitsOfMeasure == 'Metric') {
+      settingsForm.patchValue({
+        energyResultUnit: 'kJ'
+      })
+    }
+
+    if (settingsForm.value.energySourceType == 'Electricity') {
+      settingsForm.patchValue({
+        energyResultUnit: 'kWh'
+      })
+    }
+    return settingsForm;
+  }
+
+  setEnergyResultUnitSetting(settings: Settings): Settings {
+    if (settings.unitsOfMeasure == 'Imperial') {
+      settings.energyResultUnit = 'Btu'
+    }
+    else if (settings.unitsOfMeasure == 'Metric') {
+      settings.energyResultUnit = 'kJ';
+    }
+
+    if (settings.energySourceType == 'Electricity') {
+      settings.energyResultUnit = 'kWh';
+    }
+    return settings;
   }
 }
