@@ -20,6 +20,7 @@ export class MeteredEnergyService {
     let meteredEnergyIntensity = (meteredEnergyUsed / sumFeedRate) || 0;
     //Electricity Used (Auxiliary) = Electricity used during collection (aux) / collection time (aux)
     let meteredElectricityUsed = (input.auxElectricityUsed / input.auxElectricityCollectionTime) || 0;
+   
     meteredEnergyUsed = this.convertResult(meteredEnergyUsed, settings);
     meteredEnergyIntensity = this.convertResult(meteredEnergyIntensity, settings);
     //Calculated by PHAST
@@ -91,7 +92,9 @@ export class MeteredEnergyService {
   }
 
   convertResult(val: number, settings: Settings): number {
-    if (settings.unitsOfMeasure == 'Metric') {
+    if(settings.energySourceType == 'Electricity'){
+      val = this.convertUnitsService.value(val).from('kWh').to(settings.energyResultUnit)
+    }else if (settings.unitsOfMeasure == 'Metric') {
       val = this.convertUnitsService.value(val).from('kJ').to(settings.energyResultUnit);
     } else {
       val = this.convertUnitsService.value(val).from('Btu').to(settings.energyResultUnit);

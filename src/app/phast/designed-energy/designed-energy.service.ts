@@ -21,7 +21,6 @@ export class DesignedEnergyService {
     let designedEnergyIntensity = (designedEnergyUsed / sumFeedRate) || 0;
     let tmpAuxResults = this.auxEquipmentService.calculate(phast);
     let designedElectricityUsed = this.auxEquipmentService.getResultsSum(tmpAuxResults);
-
     designedEnergyUsed = this.convertResult(designedEnergyUsed, settings);
     designedEnergyIntensity = this.convertResult(designedEnergyIntensity, settings);
     //Calculated by phast
@@ -102,7 +101,9 @@ export class DesignedEnergyService {
 
 
   convertResult(val: number, settings: Settings): number {
-    if (settings.unitsOfMeasure == 'Metric') {
+    if(settings.energySourceType == 'Electricity'){
+      val = this.convertUnitsService.value(val).from('kWh').to(settings.energyResultUnit)
+    }else if (settings.unitsOfMeasure == 'Metric') {
       val = this.convertUnitsService.value(val).from('kJ').to(settings.energyResultUnit);
     } else {
       val = this.convertUnitsService.value(val).from('Btu').to(settings.energyResultUnit);

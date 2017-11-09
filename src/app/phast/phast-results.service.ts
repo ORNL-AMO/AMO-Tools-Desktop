@@ -175,7 +175,7 @@ export class PhastResultsService {
     let sumFeedRate = this.phastService.sumChargeMaterialFeedRate(phast.losses.chargeMaterials);
     let phastResults = this.getResults(phast, settings);
     let calculatedFuelEnergyUsed = phastResults.grossHeatInput;
-    let calculatedEnergyIntensity = (calculatedFuelEnergyUsed / sumFeedRate) || 0;
+    let calculatedEnergyIntensity = (calculatedFuelEnergyUsed / sumFeedRate);
     let tmpAuxResults = this.auxEquipmentService.calculate(phast);
     let calculatedElectricityUsed = this.auxEquipmentService.getResultsSum(tmpAuxResults);
 
