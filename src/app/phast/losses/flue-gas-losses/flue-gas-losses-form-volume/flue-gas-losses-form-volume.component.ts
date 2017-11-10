@@ -130,34 +130,41 @@ export class FlueGasLossesFormVolumeComponent implements OnInit {
       if (this.flueGasCompareService.differentArray[this.lossIndex]) {
         let doc = this.windowRefService.getDoc();
 
-        //gasTypeId
+        // gasTypeId
         this.flueGasCompareService.differentArray[this.lossIndex].different.flueGasVolumeDifferent.gasTypeId.subscribe((val) => {
           let gasTypeIdElements = doc.getElementsByName('gasTypeId_' + this.lossIndex);
           gasTypeIdElements.forEach(element => {
             element.classList.toggle('indicate-different', val);
           });
-        })
-        //flueGasTemperature
+        });
+        // flueGasTemperature
         this.flueGasCompareService.differentArray[this.lossIndex].different.flueGasVolumeDifferent.flueGasTemperature.subscribe((val) => {
           let flueGasTemperatureElements = doc.getElementsByName('flueGasTemperature_' + this.lossIndex);
           flueGasTemperatureElements.forEach(element => {
             element.classList.toggle('indicate-different', val);
           });
-        })
-        //excessAirPercentage
+        });
+        // excessAirPercentage
         this.flueGasCompareService.differentArray[this.lossIndex].different.flueGasVolumeDifferent.excessAirPercentage.subscribe((val) => {
           let excessAirPercentageElements = doc.getElementsByName('excessAirPercentage_' + this.lossIndex);
           excessAirPercentageElements.forEach(element => {
             element.classList.toggle('indicate-different', val);
           });
-        })
-        //combustionAirTemperature
+        });
+        // combustionAirTemperature
         this.flueGasCompareService.differentArray[this.lossIndex].different.flueGasVolumeDifferent.combustionAirTemperature.subscribe((val) => {
           let combustionAirTemperatureElements = doc.getElementsByName('combustionAirTemperature_' + this.lossIndex);
           combustionAirTemperatureElements.forEach(element => {
             element.classList.toggle('indicate-different', val);
           });
-        })
+        });
+        // fuelTemperature
+        this.flueGasCompareService.differentArray[this.lossIndex].different.flueGasVolumeDifferent.fuelTemperature.subscribe((val) => {
+          let fuelTemperatureElements = doc.getElementsByName('fuelTemperature_' + this.lossIndex);
+          fuelTemperatureElements.forEach(element => {
+            element.classList.toggle('indicate-different', val);
+          });
+        });
       }
     }
   }
