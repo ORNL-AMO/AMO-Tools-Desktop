@@ -28,7 +28,6 @@ export class PsatDiagramComponent implements OnInit {
           this.resultsArr.push({ output: tmpResults, name: val.psat.name, psat: val.psat })
         })
       }
-      console.log(this.resultsArr);
     }
   }
 
@@ -46,7 +45,6 @@ export class PsatDiagramComponent implements OnInit {
     if (psat.inputs.optimize_calculation) {
       return this.psatService.resultsOptimal(JSON.parse(JSON.stringify(psat.inputs)), settings);
     } else if (!isModification) {
-      console.log('existing')
       return this.psatService.resultsExisting(JSON.parse(JSON.stringify(psat.inputs)), settings);
     } else {
       return this.psatService.resultsModified(JSON.parse(JSON.stringify(psat.inputs)), settings, this.psat.outputs.pump_efficiency);

@@ -151,7 +151,6 @@ export class EnergyInputExhaustGasLossesComponent implements OnInit {
     this.availableHeat = this.phastService.availableHeat(tmpLoss, this.settings);
     tmpLoss.availableHeat = this.availableHeat;
     let results = this.phastService.energyInputExhaustGasLosses(tmpLoss, this.settings);
-    console.log(results);
     loss.heatLoss = results.heatDelivered;
     loss.exhaustGas = results.exhaustGasLosses;
   }
