@@ -27,4 +27,11 @@
       </label>
     </div>
   </div>
+
+  <div class="form-group" *ngIf="inPhast">
+    <label for="furnaceType">Energy Result Unit</label>
+    <select class="form-control" formControlName="energyResultUnit" id="energyResultUnit" ngModel="{{settingsForm.value.energyResultUnit}}">
+        <option *ngFor="let option of energyResultOptions" [ngValue]="option.unit">{{option.display}} <span [innerHTML]="option.displayUnit"></span></option>
+    </select>
+  </div>
 </form>

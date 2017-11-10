@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Settings } from '../../shared/models/settings';
+import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
 
 @Component({
   selector: 'app-phast-settings',
@@ -28,9 +29,7 @@ export class PhastSettingsComponent implements OnInit {
   ]
 
   // electricOptions: Array<string>;
-
   constructor() { }
-
   ngOnInit() {
     if (!this.settingsForm.value.furnaceType || this.settingsForm.value.furnaceType == '') {
       this.setOptions();
@@ -44,10 +43,12 @@ export class PhastSettingsComponent implements OnInit {
       })
     } else if (this.settingsForm.value.energySourceType == 'Electricity') {
       this.settingsForm.patchValue({
-        furnaceType: 'Electrical Infrared'
+        furnaceType: 'Electrical Infrared',
+        energyResultUnit: 'kWh'
       })
     }
   }
+
 
   startPolling() {
     this.startSavePolling.emit(true);
