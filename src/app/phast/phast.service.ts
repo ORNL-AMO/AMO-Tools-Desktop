@@ -166,6 +166,25 @@ export class PhastService {
     results = this.convertResult(results, settings.energyResultUnit);
     return results
   }
+
+
+  // Calculates view factor for opening losses of either type
+  viewFactorCalculation(input: any, settings: Settings): number {
+    let inputs = this.createInputCopy(input);
+    let results = 0;
+    if (settings.unitsOfMeasure === 'Metric') {
+      inputs.thickness = this.convertUnitsService.value(inputs.thickness).from('mm').to('in');
+      if ('diameter' in inputs) {
+        inputs.diameter = this.convertUnitsService.value(inputs.diameter).from('mm').to('in');
+      } else {
+        inputs.length = this.convertUnitsService.value(inputs.length).from('mm').to('in');
+        inputs.width = this.convertUnitsService.value(inputs.width).from('mm').to('in');
+      }
+    }
+    results = phastAddon.viewFactorCalculation(inputs);
+    return this.convertResult(results, settings.energyResultUnit);
+  }
+
   openingLossesQuad(input: QuadOpeningLoss, settings: Settings): number {
     let inputs = this.createInputCopy(input);
     let results = 0;
@@ -174,13 +193,10 @@ export class PhastService {
       inputs.insideTemperature = this.convertUnitsService.value(inputs.insideTemperature).from('C').to('F');
       inputs.thickness = this.convertUnitsService.value(inputs.thickness).from('mm').to('in');
       inputs.length = this.convertUnitsService.value(inputs.length).from('mm').to('in');
-      results = phastAddon.openingLossesQuad(inputs);
+      inputs.width = this.convertUnitsService.value(inputs.width).from('mm').to('in');
     }
-    else {
-      results = phastAddon.openingLossesQuad(inputs);
-    }
-    results = this.convertResult(results, settings.energyResultUnit);
-    return results
+    results = phastAddon.openingLossesQuad(inputs);
+    return this.convertResult(results, settings.energyResultUnit);
   }
 
   openingLossesCircular(input: CircularOpeningLoss, settings: Settings): number {
@@ -190,13 +206,10 @@ export class PhastService {
       inputs.ambientTemperature = this.convertUnitsService.value(inputs.ambientTemperature).from('C').to('F');
       inputs.insideTemperature = this.convertUnitsService.value(inputs.insideTemperature).from('C').to('F');
       inputs.thickness = this.convertUnitsService.value(inputs.thickness).from('mm').to('in');
-      inputs.diameterLength = this.convertUnitsService.value(inputs.diameterLength).from('mm').to('in');
-      results = phastAddon.openingLossesCircular(inputs);
-    } else {
-      results = phastAddon.openingLossesCircular(inputs);
+      inputs.diameter = this.convertUnitsService.value(inputs.diameter).from('mm').to('in');
     }
-    results = this.convertResult(results, settings.energyResultUnit);
-    return results;
+    results = phastAddon.openingLossesCircular(inputs);
+    return this.convertResult(results, settings.energyResultUnit);
   }
 
   solidLoadChargeMaterial(input: SolidChargeMaterial, settings: Settings) {
@@ -639,13 +652,17 @@ export class PhastService {
       if (tmpForm.status == 'VALID') {
         if (loss.openingType == 'Round') {
           let tmpLoss = this.openingLossesService.getCircularLossFromForm(tmpForm);
+          // tmpLoss.viewFactor = this.viewFactorCalculation(this.openingLossesService.getViewFactorInputFromForm(tmpForm));
+          // console.log(tmpLoss.viewFactor);
           sum += this.openingLossesCircular(tmpLoss, settings) * loss.numberOfOpenings;
         } else if (loss.openingType == 'Rectangular (Square)') {
           let tmpLoss = this.openingLossesService.getQuadLossFromForm(tmpForm);
-          sum += this.openingLossesQuad(tmpLoss, settings) * loss.numberOfOpenings
+          // tmpLoss.viewFactor = this.viewFactorCalculation(this.openingLossesService.getViewFactorInputFromForm(tmpForm));
+          // console.log(tmpLoss.viewFactor);
+          sum += this.openingLossesQuad(tmpLoss, settings) * loss.numberOfOpenings;
         }
       }
-    })
+    });
 
     return sum;
   }

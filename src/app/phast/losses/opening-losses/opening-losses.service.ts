@@ -57,7 +57,7 @@ export class OpeningLossesService {
   }
 
   getLossFromForm(form: any): OpeningLoss {
-    let tmpLoss: OpeningLoss = {
+    return {
       numberOfOpenings: form.value.numberOfOpenings,
       emissivity: form.value.emissivity,
       thickness: form.value.wallThickness,
@@ -68,16 +68,31 @@ export class OpeningLossesService {
       openingType: form.value.openingType,
       lengthOfOpening: form.value.lengthOfOpening,
       heightOfOpening: form.value.heightOfOpening,
+    };
+  }
+
+  getViewFactorInput(input: any) {
+    if (input.value.openingType === 'Round') {
+      return {
+        openingShape: 0,
+        thickness: input.value.wallThickness,
+        diameter: input.value.lengthOfOpening
+      };
     }
-    return tmpLoss;
+    return {
+      openingShape: 1,
+      thickness: input.value.wallThickness,
+      length: input.value.lengthOfOpening,
+      width: input.value.heightOfOpening
+    };
   }
 
   getQuadLossFromForm(form: any): QuadOpeningLoss {
-    let ratio = Math.min(form.value.lengthOfOpening, form.value.heightOfOpening) / form.value.wallThickness;
-    let tmpLoss: QuadOpeningLoss = {
+    const ratio = Math.min(form.value.lengthOfOpening, form.value.heightOfOpening) / form.value.wallThickness;
+    return {
       emissivity: form.value.emissivity,
       length: form.value.lengthOfOpening,
-      widthHeight: form.value.heightOfOpening,
+      width: form.value.heightOfOpening,
       thickness: form.value.wallThickness,
       ratio: ratio,
       ambientTemperature: form.value.ambientTemp,
@@ -85,21 +100,19 @@ export class OpeningLossesService {
       percentTimeOpen: form.value.percentTimeOpen,
       viewFactor: form.value.viewFactor
     };
-    return tmpLoss;
   }
 
   getCircularLossFromForm(form: any): CircularOpeningLoss {
-    let ratio = form.value.lengthOfOpening / form.value.wallThickness;
-    let tmpLoss: CircularOpeningLoss = {
+    const ratio = form.value.lengthOfOpening / form.value.wallThickness;
+    return {
       emissivity: form.value.emissivity,
-      diameterLength: form.value.lengthOfOpening,
+      diameter: form.value.lengthOfOpening,
       thickness: form.value.wallThickness,
       ratio: ratio,
       ambientTemperature: form.value.ambientTemp,
       insideTemperature: form.value.insideTemp,
       percentTimeOpen: form.value.percentTimeOpen,
       viewFactor: form.value.viewFactor
-    }
-    return tmpLoss
+    };
   }
 }
