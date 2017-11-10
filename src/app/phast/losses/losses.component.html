@@ -197,7 +197,7 @@
     <button type="button" (click)="lossesSetup()" *ngIf="!isLossesSetup">Baseline Done?</button>
     <p>Data will be copied from your current baseline condition.</p>
   </div>
-  <app-losses-help [lossesTab]="lossesTab" [currentField]="currentField"></app-losses-help>
+  <app-losses-help [lossesTab]="lossesTab" [currentField]="currentField" [settings]="settings"></app-losses-help>
 
 
   <div class="setup-dialog" *ngIf="showSetupDialog == true">

@@ -70,7 +70,9 @@ export class OperationsFormComponent implements OnInit {
     this.changeField.emit(str);
   }
 
-
+  focusOut() {
+    this.changeField.emit('default');
+  }
   calculatHrsPerYear() {
     this.startSavePolling();
     // this.phast.operatingHours.isCalculated = true;
