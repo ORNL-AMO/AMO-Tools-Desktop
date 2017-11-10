@@ -27,6 +27,7 @@ export interface FlueGasByVolume {
     flueGasTemperature?: number,
     excessAirPercentage?: number,
     combustionAirTemperature?: number,
+    fuelTemperature?: number,
     CH4?: number,
     C2H6?: number,
     N2?: number,

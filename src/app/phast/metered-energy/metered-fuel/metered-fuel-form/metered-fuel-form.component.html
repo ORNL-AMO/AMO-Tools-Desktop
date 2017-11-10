@@ -14,7 +14,7 @@
       <div class="input-group">
         <input name="heatingValue" type="number" step="any" id="heatingValue" class="form-control" (focus)="focusField('heatingValue')"
           [(ngModel)]="inputs.heatingValue" (input)="setFlowRate()" onfocus="this.select();" />
-        <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">BTU/SCF</span>
+        <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">Btu/SCF</span>
         <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kJ/Nm<sup>3</sup></span>
       </div>
     </div>

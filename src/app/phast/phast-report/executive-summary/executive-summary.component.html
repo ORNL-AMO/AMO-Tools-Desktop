@@ -1,6 +1,6 @@
 <div class="output-summary">
   <h5>Assessment Executive Summary</h5>
-  <table class="table">
+  <table class="table table-hover">
     <thead>
       <tr>
         <th></th>
@@ -21,9 +21,9 @@
         <td>Energy Intensity
           <span> ({{energyUnit}})</span>
         </td>
-        <td>{{baseline.energyPerMass | number:'1.0-0'}}</td>
+        <td>{{baseline.energyPerMass | sigFigs:'5'}}</td>
         <td *ngFor="let mod of modifications; let index = index;" [ngClass]="{'selected-modification': index == selectedModificationIndex}">
-          <span *ngIf="mod.energyPerMass">{{mod.energyPerMass | number:'1.0-0'}}</span>
+          <span *ngIf="mod.energyPerMass">{{mod.energyPerMass | sigFigs:'5'}}</span>
           <span *ngIf="!mod.energyPerMass">&mdash; &mdash;</span>
         </td>
       </tr>
@@ -31,9 +31,9 @@
         <td>Annual Energy Used
           <span> ({{timeUnit}})</span>
         </td>
-        <td>{{baseline.annualEnergyUsed | number:'1.0-0'}}</td>
+        <td>{{baseline.annualEnergyUsed | sigFigs:'5'}}</td>
         <td *ngFor="let mod of modifications; let index = index;" [ngClass]="{'selected-modification': index == selectedModificationIndex}">
-          <span *ngIf="mod.annualEnergyUsed">{{mod.annualEnergyUsed | number:'1.0-0'}}</span>
+          <span *ngIf="mod.annualEnergyUsed">{{mod.annualEnergyUsed | sigFigs:'5'}}</span>
           <span *ngIf="!mod.annualEnergyUsed">&mdash; &mdash;</span>
         </td>
       </tr>
@@ -43,7 +43,7 @@
         </td>
         <td>&mdash; &mdash;</td>
         <td *ngFor="let mod of modifications; let index = index;" [ngClass]="{'selected-modification': index == selectedModificationIndex}">
-          <span *ngIf="mod.annualEnergySavings">{{mod.annualEnergySavings | number:'1.0-0'}}</span>
+          <span *ngIf="mod.annualEnergySavings">{{mod.annualEnergySavings | sigFigs:'5'}}</span>
           <span *ngIf="!mod.annualEnergySavings">&mdash; &mdash;</span>
         </td>
       </tr>
@@ -75,7 +75,7 @@
         <td>Simple Payback Period (months)</td>
         <td>&mdash; &mdash;</td>
         <td *ngFor="let mod of modifications; let index = index;" [ngClass]="{'selected-modification': index == selectedModificationIndex}">
-          <span *ngIf="mod.paybackPeriod">{{mod.paybackPeriod | number:'1.0-0'}}</span>
+          <span *ngIf="mod.paybackPeriod">{{mod.paybackPeriod | sigFigs:'5'}}</span>
           <span *ngIf="!mod.paybackPeriod">&mdash; &mdash;</span>
         </td>
       </tr>

@@ -34,16 +34,12 @@ export class PhastBarChartComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-
     let units;
-    if (this.settings.energySourceType == 'Electricity') {
+    if (this.settings.energyResultUnit != 'kWh') {
+      units = this.settings.energyResultUnit + '/hr';
+    } else {
       units = 'kW';
-    } else if (this.settings.unitsOfMeasure == 'Metric') {
-      units = 'kJ/kg';
-    } else if (this.settings.unitsOfMeasure == 'Imperial') {
-      units = 'Btu/lb';
     }
-
     this.options = {
       legend: {
         display: false

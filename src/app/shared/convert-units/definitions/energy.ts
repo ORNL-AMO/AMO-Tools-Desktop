@@ -108,11 +108,11 @@ export const energy = {
       }
       , to_anchor: 1
     }
-    , MMBTU: {
+    , MMBtu: {
       name: {
         singular: 'Million British Thermal Units'
         , plural: 'Millions British Thermal Units',
-        dispaly: '(MMBTU)'
+        display: '(MMBtu)'
       }
       , to_anchor: 1000000
     }
