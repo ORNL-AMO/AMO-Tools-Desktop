@@ -66,9 +66,11 @@ export class ConvertPhastService {
     if (meteredEnergy.meteredEnergyFuel) {
       if (oldSettings.unitsOfMeasure == 'Metric' && newSettings.unitsOfMeasure == 'Imperial') {
         //phast.meteredEnergy.meteredEnergyFuel.heatingValue = this.convertVal(phast.meteredEnergy.meteredEnergyFuel.heatingValue, 'btuScfF', 'kjnm');
-        meteredEnergy.meteredEnergyFuel.fuelFlowRateInput = this.convertVal(meteredEnergy.meteredEnergyFuel.fuelFlowRateInput, 'kJ', 'Btu');
+        meteredEnergy.meteredEnergyFuel.fuelEnergy = this.convertVal(meteredEnergy.meteredEnergyFuel.fuelFlowRateInput, 'kJ', 'Btu');
+        meteredEnergy.meteredEnergyFuel.fuelFlowRateInput = this.convertVal(meteredEnergy.meteredEnergyFuel.fuelEnergy, 'm3', 'ft3');
       } else if (oldSettings.unitsOfMeasure == 'Imperial' && newSettings.unitsOfMeasure == 'Metric') {
-        meteredEnergy.meteredEnergyFuel.fuelFlowRateInput = this.convertVal(meteredEnergy.meteredEnergyFuel.fuelFlowRateInput, 'Btu', 'kJ');
+        meteredEnergy.meteredEnergyFuel.fuelEnergy = this.convertVal(meteredEnergy.meteredEnergyFuel.fuelFlowRateInput, 'Btu', 'kJ');
+        meteredEnergy.meteredEnergyFuel.fuelFlowRateInput = this.convertVal(meteredEnergy.meteredEnergyFuel.fuelEnergy, 'ft3', 'm3');
       }
     }
     if (meteredEnergy.meteredEnergySteam) {

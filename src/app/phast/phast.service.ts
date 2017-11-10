@@ -99,6 +99,7 @@ export class PhastService {
       inputs.flowRate = this.convertUnitsService.value(inputs.flowRate).from('m3').to('ft3');
       inputs.finalTemperature = this.convertUnitsService.value(inputs.finalTemperature).from('C').to('F');
       inputs.initialTemperature = this.convertUnitsService.value(inputs.initialTemperature).from('C').to('F');
+      inputs.gasDensity = this.convertUnitsService.value(inputs.gasDensity).from('kgNm3').to('lbscf');
       results = phastAddon.gasCoolingLosses(inputs);
     }
     else {
@@ -174,6 +175,7 @@ export class PhastService {
       inputs.insideTemperature = this.convertUnitsService.value(inputs.insideTemperature).from('C').to('F');
       inputs.thickness = this.convertUnitsService.value(inputs.thickness).from('mm').to('in');
       inputs.length = this.convertUnitsService.value(inputs.length).from('mm').to('in');
+      inputs.widthHeight = this.convertUnitsService.value(inputs.widthHeight).from('mm').to('in');
       results = phastAddon.openingLossesQuad(inputs);
     }
     else {
@@ -490,6 +492,7 @@ export class PhastService {
       if (tmpForm.status == 'VALID') {
         sum += this.atmosphere(loss, settings);
       }
+     // console.log(sum);
     });
     return sum;
   }
@@ -543,6 +546,7 @@ export class PhastService {
         }
       }
     })
+    console.log(sum);
     return sum;
   }
 
@@ -645,7 +649,7 @@ export class PhastService {
         }
       }
     })
-
+    //console.log(sum)
     return sum;
   }
 

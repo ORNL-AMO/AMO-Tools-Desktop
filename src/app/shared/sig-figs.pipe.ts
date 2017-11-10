@@ -11,9 +11,7 @@ export class SigFigsPipe implements PipeTransform {
     //converted to number to get trailing/leading zeros
     let newValNumber = parseFloat(newValString);
     //convert back to string
-    let str = newValNumber.toString();
-    //use string to add commas
-    let numWithZerosAndCommas = str.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,");
+    let numWithZerosAndCommas = newValNumber.toLocaleString();
 
     if(scientificNotation){
       return newValString;
