@@ -102,15 +102,13 @@ export class DesignedEnergyService {
     return tmpResults;
   }
 
-<<<<<<< HEAD
   sumDesignedEnergySteam(inputs: DesignedEnergySteam[]): number{
     let designedEnergyUsed = 0;
     inputs.forEach(input => {
       designedEnergyUsed += (input.totalHeat) * (input.steamFlow) * (input.percentCapacityUsed / 100) * (input.percentOperatingHours / 100);
     })
     return designedEnergyUsed || 0;
-=======
-
+  }
   convertResult(val: number, settings: Settings): number {
     if(settings.energySourceType == 'Electricity'){
       val = this.convertUnitsService.value(val).from('kWh').to(settings.energyResultUnit)
@@ -120,7 +118,6 @@ export class DesignedEnergyService {
       val = this.convertUnitsService.value(val).from('Btu').to(settings.energyResultUnit);
     }
     return val;
->>>>>>> issue-706
   }
 }
 

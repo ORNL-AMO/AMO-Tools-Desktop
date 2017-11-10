@@ -3,7 +3,8 @@ import { Settings } from '../../../shared/models/settings';
 import { PreAssessment } from './pre-assessment';
 import { DesignedEnergyService } from '../../../phast/designed-energy/designed-energy.service';
 import { MeteredEnergyService } from '../../../phast/metered-energy/metered-energy.service';
-
+import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
+import * as _ from 'lodash';
 @Component({
   selector: 'app-pre-assessment',
   templateUrl: './pre-assessment.component.html',
@@ -18,7 +19,7 @@ export class PreAssessmentComponent implements OnInit {
   results: Array<any>;
   settings: Settings;
 
-  constructor(private meteredEnergyService: MeteredEnergyService, private designedEnergyService: DesignedEnergyService) { }
+  constructor(private meteredEnergyService: MeteredEnergyService, private designedEnergyService: DesignedEnergyService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
     this.results = new Array<any>();
@@ -47,6 +48,10 @@ export class PreAssessmentComponent implements OnInit {
         this.calculateDesigned(assessment);
       }
     }
+    let sum = this.getSum(this.results);
+    this.results.forEach(result => {
+      result.percent = this.getResultPercent(result.value, sum);
+    })
   }
 
   calculateMetered(assessment: PreAssessment) {
@@ -73,8 +78,18 @@ export class PreAssessmentComponent implements OnInit {
     }
     else if (assessment.settings.energySourceType == 'Electricity') {
       let tmpResults = this.designedEnergyService.sumDesignedEnergyElectricity(assessment.designedEnergy.designedEnergyElectricity);
+      tmpResults = this.convertElectrotech(tmpResults);
       this.addResult(tmpResults, assessment.name);
     }
+  }
+
+  convertElectrotech(val: number){
+    if(this.settings.unitsOfMeasure == 'Metric'){
+      val = this.convertUnitsService.value(val).from('kWh').to('kJ');
+    }else{
+      val = this.convertUnitsService.value(val).from('kWh').to('Btu');
+    }
+    return val;
   }
 
   addResult(num: number, name: string) {
@@ -84,6 +99,16 @@ export class PreAssessmentComponent implements OnInit {
         value: num
       })
     }
+  }
+
+  getSum(data: Array<any>): number{
+    let sum = _.sumBy(data, 'value');
+    return sum;
+  }
+
+  getResultPercent(value: number, sum: number): number{
+    let percent = (value/sum)*100;
+    return percent;
   }
 
   addPreAssessment() {
