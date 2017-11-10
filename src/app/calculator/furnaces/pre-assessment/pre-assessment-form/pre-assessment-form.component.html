@@ -1,16 +1,34 @@
 <div class="pre-assessment-furnace">
-  <div class="row slide-in">
-    <div class="col">
-      {{assessment.name}}
-      <div class="pull-right">
+  <div class="row">
+    <div class="col pre-assessment-header">
+      <h5>
+        <span class="pull-left">
+          {{assessment.name}}
+        </span>
+        <div class="pull-right">
+          <span class="fa fa-chevron-up" *ngIf="!assessment.collapsed" (click)="collapsePreAssessment()"></span>
+          <span class="fa fa-chevron-down" *ngIf="assessment.collapsed" (click)="collapsePreAssessment()"></span>
+          <span class="fa fa-times" (click)="deletePreAssessment()"></span>
+        </div>
+      </h5>
+    </div>
+  </div>
+
+  <div class="pre-assessement-form" [@collapsed]="assessment.collapsedState">
+    <div class="row form-section">
+      <div class="col">
         <div class="form-group">
-          <select class="form-control select-type" id="assessmentType" name="assessmentType" [(ngModel)]="assessment.type">
+          <label for="assessmentType">Assessment Type</label>
+          <select class="form-control select-type mx-auto" id="assessmentType" name="assessmentType" [(ngModel)]="assessment.type">
             <option [ngValue]="'Metered'">Metered</option>
             <option [ngValue]="'Designed'">Designed</option>
           </select>
         </div>
+      </div>
+      <div class="col">
         <div class="form-group">
-          <select class="form-control select-type" id="energySourceType" name="energySourceType" [(ngModel)]="assessment.settings.energySourceType">
+          <label for="energySourceType">Furnace Type</label>
+          <select class="form-control select-type mx-auto" id="energySourceType" name="energySourceType" [(ngModel)]="assessment.settings.energySourceType">
             <option [ngValue]="'Fuel'">Fuel</option>
             <option [ngValue]="'Electricity'">Electrotechnology</option>
             <option [ngValue]="'Steam'">Steam-based</option>
@@ -18,13 +36,13 @@
         </div>
       </div>
     </div>
-  </div>
-  <div class="row slide-in">
-    <div class="mx-auto col-12" *ngIf="assessment.type == 'Metered'">
-      <app-pre-assessment-metered [assessment]="assessment" [settings]="settings" (emitCalculate)="calculate()"></app-pre-assessment-metered>
-    </div>
-    <div class="mx-auto col-12" *ngIf="assessment.type == 'Designed'">
-      <app-pre-assessment-designed [assessment]="assessment" [settings]="settings" (emitCalculate)="calculate()"></app-pre-assessment-designed>
+    <div class="row">
+      <div class="mx-auto col-12" *ngIf="assessment.type == 'Metered'">
+        <app-pre-assessment-metered [assessment]="assessment" [settings]="settings" (emitCalculate)="calculate()" (emitChangeField)="changeField($event)"></app-pre-assessment-metered>
+      </div>
+      <div class="mx-auto col-12" *ngIf="assessment.type == 'Designed'">
+        <app-pre-assessment-designed [assessment]="assessment" [settings]="settings" (emitCalculate)="calculate()" (emitChangeField)="changeField($event)"></app-pre-assessment-designed>
+      </div>
     </div>
   </div>
 </div>

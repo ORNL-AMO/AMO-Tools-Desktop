@@ -11,6 +11,8 @@ export class PreAssessmentMeteredComponent implements OnInit {
   assessment: PreAssessment;
   @Output('emitCalculate')
   emitCalculate = new EventEmitter<boolean>();
+  @Output('emitChangeField')
+  emitChangeField = new EventEmitter<string>();
   @Input()
   settings: Settings;
   constructor() { }
@@ -44,9 +46,11 @@ export class PreAssessmentMeteredComponent implements OnInit {
   }
 
   calculate(){
-    console.log(this.assessment.meteredEnergy);
     this.emitCalculate.emit(true);
   }
 
+  changeField(str: string){
+    this.emitChangeField.emit(str);
+  }
 
 }

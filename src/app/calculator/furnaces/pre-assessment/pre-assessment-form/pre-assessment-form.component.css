@@ -1,10 +1,12 @@
 .pre-assessment-furnace{
-    padding: 5%;
     background-color: white;
-    border: gray dashed;
     animation-name: show-assessment;
     animation-duration: 1.5s;
     overflow: hidden;
+    padding-left:15px;
+    padding-right: 15px;
+    padding-bottom: 0px;
+    margin-bottom: 10px;
 }
 
 
@@ -22,3 +24,33 @@
     from {height: 0%}
     to {height: 100%}
 } */
+
+.pre-assessment-header{
+    border-bottom: inset 2px #BF3D00;
+    border-left: solid 10px #BF3D00;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.pre-assessment-form{
+    padding-top: 10px;
+    /* padding-left: 15px;
+    padding-right: 15px; */
+}
+
+/* .pre-assessment-body{
+    padding-left: 15px;
+    padding-right: 15px;
+} */
+
+.fa{
+    font-size: 75%;
+}
+
+.fa:hover{
+    cursor: pointer;
+}
+
+.form-group{
+    text-align:center;
+}

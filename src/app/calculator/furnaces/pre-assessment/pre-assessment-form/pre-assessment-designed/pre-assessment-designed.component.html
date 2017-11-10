@@ -1,9 +1,9 @@
 <div *ngIf="assessment.settings.energySourceType == 'Electricity'">
-    <app-designed-energy-electricity-form *ngFor="let inputs of assessment.designedEnergy.designedEnergyElectricity" [inputs]="inputs"  (emitCalculate)="calculate()"></app-designed-energy-electricity-form>
+    <app-designed-energy-electricity-form *ngFor="let inputs of assessment.designedEnergy.designedEnergyElectricity" [inputs]="inputs"  (emitCalculate)="calculate()" (changeField)="changeField($event)"></app-designed-energy-electricity-form>
 </div>
 <div *ngIf="assessment.settings.energySourceType == 'Fuel'">
-    <app-designed-energy-fuel-form *ngFor="let inputs of assessment.designedEnergy.designedEnergyFuel" [inputs]="inputs" [settings]="settings" (emitCalculate)="calculate()"></app-designed-energy-fuel-form>
+    <app-designed-energy-fuel-form *ngFor="let inputs of assessment.designedEnergy.designedEnergyFuel" [inputs]="inputs" [settings]="settings" (emitCalculate)="calculate()" (changeField)="changeField($event)"></app-designed-energy-fuel-form>
 </div>
 <div *ngIf="assessment.settings.energySourceType == 'Steam'">
-    <app-designed-energy-steam-form *ngFor="let inputs of assessment.designedEnergy.designedEnergySteam" [inputs]="inputs" [settings]="settings" (emitCalculate)="calculate()"></app-designed-energy-steam-form>
+    <app-designed-energy-steam-form *ngFor="let inputs of assessment.designedEnergy.designedEnergySteam" [inputs]="inputs" [settings]="settings" (emitCalculate)="calculate()" (changeField)="changeField($event)"></app-designed-energy-steam-form>
 </div>

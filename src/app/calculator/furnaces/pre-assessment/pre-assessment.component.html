@@ -15,31 +15,37 @@
             </div>
           </div>
         </div>
-        <div class="col-6 align-bottom">
-          <a class="pull-right" (click)="addPreAssessment()">+Add Furnace</a>
+        <div class="col-6">
+          <a class="pull-right small align-bottom" (click)="addPreAssessment()">+Add Furnace</a>
         </div>
       </div>
-      <div class="row" *ngFor="let assessment of preAssessments">
+      <div class="row" *ngFor="let assessment of preAssessments; let index = index;">
         <div class="col-12">
-            <app-pre-assessment-form [assessment]="assessment" [settings]="settings" (emitCalculate)="calculate()"></app-pre-assessment-form>
+          <app-pre-assessment-form [assessment]="assessment" [settings]="settings" (emitCalculate)="calculate()" (emitCollapse)="collapsePreAssessment(index)"
+            (emitDelete)="deletePreAssessment(index)" (emitChangeField)="setCurrentField($event)"></app-pre-assessment-form>
+          <!-- <span class="fa fa-times" (click)="deletePreAssessment(index)"></span>
+            <span class="fa fa-chevron-up" *ngIf="!assessment.collapsed" (click)="collapsePreAssessment(index)"></span>
+            <span class="fa fa-chevron-down" *ngIf="assessment.collapsed" (click)="collapsePreAssessment(index)"></span> -->
         </div>
       </div>
     </div>
 
     <div class="col-6">
-      <ul class="tabs primary text-center">
-        <li class="calc-tab" [ngClass]="{'active': tabSelect == 'results'}">
-          <a (click)="setTab('results')">Results</a>
-        </li><!--
-    --><li class="calc-tab" [ngClass]="{'active': tabSelect == 'help'}">
-          <a (click)="setTab('help')">Help</a>
-        </li>
-      </ul>
-      <div class="tab-content">
-        <div *ngIf="tabSelect == 'results'" class="form-group text-center results-box">
-          <app-pre-assessment-graph [results]="results"></app-pre-assessment-graph>
+      <div class="sticky-top">
+        <ul class="tabs primary text-center">
+          <li class="calc-tab" [ngClass]="{'active': tabSelect == 'results'}">
+            <a (click)="setTab('results')">Results</a>
+          </li><!--
+          --><li class="calc-tab" [ngClass]="{'active': tabSelect == 'help'}">
+            <a (click)="setTab('help')">Help</a>
+          </li>
+        </ul>
+        <div class="tab-content">
+          <div *ngIf="tabSelect == 'results'" class="form-group text-center results-box">
+            <app-pre-assessment-graph [results]="results"></app-pre-assessment-graph>
+          </div>
+          <app-pre-assessment-help *ngIf="tabSelect == 'help'" [currentField]="currentField"></app-pre-assessment-help>
         </div>
-        <app-pre-assessment-help *ngIf="tabSelect == 'help'"></app-pre-assessment-help>
       </div>
     </div>
   </div>

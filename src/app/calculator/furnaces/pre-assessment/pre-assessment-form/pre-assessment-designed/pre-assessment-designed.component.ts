@@ -13,6 +13,8 @@ export class PreAssessmentDesignedComponent implements OnInit {
   assessment: PreAssessment;
   @Output('emitCalculate')
   emitCalculate = new EventEmitter<boolean>();
+  @Output('emitChangeField')
+  emitChangeField = new EventEmitter<string>();
   @Input()
   settings: Settings;
   constructor() { }
@@ -31,9 +33,12 @@ export class PreAssessmentDesignedComponent implements OnInit {
   }
 
   calculate(){
-    
+    this.emitCalculate.emit(true);
   }
 
+  changeField(str: string){
+    this.emitChangeField.emit(str);
+  }
 
   addElectricityZone(){
     let eqNum = 1;

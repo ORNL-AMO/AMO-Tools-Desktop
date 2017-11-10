@@ -8,5 +8,7 @@ export interface PreAssessment {
     energyUsed?: number,
     name?: string,
     type?: string,
-    settings?: Settings
+    settings?: Settings,
+    collapsed?: boolean,
+    collapsedState?: string
 }

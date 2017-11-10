@@ -17,7 +17,7 @@ export class PreAssessmentComponent implements OnInit {
   unitsOfMeasure: string = 'Imperial';
   results: Array<any>;
   settings: Settings;
-  
+
   constructor(private meteredEnergyService: MeteredEnergyService, private designedEnergyService: DesignedEnergyService) { }
 
   ngOnInit() {
@@ -38,13 +38,15 @@ export class PreAssessmentComponent implements OnInit {
 
   calculate() {
     this.results = new Array<any>();
-    this.preAssessments.forEach(assessment => {
+    let i = this.preAssessments.length - 1;
+    for (i; i >= 0; i--) {
+      let assessment = this.preAssessments[i];
       if (assessment.type == 'Metered') {
         this.calculateMetered(assessment);
       } else if (assessment.type == 'Designed') {
         this.calculateDesigned(assessment);
       }
-    })
+    }
   }
 
   calculateMetered(assessment: PreAssessment) {
@@ -75,11 +77,13 @@ export class PreAssessmentComponent implements OnInit {
     }
   }
 
-  addResult(num: number, name: string){
-    this.results.push({
-      name: name,
-      value: num
-    })
+  addResult(num: number, name: string) {
+    if (isNaN(num) != true) {
+      this.results.push({
+        name: name,
+        value: num
+      })
+    }
   }
 
   addPreAssessment() {
@@ -88,12 +92,29 @@ export class PreAssessmentComponent implements OnInit {
       energySourceType: 'Fuel'
     }
 
-    let nameIndex = this.preAssessments.length +1;
+    let nameIndex = this.preAssessments.length + 1;
 
     this.preAssessments.unshift({
       type: 'Metered',
       name: 'Furnace ' + nameIndex,
-      settings: tmpSettings
+      settings: tmpSettings,
+      collapsed: false,
+      collapsedState: 'open'
     })
+  }
+
+  deletePreAssessment(index: number) {
+    this.preAssessments.splice(index, 1);
+    this.calculate();
+  }
+
+
+  collapsePreAssessment(index: number) {
+    this.preAssessments[index].collapsed = !this.preAssessments[index].collapsed;
+    if (this.preAssessments[index].collapsed) {
+      this.preAssessments[index].collapsedState = 'closed';
+    } else {
+      this.preAssessments[index].collapsedState = 'open';
+    }
   }
 }
