@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { PreAssessment } from '../../pre-assessment';
-
+import { Settings } from '../../../../../shared/models/settings';
 @Component({
   selector: 'app-pre-assessment-metered',
   templateUrl: './pre-assessment-metered.component.html',
@@ -11,7 +11,8 @@ export class PreAssessmentMeteredComponent implements OnInit {
   assessment: PreAssessment;
   @Output('emitCalculate')
   emitCalculate = new EventEmitter<boolean>();
-
+  @Input()
+  settings: Settings;
   constructor() { }
 
   ngOnInit() {

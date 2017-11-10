@@ -48,7 +48,8 @@
 <div class="calculator" *ngIf="getSelectedTool() == 'o2-enrichment'">
   <div class="row">
     <div class="col-lg-11 mx-auto">
-      <h2>O<sub>2</sub> Enrichment</h2>
+      <h2>O
+        <sub>2</sub> Enrichment</h2>
       <p>Calculation of available heat (an indication of thermal efficiency) for fuel fired furnaces and expected energy savings
         when oxygen in combustion, “air”, is changed from standard (21%) to a higher value. Enter data for current (“Combustion
         with Air”) and new (“Combustion with Oxygen Enriched Air”) configurations.</p>
@@ -111,7 +112,11 @@
       <p>Description</p>
     </div>
   </div>
-  <div class="calculator-container">
-    <app-pre-assessment></app-pre-assessment>
+  <div class="row">
+    <div class="col-lg-11 mx-auto">
+      <div class="calculator-container">
+        <app-pre-assessment></app-pre-assessment>
+      </div>
+    </div>
   </div>
 </div>

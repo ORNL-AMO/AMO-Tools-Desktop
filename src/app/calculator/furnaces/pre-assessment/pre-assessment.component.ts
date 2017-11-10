@@ -3,6 +3,7 @@ import { Settings } from '../../../shared/models/settings';
 import { PreAssessment } from './pre-assessment';
 import { DesignedEnergyService } from '../../../phast/designed-energy/designed-energy.service';
 import { MeteredEnergyService } from '../../../phast/metered-energy/metered-energy.service';
+
 @Component({
   selector: 'app-pre-assessment',
   templateUrl: './pre-assessment.component.html',
@@ -15,11 +16,17 @@ export class PreAssessmentComponent implements OnInit {
   currentField: string;
   unitsOfMeasure: string = 'Imperial';
   results: Array<any>;
+  settings: Settings;
+  
   constructor(private meteredEnergyService: MeteredEnergyService, private designedEnergyService: DesignedEnergyService) { }
 
   ngOnInit() {
     this.results = new Array<any>();
     this.preAssessments = new Array<PreAssessment>();
+    this.addPreAssessment();
+    this.settings = {
+      unitsOfMeasure: 'Metric'
+    }
   }
   setCurrentField(str: string) {
     this.currentField = str;
@@ -38,7 +45,6 @@ export class PreAssessmentComponent implements OnInit {
         this.calculateDesigned(assessment);
       }
     })
-    console.log(this.results);
   }
 
   calculateMetered(assessment: PreAssessment) {
@@ -82,9 +88,9 @@ export class PreAssessmentComponent implements OnInit {
       energySourceType: 'Fuel'
     }
 
-    let nameIndex = this.preAssessments.length;
+    let nameIndex = this.preAssessments.length +1;
 
-    this.preAssessments.push({
+    this.preAssessments.unshift({
       type: 'Metered',
       name: 'Furnace ' + nameIndex,
       settings: tmpSettings

@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { PreAssessment } from '../pre-assessment';
+import { Settings } from '../../../../shared/models/settings';
 @Component({
   selector: 'app-pre-assessment-form',
   templateUrl: './pre-assessment-form.component.html',
@@ -8,6 +9,8 @@ import { PreAssessment } from '../pre-assessment';
 export class PreAssessmentFormComponent implements OnInit {
   @Input()
   assessment: PreAssessment;
+  @Input()
+  settings: Settings;
   @Output('emitCalculate')
   emitCalcualte = new EventEmitter<boolean>();
 

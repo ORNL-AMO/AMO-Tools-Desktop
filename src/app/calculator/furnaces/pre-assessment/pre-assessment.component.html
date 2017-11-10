@@ -7,21 +7,21 @@
             <label>Units of Measure</label>
             <div class="form-check">
               <label class="form-check-label">
-                <input class="form-check-input" type="radio" name="unitsOfMeasure" [(ngModel)]="unitsOfMeasure" value="Imperial">Imperial
+                <input class="form-check-input" type="radio" name="unitsOfMeasure" [(ngModel)]="settings.unitsOfMeasure" value="Imperial">Imperial
               </label>
               <label class="form-check-label">
-                <input class="form-check-input" type="radio" name="unitsOfMeasure" [(ngModel)]="unitsOfMeasure" value="Metric">Metric
+                <input class="form-check-input" type="radio" name="unitsOfMeasure" [(ngModel)]="settings.unitsOfMeasure" value="Metric">Metric
               </label>
             </div>
           </div>
         </div>
-        <div class="col-6">
-          <a class="pull-right" (click)="addPreAssessment()">Add Furnace</a>
+        <div class="col-6 align-bottom">
+          <a class="pull-right" (click)="addPreAssessment()">+Add Furnace</a>
         </div>
       </div>
       <div class="row" *ngFor="let assessment of preAssessments">
         <div class="col-12">
-            <app-pre-assessment-form [assessment]="assessment" (emitCalculate)="calculate()"></app-pre-assessment-form>
+            <app-pre-assessment-form [assessment]="assessment" [settings]="settings" (emitCalculate)="calculate()"></app-pre-assessment-form>
         </div>
       </div>
     </div>

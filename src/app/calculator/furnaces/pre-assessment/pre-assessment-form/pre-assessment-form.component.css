@@ -2,4 +2,23 @@
     padding: 5%;
     background-color: white;
     border: gray dashed;
+    animation-name: show-assessment;
+    animation-duration: 1.5s;
+    overflow: hidden;
 }
+
+
+@keyframes show-assessment{
+    from { height: 0%;}
+    to {height: 100%;}
+}
+
+/* .slide-in{
+    animation-name: slide-in-key;
+    animation-duration: .5s;  
+}
+
+@keyframes slide-in-key{
+    from {height: 0%}
+    to {height: 100%}
+} */

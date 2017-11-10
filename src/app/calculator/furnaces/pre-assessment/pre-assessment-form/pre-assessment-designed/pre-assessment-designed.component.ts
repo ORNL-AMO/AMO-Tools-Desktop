@@ -2,6 +2,7 @@ import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { PreAssessment } from '../../pre-assessment';
 import { DesignedEnergyElectricity, DesignedEnergyFuel, DesignedEnergySteam } from '../../../../../shared/models/phast/designedEnergy'
 
+import { Settings } from '../../../../../shared/models/settings';
 @Component({
   selector: 'app-pre-assessment-designed',
   templateUrl: './pre-assessment-designed.component.html',
@@ -12,7 +13,8 @@ export class PreAssessmentDesignedComponent implements OnInit {
   assessment: PreAssessment;
   @Output('emitCalculate')
   emitCalculate = new EventEmitter<boolean>();
-  
+  @Input()
+  settings: Settings;
   constructor() { }
 
   ngOnInit() {
