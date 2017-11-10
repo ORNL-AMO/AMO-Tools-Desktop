@@ -583,8 +583,12 @@ export class PsatService {
     let driveEnum;
     if (drive == 'Direct Drive') {
       driveEnum = 0;
-    } else if (drive == 'Belt Drive') {
+    } else if (drive == 'V-Belt Drive') {
       driveEnum = 1;
+    } else if (drive == 'Notched V-Belt Drive') {
+      driveEnum = 2;
+    } else if (drive == 'Synchronous Belt Drive') {
+      driveEnum = 3;
     }
     return driveEnum;
   }
@@ -593,8 +597,12 @@ export class PsatService {
     if (num == 0) {
       drive = 'Direct Drive';
     } else if (num == 1) {
-      drive = 'Belt Drive';
-    }
+      drive = 'V-Belt Drive';
+    }   else if (num == 2) {
+    drive = 'Notched V-Belt Drive';
+    }  else if (num == 3) {
+    drive = 'Synchronous Belt Drive';
+  }
     return drive;
   }
   getFixedSpeedEmum(fixedSpeed: string): number {

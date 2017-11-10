@@ -52,7 +52,9 @@ export class PumpFluidComponent implements OnInit {
 
   drives: Array<string> = [
     'Direct Drive',
-    'Belt Drive'
+    'V-Belt Drive',
+    'Notched V-Belt Drive',
+    'Synchronous Belt Drive'
   ];
   psatForm: any;
   isFirstChange: boolean = true;
@@ -261,5 +263,3 @@ export class PumpFluidComponent implements OnInit {
 
 
 }
-
-

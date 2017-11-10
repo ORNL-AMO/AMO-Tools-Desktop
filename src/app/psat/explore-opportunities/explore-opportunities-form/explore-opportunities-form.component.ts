@@ -236,10 +236,6 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
     if (this.psat.inputs.drive == this.psatService.getDriveEnum('Direct Drive')) {
       min = 540;
       max = 3960;
-    } else if (this.psat.inputs.drive == this.psatService.getDriveEnum('Belt Drive')) {
-      //TODO UPDATE WITH BELT DRIVE VALS
-      min = 540;
-      max = 3960;
     }
     let rpms;
     if (num == 1) {
