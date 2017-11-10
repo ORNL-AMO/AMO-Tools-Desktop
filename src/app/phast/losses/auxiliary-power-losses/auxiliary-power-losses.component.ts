@@ -32,7 +32,7 @@ export class AuxiliaryPowerLossesComponent implements OnInit {
   @Input()
   isLossesSetup: boolean;
 
-  resultsUnit: string = 'Btu/hr';
+  resultsUnit: string;
   _auxiliaryPowerLosses: Array<any>;
   firstChange: boolean = true;
   constructor(private phastService: PhastService, private auxiliaryPowerLossesService: AuxiliaryPowerLossesService, private auxiliaryPowerCompareService: AuxiliaryPowerCompareService) { }
@@ -52,10 +52,10 @@ export class AuxiliaryPowerLossesComponent implements OnInit {
   }
 
   ngOnInit() {
-    if (this.settings.energySourceType == 'Electricity') {
+    if (this.settings.energyResultUnit != 'kWh') {
+      this.resultsUnit = this.settings.energyResultUnit + '/hr';
+    } else {
       this.resultsUnit = 'kW';
-    } else if (this.settings.unitsOfMeasure == 'Metric') {
-      this.resultsUnit = 'kJ/hr';
     }
     if (!this._auxiliaryPowerLosses) {
       this._auxiliaryPowerLosses = new Array();

@@ -33,7 +33,7 @@ export class OpeningLossesComponent implements OnInit {
   isLossesSetup: boolean;
   _openingLosses: Array<any>;
   firstChange: boolean = true;
-  resultsUnit: string = 'Btu/hr';
+  resultsUnit: string;
   constructor(private phastService: PhastService, private openingLossesService: OpeningLossesService, private openingLossesCompareService: OpeningLossesCompareService) { }
 
 
@@ -51,10 +51,10 @@ export class OpeningLossesComponent implements OnInit {
     }
   }
   ngOnInit() {
-    if (this.settings.energySourceType == 'Electricity') {
+    if (this.settings.energyResultUnit != 'kWh') {
+      this.resultsUnit = this.settings.energyResultUnit + '/hr';
+    } else {
       this.resultsUnit = 'kW';
-    } else if (this.settings.unitsOfMeasure == 'Metric') {
-      this.resultsUnit = 'kJ/hr';
     }
 
     if (!this._openingLosses) {
@@ -148,14 +148,10 @@ export class OpeningLossesComponent implements OnInit {
     if (loss.form.status == 'VALID') {
       if (loss.form.value.openingType == 'Rectangular (Square)' && loss.form.value.heightOfOpening != '') {
         let tmpLoss: QuadOpeningLoss = this.openingLossesService.getQuadLossFromForm(loss.form);
-        // tmpLoss.viewFactor = this.phastService.viewFactorCalculation(this.openingLossesService.getViewFactorInput(tmpLoss), this.settings);
-        // console.log(tmpLoss.viewFactor);
         let lossAmount = this.phastService.openingLossesQuad(tmpLoss, this.settings);
         loss.totalOpeningLosses = loss.form.value.numberOfOpenings * lossAmount;
       } else if (loss.form.value.openingType == 'Round') {
         let tmpLoss: CircularOpeningLoss = this.openingLossesService.getCircularLossFromForm(loss.form);
-        // tmpLoss.viewFactor = this.phastService.viewFactorCalculation(this.openingLossesService.getViewFactorInput(tmpLoss), this.settings);
-        // console.log(tmpLoss.viewFactor);
         let lossAmount = this.phastService.openingLossesCircular(tmpLoss, this.settings);
         loss.totalOpeningLosses = loss.form.value.numberOfOpenings * lossAmount;
       } else {
