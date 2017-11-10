@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 
+
 @Component({
   selector: 'app-heat-system-efficiency-help',
   templateUrl: './heat-system-efficiency-help.component.html',
