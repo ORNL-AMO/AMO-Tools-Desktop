@@ -1,9 +1,9 @@
 <div class="help-header">
   <h3>Heat System Efficiency Help</h3>
-  <!--<div *ngIf="currentField == 'Custom'">-->
+  <div *ngIf="settings.furnaceType == 'Custom Electrotechnology'">
     <p>Electric process heaters heat loss can be estimated knowing the overall efficiency of the electric system.</p>
-  <!--</div>-->
-  <!--<div  *ngIf="currentField == 'Steam'">-->
+  </div>
+  <div  *ngIf="settings.energySourceType == 'Steam'">
     <p>Steam process heaters heat loss can be estimated knowing the overall efficiency of the heater.</p>
   </div>
 

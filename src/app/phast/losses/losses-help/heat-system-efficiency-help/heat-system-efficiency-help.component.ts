@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-
+import { Settings } from '../../../../shared/models/settings';
 
 @Component({
   selector: 'app-heat-system-efficiency-help',
@@ -9,9 +9,12 @@ import { Component, OnInit, Input } from '@angular/core';
 export class HeatSystemEfficiencyHelpComponent implements OnInit {
   @Input()
   currentField: string;
+  @Input()
+  settings: Settings;
   constructor() { }
 
   ngOnInit() {
+    console.log(this.settings);
   }
 
 }
