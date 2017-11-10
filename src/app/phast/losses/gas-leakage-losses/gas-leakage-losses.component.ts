@@ -34,7 +34,7 @@ export class GasLeakageLossesComponent implements OnInit {
 
   _leakageLosses: Array<any>;
   firstChange: boolean = true;
-  resultsUnit: string = 'Btu/hr';
+  resultsUnit: string;
   constructor(private gasLeakageLossesService: GasLeakageLossesService, private phastService: PhastService, private gasLeakageCompareService: GasLeakageCompareService) { }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -51,10 +51,10 @@ export class GasLeakageLossesComponent implements OnInit {
     }
   }
   ngOnInit() {
-    if (this.settings.energySourceType == 'Electricity') {
+    if (this.settings.energyResultUnit != 'kWh') {
+      this.resultsUnit = this.settings.energyResultUnit + '/hr';
+    } else {
       this.resultsUnit = 'kW';
-    } else if (this.settings.unitsOfMeasure == 'Metric') {
-      this.resultsUnit = 'kJ/hr';
     }
     if (!this._leakageLosses) {
       this._leakageLosses = new Array<any>();

@@ -3,10 +3,11 @@ import { PHAST, PhastResults, Losses, ShowResultsCategories, CalculatedByPhast }
 import { PhastService } from './phast.service';
 import { Settings } from '../shared/models/settings';
 import { AuxEquipmentService } from './aux-equipment/aux-equipment.service';
+import { ConvertUnitsService } from '../shared/convert-units/convert-units.service';
 @Injectable()
 export class PhastResultsService {
 
-  constructor(private phastService: PhastService, private auxEquipmentService: AuxEquipmentService) { }
+  constructor(private phastService: PhastService, private auxEquipmentService: AuxEquipmentService, private convertUnitsService: ConvertUnitsService) { }
   checkLoss(loss: any) {
     if (!loss) {
       return false;
@@ -174,8 +175,10 @@ export class PhastResultsService {
     let sumFeedRate = this.phastService.sumChargeMaterialFeedRate(phast.losses.chargeMaterials);
     let phastResults = this.getResults(phast, settings);
     let calculatedFuelEnergyUsed = phastResults.grossHeatInput;
-    let calculatedEnergyIntensity = (calculatedFuelEnergyUsed / sumFeedRate) || 0;
+    let calculatedEnergyIntensity = (calculatedFuelEnergyUsed / sumFeedRate);
+    //calculates aux equipment
     let tmpAuxResults = this.auxEquipmentService.calculate(phast);
+    //sum aux equipment results
     let calculatedElectricityUsed = this.auxEquipmentService.getResultsSum(tmpAuxResults);
     let phastCalcs: CalculatedByPhast = {
       fuelEnergyUsed: calculatedFuelEnergyUsed,

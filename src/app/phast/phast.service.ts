@@ -99,6 +99,7 @@ export class PhastService {
       inputs.flowRate = this.convertUnitsService.value(inputs.flowRate).from('m3').to('ft3');
       inputs.finalTemperature = this.convertUnitsService.value(inputs.finalTemperature).from('C').to('F');
       inputs.initialTemperature = this.convertUnitsService.value(inputs.initialTemperature).from('C').to('F');
+      inputs.gasDensity = this.convertUnitsService.value(inputs.gasDensity).from('kgNm3').to('lbscf');
       results = phastAddon.gasCoolingLosses(inputs);
     }
     else {
@@ -166,6 +167,25 @@ export class PhastService {
     results = this.convertResult(results, settings.energyResultUnit);
     return results
   }
+
+
+  // Calculates view factor for opening losses of either type
+  viewFactorCalculation(input: any, settings: Settings): number {
+    let inputs = this.createInputCopy(input);
+    let results = 0;
+    if (settings.unitsOfMeasure === 'Metric') {
+      inputs.thickness = this.convertUnitsService.value(inputs.thickness).from('mm').to('in');
+      if ('diameter' in inputs) {
+        inputs.diameter = this.convertUnitsService.value(inputs.diameter).from('mm').to('in');
+      } else {
+        inputs.length = this.convertUnitsService.value(inputs.length).from('mm').to('in');
+        inputs.width = this.convertUnitsService.value(inputs.width).from('mm').to('in');
+      }
+    }
+    results = phastAddon.viewFactorCalculation(inputs);
+    return results;
+  }
+
   openingLossesQuad(input: QuadOpeningLoss, settings: Settings): number {
     let inputs = this.createInputCopy(input);
     let results = 0;
@@ -174,13 +194,12 @@ export class PhastService {
       inputs.insideTemperature = this.convertUnitsService.value(inputs.insideTemperature).from('C').to('F');
       inputs.thickness = this.convertUnitsService.value(inputs.thickness).from('mm').to('in');
       inputs.length = this.convertUnitsService.value(inputs.length).from('mm').to('in');
+      inputs.width = this.convertUnitsService.value(inputs.width).from('mm').to('in');
+      results = phastAddon.openingLossesQuad(inputs);
+    }else{
       results = phastAddon.openingLossesQuad(inputs);
     }
-    else {
-      results = phastAddon.openingLossesQuad(inputs);
-    }
-    results = this.convertResult(results, settings.energyResultUnit);
-    return results
+    return this.convertResult(results, settings.energyResultUnit);
   }
 
   openingLossesCircular(input: CircularOpeningLoss, settings: Settings): number {
@@ -190,13 +209,12 @@ export class PhastService {
       inputs.ambientTemperature = this.convertUnitsService.value(inputs.ambientTemperature).from('C').to('F');
       inputs.insideTemperature = this.convertUnitsService.value(inputs.insideTemperature).from('C').to('F');
       inputs.thickness = this.convertUnitsService.value(inputs.thickness).from('mm').to('in');
-      inputs.diameterLength = this.convertUnitsService.value(inputs.diameterLength).from('mm').to('in');
+      inputs.diameter = this.convertUnitsService.value(inputs.diameter).from('mm').to('in');
       results = phastAddon.openingLossesCircular(inputs);
-    } else {
+    }else{
       results = phastAddon.openingLossesCircular(inputs);
     }
-    results = this.convertResult(results, settings.energyResultUnit);
-    return results;
+    return this.convertResult(results, settings.energyResultUnit);
   }
 
   solidLoadChargeMaterial(input: SolidChargeMaterial, settings: Settings) {
@@ -267,7 +285,7 @@ export class PhastService {
     } else {
       results = phastAddon.flueGasLossesByVolume(inputs);
     }
-    results = this.convertResult(results, settings.energyResultUnit);
+
     return results;
   }
 
@@ -283,7 +301,6 @@ export class PhastService {
     } else {
       results = phastAddon.flueGasLossesByMass(inputs);
     }
-    results = this.convertResult(results, settings.energyResultUnit);
     return results;
   }
 
@@ -332,8 +349,8 @@ export class PhastService {
       totalChemicalEnergyInput: 0
     };
     if (settings.unitsOfMeasure == 'Metric') {
-      inputs.naturalGasHeatInput = this.convertUnitsService.value(inputs.naturalGasHeatInput).from('GJ').to('MMBTU');
-      inputs.otherFuels = this.convertUnitsService.value(inputs.otherFuels).from('GJ').to('MMBTU');
+      inputs.naturalGasHeatInput = this.convertUnitsService.value(inputs.naturalGasHeatInput).from('GJ').to('MMBtu');
+      inputs.otherFuels = this.convertUnitsService.value(inputs.otherFuels).from('GJ').to('MMBtu');
       inputs.coalCarbonInjection = this.convertUnitsService.value(inputs.coalCarbonInjection).from('kg').to('lb');
       inputs.coalHeatingValue = this.convertUnitsService.value(inputs.coalHeatingValue).from('kJkg').to('btuLb');
       inputs.electrodeHeatingValue = this.convertUnitsService.value(inputs.electrodeHeatingValue).from('kJkg').to('btuLb');
@@ -491,6 +508,7 @@ export class PhastService {
       if (tmpForm.status == 'VALID') {
         sum += this.atmosphere(loss, settings);
       }
+     // console.log(sum);
     });
     return sum;
   }
@@ -544,6 +562,7 @@ export class PhastService {
         }
       }
     })
+    console.log(sum);
     return sum;
   }
 
@@ -642,10 +661,10 @@ export class PhastService {
           sum += this.openingLossesCircular(tmpLoss, settings) * loss.numberOfOpenings;
         } else if (loss.openingType == 'Rectangular (Square)') {
           let tmpLoss = this.openingLossesService.getQuadLossFromForm(tmpForm);
-          sum += this.openingLossesQuad(tmpLoss, settings) * loss.numberOfOpenings
+          sum += this.openingLossesQuad(tmpLoss, settings) * loss.numberOfOpenings;
         }
       }
-    })
+    });
 
     return sum;
   }
@@ -719,14 +738,13 @@ export class PhastService {
       })
     }
     if (sumAdditionalHeat != 0) {
-      if (settings.energySourceType == 'Electricity') {
-        if (settings.unitsOfMeasure == 'Imperial') {
-          sumAdditionalHeat = this.convertUnitsService.value(sumAdditionalHeat).from('Btu').to('kWh');
-        } else if (settings.unitsOfMeasure == 'Metric') {
-          sumAdditionalHeat = this.convertUnitsService.value(sumAdditionalHeat).from('kJ').to('kWh')
-        }
+      if (settings.unitsOfMeasure == 'Imperial') {
+        sumAdditionalHeat = this.convertUnitsService.value(sumAdditionalHeat).from('Btu').to(settings.energyResultUnit);
+      } else if (settings.unitsOfMeasure == 'Metric') {
+        sumAdditionalHeat = this.convertUnitsService.value(sumAdditionalHeat).from('kJ').to(settings.energyResultUnit);
       }
     }
+
     return sumAdditionalHeat;
   }
 

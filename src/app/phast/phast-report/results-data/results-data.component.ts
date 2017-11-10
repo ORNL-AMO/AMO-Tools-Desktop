@@ -47,15 +47,12 @@ export class ResultsDataComponent implements OnInit {
     } else {
       this.baseLineResults = this.phastResultsService.initResults();
     }
-    if (this.settings.energySourceType == 'Electricity') {
+    if(this.settings.energyResultUnit != 'kWh'){
+      this.lossUnit = this.settings.energyResultUnit + '/hr';
+    }else{
       this.lossUnit = 'kW';
-    } else {
-      if (this.settings.unitsOfMeasure == 'Metric') {
-        this.lossUnit = 'kJ/hr';
-      } else if (this.settings.unitsOfMeasure == 'Imperial') {
-        this.lossUnit = 'Btu/hr';
-      }
     }
+    
     if (!this.inPhast) {
       this.reportRollupService.selectedPhasts.subscribe(val => {
         if (val) {

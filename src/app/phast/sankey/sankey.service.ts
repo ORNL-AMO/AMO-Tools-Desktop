@@ -15,66 +15,66 @@ export class SankeyService {
     let resultCats: ShowResultsCategories = this.phastResultsService.getResultCategories(settings);
     let phastResults: PhastResults = this.phastResultsService.getResults(phast, settings);
     let results: FuelResults = this.initFuelResults();
-    let constant = 1;
-    if (settings.energySourceType != 'Electricity') {
-      constant = 1000000
-    }
+    // let constant = 1;
+    // if (settings.energySourceType != 'Electricity') {
+    //   constant = 1000000
+    // }
     if (phastResults.totalWallLoss) {
-      results.totalWallLoss = phastResults.totalWallLoss / constant;
+      results.totalWallLoss = phastResults.totalWallLoss;
     }
     if (phastResults.totalAtmosphereLoss) {
-      results.totalAtmosphereLoss = phastResults.totalAtmosphereLoss / constant;
+      results.totalAtmosphereLoss = phastResults.totalAtmosphereLoss;
     }
     if (phastResults.totalOtherLoss) {
-      results.totalOtherLoss = phastResults.totalOtherLoss / constant;
+      results.totalOtherLoss = phastResults.totalOtherLoss;
     }
     if (phastResults.totalCoolingLoss) {
-      results.totalCoolingLoss = phastResults.totalCoolingLoss / constant;
+      results.totalCoolingLoss = phastResults.totalCoolingLoss;
     }
     if (phastResults.totalOpeningLoss) {
-      results.totalOpeningLoss = phastResults.totalOpeningLoss / constant;
+      results.totalOpeningLoss = phastResults.totalOpeningLoss;
     }
     if (phastResults.totalFixtureLoss) {
-      results.totalFixtureLoss = phastResults.totalFixtureLoss / constant;
+      results.totalFixtureLoss = phastResults.totalFixtureLoss;
     }
     if (phastResults.totalLeakageLoss) {
-      results.totalLeakageLoss = phastResults.totalLeakageLoss / constant;
+      results.totalLeakageLoss = phastResults.totalLeakageLoss;
     }
     if (phastResults.totalExtSurfaceLoss) {
-      results.totalExtSurfaceLoss = phastResults.totalExtSurfaceLoss / constant;
+      results.totalExtSurfaceLoss = phastResults.totalExtSurfaceLoss;
     }
     if (phastResults.totalChargeMaterialLoss) {
-      results.totalChargeMaterialLoss = phastResults.totalChargeMaterialLoss / constant;
+      results.totalChargeMaterialLoss = phastResults.totalChargeMaterialLoss;
     }
     if (resultCats.showFlueGas && phastResults.totalFlueGas) {
-      results.totalFlueGas = phastResults.totalFlueGas / constant;
+      results.totalFlueGas = phastResults.totalFlueGas;
     }
     if (resultCats.showAuxPower && phastResults.totalAuxPower) {
-      results.totalAuxPower = phastResults.totalAuxPower / constant;
+      results.totalAuxPower = phastResults.totalAuxPower;
     }
     if (resultCats.showSlag && phastResults.totalSlag) {
-      results.totalSlag = phastResults.totalSlag / constant;
+      results.totalSlag = phastResults.totalSlag;
     }
     if (resultCats.showExGas && phastResults.totalExhaustGasEAF) {
-      results.totalExhaustGas = phastResults.totalExhaustGasEAF / constant;
+      results.totalExhaustGas = phastResults.totalExhaustGasEAF;
     }
     if (resultCats.showEnInput2 && phastResults.totalExhaustGas) {
-      results.totalExhaustGas = phastResults.totalExhaustGas / constant;
+      results.totalExhaustGas = phastResults.totalExhaustGas;
     }
     if (phastResults.totalSystemLosses && resultCats.showSystemEff) {
-      results.totalSystemLosses = phastResults.totalSystemLosses / constant;
+      results.totalSystemLosses = phastResults.totalSystemLosses;
     }
-    results.totalInput = phastResults.grossHeatInput / constant;
+    results.totalInput = phastResults.grossHeatInput;
     results.nodes = this.getNodes(results, settings);
     return results;
   }
 
   getNodes(results: FuelResults, settings: Settings) {
-    let unit: string = 'MMBtu/hr';
-    if (settings.energySourceType == 'Electricity') {
-      unit = 'kW'
-    } else if (settings.unitsOfMeasure == 'Metric') {
-      unit = 'GJ/hr'
+    let unit: string;
+    if (settings.energyResultUnit != 'kWh') {
+      unit = settings.energyResultUnit + '/hr';
+    } else {
+      unit = 'kW';
     }
 
     let tmpNode = this.createNode("Input", results.totalInput, this.baseSize, 300, 200, 0, true, false, false, false, unit, false)
