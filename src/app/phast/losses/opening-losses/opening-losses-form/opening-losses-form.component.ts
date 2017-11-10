@@ -39,7 +39,8 @@ export class OpeningLossesFormComponent implements OnInit {
   timeOpenError: string = null;
   numOpeningsError: string = null;
   thicknessError: string = null;
-  openingDimensionsError: string = null;
+  lengthError: string = null;
+  heightError: string = null;
   viewFactorError: string = null;
 
   constructor(private convertUnitsService: ConvertUnitsService, private windowRefService: WindowRefService,
@@ -64,6 +65,7 @@ export class OpeningLossesFormComponent implements OnInit {
     this.checkSurfaceEmissivity(true);
     this.checkTemperature(true);
     this.checkTimeOpen(true);
+    this.checkThickness(true);
   }
 
   ngAfterViewInit() {
@@ -105,13 +107,11 @@ export class OpeningLossesFormComponent implements OnInit {
     if (!bool) {
       this.startSavePolling();
     }
-    this.openingDimensionsError = null;
     if (this.openingLossesForm.value.openingType === 'Round') {
-      if (this.openingLossesForm.value.lengthOfOpening < 0) {
-        this.openingDimensionsError = "Opening Diameter cannot be negative";
-      }
-    } else if (this.openingLossesForm.value.lengthOfOpening < 0 || this.openingLossesForm.value.heightOfOpening < 0) {
-      this.openingDimensionsError = "Neither Opening Length or Height can be negative";
+      this.lengthError = (this.openingLossesForm.value.lengthOfOpening <= 0) ? "Opening Diameter must be greater than 0" : null;
+    } else {
+      this.lengthError = (this.openingLossesForm.value.lengthOfOpening <= 0) ? "Opening Length must be greater than 0" : null;
+      this.heightError = (this.openingLossesForm.value.heightOfOpening <= 0) ? "Opening Height must be greater than 0" : null;
     }
   }
 
@@ -119,61 +119,44 @@ export class OpeningLossesFormComponent implements OnInit {
     if (!bool) {
       this.startSavePolling();
     }
-    this.thicknessError = null;
-    if (this.openingLossesForm.value.wallThickness < 0) {
-      this.thicknessError = "Furnace Thickness must be > 0";
-    }
+    this.thicknessError = (this.openingLossesForm.value.wallThickness < 0) ? "Furnace Wall Thickness must be greater than or equal to 0" : null;
   }
 
   checkNumOpenings(bool?: boolean) {
     if (!bool) {
       this.startSavePolling();
     }
-    this.numOpeningsError = null;
-    if (this.openingLossesForm.value.numberOfOpenings < 0) {
-      this.numOpeningsError = "Number of Openings must be > 0";
-    }
+    this.numOpeningsError = (this.openingLossesForm.value.numberOfOpenings < 0) ? "Number of Openings must be greater than 0" : null;
   }
 
   checkViewFactor(bool?: boolean) {
     if (!bool) {
       this.startSavePolling();
     }
-    this.viewFactorError = null;
-    if (this.openingLossesForm.value.viewFactor < 0) {
-      this.viewFactorError = "View Factor must be > 0";
-    }
+    this.viewFactorError = (this.openingLossesForm.value.viewFactor < 0) ? "View Factor must be greater than 0" : null;
   }
 
   checkTemperature(bool?: boolean) {
     if (!bool) {
       this.startSavePolling();
     }
-    if (this.openingLossesForm.value.ambientTemp > this.openingLossesForm.value.insideTemp) {
-      this.temperatureError = 'Ambient Temperature is greater than Average Zone Temperature';
-    } else {
-      this.temperatureError = null;
-    }
+    this.temperatureError = (this.openingLossesForm.value.ambientTemp > this.openingLossesForm.value.insideTemp) ?
+      'Ambient Temperature cannot be greater than Average Zone Temperature' : null;
   }
 
   checkSurfaceEmissivity(bool?: boolean) {
     if (!bool) {
       this.startSavePolling();
     }
-    this.emissivityError = null;
-    if (this.openingLossesForm.value.emissivity > 1 || this.openingLossesForm.value.emissivity < 0) {
-      this.emissivityError = 'Surface emissivity must be between 0 and 1';
-    }
+    this.emissivityError = (this.openingLossesForm.value.emissivity > 1 || this.openingLossesForm.value.emissivity < 0) ? 'Surface emissivity must be between 0 and 1' : null;
   }
 
   checkTimeOpen(bool?: boolean) {
     if (!bool) {
       this.startSavePolling();
     }
-    this.timeOpenError = null;
-    if (this.openingLossesForm.value.percentTimeOpen < 0 || this.openingLossesForm.value.percentTimeOpen > 100) {
-      this.timeOpenError = '% Time Open must be between 0% and 100%';
-    }
+    this.timeOpenError = (this.openingLossesForm.value.percentTimeOpen < 0 || this.openingLossesForm.value.percentTimeOpen > 100) ?
+      'Percent Time Open must be between 0% and 100%' : null;
   }
 
   getArea() {
@@ -185,7 +168,7 @@ export class OpeningLossesFormComponent implements OnInit {
     }
     this.checkNumOpenings();
     this.checkOpeningDimensions();
-    if (this.numOpeningsError !== null || this.openingDimensionsError !== null) {
+    if (this.numOpeningsError !== null || this.lengthError !== null || this.heightError !== null) {
       this.totalArea = 0;
       return;
     }
