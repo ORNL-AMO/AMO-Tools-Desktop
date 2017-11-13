@@ -53,7 +53,6 @@ export class ImportExportComponent implements OnInit {
           this.getAssessmentSettings(item);
         });
         this.gatheringSettings = setTimeout(() => {
-          console.log(this.exportData);
           this.isDataGathered = true;
         }, 500)
       }, 500)
@@ -109,12 +108,10 @@ export class ImportExportComponent implements OnInit {
       if ($event.target.files.length != 0) {
         let regex = /.json$/;
         if (regex.test($event.target.files[0].name)) {
-          console.log('valid');
           this.fileReference = $event;
           this.validFile = true;
         } else {
           this.validFile = false;
-          console.log('invalid');
         }
       }
     }

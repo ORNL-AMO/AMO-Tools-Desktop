@@ -59,7 +59,6 @@ export class ExploreOpportunitiesSankeyComponent implements OnInit, OnChanges {
     if (this.selectedView == 'Baseline') {
       this.sankey("app-explore-opportunities-sankey", this.baselineResults);
     } else if (this.selectedView == 'Modified') {
-      console.log('create modified 2');
       this.sankey("app-explore-opportunities-sankey", this.modificationResults);
     }
   }

@@ -92,6 +92,25 @@
     </div>
   </div>
 
+  <div class="card" *ngIf="currentField == 'default'">
+    <div class="card-header">
+      Savings Suggestions
+    </div>
+    <div class="card-block">
+      <label><u><strong>Description</strong></u></label>
+      <ul>
+        <li class="help-general">Control air-fuel ratios for burners</li>
+        <li class="help-general">Use Preheated air where possible</li>
+        <li class="help-general">Use fuel-air ratio control system to maintain desired (preferably 10% excess air) for the range of burner turn down</li>
+        <li class="help-general">Replace excess air burners by ratio type burners.  Consider process requirements (i.e. make up air) to evaluate benefits of ratio type burners</li>
+        <li class="help-general">Replace atmospheric or even premix burners where possible to use nozzle mix burners with high turn down</li>
+        <li class="help-general">Minimize volume by controlling make up air and air leaks in the oven</li>
+        <li class="help-general">Use preheated combustion air</li>
+        <li class="help-general">Reduce exhaust gas temperature by using one or more heat recovery methods</li>
+      </ul>
+    </div>
+  </div>
+
   <!--<div class="card" *ngIf="currentField == 'availableHeat'">
     <div class="card-header">
      Available Heat

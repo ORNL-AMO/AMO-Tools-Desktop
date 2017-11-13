@@ -50,7 +50,6 @@ export class SidebarComponent implements OnInit {
     this.selectedDirectoryId = this.directory.id;
     this.assessmentService.updateAvailable.subscribe(val => {
       this.isUpdateAvailable = val;
-      console.log('sidebar :' + val);
     })
   }
 

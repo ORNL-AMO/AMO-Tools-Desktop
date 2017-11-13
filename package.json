@@ -1,6 +1,6 @@
 {
   "name": "amo-tools-desktop",
-  "version": "0.2.3-beta",
+  "version": "0.2.1",
   "main": "main.js",
   "license": "MIT",
   "description": "AMO-Tools-Desktop",
@@ -106,7 +106,7 @@
     "chart.js": "^2.7.0",
     "codelyzer": "~2.0.0",
     "css-loader": "^0.26.2",
-    "electron": "^1.8.1",
+    "electron": "^1.7.6",
     "electron-builder": "^19.45.6",
     "electron-packager": "^9.0.0",
     "jasmine-core": "~2.5.2",
