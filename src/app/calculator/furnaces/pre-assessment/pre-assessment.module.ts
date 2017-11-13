@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { SharedModule } from '../../../shared/shared.module';
 import { PreAssessmentComponent } from './pre-assessment.component';
 import { DesignedEnergyModule } from '../../../phast/designed-energy/designed-energy.module';
 import { MeteredEnergyModule } from '../../../phast/metered-energy/metered-energy.module';
@@ -12,6 +13,7 @@ import { PreAssessmentHelpComponent } from './pre-assessment-help/pre-assessment
 import { ChartsModule } from 'ng2-charts';
 import { PreAssessmentMeteredComponent } from './pre-assessment-form/pre-assessment-metered/pre-assessment-metered.component';
 import { PreAssessmentDesignedComponent } from './pre-assessment-form/pre-assessment-designed/pre-assessment-designed.component';
+import { ConvertPhastService } from '../../../phast/convert-phast.service';
 @NgModule({
   imports: [
     CommonModule,
@@ -21,7 +23,8 @@ import { PreAssessmentDesignedComponent } from './pre-assessment-form/pre-assess
     MeteredEnergyModule,
     ChartsModule,
     BrowserModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    SharedModule
   ],
   declarations: [
     PreAssessmentComponent,
@@ -33,6 +36,9 @@ import { PreAssessmentDesignedComponent } from './pre-assessment-form/pre-assess
   ],
   exports: [
     PreAssessmentComponent
+  ],
+  providers: [
+    ConvertPhastService
   ]
 })
 export class PreAssessmentModule { }

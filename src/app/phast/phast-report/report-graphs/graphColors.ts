@@ -11,5 +11,13 @@ export const graphColors: Array<any> = [
     '#F1C40F',
     '#7B241C',
     '#909497',
-    '#D2B4DE'
+    '#D2B4DE',
+    "#512E5F",
+    "#17A589",
+    "#F4F6F7",
+    "#117A65",
+    "#9B59B6",
+    "#17202A",
+    "#641E16",
+    "#D4EFDF"
 ]

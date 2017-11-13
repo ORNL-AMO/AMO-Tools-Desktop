@@ -37,7 +37,10 @@ import { DesignedEnergyService } from './designed-energy.service';
     DesignedEnergyElectricityFormComponent,
     DesignedEnergyFuelFormComponent,
     DesignedEnergySteamFormComponent,
-    DesignedEnergyResultsComponent
+    DesignedEnergyResultsComponent,
+    DesignedEnergyFuelHelpComponent,
+    DesignedEnergySteamHelpComponent,
+    DesignedEnergyElectricityHelpComponent
   ],
   providers: [
     DesignedEnergyService

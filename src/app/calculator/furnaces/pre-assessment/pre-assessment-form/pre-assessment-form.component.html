@@ -1,15 +1,21 @@
 <div class="pre-assessment-furnace">
   <div class="row">
-    <div class="col pre-assessment-header">
-      <h5>
-        <span class="pull-left">
+    <div class="col pre-assessment-header" [ngStyle]="{'border-color': assessment.borderColor}"  (click)="collapsePreAssessment()">
+      <h5 *ngIf="!isEditingName">
+          <span class="fa fa-pencil" (click)="editName()"></span>
           {{assessment.name}}
-        </span>
+        <!-- <span class="pull-left">
+          {{assessment.name}}
+        </span> -->
         <div class="pull-right">
-          <span class="fa fa-chevron-up" *ngIf="!assessment.collapsed" (click)="collapsePreAssessment()"></span>
-          <span class="fa fa-chevron-down" *ngIf="assessment.collapsed" (click)="collapsePreAssessment()"></span>
+          <!-- <span class="fa fa-chevron-up" *ngIf="!assessment.collapsed"></span>
+          <span class="fa fa-chevron-down" *ngIf="assessment.collapsed"></span> -->
           <span class="fa fa-times" (click)="deletePreAssessment()"></span>
         </div>
+      </h5>
+      <h5 *ngIf="isEditingName">
+        <input type="text" id="assessmentName" [(ngModel)]="assessment.name" onfocus="this.select();" required="required" (input)="calculate()">
+        <span *ngIf="assessment.name" class="fa fa-check" (click)="doneEditingName()"></span>
       </h5>
     </div>
   </div>
@@ -19,7 +25,8 @@
       <div class="col">
         <div class="form-group">
           <label for="assessmentType">Assessment Type</label>
-          <select class="form-control select-type mx-auto" id="assessmentType" name="assessmentType" [(ngModel)]="assessment.type">
+          <select class="form-control select-type mx-auto" id="assessmentType" name="assessmentType" [(ngModel)]="assessment.type"
+            (change)="changeAssessmentType()">
             <option [ngValue]="'Metered'">Metered</option>
             <option [ngValue]="'Designed'">Designed</option>
           </select>
@@ -28,7 +35,8 @@
       <div class="col">
         <div class="form-group">
           <label for="energySourceType">Furnace Type</label>
-          <select class="form-control select-type mx-auto" id="energySourceType" name="energySourceType" [(ngModel)]="assessment.settings.energySourceType">
+          <select class="form-control select-type mx-auto" id="energySourceType" name="energySourceType" [(ngModel)]="assessment.settings.energySourceType"
+            (change)="changeEnergyType()">
             <option [ngValue]="'Fuel'">Fuel</option>
             <option [ngValue]="'Electricity'">Electrotechnology</option>
             <option [ngValue]="'Steam'">Steam-based</option>

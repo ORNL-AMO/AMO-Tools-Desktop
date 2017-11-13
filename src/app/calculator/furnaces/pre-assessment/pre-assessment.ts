@@ -10,5 +10,6 @@ export interface PreAssessment {
     type?: string,
     settings?: Settings,
     collapsed?: boolean,
-    collapsedState?: string
+    collapsedState?: string,
+    borderColor?: string
 }

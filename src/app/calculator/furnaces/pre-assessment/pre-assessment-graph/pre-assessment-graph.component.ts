@@ -10,15 +10,14 @@ export class PreAssessmentGraphComponent implements OnInit {
   @Input()
   results: Array<any>;
 
-  
-  @ViewChild(BaseChartDirective) private baseChart;
 
+  @ViewChild(BaseChartDirective) private baseChart;
 
   pieChartLabels: Array<string>;
   pieChartData: Array<number>;
   chartColors: Array<any>;
   //chartColorDataSet: Array<any>;
-
+  backgroundColors: Array<string>;
   options: any = {
     legend: {
       display: false
@@ -29,7 +28,6 @@ export class PreAssessmentGraphComponent implements OnInit {
 
   ngOnInit() {
     this.getData();
-    this.getColors();
   }
 
   ngOnChanges(changes: SimpleChange) {
@@ -41,16 +39,23 @@ export class PreAssessmentGraphComponent implements OnInit {
   getData() {
     this.pieChartData = new Array();
     this.pieChartLabels = new Array();
+    this.backgroundColors = new Array();
     this.results.forEach(val => {
+      this.pieChartLabels.push(val.name+' (%)');
       this.pieChartData.push(val.percent);
-      this.pieChartLabels.push(val.name);
+      this.backgroundColors.push(val.color);
     })
+    if (this.baseChart && this.baseChart.chart) {
+      this.baseChart.chart.config.data.labels = this.pieChartLabels;
+      this.baseChart.chart.config.data.datasets[0].backgroundColor = this.backgroundColors;
+    }
+    this.getColors();
   }
 
   getColors() {
     this.chartColors = [
       {
-        backgroundColor: graphColors
+        backgroundColor: this.backgroundColors
       }
     ]
   }

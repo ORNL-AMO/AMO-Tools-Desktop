@@ -26,8 +26,8 @@
 } */
 
 .pre-assessment-header{
-    border-bottom: inset 2px #BF3D00;
-    border-left: solid 10px #BF3D00;
+    border-bottom: inset 2px;
+    border-left: solid 10px;
     padding-top: 10px;
     padding-bottom: 10px;
 }
@@ -49,8 +49,22 @@
 
 .fa:hover{
     cursor: pointer;
+    zoom: 1.25;
 }
 
 .form-group{
     text-align:center;
+}
+
+.fa-pencil{
+    padding-right: 5px;
+}
+
+h5{
+    margin-bottom: 0px;
+}
+
+.pre-assessment-header:hover{
+    cursor: pointer;
+    background-color: lightgray;
 }

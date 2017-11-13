@@ -8,6 +8,11 @@ import { Component, OnInit, Input } from '@angular/core';
 export class PreAssessmentHelpComponent implements OnInit {
   @Input()
   currentField: string;
+  @Input()
+  currentEnergySourceType: string;
+  @Input()
+  currentAssessmentType: string;
+
   constructor() { }
 
   ngOnInit() {

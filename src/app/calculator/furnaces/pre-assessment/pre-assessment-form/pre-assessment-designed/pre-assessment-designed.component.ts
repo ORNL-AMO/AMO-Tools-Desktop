@@ -20,7 +20,7 @@ export class PreAssessmentDesignedComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    if(!this.assessment.designedEnergy){
+    if (!this.assessment.designedEnergy) {
       this.assessment.designedEnergy = {
         designedEnergyElectricity: new Array<DesignedEnergyElectricity>(),
         designedEnergyFuel: new Array<DesignedEnergyFuel>(),
@@ -32,21 +32,31 @@ export class PreAssessmentDesignedComponent implements OnInit {
     }
   }
 
-  calculate(){
+  addZone() {
+    if (this.assessment.settings.energySourceType == 'Fuel') {
+      this.addFuelZone();
+    } else if (this.assessment.settings.energySourceType == 'Steam') {
+      this.addSteamZone();
+    } else if (this.assessment.settings.energySourceType == 'Electricity') {
+      this.addElectricityZone();
+    }
+  }
+
+  calculate() {
     this.emitCalculate.emit(true);
   }
 
-  changeField(str: string){
+  changeField(str: string) {
     this.emitChangeField.emit(str);
   }
 
-  addElectricityZone(){
+  addElectricityZone() {
     let eqNum = 1;
     if (this.assessment.designedEnergy.designedEnergyElectricity) {
       eqNum = this.assessment.designedEnergy.designedEnergyElectricity.length + 1;
     }
     let tmpZone: DesignedEnergyElectricity = {
-      name: 'Zone #'+eqNum,          
+      name: 'Zone #' + eqNum,
       kwRating: 0,
       percentCapacityUsed: 0,
       percentOperatingHours: 0
@@ -54,7 +64,7 @@ export class PreAssessmentDesignedComponent implements OnInit {
     this.assessment.designedEnergy.designedEnergyElectricity.push(tmpZone);
   }
 
-  addFuelZone(){
+  addFuelZone() {
     let eqNum = 1;
     if (this.assessment.designedEnergy.designedEnergyFuel) {
       eqNum = this.assessment.designedEnergy.designedEnergyFuel.length + 1;
@@ -69,7 +79,7 @@ export class PreAssessmentDesignedComponent implements OnInit {
     this.assessment.designedEnergy.designedEnergyFuel.push(tmpZone);
   }
 
-  addSteamZone(){
+  addSteamZone() {
     let eqNum = 1;
     if (this.assessment.designedEnergy.designedEnergySteam) {
       eqNum = this.assessment.designedEnergy.designedEnergySteam.length + 1;
@@ -82,5 +92,17 @@ export class PreAssessmentDesignedComponent implements OnInit {
       percentOperatingHours: 0
     }
     this.assessment.designedEnergy.designedEnergySteam.push(tmpZone);
+  }
+
+  removeFuelZone(num: number) {
+    this.assessment.designedEnergy.designedEnergyFuel.splice(num, 1);
+  }
+
+  removeSteamZone(num: number) {
+    this.assessment.designedEnergy.designedEnergySteam.splice(num, 1);
+  }
+
+  removeElectricityZone(num: number) {
+    this.assessment.designedEnergy.designedEnergyElectricity.splice(num, 1);
   }
 }

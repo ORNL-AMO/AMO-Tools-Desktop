@@ -1,8 +1,7 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
 import { PreAssessment } from '../pre-assessment';
 import { Settings } from '../../../../shared/models/settings';
 import { trigger, state, style, animate, transition } from '@angular/animations';
-
 @Component({
   selector: 'app-pre-assessment-form',
   templateUrl: './pre-assessment-form.component.html',
@@ -35,24 +34,49 @@ export class PreAssessmentFormComponent implements OnInit {
   emitDelete = new EventEmitter<boolean>();
   @Output('emitChangeField')
   emitChangeField = new EventEmitter<string>();
+  @Output('emitAssessmentType')
+  emitAssessmentType = new EventEmitter<string>();
+  @Output('emitEnergyType')
+  emitEnergyType = new EventEmitter<string>();
+
+  isEditingName: boolean = false;
+
   constructor() { }
 
   ngOnInit() {
   }
 
-  calculate(){
+  editName() {
+    this.isEditingName = true;
+  }
+  
+  doneEditingName() {
+    this.isEditingName = false;
+  }
+
+  calculate() {
     this.emitCalcualte.emit(true);
   }
 
-  collapsePreAssessment(){
+  collapsePreAssessment() {
     this.emitCollapse.emit(true);
   }
 
-  deletePreAssessment(){
+  deletePreAssessment() {
     this.emitDelete.emit(true);
   }
 
-  changeField(str: string){
+  changeField(str: string) {
     this.emitChangeField.emit(str);
+    this.changeEnergyType();
+    this.changeAssessmentType();
+  }
+
+  changeEnergyType() {
+    this.emitEnergyType.emit(this.assessment.settings.energySourceType);
+  }
+
+  changeAssessmentType() {
+    this.emitAssessmentType.emit(this.assessment.type);
   }
 }
