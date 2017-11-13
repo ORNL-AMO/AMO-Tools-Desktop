@@ -13,40 +13,24 @@ export class DesignedEnergyResultsComponent implements OnInit {
   @Input()
   settings: Settings;
 
-  resultUnits: any;
+  resultUnits: any = {
+    energyPerMassUnit: '',
+    energyPerTimeUnit: '',
+    electricityUsedUnit: ''
+  };
   constructor() { }
 
   ngOnInit() {
-    if (this.settings.energySourceType == 'Fuel' || this.settings.energySourceType == 'Steam') {
-      if (this.settings.unitsOfMeasure == 'Imperial') {
-        this.resultUnits = {
-          designedEnergyUsed: 'Btu/hr',
-          designedEnergyIntensity: 'Btu/lb',
-          designedElectricityUsed: 'kW',
-          calculatedFuelEnergyUsed: 'Btu/hr',
-          calculatedEnergyIntensity: 'Btu/lb',
-          calculatedElectricityUsed: 'kW'
-        }
-      } else if (this.settings.unitsOfMeasure == 'Metric') {
-        this.resultUnits = {
-          designedEnergyUsed: 'kJ/hr',
-          designedEnergyIntensity: 'kJ/kg',
-          designedElectricityUsed: 'kW',
-          calculatedFuelEnergyUsed: 'kJ/hr',
-          calculatedEnergyIntensity: 'kJ/kg',
-          calculatedElectricityUsed: 'kW'
-        }
-      }
-    } else if (this.settings.energySourceType == 'Electricity') {
-      this.resultUnits = {
-        designedEnergyUsed: 'kW',
-        designedEnergyIntensity: 'kW',
-        designedElectricityUsed: 'kW',
-        calculatedFuelEnergyUsed: 'kW',
-        calculatedEnergyIntensity: 'kW',
-        calculatedElectricityUsed: 'kW'
-      }
+    if (this.settings.energyResultUnit == 'kWh') {
+      this.resultUnits.energyPerTimeUnit = this.settings.energyResultUnit;
+    } else {
+      this.resultUnits.energyPerTimeUnit = this.settings.energyResultUnit + '/hr';
     }
+    if (this.settings.unitsOfMeasure == 'Metric') {
+      this.resultUnits.energyPerMassUnit = this.settings.energyResultUnit + '/kg';
+    } else if (this.settings.unitsOfMeasure == 'Imperial') {
+      this.resultUnits.energyPerMassUnit = this.settings.energyResultUnit + '/lb';
+    }
+    this.resultUnits.electricityUsedUnit = 'kW';
   }
-
 }

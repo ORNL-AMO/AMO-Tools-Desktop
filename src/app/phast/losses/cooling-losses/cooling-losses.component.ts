@@ -34,7 +34,7 @@ export class CoolingLossesComponent implements OnInit {
 
   _coolingLosses: Array<any>;
   firstChange: boolean = true;
-  resultsUnit: string = 'Btu/hr';
+  resultsUnit: string;
   constructor(private coolingLossesService: CoolingLossesService, private phastService: PhastService, private coolingLossesCompareService: CoolingLossesCompareService) { }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -52,10 +52,10 @@ export class CoolingLossesComponent implements OnInit {
   }
 
   ngOnInit() {
-    if (this.settings.energySourceType == 'Electricity') {
+    if (this.settings.energyResultUnit != 'kWh') {
+      this.resultsUnit = this.settings.energyResultUnit + '/hr';
+    } else {
       this.resultsUnit = 'kW';
-    } else if (this.settings.unitsOfMeasure == 'Metric') {
-      this.resultsUnit = 'kJ/hr';
     }
 
     if (!this._coolingLosses) {

@@ -23,14 +23,25 @@ export class ApplicationSettingsComponent implements OnInit {
     '$ - US Dollar'
   ]
 
+  energyOptions: Array<string> = [
+    'MMBtu',
+    'Btu',
+    'GJ',
+    'kJ',
+    'kcal',
+    'kgce',
+    'kgoe',
+    'kWh'
+  ]
+
   energyResultOptions: Array<any>;
   constructor(private convertUnitsService: ConvertUnitsService, private settingsService: SettingsService) { }
 
   ngOnInit() {
     //this.setUnits();
     this.energyResultOptions = new Array<any>();
-    let possibilities = this.convertUnitsService.possibilities('energy');
-    possibilities.forEach(val => {
+    //let possibilities = this.convertUnitsService.possibilities('energy');
+    this.energyOptions.forEach(val => {
       let tmpPossibility = {
         unit: val,
         display: this.getUnitName(val),

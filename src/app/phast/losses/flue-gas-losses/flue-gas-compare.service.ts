@@ -42,6 +42,7 @@ export class FlueGasCompareService {
       flueGasTemperature: new BehaviorSubject<boolean>(null),
       excessAirPercentage: new BehaviorSubject<boolean>(null),
       combustionAirTemperature: new BehaviorSubject<boolean>(null),
+      fuelTemperature: new BehaviorSubject<boolean>(null),
     }
     let tmpByMass: FlueGasMassDifferent = {
       gasTypeId: new BehaviorSubject<boolean>(null),
@@ -113,6 +114,7 @@ export class FlueGasCompareService {
       this.differentArray[lossIndex].different.flueGasVolumeDifferent.flueGasTemperature.next(false);
       this.differentArray[lossIndex].different.flueGasVolumeDifferent.excessAirPercentage.next(false);
       this.differentArray[lossIndex].different.flueGasVolumeDifferent.combustionAirTemperature.next(false);
+      this.differentArray[lossIndex].different.flueGasVolumeDifferent.fuelTemperature.next(false);
       this.differentArray[lossIndex].different.flueGasMassDifferent.gasTypeId.next(false);
       this.differentArray[lossIndex].different.flueGasMassDifferent.flueGasTemperature.next(false);
       this.differentArray[lossIndex].different.flueGasMassDifferent.excessAirPercentage.next(false);
@@ -129,6 +131,7 @@ export class FlueGasCompareService {
     this.differentArray[lossIndex].different.flueGasVolumeDifferent.flueGasTemperature.next(false);
     this.differentArray[lossIndex].different.flueGasVolumeDifferent.excessAirPercentage.next(false);
     this.differentArray[lossIndex].different.flueGasVolumeDifferent.combustionAirTemperature.next(false);
+    this.differentArray[lossIndex].different.flueGasVolumeDifferent.fuelTemperature.next(false);
     this.differentArray[lossIndex].different.flueGasMassDifferent.gasTypeId.next(false);
     this.differentArray[lossIndex].different.flueGasMassDifferent.flueGasTemperature.next(false);
     this.differentArray[lossIndex].different.flueGasMassDifferent.excessAirPercentage.next(false);
@@ -168,6 +171,7 @@ export interface FlueGasVolumeDifferent {
   flueGasTemperature: BehaviorSubject<boolean>,
   excessAirPercentage: BehaviorSubject<boolean>,
   combustionAirTemperature: BehaviorSubject<boolean>,
+  fuelTemperature: BehaviorSubject<boolean>,
 }
 
 export interface FlueGasMassDifferent {

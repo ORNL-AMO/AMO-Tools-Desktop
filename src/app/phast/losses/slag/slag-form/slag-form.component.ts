@@ -75,7 +75,9 @@ export class SlagFormComponent implements OnInit {
   focusField(str: string) {
     this.changeField.emit(str);
   }
-
+  focusOut() {
+    this.changeField.emit('default');
+  }
   emitSave() {
     this.saveEmit.emit(true);
   }
@@ -117,7 +119,7 @@ export class SlagFormComponent implements OnInit {
             element.classList.toggle('indicate-different', val);
           });
         })
-        //specificHeat 
+        //specificHeat
         this.slagCompareService.differentArray[this.lossIndex].different.specificHeat.subscribe((val) => {
           let specificHeatElements = doc.getElementsByName('specificHeat_' + this.lossIndex);
           specificHeatElements.forEach(element => {

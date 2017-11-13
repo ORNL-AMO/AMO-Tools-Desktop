@@ -111,7 +111,9 @@ export class EnergyInputExhaustGasFormComponent implements OnInit {
   focusField(str: string) {
     this.changeField.emit(str);
   }
-
+  focusOut() {
+    this.changeField.emit('default');
+  }
   emitSave() {
     this.saveEmit.emit(true);
   }

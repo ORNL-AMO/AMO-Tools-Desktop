@@ -15,7 +15,7 @@
     <app-exhaust-gas-help [currentField]="currentField" *ngIf="lossesTab == 'exhaust-gas'"></app-exhaust-gas-help>
     <app-energy-input-help [currentField]="currentField" *ngIf="lossesTab == 'energy-input'"></app-energy-input-help>
     <app-energy-input-exhaust-gas-losses-help [currentField]="currentField" *ngIf="lossesTab == 'energy-input-exhaust-gas'"></app-energy-input-exhaust-gas-losses-help>
-    <app-heat-system-efficiency-help [currentField]="currentField" *ngIf="lossesTab == 'heat-system-efficiency'"></app-heat-system-efficiency-help>
+    <app-heat-system-efficiency-help [currentField]="currentField" [settings]="settings" *ngIf="lossesTab == 'heat-system-efficiency'"></app-heat-system-efficiency-help>
     <app-operations-help [currentField]="currentField" *ngIf="lossesTab == 'operations'"></app-operations-help>
   </div>
 </div>

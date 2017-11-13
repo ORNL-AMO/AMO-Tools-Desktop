@@ -61,6 +61,24 @@ export class SettingsService {
     return tmpSettings;
   }
 
+  getNewSettingFromSetting(settings: Settings): Settings{
+    let newSettings: Settings = {
+      language: settings.language,
+      currency: settings.currency,
+      unitsOfMeasure: settings.unitsOfMeasure,
+      distanceMeasurement: settings.distanceMeasurement,
+      flowMeasurement: settings.flowMeasurement,
+      powerMeasurement: settings.powerMeasurement,
+      pressureMeasurement: settings.pressureMeasurement,
+      currentMeasurement: settings.currentMeasurement,
+      viscosityMeasurement: settings.viscosityMeasurement,
+      voltageMeasurement: settings.voltageMeasurement,
+      energySourceType: settings.energySourceType,
+      furnaceType: settings.furnaceType
+    }
+    return newSettings;
+  }
+
   setUnits(settingsForm: any): any {
     if (settingsForm.value.unitsOfMeasure == 'Imperial') {
       settingsForm.patchValue({
@@ -91,12 +109,12 @@ export class SettingsService {
   setEnergyResultUnit(settingsForm: any): any {
     if (settingsForm.value.unitsOfMeasure == 'Imperial') {
       settingsForm.patchValue({
-        energyResultUnit: 'Btu'
+        energyResultUnit: 'MMBtu'
       })
     }
     else if (settingsForm.value.unitsOfMeasure == 'Metric') {
       settingsForm.patchValue({
-        energyResultUnit: 'kJ'
+        energyResultUnit: 'GJ'
       })
     }
 
@@ -110,10 +128,10 @@ export class SettingsService {
 
   setEnergyResultUnitSetting(settings: Settings): Settings {
     if (settings.unitsOfMeasure == 'Imperial') {
-      settings.energyResultUnit = 'Btu'
+      settings.energyResultUnit = 'MMBtu'
     }
     else if (settings.unitsOfMeasure == 'Metric') {
-      settings.energyResultUnit = 'kJ';
+      settings.energyResultUnit = 'GJ';
     }
 
     if (settings.energySourceType == 'Electricity') {
