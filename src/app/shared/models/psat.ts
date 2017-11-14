@@ -90,3 +90,10 @@ export interface Notes {
   motorNotes?: string,
   fieldDataNotes?: string
 }
+
+export interface FluidProperties {
+  density: number,
+  beta: number,
+  tref: number,
+  kinViscosity: number
+}

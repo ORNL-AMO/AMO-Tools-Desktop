@@ -1,6 +1,6 @@
 import { Component, OnInit, Output, EventEmitter, Input, SimpleChanges, ViewChild, ElementRef } from '@angular/core';
 import { PsatService } from '../psat.service';
-import { PSAT, PsatInputs } from '../../shared/models/psat';
+import {FluidProperties, PSAT, PsatInputs} from '../../shared/models/psat';
 import { Settings } from '../../shared/models/settings';
 import { CompareService } from '../compare.service';
 import { WindowRefService } from '../../indexedDb/window-ref.service';
@@ -69,15 +69,29 @@ export class PumpFluidComponent implements OnInit {
   // n-Octane,0.00063,59,43.6,1.266
   // Petroleum,0.00056,60,44.4,0.198
 
+  fluidProperties: Object<FluidProperties>  = {
+    'Acetone': { density: 0.00079, beta: 77, tref: 49, kinViscosity: 0.41 },
+    'Ammonia': { density: 0.00136, beta: 77, tref: 51.4, kinViscosity: 0.3 },
+    'Dichlorodifluoromethane refrigerant R-12': { density: 0.00144, beta: 77, tref: 81.8, kinViscosity: 0.198 },
+    'Ethanol': { density: 0.00061, beta: 77, tref: 49, kinViscosity: 1.52 },
+    'Ethylene glycol': { density: 0.00032, beta: 77, tref: 68.5, kinViscosity: 17.8 },
+    'Gasoline': { density: 0.00053, beta: 60, tref: 46, kinViscosity: 0.88 },
+    'Glycerine (glycerol)': { density: 0.00028, beta: 77, tref: 78.66, kinViscosity: 648 },
+    'Kerosene - jet fuel': { density: 0.00055, beta: 60, tref: 51.2, kinViscosity: 2.71 },
+    'Methanol': { density: 0.00083, beta: 77, tref: 49.1, kinViscosity: 0.75 },
+    'n-Octane': { density: 0.00063, beta: 59, tref: 43.6, kinViscosity: 1.266 },
+    'Petroleum': { density: 0.00056, beta: 60, tref: 44.4, kinViscosity: 0.198 }
+  };
+
   fluidTypes: Array<string> = [
     'Acetone',
     'Ammonia',
-    'Dichlorodifluoromethane refrigerant R-12',
+    'Dichlorodifluoromethane refrigerant R-12',
     'Ethanol',
     'Ethylene glycol',
     'Gasoline',
     'Glycerine (glycerol)',
-    'Kerosene, jet fuel',
+    'Kerosene - jet fuel',
     'Methanol',
     'n-Octane',
     'Petroleum',
@@ -213,6 +227,32 @@ export class PumpFluidComponent implements OnInit {
       this.rpmError = null;
       return null;
     }
+  }
+
+  calculateSpecificGravity(bool?: boolean) {
+    if (!bool) {
+      this.startSavePolling();
+    }
+    const fluidType = this.psatForm.value.fluidType;
+    const t = this.psatForm.value.fluidTemperature;
+    if (fluidType === 'Water') {
+      const tTemp = (t - 32) * (5.0 / 9) + 273.15;
+      const density = 0.14395 / Math.pow(0.0112, (1 + Math.pow(1 - tTemp / 649.727, 0.05107)));
+      const kinViscosity = 0.000000003 * Math.pow(t, 4) - 0.000002 * Math.pow(t, 3) - 0.0005 * Math.pow(t, 2) - 0.0554 * t + 3.1271;
+      this.psatForm.patchValue({
+        gravity: density / 1000,
+        viscosity: kinViscosity
+      });
+    } else {
+      const property = this.fluidProperties[fluidType];
+      const density = property.density / (1 + property.beta * (t - property.tref));
+      this.psatForm.patchValue({
+        gravity: density / 62.428,
+        viscosity: property.kinViscosity
+      });
+    }
+
+
   }
 
 

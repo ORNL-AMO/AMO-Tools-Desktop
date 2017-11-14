@@ -39,7 +39,7 @@
 
   <div class="form-group">
     <label for="fluidType">Fluid Type</label>
-    <select class="form-control" name="fluidType" formControlName="fluidType" id="fluidType" (input)="startSavePolling()" (focus)="focusField('fluidType')"
+    <select class="form-control" name="fluidType" formControlName="fluidType" id="fluidType" (change)="calculateSpecificGravity()" (focus)="focusField('fluidType')"
             ngModel="{{psatForm.value.fluidType}}">
       <option *ngFor="let fluidType of fluidTypes" [ngValue]="fluidType">{{fluidType}}</option>
     </select>
