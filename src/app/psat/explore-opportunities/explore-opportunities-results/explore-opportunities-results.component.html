@@ -16,7 +16,10 @@
           &mdash; &mdash;
         </td>
         <td class="percent-graph">
-          <app-percent-graph [value]="percentSavings" [valueDescription]="'Percent Savings'" [unit]="'%'"></app-percent-graph>
+          <div class="col-8 graph-col" *ngIf="percentSavings">
+            <app-percent-graph [value]="percentSavings" [valueDescription]="'Percent Savings'" [unit]="'%'"></app-percent-graph>
+          </div>
+          <div *ngIf="!percentSavings">&mdash; &mdash;</div>
         </td>
       </tr>
       <tr>
@@ -92,7 +95,9 @@
       <tr *ngIf="psat.modifications[exploreModIndex].psat.inputs.optimize_calculation">
         <td></td>
         <td></td>
-        <td><span class="text-muted">*Optimized</span></td>
+        <td>
+          <span class="text-muted">*Optimized</span>
+        </td>
       </tr>
     </tbody>
   </table>

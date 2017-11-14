@@ -9,8 +9,12 @@
 }
 .output-summary .table td {
     padding: 0px 8px;
+    vertical-align: middle;
 }
 
+.graph-col{
+    padding-left: 0px;
+}
 
 .positive-savings{
 	color: green;

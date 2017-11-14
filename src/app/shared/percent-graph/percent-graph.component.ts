@@ -60,25 +60,30 @@ export class PercentGraphComponent implements OnInit {
   setValueMargin() {
     let div = this.doc.getElementsByClassName('chart-container')
     let valueClass = this.doc.getElementsByClassName('value');
-    if (div[0].clientWidth < 350 && div[0].clientWidth > 200) {
-      for (let i = 0; i < valueClass.length; i++) {
-        valueClass[i].style.fontSize = '24px';
+    let chartDiv = div[0];
+    if (chartDiv) {
+      if (chartDiv.clientWidth < 350 && chartDiv.clientWidth > 200) {
+        for (let i = 0; i < valueClass.length; i++) {
+          valueClass[i].style.fontSize = '24px';
+        }
+      } else if (chartDiv.clientWidth < 200) {
+        for (let i = 0; i < valueClass.length; i++) {
+          valueClass[i].style.fontSize = '16px';
+        }
+      } else {
+        for (let i = 0; i < valueClass.length; i++) {
+          valueClass[i].style.fontSize = '32px';
+        }
       }
-    } else if (div[0].clientWidth < 200) {
-      for (let i = 0; i < valueClass.length; i++) {
-        valueClass[i].style.fontSize = '16px';
+      let percentValue = this.doc.getElementById('percent');
+      if (percentValue) {
+        let marginTop = ((chartDiv.clientWidth / 2) - (percentValue.clientHeight / 2)) / 2;
+        let marginLeft = (chartDiv.clientWidth / 2) - (percentValue.clientWidth / 2);
+        for (let i = 0; i < valueClass.length; i++) {
+          valueClass[i].style.marginTop = marginTop + 'px';
+          valueClass[i].style.marginLeft = marginLeft + 'px';
+        }
       }
-    } else {
-      for (let i = 0; i < valueClass.length; i++) {
-        valueClass[i].style.fontSize = '32px';
-      }
-    }
-    let percentValue = this.doc.getElementById('percent');
-    let marginTop = ((div[0].clientWidth / 2) - (percentValue.clientHeight / 2)) / 2;
-    let marginLeft = (div[0].clientWidth / 2) - (percentValue.clientWidth / 2);
-    for (let i = 0; i < valueClass.length; i++) {
-      valueClass[i].style.marginTop = marginTop + 'px';
-      valueClass[i].style.marginLeft = marginLeft + 'px';
     }
   }
 
@@ -116,9 +121,9 @@ export class PercentGraphComponent implements OnInit {
     this.doughnutChartLabels = [this.valueDescription, 'Potential']
     if (this.value <= 100 && this.value > 0) {
       this.potential = 100 - this.value;
-    } else if(this.value < 0){
+    } else if (this.value < 0) {
       this.potential = 100 + this.value;
-    }else{
+    } else {
       this.potential = 0;
     }
     this.doughnutChartData = [this.value, this.potential];
