@@ -36,6 +36,7 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
 
   showOperatingFraction: boolean;
   showPumpType: boolean;
+  showMotorDrive: boolean;
   showPumpSpecified: boolean;
 
   showCalculationMethod: boolean;
@@ -44,6 +45,8 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
   showSizeMargin: boolean;
   tmpModificationPumpType: string;
   tmpBaselinePumpType: string;
+  tmpModificationMotorDrive: string;
+  tmpBaselineMotorDrive: string;
   tmpModificationEfficiencyClass: string;
   tmpBaselineEfficiencyClass: string;
 
@@ -68,6 +71,12 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
     'Large End Suction',
     // When user selects below they need a way to provide the optimal efficiency
     'Specified Optimal Efficiency'
+  ];
+  drives: Array<string> = [
+    'Direct Drive',
+    'V-Belt Drive',
+    'Notched V-Belt Drive',
+    'Synchronous Belt Drive'
   ];
   options: Array<any>;
   horsePowers: Array<string> = ['5', '7.5', '10', '15', '20', '25', '30', '40', '50', '60', '75', '100', '125', '150', '200', '250', '300', '350', '400', '450', '500', '600', '700', '800', '900', '1000', '1250', '1750', '2000', '2250', '2500', '3000', '3500', '4000', '4500', '5000', '5500', '6000', '7000', '8000', '9000', '10000', '11000', '12000', '13000', '14000', '15000', '16000', '17000', '18000', '19000', '20000', '22500', '25000', '27500', '30000', '35000', '40000', '45000', '50000'];
@@ -101,6 +110,8 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
     this.tmpBaselineEfficiencyClass = this.psatService.getEfficiencyClassFromEnum(this.psat.inputs.efficiency_class);
     this.tmpModificationPumpType = this.psatService.getPumpStyleFromEnum(this.psat.modifications[this.exploreModIndex].psat.inputs.pump_style);
     this.tmpBaselinePumpType = this.psatService.getPumpStyleFromEnum(this.psat.inputs.pump_style);
+    this.tmpModificationMotorDrive = this.psatService.getDriveFromEnum(this.psat.modifications[this.exploreModIndex].psat.inputs.drive);
+    this.tmpBaselineMotorDrive = this.psatService.getDriveFromEnum(this.psat.inputs.drive);
     this.checkMotorEfficiencies();
     this.checkPumpTypes();
     this.checkValues();
@@ -124,6 +135,18 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
     this.checkPumpTypes();
     this.psat.inputs.pump_style = this.psatService.getPumpStyleEnum(this.tmpBaselinePumpType);
     this.psat.modifications[this.exploreModIndex].psat.inputs.pump_style = this.psatService.getPumpStyleEnum(this.tmpModificationPumpType);
+    this.calculate();
+  }
+
+  setMotorDrive() {
+    // this.checkPumpTypes();
+    // this.psat.inputs.pump_style = this.psatService.getPumpStyleEnum(this.tmpBaselinePumpType);
+    // this.psat.modifications[this.exploreModIndex].psat.inputs.pump_style = this.psatService.getPumpStyleEnum(this.tmpModificationPumpType);
+    // this.calculate();
+
+    // this.checkMotorDriveTypes();
+    this.psat.inputs.drive = this.psatService.getDriveEnum(this.tmpBaselineMotorDrive);
+    this.psat.modifications[this.exploreModIndex].psat.inputs.drive = this.psatService.getDriveEnum(this.tmpModificationMotorDrive);
     this.calculate();
   }
 
@@ -219,6 +242,9 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
     if (this.psat.inputs.pump_style != this.psat.modifications[this.exploreModIndex].psat.inputs.pump_style) {
       this.showPumpType = true;
       this.showPumpData = true;
+    }
+    if (this.psat.inputs.drive !== this.psat.modifications[this.exploreModIndex].psat.inputs.drive) {
+      this.showMotorDrive = true;
     }
     if (this.psat.inputs.pump_specified != this.psat.modifications[this.exploreModIndex].psat.inputs.pump_specified) {
       this.showPumpSpecified = true;
@@ -503,8 +529,10 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
     if (this.showPumpData == false) {
       this.showPumpSpecified = false;
       this.showPumpType = false;
+      this.showMotorDrive = false;
       this.togglePumpSpecified();
       this.togglePumpType();
+      this.toggleMotorDrive();
     }
   }
 
@@ -524,6 +552,13 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
     if (this.showPumpType == false) {
       this.psat.modifications[this.exploreModIndex].psat.inputs.pump_style = this.psat.inputs.pump_style;
       this.tmpModificationPumpType = this.psatService.getPumpStyleFromEnum(this.psat.inputs.pump_style);
+      this.calculate();
+    }
+  }
+  toggleMotorDrive() {
+    if (this.showMotorDrive === false) {
+      this.psat.modifications[this.exploreModIndex].psat.inputs.drive = this.psat.inputs.drive;
+      this.tmpModificationMotorDrive = this.psatService.getDriveFromEnum(this.psat.inputs.drive);
       this.calculate();
     }
   }
