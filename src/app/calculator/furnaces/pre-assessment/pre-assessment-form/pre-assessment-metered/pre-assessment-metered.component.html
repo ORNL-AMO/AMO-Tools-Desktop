@@ -1,0 +1,8 @@
+
+
+<app-metered-electricity-form *ngIf="assessment.settings.energySourceType == 'Electricity'" [inputs]="assessment.meteredEnergy.meteredEnergyElectricity"
+    (emitCalculate)="calculate()" (changeField)="changeField($event)"></app-metered-electricity-form>
+<app-metered-fuel-form *ngIf="assessment.settings.energySourceType == 'Fuel'" [inputs]="assessment.meteredEnergy.meteredEnergyFuel"
+    [settings]="settings" (emitCalculate)="calculate()" (changeField)="changeField($event)"></app-metered-fuel-form>
+<app-metered-steam-form *ngIf="assessment.settings.energySourceType == 'Steam'" [inputs]="assessment.meteredEnergy.meteredEnergySteam"
+    [settings]="settings" (emitCalculate)="calculate()" (changeField)="changeField($event)"></app-metered-steam-form>

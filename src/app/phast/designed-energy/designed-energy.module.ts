@@ -33,7 +33,14 @@ import { DesignedEnergyService } from './designed-energy.service';
     DesignedEnergyElectricityHelpComponent
   ],
   exports: [
-    DesignedEnergyComponent
+    DesignedEnergyComponent,
+    DesignedEnergyElectricityFormComponent,
+    DesignedEnergyFuelFormComponent,
+    DesignedEnergySteamFormComponent,
+    DesignedEnergyResultsComponent,
+    DesignedEnergyFuelHelpComponent,
+    DesignedEnergySteamHelpComponent,
+    DesignedEnergyElectricityHelpComponent
   ],
   providers: [
     DesignedEnergyService

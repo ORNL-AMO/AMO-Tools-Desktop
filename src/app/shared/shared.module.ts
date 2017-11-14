@@ -12,11 +12,11 @@ import { PercentGraphComponent } from './percent-graph/percent-graph.component';
 import { SigFigsPipe } from './sig-figs.pipe';
 
 @NgModule({
-    imports: [
-      CommonModule,
-      FormsModule,
-      ReactiveFormsModule,
-      ChartsModule
+  imports: [
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    ChartsModule
   ],
   declarations: [
     ControlMessagesComponent,

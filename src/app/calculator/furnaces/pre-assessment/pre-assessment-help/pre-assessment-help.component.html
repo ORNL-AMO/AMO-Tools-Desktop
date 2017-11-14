@@ -1,0 +1,10 @@
+<div *ngIf="currentAssessmentType == 'Metered'">
+  <app-metered-steam-help *ngIf="currentEnergySourceType == 'Steam'" [currentField]="currentField"></app-metered-steam-help>
+  <app-metered-fuel-help *ngIf="currentEnergySourceType == 'Fuel'" [currentField]="currentField"></app-metered-fuel-help>
+  <app-metered-electricity-help *ngIf="currentEnergySourceType == 'Electricity'" [currentField]="currentField"></app-metered-electricity-help>
+</div>
+<div *ngIf="currentAssessmentType == 'Designed'">
+  <app-designed-energy-electricity-help  *ngIf="currentEnergySourceType == 'Electricity'" [currentField]="currentField"></app-designed-energy-electricity-help>
+  <app-designed-energy-steam-help  *ngIf="currentEnergySourceType == 'Steam'" [currentField]="currentField"></app-designed-energy-steam-help>
+  <app-designed-energy-fuel-help  *ngIf="currentEnergySourceType == 'Fuel'" [currentField]="currentField"></app-designed-energy-fuel-help>
+</div>
