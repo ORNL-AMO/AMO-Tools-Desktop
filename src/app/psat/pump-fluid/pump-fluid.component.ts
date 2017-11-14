@@ -56,6 +56,33 @@ export class PumpFluidComponent implements OnInit {
     'Notched V-Belt Drive',
     'Synchronous Belt Drive'
   ];
+
+  // Acetone,0.00079,77,49,0.41
+  // Ammonia,0.00136,77,51.4,0.3
+  // Dichlorodifluoromethane refrigerant R-12,0.00144,77,81.8,0.198
+  // Ethanol,0.00061,77,49,1.52
+  // Ethylene glycol,0.00032,77,68.5,17.8
+  // Gasoline,0.00053,60,46,0.88
+  // Glycerine (glycerol),0.00028,77,78.66,648
+  // "Kerosene, jet fuel",0.00055,60,51.2,2.71
+  // Methanol,0.00083,77,49.1,0.75
+  // n-Octane,0.00063,59,43.6,1.266
+  // Petroleum,0.00056,60,44.4,0.198
+
+  fluidTypes: Array<string> = [
+    'Acetone',
+    'Ammonia',
+    'Dichlorodifluoromethane refrigerant R-12',
+    'Ethanol',
+    'Ethylene glycol',
+    'Gasoline',
+    'Glycerine (glycerol)',
+    'Kerosene, jet fuel',
+    'Methanol',
+    'n-Octane',
+    'Petroleum',
+    'Water'
+  ];
   psatForm: any;
   isFirstChange: boolean = true;
   rpmError: string = null;

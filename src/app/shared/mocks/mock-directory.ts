@@ -39,7 +39,9 @@ export const MockDirectory: Directory = {
           motor_field_current: null,
           motor_field_voltage: 480,
           cost_kw_hour: .05,
-          cost: .05
+          cost: .05,
+          fluidType: 'Water',
+          fluidTemperature: 68
         },
         setupDone: true
       }

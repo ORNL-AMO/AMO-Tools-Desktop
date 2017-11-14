@@ -719,7 +719,9 @@ export class PsatService {
       'motorAmps': [psatInputs.motor_field_current, Validators.required],
       'measuredVoltage': [psatInputs.motor_field_voltage, Validators.required],
       'optimizeCalculation': [psatInputs.optimize_calculation, Validators.required],
-      'implementationCosts': [psatInputs.implementationCosts]
+      'implementationCosts': [psatInputs.implementationCosts],
+      'fluidType': [psatInputs.fluidType],
+      'fluidTemperature': [psatInputs.fluidTemperature]
     })
   }
 
@@ -759,8 +761,10 @@ export class PsatService {
       cost_kw_hour: form.value.costKwHr,
       cost: form.value.costKwHr,
       optimize_calculation: form.value.optimizeCalculation,
-      implementationCosts: form.value.implementationCosts
-    }
+      implementationCosts: form.value.implementationCosts,
+      fluidType: form.value.fluidType,
+      fluidTemperature: form.value.fluidTemperature
+    };
     return tmpPsatInputs;
   }
 

@@ -35,6 +35,18 @@
       </tr>
 
       <tr>
+        <td [ngClass]="{'indicate-report-field-different': fluidTypeDiff == true}">Fluid Type</td>
+        <td [ngClass]="{'indicate-report-field-different': fluidTypeDiff == true}">{{psat.inputs.fluidType}}</td>
+        <td *ngFor="let modification of psat.modifications" [ngClass]="{'indicate-report-field-different': modification.psat.inputs.fluidType != psat.inputs.fluidType}">{{modification.psat.inputs.fluidType}}</td>
+      </tr>
+
+      <tr>
+        <td [ngClass]="{'indicate-report-field-different': fluidTemperatureDiff == true}">Fluid Temperature</td>
+        <td [ngClass]="{'indicate-report-field-different': fluidTemperatureDiff == true}">{{psat.inputs.fluidTemperature}}</td>
+        <td *ngFor="let modification of psat.modifications" [ngClass]="{'indicate-report-field-different': modification.psat.inputs.fluidTemperature != psat.inputs.fluidTemperature}">{{modification.psat.inputs.fluidTemperature}}</td>
+      </tr>
+
+      <tr>
         <td [ngClass]="{'indicate-report-field-different': gravityDiff == true}">Specific Gravity</td>
         <td [ngClass]="{'indicate-report-field-different': gravityDiff == true}">{{psat.inputs.specific_gravity | sigFigs:'5'}}</td>
         <td *ngFor="let modification of psat.modifications" [ngClass]="{'indicate-report-field-different': modification.psat.inputs.specific_gravity != psat.inputs.specific_gravity}">{{modification.psat.inputs.specific_gravity | sigFigs:'5'}}</td>

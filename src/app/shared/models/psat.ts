@@ -37,7 +37,9 @@ export interface PsatInputs {
   cost?: number,
   load_factor?: number,
   optimize_calculation?: string,
-  implementationCosts?: number
+  implementationCosts?: number,
+  fluidType: string,
+  fluidTemperature: number
 }
 
 export interface PsatOutputs {
