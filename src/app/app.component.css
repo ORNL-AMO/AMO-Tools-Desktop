@@ -1502,11 +1502,6 @@ Modify Conditions
   min-height: 100vh;
 }
 
-  .modify-conditions .col-4 {
-    padding-right: 0;
-    padding-left: 0;
-  }
-
 .modify-conditions .help-panel {
   padding: 20px;
   height: 100%;

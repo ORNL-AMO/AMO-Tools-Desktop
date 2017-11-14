@@ -1,85 +1,74 @@
 <div *ngIf="assessment && settings">
   <div class="sticky-top hide-print">
     <app-phast-banner [assessment]="assessment"></app-phast-banner>
-    <app-phast-tabs *ngIf="mainTab == 'assessment'"></app-phast-tabs>
-    <nav>
-      <app-losses-tabs *ngIf="currentTab == 'losses' && mainTab == 'assessment'" [phast]="_phast" [settings]="settings" [saveDbToggle]="saveDbToggle"></app-losses-tabs>
+    <!-- phast-tabs = step tabs -->
+    <app-phast-tabs *ngIf="mainTab == 'system-setup'"></app-phast-tabs>
+    <!--losses-tabs are tabs for heat balance/assessment, both inSetup and !inSetup -->
+    <nav *ngIf="mainTab == 'assessment' || (mainTab == 'system-setup' && stepTab.step == 4)">
+      <app-losses-tabs [phast]="_phast" [settings]="settings" [saveDbToggle]="saveDbToggle"></app-losses-tabs>
     </nav>
   </div>
 
-
+  <!--Furnace Setup -->
   <div *ngIf="mainTab == 'system-setup'">
-    <nav>
-      <ul class="tabs subtabs progress-tabs">
-        <li [ngClass]="{'active': subTab == 'system-basics'}">
-          <a (click)="changeSubTab('system-basics')"><span class="step-number">1</span> Assessment Settings</a>
-        </li>
-        <li [ngClass]="{'active': subTab == 'operating-hours'}">
-          <a (click)="changeSubTab('operating-hours')"><span class="step-number">2</span> Operating Hours</a>
-        </li>
-        <li [ngClass]="{'active': subTab == 'energy-costs'}">
-          <a (click)="changeSubTab('energy-costs')"><span class="step-number">3</span> Operating Costs</a>
-        </li>
-      </ul>
-    </nav>
     <div class="tab-content">
-      <div class="wrapper">
+      <div class="wrapper" *ngIf="stepTab.step < 4">
         <div class="form">
-          <app-system-basics *ngIf="subTab == 'system-basics'" [phast]="_phast" [settings]="settings" [saveClicked]="saveClicked" [assessment]="assessment"
+          <!--Step: 1 System Basics (Settings)-->
+          <app-system-basics *ngIf="stepTab.step  == 1" [phast]="_phast" [settings]="settings" [saveClicked]="saveClicked" [assessment]="assessment"
             [isAssessmentSettings]="isAssessmentSettings" (updateSettings)="getSettings($event)" (save)="saveDb()"></app-system-basics>
-          <app-operating-hours *ngIf="subTab == 'operating-hours'" [phast]="_phast" [saveClicked]="saveClicked" (save)="saveDb()"></app-operating-hours>
-          <app-energy-costs *ngIf="subTab == 'energy-costs'" [phast]="_phast" [saveClicked]="saveClicked" (save)="saveDb()" [settings]="settings"></app-energy-costs>
+          <!--Step: 2 Operating Hours-->
+          <app-operating-hours *ngIf="stepTab.step  == 2" [phast]="_phast" [saveClicked]="saveClicked" (save)="saveDb()"></app-operating-hours>
+          <!--Step: 3 Operating Costs-->
+          <app-energy-costs *ngIf="stepTab.step  == 3" [phast]="_phast" [saveClicked]="saveClicked" (save)="saveDb()" [settings]="settings"></app-energy-costs>
         </div>
         <div class="help">
           <app-help-panel></app-help-panel>
         </div>
       </div>
+      <!--Step: 4 Heat Balance-->
+      <app-losses *ngIf="stepTab.step  == 4" [(phast)]="_phast" [saveClicked]="saveClicked" (saved)="saveDb()" [settings]="settings"
+        [inSetup]="true"></app-losses>
+      <!--Step: 5 Aux Equipment-->
+      <app-aux-equipment *ngIf="stepTab.step  == 5" [(phast)]="_phast" (save)="saveDb()"></app-aux-equipment>
+      <!--Step: 6 Designed Energy-->
+      <app-designed-energy *ngIf="stepTab.step  == 6" [(phast)]="_phast" [settings]="settings" (save)="saveDb()"></app-designed-energy>
+      <!--Step: 7 Metered Energy -->
+      <app-metered-energy *ngIf="stepTab.step  == 7" [(phast)]="_phast" [settings]="settings" (save)="saveDb()"></app-metered-energy>
     </div>
   </div>
 
-  <div class="tab-content" *ngIf="mainTab == 'assessment'">
-    <app-losses *ngIf="currentTab == 'losses'" [(phast)]="_phast" [saveClicked]="saveClicked" (saved)="saveDb()" [settings]="settings"></app-losses>
-
-    <div class="row tab-content" *ngIf="currentTab != 'losses'">
-      <div class="col-12">
-        <app-designed-energy *ngIf="currentTab == 'designed-energy-use'" [(phast)]="_phast" [settings]="settings" (save)="saveDb()"></app-designed-energy>
-        <app-aux-equipment *ngIf="currentTab == 'aux-equipment'" [(phast)]="_phast" (save)="saveDb()"></app-aux-equipment>
-        <app-metered-energy *ngIf="currentTab == 'metered-energy'" [(phast)]="_phast" [settings]="settings" (save)="saveDb()"></app-metered-energy>
-      </div>
-    </div>
+  <!--Assessment-->
+  <div *ngIf="mainTab == 'assessment'" class="tab-content">
+    <app-losses [(phast)]="_phast" [saveClicked]="saveClicked" (saved)="saveDb()" [settings]="settings" [inSetup]="false"></app-losses>
   </div>
-
-
-  <div class="row justify-content-center report-container" *ngIf="mainTab == 'report'">
+  <!--Report-->
+  <div *ngIf="mainTab == 'report'" class="row justify-content-center report-container">
     <div class="col-11 report-column">
       <app-phast-report [phast]="_phast" [settings]="settings" [assessment]="assessment" [inPhast]="true"></app-phast-report>
     </div>
   </div>
-
-  <div class="row tab-content" *ngIf="mainTab == 'sankey'">
+  <!--Sankey-->
+  <div *ngIf="mainTab == 'sankey'" class="row tab-content">
     <div class="col-12">
       <app-sankey [phast]="_phast" [location]="'sankey-diagram'" [settings]="settings"></app-sankey>
     </div>
   </div>
-
-  <div class="tab-content" *ngIf="mainTab =='diagram'">
+  <!--Diagram-->
+  <div *ngIf="mainTab =='diagram'" class="tab-content">
     <app-phast-diagram></app-phast-diagram>
   </div>
 
   <div class="footer" *ngIf="mainTab == 'system-setup' || mainTab == 'assessment'">
     <div class="pull-left">
-      <button class="btn btn-secondary" *ngIf="mainTab == 'system-setup'" (click)="close()">Close</button>
-      <button class="btn btn-secondary" *ngIf="mainTab != 'system-setup'" (click)="goBack()">Back</button>
+      <!--<button class="btn btn-secondary" *ngIf="mainTab == 'system-setup'" (click)="close()">Close</button>-->
+      <button class="btn btn-secondary" *ngIf="mainTab == 'system-setup'" (click)="goToStep(stepTab.back)">Back</button>
     </div>
     <div class="pull-right">
       <button class="btn btn-secondary" (click)="save()">Save</button>
-      <!--<button class="btn btn-secondary" *ngIf="currentTab >= 3" (click)="exportData()">Export to CSV...</button>-->
-      <button class="btn btn-secondary" *ngIf="subTab == 'system-basics' && mainTab == 'system-setup'" (click)="changeSubTab('operating-hours')">Continue</button>
-      <button class="btn btn-secondary" *ngIf="subTab == 'operating-hours' && mainTab == 'system-setup'" (click)="changeSubTab('energy-costs')">Continue</button>
-      <button class="btn btn-secondary" *ngIf="subTab == 'energy-costs' && mainTab == 'system-setup'" (click)="continue()">Continue</button>
-
+      <button class="btn btn-secondary" *ngIf="mainTab == 'system-setup' && stepTab.next" (click)="goToStep(stepTab.next)">Continue</button>
+      <button class="btn btn-secondary" *ngIf="mainTab == 'system-setup' && !stepTab.next" [disabled]="!_phast.setupDone" (click)="phastService()">Heat Balance Assessment</button>
       <button class="btn btn-primary" *ngIf="mainTab == 'assessment'" [disabled]="!_phast.setupDone" (click)="goToReport()">View Report</button>
-
     </div>
   </div>
 </div>

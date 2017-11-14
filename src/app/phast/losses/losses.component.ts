@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, SimpleChanges, Output, EventEmitter } from '@angular/core';
 import { PHAST, Losses, Modification } from '../../shared/models/phast/phast';
 import { Settings } from '../../shared/models/settings';
+
 import * as _ from 'lodash';
 import { ModalDirective } from 'ngx-bootstrap';
 import { PhastService } from '../phast.service';
@@ -8,7 +9,7 @@ import { LossesService } from './losses.service';
 @Component({
   selector: 'app-losses',
   templateUrl: 'losses.component.html',
-  styleUrls: ['losses.component.css']
+  styleUrls: ['losses.component.css', '../../psat/explore-opportunities/explore-opportunities.component.css']
 })
 export class LossesComponent implements OnInit {
   @Input()
@@ -19,6 +20,8 @@ export class LossesComponent implements OnInit {
   saved = new EventEmitter<boolean>();
   @Input()
   settings: Settings;
+  @Input()
+  inSetup: boolean;
 
   lossAdded: boolean;
 
@@ -40,6 +43,7 @@ export class LossesComponent implements OnInit {
 
   isModalOpen: boolean = false;
   showAddBtn: boolean = true;
+  toggleCalcuate: boolean = false;
   constructor(private lossesService: LossesService) { }
 
   ngOnInit() {
@@ -77,7 +81,7 @@ export class LossesComponent implements OnInit {
   }
 
   ngOnDestroy() {
-   // this.lossesService.lossesTab.next('charge-material');
+    // this.lossesService.lossesTab.next('charge-material');
   }
 
   changeField($event) {
@@ -89,6 +93,7 @@ export class LossesComponent implements OnInit {
       this.saved.emit(true);
       this.showEditModification = false;
       this.editModification = null;
+      this.toggleCalculate = !this.toggleCalculate;
     }
   }
 

@@ -1,17 +1,16 @@
-<!-- <div class="sticky-top">
-  <nav>
-    <app-losses-tabs [settings]="settings"></app-losses-tabs>
-  </nav>
-</div> -->
-<div class="modify-conditions">
-  <!--<nav class="col-2 sidebar losses-sidebar">
-    <app-losses-sidebar [losses]="phast.losses" [lossesStates]="lossesStates" (changeTab)="changeTab($event)" [lossesTab]="lossesTab"></app-losses-sidebar>
-  </nav>-->
-  <!--Baseline-->
-  <div class="modification baseline" (click)="togglePanel(baselineSelected)" [ngClass]="{'disabled': baselineSelected == false, 'modal-open': isModalOpen == true}">
+<div class="row modify-conditions" [ngClass]="{'explore-container': inSetup}">
+  <div class="modification" (click)="togglePanel(baselineSelected)" [ngClass]="{'disabled': baselineSelected == false, 'modal-open': isModalOpen == true, 'baseline':!inSetup,  'col-4': !inSetup, 'col-md-6': inSetup, 'explore-column': inSetup }">
+    <!-- use inSetup with ngClass for styling in system setup (inSetup == true) or in assessment (inSetup == false) -->
     <div class="header">
       <h3>Baseline</h3>
-      <button *ngIf="showAddBtn" class="btn btn-secondary pull-right" (click)="addLoss()" [disabled]="!baselineSelected"><span class="fa fa-plus"></span></button>
+      <!-- <button *ngIf="showAddBtn" class="btn btn-secondary pull-right" (click)="addLoss()" [disabled]="!baselineSelected">
+        <span class="fa fa-plus"></span>
+      </button> -->
+      <h5 class="pull-right add-loss">
+        <a class="small" [ngClass]="{'disabled': !baselineSelected}">
+          <span (click)="addLoss()">+Add Loss</span>
+        </a>
+      </h5>
     </div>
 
     <div class="losses-container">
@@ -84,7 +83,8 @@
     </div>
   </div>
   <!--Modification Start -->
-  <div class="modification" *ngIf="_modifications.length != 0" (click)="togglePanel(modificationSelected)" [ngClass]="{'disabled': modificationSelected == false, 'modal-open': isModalOpen == true}">
+  <div class="modification col-4" *ngIf="_modifications.length != 0 && !inSetup" (click)="togglePanel(modificationSelected)"
+    [ngClass]="{'disabled': modificationSelected == false, 'modal-open': isModalOpen == true}">
 
     <!-- Modification Header -->
     <!--<div class="header" *ngIf="!editModification">-->
@@ -174,15 +174,16 @@
       <ul *ngIf="!showEditModification">
         <li *ngFor="let modification of _modifications">
           <button>
-          <a (click)="selectModification(modification)">
-            {{modification.phast.name}}
-          </a>
-          <a class="pull-right" (click)="dispEditModification(modification)">Edit / Delete</a>
+            <a (click)="selectModification(modification)">
+              {{modification.phast.name}}
+            </a>
+            <a class="pull-right" (click)="dispEditModification(modification)">Edit / Delete</a>
           </button>
         </li>
         <li class="add-modification">
           <button (click)="addModification()">Add Modified Condition</button>
-          <p>Data will be copied from <br/> your baseline operating condition</p>
+          <p>Data will be copied from
+            <br/> your baseline operating condition</p>
         </li>
       </ul>
       <div class="losses-container edit-modification" *ngIf="showEditModification && editModification">
@@ -191,13 +192,16 @@
       </div>
     </div>
   </div>
-  <div class="no-data" *ngIf="_modifications.length == 0">
-    <h3>Once you have your baseline set up, click below to start adding modifications.</h3>
-    <button type="button" (click)="addModification()" *ngIf="isLossesSetup">Add Modified Condition</button>
-    <button type="button" (click)="lossesSetup()" *ngIf="!isLossesSetup">Baseline Done?</button>
+  <div class="no-data col-4" *ngIf="_modifications.length == 0 && !inSetup">
+    <h3>Now that your baseline set up, click below to start adding modifications.</h3>
+    <button type="button" (click)="addModification()">Add Modified Condition</button>
+    <!--<button type="button" (click)="lossesSetup()" *ngIf="!isLossesSetup">Baseline Done?</button>-->
     <p>Data will be copied from your current baseline condition.</p>
   </div>
-  <app-losses-help [lossesTab]="lossesTab" [currentField]="currentField" [settings]="settings"></app-losses-help>
+  <div [ngClass]="{'col-md-6': inSetup, 'col-md-4': !inSetup}">
+    <app-losses-result-panel *ngIf="!inSetup"  [inSetup]="inSetup"  [lossesTab]="lossesTab" [currentField]="currentField" [settings]="settings" [phast]="phast" [toggleCalculate]="toggleCalculate" [modification]="_modifications[modificationIndex].phast"></app-losses-result-panel>
+    <app-losses-result-panel *ngIf="inSetup"  [inSetup]="inSetup"  [lossesTab]="lossesTab" [currentField]="currentField" [settings]="settings" [phast]="phast" [toggleCalculate]="toggleCalculate"></app-losses-result-panel>
+  </div>
 
 
   <div class="setup-dialog" *ngIf="showSetupDialog == true">

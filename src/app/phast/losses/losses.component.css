@@ -15,3 +15,8 @@
 .modal-open {
     z-index: initial !important;
 }
+
+.add-loss{
+    margin-bottom: 0px;
+    margin-top: 5px;
+}

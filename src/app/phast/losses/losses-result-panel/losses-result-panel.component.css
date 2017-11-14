@@ -1,0 +1,12 @@
+.tab-row{
+    width: 100%;
+    text-align: center;
+}
+
+.data-table{
+    padding-top: 25px;
+}
+
+.help-panel{
+    padding:0px !important;
+}
