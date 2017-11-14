@@ -69,18 +69,18 @@ export class PumpFluidComponent implements OnInit {
   // n-Octane,0.00063,59,43.6,1.266
   // Petroleum,0.00056,60,44.4,0.198
 
-  fluidProperties: Object<FluidProperties>  = {
-    'Acetone': { density: 0.00079, beta: 77, tref: 49, kinViscosity: 0.41 },
-    'Ammonia': { density: 0.00136, beta: 77, tref: 51.4, kinViscosity: 0.3 },
-    'Dichlorodifluoromethane refrigerant R-12': { density: 0.00144, beta: 77, tref: 81.8, kinViscosity: 0.198 },
-    'Ethanol': { density: 0.00061, beta: 77, tref: 49, kinViscosity: 1.52 },
-    'Ethylene glycol': { density: 0.00032, beta: 77, tref: 68.5, kinViscosity: 17.8 },
-    'Gasoline': { density: 0.00053, beta: 60, tref: 46, kinViscosity: 0.88 },
-    'Glycerine (glycerol)': { density: 0.00028, beta: 77, tref: 78.66, kinViscosity: 648 },
-    'Kerosene - jet fuel': { density: 0.00055, beta: 60, tref: 51.2, kinViscosity: 2.71 },
-    'Methanol': { density: 0.00083, beta: 77, tref: 49.1, kinViscosity: 0.75 },
-    'n-Octane': { density: 0.00063, beta: 59, tref: 43.6, kinViscosity: 1.266 },
-    'Petroleum': { density: 0.00056, beta: 60, tref: 44.4, kinViscosity: 0.198 }
+  fluidProperties = {
+    'Acetone': { beta: 0.00079, tref: 77, density: 49, kinViscosity: 0.41 },
+    'Ammonia': { beta: 0.00136, tref: 77, density: 51.4, kinViscosity: 0.3 },
+    'Dichlorodifluoromethane refrigerant R-12': { beta: 0.00144, tref: 77, density: 81.8, kinViscosity: 0.198 },
+    'Ethanol': { beta: 0.00061, tref: 77, density: 49, kinViscosity: 1.52 },
+    'Ethylene glycol': { beta: 0.00032, tref: 77, density: 68.5, kinViscosity: 17.8 },
+    'Gasoline': { beta: 0.00053, tref: 60, density: 46, kinViscosity: 0.88 },
+    'Glycerine (glycerol)': { beta: 0.00028, tref: 77, density: 78.66, kinViscosity: 648 },
+    'Kerosene - jet fuel': { beta: 0.00055, tref: 60, density: 51.2, kinViscosity: 2.71 },
+    'Methanol': { beta: 0.00083, tref: 77, density: 49.1, kinViscosity: 0.75 },
+    'n-Octane': { beta: 0.00063, tref: 59, density: 43.6, kinViscosity: 1.266 },
+    'Petroleum': { beta: 0.00056, tref: 60, density: 44.4, kinViscosity: 0.198 }
   };
 
   fluidTypes: Array<string> = [
