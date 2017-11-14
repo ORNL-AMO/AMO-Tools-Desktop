@@ -9,6 +9,7 @@
 }
 .output-summary .table td {
     padding: 0px 8px;
+    vertical-align: middle;
 }
 
 
@@ -16,7 +17,9 @@
     font-weight: bold;
 }
 
-
+.graph-col{
+    padding-left: 0px;
+}
 
 @media print {
     tr{
