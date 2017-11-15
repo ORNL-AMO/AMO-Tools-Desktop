@@ -1,8 +1,12 @@
-<div class="modify-conditions">
-  <div class="modification aux-form-panel">
+<div class="modify-conditions explore-container row">
+  <div class="modification explore-column col-6">
     <div class="header aux-header">
-      <h3>Design Energy (Electricity)</h3>
-      <button class="btn btn-secondary pull-right" (click)="addZone()"><span class="fa fa-plus"></span></button>
+      <h5 class="aux-title">Design Energy (Electricity)</h5>
+      <h5 class="pull-right add-loss">
+          <a class="small">
+              <span (click)="addZone()">+Add Zone</span>
+          </a>
+      </h5>
     </div>
     <div class="losses-container">
       <div class="card-form" *ngFor="let zone of phast.designedEnergy.designedEnergyElectricity; let index = index;">
@@ -28,7 +32,7 @@
       </div>
     </div>
   </div>
-  <div class="modification aux-help-panel">
+  <div class="col-6">
     <div class="help-panel">
       <div class="row">
         <ul class="tabs primary tab-row">

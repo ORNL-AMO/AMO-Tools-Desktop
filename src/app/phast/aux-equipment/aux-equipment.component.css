@@ -1,24 +1,17 @@
-.aux-equipment table {
-	width: 100%;
+
+.help-panel{
+	padding: 0px;
 }
 
-.modification{
-	width: 50%;
+.aux-title{
+	margin: 10px 0 10px 10px;
+    font-size: 15px;
+    text-transform: uppercase;
+    display: inline-block;
+    letter-spacing: 4px
 }
 
-.aux-form-panel{
-box-shadow: 0px 0px 69px -1px rgba(0,0,0,0.2);
-    z-index: 2;
-}
-
-.aux-help-panel{
-	box-shadow: none;
-	z-index: 0;
-}
-
-.aux-header{
-	padding-top: 10px;
-	padding-bottom: 10px;
-	padding-left: 20px;
-	padding-right: 10px;
+.add-loss{
+    margin-bottom: 0px;
+    margin-top: 5px;
 }

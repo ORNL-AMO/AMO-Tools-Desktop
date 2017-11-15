@@ -1,8 +1,12 @@
-<div class="modify-conditions explore-container ">
-    <div class="modification aux-form-panel explore-column">
-        <div class="header aux-header">
-            <h3>Auxiliary Equipment</h3>
-            <button class="btn btn-secondary pull-right" (click)="addEquipment()"><span class="fa fa-plus"></span></button>
+<div class="modify-conditions explore-container row">
+    <div class="modification explore-column col-6">
+        <div class="header">
+            <h5 class="aux-title">Auxiliary Equipment</h5>
+            <h5 class="pull-right add-loss">
+                <a class="small">
+                    <span (click)="addEquipment()">+Add Equipment</span>
+                </a>
+            </h5>
         </div>
         <div class="losses-container">
             <div class="card-form" *ngFor="let equipment of phast.auxEquipment; let index = index;">
@@ -16,8 +20,8 @@
                     </div>
                     <div class="col-6">
                         <button class="close pull-right" aria-label="Close" (click)="removeEquipment(index)">
-                                <span aria-hidden="true">&times;</span>
-                         </button>
+                            <span aria-hidden="true">&times;</span>
+                        </button>
                     </div>
                 </div>
                 <div class="row">
@@ -28,7 +32,7 @@
             </div>
         </div>
     </div>
-    <div class="modification aux-help-panel">
+    <div class="col-6">
         <div class="help-panel">
             <div class="row">
                 <ul class="tabs primary tab-row">
