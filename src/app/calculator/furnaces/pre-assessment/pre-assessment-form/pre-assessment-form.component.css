@@ -1,0 +1,70 @@
+.pre-assessment-furnace{
+    background-color: white;
+    animation-name: show-assessment;
+    animation-duration: 1.5s;
+    overflow: hidden;
+    padding-left:15px;
+    padding-right: 15px;
+    padding-bottom: 0px;
+    margin-bottom: 10px;
+}
+
+
+@keyframes show-assessment{
+    from { height: 0%;}
+    to {height: 100%;}
+}
+
+/* .slide-in{
+    animation-name: slide-in-key;
+    animation-duration: .5s;  
+}
+
+@keyframes slide-in-key{
+    from {height: 0%}
+    to {height: 100%}
+} */
+
+.pre-assessment-header{
+    border-bottom: inset 2px;
+    border-left: solid 10px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.pre-assessment-form{
+    padding-top: 10px;
+    /* padding-left: 15px;
+    padding-right: 15px; */
+}
+
+/* .pre-assessment-body{
+    padding-left: 15px;
+    padding-right: 15px;
+} */
+
+.fa{
+    font-size: 75%;
+}
+
+.fa:hover{
+    cursor: pointer;
+    zoom: 1.25;
+}
+
+.form-group{
+    text-align:center;
+}
+
+.fa-pencil{
+    padding-right: 5px;
+}
+
+h5{
+    margin-bottom: 0px;
+}
+
+.pre-assessment-header:hover{
+    cursor: pointer;
+    background-color: lightgray;
+}

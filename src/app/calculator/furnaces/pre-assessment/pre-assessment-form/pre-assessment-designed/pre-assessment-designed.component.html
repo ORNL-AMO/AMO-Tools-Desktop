@@ -1,0 +1,35 @@
+<div class="row">
+    <div class="col">
+        <a class="pull-right small" (click)="addZone()">+Add Zone</a>
+    </div>
+</div>
+<div *ngIf="assessment.settings.energySourceType == 'Electricity'">
+    <div *ngFor="let inputs of assessment.designedEnergy.designedEnergyElectricity; let index = index">
+        <app-designed-energy-electricity-form [inputs]="inputs" (emitCalculate)="calculate()" (changeField)="changeField($event)"></app-designed-energy-electricity-form>
+        <div class="row">
+            <div class="col">
+                <a class="pull-right small" (click)="removeElectricityZone(index)">-Remove Zone</a>
+            </div>
+        </div>
+    </div>
+</div>
+<div *ngIf="assessment.settings.energySourceType == 'Fuel'">
+    <div *ngFor="let inputs of assessment.designedEnergy.designedEnergyFuel; let index = index">
+        <app-designed-energy-fuel-form [inputs]="inputs" [settings]="settings" (emitCalculate)="calculate()" (changeField)="changeField($event)"></app-designed-energy-fuel-form>
+        <div class="row">
+            <div class="col">
+                <a class="pull-right small" (click)="removeFuelZone(index)">-Remove Zone</a>
+            </div>
+        </div>
+    </div>
+</div>
+<div *ngIf="assessment.settings.energySourceType == 'Steam'">
+    <div *ngFor="let inputs of assessment.designedEnergy.designedEnergySteam; let index = index">
+        <app-designed-energy-steam-form [inputs]="inputs" [settings]="settings" (emitCalculate)="calculate()" (changeField)="changeField($event)"></app-designed-energy-steam-form>
+        <div class="row">
+            <div class="col">
+                <a class="pull-right small" (click)="removeSteamZone(index)">-Remove Zone</a>
+            </div>
+        </div>
+    </div>
+</div>

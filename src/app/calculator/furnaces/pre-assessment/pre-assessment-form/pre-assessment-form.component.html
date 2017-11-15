@@ -1,0 +1,56 @@
+<div class="pre-assessment-furnace">
+  <div class="row">
+    <div class="col pre-assessment-header" [ngStyle]="{'border-color': assessment.borderColor}"  (click)="collapsePreAssessment()">
+      <h5 *ngIf="!isEditingName">
+          <span class="fa fa-pencil" (click)="editName()"></span>
+          {{assessment.name}}
+        <!-- <span class="pull-left">
+          {{assessment.name}}
+        </span> -->
+        <div class="pull-right">
+          <!-- <span class="fa fa-chevron-up" *ngIf="!assessment.collapsed"></span>
+          <span class="fa fa-chevron-down" *ngIf="assessment.collapsed"></span> -->
+          <span class="fa fa-times" (click)="deletePreAssessment()"></span>
+        </div>
+      </h5>
+      <h5 *ngIf="isEditingName">
+        <input type="text" id="assessmentName" [(ngModel)]="assessment.name" onfocus="this.select();" required="required" (input)="calculate()">
+        <span *ngIf="assessment.name" class="fa fa-check" (click)="doneEditingName()"></span>
+      </h5>
+    </div>
+  </div>
+
+  <div class="pre-assessement-form" [@collapsed]="assessment.collapsedState">
+    <div class="row form-section">
+      <div class="col">
+        <div class="form-group">
+          <label for="assessmentType">Assessment Type</label>
+          <select class="form-control select-type mx-auto" id="assessmentType" name="assessmentType" [(ngModel)]="assessment.type"
+            (change)="changeAssessmentType()">
+            <option [ngValue]="'Metered'">Metered</option>
+            <option [ngValue]="'Designed'">Designed</option>
+          </select>
+        </div>
+      </div>
+      <div class="col">
+        <div class="form-group">
+          <label for="energySourceType">Furnace Type</label>
+          <select class="form-control select-type mx-auto" id="energySourceType" name="energySourceType" [(ngModel)]="assessment.settings.energySourceType"
+            (change)="changeEnergyType()">
+            <option [ngValue]="'Fuel'">Fuel</option>
+            <option [ngValue]="'Electricity'">Electrotechnology</option>
+            <option [ngValue]="'Steam'">Steam-based</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="mx-auto col-12" *ngIf="assessment.type == 'Metered'">
+        <app-pre-assessment-metered [assessment]="assessment" [settings]="settings" (emitCalculate)="calculate()" (emitChangeField)="changeField($event)"></app-pre-assessment-metered>
+      </div>
+      <div class="mx-auto col-12" *ngIf="assessment.type == 'Designed'">
+        <app-pre-assessment-designed [assessment]="assessment" [settings]="settings" (emitCalculate)="calculate()" (emitChangeField)="changeField($event)"></app-pre-assessment-designed>
+      </div>
+    </div>
+  </div>
+</div>

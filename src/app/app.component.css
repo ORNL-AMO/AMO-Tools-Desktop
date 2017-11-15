@@ -833,9 +833,6 @@ Sidebar
     height: 100vh;
     background-color: #ececec;
 }
-.dashboard-page {
-  margin-top: 4%;
-}
 
 .doe-logo {
   width: 100%;
@@ -1927,6 +1924,7 @@ Toasty Overrides ================================= */
   .output-summary table td {
     font-size: 11px;
     padding: 0px 8px;
+    vertical-align: middle;
   }
 
   .assessment-report {

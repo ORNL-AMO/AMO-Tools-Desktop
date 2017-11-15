@@ -1,0 +1,83 @@
+<div class="pump-head">
+  <div class="row">
+    <div class="col-6 form">
+      <div class="row">
+        <div class="col-6">
+          <div class="form-group">
+            <label>Units of Measure</label>
+            <div class="form-check">
+              <label class="form-check-label">
+                <input class="form-check-input" type="radio" name="unitsOfMeasure" [(ngModel)]="settings.unitsOfMeasure" value="Imperial" (change)="convertData()">Imperial
+              </label>
+              <label class="form-check-label">
+                <input class="form-check-input" type="radio" name="unitsOfMeasure" [(ngModel)]="settings.unitsOfMeasure" value="Metric" (change)="convertData()">Metric
+              </label>
+            </div>
+          </div>
+        </div>
+        <div class="col-6">
+          <a class="pull-right small align-bottom" (click)="addPreAssessment()" *ngIf="showAdd">+Add Furnace</a>
+        </div>
+      </div>
+      <div class="row" *ngFor="let assessment of preAssessments; let index = index;">
+        <div class="col-12">
+          <app-pre-assessment-form [assessment]="assessment" [settings]="settings" (emitCalculate)="calculate()" (emitCollapse)="collapsePreAssessment(assessment)"
+            (emitDelete)="deletePreAssessment(assessment, index)" (emitChangeField)="setCurrentField($event)" (emitEnergyType)="setEnergySourceType($event)"
+            (emitAssessmentType)="setAssessmentType($event)"></app-pre-assessment-form>
+          <!-- <span class="fa fa-times" (click)="deletePreAssessment(index)"></span>
+            <span class="fa fa-chevron-up" *ngIf="!assessment.collapsed" (click)="collapsePreAssessment(index)"></span>
+            <span class="fa fa-chevron-down" *ngIf="assessment.collapsed" (click)="collapsePreAssessment(index)"></span> -->
+        </div>
+      </div>
+    </div>
+
+    <div class="col-6">
+      <div class="sticky-top">
+        <ul class="tabs primary text-center">
+          <li class="calc-tab" [ngClass]="{'active': tabSelect == 'results'}">
+            <a (click)="setTab('results')">Results</a>
+          </li><!--
+          --><li class="calc-tab" [ngClass]="{'active': tabSelect == 'help'}">
+            <a (click)="setTab('help')">Help</a>
+          </li>
+        </ul>
+        <div class="tab-content">
+          <div *ngIf="tabSelect == 'results'" class="form-group text-center results-box">
+            <div *ngIf="results.length != 0">
+              <h5>Process Heating Equipment - Energy Distribution</h5>
+              <app-pre-assessment-graph [results]="results"></app-pre-assessment-graph>
+              <div class="row result-table">
+                <div class="col-6">
+                  <table class="table table-hover">
+                    <tbody>
+                      <tr *ngFor="let result of results; let even = even;" class="result-table-row" [ngStyle]="{'border-left-color': result.color}">
+                        <td *ngIf="even" class="result-name">{{result.name}}:</td>
+                        <td *ngIf="even" class="result-percent">{{result.percent | number:'1.0-2'}}%</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <div class="col-6">
+                  <table class="table table-hover">
+                    <tbody>
+                      <tr *ngFor="let result of results; let odd = odd;" class="result-table-row" [ngStyle]="{'border-left-color': result.color}">
+                        <td *ngIf="odd" class="result-name">{{result.name}}:</td>
+                        <td *ngIf="odd" class="result-percent">{{result.percent | number:'1.0-2'}}%</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+            <div *ngIf="results.length == 0">
+              <h5>Enter furnace data for multiple furnaces to compare their energy consumption.</h5>
+            </div>
+          </div>
+          <div class="help-panel" *ngIf="tabSelect == 'help'">
+            <app-pre-assessment-help [currentField]="currentField" [currentAssessmentType]="currentAssessmentType" [currentEnergySourceType]="currentEnergySourceType"></app-pre-assessment-help>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
