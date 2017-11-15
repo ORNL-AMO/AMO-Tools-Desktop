@@ -570,13 +570,15 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
 
   //optimized
   addNum() {
-    this.psat.modifications[this.exploreModIndex].psat.inputs.kinematic_viscosity = this.psat.modifications[this.exploreModIndex].psat.inputs.kinematic_viscosity + 1;
+    // this.psat.modifications[this.exploreModIndex].psat.inputs.kinematic_viscosity = Number(this.psat.modifications[this.exploreModIndex].psat.inputs.kinematic_viscosity + 1).toFixed(3);
+    this.psat.modifications[this.exploreModIndex].psat.inputs.kinematic_viscosity += 1;
     this.calculate();
   }
 
   subtractNum() {
-    if (this.psat.modifications[this.exploreModIndex].psat.inputs.kinematic_viscosity != 0) {
-      this.psat.modifications[this.exploreModIndex].psat.inputs.kinematic_viscosity = this.psat.modifications[this.exploreModIndex].psat.inputs.kinematic_viscosity - 1;
+    if (this.psat.modifications[this.exploreModIndex].psat.inputs.kinematic_viscosity - 1 > 0) {
+      // this.psat.modifications[this.exploreModIndex].psat.inputs.kinematic_viscosity = Number(this.psat.modifications[this.exploreModIndex].psat.inputs.kinematic_viscosity - 1).toFixed(3);
+      this.psat.modifications[this.exploreModIndex].psat.inputs.kinematic_viscosity -= 1;
     }
     this.calculate();
   }
@@ -595,9 +597,10 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
 
   checkOptimized() {
     if (this.psat.modifications[this.exploreModIndex].psat.inputs.optimize_calculation) {
-      if (this.psat.modifications[this.exploreModIndex].psat.inputs.kinematic_viscosity != 1) {
-        this.showViscosity = true;
-      }
+      this.showViscosity = true;
+      // if (this.psat.modifications[this.exploreModIndex].psat.inputs.kinematic_viscosity != 1) {
+      //   this.showViscosity = true;
+      // }
       if (this.psat.modifications[this.exploreModIndex].psat.inputs.fixed_speed != 0) {
         this.showSpeed = true;
       }

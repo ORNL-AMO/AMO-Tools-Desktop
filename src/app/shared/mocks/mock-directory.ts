@@ -1,4 +1,5 @@
 import { Directory } from '../models/directory';
+import {FlueGasByVolume} from "../models/phast/losses/flueGas";
 
 export const MockDirectory: Directory = {
   name: 'Root Directory',
@@ -239,9 +240,10 @@ export const MockDirectory: Directory = {
             {
               flueGasType: "By Volume",
               flueGasByVolume: {
-                flueGasTemperature: 1300,
+                flueGasTemperature: 1400,
                 excessAirPercentage: 10.0,
                 combustionAirTemperature: 500,
+                fuelTemperature: 125,
                 gasTypeId: 1,
                 C2H6: 8.5,
                 C3H8: 0,

@@ -233,8 +233,7 @@ export class PumpFluidComponent implements OnInit {
       }
       const tTemp = (t - 32) * (5.0 / 9) + 273.15;
       const density = 0.14395 / Math.pow(0.0112, (1 + Math.pow(1 - tTemp / 649.727, 0.05107)));
-      const kinViscosity = 0.000000003 * Math.pow(t, 4) - 0.000002 * Math.pow(t, 3) - 0.0005 * Math.pow(t, 2) - 0.0554 * t + 3.1271;
-      console.log(kinViscosity);
+      const kinViscosity = 0.000000003 * Math.pow(t, 4) - 0.000002 * Math.pow(t, 3) + 0.0005 * Math.pow(t, 2) - 0.0554 * t + 3.1271;
       this.psatForm.patchValue({
         gravity: Number(density / 1000).toFixed(3),
         viscosity: Number(kinViscosity).toFixed(3)
@@ -247,7 +246,6 @@ export class PumpFluidComponent implements OnInit {
         this.temperatureError = "Warning: Fluid Temperature is less than the freezing point (" + property.melting + " deg F) at atmospheric pressure";
       }
       const density = property.density / (1 + property.beta * (t - property.tref));
-      console.log(property.kinViscosity);
       this.psatForm.patchValue({
         gravity: Number(density / 62.428).toFixed(3),
         viscosity: Number(property.kinViscosity).toFixed(3)

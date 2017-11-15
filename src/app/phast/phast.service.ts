@@ -281,6 +281,7 @@ export class PhastService {
     if (settings.unitsOfMeasure == 'Metric') {
       inputs.combustionAirTemperature = this.convertUnitsService.value(inputs.combustionAirTemperature).from('C').to('F');
       inputs.flueGasTemperature = this.convertUnitsService.value(inputs.flueGasTemperature).from('C').to('F');
+      inputs.fuelTemperature = this.convertUnitsService.value(inputs.fuelTemperature).from('C').to('F');
       results = phastAddon.flueGasLossesByVolume(inputs);
     } else {
       results = phastAddon.flueGasLossesByVolume(inputs);
