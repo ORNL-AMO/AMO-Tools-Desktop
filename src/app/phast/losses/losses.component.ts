@@ -43,7 +43,7 @@ export class LossesComponent implements OnInit {
 
   isModalOpen: boolean = false;
   showAddBtn: boolean = true;
-  toggleCalcuate: boolean = false;
+  toggleCalculate: boolean = false;
   constructor(private lossesService: LossesService) { }
 
   ngOnInit() {

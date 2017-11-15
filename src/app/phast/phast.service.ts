@@ -288,6 +288,7 @@ export class PhastService {
   }
 
   flueGasByVolume(input: FlueGasByVolume, settings: Settings) {
+    console.log(input);
     let inputs = this.createInputCopy(input);
     let results = 0;
     if (settings.unitsOfMeasure == 'Metric') {

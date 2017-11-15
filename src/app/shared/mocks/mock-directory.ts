@@ -239,6 +239,7 @@ export const MockDirectory: Directory = {
               flueGasByVolume: {
                 flueGasTemperature: 1300,
                 excessAirPercentage: 10.0,
+                fuelTemperature: 20,
                 combustionAirTemperature: 500,
                 gasTypeId: 1,
                 C2H6: 8.5,
