@@ -95,5 +95,7 @@ export interface FluidProperties {
   density: number,
   beta: number,
   tref: number,
-  kinViscosity: number
+  kinViscosity: number,
+  boiling: number,
+  melting: number
 }
