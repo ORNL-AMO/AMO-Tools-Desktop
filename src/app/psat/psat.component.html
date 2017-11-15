@@ -5,18 +5,22 @@
   <!--system-setup-->
   <div *ngIf="mainTab == 'system-setup'">
     <nav class="hide-print">
-      <ul class="tabs subtabs progress-tabs">
+      <ul class="tabs subtabs progress-tabs psat">
         <li [ngClass]="{'active': subTab == 'system-basics'}">
-          <a (click)="changeSubTab('system-basics')"><span class="step-number">1</span> Assessment Settings</a>
+          <a (click)="changeSubTab('system-basics')">
+            <span class="step-number">1</span> Assessment Settings</a>
         </li>
         <li [ngClass]="{'active': subTab == 'pump-fluid'}">
-          <a (click)="changeSubTab('pump-fluid')"><span class="step-number">2</span> Pump &amp; Fluid</a>
+          <a (click)="changeSubTab('pump-fluid')">
+            <span class="step-number">2</span> Pump &amp; Fluid</a>
         </li>
         <li [ngClass]="{'active': subTab == 'motor', 'disabled': checkPumpFluid() }">
-          <a (click)="changeSubTab('motor')"><span class="step-number">3</span> Motor</a>
+          <a (click)="changeSubTab('motor')">
+            <span class="step-number">3</span> Motor</a>
         </li>
         <li [ngClass]="{'active': subTab == 'field-data', 'disabled': checkMotor()}">
-          <a (click)="changeSubTab('field-data')"><span class="step-number">4</span> Field Data</a>
+          <a (click)="changeSubTab('field-data')">
+            <span class="step-number">4</span> Field Data</a>
         </li>
       </ul>
     </nav>
@@ -34,7 +38,7 @@
             [(psat)]="_psat" (saved)="save()" [selected]="true" [settings]="settings" [baseline]="true"></app-field-data>
         </div>
         <div class="help">
-          <app-help-panel [psat]="_psat" [settings]="settings" [currentTab]="subTab"></app-help-panel>
+          <app-help-panel [psat]="_psat" [settings]="settings" [currentTab]="subTab" [inSetup]="true"></app-help-panel>
         </div>
       </div>
     </div>
@@ -53,17 +57,13 @@
     <app-modify-conditions *ngIf="currentTab == 'modify-conditions'" [assessment]="assessment" [settings]="settings" [saveClicked]="saveClicked"
       [(psat)]="_psat" (saved)="save()"></app-modify-conditions>
   </div>
-  <div class="row justify-content-center" *ngIf="mainTab == 'assessment' && currentTab != 'explore-opportunities' && currentTab != 'modify-conditions'">
-    <div class="col-10">
-      <div class="card card-block calculator-card" style="margin-bottom: 10% !important;">
-        <app-system-curve *ngIf="currentTab == 'system-curve'" [inPsat]="true" [psat]="_psat" [settings]="settings"></app-system-curve>
-        <app-achievable-efficiency *ngIf="currentTab == 'achievable-efficiency'" [inPsat]="true" [settings]="settings" [psat]="_psat"></app-achievable-efficiency>
-        <app-motor-performance *ngIf="currentTab == 'motor-performance'" [inPsat]="true" [psat]="_psat" [settings]="settings"></app-motor-performance>
-        <app-nema-energy-efficiency *ngIf="currentTab == 'nema-energy-efficiency'" [inPsat]="true" [psat]="_psat" [settings]="settings"></app-nema-energy-efficiency>
-        <app-specific-speed *ngIf="currentTab == 'specific-speed'" [settings]="settings" [inPsat]="true" [psat]="_psat"></app-specific-speed>
-        <app-pump-curve *ngIf="currentTab == 'pump-curve'" [settings]="settings" [inPsat]="true" [psat]="_psat"></app-pump-curve>
-      </div>
-    </div>
+  <div class="tab-content" *ngIf="mainTab == 'assessment' && currentTab != 'explore-opportunities' && currentTab != 'modify-conditions'">
+    <app-system-curve *ngIf="currentTab == 'system-curve'" [inPsat]="true" [psat]="_psat" [settings]="settings"></app-system-curve>
+    <app-achievable-efficiency *ngIf="currentTab == 'achievable-efficiency'" [inPsat]="true" [settings]="settings" [psat]="_psat"></app-achievable-efficiency>
+    <app-motor-performance *ngIf="currentTab == 'motor-performance'" [inPsat]="true" [psat]="_psat" [settings]="settings"></app-motor-performance>
+    <app-nema-energy-efficiency *ngIf="currentTab == 'nema-energy-efficiency'" [inPsat]="true" [psat]="_psat" [settings]="settings"></app-nema-energy-efficiency>
+    <app-specific-speed *ngIf="currentTab == 'specific-speed'" [settings]="settings" [inPsat]="true" [psat]="_psat"></app-specific-speed>
+    <app-pump-curve *ngIf="currentTab == 'pump-curve'" [settings]="settings" [inPsat]="true" [psat]="_psat"></app-pump-curve>
   </div>
   <div class="tab-content" *ngIf="mainTab =='diagram'">
     <app-psat-diagram [psat]="_psat" [settings]="settings"></app-psat-diagram>

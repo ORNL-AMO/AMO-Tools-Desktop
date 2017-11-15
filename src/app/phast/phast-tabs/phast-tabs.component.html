@@ -21,7 +21,7 @@
 </ul>-->
 
 <nav>
-  <ul class="tabs subtabs progress-tabs">
+  <ul class="tabs subtabs progress-tabs phast">
     <li *ngFor="let tab of stepTabs" [ngClass]="{'active': currentTab.step == tab.step}">
       <a (click)="changeTab(tab.step)"><span class="step-number">{{tab.step}}</span> {{tab.tabName}}</a>
     </li>

@@ -15,6 +15,9 @@ export class HelpPanelComponent implements OnInit {
   settings: Settings;
   @Input()
   psat: PSAT;
+  @Input()
+  inSetup: boolean;
+  
   constructor() { }
 
   ngOnInit() {

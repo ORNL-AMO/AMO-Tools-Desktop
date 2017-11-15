@@ -10,7 +10,7 @@
         <th *ngFor="let mod of phastMods; let index = index;" [ngClass]="{'selected-modification': index == selectedModificationIndex}">{{mod.phast.name}}
           <span>({{lossUnit}})</span>
         </th>
-        <th *ngIf="!inSetup && modification">{{modification.name}} <span>({{lossUnit}})</span></th>
+        <th *ngIf="!inSetup && modification">{{modification.phast.name}} <span>({{lossUnit}})</span></th>
       </tr>
     </thead>
     <tbody>

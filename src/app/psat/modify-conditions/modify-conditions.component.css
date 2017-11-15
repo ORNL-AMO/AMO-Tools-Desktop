@@ -31,3 +31,36 @@
 .data-row{
   margin-top: 5%;
 }
+
+.add-loss{
+  margin-bottom: 0px;
+  margin-top: 5px;
+}
+
+.add-loss a {
+  padding-left: 15px;
+  border-left: groove 1px #2980b9;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  font-size: 15px;
+}
+
+.disabled .add-loss a{
+  color: gray;
+  border-left:#ddd solid 1px;
+}
+
+.disabled .add-loss a:hover{
+  cursor: not-allowed;
+  text-decoration: none;
+}
+
+.header{
+  border-bottom: #2980b9 groove 2px;
+  padding-top: 8.5px;
+  padding-bottom: 8.5px;
+}
+
+.disabled .header{
+  border-bottom: #ddd solid 1px;
+}

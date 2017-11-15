@@ -5,7 +5,7 @@
     <app-phast-tabs *ngIf="mainTab == 'system-setup'"></app-phast-tabs>
     <!--losses-tabs are tabs for heat balance/assessment, both inSetup and !inSetup -->
     <nav *ngIf="mainTab == 'assessment' || (mainTab == 'system-setup' && stepTab.step == 4)">
-      <app-losses-tabs [phast]="_phast" [settings]="settings" [saveDbToggle]="saveDbToggle"></app-losses-tabs>
+      <app-losses-tabs [phast]="_phast" [settings]="settings" [saveDbToggle]="saveDbToggle" [inSetup]="mainTab == 'system-setup'"></app-losses-tabs>
     </nav>
   </div>
 

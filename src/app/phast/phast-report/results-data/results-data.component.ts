@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
 import { PhastService } from '../../phast.service';
-import { PHAST, PhastResults, ShowResultsCategories } from '../../../shared/models/phast/phast';
+import { PHAST, PhastResults, ShowResultsCategories, Modification } from '../../../shared/models/phast/phast';
 import { Settings } from '../../../shared/models/settings';
 import { Assessment } from '../../../shared/models/assessment';
 import { PhastResultsService } from '../../phast-results.service';
@@ -26,7 +26,7 @@ export class ResultsDataComponent implements OnInit {
   @Input()
   inSetup: boolean;
   @Input()
-  modification: PHAST;
+  modification: Modification;
   @Input()
   inReport: boolean;
 
@@ -69,7 +69,6 @@ export class ResultsDataComponent implements OnInit {
   }
 
   getResults(){
-    console.log(this.phast);
     this.modificationResults = new Array<PhastResults>();
     this.showResultsCats = this.phastResultsService.getResultCategories(this.settings);
     if (this.phast.losses) {
@@ -83,7 +82,7 @@ export class ResultsDataComponent implements OnInit {
           })
         }
       }else if(this.modification && !this.inSetup && !this.inReport){
-        let tmpResults = this.phastResultsService.getResults(this.modification, this.settings);
+        let tmpResults = this.phastResultsService.getResults(this.modification.phast, this.settings);
         this.modificationResults.push(tmpResults);
       }
     } else {

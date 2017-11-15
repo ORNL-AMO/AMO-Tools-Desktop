@@ -8,7 +8,7 @@ import { Settings } from '../../../shared/models/settings';
 @Component({
   selector: 'app-metered-fuel',
   templateUrl: './metered-fuel.component.html',
-  styleUrls: ['./metered-fuel.component.css', '../../aux-equipment/aux-equipment.component.css', '../../../psat/explore-opportunities/explore-opportunities.component.css']
+  styleUrls: ['./metered-fuel.component.css', '../../../psat/explore-opportunities/explore-opportunities.component.css', '../../aux-equipment/aux-equipment.component.css']
 })
 export class MeteredFuelComponent implements OnInit {
   @Input()

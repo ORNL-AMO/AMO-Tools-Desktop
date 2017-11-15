@@ -3,15 +3,45 @@
 	padding: 0px;
 }
 
+.tab-row{
+    width: 100%;
+    text-align: center;
+}
+
 .aux-title{
-	margin: 10px 0 10px 10px;
+	margin: 10px 0 0px 10px;
     font-size: 15px;
     text-transform: uppercase;
     display: inline-block;
-    letter-spacing: 4px
+    letter-spacing: 4px;
 }
 
 .add-loss{
     margin-bottom: 0px;
     margin-top: 5px;
+}
+
+.add-loss a {
+    padding-left: 15px;
+    border-left: groove 1px #BF3D00;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    font-size: 15px;
+}
+
+.header{
+    border-bottom: #BF3D00 groove 2px;
+    padding-top: 8.5px;
+    padding-bottom: 8.5px;
+}
+
+.aux-tab{
+    font-size: 15px;
+    text-transform: uppercase;
+    letter-spacing: 4px;
+}
+
+.aux-tab.active{
+    border: none;
+    border-bottom: #BF3D00 groove 2px;
 }

@@ -36,10 +36,10 @@
     <div class="help-panel">
       <div class="row">
         <ul class="tabs primary tab-row">
-          <li class="calc-tab tab-item" [ngClass]="{'active': tabSelect == 'results'}">
+          <li class="calc-tab tab-item aux-tab" [ngClass]="{'active': tabSelect == 'results'}">
             <a (click)="setTab('results')">Results</a>
           </li><!--
-						--><li class="calc-tab tab-item" [ngClass]="{'active': tabSelect == 'help'}">
+						--><li class="calc-tab tab-item aux-tab" [ngClass]="{'active': tabSelect == 'help'}">
             <a (click)="setTab('help')">Help</a>
           </li>
         </ul>

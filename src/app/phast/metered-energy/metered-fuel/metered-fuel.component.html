@@ -1,7 +1,7 @@
 <div class="modify-conditions explore-container row">
   <div class="modification explore-column col-6">
     <div class="header aux-header">
-      <h3>Metered Energy (Fuel)</h3>
+      <h5 class="aux-title">Metered Energy (Fuel)</h5>
     </div>
     <div class="losses-container">
       <div class="card-form">
@@ -17,10 +17,10 @@
     <div class="help-panel">
       <div class="row">
         <ul class="tabs primary tab-row">
-          <li class="calc-tab tab-item" [ngClass]="{'active': tabSelect == 'results'}">
+          <li class="calc-tab tab-item aux-tab" [ngClass]="{'active': tabSelect == 'results'}">
             <a (click)="setTab('results')">Results</a>
           </li><!--
-						--><li class="calc-tab tab-item" [ngClass]="{'active': tabSelect == 'help'}">
+						--><li class="calc-tab tab-item aux-tab" [ngClass]="{'active': tabSelect == 'help'}">
             <a (click)="setTab('help')">Help</a>
           </li>
         </ul>

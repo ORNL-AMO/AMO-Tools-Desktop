@@ -1,0 +1,19 @@
+.help-panel{
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+.header{
+    border-bottom: #2980b9 groove 2px;
+    padding-top: 8.5px;
+    padding-bottom: 8.5px;
+  }
+
+.header h3{
+    margin: 10px 0 0px 10px;
+    font-size: 15px;
+    text-transform: uppercase;
+    display: inline-block;
+    letter-spacing: 4px;
+    font-weight: bold;
+}

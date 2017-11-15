@@ -144,9 +144,11 @@ export class LossesComponent implements OnInit {
   }
 
   toggleDropdown() {
-    this.showEditModification = false;
-    this.isDropdownOpen = !this.isDropdownOpen;
-    this.showNotes = false;
+    if (this.modificationSelected) {
+      this.showEditModification = false;
+      this.isDropdownOpen = !this.isDropdownOpen;
+      this.showNotes = false;
+    }
   }
 
   selectModification(modification: Modification) {
@@ -163,8 +165,10 @@ export class LossesComponent implements OnInit {
   }
 
   addLoss() {
-    this.lossAdded = true;
-    this.addLossToggle = !this.addLossToggle;
+    if (this.baselineSelected) {
+      this.lossAdded = true;
+      this.addLossToggle = !this.addLossToggle;
+    }
   }
 
   toggleNotes() {

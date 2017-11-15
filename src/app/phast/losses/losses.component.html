@@ -90,10 +90,16 @@
     <!--<div class="header" *ngIf="!editModification">-->
     <div class="header">
       <h3 *ngIf="_modifications[modificationIndex] && !isDropdownOpen">{{_modifications[modificationIndex].phast.name}}</h3>
-      <button class="pull-right" (click)="toggleDropdown()" [disabled]="!modificationSelected">
+      <h5 class="pull-right add-loss">
+        <a class="small" [ngClass]="{'disabled': !modificationSelected}">
+          <span *ngIf="!isDropdownOpen" (click)="toggleDropdown()">Change / Add</span>
+          <span *ngIf="isDropdownOpen" (click)="toggleDropdown()">Cancel</span>
+        </a>
+      </h5>
+      <!-- <button class="pull-right" (click)="toggleDropdown()" [disabled]="!modificationSelected">
         <span class="changeAdd" *ngIf="!isDropdownOpen">Change / Add</span>
         <span class="changeAdd" *ngIf="isDropdownOpen">Cancel</span>
-      </button>
+      </button> -->
     </div>
 
     <div class="losses-container" *ngIf="!isDropdownOpen">
@@ -199,7 +205,7 @@
     <p>Data will be copied from your current baseline condition.</p>
   </div>
   <div [ngClass]="{'col-md-6': inSetup, 'col-md-4': !inSetup}">
-    <app-losses-result-panel *ngIf="!inSetup"  [inSetup]="inSetup"  [lossesTab]="lossesTab" [currentField]="currentField" [settings]="settings" [phast]="phast" [toggleCalculate]="toggleCalculate" [modification]="_modifications[modificationIndex].phast"></app-losses-result-panel>
+    <app-losses-result-panel *ngIf="!inSetup"  [inSetup]="inSetup"  [lossesTab]="lossesTab" [currentField]="currentField" [settings]="settings" [phast]="phast" [toggleCalculate]="toggleCalculate" [modification]="_modifications[modificationIndex]"></app-losses-result-panel>
     <app-losses-result-panel *ngIf="inSetup"  [inSetup]="inSetup"  [lossesTab]="lossesTab" [currentField]="currentField" [settings]="settings" [phast]="phast" [toggleCalculate]="toggleCalculate"></app-losses-result-panel>
   </div>
 

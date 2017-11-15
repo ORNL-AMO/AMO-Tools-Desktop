@@ -13,7 +13,8 @@ export class LossesTabsComponent implements OnInit {
   lossesTab: string;
   @Input()
   saveDbToggle: boolean;
-
+  @Input()
+  inSetup: boolean;
   @Input()
   settings: Settings;
   @Input()
@@ -56,10 +57,12 @@ export class LossesTabsComponent implements OnInit {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (this.phast.losses) {
-      this.getNumLosses(this.phast.losses);
+    if (changes) {
+      if (this.phast.losses) {
+        this.getNumLosses(this.phast.losses);
+      }
+      this.checkDone();
     }
-    this.checkDone();
   }
 
 

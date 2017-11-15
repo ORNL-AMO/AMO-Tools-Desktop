@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewEncapsulation, Input } from '@angular/core';
 import { Settings } from '../../../shared/models/settings';
 import { Assessment } from '../../../shared/models/assessment';
-import { PHAST } from '../../../shared/models/phast/phast';
+import { PHAST, Modification } from '../../../shared/models/phast/phast';
 
 @Component({
   selector: 'app-losses-result-panel',
@@ -21,7 +21,7 @@ export class LossesResultPanelComponent implements OnInit {
   @Input()
   toggleCalculate: boolean;
   @Input()
-  modification: PHAST;
+  modification: Modification;
   @Input()
   inSetup: boolean;
 
@@ -29,7 +29,6 @@ export class LossesResultPanelComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    console.log(this.phast);
   }
 
   setTab(str: string){

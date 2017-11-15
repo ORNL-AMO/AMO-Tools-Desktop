@@ -2,10 +2,10 @@
   <app-modify-conditions-tabs (changeTab)="changeTab($event)" [modifyTab]="modifyTab"></app-modify-conditions-tabs>
 </nav>
 
-<div class="modify-conditions" *ngIf="settings">
+<div class="modify-conditions row" *ngIf="settings">
 
   <!-- Baseline -->
-  <div class="modification baseline" (click)="togglePanel(baselineSelected)" [ngClass]="{'disabled': baselineSelected == false, 'modal-open': isModalOpen == true}">
+  <div class="modification baseline col-4" (click)="togglePanel(baselineSelected)" [ngClass]="{'disabled': baselineSelected == false, 'modal-open': isModalOpen == true}">
     <div class="header">
       <h3>Baseline</h3>
     </div>
@@ -23,18 +23,25 @@
 
 
   <!-- Modifications Start -->
-  <div class="modification" (click)="togglePanel(modifiedSelected)" *ngIf="_modifications.length != 0" [ngClass]="{'disabled': modifiedSelected == false, 'modal-open': isModalOpen == true}">
+  <div class="modification col-4" (click)="togglePanel(modifiedSelected)" *ngIf="_modifications.length != 0" [ngClass]="{'disabled': modifiedSelected == false, 'modal-open': isModalOpen == true}">
 
     <!-- Modification Header -->
     <div class="header" *ngIf="!editModification">
       <h3 *ngIf="_modifications[modificationIndex]">{{_modifications[modificationIndex].psat.name}}</h3>
-      <button class="pull-right" (click)="toggleDropdown()" [disabled]="!modifiedSelected">
-<!--         <span class="fa fa-caret-down" *ngIf="!isDropdownOpen"></span>
+      <!-- <button class="pull-right" (click)="toggleDropdown()" [disabled]="!modifiedSelected"> -->
+        <!--         <span class="fa fa-caret-down" *ngIf="!isDropdownOpen"></span>
         <span class="fa fa-caret-up" *ngIf="isDropdownOpen"></span> -->
-
+<!-- 
         <span class="" *ngIf="!isDropdownOpen">Change / Add</span>
         <span class="" *ngIf="isDropdownOpen">Cancel</span>
-      </button>
+      </button> -->
+
+      <h5 class="pull-right add-loss">
+        <a class="small" [ngClass]="{'disabled': !modificationSelected}">
+          <span *ngIf="!isDropdownOpen" (click)="toggleDropdown()">Change / Add</span>
+          <span *ngIf="isDropdownOpen" (click)="toggleDropdown()">Cancel</span>
+        </a>
+      </h5>
     </div>
 
     <!-- Forms -->
@@ -58,15 +65,16 @@
       <ul *ngIf="!showEditModification">
         <li *ngFor="let modification of _modifications">
           <button>
-          <a (click)="selectModification(modification)">
-            {{modification.psat.name}}
-          </a>
-          <a class="pull-right" (click)="dispEditModification(modification)">Edit / Delete</a>
+            <a (click)="selectModification(modification)">
+              {{modification.psat.name}}
+            </a>
+            <a class="pull-right" (click)="dispEditModification(modification)">Edit / Delete</a>
           </button>
         </li>
         <li class="add-modification">
           <button (click)="addModification()">Add Modified Condition</button>
-          <p>Data will be copied from <br/> your baseline operating condition</p>
+          <p>Data will be copied from
+            <br/> your baseline operating condition</p>
         </li>
       </ul>
       <div class="losses-container edit-modification" *ngIf="showEditModification && editModification">
@@ -86,7 +94,9 @@
   </div>
 
   <!-- Help Panel -->
-  <app-help-panel [psat]="psat" [currentTab]="modifyTab" [settings]="settings"></app-help-panel>
+  <div class="col-4">
+    <app-help-panel [psat]="psat" [currentTab]="modifyTab" [settings]="settings"></app-help-panel>
+  </div>
 
 </div>
 

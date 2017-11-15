@@ -7,6 +7,18 @@
     padding-top: 25px;
 }
 
-.help-panel{
-    padding:0px !important;
+.results-panel{
+    padding: 0px;
+}
+
+.results-panel .tabs.primary{
+    font-size: 15px;
+    text-transform: uppercase;
+    letter-spacing: 4px;
+}
+
+
+.results-panel .tabs.primary .active a {
+    border: none;
+    border-bottom: #BF3D00 groove 2px;
 }

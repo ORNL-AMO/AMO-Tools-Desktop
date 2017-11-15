@@ -505,12 +505,12 @@ Reports
 }
 .output-summary .table th {
     border: none;
-    padding: 0px 10px;
+    padding: 0px;
     text-align: left;
     font-size: 12px;
 }
 .output-summary .table td {
-    padding: 0px 8px;
+    padding: 0px;
 }
 
 
@@ -1339,9 +1339,7 @@ Tabs
   display: block;
   color: #0F0F0F;
 }
-.tabs.primary li:last-of-type a {
-  border-right: #c8c8c8 solid 1px;
-}
+
 .tabs.primary a:hover {
   text-decoration: none;
   background: #efefef;
@@ -1350,16 +1348,13 @@ Tabs
   background: #fff;
   font-weight: bold;
   border-bottom: #fff solid 1px;
-  margin-bottom: -1px;
 }
 
 /* Sub Tabs */
 .tabs.subtabs {
-  background: #fff;
-  border-bottom: #828282 solid 1px;
+  background: #ececec;
   -webkit-box-shadow: 0px 1px 4px 0px rgba(0,0,0,0.2);
   -moz-box-shadow: 0px 1px 4px 0px rgba(0,0,0,0.2);
-  box-shadow: 0px 1px 4px 0px rgba(0,0,0,0.2);
   z-index: 3;
   position: relative;
 }
@@ -1375,8 +1370,16 @@ Tabs
 .tabs.subtabs a:hover {
   text-decoration: none;
 }
-.tabs.subtabs .active a {
+.tabs.subtabs.phast .active a {
   font-weight: bold;
+  border-bottom: #BF3D00 groove 2px;
+  background: white;
+}
+
+.tabs.subtabs.psat .active a {
+  font-weight: bold;
+  border-bottom: #2980b9 groove 2px;
+  background: white;
 }
 
   .tabs.subtabs.progress-tabs a {
@@ -1402,8 +1405,11 @@ Tabs
     border-radius: 23%;
     margin-right: 5px;
   }
-    .active .step-number {
-      background: #d35400;
+    .tabs.subtabs.phast .active .step-number {
+      background: #BF3D00;
+    }
+    .tabs.subtabs.psat .active .step-number {
+      background: #2980b9;
     }
     .disabled .step-number {
       background: #efefef;
@@ -1503,7 +1509,6 @@ Modify Conditions
 }
 
 .modify-conditions .help-panel {
-  padding: 20px;
   height: 100%;
 }
   .modify-conditions .help-panel .btn-group {
@@ -1520,14 +1525,12 @@ Modify Conditions
 
 .modification {
   background: #fff;
-  border-color: #333;
-  border-width: 0 1px;
-  border-style: solid;
   -webkit-box-shadow: 0px 0px 69px -1px rgba(0,0,0,0.2);
   -moz-box-shadow: 0px 0px 69px -1px rgba(0,0,0,0.2);
   box-shadow: 0px 0px 69px -1px rgba(0,0,0,0.2);
   z-index: 2;
   width: 35%;
+  padding-left: 25px;
 }
   .modification .header {
     display: block;
@@ -1539,12 +1542,18 @@ Modify Conditions
       clear: both;
     }
     .modification .header h3 {
-      margin: 10px 0 10px 10px;
+      margin: 10px 0 0px 10px;
       font-size: 15px;
       text-transform: uppercase;
       display: inline-block;
       letter-spacing: 4px;
+      font-weight: bold;
     }
+
+    .disabled.modification .header h3{
+      font-weight: normal;
+    }
+
     .modification .header button {
       background: #fff;
       border: none;
@@ -1567,6 +1576,7 @@ Modify Conditions
     -moz-box-shadow: none;
     box-shadow: none;
     z-index: 1;
+    background: none;
   }
     .modification.disabled:hover, .modify-conditions .no-data:hover {
       background: #fff;
@@ -1837,8 +1847,8 @@ Toasty Overrides ================================= */
     height: 100%;
     max-height: 100%;
     padding-top: 30px;
-    padding-right: 50px;
-    padding-left: 50px;
+    padding-right: 25px;
+    padding-left: 25px;
     padding-bottom: 80px;
 }
 .baseline .losses-container {
@@ -1918,7 +1928,7 @@ Toasty Overrides ================================= */
 
   .output-summary table td {
     font-size: 11px;
-    padding: 0px 8px;
+    padding: 0px;
     vertical-align: middle;
   }
 
