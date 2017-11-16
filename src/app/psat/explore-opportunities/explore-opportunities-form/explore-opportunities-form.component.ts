@@ -551,12 +551,12 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
   }
 
   toggleOptimized() {
+    this.showViscosity = true;
     this.calculate();
     if (!this.psat.modifications[this.exploreModIndex].psat.inputs.optimize_calculation) {
       this.psat.modifications[this.exploreModIndex].psat.inputs.kinematic_viscosity = 1;
       this.psat.modifications[this.exploreModIndex].psat.inputs.fixed_speed = 0;
       this.psat.modifications[this.exploreModIndex].psat.inputs.margin = 0;
-      this.showViscosity = false;
       this.showSpeed = false;
       this.showSizeMargin = false;
     }
