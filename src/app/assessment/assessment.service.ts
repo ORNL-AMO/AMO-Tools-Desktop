@@ -38,7 +38,7 @@ export class AssessmentService {
       pump_rated_speed: 1780,
       drive: 0,
       kinematic_viscosity: 1.107,
-      specific_gravity: 1,
+      specific_gravity: 1.002,
       stages: 1,
       fixed_speed: 0,
       line_frequency: 0,
