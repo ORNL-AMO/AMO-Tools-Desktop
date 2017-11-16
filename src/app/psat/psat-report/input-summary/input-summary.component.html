@@ -153,18 +153,32 @@
         <td *ngFor="let modification of psat.modifications" [ngClass]="{'indicate-report-field-different': modification.psat.inputs.motor_field_voltage != psat.inputs.motor_field_voltage}">{{modification.psat.inputs.motor_field_voltage}}</td>
       </tr>
 
-      <tr *ngIf="anyOptimized">
-        <td>Kinematic Viscosity (cST)</td>
-        <td>&mdash;</td>
-        <td *ngFor="let modification of psat.modifications">
-          <span *ngIf="modification.psat.inputs.optimize_calculation == true">
-          {{modification.psat.inputs.kinematic_viscosity}}
-          </span>
-          <span *ngIf="modification.psat.inputs.optimize_calculation != true">
-            &mdash;
-          </span>
-        </td>
+      <!--<tr *ngIf="anyOptimized">-->
+        <!--<td>Kinematic Viscosity (cST)</td>-->
+        <!--<td>&mdash;</td>-->
+        <!--<td *ngFor="let modification of psat.modifications">-->
+          <!--<span *ngIf="modification.psat.inputs.optimize_calculation == true">-->
+          <!--{{modification.psat.inputs.kinematic_viscosity}}-->
+          <!--</span>-->
+          <!--<span *ngIf="modification.psat.inputs.optimize_calculation != true">-->
+            <!--&mdash;-->
+          <!--</span>-->
+        <!--</td>-->
+      <!--</tr>-->
+
+      <tr>
+        <td [ngClass]="{'indicate-report-field-different': viscosityDiff == true}">Kinematic Viscosity (cST)</td>
+        <td [ngClass]="{'indicate-report-field-different': viscosityDiff == true}">{{psat.inputs.kinematic_viscosity}}</td>
+        <td *ngFor="let modification of psat.modifications" [ngClass]="{'indicate-report-field-different': modification.psat.inputs.kinematic_viscosity != psat.inputs.kinematic_viscosity}">{{modification.psat.inputs.kinematic_viscosity}}</td>
       </tr>
+
+      <!--<tr>-->
+        <!--<td>Kinematic Viscosity (cST)</td>-->
+        <!--<td>{{psat.inputs.kinematic_viscosity}}</td>-->
+        <!--<td *ngFor="let modification of psat.modifications">-->
+          <!--<span>{{modification.psat.inputs.kinematic_viscosity}}</span>-->
+        <!--</td>-->
+      <!--</tr>-->
 
       <tr *ngIf="anyOptimized">
         <td>Fixed specifc speed?</td>

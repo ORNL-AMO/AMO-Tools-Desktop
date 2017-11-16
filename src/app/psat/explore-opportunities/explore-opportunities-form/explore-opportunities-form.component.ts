@@ -129,6 +129,7 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
     this.checkEfficiency(this.psat.inputs.pump_specified, 3);
     this.checkEfficiency(this.psat.modifications[this.exploreModIndex].psat.inputs.pump_specified, 4);
     this.checkOptimized();
+    this.psat.modifications[this.exploreModIndex].psat.inputs.kinematic_viscosity =  this.psat.inputs.kinematic_viscosity;
   }
 
   setPumpTypes() {
@@ -587,7 +588,7 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
     this.showViscosity = true;
     this.calculate();
     if (!this.psat.modifications[this.exploreModIndex].psat.inputs.optimize_calculation) {
-      this.psat.modifications[this.exploreModIndex].psat.inputs.kinematic_viscosity = 1;
+      this.psat.modifications[this.exploreModIndex].psat.inputs.kinematic_viscosity =  this.psat.inputs.kinematic_viscosity;
       this.psat.modifications[this.exploreModIndex].psat.inputs.fixed_speed = 0;
       this.psat.modifications[this.exploreModIndex].psat.inputs.margin = 0;
       this.showSpeed = false;

@@ -20,7 +20,7 @@ export const MockDirectory: Directory = {
           pump_specified: null,
           pump_rated_speed: 1780,
           drive: 0,
-          kinematic_viscosity: 1.0,
+          kinematic_viscosity: 1.107,
           specific_gravity: 1.0,
           stages: 2.0,
           fixed_speed: 1,

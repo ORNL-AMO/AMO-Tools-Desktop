@@ -92,7 +92,11 @@ export class PumpFluidComponent implements OnInit {
   temperatureError: string = null;
   different: any = {
     pumpRPM: null
+  };
+  private static round(value) {
+    return Number(Math.round(Number(value + 'e' + 3)) + 'e-' + 3);
   }
+
   constructor(private psatService: PsatService, private compareService: CompareService, private windowRefService: WindowRefService, private helpPanelService: HelpPanelService) { }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -235,8 +239,8 @@ export class PumpFluidComponent implements OnInit {
       const density = 0.14395 / Math.pow(0.0112, (1 + Math.pow(1 - tTemp / 649.727, 0.05107)));
       const kinViscosity = 0.000000003 * Math.pow(t, 4) - 0.000002 * Math.pow(t, 3) + 0.0005 * Math.pow(t, 2) - 0.0554 * t + 3.1271;
       this.psatForm.patchValue({
-        gravity: Number(density / 1000).toFixed(3),
-        viscosity: Number(kinViscosity).toFixed(3)
+        gravity: PumpFluidComponent.round(density / 1000),
+        viscosity: PumpFluidComponent.round(kinViscosity)
       });
     } else {
       const property = this.fluidProperties[fluidType];
@@ -247,8 +251,8 @@ export class PumpFluidComponent implements OnInit {
       }
       const density = property.density / (1 + property.beta * (t - property.tref));
       this.psatForm.patchValue({
-        gravity: Number(density / 62.428).toFixed(3),
-        viscosity: Number(property.kinViscosity).toFixed(3)
+        gravity: PumpFluidComponent.round(density / 62.428),
+        viscosity: PumpFluidComponent.round(property.kinViscosity)
       });
     }
   }
@@ -295,13 +299,13 @@ export class PumpFluidComponent implements OnInit {
         element.classList.toggle('indicate-different', val);
       });
     });
-    //kinematic viscosity
-    // this.compareService.kinematic_viscosity_different.subscribe((val) => {
-    //   let viscosityElements = doc.getElementsByName('viscosity');
-    //   viscosityElements.forEach(element => {
-    //     element.classList.toggle('indicate-different', val);
-    //   });
-    // });
+    // kinematic viscosity
+    this.compareService.kinematic_viscosity_different.subscribe((val) => {
+      let viscosityElements = doc.getElementsByName('viscosity');
+      viscosityElements.forEach(element => {
+        element.classList.toggle('indicate-different', val);
+      });
+    });
     //specific gravity
     this.compareService.specific_gravity_different.subscribe((val) => {
       let gravityElements = doc.getElementsByName('gravity');

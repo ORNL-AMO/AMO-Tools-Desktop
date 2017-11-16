@@ -23,12 +23,12 @@
 
   <div class="form-group">
     <label for="motorRPM">Motor RPM</label>
-    <div name="motorRPM" class="incrementor with-units form-control input-group">
-      <button class="btn input-group-btn" [disabled]="!selected" (click)="subtractNum('motorRPM')"><i class="fa fa-minus"></i></button>
-      <button class="btn input-group-btn" [disabled]="!selected" (click)="addNum('motorRPM')"><i class="fa fa-plus"></i></button>
-      <input type="number " step="any" class="form-control addon-input" id="motorRPM" formControlName="motorRPM" ngModel="{{psatForm.value.motorRPM}}"
+    <div name="motorRPM" class="input-group">
+      <!--<button class="btn input-group-btn" [disabled]="!selected" (click)="subtractNum('motorRPM')"><i class="fa fa-minus"></i></button>-->
+      <!--<button class="btn input-group-btn" [disabled]="!selected" (click)="addNum('motorRPM')"><i class="fa fa-plus"></i></button>-->
+      <input type="number" step="10" min="0" class="form-control number-input-field" id="motorRPM" formControlName="motorRPM" ngModel="{{psatForm.value.motorRPM}}"
         (input)="checkMotorRpm()" (focus)="focusField('motorRPM')" onfocus="this.select();">
-      <span class="input-group-addon units">rpms</span>
+      <span class="input-group-addon units">rpm</span>
     </div>
     <span class="alert-danger pull-right small" *ngIf="rpmError !== null">{{rpmError}}</span>
   </div>
