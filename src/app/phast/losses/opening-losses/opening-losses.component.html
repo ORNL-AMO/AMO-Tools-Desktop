@@ -31,7 +31,7 @@
       <div class="form-group">
         <label class="small">Radiation Losses</label>
         <div *ngIf="loss.totalOpeningLosses" class="small text-center">
-          {{loss.totalOpeningLosses | number:'2.0-0'}} <span>{{resultsUnit}}</span>
+          {{loss.totalOpeningLosses | sigFigs:'5'}} <span>{{resultsUnit}}</span>
         </div>
         <div *ngIf="!loss.totalOpeningLosses" class="text-center small">
           &mdash; &mdash;
