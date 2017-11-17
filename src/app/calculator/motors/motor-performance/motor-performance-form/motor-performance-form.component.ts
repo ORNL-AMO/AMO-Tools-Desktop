@@ -72,26 +72,26 @@ export class MotorPerformanceFormComponent implements OnInit {
     this.calculate.emit(true);
   }
 
-  addNum(str: string) {
-    if (str == 'motorRPM') {
-      if (this.tmpMotorRpm) {
-        this.tmpMotorRpm++;
-        this.emitChange();
-      } else {
-        this.tmpMotorRpm = 1;
-        this.emitChange();
-      }
-    }
-  }
-
-  subtractNum(str: string) {
-    if (str == 'motorRPM' && this.tmpMotorRpm) {
-      if (this.tmpMotorRpm != 0) {
-        this.tmpMotorRpm--;
-        this.emitChange();
-      }
-    }
-  }
+  // addNum(str: string) {
+  //   if (str == 'motorRPM') {
+  //     if (this.tmpMotorRpm) {
+  //       this.tmpMotorRpm++;
+  //       this.emitChange();
+  //     } else {
+  //       this.tmpMotorRpm = 1;
+  //       this.emitChange();
+  //     }
+  //   }
+  // }
+  //
+  // subtractNum(str: string) {
+  //   if (str == 'motorRPM' && this.tmpMotorRpm) {
+  //     if (this.tmpMotorRpm != 0) {
+  //       this.tmpMotorRpm--;
+  //       this.emitChange();
+  //     }
+  //   }
+  // }
   checkEfficiency() {
     if (this.tmpEfficiency > 100) {
       this.efficiencyError = "Unrealistic efficiency, shouldn't be greater then 100%";

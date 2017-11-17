@@ -22,9 +22,9 @@
   <div class="form-group">
     <label for="pumpRPM">Pump Speed</label>
     <div class="input-group">
-      <input type="number" name="pumpRPM" min="0" step="any" class="form-control {{different.pumpRPM}}" formControlName="pumpRPM"
+      <input type="number" name="pumpRPM" min="0" step="10" class="form-control {{different.pumpRPM}}" formControlName="pumpRPM"
         id="pumpRPM" (input)="checkPumpRpm()" (focus)="focusField('pumpRPM')" onfocus="this.select();">
-      <span class="input-group-addon units">rpms</span>
+      <span class="input-group-addon units">rpm</span>
     </div>
       <span class="alert-danger pull-right small" *ngIf="rpmError !== null">{{rpmError}}</span>
   </div>
@@ -37,11 +37,37 @@
     </select>
   </div>
 
+  <div class="form-group">
+    <label for="fluidType">Fluid Type</label>
+    <select class="form-control" name="fluidType" formControlName="fluidType" id="fluidType" (change)="calculateSpecificGravity()" (focus)="focusField('fluidType')"
+            ngModel="{{psatForm.value.fluidType}}">
+      <option *ngFor="let fluidType of fluidTypes" [ngValue]="fluidType">{{fluidType}}</option>
+    </select>
+  </div>
+
+  <div class="form-group">
+    <label for="fluidTemperature">Fluid Temperature</label>
+    <div class="input-group">
+      <input type="number" name="fluidTemperature" step="any" class="form-control {{different.fluidTemperature}}" formControlName="fluidTemperature"
+             id="fluidTemperature" (input)="calculateSpecificGravity()" (focus)="focusField('fluidTemperature')" onfocus="this.select();">
+      <span class="input-group-addon units">deg F</span>
+    </div>
+    <span class="alert-danger pull-right small" *ngIf="temperatureError !== null">{{temperatureError}}</span>
+  </div>
 
   <div class="form-group">
     <label for="gravity">Specific Gravity</label>
     <input type="number" min="0" name="gravity" step="any" class="form-control" formControlName="gravity" id="gravity" (input)="startSavePolling()"
       (focus)="focusField('specificGravity')" onfocus="this.select();">
+  </div>
+
+  <div class="form-group">
+    <label for="viscosity">Kinematic Viscosity</label>
+    <div class="input-group">
+      <input type="number" min="0" name="viscosity" step="any" class="form-control" formControlName="viscosity" id="viscosity" (input)="startSavePolling()"
+             (focus)="focusField('viscosity')" onfocus="this.select();">
+      <span class="input-group-addon units">cSt</span>
+    </div>
   </div>
 
   <div class="form-group">

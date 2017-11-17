@@ -74,7 +74,7 @@
       <label><u><strong>Input</strong></u></label>
       <p>
         Units: <strong>RPM</strong><br> Minimum Value Allowed (Direct Drive): <strong>540</strong><br> Maximum Value Allowed (Direct Drive): <strong>3960</strong><br>
-         Minimum Value Allowed (Dir Drive): <strong>1</strong><br> Maximum Value Allowed (Belt Drive): <strong>&mdash;</strong>
+         Minimum Value Allowed (Belt Drives): <strong>1</strong><br> Maximum Value Allowed (Belt Drives): <strong>&mdash;</strong>
       </p>
     </div>
   </div>
@@ -86,7 +86,9 @@
     <div class="card-block small">
       <label><u><strong>Description</strong></u></label>
       <p>
-        This drop-down selection menu allows the user to define whether the pump is direct driven by the motor or belt-driven.
+        This drop-down selection menu allows the user to define whether the pump is direct driven by the motor or belt-driven.  There are three options for
+        belt drives: V-Belt, Notched V-Belt and Synchronous Belt Drives.  Of the three, V-Belt drives are the least efficient, Notched V-Belts are slightly better, and Synchronous
+        Belts are the most efficient belts.
       </p>
       <p>
         This value is used in the Load Estimation calculation. Note: The current estimating method should NOT be used if adjustable
@@ -94,7 +96,55 @@
       </p>
       <label><u><strong>Input</strong></u></label>
       <p>
-        Options: <strong>Direct Drive</strong> or <strong>Belt Drive</strong>
+        Options: <strong>Direct Drive, V-Belt Drive, Notched V-Belt</strong> or <strong>Synchronous Drive</strong>
+      </p>
+    </div>
+  </div>
+
+  <div class="card" *ngIf="currentField == 'fluidType'">
+    <div class="card-header">
+      Fluid Type
+    </div>
+    <div class="card-block small">
+      <label><u><strong>Description</strong></u></label>
+      <p>
+        Fluid Type is the type of fluid in your system.
+      </p>
+      <label><u><strong>Input</strong></u></label><br>
+      <label>
+        Options: </label>
+      <ul style="list-style: none;">
+        <li> <strong>Acetone</strong><br> </li>
+        <li> <strong>Ammonia</strong><br> </li>
+        <li> <strong>Dichlorodifluoromethane refrigerant R-12</strong><br> </li>
+        <li> <strong>Ethanol</strong><br> </li>
+        <li> <strong>Ethylene glycol</strong><br> </li>
+        <li> <strong>Glycerine (glycerol)</strong><br> </li>
+        <li> <strong>Kerosene - jet fuel</strong><br> </li>
+        <li> <strong>Methanol</strong><br> </li>
+        <li> <strong>n-Octane</strong><br> </li>
+        <li> <strong>Other (define your own k. viscosity)</strong><br> </li>
+        <li> <strong>Petroleum</strong><br> </li>
+        <li> <strong>Water</strong> </li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card" *ngIf="currentField == 'fluidTemperature'">
+    <div class="card-header">
+      Fluid Temperature
+    </div>
+    <div class="card-block small">
+      <label><u><strong>Description</strong></u></label>
+      <p>
+        Fluid Temperature is the average temperature of the fluid in your system.
+      </p>
+      <p>
+        This is used in combination with properties of the fluid itself to calculate specific gravity.
+      </p>
+      <label><u><strong>Input</strong></u></label>
+      <p>
+        Suggested Minimum: <strong>Fluid Freezing Point</strong><br> Suggested Maximum: <strong>Fluid Boiling Point</strong><br>
       </p>
     </div>
   </div>
@@ -109,12 +159,37 @@
         Specific Gravity is the ratio of the density of the fluid to water at standard condition.
       </p>
       <p>
-        This is used in calculating the fluid power at the specified pump flow rate and head conditions. This value can be found
+        This is used in calculating the fluid power at the specified pump flow rate and head conditions. This can be found
         through fluid property tables.
+      </p>
+      <p>
+        This value is automatically calculated for the chosen fluid at the specified temperature. It can also be edited manually if desired.
       </p>
       <label><u><strong>Input</strong></u></label>
       <p>
-        Minimum Value Allowed: <strong>0</strong><br> Maximum Value Allowed: <strong>None</strong><br>
+        Minimum Value Allowed: <strong>0</strong><br>
+      </p>
+    </div>
+  </div>
+
+  <div class="card" *ngIf="currentField == 'viscosity'">
+    <div class="card-header">
+      Kinematic Viscosity
+    </div>
+    <div class="card-block small">
+      <label><u><strong>Description</strong></u></label>
+      <p>
+        Kinematic viscosity is the ratio of absolute (or dynamic) viscosity to density - a quantity in which no force is involved.
+      </p>
+      <p>
+        This can be obtained by dividing the absolute viscosity of a fluid with the fluid mass density. It is expressed here in terms of CentiStokes.
+      </p>
+      <p>
+        This value is automatically calculated for the chosen fluid at the specified temperature. For all fluids other than water, this value is only valid at the reference temperature, usually 25 deg C (68 deg F). It can also be edited manually.
+      </p>
+      <label><u><strong>Input</strong></u></label>
+      <p>
+        Minimum Value Allowed: <strong>0</strong><br>
       </p>
     </div>
   </div>

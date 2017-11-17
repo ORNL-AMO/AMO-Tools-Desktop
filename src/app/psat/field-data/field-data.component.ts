@@ -333,16 +333,16 @@ export class FieldDataComponent implements OnInit {
   }
 
 
-  subtractViscosity() {
-    this.psatForm.value.viscosity = this.psatForm.value.viscosity - 1
-    this.startSavePolling();
-
-  }
-
-  addViscosity() {
-    this.psatForm.value.viscosity = this.psatForm.value.viscosity + 1
-    this.startSavePolling();
-  }
+  // subtractViscosity() {
+  //   this.psatForm.value.viscosity = this.psatForm.value.viscosity - 1
+  //   this.startSavePolling();
+  //
+  // }
+  //
+  // addViscosity() {
+  //   this.psatForm.value.viscosity = this.psatForm.value.viscosity + 1
+  //   this.startSavePolling();
+  // }
 
   //used to add classes to inputs with different baseline vs modification values
   initDifferenceMonitor() {

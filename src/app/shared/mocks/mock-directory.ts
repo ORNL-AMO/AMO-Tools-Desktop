@@ -1,4 +1,5 @@
 import { Directory } from '../models/directory';
+import {FlueGasByVolume} from "../models/phast/losses/flueGas";
 
 export const MockDirectory: Directory = {
   name: 'Root Directory',
@@ -19,8 +20,8 @@ export const MockDirectory: Directory = {
           pump_specified: null,
           pump_rated_speed: 1780,
           drive: 0,
-          kinematic_viscosity: 1.0,
-          specific_gravity: 1.0,
+          kinematic_viscosity: 1.107,
+          specific_gravity: 1.002,
           stages: 2.0,
           fixed_speed: 1,
           line_frequency: 0,
@@ -39,7 +40,9 @@ export const MockDirectory: Directory = {
           motor_field_current: null,
           motor_field_voltage: 480,
           cost_kw_hour: .05,
-          cost: .05
+          cost: .05,
+          fluidType: 'Water',
+          fluidTemperature: 68
         },
         setupDone: true
       }
@@ -237,9 +240,10 @@ export const MockDirectory: Directory = {
             {
               flueGasType: "By Volume",
               flueGasByVolume: {
-                flueGasTemperature: 1300,
+                flueGasTemperature: 1400,
                 excessAirPercentage: 10.0,
                 combustionAirTemperature: 500,
+                fuelTemperature: 125,
                 gasTypeId: 1,
                 C2H6: 8.5,
                 C3H8: 0,

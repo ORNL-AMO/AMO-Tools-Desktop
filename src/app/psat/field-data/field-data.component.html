@@ -97,16 +97,16 @@
           (change)="focusField('optimizeCalculation')" >Optimize Pump and Motor combination, automatically</label>
   </div>
   <div *ngIf="psatForm.value.optimizeCalculation == true">
-    <div class="form-group">
-      <label for="viscosity">Kinematic Viscosity</label>
-      <div name="viscosity" class="incrementor form-control input-group">
-        <button class="btn input-group-btn" [disabled]="!selected" (click)="subtractViscosity()"><i class="fa fa-minus"></i></button>
-        <button class="btn input-group-btn" [disabled]="!selected" (click)="addViscosity()"><i class="fa fa-plus"></i></button>
-        <input type="number" min="0" step="any" class="form-control addon-input" formControlName="viscosity" id="viscosity" ngModel="{{psatForm.value.viscosity}}"
-          (input)="startSavePolling()" (focus)="focusField('kinematicViscosity')" onfocus="this.select();">
-        <span class="input-group-addon units">cST</span>
-      </div>
-    </div>
+    <!--<div class="form-group">-->
+      <!--<label for="viscosity">Kinematic Viscosity</label>-->
+      <!--<div name="viscosity" class="incrementor form-control input-group">-->
+        <!--<button class="btn input-group-btn" [disabled]="!selected" (click)="subtractViscosity()"><i class="fa fa-minus"></i></button>-->
+        <!--<button class="btn input-group-btn" [disabled]="!selected" (click)="addViscosity()"><i class="fa fa-plus"></i></button>-->
+        <!--<input type="number" min="0" step="any" class="form-control addon-input" formControlName="viscosity" id="viscosity" ngModel="{{psatForm.value.viscosity}}"-->
+          <!--(input)="startSavePolling()" (focus)="focusField('kinematicViscosity')" onfocus="this.select();">-->
+        <!--<span class="input-group-addon units">cST</span>-->
+      <!--</div>-->
+    <!--</div>-->
     <div class="form-group">
       <label for="sizeMargin">Size Margin</label>
       <div class="input-group">
