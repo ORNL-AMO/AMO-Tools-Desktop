@@ -4,6 +4,7 @@ import { Losses, PHAST, Modification } from '../../shared/models/phast/phast';
 import { PhastService } from '../phast.service';
 import { Settings } from '../../shared/models/settings';
 import { PhastResultsService } from '../phast-results.service';
+import { FlueGasLossesService } from './flue-gas-losses/flue-gas-losses.service';
 @Injectable()
 export class LossesService {
   lossIndex: BehaviorSubject<number>;
@@ -21,7 +22,7 @@ export class LossesService {
   efficiencyDone: boolean;
 
 
-  constructor(private phastService: PhastService, private phastResultsService: PhastResultsService) {
+  constructor(private phastService: PhastService, private phastResultsService: PhastResultsService, private flueGasLossesService: FlueGasLossesService) {
     this.lossIndex = new BehaviorSubject<number>(0);
     this.baseline = new BehaviorSubject<PHAST>(null);
     this.modification = new BehaviorSubject<Modification>(null);
@@ -105,20 +106,26 @@ export class LossesService {
           if (phast.losses.flueGasLosses.length != 0) {
             let flueGas = phast.losses.flueGasLosses[0];
             if (flueGas.flueGasType == 'By Mass') {
-              let test = this.phastService.flueGasByMass(flueGas.flueGasByMass, settings);
-              if (test != 0) {
-                grossHeat = true;
-                this.flueGasDone = true;
-              } else {
-                this.flueGasDone = false;
+              let tmpForm = this.flueGasLossesService.initByMassFormFromLoss(flueGas);
+              if (tmpForm.status == 'VALID') {
+                let test = this.phastService.flueGasByMass(flueGas.flueGasByMass, settings);
+                if (test != 0) {
+                  grossHeat = true;
+                  this.flueGasDone = true;
+                } else {
+                  this.flueGasDone = false;
+                }
               }
             } else if (flueGas.flueGasType == 'By Volume') {
-              let test = this.phastService.flueGasByVolume(flueGas.flueGasByVolume, settings);
-              if (test != 0) {
-                grossHeat = true;
-                this.flueGasDone = true;
-              } else {
-                this.flueGasDone = false;
+              let tmpForm = this.flueGasLossesService.initByVolumeFormFromLoss(flueGas);
+              if (tmpForm.status == 'VALID') {
+                let test = this.phastService.flueGasByVolume(flueGas.flueGasByVolume, settings);
+                if (test != 0) {
+                  grossHeat = true;
+                  this.flueGasDone = true;
+                } else {
+                  this.flueGasDone = false;
+                }
               }
             }
           } else {
@@ -141,5 +148,38 @@ export class LossesService {
     }
     isDone = (grossHeat && chargeDone);
     return isDone;
+  }
+
+  checkChargeMaterials(phast: PHAST, settings: Settings) {
+    if (phast.losses.chargeMaterials) {
+      if (phast.losses.chargeMaterials.length != 0) {
+        let test = this.phastService.sumChargeMaterials(phast.losses.chargeMaterials, settings);
+        if (test != 0) {
+          return true;
+        } else {
+          return false;
+        }
+      } else {
+        return false;
+      }
+    } else {
+      return false;
+    }
+  }
+
+  checkEnergyInputEAF(phast: PHAST) {
+
+  }
+
+  checkEnergyInputExhaustGas(phast: PHAST) {
+
+  }
+
+  checkFlueGas(phast: PHAST) {
+
+  }
+
+  checkSystemEfficiency(phast: PHAST) {
+
   }
 }

@@ -26,17 +26,6 @@ export class FlueGasLossesService {
     }
   }
 
-  initForm() {
-    return this.formBuilder.group({
-      'furnaceFlueGasTemp': [''],
-      'input': [''],
-      'oxygenInFlueGas': [''],
-      'excessAir': [''],
-      'combustionAirTemp': [''],
-      'calculatedO2InFlueGas': [''],
-      'availableHeatInput': [''],
-    })
-  }
 
   initFormVolume() {
     return this.formBuilder.group({
