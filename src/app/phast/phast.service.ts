@@ -563,7 +563,6 @@ export class PhastService {
         }
       }
     })
-    console.log(sum);
     return sum;
   }
 
