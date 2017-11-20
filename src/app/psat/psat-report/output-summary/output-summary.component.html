@@ -20,7 +20,7 @@
         </td>
         <td *ngFor="let modification of psat.modifications; let index = index;" [ngClass]="{'selected-modification': index == selectedModificationIndex}">
           <div class="hide-print" *ngIf="modification.psat.outputs.percent_annual_savings">
-            <div class="col-8 graph-col">
+            <div class="col-8 graph-col doughnut">
               <app-percent-graph [value]="modification.psat.outputs.percent_annual_savings" [titlePlacement]="titlePlacement" [valueDescription]="'Annual Savings'"
                 [unit]="unit"></app-percent-graph>
             </div>
@@ -81,7 +81,7 @@
         </td>
       </tr>
       <tr>
-        <td>Motor power ({{settings.powerMeasurement}})</td>
+        <td>Motor power (kW)</td>
         <td>{{psat.outputs.motor_power | sigFigs:'5'}}</td>
         <td *ngFor="let modification of psat.modifications; let index = index;" [ngClass]="{'selected-modification': index == selectedModificationIndex}">
           <span *ngIf="modification.psat.outputs.motor_power">{{modification.psat.outputs.motor_power | sigFigs:'5'}}</span>
