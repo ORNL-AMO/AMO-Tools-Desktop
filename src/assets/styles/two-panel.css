@@ -1,0 +1,123 @@
+
+.panel-column{
+	box-shadow: 0px 0px 69px -1px rgba(0,0,0,0.2);
+	background: #fff;
+	z-index: 2;
+	padding-left: 25px;
+}
+
+
+.panel-container{
+	padding-bottom: 70px;
+	max-height: none !important;
+	min-height: 100vh;
+	height: auto !important;
+}
+
+.form-card{
+	border: none;
+}
+
+.tab-row{
+    width: 100%;
+    text-align: center;
+}
+
+.tab-2{
+    width: 50%;
+}
+
+.tab-3{
+    width: 33%;
+}
+
+.panel-tab-item{
+	text-align: center;
+	font-size: 15px;
+    text-transform: uppercase;
+	letter-spacing: 4px;
+}
+
+.psat .panel-tab-item.active{
+    border: none;
+    border-bottom: #2980b9 groove 2px;
+}
+
+.phast .panel-tab-item.active{
+    border: none;
+    border-bottom: #BF3D00 groove 2px;
+}
+
+.header{
+    padding-top: 8.5px;
+    padding-bottom: 8.5px;
+}
+
+.psat .header{
+    border-bottom: #2980b9 groove 2px;
+} 
+
+.phast .header{
+    border-bottom: #BF3D00 groove 2px;  
+}
+
+.psat .disabled .header{
+    border-bottom-color: gray;
+}
+
+.panel-add a{
+    padding-top: 5px;
+    padding-bottom: 5px;
+    font-size: 15px;
+    padding-left: 15px;
+    color: #0077e3;
+}
+
+.panel-add a span:hover{
+    text-decoration: underline;
+    cursor: pointer;
+    color: #0077e3;
+}
+
+.panel-add a.disabled{
+    color: gray;
+}
+
+
+.panel-add a.disabled span:hover{
+    text-decoration: none;
+    cursor: not-allowed;
+}
+
+.phast .panel-add a {
+    border-left: groove 1px #BF3D00;
+}
+.psat .panel-add a {
+    border-left: groove 1px #2980b9;
+}
+
+.data-row{
+	margin-top: 5%;
+}
+
+.panel-results{
+	margin-top: 5%;
+}
+
+.help-panel{
+	padding: 0px;
+}
+
+.header h3{
+	margin: 10px 0 0px 10px;
+    font-size: 15px;
+    text-transform: uppercase;
+    display: inline-block;
+    letter-spacing: 4px;
+}
+
+.panel-add{
+    margin-bottom: 0px;
+    margin-top: 5px;
+}
+

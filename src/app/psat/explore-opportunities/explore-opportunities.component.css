@@ -1,17 +1,5 @@
 
-
-label {
-	width: 100% !important;
-}
-
-.positive-savings{
-	color: green;
-}
-
-.negative-savings{
-	color: red;
-}
-
+/* 
 .explore-column{
 	box-shadow: 0px 0px 69px -1px rgba(0,0,0,0.2);
 	background: #fff;
@@ -42,8 +30,7 @@ label {
 
 .data-row{
 	margin-top: 5%;
-}
-
+}  
 .savings{
 	margin-bottom: 0px;
 }
@@ -57,9 +44,6 @@ label {
 	min-height: 100vh;
 	height: auto !important;
 }
-
-
-
-.explore-results{
+ .explore-results{
 	margin-top: 5%;
-}
+} */

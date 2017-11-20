@@ -1,44 +1,42 @@
-<div class="container-fluid">
-	<div class="row modify-conditions explore-container">
-		<div class="col-md-6 explore-column">
+<div class="container-fluid psat">
+	<div class="row modify-conditions panel-container">
+		<div class="col-md-6 panel-column">
 
 			<app-explore-opportunities-form [psat]="psat" (emitCalculate)="getResults()" [settings]="settings" (emitSave)="save()" [exploreModIndex]="exploreModIndex"
 			 (changeField)="focusField($event)" (emitOptimize)="optimize()">
 			</app-explore-opportunities-form>
 
 		</div>
-		<div class="col-md-6">
-			<div class="help-panel">
-				<div class="row">
-					<ul class="tabs primary tab-row">
-						<li class="calc-tab tab-item explore-tab-item" [ngClass]="{'active': tabSelect == 'results'}">
-							<a (click)="setTab('results')">Results</a>
-						</li><!--
-						--><li class="calc-tab tab-item explore-tab-item" [ngClass]="{'active': tabSelect == 'sankey'}">
-							<a (click)="setTab('sankey')">Sankey</a>
-						</li><!--
-							--><li class="calc-tab tab-item explore-tab-item" [ngClass]="{'active': tabSelect == 'help'}">
-							<a (click)="setTab('help')">Help</a>
-						</li>
-					</ul>
-				</div>
-
-				<app-explore-opportunities-help [currentField]="currentField" [settings]="settings" [psat]="psat" *ngIf="tabSelect == 'help'">
-				</app-explore-opportunities-help>
-
-
-				<app-explore-opportunities-sankey [baselineResults]="baselineResults" [modificationResults]="modificationResults" [settings]="settings"
-				 *ngIf="tabSelect == 'sankey'">
-				</app-explore-opportunities-sankey>
-				
-				<div class="explore-results">
-					<app-explore-opportunities-results [percentSavings]="percentSavings" [psat]="psat" [exploreModIndex]="exploreModIndex" [baselineResults]="baselineResults"
-					 [modificationResults]="modificationResults" [settings]="settings" [annualSavings]="annualSavings" *ngIf="tabSelect == 'results'">
-					</app-explore-opportunities-results>
-				</div>
-
-
+		<div class="col-md-6 help-panel">
+			<div class="row">
+				<ul class="tabs primary tab-row">
+					<li class="panel-tab-item tab-3" [ngClass]="{'active': tabSelect == 'results'}">
+						<a (click)="setTab('results')">Results</a>
+					</li><!--
+					--><li class="panel-tab-item tab-3" [ngClass]="{'active': tabSelect == 'sankey'}">
+						<a (click)="setTab('sankey')">Sankey</a>
+					</li><!--
+					--><li class="panel-tab-item tab-3" [ngClass]="{'active': tabSelect == 'help'}">
+						<a (click)="setTab('help')">Help</a>
+					</li>
+				</ul>
 			</div>
+
+			<app-explore-opportunities-help [currentField]="currentField" [settings]="settings" [psat]="psat" *ngIf="tabSelect == 'help'">
+			</app-explore-opportunities-help>
+
+
+			<app-explore-opportunities-sankey [baselineResults]="baselineResults" [modificationResults]="modificationResults" [settings]="settings"
+			 *ngIf="tabSelect == 'sankey'">
+			</app-explore-opportunities-sankey>
+
+			<div class="panel-results">
+				<app-explore-opportunities-results [percentSavings]="percentSavings" [psat]="psat" [exploreModIndex]="exploreModIndex" [baselineResults]="baselineResults"
+				 [modificationResults]="modificationResults" [settings]="settings" [annualSavings]="annualSavings" *ngIf="tabSelect == 'results'">
+				</app-explore-opportunities-results>
+			</div>
+
+
 			<!-- End .help-panel -->
 		</div>
 	</div>

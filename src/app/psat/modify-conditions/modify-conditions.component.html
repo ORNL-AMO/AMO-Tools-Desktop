@@ -2,10 +2,10 @@
   <app-modify-conditions-tabs (changeTab)="changeTab($event)" [modifyTab]="modifyTab"></app-modify-conditions-tabs>
 </nav>
 
-<div class="modify-conditions row" *ngIf="settings">
+<div class="modify-conditions row psat" *ngIf="settings">
 
   <!-- Baseline -->
-  <div class="modification baseline col-4" (click)="togglePanel(baselineSelected)" [ngClass]="{'disabled': baselineSelected == false, 'modal-open': isModalOpen == true}">
+  <div class="modification baseline col-4 panel-column" (click)="togglePanel(baselineSelected)" [ngClass]="{'disabled': baselineSelected == false, 'modal-open': isModalOpen == true}">
     <div class="header">
       <h3>Baseline</h3>
     </div>
@@ -23,7 +23,7 @@
 
 
   <!-- Modifications Start -->
-  <div class="modification col-4" (click)="togglePanel(modifiedSelected)" *ngIf="_modifications.length != 0" [ngClass]="{'disabled': modifiedSelected == false, 'modal-open': isModalOpen == true}">
+  <div class="modification col-4 panel-column" (click)="togglePanel(modifiedSelected)" *ngIf="_modifications.length != 0" [ngClass]="{'disabled': modifiedSelected == false, 'modal-open': isModalOpen == true}">
 
     <!-- Modification Header -->
     <div class="header" *ngIf="!editModification">
@@ -36,8 +36,8 @@
         <span class="" *ngIf="isDropdownOpen">Cancel</span>
       </button> -->
 
-      <h5 class="pull-right add-loss">
-        <a class="small" [ngClass]="{'disabled': !modificationSelected}">
+      <h5 class="pull-right panel-add">
+        <a class="small" [ngClass]="{'disabled': modifiedSelected == false}">
           <span *ngIf="!isDropdownOpen" (click)="toggleDropdown()">Change / Add</span>
           <span *ngIf="isDropdownOpen" (click)="toggleDropdown()">Cancel</span>
         </a>
