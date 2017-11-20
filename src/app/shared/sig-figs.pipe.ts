@@ -6,7 +6,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 export class SigFigsPipe implements PipeTransform {
 
   transform(value: number, sigFigs: number, scientificNotation?: boolean): any {
-    if (isNaN(value) == false) {
+    if (isNaN(value) == false && value != null && value != undefined) {
       //string value of number in scientific notation
       let newValString = value.toPrecision(sigFigs);
       //converted to number to get trailing/leading zeros
