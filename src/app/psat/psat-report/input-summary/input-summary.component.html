@@ -70,7 +70,7 @@
         <td *ngFor="let modification of psat.modifications" [ngClass]="{'indicate-report-field-different': modification.psat.inputs.line_frequency != psat.inputs.line_frequency}">{{getLineFreq(modification.psat.inputs.line_frequency)}}</td>
       </tr>
       <tr>
-        <td [ngClass]="{'indicate-report-field-different': hpDiff == true}">Motor Rated Power (hp)</td>
+        <td [ngClass]="{'indicate-report-field-different': hpDiff == true}">Motor Rated Power ({{settings.powerMeasurement}})</td>
         <td [ngClass]="{'indicate-report-field-different': hpDiff == true}">{{psat.inputs.motor_rated_power}}</td>
         <td *ngFor="let modification of psat.modifications" [ngClass]="{'indicate-report-field-different': modification.psat.inputs.motor_rated_power != psat.inputs.motor_rated_power}">{{modification.psat.inputs.motor_rated_power}}</td>
       </tr>
