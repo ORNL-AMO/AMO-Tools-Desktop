@@ -78,6 +78,13 @@ export class LossesService {
       } else {
         this.efficiencyDone = false;
       }
+    }else{
+      this.efficiencyDone = false;
+      this.enInput1Done = false;
+      this.enInput2Done = false;
+      this.flueGasDone = false;
+      this.chargeDone = false;
+      return false;
     }
     grossHeat = (this.efficiencyDone || this.enInput1Done || this.enInput2Done || this.flueGasDone);
     isDone = (grossHeat && this.chargeDone);
