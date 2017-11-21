@@ -9,6 +9,9 @@ import { PhastResultsService } from '../phast/phast-results.service';
 import { ExecutiveSummaryService } from '../phast/phast-report/executive-summary.service';
 import * as _ from 'lodash';
 import { PsatService } from '../psat/psat.service';
+import { SettingsService } from '../settings/settings.service';
+import { Settings } from '../shared/models/settings';
+
 
 @Injectable()
 export class ReportRollupService {
@@ -29,7 +32,7 @@ export class ReportRollupService {
   phastResults: BehaviorSubject<Array<PhastResultsData>>;
   allPhastResults: BehaviorSubject<Array<AllPhastResultsData>>;
 
-  constructor(private indexedDbService: IndexedDbService, private psatService: PsatService, private phastResultsService: PhastResultsService, private executiveSummaryService: ExecutiveSummaryService) {
+  constructor(private indexedDbService: IndexedDbService, private psatService: PsatService, private executiveSummaryService: ExecutiveSummaryService, private settingsService: SettingsService) {
     this.initSummary();
   }
 
@@ -128,6 +131,7 @@ export class ReportRollupService {
     psatArr.forEach(val => {
       if (val.psat.setupDone && (val.psat.modifications.length != 0)) {
         this.indexedDbService.getAssessmentSettings(val.id).then(settings => {
+          settings[0] = this.checkSettings(settings[0]);
           let baselineResults = this.psatService.resultsExisting(JSON.parse(JSON.stringify(val.psat.inputs)), settings[0]);
           let modResultsArr = new Array<PsatOutputs>();
           val.psat.modifications.forEach(mod => {
@@ -150,6 +154,7 @@ export class ReportRollupService {
     let tmpResultsArr = new Array<PsatResultsData>();
     selectedPsats.forEach(val => {
       this.indexedDbService.getAssessmentSettings(val.assessmentId).then(settings => {
+        settings[0] = this.checkSettings(settings[0]);
         let modificationResults;
         let baselineResults = this.psatService.resultsExisting(JSON.parse(JSON.stringify(val.baseline.inputs)), settings[0]);
         if (val.modification.inputs.optimize_calculation) {
@@ -194,6 +199,7 @@ export class ReportRollupService {
       if (val.phast.setupDone && val.phast.modifications) {
         if (val.phast.modifications.length != 1) {
           this.indexedDbService.getAssessmentSettings(val.id).then(settings => {
+            settings[0] = this.checkSettings(settings[0]);
             let baselineResults = this.executiveSummaryService.getSummary(val.phast, false, settings[0], val.phast)
             let modResultsArr = new Array<ExecutiveSummary>();
             val.phast.modifications.forEach(mod => {
@@ -212,12 +218,20 @@ export class ReportRollupService {
     let tmpResultsArr = new Array<PhastResultsData>();
     selectedPhasts.forEach(val => {
       this.indexedDbService.getAssessmentSettings(val.assessmentId).then(settings => {
+        settings[0] = this.checkSettings(settings[0]);
         let baselineResults = this.executiveSummaryService.getSummary(val.baseline, false, settings[0], val.baseline);
         let modificationResults = this.executiveSummaryService.getSummary(val.modification, true, settings[0], val.baseline, baselineResults);
         tmpResultsArr.push({ baselineResults: baselineResults, modificationResults: modificationResults, assessmentId: val.assessmentId });
         this.phastResults.next(tmpResultsArr);
       })
     })
+  }
+
+  checkSettings(settings: Settings){
+    if(!settings.energyResultUnit){
+      settings = this.settingsService.setEnergyResultUnitSetting(settings);
+    }
+    return settings;
   }
 
 }
