@@ -2,7 +2,7 @@
   <div class="col-sm-6 col-md-6 col-lg-6">
     <div class="form-section">
       <div class="form-group">
-        <h3>Combustion With<br>Air</h3>
+        <h3 class="font-weight-bold">Combustion With Air</h3>
       </div>
 
       <div class="form-group">
@@ -46,18 +46,18 @@
       </div>
 
       <div class="form-group">
-        <label class="small" for="fuelConsumption"><strong>Fuel consumption</strong></label>
+        <label class="small" for="fuelConsumption">Fuel consumption</label>
         <div class="input-group">
           <input type="number" min="0" step="any" class="form-control" id="fuelConsumption" (input)="calc()" (focus)="changeField('fuelConsumption')"
             [(ngModel)]="o2Enrichment.fuelConsumption" onfocus="this.select();">
-          <span class="input-group-addon units">MM Btu/h</span>
+          <span class="input-group-addon units">MMBtu/hr</span>
         </div>
       </div>
     </div>
 
     <div class="form-group">
-      <label class="small">Available heat</label>
-      <div>{{o2EnrichmentOutput.availableHeatInput | number:'2.2-2'}} % of HHV</div>
+      <label class="small font-weight-bold">Available heat</label>
+      <div class="small">{{o2EnrichmentOutput.availableHeatInput | number:'2.2-2'}} % of HHV</div>
     </div>
 
   </div>
@@ -66,7 +66,7 @@
   <div class="col-sm-6 col-md-6 col-lg-6">
     <div class="form-section">
       <div class="form-group">
-        <h3>Combustion With<br>Oxygen Enriched Air</h3>
+        <h3 class="font-weight-bold">Combustion With O<sub>2</sub> Enriched Air</h3>
       </div>
 
       <div class="form-group">
@@ -111,22 +111,22 @@
     </div>
 
     <div class="form-group">
-      <label class="small"><strong>Fuel consumption</strong></label>
-      <div>{{o2EnrichmentOutput.fuelConsumptionEnriched | number:'2.2-2'}} MM Btu/hr</div>
+      <label class="small font-weight-bold">Fuel consumption</label>
+      <div class="small">{{o2EnrichmentOutput.fuelConsumptionEnriched | number:'2.2-2'}} MMBtu/hr</div>
     </div>
 
     <div class="form-group">
-      <label class="small">Available heat</label>
-      <div>{{o2EnrichmentOutput.availableHeatEnriched | number:'2.2-2'}} % of HHV</div>
+      <label class="small font-weight-bold">Available heat</label>
+      <div class="small">{{o2EnrichmentOutput.availableHeatEnriched | number:'2.2-2'}} % of HHV</div>
     </div>
 
     <div class="form-group">
-      <label class="small"><strong>Fuel savings</strong></label>
-      <div>{{o2EnrichmentOutput.fuelSavingsEnriched | number:'2.2-2'}} %</div>
+      <label class="small font-weight-bold">Fuel savings</label>
+      <div class="small">{{o2EnrichmentOutput.fuelSavingsEnriched | number:'2.2-2'}} %</div>
     </div>
 
     <div class="text-center" style="padding-top: 20px">
-      <button type="button" class="btn btn-success text-center">Plot</button>
+      <button type="button" class="btn-sm btn-success pull-right">Plot</button>
     </div>
   </div>
   <!-- End .col -->

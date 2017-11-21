@@ -45,8 +45,8 @@
   </div>
 </div>
 
-<div class="calculator" *ngIf="getSelectedTool() == 'o2-enrichment'">
-  <div class="row">
+<div class="tab-content" *ngIf="getSelectedTool() == 'o2-enrichment'">
+  <!-- <div class="row">
     <div class="col-lg-11 mx-auto">
       <h2>O
         <sub>2</sub> Enrichment</h2>
@@ -54,10 +54,9 @@
         when oxygen in combustion, “air”, is changed from standard (21%) to a higher value. Enter data for current (“Combustion
         with Air”) and new (“Combustion with Oxygen Enriched Air”) configurations.</p>
     </div>
-  </div>
-  <div class="calculator-container">
+  </div> -->
+
     <app-o2-enrichment></app-o2-enrichment>
-  </div>
 </div>
 
 
