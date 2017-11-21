@@ -126,6 +126,17 @@ Tabs
       color: #0F0F0F;
     }
   
+/*in calculator*/
+    .in-psat-height{
+        height: 100%;
+    }
+    
+    .calculator-margin{
+        margin-top: 10%;
+    }
+
+
+
   /* Vertical Tabs */
   /* .tabs.vertical {
     margin-right: -1px;

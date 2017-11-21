@@ -9,7 +9,7 @@ import { PsatService } from '../../../psat/psat.service';
 @Component({
   selector: 'app-system-curve',
   templateUrl: './system-curve.component.html',
-  styleUrls: ['./system-curve.component.css', '../../../psat/explore-opportunities/explore-opportunities.component.css']
+  styleUrls: ['./system-curve.component.css']
 })
 export class SystemCurveComponent implements OnInit {
   @Input()

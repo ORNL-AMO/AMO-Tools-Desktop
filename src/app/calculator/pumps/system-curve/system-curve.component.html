@@ -1,9 +1,9 @@
-<div class="modify-conditions explore-container row" *ngIf="settings">
+<div class="modify-conditions panel-container row psat" *ngIf="settings">
   <div class="col-12">
     <div class="row align-items-top" [ngClass]="{'in-psat-height': inPsat}">
-      <div class="modification explore-column col-6 align-top">
+      <div class="modification panel-column col-6 align-top">
         <div class="header">
-          <h5 class="aux-title">System Curve Calculator</h5>
+          <h3>System Curve Calculator</h3>
         </div>
         <div class="losses-container">
           <div class="card-form">
@@ -20,10 +20,10 @@
         <div class="help-panel">
           <div class="row">
             <ul class="tabs primary tab-row">
-              <li class="calc-tab tab-item aux-tab" [ngClass]="{'active': tabSelect == 'results'}">
+              <li class="panel-tab-item tab-2" [ngClass]="{'active': tabSelect == 'results'}">
                 <a (click)="setTab('results')">Graph</a>
               </li><!--
-              --><li class="calc-tab tab-item aux-tab" [ngClass]="{'active': tabSelect == 'help'}">
+              --><li class="panel-tab-item tab-2" [ngClass]="{'active': tabSelect == 'help'}">
                 <a (click)="setTab('help')">Help</a>
               </li>
             </ul>
@@ -66,7 +66,7 @@
           </div>
           <div class="row justify-content-center data-row" *ngIf="tabSelect == 'results'">
             <div class="col-11" id="systemCurveGraph">
-              <app-system-curve-graph *ngIf="tabSelect == 'results'" [lossCoefficient]="lossCoefficient" [settings]="settings" [staticHead]="staticHead"
+              <app-system-curve-graph [lossCoefficient]="lossCoefficient" [settings]="settings" [staticHead]="staticHead"
                 [pointOne]="pointOne" [pointTwo]="pointTwo" [curveConstants]="curveConstants"></app-system-curve-graph>
 
             </div>
