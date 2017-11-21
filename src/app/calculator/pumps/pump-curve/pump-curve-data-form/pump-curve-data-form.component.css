@@ -1,11 +1,14 @@
 
-.section-label{
-        font-size: large;
-    font-weight: bold;
-    text-align: center;
-}
-
 
 .fa-times-circle:hover{
+    cursor: pointer;
+}
+
+.add-link{
+    color: blue;
+}
+
+.add-link:hover{
+    text-decoration: underline;
     cursor: pointer;
 }
