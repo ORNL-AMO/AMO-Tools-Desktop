@@ -21,47 +21,43 @@
         <div class="header">
           <h3>Pump Head Calculator</h3>
         </div>
-        <div class="losses-container">
-          <div class="row justify-content-center">
-            <div class="btn-group btn-group-sm align-self-center">
-              <button type="button" class="btn btn-secondary btn-sm" (click)="setFormView('Suction tank elevation')" [ngClass]="{'active': headToolType == 'Suction tank elevation'}">Suction tank elevation</button>
-              <button type="button" class="btn btn-secondary btn-sm" (click)="setFormView('Suction gauge elevation')" [ngClass]="{'active': headToolType == 'Suction gauge elevation'}">Suction gauge elevation</button>
-            </div>
+        <div class="row justify-content-center head-tool-toggle-switch">
+          <div class="btn-group btn-group-sm align-self-center">
+            <button type="button" class="btn btn-secondary btn-sm" (click)="setFormView('Suction tank elevation')" [ngClass]="{'active': headToolType == 'Suction tank elevation'}">Suction tank elevation</button>
+            <button type="button" class="btn btn-secondary btn-sm" (click)="setFormView('Suction gauge elevation')" [ngClass]="{'active': headToolType == 'Suction gauge elevation'}">Suction gauge elevation</button>
           </div>
-          <div class="card-form">
-            <div class="row">
-              <div class="col-12">
+        </div>
+        <div class="row">
+          <div class="col-12">
 
-                <div *ngIf="headToolType == 'Suction tank elevation'">
-                  <div class="head-diagram text-center">
-                    <img class="img-fluid mx-auto d-block" aria-describedby="headDiagramHelp" src="assets/images/img-tank-elevation-head.png">
-                    <small id="headDiagramHelp" class="text-muted text-help">K
-                      <sub>s</sub> represents all suction losses from the tank to the pump</small>
-                    <br>
-                    <small id="headDiagramHelp" class="text-muted text-help">K
-                      <sub>d</sub> represents all discharge losses from the pump to the gauge P
-                      <sub>d</sub>
-                    </small>
-                  </div>
-                  <app-head-tool-suction-form [(headToolSuctionForm)]="headToolSuctionForm" [settings]="settings" (calculate)="calculateHeadToolSuctionTank()"
-                    [inAssessment]="inAssessment" (changeField)="changeField($event)"></app-head-tool-suction-form>
-                </div>
-
-                <div *ngIf="headToolType == 'Suction gauge elevation'">
-                  <div class="head-diagram text-center">
-                    <img class="img-fluid mx-auto d-block" aria-describedby="headDiagramHelp" src="assets/images/img-suction-discharge-head.png">
-                    <small id="headDiagramHelp" class="text-muted text-help">K
-                      <sub>s</sub> represents all suction losses from the tank to the pump</small>
-                    <br>
-                    <small id="headDiagramHelp" class="text-muted text-help">K
-                      <sub>d</sub> represents all discharge losses from the pump to the gauge P
-                      <sub>d</sub>
-                    </small>
-                  </div>
-                  <app-head-tool-form [(headToolForm)]="headToolForm" [settings]="settings" (calculate)="calculateHeadTool()" [inAssessment]="inAssessment"
-                    (changeField)="changeField($event)"></app-head-tool-form>
-                </div>
+            <div *ngIf="headToolType == 'Suction tank elevation'">
+              <div class="head-diagram text-center">
+                <img class="img-fluid mx-auto d-block" aria-describedby="headDiagramHelp" src="assets/images/img-tank-elevation-head.png">
+                <small id="headDiagramHelp" class="text-muted text-help">K
+                  <sub>s</sub> represents all suction losses from the tank to the pump</small>
+                <br>
+                <small id="headDiagramHelp" class="text-muted text-help">K
+                  <sub>d</sub> represents all discharge losses from the pump to the gauge P
+                  <sub>d</sub>
+                </small>
               </div>
+              <app-head-tool-suction-form [(headToolSuctionForm)]="headToolSuctionForm" [settings]="settings" (calculate)="calculateHeadToolSuctionTank()"
+                [inAssessment]="inAssessment" (changeField)="changeField($event)"></app-head-tool-suction-form>
+            </div>
+
+            <div *ngIf="headToolType == 'Suction gauge elevation'">
+              <div class="head-diagram text-center">
+                <img class="img-fluid mx-auto d-block" aria-describedby="headDiagramHelp" src="assets/images/img-suction-discharge-head.png">
+                <small id="headDiagramHelp" class="text-muted text-help">K
+                  <sub>s</sub> represents all suction losses from the tank to the pump</small>
+                <br>
+                <small id="headDiagramHelp" class="text-muted text-help">K
+                  <sub>d</sub> represents all discharge losses from the pump to the gauge P
+                  <sub>d</sub>
+                </small>
+              </div>
+              <app-head-tool-form [(headToolForm)]="headToolForm" [settings]="settings" (calculate)="calculateHeadTool()" [inAssessment]="inAssessment"
+                (changeField)="changeField($event)"></app-head-tool-form>
             </div>
           </div>
         </div>
@@ -73,7 +69,7 @@
               <li class="panel-tab-item tab-2" [ngClass]="{'active': tabSelect == 'results'}">
                 <a (click)="setTab('results')">Graph</a>
               </li><!--
-                  --><li class="panel-tab-item tab-2" [ngClass]="{'active': tabSelect == 'help'}">
+              --><li class="panel-tab-item tab-2" [ngClass]="{'active': tabSelect == 'help'}">
                 <a (click)="setTab('help')">Help</a>
               </li>
             </ul>

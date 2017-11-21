@@ -8,15 +8,28 @@
 
 
 .panel-container{
-	padding-bottom: 70px;
+	/* padding-bottom: 70px;
 	max-height: none !important;
 	min-height: 100vh;
-	height: auto !important;
+	height: auto !important; */
 }
 
 .form-card{
 	border: none;
 }
+
+.panel-container form .form-section {
+        padding-top: 10px;
+        padding-bottom: 10px;
+        border-bottom: #bbb dashed 1px;
+}
+
+.panel-container form {
+    padding-top: 15px;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
 
 .tab-row{
     width: 100%;
@@ -121,3 +134,20 @@
     margin-top: 5px;
 }
 
+.panel-container .group-label{
+    padding-top: 6.5px;
+    padding-bottom: 6.5px;
+    font-size: 12px;
+    text-transform: uppercase;
+    display: inline-block;
+    letter-spacing: 3px;
+    width: 100%;
+}
+
+.psat form .group-label{
+    border-bottom: #2980b9 groove 2px;
+}
+
+.phast form .group-label{
+    border-bottom: #BF3D00 groove 2px;
+}

@@ -1,3 +1,5 @@
+<label class="group-label">
+    Pump Data</label>
 <div class="row">
   <div class="col-12">
     <label>Order</label>
@@ -11,7 +13,7 @@
     </select>
   </div>
   <div class="col-6">
-      <span class="add-link small pull-right" (click)="addRow()">+Add Row</span>
+    <span class="add-link small pull-right" (click)="addRow()">+Add Row</span>
   </div>
 </div>
 <div *ngFor="let dataRow of pumpCurveForm.dataRows; let index = index;">

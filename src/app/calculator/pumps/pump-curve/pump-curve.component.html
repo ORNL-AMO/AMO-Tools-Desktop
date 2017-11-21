@@ -7,21 +7,16 @@
             Pump Curve Calculator
           </h3>
         </div>
-        <div class="losses-container">
-          <div class="row justify-content-center">
-            <div class="btn-group btn-group-sm align-self-center">
-              <button type="button" class="btn btn-secondary btn-sm" (click)="setFormView('Equation')" [ngClass]="{'active': selectedFormView == 'Equation'}">By Equation</button>
-              <button type="button" class="btn btn-secondary btn-sm" (click)="setFormView('Data')" [ngClass]="{'active': selectedFormView == 'Data'}">By Data</button>
-            </div>
+        <div class="row justify-content-center pump-curve-toggle-switch">
+          <div class="btn-group btn-group-sm align-self-center">
+            <button type="button" class="btn btn-secondary btn-sm" (click)="setFormView('Equation')" [ngClass]="{'active': selectedFormView == 'Equation'}">By Equation</button>
+            <button type="button" class="btn btn-secondary btn-sm" (click)="setFormView('Data')" [ngClass]="{'active': selectedFormView == 'Data'}">By Data</button>
           </div>
-
-          <div class="card-form">
-            <div class="row">
-              <div class="col-12">
-                <app-pump-curve-form [(pumpCurveForm)]="pumpCurveForm" [settings]="settings" (emitCalculate)="calculate()" (changeField)="setField($event)"
-                  [selectedFormView]="selectedFormView"></app-pump-curve-form>
-              </div>
-            </div>
+        </div>
+        <div class="row">
+          <div class="col-12">
+            <app-pump-curve-form [(pumpCurveForm)]="pumpCurveForm" [settings]="settings" (emitCalculate)="calculate()" (changeField)="setField($event)"
+              [selectedFormView]="selectedFormView"></app-pump-curve-form>
           </div>
         </div>
       </div>
@@ -32,7 +27,7 @@
               <li class="panel-tab-item tab-2" [ngClass]="{'active': tabSelect == 'results'}">
                 <a (click)="setTab('results')">Graph</a>
               </li><!--
-            --><li class="panel-tab-item tab-2" [ngClass]="{'active': tabSelect == 'help'}">
+              --><li class="panel-tab-item tab-2" [ngClass]="{'active': tabSelect == 'help'}">
                 <a (click)="setTab('help')">Help</a>
               </li>
             </ul>

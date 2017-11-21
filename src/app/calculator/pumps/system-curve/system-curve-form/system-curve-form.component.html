@@ -16,7 +16,7 @@
 
   <div class="form-section">
     <div class="form-group">
-      <label class="small section-label" for="pointAdjustment">Point 1</label>
+      <label class="group-label point-label" for="pointAdjustment">Point 1</label>
       <select name="p1Option" class="form-control" *ngIf="options.length != 0 " (change)="setFormValues(pointOne)" [(ngModel)]="p1Option" id="pointAdjustment">
         <option *ngFor="let option of options" [ngValue]="option.name">{{option.name}}</option>
       </select>
@@ -48,7 +48,7 @@
 
   <div class="form-section">
     <div class="form-group">
-      <label class="small section-label" for="pointAdjustment">Point 2</label>
+      <label class="group-label point-label" for="pointAdjustment">Point 2</label>
       <select name="pointAdjustment" class="form-control" *ngIf="options.length != 0 " (change)="setFormValues(pointTwo)" id="pointAdjustment" [(ngModel)]="p2Option">
         <option *ngFor="let option of options" [ngValue]="option.name">{{option.name}}</option>
       </select>

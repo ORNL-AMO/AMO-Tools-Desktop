@@ -5,14 +5,10 @@
         <div class="header">
           <h3>System Curve Calculator</h3>
         </div>
-        <div class="losses-container">
-          <div class="card-form">
-            <div class="row">
-              <div class="col-12">
-                <app-system-curve-form [psat]="psat" [settings]="settings" [(pointOne)]="pointOne" [(pointTwo)]="pointTwo" [(curveConstants)]="curveConstants"
-                  (calculate)="calculateValues()" (calculateP1)="calculateP1Flow()" (calculateP2)="calculateP2Flow()"></app-system-curve-form>
-              </div>
-            </div>
+        <div class="row">
+          <div class="col-12">
+            <app-system-curve-form [psat]="psat" [settings]="settings" [(pointOne)]="pointOne" [(pointTwo)]="pointTwo" [(curveConstants)]="curveConstants"
+              (calculate)="calculateValues()" (calculateP1)="calculateP1Flow()" (calculateP2)="calculateP2Flow()"></app-system-curve-form>
           </div>
         </div>
       </div>
@@ -66,8 +62,8 @@
           </div>
           <div class="row justify-content-center data-row" *ngIf="tabSelect == 'results'">
             <div class="col-11" id="systemCurveGraph">
-              <app-system-curve-graph [lossCoefficient]="lossCoefficient" [settings]="settings" [staticHead]="staticHead"
-                [pointOne]="pointOne" [pointTwo]="pointTwo" [curveConstants]="curveConstants"></app-system-curve-graph>
+              <app-system-curve-graph [lossCoefficient]="lossCoefficient" [settings]="settings" [staticHead]="staticHead" [pointOne]="pointOne"
+                [pointTwo]="pointTwo" [curveConstants]="curveConstants"></app-system-curve-graph>
 
             </div>
           </div>

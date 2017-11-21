@@ -246,7 +246,7 @@ select.form-control:not([size]):not([multiple]) {
 
 .card-form .form-section {
   margin-bottom: 10px;
-  padding-bottom: 18px !important;
+  padding-bottom: 18px;
   border-bottom: #bbb dashed 1px;
 }
 

@@ -5,13 +5,9 @@
 				<div class="header">
 					<h3>System Curve Calculator</h3>
 				</div>
-				<div class="losses-container">
-					<div class="card-form">
-						<div class="row">
-							<div class="col-12">
-								<app-achievable-efficiency-form [(efficiencyForm)]="efficiencyForm" [settings]="settings" (calculate)="calculate()"></app-achievable-efficiency-form>
-							</div>
-						</div>
+				<div class="row">
+					<div class="col-12">
+						<app-achievable-efficiency-form [(efficiencyForm)]="efficiencyForm" [settings]="settings" (calculate)="calculate()"></app-achievable-efficiency-form>
 					</div>
 				</div>
 			</div>
@@ -22,7 +18,7 @@
 							<li class="panel-tab-item tab-2" [ngClass]="{'active': tabSelect == 'results'}">
 								<a (click)="setTab('results')">Graph</a>
 							</li><!--
-	  						--><li class="panel-tab-item tab-2" [ngClass]="{'active': tabSelect == 'help'}">
+							--><li class="panel-tab-item tab-2" [ngClass]="{'active': tabSelect == 'help'}">
 								<a (click)="setTab('help')">Help</a>
 							</li>
 						</ul>

@@ -153,12 +153,12 @@
   aria-hidden="true" [config]="{backdrop: 'fixed'}">
   <div class="modal-dialog">
     <div class="modal-content">
-      <div class="modal-header">
+      <!-- <div class="modal-header">
         <div class="h3">Pump Head Calculator</div>
         <button class="close" aria-label="Close" (click)="hideHeadToolModal()">
           <span aria-hidden="true">&times;</span>
         </button>
-      </div>
+      </div> -->
       <div class="modal-body">
         <app-head-tool [headToolResults]="headToolResults" [psat]="psat" [settings]="settings" (close)="hideHeadToolModal()" [inAssessment]="true"></app-head-tool>
       </div>
