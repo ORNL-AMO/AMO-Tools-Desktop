@@ -2,7 +2,6 @@ import { Component, OnInit, Input } from '@angular/core';
 import { Assessment } from '../../../shared/models/assessment';
 import { ReportRollupService, PsatCompare, PhastResultsData } from '../../report-rollup.service';
 import * as _ from 'lodash';
-import { PsatService } from '../../../psat/psat.service';
 import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
 
 @Component({
@@ -16,7 +15,7 @@ export class PhastSummaryComponent implements OnInit {
   energySavingsPotential: number = 0;
   totalCost: number = 0;
   totalEnergy: number = 0;
-  constructor(private reportRollupService: ReportRollupService, private indexedDbService: IndexedDbService, private psatService: PsatService) { }
+  constructor(private reportRollupService: ReportRollupService, private indexedDbService: IndexedDbService) { }
 
   ngOnInit() {
     this.reportRollupService.phastAssessments.subscribe(val => {
