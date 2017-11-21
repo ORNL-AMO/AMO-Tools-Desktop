@@ -1,10 +1,11 @@
 import { Component, OnInit, Output, EventEmitter, Input, SimpleChanges, ViewChild, ElementRef } from '@angular/core';
 import { PsatService } from '../psat.service';
-import {FluidProperties, PSAT, PsatInputs} from '../../shared/models/psat';
+import { FluidProperties, PSAT, PsatInputs } from '../../shared/models/psat';
 import { Settings } from '../../shared/models/settings';
 import { CompareService } from '../compare.service';
 import { WindowRefService } from '../../indexedDb/window-ref.service';
 import { HelpPanelService } from '../help-panel/help-panel.service';
+import { debug } from 'util';
 @Component({
   selector: 'app-pump-fluid',
   templateUrl: './pump-fluid.component.html',
@@ -93,9 +94,7 @@ export class PumpFluidComponent implements OnInit {
   different: any = {
     pumpRPM: null
   };
-  private static round(value) {
-    return Number(Math.round(Number(value + 'e' + 3)) + 'e-' + 3);
-  }
+
 
   constructor(private psatService: PsatService, private compareService: CompareService, private windowRefService: WindowRefService, private helpPanelService: HelpPanelService) { }
 
@@ -123,7 +122,6 @@ export class PumpFluidComponent implements OnInit {
       this.formRef.nativeElement.pumpType.focus();
     }
     this.checkPumpRpm(true);
-    this.calculateSpecificGravity(true);
   }
 
   ngAfterViewInit() {
@@ -211,51 +209,56 @@ export class PumpFluidComponent implements OnInit {
     }
     this.rpmError = null;
     if (this.psatForm.value.pumpRPM < min) {
-      this.rpmError = 'Pump Speed is less than the minimum (' + min + ' rpm)' ;
+      this.rpmError = 'Pump Speed is less than the minimum (' + min + ' rpm)';
     } else if (this.psatForm.value.pumpRPM > max) {
       this.rpmError = 'Pump Speed is greater than the maximum (' + max + ' rpm)';
     }
   }
 
   calculateSpecificGravity(bool?: boolean) {
-    if (!bool) {
-      this.startSavePolling();
-    }
-    const fluidType = this.psatForm.value.fluidType;
-    const t = this.psatForm.value.fluidTemperature;
-    this.temperatureError = null;
+    let fluidType = this.psatForm.value.fluidType;
+    let t = this.psatForm.value.fluidTemperature;
+    if (fluidType && t) {
 
-    if (fluidType === 'Other') {
-      return;
-    }
+      if (!bool) {
+        this.startSavePolling();
+      }
 
-    if (fluidType === 'Water') {
-      if (t > 212.0) {
-        this.temperatureError = "Warning: Fluid Temperature is greater than the boiling point (212 deg F) at atmospheric pressure";
-      } else if (t < 32.0) {
-        this.temperatureError = "Warning: Fluid Temperature is less than the freezing point (32.0 deg F) at atmospheric pressure";
+      this.temperatureError = null;
+
+      if (fluidType === 'Other') {
+        return;
       }
-      const tTemp = (t - 32) * (5.0 / 9) + 273.15;
-      const density = 0.14395 / Math.pow(0.0112, (1 + Math.pow(1 - tTemp / 649.727, 0.05107)));
-      const kinViscosity = 0.000000003 * Math.pow(t, 4) - 0.000002 * Math.pow(t, 3) + 0.0005 * Math.pow(t, 2) - 0.0554 * t + 3.1271;
-      this.psatForm.patchValue({
-        gravity: PumpFluidComponent.round(density / 1000),
-        viscosity: PumpFluidComponent.round(kinViscosity)
-      });
-    } else {
-      const property = this.fluidProperties[fluidType];
-      if (t > property.boiling) {
-        this.temperatureError = "Warning: Fluid Temperature is greater than the boiling point (" + property.boiling + " deg F) at atmospheric pressure";
-      } else if (t < property.melting) {
-        this.temperatureError = "Warning: Fluid Temperature is less than the freezing point (" + property.melting + " deg F) at atmospheric pressure";
+
+      if (fluidType === 'Water') {
+        if (t > 212.0) {
+          this.temperatureError = "Warning: Fluid Temperature is greater than the boiling point (212 deg F) at atmospheric pressure";
+        } else if (t < 32.0) {
+          this.temperatureError = "Warning: Fluid Temperature is less than the freezing point (32.0 deg F) at atmospheric pressure";
+        }
+        let tTemp = (t - 32) * (5.0 / 9) + 273.15;
+        let density = 0.14395 / Math.pow(0.0112, (1 + Math.pow(1 - tTemp / 649.727, 0.05107)));
+        let kinViscosity = 0.000000003 * Math.pow(t, 4) - 0.000002 * Math.pow(t, 3) + 0.0005 * Math.pow(t, 2) - 0.0554 * t + 3.1271;
+        this.psatForm.patchValue({
+          gravity: this.psatService.roundVal((density / 1000), 3),
+          viscosity: this.psatService.roundVal(kinViscosity, 3)
+        });
+      } else {
+        let property = this.fluidProperties[fluidType];
+        if (t > property.boiling) {
+          this.temperatureError = "Warning: Fluid Temperature is greater than the boiling point (" + property.boiling + " deg F) at atmospheric pressure";
+        } else if (t < property.melting) {
+          this.temperatureError = "Warning: Fluid Temperature is less than the freezing point (" + property.melting + " deg F) at atmospheric pressure";
+        }
+        let density = property.density / (1 + property.beta * (t - property.tref));
+        this.psatForm.patchValue({
+          gravity: this.psatService.roundVal((density / 62.428), 3),
+          viscosity: this.psatService.roundVal(property.kinViscosity, 3)
+        });
       }
-      const density = property.density / (1 + property.beta * (t - property.tref));
-      this.psatForm.patchValue({
-        gravity: PumpFluidComponent.round(density / 62.428),
-        viscosity: PumpFluidComponent.round(property.kinViscosity)
-      });
     }
   }
+
 
   startSavePolling() {
     this.checkForm(this.psatForm);
