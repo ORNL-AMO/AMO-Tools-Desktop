@@ -36,7 +36,7 @@
 
     <label for="head">
         Head
-        <a [ngClass]="{'disabled-link': !selected}" class="form-text text-help small" (click)="showHeadToolModal()">Calculate Head</a>
+        <a [ngClass]="{'disabled-link': !selected}" class="form-text small click-link" (click)="showHeadToolModal()">Calculate Head</a>
       </label>
     <div class="input-group">
       <input name="head" type="number" min="0.1" step="any" class="form-control" formControlName="head" id="head" (input)="checkHead()"
