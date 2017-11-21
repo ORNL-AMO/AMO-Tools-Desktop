@@ -22,4 +22,12 @@
              onfocus="this.select();">
     </div>
   </div>
+
+  <div class="form-group">
+    <label for="loadEstimation">Percent Load Estimation</label>
+    <div class="input-group calc-addon-group">
+      <input type="number" step="10" min="0" class="form-control" id="loadEstimation" [(ngModel)]="tmpLoadEstimation" (input)="emitChange()"
+             onfocus="this.select();">
+    </div>
+  </div>
 </div>

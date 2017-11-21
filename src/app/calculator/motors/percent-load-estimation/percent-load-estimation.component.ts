@@ -23,7 +23,8 @@ export class PercentLoadEstimationComponent implements OnInit {
       this.percentLoadEstimationForm = this.formBuilder.group({
         'measuredSpeed': ['', Validators.required],
         'nameplateFullLoadSpeed': ['', Validators.required],
-        'synchronousSpeed': ['', ]
+        'synchronousSpeed': ['', ],
+        'loadEstimation': ['', ]
       });
     }
 
