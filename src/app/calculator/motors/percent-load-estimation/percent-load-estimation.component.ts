@@ -1,5 +1,7 @@
 import {Component, Input, OnInit} from '@angular/core';
 import { Settings } from '../../../shared/models/settings';
+import {FormBuilder, Validators} from "@angular/forms";
+import {IndexedDbService} from "../../../indexedDb/indexed-db.service";
 
 @Component({
   selector: 'app-percent-load-estimation',
@@ -14,9 +16,31 @@ export class PercentLoadEstimationComponent implements OnInit {
 
   toggleCalculate = false;
 
-  constructor() { }
+  constructor(private formBuilder: FormBuilder, private indexedDbService: IndexedDbService) { }
 
   ngOnInit() {
+    if (!this.percentLoadEstimationForm) {
+      this.percentLoadEstimationForm = this.formBuilder.group({
+        'measuredSpeed': ['', Validators.required],
+        'nameplateFullLoadSpeed': ['', Validators.required],
+        'synchronousSpeed': ['', ]
+      });
+    }
+
+    if (!this.settings) {
+      this.indexedDbService.getDirectorySettings(1).then(
+        results => {
+          if (results.length !== 0) {
+            // if(results[0].powerMeasurement != 'hp'){
+            //   this.performanceForm.patchValue({
+            //     horsePower: '150'
+            //   })
+            // }
+            this.settings = results[0];
+          }
+        }
+      );
+    }
   }
 
   calculate() {

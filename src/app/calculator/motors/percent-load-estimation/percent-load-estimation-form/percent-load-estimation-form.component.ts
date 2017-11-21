@@ -14,12 +14,22 @@ export class PercentLoadEstimationFormComponent implements OnInit {
   @Input()
   settings: Settings;
 
-
   tmpMeasuredSpeed: number;
+  tmpNameplateFullLoadSpeed: number;
+  tmpSynchronousSpeed: number;
 
   constructor() { }
 
   ngOnInit() {
+  }
+
+  emitChange() {
+    this.percentLoadEstimationForm.patchValue({
+      measuredSpeed: this.tmpMeasuredSpeed,
+      nameplateFullLoadSpeed: this.tmpNameplateFullLoadSpeed,
+      synchronousSpeed: this.tmpSynchronousSpeed
+    });
+    this.calculate.emit(true);
   }
 
 }
