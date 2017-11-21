@@ -19,6 +19,9 @@ export class PercentLoadEstimationFormComponent implements OnInit {
   tmpSynchronousSpeed: number;
   tmpLoadEstimation: number;
 
+  synchronousSpeedError: string = null;
+  nameplateFullLoadSpeedError: string = null;
+
   private synchronousSpeeds = [
     600,
     720,
@@ -42,17 +45,37 @@ export class PercentLoadEstimationFormComponent implements OnInit {
   }
 
   calculate() {
+    this.synchronousSpeedError = null;
+
+    if (this.tmpNameplateFullLoadSpeed >= 3600) {
+      this.nameplateFullLoadSpeedError = 'Nameplate Full Load Speed is greater than or equal to 3600';
+    }
+
     if (!this.tmpMeasuredSpeed || !this.tmpNameplateFullLoadSpeed) {
       return;
     }
 
-    let diff = this.synchronousSpeeds[this.synchronousSpeeds.length - 1];
-    this.synchronousSpeeds.forEach( (val) => {
-      if (Math.abs(this.tmpNameplateFullLoadSpeed - val) < diff) {
-        diff = Math.abs(this.tmpNameplateFullLoadSpeed - val);
-        this.tmpSynchronousSpeed = val;
+    for (let i = 0; i < this.synchronousSpeeds.length; i++) {
+      if (this.synchronousSpeeds[i] > this.tmpNameplateFullLoadSpeed) {
+        this.tmpSynchronousSpeed = this.synchronousSpeeds[i];
+        break;
       }
-    });
+      if (this.tmpNameplateFullLoadSpeed === this.synchronousSpeeds[i]) {
+        this.synchronousSpeedError = 'Nameplate Full Load Speed cannot equal the Synchronous Speed of ' + this.synchronousSpeeds[i];
+        break;
+      }
+    }
+
+    // this.synchronousSpeeds.forEach( (val) => {
+    //   if (val > this.tmpNameplateFullLoadSpeed) {
+    //     this.tmpSynchronousSpeed = val;
+    //     break;
+    //   }
+    //   if (this.tmpNameplateFullLoadSpeed === val) {
+    //     this.synchronousSpeedError = 'Nameplate Full Load Speed cannot equal the Synchronous Speed of ' + val;
+    //     break;
+    //   }
+    // });
 
     this.tmpLoadEstimation = (this.tmpSynchronousSpeed - this.tmpMeasuredSpeed) / (this.tmpSynchronousSpeed - this.tmpNameplateFullLoadSpeed);
   }
