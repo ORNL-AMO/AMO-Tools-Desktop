@@ -36,13 +36,6 @@
 </div>
 
 
-<div class="calculator" *ngIf="getSelectedTool() == 'motor-performance'">
-  <div class="row">
-    <div class="col-lg-10  mx-auto">
-      <h2>Motor Performance Calculator</h2>
-    </div>
-  </div>
-  <div class="calculator-container">
-    <app-motor-performance></app-motor-performance>
-  </div>
+<div class="tab-content" *ngIf="getSelectedTool() == 'motor-performance'">
+  <app-motor-performance></app-motor-performance>
 </div>

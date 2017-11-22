@@ -30,7 +30,7 @@
     <div class="col-6">
       <label class="group-label">Modified Condition</label>
       <div class="form-group">
-        <select id="measurementOption" name="measurementOption" class="form-control" disabled="disabled" (change)="calculate()" [(ngModel)]="pumpCurveForm.measurementOption"
+        <select id="measurementOption2" name="measurementOption2" class="form-control" disabled="disabled" (change)="calculate()" [(ngModel)]="pumpCurveForm.measurementOption"
           (focus)="focusField('measurementOption')">
           <option *ngFor="let option of options" [ngValue]="option">{{option}}</option>
         </select>
