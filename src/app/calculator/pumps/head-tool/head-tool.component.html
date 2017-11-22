@@ -14,7 +14,7 @@
         <p><strong>Units of Measure:</strong> {{settings.pressureMeasurement}}, {{settings.flowMeasurement}}, {{settings.distanceMeasurement}}
           <a (click)="editSettings()">change</a></p>
       </div> -->
-<div class="modify-conditions panel-container row psat" *ngIf="settings && !showSettings">
+<div class="modify-conditions panel-container row psat calculator-panel" *ngIf="settings && !showSettings">
   <div class="col-12">
     <div class="row align-items-top" [ngClass]="{'in-psat-height': inPsat}">
       <div class="modification panel-column col-6 align-top">
@@ -67,7 +67,7 @@
           <div class="row">
             <ul class="tabs primary tab-row">
               <li class="panel-tab-item tab-2" [ngClass]="{'active': tabSelect == 'results'}">
-                <a (click)="setTab('results')">Graph</a>
+                <a (click)="setTab('results')">Results</a>
               </li><!--
               --><li class="panel-tab-item tab-2" [ngClass]="{'active': tabSelect == 'help'}">
                 <a (click)="setTab('help')">Help</a>
@@ -83,7 +83,7 @@
           </div>
           <div class="row justify-content-center data-row" *ngIf="tabSelect == 'results'">
             <div class="col-11">
-              <app-head-tool-results *ngIf="tabSelect == 'results'" [results]="results" [settings]="settings"></app-head-tool-results>
+              <app-head-tool-results [results]="results" [settings]="settings"></app-head-tool-results>
             </div>
           </div>
         </div>

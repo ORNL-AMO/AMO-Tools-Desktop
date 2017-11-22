@@ -7,6 +7,10 @@
 }
 
 
+.calculator-panel{
+    height: 100%;
+}
+
 .panel-container{
 	/* padding-bottom: 70px;
 	max-height: none !important;
