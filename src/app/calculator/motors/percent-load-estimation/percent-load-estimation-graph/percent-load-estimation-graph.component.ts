@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
+import {Settings} from "../../../../shared/models/settings";
 
 @Component({
   selector: 'app-percent-load-estimation-graph',
@@ -6,10 +7,21 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./percent-load-estimation-graph.component.css']
 })
 export class PercentLoadEstimationGraphComponent implements OnInit {
+  @Input()
+  percentLoadEstimationForm: any;
+  // @Output('calculate')
+  // calculate = new EventEmitter<boolean>();
+  @Input()
+  settings: Settings;
 
   constructor() { }
 
   ngOnInit() {
+    debugger
+  }
+
+  calculate() {
+    return this.percentLoadEstimationForm.loadEstimation;
   }
 
 }
