@@ -7,6 +7,7 @@ import { IndexedDbService } from '../../indexedDb/indexed-db.service';
 import { Directory } from '../../shared/models/directory';
 import { ReportRollupService } from '../../report-rollup/report-rollup.service';
 import { WindowRefService } from '../../indexedDb/window-ref.service';
+import { SettingsService } from '../../settings/settings.service';
 
 @Component({
   selector: 'app-phast-report',
@@ -25,14 +26,19 @@ export class PhastReportComponent implements OnInit {
   assessment: Assessment;
   @Input()
   inRollup: boolean;
-  
+
   currentTab: string = 'energy-used';
   assessmentDirectories: Array<Directory>;
   createdDate: Date;
-  constructor(private phastService: PhastService, private indexedDbService: IndexedDbService, private reportRollupService: ReportRollupService, private windowRefService: WindowRefService) { }
+  constructor(private phastService: PhastService, private indexedDbService: IndexedDbService, private reportRollupService: ReportRollupService, private windowRefService: WindowRefService, private settingsService: SettingsService) { }
 
   ngOnInit() {
     this.createdDate = new Date();
+    if(this.settings){
+      if (!this.settings.energyResultUnit) {
+        this.settings = this.settingsService.setEnergyResultUnitSetting(this.settings);
+      }
+    }
     if (this.assessment.phast && this.settings && !this.phast) {
       this.phast = this.assessment.phast;
     } else if (this.assessment.phast && !this.settings) {
@@ -60,6 +66,9 @@ export class PhastReportComponent implements OnInit {
   getSettings() {
     this.indexedDbService.getAssessmentSettings(this.assessment.id).then(results => {
       if (results.length != 0) {
+        if (!results[0].energyResultUnit) {
+          results[0] = this.settingsService.setEnergyResultUnitSetting(results[0]);
+        }
         this.settings = results[0];
       } else {
         this.getParentDirectorySettings(this.assessment.directoryId);
@@ -72,6 +81,9 @@ export class PhastReportComponent implements OnInit {
     this.indexedDbService.getDirectorySettings(dirId).then(
       resultSettings => {
         if (resultSettings.length != 0) {
+          if (resultSettings[0].energyResultUnit) {
+            resultSettings[0] = this.settingsService.setEnergyResultUnitSetting(resultSettings[0]);
+          }
           this.settings = resultSettings[0];
         } else {
           this.indexedDbService.getDirectory(dirId).then(

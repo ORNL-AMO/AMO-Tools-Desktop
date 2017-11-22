@@ -122,7 +122,6 @@ export class PhastPieChartComponent implements OnInit {
     } else {
       this.phastReportService.modificationChartLabels.next(this.chartData.pieChartLabels);
     }
-    console.log(this.chartData.pieChartLabels);
   }
 
   getLossPercent(totalLosses: number, loss: number): number {
