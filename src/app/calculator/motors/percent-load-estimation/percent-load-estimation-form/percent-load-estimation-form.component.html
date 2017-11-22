@@ -19,7 +19,7 @@
   <div class="form-group">
     <label for="synchronousSpeed">Synchronous Speed</label>
     <div class="input-group calc-addon-group">
-      <input type="number" step="10" min="0" class="form-control" id="synchronousSpeed" [(ngModel)]="tmpSynchronousSpeed" (input)="emitChange()"
+      <input type="number" step="10" min="0" [disabled]="true" class="form-control" id="synchronousSpeed" [(ngModel)]="tmpSynchronousSpeed" (input)="emitChange()"
              onfocus="this.select();">
     </div>
     <span class="alert-danger pull-right small" *ngIf="synchronousSpeedError !== null">{{synchronousSpeedError}}</span>

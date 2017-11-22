@@ -45,7 +45,7 @@ export class PercentLoadEstimationFormComponent implements OnInit {
   }
 
   calculate() {
-    this.synchronousSpeedError = null;
+    this.synchronousSpeedError = this.nameplateFullLoadSpeedError = null;
 
     if (this.tmpNameplateFullLoadSpeed >= 3600) {
       this.nameplateFullLoadSpeedError = 'Nameplate Full Load Speed is greater than or equal to 3600';
