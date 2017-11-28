@@ -1,6 +1,4 @@
 [![Waffle.io - Columns and their card count](https://badge.waffle.io/ORNL-AMO/AMO-Tools-Desktop.svg?columns=all)](http://waffle.io/ORNL-AMO/AMO-Tools-Desktop)
-[![Github All Releases]
-(https://img.shields.io/github/downloads/ORNL-AMO/AMO-Tools-Desktop/total.svg)]()
 
 # AMOToolsDesktop
 
