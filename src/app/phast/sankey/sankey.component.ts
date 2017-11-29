@@ -188,7 +188,7 @@ export class SankeyComponent implements OnInit {
           return d.name;
         }
       })
-      .style("font-size", (this.location === 'sankey-diagram') ? "32px" : "50px");
+      .style("font-size", (this.location === 'sankey-diagram') ? "32px" : "45px");
     // var nodes_units = svg.selectAll(".nodetext")
     //   .data(results.nodes)
     //   .enter()
@@ -267,7 +267,7 @@ export class SankeyComponent implements OnInit {
               var format = d3.format(",.2f");
               return format(node_val.value) + ' ' + node_val.units;
             })
-            .style("font-size", (this.location === 'sankey-diagram') ? "32px" : "50px");
+            .style("font-size", (this.location === 'sankey-diagram') ? "32px" : "45px");
 
           // Units Adjustment if it is Sankey Report
         } else if (this.location === 'baseline-sankey' || this.location === 'modification-sankey') {
@@ -308,7 +308,7 @@ export class SankeyComponent implements OnInit {
               var format = d3.format(",.2f");
               return format(node_val.value) + ' ' + node_val.units;
             })
-            .style("font-size", (!this.location) ? "32px" : "50px");
+            .style("font-size", (!this.location) ? "32px" : "45px");
         }
       }
     });
