@@ -132,7 +132,7 @@ export class SankeyComponent implements OnInit {
       .append('g')
       .append("polygon")
       .attr('class', 'node');
-
+    // Label Adjustment
     var nodes_text = svg.selectAll(".nodetext")
       .data(results.nodes)
       .enter()
@@ -154,14 +154,26 @@ export class SankeyComponent implements OnInit {
       })
       .attr("dy", (d) => {
         if (d.input) {
-          return d.y + (d.displaySize / 2) + 10;
+          if (this.location === 'sankey-diagram') {
+            return d.y + (d.displaySize / 2) + 10;
+          }else if (this.location !== 'sankey-diagram') {
+          return d.y + (d.displaySize / 2) - 15;
+          }
         }
-        else if (d.usefulOutput) {
+
+        if (d.usefulOutput) {
+          if (this.location === 'sankey-diagram') {
           return d.y + (d.displaySize / 2) - 140;
+        } else if (this.location !== 'sankey-diagram') {
+            return d.y + (d.displaySize / 2) - 180;
+          }
         }
-        else {
-          if (d.top) {
-            return d.y - 155;
+        if (d.top) {
+            if (this.location === 'sankey-diagram') {
+              return d.y - 155;
+            } else if (this.location !== 'sankey-diagram') {
+              return d.y - 160;
+            }
           }
           else if (d.extSurfaceLoss) {
             return d.y + 45;
@@ -169,15 +181,14 @@ export class SankeyComponent implements OnInit {
           else {
             return d.y + 140;
           }
-        }
+
       })
       .text((d) => {
         if (!d.inter) {
           return d.name;
         }
       })
-      .style("font-size", "32px");
-
+      .style("font-size", (this.location === 'sankey-diagram') ? "32px" : "45px");
     // var nodes_units = svg.selectAll(".nodetext")
     //   .data(results.nodes)
     //   .enter()
@@ -214,46 +225,91 @@ export class SankeyComponent implements OnInit {
     //   })
     //   .style("font-size", "30px");
 
+    // Units Adjustment if it is Sankey Diagram
     results.nodes.forEach((d, i) => {
       var node_val = d, i = i;
       if (!node_val.inter) {
-        svg.append("text")
-          .attr("x", function () {
-            if (node_val.input) {
-              return node_val.x + 10;
-            }
-            else if (node_val.extSurfaceLoss) {
-              return d.x - 340;
-            }
-            else if (node_val.usefulOutput) {
-              return d.x + (d.displaySize * .7) - 70 ;
-            }
-            else {
-              return node_val.x - 70;
-            }
-          })
-          .attr("y", function () {
-            if (node_val.input) {
-              return (node_val.y + (node_val.displaySize / 2)) + 43;
-            }
-            else if (node_val.usefulOutput) {
-              return (node_val.y + (node_val.displaySize / 2)) - 110;
-            }
-            else if (node_val.top) {
-              return node_val.y - 120;
-            }
-            else if (node_val.extSurfaceLoss) {
-              return node_val.y + 80;
-            }
-            else {
-              return node_val.y + 175;
-            }
-          })
-          .text(function () {
-            var format = d3.format(",.2f");
-            return format(node_val.value) + ' ' + node_val.units;
-          })
-          .style("font-size", "32px");
+        if (this.location === 'sankey-diagram') {
+          console.log(this.location + " " + "this is location")
+          svg.append("text")
+            .attr("x", function () {
+              if (node_val.input) {
+                return node_val.x + 10;
+              }
+              if (node_val.extSurfaceLoss) {
+                  return d.x - 200;
+             }
+              if (node_val.usefulOutput) {
+                return d.x + (d.displaySize * .7) - 70;
+              }
+              if (node_val.x) {
+                  return node_val.x + (d.displaySize * .7) - 120;
+               }
+            })
+            .attr("y", function () {
+              if (node_val.input) {
+                return (node_val.y + (node_val.displaySize / 2)) + 45;
+              }
+              else if (node_val.usefulOutput) {
+                return (node_val.y + (node_val.displaySize / 2)) - 100;
+              }
+              else if (node_val.top) {
+                return node_val.y - 120;
+              }
+              else if (node_val.extSurfaceLoss) {
+                return node_val.y + 80;
+              }
+              else {
+                return node_val.y + 175;
+              }
+            })
+            .text(function () {
+              var format = d3.format(",.2f");
+              return format(node_val.value) + ' ' + node_val.units;
+            })
+            .style("font-size", (this.location === 'sankey-diagram') ? "32px" : "45px");
+
+          // Units Adjustment if it is Sankey Report
+        } else if (this.location === 'baseline-sankey' || this.location === 'modification-sankey') {
+          console.log("This is report location " + " " + this.location)
+          svg.append("text")
+            .attr("x", function () {
+              if (node_val.input) {
+                return node_val.x + 10;
+              }
+              if (node_val.extSurfaceLoss) {
+                return d.x - 100;
+              }
+              if (node_val.usefulOutput) {
+                return d.x + (d.displaySize * .7) - 180;
+              }
+              if (node_val.x) {
+                return node_val.x + (d.displaySize * .7) - 200;
+              }
+            })
+            .attr("y", function () {
+              if (node_val.input) {
+                return (node_val.y + (node_val.displaySize / 2)) + 45;
+              }
+              else if (node_val.usefulOutput) {
+                return (node_val.y + (node_val.displaySize / 2)) - 130;
+              }
+              else if (node_val.top) {
+                return node_val.y - 100;
+              }
+              else if (node_val.extSurfaceLoss) {
+                return node_val.y + 115;
+              }
+              else {
+                return node_val.y + 195;
+              }
+            })
+            .text(function () {
+              var format = d3.format(",.2f");
+              return format(node_val.value) + ' ' + node_val.units;
+            })
+            .style("font-size", (!this.location) ? "32px" : "45px");
+        }
       }
     });
 
