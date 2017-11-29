@@ -68,7 +68,6 @@ export class FlueGasLossesFormVolumeComponent implements OnInit {
       } else {
         this.enableForm();
       }
-      this.isExcessAirDisabled = (this.flueGasLossForm.value.calculationMethod === 'Excess Air');
     } else {
       this.firstChange = false;
     }
@@ -169,6 +168,13 @@ export class FlueGasLossesFormVolumeComponent implements OnInit {
         });
         // fuelTemperature
         this.flueGasCompareService.differentArray[this.lossIndex].different.flueGasVolumeDifferent.fuelTemperature.subscribe((val) => {
+          let fuelTemperatureElements = doc.getElementsByName('fuelTemperature_' + this.lossIndex);
+          fuelTemperatureElements.forEach(element => {
+            element.classList.toggle('indicate-different', val);
+          });
+        });
+        // Oxygen Calculation Method
+        this.flueGasCompareService.differentArray[this.lossIndex].different.flueGasVolumeDifferent.oxygenCalculationMethod.subscribe((val) => {
           let fuelTemperatureElements = doc.getElementsByName('fuelTemperature_' + this.lossIndex);
           fuelTemperatureElements.forEach(element => {
             element.classList.toggle('indicate-different', val);
