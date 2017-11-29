@@ -16,15 +16,30 @@
           id="flueGasTemperature" onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('flueGasTemperature')" (blur)="focusOut()">
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">&#8457;</span>
         <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
-
       </div>
     </div>
 
     <div class="form-group">
+      <label class="small" for="oxygenCalculationMethod">Oxygen Calculation Method</label>
+      <select name="{{'oxygenCalculationMethod_'+lossIndex}}" class="form-control" formControlName="oxygenCalculationMethod" id="oxygenCalculationMethod" (change)="setProperties()" (focus)="focusField('oxygenCalculationMethod')" (blur)="focusOut()">
+        <option *ngFor="let method of calculationMethods" [ngValue]="method">{{method}}</option>
+      </select>
+    </div>
+
+    <div class="form-group" *ngIf="!isExcessAirDisabled()">
       <label class="small" for="excessAirPercentage">Excess Air</label>
       <div class="input-group">
         <input name="{{'excessAirPercentage_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="excessAirPercentage"
           id="excessAirPercentage" onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('excessAirPercentage')" (blur)="focusOut()">
+        <span class="input-group-addon units">%</span>
+      </div>
+    </div>
+
+    <div class="form-group" *ngIf="isExcessAirDisabled()">
+      <label class="small" for="o2InFlueGas">Oxygen In Flue Gas</label>
+      <div class="input-group">
+        <input name="{{'o2InFlueGas_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="o2InFlueGas"
+               id="o2InFlueGas" onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('o2InFlueGas')" (blur)="focusOut()">
         <span class="input-group-addon units">%</span>
       </div>
     </div>

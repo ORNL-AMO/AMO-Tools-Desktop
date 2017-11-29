@@ -34,6 +34,10 @@ export class FlueGasLossesFormVolumeComponent implements OnInit {
 
   firstChange: boolean = true;
   options: any;
+  calculationMethods = [
+    'Excess Air',
+    'Oxygen in Flue Gas'
+  ];
   counter: any;
   showModal: boolean = false;
   constructor(private suiteDbService: SuiteDbService, private flueGasCompareService: FlueGasCompareService, private windowRefService: WindowRefService, private lossesService: LossesService) { }
@@ -64,6 +68,7 @@ export class FlueGasLossesFormVolumeComponent implements OnInit {
       } else {
         this.enableForm();
       }
+      this.isExcessAirDisabled = (this.flueGasLossForm.value.calculationMethod === 'Excess Air');
     } else {
       this.firstChange = false;
     }
@@ -91,6 +96,10 @@ export class FlueGasLossesFormVolumeComponent implements OnInit {
     for (var i = 0, len = this.elements.length; i < len; ++i) {
       this.elements[i].disabled = false;
     }
+  }
+
+  isExcessAirDisabled() {
+    return this.flueGasLossForm.value.oxygenCalculationMethod === 'Oxygen in Flue Gas';
   }
 
   setProperties() {
