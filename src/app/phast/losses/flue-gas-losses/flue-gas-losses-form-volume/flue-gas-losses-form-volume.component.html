@@ -20,7 +20,7 @@
     </div>
 
     <div class="form-group">
-      <label class="small" for="oxygenCalculationMethod">Oxygen Calculation Method</label>
+      <label class="small" for="oxygenCalculationMethod">Percent Oxygen Or Excess Air?</label>
       <select name="{{'oxygenCalculationMethod_'+lossIndex}}" class="form-control" formControlName="oxygenCalculationMethod" id="oxygenCalculationMethod" (change)="setProperties()" (focus)="focusField('oxygenCalculationMethod')" (blur)="focusOut()">
         <option *ngFor="let method of calculationMethods" [ngValue]="method">{{method}}</option>
       </select>
