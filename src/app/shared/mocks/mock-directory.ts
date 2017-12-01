@@ -241,7 +241,9 @@ export const MockDirectory: Directory = {
               flueGasType: "By Volume",
               flueGasByVolume: {
                 flueGasTemperature: 1400,
+                oxygenCalculationMethod: 'Excess Air',
                 excessAirPercentage: 10.0,
+                o2InFlueGas: 0.5,
                 combustionAirTemperature: 500,
                 fuelTemperature: 125,
                 gasTypeId: 1,
