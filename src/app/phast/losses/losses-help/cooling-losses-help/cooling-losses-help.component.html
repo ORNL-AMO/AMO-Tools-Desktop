@@ -1,7 +1,7 @@
 <div class="help-header">
 
   <h3>Cooling Losses Help</h3>
-  <p>Enter loss data</p>
+  <p>Enter loss data<br>Note: the default Average Specific Heat and Density values are for Air or Water (depending on the chosen cooling medium).</p>
   <p class="text-muted">
     <span class="fa fa-youtube-play"></span> Watch tutorial on entering cooling loss data.
   </p>
@@ -106,13 +106,13 @@
 
   <div class="card" *ngIf="currentField == 'avgSpecificHeatGas'">
     <div class="card-header">
-      Specific Heat
+      Average Specific Heat
     </div>
     <div class="card-block">
       <label><u><strong>Description</strong></u></label>
       <p>
-        Amount of heat per unit mass required to raise the temperature by one degree of temperature. Default value is for
-        air; may be more accurate to compute as the average of specific heat based on inlet and outlet temperature.
+        Amount of heat per unit mass required to raise the temperature by one degree of temperature.<br>Default value is for
+        <strong>air</strong>; may be more accurate to compute as the average of specific heat based on inlet and outlet temperature.
       </p>
       <label><u><strong>Input</strong></u></label>
       <p>
@@ -164,7 +164,7 @@
     <div class="card-block">
       <label><u><strong>Description</strong></u></label>
       <p>
-        Amount of heat per unit mass required to raise the temperature by one degree of temperature. Default value is for water;
+        Amount of heat per unit mass required to raise the temperature by one degree of temperature.<br>Default value is for <strong>water</strong>;
         may be more accurate to compute as the average of specific heat based on inlet and outlet temperature.
       </p>
       <label><u><strong>Input</strong></u></label>

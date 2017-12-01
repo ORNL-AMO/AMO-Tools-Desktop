@@ -162,10 +162,11 @@ export class OpeningLossesFormComponent implements OnInit {
   getArea() {
     let smallUnit = 'in';
     let largeUnit = 'ft';
-    if(this.settings.unitsOfMeasure == 'Metric'){
-      smallUnit == 'mm';
-      largeUnit == 'm';
+    if (this.settings.unitsOfMeasure == 'Metric') {
+      smallUnit = 'mm';
+      largeUnit = 'm';
     }
+
     this.checkNumOpenings();
     this.checkOpeningDimensions();
     if (this.numOpeningsError !== null || this.lengthError !== null || this.heightError !== null) {
