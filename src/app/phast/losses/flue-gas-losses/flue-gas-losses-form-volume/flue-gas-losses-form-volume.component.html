@@ -29,7 +29,7 @@
     <div class="form-group" *ngIf="isExcessAirDisabled()">
       <label class="small" for="o2InFlueGas">Oxygen In Flue Gas</label>
       <div class="input-group">
-        <input name="{{'o2InFlueGas_'+lossIndex}}" type="number" step="any" min="0" max="20" class="form-control" formControlName="o2InFlueGas"
+        <input name="{{'o2InFlueGas_'+lossIndex}}" type="number" step="0.5" min="0" max="20.5" class="form-control" formControlName="o2InFlueGas"
                id="o2InFlueGas" onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('o2InFlueGas')" (blur)="focusOut()">
         <span class="input-group-addon units">%</span>
       </div>
