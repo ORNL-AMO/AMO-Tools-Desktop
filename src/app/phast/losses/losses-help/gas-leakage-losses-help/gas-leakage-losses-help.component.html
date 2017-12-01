@@ -12,7 +12,7 @@
 <div class="help-content">
   <div class="card" *ngIf="currentField == 'draftPressure'">
     <div class="card-header">
-      Furnace Draft Pressure (Inch W.C.)
+      Furnace Draft Pressure
     </div>
     <div class="card-block">
       <label>Description:</label>
@@ -20,30 +20,42 @@
         digital gage. Units of measurement is in terms of inch water column. Hot gases leak out when the pressure is
         positive. Cold air leaks into the furnace when pressure is negative.
       </p>
+      <label><u><strong>Input</strong></u></label>
+      <p>
+        Units: <strong>Inch W.C.</strong> or <strong>Pa</strong>
+      </p>
     </div>
   </div>
 
   <div class="card" *ngIf="currentField == 'openingArea'">
     <div class="card-header">
-      Opening Area (ft<sup>2</sup>)
+      Opening Area
     </div>
     <div class="card-block">
       <label>Description:</label>
       <p>
         This is value of open area from where hot gases are leaking out.
       </p>
+      <label><u><strong>Input</strong></u></label>
+      <p>
+        Units: <strong>ft<sup>2</sup></strong> or <strong>m<sup>2</sup></strong>
+      </p>
     </div>
   </div>
 
   <div class="card" *ngIf="currentField == 'leakageGasTemperature'">
     <div class="card-header">
-      Temperature of Gases Leaking (&#8457;)
+      Temperature of Gases Leaking
     </div>
     <div class="card-block">
       <label>Description:</label>
       <p>
         Temperature of gases leaking out of the opening. In most cases it is safe and accurate enough to measure and
         use furnace (or zone) temperature for this value.
+      </p>
+      <label><u><strong>Input</strong></u></label>
+      <p>
+        Units: <strong><sup>o</sup>F</strong> or <strong><sup>o</sup>C</strong>
       </p>
     </div>
   </div>
@@ -63,13 +75,17 @@
 
   <div class="card" *ngIf="currentField == 'ambientTemperature'">
     <div class="card-header">
-      Ambient Temperature (&#8457;)
+      Ambient Temperature
     </div>
     <div class="card-block">
       <label>Description:</label>
       <p>
         Ambient temperature at the location where opening is present. Normally this is room temperature in the area
         where furnace is located.
+      </p>
+      <label><u><strong>Input</strong></u></label>
+      <p>
+        Units: <strong><sup>o</sup>F</strong> or <strong><sup>o</sup>C</strong>
       </p>
     </div>
   </div>
