@@ -35,6 +35,8 @@ import { ReportRollupModule } from '../report-rollup/report-rollup.module';
 
 import { VersionModalComponent } from '../version-modal/version-modal.component';
 import { UpdateModalComponent } from '../update-modal/update-modal.component';
+import {AcknowledgmentsPageComponent} from "../acknowledgments-page/acknowledgments-page.component";
+
 @NgModule({
   declarations: [
     CoreComponent,
@@ -46,6 +48,7 @@ import { UpdateModalComponent } from '../update-modal/update-modal.component';
     AboutPageComponent,
     TutorialsComponent,
     ContactPageComponent,
+    AcknowledgmentsPageComponent,
     UpdateModalComponent,
     VersionModalComponent
   ],
