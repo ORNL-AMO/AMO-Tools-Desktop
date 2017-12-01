@@ -78,8 +78,8 @@ export class ExtendedSurfaceLossesFormComponent implements OnInit {
     if (!bool) {
       this.startSavePolling();
     }
-    if (this.lossesForm.value.surfaceEmissivity >> 1) {
-      this.emissivityError = 'Surface emissivity cannot be greater than 1';
+    if (this.lossesForm.value.surfaceEmissivity > 1 || this.lossesForm.value.surfaceEmissivity < 0) {
+      this.emissivityError = 'Surface emissivity must be between 0 and 1';
     } else {
       this.emissivityError = null;
     }

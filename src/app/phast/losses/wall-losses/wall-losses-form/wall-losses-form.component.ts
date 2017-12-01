@@ -101,8 +101,8 @@ export class WallLossesFormComponent implements OnInit {
     if (!bool) {
       this.startSavePolling();
     }
-    if (this.wallLossesForm.value.surfaceEmissivity > 1) {
-      this.emissivityError = 'Surface emissivity cannot be greater than 1';
+    if (this.wallLossesForm.value.surfaceEmissivity > 1 || this.wallLossesForm.value.surfaceEmissivity < 0) {
+      this.emissivityError = 'Surface emissivity must be between 0 and 1';
     } else {
       this.emissivityError = null;
     }
