@@ -30,10 +30,10 @@
             </select>
       </div>
       <app-flue-gas-losses-form-mass [(flueGasLossForm)]="loss.formByMass" *ngIf="loss.measurementType == 'By Mass'" (changeField)="changeField($event)"
-        (calculate)="calculate(loss)" [baselineSelected]="baselineSelected" (saveEmit)="saveLosses()" [lossIndex]="lossIndex"
+        (calculate)="calculate(true, loss)" [baselineSelected]="baselineSelected" (saveEmit)="saveLosses()" [lossIndex]="lossIndex"
         [settings]="settings"></app-flue-gas-losses-form-mass>
       <app-flue-gas-losses-form-volume [(flueGasLossForm)]="loss.formByVolume" *ngIf="loss.measurementType == 'By Volume'" (changeField)="changeField($event)"
-        (calculate)="calculate(loss)" [baselineSelected]="baselineSelected" (saveEmit)="saveLosses()" [lossIndex]="lossIndex"
+        (calculate)="calculate($event, loss)" [baselineSelected]="baselineSelected" (saveEmit)="saveLosses()" [lossIndex]="lossIndex"
         [settings]="settings"></app-flue-gas-losses-form-volume>
     </div>
   </div>

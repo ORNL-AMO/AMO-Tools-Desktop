@@ -46,6 +46,7 @@ export class FlueGasLossesFormVolumeComponent implements OnInit {
 
   counter: any;
   showModal: boolean = false;
+  excessAirDisabled: boolean;
   constructor(private suiteDbService: SuiteDbService, private flueGasCompareService: FlueGasCompareService, private windowRefService: WindowRefService, private lossesService: LossesService, private phastService: PhastService) { }
 
   ngOnInit() {
@@ -57,6 +58,7 @@ export class FlueGasLossesFormVolumeComponent implements OnInit {
         }
       }
     }
+    this.isExcessAirDisabled();
   }
 
 
@@ -89,7 +91,8 @@ export class FlueGasLossesFormVolumeComponent implements OnInit {
   }
 
   checkForm() {
-    this.calculate.emit(true);
+    this.isExcessAirDisabled();
+    this.calculate.emit(this.excessAirDisabled);
   }
 
   focusField(str: string) {
@@ -120,14 +123,18 @@ export class FlueGasLossesFormVolumeComponent implements OnInit {
       excessAir: this.flueGasLossForm.value.excessAirPercentage
     };
 
-    const excessAirDisabled = this.flueGasLossForm.value.oxygenCalculationMethod === 'Oxygen in Flue Gas';
+    this.excessAirDisabled = this.flueGasLossForm.value.oxygenCalculationMethod === 'Oxygen in Flue Gas';
 
     this.calculationWarning = null;
-    if (excessAirDisabled) {
+    if (this.excessAirDisabled) {
+      this.flueGasLossForm.patchValue({
+        o2InFlueGas: undefined
+      })
+      input.o2InFlueGas = undefined;
       if (input.o2InFlueGas < 0 || input.o2InFlueGas > 20.99999) {
         this.calculationExcessAir = 0.0;
         this.calculationWarning = 'Oxygen levels in Flue Gas must be greater than or equal to 0 and less than 21 percent';
-        return excessAirDisabled;
+        return;
       }
       this.calculationExcessAir = this.phastService.flueGasCalculateExcessAir(input);
       this.flueGasLossForm.value.excessAirPercentage = this.calculationExcessAir;
@@ -135,14 +142,18 @@ export class FlueGasLossesFormVolumeComponent implements OnInit {
         excessAirPercentage: this.calculationExcessAir
       });
     } else {
+      this.flueGasLossForm.patchValue({
+        excessAirPercentage: undefined
+      })
+      input.excessAir = undefined;
       if (input.excessAir < 0) {
         this.calculationFlueGasO2 = 0.0;
         this.calculationWarning = 'Excess Air must be greater than 0 percent';
-        return excessAirDisabled;
+        return;
       }
       this.calculationFlueGasO2 = this.phastService.flueGasCalculateO2(input);
     }
-    return excessAirDisabled;
+    return;
   }
 
   setProperties() {
