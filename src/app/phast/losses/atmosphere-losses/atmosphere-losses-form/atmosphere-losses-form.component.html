@@ -2,12 +2,14 @@
   <div class="form-section">
     <div class="form-group">
       <label class="small" for="atmosphereGas">Atmosphere Gas
-        <small id="materialHelp" class="form-text text-help"><a (click)="showMaterialModal()">Add New Gas</a></small>
+        <small id="materialHelp" class="form-text text-help">
+          <a (click)="showMaterialModal()">Add New Gas</a>
+        </small>
       </label>
       <select name="{{'atmosphereGas'+lossIndex}}" class="form-control" id="atmosphereGas" formControlName="atmosphereGas" (change)="setProperties()"
         (focus)="focusField('materialName')" (blur)="focusOut()">
-          <option *ngFor="let gas of materialTypes" [ngValue]="gas.id">{{gas.substance}}</option>
-        </select>
+        <option *ngFor="let gas of materialTypes" [ngValue]="gas.id">{{gas.substance}}</option>
+      </select>
     </div>
 
     <div class="form-group">
@@ -16,7 +18,8 @@
         <input name="{{'specificHeat_'+lossIndex}}" type="number" class="form-control" formControlName="specificHeat" id="specificHeat"
           onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('specificHeat')" (blur)="focusOut()">
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">Btu/(SCF-&#8457;)</span>
-        <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kJ/(Nm<sup>3</sup>-&#8451;)</span>
+        <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kJ/(Nm
+          <sup>3</sup>-&#8451;)</span>
       </div>
     </div>
 
@@ -49,14 +52,17 @@
         <input name="{{'flowRate_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="flowRate" id="flowRate"
           onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('flowRate')" (blur)="focusOut()">
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">SCF/hr</span>
-        <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">Nm<sup>3</sup></span>
+        <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">Nm
+          <sup>3</sup>
+        </span>
       </div>
     </div>
 
     <div class="form-group">
       <label class="small" for="correctionFactor">Correction Factor</label>
       <input name="{{'correctionFactor_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="correctionFactor"
-        id="correctionFactor" onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('correctionFactor')" (blur)="focusOut()">
+        id="correctionFactor" onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('correctionFactor')"
+        (blur)="focusOut()">
     </div>
   </div>
 </form>
@@ -66,14 +72,16 @@
 <div bsModal #materialModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="materialModalLabel"
   aria-hidden="true" [config]="{backdrop: 'static'}">
   <div class="modal-dialog modal-md">
-    <div class="modal-header">
-      <h3>Create Gas Material</h3>
-      <button class="close" (click)="hideMaterialModal()">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Create Gas Material</h3>
+        <button class="close" (click)="hideMaterialModal()">
           <span aria-hidden="true">&times;</span>
         </button>
-    </div>
-    <div class="modal-content">
-      <app-atmosphere-specific-heat-material *ngIf="showModal" (closeModal)="hideMaterialModal($event)" [settings]="settings"></app-atmosphere-specific-heat-material>
+      </div>
+      <div class="modal-body">
+        <app-atmosphere-specific-heat-material *ngIf="showModal" (closeModal)="hideMaterialModal($event)" [settings]="settings"></app-atmosphere-specific-heat-material>
+      </div>
     </div>
   </div>
 </div>
