@@ -285,13 +285,15 @@
 <div bsModal #viewFactorModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="viewFactorModalHeader"
   aria-hidden="true" [config]="{backdrop: 'static'}">
   <div class="modal-dialog modal-lg view-factor-modal">
-    <div class="modal-header">
-      <button class="close" (click)="hideViewFactorModal()">
-        <span aria-hidden="true">&times;</span>
-      </button>
-    </div>
     <div class="modal-content">
-      <img src="assets/images/view-factor-diagram.png" class="dialog-image mx-auto">
+      <div class="modal-header">
+        <button class="close" (click)="hideViewFactorModal()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <img src="assets/images/view-factor-diagram.png" class="dialog-image mx-auto">
+      </div>
     </div>
   </div>
 </div>

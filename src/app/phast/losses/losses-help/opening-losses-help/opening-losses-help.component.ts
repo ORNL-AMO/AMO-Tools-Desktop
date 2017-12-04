@@ -24,7 +24,6 @@ export class OpeningLossesHelpComponent implements OnInit {
   }
 
   hideViewFactorModal(){
-    console.log('clicked');
     this.lossesService.modalOpen.next(false);
     this.viewFactorModal.hide();
   }
