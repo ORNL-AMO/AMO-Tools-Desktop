@@ -62,6 +62,9 @@ export class SystemBasicsComponent implements OnInit {
     this.settingsForm = this.settingsService.getFormFromSettings(this.settings);
   }
 
+  ngOnDestroy() {
+    clearTimeout(this.counter);
+  }
 
   setUnits() {
     this.unitChange = !this.unitChange;
