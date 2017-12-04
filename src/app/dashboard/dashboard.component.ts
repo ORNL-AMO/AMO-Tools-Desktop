@@ -15,7 +15,7 @@ import { WindowRefService } from '../indexedDb/window-ref.service';
 import { ImportExportService } from '../shared/import-export/import-export.service';
 import { WallLossesSurface, GasLoadChargeMaterial, LiquidLoadChargeMaterial, SolidLoadChargeMaterial, AtmosphereSpecificHeat, FlueGasMaterial, SolidLiquidFlueGasMaterial } from '../shared/models/materials';
 import { ReportRollupService } from '../report-rollup/report-rollup.service';
-import { SettingsService } from '../settings/settings.service'; 
+import { SettingsService } from '../settings/settings.service';
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
@@ -181,6 +181,11 @@ export class DashboardComponent implements OnInit {
   showAbout() {
     this.selectedCalculator = '';
     this.dashboardView = 'about-page';
+  }
+
+  showAcknowledgments() {
+    this.selectedCalculator = '';
+    this.dashboardView = 'acknowledgments-page';
   }
 
   showTutorials() {
