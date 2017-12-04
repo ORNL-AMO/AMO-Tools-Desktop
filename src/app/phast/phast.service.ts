@@ -417,7 +417,7 @@ export class PhastService {
     let results: any = {
       heatDelivered: 0,
       exhaustGasLosses: 0
-    }
+    };
     if (settings.unitsOfMeasure == 'Metric') {
       inputs.combustionAirTemp = this.convertUnitsService.value(inputs.combustionAirTemp).from('C').to('F');
       inputs.exhaustGasTemp = this.convertUnitsService.value(inputs.exhaustGasTemp).from('C').to('F');
