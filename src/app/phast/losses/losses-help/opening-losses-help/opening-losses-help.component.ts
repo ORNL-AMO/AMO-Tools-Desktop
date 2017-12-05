@@ -1,4 +1,6 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ViewChild } from '@angular/core';
+import { LossesService } from '../../losses.service';
+import { ModalDirective } from 'ngx-bootstrap';
 
 @Component({
   selector: 'app-opening-losses-help',
@@ -8,9 +10,21 @@ import { Component, OnInit, Input } from '@angular/core';
 export class OpeningLossesHelpComponent implements OnInit {
   @Input()
   currentField: string;
-  constructor() { }
+
+  @ViewChild('viewFactorModal') public viewFactorModal: ModalDirective;
+
+  constructor(private lossesService: LossesService) { }
 
   ngOnInit() {
   }
 
+  showViewFactor(){
+    this.lossesService.modalOpen.next(true);
+    this.viewFactorModal.show();
+  }
+
+  hideViewFactorModal(){
+    this.lossesService.modalOpen.next(false);
+    this.viewFactorModal.hide();
+  }
 }
