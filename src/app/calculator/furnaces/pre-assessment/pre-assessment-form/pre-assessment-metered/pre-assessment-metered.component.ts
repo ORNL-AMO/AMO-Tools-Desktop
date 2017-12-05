@@ -21,6 +21,7 @@ export class PreAssessmentMeteredComponent implements OnInit {
     if (!this.assessment.meteredEnergy) {
       this.assessment.meteredEnergy = {
         meteredEnergyFuel: {
+          fuelDescription: 'gas',
           fuelType: 0,
           heatingValue: 0,
           collectionTime: 0,

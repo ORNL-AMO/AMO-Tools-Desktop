@@ -35,6 +35,7 @@ export class MeteredFuelComponent implements OnInit {
   ngOnInit() {
     if (!this.phast.meteredEnergy.meteredEnergyFuel) {
       this.phast.meteredEnergy.meteredEnergyFuel = {
+        fuelDescription: 'gas',
         fuelType: 0,
         heatingValue: 0,
         collectionTime: 0,
@@ -42,6 +43,10 @@ export class MeteredFuelComponent implements OnInit {
         electricityCollectionTime: 0,
         fuelEnergy: 0
       };
+    }else{
+      if(!this.phast.meteredEnergy.meteredEnergyFuel.fuelDescription){
+        this.phast.meteredEnergy.meteredEnergyFuel.fuelDescription = 'gas';
+      }
     }
     this.calculate();
   }
