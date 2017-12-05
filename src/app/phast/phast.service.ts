@@ -62,8 +62,12 @@ export class PhastService {
   }
 
   createInputCopy(inputs: any) {
-    let cpy = JSON.parse(JSON.stringify(inputs));
-    return cpy;
+    if (inputs) {
+      let cpy = JSON.parse(JSON.stringify(inputs));
+      return cpy;
+    }else{
+      return
+    }
   }
 
   convertResult(val: number, to: string) {
@@ -196,7 +200,7 @@ export class PhastService {
       inputs.length = this.convertUnitsService.value(inputs.length).from('mm').to('in');
       inputs.width = this.convertUnitsService.value(inputs.width).from('mm').to('in');
       results = phastAddon.openingLossesQuad(inputs);
-    }else{
+    } else {
       results = phastAddon.openingLossesQuad(inputs);
     }
     return this.convertResult(results, settings.energyResultUnit);
@@ -211,7 +215,7 @@ export class PhastService {
       inputs.thickness = this.convertUnitsService.value(inputs.thickness).from('mm').to('in');
       inputs.diameter = this.convertUnitsService.value(inputs.diameter).from('mm').to('in');
       results = phastAddon.openingLossesCircular(inputs);
-    }else{
+    } else {
       results = phastAddon.openingLossesCircular(inputs);
     }
     return this.convertResult(results, settings.energyResultUnit);
@@ -394,10 +398,12 @@ export class PhastService {
     let inputs = this.createInputCopy(input);
     let results = 0;
     if (settings.unitsOfMeasure == 'Metric') {
-      inputs.combustionAirTemp = this.convertUnitsService.value(inputs.combustionAirTemp).from('C').to('F');
-      inputs.exhaustGasTemp = this.convertUnitsService.value(inputs.exhaustGasTemp).from('C').to('F');
-      inputs.totalHeatInput = this.convertUnitsService.value(inputs.totalHeatInput).from('kJ').to('Btu');
-      results = phastAddon.availableHeat(inputs);
+      if (inputs.combustionAirTemp && inputs.exhaustGasTemp && inputs.totalHeatInput) {
+        inputs.combustionAirTemp = this.convertUnitsService.value(inputs.combustionAirTemp).from('C').to('F');
+        inputs.exhaustGasTemp = this.convertUnitsService.value(inputs.exhaustGasTemp).from('C').to('F');
+        inputs.totalHeatInput = this.convertUnitsService.value(inputs.totalHeatInput).from('kJ').to('Btu');
+        results = phastAddon.availableHeat(inputs);
+      }
       if (isNaN(results)) {
         results = 0;
       }
@@ -517,7 +523,7 @@ export class PhastService {
       if (tmpForm.status == 'VALID') {
         sum += this.atmosphere(loss, settings);
       }
-     // console.log(sum);
+      // console.log(sum);
     });
     return sum;
   }

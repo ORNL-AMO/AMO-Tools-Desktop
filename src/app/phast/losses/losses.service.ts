@@ -57,28 +57,28 @@ export class LossesService {
       let categories = this.phastResultsService.getResultCategories(settings);
       if (categories.showEnInput1) {
         this.checkEAF(phast, settings);
-      }else{
+      } else {
         this.enInput1Done = false;
       }
-      
+
       if (categories.showEnInput2) {
         this.checkEnergyInputExhaustGas(phast, settings);
-      }else{
+      } else {
         this.enInput2Done = false;
       }
-      
+
       if (categories.showFlueGas) {
         this.checkFlueGas(phast, settings);
-      }else{
+      } else {
         this.flueGasDone = false;
       }
-      
+
       if (categories.showSystemEff) {
         this.checkSystemEfficiency(phast, settings);
       } else {
         this.efficiencyDone = false;
       }
-    }else{
+    } else {
       this.efficiencyDone = false;
       this.enInput1Done = false;
       this.enInput2Done = false;
@@ -91,7 +91,7 @@ export class LossesService {
     return isDone;
   }
 
-  checkChargeMaterials(phast: PHAST, settings: Settings){
+  checkChargeMaterials(phast: PHAST, settings: Settings) {
     if (phast.losses.chargeMaterials) {
       if (phast.losses.chargeMaterials.length != 0) {
         let test = this.phastService.sumChargeMaterials(phast.losses.chargeMaterials, settings);
@@ -152,9 +152,8 @@ export class LossesService {
   checkEnergyInputExhaustGas(phast: PHAST, settings: Settings) {
     if (phast.losses.energyInputExhaustGasLoss) {
       if (phast.losses.energyInputExhaustGasLoss.length != 0) {
-        let test = this.phastService.sumEnergyInputExhaustGas(phast.losses.energyInputExhaustGasLoss, settings);
-        if (test != 0) {
-          this.enInput2Done = true;
+        if (phast.losses.energyInputExhaustGasLoss[0].totalHeatInput) {
+          this.enInput2Done = true
         } else {
           this.enInput2Done = false;
         }
@@ -166,7 +165,7 @@ export class LossesService {
     }
   }
 
-  checkEAF(phast: PHAST, settings: Settings){
+  checkEAF(phast: PHAST, settings: Settings) {
     if (phast.losses.energyInputEAF) {
       if (phast.losses.energyInputEAF.length != 0) {
         let test = this.phastService.sumEnergyInputEAF(phast.losses.energyInputEAF, settings);
