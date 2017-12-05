@@ -37,8 +37,8 @@ export class AssessmentService {
       pump_specified: null,
       pump_rated_speed: 1780,
       drive: 0,
-      kinematic_viscosity: 1,
-      specific_gravity: 1,
+      kinematic_viscosity: 1.107,
+      specific_gravity: 1.002,
       stages: 1,
       fixed_speed: 0,
       line_frequency: 0,
@@ -56,11 +56,13 @@ export class AssessmentService {
       motor_field_power: null,
       motor_field_current: null,
       motor_field_voltage: 460,
-      cost_kw_hour: 0.06
-    }
+      cost_kw_hour: 0.06,
+      fluidType: 'Water',
+      fluidTemperature: 68
+    };
     let newPsat: PSAT = {
       inputs: newPsatInputs
-    }
+    };
     return newPsat;
   }
 
@@ -135,7 +137,9 @@ export class AssessmentService {
       this.workingAssessment.psat.inputs.motor_field_power,
       this.workingAssessment.psat.inputs.motor_field_current,
       this.workingAssessment.psat.inputs.motor_field_voltage,
-      this.workingAssessment.psat.inputs.cost_kw_hour
+      this.workingAssessment.psat.inputs.cost_kw_hour,
+      this.workingAssessment.psat.inputs.fluidType,
+      this.workingAssessment.psat.inputs.fluidTemperature
     );
     tmpPSAT = {
       inputs: tmpPsatInputs
@@ -167,7 +171,9 @@ export class AssessmentService {
     _motor_field_power: any,
     _motor_field_current: any,
     _motor_field_voltage: any,
-    _cost_kw_hour: any
+    _cost_kw_hour: any,
+    _fluidType: any,
+    _fluidTemperature: any
 
   ): PsatInputs {
     let newPsatInputs: PsatInputs = {
@@ -194,8 +200,10 @@ export class AssessmentService {
       motor_field_power: _motor_field_power,
       motor_field_current: _motor_field_current,
       motor_field_voltage: _motor_field_voltage,
-      cost_kw_hour: _cost_kw_hour
-    }
+      cost_kw_hour: _cost_kw_hour,
+      fluidType: _fluidType,
+      fluidTemperature: _fluidTemperature
+    };
     return newPsatInputs;
   }
 }

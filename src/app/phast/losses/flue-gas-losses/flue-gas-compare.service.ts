@@ -43,6 +43,7 @@ export class FlueGasCompareService {
       excessAirPercentage: new BehaviorSubject<boolean>(null),
       combustionAirTemperature: new BehaviorSubject<boolean>(null),
       fuelTemperature: new BehaviorSubject<boolean>(null),
+      oxygenCalculationMethod: new BehaviorSubject<boolean>(null),
     }
     let tmpByMass: FlueGasMassDifferent = {
       gasTypeId: new BehaviorSubject<boolean>(null),
@@ -172,6 +173,7 @@ export interface FlueGasVolumeDifferent {
   excessAirPercentage: BehaviorSubject<boolean>,
   combustionAirTemperature: BehaviorSubject<boolean>,
   fuelTemperature: BehaviorSubject<boolean>,
+  oxygenCalculationMethod: BehaviorSubject<boolean>,
 }
 
 export interface FlueGasMassDifferent {

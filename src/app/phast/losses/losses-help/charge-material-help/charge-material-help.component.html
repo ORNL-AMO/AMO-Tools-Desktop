@@ -59,12 +59,16 @@
 
   <div class="card" *ngIf="currentField == 'materialLatentHeatOfFusion'">
     <div class="card-header">
-      Latent Heat of Fusion (Btu/lb)
+      Latent Heat of Fusion
     </div>
     <div class="card-block">
       <label><u><strong>Description</strong></u></label>
       <p>
         Latent heat of melting or fusion or phase change for the solid material.
+      </p>
+      <label><u><strong>Input</strong></u></label>
+      <p>
+        Units: <strong>Btu/lb</strong> or <strong>kJ/kg</strong>
       </p>
     </div>
   </div>
@@ -89,7 +93,7 @@
 
   <div class="card" *ngIf="currentField == 'materialMeltingPoint'">
     <div class="card-header">
-      Melting Point (&#8457;)
+      Melting Point
     </div>
     <div class="card-block">
       <label><u><strong>Description</strong></u></label>
@@ -173,7 +177,7 @@
 
   <div class="card" *ngIf="currentField == 'waterVaporDischargeTemperature'">
     <div class="card-header">
-      Water Vapor Discharge Temperature (&#8457;)
+      Water Vapor Discharge Temperature
     </div>
     <div class="card-block">
       <label><u><strong>Description</strong></u></label>
@@ -190,7 +194,7 @@
 
   <div class="card" *ngIf="currentField == 'chargeMaterialDischargeTemperature'">
     <div class="card-header">
-      Charge Material Discharge Temperature (&#8457;)
+      Charge Material Discharge Temperature
     </div>
     <div class="card-block">
       <label><u><strong>Description</strong></u></label>
@@ -207,7 +211,7 @@
 
   <div class="card" *ngIf="currentField == 'additionalHeatRequired'">
     <div class="card-header">
-      Additional Heat Required (Btu/lb)
+      Additional Heat Required
     </div>
     <div class="card-block">
       <label><u><strong>Description</strong></u></label>
@@ -243,7 +247,7 @@
 
   <div class="card" *ngIf="currentField == 'materialVaporizingTemperature'">
     <div class="card-header">
-      Vaporizing Temperature of Liquid(&#8457;)
+      Vaporizing Temperature of Liquid
     </div>
     <div class="card-block">
       <label><u><strong>Description</strong></u></label>
@@ -259,7 +263,7 @@
 
   <div class="card" *ngIf="currentField == 'materialLatentHeat'">
     <div class="card-header">
-      Latent Heat of Vaporization (&#8457;)
+      Latent Heat of Vaporization
     </div>
     <div class="card-block">
       <label><u><strong>Description</strong></u></label>
@@ -268,7 +272,7 @@
       </p>
       <label><u><strong>Input</strong></u></label>
       <p>
-        Units: <strong><sup>o</sup>F</strong> or <strong><sup>o</sup>C</strong>
+        Units: <strong>Btu/lb</strong> or <strong>kJ/kg</strong>
       </p>
     </div>
   </div>
@@ -396,7 +400,7 @@
   <!-- All -->
   <div class="card" *ngIf="currentField == 'initialTemperature'">
     <div class="card-header">
-      Initial Temperature (&#8457;)
+      Initial Temperature
     </div>
     <div class="card-block">
       <label><u><strong>Description</strong></u></label>
@@ -412,7 +416,7 @@
 
   <div class="card" *ngIf="currentField == 'dischargeTemperature'">
     <div class="card-header">
-      Discharge Temperature (&#8457;)
+      Discharge Temperature
     </div>
     <div class="card-block">
       <label><u><strong>Description</strong></u></label>
@@ -459,13 +463,17 @@
 
   <div class="card" *ngIf="currentField == 'feedRate'">
     <div class="card-header">
-      Feed Rate for Gas Mixture (lb/hr)
+      Feed Rate
     </div>
     <div class="card-block">
       <label><u><strong>Description</strong></u></label>
       <p>
         Weight of material charged per hour. Use total weight including moisture in the charge material. Note that for
         batch furnaces the total weight should be corrected for cycle time to obtain weight per hour value.
+      </p>
+      <label><u><strong>Input</strong></u></label>
+      <p>
+        Units: <strong>lb/hr</strong> or <strong>kg/hr</strong>
       </p>
     </div>
   </div>

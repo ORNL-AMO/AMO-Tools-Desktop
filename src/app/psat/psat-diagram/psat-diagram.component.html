@@ -55,8 +55,16 @@
             <th *ngFor="let result of resultsArr"></th>
           </tr>
           <tr>
+            <td class="data-cell data-cell-label">Fluid Type:</td>
+            <td *ngFor="let result of resultsArr" class="data-cell">{{result.psat.inputs.fluidType}}</td>
+          </tr>
+          <tr>
             <td class="data-cell data-cell-label">Specific Gravity:</td>
-            <td *ngFor="let result of resultsArr" class="data-cell">{{result.psat.inputs.specific_gravity| number:'1.0-1'}}</td>
+            <td *ngFor="let result of resultsArr" class="data-cell">{{result.psat.inputs.specific_gravity| number:'1.0-3'}}</td>
+          </tr>
+          <tr>
+            <td class="data-cell data-cell-label">Kinematic Viscosity:</td>
+            <td *ngFor="let result of resultsArr" class="data-cell">{{result.psat.inputs.kinematic_viscosity| number:'1.0-3'}}</td>
           </tr>
           <tr>
             <td class="data-cell data-cell-label">Flow Rate <span class="muted" [innerHTML]="getUnit(settings.flowMeasurement)"></span>:</td>

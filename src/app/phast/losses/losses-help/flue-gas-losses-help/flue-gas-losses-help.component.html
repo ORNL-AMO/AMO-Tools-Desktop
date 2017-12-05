@@ -52,7 +52,23 @@
       </p>
       <label><u><strong>Input</strong></u></label>
       <p>
-        Units: <strong><sup>o</sup>F</strong> or <strong><sup>o</sup>C</strong><br> Minimum Value Allowed: <strong>0</strong>
+        Units: <strong><sup>o</sup>F</strong> or <strong><sup>o</sup>C</strong><br>
+      </p>
+    </div>
+  </div>
+
+  <div class="card" *ngIf="currentField == 'oxygenCalculationMethod'">
+    <div class="card-header">
+      O2 in Flue Gas / Excess Air Dropdown
+    </div>
+    <div class="card-block">
+      <label><u><strong>Description</strong></u></label>
+      <p>
+        Choose which value is known for the calculation of Available heat. Using Excess Air is recommended (for higher accuracy) if known.
+      </p>
+      <label><u><strong>Input</strong></u></label>
+      <p>
+        <strong>Excess Air</strong><br><strong>Oxygen in Flue Gas</strong><br>
       </p>
     </div>
   </div>
@@ -69,7 +85,24 @@
       </p>
       <label><u><strong>Input</strong></u></label>
       <p>
-        Units: <strong>%</strong><br>Minimum Value Allowed: <strong>0</strong><br>Maximum Value Allowed: <strong>100</strong>
+        Units: <strong>%</strong><br>Minimum Value Allowed: <strong>0</strong>
+      </p>
+    </div>
+  </div>
+
+  <div class="card" *ngIf="currentField == 'o2InFlueGas'">
+    <div class="card-header">
+      O2 in Flue Gas
+    </div>
+    <div class="card-block">
+      <label><u><strong>Description</strong></u></label>
+      <p>
+        The volumetric percentage of oxygen present in the flue gas. Flue gas O2 (dry basis) reading is taken at the same
+        location where flue gas temperature is measured to maintain accuracy of the calculations.
+      </p>
+      <label><u><strong>Input</strong></u></label>
+      <p>
+        Units: <strong>%</strong><br>Minimum Value Allowed: <strong>0</strong><br>Maximum Value Allowed: <strong>21</strong>
       </p>
     </div>
   </div>
@@ -86,7 +119,7 @@
       </p>
       <label><u><strong>Input</strong></u></label>
       <p>
-        Units: <strong><sup>o</sup>F</strong> or <strong><sup>o</sup>C</strong><br> Minimum Value Allowed: <strong>0</strong>
+        Units: <strong><sup>o</sup>F</strong> or <strong><sup>o</sup>C</strong>
       </p>
     </div>
   </div>
@@ -103,7 +136,7 @@
     </p>
     <label><u><strong>Input</strong></u></label>
     <p>
-      Units: <strong><sup>o</sup>F</strong> or <strong><sup>o</sup>C</strong><br> Minimum Value Allowed: <strong>0</strong>
+      Units: <strong><sup>o</sup>F</strong> or <strong><sup>o</sup>C</strong>
     </p>
   </div>
 </div>
@@ -111,7 +144,7 @@
   <!--Solid/Liquid-->
   <div class="card" *ngIf="currentField == 'moistureInAirComposition'">
     <div class="card-header">
-      Moisture in Air Composition
+      Moisture in Air
     </div>
     <div class="card-block">
       <label><u><strong>Description</strong></u></label>
@@ -136,7 +169,7 @@
       </p>
       <label><u><strong>Input</strong></u></label>
       <p>
-        Units: <strong><sup>o</sup>F</strong> or <strong><sup>o</sup>C</strong><br>Minimum Value Allowed: <strong>0</strong>
+        Units: <strong><sup>o</sup>F</strong> or <strong><sup>o</sup>C</strong>
       </p>
     </div>
   </div>

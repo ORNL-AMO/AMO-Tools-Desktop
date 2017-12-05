@@ -53,7 +53,7 @@
 
   <div class="card" *ngIf="currentField == 'windVelocity'">
     <div class="card-header">
-      Wind Velocity (mph)
+      Wind Velocity
     </div>
     <div class="card-block">
       <label><u><strong>Description</strong></u></label>
@@ -64,7 +64,7 @@
       </p>
       <label><u><strong>Input</strong></u></label>
       <p>
-        Units: <strong>mph</strong> or <strong>kmph</strong>
+        Units: <strong>mph</strong> or <strong>kph</strong>
       </p>
     </div>
   </div>
@@ -89,8 +89,12 @@
     <div class="card-block">
       <label><u><strong>Description</strong></u></label>
       <p>
-        Surface emissivity of the outside surface of heat loss. Default value is 0.8. The user can change this value
+        Surface emissivity of the outside surface of heat loss. Default value is 0.9. The user can change this value
         for their specific case.
+      </p>
+      <p>
+        Minimum Value Allowed: <strong>0</strong><br>
+        Maximum Value Allowed: <strong>1</strong>
       </p>
     </div>
   </div>

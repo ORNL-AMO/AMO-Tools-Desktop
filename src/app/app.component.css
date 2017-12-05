@@ -454,8 +454,13 @@ Modals
 .modal h3 {
   font-size: 22px;
   margin-bottom: 0;
+  width: 100%;
 }
 
+.close:hover{
+  font-weight: bold;
+  cursor: pointer;
+}
 
 
 

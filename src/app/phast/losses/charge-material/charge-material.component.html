@@ -43,7 +43,7 @@
       <div class="form-group">
         <label class="small">Total Heat Required For Charge Material</label>
         <div *ngIf="material.heatRequired" class="text-center small">
-          {{material.heatRequired | number:'2.0-0'}} <span>{{resultsUnit}}</span>
+          {{material.heatRequired | sigFigs:'5'}} <span>{{resultsUnit}}</span>
         </div>
         <div *ngIf="!material.heatRequired" class="text-center small">
           &mdash; &mdash;

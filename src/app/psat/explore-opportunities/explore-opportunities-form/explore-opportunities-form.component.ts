@@ -36,14 +36,17 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
 
   showOperatingFraction: boolean;
   showPumpType: boolean;
+  showMotorDrive: boolean;
   showPumpSpecified: boolean;
 
   showCalculationMethod: boolean;
-  showViscosity: boolean;
+  // showViscosity: boolean;
   showSpeed: boolean;
   showSizeMargin: boolean;
   tmpModificationPumpType: string;
   tmpBaselinePumpType: string;
+  tmpModificationMotorDrive: string;
+  tmpBaselineMotorDrive: string;
   tmpModificationEfficiencyClass: string;
   tmpBaselineEfficiencyClass: string;
 
@@ -68,6 +71,12 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
     'Large End Suction',
     // When user selects below they need a way to provide the optimal efficiency
     'Specified Optimal Efficiency'
+  ];
+  drives: Array<string> = [
+    'Direct Drive',
+    'V-Belt Drive',
+    'Notched V-Belt Drive',
+    'Synchronous Belt Drive'
   ];
   options: Array<any>;
   horsePowers: Array<string> = ['5', '7.5', '10', '15', '20', '25', '30', '40', '50', '60', '75', '100', '125', '150', '200', '250', '300', '350', '400', '450', '500', '600', '700', '800', '900', '1000', '1250', '1750', '2000', '2250', '2500', '3000', '3500', '4000', '4500', '5000', '5500', '6000', '7000', '8000', '9000', '10000', '11000', '12000', '13000', '14000', '15000', '16000', '17000', '18000', '19000', '20000', '22500', '25000', '27500', '30000', '35000', '40000', '45000', '50000'];
@@ -101,6 +110,8 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
     this.tmpBaselineEfficiencyClass = this.psatService.getEfficiencyClassFromEnum(this.psat.inputs.efficiency_class);
     this.tmpModificationPumpType = this.psatService.getPumpStyleFromEnum(this.psat.modifications[this.exploreModIndex].psat.inputs.pump_style);
     this.tmpBaselinePumpType = this.psatService.getPumpStyleFromEnum(this.psat.inputs.pump_style);
+    this.tmpModificationMotorDrive = this.psatService.getDriveFromEnum(this.psat.modifications[this.exploreModIndex].psat.inputs.drive);
+    this.tmpBaselineMotorDrive = this.psatService.getDriveFromEnum(this.psat.inputs.drive);
     this.checkMotorEfficiencies();
     this.checkPumpTypes();
     this.checkValues();
@@ -118,12 +129,25 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
     this.checkEfficiency(this.psat.inputs.pump_specified, 3);
     this.checkEfficiency(this.psat.modifications[this.exploreModIndex].psat.inputs.pump_specified, 4);
     this.checkOptimized();
+    // this.psat.modifications[this.exploreModIndex].psat.inputs.kinematic_viscosity =  this.psat.inputs.kinematic_viscosity;
   }
 
   setPumpTypes() {
     this.checkPumpTypes();
     this.psat.inputs.pump_style = this.psatService.getPumpStyleEnum(this.tmpBaselinePumpType);
     this.psat.modifications[this.exploreModIndex].psat.inputs.pump_style = this.psatService.getPumpStyleEnum(this.tmpModificationPumpType);
+    this.calculate();
+  }
+
+  setMotorDrive() {
+    // this.checkPumpTypes();
+    // this.psat.inputs.pump_style = this.psatService.getPumpStyleEnum(this.tmpBaselinePumpType);
+    // this.psat.modifications[this.exploreModIndex].psat.inputs.pump_style = this.psatService.getPumpStyleEnum(this.tmpModificationPumpType);
+    // this.calculate();
+
+    // this.checkMotorDriveTypes();
+    this.psat.inputs.drive = this.psatService.getDriveEnum(this.tmpBaselineMotorDrive);
+    this.psat.modifications[this.exploreModIndex].psat.inputs.drive = this.psatService.getDriveEnum(this.tmpModificationMotorDrive);
     this.calculate();
   }
 
@@ -220,6 +244,9 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
       this.showPumpType = true;
       this.showPumpData = true;
     }
+    if (this.psat.inputs.drive !== this.psat.modifications[this.exploreModIndex].psat.inputs.drive) {
+      this.showMotorDrive = true;
+    }
     if (this.psat.inputs.pump_specified != this.psat.modifications[this.exploreModIndex].psat.inputs.pump_specified) {
       this.showPumpSpecified = true;
       this.showPumpData = true;
@@ -233,10 +260,6 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
     let min = 0;
     let max = 0;
     if (this.psat.inputs.drive == this.psatService.getDriveEnum('Direct Drive')) {
-      min = 540;
-      max = 3960;
-    } else if (this.psat.inputs.drive == this.psatService.getDriveEnum('Belt Drive')) {
-      //TODO UPDATE WITH BELT DRIVE VALS
       min = 540;
       max = 3960;
     }
@@ -507,8 +530,10 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
     if (this.showPumpData == false) {
       this.showPumpSpecified = false;
       this.showPumpType = false;
+      this.showMotorDrive = false;
       this.togglePumpSpecified();
       this.togglePumpType();
+      this.toggleMotorDrive();
     }
   }
 
@@ -531,6 +556,13 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
       this.calculate();
     }
   }
+  toggleMotorDrive() {
+    if (this.showMotorDrive === false) {
+      this.psat.modifications[this.exploreModIndex].psat.inputs.drive = this.psat.inputs.drive;
+      this.tmpModificationMotorDrive = this.psatService.getDriveFromEnum(this.psat.inputs.drive);
+      this.calculate();
+    }
+  }
   getUnit(unit: string) {
     let tmpUnit = this.convertUnitsService.getUnit(unit);
     return tmpUnit.unit.name.display;
@@ -539,24 +571,26 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
 
   //optimized
   addNum() {
-    this.psat.modifications[this.exploreModIndex].psat.inputs.kinematic_viscosity = this.psat.modifications[this.exploreModIndex].psat.inputs.kinematic_viscosity + 1;
+    // this.psat.modifications[this.exploreModIndex].psat.inputs.kinematic_viscosity = Number(this.psat.modifications[this.exploreModIndex].psat.inputs.kinematic_viscosity + 1).toFixed(3);
+    this.psat.modifications[this.exploreModIndex].psat.inputs.kinematic_viscosity += 1;
     this.calculate();
   }
 
   subtractNum() {
-    if (this.psat.modifications[this.exploreModIndex].psat.inputs.kinematic_viscosity != 0) {
-      this.psat.modifications[this.exploreModIndex].psat.inputs.kinematic_viscosity = this.psat.modifications[this.exploreModIndex].psat.inputs.kinematic_viscosity - 1;
+    if (this.psat.modifications[this.exploreModIndex].psat.inputs.kinematic_viscosity - 1 > 0) {
+      // this.psat.modifications[this.exploreModIndex].psat.inputs.kinematic_viscosity = Number(this.psat.modifications[this.exploreModIndex].psat.inputs.kinematic_viscosity - 1).toFixed(3);
+      this.psat.modifications[this.exploreModIndex].psat.inputs.kinematic_viscosity -= 1;
     }
     this.calculate();
   }
 
   toggleOptimized() {
+    // this.showViscosity = true;
     this.calculate();
     if (!this.psat.modifications[this.exploreModIndex].psat.inputs.optimize_calculation) {
-      this.psat.modifications[this.exploreModIndex].psat.inputs.kinematic_viscosity = 1;
+      // this.psat.modifications[this.exploreModIndex].psat.inputs.kinematic_viscosity =  this.psat.inputs.kinematic_viscosity;
       this.psat.modifications[this.exploreModIndex].psat.inputs.fixed_speed = 0;
       this.psat.modifications[this.exploreModIndex].psat.inputs.margin = 0;
-      this.showViscosity = false;
       this.showSpeed = false;
       this.showSizeMargin = false;
     }
@@ -564,9 +598,10 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
 
   checkOptimized() {
     if (this.psat.modifications[this.exploreModIndex].psat.inputs.optimize_calculation) {
-      if (this.psat.modifications[this.exploreModIndex].psat.inputs.kinematic_viscosity != 1) {
-        this.showViscosity = true;
-      }
+      // this.showViscosity = true;
+      // if (this.psat.modifications[this.exploreModIndex].psat.inputs.kinematic_viscosity != 1) {
+      //   this.showViscosity = true;
+      // }
       if (this.psat.modifications[this.exploreModIndex].psat.inputs.fixed_speed != 0) {
         this.showSpeed = true;
       }

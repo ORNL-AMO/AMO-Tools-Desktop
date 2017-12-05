@@ -29,7 +29,7 @@
   <div class="row">
     <div class="col-12 form-group">
       <input type="file" class="form-control-file" (change)="setImportFile($event)">
-      <span class="alert-danger small" *ngIf="validFile == false">Invalid File Type</span>
+      <span class="alert-danger small" *ngIf="validFile == false">Invalid File Type - Must have a .json file extension</span>
     </div>
   </div>
   <div class="row" style="padding-top: 15px;">

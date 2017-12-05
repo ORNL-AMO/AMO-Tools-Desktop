@@ -186,27 +186,27 @@ export class MotorComponent implements OnInit {
 
   }
 
-  addNum(str: string) {
-    if (str == 'motorRPM') {
-      this.psatForm.value.motorRPM++;
-    } else if (str == 'sizeMargin') {
-      this.psatForm.value.sizeMargin++;
-    }
-    this.checkForm(this.psatForm);
-  }
-
-  subtractNum(str: string) {
-    if (str == 'motorRPM') {
-      if (this.psatForm.value.motorRPM != 0) {
-        this.psatForm.value.motorRPM--;
-      }
-    } else if (str == 'sizeMargin') {
-      if (this.psatForm.value.sizeMargin != 0) {
-        this.psatForm.value.sizeMargin--;
-      }
-    }
-    this.checkForm(this.psatForm);
-  }
+  // addNum(str: string) {
+  //   if (str == 'motorRPM') {
+  //     this.psatForm.value.motorRPM++;
+  //   } else if (str == 'sizeMargin') {
+  //     this.psatForm.value.sizeMargin++;
+  //   }
+  //   this.checkForm(this.psatForm);
+  // }
+  //
+  // subtractNum(str: string) {
+  //   if (str == 'motorRPM') {
+  //     if (this.psatForm.value.motorRPM != 0) {
+  //       this.psatForm.value.motorRPM--;
+  //     }
+  //   } else if (str == 'sizeMargin') {
+  //     if (this.psatForm.value.sizeMargin != 0) {
+  //       this.psatForm.value.sizeMargin--;
+  //     }
+  //   }
+  //   this.checkForm(this.psatForm);
+  // }
 
   focusField(str: string) {
     this.helpPanelService.currentField.next(str);

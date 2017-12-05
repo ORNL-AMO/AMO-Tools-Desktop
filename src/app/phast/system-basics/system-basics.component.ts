@@ -46,6 +46,10 @@ export class SystemBasicsComponent implements OnInit {
     }
   }
 
+  ngOnDestroy() {
+    clearTimeout(this.counter);
+  }
+
   ngOnChanges(changes: SimpleChanges) {
     if (changes.saveClicked && !this.isFirstChange) {
       this.saveChanges();
@@ -56,10 +60,7 @@ export class SystemBasicsComponent implements OnInit {
 
   saveChanges() {
     this.newSettings = this.settingsService.getSettingsFromForm(this.settingsForm);
-    if (
-      this.settings.currency != this.newSettings.currency ||
-      this.settings.unitsOfMeasure != this.newSettings.unitsOfMeasure
-    ) {
+    if (this.settings.currency !== this.newSettings.currency || this.settings.unitsOfMeasure !== this.newSettings.unitsOfMeasure) {
       this.showSettingsModal();
     } else if (this.settings.energySourceType != this.newSettings.energySourceType ||
       this.settings.furnaceType != this.newSettings.furnaceType ||

@@ -37,7 +37,9 @@ export interface PsatInputs {
   cost?: number,
   load_factor?: number,
   optimize_calculation?: string,
-  implementationCosts?: number
+  implementationCosts?: number,
+  fluidType: string,
+  fluidTemperature: number
 }
 
 export interface PsatOutputs {
@@ -87,4 +89,13 @@ export interface Notes {
   pumpFluidNotes?: string,
   motorNotes?: string,
   fieldDataNotes?: string
+}
+
+export interface FluidProperties {
+  density: number,
+  beta: number,
+  tref: number,
+  kinViscosity: number,
+  boiling: number,
+  melting: number
 }

@@ -583,8 +583,12 @@ export class PsatService {
     let driveEnum;
     if (drive == 'Direct Drive') {
       driveEnum = 0;
-    } else if (drive == 'Belt Drive') {
+    } else if (drive == 'V-Belt Drive') {
       driveEnum = 1;
+    } else if (drive == 'Notched V-Belt Drive') {
+      driveEnum = 2;
+    } else if (drive == 'Synchronous Belt Drive') {
+      driveEnum = 3;
     }
     return driveEnum;
   }
@@ -593,8 +597,12 @@ export class PsatService {
     if (num == 0) {
       drive = 'Direct Drive';
     } else if (num == 1) {
-      drive = 'Belt Drive';
-    }
+      drive = 'V-Belt Drive';
+    }   else if (num == 2) {
+    drive = 'Notched V-Belt Drive';
+    }  else if (num == 3) {
+    drive = 'Synchronous Belt Drive';
+  }
     return drive;
   }
   getFixedSpeedEmum(fixedSpeed: string): number {
@@ -711,7 +719,9 @@ export class PsatService {
       'motorAmps': [psatInputs.motor_field_current, Validators.required],
       'measuredVoltage': [psatInputs.motor_field_voltage, Validators.required],
       'optimizeCalculation': [psatInputs.optimize_calculation, Validators.required],
-      'implementationCosts': [psatInputs.implementationCosts]
+      'implementationCosts': [psatInputs.implementationCosts],
+      'fluidType': [psatInputs.fluidType],
+      'fluidTemperature': [psatInputs.fluidTemperature]
     })
   }
 
@@ -751,8 +761,10 @@ export class PsatService {
       cost_kw_hour: form.value.costKwHr,
       cost: form.value.costKwHr,
       optimize_calculation: form.value.optimizeCalculation,
-      implementationCosts: form.value.implementationCosts
-    }
+      implementationCosts: form.value.implementationCosts,
+      fluidType: form.value.fluidType,
+      fluidTemperature: form.value.fluidTemperature
+    };
     return tmpPsatInputs;
   }
 

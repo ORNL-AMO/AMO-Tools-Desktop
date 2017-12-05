@@ -34,9 +34,9 @@ export class O2EnrichmentFormComponent implements OnInit {
     this.error.flueGasTemp = this.error.flueGasTempEnriched = this.error.o2CombAir = this.error.o2CombAirEnriched = null;
     this.error.combAirTemp = this.error.combAirTempEnriched = this.error.o2FlueGas = this.error.o2FlueGasEnriched = null;
     let canCalculate: any = true;
-    if (this.o2Enrichment.o2CombAirEnriched < 0 || this.o2Enrichment.o2CombAirEnriched > 100) {
+    if (this.o2Enrichment.o2CombAirEnriched < 21 || this.o2Enrichment.o2CombAirEnriched > 100) {
       canCalculate = false;
-      this.error.o2CombAirEnriched = 'O2 in combustion air must be between 0 and 100 percent';
+      this.error.o2CombAirEnriched = 'O2 in combustion air must be between 21 and 100 percent';
     }
     if (this.o2Enrichment.o2CombAir > this.o2Enrichment.o2CombAirEnriched) {
       canCalculate = false;

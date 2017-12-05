@@ -120,10 +120,8 @@ export class PhastComponent implements OnInit {
             this.settings = this.settingsService.setEnergyResultUnitSetting(this.settings);
           }
           this.isAssessmentSettings = true;
-          if (this.init) {
-            this.lossesService.checkSetupDone(this._phast, this.settings);
-            this.init = false;
-          }
+          this._phast.setupDone = this.lossesService.checkSetupDone(this._phast, this.settings);
+          this.init = false;
           if (update) {
             this.addToast('Settings Saved');
           }

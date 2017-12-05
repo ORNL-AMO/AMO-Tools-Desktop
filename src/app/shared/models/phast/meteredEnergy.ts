@@ -6,6 +6,7 @@ export interface MeteredEnergy {
 
 
 export interface MeteredEnergyFuel {
+    fuelDescription?: string,
     fuelType: number,
     heatingValue: number,
     collectionTime: number,

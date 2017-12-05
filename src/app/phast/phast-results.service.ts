@@ -4,10 +4,15 @@ import { PhastService } from './phast.service';
 import { Settings } from '../shared/models/settings';
 import { AuxEquipmentService } from './aux-equipment/aux-equipment.service';
 import { ConvertUnitsService } from '../shared/convert-units/convert-units.service';
+import { FlueGasLossesService } from './losses/flue-gas-losses/flue-gas-losses.service';
+import { EnergyInputExhaustGasService } from './losses/energy-input-exhaust-gas-losses/energy-input-exhaust-gas.service';
+import { EnergyInputService } from './losses/energy-input/energy-input.service';
+
+
 @Injectable()
 export class PhastResultsService {
 
-  constructor(private phastService: PhastService, private auxEquipmentService: AuxEquipmentService, private convertUnitsService: ConvertUnitsService) { }
+  constructor(private phastService: PhastService, private auxEquipmentService: AuxEquipmentService, private convertUnitsService: ConvertUnitsService, private flueGasLossesService: FlueGasLossesService, private energyInputExhaustGasService: EnergyInputExhaustGasService, private energyInputService: EnergyInputService) { }
   checkLoss(loss: any) {
     if (!loss) {
       return false;
@@ -100,17 +105,23 @@ export class PhastResultsService {
 
 
     if (resultCats.showEnInput1 && this.checkLoss(phast.losses.energyInputEAF)) {
-      let tmpResults = this.phastService.energyInputEAF(phast.losses.energyInputEAF[0], settings);
-      results.energyInputTotalChemEnergy = tmpResults.totalChemicalEnergyInput;
-      results.energyInputHeatDelivered = tmpResults.heatDelivered;
+      let tmpForm = this.energyInputService.getFormFromLoss(phast.losses.energyInputEAF[0]);
+      if (tmpForm.status == 'VALID') {
+        let tmpResults = this.phastService.energyInputEAF(phast.losses.energyInputEAF[0], settings);
+        results.energyInputTotalChemEnergy = tmpResults.totalChemicalEnergyInput;
+        results.energyInputHeatDelivered = tmpResults.heatDelivered;
+      }
     }
 
     if (resultCats.showEnInput2 && this.checkLoss(phast.losses.energyInputExhaustGasLoss)) {
-      let tmpResults = this.phastService.energyInputExhaustGasLosses(phast.losses.energyInputExhaustGasLoss[0], settings)
-      results.energyInputHeatDelivered = tmpResults.heatDelivered;
-      results.totalExhaustGas = tmpResults.exhaustGasLosses;
-      results.grossHeatInput = results.totalInput - results.exothermicHeat;
-      results.availableHeatPercent = this.phastService.availableHeat(phast.losses.energyInputExhaustGasLoss[0], settings);
+      let tmpForm = this.energyInputExhaustGasService.getFormFromLoss(phast.losses.energyInputExhaustGasLoss[0]);
+      if (tmpForm.status == 'VALID') {
+        let tmpResults = this.phastService.energyInputExhaustGasLosses(phast.losses.energyInputExhaustGasLoss[0], settings)
+        results.energyInputHeatDelivered = tmpResults.heatDelivered;
+        results.totalExhaustGas = tmpResults.exhaustGasLosses;
+        results.grossHeatInput = results.totalInput - results.exothermicHeat;
+        results.availableHeatPercent = this.phastService.availableHeat(phast.losses.energyInputExhaustGasLoss[0], settings);
+      }
     }
 
     if (phast.systemEfficiency && resultCats.showSystemEff) {
@@ -124,17 +135,23 @@ export class PhastResultsService {
       let tmpFlueGas = phast.losses.flueGasLosses[0];
       if (tmpFlueGas) {
         if (tmpFlueGas.flueGasType == 'By Mass') {
-          let tmpVal = this.phastService.flueGasByMass(tmpFlueGas.flueGasByMass, settings);
-          results.flueGasAvailableHeat = tmpVal * 100;
-          results.flueGasGrossHeat = (results.totalInput / tmpVal);
-          results.flueGasSystemLosses = results.flueGasGrossHeat * (1 - tmpVal);
-          results.totalFlueGas = results.flueGasSystemLosses;
+          let tmpForm = this.flueGasLossesService.initByMassFormFromLoss(tmpFlueGas);
+          if (tmpForm.status == 'VALID') {
+            let tmpVal = this.phastService.flueGasByMass(tmpFlueGas.flueGasByMass, settings);
+            results.flueGasAvailableHeat = tmpVal * 100;
+            results.flueGasGrossHeat = (results.totalInput / tmpVal);
+            results.flueGasSystemLosses = results.flueGasGrossHeat * (1 - tmpVal);
+            results.totalFlueGas = results.flueGasSystemLosses;
+          }
         } else if (tmpFlueGas.flueGasType == 'By Volume') {
-          let tmpVal = this.phastService.flueGasByVolume(tmpFlueGas.flueGasByVolume, settings);
-          results.flueGasAvailableHeat = tmpVal * 100;
-          results.flueGasGrossHeat = (results.totalInput / tmpVal);
-          results.flueGasSystemLosses = results.flueGasGrossHeat * (1 - tmpVal);
-          results.totalFlueGas = results.flueGasSystemLosses;
+          let tmpForm = this.flueGasLossesService.initByVolumeFormFromLoss(tmpFlueGas);
+          if (tmpForm.status == 'VALID') {
+            let tmpVal = this.phastService.flueGasByVolume(tmpFlueGas.flueGasByVolume, settings);
+            results.flueGasAvailableHeat = tmpVal * 100;
+            results.flueGasGrossHeat = (results.totalInput / tmpVal);
+            results.flueGasSystemLosses = results.flueGasGrossHeat * (1 - tmpVal);
+            results.totalFlueGas = results.flueGasSystemLosses;
+          }
         }
         results.grossHeatInput = results.totalInput + results.flueGasSystemLosses - results.exothermicHeat;
       }

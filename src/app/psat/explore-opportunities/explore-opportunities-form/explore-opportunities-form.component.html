@@ -232,6 +232,27 @@
             </div>
           </form>
         </li>
+        <li>
+          <div class="checkbox">
+            <label for="modifyMotorDrive"><input type="checkbox" id="modifyMotorDrive" value="true" (focus)="focusField('drive')" (change)="toggleMotorDrive()" [(ngModel)]="showMotorDrive"/>
+              Modify Motor Drive
+            </label>
+          </div>
+          <form *ngIf="showMotorDrive">
+            <div class="form-group">
+              <label for="baselineMotorDrive">Baseline Motor Drive</label>
+              <select class="form-control" name="drive" id="drive" (change)="setMotorDrive()" (focus)="focusField('drive')" [(ngModel)]="tmpBaselineMotorDrive">
+                <option *ngFor="let drive of drives" [ngValue]="drive">{{drive}}</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="modificationMotorDrive">Modification Motor Drive</label>
+              <select class="form-control" name="drive2" id="drive2" (change)="setMotorDrive()" (focus)="focusField('drive')" [(ngModel)]="tmpModificationMotorDrive">
+                <option *ngFor="let drive2 of drives" [ngValue]="drive2">{{drive2}}</option>
+              </select>
+            </div>
+          </form>
+        </li>
         <li *ngIf="(tmpBaselinePumpType == 'Specified Optimal Efficiency' || tmpModificationPumpType == 'Specified Optimal Efficiency') && showPumpType">
           <div class="checkbox">
             <label for="modifyPumpSpecified"><input type="checkbox" disabled="disabled" id="modifyPumpSpecified" value="true" (focus)="focusField('pumpSpecified')" [(ngModel)]="showPumpSpecified"/>
@@ -270,26 +291,24 @@
 									</label>
       </div>
       <ul *ngIf="psat.modifications[exploreModIndex].psat.inputs.optimize_calculation">
-        <li>
-          <div class="checkbox">
-            <label for="viscosity"><input name="showViscosity" type="checkbox" id="viscosity" value="true" (focus)="focusField('viscosity')" [(ngModel)]="showViscosity"/>
-										Kinematic Viscosity
-									</label>
-          </div>
-          <form *ngIf="showViscosity">
-            <div class="form-group">
-            </div>
-            <div class="form-group">
-              <div name="viscosity" class="incrementor form-control input-group">
-                <button class="btn input-group-btn" (click)="subtractNum()"><i class="fa fa-minus"></i></button>
-                <button class="btn input-group-btn" (click)="addNum()"><i class="fa fa-plus"></i></button>
-                <input name="kinematicViscosity" type="number" min="0" step="any" class="form-control addon-input" id="viscosity" [(ngModel)]="psat.modifications[exploreModIndex].psat.inputs.kinematic_viscosity"
-                  (input)="calculate()" (focus)="focusField('kinematicViscosity')" onfocus="this.select();">
-                <span class="input-group-addon units">cST</span>
-              </div>
-            </div>
-          </form>
-        </li>
+        <!--<li>-->
+          <!--<form *ngIf="showViscosity">-->
+            <!--<div class="form-group">-->
+            <!--</div>-->
+            <!--<div class="form-group">-->
+              <!--<label>-->
+                <!--Kinematic Viscosity-->
+              <!--</label>-->
+              <!--<div name="viscosity" class="incrementor form-control input-group">-->
+                <!--<button class="btn input-group-btn" (click)="subtractNum()"><i class="fa fa-minus"></i></button>-->
+                <!--<button class="btn input-group-btn" (click)="addNum()"><i class="fa fa-plus"></i></button>-->
+                <!--<input name="kinematicViscosity" type="number" min="0" step="any" class="form-control addon-input" id="viscosity" [(ngModel)]="psat.modifications[exploreModIndex].psat.inputs.kinematic_viscosity"-->
+                  <!--(input)="calculate()" (focus)="focusField('kinematicViscosity')" onfocus="this.select();">-->
+                <!--<span class="input-group-addon units">cST</span>-->
+              <!--</div>-->
+            <!--</div>-->
+          <!--</form>-->
+        <!--</li>-->
 
         <li>
           <div class="checkbox">

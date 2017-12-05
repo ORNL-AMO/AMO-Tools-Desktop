@@ -96,22 +96,34 @@ export class EnergyUsedComponent implements OnInit {
   setElectrotechVals(tmpResults: PhastResults) {
     this.electricEnergyUsed = tmpResults.grossHeatInput;
     if (this.phast.meteredEnergy) {
-      this.meteredResults = this.meteredEnergyService.meteredElectricity(this.phast.meteredEnergy.meteredEnergyElectricity, this.phast, this.settings);
-    } if (this.phast.designedEnergy) {
-      this.designedResults = this.designedEnergyService.designedEnergyElectricity(this.phast.designedEnergy.designedEnergyElectricity, this.phast, this.settings);
+      if (this.phast.meteredEnergy.meteredEnergyElectricity) {
+        this.meteredResults = this.meteredEnergyService.meteredElectricity(this.phast.meteredEnergy.meteredEnergyElectricity, this.phast, this.settings);
+      }
+    } 
+    
+    if (this.phast.designedEnergy) {
+      if (this.phast.designedEnergy.designedEnergyElectricity) {
+        this.designedResults = this.designedEnergyService.designedEnergyElectricity(this.phast.designedEnergy.designedEnergyElectricity, this.phast, this.settings);
+      }
     }
   }
 
   setSteamVals(tmpResults: PhastResults) {
     this.steamEnergyUsed = tmpResults.grossHeatInput;
     if (this.phast.meteredEnergy) {
-      this.meteredResults = this.meteredEnergyService.meteredSteam(this.phast.meteredEnergy.meteredEnergySteam, this.phast, this.settings);
-      this.steamHeatingValue = this.phast.meteredEnergy.meteredEnergySteam.totalHeatSteam;
-    } if (this.phast.designedEnergy) {
-      this.designedResults = this.designedEnergyService.designedEnergySteam(this.phast.designedEnergy.designedEnergySteam, this.phast, this.settings);
-      if (!this.steamHeatingValue) {
-        let hhvSum = _.sumBy(this.phast.designedEnergy.designedEnergySteam, 'totalHeat')
-        this.steamHeatingValue = hhvSum / this.phast.designedEnergy.designedEnergySteam.length;
+      if (this.phast.meteredEnergy.meteredEnergySteam) {
+        this.meteredResults = this.meteredEnergyService.meteredSteam(this.phast.meteredEnergy.meteredEnergySteam, this.phast, this.settings);
+        this.steamHeatingValue = this.phast.meteredEnergy.meteredEnergySteam.totalHeatSteam;
+      }
+    } 
+    
+    if (this.phast.designedEnergy) {
+      if (this.phast.designedEnergy.designedEnergySteam) {
+        this.designedResults = this.designedEnergyService.designedEnergySteam(this.phast.designedEnergy.designedEnergySteam, this.phast, this.settings);
+        if (!this.steamHeatingValue) {
+          let hhvSum = _.sumBy(this.phast.designedEnergy.designedEnergySteam, 'totalHeat')
+          this.steamHeatingValue = hhvSum / this.phast.designedEnergy.designedEnergySteam.length;
+        }
       }
     }
   }
@@ -119,9 +131,15 @@ export class EnergyUsedComponent implements OnInit {
   setFuelVals(tmpResults: PhastResults) {
     this.fuelEnergyUsed = tmpResults.grossHeatInput;
     if (this.phast.meteredEnergy) {
-      this.meteredResults = this.meteredEnergyService.meteredFuel(this.phast.meteredEnergy.meteredEnergyFuel, this.phast, this.settings);
-    } if (this.phast.designedEnergy) {
-      this.designedResults = this.designedEnergyService.designedEnergyFuel(this.phast.designedEnergy.designedEnergyFuel, this.phast, this.settings);
+      if (this.phast.meteredEnergy.meteredEnergyFuel) {
+        this.meteredResults = this.meteredEnergyService.meteredFuel(this.phast.meteredEnergy.meteredEnergyFuel, this.phast, this.settings);
+      }
+    } 
+    
+    if (this.phast.designedEnergy) {
+      if (this.phast.designedEnergy.designedEnergyFuel) {
+        this.designedResults = this.designedEnergyService.designedEnergyFuel(this.phast.designedEnergy.designedEnergyFuel, this.phast, this.settings);
+      }
     }
     if (this.phast.losses.flueGasLosses[0].flueGasType == 'By Mass') {
       let gas = this.suiteDbService.selectSolidLiquidFlueGasMaterialById(this.phast.losses.flueGasLosses[0].flueGasByMass.gasTypeId);
