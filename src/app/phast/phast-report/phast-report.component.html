@@ -59,7 +59,7 @@
         </ul>
         <div class="results" [ngClass]="{'show-print':currentTab != 'energy-used'}">
           <app-energy-used [phast]="phast" [settings]="settings"></app-energy-used>
-        </div>        
+        </div>
         <div class="results" [ngClass]="{'show-print':currentTab != 'executive-summary'}">
           <app-executive-summary  [settings]="settings" [phast]="phast" [assessment]="assessment" [inPhast]="inPhast"></app-executive-summary>
         </div>

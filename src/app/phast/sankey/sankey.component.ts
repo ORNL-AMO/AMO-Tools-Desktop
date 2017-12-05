@@ -230,7 +230,6 @@ export class SankeyComponent implements OnInit {
       var node_val = d, i = i;
       if (!node_val.inter) {
         if (this.location === 'sankey-diagram') {
-          console.log(this.location + " " + "this is location")
           svg.append("text")
             .attr("x", function () {
               if (node_val.input) {
