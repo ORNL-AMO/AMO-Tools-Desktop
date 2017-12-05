@@ -11,7 +11,7 @@
     <div class="form-group">
       <label class="small" for="offGasTemp">Off (Exhaust) Gas Temp</label>
       <div class="input-group">
-        <input name="{{'offGasTemp_'+lossIndex}}" type="number" step="any" min="0" class="form-control" formControlName="offGasTemp" id="offGasTemp"
+        <input name="{{'offGasTemp_'+lossIndex}}" type="number" step="10" class="form-control" formControlName="offGasTemp" id="offGasTemp"
           onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('offGasTemp')" (blur)="focusOut()">
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">&#8457;</span>
         <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
