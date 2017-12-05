@@ -143,7 +143,7 @@ export class FlueGasLossesFormMassComponent implements OnInit {
       excessAir: this.flueGasLossForm.value.excessAirPercentage
     };
     this.calculationWarning = null;
-    if (this.calcMethodExcessAir) {
+    if (!this.calcMethodExcessAir) {
       if (input.o2InFlueGas < 0 || input.o2InFlueGas > 20.99999) {
         this.calculationExcessAir = 0.0;
         this.calculationWarning = 'Oxygen levels in Flue Gas must be greater than or equal to 0 and less than 21 percent';
@@ -153,8 +153,7 @@ export class FlueGasLossesFormMassComponent implements OnInit {
       this.flueGasLossForm.patchValue({
         excessAirPercentage: this.calculationExcessAir
       });
-    }
-    else {
+    } else {
       if (input.excessAir < 0) {
         this.calculationFlueGasO2 = 0.0;
 
