@@ -313,6 +313,14 @@ export class PhastService {
     return phastAddon.flueGasCalculateO2(input);
   }
 
+  flueGasByMassCalculateExcessAir(input: any) {
+    return phastAddon.flueGasByMassCalculateExcessAir(input);
+  }
+
+  flueGasByMassCalculateO2(input: any) {
+    return phastAddon.flueGasByMassCalculateO2(input);
+  }
+
   atmosphere(input: AtmosphereLoss, settings: Settings) {
     let inputs = this.createInputCopy(input);
     let results = 0;

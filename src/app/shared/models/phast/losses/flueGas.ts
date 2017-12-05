@@ -7,7 +7,9 @@ export interface FlueGas {
 export interface FlueGasByMass {
     gasTypeId?: number,
     flueGasTemperature?: number,
+    oxygenCalculationMethod?: string,
     excessAirPercentage?: number,
+    o2InFlueGas?: number,
     combustionAirTemperature?: number,
     fuelTemperature?: number,
     ashDischargeTemperature?: number,
