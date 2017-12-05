@@ -28,6 +28,8 @@ export class SidebarComponent implements OnInit {
   emitShowTutorials = new EventEmitter<boolean>();
   @Output('emitShowAbout')
   emitShowAbout = new EventEmitter<boolean>();
+  @Output('emitShowAcknowledgments')
+  emitShowAcknowledgments = new EventEmitter<boolean>();
   @Input()
   dashboardView: string;
   @Output('emitGoToSettings')
@@ -106,6 +108,10 @@ export class SidebarComponent implements OnInit {
 
   showAbout() {
     this.emitShowAbout.emit(true);
+  }
+
+  showAcknowledgments() {
+    this.emitShowAcknowledgments.emit(true);
   }
 
   showTutorials() {

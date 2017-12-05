@@ -83,8 +83,8 @@ export class CoolingLossesComponent implements OnInit {
           this._coolingLosses.push({
             coolingMedium: 'Gas',
             waterCoolingForm: this.coolingLossesService.initWaterCoolingForm(),
-            gasCoolingForm: this.coolingLossesService.initGasCoolingForm(),
-            liquidCoolingForm: this.coolingLossesService.initLiquidCoolingForm(),
+            gasCoolingForm: this.coolingLossesService.initGasCoolingForm(this.settings),
+            liquidCoolingForm: this.coolingLossesService.initLiquidCoolingForm(this.settings),
             name: 'Loss #' + (this._coolingLosses.length + 1),
             heatLoss: 0.0
           });
@@ -96,8 +96,8 @@ export class CoolingLossesComponent implements OnInit {
           this._coolingLosses.push({
             coolingMedium: 'Gas',
             waterCoolingForm: this.coolingLossesService.initWaterCoolingForm(),
-            gasCoolingForm: this.coolingLossesService.initGasCoolingForm(),
-            liquidCoolingForm: this.coolingLossesService.initLiquidCoolingForm(),
+            gasCoolingForm: this.coolingLossesService.initGasCoolingForm(this.settings),
+            liquidCoolingForm: this.coolingLossesService.initLiquidCoolingForm(this.settings),
             name: 'Loss #' + (this._coolingLosses.length + 1),
             heatLoss: 0.0
           });
@@ -125,7 +125,7 @@ export class CoolingLossesComponent implements OnInit {
           coolingMedium: loss.coolingLossType,
           waterCoolingForm: this.coolingLossesService.initWaterCoolingForm(),
           gasCoolingForm: this.coolingLossesService.initGasFormFromLoss(loss.gasCoolingLoss),
-          liquidCoolingForm: this.coolingLossesService.initLiquidCoolingForm(),
+          liquidCoolingForm: this.coolingLossesService.initLiquidCoolingForm(this.settings),
           name: 'Loss #' + (this._coolingLosses.length + 1),
           heatLoss: loss.heatLoss || 0.0
         };
@@ -133,7 +133,7 @@ export class CoolingLossesComponent implements OnInit {
         tmpLoss = {
           coolingMedium: loss.coolingLossType,
           waterCoolingForm: this.coolingLossesService.initWaterCoolingForm(),
-          gasCoolingForm: this.coolingLossesService.initGasCoolingForm(),
+          gasCoolingForm: this.coolingLossesService.initGasCoolingForm(this.settings),
           liquidCoolingForm: this.coolingLossesService.initLiquidFormFromLoss(loss.liquidCoolingLoss),
           name: 'Loss #' + (this._coolingLosses.length + 1),
           heatLoss: loss.heatLoss || 0.0
@@ -143,8 +143,8 @@ export class CoolingLossesComponent implements OnInit {
         tmpLoss = {
           coolingMedium: loss.coolingLossType,
           waterCoolingForm: this.coolingLossesService.initWaterFormFromLoss(loss.waterCoolingLoss),
-          gasCoolingForm: this.coolingLossesService.initGasCoolingForm(),
-          liquidCoolingForm: this.coolingLossesService.initLiquidCoolingForm(),
+          gasCoolingForm: this.coolingLossesService.initGasCoolingForm(this.settings),
+          liquidCoolingForm: this.coolingLossesService.initLiquidCoolingForm(this.settings),
           name: 'Loss #' + (this._coolingLosses.length + 1),
           heatLoss: loss.heatLoss || 0.0
         };
@@ -164,8 +164,8 @@ export class CoolingLossesComponent implements OnInit {
     this._coolingLosses.push({
       coolingMedium: 'Gas',
       waterCoolingForm: this.coolingLossesService.initWaterCoolingForm(),
-      gasCoolingForm: this.coolingLossesService.initGasCoolingForm(),
-      liquidCoolingForm: this.coolingLossesService.initLiquidCoolingForm(),
+      gasCoolingForm: this.coolingLossesService.initGasCoolingForm(this.settings),
+      liquidCoolingForm: this.coolingLossesService.initLiquidCoolingForm(this.settings),
       name: 'Loss #' + (this._coolingLosses.length + 1),
       heatLoss: 0.0
     });
