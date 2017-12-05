@@ -37,6 +37,13 @@ export class GasChargeMaterialFormComponent implements OnInit {
   selectedMaterial: any;
   counter: any;
   showModal: boolean = false;
+  dischargeTempError: string = null;
+  specificHeatGasError: string = null;
+  feedRateError: string = null;
+  gasMixVaporError: string = null;
+  specificHeatGasVaporError: string = null;
+  feedReactedError: string = null;
+  heatOfReactionError: string = null;
   constructor(private suiteDbService: SuiteDbService, private chargeMaterialCompareService: ChargeMaterialCompareService, private windowRefService: WindowRefService, private lossesService: LossesService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -106,6 +113,42 @@ export class GasChargeMaterialFormComponent implements OnInit {
   }
   emitSave() {
     this.saveEmit.emit(true);
+  }
+
+  checkInputError(bool?: boolean) {
+    if (!bool) {
+      this.startSavePolling();
+    }
+    if (this.chargeMaterialForm.value.materialSpecificHeat < 0) {
+      this.specificHeatGasError = 'Specific Heat of Gas must be equal or grater than 0';
+    } else {
+      this.specificHeatGasError = null;
+    }
+    if (this.chargeMaterialForm.value.feedRate < 0) {
+      this.feedRateError = 'Feed Rate for Gas Mixture must be grater than 0';
+    } else {
+      this.feedRateError = null;
+    }
+    if (this.chargeMaterialForm.value.vaporInGas < 0 || this.chargeMaterialForm.value.vaporInGas > 100) {
+      this.gasMixVaporError = 'Vapor in Gas Mixture must be equal or grater than 0 and less than or equal to 100%';
+    } else {
+      this.gasMixVaporError = null;
+    }
+    if (this.chargeMaterialForm.value.specificHeatOfVapor < 0) {
+      this.specificHeatGasVaporError = 'Specific Heat of Vapor must be equal or grater than 0';
+    } else {
+      this.specificHeatGasVaporError = null;
+    }
+    if (this.chargeMaterialForm.value.gasReacted < 0 || this.chargeMaterialForm.value.gasReacted > 100) {
+      this.feedReactedError = 'Feed Gas Reacted must be equal or grater than 0 and less than or equal to 100%';
+    } else {
+      this.feedReactedError = null;
+    }
+    if (this.chargeMaterialForm.value.heatOfReaction < 0) {
+      this.heatOfReactionError = 'Heat of Reaction cannot be less than zero. For exothermic reactions, change "Endothermic/Exothermic"';
+    } else {
+      this.heatOfReactionError = null;
+    }
   }
 
   startSavePolling() {

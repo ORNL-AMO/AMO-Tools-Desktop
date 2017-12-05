@@ -3,9 +3,11 @@
   <div class="form-section">
     <div class="form-group">
       <label class="small" for="motorPhase">Motor Current Phase(s)</label>
-      <input name="{{'motorPhase_'+lossIndex}}" type="number" step="any" min="1" max="3" class="form-control" formControlName="motorPhase" id="motorPhase" onfocus="this.select();" (input)="startSavePolling()"
+      <input name="{{'motorPhase_'+lossIndex}}" type="number" step="1" min="1" max="3" class="form-control" formControlName="motorPhase" id="motorPhase" onfocus="this.select();" (input)="startSavePolling()"
         (focus)="focusField('motorPhase')" (blur)="focusOut()">
+      <span class="alert-warning pull-right small" *ngIf="inputError !==null">{{inputError}}</span>
     </div>
+
 
     <div class="form-group">
       <label class="small" for="supplyVoltage">Supply Voltage</label>
@@ -14,6 +16,7 @@
           (focus)="focusField('supplyVoltage')" (blur)="focusOut()">
         <span class="input-group-addon units">V</span>
       </div>
+      <!--<span class="alert-warning pull-right small" *ngIf="inputError !==null">{{inputError}}</span>-->
     </div>
 
     <div class="form-group">
@@ -23,6 +26,7 @@
           (focus)="focusField('avgCurrent')" (blur)="focusOut()">
         <span class="input-group-addon units">A</span>
       </div>
+      <!--<span class="alert-warning pull-right small" *ngIf="inputError !==null">{{inputError}}</span>-->
     </div>
 
     <div class="form-group">
@@ -38,6 +42,7 @@
           (focus)="focusField('operatingTime')" (blur)="focusOut()">
         <span class="input-group-addon units">%</span>
       </div>
+      <!--<span class="alert-warning pull-right small" *ngIf="inputError !==null">{{inputError}}</span>-->
     </div>
   </div>
 </form>

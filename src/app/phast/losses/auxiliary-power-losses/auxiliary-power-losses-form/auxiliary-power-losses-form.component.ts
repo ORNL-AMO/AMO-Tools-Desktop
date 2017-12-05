@@ -23,7 +23,7 @@ export class AuxiliaryPowerLossesFormComponent implements OnInit {
   @ViewChild('lossForm') lossForm: ElementRef;
   form: any;
   elements: any;
-
+  inputError: string = null;
   firstChange: boolean = true;
   counter: any;
   constructor(private windowRefService: WindowRefService, private auxiliaryPowerCompareService: AuxiliaryPowerCompareService) { }
@@ -86,7 +86,25 @@ export class AuxiliaryPowerLossesFormComponent implements OnInit {
       this.emitSave();
     }, 3000)
   }
-
+  // checkInputError(bool?: boolean) {
+  //   if (!bool) {
+  //     this.startSavePolling();
+  //   }
+  //   // if (this.auxLossesForm.motorPhase < 1 || this.auxLossesForm.motorPhase > 3) {
+  //   //   this.inputError = 'Motor Current Phase must be greater or equal to 1 and equal or less than 3'
+  //   //  } else if (this.auxLossesForm.supplyVoltage < 0) {
+  //   //     this.inputError = 'Supply Voltage must be greater than 0'
+  //   //   }
+  //   if (this.auxLossesForm.avgCurrent > 0) {
+  //     this.inputError = 'Average Current must be greater than 0'
+  //   // } else if (this.auxLossesForm.powerFactor < 0) {
+  //   //   this.inputError = 'Power Factor must be greater than 0'
+  //   // } else if (this.auxLossesForm.operatingTime < 0 || this.auxLossesForm.operatingTime > 100) {
+  //   //   this.inputError = 'Operating Time must be greater or equal 0 and equal or less than 100'
+  //   } else {
+  //     this.inputError = null;
+  //   }
+  // }
   initDifferenceMonitor() {
     if (this.auxiliaryPowerCompareService.baselineAuxLosses && this.auxiliaryPowerCompareService.modifiedAuxLosses && this.auxiliaryPowerCompareService.differentArray.length != 0) {
       if (this.auxiliaryPowerCompareService.differentArray[this.lossIndex]) {

@@ -30,6 +30,7 @@
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">mph</span>
         <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">km/hr</span>
       </div>
+      <span class="alert-warning pull-right small" *ngIf="windVelocityError !== null">{{windVelocityError}}</span>
     </div>
 
     <div class="form-group">
@@ -64,6 +65,7 @@
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">ft<sup>2</sup></span>
         <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">m<sup>2</sup></span>
       </div>
+      <span class="alert-warning pull-right small" *ngIf="surfaceAreaError !== null">{{surfaceAreaError}}</span>
     </div>
 
     <div class="form-group">
