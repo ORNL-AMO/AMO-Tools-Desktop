@@ -76,7 +76,7 @@ export class FlueGasLossesService {
       'flueGasTemperature': [loss.flueGasByVolume.flueGasTemperature, Validators.required],
       'oxygenCalculationMethod': [loss.flueGasByVolume.oxygenCalculationMethod, Validators.required],
       'excessAirPercentage': [loss.flueGasByVolume.excessAirPercentage, Validators.required],
-      'o2InFlueGas': [loss.flueGasByVolume.o2InFlueGas],
+      'o2InFlueGas': [loss.flueGasByVolume.o2InFlueGas, Validators.required],
       'combustionAirTemperature': [loss.flueGasByVolume.combustionAirTemperature, Validators.required],
       'fuelTemperature': [loss.flueGasByVolume.fuelTemperature, Validators.required],
       'CH4': [loss.flueGasByVolume.CH4, Validators.required],

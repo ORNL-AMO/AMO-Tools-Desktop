@@ -124,6 +124,7 @@ export class FlueGasLossesComponent implements OnInit {
           name: 'Loss #' + (this._flueGasLosses.length + 1),
           heatLoss: 0.0
         }
+        this.calculate(tmpLoss);
         this._flueGasLosses.push(tmpLoss);
       } else if (loss.flueGasType == "By Mass") {
         let tmpLoss = {
@@ -135,6 +136,7 @@ export class FlueGasLossesComponent implements OnInit {
           grossHeat: 0.0,
           systemLosses: 0.0
         }
+        this.calculate(tmpLoss);
         this._flueGasLosses.push(tmpLoss);
       }
     })
@@ -170,15 +172,10 @@ export class FlueGasLossesComponent implements OnInit {
     })
   }
 
-  calculate(excessAirDisabled: boolean, loss: any) {
+  calculate(loss: any) {
     let sumAdditionalHeat = this.phastService.sumChargeMaterialExothermic(this.losses.chargeMaterials, this.settings);
     if (loss.measurementType == "By Volume") {
       if (loss.formByVolume.status == 'VALID') {
-        if(excessAirDisabled){
-          console.log(excessAirDisabled);
-        }else{
-          console.log(excessAirDisabled);
-        }
         let tmpLoss: FlueGasByVolume = this.flueGasLossesService.buildByVolumeLossFromForm(loss.formByVolume);
         let tmpResult = this.phastService.flueGasByVolume(tmpLoss, this.settings);
         loss.availableHeat = tmpResult * 100;
