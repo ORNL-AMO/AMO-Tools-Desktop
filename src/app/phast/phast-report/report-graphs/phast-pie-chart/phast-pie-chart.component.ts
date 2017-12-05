@@ -108,7 +108,7 @@ export class PhastPieChartComponent implements OnInit {
       this.chartData.pieChartLabels.push('Exhaust Gas Losses (%)');
     }
     if (resultCats.showEnInput2) {
-      let totalExhaustGas = this.getLossPercent(phastResults.totalExhaustGas, phastResults.totalExhaustGas);
+      let totalExhaustGas = this.getLossPercent(phastResults.grossHeatInput, phastResults.totalExhaustGas);
       this.chartData.pieChartData.push(totalExhaustGas);
       this.chartData.pieChartLabels.push('Exhaust Gas Losses (%)');
     }
