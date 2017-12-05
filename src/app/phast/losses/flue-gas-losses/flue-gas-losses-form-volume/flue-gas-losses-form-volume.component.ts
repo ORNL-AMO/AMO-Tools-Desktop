@@ -142,7 +142,7 @@ export class FlueGasLossesFormVolumeComponent implements OnInit {
       excessAir: this.flueGasLossForm.value.excessAirPercentage
     };
     this.calculationWarning = null;
-    if (this.calcMethodExcessAir) {
+    if (!this.calcMethodExcessAir) {
       if (input.o2InFlueGas < 0 || input.o2InFlueGas > 20.99999) {
         this.calculationExcessAir = 0.0;
         this.flueGasLossForm.patchValue({
