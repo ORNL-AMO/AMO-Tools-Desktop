@@ -29,6 +29,10 @@
         <option *ngFor="let option of electrotechOptions" [ngValue]="option">{{option}}</option>
     </select>
   </div>
+  <div class="form-group" *ngIf="settingsForm.value.furnaceType == 'Custom Fuel Furnace' || settingsForm.value.furnaceType == 'Custom Electrotechnology'">
+    <label for="customFurnaceName">Custom Furnace Name</label>
+    <input class="form-control" formControlName="customFurnaceName" id="customFurnaceName">
+  </div>
 </form>
 
 <!--<div class="row">
