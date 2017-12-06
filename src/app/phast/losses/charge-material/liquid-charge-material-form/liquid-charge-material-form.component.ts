@@ -37,6 +37,12 @@ export class LiquidChargeMaterialFormComponent implements OnInit {
   selectedMaterial: any;
   counter: any;
   dischargeTempError: string = null;
+  specificHeatLiquidError: string = null;
+  specificHeatVaporError: string = null;
+  feedLiquidRateError: string = null;
+  chargeVaporError: string = null;
+  chargeReactedError: string = null;
+  heatOfReactionError: string = null;
   constructor(private suiteDbService: SuiteDbService, private chargeMaterialCompareService: ChargeMaterialCompareService, private windowRefService: WindowRefService, private lossesService: LossesService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -104,6 +110,7 @@ export class LiquidChargeMaterialFormComponent implements OnInit {
     }
   }
 
+
   setProperties() {
     let selectedMaterial = this.suiteDbService.selectLiquidLoadChargeMaterialById(this.chargeMaterialForm.value.materialId);
        if (this.settings.unitsOfMeasure == 'Metric') {
@@ -125,6 +132,42 @@ export class LiquidChargeMaterialFormComponent implements OnInit {
   }
   emitSave() {
     this.saveEmit.emit(true);
+  }
+
+  checkInputError(bool?: boolean) {
+    if (!bool) {
+      this.startSavePolling();
+    }
+    if (this.chargeMaterialForm.value.materialSpecificHeatLiquid < 0) {
+      this.specificHeatLiquidError = 'Specific Heat of Liquid must be equal or grater than 0';
+    } else {
+      this.specificHeatLiquidError = null;
+    }
+    if (this.chargeMaterialForm.value.materialSpecificHeatVapor < 0) {
+      this.specificHeatVaporError = 'Specific Heat of Vapor must be equal or grater than 0';
+    } else {
+      this.specificHeatVaporError = null;
+    }
+    if (this.chargeMaterialForm.value.feedRate < 0) {
+      this.feedLiquidRateError = 'Charge Feed Rate must be grater than 0';
+    } else {
+      this.feedLiquidRateError = null;
+    }
+    if (this.chargeMaterialForm.value.liquidVaporized < 0 || this.chargeMaterialForm.value.liquidVaporized > 100) {
+      this.chargeVaporError = 'Charge Liquid Vaporized must be equal or grater than 0 and less than or equal to 100%';
+    } else {
+      this.chargeVaporError = null;
+    }
+    if (this.chargeMaterialForm.value.liquidReacted < 0 || this.chargeMaterialForm.value.liquidReacted > 100) {
+      this.chargeReactedError = 'Charge Liquid Reacted must be equal or grater than 0 and less than or equal to 100%';
+    } else {
+      this.chargeReactedError = null;
+    }
+    if (this.chargeMaterialForm.value.heatOfReaction < 0) {
+      this.heatOfReactionError = 'Heat of Reaction cannot be less than zero. For exothermic reactions, change "Endothermic/Exothermic"';
+    } else {
+      this.heatOfReactionError = null;
+    }
   }
 
   startSavePolling() {

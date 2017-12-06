@@ -13,11 +13,12 @@
     <div class="form-group">
       <label class="small" for="openingArea">Opening Area</label>
       <div class="input-group">
-        <input name="{{'openingArea_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="openingArea" id="openingArea"
-          onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('openingArea')" (blur)="focusOut()">
+        <input name="{{'openingArea_'+lossIndex}}" type="number" step="any" min="0" class="form-control" formControlName="openingArea" id="openingArea"
+          onfocus="this.select();" (input)="checkInputError()" (focus)="focusField('openingArea')" (blur)="focusOut()">
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units"><span>ft<sup>2</sup></span></span>
         <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units"><span>m<sup>2</sup></span></span>
       </div>
+      <span class="alert-warning pull-right small" *ngIf="openingAreaError !== null">{{openingAreaError}}</span>
     </div>
 
     <div class="form-group">
@@ -34,9 +35,10 @@
     <div class="form-group">
       <label class="small" for="specificGravity" aria-describedby="specificGravityHelp">Specific Density of Flue Gases</label>
 
-      <input name="{{'specificGravity_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="specificGravity"
-        id="specificGravity" onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('specificGravity')" (blur)="focusOut()">
+      <input name="{{'specificGravity_'+lossIndex}}" type="number" step="any" min="0" class="form-control" formControlName="specificGravity"
+        id="specificGravity" onfocus="this.select();" (input)="checkInputError()" (focus)="focusField('specificGravity')" (blur)="focusOut()">
     </div>
+    <span class="alert-warning pull-right small" *ngIf="specificGravityError !== null">{{specificGravityError}}</span>
 
     <div class="form-group">
       <label class="small" for="ambientTemperature">Ambient Temperature</label>

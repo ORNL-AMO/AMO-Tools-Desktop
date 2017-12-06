@@ -2,14 +2,11 @@
   <div class="form-section">
     <div class="form-group">
       <label class="small" for="gasTypeId">Fuel
-        <small id="materialHelp" class="form-text text-help">
-          <a (click)="showMaterialModal()">Add New Fuel</a>
-        </small>
+        <small id="materialHelp" class="form-text text-help"><a (click)="showMaterialModal()">Add New Fuel</a></small>
       </label>
-      <select name="{{'gasTypeId_'+lossIndex}}" class="form-control" formControlName="gasTypeId" id="gasTypeId" (change)="setProperties()"
-        (focus)="focusField('gasTypeId')" (blur)="focusOut()">
-        <option *ngFor="let option of options" [ngValue]="option.id">{{option.substance}}</option>
-      </select>
+      <select name="{{'gasTypeId_'+lossIndex}}" class="form-control" formControlName="gasTypeId" id="gasTypeId" (change)="setProperties()" (focus)="focusField('gasTypeId')" (blur)="focusOut()">
+      <option *ngFor="let option of options" [ngValue]="option.id">{{option.substance}}</option>
+    </select>
     </div>
 
     <div class="form-group">
@@ -26,8 +23,7 @@
       <label class="small" for="excessAirPercentage">Excess Air</label>
       <div class="input-group">
         <input name="{{'excessAirPercentage_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="excessAirPercentage"
-          id="excessAirPercentage" onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('excessAirPercentage')"
-          (blur)="focusOut()">
+          id="excessAirPercentage" onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('excessAirPercentage')" (blur)="focusOut()">
         <span class="input-group-addon units">%</span>
       </div>
     </div>
@@ -53,18 +49,17 @@
     </div>
 
     <div class="form-group">
-      <label class="small" for="moistureInAirComposition">Moisture in Air</label>
-      <input name="{{'moistureInAirComposition_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="moistureInAirComposition"
-        id="moistureInAirComposition" onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('moistureInAirComposition')"
-        (blur)="focusOut()">
+      <label class="small" for="moistureInAirComposition">Moisture in Air Combustion</label>
+      <input name="{{'moistureInAirComposition_'+lossIndex}}" type="number" step="any" min="0" class="form-control" formControlName="moistureInAirComposition"
+        id="moistureInAirComposition" onfocus="this.select();" (input)="checkInputError()" (focus)="focusField('moistureInAirComposition')" (blur)="focusOut()">
     </div>
+    <span class="alert-warning pull-right small" *ngIf="moistureInAirCompositionError !== null">{{moistureInAirCompositionError}}</span>
 
     <div class="form-group">
       <label class="small" for="ashDischargeTemperature">Ash Discharge Temperature</label>
       <div class="input-group">
         <input name="{{'ashDischargeTemperature_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="ashDischargeTemperature"
-          id="ashDischargeTemperature" onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('ashDischargeTemperature')"
-          (blur)="focusOut()">
+          id="ashDischargeTemperature" onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('ashDischargeTemperature')" (blur)="focusOut()">
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">&#8457;</span>
         <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
       </div>
@@ -73,11 +68,11 @@
     <div class="form-group">
       <label class="small" for="unburnedCarbonInAsh">Unburned Carbon in Ash</label>
       <div class="input-group">
-        <input name="{{'unburnedCarbonInAsh_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="unburnedCarbonInAsh"
-          id="unburnedCarbonInAsh" onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('unburnedCarbonInAsh')"
-          (blur)="focusOut()">
+        <input name="{{'unburnedCarbonInAsh_'+lossIndex}}" type="number" step="any" min="0" class="form-control" formControlName="unburnedCarbonInAsh"
+          id="unburnedCarbonInAsh" onfocus="this.select();" (input)="checkInputError()" (focus)="focusField('unburnedCarbonInAsh')" (blur)="focusOut()">
         <span class="input-group-addon units">%</span>
       </div>
+      <span class="alert-warning pull-right small" *ngIf="unburnedCarbonInAshError !== null">{{unburnedCarbonInAshError}}</span>
     </div>
   </div>
 </form>
@@ -86,16 +81,14 @@
 <div bsModal #materialModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="materialModalLabel"
   aria-hidden="true" [config]="{backdrop: 'static'}">
   <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h3>Create Fuel</h3>
-        <button class="close" (click)="hideMaterialModal()">
+    <div class="modal-header">
+      <h3>Create Fuel</h3>
+      <button class="close" (click)="hideMaterialModal()">
           <span aria-hidden="true">&times;</span>
         </button>
-      </div>
-      <div class="modal-body">
-        <app-solid-liquid-flue-gas-material *ngIf="showModal" (closeModal)="hideMaterialModal($event)" [settings]="settings"></app-solid-liquid-flue-gas-material>
-      </div>
+    </div>
+    <div class="modal-content">
+      <app-solid-liquid-flue-gas-material *ngIf="showModal" (closeModal)="hideMaterialModal($event)" [settings]="settings"></app-solid-liquid-flue-gas-material>
     </div>
   </div>
 </div>

@@ -34,10 +34,13 @@ export class WallLossesFormComponent implements OnInit {
   form: any;
   elements: any;
 
+  windVelocityError: string = null;
+  surfaceAreaError: string = null;
   firstChange: boolean = true;
   counter: any;
   surfaceTmpError: string = null;
   emissivityError: string = null;
+  surfaceEmissivityError: string = null;
   surfaceOptions: Array<WallLossesSurface>;
   showModal: boolean = false;
   constructor(private windowRefService: WindowRefService, private wallLossCompareService: WallLossCompareService, private suiteDbService: SuiteDbService, private lossesService: LossesService, private convertUnitsService: ConvertUnitsService) { }
@@ -121,6 +124,23 @@ export class WallLossesFormComponent implements OnInit {
   emitSave() {
     this.saveEmit.emit(true);
   }
+
+  checkInputError(bool?: boolean) {
+    if (!bool) {
+      this.startSavePolling();
+    }
+    if (this.wallLossesForm.value.windVelocity < 0) {
+      this.windVelocityError = 'Wind Velocity must be equal or grater than 0';
+    } else {
+      this.windVelocityError = null;
+    }
+    if (this.wallLossesForm.value.surfaceArea < 0 ) {
+      this.surfaceAreaError = 'Total Outside Surface Area must be equal or grater than 0';
+    } else {
+      this.surfaceAreaError = null;
+    }
+  }
+
   //on input/change in form startSavePolling is called, if not called again with 3 seconds save process is triggered
   startSavePolling() {
     this.calculate.emit(true);
