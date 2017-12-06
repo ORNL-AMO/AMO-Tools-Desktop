@@ -90,7 +90,7 @@ export class GasLeakageLossesFormComponent implements OnInit {
     }
   }
 
-  checkCorrectionError(bool?: boolean) {
+  checkInputError(bool?: boolean) {
     if (!bool) {
       this.startSavePolling();
     }

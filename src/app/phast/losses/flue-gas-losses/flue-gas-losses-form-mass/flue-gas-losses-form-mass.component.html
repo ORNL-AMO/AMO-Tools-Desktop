@@ -50,7 +50,7 @@
 
     <div class="form-group">
       <label class="small" for="moistureInAirComposition">Moisture in Air Combustion</label>
-      <input name="{{'moistureInAirComposition_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="moistureInAirComposition"
+      <input name="{{'moistureInAirComposition_'+lossIndex}}" type="number" step="any" min="0" class="form-control" formControlName="moistureInAirComposition"
         id="moistureInAirComposition" onfocus="this.select();" (input)="checkInputError()" (focus)="focusField('moistureInAirComposition')" (blur)="focusOut()">
     </div>
     <span class="alert-warning pull-right small" *ngIf="moistureInAirCompositionError !== null">{{moistureInAirCompositionError}}</span>
@@ -68,7 +68,7 @@
     <div class="form-group">
       <label class="small" for="unburnedCarbonInAsh">Unburned Carbon in Ash</label>
       <div class="input-group">
-        <input name="{{'unburnedCarbonInAsh_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="unburnedCarbonInAsh"
+        <input name="{{'unburnedCarbonInAsh_'+lossIndex}}" type="number" step="any" min="0" class="form-control" formControlName="unburnedCarbonInAsh"
           id="unburnedCarbonInAsh" onfocus="this.select();" (input)="checkInputError()" (focus)="focusField('unburnedCarbonInAsh')" (blur)="focusOut()">
         <span class="input-group-addon units">%</span>
       </div>

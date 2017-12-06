@@ -25,8 +25,8 @@
     <div class="form-group">
       <label class="small" for="windVelocity">Wind Velocity</label>
       <div class="input-group">
-        <input name="{{'windVelocity_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="windVelocity"
-          id="windVelocity" onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('windVelocity')"  (blur)="focusOut()">
+        <input name="{{'windVelocity_'+lossIndex}}" type="number" step="any" min="0" class="form-control" formControlName="windVelocity"
+          id="windVelocity" onfocus="this.select();" (input)="checkInputError()" (focus)="focusField('windVelocity')"  (blur)="focusOut()">
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">mph</span>
         <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">km/hr</span>
       </div>
@@ -60,8 +60,8 @@
     <div class="form-group">
       <label class="small" for="surfaceArea">Total Outside Surface Area</label>
       <div class="input-group">
-        <input name="{{'surfaceArea_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="surfaceArea" id="surfaceArea"
-          onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('surfaceArea')" (blur)="focusOut()">
+        <input name="{{'surfaceArea_'+lossIndex}}" type="number" step="any" min="0" class="form-control" formControlName="surfaceArea" id="surfaceArea"
+          onfocus="this.select();" (input)="checkInputError()" (focus)="focusField('surfaceArea')" (blur)="focusOut()">
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">ft<sup>2</sup></span>
         <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">m<sup>2</sup></span>
       </div>

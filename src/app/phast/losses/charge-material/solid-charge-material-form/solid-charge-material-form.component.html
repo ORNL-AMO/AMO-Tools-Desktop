@@ -82,7 +82,7 @@
       <label class="small" for="chargeMaterialDischargeTemperature">Charge Material Discharge Temperature</label>
       <div class="input-group">
         <input name="{{'chargeMaterialDischargeTemperature_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="chargeMaterialDischargeTemperature"
-          id="chargeMaterialDischargeTemperature" onfocus="this.select();" (input)="checkInputError()" (focus)="focusField('chargeMaterialDischargeTemperature')" (blur)="focusOut()">
+          id="chargeMaterialDischargeTemperature" onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('chargeMaterialDischargeTemperature')" (blur)="focusOut()">
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">&#8457;</span>
         <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
       </div>
@@ -137,7 +137,7 @@
           id="percentChargeReacted" onfocus="this.select();" (input)="checkInputError()" (focus)="focusField('percentChargeReacted')" (blur)="focusOut()">
         <span class="input-group-addon units">%</span>
       </div>
-      <span class="alert-warning pull-right small" *ngIf="chargeReactedError !== null">{{chargeReactedError}}</span>
+      <span class="alert-warning pull-right small" *ngIf="chargeSolidReactedError !== null">{{chargeSolidReactedError}}</span>
     </div>
 
     <div class="form-group">

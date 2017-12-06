@@ -43,7 +43,7 @@ export class SolidChargeMaterialFormComponent implements OnInit {
   waterChargedError: string = null;
   waterDischargedError: string = null;
   chargeMeltedError: string = null;
-  chargeReactedError: string = null;
+  chargeSolidReactedError: string = null;
   heatOfReactionError: string = null;
   materialTypes: any;
   selectedMaterialId: any;
@@ -184,9 +184,9 @@ checkInputError(bool?: boolean) {
         this.chargeMeltedError = null;
       }
   if (this.chargeMaterialForm.value.percentChargeReacted < 0 || this.chargeMaterialForm.value.percentChargeReacted > 100) {
-        this.chargeReactedError = 'Charge Reacted must be equal or grater than 0 and less than or equal to 100%';
+        this.chargeSolidReactedError = 'Charge Reacted must be equal or grater than 0 and less than or equal to 100%';
       } else {
-        this.chargeReactedError = null;
+        this.chargeSolidReactedError = null;
       }
    if (this.chargeMaterialForm.value.heatOfReaction < 0) {
         this.heatOfReactionError = 'Heat of Reaction cannot be less than zero. For exothermic reactions, change "Endothermic/Exothermic"';

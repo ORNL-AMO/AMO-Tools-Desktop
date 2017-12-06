@@ -39,7 +39,7 @@ export class LiquidChargeMaterialFormComponent implements OnInit {
   dischargeTempError: string = null;
   specificHeatLiquidError: string = null;
   specificHeatVaporError: string = null;
-  feedRateError: string = null;
+  feedLiquidRateError: string = null;
   chargeVaporError: string = null;
   chargeReactedError: string = null;
   heatOfReactionError: string = null;
@@ -149,9 +149,9 @@ export class LiquidChargeMaterialFormComponent implements OnInit {
       this.specificHeatVaporError = null;
     }
     if (this.chargeMaterialForm.value.feedRate < 0) {
-      this.feedRateError = 'Charge Feed Rate must be grater than 0';
+      this.feedLiquidRateError = 'Charge Feed Rate must be grater than 0';
     } else {
-      this.feedRateError = null;
+      this.feedLiquidRateError = null;
     }
     if (this.chargeMaterialForm.value.liquidVaporized < 0 || this.chargeMaterialForm.value.liquidVaporized > 100) {
       this.chargeVaporError = 'Charge Liquid Vaporized must be equal or grater than 0 and less than or equal to 100%';

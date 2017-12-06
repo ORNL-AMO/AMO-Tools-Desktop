@@ -39,10 +39,10 @@ export class GasChargeMaterialFormComponent implements OnInit {
   showModal: boolean = false;
   dischargeTempError: string = null;
   specificHeatGasError: string = null;
-  feedRateError: string = null;
+  feedGasRateError: string = null;
   gasMixVaporError: string = null;
   specificHeatGasVaporError: string = null;
-  feedReactedError: string = null;
+  feedGasReactedError: string = null;
   heatOfReactionError: string = null;
   constructor(private suiteDbService: SuiteDbService, private chargeMaterialCompareService: ChargeMaterialCompareService, private windowRefService: WindowRefService, private lossesService: LossesService, private convertUnitsService: ConvertUnitsService) { }
 
@@ -125,9 +125,9 @@ export class GasChargeMaterialFormComponent implements OnInit {
       this.specificHeatGasError = null;
     }
     if (this.chargeMaterialForm.value.feedRate < 0) {
-      this.feedRateError = 'Feed Rate for Gas Mixture must be grater than 0';
+      this.feedGasRateError = 'Feed Rate for Gas Mixture must be grater than 0';
     } else {
-      this.feedRateError = null;
+      this.feedGasRateError = null;
     }
     if (this.chargeMaterialForm.value.vaporInGas < 0 || this.chargeMaterialForm.value.vaporInGas > 100) {
       this.gasMixVaporError = 'Vapor in Gas Mixture must be equal or grater than 0 and less than or equal to 100%';
@@ -140,9 +140,9 @@ export class GasChargeMaterialFormComponent implements OnInit {
       this.specificHeatGasVaporError = null;
     }
     if (this.chargeMaterialForm.value.gasReacted < 0 || this.chargeMaterialForm.value.gasReacted > 100) {
-      this.feedReactedError = 'Feed Gas Reacted must be equal or grater than 0 and less than or equal to 100%';
+      this.feedGasReactedError = 'Feed Gas Reacted must be equal or grater than 0 and less than or equal to 100%';
     } else {
-      this.feedReactedError = null;
+      this.feedGasReactedError = null;
     }
     if (this.chargeMaterialForm.value.heatOfReaction < 0) {
       this.heatOfReactionError = 'Heat of Reaction cannot be less than zero. For exothermic reactions, change "Endothermic/Exothermic"';

@@ -60,7 +60,7 @@
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">lb/hr</span>
         <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kg/hr</span>
       </div>
-      <span class="alert-warning pull-right small" *ngIf="feedRateError !== null">{{feedRateError}}</span>
+      <span class="alert-warning pull-right small" *ngIf="feedLiquidRateError !== null">{{feedLiquidRateError}}</span>
     </div>
 
     <div class="form-group">
