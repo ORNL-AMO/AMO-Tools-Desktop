@@ -142,7 +142,7 @@ export class FlueGasLossesFormVolumeComponent implements OnInit {
       excessAir: this.flueGasLossForm.value.excessAirPercentage
     };
     this.calculationWarning = null;
-    if (this.calcMethodExcessAir) {
+    if (!this.calcMethodExcessAir) {
       if (input.o2InFlueGas < 0 || input.o2InFlueGas > 20.99999) {
         this.calculationExcessAir = 0.0;
         this.calculationWarning = 'Oxygen levels in Flue Gas must be greater than or equal to 0 and less than 21 percent';

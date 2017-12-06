@@ -17,7 +17,7 @@
             <span *ngIf="!fuelName">Fuel</span>
           </td>
           <td>
-            <span>{{fuelEnergyUsed | sigFigs:'5'}} {{baseEnergyUnit}}</span>
+            <span *ngIf="fuelEnergyUsed">{{fuelEnergyUsed | sigFigs:'5'}} {{baseEnergyUnit}}</span>
             <span *ngIf="!fuelEnergyUsed">&mdash; &mdash;</span>
           </td>
           <td>

@@ -23,7 +23,7 @@ export class AuxiliaryPowerLossesFormComponent implements OnInit {
   @ViewChild('lossForm') lossForm: ElementRef;
   form: any;
   elements: any;
-
+  inputError: string = null;
   firstChange: boolean = true;
   counter: any;
   constructor(private windowRefService: WindowRefService, private auxiliaryPowerCompareService: AuxiliaryPowerCompareService) { }

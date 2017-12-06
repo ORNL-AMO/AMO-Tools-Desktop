@@ -16,5 +16,6 @@ export interface Settings {
     id?: number,
     energySourceType?: string,
     furnaceType?: string,
-    energyResultUnit?: string
+    energyResultUnit?: string,
+    customFurnaceName?: string
 }

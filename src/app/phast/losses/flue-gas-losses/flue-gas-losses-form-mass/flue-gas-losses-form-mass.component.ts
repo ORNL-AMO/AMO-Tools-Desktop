@@ -33,7 +33,8 @@ export class FlueGasLossesFormMassComponent implements OnInit {
   @ViewChild('lossForm') lossForm: ElementRef;
   form: any;
   elements: any;
-
+  moistureInAirCompositionError: string = null;
+  unburnedCarbonInAshError: string = null;
   firstChange: boolean = true;
   options: any;
   counter: any;
@@ -183,6 +184,23 @@ export class FlueGasLossesFormMassComponent implements OnInit {
   emitSave() {
     this.saveEmit.emit(true);
   }
+
+  checkInputError(bool?: boolean) {
+    if (!bool) {
+      this.startSavePolling();
+    }
+    if (this.flueGasLossForm.value.moistureInAirComposition < 0) {
+      this.moistureInAirCompositionError = 'Moisture in Air Combustion must be equal or grater than 0';
+    } else {
+      this.moistureInAirCompositionError = null;
+    }
+    if (this.flueGasLossForm.value.unburnedCarbonInAsh < 0 || this.flueGasLossForm.value.unburnedCarbonInAsh > 100) {
+      this.unburnedCarbonInAshError = 'Unburned Carbon in Ash must be equal or grater than 0 and less than or equal to 100%';
+    } else {
+      this.unburnedCarbonInAshError = null;
+    }
+  }
+
 
   startSavePolling() {
     this.checkForm();

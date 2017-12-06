@@ -27,6 +27,7 @@ export class ExtendedSurfaceLossesFormComponent implements OnInit {
   form: any;
   elements: any;
 
+  surfaceAreaError: string = null;
   firstChange: boolean = true;
   counter: any;
   temperatureError: string = null;
@@ -93,6 +94,11 @@ export class ExtendedSurfaceLossesFormComponent implements OnInit {
       this.temperatureError = 'Ambient Temperature is greater than Surface Temperature';
     } else {
       this.temperatureError = null;
+    }
+    if (this.lossesForm.value.surfaceArea < 0) {
+      this.surfaceAreaError = 'Total Outside Surface Area must be equal or greater than 0 ';
+    } else {
+      this.surfaceAreaError= null;
     }
   }
 
