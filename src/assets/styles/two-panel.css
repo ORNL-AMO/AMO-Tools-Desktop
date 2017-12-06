@@ -153,11 +153,11 @@
     width: 100%;
 }
 
-.psat form .group-label{
+.psat .group-label{
     border-bottom: #2980b9 groove 2px;
 }
 
-.phast form .group-label{
+.phast .group-label{
     border-bottom: #BF3D00 groove 2px;
 }
 
@@ -186,6 +186,6 @@
     text-decoration: none;
 }
 
-.psat-form-group{
+.setup-form-group{
     padding: 20px;
 }

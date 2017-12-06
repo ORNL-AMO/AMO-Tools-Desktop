@@ -6,7 +6,7 @@
       </div>
     </div>
   </div>
-  <div class="psat-form-group">
+  <div class="setup-form-group">
     <div class="form-group">
       <label for="operatingFraction">Operating Fraction</label>
       <input name="operatingFraction" type="number" min="0" max="1" step="any" class="form-control" formControlName="operatingFraction"
@@ -89,7 +89,7 @@
   </div>
 </form>
 <form #formRef2 [formGroup]="psatForm" *ngIf="psatForm">
-  <div class="psat-form-group">
+  <div class="setup-form-group">
     <div *ngIf="!baseline" class="form-group">
       <label class="form-check-label" style="width: 100%; padding-top: 5px;">
         <input name="optimizeCalculation" id="optimizeCalculation" class="form-control form-check-input" type="checkbox" formControlName="optimizeCalculation"

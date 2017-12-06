@@ -3,3 +3,11 @@
   padding-bottom: 18px !important;
   border-bottom: #bbb dashed 1px;
 }
+
+.operating-text-box{
+  padding-top: 15px;
+}
+
+.op-text-area{
+  width: 100%;
+}
