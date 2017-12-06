@@ -28,6 +28,14 @@
   </ul>
 </nav>
 
+<nav *ngIf="currentTab.step == 1">
+  <ul class="tabs subtabs phast">
+    <li *ngFor="let tab of specTabs" [ngClass]="{'active': specTab == tab.value}">
+      <a (click)="changeSpecTab(tab.value)">{{tab.name}}</a>
+    </li>
+  </ul>
+</nav>
+
 
 <!--
 To add class for specific step number: example 4

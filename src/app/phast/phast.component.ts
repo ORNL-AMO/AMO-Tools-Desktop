@@ -41,6 +41,7 @@ export class PhastComponent implements OnInit {
   mainTab: string = 'system-setup';
   init: boolean = true;
   saveDbToggle: string;
+  specTab: string;
   constructor(
     private location: Location,
     private assessmentService: AssessmentService,
@@ -96,6 +97,9 @@ export class PhastComponent implements OnInit {
         this.stepTab = val;
       })
 
+      this.phastService.specTab.subscribe(val => {
+        this.specTab = val;
+      })
     });
   }
 

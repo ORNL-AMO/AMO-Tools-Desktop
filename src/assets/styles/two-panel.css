@@ -18,6 +18,10 @@
 	height: auto !important; */
 }
 
+.tab-content{
+    height: 100%;
+}
+
 .form-card{
 	border: none;
 }

@@ -1234,7 +1234,7 @@ Modify Conditions
 .modify-conditions {
   align-items: stretch;
   display: flex;
-  min-height: 100vh;
+  min-height: 100%;
 }
 
 .modify-conditions .help-panel {
@@ -1260,6 +1260,7 @@ Modify Conditions
   z-index: 2;
   width: 35%;
   padding-left: 25px;
+  min-height: 100%;
 }
   /* .modification .header {
     display: block;
