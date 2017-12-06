@@ -21,10 +21,11 @@
 					</li>
 				</ul>
 			</div>
-
-			<app-explore-opportunities-help [currentField]="currentField" [settings]="settings" [psat]="psat" *ngIf="tabSelect == 'help'">
-			</app-explore-opportunities-help>
-
+			<div class="explore-help-panel">
+				<app-explore-opportunities-help [currentField]="currentField" [settings]="settings" [psat]="psat" *ngIf="tabSelect == 'help'">
+				</app-explore-opportunities-help>
+			</div>
+			
 
 			<app-explore-opportunities-sankey [baselineResults]="baselineResults" [modificationResults]="modificationResults" [settings]="settings"
 			 *ngIf="tabSelect == 'sankey'">

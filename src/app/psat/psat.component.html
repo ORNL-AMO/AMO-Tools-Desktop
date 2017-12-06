@@ -25,9 +25,8 @@
       </ul>
     </nav>
 
-    <div class="tab-content">
-      <div class="wrapper">
-        <div class="form">
+    <div class="row tab-content psat">
+      <div class="col-6 panel-column modification">
           <app-system-basics *ngIf="subTab == 'system-basics'" [settings]="settings" [saveClicked]="saveClicked" [assessment]="assessment"
             [(psat)]="_psat" [isAssessmentSettings]="isAssessmentSettings" (updateSettings)="getSettings($event)" (updateAssessment)="save()"></app-system-basics>
           <app-pump-fluid *ngIf="subTab == 'pump-fluid'" (isValid)="setValid()" (isInvalid)="setInvalid()" [saveClicked]="saveClicked"
@@ -37,9 +36,8 @@
           <app-field-data *ngIf="subTab == 'field-data'" (isValid)="setValid()" (isInvalid)="setInvalid()" [saveClicked]="saveClicked"
             [(psat)]="_psat" (saved)="save()" [selected]="true" [settings]="settings" [baseline]="true"></app-field-data>
         </div>
-        <div class="help">
+        <div class="col-6 help-panel">
           <app-help-panel [psat]="_psat" [settings]="settings" [currentTab]="subTab" [inSetup]="true"></app-help-panel>
-        </div>
       </div>
     </div>
 

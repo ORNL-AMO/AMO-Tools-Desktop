@@ -20,6 +20,7 @@
 
 .tab-content{
     height: 100%;
+    min-height: 100%;
 }
 
 .form-card{
@@ -183,4 +184,8 @@
 .disabled .add-loss a:hover{
     cursor: not-allowed;
     text-decoration: none;
+}
+
+.psat-form-group{
+    padding: 20px;
 }
