@@ -18,3 +18,8 @@ a:not([href]):not([tabindex]).disabled-link:hover{
     cursor: default;
     text-decoration: none;
 }
+
+
+.stand-alone-calc{
+    height: 100vh;
+}

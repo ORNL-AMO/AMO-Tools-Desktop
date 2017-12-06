@@ -8,15 +8,19 @@
 <div class="card-form" *ngFor="let loss of _wallLosses; let lossIndex = index;">
   <div class="row">
     <div class="col-12">
-      <div class="pull-left">
+      <!-- <div class="pull-left"> -->
         <!--<input *ngIf="isBaseline" type="text" id="{{'wallLossName_'+lossIndex}}" [disabled]="!baselineSelected" class="form-control" [(ngModel)]="loss.name" />-->
-        <h6 *ngIf="isBaseline">{{loss.name}}</h6>
+        <!-- <h6 *ngIf="isBaseline">{{loss.name}}</h6>
         <h6 *ngIf="!isBaseline">{{loss.name}} Modification</h6>
-      </div>
+      </div> -->
       <!--delete from baseline only-->
-      <button *ngIf="isBaseline" class="close pull-right" aria-label="Close" (click)="removeLoss(lossIndex)">
+      <!-- <button *ngIf="isBaseline" class="close pull-right" aria-label="Close" (click)="removeLoss(lossIndex)">
       <span aria-hidden="true">&times;</span>
-    </button>
+    </button> -->
+    <label class="group-label loss-label">
+      {{loss.name}}
+      <span aria-hidden="true" *ngIf="isBaseline" class="close pull-right" aria-label="Close" (click)="removeLoss(lossIndex)">&times;</span>
+    </label>
     </div>
   </div>
   <div class="row">

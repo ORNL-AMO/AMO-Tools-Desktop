@@ -24,11 +24,11 @@
 
 
 
-<div class="tab-content" *ngIf="getSelectedTool() == 'nema-energy-efficiency'">
+<div class="stand-alone-calc" *ngIf="getSelectedTool() == 'nema-energy-efficiency'">
     <app-nema-energy-efficiency></app-nema-energy-efficiency>
 </div>
 
 
-<div class="tab-content" *ngIf="getSelectedTool() == 'motor-performance'">
+<div class="stand-alone-calc" *ngIf="getSelectedTool() == 'motor-performance'">
   <app-motor-performance></app-motor-performance>
 </div>

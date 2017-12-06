@@ -42,22 +42,22 @@
 </div>
 
 
-<div *ngIf="getSelectedTool() == 'head-tool'">
+<div class="stand-alone-calc" *ngIf="getSelectedTool() == 'head-tool'">
     <app-head-tool></app-head-tool>
 </div>
 
-<div class="tab-content" *ngIf="getSelectedTool() == 'system-curve'">
+<div class="stand-alone-calc tab-content" *ngIf="getSelectedTool() == 'system-curve'">
   <app-system-curve></app-system-curve>
 </div>
 
-<div class="tab-content" *ngIf="getSelectedTool() == 'specific-speed'">
+<div class="stand-alone-calc tab-content" *ngIf="getSelectedTool() == 'specific-speed'">
   <app-specific-speed></app-specific-speed>
 </div>
 
-<div class="tab-content" *ngIf="getSelectedTool() == 'achievable-efficiency'">
+<div class="stand-alone-calc tab-content" *ngIf="getSelectedTool() == 'achievable-efficiency'">
     <app-achievable-efficiency></app-achievable-efficiency>
 </div>
 
-<div class="tab-content" *ngIf="getSelectedTool() == 'pump-curve'">
+<div class="stand-alone-calc tab-content" *ngIf="getSelectedTool() == 'pump-curve'">
   <app-pump-curve></app-pump-curve>
 </div>

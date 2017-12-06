@@ -15,7 +15,8 @@
 	/* padding-bottom: 70px;
 	max-height: none !important;
 	min-height: 100vh;
-	height: auto !important; */
+    height: auto !important; */
+    height: 100%;
 }
 
 .tab-content{
@@ -161,6 +162,11 @@
     border-bottom: #BF3D00 groove 2px;
 }
 
+.loss-label{
+    width: 100%;
+    margin-bottom: 10px;
+    font-size: 18px;
+}
 
 
 .add-loss{
