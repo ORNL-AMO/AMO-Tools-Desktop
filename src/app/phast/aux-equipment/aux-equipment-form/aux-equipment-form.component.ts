@@ -17,9 +17,22 @@ export class AuxEquipmentFormComponent implements OnInit {
   @Output('changeField')
   changeField = new EventEmitter<string>();
   counter: any;
+  voltageError: string = null;
   constructor() { }
 
   ngOnInit() {
+  }
+
+  checkVoltageError(bool?: boolean) {
+    if (!bool) {
+      this.startSavePolling();
+      this.emitCalculate.emit(true);
+    }
+    if (this.equipment.supplyVoltage < 0 || this.equipment.supplyVoltage > 480) {
+      this.voltageError = 'Supply Voltage must be between 0 and 480';
+    } else {
+      this.voltageError = null;
+    }
   }
 
   focusField(str: string) {

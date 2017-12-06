@@ -18,9 +18,10 @@
       <label class="small" for="supplyVoltage">Supply Voltage</label>
       <div class="input-group">
         <input name="{{'supplyVoltage_'+lossIndex}}" type="number" min="0" step="any" class="form-control" formControlName="supplyVoltage"
-          id="supplyVoltage" onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('supplyVoltage')" (blur)="focusOut()">
+          id="supplyVoltage" onfocus="this.select();" (input)="checkVoltageError()" (focus)="focusField('supplyVoltage')" (blur)="focusOut()">
         <span class="input-group-addon units">V</span>
       </div>
+      <span class="alert-warning pull-right small" *ngIf="voltageError !== null">{{voltageError}}</span>
     </div>
 
     <div class="form-group">

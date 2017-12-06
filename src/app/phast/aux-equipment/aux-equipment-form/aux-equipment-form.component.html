@@ -64,9 +64,10 @@
       <label for="supplyVoltage">Supply Voltage</label>
       <div class="input-group">
         <input name="supplyVoltage" type="number" step="any" id="supplyVoltage" class="form-control" (focus)="focusField('supplyVoltage')"
-          [(ngModel)]="equipment.supplyVoltage" (input)="calculate()" onfocus="this.select();" />
+          [(ngModel)]="equipment.supplyVoltage" (input)="checkVoltageError()" onfocus="this.select();" />
         <span class="input-group-addon units">V</span>
       </div>
+      <span class="alert-warning pull-right small" *ngIf="voltageError !== null">{{voltageError}}</span>
     </div>
     <div class="form-group" *ngIf="equipment.motorPower == 'Calculated'">
       <label for="averageCurrent">Average Current</label>

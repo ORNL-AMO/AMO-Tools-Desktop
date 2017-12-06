@@ -26,6 +26,7 @@ export class AuxiliaryPowerLossesFormComponent implements OnInit {
   inputError: string = null;
   firstChange: boolean = true;
   counter: any;
+  voltageError: string = null;
 
   motorPhases: Array<number> = [
     1,
@@ -80,6 +81,17 @@ export class AuxiliaryPowerLossesFormComponent implements OnInit {
   }
   emitSave() {
     this.saveEmit.emit(true);
+  }
+
+  checkVoltageError(bool?: boolean) {
+    if (!bool) {
+      this.startSavePolling();
+    }
+    if (this.auxLossesForm.value.supplyVoltage < 0 || this.auxLossesForm.value.supplyVoltage > 480) {
+      this.voltageError = 'Supply Voltage must be between 0 and 480';
+    } else {
+      this.voltageError = null;
+    }
   }
 
   startSavePolling() {
