@@ -16,28 +16,6 @@
     z-index: initial !important;
 }
 
-.add-loss{
-    margin-bottom: 0px;
-    margin-top: 5px;
-}
-
-.add-loss a {
-    padding-left: 15px;
-    border-left: groove 1px #BF3D00;
-    padding-top: 5px;
-    padding-bottom: 5px;
-    font-size: 15px;
-}
-
-.disabled .add-loss a{
-    color: gray;
-    border-left:#ddd solid 1px;
-}
-
-.disabled .add-loss a:hover{
-    cursor: not-allowed;
-    text-decoration: none;
-}
 
 .header{
     border-bottom: #BF3D00 groove 2px;
