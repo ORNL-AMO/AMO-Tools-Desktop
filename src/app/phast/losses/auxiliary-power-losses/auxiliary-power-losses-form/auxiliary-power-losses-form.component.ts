@@ -26,6 +26,11 @@ export class AuxiliaryPowerLossesFormComponent implements OnInit {
   inputError: string = null;
   firstChange: boolean = true;
   counter: any;
+
+  motorPhases: Array<number> = [
+    1,
+    3
+  ]
   constructor(private windowRefService: WindowRefService, private auxiliaryPowerCompareService: AuxiliaryPowerCompareService) { }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -78,6 +83,7 @@ export class AuxiliaryPowerLossesFormComponent implements OnInit {
   }
 
   startSavePolling() {
+    console.log(this.auxLossesForm);
     this.checkForm();
     if (this.counter) {
       clearTimeout(this.counter);

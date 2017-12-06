@@ -18,13 +18,6 @@
   </div>
   <div class="row">
     <div class="col-12">
-      <div class="form-group">
-        <label class="small" for="motorPhase">Motor Current Phase(s)</label>
-        <select class="form-control" id="motorPhase"  (change)="calculate(loss)" [disabled]="!baselineSelected" (focus)="changeField('motorPhase')" (blur)="focusOut()">
-          <option>1</option>
-          <option>3</option>
-        </select>
-      </div>
       <app-auxiliary-power-losses-form (changeField)="changeField($event)" [(auxLossesForm)]="loss.form" (calculate)="calculate(loss)"
         [baselineSelected]="baselineSelected" (saveEmit)="saveLosses()" [lossIndex]="lossIndex"></app-auxiliary-power-losses-form>
     </div>
