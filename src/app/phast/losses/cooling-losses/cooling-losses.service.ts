@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { WaterCoolingLoss, LiquidCoolingLoss, GasCoolingLoss, CoolingLoss } from '../../../shared/models/phast/losses/coolingLoss';
 import { BehaviorSubject } from 'rxjs';
+import { Settings } from '../../../shared/models/settings';
 @Injectable()
 export class CoolingLossesService {
   deleteLossIndex: BehaviorSubject<number>;
@@ -51,10 +52,16 @@ export class CoolingLossesService {
     return tmpLoss;
   }
 
-  initLiquidCoolingForm() {
+  initLiquidCoolingForm(settings: Settings) {
+    let defaultDensity: number = 8.338;
+    let defaultSpecificHeat: number = 1;
+    if (settings.unitsOfMeasure == 'Metric') {
+      defaultDensity = .999;
+      defaultSpecificHeat = 4.187;
+    }
     return this.formBuilder.group({
-      'avgSpecificHeat': [1, Validators.required],
-      'density': [8.338, Validators.required],
+      'avgSpecificHeat': [defaultSpecificHeat, Validators.required],
+      'density': [defaultDensity, Validators.required],
       'liquidFlow': ['', Validators.required],
       'inletTemp': ['', Validators.required],
       'outletTemp': ['', Validators.required],
@@ -85,14 +92,20 @@ export class CoolingLossesService {
     return tmpLoss;
   }
 
-  initGasCoolingForm() {
+  initGasCoolingForm(settings: Settings) {
+    let defaultDensity: number = .074887;
+    let defaultSpecificHeat: number = .2371;
+    if (settings.unitsOfMeasure == 'Metric') {
+      defaultDensity = 1.2;
+      defaultSpecificHeat = 0.993;
+    }
     return this.formBuilder.group({
-      'avgSpecificHeat': [.2371, Validators.required],
+      'avgSpecificHeat': [defaultSpecificHeat, Validators.required],
       'gasFlow': ['', Validators.required],
       'inletTemp': ['', Validators.required],
       'outletTemp': ['', Validators.required],
       'correctionFactor': [1.0, Validators.required],
-      'gasDensity': [0.074887, Validators.required]
+      'gasDensity': [defaultDensity, Validators.required]
     });
   }
 

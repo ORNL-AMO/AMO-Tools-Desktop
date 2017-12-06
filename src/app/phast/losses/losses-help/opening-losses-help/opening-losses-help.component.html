@@ -15,7 +15,11 @@
       Select type
     </div>
     <div class="card-block">
-      <label><u><strong>Description</strong></u></label>
+      <label>
+        <u>
+          <strong>Description</strong>
+        </u>
+      </label>
       <p>
         Select shape of opening (Round or Rectangular/Square).
       </p>
@@ -27,7 +31,11 @@
       Number of Openings of Same Size and Shape
     </div>
     <div class="card-block">
-      <label><u><strong>Description</strong></u></label>
+      <label>
+        <u>
+          <strong>Description</strong>
+        </u>
+      </label>
       <p>
         Give number of openings of the same shape and size.
       </p>
@@ -39,13 +47,22 @@
       Furnace Wall Thickness
     </div>
     <div class="card-block">
-      <label><u><strong>Description</strong></u></label>
+      <label>
+        <u>
+          <strong>Description</strong>
+        </u>
+      </label>
       <p>
-        Value of wall thickness (insulation - refractory etc.) at the location of openings in the wall or doors etc.
-        Use actual measurements if possible or information from the current furnace drawings.
+        Value of wall thickness (insulation - refractory etc.) at the location of openings in the wall or doors etc. Use actual measurements
+        if possible or information from the current furnace drawings.
       </p>
-      <label><u><strong>Input</strong></u></label>
+      <label>
+        <u>
+          <strong>Input</strong>
+        </u>
+      </label>
       <p>
+
         Units: <strong>in</strong> or <strong>mm</strong><br> Minimum Value Allowed: <strong>0</strong>
       </p>
     </div>
@@ -56,15 +73,24 @@
       Length of Openings Or Diameter of Openings
     </div>
     <div class="card-block">
-      <label><u><strong>Description</strong></u></label>
+      <label>
+        <u>
+          <strong>Description</strong>
+        </u>
+      </label>
       <p>
-        Value of length of the openings for square or rectangular openings in the wall or doors etc. Use actual
-        measurements if possible or information from the current furnace drawings. Use value for a typical opening or
-        average value.
+        Value of length of the openings for square or rectangular openings in the wall or doors etc. Use actual measurements if possible
+        or information from the current furnace drawings. Use value for a typical opening or average value.
       </p>
-      <label><u><strong>Input</strong></u></label>
+      <label>
+        <u>
+          <strong>Input</strong>
+        </u>
+      </label>
       <p>
+
         Units: <strong>in</strong> or <strong>mm</strong><br> Minimum Value Allowed: <strong>0</strong><br>
+
       </p>
     </div>
   </div>
@@ -74,13 +100,20 @@
       Height of Openings
     </div>
     <div class="card-block">
-      <label><u><strong>Description</strong></u></label>
+      <label>
+        <u>
+          <strong>Description</strong>
+        </u>
+      </label>
       <p>
-        Value of height of the openings for square or rectangular openings in the wall or doors etc. Use actual
-        measurements if possible or information from the current furnace drawings. Use value for a typical opening or
-        average value.
+        Value of height of the openings for square or rectangular openings in the wall or doors etc. Use actual measurements if possible
+        or information from the current furnace drawings. Use value for a typical opening or average value.
       </p>
-      <label><u><strong>Input</strong></u></label>
+      <label>
+        <u>
+          <strong>Input</strong>
+        </u>
+      </label>
       <p>
         Units: <strong>in</strong> or <strong>mm</strong><br> Minimum Value Allowed: <strong>0</strong><br>
       </p>
@@ -92,13 +125,26 @@
       View Factor
     </div>
     <div class="card-block">
-      <label><u><strong>Description</strong></u></label>
+      <label>
+        <u>
+          <strong>Description</strong>
+        </u>
+      </label>
       <p>
         Fraction of energy exiting a surface, determined by the shape of the opening.
       </p>
-      <label><u><strong>Input</strong></u></label>
       <p>
-        Minimum Value Allowed: <strong>0</strong>
+        <span class="fa fa-search-plus inspect-icon" (click)="showViewFactor()"></span>
+        <img src="assets/images/view-factor-diagram.png" class="view-factor-diagram">
+      </p>
+      <label>
+        <u>
+          <strong>Input</strong>
+        </u>
+      </label>
+      <p>
+        Minimum Value Allowed:
+        <strong>0</strong>
       </p>
     </div>
   </div>
@@ -108,15 +154,24 @@
       Avg. Zone or Radiation Source Temp.
     </div>
     <div class="card-block">
-      <label><u><strong>Description</strong></u></label>
+      <label>
+        <u>
+          <strong>Description</strong>
+        </u>
+      </label>
       <p>
-        Use the furnace zone temperature at the location of the openings. This can be obtained from furnace temperature
-        recorder-indicator. Use an 'average" value of temperature if the openings are in different zones or at
-        different locations.
+        Use the furnace zone temperature at the location of the openings. This can be obtained from furnace temperature recorder-indicator.
+        Use an 'average" value of temperature if the openings are in different zones or at different locations.
       </p>
-      <label><u><strong>Input</strong></u></label>
+      <label>
+        <u>
+          <strong>Input</strong>
+        </u>
+      </label>
       <p>
-        Units: <strong>&#8457;</strong> or <strong>&#8451;</strong>
+        Units:
+        <strong>&#8457;</strong> or
+        <strong>&#8451;</strong>
       </p>
     </div>
   </div>
@@ -126,14 +181,24 @@
       Ambient Temp.
     </div>
     <div class="card-block">
-      <label><u><strong>Description</strong></u></label>
+      <label>
+        <u>
+          <strong>Description</strong>
+        </u>
+      </label>
       <p>
-        Temperature of the area outside the furnace where the openings are located. In most cases this is the ambient
-        temperature in the area where the furnace and openings are located.
+        Temperature of the area outside the furnace where the openings are located. In most cases this is the ambient temperature
+        in the area where the furnace and openings are located.
       </p>
-      <label><u><strong>Input</strong></u></label>
+      <label>
+        <u>
+          <strong>Input</strong>
+        </u>
+      </label>
       <p>
-        Units: <strong>&#8457;</strong> or <strong>&#8451;</strong>
+        Units:
+        <strong>&#8457;</strong> or
+        <strong>&#8451;</strong>
       </p>
     </div>
   </div>
@@ -143,13 +208,24 @@
       Emissivity of the Source
     </div>
     <div class="card-block">
-      <label><u><strong>Description</strong></u></label>
+      <label>
+        <u>
+          <strong>Description</strong>
+        </u>
+      </label>
       <p>
         Emissivity of the radiation source (usually interior of the furnace). The default or suggested value is 0.9
       </p>
-      <label><u><strong>Input</strong></u></label>
+      <label>
+        <u>
+          <strong>Input</strong>
+        </u>
+      </label>
       <p>
-        Minimum Value Allowed: <strong>0</strong><br>Maximum Value Allowed: <strong>1</strong>
+        Minimum Value Allowed:
+        <strong>0</strong>
+        <br>Maximum Value Allowed:
+        <strong>1</strong>
       </p>
     </div>
   </div>
@@ -159,12 +235,15 @@
       Percent of Time Open
     </div>
     <div class="card-block">
-      <label><u><strong>Description</strong></u></label>
+      <label>
+        <u>
+          <strong>Description</strong>
+        </u>
+      </label>
       <p>
-        This represents the time during which the furnace interior is exposed or open to the ambient and heat is lost
-        by radiation. it is expressed as percentage of the total operating time or cycle time. Typical examples
-        including opening of a door for charging and discharging load or opening of a damper for part of the operating
-        time.
+        This represents the time during which the furnace interior is exposed or open to the ambient and heat is lost by radiation.
+        it is expressed as percentage of the total operating time or cycle time. Typical examples including opening of a
+        door for charging and discharging load or opening of a damper for part of the operating time.
       </p>
       <p>
         Units: <strong>%</strong><br> Minimum Value Allowed: <strong>0</strong><br> Maximum Value Allowed: <strong>100</strong>
@@ -177,14 +256,40 @@
       Savings Suggestions
     </div>
     <div class="card-block">
-      <label><u><strong>Description</strong></u></label>
+      <label>
+        <u>
+          <strong>Description</strong>
+        </u>
+      </label>
       <ul>
         <li class="help-general">Use and maintain proper seals to eliminate or reduce size of openings. Repair and maintain the seals</li>
-        <li class="help-general">Watch for proper closing and seals for doors, openings at moving or rotating parts such as rolls, conveyors, rotary kilns etc. Provide and maintain seals</li>
+        <li class="help-general">Watch for proper closing and seals for doors, openings at moving or rotating parts such as rolls, conveyors, rotary
+          kilns etc. Provide and maintain seals</li>
         <li class="help-general">Consider use of "radiation shields" or sight glasses with covers to reduce radiation heat losses</li>
-        <li class="help-general"><strong>Note:</strong> These energy saving measures are for guidance only. Not all measures are applicable under all operating conditions. There may additional measures when considering specific situations and the user is encouraged to review and apply the appropriate measures</li>
+        <li class="help-general">
+          <strong>Note:</strong> These energy saving measures are for guidance only. Not all measures are applicable under all operating
+          conditions. There may additional measures when considering specific situations and the user is encouraged to review
+          and apply the appropriate measures</li>
       </ul>
     </div>
   </div>
 
+</div>
+
+
+
+<div bsModal #viewFactorModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="viewFactorModalHeader"
+  aria-hidden="true" [config]="{backdrop: 'static'}">
+  <div class="modal-dialog modal-lg view-factor-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button class="close" (click)="hideViewFactorModal()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <img src="assets/images/view-factor-diagram.png" class="dialog-image mx-auto">
+      </div>
+    </div>
+  </div>
 </div>

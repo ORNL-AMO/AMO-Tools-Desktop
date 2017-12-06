@@ -26,7 +26,19 @@ export class MeteredFuelFormComponent implements OnInit {
   constructor(private suiteDbService: SuiteDbService, private convertPhastService: ConvertPhastService) { }
 
   ngOnInit() {
-    this.fuelTypes = this.suiteDbService.selectGasFlueGasMaterials();
+    this.getFuelTypes(true);
+  }
+
+  getFuelTypes(bool?: boolean) {
+    if (this.inputs.fuelDescription == 'gas') {
+      this.fuelTypes = this.suiteDbService.selectGasFlueGasMaterials();
+    } else if (this.inputs.fuelDescription == 'solidLiquid') {
+      this.fuelTypes = this.suiteDbService.selectSolidLiquidFlueGasMaterials();
+    }
+    if(!bool){
+      this.inputs.fuelType = undefined;
+      this.inputs.heatingValue = 0;
+    }
   }
 
   focusField(str: string) {

@@ -1,5 +1,4 @@
 <div class="help-panel">
-  <div class="sticky-top">
     <app-charge-material-help [currentField]="currentField" *ngIf="lossesTab == 'charge-material'"></app-charge-material-help>
     <app-wall-losses-help [currentField]="currentField" *ngIf="lossesTab == 'wall-losses'"></app-wall-losses-help>
     <app-atmosphere-losses-help [currentField]="currentField" *ngIf="lossesTab == 'atmosphere-losses'"></app-atmosphere-losses-help>
@@ -17,5 +16,4 @@
     <app-energy-input-exhaust-gas-losses-help [currentField]="currentField" *ngIf="lossesTab == 'energy-input-exhaust-gas'"></app-energy-input-exhaust-gas-losses-help>
     <app-heat-system-efficiency-help [currentField]="currentField" [settings]="settings" *ngIf="lossesTab == 'heat-system-efficiency'"></app-heat-system-efficiency-help>
     <app-operations-help [currentField]="currentField" *ngIf="lossesTab == 'operations'"></app-operations-help>
-  </div>
 </div>
