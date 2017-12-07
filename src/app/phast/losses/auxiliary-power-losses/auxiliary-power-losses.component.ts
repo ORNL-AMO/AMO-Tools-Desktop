@@ -168,6 +168,10 @@ export class AuxiliaryPowerLossesComponent implements OnInit {
     this.fieldChange.emit(str);
   }
 
+  focusOut() {
+    this.fieldChange.emit('default');
+  }
+
   setCompareVals() {
     if (this.isBaseline) {
       this.auxiliaryPowerCompareService.baselineAuxLosses = this.losses.auxiliaryPowerLosses;
