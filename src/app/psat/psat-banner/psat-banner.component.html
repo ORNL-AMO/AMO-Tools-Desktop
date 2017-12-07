@@ -1,5 +1,5 @@
 <div class="banner psat row">
-	<div class="col-4">
+	<div class="col-3">
 		<div class="pull-left">
 			<div *ngIf="assessment" class="title">
 				<h1>{{assessment.name}}</h1>
@@ -8,7 +8,7 @@
 		</div>
 	</div>
 
-	<div class="col-4">
+	<div class="col-6">
 		<div class="row justify-content-center align-items-center pill-row">
 			<ul class="pills-nav">
 				<li [ngClass]="{'active': mainTab == 'system-setup'}" (click)="changeTab('system-setup')">
@@ -27,7 +27,7 @@
 		</div>
 	</div>
 
-	<div class="col-4">
+	<div class="col-3">
 		<a routerLink="/dashboard" class="btn-dashboard pull-right">
 			<span>&times;</span> Back To Dashboard</a>
 	</div>

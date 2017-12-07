@@ -70,18 +70,22 @@ Tabs
   }
   .tabs.subtabs.phast .active a {
     font-weight: bold;
-    border-right: #BF3D00 solid 2px;
-    border-left: #BF3D00 solid 2px;
+    /* border-right: #BF3D00 solid 2px;
+    border-left: #BF3D00 solid 2px; */
     background: white;
   }
+  .tabs.subtabs.phast {
+    border-bottom: #BF3D00 solid 3px;
+  }
+
   .tabs.subtabs.psat {
-    border-bottom: #2980b9 solid 2px;
+    border-bottom: #2980b9 solid 3px;
   }
 
   .tabs.subtabs.psat .active a {
     font-weight: bold;
-    border-right: #2980b9 solid 2px;
-    border-left: #2980b9 solid 2px;
+    /* border-right: #2980b9 solid 2px;
+    border-left: #2980b9 solid 2px; */
     background: white;
   }
   

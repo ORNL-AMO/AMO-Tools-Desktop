@@ -26,3 +26,7 @@
 .disabled .header{
   border-bottom: #ddd solid 1px;
 }
+
+.phast-losses-container{
+    padding-top: 14px;
+}

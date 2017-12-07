@@ -1141,6 +1141,8 @@ Banner
   }
   .banner.psat {
     background: #2980b9;
+    margin-left: 0px;
+    margin-right: 0px;
   }
   .banner.phast {
     background: #BF3D00;

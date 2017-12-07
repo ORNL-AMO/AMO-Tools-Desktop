@@ -13,7 +13,7 @@
       </h5>
     </div>
 
-    <div class="losses-container">
+    <div class="losses-container phast-losses-container">
       <app-charge-material (fieldChange)="changeField($event)" [baselineSelected]="baselineSelected" (savedLoss)="saveModifications()"
         [(losses)]="phast.losses" [addLossToggle]="addLossToggle" [saveClicked]="saveClicked" *ngIf="lossesTab == 'charge-material'"
         [isBaseline]="true" [settings]="settings" [isLossesSetup]="isLossesSetup"></app-charge-material>
@@ -102,9 +102,9 @@
       </button> -->
     </div>
 
-    <div class="losses-container" *ngIf="!isDropdownOpen">
+    <div class="losses-container phast-losses-container" *ngIf="!isDropdownOpen">
 
-      <app-notes [(notes)]="_modifications[modificationIndex].notes" [currentTab]="lossesTab"></app-notes>
+      <!-- <app-notes [(notes)]="_modifications[modificationIndex].notes" [currentTab]="lossesTab"></app-notes> -->
 
       <app-charge-material (fieldChange)="changeField($event)" [baselineSelected]="modificationSelected" (savedLoss)="saveModifications()"
         [(losses)]="_modifications[modificationIndex].phast.losses" [saveClicked]="saveClicked" *ngIf="lossesTab == 'charge-material'"
