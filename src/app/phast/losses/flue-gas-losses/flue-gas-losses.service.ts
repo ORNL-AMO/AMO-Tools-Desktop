@@ -54,7 +54,9 @@ export class FlueGasLossesService {
     return this.formBuilder.group({
       'gasTypeId': [1, Validators.required],
       'flueGasTemperature': ['', Validators.required],
+      'oxygenCalculationMethod': ['', Validators.required],
       'excessAirPercentage': ['', Validators.required],
+      'o2InFlueGas': ['', Validators.required],
       'combustionAirTemperature': ['', Validators.required],
       'fuelTemperature': ['', Validators.required],
       'moistureInAirComposition': ['', Validators.required],
@@ -97,7 +99,9 @@ export class FlueGasLossesService {
     return this.formBuilder.group({
       'gasTypeId': [loss.flueGasByMass.gasTypeId, Validators.required],
       'flueGasTemperature': [loss.flueGasByMass.flueGasTemperature, Validators.required],
+      'oxygenCalculationMethod': [loss.flueGasByMass.oxygenCalculationMethod, Validators.required],
       'excessAirPercentage': [loss.flueGasByMass.excessAirPercentage, Validators.required],
+      'o2InFlueGas': [loss.flueGasByMass.o2InFlueGas, Validators.required],
       'combustionAirTemperature': [loss.flueGasByMass.combustionAirTemperature, Validators.required],
       'fuelTemperature': [loss.flueGasByMass.fuelTemperature, Validators.required],
       'moistureInAirComposition': [loss.flueGasByMass.moistureInAirComposition, Validators.required],
@@ -117,7 +121,9 @@ export class FlueGasLossesService {
     let tmpFlueGas: FlueGasByMass = {
       gasTypeId: form.value.gasTypeId,
       flueGasTemperature: form.value.flueGasTemperature,
+      oxygenCalculationMethod: form.value.oxygenCalculationMethod,
       excessAirPercentage: form.value.excessAirPercentage,
+      o2InFlueGas: form.value.o2InFlueGas,
       combustionAirTemperature: form.value.combustionAirTemperature,
       fuelTemperature: form.value.fuelTemperature,
       ashDischargeTemperature: form.value.ashDischargeTemperature,
