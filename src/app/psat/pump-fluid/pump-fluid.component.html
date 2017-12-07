@@ -1,6 +1,6 @@
 <form #formRef [formGroup]="psatForm">
   <div class="row">
-    <div class="col-12">
+    <div *ngIf="inSetup" class="col-12">
       <div class="header">
         <h3>Pump &amp; Fluid</h3>
       </div>

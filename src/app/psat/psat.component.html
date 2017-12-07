@@ -6,19 +6,19 @@
   <div class="tab-content" *ngIf="mainTab == 'system-setup'">
     <nav class="hide-print">
       <ul class="tabs subtabs progress-tabs psat">
-        <li [ngClass]="{'active': subTab == 'system-basics'}">
+        <li class="fixed-tab-size" [ngClass]="{'active': subTab == 'system-basics'}">
           <a (click)="changeSubTab('system-basics')">
             <span class="step-number">1</span> Assessment Settings</a>
         </li>
-        <li [ngClass]="{'active': subTab == 'pump-fluid'}">
+        <li class="fixed-tab-size" [ngClass]="{'active': subTab == 'pump-fluid'}">
           <a (click)="changeSubTab('pump-fluid')">
             <span class="step-number">2</span> Pump &amp; Fluid</a>
         </li>
-        <li [ngClass]="{'active': subTab == 'motor', 'disabled': checkPumpFluid() }">
+        <li class="fixed-tab-size" [ngClass]="{'active': subTab == 'motor', 'disabled': checkPumpFluid() }">
           <a (click)="changeSubTab('motor')">
             <span class="step-number">3</span> Motor</a>
         </li>
-        <li [ngClass]="{'active': subTab == 'field-data', 'disabled': checkMotor()}">
+        <li class="fixed-tab-size" [ngClass]="{'active': subTab == 'field-data', 'disabled': checkMotor()}">
           <a (click)="changeSubTab('field-data')">
             <span class="step-number">4</span> Field Data</a>
         </li>
@@ -30,11 +30,11 @@
           <app-system-basics *ngIf="subTab == 'system-basics'" [settings]="settings" [saveClicked]="saveClicked" [assessment]="assessment"
             [(psat)]="_psat" [isAssessmentSettings]="isAssessmentSettings" (updateSettings)="getSettings($event)" (updateAssessment)="save()"></app-system-basics>
           <app-pump-fluid *ngIf="subTab == 'pump-fluid'" (isValid)="setValid()" (isInvalid)="setInvalid()" [saveClicked]="saveClicked"
-            [(psat)]="_psat" (saved)="save()" [selected]="true" [settings]="settings" [baseline]="true"></app-pump-fluid>
+            [(psat)]="_psat" (saved)="save()" [selected]="true" [settings]="settings" [baseline]="true" [inSetup]="true"></app-pump-fluid>
           <app-motor *ngIf="subTab == 'motor'" (isValid)="setValid()" (isInvalid)="setInvalid()" [saveClicked]="saveClicked" [(psat)]="_psat"
-            (saved)="save()" [selected]="true" [settings]="settings" [baseline]="true"></app-motor>
+            (saved)="save()" [selected]="true" [settings]="settings" [baseline]="true" [inSetup]="true"></app-motor>
           <app-field-data *ngIf="subTab == 'field-data'" (isValid)="setValid()" (isInvalid)="setInvalid()" [saveClicked]="saveClicked"
-            [(psat)]="_psat" (saved)="save()" [selected]="true" [settings]="settings" [baseline]="true"></app-field-data>
+            [(psat)]="_psat" (saved)="save()" [selected]="true" [settings]="settings" [baseline]="true" [inSetup]="true"></app-field-data>
         </div>
         <div class="col-6 help-panel">
           <app-help-panel [psat]="_psat" [settings]="settings" [currentTab]="subTab" [inSetup]="true"></app-help-panel>

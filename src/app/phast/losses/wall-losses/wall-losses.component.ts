@@ -74,7 +74,8 @@ export class WallLossesComponent implements OnInit {
         let tmpLoss = {
           form: this.wallLossesService.getWallLossForm(loss),
           name: 'Loss #' + (this._wallLosses.length + 1),
-          heatLoss: loss.heatLoss || 0.0
+          heatLoss: loss.heatLoss || 0.0,
+          collapse: false
         };
         //attempt to calculate tmpLoss results
         this.calculate(tmpLoss);
@@ -147,8 +148,13 @@ export class WallLossesComponent implements OnInit {
     this._wallLosses.push({
       form: this.wallLossesService.initForm(),
       name: 'Loss #' + (this._wallLosses.length + 1),
-      heatLoss: 0.0
+      heatLoss: 0.0,
+      collapse: false
     });
+  }
+
+  collapseLoss(loss: any){
+    loss.collapse = !loss.collapse;
   }
 
   removeLoss(lossIndex: number) {

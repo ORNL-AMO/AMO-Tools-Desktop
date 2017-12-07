@@ -35,6 +35,9 @@ export class FieldDataComponent implements OnInit {
   closeHeadTool = new EventEmitter<boolean>();
   @Input()
   baseline: boolean;
+  @Input()
+  inSetup: boolean;
+
 
   counter: any;
 
@@ -84,7 +87,7 @@ export class FieldDataComponent implements OnInit {
       this.checkMargin(true);
     }
     this.checkHead(true);
-    if(!this.baseline){
+    if (!this.baseline) {
       this.optimizeCalc(this.psatForm.value.optimizeCalculation);
     }
   }
@@ -118,28 +121,28 @@ export class FieldDataComponent implements OnInit {
   }
 
   disableForm() {
-    // this.elements = this.formRef.nativeElement.elements;
-    // for (var i = 0, len = this.elements.length; i < len; ++i) {
-    //   this.elements[i].disabled = true;
-    // }
-    // this.elements = this.formRef2.nativeElement.elements;
-    // for (var i = 0, len = this.elements.length; i < len; ++i) {
-    //   this.elements[i].disabled = true;
-    // }
-    this.psatForm.disable();
+    this.elements = this.formRef.nativeElement.elements;
+    for (var i = 0, len = this.elements.length; i < len; ++i) {
+      this.elements[i].disabled = true;
+    }
+    this.elements = this.formRef2.nativeElement.elements;
+    for (var i = 0, len = this.elements.length; i < len; ++i) {
+      this.elements[i].disabled = true;
+    }
+    //this.psatForm.disable();
 
   }
 
   enableForm() {
-    // this.elements = this.formRef.nativeElement.elements;
-    // for (var i = 0, len = this.elements.length; i < len; ++i) {
-    //   this.elements[i].disabled = false;
-    // }
-    // this.elements = this.formRef2.nativeElement.elements;
-    // for (var i = 0, len = this.elements.length; i < len; ++i) {
-    //   this.elements[i].disabled = false;
-    // }
-    this.psatForm.enable();
+    this.elements = this.formRef.nativeElement.elements;
+    for (var i = 0, len = this.elements.length; i < len; ++i) {
+      this.elements[i].disabled = false;
+    }
+    this.elements = this.formRef2.nativeElement.elements;
+    for (var i = 0, len = this.elements.length; i < len; ++i) {
+      this.elements[i].disabled = false;
+    }
+    //this.psatForm.enable();
   }
 
   focusField(str: string) {

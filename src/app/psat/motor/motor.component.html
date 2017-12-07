@@ -1,5 +1,5 @@
 <form #formRef [formGroup]="psatForm">
-  <div class="row">
+  <div *ngIf="inSetup" class="row">
     <div class="col-12">
       <div class="header">
         <h3>Motor</h3>

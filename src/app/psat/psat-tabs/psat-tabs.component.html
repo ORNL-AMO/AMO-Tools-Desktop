@@ -1,11 +1,11 @@
 <ul class="tabs subtabs psat">
-  <li [ngClass]="{'active': currentTab == 'explore-opportunities'}">
+  <li class="fixed-tab-size" [ngClass]="{'active': currentTab == 'explore-opportunities'}">
     <a (click)="changeTab('explore-opportunities')">Explore Opportunities</a>
   </li><!--
-  --><li [ngClass]="{'active': currentTab == 'modify-conditions'}">
+  --><li class="fixed-tab-size" [ngClass]="{'active': currentTab == 'modify-conditions'}">
   <a (click)="changeTab('modify-conditions')">Modify Conditions</a>
   </li><!--
-     --><li [ngClass]="{'active': currentTab == 'calculators'}">
+     --><li class="fixed-tab-size" [ngClass]="{'active': currentTab == 'calculators'}">
       <a (click)="changeTab('calculators')">Calculators</a>
     </li><!--
  <li [ngClass]="{'active': currentTab == 'system-curve'}">

@@ -30,7 +30,9 @@ export class MotorComponent implements OnInit {
   settings: Settings;
   @Input()
   baseline: boolean;
-
+  @Input()
+  inSetup: boolean;
+  
   @ViewChild('formRef') formRef: ElementRef;
   elements: any;
 

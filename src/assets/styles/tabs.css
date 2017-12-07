@@ -44,10 +44,13 @@ Tabs
     font-weight: bold;
     border-bottom: #fff solid 1px;
   }
+  
+  .fixed-tab-size{
+    width: 200px;
+  }
    
   /* Sub Tabs */
   .tabs.subtabs {
-    text-align: center;
     background: #ececec;
     -webkit-box-shadow: 0px 1px 4px 0px rgba(0,0,0,0.2);
     -moz-box-shadow: 0px 1px 4px 0px rgba(0,0,0,0.2);

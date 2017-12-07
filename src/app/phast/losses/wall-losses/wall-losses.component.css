@@ -1,3 +1,17 @@
 .adjustment-card{
     width:100%;
 }
+
+.card-form{
+    border: none;
+    padding-bottom: 0px;
+}
+
+.fa{
+    font-size: 24px;
+}
+
+.fa:hover{
+    font-weight: bold;
+    cursor: pointer;
+}
