@@ -89,12 +89,12 @@ export class GasCoolingLossesFormComponent implements OnInit {
       this.startSavePolling();
     }
     if (this.lossesForm.value.avgSpecificHeat < 0) {
-      this.specificHeatError = 'Specific Heat must be equal or grater than 0';
+      this.specificHeatError = 'Specific Heat must be equal or greater than 0';
     } else {
       this.specificHeatError = null;
     }
     if (this.lossesForm.value.gasFlow < 0) {
-      this.gasFlowError = 'Gas Flow must be equal or grater than 0';
+      this.gasFlowError = 'Gas Flow must be equal or greater than 0';
     } else {
       this.gasFlowError = null;
     }

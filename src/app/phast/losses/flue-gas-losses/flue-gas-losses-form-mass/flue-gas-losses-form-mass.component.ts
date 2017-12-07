@@ -190,12 +190,12 @@ export class FlueGasLossesFormMassComponent implements OnInit {
       this.startSavePolling();
     }
     if (this.flueGasLossForm.value.moistureInAirComposition < 0) {
-      this.moistureInAirCompositionError = 'Moisture in Air Combustion must be equal or grater than 0';
+      this.moistureInAirCompositionError = 'Moisture in Air Combustion must be equal or greater than 0';
     } else {
       this.moistureInAirCompositionError = null;
     }
     if (this.flueGasLossForm.value.unburnedCarbonInAsh < 0 || this.flueGasLossForm.value.unburnedCarbonInAsh > 100) {
-      this.unburnedCarbonInAshError = 'Unburned Carbon in Ash must be equal or grater than 0 and less than or equal to 100%';
+      this.unburnedCarbonInAshError = 'Unburned Carbon in Ash must be equal or greater than 0 and less than or equal to 100%';
     } else {
       this.unburnedCarbonInAshError = null;
     }
