@@ -9,7 +9,7 @@
     <div class="header">
       <h3>Baseline</h3>
     </div>
-    <div class="losses-container">
+    <div class="losses-container psat-losses-container">
       <!--<app-system-basics *ngIf="modifyTab == 'system-basics'"></app-system-basics>-->
       <app-pump-fluid *ngIf="modifyTab == 'pump-fluid'" [selected]="baselineSelected" [saveClicked]="saveClicked" [(psat)]="psat"
         (saved)="save()" [settings]="settings" [baseline]="true"></app-pump-fluid>
@@ -28,14 +28,6 @@
     <!-- Modification Header -->
     <div class="header" *ngIf="!editModification">
       <h3 *ngIf="_modifications[modificationIndex]">{{_modifications[modificationIndex].psat.name}}</h3>
-      <!-- <button class="pull-right" (click)="toggleDropdown()" [disabled]="!modifiedSelected"> -->
-        <!--         <span class="fa fa-caret-down" *ngIf="!isDropdownOpen"></span>
-        <span class="fa fa-caret-up" *ngIf="isDropdownOpen"></span> -->
-<!-- 
-        <span class="" *ngIf="!isDropdownOpen">Change / Add</span>
-        <span class="" *ngIf="isDropdownOpen">Cancel</span>
-      </button> -->
-
       <h5 class="pull-right panel-add">
         <a class="small" [ngClass]="{'disabled': modifiedSelected == false}">
           <span *ngIf="!isDropdownOpen" (click)="toggleDropdown()">Change / Add</span>
@@ -45,10 +37,10 @@
     </div>
 
     <!-- Forms -->
-    <div class="losses-container" *ngIf="!isDropdownOpen">
+    <div class="losses-container psat-losses-container" *ngIf="!isDropdownOpen">
 
       <!-- Notes -->
-      <app-modify-conditions-notes [(notes)]="_modifications[modificationIndex].notes" [currentTab]="modifyTab"></app-modify-conditions-notes>
+      <!-- <app-modify-conditions-notes [(notes)]="_modifications[modificationIndex].notes" [currentTab]="modifyTab"></app-modify-conditions-notes> -->
 
       <!--<app-system-basics *ngIf="modifyTab == 'system-basics'"></app-system-basics>-->
       <app-pump-fluid *ngIf="modifyTab == 'pump-fluid'" [selected]="modifiedSelected" [saveClicked]="saveClicked" [(psat)]="_modifications[modificationIndex].psat"
@@ -94,8 +86,8 @@
   </div>
 
   <!-- Help Panel -->
-  <div class="col-4">
-    <app-help-panel [psat]="psat" [currentTab]="modifyTab" [settings]="settings"></app-help-panel>
+  <div class="col-4" style="padding-left: 0px; padding-right: 0px;">
+    <app-help-panel [psat]="psat" [currentTab]="modifyTab" [settings]="settings" [(modification)]="_modifications[modificationIndex]"></app-help-panel>
   </div>
 
 </div>

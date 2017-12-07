@@ -2,3 +2,7 @@
     padding-top: 15px;
     padding-bottom: 15px;
 }
+
+.head-tool-toggle-switch .btn{
+    background-color: #2980b9;
+}

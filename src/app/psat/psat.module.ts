@@ -61,7 +61,6 @@ import { PsatDiagramComponent } from './psat-diagram/psat-diagram.component';
     InputSummaryComponent,
     OutputSummaryComponent,
     ModifyConditionsTabsComponent,
-    ModifyConditionsNotesComponent,
     EditConditionPropertiesComponent,
     ExploreOpportunitiesComponent,
     ExploreOpportunitiesFormComponent,

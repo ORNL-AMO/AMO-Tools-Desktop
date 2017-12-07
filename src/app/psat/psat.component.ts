@@ -52,6 +52,7 @@ export class PsatComponent implements OnInit {
   viewingReport: boolean = false;
   tabBeforeReport: string = 'explore-opportunities';
   mainTab: string = 'system-setup';
+  calcTab: string;
   constructor(
     private location: Location,
     private assessmentService: AssessmentService,
@@ -98,6 +99,10 @@ export class PsatComponent implements OnInit {
       })
       this.psatService.secondaryTab.subscribe(val => {
         this.currentTab = val;
+      })
+
+      this.psatService.calcTab.subscribe(val => {
+        this.calcTab = val;
       })
     })
   }

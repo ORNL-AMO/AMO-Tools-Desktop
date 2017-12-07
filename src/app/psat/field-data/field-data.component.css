@@ -24,4 +24,9 @@
     padding-bottom: 0px;
     padding-left: 15px;
     padding-right: 15px;
+    background-color: #ececec;
+}
+
+.modal-header{
+    background-color: #2980b9;
 }

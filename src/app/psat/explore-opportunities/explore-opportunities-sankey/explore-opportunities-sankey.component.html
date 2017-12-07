@@ -1,8 +1,6 @@
-<div class="text-center">
-  <div class="container">
-    <form>
-        <label class="radio-inline" style="padding: 20px;"><input type="radio" id="baseline" name="optradio" value="Baseline" [(ngModel)]="selectedView" (change)="createSankey()">Baseline</label>
-        <label class="radio-inline" style="padding: 20px;"><input type="radio" id="modified" name="optradio" value="Modified" [(ngModel)]="selectedView" (change)="createSankey()">Modified</label>
-    </form>
+<div class="row justify-content-center sankey-toggle-switch">
+    <div class="btn-group align-self-center">
+      <button type="button" class="btn btn-secondary" (click)="createSankey('Baseline')" [ngClass]="{'active': selectedView == 'Baseline'}">Baseline</button>
+      <button type="button" class="btn btn-secondary" (click)="createSankey('Modified')" [ngClass]="{'active': selectedView == 'Modified'}">Modification</button>
+    </div>
   </div>
-</div>

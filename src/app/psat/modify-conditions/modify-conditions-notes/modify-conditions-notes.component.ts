@@ -10,6 +10,7 @@ export class ModifyConditionsNotesComponent implements OnInit {
   notes: Notes;
   @Input()
   currentTab: string;
+
   constructor() { }
 
   ngOnInit() {
