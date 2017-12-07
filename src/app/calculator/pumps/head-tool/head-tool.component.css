@@ -6,3 +6,15 @@
 .head-tool-toggle-switch .btn{
     background-color: #2980b9;
 }
+
+
+.button-row{
+    padding-top: 10px;
+    padding-bottom: 10px;
+    background: #2980b9;
+}
+
+.save-button{
+    background: white;
+    color: black;
+}

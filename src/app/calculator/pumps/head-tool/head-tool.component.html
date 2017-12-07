@@ -96,14 +96,14 @@
 
 
 <!-- <div class="row justify-content-center" *ngIf="settingsForm && showSettings">
-          <div class="col-4">
-            <app-psat-settings [(settingsForm)]="settingsForm"></app-psat-settings>
-          </div>
-        </div>
-        <div class="row button-row">
-          <div class="col-12">
-            <button class="btn btn-primary pull-right" (click)="save()" *ngIf="inAssessment" [disabled]="!canSave">Save to Assessment</button>
-            <button class="btn btn-secondary pull-left" (click)="cancelSettings()" *ngIf="showSettings">Cancel</button>
-            <button class="btn btn-secondary pull-right" (click)="applySettings()" *ngIf="showSettings">Apply Settings</button>
-          </div>
-        </div> -->
+  <div class="col-4">
+    <app-psat-settings [(settingsForm)]="settingsForm"></app-psat-settings>
+  </div>
+</div> -->
+<div class="row button-row" *ngIf="inAssessment">
+  <div class="col-12">
+    <button class="btn btn-primary pull-right save-button" (click)="save()" [disabled]="!canSave">Save to Assessment</button>
+    <!-- <button class="btn btn-secondary pull-left" (click)="cancelSettings()" *ngIf="showSettings">Cancel</button>
+    <button class="btn btn-secondary pull-right" (click)="applySettings()" *ngIf="showSettings">Apply Settings</button> -->
+  </div>
+</div>

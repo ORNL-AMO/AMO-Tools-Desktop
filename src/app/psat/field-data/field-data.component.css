@@ -30,3 +30,15 @@
 .modal-header{
     background-color: #2980b9;
 }
+
+.fa-square-o, .fa-check-square-o{
+    /* font-size: 22px; */
+}
+.fa-square-o:hover, .fa-check-square-o:hover{
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.form-group.opt-group label{
+    width: 100%;
+}

@@ -58,10 +58,7 @@ Tabs
     display: inline-block;
   }
   .tabs.subtabs a {
-    padding-right: 8px;
-    padding-left: 8px;
-    padding-top: 8px;
-    padding-bottom: 4px;
+    padding:10px;
     font-size: 16px;
     display: block;
     color: #0F0F0F;
@@ -73,7 +70,8 @@ Tabs
   }
   .tabs.subtabs.phast .active a {
     font-weight: bold;
-    border-bottom: #BF3D00 groove 2px;
+    border-right: #BF3D00 solid 2px;
+    border-left: #BF3D00 solid 2px;
     background: white;
   }
   .tabs.subtabs.psat {
@@ -82,7 +80,8 @@ Tabs
 
   .tabs.subtabs.psat .active a {
     font-weight: bold;
-    border-bottom: #2980b9 groove 7px;
+    border-right: #2980b9 solid 2px;
+    border-left: #2980b9 solid 2px;
     background: white;
   }
   

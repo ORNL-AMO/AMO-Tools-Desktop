@@ -1092,8 +1092,6 @@ Footer
 
 
 .pills-nav {
-  margin: 0;
-  padding: 0;
   display: flex;
 }
   .pills-nav li {
@@ -1183,10 +1181,10 @@ Banner
   padding: 0 10px;
 }
 .banner .title, .banner .pills-nav {
-  float: left;
+
 }
 .banner .pills-nav {
-  margin: 5px 0 0 12px;
+
 }
 /*.banner.psat .title {
   color: #fff;

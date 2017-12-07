@@ -84,6 +84,9 @@ export class FieldDataComponent implements OnInit {
       this.checkMargin(true);
     }
     this.checkHead(true);
+    if(!this.baseline){
+      this.optimizeCalc(this.psatForm.value.optimizeCalculation);
+    }
   }
 
   ngAfterViewInit() {
@@ -115,26 +118,28 @@ export class FieldDataComponent implements OnInit {
   }
 
   disableForm() {
-    this.elements = this.formRef.nativeElement.elements;
-    for (var i = 0, len = this.elements.length; i < len; ++i) {
-      this.elements[i].disabled = true;
-    }
-    this.elements = this.formRef2.nativeElement.elements;
-    for (var i = 0, len = this.elements.length; i < len; ++i) {
-      this.elements[i].disabled = true;
-    }
+    // this.elements = this.formRef.nativeElement.elements;
+    // for (var i = 0, len = this.elements.length; i < len; ++i) {
+    //   this.elements[i].disabled = true;
+    // }
+    // this.elements = this.formRef2.nativeElement.elements;
+    // for (var i = 0, len = this.elements.length; i < len; ++i) {
+    //   this.elements[i].disabled = true;
+    // }
+    this.psatForm.disable();
 
   }
 
   enableForm() {
-    this.elements = this.formRef.nativeElement.elements;
-    for (var i = 0, len = this.elements.length; i < len; ++i) {
-      this.elements[i].disabled = false;
-    }
-    this.elements = this.formRef2.nativeElement.elements;
-    for (var i = 0, len = this.elements.length; i < len; ++i) {
-      this.elements[i].disabled = false;
-    }
+    // this.elements = this.formRef.nativeElement.elements;
+    // for (var i = 0, len = this.elements.length; i < len; ++i) {
+    //   this.elements[i].disabled = false;
+    // }
+    // this.elements = this.formRef2.nativeElement.elements;
+    // for (var i = 0, len = this.elements.length; i < len; ++i) {
+    //   this.elements[i].disabled = false;
+    // }
+    this.psatForm.enable();
   }
 
   focusField(str: string) {
@@ -321,17 +326,29 @@ export class FieldDataComponent implements OnInit {
     }
   }
 
-  checkHead(bool?: boolean){
-    if(!bool){
+  checkHead(bool?: boolean) {
+    if (!bool) {
       this.startSavePolling();
     }
-    if(this.psatForm.value.head < 0){
+    if (this.psatForm.value.head < 0) {
       this.headError = 'Head cannot be negative';
-    }else{
+    } else {
       this.headError = null;
     }
   }
 
+  optimizeCalc(bool: boolean) {
+    if (!bool) {
+      this.psatForm.controls.sizeMargin.disable();
+      this.psatForm.controls.fixedSpeed.disable();
+    } else {
+      this.psatForm.controls.sizeMargin.enable();
+      this.psatForm.controls.fixedSpeed.enable();
+    }
+    this.psatForm.patchValue({
+      optimizeCalculation: bool
+    });
+  }
 
   // subtractViscosity() {
   //   this.psatForm.value.viscosity = this.psatForm.value.viscosity - 1
