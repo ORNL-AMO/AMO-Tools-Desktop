@@ -1,5 +1,6 @@
-<div *ngIf="settingsTab == 'energy-cost'">
+<div *ngIf="settingsTab == 'energy-costs'">
   <div class="help-panel">
+    <h3>ENERGY COSTS HELP</h3>
     <h3>Your system basics helps define the units of measure and other information related to the system you are modeling for this
       assessment.</h3>
     <p class="text-muted">
@@ -8,11 +9,21 @@
   </div>
 </div>
 
-<div *ngIf="settingsTab == 'operation-cost'">
+<div *ngIf="settingsTab == 'operating-hours'">
   <div class="help-panel">
-    <h3>Something bla blablablabalbalblalbalbal</h3>
+    <h3>OP HOURS HELP</h3>
     <p class="text-muted">
       Units of Measure are inherited by default from your Application Settings. Units of Measure can be customized for this assessment.
     </p>
   </div>
 </div>
+
+<div *ngIf="settingsTab == 'system-basics'">
+  <div class="help-panel">
+    <h3>SYSTEM BASICS HELP</h3>
+    <p class="text-muted">
+      Units of Measure are inherited by default from your Application Settings. Units of Measure can be customized for this assessment.
+    </p>
+  </div>
+</div>
+
