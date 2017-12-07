@@ -149,17 +149,17 @@ checkInputError(bool?: boolean) {
     this.startSavePolling();
   }
   if (this.chargeMaterialForm.value.materialSpecificHeatOfSolidMaterial < 0) {
-        this.specificHeatError = 'Average Specific Heat must be equal or grater than 0';
+        this.specificHeatError = 'Average Specific Heat must be equal or greater than 0';
       } else {
         this.specificHeatError = null;
       }
   if (this.chargeMaterialForm.value.materialLatentHeatOfFusion < 0) {
-        this.latentHeatError = 'Latent Heat of Fusion must be equal or grater than 0';
+        this.latentHeatError = 'Latent Heat of Fusion must be equal or greater than 0';
       } else {
         this.latentHeatError = null;
       }
   if (this.chargeMaterialForm.value.materialHeatOfLiquid < 0) {
-        this.heatOfLiquidError = 'Specific heat of liquid from molten material must be equal or grater than 0';
+        this.heatOfLiquidError = 'Specific heat of liquid from molten material must be equal or greater than 0';
       } else {
         this.heatOfLiquidError = null;
       }
@@ -169,22 +169,22 @@ checkInputError(bool?: boolean) {
         this.feedRateError = null;
       }
   if (this.chargeMaterialForm.value.waterContentAsCharged < 0 || this.chargeMaterialForm.value.waterContentAsCharged > 100) {
-        this.waterChargedError = 'Water Content as Charged must be equal or grater than 0 and less than or equal to 100%';
+        this.waterChargedError = 'Water Content as Charged must be equal or greater than 0 and less than or equal to 100%';
       } else {
         this.waterChargedError = null;
       }
   if (this.chargeMaterialForm.value.waterContentAsDischarged < 0 || this.chargeMaterialForm.value.waterContentAsDischarged > 100) {
-        this.waterDischargedError = 'Water Content as Discharged must be equal or grater than 0 and less than or equal to 100%';
+        this.waterDischargedError = 'Water Content as Discharged must be equal or greater than 0 and less than or equal to 100%';
       } else {
         this.waterDischargedError = null;
       }
   if (this.chargeMaterialForm.value.percentChargeMelted < 0 || this.chargeMaterialForm.percentChargeMelted > 100) {
-        this.chargeMeltedError = 'Charge Melted must be equal or grater than 0 and less than or equal to 100%';
+        this.chargeMeltedError = 'Charge Melted must be equal or greater than 0 and less than or equal to 100%';
       } else {
         this.chargeMeltedError = null;
       }
   if (this.chargeMaterialForm.value.percentChargeReacted < 0 || this.chargeMaterialForm.value.percentChargeReacted > 100) {
-        this.chargeSolidReactedError = 'Charge Reacted must be equal or grater than 0 and less than or equal to 100%';
+        this.chargeSolidReactedError = 'Charge Reacted must be equal or greater than 0 and less than or equal to 100%';
       } else {
         this.chargeSolidReactedError = null;
       }

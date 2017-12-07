@@ -99,12 +99,12 @@ export class FixtureLossesFormComponent implements OnInit {
       this.startSavePolling();
     }
     if (this.lossesForm.value.specificHeat < 0) {
-      this.specificHeatError = 'Specific Heat must be equal or grater than 0';
+      this.specificHeatError = 'Specific Heat must be equal or greater than 0';
     } else {
       this.specificHeatError = null;
     }
     if (this.lossesForm.value.feedRate < 0) {
-      this.feedRateError = 'Fixture Weight feed rate must be grater than 0';
+      this.feedRateError = 'Fixture Weight feed rate must be greater than 0';
     } else {
       this.feedRateError = null;
     }

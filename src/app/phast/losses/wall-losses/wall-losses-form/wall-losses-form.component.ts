@@ -130,12 +130,12 @@ export class WallLossesFormComponent implements OnInit {
       this.startSavePolling();
     }
     if (this.wallLossesForm.value.windVelocity < 0) {
-      this.windVelocityError = 'Wind Velocity must be equal or grater than 0';
+      this.windVelocityError = 'Wind Velocity must be equal or greater than 0';
     } else {
       this.windVelocityError = null;
     }
     if (this.wallLossesForm.value.surfaceArea < 0 ) {
-      this.surfaceAreaError = 'Total Outside Surface Area must be equal or grater than 0';
+      this.surfaceAreaError = 'Total Outside Surface Area must be equal or greater than 0';
     } else {
       this.surfaceAreaError = null;
     }

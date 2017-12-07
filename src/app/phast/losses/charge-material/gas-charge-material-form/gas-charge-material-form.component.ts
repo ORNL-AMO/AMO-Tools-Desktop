@@ -120,27 +120,27 @@ export class GasChargeMaterialFormComponent implements OnInit {
       this.startSavePolling();
     }
     if (this.chargeMaterialForm.value.materialSpecificHeat < 0) {
-      this.specificHeatGasError = 'Specific Heat of Gas must be equal or grater than 0';
+      this.specificHeatGasError = 'Specific Heat of Gas must be equal or greater than 0';
     } else {
       this.specificHeatGasError = null;
     }
     if (this.chargeMaterialForm.value.feedRate < 0) {
-      this.feedGasRateError = 'Feed Rate for Gas Mixture must be grater than 0';
+      this.feedGasRateError = 'Feed Rate for Gas Mixture must be greater than 0';
     } else {
       this.feedGasRateError = null;
     }
     if (this.chargeMaterialForm.value.vaporInGas < 0 || this.chargeMaterialForm.value.vaporInGas > 100) {
-      this.gasMixVaporError = 'Vapor in Gas Mixture must be equal or grater than 0 and less than or equal to 100%';
+      this.gasMixVaporError = 'Vapor in Gas Mixture must be equal or greater  than 0 and less than or equal to 100%';
     } else {
       this.gasMixVaporError = null;
     }
     if (this.chargeMaterialForm.value.specificHeatOfVapor < 0) {
-      this.specificHeatGasVaporError = 'Specific Heat of Vapor must be equal or grater than 0';
+      this.specificHeatGasVaporError = 'Specific Heat of Vapor must be equal or greater than 0';
     } else {
       this.specificHeatGasVaporError = null;
     }
     if (this.chargeMaterialForm.value.gasReacted < 0 || this.chargeMaterialForm.value.gasReacted > 100) {
-      this.feedGasReactedError = 'Feed Gas Reacted must be equal or grater than 0 and less than or equal to 100%';
+      this.feedGasReactedError = 'Feed Gas Reacted must be equal or greater than 0 and less than or equal to 100%';
     } else {
       this.feedGasReactedError = null;
     }
