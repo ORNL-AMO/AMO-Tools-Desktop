@@ -692,7 +692,7 @@ export class PsatService {
       'efficiency': [''],
       'motorVoltage': ['', Validators.required],
       'fullLoadAmps': ['', Validators.required],
-      'sizeMargin': [''],
+      'sizeMargin': [0, Validators.required],
       'operatingFraction': ['', Validators.required],
       'costKwHr': ['', Validators.required],
       'flowRate': ['', Validators.required],
@@ -729,7 +729,7 @@ export class PsatService {
       'efficiency': [psatInputs.efficiency],
       'motorVoltage': [psatInputs.motor_rated_voltage, Validators.required],
       'fullLoadAmps': [psatInputs.motor_rated_fla, Validators.required],
-      'sizeMargin': [psatInputs.margin],
+      'sizeMargin': [psatInputs.margin, Validators.required],
       'operatingFraction': [psatInputs.operating_fraction, Validators.required],
       'costKwHr': [psatInputs.cost_kw_hour, Validators.required],
       'flowRate': [psatInputs.flow_rate, Validators.required],
@@ -751,7 +751,7 @@ export class PsatService {
     let pumpStyleEnum = this.getPumpStyleEnum(form.value.pumpType);
     let efficiencyClassEnum = this.getEfficienyClassEnum(form.value.efficiencyClass);
     let driveEnum = this.getDriveEnum(form.value.drive);
-    let fixedSpeedEnum = this.getFixedSpeedEmum(form.value.fixedSpeed);
+    // let fixedSpeedEnum = this.getFixedSpeedEmum(form.value.fixedSpeed);
     let loadEstMethodEnum = this.getLoadEstimationEnum(form.value.loadEstimatedMethod);
 
     let tmpPsatInputs: PsatInputs = {
@@ -762,7 +762,7 @@ export class PsatService {
       kinematic_viscosity: form.value.viscosity,
       specific_gravity: form.value.gravity,
       stages: form.value.stages,
-      fixed_speed: fixedSpeedEnum,
+      fixed_speed: form.value.fixedSpeed,
       line_frequency: lineFreqEnum,
       motor_rated_power: form.value.horsePower,
       motor_rated_speed: form.value.motorRPM,
