@@ -46,7 +46,7 @@ Tabs
   }
   
   .fixed-tab-size{
-    width: 200px;
+    min-width: 200px;
   }
    
   /* Sub Tabs */
@@ -65,7 +65,7 @@ Tabs
     font-size: 16px;
     display: block;
     color: #0F0F0F;
-   }
+  }
   .tabs.subtabs a:hover {
     text-decoration: underline;
     background: #E5E7E9;

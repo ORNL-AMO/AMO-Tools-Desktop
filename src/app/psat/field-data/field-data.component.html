@@ -96,7 +96,7 @@
           value="true" (change)="focusField('optimizeCalculation')">Optimize Pump and Motor combination, automatically</label>
     </div> -->
     <div class="form-group opt-group">
-      <label class="group-label">
+      <label>
         <span *ngIf="!psatForm.value.optimizeCalculation" class="fa fa-square-o" (click)="optimizeCalc(true)"></span>
         <span *ngIf="psatForm.value.optimizeCalculation" class="fa fa-check-square-o" (click)="optimizeCalc(false)"></span>
         Optimize Pump and Motor combination automatically</label>

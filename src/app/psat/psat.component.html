@@ -26,7 +26,7 @@
     </nav>
 
     <div class="row tab-content psat">
-      <div class="col-6 panel-column modification">
+      <div class="col-6 panel-column modification" [ngClass]="{'modal-open': isModalOpen == true}">
           <app-system-basics *ngIf="subTab == 'system-basics'" [settings]="settings" [saveClicked]="saveClicked" [assessment]="assessment"
             [(psat)]="_psat" [isAssessmentSettings]="isAssessmentSettings" (updateSettings)="getSettings($event)" (updateAssessment)="save()"></app-system-basics>
           <app-pump-fluid *ngIf="subTab == 'pump-fluid'" (isValid)="setValid()" (isInvalid)="setInvalid()" [saveClicked]="saveClicked"
@@ -34,7 +34,7 @@
           <app-motor *ngIf="subTab == 'motor'" (isValid)="setValid()" (isInvalid)="setInvalid()" [saveClicked]="saveClicked" [(psat)]="_psat"
             (saved)="save()" [selected]="true" [settings]="settings" [baseline]="true" [inSetup]="true"></app-motor>
           <app-field-data *ngIf="subTab == 'field-data'" (isValid)="setValid()" (isInvalid)="setInvalid()" [saveClicked]="saveClicked"
-            [(psat)]="_psat" (saved)="save()" [selected]="true" [settings]="settings" [baseline]="true" [inSetup]="true"></app-field-data>
+            [(psat)]="_psat" (saved)="save()" [selected]="true" [settings]="settings" [baseline]="true" [inSetup]="true" (openHeadTool)="modalOpen()" (closeHeadTool)="modalClose()"></app-field-data>
         </div>
         <div class="col-6 help-panel">
           <app-help-panel [psat]="_psat" [settings]="settings" [currentTab]="subTab" [inSetup]="true"></app-help-panel>
@@ -55,7 +55,7 @@
     <app-modify-conditions *ngIf="currentTab == 'modify-conditions'" [assessment]="assessment" [settings]="settings" [saveClicked]="saveClicked"
       [(psat)]="_psat" (saved)="save()"></app-modify-conditions>
   </div>
-  <div class="tab-content" *ngIf="mainTab == 'assessment' && currentTab == 'calculators'">
+  <div class="tab-content" *ngIf="mainTab == 'calculators'">
     <app-system-curve *ngIf="calcTab == 'system-curve'" [inPsat]="true" [psat]="_psat" [settings]="settings"></app-system-curve>
     <app-achievable-efficiency *ngIf="calcTab == 'achievable-efficiency'" [inPsat]="true" [settings]="settings" [psat]="_psat"></app-achievable-efficiency>
     <app-motor-performance *ngIf="calcTab == 'motor-performance'" [inPsat]="true" [psat]="_psat" [settings]="settings"></app-motor-performance>

@@ -366,59 +366,61 @@ export class FieldDataComponent implements OnInit {
 
   //used to add classes to inputs with different baseline vs modification values
   initDifferenceMonitor() {
-    let doc = this.windowRefService.getDoc();
+    if (this.inSetup) {
+      let doc = this.windowRefService.getDoc();
 
-    //operating fraction
-    this.compareService.operating_fraction_different.subscribe((val) => {
-      let opFractionElements = doc.getElementsByName('operatingFraction');
-      opFractionElements.forEach(element => {
-        element.classList.toggle('indicate-different', val);
+      //operating fraction
+      this.compareService.operating_fraction_different.subscribe((val) => {
+        let opFractionElements = doc.getElementsByName('operatingFraction');
+        opFractionElements.forEach(element => {
+          element.classList.toggle('indicate-different', val);
+        });
       });
-    });
-    //cost kw hr
-    this.compareService.cost_kw_hour_different.subscribe((val) => {
-      let costElements = doc.getElementsByName('costKwHr');
-      costElements.forEach(element => {
-        element.classList.toggle('indicate-different', val);
+      //cost kw hr
+      this.compareService.cost_kw_hour_different.subscribe((val) => {
+        let costElements = doc.getElementsByName('costKwHr');
+        costElements.forEach(element => {
+          element.classList.toggle('indicate-different', val);
+        });
       });
-    });
-    //flow rate
-    this.compareService.flow_rate_different.subscribe((val) => {
-      let flowRateElements = doc.getElementsByName('flowRate');
-      flowRateElements.forEach(element => {
-        element.classList.toggle('indicate-different', val);
+      //flow rate
+      this.compareService.flow_rate_different.subscribe((val) => {
+        let flowRateElements = doc.getElementsByName('flowRate');
+        flowRateElements.forEach(element => {
+          element.classList.toggle('indicate-different', val);
+        });
       });
-    });
-    //head
-    this.compareService.head_different.subscribe((val) => {
-      let headElements = doc.getElementsByName('head');
-      headElements.forEach(element => {
-        element.classList.toggle('indicate-different', val);
+      //head
+      this.compareService.head_different.subscribe((val) => {
+        let headElements = doc.getElementsByName('head');
+        headElements.forEach(element => {
+          element.classList.toggle('indicate-different', val);
+        });
       });
-    });
-    // //load estimation method
-    // this.compareService.load_estimation_method_different.subscribe((val) => {
-    //   if (val && !this.baseline) {
-    //     this.psat.inputs.load_estimation_method = this.compareService.baselinePSAT.inputs.load_estimation_method;
-    //   }
-    // });
-    // //motor power A
-    // this.compareService.motor_field_power_different.subscribe((val) => {
-    //   if (val && !this.baseline) {
-    //     this.psat.inputs.motor_field_power = this.compareService.baselinePSAT.inputs.motor_field_power;
-    //   }
-    // });
-    // //motor power kw
-    // this.compareService.motor_field_current_different.subscribe((val) => {
-    //   if (val && !this.baseline) {
-    //     this.psat.inputs.motor_field_current = this.compareService.baselinePSAT.inputs.motor_field_current;
-    //   }
-    // });
-    // //measured voltage
-    // this.compareService.motor_field_voltage_different.subscribe((val) => {
-    //   if (val && !this.baseline) {
-    //     this.psat.inputs.motor_field_voltage = this.compareService.baselinePSAT.inputs.motor_field_voltage;
-    //   }
-    // });
+      // //load estimation method
+      // this.compareService.load_estimation_method_different.subscribe((val) => {
+      //   if (val && !this.baseline) {
+      //     this.psat.inputs.load_estimation_method = this.compareService.baselinePSAT.inputs.load_estimation_method;
+      //   }
+      // });
+      // //motor power A
+      // this.compareService.motor_field_power_different.subscribe((val) => {
+      //   if (val && !this.baseline) {
+      //     this.psat.inputs.motor_field_power = this.compareService.baselinePSAT.inputs.motor_field_power;
+      //   }
+      // });
+      // //motor power kw
+      // this.compareService.motor_field_current_different.subscribe((val) => {
+      //   if (val && !this.baseline) {
+      //     this.psat.inputs.motor_field_current = this.compareService.baselinePSAT.inputs.motor_field_current;
+      //   }
+      // });
+      // //measured voltage
+      // this.compareService.motor_field_voltage_different.subscribe((val) => {
+      //   if (val && !this.baseline) {
+      //     this.psat.inputs.motor_field_voltage = this.compareService.baselinePSAT.inputs.motor_field_voltage;
+      //   }
+      // });
+    }
   }
 }

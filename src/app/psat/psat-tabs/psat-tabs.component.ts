@@ -9,6 +9,7 @@ export class PsatTabsComponent implements OnInit {
 
   currentTab: string;
   calcTab: string;
+  mainTab: string;
   constructor(private psatService: PsatService) { }
 
   ngOnInit() {
@@ -17,6 +18,9 @@ export class PsatTabsComponent implements OnInit {
     })
     this.psatService.calcTab.subscribe(val => {
       this.calcTab = val;
+    })
+    this.psatService.mainTab.subscribe(val => {
+      this.mainTab = val;
     })
   }
 
