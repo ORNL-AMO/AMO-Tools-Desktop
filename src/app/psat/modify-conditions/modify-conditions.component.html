@@ -60,7 +60,7 @@
             <a (click)="selectModification(modification)">
               {{modification.psat.name}}
             </a>
-            <a class="pull-right" (click)="dispEditModification(modification)">Edit / Delete</a>
+            <a class="pull-right click-link" (click)="dispEditModification(modification)">Edit / Delete</a>
           </button>
         </li>
         <li class="add-modification">
@@ -77,7 +77,7 @@
   </div>
 
   <!-- No content message -->
-  <div class="no-data" *ngIf="_modifications.length == 0" (click)="addModification()">
+  <div class="col-4 no-data" *ngIf="_modifications.length == 0" (click)="addModification()">
     <h3>Now that you have setup your system and have baseline information, create duplicate baseline conditions to find efficiency
       opportunities.
     </h3>
