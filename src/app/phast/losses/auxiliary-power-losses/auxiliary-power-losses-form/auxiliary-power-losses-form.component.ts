@@ -26,6 +26,12 @@ export class AuxiliaryPowerLossesFormComponent implements OnInit {
   inputError: string = null;
   firstChange: boolean = true;
   counter: any;
+  voltageError: string = null;
+
+  motorPhases: Array<number> = [
+    1,
+    3
+  ]
   constructor(private windowRefService: WindowRefService, private auxiliaryPowerCompareService: AuxiliaryPowerCompareService) { }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -77,7 +83,19 @@ export class AuxiliaryPowerLossesFormComponent implements OnInit {
     this.saveEmit.emit(true);
   }
 
+  checkVoltageError(bool?: boolean) {
+    if (!bool) {
+      this.startSavePolling();
+    }
+    if (this.auxLossesForm.value.supplyVoltage < 0 || this.auxLossesForm.value.supplyVoltage > 480) {
+      this.voltageError = 'Supply Voltage must be between 0 and 480';
+    } else {
+      this.voltageError = null;
+    }
+  }
+
   startSavePolling() {
+    console.log(this.auxLossesForm);
     this.checkForm();
     if (this.counter) {
       clearTimeout(this.counter);

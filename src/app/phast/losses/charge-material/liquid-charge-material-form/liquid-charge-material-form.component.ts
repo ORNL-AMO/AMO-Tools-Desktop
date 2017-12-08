@@ -139,27 +139,27 @@ export class LiquidChargeMaterialFormComponent implements OnInit {
       this.startSavePolling();
     }
     if (this.chargeMaterialForm.value.materialSpecificHeatLiquid < 0) {
-      this.specificHeatLiquidError = 'Specific Heat of Liquid must be equal or grater than 0';
+      this.specificHeatLiquidError = 'Specific Heat of Liquid must be equal or greater than 0';
     } else {
       this.specificHeatLiquidError = null;
     }
     if (this.chargeMaterialForm.value.materialSpecificHeatVapor < 0) {
-      this.specificHeatVaporError = 'Specific Heat of Vapor must be equal or grater than 0';
+      this.specificHeatVaporError = 'Specific Heat of Vapor must be equal or greater than 0';
     } else {
       this.specificHeatVaporError = null;
     }
     if (this.chargeMaterialForm.value.feedRate < 0) {
-      this.feedLiquidRateError = 'Charge Feed Rate must be grater than 0';
+      this.feedLiquidRateError = 'Charge Feed Rate must be greater than 0';
     } else {
       this.feedLiquidRateError = null;
     }
     if (this.chargeMaterialForm.value.liquidVaporized < 0 || this.chargeMaterialForm.value.liquidVaporized > 100) {
-      this.chargeVaporError = 'Charge Liquid Vaporized must be equal or grater than 0 and less than or equal to 100%';
+      this.chargeVaporError = 'Charge Liquid Vaporized must be equal or greater than 0 and less than or equal to 100%';
     } else {
       this.chargeVaporError = null;
     }
     if (this.chargeMaterialForm.value.liquidReacted < 0 || this.chargeMaterialForm.value.liquidReacted > 100) {
-      this.chargeReactedError = 'Charge Liquid Reacted must be equal or grater than 0 and less than or equal to 100%';
+      this.chargeReactedError = 'Charge Liquid Reacted must be equal or greater than 0 and less than or equal to 100%';
     } else {
       this.chargeReactedError = null;
     }
