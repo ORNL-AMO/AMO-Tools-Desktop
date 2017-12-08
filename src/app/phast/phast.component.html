@@ -21,8 +21,8 @@
         <!--Step: 3 Operating Costs-->
         <app-energy-costs *ngIf="specTab == 'energy-costs'" [phast]="_phast" [saveClicked]="saveClicked" (save)="saveDb()" [settings]="settings"></app-energy-costs>
       </div>
-      <div class="col-6 help-panel">
-        <app-help-panel></app-help-panel>
+      <div class="col-6">
+        <app-help-panel [settingsTab]="specTab"></app-help-panel>
       </div>
     </div>
     <!--Step: 4 Heat Balance-->

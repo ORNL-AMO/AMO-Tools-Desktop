@@ -14,7 +14,7 @@ export class PhastTabsComponent implements OnInit {
 
   specTabs: Array<any> = [
     {
-      name: 'Assessment Settings',
+      name: 'System Basics',
       value: 'system-basics'
     },{
       name: 'Operating Hours',

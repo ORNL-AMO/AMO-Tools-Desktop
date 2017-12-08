@@ -89,7 +89,8 @@ export class ChargeMaterialComponent implements OnInit {
             gasForm: this.chargeMaterialService.initGasForm(),
             name: 'Material #' + (this._chargeMaterial.length + 1),
             heatRequired: 0.0,
-            modifiedHeatRequired: 0.0
+            modifiedHeatRequired: 0.0,
+            collapse: false
           });
         }
       })
@@ -103,7 +104,8 @@ export class ChargeMaterialComponent implements OnInit {
             gasForm: this.chargeMaterialService.initGasForm(),
             name: 'Material #' + (this._chargeMaterial.length + 1),
             heatRequired: 0.0,
-            modifiedHeatRequired: 0.0
+            modifiedHeatRequired: 0.0,
+            collapse: false
           });
         }
       })
@@ -130,7 +132,8 @@ export class ChargeMaterialComponent implements OnInit {
           liquidForm: this.chargeMaterialService.initLiquidForm(),
           gasForm: this.chargeMaterialService.getGasChargeMaterialForm(loss.gasChargeMaterial),
           name: 'Material #' + (this._chargeMaterial.length + 1),
-          heatRequired: loss.gasChargeMaterial.heatRequired || 0.0
+          heatRequired: loss.gasChargeMaterial.heatRequired || 0.0,
+          collapse: false
         };
         this.calculate(tmpLoss);
         this._chargeMaterial.push(tmpLoss);
@@ -142,7 +145,8 @@ export class ChargeMaterialComponent implements OnInit {
           liquidForm: this.chargeMaterialService.initLiquidForm(),
           gasForm: this.chargeMaterialService.initGasForm(),
           name: 'Material #' + (this._chargeMaterial.length + 1),
-          heatRequired: loss.solidChargeMaterial.heatRequired || 0.0
+          heatRequired: loss.solidChargeMaterial.heatRequired || 0.0,
+          collapse: false
         };
         this.calculate(tmpLoss);
         this._chargeMaterial.push(tmpLoss);
@@ -154,7 +158,8 @@ export class ChargeMaterialComponent implements OnInit {
           liquidForm: this.chargeMaterialService.getLiquidChargeMaterialForm(loss.liquidChargeMaterial),
           gasForm: this.chargeMaterialService.initGasForm(),
           name: 'Material #' + (this._chargeMaterial.length + 1),
-          heatRequired: loss.liquidChargeMaterial.heatRequired || 0.0
+          heatRequired: loss.liquidChargeMaterial.heatRequired || 0.0,
+          collapse: false
         };
         this.calculate(tmpLoss);
         this._chargeMaterial.push(tmpLoss);
@@ -176,7 +181,8 @@ export class ChargeMaterialComponent implements OnInit {
       gasForm: this.chargeMaterialService.initGasForm(),
       name: 'Material #' + (this._chargeMaterial.length + 1),
       heatRequired: 0.0,
-      modifiedHeatRequired: 0.0
+      modifiedHeatRequired: 0.0,
+      collapse: false
     });
 
   }
@@ -191,6 +197,10 @@ export class ChargeMaterialComponent implements OnInit {
       material.name = 'Material #' + index;
       index++;
     })
+  }
+  
+  collapseLoss(loss: any){
+    loss.collapse = !loss.collapse;
   }
 
   calculate(loss: any) {

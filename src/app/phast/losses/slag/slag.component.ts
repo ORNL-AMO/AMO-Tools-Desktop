@@ -69,7 +69,8 @@ export class SlagComponent implements OnInit {
         let tmpLoss = {
           form: this.slagService.getFormFromLoss(loss),
           name: 'Loss #' + (this._slagLosses.length + 1),
-          heatLoss: loss.heatLoss || 0.0
+          heatLoss: loss.heatLoss || 0.0,
+          collapse: false
         };
         this.calculate(tmpLoss);
         this._slagLosses.push(tmpLoss);
@@ -92,7 +93,8 @@ export class SlagComponent implements OnInit {
           this._slagLosses.push({
             form: this.slagService.initForm(),
             name: 'Loss #' + (this._slagLosses.length + 1),
-            heatLoss: 0.0
+            heatLoss: 0.0,
+            collapse: false
           })
         }
       })
@@ -102,7 +104,8 @@ export class SlagComponent implements OnInit {
           this._slagLosses.push({
             form: this.slagService.initForm(),
             name: 'Loss #' + (this._slagLosses.length + 1),
-            heatLoss: 0.0
+            heatLoss: 0.0,
+            collapse: false
           })
         }
       })
@@ -131,7 +134,8 @@ export class SlagComponent implements OnInit {
     this._slagLosses.push({
       form: this.slagService.initForm(),
       name: 'Loss #' + (this._slagLosses.length + 1),
-      heatLoss: 0.0
+      heatLoss: 0.0,
+      collapse: false
     });
   }
 
