@@ -31,7 +31,9 @@ export class CoolingLossesComponent implements OnInit {
   settings: Settings;
   @Input()
   isLossesSetup: boolean;
-
+  @Input()
+  inSetup: boolean;
+  
   _coolingLosses: Array<any>;
   firstChange: boolean = true;
   resultsUnit: string;

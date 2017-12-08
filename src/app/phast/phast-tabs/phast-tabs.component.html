@@ -22,7 +22,7 @@
 
 <nav>
   <ul class="tabs subtabs progress-tabs phast">
-    <li *ngFor="let tab of stepTabs" [ngClass]="{'active': currentTab.step == tab.step}">
+    <li class="fixed-tab-size" *ngFor="let tab of stepTabs" [ngClass]="{'active': currentTab.step == tab.step}">
       <a (click)="changeTab(tab.step)"><span class="step-number">{{tab.step}}</span> {{tab.tabName}}</a>
     </li>
   </ul>
@@ -30,7 +30,7 @@
 
 <nav *ngIf="currentTab.step == 1">
   <ul class="tabs subtabs phast">
-    <li *ngFor="let tab of specTabs" [ngClass]="{'active': specTab == tab.value}">
+    <li class="fixed-tab-size" *ngFor="let tab of specTabs" [ngClass]="{'active': specTab == tab.value}">
       <a (click)="changeSpecTab(tab.value)">{{tab.name}}</a>
     </li>
   </ul>

@@ -31,6 +31,9 @@ export class OpeningLossesComponent implements OnInit {
   settings: Settings;
   @Input()
   isLossesSetup: boolean;
+  @Input()
+  inSetup: boolean;
+  
   _openingLosses: Array<any>;
   firstChange: boolean = true;
   resultsUnit: string;

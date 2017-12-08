@@ -31,6 +31,9 @@ export class AtmosphereLossesComponent implements OnInit {
   settings: Settings;
   @Input()
   isLossesSetup: boolean;
+  @Input()
+  inSetup: boolean;
+  
   _atmosphereLosses: Array<any>;
   firstChange: boolean = true;
 

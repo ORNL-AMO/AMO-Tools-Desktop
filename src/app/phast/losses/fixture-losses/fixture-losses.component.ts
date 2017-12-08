@@ -31,6 +31,9 @@ export class FixtureLossesComponent implements OnInit {
   settings: Settings;
   @Input()
   isLossesSetup: boolean;
+  @Input()
+  inSetup: boolean;
+  
   resultsUnit: string;
   _fixtureLosses: Array<any>;
   firstChange: boolean = true;

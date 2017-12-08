@@ -32,7 +32,9 @@ export class ChargeMaterialComponent implements OnInit {
   settings: Settings;
   @Input()
   isLossesSetup: boolean;
-
+  @Input()
+  inSetup: boolean;
+  
   _chargeMaterial: Array<any>;
   firstChange: boolean = true;
   resultsUnit: string;

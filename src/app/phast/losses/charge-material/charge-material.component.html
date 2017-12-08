@@ -10,7 +10,7 @@
         <h6 *ngIf="isBaseline">{{material.name}}</h6>
         <h6 *ngIf="!isBaseline">{{material.name}} Modification</h6>
       </div>
-      <button *ngIf="isBaseline" class="close pull-right" aria-label="Close" (click)="removeMaterial(lossIndex)">
+      <button *ngIf="isBaseline && inSetup" class="close pull-right" aria-label="Close" (click)="removeMaterial(lossIndex)">
       <span aria-hidden="true">&times;</span>
     </button>
     </div>
