@@ -31,7 +31,7 @@
           <app-energy-costs *ngIf="subTab == 'energy-costs'" [phast]="_phast" [saveClicked]="saveClicked" (save)="saveDb()" [settings]="settings"></app-energy-costs>
         </div>
         <div class="help">
-          <app-help-panel></app-help-panel>
+          <app-help-panel [settingsTab]="subTab"></app-help-panel>
         </div>
       </div>
     </div>

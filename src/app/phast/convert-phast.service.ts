@@ -191,7 +191,7 @@ export class ConvertPhastService {
   convertLiquidChargeMaterial(loss: LiquidChargeMaterial, oldSettings: Settings, newSettings: Settings): LiquidChargeMaterial {
     if (oldSettings.unitsOfMeasure == 'Metric' && newSettings.unitsOfMeasure == 'Imperial') {
       loss.vaporizingTemperature = this.convertVal(loss.vaporizingTemperature, 'C', 'F');
-      loss.latentHeat = this.convertVal(loss.latentHeat, 'C', 'F');
+      loss.latentHeat = this.convertVal(loss.latentHeat, 'kJkg', 'btuLb');
       loss.initialTemperature = this.convertVal(loss.initialTemperature, 'C', 'F');
       loss.dischargeTemperature = this.convertVal(loss.dischargeTemperature, 'C', 'F');
       loss.chargeFeedRate = this.convertVal(loss.chargeFeedRate, 'kg', 'lb')
@@ -201,7 +201,7 @@ export class ConvertPhastService {
       loss.specificHeatVapor = this.convertVal(loss.specificHeatVapor, 'kJkgC', 'btulbF');
     } else if (oldSettings.unitsOfMeasure == 'Imperial' && newSettings.unitsOfMeasure == 'Metric') {
       loss.vaporizingTemperature = this.convertVal(loss.vaporizingTemperature, 'F', 'C');
-      loss.latentHeat = this.convertVal(loss.latentHeat, 'F', 'C');
+      loss.latentHeat = this.convertVal(loss.latentHeat, 'btuLb', 'kJkg');
       loss.initialTemperature = this.convertVal(loss.initialTemperature, 'F', 'C');
       loss.dischargeTemperature = this.convertVal(loss.dischargeTemperature, 'F', 'C');
       loss.chargeFeedRate = this.convertVal(loss.chargeFeedRate, 'lb', 'kg')

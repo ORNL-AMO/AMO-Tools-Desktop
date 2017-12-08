@@ -13,11 +13,12 @@
     <div class="form-group">
       <label class="small" for="specificHeat">Specific heat of gas</label>
       <div class="input-group">
-        <input name="{{'specificHeat_'+lossIndex}}" type="number" class="form-control" formControlName="specificHeat" id="specificHeat"
-          onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('specificHeat')" (blur)="focusOut()">
+        <input name="{{'specificHeat_'+lossIndex}}" type="number" step="any" min="0" class="form-control" formControlName="specificHeat" id="specificHeat"
+          onfocus="this.select();" (input)="checkCorrectionError()" (focus)="focusField('specificHeat')" (blur)="focusOut()">
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">Btu/(SCF-&#8457;)</span>
         <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kJ/(Nm<sup>3</sup>-&#8451;)</span>
       </div>
+      <span class="alert-warning pull-right small" *ngIf="specificHeatError !== null">{{specificHeatError}}</span>
     </div>
 
 
@@ -46,16 +47,17 @@
     <div class="form-group">
       <label class="small" for="flowRate">Flow Rate</label>
       <div class="input-group">
-        <input name="{{'flowRate_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="flowRate" id="flowRate"
-          onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('flowRate')" (blur)="focusOut()">
+        <input name="{{'flowRate_'+lossIndex}}" type="number" step="any" min="0" class="form-control" formControlName="flowRate" id="flowRate"
+          onfocus="this.select();" (input)="checkCorrectionError()" (focus)="focusField('flowRate')" (blur)="focusOut()">
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">SCF/hr</span>
         <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">Nm<sup>3</sup></span>
       </div>
+      <span class="alert-warning pull-right small" *ngIf="flowRateError !== null">{{flowRateError}}</span>
     </div>
 
     <div class="form-group">
       <label class="small" for="correctionFactor">Correction Factor</label>
-      <input name="{{'correctionFactor_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="correctionFactor"
+      <input name="{{'correctionFactor_'+lossIndex}}" type="number" min="0" step="any"  class="form-control" formControlName="correctionFactor"
         id="correctionFactor" onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('correctionFactor')" (blur)="focusOut()">
     </div>
   </div>

@@ -16,7 +16,8 @@ export class PhastSettingsComponent implements OnInit {
   fuelFiredOptions: Array<string> = [
     'Ladle Heater',
     'Reheat Furnace',
-    'Tundish Heater'
+    'Tundish Heater',
+    'Custom Fuel Furnace'
   ]
 
   electrotechOptions: Array<string> = [

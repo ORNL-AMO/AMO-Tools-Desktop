@@ -32,7 +32,8 @@ export class FixtureLossesFormComponent implements OnInit {
   @ViewChild('lossForm') lossForm: ElementRef;
   form: any;
   elements: any;
-
+  specificHeatError: string = null;
+  feedRateError: string = null;
   firstChange: boolean = true;
   counter: any;
   materials: Array<any>;
@@ -91,6 +92,22 @@ export class FixtureLossesFormComponent implements OnInit {
       specificHeat: tmpMaterial.specificHeatSolid
     })
     this.startSavePolling();
+  }
+
+  checkInputError(bool?: boolean) {
+    if (!bool) {
+      this.startSavePolling();
+    }
+    if (this.lossesForm.value.specificHeat < 0) {
+      this.specificHeatError = 'Specific Heat must be equal or greater than 0';
+    } else {
+      this.specificHeatError = null;
+    }
+    if (this.lossesForm.value.feedRate < 0) {
+      this.feedRateError = 'Fixture Weight feed rate must be greater than 0';
+    } else {
+      this.feedRateError = null;
+    }
   }
 
   startSavePolling() {

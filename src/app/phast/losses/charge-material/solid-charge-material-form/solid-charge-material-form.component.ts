@@ -36,12 +36,23 @@ export class SolidChargeMaterialFormComponent implements OnInit {
 
   firstChange: boolean = true;
 
+  specificHeatError: string = null;
+  latentHeatError: string = null;
+  heatOfLiquidError: string = null;
+  feedRateError: string = null;
+  waterChargedError: string = null;
+  waterDischargedError: string = null;
+  chargeMeltedError: string = null;
+  chargeSolidReactedError: string = null;
+  heatOfReactionError: string = null;
   materialTypes: any;
   selectedMaterialId: any;
   selectedMaterial: any;
   counter: any;
   dischargeTempError: string = null;
-  constructor(private suiteDbService: SuiteDbService, private chargeMaterialCompareService: ChargeMaterialCompareService, private windowRefService: WindowRefService, private lossesService: LossesService, private convertUnitsService: ConvertUnitsService) { }
+
+  constructor(private suiteDbService: SuiteDbService, private chargeMaterialCompareService: ChargeMaterialCompareService, private windowRefService: WindowRefService, private lossesService: LossesService, private convertUnitsService: ConvertUnitsService) {
+  }
 
   ngOnChanges(changes: SimpleChanges) {
     if (!this.firstChange) {
@@ -73,6 +84,7 @@ export class SolidChargeMaterialFormComponent implements OnInit {
     }
     this.initDifferenceMonitor();
   }
+
   ngOnDestroy() {
     this.lossesService.modalOpen.next(false);
   }
@@ -109,6 +121,7 @@ export class SolidChargeMaterialFormComponent implements OnInit {
   focusField(str: string) {
     this.changeField.emit(str);
   }
+
   focusOut() {
     this.changeField.emit('default');
   }
@@ -131,6 +144,56 @@ export class SolidChargeMaterialFormComponent implements OnInit {
     })
     this.calculate.emit(true);
   }
+checkInputError(bool?: boolean) {
+      if (!bool) {
+    this.startSavePolling();
+  }
+  if (this.chargeMaterialForm.value.materialSpecificHeatOfSolidMaterial < 0) {
+        this.specificHeatError = 'Average Specific Heat must be equal or greater than 0';
+      } else {
+        this.specificHeatError = null;
+      }
+  if (this.chargeMaterialForm.value.materialLatentHeatOfFusion < 0) {
+        this.latentHeatError = 'Latent Heat of Fusion must be equal or greater than 0';
+      } else {
+        this.latentHeatError = null;
+      }
+  if (this.chargeMaterialForm.value.materialHeatOfLiquid < 0) {
+        this.heatOfLiquidError = 'Specific heat of liquid from molten material must be equal or greater than 0';
+      } else {
+        this.heatOfLiquidError = null;
+      }
+  if (this.chargeMaterialForm.value.feedRate < 0) {
+        this.feedRateError = 'Charge Feed Rate must be grater than 0';
+      } else {
+        this.feedRateError = null;
+      }
+  if (this.chargeMaterialForm.value.waterContentAsCharged < 0 || this.chargeMaterialForm.value.waterContentAsCharged > 100) {
+        this.waterChargedError = 'Water Content as Charged must be equal or greater than 0 and less than or equal to 100%';
+      } else {
+        this.waterChargedError = null;
+      }
+  if (this.chargeMaterialForm.value.waterContentAsDischarged < 0 || this.chargeMaterialForm.value.waterContentAsDischarged > 100) {
+        this.waterDischargedError = 'Water Content as Discharged must be equal or greater than 0 and less than or equal to 100%';
+      } else {
+        this.waterDischargedError = null;
+      }
+  if (this.chargeMaterialForm.value.percentChargeMelted < 0 || this.chargeMaterialForm.percentChargeMelted > 100) {
+        this.chargeMeltedError = 'Charge Melted must be equal or greater than 0 and less than or equal to 100%';
+      } else {
+        this.chargeMeltedError = null;
+      }
+  if (this.chargeMaterialForm.value.percentChargeReacted < 0 || this.chargeMaterialForm.value.percentChargeReacted > 100) {
+        this.chargeSolidReactedError = 'Charge Reacted must be equal or greater than 0 and less than or equal to 100%';
+      } else {
+        this.chargeSolidReactedError = null;
+      }
+   if (this.chargeMaterialForm.value.heatOfReaction < 0) {
+        this.heatOfReactionError = 'Heat of Reaction cannot be less than zero. For exothermic reactions, change "Endothermic/Exothermic"';
+      } else {
+        this.heatOfReactionError = null;
+      }
+}
 
   emitSave() {
     this.saveEmit.emit(true);

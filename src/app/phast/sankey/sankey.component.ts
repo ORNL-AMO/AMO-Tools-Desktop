@@ -158,7 +158,7 @@ export class SankeyComponent implements OnInit {
         }
         if (d.input) {
           if (this.location === 'sankey-diagram') {
-            return d.x - 70;            
+            return d.x - 70;
           }
           else if (this.location !== 'sankey-diagram') {
             return d.x + 70;
@@ -174,7 +174,7 @@ export class SankeyComponent implements OnInit {
           if (this.location === 'sankey-diagram') {
             return d.y + (d.displaySize) + labelFontSize + labelPadding;
           } else if (this.location !== 'sankey-diagram') {
-            return d.y + (d.displaySize) + reportFontSize + reportPadding;            
+            return d.y + (d.displaySize) + reportFontSize + reportPadding;
           }
         }
 
@@ -194,7 +194,7 @@ export class SankeyComponent implements OnInit {
         }
         else {
           if (this.location === 'sankey-diagram') {
-            return bottomLabelPositionY;            
+            return bottomLabelPositionY;
           }
           else if (this.location !== 'sankey-diagram') {
             return bottomReportPositionY;
@@ -244,7 +244,7 @@ export class SankeyComponent implements OnInit {
           if (this.location === 'sankey-diagram') {
             return d.y + (d.displaySize + (d.displaySize * 0.25)) + (labelFontSize * 2) + (labelPadding * 2);
           } else if (this.location !== 'sankey-diagram') {
-            return d.y + (d.displaySize + (d.displaySize * 0.25)) + (reportFontSize * 2) + (reportPadding * 2);            
+            return d.y + (d.displaySize + (d.displaySize * 0.25)) + (reportFontSize * 2) + (reportPadding * 2);
           }
           return d.y + (d.displaySize) - 135;
         }
@@ -252,7 +252,7 @@ export class SankeyComponent implements OnInit {
           if (this.location === 'sankey-diagram') {
             return topLabelPositionY + labelFontSize + labelPadding;
           } else if (this.location !== 'sankey-diagram') {
-            return topReportPositionY + reportFontSize + reportPadding;            
+            return topReportPositionY + reportFontSize + reportPadding;
           }
         }
         else {
