@@ -69,7 +69,8 @@ export class ExhaustGasComponent implements OnInit {
         let tmpLoss = {
           form: this.exhaustGasService.getFormFromLoss(loss),
           name: 'Loss #' + (this._exhaustGasLosses.length + 1),
-          heatLoss: 0.0
+          heatLoss: 0.0,
+          collapse: false
         };
         this.calculate(tmpLoss);
         this._exhaustGasLosses.push(tmpLoss);
@@ -92,7 +93,8 @@ export class ExhaustGasComponent implements OnInit {
           this._exhaustGasLosses.push({
             form: this.exhaustGasService.initForm(),
             name: 'Loss #' + (this._exhaustGasLosses.length + 1),
-            heatLoss: 0.0
+            heatLoss: 0.0,
+            collapse: false
           })
         }
       })
@@ -102,7 +104,8 @@ export class ExhaustGasComponent implements OnInit {
           this._exhaustGasLosses.push({
             form: this.exhaustGasService.initForm(),
             name: 'Loss #' + (this._exhaustGasLosses.length + 1),
-            heatLoss: 0.0
+            heatLoss: 0.0,
+            collapse: false
           })
         }
       })
@@ -129,7 +132,8 @@ export class ExhaustGasComponent implements OnInit {
     this._exhaustGasLosses.push({
       form: this.exhaustGasService.initForm(),
       name: 'Loss #' + (this._exhaustGasLosses.length + 1),
-      heatLoss: 0.0
+      heatLoss: 0.0,
+      collapse: false
     });
   }
 
@@ -145,6 +149,9 @@ export class ExhaustGasComponent implements OnInit {
     })
   }
 
+  collapseLoss(loss: any){
+    loss.collapse = !loss.collapse;
+  }
   calculate(loss: any) {
     if (loss.form.status == 'VALID') {
       let tmpGas = this.exhaustGasService.getLossFromForm(loss.form);

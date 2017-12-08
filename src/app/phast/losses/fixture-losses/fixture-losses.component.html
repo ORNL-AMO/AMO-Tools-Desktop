@@ -11,16 +11,15 @@
 <div class="card-form" *ngFor="let loss of _fixtureLosses; let lossIndex = index;">
   <div class="row">
     <div class="col-12">
-      <div class="pull-left">
-        <h6 *ngIf="isBaseline">{{loss.name}}</h6>
-        <h6 *ngIf="!isBaseline">{{loss.name}} Modification</h6>
-      </div>
-      <button *ngIf="isBaseline && inSetup" class="close pull-right" aria-label="Close" (click)="removeLoss(lossIndex)">
-      <span aria-hidden="true">&times;</span>
-    </button>
+      <label class="group-label loss-label">
+        <span *ngIf="loss.collapse" class="fa fa-caret-down" (click)="collapseLoss(loss)"></span>
+        <span *ngIf="!loss.collapse" class="fa fa-caret-up" (click)="collapseLoss(loss)"></span>
+        {{loss.name}}
+        <span aria-hidden="true" *ngIf="isBaseline && inSetup" class="close pull-right" aria-label="Close" (click)="removeLoss(lossIndex)">&times;</span>
+      </label>
     </div>
   </div>
-  <div class="row">
+  <div class="row" *ngIf="!loss.collapse">
     <div class="col-12">
       <app-fixture-losses-form (changeField)="changeField($event)" [(lossesForm)]="loss.form" (calculate)="calculate(loss)" [baselineSelected]="baselineSelected"
         (saveEmit)="saveLosses()" [lossIndex]="lossIndex" [settings]="settings"></app-fixture-losses-form>
@@ -31,7 +30,8 @@
       <div class="form-group">
         <label class="small">Total Heat Required</label>
         <div *ngIf="loss.heatLoss" class="text-center small">
-          {{loss.heatLoss | sigFigs:'5'}} <span>{{resultsUnit}}</span>
+          {{loss.heatLoss | sigFigs:'5'}}
+          <span>{{resultsUnit}}</span>
           <div *ngIf="!loss.heatLoss" class="text-center small">
             &mdash; &mdash;
           </div>

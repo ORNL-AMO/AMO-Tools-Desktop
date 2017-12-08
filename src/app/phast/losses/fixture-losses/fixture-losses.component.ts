@@ -68,7 +68,8 @@ export class FixtureLossesComponent implements OnInit {
         let tmpLoss = {
           form: this.fixtureLossesService.getFormFromLoss(loss),
           name: 'Loss #' + (this._fixtureLosses.length + 1),
-          heatLoss: loss.heatLoss || 0.0
+          heatLoss: loss.heatLoss || 0.0,
+          collapse: false
         };
         this.calculate(tmpLoss);
         this._fixtureLosses.push(tmpLoss);
@@ -91,7 +92,8 @@ export class FixtureLossesComponent implements OnInit {
           this._fixtureLosses.push({
             form: this.fixtureLossesService.initForm(),
             name: 'Loss #' + (this._fixtureLosses.length + 1),
-            heatLoss: 0.0
+            heatLoss: 0.0,
+            collapse: false
           })
         }
       })
@@ -101,7 +103,8 @@ export class FixtureLossesComponent implements OnInit {
           this._fixtureLosses.push({
             form: this.fixtureLossesService.initForm(),
             name: 'Loss #' + (this._fixtureLosses.length + 1),
-            heatLoss: 0.0
+            heatLoss: 0.0,
+            collapse: false
           })
         }
       })
@@ -129,7 +132,8 @@ export class FixtureLossesComponent implements OnInit {
     this._fixtureLosses.push({
       form: this.fixtureLossesService.initForm(),
       name: 'Loss #' + (this._fixtureLosses.length + 1),
-      heatLoss: 0.0
+      heatLoss: 0.0,
+      collapse: false
     });
   }
 
@@ -154,6 +158,10 @@ export class FixtureLossesComponent implements OnInit {
     }
   }
 
+  collapseLoss(loss: any){
+    loss.collapse = !loss.collapse;
+  }
+  
   saveLosses() {
     let tmpFixtureLosses = new Array<FixtureLoss>();
     this._fixtureLosses.forEach(loss => {

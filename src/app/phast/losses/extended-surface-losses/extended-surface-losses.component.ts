@@ -81,7 +81,8 @@ export class ExtendedSurfaceLossesComponent implements OnInit {
         let tmpLoss = {
           form: this.extendedSurfaceLossesService.getSurfaceLossForm(loss),
           name: 'Loss #' + (this._surfaceLosses.length + 1),
-          heatLoss: loss.heatLoss || 0.0
+          heatLoss: loss.heatLoss || 0.0,
+          collapse: false
         };
         this.calculate(tmpLoss);
         this._surfaceLosses.push(tmpLoss);
@@ -103,7 +104,8 @@ export class ExtendedSurfaceLossesComponent implements OnInit {
           this._surfaceLosses.push({
             form: this.extendedSurfaceLossesService.initForm(),
             name: 'Loss #' + (this._surfaceLosses.length + 1),
-            heatLoss: 0.0
+            heatLoss: 0.0,
+            collapse: false
           })
         }
       })
@@ -113,7 +115,8 @@ export class ExtendedSurfaceLossesComponent implements OnInit {
           this._surfaceLosses.push({
             form: this.extendedSurfaceLossesService.initForm(),
             name: 'Loss #' + (this._surfaceLosses.length + 1),
-            heatLoss: 0.0
+            heatLoss: 0.0,
+            collapse: false
           })
         }
       })
@@ -130,7 +133,8 @@ export class ExtendedSurfaceLossesComponent implements OnInit {
     this._surfaceLosses.push({
       form: this.extendedSurfaceLossesService.initForm(),
       name: 'Loss #' + (this._surfaceLosses.length + 1),
-      heatLoss: 0.0
+      heatLoss: 0.0,
+      collapse: false
     });
   }
 
@@ -169,6 +173,10 @@ export class ExtendedSurfaceLossesComponent implements OnInit {
 
   }
 
+  collapseLoss(loss: any){
+    loss.collapse = !loss.collapse;
+  }
+  
   saveLosses() {
     let tmpSurfaceLosses = new Array<ExtendedSurface>();
     this._surfaceLosses.forEach(loss => {

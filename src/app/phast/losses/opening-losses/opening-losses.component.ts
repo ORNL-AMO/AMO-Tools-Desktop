@@ -70,7 +70,8 @@ export class OpeningLossesComponent implements OnInit {
         let tmpLoss = {
           form: this.openingLossesService.getFormFromLoss(loss),
           name: 'Loss #' + (this._openingLosses.length + 1),
-          totalOpeningLosses: loss.heatLoss || 0.0
+          totalOpeningLosses: loss.heatLoss || 0.0,
+          collapse: false
         };
         this.calculate(tmpLoss);
         this._openingLosses.push(tmpLoss);
@@ -93,7 +94,8 @@ export class OpeningLossesComponent implements OnInit {
           this._openingLosses.push({
             form: this.openingLossesService.initForm(),
             name: 'Loss #' + (this._openingLosses.length + 1),
-            heatLoss: 0.0
+            heatLoss: 0.0,
+            collapse: false
           })
         }
       })
@@ -103,7 +105,8 @@ export class OpeningLossesComponent implements OnInit {
           this._openingLosses.push({
             form: this.openingLossesService.initForm(),
             name: 'Loss #' + (this._openingLosses.length + 1),
-            heatLoss: 0.0
+            heatLoss: 0.0,
+            collapse: false
           })
         }
       })
@@ -131,8 +134,12 @@ export class OpeningLossesComponent implements OnInit {
     this._openingLosses.push({
       form: this.openingLossesService.initForm(),
       name: 'Opening Loss #' + (this._openingLosses.length + 1),
-      totalOpeningLosses: 0.0
+      totalOpeningLosses: 0.0,
+      collapse: false
     });
+  }
+  collapseLoss(loss: any){
+    loss.collapse = !loss.collapse;
   }
 
   removeLoss(lossIndex: number) {

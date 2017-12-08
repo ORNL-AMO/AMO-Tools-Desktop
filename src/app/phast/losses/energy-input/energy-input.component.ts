@@ -74,7 +74,8 @@ export class EnergyInputComponent implements OnInit {
             heatDelivered: 0,
             kwhCycle: 0,
             totalKwhCycle: 0
-          }
+          },
+          collapse: false
         };
         this.calculate(tmpLoss);
         this._energyInputs.push(tmpLoss);
@@ -100,7 +101,8 @@ export class EnergyInputComponent implements OnInit {
               heatDelivered: 0,
               kwhCycle: 0,
               totalKwhCycle: 0
-            }
+            },
+            collapse: false
           });
         }
       })
@@ -114,7 +116,8 @@ export class EnergyInputComponent implements OnInit {
               heatDelivered: 0,
               kwhCycle: 0,
               totalKwhCycle: 0
-            }
+            },
+            collapse: false
           })
         }
       })
@@ -146,7 +149,8 @@ export class EnergyInputComponent implements OnInit {
         heatDelivered: 0,
         kwhCycle: 0,
         totalKwhCycle: 0
-      }
+      },
+      collapse: false
     });
   }
 
@@ -161,7 +165,9 @@ export class EnergyInputComponent implements OnInit {
       index++;
     })
   }
-
+  collapseLoss(loss: any){
+    loss.collapse = !loss.collapse;
+  }
   calculate(loss: any) {
     if (loss.form.status == 'VALID') {
       let tmpLoss: EnergyInputEAF = this.energyInputService.getLossFromForm(loss.form);

@@ -88,7 +88,8 @@ export class CoolingLossesComponent implements OnInit {
             gasCoolingForm: this.coolingLossesService.initGasCoolingForm(this.settings),
             liquidCoolingForm: this.coolingLossesService.initLiquidCoolingForm(this.settings),
             name: 'Loss #' + (this._coolingLosses.length + 1),
-            heatLoss: 0.0
+            heatLoss: 0.0,
+            collapse: false
           });
         }
       })
@@ -101,7 +102,8 @@ export class CoolingLossesComponent implements OnInit {
             gasCoolingForm: this.coolingLossesService.initGasCoolingForm(this.settings),
             liquidCoolingForm: this.coolingLossesService.initLiquidCoolingForm(this.settings),
             name: 'Loss #' + (this._coolingLosses.length + 1),
-            heatLoss: 0.0
+            heatLoss: 0.0,
+            collapse: false
           });
         }
       })
@@ -129,7 +131,8 @@ export class CoolingLossesComponent implements OnInit {
           gasCoolingForm: this.coolingLossesService.initGasFormFromLoss(loss.gasCoolingLoss),
           liquidCoolingForm: this.coolingLossesService.initLiquidCoolingForm(this.settings),
           name: 'Loss #' + (this._coolingLosses.length + 1),
-          heatLoss: loss.heatLoss || 0.0
+          heatLoss: loss.heatLoss || 0.0,
+          collapse: false
         };
       } else if (loss.coolingLossType == 'Liquid') {
         tmpLoss = {
@@ -138,7 +141,8 @@ export class CoolingLossesComponent implements OnInit {
           gasCoolingForm: this.coolingLossesService.initGasCoolingForm(this.settings),
           liquidCoolingForm: this.coolingLossesService.initLiquidFormFromLoss(loss.liquidCoolingLoss),
           name: 'Loss #' + (this._coolingLosses.length + 1),
-          heatLoss: loss.heatLoss || 0.0
+          heatLoss: loss.heatLoss || 0.0,
+          collapse: false
         };
       }
       else if (loss.coolingLossType == 'Water') {
@@ -148,7 +152,8 @@ export class CoolingLossesComponent implements OnInit {
           gasCoolingForm: this.coolingLossesService.initGasCoolingForm(this.settings),
           liquidCoolingForm: this.coolingLossesService.initLiquidCoolingForm(this.settings),
           name: 'Loss #' + (this._coolingLosses.length + 1),
-          heatLoss: loss.heatLoss || 0.0
+          heatLoss: loss.heatLoss || 0.0,
+          collapse: false
         };
       }
       this.calculate(tmpLoss);
@@ -169,7 +174,8 @@ export class CoolingLossesComponent implements OnInit {
       gasCoolingForm: this.coolingLossesService.initGasCoolingForm(this.settings),
       liquidCoolingForm: this.coolingLossesService.initLiquidCoolingForm(this.settings),
       name: 'Loss #' + (this._coolingLosses.length + 1),
-      heatLoss: 0.0
+      heatLoss: 0.0,
+      collapse: false
     });
   }
 
@@ -243,7 +249,9 @@ export class CoolingLossesComponent implements OnInit {
     this.setCompareVals();
     this.savedLoss.emit(true);
   }
-
+  collapseLoss(loss: any){
+    loss.collapse = !loss.collapse;
+  }
   changeField(str: string) {
     this.fieldChange.emit(str);
   }

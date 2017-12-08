@@ -71,7 +71,8 @@ export class EnergyInputExhaustGasLossesComponent implements OnInit {
         let tmpLoss = {
           form: this.energyInputExhaustGasService.getFormFromLoss(loss),
           name: 'Loss #' + (this._exhaustGasLosses.length + 1),
-          heatLoss: 0.0
+          heatLoss: 0.0,
+          collapse: false
         };
         this.calculate(tmpLoss);
         this._exhaustGasLosses.push(tmpLoss);
@@ -94,7 +95,8 @@ export class EnergyInputExhaustGasLossesComponent implements OnInit {
           this._exhaustGasLosses.push({
             form: this.energyInputExhaustGasService.initForm(),
             name: 'Loss #' + (this._exhaustGasLosses.length + 1),
-            heatLoss: 0.0
+            heatLoss: 0.0,
+            collapse: false
           })
         }
       })
@@ -104,7 +106,8 @@ export class EnergyInputExhaustGasLossesComponent implements OnInit {
           this._exhaustGasLosses.push({
             form: this.energyInputExhaustGasService.initForm(),
             name: 'Loss #' + (this._exhaustGasLosses.length + 1),
-            heatLoss: 0.0
+            heatLoss: 0.0,
+            collapse: false
           })
         }
       })
@@ -132,7 +135,8 @@ export class EnergyInputExhaustGasLossesComponent implements OnInit {
       form: this.energyInputExhaustGasService.initForm(),
       name: 'Loss #' + (this._exhaustGasLosses.length + 1),
       heatLoss: 0.0,
-      exhaustGas: 0.0
+      exhaustGas: 0.0,
+      collapse: false
     });
   }
 
@@ -162,6 +166,10 @@ export class EnergyInputExhaustGasLossesComponent implements OnInit {
     }
   }
 
+  collapseLoss(loss: any){
+    loss.collapse = !loss.collapse;
+  }
+  
   saveLosses() {
     let tmpExhaustGases = new Array<EnergyInputExhaustGasLoss>();
     this._exhaustGasLosses.forEach(loss => {

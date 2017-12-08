@@ -68,7 +68,8 @@ export class GasLeakageLossesComponent implements OnInit {
         let tmpLoss = {
           form: this.gasLeakageLossesService.initFormFromLoss(loss),
           name: 'Loss #' + (this._leakageLosses.length + 1),
-          heatLoss: loss.heatLoss || 0.0
+          heatLoss: loss.heatLoss || 0.0,
+          collapse: false
         };
         this.calculate(tmpLoss);
         this._leakageLosses.push(tmpLoss);
@@ -91,7 +92,8 @@ export class GasLeakageLossesComponent implements OnInit {
           this._leakageLosses.push({
             form: this.gasLeakageLossesService.initForm(),
             name: 'Loss #' + (this._leakageLosses.length + 1),
-            heatLoss: 0.0
+            heatLoss: 0.0,
+            collapse: false
           })
         }
       })
@@ -101,7 +103,8 @@ export class GasLeakageLossesComponent implements OnInit {
           this._leakageLosses.push({
             form: this.gasLeakageLossesService.initForm(),
             name: 'Loss #' + (this._leakageLosses.length + 1),
-            heatLoss: 0.0
+            heatLoss: 0.0,
+            collapse: false
           })
         }
       })
@@ -129,10 +132,14 @@ export class GasLeakageLossesComponent implements OnInit {
     this._leakageLosses.push({
       form: this.gasLeakageLossesService.initForm(),
       name: 'Loss #' + (this._leakageLosses.length + 1),
-      heatLoss: 0.0
+      heatLoss: 0.0,
+      collapse: false
     });
   }
-
+  
+  collapseLoss(loss: any){
+    loss.collapse = !loss.collapse;
+  }
 
   removeLoss(lossIndex: number) {
     this.gasLeakageLossesService.setDelete(lossIndex);

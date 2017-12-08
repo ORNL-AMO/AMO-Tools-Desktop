@@ -63,7 +63,8 @@ export class OtherLossesComponent implements OnInit {
       this.losses.otherLosses.forEach(loss => {
         let tmpLoss = {
           form: this.otherLossesService.getFormFromLoss(loss),
-          name: 'Loss #' + (this._otherLosses.length + 1)
+          name: 'Loss #' + (this._otherLosses.length + 1),
+          collapse: false
         };
         this.calculate(tmpLoss);
         this._otherLosses.push(tmpLoss);
@@ -99,7 +100,9 @@ export class OtherLossesComponent implements OnInit {
       })
     }
   }
-
+  collapseLoss(loss: any){
+    loss.collapse = !loss.collapse;
+  }
   addLoss() {
     if (this.isLossesSetup) {
       this.otherLossesService.addLoss(this.isBaseline);
@@ -109,7 +112,8 @@ export class OtherLossesComponent implements OnInit {
     }
     this._otherLosses.push({
       form: this.otherLossesService.initForm(),
-      name: 'Loss #' + (this._otherLosses.length + 1)
+      name: 'Loss #' + (this._otherLosses.length + 1),
+      collapse: false
     });;
   }
 
