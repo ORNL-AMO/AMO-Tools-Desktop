@@ -1,6 +1,6 @@
 <div class="output-summary hide-print">
   <div class="row justify-content-center" *ngIf="phast.losses">
-    <div class="col-6">
+    <div class="col-9">
       <div class="form-group">
         <select name="phastSelect" class="form-control mx-auto" id="phastSelect" [(ngModel)]="phast1">
         <option *ngFor="let phast of phastOptions" [ngValue]="phast">{{phast.name}}</option>
@@ -9,7 +9,7 @@
       <!--<div id="baseline-sankey"></div>-->
       <app-sankey [phast]="phast1.phast" [settings]="settings" [location]="'baseline-sankey'"></app-sankey>
     </div>
-    <div class="col-6" *ngIf="phast2">
+    <div class="col-9" *ngIf="phast2">
       <div class="form-group">
         <select name="modSelect" class="form-control mx-auto" id="modSelect" [(ngModel)]="phast2">
            <option *ngFor="let phast of phastOptions" [ngValue]="phast">{{phast.name}}</option>
