@@ -1,5 +1,5 @@
 <div class="psat-container" *ngIf="assessment && settings">
-  <div class="hide-print" id="psatBanner">
+  <div class="hide-print sticky-top" id="psatBanner">
     <app-psat-banner (togglePanel)="toggleOpenPanel($event)" [assessment]="assessment"></app-psat-banner>
   </div>
   <!--system-setup-->

@@ -30,6 +30,9 @@ export class OtherLossesComponent implements OnInit {
   settings: Settings;
   @Input()
   isLossesSetup: boolean;
+  @Input()
+  inSetup: boolean;
+  
   _otherLosses: Array<any>;
   firstChange: boolean = true;
   constructor(private otherLossesService: OtherLossesService, private otherLossCompareService: OtherLossesCompareService) { }

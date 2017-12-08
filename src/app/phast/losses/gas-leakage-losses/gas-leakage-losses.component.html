@@ -16,7 +16,7 @@
         <h6 *ngIf="isBaseline">{{loss.name}}</h6>
         <h6 *ngIf="!isBaseline">{{loss.name}} Modification</h6>
       </div>
-      <button *ngIf="isBaseline" class="close pull-right" aria-label="Close" (click)="removeLoss(lossIndex)">
+      <button *ngIf="isBaseline && inSetup" class="close pull-right" aria-label="Close" (click)="removeLoss(lossIndex)">
       <span aria-hidden="true">&times;</span>
     </button>
     </div>

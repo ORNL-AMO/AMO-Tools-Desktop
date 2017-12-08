@@ -30,7 +30,9 @@ export class FlueGasLossesComponent implements OnInit {
   settings: Settings;
   @Input()
   isLossesSetup: boolean;
-
+  @Input()
+  inSetup: boolean;
+  
   _flueGasLosses: Array<any>;
   firstChange: boolean = true;
   resultsUnit: string;

@@ -31,7 +31,9 @@ export class GasLeakageLossesComponent implements OnInit {
   settings: Settings;
   @Input()
   isLossesSetup: boolean;
-
+  @Input()
+  inSetup: boolean;
+  
   _leakageLosses: Array<any>;
   firstChange: boolean = true;
   resultsUnit: string;

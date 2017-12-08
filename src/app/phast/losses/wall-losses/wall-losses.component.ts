@@ -31,7 +31,9 @@ export class WallLossesComponent implements OnInit {
   settings: Settings;
   @Input()
   isLossesSetup: boolean;
-
+  @Input()
+  inSetup: boolean;
+  
   _wallLosses: Array<any>;
   firstChange: boolean = true;
   resultsUnit: string

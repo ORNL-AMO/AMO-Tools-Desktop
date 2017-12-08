@@ -31,6 +31,9 @@ export class ExtendedSurfaceLossesComponent implements OnInit {
   settings: Settings;
   @Input()
   isLossesSetup: boolean;
+  @Input()
+  inSetup: boolean;
+  
   _surfaceLosses: Array<any>;
   firstChange: boolean = true;
   resultsUnit: string;

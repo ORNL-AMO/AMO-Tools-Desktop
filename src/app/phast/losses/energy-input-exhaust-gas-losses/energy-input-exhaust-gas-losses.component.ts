@@ -31,7 +31,9 @@ export class EnergyInputExhaustGasLossesComponent implements OnInit {
   settings: Settings;
   @Input()
   isLossesSetup: boolean;
-
+  @Input()
+  inSetup: boolean;
+  
   _exhaustGasLosses: Array<any>;
   firstChange: boolean = true;
   availableHeat: number = 0;

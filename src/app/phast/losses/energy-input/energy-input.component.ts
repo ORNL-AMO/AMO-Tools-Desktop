@@ -31,7 +31,9 @@ export class EnergyInputComponent implements OnInit {
   settings: Settings;
   @Input()
   isLossesSetup: boolean;
-
+  @Input()
+  inSetup: boolean;
+  
   _energyInputs: Array<any>;
   firstChange: boolean = true;
   resultsUnit: string;

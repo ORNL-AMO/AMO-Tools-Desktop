@@ -9,7 +9,7 @@ import { LossesService } from './losses.service';
 @Component({
   selector: 'app-losses',
   templateUrl: 'losses.component.html',
-  styleUrls: ['losses.component.css', '../../psat/explore-opportunities/explore-opportunities.component.css']
+  styleUrls: ['losses.component.css']
 })
 export class LossesComponent implements OnInit {
   @Input()
