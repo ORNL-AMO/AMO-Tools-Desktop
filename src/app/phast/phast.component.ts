@@ -42,6 +42,7 @@ export class PhastComponent implements OnInit {
   init: boolean = true;
   saveDbToggle: string;
   specTab: string;
+  isModalOpen: boolean = false;
   constructor(
     private location: Location,
     private assessmentService: AssessmentService,
@@ -182,6 +183,10 @@ export class PhastComponent implements OnInit {
     if (stepNum) {
       this.phastService.goToStep(stepNum)
     }
+  }
+
+  openModal($event){
+    this.isModalOpen = $event;
   }
 
   close() {

@@ -6,3 +6,7 @@
     height: 100%;
 }
 
+
+.modal-open {
+    z-index: initial !important;
+}
