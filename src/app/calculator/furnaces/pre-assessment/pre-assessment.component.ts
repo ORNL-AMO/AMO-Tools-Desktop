@@ -21,8 +21,8 @@ export class PreAssessmentComponent implements OnInit {
   unitsOfMeasure: string = 'Imperial';
   results: Array<any>;
   settings: Settings;
-  currentEnergySourceType: string;
-  currentAssessmentType: string;
+  currentEnergySourceType: string = 'Fuel';
+  currentAssessmentType: string = 'Metered';
   nameIndex: number = 1;
   assessmentGraphColors: Array<string>;
   showAdd: boolean = true;
@@ -58,6 +58,10 @@ export class PreAssessmentComponent implements OnInit {
 
   setTab(str: string) {
     this.tabSelect = str;
+  }
+
+  setUnitsOfMeasure(str: string){
+    this.settings.unitsOfMeasure = str;
   }
 
   calculate() {

@@ -35,7 +35,7 @@
             </p>
           </li>
           <li>
-            <a (click)="showTool('pre-assessment')">Pre Assessment Calculator</a>
+            <a (click)="showTool('pre-assessment')">Pre-assessment / Screening Calculator</a>
             <p>Enter design or metered energy use data for furnaces within a facility to determine the relative energy use and prioritize
               energy use evaluations and improvements.
             </p>
@@ -105,10 +105,10 @@
 </div>
 
 
-<div class="calculator" *ngIf="getSelectedTool() == 'pre-assessment'">
-  <div class="row">
+<div class="stand-alone-calc tab-content" *ngIf="getSelectedTool() == 'pre-assessment'">
+  <!-- <div class="row">
     <div class="col-lg-11 mx-auto">
-      <h2>Pre Assessment Calculator</h2>
+      <h2>Pre-assessment / Screening</h2>
       <p>This calculator allows the user to enter either energy use information gathered from meters or design specifications
         (for fuel, electrotechnology or steam furnaces) to calculate energy use for multiple furnaces. This allows users to
         compare the relative energy use of furnaces within a facility to prioritize energy evaluations and efficiency improvements.
@@ -117,9 +117,9 @@
   </div>
   <div class="row">
     <div class="col-lg-11 mx-auto">
-      <div class="calculator-container">
+      <div class="calculator-container"> -->
         <app-pre-assessment></app-pre-assessment>
-      </div>
+      <!-- </div>
     </div>
-  </div>
+  </div> -->
 </div>

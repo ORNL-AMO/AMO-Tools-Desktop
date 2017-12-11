@@ -1,7 +1,7 @@
 .pre-assessment-furnace{
     background-color: white;
     animation-name: show-assessment;
-    animation-duration: 1.5s;
+    animation-duration: 1s;
     overflow: hidden;
     padding-left:15px;
     padding-right: 15px;
@@ -44,7 +44,7 @@
 } */
 
 .fa{
-    font-size: 75%;
+    font-size: 16px;
 }
 
 .fa:hover{
@@ -67,4 +67,22 @@ h5{
 .pre-assessment-header:hover{
     cursor: pointer;
     background-color: lightgray;
+}
+
+.toggle-btn{
+    font-size: 12px;
+}
+
+.btn-secondary:not([disabled]):not(.disabled).active{
+    background-color: #BF3D00;
+}
+
+.btn-col{
+    text-align: center;
+    padding-top: 3px;
+    padding-bottom: 3px;
+}
+
+.add-zone{
+    padding-right: 15px;
 }
