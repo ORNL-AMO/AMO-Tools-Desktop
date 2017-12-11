@@ -28,6 +28,8 @@ export class PumpFluidComponent implements OnInit {
   settings: Settings;
   @Input()
   baseline: boolean;
+  @Input()
+  inSetup: boolean;
 
   @ViewChild('formRef') formRef: ElementRef;
   elements: any;
@@ -272,64 +274,66 @@ export class PumpFluidComponent implements OnInit {
 
   //used to add classes to inputs with different baseline vs modification values
   initDifferenceMonitor() {
-    let doc = this.windowRefService.getDoc();
-    //pump style
-    this.compareService.pump_style_different.subscribe((val) => {
-      let pumpStyleElements = doc.getElementsByName('pumpType');
-      pumpStyleElements.forEach(element => {
-        element.classList.toggle('indicate-different', val);
+    if (!this.inSetup) {
+      let doc = this.windowRefService.getDoc();
+      //pump style
+      this.compareService.pump_style_different.subscribe((val) => {
+        let pumpStyleElements = doc.getElementsByName('pumpType');
+        pumpStyleElements.forEach(element => {
+          element.classList.toggle('indicate-different', val);
+        });
+      })
+      //pump specified
+      this.compareService.pump_specified_different.subscribe((val) => {
+        let specifiedPumpTypeElements = doc.getElementsByName('specifiedPumpType');
+        specifiedPumpTypeElements.forEach(element => {
+          element.classList.toggle('indicate-different', val);
+        });
+      })
+      //pump rated speed
+      this.compareService.pump_rated_speed_different.subscribe((val) => {
+        let pumpRpmElements = doc.getElementsByName('pumpRPM');
+        pumpRpmElements.forEach(element => {
+          element.classList.toggle('indicate-different', val);
+        });
       });
-    })
-    //pump specified
-    this.compareService.pump_specified_different.subscribe((val) => {
-      let specifiedPumpTypeElements = doc.getElementsByName('specifiedPumpType');
-      specifiedPumpTypeElements.forEach(element => {
-        element.classList.toggle('indicate-different', val);
-      });
-    })
-    //pump rated speed
-    this.compareService.pump_rated_speed_different.subscribe((val) => {
-      let pumpRpmElements = doc.getElementsByName('pumpRPM');
-      pumpRpmElements.forEach(element => {
-        element.classList.toggle('indicate-different', val);
-      });
-    });
 
-    //drive
-    this.compareService.drive_different.subscribe((val) => {
-      let driveElements = doc.getElementsByName('drive');
-      driveElements.forEach(element => {
-        element.classList.toggle('indicate-different', val);
+      //drive
+      this.compareService.drive_different.subscribe((val) => {
+        let driveElements = doc.getElementsByName('drive');
+        driveElements.forEach(element => {
+          element.classList.toggle('indicate-different', val);
+        });
       });
-    });
-    // kinematic viscosity
-    this.compareService.kinematic_viscosity_different.subscribe((val) => {
-      let viscosityElements = doc.getElementsByName('viscosity');
-      viscosityElements.forEach(element => {
-        element.classList.toggle('indicate-different', val);
+      // kinematic viscosity
+      this.compareService.kinematic_viscosity_different.subscribe((val) => {
+        let viscosityElements = doc.getElementsByName('viscosity');
+        viscosityElements.forEach(element => {
+          element.classList.toggle('indicate-different', val);
+        });
       });
-    });
-    //specific gravity
-    this.compareService.specific_gravity_different.subscribe((val) => {
-      let gravityElements = doc.getElementsByName('gravity');
-      gravityElements.forEach(element => {
-        element.classList.toggle('indicate-different', val);
+      //specific gravity
+      this.compareService.specific_gravity_different.subscribe((val) => {
+        let gravityElements = doc.getElementsByName('gravity');
+        gravityElements.forEach(element => {
+          element.classList.toggle('indicate-different', val);
+        });
       });
-    });
-    //stages
-    this.compareService.stages_different.subscribe((val) => {
-      let stagesElements = doc.getElementsByName('stages');
-      stagesElements.forEach(element => {
-        element.classList.toggle('indicate-different', val);
+      //stages
+      this.compareService.stages_different.subscribe((val) => {
+        let stagesElements = doc.getElementsByName('stages');
+        stagesElements.forEach(element => {
+          element.classList.toggle('indicate-different', val);
+        });
       });
-    });
-    //fixed speed
-    // this.compareService.fixed_speed_different.subscribe((val) => {
-    //   let fixedSpeedElements = doc.getElementsByName('fixedSpeed');
-    //   fixedSpeedElements.forEach(element => {
-    //     element.classList.toggle('indicate-different', val);
-    //   });
-    // });
+      //fixed speed
+      // this.compareService.fixed_speed_different.subscribe((val) => {
+      //   let fixedSpeedElements = doc.getElementsByName('fixedSpeed');
+      //   fixedSpeedElements.forEach(element => {
+      //     element.classList.toggle('indicate-different', val);
+      //   });
+      // });
+    }
   }
 
 

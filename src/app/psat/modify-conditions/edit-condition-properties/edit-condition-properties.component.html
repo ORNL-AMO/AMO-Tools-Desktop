@@ -1,15 +1,37 @@
-
-<div class="form-group">
-  <label for="modName">Modification Name</label>
-  <input type="text" class="form-control" id="modName" [(ngModel)]="name">
+<div class="row">
+  <div class="col-12" style="padding-top:15px;">
+    <div class="form-group">
+      <label for="modName">Modification Name</label>
+      <input type="text" class="form-control" id="modName" [(ngModel)]="name">
+    </div>
+  </div>
 </div>
-<div class="actions">
-	<a (click)="cancel()" class="pull-left btn btn-secondary">Cancel</a>
-	<a *ngIf="!deleteConfirm" (click)="saveModification()" class="pull-right btn btn-primary">Save</a>
+
+<div class="row" style="padding-top:15px;">
+  <div class="col-12">
+    <a (click)="cancel()" class="pull-left btn btn-secondary">Cancel</a>
+    <a *ngIf="!deleteConfirm" (click)="saveModification()" class="pull-right btn btn-primary">Save</a>
+  </div>
 </div>
 
-
-<a class="delete-modification" *ngIf="!deleteConfirm" (click)="showDeleteConfirm()">Delete Modification</a>
-
-<div class="pull-left" *ngIf="deleteConfirm" >Are you sure you want to delete? <a (click)="deleteModification()">Delete</a> / <a (click)="cancelDelete()">Cancel</a>
+<div class="row" style="padding-top:15px;">
+  <div class="col-12">
+    <a class="delete-modification" *ngIf="!deleteConfirm" (click)="showDeleteConfirm()">Delete Modification</a>
+    <div *ngIf="deleteConfirm">
+      <div class="row">
+        <div class="col-12">
+          Are you sure you want to delete?
+        </div>
+        <div class="col-12">
+          <a class="delete-modification" (click)="deleteModification()">Delete</a> /
+          <a class="click-link" (click)="cancelDelete()">Cancel</a>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
+<!-- 
+<div class="pull-left" *ngIf="deleteConfirm">Are you sure you want to delete?
+  <a class="delete-modification" (click)="deleteModification()">Delete</a> /
+  <a class="click-link" (click)="cancelDelete()">Cancel</a>
+</div> -->

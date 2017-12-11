@@ -1,94 +1,61 @@
-<div class="modify-conditions">
-  <div class="modification aux-form-panel">
-    <div class="header aux-header">
-      <h3>Design Energy (Electricity)</h3>
-      <button class="btn btn-secondary pull-right" (click)="addZone()"><span class="fa fa-plus"></span></button>
-    </div>
-    <div class="losses-container">
-      <div class="card-form" *ngFor="let zone of phast.designedEnergy.designedEnergyElectricity; let index = index;">
-        <div class="row">
-          <div class="col-6">
-            <div class="form-group">
-              <!--<label for="name">Equipment Name</label>-->
-              <input name="name" type="text" id="text" class="form-control" (focus)="setField('name')" [(ngModel)]="zone.name" (input)="calculate()"
-                onfocus="this.select();" />
+<div class="modify-conditions panel-container row phast">
+  <div class="col-12">
+    <div class="row align-items-top calculator-panel">
+      <div class="modification panel-column col-6 align-top">
+        <div class="header">
+          <h3>Design Energy (Electricity)</h3>
+            <h5 class="pull-right panel-add">
+              <a class="small">
+                <span (click)="addZone()">+Add Zone</span>
+              </a>
+            </h5>
+        </div>
+        <div class="card-form" *ngFor="let zone of phast.designedEnergy.designedEnergyElectricity; let index = index;">
+          <form>
+            <div class="row">
+              <div class="col-12">
+                <div class="pull-left">
+                  <!--<label for="name">Equipment Name</label>-->
+                  <input name="name" type="text" id="text" class="form-control" (focus)="setField('name')" [(ngModel)]="zone.name" (input)="calculate()"
+                    onfocus="this.select();" />
+                </div>
+                <button class="close pull-right" aria-label="Close" (click)="removeZone(index)">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="col-12">
+                <app-designed-energy-electricity-form [inputs]="zone" (emitCalculate)="calculate()" (emitSave)="save()" (changeField)="setField($event)"></app-designed-energy-electricity-form>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+      <div class="col-6 align-top">
+        <div class="help-panel">
+          <div class="row">
+            <ul class="tabs primary tab-row">
+              <li class="panel-tab-item tab-2" [ngClass]="{'active': tabSelect == 'results'}">
+                <a (click)="setTab('results')">Results</a>
+              </li><!--
+						--><li class="panel-tab-item tab-2" [ngClass]="{'active': tabSelect == 'help'}">
+                <a (click)="setTab('help')">Help</a>
+              </li>
+            </ul>
+          </div>
+          <div class="row justify-content-center data-row align-items-center" *ngIf="tabSelect == 'help'">
+            <div class="col-11">
+              <div class="calc-help">
+                <app-designed-energy-electricity-help [currentField]="currentField"></app-designed-energy-electricity-help>
+              </div>
             </div>
           </div>
-          <div class="col-6">
-            <button class="close pull-right" aria-label="Close" (click)="removeZone(index)">
-                                <span aria-hidden="true">&times;</span>
-                         </button>
+          <div class="row justify-content-center data-row" *ngIf="tabSelect == 'results'">
+            <div class="col-11">
+              <app-designed-energy-results [results]="results" [settings]="settings"></app-designed-energy-results>
+            </div>
           </div>
-        </div>
-        <div class="row">
-          <div class="col-12">
-           <app-designed-energy-electricity-form [inputs]="zone" (emitCalculate)="calculate()" (emitSave)="save()" (changeField)="setField($event)"></app-designed-energy-electricity-form>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="modification aux-help-panel">
-    <div class="help-panel">
-      <div class="row">
-        <ul class="tabs primary tab-row">
-          <li class="calc-tab tab-item" [ngClass]="{'active': tabSelect == 'results'}">
-            <a (click)="setTab('results')">Results</a>
-          </li><!--
-						--><li class="calc-tab tab-item" [ngClass]="{'active': tabSelect == 'help'}">
-            <a (click)="setTab('help')">Help</a>
-          </li>
-        </ul>
-      </div>
-      <div class="row justify-content-center data-row align-items-center" *ngIf="tabSelect == 'help'">
-        <div class="col-11">
-          <app-designed-energy-electricity-help [currentField]="currentField"></app-designed-energy-electricity-help>
-        </div>
-      </div>
-      <div class="row justify-content-center data-row" *ngIf="tabSelect == 'results'">
-        <div class="col-11 data-table">
-          <app-designed-energy-results [results]="results" [settings]="settings"></app-designed-energy-results>
         </div>
       </div>
     </div>
   </div>
 </div>
-
-
-
-
-
-
-
-
-<!--
-<div class="container-fluid">
-  <div class="row modify-conditions explore-container">
-    <div class="col-md-6 explore-column">
-      <app-designed-energy-electricity-form [inputs]="inputs" (emitCalculate)="calculate()" (emitSave)="save()" (changeField)="setField($event)"></app-designed-energy-electricity-form>
-    </div>
-    <div class="col-md-6 results-column">
-      <div class="help-panel">
-        <div class="row">
-          <ul class="tabs primary tab-row">
-            <li class="calc-tab tab-item" [ngClass]="{'active': tabSelect == 'results'}">
-              <a (click)="setTab('results')">Results</a>
-            </li><li class="calc-tab tab-item" [ngClass]="{'active': tabSelect == 'help'}">
-              <a (click)="setTab('help')">Help</a>
-            </li>
-          </ul>
-        </div>
-        <div class="row justify-content-center data-row align-items-center" *ngIf="tabSelect == 'help'">
-          <div class="col-11">
-            <app-designed-energy-electricity-help [currentField]="currentField"></app-designed-energy-electricity-help>
-          </div>
-        </div>
-        <div class="row justify-content-center data-row" *ngIf="tabSelect == 'results'">
-          <div class="col-8 data-table">
-            <app-designed-energy-results [results]="results"></app-designed-energy-results>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>-->

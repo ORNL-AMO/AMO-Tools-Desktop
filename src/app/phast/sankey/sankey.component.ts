@@ -7,8 +7,19 @@ import * as d3 from 'd3';
 var svg;
 import { Settings } from '../../shared/models/settings';
 import { SankeyService, FuelResults } from './sankey.service';
+
+// use these values to alter label font position and size
 const width = 2650,
-  height = 1400;
+  height = 1400,
+  labelFontSize = 28,
+  labelPadding = 4,
+  reportFontSize = 30,
+  reportPadding = 4,
+  topLabelPositionY = 150,
+  bottomLabelPositionY = 1250,
+  topReportPositionY = 125,
+  bottomReportPositionY = 1250;
+
 
 @Component({
   selector: 'app-sankey',
@@ -25,8 +36,9 @@ export class SankeyComponent implements OnInit {
   location: string;
 
   firstChange: boolean = true;
-
   baseSize: number = 300;
+  minSize: number = 3;
+
   constructor(private phastService: PhastService, private sankeyService: SankeyService) {
   }
 
@@ -73,6 +85,7 @@ export class SankeyComponent implements OnInit {
     //extra push for output
     links.push({ source: i, target: i + 1 })
 
+
     svg = d3.select('#' + this.location).append('svg')
       .call(() => {
         this.calcSankey(results.nodes);
@@ -84,17 +97,17 @@ export class SankeyComponent implements OnInit {
       .append("g");
 
     this.drawFurnace();
-
     var color = this.findColor(results.nodes[0].value);
-
     this.makeGradient(color, results.nodes, links);
 
+    //arrows are created, positioned, and colored
     svg.selectAll('marker')
       .data(links)
       .enter().append('svg:marker')
       .attr('id', function (d) {
         return 'end-' + d.target;
       })
+      //real version
       .attr('orient', 'auto')
       .attr('refX', .1)
       .attr('refY', 0)
@@ -103,7 +116,8 @@ export class SankeyComponent implements OnInit {
         return color(results.nodes[d.target].value);
       })
       .append('svg:path')
-      .attr("d", "M0,-2.5L2,0L0,2.5");
+      .attr("d", "M0,-2.5 L2,0 L0,2.5");
+
 
     // Draw links to the svg
     var link = svg.append("g")
@@ -139,184 +153,131 @@ export class SankeyComponent implements OnInit {
       .append("text")
       .attr("text-anchor", "middle")
       .attr("dx", (d) => {
-       if (d.extSurfaceLoss) {
-         return d.x - 240;
-       }
-       if (d.usefulOutput) {
-          return d.x + (d.displaySize * .7) + 5;
+        if (d.usefulOutput) {
+          return d.x + (d.displaySize * .7) + 40;
         }
         if (d.input) {
-          return d.x + 70;
-       }
-       else {
+          if (this.location === 'sankey-diagram') {
+            return d.x - 70;
+          }
+          else if (this.location !== 'sankey-diagram') {
+            return d.x + 70;
+          }
+          return d.x
+        }
+        else {
           return d.x;
         }
       })
       .attr("dy", (d) => {
         if (d.input) {
           if (this.location === 'sankey-diagram') {
-            return d.y + (d.displaySize / 2) + 10;
-          }else if (this.location !== 'sankey-diagram') {
-          return d.y + (d.displaySize / 2) - 15;
+            return d.y + (d.displaySize) + labelFontSize + labelPadding;
+          } else if (this.location !== 'sankey-diagram') {
+            return d.y + (d.displaySize) + reportFontSize + reportPadding;
           }
         }
 
         if (d.usefulOutput) {
           if (this.location === 'sankey-diagram') {
-          return d.y + (d.displaySize / 2) - 140;
-        } else if (this.location !== 'sankey-diagram') {
-            return d.y + (d.displaySize / 2) - 180;
+            return d.y + (d.displaySize + (d.displaySize * 0.25)) + labelFontSize + labelPadding;
+          } else if (this.location !== 'sankey-diagram') {
+            return d.y + (d.displaySize + (d.displaySize * 0.25)) + reportFontSize + reportPadding;
           }
         }
         if (d.top) {
-            if (this.location === 'sankey-diagram') {
-              return d.y - 155;
-            } else if (this.location !== 'sankey-diagram') {
-              return d.y - 160;
-            }
+          if (this.location === 'sankey-diagram') {
+            return topLabelPositionY;
+          } else if (this.location !== 'sankey-diagram') {
+            return topReportPositionY;
           }
-          else if (d.extSurfaceLoss) {
-            return d.y + 45;
+        }
+        else {
+          if (this.location === 'sankey-diagram') {
+            return bottomLabelPositionY;
           }
-          else {
-            return d.y + 140;
+          else if (this.location !== 'sankey-diagram') {
+            return bottomReportPositionY;
           }
-
+        }
       })
       .text((d) => {
         if (!d.inter) {
           return d.name;
         }
       })
-      .style("font-size", (this.location === 'sankey-diagram') ? "32px" : "45px");
-    // var nodes_units = svg.selectAll(".nodetext")
-    //   .data(results.nodes)
-    //   .enter()
-    //   .append("text")
-    //   .attr("text-anchor", "middle")
-    //   .attr("dx", function (d) {
-    //     if (d.input) {
-    //       return d.x - 70;
-    //     }
-    //     else if (d.usefulOutput) {
-    //       return d.x + (d.displaySize * .7) + 100;
-    //     }
-    //     else {
-    //       return d.x;
-    //     }
-    //   })
-    //   .attr("dy", function (d) {
-    //     if (d.input || d.usefulOutput) {
-    //       return d.y + (d.displaySize / 2) + 80;
-    //     }
-    //     else {
-    //       if (d.top) {
-    //         return d.y - 20;
-    //       }
-    //       else {
-    //         return d.y + 160;
-    //       }
-    //     }
-    //   })
-    //   .text(function (d) {
-    //     if (!d.inter) {
-    //       return d.units;
-    //     }
-    //   })
-    //   .style("font-size", "30px");
+      .style("font-size", (this.location === 'sankey-diagram') ? labelFontSize + "px" : reportFontSize + "px");
 
-    // Units Adjustment if it is Sankey Diagram
-    results.nodes.forEach((d, i) => {
-      var node_val = d, i = i;
-      if (!node_val.inter) {
-        if (this.location === 'sankey-diagram') {
-          svg.append("text")
-            .attr("x", function () {
-              if (node_val.input) {
-                return node_val.x + 10;
-              }
-              if (node_val.extSurfaceLoss) {
-                  return d.x - 200;
-             }
-              if (node_val.usefulOutput) {
-                return d.x + (d.displaySize * .7) - 70;
-              }
-              if (node_val.x) {
-                  return node_val.x + (d.displaySize * .7) - 120;
-               }
-            })
-            .attr("y", function () {
-              if (node_val.input) {
-                return (node_val.y + (node_val.displaySize / 2)) + 45;
-              }
-              else if (node_val.usefulOutput) {
-                return (node_val.y + (node_val.displaySize / 2)) - 100;
-              }
-              else if (node_val.top) {
-                return node_val.y - 120;
-              }
-              else if (node_val.extSurfaceLoss) {
-                return node_val.y + 80;
-              }
-              else {
-                return node_val.y + 175;
-              }
-            })
-            .text(function () {
-              var format = d3.format(",.2f");
-              return format(node_val.value) + ' ' + node_val.units;
-            })
-            .style("font-size", (this.location === 'sankey-diagram') ? "32px" : "45px");
 
-          // Units Adjustment if it is Sankey Report
-        } else if (this.location === 'baseline-sankey' || this.location === 'modification-sankey') {
-          console.log("This is report location " + " " + this.location)
-          svg.append("text")
-            .attr("x", function () {
-              if (node_val.input) {
-                return node_val.x + 10;
-              }
-              if (node_val.extSurfaceLoss) {
-                return d.x - 100;
-              }
-              if (node_val.usefulOutput) {
-                return d.x + (d.displaySize * .7) - 180;
-              }
-              if (node_val.x) {
-                return node_val.x + (d.displaySize * .7) - 200;
-              }
-            })
-            .attr("y", function () {
-              if (node_val.input) {
-                return (node_val.y + (node_val.displaySize / 2)) + 45;
-              }
-              else if (node_val.usefulOutput) {
-                return (node_val.y + (node_val.displaySize / 2)) - 130;
-              }
-              else if (node_val.top) {
-                return node_val.y - 100;
-              }
-              else if (node_val.extSurfaceLoss) {
-                return node_val.y + 115;
-              }
-              else {
-                return node_val.y + 195;
-              }
-            })
-            .text(function () {
-              var format = d3.format(",.2f");
-              return format(node_val.value) + ' ' + node_val.units;
-            })
-            .style("font-size", (!this.location) ? "32px" : "45px");
+    //append values and units
+    nodes_text = svg.selectAll(".nodetext")
+      .data(results.nodes)
+      .enter()
+      .append("text")
+      .attr("text-anchor", "middle")
+      .attr("dx", (d) => {
+        if (d.usefulOutput) {
+          return d.x + (d.displaySize * .7) + 40;
         }
-      }
-    });
-
+        if (d.input) {
+          if (this.location === 'sankey-diagram') {
+            return d.x - 70;
+          }
+          else if (this.location !== 'sankey-diagram') {
+            return d.x + 70;
+          }
+          return d.x + 70;
+        }
+        else {
+          return d.x;
+        }
+      })
+      .attr("dy", (d) => {
+        if (d.input) {
+          if (this.location === 'sankey-diagram') {
+            return d.y + (d.displaySize) + (labelFontSize * 2) + (labelPadding * 2);
+          } else if (this.location !== 'sankey-diagram') {
+            return d.y + (d.displaySize) + (reportFontSize * 2) + (reportPadding * 2);
+          }
+        }
+        if (d.usefulOutput) {
+          if (this.location === 'sankey-diagram') {
+            return d.y + (d.displaySize + (d.displaySize * 0.25)) + (labelFontSize * 2) + (labelPadding * 2);
+          } else if (this.location !== 'sankey-diagram') {
+            return d.y + (d.displaySize + (d.displaySize * 0.25)) + (reportFontSize * 2) + (reportPadding * 2);
+          }
+          return d.y + (d.displaySize) - 135;
+        }
+        if (d.top) {
+          if (this.location === 'sankey-diagram') {
+            return topLabelPositionY + labelFontSize + labelPadding;
+          } else if (this.location !== 'sankey-diagram') {
+            return topReportPositionY + reportFontSize + reportPadding;
+          }
+        }
+        else {
+          if (this.location === 'sankey-diagram') {
+            return bottomLabelPositionY + labelFontSize + labelPadding;
+          }
+          else if (this.location !== 'sankey-diagram') {
+            return bottomReportPositionY + reportFontSize + reportPadding;
+          }
+          return bottomLabelPositionY + labelFontSize + labelPadding;
+        }
+      })
+      .text((d) => {
+        if (!d.inter) {
+          return d.value.toFixed(2) + " " + d.units;
+        }
+      })
+      .style("font-size", (this.location === 'sankey-diagram') ? labelFontSize + "px" : reportFontSize + "px");
   }
 
+  //positions elements
   calcSankey(nodes) {
     var alterVal = 0, change;
     nodes.forEach((d, i) => {
+
       d.y = (height / 2 - nodes[0].displaySize / 2);
       if (d.inter) {
         // Reset heightbn
@@ -329,6 +290,7 @@ export class SankeyComponent implements OnInit {
           // Previous node.val - interNode.value
           d.value = (nodes[i - 2].value - nodes[i - 1].value);
           d.displaySize = this.calcDisplayValue(this.baseSize, d.value, nodes[0].value);
+
           if (d.top) {
             d.y = d.y + alterVal;
           }
@@ -365,9 +327,11 @@ export class SankeyComponent implements OnInit {
     return nodes;
   }
 
+  //debug version
   calcDisplayValue(baseSize, val, value) {
-    return baseSize * (val / value);
+    return Math.max(baseSize * (val / value), this.minSize);
   }
+
 
   makeLinks(d, nodes) {
 
@@ -389,19 +353,21 @@ export class SankeyComponent implements OnInit {
       if (nodes[d.target].top) {
         points.push([(nodes[d.source].x - 5), (nodes[d.source].y + (nodes[d.target].displaySize / 2))]);
         points.push([(nodes[d.source].x + 30), (nodes[d.source].y + (nodes[d.target].displaySize / 2))]);
-        points.push([(nodes[d.target].x), (nodes[d.target].y + (nodes[d.target].displaySize / 2))]);
+        points.push([(nodes[d.target].x), (300)]);
       }
       else {
         points.push([(nodes[d.source].x - 5), ((nodes[d.source].y + nodes[d.source].displaySize) - (nodes[d.target].displaySize / 2))]);
         points.push([(nodes[d.source].x + 30), (((nodes[d.source].y + nodes[d.source].displaySize) - (nodes[d.target].displaySize / 2)))]);
-        points.push([(nodes[d.target].x), (nodes[d.target].y - (nodes[d.target].displaySize / 2))]);
+        points.push([(nodes[d.target].x), (1100)]);
       }
     }
 
     return linkGen(points);
   };
 
+
   makeGradient(color, nodes, links) {
+
     links.forEach(function (d, i) {
       var link_data = d;
       svg.append("linearGradient")
@@ -434,7 +400,7 @@ export class SankeyComponent implements OnInit {
         })
         .selectAll("stop")
         .data([
-          { offset: "0%", color: color(nodes[link_data.source].value) },
+          { offset: "30%", color: color(nodes[link_data.source].value) },
           { offset: "76%", color: color(nodes[link_data.target].value) },
         ])
         .enter().append("stop")
@@ -447,6 +413,7 @@ export class SankeyComponent implements OnInit {
     });
   }
 
+
   getEndMarker(d, nodes) {
     if (!nodes[d.target].inter || nodes[d.target].usefulOutput) {
       return "url(" + window.location + "#end-" + d.target + ")";
@@ -455,6 +422,7 @@ export class SankeyComponent implements OnInit {
       return "";
     }
   }
+
 
   updateColors(nodes, links) {
 
@@ -511,11 +479,13 @@ export class SankeyComponent implements OnInit {
     });
   }
 
+
   findColor(value) {
     return d3.scaleLinear()
       .domain([0, value])
-      .range(["#ffcc00", "#ff3300"]);
+      .range(["#ffa400", "#a71600"]);
   }
+
 
   changePlaceHolders(nodes) {
     svg.selectAll("input")
@@ -567,6 +537,7 @@ export class SankeyComponent implements OnInit {
         }
       });
   }
+
 
   changeAll(nodes, links, link, nodes_text, nodes_units) {
 

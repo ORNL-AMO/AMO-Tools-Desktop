@@ -1,6 +1,9 @@
+
+
+
 <span 
 	[ngClass]="{ 'phast' : assessment.type == 'PHAST', 'psat': assessment.type == 'PSAT' }" (click)="goToAssessment(assessment)">
-
+	<img *ngIf="assessment.type == 'PSAT'" class="icon-image" src="assets/images/ico-psat-diagram-small.png">
+	<img *ngIf="assessment.type == 'PHAST'" class="icon-image" src="assets/images/ico-phast-diagram-small.png">
 	{{assessment.name}}
-
 </span>

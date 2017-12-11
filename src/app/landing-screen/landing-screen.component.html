@@ -1,70 +1,70 @@
 <div class="landing">
 
 	<h1>Welcome to the most efficient way to manage and optimize your plant's systems and equipment.</h1>
-	<!-- <h2>Start with one of the following options to get started.</h2> -->
-	<h2>Create an assessment to model your system and find opportunities for efficiency or run calculations from one of our many property and equipment calculators.</h2>
+	<h2>Start with one of the following options to get started.</h2> 
+	<!-- <h2>Create an assessment to model your system and find opportunities for efficiency or run calculations from one of our many
+		property and equipment calculators.</h2> -->
 
-	<!-- <ul>
+	<div class="row justify-content-center spacer-row">
+		<div class="col-5 spacer-col">
+
+		</div>
+	</div>
+
+	<ul>
 		<li>
-			<h3>Properties &amp; Equipment Calculators</h3>
+			<h3 (click)="createAssessment()"><a  class="click-link" (click)="createAssessment()">Create Assessment</a>
+			</h3>
+			<p>Model a system and explore endless optimization scenarios.</p>
+			<a (click)="hideScreen()" class="click-link">View Your Assessments</a>
+		</li>
+		<li>
+			<h3><a  class="click-link" (click)="chooseCalculator('all')">Properties &amp; Equipment Calculators</a></h3>
 			<p>Generate detailed properties and test a variety of adjustments.</p>
 			<div>
-			<span class="nav-item" [ngClass]="{'selected': selectedCalculator == 'pumps'}" (click)="chooseCalculator('pumps')">
-			   <span class="icon">
-			 <i class="fa fa-calculator"></i>
-			   </span>Pumps
-			</span>
+				<a class="icon click-link" (click)="chooseCalculator('pumps')">
+					<i class="fa fa-calculator"></i> Pumps</a>
+			</div>
+			<!-- <div>
+				<span class="click-link" (click)="chooseCalculator('fans')">
+					<a class="icon click-link">
+						<i class="fa fa-calculator"></i>
+					</span>Fans
+				</span>
+			</div> -->
+			<div>
+				<a class="icon click-link" (click)="chooseCalculator('furnaces')">
+					<i class="fa fa-calculator"></i> Furnaces
+				</a>
+			</div>
+			<!-- <div>
+				<span class="click-link" (click)="chooseCalculator('steam')">
+					<a class="icon click-link">
+						<i class="fa fa-calculator"></i>
+					</span>Steam
+				</span>
+			</div>-->
+			<div>
+				<a class="icon click-link" (click)="chooseCalculator('motors')">
+					<i class="fa fa-calculator"></i> Motors
+				</a>
 			</div>
 			<div>
-			<span class="nav-item" [ngClass]="{'selected': selectedCalculator == 'fans'}" (click)="chooseCalculator('fans')">
-			   <span class="icon">
-			 <i class="fa fa-calculator"></i>
-			   </span>Fans
-			</span>
-			</div>
-			<div>
-			<span class="nav-item" [ngClass]="{'selected': selectedCalculator == 'furnaces'}" (click)="chooseCalculator('furnaces')">
-			   <span class="icon">
-			 <i class="fa fa-calculator"></i>
-			   </span>Furnaces
-			</span>
-			</div>
-			<div>
-			<span class="nav-item" [ngClass]="{'selected': selectedCalculator == 'steam'}" (click)="chooseCalculator('steam')">
-			   <span class="icon">
-			 <i class="fa fa-calculator"></i>
-			   </span>Steam
-			</span>
-			</div>
-			<div>
-			<span class="nav-item" [ngClass]="{'selected': selectedCalculator == 'motors'}" (click)="chooseCalculator('motors')">
-			   <span class="icon">
-			 <i class="fa fa-calculator"></i>
-			   </span>Motors
-			</span>
-			</div>
-			<div>
-			<span class="nav-item" [ngClass]="{'selected': selectedCalculator == 'utilities'}" (click)="chooseCalculator('utilities')">
-			   <span class="icon">
-			 <i class="fa fa-calculator"></i>
-			   </span>Utilities
-			</span>
+				<a class="icon click-link" (click)="chooseCalculator('utilities')">
+					<i class="fa fa-calculator"></i> Utilities
+				</a>
 			</div>
 		</li>
-		<li>
-			<h3>Create Assessment</h3>
-			<p>Model a system and explore endless optimization scenarios.</p>
-			<app-assessment-create [directory]="directory"></app-assessment-create>
-			<a (click)="hideScreen()">Go To Assessments Dashboard</a>
-		</li>
-	</ul> -->
+	</ul>
 
 	<div class="help">
 		<h3>Need help getting started?</h3>
 		<p>Watch the following tutorial to see how to get started using the tool.</p>
-		<video controls style="max-width:100%;">
-	        <source src="assets/videos/landing-screen-video.mp4" type="video/mp4"> Your browser does not support mp4 videos
-	    </video>
+		<video controls class="tutorial-video">
+			<source src="assets/videos/landing-screen-video.mp4" type="video/mp4"> Your browser does not support mp4 videos
+		</video>
 	</div>
 
 </div>
+
+<app-assessment-create *ngIf="showCreateAssessment" [directory]="directory" (hideModal)="hideCreateAssessment()"></app-assessment-create>

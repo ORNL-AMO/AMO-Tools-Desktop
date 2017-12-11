@@ -7,9 +7,10 @@
         <th>Baseline
           <span>({{lossUnit}})</span>
         </th>
-        <th *ngFor="let mod of phast.modifications; let index = index;" [ngClass]="{'selected-modification': index == selectedModificationIndex}">{{mod.phast.name}}
+        <th *ngFor="let mod of phastMods; let index = index;" [ngClass]="{'selected-modification': index == selectedModificationIndex}">{{mod.phast.name}}
           <span>({{lossUnit}})</span>
         </th>
+        <th *ngIf="!inSetup && modification != undefined">{{modification.phast.name}} <span>({{lossUnit}})</span></th>
       </tr>
     </thead>
     <tbody>

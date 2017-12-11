@@ -1,0 +1,200 @@
+
+/*
+Tabs
+========================================== */
+.tabs {
+    margin: 0;
+    padding: 0;
+  }
+  .tabs li {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  
+  /* Primary Tabs */
+   .tabs.primary {
+    background: #e5e5e5;
+    border-bottom: #c8c8c8 solid 1px;
+  }
+  .tabs.primary li {
+    display: inline-block;
+  }
+    .tabs.primary.psat li:nth-child(-n+2) a {
+      border-top: #00315d solid 4px;
+    }
+    .tabs.primary.phast li:nth-child(-n+2) a {
+      border-top: #611f00 solid 4px;
+    }
+  .tabs.primary a {
+    padding: 14px 10px;
+    font-size: 14px;
+    border-left: #c8c8c8 solid 1px;
+    display: block;
+    color: #0F0F0F;
+  }
+  
+  .tabs.primary li:hover {
+    text-decoration: none;
+    background: #efefef;
+    cursor: pointer;
+  }
+  .tabs.primary .active a {
+    background: #fff;
+    font-weight: bold;
+    border-bottom: #fff solid 1px;
+  }
+  
+  .fixed-tab-size{
+    min-width: 200px;
+  }
+   
+  /* Sub Tabs */
+  .tabs.subtabs {
+    background: #ececec;
+    -webkit-box-shadow: 0px 1px 4px 0px rgba(0,0,0,0.2);
+    -moz-box-shadow: 0px 1px 4px 0px rgba(0,0,0,0.2);
+    z-index: 3;
+    position: relative;
+  }
+  .tabs.subtabs li {
+    display: inline-block;
+  }
+  .tabs.subtabs a {
+    padding:10px;
+    font-size: 16px;
+    display: block;
+    color: #0F0F0F;
+  }
+  .tabs.subtabs a:hover {
+    text-decoration: underline;
+    background: #E5E7E9;
+    cursor: pointer;
+  }
+  .tabs.subtabs.phast .active a {
+    font-weight: bold;
+    /* border-right: #BF3D00 solid 2px;
+    border-left: #BF3D00 solid 2px; */
+    background: white;
+  }
+  .tabs.subtabs.phast {
+    border-bottom: #BF3D00 solid 3px;
+  }
+
+  .tabs.subtabs.psat {
+    border-bottom: #2980b9 solid 3px;
+  }
+
+  .tabs.subtabs.psat .active a {
+    font-weight: bold;
+    /* border-right: #2980b9 solid 2px;
+    border-left: #2980b9 solid 2px; */
+    background: white;
+  }
+  
+    .tabs.subtabs.progress-tabs a {
+      color: #000;
+      font-size: 14px;
+      padding: 14px 10px;
+    }
+      .tabs.subtabs.progress-tabs li:hover {
+        background: #fff;
+      }
+    .tabs.subtabs.progress-tabs li.active a {
+      color: #000;
+    }
+    .tabs.subtabs.progress-tabs li.disabled a {
+      color: #999;
+    }
+    .step-number {
+      background: #333;
+      color: #fff;
+      font-weight: bold;
+      font-size: 14px;
+      padding: 5px 10px;
+      border-radius: 23%;
+      margin-right: 5px;
+    }
+      .tabs.subtabs.phast .active .step-number {
+        background: #BF3D00;
+      }
+      .tabs.subtabs.psat .active .step-number {
+        background: #2980b9;
+      }
+      .disabled .step-number {
+        background: #efefef;
+        color: #999;
+        font-weight: normal;
+      }
+  
+  .tabs.subtabs .report-link {
+    color: #0081d6;
+    text-decoration: none;
+    font-weight: bold;
+    padding-left: 23px;
+    margin-left: 10px;
+    border-left: #ddd dashed 1px;
+  }
+    .tabs.subtabs .active .report-link {
+      color: #0F0F0F;
+    }
+  
+/*in calculator*/
+    .in-psat-height{
+        height: 100%;
+    }
+    
+    .calculator-margin{
+        margin-top: 10%;
+    }
+
+
+
+  /* Vertical Tabs */
+  /* .tabs.vertical {
+    margin-right: -1px;
+  }
+  .tabs.vertical a {
+    display: block;
+    padding: 10px;
+    border-bottom: #eaeaea solid 1px;
+    border-left: #eaeaea solid 1px;
+    border-top: #fff solid 1px;
+    border-right: #ccc solid 1px;
+  }
+    .tabs.vertical li:first-of-type a {
+      border-top: #eaeaea solid 1px;
+    }
+  .tabs.vertical a:hover {
+    text-decoration: none;
+  }
+  .tabs.vertical .active a {
+    color: #333;
+    font-weight: bold;
+    background: #fff;
+    border-color: #bbb;
+    border-style: solid;
+    border-width: 1px 0 1px 1px;
+  }
+  
+  .tabs.horizontal a {
+    display: block;
+    padding-right: 10px;
+    padding-left: 10px;
+    border-bottom: #ccc solid 1px;
+    border-top: #fff solid 1px;
+    border-right: #ccc solid 1px;
+    border-left: #ccc solid 1px;
+  }
+  .tabs.horizontal a:hover {
+    text-decoration: none;
+  }
+  .tabs.horizontal .active a {
+    color: #333;
+    font-weight: bold;
+    background: #fff;
+    border-color: #bbb;
+    border-style: solid;
+    border-width: 0 1px;
+  }
+   */

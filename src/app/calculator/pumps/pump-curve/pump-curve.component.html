@@ -1,31 +1,54 @@
-<div class="pump-head">
-  <div class="row" *ngIf="settings && pumpCurveForm">
-    <div class="col-md-5 col-sm-12 mx-auto">
-      <app-pump-curve-form [(pumpCurveForm)]="pumpCurveForm" [settings]="settings" (emitCalculate)="calculate()" (changeField)="setField($event)" [selectedFormView]="selectedFormView"></app-pump-curve-form>
-    </div>
-    <div class="col-md-6 col-sm-12 mx-auto">
-      <ul class="tabs primary text-center">
-        <li class="calc-tab" [ngClass]="{'active': tabSelect == 'results'}">
-          <a (click)="setTab('results')">Graph</a>
-        </li><!--
-    --><li class="calc-tab" [ngClass]="{'active': tabSelect == 'help'}">
-          <a (click)="setTab('help')">Help</a>
-        </li>
-      </ul>
-      <div class="tab-content curve-results" id="pumpCurveGraph">
-        <div *ngIf="tabSelect == 'results'" class="help-panel">
-          <app-pump-curve-graph [pumpCurveForm]="pumpCurveForm" [settings]="settings" [toggleCalculate]="toggleCalculate" [selectedFormView]="selectedFormView"></app-pump-curve-graph>
-          <!--<span *ngIf"selectedFormView == 'Equation'">TEST EQUATION HERE</span>-->
+<div class="modify-conditions panel-container row psat calculator-panel" *ngIf="settings && pumpCurveForm">
+  <div class="col-12">
+    <div class="row align-items-top calculator-panel">
+      <div class="modification panel-column col-6 align-top">
+        <div class="header">
+          <h3>
+            Pump Curve Calculator
+          </h3>
         </div>
-        <div *ngIf="tabSelect == 'results'" class="row justify-content-center">
-          <div class="col-10">
-            <p [innerHTML]="regEquation"></p>
+        <div class="row justify-content-center pump-curve-toggle-switch">
+          <div class="btn-group btn-group-sm align-self-center">
+            <button type="button" class="btn btn-secondary btn-sm" (click)="setFormView('Equation')" [ngClass]="{'active': selectedFormView == 'Equation'}">By Equation</button>
+            <button type="button" class="btn btn-secondary btn-sm" (click)="setFormView('Data')" [ngClass]="{'active': selectedFormView == 'Data'}">By Data</button>
           </div>
         </div>
-        <div *ngIf="tabSelect == 'help'" class="help-panel">
-          <app-pump-curve-help [currentField]="currentField"></app-pump-curve-help>
+        <div class="row">
+          <div class="col-12">
+            <app-pump-curve-form [(pumpCurveForm)]="pumpCurveForm" [settings]="settings" (emitCalculate)="calculate()" (changeField)="setField($event)"
+              [selectedFormView]="selectedFormView"></app-pump-curve-form>
+          </div>
+        </div>
+      </div>
+      <div class="col-6 align-top">
+        <div class="help-panel">
+          <div class="row">
+            <ul class="tabs primary tab-row">
+              <li class="panel-tab-item tab-2" [ngClass]="{'active': tabSelect == 'results'}">
+                <a (click)="setTab('results')">Graph</a>
+              </li><!--
+              --><li class="panel-tab-item tab-2" [ngClass]="{'active': tabSelect == 'help'}">
+                <a (click)="setTab('help')">Help</a>
+              </li>
+            </ul>
+            <div class="row justify-content-center data-row align-items-center" *ngIf="tabSelect == 'help'">
+              <div class="col-11">
+                <div class="calc-help">
+                  <app-pump-curve-help [currentField]="currentField"></app-pump-curve-help>
+                </div>
+              </div>
+            </div>
+            <div class="row justify-content-center data-row" style="width:100%;" *ngIf="tabSelect == 'results'">
+              <div class="col-11" id="pumpCurveGraph">
+                <app-pump-curve-graph [pumpCurveForm]="pumpCurveForm" [settings]="settings" [toggleCalculate]="toggleCalculate" [selectedFormView]="selectedFormView"></app-pump-curve-graph>
+                <!--<span *ngIf"selectedFormView == 'Equation'">TEST EQUATION HERE</span>-->
+              </div>
+              <div class="col-11">
+                <p [innerHTML]="regEquation"></p>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
   </div>
-</div>

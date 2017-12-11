@@ -1,46 +1,71 @@
-<div class="pump-head">
-  <div class="row" *ngIf="settings">
-    <div class="col-md-4 col-sm-12  mx-auto">
-      <app-system-curve-form [psat]="psat" [settings]="settings" [(pointOne)]="pointOne" [(pointTwo)]="pointTwo" [(curveConstants)]="curveConstants"
-        (calculate)="calculateValues()" (calculateP1)="calculateP1Flow()" (calculateP2)="calculateP2Flow()"></app-system-curve-form>
-    </div>
-    <div class="col-md-6 col-sm-12 mx-auto">
-      <ul class="tabs primary text-center">
-        <li class="calc-tab" [ngClass]="{'active': tabSelect == 'results'}">
-          <a (click)="setTab('results')">Graph</a>
-        </li><!--
-    --><li class="calc-tab" [ngClass]="{'active': tabSelect == 'help'}">
-          <a (click)="setTab('help')">Help</a>
-        </li>
-      </ul>
-      <div class="tab-content efficiency-results" id="systemCurveGraph">
-        <app-system-curve-graph *ngIf="tabSelect == 'results'" [lossCoefficient]="lossCoefficient" [settings]="settings" [staticHead]="staticHead"
-          [pointOne]="pointOne" [pointTwo]="pointTwo" [curveConstants]="curveConstants"></app-system-curve-graph>
-        <div *ngIf="tabSelect == 'help'" class="help-panel">
+<div class="modify-conditions panel-container row psat" *ngIf="settings">
+  <div class="col-12">
+    <div class="row align-items-top calculator-panel">
+      <div class="modification panel-column col-6 align-top">
+        <div class="header">
+          <h3>System Curve Calculator</h3>
+        </div>
+        <div class="row">
+          <div class="col-12">
+            <app-system-curve-form [psat]="psat" [settings]="settings" [(pointOne)]="pointOne" [(pointTwo)]="pointTwo" [(curveConstants)]="curveConstants"
+              (calculate)="calculateValues()" (calculateP1)="calculateP1Flow()" (calculateP2)="calculateP2Flow()"></app-system-curve-form>
+          </div>
+        </div>
+      </div>
+      <div class="col-6 align-top">
+        <div class="help-panel">
+          <div class="row">
+            <ul class="tabs primary tab-row">
+              <li class="panel-tab-item tab-2" [ngClass]="{'active': tabSelect == 'results'}">
+                <a (click)="setTab('results')">Graph</a>
+              </li><!--
+              --><li class="panel-tab-item tab-2" [ngClass]="{'active': tabSelect == 'help'}">
+                <a (click)="setTab('help')">Help</a>
+              </li>
+            </ul>
+          </div>
+          <div class="row justify-content-center data-row align-items-center" *ngIf="tabSelect == 'help'">
+            <div class="col-11">
+              <div class="calc-help">
+                <h3>System Curve Help</h3>
+                <p>
+                  A system-head curve is a graphical representation of the relationship between flow and hydraulic losses in a given piping
+                  system. Since hydraulic losses are functions of rate of flow, size and length of pipe, and size, number
+                  and type of fittings, each system has its own characteristic curve and specific values.
+                </p>
+                <p>
+                  <u>Curve basis</u>
+                  <br> H = H
+                  <sub>s</sub> + K'Q
+                  <sup>C</sup> where
+                  <br> H = Total Head
+                  <br> H
+                  <sub>s</sub> = Static Head
+                  <br> K' = Loss coefficient
+                  <br> Q = Flow rate
+                  <br> C = dynamic/friction loss exponent
+                </p>
+                <p>
+                  Note 1: K' here applies to the volumetric flow rate,
+                  <u>not</u> the velocity head.
+                </p>
+                <p>
+                  Note 2: This simple system method does not apply to complex distribution systems where flow is delivered to multiple elevation
+                  or pressure systems.
+                </p>
+                <p>
+                  Note 3: The specific gravity does not affect the system head curve, but does affect the fluid power, which is directly proportional
+                  to the specific gravity.
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="row justify-content-center data-row" *ngIf="tabSelect == 'results'">
+            <div class="col-11" id="systemCurveGraph">
+              <app-system-curve-graph [lossCoefficient]="lossCoefficient" [settings]="settings" [staticHead]="staticHead" [pointOne]="pointOne"
+                [pointTwo]="pointTwo" [curveConstants]="curveConstants"></app-system-curve-graph>
 
-          <div class="calc-help">
-            <h3>System Curve Help</h3>
-            <p>
-              A system-head curve is a graphical representation of the relationship between flow and hydraulic losses in a given piping
-              system. Since hydraulic losses are functions of rate of flow, size and length of pipe, and size, number and
-              type of fittings, each system has its own characteristic curve and specific values.
-            </p>
-            <p>
-              <u>Curve basis</u><br> H = H<sub>s</sub> + K'Q<sup>C</sup> where<br> H = Total Head<br> H
-              <sub>s</sub> = Static Head<br> K' = Loss coefficient<br> Q = Flow rate<br> C = dynamic/friction loss exponent
-            </p>
-            <p>
-              Note 1: K' here applies to the volumetric flow rate,
-              <u>not</u> the velocity head.
-            </p>
-            <p>
-              Note 2: This simple system method does not apply to complex distribution systems where flow is delivered to multiple elevation
-              or pressure systems.
-            </p>
-            <p>
-              Note 3: The specific gravity does not affect the system head curve, but does affect the fluid power, which is directly proportional
-              to the specific gravity.
-            </p>
+            </div>
           </div>
         </div>
       </div>

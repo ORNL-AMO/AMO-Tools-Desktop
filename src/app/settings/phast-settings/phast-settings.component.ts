@@ -12,6 +12,8 @@ export class PhastSettingsComponent implements OnInit {
   settingsForm: any;
   @Output('startSavePolling')
   startSavePolling = new EventEmitter<boolean>();
+  @Input()
+  disable: boolean;
 
   fuelFiredOptions: Array<string> = [
     'Ladle Heater',
@@ -34,6 +36,11 @@ export class PhastSettingsComponent implements OnInit {
   ngOnInit() {
     if (!this.settingsForm.value.furnaceType || this.settingsForm.value.furnaceType == '') {
       this.setOptions();
+    }
+    if(this.disable){
+      this.settingsForm.controls.furnaceType.disable();
+      this.settingsForm.controls.energySourceType.disable();
+      this.settingsForm.controls.customFurnaceName.disable();
     }
   }
 

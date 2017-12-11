@@ -2,7 +2,7 @@
 
   <h4 class="show-print">Report Results</h4>
 
-  <table class="table">
+  <table class="table table-hover">
     <thead>
       <tr>
         <th [ngStyle]="{'width.%': 100 /(psat.modifications.length+2)}"></th>
@@ -20,7 +20,7 @@
         </td>
         <td *ngFor="let modification of psat.modifications; let index = index;" [ngClass]="{'selected-modification': index == selectedModificationIndex}">
           <div class="hide-print" *ngIf="modification.psat.outputs.percent_annual_savings">
-            <div class="col-8 graph-col doughnut">
+            <div class="col-8 mx-auto">
               <app-percent-graph [value]="modification.psat.outputs.percent_annual_savings" [titlePlacement]="titlePlacement" [valueDescription]="'Annual Savings'"
                 [unit]="unit"></app-percent-graph>
             </div>

@@ -24,25 +24,11 @@
 
 
 
-<div class="calculator" *ngIf="getSelectedTool() == 'nema-energy-efficiency'">
-  <div class="row">
-    <div class="col-lg-10  mx-auto">
-      <h2>NEMA Energy Efficiency Calculator</h2>
-    </div>
-  </div>
-  <div class="calculator-container">
+<div class="stand-alone-calc" *ngIf="getSelectedTool() == 'nema-energy-efficiency'">
     <app-nema-energy-efficiency></app-nema-energy-efficiency>
-  </div>
 </div>
 
 
-<div class="calculator" *ngIf="getSelectedTool() == 'motor-performance'">
-  <div class="row">
-    <div class="col-lg-10  mx-auto">
-      <h2>Motor Performance Calculator</h2>
-    </div>
-  </div>
-  <div class="calculator-container">
-    <app-motor-performance></app-motor-performance>
-  </div>
+<div class="stand-alone-calc" *ngIf="getSelectedTool() == 'motor-performance'">
+  <app-motor-performance></app-motor-performance>
 </div>

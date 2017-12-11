@@ -49,7 +49,7 @@ export class AssessmentService {
       motor_rated_voltage: 460,
       load_estimation_method: 0,
       motor_rated_fla: null,
-      margin: null,
+      margin: 0,
       operating_fraction: 1,
       flow_rate: null,
       head: 277,

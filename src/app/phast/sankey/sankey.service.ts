@@ -69,7 +69,45 @@ export class SankeyService {
     return results;
   }
 
+
   getNodes(results: FuelResults, settings: Settings) {
+
+    var chargeMaterialX = 2400;   // x position of useful output arrow
+    var arrowCount = 0;           // store the number of loss sources
+    var ventOffsetX = 0;          // store x position offset by vent arrow
+    var spacing = 0;              // space between each arrow, calc based on number of arrows
+
+    if (results.totalAtmosphereLoss) {
+      arrowCount++;
+    }
+    if (results.totalAuxPower) {
+      arrowCount++;
+    }
+    if (results.totalCoolingLoss) {
+      arrowCount++;
+    }
+    if (results.totalExtSurfaceLoss) {
+      arrowCount++;
+    }
+    if (results.totalFixtureLoss) {
+      arrowCount++;
+    }
+    if (results.totalLeakageLoss) {
+      arrowCount++;
+    }
+    if (results.totalOpeningLoss) {
+      arrowCount++;
+    }
+    if (results.totalOtherLoss) {
+      arrowCount++;
+    }
+    if (results.totalSlag) {
+      arrowCount++;
+    }
+    if (results.totalWallLoss) {
+      arrowCount++;
+    }
+
     let unit: string;
     if (settings.energyResultUnit != 'kWh') {
       unit = settings.energyResultUnit + '/hr';
@@ -82,6 +120,9 @@ export class SankeyService {
     tmpNode = this.createNode("inter1", 0, 0, 0, 350, 0, false, false, true, true, unit, false)
     results.nodes.push(tmpNode);
     let interIndex = 2;
+
+    ventOffsetX = (250 * interIndex);
+    spacing = (chargeMaterialX - ventOffsetX) / (arrowCount + 1);
 
     let top: boolean = false;
     // FLUE GAS ARROW
@@ -104,99 +145,100 @@ export class SankeyService {
     }
 
     if (results.totalSystemLosses) {
-      tmpNode = this.createNode("System Losses", results.totalSystemLosses, 0, 0, 100 + (250 * interIndex), 0, false, false, false, true, unit, false)
+      tmpNode = this.createNode("System Losses", results.totalSystemLosses, 0, 0, 100 + (spacing * interIndex), 0, false, false, false, true, unit, false)
       results.nodes.push(tmpNode);
-      tmpNode = this.createNode("inter" + interIndex, 0, 0, 0, 100 + (250 * interIndex), 0, false, false, true, false, unit, false)
+      tmpNode = this.createNode("inter" + interIndex, 0, 0, 0, 100 + (spacing * interIndex), 0, false, false, true, false, unit, false)
       results.nodes.push(tmpNode);
       interIndex++;
     }
     // end flue gas arrow
+
     // Atmoshpere
     if (results.totalAtmosphereLoss) {
-      tmpNode = this.createNode("Atmosphere Losses", results.totalAtmosphereLoss, 0, 0, 100 + (250 * interIndex), 0, false, false, false, top, unit, false)
+      tmpNode = this.createNode("Atmosphere Losses", results.totalAtmosphereLoss, 0, 0, 100 + (spacing * interIndex), 0, false, false, false, top, unit, false)
       results.nodes.push(tmpNode);
-      tmpNode = this.createNode("inter" + interIndex, 0, 0, 0, 100 + (250 * interIndex), 0, false, false, true, !top, unit, false);
+      tmpNode = this.createNode("inter" + interIndex, 0, 0, 0, 100 + (spacing * interIndex), 0, false, false, true, !top, unit, false);
       results.nodes.push(tmpNode);
       interIndex++;
       top = !top;
     }
     // Other
     if (results.totalOtherLoss) {
-      tmpNode = this.createNode("Other Losses", results.totalOtherLoss, 0, 0, 100 + (250 * interIndex), 0, false, false, false, top, unit, false)
+      tmpNode = this.createNode("Other Losses", results.totalOtherLoss, 0, 0, 100 + (spacing * interIndex), 0, false, false, false, top, unit, false)
       results.nodes.push(tmpNode);
-      tmpNode = this.createNode("inter" + interIndex, 0, 0, 0, 100 + (250 * interIndex), 0, false, false, true, !top, unit, false);
+      tmpNode = this.createNode("inter" + interIndex, 0, 0, 0, 100 + (spacing * interIndex), 0, false, false, true, !top, unit, false);
       results.nodes.push(tmpNode);
       interIndex++;
       top = !top;
     }
     // Cooling
     if (results.totalCoolingLoss) {
-      tmpNode = this.createNode("Water Cooling Losses", results.totalCoolingLoss, 0, 0, 100 + (250 * interIndex), 0, false, false, false, top, unit, false)
+      tmpNode = this.createNode("Water Cooling Losses", results.totalCoolingLoss, 0, 0, 100 + (spacing * interIndex), 0, false, false, false, top, unit, false)
       results.nodes.push(tmpNode);
-      tmpNode = this.createNode("inter" + interIndex, 0, 0, 0, 100 + (250 * interIndex), 0, false, false, true, !top, unit, false);
+      tmpNode = this.createNode("inter" + interIndex, 0, 0, 0, 100 + (spacing * interIndex), 0, false, false, true, !top, unit, false);
       results.nodes.push(tmpNode);
       interIndex++;
       top = !top;
     }
     // Wall
     if (results.totalWallLoss) {
-      tmpNode = this.createNode("Wall Losses", results.totalWallLoss, 0, 0, 100 + (250 * interIndex), 0, false, false, false, top, unit, false)
+      tmpNode = this.createNode("Wall Losses", results.totalWallLoss, 0, 0, 100 + (spacing * interIndex), 0, false, false, false, top, unit, false)
       results.nodes.push(tmpNode);
-      tmpNode = this.createNode("inter" + interIndex, 0, 0, 0, 100 + (250 * interIndex), 0, false, false, true, !top, unit, false);
+      tmpNode = this.createNode("inter" + interIndex, 0, 0, 0, 100 + (spacing * interIndex), 0, false, false, true, !top, unit, false);
       results.nodes.push(tmpNode);
       interIndex++;
       top = !top;
     }
     // Opening
     if (results.totalOpeningLoss) {
-      tmpNode = this.createNode("Opening Losses", results.totalOpeningLoss, 0, 0, 100 + (250 * interIndex), 0, false, false, false, top, unit, false)
+      tmpNode = this.createNode("Opening Losses", results.totalOpeningLoss, 0, 0, 100 + (spacing * interIndex), 0, false, false, false, top, unit, false)
       results.nodes.push(tmpNode);
-      tmpNode = this.createNode("inter" + interIndex, 0, 0, 0, 100 + (250 * interIndex), 0, false, false, true, !top, unit, false);
+      tmpNode = this.createNode("inter" + interIndex, 0, 0, 0, 100 + (spacing * interIndex), 0, false, false, true, !top, unit, false);
       results.nodes.push(tmpNode);
       interIndex++;
       top = !top;
     }
     // Fixture
     if (results.totalFixtureLoss) {
-      tmpNode = this.createNode("Fixture/Conveyor Losses", results.totalFixtureLoss, 0, 0, 100 + (250 * interIndex), 0, false, false, false, top, unit, false)
+      tmpNode = this.createNode("Fixture/Conveyor Losses", results.totalFixtureLoss, 0, 0, 100 + (spacing * interIndex), 0, false, false, false, top, unit, false)
       results.nodes.push(tmpNode);
-      tmpNode = this.createNode("inter" + interIndex, 0, 0, 0, 100 + (250 * interIndex), 0, false, false, true, !top, unit, false);
+      tmpNode = this.createNode("inter" + interIndex, 0, 0, 0, 100 + (spacing * interIndex), 0, false, false, true, !top, unit, false);
       results.nodes.push(tmpNode);
       interIndex++;
       top = !top;
     }
     // Leakage
     if (results.totalLeakageLoss) {
-      tmpNode = this.createNode("Leakage Losses", results.totalLeakageLoss, 0, 0, 100 + (250 * interIndex), 0, false, false, false, top, unit, false)
+      tmpNode = this.createNode("Leakage Losses", results.totalLeakageLoss, 0, 0, 100 + (spacing * interIndex), 0, false, false, false, top, unit, false)
       results.nodes.push(tmpNode);
-      tmpNode = this.createNode("inter" + interIndex, 0, 0, 0, 100 + (250 * interIndex), 0, false, false, true, !top, unit, false);
+      tmpNode = this.createNode("inter" + interIndex, 0, 0, 0, 100 + (spacing * interIndex), 0, false, false, true, !top, unit, false);
       results.nodes.push(tmpNode);
       interIndex++;
       top = !top;
     }
     // External Surface
     if (results.totalExtSurfaceLoss) {
-      tmpNode = this.createNode("External Surface \n  Losses", results.totalExtSurfaceLoss, 0, 0, 100 + (250 * interIndex), 0, false, false, false, top, unit, true)
+      tmpNode = this.createNode("External Surface \n  Losses", results.totalExtSurfaceLoss, 0, 0, 100 + (spacing * interIndex), 0, false, false, false, top, unit, true)
       results.nodes.push(tmpNode);
-      tmpNode = this.createNode("inter" + interIndex, 0, 0, 0, 100 + (250 * interIndex), 0, false, false, true, !top, unit, false);
+      tmpNode = this.createNode("inter" + interIndex, 0, 0, 0, 100 + (spacing * interIndex), 0, false, false, true, !top, unit, false);
       results.nodes.push(tmpNode);
       interIndex++;
       top = !top;
     }
     // auxiliary power losses
     if (results.totalAuxPower) {
-      tmpNode = this.createNode("Auxiliary Power Losses", results.totalAuxPower, 0, 0, 100 + (250 * interIndex), 0, false, false, false, top, unit, false)
+      tmpNode = this.createNode("Auxiliary Power Losses", results.totalAuxPower, 0, 0, 100 + (spacing * interIndex), 0, false, false, false, top, unit, false)
       results.nodes.push(tmpNode);
-      tmpNode = this.createNode("inter" + interIndex, 0, 0, 0, 100 + (250 * interIndex), 0, false, false, true, !top, unit, false);
+      tmpNode = this.createNode("inter" + interIndex, 0, 0, 0, 100 + (spacing * interIndex), 0, false, false, true, !top, unit, false);
       results.nodes.push(tmpNode);
       interIndex++;
       top = !top;
     }
     // slag
     if (results.totalSlag) {
-      tmpNode = this.createNode("Slag Losses", results.totalSlag, 0, 0, 100 + (250 * interIndex), 0, false, false, false, top, unit, false)
+      tmpNode = this.createNode("Slag Losses", results.totalSlag, 0, 0, 100 + (spacing * interIndex), 0, false, false, false, top, unit, false)
       results.nodes.push(tmpNode);
-      tmpNode = this.createNode("inter" + interIndex, 0, 0, 0, 100 + (250 * interIndex), 0, false, false, true, !top, unit, false);
+      tmpNode = this.createNode("inter" + interIndex, 0, 0, 0, 100 + (spacing * interIndex), 0, false, false, true, !top, unit, false);
       results.nodes.push(tmpNode);
       interIndex++;
       top = !top;

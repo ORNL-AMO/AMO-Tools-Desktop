@@ -1,0 +1,211 @@
+
+.panel-column{
+	box-shadow: 0px 0px 69px -1px rgba(0,0,0,0.2);
+	background: #fff;
+	z-index: 2;
+	padding-left: 25px;
+}
+
+
+.calculator-panel{
+    height: 100%;
+}
+
+.panel-container{
+	/* padding-bottom: 70px;
+	max-height: none !important;
+	min-height: 100vh;
+    height: auto !important; */
+    height: 100%;
+}
+
+.tab-content{
+    height: 100%;
+    min-height: 100%;
+}
+
+.form-card{
+	border: none;
+}
+
+.panel-container form .form-section {
+        padding-top: 10px;
+        padding-bottom: 10px;
+        border-bottom: #bbb dashed 1px;
+}
+
+.panel-container form {
+    padding-top: 15px;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+
+.tab-row{
+    width: 100%;
+    text-align: center;
+}
+
+.tab-2{
+    width: 50%;
+}
+
+.tab-3{
+    width: 33%;
+}
+
+.panel-tab-item{
+	text-align: center;
+	font-size: 15px;
+    text-transform: uppercase;
+	letter-spacing: 4px;
+}
+
+.psat .panel-tab-item.active{
+    border: none;
+    border-bottom: #2980b9 groove 2px;
+}
+
+.phast .panel-tab-item.active{
+    border: none;
+    border-bottom: #BF3D00 groove 2px;
+}
+
+.header{
+    padding-top: 8.5px;
+    padding-bottom: 8.5px;
+}
+
+.psat .header{
+    border-bottom: #2980b9 groove 2px;
+} 
+
+.phast .header{
+    border-bottom: #BF3D00 groove 2px;  
+}
+
+.psat .disabled .header{
+    border-bottom-color: gray;
+}
+
+.panel-add a{
+    padding-top: 5px;
+    padding-bottom: 5px;
+    font-size: 15px;
+    padding-left: 15px;
+    color: #0077e3;
+}
+
+.panel-add a span:hover{
+    text-decoration: underline;
+    cursor: pointer;
+    color: #0077e3;
+}
+
+.panel-add a.disabled{
+    color: gray;
+}
+
+
+.panel-add a.disabled span:hover{
+    text-decoration: none;
+    cursor: not-allowed;
+}
+
+.phast .panel-add a {
+    border-left: groove 1px #BF3D00;
+}
+.psat .panel-add a {
+    border-left: groove 1px #2980b9;
+}
+
+.data-row{
+	margin-top: 5%;
+}
+
+.panel-results{
+	margin-top: 5%;
+}
+
+.help-panel{
+	padding-right: 15px;
+}
+
+.header h3{
+	margin: 10px 0 0px 10px;
+    font-size: 15px;
+    text-transform: uppercase;
+    display: inline-block;
+    letter-spacing: 4px;
+}
+
+.panel-add{
+    margin-bottom: 0px;
+    margin-top: 5px;
+}
+
+.panel-container .group-label{
+    padding-top: 6.5px;
+    padding-bottom: 6.5px;
+    font-size: 12px;
+    text-transform: uppercase;
+    display: inline-block;
+    letter-spacing: 3px;
+    width: 100%;
+}
+
+.psat .group-label{
+    border-bottom: #2980b9 groove 2px;
+}
+
+.phast .group-label{
+    border-bottom: #BF3D00 groove 2px;
+}
+
+.loss-label{
+    width: 100%;
+    margin-bottom: 10px;
+    font-size: 18px;
+}
+
+.loss-label .fa{
+    font-size: 24px;
+}
+
+.loss-label .fa:hover{
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.add-loss{
+    margin-bottom: 0px;
+    margin-top: 5px;
+}
+
+.add-loss a {
+    padding-left: 15px;
+    border-left: groove 1px #BF3D00;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    font-size: 15px;
+}
+
+.disabled .add-loss a{
+    color: gray;
+    border-left:#ddd solid 1px;
+}
+
+.disabled .add-loss a:hover{
+    cursor: not-allowed;
+    text-decoration: none;
+}
+
+.setup-form-group{
+    padding-top: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.loss-form-section{
+    padding-top: 10px;
+}

@@ -35,12 +35,15 @@ import { GasLeakageLossesService } from './losses/gas-leakage-losses/gas-leakage
 import { OtherLossesService } from './losses/other-losses/other-losses.service';
 import { SlagService } from './losses/slag/slag.service';
 import { FlueGasMaterial, SolidLiquidFlueGasMaterial } from '../shared/models/materials';
+import { StepTab, stepTabs } from './tabs';
+import * as _ from 'lodash';
 @Injectable()
 export class PhastService {
 
   mainTab: BehaviorSubject<string>;
-  secondaryTab: BehaviorSubject<string>;
-
+ // secondaryTab: BehaviorSubject<string>;
+  stepTab: BehaviorSubject<StepTab>;
+  specTab: BehaviorSubject<string>;
   constructor(
     private openingLossesService: OpeningLossesService,
     private convertUnitsService: ConvertUnitsService,
@@ -54,9 +57,20 @@ export class PhastService {
     private otherLossessService: OtherLossesService,
     private slagService: SlagService
   ) {
-    this.mainTab = new BehaviorSubject<string>('system-setup');
-    this.secondaryTab = new BehaviorSubject<string>('explore-opportunities');
+    this.initTabs();
   }
+  initTabs(){
+    this.mainTab = new BehaviorSubject<string>('system-setup');
+    //this.secondaryTab = new BehaviorSubject<string>('explore-opportunities');
+    this.stepTab = new BehaviorSubject<StepTab>(stepTabs[0]);
+    this.specTab = new BehaviorSubject<string>('system-basics');
+  }
+
+  goToStep(newStepNum: number){
+    let newStep = _.find(stepTabs, (tab)=> {return tab.step == newStepNum});
+    this.stepTab.next(newStep);
+  }
+
   test() {
     console.log(phastAddon)
   }
@@ -531,7 +545,6 @@ export class PhastService {
       if (tmpForm.status == 'VALID') {
         sum += this.atmosphere(loss, settings);
       }
-      // console.log(sum);
     });
     return sum;
   }

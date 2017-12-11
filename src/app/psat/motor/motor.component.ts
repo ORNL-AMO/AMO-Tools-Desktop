@@ -30,6 +30,8 @@ export class MotorComponent implements OnInit {
   settings: Settings;
   @Input()
   baseline: boolean;
+  @Input()
+  inSetup: boolean;
 
   @ViewChild('formRef') formRef: ElementRef;
   elements: any;
@@ -390,62 +392,64 @@ export class MotorComponent implements OnInit {
   }
 
   initDifferenceMonitor() {
-    let doc = this.windowRefService.getDoc();
-    //line frequency
-    this.compareService.line_frequency_different.subscribe((val) => {
-      let lineFreqElements = doc.getElementsByName('frequency');
-      lineFreqElements.forEach(element => {
-        element.classList.toggle('indicate-different', val);
-      });
-    })
-    //motor power
-    this.compareService.motor_rated_power_different.subscribe((val) => {
-      let horsePowerElements = doc.getElementsByName('horsePower');
-      horsePowerElements.forEach(element => {
-        element.classList.toggle('indicate-different', val);
-      });
-    })
-    //motor rpm
-    this.compareService.motor_rated_speed_different.subscribe((val) => {
-      let motorRpmElements = doc.getElementsByName('motorRPM');
-      motorRpmElements.forEach(element => {
-        element.classList.toggle('indicate-different', val);
-      });
-    })
-    //efficiency class
-    this.compareService.efficiency_class_different.subscribe((val) => {
-      let efficiencyClassElements = doc.getElementsByName('efficiencyClass');
-      efficiencyClassElements.forEach(element => {
-        element.classList.toggle('indicate-different', val);
-      });
-    })
-    //efficiency
-    this.compareService.efficiency_different.subscribe((val) => {
-      let efficiencyElements = doc.getElementsByName('efficiency');
-      efficiencyElements.forEach(element => {
-        element.classList.toggle('indicate-different', val);
-      });
-    })
-    //rated voltage
-    this.compareService.motor_rated_voltage_different.subscribe((val) => {
-      let motorVoltageElements = doc.getElementsByName('motorVoltage');
-      motorVoltageElements.forEach(element => {
-        element.classList.toggle('indicate-different', val);
-      });
-    })
-    //full load amps
-    this.compareService.motor_rated_fla_different.subscribe((val) => {
-      let motorFlaElements = doc.getElementsByName('fullLoadAmps');
-      motorFlaElements.forEach(element => {
-        element.classList.toggle('indicate-different', val);
-      });
-    })
-    //size margin
-    this.compareService.margin_different.subscribe((val) => {
-      let marginElements = doc.getElementsByName('sizeMargin');
-      marginElements.forEach(element => {
-        element.classList.toggle('indicate-different', val);
-      });
-    })
+    if (!this.inSetup) {
+      let doc = this.windowRefService.getDoc();
+      //line frequency
+      this.compareService.line_frequency_different.subscribe((val) => {
+        let lineFreqElements = doc.getElementsByName('frequency');
+        lineFreqElements.forEach(element => {
+          element.classList.toggle('indicate-different', val);
+        });
+      })
+      //motor power
+      this.compareService.motor_rated_power_different.subscribe((val) => {
+        let horsePowerElements = doc.getElementsByName('horsePower');
+        horsePowerElements.forEach(element => {
+          element.classList.toggle('indicate-different', val);
+        });
+      })
+      //motor rpm
+      this.compareService.motor_rated_speed_different.subscribe((val) => {
+        let motorRpmElements = doc.getElementsByName('motorRPM');
+        motorRpmElements.forEach(element => {
+          element.classList.toggle('indicate-different', val);
+        });
+      })
+      //efficiency class
+      this.compareService.efficiency_class_different.subscribe((val) => {
+        let efficiencyClassElements = doc.getElementsByName('efficiencyClass');
+        efficiencyClassElements.forEach(element => {
+          element.classList.toggle('indicate-different', val);
+        });
+      })
+      //efficiency
+      this.compareService.efficiency_different.subscribe((val) => {
+        let efficiencyElements = doc.getElementsByName('efficiency');
+        efficiencyElements.forEach(element => {
+          element.classList.toggle('indicate-different', val);
+        });
+      })
+      //rated voltage
+      this.compareService.motor_rated_voltage_different.subscribe((val) => {
+        let motorVoltageElements = doc.getElementsByName('motorVoltage');
+        motorVoltageElements.forEach(element => {
+          element.classList.toggle('indicate-different', val);
+        });
+      })
+      //full load amps
+      this.compareService.motor_rated_fla_different.subscribe((val) => {
+        let motorFlaElements = doc.getElementsByName('fullLoadAmps');
+        motorFlaElements.forEach(element => {
+          element.classList.toggle('indicate-different', val);
+        });
+      })
+      //size margin
+      this.compareService.margin_different.subscribe((val) => {
+        let marginElements = doc.getElementsByName('sizeMargin');
+        marginElements.forEach(element => {
+          element.classList.toggle('indicate-different', val);
+        });
+      })
+    }
   }
 }

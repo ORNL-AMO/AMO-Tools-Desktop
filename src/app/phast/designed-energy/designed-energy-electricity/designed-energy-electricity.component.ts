@@ -7,7 +7,7 @@ import { DesignedEnergyService } from '../designed-energy.service';
 @Component({
   selector: 'app-designed-energy-electricity',
   templateUrl: './designed-energy-electricity.component.html',
-  styleUrls: ['./designed-energy-electricity.component.css', '../../../psat/explore-opportunities/explore-opportunities.component.css', '../../aux-equipment/aux-equipment.component.css']
+  styleUrls: ['./designed-energy-electricity.component.css']
 })
 export class DesignedEnergyElectricityComponent implements OnInit {
   @Input()

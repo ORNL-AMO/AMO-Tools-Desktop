@@ -1,4 +1,4 @@
-<div class="pump-head">
+<!-- <div class="pump-head">
 
   <div class="row align-items-center" *ngIf="settings && !showSettings">
     <div class="col-7">
@@ -13,71 +13,97 @@
       <div class="units-of-measure" *ngIf="settings && !inAssessment">
         <p><strong>Units of Measure:</strong> {{settings.pressureMeasurement}}, {{settings.flowMeasurement}}, {{settings.distanceMeasurement}}
           <a (click)="editSettings()">change</a></p>
-      </div>
-
-      <div *ngIf="headToolType == 'Suction tank elevation'">
-        <div class="head-diagram text-center">
-          <img class="img-fluid mx-auto d-block" aria-describedby="headDiagramHelp" src="assets/images/img-tank-elevation-head.png">
-          <small id="headDiagramHelp" class="text-muted text-help">K<sub>s</sub> represents all suction losses from the tank to the pump</small><br>
-          <small id="headDiagramHelp" class="text-muted text-help">K<sub>d</sub> represents all discharge losses from the pump to the gauge P<sub>d</sub></small>
+      </div> -->
+<div class="modify-conditions panel-container row psat calculator-panel" *ngIf="settings && !showSettings">
+  <div class="col-12">
+    <div class="row align-items-top calculator-panel">
+      <div class="modification panel-column col-6 align-top">
+        <div class="header">
+          <h3>Pump Head Calculator</h3>
         </div>
-        <app-head-tool-suction-form [(headToolSuctionForm)]="headToolSuctionForm" [settings]="settings" (calculate)="calculateHeadToolSuctionTank()"
-          [inAssessment]="inAssessment" (changeField)="changeField($event)"></app-head-tool-suction-form>
-      </div>
-
-      <div *ngIf="headToolType == 'Suction gauge elevation'">
-        <div class="head-diagram text-center">
-          <img class="img-fluid mx-auto d-block" aria-describedby="headDiagramHelp" src="assets/images/img-suction-discharge-head.png">
-          <small id="headDiagramHelp" class="text-muted text-help">K<sub>s</sub> represents all suction losses from the tank to the pump</small><br>
-          <small id="headDiagramHelp" class="text-muted text-help">K<sub>d</sub> represents all discharge losses from the pump to the gauge P<sub>d</sub></small>
+        <div class="row justify-content-center head-tool-toggle-switch">
+          <div class="btn-group btn-group-sm align-self-center">
+            <button type="button" class="btn btn-secondary btn-sm" (click)="setFormView('Suction tank elevation')" [ngClass]="{'active': headToolType == 'Suction tank elevation'}">Suction tank elevation</button>
+            <button type="button" class="btn btn-secondary btn-sm" (click)="setFormView('Suction gauge elevation')" [ngClass]="{'active': headToolType == 'Suction gauge elevation'}">Suction gauge elevation</button>
+          </div>
         </div>
-        <app-head-tool-form [(headToolForm)]="headToolForm" [settings]="settings" (calculate)="calculateHeadTool()" [inAssessment]="inAssessment"
-          (changeField)="changeField($event)"></app-head-tool-form>
+        <div class="row">
+          <div class="col-12">
+
+            <div *ngIf="headToolType == 'Suction tank elevation'">
+              <div class="head-diagram text-center">
+                <img class="img-fluid mx-auto d-block" aria-describedby="headDiagramHelp" src="assets/images/img-tank-elevation-head.png">
+                <small id="headDiagramHelp" class="text-muted text-help">K
+                  <sub>s</sub> represents all suction losses from the tank to the pump</small>
+                <br>
+                <small id="headDiagramHelp" class="text-muted text-help">K
+                  <sub>d</sub> represents all discharge losses from the pump to the gauge P
+                  <sub>d</sub>
+                </small>
+              </div>
+              <app-head-tool-suction-form [(headToolSuctionForm)]="headToolSuctionForm" [settings]="settings" (calculate)="calculateHeadToolSuctionTank()"
+                [inAssessment]="inAssessment" (changeField)="changeField($event)"></app-head-tool-suction-form>
+            </div>
+
+            <div *ngIf="headToolType == 'Suction gauge elevation'">
+              <div class="head-diagram text-center">
+                <img class="img-fluid mx-auto d-block" aria-describedby="headDiagramHelp" src="assets/images/img-suction-discharge-head.png">
+                <small id="headDiagramHelp" class="text-muted text-help">K
+                  <sub>s</sub> represents all suction losses from the tank to the pump</small>
+                <br>
+                <small id="headDiagramHelp" class="text-muted text-help">K
+                  <sub>d</sub> represents all discharge losses from the pump to the gauge P
+                  <sub>d</sub>
+                </small>
+              </div>
+              <app-head-tool-form [(headToolForm)]="headToolForm" [settings]="settings" (calculate)="calculateHeadTool()" [inAssessment]="inAssessment"
+                (changeField)="changeField($event)"></app-head-tool-form>
+            </div>
+          </div>
+        </div>
       </div>
-
-    </div>
-    <!-- End .col-7 -->
-
-    <div class="col-5">
-
-      <ul class="tabs primary text-center">
-        <li class="calc-tab" [ngClass]="{'active': tabSelect == 'results'}">
-          <a (click)="setTab('results')">Results</a>
-        </li><!--
-        --><li class="calc-tab" [ngClass]="{'active': tabSelect == 'help'}">
-          <a (click)="setTab('help')">Help</a>
-        </li>
-      </ul>
-
-      <div class="tab-content">
-        <app-head-tool-results *ngIf="tabSelect == 'results'" [results]="results" [settings]="settings"></app-head-tool-results>
-        <app-head-tool-help [currentField]="currentField" [headToolType]="headToolType" *ngIf="tabSelect == 'help'"></app-head-tool-help>
+      <div class="col-6 align-top">
+        <div class="help-panel">
+          <div class="row">
+            <ul class="tabs primary tab-row">
+              <li class="panel-tab-item tab-2" [ngClass]="{'active': tabSelect == 'results'}">
+                <a (click)="setTab('results')">Results</a>
+              </li><!--
+              --><li class="panel-tab-item tab-2" [ngClass]="{'active': tabSelect == 'help'}">
+                <a (click)="setTab('help')">Help</a>
+              </li>
+            </ul>
+          </div>
+          <div class="row justify-content-center data-row align-items-center" *ngIf="tabSelect == 'help'">
+            <div class="col-11">
+              <div class="calc-help">
+                <app-head-tool-help [currentField]="currentField" [headToolType]="headToolType"></app-head-tool-help>
+              </div>
+            </div>
+          </div>
+          <div class="row justify-content-center data-row" *ngIf="tabSelect == 'results'">
+            <div class="col-11">
+              <app-head-tool-results [results]="results" [settings]="settings"></app-head-tool-results>
+            </div>
+          </div>
+        </div>
       </div>
-
     </div>
   </div>
+</div>
 
 
 
-  <div class="row justify-content-center" *ngIf="settingsForm && showSettings">
-    <div class="col-4">
-      <app-psat-settings [(settingsForm)]="settingsForm"></app-psat-settings>
-    </div>
+
+<!-- <div class="row justify-content-center" *ngIf="settingsForm && showSettings">
+  <div class="col-4">
+    <app-psat-settings [(settingsForm)]="settingsForm"></app-psat-settings>
   </div>
-
-
-
-
-  <div class="row button-row">
-    <div class="col-12">
-
-      <!-- <button class="btn btn-secondary pull-left" *ngIf="!showSettings" (click)="closeTool()">Close</button> -->
-      <button class="btn btn-primary pull-right" (click)="save()" *ngIf="inAssessment" [disabled]="!canSave">Save to Assessment</button>
-      <!-- <button class="btn btn-secondary pull-right">Export to CSV...</button>-->
-      <button class="btn btn-secondary pull-left" (click)="cancelSettings()" *ngIf="showSettings">Cancel</button>
-      <button class="btn btn-secondary pull-right" (click)="applySettings()" *ngIf="showSettings">Apply Settings</button>
-    </div>
+</div> -->
+<div class="row button-row" *ngIf="inAssessment">
+  <div class="col-12">
+    <button class="btn btn-primary pull-right save-button" (click)="save()" [disabled]="!canSave">Save to Assessment</button>
+    <!-- <button class="btn btn-secondary pull-left" (click)="cancelSettings()" *ngIf="showSettings">Cancel</button>
+    <button class="btn btn-secondary pull-right" (click)="applySettings()" *ngIf="showSettings">Apply Settings</button> -->
   </div>
-
-
 </div>

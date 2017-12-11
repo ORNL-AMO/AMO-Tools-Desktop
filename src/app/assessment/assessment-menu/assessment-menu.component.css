@@ -1,0 +1,14 @@
+.breadcrumb-item{
+    padding-left: 6px;
+}
+
+.breadcrumb-item{
+    font-size: large;
+}
+
+.breadcrumb-item{
+    cursor: pointer;
+    text-decoration: underline;
+    font-weight: bold;
+}
+

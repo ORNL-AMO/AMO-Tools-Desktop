@@ -46,8 +46,8 @@
   </div>
 </div>
 
-<div class="calculator" *ngIf="getSelectedTool() == 'o2-enrichment'">
-  <div class="row">
+<div class="stand-alone-calc tab-content" *ngIf="getSelectedTool() == 'o2-enrichment'">
+  <!-- <div class="row">
     <div class="col-lg-11 mx-auto">
       <h2>Fuel Consumption</h2>
       <p>Calculation of available heat (an indication of thermal efficiency) for fuel fired furnaces and expected energy savings
@@ -55,10 +55,9 @@
         by changing values under "Combustion with Oxygen enriched Air" and clicking "Plot".
         Changing values for "Combustion with Air" will adjust all the lines on the graph.</p>
     </div>
-  </div>
-  <div class="calculator-container">
+  </div> -->
+
     <app-o2-enrichment></app-o2-enrichment>
-  </div>
 </div>
 
 
@@ -92,17 +91,17 @@
   </div>
 </div>
 
-<div class="calculator" *ngIf="getSelectedTool() == 'energy-use'">
-  <div class="row">
+<div class="stand-alone-calc tab-content" *ngIf="getSelectedTool() == 'energy-use'">
+  <!-- <div class="row">
     <div class="col-lg-11 mx-auto">
       <h2>Flow Calculations Energy Use</h2>
       <p> Calculation of flow rates for commonly used gases using data for an orifice type flow meter and heat input calculations
         when the gas is a fuel (i.e. natural gas, propane).</p>
     </div>
-  </div>
-  <div class="calculator-container">
+  </div> -->
+  
     <app-energy-use></app-energy-use>
-  </div>
+  
 </div>
 
 

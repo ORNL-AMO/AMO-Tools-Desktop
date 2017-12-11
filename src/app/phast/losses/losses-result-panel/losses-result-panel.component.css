@@ -1,0 +1,28 @@
+.tab-row{
+    width: 100%;
+    text-align: center;
+}
+
+.data-table{
+    padding-top: 25px;
+}
+
+.results-panel{
+    padding: 0px;
+}
+
+.results-panel .tabs.primary{
+    font-size: 15px;
+    text-transform: uppercase;
+    letter-spacing: 4px;
+}
+
+
+.results-panel .tabs.primary .active a {
+    border: none;
+    border-bottom: #BF3D00 groove 2px;
+}
+
+.no-padding-left{
+    padding-left: 0px;
+}

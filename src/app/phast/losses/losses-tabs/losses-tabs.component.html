@@ -1,4 +1,4 @@
-<ul class="tabs subtabs">
+<ul class="tabs subtabs phast">
   <li [ngClass]="{'active': lossesTab == 'charge-material'}" (click)="tabChange('charge-material')">
     <a class="nav-link small">
     <span class="required-asterisk" *ngIf="!chargeDone">*</span>Charge Material <span class="badge gray-badge" *ngIf="numCharge"><strong>{{numCharge}}</strong></span>
@@ -74,7 +74,7 @@
   --><li *ngIf="showEnInput1" [ngClass]="{'active': lossesTab == 'energy-input'}"
     (click)="tabChange('energy-input')">
     <a class="nav-link small">
-     <span class="required-asterisk" *ngIf="!enInput2Done">*</span>  Energy Input
+     <span class="required-asterisk" *ngIf="!enInput1Done">*</span>  Energy Input
     </a>
   </li><!--
   --><li *ngIf="showEnInput2" [ngClass]="{'active': lossesTab == 'energy-input-exhaust-gas'}"
@@ -84,7 +84,7 @@
     </a>
   </li><!--
   --><li [ngClass]="{'active': lossesTab == 'operations'}"
-    (click)="tabChange('operations')">
+    (click)="tabChange('operations')" *ngIf="!inSetup">
      <a class="nav-link small">
       Operations
     </a>

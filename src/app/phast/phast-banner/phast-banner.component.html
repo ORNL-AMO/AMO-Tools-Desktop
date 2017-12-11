@@ -1,29 +1,38 @@
-<div class="banner phast">
-
-  <div *ngIf="assessment" class="pull-left">
-    <div class="title">
-      <h1>{{assessment.name}}</h1>
-      <small>Last modified: {{assessment.modifiedDate | date:'medium'}}</small>
+<div class="banner phast row">
+  <div class="col-3">
+    <div class="pull-left">
+      <div *ngIf="assessment" class="title">
+        <h1>{{assessment.name}}</h1>
+        <small>Last modified: {{assessment.modifiedDate | date:'medium'}}</small>
+      </div>
     </div>
-    <ul class="pills-nav">
-      <li [ngClass]="{'active': mainTab == 'system-setup'}" (click)="changeTab('system-setup')"> <span>Furnace</span>
-      </li>
-      <li [ngClass]="{'active': mainTab == 'assessment'}" (click)="changeTab('assessment')"><span>Assessment</span></li>
-      <li [ngClass]="{'active': mainTab == 'diagram', 'disabled': !assessment.phast.setupDone}" (click)="changeTab('diagram')"><span>Diagram</span></li>
-      <li [ngClass]="{'active': mainTab == 'report', 'disabled': !assessment.phast.setupDone}" (click)="changeTab('report')"><span>Report</span></li>
-      <li [ngClass]="{'active': mainTab == 'sankey', 'disabled': !assessment.phast.setupDone}" (click)="changeTab('sankey')"><span>Sankey</span></li>
-    </ul>
   </div>
 
-  <a routerLink="/dashboard" class="btn-dashboard"><span>&times;</span> Back To Dashboard</a>
-  <!--<div class="pull-right settings" (click)="openPanel('settings-panel')">
-    <span class="fa fa-cog"></span>
-  </div>-->
-  <!-- <div class="pointer-item" (click)="openPanel('help-panel')">
-    <span class="fa fa-question home-icon pull-right"></span>
+  <div class="col-6">
+    <div class="row justify-content-center align-items-center pill-row">
+      <ul class="pills-nav">
+        <li [ngClass]="{'active': mainTab == 'system-setup'}" (click)="changeTab('system-setup')">
+          <span>Furnace Setup</span>
+        </li>
+        <li [ngClass]="{'active': mainTab == 'assessment', 'disabled': !assessment.phast.setupDone}" (click)="changeTab('assessment')">
+          <span>Assessment</span>
+        </li>
+        <li [ngClass]="{'active': mainTab == 'diagram', 'disabled': !assessment.phast.setupDone}" (click)="changeTab('diagram')">
+          <span>Diagram</span>
+        </li>
+        <li [ngClass]="{'active': mainTab == 'report', 'disabled': !assessment.phast.setupDone}" (click)="changeTab('report')">
+          <span>Report</span>
+        </li>
+        <li [ngClass]="{'active': mainTab == 'sankey', 'disabled': !assessment.phast.setupDone}" (click)="changeTab('sankey')">
+          <span>Sankey</span>
+        </li>
+      </ul>
+    </div>
   </div>
-  <div class="pointer-item pull-right" (click)="openPanel('data-panel')">
-    <span class="fa fa-bar-chart-o home-icon pull-right"></span>
-  </div> -->
 
+	<div class="col-3">
+      <a routerLink="/dashboard" class="btn-dashboard pull-right">
+        <span>&times;</span> Back To Dashboard</a>
+    </div>
+  
 </div>

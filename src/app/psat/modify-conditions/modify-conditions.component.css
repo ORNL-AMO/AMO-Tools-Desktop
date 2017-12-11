@@ -15,23 +15,6 @@
     }
 }
 
-.results-column{
-  padding: 0px;
-}
-.tab-row{
-  width: 40%;
-}
-
-.tab-item{
-  width: 50%;
-  text-align: center;
-  font-size: large;
-}
-
-.data-row{
-  margin-top: 5%;
-}
-
-.data-table{
-  background: white;
+.psat-losses-container{
+  padding-top: 0px;
 }

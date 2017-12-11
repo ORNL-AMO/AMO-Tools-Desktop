@@ -59,6 +59,7 @@ export class ModifyConditionsComponent implements OnInit {
   }
 
   save() {
+    console.log('save mod conditions')
     this.psat.modifications = (JSON.parse(JSON.stringify(this._modifications)));
     this.saved.emit(true);
     this.showEditModification = false;

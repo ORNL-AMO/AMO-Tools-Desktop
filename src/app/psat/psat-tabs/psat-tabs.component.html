@@ -1,26 +1,30 @@
-<ul class="tabs primary psat">
-  <li [ngClass]="{'active': currentTab == 'explore-opportunities'}">
+<ul class="tabs subtabs psat" *ngIf="mainTab != 'calculators'">
+  <li class="fixed-tab-size" [ngClass]="{'active': currentTab == 'explore-opportunities'}">
     <a (click)="changeTab('explore-opportunities')">Explore Opportunities</a>
   </li><!--
-  --><li [ngClass]="{'active': currentTab == 'modify-conditions'}">
+  --><li class="fixed-tab-size" [ngClass]="{'active': currentTab == 'modify-conditions'}">
   <a (click)="changeTab('modify-conditions')">Modify Conditions</a>
+  </li>
+</ul>
+
+
+<ul class="tabs subtabs psat" *ngIf="mainTab == 'calculators'">
+  <li [ngClass]="{'active': calcTab == 'system-curve'}">
+    <a (click)="changeCalcTab('system-curve')">System Curve</a>
   </li><!--
- --><li [ngClass]="{'active': currentTab == 'system-curve'}">
-    <a (click)="changeTab('system-curve')">System Curve</a>
+  --><li [ngClass]="{'active': calcTab == 'achievable-efficiency'}">
+  <a (click)="changeCalcTab('achievable-efficiency')">Achievable Pump Efficiency</a>
+</li><!--
+--><li [ngClass]="{'active': calcTab == 'motor-performance'}">
+    <a (click)="changeCalcTab('motor-performance')">Motor Performance</a>
   </li><!--
-  --><li [ngClass]="{'active': currentTab == 'achievable-efficiency'}">
-  <a (click)="changeTab('achievable-efficiency')">Achievable Pump Efficiency</a>
+  --><li [ngClass]="{'active': calcTab == 'nema-energy-efficiency'}">
+    <a (click)="changeCalcTab('nema-energy-efficiency')">NEMA Energy Efficiency</a>
   </li><!--
-    --><li [ngClass]="{'active': currentTab == 'motor-performance'}">
-    <a (click)="changeTab('motor-performance')">Motor Performance</a>
+  --><li [ngClass]="{'active': calcTab == 'specific-speed'}">
+    <a (click)="changeCalcTab('specific-speed')">Specific Speed</a>
   </li><!--
-    --><li [ngClass]="{'active': currentTab == 'nema-energy-efficiency'}">
-    <a (click)="changeTab('nema-energy-efficiency')">NEMA Energy Efficiency</a>
-  </li><!--
-    --><li [ngClass]="{'active': currentTab == 'specific-speed'}">
-    <a (click)="changeTab('specific-speed')">Specific Speed</a>
-  </li><!--
-    --><li [ngClass]="{'active': currentTab == 'pump-curve'}">
-    <a (click)="changeTab('pump-curve')">Pump Curve</a>
+  --><li [ngClass]="{'active': calcTab == 'pump-curve'}">
+    <a (click)="changeCalcTab('pump-curve')">Pump Curve</a>
   </li>
 </ul>

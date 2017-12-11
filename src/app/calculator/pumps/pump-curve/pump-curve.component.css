@@ -1,13 +1,3 @@
-.curve-results{
-  padding: 0px !important;
+.pump-curve-toggle-switch{
+    padding-top: 15px;
 }
-
-.calc-help{
-  padding: 8px !important;
-}
-
-
-.tab-content{
-  max-height: 78vh;
-}
-

@@ -1,41 +1,43 @@
-<div *ngIf="assessment && settings">
-  <div class="hide-print" id="psatBanner">
+<div class="psat-container" *ngIf="assessment && settings">
+  <div class="hide-print sticky-top" id="psatBanner">
     <app-psat-banner (togglePanel)="toggleOpenPanel($event)" [assessment]="assessment"></app-psat-banner>
   </div>
   <!--system-setup-->
-  <div *ngIf="mainTab == 'system-setup'">
+  <div class="tab-content" *ngIf="mainTab == 'system-setup'">
     <nav class="hide-print">
-      <ul class="tabs subtabs progress-tabs">
-        <li [ngClass]="{'active': subTab == 'system-basics'}">
-          <a (click)="changeSubTab('system-basics')"><span class="step-number">1</span> Assessment Settings</a>
+      <ul class="tabs subtabs progress-tabs psat">
+        <li class="fixed-tab-size" [ngClass]="{'active': subTab == 'system-basics'}">
+          <a (click)="changeSubTab('system-basics')">
+            <span class="step-number">1</span> Assessment Settings</a>
         </li>
-        <li [ngClass]="{'active': subTab == 'pump-fluid'}">
-          <a (click)="changeSubTab('pump-fluid')"><span class="step-number">2</span> Pump &amp; Fluid</a>
+        <li class="fixed-tab-size" [ngClass]="{'active': subTab == 'pump-fluid'}">
+          <a (click)="changeSubTab('pump-fluid')">
+            <span class="step-number">2</span> Pump &amp; Fluid</a>
         </li>
-        <li [ngClass]="{'active': subTab == 'motor', 'disabled': checkPumpFluid() }">
-          <a (click)="changeSubTab('motor')"><span class="step-number">3</span> Motor</a>
+        <li class="fixed-tab-size" [ngClass]="{'active': subTab == 'motor', 'disabled': checkPumpFluid() }">
+          <a (click)="changeSubTab('motor')">
+            <span class="step-number">3</span> Motor</a>
         </li>
-        <li [ngClass]="{'active': subTab == 'field-data', 'disabled': checkMotor()}">
-          <a (click)="changeSubTab('field-data')"><span class="step-number">4</span> Field Data</a>
+        <li class="fixed-tab-size" [ngClass]="{'active': subTab == 'field-data', 'disabled': checkMotor()}">
+          <a (click)="changeSubTab('field-data')">
+            <span class="step-number">4</span> Field Data</a>
         </li>
       </ul>
     </nav>
 
-    <div class="tab-content">
-      <div class="wrapper">
-        <div class="form">
+    <div class="row tab-content psat">
+      <div class="col-6 panel-column modification" [ngClass]="{'modal-open': isModalOpen == true}">
           <app-system-basics *ngIf="subTab == 'system-basics'" [settings]="settings" [saveClicked]="saveClicked" [assessment]="assessment"
             [(psat)]="_psat" [isAssessmentSettings]="isAssessmentSettings" (updateSettings)="getSettings($event)" (updateAssessment)="save()"></app-system-basics>
           <app-pump-fluid *ngIf="subTab == 'pump-fluid'" (isValid)="setValid()" (isInvalid)="setInvalid()" [saveClicked]="saveClicked"
-            [(psat)]="_psat" (saved)="save()" [selected]="true" [settings]="settings" [baseline]="true"></app-pump-fluid>
+            [(psat)]="_psat" (saved)="save()" [selected]="true" [settings]="settings" [baseline]="true" [inSetup]="true"></app-pump-fluid>
           <app-motor *ngIf="subTab == 'motor'" (isValid)="setValid()" (isInvalid)="setInvalid()" [saveClicked]="saveClicked" [(psat)]="_psat"
-            (saved)="save()" [selected]="true" [settings]="settings" [baseline]="true"></app-motor>
+            (saved)="save()" [selected]="true" [settings]="settings" [baseline]="true" [inSetup]="true"></app-motor>
           <app-field-data *ngIf="subTab == 'field-data'" (isValid)="setValid()" (isInvalid)="setInvalid()" [saveClicked]="saveClicked"
-            [(psat)]="_psat" (saved)="save()" [selected]="true" [settings]="settings" [baseline]="true"></app-field-data>
+            [(psat)]="_psat" (saved)="save()" [selected]="true" [settings]="settings" [baseline]="true" [inSetup]="true" (openHeadTool)="modalOpen()" (closeHeadTool)="modalClose()"></app-field-data>
         </div>
-        <div class="help">
-          <app-help-panel [psat]="_psat" [settings]="settings" [currentTab]="subTab"></app-help-panel>
-        </div>
+        <div class="col-6 help-panel">
+          <app-help-panel [psat]="_psat" [settings]="settings" [currentTab]="subTab" [inSetup]="true"></app-help-panel>
       </div>
     </div>
 
@@ -53,17 +55,13 @@
     <app-modify-conditions *ngIf="currentTab == 'modify-conditions'" [assessment]="assessment" [settings]="settings" [saveClicked]="saveClicked"
       [(psat)]="_psat" (saved)="save()"></app-modify-conditions>
   </div>
-  <div class="row justify-content-center" *ngIf="mainTab == 'assessment' && currentTab != 'explore-opportunities' && currentTab != 'modify-conditions'">
-    <div class="col-10">
-      <div class="card card-block calculator-card" style="margin-bottom: 10% !important;">
-        <app-system-curve *ngIf="currentTab == 'system-curve'" [inPsat]="true" [psat]="_psat" [settings]="settings"></app-system-curve>
-        <app-achievable-efficiency *ngIf="currentTab == 'achievable-efficiency'" [inPsat]="true" [settings]="settings" [psat]="_psat"></app-achievable-efficiency>
-        <app-motor-performance *ngIf="currentTab == 'motor-performance'" [inPsat]="true" [psat]="_psat" [settings]="settings"></app-motor-performance>
-        <app-nema-energy-efficiency *ngIf="currentTab == 'nema-energy-efficiency'" [inPsat]="true" [psat]="_psat" [settings]="settings"></app-nema-energy-efficiency>
-        <app-specific-speed *ngIf="currentTab == 'specific-speed'" [settings]="settings" [inPsat]="true" [psat]="_psat"></app-specific-speed>
-        <app-pump-curve *ngIf="currentTab == 'pump-curve'" [settings]="settings" [inPsat]="true" [psat]="_psat"></app-pump-curve>
-      </div>
-    </div>
+  <div class="tab-content" *ngIf="mainTab == 'calculators'">
+    <app-system-curve *ngIf="calcTab == 'system-curve'" [inPsat]="true" [psat]="_psat" [settings]="settings"></app-system-curve>
+    <app-achievable-efficiency *ngIf="calcTab == 'achievable-efficiency'" [inPsat]="true" [settings]="settings" [psat]="_psat"></app-achievable-efficiency>
+    <app-motor-performance *ngIf="calcTab == 'motor-performance'" [inPsat]="true" [psat]="_psat" [settings]="settings"></app-motor-performance>
+    <app-nema-energy-efficiency *ngIf="calcTab == 'nema-energy-efficiency'" [inPsat]="true" [psat]="_psat" [settings]="settings"></app-nema-energy-efficiency>
+    <app-specific-speed *ngIf="calcTab == 'specific-speed'" [settings]="settings" [inPsat]="true" [psat]="_psat"></app-specific-speed>
+    <app-pump-curve *ngIf="calcTab == 'pump-curve'" [settings]="settings" [inPsat]="true" [psat]="_psat"></app-pump-curve>
   </div>
   <div class="tab-content" *ngIf="mainTab =='diagram'">
     <app-psat-diagram [psat]="_psat" [settings]="settings"></app-psat-diagram>

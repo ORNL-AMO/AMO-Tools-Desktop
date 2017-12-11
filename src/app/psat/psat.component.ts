@@ -48,10 +48,11 @@ export class PsatComponent implements OnInit {
   subTab: string = 'system-basics';
   settings: Settings;
   isAssessmentSettings: boolean = false;
-
+  isModalOpen: boolean = false;
   viewingReport: boolean = false;
   tabBeforeReport: string = 'explore-opportunities';
   mainTab: string = 'system-setup';
+  calcTab: string;
   constructor(
     private location: Location,
     private assessmentService: AssessmentService,
@@ -99,6 +100,10 @@ export class PsatComponent implements OnInit {
       this.psatService.secondaryTab.subscribe(val => {
         this.currentTab = val;
       })
+
+      this.psatService.calcTab.subscribe(val => {
+        this.calcTab = val;
+      })
     })
   }
 
@@ -106,6 +111,8 @@ export class PsatComponent implements OnInit {
   ngOnDestroy() {
     this.psatService.secondaryTab.next('explore-opportunities');
     this.psatService.mainTab.next('system-setup');
+    this.compareService.baselinePSAT = undefined;
+    this.compareService.modifiedPSAT = undefined;
   }
 
   getSettings(update?: boolean) {
@@ -286,6 +293,13 @@ export class PsatComponent implements OnInit {
   }
   goToReport() {
     this.psatService.mainTab.next('report');
+  }
+
+  modalOpen() {
+    this.isModalOpen = true;
+  }
+  modalClose() {
+    this.isModalOpen = false;
   }
 
 }

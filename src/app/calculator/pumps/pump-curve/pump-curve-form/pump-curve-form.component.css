@@ -1,9 +1,13 @@
-.section-label{
-        font-size: large;
-    font-weight: bold;
-        text-align: center;
+.estimate-link{
+    color: blue;
 }
 
-.form-row{
-    padding-top: 15px;
+.estimate-link:hover{
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+
+.pump-curve-form{
+    padding-top: 0px;
 }

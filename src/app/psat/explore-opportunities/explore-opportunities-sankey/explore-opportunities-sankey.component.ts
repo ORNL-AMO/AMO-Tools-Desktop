@@ -40,22 +40,23 @@ export class ExploreOpportunitiesSankeyComponent implements OnInit, OnChanges {
   }
 
   ngOnInit() {
-    this.createSankey();
+    this.createSankey('Baseline');
   }
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.baselineResults) {
       if (this.selectedView == 'Baseline') {
-        this.createSankey();
+        this.createSankey('Baseline');
       }
     }
     if (changes.modificationResults) {
       if (this.selectedView == 'Modified') {
-        this.createSankey();
+        this.createSankey('Modified');
       }
     }
   }
-  createSankey() {
+  createSankey(str: string) {
+    this.selectedView = str;
     if (this.selectedView == 'Baseline') {
       this.sankey("app-explore-opportunities-sankey", this.baselineResults);
     } else if (this.selectedView == 'Modified') {
@@ -78,7 +79,7 @@ export class ExploreOpportunitiesSankeyComponent implements OnInit, OnChanges {
     d3.select(location).selectAll('svg').remove();
 
     this.width = 400;
-    this.height = 400;
+    this.height = 300;
 
     svg = d3.select(location).append('svg')
       .attr("viewBox", "0 0 " + this.width + " " + this.height)

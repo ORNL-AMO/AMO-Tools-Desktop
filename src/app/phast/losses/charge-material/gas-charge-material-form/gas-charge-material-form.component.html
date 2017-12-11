@@ -2,9 +2,7 @@
   <div class="form-section">
     <div class="form-group">
       <label class="small" for="materialName">Name of Material
-        <small id="materialHelp" class="form-text text-help">
-          <a (click)="showMaterialModal()">Add New Gas Material</a>
-        </small>
+          <a id="materialHelp" class="form-text small click-link" (click)="showMaterialModal()" [ngClass]="{'disabled-link': !baselineSelected}">Add New Gas Material</a>
       </label>
       <select name="{{'materialName_'+lossIndex}}" class="form-control" id="materialName" formControlName="materialId" (change)="setProperties()"
         (focus)="focusField('materialName')" (blur)="focusOut()">

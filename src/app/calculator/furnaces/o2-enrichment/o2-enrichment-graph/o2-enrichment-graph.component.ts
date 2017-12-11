@@ -721,7 +721,7 @@ export class O2EnrichmentGraphComponent implements OnInit, DoCheck {
           // .style("padding", "0px")
           .attr("class", "text-center")
           .append("button")
-          .attr("class", "btn deleteBtn")
+          .attr("class", "btn-sm deleteBtn")
           .attr("type", "button")
           // .style("padding", "0px")
           // .style("width", "20px")

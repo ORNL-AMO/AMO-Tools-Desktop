@@ -1,35 +1,50 @@
-<div class="pump-head">
-  <div class="row" *ngIf="settings">
-    <div class="col-md-4 col-sm-12  mx-auto">
-      <app-specific-speed-form [(speedForm)]="speedForm" [settings]="settings" (calculate)="calculate()"></app-specific-speed-form>
-    </div>
-    <div class="col-md-6 col-sm-12 mx-auto">
-      <ul class="tabs primary text-center">
-        <li class="calc-tab" [ngClass]="{'active': tabSelect == 'results'}">
-          <a (click)="setTab('results')">Graph</a>
-        </li><!--
-    --><li class="calc-tab" [ngClass]="{'active': tabSelect == 'help'}">
-          <a (click)="setTab('help')">Help</a>
-        </li>
-      </ul>
-      <div class="tab-content efficiency-results" id="specificSpeedGraph">
-        <app-specific-speed-graph *ngIf="tabSelect == 'results'" [speedForm]="speedForm" [toggleCalculate]="toggleCalculate"></app-specific-speed-graph>
-
-        <div *ngIf="tabSelect == 'help'" class="help-panel">
-          <div class="calc-help">
-
-            <h3>Specific Speed Help</h3>
-            <p>
-              For each pump type there is an optimal specific speed based on size, flow rate, specific speed. Hydraulic Institute standards
-              also include factors for wear and surface finish on wetted parts but these two factors are not considered in
-              the PSAT calculations. Operation at the optimal specific speed allows a pump to operate at maximum efficiency.
-              This calculator determines the specific speed for a pump at the given conditions and calculates the amount
-              of efficiency penalty to be deducted from the maximum value due to operation away from the optimal specific
-              speed.
-            </p>
+<div class="modify-conditions panel-container row psat" *ngIf="settings">
+  <div class="col-12">
+    <div class="row align-items-top calculator-panel">
+      <div class="modification panel-column col-6 align-top">
+        <div class="header">
+          <h3>Specific Speed Calculator</h3>
+        </div>
+        <div class="row">
+          <div class="col-12">
+            <app-specific-speed-form [(speedForm)]="speedForm" [settings]="settings" (calculate)="calculate()"></app-specific-speed-form>
           </div>
         </div>
+      </div>
+      <div class="col-6 align-top">
+        <div class="help-panel">
+          <div class="row">
+            <ul class="tabs primary tab-row">
+              <li class="panel-tab-item tab-2" [ngClass]="{'active': tabSelect == 'results'}">
+                <a (click)="setTab('results')">Graph</a>
+              </li><!--
+              --><li class="panel-tab-item tab-2" [ngClass]="{'active': tabSelect == 'help'}">
+                <a (click)="setTab('help')">Help</a>
+              </li>
+            </ul>
 
+            <div class="row justify-content-center data-row align-items-center" *ngIf="tabSelect == 'help'">
+              <div class="col-11">
+                <div class="calc-help">
+                  <h3>Specific Speed Help</h3>
+                  <p>
+                    For each pump type there is an optimal specific speed based on size, flow rate, specific speed. Hydraulic Institute standards
+                    also include factors for wear and surface finish on wetted parts but these two factors are not considered
+                    in the PSAT calculations. Operation at the optimal specific speed allows a pump to operate at maximum
+                    efficiency. This calculator determines the specific speed for a pump at the given conditions and calculates
+                    the amount of efficiency penalty to be deducted from the maximum value due to operation away from the
+                    optimal specific speed.
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="row justify-content-center data-row" style="width:100%;" *ngIf="tabSelect == 'results'">
+              <div class="col-11" id="specificSpeedGraph">
+                <app-specific-speed-graph [speedForm]="speedForm" [toggleCalculate]="toggleCalculate"></app-specific-speed-graph>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
