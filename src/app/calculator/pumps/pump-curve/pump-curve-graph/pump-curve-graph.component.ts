@@ -33,7 +33,8 @@ export class PumpCurveGraphComponent implements OnInit {
   line: any;
   filter: any;
   detailBox: any;
-  pointer: any;
+  tooltipPointer: any;
+  // pointer: any;
   calcPoint: any;
   focus: any;
   focusMod: any;
@@ -345,6 +346,15 @@ export class PumpCurveGraphComponent implements OnInit {
       .attr("class", "d3-tip")
       .style("opacity", 0)
       .style('pointer-events', 'none');
+
+    //debug
+    this.tooltipPointer = d3.select("app-pump-curve-graph").append("div")
+      .attr("id", "tooltipPointer")
+      .attr("class", "tooltip-pointer")
+      .style("opacity", 0)
+      .style('pointer-events', 'none');
+
+
     let detailBoxWidth = 160;
     let detailBoxHeight = 90;
 
@@ -353,12 +363,12 @@ export class PumpCurveGraphComponent implements OnInit {
       detailBoxHeight = 160;
 
     }
-    this.pointer = this.svg.append("polygon")
-      .attr("id", "pointer")
-      //.attr("points", "0,13, 14,13, 7,-2");
-      .attr("points", "0,0, 0," + (detailBoxHeight - 2) + "," + detailBoxWidth + "," + (detailBoxHeight - 2) + "," + detailBoxWidth + ", 0," + ((detailBoxWidth / 2) + 12) + ",0," + (detailBoxWidth / 2) + ", -12, " + ((detailBoxWidth / 2) - 12) + ",0")
-      .style("display", "none")
-      .style('pointer-events', 'none');
+    // this.pointer = this.svg.append("polygon")
+    //   .attr("id", "pointer")
+    //   //.attr("points", "0,13, 14,13, 7,-2");
+    //   .attr("points", "0,0, 0," + (detailBoxHeight - 2) + "," + detailBoxWidth + "," + (detailBoxHeight - 2) + "," + detailBoxWidth + ", 0," + ((detailBoxWidth / 2) + 12) + ",0," + (detailBoxWidth / 2) + ", -12, " + ((detailBoxWidth / 2) - 12) + ",0")
+    //   .style("display", "none")
+    //   .style('pointer-events', 'none');
 
     this.focus = this.svg.append("g")
       .attr("class", "focus")
@@ -411,10 +421,15 @@ export class PumpCurveGraphComponent implements OnInit {
             .style("opacity", 1)
             .style('pointer-events', 'none');
         }
-        this.pointer
+        // this.pointer
+        //   .style("display", null)
+        //   .style('pointer-events', 'none');
+        this.detailBox
           .style("display", null)
           .style('pointer-events', 'none');
-        this.detailBox
+
+        //debug
+        this.tooltipPointer
           .style("display", null)
           .style('pointer-events', 'none');
 
@@ -431,10 +446,14 @@ export class PumpCurveGraphComponent implements OnInit {
             .style("opacity", 1)
             .style('pointer-events', 'none');
         }
-        this.pointer
+        // this.pointer
+        //   .style("display", null)
+        //   .style('pointer-events', 'none');
+        this.detailBox
           .style("display", null)
           .style('pointer-events', 'none');
-        this.detailBox
+
+        this.tooltipPointer
           .style("display", null)
           .style('pointer-events', 'none');
 
@@ -455,6 +474,10 @@ export class PumpCurveGraphComponent implements OnInit {
             let modD0 = modifiedData[i - 1];
             let modD1 = modifiedData[i];
             if (modD0 && modD1) {
+
+              //debug
+              console.log("modD0 && modD1");
+
               let modD = x0 - modD0.x > modD1.x - x0 ? modD1 : modD0;
               xVal = this.x(modD.x);
               if (isNaN(xVal) == false) {
@@ -464,10 +487,10 @@ export class PumpCurveGraphComponent implements OnInit {
                 this.focusMod.attr("transform", "translate(" + this.x(d.x) + "," + this.y(modD.y) + ")");
 
                 if (minMod.y < minBaseline.y) {
-                  this.pointer
-                    .attr("transform", 'translate(' + (this.x(d.x) - (detailBoxWidth / 2)) + ',' + (this.y(modD.y) + 27) + ')')
-                    .style("fill", "#ffffff")
-                    .style("filter", "url(#drop-shadow)");
+                  // this.pointer
+                  //   .attr("transform", 'translate(' + (this.x(d.x) - (detailBoxWidth / 2)) + ',' + (this.y(modD.y) + 27) + ')')
+                  //   .style("fill", "#ffffff");
+                  // .style("filter", "url(#drop-shadow)");
 
                   this.detailBox
                     .style("padding-right", "10px")
@@ -482,8 +505,13 @@ export class PumpCurveGraphComponent implements OnInit {
 
                     // "<div style='float:left;'>Fluid Power: </div><div style='float: right;'>" + format(d.fluidPower) + " </div></strong></p>")
 
-                    .style("left", (this.margin.left + this.x(d.x) - (detailBoxWidth / 2 - 17)) + "px")
-                    .style("top", (this.margin.top + this.y(modD.y) + 83) + "px")
+                    //real version
+                    // .style("left", (this.margin.left + this.x(d.x) - (detailBoxWidth / 2 - 17)) - 2 + "px")
+                    // .style("top", (this.margin.top + this.y(modD.y) + 26) + "px")
+
+                    //debug
+                    .style("left", (this.margin.left + this.x(d.x) - (detailBoxWidth / 2 - 17)) - 2 + "px")
+                    .style("top", (this.margin.top + this.y(d.y) + 26) + "px")
                     .style("position", "absolute")
                     .style("width", detailBoxWidth + "px")
                     .style("height", detailBoxHeight + "px")
@@ -493,12 +521,25 @@ export class PumpCurveGraphComponent implements OnInit {
                     .style("background", "#ffffff")
                     .style("border", "0px")
                     .style("pointer-events", "none");
+
+                  this.tooltipPointer
+                    .attr("class", "tooltip-pointer")
+                    .html("<div></div>")
+                    .style("left", (this.margin.left + this.x(d.x)) + 5 + "px")
+                    .style("top", (this.margin.top + this.y(d.y) + 16) + "px")
+                    .style("position", "absolute")
+                    .style("width", "0px")
+                    .style("height", "0px")
+                    .style("border-left", "10px solid transparent")
+                    .style("border-right", "10px solid transparent")
+                    .style("border-bottom", "10px solid white")
+                    .style('pointer-events', 'none');
                 }
               } else {
-                this.pointer
-                  .attr("transform", 'translate(' + (this.x(d.x) - (detailBoxWidth / 2)) + ',' + (this.y(d.y) + 27) + ')')
-                  .style("fill", "#ffffff")
-                  .style("filter", "url(#drop-shadow)");
+                // this.pointer
+                //   .attr("transform", 'translate(' + (this.x(d.x) - (detailBoxWidth / 2)) + ',' + (this.y(d.y) + 27) + ')')
+                //   .style("fill", "#ffffff")
+                // .style("filter", "url(#drop-shadow)");
 
                 this.detailBox
                   .style("padding-right", "10px")
@@ -513,8 +554,8 @@ export class PumpCurveGraphComponent implements OnInit {
 
                   // "<div style='float:left;'>Fluid Power: </div><div style='float: right;'>" + format(d.fluidPower) + " </div></strong></p>")
 
-                  .style("left", (this.margin.left + this.x(d.x) - (detailBoxWidth / 2 - 17)) + "px")
-                  .style("top", (this.margin.top + this.y(d.y) + 83) + "px")
+                  .style("left", (this.margin.left + this.x(d.x) - (detailBoxWidth / 2 - 17)) - 2 + "px")
+                  .style("top", (this.margin.top + this.y(d.y) + 26) + "px")
                   .style("position", "absolute")
                   .style("width", detailBoxWidth + "px")
                   .style("height", detailBoxHeight + "px")
@@ -523,29 +564,53 @@ export class PumpCurveGraphComponent implements OnInit {
                   .style("font", "12px sans-serif")
                   .style("background", "#ffffff")
                   .style("border", "0px")
+                  .style("box-shadow", "0px 0px 10px 2px grey")
                   .style("pointer-events", "none");
+
+                this.tooltipPointer
+                  .attr("class", "tooltip-pointer")
+                  .html("<div></div>")
+                  .style("left", (this.margin.left + this.x(d.x)) + 5 + "px")
+                  .style("top", (this.margin.top + this.y(d.y) + 16) + "px")
+                  .style("position", "absolute")
+                  .style("width", "0px")
+                  .style("height", "0px")
+                  .style("border-left", "10px solid transparent")
+                  .style("border-right", "10px solid transparent")
+                  .style("border-bottom", "10px solid white")
+                  .style('pointer-events', 'none');
               }
 
-              this.pointer.transition()
-                .style("opacity", 1);
+              // this.pointer.transition()
+              //   .style("opacity", 1);
 
               this.detailBox.transition()
+                .style("opacity", 1);
+
+              this.tooltipPointer.transition()
                 .style("opacity", 1);
             }
           }
           else {
+
+            //debug
+            console.log("NOT modD0 && modD1");
+
             this.focus.attr("transform", "translate(" + this.x(d.x) + "," + this.y(d.y) + ")");
 
-            this.pointer.transition()
-              .style("opacity", 1);
+            // this.pointer.transition()
+            //   .style("opacity", 1);
 
             this.detailBox.transition()
               .style("opacity", 1);
 
-            this.pointer
-              .attr("transform", 'translate(' + (this.x(d.x) - (detailBoxWidth / 2)) + ',' + (this.y(d.y) + 27) + ')')
-              .style("fill", "#ffffff")
-              .style("filter", "url(#drop-shadow)");
+            this.tooltipPointer.transition()
+              .style("opacity", 1);
+
+            // this.pointer
+            //   .attr("transform", 'translate(' + (this.x(d.x) - (detailBoxWidth / 2)) + ',' + (this.y(d.y) + 27) + ')')
+            //   .style("fill", "#ffffff");
+            // .style("filter", "url(#drop-shadow)");
 
 
             this.detailBox
@@ -559,8 +624,8 @@ export class PumpCurveGraphComponent implements OnInit {
               // "<div style='float:left;'>Fluid Power: </div><div style='float: right;'>" + format(d.fluidPower) + " </div></strong></p>")
 
 
-              .style("left", (this.margin.left + this.x(d.x) - (detailBoxWidth / 2 - 17)) + "px")
-              .style("top", (this.margin.top + this.y(d.y) + 83) + "px")
+              .style("left", (this.margin.left + this.x(d.x) - (detailBoxWidth / 2 - 17)) - 2 + "px")
+              .style("top", (this.margin.top + this.y(d.y) + 26) + "px")
               .style("position", "absolute")
               .style("width", detailBoxWidth + "px")
               .style("height", detailBoxHeight + "px")
@@ -569,18 +634,39 @@ export class PumpCurveGraphComponent implements OnInit {
               .style("font", "12px sans-serif")
               .style("background", "#ffffff")
               .style("border", "0px")
+              .style("box-shadow", "0px 0px 10px 2px grey")
               .style("pointer-events", "none");
+
+
+            this.tooltipPointer
+              .attr("class", "tooltip-pointer")
+              .html("<div></div>")
+              .style("left", (this.margin.left + this.x(d.x)) + 5 + "px")
+              .style("top", (this.margin.top + this.y(d.y) + 16) + "px")
+              .style("position", "absolute")
+              .style("width", "0px")
+              .style("height", "0px")
+              .style("border-left", "10px solid transparent")
+              .style("border-right", "10px solid transparent")
+              .style("border-bottom", "10px solid white")
+              .style('pointer-events', 'none');
           }
         }
       })
       .on("mouseout", () => {
-        this.pointer
+        // this.pointer
+        //   .transition()
+        //   .delay(100)
+        //   .duration(600)
+        //   .style("opacity", 0);
+
+        this.detailBox
           .transition()
           .delay(100)
           .duration(600)
           .style("opacity", 0);
 
-        this.detailBox
+        this.tooltipPointer
           .transition()
           .delay(100)
           .duration(600)

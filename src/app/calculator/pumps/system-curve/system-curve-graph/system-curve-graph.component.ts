@@ -35,6 +35,7 @@ export class SystemCurveGraphComponent implements OnInit {
   line: any;
   filter: any;
   detailBox: any;
+  tooltipPointer: any;
   pointer: any;
   focus: any;
 
@@ -93,13 +94,27 @@ export class SystemCurveGraphComponent implements OnInit {
 
     if (this.canvasWidth < 400) {
       this.fontSize = '8px';
-      this.margin = { top: 10, right: 10, bottom: 50, left: 75 };
+
+      //debug
+      this.margin = { top: 10, right: 35, bottom: 50, left: 50 };
+      
+      //real version
+      // this.margin = { top: 10, right: 10, bottom: 50, left: 75 };
     } else {
       this.fontSize = '12px';
-      this.margin = { top: 20, right: 20, bottom: 75, left: 120 };
+
+      //debug
+      this.margin = { top: 20, right: 45, bottom: 75, left: 95 };
+      
+      //real version
+      // this.margin = { top: 20, right: 20, bottom: 75, left: 120 };
     }
+    //real version
     this.width = this.canvasWidth - this.margin.left - this.margin.right;
     this.height = this.canvasHeight - this.margin.top - this.margin.bottom;
+    //debug
+    // this.width = this.canvasWidth - this.margin.left - this.margin.right;
+    // this.height = this.canvasHeight - this.margin.top - this.margin.bottom + (parseInt(this.fontSize.replace('px', '')) * 2 + 5);
 
     d3.select("app-system-curve").select("#gridToggle").style("top", (this.height + 100) + "px");
 
@@ -114,6 +129,9 @@ export class SystemCurveGraphComponent implements OnInit {
     this.svg = d3.select('app-system-curve-graph').append('svg')
       .attr("width", this.width + this.margin.left + this.margin.right)
       .attr("height", this.height + this.margin.top + this.margin.bottom)
+      //debug
+      // .attr("width", this.width + this.margin.left + this.margin.right)
+      // .attr("height", this.height + this.margin.top + this.margin.bottom + (parseInt(this.fontSize.replace('px', '')) * 2 + 5))
       .append("g")
       .attr("transform", "translate(" + this.margin.left + "," + this.margin.top + ")");
 
@@ -171,6 +189,24 @@ export class SystemCurveGraphComponent implements OnInit {
       .text("Flow Rate (" + this.settings.flowMeasurement + ")");
 
 
+
+    //debug - trying something
+    // console.log("fontSize number = " + (this.fontSize[0] + this.fontSize[1]));
+    // this.svg.append("text")
+    //   .attr("text-anchor", "left")
+    //   .attr("transform", "translate(20, " + "-" + (parseInt(this.fontSize.replace('px', '')) * 2) + ")")
+    //   .attr("font-size", this.fontSize)
+    //   .attr("font-weight", "bold")
+    //   .text("testing title");
+
+    // this.svg.append("text")
+    //   .attr("text-anchor", "left")
+    //   .attr("transform", "translate(20, " + "-" + (this.fontSize.replace('px', '')) + ")")
+    //   .attr("font-size", this.fontSize)
+    //   .attr("font-weight", "bold")
+    //   .text("test title 2");
+
+
     var x = d3.scaleLinear()
       .range([0, this.width]);
 
@@ -225,6 +261,7 @@ export class SystemCurveGraphComponent implements OnInit {
         .tickPadding(0)
         .ticks(5)
         .tickSize(-this.height)
+        // .attr("class", "grid-line")
         .tickFormat(d3.format(".2s"));
 
       this.yAxis = d3.axisLeft()
@@ -293,14 +330,21 @@ export class SystemCurveGraphComponent implements OnInit {
       .style("opacity", 0)
       .style('pointer-events', 'none');
 
+    //debug
+    this.tooltipPointer = d3.select("app-system-curve-graph").append("div")
+      .attr("id", "tooltipPointer")
+      .attr("class", "tooltip-pointer")
+      .style("opacity", 1)
+      .style('pointer-events', 'none');
+
     const detailBoxWidth = 160;
     const detailBoxHeight = 80;
 
-    this.pointer = this.svg.append("polygon")
-      .attr("id", "pointer")
-      .attr("points", "0,0, 0," + (detailBoxHeight - 2) + "," + detailBoxWidth + "," + (detailBoxHeight - 2) + "," + detailBoxWidth + ", 0," + ((detailBoxWidth / 2) + 12) + ",0," + (detailBoxWidth / 2) + ", -12, " + ((detailBoxWidth / 2) - 12) + ",0")
-      .style("opacity", 0)
-      .style('pointer-events', 'none');
+    // this.pointer = this.svg.append("polygon")
+    //   .attr("id", "pointer")
+    //   .attr("points", "0,0, 0," + (detailBoxHeight - 2) + "," + detailBoxWidth + "," + (detailBoxHeight - 2) + "," + detailBoxWidth + ", 0," + ((detailBoxWidth / 2) + 12) + ",0," + (detailBoxWidth / 2) + ", -12, " + ((detailBoxWidth / 2) - 12) + ",0")
+    //   .style("opacity", 0)
+    //   .style('pointer-events', 'none');
 
     this.focus = this.svg.append("g")
       .attr("class", "focus")
@@ -335,10 +379,15 @@ export class SystemCurveGraphComponent implements OnInit {
           .style("display", null)
           .style("opacity", 1)
           .style('pointer-events', 'none');
-        this.pointer
+        // this.pointer
+        //   .style("display", null)
+        //   .style('pointer-events', 'none');
+        this.detailBox
           .style("display", null)
           .style('pointer-events', 'none');
-        this.detailBox
+
+        //debug
+        this.tooltipPointer
           .style("display", null)
           .style('pointer-events', 'none');
 
@@ -349,10 +398,15 @@ export class SystemCurveGraphComponent implements OnInit {
           .style("display", null)
           .style("opacity", 1)
           .style('pointer-events', 'none');
-        this.pointer
+        // this.pointer
+        //   .style("display", null)
+        //   .style('pointer-events', 'none');
+        this.detailBox
           .style("display", null)
           .style('pointer-events', 'none');
-        this.detailBox
+
+        //debug
+        this.tooltipPointer
           .style("display", null)
           .style('pointer-events', 'none');
 
@@ -363,20 +417,27 @@ export class SystemCurveGraphComponent implements OnInit {
           d = x0 - d0.x > d1.x - x0 ? d1 : d0;
         this.focus.attr("transform", "translate(" + x(d.x) + "," + y(d.y) + ")");
 
-        this.pointer.transition()
-          .style("opacity", 1);
+        // this.pointer.transition()
+        //   .style("opacity", 1);
 
         this.detailBox.transition()
           .style("opacity", 1);
 
+        //debug
+        this.tooltipPointer.transition()
+          .style("opacity", 1);
+
         var detailBoxWidth = 160;
         var detailBoxHeight = 80;
+        var tooltipPointerWidth = detailBoxWidth * 0.05;
+        var tooltipPointerHeight = detailBoxHeight * 0.05;
 
-        this.pointer
-          .attr("transform", 'translate(' + (x(d.x) - (detailBoxWidth / 2)) + ',' + (y(d.y) + 27) + ')')
-          .style("fill", "#ffffff")
-          .style("filter", "url(#drop-shadow)");
+        // this.pointer
+        //   .attr("transform", 'translate(' + (x(d.x) - (detailBoxWidth / 2)) + ',' + (y(d.y) + 27) + ')')
+        //   .style("fill", "#ffffff")
+        //   .style("filter", "url(#drop-shadow)");
 
+        //debug
         this.detailBox
           .style("padding-top", "10px")
           .style("padding-right", "10px")
@@ -389,8 +450,8 @@ export class SystemCurveGraphComponent implements OnInit {
 
           "<div style='float:left; position: relative; top: -10px;'>Fluid Power: </div><div style='float: right; position: relative; top: -10px;'>" + format(d.fluidPower) + " " + this.settings.powerMeasurement + "</div></strong></p>")
 
-          .style("left", (this.margin.left + x(d.x) - (detailBoxWidth / 2 - 17)) + "px")
-          .style("top", (this.margin.top + y(d.y) + 83) + "px")
+          .style("left", Math.min(((this.margin.left + x(d.x) - (detailBoxWidth / 2 - 17)) - 2), this.canvasWidth - detailBoxWidth) + "px")
+          .style("top", (this.margin.top + y(d.y) + 26) + "px")
           .style("position", "absolute")
           .style("width", detailBoxWidth + "px")
           .style("height", detailBoxHeight + "px")
@@ -398,16 +459,60 @@ export class SystemCurveGraphComponent implements OnInit {
           .style("font", "12px sans-serif")
           .style("background", "#ffffff")
           .style("border", "0px")
+          .style("box-shadow", "0px 0px 10px 2px grey")
           .style("pointer-events", "none");
+
+        this.tooltipPointer
+          .attr("class", "tooltip-pointer")
+          .html("<div></div>")
+          .style("left", (this.margin.left + x(d.x)) + 5 + "px")
+          .style("top", (this.margin.top + y(d.y) + 16) + "px")
+          .style("position", "absolute")
+          .style("width", "0px")
+          .style("height", "0px")
+          .style("border-left", "10px solid transparent")
+          .style("border-right", "10px solid transparent")
+          .style("border-bottom", "10px solid white")
+          .style('pointer-events', 'none');
+
+        //real version
+        // this.detailBox
+        //   .style("padding-top", "10px")
+        //   .style("padding-right", "10px")
+        //   .style("padding-bottom", "10px")
+        //   .style("padding-left", "10px")
+        //   .html(
+        //   "<p><strong><div style='float:left; position: relative; top: -10px;'>Flow Rate: </div><div style='float:right; position: relative; top: -10px;'>" + format(d.x) + " " + this.settings.flowMeasurement + "</div><br>" +
+
+        //   "<div style='float:left; position: relative; top: -10px;'>Head: </div><div style='float: right; position: relative; top: -10px;'>" + format(d.y) + " " + this.settings.distanceMeasurement + "</div><br>" +
+
+        //   "<div style='float:left; position: relative; top: -10px;'>Fluid Power: </div><div style='float: right; position: relative; top: -10px;'>" + format(d.fluidPower) + " " + this.settings.powerMeasurement + "</div></strong></p>")
+
+        //   .style("left", (this.margin.left + x(d.x) - (detailBoxWidth / 2 - 17)) - 2 + "px")
+        //   .style("top", (this.margin.top + y(d.y) + 26) + "px")
+        //   .style("position", "absolute")
+        //   .style("width", detailBoxWidth + "px")
+        //   .style("height", detailBoxHeight + "px")
+        //   .style("padding", "10px")
+        //   .style("font", "12px sans-serif")
+        //   .style("background", "#ffffff")
+        //   .style("border", "0px")
+        //   .style("pointer-events", "none");
       })
       .on("mouseout", () => {
-        this.pointer
+        // this.pointer
+        //   .transition()
+        //   .delay(100)
+        //   .duration(600)
+        //   .style("opacity", 0);
+
+        this.detailBox
           .transition()
           .delay(100)
           .duration(600)
           .style("opacity", 0);
 
-        this.detailBox
+        this.tooltipPointer
           .transition()
           .delay(100)
           .duration(600)
@@ -424,6 +529,9 @@ export class SystemCurveGraphComponent implements OnInit {
       .attr("id", "staticHeadText")
       .attr("x", 20)
       .attr("y", "20")
+      // debug
+      // .attr("x", 20)
+      // .attr("y", "20")
       .text("Calculated Static Head: " + this.staticHead + ' ' + this.settings.distanceMeasurement)
       .style("font-size", this.fontSize)
       .style("font-weight", "bold");
