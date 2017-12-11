@@ -5,7 +5,7 @@
       <!-- <button *ngIf="showAddBtn" class="btn btn-secondary pull-right" (click)="addLoss()" [disabled]="!baselineSelected">
         <span class="fa fa-plus"></span>
       </button> -->
-      <h5 class="pull-right panel-add" *ngIf="inSetup">
+      <h5 class="pull-right panel-add" *ngIf="inSetup && !modificationExists">
         <a class="small" [ngClass]="{'disabled': !baselineSelected}">
           <span (click)="addLoss()">+Add Loss</span>
         </a>
