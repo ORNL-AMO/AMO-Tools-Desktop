@@ -28,6 +28,7 @@ export class GasCoolingLossesFormComponent implements OnInit {
   elements: any;
   specificHeatError: string = null;
   gasFlowError: string = null;
+  gasDensityError: string = null;
   firstChange: boolean = true;
   counter: any;
   temperatureError: string = null;
@@ -98,6 +99,12 @@ export class GasCoolingLossesFormComponent implements OnInit {
     } else {
       this.gasFlowError = null;
     }
+    if (this.lossesForm.value.gasDensity < 0) {
+      this.gasDensityError = 'Gas Density must be equal or greater than 0';
+    } else {
+      this.gasDensityError = null;
+    }
+
   }
 
   focusField(str: string) {
