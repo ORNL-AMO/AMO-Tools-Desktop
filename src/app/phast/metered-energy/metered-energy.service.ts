@@ -16,7 +16,10 @@ export class MeteredEnergyService {
     //meteredEnergyUsed = Electricity Used during collection / Collection Time
     let meteredEnergyUsed = this.calcElectricityUsed(input);
     //Energy Intensity for Charge Material = meteredEnergyUsed / sum(charge material feed rates)
-    let sumFeedRate = this.phastService.sumChargeMaterialFeedRate(phast.losses.chargeMaterials);
+    let sumFeedRate = 0;
+    if (phast.losses) {
+      sumFeedRate = this.phastService.sumChargeMaterialFeedRate(phast.losses.chargeMaterials);
+    }
     let meteredEnergyIntensity = (meteredEnergyUsed / sumFeedRate) || 0;
     //Electricity Used (Auxiliary) = Electricity used during collection (aux) / collection time (aux)
     let meteredElectricityUsed = (input.auxElectricityUsed / input.auxElectricityCollectionTime) || 0;
@@ -46,7 +49,10 @@ export class MeteredEnergyService {
     //Metered Fuel Used = HHV * Flow Rate (if flow rate given)
     let meteredEnergyUsed = this.calcFuelUsed(inputs);
     //Energy Intensity for Charge Materials =  Metered Energy Used / Sum(charge material feed rates)
-    let sumFeedRate = this.phastService.sumChargeMaterialFeedRate(phast.losses.chargeMaterials);
+    let sumFeedRate = 0;
+    if (phast.losses) {
+      sumFeedRate = this.phastService.sumChargeMaterialFeedRate(phast.losses.chargeMaterials);
+    }
     let meteredEnergyIntensity = (meteredEnergyUsed / sumFeedRate) || 0;
     //Electricity Used (Auxiliary) = Electricity used during collection / collection time
     let meteredElectricityUsed = (inputs.electricityUsed / inputs.electricityCollectionTime) || 0;
@@ -77,7 +83,10 @@ export class MeteredEnergyService {
     //Metered Fuel Used = HHV * Flow Rate
     let meteredEnergyUsed = this.calcSteamEnergyUsed(inputs);
     //Energy Intensity for Charge Materials =  Metered Energy Used / Sum(charge material feed rates)
-    let sumFeedRate = this.phastService.sumChargeMaterialFeedRate(phast.losses.chargeMaterials);
+    let sumFeedRate = 0;
+    if (phast.losses) {
+      sumFeedRate = this.phastService.sumChargeMaterialFeedRate(phast.losses.chargeMaterials);
+    }
     let meteredEnergyIntensity = (meteredEnergyUsed / sumFeedRate) || 0;
     //Electricity Used (Auxiliary) = Electricity used during collection / collection time
     let meteredElectricityUsed = (inputs.electricityUsed / inputs.electricityCollectionTime) || 0;
