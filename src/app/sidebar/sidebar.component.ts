@@ -36,6 +36,8 @@ export class SidebarComponent implements OnInit {
   emitGoToSettings = new EventEmitter<boolean>();
   @Output('emitGoToContact')
   emitGoToContact = new EventEmitter<boolean>();
+  @Output('openModal')
+  openModal = new EventEmitter<boolean>();
 
   selectedDirectoryId: number;
   firstChange: boolean = true;
@@ -126,19 +128,23 @@ export class SidebarComponent implements OnInit {
     this.emitGoToContact.emit(true);
   }
 
-  closeModal() {
+  closeUpdateModal() {
+    this.openModal.emit(false);
     this.showModal = false;
   }
 
-  openModal() {
+  openUpdateModal() {
+    this.openModal.emit(true);
     this.showModal = true;
   }
 
   openVersionModal() {
+    this.openModal.emit(true);
     this.showVersionModal = true;
   }
 
   closeVersionModal() {
+    this.openModal.emit(false);
     this.showVersionModal = false;
   }
 }

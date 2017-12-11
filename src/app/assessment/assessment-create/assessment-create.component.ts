@@ -19,6 +19,8 @@ export class AssessmentCreateComponent implements OnInit {
   @ViewChildren('assessmentName') vc;
   @Output('hideModal')
   hideModal = new EventEmitter<boolean>();
+  @Input()
+  type: string;
 
   newAssessment: any;
   selectedEquip: string = 'new';
@@ -36,6 +38,7 @@ export class AssessmentCreateComponent implements OnInit {
     private indexedDbService: IndexedDbService) { }
 
   ngOnInit() {
+    console.log('init');
     this.indexedDbService.getDirectorySettings(this.directory.id).then(
       results => {
         if (results.length != 0) {
@@ -48,6 +51,11 @@ export class AssessmentCreateComponent implements OnInit {
     this.allAssessments = this.directory.assessments;
     this.filteredAssessments = this.allAssessments;
     this.canCreate = true;
+    if(this.type){
+      this.newAssessment.patchValue({
+        assessmentType: this.type
+      })
+    }
   }
 
   getParentDirectorySettings(parentDirectoryId: number) {
@@ -92,6 +100,7 @@ export class AssessmentCreateComponent implements OnInit {
   hideCreateModal(bool?: boolean) {
     this.showDropdown = false;
     this.createModal.hide();
+    this.hideModal.emit(true);
     // this.hideModal.emit(true);
     if (!bool) {
       this.assessmentService.createAssessment.next(false);

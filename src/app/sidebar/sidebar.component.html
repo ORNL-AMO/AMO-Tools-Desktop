@@ -96,11 +96,11 @@
       </span>
     </li>
     <li>
-      <span *ngIf="isUpdateAvailable" class="update-available" (click)="openModal()">Update Available!</span>
+      <span *ngIf="isUpdateAvailable" class="update-available" (click)="openUpdateModal()">Update Available!</span>
     </li>
   </ul>
 </div>
 
 
-<app-update-modal *ngIf="showModal" (closeModal)="closeModal()"></app-update-modal>
+<app-update-modal *ngIf="showModal" (closeModal)="closeUpdateModal()"></app-update-modal>
 <app-version-modal *ngIf="showVersionModal" (closeModal)="closeVersionModal()"></app-version-modal>

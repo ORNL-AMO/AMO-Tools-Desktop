@@ -9,8 +9,8 @@
     <div class="modal-content">
 
       <div class="modal-header">
-        <h3 *ngIf="directory.id != 1">Add Asset in {{directory.name}}</h3>
-        <h3 *ngIf="directory.id == 1">Add Asset</h3>
+        <h3 *ngIf="directory.id != 1">Add Assessment in {{directory.name}}</h3>
+        <h3 *ngIf="directory.id == 1">Add Assessment</h3>
         <button class="close" (click)="hideCreateModal(false)">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -21,7 +21,7 @@
         <div class="modal-body">
         
             <div class="form-group">
-              <label class="form-control-label" for="assessmentName">Asset Name</label>
+              <label class="form-control-label" for="assessmentName">Assessment Name</label>
               <input #assessmentName class="form-control" formControlName="assessmentName" id="assessmentName" type="text" />
               <div class="help-text">
                 <p *ngIf="newAssessment.value.assessmentType == 'Pump'">Example: "Pump123" or "ORNL Pump 3"</p>
@@ -30,7 +30,7 @@
             </div><!-- End .form-group -->
 
             <div class="form-group">
-              <label>Asset Type</label>
+              <label>Assessment Type</label>
               <select class="form-control type-select" formControlName="assessmentType">
                 <option>Pump</option>
                 <option>Furnace</option>

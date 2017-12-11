@@ -26,7 +26,8 @@ export class SystemBasicsComponent implements OnInit {
   phast: PHAST;
   @Output('save')
   save = new EventEmitter<boolean>();
-
+  @Output('openModal')
+  openModal = new EventEmitter<boolean>();
 
   @ViewChild('settingsModal') public settingsModal: ModalDirective;
 
@@ -132,10 +133,12 @@ export class SystemBasicsComponent implements OnInit {
   }
 
   showSettingsModal() {
+    this.openModal.emit(true);
     this.settingsModal.show();
   }
 
   hideSettingsModal() {
+    this.openModal.emit(false);
     this.settingsModal.hide();
   }
   startSavePolling() {

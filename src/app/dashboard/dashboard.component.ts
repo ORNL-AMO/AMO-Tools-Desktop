@@ -48,7 +48,7 @@ export class DashboardComponent implements OnInit {
   showImportExport: boolean;
   deleting: boolean;
   suiteDbInit: boolean = false;
-
+  isModalOpen: boolean = false;
   createAssessment: boolean = false;
 
   constructor(private indexedDbService: IndexedDbService, private formBuilder: FormBuilder, private assessmentService: AssessmentService, private toastyService: ToastyService,
@@ -159,7 +159,9 @@ export class DashboardComponent implements OnInit {
       }
     );
   }
-
+  openModal($event){
+    this.isModalOpen = $event;
+  }
 
   hideScreen() {
     this.dashboardView = 'assessment-dashboard';

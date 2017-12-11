@@ -86,3 +86,13 @@
 .tutorial-video{
 	max-width: 350px;
 }
+
+.icon-image{
+	height: 18px;
+    padding-right: 4px;
+    padding-bottom: 2px;
+}
+
+.fa-folder-o{
+	color: gray;
+}
