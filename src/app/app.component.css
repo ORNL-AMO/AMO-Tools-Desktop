@@ -811,14 +811,10 @@ Sidebar
 
 
 .sidebar-bg {
-  height: 100vh;
+  min-height: 100%;
   background-color: #fff;
-  border-width: 1px;
-  border-style: solid;
-  -o-border-image: linear-gradient(to bottom, #949494, rgba(0, 0, 0, 0)) 1 100%;
-  border-image: -webkit-linear-gradient(top, #949494, rgba(0, 0, 0, 0)) 1 100%;
-  border-image: linear-gradient(to bottom, #949494, rgba(0, 0, 0, 0)) 1 100%;
-
+	box-shadow: 0px 0px 69px -1px rgba(0,0,0,0.2);
+	background: #fff;
 }
 
 
@@ -836,7 +832,7 @@ Sidebar
     cursor: pointer;
   }
 .sidebar-group {
-  margin-bottom: 20px;
+  margin-bottom: 12px;
 }
 
 .sidebar-group .btn-primary {
@@ -862,6 +858,13 @@ Sidebar
   font-size: 17px;
   display: block;
   color: #2d2d2d;
+  padding-top: 1.5px;
+  padding-bottom: 1.5px;
+}
+
+.sidebar-group li span:hover{
+  background-color: #eee;
+  cursor: pointer;
 }
 .sidebar-group li span.disabled {
   font-size: 15px;
@@ -872,7 +875,7 @@ Sidebar
 }
 .sidebar-group.secondary {
   border-top: #ddd dotted 1px;
-  padding-top: 20px;
+  padding-top: 12px;
 }
 .sidebar-group.secondary li > span, .sidebar-group.secondary li > a, .sidebar-group.secondary li > a:not([href]):not([tabindex]) {
   color: #787878;

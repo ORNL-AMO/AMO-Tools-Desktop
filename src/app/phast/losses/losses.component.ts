@@ -80,6 +80,11 @@ export class LossesComponent implements OnInit {
     this.lossesService.modalOpen.subscribe(val => {
       this.isModalOpen = val;
     })
+
+    if(!this.inSetup){
+      this.baselineSelected = false;
+      this.modificationSelected = true;
+    }
   }
 
   ngOnDestroy() {
