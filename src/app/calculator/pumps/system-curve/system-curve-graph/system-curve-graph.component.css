@@ -18,3 +18,13 @@
   height: 28px;
   vertical-align: middle;
 }
+
+
+.grid .tick { 
+  stroke: lightgrey;
+  opacity: 0.7;
+}
+
+.grid path {
+  stroke-width: 0;
+}

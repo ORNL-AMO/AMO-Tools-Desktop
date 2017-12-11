@@ -24,7 +24,8 @@ export class SpecificSpeedGraphComponent implements OnInit {
   line: any;
   filter: any;
   detailBox: any;
-  pointer: any;
+  tooltipPointer: any;
+  // pointer: any;
   calcPoint: any;
   focus: any;
   isGridToggled: boolean;
@@ -277,15 +278,22 @@ export class SpecificSpeedGraphComponent implements OnInit {
         .style("opacity", 0)
         .style('pointer-events', 'none');
 
+      //debug
+      this.tooltipPointer = d3.select("app-specific-speed-graph").append("div")
+        .attr("id", "tooltipPointer")
+        .attr("class", "tooltip-pointer")
+        .style("opacity", 0)
+        .style('pointer-events', 'none');
+
       const detailBoxWidth = 160;
       const detailBoxHeight = 90;
 
-      this.pointer = this.svg.append("polygon")
-        .attr("id", "pointer")
-        //.attr("points", "0,13, 14,13, 7,-2");
-        .attr("points", "0,0, 0," + (detailBoxHeight - 2) + "," + detailBoxWidth + "," + (detailBoxHeight - 2) + "," + detailBoxWidth + ", 0," + ((detailBoxWidth / 2) + 12) + ",0," + (detailBoxWidth / 2) + ", -12, " + ((detailBoxWidth / 2) - 12) + ",0")
-        .style("display", "none")
-        .style('pointer-events', 'none');
+      // this.pointer = this.svg.append("polygon")
+      //   .attr("id", "pointer")
+      //   //.attr("points", "0,13, 14,13, 7,-2");
+      //   .attr("points", "0,0, 0," + (detailBoxHeight - 2) + "," + detailBoxWidth + "," + (detailBoxHeight - 2) + "," + detailBoxWidth + ", 0," + ((detailBoxWidth / 2) + 12) + ",0," + (detailBoxWidth / 2) + ", -12, " + ((detailBoxWidth / 2) - 12) + ",0")
+      //   .style("display", "none")
+      //   .style('pointer-events', 'none');
 
       this.focus = this.svg.append("g")
         .attr("class", "focus")
@@ -316,10 +324,15 @@ export class SpecificSpeedGraphComponent implements OnInit {
             .style("display", null)
             .style("opacity", 1)
             .style('pointer-events', 'none');
-          this.pointer
+          // this.pointer
+          //   .style("display", null)
+          //   .style('pointer-events', 'none');
+          this.detailBox
             .style("display", null)
             .style('pointer-events', 'none');
-          this.detailBox
+
+          //debug
+          this.tooltipPointer
             .style("display", null)
             .style('pointer-events', 'none');
 
@@ -330,10 +343,13 @@ export class SpecificSpeedGraphComponent implements OnInit {
             .style("display", null)
             .style("opacity", 1)
             .style('pointer-events', 'none');
-          this.pointer
+          // this.pointer
+          //   .style("display", null)
+          //   .style('pointer-events', 'none');
+          this.detailBox
             .style("display", null)
             .style('pointer-events', 'none');
-          this.detailBox
+          this.tooltipPointer
             .style("display", null)
             .style('pointer-events', 'none');
 
@@ -347,19 +363,22 @@ export class SpecificSpeedGraphComponent implements OnInit {
           let d = x0 - d0.x > d1.x - x0 ? d1 : d0;
           this.focus.attr("transform", "translate(" + this.x(d.x) + "," + this.y(d.y) + ")");
 
-          this.pointer.transition()
-            .style("opacity", 1);
+          // this.pointer.transition()
+          //   .style("opacity", 1);
 
           this.detailBox.transition()
+            .style("opacity", 1);
+
+          this.tooltipPointer.transition()
             .style("opacity", 1);
 
           var detailBoxWidth = 160;
           var detailBoxHeight = 90;
 
-          this.pointer
-            .attr("transform", 'translate(' + (this.x(d.x) - (detailBoxWidth / 2)) + ',' + (this.y(d.y) + 27) + ')')
-            .style("fill", "#ffffff")
-            .style("filter", "url(#drop-shadow)");
+          // this.pointer
+          //   .attr("transform", 'translate(' + (this.x(d.x) - (detailBoxWidth / 2)) + ',' + (this.y(d.y) + 27) + ')')
+          //   .style("fill", "#ffffff")
+          //   .style("filter", "url(#drop-shadow)");
 
           this.detailBox
             .style("padding-right", "10px")
@@ -371,8 +390,8 @@ export class SpecificSpeedGraphComponent implements OnInit {
 
             // "<div style='float:left;'>Fluid Power: </div><div style='float: right;'>" + format(d.fluidPower) + " </div></strong></p>")
 
-            .style("left", (this.margin.left + this.x(d.x) - (detailBoxWidth / 2 - 17)) + "px")
-            .style("top", (this.margin.top + this.y(d.y) + 83) + "px")
+            .style("left", (this.margin.left + this.x(d.x) - (detailBoxWidth / 2 - 17)) - 2 + "px")
+            .style("top", (this.margin.top + this.y(d.y) + 26) + "px")
             .style("position", "absolute")
             .style("width", detailBoxWidth + "px")
             .style("height", detailBoxHeight + "px")
@@ -381,20 +400,44 @@ export class SpecificSpeedGraphComponent implements OnInit {
             .style("font", "12px sans-serif")
             .style("background", "#ffffff")
             .style("border", "0px")
+            .style("box-shadow", "0px 0px 10px 2px grey")
             .style("pointer-events", "none");
+
+          this.tooltipPointer
+            .attr("class", "tooltip-pointer")
+            .html("<div></div>")
+            .style("left", (this.margin.left + this.x(d.x)) + 5 + "px")
+            .style("top", (this.margin.top + this.y(d.y) + 16) + "px")
+            .style("position", "absolute")
+            .style("width", "0px")
+            .style("height", "0px")
+            .style("border-left", "10px solid transparent")
+            .style("border-right", "10px solid transparent")
+            .style("border-bottom", "10px solid white")
+            .style('pointer-events', 'none');
         })
         .on("mouseout", () => {
-          this.pointer
-            .transition()
-            .delay(100)
-            .duration(600)
-            .style("opacity", 0);
+          // this.pointer
+          //   .transition()
+          //   .delay(100)
+          //   .duration(600)
+          //   .style("opacity", 0);
 
           this.detailBox
             .transition()
             .delay(100)
             .duration(600)
             .style("opacity", 0);
+            //debug
+            // .remove();
+
+          this.tooltipPointer
+            .transition()
+            .delay(100)
+            .duration(600)
+            .style("opacity", 0);
+            //debug
+            // .remove();
 
           this.focus
             .transition()
