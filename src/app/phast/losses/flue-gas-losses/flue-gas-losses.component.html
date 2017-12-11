@@ -42,6 +42,7 @@
         <div *ngIf="!loss.availableHeat" class="text-center small">
           &mdash; &mdash;
         </div>
+        <span class="alert-warning pull-right small" *ngIf="availableHeatError !== null">{{availableHeatError}}</span>
       </div>
       <div class="form-group">
         <label class="small">Gross Heat</label>

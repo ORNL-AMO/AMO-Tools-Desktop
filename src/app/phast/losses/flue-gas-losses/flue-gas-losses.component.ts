@@ -38,7 +38,11 @@ export class FlueGasLossesComponent implements OnInit {
   _flueGasLosses: Array<any>;
   firstChange: boolean = true;
   resultsUnit: string;
+
+  availableHeatError: string = null;
+
   disableType: boolean = false;
+
   constructor(private phastService: PhastService, private flueGasLossesService: FlueGasLossesService, private flueGasCompareService: FlueGasCompareService) { }
 
   ngOnInit() {
@@ -202,6 +206,11 @@ export class FlueGasLossesComponent implements OnInit {
         let tmpLoss: FlueGasByVolume = this.flueGasLossesService.buildByVolumeLossFromForm(loss.formByVolume);
         let tmpResult = this.phastService.flueGasByVolume(tmpLoss, this.settings);
         loss.availableHeat = tmpResult * 100;
+        if (loss.availableHeat < 0 || loss.availableHeat > 100) {
+          this.availableHeatError = 'Available heat is' + ' ' + loss.availableHeat.toFixed(2) + '%' + '.' + ' ' + 'Check your input fields.';
+        } else {
+          this.availableHeatError = null;
+        }
         let sumHeat = this.phastService.sumHeatInput(this.losses, this.settings);
         loss.grossHeat = (sumHeat / tmpResult) - sumAdditionalHeat;
         loss.systemLosses = loss.grossHeat * (1 - tmpResult);
@@ -215,6 +224,11 @@ export class FlueGasLossesComponent implements OnInit {
         let tmpLoss: FlueGasByMass = this.flueGasLossesService.buildByMassLossFromForm(loss.formByMass);
         let tmpResult = this.phastService.flueGasByMass(tmpLoss, this.settings);
         loss.availableHeat = tmpResult * 100;
+        if (loss.availableHeat < 0 || loss.availableHeat > 100) {
+          this.availableHeatError = 'Available heat is' + ' ' + loss.availableHeat.toFixed(2) + '%' + '.' + ' ' + 'Check your input fields.';
+        } else {
+          this.availableHeatError = null;
+        }
         let heatInput = this.phastService.sumHeatInput(this.losses, this.settings);
         loss.grossHeat = (heatInput / tmpResult) - sumAdditionalHeat;;
         loss.systemLosses = loss.grossHeat * (1 - tmpResult);
@@ -225,6 +239,7 @@ export class FlueGasLossesComponent implements OnInit {
       }
     }
   }
+
 
   saveLosses() {
     let tmpFlueGasLosses = new Array<FlueGas>();
