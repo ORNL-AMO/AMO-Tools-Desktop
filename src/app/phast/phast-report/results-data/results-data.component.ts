@@ -73,7 +73,7 @@ export class ResultsDataComponent implements OnInit {
     this.showResultsCats = this.phastResultsService.getResultCategories(this.settings);
     if (this.phast.losses) {
       this.baseLineResults = this.phastResultsService.getResults(this.phast, this.settings);
-      if (this.phast.modifications && this.inReport && !this.inReport) {
+      if (this.phast.modifications && this.inReport) {
         this.phastMods = this.phast.modifications;
         if (this.phast.modifications.length != 0) {
           this.phast.modifications.forEach(mod => {
