@@ -127,7 +127,8 @@ export class FlueGasLossesComponent implements OnInit {
 
   disableForms(){
     this._flueGasLosses.forEach(loss => {
-      loss.form.disable();
+      loss.formByMass.disable();
+      loss.formByVolume.disable();
     })
   }
   initFlueGasses() {
