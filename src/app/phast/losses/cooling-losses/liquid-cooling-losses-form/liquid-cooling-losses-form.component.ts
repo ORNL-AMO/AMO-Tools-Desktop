@@ -31,6 +31,8 @@ export class LiquidCoolingLossesFormComponent implements OnInit {
   firstChange: boolean = true;
   counter: any;
   temperatureError: string = null;
+  densityLiquidError: string = null;
+  liquidFlowError: string = null;
   constructor(private windowRefService: WindowRefService, private coolingLossesCompareService: CoolingLossesCompareService) { }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -95,6 +97,16 @@ export class LiquidCoolingLossesFormComponent implements OnInit {
       this.specificHeatError = 'Specific Heat must be equal or greater than 0';
     } else {
       this.specificHeatError = null;
+    }
+    if (this.lossesForm.value.density < 0) {
+      this.densityLiquidError = 'Density must be equal or greater than 0';
+    } else {
+      this.densityLiquidError = null;
+    }
+    if (this.lossesForm.value.liquidFlow < 0) {
+      this.liquidFlowError = 'Liquid Flow must be equal or greater than 0';
+    } else {
+      this.liquidFlowError = null;
     }
   }
 

@@ -43,6 +43,7 @@ export class LiquidChargeMaterialFormComponent implements OnInit {
   chargeVaporError: string = null;
   chargeReactedError: string = null;
   heatOfReactionError: string = null;
+  materialLatentHeatError: string = null;
   constructor(private suiteDbService: SuiteDbService, private chargeMaterialCompareService: ChargeMaterialCompareService, private windowRefService: WindowRefService, private lossesService: LossesService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -167,6 +168,11 @@ export class LiquidChargeMaterialFormComponent implements OnInit {
       this.heatOfReactionError = 'Heat of Reaction cannot be less than zero. For exothermic reactions, change "Endothermic/Exothermic"';
     } else {
       this.heatOfReactionError = null;
+    }
+    if (this.chargeMaterialForm.value.materialLatentHeat < 0) {
+      this.materialLatentHeatError = 'Latent Heat of Vaporization must be equal or greater than 0';
+    } else {
+      this.materialLatentHeatError = null;
     }
   }
 

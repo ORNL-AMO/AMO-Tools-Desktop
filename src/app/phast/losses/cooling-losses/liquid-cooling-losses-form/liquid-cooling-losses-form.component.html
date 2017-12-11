@@ -16,20 +16,22 @@
       <label class="small" for="density">Density</label>
       <div class="input-group">
         <input name="{{'density_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="density" id="density"
-          onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('density')" (blur)="focusOut()">
+          onfocus="this.select();" (input)="checkInputError()" (focus)="focusField('density')" (blur)="focusOut()">
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">lb/gal</span>
         <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kg/L</span>
       </div>
+      <span class="alert-warning pull-right small" *ngIf="densityLiquidError !== null">{{densityLiquidError}}</span>
     </div>
 
     <div class="form-group">
       <label class="small" for="liquidFlow">Liquid Flow</label>
       <div class="input-group">
         <input name="{{'liquidFlow_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="liquidFlow" id="liquidFlow"
-          onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('liquidFlow')" (blur)="focusOut()">
+          onfocus="this.select();" (input)="checkInputError()" (focus)="focusField('liquidFlow')" (blur)="focusOut()">
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">gal/min</span>
         <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">L/min</span>
       </div>
+      <span class="alert-warning pull-right small" *ngIf="liquidFlowError !== null">{{liquidFlowError}}</span>
     </div>
 
     <div class="form-group">
