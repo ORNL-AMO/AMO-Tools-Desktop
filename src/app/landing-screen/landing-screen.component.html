@@ -16,7 +16,9 @@
 			<h3 (click)="createAssessment()"><a  class="click-link" (click)="createAssessment()">Create Assessment</a>
 			</h3>
 			<p>Model a system and explore endless optimization scenarios.</p>
-			<a (click)="hideScreen()" class="click-link">View Your Assessments</a>
+			<a (click)="createAssessment('Pump')" class="click-link"><img class="icon-image" src="assets/images/ico-psat-diagram-small.png">Create Pump Assessment</a>
+			<a (click)="createAssessment('Furnace')" class="click-link"><img class="icon-image" src="assets/images/ico-phast-diagram-small.png">Create Furnace Assessment</a>
+			<a (click)="hideScreen()" class="click-link"><span class="fa fa-folder-o"></span> View All Your Assessments</a>
 		</li>
 		<li>
 			<h3><a  class="click-link" (click)="chooseCalculator('all')">Properties &amp; Equipment Calculators</a></h3>
@@ -67,4 +69,4 @@
 
 </div>
 
-<app-assessment-create *ngIf="showCreateAssessment" [directory]="directory" (hideModal)="hideCreateAssessment()"></app-assessment-create>
+<app-assessment-create *ngIf="showCreateAssessment" [directory]="directory" (hideModal)="hideCreateAssessment()" [type]="createAssessmentType"></app-assessment-create>
