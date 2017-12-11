@@ -22,3 +22,7 @@
     border: none;
     border-bottom: #BF3D00 groove 2px;
 }
+
+.no-padding-left{
+    padding-left: 0px;
+}
