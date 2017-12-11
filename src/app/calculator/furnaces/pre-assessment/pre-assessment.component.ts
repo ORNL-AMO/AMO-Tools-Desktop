@@ -21,8 +21,8 @@ export class PreAssessmentComponent implements OnInit {
   unitsOfMeasure: string = 'Imperial';
   results: Array<any>;
   settings: Settings;
-  currentEnergySourceType: string;
-  currentAssessmentType: string;
+  currentEnergySourceType: string = 'Fuel';
+  currentAssessmentType: string = 'Metered';
   nameIndex: number = 1;
   assessmentGraphColors: Array<string>;
   showAdd: boolean = true;
@@ -34,7 +34,7 @@ export class PreAssessmentComponent implements OnInit {
     this.preAssessments = new Array<PreAssessment>();
     this.addPreAssessment();
     this.settings = {
-      unitsOfMeasure: 'Metric'
+      unitsOfMeasure: 'Imperial'
     }
   }
 
@@ -58,6 +58,10 @@ export class PreAssessmentComponent implements OnInit {
 
   setTab(str: string) {
     this.tabSelect = str;
+  }
+
+  setUnitsOfMeasure(str: string){
+    this.settings.unitsOfMeasure = str;
   }
 
   calculate() {
@@ -86,6 +90,7 @@ export class PreAssessmentComponent implements OnInit {
     }
     else if (assessment.settings.energySourceType == 'Electricity') {
       let tmpResults = this.meteredEnergyService.calcElectricityUsed(assessment.meteredEnergy.meteredEnergyElectricity);
+      tmpResults = this.convertElectrotechResults(tmpResults);
       this.addResult(tmpResults, assessment.name, assessment.borderColor);
     }
   }
@@ -93,7 +98,7 @@ export class PreAssessmentComponent implements OnInit {
   calculateDesigned(assessment: PreAssessment) {
     if (assessment.settings.energySourceType == 'Fuel') {
       let tmpResults = this.designedEnergyService.sumDesignedEnergyFuel(assessment.designedEnergy.designedEnergyFuel);
-      tmpResults = tmpResults / Math.pow(10, 6);
+      tmpResults = tmpResults;
       this.addResult(tmpResults, assessment.name, assessment.borderColor);
     } else if (assessment.settings.energySourceType == 'Steam') {
       let tmpResults = this.designedEnergyService.sumDesignedEnergySteam(assessment.designedEnergy.designedEnergySteam);

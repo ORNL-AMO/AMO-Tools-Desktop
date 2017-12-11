@@ -38,9 +38,7 @@
     </div>
     <div class="form-group">
       <label class="small">
-        <a (click)="showHideInputField()">
-          <font size="2">Calculate using flow rate</font>
-        </a>
+        <a class="click-link small" (click)="showHideInputField()">Calculate using flow rate</a>
       </label>
       <div class="input-group">
         <input *ngIf="fuelFlowInput" id="fuelFlowRateInput" name="fuelFlowRateInput" type="number" step="any" class="form-control"
@@ -51,7 +49,7 @@
       </div>
     </div>
     <div class="form-group">
-      <label for="collectionTime">Collection Time</label>
+      <label for="collectionTime">Data Collection Time</label>
       <div class="input-group">
         <input name="collectionTime" type="number" step="any" id="collectionTime" class="form-control" (focus)="focusField('collectionTime')"
           [(ngModel)]="inputs.collectionTime" (input)="calculate()" onfocus="this.select();" />
@@ -59,12 +57,12 @@
       </div>
     </div>
   </div>
-  <div class="form-section">
+  <div class="form-section" *ngIf="!inCalc">
     <label>
       Total Electricity Consumption (Aux. Equipment)
     </label>
     <div class="form-group">
-      <label for="electricityUsed">Electricity Used During Collection</label>
+      <label for="electricityUsed">Electricity Used During Data Collection</label>
       <div class="input-group">
         <input name="electricityUsed" type="number" step="any" id="electricityUsed" class="form-control" (focus)="focusField('electricityUsed')"
           [(ngModel)]="inputs.electricityUsed" (input)="calculate()" onfocus="this.select();" />
@@ -72,7 +70,7 @@
       </div>
     </div>
     <div class="form-group">
-      <label for="electricityCollectionTime">Collection Time</label>
+      <label for="electricityCollectionTime">Data Collection Time</label>
       <div class="input-group">
         <input name="electricityCollectionTime" type="number" step="any" id="electricityCollectionTime" class="form-control" (focus)="focusField('electricityCollectionTime')"
           [(ngModel)]="inputs.electricityCollectionTime" (input)="calculate()" onfocus="this.select();" />

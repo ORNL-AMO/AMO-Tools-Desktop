@@ -79,4 +79,13 @@ export class PreAssessmentFormComponent implements OnInit {
   changeAssessmentType() {
     this.emitAssessmentType.emit(this.assessment.type);
   }
+
+  setFurnaceType(str: string){
+    this.assessment.settings.energySourceType = str;
+    this.changeEnergyType();
+  }
+
+  setAssessmentType(str: string){
+    this.assessment.type = str;
+  }
 }

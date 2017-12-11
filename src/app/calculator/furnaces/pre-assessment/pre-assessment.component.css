@@ -24,3 +24,17 @@ td{
 .result-table{
     margin-top: 25px;
 }
+
+.toggle-btn{
+    font-size: 12px;
+}
+
+.action-row{
+    margin: 10px;
+}
+
+
+
+.btn-secondary:not([disabled]):not(.disabled).active{
+    background-color: #BF3D00;
+}

@@ -13,7 +13,8 @@
     <div class="input-group">
       <input name="steamFlow" type="number" step="any" id="steamFlow" class="form-control" (focus)="focusField('steamFlow')" [(ngModel)]="inputs.steamFlow"
         (input)="calculate()" onfocus="this.select();" />
-      <span class="input-group-addon units">%</span>
+        <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">lb/hr</span>
+        <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kg/hr</span>
     </div>
   </div>
   <div class="form-group">

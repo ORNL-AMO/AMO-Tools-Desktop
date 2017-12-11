@@ -17,6 +17,9 @@ export class MeteredElectricityFormComponent implements OnInit {
   emitSave = new EventEmitter<boolean>();
   @Output('changeField')
   changeField = new EventEmitter<string>();
+  @Input()
+  inCalc: boolean;
+
   counter: any;
   constructor() { }
 
