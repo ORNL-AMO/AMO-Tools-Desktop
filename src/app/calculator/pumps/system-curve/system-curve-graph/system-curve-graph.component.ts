@@ -94,10 +94,20 @@ export class SystemCurveGraphComponent implements OnInit {
 
     if (this.canvasWidth < 400) {
       this.fontSize = '8px';
-      this.margin = { top: 10, right: 10, bottom: 50, left: 75 };
+
+      //debug
+      this.margin = { top: 10, right: 35, bottom: 50, left: 50 };
+      
+      //real version
+      // this.margin = { top: 10, right: 10, bottom: 50, left: 75 };
     } else {
       this.fontSize = '12px';
-      this.margin = { top: 20, right: 20, bottom: 75, left: 120 };
+
+      //debug
+      this.margin = { top: 20, right: 45, bottom: 75, left: 95 };
+      
+      //real version
+      // this.margin = { top: 20, right: 20, bottom: 75, left: 120 };
     }
     //real version
     this.width = this.canvasWidth - this.margin.left - this.margin.right;
@@ -440,7 +450,7 @@ export class SystemCurveGraphComponent implements OnInit {
 
           "<div style='float:left; position: relative; top: -10px;'>Fluid Power: </div><div style='float: right; position: relative; top: -10px;'>" + format(d.fluidPower) + " " + this.settings.powerMeasurement + "</div></strong></p>")
 
-          .style("left", (this.margin.left + x(d.x) - (detailBoxWidth / 2 - 17)) - 2 + "px")
+          .style("left", Math.min(((this.margin.left + x(d.x) - (detailBoxWidth / 2 - 17)) - 2), this.canvasWidth - detailBoxWidth) + "px")
           .style("top", (this.margin.top + y(d.y) + 26) + "px")
           .style("position", "absolute")
           .style("width", detailBoxWidth + "px")

@@ -84,9 +84,9 @@ export class SpecificSpeedGraphComponent implements OnInit {
       this.canvasHeight = this.canvasWidth * (3 / 5);
 
       if (this.canvasWidth < 400) {
-        this.margin = { top: 10, right: 10, bottom: 50, left: 75 };
+        this.margin = { top: 10, right: 35, bottom: 50, left: 50 };
       } else {
-        this.margin = { top: 20, right: 20, bottom: 75, left: 120 };
+        this.margin = { top: 20, right: 45, bottom: 75, left: 95 };
       }
       this.width = this.canvasWidth - this.margin.left - this.margin.right;
       this.height = this.canvasHeight - this.margin.top - this.margin.bottom;
@@ -229,6 +229,7 @@ export class SpecificSpeedGraphComponent implements OnInit {
         .style("font-size", "13px")
         .attr("transform", "rotate(-65) translate(-15, 0)")
         .attr("dy", "12px");
+
 
       this.yAxis = this.svg.append('g')
         .attr("class", "y axis")
