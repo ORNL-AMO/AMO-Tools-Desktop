@@ -12,6 +12,7 @@ import { ToastyService, ToastyConfig, ToastOptions, ToastData } from 'ng2-toasty
 import { SettingsService } from '../settings/settings.service';
 import { PhastResultsService } from './phast-results.service';
 import { LossesService } from './losses/losses.service';
+import { StepTab } from './tabs';
 @Component({
   selector: 'app-phast',
   templateUrl: './phast.component.html',
@@ -20,7 +21,6 @@ import { LossesService } from './losses/losses.service';
 export class PhastComponent implements OnInit {
   assessment: Assessment;
 
-  currentTab: string = 'system-setup';
   saveClicked: boolean = false;
 
   tabs: Array<string> = [
@@ -35,12 +35,13 @@ export class PhastComponent implements OnInit {
   settings: Settings;
   isAssessmentSettings: boolean;
   continueClicked: boolean = true;
-  subTab: string = 'system-basics';
+  stepTab: StepTab;
   _phast: PHAST;
 
   mainTab: string = 'system-setup';
   init: boolean = true;
   saveDbToggle: string;
+  specTab: string;
   constructor(
     private location: Location,
     private assessmentService: AssessmentService,
@@ -59,6 +60,7 @@ export class PhastComponent implements OnInit {
 
   ngOnInit() {
     //this.phastService.test();
+    this.lossesService.initDone();
     let tmpAssessmentId;
     this.activatedRoute.params.subscribe(params => {
       tmpAssessmentId = params['id'];
@@ -90,17 +92,14 @@ export class PhastComponent implements OnInit {
       }
       this.phastService.mainTab.subscribe(val => {
         this.mainTab = val;
-        if (this.mainTab == 'assessment') {
-          if (this.currentTab != 'losses') {
-            this.phastService.secondaryTab.next('losses');
-          }
-        } else if (this.mainTab == 'system-setup') {
-          this.phastService.secondaryTab.next('system-basics');
-        }
       })
 
-      this.phastService.secondaryTab.subscribe(val => {
-        this.currentTab = val;
+      this.phastService.stepTab.subscribe(val => {
+        this.stepTab = val;
+      })
+
+      this.phastService.specTab.subscribe(val => {
+        this.specTab = val;
       })
     });
   }
@@ -112,6 +111,11 @@ export class PhastComponent implements OnInit {
 
   ngOnDestroy() {
     this.lossesService.lossesTab.next('charge-material');
+    this.phastService.initTabs();
+  }
+
+  checkSetupDone(){
+    this._phast.setupDone = this.lossesService.checkSetupDone((JSON.parse(JSON.stringify(this._phast))), this.settings);
   }
 
 
@@ -125,7 +129,7 @@ export class PhastComponent implements OnInit {
             this.settings = this.settingsService.setEnergyResultUnitSetting(this.settings);
           }
           this.isAssessmentSettings = true;
-          this._phast.setupDone = this.lossesService.checkSetupDone(this._phast, this.settings);
+          this.checkSetupDone();
           this.init = false;
           if (update) {
             this.addToast('Settings Saved');
@@ -166,49 +170,29 @@ export class PhastComponent implements OnInit {
     )
   }
 
-  changeTab($event) {
-    let tmpIndex = 0;
-    this.tabs.forEach(tab => {
-      if (tab == $event) {
-        this.tabIndex = tmpIndex;
-        this.phastService.secondaryTab.next(this.tabs[this.tabIndex]);
-      } else {
-        tmpIndex++;
-      }
-    })
-  }
-
   goToReport() {
     this.phastService.mainTab.next('report');
   }
 
-  continue() {
-    this.tabIndex++;
-    if (this.tabs[this.tabIndex] == 'losses') {
-      this.phastService.mainTab.next('assessment');
+  goToAssessment(){
+    this.phastService.mainTab.next('assessment');
+  }
+
+  goToStep(stepNum: number) {
+    if (stepNum) {
+      this.phastService.goToStep(stepNum)
     }
-    this.phastService.secondaryTab.next(this.tabs[this.tabIndex]);
   }
 
   close() {
     this.location.back();
   }
 
-  goBack() {
-    this.tabIndex--;
-    this.phastService.secondaryTab.next(this.tabs[this.tabIndex]);
-  }
-
   save() {
     this.saveClicked = !this.saveClicked;
   }
-
-  changeSubTab(str: string) {
-    this.subTab = str;
-  }
-
   saveDb() {
-    this._phast.setupDone = this.lossesService.checkSetupDone((JSON.parse(JSON.stringify(this._phast))), this.settings);
+    this.checkSetupDone();
     this.assessment.phast = (JSON.parse(JSON.stringify(this._phast)));
     this.lossesService.baseline.next(this._phast);
     this.saveDbToggle = 'saveDb' + Math.random();

@@ -1,7 +1,7 @@
 <div class="output-summary">
 
 
-  <table class="table">
+  <table class="table table-hover">
     <thead>
       <tr>
         <th></th>
@@ -16,10 +16,10 @@
           &mdash; &mdash;
         </td>
         <td class="percent-graph">
-          <div class="col-8 graph-col" *ngIf="percentSavings">
-            <app-percent-graph [value]="percentSavings" [valueDescription]="'Percent Savings'" [unit]="'%'"></app-percent-graph>
-          </div>
-          <div *ngIf="!percentSavings">&mdash; &mdash;</div>
+            <div class="col-8 mx-auto" *ngIf="percentSavings">
+              <app-percent-graph [value]="percentSavings" [valueDescription]="'Percent Savings'" [unit]="'%'"></app-percent-graph>
+            </div>
+          <div *ngIf="!percentSavings" class="mx-auto">&mdash; &mdash;</div>
         </td>
       </tr>
       <tr>

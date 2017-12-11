@@ -24,7 +24,7 @@ import { ExecutiveSummaryService } from './executive-summary.service';
     SharedModule
   ],
   declarations: [PhastReportComponent, EnergyUsedComponent, ExecutiveSummaryComponent, ResultsDataComponent, ReportGraphsComponent, ReportSankeyComponent, PhastPieChartComponent, PhastBarChartComponent],
-  exports: [PhastReportComponent],
+  exports: [PhastReportComponent, ResultsDataComponent],
   providers: [PhastReportService, ExecutiveSummaryService]
 })
 export class PhastReportModule { }

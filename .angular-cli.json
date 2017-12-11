@@ -24,7 +24,10 @@
         "../node_modules/bootstrap/dist/css/bootstrap.css",
         "../node_modules/ng2-toasty/style-bootstrap.css",
         "../node_modules/ng2-toasty/style-default.css",
-        "../node_modules/ng2-toasty/style-material.css"
+        "../node_modules/ng2-toasty/style-material.css",
+        "./assets/styles/two-panel.css",
+        "./assets/styles/tabs.css",
+        "./assets/styles/utilities.css"
       ],
       "scripts": [
         "../node_modules/chart.js/dist/Chart.bundle.min.js",

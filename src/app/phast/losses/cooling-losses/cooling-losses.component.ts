@@ -31,10 +31,15 @@ export class CoolingLossesComponent implements OnInit {
   settings: Settings;
   @Input()
   isLossesSetup: boolean;
+  @Input()
+  inSetup: boolean;
+  @Input()
+  modExists: boolean;
 
   _coolingLosses: Array<any>;
   firstChange: boolean = true;
   resultsUnit: string;
+  disableType: boolean = false;
   constructor(private coolingLossesService: CoolingLossesService, private phastService: PhastService, private coolingLossesCompareService: CoolingLossesCompareService) { }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -86,7 +91,8 @@ export class CoolingLossesComponent implements OnInit {
             gasCoolingForm: this.coolingLossesService.initGasCoolingForm(this.settings),
             liquidCoolingForm: this.coolingLossesService.initLiquidCoolingForm(this.settings),
             name: 'Loss #' + (this._coolingLosses.length + 1),
-            heatLoss: 0.0
+            heatLoss: 0.0,
+            collapse: false
           });
         }
       })
@@ -99,10 +105,15 @@ export class CoolingLossesComponent implements OnInit {
             gasCoolingForm: this.coolingLossesService.initGasCoolingForm(this.settings),
             liquidCoolingForm: this.coolingLossesService.initLiquidCoolingForm(this.settings),
             name: 'Loss #' + (this._coolingLosses.length + 1),
-            heatLoss: 0.0
+            heatLoss: 0.0,
+            collapse: false
           });
         }
       })
+    }
+    if(this.inSetup && this.modExists){
+      this.disableType = true;
+      this.disableForms();
     }
   }
 
@@ -116,7 +127,13 @@ export class CoolingLossesComponent implements OnInit {
     }
     this.coolingLossesService.deleteLossIndex.next(null);
   }
-
+  disableForms(){
+    this._coolingLosses.forEach(loss => {
+      loss.waterCoolingForm.disable();
+      loss.gasCoolingForm.disable();
+      loss.liquidCoolingForm.disable();
+    })
+  }
   initCoolingLosses() {
     this.losses.coolingLosses.forEach(loss => {
       let tmpLoss: any;
@@ -127,7 +144,8 @@ export class CoolingLossesComponent implements OnInit {
           gasCoolingForm: this.coolingLossesService.initGasFormFromLoss(loss.gasCoolingLoss),
           liquidCoolingForm: this.coolingLossesService.initLiquidCoolingForm(this.settings),
           name: 'Loss #' + (this._coolingLosses.length + 1),
-          heatLoss: loss.heatLoss || 0.0
+          heatLoss: loss.heatLoss || 0.0,
+          collapse: false
         };
       } else if (loss.coolingLossType == 'Liquid') {
         tmpLoss = {
@@ -136,7 +154,8 @@ export class CoolingLossesComponent implements OnInit {
           gasCoolingForm: this.coolingLossesService.initGasCoolingForm(this.settings),
           liquidCoolingForm: this.coolingLossesService.initLiquidFormFromLoss(loss.liquidCoolingLoss),
           name: 'Loss #' + (this._coolingLosses.length + 1),
-          heatLoss: loss.heatLoss || 0.0
+          heatLoss: loss.heatLoss || 0.0,
+          collapse: false
         };
       }
       else if (loss.coolingLossType == 'Water') {
@@ -146,7 +165,8 @@ export class CoolingLossesComponent implements OnInit {
           gasCoolingForm: this.coolingLossesService.initGasCoolingForm(this.settings),
           liquidCoolingForm: this.coolingLossesService.initLiquidCoolingForm(this.settings),
           name: 'Loss #' + (this._coolingLosses.length + 1),
-          heatLoss: loss.heatLoss || 0.0
+          heatLoss: loss.heatLoss || 0.0,
+          collapse: false
         };
       }
       this.calculate(tmpLoss);
@@ -167,7 +187,8 @@ export class CoolingLossesComponent implements OnInit {
       gasCoolingForm: this.coolingLossesService.initGasCoolingForm(this.settings),
       liquidCoolingForm: this.coolingLossesService.initLiquidCoolingForm(this.settings),
       name: 'Loss #' + (this._coolingLosses.length + 1),
-      heatLoss: 0.0
+      heatLoss: 0.0,
+      collapse: false
     });
   }
 
@@ -241,7 +262,9 @@ export class CoolingLossesComponent implements OnInit {
     this.setCompareVals();
     this.savedLoss.emit(true);
   }
-
+  collapseLoss(loss: any){
+    loss.collapse = !loss.collapse;
+  }
   changeField(str: string) {
     this.fieldChange.emit(str);
   }

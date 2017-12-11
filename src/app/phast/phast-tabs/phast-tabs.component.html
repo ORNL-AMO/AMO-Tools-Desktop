@@ -1,23 +1,46 @@
-<ul class="tabs primary phast" *ngIf="currentTab != 'system-setup'">
-  <!--<li [ngClass]="{'active': currentTab == 'explore-opportunities'}">
+<!--<ul class="tabs primary phast" *ngIf="currentTab != 'system-setup'">
+  <li [ngClass]="{'active': currentTab == 'explore-opportunities'}">
     <a (click)="changeTab('explore-opportunities')">Explore Opportunities</a>
   </li>
-  --><li [ngClass]="{'active': currentTab == 'losses'}">
+  
+  <li [ngClass]="{'active': currentTab == 'losses'}">
     <a (click)="changeTab('losses')">Modify Conditions</a>
-  </li><!--
-  --><li class="aux-equipment" [ngClass]="{'active': currentTab == 'aux-equipment'}">
-  <a (click)="changeTab('aux-equipment')">Aux Equipment</a>
-</li><!--
-  --><li [ngClass]="{'active': currentTab == 'designed-energy-use'}">
-  <a (click)="changeTab('designed-energy-use')">Design Energy Use</a>
-</li><!--
-  --><li [ngClass]="{'active': currentTab == 'metered-energy'}">
-  <a (click)="changeTab('metered-energy')">Metered Energy</a>
-</li>
-
-  <!--
+  </li>
+  <li class="aux-equipment" [ngClass]="{'active': currentTab == 'aux-equipment'}">
+    <a (click)="changeTab('aux-equipment')">Aux Equipment</a>
+  </li>
+  <li [ngClass]="{'active': currentTab == 'designed-energy-use'}">
+    <a (click)="changeTab('designed-energy-use')">Design Energy Use</a>
+  </li>
+  <li [ngClass]="{'active': currentTab == 'metered-energy'}">
+    <a (click)="changeTab('metered-energy')">Metered Energy</a>
+  </li>
     <li [ngClass]="{'active': currentTab == 'sankey'}">
       <a (click)="changeTab('sankey')">Sankey</a>
     </li>
+</ul>-->
+
+<nav>
+  <ul class="tabs subtabs progress-tabs phast">
+    <li class="fixed-tab-size" *ngFor="let tab of stepTabs" [ngClass]="{'active': currentTab.step == tab.step}">
+      <a (click)="changeTab(tab.step)"><span class="step-number">{{tab.step}}</span> {{tab.tabName}}</a>
+    </li>
+  </ul>
+</nav>
+
+<nav *ngIf="currentTab.step == 1">
+  <ul class="tabs subtabs phast">
+    <li class="fixed-tab-size" *ngFor="let tab of specTabs" [ngClass]="{'active': specTab == tab.value}">
+      <a (click)="changeSpecTab(tab.value)">{{tab.name}}</a>
+    </li>
+  </ul>
+</nav>
+
+
+<!--
+To add class for specific step number: example 4
+change ngClass to
+
+[ngClass]="{'active': currentTab.step == tab.step, 'step-class': tab.step == 4 }"
+
   -->
-</ul>

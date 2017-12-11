@@ -1,106 +1,91 @@
 <form #formRef [formGroup]="psatForm">
   <div class="row">
-    <div class="col-12">
-      <h5>Pump &amp; Fluid</h5>
+    <div *ngIf="inSetup" class="col-12">
+      <div class="header">
+        <h3>Pump &amp; Fluid</h3>
+      </div>
     </div>
+
   </div>
 
-  <div class="form-group">
-    <label for="pumpType">Pump Type</label>
-    <select class="form-control" name="pumpType" formControlName="pumpType" id="pumpType" (input)="startSavePolling()" (focus)="focusField('pumpType')"
-      ngModel="{{psatForm.value.pumpType}}">
-      <option *ngFor="let pumpType of pumpTypes" [ngValue]="pumpType">{{pumpType}}</option>
-    </select>
-  </div>
-
-  <div class="form-group" *ngIf="psatForm.value.pumpType == 'Specified Optimal Efficiency'">
-    <label for="specifiedPumpEfficiency">Specify Pump Efficiency</label>
-    <input name="specifiedPumpEfficiency" type="number" min="0" step="any" class="form-control" formControlName="specifiedPumpEfficiency"
-      id="specifiedPumpEfficiency" onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('specifiedPumpEfficiency')">
-  </div>
-
-  <div class="form-group">
-    <label for="pumpRPM">Pump Speed</label>
-    <div class="input-group">
-      <input type="number" name="pumpRPM" min="0" step="10" class="form-control {{different.pumpRPM}}" formControlName="pumpRPM"
-        id="pumpRPM" (input)="checkPumpRpm()" (focus)="focusField('pumpRPM')" onfocus="this.select();">
-      <span class="input-group-addon units">rpm</span>
+  <div class="setup-form-group">
+    <div class="form-group">
+      <label for="pumpType">Pump Type</label>
+      <select class="form-control" name="pumpType" formControlName="pumpType" id="pumpType" (input)="startSavePolling()" (focus)="focusField('pumpType')"
+        ngModel="{{psatForm.value.pumpType}}">
+        <option *ngFor="let pumpType of pumpTypes" [ngValue]="pumpType">{{pumpType}}</option>
+      </select>
     </div>
+
+    <div class="form-group" *ngIf="psatForm.value.pumpType == 'Specified Optimal Efficiency'">
+      <label for="specifiedPumpEfficiency">Specify Pump Efficiency</label>
+      <input name="specifiedPumpEfficiency" type="number" min="0" step="any" class="form-control" formControlName="specifiedPumpEfficiency"
+        id="specifiedPumpEfficiency" onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('specifiedPumpEfficiency')">
+    </div>
+
+    <div class="form-group">
+      <label for="pumpRPM">Pump Speed</label>
+      <div class="input-group">
+        <input type="number" name="pumpRPM" min="0" step="10" class="form-control {{different.pumpRPM}}" formControlName="pumpRPM"
+          id="pumpRPM" (input)="checkPumpRpm()" (focus)="focusField('pumpRPM')" onfocus="this.select();">
+        <span class="input-group-addon units">rpm</span>
+      </div>
       <span class="alert-danger pull-right small" *ngIf="rpmError !== null">{{rpmError}}</span>
-  </div>
-
-  <div class="form-group">
-    <label for="drive">Drive</label>
-    <select class="form-control" name="drive" formControlName="drive" id="drive" (input)="startSavePolling()" (focus)="focusField('drive')"
-      ngModel="{{psatForm.value.drive}}">
-      <option *ngFor="let drive of drives" [ngValue]="drive">{{drive}}</option>
-    </select>
-  </div>
-
-  <div class="form-group">
-    <label for="fluidType">Fluid Type</label>
-    <select class="form-control" name="fluidType" formControlName="fluidType" id="fluidType" (change)="calculateSpecificGravity()" (focus)="focusField('fluidType')"
-            ngModel="{{psatForm.value.fluidType}}">
-      <option *ngFor="let fluidType of fluidTypes" [ngValue]="fluidType">{{fluidType}}</option>
-    </select>
-  </div>
-
-  <div class="form-group">
-    <label for="fluidTemperature">Fluid Temperature</label>
-    <div class="input-group">
-      <input type="number" name="fluidTemperature" step="any" class="form-control {{different.fluidTemperature}}" formControlName="fluidTemperature"
-             id="fluidTemperature" (input)="calculateSpecificGravity()" (focus)="focusField('fluidTemperature')" onfocus="this.select();">
-      <span class="input-group-addon units">deg F</span>
-    </div>
-    <span class="alert-danger pull-right small" *ngIf="temperatureError !== null">{{temperatureError}}</span>
-  </div>
-
-  <div class="form-group">
-    <label for="gravity">Specific Gravity</label>
-    <input type="number" min="0" name="gravity" step="any" class="form-control" formControlName="gravity" id="gravity" (input)="startSavePolling()"
-      (focus)="focusField('specificGravity')" onfocus="this.select();">
-  </div>
-
-  <div class="form-group">
-    <label for="viscosity">Kinematic Viscosity</label>
-    <div class="input-group">
-      <input type="number" min="0" name="viscosity" step="any" class="form-control" formControlName="viscosity" id="viscosity" (input)="startSavePolling()"
-             (focus)="focusField('viscosity')" onfocus="this.select();">
-      <span class="input-group-addon units">cSt</span>
-    </div>
-  </div>
-
-  <div class="form-group">
-    <label for="stages">Stages</label>
-    <div name="stages" class="incrementor form-control input-group">
-      <button class="btn input-group-btn" [disabled]="!selected" (click)="subtractNum('stages')"><i class="fa fa-minus"></i></button>
-      <button class="btn input-group-btn" [disabled]="!selected" (click)="addNum('stages')"><i class="fa fa-plus"></i></button>
-      <input type="number" min="1" step="any" class="form-control" formControlName="stages" id="stages" ngModel="{{psatForm.value.stages}}"
-        (input)="startSavePolling()" (focus)="focusField('stages')" onfocus="this.select();">
-    </div>
-  </div>
-
-  <!--<div class="form-group">
-
-    <label>Fixed specific speed?</label>
-    <div name="fixedSpeed" class="form-check">
-      <label class="form-check-label">
-        <input
-          class="form-check-input"
-          type="radio"
-          formControlName="fixedSpeed"
-          value="Yes"
-          (change)="focusField('fixedSpecificSpeed')">Yes
-        </label>
-      <label class="form-check-label">
-        <input
-          class="form-check-input"
-          type="radio"
-          formControlName="fixedSpeed"
-          value="No"
-          (change)="focusField('fixedSpecificSpeed')">No
-      </label>
     </div>
 
-  </div>-->
+    <div class="form-group">
+      <label for="drive">Drive</label>
+      <select class="form-control" name="drive" formControlName="drive" id="drive" (input)="startSavePolling()" (focus)="focusField('drive')"
+        ngModel="{{psatForm.value.drive}}">
+        <option *ngFor="let drive of drives" [ngValue]="drive">{{drive}}</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="fluidType">Fluid Type</label>
+      <select class="form-control" name="fluidType" formControlName="fluidType" id="fluidType" (change)="calculateSpecificGravity()"
+        (focus)="focusField('fluidType')" ngModel="{{psatForm.value.fluidType}}">
+        <option *ngFor="let fluidType of fluidTypes" [ngValue]="fluidType">{{fluidType}}</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="fluidTemperature">Fluid Temperature</label>
+      <div class="input-group">
+        <input type="number" name="fluidTemperature" step="any" class="form-control {{different.fluidTemperature}}" formControlName="fluidTemperature"
+          id="fluidTemperature" (input)="calculateSpecificGravity()" (focus)="focusField('fluidTemperature')" onfocus="this.select();">
+        <span class="input-group-addon units">deg F</span>
+      </div>
+      <span class="alert-danger pull-right small" *ngIf="temperatureError !== null">{{temperatureError}}</span>
+    </div>
+
+    <div class="form-group">
+      <label for="gravity">Specific Gravity</label>
+      <input type="number" min="0" name="gravity" step="any" class="form-control" formControlName="gravity" id="gravity" (input)="startSavePolling()"
+        (focus)="focusField('specificGravity')" onfocus="this.select();">
+    </div>
+
+    <div class="form-group">
+      <label for="viscosity">Kinematic Viscosity</label>
+      <div class="input-group">
+        <input type="number" min="0" name="viscosity" step="any" class="form-control" formControlName="viscosity" id="viscosity"
+          (input)="startSavePolling()" (focus)="focusField('viscosity')" onfocus="this.select();">
+        <span class="input-group-addon units">cSt</span>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="stages">Stages</label>
+      <div name="stages" class="incrementor form-control input-group">
+        <button class="btn input-group-btn" [disabled]="!selected" (click)="subtractNum('stages')">
+          <i class="fa fa-minus"></i>
+        </button>
+        <button class="btn input-group-btn" [disabled]="!selected" (click)="addNum('stages')">
+          <i class="fa fa-plus"></i>
+        </button>
+        <input type="number" min="1" step="any" class="form-control" formControlName="stages" id="stages" ngModel="{{psatForm.value.stages}}"
+          (input)="startSavePolling()" (focus)="focusField('stages')" onfocus="this.select();">
+      </div>
+    </div>
+  </div>
 </form>

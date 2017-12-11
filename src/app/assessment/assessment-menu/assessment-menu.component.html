@@ -6,15 +6,14 @@
 
     <ol class="breadcrumb">
       <li *ngFor="let crumb of breadCrumbs; let first = first;">
-        <a *ngIf="first" (click)="goToDirectory(crumb)">
-          All Assets
+        <a  class="breadcrumb-item" *ngIf="first" (click)="goToDirectory(crumb)">
+          All Assessments /
         </a>
-        <a *ngIf="!first" (click)="goToDirectory(crumb)">
-          {{crumb.name}}
+        <a class="breadcrumb-item" *ngIf="!first" (click)="goToDirectory(crumb)">
+          {{crumb.name}} /
         </a>
       </li>
-      <li>{{directory.name}}</li>
-      <li *ngIf="view == 'settings'">Settings</li>
+      <li class="breadcrumb-item">{{directory.name}}</li>
     </ol>
 
   </div>
@@ -28,7 +27,7 @@
     <div class="table-header">
 
       <div class="actions">
-        <button (click)="showCreateAssessment()" type="button" class="btn btn-secondary create-btn">Add Asset</button>
+        <button (click)="showCreateAssessment()" type="button" class="btn btn-secondary create-btn">Add Assessment</button>
         <app-create-folder [(directory)]="directory" (newDirectory)="emitNewDir()" class="create-container"></app-create-folder>
         <button [disabled]="!checkSelected()" type="button" class="btn btn-secondary" (click)="emitGenReport()">Generate Report</button>
         <button [disabled]="!checkSelected()" type="button" (click)="signalDeleteItems()" class="btn btn-secondary">Delete...</button>

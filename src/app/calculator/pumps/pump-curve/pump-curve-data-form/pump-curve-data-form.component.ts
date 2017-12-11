@@ -17,6 +17,9 @@ export class PumpCurveDataFormComponent implements OnInit {
   settings: Settings;
   @Input()
   inPsat: boolean;
+  @Output('emitAddRow')
+  emitAddRow = new EventEmitter<boolean>();
+
   dataForm: any;
   orderOptions: Array<number> = [
     2, 3, 4, 5, 6
@@ -38,5 +41,9 @@ export class PumpCurveDataFormComponent implements OnInit {
 
   emitCalculateChanges() {
     this.calculate.emit(true);
+  }
+
+  addRow(){
+    this.emitAddRow.emit(true);
   }
 }

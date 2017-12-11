@@ -30,6 +30,11 @@ export class OtherLossesComponent implements OnInit {
   settings: Settings;
   @Input()
   isLossesSetup: boolean;
+  @Input()
+  inSetup: boolean;
+  @Input()
+  modExists: boolean;
+  
   _otherLosses: Array<any>;
   firstChange: boolean = true;
   constructor(private otherLossesService: OtherLossesService, private otherLossCompareService: OtherLossesCompareService) { }
@@ -60,7 +65,8 @@ export class OtherLossesComponent implements OnInit {
       this.losses.otherLosses.forEach(loss => {
         let tmpLoss = {
           form: this.otherLossesService.getFormFromLoss(loss),
-          name: 'Loss #' + (this._otherLosses.length + 1)
+          name: 'Loss #' + (this._otherLosses.length + 1),
+          collapse: false
         };
         this.calculate(tmpLoss);
         this._otherLosses.push(tmpLoss);
@@ -95,8 +101,22 @@ export class OtherLossesComponent implements OnInit {
         }
       })
     }
+
+    if(this.inSetup && this.modExists){
+      this.disableForms();
+    }
   }
 
+  collapseLoss(loss: any){
+    loss.collapse = !loss.collapse;
+  }
+  
+  disableForms(){
+    this._otherLosses.forEach(loss => {
+      loss.form.disable();
+    })
+  }
+  
   addLoss() {
     if (this.isLossesSetup) {
       this.otherLossesService.addLoss(this.isBaseline);
@@ -106,7 +126,8 @@ export class OtherLossesComponent implements OnInit {
     }
     this._otherLosses.push({
       form: this.otherLossesService.initForm(),
-      name: 'Loss #' + (this._otherLosses.length + 1)
+      name: 'Loss #' + (this._otherLosses.length + 1),
+      collapse: false
     });;
   }
 

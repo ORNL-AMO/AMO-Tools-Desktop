@@ -4,16 +4,13 @@
 .output-summary .table th {
     border: none;
     padding: 0px 10px;
-    text-align: left;
+    text-align: center;
     font-size: 12px;
 }
 .output-summary .table td {
     padding: 0px 8px;
     vertical-align: middle;
-}
-
-.graph-col{
-    padding-left: 0px;
+    text-align: center;
 }
 
 .positive-savings{

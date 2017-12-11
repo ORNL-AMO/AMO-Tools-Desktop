@@ -1,9 +1,4 @@
-<!--<div class="section-header">
-  <h3 class="pull-left">Extended Surface Losses</h3>
-  <button class="btn btn-secondary pull-right" (click)="addLoss()">+ Add Surface Loss</button>
-</div>-->
-
-<div class="no-data no-data-phast" *ngIf="_surfaceLosses.length == 0" (click)="addLoss()">
+<div class="no-data no-data-phast" *ngIf="_surfaceLosses.length == 0 && inSetup" (click)="addLoss()">
   <h3>You have no Extended Surface Losses</h3>
   <h4>Add some now.</h4>
 </div>
@@ -12,16 +7,15 @@
 <div class="card-form" *ngFor="let loss of _surfaceLosses; let lossIndex = index;">
   <div class="row">
     <div class="col-12">
-      <div class="pull-left">
-        <h6 *ngIf="isBaseline">{{loss.name}}</h6>
-        <h6 *ngIf="!isBaseline">{{loss.name}} Modification</h6>
-      </div>
-      <button *ngIf="isBaseline" class="close pull-right" aria-label="Close" (click)="removeLoss(lossIndex)">
-      <span aria-hidden="true">&times;</span>
-    </button>
+      <label class="group-label loss-label">
+        <span *ngIf="loss.collapse" class="fa fa-caret-down" (click)="collapseLoss(loss)"></span>
+        <span *ngIf="!loss.collapse" class="fa fa-caret-up" (click)="collapseLoss(loss)"></span>
+        {{loss.name}}
+        <span aria-hidden="true" *ngIf="isBaseline && inSetup" class="close pull-right" aria-label="Close" (click)="removeLoss(lossIndex)">&times;</span>
+      </label>
     </div>
   </div>
-  <div class="row">
+  <div class="row" *ngIf="!loss.collapse">
     <div class="col-12">
       <app-extended-surface-losses-form (changeField)="changeField($event)" [(lossesForm)]="loss.form" (calculate)="calculate(loss)"
         [baselineSelected]="baselineSelected" (saveEmit)="saveLosses()" [lossIndex]="lossIndex" [settings]="settings"></app-extended-surface-losses-form>
@@ -32,7 +26,8 @@
       <div class="form-group">
         <label class="small">Heat Loss</label>
         <div *ngIf="loss.heatLoss" class="text-center small">
-          {{loss.heatLoss | sigFigs:'5'}} <span>{{resultsUnit}}</span>
+          {{loss.heatLoss | sigFigs:'5'}}
+          <span>{{resultsUnit}}</span>
         </div>
         <div *ngIf="!loss.heatLoss" class="text-center small">
           &mdash; &mdash;

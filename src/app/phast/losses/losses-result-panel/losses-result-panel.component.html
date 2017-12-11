@@ -1,0 +1,36 @@
+<div class="results-panel help-panel">
+  <div class="row">
+    <div class="col-12 no-padding-left">
+    <ul class="tabs primary tab-row">
+      <li class="calc-tab tab-item" [ngClass]="{'active': tabSelect == 'results', 'tab-3': !inSetup, 'tab-2': inSetup}">
+        <a (click)="setTab('results')">Results</a>
+      </li><!--
+      --><li class="calc-tab tab-item" [ngClass]="{'active': tabSelect == 'help', 'tab-3': !inSetup, 'tab-2': inSetup}">
+        <a (click)="setTab('help')">Help</a>
+      </li><!--
+      --><li *ngIf="!inSetup" class="calc-tab tab-item tab-3" [ngClass]="{'active': tabSelect == 'notes'}">
+        <a (click)="setTab('notes')">Notes</a>
+      </li>
+    </ul>
+    </div>
+  </div>
+  <div class="row justify-content-center align-items-center" *ngIf="tabSelect == 'help'">
+    <div class="col-12">
+      <app-losses-help [lossesTab]="lossesTab" [currentField]="currentField" [settings]="settings"></app-losses-help>
+    </div>
+  </div>
+  <div class="row justify-content-center data-row" *ngIf="tabSelect == 'results'">
+    <div class="col-12 data-table">
+      <app-results-data [phast]="phast" [inPhast]="true" [settings]="settings" [inSetup]="inSetup" [toggleCalculate]="toggleCalculate"
+        [modification]="modification"></app-results-data>
+    </div>
+    <div class="col-12">
+      <p>*Save to update calculations</p>
+    </div>
+  </div>
+  <div class="row" *ngIf="tabSelect == 'notes'">
+    <div class="col-12 no-padding-left">
+      <app-notes [(notes)]="modification.notes" [currentTab]="lossesTab"></app-notes>
+      </div>
+  </div>
+</div>

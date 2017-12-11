@@ -35,6 +35,9 @@ export class FieldDataComponent implements OnInit {
   closeHeadTool = new EventEmitter<boolean>();
   @Input()
   baseline: boolean;
+  @Input()
+  inSetup: boolean;
+
 
   counter: any;
 
@@ -84,6 +87,9 @@ export class FieldDataComponent implements OnInit {
       this.checkMargin(true);
     }
     this.checkHead(true);
+    if (!this.baseline) {
+      this.optimizeCalc(this.psatForm.value.optimizeCalculation);
+    }
   }
 
   ngAfterViewInit() {
@@ -123,6 +129,7 @@ export class FieldDataComponent implements OnInit {
     for (var i = 0, len = this.elements.length; i < len; ++i) {
       this.elements[i].disabled = true;
     }
+    //this.psatForm.disable();
 
   }
 
@@ -135,6 +142,7 @@ export class FieldDataComponent implements OnInit {
     for (var i = 0, len = this.elements.length; i < len; ++i) {
       this.elements[i].disabled = false;
     }
+    //this.psatForm.enable();
   }
 
   focusField(str: string) {
@@ -321,17 +329,29 @@ export class FieldDataComponent implements OnInit {
     }
   }
 
-  checkHead(bool?: boolean){
-    if(!bool){
+  checkHead(bool?: boolean) {
+    if (!bool) {
       this.startSavePolling();
     }
-    if(this.psatForm.value.head < 0){
+    if (this.psatForm.value.head < 0) {
       this.headError = 'Head cannot be negative';
-    }else{
+    } else {
       this.headError = null;
     }
   }
 
+  optimizeCalc(bool: boolean) {
+    if (!bool) {
+      this.psatForm.controls.sizeMargin.disable();
+      this.psatForm.controls.fixedSpeed.disable();
+    } else {
+      this.psatForm.controls.sizeMargin.enable();
+      this.psatForm.controls.fixedSpeed.enable();
+    }
+    this.psatForm.patchValue({
+      optimizeCalculation: bool
+    });
+  }
 
   // subtractViscosity() {
   //   this.psatForm.value.viscosity = this.psatForm.value.viscosity - 1
@@ -346,59 +366,61 @@ export class FieldDataComponent implements OnInit {
 
   //used to add classes to inputs with different baseline vs modification values
   initDifferenceMonitor() {
-    let doc = this.windowRefService.getDoc();
+    if (this.inSetup) {
+      let doc = this.windowRefService.getDoc();
 
-    //operating fraction
-    this.compareService.operating_fraction_different.subscribe((val) => {
-      let opFractionElements = doc.getElementsByName('operatingFraction');
-      opFractionElements.forEach(element => {
-        element.classList.toggle('indicate-different', val);
+      //operating fraction
+      this.compareService.operating_fraction_different.subscribe((val) => {
+        let opFractionElements = doc.getElementsByName('operatingFraction');
+        opFractionElements.forEach(element => {
+          element.classList.toggle('indicate-different', val);
+        });
       });
-    });
-    //cost kw hr
-    this.compareService.cost_kw_hour_different.subscribe((val) => {
-      let costElements = doc.getElementsByName('costKwHr');
-      costElements.forEach(element => {
-        element.classList.toggle('indicate-different', val);
+      //cost kw hr
+      this.compareService.cost_kw_hour_different.subscribe((val) => {
+        let costElements = doc.getElementsByName('costKwHr');
+        costElements.forEach(element => {
+          element.classList.toggle('indicate-different', val);
+        });
       });
-    });
-    //flow rate
-    this.compareService.flow_rate_different.subscribe((val) => {
-      let flowRateElements = doc.getElementsByName('flowRate');
-      flowRateElements.forEach(element => {
-        element.classList.toggle('indicate-different', val);
+      //flow rate
+      this.compareService.flow_rate_different.subscribe((val) => {
+        let flowRateElements = doc.getElementsByName('flowRate');
+        flowRateElements.forEach(element => {
+          element.classList.toggle('indicate-different', val);
+        });
       });
-    });
-    //head
-    this.compareService.head_different.subscribe((val) => {
-      let headElements = doc.getElementsByName('head');
-      headElements.forEach(element => {
-        element.classList.toggle('indicate-different', val);
+      //head
+      this.compareService.head_different.subscribe((val) => {
+        let headElements = doc.getElementsByName('head');
+        headElements.forEach(element => {
+          element.classList.toggle('indicate-different', val);
+        });
       });
-    });
-    // //load estimation method
-    // this.compareService.load_estimation_method_different.subscribe((val) => {
-    //   if (val && !this.baseline) {
-    //     this.psat.inputs.load_estimation_method = this.compareService.baselinePSAT.inputs.load_estimation_method;
-    //   }
-    // });
-    // //motor power A
-    // this.compareService.motor_field_power_different.subscribe((val) => {
-    //   if (val && !this.baseline) {
-    //     this.psat.inputs.motor_field_power = this.compareService.baselinePSAT.inputs.motor_field_power;
-    //   }
-    // });
-    // //motor power kw
-    // this.compareService.motor_field_current_different.subscribe((val) => {
-    //   if (val && !this.baseline) {
-    //     this.psat.inputs.motor_field_current = this.compareService.baselinePSAT.inputs.motor_field_current;
-    //   }
-    // });
-    // //measured voltage
-    // this.compareService.motor_field_voltage_different.subscribe((val) => {
-    //   if (val && !this.baseline) {
-    //     this.psat.inputs.motor_field_voltage = this.compareService.baselinePSAT.inputs.motor_field_voltage;
-    //   }
-    // });
+      // //load estimation method
+      // this.compareService.load_estimation_method_different.subscribe((val) => {
+      //   if (val && !this.baseline) {
+      //     this.psat.inputs.load_estimation_method = this.compareService.baselinePSAT.inputs.load_estimation_method;
+      //   }
+      // });
+      // //motor power A
+      // this.compareService.motor_field_power_different.subscribe((val) => {
+      //   if (val && !this.baseline) {
+      //     this.psat.inputs.motor_field_power = this.compareService.baselinePSAT.inputs.motor_field_power;
+      //   }
+      // });
+      // //motor power kw
+      // this.compareService.motor_field_current_different.subscribe((val) => {
+      //   if (val && !this.baseline) {
+      //     this.psat.inputs.motor_field_current = this.compareService.baselinePSAT.inputs.motor_field_current;
+      //   }
+      // });
+      // //measured voltage
+      // this.compareService.motor_field_voltage_different.subscribe((val) => {
+      //   if (val && !this.baseline) {
+      //     this.psat.inputs.motor_field_voltage = this.compareService.baselinePSAT.inputs.motor_field_voltage;
+      //   }
+      // });
+    }
   }
 }

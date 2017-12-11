@@ -31,6 +31,10 @@ export class WallLossesComponent implements OnInit {
   settings: Settings;
   @Input()
   isLossesSetup: boolean;
+  @Input()
+  inSetup: boolean;
+  @Input()
+  modExists: boolean;
 
   _wallLosses: Array<any>;
   firstChange: boolean = true;
@@ -74,7 +78,8 @@ export class WallLossesComponent implements OnInit {
         let tmpLoss = {
           form: this.wallLossesService.getWallLossForm(loss),
           name: 'Loss #' + (this._wallLosses.length + 1),
-          heatLoss: loss.heatLoss || 0.0
+          heatLoss: loss.heatLoss || 0.0,
+          collapse: false
         };
         //attempt to calculate tmpLoss results
         this.calculate(tmpLoss);
@@ -119,6 +124,10 @@ export class WallLossesComponent implements OnInit {
         }
       })
     }
+
+    if(this.inSetup && this.modExists){
+      this.disableForms();
+    }
   }
 
   ngOnDestroy() {
@@ -131,6 +140,12 @@ export class WallLossesComponent implements OnInit {
       this.wallLossesService.addLossModifiedMonitor.next(false);
     }
     this.wallLossesService.deleteLossIndex.next(null);
+  }
+
+  disableForms(){
+    this._wallLosses.forEach(loss => {
+      loss.form.disable();
+    })
   }
 
   addLoss() {
@@ -147,8 +162,13 @@ export class WallLossesComponent implements OnInit {
     this._wallLosses.push({
       form: this.wallLossesService.initForm(),
       name: 'Loss #' + (this._wallLosses.length + 1),
-      heatLoss: 0.0
+      heatLoss: 0.0,
+      collapse: false
     });
+  }
+
+  collapseLoss(loss: any){
+    loss.collapse = !loss.collapse;
   }
 
   removeLoss(lossIndex: number) {

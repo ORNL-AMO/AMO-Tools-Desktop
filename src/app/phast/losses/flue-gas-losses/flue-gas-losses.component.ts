@@ -30,10 +30,15 @@ export class FlueGasLossesComponent implements OnInit {
   settings: Settings;
   @Input()
   isLossesSetup: boolean;
+  @Input()
+  inSetup: boolean;
+  @Input()
+  modExists: boolean;
 
   _flueGasLosses: Array<any>;
   firstChange: boolean = true;
   resultsUnit: string;
+  disableType: boolean = false;
   constructor(private phastService: PhastService, private flueGasLossesService: FlueGasLossesService, private flueGasCompareService: FlueGasCompareService) { }
 
   ngOnInit() {
@@ -70,7 +75,8 @@ export class FlueGasLossesComponent implements OnInit {
             formByVolume: this.flueGasLossesService.initFormVolume(),
             formByMass: this.flueGasLossesService.initFormMass(),
             name: 'Loss #' + (this._flueGasLosses.length + 1),
-            heatLoss: 0.0
+            heatLoss: 0.0,
+            collapse: false
           })
         }
       })
@@ -82,10 +88,15 @@ export class FlueGasLossesComponent implements OnInit {
             formByVolume: this.flueGasLossesService.initFormVolume(),
             formByMass: this.flueGasLossesService.initFormMass(),
             name: 'Loss #' + (this._flueGasLosses.length + 1),
-            heatLoss: 0.0
+            heatLoss: 0.0,
+            collapse: false
           })
         }
       })
+    }
+    if(this.inSetup && this.modExists){
+      this.disableType = true;
+      this.disableForms();
     }
   }
 
@@ -114,6 +125,12 @@ export class FlueGasLossesComponent implements OnInit {
     this.flueGasLossesService.deleteLossIndex.next(null);
   }
 
+  disableForms(){
+    this._flueGasLosses.forEach(loss => {
+      loss.formByMass.disable();
+      loss.formByVolume.disable();
+    })
+  }
   initFlueGasses() {
     this.losses.flueGasLosses.forEach(loss => {
       if (loss.flueGasType == "By Volume") {
@@ -122,7 +139,8 @@ export class FlueGasLossesComponent implements OnInit {
           formByVolume: this.flueGasLossesService.initByVolumeFormFromLoss(loss),
           formByMass: this.flueGasLossesService.initFormMass(),
           name: 'Loss #' + (this._flueGasLosses.length + 1),
-          heatLoss: 0.0
+          heatLoss: 0.0,
+          collapse: false
         }
         this.calculate(tmpLoss);
         this._flueGasLosses.push(tmpLoss);
@@ -134,7 +152,8 @@ export class FlueGasLossesComponent implements OnInit {
           name: 'Loss #' + (this._flueGasLosses.length + 1),
           availableHeat: 0.0,
           grossHeat: 0.0,
-          systemLosses: 0.0
+          systemLosses: 0.0,
+          collapse: false
         }
         this.calculate(tmpLoss);
         this._flueGasLosses.push(tmpLoss);
@@ -156,7 +175,8 @@ export class FlueGasLossesComponent implements OnInit {
       name: 'Loss #' + (this._flueGasLosses.length + 1),
       availableHeat: 0.0,
       grossHeat: 0.0,
-      systemLosses: 0.0
+      systemLosses: 0.0,
+      collapse: false
     });
   }
 
@@ -170,6 +190,9 @@ export class FlueGasLossesComponent implements OnInit {
       loss.name = 'Loss #' + index;
       index++;
     })
+  }
+  collapseLoss(loss: any){
+    loss.collapse = !loss.collapse;
   }
 
   calculate(loss: any) {

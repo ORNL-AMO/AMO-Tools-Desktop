@@ -33,7 +33,15 @@ export class LossesService {
     // this.enInput1Done = new BehaviorSubject<boolean>(false);
     // this.enInput2Done = new BehaviorSubject<boolean>(false);
     // this.flueGasDone = new BehaviorSubject<boolean>(false);
-    // this.efficiencyDone = new BehaviorSubject<boolean>(false);
+    // this.efficiencyDone = new BehaviorSubject<boolean>(false);    
+  }
+
+  initDone(){
+    this.chargeDone = false;
+    this.enInput1Done = false;
+    this.enInput2Done = false;
+    this.flueGasDone = false;
+    this.efficiencyDone = false;
   }
 
   setBaseline(phast: PHAST) {
@@ -152,7 +160,12 @@ export class LossesService {
   checkEnergyInputExhaustGas(phast: PHAST, settings: Settings) {
     if (phast.losses.energyInputExhaustGasLoss) {
       if (phast.losses.energyInputExhaustGasLoss.length != 0) {
-        if (phast.losses.energyInputExhaustGasLoss[0].totalHeatInput) {
+        let test = this.phastService.sumEnergyInputExhaustGas(phast.losses.energyInputExhaustGasLoss, settings);
+        if (test != 0) {
+          //fuel heat delivered not 0
+          this.enInput2Done = true
+        } else if (phast.losses.energyInputExhaustGasLoss[0].totalHeatInput == 0) {
+          //fuel heat delevired 0 && "Total heat for burners" = 0
           this.enInput2Done = true
         } else {
           this.enInput2Done = false;

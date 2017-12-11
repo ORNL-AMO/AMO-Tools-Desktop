@@ -1,50 +1,75 @@
-<div class="form-section">
-  <div class="form-group">
-    <label for="weeksPerYear">Weeks / Year</label>
-    <div class="incrementor form-control input-group">
-      <button class="btn input-group-btn" (click)="subtractWeek()" [disabled]="phast.operatingHours.weeksPerYear == 0"><i class="fa fa-minus"></i></button>
-      <button class="btn input-group-btn" (click)="addWeek()" [disabled]="phast.operatingHours.weeksPerYear == 52"><i class="fa fa-plus"></i></button>
-      <input name="weeksPerYear" type="number" step="any" class="form-control" id="weeksPerYear" (input)="calculatHrsPerYear()"
-        [(ngModel)]="phast.operatingHours.weeksPerYear">
+<div class="row">
+  <div class="col-12">
+    <div class="header">
+      <h3>Furnace Operating Hours</h3>
     </div>
-  </div>
-  <div class="form-group">
-    <label for="daysPerWeek">Days / Week</label>
-    <div class="incrementor form-control input-group">
-      <button class="btn input-group-btn" (click)="subtractWeekDay()" [disabled]="phast.operatingHours.daysPerWeek == 0"><i class="fa fa-minus"></i></button>
-      <button class="btn input-group-btn" (click)="addWeekDay()" [disabled]="phast.operatingHours.daysPerWeek == 7"><i class="fa fa-plus"></i></button>
-      <input name="daysPerWeek" type="number" step="any" class="form-control" id="daysPerWeek" (input)="calculatHrsPerYear()" [(ngModel)]="phast.operatingHours.daysPerWeek">
-    </div>
-  </div>
-  <div class="form-group">
-    <label for="shiftsPerDay">Shifts / Day</label>
-    <div class="incrementor form-control input-group">
-      <button class="btn input-group-btn" (click)="subtractShift()" [disabled]="phast.operatingHours.shiftsPerDay == 0"><i class="fa fa-minus"></i></button>
-      <button class="btn input-group-btn" (click)="addShift()" [disabled]="phast.operatingHours.shiftsPerDay == 3"><i class="fa fa-plus"></i></button>
-      <input name="shiftsPerDay" type="number" step="any" class="form-control" id="shiftsPerDay" (input)="calculatHrsPerYear()"
-        [(ngModel)]="phast.operatingHours.shiftsPerDay">
-    </div>
-  </div>
-  <div class="form-group">
-    <label for="hoursPerShift">Hours / Shift</label>
-    <div class="incrementor form-control input-group">
-      <button class="btn input-group-btn" (click)="subtractShiftHr()" [disabled]="phast.operatingHours.hoursPerShift == 0"><i class="fa fa-minus"></i></button>
-      <button class="btn input-group-btn" (click)="addShiftHr()" [disabled]="phast.operatingHours.hoursPerShift == 8"><i class="fa fa-plus"></i></button>
-      <input name="hoursPerShift" type="number" step="any" class="form-control" id="hoursPerShift" (input)="calculatHrsPerYear()"
-        [(ngModel)]="phast.operatingHours.hoursPerShift">
-    </div>
-  </div>
-  <span class="alert-warning pull-right small" *ngIf="!phast.operatingHours.isCalculated">Above values not used.</span>
-</div>
-<div class="form-section">
-  <div class="form-group">
-    <label for="hoursPerYear">Hours / Year</label>
-    <input name="hoursPerYear" type="number" step="any" class="form-control" id="hoursPerYear" (input)="setNotCalculated()" [(ngModel)]="phast.operatingHours.hoursPerYear">
   </div>
 </div>
-<div class="form-section">
-  <div class="form-group">
-    <label for="operatingConditions">Operating Conditions at time of assessment</label>
-    <textarea rows="4" id="operatingConditions" [(ngModel)]="phast.operatingHours.operatingConditions" placeholder="Add note for operations conditions"></textarea>
+<div class="setup-form-group">
+  <div class="form-section">
+    <div class="form-group">
+      <label for="weeksPerYear">Weeks / Year</label>
+      <div class="incrementor form-control input-group">
+        <button class="btn input-group-btn" (click)="subtractWeek()" [disabled]="phast.operatingHours.weeksPerYear == 0">
+          <i class="fa fa-minus"></i>
+        </button>
+        <button class="btn input-group-btn" (click)="addWeek()" [disabled]="phast.operatingHours.weeksPerYear == 52">
+          <i class="fa fa-plus"></i>
+        </button>
+        <input name="weeksPerYear" type="number" step="any" class="form-control" id="weeksPerYear" (input)="calculatHrsPerYear()"
+          [(ngModel)]="phast.operatingHours.weeksPerYear">
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="daysPerWeek">Days / Week</label>
+      <div class="incrementor form-control input-group">
+        <button class="btn input-group-btn" (click)="subtractWeekDay()" [disabled]="phast.operatingHours.daysPerWeek == 0">
+          <i class="fa fa-minus"></i>
+        </button>
+        <button class="btn input-group-btn" (click)="addWeekDay()" [disabled]="phast.operatingHours.daysPerWeek == 7">
+          <i class="fa fa-plus"></i>
+        </button>
+        <input name="daysPerWeek" type="number" step="any" class="form-control" id="daysPerWeek" (input)="calculatHrsPerYear()" [(ngModel)]="phast.operatingHours.daysPerWeek">
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="shiftsPerDay">Shifts / Day</label>
+      <div class="incrementor form-control input-group">
+        <button class="btn input-group-btn" (click)="subtractShift()" [disabled]="phast.operatingHours.shiftsPerDay == 0">
+          <i class="fa fa-minus"></i>
+        </button>
+        <button class="btn input-group-btn" (click)="addShift()" [disabled]="phast.operatingHours.shiftsPerDay == 3">
+          <i class="fa fa-plus"></i>
+        </button>
+        <input name="shiftsPerDay" type="number" step="any" class="form-control" id="shiftsPerDay" (input)="calculatHrsPerYear()"
+          [(ngModel)]="phast.operatingHours.shiftsPerDay">
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="hoursPerShift">Hours / Shift</label>
+      <div class="incrementor form-control input-group">
+        <button class="btn input-group-btn" (click)="subtractShiftHr()" [disabled]="phast.operatingHours.hoursPerShift == 0">
+          <i class="fa fa-minus"></i>
+        </button>
+        <button class="btn input-group-btn" (click)="addShiftHr()" [disabled]="phast.operatingHours.hoursPerShift == 8">
+          <i class="fa fa-plus"></i>
+        </button>
+        <input name="hoursPerShift" type="number" step="any" class="form-control" id="hoursPerShift" (input)="calculatHrsPerYear()"
+          [(ngModel)]="phast.operatingHours.hoursPerShift">
+      </div>
+    </div>
+    <span class="alert-warning pull-right small" *ngIf="!phast.operatingHours.isCalculated">Above values not used.</span>
+  </div>
+  <div class="form-section">
+    <div class="form-group">
+      <label for="hoursPerYear">Hours / Year</label>
+      <input name="hoursPerYear" type="number" step="any" class="form-control" id="hoursPerYear" (input)="setNotCalculated()" [(ngModel)]="phast.operatingHours.hoursPerYear">
+    </div>
+  </div>
+
+  <label class="group-label">
+    Operating Conditions at time of Assessment</label>
+  <div class="operating-text-box">
+    <textarea class="op-text-area" rows="4" id="operatingConditions" [(ngModel)]="phast.operatingHours.operatingConditions" placeholder="Add note for operating conditions"></textarea>
   </div>
 </div>

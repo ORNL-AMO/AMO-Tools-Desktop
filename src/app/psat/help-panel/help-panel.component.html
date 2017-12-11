@@ -1,11 +1,29 @@
 <div class="help-panel">
-    <app-system-basics-help *ngIf="currentTab == 'system-basics'"></app-system-basics-help>
-    
-    <app-pump-fluid-help [psat]="psat" *ngIf="currentTab == 'pump-fluid'"></app-pump-fluid-help>
-    
-    <app-motor-help  [settings]="settings" [psat]="psat" *ngIf="currentTab == 'motor'"></app-motor-help>
-    
-    <app-field-data-help [settings]="settings" [psat]="psat" *ngIf="currentTab == 'field-data'"></app-field-data-help>
-    
-    <app-modify-conditions-help *ngIf="currentTab == 'modify-conditions'"></app-modify-conditions-help>
+    <div class="row" *ngIf="!inSetup" style="margin: 0px;">
+        <ul class="tabs primary tab-row">
+            <li class="panel-tab-item tab-2" [ngClass]="{'active': tabSelect == 'help'}">
+                <a (click)="setTab('help')">Help</a>
+            </li><!--
+                  --><li class="panel-tab-item tab-2" [ngClass]="{'active': tabSelect == 'notes'}">
+                <a (click)="setTab('notes')">Notes</a>
+            </li>
+        </ul>
+    </div>
+    <div *ngIf="inSetup" class="header">
+        <h3>Help</h3>
+    </div>
+    <div class="psat-notes" *ngIf="inSetup || tabSelect == 'help'">
+        <app-system-basics-help *ngIf="currentTab == 'system-basics'"></app-system-basics-help>
+
+        <app-pump-fluid-help [psat]="psat" *ngIf="currentTab == 'pump-fluid'"></app-pump-fluid-help>
+
+        <app-motor-help [settings]="settings" [psat]="psat" *ngIf="currentTab == 'motor'"></app-motor-help>
+
+        <app-field-data-help [settings]="settings" [psat]="psat" *ngIf="currentTab == 'field-data'"></app-field-data-help>
+
+        <app-modify-conditions-help *ngIf="currentTab == 'modify-conditions'"></app-modify-conditions-help>
+    </div>
+    <div *ngIf="tabSelect == 'notes'">
+        <app-modify-conditions-notes [(notes)]="modification.notes" [currentTab]="currentTab"></app-modify-conditions-notes>
+    </div>
 </div>

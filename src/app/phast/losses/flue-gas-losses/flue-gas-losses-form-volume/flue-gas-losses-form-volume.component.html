@@ -2,18 +2,20 @@
   <div class="form-section">
     <div class="form-group">
       <label class="small" for="gasTypeId">Fuel
-        <small id="materialHelp" class="form-text text-help"><a (click)="showMaterialModal()">Add New Fuel</a></small>
+        <a id="materialHelp" class="form-text small click-link" (click)="showMaterialModal()" [ngClass]="{'disabled-link': !baselineSelected}">Add New Fuel</a>
       </label>
-      <select name="{{'gasTypeId_'+lossIndex}}" class="form-control" formControlName="gasTypeId" id="gasTypeId" (change)="setProperties()" (focus)="focusField('gasTypeId')" (blur)="focusOut()">
-      <option *ngFor="let option of options" [ngValue]="option.id">{{option.substance}}</option>
-    </select>
+      <select name="{{'gasTypeId_'+lossIndex}}" class="form-control" formControlName="gasTypeId" id="gasTypeId" (change)="setProperties()"
+        (focus)="focusField('gasTypeId')" (blur)="focusOut()">
+        <option *ngFor="let option of options" [ngValue]="option.id">{{option.substance}}</option>
+      </select>
     </div>
 
     <div class="form-group">
       <label class="small" for="flueGasTemperature">Flue Gas Temperature</label>
       <div class="input-group">
         <input name="{{'flueGasTemperature_'+lossIndex}}" type="number" step="10" class="form-control" formControlName="flueGasTemperature"
-          id="flueGasTemperature" onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('flueGasTemperature')" (blur)="focusOut()">
+          id="flueGasTemperature" onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('flueGasTemperature')"
+          (blur)="focusOut()">
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">&#8457;</span>
         <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
       </div>
@@ -21,7 +23,8 @@
 
     <div class="form-group">
       <label class="small" for="oxygenCalculationMethod">Percent Oxygen Or Excess Air?</label>
-      <select name="{{'oxygenCalculationMethod_'+lossIndex}}" class="form-control" (change)="changeMethod()" formControlName="oxygenCalculationMethod" id="oxygenCalculationMethod" (focus)="focusField('oxygenCalculationMethod')" (blur)="focusOut()">
+      <select name="{{'oxygenCalculationMethod_'+lossIndex}}" class="form-control" (change)="changeMethod()" formControlName="oxygenCalculationMethod"
+        id="oxygenCalculationMethod" (focus)="focusField('oxygenCalculationMethod')" (blur)="focusOut()">
         <option *ngFor="let method of calculationMethods" [ngValue]="method">{{method}}</option>
       </select>
     </div>
@@ -30,7 +33,7 @@
       <label class="small" for="o2InFlueGas">Oxygen In Flue Gas</label>
       <div class="input-group">
         <input name="{{'o2InFlueGas_'+lossIndex}}" type="number" step="0.5" min="0" max="20.5" class="form-control" formControlName="o2InFlueGas"
-               id="o2InFlueGas" onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('o2InFlueGas')" (blur)="focusOut()">
+          id="o2InFlueGas" onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('o2InFlueGas')" (blur)="focusOut()">
         <span class="input-group-addon units">%</span>
       </div>
       <span class="alert-warning pull-right small" *ngIf="calculationWarning !== null">{{calculationWarning}}</span>
@@ -52,7 +55,8 @@
       <label class="small" for="excessAirPercentage">Excess Air</label>
       <div class="input-group">
         <input name="{{'excessAirPercentage_'+lossIndex}}" type="number" step="any" min="0" class="form-control" formControlName="excessAirPercentage"
-               id="excessAirPercentage" onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('excessAirPercentage')" (blur)="focusOut()">
+          id="excessAirPercentage" onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('excessAirPercentage')"
+          (blur)="focusOut()">
         <span class="input-group-addon units">%</span>
       </div>
       <span class="alert-warning pull-right small" *ngIf="calculationWarning !== null">{{calculationWarning}}</span>
@@ -62,7 +66,8 @@
       <label class="small" for="combustionAirTemperature">Combustion Air Temperature</label>
       <div class="input-group">
         <input name="{{'combustionAirTemperature_'+lossIndex}}" type="number" step="10" class="form-control" formControlName="combustionAirTemperature"
-          id="combustionAirTemperature" onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('combustionAirTemperature')" (blur)="focusOut()">
+          id="combustionAirTemperature" onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('combustionAirTemperature')"
+          (blur)="focusOut()">
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">&#8457;</span>
         <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
       </div>
@@ -72,7 +77,8 @@
       <label class="small" for="fuelTemperature">Fuel Temperature</label>
       <div class="input-group">
         <input name="{{'fuelTemperature_'+lossIndex}}" type="number" step="10" class="form-control" formControlName="fuelTemperature"
-               id="fuelTemperature" onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('fuelTemperature')" (blur)="focusOut()">
+          id="fuelTemperature" onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('fuelTemperature')"
+          (blur)="focusOut()">
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">&#8457;</span>
         <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
       </div>
@@ -85,14 +91,16 @@
 <div bsModal #materialModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="materialModalLabel"
   aria-hidden="true" [config]="{backdrop: 'static'}">
   <div class="modal-dialog modal-lg">
-    <div class="modal-header">
-      <h3>Create Fuel</h3>
-      <button class="close" (click)="hideMaterialModal()">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Create Fuel</h3>
+        <button class="close" (click)="hideMaterialModal()">
           <span aria-hidden="true">&times;</span>
         </button>
-    </div>
-    <div class="modal-content">
-      <app-flue-gas-material *ngIf="showModal" (closeModal)="hideMaterialModal($event)" [settings]="settings"></app-flue-gas-material>
+      </div>
+      <div class="modal-body">
+        <app-flue-gas-material *ngIf="showModal" (closeModal)="hideMaterialModal($event)" [settings]="settings"></app-flue-gas-material>
+      </div>
     </div>
   </div>
 </div>

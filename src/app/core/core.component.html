@@ -1,4 +1,4 @@
-<div class="feedback hide-print" *ngIf="showFeedback">
+<!-- <div class="feedback hide-print" *ngIf="showFeedback">
 
     <div class="feedback-header">
         <h2>Provide Feedback: Tell us how we can improve this app!</h2>
@@ -6,7 +6,7 @@
         <p *ngIf="!showScreenshot">Help us further understand your request by downloading and attaching <a (click)="downloadData()">your current data set</a>. If possible, please attach a screen shot of the interface as well.</p>
     </div>
     <button type="button" class="btn btn-secondary btn-sm" (click)="mailTo()"><i class="fa fa-external-link" aria-hidden="true"></i> Email Feedback</button>
-</div>
+</div> -->
 
 <router-outlet></router-outlet>
 <app-update-modal *ngIf="showUpdateModal" (closeModal)="closeModal()"></app-update-modal>

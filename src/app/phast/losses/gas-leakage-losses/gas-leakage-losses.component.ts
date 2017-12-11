@@ -31,6 +31,10 @@ export class GasLeakageLossesComponent implements OnInit {
   settings: Settings;
   @Input()
   isLossesSetup: boolean;
+  @Input()
+  inSetup: boolean;
+  @Input()
+  modExists: boolean;
 
   _leakageLosses: Array<any>;
   firstChange: boolean = true;
@@ -66,7 +70,8 @@ export class GasLeakageLossesComponent implements OnInit {
         let tmpLoss = {
           form: this.gasLeakageLossesService.initFormFromLoss(loss),
           name: 'Loss #' + (this._leakageLosses.length + 1),
-          heatLoss: loss.heatLoss || 0.0
+          heatLoss: loss.heatLoss || 0.0,
+          collapse: false
         };
         this.calculate(tmpLoss);
         this._leakageLosses.push(tmpLoss);
@@ -89,7 +94,8 @@ export class GasLeakageLossesComponent implements OnInit {
           this._leakageLosses.push({
             form: this.gasLeakageLossesService.initForm(),
             name: 'Loss #' + (this._leakageLosses.length + 1),
-            heatLoss: 0.0
+            heatLoss: 0.0,
+            collapse: false
           })
         }
       })
@@ -99,10 +105,15 @@ export class GasLeakageLossesComponent implements OnInit {
           this._leakageLosses.push({
             form: this.gasLeakageLossesService.initForm(),
             name: 'Loss #' + (this._leakageLosses.length + 1),
-            heatLoss: 0.0
+            heatLoss: 0.0,
+            collapse: false
           })
         }
       })
+    }
+    
+    if(this.inSetup && this.modExists){
+      this.disableForms();
     }
   }
 
@@ -117,6 +128,12 @@ export class GasLeakageLossesComponent implements OnInit {
     this.gasLeakageLossesService.deleteLossIndex.next(null);
   }
 
+  disableForms(){
+    this._leakageLosses.forEach(loss => {
+      loss.form.disable();
+    })
+  }
+  
   addLoss() {
     if (this.isLossesSetup) {
       this.gasLeakageLossesService.addLoss(this.isBaseline);
@@ -127,10 +144,14 @@ export class GasLeakageLossesComponent implements OnInit {
     this._leakageLosses.push({
       form: this.gasLeakageLossesService.initForm(),
       name: 'Loss #' + (this._leakageLosses.length + 1),
-      heatLoss: 0.0
+      heatLoss: 0.0,
+      collapse: false
     });
   }
-
+  
+  collapseLoss(loss: any){
+    loss.collapse = !loss.collapse;
+  }
 
   removeLoss(lossIndex: number) {
     this.gasLeakageLossesService.setDelete(lossIndex);

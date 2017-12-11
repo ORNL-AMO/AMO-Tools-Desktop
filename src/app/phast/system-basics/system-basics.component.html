@@ -1,40 +1,45 @@
 <div class="row">
   <div class="col-12">
-    <h5>Assessment Basics</h5>
+    <div class="header">
+      <h3>{{assessment.name}} Settings</h3>
+    </div>
   </div>
 </div>
 
-<div class="row">
-  <div class="col-12">
-    <app-application-settings [(settingsForm)]="settingsForm" (startSavePolling)="startSavePolling()" [inPhast]="true"></app-application-settings>
+<div class="setup-form-group">
+  <div class="row">
+    <div class="col-12">
+      <app-application-settings [(settingsForm)]="settingsForm" (startSavePolling)="startSavePolling()" [inPhast]="true"></app-application-settings>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-12">
+      <app-phast-settings [(settingsForm)]="settingsForm" (startSavePolling)="startSavePolling()" [disable]="lossesExist"></app-phast-settings>
+    </div>
   </div>
 </div>
 
-<div class="row">
-  <div class="col-12">
-    <app-phast-settings [(settingsForm)]="settingsForm" (startSavePolling)="startSavePolling()"></app-phast-settings>
-  </div>
-</div>
 
 
 
-  <div bsModal #settingsModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="settingsModal" aria-hidden="true"
-    [config]="{backdrop: 'static'}">
-    <div class="modal-dialog modal-md">
-      <div class="modal-content">
-        <div class="modal-header">
-          Settings Changed
-          <button class="close" aria-label="Close" (click)="hideSettingsModal()">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          Your settings have changed. Would you like to convert assessment data to match new settings?
-        </div>
-        <div class="modal-footer">
-          <button class="btn btn-primary pull-right" (click)="updateData(true)">Yes</button>
-          <button class="btn btn-danger pull-left" (click)="updateData(false)">No keep data</button>
-        </div>
+<div bsModal #settingsModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="settingsModal" aria-hidden="true"
+  [config]="{backdrop: 'static'}">
+  <div class="modal-dialog modal-md">
+    <div class="modal-content">
+      <div class="modal-header">
+        Settings Changed
+        <button class="close" aria-label="Close" (click)="hideSettingsModal()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        Your settings have changed. Would you like to convert assessment data to match new settings?
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-primary pull-right" (click)="updateData(true)">Yes</button>
+        <button class="btn btn-danger pull-left" (click)="updateData(false)">No keep data</button>
       </div>
     </div>
   </div>
+</div>

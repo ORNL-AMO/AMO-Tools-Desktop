@@ -1,9 +1,11 @@
-<div class="row">
+<!-- <div class="row">
   <div class="col-12">
-    <div class="bold h6">Heat & Energy Sources</div>
-    <!--<div>Heat & Energy Sources are inherited by the <a>folder's settings</a></div>-->
+    <label class="group-label">
+      Heat & Energy Source
+      <!--<div>Heat & Energy Sources are inherited by the <a>folder's settings</a></div>
+    </label>
   </div>
-</div>
+</div> -->
 <form [formGroup]="settingsForm">
   <div class="form-group">
     <label>Select Energy Source Type</label>
@@ -11,7 +13,8 @@
       <label class="form-check-label label-nowrapp">
         <input class="form-check-input" type="radio" name="energySourceType" formControlName="energySourceType" value="Fuel" (change)="setOptions()">Fuel-fired</label>
       <label class="label-width">
-        <input class="form-check-input" type="radio" name="energySourceType" formControlName="energySourceType" value="Electricity" (change)="setOptions()">Electrotechnology</label>
+        <input class="form-check-input" type="radio" name="energySourceType" formControlName="energySourceType" value="Electricity"
+          (change)="setOptions()">Electrotechnology</label>
       <label class="form-check-label label-nowrapp">
         <input class="form-check-input" type="radio" name="energySourceType" formControlName="energySourceType" value="Steam" (change)="setOptions()">Steam-based</label>
     </div>
@@ -20,21 +23,25 @@
   <div class="form-group" *ngIf="settingsForm.value.energySourceType == 'Fuel'">
     <label for="furnaceType">Type of Fuel Furnace</label>
     <select class="form-control" formControlName="furnaceType" id="furnaceType" ngModel="{{settingsForm.value.furnaceType}}">
-        <option *ngFor="let option of fuelFiredOptions" [ngValue]="option">{{option}}</option>
+      <option *ngFor="let option of fuelFiredOptions" [ngValue]="option">{{option}}</option>
     </select>
   </div>
   <div class="form-group" *ngIf="settingsForm.value.energySourceType == 'Electricity'">
     <label for="furnaceType">Type of Electric Furnace</label>
     <select class="form-control" formControlName="furnaceType" id="furnaceType" ngModel="{{settingsForm.value.furnaceType}}">
-        <option *ngFor="let option of electrotechOptions" [ngValue]="option">{{option}}</option>
+      <option *ngFor="let option of electrotechOptions" [ngValue]="option">{{option}}</option>
     </select>
   </div>
   <div class="form-group" *ngIf="settingsForm.value.furnaceType == 'Custom Fuel Furnace' || settingsForm.value.furnaceType == 'Custom Electrotechnology'">
     <label for="customFurnaceName">Custom Furnace Name</label>
     <input class="form-control" formControlName="customFurnaceName" id="customFurnaceName">
   </div>
+  <div class="row" *ngIf="disable">
+    <div class="col">
+      <p class="small help-text">*Cannot change energy settings after heat balance has begun. Create a new assessment if you wish to use a different energy source type.</p>
+    </div>
+  </div>
 </form>
-
 <!--<div class="row">
   <div class="col-12">
     <label class="form-control-label" for="heatSource">Heat Source</label>

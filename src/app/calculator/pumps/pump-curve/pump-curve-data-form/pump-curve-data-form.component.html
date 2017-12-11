@@ -1,14 +1,19 @@
+<label class="group-label">
+    Pump Data</label>
 <div class="row">
-  <div class="form-group col-4">
+  <div class="col-12">
     <label>Order</label>
   </div>
 </div>
 <div class="row">
-  <div class="form-group col-12">
+  <div class="form-group col-6">
     <select id="dataOrder" name="dataOrder" class="form-control" [(ngModel)]="pumpCurveForm.dataOrder" (focus)="focusField('dataOrder')"
       (change)="emitCalculateChanges()">
-              <option *ngFor="let order of orderOptions" [ngValue]="order">{{order}}</option>
-            </select>
+      <option *ngFor="let order of orderOptions" [ngValue]="order">{{order}}</option>
+    </select>
+  </div>
+  <div class="col-6">
+    <span class="add-link small pull-right" (click)="addRow()">+Add Row</span>
   </div>
 </div>
 <div *ngFor="let dataRow of pumpCurveForm.dataRows; let index = index;">
@@ -29,8 +34,10 @@
         <span class="input-group-addon units">{{settings.distanceMeasurement}}</span>
       </div>
     </div>
-    <div class="col-2" style="height: 100%;" *ngIf="pumpCurveForm.dataRows.length != 1">
-      <span class="float-right"><i class="fa fa-times-circle" (click)="removeRow(index)"></i></span>
+    <div class="col-2" style="height: 100%;">
+      <span class="float-right" *ngIf="pumpCurveForm.dataRows.length != 1">
+        <i class="fa fa-times-circle" (click)="removeRow(index)"></i>
+      </span>
     </div>
   </div>
 </div>

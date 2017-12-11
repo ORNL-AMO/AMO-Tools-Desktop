@@ -137,4 +137,8 @@ export class PumpCurveComponent implements OnInit {
       this.toggleCalculate = !this.toggleCalculate;
     }
   }
+
+  setFormView(str: string){
+    this.selectedFormView = str;
+  }
 }

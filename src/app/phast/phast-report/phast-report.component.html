@@ -64,7 +64,7 @@
           <app-executive-summary  [settings]="settings" [phast]="phast" [assessment]="assessment" [inPhast]="inPhast"></app-executive-summary>
         </div>
         <div class="results" [ngClass]="{'show-print':currentTab !=  'results-data'}">
-          <app-results-data [phast]="phast" [settings]="settings" [assessment]="assessment" [inPhast]="inPhast"></app-results-data>
+          <app-results-data [phast]="phast" [settings]="settings" [assessment]="assessment" [inPhast]="inPhast" [inReport]="true"></app-results-data>
         </div>        
         <div class="results" [ngClass]="{'show-print':currentTab != 'report-graphs'}">
           <app-report-graphs [phast]="phast" [settings]="settings"></app-report-graphs>

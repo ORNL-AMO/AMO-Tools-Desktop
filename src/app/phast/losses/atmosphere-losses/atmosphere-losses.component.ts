@@ -31,6 +31,11 @@ export class AtmosphereLossesComponent implements OnInit {
   settings: Settings;
   @Input()
   isLossesSetup: boolean;
+  @Input()
+  inSetup: boolean;
+  @Input()
+  modExists: boolean;
+
   _atmosphereLosses: Array<any>;
   firstChange: boolean = true;
 
@@ -68,7 +73,8 @@ export class AtmosphereLossesComponent implements OnInit {
         let tmpLoss = {
           form: this.atmosphereLossesService.getAtmosphereForm(loss),
           name: 'Loss #' + (this._atmosphereLosses.length + 1),
-          heatLoss: loss.heatLoss || 0.0
+          heatLoss: loss.heatLoss || 0.0,
+          collapse: false
         };
         this.calculate(tmpLoss);
         this._atmosphereLosses.push(tmpLoss);
@@ -90,7 +96,8 @@ export class AtmosphereLossesComponent implements OnInit {
           this._atmosphereLosses.push({
             form: this.atmosphereLossesService.initForm(),
             name: 'Loss #' + (this._atmosphereLosses.length + 1),
-            heatLoss: 0.0
+            heatLoss: 0.0,
+            collapse: false
           })
         }
       })
@@ -100,10 +107,14 @@ export class AtmosphereLossesComponent implements OnInit {
           this._atmosphereLosses.push({
             form: this.atmosphereLossesService.initForm(),
             name: 'Loss #' + (this._atmosphereLosses.length + 1),
-            heatLoss: 0.0
+            heatLoss: 0.0,
+            collapse: false
           })
         }
       })
+    }
+    if(this.inSetup && this.modExists){
+      this.disableForms();
     }
   }
 
@@ -117,6 +128,12 @@ export class AtmosphereLossesComponent implements OnInit {
     }
     this.atmosphereLossesService.deleteLossIndex.next(null);
   }
+  
+  disableForms(){
+    this._atmosphereLosses.forEach(loss => {
+      loss.form.disable();
+    })
+  }
 
   addLoss() {
     if (this.isLossesSetup) {
@@ -129,10 +146,14 @@ export class AtmosphereLossesComponent implements OnInit {
     this._atmosphereLosses.push({
       form: this.atmosphereLossesService.initForm(),
       name: 'Loss #' + (this._atmosphereLosses.length + 1),
-      heatLoss: 0.0
+      heatLoss: 0.0,
+      collapse: false
     });
   }
-
+  collapseLoss(loss: any){
+    loss.collapse = !loss.collapse;
+  }
+  
   removeLoss(lossIndex: number) {
     this.atmosphereLossesService.setDelete(lossIndex);
   }

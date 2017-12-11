@@ -1,37 +1,35 @@
-<form>
-  <div class="form-section">
-    <div class="form-group">
-      <label for="totalHeat">Total Heat for Steam</label>
-      <div class="input-group">
-        <input name="totalHeat" type="number" step="any" id="totalHeat" class="form-control" (focus)="focusField('totalHeat')" [(ngModel)]="inputs.totalHeat"
-          (input)="calculate()" onfocus="this.select();" />
-        <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">Btu/lb</span>
-        <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kJ/kg</span>
-      </div>
-    </div>
-    <div class="form-group">
-      <label for="steamFlow">Steam Flow</label>
-      <div class="input-group">
-        <input name="steamFlow" type="number" step="any" id="steamFlow" class="form-control" (focus)="focusField('steamFlow')" [(ngModel)]="inputs.steamFlow"
-          (input)="calculate()" onfocus="this.select();" />
-        <span class="input-group-addon units">%</span>
-      </div>
-    </div>
-    <div class="form-group">
-      <label for="percentOperatingHours">% of Operating Hours</label>
-      <div class="input-group">
-        <input name="percentOperatingHours" type="number" step="any" id="percentOperatingHours" class="form-control" (focus)="focusField('percentOperatingHours')"
-          [(ngModel)]="inputs.percentOperatingHours" (input)="calculate()" onfocus="this.select();" />
-        <span class="input-group-addon units">%</span>
-      </div>
-    </div>
-    <div class="form-group">
-      <label for="percentCapacityUsed">% of Rated Capacity</label>
-      <div class="input-group">
-        <input name="percentCapacityUsed" type="number" step="any" id="percentCapacityUsed" class="form-control" (focus)="focusField('percentCapacityUsed')"
-          [(ngModel)]="inputs.percentCapacityUsed" (input)="calculate()" onfocus="this.select();" />
-        <span class="input-group-addon units">%</span>
-      </div>
+<div class="form-section">
+  <div class="form-group">
+    <label for="totalHeat">Total Heat for Steam</label>
+    <div class="input-group">
+      <input name="totalHeat" type="number" step="any" id="totalHeat" class="form-control" (focus)="focusField('totalHeat')" [(ngModel)]="inputs.totalHeat"
+        (input)="calculate()" onfocus="this.select();" />
+      <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">Btu/lb</span>
+      <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kJ/kg</span>
     </div>
   </div>
-</form>
+  <div class="form-group">
+    <label for="steamFlow">Steam Flow</label>
+    <div class="input-group">
+      <input name="steamFlow" type="number" step="any" id="steamFlow" class="form-control" (focus)="focusField('steamFlow')" [(ngModel)]="inputs.steamFlow"
+        (input)="calculate()" onfocus="this.select();" />
+      <span class="input-group-addon units">%</span>
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="percentOperatingHours">% of Operating Hours</label>
+    <div class="input-group">
+      <input name="percentOperatingHours" type="number" step="any" id="percentOperatingHours" class="form-control" (focus)="focusField('percentOperatingHours')"
+        [(ngModel)]="inputs.percentOperatingHours" (input)="calculate()" onfocus="this.select();" />
+      <span class="input-group-addon units">%</span>
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="percentCapacityUsed">% of Rated Capacity</label>
+    <div class="input-group">
+      <input name="percentCapacityUsed" type="number" step="any" id="percentCapacityUsed" class="form-control" (focus)="focusField('percentCapacityUsed')"
+        [(ngModel)]="inputs.percentCapacityUsed" (input)="calculate()" onfocus="this.select();" />
+      <span class="input-group-addon units">%</span>
+    </div>
+  </div>
+</div>

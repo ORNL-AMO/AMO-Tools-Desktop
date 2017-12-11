@@ -1,87 +1,80 @@
 <form #formRef [formGroup]="psatForm">
-  <div class="row">
+  <div *ngIf="inSetup" class="row">
     <div class="col-12">
-      <h5>Motor</h5>
+      <div class="header">
+        <h3>Motor</h3>
+      </div>
     </div>
   </div>
-  <div class="form-group">
-    <label for="frequency">Line Frequency</label>
-    <select name="frequency" class="form-control number-input-field" id="frequency" formControlName="frequency" (input)="startSavePolling()"
-      (focus)="focusField('lineFrequency')" (change)="defaultRpm()" ngModel="{{psatForm.value.frequency}}">
+  <div class="setup-form-group">
+    <div class="form-group">
+      <label for="frequency">Line Frequency</label>
+      <select name="frequency" class="form-control number-input-field" id="frequency" formControlName="frequency" (input)="startSavePolling()"
+        (focus)="focusField('lineFrequency')" (change)="defaultRpm()" ngModel="{{psatForm.value.frequency}}">
         <option *ngFor="let frequency of frequencies" [ngValue]="frequency">{{frequency}}</option>
-    </select>
-  </div>
-
-  <div class="form-group">
-    <label for="horsePower">Rated Motor Power</label>
-    <select name="horsePower" class="form-control number-input-field" id="horsePower" formControlName="horsePower" (change)="checkRatedPower()"
-      (focus)="focusField('horsePower')" ngModel="{{psatForm.value.horsePower}}">
-        <option  *ngFor="let option of options" [ngValue]="option">{{option}} {{settings.powerMeasurement}}</option>
-    </select>
-    <span class="alert-danger pull-right small" *ngIf="ratedPowerError !== null && !psat.inputs.optimize_calculation">{{ratedPowerError}}</span>
-  </div>
-
-  <div class="form-group">
-    <label for="motorRPM">Motor RPM</label>
-    <div name="motorRPM" class="input-group">
-      <!--<button class="btn input-group-btn" [disabled]="!selected" (click)="subtractNum('motorRPM')"><i class="fa fa-minus"></i></button>-->
-      <!--<button class="btn input-group-btn" [disabled]="!selected" (click)="addNum('motorRPM')"><i class="fa fa-plus"></i></button>-->
-      <input type="number" step="10" min="0" class="form-control number-input-field" id="motorRPM" formControlName="motorRPM" ngModel="{{psatForm.value.motorRPM}}"
-        (input)="checkMotorRpm()" (focus)="focusField('motorRPM')" onfocus="this.select();">
-      <span class="input-group-addon units">rpm</span>
+      </select>
     </div>
-    <span class="alert-danger pull-right small" *ngIf="rpmError !== null">{{rpmError}}</span>
-  </div>
 
-  <div class="form-group">
-    <label for="efficiencyClass">Efficiency Class</label>
-    <select name="efficiencyClass" class="form-control select-input-field" id="efficiencyClass" formControlName="efficiencyClass"
-      (change)="startSavePolling()" (focus)="focusField('efficiencyClass')" ngModel="{{psatForm.value.efficiencyClass}}">
-      <option *ngFor="let efficiencyClass of efficiencyClasses" [ngValue]="efficiencyClass">{{efficiencyClass}}</option>
-    </select>
-  </div>
-
-  <div class="form-group" *ngIf="psatForm.value.efficiencyClass == 'Specified'">
-    <label for="efficiency">Efficiency</label>
-    <div class="input-group">
-      <input name="efficiency" type="number" min="0" step="any" class="form-control" id="efficiency" formControlName="efficiency"
-        (input)="checkEfficiency()" (focus)="focusField('efficiency')" onfocus="this.select();">
-      <span class="input-group-addon units">%</span>
+    <div class="form-group">
+      <label for="horsePower">Rated Motor Power</label>
+      <select name="horsePower" class="form-control number-input-field" id="horsePower" formControlName="horsePower" (change)="checkRatedPower()"
+        (focus)="focusField('horsePower')" ngModel="{{psatForm.value.horsePower}}">
+        <option *ngFor="let option of options" [ngValue]="option">{{option}} {{settings.powerMeasurement}}</option>
+      </select>
+      <span class="alert-danger pull-right small" *ngIf="ratedPowerError !== null && !psat.inputs.optimize_calculation">{{ratedPowerError}}</span>
     </div>
-    <span class="alert-danger pull-right small" *ngIf="efficiencyError !== null">{{efficiencyError}}</span>
-  </div>
 
-  <div class="form-group">
-    <label for="motorVoltage">Rated Voltage</label>
-    <div class="input-group">
-      <input name="motorVoltage" type="number" min="0" step="any" class="form-control number-input-field" id="motorVoltage" formControlName="motorVoltage"
-        (input)="checkMotorVoltage()" (focus)="focusField('motorVoltage')" onfocus="this.select();">
-      <span class="input-group-addon units">V</span>
+    <div class="form-group">
+      <label for="motorRPM">Motor RPM</label>
+      <div name="motorRPM" class="input-group">
+        <!--<button class="btn input-group-btn" [disabled]="!selected" (click)="subtractNum('motorRPM')"><i class="fa fa-minus"></i></button>-->
+        <!--<button class="btn input-group-btn" [disabled]="!selected" (click)="addNum('motorRPM')"><i class="fa fa-plus"></i></button>-->
+        <input type="number" step="10" min="0" class="form-control number-input-field" id="motorRPM" formControlName="motorRPM" ngModel="{{psatForm.value.motorRPM}}"
+          (input)="checkMotorRpm()" (focus)="focusField('motorRPM')" onfocus="this.select();">
+        <span class="input-group-addon units">rpm</span>
+      </div>
+      <span class="alert-danger pull-right small" *ngIf="rpmError !== null">{{rpmError}}</span>
     </div>
-    <span class="alert-danger pull-right small" *ngIf="voltageError !== null">{{voltageError}}</span>
-  </div>
 
-  <div class="form-group">
-    <label for="fullLoadAmps" aria-describedby="flaHelp">
-      Full-Load Amps
-      <a [ngClass]="{'disabled-link': !selected}" *ngIf="!disableFLA()" id="flaHelp" class="form-text text-help" (click)="getFullLoadAmps()">Estimate Full-Load Amps</a>
-    </label>
-    <div class="input-group">
-      <input name="fullLoadAmps" type="number" min="0" step="any" class="form-control number-input-field" id="fullLoadAmps" formControlName="fullLoadAmps"
-        (input)="checkFLA()" (focus)="focusField('fullLoadAmps')" onfocus="this.select();">
-      <span class="input-group-addon units">A</span>
+    <div class="form-group">
+      <label for="efficiencyClass">Efficiency Class</label>
+      <select name="efficiencyClass" class="form-control select-input-field" id="efficiencyClass" formControlName="efficiencyClass"
+        (change)="startSavePolling()" (focus)="focusField('efficiencyClass')" ngModel="{{psatForm.value.efficiencyClass}}">
+        <option *ngFor="let efficiencyClass of efficiencyClasses" [ngValue]="efficiencyClass">{{efficiencyClass}}</option>
+      </select>
     </div>
-    <span class="alert-warning small pull-right" *ngIf="flaError !== null">{{flaError}}</span>
-  </div>
 
-  <!--<div class="form-group">
-    <label for="sizeMargin">Size Margin</label>
-    <div class="input-group">
-      <input name="sizeMargin" type="number" min="0" max="100" step="any" class="form-control" id="sizeMargin" formControlName="sizeMargin"
-        ngModel="{{psatForm.value.sizeMargin}}" (input)="checkMargin()" (focus)="focusField('sizeMargin')" onfocus="this.select();">
-      <span class="input-group-addon units">%</span>
+    <div class="form-group" *ngIf="psatForm.value.efficiencyClass == 'Specified'">
+      <label for="efficiency">Efficiency</label>
+      <div class="input-group">
+        <input name="efficiency" type="number" min="0" step="any" class="form-control" id="efficiency" formControlName="efficiency"
+          (input)="checkEfficiency()" (focus)="focusField('efficiency')" onfocus="this.select();">
+        <span class="input-group-addon units">%</span>
+      </div>
+      <span class="alert-danger pull-right small" *ngIf="efficiencyError !== null">{{efficiencyError}}</span>
     </div>
-    <span class="alert-warning pull-right small" *ngIf="marginError !== null">{{marginError}}</span>
-  </div>-->
 
+    <div class="form-group">
+      <label for="motorVoltage">Rated Voltage</label>
+      <div class="input-group">
+        <input name="motorVoltage" type="number" min="0" step="any" class="form-control number-input-field" id="motorVoltage" formControlName="motorVoltage"
+          (input)="checkMotorVoltage()" (focus)="focusField('motorVoltage')" onfocus="this.select();">
+        <span class="input-group-addon units">V</span>
+      </div>
+      <span class="alert-danger pull-right small" *ngIf="voltageError !== null">{{voltageError}}</span>
+    </div>
+
+    <div class="form-group">
+      <label for="fullLoadAmps" aria-describedby="flaHelp">
+        Full-Load Amps
+        <a class="form-text small click-link" [ngClass]="{'disabled-link': !selected}" *ngIf="!disableFLA()" id="flaHelp" (click)="getFullLoadAmps()">Estimate Full-Load Amps</a>
+      </label>
+      <div class="input-group">
+        <input name="fullLoadAmps" type="number" min="0" step="any" class="form-control number-input-field" id="fullLoadAmps" formControlName="fullLoadAmps"
+          (input)="checkFLA()" (focus)="focusField('fullLoadAmps')" onfocus="this.select();">
+        <span class="input-group-addon units">A</span>
+      </div>
+      <span class="alert-warning small pull-right" *ngIf="flaError !== null">{{flaError}}</span>
+    </div>
+  </div>
 </form>

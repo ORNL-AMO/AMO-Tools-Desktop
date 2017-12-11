@@ -1,28 +1,46 @@
-<div class="pump-head">
-  <div class="row" *ngIf="settings">
-    <div class="col-md-4 col-sm-12  mx-auto">
-      <app-nema-energy-efficiency-form [(nemaForm)]="nemaForm" [settings]="settings"></app-nema-energy-efficiency-form>
-    </div>
-    <div class="col-md-6 col-sm-12 mx-auto">
-      <ul class="tabs primary text-center">
-        <li class="calc-tab" [ngClass]="{'active': tabSelect == 'results'}">
-          <a (click)="setTab('results')">Graph</a>
-        </li><!--
-    --><li class="calc-tab" [ngClass]="{'active': tabSelect == 'help'}">
-          <a (click)="setTab('help')">Help</a>
-        </li>
-      </ul>
-      <div class="tab-content efficiency-results">
-        <app-nema-energy-efficiency-graph *ngIf="tabSelect == 'results'" [settings]="settings" [(nemaForm)]="nemaForm"></app-nema-energy-efficiency-graph>
-        <div *ngIf="tabSelect == 'help'" class="help-panel">
-          <div class="calc-help">
-            <h3>NEMA Energy Efficiency Help</h3>
-            <p>
-              <strong>NEMA</strong>(National Electrical Manufacturers Association) labeled electric motors are designed to
-              assist purchasers in optimizing motor system efficiency, reducing electrical power consumption and costs, and
-              improving system reliability. The predicted efficiency is based on a <strong>TEFC</strong>(Totally Enclosed,
-              Fan-Cooled) Motor from NEMA MG1, based on size, rotating speed and efficiency class.
-            </p>
+<div class="modify-conditions panel-container row psat" *ngIf="settings">
+  <div class="col-12">
+    <div class="row align-items-top tab-content" [ngClass]="{'in-psat-height': inPsat}">
+      <div class="modification panel-column col-6 align-top">
+        <div class="header">
+          <h3>NEMA Energy Efficiency Calculator</h3>
+        </div>
+        <div class="row">
+          <div class="col-12">
+            <app-nema-energy-efficiency-form [(nemaForm)]="nemaForm" [settings]="settings"></app-nema-energy-efficiency-form>
+          </div>
+        </div>
+      </div>
+      <div class="col-6 align-top">
+        <div class="help-panel">
+          <div class="row">
+            <ul class="tabs primary tab-row">
+              <li class="panel-tab-item tab-2" [ngClass]="{'active': tabSelect == 'results'}">
+                <a (click)="setTab('results')">Graph</a>
+              </li><!--
+        --><li class="panel-tab-item tab-2" [ngClass]="{'active': tabSelect == 'help'}">
+                <a (click)="setTab('help')">Help</a>
+              </li>
+            </ul>
+          </div>
+          <div class="row justify-content-center data-row" *ngIf="tabSelect == 'results'">
+            <div class="col-11">
+              <app-nema-energy-efficiency-graph *ngIf="tabSelect == 'results'" [settings]="settings" [(nemaForm)]="nemaForm"></app-nema-energy-efficiency-graph>
+            </div>
+          </div>
+          <div class="row justify-content-center data-row align-items-center" *ngIf="tabSelect == 'help'">
+            <div class="col-11">
+              <div class="calc-help">
+                <h3>NEMA Energy Efficiency Help</h3>
+                <p>
+                  <strong>NEMA</strong>(National Electrical Manufacturers Association) labeled electric motors are designed to assist
+                  purchasers in optimizing motor system efficiency, reducing electrical power consumption and costs, and
+                  improving system reliability. The predicted efficiency is based on a
+                  <strong>TEFC</strong>(Totally Enclosed, Fan-Cooled) Motor from NEMA MG1, based on size, rotating speed and efficiency
+                  class.
+                </p>
+              </div>
+            </div>
           </div>
         </div>
       </div>

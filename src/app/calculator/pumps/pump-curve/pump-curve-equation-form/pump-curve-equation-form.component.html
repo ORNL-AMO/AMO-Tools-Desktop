@@ -1,84 +1,74 @@
-<div class="row justify-content-end">
-  <div class="col-8">
-    <label class="section-label">Head Equation Coefficients</label>
-  </div>
-</div>
+<label class="group-label">
+  Head Equation Coefficients</label>
 
-<div class="form-group row">
-  <label class="col-6 col-form-label">Max Flow</label>
-  <div class="col-6">
-    <div class="input-group">
-      <input name="maxFlow" [(ngModel)]="pumpCurveForm.maxFlow" type="number" step="any" class="form-control" (input)="emitCalculateChanges()"
-        id="maxFlow" onfocus="this.select();" (focus)="focusField('maxFlow')">
-      <span class="input-group-addon units">{{settings.flowMeasurement}}</span>
-    </div>
+<div class="form-group">
+  <label for="maxFlow">Max Flow</label>
+  <div class="input-group">
+    <input name="maxFlow" [(ngModel)]="pumpCurveForm.maxFlow" type="number" step="any" class="form-control" (input)="emitCalculateChanges()"
+      id="maxFlow" onfocus="this.select();" (focus)="focusField('maxFlow')">
+    <span class="input-group-addon units">{{settings.flowMeasurement}}</span>
   </div>
 </div>
 
 
-<div class="form-group row">
-  <label class="col-6 col-form-label">Order</label>
-  <div class="col-6">
-    <select id="headOrder" name="headOrder" class="form-control" [(ngModel)]="pumpCurveForm.headOrder" (focus)="focusField('headOrder')" (change)="setOrder()">
-              <option *ngFor="let order of orderOptions" [ngValue]="order">{{order}}</option>
-            </select>
-  </div>
+<div class="form-group">
+  <label for="headOrder">Order</label>
+  <select id="headOrder" name="headOrder" class="form-control" [(ngModel)]="pumpCurveForm.headOrder" (focus)="focusField('headOrder')"
+    (change)="setOrder()">
+    <option *ngFor="let order of orderOptions" [ngValue]="order">{{order}}</option>
+  </select>
 </div>
 
-<div class="form-group row">
-  <label class="col-6 col-form-label">Constant</label>
-  <div class="col-6">
-    <input name="headConstant" [(ngModel)]="pumpCurveForm.headConstant" type="number" step="any" class="form-control" (input)="emitCalculateChanges()"
-      id="headConstant" onfocus="this.select();" (focus)="focusField('headConstant')">
-  </div>
+<div class="form-group">
+  <label for="headConstant">Constant</label>
+  <input name="headConstant" [(ngModel)]="pumpCurveForm.headConstant" type="number" step="any" class="form-control" (input)="emitCalculateChanges()"
+    id="headConstant" onfocus="this.select();" (focus)="focusField('headConstant')">
 </div>
 
-<div class="form-group row">
-  <label class="col-6 col-form-label">flow</label>
-  <div class="col-6">
-    <input name="headFlow" [(ngModel)]="pumpCurveForm.headFlow" type="number" step="any" class="form-control" (input)="emitCalculateChanges()"
-      id="headFlow" onfocus="this.select();" (focus)="focusField('headFlow')">
-  </div>
+<div class="form-group">
+  <label for="headFlow">flow</label>
+  <input name="headFlow" [(ngModel)]="pumpCurveForm.headFlow" type="number" step="any" class="form-control" (input)="emitCalculateChanges()"
+    id="headFlow" onfocus="this.select();" (focus)="focusField('headFlow')">
 </div>
 
 
-<div class="form-group row" *ngIf="pumpCurveForm.headOrder > 1">
-  <label class="col-6 col-form-label">flow<sup>2</sup></label>
-  <div class="col-6">
-    <input name="headFlow2" [(ngModel)]="pumpCurveForm.headFlow2" type="number" step="any" class="form-control" (input)="emitCalculateChanges()"
-      id="headFlow2" onfocus="this.select();" (focus)="focusField('headFlow2')">
-  </div>
+<div class="form-group" *ngIf="pumpCurveForm.headOrder > 1">
+  <label for="headFlow2">flow
+    <sup>2</sup>
+  </label>
+  <input name="headFlow2" [(ngModel)]="pumpCurveForm.headFlow2" type="number" step="any" class="form-control" (input)="emitCalculateChanges()"
+    id="headFlow2" onfocus="this.select();" (focus)="focusField('headFlow2')">
 </div>
 
 
-<div class="form-group row" *ngIf="pumpCurveForm.headOrder > 2">
-  <label class="col-6 col-form-label">flow<sup>3</sup></label>
-  <div class="col-6">
-    <input name="headFlow3" [(ngModel)]="pumpCurveForm.headFlow3" type="number" step="any" class="form-control" (input)="emitCalculateChanges()"
-      id="headFlow3" onfocus="this.select();" (focus)="focusField('headFlow3')">
-  </div>
+<div class="form-group" *ngIf="pumpCurveForm.headOrder > 2">
+  <label for="headFlow3">flow
+    <sup>3</sup>
+  </label>
+  <input name="headFlow3" [(ngModel)]="pumpCurveForm.headFlow3" type="number" step="any" class="form-control" (input)="emitCalculateChanges()"
+    id="headFlow3" onfocus="this.select();" (focus)="focusField('headFlow3')">
 </div>
 
-<div class="form-group row" *ngIf="pumpCurveForm.headOrder > 3">
-  <label class="col-6 col-form-label">flow<sup>4</sup></label>
-  <div class="col-6">
-    <input name="headFlow4" [(ngModel)]="pumpCurveForm.headFlow4" type="number" step="any" class="form-control" (input)="emitCalculateChanges()"
-      id="headFlow4" onfocus="this.select();" (focus)="focusField('headFlow4')">
-  </div>
+<div class="form-group" *ngIf="pumpCurveForm.headOrder > 3">
+  <label for="headFlow4">flow
+    <sup>4</sup>
+  </label>
+  <input name="headFlow4" [(ngModel)]="pumpCurveForm.headFlow4" type="number" step="any" class="form-control" (input)="emitCalculateChanges()"
+    id="headFlow4" onfocus="this.select();" (focus)="focusField('headFlow4')">
 </div>
 
 <div class="form-group row" *ngIf="pumpCurveForm.headOrder > 4">
-  <label class="col-6 col-form-label">flow<sup>5</sup></label>
-  <div class="col-6">
-    <input name="headFlow5" [(ngModel)]="pumpCurveForm.headFlow5" type="number" step="any" class="form-control" (input)="emitCalculateChanges()"
-      id="headFlow5" onfocus="this.select();" (focus)="focusField('headFlow5')">
-  </div>
+  <label for="headFlow5">flow
+    <sup>5</sup>
+  </label>
+  <input name="headFlow5" [(ngModel)]="pumpCurveForm.headFlow5" type="number" step="any" class="form-control" (input)="emitCalculateChanges()"
+    id="headFlow5" onfocus="this.select();" (focus)="focusField('headFlow5')">
 </div>
 
 <div class="form-group row" *ngIf="pumpCurveForm.headOrder > 5">
-  <label class="col-6 col-form-label">flow<sup>6</sup></label>
-  <div class="col-6">
-    <input name="headFlow6" [(ngModel)]="pumpCurveForm.headFlow6" type="number" step="any" class="form-control" (input)="emitCalculateChanges()"
-      id="headFlow6" onfocus="this.select();" (focus)="focusField('headFlow6')">
-  </div>
+  <label for="headFlow6">flow
+    <sup>6</sup>
+  </label>
+  <input name="headFlow6" [(ngModel)]="pumpCurveForm.headFlow6" type="number" step="any" class="form-control" (input)="emitCalculateChanges()"
+    id="headFlow6" onfocus="this.select();" (focus)="focusField('headFlow6')">
 </div>

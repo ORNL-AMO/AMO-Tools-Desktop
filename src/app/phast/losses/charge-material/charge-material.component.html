@@ -1,4 +1,4 @@
-<div class="no-data no-data-phast" *ngIf="_chargeMaterial.length == 0" (click)="addMaterial()">
+<div class="no-data no-data-phast" *ngIf="_chargeMaterial.length == 0 && inSetup" (click)="addMaterial()">
   <h3>You have no Charge Material</h3>
   <h4>Add some now.</h4>
 </div>
@@ -6,25 +6,25 @@
 <div class="card-form" *ngFor="let material of _chargeMaterial; let lossIndex = index">
   <div class="row">
     <div class="col-12">
-      <div class="pull-left">
-        <h6 *ngIf="isBaseline">{{material.name}}</h6>
-        <h6 *ngIf="!isBaseline">{{material.name}} Modification</h6>
-      </div>
-      <button *ngIf="isBaseline" class="close pull-right" aria-label="Close" (click)="removeMaterial(lossIndex)">
-      <span aria-hidden="true">&times;</span>
-    </button>
+      <label class="group-label loss-label">
+        <span *ngIf="material.collapse" class="fa fa-caret-down" (click)="collapseLoss(material)"></span>
+        <span *ngIf="!material.collapse" class="fa fa-caret-up" (click)="collapseLoss(material)"></span>
+        {{material.name}}
+        <span aria-hidden="true" *ngIf="isBaseline && inSetup && !modExists" class="close pull-right" aria-label="Close" (click)="removeMaterial(lossIndex)">&times;</span>
+      </label>
     </div>
   </div>
-  <div class="row">
+  <div class="row" *ngIf="!material.collapse">
     <div class="col-12">
       <div class="form-section">
         <div class="form-group">
           <label class="small" for="type">Select Type</label>
-          <select class="form-control" id="type" [(ngModel)]="material.chargeMaterialType" [disabled]="!baselineSelected" (focus)="changeField('chargeMaterialType')" (blur)="focusOut()">
+          <select class="form-control" id="type" [(ngModel)]="material.chargeMaterialType" [disabled]="!baselineSelected || disableType" (focus)="changeField('chargeMaterialType')"
+            (blur)="focusOut()">
             <option>Solid</option>
             <option>Liquid</option>
             <option>Gas</option>
-            </select>
+          </select>
         </div>
       </div>
       <app-solid-charge-material-form *ngIf="material.chargeMaterialType == 'Solid'" (changeField)="changeField($event)" [(chargeMaterialForm)]="material.solidForm"
@@ -43,7 +43,8 @@
       <div class="form-group">
         <label class="small">Total Heat Required For Charge Material</label>
         <div *ngIf="material.heatRequired" class="text-center small">
-          {{material.heatRequired | sigFigs:'5'}} <span>{{resultsUnit}}</span>
+          {{material.heatRequired | sigFigs:'5'}}
+          <span>{{resultsUnit}}</span>
         </div>
         <div *ngIf="!material.heatRequired" class="text-center small">
           &mdash; &mdash;

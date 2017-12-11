@@ -1,16 +1,16 @@
-<div class="form-section calculator-form">
+<form>
   <div class="form-group">
     <label for="frequency">Line Frequency</label>
-    <select class="form-control" id="frequency" [(ngModel)]="tmpFrequency" (change)="emitChange()" autofocus>
-        <option *ngFor="let frequency of frequencies" [ngValue]="frequency">{{frequency}}</option>
-      </select>
+    <select name="frequency" class="form-control" id="frequency" [(ngModel)]="tmpFrequency" (change)="emitChange()" autofocus>
+      <option *ngFor="let frequency of frequencies" [ngValue]="frequency">{{frequency}}</option>
+    </select>
   </div>
 
   <div class="form-group">
     <label for="horsePower">Motor Power</label>
-    <select class="form-control" id="horsePower" [(ngModel)]="tmpHorsePower" (change)="emitChange()">
-        <option *ngFor="let option of options" [ngValue]="option">{{option}} {{settings.powerMeasurement}}</option>
-      </select>
+    <select name="horsePower" class="form-control" id="horsePower" [(ngModel)]="tmpHorsePower" (change)="emitChange()">
+      <option *ngFor="let option of options" [ngValue]="option">{{option}} {{settings.powerMeasurement}}</option>
+    </select>
   </div>
 
   <div class=" form-group">
@@ -22,7 +22,7 @@
       <!--<div class="incrementor input-group-addon">-->
         <!--<button class="btn" (click)="addNum('motorRPM')"><i class="fa fa-plus"></i></button>-->
       <!--</div>-->
-      <input type="number" step="10" min="0" class="form-control" id="motorRPM" [(ngModel)]="tmpMotorRpm" (input)="emitChange()"
+      <input type="number" name="tmpMotorRpm" step="10" min="0" class="form-control" id="motorRPM" [(ngModel)]="tmpMotorRpm" (input)="emitChange()"
         onfocus="this.select();">
     </div>
   </div>
@@ -31,15 +31,15 @@
   <div class="form-group">
     <label for="efficiencyClass">Efficiency Class</label>
 
-    <select class="form-control" id="efficiencyClass" [(ngModel)]="tmpEfficiencyClass" (change)="emitChange()">
-          <option *ngFor="let efficiencyClass of efficiencyClasses" [ngValue]="efficiencyClass">{{efficiencyClass}}</option>
-        </select>
+    <select name="efficiencyClass" class="form-control" id="efficiencyClass" [(ngModel)]="tmpEfficiencyClass" (change)="emitChange()">
+      <option *ngFor="let efficiencyClass of efficiencyClasses" [ngValue]="efficiencyClass">{{efficiencyClass}}</option>
+    </select>
   </div>
 
   <div class="form-group" *ngIf="tmpEfficiencyClass == 'Specified'">
     <label for="efficiency">Efficiency</label>
     <div class="input-group calc-addon-group">
-      <input type="number" min="0" step="any" max="100" class="form-control" id="efficiency" [(ngModel)]="tmpEfficiency" (input)="emitChange()"
+      <input name="efficiency" type="number" min="0" step="any" max="100" class="form-control" id="efficiency" [(ngModel)]="tmpEfficiency" (input)="emitChange()"
         onfocus="this.select();" [ngClass]="{'invalid': checkEfficiency() == false}">
       <span class="units">%</span>
     </div>
@@ -49,7 +49,7 @@
   <div class="form-group">
     <label for="motorVoltage">Voltage</label>
     <div class="input-group calc-addon-group">
-      <input type="number" step="any" class="form-control" id="motorVoltage" [(ngModel)]="tmpMotorVoltage" (input)="emitChange()"
+      <input name="motorVoltage" type="number" step="any" class="form-control" id="motorVoltage" [(ngModel)]="tmpMotorVoltage" (input)="emitChange()"
         onfocus="this.select();">
       <span class="input-group-addon units">V</span>
     </div>
@@ -57,13 +57,12 @@
 
   <div class="form-group">
     <label for="fullLoadAmps" aria-describedby="flaHelp">
-        Full-Load Amps
-      </label>
+      Full-Load Amps
+    </label>
     <div class="input-group calc-addon-group">
-      <input type="number" step="any" class="form-control addon-input" id="fullLoadAmps" [(ngModel)]="tmpFullLoadAmps" (input)="emitChange()"
+      <input name="fullLoadAmps" type="number" step="any" class="form-control addon-input" id="fullLoadAmps" [(ngModel)]="tmpFullLoadAmps" (input)="emitChange()"
         onfocus="this.select();">
       <span class="input-group-addon units">A</span>
     </div>
   </div>
-
-</div>
+</form>

@@ -16,10 +16,12 @@ export class PsatService {
 
   mainTab: BehaviorSubject<string>;
   secondaryTab: BehaviorSubject<string>;
+  calcTab: BehaviorSubject<string>;
   baseline: PSAT;
   constructor(private formBuilder: FormBuilder, private convertUnitsService: ConvertUnitsService, private validationService: ValidationService) {
     this.mainTab = new BehaviorSubject<string>('system-setup');
     this.secondaryTab = new BehaviorSubject<string>('explore-opportunities');
+    this.calcTab = new BehaviorSubject<string>('system-curve')
   }
 
   test() {
@@ -88,6 +90,24 @@ export class PsatService {
     return tmpResults;
   }
 
+  emptyResults(): PsatOutputs {
+    let results: PsatOutputs = {
+      pump_efficiency: 0,
+      motor_rated_power: 0,
+      motor_shaft_power: 0,
+      pump_shaft_power: 0,
+      motor_efficiency: 0,
+      motor_power_factor: 0,
+      motor_current: 0,
+      motor_power: 0,
+      annual_energy: 0,
+      annual_cost: 0,
+      annual_savings_potential: 0,
+      optimization_rating: 0
+    }
+    return results;
+  }
+
   roundResults(psatResults: PsatOutputs): PsatOutputs {
     let roundResults: PsatOutputs = {
       pump_efficiency: this.roundVal(psatResults.pump_efficiency, 2),
@@ -103,7 +123,7 @@ export class PsatService {
       annual_savings_potential: this.roundVal(psatResults.annual_savings_potential, 0),
       optimization_rating: this.roundVal(psatResults.optimization_rating, 2)
     }
-    return psatResults;
+    return roundResults;
   }
 
   resultsExistingAndOptimal(psatInputs: PsatInputs, settings: Settings): PsatOutputsExistingOptimal {
@@ -598,11 +618,11 @@ export class PsatService {
       drive = 'Direct Drive';
     } else if (num == 1) {
       drive = 'V-Belt Drive';
-    }   else if (num == 2) {
-    drive = 'Notched V-Belt Drive';
-    }  else if (num == 3) {
-    drive = 'Synchronous Belt Drive';
-  }
+    } else if (num == 2) {
+      drive = 'Notched V-Belt Drive';
+    } else if (num == 3) {
+      drive = 'Synchronous Belt Drive';
+    }
     return drive;
   }
   getFixedSpeedEmum(fixedSpeed: string): number {
@@ -611,6 +631,8 @@ export class PsatService {
       fixedSpeedEnum = 0;
     } else if (fixedSpeed == 'No') {
       fixedSpeedEnum = 1;
+    } else {
+      fixedSpeedEnum = 0;
     }
     return fixedSpeedEnum;
   }
@@ -621,6 +643,8 @@ export class PsatService {
     }
     else if (num == 1) {
       fixedSpeed = 'No';
+    }else{
+      fixedSpeed = 'Yes';
     }
     return fixedSpeed;
   }
@@ -658,13 +682,13 @@ export class PsatService {
   initForm() {
     return this.formBuilder.group({
       'pumpType': ['', Validators.required],
-      'specifiedPumpEfficiency': ['', Validators.required],
+      'specifiedPumpEfficiency': [''],
       'pumpRPM': ['', Validators.required],
       'drive': ['', Validators.required],
       'viscosity': ['', Validators.required],
       'gravity': ['', Validators.required],
       'stages': ['', Validators.required],
-      'fixedSpeed': ['', Validators.required],
+      'fixedSpeed': ['Yes', Validators.required],
       'frequency': ['', Validators.required],
       'horsePower': ['', Validators.required],
       'motorRPM': ['', Validators.required],
@@ -672,21 +696,27 @@ export class PsatService {
       'efficiency': [''],
       'motorVoltage': ['', Validators.required],
       'fullLoadAmps': ['', Validators.required],
-      'sizeMargin': ['', Validators.required],
+      'sizeMargin': [0, Validators.required],
       'operatingFraction': ['', Validators.required],
       'costKwHr': ['', Validators.required],
       'flowRate': ['', Validators.required],
       'head': ['', Validators.required],
       'loadEstimatedMethod': ['', Validators.required],
-      'motorKW': ['', Validators.required],
-      'motorAmps': ['', Validators.required],
+      'motorKW': [''],
+      'motorAmps': [''],
       'measuredVoltage': ['', Validators.required],
-      'optimizeCalculation': ['', Validators.required],
+      'optimizeCalculation': [''],
       'implementationCosts': ['']
     })
   }
 
   getFormFromPsat(psatInputs: PsatInputs) {
+    if (!psatInputs.fixed_speed) {
+      psatInputs.fixed_speed = 0;
+    }
+    if (!psatInputs.margin) {
+      psatInputs.margin = 0;
+    }
     let pumpStyle = this.getPumpStyleFromEnum(psatInputs.pump_style);
     let lineFreq = this.getLineFreqFromEnum(psatInputs.line_frequency);
     let effClass = this.getEfficiencyClassFromEnum(psatInputs.efficiency_class);
@@ -695,7 +725,7 @@ export class PsatService {
     let loadEstMethod = this.getLoadEstimationFromEnum(psatInputs.load_estimation_method);
     return this.formBuilder.group({
       'pumpType': [pumpStyle, Validators.required],
-      'specifiedPumpEfficiency': [psatInputs.pump_specified, Validators.required],
+      'specifiedPumpEfficiency': [psatInputs.pump_specified],
       'pumpRPM': [psatInputs.pump_rated_speed, Validators.required],
       'drive': [drive, Validators.required],
       'viscosity': [psatInputs.kinematic_viscosity, Validators.required],
@@ -715,10 +745,10 @@ export class PsatService {
       'flowRate': [psatInputs.flow_rate, Validators.required],
       'head': [psatInputs.head, Validators.required],
       'loadEstimatedMethod': [loadEstMethod, Validators.required],
-      'motorKW': [psatInputs.motor_field_power, Validators.required],
-      'motorAmps': [psatInputs.motor_field_current, Validators.required],
+      'motorKW': [psatInputs.motor_field_power],
+      'motorAmps': [psatInputs.motor_field_current],
       'measuredVoltage': [psatInputs.motor_field_voltage, Validators.required],
-      'optimizeCalculation': [psatInputs.optimize_calculation, Validators.required],
+      'optimizeCalculation': [psatInputs.optimize_calculation],
       'implementationCosts': [psatInputs.implementationCosts],
       'fluidType': [psatInputs.fluidType],
       'fluidTemperature': [psatInputs.fluidTemperature]
@@ -733,7 +763,6 @@ export class PsatService {
     let driveEnum = this.getDriveEnum(form.value.drive);
     let fixedSpeedEnum = this.getFixedSpeedEmum(form.value.fixedSpeed);
     let loadEstMethodEnum = this.getLoadEstimationEnum(form.value.loadEstimatedMethod);
-
     let tmpPsatInputs: PsatInputs = {
       pump_style: pumpStyleEnum,
       pump_specified: form.value.specifiedPumpEfficiency,

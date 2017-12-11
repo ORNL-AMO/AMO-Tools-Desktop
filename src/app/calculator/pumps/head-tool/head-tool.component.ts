@@ -157,6 +157,10 @@ export class HeadToolComponent implements OnInit {
     }
   }
 
+  setFormView(str: string){
+    this.headToolType = str;
+  }
+
   initHeadToolSuctionForm(settings: Settings) {
     let smallUnit, pressureUnit;
     if (settings.distanceMeasurement == 'ft') {

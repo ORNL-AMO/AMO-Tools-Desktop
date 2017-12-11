@@ -31,6 +31,11 @@ export class FixtureLossesComponent implements OnInit {
   settings: Settings;
   @Input()
   isLossesSetup: boolean;
+  @Input()
+  inSetup: boolean;
+  @Input()
+  modExists: boolean;
+
   resultsUnit: string;
   _fixtureLosses: Array<any>;
   firstChange: boolean = true;
@@ -65,7 +70,8 @@ export class FixtureLossesComponent implements OnInit {
         let tmpLoss = {
           form: this.fixtureLossesService.getFormFromLoss(loss),
           name: 'Loss #' + (this._fixtureLosses.length + 1),
-          heatLoss: loss.heatLoss || 0.0
+          heatLoss: loss.heatLoss || 0.0,
+          collapse: false
         };
         this.calculate(tmpLoss);
         this._fixtureLosses.push(tmpLoss);
@@ -88,7 +94,8 @@ export class FixtureLossesComponent implements OnInit {
           this._fixtureLosses.push({
             form: this.fixtureLossesService.initForm(),
             name: 'Loss #' + (this._fixtureLosses.length + 1),
-            heatLoss: 0.0
+            heatLoss: 0.0,
+            collapse: false
           })
         }
       })
@@ -98,10 +105,14 @@ export class FixtureLossesComponent implements OnInit {
           this._fixtureLosses.push({
             form: this.fixtureLossesService.initForm(),
             name: 'Loss #' + (this._fixtureLosses.length + 1),
-            heatLoss: 0.0
+            heatLoss: 0.0,
+            collapse: false
           })
         }
       })
+    }
+    if(this.inSetup && this.modExists){
+      this.disableForms();
     }
   }
 
@@ -116,6 +127,11 @@ export class FixtureLossesComponent implements OnInit {
     this.fixtureLossesService.deleteLossIndex.next(null);
   }
 
+  disableForms(){
+    this._fixtureLosses.forEach(loss => {
+      loss.form.disable();
+    })
+  }
   addLoss() {
     if (this.isLossesSetup) {
       this.fixtureLossesService.addLoss(this.isBaseline);
@@ -126,7 +142,8 @@ export class FixtureLossesComponent implements OnInit {
     this._fixtureLosses.push({
       form: this.fixtureLossesService.initForm(),
       name: 'Loss #' + (this._fixtureLosses.length + 1),
-      heatLoss: 0.0
+      heatLoss: 0.0,
+      collapse: false
     });
   }
 
@@ -151,6 +168,10 @@ export class FixtureLossesComponent implements OnInit {
     }
   }
 
+  collapseLoss(loss: any){
+    loss.collapse = !loss.collapse;
+  }
+  
   saveLosses() {
     let tmpFixtureLosses = new Array<FixtureLoss>();
     this._fixtureLosses.forEach(loss => {

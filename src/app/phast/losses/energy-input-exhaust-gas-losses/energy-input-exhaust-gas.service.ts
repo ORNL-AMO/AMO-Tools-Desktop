@@ -34,22 +34,22 @@ export class EnergyInputExhaustGasService {
 
   initForm() {
     return this.formBuilder.group({
-      'excessAir': [20, Validators.required],
-      'combustionAirTemp': ['', Validators.required],
-      'exhaustGasTemp': ['', Validators.required],
-      'totalHeatInput': [3, Validators.required],
-      'electricalPowerInput': ['', Validators.required],
-     // 'otherLoss1': ['', Validators.required]
+      'excessAir': [20],
+      'combustionAirTemp': [''],
+      'exhaustGasTemp': [''],
+      'totalHeatInput': [3],
+      'electricalPowerInput': [''],
+     // 'otherLoss1': ['']
     })
   }
 
   getFormFromLoss(energyInputExhaustGas: EnergyInputExhaustGasLoss) {
     let tmpGroup = this.formBuilder.group({
-      'excessAir': [energyInputExhaustGas.excessAir, Validators.required],
-      'combustionAirTemp': [energyInputExhaustGas.combustionAirTemp, Validators.required],
-      'exhaustGasTemp': [energyInputExhaustGas.exhaustGasTemp, Validators.required],
-      'totalHeatInput': [energyInputExhaustGas.totalHeatInput, Validators.required],
-      'electricalPowerInput': [energyInputExhaustGas.electricalPowerInput, Validators.required],
+      'excessAir': [energyInputExhaustGas.excessAir],
+      'combustionAirTemp': [energyInputExhaustGas.combustionAirTemp],
+      'exhaustGasTemp': [energyInputExhaustGas.exhaustGasTemp],
+      'totalHeatInput': [energyInputExhaustGas.totalHeatInput],
+      'electricalPowerInput': [energyInputExhaustGas.electricalPowerInput],
     })
     // if (energyInputExhaustGas.otherLossObjects) {
     //   let index = 1;

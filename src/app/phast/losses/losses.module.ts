@@ -17,7 +17,7 @@ import { AuxiliaryPowerLossesModule } from './auxiliary-power-losses/auxiliary-p
 import { AtmosphereLossesModule } from "./atmosphere-losses/atmosphere-losses.module";
 import { CoolingLossesModule } from "./cooling-losses/cooling-losses.module";
 import { ChargeMaterialModule } from './charge-material/charge-material.module';
-
+import { PhastReportModule } from '../phast-report/phast-report.module';
 import { LossesComponent } from './losses.component';
 
 
@@ -51,6 +51,8 @@ import { HeatSystemEfficiencyHelpComponent } from './losses-help/heat-system-eff
 import { OperationsModule } from './operations/operations.module';
 import { OperationsHelpComponent } from './losses-help/operations-help/operations-help.component';
 import { LossesSplashPageComponent } from './losses-splash-page/losses-splash-page.component';
+import { LossesResultPanelComponent } from './losses-result-panel/losses-result-panel.component';
+import { ToastyModule } from 'ng2-toasty';
 @NgModule({
   imports: [
     CommonModule,
@@ -75,7 +77,9 @@ import { LossesSplashPageComponent } from './losses-splash-page/losses-splash-pa
     ExhaustGasModule,
     EnergyInputExhaustGasLossesModule,
     OperationsModule,
-    HeatSystemEfficiencyModule
+    HeatSystemEfficiencyModule,
+    PhastReportModule,
+    ToastyModule
   ],
   declarations: [
     LossesComponent,
@@ -99,7 +103,8 @@ import { LossesSplashPageComponent } from './losses-splash-page/losses-splash-pa
     EnergyInputExhaustGasLossesHelpComponent,
     HeatSystemEfficiencyHelpComponent,
     OperationsHelpComponent,
-    LossesSplashPageComponent
+    LossesSplashPageComponent,
+    LossesResultPanelComponent
   ],
   providers: [
     LossesService

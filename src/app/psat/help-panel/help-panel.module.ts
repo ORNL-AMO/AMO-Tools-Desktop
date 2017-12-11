@@ -7,11 +7,14 @@ import { PumpFluidHelpComponent } from './pump-fluid-help/pump-fluid-help.compon
 import { MotorHelpComponent } from './motor-help/motor-help.component';
 import { FieldDataHelpComponent } from './field-data-help/field-data-help.component';
 import { ModifyConditionsHelpComponent } from './modify-conditions-help/modify-conditions-help.component';
-
+import { ModifyConditionsNotesComponent } from '../modify-conditions/modify-conditions-notes/modify-conditions-notes.component';
 import { HelpPanelService } from './help-panel.service';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 @NgModule({
   imports: [
-    CommonModule
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule
   ],
   declarations: [
     HelpPanelComponent,
@@ -19,7 +22,8 @@ import { HelpPanelService } from './help-panel.service';
     PumpFluidHelpComponent,
     MotorHelpComponent,
     FieldDataHelpComponent,
-    ModifyConditionsHelpComponent
+    ModifyConditionsHelpComponent,
+    ModifyConditionsNotesComponent
   ],
   providers: [
     HelpPanelService

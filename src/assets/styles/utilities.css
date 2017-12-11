@@ -1,0 +1,25 @@
+a:not([href]):not([tabindex]).click-link{
+    color: blue;
+}
+
+a:not([href]):not([tabindex]).click-link:hover{
+    text-decoration: underline;
+    cursor: pointer;
+    font-weight: bold;
+    color: blue;
+}
+
+a:not([href]):not([tabindex]).disabled-link{
+    color: gray;
+}
+
+a:not([href]):not([tabindex]).disabled-link:hover{
+    font-weight: normal;
+    cursor: default;
+    text-decoration: none;
+}
+
+
+.stand-alone-calc{
+    height: 100vh;
+}

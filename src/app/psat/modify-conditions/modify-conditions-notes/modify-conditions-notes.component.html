@@ -1,15 +1,15 @@
 <div class="note-form" *ngIf="currentTab == 'system-basics'">
-  <textarea rows="2" id="notes" [(ngModel)]="notes.systemBasicsNotes" placeholder="Add note for system basics"></textarea>
+  <textarea rows="6" id="notes" [(ngModel)]="notes.systemBasicsNotes" placeholder="Add note for system basics"></textarea>
 </div>
 
 <div class="note-form" *ngIf="currentTab == 'pump-fluid'">
-  <textarea rows="2" id="notes" [(ngModel)]="notes.pumpFluidNotes" placeholder="Add note for pump & fluid"></textarea>
+  <textarea rows="6" id="notes" [(ngModel)]="notes.pumpFluidNotes" placeholder="Add notes for modification pump & fluid"></textarea>
 </div>
 
 <div class="note-form" *ngIf="currentTab == 'motor'">
-  <textarea rows="2" id="notes" [(ngModel)]="notes.motorNotes" placeholder="Add note for motor"></textarea>
+  <textarea rows="6" id="notes" [(ngModel)]="notes.motorNotes" placeholder="Add notes for modification motor"></textarea>
 </div>
 
 <div class="note-form" *ngIf="currentTab == 'field-data'">
-  <textarea rows="2" id="notes" [(ngModel)]="notes.fieldDataNotes" placeholder="Add note for field data"></textarea>
+  <textarea rows="6" id="notes" [(ngModel)]="notes.fieldDataNotes" placeholder="Add notes for modification field data"></textarea>
 </div>

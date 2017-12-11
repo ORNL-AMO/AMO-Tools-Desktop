@@ -31,6 +31,11 @@ export class ExhaustGasComponent implements OnInit {
   settings: Settings;
   @Input()
   isLossesSetup: boolean;
+  @Input()
+  inSetup: boolean;
+  @Input()
+  modExists: boolean;
+  
   _exhaustGasLosses: Array<any>;
   firstChange: boolean = true;
   resultsUnit: string;
@@ -66,7 +71,8 @@ export class ExhaustGasComponent implements OnInit {
         let tmpLoss = {
           form: this.exhaustGasService.getFormFromLoss(loss),
           name: 'Loss #' + (this._exhaustGasLosses.length + 1),
-          heatLoss: 0.0
+          heatLoss: 0.0,
+          collapse: false
         };
         this.calculate(tmpLoss);
         this._exhaustGasLosses.push(tmpLoss);
@@ -89,7 +95,8 @@ export class ExhaustGasComponent implements OnInit {
           this._exhaustGasLosses.push({
             form: this.exhaustGasService.initForm(),
             name: 'Loss #' + (this._exhaustGasLosses.length + 1),
-            heatLoss: 0.0
+            heatLoss: 0.0,
+            collapse: false
           })
         }
       })
@@ -99,10 +106,14 @@ export class ExhaustGasComponent implements OnInit {
           this._exhaustGasLosses.push({
             form: this.exhaustGasService.initForm(),
             name: 'Loss #' + (this._exhaustGasLosses.length + 1),
-            heatLoss: 0.0
+            heatLoss: 0.0,
+            collapse: false
           })
         }
       })
+    }
+    if(this.inSetup && this.modExists){
+      this.disableForms();
     }
   }
 
@@ -116,6 +127,13 @@ export class ExhaustGasComponent implements OnInit {
     }
     this.exhaustGasService.deleteLossIndex.next(null);
   }
+
+  disableForms(){
+    this._exhaustGasLosses.forEach(loss => {
+      loss.form.disable();
+    })
+  }
+
   addLoss() {
     if (this.isLossesSetup) {
       this.exhaustGasService.addLoss(this.isBaseline);
@@ -126,7 +144,8 @@ export class ExhaustGasComponent implements OnInit {
     this._exhaustGasLosses.push({
       form: this.exhaustGasService.initForm(),
       name: 'Loss #' + (this._exhaustGasLosses.length + 1),
-      heatLoss: 0.0
+      heatLoss: 0.0,
+      collapse: false
     });
   }
 
@@ -142,6 +161,9 @@ export class ExhaustGasComponent implements OnInit {
     })
   }
 
+  collapseLoss(loss: any){
+    loss.collapse = !loss.collapse;
+  }
   calculate(loss: any) {
     if (loss.form.status == 'VALID') {
       let tmpGas = this.exhaustGasService.getLossFromForm(loss.form);

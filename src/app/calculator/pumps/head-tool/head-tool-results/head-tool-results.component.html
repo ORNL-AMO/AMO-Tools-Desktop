@@ -1,21 +1,30 @@
-<dl class="inline">
-  
-  <dt>Differential Elevation Head</dt>
-  <dd>{{results.differentialElevationHead | number:'1.1-2'}} {{settings.distanceMeasurement}}</dd>
-
-  <dt>Differential Pressure Head</dt>
-  <dd [ngClass]="{'invalid': results.differentialPressureHead < 0}">{{results.differentialPressureHead | number:'1.1-2'}} {{settings.distanceMeasurement}}</dd>
-
-  <dt>Differential Velocity Head</dt>
-  <dd>{{results.differentialVelocityHead | number:'1.1-2'}} {{settings.distanceMeasurement}}</dd>
-
-  <dt>Estimated Suction Friction Head</dt>
-  <dd>{{results.estimatedSuctionFrictionHead | number:'1.1-2'}} {{settings.distanceMeasurement}}</dd>
-
-  <dt>Discharge Friction Head</dt>
-  <dd>{{results.estimatedDischargeFrictionHead | number:'1.1-2'}} {{settings.distanceMeasurement}}</dd>
-
-  <dt>Pump Head</dt>
-  <dd [ngClass]="{'invalid': results.pumpHead < 0}">{{results.pumpHead | number:'1.1-2'}} {{settings.distanceMeasurement}}</dd>
-
-</dl>
+<div class="output-summary">
+  <table class="table head-tool-summary">
+    <tbody>
+      <tr>
+        <th>Differential Elevation Head</th>
+        <td>{{results.differentialElevationHead | number:'1.1-2'}} {{settings.distanceMeasurement}}</td>
+      </tr>
+      <tr>
+          <th>Differential Pressure Head</th>
+          <td [ngClass]="{'invalid': results.differentialPressureHead < 0}">{{results.differentialPressureHead | number:'1.1-2'}} {{settings.distanceMeasurement}}</td>
+      </tr>
+      <tr>
+          <th>Differential Velocity Head</th>
+          <td>{{results.differentialVelocityHead | number:'1.1-2'}} {{settings.distanceMeasurement}}</td>
+      </tr>
+      <tr>
+          <th>Estimated Suction Friction Head</th>
+          <td>{{results.estimatedSuctionFrictionHead | number:'1.1-2'}} {{settings.distanceMeasurement}}</td>
+      </tr>
+      <tr>
+          <th>Discharge Friction Head</th>
+          <td>{{results.estimatedDischargeFrictionHead | number:'1.1-2'}} {{settings.distanceMeasurement}}</td>
+      </tr>
+      <tr>
+          <th>Pump Head</th>
+          <td [ngClass]="{'invalid': results.pumpHead < 0}">{{results.pumpHead | number:'1.1-2'}} {{settings.distanceMeasurement}}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>

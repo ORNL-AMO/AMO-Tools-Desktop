@@ -1,16 +1,27 @@
 <div>
   <span (click)="goHome()">
     <img src="assets/images/DOE-banner-color.png" class="doe-logo">
-   </span>
+  </span>
 </div>
 
 <div class="sidebar-group create-button">
-  <button type="button" class="btn btn-primary btn-block" (click)="showCreateAssessment()">Add Asset</button>
+  <button type="button" class="btn btn-primary btn-block" (click)="showCreateAssessment()">Add Assessment</button>
 </div>
 
-<div class="sidebar-group">
+
+<div class="sidebar-group secondary">
   <ul>
-    <li [ngClass]="{'selected':selectedDirectoryId == directory.id && dashboardView == 'assessment-dashboard'}"><span (click)="toggleSelected(directory)">All Assets</span></li>
+    <li [ngClass]="{'selected': dashboardView == 'landing-screen'}">
+      <span (click)="goHome()">Dashboard</span>
+    </li>
+  </ul>
+</div>
+
+<div class="sidebar-group secondary">
+  <ul>
+    <li [ngClass]="{'selected':selectedDirectoryId == directory.id && dashboardView == 'assessment-dashboard'}">
+      <span (click)="toggleSelected(directory)">All Assets</span>
+    </li>
     <li *ngIf="directory">
       <app-directory-item [directory]="getDirectory()" [selectedDirectoryId]="selectedDirectoryId" (selectSignal)="toggleSelected($event)"
         (collapseSignal)="toggleDirectoryCollapse($event)" [newDirEventToggle]="newDirEventToggle" [dashboardView]="dashboardView"></app-directory-item>
@@ -58,10 +69,10 @@
     <li [ngClass]="{'selected':dashboardView == 'settings'}">
       <span (click)="goToSettings()">Settings</span>
     </li>
-    <li [ngClass]="{'selected': dashboardView == 'tutorials'}">
+    <!--<li [ngClass]="{'selected': dashboardView == 'tutorials'}">
       <span (click)="showTutorials()">Tutorials</span>
     </li>
-    <!-- <li [ngClass]="{'selected':dashboardView == 'landing-screen'}">
+    <li [ngClass]="{'selected':dashboardView == 'landing-screen'}">
       <span (click)="goHome()">Welcome</span>
     </li> -->
     <li [ngClass]="{'selected': dashboardView == 'about-page'}">
@@ -80,7 +91,9 @@
 <div class="sidebar-group">
   <ul>
     <li>
-      <span class="version-num">v{{versionNum}} <i class="fa fa-info-circle" (click)="openVersionModal()"></i></span>
+      <span class="version-num">v{{versionNum}}
+        <i class="fa fa-info-circle" (click)="openVersionModal()"></i>
+      </span>
     </li>
     <li>
       <span *ngIf="isUpdateAvailable" class="update-available" (click)="openModal()">Update Available!</span>

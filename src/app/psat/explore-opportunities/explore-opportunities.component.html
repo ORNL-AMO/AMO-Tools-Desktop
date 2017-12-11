@@ -1,102 +1,44 @@
-<div class="container-fluid">
-	<div class="row modify-conditions explore-container">
-		<div class="col-md-6 explore-column">
+<div class="container-fluid psat">
+	<div class="row modify-conditions panel-container">
+		<div class="col-md-6 panel-column">
 
-			<app-explore-opportunities-form 
-				[psat]="psat" 
-				(emitCalculate)="getResults()" 
-				[settings]="settings" 
-				(emitSave)="save()" 
-				[exploreModIndex]="exploreModIndex"
-				(changeField)="focusField($event)" 
-				(emitOptimize)="optimize()">
+			<app-explore-opportunities-form [psat]="psat" (emitCalculate)="getResults()" [settings]="settings" (emitSave)="save()" [exploreModIndex]="exploreModIndex"
+			 (changeField)="focusField($event)" (emitOptimize)="optimize()">
 			</app-explore-opportunities-form>
 
 		</div>
-		<div class="col-md-6">
-			<div class="help-panel">
-
-
-				<div class="btn-group" role="group" aria-label="Basic example">
-					<button 
-						type="button" 
-						class="btn btn-secondary" 
-						[ngClass]="{'active': tabSelect == 'results'}" 
-						(click)="setTab('results')">
-						Results
-					</button>
-					<button 
-						type="button" 
-						class="btn btn-secondary" 
-						[ngClass]="{'active': tabSelect == 'sankey'}" 
-						(click)="setTab('sankey')">
-						Sankey
-					</button>
-					<button 
-						type="button" 
-						class="btn btn-secondary" 
-						[ngClass]="{'active': tabSelect == 'help'}" 
-						(click)="setTab('help')">
-						Help
-					</button>
-				</div>
-
-
-				<app-explore-opportunities-help 
-					[currentField]="currentField" 
-					[settings]="settings" 
-					[psat]="psat" 
-					*ngIf="tabSelect == 'help'">
+		<div class="col-md-6 help-panel">
+			<div class="row">
+				<ul class="tabs primary tab-row">
+					<li class="panel-tab-item tab-3" [ngClass]="{'active': tabSelect == 'results'}">
+						<a (click)="setTab('results')">Results</a>
+					</li><!--
+					--><li class="panel-tab-item tab-3" [ngClass]="{'active': tabSelect == 'sankey'}">
+						<a (click)="setTab('sankey')">Sankey</a>
+					</li><!--
+					--><li class="panel-tab-item tab-3" [ngClass]="{'active': tabSelect == 'help'}">
+						<a (click)="setTab('help')">Help</a>
+					</li>
+				</ul>
+			</div>
+			<div class="explore-help-panel">
+				<app-explore-opportunities-help [currentField]="currentField" [settings]="settings" [psat]="psat" *ngIf="tabSelect == 'help'">
 				</app-explore-opportunities-help>
+			</div>
+			
 
+			<app-explore-opportunities-sankey [baselineResults]="baselineResults" [modificationResults]="modificationResults" [settings]="settings"
+			 *ngIf="tabSelect == 'sankey'">
+			</app-explore-opportunities-sankey>
 
-				<app-explore-opportunities-sankey 
-					[baselineResults]="baselineResults" 
-					[modificationResults]="modificationResults" 
-					[settings]="settings" 
-					*ngIf="tabSelect == 'sankey'">
-				</app-explore-opportunities-sankey>
-
-
-				<!--<div class="row justify-content-center data-row" *ngIf="tabSelect == 'results'">
-					<div class="col-3 chart-summary">
-						<dl class="chart-item">
-							<dd>
-								<app-percent-graph [value]="baselineOptimizationRating" [titlePlacement]="titlePlacement" [valueDescription]="'Optimization Rating'"
-								 [title]="'Baseline'" [unit]="unit"></app-percent-graph>
-							</dd>
-							<dt class="text-center op-rating">Optimization Rating</dt>
-							<dd class="savings text-center">$ &mdash; &mdash; &mdash;</dd>
-							<dt class="text-muted text-center">Annual Savings</dt>
-						</dl>
-					</div>
-					<div class="col-3 offset-md-1 chart-summary">
-						<dl class="chart-item">
-							<dd>
-								<app-percent-graph [value]="percentSavings" [titlePlacement]="titlePlacement" [valueDescription]="'Percent Savings'"
-								 [title]="title" [unit]="unit"></app-percent-graph>
-							</dd>
-							<dt class="text-center op-rating">Percent Savings</dt>
-							<dd class="savings text-center" [ngClass]="{'positive-savings': annualSavings > 0, 'negative-savings': annualSavings < 0}">{{annualSavings | currency:'USD':'symbol':'4.0-0'}}</dd>
-							<dt class="text-muted text-center">Annual Savings</dt>
-						</dl>
-					</div>
-				</div>-->
-
-
-				<app-explore-opportunities-results 
-					[percentSavings]="percentSavings" 
-					[psat]="psat" 
-					[exploreModIndex]="exploreModIndex" 
-					[baselineResults]="baselineResults"
-					[modificationResults]="modificationResults"
-					[settings]="settings"
-					[annualSavings]="annualSavings"
-					*ngIf="tabSelect == 'results'">
+			<div class="panel-results">
+				<app-explore-opportunities-results [percentSavings]="percentSavings" [psat]="psat" [exploreModIndex]="exploreModIndex" [baselineResults]="baselineResults"
+				 [modificationResults]="modificationResults" [settings]="settings" [annualSavings]="annualSavings" *ngIf="tabSelect == 'results'">
 				</app-explore-opportunities-results>
+			</div>
 
 
-			</div><!-- End .help-panel -->
+			<!-- End .help-panel -->
 		</div>
 	</div>
 </div>

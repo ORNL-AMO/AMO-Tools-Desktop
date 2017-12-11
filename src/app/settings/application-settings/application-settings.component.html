@@ -1,15 +1,23 @@
+<!-- <div class="row" *ngIf="inPhast">
+  <div class="col-12">
+    <label class="group-label">
+      Data Settings
+    </label>
+  </div>
+</div> -->
+
 <form [formGroup]="settingsForm">
   <div class="form-group">
     <label for="language">Language</label>
     <select class="form-control" formControlName="language" id="language" ngModel="{{settingsForm.value.language}}" autofocus>
-        <option *ngFor="let language of languages" [ngValue]="language">{{language}}</option>
+      <option *ngFor="let language of languages" [ngValue]="language">{{language}}</option>
     </select>
   </div>
 
   <div class="form-group">
     <label for="currency">Currency</label>
     <select class="form-control" formControlName="currency" id="currency" ngModel="{{settingsForm.value.currency}}">
-        <option *ngFor="let currency of currencies" [ngValue]="currency">{{currency}}</option>
+      <option *ngFor="let currency of currencies" [ngValue]="currency">{{currency}}</option>
     </select>
   </div>
 
@@ -17,7 +25,7 @@
     <label>Units of Measure</label>
     <div class="form-check">
       <label class="form-check-label">
-        <input class="form-check-input" [ngClass]="{'inPhast': inPhast}" type="radio" name="unitsOfMeasure" formControlName="unitsOfMeasure" value="Imperial" (change)="setUnits()">Imperial
+        <input class="form-check-input" type="radio" name="unitsOfMeasure" formControlName="unitsOfMeasure" value="Imperial" (change)="setUnits()">Imperial
       </label>
       <label class="form-check-label">
         <input class="form-check-input" type="radio" name="unitsOfMeasure" formControlName="unitsOfMeasure" value="Metric" (change)="setUnits()">Metric
@@ -31,7 +39,9 @@
   <div class="form-group" *ngIf="inPhast">
     <label for="furnaceType">Energy Result Unit</label>
     <select class="form-control" formControlName="energyResultUnit" id="energyResultUnit" ngModel="{{settingsForm.value.energyResultUnit}}">
-        <option *ngFor="let option of energyResultOptions" [ngValue]="option.unit">{{option.display}} <span [innerHTML]="option.displayUnit"></span></option>
+      <option *ngFor="let option of energyResultOptions" [ngValue]="option.unit">{{option.display}}
+        <span [innerHTML]="option.displayUnit"></span>
+      </option>
     </select>
   </div>
 </form>
