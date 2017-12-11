@@ -1,4 +1,4 @@
-<div class="no-data no-data-phast" *ngIf="_chargeMaterial.length == 0" (click)="addMaterial()">
+<div class="no-data no-data-phast" *ngIf="_chargeMaterial.length == 0 && inSetup" (click)="addMaterial()">
   <h3>You have no Charge Material</h3>
   <h4>Add some now.</h4>
 </div>

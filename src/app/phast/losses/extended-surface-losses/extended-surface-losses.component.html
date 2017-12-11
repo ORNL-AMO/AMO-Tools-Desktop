@@ -1,9 +1,4 @@
-<!--<div class="section-header">
-  <h3 class="pull-left">Extended Surface Losses</h3>
-  <button class="btn btn-secondary pull-right" (click)="addLoss()">+ Add Surface Loss</button>
-</div>-->
-
-<div class="no-data no-data-phast" *ngIf="_surfaceLosses.length == 0" (click)="addLoss()">
+<div class="no-data no-data-phast" *ngIf="_surfaceLosses.length == 0 && inSetup" (click)="addLoss()">
   <h3>You have no Extended Surface Losses</h3>
   <h4>Add some now.</h4>
 </div>

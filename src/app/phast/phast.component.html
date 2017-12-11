@@ -1,6 +1,8 @@
 <div class="phast-container phast" *ngIf="assessment && settings">
-  <div class="sticky-top hide-print">
-    <app-phast-banner [assessment]="assessment"></app-phast-banner>
+  <div class="hide-print">
+    <div class="sticky-top">
+          <app-phast-banner [assessment]="assessment"></app-phast-banner>
+    </div>
     <!-- phast-tabs = step tabs -->
     <app-phast-tabs *ngIf="mainTab == 'system-setup'"></app-phast-tabs>
     <!--losses-tabs are tabs for heat balance/assessment, both inSetup and !inSetup -->
