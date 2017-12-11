@@ -33,7 +33,9 @@ export class FixtureLossesComponent implements OnInit {
   isLossesSetup: boolean;
   @Input()
   inSetup: boolean;
-  
+  @Input()
+  modExists: boolean;
+
   resultsUnit: string;
   _fixtureLosses: Array<any>;
   firstChange: boolean = true;
@@ -109,6 +111,9 @@ export class FixtureLossesComponent implements OnInit {
         }
       })
     }
+    if(this.inSetup && this.modExists){
+      this.disableForms();
+    }
   }
 
   ngOnDestroy() {
@@ -122,6 +127,11 @@ export class FixtureLossesComponent implements OnInit {
     this.fixtureLossesService.deleteLossIndex.next(null);
   }
 
+  disableForms(){
+    this._fixtureLosses.forEach(loss => {
+      loss.form.disable();
+    })
+  }
   addLoss() {
     if (this.isLossesSetup) {
       this.fixtureLossesService.addLoss(this.isBaseline);

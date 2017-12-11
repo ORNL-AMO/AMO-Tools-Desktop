@@ -33,7 +33,9 @@ export class GasLeakageLossesComponent implements OnInit {
   isLossesSetup: boolean;
   @Input()
   inSetup: boolean;
-  
+  @Input()
+  modExists: boolean;
+
   _leakageLosses: Array<any>;
   firstChange: boolean = true;
   resultsUnit: string;
@@ -109,6 +111,10 @@ export class GasLeakageLossesComponent implements OnInit {
         }
       })
     }
+    
+    if(this.inSetup && this.modExists){
+      this.disableForms();
+    }
   }
 
   ngOnDestroy() {
@@ -122,6 +128,12 @@ export class GasLeakageLossesComponent implements OnInit {
     this.gasLeakageLossesService.deleteLossIndex.next(null);
   }
 
+  disableForms(){
+    this._leakageLosses.forEach(loss => {
+      loss.form.disable();
+    })
+  }
+  
   addLoss() {
     if (this.isLossesSetup) {
       this.gasLeakageLossesService.addLoss(this.isBaseline);

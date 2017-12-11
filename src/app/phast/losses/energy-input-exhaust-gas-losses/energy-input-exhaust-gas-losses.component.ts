@@ -33,7 +33,9 @@ export class EnergyInputExhaustGasLossesComponent implements OnInit {
   isLossesSetup: boolean;
   @Input()
   inSetup: boolean;
-  
+  @Input()
+  modExists: boolean;
+
   _exhaustGasLosses: Array<any>;
   firstChange: boolean = true;
   availableHeat: number = 0;
@@ -112,6 +114,9 @@ export class EnergyInputExhaustGasLossesComponent implements OnInit {
         }
       })
     }
+    if(this.inSetup && this.modExists){
+      this.disableForms();
+    }
   }
 
   ngOnDestroy() {
@@ -124,6 +129,13 @@ export class EnergyInputExhaustGasLossesComponent implements OnInit {
     }
     this.energyInputExhaustGasService.deleteLossIndex.next(null);
   }
+  
+  disableForms(){
+    this._exhaustGasLosses.forEach(loss => {
+      loss.form.disable();
+    })
+  }
+
   addLoss() {
     if (this.isLossesSetup) {
       this.energyInputExhaustGasService.addLoss(this.isBaseline);

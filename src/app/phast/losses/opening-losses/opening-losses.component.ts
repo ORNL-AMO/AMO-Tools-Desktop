@@ -33,7 +33,9 @@ export class OpeningLossesComponent implements OnInit {
   isLossesSetup: boolean;
   @Input()
   inSetup: boolean;
-  
+  @Input()
+  modExists: boolean;
+
   _openingLosses: Array<any>;
   firstChange: boolean = true;
   resultsUnit: string;
@@ -111,6 +113,10 @@ export class OpeningLossesComponent implements OnInit {
         }
       })
     }
+
+    if(this.inSetup && this.modExists){
+      this.disableForms();
+    }
   }
 
   ngOnDestroy() {
@@ -138,10 +144,16 @@ export class OpeningLossesComponent implements OnInit {
       collapse: false
     });
   }
+  
   collapseLoss(loss: any){
     loss.collapse = !loss.collapse;
   }
 
+  disableForms(){
+    this._openingLosses.forEach(loss => {
+      loss.form.disable();
+    })
+  }
   removeLoss(lossIndex: number) {
     this.openingLossesService.setDelete(lossIndex);
   }

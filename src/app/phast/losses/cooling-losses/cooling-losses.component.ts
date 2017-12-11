@@ -33,10 +33,13 @@ export class CoolingLossesComponent implements OnInit {
   isLossesSetup: boolean;
   @Input()
   inSetup: boolean;
-  
+  @Input()
+  modExists: boolean;
+
   _coolingLosses: Array<any>;
   firstChange: boolean = true;
   resultsUnit: string;
+  disableType: boolean = false;
   constructor(private coolingLossesService: CoolingLossesService, private phastService: PhastService, private coolingLossesCompareService: CoolingLossesCompareService) { }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -108,6 +111,10 @@ export class CoolingLossesComponent implements OnInit {
         }
       })
     }
+    if(this.inSetup && this.modExists){
+      this.disableType = true;
+      this.disableForms();
+    }
   }
 
   ngOnDestroy() {
@@ -120,7 +127,13 @@ export class CoolingLossesComponent implements OnInit {
     }
     this.coolingLossesService.deleteLossIndex.next(null);
   }
-
+  disableForms(){
+    this._coolingLosses.forEach(loss => {
+      loss.waterCoolingForm.disable();
+      loss.gasCoolingForm.disable();
+      loss.liquidCoolingForm.disable();
+    })
+  }
   initCoolingLosses() {
     this.losses.coolingLosses.forEach(loss => {
       let tmpLoss: any;

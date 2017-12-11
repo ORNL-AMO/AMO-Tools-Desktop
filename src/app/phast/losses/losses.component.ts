@@ -44,6 +44,7 @@ export class LossesComponent implements OnInit {
   isModalOpen: boolean = false;
   showAddBtn: boolean = true;
   toggleCalculate: boolean = false;
+  modificationExists: boolean = false;
   constructor(private lossesService: LossesService) { }
 
   ngOnInit() {
@@ -56,6 +57,7 @@ export class LossesComponent implements OnInit {
     }
     if (this.phast.modifications) {
       this._modifications = (JSON.parse(JSON.stringify(this.phast.modifications)));
+      this.modificationExists = true;
     }
 
     this.lossesService.lossesTab.subscribe(val => {
@@ -94,6 +96,13 @@ export class LossesComponent implements OnInit {
       this.showEditModification = false;
       this.editModification = null;
       this.toggleCalculate = !this.toggleCalculate;
+      if(this._modifications.length != 0){
+        this.modificationExists = true;
+      }else{
+        this.modificationExists = false;
+      }
+    }else{
+      this.modificationExists = false;
     }
   }
 

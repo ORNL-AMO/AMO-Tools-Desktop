@@ -33,7 +33,9 @@ export class AtmosphereLossesComponent implements OnInit {
   isLossesSetup: boolean;
   @Input()
   inSetup: boolean;
-  
+  @Input()
+  modExists: boolean;
+
   _atmosphereLosses: Array<any>;
   firstChange: boolean = true;
 
@@ -111,6 +113,9 @@ export class AtmosphereLossesComponent implements OnInit {
         }
       })
     }
+    if(this.inSetup && this.modExists){
+      this.disableForms();
+    }
   }
 
   ngOnDestroy() {
@@ -122,6 +127,12 @@ export class AtmosphereLossesComponent implements OnInit {
       this.atmosphereLossesService.addLossModificationMonitor.next(false);
     }
     this.atmosphereLossesService.deleteLossIndex.next(null);
+  }
+  
+  disableForms(){
+    this._atmosphereLosses.forEach(loss => {
+      loss.form.disable();
+    })
   }
 
   addLoss() {

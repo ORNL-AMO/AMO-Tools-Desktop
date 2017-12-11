@@ -160,9 +160,7 @@ export class LossesService {
   checkEnergyInputExhaustGas(phast: PHAST, settings: Settings) {
     if (phast.losses.energyInputExhaustGasLoss) {
       if (phast.losses.energyInputExhaustGasLoss.length != 0) {
-        console.log(phast.losses.energyInputExhaustGasLoss)
         let test = this.phastService.sumEnergyInputExhaustGas(phast.losses.energyInputExhaustGasLoss, settings);
-        console.log(test);
         if (test != 0) {
           //fuel heat delivered not 0
           this.enInput2Done = true

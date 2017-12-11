@@ -33,7 +33,9 @@ export class WallLossesComponent implements OnInit {
   isLossesSetup: boolean;
   @Input()
   inSetup: boolean;
-  
+  @Input()
+  modExists: boolean;
+
   _wallLosses: Array<any>;
   firstChange: boolean = true;
   resultsUnit: string
@@ -122,6 +124,10 @@ export class WallLossesComponent implements OnInit {
         }
       })
     }
+
+    if(this.inSetup && this.modExists){
+      this.disableForms();
+    }
   }
 
   ngOnDestroy() {
@@ -134,6 +140,12 @@ export class WallLossesComponent implements OnInit {
       this.wallLossesService.addLossModifiedMonitor.next(false);
     }
     this.wallLossesService.deleteLossIndex.next(null);
+  }
+
+  disableForms(){
+    this._wallLosses.forEach(loss => {
+      loss.form.disable();
+    })
   }
 
   addLoss() {

@@ -25,6 +25,10 @@ export class HeatSystemEfficiencyComponent implements OnInit {
   baselineSelected: boolean;
   @Input()
   settings: Settings;
+  @Input()
+  inSetup: boolean;
+  @Input()
+  modExists: boolean;
 
   @Output('savedLoss')
   savedLoss = new EventEmitter<boolean>();
@@ -61,6 +65,26 @@ export class HeatSystemEfficiencyComponent implements OnInit {
     this.setCompareVals();
     this.heatSystemEfficiencyCompareService.initCompareObjects();
     this.initDifferenceMonitor();
+
+    if (this.inSetup && this.modExists) {
+      this.disableForm();
+    }
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (!this.firstChange) {
+      if (changes.saveClicked) {
+        this.saveLosses();
+      }
+      if (!this.baselineSelected) {
+        this.disableForm();
+      } else {
+        this.enableForm();
+      }
+    }
+    else {
+      this.firstChange = false;
+    }
   }
 
   ngOnDestroy() {
@@ -83,35 +107,12 @@ export class HeatSystemEfficiencyComponent implements OnInit {
     }
   }
 
-
-  ngOnChanges(changes: SimpleChanges) {
-    if (!this.firstChange) {
-      if (changes.saveClicked) {
-        this.saveLosses();
-      }
-      if (!this.baselineSelected) {
-        this.disableForm();
-      } else {
-        this.enableForm();
-      }
-    }
-    else {
-      this.firstChange = false;
-    }
-  }
-
   disableForm() {
-    this.elements = this.lossForm.nativeElement.elements;
-    for (var i = 0, len = this.elements.length; i < len; ++i) {
-      this.elements[i].disabled = true;
-    }
+    this.efficiencyForm.disable();
   }
 
   enableForm() {
-    this.elements = this.lossForm.nativeElement.elements;
-    for (var i = 0, len = this.elements.length; i < len; ++i) {
-      this.elements[i].disabled = false;
-    }
+    this.efficiencyForm.enable();
   }
 
   saveLosses() {

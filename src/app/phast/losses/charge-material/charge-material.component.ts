@@ -34,10 +34,13 @@ export class ChargeMaterialComponent implements OnInit {
   isLossesSetup: boolean;
   @Input()
   inSetup: boolean;
-  
+  @Input()
+  modExists: boolean;
+
   _chargeMaterial: Array<any>;
   firstChange: boolean = true;
   resultsUnit: string;
+  disableType: boolean = false;
   constructor(private formBuilder: FormBuilder, private phastService: PhastService, private chargeMaterialService: ChargeMaterialService, private chargeMaterialCompareService: ChargeMaterialCompareService) { }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -110,6 +113,10 @@ export class ChargeMaterialComponent implements OnInit {
         }
       })
     }
+    if(this.inSetup && this.modExists){
+      this.disableType = true;
+      this.disableForms();
+    }
   }
 
   ngOnDestroy() {
@@ -122,7 +129,13 @@ export class ChargeMaterialComponent implements OnInit {
     }
     this.chargeMaterialService.deleteLossIndex.next(null);
   }
-
+  disableForms(){
+    this._chargeMaterial.forEach(loss => {
+      loss.solidForm.disable();
+      loss.liquidForm.disable();
+      loss.gasForm.disable();
+    })
+  }
   initChargeMaterial() {
     this.losses.chargeMaterials.forEach(loss => {
       if (loss.chargeMaterialType == 'Gas') {

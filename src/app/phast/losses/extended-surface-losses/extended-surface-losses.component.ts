@@ -33,7 +33,9 @@ export class ExtendedSurfaceLossesComponent implements OnInit {
   isLossesSetup: boolean;
   @Input()
   inSetup: boolean;
-  
+  @Input()
+  modExists: boolean;
+
   _surfaceLosses: Array<any>;
   firstChange: boolean = true;
   resultsUnit: string;
@@ -121,8 +123,16 @@ export class ExtendedSurfaceLossesComponent implements OnInit {
         }
       })
     }
+    if (this.inSetup && this.modExists) {
+      this.disableForms();
+    }
   }
 
+  disableForms(){
+    this._surfaceLosses.forEach(loss => {
+      loss.form.disable();
+    })
+  }
   addLoss() {
     if (this.isLossesSetup) {
       this.extendedSurfaceLossesService.addLoss(this.isBaseline);
@@ -173,10 +183,10 @@ export class ExtendedSurfaceLossesComponent implements OnInit {
 
   }
 
-  collapseLoss(loss: any){
+  collapseLoss(loss: any) {
     loss.collapse = !loss.collapse;
   }
-  
+
   saveLosses() {
     let tmpSurfaceLosses = new Array<ExtendedSurface>();
     this._surfaceLosses.forEach(loss => {

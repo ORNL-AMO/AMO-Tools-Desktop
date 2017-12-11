@@ -33,7 +33,9 @@ export class SlagComponent implements OnInit {
   isLossesSetup: boolean;
   @Input()
   inSetup: boolean;
-  
+  @Input()
+  modExists: boolean;
+
   _slagLosses: Array<any>;
   firstChange: boolean = true;
   resultsUnit: string;
@@ -110,6 +112,10 @@ export class SlagComponent implements OnInit {
         }
       })
     }
+
+    if(this.inSetup && this.modExists){
+      this.disableForms();
+    }
   }
 
   ngOnDestroy() {
@@ -123,6 +129,11 @@ export class SlagComponent implements OnInit {
     this.slagService.deleteLossIndex.next(null);
   }
 
+  disableForms(){
+    this._slagLosses.forEach(loss => {
+      loss.form.disable();
+    })
+  }
 
   addLoss() {
     if (this.isLossesSetup) {

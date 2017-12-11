@@ -23,7 +23,7 @@
     <div class="col-12">
       <div class="form-group">
         <label class="small" for="coolingMedium">Cooling Medium</label>
-        <select class="form-control" id="coolingMedium" [(ngModel)]="loss.coolingMedium" (change)="calculate(loss)" [disabled]="!baselineSelected"
+        <select class="form-control" id="coolingMedium" [(ngModel)]="loss.coolingMedium" (change)="calculate(loss)" [disabled]="!baselineSelected || disableType"
           (focus)="changeField('coolingMedium')" (blur)="focusOut()">
           <option>Gas</option>
           <option>Liquid</option>

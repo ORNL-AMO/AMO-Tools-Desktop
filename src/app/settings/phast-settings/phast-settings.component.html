@@ -36,8 +36,12 @@
     <label for="customFurnaceName">Custom Furnace Name</label>
     <input class="form-control" formControlName="customFurnaceName" id="customFurnaceName">
   </div>
+  <div class="row" *ngIf="disable">
+    <div class="col">
+      <p class="small help-text">*Cannot change energy settings after heat balance has begun. Create a new assessment if you wish to use a different energy source type.</p>
+    </div>
+  </div>
 </form>
-
 <!--<div class="row">
   <div class="col-12">
     <label class="form-control-label" for="heatSource">Heat Source</label>

@@ -33,6 +33,8 @@ export class ExhaustGasComponent implements OnInit {
   isLossesSetup: boolean;
   @Input()
   inSetup: boolean;
+  @Input()
+  modExists: boolean;
   
   _exhaustGasLosses: Array<any>;
   firstChange: boolean = true;
@@ -110,6 +112,9 @@ export class ExhaustGasComponent implements OnInit {
         }
       })
     }
+    if(this.inSetup && this.modExists){
+      this.disableForms();
+    }
   }
 
   ngOnDestroy() {
@@ -122,6 +127,13 @@ export class ExhaustGasComponent implements OnInit {
     }
     this.exhaustGasService.deleteLossIndex.next(null);
   }
+
+  disableForms(){
+    this._exhaustGasLosses.forEach(loss => {
+      loss.form.disable();
+    })
+  }
+
   addLoss() {
     if (this.isLossesSetup) {
       this.exhaustGasService.addLoss(this.isBaseline);

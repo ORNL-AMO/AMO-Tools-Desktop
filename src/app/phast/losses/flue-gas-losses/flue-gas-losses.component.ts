@@ -32,10 +32,13 @@ export class FlueGasLossesComponent implements OnInit {
   isLossesSetup: boolean;
   @Input()
   inSetup: boolean;
-  
+  @Input()
+  modExists: boolean;
+
   _flueGasLosses: Array<any>;
   firstChange: boolean = true;
   resultsUnit: string;
+  disableType: boolean = false;
   constructor(private phastService: PhastService, private flueGasLossesService: FlueGasLossesService, private flueGasCompareService: FlueGasCompareService) { }
 
   ngOnInit() {
@@ -91,6 +94,10 @@ export class FlueGasLossesComponent implements OnInit {
         }
       })
     }
+    if(this.inSetup && this.modExists){
+      this.disableType = true;
+      this.disableForms();
+    }
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -118,6 +125,11 @@ export class FlueGasLossesComponent implements OnInit {
     this.flueGasLossesService.deleteLossIndex.next(null);
   }
 
+  disableForms(){
+    this._flueGasLosses.forEach(loss => {
+      loss.form.disable();
+    })
+  }
   initFlueGasses() {
     this.losses.flueGasLosses.forEach(loss => {
       if (loss.flueGasType == "By Volume") {

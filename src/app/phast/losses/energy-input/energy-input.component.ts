@@ -33,6 +33,8 @@ export class EnergyInputComponent implements OnInit {
   isLossesSetup: boolean;
   @Input()
   inSetup: boolean;
+  @Input()
+  modExists: boolean;
   
   _energyInputs: Array<any>;
   firstChange: boolean = true;
@@ -122,6 +124,9 @@ export class EnergyInputComponent implements OnInit {
         }
       })
     }
+    if(this.inSetup && this.modExists){
+      this.disableForms();
+    }
   }
 
   ngOnDestroy() {
@@ -135,6 +140,11 @@ export class EnergyInputComponent implements OnInit {
     this.energyInputService.deleteLossIndex.next(null);
   }
 
+  disableForms(){
+    this._energyInputs.forEach(loss => {
+      loss.form.disable();
+    })
+  }
   addLoss() {
     if (this.isLossesSetup) {
       this.energyInputService.addLoss(this.isBaseline);

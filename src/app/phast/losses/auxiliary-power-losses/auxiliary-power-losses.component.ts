@@ -33,7 +33,9 @@ export class AuxiliaryPowerLossesComponent implements OnInit {
   isLossesSetup: boolean;
   @Input()
   inSetup: boolean;
-  
+  @Input()
+  modExists: boolean;
+
   resultsUnit: string;
   _auxiliaryPowerLosses: Array<any>;
   firstChange: boolean = true;
@@ -109,6 +111,9 @@ export class AuxiliaryPowerLossesComponent implements OnInit {
         }
       })
     }
+    if(this.inSetup && this.modExists){
+      this.disableForms();
+    }
   }
 
   ngOnDestroy() {
@@ -121,7 +126,11 @@ export class AuxiliaryPowerLossesComponent implements OnInit {
     }
     this.auxiliaryPowerLossesService.deleteLossIndex.next(null);
   }
-
+  disableForms(){
+    this._auxiliaryPowerLosses.forEach(loss => {
+      loss.form.disable();
+    })
+  }
   addLoss() {
     if (this.isLossesSetup) {
       this.auxiliaryPowerLossesService.addLoss(this.isBaseline);

@@ -116,7 +116,6 @@ export class PhastComponent implements OnInit {
 
   checkSetupDone(){
     this._phast.setupDone = this.lossesService.checkSetupDone((JSON.parse(JSON.stringify(this._phast))), this.settings);
-    console.log(this._phast.setupDone);
   }
 
 

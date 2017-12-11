@@ -15,7 +15,7 @@
         <span *ngIf="loss.collapse" class="fa fa-caret-down" (click)="collapseLoss(loss)"></span>
         <span *ngIf="!loss.collapse" class="fa fa-caret-up" (click)="collapseLoss(loss)"></span>
         {{loss.name}}
-        <span aria-hidden="true" *ngIf="isBaseline && inSetup" class="close pull-right" aria-label="Close" (click)="removeLoss(lossIndex)">&times;</span>
+        <span aria-hidden="true" *ngIf="isBaseline && inSetup && !modExists" class="close pull-right" aria-label="Close" (click)="removeLoss(lossIndex)">&times;</span>
       </label>
     </div>
   </div>
@@ -23,7 +23,7 @@
     <div class="col-12">
       <div class="form-group">
         <label class="small" for="type">Type of fuel</label>
-        <select class="form-control" id="type" [(ngModel)]="loss.measurementType" [disabled]="!baselineSelected" (focus)="changeField('measurementType')"
+        <select class="form-control" id="type" [(ngModel)]="loss.measurementType" [disabled]="!baselineSelected || disableType" (focus)="changeField('measurementType')"
           (blur)="focusOut()">
           <option [ngValue]="'By Volume'">Gas</option>
           <option [ngValue]="'By Mass'">Solid/Liquid</option>
