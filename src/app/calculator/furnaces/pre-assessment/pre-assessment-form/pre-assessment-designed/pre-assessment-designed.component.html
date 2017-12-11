@@ -11,7 +11,7 @@
                     <input name="name" type="text" id="text" class="form-control" [(ngModel)]="inputs.name" onfocus="this.select();" />
                 </div>
                 <div class="col">
-                    <a class="pull-right small click-link" (click)="removeElectricityZone(index)"><span aria-hidden="true">&times;</span></a>
+                    <a class="pull-right small click-link fa fa-times" (click)="removeElectricityZone(index)"></a>
                 </div>
             </div>
             <app-designed-energy-electricity-form [inputs]="inputs" (emitCalculate)="calculate()" (changeField)="changeField($event)"></app-designed-energy-electricity-form>
@@ -24,7 +24,7 @@
                     <input name="name" type="text" id="text" class="form-control" [(ngModel)]="inputs.name" onfocus="this.select();" />
                 </div>
                 <div class="col">
-                    <a class="pull-right small click-link" (click)="removeFuelZone(index)"><span aria-hidden="true">&times;</span></a>
+                    <a class="pull-right small click-link fa fa-times" (click)="removeFuelZone(index)"></a>
                 </div>
             </div>
             <app-designed-energy-fuel-form [inputs]="inputs" [settings]="settings" (emitCalculate)="calculate()" (changeField)="changeField($event)"></app-designed-energy-fuel-form>
@@ -37,7 +37,7 @@
                     <input name="name" type="text" id="text" class="form-control" [(ngModel)]="inputs.name" onfocus="this.select();" />
                 </div>
                 <div class="col">
-                    <a class="pull-right small click-link" (click)="removeSteamZone(index)"><span aria-hidden="true">&times;</span></a>
+                    <a class="pull-right small click-link fa fa-times" (click)="removeSteamZone(index)"></a>
                 </div>
             </div>
             <app-designed-energy-steam-form [inputs]="inputs" [settings]="settings" (emitCalculate)="calculate()" (changeField)="changeField($event)"></app-designed-energy-steam-form>

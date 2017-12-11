@@ -64,10 +64,6 @@ h5{
     margin-bottom: 0px;
 }
 
-.pre-assessment-header:hover{
-    cursor: pointer;
-    background-color: lightgray;
-}
 
 .toggle-btn{
     font-size: 12px;
@@ -85,4 +81,9 @@ h5{
 
 .add-zone{
     padding-right: 15px;
+}
+
+.furnace-name:hover{
+    font-weight: bold;
+    cursor: pointer;
 }

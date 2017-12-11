@@ -4,7 +4,7 @@
       <label *ngIf="!isEditingName" class="group-label loss-label">
         <span *ngIf="assessment.collapsed" class="fa fa-caret-down" (click)="collapsePreAssessment()"></span>
         <span *ngIf="!assessment.collapsed" class="fa fa-caret-up" (click)="collapsePreAssessment()"></span>
-        {{assessment.name}}
+        <span class="furnace-name"  (click)="collapsePreAssessment()">{{assessment.name}}</span>
         <span class="fa fa-times pull-right" (click)="deletePreAssessment()"></span>
         <span class="fa fa-pencil pull-right" (click)="editName()"></span>
       </label>
