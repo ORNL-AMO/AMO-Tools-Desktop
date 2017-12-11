@@ -13,8 +13,11 @@ export class DesignedEnergyService {
 
   designedEnergyElectricity(inputs: DesignedEnergyElectricity[], phast: PHAST, settings: Settings): DesignedEnergyResults {
     //Design Results
-    let designedEnergyUsed =  this.sumDesignedEnergyElectricity(inputs);
-    let sumFeedRate = this.phastService.sumChargeMaterialFeedRate(phast.losses.chargeMaterials);
+    let designedEnergyUsed = this.sumDesignedEnergyElectricity(inputs);
+    let sumFeedRate = 0;
+    if (phast.losses) {
+      sumFeedRate = this.phastService.sumChargeMaterialFeedRate(phast.losses.chargeMaterials);
+    }
     let designedEnergyIntensity = (designedEnergyUsed / sumFeedRate) || 0;
     let tmpAuxResults = this.auxEquipmentService.calculate(phast);
     let designedElectricityUsed = this.auxEquipmentService.getResultsSum(tmpAuxResults);
@@ -34,7 +37,7 @@ export class DesignedEnergyService {
     return tmpResults;
   }
 
-  sumDesignedEnergyElectricity(inputs: DesignedEnergyElectricity[]): number{
+  sumDesignedEnergyElectricity(inputs: DesignedEnergyElectricity[]): number {
     let designedEnergyUsed = 0;
     //used to convert burner capacity from MMBtu -> Btu or GJ -> kJ
     //results for designedEnergyUsed end up in Btu or kJ
@@ -48,7 +51,10 @@ export class DesignedEnergyService {
   designedEnergyFuel(inputs: DesignedEnergyFuel[], phast: PHAST, settings: Settings): DesignedEnergyResults {
     //Design Results
     let designedEnergyUsed = this.sumDesignedEnergyFuel(inputs);
-    let sumFeedRate = this.phastService.sumChargeMaterialFeedRate(phast.losses.chargeMaterials);
+    let sumFeedRate = 0;
+    if (phast.losses) {
+      sumFeedRate = this.phastService.sumChargeMaterialFeedRate(phast.losses.chargeMaterials);
+    }
     let designedEnergyIntensity = (designedEnergyUsed / sumFeedRate) || 0;
     let tmpAuxResults = this.auxEquipmentService.calculate(phast);
     let designedElectricityUsed = this.auxEquipmentService.getResultsSum(tmpAuxResults);
@@ -69,7 +75,7 @@ export class DesignedEnergyService {
     return tmpResults;
   }
 
-  sumDesignedEnergyFuel(inputs: DesignedEnergyFuel[]): number{
+  sumDesignedEnergyFuel(inputs: DesignedEnergyFuel[]): number {
     let designedEnergyUsed = 0;
     let constant = Math.pow(10, 6);
     inputs.forEach(input => {
@@ -81,7 +87,10 @@ export class DesignedEnergyService {
   designedEnergySteam(inputs: DesignedEnergySteam[], phast: PHAST, settings: Settings): DesignedEnergyResults {
     //Design Results
     let designedEnergyUsed = this.sumDesignedEnergySteam(inputs);
-    let sumFeedRate = this.phastService.sumChargeMaterialFeedRate(phast.losses.chargeMaterials);
+    let sumFeedRate = 0;
+    if (phast.losses) {
+      sumFeedRate = this.phastService.sumChargeMaterialFeedRate(phast.losses.chargeMaterials);
+    }
     let designedEnergyIntensity = (designedEnergyUsed / sumFeedRate) || 0;
     let tmpAuxResults = this.auxEquipmentService.calculate(phast);
     let designedElectricityUsed = this.auxEquipmentService.getResultsSum(tmpAuxResults);
@@ -102,7 +111,7 @@ export class DesignedEnergyService {
     return tmpResults;
   }
 
-  sumDesignedEnergySteam(inputs: DesignedEnergySteam[]): number{
+  sumDesignedEnergySteam(inputs: DesignedEnergySteam[]): number {
     let designedEnergyUsed = 0;
     inputs.forEach(input => {
       designedEnergyUsed += (input.totalHeat) * (input.steamFlow) * (input.percentCapacityUsed / 100) * (input.percentOperatingHours / 100);
@@ -110,9 +119,9 @@ export class DesignedEnergyService {
     return designedEnergyUsed || 0;
   }
   convertResult(val: number, settings: Settings): number {
-    if(settings.energySourceType == 'Electricity'){
+    if (settings.energySourceType == 'Electricity') {
       val = this.convertUnitsService.value(val).from('kWh').to(settings.energyResultUnit)
-    }else if (settings.unitsOfMeasure == 'Metric') {
+    } else if (settings.unitsOfMeasure == 'Metric') {
       val = this.convertUnitsService.value(val).from('kJ').to(settings.energyResultUnit);
     } else {
       val = this.convertUnitsService.value(val).from('Btu').to(settings.energyResultUnit);

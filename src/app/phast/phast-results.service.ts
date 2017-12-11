@@ -189,8 +189,12 @@ export class PhastResultsService {
   }
 
   calculatedByPhast(phast: PHAST, settings: Settings) {
-    let sumFeedRate = this.phastService.sumChargeMaterialFeedRate(phast.losses.chargeMaterials);
-    let phastResults = this.getResults(phast, settings);
+    let sumFeedRate = 0;
+    let phastResults = this.initResults();
+    if (phast.losses) {
+      sumFeedRate = this.phastService.sumChargeMaterialFeedRate(phast.losses.chargeMaterials);
+      phastResults = this.getResults(phast, settings);
+    }
     let calculatedFuelEnergyUsed = phastResults.grossHeatInput;
     let calculatedEnergyIntensity = (calculatedFuelEnergyUsed / sumFeedRate);
     //calculates aux equipment
