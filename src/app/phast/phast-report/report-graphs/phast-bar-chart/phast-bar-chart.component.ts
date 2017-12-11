@@ -59,12 +59,12 @@ export class PhastBarChartComponent implements OnInit {
     this.baselineData = {
       data: new Array<number>(),
       label: ' Baseline (' + units + ')',
-      backgroundColor: graphColors[0]
+      backgroundColor: '#1E7640'
     };
     this.modificationData = {
       data: new Array<number>(),
       label: ' Modification (' + units + ')',
-      backgroundColor: graphColors[1]
+      backgroundColor: '#2ABDDA'
     };
     this.getData(this.results, this.modResults, this.resultCats);
     this.getColors();
