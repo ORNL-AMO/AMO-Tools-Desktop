@@ -5,7 +5,7 @@
 </div>
 
 <div class="sidebar-group create-button">
-  <button type="button" class="btn btn-primary btn-block" (click)="showCreateAssessment()">Add Asset</button>
+  <button type="button" class="btn btn-primary btn-block" (click)="showCreateAssessment()">Add Assessment</button>
 </div>
 
 <div class="sidebar-group">
@@ -58,10 +58,10 @@
     <li [ngClass]="{'selected':dashboardView == 'settings'}">
       <span (click)="goToSettings()">Settings</span>
     </li>
-    <li [ngClass]="{'selected': dashboardView == 'tutorials'}">
+    <!--<li [ngClass]="{'selected': dashboardView == 'tutorials'}">
       <span (click)="showTutorials()">Tutorials</span>
     </li>
-    <!-- <li [ngClass]="{'selected':dashboardView == 'landing-screen'}">
+    <li [ngClass]="{'selected':dashboardView == 'landing-screen'}">
       <span (click)="goHome()">Welcome</span>
     </li> -->
     <li [ngClass]="{'selected': dashboardView == 'about-page'}">

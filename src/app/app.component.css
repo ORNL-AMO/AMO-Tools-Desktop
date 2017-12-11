@@ -838,9 +838,7 @@ Sidebar
 .sidebar-group {
   margin-bottom: 20px;
 }
-  .sidebar-group.create-button {
-    margin: 0 20px 20px;
-  }
+
 .sidebar-group .btn-primary {
   padding: 8px;
 }
@@ -864,7 +862,6 @@ Sidebar
   font-size: 17px;
   display: block;
   color: #2d2d2d;
-  padding: 5px 20px;
 }
 .sidebar-group li span.disabled {
   font-size: 15px;
@@ -897,15 +894,15 @@ Sidebar
 }
   .sidebar-group .assessments .psat,
   .sidebar-group .assessments .phast {
-    background-repeat: no-repeat;
+    /* background-repeat: no-repeat;
     background-size: 16px;
     background-position: left 4px;
-    margin-left: 18px;
+    margin-left: 18px; */
   }
-  .sidebar-group .assessments .psat  {
+  .sidebar-group .assessments .psat .sidebar-icon  {
     background-image: url('../assets/images/ico-psat-diagram-small.png');
   }
-  .sidebar-group .assessments .phast {
+  .sidebar-group .assessments .phast .sidebar-icon {
     background-image: url('../assets/images/ico-phast-diagram-small.png');
   }
 
