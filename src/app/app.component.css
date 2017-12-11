@@ -234,8 +234,6 @@ select.form-control:not([size]):not([multiple]) {
 }
 
 .card-form{
-  padding-bottom: 15px;
-  border-bottom: solid;
   padding-top: 15px;
 }
 
@@ -246,7 +244,7 @@ select.form-control:not([size]):not([multiple]) {
 
 .card-form .form-section {
   margin-bottom: 10px;
-  padding-bottom: 18px;
+  padding-bottom: 4px;
   border-bottom: #bbb dashed 1px;
 }
 
@@ -813,14 +811,10 @@ Sidebar
 
 
 .sidebar-bg {
-  height: 100vh;
+  min-height: 100%;
   background-color: #fff;
-  border-width: 1px;
-  border-style: solid;
-  -o-border-image: linear-gradient(to bottom, #949494, rgba(0, 0, 0, 0)) 1 100%;
-  border-image: -webkit-linear-gradient(top, #949494, rgba(0, 0, 0, 0)) 1 100%;
-  border-image: linear-gradient(to bottom, #949494, rgba(0, 0, 0, 0)) 1 100%;
-
+	box-shadow: 0px 0px 69px -1px rgba(0,0,0,0.2);
+	background: #fff;
 }
 
 
@@ -838,11 +832,9 @@ Sidebar
     cursor: pointer;
   }
 .sidebar-group {
-  margin-bottom: 20px;
+  margin-bottom: 12px;
 }
-  .sidebar-group.create-button {
-    margin: 0 20px 20px;
-  }
+
 .sidebar-group .btn-primary {
   padding: 8px;
 }
@@ -866,7 +858,13 @@ Sidebar
   font-size: 17px;
   display: block;
   color: #2d2d2d;
-  padding: 5px 20px;
+  padding-top: 1.5px;
+  padding-bottom: 1.5px;
+}
+
+.sidebar-group li span:hover{
+  background-color: #eee;
+  cursor: pointer;
 }
 .sidebar-group li span.disabled {
   font-size: 15px;
@@ -877,7 +875,7 @@ Sidebar
 }
 .sidebar-group.secondary {
   border-top: #ddd dotted 1px;
-  padding-top: 20px;
+  padding-top: 12px;
 }
 .sidebar-group.secondary li > span, .sidebar-group.secondary li > a, .sidebar-group.secondary li > a:not([href]):not([tabindex]) {
   color: #787878;
@@ -899,15 +897,15 @@ Sidebar
 }
   .sidebar-group .assessments .psat,
   .sidebar-group .assessments .phast {
-    background-repeat: no-repeat;
+    /* background-repeat: no-repeat;
     background-size: 16px;
     background-position: left 4px;
-    margin-left: 18px;
+    margin-left: 18px; */
   }
-  .sidebar-group .assessments .psat  {
+  .sidebar-group .assessments .psat .sidebar-icon  {
     background-image: url('../assets/images/ico-psat-diagram-small.png');
   }
-  .sidebar-group .assessments .phast {
+  .sidebar-group .assessments .phast .sidebar-icon {
     background-image: url('../assets/images/ico-phast-diagram-small.png');
   }
 

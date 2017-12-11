@@ -33,7 +33,9 @@ export class SlagComponent implements OnInit {
   isLossesSetup: boolean;
   @Input()
   inSetup: boolean;
-  
+  @Input()
+  modExists: boolean;
+
   _slagLosses: Array<any>;
   firstChange: boolean = true;
   resultsUnit: string;
@@ -69,7 +71,8 @@ export class SlagComponent implements OnInit {
         let tmpLoss = {
           form: this.slagService.getFormFromLoss(loss),
           name: 'Loss #' + (this._slagLosses.length + 1),
-          heatLoss: loss.heatLoss || 0.0
+          heatLoss: loss.heatLoss || 0.0,
+          collapse: false
         };
         this.calculate(tmpLoss);
         this._slagLosses.push(tmpLoss);
@@ -92,7 +95,8 @@ export class SlagComponent implements OnInit {
           this._slagLosses.push({
             form: this.slagService.initForm(),
             name: 'Loss #' + (this._slagLosses.length + 1),
-            heatLoss: 0.0
+            heatLoss: 0.0,
+            collapse: false
           })
         }
       })
@@ -102,10 +106,15 @@ export class SlagComponent implements OnInit {
           this._slagLosses.push({
             form: this.slagService.initForm(),
             name: 'Loss #' + (this._slagLosses.length + 1),
-            heatLoss: 0.0
+            heatLoss: 0.0,
+            collapse: false
           })
         }
       })
+    }
+
+    if(this.inSetup && this.modExists){
+      this.disableForms();
     }
   }
 
@@ -120,6 +129,11 @@ export class SlagComponent implements OnInit {
     this.slagService.deleteLossIndex.next(null);
   }
 
+  disableForms(){
+    this._slagLosses.forEach(loss => {
+      loss.form.disable();
+    })
+  }
 
   addLoss() {
     if (this.isLossesSetup) {
@@ -131,7 +145,8 @@ export class SlagComponent implements OnInit {
     this._slagLosses.push({
       form: this.slagService.initForm(),
       name: 'Loss #' + (this._slagLosses.length + 1),
-      heatLoss: 0.0
+      heatLoss: 0.0,
+      collapse: false
     });
   }
 

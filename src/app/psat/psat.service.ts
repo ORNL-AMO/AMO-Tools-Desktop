@@ -631,6 +631,8 @@ export class PsatService {
       fixedSpeedEnum = 0;
     } else if (fixedSpeed == 'No') {
       fixedSpeedEnum = 1;
+    } else {
+      fixedSpeedEnum = 0;
     }
     return fixedSpeedEnum;
   }
@@ -641,6 +643,8 @@ export class PsatService {
     }
     else if (num == 1) {
       fixedSpeed = 'No';
+    }else{
+      fixedSpeed = 'Yes';
     }
     return fixedSpeed;
   }
@@ -707,6 +711,12 @@ export class PsatService {
   }
 
   getFormFromPsat(psatInputs: PsatInputs) {
+    if (!psatInputs.fixed_speed) {
+      psatInputs.fixed_speed = 0;
+    }
+    if (!psatInputs.margin) {
+      psatInputs.margin = 0;
+    }
     let pumpStyle = this.getPumpStyleFromEnum(psatInputs.pump_style);
     let lineFreq = this.getLineFreqFromEnum(psatInputs.line_frequency);
     let effClass = this.getEfficiencyClassFromEnum(psatInputs.efficiency_class);
@@ -751,9 +761,8 @@ export class PsatService {
     let pumpStyleEnum = this.getPumpStyleEnum(form.value.pumpType);
     let efficiencyClassEnum = this.getEfficienyClassEnum(form.value.efficiencyClass);
     let driveEnum = this.getDriveEnum(form.value.drive);
-    // let fixedSpeedEnum = this.getFixedSpeedEmum(form.value.fixedSpeed);
+    let fixedSpeedEnum = this.getFixedSpeedEmum(form.value.fixedSpeed);
     let loadEstMethodEnum = this.getLoadEstimationEnum(form.value.loadEstimatedMethod);
-
     let tmpPsatInputs: PsatInputs = {
       pump_style: pumpStyleEnum,
       pump_specified: form.value.specifiedPumpEfficiency,
@@ -762,7 +771,7 @@ export class PsatService {
       kinematic_viscosity: form.value.viscosity,
       specific_gravity: form.value.gravity,
       stages: form.value.stages,
-      fixed_speed: form.value.fixedSpeed,
+      fixed_speed: fixedSpeedEnum,
       line_frequency: lineFreqEnum,
       motor_rated_power: form.value.horsePower,
       motor_rated_speed: form.value.motorRPM,

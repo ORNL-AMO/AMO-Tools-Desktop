@@ -1,6 +1,8 @@
 <div class="phast-container phast" *ngIf="assessment && settings">
-  <div class="sticky-top hide-print">
+  <div class="hide-print sticky-top">
     <app-phast-banner [assessment]="assessment"></app-phast-banner>
+  </div>
+  <div class="hide-print">
     <!-- phast-tabs = step tabs -->
     <app-phast-tabs *ngIf="mainTab == 'system-setup'"></app-phast-tabs>
     <!--losses-tabs are tabs for heat balance/assessment, both inSetup and !inSetup -->
@@ -21,8 +23,8 @@
         <!--Step: 3 Operating Costs-->
         <app-energy-costs *ngIf="specTab == 'energy-costs'" [phast]="_phast" [saveClicked]="saveClicked" (save)="saveDb()" [settings]="settings"></app-energy-costs>
       </div>
-      <div class="col-6 help-panel">
-        <app-help-panel></app-help-panel>
+      <div class="col-6">
+        <app-help-panel [settingsTab]="specTab"></app-help-panel>
       </div>
     </div>
     <!--Step: 4 Heat Balance-->

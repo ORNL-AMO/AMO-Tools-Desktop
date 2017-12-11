@@ -1,7 +1,7 @@
 export const stepTabs: Array<StepTab> = [
     {
         step: 1,
-        tabName: 'Furnace Setup',
+        tabName: 'Assessment Settings',
         next: 2
     },
     {

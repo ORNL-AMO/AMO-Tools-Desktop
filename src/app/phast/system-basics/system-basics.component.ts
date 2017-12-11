@@ -36,6 +36,7 @@ export class SystemBasicsComponent implements OnInit {
   isFirstChange: boolean = true;
   counter: any;
   newSettings: Settings;
+  lossesExist: boolean;
   constructor(private settingsService: SettingsService, private indexedDbService: IndexedDbService, private convertPhastService: ConvertPhastService) { }
 
   ngOnInit() {
@@ -44,6 +45,7 @@ export class SystemBasicsComponent implements OnInit {
       this.settingsForm = this.settingsService.setEnergyResultUnit(this.settingsForm);
       this.saveChanges();
     }
+    this.lossesExist = this.lossExists(this.phast);
   }
 
   ngOnDestroy() {
@@ -58,6 +60,13 @@ export class SystemBasicsComponent implements OnInit {
     }
   }
 
+  lossExists(phast: PHAST){
+    if(phast.losses){
+      return true;
+    }else{
+      return false;
+    }
+  }
   saveChanges() {
     this.newSettings = this.settingsService.getSettingsFromForm(this.settingsForm);
     if (this.settings.currency !== this.newSettings.currency || this.settings.unitsOfMeasure !== this.newSettings.unitsOfMeasure) {

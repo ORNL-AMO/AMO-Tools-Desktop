@@ -10,8 +10,7 @@
     <div class="form-group">
       <label for="operatingFraction">Operating Fraction</label>
       <input name="operatingFraction" type="number" min="0" max="1" step="any" class="form-control" formControlName="operatingFraction"
-        id="operatingFraction" (input)="startSavePolling()" (focus)="focusField('operatingFraction')" onfocus="this.select();"
-        [ngClass]="{'invalid': checkOpFraction() == false}">
+        id="operatingFraction" (input)="startSavePolling()" (focus)="focusField('operatingFraction')" onfocus="this.select();">
       <span class="alert-danger pull-right small" *ngIf="opFractionError !== null">{{opFractionError}}</span>
     </div>
 

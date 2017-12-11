@@ -34,10 +34,13 @@ export class ChargeMaterialComponent implements OnInit {
   isLossesSetup: boolean;
   @Input()
   inSetup: boolean;
-  
+  @Input()
+  modExists: boolean;
+
   _chargeMaterial: Array<any>;
   firstChange: boolean = true;
   resultsUnit: string;
+  disableType: boolean = false;
   constructor(private formBuilder: FormBuilder, private phastService: PhastService, private chargeMaterialService: ChargeMaterialService, private chargeMaterialCompareService: ChargeMaterialCompareService) { }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -89,7 +92,8 @@ export class ChargeMaterialComponent implements OnInit {
             gasForm: this.chargeMaterialService.initGasForm(),
             name: 'Material #' + (this._chargeMaterial.length + 1),
             heatRequired: 0.0,
-            modifiedHeatRequired: 0.0
+            modifiedHeatRequired: 0.0,
+            collapse: false
           });
         }
       })
@@ -103,10 +107,15 @@ export class ChargeMaterialComponent implements OnInit {
             gasForm: this.chargeMaterialService.initGasForm(),
             name: 'Material #' + (this._chargeMaterial.length + 1),
             heatRequired: 0.0,
-            modifiedHeatRequired: 0.0
+            modifiedHeatRequired: 0.0,
+            collapse: false
           });
         }
       })
+    }
+    if(this.inSetup && this.modExists){
+      this.disableType = true;
+      this.disableForms();
     }
   }
 
@@ -120,7 +129,13 @@ export class ChargeMaterialComponent implements OnInit {
     }
     this.chargeMaterialService.deleteLossIndex.next(null);
   }
-
+  disableForms(){
+    this._chargeMaterial.forEach(loss => {
+      loss.solidForm.disable();
+      loss.liquidForm.disable();
+      loss.gasForm.disable();
+    })
+  }
   initChargeMaterial() {
     this.losses.chargeMaterials.forEach(loss => {
       if (loss.chargeMaterialType == 'Gas') {
@@ -130,7 +145,8 @@ export class ChargeMaterialComponent implements OnInit {
           liquidForm: this.chargeMaterialService.initLiquidForm(),
           gasForm: this.chargeMaterialService.getGasChargeMaterialForm(loss.gasChargeMaterial),
           name: 'Material #' + (this._chargeMaterial.length + 1),
-          heatRequired: loss.gasChargeMaterial.heatRequired || 0.0
+          heatRequired: loss.gasChargeMaterial.heatRequired || 0.0,
+          collapse: false
         };
         this.calculate(tmpLoss);
         this._chargeMaterial.push(tmpLoss);
@@ -142,7 +158,8 @@ export class ChargeMaterialComponent implements OnInit {
           liquidForm: this.chargeMaterialService.initLiquidForm(),
           gasForm: this.chargeMaterialService.initGasForm(),
           name: 'Material #' + (this._chargeMaterial.length + 1),
-          heatRequired: loss.solidChargeMaterial.heatRequired || 0.0
+          heatRequired: loss.solidChargeMaterial.heatRequired || 0.0,
+          collapse: false
         };
         this.calculate(tmpLoss);
         this._chargeMaterial.push(tmpLoss);
@@ -154,7 +171,8 @@ export class ChargeMaterialComponent implements OnInit {
           liquidForm: this.chargeMaterialService.getLiquidChargeMaterialForm(loss.liquidChargeMaterial),
           gasForm: this.chargeMaterialService.initGasForm(),
           name: 'Material #' + (this._chargeMaterial.length + 1),
-          heatRequired: loss.liquidChargeMaterial.heatRequired || 0.0
+          heatRequired: loss.liquidChargeMaterial.heatRequired || 0.0,
+          collapse: false
         };
         this.calculate(tmpLoss);
         this._chargeMaterial.push(tmpLoss);
@@ -176,7 +194,8 @@ export class ChargeMaterialComponent implements OnInit {
       gasForm: this.chargeMaterialService.initGasForm(),
       name: 'Material #' + (this._chargeMaterial.length + 1),
       heatRequired: 0.0,
-      modifiedHeatRequired: 0.0
+      modifiedHeatRequired: 0.0,
+      collapse: false
     });
 
   }
@@ -191,6 +210,10 @@ export class ChargeMaterialComponent implements OnInit {
       material.name = 'Material #' + index;
       index++;
     })
+  }
+  
+  collapseLoss(loss: any){
+    loss.collapse = !loss.collapse;
   }
 
   calculate(loss: any) {

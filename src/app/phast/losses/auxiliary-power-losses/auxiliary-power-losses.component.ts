@@ -33,7 +33,9 @@ export class AuxiliaryPowerLossesComponent implements OnInit {
   isLossesSetup: boolean;
   @Input()
   inSetup: boolean;
-  
+  @Input()
+  modExists: boolean;
+
   resultsUnit: string;
   _auxiliaryPowerLosses: Array<any>;
   firstChange: boolean = true;
@@ -69,7 +71,8 @@ export class AuxiliaryPowerLossesComponent implements OnInit {
         let tmpLoss = {
           form: this.auxiliaryPowerLossesService.getFormFromLoss(loss),
           name: 'Loss #' + (this._auxiliaryPowerLosses.length + 1),
-          powerUsed: loss.powerUsed || 0.0
+          powerUsed: loss.powerUsed || 0.0,
+          collapse: false
         };
         this.calculate(tmpLoss);
         this._auxiliaryPowerLosses.push(tmpLoss);
@@ -91,7 +94,8 @@ export class AuxiliaryPowerLossesComponent implements OnInit {
           this._auxiliaryPowerLosses.push({
             form: this.auxiliaryPowerLossesService.initForm(),
             name: 'Loss #' + (this._auxiliaryPowerLosses.length + 1),
-            heatLoss: 0.0
+            heatLoss: 0.0,
+            collapse: false
           })
         }
       })
@@ -101,10 +105,14 @@ export class AuxiliaryPowerLossesComponent implements OnInit {
           this._auxiliaryPowerLosses.push({
             form: this.auxiliaryPowerLossesService.initForm(),
             name: 'Loss #' + (this._auxiliaryPowerLosses.length + 1),
-            heatLoss: 0.0
+            heatLoss: 0.0,
+            collapse: false
           })
         }
       })
+    }
+    if(this.inSetup && this.modExists){
+      this.disableForms();
     }
   }
 
@@ -118,7 +126,11 @@ export class AuxiliaryPowerLossesComponent implements OnInit {
     }
     this.auxiliaryPowerLossesService.deleteLossIndex.next(null);
   }
-
+  disableForms(){
+    this._auxiliaryPowerLosses.forEach(loss => {
+      loss.form.disable();
+    })
+  }
   addLoss() {
     if (this.isLossesSetup) {
       this.auxiliaryPowerLossesService.addLoss(this.isBaseline);
@@ -129,7 +141,8 @@ export class AuxiliaryPowerLossesComponent implements OnInit {
     this._auxiliaryPowerLosses.push({
       form: this.auxiliaryPowerLossesService.initForm(),
       name: 'Loss #' + (this._auxiliaryPowerLosses.length + 1),
-      powerUsed: 0.0
+      powerUsed: 0.0,
+      collapse: false
     });
   }
 
@@ -166,6 +179,10 @@ export class AuxiliaryPowerLossesComponent implements OnInit {
     this.savedLoss.emit(true);
   }
 
+  collapseLoss(loss: any){
+    loss.collapse = !loss.collapse;
+  }
+  
   changeField(str: string) {
     this.fieldChange.emit(str);
   }

@@ -7,14 +7,11 @@
 	justify-content: center;
 	flex-direction: column;
 }
-	.landing h1, .landing h2 {
-		width: 70%;
-	}
 	.landing h1 {
 		text-align: center;
 		color: #333;
 		font-size: 32px;
-    	margin-top: 7%;
+    	margin-top: 25px;
 	}
 	.landing h2 {
 		margin: 0;
@@ -28,17 +25,18 @@
 		font-size: 22px;
 		text-align: center;
 		font-weight: normal;
+		border-bottom: solid 1px #ddd;
+		padding-bottom: 8px;
 	}
 	.landing p {
 		font-size: 16px;
 	}
 	.landing a {
 		display: block;
-		margin-top: 14px;
 	}
 
 .landing > ul {
-	margin: 60px 0 20px;
+	margin: 15px 0 20px;
 	padding: 0;
     background: #fff;
     -webkit-box-shadow: 0px 2px 5px -1px rgba(0,0,0,0.28);
@@ -66,10 +64,25 @@
 
 .landing .help {
     text-align: center;
-    margin-top: 60px;
-    padding-top: 60px;
     border-top: #ddd solid 1px;
 }
 .landing .nav-item span:hover {
 	cursor: pointer;
+}
+
+.fa-calculator{
+	color: gray;
+}
+
+.spacer-row{
+    height: 15px;
+    width: 100%;
+}
+
+.spacer-col{
+	border-bottom: #ddd solid 1px;;
+}
+
+.tutorial-video{
+	max-width: 350px;
 }

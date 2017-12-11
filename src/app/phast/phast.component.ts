@@ -60,6 +60,7 @@ export class PhastComponent implements OnInit {
 
   ngOnInit() {
     //this.phastService.test();
+    this.lossesService.initDone();
     let tmpAssessmentId;
     this.activatedRoute.params.subscribe(params => {
       tmpAssessmentId = params['id'];
@@ -113,6 +114,10 @@ export class PhastComponent implements OnInit {
     this.phastService.initTabs();
   }
 
+  checkSetupDone(){
+    this._phast.setupDone = this.lossesService.checkSetupDone((JSON.parse(JSON.stringify(this._phast))), this.settings);
+  }
+
 
   getSettings(update?: boolean) {
     //get assessment settings
@@ -124,7 +129,7 @@ export class PhastComponent implements OnInit {
             this.settings = this.settingsService.setEnergyResultUnitSetting(this.settings);
           }
           this.isAssessmentSettings = true;
-          this._phast.setupDone = this.lossesService.checkSetupDone(this._phast, this.settings);
+          this.checkSetupDone();
           this.init = false;
           if (update) {
             this.addToast('Settings Saved');
@@ -187,7 +192,7 @@ export class PhastComponent implements OnInit {
     this.saveClicked = !this.saveClicked;
   }
   saveDb() {
-    this._phast.setupDone = this.lossesService.checkSetupDone((JSON.parse(JSON.stringify(this._phast))), this.settings);
+    this.checkSetupDone();
     this.assessment.phast = (JSON.parse(JSON.stringify(this._phast)));
     this.lossesService.baseline.next(this._phast);
     this.saveDbToggle = 'saveDb' + Math.random();

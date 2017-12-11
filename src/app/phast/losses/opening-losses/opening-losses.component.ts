@@ -33,7 +33,9 @@ export class OpeningLossesComponent implements OnInit {
   isLossesSetup: boolean;
   @Input()
   inSetup: boolean;
-  
+  @Input()
+  modExists: boolean;
+
   _openingLosses: Array<any>;
   firstChange: boolean = true;
   resultsUnit: string;
@@ -70,7 +72,8 @@ export class OpeningLossesComponent implements OnInit {
         let tmpLoss = {
           form: this.openingLossesService.getFormFromLoss(loss),
           name: 'Loss #' + (this._openingLosses.length + 1),
-          totalOpeningLosses: loss.heatLoss || 0.0
+          totalOpeningLosses: loss.heatLoss || 0.0,
+          collapse: false
         };
         this.calculate(tmpLoss);
         this._openingLosses.push(tmpLoss);
@@ -93,7 +96,8 @@ export class OpeningLossesComponent implements OnInit {
           this._openingLosses.push({
             form: this.openingLossesService.initForm(),
             name: 'Loss #' + (this._openingLosses.length + 1),
-            heatLoss: 0.0
+            heatLoss: 0.0,
+            collapse: false
           })
         }
       })
@@ -103,10 +107,15 @@ export class OpeningLossesComponent implements OnInit {
           this._openingLosses.push({
             form: this.openingLossesService.initForm(),
             name: 'Loss #' + (this._openingLosses.length + 1),
-            heatLoss: 0.0
+            heatLoss: 0.0,
+            collapse: false
           })
         }
       })
+    }
+
+    if(this.inSetup && this.modExists){
+      this.disableForms();
     }
   }
 
@@ -131,10 +140,20 @@ export class OpeningLossesComponent implements OnInit {
     this._openingLosses.push({
       form: this.openingLossesService.initForm(),
       name: 'Opening Loss #' + (this._openingLosses.length + 1),
-      totalOpeningLosses: 0.0
+      totalOpeningLosses: 0.0,
+      collapse: false
     });
   }
+  
+  collapseLoss(loss: any){
+    loss.collapse = !loss.collapse;
+  }
 
+  disableForms(){
+    this._openingLosses.forEach(loss => {
+      loss.form.disable();
+    })
+  }
   removeLoss(lossIndex: number) {
     this.openingLossesService.setDelete(lossIndex);
   }

@@ -254,6 +254,7 @@ export class GasChargeMaterialFormComponent implements OnInit {
   }
 
   hideMaterialModal(event?: any) {
+    console.log('hide')
     if (event) {
       this.materialTypes = this.suiteDbService.selectGasLoadChargeMaterials();
       let newMaterial = this.materialTypes.filter(material => { return material.substance == event.substance })

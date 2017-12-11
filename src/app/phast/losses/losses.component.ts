@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, SimpleChanges, Output, EventEmitter } from '@angular/core';
 import { PHAST, Losses, Modification } from '../../shared/models/phast/phast';
 import { Settings } from '../../shared/models/settings';
+import { ToastyService, ToastyConfig, ToastOptions, ToastData } from 'ng2-toasty';
 
 import * as _ from 'lodash';
 import { ModalDirective } from 'ngx-bootstrap';
@@ -44,7 +45,12 @@ export class LossesComponent implements OnInit {
   isModalOpen: boolean = false;
   showAddBtn: boolean = true;
   toggleCalculate: boolean = false;
-  constructor(private lossesService: LossesService) { }
+  modificationExists: boolean = false;
+  constructor(private lossesService: LossesService, private toastyService: ToastyService,
+    private toastyConfig: ToastyConfig, ) { 
+      this.toastyConfig.theme = 'bootstrap';
+      this.toastyConfig.position = 'bottom-right';
+    }
 
   ngOnInit() {
     this._modifications = new Array<Modification>();
@@ -56,6 +62,7 @@ export class LossesComponent implements OnInit {
     }
     if (this.phast.modifications) {
       this._modifications = (JSON.parse(JSON.stringify(this.phast.modifications)));
+      this.modificationExists = true;
     }
 
     this.lossesService.lossesTab.subscribe(val => {
@@ -78,10 +85,26 @@ export class LossesComponent implements OnInit {
     this.lossesService.modalOpen.subscribe(val => {
       this.isModalOpen = val;
     })
+
+    if (!this.inSetup) {
+      this.baselineSelected = false;
+      this.modificationSelected = true;
+    }
+
+    if (this.modificationExists && this.inSetup) {
+      let toastOptions: ToastOptions = {
+        title: 'Baseline is locked since there are modifications in use. If you wish to change your baseline data use the Assessment tab.',
+        showClose: true,
+        theme: 'default',
+        timeout: 10000000
+      }
+      this.toastyService.warning(toastOptions);
+    }
   }
 
   ngOnDestroy() {
     // this.lossesService.lossesTab.next('charge-material');
+    this.toastyService.clearAll();
   }
 
   changeField($event) {
@@ -94,6 +117,13 @@ export class LossesComponent implements OnInit {
       this.showEditModification = false;
       this.editModification = null;
       this.toggleCalculate = !this.toggleCalculate;
+      if (this._modifications.length != 0) {
+        this.modificationExists = true;
+      } else {
+        this.modificationExists = false;
+      }
+    } else {
+      this.modificationExists = false;
     }
   }
 
