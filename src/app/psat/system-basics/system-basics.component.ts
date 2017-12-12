@@ -29,7 +29,10 @@ export class SystemBasicsComponent implements OnInit {
   updateAssessment = new EventEmitter<boolean>();
   @Output('nameUpdated')
   nameUpdated = new EventEmitter<boolean>();
-
+  @Output('openModal')
+  openModal = new EventEmitter<boolean>();
+  @Output('closeModal')
+  closeModal = new EventEmitter<boolean>();
   unitChange: boolean = false;
 
   settingsForm: any;
@@ -137,10 +140,12 @@ export class SystemBasicsComponent implements OnInit {
   }
 
   showSettingsModal() {
+    this.openModal.emit(true);
     this.settingsModal.show();
   }
 
   hideSettingsModal() {
+    this.closeModal.emit(true);
     this.settingsModal.hide();
   }
 
