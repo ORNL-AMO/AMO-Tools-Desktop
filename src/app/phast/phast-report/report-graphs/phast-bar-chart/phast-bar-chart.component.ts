@@ -209,8 +209,8 @@ export class PhastBarChartComponent implements OnInit {
 
   getColors() {
     this.chartColors = [
-      graphColors[0],
-      graphColors[1],
+      '#1E7640',
+      '#2ABDDA',
     ]
   }
 }
