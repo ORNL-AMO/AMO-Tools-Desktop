@@ -12,8 +12,9 @@ export class PercentLoadEstimationComponent implements OnInit {
   @Input()
   settings: Settings;
 
+  loadEstimationResult: number;
   percentLoadEstimationForm: any;
-
+  tabSelect: string = 'results';  
   toggleCalculate = false;
 
   constructor(private formBuilder: FormBuilder, private indexedDbService: IndexedDbService) { }
@@ -32,20 +33,19 @@ export class PercentLoadEstimationComponent implements OnInit {
       this.indexedDbService.getDirectorySettings(1).then(
         results => {
           if (results.length !== 0) {
-            // if(results[0].powerMeasurement != 'hp'){
-            //   this.performanceForm.patchValue({
-            //     horsePower: '150'
-            //   })
-            // }
             this.settings = results[0];
           }
         }
       );
     }
   }
+  setTab(str: string) {
+    this.tabSelect = str;
+  }
 
   calculate() {
-    this.toggleCalculate = !this.toggleCalculate;
+    this.loadEstimationResult = ((this.percentLoadEstimationForm.value.synchronousSpeed - this.percentLoadEstimationForm.value.measuredSpeed) 
+                              / (this.percentLoadEstimationForm.value.synchronousSpeed - this.percentLoadEstimationForm.value.nameplateFullLoadSpeed)) * 100;    
   }
 
 }

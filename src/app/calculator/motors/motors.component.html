@@ -37,6 +37,13 @@
 </div>
 
 
+<div class="stand-alone-calc" *ngIf="getSelectedTool() == 'percent-load-estimation'">
+  <app-percent-load-estimation></app-percent-load-estimation>
+</div>
+
+
+<!-- Original Version -->
+<!-- 
 <div class="calculator" *ngIf="getSelectedTool() == 'percent-load-estimation'">
   <div class="row">
     <div class="col-lg-10  mx-auto">
@@ -46,4 +53,4 @@
   <div class="calculator-container">
     <app-percent-load-estimation></app-percent-load-estimation>
   </div>
-</div>
+</div> -->
