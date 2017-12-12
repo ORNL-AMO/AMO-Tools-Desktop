@@ -88,7 +88,7 @@
     <!-- Modification Header -->
     <!--<div class="header" *ngIf="!editModification">-->
     <div class="header">
-      <h3 *ngIf="_modifications[modificationIndex] && !isDropdownOpen">{{_modifications[modificationIndex].phast.name}}</h3>
+      <h3 *ngIf="_modifications[modificationIndex]">{{_modifications[modificationIndex].phast.name}}</h3>
       <h5 class="pull-right add-loss">
         <a class="small click-link" [ngClass]="{'disabled-link': !modificationSelected}">
           <span *ngIf="!isDropdownOpen" (click)="toggleDropdown()">Change / Add</span>
