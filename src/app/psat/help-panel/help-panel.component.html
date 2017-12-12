@@ -4,7 +4,7 @@
             <li class="panel-tab-item tab-2" [ngClass]="{'active': tabSelect == 'help'}">
                 <a (click)="setTab('help')">Help</a>
             </li><!--
-                  --><li class="panel-tab-item tab-2" [ngClass]="{'active': tabSelect == 'notes'}">
+            --><li class="panel-tab-item tab-2" [ngClass]="{'active': tabSelect == 'notes'}">
                 <a (click)="setTab('notes')">Notes</a>
             </li>
         </ul>
@@ -24,6 +24,10 @@
         <app-modify-conditions-help *ngIf="currentTab == 'modify-conditions'"></app-modify-conditions-help>
     </div>
     <div *ngIf="tabSelect == 'notes'">
+        <div *ngIf="modification" class="col-12 no-padding-left"></div>
         <app-modify-conditions-notes [(notes)]="modification.notes" [currentTab]="currentTab"></app-modify-conditions-notes>
+        <div class="col-11" *ngIf="!modification" style="padding-top:10px;">
+            You must add a modification to take notes on it.
+        </div>
     </div>
 </div>

@@ -19,12 +19,14 @@
     <a class="delete-modification" *ngIf="!deleteConfirm" (click)="showDeleteConfirm()">Delete Modification</a>
     <div *ngIf="deleteConfirm">
       <div class="row">
-        <div class="col-12">
+        <div class="col-12" style="text-align: center">
           Are you sure you want to delete?
         </div>
-        <div class="col-12">
-          <a class="delete-modification" (click)="deleteModification()">Delete</a> /
-          <a class="click-link" (click)="cancelDelete()">Cancel</a>
+        <div class="col-6">
+          <a class="delete-modification pull-right" (click)="deleteModification()">Delete</a>
+        </div>
+        <div class="col-6">
+          <a class="click-link pull-left" (click)="cancelDelete()">Cancel</a>
         </div>
       </div>
     </div>
