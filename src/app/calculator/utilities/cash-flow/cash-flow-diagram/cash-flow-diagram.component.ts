@@ -10,13 +10,77 @@ import * as d3 from 'd3';
 export class CashFlowDiagramComponent implements OnInit {
   @Input()
   cashFlowResults: CashFlowResults;
-  // x: any;
-  // y: any;
+
+  svg: any;
+  xAxis: any;
+  yAxis: any;
+  x: any;
+  y: any;
+  width: any;
+  height: any;
+  margin: any;
+
+  firstChange: boolean = true;
+
+  canvasWidth: number;
+  canvasHeight: number;
+  doc: any;
+  window: any;
+
+  tmpData: Array<number> = [
+    4,
+    8,
+    15,
+    16,
+    23,
+    42
+  ];
+
+
   constructor() {
-     }
+  }
 
   ngOnInit() {
   }
+
+
+  resizeGraph() {
+    let curveGraph = this.doc.getElementById('cashFlowDiagram');
+    if (curveGraph) {
+      this.canvasWidth = curveGraph.clientWidth;
+      this.canvasHeight = this.canvasWidth * (3 / 5);
+
+      if (this.canvasWidth < 400) {
+        this.margin = { top: 10, right: 35, bottom: 50, left: 50 };
+      } else {
+        this.margin = { top: 20, right: 45, bottom: 75, left: 95 };
+      }
+      this.width = this.canvasWidth - this.margin.left - this.margin.right;
+      this.height = this.canvasHeight - this.margin.top - this.margin.bottom;
+
+      // if (this.checkForm()) {
+      //   this.makeGraph();
+      // }
+    }
+  }
+
+
+
+  makeGraph() {
+
+    d3.select('app-cash-flow-diagram').selectAll('svg').remove();
+
+    this.svg = d3.select('app-cash-flow-diagram').append('svg')
+      .attr("width", this.width + this.margin.left + this.margin.right)
+      .attr("height", this.height + this.margin.top + this.margin.bottom)
+      .append("g")
+      .attr("transform", "translate(" + this.margin.left + "," + this.margin.top + ")");
+  }
+
+
+
+
+
 
 }
 

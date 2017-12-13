@@ -20,6 +20,7 @@ export class CashFlowComponent implements OnInit {
    constructor() { }
 
   ngOnInit() {
+    console.log("ngOnInit Cash-flow");
     this.cashFlowForm = {
       lifeYears: 10,
       energySavings: 1000,
