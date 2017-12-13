@@ -137,299 +137,137 @@ export class SankeyService {
     // one of three
     // Flue Gas
     if (results.totalFlueGas) {
-
-      //debug
-      console.log("---- totalFlueGas ----");
       spacing = scale(interIndex);
-      console.log("spacing = " + spacing);
       tmpNode = this.createNode("Flue Gas Losses", results.totalFlueGas, 0, 0, 100 + (250 * interIndex), 0, false, false, false, true, unit, false)
       results.nodes.push(tmpNode);
       tmpNode = this.createNode("inter" + interIndex, 0, 0, 0, spacing, 0, false, false, true, false, unit, false)
       results.nodes.push(tmpNode);
       interIndex++;
-
-      //real version
-      // tmpNode = this.createNode("Flue Gas Losses", results.totalFlueGas, 0, 0, 100 + (250 * interIndex), 0, false, false, false, true, unit, false)
-      // results.nodes.push(tmpNode);
-      // tmpNode = this.createNode("inter" + interIndex, 0, 0, 0, 100 + (250 * interIndex), 0, false, false, true, false, unit, false)
-      // results.nodes.push(tmpNode);
-      // interIndex++;
     }
     // Exhaust Gas EAF
     if (results.totalExhaustGas) {
-      
-      //debug
-      console.log("---- totalExhaustGas ----");
       spacing = scale(interIndex);
-      console.log("spacing = " + spacing);
       tmpNode = this.createNode("Exhaust Gas Losses", results.totalExhaustGas, 0, 0, 100 + (250 * interIndex), 0, false, false, false, true, unit, false)
       results.nodes.push(tmpNode);
       tmpNode = this.createNode("inter" + interIndex, 0, 0, 0, spacing, 0, false, false, true, false, unit, false)
       results.nodes.push(tmpNode);
       interIndex++;
-
-      //real version
-      // tmpNode = this.createNode("Exhaust Gas Losses", results.totalExhaustGas, 0, 0, 100 + (250 * interIndex), 0, false, false, false, true, unit, false)
-      // results.nodes.push(tmpNode);
-      // tmpNode = this.createNode("inter" + interIndex, 0, 0, 0, 100 + (250 * interIndex), 0, false, false, true, false, unit, false)
-      // results.nodes.push(tmpNode);
-      // interIndex++;
     }
 
     if (results.totalSystemLosses) {
-
-      //debug
-      console.log("---- totalSystemLoss ----");
       spacing = scale(interIndex);
-      console.log("spacing = " + spacing);
       tmpNode = this.createNode("System Losses", results.totalSystemLosses, 0, 0, spacing, 0, false, false, false, true, unit, false)
       results.nodes.push(tmpNode);
       tmpNode = this.createNode("inter" + interIndex, 0, 0, 0, spacing, 0, false, false, true, false, unit, false)
       results.nodes.push(tmpNode);
       interIndex++;
-
-      //real version
-      // tmpNode = this.createNode("System Losses", results.totalSystemLosses, 0, 0, 100 + (spacing * interIndex), 0, false, false, false, true, unit, false)
-      // results.nodes.push(tmpNode);
-      // tmpNode = this.createNode("inter" + interIndex, 0, 0, 0, 100 + (spacing * interIndex), 0, false, false, true, false, unit, false)
-      // results.nodes.push(tmpNode);
-      // interIndex++;
     }
     // end flue gas arrow
 
     // Atmoshpere
     if (results.totalAtmosphereLoss) {
-      
-      //debug
-      console.log("---- totalAtmosphereLoss ----");
       spacing = scale(interIndex);
-      console.log("spacing = " + spacing);
       tmpNode = this.createNode("Atmosphere Losses", results.totalAtmosphereLoss, 0, 0, spacing, 0, false, false, false, top, unit, false);
       results.nodes.push(tmpNode);
       tmpNode = this.createNode("inter" + interIndex, 0, 0, 0, spacing, 0, false, false, true, !top, unit, false);
       results.nodes.push(tmpNode);
       interIndex++;
       top = !top;
-      
-      //real version
-      // tmpNode = this.createNode("Atmosphere Losses", results.totalAtmosphereLoss, 0, 0, 100 + (spacing * interIndex), 0, false, false, false, top, unit, false)
-      // results.nodes.push(tmpNode);
-      // tmpNode = this.createNode("inter" + interIndex, 0, 0, 0, 100 + (spacing * interIndex), 0, false, false, true, !top, unit, false);
-      // results.nodes.push(tmpNode);
-      // interIndex++;
-      // top = !top;
     }
     // Other
     if (results.totalOtherLoss) {
-      
-      //debug
-      console.log("---- totalOtherLosses ----");
       spacing = scale(interIndex);
-      console.log("spacing = " + spacing);
       tmpNode = this.createNode("Other Losses", results.totalOtherLoss, 0, 0, spacing, 0, false, false, false, top, unit, false)
       results.nodes.push(tmpNode);
       tmpNode = this.createNode("inter" + interIndex, 0, 0, 0, spacing, 0, false, false, true, !top, unit, false);
       results.nodes.push(tmpNode);
       interIndex++;
       top = !top;
-
-      //real version
-      // tmpNode = this.createNode("Other Losses", results.totalOtherLoss, 0, 0, 100 + (spacing * interIndex), 0, false, false, false, top, unit, false)
-      // results.nodes.push(tmpNode);
-      // tmpNode = this.createNode("inter" + interIndex, 0, 0, 0, 100 + (spacing * interIndex), 0, false, false, true, !top, unit, false);
-      // results.nodes.push(tmpNode);
-      // interIndex++;
-      // top = !top;
     }
     // Cooling
     if (results.totalCoolingLoss) {
-      
-      //debug
-      console.log("---- totalCoolingLoss ----");
       spacing = scale(interIndex);
-      console.log("spacing = " + spacing);
       tmpNode = this.createNode("Water Cooling Losses", results.totalCoolingLoss, 0, 0, spacing, 0, false, false, false, top, unit, false)
       results.nodes.push(tmpNode);
       tmpNode = this.createNode("inter" + interIndex, 0, 0, 0, spacing, 0, false, false, true, !top, unit, false);
       results.nodes.push(tmpNode);
       interIndex++;
       top = !top;
-
-      //real version
-      // tmpNode = this.createNode("Water Cooling Losses", results.totalCoolingLoss, 0, 0, 100 + (spacing * interIndex), 0, false, false, false, top, unit, false)
-      // results.nodes.push(tmpNode);
-      // tmpNode = this.createNode("inter" + interIndex, 0, 0, 0, 100 + (spacing * interIndex), 0, false, false, true, !top, unit, false);
-      // results.nodes.push(tmpNode);
-      // interIndex++;
-      // top = !top;
     }
     // Wall
     if (results.totalWallLoss) {
-
-      //debug
-      console.log("---- totalWallLoss ----");
       spacing = scale(interIndex);
-      console.log("spacing = " + spacing);
       tmpNode = this.createNode("Wall Losses", results.totalWallLoss, 0, 0, spacing, 0, false, false, false, top, unit, false)
       results.nodes.push(tmpNode);
       tmpNode = this.createNode("inter" + interIndex, 0, 0, 0, spacing, 0, false, false, true, !top, unit, false);
       results.nodes.push(tmpNode);
       interIndex++;
       top = !top;
-
-      //real version
-      // tmpNode = this.createNode("Wall Losses", results.totalWallLoss, 0, 0, 100 + (spacing * interIndex), 0, false, false, false, top, unit, false)
-      // results.nodes.push(tmpNode);
-      // tmpNode = this.createNode("inter" + interIndex, 0, 0, 0, 100 + (spacing * interIndex), 0, false, false, true, !top, unit, false);
-      // results.nodes.push(tmpNode);
-      // interIndex++;
-      // top = !top;
     }
     // Opening
     if (results.totalOpeningLoss) {
-      
-      //debug
-      console.log("---- totalOpeningLoss ----");
       spacing = scale(interIndex);
-      console.log("spacing = " + spacing);
       tmpNode = this.createNode("Opening Losses", results.totalOpeningLoss, 0, 0, spacing, 0, false, false, false, top, unit, false)
       results.nodes.push(tmpNode);
       tmpNode = this.createNode("inter" + interIndex, 0, 0, 0, spacing, 0, false, false, true, !top, unit, false);
       results.nodes.push(tmpNode);
       interIndex++;
       top = !top;
-
-      //real version
-      // tmpNode = this.createNode("Opening Losses", results.totalOpeningLoss, 0, 0, 100 + (spacing * interIndex), 0, false, false, false, top, unit, false)
-      // results.nodes.push(tmpNode);
-      // tmpNode = this.createNode("inter" + interIndex, 0, 0, 0, 100 + (spacing * interIndex), 0, false, false, true, !top, unit, false);
-      // results.nodes.push(tmpNode);
-      // interIndex++;
-      // top = !top;
     }
     // Fixture
     if (results.totalFixtureLoss) {
-      
-      //debug
-      console.log("---- totalFixtureLoss ----");
       spacing = scale(interIndex);
-      console.log("spacing = " + spacing);
       tmpNode = this.createNode("Fixture/Conveyor Losses", results.totalFixtureLoss, 0, 0, spacing, 0, false, false, false, top, unit, false)
       results.nodes.push(tmpNode);
       tmpNode = this.createNode("inter" + interIndex, 0, 0, 0, spacing, 0, false, false, true, !top, unit, false);
       results.nodes.push(tmpNode);
       interIndex++;
       top = !top;
-
-      //real version
-      // tmpNode = this.createNode("Fixture/Conveyor Losses", results.totalFixtureLoss, 0, 0, 100 + (spacing * interIndex), 0, false, false, false, top, unit, false)
-      // results.nodes.push(tmpNode);
-      // tmpNode = this.createNode("inter" + interIndex, 0, 0, 0, 100 + (spacing * interIndex), 0, false, false, true, !top, unit, false);
-      // results.nodes.push(tmpNode);
-      // interIndex++;
-      // top = !top;
     }
     // Leakage
     if (results.totalLeakageLoss) {
-      
-      //debug
-      console.log("---- totalLeakageLoss ----");
       spacing = scale(interIndex);
-      console.log("spacing = " + spacing);
       tmpNode = this.createNode("Leakage Losses", results.totalLeakageLoss, 0, 0, spacing, 0, false, false, false, top, unit, false)
       results.nodes.push(tmpNode);
       tmpNode = this.createNode("inter" + interIndex, 0, 0, 0, spacing, 0, false, false, true, !top, unit, false);
       results.nodes.push(tmpNode);
       interIndex++;
       top = !top;
-
-      //real version
-      // tmpNode = this.createNode("Leakage Losses", results.totalLeakageLoss, 0, 0, 100 + (spacing * interIndex), 0, false, false, false, top, unit, false)
-      // results.nodes.push(tmpNode);
-      // tmpNode = this.createNode("inter" + interIndex, 0, 0, 0, 100 + (spacing * interIndex), 0, false, false, true, !top, unit, false);
-      // results.nodes.push(tmpNode);
-      // interIndex++;
-      // top = !top;
     }
     // External Surface
     if (results.totalExtSurfaceLoss) {
-      
-      //debug
-      console.log("---- totalExtSurfaceLoss ----");
       spacing = scale(interIndex);
-      console.log("spacing = " + spacing);
       tmpNode = this.createNode("External Surface \n  Losses", results.totalExtSurfaceLoss, 0, 0, spacing, 0, false, false, false, top, unit, true)
       results.nodes.push(tmpNode);
       tmpNode = this.createNode("inter" + interIndex, 0, 0, 0, spacing, 0, false, false, true, !top, unit, false);
       results.nodes.push(tmpNode);
       interIndex++;
       top = !top;
-
-      //real version
-      // tmpNode = this.createNode("External Surface \n  Losses", results.totalExtSurfaceLoss, 0, 0, 100 + (spacing * interIndex), 0, false, false, false, top, unit, true)
-      // results.nodes.push(tmpNode);
-      // tmpNode = this.createNode("inter" + interIndex, 0, 0, 0, 100 + (spacing * interIndex), 0, false, false, true, !top, unit, false);
-      // results.nodes.push(tmpNode);
-      // interIndex++;
-      // top = !top;
     }
     // auxiliary power losses
     if (results.totalAuxPower) {
-
-      //debug
-      console.log("---- totalAuxPower ----");
       spacing = scale(interIndex);
-      console.log("spacing = " + spacing);
       tmpNode = this.createNode("Auxiliary Power Losses", results.totalAuxPower, 0, 0, spacing, 0, false, false, false, top, unit, false)
       results.nodes.push(tmpNode);
       tmpNode = this.createNode("inter" + interIndex, 0, 0, 0, spacing, 0, false, false, true, !top, unit, false);
       results.nodes.push(tmpNode);
       interIndex++;
       top = !top;
-
-      //real version
-      // tmpNode = this.createNode("Auxiliary Power Losses", results.totalAuxPower, 0, 0, 100 + (spacing * interIndex), 0, false, false, false, top, unit, false)
-      // results.nodes.push(tmpNode);
-      // tmpNode = this.createNode("inter" + interIndex, 0, 0, 0, 100 + (spacing * interIndex), 0, false, false, true, !top, unit, false);
-      // results.nodes.push(tmpNode);
-      // interIndex++;
-      // top = !top;
     }
     // slag
     if (results.totalSlag) {
-      
-      //debug
-      console.log("---- totalSlag ----");
       spacing = scale(interIndex);
-      console.log("spacing = " + spacing);
       tmpNode = this.createNode("Slag Losses", results.totalSlag, 0, 0, spacing, 0, false, false, false, top, unit, false)
       results.nodes.push(tmpNode);
       tmpNode = this.createNode("inter" + interIndex, 0, 0, 0, spacing, 0, false, false, true, !top, unit, false);
       results.nodes.push(tmpNode);
       interIndex++;
       top = !top;
-
-      //real version
-      // tmpNode = this.createNode("Slag Losses", results.totalSlag, 0, 0, 100 + (spacing * interIndex), 0, false, false, false, top, unit, false)
-      // results.nodes.push(tmpNode);
-      // tmpNode = this.createNode("inter" + interIndex, 0, 0, 0, 100 + (spacing * interIndex), 0, false, false, true, !top, unit, false);
-      // results.nodes.push(tmpNode);
-      // interIndex++;
-      // top = !top;
     }
-
-    //debug
-    console.log("---- Useful Output");
     spacing = scale(interIndex);
-    console.log("spacing = " + spacing);
     tmpNode = this.createNode("Useful Output", results.totalChargeMaterialLoss, 0, 0, spacing, 0, false, true, false, false, unit, false)
     results.nodes.push(tmpNode);
     return results.nodes;
-
-    //real version
-    // tmpNode = this.createNode("Useful Output", results.totalChargeMaterialLoss, 0, 0, 2400, 0, false, true, false, false, unit, false)
-    // results.nodes.push(tmpNode);
-    // return results.nodes;
   }
 
 
