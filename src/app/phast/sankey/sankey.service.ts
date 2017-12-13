@@ -4,6 +4,9 @@ import { Losses, ShowResultsCategories, PhastResults } from '../../shared/models
 import { Settings } from '../../shared/models/settings';
 import { PHAST } from '../../shared/models/phast/phast';
 import { PhastResultsService } from '../phast-results.service';
+import { min } from 'rxjs/operators/min';
+import * as d3 from 'd3';
+
 @Injectable()
 export class SankeyService {
 
@@ -76,6 +79,8 @@ export class SankeyService {
     var arrowCount = 0;           // store the number of loss sources
     var ventOffsetX = 0;          // store x position offset by vent arrow
     var spacing = 0;              // space between each arrow, calc based on number of arrows
+    var minOutputSize = 100;
+    var adjustment: number;
 
     if (results.totalAtmosphereLoss) {
       arrowCount++;
@@ -115,14 +120,36 @@ export class SankeyService {
       unit = 'kW';
     }
 
+
+
+
     let tmpNode = this.createNode("Input", results.totalInput, this.baseSize, 300, 200, 0, true, false, false, false, unit, false)
     results.nodes.push(tmpNode);
+
+    //debug
+    adjustment = tmpNode.x;
     tmpNode = this.createNode("inter1", 0, 0, 0, 350, 0, false, false, true, true, unit, false)
+    // adjustment = tmpNode.x;
+    //real version
+    // tmpNode = this.createNode("inter1", 0, 0, 0, 350, 0, false, false, true, true, unit, false)
     results.nodes.push(tmpNode);
     let interIndex = 2;
 
     ventOffsetX = (250 * interIndex);
-    spacing = (chargeMaterialX - ventOffsetX) / (arrowCount + 1);
+    spacing = (chargeMaterialX - ventOffsetX - minOutputSize - 350) / (arrowCount + 1);
+
+    //debug 
+    console.log("chargeMaterialX - ventOffsetX - minOutputSize = " + (chargeMaterialX - ventOffsetX - minOutputSize));
+    console.log("arrowCount + 1 = " + (arrowCount + 1));
+    console.log("spacing = " + spacing);
+
+    var scale = d3.scaleLinear()
+                  .domain([2, arrowCount + interIndex + 1])
+                  .range([350, chargeMaterialX]);
+    console.log("RANGE: adjustment = " + adjustment + ", chargeMaterialX = " + chargeMaterialX);
+
+    // scale.domain([2, arrowCount]);
+    // scale.range([adjustment, chargeMaterialX])
 
     let top: boolean = false;
     // FLUE GAS ARROW
@@ -131,7 +158,15 @@ export class SankeyService {
     if (results.totalFlueGas) {
       tmpNode = this.createNode("Flue Gas Losses", results.totalFlueGas, 0, 0, 100 + (250 * interIndex), 0, false, false, false, true, unit, false)
       results.nodes.push(tmpNode);
-      tmpNode = this.createNode("inter" + interIndex, 0, 0, 0, 100 + (250 * interIndex), 0, false, false, true, false, unit, false)
+
+      //debug
+      spacing = scale(interIndex);
+      console.log("flueGas spacing = " + spacing);
+
+      tmpNode = this.createNode("inter" + interIndex, 0, 0, 0, spacing, 0, false, false, true, false, unit, false)
+
+      //real version
+      // tmpNode = this.createNode("inter" + interIndex, 0, 0, 0, 100 + (250 * interIndex), 0, false, false, true, false, unit, false)
       results.nodes.push(tmpNode);
       interIndex++;
     }
@@ -155,12 +190,26 @@ export class SankeyService {
 
     // Atmoshpere
     if (results.totalAtmosphereLoss) {
-      tmpNode = this.createNode("Atmosphere Losses", results.totalAtmosphereLoss, 0, 0, 100 + (spacing * interIndex), 0, false, false, false, top, unit, false)
+      console.log("totalAtmosphereLoss interIndex = " + interIndex);
+
+      spacing = scale(interIndex);
+      console.log("totalAtmosphereLoss. spacing = " + spacing);
+
+      //debug
+      tmpNode = this.createNode("Atmosphere Losses", results.totalAtmosphereLoss, 0, 0, spacing, 0, false, false, false, top, unit, false)
       results.nodes.push(tmpNode);
-      tmpNode = this.createNode("inter" + interIndex, 0, 0, 0, 100 + (spacing * interIndex), 0, false, false, true, !top, unit, false);
+      tmpNode = this.createNode("inter" + interIndex, 0, 0, 0, spacing, 0, false, false, true, !top, unit, false);
       results.nodes.push(tmpNode);
       interIndex++;
       top = !top;
+
+      //real version
+      // tmpNode = this.createNode("Atmosphere Losses", results.totalAtmosphereLoss, 0, 0, 100 + (spacing * interIndex), 0, false, false, false, top, unit, false)
+      // results.nodes.push(tmpNode);
+      // tmpNode = this.createNode("inter" + interIndex, 0, 0, 0, 100 + (spacing * interIndex), 0, false, false, true, !top, unit, false);
+      // results.nodes.push(tmpNode);
+      // interIndex++;
+      // top = !top;
     }
     // Other
     if (results.totalOtherLoss) {
@@ -182,12 +231,27 @@ export class SankeyService {
     }
     // Wall
     if (results.totalWallLoss) {
-      tmpNode = this.createNode("Wall Losses", results.totalWallLoss, 0, 0, 100 + (spacing * interIndex), 0, false, false, false, top, unit, false)
+
+      //debug
+      console.log("interIndex = " + interIndex);
+
+      spacing = scale(interIndex);
+      console.log("totalWallLoss. spacing = " + spacing);
+
+      tmpNode = this.createNode("Wall Losses", results.totalWallLoss, 0, 0, spacing, 0, false, false, false, top, unit, false)
       results.nodes.push(tmpNode);
-      tmpNode = this.createNode("inter" + interIndex, 0, 0, 0, 100 + (spacing * interIndex), 0, false, false, true, !top, unit, false);
+      tmpNode = this.createNode("inter" + interIndex, 0, 0, 0, spacing, 0, false, false, true, !top, unit, false);
       results.nodes.push(tmpNode);
       interIndex++;
       top = !top;
+
+      //real version
+      // tmpNode = this.createNode("Wall Losses", results.totalWallLoss, 0, 0, 100 + (spacing * interIndex), 0, false, false, false, top, unit, false)
+      // results.nodes.push(tmpNode);
+      // tmpNode = this.createNode("inter" + interIndex, 0, 0, 0, 100 + (spacing * interIndex), 0, false, false, true, !top, unit, false);
+      // results.nodes.push(tmpNode);
+      // interIndex++;
+      // top = !top;
     }
     // Opening
     if (results.totalOpeningLoss) {
@@ -243,9 +307,19 @@ export class SankeyService {
       interIndex++;
       top = !top;
     }
-    tmpNode = this.createNode("Useful Output", results.totalChargeMaterialLoss, 0, 0, 2400, 0, false, true, false, false, unit, false)
+
+    //debug
+    console.log("output interIndex = " + interIndex);
+    spacing = scale(interIndex);
+    console.log("spacing = " + spacing);
+    tmpNode = this.createNode("Useful Output", results.totalChargeMaterialLoss, 0, 0, spacing, 0, false, true, false, false, unit, false)
     results.nodes.push(tmpNode);
     return results.nodes;
+
+    //real version
+    // tmpNode = this.createNode("Useful Output", results.totalChargeMaterialLoss, 0, 0, 2400, 0, false, true, false, false, unit, false)
+    // results.nodes.push(tmpNode);
+    // return results.nodes;
   }
 
 
