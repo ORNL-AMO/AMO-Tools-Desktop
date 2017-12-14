@@ -46,6 +46,7 @@ import { ExploreOpportunitiesHelpComponent } from './explore-opportunities/explo
 
 import { ExploreOpportunitiesSankeyComponent } from './explore-opportunities/explore-opportunities-sankey/explore-opportunities-sankey.component';
 import { PsatDiagramComponent } from './psat-diagram/psat-diagram.component';
+import { PsatSankeyComponent } from './psat-sankey/psat-sankey.component';
 
 @NgModule({
   declarations: [
@@ -67,7 +68,8 @@ import { PsatDiagramComponent } from './psat-diagram/psat-diagram.component';
     ExploreOpportunitiesResultsComponent,
     ExploreOpportunitiesHelpComponent,
     ExploreOpportunitiesSankeyComponent,
-    PsatDiagramComponent
+    PsatDiagramComponent,
+    PsatSankeyComponent
   ],
   exports: [
     PsatReportComponent

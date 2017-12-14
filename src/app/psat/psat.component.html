@@ -44,7 +44,7 @@
   </div>
   <!--End system-setup-->
   <!--tab (diagram and assessment)-->
-  <div class="hide-print" id="psatTabs" *ngIf="mainTab != 'report' && mainTab != 'system-setup' && mainTab != 'diagram'">
+  <div class="hide-print" id="psatTabs" *ngIf="mainTab == 'assessment'">
     <app-psat-tabs></app-psat-tabs>
   </div>
   <!--end tabs-->
@@ -66,6 +66,10 @@
   <div class="tab-content" *ngIf="mainTab =='diagram'">
     <app-psat-diagram [psat]="_psat" [settings]="settings"></app-psat-diagram>
   </div>
+  
+  <div class="tab-content" *ngIf="mainTab =='sankey'">
+      <app-psat-sankey [psat]="_psat" [settings]="settings"></app-psat-sankey>
+    </div>
   <!--end diagram-->
   <!--report-->
   <div class="row justify-content-center report-container" *ngIf="mainTab == 'report'">

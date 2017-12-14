@@ -24,6 +24,7 @@ export class PhastTabsComponent implements OnInit {
       value: 'energy-costs'
     }
   ]
+
   constructor(private phastService: PhastService) { }
 
   ngOnInit() {

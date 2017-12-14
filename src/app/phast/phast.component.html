@@ -17,7 +17,8 @@
       <div class="col-6 panel-column modification" [ngClass]="{'modal-open': isModalOpen}">
         <!--Step: 1 System Basics (Settings)-->
         <app-system-basics *ngIf="specTab == 'system-basics'" [phast]="_phast" [settings]="settings" [saveClicked]="saveClicked"
-          [assessment]="assessment" [isAssessmentSettings]="isAssessmentSettings" (updateSettings)="getSettings($event)" (save)="saveDb()" (openModal)="openModal($event)"></app-system-basics>
+          [assessment]="assessment" [isAssessmentSettings]="isAssessmentSettings" (updateSettings)="getSettings($event)" (save)="saveDb()"
+          (openModal)="openModal($event)"></app-system-basics>
         <!--Step: 2 Operating Hours-->
         <app-operating-hours *ngIf="specTab == 'operating-hours'" [phast]="_phast" [saveClicked]="saveClicked" (save)="saveDb()"></app-operating-hours>
         <!--Step: 3 Operating Costs-->
@@ -59,6 +60,15 @@
     <app-phast-diagram></app-phast-diagram>
   </div>
 
+  <!--Calculators-->
+  <div *ngIf="mainTab =='calculators'" class="tab-content">
+    <app-phast-calculator-tabs></app-phast-calculator-tabs>
+    <app-efficiency-improvement *ngIf="calcTab == 'efficiency-improvement'"></app-efficiency-improvement>
+    <app-energy-equivalency *ngIf="calcTab == 'energy-equivalency'"></app-energy-equivalency>
+    <app-energy-use *ngIf="calcTab == 'energy-use'"></app-energy-use>
+    <app-o2-enrichment *ngIf="calcTab == 'o2-enrichment'"></app-o2-enrichment>
+    <app-pre-assessment *ngIf="calcTab == 'pre-assessment'"></app-pre-assessment>
+  </div>
   <div class="footer" *ngIf="mainTab == 'system-setup' || mainTab == 'assessment'">
     <div class="pull-left">
       <!--<button class="btn btn-secondary" *ngIf="mainTab == 'system-setup'" (click)="close()">Close</button>-->
