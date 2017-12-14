@@ -129,7 +129,7 @@ Badges
   display: inline-block;
   font-size: 12px;
   font-weight: normal;
-  font-style: italic;
+  /*font-style: italic;*/
   padding: 3px 3px;
   border-radius: 2px;
 }
@@ -141,11 +141,11 @@ Badges
     /*border-bottom-right-radius: 45%;*/
     /*border-top-left-radius: 45%;*/
     border-radius: 50%;
-    padding: 1px 1px 1px 1px;
+    padding: 2px 3px 2px 3px;
     /*box-shadow: 2px 2px #888888;*/
     font-size: 10px;
     color: #fff;
-    width: 12px;
+    width: 14px;
   }
 
 .required-asterisk {
