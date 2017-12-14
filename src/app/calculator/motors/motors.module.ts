@@ -10,9 +10,11 @@ import {NemaEnergyEfficiencyModule} from './nema-energy-efficiency/nema-energy-e
 import {MotorPerformanceModule} from './motor-performance/motor-performance.module';
 
 import { MotorsComponent } from './motors.component';
+import {PercentLoadEstimationModule} from "./percent-load-estimation/percent-load-estimation.module";
+
 @NgModule({
   declarations: [
-    MotorsComponent
+    MotorsComponent,
   ],
   exports: [
     MotorsComponent
@@ -26,10 +28,12 @@ import { MotorsComponent } from './motors.component';
     ChartsModule,
     NemaEnergyEfficiencyModule,
     MotorPerformanceModule,
-    ],
+    PercentLoadEstimationModule
+  ],
   providers: [
 
   ]
 })
+
 
 export class MotorsModule { }
