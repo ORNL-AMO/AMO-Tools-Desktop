@@ -36,20 +36,25 @@ export class PercentLoadEstimationFormComponent implements OnInit {
 
   calculate() {
     this.synchronousSpeedError = this.nameplateFullLoadSpeedError = this.measuredSpeedError = null;
-
+    var err: boolean = false;
 
     if (this.percentLoadEstimationForm.value.nameplateFullLoadSpeed >= 3600) {
       this.nameplateFullLoadSpeedError = 'Nameplate Full Load Speed must be less than 3600';
-      return;
+      err = true;
     }
     if (this.percentLoadEstimationForm.value.measuredSpeed >= 3600) {
       this.measuredSpeedError = 'Measured Speed must be less than 3600';
-      return;
+      err = true;
     }
 
     if (!this.percentLoadEstimationForm.value.measuredSpeed || !this.percentLoadEstimationForm.value.nameplateFullLoadSpeed) {
       this.loadEstimationResult = 0;
-      return;
+      err = true;
+    }
+
+    if (this.percentLoadEstimationForm.value.nameplateFullLoadSpeed > this.percentLoadEstimationForm.value.measuredSpeed) {
+      this.measuredSpeedError = 'Measured Speed must be greater than or equal to the Nameplate Full Load Speed.';
+      err = true;
     }
 
     for (let i = 0; i < this.synchronousSpeeds.length; i++) {
@@ -60,7 +65,7 @@ export class PercentLoadEstimationFormComponent implements OnInit {
 
         if (this.synchronousSpeeds[i] <= this.percentLoadEstimationForm.value.measuredSpeed) {
           this.measuredSpeedError = 'Measured Speed must be less than the synchronous speed';
-          return;
+          err = true;
         }
 
         break;
@@ -68,10 +73,12 @@ export class PercentLoadEstimationFormComponent implements OnInit {
       if (this.percentLoadEstimationForm.value.nameplateFullLoadSpeed === this.synchronousSpeeds[i]) {
         this.synchronousSpeedError = 'Nameplate Full Load Speed cannot equal the Synchronous Speed of ' + this.synchronousSpeeds[i];
         this.loadEstimationResult = 0;
-        // return;
+        err = true;
       }
     }
-    this.emitCalculate.emit(true);
+    if (!err) {
+      this.emitCalculate.emit(true);      
+    }
   }
 
   //debug
