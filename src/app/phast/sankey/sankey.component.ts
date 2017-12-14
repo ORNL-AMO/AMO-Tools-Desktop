@@ -154,7 +154,7 @@ export class SankeyComponent implements OnInit {
       .attr("text-anchor", "middle")
       .attr("dx", (d) => {
         if (d.usefulOutput) {
-          return d.x + (d.displaySize * .7) + 40;
+          return d.x + 70;
         }
         if (d.input) {
           if (this.location === 'sankey-diagram') {
@@ -217,7 +217,7 @@ export class SankeyComponent implements OnInit {
       .attr("text-anchor", "middle")
       .attr("dx", (d) => {
         if (d.usefulOutput) {
-          return d.x + (d.displaySize * .7) + 40;
+          return d.x + 70;
         }
         if (d.input) {
           if (this.location === 'sankey-diagram') {
