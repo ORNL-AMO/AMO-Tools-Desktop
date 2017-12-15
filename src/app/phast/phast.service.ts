@@ -471,8 +471,8 @@ export class PhastService {
       let results: EfficiencyImprovementOutputs = phastAddon.efficiencyImprovement(inputs);
       results.newEnergyInput = this.convertUnitsService.value(results.newEnergyInput).from('MMBtu').to('GJ');
       return results;
-    }else{
-      return phastAddon.efficiencyImprovement(inputs); 
+    } else {
+      return phastAddon.efficiencyImprovement(inputs);
     }
   }
 
@@ -488,8 +488,20 @@ export class PhastService {
     return phastAddon.flowCalculations(inputs);
   }
 
-  o2Enrichment(inputs: O2Enrichment) {
-    return phastAddon.o2Enrichment(inputs);
+  o2Enrichment(input: O2Enrichment, settings: Settings) {
+    let inputs = this.createInputCopy(input);
+    if (settings.unitsOfMeasure == 'Metric') {
+      inputs.combAirTemp = this.convertUnitsService.value(inputs.combAirTemp).from('C').to('F');
+      inputs.flueGasTemp = this.convertUnitsService.value(inputs.flueGasTemp).from('C').to('F');
+      inputs.combAirTempEnriched = this.convertUnitsService.value(inputs.combAirTempEnriched).from('C').to('F');
+      inputs.flueGasTempEnriched = this.convertUnitsService.value(inputs.flueGasTempEnriched).from('C').to('F');
+      inputs.fuelConsumption = this.convertUnitsService.value(inputs.combAirTemp).from('GJ').to('MMBtu');
+      let results = phastAddon.o2Enrichment(inputs);
+      results.fuelConsumptionEnriched = this.convertUnitsService.value(results.fuelConsumptionEnriched).from('MMBtu').to('GJ');
+      return results;
+    } else {
+      return phastAddon.o2Enrichment(inputs);
+    }
   }
 
   flueGasByVolumeCalculateHeatingValue(inputs: FlueGasMaterial) {
