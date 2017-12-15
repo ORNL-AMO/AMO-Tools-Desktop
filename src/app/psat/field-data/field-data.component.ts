@@ -346,7 +346,7 @@ export class FieldDataComponent implements OnInit {
   }
 
   optimizeCalc(bool: boolean) {
-    if (!bool) {
+    if (!bool || !this.selected) {
       this.psatForm.controls.sizeMargin.disable();
       this.psatForm.controls.fixedSpeed.disable();
     } else {
