@@ -273,6 +273,7 @@ export class PsatComponent implements OnInit {
     this.indexedDbService.putAssessment(this.assessment).then(
       results => {
         this.addToast('Assessment Saved');
+        this.psatService.getResults.next(true);
       }
     )
   }

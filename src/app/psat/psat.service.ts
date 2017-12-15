@@ -18,10 +18,12 @@ export class PsatService {
   secondaryTab: BehaviorSubject<string>;
   calcTab: BehaviorSubject<string>;
   baseline: PSAT;
+  getResults: BehaviorSubject<boolean>;
   constructor(private formBuilder: FormBuilder, private convertUnitsService: ConvertUnitsService, private validationService: ValidationService) {
     this.mainTab = new BehaviorSubject<string>('system-setup');
     this.secondaryTab = new BehaviorSubject<string>('explore-opportunities');
-    this.calcTab = new BehaviorSubject<string>('system-curve')
+    this.calcTab = new BehaviorSubject<string>('system-curve');
+    this.getResults = new BehaviorSubject<boolean>(true);
   }
 
   test() {
