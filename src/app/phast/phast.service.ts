@@ -476,12 +476,20 @@ export class PhastService {
     }
   }
 
-  energyEquivalencyElectric(inputs: EnergyEquivalencyElectric) {
+  energyEquivalencyElectric(input: EnergyEquivalencyElectric, settings: Settings) {
+    let inputs = this.createInputCopy(input)
+    if (settings.unitsOfMeasure == 'Metric') {
+      inputs.fuelFiredHeatInput = this.convertUnitsService.value(inputs.fuelFiredHeatInput).from('GJ').to('MMBtu');
+    }
     return phastAddon.energyEquivalencyElectric(inputs);
   }
 
-  energyEquivalencyFuel(inputs: EnergyEquivalencyFuel) {
-    return phastAddon.energyEquivalencyFuel(inputs);
+  energyEquivalencyFuel(inputs: EnergyEquivalencyFuel, settings: Settings) {
+    let results = phastAddon.energyEquivalencyFuel(inputs);
+    if(settings.unitsOfMeasure == 'Metric'){
+      results.fuelFiredHeatInput = this.convertUnitsService.value(results.fuelFiredHeatInput).from('MMBtu').to('GJ');
+    }
+    return results;
   }
 
   flowCalculations(inputs: FlowCalculations) {

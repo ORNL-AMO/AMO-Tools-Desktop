@@ -78,17 +78,17 @@
 </div>
 
 
-<div class="calculator" *ngIf="getSelectedTool() == 'energy-equivalency'">
-  <div class="row">
+<div class="stand-alone-calc tab-content" *ngIf="getSelectedTool() == 'energy-equivalency'">
+  <!-- <div class="row">
     <div class="col-lg-11 mx-auto">
       <h2>Energy Equivalency Calculator</h2>
       <p> Provides calculations for converting values of energy input requirements when the heat source is changed from fuel-firing
         (Btu/hr or kJ/hr) to electricity (kW), or vice versa.</p>
     </div>
   </div>
-  <div class="calculator-container">
+  <div class="calculator-container"> -->
     <app-energy-equivalency></app-energy-equivalency>
-  </div>
+  <!-- </div> -->
 </div>
 
 <div class="stand-alone-calc tab-content" *ngIf="getSelectedTool() == 'energy-use'">
