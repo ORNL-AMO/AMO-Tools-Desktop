@@ -33,7 +33,7 @@
             You must add a modification to take notes on it.
         </div>
     </div>
-    <div class="panel-results" *ngIf="tabSelect == 'results'">
+    <div class="panel-results" *ngIf="tabSelect == 'results' && !inSetup">
             <app-explore-opportunities-results [percentSavings]="percentSavings" [psat]="psat" [exploreModIndex]="modificationIndex" [baselineResults]="baselineResults"
             [modificationResults]="modificationResults" [settings]="settings" [annualSavings]="annualSavings">
            </app-explore-opportunities-results>
