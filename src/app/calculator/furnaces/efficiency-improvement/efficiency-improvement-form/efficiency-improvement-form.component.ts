@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { EfficiencyImprovementInputs, EfficiencyImprovementOutputs } from '../../../../shared/models/phast/efficiencyImprovement';
-
+import { Settings } from '../../../../shared/models/settings';
 @Component({
   selector: 'app-efficiency-improvement-form',
   templateUrl: './efficiency-improvement-form.component.html',
@@ -8,24 +8,27 @@ import { EfficiencyImprovementInputs, EfficiencyImprovementOutputs } from '../..
 })
 export class EfficiencyImprovementFormComponent implements OnInit {
   @Input()
-  efficiencyImprovementInputs:EfficiencyImprovementInputs;
+  efficiencyImprovementInputs: EfficiencyImprovementInputs;
   @Input()
-  efficiencyImprovementOutputs:EfficiencyImprovementOutputs
+  efficiencyImprovementOutputs: EfficiencyImprovementOutputs
   @Output('calculate')
   calculate = new EventEmitter<boolean>();
   @Output('changeField')
   changeField = new EventEmitter<string>();
+  @Input()
+  settings: Settings;
+
   constructor() { }
 
   ngOnInit() {
   }
 
 
-  calc(){
+  calc() {
     this.calculate.emit(true);
   }
 
-  focusField(str: string){
+  focusField(str: string) {
     this.changeField.emit(str);
   }
 }
