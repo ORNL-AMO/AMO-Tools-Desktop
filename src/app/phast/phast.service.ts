@@ -486,14 +486,33 @@ export class PhastService {
 
   energyEquivalencyFuel(inputs: EnergyEquivalencyFuel, settings: Settings) {
     let results = phastAddon.energyEquivalencyFuel(inputs);
-    if(settings.unitsOfMeasure == 'Metric'){
+    if (settings.unitsOfMeasure == 'Metric') {
       results.fuelFiredHeatInput = this.convertUnitsService.value(results.fuelFiredHeatInput).from('MMBtu').to('GJ');
     }
     return results;
   }
 
-  flowCalculations(inputs: FlowCalculations) {
-    return phastAddon.flowCalculations(inputs);
+  flowCalculations(input: FlowCalculations, settings: Settings) {
+    let inputs = this.createInputCopy(input);
+    if (settings.unitsOfMeasure == 'Metric') {
+      //cm -> in
+      inputs.orificeDiameter = this.convertUnitsService.value(inputs.orificeDiameter).from('cm').to('in');
+      inputs.insidePipeDiameter = this.convertUnitsService.value(inputs.insidePipeDiameter).from('cm').to('in');
+      inputs.orificePressureDrop = this.convertUnitsService.value(inputs.orificePressureDrop).from('cm').to('in');
+      //C -> F
+      inputs.gasTemperature = this.convertUnitsService.value(inputs.gasTemperature).from('C').to('F');
+      //kPa -> Psig
+      inputs.gasPressure = this.convertUnitsService.value(inputs.gasPressure).from('kPa').to('psi');
+      //kJNm3 -> btuSCF
+      inputs.gasHeatingValue = this.convertUnitsService.value(inputs.gasHeatingValue).from('kJNm3').to('btuSCF');
+      let results = phastAddon.flowCalculations(inputs);
+      results.flow = this.convertUnitsService.value(results.flow).from('ft3').to('m3')
+      results.totalFlow = this.convertUnitsService.value(results.totalFlow).from('ft3').to('m3')
+      results.heatInput = this.convertUnitsService.value(results.heatInput).from('MMBtu').to('GJ')
+      return results;
+    } else {
+      return phastAddon.flowCalculations(inputs);
+    }
   }
 
   o2Enrichment(input: O2Enrichment, settings: Settings) {
