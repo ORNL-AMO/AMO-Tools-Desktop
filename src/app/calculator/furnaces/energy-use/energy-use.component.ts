@@ -1,6 +1,9 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { FlowCalculations, FlowCalculationsOutput } from '../../../shared/models/phast/flowCalculations';
 import { PhastService } from '../../../phast/phast.service';
+import { Settings } from '../../../shared/models/settings';
+import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
+
 @Component({
   selector: 'app-energy-use',
   templateUrl: './energy-use.component.html',
@@ -9,6 +12,8 @@ import { PhastService } from '../../../phast/phast.service';
 export class EnergyUseComponent implements OnInit {
   @Input()
   inPhast: boolean;
+  @Input()
+  settings: Settings;
 
   flowCalculations: FlowCalculations = {
     //natural gas
@@ -35,10 +40,19 @@ export class EnergyUseComponent implements OnInit {
   currentField: string = 'orificeDiameter';
   tabSelect: string = 'results';
 
-  constructor(private phastService: PhastService) { }
+  constructor(private phastService: PhastService, private indexedDbService: IndexedDbService) { }
 
   ngOnInit() {
-    this.calculate();
+    if(!this.settings){
+      this.indexedDbService.getDirectorySettings(1).then(results => {
+        if(results){
+          this.settings = results[0];
+          this.calculate();
+        }
+      })
+    }else{
+      this.calculate();
+    }
   }
   setCurrentField(str: string) {
     this.currentField = str;
@@ -49,7 +63,7 @@ export class EnergyUseComponent implements OnInit {
   }
 
   calculate() {
-    this.flowCalculationResults = this.phastService.flowCalculations(this.flowCalculations);
+    this.flowCalculationResults = this.phastService.flowCalculations(this.flowCalculations, this.settings);
   }
 
 }

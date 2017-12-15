@@ -3,6 +3,7 @@ import { PhastService } from '../../../../phast/phast.service';
 import { WindowRefService } from '../../../../indexedDb/window-ref.service';
 import { O2Enrichment, O2EnrichmentOutput } from '../../../../shared/models/phast/o2Enrichment';
 import * as d3 from 'd3';
+import { Settings } from '../../../../shared/models/settings';
 
 @Component({
   selector: 'app-o2-enrichment-graph',
@@ -18,6 +19,8 @@ export class O2EnrichmentGraphComponent implements OnInit, DoCheck {
   o2Enrichment: O2Enrichment;
   @Input()
   lines: any;
+  @Input()
+  settings: Settings;
 
   o2EnrichmentPoint: O2Enrichment;
 
@@ -311,7 +314,7 @@ export class O2EnrichmentGraphComponent implements OnInit, DoCheck {
 
     for (let i = 0; i <= 100; i += .5) {
       this.o2EnrichmentPoint.o2CombAirEnriched = i;
-      const fuelSavings = this.phastService.o2Enrichment(this.o2EnrichmentPoint).fuelSavingsEnriched;
+      const fuelSavings = this.phastService.o2Enrichment(this.o2EnrichmentPoint, this.settings).fuelSavingsEnriched;
 
       if (fuelSavings > 0 && fuelSavings < 100) {
         if (fuelSavings > line.fuelSavings) {
@@ -452,7 +455,7 @@ export class O2EnrichmentGraphComponent implements OnInit, DoCheck {
       .attr("x", 9)
       .attr("dy", ".35em");
 
-    const fuelSavings = this.phastService.o2Enrichment(information).fuelSavingsEnriched;
+    const fuelSavings = this.phastService.o2Enrichment(information, this.settings).fuelSavingsEnriched;
 
     this.point
       .style("display", null)
@@ -590,7 +593,7 @@ export class O2EnrichmentGraphComponent implements OnInit, DoCheck {
           fuelConsumption: this.o2Enrichment.fuelConsumption
         };
         if (this.xPosition != null) {
-          const fuelSavings = this.phastService.o2Enrichment(o2EnrichmentPoint).fuelSavingsEnriched;
+          const fuelSavings = this.phastService.o2Enrichment(o2EnrichmentPoint, this.settings).fuelSavingsEnriched;
 
           if (fuelSavings < 0 || fuelSavings > 100) {
             return "<i class='fa fa-minus' style='margin: 0px; font-size: 1vw;'></i>" +
@@ -601,7 +604,7 @@ export class O2EnrichmentGraphComponent implements OnInit, DoCheck {
           }
         } else {
           o2EnrichmentPoint.o2CombAirEnriched = this.o2Enrichment.o2CombAirEnriched;
-          const fuelSavings = this.phastService.o2Enrichment(o2EnrichmentPoint).fuelSavingsEnriched;
+          const fuelSavings = this.phastService.o2Enrichment(o2EnrichmentPoint, this.settings).fuelSavingsEnriched;
 
           if (fuelSavings < 0 || fuelSavings > 100) {
             return "<i class='fa fa-minus' style='margin: 0px; font-size: 1vw;'></i>" +
@@ -681,7 +684,7 @@ export class O2EnrichmentGraphComponent implements OnInit, DoCheck {
               o2EnrichmentPoint.o2CombAirEnriched = d.o2CombAirEnriched;
             }
 
-            const fuelSavings = this.phastService.o2Enrichment(o2EnrichmentPoint).fuelSavingsEnriched;
+            const fuelSavings = this.phastService.o2Enrichment(o2EnrichmentPoint, this.settings).fuelSavingsEnriched;
 
             if (fuelSavings < 0 || fuelSavings > 100) {
               return "<i class='fa fa-minus' style='margin: 0px; font-size: 1vw; vertical-align: middle: height: 100%;'></i>" +

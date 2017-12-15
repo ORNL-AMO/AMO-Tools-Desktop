@@ -1,4 +1,4 @@
-<div class="modify-conditions panel-container row phast">
+<div class="modify-conditions panel-container row phast" *ngIf="settings">
   <div class="col-12">
     <div class="row align-items-top calculator-panel">
       <div class="modification panel-column col-6 align-top">
@@ -11,7 +11,7 @@
             <div class="row">
               <div class="col-12">
                 <app-o2-enrichment-form [(o2Enrichment)]="o2Enrichment" [o2EnrichmentOutput]="o2EnrichmentOutput" [lines]="lines" (calculate)="calculate()"
-                  (changeFieldEmit)="changeField($event)"></app-o2-enrichment-form>
+                  (changeFieldEmit)="changeField($event)" [settings]="settings"></app-o2-enrichment-form>
               </div>
             </div>
           </div>
@@ -33,7 +33,7 @@
           <div class="row justify-content-center data-row" *ngIf="tabSelect == 'results'">
             <div class="col-11" id="o2EnrichmentGraph">
               <app-o2-enrichment-graph *ngIf="tabSelect == 'results'" [o2Enrichment]="o2Enrichment" [o2EnrichmentOutput]="o2EnrichmentOutput"
-                [lines]="lines"></app-o2-enrichment-graph>
+                [lines]="lines" [settings]="settings"></app-o2-enrichment-graph>
 
               <table class="table table-bordered">
                 <thead>

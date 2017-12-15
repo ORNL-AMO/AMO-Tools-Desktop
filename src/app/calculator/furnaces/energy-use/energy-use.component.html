@@ -1,4 +1,4 @@
-<div class="modify-conditions panel-container row phast">
+<div class="modify-conditions panel-container row phast" *ngIf="settings">
   <div class="col-12">
     <div class="row align-items-top calculator-panel">
       <div class="modification panel-column col-6 align-top">
@@ -8,7 +8,7 @@
         <div class="row">
           <div class="col-12">
             <app-energy-use-form [inPhast]="inPhast" [flowCalculations]="flowCalculations" [flowCalculationResults]="flowCalculationResults"
-              (changeField)="setCurrentField($event)" (emitCalculate)="calculate()"></app-energy-use-form>
+              (changeField)="setCurrentField($event)" (emitCalculate)="calculate()" [settings]="settings"></app-energy-use-form>
           </div>
         </div>
       </div>
@@ -31,15 +31,24 @@
                   <tbody>
                     <tr>
                       <th>Flow</th>
-                      <td>{{flowCalculationResults.flow | number:'2.2-2'}} Scfh</td>
+                      <td>{{flowCalculationResults.flow | number:'2.2-2'}} 
+                        <span *ngIf="settings.unitsOfMeasure == 'Imperial'">Scfh</span>
+                        <span *ngIf="settings.unitsOfMeasure == 'Metric'">Nm<sup>3</sup>/hr</span>
+                      </td>
                     </tr>
                     <tr>
                       <th>Total Flow</th>
-                      <td>{{flowCalculationResults.totalFlow | number:'2.2-2'}} Scf</td>
+                      <td>{{flowCalculationResults.totalFlow | number:'2.2-2'}} 
+                          <span *ngIf="settings.unitsOfMeasure == 'Imperial'">Scf</span>
+                          <span *ngIf="settings.unitsOfMeasure == 'Metric'">Nm<sup>3</sup></span>
+                      </td>
                     </tr>
                     <tr>
                       <th>Energy Use</th>
-                      <td>{{flowCalculationResults.heatInput | number:'2.2-2'}} MMBtu</td>
+                      <td>{{flowCalculationResults.heatInput | number:'2.2-2'}} 
+                          <span *ngIf="settings.unitsOfMeasure == 'Imperial'">MMBtu</span>
+                          <span *ngIf="settings.unitsOfMeasure == 'Metric'">GJ</span>
+                      </td>
                     </tr>
                   </tbody>
                 </table>

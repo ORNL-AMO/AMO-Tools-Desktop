@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { O2Enrichment, O2EnrichmentOutput } from '../../../../shared/models/phast/o2Enrichment';
+import { Settings } from '../../../../shared/models/settings';
 @Component({
   selector: 'app-o2-enrichment-form',
   templateUrl: './o2-enrichment-form.component.html',
@@ -16,6 +17,8 @@ export class O2EnrichmentFormComponent implements OnInit {
   lines: any;
   @Output('changeFieldEmit')
   changeFieldEmit = new EventEmitter<string>();
+  @Input()
+  settings: Settings;
   error = {
     flueGasTemp: null,
     flueGasTempEnriched: null,
