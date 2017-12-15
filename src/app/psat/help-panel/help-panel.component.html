@@ -1,10 +1,13 @@
 <div class="help-panel">
     <div class="row" *ngIf="!inSetup" style="margin: 0px;">
         <ul class="tabs primary tab-row">
-            <li class="panel-tab-item tab-2" [ngClass]="{'active': tabSelect == 'help'}">
+            <li class="panel-tab-item tab-3" [ngClass]="{'active': tabSelect == 'results'}">
+                <a (click)="setTab('results')">Results</a>
+            </li><!--
+            --><li class="panel-tab-item tab-3" [ngClass]="{'active': tabSelect == 'help'}">
                 <a (click)="setTab('help')">Help</a>
             </li><!--
-            --><li class="panel-tab-item tab-2" [ngClass]="{'active': tabSelect == 'notes'}">
+            --><li class="panel-tab-item tab-3" [ngClass]="{'active': tabSelect == 'notes'}">
                 <a (click)="setTab('notes')">Notes</a>
             </li>
         </ul>
@@ -30,4 +33,9 @@
             You must add a modification to take notes on it.
         </div>
     </div>
+    <div class="panel-results" *ngIf="tabSelect == 'results'">
+            <app-explore-opportunities-results [percentSavings]="percentSavings" [psat]="psat" [exploreModIndex]="modificationIndex" [baselineResults]="baselineResults"
+            [modificationResults]="modificationResults" [settings]="settings" [annualSavings]="annualSavings">
+           </app-explore-opportunities-results>
+        </div>
 </div>
