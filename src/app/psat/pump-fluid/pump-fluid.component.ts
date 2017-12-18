@@ -228,6 +228,8 @@ export class PumpFluidComponent implements OnInit {
   calculateSpecificGravity(bool?: boolean) {
     let fluidType = this.psatForm.value.fluidType;
     let t = this.psatForm.value.fluidTemperature;
+    t = this.convertUnitsService.value(t).from(this.settings.temperatureMeasurement).to('F');
+
     if (fluidType && t) {
 
       if (!bool) {
