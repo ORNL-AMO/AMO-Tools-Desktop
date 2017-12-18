@@ -25,13 +25,14 @@ export class SlagService {
   //   }
   // }
 
-  initForm() {
+  initForm(lossNum: number) {
     return this.formBuilder.group({
       'weight': ['', Validators.required],
       'inletTemperature': ['', Validators.required],
       'outletTemperature': ['', Validators.required],
       'specificHeat': ['', Validators.required],
-      'correctionFactor': [1.0, Validators.required]
+      'correctionFactor': [1.0, Validators.required],
+      'name': ['Loss #'+lossNum]
     })
   }
 
@@ -41,7 +42,8 @@ export class SlagService {
       'inletTemperature': [slag.inletTemperature, Validators.required],
       'outletTemperature': [slag.outletTemperature, Validators.required],
       'specificHeat': [slag.specificHeat, Validators.required],
-      'correctionFactor': [slag.correctionFactor, Validators.required]
+      'correctionFactor': [slag.correctionFactor, Validators.required],
+      'name': [slag.name]
     })
   }
 
@@ -51,7 +53,8 @@ export class SlagService {
       inletTemperature: form.value.inletTemperature,
       outletTemperature: form.value.outletTemperature,
       specificHeat: form.value.specificHeat,
-      correctionFactor: form.value.correctionFactor
+      correctionFactor: form.value.correctionFactor,
+      name: form.value.name
     }
     return tmpSlag;
   }

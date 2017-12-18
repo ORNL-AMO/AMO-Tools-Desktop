@@ -25,13 +25,14 @@ export class AuxiliaryPowerLossesService {
   //   }
   // }
 
-  initForm() {
+  initForm(lossNum: number) {
     return this.formBuilder.group({
       motorPhase: ['', Validators.required],
       supplyVoltage: ['', Validators.required],
       avgCurrent: ['', Validators.required],
       powerFactor: ['', Validators.required],
       operatingTime: ['', Validators.required],
+      name: ['Loss #'+lossNum]
     })
   }
 
@@ -42,6 +43,7 @@ export class AuxiliaryPowerLossesService {
       avgCurrent: form.value.avgCurrent,
       powerFactor: form.value.powerFactor,
       operatingTime: form.value.operatingTime,
+      name: form.value.name
     }
     return tmpLoss;
   }
@@ -53,6 +55,7 @@ export class AuxiliaryPowerLossesService {
       avgCurrent: [loss.avgCurrent, Validators.required],
       powerFactor: [loss.powerFactor, Validators.required],
       operatingTime: [loss.operatingTime, Validators.required],
+      name: [loss.name]
     })
   }
 

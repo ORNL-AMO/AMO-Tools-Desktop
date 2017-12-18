@@ -28,7 +28,8 @@
         "./assets/styles/two-panel.css",
         "./assets/styles/tabs.css",
         "./assets/styles/utilities.css",
-        "./assets/styles/graphs.css"
+        "./assets/styles/graphs.css",
+        "./assets/styles/forms.css"
       ],
       "scripts": [
         "../node_modules/chart.js/dist/Chart.bundle.min.js",

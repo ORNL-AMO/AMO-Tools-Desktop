@@ -6,5 +6,6 @@ export interface LeakageLoss{
     coefficient?: number
     specificGravity?: number
     correctionFactor?: number,
-    heatLoss?: number
+    heatLoss?: number,
+    name?: string
 }

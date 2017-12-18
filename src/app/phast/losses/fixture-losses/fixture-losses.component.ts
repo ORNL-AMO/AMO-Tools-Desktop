@@ -67,13 +67,19 @@ export class FixtureLossesComponent implements OnInit {
     if (this.losses.fixtureLosses) {
       this.setCompareVals();
       this.fixtureLossesCompareService.initCompareObjects();
+      let lossIndex = 1;
       this.losses.fixtureLosses.forEach(loss => {
         let tmpLoss = {
           form: this.fixtureLossesService.getFormFromLoss(loss),
-          name: 'Loss #' + (this._fixtureLosses.length + 1),
           heatLoss: loss.heatLoss || 0.0,
           collapse: false
         };
+        if(!tmpLoss.form.value.name){
+          tmpLoss.form.patchValue({
+            name: 'Loss #' + lossIndex
+          })
+        }
+        lossIndex++;
         this.calculate(tmpLoss);
         this._fixtureLosses.push(tmpLoss);
       })
@@ -143,8 +149,7 @@ export class FixtureLossesComponent implements OnInit {
       this.fixtureLossesCompareService.addObject(this.fixtureLossesCompareService.differentArray.length - 1);
     }
     this._fixtureLosses.push({
-      form: this.fixtureLossesService.initForm(),
-      name: 'Loss #' + (this._fixtureLosses.length + 1),
+      form: this.fixtureLossesService.initForm(this._fixtureLosses.length+1),
       heatLoss: 0.0,
       collapse: false
     });
@@ -153,14 +158,6 @@ export class FixtureLossesComponent implements OnInit {
 
   removeLoss(lossIndex: number) {
     this.fixtureLossesService.setDelete(lossIndex);
-  }
-
-  renameLosses() {
-    let index = 1;
-    this._fixtureLosses.forEach(fixture => {
-      fixture.name = 'Fixture #' + index;
-      index++;
-    })
   }
 
   calculate(loss: any) {
@@ -178,7 +175,14 @@ export class FixtureLossesComponent implements OnInit {
   
   saveLosses() {
     let tmpFixtureLosses = new Array<FixtureLoss>();
+    let lossIndex = 1;
     this._fixtureLosses.forEach(loss => {
+      if(!loss.form.value.name){
+        loss.form.patchValue({
+          name: 'Loss #' + lossIndex
+        })
+      }
+      lossIndex++;
       let tmpFixtureLoss = this.fixtureLossesService.getLossFromForm(loss.form);
       tmpFixtureLoss.heatLoss = loss.heatLoss;
       tmpFixtureLosses.push(tmpFixtureLoss);

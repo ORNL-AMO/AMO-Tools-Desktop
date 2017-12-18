@@ -75,14 +75,20 @@ export class WallLossesComponent implements OnInit {
       //set our baseline or modification losses for comparisons
       this.setCompareVals();
       this.wallLossCompareService.initCompareObjects();
+      let lossIndex = 1;
       this.losses.wallLosses.forEach(loss => {
         //create a temp loss object
         let tmpLoss = {
           form: this.wallLossesService.getWallLossForm(loss),
-          name: 'Loss #' + (this._wallLosses.length + 1),
           heatLoss: loss.heatLoss || 0.0,
           collapse: false
         };
+        if(!tmpLoss.form.value.name){
+          tmpLoss.form.patchValue({
+            name: 'Loss #' + lossIndex
+          })
+        }
+        lossIndex++;
         //attempt to calculate tmpLoss results
         this.calculate(tmpLoss);
         //add object to component data array
@@ -165,11 +171,11 @@ export class WallLossesComponent implements OnInit {
     }
     //add new empty loss to component data
     this._wallLosses.push({
-      form: this.wallLossesService.initForm(),
-      name: 'Loss #' + (this._wallLosses.length + 1),
+      form: this.wallLossesService.initForm(this._wallLosses.length+1),
       heatLoss: 0.0,
       collapse: false
     });
+
     this.saveLosses();
   }
 
@@ -180,15 +186,6 @@ export class WallLossesComponent implements OnInit {
   removeLoss(lossIndex: number) {
     //signal delete to service
     this.wallLossesService.setDelete(lossIndex);
-  }
-
-  //TODO: need to handle new losses after a loss has been deleted, can currently have same name
-  renameLossess() {
-    let index = 1;
-    this._wallLosses.forEach(loss => {
-      loss.name = 'Loss #' + index;
-      index++;
-    })
   }
 
   //calculate wall loss results
@@ -205,7 +202,14 @@ export class WallLossesComponent implements OnInit {
     //temp array will hold new losses data
     let tmpWallLosses = new Array<WallLoss>();
     //iterate through component array to build up new data
+    let lossIndex = 1;
     this._wallLosses.forEach(loss => {
+      if(!loss.form.value.name){
+        loss.form.patchValue({
+          name: 'Loss #' + lossIndex
+        })
+      }
+      lossIndex++;
       let tmpWallLoss = this.wallLossesService.getWallLossFromForm(loss.form);
       tmpWallLoss.heatLoss = loss.heatLoss;
       tmpWallLosses.push(tmpWallLoss);
@@ -217,10 +221,12 @@ export class WallLossesComponent implements OnInit {
     //emit to losses.component that data is updated and should be saved
     this.savedLoss.emit(true);
   }
+
   //used for field by field context, send name of current field to losses.component
   changeField(str: string) {
     this.fieldChange.emit(str);
   }
+  
   //used for compare service
   setCompareVals() {
     //depending on modification/baseline set values for comparison

@@ -68,13 +68,19 @@ export class SlagComponent implements OnInit {
     if (this.losses.slagLosses) {
       this.setCompareVals();
       this.slagCompareService.initCompareObjects();
+      let lossIndex = 1;
       this.losses.slagLosses.forEach(loss => {
         let tmpLoss = {
           form: this.slagService.getFormFromLoss(loss),
-          name: 'Loss #' + (this._slagLosses.length + 1),
           heatLoss: loss.heatLoss || 0.0,
           collapse: false
         };
+        if(!tmpLoss.form.value.name){
+          tmpLoss.form.patchValue({
+            name: 'Loss #' + lossIndex
+          })
+        }
+        lossIndex++;
         this.calculate(tmpLoss);
         this._slagLosses.push(tmpLoss);
       })
@@ -146,8 +152,7 @@ export class SlagComponent implements OnInit {
       this.slagCompareService.addObject(this.slagCompareService.differentArray.length - 1);
     }
     this._slagLosses.push({
-      form: this.slagService.initForm(),
-      name: 'Loss #' + (this._slagLosses.length + 1),
+      form: this.slagService.initForm(this._slagLosses.length+1),
       heatLoss: 0.0,
       collapse: false
     });
@@ -156,14 +161,6 @@ export class SlagComponent implements OnInit {
 
   removeLoss(lossIndex: number) {
     this.slagService.setDelete(lossIndex);
-  }
-
-  renameLossess() {
-    let index = 1;
-    this._slagLosses.forEach(loss => {
-      loss.name = 'Loss #' + index;
-      index++;
-    })
   }
 
   calculate(loss: any) {
@@ -177,7 +174,14 @@ export class SlagComponent implements OnInit {
 
   saveLosses() {
     let tmpSlagLosses = new Array<Slag>();
+    let lossIndex = 1;
     this._slagLosses.forEach(loss => {
+      if(!loss.form.value.name){
+        loss.form.patchValue({
+          name: 'Loss #' + lossIndex
+        })
+      }
+      lossIndex++;
       let tmpSlag = this.slagService.getLossFromForm(loss.form);
       tmpSlag.heatLoss = loss.heatLoss;
       tmpSlagLosses.push(tmpSlag);
