@@ -20,8 +20,7 @@ export class PsatSettingsComponent implements OnInit {
   currentMeasurements: Array<any> = [];
   viscosityMeasurements: Array<any> = [];
   voltageMeasurements: Array<any> = [];
-
-
+  temperatureMeasurements: Array<any> = [];
   isFirstChange: boolean = true;
   constructor(private convertUnitsService: ConvertUnitsService) { }
 
@@ -33,7 +32,7 @@ export class PsatSettingsComponent implements OnInit {
     this.currentMeasurements = new Array();
     this.viscosityMeasurements = new Array();
     this.voltageMeasurements = new Array();
-
+    this.temperatureMeasurements = new Array();
     let tmpList = [
       'gpm',
       'MGD',
@@ -84,6 +83,18 @@ export class PsatSettingsComponent implements OnInit {
       this.pressureMeasurements.push(tmpPossibility);
     })
 
+    tmpList = [
+      'C',
+      'F',
+      'K'
+    ];
+    tmpList.forEach(unit => {
+      let tmpPossibility = {
+        unit: unit,
+        display: this.getUnitName(unit)
+      }
+      this.temperatureMeasurements.push(tmpPossibility);
+    })
     // tmpList = this.convertUnitsService.possibilities('current');
     // tmpList.forEach(unit => {
     //   let tmpPossibility = {
