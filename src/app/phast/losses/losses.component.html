@@ -7,7 +7,8 @@
       </button> -->
       <h5 class="pull-right panel-add" *ngIf="inSetup && !modificationExists">
         <a class="small" [ngClass]="{'disabled': !baselineSelected}">
-          <span (click)="addLoss()">+Add Loss</span>
+          <span *ngIf="lossesTab != 'charge-material'" (click)="addLoss()">+Add Loss</span>
+          <span *ngIf="lossesTab == 'charge-material'" (click)="addLoss()">+Add Charge Material</span>
         </a>
       </h5>
     </div>
