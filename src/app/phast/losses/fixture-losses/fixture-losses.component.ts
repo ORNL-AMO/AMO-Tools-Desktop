@@ -85,32 +85,33 @@ export class FixtureLossesComponent implements OnInit {
           if (this.fixtureLossesCompareService.differentArray && !this.isBaseline) {
             this.fixtureLossesCompareService.differentArray.splice(lossIndex, 1);
           }
+          this.saveLosses();
         }
       }
     })
-    if (this.isBaseline) {
-      this.fixtureLossesService.addLossBaselineMonitor.subscribe((val) => {
-        if (val == true) {
-          this._fixtureLosses.push({
-            form: this.fixtureLossesService.initForm(),
-            name: 'Loss #' + (this._fixtureLosses.length + 1),
-            heatLoss: 0.0,
-            collapse: false
-          })
-        }
-      })
-    } else {
-      this.fixtureLossesService.addLossModificationMonitor.subscribe((val) => {
-        if (val == true) {
-          this._fixtureLosses.push({
-            form: this.fixtureLossesService.initForm(),
-            name: 'Loss #' + (this._fixtureLosses.length + 1),
-            heatLoss: 0.0,
-            collapse: false
-          })
-        }
-      })
-    }
+    // if (this.isBaseline) {
+    //   this.fixtureLossesService.addLossBaselineMonitor.subscribe((val) => {
+    //     if (val == true) {
+    //       this._fixtureLosses.push({
+    //         form: this.fixtureLossesService.initForm(),
+    //         name: 'Loss #' + (this._fixtureLosses.length + 1),
+    //         heatLoss: 0.0,
+    //         collapse: false
+    //       })
+    //     }
+    //   })
+    // } else {
+    //   this.fixtureLossesService.addLossModificationMonitor.subscribe((val) => {
+    //     if (val == true) {
+    //       this._fixtureLosses.push({
+    //         form: this.fixtureLossesService.initForm(),
+    //         name: 'Loss #' + (this._fixtureLosses.length + 1),
+    //         heatLoss: 0.0,
+    //         collapse: false
+    //       })
+    //     }
+    //   })
+    // }
     if(this.inSetup && this.modExists){
       this.disableForms();
     }
@@ -118,10 +119,10 @@ export class FixtureLossesComponent implements OnInit {
 
   ngOnDestroy() {
     if (this.isBaseline) {
-      this.fixtureLossesService.addLossBaselineMonitor.next(false);
+      // this.fixtureLossesService.addLossBaselineMonitor.next(false);
       this.fixtureLossesCompareService.baselineFixtureLosses = null;
     } else {
-      this.fixtureLossesService.addLossModificationMonitor.next(false);
+      // this.fixtureLossesService.addLossModificationMonitor.next(false);
       this.fixtureLossesCompareService.modifiedFixtureLosses = null;
     }
     this.fixtureLossesService.deleteLossIndex.next(null);
@@ -133,9 +134,9 @@ export class FixtureLossesComponent implements OnInit {
     })
   }
   addLoss() {
-    if (this.isLossesSetup) {
-      this.fixtureLossesService.addLoss(this.isBaseline);
-    }
+    // if (this.isLossesSetup) {
+    //   this.fixtureLossesService.addLoss(this.isBaseline);
+    // }
     if (this.fixtureLossesCompareService.differentArray) {
       this.fixtureLossesCompareService.addObject(this.fixtureLossesCompareService.differentArray.length - 1);
     }
@@ -145,6 +146,7 @@ export class FixtureLossesComponent implements OnInit {
       heatLoss: 0.0,
       collapse: false
     });
+    this.saveLosses();
   }
 
   removeLoss(lossIndex: number) {

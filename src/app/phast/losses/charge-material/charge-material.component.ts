@@ -79,40 +79,41 @@ export class ChargeMaterialComponent implements OnInit {
           if (this.chargeMaterialCompareService.differentArray && !this.isBaseline) {
             this.chargeMaterialCompareService.differentArray.splice(lossIndex, 1);
           }
+          this.saveLosses()
         }
       }
     })
-    if (this.isBaseline) {
-      this.chargeMaterialService.addLossBaselineMonitor.subscribe((val) => {
-        if (val == true) {
-          this._chargeMaterial.push({
-            chargeMaterialType: 'Solid',
-            solidForm: this.chargeMaterialService.initSolidForm(),
-            liquidForm: this.chargeMaterialService.initLiquidForm(),
-            gasForm: this.chargeMaterialService.initGasForm(),
-            name: 'Material #' + (this._chargeMaterial.length + 1),
-            heatRequired: 0.0,
-            modifiedHeatRequired: 0.0,
-            collapse: false
-          });
-        }
-      })
-    } else {
-      this.chargeMaterialService.addLossModificationMonitor.subscribe((val) => {
-        if (val == true) {
-          this._chargeMaterial.push({
-            chargeMaterialType: 'Solid',
-            solidForm: this.chargeMaterialService.initSolidForm(),
-            liquidForm: this.chargeMaterialService.initLiquidForm(),
-            gasForm: this.chargeMaterialService.initGasForm(),
-            name: 'Material #' + (this._chargeMaterial.length + 1),
-            heatRequired: 0.0,
-            modifiedHeatRequired: 0.0,
-            collapse: false
-          });
-        }
-      })
-    }
+    // if (this.isBaseline) {
+    //   this.chargeMaterialService.addLossBaselineMonitor.subscribe((val) => {
+    //     if (val == true) {
+    //       this._chargeMaterial.push({
+    //         chargeMaterialType: 'Solid',
+    //         solidForm: this.chargeMaterialService.initSolidForm(),
+    //         liquidForm: this.chargeMaterialService.initLiquidForm(),
+    //         gasForm: this.chargeMaterialService.initGasForm(),
+    //         name: 'Material #' + (this._chargeMaterial.length + 1),
+    //         heatRequired: 0.0,
+    //         modifiedHeatRequired: 0.0,
+    //         collapse: false
+    //       });
+    //     }
+    //   })
+    // } else {
+    //   this.chargeMaterialService.addLossModificationMonitor.subscribe((val) => {
+    //     if (val == true) {
+    //       this._chargeMaterial.push({
+    //         chargeMaterialType: 'Solid',
+    //         solidForm: this.chargeMaterialService.initSolidForm(),
+    //         liquidForm: this.chargeMaterialService.initLiquidForm(),
+    //         gasForm: this.chargeMaterialService.initGasForm(),
+    //         name: 'Material #' + (this._chargeMaterial.length + 1),
+    //         heatRequired: 0.0,
+    //         modifiedHeatRequired: 0.0,
+    //         collapse: false
+    //       });
+    //     }
+    //   })
+    // }
     if(this.inSetup && this.modExists){
       this.disableType = true;
       this.disableForms();
@@ -122,10 +123,10 @@ export class ChargeMaterialComponent implements OnInit {
   ngOnDestroy() {
     if (this.isBaseline) {
       this.chargeMaterialCompareService.baselineMaterials = null;
-      this.chargeMaterialService.addLossBaselineMonitor.next(false);
+    //  this.chargeMaterialService.addLossBaselineMonitor.next(false);
     } else {
       this.chargeMaterialCompareService.modifiedMaterials = null;
-      this.chargeMaterialService.addLossModificationMonitor.next(false);
+     // this.chargeMaterialService.addLossModificationMonitor.next(false);
     }
     this.chargeMaterialService.deleteLossIndex.next(null);
   }
@@ -181,9 +182,9 @@ export class ChargeMaterialComponent implements OnInit {
   }
 
   addMaterial() {
-    if (this.isLossesSetup) {
-      this.chargeMaterialService.addLoss(this.isBaseline);
-    }
+    // if (this.isLossesSetup) {
+    //   this.chargeMaterialService.addLoss(this.isBaseline);
+    // }
     if (this.chargeMaterialCompareService.differentArray) {
       this.chargeMaterialCompareService.addObject(this.chargeMaterialCompareService.differentArray.length - 1);
     }
@@ -197,7 +198,7 @@ export class ChargeMaterialComponent implements OnInit {
       modifiedHeatRequired: 0.0,
       collapse: false
     });
-
+    this.saveLosses();
   }
 
   removeMaterial(lossIndex: number) {

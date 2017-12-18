@@ -87,31 +87,32 @@ export class SlagComponent implements OnInit {
             this.slagCompareService.differentArray.splice(lossIndex, 1);
           }
         }
+        this.saveLosses();
       }
     })
-    if (this.isBaseline) {
-      this.slagService.addLossBaselineMonitor.subscribe((val) => {
-        if (val == true) {
-          this._slagLosses.push({
-            form: this.slagService.initForm(),
-            name: 'Loss #' + (this._slagLosses.length + 1),
-            heatLoss: 0.0,
-            collapse: false
-          })
-        }
-      })
-    } else {
-      this.slagService.addLossModificationMonitor.subscribe((val) => {
-        if (val == true) {
-          this._slagLosses.push({
-            form: this.slagService.initForm(),
-            name: 'Loss #' + (this._slagLosses.length + 1),
-            heatLoss: 0.0,
-            collapse: false
-          })
-        }
-      })
-    }
+    // if (this.isBaseline) {
+    //   this.slagService.addLossBaselineMonitor.subscribe((val) => {
+    //     if (val == true) {
+    //       this._slagLosses.push({
+    //         form: this.slagService.initForm(),
+    //         name: 'Loss #' + (this._slagLosses.length + 1),
+    //         heatLoss: 0.0,
+    //         collapse: false
+    //       })
+    //     }
+    //   })
+    // } else {
+    //   this.slagService.addLossModificationMonitor.subscribe((val) => {
+    //     if (val == true) {
+    //       this._slagLosses.push({
+    //         form: this.slagService.initForm(),
+    //         name: 'Loss #' + (this._slagLosses.length + 1),
+    //         heatLoss: 0.0,
+    //         collapse: false
+    //       })
+    //     }
+    //   })
+    // }
 
     if(this.inSetup && this.modExists){
       this.disableForms();
@@ -121,10 +122,10 @@ export class SlagComponent implements OnInit {
   ngOnDestroy() {
     if (this.isBaseline) {
       this.slagCompareService.baselineSlag = null;
-      this.slagService.addLossBaselineMonitor.next(false);
+     // this.slagService.addLossBaselineMonitor.next(false);
     } else {
       this.slagCompareService.modifiedSlag = null;
-      this.slagService.addLossModificationMonitor.next(false);
+    //  this.slagService.addLossModificationMonitor.next(false);
     }
     this.slagService.deleteLossIndex.next(null);
   }
@@ -136,9 +137,9 @@ export class SlagComponent implements OnInit {
   }
 
   addLoss() {
-    if (this.isLossesSetup) {
-      this.slagService.addLoss(this.isBaseline);
-    }
+    // if (this.isLossesSetup) {
+    //   this.slagService.addLoss(this.isBaseline);
+    // }
     if (this.slagCompareService.differentArray) {
       this.slagCompareService.addObject(this.slagCompareService.differentArray.length - 1);
     }
@@ -148,6 +149,7 @@ export class SlagComponent implements OnInit {
       heatLoss: 0.0,
       collapse: false
     });
+    this.saveLosses();
   }
 
   removeLoss(lossIndex: number) {

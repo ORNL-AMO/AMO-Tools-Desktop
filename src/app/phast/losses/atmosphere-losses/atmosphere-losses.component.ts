@@ -87,32 +87,33 @@ export class AtmosphereLossesComponent implements OnInit {
           if (this.atmosphereLossesCompareService.differentArray && !this.isBaseline) {
             this.atmosphereLossesCompareService.differentArray.splice(lossIndex, 1);
           }
+          this.saveLosses();
         }
       }
     })
-    if (this.isBaseline) {
-      this.atmosphereLossesService.addLossBaselineMonitor.subscribe((val) => {
-        if (val == true) {
-          this._atmosphereLosses.push({
-            form: this.atmosphereLossesService.initForm(),
-            name: 'Loss #' + (this._atmosphereLosses.length + 1),
-            heatLoss: 0.0,
-            collapse: false
-          })
-        }
-      })
-    } else {
-      this.atmosphereLossesService.addLossModificationMonitor.subscribe((val) => {
-        if (val == true) {
-          this._atmosphereLosses.push({
-            form: this.atmosphereLossesService.initForm(),
-            name: 'Loss #' + (this._atmosphereLosses.length + 1),
-            heatLoss: 0.0,
-            collapse: false
-          })
-        }
-      })
-    }
+    // if (this.isBaseline) {
+    //   this.atmosphereLossesService.addLossBaselineMonitor.subscribe((val) => {
+    //     if (val == true) {
+    //       this._atmosphereLosses.push({
+    //         form: this.atmosphereLossesService.initForm(),
+    //         name: 'Loss #' + (this._atmosphereLosses.length + 1),
+    //         heatLoss: 0.0,
+    //         collapse: false
+    //       })
+    //     }
+    //   })
+    // } else {
+    //   this.atmosphereLossesService.addLossModificationMonitor.subscribe((val) => {
+    //     if (val == true) {
+    //       this._atmosphereLosses.push({
+    //         form: this.atmosphereLossesService.initForm(),
+    //         name: 'Loss #' + (this._atmosphereLosses.length + 1),
+    //         heatLoss: 0.0,
+    //         collapse: false
+    //       })
+    //     }
+    //   })
+    // }
     if(this.inSetup && this.modExists){
       this.disableForms();
     }
@@ -120,11 +121,11 @@ export class AtmosphereLossesComponent implements OnInit {
 
   ngOnDestroy() {
     if (this.isBaseline) {
-      this.atmosphereLossesService.addLossBaselineMonitor.next(false);
+//      this.atmosphereLossesService.addLossBaselineMonitor.next(false);
       this.atmosphereLossesCompareService.baselineAtmosphereLosses = null;
     } else {
       this.atmosphereLossesCompareService.modifiedAtmosphereLosses = null;
-      this.atmosphereLossesService.addLossModificationMonitor.next(false);
+      // this.atmosphereLossesService.addLossModificationMonitor.next(false);
     }
     this.atmosphereLossesService.deleteLossIndex.next(null);
   }
@@ -136,9 +137,9 @@ export class AtmosphereLossesComponent implements OnInit {
   }
 
   addLoss() {
-    if (this.isLossesSetup) {
-      this.atmosphereLossesService.addLoss(this.isBaseline);
-    }
+    // if (this.isLossesSetup) {
+    //   this.atmosphereLossesService.addLoss(this.isBaseline);
+    // }
     if (this.atmosphereLossesCompareService.differentArray) {
       this.atmosphereLossesCompareService.addObject(this.atmosphereLossesCompareService.differentArray.length - 1);
     }
@@ -149,6 +150,7 @@ export class AtmosphereLossesComponent implements OnInit {
       heatLoss: 0.0,
       collapse: false
     });
+    this.saveLosses();
   }
   collapseLoss(loss: any){
     loss.collapse = !loss.collapse;

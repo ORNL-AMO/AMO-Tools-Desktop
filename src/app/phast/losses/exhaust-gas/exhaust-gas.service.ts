@@ -8,14 +8,14 @@ import * as _ from 'lodash';
 export class ExhaustGasService {
 
   deleteLossIndex: BehaviorSubject<number>;
-  addLossBaselineMonitor: BehaviorSubject<any>;
-  addLossModificationMonitor: BehaviorSubject<any>;
+  //addLossBaselineMonitor: BehaviorSubject<any>;
+ // addLossModificationMonitor: BehaviorSubject<any>;
   // addOtherMonitor: BehaviorSubject<any>;
   // deleteOtherMonitor: BehaviorSubject<any>;
   constructor(private formBuilder: FormBuilder) {
     this.deleteLossIndex = new BehaviorSubject<number>(null);
-    this.addLossBaselineMonitor = new BehaviorSubject<any>(null);
-    this.addLossModificationMonitor = new BehaviorSubject<any>(null);
+    //this.addLossBaselineMonitor = new BehaviorSubject<any>(null);
+    //this.addLossModificationMonitor = new BehaviorSubject<any>(null);
     // this.addOtherMonitor = new BehaviorSubject<any>(null);
     // this.deleteOtherMonitor = new BehaviorSubject<any>(null);
   }
@@ -23,13 +23,13 @@ export class ExhaustGasService {
   setDelete(num: number) {
     this.deleteLossIndex.next(num);
   }
-  addLoss(bool: boolean) {
-    if (bool) {
-      this.addLossModificationMonitor.next(true);
-    } else {
-      this.addLossBaselineMonitor.next(true);
-    }
-  }
+  // addLoss(bool: boolean) {
+  //   if (bool) {
+  //     this.addLossModificationMonitor.next(true);
+  //   } else {
+  //     this.addLossBaselineMonitor.next(true);
+  //   }
+  // }
 
 
 

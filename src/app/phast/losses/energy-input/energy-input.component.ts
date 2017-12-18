@@ -90,40 +90,41 @@ export class EnergyInputComponent implements OnInit {
           if (this.energyInputCompareService.differentArray && !this.isBaseline) {
             this.energyInputCompareService.differentArray.splice(lossIndex, 1);
           }
+          this.saveLosses();
         }
       }
     })
-    if (this.isBaseline) {
-      this.energyInputService.addLossBaselineMonitor.subscribe((val) => {
-        if (val == true) {
-          this._energyInputs.push({
-            form: this.energyInputService.initForm(),
-            name: 'Loss #' + (this._energyInputs.length + 1),
-            results: {
-              heatDelivered: 0,
-              kwhCycle: 0,
-              totalKwhCycle: 0
-            },
-            collapse: false
-          });
-        }
-      })
-    } else {
-      this.energyInputService.addLossModificationMonitor.subscribe((val) => {
-        if (val == true) {
-          this._energyInputs.push({
-            form: this.energyInputService.initForm(),
-            name: 'Loss #' + (this._energyInputs.length + 1),
-            results: {
-              heatDelivered: 0,
-              kwhCycle: 0,
-              totalKwhCycle: 0
-            },
-            collapse: false
-          })
-        }
-      })
-    }
+    // if (this.isBaseline) {
+    //   this.energyInputService.addLossBaselineMonitor.subscribe((val) => {
+    //     if (val == true) {
+    //       this._energyInputs.push({
+    //         form: this.energyInputService.initForm(),
+    //         name: 'Loss #' + (this._energyInputs.length + 1),
+    //         results: {
+    //           heatDelivered: 0,
+    //           kwhCycle: 0,
+    //           totalKwhCycle: 0
+    //         },
+    //         collapse: false
+    //       });
+    //     }
+    //   })
+    // } else {
+    //   this.energyInputService.addLossModificationMonitor.subscribe((val) => {
+    //     if (val == true) {
+    //       this._energyInputs.push({
+    //         form: this.energyInputService.initForm(),
+    //         name: 'Loss #' + (this._energyInputs.length + 1),
+    //         results: {
+    //           heatDelivered: 0,
+    //           kwhCycle: 0,
+    //           totalKwhCycle: 0
+    //         },
+    //         collapse: false
+    //       })
+    //     }
+    //   })
+    // }
     if(this.inSetup && this.modExists){
       this.disableForms();
     }
@@ -131,11 +132,11 @@ export class EnergyInputComponent implements OnInit {
 
   ngOnDestroy() {
     if (this.isBaseline) {
-      this.energyInputService.addLossBaselineMonitor.next(false);
+    //  this.energyInputService.addLossBaselineMonitor.next(false);
       this.energyInputCompareService.baselineEnergyInput = null;
     } else {
       this.energyInputCompareService.modifiedEnergyInput = null;
-      this.energyInputService.addLossModificationMonitor.next(false);
+    //  this.energyInputService.addLossModificationMonitor.next(false);
     }
     this.energyInputService.deleteLossIndex.next(null);
   }
@@ -146,9 +147,9 @@ export class EnergyInputComponent implements OnInit {
     })
   }
   addLoss() {
-    if (this.isLossesSetup) {
-      this.energyInputService.addLoss(this.isBaseline);
-    }
+    // if (this.isLossesSetup) {
+    //   this.energyInputService.addLoss(this.isBaseline);
+    // }
     if (this.energyInputCompareService.differentArray) {
       this.energyInputCompareService.addObject(this.energyInputCompareService.differentArray.length - 1);
     }
@@ -162,6 +163,7 @@ export class EnergyInputComponent implements OnInit {
       },
       collapse: false
     });
+    this.saveLosses();
   }
 
   removeLoss(lossIndex: number) {
