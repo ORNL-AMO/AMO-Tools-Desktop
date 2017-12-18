@@ -6,6 +6,7 @@ import { CompareService } from '../compare.service';
 import { WindowRefService } from '../../indexedDb/window-ref.service';
 import { HelpPanelService } from '../help-panel/help-panel.service';
 import { debug } from 'util';
+import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
 @Component({
   selector: 'app-pump-fluid',
   templateUrl: './pump-fluid.component.html',
@@ -97,8 +98,8 @@ export class PumpFluidComponent implements OnInit {
     pumpRPM: null
   };
 
-
-  constructor(private psatService: PsatService, private compareService: CompareService, private windowRefService: WindowRefService, private helpPanelService: HelpPanelService) { }
+  tempUnit: string;
+  constructor(private psatService: PsatService, private compareService: CompareService, private windowRefService: WindowRefService, private helpPanelService: HelpPanelService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnChanges(changes: SimpleChanges) {
     if (!this.isFirstChange) {
@@ -124,6 +125,13 @@ export class PumpFluidComponent implements OnInit {
       this.formRef.nativeElement.pumpType.focus();
     }
     this.checkPumpRpm(true);
+    if(this.settings.temperatureMeasurement == 'C'){
+      this.tempUnit = '&#8451';
+    }else if(this.settings.temperatureMeasurement == 'F'){
+      this.tempUnit = '&#8457';
+    }else if(this.settings.temperatureMeasurement == 'K'){
+      this.tempUnit = '&#8490';
+    }
   }
 
   ngAfterViewInit() {

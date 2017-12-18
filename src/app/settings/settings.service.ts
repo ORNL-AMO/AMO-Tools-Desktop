@@ -21,7 +21,8 @@ export class SettingsService {
       'energySourceType': [''],
       'furnaceType': [''],
       'energyResultUnit': [''],
-      'customFurnaceName': ['']
+      'customFurnaceName': [''],
+      'temperatureMeasurement': ['']
     });
   }
 
@@ -40,7 +41,8 @@ export class SettingsService {
       'energySourceType': [settings.energySourceType],
       'furnaceType': [settings.furnaceType],
       'energyResultUnit': [settings.energyResultUnit],
-      'customFurnaceName': [settings.customFurnaceName]
+      'customFurnaceName': [settings.customFurnaceName],
+      'temperatureMeasurement': [settings.temperatureMeasurement]
     });
   }
 
@@ -59,7 +61,8 @@ export class SettingsService {
       energySourceType: form.value.energySourceType,
       furnaceType: form.value.furnaceType,
       energyResultUnit: form.value.energyResultUnit,
-      customFurnaceName: form.value.customFurnaceName
+      customFurnaceName: form.value.customFurnaceName,
+      temperatureMeasurement: form.value.temperatureMeasurement
     };
     return tmpSettings;
   }
@@ -78,7 +81,8 @@ export class SettingsService {
       voltageMeasurement: settings.voltageMeasurement,
       energySourceType: settings.energySourceType,
       furnaceType: settings.furnaceType,
-      customFurnaceName: settings.customFurnaceName
+      customFurnaceName: settings.customFurnaceName,
+      temperatureMeasurement: settings.temperatureMeasurement
     }
     return newSettings;
   }
@@ -89,7 +93,8 @@ export class SettingsService {
         powerMeasurement: 'hp',
         flowMeasurement: 'gpm',
         distanceMeasurement: 'ft',
-        pressureMeasurement: 'psi'
+        pressureMeasurement: 'psi',
+        temperatureMeasurement: 'F'
         // currentMeasurement: 'A',
         // viscosityMeasurement: 'cST',
         // voltageMeasurement: 'V'
@@ -100,7 +105,8 @@ export class SettingsService {
         powerMeasurement: 'kW',
         flowMeasurement: 'm3/h',
         distanceMeasurement: 'm',
-        pressureMeasurement: 'kPa'
+        pressureMeasurement: 'kPa',
+        temperatureMeasurement: 'C'
         // currentMeasurement: 'A',
         // viscosityMeasurement: 'cST',
         // voltageMeasurement: 'V'
@@ -140,6 +146,17 @@ export class SettingsService {
 
     if (settings.energySourceType == 'Electricity') {
       settings.energyResultUnit = 'kWh';
+    }
+    return settings;
+  }
+
+  setTemperatureUnit(settings: Settings){
+    if(settings.unitsOfMeasure == 'Imperial'){
+      settings.temperatureMeasurement = 'F';
+    }else if(settings.unitsOfMeasure == 'Metric'){
+      settings.temperatureMeasurement = 'C';
+    }else{
+      settings.temperatureMeasurement = 'F';
     }
     return settings;
   }
