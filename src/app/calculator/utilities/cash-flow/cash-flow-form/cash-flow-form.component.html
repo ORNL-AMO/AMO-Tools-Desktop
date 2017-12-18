@@ -23,6 +23,15 @@
 <!-- </div> -->
 <form>
   <div class="form-section">
+    <div class="form-group">
+      <label class="small">Lifetime</label>
+      <div class="input-group calc-addon-group">
+          <input type="number" step="any" class="form-control addon-input" name="lifeYears" id="lifeYears" [(ngModel)]="cashFlowForm.lifeYears"
+          (focus)="focusField('lifeYears')" (input)="calculate()">
+      </div>
+    </div>
+  </div>
+  <div class="form-section">
     <label class="group-label point-label">Benefits</label>        
     <div class="form-group">
       <label class="small">Annual Energy Savings</label>

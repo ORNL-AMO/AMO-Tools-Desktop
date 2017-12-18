@@ -1,5 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { CashFlowForm, CashFlowResults } from './cash-flow';
+import { CashFlowService } from './cash-flow.service';
+
 @Component({
   selector: 'app-cash-flow',
   templateUrl: './cash-flow.component.html',
@@ -7,7 +9,7 @@ import { CashFlowForm, CashFlowResults } from './cash-flow';
 })
 export class CashFlowComponent implements OnInit {
   @Input()
-  currentField: string  = 'lifeYears';
+  currentField: string = 'lifeYears';
   cashFlowForm: CashFlowForm;
   cashFlowResults: CashFlowResults = {
     benefits: 0,
@@ -16,8 +18,13 @@ export class CashFlowComponent implements OnInit {
     payback: 0
   };
 
+
+  toggleCalculate: boolean = true;
   tabSelect: string = 'results';
-   constructor() { }
+
+  constructor(private cashFlowService: CashFlowService) {
+
+  }
 
   ngOnInit() {
     console.log("ngOnInit Cash-flow");
@@ -42,13 +49,15 @@ export class CashFlowComponent implements OnInit {
 
 
   calculate() {
-  // Benefits/Cost Ratio
+    // Benefits/Cost Ratio
     this.cashFlowResults.results = ((this.cashFlowForm.energySavings * this.cashFlowForm.lifeYears) + this.cashFlowForm.salvageInput) /
-    (((this.cashFlowForm.installationCost + this.cashFlowForm.junkCost) + (this.cashFlowForm.operationCost + this.cashFlowForm.fuelCost)) * this.cashFlowForm.lifeYears);
+      (((this.cashFlowForm.installationCost + this.cashFlowForm.junkCost) + (this.cashFlowForm.operationCost + this.cashFlowForm.fuelCost)) * this.cashFlowForm.lifeYears);
     console.log(this.cashFlowResults.results);
-  // Payback
+    // Payback
     this.cashFlowResults.payback = (this.cashFlowForm.installationCost * 12) / this.cashFlowForm.energySavings;
 
+    console.log("made it");
+    this.cashFlowService.calculate.next(true);
   }
 
 

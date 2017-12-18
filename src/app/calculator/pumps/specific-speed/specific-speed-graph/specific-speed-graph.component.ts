@@ -516,6 +516,8 @@ export class SpecificSpeedGraphComponent implements OnInit {
       .style("fill", "none")
       .style("stroke", "#2ECC71")
       .style('pointer-events', 'none');
+
+      
   }
 
 }
