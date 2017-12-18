@@ -39,6 +39,7 @@ export class ExtendedSurfaceLossesComponent implements OnInit {
   _surfaceLosses: Array<any>;
   firstChange: boolean = true;
   resultsUnit: string;
+  lossesLocked: boolean = false;
   constructor(private phastService: PhastService, private extendedSurfaceLossesService: ExtendedSurfaceLossesService, private extendedSurfaceCompareService: ExtendedSurfaceCompareService) { }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -125,6 +126,7 @@ export class ExtendedSurfaceLossesComponent implements OnInit {
     //   })
     // }
     if (this.inSetup && this.modExists) {
+      this.lossesLocked = true;
       this.disableForms();
     }
   }

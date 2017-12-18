@@ -41,6 +41,7 @@ export class ChargeMaterialComponent implements OnInit {
   firstChange: boolean = true;
   resultsUnit: string;
   disableType: boolean = false;
+  lossesLocked: boolean = false;
   constructor(private formBuilder: FormBuilder, private phastService: PhastService, private chargeMaterialService: ChargeMaterialService, private chargeMaterialCompareService: ChargeMaterialCompareService) { }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -79,7 +80,7 @@ export class ChargeMaterialComponent implements OnInit {
           if (this.chargeMaterialCompareService.differentArray && !this.isBaseline) {
             this.chargeMaterialCompareService.differentArray.splice(lossIndex, 1);
           }
-          this.saveLosses()
+          this.saveLosses();
         }
       }
     })
@@ -115,7 +116,7 @@ export class ChargeMaterialComponent implements OnInit {
     //   })
     // }
     if(this.inSetup && this.modExists){
-      this.disableType = true;
+      this.lossesLocked = true;
       this.disableForms();
     }
   }

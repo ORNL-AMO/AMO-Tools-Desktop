@@ -42,7 +42,7 @@ export class FlueGasLossesComponent implements OnInit {
   availableHeatError: string = null;
 
   disableType: boolean = false;
-
+  lossesLocked: boolean = false;
   constructor(private phastService: PhastService, private flueGasLossesService: FlueGasLossesService, private flueGasCompareService: FlueGasCompareService) { }
 
   ngOnInit() {
@@ -100,7 +100,7 @@ export class FlueGasLossesComponent implements OnInit {
     //   })
     // }
     if(this.inSetup && this.modExists){
-      this.disableType = true;
+      this.lossesLocked = true;
       this.disableForms();
     }
   }

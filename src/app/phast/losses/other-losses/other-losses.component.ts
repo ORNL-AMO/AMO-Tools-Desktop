@@ -37,6 +37,7 @@ export class OtherLossesComponent implements OnInit {
   
   _otherLosses: Array<any>;
   firstChange: boolean = true;
+  lossesLocked: boolean = false;
   constructor(private otherLossesService: OtherLossesService, private otherLossCompareService: OtherLossesCompareService) { }
 
 
@@ -104,6 +105,7 @@ export class OtherLossesComponent implements OnInit {
     // }
 
     if(this.inSetup && this.modExists){
+      this.lossesLocked = true;
       this.disableForms();
     }
   }

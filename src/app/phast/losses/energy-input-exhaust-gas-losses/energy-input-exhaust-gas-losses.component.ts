@@ -40,6 +40,7 @@ export class EnergyInputExhaustGasLossesComponent implements OnInit {
   firstChange: boolean = true;
   availableHeat: number = 0;
   resultsUnit: string;
+  lossesLocked: boolean = false;
   constructor(private phastService: PhastService, private energyInputExhaustGasService: EnergyInputExhaustGasService, private energyInputExhaustGasCompareService: EnergyInputExhaustGasCompareService) { }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -116,6 +117,7 @@ export class EnergyInputExhaustGasLossesComponent implements OnInit {
     //   })
     // }
     if(this.inSetup && this.modExists){
+      this.lossesLocked = true;
       this.disableForms();
     }
   }

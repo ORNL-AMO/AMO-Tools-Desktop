@@ -1,4 +1,4 @@
-<div class="no-data no-data-phast" *ngIf="_leakageLosses.length == 0 && inSetup" (click)="addLoss()">
+<div class="no-data no-data-phast" *ngIf="_leakageLosses.length == 0 && inSetup && !lossesLocked" (click)="addLoss()">
   <h3>You have no Gas Leakage Losses</h3>
   <h4>Add some now.</h4>
 </div>

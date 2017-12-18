@@ -39,6 +39,7 @@ export class SlagComponent implements OnInit {
   _slagLosses: Array<any>;
   firstChange: boolean = true;
   resultsUnit: string;
+  lossesLocked: boolean = false;
   constructor(private phastService: PhastService, private slagService: SlagService, private slagCompareService: SlagCompareService) { }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -115,6 +116,7 @@ export class SlagComponent implements OnInit {
     // }
 
     if(this.inSetup && this.modExists){
+      this.lossesLocked = true;
       this.disableForms();
     }
   }

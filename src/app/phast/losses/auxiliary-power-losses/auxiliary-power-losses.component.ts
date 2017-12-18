@@ -39,6 +39,7 @@ export class AuxiliaryPowerLossesComponent implements OnInit {
   resultsUnit: string;
   _auxiliaryPowerLosses: Array<any>;
   firstChange: boolean = true;
+  lossesLocked: boolean = false;
   constructor(private phastService: PhastService, private auxiliaryPowerLossesService: AuxiliaryPowerLossesService, private auxiliaryPowerCompareService: AuxiliaryPowerCompareService) { }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -114,6 +115,7 @@ export class AuxiliaryPowerLossesComponent implements OnInit {
     // }
     if(this.inSetup && this.modExists){
       this.disableForms();
+      this.lossesLocked = true;
     }
   }
 

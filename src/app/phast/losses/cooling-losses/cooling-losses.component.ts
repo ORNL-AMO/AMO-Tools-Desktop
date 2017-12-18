@@ -39,6 +39,7 @@ export class CoolingLossesComponent implements OnInit {
   _coolingLosses: Array<any>;
   firstChange: boolean = true;
   resultsUnit: string;
+  lossesLocked: boolean = false;
   disableType: boolean = false;
   constructor(private coolingLossesService: CoolingLossesService, private phastService: PhastService, private coolingLossesCompareService: CoolingLossesCompareService) { }
 
@@ -113,7 +114,7 @@ export class CoolingLossesComponent implements OnInit {
     //   })
     // }
     if(this.inSetup && this.modExists){
-      this.disableType = true;
+      this.lossesLocked = true;
       this.disableForms();
     }
   }

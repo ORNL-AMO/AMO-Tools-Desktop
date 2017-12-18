@@ -39,6 +39,7 @@ export class EnergyInputComponent implements OnInit {
   _energyInputs: Array<any>;
   firstChange: boolean = true;
   resultsUnit: string;
+  lossesLocked: boolean = false;
   constructor(private energyInputService: EnergyInputService, private phastService: PhastService, private energyInputCompareService: EnergyInputCompareService) { }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -126,6 +127,7 @@ export class EnergyInputComponent implements OnInit {
     //   })
     // }
     if(this.inSetup && this.modExists){
+      this.lossesLocked = true;
       this.disableForms();
     }
   }

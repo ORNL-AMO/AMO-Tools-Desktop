@@ -40,6 +40,7 @@ export class AtmosphereLossesComponent implements OnInit {
   firstChange: boolean = true;
 
   resultsUnit: string;
+  lossesLocked: boolean = false;
   constructor(private atmosphereLossesService: AtmosphereLossesService, private phastService: PhastService, private atmosphereLossesCompareService: AtmosphereLossesCompareService) { }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -115,6 +116,7 @@ export class AtmosphereLossesComponent implements OnInit {
     //   })
     // }
     if(this.inSetup && this.modExists){
+      this.lossesLocked = true;
       this.disableForms();
     }
   }

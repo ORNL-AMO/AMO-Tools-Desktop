@@ -40,6 +40,7 @@ export class WallLossesComponent implements OnInit {
   _wallLosses: Array<any>;
   firstChange: boolean = true;
   resultsUnit: string
+  lossesLocked: boolean = false;
   constructor(private phastService: PhastService, private wallLossesService: WallLossesService, private wallLossCompareService: WallLossCompareService, private windowRefService: WindowRefService) { }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -129,6 +130,7 @@ export class WallLossesComponent implements OnInit {
     // }
 
     if(this.inSetup && this.modExists){
+      this.lossesLocked = true;
       this.disableForms();
     }
   }

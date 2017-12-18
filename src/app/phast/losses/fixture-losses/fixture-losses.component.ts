@@ -39,6 +39,7 @@ export class FixtureLossesComponent implements OnInit {
   resultsUnit: string;
   _fixtureLosses: Array<any>;
   firstChange: boolean = true;
+  lossesLocked: boolean = false;
   constructor(private phastService: PhastService, private fixtureLossesService: FixtureLossesService, private fixtureLossesCompareService: FixtureLossesCompareService) { }
   ngOnChanges(changes: SimpleChanges) {
     if (!this.firstChange) {
@@ -113,6 +114,7 @@ export class FixtureLossesComponent implements OnInit {
     //   })
     // }
     if(this.inSetup && this.modExists){
+      this.lossesLocked = true;
       this.disableForms();
     }
   }

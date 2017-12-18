@@ -38,6 +38,7 @@ export class GasLeakageLossesComponent implements OnInit {
 
   _leakageLosses: Array<any>;
   firstChange: boolean = true;
+  lossesLocked: boolean = false;
   resultsUnit: string;
   constructor(private gasLeakageLossesService: GasLeakageLossesService, private phastService: PhastService, private gasLeakageCompareService: GasLeakageCompareService) { }
 
@@ -114,6 +115,7 @@ export class GasLeakageLossesComponent implements OnInit {
     // }
     
     if(this.inSetup && this.modExists){
+      this.lossesLocked = true;
       this.disableForms();
     }
   }
