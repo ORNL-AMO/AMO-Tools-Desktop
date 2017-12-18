@@ -7,6 +7,7 @@ import { WallLossesService } from './wall-losses.service';
 import { WallLossCompareService } from './wall-loss-compare.service';
 import { WindowRefService } from '../../../indexedDb/window-ref.service';
 import { Settings } from '../../../shared/models/settings';
+
 @Component({
   selector: 'app-wall-losses',
   templateUrl: './wall-losses.component.html',
@@ -39,6 +40,7 @@ export class WallLossesComponent implements OnInit {
   _wallLosses: Array<any>;
   firstChange: boolean = true;
   resultsUnit: string
+  lossesLocked: boolean = false;
   constructor(private phastService: PhastService, private wallLossesService: WallLossesService, private wallLossCompareService: WallLossCompareService, private windowRefService: WindowRefService) { }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -98,34 +100,37 @@ export class WallLossesComponent implements OnInit {
           if (this.wallLossCompareService.differentArray && !this.isBaseline) {
             this.wallLossCompareService.differentArray.splice(lossIndex, 1);
           }
+          this.saveLosses();
         }
       }
     })
 
     //add monitor so both baseline and modification add loss when clicked
-    if (this.isBaseline) {
-      this.wallLossesService.addLossBaselineMonitor.subscribe((val) => {
-        if (val == true) {
-          this._wallLosses.push({
-            form: this.wallLossesService.initForm(),
-            name: 'Loss #' + (this._wallLosses.length + 1),
-            heatLoss: 0.0
-          })
-        }
-      })
-    } else {
-      this.wallLossesService.addLossModifiedMonitor.subscribe((val) => {
-        if (val == true) {
-          this._wallLosses.push({
-            form: this.wallLossesService.initForm(),
-            name: 'Loss #' + (this._wallLosses.length + 1),
-            heatLoss: 0.0
-          })
-        }
-      })
-    }
+    //ONLY ADDING LOSSSES IN BASELINE NOW
+    // if (this.isBaseline) {
+    //   this.wallLossesService.addLossBaselineMonitor.subscribe((val) => {
+    //     if (val == true) {
+    //       this._wallLosses.push({
+    //         form: this.wallLossesService.initForm(),
+    //         name: 'Loss #' + (this._wallLosses.length + 1),
+    //         heatLoss: 0.0
+    //       })
+    //     }
+    //   })
+    // } else {
+    //   this.wallLossesService.addLossModifiedMonitor.subscribe((val) => {
+    //     if (val == true) {
+    //       this._wallLosses.push({
+    //         form: this.wallLossesService.initForm(),
+    //         name: 'Loss #' + (this._wallLosses.length + 1),
+    //         heatLoss: 0.0
+    //       })
+    //     }
+    //   })
+    // }
 
     if(this.inSetup && this.modExists){
+      this.lossesLocked = true;
       this.disableForms();
     }
   }
@@ -133,11 +138,11 @@ export class WallLossesComponent implements OnInit {
   ngOnDestroy() {
     //clean up subscriptions on destroy
     if (this.isBaseline) {
-      this.wallLossesService.addLossBaselineMonitor.next(false);
+     // this.wallLossesService.addLossBaselineMonitor.next(false);
       this.wallLossCompareService.baselineWallLosses = null;
     } else {
       this.wallLossCompareService.modifiedWallLosses = null;
-      this.wallLossesService.addLossModifiedMonitor.next(false);
+     // this.wallLossesService.addLossModifiedMonitor.next(false);
     }
     this.wallLossesService.deleteLossIndex.next(null);
   }
@@ -150,9 +155,9 @@ export class WallLossesComponent implements OnInit {
 
   addLoss() {
     //if adding loss in modification signal to baseline to add loss
-    if (this.isLossesSetup) {
-      this.wallLossesService.addLoss(this.isBaseline);
-    }
+    // if (this.isLossesSetup) {
+    //   this.wallLossesService.addLoss(this.isBaseline);
+    // }
     //check compare service objects has been initialized
     //have modify conditions view call so that it isn't called twice => (!this.isBaseline)
     if (this.wallLossCompareService.differentArray) {
@@ -165,6 +170,7 @@ export class WallLossesComponent implements OnInit {
       heatLoss: 0.0,
       collapse: false
     });
+    this.saveLosses();
   }
 
   collapseLoss(loss: any){

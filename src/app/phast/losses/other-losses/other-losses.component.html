@@ -1,9 +1,4 @@
-<!--<div class="section-header">
-  <h3 class="pull-left">Other Losses</h3>
-  <button class="btn btn-secondary pull-right" (click)="addLoss()">+ Add Other Loss</button>
-</div>-->
-
-<div class="no-data no-data-phast" *ngIf="_otherLosses.length == 0 && inSetup" (click)="addLoss()">
+<div class="no-data no-data-phast" *ngIf="_otherLosses.length == 0 && inSetup && !lossesLocked" (click)="addLoss()">
   <h3>You have no Other Losses</h3>
   <h4>Add some now.</h4>
 </div>

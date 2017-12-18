@@ -1,4 +1,4 @@
-<div class="no-data no-data-phast" *ngIf="_coolingLosses.length == 0 && inSetup" (click)="addLoss()">
+<div class="no-data no-data-phast" *ngIf="_coolingLosses.length == 0 && inSetup && !lossesLocked" (click)="addLoss()">
   <h3>You have no Cooling Losses</h3>
   <h4>Add some now.</h4>
 </div>
@@ -18,7 +18,7 @@
     <div class="col-12">
       <div class="form-group">
         <label class="small" for="coolingMedium">Cooling Medium</label>
-        <select class="form-control" id="coolingMedium" [(ngModel)]="loss.coolingMedium" (change)="calculate(loss)" [disabled]="!baselineSelected || disableType"
+        <select class="form-control" id="coolingMedium" [(ngModel)]="loss.coolingMedium" (change)="calculate(loss)" [disabled]="!baselineSelected || lossesLocked"
           (focus)="changeField('coolingMedium')" (blur)="focusOut()">
           <option>Gas</option>
           <option>Liquid</option>

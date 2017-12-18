@@ -39,6 +39,7 @@ export class ExtendedSurfaceLossesComponent implements OnInit {
   _surfaceLosses: Array<any>;
   firstChange: boolean = true;
   resultsUnit: string;
+  lossesLocked: boolean = false;
   constructor(private phastService: PhastService, private extendedSurfaceLossesService: ExtendedSurfaceLossesService, private extendedSurfaceCompareService: ExtendedSurfaceCompareService) { }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -57,10 +58,10 @@ export class ExtendedSurfaceLossesComponent implements OnInit {
 
   ngOnDestroy() {
     if (this.isBaseline) {
-      this.extendedSurfaceLossesService.addLossBaselineMonitor.next(false);
+    //  this.extendedSurfaceLossesService.addLossBaselineMonitor.next(false);
       this.extendedSurfaceCompareService.baselineSurface = null;
     } else {
-      this.extendedSurfaceLossesService.addLossModificationMonitor.next(false);
+     // this.extendedSurfaceLossesService.addLossModificationMonitor.next(false);
       this.extendedSurfaceCompareService.modifiedSurface = null;
     }
     this.extendedSurfaceLossesService.deleteLossIndex.next(null);
@@ -97,33 +98,35 @@ export class ExtendedSurfaceLossesComponent implements OnInit {
           if (this.extendedSurfaceCompareService.differentArray && !this.isBaseline) {
             this.extendedSurfaceCompareService.differentArray.splice(lossIndex, 1);
           }
+          this.saveLosses();
         }
       }
     })
-    if (this.isBaseline) {
-      this.extendedSurfaceLossesService.addLossBaselineMonitor.subscribe((val) => {
-        if (val == true) {
-          this._surfaceLosses.push({
-            form: this.extendedSurfaceLossesService.initForm(),
-            name: 'Loss #' + (this._surfaceLosses.length + 1),
-            heatLoss: 0.0,
-            collapse: false
-          })
-        }
-      })
-    } else {
-      this.extendedSurfaceLossesService.addLossModificationMonitor.subscribe((val) => {
-        if (val == true) {
-          this._surfaceLosses.push({
-            form: this.extendedSurfaceLossesService.initForm(),
-            name: 'Loss #' + (this._surfaceLosses.length + 1),
-            heatLoss: 0.0,
-            collapse: false
-          })
-        }
-      })
-    }
+    // if (this.isBaseline) {
+    //   this.extendedSurfaceLossesService.addLossBaselineMonitor.subscribe((val) => {
+    //     if (val == true) {
+    //       this._surfaceLosses.push({
+    //         form: this.extendedSurfaceLossesService.initForm(),
+    //         name: 'Loss #' + (this._surfaceLosses.length + 1),
+    //         heatLoss: 0.0,
+    //         collapse: false
+    //       })
+    //     }
+    //   })
+    // } else {
+    //   this.extendedSurfaceLossesService.addLossModificationMonitor.subscribe((val) => {
+    //     if (val == true) {
+    //       this._surfaceLosses.push({
+    //         form: this.extendedSurfaceLossesService.initForm(),
+    //         name: 'Loss #' + (this._surfaceLosses.length + 1),
+    //         heatLoss: 0.0,
+    //         collapse: false
+    //       })
+    //     }
+    //   })
+    // }
     if (this.inSetup && this.modExists) {
+      this.lossesLocked = true;
       this.disableForms();
     }
   }
@@ -134,9 +137,9 @@ export class ExtendedSurfaceLossesComponent implements OnInit {
     })
   }
   addLoss() {
-    if (this.isLossesSetup) {
-      this.extendedSurfaceLossesService.addLoss(this.isBaseline);
-    }
+    // if (this.isLossesSetup) {
+    //   this.extendedSurfaceLossesService.addLoss(this.isBaseline);
+    // }
     if (this.extendedSurfaceCompareService.differentArray) {
       this.extendedSurfaceCompareService.addObject(this.extendedSurfaceCompareService.differentArray.length - 1);
     }
@@ -146,6 +149,7 @@ export class ExtendedSurfaceLossesComponent implements OnInit {
       heatLoss: 0.0,
       collapse: false
     });
+    this.saveLosses();
   }
 
   removeLoss(lossIndex: number) {

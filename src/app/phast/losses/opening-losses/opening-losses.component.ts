@@ -39,6 +39,7 @@ export class OpeningLossesComponent implements OnInit {
   _openingLosses: Array<any>;
   firstChange: boolean = true;
   resultsUnit: string;
+  lossesLocked: boolean = false;
   constructor(private phastService: PhastService, private openingLossesService: OpeningLossesService, private openingLossesCompareService: OpeningLossesCompareService) { }
 
 
@@ -90,50 +91,51 @@ export class OpeningLossesComponent implements OnInit {
         }
       }
     })
-    if (this.isBaseline) {
-      this.openingLossesService.addLossBaselineMonitor.subscribe((val) => {
-        if (val == true) {
-          this._openingLosses.push({
-            form: this.openingLossesService.initForm(),
-            name: 'Loss #' + (this._openingLosses.length + 1),
-            heatLoss: 0.0,
-            collapse: false
-          })
-        }
-      })
-    } else {
-      this.openingLossesService.addLossModificationMonitor.subscribe((val) => {
-        if (val == true) {
-          this._openingLosses.push({
-            form: this.openingLossesService.initForm(),
-            name: 'Loss #' + (this._openingLosses.length + 1),
-            heatLoss: 0.0,
-            collapse: false
-          })
-        }
-      })
-    }
+    // if (this.isBaseline) {
+    //   this.openingLossesService.addLossBaselineMonitor.subscribe((val) => {
+    //     if (val == true) {
+    //       this._openingLosses.push({
+    //         form: this.openingLossesService.initForm(),
+    //         name: 'Loss #' + (this._openingLosses.length + 1),
+    //         heatLoss: 0.0,
+    //         collapse: false
+    //       })
+    //     }
+    //   })
+    // } else {
+    //   this.openingLossesService.addLossModificationMonitor.subscribe((val) => {
+    //     if (val == true) {
+    //       this._openingLosses.push({
+    //         form: this.openingLossesService.initForm(),
+    //         name: 'Loss #' + (this._openingLosses.length + 1),
+    //         heatLoss: 0.0,
+    //         collapse: false
+    //       })
+    //     }
+    //   })
+    // }
 
     if(this.inSetup && this.modExists){
+      this.lossesLocked = true;
       this.disableForms();
     }
   }
 
   ngOnDestroy() {
     if (this.isBaseline) {
-      this.openingLossesService.addLossBaselineMonitor.next(false);
+  //    this.openingLossesService.addLossBaselineMonitor.next(false);
       this.openingLossesCompareService.baselineOpeningLosses = null;
     } else {
       this.openingLossesCompareService.modifiedOpeningLosses = null;
-      this.openingLossesService.addLossModificationMonitor.next(false);
+//      this.openingLossesService.addLossModificationMonitor.next(false);
     };
     this.openingLossesService.deleteLossIndex.next(null);
   }
 
   addLoss() {
-    if (this.isLossesSetup) {
-      this.openingLossesService.addLoss(this.isBaseline);
-    }
+    // if (this.isLossesSetup) {
+    //   this.openingLossesService.addLoss(this.isBaseline);
+    // }
     if (this.openingLossesCompareService.differentArray) {
       this.openingLossesCompareService.addObject(this.openingLossesCompareService.differentArray.length - 1);
     }
@@ -143,6 +145,7 @@ export class OpeningLossesComponent implements OnInit {
       totalOpeningLosses: 0.0,
       collapse: false
     });
+    this.saveLosses();
   }
   
   collapseLoss(loss: any){
