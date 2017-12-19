@@ -615,17 +615,17 @@ export class PhastService {
     let sum = 0;
     losses.forEach(loss => {
       if (loss.chargeMaterialType == 'Gas') {
-        let tmpForm = this.chargeMaterialService.getGasChargeMaterialForm(loss.gasChargeMaterial);
+        let tmpForm = this.chargeMaterialService.getGasChargeMaterialForm(loss);
         if (tmpForm.status == 'VALID') {
           sum += this.gasLoadChargeMaterial(loss.gasChargeMaterial, settings);
         }
       } else if (loss.chargeMaterialType == 'Solid') {
-        let tmpForm = this.chargeMaterialService.getSolidChargeMaterialForm(loss.solidChargeMaterial);
+        let tmpForm = this.chargeMaterialService.getSolidChargeMaterialForm(loss);
         if (tmpForm.status == 'VALID') {
           sum += this.solidLoadChargeMaterial(loss.solidChargeMaterial, settings);
         }
       } else if (loss.chargeMaterialType == 'Liquid') {
-        let tmpForm = this.chargeMaterialService.getLiquidChargeMaterialForm(loss.liquidChargeMaterial);
+        let tmpForm = this.chargeMaterialService.getLiquidChargeMaterialForm(loss);
         if (tmpForm.status == 'VALID') {
           sum += this.liquidLoadChargeMaterial(loss.liquidChargeMaterial, settings);
         }

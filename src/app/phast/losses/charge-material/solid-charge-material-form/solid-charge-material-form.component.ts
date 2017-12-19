@@ -91,17 +91,11 @@ export class SolidChargeMaterialFormComponent implements OnInit {
 
 
   disableForm() {
-    this.elements = this.lossForm.nativeElement.elements;
-    for (var i = 0, len = this.elements.length; i < len; ++i) {
-      this.elements[i].disabled = true;
-    }
+    this.chargeMaterialForm.disable();
   }
 
   enableForm() {
-    this.elements = this.lossForm.nativeElement.elements;
-    for (var i = 0, len = this.elements.length; i < len; ++i) {
-      this.elements[i].disabled = false;
-    }
+    this.chargeMaterialForm.enable();
   }
 
   checkDischargeTemp() {
