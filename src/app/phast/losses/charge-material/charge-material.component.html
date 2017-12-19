@@ -1,4 +1,4 @@
-<div class="no-data no-data-phast" *ngIf="_chargeMaterial.length == 0 && inSetup" (click)="addMaterial()">
+<div class="no-data no-data-phast" *ngIf="_chargeMaterial.length == 0 && inSetup && !lossesLocked" (click)="addMaterial()">
   <h3>You have no Charge Material</h3>
   <h4>Add some now.</h4>
 </div>
@@ -19,7 +19,7 @@
       <div class="form-section">
         <div class="form-group">
           <label class="small" for="type">Select Type</label>
-          <select class="form-control" id="type" [(ngModel)]="material.chargeMaterialType" [disabled]="!baselineSelected || disableType" (focus)="changeField('chargeMaterialType')"
+          <select class="form-control" id="type" [(ngModel)]="material.chargeMaterialType" [disabled]="!baselineSelected || lossesLocked" (focus)="changeField('chargeMaterialType')"
             (blur)="focusOut()">
             <option>Solid</option>
             <option>Liquid</option>

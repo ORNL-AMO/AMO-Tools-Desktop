@@ -209,3 +209,8 @@
 .loss-form-section{
     padding-top: 10px;
 }
+
+.phast-losses-container .card-form:last-of-type{
+    padding-bottom: 90px;
+}
+

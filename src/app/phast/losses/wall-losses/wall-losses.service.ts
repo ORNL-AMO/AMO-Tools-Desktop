@@ -8,29 +8,29 @@ import { BehaviorSubject } from 'rxjs';
 export class WallLossesService {
   //components subscribe to BehaviorSubject variables for communication between siblings components
   deleteLossIndex: BehaviorSubject<number>;
-  addLossBaselineMonitor: BehaviorSubject<any>;
-  addLossModifiedMonitor: BehaviorSubject<any>;
+//  addLossBaselineMonitor: BehaviorSubject<any>;
+//  addLossModifiedMonitor: BehaviorSubject<any>;
 
   constructor(private formBuilder: FormBuilder) {
     //init behavior subjects to null;
     this.deleteLossIndex = new BehaviorSubject<number>(null);
-    this.addLossBaselineMonitor = new BehaviorSubject<any>(null);
-    this.addLossModifiedMonitor = new BehaviorSubject<any>(null);
+    // this.addLossBaselineMonitor = new BehaviorSubject<any>(null);
+    // this.addLossModifiedMonitor = new BehaviorSubject<any>(null);
   }
 
   setDelete(num: number) {
     this.deleteLossIndex.next(num);
   }
 
-  addLoss(isBaseline: boolean) {
-    //if baseline adds loss, signal modified
-    if (isBaseline) {
-      this.addLossModifiedMonitor.next(true);
-    }else{
-       //signal baseline
-       this.addLossBaselineMonitor.next(true);
-    }
-  }
+  // addLoss(isBaseline: boolean) {
+  //   //if baseline adds loss, signal modified
+  //   if (isBaseline) {
+  //     this.addLossModifiedMonitor.next(true);
+  //   }else{
+  //      //signal baseline
+  //      this.addLossBaselineMonitor.next(true);
+  //   }
+  // }
 
   //init empty wall loss form
   initForm() {

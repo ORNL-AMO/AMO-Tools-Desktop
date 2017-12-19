@@ -3,7 +3,7 @@
   <button class="btn btn-secondary pull-right" (click)="addLoss()">+ Add Atmosphere Loss</button>
 </div>-->
 
-<div class="no-data no-data-phast" *ngIf="_atmosphereLosses.length == 0 && inSetup" (click)="addLoss()">
+<div class="no-data no-data-phast" *ngIf="_atmosphereLosses.length == 0 && inSetup && !lossesLocked" (click)="addLoss()">
   <h3>You have no Atmosphere Losses</h3>
   <h4>Add some now.</h4>
 </div>

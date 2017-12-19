@@ -54,8 +54,10 @@ export class ConvertPhastService {
       designedEnergy.designedEnergySteam.forEach(val => {
         if (oldSettings.unitsOfMeasure == 'Metric' && newSettings.unitsOfMeasure == 'Imperial') {
           val.totalHeat = this.convertVal(val.totalHeat, 'kJkg', 'btuLb');
+          val.steamFlow = this.convertVal(val.steamFlow, 'kg', 'lb');
         } else if (oldSettings.unitsOfMeasure == 'Imperial' && newSettings.unitsOfMeasure == 'Metric') {
           val.totalHeat = this.convertVal(val.totalHeat, 'btuLb', 'kJkg');
+          val.steamFlow = this.convertVal(val.steamFlow, 'lb', 'kg');
         }
       })
     }
@@ -66,12 +68,12 @@ export class ConvertPhastService {
     if (meteredEnergy.meteredEnergyFuel) {
       if (oldSettings.unitsOfMeasure == 'Metric' && newSettings.unitsOfMeasure == 'Imperial') {
         meteredEnergy.meteredEnergyFuel.heatingValue = this.convertVal(meteredEnergy.meteredEnergyFuel.heatingValue, 'kJNm3', 'btuSCF');
-        meteredEnergy.meteredEnergyFuel.fuelEnergy = this.convertVal(meteredEnergy.meteredEnergyFuel.fuelFlowRateInput, 'kJ', 'Btu');
-        meteredEnergy.meteredEnergyFuel.fuelFlowRateInput = this.convertVal(meteredEnergy.meteredEnergyFuel.fuelEnergy, 'm3', 'ft3');
+        meteredEnergy.meteredEnergyFuel.fuelEnergy = this.convertVal(meteredEnergy.meteredEnergyFuel.fuelEnergy, 'kJ', 'Btu');
+        meteredEnergy.meteredEnergyFuel.fuelFlowRateInput = this.convertVal(meteredEnergy.meteredEnergyFuel.fuelFlowRateInput, 'm3', 'ft3');
       } else if (oldSettings.unitsOfMeasure == 'Imperial' && newSettings.unitsOfMeasure == 'Metric') {
         meteredEnergy.meteredEnergyFuel.heatingValue = this.convertVal(meteredEnergy.meteredEnergyFuel.heatingValue, 'btuSCF', 'kJNm3');
-        meteredEnergy.meteredEnergyFuel.fuelEnergy = this.convertVal(meteredEnergy.meteredEnergyFuel.fuelFlowRateInput, 'Btu', 'kJ');
-        meteredEnergy.meteredEnergyFuel.fuelFlowRateInput = this.convertVal(meteredEnergy.meteredEnergyFuel.fuelEnergy, 'ft3', 'm3');
+        meteredEnergy.meteredEnergyFuel.fuelEnergy = this.convertVal(meteredEnergy.meteredEnergyFuel.fuelEnergy, 'Btu', 'kJ');
+        meteredEnergy.meteredEnergyFuel.fuelFlowRateInput = this.convertVal(meteredEnergy.meteredEnergyFuel.fuelFlowRateInput, 'ft3', 'm3');
       }
     }
     if (meteredEnergy.meteredEnergySteam) {

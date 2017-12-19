@@ -14,8 +14,11 @@
             <a (click)="showTool('motor-performance')">Motor Performance</a>
             <p>Plots current, efficiency, power factor vs motor shaft load for a given motor description.</p>
           </li>
+          <li>
+            <a (click)="showTool('percent-load-estimation')">Percent Load Estimation</a>
+            <p>Calculates Percent Load Estimation</p>
+          </li>
         </ul>
-
       </div>
     </div>
   </div>
@@ -32,3 +35,22 @@
 <div class="stand-alone-calc" *ngIf="getSelectedTool() == 'motor-performance'">
   <app-motor-performance></app-motor-performance>
 </div>
+
+
+<div class="stand-alone-calc" *ngIf="getSelectedTool() == 'percent-load-estimation'">
+  <app-percent-load-estimation></app-percent-load-estimation>
+</div>
+
+
+<!-- Original Version -->
+<!-- 
+<div class="calculator" *ngIf="getSelectedTool() == 'percent-load-estimation'">
+  <div class="row">
+    <div class="col-lg-10  mx-auto">
+      <h2>Percent Load Estimation Calculator</h2>
+    </div>
+  </div>
+  <div class="calculator-container">
+    <app-percent-load-estimation></app-percent-load-estimation>
+  </div>
+</div> -->

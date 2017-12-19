@@ -1,4 +1,4 @@
-<div class="no-data no-data-phast" *ngIf="_flueGasLosses.length == 0 && inSetup" (click)="addLoss()">
+<div class="no-data no-data-phast" *ngIf="_flueGasLosses.length == 0 && inSetup && !lossesLocked" (click)="addLoss()">
   <h3>You have no Flue Gas Losses</h3>
   <h4>Add some now.</h4>
 </div>
@@ -18,7 +18,7 @@
     <div class="col-12">
       <div class="form-group">
         <label class="small" for="type">Type of fuel</label>
-        <select class="form-control" id="type" [(ngModel)]="loss.measurementType" [disabled]="!baselineSelected || disableType" (focus)="changeField('measurementType')"
+        <select class="form-control" id="type" [(ngModel)]="loss.measurementType" [disabled]="!baselineSelected || lossesLocked" (focus)="changeField('measurementType')"
           (blur)="focusOut()">
           <option [ngValue]="'By Volume'">Gas</option>
           <option [ngValue]="'By Mass'">Solid/Liquid</option>

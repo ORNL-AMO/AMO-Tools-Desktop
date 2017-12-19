@@ -1,0 +1,29 @@
+<div class="form-section">
+  <form [formGroup]="percentLoadEstimationForm">
+    <div class="form-group">
+      <label for="measuredSpeed">Measured Speed</label>
+      <div class="input-group calc-addon-group">
+        <input type="number" step="10" min="0" class="form-control" formControlName="measuredSpeed" id="measuredSpeed"
+          (input)="calculate()" onfocus="this.select();" autofocus>
+      </div>
+      <span class="alert-danger pull-right small" *ngIf="measuredSpeedError !== null">{{measuredSpeedError}}</span>      
+    </div>
+
+    <div class="form-group">
+      <label for="nameplateFullLoadSpeed">Nameplate Full Load Speed</label>
+      <div class="input-group calc-addon-group">
+        <input type="number" step="10" min="0" max="3600" class="form-control" formControlName="nameplateFullLoadSpeed" id="nameplateFullLoadSpeed"
+           (input)="calculate()" onfocus="this.select();">
+      </div>
+      <span class="alert-danger pull-right small" *ngIf="nameplateFullLoadSpeedError !== null">{{nameplateFullLoadSpeedError}}</span>
+    </div>
+
+    <div class="form-group">
+      <label for="synchronousSpeed">Synchronous Speed</label>
+      <div class="text-center small">
+          {{percentLoadEstimationForm.value.synchronousSpeed}}
+      </div>
+      <span class="alert-danger pull-right small" *ngIf="synchronousSpeedError !== null">{{synchronousSpeedError}}</span>      
+    </div>
+  </form>
+</div>
