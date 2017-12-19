@@ -67,13 +67,19 @@ export class GasLeakageLossesComponent implements OnInit {
     if (this.losses.leakageLosses) {
       this.setCompareVals();
       this.gasLeakageCompareService.initCompareObjects();
+      let lossIndex = 1;
       this.losses.leakageLosses.forEach(loss => {
         let tmpLoss = {
           form: this.gasLeakageLossesService.initFormFromLoss(loss),
-          name: 'Loss #' + (this._leakageLosses.length + 1),
           heatLoss: loss.heatLoss || 0.0,
           collapse: false
         };
+        if(!tmpLoss.form.value.name){
+          tmpLoss.form.patchValue({
+            name: 'Loss #' + lossIndex
+          })
+        }
+        lossIndex++;
         this.calculate(tmpLoss);
         this._leakageLosses.push(tmpLoss);
       })
@@ -145,8 +151,7 @@ export class GasLeakageLossesComponent implements OnInit {
       this.gasLeakageCompareService.addObject(this.gasLeakageCompareService.differentArray.length - 1);
     }
     this._leakageLosses.push({
-      form: this.gasLeakageLossesService.initForm(),
-      name: 'Loss #' + (this._leakageLosses.length + 1),
+      form: this.gasLeakageLossesService.initForm(this._leakageLosses.length+1),
       heatLoss: 0.0,
       collapse: false
     });
@@ -161,14 +166,6 @@ export class GasLeakageLossesComponent implements OnInit {
     this.gasLeakageLossesService.setDelete(lossIndex);
   }
 
-  renameLossess() {
-    let index = 1;
-    this._leakageLosses.forEach(loss => {
-      loss.name = 'Loss #' + index;
-      index++;
-    })
-  }
-
   calculate(loss: any) {
     if (loss.form.status == 'VALID') {
       let tmpLeakageLoss = this.gasLeakageLossesService.initLossFromForm(loss.form);
@@ -181,7 +178,14 @@ export class GasLeakageLossesComponent implements OnInit {
 
   saveLosses() {
     let tmpLeakageLosses = new Array<LeakageLoss>();
+    let lossIndex = 1;
     this._leakageLosses.forEach(loss => {
+      if(!loss.form.value.name){
+        loss.form.patchValue({
+          name: 'Loss #' + lossIndex
+        })
+      }
+      lossIndex++;
       let tmpLeakageLoss = this.gasLeakageLossesService.initLossFromForm(loss.form);
       tmpLeakageLoss.heatLoss = loss.heatLoss;
       tmpLeakageLosses.push(tmpLeakageLoss);

@@ -65,7 +65,7 @@
 
     <div class="form-group">
       <label class="small" for="viewFactor" aria-describedby="viewFactorHelp">View Factor
-        <span><a id="{{'viewFactor_'+lossIndex}}" class="form-text text-help small" (click)="calculateViewFactor()">Calculate View Factor</a></span>
+        <span><a id="{{'viewFactor_'+lossIndex}}" class="click-link" (click)="calculateViewFactor()">Calculate View Factor</a></span>
     </label>
 
       <input name="{{'viewFactor_'+lossIndex}}" type="number" step="0.1" min="0" max="1" class="form-control" formControlName="viewFactor" id="viewFactor"

@@ -25,12 +25,13 @@ export class ExtendedSurfaceLossesService {
   //     this.addLossBaselineMonitor.next(true);
   //   }
   // }
-  initForm() {
+  initForm(lossNum: number) {
     return this.formBuilder.group({
       'surfaceArea': ['', Validators.required],
       'avgSurfaceTemp': ['', Validators.required],
       'ambientTemp': ['', Validators.required],
       'surfaceEmissivity': [0.9, Validators.required],
+      'name': ['Loss #'+lossNum]
     })
   }
 
@@ -40,6 +41,7 @@ export class ExtendedSurfaceLossesService {
       'avgSurfaceTemp': [wallLoss.surfaceTemperature, Validators.required],
       'ambientTemp': [wallLoss.ambientTemperature, Validators.required],
       'surfaceEmissivity': [wallLoss.surfaceEmissivity, Validators.required],
+      'name':[wallLoss.name]
     })
   }
   //get WallLoss from form
@@ -49,6 +51,7 @@ export class ExtendedSurfaceLossesService {
       ambientTemperature: wallLossForm.value.ambientTemp,
       surfaceTemperature: wallLossForm.value.avgSurfaceTemp,
       surfaceEmissivity: wallLossForm.value.surfaceEmissivity,
+      name: wallLossForm.value.name
     }
     return tmpWallLoss;
   }

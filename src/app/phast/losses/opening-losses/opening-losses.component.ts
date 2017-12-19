@@ -69,13 +69,19 @@ export class OpeningLossesComponent implements OnInit {
     if (this.losses.openingLosses) {
       this.setCompareVals();
       this.openingLossesCompareService.initCompareObjects();
+      let lossIndex = 1;
       this.losses.openingLosses.forEach(loss => {
         let tmpLoss = {
           form: this.openingLossesService.getFormFromLoss(loss),
-          name: 'Loss #' + (this._openingLosses.length + 1),
           totalOpeningLosses: loss.heatLoss || 0.0,
           collapse: false
         };
+        if(!tmpLoss.form.value.name){
+          tmpLoss.form.patchValue({
+            name: 'Loss #' + lossIndex
+          })
+        }
+        lossIndex++;
         this.calculate(tmpLoss);
         this._openingLosses.push(tmpLoss);
       })
@@ -140,8 +146,7 @@ export class OpeningLossesComponent implements OnInit {
       this.openingLossesCompareService.addObject(this.openingLossesCompareService.differentArray.length - 1);
     }
     this._openingLosses.push({
-      form: this.openingLossesService.initForm(),
-      name: 'Opening Loss #' + (this._openingLosses.length + 1),
+      form: this.openingLossesService.initForm(this._openingLosses.length+1),
       totalOpeningLosses: 0.0,
       collapse: false
     });
@@ -159,14 +164,6 @@ export class OpeningLossesComponent implements OnInit {
   }
   removeLoss(lossIndex: number) {
     this.openingLossesService.setDelete(lossIndex);
-  }
-
-  renameLosses() {
-    let index = 1;
-    this._openingLosses.forEach(loss => {
-      loss.name = 'Opening #' + index;
-      index++;
-    })
   }
 
   calculate(loss: any) {
@@ -189,7 +186,14 @@ export class OpeningLossesComponent implements OnInit {
 
   saveLosses() {
     let tmpOpeningLosses = new Array<OpeningLoss>();
+    let lossIndex = 1;
     this._openingLosses.forEach(loss => {
+      if(!loss.form.value.name){
+        loss.form.patchValue({
+          name: 'Loss #' + lossIndex
+        })
+      }
+      lossIndex++;
       let tmpOpeningLoss = this.openingLossesService.getLossFromForm(loss.form);
       tmpOpeningLoss.heatLoss = loss.totalOpeningLosses;
       tmpOpeningLosses.push(tmpOpeningLoss);

@@ -638,12 +638,12 @@ export class PhastService {
     let sum = 0;
     losses.forEach(loss => {
       if (loss.coolingLossType == 'Gas') {
-        let tmpForm = this.coolingLossesService.initGasFormFromLoss(loss.gasCoolingLoss);
+        let tmpForm = this.coolingLossesService.initGasFormFromLoss(loss);
         if (tmpForm.status == 'VALID') {
           sum += this.gasCoolingLosses(loss.gasCoolingLoss, settings);
         }
       } else if (loss.coolingLossType == 'Liquid') {
-        let tmpForm = this.coolingLossesService.initLiquidFormFromLoss(loss.liquidCoolingLoss);
+        let tmpForm = this.coolingLossesService.initLiquidFormFromLoss(loss);
         if (tmpForm.status == 'VALID') {
           sum += this.liquidCoolingLosses(loss.liquidCoolingLoss, settings);
         }

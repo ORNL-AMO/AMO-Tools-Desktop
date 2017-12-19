@@ -91,17 +91,11 @@ export class FlueGasLossesFormMassComponent implements OnInit {
     this.changeField.emit('default');
   }
   disableForm() {
-    this.elements = this.lossForm.nativeElement.elements;
-    for (var i = 0, len = this.elements.length; i < len; ++i) {
-      this.elements[i].disabled = true;
-    }
+    this.flueGasLossForm.disable();
   }
 
   enableForm() {
-    this.elements = this.lossForm.nativeElement.elements;
-    for (var i = 0, len = this.elements.length; i < len; ++i) {
-      this.elements[i].disabled = false;
-    }
+    this.flueGasLossForm.enable();
   }
 
   checkForm() {
