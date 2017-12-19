@@ -1,7 +1,8 @@
 <ul class="tabs subtabs phast">
   <li [ngClass]="{'active': lossesTab == 'charge-material'}" (click)="tabChange('charge-material')">
     <a class="nav-link small">
-    <span class="required-asterisk" *ngIf="!chargeDone">*</span>Charge Material <span class="badge gray-badge" *ngIf="numCharge"><strong>{{numCharge}}</strong></span>
+    <span class="required-asterisk" *ngIf="!chargeDone">*</span>
+    <span class="required-asterisk-done" *ngIf="chargeDone">*</span>Charge Material <span class="badge gray-badge" *ngIf="numCharge"><strong>{{numCharge}}</strong></span>
     </a>
   </li><!--
   --><li [ngClass]="{'active': lossesTab == 'fixture-losses'}" (click)="tabChange('fixture-losses')">
@@ -27,7 +28,7 @@
   --><li [ngClass]="{'active': lossesTab == 'opening-losses'}" (click)="tabChange('opening-losses')">
     <a class="nav-link small">
     Opening <span class="badge gray-badge" *ngIf="numOpening"><strong>{{numOpening}}</strong></span>
-    </a> 
+    </a>
   </li><!--
   --><li [ngClass]="{'active': lossesTab == 'gas-leakage-losses'}" (click)="tabChange('gas-leakage-losses')">
     <a class="nav-link small">
@@ -52,7 +53,8 @@
   </li><!--
   --><li *ngIf="showFlueGas" [ngClass]="{'active': lossesTab == 'flue-gas-losses'}" (click)="tabChange('flue-gas-losses')">
   <a class="nav-link small">
-    <span class="required-asterisk" *ngIf="!flueGasDone">*</span> Flue Gas
+    <span class="required-asterisk" *ngIf="!flueGasDone">*</span>
+    <span class="required-asterisk-done" *ngIf="flueGasDone">*</span> Flue Gas
   </a>
   </li><!--
   --><li *ngIf="showAuxPower" [ngClass]="{'active': lossesTab == 'auxiliary-power'}"

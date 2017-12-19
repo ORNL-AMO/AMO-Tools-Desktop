@@ -549,8 +549,9 @@ export class O2EnrichmentGraphComponent implements OnInit, DoCheck {
   }
 
   updateDetailBoxes() {
-    const format = d3.format(",.2f");
+    const format = d3.format(",.1f");
     const format0 = d3.format(',.0f');
+    const format2 = d3.format(",.2f");
     d3.select('app-o2-enrichment').selectAll("#lineDetails").selectAll("tr").remove();
 
     const lineDetail = d3.select('app-o2-enrichment').selectAll("#lineDetails").append("tr");
@@ -630,7 +631,7 @@ export class O2EnrichmentGraphComponent implements OnInit, DoCheck {
       .style("font", "13px sans-serif")
       .style('padding', '2px')
       .html(
-        "<p style='margin: 0px; font-size: 1vw'>" + format(this.o2Enrichment.o2FlueGasEnriched) + "%</p>"
+        "<p style='margin: 0px; font-size: 1vw'>" + format2(this.o2Enrichment.o2FlueGasEnriched) + "%</p>"
       );
     lineDetail.append('td')
       .attr('class', 'text-center')

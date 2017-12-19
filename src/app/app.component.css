@@ -151,6 +151,11 @@ Badges
   font-size: 20px;
   font-weight: bold;
 }
+.required-asterisk-done {
+  color: #1E7640;
+  font-size: 20px;
+  font-weight: bold;
+}
 
 /*
 Forms
