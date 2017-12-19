@@ -55,6 +55,8 @@
                 <a>Report Graphs</a>
             </li><li (click)="setTab('report-sankey')" [ngClass]="{'active': currentTab == 'report-sankey'}">
                 <a>Sankey</a>
+            </li><li (click)="setTab('input-summary')" [ngClass]="{'active': currentTab == 'input-summary'}">
+                <a>Input Data</a>
             </li>
         </ul>
         <div class="results" [ngClass]="{'show-print':currentTab != 'energy-used'}">
@@ -71,6 +73,9 @@
         </div>
         <div class="results" [ngClass]="{'show-print':currentTab != 'report-sankey'}">
           <app-report-sankey [phast]="phast" [settings]="settings" ></app-report-sankey>
+        </div>
+        <div class="results">
+            <app-phast-input-summary [phast]="phast"></app-phast-input-summary>
         </div>
     </div>
     <div *ngIf="!phast.setupDone">

@@ -1,0 +1,19 @@
+<div *ngIf="phast.losses">
+  <div *ngIf="phast.losses.chargeMaterials">
+    <div class="card-header">
+      <h5>Charge Materials</h5>
+    </div>
+    <div class="card-body" *ngFor="let material of phast.losses.chargeMaterials; let index = index">
+      <div class="card">
+        <div class="card-header">
+          <h6>{{material.name}}</h6>
+        </div>
+        <div class="card-body">
+          <app-gas-material-summary *ngIf="material.chargeMaterialType == 'Gas'" [gasMaterial]="material.gasChargeMaterial" [modifications]="phast.modifications" [index]="index"></app-gas-material-summary>
+          <app-liquid-material-summary *ngIf="material.chargeMaterialType == 'Liquid'" [liquidMaterial]="material.liquidChargeMaterial" [modifications]="phast.modifications" [index]="index"></app-liquid-material-summary>
+          <app-solid-material-summary *ngIf="material.chargeMaterialType == 'Solid'" [solidMaterial]="material.solidMaterial" [modifications]="phast.modifications" [index]="index"></app-solid-material-summary>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
