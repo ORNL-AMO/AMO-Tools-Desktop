@@ -6,6 +6,7 @@ import { Settings } from '../../shared/models/settings';
 import { IndexedDbService } from '../../indexedDb/indexed-db.service';
 import { Directory } from '../../shared/models/directory';
 import { WindowRefService } from '../../indexedDb/window-ref.service';
+import { SettingsService } from '../../settings/settings.service';
 
 @Component({
   selector: 'app-psat-report',
@@ -35,7 +36,7 @@ export class PsatReportComponent implements OnInit {
   currentTab: string = 'results';
   createdDate: Date;
 
-  constructor(private psatService: PsatService, private indexedDbService: IndexedDbService, private windowRefService: WindowRefService) { }
+  constructor(private psatService: PsatService, private indexedDbService: IndexedDbService, private windowRefService: WindowRefService, private settingsService: SettingsService) { }
 
   ngOnInit() {
     this.createdDate = new Date();
@@ -69,6 +70,9 @@ export class PsatReportComponent implements OnInit {
       results => {
         if (results.length != 0) {
           this.settings = results[0];
+          if(!this.settings.temperatureMeasurement){
+            this.settings = this.settingsService.setTemperatureUnit(this.settings);
+          }
         }
       }
     )
