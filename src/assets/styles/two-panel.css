@@ -78,10 +78,10 @@
 
 .psat .header{
     border-bottom: #2980b9 groove 2px;
-} 
+}
 
 .phast .header{
-    border-bottom: #BF3D00 groove 2px;  
+    border-bottom: #BF3D00 groove 2px;
 }
 
 .psat .disabled .header{
@@ -201,7 +201,7 @@
 }
 
 .setup-form-group{
-    padding-top: 10px;
+    padding-top: 18px;
     padding-left: 10px;
     padding-right: 10px;
 }
@@ -213,3 +213,4 @@
 .phast-losses-container .card-form:last-of-type{
     padding-bottom: 90px;
 }
+

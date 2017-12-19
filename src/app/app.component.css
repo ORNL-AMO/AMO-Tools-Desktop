@@ -129,21 +129,25 @@ Badges
   display: inline-block;
   font-size: 12px;
   font-weight: normal;
-  font-style: italic;
+  /*font-style: italic;*/
   padding: 3px 3px;
   border-radius: 2px;
 }
   .gray-badge {
     color: #000;
+    vertical-align: super;
     /*background-color: #eaeaea;*/
     background-color: #BF3D00;
     /*border: 1px solid;*/
-    border-bottom-right-radius: 45%;
-    border-top-left-radius: 45%;
-    padding: 5px;
-    box-shadow: 2px 2px #888888;
-    font-size: 16px;
+    /*border-bottom-right-radius: 45%;*/
+    /*border-top-left-radius: 45%;*/
+    border-radius: 50%;
+    padding: 2px 6px 11px 4px;
+    /*box-shadow: 2px 2px #888888;*/
+    font-size: 10px;
     color: #fff;
+    width: 14px;
+    height: 14px;
   }
 
 .required-asterisk {
@@ -1194,18 +1198,18 @@ Banner
 .banner .pills-nav {
 
 }
-/*.banner.psat .title {
+.banner.psat .title {
   color: #fff;
   padding-left: 58px;
-  background: url('../assets/images/assessment-icon-psat.png') no-repeat 14px;
+  background: url('../assets/images/ico-psat-diagram.png') no-repeat 14px;
   background-size: 31px;
 }
 .banner.phast .title {
   color: #fff;
   padding-left: 58px;
-  background: url('../assets/images/assessment-icon-phast.png') no-repeat 14px;
+  background: url('../assets/images/ico-phast-diagram.png') no-repeat 14px;
   background-size: 31px;
-}*/
+}
 
 .banner-border{
   border-bottom: solid;
