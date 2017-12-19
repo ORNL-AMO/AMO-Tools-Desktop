@@ -75,17 +75,11 @@ export class WallLossesFormComponent implements OnInit {
   }
   //iterate through form elements and disable
   disableForm() {
-    this.elements = this.lossForm.nativeElement.elements;
-    for (var i = 0, len = this.elements.length; i < len; ++i) {
-      this.elements[i].disabled = true;
-    }
+    this.wallLossesForm.disable();
   }
   //iterate through form elements and enable
   enableForm() {
-    this.elements = this.lossForm.nativeElement.elements;
-    for (var i = 0, len = this.elements.length; i < len; ++i) {
-      this.elements[i].disabled = false;
-    }
+    this.wallLossesForm.enable();
   }
   //checkSurfaceTemp and ambientTemp for needed warnings
   checkSurfaceTemp(bool?: boolean) {

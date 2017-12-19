@@ -26,14 +26,15 @@ export class FixtureLossesService {
   //   }
   // }
 
-  initForm() {
+  initForm(lossNum: number) {
     return this.formBuilder.group({
       'materialName': ['', Validators.required],
       'feedRate': ['', Validators.required],
       'initialTemp': ['', Validators.required],
       'finalTemp': ['', Validators.required],
       'correctionFactor': [1.0, Validators.required],
-      'specificHeat': ['', Validators.required]
+      'specificHeat': ['', Validators.required],
+      'name': ['Loss #'+lossNum]
     })
   }
 
@@ -44,7 +45,8 @@ export class FixtureLossesService {
       'initialTemp': [loss.initialTemperature, Validators.required],
       'finalTemp': [loss.finalTemperature, Validators.required],
       'correctionFactor': [loss.correctionFactor, Validators.required],
-      'specificHeat': [loss.specificHeat, Validators.required]
+      'specificHeat': [loss.specificHeat, Validators.required],
+      'name': [loss.name]
     })
   }
 
@@ -55,7 +57,8 @@ export class FixtureLossesService {
       initialTemperature: form.value.initialTemp,
       finalTemperature: form.value.finalTemp,
       correctionFactor: form.value.correctionFactor,
-      materialName: form.value.materialName
+      materialName: form.value.materialName,
+      name: form.value.name
     }
     return tmpLoss;
   }

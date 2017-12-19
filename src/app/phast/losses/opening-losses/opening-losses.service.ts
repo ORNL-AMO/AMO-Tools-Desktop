@@ -26,7 +26,7 @@ export class OpeningLossesService {
   //   }
   // }
 
-  initForm() {
+  initForm(lossNum: number) {
     return this.formBuilder.group({
       'numberOfOpenings': [1, Validators.required],
       'openingType': ['Round', Validators.required],
@@ -37,7 +37,8 @@ export class OpeningLossesService {
       'insideTemp': ['', Validators.required],
       'ambientTemp': ['', Validators.required],
       'percentTimeOpen': ['', Validators.required],
-      'emissivity': [0.9, Validators.required]
+      'emissivity': [0.9, Validators.required],
+      'name': ['Loss #'+lossNum]
     })
   }
 
@@ -52,7 +53,8 @@ export class OpeningLossesService {
       'insideTemp': [loss.insideTemperature, Validators.required],
       'ambientTemp': [loss.ambientTemperature, Validators.required],
       'percentTimeOpen': [loss.percentTimeOpen, Validators.required],
-      'emissivity': [loss.emissivity, Validators.required]
+      'emissivity': [loss.emissivity, Validators.required],
+      'name': [loss.name]
     })
   }
 
@@ -68,6 +70,7 @@ export class OpeningLossesService {
       openingType: form.value.openingType,
       lengthOfOpening: form.value.lengthOfOpening,
       heightOfOpening: form.value.heightOfOpening,
+      name: form.value.name
     };
   }
 

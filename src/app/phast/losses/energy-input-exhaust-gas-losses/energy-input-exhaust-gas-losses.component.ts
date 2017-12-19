@@ -70,13 +70,19 @@ export class EnergyInputExhaustGasLossesComponent implements OnInit {
     if (this.losses.energyInputExhaustGasLoss) {
       this.setCompareVals();
       this.energyInputExhaustGasCompareService.initCompareObjects();
+      let lossIndex = 1;
       this.losses.energyInputExhaustGasLoss.forEach(loss => {
         let tmpLoss = {
           form: this.energyInputExhaustGasService.getFormFromLoss(loss),
-          name: 'Loss #' + (this._exhaustGasLosses.length + 1),
           heatLoss: 0.0,
           collapse: false
         };
+        if(!tmpLoss.form.value.name){
+          tmpLoss.form.patchValue({
+            name: 'Loss #' + lossIndex
+          })
+        }
+        lossIndex++;
         this.calculate(tmpLoss);
         this._exhaustGasLosses.push(tmpLoss);
       })
@@ -147,8 +153,7 @@ export class EnergyInputExhaustGasLossesComponent implements OnInit {
       this.energyInputExhaustGasCompareService.addObject(this.energyInputExhaustGasCompareService.differentArray.length - 1);
     }
     this._exhaustGasLosses.push({
-      form: this.energyInputExhaustGasService.initForm(),
-      name: 'Loss #' + (this._exhaustGasLosses.length + 1),
+      form: this.energyInputExhaustGasService.initForm(this._exhaustGasLosses.length+1),
       heatLoss: 0.0,
       exhaustGas: 0.0,
       collapse: false
@@ -158,14 +163,6 @@ export class EnergyInputExhaustGasLossesComponent implements OnInit {
 
   removeLoss(lossIndex: number) {
     this.energyInputExhaustGasService.setDelete(lossIndex);
-  }
-
-  renameLossess() {
-    let index = 1;
-    this._exhaustGasLosses.forEach(loss => {
-      loss.name = 'Loss #' + index;
-      index++;
-    })
   }
 
   calculate(loss: any) {
@@ -188,7 +185,14 @@ export class EnergyInputExhaustGasLossesComponent implements OnInit {
   
   saveLosses() {
     let tmpExhaustGases = new Array<EnergyInputExhaustGasLoss>();
+    let lossIndex = 1;
     this._exhaustGasLosses.forEach(loss => {
+      if(!loss.form.value.name){
+        loss.form.patchValue({
+          name: 'Loss #' + lossIndex
+        })
+      }
+      lossIndex++;
       let tmpExhaustGas = this.energyInputExhaustGasService.getLossFromForm(loss.form);
       tmpExhaustGases.push(tmpExhaustGas);
     })

@@ -28,7 +28,7 @@ export class AtmosphereLossesService {
 
 
   //get empty atmosphere form
-  initForm() {
+  initForm(lossNum: number) {
     return this.formBuilder.group({
       'atmosphereGas': ['', Validators.required],
       'specificHeat': ['', Validators.required],
@@ -36,6 +36,7 @@ export class AtmosphereLossesService {
       'outletTemp': ['', Validators.required],
       'flowRate': ['', Validators.required],
       'correctionFactor': [1.0, Validators.required],
+      'name': ['Loss #'+lossNum]
     });
   }
 
@@ -47,7 +48,8 @@ export class AtmosphereLossesService {
       'inletTemp': [loss.inletTemperature, Validators.required],
       'outletTemp': [loss.outletTemperature, Validators.required],
       'flowRate': [loss.flowRate, Validators.required],
-      'correctionFactor': [loss.correctionFactor, Validators.required]
+      'correctionFactor': [loss.correctionFactor, Validators.required],
+      'name': [loss.name]
     });
   }
 
@@ -58,7 +60,8 @@ export class AtmosphereLossesService {
       inletTemperature: form.value.inletTemp,
       outletTemperature: form.value.outletTemp,
       flowRate: form.value.flowRate,
-      correctionFactor: form.value.correctionFactor
+      correctionFactor: form.value.correctionFactor,
+      name: form.value.name
     }
     return tmpLoss;
   }

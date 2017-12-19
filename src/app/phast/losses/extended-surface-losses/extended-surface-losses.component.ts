@@ -80,13 +80,19 @@ export class ExtendedSurfaceLossesComponent implements OnInit {
     if (this.losses.extendedSurfaces) {
       this.setCompareVals();
       this.extendedSurfaceCompareService.initCompareObjects();
+      let lossIndex = 1;
       this.losses.extendedSurfaces.forEach(loss => {
         let tmpLoss = {
           form: this.extendedSurfaceLossesService.getSurfaceLossForm(loss),
-          name: 'Loss #' + (this._surfaceLosses.length + 1),
           heatLoss: loss.heatLoss || 0.0,
           collapse: false
         };
+        if(!tmpLoss.form.value.name){
+          tmpLoss.form.patchValue({
+            name: 'Loss #' + lossIndex
+          })
+        }
+        lossIndex++;
         this.calculate(tmpLoss);
         this._surfaceLosses.push(tmpLoss);
       })
@@ -144,8 +150,7 @@ export class ExtendedSurfaceLossesComponent implements OnInit {
       this.extendedSurfaceCompareService.addObject(this.extendedSurfaceCompareService.differentArray.length - 1);
     }
     this._surfaceLosses.push({
-      form: this.extendedSurfaceLossesService.initForm(),
-      name: 'Loss #' + (this._surfaceLosses.length + 1),
+      form: this.extendedSurfaceLossesService.initForm(this._surfaceLosses.length+1),
       heatLoss: 0.0,
       collapse: false
     });
@@ -154,14 +159,6 @@ export class ExtendedSurfaceLossesComponent implements OnInit {
 
   removeLoss(lossIndex: number) {
     this.extendedSurfaceLossesService.setDelete(lossIndex);
-  }
-
-  renameLossess() {
-    let index = 1;
-    this._surfaceLosses.forEach(loss => {
-      loss.name = 'Loss #' + index;
-      index++;
-    })
   }
 
   calculate(loss: any) {
@@ -194,6 +191,13 @@ export class ExtendedSurfaceLossesComponent implements OnInit {
   saveLosses() {
     let tmpSurfaceLosses = new Array<ExtendedSurface>();
     this._surfaceLosses.forEach(loss => {
+      let lossIndex = 1;
+      if(!loss.form.value.name){
+        loss.form.patchValue({
+          name: 'Loss #' + lossIndex
+        })
+      }
+      lossIndex++;
       let tmpSurfaceLoss = this.extendedSurfaceLossesService.getSurfaceLossFromForm(loss.form);
       tmpSurfaceLoss.heatLoss = loss.heatLoss;
       tmpSurfaceLosses.push(tmpSurfaceLoss);

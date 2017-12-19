@@ -70,13 +70,19 @@ export class AtmosphereLossesComponent implements OnInit {
     if (this.losses.atmosphereLosses) {
       this.setCompareVals();
       this.atmosphereLossesCompareService.initCompareObjects();
+      let lossIndex = 1;
       this.losses.atmosphereLosses.forEach(loss => {
         let tmpLoss = {
           form: this.atmosphereLossesService.getAtmosphereForm(loss),
-          name: 'Loss #' + (this._atmosphereLosses.length + 1),
           heatLoss: loss.heatLoss || 0.0,
           collapse: false
         };
+        if(!tmpLoss.form.value.name){
+          tmpLoss.form.patchValue({
+            name: 'Loss #' + lossIndex
+          })
+        }
+        lossIndex++;
         this.calculate(tmpLoss);
         this._atmosphereLosses.push(tmpLoss);
       })
@@ -147,8 +153,7 @@ export class AtmosphereLossesComponent implements OnInit {
     }
 
     this._atmosphereLosses.push({
-      form: this.atmosphereLossesService.initForm(),
-      name: 'Loss #' + (this._atmosphereLosses.length + 1),
+      form: this.atmosphereLossesService.initForm(this._atmosphereLosses.length+1),
       heatLoss: 0.0,
       collapse: false
     });
@@ -181,7 +186,14 @@ export class AtmosphereLossesComponent implements OnInit {
 
   saveLosses() {
     let tmpAtmosphereLosses = new Array<AtmosphereLoss>();
+    let lossIndex = 1;
     this._atmosphereLosses.forEach(loss => {
+      if(!loss.form.value.name){
+        loss.form.patchValue({
+          name: 'Loss #' + lossIndex
+        })
+      }
+      lossIndex++;
       let tmpAtmosphereLoss = this.atmosphereLossesService.getLossFromForm(loss.form);
       tmpAtmosphereLoss.heatLoss = loss.heatLoss;
       tmpAtmosphereLosses.push(tmpAtmosphereLoss);

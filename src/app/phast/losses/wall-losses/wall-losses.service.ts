@@ -33,7 +33,7 @@ export class WallLossesService {
   // }
 
   //init empty wall loss form
-  initForm() {
+  initForm(lossNum: number) {
     return this.formBuilder.group({
       'surfaceArea': ['', Validators.required],
       'avgSurfaceTemp': ['', Validators.required],
@@ -42,7 +42,8 @@ export class WallLossesService {
       'windVelocity': [0, Validators.required],
       'surfaceShape': ['Vertical Plates', Validators.required],
       'conditionFactor': [1.394, Validators.required],
-      'surfaceEmissivity': [0.9, Validators.required]
+      'surfaceEmissivity': [0.9, Validators.required],
+      'name': ['Loss #'+lossNum]
     })
   }
 
@@ -56,7 +57,8 @@ export class WallLossesService {
       'windVelocity': [wallLoss.windVelocity, Validators.required],
       'conditionFactor': [wallLoss.conditionFactor, Validators.required],
       'surfaceEmissivity': [wallLoss.surfaceEmissivity, Validators.required],
-      'surfaceShape': [wallLoss.surfaceShape, Validators.required]
+      'surfaceShape': [wallLoss.surfaceShape, Validators.required],
+      'name': [wallLoss.name]
     })
   }
   //get WallLoss from form
@@ -69,7 +71,8 @@ export class WallLossesService {
       surfaceEmissivity: wallLossForm.value.surfaceEmissivity,
       surfaceShape: wallLossForm.value.surfaceShape,
       conditionFactor: wallLossForm.value.conditionFactor,
-      correctionFactor: wallLossForm.value.correctionFactor
+      correctionFactor: wallLossForm.value.correctionFactor,
+      name: wallLossForm.value.name
     }
     return tmpWallLoss;
   }

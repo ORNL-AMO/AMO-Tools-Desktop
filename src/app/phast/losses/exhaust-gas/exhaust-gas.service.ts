@@ -33,7 +33,7 @@ export class ExhaustGasService {
 
 
 
-  initForm() {
+  initForm(lossNum: number) {
     return this.formBuilder.group({
     //  'cycleTime': ['', Validators.required],
       'offGasTemp': ['', Validators.required],
@@ -44,7 +44,8 @@ export class ExhaustGasService {
       'combustibleGases': ['', Validators.required],
       'vfr': ['', Validators.required],
       'dustLoading': ['', Validators.required],
-     // 'otherLoss1': ['', Validators.required]
+     // 'otherLoss1': ['', Validators.required],
+      'name': ['Loss #'+lossNum]
     })
   }
 
@@ -59,6 +60,7 @@ export class ExhaustGasService {
       'combustibleGases': [exhaustGas.combustibleGases, Validators.required],
       'vfr': [exhaustGas.vfr, Validators.required],
       'dustLoading': [exhaustGas.dustLoading, Validators.required],
+      'name': exhaustGas.name
     })
     // if (exhaustGas.otherLossObjects) {
     //   let index = 1;
@@ -85,7 +87,8 @@ export class ExhaustGasService {
       vfr: form.value.vfr,
       dustLoading: form.value.dustLoading,
      // otherLossObjects: new Array(),
-      otherLosses: 0.0
+      otherLosses: 0.0,
+      name: form.value.name
     }
     // let tmpOtherLosses = new Array();
     // Object.keys(form.controls).forEach(key => {

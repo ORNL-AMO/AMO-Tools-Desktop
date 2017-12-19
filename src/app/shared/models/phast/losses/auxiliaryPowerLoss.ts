@@ -4,5 +4,6 @@ export interface AuxiliaryPowerLoss {
     avgCurrent?: number,
     powerFactor?: number,
     operatingTime?: number,
-    powerUsed?: number
+    powerUsed?: number,
+    name?: string
 }

@@ -61,18 +61,12 @@ export class FixtureLossesFormComponent implements OnInit {
     }
     this.initDifferenceMonitor();
   }
-    disableForm() {
-    this.elements = this.lossForm.nativeElement.elements;
-    for (var i = 0, len = this.elements.length; i < len; ++i) {
-      this.elements[i].disabled = true;
-    }
+  disableForm() {
+    this.lossesForm.disable();
   }
 
   enableForm() {
-    this.elements = this.lossForm.nativeElement.elements;
-    for (var i = 0, len = this.elements.length; i < len; ++i) {
-      this.elements[i].disabled = false;
-    }
+    this.lossesForm.enable();
   }
 
   focusField(str: string) {
@@ -172,7 +166,7 @@ export class FixtureLossesFormComponent implements OnInit {
 
   setProperties() {
     let selectedMaterial = this.suiteDbService.selectSolidLoadChargeMaterialById(this.lossesForm.value.materialName);
-        if (this.settings.unitsOfMeasure == 'Metric') {
+    if (this.settings.unitsOfMeasure == 'Metric') {
       selectedMaterial.specificHeatSolid = this.convertUnitsService.value(selectedMaterial.specificHeatSolid).from('btulbF').to('kJkgC');
     }
 

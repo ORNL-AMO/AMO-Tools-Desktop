@@ -3,7 +3,8 @@ export interface ChargeMaterial {
   chargeMaterialType?: string,
   gasChargeMaterial?: GasChargeMaterial,
   liquidChargeMaterial?: LiquidChargeMaterial,
-  solidChargeMaterial?: SolidChargeMaterial
+  solidChargeMaterial?: SolidChargeMaterial,
+  name?: string
 }
 
 export interface GasChargeMaterial {

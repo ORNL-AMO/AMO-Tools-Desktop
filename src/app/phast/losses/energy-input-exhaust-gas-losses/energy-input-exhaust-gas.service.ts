@@ -32,13 +32,14 @@ export class EnergyInputExhaustGasService {
 
 
 
-  initForm() {
+  initForm(lossNum: number) {
     return this.formBuilder.group({
       'excessAir': [20],
       'combustionAirTemp': [''],
       'exhaustGasTemp': [''],
       'totalHeatInput': [3],
       'electricalPowerInput': [''],
+      'name': ['Loss #'+lossNum]
      // 'otherLoss1': ['']
     })
   }
@@ -50,6 +51,7 @@ export class EnergyInputExhaustGasService {
       'exhaustGasTemp': [energyInputExhaustGas.exhaustGasTemp],
       'totalHeatInput': [energyInputExhaustGas.totalHeatInput],
       'electricalPowerInput': [energyInputExhaustGas.electricalPowerInput],
+      'name': [energyInputExhaustGas.name]
     })
     // if (energyInputExhaustGas.otherLossObjects) {
     //   let index = 1;
@@ -72,7 +74,8 @@ export class EnergyInputExhaustGasService {
       totalHeatInput: form.value.totalHeatInput,
       electricalPowerInput: form.value.electricalPowerInput,
       //otherLossObjects: new Array(),
-      otherLosses: 0.0
+      otherLosses: 0.0,
+      name: form.value.name
     }
     // let tmpOtherLosses = new Array();
     // Object.keys(form.controls).forEach(key => {

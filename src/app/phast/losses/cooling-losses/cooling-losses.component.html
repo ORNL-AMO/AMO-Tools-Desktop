@@ -6,12 +6,36 @@
 <div class="card-form" *ngFor="let loss of _coolingLosses; let lossIndex = index">
   <div class="row">
     <div class="col-12">
-      <label class="group-label loss-label">
+      <form class="name-input-form" [formGroup]="loss.gasCoolingForm" *ngIf="loss.coolingMedium == 'Gas'">
+        <div class="input-group">
+          <span class="input-group-addon" (click)="collapseLoss(loss)">
+            <span *ngIf="loss.collapse" class="fa fa-caret-down"></span>
+            <span *ngIf="!loss.collapse" class="fa fa-caret-up"></span>
+          </span>
+          <input type="text" class="form-control name-input" formControlName="name" (input)="setName(loss)">
+          <span class="input-group-addon" *ngIf="isBaseline && inSetup && !lossesLocked" (click)="removeLoss(lossIndex)">
+            <span aria-hidden="true" class="close" aria-label="Close">&times;</span>
+          </span>
+        </div>
+      </form>
+      <form class="name-input-form" [formGroup]="loss.liquidCoolingForm" *ngIf="loss.coolingMedium == 'Liquid'">
+        <div class="input-group">
+          <span class="input-group-addon" (click)="collapseLoss(loss)">
+            <span *ngIf="loss.collapse" class="fa fa-caret-down"></span>
+            <span *ngIf="!loss.collapse" class="fa fa-caret-up"></span>
+          </span>
+          <input type="text" class="form-control name-input" formControlName="name" (input)="setName(loss)">
+          <span class="input-group-addon" *ngIf="isBaseline && inSetup && !lossesLocked" (click)="removeLoss(lossIndex)">
+            <span aria-hidden="true" class="close" aria-label="Close">&times;</span>
+          </span>
+        </div>
+      </form>
+      <!-- <label class="group-label loss-label">
         <span *ngIf="loss.collapse" class="fa fa-caret-down" (click)="collapseLoss(loss)"></span>
         <span *ngIf="!loss.collapse" class="fa fa-caret-up" (click)="collapseLoss(loss)"></span>
         {{loss.name}}
         <span aria-hidden="true" *ngIf="isBaseline && inSetup" class="close pull-right" aria-label="Close" (click)="removeLoss(lossIndex)">&times;</span>
-      </label>
+      </label> -->
     </div>
   </div>
   <div class="row" *ngIf="!loss.collapse">

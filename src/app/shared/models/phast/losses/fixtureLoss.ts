@@ -5,5 +5,6 @@ export interface FixtureLoss {
     finalTemperature?: number,
     correctionFactor?: number,
     materialName?: number,
-    heatLoss?: number
+    heatLoss?: number,
+    name?: string
 }

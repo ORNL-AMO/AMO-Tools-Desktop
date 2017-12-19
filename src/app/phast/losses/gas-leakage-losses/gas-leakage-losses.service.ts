@@ -26,7 +26,7 @@ export class GasLeakageLossesService {
   //   }
   // }
 
-  initForm() {
+  initForm(lossNum:number) {
     return this.formBuilder.group({
       draftPressure: ['', Validators.required],
       openingArea: ['', Validators.required],
@@ -34,7 +34,8 @@ export class GasLeakageLossesService {
       ambientTemperature: ['', Validators.required],
       coefficient: [.8052, Validators.required],
       specificGravity: ['', Validators.required],
-      correctionFactor: [1.0, Validators.required]
+      correctionFactor: [1.0, Validators.required],
+      name: ['Loss #'+lossNum]
     })
   }
 
@@ -46,7 +47,8 @@ export class GasLeakageLossesService {
       ambientTemperature: [loss.ambientTemperature, Validators.required],
       coefficient: [loss.coefficient, Validators.required],
       specificGravity: [loss.specificGravity, Validators.required],
-      correctionFactor: [loss.correctionFactor, Validators.required]
+      correctionFactor: [loss.correctionFactor, Validators.required],
+      name: [loss.name]
     })
   }
 
@@ -58,7 +60,8 @@ export class GasLeakageLossesService {
       ambientTemperature: form.value.ambientTemperature,
       coefficient: form.value.coefficient,
       specificGravity: form.value.specificGravity,
-      correctionFactor: form.value.correctionFactor
+      correctionFactor: form.value.correctionFactor,
+      name: form.value.name
     }
     return tmpLoss;
   }

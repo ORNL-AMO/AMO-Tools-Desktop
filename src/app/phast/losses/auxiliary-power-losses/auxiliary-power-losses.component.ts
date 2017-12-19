@@ -68,13 +68,19 @@ export class AuxiliaryPowerLossesComponent implements OnInit {
     if (this.losses.auxiliaryPowerLosses) {
       this.setCompareVals();
       this.auxiliaryPowerCompareService.initCompareObjects();
+      let lossIndex = 1;
       this.losses.auxiliaryPowerLosses.forEach(loss => {
         let tmpLoss = {
           form: this.auxiliaryPowerLossesService.getFormFromLoss(loss),
-          name: 'Loss #' + (this._auxiliaryPowerLosses.length + 1),
           powerUsed: loss.powerUsed || 0.0,
           collapse: false
         };
+        if(!tmpLoss.form.value.name){
+          tmpLoss.form.patchValue({
+            name: 'Loss #' + lossIndex
+          })
+        }
+        lossIndex++;
         this.calculate(tmpLoss);
         this._auxiliaryPowerLosses.push(tmpLoss);
       })
@@ -142,8 +148,7 @@ export class AuxiliaryPowerLossesComponent implements OnInit {
       this.auxiliaryPowerCompareService.addObject(this.auxiliaryPowerCompareService.differentArray.length - 1);
     }
     this._auxiliaryPowerLosses.push({
-      form: this.auxiliaryPowerLossesService.initForm(),
-      name: 'Loss #' + (this._auxiliaryPowerLosses.length + 1),
+      form: this.auxiliaryPowerLossesService.initForm(this._auxiliaryPowerLosses.length+1),
       powerUsed: 0.0,
       collapse: false
     });
@@ -173,7 +178,14 @@ export class AuxiliaryPowerLossesComponent implements OnInit {
 
   saveLosses() {
     let tmpAuxLosses = new Array<AuxiliaryPowerLoss>();
+    let lossIndex = 1;
     this._auxiliaryPowerLosses.forEach(loss => {
+      if(!loss.form.value.name){
+        loss.form.patchValue({
+          name: 'Loss #' + lossIndex
+        })
+      }
+      lossIndex++;
       let tmpAuxLoss = this.auxiliaryPowerLossesService.getLossFromForm(loss.form);
       tmpAuxLoss.powerUsed = loss.powerUsed;
       tmpAuxLosses.push(tmpAuxLoss);
