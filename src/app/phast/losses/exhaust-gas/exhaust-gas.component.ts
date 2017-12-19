@@ -68,13 +68,19 @@ export class ExhaustGasComponent implements OnInit {
     if (this.losses.exhaustGasEAF) {
       this.setCompareVals();
       this.exhaustGasCompareService.initCompareObjects();
+      let lossIndex = 1;
       this.losses.exhaustGasEAF.forEach(loss => {
         let tmpLoss = {
           form: this.exhaustGasService.getFormFromLoss(loss),
-          name: 'Loss #' + (this._exhaustGasLosses.length + 1),
           heatLoss: 0.0,
           collapse: false
         };
+        if(!tmpLoss.form.value.name){
+          tmpLoss.form.patchValue({
+            name: 'Loss #'+lossIndex
+          })
+        }
+        lossIndex++;
         this.calculate(tmpLoss);
         this._exhaustGasLosses.push(tmpLoss);
       })
@@ -145,7 +151,7 @@ export class ExhaustGasComponent implements OnInit {
       this.exhaustGasCompareService.addObject(this.exhaustGasCompareService.differentArray.length - 1);
     }
     this._exhaustGasLosses.push({
-      form: this.exhaustGasService.initForm(),
+      form: this.exhaustGasService.initForm(this._exhaustGasLosses.length+1),
       name: 'Loss #' + (this._exhaustGasLosses.length + 1),
       heatLoss: 0.0,
       collapse: false
@@ -155,14 +161,6 @@ export class ExhaustGasComponent implements OnInit {
 
   removeLoss(lossIndex: number) {
     this.exhaustGasService.setDelete(lossIndex);
-  }
-
-  renameLossess() {
-    let index = 1;
-    this._exhaustGasLosses.forEach(loss => {
-      loss.name = 'Loss #' + index;
-      index++;
-    })
   }
 
   collapseLoss(loss: any){
@@ -179,7 +177,14 @@ export class ExhaustGasComponent implements OnInit {
 
   saveLosses() {
     let tmpExhaustGases = new Array<ExhaustGasEAF>();
+    let lossIndex = 1;
     this._exhaustGasLosses.forEach(loss => {
+      if(!loss.form.value.name){
+        loss.form.patchValue({
+          name: 'Loss #'+lossIndex
+        })
+      }
+      lossIndex++;
       let tmpExhaustGas = this.exhaustGasService.getLossFromForm(loss.form);
       tmpExhaustGases.push(tmpExhaustGas);
     })

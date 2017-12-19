@@ -25,7 +25,7 @@ export class EnergyInputService {
   //     this.addLossBaselineMonitor.next(true);
   //   }
   // }
-  initForm() {
+  initForm(lossNum: number) {
     return this.formBuilder.group({
       naturalGasHeatInput: ['', Validators.required],
       flowRateInput: [''],
@@ -36,7 +36,8 @@ export class EnergyInputService {
       electrodeUse: ['', Validators.required],
       electrodeHeatingValue: ['', Validators.required],
       otherFuels: ['', Validators.required],
-      electricityInput: ['', Validators.required]
+      electricityInput: ['', Validators.required],
+      name: ['Loss #'+lossNum]
     })
   }
 
@@ -51,7 +52,8 @@ export class EnergyInputService {
       electrodeUse: form.value.electrodeUse,
       electrodeHeatingValue: form.value.electrodeHeatingValue,
       otherFuels: form.value.otherFuels,
-      electricityInput: form.value.electricityInput
+      electricityInput: form.value.electricityInput,
+      name: form.value.name
     }
     return tmpEnergyInput;
   }
@@ -67,7 +69,8 @@ export class EnergyInputService {
       electrodeUse: [loss.electrodeUse, Validators.required],
       electrodeHeatingValue: [loss.electrodeHeatingValue, Validators.required],
       otherFuels: [loss.otherFuels, Validators.required],
-      electricityInput: [loss.electricityInput, Validators.required]
+      electricityInput: [loss.electricityInput, Validators.required],
+      name: [loss.name]
     })
   }
 }
