@@ -68,19 +68,19 @@
   </li><!--
     --><li *ngIf="showSystemEff" [ngClass]="{'active': lossesTab == 'heat-system-efficiency'}" (click)="tabChange('heat-system-efficiency')">
     <a class="nav-link small">
-    <span class="required-asterisk" *ngIf="!efficiencyDone">*</span> Heat System Efficiency
+      <span [ngClass]="{'required-asterisk':!efficiencyDone, 'required-asterisk-done': efficiencyDone}">*</span> Heat System Efficiency
     </a>
   </li><!--
   --><li *ngIf="showEnInput1" [ngClass]="{'active': lossesTab == 'energy-input'}"
     (click)="tabChange('energy-input')">
     <a class="nav-link small">
-     <span class="required-asterisk" *ngIf="!enInput1Done">*</span>  Energy Input
+      <span [ngClass]="{'required-asterisk':!enInput1Done, 'required-asterisk-done': enInput1Done}">*</span>  Energy Input
     </a>
   </li><!--
   --><li *ngIf="showEnInput2" [ngClass]="{'active': lossesTab == 'energy-input-exhaust-gas'}"
     (click)="tabChange('energy-input-exhaust-gas')">
     <a class="nav-link small">
-     <span class="required-asterisk" *ngIf="!enInput2Done">*</span> Energy Input
+      <span [ngClass]="{'required-asterisk':!enInput2Done, 'required-asterisk-done': enInput2Done}">*</span> Energy Input
     </a>
   </li><!--
   --><li [ngClass]="{'active': lossesTab == 'operations'}"
