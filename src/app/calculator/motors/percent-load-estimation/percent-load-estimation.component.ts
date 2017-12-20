@@ -22,6 +22,7 @@ export class PercentLoadEstimationComponent implements OnInit {
   ngOnInit() {
     if (!this.percentLoadEstimationForm) {
       this.percentLoadEstimationForm = this.formBuilder.group({
+        'lineFrequency': ['', ],
         'measuredSpeed': ['', Validators.required],
         'nameplateFullLoadSpeed': ['', Validators.required],
         'synchronousSpeed': ['', ],

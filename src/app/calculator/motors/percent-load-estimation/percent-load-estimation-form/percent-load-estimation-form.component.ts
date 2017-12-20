@@ -26,24 +26,50 @@ export class PercentLoadEstimationFormComponent implements OnInit {
     1200,
     1800,
     3600
-  ]
+  ];
+
 
   constructor() { }
 
   ngOnInit() {
+    this.percentLoadEstimationForm.value.lineFrequency = 50;
+    this.updateSynchronousSpeeds();
     this.calculate();
+  }
+
+  updateSynchronousSpeeds() {
+    if (this.percentLoadEstimationForm.value.lineFrequency === 50) {
+      this.synchronousSpeeds = [
+        500,
+        600,
+        750,
+        1000,
+        1500,
+        3000
+      ];
+    }
+    else if (this.percentLoadEstimationForm.value.lineFrequency === 60) {
+      this.synchronousSpeeds = [
+        600,
+        720,
+        900,
+        1200,
+        1800,
+        3600
+      ];
+    }
   }
 
   calculate() {
     this.synchronousSpeedError = this.nameplateFullLoadSpeedError = this.measuredSpeedError = null;
     var err: boolean = false;
 
-    if (this.percentLoadEstimationForm.value.nameplateFullLoadSpeed >= 3600) {
-      this.nameplateFullLoadSpeedError = 'Nameplate Full Load Speed must be less than 3600';
+    if (this.percentLoadEstimationForm.value.nameplateFullLoadSpeed >= this.synchronousSpeeds[this.synchronousSpeeds.length - 1]) {
+      this.nameplateFullLoadSpeedError = 'Nameplate Full Load Speed must be less than ' + this.synchronousSpeeds[this.synchronousSpeeds.length - 1];
       err = true;
     }
-    if (this.percentLoadEstimationForm.value.measuredSpeed >= 3600) {
-      this.measuredSpeedError = 'Measured Speed must be less than 3600';
+    if (this.percentLoadEstimationForm.value.measuredSpeed >= this.synchronousSpeeds[this.synchronousSpeeds.length - 1]) {
+      this.measuredSpeedError = 'Measured Speed must be less than ' + this.synchronousSpeeds[this.synchronousSpeeds.length - 1];
       err = true;
     }
 
