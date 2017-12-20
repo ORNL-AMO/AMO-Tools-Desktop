@@ -111,7 +111,7 @@ export class CashFlowDiagramComponent implements OnInit {
       console.log("canvasHeight = " + this.canvasHeight);
 
       // if (this.checkForm()) {
-        this.makeGraph();
+      this.makeGraph();
       // }
     }
   }
@@ -186,47 +186,54 @@ export class CashFlowDiagramComponent implements OnInit {
     this.x = d3.scaleLinear()
       .domain([0, this.cashFlowForm.lifeYears + 1])
       .range([0, this.width]);
+
+    if (this.cashFlowForm.installationCost > this.cashFlowForm.salvageInput) {
+      this.y = d3.scaleLinear()
+        .domain([-this.cashFlowForm.installationCost, this.cashFlowForm.installationCost])
+        .range([this.height, 0]);
+    }
+    var graphBounds: number = Math.max(
+      this.cashFlowForm.energySavings,
+      this.cashFlowForm.fuelCost,
+      this.cashFlowForm.installationCost,
+      this.cashFlowForm.junkCost,
+      this.cashFlowForm.lifeYears,
+      this.cashFlowForm.operationCost,
+      this.cashFlowForm.salvageInput);
+
     this.y = d3.scaleLinear()
-      .domain([-this.cashFlowForm.installationCost, this.cashFlowForm.installationCost])
+      .domain([-graphBounds, graphBounds])
       .range([this.height, 0]);
 
+    // this.y = d3.scaleLinear()
+    //   .domain([-this.cashFlowForm.installationCost, this.cashFlowForm.installationCost])
+    //   .range([this.height, 0]);
 
-    var ticks = this.x.ticks(this.cashFlowForm.lifeYears),
-      tickFormat = this.x.tickFormat(1);
 
-    ticks.map(tickFormat);
+    // var ticks = this.x.ticks(this.cashFlowForm.lifeYears),
+    //   tickFormat = this.x.tickFormat(2);
 
 
     this.xAxis = d3.axisBottom()
       .scale(this.x)
       .ticks(this.cashFlowForm.lifeYears)
+      // .tickFormat(2)
       .tickSize(0);
+
+
+    var ticks = d3.selectAll(".tick text");
+    ticks.attr("class", (d,i) => {
+      if (i%3 != 0) d3.select(this).remove();
+    });
+    // this.xAxis = d3.axisBottom()
+    //   .scale(this.x)
+    //   .ticks(this.cashFlowForm.lifeYears)
+    //   .tickFormat(2)
+    //   .tickSize(0);
     // .attr("transform", "translate(0, " + (-(this.height / 2)) + ")");
 
     this.yAxis = d3.axisLeft()
       .scale(this.y);
-    // .ticks(10);
-
-    // this.xAxis = this.svg.append('g')
-    //   .attr("class", "x axis")
-    //   .attr("transform", "translate(0," + this.height + ")")
-    //   .call(this.xAxis)
-    //   .style("stroke-width", ".5px")
-    //   .selectAll('text')
-    //   .style("text-anchor", "end")
-    //   .style("font-size", "13px")
-    //   .style("text-align", "center")
-    //   .style("fill", "white")
-    //   .attr("transform", "translate(" + (((this.width / this.cashFlowForm.lifeYears) / 2)) + ", -20)")
-    //   .attr("dy", "12px");
-
-    // this.yAxis = this.svg.append('g')
-    //   .attr("class", "y axis")
-    //   .call(this.yAxis)
-    //   .style("stroke-width", ".5px")
-    //   .selectAll('text')
-    //   .style("font-size", "13px");
-
 
 
     this.svg.select('#graph')
@@ -424,8 +431,8 @@ export class CashFlowDiagramComponent implements OnInit {
 
   }
 
-  // Benefit/cost Ratio = 
-  //      {(Annual Energy Savings * lifetime) + salvage} / 
+  // Benefit/cost Ratio =
+  //      {(Annual Energy Savings * lifetime) + salvage} /
   //      { (Installation cost + disposal) + ((O&M cost + fuel cost) * lifetime)}
 
   // Simple Payback = (Install cost * 12) / (Annual energy Savings)
