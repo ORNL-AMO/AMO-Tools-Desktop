@@ -32,13 +32,12 @@ export class PercentLoadEstimationFormComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    this.percentLoadEstimationForm.value.lineFrequency = 50;
     this.updateSynchronousSpeeds();
     this.calculate();
   }
 
   updateSynchronousSpeeds() {
-    if (this.percentLoadEstimationForm.value.lineFrequency === 50) {
+    if (this.percentLoadEstimationForm.value.lineFrequency == 50) {
       this.synchronousSpeeds = [
         500,
         600,
@@ -48,7 +47,7 @@ export class PercentLoadEstimationFormComponent implements OnInit {
         3000
       ];
     }
-    else if (this.percentLoadEstimationForm.value.lineFrequency === 60) {
+    else if (this.percentLoadEstimationForm.value.lineFrequency == 60) {
       this.synchronousSpeeds = [
         600,
         720,
@@ -58,6 +57,7 @@ export class PercentLoadEstimationFormComponent implements OnInit {
         3600
       ];
     }
+    this.calculate();
   }
 
   calculate() {
@@ -109,6 +109,7 @@ export class PercentLoadEstimationFormComponent implements OnInit {
 
   //debug
   emitChange() {
+    this.updateSynchronousSpeeds();
     this.calculate();
   }
 }
