@@ -1,3 +1,28 @@
-<p>
-  system-efficiency-summary works!
-</p>
+<div class="card summary-card">
+  <div class="card-header" (click)="toggleCollapse()">
+    <h5>Heat System Efficiency
+      <span class="pull-right fa" [ngClass]="{'fa-chevron-up': collapse, 'fa-chevron-down': !collapse}"></span>
+    </h5>
+  </div>
+  <div *ngIf="!collapse">
+    <div class="card-body">
+      <div class="output-summary">
+        <table class="table table-hover">
+          <tbody>
+            <tr>
+              <td [ngStyle]="{'width.%': 100 /(phast.modifications.length+2)}">
+                Heat System Efficiency
+              </td>
+              <td [ngStyle]="{'width.%': 100 /(phast.modifications.length+2)}">
+                {{phast.systemEfficiency}}
+              </td>
+              <td [ngStyle]="{'width.%': 100 /(phast.modifications.length+2)}" *ngFor="let mod of phast.modifications">
+                {{mod.phast.systemEfficiency}}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

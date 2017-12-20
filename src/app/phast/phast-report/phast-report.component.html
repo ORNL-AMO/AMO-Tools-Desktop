@@ -74,7 +74,9 @@
         <div class="results" [ngClass]="{'show-print':currentTab != 'report-sankey'}">
           <app-report-sankey [phast]="phast" [settings]="settings" ></app-report-sankey>
         </div>
-        <div class="results">
+        <!--use ngClass with 'show-print' for printing-->
+        <!-- ngIf temporary -->
+        <div class="results" *ngIf="currentTab == 'input-summary'">
             <app-phast-input-summary [phast]="phast"></app-phast-input-summary>
         </div>
     </div>

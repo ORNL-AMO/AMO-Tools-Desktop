@@ -17,3 +17,16 @@
     </div>
   </div>
 </div> -->
+
+<div class="card summary-card">
+  <div class="card-header" (click)="toggleCollapse()">
+    <h5>Charge Materials ({{numLosses}})
+      <span class="pull-right fa" [ngClass]="{'fa-chevron-up': collapse, 'fa-chevron-down': !collapse}"></span>
+    </h5>
+  </div>
+  <div *ngIf="!collapse">
+    <div class="card-body">
+
+    </div>
+  </div>
+</div>

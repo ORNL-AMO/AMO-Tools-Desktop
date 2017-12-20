@@ -1,3 +1,50 @@
-<p>
-  other-summary works!
-</p>
+<div class="card summary-card">
+  <div class="card-header" (click)="toggleCollapse()">
+    <h5>Other Losses ({{numLosses}})
+      <span class="pull-right fa" [ngClass]="{'fa-chevron-up': collapse, 'fa-chevron-down': !collapse}"></span>
+    </h5>
+  </div>
+  <div *ngIf="!collapse">
+    <div class="card-body" *ngFor="let data of lossData; let index = index;">
+      <div class="output-summary">
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th [ngStyle]="{'width.%': 100 /(phast.modifications.length+2)}">{{index+1}}</th>
+              <th [ngStyle]="{'width.%': 100 /(phast.modifications.length+2)}">
+                {{data.baseline.name}}
+              </th>
+              <th [ngStyle]="{'width.%': 100 /(phast.modifications.length+2)}" *ngFor="let mod of data.modifications">
+                {{mod.name}}
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                Description
+              </td>
+              <td>
+                {{data.baseline.openingType}}
+              </td>
+              <td *ngFor="let mod of data.modifications">
+                {{mod.openingType}}
+              </td>
+            </tr>
+            <tr>
+              <td>
+                Heat Loss
+              </td>
+              <td>
+                {{data.baseline.heatLoss}}
+              </td>
+              <td *ngFor="let mod of data.modifications">
+                {{mod.heatLoss}}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,3 +1,94 @@
-<p>
-  energy-input-exhaust-gas-summary works!
-</p>
+<div class="card summary-card">
+  <div class="card-header" (click)="toggleCollapse()">
+    <h5>Energy Input Losses ({{numLosses}})
+      <span class="pull-right fa" [ngClass]="{'fa-chevron-up': collapse, 'fa-chevron-down': !collapse}"></span>
+    </h5>
+  </div>
+  <div *ngIf="!collapse">
+    <div class="card-body" *ngFor="let data of lossData; let index = index;">
+      <div class="output-summary">
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th [ngStyle]="{'width.%': 100 /(phast.modifications.length+2)}">{{index+1}}</th>
+              <th [ngStyle]="{'width.%': 100 /(phast.modifications.length+2)}">
+                {{data.baseline.name}}
+              </th>
+              <th [ngStyle]="{'width.%': 100 /(phast.modifications.length+2)}" *ngFor="let mod of data.modifications">
+                {{mod.name}}
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                Total Heat Input for Burners
+              </td>
+              <td>
+                {{data.baseline.totalHeatInput}}
+              </td>
+              <td *ngFor="let mod of data.modifications">
+                {{mod.totalHeatInput}}
+              </td>
+            </tr>
+            <tr>
+              <td>
+                Electrical Power Input
+              </td>
+              <td>
+                {{data.baseline.electricalPowerInput}}
+              </td>
+              <td *ngFor="let mod of data.modifications">
+                {{mod.electricalPowerInput}}
+              </td>
+            </tr>
+            <tr>
+              <td>
+                Excess Air
+              </td>
+              <td>
+                {{data.baseline.excessAir}}
+              </td>
+              <td *ngFor="let mod of data.modifications">
+                {{mod.excessAir}}
+              </td>
+            </tr>
+            <tr>
+              <td>
+                Combustion Air Temperature
+              </td>
+              <td>
+                {{data.baseline.combustionAirTemp}}
+              </td>
+              <td *ngFor="let mod of data.modifications">
+                {{mod.combustionAirTemp}}
+              </td>
+            </tr>
+            <tr>
+              <td>
+              Exhaust Gas Temperature  
+              </td>
+              <td>
+                {{data.baseline.exhaustGasTemp}}
+              </td>
+              <td *ngFor="let mod of data.modifications">
+                {{mod.exhaustGasTemp}}
+              </td>
+            </tr>
+            <tr>
+              <td>
+                Available Heat
+              </td>
+              <td>
+                {{data.baseline.availableHeat}}
+              </td>
+              <td *ngFor="let mod of data.modifications">
+                {{mod.availableHeat}}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

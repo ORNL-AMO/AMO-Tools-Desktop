@@ -1,3 +1,94 @@
-<p>
-  fixture-summary works!
-</p>
+<div class="card summary-card">
+  <div class="card-header" (click)="toggleCollapse()">
+    <h5>Fixture Losses ({{numLosses}})
+      <span class="pull-right fa" [ngClass]="{'fa-chevron-up': collapse, 'fa-chevron-down': !collapse}"></span>
+    </h5>
+  </div>
+  <div *ngIf="!collapse">
+    <div class="card-body" *ngFor="let data of lossData; let index = index;">
+      <div class="output-summary">
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th [ngStyle]="{'width.%': 100 /(phast.modifications.length+2)}">{{index+1}}</th>
+              <th [ngStyle]="{'width.%': 100 /(phast.modifications.length+2)}">
+                {{data.baseline.name}}
+              </th>
+              <th [ngStyle]="{'width.%': 100 /(phast.modifications.length+2)}" *ngFor="let mod of data.modifications">
+                {{mod.name}}
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                Material Name
+              </td>
+              <td>
+                {{getMaterialName(data.baseline.materialName)}}
+              </td>
+              <td *ngFor="let mod of data.modifications">
+                {{getMaterialName(mod.materialName)}}
+              </td>
+            </tr>
+            <tr>
+              <td>
+                Specific Heat
+              </td>
+              <td>
+                {{data.baseline.specificHeat}}
+              </td>
+              <td *ngFor="let mod of data.modifications">
+                {{mod.specificHeat}}
+              </td>
+            </tr>
+            <tr>
+              <td>
+                Fixture Weight Feed Rate
+              </td>
+              <td>
+                {{data.baseline.feedRate}}
+              </td>
+              <td *ngFor="let mod of data.modifications">
+                {{mod.feedRate}}
+              </td>
+            </tr>
+            <tr>
+              <td>
+                Initial Temperature
+              </td>
+              <td>
+                {{data.baseline.initialTemperature}}
+              </td>
+              <td *ngFor="let mod of data.modifications">
+                {{mod.initialTemperature}}
+              </td>
+            </tr>
+            <tr>
+              <td>
+                Final Temperature
+              </td>
+              <td>
+                {{data.baseline.finalTemperature}}
+              </td>
+              <td *ngFor="let mod of data.modifications">
+                {{mod.finalTemperature}}
+              </td>
+            </tr>
+            <tr>
+              <td>
+                Correction Factor
+              </td>
+              <td>
+                {{data.baseline.correctionFactor}}
+              </td>
+              <td *ngFor="let mod of data.modifications">
+                {{mod.correctionFactor}}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,34 +1,123 @@
-<div class="card">
-  <div class="card-header">
-    <h5>Wall Losses</h5>
+<div class="card summary-card">
+  <div class="card-header" (click)="toggleCollapse()">
+    <h5>Wall Losses ({{numLosses}})
+      <span class="pull-right fa" [ngClass]="{'fa-chevron-up': collapse, 'fa-chevron-down': !collapse}"></span>
+    </h5>
   </div>
-  <div class="card-body" *ngFor="let d of data" >
-      <table class="table">
-        <thead>
-        <tr>
-          <th></th>
-          <th>
-            {{d.baseline.name}}
-          </th>
-          <th *ngFor="let mod of d.modifications">
-            {{mod.name}}
-          </th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr>
-          <td>
-            Average Surface Temperature
-          </td>
-          <td>
-            {{d.baseline.surfaceTemperature}}
-          </td>
-          <td *ngFor="let mod of d.modifications">
-            {{mod.surfaceTemperature}}
-          </td>
-        </tr>
-        </tbody>
+  <div *ngIf="!collapse">
+    <div class="card-body" *ngFor="let data of lossData; let index = index;">
+      <div class="output-summary">
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th [ngStyle]="{'width.%': 100 /(phast.modifications.length+2)}">{{index+1}}</th>
+              <th [ngStyle]="{'width.%': 100 /(phast.modifications.length+2)}">
+                {{data.baseline.name}}
+              </th>
+              <th [ngStyle]="{'width.%': 100 /(phast.modifications.length+2)}" *ngFor="let mod of data.modifications">
+                {{mod.name}}
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                Average Surface Temperature
+              </td>
+              <td>
+                {{data.baseline.surfaceTemperature}}
+              </td>
+              <td *ngFor="let mod of data.modifications">
+                {{mod.surfaceTemperature}}
+              </td>
+            </tr>
 
-      </table>
+            <tr>
+              <td>
+                Ambient Temperature
+              </td>
+              <td>
+                {{data.baseline.ambientTemperature}}
+              </td>
+              <td *ngFor="let mod of data.modifications">
+                {{mod.ambientTemperature}}
+              </td>
+            </tr>
+
+            <tr>
+              <td>
+                Wind Velocity
+              </td>
+              <td>
+                {{data.baseline.windVelocity}}
+              </td>
+              <td *ngFor="let mod of data.modifications">
+                {{mod.windVelocity}}
+              </td>
+            </tr>
+
+            <tr>
+              <td>
+                Surface Shape/Orientation
+              </td>
+              <td>
+                {{getSurfaceOption(data.baseline.surfaceShape)}}
+              </td>
+              <td *ngFor="let mod of data.modifications">
+                {{getSurfaceOption(mod.surfaceShape)}}
+              </td>
+            </tr>
+
+            <tr>
+              <td>
+                Surface Shape/Orientation Factor
+              </td>
+              <td>
+                {{data.baseline.conditionFactor}}
+              </td>
+              <td *ngFor="let mod of data.modifications">
+                {{mod.conditionFactor}}
+              </td>
+            </tr>
+
+            <tr>
+              <td>
+                Surface Emissivity
+              </td>
+              <td>
+                {{data.baseline.surfaceEmissivity}}
+              </td>
+              <td *ngFor="let mod of data.modifications">
+                {{mod.surfaceEmissivity}}
+              </td>
+            </tr>
+
+            <tr>
+              <td>
+                Total Outside Surface Area
+              </td>
+              <td>
+                {{data.baseline.surfaceArea}}
+              </td>
+              <td *ngFor="let mod of data.modifications">
+                {{mod.surfaceArea}}
+              </td>
+            </tr>
+
+            <tr>
+              <td>
+                Correction Factor
+              </td>
+              <td>
+                {{data.baseline.correctionFactor}}
+              </td>
+              <td *ngFor="let mod of data.modifications">
+                {{mod.correctionFactor}}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
   </div>
 </div>

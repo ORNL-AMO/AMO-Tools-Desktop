@@ -1,3 +1,83 @@
-<p>
-  slag-summary works!
-</p>
+<div class="card summary-card">
+  <div class="card-header" (click)="toggleCollapse()">
+    <h5>Slag Losses ({{numLosses}})
+      <span class="pull-right fa" [ngClass]="{'fa-chevron-up': collapse, 'fa-chevron-down': !collapse}"></span>
+    </h5>
+  </div>
+  <div *ngIf="!collapse">
+    <div class="card-body" *ngFor="let data of lossData; let index = index;">
+      <div class="output-summary">
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th [ngStyle]="{'width.%': 100 /(phast.modifications.length+2)}">{{index+1}}</th>
+              <th [ngStyle]="{'width.%': 100 /(phast.modifications.length+2)}">
+                {{data.baseline.name}}
+              </th>
+              <th [ngStyle]="{'width.%': 100 /(phast.modifications.length+2)}" *ngFor="let mod of data.modifications">
+                {{mod.name}}
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                Weight
+              </td>
+              <td>
+                {{data.baseline.weight}}
+              </td>
+              <td *ngFor="let mod of data.modifications">
+                {{mod.weight}}
+              </td>
+            </tr>
+            <tr>
+              <td>
+                Inlet Temperature
+              </td>
+              <td>
+                {{data.baseline.inletTemperature}}
+              </td>
+              <td *ngFor="let mod of data.modifications">
+                {{mod.inletTemperature}}
+              </td>
+            </tr>
+            <tr>
+              <td>
+                Outlet Temperature
+              </td>
+              <td>
+                {{data.baseline.outletTemperature}}
+              </td>
+              <td *ngFor="let mod of data.modifications">
+                {{mod.outletTemperature}}
+              </td>
+            </tr>
+            <tr>
+              <td>
+                Specific Heat
+              </td>
+              <td>
+                {{data.baseline.specificHeat}}
+              </td>
+              <td *ngFor="let mod of data.modifications">
+                {{mod.specificHeat}}
+              </td>
+            </tr>
+            <tr>
+              <td>
+                Correction Factor
+              </td>
+              <td>
+                {{data.baseline.correctionFactor}}
+              </td>
+              <td *ngFor="let mod of data.modifications">
+                {{mod.correctionFactor}}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
