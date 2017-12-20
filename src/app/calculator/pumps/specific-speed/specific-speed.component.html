@@ -7,7 +7,7 @@
         </div>
         <div class="row">
           <div class="col-12">
-            <app-specific-speed-form [(speedForm)]="speedForm" [settings]="settings" (calculate)="calculate()"></app-specific-speed-form>
+            <app-specific-speed-form [(speedForm)]="speedForm" [settings]="settings" (calculate)="calculate()" (changeField)="changeField($event)"></app-specific-speed-form>
           </div>
         </div>
       </div>
@@ -25,22 +25,24 @@
 
             <div class="row justify-content-center data-row align-items-center" *ngIf="tabSelect == 'help'">
               <div class="col-11">
-                <div class="calc-help">
-                  <h3>Specific Speed Help</h3>
-                  <p>
-                    For each pump type there is an optimal specific speed based on size, flow rate, specific speed. Hydraulic Institute standards
-                    also include factors for wear and surface finish on wetted parts but these two factors are not considered
-                    in the PSAT calculations. Operation at the optimal specific speed allows a pump to operate at maximum
-                    efficiency. This calculator determines the specific speed for a pump at the given conditions and calculates
-                    the amount of efficiency penalty to be deducted from the maximum value due to operation away from the
-                    optimal specific speed.
-                  </p>
-                </div>
+                <app-specific-speed-help [currentField]="currentField"></app-specific-speed-help>
+                <!--<div class="calc-help">-->
+                  <!--<h3>Specific Speed Help</h3>-->
+                  <!--<p>-->
+                    <!--For each pump type there is an optimal specific speed based on size, flow rate, specific speed. Hydraulic Institute standards-->
+                    <!--also include factors for wear and surface finish on wetted parts but these two factors are not considered-->
+                    <!--in the PSAT calculations. Operation at the optimal specific speed allows a pump to operate at maximum-->
+                    <!--efficiency. This calculator determines the specific speed for a pump at the given conditions and calculates-->
+                    <!--the amount of efficiency penalty to be deducted from the maximum value due to operation away from the-->
+                    <!--optimal specific speed.-->
+                  <!--</p>-->
+                <!--</div>-->
               </div>
             </div>
             <div class="row justify-content-center data-row" style="width:100%;" *ngIf="tabSelect == 'results'">
               <div class="col-11" id="specificSpeedGraph">
                 <app-specific-speed-graph [speedForm]="speedForm" [toggleCalculate]="toggleCalculate"></app-specific-speed-graph>
+
               </div>
             </div>
           </div>

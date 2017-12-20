@@ -13,7 +13,12 @@ export class OperatingHoursComponent implements OnInit {
   save = new EventEmitter<boolean>();
   @Input()
   saveClicked: boolean;
-
+  timeError: string = null;
+  weeksPerYearError: string = null;
+  daysPerWeekError: string = null;
+  shiftsPerDayError: string = null;
+  hoursPerShiftError: string = null;
+  yearFormat: any;
   isFirstChange: boolean = true;
   counter: any;
   constructor() { }
@@ -23,7 +28,7 @@ export class OperatingHoursComponent implements OnInit {
       let defaultHours: OperatingHours = {
         weeksPerYear: 52,
         daysPerWeek: 7,
-        shiftsPerDay: 3,
+        shiftsPerDay: Infinity,
         hoursPerShift: 8,
         hoursPerYear: 8736
       }
@@ -42,9 +47,36 @@ export class OperatingHoursComponent implements OnInit {
   }
 
   calculatHrsPerYear() {
+    let timeCheck = this.phast.operatingHours.shiftsPerDay * this.phast.operatingHours.hoursPerShift;
+    if (timeCheck > 24) {
+      this.timeError = "Invalid input. There is 24 hours per day. " + "Your day have" + " "  + timeCheck.toFixed(2) + " " + "hours." + " " + "Please, check your input.";
+    } else {
+      this.timeError = null;
+    }
+    if (this.phast.operatingHours.weeksPerYear > 52 || this.phast.operatingHours.weeksPerYear <= 0) {
+      this.weeksPerYearError = "The number of Weeks per Year must me greater than 0 and equal or less than 52";
+    } else {
+      this.weeksPerYearError = null;
+    }
+    if (this.phast.operatingHours.daysPerWeek > 7 || this.phast.operatingHours.daysPerWeek <= 0) {
+      this.daysPerWeekError = "The number of Days per Week must be greater than 0 and equal or less than 7";
+    } else {
+      this.daysPerWeekError = null;
+    }
+    if (this.phast.operatingHours.shiftsPerDay <= 0) {
+      this.shiftsPerDayError = "Number of Shifts per Day must be greater than 0";
+    } else {
+      this.shiftsPerDayError = null;
+    }
+     if ( this.phast.operatingHours.hoursPerShift > 24 || this.phast.operatingHours.hoursPerShift <= 0) {
+      this.hoursPerShiftError = " Number of Hours per Shift must be greater then 0 and equal or less than 24 ";
+    } else {
+      this.hoursPerShiftError = null;
+    }
     this.startSavePolling();
     this.phast.operatingHours.isCalculated = true;
     this.phast.operatingHours.hoursPerYear = this.phast.operatingHours.hoursPerShift * this.phast.operatingHours.shiftsPerDay * this.phast.operatingHours.daysPerWeek * this.phast.operatingHours.weeksPerYear;
+    this.yearFormat = this.phast.operatingHours.hoursPerYear.toFixed(2);
   }
 
   setNotCalculated() {

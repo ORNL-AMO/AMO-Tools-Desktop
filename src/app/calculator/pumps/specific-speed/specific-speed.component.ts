@@ -16,7 +16,7 @@ export class SpecificSpeedComponent implements OnInit {
   settings: Settings;
   @Input()
   inPsat: boolean;
-
+  currentField: string;
   speedForm: any;
   specificSpeed: number;
   efficiencyCorrection: number;
@@ -66,5 +66,8 @@ export class SpecificSpeedComponent implements OnInit {
   }
   setTab(str: string) {
     this.tabSelect = str;
+  }
+  changeField(str: string) {
+    this.currentField = str;
   }
 }
