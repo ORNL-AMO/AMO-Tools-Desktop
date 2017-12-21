@@ -19,3 +19,40 @@
     <!-- graph here -->
   </div>
 </div>
+<div class="row">
+  <div class="col-3 tooltip-container">
+    <div class="row">
+      <div class="col-12 tooltip-label">
+        Year:
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-12 tooltip-label">
+        Savings:
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-12 tooltip-label">
+        Expenses:        
+      </div>
+    </div>
+  </div>
+  <div class="col-3 tooltip-container">
+    <div class="row">
+      <div class="col-12 tooltip-value">
+        {{selectedYear}}
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-12 tooltip-value">
+        {{selectedSavings | currency:'USD'}}
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-12 tooltip-value">
+        {{selectedExpenses | currency:'USD'}}
+      </div>
+    </div>
+
+  </div>
+</div>

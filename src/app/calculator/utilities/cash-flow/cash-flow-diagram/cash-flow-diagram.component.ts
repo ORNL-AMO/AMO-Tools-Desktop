@@ -27,6 +27,7 @@ export class CashFlowDiagramComponent implements OnInit {
   width: any;
   height: any;
   margin: any;
+  detailBox: any;
 
   firstChange: boolean = true;
 
@@ -35,6 +36,9 @@ export class CashFlowDiagramComponent implements OnInit {
   doc: any;
   window: any;
 
+  selectedYear: number = 5;
+  selectedSavings: number = 20;
+  selectedExpenses: number = 800;
   graphData: Array<any>;
 
 
@@ -222,8 +226,8 @@ export class CashFlowDiagramComponent implements OnInit {
 
 
     var ticks = d3.selectAll(".tick text");
-    ticks.attr("class", (d,i) => {
-      if (i%3 != 0) d3.select(this).remove();
+    ticks.attr("class", (d, i) => {
+      if (i % 3 != 0) d3.select(this).remove();
     });
     // this.xAxis = d3.axisBottom()
     //   .scale(this.x)
@@ -249,6 +253,7 @@ export class CashFlowDiagramComponent implements OnInit {
     // this.y.domain([0, this.cashFlowForm.salvageInput]);
 
 
+
     //annual energy savings bars
     this.svg.selectAll("bar")
       .data(this.graphData)
@@ -256,6 +261,9 @@ export class CashFlowDiagramComponent implements OnInit {
       .style("fill", "#5fa469")
       .attr("transform", "translate(0,0)")
       .attr("class", "cash-flow positive-bar")
+      .attr("id", (d, i) => {
+        return "savings-bar-" + i;
+      })
       // .attr("transform", "translate(20," + (-(this.height / 2)) + ")")
       .attr("x", (d, i) => {
         return this.x(this.graphData[i].year);
@@ -272,14 +280,26 @@ export class CashFlowDiagramComponent implements OnInit {
       .attr("height", (d, i) => {
         return (this.height / 2) - this.y(this.graphData[i].savings);
       })
-      .on('mouseover', function (d) {
+      .on('mouseover', function (d, i) {
         d3.select(this)
           .style("fill", "#248232");
+
+        // console.log("this bar id i = " + i);
+        this.selectedYear = i;
+        console.log("selectedYear = " + this.selectedYear);
+        // this.selectedSavings = this.cashFlowForm.savings;
+        // this.selectedExpenses = this.cashFlowForm.operationCost + this.cashFlowForm.fuelCost;
+
       })
       .on('mouseout', function (d) {
         d3.select(this)
           .style("fill", "#5fa469");
+
+        this.selectedYear = null;
+        this.selectedSavings = null;
+        this.selectedExpenses = null;
       });
+
 
 
 
