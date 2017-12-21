@@ -7,90 +7,90 @@
 <!--Fixtures-->
 <div class="row">
   <div class="col-12">
-    <app-fixture-summary [phast]="phast"></app-fixture-summary>
+    <app-fixture-summary [phast]="phast" [settings]="settings"></app-fixture-summary>
   </div>
 </div>
 <!--Wall-->
 <div class="row">
   <div class="col-12">
-    <app-wall-summary [phast]="phast"></app-wall-summary>
+    <app-wall-summary [phast]="phast" [settings]="settings"></app-wall-summary>
   </div>
 </div>
 <!--Cooling-->
 <div class="row">
   <div class="col-12">
-    <app-cooling-summary [phast]="phast"></app-cooling-summary>
+    <app-cooling-summary [phast]="phast" [settings]="settings"></app-cooling-summary>
   </div>
 </div>
 <!--Atmosphere-->
 <div class="row">
   <div class="col-12">
-    <app-atmosphere-summary [phast]="phast"></app-atmosphere-summary>
+    <app-atmosphere-summary [phast]="phast" [settings]="settings"></app-atmosphere-summary>
   </div>
 </div>
 <!--Opening-->
 <div class="row">
   <div class="col-12">
-    <app-opening-summary [phast]="phast"></app-opening-summary>
+    <app-opening-summary [phast]="phast" [settings]="settings"></app-opening-summary>
   </div>
 </div>
 <!--Leakage-->
 <div class="row">
   <div class="col-12">
-    <app-gas-leakage-summary [phast]="phast"></app-gas-leakage-summary>
+    <app-gas-leakage-summary [phast]="phast" [settings]="settings"></app-gas-leakage-summary>
   </div>
 </div>
 <!--Extended-->
 <div class="row">
   <div class="col-12">
-    <app-extended-surface-summary [phast]="phast"></app-extended-surface-summary>
+    <app-extended-surface-summary [phast]="phast" [settings]="settings"></app-extended-surface-summary>
   </div>
 </div>
 <!--Other-->
 <div class="row">
   <div class="col-12">
-    <app-other-summary [phast]="phast"></app-other-summary>
+    <app-other-summary [phast]="phast" [settings]="settings"></app-other-summary>
   </div>
 </div>
 <!--Flue Gas-->
-<div class="row">
+<div class="row" *ngIf="lossCategories.showAuxPower">
   <div class="col-12">
-    <app-auxiliary-power-summary [phast]="phast"></app-auxiliary-power-summary>
+    <app-auxiliary-power-summary [phast]="phast" [settings]="settings"></app-auxiliary-power-summary>
   </div>
 </div>
 <!--Flue Gas-->
-<div class="row">
+<div class="row" *ngIf="lossCategories.showFlueGas">
   <div class="col-12">
-    <app-flue-gas-summary [phast]="phast"></app-flue-gas-summary>
+    <app-flue-gas-summary [phast]="phast" [settings]="settings"></app-flue-gas-summary>
   </div>
 </div>
 <!--Slag-->
-<div class="row">
+<div class="row" *ngIf="lossCategories.showSlag">
   <div class="col-12">
-    <app-slag-summary [phast]="phast"></app-slag-summary>
+    <app-slag-summary [phast]="phast" [settings]="settings"></app-slag-summary>
   </div>
 </div>
 
 <!--Exhaust Gas-->
-<div class="row">
+<div class="row" *ngIf="lossCategories.showExGas">
   <div class="col-12">
-    <app-exhaust-gas-summary [phast]="phast"></app-exhaust-gas-summary>
+    <app-exhaust-gas-summary [phast]="phast" [settings]="settings"></app-exhaust-gas-summary>
   </div>
 </div>
 <!--Energy Input Exhuast Gas-->
-<div class="row">
+<div class="row" *ngIf="lossCategories.showEnInput2">
   <div class="col-12">
-    <app-energy-input-exhaust-gas-summary [phast]="phast"></app-energy-input-exhaust-gas-summary>
+    <app-energy-input-exhaust-gas-summary [phast]="phast" [settings]="settings"></app-energy-input-exhaust-gas-summary>
   </div>
 </div>
 <!--Energy Input-->
-<div class="row">
+<div class="row" *ngIf="lossCategories.showEnInput1">
   <div class="col-12">
-    <app-energy-input-summary [phast]="phast"></app-energy-input-summary>
+    <app-energy-input-summary [phast]="phast" [settings]="settings"></app-energy-input-summary>
   </div>
 </div>
 <!--System Efficiency-->
-<div class="row">
+<div class="row" *ngIf="lossCategories.showSystemEff">
   <div class="col-12">
     <app-system-efficiency-summary [phast]="phast"></app-system-efficiency-summary>
   </div>

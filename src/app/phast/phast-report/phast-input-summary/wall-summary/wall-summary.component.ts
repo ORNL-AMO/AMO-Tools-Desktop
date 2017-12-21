@@ -2,6 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { PHAST } from '../../../../shared/models/phast/phast';
 import { WallLoss } from '../../../../shared/models/phast/losses/wallLoss';
 import { SuiteDbService } from '../../../../suiteDb/suite-db.service';
+import { Settings } from '../../../../shared/models/settings';
 
 @Component({
   selector: 'app-wall-summary',
@@ -11,6 +12,8 @@ import { SuiteDbService } from '../../../../suiteDb/suite-db.service';
 export class WallSummaryComponent implements OnInit {
   @Input()
   phast: PHAST
+  @Input()
+  settings: Settings;
 
   lossData: Array<any>;
   surfaceOrientationOptions: Array<any>;

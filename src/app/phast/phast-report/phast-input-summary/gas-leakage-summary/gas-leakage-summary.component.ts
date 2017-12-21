@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { PHAST } from '../../../../shared/models/phast/phast';
-
+import { Settings } from '../../../../shared/models/settings';
 @Component({
   selector: 'app-gas-leakage-summary',
   templateUrl: './gas-leakage-summary.component.html',
@@ -9,8 +9,9 @@ import { PHAST } from '../../../../shared/models/phast/phast';
 export class GasLeakageSummaryComponent implements OnInit {
   @Input()
   phast: PHAST;
-
-
+  @Input()
+  settings: Settings;
+  
   numLosses: number = 0;
   collapse: boolean = true;
   lossData: Array<any>;

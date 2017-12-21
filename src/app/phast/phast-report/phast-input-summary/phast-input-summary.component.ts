@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { PHAST } from '../../../shared/models/phast/phast';
+import { PHAST, ShowResultsCategories } from '../../../shared/models/phast/phast';
 import { Settings } from '../../../shared/models/settings';
+import { PhastResultsService } from '../../phast-results.service';
 
 @Component({
   selector: 'app-phast-input-summary',
@@ -13,10 +14,11 @@ export class PhastInputSummaryComponent implements OnInit {
   @Input()
   phast: PHAST;
 
-
-  constructor() { }
+  lossCategories: ShowResultsCategories;
+  constructor(private phastResultsService: PhastResultsService) { }
 
   ngOnInit() {
+    this.lossCategories = this.phastResultsService.getResultCategories(this.settings);
   }
 
 }

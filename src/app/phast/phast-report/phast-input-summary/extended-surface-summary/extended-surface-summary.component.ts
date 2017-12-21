@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { PHAST } from '../../../../shared/models/phast/phast';
+import { Settings } from '../../../../shared/models/settings';
 @Component({
   selector: 'app-extended-surface-summary',
   templateUrl: './extended-surface-summary.component.html',
@@ -8,6 +9,8 @@ import { PHAST } from '../../../../shared/models/phast/phast';
 export class ExtendedSurfaceSummaryComponent implements OnInit {
   @Input()
   phast: PHAST;
+  @Input()
+  settings: Settings;
 
   lossData: Array<any>;
   numLosses: number = 0;

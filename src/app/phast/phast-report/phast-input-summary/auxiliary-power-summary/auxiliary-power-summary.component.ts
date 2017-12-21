@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { PHAST } from '../../../../shared/models/phast/phast';
+import { Settings } from '../../../../shared/models/settings';
 
 @Component({
   selector: 'app-auxiliary-power-summary',
@@ -9,7 +10,8 @@ import { PHAST } from '../../../../shared/models/phast/phast';
 export class AuxiliaryPowerSummaryComponent implements OnInit {
   @Input()
   phast: PHAST;
-
+  @Input()
+  settings: Settings
   numLosses: number = 0;
   collapse: boolean = true;
   lossData: Array<any>;

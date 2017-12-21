@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { PHAST } from '../../../../shared/models/phast/phast';
 import { SuiteDbService } from '../../../../suiteDb/suite-db.service';
+import { Settings } from '../../../../shared/models/settings';
 
 @Component({
   selector: 'app-atmosphere-summary',
@@ -10,6 +11,8 @@ import { SuiteDbService } from '../../../../suiteDb/suite-db.service';
 export class AtmosphereSummaryComponent implements OnInit {
   @Input()
   phast: PHAST;
+  @Input()
+  settings: Settings;
 
   lossData: Array<any>;
   numLosses: number = 0;

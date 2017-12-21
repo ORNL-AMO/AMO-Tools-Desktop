@@ -2,6 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { PHAST } from '../../../../shared/models/phast/phast';
 import { SuiteDbService } from '../../../../suiteDb/suite-db.service';
 import { FlueGas } from '../../../../shared/models/phast/losses/flueGas';
+import { Settings } from '../../../../shared/models/settings';
 @Component({
   selector: 'app-flue-gas-summary',
   templateUrl: './flue-gas-summary.component.html',
@@ -10,6 +11,8 @@ import { FlueGas } from '../../../../shared/models/phast/losses/flueGas';
 export class FlueGasSummaryComponent implements OnInit {
   @Input()
   phast: PHAST
+  @Input()
+  settings: Settings;
 
   lossData: Array<any>;
   volumeOptions: Array<any>;

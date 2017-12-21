@@ -10,11 +10,20 @@
         <table class="table table-hover">
           <thead>
             <tr>
-              <th [ngStyle]="{'width.%': 100 /(phast.modifications.length+2)}">{{index+1}}</th>
+              <th [ngStyle]="{'width.%': 100 /(phast.modifications.length+2)}"></th>
               <th [ngStyle]="{'width.%': 100 /(phast.modifications.length+2)}">
+                Baseline
+              </th>
+              <th [ngStyle]="{'width.%': 100 /(phast.modifications.length+2)}" *ngFor="let mod of phast.modifications">
+                {{mod.phast.name}}
+              </th>
+            </tr>
+            <tr>
+              <th>{{index+1}}</th>
+              <th>
                 {{data.baseline.name}}
               </th>
-              <th [ngStyle]="{'width.%': 100 /(phast.modifications.length+2)}" *ngFor="let mod of data.modifications">
+              <th *ngFor="let mod of data.modifications">
                 {{mod.name}}
               </th>
             </tr>
@@ -23,6 +32,8 @@
             <tr>
               <td>
                 Average Surface Temperature
+                <span *ngIf="settings.unitsOfMeasure == 'Imperial'">(&#8457;)</span>
+                <span *ngIf="settings.unitsOfMeasure == 'Metric'">(&#8451;)</span>
               </td>
               <td>
                 {{data.baseline.surfaceTemperature}}
@@ -35,6 +46,8 @@
             <tr>
               <td>
                 Ambient Temperature
+                <span *ngIf="settings.unitsOfMeasure == 'Imperial'">(&#8457;)</span>
+                <span *ngIf="settings.unitsOfMeasure == 'Metric'">(&#8451;)</span>
               </td>
               <td>
                 {{data.baseline.ambientTemperature}}
@@ -47,6 +60,8 @@
             <tr>
               <td>
                 Wind Velocity
+                <span *ngIf="settings.unitsOfMeasure == 'Imperial'">(mph)</span>
+                <span *ngIf="settings.unitsOfMeasure == 'Metric'">(km/hr)</span>
               </td>
               <td>
                 {{data.baseline.windVelocity}}
@@ -95,6 +110,10 @@
             <tr>
               <td>
                 Total Outside Surface Area
+                <span *ngIf="settings.unitsOfMeasure == 'Imperial'">(ft
+                  <sup>2</sup>)</span>
+                <span *ngIf="settings.unitsOfMeasure == 'Metric'">(m
+                  <sup>2</sup>)</span>
               </td>
               <td>
                 {{data.baseline.surfaceArea}}

@@ -3,7 +3,7 @@ import { PHAST, Losses } from '../../../../shared/models/phast/phast';
 import { SuiteDbService } from '../../../../suiteDb/suite-db.service';
 import { ChargeMaterial } from '../../../../shared/models/phast/losses/chargeMaterial';
 import { PhastService } from '../../../phast.service';
-
+import { Settings } from '../../../../shared/models/settings';
 @Component({
   selector: 'app-charge-material-summary',
   templateUrl: './charge-material-summary.component.html',
@@ -12,6 +12,8 @@ import { PhastService } from '../../../phast.service';
 export class ChargeMaterialSummaryComponent implements OnInit {
   @Input()
   phast: PHAST
+  @Input()
+  settings: Settings;
 
   lossData: Array<any>;
   volumeOptions: Array<any>;

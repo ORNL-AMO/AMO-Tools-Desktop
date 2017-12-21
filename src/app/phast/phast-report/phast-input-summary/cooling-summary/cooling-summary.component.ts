@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { PHAST } from '../../../../shared/models/phast/phast';
 import { CoolingLoss } from '../../../../shared/models/phast/losses/coolingLoss';
+import { Settings } from '../../../../shared/models/settings';
 
 @Component({
   selector: 'app-cooling-summary',
@@ -10,7 +11,8 @@ import { CoolingLoss } from '../../../../shared/models/phast/losses/coolingLoss'
 export class CoolingSummaryComponent implements OnInit {
   @Input()
   phast: PHAST;
-
+  @Input()
+  settings: Settings;
   numLosses: number = 0;
   collapse: boolean = true;
   lossData: Array<any>;

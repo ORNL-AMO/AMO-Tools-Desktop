@@ -1,7 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { PHAST } from '../../../../shared/models/phast/phast';
 import { SuiteDbService } from '../../../../suiteDb/suite-db.service';
-
+import { Settings } from '../../../../shared/models/settings';
 @Component({
   selector: 'app-fixture-summary',
   templateUrl: './fixture-summary.component.html',
@@ -10,7 +10,8 @@ import { SuiteDbService } from '../../../../suiteDb/suite-db.service';
 export class FixtureSummaryComponent implements OnInit {
   @Input()
   phast: PHAST;
-
+  @Input()
+  settings: Settings;
 
   numLosses: number = 0;
   collapse: boolean = true;
