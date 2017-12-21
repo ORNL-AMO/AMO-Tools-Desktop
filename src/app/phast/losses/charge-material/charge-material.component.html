@@ -13,7 +13,7 @@
             <span *ngIf="!material.collapse" class="fa fa-caret-up"></span>
           </span>
           <input type="text" class="form-control name-input" formControlName="name" (input)="setName(material)">
-          <span class="input-group-addon" *ngIf="isBaseline && inSetup && !lossesLocked" (click)="removeLoss(lossIndex)">
+          <span class="input-group-addon" *ngIf="isBaseline && inSetup && !lossesLocked" (click)="removeMaterial(lossIndex)">
             <span aria-hidden="true" class="close" aria-label="Close">&times;</span>
           </span>
         </div>
@@ -25,7 +25,7 @@
             <span *ngIf="!material.collapse" class="fa fa-caret-up"></span>
           </span>
           <input type="text" class="form-control name-input" formControlName="name" (input)="setName(material)">
-          <span class="input-group-addon" *ngIf="isBaseline && inSetup && !lossesLocked" (click)="removeLoss(lossIndex)">
+          <span class="input-group-addon" *ngIf="isBaseline && inSetup && !lossesLocked" (click)="removeMaterial(lossIndex)">
             <span aria-hidden="true" class="close" aria-label="Close">&times;</span>
           </span>
         </div>
@@ -37,7 +37,7 @@
             <span *ngIf="!material.collapse" class="fa fa-caret-up"></span>
           </span>
           <input type="text" class="form-control name-input" formControlName="name" (input)="setName(material)">
-          <span class="input-group-addon" *ngIf="isBaseline && inSetup && !lossesLocked" (click)="removeLoss(lossIndex)">
+          <span class="input-group-addon" *ngIf="isBaseline && inSetup && !lossesLocked" (click)="removeMaterial(lossIndex)">
             <span aria-hidden="true" class="close" aria-label="Close">&times;</span>
           </span>
         </div>
