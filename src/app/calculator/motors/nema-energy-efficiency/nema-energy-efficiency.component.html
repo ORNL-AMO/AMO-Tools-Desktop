@@ -7,7 +7,7 @@
         </div>
         <div class="row">
           <div class="col-12">
-            <app-nema-energy-efficiency-form [(nemaForm)]="nemaForm" [settings]="settings"></app-nema-energy-efficiency-form>
+            <app-nema-energy-efficiency-form [(nemaForm)]="nemaForm" [settings]="settings" (changeField)="changeField($event)"></app-nema-energy-efficiency-form>
           </div>
         </div>
       </div>
