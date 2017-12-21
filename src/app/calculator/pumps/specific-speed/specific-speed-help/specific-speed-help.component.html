@@ -1,7 +1,7 @@
 <div class="help-panel">
   <div class="help-header">
     <h3>Specific Speed Calculator</h3>
-    <p>Description need it</p>
+    <p></p>
   </div>
 
   <div class="help-content">
@@ -24,9 +24,34 @@
       <div class="card-block small">
         <label><u><strong>Description</strong></u></label>
         <p>
-          The speed of the pump in revolutions per minute (rpm.)
+          The speed of the pump in revolutions per minute (rpm).
         </p>
       </div>
     </div>
+
+    <div class="card" *ngIf="currentField == 'flowRate'">
+      <div class="card-header">
+        Flow Rate
+      </div>
+      <div class="card-block small">
+        <label><u><strong>Description</strong></u></label>
+        <p>
+          Volume of liquid that travels through the pump in a given time (measured in gallons per minute or gpm).
+        </p>
+      </div>
+    </div>
+
+    <div class="card" *ngIf="currentField == 'head'">
+      <div class="card-header">
+        Head
+      </div>
+      <div class="card-block small">
+        <label><u><strong>Description</strong></u></label>
+        <p>
+          Head is the height at which a pump can raise water up.
+        </p>
+      </div>
+    </div>
+
   </div>
 </div>
