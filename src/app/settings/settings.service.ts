@@ -27,6 +27,7 @@ export class SettingsService {
   }
 
   getFormFromSettings(settings: Settings) {
+    console.log(settings.energySourceType);
     return this.formBuilder.group({
       'language': [settings.language, Validators.required],
       'currency': [settings.currency, Validators.required],
@@ -64,6 +65,7 @@ export class SettingsService {
       customFurnaceName: form.value.customFurnaceName,
       temperatureMeasurement: form.value.temperatureMeasurement
     };
+    console.log(tmpSettings.energySourceType);
     return tmpSettings;
   }
 
@@ -82,7 +84,7 @@ export class SettingsService {
       energySourceType: settings.energySourceType,
       furnaceType: settings.furnaceType,
       customFurnaceName: settings.customFurnaceName,
-      temperatureMeasurement: settings.temperatureMeasurement
+      temperatureMeasurement: settings.temperatureMeasurement,
     }
     return newSettings;
   }
