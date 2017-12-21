@@ -27,7 +27,10 @@ export class CashFlowDiagramComponent implements OnInit {
   width: any;
   height: any;
   margin: any;
+
+  //tooltip container
   detailBox: any;
+  axisTitle: any;
 
   firstChange: boolean = true;
 
@@ -36,9 +39,6 @@ export class CashFlowDiagramComponent implements OnInit {
   doc: any;
   window: any;
 
-  selectedYear: number = 5;
-  selectedSavings: number = 20;
-  selectedExpenses: number = 800;
   graphData: Array<any>;
 
 
@@ -96,8 +96,10 @@ export class CashFlowDiagramComponent implements OnInit {
 
     if (curveGraph) {
       console.log("in curveGraph");
+      // this.canvasWidth = curveGraph.clientWidth;
       this.canvasWidth = curveGraph.clientWidth;
-      this.canvasHeight = this.canvasWidth * (3 / 5);
+      
+      this.canvasHeight = this.canvasWidth * (7 / 10);
       // this.canvasWidth = 600;
       // this.canvasHeight = 450;
 
@@ -132,9 +134,10 @@ export class CashFlowDiagramComponent implements OnInit {
         // this.graphData.push(this.cashFlowForm.installationCost);
         this.graphData.push({
           year: i,
-          savings: 0,
+          annualSavings: this.cashFlowForm.energySavings,
+          salvageSavings: 0,
           operationCost: this.cashFlowForm.operationCost,
-          fuelCost: 0,
+          fuelCost: this.cashFlowForm.fuelCost,
           junkCost: 0,
           installationCost: this.cashFlowForm.installationCost
         });
@@ -144,9 +147,10 @@ export class CashFlowDiagramComponent implements OnInit {
         // this.graphData.push(this.cashFlowForm.salvageInput - this.cashFlowForm.junkCost);
         this.graphData.push({
           year: i,
-          savings: this.cashFlowForm.salvageInput,
-          operationCost: 0,
-          fuelCost: 0,
+          annualSavings: this.cashFlowForm.energySavings,
+          salvageSavings: this.cashFlowForm.salvageInput,
+          operationCost: this.cashFlowForm.operationCost,
+          fuelCost: this.cashFlowForm.fuelCost,
           junkCost: this.cashFlowForm.junkCost,
           installationCost: 0
         });
@@ -156,7 +160,8 @@ export class CashFlowDiagramComponent implements OnInit {
       // this.graphData.push(this.cashFlowForm.energySavings - (this.cashFlowForm.fuelCost + this.cashFlowForm.operationCost));
       this.graphData.push({
         year: i,
-        savings: this.cashFlowForm.energySavings,
+        annualSavings: this.cashFlowForm.energySavings,
+        salvageSavings: 0,
         operationCost: this.cashFlowForm.operationCost,
         fuelCost: this.cashFlowForm.fuelCost,
         junkCost: 0,
@@ -164,7 +169,6 @@ export class CashFlowDiagramComponent implements OnInit {
       });
     }
   }
-
 
 
   makeGraph() {
@@ -175,6 +179,7 @@ export class CashFlowDiagramComponent implements OnInit {
 
     this.svg = d3.select('#cashFlowDiagram').append('svg')
       .attr("width", this.width + this.margin.left + this.margin.right)
+      // .attr("width", this.width - this.margin.left - this.margin.right)      
       .attr("height", this.height + this.margin.top + this.margin.bottom)
       .append("g")
       .attr("transform", "translate(" + this.margin.left + "," + this.margin.top + ")");
@@ -197,47 +202,32 @@ export class CashFlowDiagramComponent implements OnInit {
         .range([this.height, 0]);
     }
     var graphBounds: number = Math.max(
-      this.cashFlowForm.energySavings,
-      this.cashFlowForm.fuelCost,
-      this.cashFlowForm.installationCost,
-      this.cashFlowForm.junkCost,
-      this.cashFlowForm.lifeYears,
-      this.cashFlowForm.operationCost,
-      this.cashFlowForm.salvageInput);
+      this.cashFlowForm.installationCost + this.cashFlowForm.fuelCost + this.cashFlowForm.operationCost,
+      this.cashFlowForm.junkCost + this.cashFlowForm.fuelCost + this.cashFlowForm.operationCost,
+      this.cashFlowForm.salvageInput + this.cashFlowForm.energySavings
+    );
 
     this.y = d3.scaleLinear()
       .domain([-graphBounds, graphBounds])
       .range([this.height, 0]);
 
-    // this.y = d3.scaleLinear()
-    //   .domain([-this.cashFlowForm.installationCost, this.cashFlowForm.installationCost])
-    //   .range([this.height, 0]);
-
-
-    // var ticks = this.x.ticks(this.cashFlowForm.lifeYears),
-    //   tickFormat = this.x.tickFormat(2);
-
 
     this.xAxis = d3.axisBottom()
       .scale(this.x)
       .ticks(this.cashFlowForm.lifeYears)
-      // .tickFormat(2)
       .tickSize(0);
 
 
-    var ticks = d3.selectAll(".tick text");
-    ticks.attr("class", (d, i) => {
-      if (i % 3 != 0) d3.select(this).remove();
-    });
-    // this.xAxis = d3.axisBottom()
-    //   .scale(this.x)
-    //   .ticks(this.cashFlowForm.lifeYears)
-    //   .tickFormat(2)
-    //   .tickSize(0);
-    // .attr("transform", "translate(0, " + (-(this.height / 2)) + ")");
-
     this.yAxis = d3.axisLeft()
       .scale(this.y);
+
+
+    //create tooltip element
+    this.detailBox = d3.select("#cashFlowDiagram").append("div")
+      .attr("id", "detailBox")
+      .attr("class", "d3-tip")
+      .style("opacity", 0)
+      .style('pointer-events', 'none');
 
 
     this.svg.select('#graph')
@@ -246,11 +236,6 @@ export class CashFlowDiagramComponent implements OnInit {
       .attr("class", "overlay")
       .attr("fill", "#ffffff")
       .style("filter", "url(#drop-shadow)");
-
-
-    // this.x.domain([0, this.cashFlowForm.lifeYears + 1]);
-    // this.y.domain([-this.cashFlowForm.installationCost, this.cashFlowForm.installationCost]);
-    // this.y.domain([0, this.cashFlowForm.salvageInput]);
 
 
 
@@ -275,32 +260,210 @@ export class CashFlowDiagramComponent implements OnInit {
         if (i === this.graphData.length - 1) {
 
         }
-        return this.y(this.graphData[i].savings);
+        return this.y(this.graphData[i].annualSavings);
+        // return this.y(this.graphData[i].savings);
       })
       .attr("height", (d, i) => {
-        return (this.height / 2) - this.y(this.graphData[i].savings);
+        return (this.height / 2) - this.y(this.graphData[i].annualSavings);
+        // return (this.height / 2) - this.y(this.graphData[i].savings);
       })
       .on('mouseover', function (d, i) {
         d3.select(this)
           .style("fill", "#248232");
 
-        // console.log("this bar id i = " + i);
-        this.selectedYear = i;
-        console.log("selectedYear = " + this.selectedYear);
-        // this.selectedSavings = this.cashFlowForm.savings;
-        // this.selectedExpenses = this.cashFlowForm.operationCost + this.cashFlowForm.fuelCost;
-
+        this.detailBox = d3.select("#cashFlowDiagram").append("div")
+          .attr("id", "detailBox")
+          .attr("class", "d3-tip")
+          .style('pointer-events', 'none')
+          .style("opacity", 0)
+          .html(
+          "<div class='row'>" +
+          "<div class='col-md-6'><strong>Year: </strong></div>" +
+          "<div class='col-md-4'>" + i + " " + "</div>" +
+          "</div>" +
+          "<div class='row'>" +
+          "<div class='col-md-6'><strong>Savings: </strong></div>" +
+          "<div class='col-md-4'>$" + (d.annualSavings + d.salvageSavings).toFixed(2) + " </div>" +
+          // "<div class='col-md-4'>$" + d.savings.toFixed(2) + " </div>" +
+          "</div>" +
+          "<div class='row'>" +
+          "<div class='col-md-6'><strong>Fuel Cost: </strong></div>" +
+          "<div class='col-md-4'>$" + d.fuelCost.toFixed(2) + " </div>" +
+          "</div>" +
+          "<div class='row'>" +
+          "<div class='col-md-6'><strong>Operation Cost: </strong></div>" +
+          "<div class='col-md-4'>$" + d.operationCost.toFixed(2) + " </div>" +
+          "</div>")
+          .style("position", "absolute")
+          .style("width", "240px")
+          .style("text-align", "left")
+          .style("padding", "10px")
+          .style("font", "12px sans-serif")
+          .style("background", "#ffffff")
+          .style("border", "0px")
+          .style("box-shadow", "0px 0px 10px 2px grey")
+          .style("pointer-events", "none");
+        this.detailBox.transition().style('opacity', 1);
       })
       .on('mouseout', function (d) {
         d3.select(this)
           .style("fill", "#5fa469");
+        d3.select('app-cash-flow-diagram').selectAll('.d3-tip')
+          .transition()
+          .style('opacity', 0)
+          .remove();
+      });
 
-        this.selectedYear = null;
-        this.selectedSavings = null;
-        this.selectedExpenses = null;
+    //salvage savings bar
+    this.svg.selectAll("bar")
+      .data(this.graphData)
+      .enter().append("rect")
+      .style("fill", "#90bfcf")
+      // .style("fill", "#5fa469")
+      .attr("transform", "translate(0, " + ((this.height / 2) - this.y(0 - this.cashFlowForm.energySavings)) + ")")
+      // .attr("transform", "translate(0, " + ((this.height / 2) - this.y(this.cashFlowForm.energySavings)) + ")")
+      .attr("class", "cash-flow positive-bar")
+      .attr("id", (d, i) => {
+        return "savings-bar-" + i;
+      })
+      // .attr("transform", "translate(20," + (-(this.height / 2)) + ")")
+      .attr("x", (d, i) => {
+        return this.x(this.graphData[i].year);
+      })
+      .attr("width", ((this.width - (this.margin.left + this.margin.right)) / this.cashFlowForm.lifeYears))
+      // .attr("transform", "translate(1,0)")
+      // .attr("width", this.x)
+      .attr("y", (d, i) => {
+        return this.y(this.graphData[i].salvageSavings);
+        // if (i === this.graphData.length - 1) {
+
+        // }
+        // return this.y(this.graphData[i].annualSavings);
+        // return this.y(this.graphData[i].savings);
+      })
+      .attr("height", (d, i) => {
+        return (this.height / 2) - this.y(this.graphData[i].salvageSavings);
+        // return (this.height / 2) - this.y(this.graphData[i].savings);
+      })
+      .on('mouseover', function (d, i) {
+        d3.select(this)
+          .style("fill", "#348aa7");
+        // .style("fill", "#248232");
+
+        this.detailBox = d3.select("#cashFlowDiagram").append("div")
+          .attr("id", "detailBox")
+          .attr("class", "d3-tip")
+          .style('pointer-events', 'none')
+          .style("opacity", 0)
+          .html(
+          "<div class='row'>" +
+          "<div class='col-md-6'><strong>Year: </strong></div>" +
+          "<div class='col-md-4'>" + i + " " + "</div>" +
+          "</div>" +
+          "<div class='row'>" +
+          "<div class='col-md-6'><strong>Savings: </strong></div>" +
+          "<div class='col-md-4'>$" + (d.annualSavings + d.salvageSavings).toFixed(2) + " </div>" +
+          // "<div class='col-md-4'>$" + d.savings.toFixed(2) + " </div>" +
+          "</div>" +
+          "<div class='row'>" +
+          "<div class='col-md-6'><strong>Fuel Cost: </strong></div>" +
+          "<div class='col-md-4'>$" + d.fuelCost.toFixed(2) + " </div>" +
+          "</div>" +
+          "<div class='row'>" +
+          "<div class='col-md-6'><strong>Operation Cost: </strong></div>" +
+          "<div class='col-md-4'>$" + d.operationCost.toFixed(2) + " </div>" +
+          "</div>")
+          .style("position", "absolute")
+          .style("width", "240px")
+          .style("text-align", "left")
+          .style("padding", "10px")
+          .style("font", "12px sans-serif")
+          .style("background", "#ffffff")
+          .style("border", "0px")
+          .style("box-shadow", "0px 0px 10px 2px grey")
+          .style("pointer-events", "none");
+        this.detailBox.transition().style('opacity', 1);
+      })
+      .on('mouseout', function (d) {
+        d3.select(this)
+          .style("fill", "#90bfcf")
+        // .style("fill", "#5fa469");
+        d3.select('app-cash-flow-diagram').selectAll('.d3-tip')
+          .transition()
+          .style('opacity', 0)
+          .remove();
       });
 
 
+    //fuel cost bars
+    this.svg.selectAll("bar")
+      .data(this.graphData)
+      .enter().append("rect")
+      .style("fill", "#ff7353")
+      .attr("transform", "translate(0, " + ((this.height / 2) - this.y(this.cashFlowForm.fuelCost)) + ")")
+      // .attr("transform", "translate(" + (((this.width - (this.margin.left + this.margin.right)) / this.cashFlowForm.lifeYears) / 2) + ", " + ((this.height / 2) - this.y(this.cashFlowForm.fuelCost)) + ")")
+      .attr("x", (d, i) => {
+        return this.x(this.graphData[i].year);
+      })
+      .attr("width", ((this.width - (this.margin.left + this.margin.right)) / this.cashFlowForm.lifeYears))
+      // .attr("width", ((this.width - (this.margin.left + this.margin.right)) / this.cashFlowForm.lifeYears) / 2)
+      .attr("y", (d, i) => {
+        // if (i !== 0 && i !== this.graphData.length - 1) {
+        return this.y(this.graphData[i].fuelCost);
+        // }
+      })
+      .attr("height", (d, i) => {
+        // if (i !== 0 && i !== this.graphData.length - 1) {
+        return (this.height / 2) - this.y(this.graphData[i].fuelCost);
+        // }
+      })
+      .on('mouseover', function (d, i) {
+        d3.select(this)
+          .style("fill", "#ba4a31");
+
+        this.detailBox = d3.select("#cashFlowDiagram").append("div")
+          .attr("id", "detailBox")
+          .attr("class", "d3-tip")
+          .style('pointer-events', 'none')
+          .style("opacity", 0)
+          .html(
+          "<div class='row'>" +
+          "<div class='col-md-6'><strong>Year: </strong></div>" +
+          "<div class='col-md-4'>" + i + " " + "</div>" +
+          "</div>" +
+          "<div class='row'>" +
+          "<div class='col-md-6'><strong>Savings: </strong></div>" +
+          "<div class='col-md-4'>$" + (d.annualSavings + d.salvageSavings).toFixed(2) + " </div>" +
+          // "<div class='col-md-4'>$" + d.savings.toFixed(2) + " </div>" +
+          "</div>" +
+          "<div class='row'>" +
+          "<div class='col-md-6'><strong>Fuel Cost: </strong></div>" +
+          "<div class='col-md-4'>$" + d.fuelCost.toFixed(2) + " </div>" +
+          "</div>" +
+          "<div class='row'>" +
+          "<div class='col-md-6'><strong>Operation Cost: </strong></div>" +
+          "<div class='col-md-4'>$" + d.operationCost.toFixed(2) + " </div>" +
+          "</div>")
+          .style("position", "absolute")
+          .style("width", "240px")
+          .style("text-align", "left")
+          .style("padding", "10px")
+          .style("font", "12px sans-serif")
+          .style("background", "#ffffff")
+          .style("border", "0px")
+          .style("box-shadow", "0px 0px 10px 2px grey")
+          .style("pointer-events", "none");
+        this.detailBox.transition().style('opacity', 1);
+      })
+      .on('mouseout', function (d) {
+        d3.select(this)
+          .style("fill", "#ff7353");
+
+        d3.select('app-cash-flow-diagram').selectAll('.d3-tip')
+          .transition()
+          .style('opacity', 0)
+          .remove();
+      });
 
 
     //operation cost bars
@@ -308,68 +471,79 @@ export class CashFlowDiagramComponent implements OnInit {
       .data(this.graphData)
       .enter().append("rect")
       .style("fill", "#fed02f")
-      .attr("transform", "translate(0," + ((this.height / 2) - this.y(this.cashFlowForm.operationCost)) + ")")
+      .attr("transform", "translate(0," + ((this.height / 2) - this.y(this.cashFlowForm.operationCost + this.cashFlowForm.fuelCost)) + ")")
+      // .attr("transform", "translate(0," + ((this.height / 2) - this.y(this.cashFlowForm.operationCost)) + ")")
       .attr("x", (d, i) => {
         return this.x(this.graphData[i].year);
       })
-      .attr("width", ((this.width - (this.margin.left + this.margin.right)) / this.cashFlowForm.lifeYears) / 2)
+      .attr("width", ((this.width - (this.margin.left + this.margin.right)) / this.cashFlowForm.lifeYears))
       .attr("y", (d, i) => {
-        if (i !== 0 && i !== this.graphData.length - 1) {
-          console.log("this.y(this.graphData[i].operationCost = " + this.y(this.graphData[i].operationCost));
-          return this.y(this.graphData[i].operationCost);
-        }
+        // if (i !== 0 && i !== this.graphData.length - 1) {
+        // console.log("this.y(this.graphData[i].operationCost = " + this.y(this.graphData[i].operationCost));
+        return this.y(this.graphData[i].operationCost);
+        // }
       })
       .attr("height", (d, i) => {
-        if (i !== 0 && i !== this.graphData.length - 1) {
-          return (this.height / 2) - this.y(this.graphData[i].operationCost);
-        }
+        // if (i !== 0 && i !== this.graphData.length - 1) {
+        return (this.height / 2) - this.y(this.graphData[i].operationCost);
+        // }
       })
-      .on('mouseover', function (d) {
+      .on('mouseover', function (d, i) {
         d3.select(this)
           .style("fill", "#b99101");
+
+        this.detailBox = d3.select("#cashFlowDiagram").append("div")
+          .attr("id", "detailBox")
+          .attr("class", "d3-tip")
+          .style('pointer-events', 'none')
+          .style("opacity", 0)
+          .html(
+          "<div class='row'>" +
+          "<div class='col-md-6'><strong>Year: </strong></div>" +
+          "<div class='col-md-4'>" + i + " " + "</div>" +
+          "</div>" +
+          "<div class='row'>" +
+          "<div class='col-md-6'><strong>Savings: </strong></div>" +
+          "<div class='col-md-4'>$" + (d.annualSavings + d.salvageSavings).toFixed(2) + " </div>" +
+          // "<div class='col-md-4'>$" + d.savings.toFixed(2) + " </div>" +
+          "</div>" +
+          "<div class='row'>" +
+          "<div class='col-md-6'><strong>Fuel Cost: </strong></div>" +
+          "<div class='col-md-4'>$" + d.fuelCost.toFixed(2) + " </div>" +
+          "</div>" +
+          "<div class='row'>" +
+          "<div class='col-md-6'><strong>Operation Cost: </strong></div>" +
+          "<div class='col-md-4'>$" + d.operationCost.toFixed(2) + " </div>" +
+          "</div>")
+          .style("position", "absolute")
+          .style("width", "240px")
+          .style("text-align", "left")
+          .style("padding", "10px")
+          .style("font", "12px sans-serif")
+          .style("background", "#ffffff")
+          .style("border", "0px")
+          .style("box-shadow", "0px 0px 10px 2px grey")
+          .style("pointer-events", "none");
+        this.detailBox.transition().style('opacity', 1);
       })
       .on('mouseout', function (d) {
         d3.select(this)
           .style("fill", "#fed02f");
-      })
 
-    //fuel cost bars
-    this.svg.selectAll("bar")
-      .data(this.graphData)
-      .enter().append("rect")
-      .style("fill", "#ff7353")
-      .attr("transform", "translate(" + (((this.width - (this.margin.left + this.margin.right)) / this.cashFlowForm.lifeYears) / 2) + ", " + ((this.height / 2) - this.y(this.cashFlowForm.fuelCost)) + ")")
-      .attr("x", (d, i) => {
-        return this.x(this.graphData[i].year);
+        d3.select('app-cash-flow-diagram').selectAll('.d3-tip')
+          .transition()
+          .style('opacity', 0)
+          .remove();
       })
-      .attr("width", ((this.width - (this.margin.left + this.margin.right)) / this.cashFlowForm.lifeYears) / 2)
-      .attr("y", (d, i) => {
-        if (i !== 0 && i !== this.graphData.length - 1) {
-          console.log("this.y(this.graphData[i].operationCost = " + this.y(this.graphData[i].fuelCost));
-          return this.y(this.graphData[i].fuelCost);
-        }
-      })
-      .attr("height", (d, i) => {
-        if (i !== 0 && i !== this.graphData.length - 1) {
-          return (this.height / 2) - this.y(this.graphData[i].fuelCost);
-        }
-      })
-      .on('mouseover', function (d) {
-        d3.select(this)
-          .style("fill", "#ba4a31");
-      })
-      .on('mouseout', function (d) {
-        d3.select(this)
-          .style("fill", "#ff7353");
-      });
 
 
     //installation cost bar
     this.svg.selectAll("bar")
       .data(this.graphData)
       .enter().append("rect")
-      .style("fill", "#FA3C1E")
-      .attr("transform", "translate(0 ," + ((this.height / 2) - this.y(this.cashFlowForm.installationCost)) + ")")
+      .style("fill", "#FF3842")
+      // .style("fill", "#FA3C1E")
+      .attr("transform", "translate(0 ," + ((this.height / 2) - this.y(this.cashFlowForm.operationCost + this.cashFlowForm.fuelCost + this.cashFlowForm.installationCost)) + ")")
       .attr("x", (d, i) => {
         return this.x(this.graphData[i].year);
       })
@@ -384,13 +558,52 @@ export class CashFlowDiagramComponent implements OnInit {
           return (this.height / 2) - this.y(this.cashFlowForm.installationCost);
         }
       })
-      .on('mouseover', function (d) {
+      .on('mouseover', function (d, i) {
         d3.select(this)
-          .style("fill", "#CE3118");
+          .style("fill", "#A30810");
+
+        this.detailBox = d3.select("#cashFlowDiagram").append("div")
+          .attr("id", "detailBox")
+          .attr("class", "d3-tip")
+          .style('pointer-events', 'none')
+          .style("opacity", 0)
+          .html(
+          "<div class='row'>" +
+          "<div class='col-md-6'><strong>Year: </strong></div>" +
+          "<div class='col-md-4'>" + i + " " + "</div>" +
+          "</div>" +
+          "<div class='row'>" +
+          "<div class='col-md-6'><strong>Savings: </strong></div>" +
+          "<div class='col-md-4'>$" + (d.annualSavings + d.salvageSavings).toFixed(2) + " </div>" +
+          // "<div class='col-md-4'>$" + d.savings.toFixed(2) + " </div>" +
+          "</div>" +
+          "<div class='row'>" +
+          "<div class='col-md-6'><strong>Fuel Cost: </strong></div>" +
+          "<div class='col-md-4'>$" + d.fuelCost.toFixed(2) + " </div>" +
+          "</div>" +
+          "<div class='row'>" +
+          "<div class='col-md-6'><strong>Operation Cost: </strong></div>" +
+          "<div class='col-md-4'>$" + d.operationCost.toFixed(2) + " </div>" +
+          "</div>")
+          .style("position", "absolute")
+          .style("width", "240px")
+          .style("text-align", "left")
+          .style("padding", "10px")
+          .style("font", "12px sans-serif")
+          .style("background", "#ffffff")
+          .style("border", "0px")
+          .style("box-shadow", "0px 0px 10px 2px grey")
+          .style("pointer-events", "none");
+        this.detailBox.transition().style('opacity', 1);
       })
       .on('mouseout', function (d) {
         d3.select(this)
-          .style("fill", "#FA3C1E");
+          .style("fill", "#FF3842");
+
+        d3.select('app-cash-flow-diagram').selectAll('.d3-tip')
+          .transition()
+          .style('opacity', 0)
+          .remove();
       });
 
 
@@ -398,8 +611,8 @@ export class CashFlowDiagramComponent implements OnInit {
     this.svg.selectAll("bar")
       .data(this.graphData)
       .enter().append("rect")
-      .style("fill", "#FA3C1E")
-      .attr("transform", "translate(0 ," + ((this.height / 2) - this.y(this.cashFlowForm.junkCost)) + ")")
+      .style("fill", "#FF5D17")
+      .attr("transform", "translate(0 ," + ((this.height / 2) - this.y(this.cashFlowForm.operationCost + this.cashFlowForm.fuelCost + this.cashFlowForm.junkCost)) + ")")
       .attr("x", (d, i) => {
         return this.x(this.graphData[i].year);
       })
@@ -414,13 +627,52 @@ export class CashFlowDiagramComponent implements OnInit {
           return (this.height / 2) - this.y(this.cashFlowForm.junkCost);
         }
       })
-      .on('mouseover', function (d) {
+      .on('mouseover', function (d, i) {
         d3.select(this)
-          .style("fill", "#CE3118");
+          .style("fill", "#BA4411");
+
+        this.detailBox = d3.select("#cashFlowDiagram").append("div")
+          .attr("id", "detailBox")
+          .attr("class", "d3-tip")
+          .style('pointer-events', 'none')
+          .style("opacity", 0)
+          .html(
+          "<div class='row'>" +
+          "<div class='col-md-6'><strong>Year: </strong></div>" +
+          "<div class='col-md-4'>" + i + " " + "</div>" +
+          "</div>" +
+          "<div class='row'>" +
+          "<div class='col-md-6'><strong>Savings: </strong></div>" +
+          "<div class='col-md-4'>$" + (d.annualSavings + d.salvageSavings).toFixed(2) + " </div>" +
+          // "<div class='col-md-4'>$" + d.savings.toFixed(2) + " </div>" +
+          "</div>" +
+          "<div class='row'>" +
+          "<div class='col-md-6'><strong>Fuel Cost: </strong></div>" +
+          "<div class='col-md-4'>$" + d.fuelCost.toFixed(2) + " </div>" +
+          "</div>" +
+          "<div class='row'>" +
+          "<div class='col-md-6'><strong>Operation Cost: </strong></div>" +
+          "<div class='col-md-4'>$" + d.operationCost.toFixed(2) + " </div>" +
+          "</div>")
+          .style("position", "absolute")
+          .style("width", "240px")
+          .style("text-align", "left")
+          .style("padding", "10px")
+          .style("font", "12px sans-serif")
+          .style("background", "#ffffff")
+          .style("border", "0px")
+          .style("box-shadow", "0px 0px 10px 2px grey")
+          .style("pointer-events", "none");
+        this.detailBox.transition().style('opacity', 1);
       })
       .on('mouseout', function (d) {
         d3.select(this)
-          .style("fill", "#FA3C1E");
+          .style("fill", "#FF5D17");
+
+        d3.select('app-cash-flow-diagram').selectAll('.d3-tip')
+          .transition()
+          .style('opacity', 0)
+          .remove();
       });
 
 
@@ -438,6 +690,14 @@ export class CashFlowDiagramComponent implements OnInit {
       // .attr("transform", "translate(" + (((this.width / this.cashFlowForm.lifeYears) / 2)) + ", 0)")
       .attr("dy", "12px");
 
+    this.svg.append("text")
+      .attr("transform", "translate(" + (this.width / 2) + ", " + (this.height + this.margin.top) + ")")
+      .style("text-anchor", "middle")
+      .style("opacity", 1)
+      .text("Year");
+
+
+
     this.yAxis = this.svg.append('g')
       .attr("class", "y axis")
       .call(this.yAxis)
@@ -446,9 +706,36 @@ export class CashFlowDiagramComponent implements OnInit {
       .style("font-size", "13px");
 
 
-    // console.log("lifetime = " + this.cashFlowForm.lifeYears + " years");
+    // this.svg.append("text")
+    //   .attr("transform", "rotate(-90)")
+    //   .attr("y", 0 - this.margin.left)
+    //   .attr("x", 0 - (this.height / 2))
+    //   .attr("dy", "1em")
+    //   .style("text-anchor", "middle")
+    //   .style("opacity", 1)
+    //   .text("Dollars");
 
+    var ticks = d3.selectAll(".x .tick text");
+    // ticks.attr("top", "10px");
 
+    if (this.cashFlowForm.lifeYears >= 30) {
+      console.log("tick formatting 30");
+      ticks.attr("class", function (d, i) {
+        if (i % 3 != 0) {
+          console.log("i % 3 != 0");
+          d3.select(this).remove();
+        }
+      });
+    }
+    else if (this.cashFlowForm.lifeYears >= 20) {
+      console.log("tick formatting 20");
+      ticks.attr("class", function (d, i) {
+        if (i % 2 != 0) {
+          console.log("i % 2 != 0");
+          d3.select(this).remove();
+        }
+      });
+    }
   }
 
   // Benefit/cost Ratio =
