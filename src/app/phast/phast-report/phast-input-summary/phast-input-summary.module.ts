@@ -17,10 +17,6 @@ import { OpeningSummaryComponent } from './opening-summary/opening-summary.compo
 import { OtherSummaryComponent } from './other-summary/other-summary.component';
 import { SlagSummaryComponent } from './slag-summary/slag-summary.component';
 import { WallSummaryComponent } from './wall-summary/wall-summary.component';
-import { GasMaterialSummaryComponent } from './charge-material-summary/gas-material-summary/gas-material-summary.component';
-import { LiquidMaterialSummaryComponent } from './charge-material-summary/liquid-material-summary/liquid-material-summary.component';
-import { SolidMaterialSummaryComponent } from './charge-material-summary/solid-material-summary/solid-material-summary.component';
-
 @NgModule({
   imports: [
     CommonModule
@@ -42,10 +38,7 @@ import { SolidMaterialSummaryComponent } from './charge-material-summary/solid-m
     OpeningSummaryComponent,
     OtherSummaryComponent,
     SlagSummaryComponent,
-    WallSummaryComponent,
-    GasMaterialSummaryComponent,
-    LiquidMaterialSummaryComponent,
-    SolidMaterialSummaryComponent
+    WallSummaryComponent
   ],
   exports: [
     PhastInputSummaryComponent

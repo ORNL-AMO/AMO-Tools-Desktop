@@ -1,23 +1,3 @@
-<!-- <div *ngIf="phast.losses">
-  <div *ngIf="phast.losses.chargeMaterials">
-    <div class="card-header">
-      <h5>Charge Materials</h5>
-    </div>
-    <div class="card-body" *ngFor="let material of phast.losses.chargeMaterials; let index = index">
-      <div class="card">
-        <div class="card-header">
-          <h6>{{material.name}}</h6>
-        </div>
-        <div class="card-body">
-          <app-gas-material-summary *ngIf="material.chargeMaterialType == 'Gas'" [gasMaterial]="material.gasChargeMaterial" [modifications]="phast.modifications" [index]="index"></app-gas-material-summary>
-          <app-liquid-material-summary *ngIf="material.chargeMaterialType == 'Liquid'" [liquidMaterial]="material.liquidChargeMaterial" [modifications]="phast.modifications" [index]="index"></app-liquid-material-summary>
-          <app-solid-material-summary *ngIf="material.chargeMaterialType == 'Solid'" [solidMaterial]="material.solidMaterial" [modifications]="phast.modifications" [index]="index"></app-solid-material-summary>
-        </div>
-      </div>
-    </div>
-  </div>
-</div> -->
-
 <div class="card summary-card">
   <div class="card-header" (click)="toggleCollapse()">
     <h5>Charge Materials ({{numLosses}})
@@ -25,8 +5,255 @@
     </h5>
   </div>
   <div *ngIf="!collapse">
-    <div class="card-body">
-
+    <div class="card-body" *ngFor="let data of lossData; let index = index;">
+      <div class="output-summary">
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th [ngStyle]="{'width.%': 100 /(phast.modifications.length+2)}">{{index+1}}</th>
+              <th [ngStyle]="{'width.%': 100 /(phast.modifications.length+2)}">
+                {{data.baseline.name}}
+              </th>
+              <th [ngStyle]="{'width.%': 100 /(phast.modifications.length+2)}" *ngFor="let mod of data.modifications">
+                {{mod.name}}
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                Type of Material
+              </td>
+              <td>
+                {{data.baseline.materialType}}
+              </td>
+              <td *ngFor="let mod of data.modifications">
+                {{mod.materialType}}
+              </td>
+            </tr>
+            <tr>
+              <td>
+                Material Name
+              </td>
+              <td>
+                {{data.baseline.materialName}}
+              </td>
+              <td *ngFor="let mod of data.modifications">
+                {{mod.materialName}}
+              </td>
+            </tr>
+            <tr>
+              <td>
+                Reaction Type
+              </td>
+              <td>
+                {{data.baseline.reactionType}}
+              </td>
+              <td *ngFor="let mod of data.modifications">
+                {{mod.reactionType}}
+              </td>
+            </tr>
+            <tr>
+              <td>
+                Specific Heat Gas
+              </td>
+              <td>
+                {{data.baseline.specificHeatGas}}
+              </td>
+              <td *ngFor="let mod of data.modifications">
+                {{mod.specificHeatGas}}
+              </td>
+            </tr>
+            <tr>
+              <td>
+                Feed Rate
+              </td>
+              <td>
+                {{data.baseline.feedRate}}
+              </td>
+              <td *ngFor="let mod of data.modifications">
+                {{mod.feedRate}}
+              </td>
+            </tr>
+            <tr>
+              <td>
+                Percent Vapor
+              </td>
+              <td>
+                {{data.baseline.percentVapor}}
+              </td>
+              <td *ngFor="let mod of data.modifications">
+                {{mod.percentVapor}}
+              </td>
+            </tr>
+            <tr>
+              <td>
+                Initial Temperature
+              </td>
+              <td>
+                {{data.baseline.initialTemp}}
+              </td>
+              <td *ngFor="let mod of data.modifications">
+                {{mod.initialTemp}}
+              </td>
+            </tr>
+            <tr>
+              <td>
+                Discharge Temperature
+              </td>
+              <td>
+                {{data.baseline.dischargeTemp}}
+              </td>
+              <td *ngFor="let mod of data.modifications">
+                {{mod.dischargeTemp}}
+              </td>
+            </tr>
+            <tr>
+              <td>
+                Percent Reacted
+              </td>
+              <td>
+                {{data.baseline.percentReacted}}
+              </td>
+              <td *ngFor="let mod of data.modifications">
+                {{mod.percentReacted}}
+              </td>
+            </tr>
+            <tr>
+              <td>
+                Reaction Heat
+              </td>
+              <td>
+                {{data.baseline.reactionHeat}}
+              </td>
+              <td *ngFor="let mod of data.modifications">
+                {{mod.reactionHeat}}
+              </td>
+            </tr>
+            <tr>
+              <td>
+                Heat Required
+              </td>
+              <td>
+                {{data.baseline.heatRequired}}
+              </td>
+              <td *ngFor="let mod of data.modifications">
+                {{mod.heatRequired}}
+              </td>
+            </tr>
+            <tr>
+              <td>
+                Specific Heat Solid
+              </td>
+              <td>
+                {{data.baseline.specificHeatSolid}}
+              </td>
+              <td *ngFor="let mod of data.modifications">
+                {{mod.specificHeatSolid}}
+              </td>
+            </tr>
+            <tr>
+              <td>
+                Specific Heat Liquid
+              </td>
+              <td>
+                {{data.baseline.specificHeatLiquid}}
+              </td>
+              <td *ngFor="let mod of data.modifications">
+                {{mod.specificHeatLiquid}}
+              </td>
+            </tr>
+            <tr>
+              <td>
+                Melting Point
+              </td>
+              <td>
+                {{data.baseline.meltingPoint}}
+              </td>
+              <td *ngFor="let mod of data.modifications">
+                {{mod.meltingPoint}}
+              </td>
+            </tr>
+            <tr>
+              <td>
+                Water Content Charged
+              </td>
+              <td>
+                {{data.baseline.waterContentCharged}}
+              </td>
+              <td *ngFor="let mod of data.modifications">
+                {{mod.waterContentCharged}}
+              </td>
+            </tr>
+            <tr>
+              <td>
+                Water Content Discharged
+              </td>
+              <td>
+                {{data.baseline.waterContentDischarged}}
+              </td>
+              <td *ngFor="let mod of data.modifications">
+                {{mod.waterContentDischarged}}
+              </td>
+            </tr>
+            <tr>
+              <td>
+                Water Vapor Discharge Temperature
+              </td>
+              <td>
+                {{data.baseline.waterVaporDischargeTemp}}
+              </td>
+              <td *ngFor="let mod of data.modifications">
+                {{mod.waterVaporDischargeTemp}}
+              </td>
+            </tr>
+            <tr>
+              <td>
+                Latent Heat
+              </td>
+              <td>
+                {{data.baseline.latentHeat}}
+              </td>
+              <td *ngFor="let mod of data.modifications">
+                {{mod.latentHeat}}
+              </td>
+            </tr>
+            <tr>
+              <td>
+                Additional Heat
+              </td>
+              <td>
+                {{data.baseline.additionalHeat}}
+              </td>
+              <td *ngFor="let mod of data.modifications">
+                {{mod.additionalHeat}}
+              </td>
+            </tr>
+            <tr>
+              <td>
+                Vaporizing Temperature
+              </td>
+              <td>
+                {{data.baseline.vaporizingTemperature}}
+              </td>
+              <td *ngFor="let mod of data.modifications">
+                {{mod.vaporizingTemperature}}
+              </td>
+            </tr>
+            <tr>
+              <td>
+                Charge Melted
+              </td>
+              <td>
+                {{data.baseline.chargeMelted}}
+              </td>
+              <td *ngFor="let mod of data.modifications">
+                {{mod.chargeMelted}}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
 </div>
