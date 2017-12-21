@@ -27,7 +27,6 @@ export class SettingsService {
   }
 
   getFormFromSettings(settings: Settings) {
-    console.log(settings.energySourceType);
     return this.formBuilder.group({
       'language': [settings.language, Validators.required],
       'currency': [settings.currency, Validators.required],
@@ -49,23 +48,22 @@ export class SettingsService {
 
   getSettingsFromForm(form: any) {
     let tmpSettings: Settings = {
-      language: form.value.language,
-      currency: form.value.currency,
-      unitsOfMeasure: form.value.unitsOfMeasure,
-      distanceMeasurement: form.value.distanceMeasurement,
-      flowMeasurement: form.value.flowMeasurement,
-      powerMeasurement: form.value.powerMeasurement,
-      pressureMeasurement: form.value.pressureMeasurement,
-      currentMeasurement: form.value.currentMeasurement,
-      viscosityMeasurement: form.value.viscosityMeasurement,
-      voltageMeasurement: form.value.voltageMeasurement,
-      energySourceType: form.value.energySourceType,
-      furnaceType: form.value.furnaceType,
-      energyResultUnit: form.value.energyResultUnit,
-      customFurnaceName: form.value.customFurnaceName,
-      temperatureMeasurement: form.value.temperatureMeasurement
+      language: form.controls.language.value,
+      currency: form.controls.currency.value,
+      unitsOfMeasure: form.controls.unitsOfMeasure.value,
+      distanceMeasurement: form.controls.distanceMeasurement.value,
+      flowMeasurement: form.controls.flowMeasurement.value,
+      powerMeasurement: form.controls.powerMeasurement.value,
+      pressureMeasurement: form.controls.pressureMeasurement.value,
+      currentMeasurement: form.controls.currentMeasurement.value,
+      viscosityMeasurement: form.controls.viscosityMeasurement.value,
+      voltageMeasurement: form.controls.voltageMeasurement.value,
+      energySourceType: form.controls.energySourceType.value,
+      furnaceType: form.controls.furnaceType.value,
+      energyResultUnit: form.controls.energyResultUnit.value,
+      customFurnaceName: form.controls.customFurnaceName.value,
+      temperatureMeasurement: form.controls.temperatureMeasurement.value
     };
-    console.log(tmpSettings.energySourceType);
     return tmpSettings;
   }
 
@@ -90,7 +88,7 @@ export class SettingsService {
   }
 
   setUnits(settingsForm: any): any {
-    if (settingsForm.value.unitsOfMeasure == 'Imperial') {
+    if (settingsForm.controls.unitsOfMeasure.value == 'Imperial') {
       settingsForm.patchValue({
         powerMeasurement: 'hp',
         flowMeasurement: 'gpm',
@@ -102,7 +100,7 @@ export class SettingsService {
         // voltageMeasurement: 'V'
       })
 
-    } else if (settingsForm.value.unitsOfMeasure == 'Metric') {
+    } else if (settingsForm.controls.unitsOfMeasure.value == 'Metric') {
       settingsForm.patchValue({
         powerMeasurement: 'kW',
         flowMeasurement: 'm3/h',
@@ -119,18 +117,18 @@ export class SettingsService {
   }
 
   setEnergyResultUnit(settingsForm: any): any {
-    if (settingsForm.value.unitsOfMeasure == 'Imperial') {
+    if (settingsForm.controls.unitsOfMeasure.value == 'Imperial') {
       settingsForm.patchValue({
         energyResultUnit: 'MMBtu'
       })
     }
-    else if (settingsForm.value.unitsOfMeasure == 'Metric') {
+    else if (settingsForm.controls.unitsOfMeasure.value == 'Metric') {
       settingsForm.patchValue({
         energyResultUnit: 'GJ'
       })
     }
 
-    if (settingsForm.value.energySourceType == 'Electricity') {
+    if (settingsForm.controls.energySourceType.value == 'Electricity') {
       settingsForm.patchValue({
         energyResultUnit: 'kWh'
       })
