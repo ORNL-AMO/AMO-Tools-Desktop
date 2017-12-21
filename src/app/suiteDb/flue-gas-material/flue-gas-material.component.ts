@@ -94,14 +94,14 @@ export class FlueGasMaterialComponent implements OnInit {
 
   setHHV() {
     const vals = this.phastService.flueGasByVolumeCalculateHeatingValue(this.newMaterial);
-    if (isNaN(vals.heatingValue) === false && isNaN(vals.specificGravity) === false) {
+    if (isNaN(vals.heatingValue) === false && isNaN(vals.specificGravity) === false && isNaN(vals.heatingValueVolume) === false) {
       this.isValid = true;
       this.newMaterial.heatingValue = vals.heatingValue;
       this.newMaterial.heatingValueVolume = vals.heatingValueVolume;
       this.newMaterial.specificGravity = vals.specificGravity;
       if (this.settings.unitsOfMeasure === 'Metric') {
-        this.newMaterial.heatingValue = this.convertUnitsService.value(this.newMaterial.heatingValue).from('btuLb').to('kJkg');
-        this.newMaterial.heatingValueVolume = this.convertUnitsService.value(this.newMaterial.heatingValueVolume).from('btuSCF').to('kJNm3');
+        this.newMaterial.heatingValue = this.convertUnitsService.value(vals.heatingValue).from('btuLb').to('kJkg');
+        this.newMaterial.heatingValueVolume = this.convertUnitsService.value(vals.heatingValueVolume).from('btuSCF').to('kJNm3');
       }
     } else {
       this.isValid = false;
