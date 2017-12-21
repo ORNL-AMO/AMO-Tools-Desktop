@@ -34,11 +34,10 @@ export class PhastSettingsComponent implements OnInit {
   // electricOptions: Array<string>;
   constructor() { }
   ngOnInit() {
-    console.log(this.settingsForm.value.energySourceType);
     if (!this.settingsForm.value.furnaceType || this.settingsForm.value.furnaceType == '') {
       this.setOptions();
     }
-    if(this.disable){
+    if (this.disable) {
       this.settingsForm.controls.furnaceType.disable();
       this.settingsForm.controls.energySourceType.disable();
       this.settingsForm.controls.customFurnaceName.disable();
@@ -46,11 +45,11 @@ export class PhastSettingsComponent implements OnInit {
   }
 
   setOptions() {
-    if (this.settingsForm.value.energySourceType == 'Fuel') {
+    if (this.settingsForm.controls.energySourceType.value == 'Fuel') {
       this.settingsForm.patchValue({
         furnaceType: 'Ladle Heater'
       })
-    } else if (this.settingsForm.value.energySourceType == 'Electricity') {
+    } else if (this.settingsForm.controls.energySourceType.value == 'Electricity') {
       this.settingsForm.patchValue({
         furnaceType: 'Electrical Infrared',
         energyResultUnit: 'kWh'
