@@ -34,6 +34,7 @@ export class PhastSettingsComponent implements OnInit {
   // electricOptions: Array<string>;
   constructor() { }
   ngOnInit() {
+    console.log(this.settingsForm.value.energySourceType);
     if (!this.settingsForm.value.furnaceType || this.settingsForm.value.furnaceType == '') {
       this.setOptions();
     }
