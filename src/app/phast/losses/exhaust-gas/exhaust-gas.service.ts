@@ -8,14 +8,14 @@ import * as _ from 'lodash';
 export class ExhaustGasService {
 
   deleteLossIndex: BehaviorSubject<number>;
-  addLossBaselineMonitor: BehaviorSubject<any>;
-  addLossModificationMonitor: BehaviorSubject<any>;
+  //addLossBaselineMonitor: BehaviorSubject<any>;
+ // addLossModificationMonitor: BehaviorSubject<any>;
   // addOtherMonitor: BehaviorSubject<any>;
   // deleteOtherMonitor: BehaviorSubject<any>;
   constructor(private formBuilder: FormBuilder) {
     this.deleteLossIndex = new BehaviorSubject<number>(null);
-    this.addLossBaselineMonitor = new BehaviorSubject<any>(null);
-    this.addLossModificationMonitor = new BehaviorSubject<any>(null);
+    //this.addLossBaselineMonitor = new BehaviorSubject<any>(null);
+    //this.addLossModificationMonitor = new BehaviorSubject<any>(null);
     // this.addOtherMonitor = new BehaviorSubject<any>(null);
     // this.deleteOtherMonitor = new BehaviorSubject<any>(null);
   }
@@ -23,17 +23,17 @@ export class ExhaustGasService {
   setDelete(num: number) {
     this.deleteLossIndex.next(num);
   }
-  addLoss(bool: boolean) {
-    if (bool) {
-      this.addLossModificationMonitor.next(true);
-    } else {
-      this.addLossBaselineMonitor.next(true);
-    }
-  }
+  // addLoss(bool: boolean) {
+  //   if (bool) {
+  //     this.addLossModificationMonitor.next(true);
+  //   } else {
+  //     this.addLossBaselineMonitor.next(true);
+  //   }
+  // }
 
 
 
-  initForm() {
+  initForm(lossNum: number) {
     return this.formBuilder.group({
     //  'cycleTime': ['', Validators.required],
       'offGasTemp': ['', Validators.required],
@@ -44,7 +44,8 @@ export class ExhaustGasService {
       'combustibleGases': ['', Validators.required],
       'vfr': ['', Validators.required],
       'dustLoading': ['', Validators.required],
-     // 'otherLoss1': ['', Validators.required]
+     // 'otherLoss1': ['', Validators.required],
+      'name': ['Loss #'+lossNum]
     })
   }
 
@@ -59,6 +60,7 @@ export class ExhaustGasService {
       'combustibleGases': [exhaustGas.combustibleGases, Validators.required],
       'vfr': [exhaustGas.vfr, Validators.required],
       'dustLoading': [exhaustGas.dustLoading, Validators.required],
+      'name': exhaustGas.name
     })
     // if (exhaustGas.otherLossObjects) {
     //   let index = 1;
@@ -85,7 +87,8 @@ export class ExhaustGasService {
       vfr: form.value.vfr,
       dustLoading: form.value.dustLoading,
      // otherLossObjects: new Array(),
-      otherLosses: 0.0
+      otherLosses: 0.0,
+      name: form.value.name
     }
     // let tmpOtherLosses = new Array();
     // Object.keys(form.controls).forEach(key => {

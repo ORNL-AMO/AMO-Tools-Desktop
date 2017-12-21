@@ -47,10 +47,10 @@ export class LossesComponent implements OnInit {
   toggleCalculate: boolean = false;
   modificationExists: boolean = false;
   constructor(private lossesService: LossesService, private toastyService: ToastyService,
-    private toastyConfig: ToastyConfig, ) { 
-      this.toastyConfig.theme = 'bootstrap';
-      this.toastyConfig.position = 'bottom-right';
-    }
+    private toastyConfig: ToastyConfig, ) {
+    this.toastyConfig.theme = 'bootstrap';
+    this.toastyConfig.position = 'bottom-right';
+  }
 
   ngOnInit() {
     this._modifications = new Array<Modification>();
@@ -62,7 +62,9 @@ export class LossesComponent implements OnInit {
     }
     if (this.phast.modifications) {
       this._modifications = (JSON.parse(JSON.stringify(this.phast.modifications)));
-      this.modificationExists = true;
+      if (this._modifications.length != 0) {
+        this.modificationExists = true;
+      }
     }
 
     this.lossesService.lossesTab.subscribe(val => {
@@ -93,7 +95,7 @@ export class LossesComponent implements OnInit {
 
     if (this.modificationExists && this.inSetup) {
       let toastOptions: ToastOptions = {
-        title: 'Baseline is locked since there are modifications in use. If you wish to change your baseline data use the Assessment tab.',
+        title: 'Baseline is locked since there are modifications in use. If you wish to change your baseline data, use the Assessment tab.',
         showClose: true,
         theme: 'default',
         timeout: 10000000

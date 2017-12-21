@@ -53,27 +53,30 @@
     </div>
 
     <!-- Modifications List -->
-    <div class="modifications-list" *ngIf="isDropdownOpen">
-      <ul *ngIf="!showEditModification">
-        <li *ngFor="let modification of _modifications">
-          <button>
-            <a (click)="selectModification(modification)">
-              {{modification.psat.name}}
-            </a>
-            <a class="pull-right click-link" (click)="dispEditModification(modification)">Edit / Delete</a>
-          </button>
-        </li>
-        <li class="add-modification">
-          <button (click)="addModification()">Add Modified Condition</button>
-          <p>Data will be copied from
-            <br/> your baseline operating condition</p>
-        </li>
-      </ul>
-      <div class="losses-container edit-modification" *ngIf="showEditModification && editModification">
-        <app-edit-condition-properties [modification]="editModification" (deleteMod)="deleteModification()" (saveMod)="save()" (cancelEdit)="cancelEdit()"></app-edit-condition-properties>
+    <div class="row">
+      <div class="col-12">
+        <div class="modifications-list" *ngIf="isDropdownOpen">
+          <ul *ngIf="!showEditModification">
+            <li *ngFor="let modification of _modifications">
+              <button>
+                <a (click)="selectModification(modification)">
+                  {{modification.psat.name}}
+                </a>
+                <a class="right-col pull-right click-link" (click)="dispEditModification(modification)">Edit/Delete</a>
+              </button>
+            </li>
+            <li class="add-modification">
+              <button (click)="addModification()">Add Modified Condition</button>
+              <p>Data will be copied from
+                <br/> your baseline operating condition</p>
+            </li>
+          </ul>
+          <div class="losses-container edit-modification" *ngIf="showEditModification && editModification">
+            <app-edit-condition-properties [modification]="editModification" (deleteMod)="deleteModification()" (saveMod)="save()" (cancelEdit)="cancelEdit()"></app-edit-condition-properties>
+          </div>
+        </div>
       </div>
     </div>
-
   </div>
 
   <!-- No content message -->
@@ -87,7 +90,7 @@
 
   <!-- Help Panel -->
   <div class="col-4" style="padding-left: 0px; padding-right: 0px;">
-    <app-help-panel [psat]="psat" [currentTab]="modifyTab" [settings]="settings" [(modification)]="_modifications[modificationIndex]"></app-help-panel>
+    <app-help-panel [psat]="psat" [currentTab]="modifyTab" [settings]="settings" [(modification)]="_modifications[modificationIndex]" [modificationIndex]="modificationIndex"></app-help-panel>
   </div>
 
 </div>

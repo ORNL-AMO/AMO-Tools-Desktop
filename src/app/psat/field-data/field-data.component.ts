@@ -108,10 +108,15 @@ export class FieldDataComponent implements OnInit {
       if (changes.saveClicked) {
         this.savePsat(this.psatForm);
       }
-      if (!this.selected) {
-        this.disableForm();
-      } else {
-        this.enableForm();
+      if (changes.selected) {
+        if (!this.selected) {
+          this.disableForm();
+        } else {
+          this.enableForm();
+        }
+        if (!this.baseline) {
+          this.optimizeCalc(this.psatForm.value.optimizeCalculation);
+        }
       }
       this.setCompareVals();
     }
@@ -341,7 +346,7 @@ export class FieldDataComponent implements OnInit {
   }
 
   optimizeCalc(bool: boolean) {
-    if (!bool) {
+    if (!bool || !this.selected) {
       this.psatForm.controls.sizeMargin.disable();
       this.psatForm.controls.fixedSpeed.disable();
     } else {
@@ -352,17 +357,6 @@ export class FieldDataComponent implements OnInit {
       optimizeCalculation: bool
     });
   }
-
-  // subtractViscosity() {
-  //   this.psatForm.value.viscosity = this.psatForm.value.viscosity - 1
-  //   this.startSavePolling();
-  //
-  // }
-  //
-  // addViscosity() {
-  //   this.psatForm.value.viscosity = this.psatForm.value.viscosity + 1
-  //   this.startSavePolling();
-  // }
 
   //used to add classes to inputs with different baseline vs modification values
   initDifferenceMonitor() {
@@ -397,30 +391,6 @@ export class FieldDataComponent implements OnInit {
           element.classList.toggle('indicate-different', val);
         });
       });
-      // //load estimation method
-      // this.compareService.load_estimation_method_different.subscribe((val) => {
-      //   if (val && !this.baseline) {
-      //     this.psat.inputs.load_estimation_method = this.compareService.baselinePSAT.inputs.load_estimation_method;
-      //   }
-      // });
-      // //motor power A
-      // this.compareService.motor_field_power_different.subscribe((val) => {
-      //   if (val && !this.baseline) {
-      //     this.psat.inputs.motor_field_power = this.compareService.baselinePSAT.inputs.motor_field_power;
-      //   }
-      // });
-      // //motor power kw
-      // this.compareService.motor_field_current_different.subscribe((val) => {
-      //   if (val && !this.baseline) {
-      //     this.psat.inputs.motor_field_current = this.compareService.baselinePSAT.inputs.motor_field_current;
-      //   }
-      // });
-      // //measured voltage
-      // this.compareService.motor_field_voltage_different.subscribe((val) => {
-      //   if (val && !this.baseline) {
-      //     this.psat.inputs.motor_field_voltage = this.compareService.baselinePSAT.inputs.motor_field_voltage;
-      //   }
-      // });
     }
   }
 }

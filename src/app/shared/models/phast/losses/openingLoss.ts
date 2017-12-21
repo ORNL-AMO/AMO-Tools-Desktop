@@ -10,7 +10,8 @@ export interface OpeningLoss {
     lengthOfOpening?: number,
     heightOfOpening?: number,
     openingTotalArea?: number,
-    heatLoss?: number
+    heatLoss?: number,
+    name?: string
 }
 
 export interface QuadOpeningLoss {

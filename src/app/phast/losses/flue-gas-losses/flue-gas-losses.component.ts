@@ -42,7 +42,7 @@ export class FlueGasLossesComponent implements OnInit {
   availableHeatError: string = null;
 
   disableType: boolean = false;
-
+  lossesLocked: boolean = false;
   constructor(private phastService: PhastService, private flueGasLossesService: FlueGasLossesService, private flueGasCompareService: FlueGasCompareService) { }
 
   ngOnInit() {
@@ -68,38 +68,39 @@ export class FlueGasLossesComponent implements OnInit {
           if (this.flueGasCompareService.differentArray && !this.isBaseline) {
             this.flueGasCompareService.differentArray.splice(lossIndex, 1);
           }
+          this.saveLosses();
         }
       }
     })
-    if (this.isBaseline) {
-      this.flueGasLossesService.addLossBaselineMonitor.subscribe((val) => {
-        if (val == true) {
-          this._flueGasLosses.push({
-            measurementType: 'By Volume',
-            formByVolume: this.flueGasLossesService.initFormVolume(),
-            formByMass: this.flueGasLossesService.initFormMass(),
-            name: 'Loss #' + (this._flueGasLosses.length + 1),
-            heatLoss: 0.0,
-            collapse: false
-          })
-        }
-      })
-    } else {
-      this.flueGasLossesService.addLossModificationMonitor.subscribe((val) => {
-        if (val == true) {
-          this._flueGasLosses.push({
-            measurementType: 'By Volume',
-            formByVolume: this.flueGasLossesService.initFormVolume(),
-            formByMass: this.flueGasLossesService.initFormMass(),
-            name: 'Loss #' + (this._flueGasLosses.length + 1),
-            heatLoss: 0.0,
-            collapse: false
-          })
-        }
-      })
-    }
-    if(this.inSetup && this.modExists){
-      this.disableType = true;
+    // if (this.isBaseline) {
+    //   this.flueGasLossesService.addLossBaselineMonitor.subscribe((val) => {
+    //     if (val == true) {
+    //       this._flueGasLosses.push({
+    //         measurementType: 'By Volume',
+    //         formByVolume: this.flueGasLossesService.initFormVolume(),
+    //         formByMass: this.flueGasLossesService.initFormMass(),
+    //         name: 'Loss #' + (this._flueGasLosses.length + 1),
+    //         heatLoss: 0.0,
+    //         collapse: false
+    //       })
+    //     }
+    //   })
+    // } else {
+    //   this.flueGasLossesService.addLossModificationMonitor.subscribe((val) => {
+    //     if (val == true) {
+    //       this._flueGasLosses.push({
+    //         measurementType: 'By Volume',
+    //         formByVolume: this.flueGasLossesService.initFormVolume(),
+    //         formByMass: this.flueGasLossesService.initFormMass(),
+    //         name: 'Loss #' + (this._flueGasLosses.length + 1),
+    //         heatLoss: 0.0,
+    //         collapse: false
+    //       })
+    //     }
+    //   })
+    // }
+    if (this.inSetup && this.modExists) {
+      this.lossesLocked = true;
       this.disableForms();
     }
   }
@@ -120,82 +121,85 @@ export class FlueGasLossesComponent implements OnInit {
 
   ngOnDestroy() {
     if (this.isBaseline) {
-      this.flueGasLossesService.addLossBaselineMonitor.next(false);
+      //    this.flueGasLossesService.addLossBaselineMonitor.next(false);
       this.flueGasCompareService.baselineFlueGasLoss = null;
     } else {
-      this.flueGasLossesService.addLossModificationMonitor.next(false);
+      //    this.flueGasLossesService.addLossModificationMonitor.next(false);
       this.flueGasCompareService.modifiedFlueGasLoss = null;
     }
     this.flueGasLossesService.deleteLossIndex.next(null);
   }
 
-  disableForms(){
+  disableForms() {
     this._flueGasLosses.forEach(loss => {
       loss.formByMass.disable();
       loss.formByVolume.disable();
     })
   }
   initFlueGasses() {
+    let lossIndex = 1;
     this.losses.flueGasLosses.forEach(loss => {
+      console.log('count ' +lossIndex)
+      let tmpLoss;
       if (loss.flueGasType == "By Volume") {
-        let tmpLoss = {
+        tmpLoss = {
           measurementType: 'By Volume',
           formByVolume: this.flueGasLossesService.initByVolumeFormFromLoss(loss),
-          formByMass: this.flueGasLossesService.initFormMass(),
-          name: 'Loss #' + (this._flueGasLosses.length + 1),
+          formByMass: this.flueGasLossesService.initFormMass(lossIndex),
           heatLoss: 0.0,
           collapse: false
         }
-        this.calculate(tmpLoss);
-        this._flueGasLosses.push(tmpLoss);
       } else if (loss.flueGasType == "By Mass") {
-        let tmpLoss = {
+        tmpLoss = {
           measurementType: 'By Mass',
-          formByVolume: this.flueGasLossesService.initFormVolume(),
+          formByVolume: this.flueGasLossesService.initFormVolume(lossIndex),
           formByMass: this.flueGasLossesService.initByMassFormFromLoss(loss),
-          name: 'Loss #' + (this._flueGasLosses.length + 1),
           availableHeat: 0.0,
           grossHeat: 0.0,
           systemLosses: 0.0,
           collapse: false
         }
-        this.calculate(tmpLoss);
-        this._flueGasLosses.push(tmpLoss);
       }
+      if (!tmpLoss.formByVolume.value.name) {
+        tmpLoss.formByVolume.patchValue({
+          name: 'Loss #' + lossIndex
+        })
+      }
+      if (!tmpLoss.formByMass.value.name) {
+        tmpLoss.formByMass.patchValue({
+          name: 'Loss #' + lossIndex
+        })
+      }
+      lossIndex++;
+      this.calculate(tmpLoss);
+      this._flueGasLosses.push(tmpLoss);
     })
   }
 
   addLoss() {
-    if (this.isLossesSetup) {
-      this.flueGasLossesService.addLoss(this.isBaseline);
-    }
+    // if (this.isLossesSetup) {
+    //   this.flueGasLossesService.addLoss(this.isBaseline);
+    // }
     if (this.flueGasCompareService.differentArray) {
       this.flueGasCompareService.addObject(this.flueGasCompareService.differentArray.length - 1);
     }
     this._flueGasLosses.push({
       measurementType: 'By Volume',
-      formByVolume: this.flueGasLossesService.initFormVolume(),
-      formByMass: this.flueGasLossesService.initFormMass(),
-      name: 'Loss #' + (this._flueGasLosses.length + 1),
+      formByVolume: this.flueGasLossesService.initFormVolume(this._flueGasLosses.length + 1),
+      formByMass: this.flueGasLossesService.initFormMass(this._flueGasLosses.length + 1),
       availableHeat: 0.0,
       grossHeat: 0.0,
       systemLosses: 0.0,
       collapse: false
     });
+    this.saveLosses();
   }
 
   removeLoss(lossIndex: number) {
     this.flueGasLossesService.setDelete(lossIndex);
   }
 
-  renameLoss() {
-    let index = 1;
-    this._flueGasLosses.forEach(loss => {
-      loss.name = 'Loss #' + index;
-      index++;
-    })
-  }
-  collapseLoss(loss: any){
+  collapseLoss(loss: any) {
     loss.collapse = !loss.collapse;
   }
 
@@ -203,8 +207,8 @@ export class FlueGasLossesComponent implements OnInit {
     let sumAdditionalHeat = this.phastService.sumChargeMaterialExothermic(this.losses.chargeMaterials, this.settings);
     if (loss.measurementType == "By Volume") {
       if (loss.formByVolume.status == 'VALID') {
-        let tmpLoss: FlueGasByVolume = this.flueGasLossesService.buildByVolumeLossFromForm(loss.formByVolume);
-        let tmpResult = this.phastService.flueGasByVolume(tmpLoss, this.settings);
+        let tmpLoss: FlueGas = this.flueGasLossesService.buildByVolumeLossFromForm(loss.formByVolume);
+        let tmpResult = this.phastService.flueGasByVolume(tmpLoss.flueGasByVolume, this.settings);
         loss.availableHeat = tmpResult * 100;
         if (loss.availableHeat < 0 || loss.availableHeat > 100) {
           this.availableHeatError = 'Available heat is' + ' ' + loss.availableHeat.toFixed(2) + '%' + '.' + ' ' + 'Check your input fields.';
@@ -221,8 +225,8 @@ export class FlueGasLossesComponent implements OnInit {
       }
     } else if (loss.measurementType == "By Mass") {
       if (loss.formByMass.status == 'VALID') {
-        let tmpLoss: FlueGasByMass = this.flueGasLossesService.buildByMassLossFromForm(loss.formByMass);
-        let tmpResult = this.phastService.flueGasByMass(tmpLoss, this.settings);
+        let tmpLoss: FlueGas = this.flueGasLossesService.buildByMassLossFromForm(loss.formByMass);
+        let tmpResult = this.phastService.flueGasByMass(tmpLoss.flueGasByMass, this.settings);
         loss.availableHeat = tmpResult * 100;
         if (loss.availableHeat < 0 || loss.availableHeat > 100) {
           this.availableHeatError = 'Available heat is' + ' ' + loss.availableHeat.toFixed(2) + '%' + '.' + ' ' + 'Check your input fields.';
@@ -241,24 +245,44 @@ export class FlueGasLossesComponent implements OnInit {
   }
 
 
+  setName(loss: any) {
+    if (loss.measurementType == 'By Volume') {
+      loss.formByMass.patchValue({
+        name: loss.formByVolume.value.name
+      })
+    } else if (loss.measurementType == 'By Mass') {
+      loss.formByVolume.patchValue({
+        name: loss.formByMass.value.name
+      })
+    }
+  }
+
   saveLosses() {
     let tmpFlueGasLosses = new Array<FlueGas>();
+    let lossIndex = 1;
     this._flueGasLosses.forEach(loss => {
       if (loss.measurementType == "By Volume") {
-        let tmpVolumeLoss: FlueGas = {
-          flueGasType: 'By Volume',
-          flueGasByVolume: this.flueGasLossesService.buildByVolumeLossFromForm(loss.formByVolume)
-        };
+        if (!loss.formByVolume.value.name) {
+          loss.formByVolume.patchValue({
+            name: 'Loss #' + lossIndex
+          })
+        }
+        let tmpVolumeLoss: FlueGas = this.flueGasLossesService.buildByVolumeLossFromForm(loss.formByVolume);
+        tmpVolumeLoss.flueGasType = 'By Volume';
         tmpFlueGasLosses.push(tmpVolumeLoss);
       }
       else if (loss.measurementType == "By Mass") {
-        let tmpVolumeLoss: FlueGas = {
-          flueGasType: 'By Mass',
-          flueGasByMass: this.flueGasLossesService.buildByMassLossFromForm(loss.formByMass)
+        if (!loss.formByMass.value.name) {
+          loss.formByMass.patchValue({
+            name: 'Loss #' + lossIndex
+          })
         }
-        tmpFlueGasLosses.push(tmpVolumeLoss);
+        let tmpVolumeLoss: FlueGas = this.flueGasLossesService.buildByMassLossFromForm(loss.formByMass);
+        tmpVolumeLoss.flueGasType = 'By Mass',
+          tmpFlueGasLosses.push(tmpVolumeLoss);
       }
     })
+    lossIndex++;
     this.losses.flueGasLosses = tmpFlueGasLosses;
     this.setCompareVals();
     this.savedLoss.emit(true);

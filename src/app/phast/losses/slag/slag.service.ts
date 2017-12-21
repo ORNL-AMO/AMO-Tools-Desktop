@@ -6,32 +6,33 @@ import { BehaviorSubject } from 'rxjs';
 export class SlagService {
 
   deleteLossIndex: BehaviorSubject<number>;
-  addLossBaselineMonitor: BehaviorSubject<any>;
-  addLossModificationMonitor: BehaviorSubject<any>;
+ // addLossBaselineMonitor: BehaviorSubject<any>;
+ // addLossModificationMonitor: BehaviorSubject<any>;
   constructor(private formBuilder: FormBuilder) {
     this.deleteLossIndex = new BehaviorSubject<number>(null);
-    this.addLossBaselineMonitor = new BehaviorSubject<any>(null);
-    this.addLossModificationMonitor = new BehaviorSubject<any>(null);
+    // this.addLossBaselineMonitor = new BehaviorSubject<any>(null);
+    // this.addLossModificationMonitor = new BehaviorSubject<any>(null);
   }
 
   setDelete(num: number) {
     this.deleteLossIndex.next(num);
   }
-  addLoss(bool: boolean) {
-    if (bool) {
-      this.addLossModificationMonitor.next(true);
-    } else {
-      this.addLossBaselineMonitor.next(true);
-    }
-  }
+  // addLoss(bool: boolean) {
+  //   if (bool) {
+  //     this.addLossModificationMonitor.next(true);
+  //   } else {
+  //     this.addLossBaselineMonitor.next(true);
+  //   }
+  // }
 
-  initForm() {
+  initForm(lossNum: number) {
     return this.formBuilder.group({
       'weight': ['', Validators.required],
       'inletTemperature': ['', Validators.required],
       'outletTemperature': ['', Validators.required],
       'specificHeat': ['', Validators.required],
-      'correctionFactor': [1.0, Validators.required]
+      'correctionFactor': [1.0, Validators.required],
+      'name': ['Loss #'+lossNum]
     })
   }
 
@@ -41,7 +42,8 @@ export class SlagService {
       'inletTemperature': [slag.inletTemperature, Validators.required],
       'outletTemperature': [slag.outletTemperature, Validators.required],
       'specificHeat': [slag.specificHeat, Validators.required],
-      'correctionFactor': [slag.correctionFactor, Validators.required]
+      'correctionFactor': [slag.correctionFactor, Validators.required],
+      'name': [slag.name]
     })
   }
 
@@ -51,7 +53,8 @@ export class SlagService {
       inletTemperature: form.value.inletTemperature,
       outletTemperature: form.value.outletTemperature,
       specificHeat: form.value.specificHeat,
-      correctionFactor: form.value.correctionFactor
+      correctionFactor: form.value.correctionFactor,
+      name: form.value.name
     }
     return tmpSlag;
   }

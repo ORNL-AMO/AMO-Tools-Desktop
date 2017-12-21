@@ -59,17 +59,11 @@ export class ExtendedSurfaceLossesFormComponent implements OnInit {
   }
 
   disableForm() {
-    this.elements = this.lossForm.nativeElement.elements;
-    for (var i = 0, len = this.elements.length; i < len; ++i) {
-      this.elements[i].disabled = true;
-    }
+    this.lossesForm.disable();
   }
 
   enableForm() {
-    this.elements = this.lossForm.nativeElement.elements;
-    for (var i = 0, len = this.elements.length; i < len; ++i) {
-      this.elements[i].disabled = false;
-    }
+    this.lossesForm.enable();
   }
   checkForm() {
     this.calculate.emit(true);
@@ -98,7 +92,7 @@ export class ExtendedSurfaceLossesFormComponent implements OnInit {
     if (this.lossesForm.value.surfaceArea < 0) {
       this.surfaceAreaError = 'Total Outside Surface Area must be equal or greater than 0 ';
     } else {
-      this.surfaceAreaError= null;
+      this.surfaceAreaError = null;
     }
   }
 

@@ -6,24 +6,24 @@ import { Settings } from '../../../shared/models/settings';
 @Injectable()
 export class CoolingLossesService {
   deleteLossIndex: BehaviorSubject<number>;
-  addLossBaselineMonitor: BehaviorSubject<any>;
-  addLossModificationMonitor: BehaviorSubject<any>;
+  //  addLossBaselineMonitor: BehaviorSubject<any>;
+  //  addLossModificationMonitor: BehaviorSubject<any>;
   constructor(private formBuilder: FormBuilder) {
     this.deleteLossIndex = new BehaviorSubject<number>(null);
-    this.addLossBaselineMonitor = new BehaviorSubject<any>(null);
-    this.addLossModificationMonitor = new BehaviorSubject<any>(null);
+    // this.addLossBaselineMonitor = new BehaviorSubject<any>(null);
+    // this.addLossModificationMonitor = new BehaviorSubject<any>(null);
   }
 
   setDelete(num: number) {
     this.deleteLossIndex.next(num);
   }
-  addLoss(bool: boolean) {
-    if (bool) {
-      this.addLossModificationMonitor.next(true);
-    } else {
-      this.addLossBaselineMonitor.next(true);
-    }
-  }
+  // addLoss(bool: boolean) {
+  //   if (bool) {
+  //     this.addLossModificationMonitor.next(true);
+  //   } else {
+  //     this.addLossBaselineMonitor.next(true);
+  //   }
+  // }
   initWaterCoolingForm() {
     return this.formBuilder.group({
       'liquidFlow': ['', Validators.required],
@@ -52,7 +52,7 @@ export class CoolingLossesService {
     return tmpLoss;
   }
 
-  initLiquidCoolingForm(settings: Settings) {
+  initLiquidCoolingForm(settings: Settings, lossNum: number) {
     let defaultDensity: number = 8.338;
     let defaultSpecificHeat: number = 1;
     if (settings.unitsOfMeasure == 'Metric') {
@@ -66,33 +66,38 @@ export class CoolingLossesService {
       'inletTemp': ['', Validators.required],
       'outletTemp': ['', Validators.required],
       'correctionFactor': [1.0, Validators.required],
+      'name': ['Loss #' + lossNum]
     });
   }
 
-  initLiquidFormFromLoss(loss: LiquidCoolingLoss) {
+  initLiquidFormFromLoss(loss: CoolingLoss) {
     return this.formBuilder.group({
-      'avgSpecificHeat': [loss.specificHeat, Validators.required],
-      'density': [loss.density, Validators.required],
-      'liquidFlow': [loss.flowRate, Validators.required],
-      'inletTemp': [loss.initialTemperature, Validators.required],
-      'outletTemp': [loss.outletTemperature, Validators.required],
-      'correctionFactor': [loss.correctionFactor, Validators.required],
+      'avgSpecificHeat': [loss.liquidCoolingLoss.specificHeat, Validators.required],
+      'density': [loss.liquidCoolingLoss.density, Validators.required],
+      'liquidFlow': [loss.liquidCoolingLoss.flowRate, Validators.required],
+      'inletTemp': [loss.liquidCoolingLoss.initialTemperature, Validators.required],
+      'outletTemp': [loss.liquidCoolingLoss.outletTemperature, Validators.required],
+      'correctionFactor': [loss.liquidCoolingLoss.correctionFactor, Validators.required],
+      'name': [loss.name]
     })
   }
 
-  initLiquidLossFromForm(form: any): LiquidCoolingLoss {
-    let tmpLoss: LiquidCoolingLoss = {
-      flowRate: form.value.liquidFlow,
-      density: form.value.density,
-      initialTemperature: form.value.inletTemp,
-      outletTemperature: form.value.outletTemp,
-      specificHeat: form.value.avgSpecificHeat,
-      correctionFactor: form.value.correctionFactor
+  initLiquidLossFromForm(form: any): CoolingLoss {
+    let tmpLoss: CoolingLoss = {
+      name: form.value.name,
+      liquidCoolingLoss: {
+        flowRate: form.value.liquidFlow,
+        density: form.value.density,
+        initialTemperature: form.value.inletTemp,
+        outletTemperature: form.value.outletTemp,
+        specificHeat: form.value.avgSpecificHeat,
+        correctionFactor: form.value.correctionFactor
+      }
     }
     return tmpLoss;
   }
 
-  initGasCoolingForm(settings: Settings) {
+  initGasCoolingForm(settings: Settings, lossNum: number) {
     let defaultDensity: number = .074887;
     let defaultSpecificHeat: number = .2371;
     if (settings.unitsOfMeasure == 'Metric') {
@@ -105,29 +110,34 @@ export class CoolingLossesService {
       'inletTemp': ['', Validators.required],
       'outletTemp': ['', Validators.required],
       'correctionFactor': [1.0, Validators.required],
-      'gasDensity': [defaultDensity, Validators.required]
+      'gasDensity': [defaultDensity, Validators.required],
+      'name': ['Loss #' + lossNum]
     });
   }
 
-  initGasFormFromLoss(loss: GasCoolingLoss) {
+  initGasFormFromLoss(loss: CoolingLoss) {
     return this.formBuilder.group({
-      'avgSpecificHeat': [loss.specificHeat, Validators.required],
-      'gasFlow': [loss.flowRate, Validators.required],
-      'inletTemp': [loss.initialTemperature, Validators.required],
-      'outletTemp': [loss.finalTemperature, Validators.required],
-      'correctionFactor': [loss.correctionFactor, Validators.required],
-      'gasDensity': [loss.gasDensity, Validators.required]
+      'avgSpecificHeat': [loss.gasCoolingLoss.specificHeat, Validators.required],
+      'gasFlow': [loss.gasCoolingLoss.flowRate, Validators.required],
+      'inletTemp': [loss.gasCoolingLoss.initialTemperature, Validators.required],
+      'outletTemp': [loss.gasCoolingLoss.finalTemperature, Validators.required],
+      'correctionFactor': [loss.gasCoolingLoss.correctionFactor, Validators.required],
+      'gasDensity': [loss.gasCoolingLoss.gasDensity, Validators.required],
+      'name': [loss.name]
     });
   }
 
-  initGasLossFromForm(form: any): GasCoolingLoss {
-    let tmpLoss: GasCoolingLoss = {
-      flowRate: form.value.gasFlow,
-      initialTemperature: form.value.inletTemp,
-      finalTemperature: form.value.outletTemp,
-      specificHeat: form.value.avgSpecificHeat,
-      correctionFactor: form.value.correctionFactor,
-      gasDensity: form.value.gasDensity
+  initGasLossFromForm(form: any): CoolingLoss {
+    let tmpLoss: CoolingLoss = {
+      name: form.value.name,
+      gasCoolingLoss: {
+        flowRate: form.value.gasFlow,
+        initialTemperature: form.value.inletTemp,
+        finalTemperature: form.value.outletTemp,
+        specificHeat: form.value.avgSpecificHeat,
+        correctionFactor: form.value.correctionFactor,
+        gasDensity: form.value.gasDensity
+      }
     }
     return tmpLoss;
   }

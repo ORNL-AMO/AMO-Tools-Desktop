@@ -6,8 +6,8 @@
         <h2>Furnace Calculators</h2>
         <ul>
           <li>
-            <a (click)="showTool('o2-enrichment')">O2 Enrichment</a>
-            <p>Use the O2 Enrichment calculator to estimate fuel savings from adjusting the oxygen content of combustion and
+            <a (click)="showTool('o2-enrichment')">O<sub>2</sub> Enrichment</a>
+            <p>Use the O<sub>2</sub> Enrichment calculator to estimate fuel savings from adjusting the oxygen content of combustion and
               flue gases
             </p>
           </li>
@@ -61,8 +61,8 @@
 </div>
 
 
-<div class="calculator" *ngIf="getSelectedTool() == 'efficiency-improvement'">
-  <div class="row">
+<div class="stand-alone-calc tab-content" *ngIf="getSelectedTool() == 'efficiency-improvement'">
+  <!-- <div class="row">
     <div class="col-lg-11 mx-auto">
       <h2>Efficiency Improvement Calculator</h2>
       <p> Provides calculation of available heat (the heat that remains within the heating system as a fraction of the heat input,
@@ -72,23 +72,23 @@
       </p>
     </div>
   </div>
-  <div class="calculator-container">
+  <div class="calculator-container"> -->
     <app-efficiency-improvement></app-efficiency-improvement>
-  </div>
+  <!-- </div> -->
 </div>
 
 
-<div class="calculator" *ngIf="getSelectedTool() == 'energy-equivalency'">
-  <div class="row">
+<div class="stand-alone-calc tab-content" *ngIf="getSelectedTool() == 'energy-equivalency'">
+  <!-- <div class="row">
     <div class="col-lg-11 mx-auto">
       <h2>Energy Equivalency Calculator</h2>
       <p> Provides calculations for converting values of energy input requirements when the heat source is changed from fuel-firing
         (Btu/hr or kJ/hr) to electricity (kW), or vice versa.</p>
     </div>
   </div>
-  <div class="calculator-container">
+  <div class="calculator-container"> -->
     <app-energy-equivalency></app-energy-equivalency>
-  </div>
+  <!-- </div> -->
 </div>
 
 <div class="stand-alone-calc tab-content" *ngIf="getSelectedTool() == 'energy-use'">
@@ -99,9 +99,9 @@
         when the gas is a fuel (i.e. natural gas, propane).</p>
     </div>
   </div> -->
-  
+
     <app-energy-use></app-energy-use>
-  
+
 </div>
 
 

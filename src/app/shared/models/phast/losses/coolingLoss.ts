@@ -3,7 +3,8 @@ export interface CoolingLoss {
     gasCoolingLoss?: GasCoolingLoss,
     liquidCoolingLoss?: LiquidCoolingLoss,
     waterCoolingLoss?: WaterCoolingLoss,
-    heatLoss?: number    
+    heatLoss?: number,
+    name?: string
 }
 
 export interface LiquidCoolingLoss {

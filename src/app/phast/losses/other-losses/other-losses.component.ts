@@ -37,6 +37,7 @@ export class OtherLossesComponent implements OnInit {
   
   _otherLosses: Array<any>;
   firstChange: boolean = true;
+  lossesLocked: boolean = false;
   constructor(private otherLossesService: OtherLossesService, private otherLossCompareService: OtherLossesCompareService) { }
 
 
@@ -79,30 +80,32 @@ export class OtherLossesComponent implements OnInit {
           if (this.otherLossCompareService.differentArray && !this.isBaseline) {
             this.otherLossCompareService.differentArray.splice(lossIndex, 1);
           }
+          this.saveLosses();
         }
       }
     })
-    if (this.isBaseline) {
-      this.otherLossesService.addLossBaselineMonitor.subscribe((val) => {
-        if (val == true) {
-          this._otherLosses.push({
-            form: this.otherLossesService.initForm(),
-            name: 'Loss #' + (this._otherLosses.length + 1)
-          })
-        }
-      })
-    } else {
-      this.otherLossesService.addLossModificationMonitor.subscribe((val) => {
-        if (val == true) {
-          this._otherLosses.push({
-            form: this.otherLossesService.initForm(),
-            name: 'Loss #' + (this._otherLosses.length + 1)
-          })
-        }
-      })
-    }
+    // if (this.isBaseline) {
+    //   this.otherLossesService.addLossBaselineMonitor.subscribe((val) => {
+    //     if (val == true) {
+    //       this._otherLosses.push({
+    //         form: this.otherLossesService.initForm(),
+    //         name: 'Loss #' + (this._otherLosses.length + 1)
+    //       })
+    //     }
+    //   })
+    // } else {
+    //   this.otherLossesService.addLossModificationMonitor.subscribe((val) => {
+    //     if (val == true) {
+    //       this._otherLosses.push({
+    //         form: this.otherLossesService.initForm(),
+    //         name: 'Loss #' + (this._otherLosses.length + 1)
+    //       })
+    //     }
+    //   })
+    // }
 
     if(this.inSetup && this.modExists){
+      this.lossesLocked = true;
       this.disableForms();
     }
   }
@@ -118,9 +121,9 @@ export class OtherLossesComponent implements OnInit {
   }
   
   addLoss() {
-    if (this.isLossesSetup) {
-      this.otherLossesService.addLoss(this.isBaseline);
-    }
+    // if (this.isLossesSetup) {
+    //   this.otherLossesService.addLoss(this.isBaseline);
+    // }
     if (this.otherLossCompareService.differentArray) {
       this.otherLossCompareService.addObject(this.otherLossCompareService.differentArray.length - 1);
     }
@@ -129,6 +132,7 @@ export class OtherLossesComponent implements OnInit {
       name: 'Loss #' + (this._otherLosses.length + 1),
       collapse: false
     });;
+    this.saveLosses();
   }
 
   removeLoss(lossIndex: number) {

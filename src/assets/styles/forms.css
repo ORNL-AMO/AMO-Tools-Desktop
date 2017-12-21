@@ -1,0 +1,19 @@
+.name-input-form .input-group-addon{
+    padding-top: 0px;
+    padding-bottom: 0px;
+    background-color: #ffffff;
+    border-radius: 0px;
+}
+
+.name-input-form .input-group-addon:hover{
+    font-weight: bold;
+    cursor: pointer;
+    background-color: gray;
+}
+
+
+.name-input-form .name-input{
+    padding-left: 8px;
+    padding-top: 0px;
+    padding-bottom: 0px;
+}

@@ -7,25 +7,25 @@ import { BehaviorSubject } from 'rxjs';
 export class EnergyInputService {
 
   deleteLossIndex: BehaviorSubject<number>;
-  addLossBaselineMonitor: BehaviorSubject<any>;
-  addLossModificationMonitor: BehaviorSubject<any>;
+  // addLossBaselineMonitor: BehaviorSubject<any>;
+  // addLossModificationMonitor: BehaviorSubject<any>;
   constructor(private formBuilder: FormBuilder) {
     this.deleteLossIndex = new BehaviorSubject<number>(null);
-    this.addLossBaselineMonitor = new BehaviorSubject<any>(null);
-    this.addLossModificationMonitor = new BehaviorSubject<any>(null);
+    // this.addLossBaselineMonitor = new BehaviorSubject<any>(null);
+    // this.addLossModificationMonitor = new BehaviorSubject<any>(null);
   }
 
   setDelete(num: number) {
     this.deleteLossIndex.next(num);
   }
-  addLoss(bool: boolean) {
-    if (bool) {
-      this.addLossModificationMonitor.next(true);
-    } else {
-      this.addLossBaselineMonitor.next(true);
-    }
-  }
-  initForm() {
+  // addLoss(bool: boolean) {
+  //   if (bool) {
+  //     this.addLossModificationMonitor.next(true);
+  //   } else {
+  //     this.addLossBaselineMonitor.next(true);
+  //   }
+  // }
+  initForm(lossNum: number) {
     return this.formBuilder.group({
       naturalGasHeatInput: ['', Validators.required],
       flowRateInput: [''],
@@ -36,7 +36,8 @@ export class EnergyInputService {
       electrodeUse: ['', Validators.required],
       electrodeHeatingValue: ['', Validators.required],
       otherFuels: ['', Validators.required],
-      electricityInput: ['', Validators.required]
+      electricityInput: ['', Validators.required],
+      name: ['Loss #'+lossNum]
     })
   }
 
@@ -51,7 +52,8 @@ export class EnergyInputService {
       electrodeUse: form.value.electrodeUse,
       electrodeHeatingValue: form.value.electrodeHeatingValue,
       otherFuels: form.value.otherFuels,
-      electricityInput: form.value.electricityInput
+      electricityInput: form.value.electricityInput,
+      name: form.value.name
     }
     return tmpEnergyInput;
   }
@@ -67,7 +69,8 @@ export class EnergyInputService {
       electrodeUse: [loss.electrodeUse, Validators.required],
       electrodeHeatingValue: [loss.electrodeHeatingValue, Validators.required],
       otherFuels: [loss.otherFuels, Validators.required],
-      electricityInput: [loss.electricityInput, Validators.required]
+      electricityInput: [loss.electricityInput, Validators.required],
+      name: [loss.name]
     })
   }
 }

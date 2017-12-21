@@ -8,32 +8,32 @@ import { BehaviorSubject } from 'rxjs';
 export class WallLossesService {
   //components subscribe to BehaviorSubject variables for communication between siblings components
   deleteLossIndex: BehaviorSubject<number>;
-  addLossBaselineMonitor: BehaviorSubject<any>;
-  addLossModifiedMonitor: BehaviorSubject<any>;
+//  addLossBaselineMonitor: BehaviorSubject<any>;
+//  addLossModifiedMonitor: BehaviorSubject<any>;
 
   constructor(private formBuilder: FormBuilder) {
     //init behavior subjects to null;
     this.deleteLossIndex = new BehaviorSubject<number>(null);
-    this.addLossBaselineMonitor = new BehaviorSubject<any>(null);
-    this.addLossModifiedMonitor = new BehaviorSubject<any>(null);
+    // this.addLossBaselineMonitor = new BehaviorSubject<any>(null);
+    // this.addLossModifiedMonitor = new BehaviorSubject<any>(null);
   }
 
   setDelete(num: number) {
     this.deleteLossIndex.next(num);
   }
 
-  addLoss(isBaseline: boolean) {
-    //if baseline adds loss, signal modified
-    if (isBaseline) {
-      this.addLossModifiedMonitor.next(true);
-    }else{
-       //signal baseline
-       this.addLossBaselineMonitor.next(true);
-    }
-  }
+  // addLoss(isBaseline: boolean) {
+  //   //if baseline adds loss, signal modified
+  //   if (isBaseline) {
+  //     this.addLossModifiedMonitor.next(true);
+  //   }else{
+  //      //signal baseline
+  //      this.addLossBaselineMonitor.next(true);
+  //   }
+  // }
 
   //init empty wall loss form
-  initForm() {
+  initForm(lossNum: number) {
     return this.formBuilder.group({
       'surfaceArea': ['', Validators.required],
       'avgSurfaceTemp': ['', Validators.required],
@@ -42,7 +42,8 @@ export class WallLossesService {
       'windVelocity': [0, Validators.required],
       'surfaceShape': ['Vertical Plates', Validators.required],
       'conditionFactor': [1.394, Validators.required],
-      'surfaceEmissivity': [0.9, Validators.required]
+      'surfaceEmissivity': [0.9, Validators.required],
+      'name': ['Loss #'+lossNum]
     })
   }
 
@@ -56,7 +57,8 @@ export class WallLossesService {
       'windVelocity': [wallLoss.windVelocity, Validators.required],
       'conditionFactor': [wallLoss.conditionFactor, Validators.required],
       'surfaceEmissivity': [wallLoss.surfaceEmissivity, Validators.required],
-      'surfaceShape': [wallLoss.surfaceShape, Validators.required]
+      'surfaceShape': [wallLoss.surfaceShape, Validators.required],
+      'name': [wallLoss.name]
     })
   }
   //get WallLoss from form
@@ -69,7 +71,8 @@ export class WallLossesService {
       surfaceEmissivity: wallLossForm.value.surfaceEmissivity,
       surfaceShape: wallLossForm.value.surfaceShape,
       conditionFactor: wallLossForm.value.conditionFactor,
-      correctionFactor: wallLossForm.value.correctionFactor
+      correctionFactor: wallLossForm.value.correctionFactor,
+      name: wallLossForm.value.name
     }
     return tmpWallLoss;
   }

@@ -18,10 +18,12 @@ export class PsatService {
   secondaryTab: BehaviorSubject<string>;
   calcTab: BehaviorSubject<string>;
   baseline: PSAT;
+  getResults: BehaviorSubject<boolean>;
   constructor(private formBuilder: FormBuilder, private convertUnitsService: ConvertUnitsService, private validationService: ValidationService) {
     this.mainTab = new BehaviorSubject<string>('system-setup');
     this.secondaryTab = new BehaviorSubject<string>('explore-opportunities');
-    this.calcTab = new BehaviorSubject<string>('system-curve')
+    this.calcTab = new BehaviorSubject<string>('system-curve');
+    this.getResults = new BehaviorSubject<boolean>(true);
   }
 
   test() {
@@ -41,6 +43,9 @@ export class PsatService {
     }
     if (settings.powerMeasurement != 'hp' && psatInputs.motor_rated_power) {
       psatInputs.motor_rated_power = this.convertUnitsService.value(psatInputs.motor_rated_power).from(settings.powerMeasurement).to('hp');
+    }
+    if(settings.temperatureMeasurement != 'F' && psatInputs.fluidTemperature){
+      psatInputs.fluidTemperature = this.convertUnitsService.value(psatInputs.fluidTemperature).from(settings.temperatureMeasurement).to('F');
     }
     return psatInputs;
   }

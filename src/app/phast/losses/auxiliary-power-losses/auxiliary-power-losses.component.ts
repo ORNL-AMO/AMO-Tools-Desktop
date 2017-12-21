@@ -39,6 +39,7 @@ export class AuxiliaryPowerLossesComponent implements OnInit {
   resultsUnit: string;
   _auxiliaryPowerLosses: Array<any>;
   firstChange: boolean = true;
+  lossesLocked: boolean = false;
   constructor(private phastService: PhastService, private auxiliaryPowerLossesService: AuxiliaryPowerLossesService, private auxiliaryPowerCompareService: AuxiliaryPowerCompareService) { }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -67,13 +68,19 @@ export class AuxiliaryPowerLossesComponent implements OnInit {
     if (this.losses.auxiliaryPowerLosses) {
       this.setCompareVals();
       this.auxiliaryPowerCompareService.initCompareObjects();
+      let lossIndex = 1;
       this.losses.auxiliaryPowerLosses.forEach(loss => {
         let tmpLoss = {
           form: this.auxiliaryPowerLossesService.getFormFromLoss(loss),
-          name: 'Loss #' + (this._auxiliaryPowerLosses.length + 1),
           powerUsed: loss.powerUsed || 0.0,
           collapse: false
         };
+        if(!tmpLoss.form.value.name){
+          tmpLoss.form.patchValue({
+            name: 'Loss #' + lossIndex
+          })
+        }
+        lossIndex++;
         this.calculate(tmpLoss);
         this._auxiliaryPowerLosses.push(tmpLoss);
       })
@@ -85,43 +92,45 @@ export class AuxiliaryPowerLossesComponent implements OnInit {
           if (this.auxiliaryPowerCompareService.differentArray && !this.isBaseline) {
             this.auxiliaryPowerCompareService.differentArray.splice(lossIndex, 1);
           }
+          this.saveLosses();
         }
       }
     })
-    if (this.isBaseline) {
-      this.auxiliaryPowerLossesService.addLossBaselineMonitor.subscribe((val) => {
-        if (val == true) {
-          this._auxiliaryPowerLosses.push({
-            form: this.auxiliaryPowerLossesService.initForm(),
-            name: 'Loss #' + (this._auxiliaryPowerLosses.length + 1),
-            heatLoss: 0.0,
-            collapse: false
-          })
-        }
-      })
-    } else {
-      this.auxiliaryPowerLossesService.addLossModificationMonitor.subscribe((val) => {
-        if (val == true) {
-          this._auxiliaryPowerLosses.push({
-            form: this.auxiliaryPowerLossesService.initForm(),
-            name: 'Loss #' + (this._auxiliaryPowerLosses.length + 1),
-            heatLoss: 0.0,
-            collapse: false
-          })
-        }
-      })
-    }
+    // if (this.isBaseline) {
+    //   this.auxiliaryPowerLossesService.addLossBaselineMonitor.subscribe((val) => {
+    //     if (val == true) {
+    //       this._auxiliaryPowerLosses.push({
+    //         form: this.auxiliaryPowerLossesService.initForm(),
+    //         name: 'Loss #' + (this._auxiliaryPowerLosses.length + 1),
+    //         heatLoss: 0.0,
+    //         collapse: false
+    //       })
+    //     }
+    //   })
+    // } else {
+    //   this.auxiliaryPowerLossesService.addLossModificationMonitor.subscribe((val) => {
+    //     if (val == true) {
+    //       this._auxiliaryPowerLosses.push({
+    //         form: this.auxiliaryPowerLossesService.initForm(),
+    //         name: 'Loss #' + (this._auxiliaryPowerLosses.length + 1),
+    //         heatLoss: 0.0,
+    //         collapse: false
+    //       })
+    //     }
+    //   })
+    // }
     if(this.inSetup && this.modExists){
       this.disableForms();
+      this.lossesLocked = true;
     }
   }
 
   ngOnDestroy() {
     if (this.isBaseline) {
-      this.auxiliaryPowerLossesService.addLossBaselineMonitor.next(false);
+    //  this.auxiliaryPowerLossesService.addLossBaselineMonitor.next(false);
       this.auxiliaryPowerCompareService.baselineAuxLosses = null;
     } else {
-      this.auxiliaryPowerLossesService.addLossModificationMonitor.next(false);
+    //  this.auxiliaryPowerLossesService.addLossModificationMonitor.next(false);
       this.auxiliaryPowerCompareService.modifiedAuxLosses = null;
     }
     this.auxiliaryPowerLossesService.deleteLossIndex.next(null);
@@ -132,18 +141,18 @@ export class AuxiliaryPowerLossesComponent implements OnInit {
     })
   }
   addLoss() {
-    if (this.isLossesSetup) {
-      this.auxiliaryPowerLossesService.addLoss(this.isBaseline);
-    }
+    // if (this.isLossesSetup) {
+    //   this.auxiliaryPowerLossesService.addLoss(this.isBaseline);
+    // }
     if (this.auxiliaryPowerCompareService.differentArray) {
       this.auxiliaryPowerCompareService.addObject(this.auxiliaryPowerCompareService.differentArray.length - 1);
     }
     this._auxiliaryPowerLosses.push({
-      form: this.auxiliaryPowerLossesService.initForm(),
-      name: 'Loss #' + (this._auxiliaryPowerLosses.length + 1),
+      form: this.auxiliaryPowerLossesService.initForm(this._auxiliaryPowerLosses.length+1),
       powerUsed: 0.0,
       collapse: false
     });
+    this.saveLosses();
   }
 
   removeLoss(lossIndex: number) {
@@ -169,7 +178,14 @@ export class AuxiliaryPowerLossesComponent implements OnInit {
 
   saveLosses() {
     let tmpAuxLosses = new Array<AuxiliaryPowerLoss>();
+    let lossIndex = 1;
     this._auxiliaryPowerLosses.forEach(loss => {
+      if(!loss.form.value.name){
+        loss.form.patchValue({
+          name: 'Loss #' + lossIndex
+        })
+      }
+      lossIndex++;
       let tmpAuxLoss = this.auxiliaryPowerLossesService.getLossFromForm(loss.form);
       tmpAuxLoss.powerUsed = loss.powerUsed;
       tmpAuxLosses.push(tmpAuxLoss);

@@ -6,32 +6,33 @@ import { BehaviorSubject } from 'rxjs';
 @Injectable()
 export class AuxiliaryPowerLossesService {
   deleteLossIndex: BehaviorSubject<number>;
-  addLossBaselineMonitor: BehaviorSubject<any>;
-  addLossModificationMonitor: BehaviorSubject<any>;
+  // addLossBaselineMonitor: BehaviorSubject<any>;
+  // addLossModificationMonitor: BehaviorSubject<any>;
   constructor(private formBuilder: FormBuilder) {
     this.deleteLossIndex = new BehaviorSubject<number>(null);
-    this.addLossBaselineMonitor = new BehaviorSubject<any>(null);
-    this.addLossModificationMonitor = new BehaviorSubject<any>(null);
+    // this.addLossBaselineMonitor = new BehaviorSubject<any>(null);
+    // this.addLossModificationMonitor = new BehaviorSubject<any>(null);
   }
 
   setDelete(num: number) {
     this.deleteLossIndex.next(num);
   }
-  addLoss(bool: boolean) {
-    if (bool) {
-      this.addLossModificationMonitor.next(true);
-    } else {
-      this.addLossBaselineMonitor.next(true);
-    }
-  }
+  // addLoss(bool: boolean) {
+  //   if (bool) {
+  //     this.addLossModificationMonitor.next(true);
+  //   } else {
+  //     this.addLossBaselineMonitor.next(true);
+  //   }
+  // }
 
-  initForm() {
+  initForm(lossNum: number) {
     return this.formBuilder.group({
       motorPhase: ['', Validators.required],
       supplyVoltage: ['', Validators.required],
       avgCurrent: ['', Validators.required],
       powerFactor: ['', Validators.required],
       operatingTime: ['', Validators.required],
+      name: ['Loss #'+lossNum]
     })
   }
 
@@ -42,6 +43,7 @@ export class AuxiliaryPowerLossesService {
       avgCurrent: form.value.avgCurrent,
       powerFactor: form.value.powerFactor,
       operatingTime: form.value.operatingTime,
+      name: form.value.name
     }
     return tmpLoss;
   }
@@ -53,6 +55,7 @@ export class AuxiliaryPowerLossesService {
       avgCurrent: [loss.avgCurrent, Validators.required],
       powerFactor: [loss.powerFactor, Validators.required],
       operatingTime: [loss.operatingTime, Validators.required],
+      name: [loss.name]
     })
   }
 

@@ -7,28 +7,28 @@ import { BehaviorSubject } from 'rxjs';
 export class AtmosphereLossesService {
 
   deleteLossIndex: BehaviorSubject<number>;
-  addLossBaselineMonitor: BehaviorSubject<any>;
-  addLossModificationMonitor: BehaviorSubject<any>;
+  // addLossBaselineMonitor: BehaviorSubject<any>;
+  // addLossModificationMonitor: BehaviorSubject<any>;
   constructor(private formBuilder: FormBuilder) {
     this.deleteLossIndex = new BehaviorSubject<number>(null);
-    this.addLossBaselineMonitor = new BehaviorSubject<any>(null);
-    this.addLossModificationMonitor = new BehaviorSubject<any>(null);
+    // this.addLossBaselineMonitor = new BehaviorSubject<any>(null);
+    // this.addLossModificationMonitor = new BehaviorSubject<any>(null);
   }
 
   setDelete(num: number) {
     this.deleteLossIndex.next(num);
   }
-  addLoss(bool: boolean) {
-    if (bool) {
-      this.addLossModificationMonitor.next(true);
-    } else {
-      this.addLossBaselineMonitor.next(true);
-    }
-  }
+  // addLoss(bool: boolean) {
+  //   if (bool) {
+  //     this.addLossModificationMonitor.next(true);
+  //   } else {
+  //     this.addLossBaselineMonitor.next(true);
+  //   }
+  // }
 
 
   //get empty atmosphere form
-  initForm() {
+  initForm(lossNum: number) {
     return this.formBuilder.group({
       'atmosphereGas': ['', Validators.required],
       'specificHeat': ['', Validators.required],
@@ -36,6 +36,7 @@ export class AtmosphereLossesService {
       'outletTemp': ['', Validators.required],
       'flowRate': ['', Validators.required],
       'correctionFactor': [1.0, Validators.required],
+      'name': ['Loss #'+lossNum]
     });
   }
 
@@ -47,7 +48,8 @@ export class AtmosphereLossesService {
       'inletTemp': [loss.inletTemperature, Validators.required],
       'outletTemp': [loss.outletTemperature, Validators.required],
       'flowRate': [loss.flowRate, Validators.required],
-      'correctionFactor': [loss.correctionFactor, Validators.required]
+      'correctionFactor': [loss.correctionFactor, Validators.required],
+      'name': [loss.name]
     });
   }
 
@@ -58,7 +60,8 @@ export class AtmosphereLossesService {
       inletTemperature: form.value.inletTemp,
       outletTemperature: form.value.outletTemp,
       flowRate: form.value.flowRate,
-      correctionFactor: form.value.correctionFactor
+      correctionFactor: form.value.correctionFactor,
+      name: form.value.name
     }
     return tmpLoss;
   }

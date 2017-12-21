@@ -6,10 +6,10 @@
         <p *ngIf="!showScreenshot">Help us further understand your request by downloading and attaching <a (click)="downloadData()">your current data set</a>. If possible, please attach a screen shot of the interface as well.</p>
     </div>
     <button type="button" class="btn btn-secondary btn-sm" (click)="mailTo()"><i class="fa fa-external-link" aria-hidden="true"></i> Email Feedback</button>
-</div> 
+</div>
 
 <router-outlet></router-outlet>
-<app-update-modal *ngIf="showUpdateModal" (closeModal)="closeModal()"></app-update-modal>
+<app-update-modal  *ngIf="showUpdateModal" (closeModal)="closeModal()"></app-update-modal>
 <!--<div bsModal #updateModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="updateModalLabel" aria-hidden="true"
     [config]="{backdrop: 'static'}">
     <div class="modal-dialog">
