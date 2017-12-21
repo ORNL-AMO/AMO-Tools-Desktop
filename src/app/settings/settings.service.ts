@@ -88,7 +88,7 @@ export class SettingsService {
   }
 
   setUnits(settingsForm: any): any {
-    if (settingsForm.controls.unitsOfMeasure == 'Imperial') {
+    if (settingsForm.controls.unitsOfMeasure.value == 'Imperial') {
       settingsForm.patchValue({
         powerMeasurement: 'hp',
         flowMeasurement: 'gpm',
@@ -100,7 +100,7 @@ export class SettingsService {
         // voltageMeasurement: 'V'
       })
 
-    } else if (settingsForm.controls.unitsOfMeasure == 'Metric') {
+    } else if (settingsForm.controls.unitsOfMeasure.value == 'Metric') {
       settingsForm.patchValue({
         powerMeasurement: 'kW',
         flowMeasurement: 'm3/h',
