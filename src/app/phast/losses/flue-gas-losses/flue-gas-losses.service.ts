@@ -151,6 +151,7 @@ export class FlueGasLossesService {
     let tmpFlueGas: FlueGas = {
       name: form.value.name,
       flueGasByVolume: {
+        gasTypeId: form.value.gasTypeId,
         flueGasTemperature: form.value.flueGasTemperature,
         oxygenCalculationMethod: form.value.oxygenCalculationMethod,
         excessAirPercentage: form.value.excessAirPercentage,
