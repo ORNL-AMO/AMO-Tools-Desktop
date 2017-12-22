@@ -16,7 +16,8 @@ export class MotorPerformanceComponent implements OnInit {
   settings: Settings;
   @Input()
   inPsat: boolean;
-  
+​
+  currentField: string;
   performanceForm: any;
 
   toggleCalculate: boolean = false;
@@ -62,5 +63,8 @@ export class MotorPerformanceComponent implements OnInit {
   }
   setTab(str: string){
     this.tabSelect = str;
+  }
+  changeField(str: string) {
+    this.currentField = str;
   }
 }

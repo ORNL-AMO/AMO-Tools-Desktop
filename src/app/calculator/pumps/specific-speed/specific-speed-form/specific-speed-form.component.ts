@@ -11,6 +11,8 @@ export class SpecificSpeedFormComponent implements OnInit {
   speedForm: any;
   @Output('calculate')
   calculate = new EventEmitter<boolean>();
+  @Output('changeField')
+  changeField = new EventEmitter<string>();
   @Input()
   settings: Settings;
 
@@ -54,5 +56,7 @@ export class SpecificSpeedFormComponent implements OnInit {
     })
     this.calculate.emit(true);
   }
-
+  focusField(str: string) {
+    this.changeField.emit(str);
+  }
 }

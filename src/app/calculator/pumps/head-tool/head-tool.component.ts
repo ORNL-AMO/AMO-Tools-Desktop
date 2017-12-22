@@ -203,9 +203,4 @@ export class HeadToolComponent implements OnInit {
       'flowRate': [this.roundVal(this.convertUnitsService.value(2000).from('gpm').to(settings.flowMeasurement), 2), Validators.required],
     })
   }
-
-  changeField(str: string) {
-    this.currentField = str;
-  }
-
 }
