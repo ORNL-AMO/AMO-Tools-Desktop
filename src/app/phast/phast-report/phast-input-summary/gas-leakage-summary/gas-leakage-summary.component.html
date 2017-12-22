@@ -1,0 +1,83 @@
+<div class="card summary-card">
+  <div class="card-header" (click)="toggleCollapse()">
+    <h5>Gas Leakage Losses ({{numLosses}})
+      <span class="pull-right fa" [ngClass]="{'fa-chevron-up': collapse, 'fa-chevron-down': !collapse}"></span>
+    </h5>
+  </div>
+  <div *ngIf="!collapse">
+    <div class="card-body" *ngFor="let data of lossData; let index = index;">
+      <div class="output-summary">
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th [ngStyle]="{'width.%': 100 /(phast.modifications.length+2)}">{{index+1}}</th>
+              <th [ngStyle]="{'width.%': 100 /(phast.modifications.length+2)}">
+                {{data.baseline.name}}
+              </th>
+              <th [ngStyle]="{'width.%': 100 /(phast.modifications.length+2)}" *ngFor="let mod of data.modifications">
+                {{mod.name}}
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                Furnace Draft Pressure
+              </td>
+              <td>
+                {{data.baseline.draftPressure}}
+              </td>
+              <td *ngFor="let mod of data.modifications">
+                {{mod.draftPressure}}
+              </td>
+            </tr>
+            <tr>
+              <td>
+                Opening Area
+              </td>
+              <td>
+                {{data.baseline.openingArea}}
+              </td>
+              <td *ngFor="let mod of data.modifications">
+                {{mod.openingArea}}
+              </td>
+            </tr>
+            <tr>
+              <td>
+                Temperature of Gasses Leaking
+              </td>
+              <td>
+                {{data.baseline.leakageGasTemperature}}
+              </td>
+              <td *ngFor="let mod of data.modifications">
+                {{mod.leakageGasTemperature}}
+              </td>
+            </tr>
+            <tr>
+              <td>
+                Specific Density of Flue Gases
+              </td>
+              <td>
+                {{data.baseline.specificGravity}}
+              </td>
+              <td *ngFor="let mod of data.modifications">
+                {{mod.specificGravity}}
+              </td>
+            </tr>
+            <tr>
+              <td>
+                Ambient Temperature
+              </td>
+              <td>
+                {{data.baseline.ambientTemperature}}
+              </td>
+              <td *ngFor="let mod of data.modifications">
+                {{mod.ambientTemperature}}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

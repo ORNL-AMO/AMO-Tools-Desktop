@@ -1,0 +1,95 @@
+<div class="card summary-card">
+  <div class="card-header" (click)="toggleCollapse()">
+    <h5>Exhaust Gas Losses ({{numLosses}})
+      <span class="pull-right fa" [ngClass]="{'fa-chevron-up': collapse, 'fa-chevron-down': !collapse}"></span>
+    </h5>
+  </div>
+  <div *ngIf="!collapse">
+    <div class="card-body" *ngFor="let data of lossData; let index = index;">
+      <div class="output-summary">
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th [ngStyle]="{'width.%': 100 /(phast.modifications.length+2)}">{{index+1}}</th>
+              <th [ngStyle]="{'width.%': 100 /(phast.modifications.length+2)}">
+                {{data.baseline.name}}
+              </th>
+              <th [ngStyle]="{'width.%': 100 /(phast.modifications.length+2)}" *ngFor="let mod of data.modifications">
+                {{mod.name}}
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                Off (Exhaust) Gas Temperature
+              </td>
+              <td>
+                {{data.baseline.offGasTemp}}
+              </td>
+              <td *ngFor="let mod of data.modifications">
+                {{mod.offGasTemp}}
+              </td>
+            </tr>
+            <tr>
+              <td>
+                CO
+              </td>
+              <td>
+                {{data.baseline.CO}}
+              </td>
+              <td *ngFor="let mod of data.modifications">
+                {{mod.CO}}
+              </td>
+            </tr>
+            <tr>
+              <td>
+                H
+                <sub>2</sub>
+              </td>
+              <td>
+                {{data.baseline.H2}}
+              </td>
+              <td *ngFor="let mod of data.modifications">
+                {{mod.H2}}
+              </td>
+            </tr>
+            <tr>
+              <td>
+                Combustible Gas as CH4
+              </td>
+              <td>
+                {{data.baseline.combustibleGases}}
+              </td>
+              <td *ngFor="let mod of data.modifications">
+                {{mod.combustibleGases}}
+              </td>
+            </tr>
+            <tr>
+              <td>
+                Total Volumetric Flow Rate
+              </td>
+              <td>
+                {{data.baseline.vfr}}
+              </td>
+              <td *ngFor="let mod of data.modifications">
+                {{mod.vfr}}
+              </td>
+            </tr>
+            <tr>
+              <td>
+                Dust Loading
+              </td>
+              <td>
+                {{data.baseline.dustLoading}}
+              </td>
+              <td *ngFor="let mod of data.modifications">
+                {{mod.dustLoading}}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
