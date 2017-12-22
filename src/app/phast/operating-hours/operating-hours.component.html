@@ -16,7 +16,7 @@
         <button class="btn input-group-btn" (click)="addWeek()" [disabled]="phast.operatingHours.weeksPerYear == 52">
           <i class="fa fa-plus"></i>
         </button>
-        <input name="weeksPerYear" type="number" step="any" min="0.001" max="52" class="form-control" id="weeksPerYear" (input)="calculatHrsPerYear()"
+        <input name="weeksPerYear" type="number" step="1" min="0" max="52" class="form-control" id="weeksPerYear" (input)="calculatHrsPerYear()"
           [(ngModel)]="phast.operatingHours.weeksPerYear">
       </div>
       <span class="alert-warning pull-right small" *ngIf="weeksPerYearError !== null">{{weeksPerYearError}}</span>
@@ -30,7 +30,7 @@
         <button class="btn input-group-btn" (click)="addWeekDay()" [disabled]="phast.operatingHours.daysPerWeek == 7">
           <i class="fa fa-plus"></i>
         </button>
-        <input name="daysPerWeek" type="number" step="any" min="0.001" max="7" class="form-control" id="daysPerWeek" (input)="calculatHrsPerYear()" [(ngModel)]="phast.operatingHours.daysPerWeek">
+        <input name="daysPerWeek" type="number" step="1" min="0" max="7" class="form-control" id="daysPerWeek" (input)="calculatHrsPerYear()" [(ngModel)]="phast.operatingHours.daysPerWeek">
       </div>
       <span class="alert-warning pull-right small" *ngIf="daysPerWeekError !== null">{{daysPerWeekError}}</span>
     </div>
@@ -43,7 +43,7 @@
         <button class="btn input-group-btn" (click)="addShift()" [disabled]="phast.operatingHours.shiftsPerDay == 3">
           <i class="fa fa-plus"></i>
         </button>
-        <input name="shiftsPerDay" type="number" step="any" min="0.001" class="form-control" id="shiftsPerDay" (input)="calculatHrsPerYear()"
+        <input name="shiftsPerDay" type="number" step="1" min="0" class="form-control" id="shiftsPerDay" (input)="calculatHrsPerYear()"
           [(ngModel)]="phast.operatingHours.shiftsPerDay">
       </div>
       <span class="alert-warning pull-right small" *ngIf="shiftsPerDayError !== null">{{shiftsPerDayError}}</span>
@@ -57,7 +57,7 @@
         <button class="btn input-group-btn" (click)="addShiftHr()" [disabled]="phast.operatingHours.hoursPerShift == 8">
           <i class="fa fa-plus"></i>
         </button>
-        <input name="hoursPerShift" type="number" step="any" min="0.001" max="24" class="form-control" id="hoursPerShift" (input)="calculatHrsPerYear()"
+        <input name="hoursPerShift" type="number" step="1" min="0" max="24" class="form-control" id="hoursPerShift" (input)="calculatHrsPerYear()"
           [(ngModel)]="phast.operatingHours.hoursPerShift">
       </div>
     </div>

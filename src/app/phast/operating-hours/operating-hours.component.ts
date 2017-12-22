@@ -49,27 +49,27 @@ export class OperatingHoursComponent implements OnInit {
   calculatHrsPerYear() {
     let timeCheck = this.phast.operatingHours.shiftsPerDay * this.phast.operatingHours.hoursPerShift;
     if (timeCheck > 24) {
-      this.timeError = "Invalid input. There is 24 hours per day. " + "Your day have" + " "  + timeCheck.toFixed(2) + " " + "hours." + " " + "Please, check your input.";
+      this.timeError = "You have exceeded 24 hours/day  " + " "  + "("  + timeCheck.toFixed(2) + " " + "hours/day)" + " " + "Adjust your inputs for Shifts/Day and Hours/Shift.";
     } else {
       this.timeError = null;
     }
     if (this.phast.operatingHours.weeksPerYear > 52 || this.phast.operatingHours.weeksPerYear <= 0) {
-      this.weeksPerYearError = "The number of Weeks per Year must me greater than 0 and equal or less than 52";
+      this.weeksPerYearError = "The number of weeks/year must me greater than 0 and equal or less than 52";
     } else {
       this.weeksPerYearError = null;
     }
     if (this.phast.operatingHours.daysPerWeek > 7 || this.phast.operatingHours.daysPerWeek <= 0) {
-      this.daysPerWeekError = "The number of Days per Week must be greater than 0 and equal or less than 7";
+      this.daysPerWeekError = "The number of day/week must be greater than 0 and equal or less than 7";
     } else {
       this.daysPerWeekError = null;
     }
     if (this.phast.operatingHours.shiftsPerDay <= 0) {
-      this.shiftsPerDayError = "Number of Shifts per Day must be greater than 0";
+      this.shiftsPerDayError = "Number of shifts/day must be greater than 0";
     } else {
       this.shiftsPerDayError = null;
     }
      if ( this.phast.operatingHours.hoursPerShift > 24 || this.phast.operatingHours.hoursPerShift <= 0) {
-      this.hoursPerShiftError = " Number of Hours per Shift must be greater then 0 and equal or less than 24 ";
+      this.hoursPerShiftError = " Number of hours/shift must be greater then 0 and equal or less than 24 ";
     } else {
       this.hoursPerShiftError = null;
     }
