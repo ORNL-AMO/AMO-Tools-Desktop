@@ -18,6 +18,7 @@ export class NemaEnergyEfficiencyComponent implements OnInit {
   @Input()
   inPsat: boolean;
 
+  currentField: string;
   nemaForm: any;
   tabSelect: string = 'results';
   constructor(private psatService: PsatService, private indexedDbService: IndexedDbService) { }
@@ -51,5 +52,8 @@ export class NemaEnergyEfficiencyComponent implements OnInit {
   }
   setTab(str: string) {
     this.tabSelect = str;
+  }
+  changeField(str: string) {
+    this.currentField = str;
   }
 }
