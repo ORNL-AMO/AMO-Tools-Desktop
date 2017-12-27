@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ChangeDetectorRef } from '@angular/core';
 import { PHAST, Losses } from '../../../../shared/models/phast/phast';
 import { SuiteDbService } from '../../../../suiteDb/suite-db.service';
 import { ChargeMaterial } from '../../../../shared/models/phast/losses/chargeMaterial';
@@ -20,7 +20,30 @@ export class ChargeMaterialSummaryComponent implements OnInit {
   massOptions: Array<any>;
   numLosses: number = 0;
   collapse: boolean = true;
-  constructor(private suiteDbService: SuiteDbService, private phastService: PhastService) { }
+
+  materialTypeDiff: boolean = false;
+  materialNameDiff: boolean = false;
+  reactionTypeDiff: boolean = false;
+  specificHeatGasDiff: boolean = false;
+  feedRateDiff: boolean = false;
+  percentVaporDiff: boolean = false;
+  initialTempDiff: boolean = false;
+  dischargeTempDiff: boolean = false;
+  percentReactedDiff: boolean = false;
+  reactionHeatDiff: boolean = false;
+  heatRequiredDiff: boolean = false;
+  specificHeatSolidDiff: boolean = false;
+  specificHeatLiquidDiff: boolean = false;
+  meltingPointDiff: boolean = false;
+  waterContentChargedDiff: boolean = false;
+  waterContentDischargedDiff: boolean = false;
+  waterVaporDischargeTempDiff: boolean = false;
+  latentHeatDiff: boolean = false;
+  additionalHeatDiff: boolean = false;
+  vaporizingTemperatureDiff: boolean = false;
+  chargeMeltedDiff: boolean = false;
+  
+  constructor(private suiteDbService: SuiteDbService, private phastService: PhastService, private cd: ChangeDetectorRef) { }
 
   ngOnInit() {
     this.volumeOptions = this.suiteDbService.selectGasFlueGasMaterials();
@@ -47,6 +70,26 @@ export class ChargeMaterialSummaryComponent implements OnInit {
       }
     }
   }
+
+  //function used to check if baseline and modification values are different
+  //called from html
+  //diffBool is name of corresponding input boolean to indicate different
+  checkDiff(baselineVal: any, modificationVal: any, diffBool: string) {
+    if (baselineVal != modificationVal) {
+      //this[diffBool] get's corresponding variable
+      //only set true once
+      if (this[diffBool] != true) {
+        //set true/different
+        this[diffBool] = true;
+        //tell html to detect change
+        this.cd.detectChanges();
+      }
+      return true;
+    } else {
+      return false;
+    }
+  }
+
 
   toggleCollapse() {
     this.collapse = !this.collapse;

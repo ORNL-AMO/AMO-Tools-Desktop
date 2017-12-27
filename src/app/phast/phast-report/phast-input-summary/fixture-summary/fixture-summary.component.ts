@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ChangeDetectorRef } from '@angular/core';
 import { PHAST } from '../../../../shared/models/phast/phast';
 import { SuiteDbService } from '../../../../suiteDb/suite-db.service';
 import { Settings } from '../../../../shared/models/settings';
@@ -17,7 +17,15 @@ export class FixtureSummaryComponent implements OnInit {
   collapse: boolean = true;
   lossData: Array<any>;
   materialOptions: Array<any>;
-  constructor(private suiteDbService: SuiteDbService) { }
+
+  materialNameDiff: boolean = false;
+  specificHeatDiff: boolean = false;
+  feedRateDiff: boolean = false;
+  initialTemperatureDiff: boolean = false;
+  finalTemperatureDiff: boolean = false;
+  correctionFactorDiff: boolean = false;
+
+  constructor(private suiteDbService: SuiteDbService, private cd: ChangeDetectorRef) { }
 
   ngOnInit() {
     this.materialOptions = this.suiteDbService.selectSolidLoadChargeMaterials();
@@ -41,6 +49,25 @@ export class FixtureSummaryComponent implements OnInit {
           index++;
         })
       }
+    }
+  }
+
+  //function used to check if baseline and modification values are different
+  //called from html
+  //diffBool is name of corresponding input boolean to indicate different
+  checkDiff(baselineVal: any, modificationVal: any, diffBool: string) {
+    if (baselineVal != modificationVal) {
+      //this[diffBool] get's corresponding variable
+      //only set true once
+      if (this[diffBool] != true) {
+        //set true/different
+        this[diffBool] = true;
+        //tell html to detect change
+        this.cd.detectChanges();
+      }
+      return true;
+    } else {
+      return false;
     }
   }
 

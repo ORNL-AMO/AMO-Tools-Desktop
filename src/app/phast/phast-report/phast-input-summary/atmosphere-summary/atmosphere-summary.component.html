@@ -1,88 +1,105 @@
 <div class="card summary-card">
+  <!-- toggleCollapse toggles collapse variable -->
   <div class="card-header" (click)="toggleCollapse()">
     <h5>Atmosphere Losses ({{numLosses}})
       <span class="pull-right fa" [ngClass]="{'fa-chevron-up': collapse, 'fa-chevron-down': !collapse}"></span>
     </h5>
   </div>
+  <!-- if not collapsed show table-->
   <div *ngIf="!collapse">
+    <!-- integrate loss data -->
     <div class="card-body" *ngFor="let data of lossData; let index = index;">
       <div class="output-summary">
         <table class="table table-hover">
           <thead>
             <tr>
-              <th [ngStyle]="{'width.%': 100 /(phast.modifications.length+2)}">{{index+1}}</th>
+              <!-- set table column widths based on number of modifications, add 2 for baseline and label columns -->
+              <th [ngStyle]="{'width.%': 100 /(phast.modifications.length+2)}"></th>
               <th [ngStyle]="{'width.%': 100 /(phast.modifications.length+2)}">
+                Baseline
+              </th>
+              <th [ngStyle]="{'width.%': 100 /(phast.modifications.length+2)}" *ngFor="let mod of phast.modifications">
+                {{mod.phast.name}}
+              </th>
+            </tr>
+            <tr>
+              <th>{{index+1}}</th>
+              <th>
                 {{data.baseline.name}}
               </th>
-              <th [ngStyle]="{'width.%': 100 /(phast.modifications.length+2)}" *ngFor="let mod of data.modifications">
+              <th *ngFor="let mod of data.modifications">
                 {{mod.name}}
               </th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td>
+              <td [ngClass]="{'indicate-report-field-different':atmosphereGasDiff == true}">
                 Atmosphere Gas
               </td>
-              <td>
+              <td [ngClass]="{'indicate-report-field-different':atmosphereGasDiff == true}">
                 {{getGas(data.baseline.atmosphereGas)}}
               </td>
-              <td *ngFor="let mod of data.modifications">
+              <!-- checkDiff(data.baseline.[variable name matches curly brackets], mod.[variable name], 'boolean name') -->
+              <td *ngFor="let mod of data.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(data.baseline.atmosphereGas, mod.atmosphereGas, 'atmosphereGasDiff')}">
                 {{getGas(mod.atmosphereGas)}}
               </td>
             </tr>
             <tr>
-              <td>
+              <td [ngClass]="{'indicate-report-field-different':specificHeatDiff == true}">
                 Specific Heat of Gas
+                (<span *ngIf="settings.unitsOfMeasure == 'Imperial'">Btu/(SCF-&#8457;)</span>
+                <span *ngIf="settings.unitsOfMeasure == 'Metric'">kJ/(Nm
+                  <sup>3</sup>-&#8451;)</span>)
               </td>
-              <td>
+              <td [ngClass]="{'indicate-report-field-different':specificHeatDiff == true}">
                 {{data.baseline.specificHeat}}
               </td>
-              <td *ngFor="let mod of data.modifications">
+              <td *ngFor="let mod of data.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(data.baseline.specificHeat, mod.specificHeat, 'specificHeatDiff')}">
                 {{mod.specificHeat}}
               </td>
             </tr>
             <tr>
-              <td>
+              <td [ngClass]="{'indicate-report-field-different':inletTempDiff == true}">
                 Inlet Temperature
               </td>
-              <td>
+              <td [ngClass]="{'indicate-report-field-different':inletTempDiff == true}">
                 {{data.baseline.inletTemperature}}
               </td>
-              <td *ngFor="let mod of data.modifications">
+              <td *ngFor="let mod of data.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(data.baseline.inletTemperature, mod.inletTemperature, 'inletTempDiff')}">
                 {{mod.inletTemperature}}
               </td>
             </tr>
             <tr>
-              <td>
+              <td [ngClass]="{'indicate-report-field-different':outletTempDiff == true}">
                 Outlet Temperature
               </td>
-              <td>
+              <td [ngClass]="{'indicate-report-field-different':outletTempDiff == true}">
                 {{data.baseline.outletTemperature}}
               </td>
-              <td *ngFor="let mod of data.modifications">
+              <td *ngFor="let mod of data.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(data.baseline.outletTemperature, mod.outletTemperature, 'outletTempDiff')}">
                 {{mod.outletTemperature}}
               </td>
             </tr>
             <tr>
-              <td>
+              <td [ngClass]="{'indicate-report-field-different':flowRateDiff == true}">
                 Flow Rate
               </td>
-              <td>
+              <td [ngClass]="{'indicate-report-field-different':flowRateDiff == true}">
                 {{data.baseline.flowRate}}
               </td>
-              <td *ngFor="let mod of data.modifications">
+              <td *ngFor="let mod of data.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(data.baseline.flowRate, mod.flowRate, 'flowRateDiff')}">
                 {{mod.flowRate}}
               </td>
             </tr>
             <tr>
-              <td>
+              <td [ngClass]="{'indicate-report-field-different':correctionFactorDiff == true}">
                 Correction Factor
               </td>
-              <td>
+              <td [ngClass]="{'indicate-report-field-different':correctionFactorDiff == true}">
                 {{data.baseline.correctionFactor}}
               </td>
-              <td *ngFor="let mod of data.modifications">
+              <td *ngFor="let mod of data.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(data.baseline.correctionFactor, mod.correctionFactor, 'correctionFactorDiff')}">
                 {{mod.correctionFactor}}
               </td>
             </tr>

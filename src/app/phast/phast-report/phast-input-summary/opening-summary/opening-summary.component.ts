@@ -1,5 +1,6 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ChangeDetectorRef } from '@angular/core';
 import { PHAST } from '../../../../shared/models/phast/phast';
+import { SuiteDbService } from '../../../../suiteDb/suite-db.service';
 import { Settings } from '../../../../shared/models/settings';
 
 @Component({
@@ -16,7 +17,20 @@ export class OpeningSummaryComponent implements OnInit {
   numLosses: number = 0;
   collapse: boolean = true;
   lossData: Array<any>;
-  constructor() { }
+
+  openingTypeDiff: boolean = false;
+  numberOfOpeningsDiff: boolean = false;
+  thicknessDiff: boolean = false;
+  lengthOfOpeningDiff: boolean = false;
+  heightOfOpeningDiff: boolean = false;
+  openingTotalAreaDiff: boolean = false;
+  viewFactorDiff: boolean = false;
+  insideTemperatureDiff: boolean = false;
+  ambientTemperatureDiff: boolean = false;
+  emissivityDiff: boolean = false;
+  percentTimeOpenDiff: boolean = false;
+
+  constructor(private suiteDbService: SuiteDbService, private cd: ChangeDetectorRef) { }
 
   ngOnInit() {    
     this.lossData = new Array();
@@ -39,6 +53,25 @@ export class OpeningSummaryComponent implements OnInit {
           index++;
         })
       }
+    }
+  }
+
+  //function used to check if baseline and modification values are different
+  //called from html
+  //diffBool is name of corresponding input boolean to indicate different
+  checkDiff(baselineVal: any, modificationVal: any, diffBool: string) {
+    if (baselineVal != modificationVal) {
+      //this[diffBool] get's corresponding variable
+      //only set true once
+      if (this[diffBool] != true) {
+        //set true/different
+        this[diffBool] = true;
+        //tell html to detect change
+        this.cd.detectChanges();
+      }
+      return true;
+    } else {
+      return false;
     }
   }
 

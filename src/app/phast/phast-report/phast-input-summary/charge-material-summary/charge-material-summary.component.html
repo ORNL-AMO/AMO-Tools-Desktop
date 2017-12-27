@@ -10,244 +10,254 @@
         <table class="table table-hover">
           <thead>
             <tr>
-              <th [ngStyle]="{'width.%': 100 /(phast.modifications.length+2)}">{{index+1}}</th>
+              <!-- set table column widths based on number of modifications, add 2 for baseline and label columns -->
+              <th [ngStyle]="{'width.%': 100 /(phast.modifications.length+2)}"></th>
               <th [ngStyle]="{'width.%': 100 /(phast.modifications.length+2)}">
+                Baseline
+              </th>
+              <th [ngStyle]="{'width.%': 100 /(phast.modifications.length+2)}" *ngFor="let mod of phast.modifications">
+                {{mod.phast.name}}
+              </th>
+            </tr>
+            <tr>
+              <th>{{index+1}}</th>
+              <th>
                 {{data.baseline.name}}
               </th>
-              <th [ngStyle]="{'width.%': 100 /(phast.modifications.length+2)}" *ngFor="let mod of data.modifications">
+              <th *ngFor="let mod of data.modifications">
                 {{mod.name}}
               </th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td>
+              <td [ngClass]="{'indicate-report-field-different':materialTypeDiff == true}">
                 Type of Material
               </td>
-              <td>
+              <td [ngClass]="{'indicate-report-field-different':materialTypeDiff == true}">
                 {{data.baseline.materialType}}
               </td>
-              <td *ngFor="let mod of data.modifications">
+              <td *ngFor="let mod of data.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(data.baseline.materialType, mod.materialType, 'materialTypeDiff')}">
                 {{mod.materialType}}
               </td>
             </tr>
             <tr>
-              <td>
+              <td [ngClass]="{'indicate-report-field-different':materialNameDiff == true}">
                 Material Name
               </td>
-              <td>
+              <td [ngClass]="{'indicate-report-field-different':materialNameDiff == true}">
                 {{data.baseline.materialName}}
               </td>
-              <td *ngFor="let mod of data.modifications">
+              <td *ngFor="let mod of data.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(data.baseline.materialName, mod.materialName, 'materialNameDiff')}">
                 {{mod.materialName}}
               </td>
             </tr>
             <tr>
-              <td>
+              <td [ngClass]="{'indicate-report-field-different':reactionTypeDiff == true}">
                 Reaction Type
               </td>
-              <td>
+              <td [ngClass]="{'indicate-report-field-different':reactionTypeDiff == true}">
                 {{data.baseline.reactionType}}
               </td>
-              <td *ngFor="let mod of data.modifications">
+              <td *ngFor="let mod of data.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(data.baseline.reactionType, mod.reactionType, 'reactionTypeDiff')}">
                 {{mod.reactionType}}
               </td>
             </tr>
             <tr>
-              <td>
+              <td [ngClass]="{'indicate-report-field-different':specificHeatGasDiff == true}">
                 Specific Heat Gas
               </td>
-              <td>
+              <td [ngClass]="{'indicate-report-field-different':specificHeatGasDiff == true}">
                 {{data.baseline.specificHeatGas}}
               </td>
-              <td *ngFor="let mod of data.modifications">
+              <td *ngFor="let mod of data.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(data.baseline.specificHeatGas, mod.specificHeatGas, 'specificHeatGasDiff')}">
                 {{mod.specificHeatGas}}
               </td>
             </tr>
             <tr>
-              <td>
+              <td [ngClass]="{'indicate-report-field-different':feedRateDiff == true}">
                 Feed Rate
               </td>
-              <td>
+              <td [ngClass]="{'indicate-report-field-different':feedRateDiff == true}">
                 {{data.baseline.feedRate}}
               </td>
-              <td *ngFor="let mod of data.modifications">
+              <td *ngFor="let mod of data.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(data.baseline.feedRate, mod.feedRate, 'feedRateDiff')}">
                 {{mod.feedRate}}
               </td>
             </tr>
             <tr>
-              <td>
+              <td [ngClass]="{'indicate-report-field-different':percentVaporDiff == true}">
                 Percent Vapor
               </td>
-              <td>
+              <td [ngClass]="{'indicate-report-field-different':percentVaporDiff == true}">
                 {{data.baseline.percentVapor}}
               </td>
-              <td *ngFor="let mod of data.modifications">
+              <td *ngFor="let mod of data.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(data.baseline.percentVapor, mod.percentVapor, 'percentVaporDiff')}">
                 {{mod.percentVapor}}
               </td>
             </tr>
             <tr>
-              <td>
+              <td [ngClass]="{'indicate-report-field-different':initialTempDiff == true}">
                 Initial Temperature
               </td>
-              <td>
+              <td [ngClass]="{'indicate-report-field-different':initialTempDiff == true}">
                 {{data.baseline.initialTemp}}
               </td>
-              <td *ngFor="let mod of data.modifications">
+              <td *ngFor="let mod of data.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(data.baseline.initialTemp, mod.initialTemp, 'initialTempDiff')}">
                 {{mod.initialTemp}}
               </td>
             </tr>
             <tr>
-              <td>
+              <td [ngClass]="{'indicate-report-field-different':dischargeTempDiff == true}">
                 Discharge Temperature
               </td>
-              <td>
+              <td [ngClass]="{'indicate-report-field-different':dischargeTempDiff == true}">
                 {{data.baseline.dischargeTemp}}
               </td>
-              <td *ngFor="let mod of data.modifications">
+              <td *ngFor="let mod of data.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(data.baseline.dischargeTemp, mod.dischargeTemp, 'dischargeTempDiff')}">
                 {{mod.dischargeTemp}}
               </td>
             </tr>
             <tr>
-              <td>
+              <td [ngClass]="{'indicate-report-field-different':percentReactedDiff == true}">
                 Percent Reacted
               </td>
-              <td>
+              <td [ngClass]="{'indicate-report-field-different':percentReactedDiff == true}">
                 {{data.baseline.percentReacted}}
               </td>
-              <td *ngFor="let mod of data.modifications">
+              <td *ngFor="let mod of data.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(data.baseline.percentReacted, mod.percentReacted, 'percentReactedDiff')}">
                 {{mod.percentReacted}}
               </td>
             </tr>
             <tr>
-              <td>
+              <td [ngClass]="{'indicate-report-field-different':reactionHeatDiff == true}">
                 Reaction Heat
               </td>
-              <td>
+              <td [ngClass]="{'indicate-report-field-different':reactionHeatDiff == true}">
                 {{data.baseline.reactionHeat}}
               </td>
-              <td *ngFor="let mod of data.modifications">
+              <td *ngFor="let mod of data.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(data.baseline.reactionHeat, mod.reactionHeat, 'reactionHeatDiff')}">
                 {{mod.reactionHeat}}
               </td>
             </tr>
             <tr>
-              <td>
+              <td [ngClass]="{'indicate-report-field-different':heatRequiredDiff == true}">
                 Heat Required
               </td>
-              <td>
+              <td [ngClass]="{'indicate-report-field-different':heatRequiredDiff == true}">
                 {{data.baseline.heatRequired}}
               </td>
-              <td *ngFor="let mod of data.modifications">
+              <td *ngFor="let mod of data.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(data.baseline.heatRequired, mod.heatRequired, 'heatRequiredDiff')}">
                 {{mod.heatRequired}}
               </td>
             </tr>
             <tr>
-              <td>
+              <td [ngClass]="{'indicate-report-field-different':specificHeatSolidDiff == true}">
                 Specific Heat Solid
               </td>
-              <td>
+              <td [ngClass]="{'indicate-report-field-different':specificHeatSolidDiff == true}">
                 {{data.baseline.specificHeatSolid}}
               </td>
-              <td *ngFor="let mod of data.modifications">
+              <td *ngFor="let mod of data.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(data.baseline.specificHeatSolid, mod.specificHeatSolid, 'specificHeatSolidDiff')}">
                 {{mod.specificHeatSolid}}
               </td>
             </tr>
             <tr>
-              <td>
+              <td [ngClass]="{'indicate-report-field-different':specificHeatLiquidDiff == true}">
                 Specific Heat Liquid
               </td>
-              <td>
+              <td [ngClass]="{'indicate-report-field-different':specificHeatLiquidDiff == true}">
                 {{data.baseline.specificHeatLiquid}}
               </td>
-              <td *ngFor="let mod of data.modifications">
+              <td *ngFor="let mod of data.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(data.baseline.specificHeatLiquid, mod.specificHeatLiquid, 'specificHeatLiquidDiff')}">
                 {{mod.specificHeatLiquid}}
               </td>
             </tr>
             <tr>
-              <td>
+              <td [ngClass]="{'indicate-report-field-different':meltingPointDiff == true}">
                 Melting Point
               </td>
-              <td>
+              <td [ngClass]="{'indicate-report-field-different':meltingPointDiff == true}">
                 {{data.baseline.meltingPoint}}
               </td>
-              <td *ngFor="let mod of data.modifications">
+              <td *ngFor="let mod of data.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(data.baseline.meltingPoint, mod.meltingPoint, 'meltingPointDiff')}">
                 {{mod.meltingPoint}}
               </td>
             </tr>
             <tr>
-              <td>
+              <td [ngClass]="{'indicate-report-field-different':waterContentChargedDiff == true}">
                 Water Content Charged
               </td>
-              <td>
+              <td [ngClass]="{'indicate-report-field-different':waterContentChargedDiff == true}">
                 {{data.baseline.waterContentCharged}}
               </td>
-              <td *ngFor="let mod of data.modifications">
+              <td *ngFor="let mod of data.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(data.baseline.waterContentCharged, mod.waterContentCharged, 'waterContentChargedDiff')}">
                 {{mod.waterContentCharged}}
               </td>
             </tr>
             <tr>
-              <td>
+              <td [ngClass]="{'indicate-report-field-different':waterContentDischargedDiff == true}">
                 Water Content Discharged
               </td>
-              <td>
+              <td [ngClass]="{'indicate-report-field-different':waterContentDischargedDiff == true}">
                 {{data.baseline.waterContentDischarged}}
               </td>
-              <td *ngFor="let mod of data.modifications">
+              <td *ngFor="let mod of data.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(data.baseline.waterContentDischarged, mod.waterContentDischarged, 'waterContentDischargedDiff')}">
                 {{mod.waterContentDischarged}}
               </td>
             </tr>
             <tr>
-              <td>
+              <td [ngClass]="{'indicate-report-field-different':waterVaporDischargeTempDiff == true}">
                 Water Vapor Discharge Temperature
               </td>
-              <td>
+              <td [ngClass]="{'indicate-report-field-different':waterVaporDischargeTempDiff == true}">
                 {{data.baseline.waterVaporDischargeTemp}}
               </td>
-              <td *ngFor="let mod of data.modifications">
+              <td *ngFor="let mod of data.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(data.baseline.waterVaporDischargeTemp, mod.waterVaporDischargeTemp, 'waterVaporDischargeTempDiff')}">
                 {{mod.waterVaporDischargeTemp}}
               </td>
             </tr>
             <tr>
-              <td>
+              <td [ngClass]="{'indicate-report-field-different':latentHeatDiff == true}">
                 Latent Heat
               </td>
-              <td>
+              <td [ngClass]="{'indicate-report-field-different':latentHeatDiff == true}">
                 {{data.baseline.latentHeat}}
               </td>
-              <td *ngFor="let mod of data.modifications">
+              <td *ngFor="let mod of data.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(data.baseline.latentHeat, mod.latentHeat, 'latentHeatDiff')}">
                 {{mod.latentHeat}}
               </td>
             </tr>
             <tr>
-              <td>
+              <td [ngClass]="{'indicate-report-field-different':additionalHeatDiff == true}">
                 Additional Heat
               </td>
-              <td>
+              <td [ngClass]="{'indicate-report-field-different':additionalHeatDiff == true}">
                 {{data.baseline.additionalHeat}}
               </td>
-              <td *ngFor="let mod of data.modifications">
+              <td *ngFor="let mod of data.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(data.baseline.additionalHeat, mod.additionalHeat, 'additionalHeatDiff')}">
                 {{mod.additionalHeat}}
               </td>
             </tr>
             <tr>
-              <td>
+              <td [ngClass]="{'indicate-report-field-different':vaporizingTemperatureDiff == true}">
                 Vaporizing Temperature
               </td>
-              <td>
+              <td [ngClass]="{'indicate-report-field-different':vaporizingTemperatureDiff == true}">
                 {{data.baseline.vaporizingTemperature}}
               </td>
-              <td *ngFor="let mod of data.modifications">
+              <td *ngFor="let mod of data.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(data.baseline.vaporizingTemperature, mod.vaporizingTemperature, 'vaporizingTemperatureDiff')}">
                 {{mod.vaporizingTemperature}}
               </td>
             </tr>
             <tr>
-              <td>
+              <td [ngClass]="{'indicate-report-field-different':chargeMeltedDiff == true}">
                 Charge Melted
               </td>
-              <td>
+              <td [ngClass]="{'indicate-report-field-different':chargeMeltedDiff == true}">
                 {{data.baseline.chargeMelted}}
               </td>
-              <td *ngFor="let mod of data.modifications">
+              <td *ngFor="let mod of data.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(data.baseline.chargeMelted, mod.chargeMelted, 'chargeMeltedDiff')}">
                 {{mod.chargeMelted}}
               </td>
             </tr>

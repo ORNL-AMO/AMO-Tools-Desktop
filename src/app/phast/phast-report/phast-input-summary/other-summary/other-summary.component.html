@@ -10,35 +10,45 @@
         <table class="table table-hover">
           <thead>
             <tr>
-              <th [ngStyle]="{'width.%': 100 /(phast.modifications.length+2)}">{{index+1}}</th>
+              <!-- set table column widths based on number of modifications, add 2 for baseline and label columns -->
+              <th [ngStyle]="{'width.%': 100 /(phast.modifications.length+2)}"></th>
               <th [ngStyle]="{'width.%': 100 /(phast.modifications.length+2)}">
+                Baseline
+              </th>
+              <th [ngStyle]="{'width.%': 100 /(phast.modifications.length+2)}" *ngFor="let mod of phast.modifications">
+                {{mod.phast.name}}
+              </th>
+            </tr>
+            <tr>
+              <th>{{index+1}}</th>
+              <th>
                 {{data.baseline.name}}
               </th>
-              <th [ngStyle]="{'width.%': 100 /(phast.modifications.length+2)}" *ngFor="let mod of data.modifications">
+              <th *ngFor="let mod of data.modifications">
                 {{mod.name}}
               </th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td>
+              <td [ngClass]="{'indicate-report-field-different':openingTypeDiff == true}">
                 Description
               </td>
-              <td>
+              <td [ngClass]="{'indicate-report-field-different':openingTypeDiff == true}">
                 {{data.baseline.openingType}}
               </td>
-              <td *ngFor="let mod of data.modifications">
+              <td *ngFor="let mod of data.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(data.baseline.openingType, mod.openingType, 'openingTypeDiff')}">
                 {{mod.openingType}}
               </td>
             </tr>
             <tr>
-              <td>
+              <td [ngClass]="{'indicate-report-field-different':heatLossDiff == true}">
                 Heat Loss
               </td>
-              <td>
+              <td [ngClass]="{'indicate-report-field-different':heatLossDiff == true}">
                 {{data.baseline.heatLoss}}
               </td>
-              <td *ngFor="let mod of data.modifications">
+              <td *ngFor="let mod of data.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(data.baseline.heatLoss, mod.heatLoss, 'heatLossDiff')}">
                 {{mod.heatLoss}}
               </td>
             </tr>

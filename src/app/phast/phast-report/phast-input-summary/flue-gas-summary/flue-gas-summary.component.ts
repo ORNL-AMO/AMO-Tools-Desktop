@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ChangeDetectorRef } from '@angular/core';
 import { PHAST } from '../../../../shared/models/phast/phast';
 import { SuiteDbService } from '../../../../suiteDb/suite-db.service';
 import { FlueGas } from '../../../../shared/models/phast/losses/flueGas';
@@ -19,7 +19,21 @@ export class FlueGasSummaryComponent implements OnInit {
   massOptions: Array<any>;
   numLosses: number = 0;
   collapse: boolean = true;
-  constructor(private suiteDbService: SuiteDbService) { }
+
+  typeDiff: boolean = false;
+  fuelNameDiff: boolean = false;
+  flueGasTempDiff: boolean = false;
+  excessAirMethodDiff: boolean = false;
+  oxygenInFlueGasDiff: boolean = false;
+  excessAirDiff: boolean = false;
+  combustionAirTempDiff: boolean = false;
+  fuelTemperatureDiff: boolean = false;
+  moistureInAirDiff: boolean = false;
+  dischargeTempDiff: boolean = false;
+  unburnedCarbonDiff: boolean = false;
+
+
+  constructor(private suiteDbService: SuiteDbService, private cd: ChangeDetectorRef) { }
 
   ngOnInit() {
     this.volumeOptions = this.suiteDbService.selectGasFlueGasMaterials();
@@ -47,6 +61,26 @@ export class FlueGasSummaryComponent implements OnInit {
     }
   }
 
+
+  //function used to check if baseline and modification values are different
+  //called from html
+  //diffBool is name of corresponding input boolean to indicate different
+  checkDiff(baselineVal: any, modificationVal: any, diffBool: string) {
+    if (baselineVal != modificationVal) {
+      //this[diffBool] get's corresponding variable
+      //only set true once
+      if (this[diffBool] != true) {
+        //set true/different
+        this[diffBool] = true;
+        //tell html to detect change
+        this.cd.detectChanges();
+      }
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   toggleCollapse() {
     this.collapse = !this.collapse;
   }
@@ -57,7 +91,7 @@ export class FlueGasSummaryComponent implements OnInit {
       tmpMoisture, tmpDischargeTemp, tmpUnburnedCarbon;
 
     if (loss.flueGasType == 'By Volume') {
-      let tmpGas = this.volumeOptions.find(val => {return loss.flueGasByVolume.gasTypeId == val.id})
+      let tmpGas = this.volumeOptions.find(val => { return loss.flueGasByVolume.gasTypeId == val.id })
       tmpName = tmpGas.substance;
       tmpGasTemp = loss.flueGasByVolume.flueGasTemperature;
       tmpMethod = loss.flueGasByVolume.oxygenCalculationMethod;
@@ -66,7 +100,7 @@ export class FlueGasSummaryComponent implements OnInit {
       tmpCombustionTemp = loss.flueGasByVolume.combustionAirTemperature;
       tmpFuelTemp = loss.flueGasByVolume.fuelTemperature;
     } else if (loss.flueGasType == 'By Mass') {
-      let tmpGas = this.massOptions.find(val => {return loss.flueGasByMass.gasTypeId == val.id})
+      let tmpGas = this.massOptions.find(val => { return loss.flueGasByMass.gasTypeId == val.id })
       tmpName = tmpGas.substance;
       tmpGasTemp = loss.flueGasByMass.flueGasTemperature;
       tmpMethod = loss.flueGasByMass.oxygenCalculationMethod;

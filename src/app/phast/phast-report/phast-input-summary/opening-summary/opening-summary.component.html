@@ -10,134 +10,154 @@
         <table class="table table-hover">
           <thead>
             <tr>
-              <th [ngStyle]="{'width.%': 100 /(phast.modifications.length+2)}">{{index+1}}</th>
+              <!-- set table column widths based on number of modifications, add 2 for baseline and label columns -->
+              <th [ngStyle]="{'width.%': 100 /(phast.modifications.length+2)}"></th>
               <th [ngStyle]="{'width.%': 100 /(phast.modifications.length+2)}">
+                Baseline
+              </th>
+              <th [ngStyle]="{'width.%': 100 /(phast.modifications.length+2)}" *ngFor="let mod of phast.modifications">
+                {{mod.phast.name}}
+              </th>
+            </tr>
+            <tr>
+              <th>{{index+1}}</th>
+              <th>
                 {{data.baseline.name}}
               </th>
-              <th [ngStyle]="{'width.%': 100 /(phast.modifications.length+2)}" *ngFor="let mod of data.modifications">
+              <th *ngFor="let mod of data.modifications">
                 {{mod.name}}
               </th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td>
+              <td [ngClass]="{'indicate-report-field-different':openingTypeDiff == true}">
                 Opening Type
               </td>
-              <td>
+              <td [ngClass]="{'indicate-report-field-different':openingTypeDiff == true}">
                 {{data.baseline.openingType}}
               </td>
-              <td *ngFor="let mod of data.modifications">
+              <td *ngFor="let mod of data.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(data.baseline.openingType, mod.openingType, 'openingTypeDiff')}">
                 {{mod.openingType}}
               </td>
             </tr>
+
             <tr>
-              <td>
+              <td [ngClass]="{'indicate-report-field-different':numberOfOpeningsDiff == true}">
                 Number of Openings
               </td>
-              <td>
+              <td [ngClass]="{'indicate-report-field-different':numberOfOpeningsDiff == true}">
                 {{data.baseline.numberOfOpenings}}
               </td>
-              <td *ngFor="let mod of data.modifications">
+              <td *ngFor="let mod of data.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(data.baseline.numberOfOpenings, mod.numberOfOpenings, 'numberOfOpeningsDiff')}">
                 {{mod.numberOfOpenings}}
               </td>
             </tr>
+
             <tr>
-              <td>
+              <td [ngClass]="{'indicate-report-field-different':thicknessDiff == true}">
                 Furnace Wall Thickness
               </td>
-              <td>
+              <td [ngClass]="{'indicate-report-field-different':thicknessDiff == true}">
                 {{data.baseline.thickness}}
               </td>
-              <td *ngFor="let mod of data.modifications">
+              <td *ngFor="let mod of data.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(data.baseline.thickness, mod.thickness, 'thicknessDiff')}">
                 {{mod.thickness}}
               </td>
             </tr>
+
             <tr>
-              <td>
+              <td [ngClass]="{'indicate-report-field-different':lengthOfOpeningDiff == true}">
                 Length/Diameter of Openings
               </td>
-              <td>
+              <td [ngClass]="{'indicate-report-field-different':lengthOfOpeningDiff == true}">
                 {{data.baseline.lengthOfOpening}}
               </td>
-              <td *ngFor="let mod of data.modifications">
+              <td *ngFor="let mod of data.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(data.baseline.lengthOfOpening, mod.lengthOfOpening, 'lengthOfOpeningDiff')}">
                 {{mod.lengthOfOpening}}
               </td>
             </tr>
+
             <tr>
-              <td>
+              <td [ngClass]="{'indicate-report-field-different':heightOfOpeningDiff == true}">
                 Height of Openings
               </td>
-              <td>
+              <td [ngClass]="{'indicate-report-field-different':heightOfOpeningDiff == true}">
                 {{data.baseline.heightOfOpening}}
               </td>
-              <td *ngFor="let mod of data.modifications">
+              <td *ngFor="let mod of data.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(data.baseline.heightOfOpening, mod.heightOfOpening, 'heightOfOpeningDiff')}">
                 {{mod.heightOfOpening}}
               </td>
             </tr>
+
             <tr>
-              <td>
+              <td [ngClass]="{'indicate-report-field-different':openingTotalAreaDiff == true}">
                 Total Opening Area
               </td>
-              <td>
+              <td [ngClass]="{'indicate-report-field-different':openingTotalAreaDiff == true}">
                 {{data.baseline.openingTotalArea}}
               </td>
-              <td *ngFor="let mod of data.modifications">
+              <td *ngFor="let mod of data.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(data.baseline.openingTotalArea, mod.openingTotalArea, 'openingTotalAreaDiff')}">
                 {{mod.openingTotalArea}}
               </td>
             </tr>
+
             <tr>
-              <td>
+              <td [ngClass]="{'indicate-report-field-different':viewFactorDiff == true}">
                 View Factor
               </td>
-              <td>
+              <td [ngClass]="{'indicate-report-field-different':viewFactorDiff == true}">
                 {{data.baseline.viewFactor}}
               </td>
-              <td *ngFor="let mod of data.modifications">
+              <td *ngFor="let mod of data.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(data.baseline.viewFactor, mod.viewFactor, 'viewFactorDiff')}">
                 {{mod.viewFactor}}
               </td>
             </tr>
+
             <tr>
-              <td>
+              <td [ngClass]="{'indicate-report-field-different':insideTemperatureDiff == true}">
                 Avg. Zone or Radiation Source Temp.
               </td>
-              <td>
+              <td [ngClass]="{'indicate-report-field-different':insideTemperatureDiff == true}">
                 {{data.baseline.insideTemperature}}
               </td>
-              <td *ngFor="let mod of data.modifications">
+              <td *ngFor="let mod of data.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(data.baseline.insideTemperature, mod.insideTemperature, 'insideTemperatureDiff')}">
                 {{mod.insideTemperature}}
               </td>
             </tr>
+
             <tr>
-              <td>
+              <td [ngClass]="{'indicate-report-field-different':ambientTemperatureDiff == true}">
                 Ambient Temp
               </td>
-              <td>
+              <td [ngClass]="{'indicate-report-field-different':ambientTemperatureDiff == true}">
                 {{data.baseline.ambientTemperature}}
               </td>
-              <td *ngFor="let mod of data.modifications">
+              <td *ngFor="let mod of data.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(data.baseline.ambientTemperature, mod.ambientTemperature, 'ambientTemperatureDiff')}">
                 {{mod.ambientTemperature}}
               </td>
             </tr>
+
             <tr>
-              <td>
+              <td [ngClass]="{'indicate-report-field-different':emissivityDiff == true}">
                 Emissivity of the Source
               </td>
-              <td>
+              <td [ngClass]="{'indicate-report-field-different':emissivityDiff == true}">
                 {{data.baseline.emissivity}}
               </td>
-              <td *ngFor="let mod of data.modifications">
+              <td *ngFor="let mod of data.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(data.baseline.emissivity, mod.emissivity, 'emissivityDiff')}">
                 {{mod.emissivity}}
               </td>
             </tr>
+            
             <tr>
-              <td>
+              <td [ngClass]="{'indicate-report-field-different':percentTimeOpenDiff == true}">
                 % of Time Open
               </td>
-              <td>
+              <td [ngClass]="{'indicate-report-field-different':percentTimeOpenDiff == true}">
                 {{data.baseline.percentTimeOpen}}
               </td>
-              <td *ngFor="let mod of data.modifications">
+              <td *ngFor="let mod of data.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(data.baseline.percentTimeOpen, mod.percentTimeOpen, 'percentTimeOpenDiff')}">
                 {{mod.percentTimeOpen}}
               </td>
             </tr>
