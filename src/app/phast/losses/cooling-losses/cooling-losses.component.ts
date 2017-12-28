@@ -131,7 +131,6 @@ export class CoolingLossesComponent implements OnInit {
   }
   disableForms() {
     this._coolingLosses.forEach(loss => {
-      loss.waterCoolingForm.disable();
       loss.gasCoolingForm.disable();
       loss.liquidCoolingForm.disable();
     })
@@ -143,7 +142,6 @@ export class CoolingLossesComponent implements OnInit {
       if (loss.coolingLossType == 'Gas' || loss.coolingLossType == 'Air') {
         tmpLoss = {
           coolingMedium: loss.coolingLossType,
-          waterCoolingForm: this.coolingLossesService.initWaterCoolingForm(),
           gasCoolingForm: this.coolingLossesService.initGasFormFromLoss(loss),
           liquidCoolingForm: this.coolingLossesService.initLiquidCoolingForm(this.settings, lossIndex),
           heatLoss: loss.heatLoss || 0.0,
@@ -152,19 +150,8 @@ export class CoolingLossesComponent implements OnInit {
       } else if (loss.coolingLossType == 'Liquid') {
         tmpLoss = {
           coolingMedium: loss.coolingLossType,
-          waterCoolingForm: this.coolingLossesService.initWaterCoolingForm(),
           gasCoolingForm: this.coolingLossesService.initGasCoolingForm(this.settings, lossIndex),
           liquidCoolingForm: this.coolingLossesService.initLiquidFormFromLoss(loss),
-          heatLoss: loss.heatLoss || 0.0,
-          collapse: false
-        };
-      }
-      else if (loss.coolingLossType == 'Water') {
-        tmpLoss = {
-          coolingMedium: loss.coolingLossType,
-          waterCoolingForm: this.coolingLossesService.initWaterFormFromLoss(loss.waterCoolingLoss),
-          gasCoolingForm: this.coolingLossesService.initGasCoolingForm(this.settings, lossIndex),
-          liquidCoolingForm: this.coolingLossesService.initLiquidCoolingForm(this.settings, lossIndex),
           heatLoss: loss.heatLoss || 0.0,
           collapse: false
         };
@@ -194,7 +181,6 @@ export class CoolingLossesComponent implements OnInit {
     }
     this._coolingLosses.push({
       coolingMedium: 'Gas',
-      waterCoolingForm: this.coolingLossesService.initWaterCoolingForm(),
       gasCoolingForm: this.coolingLossesService.initGasCoolingForm(this.settings, this._coolingLosses.length + 1),
       liquidCoolingForm: this.coolingLossesService.initLiquidCoolingForm(this.settings, this._coolingLosses.length + 1),
       heatLoss: 0.0,
@@ -235,14 +221,6 @@ export class CoolingLossesComponent implements OnInit {
         loss.heatLoss = null;
       }
     }
-    else if (loss.coolingMedium == 'Water') {
-      if (loss.waterCoolingForm.status == 'VALID') {
-        let tmpWaterCoolingLoss: WaterCoolingLoss = this.coolingLossesService.initWaterLossFromForm(loss.waterCoolingForm);
-        loss.heatLoss = this.phastService.waterCoolingLosses(tmpWaterCoolingLoss);
-      } else {
-        loss.heatLoss = null;
-      }
-    }
   }
 
   saveLosses() {
@@ -269,13 +247,6 @@ export class CoolingLossesComponent implements OnInit {
         tmpCoolingLoss = this.coolingLossesService.initLiquidLossFromForm(loss.liquidCoolingForm);
         tmpCoolingLoss.coolingLossType = 'Liquid';
         tmpCoolingLoss.heatLoss = loss.heatLoss;
-      }
-      else if (loss.coolingMedium == 'Water') {
-        tmpCoolingLoss = {
-          coolingLossType: 'Water',
-          waterCoolingLoss: this.coolingLossesService.initWaterLossFromForm(loss.waterCoolingForm),
-          heatLoss: loss.heatLoss
-        };
       }
       tmpCoolingLosses.push(tmpCoolingLoss);
       lossIndex++;
