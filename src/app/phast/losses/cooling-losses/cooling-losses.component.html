@@ -48,8 +48,6 @@
           <option>Liquid</option>
         </select>
       </div>
-      <!--<app-water-cooling-losses-form (changeField)="changeField($event)" *ngIf="loss.coolingMedium == 'Water'" [(lossesForm)]="loss.waterCoolingForm"
-        (calculate)="calculate(loss)" [baselineSelected]="baselineSelected" (saveEmit)="saveLosses()" [lossIndex]="lossIndex"></app-water-cooling-losses-form>-->
       <app-liquid-cooling-losses-form (changeField)="changeField($event)" *ngIf="loss.coolingMedium == 'Liquid'" [(lossesForm)]="loss.liquidCoolingForm"
         (calculate)="calculate(loss)" [baselineSelected]="baselineSelected" (saveEmit)="saveLosses()" [lossIndex]="lossIndex"
         [settings]="settings"></app-liquid-cooling-losses-form>
