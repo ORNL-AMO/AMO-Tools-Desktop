@@ -34,8 +34,8 @@ export class OtherLossesService {
 
   getLossFromForm(form: any): OtherLoss {
     let tmpLoss = {
-      description: form.value.description,
-      heatLoss: form.value.heatLoss
+      description: form.controls.description.value,
+      heatLoss: form.controls.heatLoss.value
     }
     return tmpLoss
   }

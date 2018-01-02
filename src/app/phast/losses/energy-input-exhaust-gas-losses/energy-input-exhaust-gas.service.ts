@@ -68,14 +68,14 @@ export class EnergyInputExhaustGasService {
 
   getLossFromForm(form: any): EnergyInputExhaustGasLoss {
     let tmpExhaustGas: EnergyInputExhaustGasLoss = {
-      excessAir: form.value.excessAir,
-      combustionAirTemp: form.value.combustionAirTemp,
-      exhaustGasTemp: form.value.exhaustGasTemp,
-      totalHeatInput: form.value.totalHeatInput,
-      electricalPowerInput: form.value.electricalPowerInput,
+      excessAir: form.controls.excessAir.value,
+      combustionAirTemp: form.controls.combustionAirTemp.value,
+      exhaustGasTemp: form.controls.exhaustGasTemp.value,
+      totalHeatInput: form.controls.totalHeatInput.value,
+      electricalPowerInput: form.controls.electricalPowerInput.value,
       //otherLossObjects: new Array(),
       otherLosses: 0.0,
-      name: form.value.name
+      name: form.controls.name.value
     }
     // let tmpOtherLosses = new Array();
     // Object.keys(form.controls).forEach(key => {

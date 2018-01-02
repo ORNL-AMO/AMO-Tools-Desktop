@@ -2,14 +2,14 @@
   <form [formGroup]="nemaForm">
     <div class="form-group">
       <label for="frequency">Line Frequency</label>
-      <select class="form-control" id="frequency" formControlName="frequency" ngModel="{{nemaForm.value.frequency}}" autofocus (focus)="focusField('frequency')">
+      <select class="form-control" id="frequency" formControlName="frequency" autofocus (focus)="focusField('frequency')">
         <option *ngFor="let frequency of frequencies" [ngValue]="frequency">{{frequency}}</option>
       </select>
     </div>
 
     <div class="form-group">
       <label for="horsePower">Horse Power</label>
-      <select class="form-control" id="horsePower"  (focus)="focusField('horsePower')" formControlName="horsePower" ngModel="{{nemaForm.value.horsePower}}">
+      <select class="form-control" id="horsePower"  (focus)="focusField('horsePower')" formControlName="horsePower">
         <option *ngFor="let option of options" [ngValue]="option">{{option}} {{settings.powerMeasurement}}</option>
       </select>
     </div>
@@ -23,19 +23,18 @@
         <div class="incrementor input-group-addon">
           <button class="btn" (click)="addNum('motorRPM')"><i class="fa fa-plus"></i></button>
         </div>
-        <input type="number" min="1" step="any" class="form-control addon-input" id="motorRPM" formControlName="motorRPM"
-          ngModel="{{nemaForm.value.motorRPM}}" onfocus="this.select();" (focus)="focusField('motorRPM')">
+        <input type="number" min="1" step="any" class="form-control addon-input" id="motorRPM" formControlName="motorRPM" onfocus="this.select();" (focus)="focusField('motorRPM')">
       </div>
     </div>
 
     <div class="form-group">
       <label for="efficiencyClass">Efficiency Class</label>
-      <select class="form-control" id="efficiencyClass" formControlName="efficiencyClass" ngModel="{{nemaForm.value.efficiencyClass}}">
+      <select class="form-control" id="efficiencyClass" formControlName="efficiencyClass">
               <option *ngFor="let efficiencyClass of efficiencyClasses" [ngValue]="efficiencyClass">{{efficiencyClass}}</option>
             </select>
     </div>
 
-    <div class="form-group" *ngIf="nemaForm.value.efficiencyClass == 'Specified'">
+    <div class="form-group" *ngIf="nemaForm.controls.efficiencyClass.value == 'Specified'">
       <label for="efficiency">Efficiency</label>
       <div class="input-group calc-addon-group">
         <input type="number" min="0" step="any" max="100" class="form-control addon-input" id="efficiency" formControlName="efficiency"

@@ -32,7 +32,7 @@
     <div class="form-group">
       <label for="synchronousSpeed">Synchronous Speed</label>
       <div class="text-center small">
-          {{percentLoadEstimationForm.value.synchronousSpeed}}
+          {{percentLoadEstimationForm.controls.synchronousSpeed.value}}
       </div>
       <span class="alert-danger pull-right small" *ngIf="synchronousSpeedError !== null">{{synchronousSpeedError}}</span>      
     </div>

@@ -58,20 +58,20 @@ export class SystemCurveFormComponent implements OnInit {
     }
 
     if (this.pointOne) {
-      this.p1Head = this.pointOne.form.value.head;
-      this.p1FlowRate = this.pointOne.form.value.flowRate;
-      this.p1Option = this.pointOne.form.value.pointAdjustment;
+      this.p1Head = this.pointOne.form.controls.head.value;
+      this.p1FlowRate = this.pointOne.form.controls.flowRate.value;
+      this.p1Option = this.pointOne.form.controls.pointAdjustment.value;
     }
 
     if (this.pointTwo) {
-      this.p2Head = this.pointTwo.form.value.head;
-      this.p2FlowRate = this.pointTwo.form.value.flowRate;
-      this.p2Option = this.pointTwo.form.value.pointAdjustment;
+      this.p2Head = this.pointTwo.form.controls.head.value;
+      this.p2FlowRate = this.pointTwo.form.controls.flowRate.value;
+      this.p2Option = this.pointTwo.form.controls.pointAdjustment.value;
     }
 
     if (this.curveConstants) {
-      this.tmpSpecificGravity = this.curveConstants.form.value.specificGravity;
-      this.tmpSystemLossExponent = this.curveConstants.form.value.systemLossExponent;
+      this.tmpSpecificGravity = this.curveConstants.form.controls.specificGravity.value;
+      this.tmpSystemLossExponent = this.curveConstants.form.controls.systemLossExponent.value;
     }
     this.checkInputs();
   }

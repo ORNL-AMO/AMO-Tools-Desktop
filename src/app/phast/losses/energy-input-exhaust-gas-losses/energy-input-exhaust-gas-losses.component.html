@@ -49,7 +49,7 @@
     </div>
     <div class="col-12">
       <div class="form-group">
-        <label class="small font-weight-bold">{{loss.form.value.name}} Total</label>
+        <label class="small font-weight-bold">{{loss.form.controls.name.value}} Total</label>
         <div *ngIf="loss.exhaustGas" class="text-center small font-weight-bold">
           {{loss.exhaustGas | sigFigs:'5'}}
           <span>{{resultsUnit}}</span>

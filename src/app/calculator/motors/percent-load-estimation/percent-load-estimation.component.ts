@@ -45,8 +45,8 @@ export class PercentLoadEstimationComponent implements OnInit {
   }
 
   calculate() {
-    this.loadEstimationResult = ((this.percentLoadEstimationForm.value.synchronousSpeed - this.percentLoadEstimationForm.value.measuredSpeed) 
-                              / (this.percentLoadEstimationForm.value.synchronousSpeed - this.percentLoadEstimationForm.value.nameplateFullLoadSpeed)) * 100;    
+    this.loadEstimationResult = ((this.percentLoadEstimationForm.controls.synchronousSpeed.value - this.percentLoadEstimationForm.controls.measuredSpeed.value) 
+                              / (this.percentLoadEstimationForm.controls.synchronousSpeed.value - this.percentLoadEstimationForm.controls.nameplateFullLoadSpeed.value)) * 100;    
   }
 
 }

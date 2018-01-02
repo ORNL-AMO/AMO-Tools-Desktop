@@ -43,13 +43,13 @@ export class SpecificSpeedComponent implements OnInit {
         results => {
           //convert defaults if standalone without default system settings
           if (results[0].flowMeasurement != 'gpm') {
-            let tmpVal = this.convertUnitsService.value(this.speedForm.value.flowRate).from('gpm').to(results[0].flowMeasurement);
+            let tmpVal = this.convertUnitsService.value(this.speedForm.controls.flowRate.value).from('gpm').to(results[0].flowMeasurement);
             this.speedForm.patchValue({
               flowRate: this.psatService.roundVal(tmpVal, 2)
             })
           }
           if (results[0].distanceMeasurement != 'ft') {
-            let tmpVal = this.convertUnitsService.value(this.speedForm.value.head).from('ft').to(results[0].distanceMeasurement);
+            let tmpVal = this.convertUnitsService.value(this.speedForm.controls.head.value).from('ft').to(results[0].distanceMeasurement);
 
             this.speedForm.patchValue({
               head: this.psatService.roundVal(tmpVal, 2)

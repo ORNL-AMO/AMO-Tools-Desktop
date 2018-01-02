@@ -37,7 +37,7 @@ export class PercentLoadEstimationFormComponent implements OnInit {
   }
 
   updateSynchronousSpeeds() {
-    if (this.percentLoadEstimationForm.value.lineFrequency == 50) {
+    if (this.percentLoadEstimationForm.controls.lineFrequency.value == 50) {
       this.synchronousSpeeds = [
         500,
         600,
@@ -47,7 +47,7 @@ export class PercentLoadEstimationFormComponent implements OnInit {
         3000
       ];
     }
-    else if (this.percentLoadEstimationForm.value.lineFrequency == 60) {
+    else if (this.percentLoadEstimationForm.controls.lineFrequency.value == 60) {
       this.synchronousSpeeds = [
         600,
         720,
@@ -64,39 +64,38 @@ export class PercentLoadEstimationFormComponent implements OnInit {
     this.synchronousSpeedError = this.nameplateFullLoadSpeedError = this.measuredSpeedError = null;
     var err: boolean = false;
 
-    if (this.percentLoadEstimationForm.value.nameplateFullLoadSpeed >= this.synchronousSpeeds[this.synchronousSpeeds.length - 1]) {
+    if (this.percentLoadEstimationForm.controls.nameplateFullLoadSpeed.value >= this.synchronousSpeeds[this.synchronousSpeeds.length - 1]) {
       this.nameplateFullLoadSpeedError = 'Nameplate Full Load Speed must be less than ' + this.synchronousSpeeds[this.synchronousSpeeds.length - 1];
       err = true;
     }
-    if (this.percentLoadEstimationForm.value.measuredSpeed >= this.synchronousSpeeds[this.synchronousSpeeds.length - 1]) {
+    if (this.percentLoadEstimationForm.controls.measuredSpeed.value >= this.synchronousSpeeds[this.synchronousSpeeds.length - 1]) {
       this.measuredSpeedError = 'Measured Speed must be less than ' + this.synchronousSpeeds[this.synchronousSpeeds.length - 1];
       err = true;
     }
 
-    if (!this.percentLoadEstimationForm.value.measuredSpeed || !this.percentLoadEstimationForm.value.nameplateFullLoadSpeed) {
+    if (!this.percentLoadEstimationForm.controls.measuredSpeed.value || !this.percentLoadEstimationForm.controls.nameplateFullLoadSpeed.value) {
       this.loadEstimationResult = 0;
       err = true;
     }
 
-    if (this.percentLoadEstimationForm.value.nameplateFullLoadSpeed > this.percentLoadEstimationForm.value.measuredSpeed) {
+    if (this.percentLoadEstimationForm.controls.nameplateFullLoadSpeed.value > this.percentLoadEstimationForm.controls.measuredSpeed.value) {
       this.measuredSpeedError = 'Measured Speed must be greater than or equal to the Nameplate Full Load Speed.';
       err = true;
     }
 
     for (let i = 0; i < this.synchronousSpeeds.length; i++) {
-      if (this.synchronousSpeeds[i] > this.percentLoadEstimationForm.value.nameplateFullLoadSpeed) {
+      if (this.synchronousSpeeds[i] > this.percentLoadEstimationForm.controls.nameplateFullLoadSpeed.value) {
         this.percentLoadEstimationForm.patchValue({
           synchronousSpeed: this.synchronousSpeeds[i]
         });
 
-        if (this.synchronousSpeeds[i] <= this.percentLoadEstimationForm.value.measuredSpeed) {
+        if (this.synchronousSpeeds[i] <= this.percentLoadEstimationForm.controls.measuredSpeed.value) {
           this.measuredSpeedError = 'Measured Speed must be less than the synchronous speed';
           err = true;
         }
-
         break;
       }
-      if (this.percentLoadEstimationForm.value.nameplateFullLoadSpeed === this.synchronousSpeeds[i]) {
+      if (this.percentLoadEstimationForm.controls.nameplateFullLoadSpeed.value === this.synchronousSpeeds[i]) {
         this.synchronousSpeedError = 'Nameplate Full Load Speed cannot equal the Synchronous Speed of ' + this.synchronousSpeeds[i];
         this.loadEstimationResult = 0;
         err = true;

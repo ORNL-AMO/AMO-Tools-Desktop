@@ -68,7 +68,7 @@ export class AtmosphereLossesFormComponent implements OnInit {
   }
 
   setProperties() {
-    let selectedMaterial = this.suiteDbService.selectAtmosphereSpecificHeatById(this.atmosphereLossForm.value.atmosphereGas);
+    let selectedMaterial = this.suiteDbService.selectAtmosphereSpecificHeatById(this.atmosphereLossForm.controls.atmosphereGas.value);
     if (this.settings.unitsOfMeasure == 'Metric') {
       selectedMaterial.specificHeat = this.convertUnitsService.value(selectedMaterial.specificHeat).from('btulbF').to('kJkgC');
     }
@@ -91,7 +91,7 @@ export class AtmosphereLossesFormComponent implements OnInit {
     if (!bool) {
       this.startSavePolling();
     }
-    if (this.atmosphereLossForm.value.inletTemp > this.atmosphereLossForm.value.outletTemp) {
+    if (this.atmosphereLossForm.controls.inletTemp.value > this.atmosphereLossForm.controls.outletTemp.value) {
       this.temperatureError = 'Inlet temperature is greater than outlet temperature'
     } else {
       this.temperatureError = null;
@@ -101,12 +101,12 @@ export class AtmosphereLossesFormComponent implements OnInit {
     if (!bool) {
       this.startSavePolling();
     }
-    if (this.atmosphereLossForm.value.specificHeat < 0) {
+    if (this.atmosphereLossForm.controls.specificHeat.value < 0) {
       this.specificHeatError = 'Specific Heat must be greater than 0';
     } else {
       this.specificHeatError = null;
     }
-    if (this.atmosphereLossForm.value.flowRate < 0) {
+    if (this.atmosphereLossForm.controls.flowRate.value < 0) {
       this.flowRateError = 'Flow Rate must be greater than 0';
     } else {
       this.flowRateError = null;

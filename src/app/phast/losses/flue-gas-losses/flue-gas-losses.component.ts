@@ -160,12 +160,12 @@ export class FlueGasLossesComponent implements OnInit {
           collapse: false
         }
       }
-      if (!tmpLoss.formByVolume.value.name) {
+      if (!tmpLoss.formByVolume.controls.name.value) {
         tmpLoss.formByVolume.patchValue({
           name: 'Loss #' + lossIndex
         })
       }
-      if (!tmpLoss.formByMass.value.name) {
+      if (!tmpLoss.formByMass.controls.name.value) {
         tmpLoss.formByMass.patchValue({
           name: 'Loss #' + lossIndex
         })
@@ -248,11 +248,11 @@ export class FlueGasLossesComponent implements OnInit {
   setName(loss: any) {
     if (loss.measurementType == 'By Volume') {
       loss.formByMass.patchValue({
-        name: loss.formByVolume.value.name
+        name: loss.formByVolume.controls.name.value
       })
     } else if (loss.measurementType == 'By Mass') {
       loss.formByVolume.patchValue({
-        name: loss.formByMass.value.name
+        name: loss.formByMass.controls.name.value
       })
     }
   }
@@ -262,7 +262,7 @@ export class FlueGasLossesComponent implements OnInit {
     let lossIndex = 1;
     this._flueGasLosses.forEach(loss => {
       if (loss.measurementType == "By Volume") {
-        if (!loss.formByVolume.value.name) {
+        if (!loss.formByVolume.controls.name.value) {
           loss.formByVolume.patchValue({
             name: 'Loss #' + lossIndex
           })
@@ -272,7 +272,7 @@ export class FlueGasLossesComponent implements OnInit {
         tmpFlueGasLosses.push(tmpVolumeLoss);
       }
       else if (loss.measurementType == "By Mass") {
-        if (!loss.formByMass.value.name) {
+        if (!loss.formByMass.controls.name.value) {
           loss.formByMass.patchValue({
             name: 'Loss #' + lossIndex
           })

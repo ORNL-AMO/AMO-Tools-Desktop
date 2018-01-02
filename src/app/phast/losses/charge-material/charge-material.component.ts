@@ -246,7 +246,7 @@ export class ChargeMaterialComponent implements OnInit {
     this._chargeMaterial.forEach(material => {
       let tmpMaterial: ChargeMaterial;
       if (material.chargeMaterialType == 'Gas') {
-        if (!material.gasForm.value.name) {
+        if (!material.gasForm.controls.name.value) {
           material.gasForm.patchValue({
             name: 'Loss #' + lossIndex
           })
@@ -256,7 +256,7 @@ export class ChargeMaterialComponent implements OnInit {
         tmpMaterial.gasChargeMaterial.heatRequired = material.heatRequired;
         tmpMaterial.chargeMaterialType = 'Gas';
       } else if (material.chargeMaterialType == 'Solid') {
-        if (!material.solidForm.value.name) {
+        if (!material.solidForm.controls.name.value) {
           material.solidForm.patchValue({
             name: 'Loss #' + lossIndex
           })
@@ -266,7 +266,7 @@ export class ChargeMaterialComponent implements OnInit {
         tmpMaterial.solidChargeMaterial.heatRequired = material.heatRequired;
         tmpMaterial.chargeMaterialType = 'Solid';
       } else if (material.chargeMaterialType == 'Liquid') {
-        if (!material.liquidForm.value.name) {
+        if (!material.liquidForm.controls.name.value) {
           material.liquidForm.patchValue({
             name: 'Loss #' + lossIndex
           })
@@ -286,24 +286,24 @@ export class ChargeMaterialComponent implements OnInit {
   setName(material: any) {
     if (material.chargeMaterialType == 'Solid') {
       material.liquidForm.patchValue({
-        name: material.solidForm.value.name
+        name: material.solidForm.controls.name.value
       })
       material.gasForm.patchValue({
-        name: material.solidForm.value.name
+        name: material.solidForm.controls.name.value
       })
     } else if (material.chargeMaterialType == 'Liquid') {
       material.gasForm.patchValue({
-        name: material.liquidForm.value.name
+        name: material.liquidForm.controls.name.value
       })
       material.solidForm.patchValue({
-        name: material.liquidForm.value.name
+        name: material.liquidForm.controls.name.value
       })
     } else if (material.chargeMaterialType == 'Gas') {
       material.liquidForm.patchValue({
-        name: material.gasForm.value.name
+        name: material.gasForm.controls.name.value
       })
       material.solidForm.patchValue({
-        name: material.gasForm.value.name
+        name: material.gasForm.controls.name.value
       })
     }
   }

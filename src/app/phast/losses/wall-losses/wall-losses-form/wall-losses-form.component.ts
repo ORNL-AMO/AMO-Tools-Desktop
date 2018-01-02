@@ -87,7 +87,7 @@ export class WallLossesFormComponent implements OnInit {
     if (!bool) {
       this.startSavePolling();
     }
-    if (this.wallLossesForm.value.avgSurfaceTemp < this.wallLossesForm.value.ambientTemp) {
+    if (this.wallLossesForm.controls.avgSurfaceTemp.value < this.wallLossesForm.controls.ambientTemp.value) {
       this.surfaceTmpError = 'Surface temperature lower is than ambient temperature';
     } else {
       this.surfaceTmpError = null;
@@ -98,7 +98,7 @@ export class WallLossesFormComponent implements OnInit {
     if (!bool) {
       this.startSavePolling();
     }
-    if (this.wallLossesForm.value.surfaceEmissivity > 1 || this.wallLossesForm.value.surfaceEmissivity < 0) {
+    if (this.wallLossesForm.controls.surfaceEmissivity.value > 1 || this.wallLossesForm.controls.surfaceEmissivity.value < 0) {
       this.emissivityError = 'Surface emissivity must be between 0 and 1';
     } else {
       this.emissivityError = null;
@@ -123,12 +123,12 @@ export class WallLossesFormComponent implements OnInit {
     if (!bool) {
       this.startSavePolling();
     }
-    if (this.wallLossesForm.value.windVelocity < 0) {
+    if (this.wallLossesForm.controls.windVelocity.value < 0) {
       this.windVelocityError = 'Wind Velocity must be equal or greater than 0';
     } else {
       this.windVelocityError = null;
     }
-    if (this.wallLossesForm.value.surfaceArea < 0 ) {
+    if (this.wallLossesForm.controls.surfaceArea.value < 0 ) {
       this.surfaceAreaError = 'Total Outside Surface Area must be equal or greater than 0';
     } else {
       this.surfaceAreaError = null;
@@ -211,7 +211,7 @@ export class WallLossesFormComponent implements OnInit {
   }
 
   setProperties() {
-    let tmpFactor = this.suiteDbService.selectWallLossesSurfaceById(this.wallLossesForm.value.surfaceShape);
+    let tmpFactor = this.suiteDbService.selectWallLossesSurfaceById(this.wallLossesForm.controls.surfaceShape.value);
     this.wallLossesForm.patchValue({
       conditionFactor: tmpFactor.conditionFactor
     })

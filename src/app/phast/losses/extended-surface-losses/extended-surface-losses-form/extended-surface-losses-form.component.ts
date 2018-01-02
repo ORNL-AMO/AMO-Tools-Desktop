@@ -73,7 +73,7 @@ export class ExtendedSurfaceLossesFormComponent implements OnInit {
     if (!bool) {
       this.startSavePolling();
     }
-    if (this.lossesForm.value.surfaceEmissivity > 1 || this.lossesForm.value.surfaceEmissivity < 0) {
+    if (this.lossesForm.controls.surfaceEmissivity.value > 1 || this.lossesForm.controls.surfaceEmissivity.value < 0) {
       this.emissivityError = 'Surface emissivity must be between 0 and 1';
     } else {
       this.emissivityError = null;
@@ -84,12 +84,12 @@ export class ExtendedSurfaceLossesFormComponent implements OnInit {
     if (!bool) {
       this.startSavePolling();
     }
-    if (this.lossesForm.value.ambientTemp > this.lossesForm.value.avgSurfaceTemp) {
+    if (this.lossesForm.controls.ambientTemp.value > this.lossesForm.controls.avgSurfaceTemp.value) {
       this.temperatureError = 'Ambient Temperature is greater than Surface Temperature';
     } else {
       this.temperatureError = null;
     }
-    if (this.lossesForm.value.surfaceArea < 0) {
+    if (this.lossesForm.controls.surfaceArea.value < 0) {
       this.surfaceAreaError = 'Total Outside Surface Area must be equal or greater than 0 ';
     } else {
       this.surfaceAreaError = null;

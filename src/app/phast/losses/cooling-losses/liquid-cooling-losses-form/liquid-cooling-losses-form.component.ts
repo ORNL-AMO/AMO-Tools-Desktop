@@ -75,7 +75,7 @@ export class LiquidCoolingLossesFormComponent implements OnInit {
     if (!bool) {
       this.startSavePolling();
     }
-    if (this.lossesForm.value.inletTemp > this.lossesForm.value.outletTemp) {
+    if (this.lossesForm.controls.inletTemp.value > this.lossesForm.controls.outletTemp.value) {
       this.temperatureError = 'Inlet temperature is greater than outlet temperature';
     } else {
       this.temperatureError = null;
@@ -86,17 +86,17 @@ export class LiquidCoolingLossesFormComponent implements OnInit {
     if (!bool) {
       this.startSavePolling();
     }
-    if (this.lossesForm.value.avgSpecificHeat < 0) {
+    if (this.lossesForm.controls.avgSpecificHeat.value < 0) {
       this.specificHeatError = 'Specific Heat must be equal or greater than 0';
     } else {
       this.specificHeatError = null;
     }
-    if (this.lossesForm.value.density < 0) {
+    if (this.lossesForm.controls.density.value < 0) {
       this.densityLiquidError = 'Density must be equal or greater than 0';
     } else {
       this.densityLiquidError = null;
     }
-    if (this.lossesForm.value.liquidFlow < 0) {
+    if (this.lossesForm.controls.liquidFlow.value < 0) {
       this.liquidFlowError = 'Liquid Flow must be equal or greater than 0';
     } else {
       this.liquidFlowError = null;

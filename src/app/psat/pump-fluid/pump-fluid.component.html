@@ -11,13 +11,12 @@
   <div class="setup-form-group">
     <div class="form-group">
       <label for="pumpType">Pump Type</label>
-      <select class="form-control" name="pumpType" formControlName="pumpType" id="pumpType" (input)="startSavePolling()" (focus)="focusField('pumpType')"
-        ngModel="{{psatForm.value.pumpType}}">
+      <select class="form-control" name="pumpType" formControlName="pumpType" id="pumpType" (input)="startSavePolling()" (focus)="focusField('pumpType')">
         <option *ngFor="let pumpType of pumpTypes" [ngValue]="pumpType">{{pumpType}}</option>
       </select>
     </div>
 
-    <div class="form-group" *ngIf="psatForm.value.pumpType == 'Specified Optimal Efficiency'">
+    <div class="form-group" *ngIf="psatForm.controls.pumpType.value == 'Specified Optimal Efficiency'">
       <label for="specifiedPumpEfficiency">Specify Pump Efficiency</label>
       <input name="specifiedPumpEfficiency" type="number" min="0" step="any" class="form-control" formControlName="specifiedPumpEfficiency"
         id="specifiedPumpEfficiency" onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('specifiedPumpEfficiency')">
@@ -35,8 +34,7 @@
 
     <div class="form-group">
       <label for="drive">Drive</label>
-      <select class="form-control" name="drive" formControlName="drive" id="drive" (input)="startSavePolling()" (focus)="focusField('drive')"
-        ngModel="{{psatForm.value.drive}}">
+      <select class="form-control" name="drive" formControlName="drive" id="drive" (input)="startSavePolling()" (focus)="focusField('drive')">
         <option *ngFor="let drive of drives" [ngValue]="drive">{{drive}}</option>
       </select>
     </div>
@@ -44,7 +42,7 @@
     <div class="form-group">
       <label for="fluidType">Fluid Type</label>
       <select class="form-control" name="fluidType" formControlName="fluidType" id="fluidType" (change)="calculateSpecificGravity()"
-        (focus)="focusField('fluidType')" ngModel="{{psatForm.value.fluidType}}">
+        (focus)="focusField('fluidType')">
         <option *ngFor="let fluidType of fluidTypes" [ngValue]="fluidType">{{fluidType}}</option>
       </select>
     </div>
@@ -83,8 +81,7 @@
         <button class="btn input-group-btn" [disabled]="!selected" (click)="addNum('stages')">
           <i class="fa fa-plus"></i>
         </button>
-        <input type="number" min="1" step="any" class="form-control" formControlName="stages" id="stages" ngModel="{{psatForm.value.stages}}"
-          (input)="startSavePolling()" (focus)="focusField('stages')" onfocus="this.select();">
+        <input type="number" min="1" step="any" class="form-control" formControlName="stages" id="stages" (input)="startSavePolling()" (focus)="focusField('stages')" onfocus="this.select();">
       </div>
     </div>
   </div>

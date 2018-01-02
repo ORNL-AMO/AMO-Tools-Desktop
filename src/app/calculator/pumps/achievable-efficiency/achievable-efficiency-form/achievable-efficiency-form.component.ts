@@ -35,8 +35,8 @@ export class AchievableEfficiencyFormComponent implements OnInit {
 
   ngOnInit() {
     if (this.efficiencyForm) {
-      this.tmpFlowRate = this.efficiencyForm.value.flowRate;
-      this.tmpPumpType = this.efficiencyForm.value.pumpType;
+      this.tmpFlowRate = this.efficiencyForm.controls.flowRate.value;
+      this.tmpPumpType = this.efficiencyForm.controls.pumpType.value;
     }
   }
 

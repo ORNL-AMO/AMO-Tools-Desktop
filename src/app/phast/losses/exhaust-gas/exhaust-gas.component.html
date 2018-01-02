@@ -36,7 +36,7 @@
   <div class="row">
     <div class="col-12">
       <div class="form-group">
-        <label class="small font-weight-bold">{{loss.form.value.name}} Loss</label>
+        <label class="small font-weight-bold">{{loss.form.controls.name.value}} Loss</label>
         <div *ngIf="loss.heatLoss" class="text-center small font-weight-bold">
           {{loss.heatLoss | sigFigs:'5'}}
           <span>{{resultsUnit}}</span>

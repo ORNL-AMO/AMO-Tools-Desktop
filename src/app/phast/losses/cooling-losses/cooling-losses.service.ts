@@ -44,10 +44,10 @@ export class CoolingLossesService {
 
   initWaterLossFromForm(form: any): WaterCoolingLoss {
     let tmpLoss: WaterCoolingLoss = {
-      flowRate: form.value.liquidFlow,
-      initialTemperature: form.value.inletTemp,
-      outletTemperature: form.value.outletTemp,
-      correctionFactor: form.value.correctionFactor
+      flowRate: form.controls.liquidFlow.value,
+      initialTemperature: form.controls.inletTemp.value,
+      outletTemperature: form.controls.outletTemp.value,
+      correctionFactor: form.controls.correctionFactor.value
     }
     return tmpLoss;
   }
@@ -84,14 +84,14 @@ export class CoolingLossesService {
 
   initLiquidLossFromForm(form: any): CoolingLoss {
     let tmpLoss: CoolingLoss = {
-      name: form.value.name,
+      name: form.controls.name.value,
       liquidCoolingLoss: {
-        flowRate: form.value.liquidFlow,
-        density: form.value.density,
-        initialTemperature: form.value.inletTemp,
-        outletTemperature: form.value.outletTemp,
-        specificHeat: form.value.avgSpecificHeat,
-        correctionFactor: form.value.correctionFactor
+        flowRate: form.controls.liquidFlow.value,
+        density: form.controls.density.value,
+        initialTemperature: form.controls.inletTemp.value,
+        outletTemperature: form.controls.outletTemp.value,
+        specificHeat: form.controls.avgSpecificHeat.value,
+        correctionFactor: form.controls.correctionFactor.value
       }
     }
     return tmpLoss;
@@ -129,14 +129,14 @@ export class CoolingLossesService {
 
   initGasLossFromForm(form: any): CoolingLoss {
     let tmpLoss: CoolingLoss = {
-      name: form.value.name,
+      name: form.controls.name.value,
       gasCoolingLoss: {
-        flowRate: form.value.gasFlow,
-        initialTemperature: form.value.inletTemp,
-        finalTemperature: form.value.outletTemp,
-        specificHeat: form.value.avgSpecificHeat,
-        correctionFactor: form.value.correctionFactor,
-        gasDensity: form.value.gasDensity
+        flowRate: form.controls.gasFlow.value,
+        initialTemperature: form.controls.inletTemp.value,
+        finalTemperature: form.controls.outletTemp.value,
+        specificHeat: form.controls.avgSpecificHeat.value,
+        correctionFactor: form.controls.correctionFactor.value,
+        gasDensity: form.controls.gasDensity.value
       }
     }
     return tmpLoss;

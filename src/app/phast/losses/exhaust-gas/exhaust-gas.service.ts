@@ -77,18 +77,18 @@ export class ExhaustGasService {
 
   getLossFromForm(form: any): ExhaustGasEAF {
     let tmpExhaustGas: ExhaustGasEAF = {
-     // cycleTime: form.value.cycleTime,
-      offGasTemp: form.value.offGasTemp,
-      CO: form.value.CO,
-     // O2: form.value.O2,
-      H2: form.value.H2,
-     // CO2: form.value.CO2,
-      combustibleGases: form.value.combustibleGases,
-      vfr: form.value.vfr,
-      dustLoading: form.value.dustLoading,
+     // cycleTime: form.controls.cycleTime.value,
+      offGasTemp: form.controls.offGasTemp.value,
+      CO: form.controls.CO.value,
+     // O2: form.controls.O2.value,
+      H2: form.controls.H2.value,
+     // CO2: form.controls.CO2.value,
+      combustibleGases: form.controls.combustibleGases.value,
+      vfr: form.controls.vfr.value,
+      dustLoading: form.controls.dustLoading.value,
      // otherLossObjects: new Array(),
       otherLosses: 0.0,
-      name: form.value.name
+      name: form.controls.name.value
     }
     // let tmpOtherLosses = new Array();
     // Object.keys(form.controls).forEach(key => {

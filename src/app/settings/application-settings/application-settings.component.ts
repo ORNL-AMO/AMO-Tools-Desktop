@@ -76,7 +76,6 @@ export class ApplicationSettingsComponent implements OnInit {
     //}
     //this.setEnergyResultUnit();
     this.settingsForm = this.settingsService.setUnits(this.settingsForm);
-    console.log(this.settingsForm);
     this.startSavePolling.emit(true);
   }
 

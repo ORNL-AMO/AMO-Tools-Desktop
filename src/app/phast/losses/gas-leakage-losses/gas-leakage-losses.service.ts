@@ -54,14 +54,14 @@ export class GasLeakageLossesService {
 
   initLossFromForm(form: any): LeakageLoss {
     let tmpLoss: LeakageLoss = {
-      draftPressure: form.value.draftPressure,
-      openingArea: form.value.openingArea,
-      leakageGasTemperature: form.value.leakageGasTemperature,
-      ambientTemperature: form.value.ambientTemperature,
-      coefficient: form.value.coefficient,
-      specificGravity: form.value.specificGravity,
-      correctionFactor: form.value.correctionFactor,
-      name: form.value.name
+      draftPressure: form.controls.draftPressure.value,
+      openingArea: form.controls.openingArea.value,
+      leakageGasTemperature: form.controls.leakageGasTemperature.value,
+      ambientTemperature: form.controls.ambientTemperature.value,
+      coefficient: form.controls.coefficient.value,
+      specificGravity: form.controls.specificGravity.value,
+      correctionFactor: form.controls.correctionFactor.value,
+      name: form.controls.name.value
     }
     return tmpLoss;
   }

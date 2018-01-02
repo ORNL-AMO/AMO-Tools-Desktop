@@ -47,11 +47,11 @@ export class ExtendedSurfaceLossesService {
   //get WallLoss from form
   getSurfaceLossFromForm(wallLossForm: any): ExtendedSurface {
     let tmpWallLoss: ExtendedSurface = {
-      surfaceArea: wallLossForm.value.surfaceArea,
-      ambientTemperature: wallLossForm.value.ambientTemp,
-      surfaceTemperature: wallLossForm.value.avgSurfaceTemp,
-      surfaceEmissivity: wallLossForm.value.surfaceEmissivity,
-      name: wallLossForm.value.name
+      surfaceArea: wallLossForm.controls.surfaceArea.value,
+      ambientTemperature: wallLossForm.controls.ambientTemp.value,
+      surfaceTemperature: wallLossForm.controls.avgSurfaceTemp.value,
+      surfaceEmissivity: wallLossForm.controls.surfaceEmissivity.value,
+      name: wallLossForm.controls.name.value
     }
     return tmpWallLoss;
   }

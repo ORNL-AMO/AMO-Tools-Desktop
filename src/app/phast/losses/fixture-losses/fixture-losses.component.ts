@@ -74,7 +74,7 @@ export class FixtureLossesComponent implements OnInit {
           heatLoss: loss.heatLoss || 0.0,
           collapse: false
         };
-        if(!tmpLoss.form.value.name){
+        if(!tmpLoss.form.controls.name.value){
           tmpLoss.form.patchValue({
             name: 'Loss #' + lossIndex
           })
@@ -177,7 +177,7 @@ export class FixtureLossesComponent implements OnInit {
     let tmpFixtureLosses = new Array<FixtureLoss>();
     let lossIndex = 1;
     this._fixtureLosses.forEach(loss => {
-      if(!loss.form.value.name){
+      if(!loss.form.controls.name.value){
         loss.form.patchValue({
           name: 'Loss #' + lossIndex
         })

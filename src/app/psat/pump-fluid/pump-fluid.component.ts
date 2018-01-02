@@ -125,11 +125,11 @@ export class PumpFluidComponent implements OnInit {
       this.formRef.nativeElement.pumpType.focus();
     }
     this.checkPumpRpm(true);
-    if(this.settings.temperatureMeasurement == 'C'){
+    if (this.settings.temperatureMeasurement == 'C') {
       this.tempUnit = '&#8451';
-    }else if(this.settings.temperatureMeasurement == 'F'){
+    } else if (this.settings.temperatureMeasurement == 'F') {
       this.tempUnit = '&#8457';
-    }else if(this.settings.temperatureMeasurement == 'K'){
+    } else if (this.settings.temperatureMeasurement == 'K') {
       this.tempUnit = '&#8490';
     }
   }
@@ -158,15 +158,19 @@ export class PumpFluidComponent implements OnInit {
 
   addNum(str: string) {
     if (str == 'stages') {
-      this.psatForm.value.stages++;
+      this.psatForm.patchValue({
+        stages: this.psatForm.controls.stages.value + 1
+      })
     }
     this.checkForm(this.psatForm);
   }
 
   subtractNum(str: string) {
     if (str == 'stages') {
-      if (this.psatForm.value.stages != 0) {
-        this.psatForm.value.stages--;
+      if (this.psatForm.controls.stages.value != 0) {
+        this.psatForm.patchValue({
+          stages: this.psatForm.controls.stages.value - 1
+        })
       }
     }
     this.checkForm(this.psatForm);
@@ -210,7 +214,7 @@ export class PumpFluidComponent implements OnInit {
     }
     let min = 1;
     let max = 0;
-    if (this.psatForm.value.drive === 'Direct Drive') {
+    if (this.psatForm.controls.drive.value === 'Direct Drive') {
       min = 540;
       max = 3960;
     } else {
@@ -218,16 +222,16 @@ export class PumpFluidComponent implements OnInit {
       max = Infinity;
     }
     this.rpmError = null;
-    if (this.psatForm.value.pumpRPM < min) {
+    if (this.psatForm.controls.pumpRPM.value < min) {
       this.rpmError = 'Pump Speed is less than the minimum (' + min + ' rpm)';
-    } else if (this.psatForm.value.pumpRPM > max) {
+    } else if (this.psatForm.controls.pumpRPM > max) {
       this.rpmError = 'Pump Speed is greater than the maximum (' + max + ' rpm)';
     }
   }
 
   calculateSpecificGravity(bool?: boolean) {
-    let fluidType = this.psatForm.value.fluidType;
-    let t = this.psatForm.value.fluidTemperature;
+    let fluidType = this.psatForm.controls.fluidType.value;
+    let t = this.psatForm.controls.fluidTemperature.value;
     t = this.convertUnitsService.value(t).from(this.settings.temperatureMeasurement).to('F');
 
     if (fluidType && t) {

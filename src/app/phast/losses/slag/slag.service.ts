@@ -49,12 +49,12 @@ export class SlagService {
 
   getLossFromForm(form: any): Slag {
     let tmpSlag: Slag = {
-      weight: form.value.weight,
-      inletTemperature: form.value.inletTemperature,
-      outletTemperature: form.value.outletTemperature,
-      specificHeat: form.value.specificHeat,
-      correctionFactor: form.value.correctionFactor,
-      name: form.value.name
+      weight: form.controls.weight.value,
+      inletTemperature: form.controls.inletTemperature.value,
+      outletTemperature: form.controls.outletTemperature.value,
+      specificHeat: form.controls.specificHeat,
+      correctionFactor: form.controls.correctionFactor.value,
+      name: form.controls.name.value
     }
     return tmpSlag;
   }

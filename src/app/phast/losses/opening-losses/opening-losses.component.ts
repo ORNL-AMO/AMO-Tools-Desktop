@@ -76,7 +76,7 @@ export class OpeningLossesComponent implements OnInit {
           totalOpeningLosses: loss.heatLoss || 0.0,
           collapse: false
         };
-        if(!tmpLoss.form.value.name){
+        if(!tmpLoss.form.controls.name.value){
           tmpLoss.form.patchValue({
             name: 'Loss #' + lossIndex
           })
@@ -168,14 +168,14 @@ export class OpeningLossesComponent implements OnInit {
 
   calculate(loss: any) {
     if (loss.form.status == 'VALID') {
-      if (loss.form.value.openingType == 'Rectangular (Square)' && loss.form.value.heightOfOpening != '') {
+      if (loss.form.controls.openingType.value == 'Rectangular (Square)' && loss.form.controls.heightOfOpening.value != '') {
         let tmpLoss: QuadOpeningLoss = this.openingLossesService.getQuadLossFromForm(loss.form);
         let lossAmount = this.phastService.openingLossesQuad(tmpLoss, this.settings);
-        loss.totalOpeningLosses = loss.form.value.numberOfOpenings * lossAmount;
-      } else if (loss.form.value.openingType == 'Round') {
+        loss.totalOpeningLosses = loss.form.controls.numberOfOpenings.value * lossAmount;
+      } else if (loss.form.controls.openingType.value == 'Round') {
         let tmpLoss: CircularOpeningLoss = this.openingLossesService.getCircularLossFromForm(loss.form);
         let lossAmount = this.phastService.openingLossesCircular(tmpLoss, this.settings);
-        loss.totalOpeningLosses = loss.form.value.numberOfOpenings * lossAmount;
+        loss.totalOpeningLosses = loss.form.controls.numberOfOpenings.value * lossAmount;
       } else {
         loss.totalOpeningLosses = null;
       }
@@ -188,7 +188,7 @@ export class OpeningLossesComponent implements OnInit {
     let tmpOpeningLosses = new Array<OpeningLoss>();
     let lossIndex = 1;
     this._openingLosses.forEach(loss => {
-      if(!loss.form.value.name){
+      if(!loss.form.controls.name.value){
         loss.form.patchValue({
           name: 'Loss #' + lossIndex
         })

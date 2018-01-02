@@ -55,13 +55,13 @@ export class AtmosphereLossesService {
 
   getLossFromForm(form: any): AtmosphereLoss {
     let tmpLoss: AtmosphereLoss = {
-      atmosphereGas: form.value.atmosphereGas,
-      specificHeat: form.value.specificHeat,
-      inletTemperature: form.value.inletTemp,
-      outletTemperature: form.value.outletTemp,
-      flowRate: form.value.flowRate,
-      correctionFactor: form.value.correctionFactor,
-      name: form.value.name
+      atmosphereGas: form.controls.atmosphereGas.value,
+      specificHeat: form.controls.specificHeat.value,
+      inletTemperature: form.controls.inletTemp.value,
+      outletTemperature: form.controls.outletTemp.value,
+      flowRate: form.controls.flowRate.value,
+      correctionFactor: form.controls.correctionFactor.value,
+      name: form.controls.name.value
     }
     return tmpLoss;
   }

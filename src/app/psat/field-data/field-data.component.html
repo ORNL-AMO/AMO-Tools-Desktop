@@ -56,7 +56,7 @@
       </select>
     </div>
 
-    <div class="form-group" *ngIf="psatForm.value.loadEstimatedMethod == 'Power' && baseline">
+    <div class="form-group" *ngIf="psatForm.controls.loadEstimatedMethod.value == 'Power' && baseline">
       <label for="motorKW">Motor Power</label>
       <div class="input-group">
         <input name="motorKW" type="number" min="0" step="any" class="form-control" formControlName="motorKW" id="motorKW" (input)="checkRatedPower()"
@@ -66,7 +66,7 @@
       <span class="alert-danger pull-right small" *ngIf="ratedPowerError !== null">{{ratedPowerError}}</span>
     </div>
 
-    <div class="form-group" *ngIf="psatForm.value.loadEstimatedMethod == 'Current' && baseline">
+    <div class="form-group" *ngIf="psatForm.controls.loadEstimatedMethod.value == 'Current' && baseline">
       <label for="motorAmps">Motor Current</label>
       <div class="input-group">
         <input name="motorAmps" type="number" min="0" step="any" class="form-control" formControlName="motorAmps" id="motorAmps"
@@ -95,8 +95,8 @@
     </div> -->
     <div class="form-group opt-group">
       <label>
-        <span *ngIf="!psatForm.value.optimizeCalculation" class="fa fa-square-o" (click)="optimizeCalc(true)"></span>
-        <span *ngIf="psatForm.value.optimizeCalculation" class="fa fa-check-square-o" (click)="optimizeCalc(false)"></span>
+        <span *ngIf="!psatForm.controls.optimizeCalculation.value" class="fa fa-square-o" (click)="optimizeCalc(true)"></span>
+        <span *ngIf="psatForm.controls.optimizeCalculation.value" class="fa fa-check-square-o" (click)="optimizeCalc(false)"></span>
         Optimize Pump and Motor combination automatically</label>
     </div>
     <!--<div class="form-group">-->
@@ -104,7 +104,7 @@
     <!--<div name="viscosity" class="incrementor form-control input-group">-->
     <!--<button class="btn input-group-btn" [disabled]="!selected" (click)="subtractViscosity()"><i class="fa fa-minus"></i></button>-->
     <!--<button class="btn input-group-btn" [disabled]="!selected" (click)="addViscosity()"><i class="fa fa-plus"></i></button>-->
-    <!--<input type="number" min="0" step="any" class="form-control addon-input" formControlName="viscosity" id="viscosity" ngModel="{{psatForm.value.viscosity}}"-->
+    <!--<input type="number" min="0" step="any" class="form-control addon-input" formControlName="viscosity" id="viscosity" ngModel="{{psatForm.controls.viscosity}}"-->
     <!--(input)="startSavePolling()" (focus)="focusField('kinematicViscosity')" onfocus="this.select();">-->
     <!--<span class="input-group-addon units">cST</span>-->
     <!--</div>-->
@@ -112,8 +112,7 @@
     <div class="form-group">
       <label for="sizeMargin">Size Margin</label>
       <div class="input-group">
-        <input name="sizeMargin" type="number" min="0" max="100" step="any" class="form-control" id="sizeMargin" formControlName="sizeMargin"
-          ngModel="{{psatForm.value.sizeMargin}}" (input)="checkMargin()" (focus)="focusField('sizeMargin')" onfocus="this.select();">
+        <input name="sizeMargin" type="number" min="0" max="100" step="any" class="form-control" id="sizeMargin" formControlName="sizeMargin" (input)="checkMargin()" (focus)="focusField('sizeMargin')" onfocus="this.select();">
         <span class="input-group-addon units">%</span>
       </div>
       <span class="alert-warning pull-right small" *ngIf="marginError !== null">{{marginError}}</span>

@@ -45,7 +45,7 @@ export class EnergyInputFormComponent implements OnInit {
   }
 
   ngOnInit() {
-    if (this.energyInputForm.value.flowRateInput) {
+    if (this.energyInputForm.controls.flowRateInput.value) {
       this.flowInput = false;
     }
   }
@@ -58,7 +58,7 @@ export class EnergyInputFormComponent implements OnInit {
   }
 
   setHeatInput() {
-    let heatVal = this.energyInputForm.value.flowRateInput * (1020 / (Math.pow(10, 6)));
+    let heatVal = this.energyInputForm.controls.flowRateInput.value * (1020 / (Math.pow(10, 6)));
     this.energyInputForm.patchValue({
       'naturalGasHeatInput': heatVal
     })

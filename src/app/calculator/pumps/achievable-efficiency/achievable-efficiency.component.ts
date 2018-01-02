@@ -44,7 +44,7 @@ export class AchievableEfficiencyComponent implements OnInit {
         results => {
           if (results.length != 0) {
             if (results[0].flowMeasurement != 'gpm') {
-              let tmpVal = this.convertUnitsService.value(this.efficiencyForm.value.flowRate).from('gpm').to(results[0].flowMeasurement);
+              let tmpVal = this.convertUnitsService.value(this.efficiencyForm.controls.flowRate.value).from('gpm').to(results[0].flowMeasurement);
               this.efficiencyForm.patchValue({
                 flowRate: this.psatService.roundVal(tmpVal, 2)
               })

@@ -80,7 +80,7 @@ export class EnergyInputComponent implements OnInit {
           },
           collapse: false
         };
-        if (!tmpLoss.form.value.name) {
+        if (!tmpLoss.form.controls.name.value) {
           tmpLoss.form.patchValue({
             name: 'Loss #' + lossIndex
           })
@@ -200,7 +200,7 @@ export class EnergyInputComponent implements OnInit {
     let tmpEnergyInputs = new Array<EnergyInputEAF>();
     let lossIndex = 1;
     this._energyInputs.forEach(loss => {
-      if (!loss.form.value.name) {
+      if (!loss.form.controls.name.value) {
         loss.form.patchValue({
           name: 'Loss #' + lossIndex
         })

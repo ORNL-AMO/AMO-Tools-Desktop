@@ -43,17 +43,17 @@ export class EnergyInputService {
 
   getLossFromForm(form: any): EnergyInputEAF {
     let tmpEnergyInput: EnergyInputEAF = {
-      naturalGasHeatInput: form.value.naturalGasHeatInput,
-      flowRateInput: form.value.flowRateInput,
-     // naturalGasFlow: form.value.naturalGasFlow,
-     // measuredOxygenFlow: form.value.measuredOxygenFlow,
-      coalCarbonInjection: form.value.coalCarbonInjection,
-      coalHeatingValue: form.value.coalHeatingValue,
-      electrodeUse: form.value.electrodeUse,
-      electrodeHeatingValue: form.value.electrodeHeatingValue,
-      otherFuels: form.value.otherFuels,
-      electricityInput: form.value.electricityInput,
-      name: form.value.name
+      naturalGasHeatInput: form.controls.naturalGasHeatInput.value,
+      flowRateInput: form.controls.flowRateInput.value,
+     // naturalGasFlow: form.controls.naturalGasFlow.value,
+     // measuredOxygenFlow: form.controls.measuredOxygenFlow.value,
+      coalCarbonInjection: form.controls.coalCarbonInjection.value,
+      coalHeatingValue: form.controls.coalHeatingValue.value,
+      electrodeUse: form.controls.electrodeUse.value,
+      electrodeHeatingValue: form.controls.electrodeHeatingValue.value,
+      otherFuels: form.controls.otherFuels.value,
+      electricityInput: form.controls.electricityInput.value,
+      name: form.controls.name.value
     }
     return tmpEnergyInput;
   }

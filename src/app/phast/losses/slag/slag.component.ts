@@ -75,7 +75,7 @@ export class SlagComponent implements OnInit {
           heatLoss: loss.heatLoss || 0.0,
           collapse: false
         };
-        if(!tmpLoss.form.value.name){
+        if(!tmpLoss.form.controls.name.value){
           tmpLoss.form.patchValue({
             name: 'Loss #' + lossIndex
           })
@@ -176,7 +176,7 @@ export class SlagComponent implements OnInit {
     let tmpSlagLosses = new Array<Slag>();
     let lossIndex = 1;
     this._slagLosses.forEach(loss => {
-      if(!loss.form.value.name){
+      if(!loss.form.controls.name.value){
         loss.form.patchValue({
           name: 'Loss #' + lossIndex
         })

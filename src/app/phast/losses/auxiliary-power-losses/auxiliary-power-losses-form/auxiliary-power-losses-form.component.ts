@@ -81,7 +81,7 @@ export class AuxiliaryPowerLossesFormComponent implements OnInit {
     if (!bool) {
       this.startSavePolling();
     }
-    if (this.auxLossesForm.value.supplyVoltage < 0 || this.auxLossesForm.value.supplyVoltage > 480) {
+    if (this.auxLossesForm.controls.supplyVoltage.value < 0 || this.auxLossesForm.controls.supplyVoltage.value > 480) {
       this.voltageError = 'Supply Voltage must be between 0 and 480';
     } else {
       this.voltageError = null;

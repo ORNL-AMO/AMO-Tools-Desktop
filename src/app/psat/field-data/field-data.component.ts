@@ -83,12 +83,12 @@ export class FieldDataComponent implements OnInit {
     this.checkOpFraction(true);
     this.checkRatedPower(true);
     this.checkVoltage(true);
-    if (this.psatForm.value.optimizeCalculation == true) {
+    if (this.psatForm.controls.optimizeCalculation.value == true) {
       this.checkMargin(true);
     }
     this.checkHead(true);
     if (!this.baseline) {
-      this.optimizeCalc(this.psatForm.value.optimizeCalculation);
+      this.optimizeCalc(this.psatForm.controls.optimizeCalculation.value);
     }
   }
 
@@ -115,7 +115,7 @@ export class FieldDataComponent implements OnInit {
           this.enableForm();
         }
         if (!this.baseline) {
-          this.optimizeCalc(this.psatForm.value.optimizeCalculation);
+          this.optimizeCalc(this.psatForm.controls.optimizeCalculation.value);
         }
       }
       this.setCompareVals();
@@ -189,7 +189,7 @@ export class FieldDataComponent implements OnInit {
 
   hideHeadToolModal() {
     this.closeHeadTool.emit(true);
-    if (this.psatForm.value.head != this.psat.inputs.head) {
+    if (this.psatForm.controls.head.value != this.psat.inputs.head) {
       this.psatForm.patchValue({
         head: this.psat.inputs.head
       })
@@ -211,8 +211,8 @@ export class FieldDataComponent implements OnInit {
     if (!bool) {
       this.startSavePolling();
     }
-    if (this.psatForm.controls.flowRate.pristine == false && this.psatForm.value.flowRate != '') {
-      let tmp = this.psatService.checkFlowRate(this.psat.inputs.pump_style, this.psatForm.value.flowRate, this.settings);
+    if (this.psatForm.controls.flowRate.pristine == false && this.psatForm.controls.flowRate.value != '') {
+      let tmp = this.psatService.checkFlowRate(this.psat.inputs.pump_style, this.psatForm.controls.flowRate.value, this.settings);
       if (tmp.message) {
         this.flowError = tmp.message;
       } else {
@@ -229,14 +229,14 @@ export class FieldDataComponent implements OnInit {
     if (!bool) {
       this.startSavePolling();
     }
-    if (this.psatForm.value.measuredVoltage < 1 || this.psatForm.value.measuredVoltage == 0) {
+    if (this.psatForm.controls.measuredVoltage.value < 1 || this.psatForm.controls.measuredVoltage.value == 0) {
       this.voltageError = 'Outside estimated voltage range';
       return false;
-    } else if (this.psatForm.value.measuredVoltage > 13800) {
+    } else if (this.psatForm.controls.measuredVoltage.value > 13800) {
       this.voltageError = 'Outside estimated voltage range';
       return false;
     }
-    else if (this.psatForm.value.measuredVoltage <= 13800 && this.psatForm.value.measuredVoltage >= 1) {
+    else if (this.psatForm.controls.measuredVoltage.value <= 13800 && this.psatForm.controls.measuredVoltage.value >= 1) {
       this.voltageError = null;
       return true;
     }
@@ -251,13 +251,13 @@ export class FieldDataComponent implements OnInit {
     if (!bool) {
       this.startSavePolling();
     }
-    if (this.psatForm.value.costKwHr < 0) {
+    if (this.psatForm.controls.costKwHr.value < 0) {
       this.costError = 'Cannot have negative cost';
       return false;
-    } else if (this.psatForm.value.costKwHr > 1) {
+    } else if (this.psatForm.controls.costKwHr.value > 1) {
       this.costError = "Shouldn't be greater then 1";
       return false;
-    } else if (this.psatForm.value.costKwHr >= 0 && this.psatForm.value.costKwHr <= 1) {
+    } else if (this.psatForm.controls.costKwHr.value >= 0 && this.psatForm.controls.costKwHr.value <= 1) {
       this.costError = null;
       return true;
     } else {
@@ -270,11 +270,11 @@ export class FieldDataComponent implements OnInit {
     if (!bool) {
       this.startSavePolling();
     }
-    if (this.psatForm.value.operatingFraction > 1) {
+    if (this.psatForm.controls.operatingFraction.value > 1) {
       this.opFractionError = 'Operating fraction needs to be between 0 - 1';
       return false;
     }
-    else if (this.psatForm.value.operatingFraction < 0) {
+    else if (this.psatForm.controls.operatingFraction.value < 0) {
       this.opFractionError = "Cannot have negative operating fraction";
       return false;
     }
@@ -288,20 +288,20 @@ export class FieldDataComponent implements OnInit {
       this.startSavePolling();
     }
     let tmpVal;
-    if (this.psatForm.value.loadEstimatedMethod == 'Power') {
-      tmpVal = this.psatForm.value.motorKW;
+    if (this.psatForm.controls.loadEstimatedMethod.value == 'Power') {
+      tmpVal = this.psatForm.controls.motorKW.value;
     } else {
-      tmpVal = this.psatForm.value.motorAmps;
+      tmpVal = this.psatForm.controls.motorAmps.value;
     }
 
-    if (this.psatForm.value.horsePower && tmpVal) {
+    if (this.psatForm.controls.horsePower.value && tmpVal) {
       let val, compare;
       if (this.settings.powerMeasurement == 'hp') {
         val = this.convertUnitsService.value(tmpVal).from(this.settings.powerMeasurement).to('kW');
-        compare = this.convertUnitsService.value(this.psatForm.value.horsePower).from(this.settings.powerMeasurement).to('kW');
+        compare = this.convertUnitsService.value(this.psatForm.controls.horsePower.value).from(this.settings.powerMeasurement).to('kW');
       } else {
         val = tmpVal;
-        compare = this.psatForm.value.horsePower;
+        compare = this.psatForm.controls.horsePower.value;
       }
       compare = compare * 1.5;
       if (val > compare) {
@@ -320,11 +320,11 @@ export class FieldDataComponent implements OnInit {
     if (!bool) {
       this.startSavePolling();
     }
-    if (this.psatForm.value.sizeMargin > 100) {
+    if (this.psatForm.controls.sizeMargin.value > 100) {
       this.marginError = "Unrealistic size margin, shouldn't be greater then 100%";
       return false;
     }
-    else if (this.psatForm.value.sizeMargin < 0) {
+    else if (this.psatForm.controls.sizeMargin.value < 0) {
       this.marginError = "Shouldn't have negative size margin";
       return false;
     }
@@ -338,7 +338,7 @@ export class FieldDataComponent implements OnInit {
     if (!bool) {
       this.startSavePolling();
     }
-    if (this.psatForm.value.head < 0) {
+    if (this.psatForm.controls.head.value < 0) {
       this.headError = 'Head cannot be negative';
     } else {
       this.headError = null;

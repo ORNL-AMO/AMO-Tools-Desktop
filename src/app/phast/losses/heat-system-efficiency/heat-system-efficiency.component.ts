@@ -117,7 +117,7 @@ export class HeatSystemEfficiencyComponent implements OnInit {
 
   saveLosses() {
     if (this.efficiencyForm.status == 'VALID') {
-      this.phast.systemEfficiency = this.efficiencyForm.value.efficiency;
+      this.phast.systemEfficiency = this.efficiencyForm.controls.efficiency.value;
       this.savedLoss.emit(true);
       this.setCompareVals();
     }
@@ -141,8 +141,8 @@ export class HeatSystemEfficiencyComponent implements OnInit {
       this.startSavePolling();
     }
     let additionalHeat = this.phastService.sumChargeMaterialExothermic(this.losses.chargeMaterials, this.settings);
-    this.grossHeat = (this.phastService.sumHeatInput(this.losses, this.settings) / this.efficiencyForm.value.efficiency) - additionalHeat;
-    this.systemLosses = this.grossHeat * (1 - (this.efficiencyForm.value.efficiency / 100));
+    this.grossHeat = (this.phastService.sumHeatInput(this.losses, this.settings) / this.efficiencyForm.controls.efficiency.value) - additionalHeat;
+    this.systemLosses = this.grossHeat * (1 - (this.efficiencyForm.controls.efficiency.value / 100));
   }
 
   setCompareVals() {

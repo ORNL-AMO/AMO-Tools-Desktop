@@ -148,7 +148,7 @@ export class OtherLossesComponent implements OnInit {
   }
 
   calculate(loss: any) {
-    loss.heatLoss = loss.form.value.heatLoss;
+    loss.heatLoss = loss.form.controls.heatLoss.value;
   }
 
 

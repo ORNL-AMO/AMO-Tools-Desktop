@@ -52,13 +52,13 @@ export class FixtureLossesService {
 
   getLossFromForm(form: any): FixtureLoss {
     let tmpLoss: FixtureLoss = {
-      specificHeat: form.value.specificHeat,
-      feedRate: form.value.feedRate,
-      initialTemperature: form.value.initialTemp,
-      finalTemperature: form.value.finalTemp,
-      correctionFactor: form.value.correctionFactor,
-      materialName: form.value.materialName,
-      name: form.value.name
+      specificHeat: form.controls.specificHeat.value,
+      feedRate: form.controls.feedRate.value,
+      initialTemperature: form.controls.initialTemp.value,
+      finalTemperature: form.controls.finalTemp.value,
+      correctionFactor: form.controls.correctionFactor.value,
+      materialName: form.controls.materialName.value,
+      name: form.controls.name.value
     }
     return tmpLoss;
   }

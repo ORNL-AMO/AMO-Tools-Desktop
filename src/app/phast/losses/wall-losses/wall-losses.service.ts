@@ -64,15 +64,15 @@ export class WallLossesService {
   //get WallLoss from form
   getWallLossFromForm(wallLossForm: any): WallLoss {
     let tmpWallLoss: WallLoss = {
-      surfaceArea: wallLossForm.value.surfaceArea,
-      ambientTemperature: wallLossForm.value.ambientTemp,
-      surfaceTemperature: wallLossForm.value.avgSurfaceTemp,
-      windVelocity: wallLossForm.value.windVelocity,
-      surfaceEmissivity: wallLossForm.value.surfaceEmissivity,
-      surfaceShape: wallLossForm.value.surfaceShape,
-      conditionFactor: wallLossForm.value.conditionFactor,
-      correctionFactor: wallLossForm.value.correctionFactor,
-      name: wallLossForm.value.name
+      surfaceArea: wallLossForm.controls.surfaceArea.value,
+      ambientTemperature: wallLossForm.controls.ambientTemp.value,
+      surfaceTemperature: wallLossForm.controls.avgSurfaceTemp.value,
+      windVelocity: wallLossForm.controls.windVelocity.value,
+      surfaceEmissivity: wallLossForm.controls.surfaceEmissivity.value,
+      surfaceShape: wallLossForm.controls.surfaceShape.value,
+      conditionFactor: wallLossForm.controls.conditionFactor.value,
+      correctionFactor: wallLossForm.controls.correctionFactor.value,
+      name: wallLossForm.controls.name.value
     }
     return tmpWallLoss;
   }

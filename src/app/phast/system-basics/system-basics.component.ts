@@ -42,7 +42,7 @@ export class SystemBasicsComponent implements OnInit {
 
   ngOnInit() {
     this.settingsForm = this.settingsService.getFormFromSettings(this.settings);
-    if (this.settingsForm.value.energyResultUnit == '' || !this.settingsForm.value.energyResultUnit) {
+    if (this.settingsForm.controls.energyResultUnit.value == '' || !this.settingsForm.controls.energyResultUnit.value) {
       this.settingsForm = this.settingsService.setEnergyResultUnit(this.settingsForm);
       this.saveChanges();
     }

@@ -56,8 +56,8 @@ export class FlueGasLossesFormMassComponent implements OnInit {
   ngOnInit() {
     this.options = this.suiteDbService.selectSolidLiquidFlueGasMaterials();
     if (this.flueGasLossForm) {
-      if (this.flueGasLossForm.value.gasTypeId && this.flueGasLossForm.value.gasTypeId != '') {
-        if (this.flueGasLossForm.value.carbon == '') {
+      if (this.flueGasLossForm.controls.gasTypeId.value && this.flueGasLossForm.controls.gasTypeId.value != '') {
+        if (this.flueGasLossForm.controls.carbon.value == '') {
           this.setProperties();
         }
       }
@@ -116,7 +116,7 @@ export class FlueGasLossesFormMassComponent implements OnInit {
   }
 
   setCalcMethod() {
-    if (this.flueGasLossForm.value.oxygenCalculationMethod == 'Excess Air') {
+    if (this.flueGasLossForm.controls.oxygenCalculationMethod.value == 'Excess Air') {
       this.calcMethodExcessAir = true;
     } else {
       this.calcMethodExcessAir = false;
@@ -126,16 +126,16 @@ export class FlueGasLossesFormMassComponent implements OnInit {
 
   calcExcessAir() {
     let input = {
-      carbon: this.flueGasLossForm.value.carbon,
-      hydrogen: this.flueGasLossForm.value.hydrogen,
-      sulphur: this.flueGasLossForm.value.sulphur,
-      inertAsh: this.flueGasLossForm.value.inertAsh,
-      o2: this.flueGasLossForm.value.o2,
-      moisture: this.flueGasLossForm.value.moisture,
-      nitrogen: this.flueGasLossForm.value.nitrogen,
-      moistureInAirCombustion: this.flueGasLossForm.value.moistureInAirComposition,
-      o2InFlueGas: this.flueGasLossForm.value.o2InFlueGas,
-      excessAir: this.flueGasLossForm.value.excessAirPercentage
+      carbon: this.flueGasLossForm.controls.carbon.value,
+      hydrogen: this.flueGasLossForm.controls.hydrogen.value,
+      sulphur: this.flueGasLossForm.controls.sulphur.value,
+      inertAsh: this.flueGasLossForm.controls.inertAsh.value,
+      o2: this.flueGasLossForm.controls.o2.value,
+      moisture: this.flueGasLossForm.controls.moisture.value,
+      nitrogen: this.flueGasLossForm.controls.nitrogen.value,
+      moistureInAirCombustion: this.flueGasLossForm.controls.moistureInAirComposition.value,
+      o2InFlueGas: this.flueGasLossForm.controls.o2InFlueGas.value,
+      excessAir: this.flueGasLossForm.controls.excessAirPercentage.value
     };
     this.calculationWarning = null;
     if (!this.calcMethodExcessAir) {
@@ -163,7 +163,7 @@ export class FlueGasLossesFormMassComponent implements OnInit {
   }
 
   setProperties() {
-    let tmpFlueGas = this.suiteDbService.selectSolidLiquidFlueGasMaterialById(this.flueGasLossForm.value.gasTypeId);
+    let tmpFlueGas = this.suiteDbService.selectSolidLiquidFlueGasMaterialById(this.flueGasLossForm.controls.gasTypeId.value);
     this.flueGasLossForm.patchValue({
       carbon: tmpFlueGas.carbon,
       hydrogen: tmpFlueGas.hydrogen,
@@ -194,12 +194,12 @@ export class FlueGasLossesFormMassComponent implements OnInit {
     if (!bool) {
       this.startSavePolling();
     }
-    if (this.flueGasLossForm.value.moistureInAirComposition < 0 || this.flueGasLossForm.value.moistureInAirComposition > 100) {
+    if (this.flueGasLossForm.controls.moistureInAirComposition.value < 0 || this.flueGasLossForm.controls.moistureInAirComposition.value > 100) {
       this.moistureInAirCompositionError = 'Moisture in Air Combustion must be equal or greater than 0 and less than or equal to 100%';
     } else {
       this.moistureInAirCompositionError = null;
     }
-    if (this.flueGasLossForm.value.unburnedCarbonInAsh < 0 || this.flueGasLossForm.value.unburnedCarbonInAsh > 100) {
+    if (this.flueGasLossForm.controls.unburnedCarbonInAsh.value < 0 || this.flueGasLossForm.controls.unburnedCarbonInAsh.value > 100) {
       this.unburnedCarbonInAshError = 'Unburned Carbon in Ash must be equal or greater than 0 and less than or equal to 100%';
     } else {
       this.unburnedCarbonInAshError = null;

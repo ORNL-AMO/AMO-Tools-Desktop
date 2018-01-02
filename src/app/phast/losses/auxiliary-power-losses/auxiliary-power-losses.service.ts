@@ -38,12 +38,12 @@ export class AuxiliaryPowerLossesService {
 
   getLossFromForm(form: any): AuxiliaryPowerLoss {
     let tmpLoss: AuxiliaryPowerLoss = {
-      motorPhase: form.value.motorPhase,
-      supplyVoltage: form.value.supplyVoltage,
-      avgCurrent: form.value.avgCurrent,
-      powerFactor: form.value.powerFactor,
-      operatingTime: form.value.operatingTime,
-      name: form.value.name
+      motorPhase: form.controls.motorPhase.value,
+      supplyVoltage: form.controls.supplyVoltage.value,
+      avgCurrent: form.controls.avgCurrent.value,
+      powerFactor: form.controls.powerFactor.value,
+      operatingTime: form.controls.operatingTime.value,
+      name: form.controls.name.value
     }
     return tmpLoss;
   }
