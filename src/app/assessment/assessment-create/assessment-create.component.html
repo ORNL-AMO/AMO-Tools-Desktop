@@ -24,8 +24,8 @@
               <label class="form-control-label" for="assessmentName">Assessment Name</label>
               <input #assessmentName class="form-control" formControlName="assessmentName" id="assessmentName" type="text" />
               <div class="help-text">
-                <p *ngIf="newAssessment.value.assessmentType == 'Pump'">Example: "Pump123" or "ORNL Pump 3"</p>
-                <p *ngIf="newAssessment.value.assessmentType == 'Furnace'">Example: "Furnace123" or "ORNL Furnace 3"</p>
+                <p *ngIf="newAssessment.controls.assessmentType.value == 'Pump'">Example: "Pump123" or "ORNL Pump 3"</p>
+                <p *ngIf="newAssessment.controls.assessmentType.value == 'Furnace'">Example: "Furnace123" or "ORNL Furnace 3"</p>
               </div>
             </div><!-- End .form-group -->
 
