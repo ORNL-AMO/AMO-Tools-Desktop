@@ -30,13 +30,13 @@
   <div class="row" *ngIf="!loss.collapse">
     <div class="col-12">
       <app-exhaust-gas-form (changeField)="changeField($event)" [(exhaustGasForm)]="loss.form" (calculate)="calculate(loss)" [baselineSelected]="baselineSelected"
-        (saveEmit)="saveLosses()" [lossIndex]="lossIndex" [isBaseline]="isBaseline" [settings]="settings"></app-exhaust-gas-form>
+        (saveEmit)="saveLosses()" [lossIndex]="lossIndex" [settings]="settings"></app-exhaust-gas-form>
     </div>
   </div>
   <div class="row">
     <div class="col-12">
       <div class="form-group">
-        <label class="small font-weight-bold">{{loss.form.value.name}} Loss</label>
+        <label class="small font-weight-bold">{{loss.form.controls.name.value}} Loss</label>
         <div *ngIf="loss.heatLoss" class="text-center small font-weight-bold">
           {{loss.heatLoss | sigFigs:'5'}}
           <span>{{resultsUnit}}</span>

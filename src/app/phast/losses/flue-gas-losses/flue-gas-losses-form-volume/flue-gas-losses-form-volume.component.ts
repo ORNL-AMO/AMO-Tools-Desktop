@@ -6,6 +6,7 @@ import { ModalDirective } from 'ngx-bootstrap';
 import { LossesService } from '../../losses.service';
 import { Settings } from '../../../../shared/models/settings';
 import { PhastService } from "../../../phast.service";
+import { FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-flue-gas-losses-form-volume',
@@ -14,7 +15,7 @@ import { PhastService } from "../../../phast.service";
 })
 export class FlueGasLossesFormVolumeComponent implements OnInit {
   @Input()
-  flueGasLossForm: any;
+  flueGasLossForm: FormGroup;
   @Output('calculate')
   calculate = new EventEmitter<boolean>();
   @Input()
@@ -28,10 +29,6 @@ export class FlueGasLossesFormVolumeComponent implements OnInit {
   @Input()
   settings: Settings;
   @ViewChild('materialModal') public materialModal: ModalDirective;
-  @ViewChild('lossForm') lossForm: ElementRef;
-  form: any;
-  elements: any;
-
 
   firstChange: boolean = true;
   options: any;
@@ -52,8 +49,8 @@ export class FlueGasLossesFormVolumeComponent implements OnInit {
   ngOnInit() {
     this.options = this.suiteDbService.selectGasFlueGasMaterials();
     if (this.flueGasLossForm) {
-      if (this.flueGasLossForm.value.gasTypeId && this.flueGasLossForm.value.gasTypeId != '') {
-        if (this.flueGasLossForm.value.CH4 == '' || !this.flueGasLossForm.value.CH4) {
+      if (this.flueGasLossForm.controls.gasTypeId.value && this.flueGasLossForm.controls.gasTypeId.value != '') {
+        if (this.flueGasLossForm.controls.CH4.value == '' || !this.flueGasLossForm.controls.CH4.value) {
           this.setProperties();
         }
       }
@@ -111,7 +108,7 @@ export class FlueGasLossesFormVolumeComponent implements OnInit {
   }
 
   setCalcMethod() {
-    if (this.flueGasLossForm.value.oxygenCalculationMethod == 'Excess Air') {
+    if (this.flueGasLossForm.controls.oxygenCalculationMethod.value == 'Excess Air') {
       this.calcMethodExcessAir = true;
     } else {
       this.calcMethodExcessAir = false;
@@ -121,19 +118,19 @@ export class FlueGasLossesFormVolumeComponent implements OnInit {
 
   calcExcessAir() {
     let input = {
-      CH4: this.flueGasLossForm.value.CH4,
-      C2H6: this.flueGasLossForm.value.C2H6,
-      N2: this.flueGasLossForm.value.N2,
-      H2: this.flueGasLossForm.value.H2,
-      C3H8: this.flueGasLossForm.value.C3H8,
-      C4H10_CnH2n: this.flueGasLossForm.value.C4H10_CnH2n,
-      H2O: this.flueGasLossForm.value.H2O,
-      CO: this.flueGasLossForm.value.CO,
-      CO2: this.flueGasLossForm.value.CO2,
-      SO2: this.flueGasLossForm.value.SO2,
-      O2: this.flueGasLossForm.value.O2,
-      o2InFlueGas: this.flueGasLossForm.value.o2InFlueGas,
-      excessAir: this.flueGasLossForm.value.excessAirPercentage
+      CH4: this.flueGasLossForm.controls.CH4.value,
+      C2H6: this.flueGasLossForm.controls.C2H6.value,
+      N2: this.flueGasLossForm.controls.N2.value,
+      H2: this.flueGasLossForm.controls.H2.value,
+      C3H8: this.flueGasLossForm.controls.C3H8.value,
+      C4H10_CnH2n: this.flueGasLossForm.controls.C4H10_CnH2n.value,
+      H2O: this.flueGasLossForm.controls.H2O.value,
+      CO: this.flueGasLossForm.controls.CO.value,
+      CO2: this.flueGasLossForm.controls.CO2.value,
+      SO2: this.flueGasLossForm.controls.SO2.value,
+      O2: this.flueGasLossForm.controls.O2.value,
+      o2InFlueGas: this.flueGasLossForm.controls.o2InFlueGas.value,
+      excessAir: this.flueGasLossForm.controls.excessAirPercentage.value
     };
     this.calculationWarning = null;
     if (!this.calcMethodExcessAir) {
@@ -161,7 +158,7 @@ export class FlueGasLossesFormVolumeComponent implements OnInit {
   }
 
   setProperties() {
-    let tmpFlueGas = this.suiteDbService.selectGasFlueGasMaterialById(this.flueGasLossForm.value.gasTypeId);
+    let tmpFlueGas = this.suiteDbService.selectGasFlueGasMaterialById(this.flueGasLossForm.controls.gasTypeId.value);
     this.flueGasLossForm.patchValue({
       CH4: tmpFlueGas.CH4,
       C2H6: tmpFlueGas.C2H6,

@@ -6,6 +6,7 @@ import { Losses } from '../../../shared/models/phast/phast';
 import { AtmosphereLoss } from '../../../shared/models/phast/losses/atmosphereLoss';
 import { AtmosphereLossesCompareService } from './atmosphere-losses-compare.service';
 import { Settings } from '../../../shared/models/settings';
+import { FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-atmosphere-losses',
@@ -36,7 +37,7 @@ export class AtmosphereLossesComponent implements OnInit {
   @Input()
   modExists: boolean;
 
-  _atmosphereLosses: Array<any>;
+  _atmosphereLosses: Array<AtmoLossObj>;
   firstChange: boolean = true;
 
   resultsUnit: string;
@@ -58,9 +59,9 @@ export class AtmosphereLossesComponent implements OnInit {
   }
 
   ngOnInit() {
-    if(this.settings.energyResultUnit != 'kWh'){
+    if (this.settings.energyResultUnit != 'kWh') {
       this.resultsUnit = this.settings.energyResultUnit + '/hr';
-    }else{
+    } else {
       this.resultsUnit = 'kW';
     }
 
@@ -77,7 +78,7 @@ export class AtmosphereLossesComponent implements OnInit {
           heatLoss: loss.heatLoss || 0.0,
           collapse: false
         };
-        if(!tmpLoss.form.value.name){
+        if (!tmpLoss.form.controls.name.value) {
           tmpLoss.form.patchValue({
             name: 'Loss #' + lossIndex
           })
@@ -121,7 +122,7 @@ export class AtmosphereLossesComponent implements OnInit {
     //     }
     //   })
     // }
-    if(this.inSetup && this.modExists){
+    if (this.inSetup && this.modExists) {
       this.lossesLocked = true;
       this.disableForms();
     }
@@ -129,7 +130,7 @@ export class AtmosphereLossesComponent implements OnInit {
 
   ngOnDestroy() {
     if (this.isBaseline) {
-//      this.atmosphereLossesService.addLossBaselineMonitor.next(false);
+      //      this.atmosphereLossesService.addLossBaselineMonitor.next(false);
       this.atmosphereLossesCompareService.baselineAtmosphereLosses = null;
     } else {
       this.atmosphereLossesCompareService.modifiedAtmosphereLosses = null;
@@ -137,8 +138,8 @@ export class AtmosphereLossesComponent implements OnInit {
     }
     this.atmosphereLossesService.deleteLossIndex.next(null);
   }
-  
-  disableForms(){
+
+  disableForms() {
     this._atmosphereLosses.forEach(loss => {
       loss.form.disable();
     })
@@ -153,26 +154,18 @@ export class AtmosphereLossesComponent implements OnInit {
     }
 
     this._atmosphereLosses.push({
-      form: this.atmosphereLossesService.initForm(this._atmosphereLosses.length+1),
+      form: this.atmosphereLossesService.initForm(this._atmosphereLosses.length + 1),
       heatLoss: 0.0,
       collapse: false
     });
     this.saveLosses();
   }
-  collapseLoss(loss: any){
+  collapseLoss(loss: any) {
     loss.collapse = !loss.collapse;
   }
-  
+
   removeLoss(lossIndex: number) {
     this.atmosphereLossesService.setDelete(lossIndex);
-  }
-
-  renameLoss() {
-    let index = 1;
-    this._atmosphereLosses.forEach(loss => {
-      loss.name = 'Loss #' + index;
-      index++;
-    })
   }
 
   calculate(loss: any) {
@@ -188,7 +181,7 @@ export class AtmosphereLossesComponent implements OnInit {
     let tmpAtmosphereLosses = new Array<AtmosphereLoss>();
     let lossIndex = 1;
     this._atmosphereLosses.forEach(loss => {
-      if(!loss.form.value.name){
+      if (!loss.form.controls.name.value) {
         loss.form.patchValue({
           name: 'Loss #' + lossIndex
         })
@@ -219,4 +212,11 @@ export class AtmosphereLossesComponent implements OnInit {
       }
     }
   }
+}
+
+
+export interface AtmoLossObj {
+  form: FormGroup,
+  heatLoss: number,
+  collapse: boolean
 }

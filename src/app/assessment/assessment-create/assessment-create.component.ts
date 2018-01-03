@@ -7,6 +7,7 @@ import { Router } from '@angular/router';
 import { AssessmentService } from '../assessment.service';
 import { IndexedDbService } from '../../indexedDb/indexed-db.service';
 import { Settings } from '../../shared/models/settings';
+import { FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-assessment-create',
@@ -22,7 +23,7 @@ export class AssessmentCreateComponent implements OnInit {
   @Input()
   type: string;
 
-  newAssessment: any;
+  newAssessment: FormGroup;
   selectedEquip: string = 'new';
   showDropdown: boolean = false;
   selectedAssessment: string = 'Select Pump';
@@ -114,9 +115,9 @@ export class AssessmentCreateComponent implements OnInit {
       this.hideCreateModal(true);
       this.createModal.onHidden.subscribe(() => {
         this.assessmentService.tab = 'system-setup';
-        if (this.newAssessment.value.assessmentType == 'Pump') {
+        if (this.newAssessment.controls.assessmentType.value == 'Pump') {
           let tmpAssessment = this.assessmentService.getNewAssessment('PSAT');
-          tmpAssessment.name = this.newAssessment.value.assessmentName;
+          tmpAssessment.name = this.newAssessment.controls.assessmentName.value;
 
           let tmpPsat = this.assessmentService.getNewPsat();
           tmpAssessment.psat = tmpPsat;
@@ -148,9 +149,9 @@ export class AssessmentCreateComponent implements OnInit {
             })
           });
         }
-        else if (this.newAssessment.value.assessmentType == 'Furnace') {
+        else if (this.newAssessment.controls.assessmentType.value == 'Furnace') {
           let tmpAssessment = this.assessmentService.getNewAssessment('PHAST');
-          tmpAssessment.name = this.newAssessment.value.assessmentName;
+          tmpAssessment.name = this.newAssessment.controls.assessmentName.value;
 
           let tmpPhast = this.assessmentService.getNewPhast();
           tmpAssessment.phast = tmpPhast;

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { ChargeMaterial, GasChargeMaterial, LiquidChargeMaterial, SolidChargeMaterial } from '../../../shared/models/phast/losses/chargeMaterial';
 import { BehaviorSubject } from 'rxjs';
 @Injectable()
@@ -25,7 +25,7 @@ export class ChargeMaterialService {
   //   }
   // }
   //empty gas charge material form
-  initGasForm(lossNum: number) {
+  initGasForm(lossNum: number): FormGroup {
     return this.formBuilder.group({
       'materialId': [1, Validators.required],
       'materialSpecificHeat': ['', Validators.required],
@@ -43,7 +43,7 @@ export class ChargeMaterialService {
     })
   }
   //gas charge material form from GasChargeMaterial
-  getGasChargeMaterialForm(chargeMaterial: ChargeMaterial) {
+  getGasChargeMaterialForm(chargeMaterial: ChargeMaterial): FormGroup {
     let reactionType = 'Endothermic';
     if (chargeMaterial.gasChargeMaterial.thermicReactionType != 0) {
       reactionType = 'Exothermic';
@@ -64,32 +64,32 @@ export class ChargeMaterialService {
     });
   }
   //GasChargeMaterial from gasForm
-  buildGasChargeMaterial(gasForm: any): ChargeMaterial {
+  buildGasChargeMaterial(gasForm: FormGroup): ChargeMaterial {
     let reactionType = 0;
-    if (gasForm.value.endothermicOrExothermic == 'Exothermic') {
+    if (gasForm.controls.endothermicOrExothermic.value == 'Exothermic') {
       reactionType = 1;
     }
     let tmpGasMaterial: ChargeMaterial = {
-      name: gasForm.value.name,
+      name: gasForm.controls.name.value,
       gasChargeMaterial: {
-        materialId: gasForm.value.materialId,
+        materialId: gasForm.controls.materialId.value,
         thermicReactionType: reactionType,
-        specificHeatGas: gasForm.value.materialSpecificHeat,
-        feedRate: gasForm.value.feedRate,
-        percentVapor: gasForm.value.vaporInGas,
-        initialTemperature: gasForm.value.initialTemperature,
-        dischargeTemperature: gasForm.value.dischargeTemperature,
-        specificHeatVapor: gasForm.value.specificHeatOfVapor,
-        percentReacted: gasForm.value.gasReacted,
-        reactionHeat: gasForm.value.heatOfReaction,
-        additionalHeat: gasForm.value.additionalHeatRequired
+        specificHeatGas: gasForm.controls.materialSpecificHeat.value,
+        feedRate: gasForm.controls.feedRate.value,
+        percentVapor: gasForm.controls.vaporInGas.value,
+        initialTemperature: gasForm.controls.initialTemperature.value,
+        dischargeTemperature: gasForm.controls.dischargeTemperature.value,
+        specificHeatVapor: gasForm.controls.specificHeatOfVapor.value,
+        percentReacted: gasForm.controls.gasReacted.value,
+        reactionHeat: gasForm.controls.heatOfReaction.value,
+        additionalHeat: gasForm.controls.additionalHeatRequired.value
       }
     }
     return tmpGasMaterial;
   }
 
   //Empty liquid charge material form
-  initLiquidForm(lossNum: number) {
+  initLiquidForm(lossNum: number): FormGroup {
     return this.formBuilder.group({
       'materialId': [1, Validators.required],
       'materialSpecificHeatLiquid': ['', Validators.required],
@@ -109,7 +109,7 @@ export class ChargeMaterialService {
   }
 
   //liquid charge material form from LiquidChargeMaterial
-  getLiquidChargeMaterialForm(chargeMaterial: ChargeMaterial) {
+  getLiquidChargeMaterialForm(chargeMaterial: ChargeMaterial): FormGroup {
     let reactionType = 'Endothermic';
     if (chargeMaterial.liquidChargeMaterial.thermicReactionType != 0) {
       reactionType = 'Exothermic';
@@ -133,34 +133,34 @@ export class ChargeMaterialService {
   }
 
   //build LiquidChargeMaterial from liquidForm
-  buildLiquidChargeMaterial(liquidForm: any): ChargeMaterial {
+  buildLiquidChargeMaterial(liquidForm: FormGroup): ChargeMaterial {
     let reactionType = 0;
-    if (liquidForm.value.endothermicOrExothermic == 'Exothermic') {
+    if (liquidForm.controls.endothermicOrExothermic.value == 'Exothermic') {
       reactionType = 1;
     }
     let tmpLiquidMaterial: ChargeMaterial = {
-      name: liquidForm.value.name,
+      name: liquidForm.controls.name.value,
       liquidChargeMaterial: {
-        materialId: liquidForm.value.materialId,
+        materialId: liquidForm.controls.materialId.value,
         thermicReactionType: reactionType,
-        specificHeatLiquid: liquidForm.value.materialSpecificHeatLiquid,
-        vaporizingTemperature: liquidForm.value.materialVaporizingTemperature,
-        latentHeat: liquidForm.value.materialLatentHeat,
-        specificHeatVapor: liquidForm.value.materialSpecificHeatVapor,
-        chargeFeedRate: liquidForm.value.feedRate,
-        initialTemperature: liquidForm.value.initialTemperature,
-        dischargeTemperature: liquidForm.value.dischargeTemperature,
-        percentVaporized: liquidForm.value.liquidVaporized,
-        percentReacted: liquidForm.value.liquidReacted,
-        reactionHeat: liquidForm.value.heatOfReaction,
-        additionalHeat: liquidForm.value.additionalHeatRequired
+        specificHeatLiquid: liquidForm.controls.materialSpecificHeatLiquid.value,
+        vaporizingTemperature: liquidForm.controls.materialVaporizingTemperature.value,
+        latentHeat: liquidForm.controls.materialLatentHeat.value,
+        specificHeatVapor: liquidForm.controls.materialSpecificHeatVapor.value,
+        chargeFeedRate: liquidForm.controls.feedRate.value,
+        initialTemperature: liquidForm.controls.initialTemperature.value,
+        dischargeTemperature: liquidForm.controls.dischargeTemperature.value,
+        percentVaporized: liquidForm.controls.liquidVaporized.value,
+        percentReacted: liquidForm.controls.liquidReacted.value,
+        reactionHeat: liquidForm.controls.heatOfReaction.value,
+        additionalHeat: liquidForm.controls.additionalHeatRequired.value
       }
     }
     return tmpLiquidMaterial;
   }
 
   //empty solid charge material form
-  initSolidForm(lossNum: number) {
+  initSolidForm(lossNum: number): FormGroup {
     //FUEL FIRED SOLID
     return this.formBuilder.group({
       'materialId': [1, Validators.required],
@@ -184,7 +184,7 @@ export class ChargeMaterialService {
   }
 
   //solid material form from SolidChargeMaterial
-  getSolidChargeMaterialForm(chargeMaterial: ChargeMaterial) {
+  getSolidChargeMaterialForm(chargeMaterial: ChargeMaterial): FormGroup {
     let reactionType = 'Endothermic';
     if (chargeMaterial.solidChargeMaterial.thermicReactionType != 0) {
       reactionType = 'Exothermic';
@@ -213,30 +213,30 @@ export class ChargeMaterialService {
 
 
   //SolidChargeMaterial from form
-  buildSolidChargeMaterial(solidForm: any): ChargeMaterial {
+  buildSolidChargeMaterial(solidForm: FormGroup): ChargeMaterial {
     let reactionType = 0;
-    if (solidForm.value.endothermicOrExothermic == 'Exothermic') {
+    if (solidForm.controls.endothermicOrExothermic.value == 'Exothermic') {
       reactionType = 1;
     }
     let tmpSolidMaterial: ChargeMaterial = {
-      name: solidForm.value.name,
+      name: solidForm.controls.name.value,
       solidChargeMaterial: {
-        materialId: solidForm.value.materialId,
+        materialId: solidForm.controls.materialId.value,
         thermicReactionType: reactionType,
-        specificHeatSolid: solidForm.value.materialSpecificHeatOfSolidMaterial,
-        latentHeat: solidForm.value.materialLatentHeatOfFusion,
-        specificHeatLiquid: solidForm.value.materialHeatOfLiquid,
-        meltingPoint: solidForm.value.materialMeltingPoint,
-        chargeFeedRate: solidForm.value.feedRate,
-        waterContentCharged: solidForm.value.waterContentAsCharged,
-        waterContentDischarged: solidForm.value.waterContentAsDischarged,
-        initialTemperature: solidForm.value.initialTemperature,
-        dischargeTemperature: solidForm.value.chargeMaterialDischargeTemperature,
-        waterVaporDischargeTemperature: solidForm.value.waterVaporDischargeTemperature,
-        chargeMelted: solidForm.value.percentChargeMelted,
-        chargeReacted: solidForm.value.percentChargeReacted,
-        reactionHeat: solidForm.value.heatOfReaction,
-        additionalHeat: solidForm.value.additionalHeatRequired
+        specificHeatSolid: solidForm.controls.materialSpecificHeatOfSolidMaterial.value,
+        latentHeat: solidForm.controls.materialLatentHeatOfFusion.value,
+        specificHeatLiquid: solidForm.controls.materialHeatOfLiquid.value,
+        meltingPoint: solidForm.controls.materialMeltingPoint.value,
+        chargeFeedRate: solidForm.controls.feedRate.value,
+        waterContentCharged: solidForm.controls.waterContentAsCharged.value,
+        waterContentDischarged: solidForm.controls.waterContentAsDischarged.value,
+        initialTemperature: solidForm.controls.initialTemperature.value,
+        dischargeTemperature: solidForm.controls.chargeMaterialDischargeTemperature.value,
+        waterVaporDischargeTemperature: solidForm.controls.waterVaporDischargeTemperature.value,
+        chargeMelted: solidForm.controls.percentChargeMelted.value,
+        chargeReacted: solidForm.controls.percentChargeReacted.value,
+        reactionHeat: solidForm.controls.heatOfReaction.value,
+        additionalHeat: solidForm.controls.additionalHeatRequired.value
       }
     }
     return tmpSolidMaterial;

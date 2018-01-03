@@ -1,4 +1,4 @@
-<form #lossForm [formGroup]="wallLossesForm" onfocus="test()">
+<form [formGroup]="wallLossesForm">
   <div class="form-section">
     <div class="form-group">
       <label class="small" for="avgSurfaceTemp">Average Surface Temperature</label>
@@ -47,7 +47,7 @@
     <div class="form-group">
       <label class="small" for="conditionFactor">Surface shape/orientation factor</label>
       <div class="text-center small">
-        {{wallLossesForm.value.conditionFactor}}
+        {{wallLossesForm.controls.conditionFactor.value}}
       </div>
     </div>
 

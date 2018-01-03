@@ -6,6 +6,7 @@ import { Losses } from '../../../shared/models/phast/phast';
 import { OpeningLoss, QuadOpeningLoss, CircularOpeningLoss } from '../../../shared/models/phast/losses/openingLoss';
 import { OpeningLossesCompareService } from './opening-losses-compare.service';
 import { Settings } from '../../../shared/models/settings';
+import { FormGroup } from '@angular/forms/src/model';
 
 @Component({
   selector: 'app-opening-losses',
@@ -36,7 +37,7 @@ export class OpeningLossesComponent implements OnInit {
   @Input()
   modExists: boolean;
 
-  _openingLosses: Array<any>;
+  _openingLosses: Array<OpeningLossObj>;
   firstChange: boolean = true;
   resultsUnit: string;
   lossesLocked: boolean = false;
@@ -76,7 +77,7 @@ export class OpeningLossesComponent implements OnInit {
           totalOpeningLosses: loss.heatLoss || 0.0,
           collapse: false
         };
-        if(!tmpLoss.form.value.name){
+        if (!tmpLoss.form.controls.name.value) {
           tmpLoss.form.patchValue({
             name: 'Loss #' + lossIndex
           })
@@ -121,7 +122,7 @@ export class OpeningLossesComponent implements OnInit {
     //   })
     // }
 
-    if(this.inSetup && this.modExists){
+    if (this.inSetup && this.modExists) {
       this.lossesLocked = true;
       this.disableForms();
     }
@@ -129,11 +130,11 @@ export class OpeningLossesComponent implements OnInit {
 
   ngOnDestroy() {
     if (this.isBaseline) {
-  //    this.openingLossesService.addLossBaselineMonitor.next(false);
+      //    this.openingLossesService.addLossBaselineMonitor.next(false);
       this.openingLossesCompareService.baselineOpeningLosses = null;
     } else {
       this.openingLossesCompareService.modifiedOpeningLosses = null;
-//      this.openingLossesService.addLossModificationMonitor.next(false);
+      //      this.openingLossesService.addLossModificationMonitor.next(false);
     };
     this.openingLossesService.deleteLossIndex.next(null);
   }
@@ -146,18 +147,18 @@ export class OpeningLossesComponent implements OnInit {
       this.openingLossesCompareService.addObject(this.openingLossesCompareService.differentArray.length - 1);
     }
     this._openingLosses.push({
-      form: this.openingLossesService.initForm(this._openingLosses.length+1),
+      form: this.openingLossesService.initForm(this._openingLosses.length + 1),
       totalOpeningLosses: 0.0,
       collapse: false
     });
     this.saveLosses();
   }
-  
-  collapseLoss(loss: any){
+
+  collapseLoss(loss: OpeningLossObj) {
     loss.collapse = !loss.collapse;
   }
 
-  disableForms(){
+  disableForms() {
     this._openingLosses.forEach(loss => {
       loss.form.disable();
     })
@@ -166,16 +167,16 @@ export class OpeningLossesComponent implements OnInit {
     this.openingLossesService.setDelete(lossIndex);
   }
 
-  calculate(loss: any) {
+  calculate(loss: OpeningLossObj) {
     if (loss.form.status == 'VALID') {
-      if (loss.form.value.openingType == 'Rectangular (Square)' && loss.form.value.heightOfOpening != '') {
+      if (loss.form.controls.openingType.value == 'Rectangular (Square)' && loss.form.controls.heightOfOpening.value != '') {
         let tmpLoss: QuadOpeningLoss = this.openingLossesService.getQuadLossFromForm(loss.form);
         let lossAmount = this.phastService.openingLossesQuad(tmpLoss, this.settings);
-        loss.totalOpeningLosses = loss.form.value.numberOfOpenings * lossAmount;
-      } else if (loss.form.value.openingType == 'Round') {
+        loss.totalOpeningLosses = loss.form.controls.numberOfOpenings.value * lossAmount;
+      } else if (loss.form.controls.openingType.value == 'Round') {
         let tmpLoss: CircularOpeningLoss = this.openingLossesService.getCircularLossFromForm(loss.form);
         let lossAmount = this.phastService.openingLossesCircular(tmpLoss, this.settings);
-        loss.totalOpeningLosses = loss.form.value.numberOfOpenings * lossAmount;
+        loss.totalOpeningLosses = loss.form.controls.numberOfOpenings.value * lossAmount;
       } else {
         loss.totalOpeningLosses = null;
       }
@@ -188,7 +189,7 @@ export class OpeningLossesComponent implements OnInit {
     let tmpOpeningLosses = new Array<OpeningLoss>();
     let lossIndex = 1;
     this._openingLosses.forEach(loss => {
-      if(!loss.form.value.name){
+      if (!loss.form.controls.name.value) {
         loss.form.patchValue({
           name: 'Loss #' + lossIndex
         })
@@ -218,4 +219,10 @@ export class OpeningLossesComponent implements OnInit {
       }
     }
   }
+}
+
+export interface OpeningLossObj {
+  form: FormGroup,
+  totalOpeningLosses: number,
+  collapse: boolean
 }

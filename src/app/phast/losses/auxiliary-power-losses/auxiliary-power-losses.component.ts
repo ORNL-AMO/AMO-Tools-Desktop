@@ -6,6 +6,7 @@ import { Losses } from '../../../shared/models/phast/phast';
 import { AuxiliaryPowerLossesService } from './auxiliary-power-losses.service';
 import { AuxiliaryPowerCompareService } from './auxiliary-power-compare.service';
 import { Settings } from '../../../shared/models/settings';
+import { FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-auxiliary-power-losses',
@@ -37,7 +38,7 @@ export class AuxiliaryPowerLossesComponent implements OnInit {
   modExists: boolean;
 
   resultsUnit: string;
-  _auxiliaryPowerLosses: Array<any>;
+  _auxiliaryPowerLosses: Array<AuxPowLossObj>;
   firstChange: boolean = true;
   lossesLocked: boolean = false;
   constructor(private phastService: PhastService, private auxiliaryPowerLossesService: AuxiliaryPowerLossesService, private auxiliaryPowerCompareService: AuxiliaryPowerCompareService) { }
@@ -75,7 +76,7 @@ export class AuxiliaryPowerLossesComponent implements OnInit {
           powerUsed: loss.powerUsed || 0.0,
           collapse: false
         };
-        if(!tmpLoss.form.value.name){
+        if (!tmpLoss.form.controls.name.value) {
           tmpLoss.form.patchValue({
             name: 'Loss #' + lossIndex
           })
@@ -119,7 +120,7 @@ export class AuxiliaryPowerLossesComponent implements OnInit {
     //     }
     //   })
     // }
-    if(this.inSetup && this.modExists){
+    if (this.inSetup && this.modExists) {
       this.disableForms();
       this.lossesLocked = true;
     }
@@ -127,15 +128,15 @@ export class AuxiliaryPowerLossesComponent implements OnInit {
 
   ngOnDestroy() {
     if (this.isBaseline) {
-    //  this.auxiliaryPowerLossesService.addLossBaselineMonitor.next(false);
+      //  this.auxiliaryPowerLossesService.addLossBaselineMonitor.next(false);
       this.auxiliaryPowerCompareService.baselineAuxLosses = null;
     } else {
-    //  this.auxiliaryPowerLossesService.addLossModificationMonitor.next(false);
+      //  this.auxiliaryPowerLossesService.addLossModificationMonitor.next(false);
       this.auxiliaryPowerCompareService.modifiedAuxLosses = null;
     }
     this.auxiliaryPowerLossesService.deleteLossIndex.next(null);
   }
-  disableForms(){
+  disableForms() {
     this._auxiliaryPowerLosses.forEach(loss => {
       loss.form.disable();
     })
@@ -148,7 +149,7 @@ export class AuxiliaryPowerLossesComponent implements OnInit {
       this.auxiliaryPowerCompareService.addObject(this.auxiliaryPowerCompareService.differentArray.length - 1);
     }
     this._auxiliaryPowerLosses.push({
-      form: this.auxiliaryPowerLossesService.initForm(this._auxiliaryPowerLosses.length+1),
+      form: this.auxiliaryPowerLossesService.initForm(this._auxiliaryPowerLosses.length + 1),
       powerUsed: 0.0,
       collapse: false
     });
@@ -159,15 +160,7 @@ export class AuxiliaryPowerLossesComponent implements OnInit {
     this.auxiliaryPowerLossesService.setDelete(lossIndex);
   }
 
-  renameLossess() {
-    let index = 1;
-    this._auxiliaryPowerLosses.forEach(loss => {
-      loss.name = 'Loss #' + index;
-      index++;
-    })
-  }
-
-  calculate(loss: any) {
+  calculate(loss: AuxPowLossObj) {
     if (loss.form.status == 'VALID') {
       let tmpLoss: AuxiliaryPowerLoss = this.auxiliaryPowerLossesService.getLossFromForm(loss.form);
       loss.powerUsed = this.phastService.auxiliaryPowerLoss(tmpLoss);
@@ -180,7 +173,7 @@ export class AuxiliaryPowerLossesComponent implements OnInit {
     let tmpAuxLosses = new Array<AuxiliaryPowerLoss>();
     let lossIndex = 1;
     this._auxiliaryPowerLosses.forEach(loss => {
-      if(!loss.form.value.name){
+      if (!loss.form.controls.name.value) {
         loss.form.patchValue({
           name: 'Loss #' + lossIndex
         })
@@ -195,10 +188,10 @@ export class AuxiliaryPowerLossesComponent implements OnInit {
     this.savedLoss.emit(true);
   }
 
-  collapseLoss(loss: any){
+  collapseLoss(loss: AuxPowLossObj) {
     loss.collapse = !loss.collapse;
   }
-  
+
   changeField(str: string) {
     this.fieldChange.emit(str);
   }
@@ -221,4 +214,10 @@ export class AuxiliaryPowerLossesComponent implements OnInit {
   }
 
 
+}
+
+export interface AuxPowLossObj {
+  form: FormGroup,
+  powerUsed: number,
+  collapse: boolean
 }

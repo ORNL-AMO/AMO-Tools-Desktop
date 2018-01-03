@@ -6,6 +6,7 @@ import { Losses } from '../../../shared/models/phast/phast';
 import { CoolingLoss, GasCoolingLoss, LiquidCoolingLoss, WaterCoolingLoss } from '../../../shared/models/phast/losses/coolingLoss';
 import { CoolingLossesCompareService } from './cooling-losses-compare.service';
 import { Settings } from '../../../shared/models/settings';
+import { FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-cooling-losses',
@@ -36,7 +37,7 @@ export class CoolingLossesComponent implements OnInit {
   @Input()
   modExists: boolean;
 
-  _coolingLosses: Array<any>;
+  _coolingLosses: Array<CoolingLossObj>;
   firstChange: boolean = true;
   resultsUnit: string;
   lossesLocked: boolean = false;
@@ -169,12 +170,12 @@ export class CoolingLossesComponent implements OnInit {
           collapse: false
         };
       }
-      if (!tmpLoss.gasCoolingForm.value.name) {
+      if (!tmpLoss.gasCoolingForm.controls.name.value) {
         tmpLoss.gasCoolingForm.patchValue({
           name: 'Loss #' + lossIndex
         })
       }
-      if (!tmpLoss.liquidCoolingForm.value.name) {
+      if (!tmpLoss.liquidCoolingForm.controls.name.value) {
         tmpLoss.gasCoolingForm.patchValue({
           name: 'Loss #' + lossIndex
         })
@@ -203,14 +204,14 @@ export class CoolingLossesComponent implements OnInit {
     this.saveLosses();
   }
 
-  setName(loss: any) {
+  setName(loss: CoolingLossObj) {
     if (loss.coolingMedium == 'Gas') {
       loss.liquidCoolingForm.patchValue({
-        name: loss.gasCoolingForm.value.name
+        name: loss.gasCoolingForm.controls.name.value
       })
     } else if (loss.coolingMedium == 'Liquid') {
       loss.gasCoolingForm.patchValue({
-        name: loss.liquidCoolingForm.value.name
+        name: loss.liquidCoolingForm.controls.name.value
       })
     }
   }
@@ -218,7 +219,7 @@ export class CoolingLossesComponent implements OnInit {
   removeLoss(lossIndex) {
     this.coolingLossesService.setDelete(lossIndex);
   }
-  calculate(loss: any) {
+  calculate(loss: CoolingLossObj) {
     if (loss.coolingMedium == 'Gas' || loss.coolingMedium == 'Air') {
       if (loss.gasCoolingForm.status == 'VALID') {
         let tmpCoolingLoss: CoolingLoss = this.coolingLossesService.initGasLossFromForm(loss.gasCoolingForm);
@@ -249,12 +250,12 @@ export class CoolingLossesComponent implements OnInit {
     let tmpCoolingLosses = new Array<CoolingLoss>();
     let lossIndex = 1;
     this._coolingLosses.forEach(loss => {
-      if (!loss.gasCoolingForm.value.name) {
+      if (!loss.gasCoolingForm.controls.name.value) {
         loss.gasCoolingForm.patchValue({
           name: 'Loss #' + lossIndex
         })
       }
-      if (!loss.liquidCoolingForm.value.name) {
+      if (!loss.liquidCoolingForm.controls.name.value) {
         loss.gasCoolingForm.patchValue({
           name: 'Loss #' + lossIndex
         })
@@ -285,7 +286,7 @@ export class CoolingLossesComponent implements OnInit {
     this.setCompareVals();
     this.savedLoss.emit(true);
   }
-  collapseLoss(loss: any) {
+  collapseLoss(loss: CoolingLossObj) {
     loss.collapse = !loss.collapse;
   }
   changeField(str: string) {
@@ -306,4 +307,13 @@ export class CoolingLossesComponent implements OnInit {
       }
     }
   }
+}
+
+export interface CoolingLossObj {
+  coolingMedium: string,
+  waterCoolingForm: FormGroup,
+  gasCoolingForm: FormGroup,
+  liquidCoolingForm: FormGroup,
+  heatLoss: number,
+  collapse: boolean
 }

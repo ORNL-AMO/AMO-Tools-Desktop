@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Settings } from '../../../../shared/models/settings';
+import { FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-head-tool-form',
@@ -8,7 +9,7 @@ import { Settings } from '../../../../shared/models/settings';
 })
 export class HeadToolFormComponent implements OnInit {
   @Input()
-  headToolForm: any;
+  headToolForm: FormGroup;
   @Output('calculate')
   calculate = new EventEmitter<boolean>();
   @Input()
@@ -44,11 +45,11 @@ export class HeadToolFormComponent implements OnInit {
   }
 
   checkPipeDiameterSuction() {
-    if (this.headToolForm.value.suctionPipeDiameter == 0) {
+    if (this.headToolForm.controls.suctionPipeDiameter.value == 0) {
       this.diameterError = "Cannot have 0 diameter";
       return false;
     }
-    else if (this.headToolForm.value.suctionPipeDiameter < 0) {
+    else if (this.headToolForm.controls.suctionPipeDiameter.value < 0) {
       this.diameterError = "Cannot have negative diameter";
       return false;
     }
@@ -58,11 +59,11 @@ export class HeadToolFormComponent implements OnInit {
     }
   }
   checkPipeDiameterDischarge() {
-    if (this.headToolForm.value.dischargePipeDiameter == 0) {
+    if (this.headToolForm.controls.dischargePipeDiameter.value == 0) {
       this.diameterErrorOut = "Cannot have 0 diameter";
       return false;
     }
-    else if (this.headToolForm.value.dischargePipeDiameter < 0) {
+    else if (this.headToolForm.controls.dischargePipeDiameter.value < 0) {
       this.diameterErrorOut = "Cannot have negative diameter";
       return false;
     }
@@ -73,7 +74,7 @@ export class HeadToolFormComponent implements OnInit {
   }
 
   checkPressure() {
-    if (this.headToolForm.value.suctionGuagePressure > this.headToolForm.value.dischargeGaugePressure) {
+    if (this.headToolForm.controls.suctionGuagePressure.value > this.headToolForm.controls.dischargeGaugePressure.value) {
       this.pressureError = 'Suction Pressure cannot be greater than Discharge Pressure'
       return false;
     } else {

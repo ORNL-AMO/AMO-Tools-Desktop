@@ -77,9 +77,9 @@
   <div class="row">
     <div class="col-12">
       <div class="form-group">
-        <label class="small font-weight-bold" *ngIf="material.chargeMaterialType == 'Solid'">{{material.solidForm.value.name}} Total</label>
-        <label class="small font-weight-bold" *ngIf="material.chargeMaterialType == 'Gas'">{{material.gasForm.value.name}} Total</label>
-        <label class="small font-weight-bold" *ngIf="material.chargeMaterialType == 'Liquid'">{{material.liquidForm.value.name}} Total</label>
+        <label class="small font-weight-bold" *ngIf="material.chargeMaterialType == 'Solid'">{{material.solidForm.controls.name.value}} Total</label>
+        <label class="small font-weight-bold" *ngIf="material.chargeMaterialType == 'Gas'">{{material.gasForm.controls.name.value}} Total</label>
+        <label class="small font-weight-bold" *ngIf="material.chargeMaterialType == 'Liquid'">{{material.liquidForm.controls.name.value}} Total</label>
         <div *ngIf="material.heatRequired" class="text-center small font-weight-bold">
           {{material.heatRequired | sigFigs:'5'}}
           <span>{{resultsUnit}}</span>

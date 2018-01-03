@@ -6,6 +6,7 @@ import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
 import { Settings } from '../../../shared/models/settings';
 import { SettingsService } from '../../../settings/settings.service';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
+import { FormGroup } from '@angular/forms';
 @Component({
   selector: 'app-achievable-efficiency',
   templateUrl: './achievable-efficiency.component.html',
@@ -19,7 +20,7 @@ export class AchievableEfficiencyComponent implements OnInit {
   @Input()
   inPsat: boolean;
   
-  efficiencyForm: any;
+  efficiencyForm: FormGroup;
   toggleCalculate: boolean = true;
   tabSelect: string = 'results';
 
@@ -44,7 +45,7 @@ export class AchievableEfficiencyComponent implements OnInit {
         results => {
           if (results.length != 0) {
             if (results[0].flowMeasurement != 'gpm') {
-              let tmpVal = this.convertUnitsService.value(this.efficiencyForm.value.flowRate).from('gpm').to(results[0].flowMeasurement);
+              let tmpVal = this.convertUnitsService.value(this.efficiencyForm.controls.flowRate.value).from('gpm').to(results[0].flowMeasurement);
               this.efficiencyForm.patchValue({
                 flowRate: this.psatService.roundVal(tmpVal, 2)
               })

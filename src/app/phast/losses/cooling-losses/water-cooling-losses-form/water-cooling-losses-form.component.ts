@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, EventEmitter, Output, ViewChild, ElementRef, SimpleChanges } from '@angular/core';
 import { WindowRefService } from '../../../../indexedDb/window-ref.service';
 import { CoolingLossesCompareService } from '../cooling-losses-compare.service';
+import { FormGroup } from '@angular/forms';
 @Component({
   selector: 'app-water-cooling-losses-form',
   templateUrl: './water-cooling-losses-form.component.html',
@@ -8,7 +9,7 @@ import { CoolingLossesCompareService } from '../cooling-losses-compare.service';
 })
 export class WaterCoolingLossesFormComponent implements OnInit {
   @Input()
-  lossesForm: any;
+  lossesForm: FormGroup;
   @Output('calculate')
   calculate = new EventEmitter<boolean>();
   @Input()
@@ -19,10 +20,6 @@ export class WaterCoolingLossesFormComponent implements OnInit {
   saveEmit = new EventEmitter<boolean>();
   @Input()
   lossIndex: number;
-
-  @ViewChild('lossForm') lossForm: ElementRef;
-  form: any;
-  elements: any;
 
   firstChange: boolean = true;
   counter: any;
@@ -50,17 +47,11 @@ export class WaterCoolingLossesFormComponent implements OnInit {
   }
 
   disableForm() {
-    this.elements = this.lossForm.nativeElement.elements;
-    for (var i = 0, len = this.elements.length; i < len; ++i) {
-      this.elements[i].disabled = true;
-    }
+
   }
 
   enableForm() {
-    this.elements = this.lossForm.nativeElement.elements;
-    for (var i = 0, len = this.elements.length; i < len; ++i) {
-      this.elements[i].disabled = false;
-    }
+
   }
   checkForm() {
     this.calculate.emit(true)

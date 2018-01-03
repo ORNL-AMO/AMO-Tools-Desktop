@@ -1,4 +1,4 @@
-<form #lossForm [formGroup]="openingLossesForm">
+<form [formGroup]="openingLossesForm">
   <div class="form-section">
     <div class="form-group">
       <label class="small" for="type">Select Type</label>
@@ -32,8 +32,8 @@
     </div>
 
     <div class="form-group">
-      <label *ngIf="openingLossesForm.value.openingType != 'Round'" class="small" for="lengthOfOpening">Length of Openings</label>
-      <label *ngIf="openingLossesForm.value.openingType == 'Round'" class="small" for="lengthOfOpening">Diameter of Openings</label>
+      <label *ngIf="openingLossesForm.controls.openingType.value != 'Round'" class="small" for="lengthOfOpening">Length of Openings</label>
+      <label *ngIf="openingLossesForm.controls.openingType.value == 'Round'" class="small" for="lengthOfOpening">Diameter of Openings</label>
       <div class="input-group">
         <input name="{{'lengthOfOpening_'+lossIndex}}" type="number" step="any" min="0" class="form-control" formControlName="lengthOfOpening"
           id="lengthOfOpening" onfocus="this.select();" (input)="getArea()" (focus)="focusField('lengthOfOpening')" (blur)="focusOut()">
@@ -43,7 +43,7 @@
       <span class="alert-warning pull-right small" *ngIf="lengthError !== null">{{lengthError}}</span>
     </div>
 
-    <div class="form-group" *ngIf="openingLossesForm.value.openingType != 'Round'">
+    <div class="form-group" *ngIf="openingLossesForm.controls.openingType.value != 'Round'">
       <label class="small" for="heightOfOpening">Height of Openings</label>
       <div class="input-group">
         <input name="{{'heightOfOpening_'+lossIndex}}" type="number" step="any" min="0" class="form-control" formControlName="heightOfOpening"

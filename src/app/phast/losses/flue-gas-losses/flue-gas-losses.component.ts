@@ -6,6 +6,7 @@ import { FlueGas, FlueGasByMass, FlueGasByVolume } from '../../../shared/models/
 import { Losses } from '../../../shared/models/phast/phast';
 import { FlueGasCompareService } from './flue-gas-compare.service';
 import { Settings } from '../../../shared/models/settings';
+import { FormGroup } from '@angular/forms/src/model';
 @Component({
   selector: 'app-flue-gas-losses',
   templateUrl: './flue-gas-losses.component.html',
@@ -35,7 +36,7 @@ export class FlueGasLossesComponent implements OnInit {
   @Input()
   modExists: boolean;
 
-  _flueGasLosses: Array<any>;
+  _flueGasLosses: Array<FlueGasObj>;
   firstChange: boolean = true;
   resultsUnit: string;
 
@@ -139,7 +140,6 @@ export class FlueGasLossesComponent implements OnInit {
   initFlueGasses() {
     let lossIndex = 1;
     this.losses.flueGasLosses.forEach(loss => {
-      console.log('count ' +lossIndex)
       let tmpLoss;
       if (loss.flueGasType == "By Volume") {
         tmpLoss = {
@@ -160,12 +160,12 @@ export class FlueGasLossesComponent implements OnInit {
           collapse: false
         }
       }
-      if (!tmpLoss.formByVolume.value.name) {
+      if (!tmpLoss.formByVolume.controls.name.value) {
         tmpLoss.formByVolume.patchValue({
           name: 'Loss #' + lossIndex
         })
       }
-      if (!tmpLoss.formByMass.value.name) {
+      if (!tmpLoss.formByMass.controls.name.value) {
         tmpLoss.formByMass.patchValue({
           name: 'Loss #' + lossIndex
         })
@@ -199,11 +199,11 @@ export class FlueGasLossesComponent implements OnInit {
     this.flueGasLossesService.setDelete(lossIndex);
   }
 
-  collapseLoss(loss: any) {
+  collapseLoss(loss: FlueGasObj) {
     loss.collapse = !loss.collapse;
   }
 
-  calculate(loss: any) {
+  calculate(loss: FlueGasObj) {
     let sumAdditionalHeat = this.phastService.sumChargeMaterialExothermic(this.losses.chargeMaterials, this.settings);
     if (loss.measurementType == "By Volume") {
       if (loss.formByVolume.status == 'VALID') {
@@ -245,14 +245,14 @@ export class FlueGasLossesComponent implements OnInit {
   }
 
 
-  setName(loss: any) {
+  setName(loss: FlueGasObj) {
     if (loss.measurementType == 'By Volume') {
       loss.formByMass.patchValue({
-        name: loss.formByVolume.value.name
+        name: loss.formByVolume.controls.name.value
       })
     } else if (loss.measurementType == 'By Mass') {
       loss.formByVolume.patchValue({
-        name: loss.formByMass.value.name
+        name: loss.formByMass.controls.name.value
       })
     }
   }
@@ -262,7 +262,7 @@ export class FlueGasLossesComponent implements OnInit {
     let lossIndex = 1;
     this._flueGasLosses.forEach(loss => {
       if (loss.measurementType == "By Volume") {
-        if (!loss.formByVolume.value.name) {
+        if (!loss.formByVolume.controls.name.value) {
           loss.formByVolume.patchValue({
             name: 'Loss #' + lossIndex
           })
@@ -272,7 +272,7 @@ export class FlueGasLossesComponent implements OnInit {
         tmpFlueGasLosses.push(tmpVolumeLoss);
       }
       else if (loss.measurementType == "By Mass") {
-        if (!loss.formByMass.value.name) {
+        if (!loss.formByMass.controls.name.value) {
           loss.formByMass.patchValue({
             name: 'Loss #' + lossIndex
           })
@@ -308,3 +308,12 @@ export class FlueGasLossesComponent implements OnInit {
   }
 }
 
+export interface FlueGasObj {
+  measurementType: string,
+  formByVolume: FormGroup,
+  formByMass: FormGroup,
+  availableHeat: number,
+  grossHeat: number,
+  systemLosses: number,
+  collapse: boolean
+}

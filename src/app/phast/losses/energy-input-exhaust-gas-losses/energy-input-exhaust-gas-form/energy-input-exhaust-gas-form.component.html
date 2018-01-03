@@ -1,4 +1,4 @@
-<form #lossForm [formGroup]="exhaustGasForm">
+<form [formGroup]="exhaustGasForm">
   <div class="form-section">
     <div class="form-group">
       <label class="small" for="totalHeatInput">Total Heat Input for Burners</label>
@@ -52,22 +52,4 @@
       </div>
     </div>
   </div>
-  <!--<div class="form-section">
-    <div *ngFor="let lossNumber of otherLossArray; let index = index;">
-      <div class="form-group">
-        <label class="small" for="{{'otherLoss'+lossNumber}}">
-          <span *ngIf="isBaseline" class="fa fa-times" (click)="signalRemove(index, lossNumber)"></span>
-          Other Loss for Other Areas {{lossNumber}}
-          </label>
-        <div class="input-group">
-          <input name="{{'otherLoss'+lossNumber+'_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="{{'otherLoss'+lossNumber}}"
-            id="{{'otherLoss'+lossNumber}}" onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('otherLoss')">
-          <span class="input-group-addon units">Btu/Cycle</span>
-        </div>
-      </div>
-    </div>
-    <div class="form-group" *ngIf="isBaseline">
-      <a class="text-center small" (click)="addOtherSignal()">Add Other Loss</a>
-    </div>
-  </div>-->
 </form>

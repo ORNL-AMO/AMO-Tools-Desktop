@@ -6,6 +6,7 @@ import { Settings } from '../../shared/models/settings';
 import { IndexedDbService } from '../../indexedDb/indexed-db.service';
 import { ModalDirective } from 'ngx-bootstrap';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
+import { FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-system-basics',
@@ -35,7 +36,7 @@ export class SystemBasicsComponent implements OnInit {
   closeModal = new EventEmitter<boolean>();
   unitChange: boolean = false;
 
-  settingsForm: any;
+  settingsForm: FormGroup;
   isFirstChange: boolean = true;
 
   newSettings: Settings;

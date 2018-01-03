@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
 import { PsatService } from '../../../../psat/psat.service';
 import { Settings } from '../../../../shared/models/settings';
+import { FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-nema-energy-efficiency-graph',
@@ -9,7 +10,7 @@ import { Settings } from '../../../../shared/models/settings';
 })
 export class NemaEnergyEfficiencyGraphComponent implements OnInit {
   @Input()
-  nemaForm: any;
+  nemaForm: FormGroup;
   @Input()
   settings:Settings;
 
@@ -22,11 +23,11 @@ export class NemaEnergyEfficiencyGraphComponent implements OnInit {
     if (this.checkForm()) {
       let efficiency = this.psatService.getEfficiencyFromForm(this.nemaForm);
       return this.psatService.nema(
-        this.nemaForm.value.frequency,
-        this.nemaForm.value.motorRPM,
-        this.nemaForm.value.efficiencyClass,
+        this.nemaForm.controls.frequency.value,
+        this.nemaForm.controls.motorRPM.value,
+        this.nemaForm.controls.efficiencyClass.value,
         efficiency,
-        this.nemaForm.value.horsePower,
+        this.nemaForm.controls.horsePower.value,
         this.settings
       );
     }else{
@@ -36,14 +37,14 @@ export class NemaEnergyEfficiencyGraphComponent implements OnInit {
 
 
   checkForm() {
-    if (this.nemaForm.value.motorRPM != 0) {
+    if (this.nemaForm.controls.motorRPM.value != 0) {
       if (
         this.nemaForm.controls.frequency.status == 'VALID' &&
         this.nemaForm.controls.horsePower.status == 'VALID' &&
         this.nemaForm.controls.motorRPM.status == 'VALID' &&
         this.nemaForm.controls.efficiencyClass.status == 'VALID'
       ) {
-        if (this.nemaForm.value.efficiencyClass == 'Specified') {
+        if (this.nemaForm.controls.efficiencyClass.value == 'Specified') {
           if (
             this.nemaForm.controls.efficiency.status == 'VALID'
           ) {

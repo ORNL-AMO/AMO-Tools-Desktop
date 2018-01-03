@@ -6,6 +6,7 @@ import { WindowRefService } from '../../../indexedDb/window-ref.service';
 import { Settings } from '../../../shared/models/settings';
 import { OperationsService } from './operations.service';
 import { OperationsCompareService } from './operations-compare.service';
+import { FormGroup } from '@angular/forms';
 @Component({
   selector: 'app-operations',
   templateUrl: './operations.component.html',
@@ -27,7 +28,7 @@ export class OperationsComponent implements OnInit {
   @Input()
   settings: Settings;
 
-  operationsForm: any;
+  operationsForm: FormGroup;
   firstChange: boolean = true;
   isCalculated: boolean;
   constructor(private operationsService: OperationsService, private operationsCompareService: OperationsCompareService) { }
@@ -61,19 +62,19 @@ export class OperationsComponent implements OnInit {
   saveLosses() {
     if (this.operationsForm.status == 'VALID') {
       let tmpOpHours: OperatingHours = {
-        hoursPerShift: this.operationsForm.value.hoursPerShift,
-        hoursPerYear: this.operationsForm.value.hoursPerYear,
-        shiftsPerDay: this.operationsForm.value.shiftsPerDay,
-        daysPerWeek: this.operationsForm.value.daysPerWeek,
-        weeksPerYear: this.operationsForm.value.weeksPerYear,
+        hoursPerShift: this.operationsForm.controls.hoursPerShift.value,
+        hoursPerYear: this.operationsForm.controls.hoursPerYear.value,
+        shiftsPerDay: this.operationsForm.controls.shiftsPerDay.value,
+        daysPerWeek: this.operationsForm.controls.daysPerWeek.value,
+        weeksPerYear: this.operationsForm.controls.weeksPerYear.value,
         isCalculated: this.isCalculated
       }
       let tmpOpCosts: OperatingCosts = {
-        electricityCost: this.operationsForm.value.electricityCost,
-        steamCost: this.operationsForm.value.steamCost,
-        fuelCost: this.operationsForm.value.fuelCost
+        electricityCost: this.operationsForm.controls.electricityCost.value,
+        steamCost: this.operationsForm.controls.steamCost.value,
+        fuelCost: this.operationsForm.controls.fuelCost.value
       }
-      let implementationCost = this.operationsForm.value.implementationCost;
+      let implementationCost = this.operationsForm.controls.implementationCost.value;
       this.phast.operatingCosts = tmpOpCosts;
       this.phast.operatingHours = tmpOpHours;
       this.phast.implementationCost = implementationCost;

@@ -7,6 +7,7 @@ import { ChargeMaterial, SolidChargeMaterial, GasChargeMaterial, LiquidChargeMat
 import { ChargeMaterialService } from './charge-material.service';
 import { ChargeMaterialCompareService } from './charge-material-compare.service';
 import { Settings } from '../../../shared/models/settings';
+import { FormGroup } from '@angular/forms/src/model';
 
 @Component({
   selector: 'app-charge-material',
@@ -37,7 +38,7 @@ export class ChargeMaterialComponent implements OnInit {
   @Input()
   modExists: boolean;
 
-  _chargeMaterial: Array<any>;
+  _chargeMaterial: Array<ChargeMaterialObj>;
   firstChange: boolean = true;
   resultsUnit: string;
   disableType: boolean = false;
@@ -144,7 +145,7 @@ export class ChargeMaterialComponent implements OnInit {
       if (!loss.name) {
         loss.name = 'Loss #' + lossIndex;
       }
-      let tmpLoss;
+      let tmpLoss: ChargeMaterialObj;
       if (loss.chargeMaterialType == 'Gas') {
         tmpLoss = {
           chargeMaterialType: 'Gas',
@@ -193,7 +194,6 @@ export class ChargeMaterialComponent implements OnInit {
       liquidForm: this.chargeMaterialService.initLiquidForm(this._chargeMaterial.length + 1),
       gasForm: this.chargeMaterialService.initGasForm(this._chargeMaterial.length + 1),
       heatRequired: 0.0,
-      modifiedHeatRequired: 0.0,
       collapse: false
     });
     this.saveLosses();
@@ -203,19 +203,11 @@ export class ChargeMaterialComponent implements OnInit {
     this.chargeMaterialService.setDelete(lossIndex);
   }
 
-  renameMaterial() {
-    let index = 1;
-    this._chargeMaterial.forEach(material => {
-      material.name = 'Material #' + index;
-      index++;
-    })
-  }
-
-  collapseLoss(loss: any) {
+  collapseLoss(loss: ChargeMaterialObj) {
     loss.collapse = !loss.collapse;
   }
 
-  calculate(loss: any) {
+  calculate(loss: ChargeMaterialObj) {
     if (loss.chargeMaterialType == 'Solid') {
       if (loss.solidForm.status == 'VALID') {
         let tmpMaterial: ChargeMaterial = this.chargeMaterialService.buildSolidChargeMaterial(loss.solidForm);
@@ -246,7 +238,7 @@ export class ChargeMaterialComponent implements OnInit {
     this._chargeMaterial.forEach(material => {
       let tmpMaterial: ChargeMaterial;
       if (material.chargeMaterialType == 'Gas') {
-        if (!material.gasForm.value.name) {
+        if (!material.gasForm.controls.name.value) {
           material.gasForm.patchValue({
             name: 'Loss #' + lossIndex
           })
@@ -256,7 +248,7 @@ export class ChargeMaterialComponent implements OnInit {
         tmpMaterial.gasChargeMaterial.heatRequired = material.heatRequired;
         tmpMaterial.chargeMaterialType = 'Gas';
       } else if (material.chargeMaterialType == 'Solid') {
-        if (!material.solidForm.value.name) {
+        if (!material.solidForm.controls.name.value) {
           material.solidForm.patchValue({
             name: 'Loss #' + lossIndex
           })
@@ -266,7 +258,7 @@ export class ChargeMaterialComponent implements OnInit {
         tmpMaterial.solidChargeMaterial.heatRequired = material.heatRequired;
         tmpMaterial.chargeMaterialType = 'Solid';
       } else if (material.chargeMaterialType == 'Liquid') {
-        if (!material.liquidForm.value.name) {
+        if (!material.liquidForm.controls.name.value) {
           material.liquidForm.patchValue({
             name: 'Loss #' + lossIndex
           })
@@ -286,24 +278,24 @@ export class ChargeMaterialComponent implements OnInit {
   setName(material: any) {
     if (material.chargeMaterialType == 'Solid') {
       material.liquidForm.patchValue({
-        name: material.solidForm.value.name
+        name: material.solidForm.controls.name.value
       })
       material.gasForm.patchValue({
-        name: material.solidForm.value.name
+        name: material.solidForm.controls.name.value
       })
     } else if (material.chargeMaterialType == 'Liquid') {
       material.gasForm.patchValue({
-        name: material.liquidForm.value.name
+        name: material.liquidForm.controls.name.value
       })
       material.solidForm.patchValue({
-        name: material.liquidForm.value.name
+        name: material.liquidForm.controls.name.value
       })
     } else if (material.chargeMaterialType == 'Gas') {
       material.liquidForm.patchValue({
-        name: material.gasForm.value.name
+        name: material.gasForm.controls.name.value
       })
       material.solidForm.patchValue({
-        name: material.gasForm.value.name
+        name: material.gasForm.controls.name.value
       })
     }
   }
@@ -327,4 +319,14 @@ export class ChargeMaterialComponent implements OnInit {
       }
     }
   }
+}
+
+
+export interface ChargeMaterialObj {
+  chargeMaterialType: string,
+  solidForm: FormGroup,
+  liquidForm: FormGroup,
+  gasForm: FormGroup,
+  heatRequired: number,
+  collapse: boolean
 }
