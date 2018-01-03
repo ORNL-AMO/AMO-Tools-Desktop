@@ -39,7 +39,6 @@ export class LossesComponent implements OnInit {
   editModification: Modification;
   showEditModification: boolean = false;
 
-  showSetupDialog: boolean;
   isLossesSetup: boolean;
   showModal: boolean = false;
 
@@ -58,8 +57,8 @@ export class LossesComponent implements OnInit {
     if (!this.phast.losses) {
       //initialize losses
       this.phast.losses = {};
-      //show setup dialog div
-      this.showSetupDialog = true;
+    }else{
+      this.phast.disableSetupDialog = true;
     }
     if (this.phast.modifications) {
       this._modifications = (JSON.parse(JSON.stringify(this.phast.modifications)));
@@ -199,6 +198,7 @@ export class LossesComponent implements OnInit {
   }
 
   addLoss() {
+    this.phast.disableSetupDialog = true;
     if (this.baselineSelected) {
       this.lossAdded = true;
       this.addLossToggle = !this.addLossToggle;
@@ -228,7 +228,7 @@ export class LossesComponent implements OnInit {
 
   hideSetupDialog() {
     this.saved.emit(true);
-    this.showSetupDialog = false;
+    this.phast.disableSetupDialog = true;
   }
 
   lossesSetup() {
