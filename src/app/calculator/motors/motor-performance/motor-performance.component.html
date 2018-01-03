@@ -7,7 +7,7 @@
         </div>
         <div class="row">
           <div class="col-12">
-            <app-motor-performance-form [(performanceForm)]="performanceForm" [settings]="settings" (calculate)="calculate()"></app-motor-performance-form>
+            <app-motor-performance-form [(performanceForm)]="performanceForm" [settings]="settings" (calculate)="calculate()" (changeField)="changeField($event)"></app-motor-performance-form>
           </div>
         </div>
       </div>
@@ -31,14 +31,15 @@
           <div class="row justify-content-center data-row align-items-center" *ngIf="tabSelect == 'help'">
             <div class="col-11">
               <div class="calc-help">
-                <h3>Motor Performance Help</h3>
-                <p>
-                  Plots current, efficiency, power factor vs motor shaft load for a given motor description
-                </p>
-                <p>
-                  <u>Power factor-</u> The ratio of the real electrical power used to do work to the apparent power in the circuit.
-                  A higher power factor signifies that the motor consumes power effectively.
-                </p>
+                <app-motor-performance-help [currentField]="currentField"></app-motor-performance-help>
+                <!--<h3>Motor Performance Help</h3>-->
+                <!--<p>-->
+                  <!--Plots current, efficiency, power factor vs motor shaft load for a given motor description-->
+                <!--</p>-->
+                <!--<p>-->
+                  <!--<u>Power factor-</u> The ratio of the real electrical power used to do work to the apparent power in the circuit.-->
+                  <!--A higher power factor signifies that the motor consumes power effectively.-->
+                <!--</p>-->
               </div>
             </div>
           </div>

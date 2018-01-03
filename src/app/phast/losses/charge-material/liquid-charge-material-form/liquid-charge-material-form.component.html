@@ -162,7 +162,7 @@
         </button>
       </div>
       <div class="modal-body">
-        <app-liquid-load-charge-material (closeModal)="hideMaterialModal($event)" [settings]="settings"></app-liquid-load-charge-material>
+        <app-liquid-load-charge-material *ngIf="showModal" (closeModal)="hideMaterialModal($event)" [settings]="settings"></app-liquid-load-charge-material>
       </div>
     </div>
   </div>

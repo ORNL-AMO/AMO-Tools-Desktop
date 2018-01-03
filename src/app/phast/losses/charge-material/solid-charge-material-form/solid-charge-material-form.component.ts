@@ -50,7 +50,7 @@ export class SolidChargeMaterialFormComponent implements OnInit {
   selectedMaterial: any;
   counter: any;
   dischargeTempError: string = null;
-
+  showModal: boolean = false;
   constructor(private suiteDbService: SuiteDbService, private chargeMaterialCompareService: ChargeMaterialCompareService, private windowRefService: WindowRefService, private lossesService: LossesService, private convertUnitsService: ConvertUnitsService) {
   }
 
@@ -325,6 +325,7 @@ checkInputError(bool?: boolean) {
   }
 
   showMaterialModal() {
+    this.showModal = true;
     this.lossesService.modalOpen.next(true);
     this.materialModal.show();
   }
@@ -340,6 +341,7 @@ checkInputError(bool?: boolean) {
         this.setProperties();
       }
     }
+    this.showModal = false;
     this.materialModal.hide();
     this.lossesService.modalOpen.next(false);
   }
