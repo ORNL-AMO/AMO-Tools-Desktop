@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { ChargeMaterial, GasChargeMaterial, LiquidChargeMaterial, SolidChargeMaterial } from '../../../shared/models/phast/losses/chargeMaterial';
 import { BehaviorSubject } from 'rxjs';
 @Injectable()
@@ -25,7 +25,7 @@ export class ChargeMaterialService {
   //   }
   // }
   //empty gas charge material form
-  initGasForm(lossNum: number) {
+  initGasForm(lossNum: number): FormGroup {
     return this.formBuilder.group({
       'materialId': [1, Validators.required],
       'materialSpecificHeat': ['', Validators.required],
@@ -43,7 +43,7 @@ export class ChargeMaterialService {
     })
   }
   //gas charge material form from GasChargeMaterial
-  getGasChargeMaterialForm(chargeMaterial: ChargeMaterial) {
+  getGasChargeMaterialForm(chargeMaterial: ChargeMaterial): FormGroup {
     let reactionType = 'Endothermic';
     if (chargeMaterial.gasChargeMaterial.thermicReactionType != 0) {
       reactionType = 'Exothermic';
@@ -64,7 +64,7 @@ export class ChargeMaterialService {
     });
   }
   //GasChargeMaterial from gasForm
-  buildGasChargeMaterial(gasForm: any): ChargeMaterial {
+  buildGasChargeMaterial(gasForm: FormGroup): ChargeMaterial {
     let reactionType = 0;
     if (gasForm.controls.endothermicOrExothermic.value == 'Exothermic') {
       reactionType = 1;
@@ -89,7 +89,7 @@ export class ChargeMaterialService {
   }
 
   //Empty liquid charge material form
-  initLiquidForm(lossNum: number) {
+  initLiquidForm(lossNum: number): FormGroup {
     return this.formBuilder.group({
       'materialId': [1, Validators.required],
       'materialSpecificHeatLiquid': ['', Validators.required],
@@ -109,7 +109,7 @@ export class ChargeMaterialService {
   }
 
   //liquid charge material form from LiquidChargeMaterial
-  getLiquidChargeMaterialForm(chargeMaterial: ChargeMaterial) {
+  getLiquidChargeMaterialForm(chargeMaterial: ChargeMaterial): FormGroup {
     let reactionType = 'Endothermic';
     if (chargeMaterial.liquidChargeMaterial.thermicReactionType != 0) {
       reactionType = 'Exothermic';
@@ -133,7 +133,7 @@ export class ChargeMaterialService {
   }
 
   //build LiquidChargeMaterial from liquidForm
-  buildLiquidChargeMaterial(liquidForm: any): ChargeMaterial {
+  buildLiquidChargeMaterial(liquidForm: FormGroup): ChargeMaterial {
     let reactionType = 0;
     if (liquidForm.controls.endothermicOrExothermic.value == 'Exothermic') {
       reactionType = 1;
@@ -160,7 +160,7 @@ export class ChargeMaterialService {
   }
 
   //empty solid charge material form
-  initSolidForm(lossNum: number) {
+  initSolidForm(lossNum: number): FormGroup {
     //FUEL FIRED SOLID
     return this.formBuilder.group({
       'materialId': [1, Validators.required],
@@ -184,7 +184,7 @@ export class ChargeMaterialService {
   }
 
   //solid material form from SolidChargeMaterial
-  getSolidChargeMaterialForm(chargeMaterial: ChargeMaterial) {
+  getSolidChargeMaterialForm(chargeMaterial: ChargeMaterial): FormGroup {
     let reactionType = 'Endothermic';
     if (chargeMaterial.solidChargeMaterial.thermicReactionType != 0) {
       reactionType = 'Exothermic';
@@ -213,7 +213,7 @@ export class ChargeMaterialService {
 
 
   //SolidChargeMaterial from form
-  buildSolidChargeMaterial(solidForm: any): ChargeMaterial {
+  buildSolidChargeMaterial(solidForm: FormGroup): ChargeMaterial {
     let reactionType = 0;
     if (solidForm.controls.endothermicOrExothermic.value == 'Exothermic') {
       reactionType = 1;
@@ -223,7 +223,7 @@ export class ChargeMaterialService {
       solidChargeMaterial: {
         materialId: solidForm.controls.materialId.value,
         thermicReactionType: reactionType,
-        specificHeatSolid: solidForm.controls.materialSpecificHeatOfSolidMaterial,
+        specificHeatSolid: solidForm.controls.materialSpecificHeatOfSolidMaterial.value,
         latentHeat: solidForm.controls.materialLatentHeatOfFusion.value,
         specificHeatLiquid: solidForm.controls.materialHeatOfLiquid.value,
         meltingPoint: solidForm.controls.materialMeltingPoint.value,

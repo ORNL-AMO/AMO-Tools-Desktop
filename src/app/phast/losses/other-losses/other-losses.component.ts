@@ -5,6 +5,7 @@ import { Losses } from '../../../shared/models/phast/phast';
 import { OtherLoss } from '../../../shared/models/phast/losses/otherLoss';
 import { OtherLossesCompareService } from './other-losses-compare.service';
 import { Settings } from '../../../shared/models/settings';
+import { FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-other-losses',
@@ -35,26 +36,10 @@ export class OtherLossesComponent implements OnInit {
   @Input()
   modExists: boolean;
   
-  _otherLosses: Array<any>;
+  _otherLosses: Array<OtherLossObj>;
   firstChange: boolean = true;
   lossesLocked: boolean = false;
   constructor(private otherLossesService: OtherLossesService, private otherLossCompareService: OtherLossesCompareService) { }
-
-
-  ngOnChanges(changes: SimpleChanges) {
-    if (!this.firstChange) {
-      if (changes.saveClicked) {
-        this.saveLosses();
-      }
-      if (changes.addLossToggle) {
-        this.addLoss();
-      }
-    }
-    else {
-      this.firstChange = false;
-    }
-  }
-
 
   ngOnInit() {
     if (!this._otherLosses) {
@@ -69,7 +54,6 @@ export class OtherLossesComponent implements OnInit {
           name: 'Loss #' + (this._otherLosses.length + 1),
           collapse: false
         };
-        this.calculate(tmpLoss);
         this._otherLosses.push(tmpLoss);
       })
     }
@@ -110,7 +94,21 @@ export class OtherLossesComponent implements OnInit {
     }
   }
 
-  collapseLoss(loss: any){
+  ngOnChanges(changes: SimpleChanges) {
+    if (!this.firstChange) {
+      if (changes.saveClicked) {
+        this.saveLosses();
+      }
+      if (changes.addLossToggle) {
+        this.addLoss();
+      }
+    }
+    else {
+      this.firstChange = false;
+    }
+  }
+
+  collapseLoss(loss: OtherLossObj){
     loss.collapse = !loss.collapse;
   }
   
@@ -147,11 +145,6 @@ export class OtherLossesComponent implements OnInit {
     })
   }
 
-  calculate(loss: any) {
-    loss.heatLoss = loss.form.controls.heatLoss.value;
-  }
-
-
   saveLosses() {
     let tmpLosses = new Array<OtherLoss>();
     this._otherLosses.forEach(loss => {
@@ -179,4 +172,10 @@ export class OtherLossesComponent implements OnInit {
       }
     }
   }
+}
+
+export interface OtherLossObj{
+  form: FormGroup,
+  name: string,
+  collapse: boolean
 }

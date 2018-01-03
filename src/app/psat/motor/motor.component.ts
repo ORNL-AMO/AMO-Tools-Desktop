@@ -6,6 +6,7 @@ import { CompareService } from '../compare.service';
 import { WindowRefService } from '../../indexedDb/window-ref.service';
 import { HelpPanelService } from '../help-panel/help-panel.service';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
+import { FormGroup } from '@angular/forms';
 @Component({
   selector: 'app-motor',
   templateUrl: './motor.component.html',
@@ -33,9 +34,6 @@ export class MotorComponent implements OnInit {
   @Input()
   inSetup: boolean;
 
-  @ViewChild('formRef') formRef: ElementRef;
-  elements: any;
-
   efficiencyClasses: Array<string> = [
     'Standard Efficiency',
     'Energy Efficient',
@@ -53,7 +51,7 @@ export class MotorComponent implements OnInit {
 
   options: Array<any>;
   counter: any;
-  psatForm: any;
+  psatForm: FormGroup;
   isFirstChange: boolean = true;
   formValid: boolean;
   rpmError: string = null;
@@ -73,9 +71,7 @@ export class MotorComponent implements OnInit {
     } else {
       this.options = this.kWatts;
     }
-    if (this.selected) {
-      this.formRef.nativeElement.frequency.focus();
-    }
+
     this.helpPanelService.currentField.next('lineFrequency');
     //init alert meessages
     this.checkEfficiency(true);
@@ -136,11 +132,11 @@ export class MotorComponent implements OnInit {
   disableFLA() {
     if (!this.disableFLAOptimized) {
       if (
-        this.psatForm.controls.frequency.status.value == 'VALID' &&
-        this.psatForm.controls.horsePower.status.value == 'VALID' &&
-        this.psatForm.controls.motorRPM.status.value == 'VALID' &&
-        this.psatForm.controls.efficiencyClass.status.value == 'VALID' &&
-        this.psatForm.controls.motorVoltage.status.value == 'VALID'
+        this.psatForm.controls.frequency.status == 'VALID' &&
+        this.psatForm.controls.horsePower.status == 'VALID' &&
+        this.psatForm.controls.motorRPM.status == 'VALID' &&
+        this.psatForm.controls.efficiencyClass.status == 'VALID' &&
+        this.psatForm.controls.motorVoltage.status == 'VALID'
       ) {
         if (this.psatForm.controls.efficiencyClass.value != 'Specified') {
           return false;
@@ -161,31 +157,22 @@ export class MotorComponent implements OnInit {
   }
 
   disableOptimized() {
-    this.formRef.nativeElement.horsePower.disabled = true;
-    this.formRef.nativeElement.efficiencyClass.disabled = true;
-    if (this.formRef.nativeElement.efficiency) {
-      this.formRef.nativeElement.efficiency.disabled = true;
-    }
-    this.formRef.nativeElement.fullLoadAmps.disabled = true;
+    this.psatForm.controls.horsePower.disable();
+    this.psatForm.controls.efficiencyClass.disable();
+    this.psatForm.controls.efficiency.disable();
+    this.psatForm.controls.fullLoadAmps.disable();
     this.disableFLAOptimized = true;
   }
 
   disableForm() {
-    this.elements = this.formRef.nativeElement.elements;
-    for (var i = 0, len = this.elements.length; i < len; ++i) {
-      this.elements[i].disabled = true;
-    }
+    this.psatForm.disable();
   }
 
   enableForm() {
-    this.elements = this.formRef.nativeElement.elements;
-    for (var i = 0, len = this.elements.length; i < len; ++i) {
-      this.elements[i].disabled = false;
-    }
+    this.psatForm.enable();
     if (this.psat.inputs.optimize_calculation) {
       this.disableOptimized();
     }
-
   }
 
   // addNum(str: string) {
@@ -214,7 +201,7 @@ export class MotorComponent implements OnInit {
     this.helpPanelService.currentField.next(str);
   }
 
-  checkForm(form: any) {
+  checkForm(form: FormGroup) {
     this.formValid = this.psatService.isMotorFormValid(form);
     if (this.formValid) {
       this.isValid.emit(true)
@@ -366,7 +353,7 @@ export class MotorComponent implements OnInit {
     }
   }
 
-  savePsat(form: any) {
+  savePsat(form: FormGroup) {
     this.psat.inputs = this.psatService.getPsatInputsFromForm(form);
     this.setCompareVals();
     this.saved.emit(this.selected);

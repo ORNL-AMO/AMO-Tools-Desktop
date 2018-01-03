@@ -2,6 +2,7 @@ import {Component, Input, OnInit} from '@angular/core';
 import { Settings } from '../../../shared/models/settings';
 import {FormBuilder, Validators} from "@angular/forms";
 import {IndexedDbService} from "../../../indexedDb/indexed-db.service";
+import { FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-percent-load-estimation',
@@ -13,7 +14,7 @@ export class PercentLoadEstimationComponent implements OnInit {
   settings: Settings;
 
   loadEstimationResult: number;
-  percentLoadEstimationForm: any;
+  percentLoadEstimationForm: FormGroup;
   tabSelect: string = 'results';  
   toggleCalculate = false;
 

@@ -16,7 +16,7 @@
   </div>
   <div class="row" *ngIf="!loss.collapse">
     <div class="col-12">
-      <app-other-losses-form (changeField)="changeField($event)" [(lossesForm)]="loss.form" (calculate)="calculate(loss)" [lossIndex]="lossIndex"
+      <app-other-losses-form (changeField)="changeField($event)" [(lossesForm)]="loss.form" [lossIndex]="lossIndex"
         [baselineSelected]="baselineSelected" (saveEmit)="saveLosses()" [settings]="settings"></app-other-losses-form>
     </div>
   </div>

@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
 import { Settings } from '../../../../shared/models/settings';
+import { FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-specific-speed-form',
@@ -8,7 +9,7 @@ import { Settings } from '../../../../shared/models/settings';
 })
 export class SpecificSpeedFormComponent implements OnInit {
   @Input()
-  speedForm: any;
+  speedForm: FormGroup;
   @Output('calculate')
   calculate = new EventEmitter<boolean>();
   @Output('changeField')

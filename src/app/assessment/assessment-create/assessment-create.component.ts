@@ -7,6 +7,7 @@ import { Router } from '@angular/router';
 import { AssessmentService } from '../assessment.service';
 import { IndexedDbService } from '../../indexedDb/indexed-db.service';
 import { Settings } from '../../shared/models/settings';
+import { FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-assessment-create',
@@ -22,7 +23,7 @@ export class AssessmentCreateComponent implements OnInit {
   @Input()
   type: string;
 
-  newAssessment: any;
+  newAssessment: FormGroup;
   selectedEquip: string = 'new';
   showDropdown: boolean = false;
   selectedAssessment: string = 'Select Pump';

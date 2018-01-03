@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { FlueGas, FlueGasByMass, FlueGasByVolume } from '../../../shared/models/phast/losses/flueGas';
 import { BehaviorSubject } from 'rxjs';
 
@@ -27,7 +27,7 @@ export class FlueGasLossesService {
   // }
 
 
-  initFormVolume(lossNum: number) {
+  initFormVolume(lossNum: number): FormGroup {
     return this.formBuilder.group({
       'gasTypeId': [1, Validators.required],
       'flueGasTemperature': ['', Validators.required],
@@ -51,7 +51,7 @@ export class FlueGasLossesService {
     })
   }
 
-  initFormMass(lossNum: number) {
+  initFormMass(lossNum: number): FormGroup {
     return this.formBuilder.group({
       'gasTypeId': [1, Validators.required],
       'flueGasTemperature': ['', Validators.required],
@@ -74,7 +74,7 @@ export class FlueGasLossesService {
     })
   }
 
-  initByVolumeFormFromLoss(loss: FlueGas) {
+  initByVolumeFormFromLoss(loss: FlueGas): FormGroup {
     return this.formBuilder.group({
       'gasTypeId': [loss.flueGasByVolume.gasTypeId, Validators.required],
       'flueGasTemperature': [loss.flueGasByVolume.flueGasTemperature, Validators.required],
@@ -98,7 +98,7 @@ export class FlueGasLossesService {
     })
   }
 
-  initByMassFormFromLoss(loss: FlueGas) {
+  initByMassFormFromLoss(loss: FlueGas): FormGroup {
     return this.formBuilder.group({
       'gasTypeId': [loss.flueGasByMass.gasTypeId, Validators.required],
       'flueGasTemperature': [loss.flueGasByMass.flueGasTemperature, Validators.required],
@@ -121,7 +121,7 @@ export class FlueGasLossesService {
     })
   }
 
-  buildByMassLossFromForm(form: any): FlueGas {
+  buildByMassLossFromForm(form: FormGroup): FlueGas {
     let tmpFlueGas: FlueGas = {
       name: form.controls.name.value,
       flueGasByMass: {
@@ -147,7 +147,7 @@ export class FlueGasLossesService {
     return tmpFlueGas;
   }
 
-  buildByVolumeLossFromForm(form: any): FlueGas {
+  buildByVolumeLossFromForm(form: FormGroup): FlueGas {
     let tmpFlueGas: FlueGas = {
       name: form.controls.name.value,
       flueGasByVolume: {

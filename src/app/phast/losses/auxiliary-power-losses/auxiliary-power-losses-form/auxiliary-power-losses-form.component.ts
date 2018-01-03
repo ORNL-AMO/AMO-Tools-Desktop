@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, EventEmitter, Output, ViewChild, ElementRef, SimpleChanges } from '@angular/core';
 import { WindowRefService } from '../../../../indexedDb/window-ref.service';
 import { AuxiliaryPowerCompareService } from '../auxiliary-power-compare.service';
+import { FormGroup } from '@angular/forms';
 @Component({
   selector: 'app-auxiliary-power-losses-form',
   templateUrl: './auxiliary-power-losses-form.component.html',
@@ -8,7 +9,7 @@ import { AuxiliaryPowerCompareService } from '../auxiliary-power-compare.service
 })
 export class AuxiliaryPowerLossesFormComponent implements OnInit {
   @Input()
-  auxLossesForm: any;
+  auxLossesForm: FormGroup;
   @Output('calculate')
   calculate = new EventEmitter<boolean>();
   @Input()
@@ -20,9 +21,6 @@ export class AuxiliaryPowerLossesFormComponent implements OnInit {
   @Input()
   lossIndex: number;
 
-  @ViewChild('lossForm') lossForm: ElementRef;
-  form: any;
-  elements: any;
   inputError: string = null;
   firstChange: boolean = true;
   counter: any;

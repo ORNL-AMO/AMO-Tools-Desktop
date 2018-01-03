@@ -6,6 +6,7 @@ import { EnergyInputExhaustGasLoss } from '../../../shared/models/phast/losses/e
 import { EnergyInputExhaustGasService } from './energy-input-exhaust-gas.service';
 import { EnergyInputExhaustGasCompareService } from './energy-input-exhaust-gas-compare.service';
 import { Settings } from '../../../shared/models/settings';
+import { FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-energy-input-exhaust-gas-losses',
@@ -36,7 +37,7 @@ export class EnergyInputExhaustGasLossesComponent implements OnInit {
   @Input()
   modExists: boolean;
 
-  _exhaustGasLosses: Array<any>;
+  _exhaustGasLosses: Array<EnInputExGasObj>;
   firstChange: boolean = true;
   availableHeat: number = 0;
   resultsUnit: string;
@@ -75,9 +76,10 @@ export class EnergyInputExhaustGasLossesComponent implements OnInit {
         let tmpLoss = {
           form: this.energyInputExhaustGasService.getFormFromLoss(loss),
           heatLoss: 0.0,
-          collapse: false
+          collapse: false,
+          exhaustGas: 0.0
         };
-        if(!tmpLoss.form.controls.name.value){
+        if (!tmpLoss.form.controls.name.value) {
           tmpLoss.form.patchValue({
             name: 'Loss #' + lossIndex
           })
@@ -122,7 +124,7 @@ export class EnergyInputExhaustGasLossesComponent implements OnInit {
     //     }
     //   })
     // }
-    if(this.inSetup && this.modExists){
+    if (this.inSetup && this.modExists) {
       this.lossesLocked = true;
       this.disableForms();
     }
@@ -131,15 +133,15 @@ export class EnergyInputExhaustGasLossesComponent implements OnInit {
   ngOnDestroy() {
     if (this.isBaseline) {
       this.energyInputExhaustGasCompareService.baselineEnergyInputExhaustGasLosses = null;
-    //  this.energyInputExhaustGasService.addLossBaselineMonitor.next(false);
+      //  this.energyInputExhaustGasService.addLossBaselineMonitor.next(false);
     } else {
       this.energyInputExhaustGasCompareService.modifiedEnergyInputExhaustGasLosses = null;
-     // this.energyInputExhaustGasService.addLossModificationMonitor.next(false);
+      // this.energyInputExhaustGasService.addLossModificationMonitor.next(false);
     }
     this.energyInputExhaustGasService.deleteLossIndex.next(null);
   }
-  
-  disableForms(){
+
+  disableForms() {
     this._exhaustGasLosses.forEach(loss => {
       loss.form.disable();
     })
@@ -153,7 +155,7 @@ export class EnergyInputExhaustGasLossesComponent implements OnInit {
       this.energyInputExhaustGasCompareService.addObject(this.energyInputExhaustGasCompareService.differentArray.length - 1);
     }
     this._exhaustGasLosses.push({
-      form: this.energyInputExhaustGasService.initForm(this._exhaustGasLosses.length+1),
+      form: this.energyInputExhaustGasService.initForm(this._exhaustGasLosses.length + 1),
       heatLoss: 0.0,
       exhaustGas: 0.0,
       collapse: false
@@ -165,7 +167,7 @@ export class EnergyInputExhaustGasLossesComponent implements OnInit {
     this.energyInputExhaustGasService.setDelete(lossIndex);
   }
 
-  calculate(loss: any) {
+  calculate(loss: EnInputExGasObj) {
     let tmpLoss = this.energyInputExhaustGasService.getLossFromForm(loss.form);
     this.availableHeat = this.phastService.availableHeat(tmpLoss, this.settings);
     tmpLoss.availableHeat = this.availableHeat;
@@ -179,15 +181,15 @@ export class EnergyInputExhaustGasLossesComponent implements OnInit {
     }
   }
 
-  collapseLoss(loss: any){
+  collapseLoss(loss: EnInputExGasObj) {
     loss.collapse = !loss.collapse;
   }
-  
+
   saveLosses() {
     let tmpExhaustGases = new Array<EnergyInputExhaustGasLoss>();
     let lossIndex = 1;
     this._exhaustGasLosses.forEach(loss => {
-      if(!loss.form.controls.name.value){
+      if (!loss.form.controls.name.value) {
         loss.form.patchValue({
           name: 'Loss #' + lossIndex
         })
@@ -217,4 +219,11 @@ export class EnergyInputExhaustGasLossesComponent implements OnInit {
       }
     }
   }
+}
+
+export interface EnInputExGasObj {
+  form: FormGroup,
+  heatLoss: number,
+  exhaustGas: number,
+  collapse: boolean
 }

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { EnergyInputEAF } from '../../../shared/models/phast/losses/energyInputEAF';
 import { BehaviorSubject } from 'rxjs';
 
@@ -25,7 +25,7 @@ export class EnergyInputService {
   //     this.addLossBaselineMonitor.next(true);
   //   }
   // }
-  initForm(lossNum: number) {
+  initForm(lossNum: number): FormGroup {
     return this.formBuilder.group({
       naturalGasHeatInput: ['', Validators.required],
       flowRateInput: [''],
@@ -41,7 +41,7 @@ export class EnergyInputService {
     })
   }
 
-  getLossFromForm(form: any): EnergyInputEAF {
+  getLossFromForm(form: FormGroup): EnergyInputEAF {
     let tmpEnergyInput: EnergyInputEAF = {
       naturalGasHeatInput: form.controls.naturalGasHeatInput.value,
       flowRateInput: form.controls.flowRateInput.value,
@@ -58,7 +58,7 @@ export class EnergyInputService {
     return tmpEnergyInput;
   }
 
-  getFormFromLoss(loss: EnergyInputEAF) {
+  getFormFromLoss(loss: EnergyInputEAF): FormGroup {
     return this.formBuilder.group({
       naturalGasHeatInput: [loss.naturalGasHeatInput, Validators.required],
       flowRateInput: [loss.flowRateInput],

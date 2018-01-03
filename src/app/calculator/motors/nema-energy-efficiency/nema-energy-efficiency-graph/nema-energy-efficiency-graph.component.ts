@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
 import { PsatService } from '../../../../psat/psat.service';
 import { Settings } from '../../../../shared/models/settings';
+import { FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-nema-energy-efficiency-graph',
@@ -9,7 +10,7 @@ import { Settings } from '../../../../shared/models/settings';
 })
 export class NemaEnergyEfficiencyGraphComponent implements OnInit {
   @Input()
-  nemaForm: any;
+  nemaForm: FormGroup;
   @Input()
   settings:Settings;
 

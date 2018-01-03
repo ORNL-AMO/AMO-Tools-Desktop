@@ -32,10 +32,6 @@ export class HeatSystemEfficiencyComponent implements OnInit {
 
   @Output('savedLoss')
   savedLoss = new EventEmitter<boolean>();
-  @ViewChild('lossForm') lossForm: ElementRef;
-  form: any;
-  elements: any;
-
 
   firstChange: boolean = true;
 
@@ -54,7 +50,7 @@ export class HeatSystemEfficiencyComponent implements OnInit {
       this.resultsUnit = 'kW';
     }
 
-    this.initForm(this.phast.systemEfficiency);
+    this.efficiencyForm = this.initForm(this.phast.systemEfficiency);
 
     if (!this.baselineSelected) {
       this.disableForm();
@@ -95,16 +91,15 @@ export class HeatSystemEfficiencyComponent implements OnInit {
     }
   }
 
-  initForm(val?: number) {
+  initForm(val?: number): FormGroup {
     if (val) {
-      this.efficiencyForm = this.formBuilder.group({
+      return this.formBuilder.group({
         efficiency: [val, Validators.required]
       })
-    } else {
-      this.efficiencyForm = this.formBuilder.group({
-        efficiency: [90, Validators.required]
-      })
     }
+    return this.formBuilder.group({
+      efficiency: [90, Validators.required]
+    })
   }
 
   disableForm() {

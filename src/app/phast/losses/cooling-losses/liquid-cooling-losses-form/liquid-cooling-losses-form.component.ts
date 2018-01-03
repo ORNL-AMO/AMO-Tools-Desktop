@@ -2,6 +2,7 @@ import { Component, OnInit, Input, EventEmitter, Output, ViewChild, ElementRef, 
 import { WindowRefService } from '../../../../indexedDb/window-ref.service';
 import { CoolingLossesCompareService } from '../cooling-losses-compare.service';
 import { Settings } from '../../../../shared/models/settings';
+import { FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-liquid-cooling-losses-form',
@@ -10,7 +11,7 @@ import { Settings } from '../../../../shared/models/settings';
 })
 export class LiquidCoolingLossesFormComponent implements OnInit {
   @Input()
-  lossesForm: any;
+  lossesForm: FormGroup;
   @Output('calculate')
   calculate = new EventEmitter<boolean>();
   @Input()
@@ -24,9 +25,6 @@ export class LiquidCoolingLossesFormComponent implements OnInit {
   @Input()
   settings: Settings;
 
-  @ViewChild('lossForm') lossForm: ElementRef;
-  form: any;
-  elements: any;
   specificHeatError: string = null;
   firstChange: boolean = true;
   counter: any;

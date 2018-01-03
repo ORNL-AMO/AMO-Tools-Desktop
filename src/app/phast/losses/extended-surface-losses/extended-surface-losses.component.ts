@@ -7,6 +7,7 @@ import { ExtendedSurfaceLossesService } from './extended-surface-losses.service'
 import { ExtendedSurfaceCompareService } from './extended-surface-compare.service';
 import { WallLoss } from '../../../shared/models/phast/losses/wallLoss';
 import { Settings } from '../../../shared/models/settings';
+import { FormGroup } from '@angular/forms/src/model';
 @Component({
   selector: 'app-extended-surface-losses',
   templateUrl: './extended-surface-losses.component.html',
@@ -36,7 +37,7 @@ export class ExtendedSurfaceLossesComponent implements OnInit {
   @Input()
   modExists: boolean;
 
-  _surfaceLosses: Array<any>;
+  _surfaceLosses: Array<ExtSurfaceObj>;
   firstChange: boolean = true;
   resultsUnit: string;
   lossesLocked: boolean = false;
@@ -58,10 +59,10 @@ export class ExtendedSurfaceLossesComponent implements OnInit {
 
   ngOnDestroy() {
     if (this.isBaseline) {
-    //  this.extendedSurfaceLossesService.addLossBaselineMonitor.next(false);
+      //  this.extendedSurfaceLossesService.addLossBaselineMonitor.next(false);
       this.extendedSurfaceCompareService.baselineSurface = null;
     } else {
-     // this.extendedSurfaceLossesService.addLossModificationMonitor.next(false);
+      // this.extendedSurfaceLossesService.addLossModificationMonitor.next(false);
       this.extendedSurfaceCompareService.modifiedSurface = null;
     }
     this.extendedSurfaceLossesService.deleteLossIndex.next(null);
@@ -87,7 +88,7 @@ export class ExtendedSurfaceLossesComponent implements OnInit {
           heatLoss: loss.heatLoss || 0.0,
           collapse: false
         };
-        if(!tmpLoss.form.controls.name.value){
+        if (!tmpLoss.form.controls.name.value) {
           tmpLoss.form.patchValue({
             name: 'Loss #' + lossIndex
           })
@@ -137,7 +138,7 @@ export class ExtendedSurfaceLossesComponent implements OnInit {
     }
   }
 
-  disableForms(){
+  disableForms() {
     this._surfaceLosses.forEach(loss => {
       loss.form.disable();
     })
@@ -150,7 +151,7 @@ export class ExtendedSurfaceLossesComponent implements OnInit {
       this.extendedSurfaceCompareService.addObject(this.extendedSurfaceCompareService.differentArray.length - 1);
     }
     this._surfaceLosses.push({
-      form: this.extendedSurfaceLossesService.initForm(this._surfaceLosses.length+1),
+      form: this.extendedSurfaceLossesService.initForm(this._surfaceLosses.length + 1),
       heatLoss: 0.0,
       collapse: false
     });
@@ -192,7 +193,7 @@ export class ExtendedSurfaceLossesComponent implements OnInit {
     let tmpSurfaceLosses = new Array<ExtendedSurface>();
     this._surfaceLosses.forEach(loss => {
       let lossIndex = 1;
-      if(!loss.form.controls.name.value){
+      if (!loss.form.controls.name.value) {
         loss.form.patchValue({
           name: 'Loss #' + lossIndex
         })
@@ -223,4 +224,10 @@ export class ExtendedSurfaceLossesComponent implements OnInit {
       }
     }
   }
+}
+
+export interface ExtSurfaceObj {
+  form: FormGroup,
+  heatLoss: number,
+  collapse: boolean
 }

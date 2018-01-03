@@ -6,6 +6,7 @@ import { ModalDirective } from 'ngx-bootstrap';
 import { LossesService } from '../../losses.service';
 import { Settings } from '../../../../shared/models/settings';
 import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
+import { FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-liquid-charge-material-form',
@@ -14,7 +15,7 @@ import { ConvertUnitsService } from '../../../../shared/convert-units/convert-un
 })
 export class LiquidChargeMaterialFormComponent implements OnInit {
   @Input()
-  chargeMaterialForm: any;
+  chargeMaterialForm: FormGroup;
   @Output('calculate')
   calculate = new EventEmitter<boolean>();
   @Input()
@@ -28,9 +29,6 @@ export class LiquidChargeMaterialFormComponent implements OnInit {
   @Input()
   settings: Settings;
   @ViewChild('materialModal') public materialModal: ModalDirective;
-  @ViewChild('lossForm') lossForm: ElementRef;
-  form: any;
-  elements: any;
 
   firstChange: boolean = true;
   materialTypes: any;

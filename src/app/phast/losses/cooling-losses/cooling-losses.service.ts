@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { WaterCoolingLoss, LiquidCoolingLoss, GasCoolingLoss, CoolingLoss } from '../../../shared/models/phast/losses/coolingLoss';
 import { BehaviorSubject } from 'rxjs';
 import { Settings } from '../../../shared/models/settings';
@@ -24,7 +24,7 @@ export class CoolingLossesService {
   //     this.addLossBaselineMonitor.next(true);
   //   }
   // }
-  initWaterCoolingForm() {
+  initWaterCoolingForm(): FormGroup {
     return this.formBuilder.group({
       'liquidFlow': ['', Validators.required],
       'inletTemp': ['', Validators.required],
@@ -33,7 +33,7 @@ export class CoolingLossesService {
     })
   }
 
-  initWaterFormFromLoss(loss: WaterCoolingLoss) {
+  initWaterFormFromLoss(loss: WaterCoolingLoss): FormGroup {
     return this.formBuilder.group({
       'liquidFlow': [loss.flowRate, Validators.required],
       'inletTemp': [loss.initialTemperature, Validators.required],
@@ -42,7 +42,7 @@ export class CoolingLossesService {
     })
   }
 
-  initWaterLossFromForm(form: any): WaterCoolingLoss {
+  initWaterLossFromForm(form: FormGroup): WaterCoolingLoss {
     let tmpLoss: WaterCoolingLoss = {
       flowRate: form.controls.liquidFlow.value,
       initialTemperature: form.controls.inletTemp.value,
@@ -52,7 +52,7 @@ export class CoolingLossesService {
     return tmpLoss;
   }
 
-  initLiquidCoolingForm(settings: Settings, lossNum: number) {
+  initLiquidCoolingForm(settings: Settings, lossNum: number): FormGroup {
     let defaultDensity: number = 8.338;
     let defaultSpecificHeat: number = 1;
     if (settings.unitsOfMeasure == 'Metric') {
@@ -70,7 +70,7 @@ export class CoolingLossesService {
     });
   }
 
-  initLiquidFormFromLoss(loss: CoolingLoss) {
+  initLiquidFormFromLoss(loss: CoolingLoss): FormGroup {
     return this.formBuilder.group({
       'avgSpecificHeat': [loss.liquidCoolingLoss.specificHeat, Validators.required],
       'density': [loss.liquidCoolingLoss.density, Validators.required],
@@ -82,7 +82,7 @@ export class CoolingLossesService {
     })
   }
 
-  initLiquidLossFromForm(form: any): CoolingLoss {
+  initLiquidLossFromForm(form: FormGroup): CoolingLoss {
     let tmpLoss: CoolingLoss = {
       name: form.controls.name.value,
       liquidCoolingLoss: {
@@ -97,7 +97,7 @@ export class CoolingLossesService {
     return tmpLoss;
   }
 
-  initGasCoolingForm(settings: Settings, lossNum: number) {
+  initGasCoolingForm(settings: Settings, lossNum: number): FormGroup {
     let defaultDensity: number = .074887;
     let defaultSpecificHeat: number = .2371;
     if (settings.unitsOfMeasure == 'Metric') {
@@ -115,7 +115,7 @@ export class CoolingLossesService {
     });
   }
 
-  initGasFormFromLoss(loss: CoolingLoss) {
+  initGasFormFromLoss(loss: CoolingLoss): FormGroup {
     return this.formBuilder.group({
       'avgSpecificHeat': [loss.gasCoolingLoss.specificHeat, Validators.required],
       'gasFlow': [loss.gasCoolingLoss.flowRate, Validators.required],
@@ -127,7 +127,7 @@ export class CoolingLossesService {
     });
   }
 
-  initGasLossFromForm(form: any): CoolingLoss {
+  initGasLossFromForm(form: FormGroup): CoolingLoss {
     let tmpLoss: CoolingLoss = {
       name: form.controls.name.value,
       gasCoolingLoss: {

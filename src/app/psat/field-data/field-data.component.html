@@ -1,4 +1,4 @@
-<form #formRef [formGroup]="psatForm" *ngIf="psatForm">
+<form [formGroup]="psatForm" *ngIf="psatForm">
   <div *ngIf="inSetup" class="row">
     <div class="col-12">
       <div class="header">
@@ -85,8 +85,6 @@
       </div>
     </div>
   </div>
-</form>
-<form #formRef2 [formGroup]="psatForm" *ngIf="psatForm">
   <div class="setup-form-group" *ngIf="!baseline">
     <!-- <div *ngIf="!baseline" class="form-group">
       <label class="form-check-label" style="width: 100%; padding-top: 5px;">
@@ -112,7 +110,8 @@
     <div class="form-group">
       <label for="sizeMargin">Size Margin</label>
       <div class="input-group">
-        <input name="sizeMargin" type="number" min="0" max="100" step="any" class="form-control" id="sizeMargin" formControlName="sizeMargin" (input)="checkMargin()" (focus)="focusField('sizeMargin')" onfocus="this.select();">
+        <input name="sizeMargin" type="number" min="0" max="100" step="any" class="form-control" id="sizeMargin" formControlName="sizeMargin"
+          (input)="checkMargin()" (focus)="focusField('sizeMargin')" onfocus="this.select();">
         <span class="input-group-addon units">%</span>
       </div>
       <span class="alert-warning pull-right small" *ngIf="marginError !== null">{{marginError}}</span>

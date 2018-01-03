@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, SimpleChanges, Output, EventEmitter } from '@angular/core';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
+import { FormGroup } from '@angular/forms';
 @Component({
   selector: 'app-psat-settings',
   templateUrl: './psat-settings.component.html',
@@ -7,7 +8,7 @@ import { ConvertUnitsService } from '../../shared/convert-units/convert-units.se
 })
 export class PsatSettingsComponent implements OnInit {
   @Input()
-  settingsForm: any;
+  settingsForm: FormGroup;
   @Input()
   unitChange: boolean;
   @Output('startSavePolling')

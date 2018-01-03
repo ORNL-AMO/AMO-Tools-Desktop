@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { EnergyInputExhaustGasLoss } from '../../../shared/models/phast/losses/energyInputExhaustGasLosses';
-import { FormBuilder, Validators, FormControl } from '@angular/forms';
+import { FormBuilder, Validators, FormControl, FormGroup } from '@angular/forms';
 import { BehaviorSubject } from 'rxjs';
 import * as _ from 'lodash';
 @Injectable()
@@ -32,7 +32,7 @@ export class EnergyInputExhaustGasService {
 
 
 
-  initForm(lossNum: number) {
+  initForm(lossNum: number): FormGroup {
     return this.formBuilder.group({
       'excessAir': [20],
       'combustionAirTemp': [''],
@@ -44,7 +44,7 @@ export class EnergyInputExhaustGasService {
     })
   }
 
-  getFormFromLoss(energyInputExhaustGas: EnergyInputExhaustGasLoss) {
+  getFormFromLoss(energyInputExhaustGas: EnergyInputExhaustGasLoss): FormGroup {
     let tmpGroup = this.formBuilder.group({
       'excessAir': [energyInputExhaustGas.excessAir],
       'combustionAirTemp': [energyInputExhaustGas.combustionAirTemp],
@@ -66,7 +66,7 @@ export class EnergyInputExhaustGasService {
     return tmpGroup;
   }
 
-  getLossFromForm(form: any): EnergyInputExhaustGasLoss {
+  getLossFromForm(form: FormGroup): EnergyInputExhaustGasLoss {
     let tmpExhaustGas: EnergyInputExhaustGasLoss = {
       excessAir: form.controls.excessAir.value,
       combustionAirTemp: form.controls.combustionAirTemp.value,

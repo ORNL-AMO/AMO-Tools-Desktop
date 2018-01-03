@@ -7,6 +7,7 @@ import { ModalDirective } from 'ngx-bootstrap';
 import { LossesService } from '../../losses.service';
 import { Settings } from '../../../../shared/models/settings';
 import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
+import { FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-atmosphere-losses-form',
@@ -15,7 +16,7 @@ import { ConvertUnitsService } from '../../../../shared/convert-units/convert-un
 })
 export class AtmosphereLossesFormComponent implements OnInit {
   @Input()
-  atmosphereLossForm: any;
+  atmosphereLossForm: FormGroup;
   @Output('calculate')
   calculate = new EventEmitter<boolean>();
   @Input()
@@ -30,10 +31,6 @@ export class AtmosphereLossesFormComponent implements OnInit {
   settings: Settings;
 
   @ViewChild('materialModal') public materialModal: ModalDirective;
-  @ViewChild('lossForm') lossForm: ElementRef;
-  form: any;
-  elements: any;
-
   firstChange: boolean = true;
   counter: any;
   specificHeatError: string = null;

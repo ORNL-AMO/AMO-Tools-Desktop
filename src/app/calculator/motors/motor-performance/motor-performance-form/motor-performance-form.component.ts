@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { PsatService } from '../../../../psat/psat.service';
 import { Settings } from '../../../../shared/models/settings';
+import { FormGroup } from '@angular/forms';
 @Component({
   selector: 'app-motor-performance-form',
   templateUrl: './motor-performance-form.component.html',
@@ -8,7 +9,7 @@ import { Settings } from '../../../../shared/models/settings';
 })
 export class MotorPerformanceFormComponent implements OnInit {
   @Input()
-  performanceForm: any;
+  performanceForm: FormGroup;
   @Output('calculate')
   calculate = new EventEmitter<boolean>();
   @Input()

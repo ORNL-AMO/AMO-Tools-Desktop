@@ -6,6 +6,7 @@ import { WindowRefService } from '../../../indexedDb/window-ref.service';
 import { Settings } from '../../../shared/models/settings';
 import { OperationsService } from './operations.service';
 import { OperationsCompareService } from './operations-compare.service';
+import { FormGroup } from '@angular/forms';
 @Component({
   selector: 'app-operations',
   templateUrl: './operations.component.html',
@@ -27,7 +28,7 @@ export class OperationsComponent implements OnInit {
   @Input()
   settings: Settings;
 
-  operationsForm: any;
+  operationsForm: FormGroup;
   firstChange: boolean = true;
   isCalculated: boolean;
   constructor(private operationsService: OperationsService, private operationsCompareService: OperationsCompareService) { }

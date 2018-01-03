@@ -2,6 +2,7 @@ import { Component, OnInit, Input, EventEmitter, Output, ViewChild, ElementRef, 
 import { SlagCompareService } from '../slag-compare.service';
 import { WindowRefService } from '../../../../indexedDb/window-ref.service';
 import { Settings } from '../../../../shared/models/settings';
+import { FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-slag-form',
@@ -10,7 +11,7 @@ import { Settings } from '../../../../shared/models/settings';
 })
 export class SlagFormComponent implements OnInit {
   @Input()
-  slagLossForm: any;
+  slagLossForm: FormGroup;
   @Output('calculate')
   calculate = new EventEmitter<boolean>();
   @Input()
@@ -24,13 +25,12 @@ export class SlagFormComponent implements OnInit {
   @Input()
   settings: Settings;
 
-  @ViewChild('lossForm') lossForm: ElementRef;
-  form: any;
-  elements: any;
-
   firstChange: boolean = true;
   counter: any;
   constructor(private windowRefService: WindowRefService, private slagCompareService: SlagCompareService) { }
+
+  ngOnInit() {
+  }
 
   ngOnChanges(changes: SimpleChanges) {
     if (!this.firstChange) {
@@ -42,9 +42,6 @@ export class SlagFormComponent implements OnInit {
     } else {
       this.firstChange = false;
     }
-  }
-
-  ngOnInit() {
   }
 
   ngAfterViewInit() {

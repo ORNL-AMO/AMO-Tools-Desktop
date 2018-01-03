@@ -5,6 +5,7 @@ import { OpeningLossesCompareService } from '../opening-losses-compare.service';
 import { OpeningLossesService } from '../opening-losses.service';
 import { PhastService } from '../../../phast.service';
 import { Settings } from '../../../../shared/models/settings';
+import { FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-opening-losses-form',
@@ -13,7 +14,7 @@ import { Settings } from '../../../../shared/models/settings';
 })
 export class OpeningLossesFormComponent implements OnInit {
   @Input()
-  openingLossesForm: any;
+  openingLossesForm: FormGroup;
   @Output('calculate')
   calculate = new EventEmitter<boolean>();
   @Input()
@@ -27,11 +28,8 @@ export class OpeningLossesFormComponent implements OnInit {
   @Input()
   settings: Settings;
 
-  @ViewChild('lossForm') lossForm: ElementRef;
   totalArea: number = 0.0;
 
-  form: any;
-  elements: any;
   counter: any;
   firstChange: boolean = true;
   temperatureError: string = null;
@@ -169,7 +167,7 @@ export class OpeningLossesFormComponent implements OnInit {
     }
 
     if (this.openingLossesForm.controls.openingType.value == 'Round') {
-      if (this.openingLossesForm.controls.lengthOfOpening.status.value == "VALID") {
+      if (this.openingLossesForm.controls.lengthOfOpening.status == "VALID") {
         this.openingLossesForm.controls.heightOfOpening.setValue(0);
         let radiusInches = this.openingLossesForm.controls.lengthOfOpening.value;
         //let radiusFeet = (radiusInches * .08333333) / 2;

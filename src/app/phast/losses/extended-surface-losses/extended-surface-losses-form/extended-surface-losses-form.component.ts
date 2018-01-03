@@ -2,6 +2,7 @@ import { Component, OnInit, Input, EventEmitter, Output, ViewChild, ElementRef, 
 import { WindowRefService } from '../../../../indexedDb/window-ref.service';
 import { ExtendedSurfaceCompareService } from '../extended-surface-compare.service';
 import { Settings } from '../../../../shared/models/settings';
+import { FormGroup } from '@angular/forms';
 @Component({
   selector: 'app-extended-surface-losses-form',
   templateUrl: './extended-surface-losses-form.component.html',
@@ -9,7 +10,7 @@ import { Settings } from '../../../../shared/models/settings';
 })
 export class ExtendedSurfaceLossesFormComponent implements OnInit {
   @Input()
-  lossesForm: any;
+  lossesForm: FormGroup;
   @Output('calculate')
   calculate = new EventEmitter<boolean>();
   @Input()
@@ -22,10 +23,6 @@ export class ExtendedSurfaceLossesFormComponent implements OnInit {
   lossIndex: number;
   @Input()
   settings: Settings;
-
-  @ViewChild('lossForm') lossForm: ElementRef;
-  form: any;
-  elements: any;
 
   surfaceAreaError: string = null;
   firstChange: boolean = true;

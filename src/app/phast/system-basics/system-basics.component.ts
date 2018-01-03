@@ -6,6 +6,7 @@ import { Settings } from '../../shared/models/settings';
 import { IndexedDbService } from '../../indexedDb/indexed-db.service';
 import { ModalDirective } from 'ngx-bootstrap';
 import { ConvertPhastService } from '../convert-phast.service';
+import { FormGroup } from '@angular/forms';
 @Component({
   selector: 'app-system-basics',
   templateUrl: 'system-basics.component.html',
@@ -31,7 +32,7 @@ export class SystemBasicsComponent implements OnInit {
 
   @ViewChild('settingsModal') public settingsModal: ModalDirective;
 
-  settingsForm: any;
+  settingsForm: FormGroup;
   unitChange: boolean = false;
 
   isFirstChange: boolean = true;

@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
 import { Settings } from '../../../../shared/models/settings';
+import { FormGroup } from '@angular/forms';
 @Component({
   selector: 'app-nema-energy-efficiency-form',
   templateUrl: './nema-energy-efficiency-form.component.html',
@@ -7,7 +8,7 @@ import { Settings } from '../../../../shared/models/settings';
 })
 export class NemaEnergyEfficiencyFormComponent implements OnInit {
   @Input()
-  nemaForm: any;
+  nemaForm: FormGroup;
   @Input()
   settings: Settings;
   @Output('changeField')

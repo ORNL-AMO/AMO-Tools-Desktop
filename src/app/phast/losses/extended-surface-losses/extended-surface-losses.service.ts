@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { Losses } from '../../../shared/models/phast/phast';
 import { ExtendedSurface } from '../../../shared/models/phast/losses/extendedSurface';
 import { BehaviorSubject } from 'rxjs';
@@ -25,7 +25,7 @@ export class ExtendedSurfaceLossesService {
   //     this.addLossBaselineMonitor.next(true);
   //   }
   // }
-  initForm(lossNum: number) {
+  initForm(lossNum: number): FormGroup {
     return this.formBuilder.group({
       'surfaceArea': ['', Validators.required],
       'avgSurfaceTemp': ['', Validators.required],
@@ -35,7 +35,7 @@ export class ExtendedSurfaceLossesService {
     })
   }
 
-  getSurfaceLossForm(wallLoss: ExtendedSurface) {
+  getSurfaceLossForm(wallLoss: ExtendedSurface): FormGroup {
     return this.formBuilder.group({
       'surfaceArea': [wallLoss.surfaceArea, Validators.required],
       'avgSurfaceTemp': [wallLoss.surfaceTemperature, Validators.required],
@@ -45,7 +45,7 @@ export class ExtendedSurfaceLossesService {
     })
   }
   //get WallLoss from form
-  getSurfaceLossFromForm(wallLossForm: any): ExtendedSurface {
+  getSurfaceLossFromForm(wallLossForm: FormGroup): ExtendedSurface {
     let tmpWallLoss: ExtendedSurface = {
       surfaceArea: wallLossForm.controls.surfaceArea.value,
       ambientTemperature: wallLossForm.controls.ambientTemp.value,

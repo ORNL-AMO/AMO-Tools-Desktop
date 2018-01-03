@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { AuxiliaryPowerLoss } from '../../../shared/models/phast/losses/auxiliaryPowerLoss';
 import { BehaviorSubject } from 'rxjs';
 
@@ -25,7 +25,7 @@ export class AuxiliaryPowerLossesService {
   //   }
   // }
 
-  initForm(lossNum: number) {
+  initForm(lossNum: number): FormGroup {
     return this.formBuilder.group({
       motorPhase: ['', Validators.required],
       supplyVoltage: ['', Validators.required],
@@ -36,7 +36,7 @@ export class AuxiliaryPowerLossesService {
     })
   }
 
-  getLossFromForm(form: any): AuxiliaryPowerLoss {
+  getLossFromForm(form: FormGroup): AuxiliaryPowerLoss {
     let tmpLoss: AuxiliaryPowerLoss = {
       motorPhase: form.controls.motorPhase.value,
       supplyVoltage: form.controls.supplyVoltage.value,
@@ -48,7 +48,7 @@ export class AuxiliaryPowerLossesService {
     return tmpLoss;
   }
 
-  getFormFromLoss(loss: AuxiliaryPowerLoss) {
+  getFormFromLoss(loss: AuxiliaryPowerLoss): FormGroup {
     return this.formBuilder.group({
       motorPhase: [loss.motorPhase, Validators.required],
       supplyVoltage: [loss.supplyVoltage, Validators.required],

@@ -7,6 +7,7 @@ import { CompareService } from '../compare.service';
 import { WindowRefService } from '../../indexedDb/window-ref.service';
 import { HelpPanelService } from '../help-panel/help-panel.service';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
+import { FormGroup } from '@angular/forms';
 @Component({
   selector: 'app-field-data',
   templateUrl: './field-data.component.html',
@@ -38,13 +39,7 @@ export class FieldDataComponent implements OnInit {
   @Input()
   inSetup: boolean;
 
-
   counter: any;
-
-  @ViewChild('formRef') formRef: ElementRef;
-
-  @ViewChild('formRef2') formRef2: ElementRef;
-  elements: any;
 
   formValid: boolean;
   headToolResults: any = {
@@ -62,7 +57,7 @@ export class FieldDataComponent implements OnInit {
     'Power',
     'Current'
   ];
-  psatForm: any;
+  psatForm: FormGroup;
   isFirstChange: boolean = true;
   flowError: string = null;
   voltageError: string = null;
@@ -96,9 +91,6 @@ export class FieldDataComponent implements OnInit {
     if (!this.selected) {
       this.disableForm();
     }
-    if (this.selected) {
-      this.formRef.nativeElement.operatingFraction.focus();
-    }
     this.setCompareVals();
     this.initDifferenceMonitor();
   }
@@ -126,28 +118,11 @@ export class FieldDataComponent implements OnInit {
   }
 
   disableForm() {
-    this.elements = this.formRef.nativeElement.elements;
-    for (var i = 0, len = this.elements.length; i < len; ++i) {
-      this.elements[i].disabled = true;
-    }
-    this.elements = this.formRef2.nativeElement.elements;
-    for (var i = 0, len = this.elements.length; i < len; ++i) {
-      this.elements[i].disabled = true;
-    }
-    //this.psatForm.disable();
-
+    this.psatForm.disable();
   }
 
   enableForm() {
-    this.elements = this.formRef.nativeElement.elements;
-    for (var i = 0, len = this.elements.length; i < len; ++i) {
-      this.elements[i].disabled = false;
-    }
-    this.elements = this.formRef2.nativeElement.elements;
-    for (var i = 0, len = this.elements.length; i < len; ++i) {
-      this.elements[i].disabled = false;
-    }
-    //this.psatForm.enable();
+    this.psatForm.enable();
   }
 
   focusField(str: string) {

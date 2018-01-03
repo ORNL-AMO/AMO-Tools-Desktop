@@ -7,6 +7,7 @@ import * as _ from 'lodash';
 import { EnergyInputExhaustGasService } from '../energy-input-exhaust-gas.service';
 import { PhastService } from '../../../phast.service';
 import { Settings } from '../../../../shared/models/settings';
+import { FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-energy-input-exhaust-gas-form',
@@ -15,7 +16,7 @@ import { Settings } from '../../../../shared/models/settings';
 })
 export class EnergyInputExhaustGasFormComponent implements OnInit {
   @Input()
-  exhaustGasForm: any;
+  exhaustGasForm: FormGroup;
   @Output('calculate')
   calculate = new EventEmitter<boolean>();
   @Input()
@@ -28,15 +29,9 @@ export class EnergyInputExhaustGasFormComponent implements OnInit {
   lossIndex: number;
   @Input()
   availableHeat: number;
-  //different for other losses monitoring
-  @Input()
-  isBaseline: boolean;
+
   @Input()
   settings: Settings;
-
-  @ViewChild('lossForm') lossForm: ElementRef;
-  form: any;
-  elements: any;
 
   firstChange: boolean = true;
   counter: any;

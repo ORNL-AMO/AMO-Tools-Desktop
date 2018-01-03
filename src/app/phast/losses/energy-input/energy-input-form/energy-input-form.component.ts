@@ -2,6 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter, ViewChild, ElementRef, 
 import { WindowRefService } from '../../../../indexedDb/window-ref.service';
 import { EnergyInputCompareService } from '../energy-input-compare.service';
 import { Settings } from '../../../../shared/models/settings';
+import { FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-energy-input-form',
@@ -10,7 +11,7 @@ import { Settings } from '../../../../shared/models/settings';
 })
 export class EnergyInputFormComponent implements OnInit {
   @Input()
-  energyInputForm: any;
+  energyInputForm: FormGroup;
   @Output('calculate')
   calculate = new EventEmitter<boolean>();
   @Input()
@@ -19,15 +20,11 @@ export class EnergyInputFormComponent implements OnInit {
   changeField = new EventEmitter<string>();
   @Output('saveEmit')
   saveEmit = new EventEmitter<boolean>();
-  @ViewChild('lossForm') lossForm: ElementRef;
   @Input()
   lossIndex: number;
   @Input()
   settings: Settings;
   flowInput: boolean;
-  form: any;
-  elements: any;
-
   firstChange: boolean = true;
   counter: any;
   constructor(private energyInputCompareService: EnergyInputCompareService, private windowRefService: WindowRefService) { }

@@ -7,6 +7,7 @@ import { ConvertUnitsService } from '../shared/convert-units/convert-units.servi
 import { ValidationService } from '../shared/validation.service';
 declare var psatAddon: any;
 import { BehaviorSubject } from 'rxjs';
+import { FormGroup } from '@angular/forms';
 @Injectable()
 export class PsatService {
   flaRange: any = {
@@ -671,7 +672,7 @@ export class PsatService {
     }
     return method;
   }
-  getEfficiencyFromForm(form: any) {
+  getEfficiencyFromForm(form: FormGroup) {
     let efficiency;
     if (form.controls.efficiencyClass.value == 'Standard Efficiency') {
       efficiency = 0;
@@ -715,7 +716,7 @@ export class PsatService {
     })
   }
 
-  getFormFromPsat(psatInputs: PsatInputs) {
+  getFormFromPsat(psatInputs: PsatInputs): FormGroup {
     if (!psatInputs.fixed_speed) {
       psatInputs.fixed_speed = 0;
     }
@@ -760,7 +761,7 @@ export class PsatService {
     })
   }
 
-  getPsatInputsFromForm(form: any): PsatInputs {
+  getPsatInputsFromForm(form: FormGroup): PsatInputs {
     let efficiency = this.getEfficiencyFromForm(form);
     let lineFreqEnum = this.getLineFreqEnum(form.controls.frequency.value);
     let pumpStyleEnum = this.getPumpStyleEnum(form.controls.pumpType.value);
@@ -802,7 +803,7 @@ export class PsatService {
     return tmpPsatInputs;
   }
 
-  isPumpFluidFormValid(form: any) {
+  isPumpFluidFormValid(form: FormGroup) {
     if (
       form.controls.pumpType.status == 'VALID' &&
       form.controls.pumpRPM.status == 'VALID' &&
@@ -825,7 +826,7 @@ export class PsatService {
     }
   }
 
-  isMotorFormValid(form: any) {
+  isMotorFormValid(form: FormGroup) {
     if (
       form.controls.frequency.status == 'VALID' &&
       form.controls.horsePower.status == 'VALID' &&
@@ -849,7 +850,7 @@ export class PsatService {
     }
   }
 
-  isFieldDataFormValid(form: any) {
+  isFieldDataFormValid(form: FormGroup) {
     if (
       form.controls.operatingFraction.status == 'VALID' &&
       form.controls.flowRate.status == 'VALID' &&

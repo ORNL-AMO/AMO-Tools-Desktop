@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { Losses } from '../../../shared/models/phast/phast';
 import { LeakageLoss } from '../../../shared/models/phast/losses/leakageLoss';
 import { BehaviorSubject } from 'rxjs';
@@ -26,7 +26,7 @@ export class GasLeakageLossesService {
   //   }
   // }
 
-  initForm(lossNum:number) {
+  initForm(lossNum:number): FormGroup {
     return this.formBuilder.group({
       draftPressure: ['', Validators.required],
       openingArea: ['', Validators.required],
@@ -39,7 +39,7 @@ export class GasLeakageLossesService {
     })
   }
 
-  initFormFromLoss(loss: LeakageLoss) {
+  initFormFromLoss(loss: LeakageLoss): FormGroup {
     return this.formBuilder.group({
       draftPressure: [loss.draftPressure, Validators.required],
       openingArea: [loss.openingArea, Validators.required],
@@ -52,7 +52,7 @@ export class GasLeakageLossesService {
     })
   }
 
-  initLossFromForm(form: any): LeakageLoss {
+  initLossFromForm(form: FormGroup): LeakageLoss {
     let tmpLoss: LeakageLoss = {
       draftPressure: form.controls.draftPressure.value,
       openingArea: form.controls.openingArea.value,

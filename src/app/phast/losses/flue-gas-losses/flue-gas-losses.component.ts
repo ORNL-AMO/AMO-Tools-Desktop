@@ -6,6 +6,7 @@ import { FlueGas, FlueGasByMass, FlueGasByVolume } from '../../../shared/models/
 import { Losses } from '../../../shared/models/phast/phast';
 import { FlueGasCompareService } from './flue-gas-compare.service';
 import { Settings } from '../../../shared/models/settings';
+import { FormGroup } from '@angular/forms/src/model';
 @Component({
   selector: 'app-flue-gas-losses',
   templateUrl: './flue-gas-losses.component.html',
@@ -35,7 +36,7 @@ export class FlueGasLossesComponent implements OnInit {
   @Input()
   modExists: boolean;
 
-  _flueGasLosses: Array<any>;
+  _flueGasLosses: Array<FlueGasObj>;
   firstChange: boolean = true;
   resultsUnit: string;
 
@@ -139,7 +140,6 @@ export class FlueGasLossesComponent implements OnInit {
   initFlueGasses() {
     let lossIndex = 1;
     this.losses.flueGasLosses.forEach(loss => {
-      console.log('count ' +lossIndex)
       let tmpLoss;
       if (loss.flueGasType == "By Volume") {
         tmpLoss = {
@@ -199,11 +199,11 @@ export class FlueGasLossesComponent implements OnInit {
     this.flueGasLossesService.setDelete(lossIndex);
   }
 
-  collapseLoss(loss: any) {
+  collapseLoss(loss: FlueGasObj) {
     loss.collapse = !loss.collapse;
   }
 
-  calculate(loss: any) {
+  calculate(loss: FlueGasObj) {
     let sumAdditionalHeat = this.phastService.sumChargeMaterialExothermic(this.losses.chargeMaterials, this.settings);
     if (loss.measurementType == "By Volume") {
       if (loss.formByVolume.status == 'VALID') {
@@ -245,7 +245,7 @@ export class FlueGasLossesComponent implements OnInit {
   }
 
 
-  setName(loss: any) {
+  setName(loss: FlueGasObj) {
     if (loss.measurementType == 'By Volume') {
       loss.formByMass.patchValue({
         name: loss.formByVolume.controls.name.value
@@ -308,3 +308,12 @@ export class FlueGasLossesComponent implements OnInit {
   }
 }
 
+export interface FlueGasObj {
+  measurementType: string,
+  formByVolume: FormGroup,
+  formByMass: FormGroup,
+  availableHeat: number,
+  grossHeat: number,
+  systemLosses: number,
+  collapse: boolean
+}

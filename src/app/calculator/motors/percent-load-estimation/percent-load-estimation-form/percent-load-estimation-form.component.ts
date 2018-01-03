@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Settings } from "../../../../shared/models/settings";
+import { FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-percent-load-estimation-form',
@@ -8,7 +9,7 @@ import { Settings } from "../../../../shared/models/settings";
 })
 export class PercentLoadEstimationFormComponent implements OnInit {
   @Input()
-  percentLoadEstimationForm: any;
+  percentLoadEstimationForm: FormGroup;
   @Output('emitCalculate')
   emitCalculate = new EventEmitter<boolean>();
   @Input()

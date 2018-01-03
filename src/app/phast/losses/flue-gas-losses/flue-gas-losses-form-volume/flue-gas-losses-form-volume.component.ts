@@ -6,6 +6,7 @@ import { ModalDirective } from 'ngx-bootstrap';
 import { LossesService } from '../../losses.service';
 import { Settings } from '../../../../shared/models/settings';
 import { PhastService } from "../../../phast.service";
+import { FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-flue-gas-losses-form-volume',
@@ -14,7 +15,7 @@ import { PhastService } from "../../../phast.service";
 })
 export class FlueGasLossesFormVolumeComponent implements OnInit {
   @Input()
-  flueGasLossForm: any;
+  flueGasLossForm: FormGroup;
   @Output('calculate')
   calculate = new EventEmitter<boolean>();
   @Input()
@@ -28,10 +29,6 @@ export class FlueGasLossesFormVolumeComponent implements OnInit {
   @Input()
   settings: Settings;
   @ViewChild('materialModal') public materialModal: ModalDirective;
-  @ViewChild('lossForm') lossForm: ElementRef;
-  form: any;
-  elements: any;
-
 
   firstChange: boolean = true;
   options: any;

@@ -6,6 +6,7 @@ import { LeakageLoss } from '../../../shared/models/phast/losses/leakageLoss';
 import { GasLeakageLossesService } from './gas-leakage-losses.service';
 import { GasLeakageCompareService } from './gas-leakage-compare.service';
 import { Settings } from '../../../shared/models/settings';
+import { FormGroup } from '@angular/forms/src/model';
 
 @Component({
   selector: 'app-gas-leakage-losses',
@@ -36,7 +37,7 @@ export class GasLeakageLossesComponent implements OnInit {
   @Input()
   modExists: boolean;
 
-  _leakageLosses: Array<any>;
+  _leakageLosses: Array<GasLeakageObj>;
   firstChange: boolean = true;
   lossesLocked: boolean = false;
   resultsUnit: string;
@@ -158,7 +159,7 @@ export class GasLeakageLossesComponent implements OnInit {
     this.saveLosses();
   }
   
-  collapseLoss(loss: any){
+  collapseLoss(loss: GasLeakageObj){
     loss.collapse = !loss.collapse;
   }
 
@@ -166,7 +167,7 @@ export class GasLeakageLossesComponent implements OnInit {
     this.gasLeakageLossesService.setDelete(lossIndex);
   }
 
-  calculate(loss: any) {
+  calculate(loss: GasLeakageObj) {
     if (loss.form.status == 'VALID') {
       let tmpLeakageLoss = this.gasLeakageLossesService.initLossFromForm(loss.form);
       loss.heatLoss = this.phastService.leakageLosses(tmpLeakageLoss, this.settings);
@@ -210,4 +211,10 @@ export class GasLeakageLossesComponent implements OnInit {
       }
     }
   }
+}
+
+export interface GasLeakageObj {
+  form: FormGroup,
+  heatLoss: number,
+  collapse: boolean
 }

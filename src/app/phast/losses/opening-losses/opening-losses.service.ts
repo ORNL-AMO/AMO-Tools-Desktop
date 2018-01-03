@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { OpeningLoss, CircularOpeningLoss, QuadOpeningLoss } from '../../../shared/models/phast/losses/openingLoss';
 import { BehaviorSubject } from 'rxjs';
 
@@ -26,7 +26,7 @@ export class OpeningLossesService {
   //   }
   // }
 
-  initForm(lossNum: number) {
+  initForm(lossNum: number): FormGroup {
     return this.formBuilder.group({
       'numberOfOpenings': [1, Validators.required],
       'openingType': ['Round', Validators.required],
@@ -42,7 +42,7 @@ export class OpeningLossesService {
     })
   }
 
-  getFormFromLoss(loss: OpeningLoss) {
+  getFormFromLoss(loss: OpeningLoss): FormGroup {
     return this.formBuilder.group({
       'numberOfOpenings': [loss.numberOfOpenings, Validators.required],
       'openingType': [loss.openingType, Validators.required],
@@ -58,7 +58,7 @@ export class OpeningLossesService {
     })
   }
 
-  getLossFromForm(form: any): OpeningLoss {
+  getLossFromForm(form: FormGroup): OpeningLoss {
     return {
       numberOfOpenings: form.controls.numberOfOpenings.value,
       emissivity: form.controls.emissivity.value,
@@ -74,7 +74,7 @@ export class OpeningLossesService {
     };
   }
 
-  getViewFactorInput(input: any) {
+  getViewFactorInput(input: FormGroup) {
     if (input.controls.openingType.value === 'Round') {
       return {
         openingShape: 0,
@@ -90,7 +90,7 @@ export class OpeningLossesService {
     };
   }
 
-  getQuadLossFromForm(form: any): QuadOpeningLoss {
+  getQuadLossFromForm(form: FormGroup): QuadOpeningLoss {
     const ratio = Math.min(form.controls.lengthOfOpening.value, form.controls.heightOfOpening.value) / form.controls.wallThickness.value;
     return {
       emissivity: form.controls.emissivity.value,
@@ -105,7 +105,7 @@ export class OpeningLossesService {
     };
   }
 
-  getCircularLossFromForm(form: any): CircularOpeningLoss {
+  getCircularLossFromForm(form: FormGroup): CircularOpeningLoss {
     const ratio = form.controls.lengthOfOpening.value / form.controls.wallThickness.value;
     return {
       emissivity: form.controls.emissivity.value,

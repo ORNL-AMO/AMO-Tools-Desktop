@@ -4,6 +4,7 @@ import { Settings } from '../../../../shared/models/settings';
 import { WindowRefService } from '../../../../indexedDb/window-ref.service';
 //eclare const d3: any;
 import * as d3 from 'd3';
+import { FormGroup } from '@angular/forms';
 @Component({
   selector: 'app-motor-performance-graph',
   templateUrl: './motor-performance-graph.component.html',
@@ -11,7 +12,7 @@ import * as d3 from 'd3';
 })
 export class MotorPerformanceGraphComponent implements OnInit {
   @Input()
-  performanceForm: any;
+  performanceForm: FormGroup;
   @Input()
   toggleCalculate: boolean;
   @Input()

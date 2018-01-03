@@ -7,6 +7,7 @@ import { SlagService } from './slag.service';
 import { SlagCompareService } from './slag-compare.service';
 //import { WindowRefService } from '../../../indexedDb/window-ref.service';
 import { Settings } from '../../../shared/models/settings';
+import { FormGroup } from '@angular/forms/src/model';
 @Component({
   selector: 'app-slag',
   templateUrl: './slag.component.html',
@@ -36,7 +37,7 @@ export class SlagComponent implements OnInit {
   @Input()
   modExists: boolean;
 
-  _slagLosses: Array<any>;
+  _slagLosses: Array<SlagLossObj>;
   firstChange: boolean = true;
   resultsUnit: string;
   lossesLocked: boolean = false;
@@ -63,7 +64,7 @@ export class SlagComponent implements OnInit {
       this.resultsUnit = 'kW';
     }
     if (!this._slagLosses) {
-      this._slagLosses = new Array();
+      this._slagLosses = new Array<SlagLossObj>();
     }
     if (this.losses.slagLosses) {
       this.setCompareVals();
@@ -163,7 +164,7 @@ export class SlagComponent implements OnInit {
     this.slagService.setDelete(lossIndex);
   }
 
-  calculate(loss: any) {
+  calculate(loss: SlagLossObj) {
     if (loss.form.status == 'VALID') {
       let tmpLoss: Slag = this.slagService.getLossFromForm(loss.form);
       loss.heatLoss = this.phastService.slagOtherMaterialLosses(tmpLoss, this.settings);
@@ -207,4 +208,10 @@ export class SlagComponent implements OnInit {
       }
     }
   }
+}
+
+export interface SlagLossObj {
+  form: FormGroup,
+  heatLoss?: number,
+  collapse: boolean
 }

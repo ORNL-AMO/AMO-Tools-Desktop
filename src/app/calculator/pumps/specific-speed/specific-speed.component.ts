@@ -4,6 +4,7 @@ import { PsatService } from '../../../psat/psat.service';
 import { Settings } from '../../../shared/models/settings';
 import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
+import { FormGroup } from '@angular/forms';
 @Component({
   selector: 'app-specific-speed',
   templateUrl: './specific-speed.component.html',
@@ -17,7 +18,7 @@ export class SpecificSpeedComponent implements OnInit {
   @Input()
   inPsat: boolean;
   currentField: string;
-  speedForm: any;
+  speedForm: FormGroup;
   specificSpeed: number;
   efficiencyCorrection: number;
   toggleCalculate: boolean = true;

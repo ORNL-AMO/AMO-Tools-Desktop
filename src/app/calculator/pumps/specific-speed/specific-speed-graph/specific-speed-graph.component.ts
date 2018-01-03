@@ -4,6 +4,7 @@ import { WindowRefService } from '../../../../indexedDb/window-ref.service';
 
 //declare const d3: any;
 import * as d3 from 'd3';
+import { FormGroup } from '@angular/forms';
 @Component({
   selector: 'app-specific-speed-graph',
   templateUrl: './specific-speed-graph.component.html',
@@ -11,7 +12,7 @@ import * as d3 from 'd3';
 })
 export class SpecificSpeedGraphComponent implements OnInit {
   @Input()
-  speedForm: any;
+  speedForm: FormGroup;
 
   svg: any;
   xAxis: any;
@@ -108,7 +109,7 @@ export class SpecificSpeedGraphComponent implements OnInit {
 
   getSpecificSpeed(): number {
     if (this.checkForm()) {
-      return this.speedForm.controls.pumpRPM.value * Math.pow(this.speedForm.controls.flowRate.value, 0.5) / Math.pow(this.speedForm.controls.head, .75);
+      return this.speedForm.controls.pumpRPM.value * Math.pow(this.speedForm.controls.flowRate.value, 0.5) / Math.pow(this.speedForm.controls.head.value, .75);
     } else {
       return 0;
     }

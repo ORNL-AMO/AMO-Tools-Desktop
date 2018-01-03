@@ -6,6 +6,7 @@ import { ModalDirective } from 'ngx-bootstrap';
 import { LossesService } from '../../losses.service';
 import { Settings } from '../../../../shared/models/settings';
 import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
+import { FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-solid-charge-material-form',
@@ -14,7 +15,7 @@ import { ConvertUnitsService } from '../../../../shared/convert-units/convert-un
 })
 export class SolidChargeMaterialFormComponent implements OnInit {
   @Input()
-  chargeMaterialForm: any;
+  chargeMaterialForm: FormGroup;
   @Output('calculate')
   calculate = new EventEmitter<boolean>();
   @Input()
@@ -29,10 +30,6 @@ export class SolidChargeMaterialFormComponent implements OnInit {
   settings: Settings;
 
   @ViewChild('materialModal') public materialModal: ModalDirective;
-
-  @ViewChild('lossForm') lossForm: ElementRef;
-  form: any;
-  elements: any;
 
   firstChange: boolean = true;
 
@@ -172,7 +169,7 @@ checkInputError(bool?: boolean) {
       } else {
         this.waterDischargedError = null;
       }
-  if (this.chargeMaterialForm.controls.percentChargeMelted.value < 0 || this.chargeMaterialForm.percentChargeMelted.value > 100) {
+  if (this.chargeMaterialForm.controls.percentChargeMelted.value < 0 || this.chargeMaterialForm.controls.percentChargeMelted.value > 100) {
         this.chargeMeltedError = 'Charge Melted must be equal or greater than 0 and less than or equal to 100%';
       } else {
         this.chargeMeltedError = null;
