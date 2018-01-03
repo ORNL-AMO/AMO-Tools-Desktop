@@ -188,8 +188,14 @@ export class ReportRollupService {
 
   updateSelectedPhasts(assessment: Assessment, modIndex: number) {
     let tmpSelected = this.selectedPhasts.value;
-    let selectedIndex = _.findIndex(tmpSelected, { assessmentId: assessment.id });
-    tmpSelected.splice(selectedIndex, 1, { baseline: assessment.phast, modification: assessment.phast.modifications[modIndex].phast, assessmentId: assessment.id, selectedIndex: modIndex });
+    if(modIndex != -1){
+      let selectedIndex = _.findIndex(tmpSelected, { assessmentId: assessment.id });
+      tmpSelected.splice(selectedIndex, 1, { baseline: assessment.phast, modification: assessment.phast.modifications[modIndex].phast, assessmentId: assessment.id, selectedIndex: modIndex });
+    }
+    else{ 
+      let selectedIndex = _.findIndex(tmpSelected, { assessmentId: assessment.id });
+      tmpSelected.splice(selectedIndex, 1, { baseline: assessment.phast, modification: assessment.phast, assessmentId: assessment.id, selectedIndex: modIndex });
+    }
     this.selectedPhasts.next(tmpSelected);
   }
 
