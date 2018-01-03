@@ -213,7 +213,7 @@
   </div>
 
 
-  <div class="setup-dialog" *ngIf="showSetupDialog == true">
+  <div class="setup-dialog" *ngIf="!phast.disableSetupDialog">
     <app-losses-splash-page (hidePage)="hideSetupDialog()"></app-losses-splash-page>
   </div>
 </div>
