@@ -17,7 +17,7 @@
     "build": "ng build",
     "build-aot": "ng build --aot",
     "build-watch": "ng build --op dist -w",
-    "build-prod": "ng build-prod --aot --env=prod",
+    "build-prod": "ng build --aot --env=prod",
     "clean": "rm -rf node_modules && rm -rf dist && rm -f package-lock.json",
     "electron": "electron .",
     "lint": "ng lint",
