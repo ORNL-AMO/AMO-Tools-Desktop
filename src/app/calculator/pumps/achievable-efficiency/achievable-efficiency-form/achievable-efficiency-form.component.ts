@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Settings } from '../../../../shared/models/settings';
+import { FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-achievable-efficiency-form',
@@ -8,7 +9,7 @@ import { Settings } from '../../../../shared/models/settings';
 })
 export class AchievableEfficiencyFormComponent implements OnInit {
   @Input()
-  efficiencyForm: any;
+  efficiencyForm: FormGroup;
   @Output('calculate')
   calculate = new EventEmitter<boolean>();
   @Input()

@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Settings } from '../../../../shared/models/settings';
+import { FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-head-tool-form',
@@ -8,7 +9,7 @@ import { Settings } from '../../../../shared/models/settings';
 })
 export class HeadToolFormComponent implements OnInit {
   @Input()
-  headToolForm: any;
+  headToolForm: FormGroup;
   @Output('calculate')
   calculate = new EventEmitter<boolean>();
   @Input()

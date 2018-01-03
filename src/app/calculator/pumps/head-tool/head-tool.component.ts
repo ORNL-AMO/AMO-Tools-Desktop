@@ -6,6 +6,7 @@ import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
 import { Settings } from '../../../shared/models/settings';
 import { SettingsService } from '../../../settings/settings.service';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
+import { FormGroup } from '@angular/forms';
 @Component({
   selector: 'app-head-tool',
   templateUrl: './head-tool.component.html',
@@ -35,12 +36,12 @@ export class HeadToolComponent implements OnInit {
 
   currentField: string = 'headToolType';
 
-  headToolForm: any;
-  headToolSuctionForm: any;
+  headToolForm: FormGroup;
+  headToolSuctionForm: FormGroup;
   headToolType: string = "Suction tank elevation";
   tabSelect: string = 'results';
   showSettings: boolean = false;
-  settingsForm: any;
+  settingsForm: FormGroup;
   canSave: boolean = false;
   constructor(private formBuilder: FormBuilder, private psatService: PsatService, private indexedDbService: IndexedDbService, private settingsService: SettingsService, private convertUnitsService: ConvertUnitsService) { }
 

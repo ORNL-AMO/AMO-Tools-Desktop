@@ -37,6 +37,7 @@ export class FixtureLossesFormComponent implements OnInit {
   firstChange: boolean = true;
   counter: any;
   materials: Array<any>;
+  showModal: boolean = false;
   constructor(private windowRefService: WindowRefService, private fixtureLossesCompareService: FixtureLossesCompareService, private suiteDbService: SuiteDbService, private lossesService: LossesService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -177,6 +178,7 @@ export class FixtureLossesFormComponent implements OnInit {
   }
 
   showMaterialModal() {
+    this.showModal = true;
     this.lossesService.modalOpen.next(true);
     this.materialModal.show();
   }
@@ -192,6 +194,7 @@ export class FixtureLossesFormComponent implements OnInit {
         this.setProperties();
       }
     }
+    this.showModal = false;
     this.materialModal.hide();
     this.lossesService.modalOpen.next(false);
   }

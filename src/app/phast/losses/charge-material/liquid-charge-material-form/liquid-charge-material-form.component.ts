@@ -44,6 +44,7 @@ export class LiquidChargeMaterialFormComponent implements OnInit {
   chargeReactedError: string = null;
   heatOfReactionError: string = null;
   materialLatentHeatError: string = null;
+  showModal: boolean = false;
   constructor(private suiteDbService: SuiteDbService, private chargeMaterialCompareService: ChargeMaterialCompareService, private windowRefService: WindowRefService, private lossesService: LossesService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -281,6 +282,7 @@ export class LiquidChargeMaterialFormComponent implements OnInit {
   }
 
   showMaterialModal() {
+    this.showModal = true;
     this.lossesService.modalOpen.next(true);
     this.materialModal.show();
   }
@@ -297,6 +299,7 @@ export class LiquidChargeMaterialFormComponent implements OnInit {
         this.setProperties();
       }
     }
+    this.showModal = false;
     this.materialModal.hide();
     this.lossesService.modalOpen.next(false);
   }
