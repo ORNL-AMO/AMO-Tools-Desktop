@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, SimpleChanges, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, SimpleChanges, Output, EventEmitter, ViewChild } from '@angular/core';
 import { PHAST, Losses, Modification } from '../../shared/models/phast/phast';
 import { Settings } from '../../shared/models/settings';
 import { ToastyService, ToastyConfig, ToastOptions, ToastData } from 'ng2-toasty';
@@ -23,7 +23,7 @@ export class LossesComponent implements OnInit {
   settings: Settings;
   @Input()
   inSetup: boolean;
-
+  @ViewChild('materialModal') public materialModal: ModalDirective;
   lossAdded: boolean;
 
   _modifications: Modification[];
@@ -41,6 +41,7 @@ export class LossesComponent implements OnInit {
 
   showSetupDialog: boolean;
   isLossesSetup: boolean;
+  showModal: boolean = false;
 
   isModalOpen: boolean = false;
   showAddBtn: boolean = true;
@@ -163,6 +164,7 @@ export class LossesComponent implements OnInit {
     this.modificationSelected = true;
     this.baselineSelected = false;
     this.saveModifications();
+    this.materialModal.hide();
   }
 
   deleteModification() {
@@ -236,9 +238,11 @@ export class LossesComponent implements OnInit {
 
   openModal() {
     this.isModalOpen = true;
+    this.materialModal.show();
   }
 
   closeModal() {
     this.isModalOpen = false;
+    this.materialModal.hide();
   }
 }
