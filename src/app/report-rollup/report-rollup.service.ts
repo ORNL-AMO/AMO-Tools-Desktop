@@ -168,7 +168,7 @@ export class ReportRollupService {
     })
   }
 
-  //USED FORM PSAT SUMMARY
+  //USED FOR PHAST SUMMARY
   initPhastCompare(resultsArr: Array<AllPhastResultsData>) {
     let tmpResults: Array<PhastCompare> = new Array<PhastCompare>();
     resultsArr.forEach(result => {
@@ -197,19 +197,17 @@ export class ReportRollupService {
     let tmpResultsArr = new Array<AllPhastResultsData>();
     phastArray.forEach(val => {
       if (val.phast.setupDone && val.phast.modifications) {
-        if (val.phast.modifications.length != 1) {
-          this.indexedDbService.getAssessmentSettings(val.id).then(settings => {
-            settings[0] = this.checkSettings(settings[0]);
-            let baselineResults = this.executiveSummaryService.getSummary(val.phast, false, settings[0], val.phast)
-            let modResultsArr = new Array<ExecutiveSummary>();
-            val.phast.modifications.forEach(mod => {
-              let tmpResults = this.executiveSummaryService.getSummary(mod.phast, true, settings[0], val.phast, baselineResults);
-              modResultsArr.push(tmpResults);
-            })
-            tmpResultsArr.push({ baselineResults: baselineResults, modificationResults: modResultsArr, assessmentId: val.id });
-            this.allPhastResults.next(tmpResultsArr);
+        this.indexedDbService.getAssessmentSettings(val.id).then(settings => {
+          settings[0] = this.checkSettings(settings[0]);
+          let baselineResults = this.executiveSummaryService.getSummary(val.phast, false, settings[0], val.phast)
+          let modResultsArr = new Array<ExecutiveSummary>();
+          val.phast.modifications.forEach(mod => {
+            let tmpResults = this.executiveSummaryService.getSummary(mod.phast, true, settings[0], val.phast, baselineResults);
+            modResultsArr.push(tmpResults);
           })
-        }
+          tmpResultsArr.push({ baselineResults: baselineResults, modificationResults: modResultsArr, assessmentId: val.id });
+          this.allPhastResults.next(tmpResultsArr);
+        })
       }
     })
   }
@@ -227,8 +225,8 @@ export class ReportRollupService {
     })
   }
 
-  checkSettings(settings: Settings){
-    if(!settings.energyResultUnit){
+  checkSettings(settings: Settings) {
+    if (!settings.energyResultUnit) {
       settings = this.settingsService.setEnergyResultUnitSetting(settings);
     }
     return settings;
