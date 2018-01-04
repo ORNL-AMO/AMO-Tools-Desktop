@@ -34,5 +34,7 @@ export const graphColors: Array<any> = [
   '#948A54',
   '#A9D58B',
   '#DD7164',
-  '#FFE166'
+  '#FFE166',
+  '#c3ff9e',
+  '#3f4a7d'
 ];
