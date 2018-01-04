@@ -170,7 +170,6 @@ export class ReportRollupService {
 
   //USED FOR PHAST SUMMARY
   initPhastCompare(resultsArr: Array<AllPhastResultsData>) {
-    console.log(resultsArr);
     let tmpResults: Array<PhastCompare> = new Array<PhastCompare>();
     resultsArr.forEach(result => {
       let minCost = _.minBy(result.modificationResults, (result) => { return result.annualCost })
@@ -180,7 +179,11 @@ export class ReportRollupService {
           let phastAssessments = this.phastAssessments.value;
           let assessmentIndex = _.findIndex(phastAssessments, { id: result.assessmentId });
           let assessment = phastAssessments[assessmentIndex];
-          tmpResults.push({ baseline: assessment.phast, modification: assessment.phast.modifications[modIndex].phast, assessmentId: result.assessmentId, selectedIndex: assessmentIndex });
+          if (result.isBaseline) {
+            tmpResults.push({ baseline: assessment.phast, modification: assessment.phast, assessmentId: result.assessmentId, selectedIndex: -1 });
+          } else {
+            tmpResults.push({ baseline: assessment.phast, modification: assessment.phast.modifications[modIndex].phast, assessmentId: result.assessmentId, selectedIndex: modIndex });
+          }
         }
       }
     });
@@ -189,11 +192,11 @@ export class ReportRollupService {
 
   updateSelectedPhasts(assessment: Assessment, modIndex: number) {
     let tmpSelected = this.selectedPhasts.value;
-    if(modIndex != -1){
+    if (modIndex != -1) {
       let selectedIndex = _.findIndex(tmpSelected, { assessmentId: assessment.id });
       tmpSelected.splice(selectedIndex, 1, { baseline: assessment.phast, modification: assessment.phast.modifications[modIndex].phast, assessmentId: assessment.id, selectedIndex: modIndex });
     }
-    else{ 
+    else {
       let selectedIndex = _.findIndex(tmpSelected, { assessmentId: assessment.id });
       tmpSelected.splice(selectedIndex, 1, { baseline: assessment.phast, modification: assessment.phast, assessmentId: assessment.id, selectedIndex: modIndex });
     }
@@ -203,16 +206,30 @@ export class ReportRollupService {
   initPhastResultsArr(phastArray: Array<Assessment>) {
     let tmpResultsArr = new Array<AllPhastResultsData>();
     phastArray.forEach(val => {
-      if (val.phast.setupDone && val.phast.modifications) {
+      if (val.phast.setupDone) {
         this.indexedDbService.getAssessmentSettings(val.id).then(settings => {
           settings[0] = this.checkSettings(settings[0]);
           let baselineResults = this.executiveSummaryService.getSummary(val.phast, false, settings[0], val.phast)
-          let modResultsArr = new Array<ExecutiveSummary>();
-          val.phast.modifications.forEach(mod => {
-            let tmpResults = this.executiveSummaryService.getSummary(mod.phast, true, settings[0], val.phast, baselineResults);
+          if (val.phast.modifications) {
+            if (val.phast.modifications.length != 0) {
+              let modResultsArr = new Array<ExecutiveSummary>();
+              val.phast.modifications.forEach(mod => {
+                let tmpResults = this.executiveSummaryService.getSummary(mod.phast, true, settings[0], val.phast, baselineResults);
+                modResultsArr.push(tmpResults);
+              })
+              tmpResultsArr.push({ baselineResults: baselineResults, modificationResults: modResultsArr, assessmentId: val.id });
+            } else {
+              let modResultsArr = new Array<ExecutiveSummary>();
+              let tmpResults = this.executiveSummaryService.getSummary(val.phast, true, settings[0], val.phast, baselineResults);
+              modResultsArr.push(tmpResults);
+              tmpResultsArr.push({ baselineResults: baselineResults, modificationResults: modResultsArr, assessmentId: val.id, isBaseline: true });
+            }
+          } else {
+            let modResultsArr = new Array<ExecutiveSummary>();
+            let tmpResults = this.executiveSummaryService.getSummary(val.phast, true, settings[0], val.phast, baselineResults);
             modResultsArr.push(tmpResults);
-          })
-          tmpResultsArr.push({ baselineResults: baselineResults, modificationResults: modResultsArr, assessmentId: val.id });
+            tmpResultsArr.push({ baselineResults: baselineResults, modificationResults: modResultsArr, assessmentId: val.id, isBaseline: true });
+          }
           this.allPhastResults.next(tmpResultsArr);
         })
       }
@@ -281,5 +298,6 @@ export interface PhastResultsData {
 export interface AllPhastResultsData {
   baselineResults: ExecutiveSummary,
   modificationResults: Array<ExecutiveSummary>,
-  assessmentId: number
+  assessmentId: number,
+  isBaseline?: boolean
 }

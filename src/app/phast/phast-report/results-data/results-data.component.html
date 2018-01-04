@@ -3,14 +3,12 @@
   <table class="table table-hover">
     <thead>
       <tr>
-        <th></th>
+        <th [ngStyle]="{'width.%': 100 /(phast.modifications.length+2)}">{{lossUnit}}</th>
         <th [ngClass]="{'selected-modification': selectedModificationIndex == -1}">Baseline
-          <span>({{lossUnit}})</span>
         </th>
-        <th *ngFor="let mod of phastMods; let index = index;" [ngClass]="{'selected-modification': index == selectedModificationIndex}">{{mod.phast.name}}
-          <span>({{lossUnit}})</span>
+        <th [ngStyle]="{'width.%': 100 /(phast.modifications.length+2)}" *ngFor="let mod of phastMods; let index = index;" [ngClass]="{'selected-modification': index == selectedModificationIndex}">{{mod.phast.name}}
         </th>
-        <th *ngIf="!inSetup && modification != undefined">{{modification.phast.name}} <span>({{lossUnit}})</span></th>
+        <th [ngStyle]="{'width.%': 100 /(phast.modifications.length+2)}" *ngIf="!inSetup && modification != undefined">{{modification.phast.name}}</th>
       </tr>
     </thead>
     <tbody>
@@ -218,7 +216,7 @@
         <td style="font-weight: bold;">Gross Heat Input</td>
         <td *ngIf="baseLineResults.grossHeatInput" style="font-weight: bold;" [ngClass]="{'selected-modification': selectedModificationIndex == -1}">{{baseLineResults.grossHeatInput| sigFigs:'5'}}</td>
         <td *ngIf="!baseLineResults.grossHeatInput" style="font-weight: bold;" [ngClass]="{'selected-modification': selectedModificationIndex == -1}">&mdash; &mdash;</td>
-        <td *ngFor="let mod of modificationResults" style="font-weight: bold;">
+        <td *ngFor="let mod of modificationResults" style="font-weight: bold;" [ngClass]="{'selected-modification': index == selectedModificationIndex}">
           <span *ngIf="mod.grossHeatInput">{{mod.grossHeatInput| sigFigs:'5'}}</span>
           <span *ngIf="!mod.grossHeatInput">&mdash; &mdash;</span>
         </td>
