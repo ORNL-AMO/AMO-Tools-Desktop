@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { Losses } from '../../../shared/models/phast/phast';
 import { WallLoss } from '../../../shared/models/phast/losses/wallLoss';
 import { BehaviorSubject } from 'rxjs';
@@ -33,7 +33,7 @@ export class WallLossesService {
   // }
 
   //init empty wall loss form
-  initForm(lossNum: number) {
+  initForm(lossNum: number): FormGroup {
     return this.formBuilder.group({
       'surfaceArea': ['', Validators.required],
       'avgSurfaceTemp': ['', Validators.required],
@@ -48,7 +48,7 @@ export class WallLossesService {
   }
 
   //get form from WallLoss
-  getWallLossForm(wallLoss: WallLoss) {
+  getWallLossForm(wallLoss: WallLoss): FormGroup {
     return this.formBuilder.group({
       'surfaceArea': [wallLoss.surfaceArea, Validators.required],
       'avgSurfaceTemp': [wallLoss.surfaceTemperature, Validators.required],
@@ -62,17 +62,17 @@ export class WallLossesService {
     })
   }
   //get WallLoss from form
-  getWallLossFromForm(wallLossForm: any): WallLoss {
+  getWallLossFromForm(wallLossForm: FormGroup): WallLoss {
     let tmpWallLoss: WallLoss = {
-      surfaceArea: wallLossForm.value.surfaceArea,
-      ambientTemperature: wallLossForm.value.ambientTemp,
-      surfaceTemperature: wallLossForm.value.avgSurfaceTemp,
-      windVelocity: wallLossForm.value.windVelocity,
-      surfaceEmissivity: wallLossForm.value.surfaceEmissivity,
-      surfaceShape: wallLossForm.value.surfaceShape,
-      conditionFactor: wallLossForm.value.conditionFactor,
-      correctionFactor: wallLossForm.value.correctionFactor,
-      name: wallLossForm.value.name
+      surfaceArea: wallLossForm.controls.surfaceArea.value,
+      ambientTemperature: wallLossForm.controls.ambientTemp.value,
+      surfaceTemperature: wallLossForm.controls.avgSurfaceTemp.value,
+      windVelocity: wallLossForm.controls.windVelocity.value,
+      surfaceEmissivity: wallLossForm.controls.surfaceEmissivity.value,
+      surfaceShape: wallLossForm.controls.surfaceShape.value,
+      conditionFactor: wallLossForm.controls.conditionFactor.value,
+      correctionFactor: wallLossForm.controls.correctionFactor.value,
+      name: wallLossForm.controls.name.value
     }
     return tmpWallLoss;
   }

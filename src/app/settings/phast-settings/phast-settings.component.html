@@ -10,13 +10,13 @@
   <div class="form-group">
     <label>Select Energy Source Type</label>
     <div class="form-check enrgy-form">
-      <label class="form-check-label label-nowrapp">
-        <input class="form-check-input" type="radio" name="energySourceType" formControlName="energySourceType" value="Fuel" (change)="setOptions()">Fuel-fired</label>
-      <label class="label-width">
-        <input class="form-check-input" type="radio" name="energySourceType" formControlName="energySourceType" value="Electricity"
-          (change)="setOptions()">Electrotechnology</label>
-      <label class="form-check-label label-nowrapp">
-        <input class="form-check-input" type="radio" name="energySourceType" formControlName="energySourceType" value="Steam" (change)="setOptions()">Steam-based</label>
+      <input id="fuel" type="radio" name="energySourceType" formControlName="energySourceType" value="Fuel" (change)="setOptions()">
+      <label for="fuel">Fuel-fired</label><br>
+        <input id="electricity" type="radio" name="energySourceType" formControlName="energySourceType" value="Electricity"
+          (change)="setOptions()">
+      <label for="electricity">Electrotechnology</label><br>
+        <input type="radio" id="steam" name="energySourceType" formControlName="energySourceType" value="Steam" (change)="setOptions()">
+      <label for="steam" >Steam-based</label>
     </div>
   </div>
 

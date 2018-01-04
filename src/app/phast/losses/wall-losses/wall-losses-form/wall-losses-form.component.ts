@@ -7,6 +7,7 @@ import { ModalDirective } from 'ngx-bootstrap';
 import { LossesService } from '../../losses.service';
 import { Settings } from '../../../../shared/models/settings';
 import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
+import { FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-wall-losses-form',
@@ -15,7 +16,7 @@ import { ConvertUnitsService } from '../../../../shared/convert-units/convert-un
 })
 export class WallLossesFormComponent implements OnInit {
   @Input()
-  wallLossesForm: any;
+  wallLossesForm: FormGroup;
   @Output('calculate')
   calculate = new EventEmitter<boolean>();
   @Input()
@@ -30,9 +31,6 @@ export class WallLossesFormComponent implements OnInit {
   settings: Settings;
 
   @ViewChild('materialModal') public materialModal: ModalDirective;
-  @ViewChild('lossForm') lossForm: ElementRef;
-  form: any;
-  elements: any;
 
   windVelocityError: string = null;
   surfaceAreaError: string = null;
@@ -44,6 +42,13 @@ export class WallLossesFormComponent implements OnInit {
   surfaceOptions: Array<WallLossesSurface>;
   showModal: boolean = false;
   constructor(private windowRefService: WindowRefService, private wallLossCompareService: WallLossCompareService, private suiteDbService: SuiteDbService, private lossesService: LossesService, private convertUnitsService: ConvertUnitsService) { }
+  
+  ngOnInit() {
+    this.surfaceOptions = this.suiteDbService.selectWallLossesSurface();
+    //init warnings
+    this.checkEmissivity(true);
+    this.checkSurfaceTemp(true);
+  }
 
   ngOnChanges(changes: SimpleChanges) {
     if (!this.firstChange) {
@@ -58,13 +63,6 @@ export class WallLossesFormComponent implements OnInit {
     }
   }
 
-  ngOnInit() {
-    this.surfaceOptions = this.suiteDbService.selectWallLossesSurface();
-    //init warnings
-    this.checkEmissivity(true);
-    this.checkSurfaceTemp(true);
-  }
-
   ngAfterViewInit() {
     //wait for view to init to disable form
     if (!this.baselineSelected) {
@@ -73,6 +71,7 @@ export class WallLossesFormComponent implements OnInit {
     //initialize difference monitor
     this.initDifferenceMonitor();
   }
+  
   //iterate through form elements and disable
   disableForm() {
     this.wallLossesForm.disable();
@@ -87,7 +86,7 @@ export class WallLossesFormComponent implements OnInit {
     if (!bool) {
       this.startSavePolling();
     }
-    if (this.wallLossesForm.value.avgSurfaceTemp < this.wallLossesForm.value.ambientTemp) {
+    if (this.wallLossesForm.controls.avgSurfaceTemp.value < this.wallLossesForm.controls.ambientTemp.value) {
       this.surfaceTmpError = 'Surface temperature lower is than ambient temperature';
     } else {
       this.surfaceTmpError = null;
@@ -98,7 +97,7 @@ export class WallLossesFormComponent implements OnInit {
     if (!bool) {
       this.startSavePolling();
     }
-    if (this.wallLossesForm.value.surfaceEmissivity > 1 || this.wallLossesForm.value.surfaceEmissivity < 0) {
+    if (this.wallLossesForm.controls.surfaceEmissivity.value > 1 || this.wallLossesForm.controls.surfaceEmissivity.value < 0) {
       this.emissivityError = 'Surface emissivity must be between 0 and 1';
     } else {
       this.emissivityError = null;
@@ -123,12 +122,12 @@ export class WallLossesFormComponent implements OnInit {
     if (!bool) {
       this.startSavePolling();
     }
-    if (this.wallLossesForm.value.windVelocity < 0) {
+    if (this.wallLossesForm.controls.windVelocity.value < 0) {
       this.windVelocityError = 'Wind Velocity must be equal or greater than 0';
     } else {
       this.windVelocityError = null;
     }
-    if (this.wallLossesForm.value.surfaceArea < 0 ) {
+    if (this.wallLossesForm.controls.surfaceArea.value < 0 ) {
       this.surfaceAreaError = 'Total Outside Surface Area must be equal or greater than 0';
     } else {
       this.surfaceAreaError = null;
@@ -145,6 +144,7 @@ export class WallLossesFormComponent implements OnInit {
       this.emitSave();
     }, 3000)
   }
+
   //method used to subscribe to service monitoring differences in baseline vs modification forms
   initDifferenceMonitor() {
     if (this.wallLossCompareService.baselineWallLosses && this.wallLossCompareService.modifiedWallLosses && this.wallLossCompareService.differentArray.length != 0) {
@@ -211,7 +211,7 @@ export class WallLossesFormComponent implements OnInit {
   }
 
   setProperties() {
-    let tmpFactor = this.suiteDbService.selectWallLossesSurfaceById(this.wallLossesForm.value.surfaceShape);
+    let tmpFactor = this.suiteDbService.selectWallLossesSurfaceById(this.wallLossesForm.controls.surfaceShape.value);
     this.wallLossesForm.patchValue({
       conditionFactor: tmpFactor.conditionFactor
     })

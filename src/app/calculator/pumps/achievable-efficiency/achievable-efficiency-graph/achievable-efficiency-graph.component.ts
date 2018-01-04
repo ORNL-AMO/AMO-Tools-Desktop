@@ -128,7 +128,7 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
   calculateYaverage(flow: number) {
     if (this.checkForm()) {
       let tmpResults = this.psatService.pumpEfficiency(
-        this.efficiencyForm.value.pumpType,
+        this.efficiencyForm.controls.pumpType.value,
         flow,
         this.settings
       );
@@ -139,7 +139,7 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
   calculateYmax(flow: number) {
     if (this.checkForm()) {
       let tmpResults = this.psatService.pumpEfficiency(
-        this.efficiencyForm.value.pumpType,
+        this.efficiencyForm.controls.pumpType.value,
         flow,
         this.settings
       );
@@ -152,7 +152,7 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
     if (
       this.efficiencyForm.controls.pumpType.status == 'VALID' &&
       this.efficiencyForm.controls.flowRate.status == 'VALID' &&
-      this.efficiencyForm.value.pumpType != 'Specified Optimal Efficiency'
+      this.efficiencyForm.controls.pumpType.value != 'Specified Optimal Efficiency'
     ) {
       return true;
     } else {
@@ -670,7 +670,7 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
     this.svg.append("text")
       .attr("x", 20)
       .attr("y", "20")
-      .text("Achievable Efficiency (max): " + format(this.calculateYmax(this.efficiencyForm.value.flowRate)) + ' %')
+      .text("Achievable Efficiency (max): " + format(this.calculateYmax(this.efficiencyForm.controls.flowRate.value)) + ' %')
       .style("font-size", this.fontSize)
       .style("font-weight", "bold")
       .style("fill", "#2ECC71");
@@ -678,7 +678,7 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
     this.svg.append("text")
       .attr("x", 20)
       .attr("y", "50")
-      .text("Achievable Efficiency (average): " + format(this.calculateYaverage(this.efficiencyForm.value.flowRate)) + ' %')
+      .text("Achievable Efficiency (average): " + format(this.calculateYaverage(this.efficiencyForm.controls.flowRate.value)) + ' %')
       .style("font-size", this.fontSize)
       .style("font-weight", "bold")
       .style("fill", "#3498DB");
@@ -688,12 +688,12 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
   drawPoints() {
     this.maxPoint
       .attr("transform", () => {
-        if (this.y(this.calculateYmax(this.efficiencyForm.value.flowRate)) >= 0) {
-          return "translate(" + this.x(this.efficiencyForm.value.flowRate) + "," + this.y(this.calculateYmax(this.efficiencyForm.value.flowRate)) + ")";
+        if (this.y(this.calculateYmax(this.efficiencyForm.controls.flowRate.value)) >= 0) {
+          return "translate(" + this.x(this.efficiencyForm.controls.flowRate.value) + "," + this.y(this.calculateYmax(this.efficiencyForm.controls.flowRate.value)) + ")";
         }
       })
       .style("display", () => {
-        if (this.y(this.calculateYmax(this.efficiencyForm.value.flowRate)) >= 0) {
+        if (this.y(this.calculateYmax(this.efficiencyForm.controls.flowRate.value)) >= 0) {
           return null;
         } else {
           return "none";
@@ -702,12 +702,12 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
 
     this.avgPoint
       .attr("transform", () => {
-        if (this.y(this.calculateYaverage(this.efficiencyForm.value.flowRate)) >= 0) {
-          return "translate(" + this.x(this.efficiencyForm.value.flowRate) + "," + this.y(this.calculateYaverage(this.efficiencyForm.value.flowRate)) + ")";
+        if (this.y(this.calculateYaverage(this.efficiencyForm.controls.flowRate.value)) >= 0) {
+          return "translate(" + this.x(this.efficiencyForm.controls.flowRate.value) + "," + this.y(this.calculateYaverage(this.efficiencyForm.controls.flowRate.value)) + ")";
         }
       })
       .style("display", () => {
-        if (this.y(this.calculateYaverage(this.efficiencyForm.value.flowRate)) >= 0) {
+        if (this.y(this.calculateYaverage(this.efficiencyForm.controls.flowRate.value)) >= 0) {
           return null;
         } else {
           return "none";

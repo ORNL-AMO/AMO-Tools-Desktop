@@ -7,6 +7,7 @@ import { WallLossesService } from './wall-losses.service';
 import { WallLossCompareService } from './wall-loss-compare.service';
 import { WindowRefService } from '../../../indexedDb/window-ref.service';
 import { Settings } from '../../../shared/models/settings';
+import { FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-wall-losses',
@@ -37,7 +38,7 @@ export class WallLossesComponent implements OnInit {
   @Input()
   modExists: boolean;
 
-  _wallLosses: Array<any>;
+  _wallLosses: Array<WallLossObj>;
   firstChange: boolean = true;
   resultsUnit: string
   lossesLocked: boolean = false;
@@ -83,7 +84,7 @@ export class WallLossesComponent implements OnInit {
           heatLoss: loss.heatLoss || 0.0,
           collapse: false
         };
-        if(!tmpLoss.form.value.name){
+        if(!tmpLoss.form.controls.name.value){
           tmpLoss.form.patchValue({
             name: 'Loss #' + lossIndex
           })
@@ -179,7 +180,7 @@ export class WallLossesComponent implements OnInit {
     this.saveLosses();
   }
 
-  collapseLoss(loss: any){
+  collapseLoss(loss: WallLossObj){
     loss.collapse = !loss.collapse;
   }
 
@@ -189,7 +190,7 @@ export class WallLossesComponent implements OnInit {
   }
 
   //calculate wall loss results
-  calculate(loss: any) {
+  calculate(loss: WallLossObj) {
     if (loss.form.status == 'VALID') {
       let tmpWallLoss: WallLoss = this.wallLossesService.getWallLossFromForm(loss.form);
       loss.heatLoss = this.phastService.wallLosses(tmpWallLoss, this.settings);
@@ -204,7 +205,7 @@ export class WallLossesComponent implements OnInit {
     //iterate through component array to build up new data
     let lossIndex = 1;
     this._wallLosses.forEach(loss => {
-      if(!loss.form.value.name){
+      if(!loss.form.controls.name.value){
         loss.form.patchValue({
           name: 'Loss #' + lossIndex
         })
@@ -243,4 +244,11 @@ export class WallLossesComponent implements OnInit {
       }
     }
   }
+}
+
+
+export interface WallLossObj {
+  form: FormGroup,
+  heatLoss?: number,
+  collapse: boolean
 }

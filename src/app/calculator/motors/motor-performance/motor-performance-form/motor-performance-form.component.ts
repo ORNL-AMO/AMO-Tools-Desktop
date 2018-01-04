@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { PsatService } from '../../../../psat/psat.service';
 import { Settings } from '../../../../shared/models/settings';
+import { FormGroup } from '@angular/forms';
 @Component({
   selector: 'app-motor-performance-form',
   templateUrl: './motor-performance-form.component.html',
@@ -8,7 +9,7 @@ import { Settings } from '../../../../shared/models/settings';
 })
 export class MotorPerformanceFormComponent implements OnInit {
   @Input()
-  performanceForm: any;
+  performanceForm: FormGroup;
   @Output('calculate')
   calculate = new EventEmitter<boolean>();
   @Input()
@@ -46,13 +47,13 @@ export class MotorPerformanceFormComponent implements OnInit {
 
   ngOnInit() {
     if (this.performanceForm) {
-      this.tmpFrequency = this.performanceForm.value.frequency;
-      this.tmpHorsePower = this.performanceForm.value.horsePower;
-      this.tmpEfficiencyClass = this.performanceForm.value.efficiencyClass;
-      this.tmpEfficiency = this.performanceForm.value.efficiency;
-      this.tmpMotorVoltage = this.performanceForm.value.motorVoltage;
-      this.tmpFullLoadAmps = this.performanceForm.value.fullLoadAmps;
-      this.tmpMotorRpm = this.performanceForm.value.motorRPM
+      this.tmpFrequency = this.performanceForm.controls.frequency.value;
+      this.tmpHorsePower = this.performanceForm.controls.horsePower.value;
+      this.tmpEfficiencyClass = this.performanceForm.controls.efficiencyClass.value;
+      this.tmpEfficiency = this.performanceForm.controls.efficiency.value;
+      this.tmpMotorVoltage = this.performanceForm.controls.motorVoltage.value;
+      this.tmpFullLoadAmps = this.performanceForm.controls.fullLoadAmps.value;
+      this.tmpMotorRpm = this.performanceForm.controls.motorRPM.value
     }
     if (this.settings.powerMeasurement == 'hp') {
       this.options = this.horsePowers;

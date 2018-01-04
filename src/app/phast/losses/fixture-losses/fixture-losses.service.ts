@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { FixtureLoss } from '../../../shared/models/phast/losses/fixtureLoss';
 import { BehaviorSubject } from 'rxjs';
 
@@ -26,7 +26,7 @@ export class FixtureLossesService {
   //   }
   // }
 
-  initForm(lossNum: number) {
+  initForm(lossNum: number): FormGroup {
     return this.formBuilder.group({
       'materialName': ['', Validators.required],
       'feedRate': ['', Validators.required],
@@ -38,7 +38,7 @@ export class FixtureLossesService {
     })
   }
 
-  getFormFromLoss(loss: FixtureLoss) {
+  getFormFromLoss(loss: FixtureLoss): FormGroup {
     return this.formBuilder.group({
       'materialName': [loss.materialName, Validators.required],
       'feedRate': [loss.feedRate, Validators.required],
@@ -50,15 +50,15 @@ export class FixtureLossesService {
     })
   }
 
-  getLossFromForm(form: any): FixtureLoss {
+  getLossFromForm(form: FormGroup): FixtureLoss {
     let tmpLoss: FixtureLoss = {
-      specificHeat: form.value.specificHeat,
-      feedRate: form.value.feedRate,
-      initialTemperature: form.value.initialTemp,
-      finalTemperature: form.value.finalTemp,
-      correctionFactor: form.value.correctionFactor,
-      materialName: form.value.materialName,
-      name: form.value.name
+      specificHeat: form.controls.specificHeat.value,
+      feedRate: form.controls.feedRate.value,
+      initialTemperature: form.controls.initialTemp.value,
+      finalTemperature: form.controls.finalTemp.value,
+      correctionFactor: form.controls.correctionFactor.value,
+      materialName: form.controls.materialName.value,
+      name: form.controls.name.value
     }
     return tmpLoss;
   }

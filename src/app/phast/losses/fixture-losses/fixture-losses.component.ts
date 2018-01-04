@@ -6,6 +6,7 @@ import { Losses } from '../../../shared/models/phast/phast';
 import { FixtureLoss } from '../../../shared/models/phast/losses/fixtureLoss';
 import { FixtureLossesCompareService } from "./fixture-losses-compare.service";
 import { Settings } from '../../../shared/models/settings';
+import { FormGroup } from '@angular/forms/src/model';
 
 @Component({
   selector: 'app-fixture-losses',
@@ -37,7 +38,7 @@ export class FixtureLossesComponent implements OnInit {
   modExists: boolean;
 
   resultsUnit: string;
-  _fixtureLosses: Array<any>;
+  _fixtureLosses: Array<FixtureLossObj>;
   firstChange: boolean = true;
   lossesLocked: boolean = false;
   constructor(private phastService: PhastService, private fixtureLossesService: FixtureLossesService, private fixtureLossesCompareService: FixtureLossesCompareService) { }
@@ -74,7 +75,7 @@ export class FixtureLossesComponent implements OnInit {
           heatLoss: loss.heatLoss || 0.0,
           collapse: false
         };
-        if(!tmpLoss.form.value.name){
+        if(!tmpLoss.form.controls.name.value){
           tmpLoss.form.patchValue({
             name: 'Loss #' + lossIndex
           })
@@ -160,7 +161,7 @@ export class FixtureLossesComponent implements OnInit {
     this.fixtureLossesService.setDelete(lossIndex);
   }
 
-  calculate(loss: any) {
+  calculate(loss: FixtureLossObj) {
     if (loss.form.status == 'VALID') {
       let tmpLoss: FixtureLoss = this.fixtureLossesService.getLossFromForm(loss.form);
       loss.heatLoss = this.phastService.fixtureLosses(tmpLoss, this.settings);
@@ -169,7 +170,7 @@ export class FixtureLossesComponent implements OnInit {
     }
   }
 
-  collapseLoss(loss: any){
+  collapseLoss(loss: FixtureLossObj){
     loss.collapse = !loss.collapse;
   }
   
@@ -177,7 +178,7 @@ export class FixtureLossesComponent implements OnInit {
     let tmpFixtureLosses = new Array<FixtureLoss>();
     let lossIndex = 1;
     this._fixtureLosses.forEach(loss => {
-      if(!loss.form.value.name){
+      if(!loss.form.controls.name.value){
         loss.form.patchValue({
           name: 'Loss #' + lossIndex
         })
@@ -209,4 +210,10 @@ export class FixtureLossesComponent implements OnInit {
     }
   }
 
+}
+
+export interface FixtureLossObj{
+  form: FormGroup,
+  heatLoss: number,
+  collapse: boolean
 }

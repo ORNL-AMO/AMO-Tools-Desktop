@@ -28,7 +28,8 @@ export interface PHAST {
   operatingHours?: OperatingHours,
   systemEfficiency?: number,
   operatingCosts?: OperatingCosts,
-  implementationCost?: number
+  implementationCost?: number,
+  disableSetupDialog?: boolean
 }
 
 export interface OperatingCosts {

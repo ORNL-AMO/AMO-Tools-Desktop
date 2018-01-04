@@ -38,23 +38,6 @@ export class PumpCurveFormComponent implements OnInit {
 
   ngOnInit() { }
 
-  // setFormVals(settings: Settings) {
-  //   if (settings.flowMeasurement != 'gpm') {
-  //     let tmpVal = this.convertUnitsService.value(this.curveForm.value.flowRate).from('gpm').to(settings.flowMeasurement);
-  //     this.curveForm.patchValue({
-  //       flowRate: this.psatService.roundVal(tmpVal, 2)
-  //     })
-  //   }
-  //   if (settings.distanceMeasurement != 'ft') {
-  //     let tmpVal = this.convertUnitsService.value(this.curveForm.value.head).from('ft').to(settings.distanceMeasurement);
-
-  //     this.curveForm.patchValue({
-  //       head: this.psatService.roundVal(tmpVal, 2)
-  //     })
-  //   }
-  // }
-
-
   focusField(str: string) {
     this.changeField.emit(str);
   }

@@ -4,6 +4,7 @@ import { Settings } from '../../../../shared/models/settings';
 import { WindowRefService } from '../../../../indexedDb/window-ref.service';
 //eclare const d3: any;
 import * as d3 from 'd3';
+import { FormGroup } from '@angular/forms';
 @Component({
   selector: 'app-motor-performance-graph',
   templateUrl: './motor-performance-graph.component.html',
@@ -11,7 +12,7 @@ import * as d3 from 'd3';
 })
 export class MotorPerformanceGraphComponent implements OnInit {
   @Input()
-  performanceForm: any;
+  performanceForm: FormGroup;
   @Input()
   toggleCalculate: boolean;
   @Input()
@@ -108,13 +109,13 @@ export class MotorPerformanceGraphComponent implements OnInit {
     if (this.checkForm()) {
       let efficiency = this.psatService.getEfficiencyFromForm(this.performanceForm);
       let results = this.psatService.motorPerformance(
-        this.performanceForm.value.frequency,
-        this.performanceForm.value.efficiencyClass,
-        this.performanceForm.value.horsePower,
-        this.performanceForm.value.motorRPM,
+        this.performanceForm.controls.frequency.value,
+        this.performanceForm.controls.efficiencyClass.value,
+        this.performanceForm.controls.horsePower.value,
+        this.performanceForm.controls.motorRPM.value,
         efficiency,
-        this.performanceForm.value.motorVoltage,
-        this.performanceForm.value.fullLoadAmps,
+        this.performanceForm.controls.motorVoltage.value,
+        this.performanceForm.controls.fullLoadAmps.value,
         loadFactor,
 
         this.settings
@@ -127,13 +128,13 @@ export class MotorPerformanceGraphComponent implements OnInit {
     if (this.checkForm()) {
       let efficiency = this.psatService.getEfficiencyFromForm(this.performanceForm);
       let results = this.psatService.motorPerformance(
-        this.performanceForm.value.frequency,
-        this.performanceForm.value.efficiencyClass,
-        this.performanceForm.value.horsePower,
-        this.performanceForm.value.motorRPM,
+        this.performanceForm.controls.frequency.value,
+        this.performanceForm.controls.efficiencyClass.value,
+        this.performanceForm.controls.horsePower.value,
+        this.performanceForm.controls.motorRPM.value,
         efficiency,
-        this.performanceForm.value.motorVoltage,
-        this.performanceForm.value.fullLoadAmps,
+        this.performanceForm.controls.motorVoltage.value,
+        this.performanceForm.controls.fullLoadAmps.value,
         loadFactor,
         this.settings
       );
@@ -147,13 +148,13 @@ export class MotorPerformanceGraphComponent implements OnInit {
     if (this.checkForm()) {
       let efficiency = this.psatService.getEfficiencyFromForm(this.performanceForm);
       let results = this.psatService.motorPerformance(
-        this.performanceForm.value.frequency,
-        this.performanceForm.value.efficiencyClass,
-        this.performanceForm.value.horsePower,
-        this.performanceForm.value.motorRPM,
+        this.performanceForm.controls.frequency.value,
+        this.performanceForm.controls.efficiencyClass.value,
+        this.performanceForm.controls.horsePower.value,
+        this.performanceForm.controls.motorRPM.value,
         efficiency,
-        this.performanceForm.value.motorVoltage,
-        this.performanceForm.value.fullLoadAmps,
+        this.performanceForm.controls.motorVoltage.value,
+        this.performanceForm.controls.fullLoadAmps.value,
         loadFactor,
         this.settings
       );
@@ -171,7 +172,7 @@ export class MotorPerformanceGraphComponent implements OnInit {
       this.performanceForm.controls.motorVoltage.status == 'VALID' &&
       this.performanceForm.controls.fullLoadAmps.status == 'VALID'
     ) {
-      if (this.performanceForm.value.efficiencyClass != '' || this.performanceForm.value.efficiencyClass != undefined) {
+      if (this.performanceForm.controls.efficiencyClass.value != '' || this.performanceForm.controls.efficiencyClass.value != undefined) {
         if (
           this.performanceForm.controls.efficiency.status == 'VALID'
         ) {

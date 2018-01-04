@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges, ViewChild, ElementRef } from '@angular/core';
 import { OperationsCompareService } from '../operations-compare.service';
 import { WindowRefService } from '../../../../indexedDb/window-ref.service';
+import { FormGroup } from '@angular/forms';
 @Component({
   selector: 'app-operations-form',
   templateUrl: './operations-form.component.html',
@@ -12,17 +13,14 @@ export class OperationsFormComponent implements OnInit {
   @Output('saveEmit')
   saveEmit = new EventEmitter<boolean>();
   @Input()
-  operationsForm: any;
+  operationsForm: FormGroup;
   @Input()
   baselineSelected: boolean;
-  @ViewChild('lossForm') lossForm: ElementRef;
-  form: any;
   @Input()
   isBaseline: boolean;
   @Input()
   isCalculated: boolean;
 
-  elements: any;
   counter: any;
   firstChange: boolean = true;
   constructor(private operationsCompareService: OperationsCompareService, private windowRefService: WindowRefService) { }
@@ -53,17 +51,11 @@ export class OperationsFormComponent implements OnInit {
   }
 
   disableForm() {
-    this.elements = this.lossForm.nativeElement.elements;
-    for (var i = 0, len = this.elements.length; i < len; ++i) {
-      this.elements[i].disabled = true;
-    }
+    this.operationsForm.disable();
   }
 
   enableForm() {
-    this.elements = this.lossForm.nativeElement.elements;
-    for (var i = 0, len = this.elements.length; i < len; ++i) {
-      this.elements[i].disabled = false;
-    }
+    this.operationsForm.enable();
   }
 
   focusField(str: string) {
@@ -77,7 +69,7 @@ export class OperationsFormComponent implements OnInit {
     this.startSavePolling();
     // this.phast.operatingHours.isCalculated = true;
     // this.phast.operatingHours.hoursPerYear = this.phast.operatingHours.hoursPerShift * this.phast.operatingHours.shiftsPerDay * this.phast.operatingHours.daysPerWeek * this.phast.operatingHours.weeksPerYear;
-    let tmpHoursPerYear = this.operationsForm.value.hoursPerShift * this.operationsForm.value.shiftsPerDay * this.operationsForm.value.daysPerWeek * this.operationsForm.value.weeksPerYear;
+    let tmpHoursPerYear = this.operationsForm.controls.hoursPerShift.value * this.operationsForm.controls.shiftsPerDay.value * this.operationsForm.controls.daysPerWeek.value * this.operationsForm.controls.weeksPerYear.value;
     this.operationsForm.patchValue({
       hoursPerYear: tmpHoursPerYear
     })
@@ -90,7 +82,7 @@ export class OperationsFormComponent implements OnInit {
   }
 
   addShift() {
-    let tmpVal = this.operationsForm.value.shiftsPerDay + 1;
+    let tmpVal = this.operationsForm.controls.shiftsPerDay.value + 1;
     this.operationsForm.patchValue({
       shiftsPerDay: tmpVal
     })
@@ -99,7 +91,7 @@ export class OperationsFormComponent implements OnInit {
   }
 
   subtractShift() {
-    let tmpVal = this.operationsForm.value.shiftsPerDay - 1;
+    let tmpVal = this.operationsForm.controls.shiftsPerDay.value - 1;
     this.operationsForm.patchValue({
       shiftsPerDay: tmpVal
     })
@@ -107,7 +99,7 @@ export class OperationsFormComponent implements OnInit {
     this.calculatHrsPerYear();
   }
   subtractShiftHr() {
-    let tmpVal = this.operationsForm.value.hoursPerShift - 1;
+    let tmpVal = this.operationsForm.controls.hoursPerShift.value - 1;
     this.operationsForm.patchValue({
       hoursPerShift: tmpVal
     })
@@ -115,7 +107,7 @@ export class OperationsFormComponent implements OnInit {
     this.calculatHrsPerYear();
   }
   addShiftHr() {
-    let tmpVal = this.operationsForm.value.hoursPerShift + 1;
+    let tmpVal = this.operationsForm.controls.hoursPerShift.value + 1;
     this.operationsForm.patchValue({
       hoursPerShift: tmpVal
     })
@@ -124,7 +116,7 @@ export class OperationsFormComponent implements OnInit {
   }
 
   subtractWeekDay() {
-    let tmpVal = this.operationsForm.value.daysPerWeek - 1;
+    let tmpVal = this.operationsForm.controls.daysPerWeek.value - 1;
     this.operationsForm.patchValue({
       daysPerWeek: tmpVal
     })
@@ -132,7 +124,7 @@ export class OperationsFormComponent implements OnInit {
     this.calculatHrsPerYear();
   }
   addWeekDay() {
-    let tmpVal = this.operationsForm.value.daysPerWeek + 1;
+    let tmpVal = this.operationsForm.controls.daysPerWeek.value + 1;
     this.operationsForm.patchValue({
       daysPerWeek: tmpVal
     })
@@ -141,7 +133,7 @@ export class OperationsFormComponent implements OnInit {
   }
 
   addWeek() {
-    let tmpVal = this.operationsForm.value.weeksPerYear + 1;
+    let tmpVal = this.operationsForm.controls.weeksPerYear.value + 1;
     this.operationsForm.patchValue({
       weeksPerYear: tmpVal
     })
@@ -150,7 +142,7 @@ export class OperationsFormComponent implements OnInit {
   }
 
   subtractWeek() {
-    let tmpVal = this.operationsForm.value.weeksPerYear - 1;
+    let tmpVal = this.operationsForm.controls.weeksPerYear.value - 1;
     this.operationsForm.patchValue({
       weeksPerYear: tmpVal
     })

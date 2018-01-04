@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { OtherLoss } from '../../../shared/models/phast/losses/otherLoss';
 import { BehaviorSubject } from 'rxjs';
 
@@ -25,22 +25,22 @@ export class OtherLossesService {
   //     this.addLossBaselineMonitor.next(true);
   //   }
   // }
-  initForm() {
+  initForm(): FormGroup {
     return this.formBuilder.group({
       description: ['', Validators.required],
       heatLoss: [0.0, Validators.required]
     })
   }
 
-  getLossFromForm(form: any): OtherLoss {
+  getLossFromForm(form: FormGroup): OtherLoss {
     let tmpLoss = {
-      description: form.value.description,
-      heatLoss: form.value.heatLoss
+      description: form.controls.description.value,
+      heatLoss: form.controls.heatLoss.value
     }
     return tmpLoss
   }
 
-  getFormFromLoss(loss: OtherLoss) {
+  getFormFromLoss(loss: OtherLoss): FormGroup {
     return this.formBuilder.group({
       description: [loss.description, Validators.required],
       heatLoss: [loss.heatLoss, Validators.required]

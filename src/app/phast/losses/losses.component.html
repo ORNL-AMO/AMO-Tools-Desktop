@@ -200,7 +200,7 @@
   </div>
   <div class="no-data col-4" *ngIf="_modifications.length == 0 && !inSetup">
     <h3>Now that your baseline set up, click below to start adding modifications.</h3>
-    <button type="button" (click)="addModification()">Add Modified Condition</button>
+    <button type="button" (click)="openModal()">Add Modified Condition</button>
     <!--<button type="button" (click)="lossesSetup()" *ngIf="!isLossesSetup">Baseline Done?</button>-->
     <p>Data will be copied from your current baseline condition. You will not be able to modify your baseline condition after
       creating a modification.</p>
@@ -213,10 +213,33 @@
   </div>
 
 
-  <div class="setup-dialog" *ngIf="showSetupDialog == true">
+  <div class="setup-dialog" *ngIf="!phast.disableSetupDialog">
     <app-losses-splash-page (hidePage)="hideSetupDialog()"></app-losses-splash-page>
   </div>
 </div>
 
+<div bsModal #materialModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="materialModalLabel"
+     aria-hidden="true" [config]="{backdrop: 'static'}">
+  <div class="modal-dialog modal-md">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Warning</h3>
+        <button class="close" (click)="closeModal()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>
+          You are about to add your first modification to your system. After doing so you will not be able to add or remove losses from your baseline.
+          You will need to delete all of your modifications to add or remove losses from your baseline. Do you wish to proceed?
+        </p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default btn-primary" (click)="addModification()" data-dismiss="modal">Yes</button>
+        <button type="button" class="btn btn-default btn-secondary" (click)="closeModal()" data-dismiss="modal">No</button>
+      </div>
+    </div>
+  </div>
+</div>
 
 <ng2-toasty></ng2-toasty>

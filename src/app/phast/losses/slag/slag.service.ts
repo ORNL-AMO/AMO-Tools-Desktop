@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Slag } from '../../../shared/models/phast/losses/slag';
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { BehaviorSubject } from 'rxjs';
 @Injectable()
 export class SlagService {
@@ -25,7 +25,7 @@ export class SlagService {
   //   }
   // }
 
-  initForm(lossNum: number) {
+  initForm(lossNum: number): FormGroup {
     return this.formBuilder.group({
       'weight': ['', Validators.required],
       'inletTemperature': ['', Validators.required],
@@ -36,7 +36,7 @@ export class SlagService {
     })
   }
 
-  getFormFromLoss(slag: Slag) {
+  getFormFromLoss(slag: Slag): FormGroup {
     return this.formBuilder.group({
       'weight': [slag.weight, Validators.required],
       'inletTemperature': [slag.inletTemperature, Validators.required],
@@ -47,14 +47,14 @@ export class SlagService {
     })
   }
 
-  getLossFromForm(form: any): Slag {
+  getLossFromForm(form: FormGroup): Slag {
     let tmpSlag: Slag = {
-      weight: form.value.weight,
-      inletTemperature: form.value.inletTemperature,
-      outletTemperature: form.value.outletTemperature,
-      specificHeat: form.value.specificHeat,
-      correctionFactor: form.value.correctionFactor,
-      name: form.value.name
+      weight: form.controls.weight.value,
+      inletTemperature: form.controls.inletTemperature.value,
+      outletTemperature: form.controls.outletTemperature.value,
+      specificHeat: form.controls.specificHeat.value,
+      correctionFactor: form.controls.correctionFactor.value,
+      name: form.controls.name.value
     }
     return tmpSlag;
   }
