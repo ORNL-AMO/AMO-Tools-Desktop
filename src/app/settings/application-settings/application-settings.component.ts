@@ -15,7 +15,6 @@ export class ApplicationSettingsComponent implements OnInit {
   startSavePolling = new EventEmitter<boolean>();
   @Input()
   inPsat: boolean;
-
   languages: Array<string> = [
     'English'
   ];
