@@ -1,0 +1,116 @@
+<div class="card summary-card">
+  <div class="card-header" (click)="toggleCollapse()">
+    <h5>Energy Input Losses ({{numLosses}})
+      <span class="pull-right fa" [ngClass]="{'fa-chevron-up': collapse, 'fa-chevron-down': !collapse}"></span>
+    </h5>
+  </div>
+  <div *ngIf="!collapse">
+    <div class="card-body" *ngFor="let data of lossData; let index = index;">
+      <div class="output-summary">
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th [ngStyle]="{'width.%': 100 /(phast.modifications.length+2)}">{{index+1}}</th>
+              <th [ngStyle]="{'width.%': 100 /(phast.modifications.length+2)}">
+                {{data.baseline.name}}
+              </th>
+              <th [ngStyle]="{'width.%': 100 /(phast.modifications.length+2)}" *ngFor="let mod of data.modifications">
+                {{mod.name}}
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                Natural Gas Heat Input
+              </td>
+              <td>
+                {{data.baseline.naturalGasHeatInput}}
+              </td>
+              <td *ngFor="let mod of data.modifications">
+                {{mod.naturalGasHeatInput}}
+              </td>
+            </tr>
+            <tr>
+              <td>
+                Flow Rate
+              </td>
+              <td>
+                {{data.baseline.flowRateInput}}
+              </td>
+              <td *ngFor="let mod of data.modifications">
+                {{mod.flowRateInput}}
+              </td>
+            </tr>
+            <tr>
+              <td>
+                Coal Carbon Injection
+              </td>
+              <td>
+                {{data.baseline.coalCarbonInjection}}
+              </td>
+              <td *ngFor="let mod of data.modifications">
+                {{mod.coalCarbonInjection}}
+              </td>
+            </tr>
+            <tr>
+              <td>
+                Coal Heating Value
+              </td>
+              <td>
+                {{data.baseline.coalHeatingValue}}
+              </td>
+              <td *ngFor="let mod of data.modifications">
+                {{mod.coalHeatingValue}}
+              </td>
+            </tr>
+            <tr>
+              <td>
+                Electrode Use
+              </td>
+              <td>
+                {{data.baseline.electrodeUse}}
+              </td>
+              <td *ngFor="let mod of data.modifications">
+                {{mod.electrodeUse}}
+              </td>
+            </tr>
+            <tr>
+              <td>
+                Electrode Heating Value
+              </td>
+              <td>
+                {{data.baseline.electrodeHeatingValue}}
+              </td>
+              <td *ngFor="let mod of data.modifications">
+                {{mod.electrodeHeatingValue}}
+              </td>
+            </tr>
+            <tr>
+              <td>
+                Other Fuels
+              </td>
+              <td>
+                {{data.baseline.otherFuels}}
+              </td>
+              <td *ngFor="let mod of data.modifications">
+                {{mod.otherFuels}}
+              </td>
+            </tr>
+            <tr>
+              <td>
+                Electricity Input
+              </td>
+              <td>
+                {{data.baseline.electricityInput}}
+              </td>
+              <td *ngFor="let mod of data.modifications">
+                {{mod.electricityInput}}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
