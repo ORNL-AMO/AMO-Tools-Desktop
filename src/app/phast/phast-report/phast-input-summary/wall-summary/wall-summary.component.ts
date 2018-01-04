@@ -31,10 +31,11 @@ export class WallSummaryComponent implements OnInit {
   windVelocityDiff: boolean = false;
   surfaceShapeDiff: boolean = false;
   conditionFactorDiff: boolean = false;
-  emissivityDiff: boolean = false;
+  emissivityDiff: Array<boolean>;
   constructor(private suiteDbService: SuiteDbService, private cd: ChangeDetectorRef) { }
 
   ngOnInit() {
+    this.emissivityDiff = new Array();
     //get substances
     this.surfaceOrientationOptions = this.suiteDbService.selectWallLossesSurface();
     //init array
@@ -65,6 +66,7 @@ export class WallSummaryComponent implements OnInit {
             baseline: loss,
             modifications: modificationData
           });
+          this.emissivityDiff.push(false);
           //index +1 for next loss
           index++;
         })
@@ -82,6 +84,22 @@ export class WallSummaryComponent implements OnInit {
       if (this[diffBool] != true) {
         //set true/different
         this[diffBool] = true;
+        //tell html to detect change
+        this.cd.detectChanges();
+      }
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  checkEmissivityDifferent(baselineVal: any, modificationVal: any, diffBool: string, modIndex: number){
+    if (baselineVal != modificationVal) {
+      //this[diffBool] get's corresponding variable
+      //only set true once
+      if (this[diffBool][modIndex] != true) {
+        //set true/different
+        this[diffBool][modIndex] = true;
         //tell html to detect change
         this.cd.detectChanges();
       }

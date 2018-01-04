@@ -102,13 +102,13 @@
             </tr>
 
             <tr>
-              <td [ngClass]="{'indicate-report-field-different':emissivityDiff == true}">
+              <td [ngClass]="{'indicate-report-field-different':emissivityDiff[index] == true}">
                 Surface Emissivity
               </td>
-              <td [ngClass]="{'indicate-report-field-different':emissivityDiff == true}">
+              <td [ngClass]="{'indicate-report-field-different':emissivityDiff[index] == true}">
                 {{data.baseline.surfaceEmissivity}}
               </td>
-              <td *ngFor="let mod of data.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(data.baseline.surfaceEmissivity, mod.surfaceEmissivity, 'emissivityDiff')}">
+              <td *ngFor="let mod of data.modifications" [ngClass]="{'indicate-report-field-different': checkEmissivityDifferent(data.baseline.surfaceEmissivity, mod.surfaceEmissivity, 'emissivityDiff', index)}">
                 {{mod.surfaceEmissivity}}
               </td>
             </tr>
