@@ -170,6 +170,7 @@ export class ReportRollupService {
 
   //USED FOR PHAST SUMMARY
   initPhastCompare(resultsArr: Array<AllPhastResultsData>) {
+    console.log(resultsArr);
     let tmpResults: Array<PhastCompare> = new Array<PhastCompare>();
     resultsArr.forEach(result => {
       let minCost = _.minBy(result.modificationResults, (result) => { return result.annualCost })
