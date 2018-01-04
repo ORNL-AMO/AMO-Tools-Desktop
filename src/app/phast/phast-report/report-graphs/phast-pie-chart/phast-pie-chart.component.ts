@@ -51,71 +51,71 @@ export class PhastPieChartComponent implements OnInit {
 
     let totalWallLoss = this.getLossPercent(phastResults.grossHeatInput, phastResults.totalWallLoss);
     this.chartData.pieChartData.push(totalWallLoss);
-    this.chartData.pieChartLabels.push('Wall Losses' + " " + phastResults.totalWallLoss.toFixed(2) + "%");
+    this.chartData.pieChartLabels.push('Wall Losses' + " " + totalWallLoss + "%");
 
     let totalAtmosphereLoss = this.getLossPercent(phastResults.grossHeatInput, phastResults.totalAtmosphereLoss);
     this.chartData.pieChartData.push(totalAtmosphereLoss);
-    this.chartData.pieChartLabels.push('Atmosphere Losses' + " " + phastResults.totalAtmosphereLoss.toFixed(2) + "%");
+    this.chartData.pieChartLabels.push('Atmosphere Losses' + " " + totalAtmosphereLoss + "%");
 
     let totalOtherLoss = this.getLossPercent(phastResults.grossHeatInput, phastResults.totalOtherLoss);
     this.chartData.pieChartData.push(totalOtherLoss);
-    this.chartData.pieChartLabels.push('Other Losses' + " " + phastResults.totalOtherLoss.toFixed(2) + "%");
+    this.chartData.pieChartLabels.push('Other Losses' + " " + totalOtherLoss + "%");
 
     let totalCoolingLoss = this.getLossPercent(phastResults.grossHeatInput, phastResults.totalCoolingLoss);
     this.chartData.pieChartData.push(totalCoolingLoss);
-    this.chartData.pieChartLabels.push('Cooling Losses' + " " + phastResults.totalCoolingLoss.toFixed(2) + "%");
+    this.chartData.pieChartLabels.push('Cooling Losses' + " " + totalCoolingLoss + "%");
 
     let totalOpeningLoss = this.getLossPercent(phastResults.grossHeatInput, phastResults.totalOpeningLoss);
     this.chartData.pieChartData.push(totalOpeningLoss);
-    this.chartData.pieChartLabels.push('Opening Losses' + " " + phastResults.totalOpeningLoss.toFixed(2) + "%");
+    this.chartData.pieChartLabels.push('Opening Losses' + " " + totalOpeningLoss + "%");
 
     let totalFixtureLoss = this.getLossPercent(phastResults.grossHeatInput, phastResults.totalFixtureLoss);
     this.chartData.pieChartData.push(totalFixtureLoss);
-    this.chartData.pieChartLabels.push('Fixture Losses' + " " + phastResults.totalFixtureLoss.toFixed(2) + "%" );
+    this.chartData.pieChartLabels.push('Fixture Losses' + " " + totalFixtureLoss + "%" );
 
     let totalLeakageLoss = this.getLossPercent(phastResults.grossHeatInput, phastResults.totalLeakageLoss);
     this.chartData.pieChartData.push(totalLeakageLoss);
-    this.chartData.pieChartLabels.push('Leakage Losses' + " " + phastResults.totalLeakageLoss.toFixed(2) + "%");
+    this.chartData.pieChartLabels.push('Leakage Losses' + " " + totalLeakageLoss + "%");
 
     let totalExtSurfaceLoss = this.getLossPercent(phastResults.grossHeatInput, phastResults.totalExtSurfaceLoss);
     this.chartData.pieChartData.push(totalExtSurfaceLoss);
-    this.chartData.pieChartLabels.push('Extended Surface Losses' + " " + phastResults.totalExtSurfaceLoss.toFixed(2) + "%");
+    this.chartData.pieChartLabels.push('Extended Surface Losses' + " " + totalExtSurfaceLoss + "%");
 
     let totalChargeMaterialLoss = this.getLossPercent(phastResults.grossHeatInput, phastResults.totalChargeMaterialLoss);
     this.chartData.pieChartData.push(totalChargeMaterialLoss);
-    this.chartData.pieChartLabels.push('Charge Materials' + " " + phastResults.totalChargeMaterialLoss.toFixed(2) + "%");
+    this.chartData.pieChartLabels.push('Charge Materials' + " " + totalChargeMaterialLoss + "%");
 
     if (resultCats.showFlueGas) {
       let totalFlueGas = this.getLossPercent(phastResults.grossHeatInput, phastResults.totalFlueGas);
       this.chartData.pieChartData.push(totalFlueGas);
-      this.chartData.pieChartLabels.push('Flue Gas Losses' + " " + phastResults.totalFlueGas.toFixed(2) + "%");
+      this.chartData.pieChartLabels.push('Flue Gas Losses' + " " + totalFlueGas + "%");
     }
 
     if (resultCats.showAuxPower) {
       let totalAuxPower = this.getLossPercent(phastResults.grossHeatInput, phastResults.totalAuxPower);
       this.chartData.pieChartData.push(totalAuxPower);
-      this.chartData.pieChartLabels.push('Auxiliary Power Losses' + " " + phastResults.totalAuxPower.toFixed(2) + "%");
+      this.chartData.pieChartLabels.push('Auxiliary Power Losses' + " " + totalAuxPower + "%");
     }
 
     if (resultCats.showSlag) {
       let totalSlag = this.getLossPercent(phastResults.grossHeatInput, phastResults.totalSlag);
       this.chartData.pieChartData.push(totalSlag);
-      this.chartData.pieChartLabels.push('Slag Losses' + " " + phastResults.totalSlag.toFixed(2) + "%");
+      this.chartData.pieChartLabels.push('Slag Losses' + " " + totalSlag + "%");
     }
     if (resultCats.showExGas) {
       let totalExhaustGasEAF = this.getLossPercent(phastResults.grossHeatInput, phastResults.totalExhaustGasEAF);
       this.chartData.pieChartData.push(totalExhaustGasEAF);
-      this.chartData.pieChartLabels.push('Exhaust Gas Losses' + " " + phastResults.totalExhaustGasEAF.toFixed(2) + "%");
+      this.chartData.pieChartLabels.push('Exhaust Gas Losses' + " " + totalExhaustGasEAF + "%");
     }
     if (resultCats.showEnInput2) {
       let totalExhaustGas = this.getLossPercent(phastResults.grossHeatInput, phastResults.totalExhaustGas);
       this.chartData.pieChartData.push(totalExhaustGas);
-      this.chartData.pieChartLabels.push('Exhaust Gas Losses' + " " + phastResults.totalExhaustGas.toFixed(2) + "%");
+      this.chartData.pieChartLabels.push('Exhaust Gas Losses' + " " + totalExhaustGas + "%");
     }
     if (resultCats.showSystemEff) {
       let totalSystemLosses = this.getLossPercent(phastResults.grossHeatInput, phastResults.totalSystemLosses);
       this.chartData.pieChartData.push(totalSystemLosses);
-      this.chartData.pieChartLabels.push('System Losses' + " " + phastResults.totalSystemLosses.toFixed(2) + "%");
+      this.chartData.pieChartLabels.push('System Losses' + " " + totalSystemLosses + "%");
     }
     if (this.isBaseline) {
       this.phastReportService.baselineChartLabels.next(this.chartData.pieChartLabels);
