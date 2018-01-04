@@ -14,7 +14,7 @@ export class ApplicationSettingsComponent implements OnInit {
   @Output('startSavePolling')
   startSavePolling = new EventEmitter<boolean>();
   @Input()
-  inPhast: boolean;
+  inPsat: boolean;
 
   languages: Array<string> = [
     'English'
