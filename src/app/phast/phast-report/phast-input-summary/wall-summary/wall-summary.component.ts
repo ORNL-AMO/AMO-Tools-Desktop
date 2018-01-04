@@ -23,18 +23,24 @@ export class WallSummaryComponent implements OnInit {
   //used to collapse table
   collapse: boolean = true;
 
-  //booleans corresponding to each input, used to style indicating different
-  correctionFactorDifferent: boolean = false;
-  surfaceAreaDifferent: boolean = false;
-  avgSurfaceTempDiff: boolean = false;
-  ambientTempDiff: boolean = false;
-  windVelocityDiff: boolean = false;
-  surfaceShapeDiff: boolean = false;
-  conditionFactorDiff: boolean = false;
+  correctionFactorDifferent: Array<boolean>;
+  surfaceAreaDifferent: Array<boolean>;
+  avgSurfaceTempDiff: Array<boolean>;
+  ambientTempDiff: Array<boolean>;
+  windVelocityDiff: Array<boolean>;
+  surfaceShapeDiff: Array<boolean>;
+  conditionFactorDiff: Array<boolean>;
   emissivityDiff: Array<boolean>;
   constructor(private suiteDbService: SuiteDbService, private cd: ChangeDetectorRef) { }
 
   ngOnInit() {
+    this.correctionFactorDifferent = new Array();
+    this.surfaceAreaDifferent = new Array();
+    this.avgSurfaceTempDiff = new Array();
+    this.ambientTempDiff = new Array();
+    this.windVelocityDiff = new Array();
+    this.surfaceShapeDiff = new Array();
+    this.conditionFactorDiff = new Array();
     this.emissivityDiff = new Array();
     //get substances
     this.surfaceOrientationOptions = this.suiteDbService.selectWallLossesSurface();
@@ -66,6 +72,14 @@ export class WallSummaryComponent implements OnInit {
             baseline: loss,
             modifications: modificationData
           });
+          //initialize array values for every defined loss
+          this.correctionFactorDifferent.push(false);
+          this.surfaceAreaDifferent.push(false);
+          this.avgSurfaceTempDiff.push(false);
+          this.ambientTempDiff.push(false);
+          this.windVelocityDiff.push(false);
+          this.surfaceShapeDiff.push(false);
+          this.conditionFactorDiff.push(false);
           this.emissivityDiff.push(false);
           //index +1 for next loss
           index++;
@@ -74,26 +88,11 @@ export class WallSummaryComponent implements OnInit {
     }
   }
 
+
   //function used to check if baseline and modification values are different
   //called from html
   //diffBool is name of corresponding input boolean to indicate different
-  checkDiff(baselineVal: any, modificationVal: any, diffBool: string) {
-    if (baselineVal != modificationVal) {
-      //this[diffBool] get's corresponding variable
-      //only set true once
-      if (this[diffBool] != true) {
-        //set true/different
-        this[diffBool] = true;
-        //tell html to detect change
-        this.cd.detectChanges();
-      }
-      return true;
-    } else {
-      return false;
-    }
-  }
-
-  checkEmissivityDifferent(baselineVal: any, modificationVal: any, diffBool: string, modIndex: number){
+  checkDiff(baselineVal: any, modificationVal: any, diffBool: string, modIndex: number) {
     if (baselineVal != modificationVal) {
       //this[diffBool] get's corresponding variable
       //only set true once

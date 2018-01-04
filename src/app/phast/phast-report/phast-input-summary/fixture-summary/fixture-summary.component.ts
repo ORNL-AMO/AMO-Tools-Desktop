@@ -18,16 +18,22 @@ export class FixtureSummaryComponent implements OnInit {
   lossData: Array<any>;
   materialOptions: Array<any>;
 
-  materialNameDiff: boolean = false;
-  specificHeatDiff: boolean = false;
-  feedRateDiff: boolean = false;
-  initialTemperatureDiff: boolean = false;
-  finalTemperatureDiff: boolean = false;
-  correctionFactorDiff: boolean = false;
-
+  materialNameDiff: Array<boolean>;
+  specificHeatDiff: Array<boolean>;
+  feedRateDiff: Array<boolean>;
+  initialTemperatureDiff: Array<boolean>;
+  finalTemperatureDiff: Array<boolean>;
+  correctionFactorDiff: Array<boolean>;
   constructor(private suiteDbService: SuiteDbService, private cd: ChangeDetectorRef) { }
 
   ngOnInit() {
+    this.materialNameDiff = new Array();
+    this.specificHeatDiff = new Array();
+    this.feedRateDiff = new Array();
+    this.initialTemperatureDiff = new Array();
+    this.finalTemperatureDiff = new Array();
+    this.correctionFactorDiff = new Array();
+
     this.materialOptions = this.suiteDbService.selectSolidLoadChargeMaterials();
     this.lossData = new Array();
     if (this.phast.losses) {
@@ -46,6 +52,14 @@ export class FixtureSummaryComponent implements OnInit {
             baseline: loss,
             modifications: modificationData
           })
+          //initialize array values for every defined loss
+          this.materialNameDiff.push(false);
+          this.specificHeatDiff.push(false);
+          this.feedRateDiff.push(false);
+          this.initialTemperatureDiff.push(false);
+          this.finalTemperatureDiff.push(false);
+          this.correctionFactorDiff.push(false);
+          //index +1 for next loss
           index++;
         })
       }
@@ -55,13 +69,13 @@ export class FixtureSummaryComponent implements OnInit {
   //function used to check if baseline and modification values are different
   //called from html
   //diffBool is name of corresponding input boolean to indicate different
-  checkDiff(baselineVal: any, modificationVal: any, diffBool: string) {
+  checkDiff(baselineVal: any, modificationVal: any, diffBool: string, modIndex: number) {
     if (baselineVal != modificationVal) {
       //this[diffBool] get's corresponding variable
       //only set true once
-      if (this[diffBool] != true) {
+      if (this[diffBool][modIndex] != true) {
         //set true/different
-        this[diffBool] = true;
+        this[diffBool][modIndex] = true;
         //tell html to detect change
         this.cd.detectChanges();
       }

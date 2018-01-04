@@ -17,13 +17,15 @@ export class OtherSummaryComponent implements OnInit {
   collapse: boolean = true;
   lossData: Array<any>;
 
-
-  openingTypeDiff: boolean = false;
-  heatLossDiff: boolean = false;
+  openingTypeDiff: Array<boolean>;
+  heatLossDiff: Array<boolean>;
 
   constructor(private suiteDbService: SuiteDbService, private cd: ChangeDetectorRef) { }
 
   ngOnInit() {
+    this.openingTypeDiff = new Array();
+    this.heatLossDiff = new Array();
+
     this.lossData = new Array();
     if (this.phast.losses) {
       if (this.phast.losses.otherLosses) {
@@ -41,6 +43,10 @@ export class OtherSummaryComponent implements OnInit {
             baseline: loss,
             modifications: modificationData
           })
+          //initialize array values for every defined loss
+          this.openingTypeDiff.push(false);
+          this.heatLossDiff.push(false);
+          //index +1 for next loss
           index++;
         })
       }
@@ -50,13 +56,13 @@ export class OtherSummaryComponent implements OnInit {
   //function used to check if baseline and modification values are different
   //called from html
   //diffBool is name of corresponding input boolean to indicate different
-  checkDiff(baselineVal: any, modificationVal: any, diffBool: string) {
+  checkDiff(baselineVal: any, modificationVal: any, diffBool: string, modIndex: number) {
     if (baselineVal != modificationVal) {
       //this[diffBool] get's corresponding variable
       //only set true once
-      if (this[diffBool] != true) {
+      if (this[diffBool][modIndex] != true) {
         //set true/different
-        this[diffBool] = true;
+        this[diffBool][modIndex] = true;
         //tell html to detect change
         this.cd.detectChanges();
       }

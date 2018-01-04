@@ -21,31 +21,77 @@ export class ChargeMaterialSummaryComponent implements OnInit {
   numLosses: number = 0;
   collapse: boolean = true;
 
-  materialTypeDiff: boolean = false;
-  materialNameDiff: boolean = false;
-  reactionTypeDiff: boolean = false;
-  specificHeatGasDiff: boolean = false;
-  feedRateDiff: boolean = false;
-  percentVaporDiff: boolean = false;
-  initialTempDiff: boolean = false;
-  dischargeTempDiff: boolean = false;
-  percentReactedDiff: boolean = false;
-  reactionHeatDiff: boolean = false;
-  heatRequiredDiff: boolean = false;
-  specificHeatSolidDiff: boolean = false;
-  specificHeatLiquidDiff: boolean = false;
-  meltingPointDiff: boolean = false;
-  waterContentChargedDiff: boolean = false;
-  waterContentDischargedDiff: boolean = false;
-  waterVaporDischargeTempDiff: boolean = false;
-  latentHeatDiff: boolean = false;
-  additionalHeatDiff: boolean = false;
-  vaporizingTemperatureDiff: boolean = false;
-  chargeMeltedDiff: boolean = false;
+  //real version
+  // materialTypeDiff: boolean = false;
+  // materialNameDiff: boolean = false;
+  // reactionTypeDiff: boolean = false;
+  // specificHeatGasDiff: boolean = false;
+  // feedRateDiff: boolean = false;
+  // percentVaporDiff: boolean = false;
+  // initialTempDiff: boolean = false;
+  // dischargeTempDiff: boolean = false;
+  // percentReactedDiff: boolean = false;
+  // reactionHeatDiff: boolean = false;
+  // heatRequiredDiff: boolean = false;
+  // specificHeatSolidDiff: boolean = false;
+  // specificHeatLiquidDiff: boolean = false;
+  // meltingPointDiff: boolean = false;
+  // waterContentChargedDiff: boolean = false;
+  // waterContentDischargedDiff: boolean = false;
+  // waterVaporDischargeTempDiff: boolean = false;
+  // latentHeatDiff: boolean = false;
+  // additionalHeatDiff: boolean = false;
+  // vaporizingTemperatureDiff: boolean = false;
+  // chargeMeltedDiff: boolean = false;
+
+  //debug
+  materialTypeDiff: Array<boolean>;
+  materialNameDiff: Array<boolean>;
+  reactionTypeDiff: Array<boolean>;
+  specificHeatGasDiff: Array<boolean>;
+  feedRateDiff: Array<boolean>;
+  percentVaporDiff: Array<boolean>;
+  initialTempDiff: Array<boolean>;
+  dischargeTempDiff: Array<boolean>;
+  percentReactedDiff: Array<boolean>;
+  reactionHeatDiff: Array<boolean>;
+  heatRequiredDiff: Array<boolean>;
+  specificHeatSolidDiff: Array<boolean>;
+  specificHeatLiquidDiff: Array<boolean>;
+  meltingPointDiff: Array<boolean>;
+  waterContentChargedDiff: Array<boolean>;
+  waterContentDischargedDiff: Array<boolean>;
+  waterVaporDischargeTempDiff: Array<boolean>;
+  latentHeatDiff: Array<boolean>;
+  additionalHeatDiff: Array<boolean>;
+  vaporizingTemperatureDiff: Array<boolean>;
+  chargeMeltedDiff: Array<boolean>;
   
   constructor(private suiteDbService: SuiteDbService, private phastService: PhastService, private cd: ChangeDetectorRef) { }
 
   ngOnInit() {
+    this.materialTypeDiff = new Array();
+    this.materialNameDiff = new Array();
+    this.reactionTypeDiff = new Array();
+    this.specificHeatGasDiff = new Array();
+    this.feedRateDiff = new Array();
+    this.percentVaporDiff = new Array();
+    this.initialTempDiff = new Array();
+    this.dischargeTempDiff = new Array();
+    this.percentReactedDiff = new Array();
+    this.reactionHeatDiff = new Array();
+    this.heatRequiredDiff = new Array();
+    this.specificHeatSolidDiff = new Array();
+    this.specificHeatLiquidDiff = new Array();
+    this.meltingPointDiff = new Array();
+    this.waterContentChargedDiff = new Array();
+    this.waterContentDischargedDiff = new Array();
+    this.waterVaporDischargeTempDiff = new Array();
+    this.latentHeatDiff = new Array();
+    this.additionalHeatDiff = new Array();
+    this.vaporizingTemperatureDiff = new Array();
+    this.chargeMeltedDiff = new Array();
+
     this.volumeOptions = this.suiteDbService.selectGasFlueGasMaterials();
     this.massOptions = this.suiteDbService.selectSolidLiquidFlueGasMaterials();
     this.lossData = new Array();
@@ -65,6 +111,29 @@ export class ChargeMaterialSummaryComponent implements OnInit {
             baseline: this.getData(loss),
             modifications: modificationData
           });
+          //initialize array values for every defined loss
+          this.materialTypeDiff.push(false);
+          this.materialNameDiff.push(false);
+          this.reactionTypeDiff.push(false);
+          this.specificHeatGasDiff.push(false);
+          this.feedRateDiff.push(false);
+          this.percentVaporDiff.push(false);
+          this.initialTempDiff.push(false);
+          this.dischargeTempDiff.push(false);
+          this.percentReactedDiff.push(false);
+          this.reactionHeatDiff.push(false);
+          this.heatRequiredDiff.push(false);
+          this.specificHeatSolidDiff.push(false);
+          this.specificHeatLiquidDiff.push(false);
+          this.meltingPointDiff.push(false);
+          this.waterContentChargedDiff.push(false);
+          this.waterContentDischargedDiff.push(false);
+          this.waterVaporDischargeTempDiff.push(false);
+          this.latentHeatDiff.push(false);
+          this.additionalHeatDiff.push(false);
+          this.vaporizingTemperatureDiff.push(false);
+          this.chargeMeltedDiff.push(false);
+          //index +1 for next loss
           index++;
         })
       }
@@ -74,13 +143,13 @@ export class ChargeMaterialSummaryComponent implements OnInit {
   //function used to check if baseline and modification values are different
   //called from html
   //diffBool is name of corresponding input boolean to indicate different
-  checkDiff(baselineVal: any, modificationVal: any, diffBool: string) {
+  checkDiff(baselineVal: any, modificationVal: any, diffBool: string, modIndex: number) {
     if (baselineVal != modificationVal) {
       //this[diffBool] get's corresponding variable
       //only set true once
-      if (this[diffBool] != true) {
+      if (this[diffBool][modIndex] != true) {
         //set true/different
-        this[diffBool] = true;
+        this[diffBool][modIndex] = true;
         //tell html to detect change
         this.cd.detectChanges();
       }
@@ -105,7 +174,7 @@ export class ChargeMaterialSummaryComponent implements OnInit {
 
     if (loss.chargeMaterialType == 'Gas') {
       let gasOptions = this.suiteDbService.selectGasLoadChargeMaterials();
-      let material = gasOptions.find(val => {return val.id == loss.gasChargeMaterial.materialId });
+      let material = gasOptions.find(val => { return val.id == loss.gasChargeMaterial.materialId });
       if (material) { tmpMaterialName = material.substance; }
       tmpReactionType = 'Endothermic';
       if (loss.gasChargeMaterial.thermicReactionType != 0) {
@@ -124,7 +193,7 @@ export class ChargeMaterialSummaryComponent implements OnInit {
     }
     else if (loss.chargeMaterialType == 'Solid') {
       let gasOptions = this.suiteDbService.selectSolidLoadChargeMaterials();
-      let material = gasOptions.find(val => {return val.id == loss.solidChargeMaterial.materialId });
+      let material = gasOptions.find(val => { return val.id == loss.solidChargeMaterial.materialId });
       if (material) { tmpMaterialName = material.substance; }
       tmpReactionType = 'Endothermic';
       if (loss.solidChargeMaterial.thermicReactionType != 0) {
@@ -148,7 +217,7 @@ export class ChargeMaterialSummaryComponent implements OnInit {
     }
     else if (loss.chargeMaterialType == 'Liquid') {
       let gasOptions = this.suiteDbService.selectLiquidLoadChargeMaterials();
-      let material = gasOptions.find(val => {return val.id == loss.liquidChargeMaterial.materialId });
+      let material = gasOptions.find(val => { return val.id == loss.liquidChargeMaterial.materialId });
       if (material) { tmpMaterialName = material.substance; }
       tmpReactionType = 'Endothermic';
       if (loss.liquidChargeMaterial.thermicReactionType != 0) {

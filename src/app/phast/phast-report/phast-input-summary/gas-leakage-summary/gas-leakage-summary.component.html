@@ -31,57 +31,57 @@
           </thead>
           <tbody>
             <tr>
-              <td [ngClass]="{'indicate-report-field-different':draftPressureDiff == true}">
+              <td [ngClass]="{'indicate-report-field-different':draftPressureDiff[index] == true}">
                 Furnace Draft Pressure
               </td>
-              <td [ngClass]="{'indicate-report-field-different':draftPressureDiff == true}">
+              <td [ngClass]="{'indicate-report-field-different':draftPressureDiff[index] == true}">
                 {{data.baseline.draftPressure}}
               </td>
-              <td *ngFor="let mod of data.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(data.baseline.draftPressure, mod.draftPressure, 'draftPressureDiff')}">
+              <td *ngFor="let mod of data.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(data.baseline.draftPressure, mod.draftPressure, 'draftPressureDiff', index)}">
                 {{mod.draftPressure}}
               </td>
             </tr>
             <tr>
-              <td [ngClass]="{'indicate-report-field-different':openingAreaDiff == true}">
+              <td [ngClass]="{'indicate-report-field-different':openingAreaDiff[index] == true}">
                 Opening Area
               </td>
-              <td [ngClass]="{'indicate-report-field-different':openingAreaDiff == true}">
+              <td [ngClass]="{'indicate-report-field-different':openingAreaDiff[index] == true}">
                 {{data.baseline.openingArea}}
               </td>
-              <td *ngFor="let mod of data.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(data.baseline.openingArea, mod.openingArea, 'openingAreaDiff')}">
+              <td *ngFor="let mod of data.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(data.baseline.openingArea, mod.openingArea, 'openingAreaDiff', index)}">
                 {{mod.openingArea}}
               </td>
             </tr>
             <tr>
-              <td [ngClass]="{'indicate-report-field-different':leakageGasTemperatureDiff == true}">
+              <td [ngClass]="{'indicate-report-field-different':leakageGasTemperatureDiff[index] == true}">
                 Temperature of Gasses Leaking
               </td>
-              <td [ngClass]="{'indicate-report-field-different':leakageGasTemperatureDiff == true}">
+              <td [ngClass]="{'indicate-report-field-different':leakageGasTemperatureDiff[index] == true}">
                 {{data.baseline.leakageGasTemperature}}
               </td>
-              <td *ngFor="let mod of data.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(data.baseline.leakageGasTemperature, mod.leakageGasTemperature, 'leakageGasTemperatureDiff')}">
+              <td *ngFor="let mod of data.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(data.baseline.leakageGasTemperature, mod.leakageGasTemperature, 'leakageGasTemperatureDiff', index)}">
                 {{mod.leakageGasTemperature}}
               </td>
             </tr>
             <tr>
-              <td [ngClass]="{'indicate-report-field-different':specificGravityDiff == true}">
+              <td [ngClass]="{'indicate-report-field-different':specificGravityDiff[index] == true}">
                 Specific Density of Flue Gases
               </td>
-              <td [ngClass]="{'indicate-report-field-different':specificGravityDiff == true}">
+              <td [ngClass]="{'indicate-report-field-different':specificGravityDiff[index] == true}">
                 {{data.baseline.specificGravity}}
               </td>
-              <td *ngFor="let mod of data.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(data.baseline.specificGravity, mod.specificGravity, 'specificGravityDiff')}">
+              <td *ngFor="let mod of data.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(data.baseline.specificGravity, mod.specificGravity, 'specificGravityDiff', index)}">
                 {{mod.specificGravity}}
               </td>
             </tr>
             <tr>
-              <td [ngClass]="{'indicate-report-field-different':ambientTemperatureDiff == true}">
+              <td [ngClass]="{'indicate-report-field-different':ambientTemperatureDiff[index] == true}">
                 Ambient Temperature
               </td>
-              <td [ngClass]="{'indicate-report-field-different':ambientTemperatureDiff == true}">
+              <td [ngClass]="{'indicate-report-field-different':ambientTemperatureDiff[index] == true}">
                 {{data.baseline.ambientTemperature}}
               </td>
-              <td *ngFor="let mod of data.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(data.baseline.ambientTemperature, mod.ambientTemperature, 'ambientTemperatureDiff')}">
+              <td *ngFor="let mod of data.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(data.baseline.ambientTemperature, mod.ambientTemperature, 'ambientTemperatureDiff', index)}">
                 {{mod.ambientTemperature}}
               </td>
             </tr>
