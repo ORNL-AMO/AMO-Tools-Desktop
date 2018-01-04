@@ -223,7 +223,7 @@
       </tr>
       <tr class="hide-print" *ngIf="!inPhast">
         <td>Use for Summary</td>
-        <td [ngClass]="{'selected-modification': index == -1}">
+        <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
           <input name="{{'summarySelect_'+assessment.id}}" type="radio" (change)="useModification()" [value]="-1" [(ngModel)]="selectedModificationIndex">
         </td>
         <td *ngFor="let modification of phastMods; let index = index;" [ngClass]="{'selected-modification': index == selectedModificationIndex}">

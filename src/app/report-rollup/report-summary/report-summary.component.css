@@ -109,10 +109,17 @@
 .summary-header > span {
     float: right;
     border-radius: 50%;
-    background: #2980b9;
     -webkit-box-shadow: inset 0px 0px 2px 0px rgba(0,0,0,0.5);
     -moz-box-shadow: inset 0px 0px 2px 0px rgba(0,0,0,0.5);
     box-shadow: inset 0px 0px 2px 0px rgba(0,0,0,0.5);
+}
+
+.summary-header.furnaces > span {
+    background: #BF3D00;
+}
+
+.summary-header.pumps > span {
+    background: #2980b9;
 }
     .summary-header > span span {
         font-size: 16px;

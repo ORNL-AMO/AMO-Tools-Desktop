@@ -68,7 +68,6 @@ export class OutputSummaryComponent implements OnInit {
   getResults(psat: PSAT, settings: Settings, isModification?: boolean): PsatOutputs {
     let tmpForm = this.psatService.getFormFromPsat(psat.inputs);
     if (tmpForm.status == 'VALID') {
-      console.log('valid');
       if (psat.inputs.optimize_calculation) {
         return this.psatService.resultsOptimal(JSON.parse(JSON.stringify(psat.inputs)), settings);
       } else if (!isModification) {
@@ -77,7 +76,6 @@ export class OutputSummaryComponent implements OnInit {
         return this.psatService.resultsModified(JSON.parse(JSON.stringify(psat.inputs)), settings, this.psat.outputs.pump_efficiency);
       }
     } else {
-      console.log('invalid')
       return this.psatService.emptyResults();
     }
   }

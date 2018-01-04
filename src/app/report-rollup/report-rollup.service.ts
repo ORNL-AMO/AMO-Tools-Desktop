@@ -114,15 +114,24 @@ export class ReportRollupService {
       let psatAssessments = this.psatAssessments.value;
       let assessmentIndex = _.findIndex(psatAssessments, { id: result.assessmentId });
       let assessment = psatAssessments[assessmentIndex];
-      tmpResults.push({ baseline: assessment.psat, modification: assessment.psat.modifications[modIndex].psat, assessmentId: result.assessmentId, selectedIndex: modIndex });
+      if (result.isBaseline) {
+        tmpResults.push({ baseline: assessment.psat, modification: assessment.psat, assessmentId: result.assessmentId, selectedIndex: -1 });
+      } else {
+        tmpResults.push({ baseline: assessment.psat, modification: assessment.psat.modifications[modIndex].psat, assessmentId: result.assessmentId, selectedIndex: modIndex });
+      }
     });
     this.selectedPsats.next(tmpResults);
   }
 
   updateSelectedPsats(assessment: Assessment, modIndex: number) {
     let tmpSelected = this.selectedPsats.value;
-    let selectedIndex = _.findIndex(tmpSelected, { assessmentId: assessment.id });
-    tmpSelected.splice(selectedIndex, 1, { baseline: assessment.psat, modification: assessment.psat.modifications[modIndex].psat, assessmentId: assessment.id, selectedIndex: modIndex });
+    if (modIndex != -1) {
+      let selectedIndex = _.findIndex(tmpSelected, { assessmentId: assessment.id });
+      tmpSelected.splice(selectedIndex, 1, { baseline: assessment.psat, modification: assessment.psat.modifications[modIndex].psat, assessmentId: assessment.id, selectedIndex: modIndex });
+    } else {
+      let selectedIndex = _.findIndex(tmpSelected, { assessmentId: assessment.id });
+      tmpSelected.splice(selectedIndex, 1, { baseline: assessment.psat, modification: assessment.psat, assessmentId: assessment.id, selectedIndex: modIndex });
+    }
     this.selectedPsats.next(tmpSelected);
   }
 
@@ -133,17 +142,30 @@ export class ReportRollupService {
         this.indexedDbService.getAssessmentSettings(val.id).then(settings => {
           settings[0] = this.checkSettings(settings[0]);
           let baselineResults = this.psatService.resultsExisting(JSON.parse(JSON.stringify(val.psat.inputs)), settings[0]);
-          let modResultsArr = new Array<PsatOutputs>();
-          val.psat.modifications.forEach(mod => {
-            let tmpResults;
-            if (mod.psat.inputs.optimize_calculation) {
-              tmpResults = this.psatService.resultsOptimal(JSON.parse(JSON.stringify(mod.psat.inputs)), settings[0]);
+          if (val.psat.modifications) {
+            if (val.psat.modifications.length != 0) {
+              let modResultsArr = new Array<PsatOutputs>();
+              val.psat.modifications.forEach(mod => {
+                let tmpResults;
+                if (mod.psat.inputs.optimize_calculation) {
+                  tmpResults = this.psatService.resultsOptimal(JSON.parse(JSON.stringify(mod.psat.inputs)), settings[0]);
+                } else {
+                  tmpResults = this.psatService.resultsModified(JSON.parse(JSON.stringify(mod.psat.inputs)), settings[0], baselineResults.pump_efficiency);
+                }
+                modResultsArr.push(tmpResults);
+              })
+              tmpResultsArr.push({ baselineResults: baselineResults, modificationResults: modResultsArr, assessmentId: val.id });
             } else {
-              tmpResults = this.psatService.resultsModified(JSON.parse(JSON.stringify(mod.psat.inputs)), settings[0], baselineResults.pump_efficiency);
+              let modResultsArr = new Array<PsatOutputs>();
+              modResultsArr.push(baselineResults);
+              tmpResultsArr.push({ baselineResults: baselineResults, modificationResults: modResultsArr, assessmentId: val.id, isBaseline: true });
             }
-            modResultsArr.push(tmpResults);
-          })
-          tmpResultsArr.push({ baselineResults: baselineResults, modificationResults: modResultsArr, assessmentId: val.id });
+          } else {
+            let modResultsArr = new Array<PsatOutputs>();
+            modResultsArr.push(baselineResults);
+            tmpResultsArr.push({ baselineResults: baselineResults, modificationResults: modResultsArr, assessmentId: val.id, isBaseline: true });
+          }
+
           this.allPsatResults.next(tmpResultsArr);
         })
       }
@@ -253,6 +275,13 @@ export class ReportRollupService {
     if (!settings.energyResultUnit) {
       settings = this.settingsService.setEnergyResultUnitSetting(settings);
     }
+    if (!settings.temperatureMeasurement) {
+      if (settings.unitsOfMeasure == 'Metric') {
+        settings.temperatureMeasurement = 'C';
+      } else {
+        settings.temperatureMeasurement = 'F';
+      }
+    }
     return settings;
   }
 
@@ -276,7 +305,8 @@ export interface PsatResultsData {
 export interface AllPsatResultsData {
   baselineResults: PsatOutputs,
   modificationResults: Array<PsatOutputs>,
-  assessmentId: number
+  assessmentId: number,
+  isBaseline?: boolean
 }
 
 
