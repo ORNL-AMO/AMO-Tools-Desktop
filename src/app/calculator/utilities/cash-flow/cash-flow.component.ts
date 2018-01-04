@@ -27,7 +27,6 @@ export class CashFlowComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log("ngOnInit Cash-flow");
     this.cashFlowForm = {
       lifeYears: 10,
       energySavings: 1000,
@@ -52,11 +51,8 @@ export class CashFlowComponent implements OnInit {
     // Benefits/Cost Ratio
     this.cashFlowResults.results = ((this.cashFlowForm.energySavings * this.cashFlowForm.lifeYears) + this.cashFlowForm.salvageInput) /
       (((this.cashFlowForm.installationCost + this.cashFlowForm.junkCost) + (this.cashFlowForm.operationCost + this.cashFlowForm.fuelCost)) * this.cashFlowForm.lifeYears);
-    console.log(this.cashFlowResults.results);
     // Payback
     this.cashFlowResults.payback = (this.cashFlowForm.installationCost * 12) / this.cashFlowForm.energySavings;
-
-    console.log("made it");
     this.cashFlowService.calculate.next(true);
   }
 

@@ -31,7 +31,6 @@ export class UtilitiesComponent implements OnInit {
 
   showTool(str: string) {
     this.selectedTool = str;
-    console.log("selected tool = " + str);
   }
 
   hideTool() {

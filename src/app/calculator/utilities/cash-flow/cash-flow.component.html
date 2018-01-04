@@ -1,33 +1,3 @@
-<!-- <div class="pump-head">
-  <div class="row">
-    <div class="col-md-4 col-sm-12 mx-auto">
-      <app-cash-flow-form [cashFlowForm]="cashFlowForm" (emitCalculate)="calculate()" (changeField)="setField($event)"></app-cash-flow-form>
-    </div>
-    <div class="col-md-5 col-sm-12 mx-auto">
-      <ul class="tabs primary text-center">
-        <li class="calc-tab" [ngClass]="{'active': tabSelect == 'results'}">
-          <a (click)="setTab('results')">Results</a>
-        </li><!
-      -->
-<!--<li class="calc-tab" [ngClass]="{'active': tabSelect == 'help'}">
-          <a (click)="setTab('help')">Help</a>
-        </li>
-      </ul>
-      <div class="tab-content curve-results" id="pumpCurveGraph">
-        <div *ngIf="tabSelect == 'results'">
-           <app-cash-flow-diagram [cashFlowResults]="cashFlowResults"></app-cash-flow-diagram>
-        </div>
-        <div *ngIf="tabSelect == 'help'" class="help-panel">
-          <app-cash-flow-help [currentField]="currentField"></app-cash-flow-help>
-        </div>
-      </div>
-    </div>
-  </div>
-
-</div> -->
-
-
-
 <div class="modify-conditions panel-container row psat">
   <div class="col-12">
     <div class="row align-items-top calculator-panel">
@@ -61,9 +31,7 @@
             <div class="col-12">
               <div class="tab-content curve-results" id="pumpCurveGraph">
                 <div *ngIf="tabSelect == 'results'">
-                  <!-- <div class="col-md-11" id="cashFlowDiagram"> -->
                       <app-cash-flow-diagram [cashFlowResults]="cashFlowResults" [cashFlowForm]="cashFlowForm"></app-cash-flow-diagram>                      
-                  <!-- </div> -->
                 </div>
                 <div *ngIf="tabSelect == 'help'" class="help-panel">
                   <app-cash-flow-help [currentField]="currentField"></app-cash-flow-help>
@@ -76,32 +44,3 @@
     </div>
   </div>
 </div>
-
-<!-- <div class="pump-head">
-  <div class="row">
-    <div class="col-md-6 col-sm-12 mx-auto">
-      <app-cash-flow-form [cashFlowForm]="cashFlowForm" (emitCalculate)="calculate()" (changeField)="setField($event)"></app-cash-flow-form>
-    </div>
-    <div class="col-md-6 col-sm-12 mx-auto">
-      <ul class="tabs primary text-center">
-        <li class="calc-tab" [ngClass]="{'active': tabSelect == 'results'}">
-          <a (click)="setTab('results')">Results</a>
-        </li>
-        <!--
-      -->
-<!--<li class="calc-tab" [ngClass]="{'active': tabSelect == 'help'}">
-          <a (click)="setTab('help')">Help</a>
-        </li>
-      </ul>
-      <div class="tab-content curve-results" id="pumpCurveGraph">
-        <div *ngIf="tabSelect == 'results'">
-          <app-cash-flow-diagram [cashFlowResults]="cashFlowResults"></app-cash-flow-diagram>
-        </div>
-        <div *ngIf="tabSelect == 'help'" class="help-panel">
-          <app-cash-flow-help [currentField]="currentField"></app-cash-flow-help>
-        </div>
-      </div>
-    </div>
-  </div>
-
-</div> -->
