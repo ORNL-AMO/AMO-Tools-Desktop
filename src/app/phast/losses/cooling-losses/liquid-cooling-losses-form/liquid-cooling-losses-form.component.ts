@@ -64,7 +64,7 @@ export class LiquidCoolingLossesFormComponent implements OnInit {
   enableForm() {
     this.lossesForm.enable();
   }
-  
+
   checkForm() {
     this.calculate.emit(true)
   }
@@ -164,6 +164,13 @@ export class LiquidCoolingLossesFormComponent implements OnInit {
         this.coolingLossesCompareService.differentArray[this.lossIndex].different.liquidCoolingLossDifferent.correctionFactor.subscribe((val) => {
           let correctionFactorElements = doc.getElementsByName('correctionFactor_' + this.lossIndex);
           correctionFactorElements.forEach(element => {
+            element.classList.toggle('indicate-different', val);
+          });
+        })
+        //coolingMedium
+        this.coolingLossesCompareService.differentArray[this.lossIndex].different.liquidCoolingLossDifferent.coolingMedium.subscribe((val) => {
+          let coolingMediumElements = doc.getElementsByName('coolingMedium_' + this.lossIndex);
+          coolingMediumElements.forEach(element => {
             element.classList.toggle('indicate-different', val);
           });
         })

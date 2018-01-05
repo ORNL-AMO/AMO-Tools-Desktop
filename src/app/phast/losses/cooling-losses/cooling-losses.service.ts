@@ -66,7 +66,8 @@ export class CoolingLossesService {
       'inletTemp': ['', Validators.required],
       'outletTemp': ['', Validators.required],
       'correctionFactor': [1.0, Validators.required],
-      'name': ['Loss #' + lossNum]
+      'name': ['Loss #' + lossNum],
+      'coolingMedium': ['']
     });
   }
 
@@ -78,7 +79,8 @@ export class CoolingLossesService {
       'inletTemp': [loss.liquidCoolingLoss.initialTemperature, Validators.required],
       'outletTemp': [loss.liquidCoolingLoss.outletTemperature, Validators.required],
       'correctionFactor': [loss.liquidCoolingLoss.correctionFactor, Validators.required],
-      'name': [loss.name]
+      'name': [loss.name],
+      'coolingMedium': [loss.coolingMedium]
     })
   }
 
@@ -111,7 +113,8 @@ export class CoolingLossesService {
       'outletTemp': ['', Validators.required],
       'correctionFactor': [1.0, Validators.required],
       'gasDensity': [defaultDensity, Validators.required],
-      'name': ['Loss #' + lossNum]
+      'name': ['Loss #' + lossNum],
+      'coolingMedium': ['']
     });
   }
 
@@ -123,7 +126,8 @@ export class CoolingLossesService {
       'outletTemp': [loss.gasCoolingLoss.finalTemperature, Validators.required],
       'correctionFactor': [loss.gasCoolingLoss.correctionFactor, Validators.required],
       'gasDensity': [loss.gasCoolingLoss.gasDensity, Validators.required],
-      'name': [loss.name]
+      'name': [loss.name],
+      'coolingMedium': [loss.coolingMedium]
     });
   }
 

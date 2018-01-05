@@ -1,4 +1,153 @@
 <div *ngIf="selectedTool == 'none'">
+  <div class="row">
+    <div class="col-10  mx-auto">
+      <div class="content-container calculator-list">
+        <h2>Utilities Calculators</h2>
+        <ul>
+          <li>
+            <a (click)="showTool('convert-units')">Unit Converter</a>
+            <p>Use unit converter for quick unit conversion calculations.</p>
+          </li>
+          <li>
+            <a (click)="showTool('combined-heat-power')">Combined Heat and Power</a>
+            <p>The Combined Heat and Power (CHP) calculator is intended to help plant managers and other intended parties to
+              conduct a very preliminary initial screening of the potential CHP cost savings at the facility based on - Annual
+              Electricity Consumption, Annual Thermal Loads, Average Electricity and Fuel prices and Annual Operating hours.
+              This calculator is not intended to estimate the economic performance of a specific CHP project, rather it is
+              intended to only give the user an initial understanding of whether CHP has the potential to provide economic
+              savings at their facility.
+            </p>
+          </li>
+          <li>
+            <a (click)="showTool('cash-flow')">Cash Flow Diagram</a>
+            <p>
+              Cash flow diagram displays the revenues (savings) and costs associated with an investment. Includes calculation of Benefit:Cost
+              Ratio and Simple Payback Period.
+            </p>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="stand-alone-calc tab-content" *ngIf="selectedTool == 'convert-units'">
+  <app-unit-converter></app-unit-converter>
+</div>
+
+<div class="stand-alone-calc tab-content" *ngIf="selectedTool == 'combined-heat-power'">
+  <app-combined-heat-power></app-combined-heat-power>
+</div>
+
+<div class="stand-alone-calc tab-content" *ngIf="selectedTool == 'cash-flow'">
+  <app-cash-flow></app-cash-flow>
+</div>
+
+
+
+
+<!-- <div *ngIf="selectedTool == 'none'">
+
+  <div class="row">
+    <div class="col-10  mx-auto">
+      <div class="content-container calculator-list">
+
+        <h2>Utilities Calculators</h2>
+        <ul>
+          <li>
+            <a (click)="showTool('convert-units')">Unit Converter</a>
+            <p>Use unit converter for quick unit conversion calculations</p>
+          </li>
+          <li>
+            <a (click)="showTool('combined-heat-power')">Combined Heat and Power</a>
+            <p>
+              The Combined Heat and Power (CHP) calculator is intended to help plant managers and other intended parties to conduct a very
+              preliminary initial screening of the potential CHP cost savings at the facility based on - Annual Electricity
+              Consumption, Annual Thermal Loads, Average Electricity and Fuel prices and Annual Operating hours. This calculator
+              is not intended to estimate the economic performance of a specific CHP project, rather it is intended to only
+              give the user an initial understanding of whether CHP has the potential to provide economic savings at their
+              facility.
+            </p>
+          </li>
+          <li>
+            <a (click)="showTool('cash-flow')">Cash Flow Diagram</a>
+            <p>
+              Cash flow diagram displays the revenues (savings) and costs associated with an investment. Includes calculation of Benefit:Cost
+              Ratio and Simple Payback Period.
+            </p>
+          </li>
+        </ul>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="calculator" *ngIf="selectedTool == 'convert-units'">
+  <div class="row">
+    <div class="col-10  mx-auto">
+      <h2>Convert Units</h2>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-lg-8 col-md-9 col-sm-10  mx-auto">
+      <div class="calculator-container">
+        <div class="card background-color">
+          <div class="card-block">
+            <app-unit-converter></app-unit-converter>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="calculator" *ngIf="selectedTool == 'combined-heat-power'">
+  <div class="row">
+    <div class="col-11  mx-auto">
+      <h2>Combined Heat and Power</h2>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-11  mx-auto">
+      <div class="calculator-container">
+        <div class="card background-color">
+          <div class="card-block">
+            <app-combined-heat-power></app-combined-heat-power>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+ debug -->
+<!-- <div class="stand-alone-calc tab-content" *ngIf="selectedTool == 'cash-flow'">
+  <app-cash-flow></app-cash-flow>
+</div> -->
+
+<!-- real version -->
+<!-- <div class="calculator" *ngIf="selectedTool == 'cash-flow'">
+   <div class="row">
+    <div class="col-11  mx-auto">
+      <h2>Cash Flow Diagram</h2>
+    </div>
+  </div>
+  <div class="calculator-container">
+    <app-cash-flow></app-cash-flow>
+  </div>
+</div> -->
+
+
+
+
+
+
+
+<!-- <div *ngIf="selectedTool == 'none'">
 
   <div class="row">
     <div class="col-10  mx-auto">
@@ -81,4 +230,4 @@
   <div class="calculator-container">
     <app-cash-flow></app-cash-flow>
   </div>
-</div>
+</div> -->

@@ -166,6 +166,13 @@ export class GasCoolingLossesFormComponent implements OnInit {
             element.classList.toggle('indicate-different', val);
           });
         })
+        //coolingMedium
+        this.coolingLossesCompareService.differentArray[this.lossIndex].different.gasCoolingLossDifferent.coolingMedium.subscribe((val) => {
+          let coolingMediumElements = doc.getElementsByName('coolingMedium_' + this.lossIndex);
+          coolingMediumElements.forEach(element => {
+            element.classList.toggle('indicate-different', val);
+          });
+        })
       }
     }
   }
