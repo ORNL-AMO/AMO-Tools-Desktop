@@ -23,3 +23,20 @@ a:not([href]):not([tabindex]).disabled-link:hover{
 .stand-alone-calc{
     height: 100vh;
 }
+
+
+/**Input Data Report **/
+.summary-card .card-header h5{
+    margin-bottom: 0px;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.summary-card .card-header{
+    background-color: #ffffff;
+}
+
+.summary-card .card-header:hover{
+    background-color: #D5D8DC;
+    cursor: pointer;
+}

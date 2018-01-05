@@ -12,6 +12,7 @@ import { CashFlowComponent } from './cash-flow/cash-flow.component';
 import { CashFlowHelpComponent } from './cash-flow/cash-flow-help/cash-flow-help.component';
 import { CashFlowFormComponent } from './cash-flow/cash-flow-form/cash-flow-form.component';
 import { CashFlowDiagramComponent } from './cash-flow/cash-flow-diagram/cash-flow-diagram.component';
+import { CashFlowService } from './cash-flow/cash-flow.service';
 
 @NgModule({
     declarations: [
@@ -36,6 +37,7 @@ import { CashFlowDiagramComponent } from './cash-flow/cash-flow-diagram/cash-flo
         CombinedHeatPowerModule
     ],
     providers: [
+        CashFlowService,
     ]
 
 })

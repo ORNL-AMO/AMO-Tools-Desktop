@@ -78,8 +78,8 @@
               <!--<a id="setHHV" class="form-text text-help" (click)="setHHV()">Calculate from Gas Composition</a>-->
             </label>
             <div class="text-center small">
-              <span *ngIf="settings.unitsOfMeasure == 'Imperial'">{{newMaterial.heatingValue | number:'2.0-3'}} Btu/SCF</span>
-              <span *ngIf="settings.unitsOfMeasure == 'Metric'">{{newMaterial.heatingValue | number:'2.0-3'}} kJ/Nm<sup>3</sup></span>
+              <span *ngIf="settings.unitsOfMeasure == 'Imperial'">{{newMaterial.heatingValue | number:'2.0-3'}} Btu/lb</span>
+              <span *ngIf="settings.unitsOfMeasure == 'Metric'">{{newMaterial.heatingValue | number:'2.0-3'}} kJ/kg</span>
             </div>
           </div>
         </form>

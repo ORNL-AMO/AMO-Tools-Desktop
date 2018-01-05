@@ -82,6 +82,7 @@ export class AssessmentService {
         steamCost: 10.00,
         electricityCost: .080
       },
+      modifications: new Array()
     }
     return newPhast;
   }
