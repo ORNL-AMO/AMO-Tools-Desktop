@@ -105,3 +105,15 @@
         padding-top: 0px !important;
     }
 }
+
+
+.modal-dialog{
+    top: 0px;
+    max-width: none;
+    margin: 10px;
+}
+
+.modal-header{
+    background-color: #BF3D00;
+    color: #fff;
+}

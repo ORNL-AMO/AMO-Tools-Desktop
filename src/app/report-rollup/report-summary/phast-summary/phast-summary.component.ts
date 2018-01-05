@@ -11,19 +11,18 @@ import { ConvertUnitsService } from '../../../shared/convert-units/convert-units
   styleUrls: ['./phast-summary.component.css', '../report-summary.component.css']
 })
 export class PhastSummaryComponent implements OnInit {
+  @Input()
+  settings: Settings;
+
   furnaceSavingsPotential: number = 0;
   numPhasts: number = 0;
   energySavingsPotential: number = 0;
   totalCost: number = 0;
   totalEnergy: number = 0;
-  defaultSettings: Settings;
   constructor(private reportRollupService: ReportRollupService, private indexedDbService: IndexedDbService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
-    this.indexedDbService.getDirectorySettings(1).then(results => {
-      this.defaultSettings = this.reportRollupService.checkSettings(results[0]);
-    })
-
+    console.log(this.settings)
     this.reportRollupService.phastAssessments.subscribe(val => {
       this.numPhasts = val.length;
       if (val.length != 0) {
@@ -57,9 +56,9 @@ export class PhastSummaryComponent implements OnInit {
       let diffCost = result.modificationResults.annualCostSavings;
       sumSavings += diffCost;
       sumCost += result.modificationResults.annualCost;
-      let diffEnergy = this.convertUnitsService.value(result.modificationResults.annualEnergySavings).from(result.settings.energyResultUnit).to(this.defaultSettings.energyResultUnit);
+      let diffEnergy = this.convertUnitsService.value(result.modificationResults.annualEnergySavings).from(result.settings.energyResultUnit).to(this.settings.energyResultUnit);
       sumEnergySavings += diffEnergy;
-      sumEnergy += this.convertUnitsService.value(result.modificationResults.annualEnergyUsed).from(result.settings.energyResultUnit).to(this.defaultSettings.energyResultUnit);;
+      sumEnergy += this.convertUnitsService.value(result.modificationResults.annualEnergyUsed).from(result.settings.energyResultUnit).to(this.settings.energyResultUnit);;
     })
     this.furnaceSavingsPotential = sumSavings;
     this.energySavingsPotential = sumEnergySavings;

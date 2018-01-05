@@ -2,6 +2,9 @@ import { Component, OnInit, Input, Output, EventEmitter, HostListener, ViewChild
 import { Assessment } from '../shared/models/assessment';
 import { ReportRollupService } from './report-rollup.service';
 import { WindowRefService } from '../indexedDb/window-ref.service';
+import { Settings } from '../shared/models/settings';
+import { IndexedDbService } from '../indexedDb/indexed-db.service';
+import { ModalDirective } from 'ngx-bootstrap';
 @Component({
   selector: 'app-report-rollup',
   templateUrl: './report-rollup.component.html',
@@ -24,10 +27,18 @@ export class ReportRollupComponent implements OnInit {
   assessmentsGathered: boolean = false;
   isSummaryVisible: boolean = true;
   createdDate: Date;
+  settings: Settings;
+
+
+  @ViewChild('rollupModal') public rollupModal: ModalDirective;
   constructor(private reportRollupService: ReportRollupService,
-    private windowRefService: WindowRefService) { }
+    private windowRefService: WindowRefService, private indexedDbService: IndexedDbService) { }
 
   ngOnInit() {
+    this.indexedDbService.getDirectorySettings(1).then(results => {
+      this.settings = this.reportRollupService.checkSettings(results[0]);
+      console.log('init' + this.settings);
+    })
     this.createdDate = new Date();
     this.reportRollupService.reportAssessments.subscribe(assesments => {
       this._reportAssessments = assesments;
@@ -90,4 +101,12 @@ export class ReportRollupComponent implements OnInit {
     this.focusedAssessment = assessment;
     element.scrollIntoView({ behavior: 'smooth' });
   }
+
+  showModal() {
+    this.rollupModal.show();
+}
+
+hideModal() {
+  this.rollupModal.hide();
+}
 }

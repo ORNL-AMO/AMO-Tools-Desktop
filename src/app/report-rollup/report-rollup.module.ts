@@ -10,12 +10,14 @@ import { PsatModule } from '../psat/psat.module';
 import { PhastReportModule } from '../phast/phast-report/phast-report.module';
 import { PhastSummaryComponent } from './report-summary/phast-summary/phast-summary.component';
 import { PhastRollupComponent } from './phast-rollup/phast-rollup.component';
+import { ModalModule } from 'ngx-bootstrap/modal/modal.module';
 
 @NgModule({
   imports: [
     CommonModule,
     PsatModule,
-    PhastReportModule
+    PhastReportModule,
+    ModalModule
   ],
   declarations: [ReportRollupComponent, ReportBannerComponent, ReportSummaryComponent, PsatSummaryComponent, PhastSummaryComponent, PhastRollupComponent],
   providers: [ReportRollupService],

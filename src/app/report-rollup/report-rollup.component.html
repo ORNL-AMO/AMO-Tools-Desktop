@@ -1,4 +1,4 @@
-<div #reportTemplate *ngIf="assessmentsGathered">
+<div #reportTemplate *ngIf="assessmentsGathered && settings">
 
     <div class="report-cover">
         <img src="assets/images/DOE-banner-color.png" class="doe-logo">
@@ -13,7 +13,7 @@
     <div class="report-header hide-print" id="reportHeader">
         <app-report-banner (emitCloseReport)="closeReport()" (emitExport)="exportToCsv()" (emitPrint)="print()">
         </app-report-banner>
-        <app-report-summary id="reportSummary"></app-report-summary>
+        <app-report-summary id="reportSummary" [settings]="settings" (showModal)="showModal()"></app-report-summary>
     </div>
     <!-- End .report-header -->
 
@@ -50,4 +50,22 @@
             <h1>Gathering Results</h1>
         </div>
     </div>
+</div>
+
+
+<div bsModal #rollupModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="rollupModal"
+  aria-hidden="true" [config]="{backdrop: 'fixed'}">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+          <h5>PHAST Rollup</h5>
+        <button class="close" aria-label="Close" (click)="hideModal()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <app-phast-rollup [settings]="settings"></app-phast-rollup>
+      </div>
+    </div>
+  </div>
 </div>

@@ -4,8 +4,8 @@
         <li>
             <app-psat-summary></app-psat-summary>
         </li>
-        <li>
-            <app-phast-summary></app-phast-summary>
+        <li class="furnace-summary" (click)="showFurnaceRollup()">
+            <app-phast-summary [settings]="settings"></app-phast-summary>
         </li>
         <li class="coming-soon hide-print">
             <div class="summary-header fans">
@@ -47,3 +47,19 @@
 
 </div>
 
+
+<!-- <div bsModal #rollupModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="rollupModal"
+  aria-hidden="true" [config]="{backdrop: 'fixed'}">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button class="close" aria-label="Close" (click)="hideModal()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        
+      </div>
+    </div>
+  </div>
+</div> -->

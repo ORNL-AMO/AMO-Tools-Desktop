@@ -27,7 +27,10 @@
         color: #afafaf;
     }
 
-
+.furnace-summary:hover{
+    cursor: pointer;
+    border: red solid 2px;
+}
 
 
 .coming-soon .summary-header {
