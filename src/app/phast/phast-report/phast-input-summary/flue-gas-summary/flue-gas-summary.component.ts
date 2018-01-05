@@ -20,22 +20,45 @@ export class FlueGasSummaryComponent implements OnInit {
   numLosses: number = 0;
   collapse: boolean = true;
 
-  typeDiff: boolean = false;
-  fuelNameDiff: boolean = false;
-  flueGasTempDiff: boolean = false;
-  excessAirMethodDiff: boolean = false;
-  oxygenInFlueGasDiff: boolean = false;
-  excessAirDiff: boolean = false;
-  combustionAirTempDiff: boolean = false;
-  fuelTemperatureDiff: boolean = false;
-  moistureInAirDiff: boolean = false;
-  dischargeTempDiff: boolean = false;
-  unburnedCarbonDiff: boolean = false;
+  // typeDiff: boolean = false;
+  // fuelNameDiff: boolean = false;
+  // flueGasTempDiff: boolean = false;
+  // excessAirMethodDiff: boolean = false;
+  // oxygenInFlueGasDiff: boolean = false;
+  // excessAirDiff: boolean = false;
+  // combustionAirTempDiff: boolean = false;
+  // fuelTemperatureDiff: boolean = false;
+  // moistureInAirDiff: boolean = false;
+  // dischargeTempDiff: boolean = false;
+  // unburnedCarbonDiff: boolean = false;
 
+  typeDiff: Array<boolean>;
+  fuelNameDiff: Array<boolean>;
+  flueGasTempDiff: Array<boolean>;
+  excessAirMethodDiff: Array<boolean>;
+  oxygenInFlueGasDiff: Array<boolean>;
+  excessAirDiff: Array<boolean>;
+  combustionAirTempDiff: Array<boolean>;
+  fuelTemperatureDiff: Array<boolean>;
+  moistureInAirDiff: Array<boolean>;
+  dischargeTempDiff: Array<boolean>;
+  unburnedCarbonDiff: Array<boolean>;
 
   constructor(private suiteDbService: SuiteDbService, private cd: ChangeDetectorRef) { }
 
   ngOnInit() {
+    this.typeDiff = new Array();
+    this.fuelNameDiff = new Array();
+    this.flueGasTempDiff = new Array();
+    this.excessAirMethodDiff = new Array();
+    this.oxygenInFlueGasDiff = new Array();
+    this.excessAirDiff = new Array();
+    this.combustionAirTempDiff = new Array();
+    this.fuelTemperatureDiff = new Array();
+    this.moistureInAirDiff = new Array();
+    this.dischargeTempDiff = new Array();
+    this.unburnedCarbonDiff = new Array();
+
     this.volumeOptions = this.suiteDbService.selectGasFlueGasMaterials();
     this.massOptions = this.suiteDbService.selectSolidLiquidFlueGasMaterials();
     this.lossData = new Array();
@@ -55,23 +78,35 @@ export class FlueGasSummaryComponent implements OnInit {
             baseline: this.getData(loss),
             modifications: modificationData
           });
+          //initialize array values for every defined loss
+          this.typeDiff.push(false);
+          this.fuelNameDiff.push(false);
+          this.flueGasTempDiff.push(false);
+          this.excessAirMethodDiff.push(false);
+          this.oxygenInFlueGasDiff.push(false);
+          this.excessAirDiff.push(false);
+          this.combustionAirTempDiff.push(false);
+          this.fuelTemperatureDiff.push(false);
+          this.moistureInAirDiff.push(false);
+          this.dischargeTempDiff.push(false);
+          this.unburnedCarbonDiff.push(false);
+          //index +1 for next loss
           index++;
         })
       }
     }
   }
 
-
   //function used to check if baseline and modification values are different
   //called from html
   //diffBool is name of corresponding input boolean to indicate different
-  checkDiff(baselineVal: any, modificationVal: any, diffBool: string) {
+  checkDiff(baselineVal: any, modificationVal: any, diffBool: string, modIndex: number) {
     if (baselineVal != modificationVal) {
       //this[diffBool] get's corresponding variable
       //only set true once
-      if (this[diffBool] != true) {
+      if (this[diffBool][modIndex] != true) {
         //set true/different
-        this[diffBool] = true;
+        this[diffBool][modIndex] = true;
         //tell html to detect change
         this.cd.detectChanges();
       }

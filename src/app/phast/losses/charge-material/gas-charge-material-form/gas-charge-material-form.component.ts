@@ -6,6 +6,7 @@ import { ModalDirective } from 'ngx-bootstrap';
 import { LossesService } from '../../losses.service';
 import { Settings } from '../../../../shared/models/settings';
 import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
+import { FormGroup } from '@angular/forms';
 @Component({
   selector: 'app-gas-charge-material-form',
   templateUrl: './gas-charge-material-form.component.html',
@@ -13,7 +14,7 @@ import { ConvertUnitsService } from '../../../../shared/convert-units/convert-un
 })
 export class GasChargeMaterialFormComponent implements OnInit {
   @Input()
-  chargeMaterialForm: any;
+  chargeMaterialForm: FormGroup;
   @Output('calculate')
   calculate = new EventEmitter<boolean>();
   @Input()
@@ -26,12 +27,7 @@ export class GasChargeMaterialFormComponent implements OnInit {
   lossIndex: number;
   @Input()
   settings: Settings;
-
   @ViewChild('materialModal') public materialModal: ModalDirective;
-  @ViewChild('lossForm') lossForm: ElementRef;
-  form: any;
-  elements: any;
-
   firstChange: boolean = true;
   materialTypes: any;
   selectedMaterial: any;
@@ -61,8 +57,8 @@ export class GasChargeMaterialFormComponent implements OnInit {
   ngOnInit() {
     this.materialTypes = this.suiteDbService.selectGasLoadChargeMaterials();
     if (this.chargeMaterialForm) {
-      if (this.chargeMaterialForm.value.materialId && this.chargeMaterialForm.value.materialId != '') {
-        if (this.chargeMaterialForm.value.materialSpecificHeat == '') {
+      if (this.chargeMaterialForm.controls.materialId.value && this.chargeMaterialForm.controls.materialId.value != '') {
+        if (this.chargeMaterialForm.controls.materialSpecificHeat.value == '') {
           this.setProperties();
         }
       }
@@ -96,7 +92,7 @@ export class GasChargeMaterialFormComponent implements OnInit {
     this.changeField.emit('default');
   }
   setProperties() {
-    let selectedMaterial = this.suiteDbService.selectGasLoadChargeMaterialById(this.chargeMaterialForm.value.materialId);
+    let selectedMaterial = this.suiteDbService.selectGasLoadChargeMaterialById(this.chargeMaterialForm.controls.materialId.value);
         if (this.settings.unitsOfMeasure == 'Metric') {
       selectedMaterial.specificHeatVapor = this.convertUnitsService.value(selectedMaterial.specificHeatVapor).from('btulbF').to('kJkgC');
     }
@@ -113,32 +109,32 @@ export class GasChargeMaterialFormComponent implements OnInit {
     if (!bool) {
       this.startSavePolling();
     }
-    if (this.chargeMaterialForm.value.materialSpecificHeat < 0) {
+    if (this.chargeMaterialForm.controls.materialSpecificHeat.value < 0) {
       this.specificHeatGasError = 'Specific Heat of Gas must be equal or greater than 0';
     } else {
       this.specificHeatGasError = null;
     }
-    if (this.chargeMaterialForm.value.feedRate < 0) {
+    if (this.chargeMaterialForm.controls.feedRate.value < 0) {
       this.feedGasRateError = 'Feed Rate for Gas Mixture must be greater than 0';
     } else {
       this.feedGasRateError = null;
     }
-    if (this.chargeMaterialForm.value.vaporInGas < 0 || this.chargeMaterialForm.value.vaporInGas > 100) {
+    if (this.chargeMaterialForm.controls.vaporInGas.value < 0 || this.chargeMaterialForm.controls.vaporInGas.value > 100) {
       this.gasMixVaporError = 'Vapor in Gas Mixture must be equal or greater  than 0 and less than or equal to 100%';
     } else {
       this.gasMixVaporError = null;
     }
-    if (this.chargeMaterialForm.value.specificHeatOfVapor < 0) {
+    if (this.chargeMaterialForm.controls.specificHeatOfVapor.value < 0) {
       this.specificHeatGasVaporError = 'Specific Heat of Vapor must be equal or greater than 0';
     } else {
       this.specificHeatGasVaporError = null;
     }
-    if (this.chargeMaterialForm.value.gasReacted < 0 || this.chargeMaterialForm.value.gasReacted > 100) {
+    if (this.chargeMaterialForm.controls.gasReacted.value < 0 || this.chargeMaterialForm.controls.gasReacted.value > 100) {
       this.feedGasReactedError = 'Feed Gas Reacted must be equal or greater than 0 and less than or equal to 100%';
     } else {
       this.feedGasReactedError = null;
     }
-    if (this.chargeMaterialForm.value.heatOfReaction < 0) {
+    if (this.chargeMaterialForm.controls.heatOfReaction.value < 0) {
       this.heatOfReactionError = 'Heat of Reaction cannot be less than zero. For exothermic reactions, change "Endothermic/Exothermic"';
     } else {
       this.heatOfReactionError = null;
@@ -248,7 +244,6 @@ export class GasChargeMaterialFormComponent implements OnInit {
   }
 
   hideMaterialModal(event?: any) {
-    console.log('hide')
     if (event) {
       this.materialTypes = this.suiteDbService.selectGasLoadChargeMaterials();
       let newMaterial = this.materialTypes.filter(material => { return material.substance == event.substance })

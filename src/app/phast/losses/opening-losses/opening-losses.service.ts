@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { OpeningLoss, CircularOpeningLoss, QuadOpeningLoss } from '../../../shared/models/phast/losses/openingLoss';
 import { BehaviorSubject } from 'rxjs';
 
@@ -26,7 +26,7 @@ export class OpeningLossesService {
   //   }
   // }
 
-  initForm(lossNum: number) {
+  initForm(lossNum: number): FormGroup {
     return this.formBuilder.group({
       'numberOfOpenings': [1, Validators.required],
       'openingType': ['Round', Validators.required],
@@ -42,7 +42,7 @@ export class OpeningLossesService {
     })
   }
 
-  getFormFromLoss(loss: OpeningLoss) {
+  getFormFromLoss(loss: OpeningLoss): FormGroup {
     return this.formBuilder.group({
       'numberOfOpenings': [loss.numberOfOpenings, Validators.required],
       'openingType': [loss.openingType, Validators.required],
@@ -58,64 +58,64 @@ export class OpeningLossesService {
     })
   }
 
-  getLossFromForm(form: any): OpeningLoss {
+  getLossFromForm(form: FormGroup): OpeningLoss {
     return {
-      numberOfOpenings: form.value.numberOfOpenings,
-      emissivity: form.value.emissivity,
-      thickness: form.value.wallThickness,
-      ambientTemperature: form.value.ambientTemp,
-      insideTemperature: form.value.insideTemp,
-      percentTimeOpen: form.value.percentTimeOpen,
-      viewFactor: form.value.viewFactor,
-      openingType: form.value.openingType,
-      lengthOfOpening: form.value.lengthOfOpening,
-      heightOfOpening: form.value.heightOfOpening,
-      name: form.value.name
+      numberOfOpenings: form.controls.numberOfOpenings.value,
+      emissivity: form.controls.emissivity.value,
+      thickness: form.controls.wallThickness.value,
+      ambientTemperature: form.controls.ambientTemp.value,
+      insideTemperature: form.controls.insideTemp.value,
+      percentTimeOpen: form.controls.percentTimeOpen.value,
+      viewFactor: form.controls.viewFactor.value,
+      openingType: form.controls.openingType.value,
+      lengthOfOpening: form.controls.lengthOfOpening.value,
+      heightOfOpening: form.controls.heightOfOpening.value,
+      name: form.controls.name.value
     };
   }
 
-  getViewFactorInput(input: any) {
-    if (input.value.openingType === 'Round') {
+  getViewFactorInput(input: FormGroup) {
+    if (input.controls.openingType.value === 'Round') {
       return {
         openingShape: 0,
-        thickness: input.value.wallThickness,
-        diameter: input.value.lengthOfOpening
+        thickness: input.controls.wallThickness.value,
+        diameter: input.controls.lengthOfOpening.value
       };
     }
     return {
       openingShape: 1,
-      thickness: input.value.wallThickness,
-      length: input.value.lengthOfOpening,
-      width: input.value.heightOfOpening
+      thickness: input.controls.wallThickness.value,
+      length: input.controls.lengthOfOpening.value,
+      width: input.controls.heightOfOpening.value
     };
   }
 
-  getQuadLossFromForm(form: any): QuadOpeningLoss {
-    const ratio = Math.min(form.value.lengthOfOpening, form.value.heightOfOpening) / form.value.wallThickness;
+  getQuadLossFromForm(form: FormGroup): QuadOpeningLoss {
+    const ratio = Math.min(form.controls.lengthOfOpening.value, form.controls.heightOfOpening.value) / form.controls.wallThickness.value;
     return {
-      emissivity: form.value.emissivity,
-      length: form.value.lengthOfOpening,
-      width: form.value.heightOfOpening,
-      thickness: form.value.wallThickness,
+      emissivity: form.controls.emissivity.value,
+      length: form.controls.lengthOfOpening.value,
+      width: form.controls.heightOfOpening.value,
+      thickness: form.controls.wallThickness.value,
       ratio: ratio,
-      ambientTemperature: form.value.ambientTemp,
-      insideTemperature: form.value.insideTemp,
-      percentTimeOpen: form.value.percentTimeOpen,
-      viewFactor: form.value.viewFactor
+      ambientTemperature: form.controls.ambientTemp.value,
+      insideTemperature: form.controls.insideTemp.value,
+      percentTimeOpen: form.controls.percentTimeOpen.value,
+      viewFactor: form.controls.viewFactor.value
     };
   }
 
-  getCircularLossFromForm(form: any): CircularOpeningLoss {
-    const ratio = form.value.lengthOfOpening / form.value.wallThickness;
+  getCircularLossFromForm(form: FormGroup): CircularOpeningLoss {
+    const ratio = form.controls.lengthOfOpening.value / form.controls.wallThickness.value;
     return {
-      emissivity: form.value.emissivity,
-      diameter: form.value.lengthOfOpening,
-      thickness: form.value.wallThickness,
+      emissivity: form.controls.emissivity.value,
+      diameter: form.controls.lengthOfOpening.value,
+      thickness: form.controls.wallThickness.value,
       ratio: ratio,
-      ambientTemperature: form.value.ambientTemp,
-      insideTemperature: form.value.insideTemp,
-      percentTimeOpen: form.value.percentTimeOpen,
-      viewFactor: form.value.viewFactor
+      ambientTemperature: form.controls.ambientTemp.value,
+      insideTemperature: form.controls.insideTemp.value,
+      percentTimeOpen: form.controls.percentTimeOpen.value,
+      viewFactor: form.controls.viewFactor.value
     };
   }
 }

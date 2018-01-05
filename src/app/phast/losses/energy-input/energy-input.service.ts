@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { EnergyInputEAF } from '../../../shared/models/phast/losses/energyInputEAF';
 import { BehaviorSubject } from 'rxjs';
 
@@ -25,7 +25,7 @@ export class EnergyInputService {
   //     this.addLossBaselineMonitor.next(true);
   //   }
   // }
-  initForm(lossNum: number) {
+  initForm(lossNum: number): FormGroup {
     return this.formBuilder.group({
       naturalGasHeatInput: ['', Validators.required],
       flowRateInput: [''],
@@ -41,24 +41,24 @@ export class EnergyInputService {
     })
   }
 
-  getLossFromForm(form: any): EnergyInputEAF {
+  getLossFromForm(form: FormGroup): EnergyInputEAF {
     let tmpEnergyInput: EnergyInputEAF = {
-      naturalGasHeatInput: form.value.naturalGasHeatInput,
-      flowRateInput: form.value.flowRateInput,
-     // naturalGasFlow: form.value.naturalGasFlow,
-     // measuredOxygenFlow: form.value.measuredOxygenFlow,
-      coalCarbonInjection: form.value.coalCarbonInjection,
-      coalHeatingValue: form.value.coalHeatingValue,
-      electrodeUse: form.value.electrodeUse,
-      electrodeHeatingValue: form.value.electrodeHeatingValue,
-      otherFuels: form.value.otherFuels,
-      electricityInput: form.value.electricityInput,
-      name: form.value.name
+      naturalGasHeatInput: form.controls.naturalGasHeatInput.value,
+      flowRateInput: form.controls.flowRateInput.value,
+     // naturalGasFlow: form.controls.naturalGasFlow.value,
+     // measuredOxygenFlow: form.controls.measuredOxygenFlow.value,
+      coalCarbonInjection: form.controls.coalCarbonInjection.value,
+      coalHeatingValue: form.controls.coalHeatingValue.value,
+      electrodeUse: form.controls.electrodeUse.value,
+      electrodeHeatingValue: form.controls.electrodeHeatingValue.value,
+      otherFuels: form.controls.otherFuels.value,
+      electricityInput: form.controls.electricityInput.value,
+      name: form.controls.name.value
     }
     return tmpEnergyInput;
   }
 
-  getFormFromLoss(loss: EnergyInputEAF) {
+  getFormFromLoss(loss: EnergyInputEAF): FormGroup {
     return this.formBuilder.group({
       naturalGasHeatInput: [loss.naturalGasHeatInput, Validators.required],
       flowRateInput: [loss.flowRateInput],

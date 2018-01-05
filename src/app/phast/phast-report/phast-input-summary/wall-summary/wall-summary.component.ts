@@ -23,7 +23,6 @@ export class WallSummaryComponent implements OnInit {
   //used to collapse table
   collapse: boolean = true;
 
-  //booleans corresponding to each input, used to style indicating different
   correctionFactorDifferent: Array<boolean>;
   surfaceAreaDifferent: Array<boolean>;
   avgSurfaceTempDiff: Array<boolean>;
@@ -35,16 +34,14 @@ export class WallSummaryComponent implements OnInit {
   constructor(private suiteDbService: SuiteDbService, private cd: ChangeDetectorRef) { }
 
   ngOnInit() {
-    //init diff arrays
-    this.correctionFactorDifferent = new Array<boolean>();
-    this.surfaceAreaDifferent = new Array<boolean>();
-    this.avgSurfaceTempDiff = new Array<boolean>();
-    this.ambientTempDiff = new Array<boolean>();
-    this.windVelocityDiff = new Array<boolean>();
-    this.surfaceShapeDiff = new Array<boolean>();
-    this.conditionFactorDiff = new Array<boolean>();
-    this.emissivityDiff = new Array<boolean>();
-
+    this.correctionFactorDifferent = new Array();
+    this.surfaceAreaDifferent = new Array();
+    this.avgSurfaceTempDiff = new Array();
+    this.ambientTempDiff = new Array();
+    this.windVelocityDiff = new Array();
+    this.surfaceShapeDiff = new Array();
+    this.conditionFactorDiff = new Array();
+    this.emissivityDiff = new Array();
     //get substances
     this.surfaceOrientationOptions = this.suiteDbService.selectWallLossesSurface();
     //init array
@@ -75,7 +72,7 @@ export class WallSummaryComponent implements OnInit {
             baseline: loss,
             modifications: modificationData
           });
-          //add false for each different array
+          //initialize array values for every defined loss
           this.correctionFactorDifferent.push(false);
           this.surfaceAreaDifferent.push(false);
           this.avgSurfaceTempDiff.push(false);
@@ -91,16 +88,17 @@ export class WallSummaryComponent implements OnInit {
     }
   }
 
+
   //function used to check if baseline and modification values are different
   //called from html
   //diffBool is name of corresponding input boolean to indicate different
-  checkDiff(baselineVal: any, modificationVal: any, diffBool: string, index: number) {
+  checkDiff(baselineVal: any, modificationVal: any, diffBool: string, modIndex: number) {
     if (baselineVal != modificationVal) {
       //this[diffBool] get's corresponding variable
       //only set true once
-      if (this[diffBool][index] != true) {
+      if (this[diffBool][modIndex] != true) {
         //set true/different
-        this[diffBool][index] = true;
+        this[diffBool][modIndex] = true;
         //tell html to detect change
         this.cd.detectChanges();
       }

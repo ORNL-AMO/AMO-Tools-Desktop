@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { Settings } from '../shared/models/settings';
+
 @Injectable()
 export class SettingsService {
 
   constructor(private formBuilder: FormBuilder) { }
 
-  getSettingsForm() {
+  getSettingsForm(): FormGroup {
     return this.formBuilder.group({
       'language': ['', Validators.required],
       'currency': ['', Validators.required],
@@ -26,7 +27,7 @@ export class SettingsService {
     });
   }
 
-  getFormFromSettings(settings: Settings) {
+  getFormFromSettings(settings: Settings): FormGroup {
     return this.formBuilder.group({
       'language': [settings.language, Validators.required],
       'currency': [settings.currency, Validators.required],
@@ -46,7 +47,7 @@ export class SettingsService {
     });
   }
 
-  getSettingsFromForm(form: any) {
+  getSettingsFromForm(form: FormGroup) {
     let tmpSettings: Settings = {
       language: form.controls.language.value,
       currency: form.controls.currency.value,
@@ -87,7 +88,7 @@ export class SettingsService {
     return newSettings;
   }
 
-  setUnits(settingsForm: any): any {
+  setUnits(settingsForm: FormGroup): FormGroup {
     if (settingsForm.controls.unitsOfMeasure.value == 'Imperial') {
       settingsForm.patchValue({
         powerMeasurement: 'hp',
@@ -116,7 +117,7 @@ export class SettingsService {
     return settingsForm;
   }
 
-  setEnergyResultUnit(settingsForm: any): any {
+  setEnergyResultUnit(settingsForm: FormGroup): FormGroup  {
     if (settingsForm.controls.unitsOfMeasure.value == 'Imperial') {
       settingsForm.patchValue({
         energyResultUnit: 'MMBtu'
@@ -150,7 +151,7 @@ export class SettingsService {
     return settings;
   }
 
-  setTemperatureUnit(settings: Settings){
+  setTemperatureUnit(settings: Settings): Settings{
     if(settings.unitsOfMeasure == 'Imperial'){
       settings.temperatureMeasurement = 'F';
     }else if(settings.unitsOfMeasure == 'Metric'){

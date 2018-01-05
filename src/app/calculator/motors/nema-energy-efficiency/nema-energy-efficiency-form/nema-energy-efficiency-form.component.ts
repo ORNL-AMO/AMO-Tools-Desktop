@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
 import { Settings } from '../../../../shared/models/settings';
+import { FormGroup } from '@angular/forms';
 @Component({
   selector: 'app-nema-energy-efficiency-form',
   templateUrl: './nema-energy-efficiency-form.component.html',
@@ -7,7 +8,7 @@ import { Settings } from '../../../../shared/models/settings';
 })
 export class NemaEnergyEfficiencyFormComponent implements OnInit {
   @Input()
-  nemaForm: any;
+  nemaForm: FormGroup;
   @Input()
   settings: Settings;
   @Output('changeField')
@@ -43,14 +44,18 @@ export class NemaEnergyEfficiencyFormComponent implements OnInit {
 
   addNum(str: string) {
     if (str == 'motorRPM') {
-      this.nemaForm.value.motorRPM++;
+      this.nemaForm.patchValue({
+        'motorRPM': this.nemaForm.controls.motorRPM.value + 1
+      })
     }
   }
 
   subtractNum(str: string) {
     if (str == 'motorRPM') {
-      if (this.nemaForm.value.motorRPM != 1) {
-        this.nemaForm.value.motorRPM--;
+      if (this.nemaForm.controls.motorRPM.value != 1) {
+        this.nemaForm.patchValue({
+          'motorRPM': this.nemaForm.controls.motorRPM.value - 1
+        })
       }
     }
   }
@@ -58,15 +63,15 @@ export class NemaEnergyEfficiencyFormComponent implements OnInit {
 
 
   checkEfficiency() {
-    if (this.nemaForm.value.efficiency > 100) {
+    if (this.nemaForm.controls.efficiency.value > 100) {
       this.efficiencyError = "Unrealistic efficiency, shouldn't be greater then 100%";
       return false;
     }
-    else if (this.nemaForm.value.efficiency == 0) {
+    else if (this.nemaForm.controls.efficiency.value == 0) {
       this.efficiencyError = "Cannot have 0% efficiency";
       return false;
     }
-    else if (this.nemaForm.value.efficiency < 0) {
+    else if (this.nemaForm.controls.efficiency.value < 0) {
       this.efficiencyError = "Cannot have negative efficiency";
       return false;
     }

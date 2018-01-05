@@ -18,17 +18,26 @@ export class CoolingSummaryComponent implements OnInit {
   collapse: boolean = true;
   lossData: Array<any>;
 
-  coolingTypeDiff: boolean = false;
-  specificHeatDiff: boolean = false;
-  flowRateDiff: boolean = false;
-  densityDiff: boolean = false;
-  initialTemperatureDiff: boolean = false;
-  outletTemperatureDiff: boolean = false;
-  correctionFactorDiff: boolean = false;
-
+  coolingTypeDiff: Array<boolean>;
+  nameDiff: Array<boolean>;
+  specificHeatDiff: Array<boolean>;
+  flowRateDiff: Array<boolean>;
+  densityDiff: Array<boolean>;
+  initialTemperatureDiff: Array<boolean>;
+  outletTemperatureDiff: Array<boolean>;
+  correctionFactorDiff: Array<boolean>;
   constructor(private suiteDbService: SuiteDbService, private cd: ChangeDetectorRef) { }
 
   ngOnInit() {
+    this.coolingTypeDiff = new Array();
+    this.nameDiff = new Array();
+    this.specificHeatDiff = new Array();
+    this.flowRateDiff = new Array();
+    this.densityDiff = new Array();
+    this.initialTemperatureDiff = new Array();
+    this.outletTemperatureDiff = new Array();
+    this.correctionFactorDiff = new Array();
+
     this.lossData = new Array();
     if (this.phast.losses) {
       if (this.phast.losses.coolingLosses) {
@@ -46,6 +55,16 @@ export class CoolingSummaryComponent implements OnInit {
             baseline: this.getLossData(loss),
             modifications: modificationData
           })
+          //initialize array values for every defined loss
+          this.coolingTypeDiff.push(false);
+          this.nameDiff.push(false);
+          this.specificHeatDiff.push(false);
+          this.flowRateDiff.push(false);
+          this.densityDiff.push(false);
+          this.initialTemperatureDiff.push(false);
+          this.outletTemperatureDiff.push(false);
+          this.correctionFactorDiff.push(false);
+          //index +1 for next loss
           index++;
         })
       }
@@ -59,13 +78,13 @@ export class CoolingSummaryComponent implements OnInit {
   //function used to check if baseline and modification values are different
   //called from html
   //diffBool is name of corresponding input boolean to indicate different
-  checkDiff(baselineVal: any, modificationVal: any, diffBool: string) {
+  checkDiff(baselineVal: any, modificationVal: any, diffBool: string, modIndex: number) {
     if (baselineVal != modificationVal) {
       //this[diffBool] get's corresponding variable
       //only set true once
-      if (this[diffBool] != true) {
+      if (this[diffBool][modIndex] != true) {
         //set true/different
-        this[diffBool] = true;
+        this[diffBool][modIndex] = true;
         //tell html to detect change
         this.cd.detectChanges();
       }
@@ -75,23 +94,23 @@ export class CoolingSummaryComponent implements OnInit {
     }
   }
 
-  getLossData(loss: CoolingLoss): CoolingLossData{
+  getLossData(loss: CoolingLoss): CoolingLossData {
     let tmpFlowRate, tmpDensity, tmpInitialTemp, tmpOutletTemp, tmpSpecificHeat, tmpCorrectionFactor;
-    if(loss.coolingLossType == 'Gas'){
+    if (loss.coolingLossType == 'Gas') {
       tmpFlowRate = loss.gasCoolingLoss.flowRate;
       tmpDensity = loss.gasCoolingLoss.gasDensity;
       tmpInitialTemp = loss.gasCoolingLoss.initialTemperature;
       tmpOutletTemp = loss.gasCoolingLoss.finalTemperature;
       tmpSpecificHeat = loss.gasCoolingLoss.specificHeat;
       tmpCorrectionFactor = loss.gasCoolingLoss.correctionFactor;
-    } else if(loss.coolingLossType == 'Liquid'){
+    } else if (loss.coolingLossType == 'Liquid') {
       tmpFlowRate = loss.liquidCoolingLoss.flowRate;
       tmpDensity = loss.liquidCoolingLoss.density;
       tmpInitialTemp = loss.liquidCoolingLoss.initialTemperature;
       tmpOutletTemp = loss.liquidCoolingLoss.outletTemperature;
       tmpSpecificHeat = loss.liquidCoolingLoss.specificHeat;
       tmpCorrectionFactor = loss.liquidCoolingLoss.correctionFactor;
-    }      
+    }
     let tmpCoolingLossData: CoolingLossData = {
       name: loss.name,
       coolingType: loss.coolingLossType,
@@ -107,7 +126,7 @@ export class CoolingSummaryComponent implements OnInit {
 }
 
 
-export interface CoolingLossData{
+export interface CoolingLossData {
   name: string,
   coolingType: string,
   flowRate: number,

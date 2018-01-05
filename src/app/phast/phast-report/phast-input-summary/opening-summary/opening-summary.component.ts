@@ -13,34 +13,49 @@ export class OpeningSummaryComponent implements OnInit {
   phast: PHAST;
   @Input()
   settings: Settings;
-  
+
   numLosses: number = 0;
   collapse: boolean = true;
   lossData: Array<any>;
 
-  openingTypeDiff: boolean = false;
-  numberOfOpeningsDiff: boolean = false;
-  thicknessDiff: boolean = false;
-  lengthOfOpeningDiff: boolean = false;
-  heightOfOpeningDiff: boolean = false;
-  openingTotalAreaDiff: boolean = false;
-  viewFactorDiff: boolean = false;
-  insideTemperatureDiff: boolean = false;
-  ambientTemperatureDiff: boolean = false;
-  emissivityDiff: boolean = false;
-  percentTimeOpenDiff: boolean = false;
-
+  //bool arrays for formatting
+  openingTypeDiff: Array<boolean>;
+  numberOfOpeningsDiff: Array<boolean>;
+  thicknessDiff: Array<boolean>;
+  lengthOfOpeningDiff: Array<boolean>;
+  heightOfOpeningDiff: Array<boolean>;
+  openingTotalAreaDiff: Array<boolean>;
+  viewFactorDiff: Array<boolean>;
+  insideTemperatureDiff: Array<boolean>;
+  ambientTemperatureDiff: Array<boolean>;
+  emissivityDiff: Array<boolean>;
+  percentTimeOpenDiff: Array<boolean>;
   constructor(private suiteDbService: SuiteDbService, private cd: ChangeDetectorRef) { }
 
-  ngOnInit() {    
+  //debug trying something
+  ngOnInit() {
+    //init bool arrays
+    this.openingTypeDiff = new Array();
+    this.numberOfOpeningsDiff = new Array();
+    this.thicknessDiff = new Array();
+    this.lengthOfOpeningDiff = new Array();
+    this.heightOfOpeningDiff = new Array();
+    this.openingTotalAreaDiff = new Array();
+    this.viewFactorDiff = new Array();
+    this.insideTemperatureDiff = new Array();
+    this.ambientTemperatureDiff = new Array();
+    this.emissivityDiff = new Array();
+    this.percentTimeOpenDiff = new Array();
+
     this.lossData = new Array();
+
     if (this.phast.losses) {
       if (this.phast.losses.openingLosses) {
         this.numLosses = this.phast.losses.openingLosses.length;
         let index = 0;
         this.phast.losses.openingLosses.forEach(loss => {
           let modificationData = new Array();
-          if(this.phast.modifications){
+          if (this.phast.modifications) {
             this.phast.modifications.forEach(mod => {
               let modData = mod.phast.losses.openingLosses[index];
               modificationData.push(modData);
@@ -50,6 +65,19 @@ export class OpeningSummaryComponent implements OnInit {
             baseline: loss,
             modifications: modificationData
           })
+          //initialize array values for every defined loss
+          this.openingTypeDiff.push(false);
+          this.numberOfOpeningsDiff.push(false);
+          this.thicknessDiff.push(false);
+          this.lengthOfOpeningDiff.push(false);
+          this.heightOfOpeningDiff.push(false);
+          this.openingTotalAreaDiff.push(false);
+          this.viewFactorDiff.push(false);
+          this.insideTemperatureDiff.push(false);
+          this.ambientTemperatureDiff.push(false);
+          this.emissivityDiff.push(false);
+          this.percentTimeOpenDiff.push(false);
+          //index +1 for the next loss
           index++;
         })
       }
@@ -59,13 +87,13 @@ export class OpeningSummaryComponent implements OnInit {
   //function used to check if baseline and modification values are different
   //called from html
   //diffBool is name of corresponding input boolean to indicate different
-  checkDiff(baselineVal: any, modificationVal: any, diffBool: string) {
+  checkDiff(baselineVal: any, modificationVal: any, diffBool: string, modIndex: number) {
     if (baselineVal != modificationVal) {
       //this[diffBool] get's corresponding variable
       //only set true once
-      if (this[diffBool] != true) {
+      if (this[diffBool][modIndex] != true) {
         //set true/different
-        this[diffBool] = true;
+        this[diffBool][modIndex] = true;
         //tell html to detect change
         this.cd.detectChanges();
       }

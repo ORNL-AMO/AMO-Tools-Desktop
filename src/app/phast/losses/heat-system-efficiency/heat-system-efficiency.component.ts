@@ -32,10 +32,6 @@ export class HeatSystemEfficiencyComponent implements OnInit {
 
   @Output('savedLoss')
   savedLoss = new EventEmitter<boolean>();
-  @ViewChild('lossForm') lossForm: ElementRef;
-  form: any;
-  elements: any;
-
 
   firstChange: boolean = true;
 
@@ -54,7 +50,7 @@ export class HeatSystemEfficiencyComponent implements OnInit {
       this.resultsUnit = 'kW';
     }
 
-    this.initForm(this.phast.systemEfficiency);
+    this.efficiencyForm = this.initForm(this.phast.systemEfficiency);
 
     if (!this.baselineSelected) {
       this.disableForm();
@@ -95,16 +91,15 @@ export class HeatSystemEfficiencyComponent implements OnInit {
     }
   }
 
-  initForm(val?: number) {
+  initForm(val?: number): FormGroup {
     if (val) {
-      this.efficiencyForm = this.formBuilder.group({
+      return this.formBuilder.group({
         efficiency: [val, Validators.required]
       })
-    } else {
-      this.efficiencyForm = this.formBuilder.group({
-        efficiency: [90, Validators.required]
-      })
     }
+    return this.formBuilder.group({
+      efficiency: [90, Validators.required]
+    })
   }
 
   disableForm() {
@@ -117,7 +112,7 @@ export class HeatSystemEfficiencyComponent implements OnInit {
 
   saveLosses() {
     if (this.efficiencyForm.status == 'VALID') {
-      this.phast.systemEfficiency = this.efficiencyForm.value.efficiency;
+      this.phast.systemEfficiency = this.efficiencyForm.controls.efficiency.value;
       this.savedLoss.emit(true);
       this.setCompareVals();
     }
@@ -141,8 +136,8 @@ export class HeatSystemEfficiencyComponent implements OnInit {
       this.startSavePolling();
     }
     let additionalHeat = this.phastService.sumChargeMaterialExothermic(this.losses.chargeMaterials, this.settings);
-    this.grossHeat = (this.phastService.sumHeatInput(this.losses, this.settings) / this.efficiencyForm.value.efficiency) - additionalHeat;
-    this.systemLosses = this.grossHeat * (1 - (this.efficiencyForm.value.efficiency / 100));
+    this.grossHeat = (this.phastService.sumHeatInput(this.losses, this.settings) / this.efficiencyForm.controls.efficiency.value) - additionalHeat;
+    this.systemLosses = this.grossHeat * (1 - (this.efficiencyForm.controls.efficiency.value / 100));
   }
 
   setCompareVals() {

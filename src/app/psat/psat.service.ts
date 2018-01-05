@@ -7,6 +7,7 @@ import { ConvertUnitsService } from '../shared/convert-units/convert-units.servi
 import { ValidationService } from '../shared/validation.service';
 declare var psatAddon: any;
 import { BehaviorSubject } from 'rxjs';
+import { FormGroup } from '@angular/forms';
 @Injectable()
 export class PsatService {
   flaRange: any = {
@@ -45,6 +46,7 @@ export class PsatService {
       psatInputs.motor_rated_power = this.convertUnitsService.value(psatInputs.motor_rated_power).from(settings.powerMeasurement).to('hp');
     }
     if(settings.temperatureMeasurement != 'F' && psatInputs.fluidTemperature){
+      debugger
       psatInputs.fluidTemperature = this.convertUnitsService.value(psatInputs.fluidTemperature).from(settings.temperatureMeasurement).to('F');
     }
     return psatInputs;
@@ -671,14 +673,14 @@ export class PsatService {
     }
     return method;
   }
-  getEfficiencyFromForm(form: any) {
+  getEfficiencyFromForm(form: FormGroup) {
     let efficiency;
-    if (form.value.efficiencyClass == 'Standard Efficiency') {
+    if (form.controls.efficiencyClass.value == 'Standard Efficiency') {
       efficiency = 0;
-    } else if (form.value.efficiencyClass == 'Energy Efficient') {
+    } else if (form.controls.efficiencyClass.value == 'Energy Efficient') {
       efficiency = 1;
-    } else if (form.value.efficiencyClass == 'Specified') {
-      efficiency = form.value.efficiency;
+    } else if (form.controls.efficiencyClass.value == 'Specified') {
+      efficiency = form.controls.efficiency.value;
     }
     return efficiency;
   }
@@ -715,7 +717,7 @@ export class PsatService {
     })
   }
 
-  getFormFromPsat(psatInputs: PsatInputs) {
+  getFormFromPsat(psatInputs: PsatInputs): FormGroup {
     if (!psatInputs.fixed_speed) {
       psatInputs.fixed_speed = 0;
     }
@@ -760,49 +762,49 @@ export class PsatService {
     })
   }
 
-  getPsatInputsFromForm(form: any): PsatInputs {
+  getPsatInputsFromForm(form: FormGroup): PsatInputs {
     let efficiency = this.getEfficiencyFromForm(form);
-    let lineFreqEnum = this.getLineFreqEnum(form.value.frequency);
-    let pumpStyleEnum = this.getPumpStyleEnum(form.value.pumpType);
-    let efficiencyClassEnum = this.getEfficienyClassEnum(form.value.efficiencyClass);
-    let driveEnum = this.getDriveEnum(form.value.drive);
-    let fixedSpeedEnum = this.getFixedSpeedEmum(form.value.fixedSpeed);
-    let loadEstMethodEnum = this.getLoadEstimationEnum(form.value.loadEstimatedMethod);
+    let lineFreqEnum = this.getLineFreqEnum(form.controls.frequency.value);
+    let pumpStyleEnum = this.getPumpStyleEnum(form.controls.pumpType.value);
+    let efficiencyClassEnum = this.getEfficienyClassEnum(form.controls.efficiencyClass.value);
+    let driveEnum = this.getDriveEnum(form.controls.drive.value);
+    let fixedSpeedEnum = this.getFixedSpeedEmum(form.controls.fixedSpeed.value);
+    let loadEstMethodEnum = this.getLoadEstimationEnum(form.controls.loadEstimatedMethod.value);
     let tmpPsatInputs: PsatInputs = {
       pump_style: pumpStyleEnum,
-      pump_specified: form.value.specifiedPumpEfficiency,
-      pump_rated_speed: form.value.pumpRPM,
+      pump_specified: form.controls.specifiedPumpEfficiency.value,
+      pump_rated_speed: form.controls.pumpRPM.value,
       drive: driveEnum,
-      kinematic_viscosity: form.value.viscosity,
-      specific_gravity: form.value.gravity,
-      stages: form.value.stages,
+      kinematic_viscosity: form.controls.viscosity.value,
+      specific_gravity: form.controls.gravity.value,
+      stages: form.controls.stages.value,
       fixed_speed: fixedSpeedEnum,
       line_frequency: lineFreqEnum,
-      motor_rated_power: form.value.horsePower,
-      motor_rated_speed: form.value.motorRPM,
+      motor_rated_power: form.controls.horsePower.value,
+      motor_rated_speed: form.controls.motorRPM.value,
       efficiency_class: efficiencyClassEnum,
       efficiency: efficiency,
-      motor_rated_voltage: form.value.motorVoltage,
+      motor_rated_voltage: form.controls.motorVoltage.value,
       load_estimation_method: loadEstMethodEnum,
-      motor_rated_fla: form.value.fullLoadAmps,
-      margin: form.value.sizeMargin,
-      operating_fraction: form.value.operatingFraction,
-      flow_rate: form.value.flowRate,
-      head: form.value.head,
-      motor_field_power: form.value.motorKW,
-      motor_field_current: form.value.motorAmps,
-      motor_field_voltage: form.value.measuredVoltage,
-      cost_kw_hour: form.value.costKwHr,
-      cost: form.value.costKwHr,
-      optimize_calculation: form.value.optimizeCalculation,
-      implementationCosts: form.value.implementationCosts,
-      fluidType: form.value.fluidType,
-      fluidTemperature: form.value.fluidTemperature
+      motor_rated_fla: form.controls.fullLoadAmps.value,
+      margin: form.controls.sizeMargin.value,
+      operating_fraction: form.controls.operatingFraction.value,
+      flow_rate: form.controls.flowRate.value,
+      head: form.controls.head.value,
+      motor_field_power: form.controls.motorKW.value,
+      motor_field_current: form.controls.motorAmps.value,
+      motor_field_voltage: form.controls.measuredVoltage.value,
+      cost_kw_hour: form.controls.costKwHr.value,
+      cost: form.controls.costKwHr.value,
+      optimize_calculation: form.controls.optimizeCalculation.value,
+      implementationCosts: form.controls.implementationCosts.value,
+      fluidType: form.controls.fluidType.value,
+      fluidTemperature: form.controls.fluidTemperature.value
     };
     return tmpPsatInputs;
   }
 
-  isPumpFluidFormValid(form: any) {
+  isPumpFluidFormValid(form: FormGroup) {
     if (
       form.controls.pumpType.status == 'VALID' &&
       form.controls.pumpRPM.status == 'VALID' &&
@@ -811,7 +813,7 @@ export class PsatService {
       form.controls.stages.status == 'VALID'
     ) {
       //TODO: Check pumpType for custom
-      if (form.value.pumpType != "Specified Optimal Efficiency") {
+      if (form.controls.pumpType.value != "Specified Optimal Efficiency") {
         return true;
       } else {
         if (form.controls.specifiedPumpEfficiency.status == 'VALID') {
@@ -825,7 +827,7 @@ export class PsatService {
     }
   }
 
-  isMotorFormValid(form: any) {
+  isMotorFormValid(form: FormGroup) {
     if (
       form.controls.frequency.status == 'VALID' &&
       form.controls.horsePower.status == 'VALID' &&
@@ -834,10 +836,10 @@ export class PsatService {
       form.controls.motorVoltage.status == 'VALID' &&
       form.controls.fullLoadAmps.status == 'VALID'
     ) {
-      if (form.value.efficiencyClass != 'Specified') {
+      if (form.controls.efficiencyClass.value != 'Specified') {
         return true;
       } else {
-        if (form.value.efficiency > 0 && form.value.efficiency <= 100) {
+        if (form.controls.efficiency.value > 0 && form.controls.efficiency.value <= 100) {
           return true;
         } else {
           return false;
@@ -849,7 +851,7 @@ export class PsatService {
     }
   }
 
-  isFieldDataFormValid(form: any) {
+  isFieldDataFormValid(form: FormGroup) {
     if (
       form.controls.operatingFraction.status == 'VALID' &&
       form.controls.flowRate.status == 'VALID' &&

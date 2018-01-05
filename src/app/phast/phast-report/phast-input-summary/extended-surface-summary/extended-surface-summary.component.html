@@ -31,46 +31,46 @@
           </thead>
           <tbody>
             <tr>
-              <td [ngClass]="{'indicate-report-field-different':surfaceAreaDiff == true}">
+              <td [ngClass]="{'indicate-report-field-different':surfaceAreaDiff[index] == true}">
                 Total Outside Surface Area
               </td>
-              <td [ngClass]="{'indicate-report-field-different':surfaceAreaDiff == true}">
+              <td [ngClass]="{'indicate-report-field-different':surfaceAreaDiff[index] == true}">
                 {{data.baseline.surfaceArea}}
               </td>
-              <td *ngFor="let mod of data.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(data.baseline.surfaceArea, mod.surfaceArea, 'surfaceAreaDiff')}">
+              <td *ngFor="let mod of data.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(data.baseline.surfaceArea, mod.surfaceArea, 'surfaceAreaDiff', index)}">
                 {{mod.surfaceArea}}
               </td>
             </tr>
             <tr>
-              <td [ngClass]="{'indicate-report-field-different':surfaceTemperatureDiff == true}">
+              <td [ngClass]="{'indicate-report-field-different':surfaceTemperatureDiff[index] == true}">
                 Average Surface Temperature
               </td>
-              <td [ngClass]="{'indicate-report-field-different':surfaceTemperatureDiff == true}">
+              <td [ngClass]="{'indicate-report-field-different':surfaceTemperatureDiff[index] == true}">
                 {{data.baseline.surfaceTemperature}}
               </td>
-              <td *ngFor="let mod of data.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(data.baseline.surfaceTemperature, mod.surfaceTemperature, 'surfaceTemperatureDiff')}">
+              <td *ngFor="let mod of data.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(data.baseline.surfaceTemperature, mod.surfaceTemperature, 'surfaceTemperatureDiff', index)}">
                 {{mod.surfaceTemperature}}
               </td>
             </tr>
             <tr>
-              <td [ngClass]="{'indicate-report-field-different':ambientTemperatureDiff == true}">
+              <td [ngClass]="{'indicate-report-field-different':ambientTemperatureDiff[index] == true}">
                 Ambient Temperature
               </td>
-              <td [ngClass]="{'indicate-report-field-different':ambientTemperatureDiff == true}">
+              <td [ngClass]="{'indicate-report-field-different':ambientTemperatureDiff[index] == true}">
                 {{data.baseline.ambientTemperature}}
               </td>
-              <td *ngFor="let mod of data.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(data.baseline.ambientTemperature, mod.ambientTemperature, 'ambientTemperatureDiff')}">
+              <td *ngFor="let mod of data.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(data.baseline.ambientTemperature, mod.ambientTemperature, 'ambientTemperatureDiff', index)}">
                 {{mod.ambientTemperature}}
               </td>
             </tr>
             <tr>
-              <td [ngClass]="{'indicate-report-field-different':surfaceEmissivityDiff == true}">
+              <td [ngClass]="{'indicate-report-field-different':surfaceEmissivityDiff[index] == true}">
                 Surface Emissivity
               </td>
-              <td [ngClass]="{'indicate-report-field-different':surfaceEmissivityDiff == true}">
+              <td [ngClass]="{'indicate-report-field-different':surfaceEmissivityDiff[index] == true}">
                 {{data.baseline.surfaceEmissivity}}
               </td>
-              <td *ngFor="let mod of data.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(data.baseline.surfaceEmissivity, mod.surfaceEmissivity, 'surfaceEmissivityDiff')}">
+              <td *ngFor="let mod of data.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(data.baseline.surfaceEmissivity, mod.surfaceEmissivity, 'surfaceEmissivityDiff', index)}">
                 {{mod.surfaceEmissivity}}
               </td>
             </tr>

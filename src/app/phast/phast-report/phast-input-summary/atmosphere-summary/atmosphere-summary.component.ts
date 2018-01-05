@@ -22,15 +22,31 @@ export class AtmosphereSummaryComponent implements OnInit {
   //use array to get gas names
   gasOptions: Array<any>;
 
-  atmosphereGasDiff: boolean = false;
-  specificHeatDiff: boolean = false;
-  inletTempDiff: boolean = false;
-  outletTempDiff: boolean = false;
-  flowRateDiff: boolean = false;
-  correctionFactorDiff: boolean = false;
+  
+  // atmosphereGasDiff: boolean = false;
+  // specificHeatDiff: boolean = false;
+  // inletTempDiff: boolean = false;
+  // outletTempDiff: boolean = false;
+  // flowRateDiff: boolean = false;
+  // correctionFactorDiff: boolean = false;
+  
+  atmosphereGasDiff: Array<boolean>;
+  specificHeatDiff: Array<boolean>;
+  inletTempDiff: Array<boolean>;
+  outletTempDiff: Array<boolean>;
+  flowRateDiff: Array<boolean>;
+  correctionFactorDiff: Array<boolean>;
+
   constructor(private suiteDbService: SuiteDbService, private cd: ChangeDetectorRef) { }
 
   ngOnInit() {
+    this.atmosphereGasDiff = new Array();
+    this.specificHeatDiff = new Array();
+    this.inletTempDiff = new Array();
+    this.outletTempDiff = new Array();
+    this.flowRateDiff = new Array();
+    this.correctionFactorDiff = new Array();
+
     this.gasOptions = this.suiteDbService.selectAtmosphereSpecificHeat();
     this.lossData = new Array();
     if (this.phast.losses) {
@@ -49,6 +65,14 @@ export class AtmosphereSummaryComponent implements OnInit {
             baseline: loss,
             modifications: modificationData
           });
+          //initialize array values for every defined loss
+          this.atmosphereGasDiff.push(false);
+          this.specificHeatDiff.push(false);
+          this.inletTempDiff.push(false);
+          this.outletTempDiff.push(false);
+          this.flowRateDiff.push(false);
+          this.correctionFactorDiff.push(false);
+          //index +1 for next loss
           index++;
         })
       }
@@ -58,13 +82,13 @@ export class AtmosphereSummaryComponent implements OnInit {
   //function used to check if baseline and modification values are different
   //called from html
   //diffBool is name of corresponding input boolean to indicate different
-  checkDiff(baselineVal: any, modificationVal: any, diffBool: string) {
+  checkDiff(baselineVal: any, modificationVal: any, diffBool: string, modIndex: number) {
     if (baselineVal != modificationVal) {
       //this[diffBool] get's corresponding variable
       //only set true once
-      if (this[diffBool] != true) {
+      if (this[diffBool][modIndex] != true) {
         //set true/different
-        this[diffBool] = true;
+        this[diffBool][modIndex] = true;
         //tell html to detect change
         this.cd.detectChanges();
       }
@@ -73,6 +97,26 @@ export class AtmosphereSummaryComponent implements OnInit {
       return false;
     }
   }
+
+  //real version
+  // //function used to check if baseline and modification values are different
+  // //called from html
+  // //diffBool is name of corresponding input boolean to indicate different
+  // checkDiff(baselineVal: any, modificationVal: any, diffBool: string) {
+  //   if (baselineVal != modificationVal) {
+  //     //this[diffBool] get's corresponding variable
+  //     //only set true once
+  //     if (this[diffBool] != true) {
+  //       //set true/different
+  //       this[diffBool] = true;
+  //       //tell html to detect change
+  //       this.cd.detectChanges();
+  //     }
+  //     return true;
+  //   } else {
+  //     return false;
+  //   }
+  // }
 
   getGas(id: number) {
     if (id) {

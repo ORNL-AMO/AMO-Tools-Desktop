@@ -1,11 +1,11 @@
 import { Component, OnInit, Input, EventEmitter, Output, ViewChild, ElementRef, SimpleChanges } from '@angular/core';
 import { WindowRefService } from '../../../../indexedDb/window-ref.service';
 import { ExhaustGasCompareService } from '../exhaust-gas-compare.service';
-import { FormControl, Validators } from '@angular/forms'
 import * as _ from 'lodash';
 //used for other loss monitoring
 import { ExhaustGasService } from '../exhaust-gas.service';
 import { Settings } from '../../../../shared/models/settings';
+import { FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-exhaust-gas-form',
@@ -14,7 +14,7 @@ import { Settings } from '../../../../shared/models/settings';
 })
 export class ExhaustGasFormComponent implements OnInit {
   @Input()
-  exhaustGasForm: any;
+  exhaustGasForm: FormGroup;
   @Output('calculate')
   calculate = new EventEmitter<boolean>();
   @Input()
@@ -28,18 +28,9 @@ export class ExhaustGasFormComponent implements OnInit {
   @Input()
   settings: Settings;
 
-  //different for other losses monitoring
-  @Input()
-  isBaseline: boolean;
-
-  @ViewChild('lossForm') lossForm: ElementRef;
-  form: any;
-  elements: any;
-
   firstChange: boolean = true;
   counter: any;
 
-  // otherLossArray: Array<number>;
   constructor(private windowRefService: WindowRefService, private exhaustGasCompareService: ExhaustGasCompareService, private exhaustGasService: ExhaustGasService) { }
 
   ngOnChanges(changes: SimpleChanges) {

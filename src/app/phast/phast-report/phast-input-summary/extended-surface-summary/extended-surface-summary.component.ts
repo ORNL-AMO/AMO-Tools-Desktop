@@ -17,14 +17,18 @@ export class ExtendedSurfaceSummaryComponent implements OnInit {
   numLosses: number = 0;
   collapse: boolean = true;
 
-  surfaceAreaDiff: boolean = false;
-  surfaceTemperatureDiff: boolean = false;
-  ambientTemperatureDiff: boolean = false;
-  surfaceEmissivityDiff: boolean = false;
-
+  surfaceAreaDiff: Array<boolean>;
+  surfaceTemperatureDiff: Array<boolean>;
+  ambientTemperatureDiff: Array<boolean>;
+  surfaceEmissivityDiff: Array<boolean>;
   constructor(private suiteDbService: SuiteDbService, private cd: ChangeDetectorRef) { }
 
   ngOnInit() {
+    this.surfaceAreaDiff = new Array();
+    this.surfaceTemperatureDiff = new Array();
+    this.ambientTemperatureDiff = new Array();
+    this.surfaceEmissivityDiff = new Array();
+
     this.lossData = new Array();
     if (this.phast.losses) {
       if (this.phast.losses.extendedSurfaces) {
@@ -42,6 +46,12 @@ export class ExtendedSurfaceSummaryComponent implements OnInit {
             baseline: loss,
             modifications: modificationData
           });
+          //initialize array values for every defined loss
+          this.surfaceAreaDiff.push(false);
+          this.surfaceTemperatureDiff.push(false);
+          this.ambientTemperatureDiff.push(false);
+          this.surfaceEmissivityDiff.push(false);
+          //index +1 for next loss
           index++;
         })
       }
@@ -52,13 +62,13 @@ export class ExtendedSurfaceSummaryComponent implements OnInit {
   //function used to check if baseline and modification values are different
   //called from html
   //diffBool is name of corresponding input boolean to indicate different
-  checkDiff(baselineVal: any, modificationVal: any, diffBool: string) {
+  checkDiff(baselineVal: any, modificationVal: any, diffBool: string, modIndex: number) {
     if (baselineVal != modificationVal) {
       //this[diffBool] get's corresponding variable
       //only set true once
-      if (this[diffBool] != true) {
+      if (this[diffBool][modIndex] != true) {
         //set true/different
-        this[diffBool] = true;
+        this[diffBool][modIndex] = true;
         //tell html to detect change
         this.cd.detectChanges();
       }

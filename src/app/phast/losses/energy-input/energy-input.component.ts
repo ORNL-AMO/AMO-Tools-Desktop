@@ -6,6 +6,7 @@ import { EnergyInputService } from './energy-input.service';
 import { EnergyInputEAF } from '../../../shared/models/phast/losses/energyInputEAF';
 import { EnergyInputCompareService } from './energy-input-compare.service';
 import { Settings } from '../../../shared/models/settings';
+import { FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-energy-input',
@@ -36,7 +37,7 @@ export class EnergyInputComponent implements OnInit {
   @Input()
   modExists: boolean;
 
-  _energyInputs: Array<any>;
+  _energyInputs: Array<EnInputObj>;
   firstChange: boolean = true;
   resultsUnit: string;
   lossesLocked: boolean = false;
@@ -75,12 +76,11 @@ export class EnergyInputComponent implements OnInit {
           form: this.energyInputService.getFormFromLoss(loss),
           results: {
             heatDelivered: 0,
-            kwhCycle: 0,
-            totalKwhCycle: 0
+            totalChemicalEnergyInput: 0
           },
           collapse: false
         };
-        if (!tmpLoss.form.value.name) {
+        if (!tmpLoss.form.controls.name.value) {
           tmpLoss.form.patchValue({
             name: 'Loss #' + lossIndex
           })
@@ -165,8 +165,7 @@ export class EnergyInputComponent implements OnInit {
       form: this.energyInputService.initForm(this._energyInputs.length + 1),
       results: {
         heatDelivered: 0,
-        kwhCycle: 0,
-        totalKwhCycle: 0
+        totalChemicalEnergyInput: 0
       },
       collapse: false
     });
@@ -177,10 +176,10 @@ export class EnergyInputComponent implements OnInit {
     this.energyInputService.setDelete(lossIndex);
   }
 
-  collapseLoss(loss: any) {
+  collapseLoss(loss: EnInputObj) {
     loss.collapse = !loss.collapse;
   }
-  calculate(loss: any) {
+  calculate(loss: EnInputObj) {
     if (loss.form.status == 'VALID') {
       let tmpLoss: EnergyInputEAF = this.energyInputService.getLossFromForm(loss.form);
       let calculation = this.phastService.energyInputEAF(tmpLoss, this.settings);
@@ -200,7 +199,7 @@ export class EnergyInputComponent implements OnInit {
     let tmpEnergyInputs = new Array<EnergyInputEAF>();
     let lossIndex = 1;
     this._energyInputs.forEach(loss => {
-      if (!loss.form.value.name) {
+      if (!loss.form.controls.name.value) {
         loss.form.patchValue({
           name: 'Loss #' + lossIndex
         })
@@ -230,4 +229,15 @@ export class EnergyInputComponent implements OnInit {
       }
     }
   }
+}
+
+export interface EnInputObj {
+  form: FormGroup,
+  results: EnInputResultsObj
+  collapse: boolean
+}
+
+export interface EnInputResultsObj {
+  heatDelivered: number,
+  totalChemicalEnergyInput: number
 }

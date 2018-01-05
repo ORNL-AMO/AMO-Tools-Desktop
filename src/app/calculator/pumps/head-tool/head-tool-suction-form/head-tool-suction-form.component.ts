@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { Settings } from '../../../../shared/models/settings';
+import { FormGroup } from '@angular/forms';
 @Component({
   selector: 'app-head-tool-suction-form',
   templateUrl: './head-tool-suction-form.component.html',
@@ -7,7 +8,7 @@ import { Settings } from '../../../../shared/models/settings';
 })
 export class HeadToolSuctionFormComponent implements OnInit {
   @Input()
-  headToolSuctionForm: any;
+  headToolSuctionForm: FormGroup;
   @Output('calculate')
   calculate = new EventEmitter<boolean>();
   @Input()
@@ -42,11 +43,11 @@ export class HeadToolSuctionFormComponent implements OnInit {
     this.changeField.emit(str);
   }
   checkPipeDiameterIn() {
-    if (this.headToolSuctionForm.value.suctionPipeDiameter == 0) {
+    if (this.headToolSuctionForm.controls.suctionPipeDiameter.value == 0) {
       this.diameterSuctionError = "Cannot have 0 diameter";
       return false;
     }
-    else if (this.headToolSuctionForm.value.suctionPipeDiameter < 0) {
+    else if (this.headToolSuctionForm.controls.suctionPipeDiameter.value < 0) {
       this.diameterSuctionError = "Cannot have negative diameter";
       return false;
     }
@@ -56,11 +57,11 @@ export class HeadToolSuctionFormComponent implements OnInit {
     }
   }
   checkPipeDiameterOut() {
-    if (this.headToolSuctionForm.value.dischargePipeDiameter == 0) {
+    if (this.headToolSuctionForm.controls.dischargePipeDiameter.value == 0) {
       this.diameterSuctionErrorOut = "Cannot have 0 diameter";
       return false;
     }
-    else if (this.headToolSuctionForm.value.dischargePipeDiameter < 0) {
+    else if (this.headToolSuctionForm.controls.dischargePipeDiameter.value < 0) {
       this.diameterSuctionErrorOut = "Cannot have negative diameter";
       return false;
     }
@@ -72,7 +73,7 @@ export class HeadToolSuctionFormComponent implements OnInit {
 
 
   checkPressure() {
-    if (this.headToolSuctionForm.value.suctionTankGasOverPressure > this.headToolSuctionForm.value.dischargeGaugePressure) {
+    if (this.headToolSuctionForm.controls.suctionTankGasOverPressure.value > this.headToolSuctionForm.controls.dischargeGaugePressure.value) {
       this.pressureError = 'Suction Pressure cannot be greater than Discharge Pressure'
       return false;
     } else {

@@ -31,24 +31,24 @@
           </thead>
           <tbody>
             <tr>
-              <td [ngClass]="{'indicate-report-field-different':openingTypeDiff == true}">
+              <td [ngClass]="{'indicate-report-field-different':openingTypeDiff[index] == true}">
                 Description
               </td>
-              <td [ngClass]="{'indicate-report-field-different':openingTypeDiff == true}">
+              <td [ngClass]="{'indicate-report-field-different':openingTypeDiff[index] == true}">
                 {{data.baseline.openingType}}
               </td>
-              <td *ngFor="let mod of data.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(data.baseline.openingType, mod.openingType, 'openingTypeDiff')}">
+              <td *ngFor="let mod of data.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(data.baseline.openingType, mod.openingType, 'openingTypeDiff', index)}">
                 {{mod.openingType}}
               </td>
             </tr>
             <tr>
-              <td [ngClass]="{'indicate-report-field-different':heatLossDiff == true}">
+              <td [ngClass]="{'indicate-report-field-different':heatLossDiff[index] == true}">
                 Heat Loss
               </td>
-              <td [ngClass]="{'indicate-report-field-different':heatLossDiff == true}">
+              <td [ngClass]="{'indicate-report-field-different':heatLossDiff[index] == true}">
                 {{data.baseline.heatLoss}}
               </td>
-              <td *ngFor="let mod of data.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(data.baseline.heatLoss, mod.heatLoss, 'heatLossDiff')}">
+              <td *ngFor="let mod of data.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(data.baseline.heatLoss, mod.heatLoss, 'heatLossDiff', index)}">
                 {{mod.heatLoss}}
               </td>
             </tr>

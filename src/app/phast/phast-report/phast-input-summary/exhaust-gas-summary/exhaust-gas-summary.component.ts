@@ -17,16 +17,24 @@ export class ExhaustGasSummaryComponent implements OnInit {
   collapse: boolean = true;
   lossData: Array<any>;
 
-  offGasTempDiff: boolean = false;
-  CODiff: boolean = false;
-  H2Diff: boolean = false;
-  combustibleGasesDiff: boolean = false;
-  vfrDiff: boolean = false;
-  dustLoadingDiff: boolean = false;
+  offGasTempDiff: Array<boolean>;
+  CODiff: Array<boolean>;
+  H2Diff: Array<boolean>;
+  combustibleGasesDiff: Array<boolean>;
+  vfrDiff: Array<boolean>;
+  dustLoadingDiff: Array<boolean>;
+
 
   constructor(private suiteDbService: SuiteDbService, private cd: ChangeDetectorRef) { }
 
   ngOnInit() {
+    this.offGasTempDiff = new Array();
+    this.CODiff = new Array();
+    this.H2Diff = new Array();
+    this.combustibleGasesDiff = new Array();
+    this.vfrDiff = new Array();
+    this.dustLoadingDiff = new Array();
+
     this.lossData = new Array();
     if (this.phast.losses) {
       if (this.phast.losses.exhaustGasEAF) {
@@ -44,6 +52,14 @@ export class ExhaustGasSummaryComponent implements OnInit {
             baseline: loss,
             modifications: modificationData
           })
+          //initialize array values for every defined loss
+          this.offGasTempDiff.push(false);
+          this.CODiff.push(false);
+          this.H2Diff.push(false);
+          this.combustibleGasesDiff.push(false);
+          this.vfrDiff.push(false);
+          this.dustLoadingDiff.push(false);
+          //index +1 for next loss
           index++;
         })
       }
@@ -53,13 +69,13 @@ export class ExhaustGasSummaryComponent implements OnInit {
   //function used to check if baseline and modification values are different
   //called from html
   //diffBool is name of corresponding input boolean to indicate different
-  checkDiff(baselineVal: any, modificationVal: any, diffBool: string) {
+  checkDiff(baselineVal: any, modificationVal: any, diffBool: string, modIndex: number) {
     if (baselineVal != modificationVal) {
       //this[diffBool] get's corresponding variable
       //only set true once
-      if (this[diffBool] != true) {
+      if (this[diffBool][modIndex] != true) {
         //set true/different
-        this[diffBool] = true;
+        this[diffBool][modIndex] = true;
         //tell html to detect change
         this.cd.detectChanges();
       }
@@ -68,7 +84,6 @@ export class ExhaustGasSummaryComponent implements OnInit {
       return false;
     }
   }
-
 
   toggleCollapse() {
     this.collapse = !this.collapse;
