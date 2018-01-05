@@ -40,7 +40,8 @@ export class LossesService {
   }
 
   getTab(num: number){
-    return _.find(this.lossesTabs, (t) => {return num == t.step});
+    let newTab = _.find(this.lossesTabs, (t) => {return num == t.step});
+    return newTab;
   }
 
   setTabs(settings: Settings){
@@ -120,6 +121,7 @@ export class LossesService {
         componentStr: 'flue-gas-losses' 
       })
     }
+    this.lossesTab.next(1);
   }
 
   initDone() {

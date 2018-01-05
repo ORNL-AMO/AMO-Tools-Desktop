@@ -11,10 +11,11 @@ export class PhastTabsComponent implements OnInit {
   currentTab: StepTab;
   stepTabs: Array<StepTab>;
   specTab: StepTab;
-
+  specTabs: Array<StepTab>;
   constructor(private phastService: PhastService) { }
 
   ngOnInit() {
+    this.specTabs = specTabs;
     this.stepTabs = stepTabs;
     this.phastService.stepTab.subscribe(val => {
       this.currentTab = val;

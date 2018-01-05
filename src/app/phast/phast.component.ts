@@ -43,7 +43,7 @@ export class PhastComponent implements OnInit {
   saveDbToggle: string;
   specTab: StepTab;
   isModalOpen: boolean = false;
-  selectedTab: LossTab;
+  selectedLossTab: LossTab;
   constructor(
     private location: Location,
     private assessmentService: AssessmentService,
@@ -106,7 +106,8 @@ export class PhastComponent implements OnInit {
       })
 
       this.lossesService.lossesTab.subscribe(tab => {
-        this.selectedTab = this.lossesService.getTab(tab);
+        this.selectedLossTab = this.lossesService.getTab(tab);
+        console.log(this.selectedLossTab);
       })
     });
   }
@@ -200,8 +201,8 @@ export class PhastComponent implements OnInit {
       }
     }
     else if (this.stepTab.step == 2) {
-      if (this.selectedTab.next) {
-        this.lossesService.lossesTab.next(this.selectedTab.next);
+      if (this.selectedLossTab.next) {
+        this.lossesService.lossesTab.next(this.selectedLossTab.next);
       } else {
         this.phastService.goToStep(this.stepTab.next);
       }
