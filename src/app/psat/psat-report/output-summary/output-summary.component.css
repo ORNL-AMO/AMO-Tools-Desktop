@@ -4,15 +4,17 @@
 .output-summary .table th {
     border: none;
     padding: 0px 10px;
-    text-align: center;
     font-size: 12px;
 }
 .output-summary .table td {
     padding: 0px 8px;
     vertical-align: middle;
-    text-align: center;
 }
 
+tr > td:not(:first-child),
+tr > th:not(:first-child){
+    text-align: center;
+}
 
 .output-summary .table tr.callout td {
     font-weight: bold;

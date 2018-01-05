@@ -21,7 +21,7 @@
 <div class="setup-form-group">
   <div class="row" *ngIf="settingsForm">
     <div class="col-12">
-      <app-application-settings [(settingsForm)]="settingsForm" (startSavePolling)="startSavePolling()"></app-application-settings>
+      <app-application-settings [(settingsForm)]="settingsForm" [inPsat]="true" (startSavePolling)="startSavePolling()"></app-application-settings>
     </div>
   </div>
   <div class="row" *ngIf="settingsForm">
