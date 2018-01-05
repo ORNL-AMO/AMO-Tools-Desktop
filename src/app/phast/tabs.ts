@@ -81,41 +81,48 @@ export const defaultTabs: Array<LossTab> = [
         showAdd: true  
     },
     {
-        tabName: 'Atmosphere',
+        tabName: 'Cooling',
         step: 4,
         next: 5,
         back: 3,
+        componentStr: 'cooling-losses',  
+    },
+    {
+        tabName: 'Atmosphere',
+        step: 5,
+        next: 6,
+        back: 4,
         componentStr: 'atmosphere-losses',  
     },
     {
         tabName: 'Opening',
-        step: 5,
-        next: 6,
-        back: 4,
+        step: 6,
+        next: 7,
+        back: 5,
         componentStr: 'opening-losses',
         showAdd: true  
     },
     {
         tabName: 'Gas Leakage',
-        step: 6,
-        next: 7,
-        back: 5,
+        step: 7,
+        next: 8,
+        back: 6,
         componentStr: 'gas-leakage-losses',
         showAdd: true  
     },  
     {
         tabName: 'Extended Surface',
-        step: 7,
-        next: 8,
-        back: 6,
+        step: 8,
+        next: 9,
+        back: 7,
         componentStr: 'extended-surface-losses',
         showAdd: true  
     },
     {
         tabName: 'Other',
-        step: 8,
-        next: 9,
-        back: 7,
+        step: 9,
+        next: 10,
+        back: 8,
         componentStr: 'other-losses',
         showAdd: true  
     },
