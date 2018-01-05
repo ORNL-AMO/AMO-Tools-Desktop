@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Settings } from '../../../shared/models/settings';
+import { LossTab } from '../../tabs';
 @Component({
   selector: 'app-losses-help',
   templateUrl: './losses-help.component.html',
@@ -7,7 +8,7 @@ import { Settings } from '../../../shared/models/settings';
 })
 export class LossesHelpComponent implements OnInit {
   @Input()
-  lossesTab: string;
+  lossesTab: LossTab;
   @Input()
   currentField: string;
   @Input()
@@ -15,6 +16,7 @@ export class LossesHelpComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
+    console.log(this.lossesTab);
   }
 
 }

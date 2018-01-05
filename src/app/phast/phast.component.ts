@@ -193,14 +193,15 @@ export class PhastComponent implements OnInit {
   }
 
   nextStep() {
-    if (this.stepTab.step == 1) {
+
+    if (this.stepTab.step == 1 && this.mainTab != 'assessment') {
       if (this.specTab.next)
         this.phastService.goToSpec(this.specTab.next);
       else {
         this.phastService.goToStep(this.stepTab.next);
       }
     }
-    else if (this.stepTab.step == 2) {
+    else if (this.stepTab.step == 2 || this.mainTab == 'assessment') {
       if (this.selectedLossTab.next) {
         this.lossesService.lossesTab.next(this.selectedLossTab.next);
       } else {
@@ -211,14 +212,14 @@ export class PhastComponent implements OnInit {
     }
   }
 
-  lastStep(){
-    if(this.stepTab.step == 2){
-      if(this.selectedLossTab.back){
+  lastStep() {
+    if (this.stepTab.step == 2) {
+      if (this.selectedLossTab.back) {
         this.lossesService.lossesTab.next(this.selectedLossTab.back);
-      }else{
+      } else {
         this.phastService.goToStep(this.stepTab.back);
       }
-    }else if(this.stepTab.step != 1){
+    } else if (this.stepTab.step != 1) {
       this.phastService.goToStep(this.stepTab.back);
     }
   }

@@ -49,78 +49,91 @@ export class LossesService {
     defaultTabs.forEach(tab => {
       this.lossesTabs.push(tab);
     })
+    let index;
     if (settings.energySourceType == 'Electricity') {
       if (settings.furnaceType == 'Electric Arc Furnace (EAF)') {
         this.lossesTabs.push({
           tabName: 'Heat System Efficiency',
-          step: 9,
-          back: 8,
-          next: 10,
+          step: this.lossesTabs.length+1,
+          back: this.lossesTabs.length,
+          next: this.lossesTabs.length+2,
           componentStr: 'heat-system-efficiency' 
         })
         this.lossesTabs.push({
           tabName: 'Exhaust Gas',
-          step: 10,
-          back: 9,
-          next: 11,
+          step: this.lossesTabs.length+2,
+          back: this.lossesTabs.length+1,
+          next: this.lossesTabs.length+3,
           componentStr: 'exhaust-gas' 
         })
         this.lossesTabs.push({
           tabName: 'Energy Input',
-          step: 11,
-          back: 10,
-          lastStep: true,
+          step: this.lossesTabs.length+3,
+          back: this.lossesTabs.length+2,
+          next: this.lossesTabs.length+4,
           componentStr: 'energy-input' 
         })
+        index = 3;
       } 
       
       else if (settings.furnaceType != 'Custom Electrotechnology') {
         this.lossesTabs.push({
           tabName: 'Auxiliary Power',
-          step: 9,
-          back: 8,
-          next: 10,
+          step: this.lossesTabs.length+1,
+          back: this.lossesTabs.length,
+          next: this.lossesTabs.length+2,
           componentStr: 'auxiliary-power' 
         })
         this.lossesTabs.push({
           tabName: 'Energy Input',
-          step: 10,
-          back: 9,
-          lastStep: true,
+          step: this.lossesTabs.length+2,
+          back: this.lossesTabs.length+1,
+          next: this.lossesTabs.length+3,
           componentStr: 'energy-input-exhaust-gas' 
         })
+        index = 2;
       } 
       
       else if (settings.furnaceType == 'Custom Electrotechnology') {
         this.lossesTabs.push({
           tabName: 'Heat System Efficiency',
-          step: 9,
-          back: 8,
-          lastStep: true,
+          step: this.lossesTabs.length+1,
+          back: this.lossesTabs.length,
+          next: this.lossesTabs.length+2,
           componentStr: 'heat-system-efficiency' 
         })
+        index = 1;
       }
     } 
     
     else if (settings.energySourceType == 'Steam') {
       this.lossesTabs.push({
         tabName: 'Heat System Efficiency',
-        step: 9,
-        back: 8,
-        lastStep: true,
+        step: this.lossesTabs.length+1,
+        back: this.lossesTabs.length,
+        next: this.lossesTabs.length+2,
         componentStr: 'heat-system-efficiency' 
       })
+      index = 1;
     } 
     
     else if (settings.energySourceType == 'Fuel') {
       this.lossesTabs.push({
         tabName: 'Flue Gas',
-        step: 9,
-        back: 8,
-        lastStep: true,
+        step: this.lossesTabs.length+1,
+        back: this.lossesTabs.length,
+        next: this.lossesTabs.length+2,
         componentStr: 'flue-gas-losses' 
       })
+      index = 1;
     }
+    this.lossesTabs.push({
+      tabName: 'Operations',
+      step: this.lossesTabs.length+index,
+      back: this.lossesTabs.length+index-1,
+      componentStr: 'operations' 
+    })
+
     this.lossesTab.next(1);
   }
 

@@ -206,9 +206,9 @@
       creating a modification.</p>
   </div>
   <div [ngClass]="{'col-md-6': inSetup, 'col-md-4': !inSetup}">
-    <app-losses-result-panel *ngIf="!inSetup" [inSetup]="inSetup" [lossesTab]="lossesTab" [currentField]="currentField" [settings]="settings"
+    <app-losses-result-panel *ngIf="!inSetup" [inSetup]="inSetup" [lossesTab]="selectedTab" [currentField]="currentField" [settings]="settings"
       [phast]="phast" [toggleCalculate]="toggleCalculate" [modification]="_modifications[modificationIndex]"></app-losses-result-panel>
-    <app-losses-result-panel *ngIf="inSetup" [inSetup]="inSetup" [lossesTab]="lossesTab" [currentField]="currentField" [settings]="settings"
+    <app-losses-result-panel *ngIf="inSetup" [inSetup]="inSetup" [lossesTab]="selectedTab" [currentField]="currentField" [settings]="settings"
       [phast]="phast" [toggleCalculate]="toggleCalculate"></app-losses-result-panel>
   </div>
 
