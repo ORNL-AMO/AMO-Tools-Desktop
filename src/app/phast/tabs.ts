@@ -29,9 +29,86 @@ export const stepTabs: Array<StepTab> = [
     }
 ]
 
+
 export interface StepTab {
     step: number,
     tabName: string,
     next?: number,
     back?: number
+}
+
+export const defaultTabs: Array<LossTab> = [
+    {
+        tabName: 'Charge Material',
+        step: 1,
+        next: 2,
+        componentStr: 'charge-material',
+        showAdd: true  
+    },
+    {
+        tabName: 'Fixtures, Trays, etc.',
+        step: 2,
+        next: 3,
+        back: 1,
+        componentStr: 'fixture-losses',
+        showAdd: true  
+    },
+    {
+        tabName: 'Wall',
+        step: 3,
+        next: 4,
+        back: 2,
+        componentStr: 'wall-losses',
+        showAdd: true  
+    },
+    {
+        tabName: 'Atmosphere',
+        step: 4,
+        next: 5,
+        back: 3,
+        componentStr: 'atmosphere-losses',  
+    },
+    {
+        tabName: 'Opening',
+        step: 5,
+        next: 6,
+        back: 4,
+        componentStr: 'opening-losses',
+        showAdd: true  
+    },
+    {
+        tabName: 'Gas Leakage',
+        step: 6,
+        next: 7,
+        back: 5,
+        componentStr: 'gas-leakage-losses',
+        showAdd: true  
+    },  
+    {
+        tabName: 'Extended Surface',
+        step: 7,
+        next: 8,
+        back: 6,
+        componentStr: 'extended-surface-losses',
+        showAdd: true  
+    },
+    {
+        tabName: 'Other',
+        step: 7,
+        next: 8,
+        back: 6,
+        componentStr: 'other-losses',
+        showAdd: true  
+    },
+
+]
+
+export interface LossTab {
+    step: number,
+    tabName: string,
+    next?: number,
+    back?: number,
+    lastStep?: boolean,
+    componentStr: string,
+    showAdd?: boolean
 }

@@ -3,14 +3,15 @@ import { PHAST, Losses } from '../../../shared/models/phast/phast';
 import { Settings } from '../../../shared/models/settings';
 import { PhastService } from '../../phast.service';
 import { LossesService } from '../losses.service';
-
+import { defaultTabs, LossTab } from '../../tabs';
+import * as _ from 'lodash';
 @Component({
   selector: 'app-losses-tabs',
   templateUrl: './losses-tabs.component.html',
   styleUrls: ['./losses-tabs.component.css']
 })
 export class LossesTabsComponent implements OnInit {
-  lossesTab: string;
+  selectedTab: LossTab;
   @Input()
   saveDbToggle: boolean;
   @Input()
@@ -46,11 +47,14 @@ export class LossesTabsComponent implements OnInit {
   enInput1Done: boolean;
   enInput2Done: boolean;
   flueGasDone: boolean;
+
+  lossTabs: Array<LossTab>;
   constructor(private lossesService: LossesService) { }
 
   ngOnInit() {
+    this.lossTabs = this.lossesService.lossesTabs;
     this.lossesService.lossesTab.subscribe(val => {
-      this.lossesTab = val;
+      this.selectedTab = _.find(this.lossTabs, (t) => {return val == t.step});
     })
     this.setTabs()
     this.checkDone();
@@ -76,8 +80,8 @@ export class LossesTabsComponent implements OnInit {
 
 
 
-  tabChange(str: string) {
-    this.lossesService.lossesTab.next(str);
+  tabChange(tab: LossTab) {
+    this.lossesService.lossesTab.next(tab.next);
   }
 
   setTabs() {

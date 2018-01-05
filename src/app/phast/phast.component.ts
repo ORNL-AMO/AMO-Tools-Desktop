@@ -111,7 +111,7 @@ export class PhastComponent implements OnInit {
   }
 
   ngOnDestroy() {
-    this.lossesService.lossesTab.next('charge-material');
+    this.lossesService.lossesTab.next(1);
     this.phastService.initTabs();
   }
 

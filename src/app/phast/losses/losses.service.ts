@@ -5,6 +5,7 @@ import { PhastService } from '../phast.service';
 import { Settings } from '../../shared/models/settings';
 import { PhastResultsService } from '../phast-results.service';
 import { FlueGasLossesService } from './flue-gas-losses/flue-gas-losses.service';
+import { LossTab, defaultTabs } from '../tabs';
 @Injectable()
 export class LossesService {
   lossIndex: BehaviorSubject<number>;
@@ -12,7 +13,7 @@ export class LossesService {
   baseline: BehaviorSubject<PHAST>;
   modification: BehaviorSubject<Modification>;
 
-  lossesTab: BehaviorSubject<string>;
+  lossesTab: BehaviorSubject<number>;
   modalOpen: BehaviorSubject<boolean>;
 
 
@@ -22,12 +23,12 @@ export class LossesService {
   flueGasDone: boolean;
   efficiencyDone: boolean;
 
-
+  lossesTabs: Array<LossTab>;
   constructor(private phastService: PhastService, private phastResultsService: PhastResultsService, private flueGasLossesService: FlueGasLossesService) {
     this.lossIndex = new BehaviorSubject<number>(0);
     this.baseline = new BehaviorSubject<PHAST>(null);
     this.modification = new BehaviorSubject<Modification>(null);
-    this.lossesTab = new BehaviorSubject<string>('charge-material');
+    this.lossesTab = new BehaviorSubject<number>(1);
     this.modalOpen = new BehaviorSubject<boolean>(false);
     // this.chargeDone = new BehaviorSubject<boolean>(false);
     // this.enInput1Done = new BehaviorSubject<boolean>(false);
@@ -36,7 +37,11 @@ export class LossesService {
     // this.efficiencyDone = new BehaviorSubject<boolean>(false);    
   }
 
-  initDone(){
+  setTabs(){
+    this.lossesTabs = defaultTabs;
+  }
+
+  initDone() {
     this.chargeDone = false;
     this.enInput1Done = false;
     this.enInput2Done = false;
