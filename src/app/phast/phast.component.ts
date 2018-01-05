@@ -107,7 +107,6 @@ export class PhastComponent implements OnInit {
 
       this.lossesService.lossesTab.subscribe(tab => {
         this.selectedLossTab = this.lossesService.getTab(tab);
-        console.log(this.selectedLossTab);
       })
     });
   }
@@ -183,6 +182,7 @@ export class PhastComponent implements OnInit {
   }
 
   goToAssessment() {
+    this.lossesService.lossesTab.next(1);
     this.phastService.mainTab.next('assessment');
   }
 
@@ -211,6 +211,17 @@ export class PhastComponent implements OnInit {
     }
   }
 
+  lastStep(){
+    if(this.stepTab.step == 2){
+      if(this.selectedLossTab.back){
+        this.lossesService.lossesTab.next(this.selectedLossTab.back);
+      }else{
+        this.phastService.goToStep(this.stepTab.back);
+      }
+    }else if(this.stepTab.step != 1){
+      this.phastService.goToStep(this.stepTab.back);
+    }
+  }
 
   openModal($event) {
     this.isModalOpen = $event;
