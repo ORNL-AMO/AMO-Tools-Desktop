@@ -5,7 +5,7 @@ import { FlowCalculations } from '../shared/models/phast/flowCalculations';
 import { ExhaustGasEAF } from '../shared/models/phast/losses/exhaustGasEAF';
 import { PHAST, Losses } from '../shared/models/phast/phast';
 import { FixtureLoss } from '../shared/models/phast/losses/fixtureLoss';
-import { GasCoolingLoss, LiquidCoolingLoss, WaterCoolingLoss, CoolingLoss } from '../shared/models/phast/losses/coolingLoss';
+import { GasCoolingLoss, LiquidCoolingLoss, CoolingLoss } from '../shared/models/phast/losses/coolingLoss';
 import { GasChargeMaterial, LiquidChargeMaterial, SolidChargeMaterial, ChargeMaterial } from '../shared/models/phast/losses/chargeMaterial';
 import { OpeningLoss, CircularOpeningLoss, QuadOpeningLoss } from '../shared/models/phast/losses/openingLoss';
 import { WallLoss } from '../shared/models/phast/losses/wallLoss';
