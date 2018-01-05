@@ -9,6 +9,7 @@ import { PsatSummaryComponent } from './report-summary/psat-summary/psat-summary
 import { PsatModule } from '../psat/psat.module';
 import { PhastReportModule } from '../phast/phast-report/phast-report.module';
 import { PhastSummaryComponent } from './report-summary/phast-summary/phast-summary.component';
+import { PhastRollupComponent } from './phast-rollup/phast-rollup.component';
 
 @NgModule({
   imports: [
@@ -16,7 +17,7 @@ import { PhastSummaryComponent } from './report-summary/phast-summary/phast-summ
     PsatModule,
     PhastReportModule
   ],
-  declarations: [ReportRollupComponent, ReportBannerComponent, ReportSummaryComponent, PsatSummaryComponent, PhastSummaryComponent],
+  declarations: [ReportRollupComponent, ReportBannerComponent, ReportSummaryComponent, PsatSummaryComponent, PhastSummaryComponent, PhastRollupComponent],
   providers: [ReportRollupService],
   exports: [ReportRollupComponent]
 })

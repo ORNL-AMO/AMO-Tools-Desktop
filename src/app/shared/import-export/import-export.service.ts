@@ -69,8 +69,6 @@ export class ImportExportService {
     var blob = this.dataURItoBlob(dataUrl);
     var fd = new FormData();
     fd.append("file", blob, "screenshot.png");
-    debugger
-
   }
 
   dataURItoBlob(dataURI) {
