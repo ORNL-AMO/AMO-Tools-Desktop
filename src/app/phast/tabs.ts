@@ -29,6 +29,25 @@ export const stepTabs: Array<StepTab> = [
     }
 ]
 
+export const specTabs: Array<StepTab> = [
+    {
+        step: 1,
+        tabName: 'System Basics',
+        next: 2
+    },
+    {
+        step: 2,
+        tabName: 'Operating Hours',
+        next: 3,
+        back: 1
+    },
+    {
+        step: 3,
+        tabName: 'Operating Costs',
+        back: 2
+    }
+]
+
 
 export interface StepTab {
     step: number,
@@ -94,9 +113,9 @@ export const defaultTabs: Array<LossTab> = [
     },
     {
         tabName: 'Other',
-        step: 7,
-        next: 8,
-        back: 6,
+        step: 8,
+        next: 9,
+        back: 7,
         componentStr: 'other-losses',
         showAdd: true  
     },

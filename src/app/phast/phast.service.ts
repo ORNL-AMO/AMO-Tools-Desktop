@@ -35,7 +35,7 @@ import { GasLeakageLossesService } from './losses/gas-leakage-losses/gas-leakage
 import { OtherLossesService } from './losses/other-losses/other-losses.service';
 import { SlagService } from './losses/slag/slag.service';
 import { FlueGasMaterial, SolidLiquidFlueGasMaterial } from '../shared/models/materials';
-import { StepTab, stepTabs } from './tabs';
+import { StepTab, stepTabs, specTabs } from './tabs';
 import * as _ from 'lodash';
 @Injectable()
 export class PhastService {
@@ -43,7 +43,7 @@ export class PhastService {
   mainTab: BehaviorSubject<string>;
   // secondaryTab: BehaviorSubject<string>;
   stepTab: BehaviorSubject<StepTab>;
-  specTab: BehaviorSubject<string>;
+  specTab: BehaviorSubject<StepTab>;
   constructor(
     private openingLossesService: OpeningLossesService,
     private convertUnitsService: ConvertUnitsService,
@@ -63,12 +63,17 @@ export class PhastService {
     this.mainTab = new BehaviorSubject<string>('system-setup');
     //this.secondaryTab = new BehaviorSubject<string>('explore-opportunities');
     this.stepTab = new BehaviorSubject<StepTab>(stepTabs[0]);
-    this.specTab = new BehaviorSubject<string>('system-basics');
+    this.specTab = new BehaviorSubject<StepTab>(specTabs[0]);
   }
 
   goToStep(newStepNum: number) {
     let newStep = _.find(stepTabs, (tab) => { return tab.step == newStepNum });
     this.stepTab.next(newStep);
+  }
+
+  goToSpec(newSpec: number){
+    let newSpecTab = _.find(specTabs, (tab) => { return tab.step == newSpec });
+    this.specTab.next(newSpecTab);
   }
 
   test() {

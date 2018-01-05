@@ -6,6 +6,7 @@ import { Settings } from '../../shared/models/settings';
 import { PhastResultsService } from '../phast-results.service';
 import { FlueGasLossesService } from './flue-gas-losses/flue-gas-losses.service';
 import { LossTab, defaultTabs } from '../tabs';
+import * as _ from 'lodash';
 @Injectable()
 export class LossesService {
   lossIndex: BehaviorSubject<number>;
@@ -24,6 +25,7 @@ export class LossesService {
   efficiencyDone: boolean;
 
   lossesTabs: Array<LossTab>;
+  tabsSet: boolean;
   constructor(private phastService: PhastService, private phastResultsService: PhastResultsService, private flueGasLossesService: FlueGasLossesService) {
     this.lossIndex = new BehaviorSubject<number>(0);
     this.baseline = new BehaviorSubject<PHAST>(null);
@@ -37,8 +39,87 @@ export class LossesService {
     // this.efficiencyDone = new BehaviorSubject<boolean>(false);    
   }
 
-  setTabs(){
-    this.lossesTabs = defaultTabs;
+  getTab(num: number){
+    return _.find(this.lossesTabs, (t) => {return num == t.step});
+  }
+
+  setTabs(settings: Settings){
+    this.lossesTabs = new Array();
+    defaultTabs.forEach(tab => {
+      this.lossesTabs.push(tab);
+    })
+    if (settings.energySourceType == 'Electricity') {
+      if (settings.furnaceType == 'Electric Arc Furnace (EAF)') {
+        this.lossesTabs.push({
+          tabName: 'Heat System Efficiency',
+          step: 9,
+          back: 8,
+          next: 10,
+          componentStr: 'heat-system-efficiency' 
+        })
+        this.lossesTabs.push({
+          tabName: 'Exhaust Gas',
+          step: 10,
+          back: 9,
+          next: 11,
+          componentStr: 'exhaust-gas' 
+        })
+        this.lossesTabs.push({
+          tabName: 'Energy Input',
+          step: 11,
+          back: 10,
+          lastStep: true,
+          componentStr: 'energy-input' 
+        })
+      } 
+      
+      else if (settings.furnaceType != 'Custom Electrotechnology') {
+        this.lossesTabs.push({
+          tabName: 'Auxiliary Power',
+          step: 9,
+          back: 8,
+          next: 10,
+          componentStr: 'auxiliary-power' 
+        })
+        this.lossesTabs.push({
+          tabName: 'Energy Input',
+          step: 10,
+          back: 9,
+          lastStep: true,
+          componentStr: 'energy-input-exhaust-gas' 
+        })
+      } 
+      
+      else if (settings.furnaceType == 'Custom Electrotechnology') {
+        this.lossesTabs.push({
+          tabName: 'Heat System Efficiency',
+          step: 9,
+          back: 8,
+          lastStep: true,
+          componentStr: 'heat-system-efficiency' 
+        })
+      }
+    } 
+    
+    else if (settings.energySourceType == 'Steam') {
+      this.lossesTabs.push({
+        tabName: 'Heat System Efficiency',
+        step: 9,
+        back: 8,
+        lastStep: true,
+        componentStr: 'heat-system-efficiency' 
+      })
+    } 
+    
+    else if (settings.energySourceType == 'Fuel') {
+      this.lossesTabs.push({
+        tabName: 'Flue Gas',
+        step: 9,
+        back: 8,
+        lastStep: true,
+        componentStr: 'flue-gas-losses' 
+      })
+    }
   }
 
   initDone() {
