@@ -40,12 +40,12 @@ export class ResultsDataComponent implements OnInit {
 
   ngOnInit() {
     this.getResults();
-    if(this.settings.energyResultUnit != 'kWh'){
+    if (this.settings.energyResultUnit != 'kWh') {
       this.lossUnit = this.settings.energyResultUnit + '/hr';
-    }else{
+    } else {
       this.lossUnit = 'kW';
     }
-    
+
     if (!this.inPhast) {
       this.reportRollupService.selectedPhasts.subscribe(val => {
         if (val) {
@@ -59,8 +59,8 @@ export class ResultsDataComponent implements OnInit {
     }
   }
 
-  ngOnChanges(changes: SimpleChanges){
-    if(changes.toggleCalculate){
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.toggleCalculate) {
       this.getResults();
     }
   }
@@ -68,7 +68,7 @@ export class ResultsDataComponent implements OnInit {
     this.reportRollupService.updateSelectedPhasts(this.assessment, this.selectedModificationIndex);
   }
 
-  getResults(){
+  getResults() {
     this.modificationResults = new Array<PhastResults>();
     this.showResultsCats = this.phastResultsService.getResultCategories(this.settings);
     if (this.phast.losses) {
@@ -81,7 +81,7 @@ export class ResultsDataComponent implements OnInit {
             this.modificationResults.push(tmpResults);
           })
         }
-      }else if(this.modification && !this.inSetup && !this.inReport){
+      } else if (this.modification && !this.inSetup && !this.inReport) {
         let tmpResults = this.phastResultsService.getResults(this.modification.phast, this.settings);
         this.modificationResults.push(tmpResults);
       }

@@ -17,6 +17,7 @@ export class PercentLoadEstimationFormComponent implements OnInit {
   @Input()
   loadEstimationResult: number;
 
+  showSynchronousSpeed: boolean = false;
   measuredSpeedError: string = null;
   synchronousSpeedError: string = null;
   nameplateFullLoadSpeedError: string = null;
@@ -28,7 +29,6 @@ export class PercentLoadEstimationFormComponent implements OnInit {
     1800,
     3600
   ];
-
 
   constructor() { }
 
@@ -102,6 +102,13 @@ export class PercentLoadEstimationFormComponent implements OnInit {
         err = true;
       }
     }
+
+    if (!this.percentLoadEstimationForm.controls.nameplateFullLoadSpeed.value) {
+      this.showSynchronousSpeed = false;
+    } else {
+      this.showSynchronousSpeed = true;
+    }
+
     if (!err) {
       this.emitCalculate.emit(true);      
     }

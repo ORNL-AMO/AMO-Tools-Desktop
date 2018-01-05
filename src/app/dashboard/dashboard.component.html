@@ -2,11 +2,11 @@
     <div class="row dashboard-content" *ngIf="dashboardView != 'detailed-report'">
 
         <div class="col-2 sidebar-bg" [ngClass]="{'modal-open': isModalOpen}">
-                <app-sidebar *ngIf="allDirectories" [selectedCalculator]="selectedCalculator" [directory]="getAllDirectories()" [newDirEventToggle]="newDirEventToggle"
-                    [workingDirectory]="getWorkingDirectory()" [dashboardView]="dashboardView" (directoryChange)="changeWorkingDirectory($event)"
-                    (selectCalculator)="viewCalculator($event)" (emitGoHome)="goHome()" (emitShowAbout)="showAbout()" (emitShowAcknowledgments)="showAcknowledgments()"
-                    (emitShowTutorials)="showTutorials()" (emitGoToSettings)="showSettings()" (emitGoToContact)="showContact()" (openModal)="openModal($event)">
-                </app-sidebar>
+            <app-sidebar *ngIf="allDirectories" [selectedCalculator]="selectedCalculator" [directory]="getAllDirectories()" [newDirEventToggle]="newDirEventToggle"
+                [workingDirectory]="getWorkingDirectory()" [dashboardView]="dashboardView" (directoryChange)="changeWorkingDirectory($event)"
+                (selectCalculator)="viewCalculator($event)" (emitGoHome)="goHome()" (emitShowAbout)="showAbout()" (emitShowAcknowledgments)="showAcknowledgments()"
+                (emitShowTutorials)="showTutorials()" (emitGoToSettings)="showSettings()" (emitGoToContact)="showContact()" (openModal)="openModal($event)">
+            </app-sidebar>
         </div>
 
         <div class="col-10" *ngIf="allDirectories && dashboardView == 'assessment-dashboard'">
@@ -37,18 +37,7 @@
             <app-acknowledgments-page></app-acknowledgments-page>
         </div>
         <div class="col-10" *ngIf="allDirectories && dashboardView == 'settings'">
-
-            <div class="row">
-                <div class="col-10 mx-auto">
-                    <div class="content-container default-settings">
-
-                        <h2>Default Settings</h2>
-                        <app-assessment-settings [directory]="allDirectories" (resetDataEmit)="showDeleteModal($event)" (emitUpdateDirectory)="updateDir()"></app-assessment-settings>
-
-                    </div>
-                </div>
-            </div>
-
+            <app-assessment-settings [directory]="allDirectories" (resetDataEmit)="showDeleteModal($event)" (emitUpdateDirectory)="updateDir()"></app-assessment-settings>
         </div>
     </div>
     <!--<div class="row">
