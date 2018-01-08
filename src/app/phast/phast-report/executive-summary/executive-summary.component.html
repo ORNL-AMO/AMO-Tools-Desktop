@@ -3,9 +3,9 @@
   <table class="table table-hover">
     <thead>
       <tr>
-        <th [ngStyle]="{'width.%': 100 /(phast.modifications.length+2)}"></th>
-        <th [ngStyle]="{'width.%': 100 /(phast.modifications.length+2)}" [ngClass]="{'selected-modification': selectedModificationIndex == -1}">Baseline</th>
-        <th *ngFor="let mod of phast.modifications; let index = index;" [ngStyle]="{'width.%': 100 /(phast.modifications.length+2)}" [ngClass]="{'selected-modification': index == selectedModificationIndex}">{{mod.phast.name}}</th>
+        <th [ngStyle]="{'width.%': 100 /(numMods+2)}"></th>
+        <th [ngStyle]="{'width.%': 100 /(numMods+2)}" [ngClass]="{'selected-modification': selectedModificationIndex == -1}">Baseline</th>
+        <th *ngFor="let mod of phast.modifications; let index = index;" [ngStyle]="{'width.%': 100 /(numMods+2)}" [ngClass]="{'selected-modification': index == selectedModificationIndex}">{{mod.phast.name}}</th>
       </tr>
     </thead>
     <tbody>
