@@ -22,7 +22,6 @@ export class PhastSummaryComponent implements OnInit {
   constructor(private reportRollupService: ReportRollupService, private indexedDbService: IndexedDbService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
-    console.log(this.settings)
     this.reportRollupService.phastAssessments.subscribe(val => {
       this.numPhasts = val.length;
       if (val.length != 0) {

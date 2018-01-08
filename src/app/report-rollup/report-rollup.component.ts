@@ -36,8 +36,7 @@ export class ReportRollupComponent implements OnInit {
 
   ngOnInit() {
     this.indexedDbService.getDirectorySettings(1).then(results => {
-      this.settings = this.reportRollupService.checkSettings(results[0]);
-      console.log('init' + this.settings);
+      this.settings = this.reportRollupService.checkSettings(results[0]);;
     })
     this.createdDate = new Date();
     this.reportRollupService.reportAssessments.subscribe(assesments => {

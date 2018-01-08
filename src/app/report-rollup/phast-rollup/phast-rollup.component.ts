@@ -13,12 +13,6 @@ export class PhastRollupComponent implements OnInit {
   constructor(private reportRollupService: ReportRollupService) { }
 
   ngOnInit() {
-
-    this.reportRollupService.phastResults.subscribe(val => {
-      if (val.length != 0) {
-       // this.calcPhastSums(val);
-      }
-    })
   }
 
 }
