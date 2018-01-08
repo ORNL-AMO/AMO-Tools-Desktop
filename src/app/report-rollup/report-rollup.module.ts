@@ -14,13 +14,17 @@ import { ModalModule } from 'ngx-bootstrap/modal/modal.module';
 import { PhastRollupGraphsComponent } from './phast-rollup/phast-rollup-graphs/phast-rollup-graphs.component';
 import { PhastRollupEnergyTableComponent } from './phast-rollup/phast-rollup-energy-table/phast-rollup-energy-table.component';
 import { PhastRollupFurnaceSummaryComponent } from './phast-rollup/phast-rollup-furnace-summary/phast-rollup-furnace-summary.component';
+import { ChartsModule } from 'ng2-charts';
+import { SharedModule } from '../shared/shared.module';
 
 @NgModule({
   imports: [
     CommonModule,
     PsatModule,
     PhastReportModule,
-    ModalModule
+    ModalModule,
+    ChartsModule,
+    SharedModule
   ],
   declarations: [ReportRollupComponent, ReportBannerComponent, ReportSummaryComponent, PsatSummaryComponent, PhastSummaryComponent, PhastRollupComponent, PhastRollupGraphsComponent, PhastRollupEnergyTableComponent, PhastRollupFurnaceSummaryComponent],
   providers: [ReportRollupService],

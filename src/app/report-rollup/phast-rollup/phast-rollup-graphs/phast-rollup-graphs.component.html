@@ -1,3 +1,93 @@
-<p>
-  phast-rollup-graphs works!
-</p>
+<div class="row justify-content-center">
+  <div class="col-lg-4 col-md-6">
+    <div class="row justify-content-center btn-toggle">
+      <div class="btn-group btn-group-sm align-self-center">
+        <button type="button" class="btn btn-secondary btn-sm" (click)="setDataOption('cost')" [ngClass]="{'active': dataOption == 'cost'}">Cost</button>
+        <button type="button" class="btn btn-secondary btn-sm" (click)="setDataOption('energy')" [ngClass]="{'active': dataOption == 'energy'}">Energy Used</button>
+      </div>
+    </div>
+    <div style="display: block" *ngIf="pieChartData">
+      <canvas baseChart [colors]="chartColors" [data]="pieChartData" [labels]="pieChartLabels" [chartType]="'pie'" [options]="options"></canvas>
+    </div>
+  </div>
+  <div class="col-lg-8 col-md-11 output-summary">
+    <table class="table table-hover table-striped">
+      <thead>
+        <tr>
+          <th>
+            Furnace Name
+          </th>
+          <th>
+            Energy Use Units
+          </th>
+          <th>
+            Fuel Energy Used
+          </th>
+          <th>
+            Annual Cost
+          </th>
+          <th>
+            Electrical Energy Use
+          </th>
+          <th>
+            Annual Cost
+          </th>
+          <th>
+            Steam energy Use
+          </th>
+          <th>
+            Annual Cost
+          </th>
+          <th>
+            Annual Total Cost
+          </th>
+          <th>
+            % of Total Cost
+          </th>
+          <th>
+            % of Total Energy Used
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let data of resultData; let index=index;">
+          <td class="name" [ngStyle]="{'border-left-color': graphColors[index]}">
+            {{data.name}}
+          </td>
+          <td>
+            {{data.settings.energyResultUnit}}
+          </td>
+          <td *ngIf="data.settings.energySourceType == 'Fuel'">
+            {{data.modificationResults.annualEnergyUsed | sigFigs:'5'}}
+          </td>
+          <td *ngIf="data.settings.energySourceType == 'Fuel'">
+            {{data.modificationResults.annualCost | currency:'USD':'symbol':'1.0-0'}}
+          </td>
+          <td *ngIf="data.settings.energySourceType != 'Fuel'">&mdash; &mdash;</td>
+          <td *ngIf="data.settings.energySourceType != 'Fuel'">&mdash; &mdash;</td>
+
+          <td *ngIf="data.settings.energySourceType == 'Steam'">
+            {{data.modificationResults.annualEnergyUsed | sigFigs:'5'}}
+          </td>
+          <td *ngIf="data.settings.energySourceType == 'Steam'">
+            {{data.modificationResults.annualCost | currency:'USD':'symbol':'1.0-0'}}
+          </td>
+          <td *ngIf="data.settings.energySourceType != 'Steam'">&mdash; &mdash;</td>
+          <td *ngIf="data.settings.energySourceType != 'Steam'">&mdash; &mdash;</td>
+
+          <td *ngIf="data.settings.energySourceType == 'Electricity'">
+            {{data.modificationResults.annualEnergyUsed | sigFigs:'5'}}
+          </td>
+          <td *ngIf="data.settings.energySourceType == 'Electricity'">
+            {{data.modificationResults.annualCost | currency:'USD':'symbol':'1.0-0'}}
+          </td>
+          <td *ngIf="data.settings.energySourceType != 'Electricity'">&mdash; &mdash;</td>
+          <td *ngIf="data.settings.energySourceType != 'Electricity'">&mdash; &mdash;</td>
+          <td>{{data.modificationResults.annualCost | currency:'USD':'symbol':'1.0-0'}}</td>
+          <td>{{getResultPercent(data.modificationResults.annualCost, totalCost) | number:'1.0-1'}}</td>
+          <td>{{getConvertedPercent(data.modificationResults.annualEnergyUsed, totalEnergy, data.settings) | number:'1.0-1'}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

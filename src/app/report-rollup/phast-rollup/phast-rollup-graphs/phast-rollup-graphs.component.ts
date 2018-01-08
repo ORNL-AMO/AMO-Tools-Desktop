@@ -3,7 +3,7 @@ import { BaseChartDirective } from 'ng2-charts';
 import { ReportRollupService, PhastResultsData } from '../../report-rollup.service';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { Settings } from '../../../shared/models/settings';
-
+import { graphColors } from '../../../phast/phast-report/report-graphs/graphColors';
 @Component({
   selector: 'app-phast-rollup-graphs',
   templateUrl: './phast-rollup-graphs.component.html',
@@ -32,16 +32,19 @@ export class PhastRollupGraphsComponent implements OnInit {
       display: false
     }
   }
-
-
+  graphColors: Array<string>;
+  resultData: Array<PhastResultsData>;
+  dataOption: string = 'cost';
   constructor(private reportRollupService: ReportRollupService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
+    this.graphColors = graphColors;
     this.reportRollupService.phastResults.subscribe(val => {
       if (val.length != 0) {
         this.calcPhastSums(val);
         this.getResults(val);
         this.getData();
+        this.resultData = val;
       }
     })
   }
@@ -66,21 +69,40 @@ export class PhastRollupGraphsComponent implements OnInit {
     this.totalEnergy = sumEnergy;
   }
 
+  setDataOption(str: string){
+    this.dataOption = str;
+    this.getResults(this.resultData);
+    this.getData();
+  }
+
   getResults(resultsData: Array<PhastResultsData>) {
     this.results = new Array();
+    let i = 0;
     resultsData.forEach(val => {
       let energyUsed = this.convertUnitsService.value(val.modificationResults.annualEnergyUsed).from(val.settings.energyResultUnit).to(this.settings.energyResultUnit);
-      let percent = this.getResultPercent(energyUsed, this.totalEnergy)
+      let percent;
+      if(this.dataOption == 'cost'){
+        percent = this.getResultPercent(val.modificationResults.annualCost, this.totalCost)
+      }else{
+        percent = this.getResultPercent(energyUsed, this.totalEnergy)
+      }
       this.results.push({
         name: val.name,
-        value: percent
+        percent: percent,
+        color: graphColors[i]
       })
+      i++;
     })
-    console.log(this.results);
   }
 
   getResultPercent(value: number, sum: number): number {
     let percent = (value / sum) * 100;
+    return percent;
+  }
+
+  getConvertedPercent(value: number, sum: number, settings: Settings){
+    let convertVal = this.convertUnitsService.value(value).from(settings.energyResultUnit).to(this.settings.energyResultUnit);
+    let percent = (convertVal / sum) * 100;
     return percent;
   }
 
@@ -89,9 +111,22 @@ export class PhastRollupGraphsComponent implements OnInit {
     this.pieChartLabels = new Array();
     this.backgroundColors = new Array();
     this.results.forEach(val => {
-      this.pieChartLabels.push(val.name + ' (%)');
+      this.pieChartLabels.push(val.name+' (%)');
       this.pieChartData.push(val.percent);
+      this.backgroundColors.push(val.color);
     })
+    if (this.baseChart && this.baseChart.chart) {
+      this.baseChart.chart.config.data.labels = this.pieChartLabels;
+      this.baseChart.chart.config.data.datasets[0].backgroundColor = this.backgroundColors;
+    }
+    this.getColors();
   }
 
+  getColors() {
+    this.chartColors = [
+      {
+        backgroundColor: this.backgroundColors
+      }
+    ]
+  }
 }

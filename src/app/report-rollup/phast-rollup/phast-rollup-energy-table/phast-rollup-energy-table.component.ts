@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ReportRollupService } from '../../report-rollup.service';
 
 @Component({
   selector: 'app-phast-rollup-energy-table',
@@ -7,9 +8,14 @@ import { Component, OnInit } from '@angular/core';
 })
 export class PhastRollupEnergyTableComponent implements OnInit {
 
-  constructor() { }
+  constructor(private reportRollupService: ReportRollupService) { }
 
   ngOnInit() {
+    this.reportRollupService.phastAssessments.subscribe(val => {
+      if (val.length != 0) {
+        console.log(val);
+      }
+    })
   }
 
 }
