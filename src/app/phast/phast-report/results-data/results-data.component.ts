@@ -36,6 +36,9 @@ export class ResultsDataComponent implements OnInit {
   showResultsCats: ShowResultsCategories;
   lossUnit: string;
   selectedModificationIndex: number;
+
+  numMods: number = 0;
+
   constructor(private phastService: PhastService, private phastResultsService: PhastResultsService, private reportRollupService: ReportRollupService) { }
 
   ngOnInit() {
@@ -56,6 +59,10 @@ export class ResultsDataComponent implements OnInit {
           })
         }
       });
+    }
+
+    if(this.phast.modifications){
+      this.numMods = this.phast.modifications.length;
     }
   }
 
