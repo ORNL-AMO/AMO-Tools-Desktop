@@ -3,7 +3,7 @@ import * as _ from 'lodash';
 import { PhastService } from '../../phast.service';
 import { CoolingLossesService } from './cooling-losses.service';
 import { Losses } from '../../../shared/models/phast/phast';
-import { CoolingLoss, GasCoolingLoss, LiquidCoolingLoss, WaterCoolingLoss } from '../../../shared/models/phast/losses/coolingLoss';
+import { CoolingLoss, GasCoolingLoss, LiquidCoolingLoss } from '../../../shared/models/phast/losses/coolingLoss';
 import { CoolingLossesCompareService } from './cooling-losses-compare.service';
 import { Settings } from '../../../shared/models/settings';
 import { FormGroup } from '@angular/forms';
@@ -157,16 +157,7 @@ export class CoolingLossesComponent implements OnInit {
           collapse: false
         };
       }
-      else if (loss.coolingLossType == 'Water') {
-        tmpLoss = {
-          coolingMedium: loss.coolingLossType,
-          waterCoolingForm: this.coolingLossesService.initWaterFormFromLoss(loss.waterCoolingLoss),
-          gasCoolingForm: this.coolingLossesService.initGasCoolingForm(this.settings, lossIndex),
-          liquidCoolingForm: this.coolingLossesService.initLiquidCoolingForm(this.settings, lossIndex),
-          heatLoss: loss.heatLoss || 0.0,
-          collapse: false
-        };
-      }
+     
       if (!tmpLoss.gasCoolingForm.controls.name.value) {
         tmpLoss.gasCoolingForm.patchValue({
           name: 'Loss #' + lossIndex
