@@ -7,6 +7,8 @@ import * as _ from 'lodash';
 import { ModalDirective } from 'ngx-bootstrap';
 import { PhastService } from '../phast.service';
 import { LossesService } from './losses.service';
+import { LossTab } from '../tabs';
+
 @Component({
   selector: 'app-losses',
   templateUrl: 'losses.component.html',
@@ -31,7 +33,7 @@ export class LossesComponent implements OnInit {
   baselineSelected: boolean = true;
   modificationSelected: boolean = false;
   modificationIndex: number = 0;
-  lossesTab: string = 'charge-material';
+  selectedTab: LossTab;
   currentField: string = 'default';
   addLossToggle: boolean = false;
   isFirstChange: boolean = true;
@@ -46,6 +48,7 @@ export class LossesComponent implements OnInit {
   showAddBtn: boolean = true;
   toggleCalculate: boolean = false;
   modificationExists: boolean = false;
+  lossesTabs: Array<LossTab>;
   constructor(private lossesService: LossesService, private toastyService: ToastyService,
     private toastyConfig: ToastyConfig, ) {
     this.toastyConfig.theme = 'bootstrap';
@@ -53,11 +56,12 @@ export class LossesComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.lossesTabs = this.lossesService.lossesTabs;
     this._modifications = new Array<Modification>();
     if (!this.phast.losses) {
       //initialize losses
       this.phast.losses = {};
-    }else{
+    } else {
       this.phast.disableSetupDialog = true;
     }
     if (this.phast.modifications) {
@@ -69,20 +73,20 @@ export class LossesComponent implements OnInit {
 
     this.lossesService.lossesTab.subscribe(val => {
       this.changeField('default');
-      this.lossesTab = val;
-      if (this.lossesTab == 'heat-system-efficiency'
-        || this.lossesTab == 'atmosphere-losses'
-        || this.lossesTab == 'exhaust-gas'
-        || this.lossesTab == 'heat-system-efficiency'
-        || this.lossesTab == 'flue-gas-losses'
-        || this.lossesTab == 'energy-input'
-        || this.lossesTab == 'energy-input-exhaust-gas'
-      ) {
-        this.showAddBtn = false;
-      } else {
+      this.selectedTab = _.find(this.lossesTabs, (t) => { return val == t.step });
+      // if (this.lossesTab == 'heat-system-efficiency'
+      //   || this.lossesTab == 'atmosphere-losses'
+      //   || this.lossesTab == 'exhaust-gas'
+      //   || this.lossesTab == 'heat-system-efficiency'
+      //   || this.lossesTab == 'flue-gas-losses'
+      //   || this.lossesTab == 'energy-input'
+      //   || this.lossesTab == 'energy-input-exhaust-gas'
+      // ) {
+      //   this.showAddBtn = false;
+      // } else {
 
-        this.showAddBtn = true;
-      }
+      //   this.showAddBtn = true;
+      // }
     })
     this.lossesService.modalOpen.subscribe(val => {
       this.isModalOpen = val;

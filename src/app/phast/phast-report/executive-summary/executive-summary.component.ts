@@ -30,7 +30,7 @@ export class ExecutiveSummaryComponent implements OnInit {
   notes: Array<SummaryNote>;
   timeUnit: string;
   energyUnit: string;
-
+  numMods: number = 0;
   constructor(private executiveSummaryService: ExecutiveSummaryService, private reportRollupService: ReportRollupService) { }
 
   ngOnInit() {
@@ -64,6 +64,10 @@ export class ExecutiveSummaryComponent implements OnInit {
           })
         }
       });
+    }
+
+    if(this.phast.modifications){
+      this.numMods = this.phast.modifications.length;
     }
   }
 
