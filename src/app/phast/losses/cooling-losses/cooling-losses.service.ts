@@ -40,7 +40,7 @@ export class CoolingLossesService {
       'outletTemp': ['', Validators.required],
       'correctionFactor': [1.0, Validators.required],
       'name': ['Loss #' + lossNum],
-      'coolingMedium': ['']
+      'coolingMedium': ['Water']
     });
   }
 
@@ -54,7 +54,7 @@ export class CoolingLossesService {
       'correctionFactor': [loss.liquidCoolingLoss.correctionFactor, Validators.required],
       'name': [loss.name],
       'coolingMedium': [loss.coolingMedium]
-    })
+    });
   }
 
   initLiquidLossFromForm(form: FormGroup): CoolingLoss {
@@ -88,11 +88,12 @@ export class CoolingLossesService {
       'correctionFactor': [1.0, Validators.required],
       'gasDensity': [defaultDensity, Validators.required],
       'name': ['Loss #' + lossNum],
-      'coolingMedium': ['']
+      'coolingMedium': ['Air']
     });
   }
 
   initGasFormFromLoss(loss: CoolingLoss): FormGroup {
+    
     return this.formBuilder.group({
       'avgSpecificHeat': [loss.gasCoolingLoss.specificHeat, Validators.required],
       'gasFlow': [loss.gasCoolingLoss.flowRate, Validators.required],
