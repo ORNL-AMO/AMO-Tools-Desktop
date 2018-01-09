@@ -15,6 +15,9 @@ export class SolidLiquidFlueGasMaterialComponent implements OnInit {
   closeModal = new EventEmitter<SolidLiquidFlueGasMaterial>();
   @Input()
   settings: Settings;
+  @Output('hideModal')
+  hideModal = new EventEmitter();
+
   newMaterial: SolidLiquidFlueGasMaterial = {
     substance: 'New Fuel',
     carbon: 0,
@@ -104,6 +107,11 @@ export class SolidLiquidFlueGasMaterialComponent implements OnInit {
 
   focusField(str: string){
     this.currentField = str;
+  }
+
+
+  hideMaterialModal() {
+    this.hideModal.emit();
   }
 
 }

@@ -5,6 +5,7 @@ import { ChargeMaterialCompareService } from '../charge-material-compare.service
 import { ModalDirective } from 'ngx-bootstrap';
 import { LossesService } from '../../losses.service';
 import { Settings } from '../../../../shared/models/settings';
+import { PhastService } from "../../../phast.service";
 import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
 import { FormGroup } from '@angular/forms';
 @Component({
@@ -93,7 +94,7 @@ export class GasChargeMaterialFormComponent implements OnInit {
   }
   setProperties() {
     let selectedMaterial = this.suiteDbService.selectGasLoadChargeMaterialById(this.chargeMaterialForm.controls.materialId.value);
-        if (this.settings.unitsOfMeasure == 'Metric') {
+    if (this.settings.unitsOfMeasure == 'Metric') {
       selectedMaterial.specificHeatVapor = this.convertUnitsService.value(selectedMaterial.specificHeatVapor).from('btulbF').to('kJkgC');
     }
     this.chargeMaterialForm.patchValue({

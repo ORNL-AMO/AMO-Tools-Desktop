@@ -16,6 +16,8 @@ export class WallLossesSurfaceComponent implements OnInit {
   closeModal = new EventEmitter<WallLossesSurface>();
   @Input()
   settings: Settings;
+  @Output('hideModal')
+  hideModal = new EventEmitter();
 
   newMaterial: WallLossesSurface = {
     surface: 'New Surface',
@@ -26,6 +28,7 @@ export class WallLossesSurfaceComponent implements OnInit {
   isValidMaterialName: boolean = true;
   nameError: string = null;
   canAdd: boolean;
+  currentField: string = 'selectedMaterial';
   constructor(private suiteDbService: SuiteDbService, private indexedDbService: IndexedDbService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
@@ -58,12 +61,13 @@ export class WallLossesSurfaceComponent implements OnInit {
         surface: this.selectedMaterial.surface + ' (mod)',
         conditionFactor: this.selectedMaterial.conditionFactor
       }
+      this.checkMaterialName();
     }
   }
 
 
   checkMaterialName() {
-    let test = _.filter(this.allMaterials, (material) => { return material.surface == this.newMaterial.surface })
+    let test = _.filter(this.allMaterials, (material) => { return material.surface.toLowerCase().trim() == this.newMaterial.surface.toLowerCase().trim() })
     if (test.length > 0) {
       this.nameError = 'Cannot have same name as existing surface';
       this.isValidMaterialName = false;
@@ -71,6 +75,10 @@ export class WallLossesSurfaceComponent implements OnInit {
       this.isValidMaterialName = true;
       this.nameError = null;
     }
+  }
+
+  hideMaterialModal() {
+    this.hideModal.emit();
   }
 
 }

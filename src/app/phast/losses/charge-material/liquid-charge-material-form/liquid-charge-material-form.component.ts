@@ -107,7 +107,7 @@ export class LiquidChargeMaterialFormComponent implements OnInit {
 
   setProperties() {
     let selectedMaterial = this.suiteDbService.selectLiquidLoadChargeMaterialById(this.chargeMaterialForm.controls.materialId.value);
-       if (this.settings.unitsOfMeasure == 'Metric') {
+    if (this.settings.unitsOfMeasure == 'Metric') {
       selectedMaterial.vaporizationTemperature = this.convertUnitsService.value(selectedMaterial.vaporizationTemperature).from('F').to('C');
       selectedMaterial.latentHeat = this.convertUnitsService.value(selectedMaterial.latentHeat).from('F').to('C');
       selectedMaterial.specificHeatLiquid = this.convertUnitsService.value(selectedMaterial.specificHeatLiquid).from('btulbF').to('kJkgC');
@@ -297,8 +297,8 @@ export class LiquidChargeMaterialFormComponent implements OnInit {
         this.setProperties();
       }
     }
-    this.showModal = false;
     this.materialModal.hide();
+    this.showModal = false;
     this.lossesService.modalOpen.next(false);
   }
 }

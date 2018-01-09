@@ -15,6 +15,8 @@ export class GasLoadChargeMaterialComponent implements OnInit {
   closeModal = new EventEmitter<GasLoadChargeMaterial>();
   @Input()
   settings: Settings;
+  @Output('hideModal')
+  hideModal = new EventEmitter();
 
   newMaterial: GasLoadChargeMaterial = {
     substance: 'New Material',
@@ -60,12 +62,13 @@ export class GasLoadChargeMaterialComponent implements OnInit {
         substance: this.selectedMaterial.substance + ' (mod)',
         specificHeatVapor: this.selectedMaterial.specificHeatVapor
       }
+      this.checkMaterialName();
     }
   }
 
 
   checkMaterialName() {
-    let test = _.filter(this.allMaterials, (material) => { return material.substance == this.newMaterial.substance })
+    let test = _.filter(this.allMaterials, (material) => { return material.substance.toLowerCase().trim() == this.newMaterial.substance.toLowerCase().trim() })
     if (test.length > 0) {
       this.nameError = 'Cannot have same name as existing material';
       this.isValidMaterialName = false;
@@ -73,5 +76,9 @@ export class GasLoadChargeMaterialComponent implements OnInit {
       this.isValidMaterialName = true;
       this.nameError = null;
     }
+  }
+
+  hideMaterialModal() {
+    this.hideModal.emit();
   }
 }

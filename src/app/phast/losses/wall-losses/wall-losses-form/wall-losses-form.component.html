@@ -88,16 +88,11 @@
 <!--CREATE material MODAL-->
 <div bsModal #materialModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="materialModalLabel"
   aria-hidden="true" [config]="{backdrop: 'static'}">
-  <div class="modal-dialog modal-md">
+  <div class="modal-dialog modal-lg">
     <div class="modal-content">
-      <div class="modal-header">
-        <h3>Create Surface</h3>
-        <button class="close" (click)="hideMaterialModal()">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <app-wall-losses-surface *ngIf="showModal" (closeModal)="hideMaterialModal($event)" [settings]="settings"></app-wall-losses-surface>
+      <div>
+        <app-wall-losses-surface *ngIf="showModal" (closeModal)="hideMaterialModal($event)" (hideModal)="hideMaterialModal($event)"
+          [settings]="settings"></app-wall-losses-surface>
       </div>
     </div>
   </div>
