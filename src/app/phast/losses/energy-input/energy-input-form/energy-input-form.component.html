@@ -9,7 +9,7 @@
       </div>
     </div>
     <div class="form-group">
-      <label class="small"><a (click)="showHideInputField()"><font size="2">Calculate using flow rate</font></a></label>
+      <label class="small"><a class="form-text small click-link" (click)="showHideInputField()">Calculate using flow rate</a></label>
       <div class="input-group">
         <input *ngIf="flowInput" class="form-control" type="number" formControlName="flowRateInput" id="flowRateInput" onfocus="this.select();" (input)="setHeatInput()" (focus)="focusField('flowRateInput')">
         <span *ngIf="flowInput" class="input-group-addon units">scf/hr</span>
