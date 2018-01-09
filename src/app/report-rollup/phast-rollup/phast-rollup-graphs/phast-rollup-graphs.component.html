@@ -55,7 +55,7 @@
             {{data.name}}
           </td>
           <td>
-            {{data.settings.energyResultUnit}} /yr
+            {{settings.phastRollupUnit}}/yr
           </td>
           <td *ngIf="data.settings.energySourceType == 'Fuel'">
             {{data.baselineResults.annualEnergyUsed | sigFigs:'5'}}

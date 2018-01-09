@@ -1,1 +1,27 @@
-{{settings.phastRollupUnit}}
+<div class="row">
+    <div class="col-12">
+        To make comparisons between assessments easier, we have converted the result data in the summaries to a common unit. The
+        common unit is set in the general settings page. If you would like to change the common unit you can do so below.
+        You may also choose to use the assessment setting for result unit and we will only convert for graphical and percentage
+        representations of energy use.
+    </div>
+    <div class="row form">
+        <div class="col-12">
+            <div class="form-group">
+                <label for="pumpResults">Pumps Result Unit</label>
+                <div class="text-center small">kWh</div>
+            </div>
+            <div class="form-group">
+                <label for="phastRollupUnit">Process Heating Common Result Unit</label>
+                <select (change)="newUnit()" class="form-control" name="phastRollupUnit" [(ngModel)]="settings.phastRollupUnit" id="phastRollupUnit">
+                    <option *ngFor="let option of energyResultOptions" [ngValue]="option.unit">{{option.display}}
+                        <span [innerHTML]="option.displayUnit"></span>
+                    </option>
+                    <!-- <option [ngValue]="'assessmentUnits'">
+                        Use Assessment Units
+                    </option> -->
+                </select>
+            </div>
+        </div>
+    </div>
+</div>

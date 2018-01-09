@@ -17,6 +17,7 @@ import { PhastRollupFurnaceSummaryComponent } from './phast-rollup/phast-rollup-
 import { ChartsModule } from 'ng2-charts';
 import { SharedModule } from '../shared/shared.module';
 import { ReportRollupUnitsComponent } from './report-rollup-units/report-rollup-units.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   imports: [
@@ -25,7 +26,9 @@ import { ReportRollupUnitsComponent } from './report-rollup-units/report-rollup-
     PhastReportModule,
     ModalModule,
     ChartsModule,
-    SharedModule
+    SharedModule,
+    FormsModule,
+    ReactiveFormsModule
   ],
   declarations: [ReportRollupComponent, ReportBannerComponent, ReportSummaryComponent, PsatSummaryComponent, PhastSummaryComponent, PhastRollupComponent, PhastRollupGraphsComponent, PhastRollupEnergyTableComponent, PhastRollupFurnaceSummaryComponent, ReportRollupUnitsComponent],
   providers: [ReportRollupService],

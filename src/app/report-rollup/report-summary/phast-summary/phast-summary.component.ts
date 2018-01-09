@@ -55,9 +55,9 @@ export class PhastSummaryComponent implements OnInit {
       let diffCost = result.modificationResults.annualCostSavings;
       sumSavings += diffCost;
       sumCost += result.modificationResults.annualCost;
-      let diffEnergy = this.convertUnitsService.value(result.modificationResults.annualEnergySavings).from(result.settings.energyResultUnit).to(this.settings.energyResultUnit);
+      let diffEnergy = this.convertUnitsService.value(result.modificationResults.annualEnergySavings).from(result.settings.energyResultUnit).to(this.settings.phastRollupUnit);
       sumEnergySavings += diffEnergy;
-      sumEnergy += this.convertUnitsService.value(result.modificationResults.annualEnergyUsed).from(result.settings.energyResultUnit).to(this.settings.energyResultUnit);;
+      sumEnergy += this.convertUnitsService.value(result.modificationResults.annualEnergyUsed).from(result.settings.energyResultUnit).to(this.settings.phastRollupUnit);;
     })
     this.furnaceSavingsPotential = sumSavings;
     this.energySavingsPotential = sumEnergySavings;
