@@ -12,7 +12,7 @@ import { ToastyService, ToastyConfig, ToastOptions, ToastData } from 'ng2-toasty
 import { SettingsService } from '../settings/settings.service';
 import { PhastResultsService } from './phast-results.service';
 import { LossesService } from './losses/losses.service';
-import { StepTab } from './tabs';
+import { StepTab, LossTab } from './tabs';
 @Component({
   selector: 'app-phast',
   templateUrl: './phast.component.html',
@@ -41,8 +41,9 @@ export class PhastComponent implements OnInit {
   mainTab: string = 'system-setup';
   init: boolean = true;
   saveDbToggle: string;
-  specTab: string;
+  specTab: StepTab;
   isModalOpen: boolean = false;
+  selectedLossTab: LossTab;
   constructor(
     private location: Location,
     private assessmentService: AssessmentService,
@@ -61,6 +62,7 @@ export class PhastComponent implements OnInit {
 
   ngOnInit() {
     //this.phastService.test();
+    this.lossesService.tabsSet = false;
     this.lossesService.initDone();
     let tmpAssessmentId;
     this.activatedRoute.params.subscribe(params => {
@@ -102,6 +104,10 @@ export class PhastComponent implements OnInit {
       this.phastService.specTab.subscribe(val => {
         this.specTab = val;
       })
+
+      this.lossesService.lossesTab.subscribe(tab => {
+        this.selectedLossTab = this.lossesService.getTab(tab);
+      })
     });
   }
 
@@ -111,14 +117,13 @@ export class PhastComponent implements OnInit {
   }
 
   ngOnDestroy() {
-    this.lossesService.lossesTab.next('charge-material');
+    this.lossesService.lossesTab.next(1);
     this.phastService.initTabs();
   }
 
-  checkSetupDone(){
+  checkSetupDone() {
     this._phast.setupDone = this.lossesService.checkSetupDone((JSON.parse(JSON.stringify(this._phast))), this.settings);
   }
-
 
   getSettings(update?: boolean) {
     //get assessment settings
@@ -129,6 +134,7 @@ export class PhastComponent implements OnInit {
           if (!this.settings.energyResultUnit) {
             this.settings = this.settingsService.setEnergyResultUnitSetting(this.settings);
           }
+          this.lossesService.setTabs(this.settings);
           this.isAssessmentSettings = true;
           this.checkSetupDone();
           this.init = false;
@@ -175,7 +181,8 @@ export class PhastComponent implements OnInit {
     this.phastService.mainTab.next('report');
   }
 
-  goToAssessment(){
+  goToAssessment() {
+    this.lossesService.lossesTab.next(1);
     this.phastService.mainTab.next('assessment');
   }
 
@@ -185,7 +192,39 @@ export class PhastComponent implements OnInit {
     }
   }
 
-  openModal($event){
+  nextStep() {
+
+    if (this.stepTab.step == 1 && this.mainTab != 'assessment') {
+      if (this.specTab.next)
+        this.phastService.goToSpec(this.specTab.next);
+      else {
+        this.phastService.goToStep(this.stepTab.next);
+      }
+    }
+    else if (this.stepTab.step == 2 || this.mainTab == 'assessment') {
+      if (this.selectedLossTab.next) {
+        this.lossesService.lossesTab.next(this.selectedLossTab.next);
+      } else {
+        this.phastService.goToStep(this.stepTab.next);
+      }
+    } else {
+      this.phastService.goToStep(this.stepTab.next);
+    }
+  }
+
+  lastStep() {
+    if (this.stepTab.step == 2) {
+      if (this.selectedLossTab.back) {
+        this.lossesService.lossesTab.next(this.selectedLossTab.back);
+      } else {
+        this.phastService.goToStep(this.stepTab.back);
+      }
+    } else if (this.stepTab.step != 1) {
+      this.phastService.goToStep(this.stepTab.back);
+    }
+  }
+
+  openModal($event) {
     this.isModalOpen = $event;
   }
 

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
-import { WaterCoolingLoss, LiquidCoolingLoss, GasCoolingLoss, CoolingLoss } from '../../../shared/models/phast/losses/coolingLoss';
+import { LiquidCoolingLoss, GasCoolingLoss, CoolingLoss } from '../../../shared/models/phast/losses/coolingLoss';
 import { BehaviorSubject } from 'rxjs';
 import { Settings } from '../../../shared/models/settings';
 @Injectable()
@@ -24,33 +24,6 @@ export class CoolingLossesService {
   //     this.addLossBaselineMonitor.next(true);
   //   }
   // }
-  initWaterCoolingForm(): FormGroup {
-    return this.formBuilder.group({
-      'liquidFlow': ['', Validators.required],
-      'inletTemp': ['', Validators.required],
-      'outletTemp': ['', Validators.required],
-      'correctionFactor': ['', Validators.required],
-    })
-  }
-
-  initWaterFormFromLoss(loss: WaterCoolingLoss): FormGroup {
-    return this.formBuilder.group({
-      'liquidFlow': [loss.flowRate, Validators.required],
-      'inletTemp': [loss.initialTemperature, Validators.required],
-      'outletTemp': [loss.outletTemperature, Validators.required],
-      'correctionFactor': [loss.correctionFactor, Validators.required],
-    })
-  }
-
-  initWaterLossFromForm(form: FormGroup): WaterCoolingLoss {
-    let tmpLoss: WaterCoolingLoss = {
-      flowRate: form.controls.liquidFlow.value,
-      initialTemperature: form.controls.inletTemp.value,
-      outletTemperature: form.controls.outletTemp.value,
-      correctionFactor: form.controls.correctionFactor.value
-    }
-    return tmpLoss;
-  }
 
   initLiquidCoolingForm(settings: Settings, lossNum: number): FormGroup {
     let defaultDensity: number = 8.338;
@@ -66,7 +39,8 @@ export class CoolingLossesService {
       'inletTemp': ['', Validators.required],
       'outletTemp': ['', Validators.required],
       'correctionFactor': [1.0, Validators.required],
-      'name': ['Loss #' + lossNum]
+      'name': ['Loss #' + lossNum],
+      'coolingMedium': ['Water']
     });
   }
 
@@ -78,13 +52,15 @@ export class CoolingLossesService {
       'inletTemp': [loss.liquidCoolingLoss.initialTemperature, Validators.required],
       'outletTemp': [loss.liquidCoolingLoss.outletTemperature, Validators.required],
       'correctionFactor': [loss.liquidCoolingLoss.correctionFactor, Validators.required],
-      'name': [loss.name]
-    })
+      'name': [loss.name],
+      'coolingMedium': [loss.coolingMedium]
+    });
   }
 
   initLiquidLossFromForm(form: FormGroup): CoolingLoss {
     let tmpLoss: CoolingLoss = {
       name: form.controls.name.value,
+      coolingMedium: form.controls.coolingMedium.value,
       liquidCoolingLoss: {
         flowRate: form.controls.liquidFlow.value,
         density: form.controls.density.value,
@@ -111,11 +87,13 @@ export class CoolingLossesService {
       'outletTemp': ['', Validators.required],
       'correctionFactor': [1.0, Validators.required],
       'gasDensity': [defaultDensity, Validators.required],
-      'name': ['Loss #' + lossNum]
+      'name': ['Loss #' + lossNum],
+      'coolingMedium': ['Air']
     });
   }
 
   initGasFormFromLoss(loss: CoolingLoss): FormGroup {
+    
     return this.formBuilder.group({
       'avgSpecificHeat': [loss.gasCoolingLoss.specificHeat, Validators.required],
       'gasFlow': [loss.gasCoolingLoss.flowRate, Validators.required],
@@ -123,13 +101,15 @@ export class CoolingLossesService {
       'outletTemp': [loss.gasCoolingLoss.finalTemperature, Validators.required],
       'correctionFactor': [loss.gasCoolingLoss.correctionFactor, Validators.required],
       'gasDensity': [loss.gasCoolingLoss.gasDensity, Validators.required],
-      'name': [loss.name]
+      'name': [loss.name],
+      'coolingMedium': [loss.coolingMedium]
     });
   }
 
   initGasLossFromForm(form: FormGroup): CoolingLoss {
     let tmpLoss: CoolingLoss = {
       name: form.controls.name.value,
+      coolingMedium: form.controls.coolingMedium.value,
       gasCoolingLoss: {
         flowRate: form.controls.gasFlow.value,
         initialTemperature: form.controls.inletTemp.value,

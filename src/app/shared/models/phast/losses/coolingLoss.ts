@@ -2,9 +2,9 @@ export interface CoolingLoss {
     coolingLossType?: string,
     gasCoolingLoss?: GasCoolingLoss,
     liquidCoolingLoss?: LiquidCoolingLoss,
-    waterCoolingLoss?: WaterCoolingLoss,
     heatLoss?: number,
-    name?: string
+    name?: string,
+    coolingMedium?: string
 }
 
 export interface LiquidCoolingLoss {
@@ -23,12 +23,4 @@ export interface GasCoolingLoss {
     specificHeat?: number,
     correctionFactor?: number,
     gasDensity?: number
-}
-
-
-export interface WaterCoolingLoss {
-    flowRate?: number,
-    initialTemperature?: number,
-    outletTemperature?: number,
-    correctionFactor?: number,
 }

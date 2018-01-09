@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Notes } from '../../../shared/models/phast/phast';
+import { LossTab } from '../../tabs';
 
 @Component({
   selector: 'app-notes',
@@ -10,7 +11,7 @@ export class NotesComponent implements OnInit {
   @Input()
   notes: Notes;
   @Input()
-  currentTab: string;
+  currentTab: LossTab;
   constructor() { }
 
   ngOnInit() {

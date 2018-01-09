@@ -48,8 +48,6 @@
           <option>Liquid</option>
         </select>
       </div>
-      <!--<app-water-cooling-losses-form (changeField)="changeField($event)" *ngIf="loss.coolingMedium == 'Water'" [(lossesForm)]="loss.waterCoolingForm"
-        (calculate)="calculate(loss)" [baselineSelected]="baselineSelected" (saveEmit)="saveLosses()" [lossIndex]="lossIndex"></app-water-cooling-losses-form>-->
       <app-liquid-cooling-losses-form (changeField)="changeField($event)" *ngIf="loss.coolingMedium == 'Liquid'" [(lossesForm)]="loss.liquidCoolingForm"
         (calculate)="calculate(loss)" [baselineSelected]="baselineSelected" (saveEmit)="saveLosses()" [lossIndex]="lossIndex"
         [settings]="settings"></app-liquid-cooling-losses-form>
@@ -62,7 +60,7 @@
     <div class="col-12">
       <div class="form-group">
         <label class="small font-weight-bold" *ngIf="loss.coolingMedium == 'Gas'">{{loss.gasCoolingForm.controls.name.value}} Total</label>
-        <label class="small font-weight-bold" *ngIf="loss.liquidCoolingForm == 'Liquid'">{{loss.liquidCoolingForm.controls.name.value}} Total</label>
+        <label class="small font-weight-bold" *ngIf="loss.coolingMedium == 'Liquid'">{{loss.liquidCoolingForm.controls.name.value}} Total</label>
         <div *ngIf="loss.heatLoss" class="text-center small font-weight-bold">
           {{loss.heatLoss| sigFigs:'5'}}
           <span>{{resultsUnit}}</span>

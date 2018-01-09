@@ -1,7 +1,13 @@
 <form [formGroup]="lossesForm">
 
   <div class="form-section">
-
+    <div class="form-group">
+      <label class="small" for="coolingMedium">Name of Cooling Medium</label>
+      <div class="input-group">
+        <input name="{{'coolingMedium_'+lossIndex}}" type="text" class="form-control" formControlName="coolingMedium"
+          id="coolingMedium" onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('coolingMedium')" (blur)="focusOut()">
+      </div>
+    </div>
     <div class="form-group">
       <label class="small" for="avgSpecificHeat">Average Specific Heat</label>
       <div class="input-group">

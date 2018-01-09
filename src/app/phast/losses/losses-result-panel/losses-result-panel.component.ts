@@ -2,6 +2,7 @@ import { Component, OnInit, ViewEncapsulation, Input } from '@angular/core';
 import { Settings } from '../../../shared/models/settings';
 import { Assessment } from '../../../shared/models/assessment';
 import { PHAST, Modification } from '../../../shared/models/phast/phast';
+import { LossTab } from '../../tabs';
 
 @Component({
   selector: 'app-losses-result-panel',
@@ -11,7 +12,7 @@ import { PHAST, Modification } from '../../../shared/models/phast/phast';
 })
 export class LossesResultPanelComponent implements OnInit {
   @Input()
-  lossesTab: string;
+  lossesTab: LossTab;
   @Input()
   currentField: string;
   @Input()

@@ -3,7 +3,8 @@ import { Assessment } from '../../../shared/models/assessment';
 import { ReportRollupService, PsatCompare, PhastResultsData } from '../../report-rollup.service';
 import * as _ from 'lodash';
 import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
-
+import { Settings } from '../../../shared/models/settings';
+import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 @Component({
   selector: 'app-phast-summary',
   templateUrl: './phast-summary.component.html',
@@ -15,9 +16,14 @@ export class PhastSummaryComponent implements OnInit {
   energySavingsPotential: number = 0;
   totalCost: number = 0;
   totalEnergy: number = 0;
-  constructor(private reportRollupService: ReportRollupService, private indexedDbService: IndexedDbService) { }
+  defaultSettings: Settings;
+  constructor(private reportRollupService: ReportRollupService, private indexedDbService: IndexedDbService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
+    this.indexedDbService.getDirectorySettings(1).then(results => {
+      this.defaultSettings = this.reportRollupService.checkSettings(results[0]);
+    })
+
     this.reportRollupService.phastAssessments.subscribe(val => {
       this.numPhasts = val.length;
       if (val.length != 0) {
@@ -51,9 +57,9 @@ export class PhastSummaryComponent implements OnInit {
       let diffCost = result.modificationResults.annualCostSavings;
       sumSavings += diffCost;
       sumCost += result.modificationResults.annualCost;
-      let diffEnergy = result.modificationResults.annualEnergySavings;
+      let diffEnergy = this.convertUnitsService.value(result.modificationResults.annualEnergySavings).from(result.settings.energyResultUnit).to(this.defaultSettings.energyResultUnit);
       sumEnergySavings += diffEnergy;
-      sumEnergy += result.modificationResults.annualEnergyUsed;
+      sumEnergy += this.convertUnitsService.value(result.modificationResults.annualEnergyUsed).from(result.settings.energyResultUnit).to(this.defaultSettings.energyResultUnit);;
     })
     this.furnaceSavingsPotential = sumSavings;
     this.energySavingsPotential = sumEnergySavings;

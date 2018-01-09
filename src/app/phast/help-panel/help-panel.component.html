@@ -2,19 +2,19 @@
   <div class="header">
     <h3>Help</h3>
   </div>
-  <div *ngIf="settingsTab == 'system-basics'" class="help-content">
+  <div *ngIf="settingsTab.step == 1" class="help-content">
     <h3>System Basics</h3>
     <p>Your system basics help define the units of measure and other information related to the system you are modeling for
       this assessment. These settings are inherited by default from your directory or applications settings and can be customized for this assessment.
     </p>
   </div>
 
-  <div class="help-content" *ngIf="settingsTab == 'energy-costs'">
+  <div class="help-content" *ngIf="settingsTab.step == 2">
     <h3>Operating Costs</h3>
     <p>Per unit cost of fuel, steam and electricity related to the operation of furnace.</p>
   </div>
 
-  <div class="help-content" *ngIf="settingsTab == 'operating-hours'">
+  <div class="help-content" *ngIf="settingsTab.step == 3">
     <h3>Operating Hours</h3>
     <p>Denotes the annual operating hours during which the facility utilizes furnace loads. Either the total hours of operation
       or the operating schedule (day/week, hours/day) should be entered.</p>
