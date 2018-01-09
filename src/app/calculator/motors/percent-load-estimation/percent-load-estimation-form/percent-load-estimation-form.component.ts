@@ -79,10 +79,10 @@ export class PercentLoadEstimationFormComponent implements OnInit {
       err = true;
     }
 
-    if (this.percentLoadEstimationForm.controls.nameplateFullLoadSpeed.value > this.percentLoadEstimationForm.controls.measuredSpeed.value) {
-      this.measuredSpeedError = 'Measured Speed must be greater than or equal to the Nameplate Full Load Speed.';
-      err = true;
-    }
+    // if (this.percentLoadEstimationForm.controls.nameplateFullLoadSpeed.value > this.percentLoadEstimationForm.controls.measuredSpeed.value) {
+    //   this.measuredSpeedError = 'Measured Speed must be greater than or equal to the Nameplate Full Load Speed.';
+    //   err = true;
+    // }
 
     for (let i = 0; i < this.synchronousSpeeds.length; i++) {
       if (this.synchronousSpeeds[i] > this.percentLoadEstimationForm.controls.nameplateFullLoadSpeed.value) {
