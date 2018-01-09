@@ -1,12 +1,12 @@
 <ul class="tabs subtabs psat" *ngIf="mainTab != 'calculators'">
   <li class="fixed-tab-size" [ngClass]="{'active': currentTab == 'explore-opportunities'}">
     <a (click)="changeTab('explore-opportunities')">Explore Opportunities<br>
-        <span class="help-text">Novice View</span>
+        <span class="help-text psat-view">Novice View</span>
     </a>
   </li><!--
   --><li class="fixed-tab-size" [ngClass]="{'active': currentTab == 'modify-conditions'}">
   <a (click)="changeTab('modify-conditions')">Modify Conditions<br>
-      <span class="help-text">Expert View</span>
+      <span class="help-text psat-view">Expert View</span>
   </a>
   </li>
 </ul>

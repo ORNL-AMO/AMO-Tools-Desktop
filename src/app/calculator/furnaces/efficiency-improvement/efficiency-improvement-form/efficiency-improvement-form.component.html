@@ -15,14 +15,14 @@
           <div class="col-4">
             <div class="input-group">
               <input autofocus class="form-control" name="currentFlueGasOxygen" type="number" step="any" id="currentFlueGasOxygen" [(ngModel)]="efficiencyImprovementInputs.currentFlueGasOxygen"
-                (input)="calc()" onfocus="this.select();" (focus)="focusField('flueGasOxygen')">
+                (input)="calc()" onfocus="this.select();" (focus)="focusField('flueGasOxygen')" (blur)="focusOut()">
               <span class="input-group-addon units">% Dry</span>
             </div>
           </div>
           <div class="col-4">
             <div class="input-group">
               <input class="form-control" name="newFlueGasOxygen" type="number" step="any" id="newFlueGasOxygen" [(ngModel)]="efficiencyImprovementInputs.newFlueGasOxygen"
-                (input)="calc()" onfocus="this.select();" (focus)="focusField('flueGasOxygen')">
+                (input)="calc()" onfocus="this.select();" (focus)="focusField('flueGasOxygen')" (blur)="focusOut()">
               <span class="input-group-addon units">% Dry</span>
             </div>
           </div>
@@ -32,7 +32,7 @@
           <div class="col-4">
             <div class="input-group">
               <input class="form-control" name="currentFlueGasTemp" type="number" step="any" id="currentFlueGasTemp" [(ngModel)]="efficiencyImprovementInputs.currentFlueGasTemp"
-                (input)="calc()" onfocus="this.select();" (focus)="focusField('flueGasTemp')">
+                (input)="calc()" onfocus="this.select();" (focus)="focusField('flueGasTemp')" (blur)="focusOut()">
               <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Imperial'">&#8457;</span>
               <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
             </div>
@@ -40,7 +40,7 @@
           <div class="col-4">
             <div class="input-group">
               <input class="form-control" name="newFlueGasTemp" type="number" step="any" id="newFlueGasTemp" [(ngModel)]="efficiencyImprovementInputs.newFlueGasTemp"
-                (input)="calc()" onfocus="this.select();" (focus)="focusField('flueGasTemp')">
+                (input)="calc()" onfocus="this.select();" (focus)="focusField('flueGasTemp')" (blur)="focusOut()">
               <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Imperial'">&#8457;</span>
               <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
             </div>
@@ -58,7 +58,7 @@
           <div class="col-4">
             <div class="input-group">
               <input class="form-control" name="currentCombustionAirTemp" type="number" step="any" id="currentCombustionAirTemp" [(ngModel)]="efficiencyImprovementInputs.currentCombustionAirTemp"
-                (input)="calc()" onfocus="this.select();" (focus)="focusField('combustionAirTemp')">
+                (input)="calc()" onfocus="this.select();" (focus)="focusField('combustionAirTemp')" (blur)="focusOut()">
               <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Imperial'">&#8457;</span>
               <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
             </div>
@@ -66,7 +66,7 @@
           <div class="col-4">
             <div class="input-group">
               <input class="form-control" name="newCombustionAirTemp" type="number" step="any" id="newCombustionAirTemp" [(ngModel)]="efficiencyImprovementInputs.newCombustionAirTemp"
-                (input)="calc()" onfocus="this.select();" (focus)="focusField('combustionAirTemp')">
+                (input)="calc()" onfocus="this.select();" (focus)="focusField('combustionAirTemp')" (blur)="focusOut()">
               <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Imperial'">&#8457;</span>
               <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
             </div>
@@ -87,7 +87,7 @@
           <div class="col-4">
             <div class="input-group">
               <input class="form-control" name="currentEnergyInput" type="number" step="any" id="currentEnergyInput" [(ngModel)]="efficiencyImprovementInputs.currentEnergyInput"
-                (input)="calc()" onfocus="this.select();" (focus)="focusField('energyInput')">
+                (input)="calc()" onfocus="this.select();" (focus)="focusField('energyInput')" (blur)="focusOut()">
               <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Imperial'">MMBtu/hr</span>
               <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Metric'">GJ/hr</span>
             </div>
