@@ -29,7 +29,7 @@ export class ReportRollupComponent implements OnInit {
   createdDate: Date;
   settings: Settings;
 
-
+  @ViewChild('unitModal') public unitModal: ModalDirective;
   @ViewChild('rollupModal') public rollupModal: ModalDirective;
   constructor(private reportRollupService: ReportRollupService,
     private windowRefService: WindowRefService, private indexedDbService: IndexedDbService) { }
@@ -107,5 +107,13 @@ export class ReportRollupComponent implements OnInit {
 
   hideModal() {
     this.rollupModal.hide();
+  }
+
+  showUnitModal(){
+    this.unitModal.show();
+  }
+
+  hideUnitModal(){
+    this.unitModal.hide();
   }
 }

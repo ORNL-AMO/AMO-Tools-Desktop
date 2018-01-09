@@ -16,6 +16,7 @@ import { PhastRollupEnergyTableComponent } from './phast-rollup/phast-rollup-ene
 import { PhastRollupFurnaceSummaryComponent } from './phast-rollup/phast-rollup-furnace-summary/phast-rollup-furnace-summary.component';
 import { ChartsModule } from 'ng2-charts';
 import { SharedModule } from '../shared/shared.module';
+import { ReportRollupUnitsComponent } from './report-rollup-units/report-rollup-units.component';
 
 @NgModule({
   imports: [
@@ -26,7 +27,7 @@ import { SharedModule } from '../shared/shared.module';
     ChartsModule,
     SharedModule
   ],
-  declarations: [ReportRollupComponent, ReportBannerComponent, ReportSummaryComponent, PsatSummaryComponent, PhastSummaryComponent, PhastRollupComponent, PhastRollupGraphsComponent, PhastRollupEnergyTableComponent, PhastRollupFurnaceSummaryComponent],
+  declarations: [ReportRollupComponent, ReportBannerComponent, ReportSummaryComponent, PsatSummaryComponent, PhastSummaryComponent, PhastRollupComponent, PhastRollupGraphsComponent, PhastRollupEnergyTableComponent, PhastRollupFurnaceSummaryComponent, ReportRollupUnitsComponent],
   providers: [ReportRollupService],
   exports: [ReportRollupComponent]
 })

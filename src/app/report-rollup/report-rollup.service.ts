@@ -275,6 +275,9 @@ export class ReportRollupService {
     if (!settings.energyResultUnit) {
       settings = this.settingsService.setEnergyResultUnitSetting(settings);
     }
+    if (!settings.phastRollupUnit) {
+      settings = this.settingsService.setPhastResultUnit(settings);
+    }
     if (!settings.temperatureMeasurement) {
       if (settings.unitsOfMeasure == 'Metric') {
         settings.temperatureMeasurement = 'C';

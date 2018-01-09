@@ -107,13 +107,13 @@
 }
 
 
-.modal-dialog{
+.phast-modal .modal-dialog{
     top: 0px;
     max-width: none;
     margin: 10px;
 }
 
-.modal-header{
+.phast-modal .modal-header{
     background-color: #BF3D00;
     color: #fff;
 }

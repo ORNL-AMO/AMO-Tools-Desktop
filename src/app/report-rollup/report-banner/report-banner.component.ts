@@ -12,6 +12,8 @@ export class ReportBannerComponent implements OnInit {
   emitExport = new EventEmitter<boolean>();
   @Output('emitPrint')
   emitPrint = new EventEmitter<boolean>();
+  @Output('emitShowUnitModal')
+  emitShowUnitModal = new EventEmitter<boolean>();
   constructor() { }
 
   ngOnInit() {
@@ -27,6 +29,10 @@ export class ReportBannerComponent implements OnInit {
 
   print(){
     this.emitPrint.emit(true);
+  }
+
+  showUnitsModal(){
+    this.emitShowUnitModal.emit(true);
   }
 
 }

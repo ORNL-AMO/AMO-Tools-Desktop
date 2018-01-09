@@ -18,5 +18,6 @@ export interface Settings {
     energySourceType?: string,
     furnaceType?: string,
     energyResultUnit?: string,
-    customFurnaceName?: string
+    customFurnaceName?: string,
+    phastRollupUnit?: string
 }

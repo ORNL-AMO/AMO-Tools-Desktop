@@ -37,10 +37,21 @@
   </div>
 
   <div class="form-group" *ngIf="!inPsat">
-    <label for="furnaceType">Energy Result Unit</label>
+    <label for="energyResultUnit">Energy Result Unit</label>
     <select class="form-control" formControlName="energyResultUnit" id="energyResultUnit">
       <option *ngFor="let option of energyResultOptions" [ngValue]="option.unit">{{option.display}}
         <span [innerHTML]="option.displayUnit"></span>
+      </option>
+    </select>
+  </div>
+  <div class="form-group" *ngIf="generalSettings">
+    <label for="phastRollupUnit">Process Heating Common Result Unit</label>
+    <select class="form-control" formControlName="phastRollupUnit" id="phastRollupUnit">
+      <option *ngFor="let option of energyResultOptions" [ngValue]="option.unit">{{option.display}}
+        <span [innerHTML]="option.displayUnit"></span>
+      </option>
+      <option [ngValue]="'assessmentUnits'">
+        Use Assessment Units
       </option>
     </select>
   </div>
