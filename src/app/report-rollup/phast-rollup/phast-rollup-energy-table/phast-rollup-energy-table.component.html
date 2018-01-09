@@ -1,3 +1,62 @@
-<p>
-  phast-rollup-energy-table works!
-</p>
+<div class="row">
+  <div class="col-12">
+    <div class="output-summary">
+      <div class="summary-table">
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th>Energy Name</th>
+              <th>Energy Used</th>
+              <th>Heating Value (HHV)</th>
+              <th>Cost per Unit</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let data of fuelSummary">
+              <td>
+                {{data.name}}
+              </td>
+              <td>
+                {{data.energyUsed | sigFigs:'5'}}  {{baseEnergyUnit}}
+              </td>
+              <td>
+                {{data.hhv | sigFigs:'5'}} {{energyPerMassUnit}}
+              </td>
+              <td>
+                {{data.cost | currency:'USD':'symbol':'1.0-0'}} {{energyCostUnit}}
+              </td>
+            </tr>
+            <tr *ngIf="electricitySummary">
+              <td>
+                {{electricitySummary.name}}
+              </td>
+              <td>
+                {{electricitySummary.energyUsed | sigFigs:'5'}} kW
+              </td>
+              <td>
+                {{electricitySummary.hhv | sigFigs:'5'}} {{energyPerTimeUnit}}
+              </td>
+              <td>
+                {{electricitySummary.cost | currency:'USD':'symbol':'1.0-0'}} /kWh
+              </td>
+            </tr>
+            <tr *ngIf="steamSummary">
+              <td>
+                {{steamSummary.name}}
+              </td>
+              <td>
+                {{steamSummary.energyUsed | sigFigs:'5'}} {{baseEnergyUnit}}
+              </td>
+              <td>
+                {{steamSummary.hhv | sigFigs:'5'}} {{energyPerMassUnit}}
+              </td>
+              <td>
+                {{steamSummary.cost | currency:'USD':'symbol':'1.0-0'}} {{energyCostUnit}}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

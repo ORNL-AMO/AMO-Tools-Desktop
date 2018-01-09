@@ -103,9 +103,9 @@ export class ReportRollupComponent implements OnInit {
 
   showModal() {
     this.rollupModal.show();
-}
+  }
 
-hideModal() {
-  this.rollupModal.hide();
-}
+  hideModal() {
+    this.rollupModal.hide();
+  }
 }

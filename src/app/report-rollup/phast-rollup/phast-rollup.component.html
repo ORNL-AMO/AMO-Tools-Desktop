@@ -1,9 +1,9 @@
-<div class="card">
+<div class="card" *ngIf="settings">
   <div class="card-header">
     Summary of Energy Sources Used
   </div>
   <div class="card-body">
-    <app-phast-rollup-energy-table></app-phast-rollup-energy-table>
+    <app-phast-rollup-energy-table [settings]="settings"></app-phast-rollup-energy-table>
   </div>
 </div>
 <div class="card">

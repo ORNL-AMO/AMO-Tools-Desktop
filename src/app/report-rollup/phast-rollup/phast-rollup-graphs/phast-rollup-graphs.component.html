@@ -55,39 +55,53 @@
             {{data.name}}
           </td>
           <td>
-            {{data.settings.energyResultUnit}}
+            {{data.settings.energyResultUnit}} /yr
           </td>
           <td *ngIf="data.settings.energySourceType == 'Fuel'">
-            {{data.modificationResults.annualEnergyUsed | sigFigs:'5'}}
+            {{data.baselineResults.annualEnergyUsed | sigFigs:'5'}}
           </td>
           <td *ngIf="data.settings.energySourceType == 'Fuel'">
-            {{data.modificationResults.annualCost | currency:'USD':'symbol':'1.0-0'}}
+            {{data.baselineResults.annualCost | currency:'USD':'symbol':'1.0-0'}}
           </td>
           <td *ngIf="data.settings.energySourceType != 'Fuel'">&mdash; &mdash;</td>
           <td *ngIf="data.settings.energySourceType != 'Fuel'">&mdash; &mdash;</td>
-
-          <td *ngIf="data.settings.energySourceType == 'Steam'">
-            {{data.modificationResults.annualEnergyUsed | sigFigs:'5'}}
-          </td>
-          <td *ngIf="data.settings.energySourceType == 'Steam'">
-            {{data.modificationResults.annualCost | currency:'USD':'symbol':'1.0-0'}}
-          </td>
-          <td *ngIf="data.settings.energySourceType != 'Steam'">&mdash; &mdash;</td>
-          <td *ngIf="data.settings.energySourceType != 'Steam'">&mdash; &mdash;</td>
-
           <td *ngIf="data.settings.energySourceType == 'Electricity'">
-            {{data.modificationResults.annualEnergyUsed | sigFigs:'5'}}
+            {{data.baselineResults.annualEnergyUsed | sigFigs:'5'}}
           </td>
           <td *ngIf="data.settings.energySourceType == 'Electricity'">
-            {{data.modificationResults.annualCost | currency:'USD':'symbol':'1.0-0'}}
+            {{data.baselineResults.annualCost | currency:'USD':'symbol':'1.0-0'}}
           </td>
           <td *ngIf="data.settings.energySourceType != 'Electricity'">&mdash; &mdash;</td>
           <td *ngIf="data.settings.energySourceType != 'Electricity'">&mdash; &mdash;</td>
-          <td>{{data.modificationResults.annualCost | currency:'USD':'symbol':'1.0-0'}}</td>
-          <td>{{getResultPercent(data.modificationResults.annualCost, totalCost) | number:'1.0-1'}}</td>
-          <td>{{getConvertedPercent(data.modificationResults.annualEnergyUsed, totalEnergy, data.settings) | number:'1.0-1'}}</td>
+
+          <td *ngIf="data.settings.energySourceType == 'Steam'">
+            {{data.baselineResults.annualEnergyUsed | sigFigs:'5'}}
+          </td>
+          <td *ngIf="data.settings.energySourceType == 'Steam'">
+            {{data.baselineResults.annualCost | currency:'USD':'symbol':'1.0-0'}}
+          </td>
+          <td *ngIf="data.settings.energySourceType != 'Steam'">&mdash; &mdash;</td>
+          <td *ngIf="data.settings.energySourceType != 'Steam'">&mdash; &mdash;</td>
+          <td>{{data.baselineResults.annualCost | currency:'USD':'symbol':'1.0-0'}}</td>
+          <td>{{getResultPercent(data.baselineResults.annualCost, totalCost) | number:'1.0-1'}}</td>
+          <td>{{getConvertedPercent(data.baselineResults.annualEnergyUsed, totalEnergy, data.settings) | number:'1.0-1'}}</td>
         </tr>
       </tbody>
+      <tfoot>
+        <tr>
+          <td>
+            Totals
+          </td>
+          <td></td>
+          <td>{{totalFuelEnergyUsed | sigFigs:'5'}}</td>
+          <td>{{totalFuelCost | currency:'USD':'symbol':'1.0-0'}}</td>
+          <td>{{totalElectricalEnergyUsed | sigFigs:'5'}}</td>
+          <td>{{totalElectricalCost | currency:'USD':'symbol':'1.0-0'}}</td>
+          <td>{{totalSteamEnergyUsed | sigFigs:'5'}}</td>
+          <td>{{totalSteamCost | currency:'USD':'symbol':'1.0-0'}}</td>
+          <td>{{totalCost | currency:'USD':'symbol':'1.0-0'}}</td>
+        </tr>
+      </tfoot>
     </table>
   </div>
 </div>
