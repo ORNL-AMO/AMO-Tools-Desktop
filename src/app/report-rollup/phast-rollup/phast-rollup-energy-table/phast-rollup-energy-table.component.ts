@@ -22,7 +22,7 @@ export class PhastRollupEnergyTableComponent implements OnInit {
   electricityTotalEnergy: number = 0;
   fuelSummary: Array<PhastRollupEnergySummaryItem>;
   electricitySummary: PhastRollupEnergySummaryItem;
-  steamSummary: PhastRollupEnergySummaryItem;
+  steamSummary: Array<PhastRollupEnergySummaryItem>;
   timeoutVal: any;
   tmpArr: Array<{ assessment: PhastCompare, settings: Settings }>;
   electricityHeatingValue: number = 0;
@@ -70,7 +70,6 @@ export class PhastRollupEnergyTableComponent implements OnInit {
           this.fuelSummary.push(tmpItem);
         } else {
           test.energyUsed += tmpItem.energyUsed;
-
         }
       }
 
@@ -79,15 +78,17 @@ export class PhastRollupEnergyTableComponent implements OnInit {
       }
 
       else if (data.settings.energySourceType == 'Steam') {
-        this.steamTotalEnergy += tmpResults.grossHeatInput;
+        let tmpItem = this.getSteam(data.assessment, data.settings, tmpResults);
+        this.steamSummary.push(tmpItem);
+        //this.steamTotalEnergy += tmpResults.grossHeatInput;
       }
 
-      this.steamSummary = {
-        name: 'Steam',
-        energyUsed: this.steamTotalEnergy,
-        hhv: 1,
-        cost: data.assessment.baseline.operatingCosts.steamCost
-      }
+      // this.steamSummary = {
+      //   name: 'Steam',
+      //   energyUsed: this.steamTotalEnergy,
+      //   hhv: 1,
+      //   cost: data.assessment.baseline.operatingCosts.steamCost
+      // }
       this.electricitySummary = {
         name: 'Electricity',
         energyUsed: this.electricityTotalEnergy,
@@ -96,6 +97,19 @@ export class PhastRollupEnergyTableComponent implements OnInit {
       }
     })
   }
+
+  getSteam(assessment: PhastCompare, settings: Settings, tmpResults: PhastResults): PhastRollupEnergySummaryItem {
+    let tmpItem: PhastRollupEnergySummaryItem = {
+      name: assessment.name,
+      energyUsed: tmpResults.grossHeatInput,
+      hhv: 0,
+      cost: assessment.baseline.operatingCosts.steamCost
+    }
+
+
+    return tmpItem;
+  }
+
 
   getFuel(assessment: PhastCompare, settings: Settings, tmpResults: PhastResults): PhastRollupEnergySummaryItem {
     let tmpItem: PhastRollupEnergySummaryItem = {
@@ -130,12 +144,7 @@ export class PhastRollupEnergyTableComponent implements OnInit {
 
   initResults() {
     this.fuelSummary = new Array();
-    this.steamSummary = {
-      name: 'Steam',
-      energyUsed: this.steamTotalEnergy,
-      hhv: 0,
-      cost: 0
-    }
+    this.steamSummary = new Array();
     this.electricitySummary = {
       name: 'Electricity',
       energyUsed: this.electricityTotalEnergy,

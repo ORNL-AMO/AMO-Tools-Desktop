@@ -17,13 +17,13 @@
                 {{data.name}}
               </td>
               <td>
-                {{data.energyUsed | sigFigs:'5'}}  {{baseEnergyUnit}}
+                {{data.energyUsed | sigFigs:'5'}} {{baseEnergyUnit}}
               </td>
               <td>
                 {{data.hhv | sigFigs:'5'}} {{energyPerMassUnit}}
               </td>
               <td>
-                {{data.cost | currency:'USD':'symbol':'1.0-0'}} {{energyCostUnit}}
+                {{data.cost | currency:'USD':'symbol':'1.2-2'}} {{energyCostUnit}}
               </td>
             </tr>
             <tr *ngIf="electricitySummary">
@@ -37,21 +37,21 @@
                 {{electricitySummary.hhv | sigFigs:'5'}} {{energyPerTimeUnit}}
               </td>
               <td>
-                {{electricitySummary.cost | currency:'USD':'symbol':'1.0-0'}} /kWh
+                {{electricitySummary.cost | currency:'USD':'symbol':'1.2-2'}} /kWh
               </td>
             </tr>
-            <tr *ngIf="steamSummary">
+            <tr *ngFor="let data of steamSummary">
               <td>
-                {{steamSummary.name}}
+                {{data.name}}
               </td>
               <td>
-                {{steamSummary.energyUsed | sigFigs:'5'}} {{baseEnergyUnit}}
+                {{data.energyUsed | sigFigs:'5'}} {{baseEnergyUnit}}
               </td>
               <td>
-                {{steamSummary.hhv | sigFigs:'5'}} {{energyPerMassUnit}}
+                {{data.hhv | sigFigs:'5'}} {{energyPerMassUnit}}
               </td>
               <td>
-                {{steamSummary.cost | currency:'USD':'symbol':'1.0-0'}} {{energyCostUnit}}
+                {{data.cost | currency:'USD':'symbol':'1.2-2'}} {{energyCostUnit}}
               </td>
             </tr>
           </tbody>
