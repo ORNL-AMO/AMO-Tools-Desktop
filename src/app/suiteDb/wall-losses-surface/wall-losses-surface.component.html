@@ -1,32 +1,53 @@
 <div class="card">
-  <div class="card-body">
-    <form>
-      <div class="form-section">
-        <div class="form-group">
-          <label class="small" for="selectedMaterial">Start with existing surface</label>
-          <select name="selectedMaterial" class="form-control" id="selectedMaterial" (change)="setExisting()" [(ngModel)]="selectedMaterial">
-        <option *ngFor="let material of allMaterials" [ngValue]="material">{{material.substance}}</option>
+  <div class="card-body custom-card-body card-container col">
+    <div class="row">
+      <div class="col-sm-6 col-md-6 card-column">
+        <div class="row phast align-items-top">
+          <div class="col-12">
+            <div class="header card-header">
+              <h3>Create Surface Material</h3>
+            </div>
+          </div>
+        </div>
+        <form>
+          <div class="form-section">
+            <div class="form-group">
+              <label class="small" for="selectedMaterial">Start with existing surface</label>
+              <select name="selectedMaterial" class="form-control" id="selectedMaterial" (change)="setExisting()" [(ngModel)]="selectedMaterial">
+                <option *ngFor="let material of allMaterials" [ngValue]="material">{{material.surface}}</option>
                 <option [ngValue]="null"></option>
-      </select>
+              </select>
+            </div>
+          </div>
+          <div class="form-section">
+            <label>
+              <h6>New Surface:</h6>
+            </label>
+            <div class="form-group">
+              <label class="small" for="surface">Surface Name</label>
+              <input type="text" id="surface" name="surface" class="form-control" [(ngModel)]="newMaterial.surface" (input)="checkMaterialName()"
+              />
+              <span class="alert-warning pull-right small" *ngIf="nameError !== null">{{nameError}}</span>
+            </div>
+            <div class="form-group" *ngIf="settings">
+              <label class="small" for="conditionFactor">Condition Factor</label>
+              <input type="number" id="conditionFactor" name="conditionFactor" class="form-control" [(ngModel)]="newMaterial.conditionFactor"
+              />
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <div class="col-sm-6 col-md-6 card-help-column">
+        <div class="tab-content">
+          <app-wall-losses-surface-help [currentField]="currentField"></app-wall-losses-surface-help>
         </div>
       </div>
-      <div class="form-section">
-        <label><h6>New Surface:</h6></label>
-        <div class="form-group">
-          <label class="small" for="surface">Surface Name</label>
-          <input type="text" id="surface" name="surface" class="form-control" [(ngModel)]="newMaterial.surface" (input)="checkMaterialName()"
-          />
-          <span class="alert-warning pull-right small" *ngIf="nameError !== null">{{nameError}}</span>
-        </div>
-        <div class="form-group" *ngIf="settings">
-          <label class="small" for="conditionFactor">Condition Factor</label>
-          <input type="number" id="conditionFactor" name="conditionFactor" class="form-control" [(ngModel)]="newMaterial.conditionFactor"
-          />
-        </div>
-      </div>
-    </form>
-  </div>
-  <div class="card-body">
-    <button type="button" class="btn-primary btn-sm pull-right" (click)="addMaterial()" [disabled]="!isValidMaterialName">Submit</button>
+
+    </div>
+    <div class="modal-btn-container">
+      <button type="button" class="btn btn-secondary btn-sm modal-btn" (click)="hideMaterialModal()">Cancel</button>
+      <button type="button" class="btn btn-primary btn-sm modal-btn" (click)="addMaterial()" [disabled]="!isValidMaterialName">Submit</button>
+    </div>
   </div>
 </div>

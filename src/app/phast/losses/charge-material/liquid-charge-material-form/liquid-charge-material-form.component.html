@@ -119,8 +119,7 @@
       <label class="small" for="heatOfReaction">Heat of Reaction</label>
       <div class="input-group">
         <input name="{{'heatOfReaction_'+lossIndex}}" type="number" step="any" min="0" class="form-control" formControlName="heatOfReaction"
-          id="heatOfReaction" onfocus="this.select();" (input)="checkInputError()" (focus)="focusField('heatOfReaction')"
-          (blur)="focusOut()">
+          id="heatOfReaction" onfocus="this.select();" (input)="checkInputError()" (focus)="focusField('heatOfReaction')" (blur)="focusOut()">
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">Btu/lb</span>
         <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kJ/kg</span>
       </div>
@@ -153,16 +152,10 @@
 <!--CREATE Folder MODAL-->
 <div bsModal #materialModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="materialModalLabel"
   aria-hidden="true" [config]="{backdrop: 'static'}">
-  <div class="modal-dialog modal-md">
+  <div class="modal-dialog modal-lg">
     <div class="modal-content">
-      <div class="modal-header">
-        <h3>Create Liquid Material</h3>
-        <button class="close" (click)="hideMaterialModal()">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <app-liquid-load-charge-material *ngIf="showModal" (closeModal)="hideMaterialModal($event)" [settings]="settings"></app-liquid-load-charge-material>
+      <div>
+        <app-liquid-load-charge-material *ngIf="showModal" (closeModal)="hideMaterialModal($event)" (hideModal)="hideMaterialModal($event)" [settings]="settings"></app-liquid-load-charge-material>
       </div>
     </div>
   </div>
