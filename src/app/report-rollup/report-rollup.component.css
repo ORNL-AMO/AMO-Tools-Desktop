@@ -107,7 +107,8 @@
 }
 
 
-.phast-modal .modal-dialog{
+.phast-modal .modal-dialog,
+.psat-modal .modal-dialog{
     top: 0px;
     max-width: none;
     margin: 10px;
@@ -115,5 +116,10 @@
 
 .phast-modal .modal-header{
     background-color: #BF3D00;
+    color: #fff;
+}
+
+.psat-modal .modal-header{
+    background-color: #2980b9;
     color: #fff;
 }

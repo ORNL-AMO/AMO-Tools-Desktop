@@ -1,0 +1,75 @@
+<div class="row justify-content-center">
+  <div class="col-lg-4 col-md-6">
+    <div class="row justify-content-center btn-toggle">
+      <div class="btn-group btn-group-sm align-self-center">
+        <button type="button" class="btn btn-secondary btn-sm" (click)="setDataOption('cost')" [ngClass]="{'active': dataOption == 'cost'}">Cost</button>
+        <button type="button" class="btn btn-secondary btn-sm" (click)="setDataOption('energy')" [ngClass]="{'active': dataOption == 'energy'}">Energy Used</button>
+      </div>
+    </div>
+    <div style="display: block" *ngIf="pieChartData">
+      <canvas baseChart [colors]="chartColors" [data]="pieChartData" [labels]="pieChartLabels" [chartType]="'pie'" [options]="options"></canvas>
+    </div>
+  </div>
+  <div class="col-lg-8 col-md-11 output-summary">
+    <table class="table table-hover table-striped">
+      <thead>
+        <tr>
+          <th>
+            Pump Name
+          </th>
+          <th>
+            Energy Use Units
+          </th>
+          <th>
+            Energy Used
+          </th>
+          <th>
+            Annual Cost
+          </th>
+          <th>
+            % of Total Cost
+          </th>
+          <th>
+            % of Total Energy Used
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let data of resultData">
+          <td>
+            {{data.name}}
+          </td>
+          <td>
+            kWh
+          </td>
+          <td>
+            {{data.baselineResults.annual_energy}}
+          </td>
+          <td>
+            {{data.baselineResults.annual_cost}}
+          </td>
+          <td>
+            {{getTotalCostPercent(data.baselineResults.annual_cost)}}
+          </td>
+          <td>
+            {{getTotalEnergyPercent(data.baselineResults.annual_energy)}}
+          </td>
+        </tr>
+      </tbody>
+      <tfoot>
+        <td>
+          Totals
+        </td>
+        <td></td>
+        <td>
+          {{totalEnergyUse}}
+        </td>
+        <td>
+          {{totalCost}}
+        </td>
+        <td></td>
+        <td></td>
+      </tfoot>
+    </table>
+  </div>
+</div>

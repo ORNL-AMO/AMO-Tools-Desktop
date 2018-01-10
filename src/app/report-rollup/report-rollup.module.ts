@@ -18,6 +18,10 @@ import { ChartsModule } from 'ng2-charts';
 import { SharedModule } from '../shared/shared.module';
 import { ReportRollupUnitsComponent } from './report-rollup-units/report-rollup-units.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { PsatRollupComponent } from './psat-rollup/psat-rollup.component';
+import { PsatRollupEnergyTableComponent } from './psat-rollup/psat-rollup-energy-table/psat-rollup-energy-table.component';
+import { PsatRollupGraphsComponent } from './psat-rollup/psat-rollup-graphs/psat-rollup-graphs.component';
+import { PsatRollupPumpSummaryComponent } from './psat-rollup/psat-rollup-pump-summary/psat-rollup-pump-summary.component';
 
 @NgModule({
   imports: [
@@ -30,7 +34,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     FormsModule,
     ReactiveFormsModule
   ],
-  declarations: [ReportRollupComponent, ReportBannerComponent, ReportSummaryComponent, PsatSummaryComponent, PhastSummaryComponent, PhastRollupComponent, PhastRollupGraphsComponent, PhastRollupEnergyTableComponent, PhastRollupFurnaceSummaryComponent, ReportRollupUnitsComponent],
+  declarations: [ReportRollupComponent, ReportBannerComponent, ReportSummaryComponent, PsatSummaryComponent, PhastSummaryComponent, PhastRollupComponent, PhastRollupGraphsComponent, PhastRollupEnergyTableComponent, PhastRollupFurnaceSummaryComponent, ReportRollupUnitsComponent, PsatRollupComponent, PsatRollupEnergyTableComponent, PsatRollupGraphsComponent, PsatRollupPumpSummaryComponent],
   providers: [ReportRollupService],
   exports: [ReportRollupComponent]
 })

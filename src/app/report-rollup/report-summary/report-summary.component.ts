@@ -12,6 +12,8 @@ export class ReportSummaryComponent implements OnInit {
   settings: Settings;
   @Output('showModal')
   showModal = new EventEmitter<boolean>();
+  @Output('showPsatModal')
+  showPsatModal = new EventEmitter<boolean>();
  // @ViewChild('rollupModal') public rollupModal: ModalDirective;
   constructor() { }
 
@@ -29,4 +31,8 @@ export class ReportSummaryComponent implements OnInit {
   // hideModal() {
   //   this.rollupModal.hide();
   // }
+
+  showPumpModal(){
+    this.showPsatModal.emit(true);
+  }
 }

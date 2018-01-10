@@ -29,8 +29,14 @@
 
 .furnace-summary:hover{
     cursor: pointer;
-    border: red solid 2px;
+    border: #BF3D00 solid 2px;
 }
+
+.pump-summary:hover{
+    cursor: pointer;
+    border: #2980b9 solid 2px;
+}
+
 
 
 .coming-soon .summary-header {

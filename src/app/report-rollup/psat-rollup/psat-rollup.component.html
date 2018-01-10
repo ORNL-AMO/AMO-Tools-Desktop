@@ -1,0 +1,25 @@
+<div class="card" *ngIf="settings">
+    <div class="card-header">
+      Summary of Energy Sources Used
+    </div>
+    <div class="card-body">
+      <app-psat-rollup-energy-table [settings]="settings"></app-psat-rollup-energy-table>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-header">
+        Energy Use Graphs
+    </div>
+    <div class="card-body">
+      <app-psat-rollup-graphs [settings]="settings"></app-psat-rollup-graphs>
+    </div>
+  </div>
+  
+  <div class="card">
+    <div class="card-header">
+      Pumps Summary
+    </div>
+    <div class="card-body">
+      <app-psat-rollup-pump-summary></app-psat-rollup-pump-summary>
+    </div>
+  </div>

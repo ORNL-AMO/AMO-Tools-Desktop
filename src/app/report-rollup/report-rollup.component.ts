@@ -28,7 +28,7 @@ export class ReportRollupComponent implements OnInit {
   isSummaryVisible: boolean = true;
   createdDate: Date;
   settings: Settings;
-
+  @ViewChild('psatRollupModal') public psatRollupModal: ModalDirective;
   @ViewChild('unitModal') public unitModal: ModalDirective;
   @ViewChild('rollupModal') public rollupModal: ModalDirective;
   constructor(private reportRollupService: ReportRollupService,
@@ -115,5 +115,13 @@ export class ReportRollupComponent implements OnInit {
 
   hideUnitModal(){
     this.unitModal.hide();
+  }
+
+  showPsatModal(){
+    this.psatRollupModal.show();
+  }
+
+  hidePsatModal(){
+    this.psatRollupModal.hide();
   }
 }

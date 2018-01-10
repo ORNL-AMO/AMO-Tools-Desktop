@@ -115,9 +115,9 @@ export class ReportRollupService {
       let assessmentIndex = _.findIndex(psatAssessments, { id: result.assessmentId });
       let assessment = psatAssessments[assessmentIndex];
       if (result.isBaseline) {
-        tmpResults.push({ baseline: assessment.psat, modification: assessment.psat, assessmentId: result.assessmentId, selectedIndex: -1 });
+        tmpResults.push({ baseline: assessment.psat, modification: assessment.psat, assessmentId: result.assessmentId, selectedIndex: -1, name: assessment.name });
       } else {
-        tmpResults.push({ baseline: assessment.psat, modification: assessment.psat.modifications[modIndex].psat, assessmentId: result.assessmentId, selectedIndex: modIndex });
+        tmpResults.push({ baseline: assessment.psat, modification: assessment.psat.modifications[modIndex].psat, assessmentId: result.assessmentId, selectedIndex: modIndex, name: assessment.name });
       }
     });
     this.selectedPsats.next(tmpResults);
@@ -127,10 +127,10 @@ export class ReportRollupService {
     let tmpSelected = this.selectedPsats.value;
     if (modIndex != -1) {
       let selectedIndex = _.findIndex(tmpSelected, { assessmentId: assessment.id });
-      tmpSelected.splice(selectedIndex, 1, { baseline: assessment.psat, modification: assessment.psat.modifications[modIndex].psat, assessmentId: assessment.id, selectedIndex: modIndex });
+      tmpSelected.splice(selectedIndex, 1, { baseline: assessment.psat, modification: assessment.psat.modifications[modIndex].psat, assessmentId: assessment.id, selectedIndex: modIndex, name: assessment.name });
     } else {
       let selectedIndex = _.findIndex(tmpSelected, { assessmentId: assessment.id });
-      tmpSelected.splice(selectedIndex, 1, { baseline: assessment.psat, modification: assessment.psat, assessmentId: assessment.id, selectedIndex: modIndex });
+      tmpSelected.splice(selectedIndex, 1, { baseline: assessment.psat, modification: assessment.psat, assessmentId: assessment.id, selectedIndex: modIndex, name: assessment.name });
     }
     this.selectedPsats.next(tmpSelected);
   }
@@ -184,7 +184,7 @@ export class ReportRollupService {
         } else {
           modificationResults = this.psatService.resultsModified(JSON.parse(JSON.stringify(val.modification.inputs)), settings[0], baselineResults.pump_efficiency);
         }
-        tmpResultsArr.push({ baselineResults: baselineResults, modificationResults: modificationResults, assessmentId: val.assessmentId });
+        tmpResultsArr.push({ baselineResults: baselineResults, modificationResults: modificationResults, assessmentId: val.assessmentId, name: val.name });
         this.psatResults.next(tmpResultsArr);
       })
     })
@@ -294,14 +294,16 @@ export interface PsatCompare {
   baseline: PSAT,
   modification: PSAT,
   assessmentId: number,
-  selectedIndex: number
+  selectedIndex: number,
+  name: string
 }
 
 
 export interface PsatResultsData {
   baselineResults: PsatOutputs,
   modificationResults: PsatOutputs,
-  assessmentId: number
+  assessmentId: number,
+  name: string
 }
 
 
