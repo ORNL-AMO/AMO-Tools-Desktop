@@ -1,11 +1,21 @@
 <div class="row justify-content-center">
+  <div class="col-3">
+    <div class="form-group align-self-center">
+      <select (change)="buildChartData()" class="form-control graph-select" name="graphOption" [(ngModel)]="graphOption" id="graphOption">
+        <option *ngFor="let option of graphOptions" [ngValue]="option">{{option}}
+        </option>
+      </select>
+    </div>
+  </div>
+</div>
+<div class="row justify-content-center">
   <div class="col-lg-8 col-md-10 col-sm-12">
     <div style="display: block" *ngIf="chartData">
       <canvas baseChart [datasets]="chartData" [labels]="chartLabels" [options]="options" [legend]="true" [chartType]="'bar'"></canvas>
     </div>
   </div>
 </div>
-<div class="row justify-content-center">
+<div class="row justify-content-center table-row">
   <div class="col-lg-10 col-md-12 col-sm-12 output-summary">
     <table class="table table-hover table-striped">
       <thead>
