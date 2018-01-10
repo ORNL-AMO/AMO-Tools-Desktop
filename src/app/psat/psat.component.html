@@ -68,7 +68,8 @@
   </div>
   
   <div class="tab-content" *ngIf="mainTab =='sankey'">
-      <app-psat-sankey [psat]="_psat" [settings]="settings"></app-psat-sankey>
+    <!-- <app-psat-sankey [psat]="_psat" [settings]="settings"></app-psat-sankey> -->
+    <app-psat-sankey [psat]="_psat" [location]="'sankey-diagram'" [settings]="settings"></app-psat-sankey>
     </div>
   <!--end diagram-->
   <!--report-->

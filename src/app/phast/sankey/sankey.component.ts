@@ -327,7 +327,6 @@ export class SankeyComponent implements OnInit {
     return nodes;
   }
 
-  //debug version
   calcDisplayValue(baseSize, val, value) {
     return Math.max(baseSize * (val / value), this.minSize);
   }
