@@ -26,6 +26,12 @@ import { PhastResultsService } from './phast-results.service';
 import { EnergyCostsComponent } from './energy-costs/energy-costs.component';
 import { ConvertPhastService } from './convert-phast.service';
 import { LossesTabsComponent } from './losses/losses-tabs/losses-tabs.component';
+import { PhastCalculatorTabsComponent } from './phast-calculator-tabs/phast-calculator-tabs.component';
+import { PreAssessmentModule } from '../calculator/furnaces/pre-assessment/pre-assessment.module';
+import { O2EnrichmentModule } from '../calculator/furnaces/o2-enrichment/o2-enrichment.module';
+import { EfficiencyImprovementModule } from '../calculator/furnaces/efficiency-improvement/efficiency-improvement.module';
+import { EnergyEquivalencyModule } from '../calculator/furnaces/energy-equivalency/energy-equivalency.module';
+import { EnergyUseModule } from '../calculator/furnaces/energy-use/energy-use.module';
 
 @NgModule({
   declarations: [
@@ -37,7 +43,8 @@ import { LossesTabsComponent } from './losses/losses-tabs/losses-tabs.component'
     HelpPanelComponent,
     PhastDiagramComponent,
     EnergyCostsComponent,
-    LossesTabsComponent
+    LossesTabsComponent,
+    PhastCalculatorTabsComponent
   ],
   exports: [
   ],
@@ -55,7 +62,12 @@ import { LossesTabsComponent } from './losses/losses-tabs/losses-tabs.component'
     DesignedEnergyModule,
     MeteredEnergyModule,
     SankeyModule,
-    PhastReportModule
+    PhastReportModule,
+    PreAssessmentModule,
+    O2EnrichmentModule,
+    EfficiencyImprovementModule,
+    EnergyEquivalencyModule,
+    EnergyUseModule
   ],
   providers: [
     PhastService,

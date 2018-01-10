@@ -41,6 +41,7 @@ import { EditConditionPropertiesComponent } from './modify-conditions/edit-condi
 import { CompareService } from './compare.service';
 import { PsatDiagramComponent } from './psat-diagram/psat-diagram.component';
 import { ExploreOpportunitiesModule } from './explore-opportunities/explore-opportunities.module';
+import { PsatSankeyComponent } from './psat-sankey/psat-sankey.component';
 
 @NgModule({
   declarations: [
@@ -57,7 +58,8 @@ import { ExploreOpportunitiesModule } from './explore-opportunities/explore-oppo
     OutputSummaryComponent,
     ModifyConditionsTabsComponent,
     EditConditionPropertiesComponent,
-    PsatDiagramComponent
+    PsatDiagramComponent,
+    PsatSankeyComponent
   ],
   exports: [
     PsatReportComponent

@@ -12,7 +12,7 @@
 		<div class="row justify-content-center align-items-center pill-row">
 			<ul class="pills-nav">
 				<li [ngClass]="{'active': mainTab == 'system-setup'}" (click)="changeTab('system-setup')">
-					<span>Pump &amp; Motor</span>
+					<span>Pump &amp; Motor Setup</span>
 				</li>
 				<li [ngClass]="{'active': mainTab == 'assessment', 'disabled': !assessment.psat.setupDone}" (click)="changeTab('assessment')">
 					<span>Assessment</span>
@@ -23,6 +23,9 @@
 				<li [ngClass]="{'active': mainTab == 'report','disabled': !assessment.psat.setupDone}" (click)="changeTab('report')">
 					<span>Report</span>
 				</li>
+				<li [ngClass]="{'active': mainTab == 'sankey','disabled': !assessment.psat.setupDone}" (click)="changeTab('sankey')">
+						<span>Sankey</span>
+					</li>
 				<li [ngClass]="{'active': mainTab == 'calculators','disabled': !assessment.psat.setupDone}" (click)="changeTab('calculators')">
 					<span>Calculators</span>
 				</li>
