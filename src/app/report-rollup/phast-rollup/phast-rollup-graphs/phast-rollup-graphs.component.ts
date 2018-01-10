@@ -72,7 +72,8 @@ export class PhastRollupGraphsComponent implements OnInit {
     let sumCost = 0;
     let sumEnergySavings = 0;
     resultsData.forEach(result => {
-      let tmpAnnualEnergyUsed = this.convertUnitsService.value(result.baselineResults.annualEnergyUsed).from(result.settings.energyResultUnit).to(this.settings.phastRollupUnit);;
+      result.baselineResults.annualEnergyUsed = this.convertUnitsService.value(result.baselineResults.annualEnergyUsed).from(result.settings.energyResultUnit).to(this.settings.phastRollupUnit);
+      let tmpAnnualEnergyUsed = result.baselineResults.annualEnergyUsed;
       let diffEnergy = this.convertUnitsService.value(result.baselineResults.annualEnergySavings).from(result.settings.energyResultUnit).to(this.settings.phastRollupUnit);
       let diffCost = result.baselineResults.annualCost;
       if (result.settings.energySourceType == 'Fuel') {
@@ -110,7 +111,7 @@ export class PhastRollupGraphsComponent implements OnInit {
       if (this.dataOption == 'cost') {
         percent = this.getResultPercent(val.baselineResults.annualCost, this.totalCost)
       } else {
-        let energyUsed = this.convertUnitsService.value(val.baselineResults.annualEnergyUsed).from(val.settings.energyResultUnit).to(this.settings.phastRollupUnit);
+        let energyUsed = val.baselineResults.annualEnergyUsed;
         percent = this.getResultPercent(energyUsed, this.totalEnergy)
       }
       this.results.push({

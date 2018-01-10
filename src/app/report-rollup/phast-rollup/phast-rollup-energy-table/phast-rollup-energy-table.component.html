@@ -31,7 +31,7 @@
                 {{electricitySummary.name}}
               </td>
               <td>
-                {{electricitySummary.energyUsed | sigFigs:'5'}} kW
+                {{electricitySummary.energyUsed | sigFigs:'5'}} {{baseEnergyUnit}}
               </td>
               <td>
                 {{electricitySummary.hhv | sigFigs:'5'}} {{energyPerTimeUnit}}
@@ -48,7 +48,12 @@
                 {{data.energyUsed | sigFigs:'5'}} {{baseEnergyUnit}}
               </td>
               <td>
+                <span *ngIf="data.hhv">
                 {{data.hhv | sigFigs:'5'}} {{energyPerMassUnit}}
+                </span>
+                <span *ngIf="data.hhv">
+                  &mdash; &mdash;
+                </span>
               </td>
               <td>
                 {{data.cost | currency:'USD':'symbol':'1.2-2'}} {{energyCostUnit}}
