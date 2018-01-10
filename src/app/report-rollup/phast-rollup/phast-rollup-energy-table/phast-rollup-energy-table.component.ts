@@ -65,9 +65,7 @@ export class PhastRollupEnergyTableComponent implements OnInit {
   getData(dataArr: Array<any>) {
     dataArr.forEach(data => {
       let tmpResults: PhastResults = this.phastResultsService.getResults(data.assessment.baseline, data.settings);
-      console.log(tmpResults.grossHeatInput);
       tmpResults.grossHeatInput = this.convertUnitsService.value(tmpResults.grossHeatInput).from(data.settings.energyResultUnit).to(this.settings.phastRollupUnit);
-      console.log(tmpResults.grossHeatInput);
       if (data.settings.energySourceType == 'Fuel') {
         let tmpItem = this.getFuel(data.assessment, data.settings, tmpResults);
         let test = _.find(this.fuelSummary, (val) => { return val.name == tmpItem.name });
@@ -85,15 +83,8 @@ export class PhastRollupEnergyTableComponent implements OnInit {
       else if (data.settings.energySourceType == 'Steam') {
         let tmpItem = this.getSteam(data.assessment, data.settings, tmpResults);
         this.steamSummary.push(tmpItem);
-        //this.steamTotalEnergy += tmpResults.grossHeatInput;
       }
 
-      // this.steamSummary = {
-      //   name: 'Steam',
-      //   energyUsed: this.steamTotalEnergy,
-      //   hhv: 1,
-      //   cost: data.assessment.baseline.operatingCosts.steamCost
-      // }
       this.electricitySummary = {
         name: 'Electricity',
         energyUsed: this.electricityTotalEnergy,
@@ -137,9 +128,6 @@ export class PhastRollupEnergyTableComponent implements OnInit {
 
 
   getFuel(assessment: PhastCompare, settings: Settings, tmpResults: PhastResults): PhastRollupEnergySummaryItem {
-    console.log('====')
-    console.log(tmpResults.grossHeatInput);
-    console.log('====')
     let tmpItem: PhastRollupEnergySummaryItem = {
       name: '',
       energyUsed: 0,

@@ -265,7 +265,7 @@ export class ReportRollupService {
         settings[0] = this.checkSettings(settings[0]);
         let baselineResults = this.executiveSummaryService.getSummary(val.baseline, false, settings[0], val.baseline);
         let modificationResults = this.executiveSummaryService.getSummary(val.modification, true, settings[0], val.baseline, baselineResults);
-        tmpResultsArr.push({ baselineResults: baselineResults, modificationResults: modificationResults, assessmentId: val.assessmentId, settings: settings[0], name: val.name });
+        tmpResultsArr.push({ baselineResults: baselineResults, modificationResults: modificationResults, assessmentId: val.assessmentId, settings: settings[0], name: val.name, modName: val.modification.name });
         this.phastResults.next(tmpResultsArr);
       })
     })
@@ -329,7 +329,8 @@ export interface PhastResultsData {
   modificationResults: ExecutiveSummary,
   assessmentId: number,
   settings: Settings,
-  name: string
+  name: string,
+  modName: string
 }
 
 

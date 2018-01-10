@@ -58,7 +58,7 @@
             {{settings.phastRollupUnit}}/yr
           </td>
           <td *ngIf="data.settings.energySourceType == 'Fuel'">
-            {{data.baselineResults.annualEnergyUsed | sigFigs:'5'}}
+            {{getConvertedValue(data.baselineResults.annualEnergyUsed, data.settings) | sigFigs:'5'}}
           </td>
           <td *ngIf="data.settings.energySourceType == 'Fuel'">
             {{data.baselineResults.annualCost | currency:'USD':'symbol':'1.0-0'}}
@@ -66,7 +66,7 @@
           <td *ngIf="data.settings.energySourceType != 'Fuel'">&mdash; &mdash;</td>
           <td *ngIf="data.settings.energySourceType != 'Fuel'">&mdash; &mdash;</td>
           <td *ngIf="data.settings.energySourceType == 'Electricity'">
-            {{data.baselineResults.annualEnergyUsed | sigFigs:'5'}}
+            {{getConvertedValue(data.baselineResults.annualEnergyUsed, data.settings) | sigFigs:'5'}}
           </td>
           <td *ngIf="data.settings.energySourceType == 'Electricity'">
             {{data.baselineResults.annualCost | currency:'USD':'symbol':'1.0-0'}}
@@ -75,7 +75,7 @@
           <td *ngIf="data.settings.energySourceType != 'Electricity'">&mdash; &mdash;</td>
 
           <td *ngIf="data.settings.energySourceType == 'Steam'">
-            {{data.baselineResults.annualEnergyUsed | sigFigs:'5'}}
+            {{getConvertedValue(data.baselineResults.annualEnergyUsed, data.settings) | sigFigs:'5'}}
           </td>
           <td *ngIf="data.settings.energySourceType == 'Steam'">
             {{data.baselineResults.annualCost | currency:'USD':'symbol':'1.0-0'}}

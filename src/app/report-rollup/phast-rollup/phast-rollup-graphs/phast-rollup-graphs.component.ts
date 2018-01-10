@@ -72,9 +72,8 @@ export class PhastRollupGraphsComponent implements OnInit {
     let sumCost = 0;
     let sumEnergySavings = 0;
     resultsData.forEach(result => {
-      result.baselineResults.annualEnergyUsed = this.convertUnitsService.value(result.baselineResults.annualEnergyUsed).from(result.settings.energyResultUnit).to(this.settings.phastRollupUnit);
-      let tmpAnnualEnergyUsed = result.baselineResults.annualEnergyUsed;
-      let diffEnergy = this.convertUnitsService.value(result.baselineResults.annualEnergySavings).from(result.settings.energyResultUnit).to(this.settings.phastRollupUnit);
+      let tmpAnnualEnergyUsed = this.getConvertedValue(result.baselineResults.annualEnergyUsed, result.settings)
+      let diffEnergy = this.getConvertedValue(result.baselineResults.annualEnergySavings, result.settings)
       let diffCost = result.baselineResults.annualCost;
       if (result.settings.energySourceType == 'Fuel') {
         this.totalFuelCost += result.baselineResults.annualCost;
@@ -111,16 +110,21 @@ export class PhastRollupGraphsComponent implements OnInit {
       if (this.dataOption == 'cost') {
         percent = this.getResultPercent(val.baselineResults.annualCost, this.totalCost)
       } else {
-        let energyUsed = val.baselineResults.annualEnergyUsed;
+        let energyUsed = this.getConvertedValue(val.baselineResults.annualEnergyUsed, val.settings);
         percent = this.getResultPercent(energyUsed, this.totalEnergy)
       }
       this.results.push({
         name: val.name,
         percent: percent,
-        color: graphColors[i]
+        color: graphColors[i],
+        settings: val.settings
       })
       i++;
     })
+  }
+
+  getConvertedValue(val: number, settings: Settings) {
+    return this.convertUnitsService.value(val).from(settings.energyResultUnit).to(this.settings.phastRollupUnit);
   }
 
   getResultPercent(value: number, sum: number): number {
@@ -129,7 +133,7 @@ export class PhastRollupGraphsComponent implements OnInit {
   }
 
   getConvertedPercent(value: number, sum: number, settings: Settings) {
-    let convertVal = this.convertUnitsService.value(value).from(settings.energyResultUnit).to(this.settings.energyResultUnit);
+    let convertVal = this.getConvertedValue(value, settings);
     let percent = (convertVal / sum) * 100;
     return percent;
   }
