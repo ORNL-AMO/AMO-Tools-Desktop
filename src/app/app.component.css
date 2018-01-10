@@ -466,6 +466,9 @@ Modals
   font-size: small;
   color: gray;
 }
+.psat-view {
+  font-style: italic;
+}
 .modal h3 {
   font-size: 22px;
   margin-bottom: 0;

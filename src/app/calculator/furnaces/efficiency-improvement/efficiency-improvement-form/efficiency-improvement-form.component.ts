@@ -31,4 +31,7 @@ export class EfficiencyImprovementFormComponent implements OnInit {
   focusField(str: string) {
     this.changeField.emit(str);
   }
+  focusOut() {
+    this.changeField.emit('default');
+  }
 }
