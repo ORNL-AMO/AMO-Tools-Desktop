@@ -2,6 +2,7 @@ import { Component, OnInit, Input, EventEmitter, Output, ViewChild, ElementRef, 
 import { SlagCompareService } from '../slag-compare.service';
 import { WindowRefService } from '../../../../indexedDb/window-ref.service';
 import { Settings } from '../../../../shared/models/settings';
+import { FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-slag-form',
@@ -10,7 +11,7 @@ import { Settings } from '../../../../shared/models/settings';
 })
 export class SlagFormComponent implements OnInit {
   @Input()
-  slagLossForm: any;
+  slagLossForm: FormGroup;
   @Output('calculate')
   calculate = new EventEmitter<boolean>();
   @Input()
@@ -24,13 +25,12 @@ export class SlagFormComponent implements OnInit {
   @Input()
   settings: Settings;
 
-  @ViewChild('lossForm') lossForm: ElementRef;
-  form: any;
-  elements: any;
-
   firstChange: boolean = true;
   counter: any;
   constructor(private windowRefService: WindowRefService, private slagCompareService: SlagCompareService) { }
+
+  ngOnInit() {
+  }
 
   ngOnChanges(changes: SimpleChanges) {
     if (!this.firstChange) {
@@ -44,9 +44,6 @@ export class SlagFormComponent implements OnInit {
     }
   }
 
-  ngOnInit() {
-  }
-
   ngAfterViewInit() {
     if (!this.baselineSelected) {
       this.disableForm();
@@ -55,17 +52,11 @@ export class SlagFormComponent implements OnInit {
   }
 
   disableForm() {
-    this.elements = this.lossForm.nativeElement.elements;
-    for (var i = 0, len = this.elements.length; i < len; ++i) {
-      this.elements[i].disabled = true;
-    }
+    this.slagLossForm.disable();
   }
 
   enableForm() {
-    this.elements = this.lossForm.nativeElement.elements;
-    for (var i = 0, len = this.elements.length; i < len; ++i) {
-      this.elements[i].disabled = false;
-    }
+    this.slagLossForm.enable();
   }
 
   checkForm() {

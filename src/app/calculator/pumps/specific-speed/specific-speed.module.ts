@@ -4,6 +4,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SpecificSpeedGraphComponent } from './specific-speed-graph/specific-speed-graph.component';
 import { SpecificSpeedFormComponent } from './specific-speed-form/specific-speed-form.component';
 import { SpecificSpeedComponent } from './specific-speed.component';
+import { SpecificSpeedHelpComponent } from './specific-speed-help/specific-speed-help.component';
 
 @NgModule({
   imports: [
@@ -14,7 +15,8 @@ import { SpecificSpeedComponent } from './specific-speed.component';
   declarations: [
     SpecificSpeedGraphComponent,
     SpecificSpeedComponent,
-    SpecificSpeedFormComponent
+    SpecificSpeedFormComponent,
+    SpecificSpeedHelpComponent
   ],
   exports: [
     SpecificSpeedComponent

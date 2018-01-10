@@ -1,74 +1,86 @@
 <div class="card">
-  <div class="card-body">
+  <div class="card-body custom-card-body card-container col">
     <div class="row">
-      <div class="col-sm-7 col-md-7">
+      <div class="col-sm-6 col-md-6 card-column">
+        <div class="row phast align-items-top">
+          <div class="col-12">
+            <div class="header card-header">
+              <h3>Create Fuel</h3>
+            </div>
+          </div>
+        </div>
         <form>
           <div class="form-section">
             <div class="form-group">
               <label class="small" for="selectedMaterial">Start with existing material</label>
-              <select name="selectedMaterial" class="form-control" id="selectedMaterial" (change)="setExisting()" [(ngModel)]="selectedMaterial" (focus)="focusField('selectedMaterial')">
-            <option *ngFor="let material of allMaterials" [ngValue]="material">{{material.substance}}</option>
-          </select>
+              <select name="selectedMaterial" class="form-control" id="selectedMaterial" (change)="setExisting()" [(ngModel)]="selectedMaterial"
+                (focus)="focusField('selectedMaterial')">
+                <option *ngFor="let material of allMaterials" [ngValue]="material">{{material.substance}}</option>
+              </select>
             </div>
           </div>
           <div class="form-section">
             <div class="form-group">
               <label class="small" for="substance">Substance Name</label>
-              <input type="text" id="substance" name="substance" class="form-control" [(ngModel)]="newMaterial.substance" (input)="checkMaterialName()" (focus)="focusField('substance')"
-              />
+              <input type="text" id="substance" name="substance" class="form-control" [(ngModel)]="newMaterial.substance" (input)="checkMaterialName()"
+                (focus)="focusField('substance')" />
               <span class="alert-warning pull-right small" *ngIf="nameError !== null">{{nameError}}</span>
             </div>
             <div class="form-group">
               <label class="small" for="carbon">Carbon</label>
               <div class="input-group">
-                <input type="number" step="any" min="0" max="100" id="carbon" name="carbon" class="form-control" [(ngModel)]="newMaterial.carbon" (input)="setHHV()" (focus)="focusField('carbon')"/>
+                <input type="number" step="any" min="0" max="100" id="carbon" name="carbon" class="form-control" [(ngModel)]="newMaterial.carbon"
+                  (input)="setHHV()" (focus)="focusField('carbon')" />
                 <span class="input-group-addon units">%</span>
               </div>
             </div>
             <div class="form-group">
               <label class="small" for="hydrogen">Hydrogen</label>
               <div class="input-group">
-                <input type="number" step="any" min="0" max="100" id="hydrogen" name="hydrogen" class="form-control" [(ngModel)]="newMaterial.hydrogen" (input)="setHHV()" (focus)="focusField('hydrogen')"
-                />
+                <input type="number" step="any" min="0" max="100" id="hydrogen" name="hydrogen" class="form-control" [(ngModel)]="newMaterial.hydrogen"
+                  (input)="setHHV()" (focus)="focusField('hydrogen')" />
                 <span class="input-group-addon units">%</span>
               </div>
             </div>
             <div class="form-group">
               <label class="small" for="inertAsh">Inert Ash</label>
               <div class="input-group">
-                <input type="number" step="any" min="0" max="100" id="inertAsh" name="inertAsh" class="form-control" [(ngModel)]="newMaterial.inertAsh" (input)="setHHV()" (focus)="focusField('inertAsh')"
-                />
+                <input type="number" step="any" min="0" max="100" id="inertAsh" name="inertAsh" class="form-control" [(ngModel)]="newMaterial.inertAsh"
+                  (input)="setHHV()" (focus)="focusField('inertAsh')" />
                 <span class="input-group-addon units">%</span>
               </div>
             </div>
             <div class="form-group">
               <label class="small" for="moisture">Moisture</label>
               <div class="input-group">
-                <input type="number" step="any" min="0" max="100" id="moisture" name="moisture" class="form-control" [(ngModel)]="newMaterial.moisture" (input)="setHHV()" (focus)="focusField('moisture')"
-                />
+                <input type="number" step="any" min="0" max="100" id="moisture" name="moisture" class="form-control" [(ngModel)]="newMaterial.moisture"
+                  (input)="setHHV()" (focus)="focusField('moisture')" />
                 <span class="input-group-addon units">%</span>
               </div>
             </div>
             <div class="form-group">
               <label class="small" for="nitrogen">Nitrogen</label>
               <div class="input-group">
-                <input type="number" step="any" min="0" max="100" id="nitrogen" name="nitrogen" class="form-control" [(ngModel)]="newMaterial.nitrogen" (input)="setHHV()" (focus)="focusField('nitrogen')"
-                />
+                <input type="number" step="any" min="0" max="100" id="nitrogen" name="nitrogen" class="form-control" [(ngModel)]="newMaterial.nitrogen"
+                  (input)="setHHV()" (focus)="focusField('nitrogen')" />
                 <span class="input-group-addon units">%</span>
               </div>
             </div>
             <div class="form-group">
-              <label class="small" for="o2">O<sub>2</sub></label>
+              <label class="small" for="o2">O
+                <sub>2</sub>
+              </label>
               <div class="input-group">
-                <input type="number" step="any" min="0" max="100" id="o2" name="o2" class="form-control" [(ngModel)]="newMaterial.o2" (input)="setHHV()" (focus)="focusField('o2')"/>
+                <input type="number" step="any" min="0" max="100" id="o2" name="o2" class="form-control" [(ngModel)]="newMaterial.o2" (input)="setHHV()"
+                  (focus)="focusField('o2')" />
                 <span class="input-group-addon units">%</span>
               </div>
             </div>
             <div class="form-group">
               <label class="small" for="sulphur">Sulphur</label>
               <div class="input-group">
-                <input type="number" step="any" min="0" max="100" id="sulphur" name="sulphur" class="form-control" [(ngModel)]="newMaterial.sulphur" (input)="setHHV()" (focus)="focusField('sulphur')"
-                />
+                <input type="number" step="any" min="0" max="100" id="sulphur" name="sulphur" class="form-control" [(ngModel)]="newMaterial.sulphur"
+                  (input)="setHHV()" (focus)="focusField('sulphur')" />
                 <span class="input-group-addon units">%</span>
               </div>
             </div>
@@ -78,27 +90,22 @@
               <!--<a id="setHHV" class="form-text text-help" (click)="setHHV()">Calculate from Gas Composition</a>-->
             </label>
             <div class="text-center small">
-              <span *ngIf="settings.unitsOfMeasure == 'Imperial'">{{newMaterial.heatingValue | number:'2.0-3'}} Btu/SCF</span>
-              <span *ngIf="settings.unitsOfMeasure == 'Metric'">{{newMaterial.heatingValue | number:'2.0-3'}} kJ/Nm<sup>3</sup></span>
+              <span *ngIf="settings.unitsOfMeasure == 'Imperial'">{{newMaterial.heatingValue | number:'2.0-3'}} Btu/lb</span>
+              <span *ngIf="settings.unitsOfMeasure == 'Metric'">{{newMaterial.heatingValue | number:'2.0-3'}} kJ/kg</span>
             </div>
           </div>
         </form>
       </div>
 
-      <div class="col-sm-5 col-md-5">
+      <div class="col-sm-6 col-md-6 card-help-column">
         <div class="tab-content">
           <app-solid-liquid-flue-gas-material-help [currentField]="currentField"></app-solid-liquid-flue-gas-material-help>
         </div>
       </div>
     </div>
-
-
-      <div class="row">
-        <div class="col">
-          <button type="button" class="btn-primary btn-sm pull-right" (click)="addMaterial()"  [disabled]="!isValid || !isNameValid">Submit</button>
-        </div>
-      </div>
+    <div class="modal-btn-container">
+      <button type="button" class="btn btn-secondary btn-sm modal-btn" (click)="hideMaterialModal()">Cancel</button>
+      <button type="button" class="btn btn-primary btn-sm modal-btn" (click)="addMaterial()" [disabled]="!isValid || !isNameValid">Submit</button>
+    </div>
   </div>
 </div>
-
-

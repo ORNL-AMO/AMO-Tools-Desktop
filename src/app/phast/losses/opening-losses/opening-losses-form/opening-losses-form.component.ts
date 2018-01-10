@@ -5,6 +5,7 @@ import { OpeningLossesCompareService } from '../opening-losses-compare.service';
 import { OpeningLossesService } from '../opening-losses.service';
 import { PhastService } from '../../../phast.service';
 import { Settings } from '../../../../shared/models/settings';
+import { FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-opening-losses-form',
@@ -13,7 +14,7 @@ import { Settings } from '../../../../shared/models/settings';
 })
 export class OpeningLossesFormComponent implements OnInit {
   @Input()
-  openingLossesForm: any;
+  openingLossesForm: FormGroup;
   @Output('calculate')
   calculate = new EventEmitter<boolean>();
   @Input()
@@ -27,11 +28,8 @@ export class OpeningLossesFormComponent implements OnInit {
   @Input()
   settings: Settings;
 
-  @ViewChild('lossForm') lossForm: ElementRef;
   totalArea: number = 0.0;
 
-  form: any;
-  elements: any;
   counter: any;
   firstChange: boolean = true;
   temperatureError: string = null;
@@ -80,17 +78,11 @@ export class OpeningLossesFormComponent implements OnInit {
   }
 
   disableForm() {
-    this.elements = this.lossForm.nativeElement.elements;
-    for (var i = 0, len = this.elements.length; i < len; ++i) {
-      this.elements[i].disabled = true;
-    }
+    this.openingLossesForm.disable();
   }
 
   enableForm() {
-    this.elements = this.lossForm.nativeElement.elements;
-    for (var i = 0, len = this.elements.length; i < len; ++i) {
-      this.elements[i].disabled = false;
-    }
+    this.openingLossesForm.enable();
   }
 
   calculateViewFactor() {
@@ -107,11 +99,11 @@ export class OpeningLossesFormComponent implements OnInit {
     if (!bool) {
       this.startSavePolling();
     }
-    if (this.openingLossesForm.value.openingType === 'Round') {
-      this.lengthError = (this.openingLossesForm.value.lengthOfOpening <= 0) ? "Opening Diameter must be greater than 0" : null;
+    if (this.openingLossesForm.controls.openingType.value === 'Round') {
+      this.lengthError = (this.openingLossesForm.controls.lengthOfOpening.value <= 0) ? "Opening Diameter must be greater than 0" : null;
     } else {
-      this.lengthError = (this.openingLossesForm.value.lengthOfOpening <= 0) ? "Opening Length must be greater than 0" : null;
-      this.heightError = (this.openingLossesForm.value.heightOfOpening <= 0) ? "Opening Height must be greater than 0" : null;
+      this.lengthError = (this.openingLossesForm.controls.lengthOfOpening.value <= 0) ? "Opening Length must be greater than 0" : null;
+      this.heightError = (this.openingLossesForm.controls.heightOfOpening.value <= 0) ? "Opening Height must be greater than 0" : null;
     }
   }
 
@@ -119,28 +111,28 @@ export class OpeningLossesFormComponent implements OnInit {
     if (!bool) {
       this.startSavePolling();
     }
-    this.thicknessError = (this.openingLossesForm.value.wallThickness < 0) ? "Furnace Wall Thickness must be greater than or equal to 0" : null;
+    this.thicknessError = (this.openingLossesForm.controls.wallThickness.value < 0) ? "Furnace Wall Thickness must be greater than or equal to 0" : null;
   }
 
   checkNumOpenings(bool?: boolean) {
     if (!bool) {
       this.startSavePolling();
     }
-    this.numOpeningsError = (this.openingLossesForm.value.numberOfOpenings < 0) ? "Number of Openings must be greater than 0" : null;
+    this.numOpeningsError = (this.openingLossesForm.controls.numberOfOpenings.value < 0) ? "Number of Openings must be greater than 0" : null;
   }
 
   checkViewFactor(bool?: boolean) {
     if (!bool) {
       this.startSavePolling();
     }
-    this.viewFactorError = (this.openingLossesForm.value.viewFactor < 0) ? "View Factor must be greater than 0" : null;
+    this.viewFactorError = (this.openingLossesForm.controls.viewFactor.value < 0) ? "View Factor must be greater than 0" : null;
   }
 
   checkTemperature(bool?: boolean) {
     if (!bool) {
       this.startSavePolling();
     }
-    this.temperatureError = (this.openingLossesForm.value.ambientTemp > this.openingLossesForm.value.insideTemp) ?
+    this.temperatureError = (this.openingLossesForm.controls.ambientTemp.value > this.openingLossesForm.controls.insideTemp.value) ?
       'Ambient Temperature cannot be greater than Average Zone Temperature' : null;
   }
 
@@ -148,14 +140,14 @@ export class OpeningLossesFormComponent implements OnInit {
     if (!bool) {
       this.startSavePolling();
     }
-    this.emissivityError = (this.openingLossesForm.value.emissivity > 1 || this.openingLossesForm.value.emissivity < 0) ? 'Surface emissivity must be between 0 and 1' : null;
+    this.emissivityError = (this.openingLossesForm.controls.emissivity.value > 1 || this.openingLossesForm.controls.emissivity.value < 0) ? 'Surface emissivity must be between 0 and 1' : null;
   }
 
   checkTimeOpen(bool?: boolean) {
     if (!bool) {
       this.startSavePolling();
     }
-    this.timeOpenError = (this.openingLossesForm.value.percentTimeOpen < 0 || this.openingLossesForm.value.percentTimeOpen > 100) ?
+    this.timeOpenError = (this.openingLossesForm.controls.percentTimeOpen.value < 0 || this.openingLossesForm.controls.percentTimeOpen.value > 100) ?
       'Percent Time Open must be between 0% and 100%' : null;
   }
 
@@ -174,21 +166,21 @@ export class OpeningLossesFormComponent implements OnInit {
       return;
     }
 
-    if (this.openingLossesForm.value.openingType == 'Round') {
+    if (this.openingLossesForm.controls.openingType.value == 'Round') {
       if (this.openingLossesForm.controls.lengthOfOpening.status == "VALID") {
         this.openingLossesForm.controls.heightOfOpening.setValue(0);
-        let radiusInches = this.openingLossesForm.value.lengthOfOpening;
+        let radiusInches = this.openingLossesForm.controls.lengthOfOpening.value;
         //let radiusFeet = (radiusInches * .08333333) / 2;
 
         let radiusFeet = this.convertUnitsService.value(radiusInches).from(smallUnit).to(largeUnit) / 2;
-        this.totalArea = Math.PI * Math.pow(radiusFeet, 2) * this.openingLossesForm.value.numberOfOpenings;
+        this.totalArea = Math.PI * Math.pow(radiusFeet, 2) * this.openingLossesForm.controls.numberOfOpenings.value;
 
         this.calculate.emit(true);
       }
-    } else if (this.openingLossesForm.value.openingType == 'Rectangular (Square)') {
+    } else if (this.openingLossesForm.controls.openingType.value == 'Rectangular (Square)') {
       if (this.openingLossesForm.controls.lengthOfOpening.status == "VALID" && this.openingLossesForm.controls.heightOfOpening.status == "VALID") {
-        let lengthInches = this.openingLossesForm.value.lengthOfOpening;
-        let heightInches = this.openingLossesForm.value.heightOfOpening;
+        let lengthInches = this.openingLossesForm.controls.lengthOfOpening.value;
+        let heightInches = this.openingLossesForm.controls.heightOfOpening.value;
         let lengthFeet = 0;
         let heightFeet = 0;
         if (lengthInches) {
@@ -197,7 +189,7 @@ export class OpeningLossesFormComponent implements OnInit {
         if (heightInches) {
           heightFeet = this.convertUnitsService.value(heightInches).from(smallUnit).to(largeUnit);
         }
-        this.totalArea = lengthFeet * heightFeet * this.openingLossesForm.value.numberOfOpenings;
+        this.totalArea = lengthFeet * heightFeet * this.openingLossesForm.controls.numberOfOpenings.value;
 
         this.calculate.emit(true);
       }

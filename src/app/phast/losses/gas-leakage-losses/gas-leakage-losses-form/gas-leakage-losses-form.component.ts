@@ -2,6 +2,7 @@ import { Component, OnInit, Input, EventEmitter, Output, ViewChild, ElementRef, 
 import { GasLeakageCompareService } from "../gas-leakage-compare.service";
 import { WindowRefService } from "../../../../indexedDb/window-ref.service";
 import { Settings } from '../../../../shared/models/settings';
+import { FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-gas-leakage-losses-form',
@@ -10,7 +11,7 @@ import { Settings } from '../../../../shared/models/settings';
 })
 export class GasLeakageLossesFormComponent implements OnInit {
   @Input()
-  lossesForm: any;
+  lossesForm: FormGroup;
   @Output('calculate')
   calculate = new EventEmitter<boolean>();
   @Input()
@@ -23,11 +24,6 @@ export class GasLeakageLossesFormComponent implements OnInit {
   lossIndex: number;
   @Input()
   settings: Settings;
-
-
-  @ViewChild('lossForm') lossForm: ElementRef;
-  form: any;
-  elements: any;
 
   openingAreaError: string = null;
   specificGravityError: string = null;
@@ -62,17 +58,11 @@ export class GasLeakageLossesFormComponent implements OnInit {
     this.changeField.emit('default');
   }
   disableForm() {
-    this.elements = this.lossForm.nativeElement.elements;
-    for (var i = 0, len = this.elements.length; i < len; ++i) {
-      this.elements[i].disabled = true;
-    }
+    this.lossesForm.disable();
   }
 
   enableForm() {
-    this.elements = this.lossForm.nativeElement.elements;
-    for (var i = 0, len = this.elements.length; i < len; ++i) {
-      this.elements[i].disabled = false;
-    }
+    this.lossesForm.enable();
   }
 
   checkForm() {
@@ -83,7 +73,7 @@ export class GasLeakageLossesFormComponent implements OnInit {
     if (!bool) {
       this.startSavePolling();
     }
-    if (this.lossesForm.value.ambientTemperature > this.lossesForm.value.leakageGasTemperature) {
+    if (this.lossesForm.controls.ambientTemperature.value > this.lossesForm.controls.leakageGasTemperature.value) {
       this.temperatureError = 'Ambient Temperature is greater than Temperature of Gases Leaking';
     } else {
       this.temperatureError = null;
@@ -94,12 +84,12 @@ export class GasLeakageLossesFormComponent implements OnInit {
     if (!bool) {
       this.startSavePolling();
     }
-    if (this.lossesForm.value.openingArea < 0) {
+    if (this.lossesForm.controls.openingArea.value < 0) {
       this.openingAreaError = 'Opening Area must be equal or greater than 0';
     } else {
       this.openingAreaError = null;
     }
-    if (this.lossesForm.value.specificGravity < 0) {
+    if (this.lossesForm.controls.specificGravity.value < 0) {
       this.specificGravityError = 'Specific Density of Flue Gases must be equal or greater than 0';
     } else {
       this.specificGravityError = null;

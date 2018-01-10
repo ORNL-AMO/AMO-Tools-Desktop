@@ -213,27 +213,27 @@ export class SystemCurveGraphComponent implements OnInit {
     var y = d3.scaleLinear()
       .range([this.height, 0]);
 
-    if (this.pointOne.form.value.flowRate > this.pointTwo.form.value.flowRate) {
-      if (this.pointOne.form.value.flowRate > 50 && this.pointOne.form.value.flowRate < 25000) {
-        x.domain([0, this.pointOne.form.value.flowRate]);
-      } else if (this.pointOne.form.value.flowRate > 50 && this.pointOne.form.value.flowRate > 25000) {
+    if (this.pointOne.form.controls.flowRate.value > this.pointTwo.form.controls.flowRate.value) {
+      if (this.pointOne.form.controls.flowRate.value > 50 && this.pointOne.form.controls.flowRate.value < 25000) {
+        x.domain([0, this.pointOne.form.controls.flowRate.value]);
+      } else if (this.pointOne.form.controls.flowRate.value > 50 && this.pointOne.form.controls.flowRate.value > 25000) {
         x.domain([0, 25000]);
       } else {
         x.domain([0, 50]);
       }
     }
     else {
-      if (this.pointTwo.form.value.flowRate > 50 && this.pointTwo.form.value.flowRate < 25000) {
-        x.domain([0, this.pointTwo.form.value.flowRate]);
-      } else if (this.pointTwo.form.value.flowRate > 50 && this.pointTwo.form.value.flowRate > 25000) {
+      if (this.pointTwo.form.controls.flowRate.value > 50 && this.pointTwo.form.controls.flowRate.value < 25000) {
+        x.domain([0, this.pointTwo.form.controls.flowRate.value]);
+      } else if (this.pointTwo.form.controls.flowRate.value > 50 && this.pointTwo.form.controls.flowRate.value > 25000) {
         x.domain([0, 25000]);
       } else {
         x.domain([0, 50]);
       }
     }
 
-    if (this.pointOne.form.value.head > this.pointTwo.form.value.head) {
-      let domainVal = this.pointOne.form.value.head + (this.pointOne.form.value.head / 10)
+    if (this.pointOne.form.controls.head.value > this.pointTwo.form.controls.head.value) {
+      let domainVal = this.pointOne.form.controls.head.value + (this.pointOne.form.controls.head.value / 10)
       if (domainVal > 50 && domainVal < 25000) {
         y.domain([0, domainVal]);
       } else if (domainVal > 50 && domainVal > 25000) {
@@ -243,7 +243,7 @@ export class SystemCurveGraphComponent implements OnInit {
       }
     }
     else {
-      let domainVal = this.pointTwo.form.value.head + (this.pointTwo.form.value.head / 10)
+      let domainVal = this.pointTwo.form.controls.head.value + (this.pointTwo.form.controls.head.value / 10)
       if (domainVal > 50 && domainVal < 25000) {
         y.domain([0, domainVal]);
       } else if (domainVal > 50 && domainVal > 25000) {
@@ -553,16 +553,16 @@ export class SystemCurveGraphComponent implements OnInit {
     //Load data here
     var data = [];
 
-    var head = this.staticHead + this.lossCoefficient * Math.pow(x.domain()[1], this.curveConstants.form.value.systemLossExponent);
+    var head = this.staticHead + this.lossCoefficient * Math.pow(x.domain()[1], this.curveConstants.form.controls.systemLossExponent.value);
 
     if (head >= 0) {
-      let tmpFluidPower = (this.staticHead * 0 * this.curveConstants.form.value.specificGravity) / 3960;
+      let tmpFluidPower = (this.staticHead * 0 * this.curveConstants.form.controls.specificGravity.value) / 3960;
       if (this.settings.powerMeasurement != 'hp' && tmpFluidPower != 0) {
         tmpFluidPower = this.convertUnitsService.value(tmpFluidPower).from('hp').to(this.settings.powerMeasurement);
       }
       data.push({
         x: 0,
-        y: this.staticHead + this.lossCoefficient * Math.pow(0, this.curveConstants.form.value.systemLossExponent),
+        y: this.staticHead + this.lossCoefficient * Math.pow(0, this.curveConstants.form.controls.systemLossExponent.value),
         fluidPower: tmpFluidPower
       });
     }
@@ -576,17 +576,13 @@ export class SystemCurveGraphComponent implements OnInit {
 
 
     for (var i = 0; i <= x.domain()[1]; i += increment) {
-
-      //if(this.lossCoefficient * Math.pow(i, this.curveConstants.form.value.systemLossExponent) > 0 && this.lossCoefficient * Math.pow(i, this.curveConstants.form.value.systemLossExponent) < y.domain()[1]) {
-
-      var head = this.staticHead + this.lossCoefficient * Math.pow(i, this.curveConstants.form.value.systemLossExponent);
-
+      var head = this.staticHead + this.lossCoefficient * Math.pow(i, this.curveConstants.form.controls.systemLossExponent.value);
       if (head > y.domain()[1]) {
         y.domain([0, (head + (head / 9))]);
       }
 
       if (head >= 0) {
-        let tmpFluidPower = (this.staticHead * i * this.curveConstants.form.value.specificGravity) / 3960;
+        let tmpFluidPower = (this.staticHead * i * this.curveConstants.form.controls.specificGravity.value) / 3960;
         if (this.settings.powerMeasurement != 'hp' && tmpFluidPower != 0) {
           tmpFluidPower = this.convertUnitsService.value(tmpFluidPower).from('hp').to(this.settings.powerMeasurement);
         }
@@ -605,16 +601,16 @@ export class SystemCurveGraphComponent implements OnInit {
       }
     }
 
-    head = this.staticHead + this.lossCoefficient * Math.pow(x.domain()[1], this.curveConstants.form.value.systemLossExponent);
+    head = this.staticHead + this.lossCoefficient * Math.pow(x.domain()[1], this.curveConstants.form.controls.systemLossExponent.value);
 
     if (head >= 0) {
-      let tmpFluidPower = (this.staticHead * x.domain()[1] * this.curveConstants.form.value.specificGravity) / 3960
+      let tmpFluidPower = (this.staticHead * x.domain()[1] * this.curveConstants.form.controls.specificGravity.value) / 3960
       if (this.settings.powerMeasurement != 'hp' && tmpFluidPower != 0) {
         tmpFluidPower = this.convertUnitsService.value(tmpFluidPower).from('hp').to(this.settings.powerMeasurement);
       }
       data.push({
         x: x.domain()[1],
-        y: this.staticHead + this.lossCoefficient * Math.pow(x.domain()[1], this.curveConstants.form.value.systemLossExponent),
+        y: this.staticHead + this.lossCoefficient * Math.pow(x.domain()[1], this.curveConstants.form.controls.systemLossExponent.value),
         fluidPower: tmpFluidPower
       });
     }

@@ -1,4 +1,4 @@
-<form #lossForm [formGroup]="lossesForm">
+<form [formGroup]="lossesForm">
   <div class="form-section">
     <div class="form-group">
       <label class="small" for="materialName">Material Name
@@ -61,8 +61,22 @@
   </div>
 </form>
 
-<!--CREATE Folder MODAL-->
+
 <div bsModal #materialModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="materialModalLabel"
+  aria-hidden="true" [config]="{backdrop: 'static'}">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div>
+        <app-solid-load-charge-material *ngIf="showModal" (closeModal)="hideMaterialModal($event)" (hideModal)="hideMaterialModal($event)" [settings]="settings"></app-solid-load-charge-material>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- real version -->
+<!--CREATE Folder MODAL-->
+<!-- <div bsModal #materialModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="materialModalLabel"
   aria-hidden="true" [config]="{backdrop: 'static'}">
   <div class="modal-dialog modal-md">
     <div class="modal-content">
@@ -73,8 +87,8 @@
         </button>
       </div>
       <div class="modal-body">
-        <app-solid-load-charge-material (closeModal)="hideMaterialModal($event)" [settings]="settings"></app-solid-load-charge-material>
+        <app-solid-load-charge-material *ngIf="showModal" (closeModal)="hideMaterialModal($event)" [settings]="settings"></app-solid-load-charge-material>
       </div>
     </div>
   </div>
-</div>
+</div> -->

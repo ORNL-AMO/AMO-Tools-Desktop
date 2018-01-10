@@ -19,7 +19,7 @@ export class CashFlowFormComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    }
+  }
 
   focusField(str: string) {
     this.changeField.emit(str);

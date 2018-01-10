@@ -4,6 +4,7 @@ import { WindowRefService } from '../../../../indexedDb/window-ref.service';
 
 //declare const d3: any;
 import * as d3 from 'd3';
+import { FormGroup } from '@angular/forms';
 @Component({
   selector: 'app-specific-speed-graph',
   templateUrl: './specific-speed-graph.component.html',
@@ -11,7 +12,7 @@ import * as d3 from 'd3';
 })
 export class SpecificSpeedGraphComponent implements OnInit {
   @Input()
-  speedForm: any;
+  speedForm: FormGroup;
 
   svg: any;
   xAxis: any;
@@ -100,7 +101,7 @@ export class SpecificSpeedGraphComponent implements OnInit {
 
   getEfficiencyCorrection() {
     if (this.checkForm()) {
-      return this.psatService.achievableEfficiency(this.speedForm.value.pumpType, this.getSpecificSpeed());
+      return this.psatService.achievableEfficiency(this.speedForm.controls.pumpType.value, this.getSpecificSpeed());
     } else {
       return 0;
     }
@@ -108,7 +109,7 @@ export class SpecificSpeedGraphComponent implements OnInit {
 
   getSpecificSpeed(): number {
     if (this.checkForm()) {
-      return this.speedForm.value.pumpRPM * Math.pow(this.speedForm.value.flowRate, 0.5) / Math.pow(this.speedForm.value.head, .75);
+      return this.speedForm.controls.pumpRPM.value * Math.pow(this.speedForm.controls.flowRate.value, 0.5) / Math.pow(this.speedForm.controls.head.value, .75);
     } else {
       return 0;
     }
@@ -120,7 +121,7 @@ export class SpecificSpeedGraphComponent implements OnInit {
       this.speedForm.controls.flowRate.status == 'VALID' &&
       this.speedForm.controls.head.status == 'VALID' &&
       this.speedForm.controls.pumpRPM.status == 'VALID' &&
-      this.speedForm.value.pumpType != 'Specified Optimal Efficiency'
+      this.speedForm.controls.pumpType.value != 'Specified Optimal Efficiency'
     ) {
       return true;
     } else {
@@ -240,7 +241,7 @@ export class SpecificSpeedGraphComponent implements OnInit {
 
       var data = [];
       for (var i = 100; i < 100000; i = i + 25) {
-        var efficiencyCorrection = this.psatService.achievableEfficiency(this.speedForm.value.pumpType, i);
+        var efficiencyCorrection = this.psatService.achievableEfficiency(this.speedForm.controls.pumpType.value, i);
         if (efficiencyCorrection <= 5.5) {
           data.push({
             x: i,
@@ -455,7 +456,7 @@ export class SpecificSpeedGraphComponent implements OnInit {
 
   drawPoint() {
     var specificSpeed = this.psatService.roundVal(this.getSpecificSpeed(), 3);
-    var efficiencyCorrection = this.psatService.achievableEfficiency(this.speedForm.value.pumpType, specificSpeed);
+    var efficiencyCorrection = this.psatService.achievableEfficiency(this.speedForm.controls.pumpType.value, specificSpeed);
 
     this.calcPoint
       .attr("transform", () => {
@@ -516,6 +517,8 @@ export class SpecificSpeedGraphComponent implements OnInit {
       .style("fill", "none")
       .style("stroke", "#2ECC71")
       .style('pointer-events', 'none');
+
+      
   }
 
 }

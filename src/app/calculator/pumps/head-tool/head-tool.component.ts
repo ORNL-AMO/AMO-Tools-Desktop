@@ -6,6 +6,7 @@ import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
 import { Settings } from '../../../shared/models/settings';
 import { SettingsService } from '../../../settings/settings.service';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
+import { FormGroup } from '@angular/forms';
 @Component({
   selector: 'app-head-tool',
   templateUrl: './head-tool.component.html',
@@ -35,12 +36,12 @@ export class HeadToolComponent implements OnInit {
 
   currentField: string = 'headToolType';
 
-  headToolForm: any;
-  headToolSuctionForm: any;
+  headToolForm: FormGroup;
+  headToolSuctionForm: FormGroup;
   headToolType: string = "Suction tank elevation";
   tabSelect: string = 'results';
   showSettings: boolean = false;
-  settingsForm: any;
+  settingsForm: FormGroup;
   canSave: boolean = false;
   constructor(private formBuilder: FormBuilder, private psatService: PsatService, private indexedDbService: IndexedDbService, private settingsService: SettingsService, private convertUnitsService: ConvertUnitsService) { }
 
@@ -107,16 +108,16 @@ export class HeadToolComponent implements OnInit {
 
   calculateHeadTool() {
     let result = this.psatService.headTool(
-      this.headToolForm.value.specificGravity,
-      this.headToolForm.value.flowRate,
-      this.headToolForm.value.suctionPipeDiameter,
-      this.headToolForm.value.suctionGuagePressure,
-      this.headToolForm.value.suctionGuageElevation,
-      this.headToolForm.value.suctionLineLossCoefficients,
-      this.headToolForm.value.dischargePipeDiameter,
-      this.headToolForm.value.dischargeGaugePressure,
-      this.headToolForm.value.dischargeGaugeElevation,
-      this.headToolForm.value.dischargeLineLossCoefficients,
+      this.headToolForm.controls.specificGravity.value,
+      this.headToolForm.controls.flowRate.value,
+      this.headToolForm.controls.suctionPipeDiameter.value,
+      this.headToolForm.controls.suctionGuagePressure.value,
+      this.headToolForm.controls.suctionGuageElevation.value,
+      this.headToolForm.controls.suctionLineLossCoefficients.value,
+      this.headToolForm.controls.dischargePipeDiameter.value,
+      this.headToolForm.controls.dischargeGaugePressure.value,
+      this.headToolForm.controls.dischargeGaugeElevation.value,
+      this.headToolForm.controls.dischargeLineLossCoefficients.value,
       this.settings
     );
     this.results.differentialElevationHead = result.differentialElevationHead;
@@ -133,16 +134,16 @@ export class HeadToolComponent implements OnInit {
 
   calculateHeadToolSuctionTank() {
     let result = this.psatService.headToolSuctionTank(
-      this.headToolSuctionForm.value.specificGravity,
-      this.headToolSuctionForm.value.flowRate,
-      this.headToolSuctionForm.value.suctionPipeDiameter,
-      this.headToolSuctionForm.value.suctionTankGasOverPressure,
-      this.headToolSuctionForm.value.suctionTankFluidSurfaceElevation,
-      this.headToolSuctionForm.value.suctionLineLossCoefficients,
-      this.headToolSuctionForm.value.dischargePipeDiameter,
-      this.headToolSuctionForm.value.dischargeGaugePressure,
-      this.headToolSuctionForm.value.dischargeGaugeElevation,
-      this.headToolSuctionForm.value.dischargeLineLossCoefficients,
+      this.headToolSuctionForm.controls.specificGravity.value,
+      this.headToolSuctionForm.controls.flowRate.value,
+      this.headToolSuctionForm.controls.suctionPipeDiameter.value,
+      this.headToolSuctionForm.controls.suctionTankGasOverPressure.value,
+      this.headToolSuctionForm.controls.suctionTankFluidSurfaceElevation.value,
+      this.headToolSuctionForm.controls.suctionLineLossCoefficients.value,
+      this.headToolSuctionForm.controls.dischargePipeDiameter.value,
+      this.headToolSuctionForm.controls.dischargeGaugePressure.value,
+      this.headToolSuctionForm.controls.dischargeGaugeElevation.value,
+      this.headToolSuctionForm.controls.dischargeLineLossCoefficients.value,
       this.settings
     );
 
@@ -203,9 +204,4 @@ export class HeadToolComponent implements OnInit {
       'flowRate': [this.roundVal(this.convertUnitsService.value(2000).from('gpm').to(settings.flowMeasurement), 2), Validators.required],
     })
   }
-
-  changeField(str: string) {
-    this.currentField = str;
-  }
-
 }

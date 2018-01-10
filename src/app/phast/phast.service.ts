@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
-import { EfficiencyImprovementInputs } from '../shared/models/phast/efficiencyImprovement';
+import { EfficiencyImprovementInputs, EfficiencyImprovementOutputs } from '../shared/models/phast/efficiencyImprovement';
 import { EnergyEquivalencyElectric, EnergyEquivalencyFuel } from '../shared/models/phast/energyEquivalency';
 import { O2Enrichment } from '../shared/models/phast/o2Enrichment';
 import { FlowCalculations } from '../shared/models/phast/flowCalculations';
 import { ExhaustGasEAF } from '../shared/models/phast/losses/exhaustGasEAF';
 import { PHAST, Losses } from '../shared/models/phast/phast';
 import { FixtureLoss } from '../shared/models/phast/losses/fixtureLoss';
-import { GasCoolingLoss, LiquidCoolingLoss, WaterCoolingLoss, CoolingLoss } from '../shared/models/phast/losses/coolingLoss';
+import { GasCoolingLoss, LiquidCoolingLoss, CoolingLoss } from '../shared/models/phast/losses/coolingLoss';
 import { GasChargeMaterial, LiquidChargeMaterial, SolidChargeMaterial, ChargeMaterial } from '../shared/models/phast/losses/chargeMaterial';
 import { OpeningLoss, CircularOpeningLoss, QuadOpeningLoss } from '../shared/models/phast/losses/openingLoss';
 import { WallLoss } from '../shared/models/phast/losses/wallLoss';
@@ -35,15 +35,15 @@ import { GasLeakageLossesService } from './losses/gas-leakage-losses/gas-leakage
 import { OtherLossesService } from './losses/other-losses/other-losses.service';
 import { SlagService } from './losses/slag/slag.service';
 import { FlueGasMaterial, SolidLiquidFlueGasMaterial } from '../shared/models/materials';
-import { StepTab, stepTabs } from './tabs';
+import { StepTab, stepTabs, specTabs } from './tabs';
 import * as _ from 'lodash';
 @Injectable()
 export class PhastService {
 
   mainTab: BehaviorSubject<string>;
- // secondaryTab: BehaviorSubject<string>;
+  // secondaryTab: BehaviorSubject<string>;
   stepTab: BehaviorSubject<StepTab>;
-  specTab: BehaviorSubject<string>;
+  specTab: BehaviorSubject<StepTab>;
   calcTab: BehaviorSubject<string>;
   constructor(
     private openingLossesService: OpeningLossesService,
@@ -60,17 +60,22 @@ export class PhastService {
   ) {
     this.initTabs();
   }
-  initTabs(){
+  initTabs() {
     this.mainTab = new BehaviorSubject<string>('system-setup');
     //this.secondaryTab = new BehaviorSubject<string>('explore-opportunities');
     this.stepTab = new BehaviorSubject<StepTab>(stepTabs[0]);
-    this.specTab = new BehaviorSubject<string>('system-basics');
-    this.calcTab = new BehaviorSubject<string>('o2-enrichment')
+    this.specTab = new BehaviorSubject<StepTab>(specTabs[0]);
+    this.calcTab = new BehaviorSubject<string>('o2-enrichment');
   }
 
-  goToStep(newStepNum: number){
-    let newStep = _.find(stepTabs, (tab)=> {return tab.step == newStepNum});
+  goToStep(newStepNum: number) {
+    let newStep = _.find(stepTabs, (tab) => { return tab.step == newStepNum });
     this.stepTab.next(newStep);
+  }
+
+  goToSpec(newSpec: number){
+    let newSpecTab = _.find(specTabs, (tab) => { return tab.step == newSpec });
+    this.specTab.next(newSpecTab);
   }
 
   test() {
@@ -81,7 +86,7 @@ export class PhastService {
     if (inputs) {
       let cpy = JSON.parse(JSON.stringify(inputs));
       return cpy;
-    }else{
+    } else {
       return
     }
   }
@@ -275,9 +280,6 @@ export class PhastService {
     return results;
   }
 
-  waterCoolingLosses(inputs: WaterCoolingLoss) {
-    return phastAddon.waterCoolingLosses(inputs);
-  }
 
   leakageLosses(input: LeakageLoss, settings: Settings) {
     let inputs = this.createInputCopy(input);
@@ -462,24 +464,75 @@ export class PhastService {
     return results;
   }
 
-  efficiencyImprovement(inputs: EfficiencyImprovementInputs) {
-    return phastAddon.efficiencyImprovement(inputs);
+  efficiencyImprovement(input: EfficiencyImprovementInputs, settings: Settings) {
+    let inputs = this.createInputCopy(input);
+    if (settings.unitsOfMeasure == 'Metric') {
+      inputs.currentCombustionAirTemp = this.convertUnitsService.value(inputs.currentCombustionAirTemp).from('C').to('F')
+      inputs.currentFlueGasTemp = this.convertUnitsService.value(inputs.currentFlueGasTemp).from('C').to('F')
+      inputs.newCombustionAirTemp = this.convertUnitsService.value(inputs.newCombustionAirTemp).from('C').to('F')
+      inputs.newFlueGasTemp = this.convertUnitsService.value(inputs.newFlueGasTemp).from('C').to('F')
+      inputs.currentEnergyInput = this.convertUnitsService.value(inputs.currentEnergyInput).from('GJ').to('MMBtu');
+      let results: EfficiencyImprovementOutputs = phastAddon.efficiencyImprovement(inputs);
+      results.newEnergyInput = this.convertUnitsService.value(results.newEnergyInput).from('MMBtu').to('GJ');
+      return results;
+    } else {
+      return phastAddon.efficiencyImprovement(inputs);
+    }
   }
 
-  energyEquivalencyElectric(inputs: EnergyEquivalencyElectric) {
+  energyEquivalencyElectric(input: EnergyEquivalencyElectric, settings: Settings) {
+    let inputs = this.createInputCopy(input)
+    if (settings.unitsOfMeasure == 'Metric') {
+      inputs.fuelFiredHeatInput = this.convertUnitsService.value(inputs.fuelFiredHeatInput).from('GJ').to('MMBtu');
+    }
     return phastAddon.energyEquivalencyElectric(inputs);
   }
 
-  energyEquivalencyFuel(inputs: EnergyEquivalencyFuel) {
-    return phastAddon.energyEquivalencyFuel(inputs);
+  energyEquivalencyFuel(inputs: EnergyEquivalencyFuel, settings: Settings) {
+    let results = phastAddon.energyEquivalencyFuel(inputs);
+    if (settings.unitsOfMeasure == 'Metric') {
+      results.fuelFiredHeatInput = this.convertUnitsService.value(results.fuelFiredHeatInput).from('MMBtu').to('GJ');
+    }
+    return results;
   }
 
-  flowCalculations(inputs: FlowCalculations) {
-    return phastAddon.flowCalculations(inputs);
+  flowCalculations(input: FlowCalculations, settings: Settings) {
+    let inputs = this.createInputCopy(input);
+    if (settings.unitsOfMeasure == 'Metric') {
+      //cm -> in
+      inputs.orificeDiameter = this.convertUnitsService.value(inputs.orificeDiameter).from('cm').to('in');
+      inputs.insidePipeDiameter = this.convertUnitsService.value(inputs.insidePipeDiameter).from('cm').to('in');
+      inputs.orificePressureDrop = this.convertUnitsService.value(inputs.orificePressureDrop).from('cm').to('in');
+      //C -> F
+      inputs.gasTemperature = this.convertUnitsService.value(inputs.gasTemperature).from('C').to('F');
+      //kPa -> Psig
+      inputs.gasPressure = this.convertUnitsService.value(inputs.gasPressure).from('kPa').to('psi');
+      //kJNm3 -> btuSCF
+      inputs.gasHeatingValue = this.convertUnitsService.value(inputs.gasHeatingValue).from('kJNm3').to('btuSCF');
+      let results = phastAddon.flowCalculations(inputs);
+      results.flow = this.convertUnitsService.value(results.flow).from('ft3').to('m3')
+      results.totalFlow = this.convertUnitsService.value(results.totalFlow).from('ft3').to('m3')
+      results.heatInput = this.convertUnitsService.value(results.heatInput).from('MMBtu').to('GJ')
+      return results;
+    } else {
+      return phastAddon.flowCalculations(inputs);
+    }
   }
 
-  o2Enrichment(inputs: O2Enrichment) {
-    return phastAddon.o2Enrichment(inputs);
+  o2Enrichment(input: O2Enrichment, settings: Settings) {
+    let inputs = this.createInputCopy(input);
+    if (settings.unitsOfMeasure == 'Metric') {
+      inputs.combAirTemp = this.convertUnitsService.value(inputs.combAirTemp).from('C').to('F');
+      inputs.flueGasTemp = this.convertUnitsService.value(inputs.flueGasTemp).from('C').to('F');
+      inputs.combAirTempEnriched = this.convertUnitsService.value(inputs.combAirTempEnriched).from('C').to('F');
+      inputs.flueGasTempEnriched = this.convertUnitsService.value(inputs.flueGasTempEnriched).from('C').to('F');
+      inputs.fuelConsumption = this.convertUnitsService.value(inputs.combAirTemp).from('GJ').to('MMBtu');
+      let results = phastAddon.o2Enrichment(inputs);
+      results.fuelConsumptionEnriched = this.convertUnitsService.value(results.fuelConsumptionEnriched).from('MMBtu').to('GJ');
+      return results;
+    } else {
+      return phastAddon.o2Enrichment(inputs);
+    }
   }
 
   flueGasByVolumeCalculateHeatingValue(inputs: FlueGasMaterial) {
@@ -566,17 +619,17 @@ export class PhastService {
     let sum = 0;
     losses.forEach(loss => {
       if (loss.chargeMaterialType == 'Gas') {
-        let tmpForm = this.chargeMaterialService.getGasChargeMaterialForm(loss.gasChargeMaterial);
+        let tmpForm = this.chargeMaterialService.getGasChargeMaterialForm(loss);
         if (tmpForm.status == 'VALID') {
           sum += this.gasLoadChargeMaterial(loss.gasChargeMaterial, settings);
         }
       } else if (loss.chargeMaterialType == 'Solid') {
-        let tmpForm = this.chargeMaterialService.getSolidChargeMaterialForm(loss.solidChargeMaterial);
+        let tmpForm = this.chargeMaterialService.getSolidChargeMaterialForm(loss);
         if (tmpForm.status == 'VALID') {
           sum += this.solidLoadChargeMaterial(loss.solidChargeMaterial, settings);
         }
       } else if (loss.chargeMaterialType == 'Liquid') {
-        let tmpForm = this.chargeMaterialService.getLiquidChargeMaterialForm(loss.liquidChargeMaterial);
+        let tmpForm = this.chargeMaterialService.getLiquidChargeMaterialForm(loss);
         if (tmpForm.status == 'VALID') {
           sum += this.liquidLoadChargeMaterial(loss.liquidChargeMaterial, settings);
         }
@@ -589,12 +642,12 @@ export class PhastService {
     let sum = 0;
     losses.forEach(loss => {
       if (loss.coolingLossType == 'Gas') {
-        let tmpForm = this.coolingLossesService.initGasFormFromLoss(loss.gasCoolingLoss);
+        let tmpForm = this.coolingLossesService.initGasFormFromLoss(loss);
         if (tmpForm.status == 'VALID') {
           sum += this.gasCoolingLosses(loss.gasCoolingLoss, settings);
         }
       } else if (loss.coolingLossType == 'Liquid') {
-        let tmpForm = this.coolingLossesService.initLiquidFormFromLoss(loss.liquidCoolingLoss);
+        let tmpForm = this.coolingLossesService.initLiquidFormFromLoss(loss);
         if (tmpForm.status == 'VALID') {
           sum += this.liquidCoolingLosses(loss.liquidCoolingLoss, settings);
         }

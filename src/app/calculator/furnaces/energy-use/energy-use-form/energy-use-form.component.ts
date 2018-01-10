@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { SuiteDbService } from '../../../../suiteDb/suite-db.service';
+import { Settings } from '../../../../shared/models/settings';
 import { FlowCalculations, FlowCalculationsOutput } from '../../../../shared/models/phast/flowCalculations';
 @Component({
   selector: 'app-energy-use-form',
@@ -17,6 +18,8 @@ export class EnergyUseFormComponent implements OnInit {
   inPhast: boolean;
   @Output('emitCalculate')
   emitCalculate = new EventEmitter<boolean>();
+  @Input()
+  settings: Settings;
 
   sectionOptions: any = [
     {

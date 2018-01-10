@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, SimpleChanges, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, SimpleChanges, Output, EventEmitter, ViewChild } from '@angular/core';
 import { PHAST, Losses, Modification } from '../../shared/models/phast/phast';
 import { Settings } from '../../shared/models/settings';
 import { ToastyService, ToastyConfig, ToastOptions, ToastData } from 'ng2-toasty';
@@ -7,6 +7,8 @@ import * as _ from 'lodash';
 import { ModalDirective } from 'ngx-bootstrap';
 import { PhastService } from '../phast.service';
 import { LossesService } from './losses.service';
+import { LossTab } from '../tabs';
+
 @Component({
   selector: 'app-losses',
   templateUrl: 'losses.component.html',
@@ -23,7 +25,7 @@ export class LossesComponent implements OnInit {
   settings: Settings;
   @Input()
   inSetup: boolean;
-
+  @ViewChild('materialModal') public materialModal: ModalDirective;
   lossAdded: boolean;
 
   _modifications: Modification[];
@@ -31,7 +33,7 @@ export class LossesComponent implements OnInit {
   baselineSelected: boolean = true;
   modificationSelected: boolean = false;
   modificationIndex: number = 0;
-  lossesTab: string = 'charge-material';
+  selectedTab: LossTab;
   currentField: string = 'default';
   addLossToggle: boolean = false;
   isFirstChange: boolean = true;
@@ -39,48 +41,52 @@ export class LossesComponent implements OnInit {
   editModification: Modification;
   showEditModification: boolean = false;
 
-  showSetupDialog: boolean;
   isLossesSetup: boolean;
+  showModal: boolean = false;
 
   isModalOpen: boolean = false;
   showAddBtn: boolean = true;
   toggleCalculate: boolean = false;
   modificationExists: boolean = false;
+  lossesTabs: Array<LossTab>;
   constructor(private lossesService: LossesService, private toastyService: ToastyService,
-    private toastyConfig: ToastyConfig, ) { 
-      this.toastyConfig.theme = 'bootstrap';
-      this.toastyConfig.position = 'bottom-right';
-    }
+    private toastyConfig: ToastyConfig, ) {
+    this.toastyConfig.theme = 'bootstrap';
+    this.toastyConfig.position = 'bottom-right';
+  }
 
   ngOnInit() {
+    this.lossesTabs = this.lossesService.lossesTabs;
     this._modifications = new Array<Modification>();
     if (!this.phast.losses) {
       //initialize losses
       this.phast.losses = {};
-      //show setup dialog div
-      this.showSetupDialog = true;
+    } else {
+      this.phast.disableSetupDialog = true;
     }
     if (this.phast.modifications) {
       this._modifications = (JSON.parse(JSON.stringify(this.phast.modifications)));
-      this.modificationExists = true;
+      if (this._modifications.length != 0) {
+        this.modificationExists = true;
+      }
     }
 
     this.lossesService.lossesTab.subscribe(val => {
       this.changeField('default');
-      this.lossesTab = val;
-      if (this.lossesTab == 'heat-system-efficiency'
-        || this.lossesTab == 'atmosphere-losses'
-        || this.lossesTab == 'exhaust-gas'
-        || this.lossesTab == 'heat-system-efficiency'
-        || this.lossesTab == 'flue-gas-losses'
-        || this.lossesTab == 'energy-input'
-        || this.lossesTab == 'energy-input-exhaust-gas'
-      ) {
-        this.showAddBtn = false;
-      } else {
+      this.selectedTab = _.find(this.lossesTabs, (t) => { return val == t.step });
+      // if (this.lossesTab == 'heat-system-efficiency'
+      //   || this.lossesTab == 'atmosphere-losses'
+      //   || this.lossesTab == 'exhaust-gas'
+      //   || this.lossesTab == 'heat-system-efficiency'
+      //   || this.lossesTab == 'flue-gas-losses'
+      //   || this.lossesTab == 'energy-input'
+      //   || this.lossesTab == 'energy-input-exhaust-gas'
+      // ) {
+      //   this.showAddBtn = false;
+      // } else {
 
-        this.showAddBtn = true;
-      }
+      //   this.showAddBtn = true;
+      // }
     })
     this.lossesService.modalOpen.subscribe(val => {
       this.isModalOpen = val;
@@ -93,7 +99,7 @@ export class LossesComponent implements OnInit {
 
     if (this.modificationExists && this.inSetup) {
       let toastOptions: ToastOptions = {
-        title: 'Baseline is locked since there are modifications in use. If you wish to change your baseline data use the Assessment tab.',
+        title: 'Baseline is locked since there are modifications in use. If you wish to change your baseline data, use the Assessment tab.',
         showClose: true,
         theme: 'default',
         timeout: 10000000
@@ -161,6 +167,7 @@ export class LossesComponent implements OnInit {
     this.modificationSelected = true;
     this.baselineSelected = false;
     this.saveModifications();
+    this.materialModal.hide();
   }
 
   deleteModification() {
@@ -195,6 +202,7 @@ export class LossesComponent implements OnInit {
   }
 
   addLoss() {
+    this.phast.disableSetupDialog = true;
     if (this.baselineSelected) {
       this.lossAdded = true;
       this.addLossToggle = !this.addLossToggle;
@@ -224,7 +232,7 @@ export class LossesComponent implements OnInit {
 
   hideSetupDialog() {
     this.saved.emit(true);
-    this.showSetupDialog = false;
+    this.phast.disableSetupDialog = true;
   }
 
   lossesSetup() {
@@ -234,9 +242,11 @@ export class LossesComponent implements OnInit {
 
   openModal() {
     this.isModalOpen = true;
+    this.materialModal.show();
   }
 
   closeModal() {
     this.isModalOpen = false;
+    this.materialModal.hide();
   }
 }

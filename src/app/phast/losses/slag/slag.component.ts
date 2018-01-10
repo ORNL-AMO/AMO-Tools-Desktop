@@ -7,6 +7,7 @@ import { SlagService } from './slag.service';
 import { SlagCompareService } from './slag-compare.service';
 //import { WindowRefService } from '../../../indexedDb/window-ref.service';
 import { Settings } from '../../../shared/models/settings';
+import { FormGroup } from '@angular/forms/src/model';
 @Component({
   selector: 'app-slag',
   templateUrl: './slag.component.html',
@@ -36,9 +37,10 @@ export class SlagComponent implements OnInit {
   @Input()
   modExists: boolean;
 
-  _slagLosses: Array<any>;
+  _slagLosses: Array<SlagLossObj>;
   firstChange: boolean = true;
   resultsUnit: string;
+  lossesLocked: boolean = false;
   constructor(private phastService: PhastService, private slagService: SlagService, private slagCompareService: SlagCompareService) { }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -62,18 +64,24 @@ export class SlagComponent implements OnInit {
       this.resultsUnit = 'kW';
     }
     if (!this._slagLosses) {
-      this._slagLosses = new Array();
+      this._slagLosses = new Array<SlagLossObj>();
     }
     if (this.losses.slagLosses) {
       this.setCompareVals();
       this.slagCompareService.initCompareObjects();
+      let lossIndex = 1;
       this.losses.slagLosses.forEach(loss => {
         let tmpLoss = {
           form: this.slagService.getFormFromLoss(loss),
-          name: 'Loss #' + (this._slagLosses.length + 1),
           heatLoss: loss.heatLoss || 0.0,
           collapse: false
         };
+        if(!tmpLoss.form.controls.name.value){
+          tmpLoss.form.patchValue({
+            name: 'Loss #' + lossIndex
+          })
+        }
+        lossIndex++;
         this.calculate(tmpLoss);
         this._slagLosses.push(tmpLoss);
       })
@@ -87,33 +95,35 @@ export class SlagComponent implements OnInit {
             this.slagCompareService.differentArray.splice(lossIndex, 1);
           }
         }
+        this.saveLosses();
       }
     })
-    if (this.isBaseline) {
-      this.slagService.addLossBaselineMonitor.subscribe((val) => {
-        if (val == true) {
-          this._slagLosses.push({
-            form: this.slagService.initForm(),
-            name: 'Loss #' + (this._slagLosses.length + 1),
-            heatLoss: 0.0,
-            collapse: false
-          })
-        }
-      })
-    } else {
-      this.slagService.addLossModificationMonitor.subscribe((val) => {
-        if (val == true) {
-          this._slagLosses.push({
-            form: this.slagService.initForm(),
-            name: 'Loss #' + (this._slagLosses.length + 1),
-            heatLoss: 0.0,
-            collapse: false
-          })
-        }
-      })
-    }
+    // if (this.isBaseline) {
+    //   this.slagService.addLossBaselineMonitor.subscribe((val) => {
+    //     if (val == true) {
+    //       this._slagLosses.push({
+    //         form: this.slagService.initForm(),
+    //         name: 'Loss #' + (this._slagLosses.length + 1),
+    //         heatLoss: 0.0,
+    //         collapse: false
+    //       })
+    //     }
+    //   })
+    // } else {
+    //   this.slagService.addLossModificationMonitor.subscribe((val) => {
+    //     if (val == true) {
+    //       this._slagLosses.push({
+    //         form: this.slagService.initForm(),
+    //         name: 'Loss #' + (this._slagLosses.length + 1),
+    //         heatLoss: 0.0,
+    //         collapse: false
+    //       })
+    //     }
+    //   })
+    // }
 
     if(this.inSetup && this.modExists){
+      this.lossesLocked = true;
       this.disableForms();
     }
   }
@@ -121,10 +131,10 @@ export class SlagComponent implements OnInit {
   ngOnDestroy() {
     if (this.isBaseline) {
       this.slagCompareService.baselineSlag = null;
-      this.slagService.addLossBaselineMonitor.next(false);
+     // this.slagService.addLossBaselineMonitor.next(false);
     } else {
       this.slagCompareService.modifiedSlag = null;
-      this.slagService.addLossModificationMonitor.next(false);
+    //  this.slagService.addLossModificationMonitor.next(false);
     }
     this.slagService.deleteLossIndex.next(null);
   }
@@ -136,33 +146,25 @@ export class SlagComponent implements OnInit {
   }
 
   addLoss() {
-    if (this.isLossesSetup) {
-      this.slagService.addLoss(this.isBaseline);
-    }
+    // if (this.isLossesSetup) {
+    //   this.slagService.addLoss(this.isBaseline);
+    // }
     if (this.slagCompareService.differentArray) {
       this.slagCompareService.addObject(this.slagCompareService.differentArray.length - 1);
     }
     this._slagLosses.push({
-      form: this.slagService.initForm(),
-      name: 'Loss #' + (this._slagLosses.length + 1),
+      form: this.slagService.initForm(this._slagLosses.length+1),
       heatLoss: 0.0,
       collapse: false
     });
+    this.saveLosses();
   }
 
   removeLoss(lossIndex: number) {
     this.slagService.setDelete(lossIndex);
   }
 
-  renameLossess() {
-    let index = 1;
-    this._slagLosses.forEach(loss => {
-      loss.name = 'Loss #' + index;
-      index++;
-    })
-  }
-
-  calculate(loss: any) {
+  calculate(loss: SlagLossObj) {
     if (loss.form.status == 'VALID') {
       let tmpLoss: Slag = this.slagService.getLossFromForm(loss.form);
       loss.heatLoss = this.phastService.slagOtherMaterialLosses(tmpLoss, this.settings);
@@ -173,7 +175,14 @@ export class SlagComponent implements OnInit {
 
   saveLosses() {
     let tmpSlagLosses = new Array<Slag>();
+    let lossIndex = 1;
     this._slagLosses.forEach(loss => {
+      if(!loss.form.controls.name.value){
+        loss.form.patchValue({
+          name: 'Loss #' + lossIndex
+        })
+      }
+      lossIndex++;
       let tmpSlag = this.slagService.getLossFromForm(loss.form);
       tmpSlag.heatLoss = loss.heatLoss;
       tmpSlagLosses.push(tmpSlag);
@@ -199,4 +208,10 @@ export class SlagComponent implements OnInit {
       }
     }
   }
+}
+
+export interface SlagLossObj {
+  form: FormGroup,
+  heatLoss?: number,
+  collapse: boolean
 }

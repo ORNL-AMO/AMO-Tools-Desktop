@@ -2,6 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter, ViewChild, ElementRef, 
 import { WindowRefService } from '../../../../indexedDb/window-ref.service';
 import { EnergyInputCompareService } from '../energy-input-compare.service';
 import { Settings } from '../../../../shared/models/settings';
+import { FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-energy-input-form',
@@ -10,7 +11,7 @@ import { Settings } from '../../../../shared/models/settings';
 })
 export class EnergyInputFormComponent implements OnInit {
   @Input()
-  energyInputForm: any;
+  energyInputForm: FormGroup;
   @Output('calculate')
   calculate = new EventEmitter<boolean>();
   @Input()
@@ -19,15 +20,11 @@ export class EnergyInputFormComponent implements OnInit {
   changeField = new EventEmitter<string>();
   @Output('saveEmit')
   saveEmit = new EventEmitter<boolean>();
-  @ViewChild('lossForm') lossForm: ElementRef;
   @Input()
   lossIndex: number;
   @Input()
   settings: Settings;
   flowInput: boolean;
-  form: any;
-  elements: any;
-
   firstChange: boolean = true;
   counter: any;
   constructor(private energyInputCompareService: EnergyInputCompareService, private windowRefService: WindowRefService) { }
@@ -45,7 +42,7 @@ export class EnergyInputFormComponent implements OnInit {
   }
 
   ngOnInit() {
-    if (this.energyInputForm.value.flowRateInput) {
+    if (this.energyInputForm.controls.flowRateInput.value) {
       this.flowInput = false;
     }
   }
@@ -58,7 +55,7 @@ export class EnergyInputFormComponent implements OnInit {
   }
 
   setHeatInput() {
-    let heatVal = this.energyInputForm.value.flowRateInput * (1020 / (Math.pow(10, 6)));
+    let heatVal = this.energyInputForm.controls.flowRateInput.value * (1020 / (Math.pow(10, 6)));
     this.energyInputForm.patchValue({
       'naturalGasHeatInput': heatVal
     })
@@ -66,17 +63,11 @@ export class EnergyInputFormComponent implements OnInit {
   }
 
   disableForm() {
-    this.elements = this.lossForm.nativeElement.elements;
-    for (var i = 0, len = this.elements.length; i < len; ++i) {
-      this.elements[i].disabled = true;
-    }
+    this.energyInputForm.disable();
   }
 
   enableForm() {
-    this.elements = this.lossForm.nativeElement.elements;
-    for (var i = 0, len = this.elements.length; i < len; ++i) {
-      this.elements[i].disabled = false;
-    }
+    this.energyInputForm.enable();
   }
 
   checkForm() {

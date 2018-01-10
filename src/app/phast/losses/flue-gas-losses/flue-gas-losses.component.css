@@ -1,3 +1,29 @@
 p{
     font-size: medium;
 }
+
+.link-adj {
+  /*display: block;*/
+  /*position: absolute;*/
+  float: right;
+  /*padding-right: 3em;*/
+  /*white-space: nowrap;*/
+  /*word-break: break-all;*/
+}
+.right-col {
+  display: block;
+  position: relative;
+  margin-left: 50%;
+  float: right;
+  text-align: right;
+  padding: 50px;
+
+}
+@media (max-width: 480px) {
+  .right-col {
+    display: block;
+    position: relative;
+    float: left;
+    text-align: left;
+  }
+}

@@ -2,6 +2,7 @@ import { Component, OnInit, Input, EventEmitter, Output, ViewChild, ElementRef, 
 import { WindowRefService } from '../../../../indexedDb/window-ref.service';
 import { CoolingLossesCompareService } from '../cooling-losses-compare.service';
 import { Settings } from '../../../../shared/models/settings';
+import { FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-gas-cooling-losses-form',
@@ -10,7 +11,7 @@ import { Settings } from '../../../../shared/models/settings';
 })
 export class GasCoolingLossesFormComponent implements OnInit {
   @Input()
-  lossesForm: any;
+  lossesForm: FormGroup;
   @Output('calculate')
   calculate = new EventEmitter<boolean>();
   @Input()
@@ -23,9 +24,7 @@ export class GasCoolingLossesFormComponent implements OnInit {
   lossIndex: number;
   @Input()
   settings: Settings;
-  @ViewChild('lossForm') lossForm: ElementRef;
-  form: any;
-  elements: any;
+
   specificHeatError: string = null;
   gasFlowError: string = null;
   gasDensityError: string = null;
@@ -57,17 +56,11 @@ export class GasCoolingLossesFormComponent implements OnInit {
 
 
   disableForm() {
-    this.elements = this.lossForm.nativeElement.elements;
-    for (var i = 0, len = this.elements.length; i < len; ++i) {
-      this.elements[i].disabled = true;
-    }
+    this.lossesForm.disable();
   }
 
   enableForm() {
-    this.elements = this.lossForm.nativeElement.elements;
-    for (var i = 0, len = this.elements.length; i < len; ++i) {
-      this.elements[i].disabled = false;
-    }
+    this.lossesForm.enable();
   }
 
   checkForm() {
@@ -78,7 +71,7 @@ export class GasCoolingLossesFormComponent implements OnInit {
     if (!bool) {
       this.startSavePolling();
     }
-    if (this.lossesForm.value.inletTemp > this.lossesForm.value.outletTemp) {
+    if (this.lossesForm.controls.inletTemp.value > this.lossesForm.controls.outletTemp.value) {
       this.temperatureError = 'Inlet temperature is greater than outlet temperature'
     } else {
       this.temperatureError = null;
@@ -89,17 +82,17 @@ export class GasCoolingLossesFormComponent implements OnInit {
     if (!bool) {
       this.startSavePolling();
     }
-    if (this.lossesForm.value.avgSpecificHeat < 0) {
+    if (this.lossesForm.controls.avgSpecificHeat.value < 0) {
       this.specificHeatError = 'Specific Heat must be equal or greater than 0';
     } else {
       this.specificHeatError = null;
     }
-    if (this.lossesForm.value.gasFlow < 0) {
+    if (this.lossesForm.controls.gasFlow.value < 0) {
       this.gasFlowError = 'Gas Flow must be equal or greater than 0';
     } else {
       this.gasFlowError = null;
     }
-    if (this.lossesForm.value.gasDensity < 0) {
+    if (this.lossesForm.controls.gasDensity.value < 0) {
       this.gasDensityError = 'Gas Density must be equal or greater than 0';
     } else {
       this.gasDensityError = null;
@@ -170,6 +163,13 @@ export class GasCoolingLossesFormComponent implements OnInit {
         this.coolingLossesCompareService.differentArray[this.lossIndex].different.gasCoolingLossDifferent.gasDensity.subscribe((val) => {
           let gasDensityElements = doc.getElementsByName('gasDensity_' + this.lossIndex);
           gasDensityElements.forEach(element => {
+            element.classList.toggle('indicate-different', val);
+          });
+        })
+        //coolingMedium
+        this.coolingLossesCompareService.differentArray[this.lossIndex].different.gasCoolingLossDifferent.coolingMedium.subscribe((val) => {
+          let coolingMediumElements = doc.getElementsByName('coolingMedium_' + this.lossIndex);
+          coolingMediumElements.forEach(element => {
             element.classList.toggle('indicate-different', val);
           });
         })

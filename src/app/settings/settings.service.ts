@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { Settings } from '../shared/models/settings';
+
 @Injectable()
 export class SettingsService {
 
   constructor(private formBuilder: FormBuilder) { }
 
-  getSettingsForm() {
+  getSettingsForm(): FormGroup {
     return this.formBuilder.group({
       'language': ['', Validators.required],
       'currency': ['', Validators.required],
@@ -21,11 +22,12 @@ export class SettingsService {
       'energySourceType': [''],
       'furnaceType': [''],
       'energyResultUnit': [''],
-      'customFurnaceName': ['']
+      'customFurnaceName': [''],
+      'temperatureMeasurement': ['']
     });
   }
 
-  getFormFromSettings(settings: Settings) {
+  getFormFromSettings(settings: Settings): FormGroup {
     return this.formBuilder.group({
       'language': [settings.language, Validators.required],
       'currency': [settings.currency, Validators.required],
@@ -40,26 +42,28 @@ export class SettingsService {
       'energySourceType': [settings.energySourceType],
       'furnaceType': [settings.furnaceType],
       'energyResultUnit': [settings.energyResultUnit],
-      'customFurnaceName': [settings.customFurnaceName]
+      'customFurnaceName': [settings.customFurnaceName],
+      'temperatureMeasurement': [settings.temperatureMeasurement]
     });
   }
 
-  getSettingsFromForm(form: any) {
+  getSettingsFromForm(form: FormGroup) {
     let tmpSettings: Settings = {
-      language: form.value.language,
-      currency: form.value.currency,
-      unitsOfMeasure: form.value.unitsOfMeasure,
-      distanceMeasurement: form.value.distanceMeasurement,
-      flowMeasurement: form.value.flowMeasurement,
-      powerMeasurement: form.value.powerMeasurement,
-      pressureMeasurement: form.value.pressureMeasurement,
-      currentMeasurement: form.value.currentMeasurement,
-      viscosityMeasurement: form.value.viscosityMeasurement,
-      voltageMeasurement: form.value.voltageMeasurement,
-      energySourceType: form.value.energySourceType,
-      furnaceType: form.value.furnaceType,
-      energyResultUnit: form.value.energyResultUnit,
-      customFurnaceName: form.value.customFurnaceName
+      language: form.controls.language.value,
+      currency: form.controls.currency.value,
+      unitsOfMeasure: form.controls.unitsOfMeasure.value,
+      distanceMeasurement: form.controls.distanceMeasurement.value,
+      flowMeasurement: form.controls.flowMeasurement.value,
+      powerMeasurement: form.controls.powerMeasurement.value,
+      pressureMeasurement: form.controls.pressureMeasurement.value,
+      currentMeasurement: form.controls.currentMeasurement.value,
+      viscosityMeasurement: form.controls.viscosityMeasurement.value,
+      voltageMeasurement: form.controls.voltageMeasurement.value,
+      energySourceType: form.controls.energySourceType.value,
+      furnaceType: form.controls.furnaceType.value,
+      energyResultUnit: form.controls.energyResultUnit.value,
+      customFurnaceName: form.controls.customFurnaceName.value,
+      temperatureMeasurement: form.controls.temperatureMeasurement.value
     };
     return tmpSettings;
   }
@@ -78,29 +82,32 @@ export class SettingsService {
       voltageMeasurement: settings.voltageMeasurement,
       energySourceType: settings.energySourceType,
       furnaceType: settings.furnaceType,
-      customFurnaceName: settings.customFurnaceName
+      customFurnaceName: settings.customFurnaceName,
+      temperatureMeasurement: settings.temperatureMeasurement,
     }
     return newSettings;
   }
 
-  setUnits(settingsForm: any): any {
-    if (settingsForm.value.unitsOfMeasure == 'Imperial') {
+  setUnits(settingsForm: FormGroup): FormGroup {
+    if (settingsForm.controls.unitsOfMeasure.value == 'Imperial') {
       settingsForm.patchValue({
         powerMeasurement: 'hp',
         flowMeasurement: 'gpm',
         distanceMeasurement: 'ft',
-        pressureMeasurement: 'psi'
+        pressureMeasurement: 'psi',
+        temperatureMeasurement: 'F'
         // currentMeasurement: 'A',
         // viscosityMeasurement: 'cST',
         // voltageMeasurement: 'V'
       })
 
-    } else if (settingsForm.value.unitsOfMeasure == 'Metric') {
+    } else if (settingsForm.controls.unitsOfMeasure.value == 'Metric') {
       settingsForm.patchValue({
         powerMeasurement: 'kW',
         flowMeasurement: 'm3/h',
         distanceMeasurement: 'm',
-        pressureMeasurement: 'kPa'
+        pressureMeasurement: 'kPa',
+        temperatureMeasurement: 'C'
         // currentMeasurement: 'A',
         // viscosityMeasurement: 'cST',
         // voltageMeasurement: 'V'
@@ -110,19 +117,19 @@ export class SettingsService {
     return settingsForm;
   }
 
-  setEnergyResultUnit(settingsForm: any): any {
-    if (settingsForm.value.unitsOfMeasure == 'Imperial') {
+  setEnergyResultUnit(settingsForm: FormGroup): FormGroup  {
+    if (settingsForm.controls.unitsOfMeasure.value == 'Imperial') {
       settingsForm.patchValue({
         energyResultUnit: 'MMBtu'
       })
     }
-    else if (settingsForm.value.unitsOfMeasure == 'Metric') {
+    else if (settingsForm.controls.unitsOfMeasure.value == 'Metric') {
       settingsForm.patchValue({
         energyResultUnit: 'GJ'
       })
     }
 
-    if (settingsForm.value.energySourceType == 'Electricity') {
+    if (settingsForm.controls.energySourceType.value == 'Electricity') {
       settingsForm.patchValue({
         energyResultUnit: 'kWh'
       })
@@ -140,6 +147,17 @@ export class SettingsService {
 
     if (settings.energySourceType == 'Electricity') {
       settings.energyResultUnit = 'kWh';
+    }
+    return settings;
+  }
+
+  setTemperatureUnit(settings: Settings): Settings{
+    if(settings.unitsOfMeasure == 'Imperial'){
+      settings.temperatureMeasurement = 'F';
+    }else if(settings.unitsOfMeasure == 'Metric'){
+      settings.temperatureMeasurement = 'C';
+    }else{
+      settings.temperatureMeasurement = 'F';
     }
     return settings;
   }

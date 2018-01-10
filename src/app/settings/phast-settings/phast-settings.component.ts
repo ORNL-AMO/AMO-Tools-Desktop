@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Settings } from '../../shared/models/settings';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
+import { FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-phast-settings',
@@ -9,7 +10,7 @@ import { ConvertUnitsService } from '../../shared/convert-units/convert-units.se
 })
 export class PhastSettingsComponent implements OnInit {
   @Input()
-  settingsForm: any;
+  settingsForm: FormGroup;
   @Output('startSavePolling')
   startSavePolling = new EventEmitter<boolean>();
   @Input()
@@ -34,10 +35,10 @@ export class PhastSettingsComponent implements OnInit {
   // electricOptions: Array<string>;
   constructor() { }
   ngOnInit() {
-    if (!this.settingsForm.value.furnaceType || this.settingsForm.value.furnaceType == '') {
+    if (!this.settingsForm.controls.furnaceType.value || this.settingsForm.controls.furnaceType.value == '') {
       this.setOptions();
     }
-    if(this.disable){
+    if (this.disable) {
       this.settingsForm.controls.furnaceType.disable();
       this.settingsForm.controls.energySourceType.disable();
       this.settingsForm.controls.customFurnaceName.disable();
@@ -45,11 +46,11 @@ export class PhastSettingsComponent implements OnInit {
   }
 
   setOptions() {
-    if (this.settingsForm.value.energySourceType == 'Fuel') {
+    if (this.settingsForm.controls.energySourceType.value == 'Fuel') {
       this.settingsForm.patchValue({
         furnaceType: 'Ladle Heater'
       })
-    } else if (this.settingsForm.value.energySourceType == 'Electricity') {
+    } else if (this.settingsForm.controls.energySourceType.value == 'Electricity') {
       this.settingsForm.patchValue({
         furnaceType: 'Electrical Infrared',
         energyResultUnit: 'kWh'

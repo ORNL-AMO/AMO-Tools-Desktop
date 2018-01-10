@@ -1,8 +1,8 @@
-<form #lossForm [formGroup]="chargeMaterialForm">
+<form [formGroup]="chargeMaterialForm">
   <div class="form-section">
     <div class="form-group">
       <label class="small" for="materialName">Name of Material
-          <a id="materialHelp" class="form-text small click-link" (click)="showMaterialModal()" [ngClass]="{'disabled-link': !baselineSelected}">Add New Gas Material</a>
+        <a id="materialHelp" class="form-text small click-link" (click)="showMaterialModal()" [ngClass]="{'disabled-link': !baselineSelected}">Add New Gas Material</a>
       </label>
       <select name="{{'materialName_'+lossIndex}}" class="form-control" id="materialName" formControlName="materialId" (change)="setProperties()"
         (focus)="focusField('materialName')" (blur)="focusOut()">
@@ -13,7 +13,8 @@
       <label class="small" for="materialSpecificHeat">Specific Heat of Gas</label>
       <div class="input-group">
         <input name="{{'materialSpecificHeat_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="materialSpecificHeat"
-          id="materialSpecificHeat" onfocus="this.select();" (input)="checkInputError()" (focus)="focusField('materialSpecificHeat')" (blur)="focusOut()">
+          id="materialSpecificHeat" onfocus="this.select();" (input)="checkInputError()" (focus)="focusField('materialSpecificHeat')"
+          (blur)="focusOut()">
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">Btu/(lb-&#8457;)</span>
         <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kJ/(kg-&#8451;)</span>
       </div>
@@ -68,8 +69,8 @@
       <label class="small" for="specificHeatOfVapor">Specific Heat of Vapor</label>
       <div class="input-group">
         <input name="{{'specificHeatOfVapor_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="specificHeatOfVapor"
-
-          id="specificHeatOfVapor" onfocus="this.select();" (input)="checkInputError()" (focus)="focusField('specificHeatOfVapor')" (blur)="focusOut()">
+          id="specificHeatOfVapor" onfocus="this.select();" (input)="checkInputError()" (focus)="focusField('specificHeatOfVapor')"
+          (blur)="focusOut()">
 
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">Btu/(lb-&#8457;)</span>
         <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kJ/(kg-&#8451;)</span>
@@ -91,7 +92,6 @@
       <label class="small" for="heatOfReaction">Heat of Reaction</label>
       <div class="input-group">
         <input name="{{'heatOfReaction_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="heatOfReaction"
-
           id="heatOfReaction" onfocus="this.select();" (input)="checkInputError()" (focus)="focusField('heatOfReaction')" (blur)="focusOut()">
 
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">Btu/lb</span>
@@ -127,6 +127,21 @@
 <!--CREATE Folder MODAL-->
 <div bsModal #materialModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="materialModalLabel"
   aria-hidden="true" [config]="{backdrop: 'static'}">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div>
+        <app-gas-load-charge-material *ngIf="showModal" (closeModal)="hideMaterialModal($event)" (hideModal)="hideMaterialModal($event)"
+          [settings]="settings"></app-gas-load-charge-material>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<!-- real version -->
+<!-- <div bsModal #materialModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="materialModalLabel"
+  aria-hidden="true" [config]="{backdrop: 'static'}">
   <div class="modal-dialog modal-md">
     <div class="modal-content">
       <div class="modal-header">
@@ -140,4 +155,4 @@
       </div>
     </div>
   </div>
-</div>
+</div> -->

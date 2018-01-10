@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, EventEmitter, Output, ViewChild, ElementRef, SimpleChanges } from '@angular/core';
 import { WindowRefService } from '../../../../indexedDb/window-ref.service';
 import { AuxiliaryPowerCompareService } from '../auxiliary-power-compare.service';
+import { FormGroup } from '@angular/forms';
 @Component({
   selector: 'app-auxiliary-power-losses-form',
   templateUrl: './auxiliary-power-losses-form.component.html',
@@ -8,7 +9,7 @@ import { AuxiliaryPowerCompareService } from '../auxiliary-power-compare.service
 })
 export class AuxiliaryPowerLossesFormComponent implements OnInit {
   @Input()
-  auxLossesForm: any;
+  auxLossesForm: FormGroup;
   @Output('calculate')
   calculate = new EventEmitter<boolean>();
   @Input()
@@ -20,9 +21,6 @@ export class AuxiliaryPowerLossesFormComponent implements OnInit {
   @Input()
   lossIndex: number;
 
-  @ViewChild('lossForm') lossForm: ElementRef;
-  form: any;
-  elements: any;
   inputError: string = null;
   firstChange: boolean = true;
   counter: any;
@@ -56,17 +54,11 @@ export class AuxiliaryPowerLossesFormComponent implements OnInit {
   }
 
   disableForm() {
-    this.elements = this.lossForm.nativeElement.elements;
-    for (var i = 0, len = this.elements.length; i < len; ++i) {
-      this.elements[i].disabled = true;
-    }
+    this.auxLossesForm.disable();
   }
 
   enableForm() {
-    this.elements = this.lossForm.nativeElement.elements;
-    for (var i = 0, len = this.elements.length; i < len; ++i) {
-      this.elements[i].disabled = false;
-    }
+    this.auxLossesForm.enable();
   }
 
   checkForm() {
@@ -87,7 +79,7 @@ export class AuxiliaryPowerLossesFormComponent implements OnInit {
     if (!bool) {
       this.startSavePolling();
     }
-    if (this.auxLossesForm.value.supplyVoltage < 0 || this.auxLossesForm.value.supplyVoltage > 480) {
+    if (this.auxLossesForm.controls.supplyVoltage.value < 0 || this.auxLossesForm.controls.supplyVoltage.value > 480) {
       this.voltageError = 'Supply Voltage must be between 0 and 480';
     } else {
       this.voltageError = null;

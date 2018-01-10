@@ -1,4 +1,4 @@
-<form #lossForm [formGroup]="atmosphereLossForm">
+<form [formGroup]="atmosphereLossForm">
   <div class="form-section">
     <div class="form-group">
       <label class="small" for="atmosphereGas">Atmosphere Gas
@@ -72,6 +72,19 @@
 <!--CREATE material MODAL-->
 <div bsModal #materialModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="materialModalLabel"
   aria-hidden="true" [config]="{backdrop: 'static'}">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div>
+        <app-atmosphere-specific-heat-material *ngIf="showModal" (closeModal)="hideMaterialModal($event)" (hideModal)="hideMaterialModal($event)" [settings]="settings"></app-atmosphere-specific-heat-material>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- real version -->
+<!--CREATE material MODAL-->
+<!-- <div bsModal #materialModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="materialModalLabel"
+  aria-hidden="true" [config]="{backdrop: 'static'}">
   <div class="modal-dialog modal-md">
     <div class="modal-content">
       <div class="modal-header">
@@ -86,4 +99,4 @@
     </div>
 
   </div>
-</div>
+</div> -->

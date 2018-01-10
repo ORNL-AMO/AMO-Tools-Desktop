@@ -1,4 +1,4 @@
-<div class="modify-conditions panel-container row phast">
+<div class="modify-conditions panel-container row phast" *ngIf="settings">
   <div class="col-12">
     <div class="row align-items-top calculator-panel">
       <div class="modification panel-column col-6 align-top">
@@ -66,7 +66,7 @@
                 </div>
               </div>
             </div>
-            <div class="col-11" *ngIf="results.length == 0">
+            <div class="col-11 no-data" *ngIf="results.length == 0">
               <h5>Enter furnace data for multiple furnaces to compare their energy consumption.</h5>
             </div>
           </div>

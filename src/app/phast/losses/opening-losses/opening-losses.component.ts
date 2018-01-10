@@ -6,6 +6,7 @@ import { Losses } from '../../../shared/models/phast/phast';
 import { OpeningLoss, QuadOpeningLoss, CircularOpeningLoss } from '../../../shared/models/phast/losses/openingLoss';
 import { OpeningLossesCompareService } from './opening-losses-compare.service';
 import { Settings } from '../../../shared/models/settings';
+import { FormGroup } from '@angular/forms/src/model';
 
 @Component({
   selector: 'app-opening-losses',
@@ -36,9 +37,10 @@ export class OpeningLossesComponent implements OnInit {
   @Input()
   modExists: boolean;
 
-  _openingLosses: Array<any>;
+  _openingLosses: Array<OpeningLossObj>;
   firstChange: boolean = true;
   resultsUnit: string;
+  lossesLocked: boolean = false;
   constructor(private phastService: PhastService, private openingLossesService: OpeningLossesService, private openingLossesCompareService: OpeningLossesCompareService) { }
 
 
@@ -68,13 +70,19 @@ export class OpeningLossesComponent implements OnInit {
     if (this.losses.openingLosses) {
       this.setCompareVals();
       this.openingLossesCompareService.initCompareObjects();
+      let lossIndex = 1;
       this.losses.openingLosses.forEach(loss => {
         let tmpLoss = {
           form: this.openingLossesService.getFormFromLoss(loss),
-          name: 'Loss #' + (this._openingLosses.length + 1),
           totalOpeningLosses: loss.heatLoss || 0.0,
           collapse: false
         };
+        if (!tmpLoss.form.controls.name.value) {
+          tmpLoss.form.patchValue({
+            name: 'Loss #' + lossIndex
+          })
+        }
+        lossIndex++;
         this.calculate(tmpLoss);
         this._openingLosses.push(tmpLoss);
       })
@@ -90,66 +98,67 @@ export class OpeningLossesComponent implements OnInit {
         }
       }
     })
-    if (this.isBaseline) {
-      this.openingLossesService.addLossBaselineMonitor.subscribe((val) => {
-        if (val == true) {
-          this._openingLosses.push({
-            form: this.openingLossesService.initForm(),
-            name: 'Loss #' + (this._openingLosses.length + 1),
-            heatLoss: 0.0,
-            collapse: false
-          })
-        }
-      })
-    } else {
-      this.openingLossesService.addLossModificationMonitor.subscribe((val) => {
-        if (val == true) {
-          this._openingLosses.push({
-            form: this.openingLossesService.initForm(),
-            name: 'Loss #' + (this._openingLosses.length + 1),
-            heatLoss: 0.0,
-            collapse: false
-          })
-        }
-      })
-    }
+    // if (this.isBaseline) {
+    //   this.openingLossesService.addLossBaselineMonitor.subscribe((val) => {
+    //     if (val == true) {
+    //       this._openingLosses.push({
+    //         form: this.openingLossesService.initForm(),
+    //         name: 'Loss #' + (this._openingLosses.length + 1),
+    //         heatLoss: 0.0,
+    //         collapse: false
+    //       })
+    //     }
+    //   })
+    // } else {
+    //   this.openingLossesService.addLossModificationMonitor.subscribe((val) => {
+    //     if (val == true) {
+    //       this._openingLosses.push({
+    //         form: this.openingLossesService.initForm(),
+    //         name: 'Loss #' + (this._openingLosses.length + 1),
+    //         heatLoss: 0.0,
+    //         collapse: false
+    //       })
+    //     }
+    //   })
+    // }
 
-    if(this.inSetup && this.modExists){
+    if (this.inSetup && this.modExists) {
+      this.lossesLocked = true;
       this.disableForms();
     }
   }
 
   ngOnDestroy() {
     if (this.isBaseline) {
-      this.openingLossesService.addLossBaselineMonitor.next(false);
+      //    this.openingLossesService.addLossBaselineMonitor.next(false);
       this.openingLossesCompareService.baselineOpeningLosses = null;
     } else {
       this.openingLossesCompareService.modifiedOpeningLosses = null;
-      this.openingLossesService.addLossModificationMonitor.next(false);
+      //      this.openingLossesService.addLossModificationMonitor.next(false);
     };
     this.openingLossesService.deleteLossIndex.next(null);
   }
 
   addLoss() {
-    if (this.isLossesSetup) {
-      this.openingLossesService.addLoss(this.isBaseline);
-    }
+    // if (this.isLossesSetup) {
+    //   this.openingLossesService.addLoss(this.isBaseline);
+    // }
     if (this.openingLossesCompareService.differentArray) {
       this.openingLossesCompareService.addObject(this.openingLossesCompareService.differentArray.length - 1);
     }
     this._openingLosses.push({
-      form: this.openingLossesService.initForm(),
-      name: 'Opening Loss #' + (this._openingLosses.length + 1),
+      form: this.openingLossesService.initForm(this._openingLosses.length + 1),
       totalOpeningLosses: 0.0,
       collapse: false
     });
+    this.saveLosses();
   }
-  
-  collapseLoss(loss: any){
+
+  collapseLoss(loss: OpeningLossObj) {
     loss.collapse = !loss.collapse;
   }
 
-  disableForms(){
+  disableForms() {
     this._openingLosses.forEach(loss => {
       loss.form.disable();
     })
@@ -158,24 +167,16 @@ export class OpeningLossesComponent implements OnInit {
     this.openingLossesService.setDelete(lossIndex);
   }
 
-  renameLosses() {
-    let index = 1;
-    this._openingLosses.forEach(loss => {
-      loss.name = 'Opening #' + index;
-      index++;
-    })
-  }
-
-  calculate(loss: any) {
+  calculate(loss: OpeningLossObj) {
     if (loss.form.status == 'VALID') {
-      if (loss.form.value.openingType == 'Rectangular (Square)' && loss.form.value.heightOfOpening != '') {
+      if (loss.form.controls.openingType.value == 'Rectangular (Square)' && loss.form.controls.heightOfOpening.value != '') {
         let tmpLoss: QuadOpeningLoss = this.openingLossesService.getQuadLossFromForm(loss.form);
         let lossAmount = this.phastService.openingLossesQuad(tmpLoss, this.settings);
-        loss.totalOpeningLosses = loss.form.value.numberOfOpenings * lossAmount;
-      } else if (loss.form.value.openingType == 'Round') {
+        loss.totalOpeningLosses = loss.form.controls.numberOfOpenings.value * lossAmount;
+      } else if (loss.form.controls.openingType.value == 'Round') {
         let tmpLoss: CircularOpeningLoss = this.openingLossesService.getCircularLossFromForm(loss.form);
         let lossAmount = this.phastService.openingLossesCircular(tmpLoss, this.settings);
-        loss.totalOpeningLosses = loss.form.value.numberOfOpenings * lossAmount;
+        loss.totalOpeningLosses = loss.form.controls.numberOfOpenings.value * lossAmount;
       } else {
         loss.totalOpeningLosses = null;
       }
@@ -186,7 +187,14 @@ export class OpeningLossesComponent implements OnInit {
 
   saveLosses() {
     let tmpOpeningLosses = new Array<OpeningLoss>();
+    let lossIndex = 1;
     this._openingLosses.forEach(loss => {
+      if (!loss.form.controls.name.value) {
+        loss.form.patchValue({
+          name: 'Loss #' + lossIndex
+        })
+      }
+      lossIndex++;
       let tmpOpeningLoss = this.openingLossesService.getLossFromForm(loss.form);
       tmpOpeningLoss.heatLoss = loss.totalOpeningLosses;
       tmpOpeningLosses.push(tmpOpeningLoss);
@@ -211,4 +219,10 @@ export class OpeningLossesComponent implements OnInit {
       }
     }
   }
+}
+
+export interface OpeningLossObj {
+  form: FormGroup,
+  totalOpeningLosses: number,
+  collapse: boolean
 }

@@ -5,6 +5,8 @@ import { PhastService } from '../phast.service';
 import { Settings } from '../../shared/models/settings';
 import { PhastResultsService } from '../phast-results.service';
 import { FlueGasLossesService } from './flue-gas-losses/flue-gas-losses.service';
+import { LossTab, defaultTabs } from '../tabs';
+import * as _ from 'lodash';
 @Injectable()
 export class LossesService {
   lossIndex: BehaviorSubject<number>;
@@ -12,7 +14,7 @@ export class LossesService {
   baseline: BehaviorSubject<PHAST>;
   modification: BehaviorSubject<Modification>;
 
-  lossesTab: BehaviorSubject<string>;
+  lossesTab: BehaviorSubject<number>;
   modalOpen: BehaviorSubject<boolean>;
 
 
@@ -22,12 +24,13 @@ export class LossesService {
   flueGasDone: boolean;
   efficiencyDone: boolean;
 
-
+  lossesTabs: Array<LossTab>;
+  tabsSet: boolean;
   constructor(private phastService: PhastService, private phastResultsService: PhastResultsService, private flueGasLossesService: FlueGasLossesService) {
     this.lossIndex = new BehaviorSubject<number>(0);
     this.baseline = new BehaviorSubject<PHAST>(null);
     this.modification = new BehaviorSubject<Modification>(null);
-    this.lossesTab = new BehaviorSubject<string>('charge-material');
+    this.lossesTab = new BehaviorSubject<number>(1);
     this.modalOpen = new BehaviorSubject<boolean>(false);
     // this.chargeDone = new BehaviorSubject<boolean>(false);
     // this.enInput1Done = new BehaviorSubject<boolean>(false);
@@ -36,7 +39,105 @@ export class LossesService {
     // this.efficiencyDone = new BehaviorSubject<boolean>(false);    
   }
 
-  initDone(){
+  getTab(num: number){
+    let newTab = _.find(this.lossesTabs, (t) => {return num == t.step});
+    return newTab;
+  }
+
+  setTabs(settings: Settings){
+    this.lossesTabs = new Array();
+    defaultTabs.forEach(tab => {
+      this.lossesTabs.push(tab);
+    })
+    let index;
+    if (settings.energySourceType == 'Electricity') {
+      if (settings.furnaceType == 'Electric Arc Furnace (EAF)') {
+        this.lossesTabs.push({
+          tabName: 'Heat System Efficiency',
+          step: this.lossesTabs.length+1,
+          back: this.lossesTabs.length,
+          next: this.lossesTabs.length+2,
+          componentStr: 'heat-system-efficiency' 
+        })
+        this.lossesTabs.push({
+          tabName: 'Exhaust Gas',
+          step: this.lossesTabs.length+2,
+          back: this.lossesTabs.length+1,
+          next: this.lossesTabs.length+3,
+          componentStr: 'exhaust-gas' 
+        })
+        this.lossesTabs.push({
+          tabName: 'Energy Input',
+          step: this.lossesTabs.length+3,
+          back: this.lossesTabs.length+2,
+          next: this.lossesTabs.length+4,
+          componentStr: 'energy-input' 
+        })
+        index = 3;
+      } 
+      
+      else if (settings.furnaceType != 'Custom Electrotechnology') {
+        this.lossesTabs.push({
+          tabName: 'Auxiliary Power',
+          step: this.lossesTabs.length+1,
+          back: this.lossesTabs.length,
+          next: this.lossesTabs.length+2,
+          componentStr: 'auxiliary-power' 
+        })
+        this.lossesTabs.push({
+          tabName: 'Energy Input',
+          step: this.lossesTabs.length+2,
+          back: this.lossesTabs.length+1,
+          next: this.lossesTabs.length+3,
+          componentStr: 'energy-input-exhaust-gas' 
+        })
+        index = 2;
+      } 
+      
+      else if (settings.furnaceType == 'Custom Electrotechnology') {
+        this.lossesTabs.push({
+          tabName: 'Heat System Efficiency',
+          step: this.lossesTabs.length+1,
+          back: this.lossesTabs.length,
+          next: this.lossesTabs.length+2,
+          componentStr: 'heat-system-efficiency' 
+        })
+        index = 1;
+      }
+    } 
+    
+    else if (settings.energySourceType == 'Steam') {
+      this.lossesTabs.push({
+        tabName: 'Heat System Efficiency',
+        step: this.lossesTabs.length+1,
+        back: this.lossesTabs.length,
+        next: this.lossesTabs.length+2,
+        componentStr: 'heat-system-efficiency' 
+      })
+      index = 1;
+    } 
+    
+    else if (settings.energySourceType == 'Fuel') {
+      this.lossesTabs.push({
+        tabName: 'Flue Gas',
+        step: this.lossesTabs.length+1,
+        back: this.lossesTabs.length,
+        next: this.lossesTabs.length+2,
+        componentStr: 'flue-gas-losses' 
+      })
+      index = 1;
+    }
+    this.lossesTabs.push({
+      tabName: 'Operations',
+      step: this.lossesTabs.length+index,
+      back: this.lossesTabs.length+index-1,
+      componentStr: 'operations' 
+    })
+
+    this.lossesTab.next(1);
+  }
+
+  initDone() {
     this.chargeDone = false;
     this.enInput1Done = false;
     this.enInput2Done = false;

@@ -5,7 +5,7 @@ import { FlowCalculations } from '../shared/models/phast/flowCalculations';
 import { ExhaustGasEAF } from '../shared/models/phast/losses/exhaustGasEAF';
 import { PHAST, Losses } from '../shared/models/phast/phast';
 import { FixtureLoss } from '../shared/models/phast/losses/fixtureLoss';
-import { GasCoolingLoss, LiquidCoolingLoss, WaterCoolingLoss, CoolingLoss } from '../shared/models/phast/losses/coolingLoss';
+import { GasCoolingLoss, LiquidCoolingLoss, CoolingLoss } from '../shared/models/phast/losses/coolingLoss';
 import { GasChargeMaterial, LiquidChargeMaterial, SolidChargeMaterial, ChargeMaterial } from '../shared/models/phast/losses/chargeMaterial';
 import { OpeningLoss, CircularOpeningLoss, QuadOpeningLoss } from '../shared/models/phast/losses/openingLoss';
 import { WallLoss } from '../shared/models/phast/losses/wallLoss';
@@ -54,8 +54,10 @@ export class ConvertPhastService {
       designedEnergy.designedEnergySteam.forEach(val => {
         if (oldSettings.unitsOfMeasure == 'Metric' && newSettings.unitsOfMeasure == 'Imperial') {
           val.totalHeat = this.convertVal(val.totalHeat, 'kJkg', 'btuLb');
+          val.steamFlow = this.convertVal(val.steamFlow, 'kg', 'lb');
         } else if (oldSettings.unitsOfMeasure == 'Imperial' && newSettings.unitsOfMeasure == 'Metric') {
           val.totalHeat = this.convertVal(val.totalHeat, 'btuLb', 'kJkg');
+          val.steamFlow = this.convertVal(val.steamFlow, 'lb', 'kg');
         }
       })
     }
@@ -66,12 +68,12 @@ export class ConvertPhastService {
     if (meteredEnergy.meteredEnergyFuel) {
       if (oldSettings.unitsOfMeasure == 'Metric' && newSettings.unitsOfMeasure == 'Imperial') {
         meteredEnergy.meteredEnergyFuel.heatingValue = this.convertVal(meteredEnergy.meteredEnergyFuel.heatingValue, 'kJNm3', 'btuSCF');
-        meteredEnergy.meteredEnergyFuel.fuelEnergy = this.convertVal(meteredEnergy.meteredEnergyFuel.fuelFlowRateInput, 'kJ', 'Btu');
-        meteredEnergy.meteredEnergyFuel.fuelFlowRateInput = this.convertVal(meteredEnergy.meteredEnergyFuel.fuelEnergy, 'm3', 'ft3');
+        meteredEnergy.meteredEnergyFuel.fuelEnergy = this.convertVal(meteredEnergy.meteredEnergyFuel.fuelEnergy, 'kJ', 'Btu');
+        meteredEnergy.meteredEnergyFuel.fuelFlowRateInput = this.convertVal(meteredEnergy.meteredEnergyFuel.fuelFlowRateInput, 'm3', 'ft3');
       } else if (oldSettings.unitsOfMeasure == 'Imperial' && newSettings.unitsOfMeasure == 'Metric') {
         meteredEnergy.meteredEnergyFuel.heatingValue = this.convertVal(meteredEnergy.meteredEnergyFuel.heatingValue, 'btuSCF', 'kJNm3');
-        meteredEnergy.meteredEnergyFuel.fuelEnergy = this.convertVal(meteredEnergy.meteredEnergyFuel.fuelFlowRateInput, 'Btu', 'kJ');
-        meteredEnergy.meteredEnergyFuel.fuelFlowRateInput = this.convertVal(meteredEnergy.meteredEnergyFuel.fuelEnergy, 'ft3', 'm3');
+        meteredEnergy.meteredEnergyFuel.fuelEnergy = this.convertVal(meteredEnergy.meteredEnergyFuel.fuelEnergy, 'Btu', 'kJ');
+        meteredEnergy.meteredEnergyFuel.fuelFlowRateInput = this.convertVal(meteredEnergy.meteredEnergyFuel.fuelFlowRateInput, 'ft3', 'm3');
       }
     }
     if (meteredEnergy.meteredEnergySteam) {

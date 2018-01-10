@@ -5,6 +5,7 @@ import { IndexedDbService } from '../../indexedDb/indexed-db.service';
 import * as _ from 'lodash';
 import { Settings } from '../../shared/models/settings';
 import { PhastService } from '../../phast/phast.service';
+import {ConvertUnitsService} from "../../shared/convert-units/convert-units.service";
 @Component({
   selector: 'app-solid-liquid-flue-gas-material',
   templateUrl: './solid-liquid-flue-gas-material.component.html',
@@ -15,6 +16,9 @@ export class SolidLiquidFlueGasMaterialComponent implements OnInit {
   closeModal = new EventEmitter<SolidLiquidFlueGasMaterial>();
   @Input()
   settings: Settings;
+  @Output('hideModal')
+  hideModal = new EventEmitter();
+
   newMaterial: SolidLiquidFlueGasMaterial = {
     substance: 'New Fuel',
     carbon: 0,
@@ -33,7 +37,7 @@ export class SolidLiquidFlueGasMaterialComponent implements OnInit {
   canAdd: boolean;
   isNameValid: boolean;
   currentField: string = 'selectedMaterial';
-  constructor(private suiteDbService: SuiteDbService, private indexedDbService: IndexedDbService, private phastService: PhastService) { }
+  constructor(private suiteDbService: SuiteDbService, private indexedDbService: IndexedDbService, private phastService: PhastService,  private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
     this.canAdd = true;
@@ -79,10 +83,13 @@ export class SolidLiquidFlueGasMaterialComponent implements OnInit {
   }
 
   setHHV() {
-    let tmpHeatingVals = this.phastService.flueGasByMassCalculateHeatingValue(this.newMaterial);
-    if (isNaN(tmpHeatingVals) == false) {
+    const tmpHeatingVals = this.phastService.flueGasByMassCalculateHeatingValue(this.newMaterial);
+    if (isNaN(tmpHeatingVals) === false) {
       this.isValid = true;
       this.newMaterial.heatingValue = tmpHeatingVals;
+      if (this.settings.unitsOfMeasure === 'Metric') {
+        this.newMaterial.heatingValue = this.convertUnitsService.value(tmpHeatingVals).from('btuLb').to('kJkg');
+      }
     } else {
       this.isValid = false;
       this.newMaterial.heatingValue = 0;
@@ -104,6 +111,11 @@ export class SolidLiquidFlueGasMaterialComponent implements OnInit {
 
   focusField(str: string){
     this.currentField = str;
+  }
+
+
+  hideMaterialModal() {
+    this.hideModal.emit();
   }
 
 }

@@ -6,6 +6,7 @@ import { Settings } from '../../shared/models/settings';
 import { IndexedDbService } from '../../indexedDb/indexed-db.service';
 import { ModalDirective } from 'ngx-bootstrap';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
+import { FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-system-basics',
@@ -35,7 +36,7 @@ export class SystemBasicsComponent implements OnInit {
   closeModal = new EventEmitter<boolean>();
   unitChange: boolean = false;
 
-  settingsForm: any;
+  settingsForm: FormGroup;
   isFirstChange: boolean = true;
 
   newSettings: Settings;
@@ -82,9 +83,10 @@ export class SystemBasicsComponent implements OnInit {
       this.settings.language != this.newSettings.language ||
       this.settings.powerMeasurement != this.newSettings.powerMeasurement ||
       this.settings.pressureMeasurement != this.newSettings.pressureMeasurement ||
-      this.settings.unitsOfMeasure != this.newSettings.unitsOfMeasure
+      this.settings.unitsOfMeasure != this.newSettings.unitsOfMeasure ||
+      this.settings.temperatureMeasurement != this.newSettings.temperatureMeasurement
     ) {
-      if (this.psat.inputs.flow_rate || this.psat.inputs.head || this.psat.inputs.motor_rated_power) {
+      if (this.psat.inputs.flow_rate || this.psat.inputs.head || this.psat.inputs.motor_rated_power || this.psat.inputs.fluidTemperature) {
         this.showSettingsModal();
       } else {
         this.updateData(false);
@@ -134,6 +136,11 @@ export class SystemBasicsComponent implements OnInit {
         psat.inputs.motor_rated_power = this.getClosest(psat.inputs.motor_rated_power, this.horsePowers);
       } else {
         psat.inputs.motor_rated_power = this.getClosest(psat.inputs.motor_rated_power, this.kWatts);
+      }
+    }
+    if (psat.inputs.fluidTemperature) {
+      if (this.settings.temperatureMeasurement && this.newSettings.temperatureMeasurement) {
+        psat.inputs.fluidTemperature = this.convertUnitsService.value(psat.inputs.fluidTemperature).from(this.settings.temperatureMeasurement).to(this.newSettings.temperatureMeasurement);
       }
     }
     return psat;

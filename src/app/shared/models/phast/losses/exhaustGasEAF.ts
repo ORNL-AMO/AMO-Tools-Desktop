@@ -8,5 +8,6 @@ export interface ExhaustGasEAF {
     combustibleGases?: number,
     vfr?: number,
     dustLoading?: number,
-    otherLosses?: number
+    otherLosses?: number,
+    name?: string
 }

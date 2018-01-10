@@ -3,6 +3,7 @@ import { PSAT } from '../../../shared/models/psat';
 import { PsatService } from '../../../psat/psat.service';
 import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
 import { Settings } from '../../../shared/models/settings';
+import { FormGroup } from '@angular/forms';
 
 
 @Component({
@@ -18,7 +19,8 @@ export class NemaEnergyEfficiencyComponent implements OnInit {
   @Input()
   inPsat: boolean;
 
-  nemaForm: any;
+  currentField: string;
+  nemaForm: FormGroup;
   tabSelect: string = 'results';
   constructor(private psatService: PsatService, private indexedDbService: IndexedDbService) { }
 
@@ -51,5 +53,8 @@ export class NemaEnergyEfficiencyComponent implements OnInit {
   }
   setTab(str: string) {
     this.tabSelect = str;
+  }
+  changeField(str: string) {
+    this.currentField = str;
   }
 }

@@ -18,7 +18,7 @@
     padding-top: 8.5px;
     padding-bottom: 8.5px;
 } */
- 
+
 .disabled .header{
   border-bottom: #ddd solid 1px;
 }
@@ -26,3 +26,17 @@
 .phast-losses-container{
     padding-top: 14px;
 }
+.modal-header{
+  background: #fff;
+}
+
+.modal-content{
+  border: none;
+  border-radius: 0px;
+}
+
+.modal-dialog{
+  top: 20%;
+}
+
+

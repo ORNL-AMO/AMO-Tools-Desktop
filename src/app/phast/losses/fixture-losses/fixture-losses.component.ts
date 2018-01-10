@@ -6,6 +6,7 @@ import { Losses } from '../../../shared/models/phast/phast';
 import { FixtureLoss } from '../../../shared/models/phast/losses/fixtureLoss';
 import { FixtureLossesCompareService } from "./fixture-losses-compare.service";
 import { Settings } from '../../../shared/models/settings';
+import { FormGroup } from '@angular/forms/src/model';
 
 @Component({
   selector: 'app-fixture-losses',
@@ -37,8 +38,9 @@ export class FixtureLossesComponent implements OnInit {
   modExists: boolean;
 
   resultsUnit: string;
-  _fixtureLosses: Array<any>;
+  _fixtureLosses: Array<FixtureLossObj>;
   firstChange: boolean = true;
+  lossesLocked: boolean = false;
   constructor(private phastService: PhastService, private fixtureLossesService: FixtureLossesService, private fixtureLossesCompareService: FixtureLossesCompareService) { }
   ngOnChanges(changes: SimpleChanges) {
     if (!this.firstChange) {
@@ -66,13 +68,19 @@ export class FixtureLossesComponent implements OnInit {
     if (this.losses.fixtureLosses) {
       this.setCompareVals();
       this.fixtureLossesCompareService.initCompareObjects();
+      let lossIndex = 1;
       this.losses.fixtureLosses.forEach(loss => {
         let tmpLoss = {
           form: this.fixtureLossesService.getFormFromLoss(loss),
-          name: 'Loss #' + (this._fixtureLosses.length + 1),
           heatLoss: loss.heatLoss || 0.0,
           collapse: false
         };
+        if(!tmpLoss.form.controls.name.value){
+          tmpLoss.form.patchValue({
+            name: 'Loss #' + lossIndex
+          })
+        }
+        lossIndex++;
         this.calculate(tmpLoss);
         this._fixtureLosses.push(tmpLoss);
       })
@@ -85,43 +93,45 @@ export class FixtureLossesComponent implements OnInit {
           if (this.fixtureLossesCompareService.differentArray && !this.isBaseline) {
             this.fixtureLossesCompareService.differentArray.splice(lossIndex, 1);
           }
+          this.saveLosses();
         }
       }
     })
-    if (this.isBaseline) {
-      this.fixtureLossesService.addLossBaselineMonitor.subscribe((val) => {
-        if (val == true) {
-          this._fixtureLosses.push({
-            form: this.fixtureLossesService.initForm(),
-            name: 'Loss #' + (this._fixtureLosses.length + 1),
-            heatLoss: 0.0,
-            collapse: false
-          })
-        }
-      })
-    } else {
-      this.fixtureLossesService.addLossModificationMonitor.subscribe((val) => {
-        if (val == true) {
-          this._fixtureLosses.push({
-            form: this.fixtureLossesService.initForm(),
-            name: 'Loss #' + (this._fixtureLosses.length + 1),
-            heatLoss: 0.0,
-            collapse: false
-          })
-        }
-      })
-    }
+    // if (this.isBaseline) {
+    //   this.fixtureLossesService.addLossBaselineMonitor.subscribe((val) => {
+    //     if (val == true) {
+    //       this._fixtureLosses.push({
+    //         form: this.fixtureLossesService.initForm(),
+    //         name: 'Loss #' + (this._fixtureLosses.length + 1),
+    //         heatLoss: 0.0,
+    //         collapse: false
+    //       })
+    //     }
+    //   })
+    // } else {
+    //   this.fixtureLossesService.addLossModificationMonitor.subscribe((val) => {
+    //     if (val == true) {
+    //       this._fixtureLosses.push({
+    //         form: this.fixtureLossesService.initForm(),
+    //         name: 'Loss #' + (this._fixtureLosses.length + 1),
+    //         heatLoss: 0.0,
+    //         collapse: false
+    //       })
+    //     }
+    //   })
+    // }
     if(this.inSetup && this.modExists){
+      this.lossesLocked = true;
       this.disableForms();
     }
   }
 
   ngOnDestroy() {
     if (this.isBaseline) {
-      this.fixtureLossesService.addLossBaselineMonitor.next(false);
+      // this.fixtureLossesService.addLossBaselineMonitor.next(false);
       this.fixtureLossesCompareService.baselineFixtureLosses = null;
     } else {
-      this.fixtureLossesService.addLossModificationMonitor.next(false);
+      // this.fixtureLossesService.addLossModificationMonitor.next(false);
       this.fixtureLossesCompareService.modifiedFixtureLosses = null;
     }
     this.fixtureLossesService.deleteLossIndex.next(null);
@@ -133,33 +143,25 @@ export class FixtureLossesComponent implements OnInit {
     })
   }
   addLoss() {
-    if (this.isLossesSetup) {
-      this.fixtureLossesService.addLoss(this.isBaseline);
-    }
+    // if (this.isLossesSetup) {
+    //   this.fixtureLossesService.addLoss(this.isBaseline);
+    // }
     if (this.fixtureLossesCompareService.differentArray) {
       this.fixtureLossesCompareService.addObject(this.fixtureLossesCompareService.differentArray.length - 1);
     }
     this._fixtureLosses.push({
-      form: this.fixtureLossesService.initForm(),
-      name: 'Loss #' + (this._fixtureLosses.length + 1),
+      form: this.fixtureLossesService.initForm(this._fixtureLosses.length+1),
       heatLoss: 0.0,
       collapse: false
     });
+    this.saveLosses();
   }
 
   removeLoss(lossIndex: number) {
     this.fixtureLossesService.setDelete(lossIndex);
   }
 
-  renameLosses() {
-    let index = 1;
-    this._fixtureLosses.forEach(fixture => {
-      fixture.name = 'Fixture #' + index;
-      index++;
-    })
-  }
-
-  calculate(loss: any) {
+  calculate(loss: FixtureLossObj) {
     if (loss.form.status == 'VALID') {
       let tmpLoss: FixtureLoss = this.fixtureLossesService.getLossFromForm(loss.form);
       loss.heatLoss = this.phastService.fixtureLosses(tmpLoss, this.settings);
@@ -168,13 +170,20 @@ export class FixtureLossesComponent implements OnInit {
     }
   }
 
-  collapseLoss(loss: any){
+  collapseLoss(loss: FixtureLossObj){
     loss.collapse = !loss.collapse;
   }
   
   saveLosses() {
     let tmpFixtureLosses = new Array<FixtureLoss>();
+    let lossIndex = 1;
     this._fixtureLosses.forEach(loss => {
+      if(!loss.form.controls.name.value){
+        loss.form.patchValue({
+          name: 'Loss #' + lossIndex
+        })
+      }
+      lossIndex++;
       let tmpFixtureLoss = this.fixtureLossesService.getLossFromForm(loss.form);
       tmpFixtureLoss.heatLoss = loss.heatLoss;
       tmpFixtureLosses.push(tmpFixtureLoss);
@@ -201,4 +210,10 @@ export class FixtureLossesComponent implements OnInit {
     }
   }
 
+}
+
+export interface FixtureLossObj{
+  form: FormGroup,
+  heatLoss: number,
+  collapse: boolean
 }

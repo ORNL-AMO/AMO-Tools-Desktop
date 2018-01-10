@@ -1,5 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { EnergyEquivalencyElectric, EnergyEquivalencyFuel, EnergyEquivalencyElectricOutput, EnergyEquivalencyFuelOutput } from '../../../../shared/models/phast/energyEquivalency';
+import { Settings } from '../../../../shared/models/settings';
+
 @Component({
   selector: 'app-energy-equivalency-form',
   templateUrl: './energy-equivalency-form.component.html',
@@ -20,6 +22,9 @@ export class EnergyEquivalencyFormComponent implements OnInit {
   calculateElectric = new EventEmitter<boolean>();
   @Output('changeField')
   changeField = new EventEmitter<string>();
+  @Input()
+  settings: Settings;
+
   constructor() { }
 
   ngOnInit() {

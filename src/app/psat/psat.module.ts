@@ -38,14 +38,9 @@ import { ModifyConditionsNotesComponent } from './modify-conditions/modify-condi
 import { SettingsModule } from '../settings/settings.module';
 import { ToastyModule } from 'ng2-toasty';
 import { EditConditionPropertiesComponent } from './modify-conditions/edit-condition-properties/edit-condition-properties.component';
-import { ExploreOpportunitiesComponent } from './explore-opportunities/explore-opportunities.component';
 import { CompareService } from './compare.service';
-import { ExploreOpportunitiesFormComponent } from './explore-opportunities/explore-opportunities-form/explore-opportunities-form.component';
-import { ExploreOpportunitiesResultsComponent } from './explore-opportunities/explore-opportunities-results/explore-opportunities-results.component';
-import { ExploreOpportunitiesHelpComponent } from './explore-opportunities/explore-opportunities-help/explore-opportunities-help.component';
-
-import { ExploreOpportunitiesSankeyComponent } from './explore-opportunities/explore-opportunities-sankey/explore-opportunities-sankey.component';
 import { PsatDiagramComponent } from './psat-diagram/psat-diagram.component';
+import { ExploreOpportunitiesModule } from './explore-opportunities/explore-opportunities.module';
 import { PsatSankeyComponent } from './psat-sankey/psat-sankey.component';
 
 @NgModule({
@@ -63,11 +58,6 @@ import { PsatSankeyComponent } from './psat-sankey/psat-sankey.component';
     OutputSummaryComponent,
     ModifyConditionsTabsComponent,
     EditConditionPropertiesComponent,
-    ExploreOpportunitiesComponent,
-    ExploreOpportunitiesFormComponent,
-    ExploreOpportunitiesResultsComponent,
-    ExploreOpportunitiesHelpComponent,
-    ExploreOpportunitiesSankeyComponent,
     PsatDiagramComponent,
     PsatSankeyComponent
   ],
@@ -93,7 +83,8 @@ import { PsatSankeyComponent } from './psat-sankey/psat-sankey.component';
     MotorPerformanceModule,
     HeadToolModule,
     AchievableEfficiencyModule, 
-    PumpCurveModule
+    PumpCurveModule,
+    ExploreOpportunitiesModule
   ],
   providers: [
     PsatService,

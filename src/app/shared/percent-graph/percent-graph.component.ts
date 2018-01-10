@@ -133,7 +133,7 @@ export class PercentGraphComponent implements OnInit {
           options: this.chartOptions,
           data: this.doughnutChartData,
           backgroundColor: [
-            "#27AE60",
+            "#27AE60", //green
             "#CCD1D1"
           ],
           hoverBackground: [
@@ -142,13 +142,13 @@ export class PercentGraphComponent implements OnInit {
           ]
         }
       ]
-    } else if (this.value < 10 && this.value >= 5) {
+    } else if (this.value <= 10 && this.value >= 5) {
       this.chartColorDataSet = [
         {
           options: this.chartOptions,
           data: this.doughnutChartData,
           backgroundColor: [
-            "#EB984E",
+            "#3498DB",  //blue
             "#CCD1D1"
 
           ],
@@ -158,29 +158,29 @@ export class PercentGraphComponent implements OnInit {
           ]
         }
       ]
+
+      // this.chartColorDataSet = [
+      //   {
+      //     options: this.chartOptions,
+      //     data: this.doughnutChartData,
+      //     backgroundColor: [
+      //       "#EB984E", //orange
+      //       "#CCD1D1"
+
+      //     ],
+      //     hoverBackground: [
+      //       "#DC7633",
+      //       "#B2BABB"
+      //     ]
+      //   }
+      // ]
     } else if (this.value > 100) {
       this.chartColorDataSet = [
         {
           options: this.chartOptions,
           data: this.doughnutChartData,
           backgroundColor: [
-            "#3498DB",
-            "#CCD1D1"
-
-          ],
-          hoverBackground: [
-            "#DC7633",
-            "#B2BABB"
-          ]
-        }
-      ]
-    } else {
-      this.chartColorDataSet = [
-        {
-          options: this.chartOptions,
-          data: this.doughnutChartData,
-          backgroundColor: [
-            "#E74C3C",
+            "#E74C3C",  //red
             "#CCD1D1"
 
           ],
@@ -190,6 +190,55 @@ export class PercentGraphComponent implements OnInit {
           ]
         }
       ]
+
+      // this.chartColorDataSet = [
+      //   {
+      //     options: this.chartOptions,
+      //     data: this.doughnutChartData,
+      //     backgroundColor: [
+      //       "#3498DB", //blue
+      //       "#CCD1D1"
+
+      //     ],
+      //     hoverBackground: [
+      //       "#DC7633",
+      //       "#B2BABB"
+      //     ]
+      //   }
+      // ]
+    } else {  // < 5%
+
+      this.chartColorDataSet = [
+        {
+          options: this.chartOptions,
+          data: this.doughnutChartData,
+          backgroundColor: [
+            "#52489C",  //purple
+            "#CCD1D1"
+
+          ],
+          hoverBackground: [
+            "#DC7633",
+            "#B2BABB"
+          ]
+        }
+      ]
+
+      // this.chartColorDataSet = [
+      //   {
+      //     options: this.chartOptions,
+      //     data: this.doughnutChartData,
+      //     backgroundColor: [
+      //       "#E74C3C",   //red
+      //       "#CCD1D1"
+
+      //     ],
+      //     hoverBackground: [
+      //       "#DC7633",
+      //       "#CB4335"
+      //     ]
+      //   }
+      // ]
     }
     if (this.baseChart.chart) {
       this.baseChart.chart.config.data.datasets[0].backgroundColor = this.chartColorDataSet[0].backgroundColor;

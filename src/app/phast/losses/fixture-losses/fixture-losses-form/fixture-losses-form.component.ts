@@ -6,6 +6,7 @@ import { ModalDirective } from 'ngx-bootstrap';
 import { LossesService } from '../../losses.service';
 import { Settings } from '../../../../shared/models/settings';
 import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
+import { FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-fixture-losses-form',
@@ -14,7 +15,7 @@ import { ConvertUnitsService } from '../../../../shared/convert-units/convert-un
 })
 export class FixtureLossesFormComponent implements OnInit {
   @Input()
-  lossesForm: any;
+  lossesForm: FormGroup;
   @Output('calculate')
   calculate = new EventEmitter<boolean>();
   @Input()
@@ -29,14 +30,13 @@ export class FixtureLossesFormComponent implements OnInit {
   settings: Settings;
 
   @ViewChild('materialModal') public materialModal: ModalDirective;
-  @ViewChild('lossForm') lossForm: ElementRef;
-  form: any;
-  elements: any;
+
   specificHeatError: string = null;
   feedRateError: string = null;
   firstChange: boolean = true;
   counter: any;
   materials: Array<any>;
+  showModal: boolean = false;
   constructor(private windowRefService: WindowRefService, private fixtureLossesCompareService: FixtureLossesCompareService, private suiteDbService: SuiteDbService, private lossesService: LossesService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -61,18 +61,12 @@ export class FixtureLossesFormComponent implements OnInit {
     }
     this.initDifferenceMonitor();
   }
-    disableForm() {
-    this.elements = this.lossForm.nativeElement.elements;
-    for (var i = 0, len = this.elements.length; i < len; ++i) {
-      this.elements[i].disabled = true;
-    }
+  disableForm() {
+    this.lossesForm.disable();
   }
 
   enableForm() {
-    this.elements = this.lossForm.nativeElement.elements;
-    for (var i = 0, len = this.elements.length; i < len; ++i) {
-      this.elements[i].disabled = false;
-    }
+    this.lossesForm.enable();
   }
 
   focusField(str: string) {
@@ -87,7 +81,7 @@ export class FixtureLossesFormComponent implements OnInit {
     this.changeField.emit('default');
   }
   setSpecificHeat() {
-    let tmpMaterial = this.suiteDbService.selectSolidLoadChargeMaterialById(this.lossesForm.value.materialName);
+    let tmpMaterial = this.suiteDbService.selectSolidLoadChargeMaterialById(this.lossesForm.controls.materialName.value);
     this.lossesForm.patchValue({
       specificHeat: tmpMaterial.specificHeatSolid
     })
@@ -98,12 +92,12 @@ export class FixtureLossesFormComponent implements OnInit {
     if (!bool) {
       this.startSavePolling();
     }
-    if (this.lossesForm.value.specificHeat < 0) {
+    if (this.lossesForm.controls.specificHeat.value < 0) {
       this.specificHeatError = 'Specific Heat must be equal or greater than 0';
     } else {
       this.specificHeatError = null;
     }
-    if (this.lossesForm.value.feedRate < 0) {
+    if (this.lossesForm.controls.feedRate.value < 0) {
       this.feedRateError = 'Fixture Weight feed rate must be greater than 0';
     } else {
       this.feedRateError = null;
@@ -171,8 +165,8 @@ export class FixtureLossesFormComponent implements OnInit {
   }
 
   setProperties() {
-    let selectedMaterial = this.suiteDbService.selectSolidLoadChargeMaterialById(this.lossesForm.value.materialName);
-        if (this.settings.unitsOfMeasure == 'Metric') {
+    let selectedMaterial = this.suiteDbService.selectSolidLoadChargeMaterialById(this.lossesForm.controls.materialName.value);
+    if (this.settings.unitsOfMeasure == 'Metric') {
       selectedMaterial.specificHeatSolid = this.convertUnitsService.value(selectedMaterial.specificHeatSolid).from('btulbF').to('kJkgC');
     }
 
@@ -183,6 +177,7 @@ export class FixtureLossesFormComponent implements OnInit {
   }
 
   showMaterialModal() {
+    this.showModal = true;
     this.lossesService.modalOpen.next(true);
     this.materialModal.show();
   }
@@ -198,6 +193,7 @@ export class FixtureLossesFormComponent implements OnInit {
         this.setProperties();
       }
     }
+    this.showModal = false;
     this.materialModal.hide();
     this.lossesService.modalOpen.next(false);
   }

@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Settings } from "../../../../shared/models/settings";
+import { FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-percent-load-estimation-form',
@@ -8,7 +9,7 @@ import { Settings } from "../../../../shared/models/settings";
 })
 export class PercentLoadEstimationFormComponent implements OnInit {
   @Input()
-  percentLoadEstimationForm: any;
+  percentLoadEstimationForm: FormGroup;
   @Output('emitCalculate')
   emitCalculate = new EventEmitter<boolean>();
   @Input()
@@ -16,6 +17,7 @@ export class PercentLoadEstimationFormComponent implements OnInit {
   @Input()
   loadEstimationResult: number;
 
+  showSynchronousSpeed: boolean = false;
   measuredSpeedError: string = null;
   synchronousSpeedError: string = null;
   nameplateFullLoadSpeedError: string = null;
@@ -26,11 +28,36 @@ export class PercentLoadEstimationFormComponent implements OnInit {
     1200,
     1800,
     3600
-  ]
+  ];
 
   constructor() { }
 
   ngOnInit() {
+    this.updateSynchronousSpeeds();
+    this.calculate();
+  }
+
+  updateSynchronousSpeeds() {
+    if (this.percentLoadEstimationForm.controls.lineFrequency.value == 50) {
+      this.synchronousSpeeds = [
+        500,
+        600,
+        750,
+        1000,
+        1500,
+        3000
+      ];
+    }
+    else if (this.percentLoadEstimationForm.controls.lineFrequency.value == 60) {
+      this.synchronousSpeeds = [
+        600,
+        720,
+        900,
+        1200,
+        1800,
+        3600
+      ];
+    }
     this.calculate();
   }
 
@@ -38,44 +65,50 @@ export class PercentLoadEstimationFormComponent implements OnInit {
     this.synchronousSpeedError = this.nameplateFullLoadSpeedError = this.measuredSpeedError = null;
     var err: boolean = false;
 
-    if (this.percentLoadEstimationForm.value.nameplateFullLoadSpeed >= 3600) {
-      this.nameplateFullLoadSpeedError = 'Nameplate Full Load Speed must be less than 3600';
+    if (this.percentLoadEstimationForm.controls.nameplateFullLoadSpeed.value >= this.synchronousSpeeds[this.synchronousSpeeds.length - 1]) {
+      this.nameplateFullLoadSpeedError = 'Nameplate Full Load Speed must be less than ' + this.synchronousSpeeds[this.synchronousSpeeds.length - 1];
       err = true;
     }
-    if (this.percentLoadEstimationForm.value.measuredSpeed >= 3600) {
-      this.measuredSpeedError = 'Measured Speed must be less than 3600';
+    if (this.percentLoadEstimationForm.controls.measuredSpeed.value >= this.synchronousSpeeds[this.synchronousSpeeds.length - 1]) {
+      this.measuredSpeedError = 'Measured Speed must be less than ' + this.synchronousSpeeds[this.synchronousSpeeds.length - 1];
       err = true;
     }
 
-    if (!this.percentLoadEstimationForm.value.measuredSpeed || !this.percentLoadEstimationForm.value.nameplateFullLoadSpeed) {
+    if (!this.percentLoadEstimationForm.controls.measuredSpeed.value || !this.percentLoadEstimationForm.controls.nameplateFullLoadSpeed.value) {
       this.loadEstimationResult = 0;
       err = true;
     }
 
-    if (this.percentLoadEstimationForm.value.nameplateFullLoadSpeed > this.percentLoadEstimationForm.value.measuredSpeed) {
-      this.measuredSpeedError = 'Measured Speed must be greater than or equal to the Nameplate Full Load Speed.';
-      err = true;
-    }
+    // if (this.percentLoadEstimationForm.controls.nameplateFullLoadSpeed.value > this.percentLoadEstimationForm.controls.measuredSpeed.value) {
+    //   this.measuredSpeedError = 'Measured Speed must be greater than or equal to the Nameplate Full Load Speed.';
+    //   err = true;
+    // }
 
     for (let i = 0; i < this.synchronousSpeeds.length; i++) {
-      if (this.synchronousSpeeds[i] > this.percentLoadEstimationForm.value.nameplateFullLoadSpeed) {
+      if (this.synchronousSpeeds[i] > this.percentLoadEstimationForm.controls.nameplateFullLoadSpeed.value) {
         this.percentLoadEstimationForm.patchValue({
           synchronousSpeed: this.synchronousSpeeds[i]
         });
 
-        if (this.synchronousSpeeds[i] <= this.percentLoadEstimationForm.value.measuredSpeed) {
+        if (this.synchronousSpeeds[i] <= this.percentLoadEstimationForm.controls.measuredSpeed.value) {
           this.measuredSpeedError = 'Measured Speed must be less than the synchronous speed';
           err = true;
         }
-
         break;
       }
-      if (this.percentLoadEstimationForm.value.nameplateFullLoadSpeed === this.synchronousSpeeds[i]) {
+      if (this.percentLoadEstimationForm.controls.nameplateFullLoadSpeed.value === this.synchronousSpeeds[i]) {
         this.synchronousSpeedError = 'Nameplate Full Load Speed cannot equal the Synchronous Speed of ' + this.synchronousSpeeds[i];
         this.loadEstimationResult = 0;
         err = true;
       }
     }
+
+    if (!this.percentLoadEstimationForm.controls.nameplateFullLoadSpeed.value) {
+      this.showSynchronousSpeed = false;
+    } else {
+      this.showSynchronousSpeed = true;
+    }
+
     if (!err) {
       this.emitCalculate.emit(true);      
     }
@@ -83,6 +116,7 @@ export class PercentLoadEstimationFormComponent implements OnInit {
 
   //debug
   emitChange() {
+    this.updateSynchronousSpeeds();
     this.calculate();
   }
 }

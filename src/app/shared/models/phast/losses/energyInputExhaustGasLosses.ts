@@ -5,5 +5,6 @@ export interface EnergyInputExhaustGasLoss {
     totalHeatInput?: number,
     electricalPowerInput?: number,
     otherLosses?: number,
-    availableHeat?:number
+    availableHeat?:number,
+    name?: string
 }

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { EnergyInputEAF } from '../../../shared/models/phast/losses/energyInputEAF';
 import { BehaviorSubject } from 'rxjs';
 
@@ -7,25 +7,25 @@ import { BehaviorSubject } from 'rxjs';
 export class EnergyInputService {
 
   deleteLossIndex: BehaviorSubject<number>;
-  addLossBaselineMonitor: BehaviorSubject<any>;
-  addLossModificationMonitor: BehaviorSubject<any>;
+  // addLossBaselineMonitor: BehaviorSubject<any>;
+  // addLossModificationMonitor: BehaviorSubject<any>;
   constructor(private formBuilder: FormBuilder) {
     this.deleteLossIndex = new BehaviorSubject<number>(null);
-    this.addLossBaselineMonitor = new BehaviorSubject<any>(null);
-    this.addLossModificationMonitor = new BehaviorSubject<any>(null);
+    // this.addLossBaselineMonitor = new BehaviorSubject<any>(null);
+    // this.addLossModificationMonitor = new BehaviorSubject<any>(null);
   }
 
   setDelete(num: number) {
     this.deleteLossIndex.next(num);
   }
-  addLoss(bool: boolean) {
-    if (bool) {
-      this.addLossModificationMonitor.next(true);
-    } else {
-      this.addLossBaselineMonitor.next(true);
-    }
-  }
-  initForm() {
+  // addLoss(bool: boolean) {
+  //   if (bool) {
+  //     this.addLossModificationMonitor.next(true);
+  //   } else {
+  //     this.addLossBaselineMonitor.next(true);
+  //   }
+  // }
+  initForm(lossNum: number): FormGroup {
     return this.formBuilder.group({
       naturalGasHeatInput: ['', Validators.required],
       flowRateInput: [''],
@@ -36,27 +36,29 @@ export class EnergyInputService {
       electrodeUse: ['', Validators.required],
       electrodeHeatingValue: ['', Validators.required],
       otherFuels: ['', Validators.required],
-      electricityInput: ['', Validators.required]
+      electricityInput: ['', Validators.required],
+      name: ['Loss #'+lossNum]
     })
   }
 
-  getLossFromForm(form: any): EnergyInputEAF {
+  getLossFromForm(form: FormGroup): EnergyInputEAF {
     let tmpEnergyInput: EnergyInputEAF = {
-      naturalGasHeatInput: form.value.naturalGasHeatInput,
-      flowRateInput: form.value.flowRateInput,
-     // naturalGasFlow: form.value.naturalGasFlow,
-     // measuredOxygenFlow: form.value.measuredOxygenFlow,
-      coalCarbonInjection: form.value.coalCarbonInjection,
-      coalHeatingValue: form.value.coalHeatingValue,
-      electrodeUse: form.value.electrodeUse,
-      electrodeHeatingValue: form.value.electrodeHeatingValue,
-      otherFuels: form.value.otherFuels,
-      electricityInput: form.value.electricityInput
+      naturalGasHeatInput: form.controls.naturalGasHeatInput.value,
+      flowRateInput: form.controls.flowRateInput.value,
+     // naturalGasFlow: form.controls.naturalGasFlow.value,
+     // measuredOxygenFlow: form.controls.measuredOxygenFlow.value,
+      coalCarbonInjection: form.controls.coalCarbonInjection.value,
+      coalHeatingValue: form.controls.coalHeatingValue.value,
+      electrodeUse: form.controls.electrodeUse.value,
+      electrodeHeatingValue: form.controls.electrodeHeatingValue.value,
+      otherFuels: form.controls.otherFuels.value,
+      electricityInput: form.controls.electricityInput.value,
+      name: form.controls.name.value
     }
     return tmpEnergyInput;
   }
 
-  getFormFromLoss(loss: EnergyInputEAF) {
+  getFormFromLoss(loss: EnergyInputEAF): FormGroup {
     return this.formBuilder.group({
       naturalGasHeatInput: [loss.naturalGasHeatInput, Validators.required],
       flowRateInput: [loss.flowRateInput],
@@ -67,7 +69,8 @@ export class EnergyInputService {
       electrodeUse: [loss.electrodeUse, Validators.required],
       electrodeHeatingValue: [loss.electrodeHeatingValue, Validators.required],
       otherFuels: [loss.otherFuels, Validators.required],
-      electricityInput: [loss.electricityInput, Validators.required]
+      electricityInput: [loss.electricityInput, Validators.required],
+      name: [loss.name]
     })
   }
 }

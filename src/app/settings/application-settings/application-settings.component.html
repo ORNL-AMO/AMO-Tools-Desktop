@@ -9,14 +9,14 @@
 <form [formGroup]="settingsForm">
   <div class="form-group">
     <label for="language">Language</label>
-    <select class="form-control" formControlName="language" id="language" ngModel="{{settingsForm.value.language}}" autofocus>
+    <select class="form-control" formControlName="language" id="language" autofocus>
       <option *ngFor="let language of languages" [ngValue]="language">{{language}}</option>
     </select>
   </div>
 
   <div class="form-group">
     <label for="currency">Currency</label>
-    <select class="form-control" formControlName="currency" id="currency" ngModel="{{settingsForm.value.currency}}">
+    <select class="form-control" formControlName="currency" id="currency">
       <option *ngFor="let currency of currencies" [ngValue]="currency">{{currency}}</option>
     </select>
   </div>
@@ -30,15 +30,15 @@
       <label class="form-check-label">
         <input class="form-check-input" type="radio" name="unitsOfMeasure" formControlName="unitsOfMeasure" value="Metric" (change)="setUnits()">Metric
       </label>
-      <label class="form-check-label" *ngIf="!inPhast">
+      <label class="form-check-label" *ngIf="inPsat">
         <input class="form-check-input" type="radio" name="unitsOfMeasure" formControlName="unitsOfMeasure" value="Custom" (change)="setUnits()">Custom
       </label>
     </div>
   </div>
 
-  <div class="form-group" *ngIf="inPhast">
+  <div class="form-group" *ngIf="!inPsat">
     <label for="furnaceType">Energy Result Unit</label>
-    <select class="form-control" formControlName="energyResultUnit" id="energyResultUnit" ngModel="{{settingsForm.value.energyResultUnit}}">
+    <select class="form-control" formControlName="energyResultUnit" id="energyResultUnit">
       <option *ngFor="let option of energyResultOptions" [ngValue]="option.unit">{{option.display}}
         <span [innerHTML]="option.displayUnit"></span>
       </option>

@@ -7,6 +7,7 @@ import { ModalDirective } from 'ngx-bootstrap';
 import { LossesService } from '../../losses.service';
 import { Settings } from '../../../../shared/models/settings';
 import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
+import { FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-atmosphere-losses-form',
@@ -15,7 +16,7 @@ import { ConvertUnitsService } from '../../../../shared/convert-units/convert-un
 })
 export class AtmosphereLossesFormComponent implements OnInit {
   @Input()
-  atmosphereLossForm: any;
+  atmosphereLossForm: FormGroup;
   @Output('calculate')
   calculate = new EventEmitter<boolean>();
   @Input()
@@ -30,10 +31,6 @@ export class AtmosphereLossesFormComponent implements OnInit {
   settings: Settings;
 
   @ViewChild('materialModal') public materialModal: ModalDirective;
-  @ViewChild('lossForm') lossForm: ElementRef;
-  form: any;
-  elements: any;
-
   firstChange: boolean = true;
   counter: any;
   specificHeatError: string = null;
@@ -68,7 +65,7 @@ export class AtmosphereLossesFormComponent implements OnInit {
   }
 
   setProperties() {
-    let selectedMaterial = this.suiteDbService.selectAtmosphereSpecificHeatById(this.atmosphereLossForm.value.atmosphereGas);
+    let selectedMaterial = this.suiteDbService.selectAtmosphereSpecificHeatById(this.atmosphereLossForm.controls.atmosphereGas.value);
     if (this.settings.unitsOfMeasure == 'Metric') {
       selectedMaterial.specificHeat = this.convertUnitsService.value(selectedMaterial.specificHeat).from('btulbF').to('kJkgC');
     }
@@ -80,24 +77,18 @@ export class AtmosphereLossesFormComponent implements OnInit {
   }
 
   disableForm() {
-    this.elements = this.lossForm.nativeElement.elements;
-    for (var i = 0, len = this.elements.length; i < len; ++i) {
-      this.elements[i].disabled = true;
-    }
+    this.atmosphereLossForm.disable();
   }
 
   enableForm() {
-    this.elements = this.lossForm.nativeElement.elements;
-    for (var i = 0, len = this.elements.length; i < len; ++i) {
-      this.elements[i].disabled = false;
-    }
+    this.atmosphereLossForm.enable();
   }
 
   checkTempError(bool?: boolean) {
     if (!bool) {
       this.startSavePolling();
     }
-    if (this.atmosphereLossForm.value.inletTemp > this.atmosphereLossForm.value.outletTemp) {
+    if (this.atmosphereLossForm.controls.inletTemp.value > this.atmosphereLossForm.controls.outletTemp.value) {
       this.temperatureError = 'Inlet temperature is greater than outlet temperature'
     } else {
       this.temperatureError = null;
@@ -107,12 +98,12 @@ export class AtmosphereLossesFormComponent implements OnInit {
     if (!bool) {
       this.startSavePolling();
     }
-    if (this.atmosphereLossForm.value.specificHeat < 0) {
+    if (this.atmosphereLossForm.controls.specificHeat.value < 0) {
       this.specificHeatError = 'Specific Heat must be greater than 0';
     } else {
       this.specificHeatError = null;
     }
-    if (this.atmosphereLossForm.value.flowRate < 0) {
+    if (this.atmosphereLossForm.controls.flowRate.value < 0) {
       this.flowRateError = 'Flow Rate must be greater than 0';
     } else {
       this.flowRateError = null;

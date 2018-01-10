@@ -5,6 +5,7 @@ import { Losses } from '../../../shared/models/phast/phast';
 import { OtherLoss } from '../../../shared/models/phast/losses/otherLoss';
 import { OtherLossesCompareService } from './other-losses-compare.service';
 import { Settings } from '../../../shared/models/settings';
+import { FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-other-losses',
@@ -35,10 +36,63 @@ export class OtherLossesComponent implements OnInit {
   @Input()
   modExists: boolean;
   
-  _otherLosses: Array<any>;
+  _otherLosses: Array<OtherLossObj>;
   firstChange: boolean = true;
+  lossesLocked: boolean = false;
   constructor(private otherLossesService: OtherLossesService, private otherLossCompareService: OtherLossesCompareService) { }
 
+  ngOnInit() {
+    if (!this._otherLosses) {
+      this._otherLosses = new Array();
+    }
+    if (this.losses.otherLosses) {
+      this.setCompareVals();
+      this.otherLossCompareService.initCompareObjects();
+      this.losses.otherLosses.forEach(loss => {
+        let tmpLoss = {
+          form: this.otherLossesService.getFormFromLoss(loss),
+          name: 'Loss #' + (this._otherLosses.length + 1),
+          collapse: false
+        };
+        this._otherLosses.push(tmpLoss);
+      })
+    }
+    this.otherLossesService.deleteLossIndex.subscribe((lossIndex) => {
+      if (lossIndex != undefined) {
+        if (this.losses.otherLosses) {
+          this._otherLosses.splice(lossIndex, 1);
+          if (this.otherLossCompareService.differentArray && !this.isBaseline) {
+            this.otherLossCompareService.differentArray.splice(lossIndex, 1);
+          }
+          this.saveLosses();
+        }
+      }
+    })
+    // if (this.isBaseline) {
+    //   this.otherLossesService.addLossBaselineMonitor.subscribe((val) => {
+    //     if (val == true) {
+    //       this._otherLosses.push({
+    //         form: this.otherLossesService.initForm(),
+    //         name: 'Loss #' + (this._otherLosses.length + 1)
+    //       })
+    //     }
+    //   })
+    // } else {
+    //   this.otherLossesService.addLossModificationMonitor.subscribe((val) => {
+    //     if (val == true) {
+    //       this._otherLosses.push({
+    //         form: this.otherLossesService.initForm(),
+    //         name: 'Loss #' + (this._otherLosses.length + 1)
+    //       })
+    //     }
+    //   })
+    // }
+
+    if(this.inSetup && this.modExists){
+      this.lossesLocked = true;
+      this.disableForms();
+    }
+  }
 
   ngOnChanges(changes: SimpleChanges) {
     if (!this.firstChange) {
@@ -54,60 +108,7 @@ export class OtherLossesComponent implements OnInit {
     }
   }
 
-
-  ngOnInit() {
-    if (!this._otherLosses) {
-      this._otherLosses = new Array();
-    }
-    if (this.losses.otherLosses) {
-      this.setCompareVals();
-      this.otherLossCompareService.initCompareObjects();
-      this.losses.otherLosses.forEach(loss => {
-        let tmpLoss = {
-          form: this.otherLossesService.getFormFromLoss(loss),
-          name: 'Loss #' + (this._otherLosses.length + 1),
-          collapse: false
-        };
-        this.calculate(tmpLoss);
-        this._otherLosses.push(tmpLoss);
-      })
-    }
-    this.otherLossesService.deleteLossIndex.subscribe((lossIndex) => {
-      if (lossIndex != undefined) {
-        if (this.losses.otherLosses) {
-          this._otherLosses.splice(lossIndex, 1);
-          if (this.otherLossCompareService.differentArray && !this.isBaseline) {
-            this.otherLossCompareService.differentArray.splice(lossIndex, 1);
-          }
-        }
-      }
-    })
-    if (this.isBaseline) {
-      this.otherLossesService.addLossBaselineMonitor.subscribe((val) => {
-        if (val == true) {
-          this._otherLosses.push({
-            form: this.otherLossesService.initForm(),
-            name: 'Loss #' + (this._otherLosses.length + 1)
-          })
-        }
-      })
-    } else {
-      this.otherLossesService.addLossModificationMonitor.subscribe((val) => {
-        if (val == true) {
-          this._otherLosses.push({
-            form: this.otherLossesService.initForm(),
-            name: 'Loss #' + (this._otherLosses.length + 1)
-          })
-        }
-      })
-    }
-
-    if(this.inSetup && this.modExists){
-      this.disableForms();
-    }
-  }
-
-  collapseLoss(loss: any){
+  collapseLoss(loss: OtherLossObj){
     loss.collapse = !loss.collapse;
   }
   
@@ -118,9 +119,9 @@ export class OtherLossesComponent implements OnInit {
   }
   
   addLoss() {
-    if (this.isLossesSetup) {
-      this.otherLossesService.addLoss(this.isBaseline);
-    }
+    // if (this.isLossesSetup) {
+    //   this.otherLossesService.addLoss(this.isBaseline);
+    // }
     if (this.otherLossCompareService.differentArray) {
       this.otherLossCompareService.addObject(this.otherLossCompareService.differentArray.length - 1);
     }
@@ -129,6 +130,7 @@ export class OtherLossesComponent implements OnInit {
       name: 'Loss #' + (this._otherLosses.length + 1),
       collapse: false
     });;
+    this.saveLosses();
   }
 
   removeLoss(lossIndex: number) {
@@ -142,11 +144,6 @@ export class OtherLossesComponent implements OnInit {
       index++;
     })
   }
-
-  calculate(loss: any) {
-    loss.heatLoss = loss.form.value.heatLoss;
-  }
-
 
   saveLosses() {
     let tmpLosses = new Array<OtherLoss>();
@@ -175,4 +172,10 @@ export class OtherLossesComponent implements OnInit {
       }
     }
   }
+}
+
+export interface OtherLossObj{
+  form: FormGroup,
+  name: string,
+  collapse: boolean
 }

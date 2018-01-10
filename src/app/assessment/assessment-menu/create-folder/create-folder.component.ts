@@ -42,7 +42,7 @@ export class CreateFolderComponent implements OnInit {
   createFolder() {
     this.hideCreateModal();
     let newDir: DirectoryDbRef = {
-      name: this.newFolder.value.newFolderName,
+      name: this.newFolder.controls.newFolderName.value,
       parentDirectoryId: this.directory.id,
       createdDate: new Date(),
       modifiedDate: new Date()

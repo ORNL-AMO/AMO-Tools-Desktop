@@ -3,9 +3,10 @@ import * as _ from 'lodash';
 import { PhastService } from '../../phast.service';
 import { CoolingLossesService } from './cooling-losses.service';
 import { Losses } from '../../../shared/models/phast/phast';
-import { CoolingLoss, GasCoolingLoss, LiquidCoolingLoss, WaterCoolingLoss } from '../../../shared/models/phast/losses/coolingLoss';
+import { CoolingLoss, GasCoolingLoss, LiquidCoolingLoss } from '../../../shared/models/phast/losses/coolingLoss';
 import { CoolingLossesCompareService } from './cooling-losses-compare.service';
 import { Settings } from '../../../shared/models/settings';
+import { FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-cooling-losses',
@@ -36,9 +37,10 @@ export class CoolingLossesComponent implements OnInit {
   @Input()
   modExists: boolean;
 
-  _coolingLosses: Array<any>;
+  _coolingLosses: Array<CoolingLossObj>;
   firstChange: boolean = true;
   resultsUnit: string;
+  lossesLocked: boolean = false;
   disableType: boolean = false;
   constructor(private coolingLossesService: CoolingLossesService, private phastService: PhastService, private coolingLossesCompareService: CoolingLossesCompareService) { }
 
@@ -79,152 +81,144 @@ export class CoolingLossesComponent implements OnInit {
           if (this.coolingLossesCompareService.differentArray && !this.isBaseline) {
             this.coolingLossesCompareService.differentArray.splice(lossIndex, 1);
           }
+          this.saveLosses();
         }
       }
     })
-    if (this.isBaseline) {
-      this.coolingLossesService.addLossBaselineMonitor.subscribe((val) => {
-        if (val == true) {
-          this._coolingLosses.push({
-            coolingMedium: 'Gas',
-            waterCoolingForm: this.coolingLossesService.initWaterCoolingForm(),
-            gasCoolingForm: this.coolingLossesService.initGasCoolingForm(this.settings),
-            liquidCoolingForm: this.coolingLossesService.initLiquidCoolingForm(this.settings),
-            name: 'Loss #' + (this._coolingLosses.length + 1),
-            heatLoss: 0.0,
-            collapse: false
-          });
-        }
-      })
-    } else {
-      this.coolingLossesService.addLossModificationMonitor.subscribe((val) => {
-        if (val == true) {
-          this._coolingLosses.push({
-            coolingMedium: 'Gas',
-            waterCoolingForm: this.coolingLossesService.initWaterCoolingForm(),
-            gasCoolingForm: this.coolingLossesService.initGasCoolingForm(this.settings),
-            liquidCoolingForm: this.coolingLossesService.initLiquidCoolingForm(this.settings),
-            name: 'Loss #' + (this._coolingLosses.length + 1),
-            heatLoss: 0.0,
-            collapse: false
-          });
-        }
-      })
-    }
-    if(this.inSetup && this.modExists){
-      this.disableType = true;
+    // if (this.isBaseline) {
+    //   this.coolingLossesService.addLossBaselineMonitor.subscribe((val) => {
+    //     if (val == true) {
+    //       this._coolingLosses.push({
+    //         coolingMedium: 'Gas',
+    //         waterCoolingForm: this.coolingLossesService.initWaterCoolingForm(),
+    //         gasCoolingForm: this.coolingLossesService.initGasCoolingForm(this.settings),
+    //         liquidCoolingForm: this.coolingLossesService.initLiquidCoolingForm(this.settings),
+    //         name: 'Loss #' + (this._coolingLosses.length + 1),
+    //         heatLoss: 0.0,
+    //         collapse: false
+    //       });
+    //     }
+    //   })
+    // } else {
+    //   this.coolingLossesService.addLossModificationMonitor.subscribe((val) => {
+    //     if (val == true) {
+    //       this._coolingLosses.push({
+    //         coolingMedium: 'Gas',
+    //         waterCoolingForm: this.coolingLossesService.initWaterCoolingForm(),
+    //         gasCoolingForm: this.coolingLossesService.initGasCoolingForm(this.settings),
+    //         liquidCoolingForm: this.coolingLossesService.initLiquidCoolingForm(this.settings),
+    //         name: 'Loss #' + (this._coolingLosses.length + 1),
+    //         heatLoss: 0.0,
+    //         collapse: false
+    //       });
+    //     }
+    //   })
+    // }
+    if (this.inSetup && this.modExists) {
+      this.lossesLocked = true;
       this.disableForms();
     }
   }
 
   ngOnDestroy() {
     if (this.isBaseline) {
-      this.coolingLossesService.addLossBaselineMonitor.next(false);
+      // this.coolingLossesService.addLossBaselineMonitor.next(false);
       this.coolingLossesCompareService.baselineCoolingLosses = null;
     } else {
-      this.coolingLossesService.addLossModificationMonitor.next(false);
+      //this.coolingLossesService.addLossModificationMonitor.next(false);
       this.coolingLossesCompareService.modifiedCoolingLosses = null;
     }
     this.coolingLossesService.deleteLossIndex.next(null);
   }
-  disableForms(){
+  disableForms() {
     this._coolingLosses.forEach(loss => {
-      loss.waterCoolingForm.disable();
       loss.gasCoolingForm.disable();
       loss.liquidCoolingForm.disable();
     })
   }
   initCoolingLosses() {
+    let lossIndex = 1;
     this.losses.coolingLosses.forEach(loss => {
       let tmpLoss: any;
       if (loss.coolingLossType == 'Gas' || loss.coolingLossType == 'Air') {
         tmpLoss = {
           coolingMedium: loss.coolingLossType,
-          waterCoolingForm: this.coolingLossesService.initWaterCoolingForm(),
-          gasCoolingForm: this.coolingLossesService.initGasFormFromLoss(loss.gasCoolingLoss),
-          liquidCoolingForm: this.coolingLossesService.initLiquidCoolingForm(this.settings),
-          name: 'Loss #' + (this._coolingLosses.length + 1),
+          gasCoolingForm: this.coolingLossesService.initGasFormFromLoss(loss),
+          liquidCoolingForm: this.coolingLossesService.initLiquidCoolingForm(this.settings, lossIndex),
           heatLoss: loss.heatLoss || 0.0,
           collapse: false
         };
       } else if (loss.coolingLossType == 'Liquid') {
         tmpLoss = {
           coolingMedium: loss.coolingLossType,
-          waterCoolingForm: this.coolingLossesService.initWaterCoolingForm(),
-          gasCoolingForm: this.coolingLossesService.initGasCoolingForm(this.settings),
-          liquidCoolingForm: this.coolingLossesService.initLiquidFormFromLoss(loss.liquidCoolingLoss),
-          name: 'Loss #' + (this._coolingLosses.length + 1),
+          gasCoolingForm: this.coolingLossesService.initGasCoolingForm(this.settings, lossIndex),
+          liquidCoolingForm: this.coolingLossesService.initLiquidFormFromLoss(loss),
           heatLoss: loss.heatLoss || 0.0,
           collapse: false
         };
       }
-      else if (loss.coolingLossType == 'Water') {
-        tmpLoss = {
-          coolingMedium: loss.coolingLossType,
-          waterCoolingForm: this.coolingLossesService.initWaterFormFromLoss(loss.waterCoolingLoss),
-          gasCoolingForm: this.coolingLossesService.initGasCoolingForm(this.settings),
-          liquidCoolingForm: this.coolingLossesService.initLiquidCoolingForm(this.settings),
-          name: 'Loss #' + (this._coolingLosses.length + 1),
-          heatLoss: loss.heatLoss || 0.0,
-          collapse: false
-        };
+     
+      if (!tmpLoss.gasCoolingForm.controls.name.value) {
+        tmpLoss.gasCoolingForm.patchValue({
+          name: 'Loss #' + lossIndex
+        })
       }
+      if (!tmpLoss.liquidCoolingForm.controls.name.value) {
+        tmpLoss.gasCoolingForm.patchValue({
+          name: 'Loss #' + lossIndex
+        })
+      }
+      lossIndex++;
       this.calculate(tmpLoss);
       this._coolingLosses.push(tmpLoss);
     })
   }
 
   addLoss() {
-    if (this.isLossesSetup) {
-      this.coolingLossesService.addLoss(this.isBaseline);
-    }
+    // if (this.isLossesSetup) {
+    //   this.coolingLossesService.addLoss(this.isBaseline);
+    // }
     if (this.coolingLossesCompareService.differentArray) {
       this.coolingLossesCompareService.addObject(this.coolingLossesCompareService.differentArray.length - 1);
     }
     this._coolingLosses.push({
       coolingMedium: 'Gas',
-      waterCoolingForm: this.coolingLossesService.initWaterCoolingForm(),
-      gasCoolingForm: this.coolingLossesService.initGasCoolingForm(this.settings),
-      liquidCoolingForm: this.coolingLossesService.initLiquidCoolingForm(this.settings),
-      name: 'Loss #' + (this._coolingLosses.length + 1),
+      gasCoolingForm: this.coolingLossesService.initGasCoolingForm(this.settings, this._coolingLosses.length + 1),
+      liquidCoolingForm: this.coolingLossesService.initLiquidCoolingForm(this.settings, this._coolingLosses.length + 1),
       heatLoss: 0.0,
       collapse: false
     });
+    this.saveLosses();
+  }
+
+  setName(loss: CoolingLossObj) {
+    if (loss.coolingMedium == 'Gas') {
+      loss.liquidCoolingForm.patchValue({
+        name: loss.gasCoolingForm.controls.name.value
+      })
+    } else if (loss.coolingMedium == 'Liquid') {
+      loss.gasCoolingForm.patchValue({
+        name: loss.liquidCoolingForm.controls.name.value
+      })
+    }
   }
 
   removeLoss(lossIndex) {
     this.coolingLossesService.setDelete(lossIndex);
   }
-
-  renameLosses() {
-    let index = 1;
-    this._coolingLosses.forEach(loss => {
-      loss.name = 'Loss #' + index;
-      index++;
-    })
-  }
-
-  calculate(loss: any) {
+  calculate(loss: CoolingLossObj) {
     if (loss.coolingMedium == 'Gas' || loss.coolingMedium == 'Air') {
       if (loss.gasCoolingForm.status == 'VALID') {
-        let tmpGasCoolingLoss: GasCoolingLoss = this.coolingLossesService.initGasLossFromForm(loss.gasCoolingForm);
-        loss.heatLoss = this.phastService.gasCoolingLosses(tmpGasCoolingLoss, this.settings);
+        let tmpCoolingLoss: CoolingLoss = this.coolingLossesService.initGasLossFromForm(loss.gasCoolingForm);
+        loss.heatLoss = this.phastService.gasCoolingLosses(tmpCoolingLoss.gasCoolingLoss, this.settings);
       } else {
         loss.heatLoss = null;
       }
     }
     else if (loss.coolingMedium == 'Liquid') {
       if (loss.liquidCoolingForm.status == 'VALID') {
-        let tmpLiquidCoolingLoss: LiquidCoolingLoss = this.coolingLossesService.initLiquidLossFromForm(loss.liquidCoolingForm);
-        loss.heatLoss = this.phastService.liquidCoolingLosses(tmpLiquidCoolingLoss, this.settings);
-      } else {
-        loss.heatLoss = null;
-      }
-    }
-    else if (loss.coolingMedium == 'Water') {
-      if (loss.waterCoolingForm.status == 'VALID') {
-        let tmpWaterCoolingLoss: WaterCoolingLoss = this.coolingLossesService.initWaterLossFromForm(loss.waterCoolingForm);
-        loss.heatLoss = this.phastService.waterCoolingLosses(tmpWaterCoolingLoss);
+        let tmpCoolingLoss: CoolingLoss = this.coolingLossesService.initLiquidLossFromForm(loss.liquidCoolingForm);
+        loss.heatLoss = this.phastService.liquidCoolingLosses(tmpCoolingLoss.liquidCoolingLoss, this.settings);
       } else {
         loss.heatLoss = null;
       }
@@ -233,36 +227,38 @@ export class CoolingLossesComponent implements OnInit {
 
   saveLosses() {
     let tmpCoolingLosses = new Array<CoolingLoss>();
+    let lossIndex = 1;
     this._coolingLosses.forEach(loss => {
+      if (!loss.gasCoolingForm.controls.name.value) {
+        loss.gasCoolingForm.patchValue({
+          name: 'Loss #' + lossIndex
+        })
+      }
+      if (!loss.liquidCoolingForm.controls.name.value) {
+        loss.gasCoolingForm.patchValue({
+          name: 'Loss #' + lossIndex
+        })
+      }
       let tmpCoolingLoss: CoolingLoss;
       if (loss.coolingMedium == 'Gas' || loss.coolingMedium == 'Air') {
-        tmpCoolingLoss = {
-          coolingLossType: 'Gas',
-          gasCoolingLoss: this.coolingLossesService.initGasLossFromForm(loss.gasCoolingForm),
-          heatLoss: loss.heatLoss
-        };
+        tmpCoolingLoss = this.coolingLossesService.initGasLossFromForm(loss.gasCoolingForm);
+        tmpCoolingLoss.coolingLossType = 'Gas';
+        tmpCoolingLoss.heatLoss = loss.heatLoss;
       }
       else if (loss.coolingMedium == 'Liquid') {
-        tmpCoolingLoss = {
-          coolingLossType: 'Liquid',
-          liquidCoolingLoss: this.coolingLossesService.initLiquidLossFromForm(loss.liquidCoolingForm),
-          heatLoss: loss.heatLoss
-        };
-      }
-      else if (loss.coolingMedium == 'Water') {
-        tmpCoolingLoss = {
-          coolingLossType: 'Water',
-          waterCoolingLoss: this.coolingLossesService.initWaterLossFromForm(loss.waterCoolingForm),
-          heatLoss: loss.heatLoss
-        };
+        tmpCoolingLoss = this.coolingLossesService.initLiquidLossFromForm(loss.liquidCoolingForm);
+        tmpCoolingLoss.coolingLossType = 'Liquid';
+        tmpCoolingLoss.heatLoss = loss.heatLoss;
       }
       tmpCoolingLosses.push(tmpCoolingLoss);
+      lossIndex++;
     })
+
     this.losses.coolingLosses = tmpCoolingLosses;
     this.setCompareVals();
     this.savedLoss.emit(true);
   }
-  collapseLoss(loss: any){
+  collapseLoss(loss: CoolingLossObj) {
     loss.collapse = !loss.collapse;
   }
   changeField(str: string) {
@@ -283,4 +279,12 @@ export class CoolingLossesComponent implements OnInit {
       }
     }
   }
+}
+
+export interface CoolingLossObj {
+  coolingMedium: string,
+  gasCoolingForm: FormGroup,
+  liquidCoolingForm: FormGroup,
+  heatLoss: number,
+  collapse: boolean
 }

@@ -6,6 +6,8 @@ import { CompareService } from '../compare.service';
 import { WindowRefService } from '../../indexedDb/window-ref.service';
 import { HelpPanelService } from '../help-panel/help-panel.service';
 import { debug } from 'util';
+import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
+import { FormGroup } from '@angular/forms';
 @Component({
   selector: 'app-pump-fluid',
   templateUrl: './pump-fluid.component.html',
@@ -30,9 +32,6 @@ export class PumpFluidComponent implements OnInit {
   baseline: boolean;
   @Input()
   inSetup: boolean;
-
-  @ViewChild('formRef') formRef: ElementRef;
-  elements: any;
 
   counter: any;
 
@@ -89,7 +88,7 @@ export class PumpFluidComponent implements OnInit {
     'Petroleum',
     'Water'
   ];
-  psatForm: any;
+  psatForm: FormGroup;
   isFirstChange: boolean = true;
   rpmError: string = null;
   temperatureError: string = null;
@@ -97,8 +96,8 @@ export class PumpFluidComponent implements OnInit {
     pumpRPM: null
   };
 
-
-  constructor(private psatService: PsatService, private compareService: CompareService, private windowRefService: WindowRefService, private helpPanelService: HelpPanelService) { }
+  tempUnit: string;
+  constructor(private psatService: PsatService, private compareService: CompareService, private windowRefService: WindowRefService, private helpPanelService: HelpPanelService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnChanges(changes: SimpleChanges) {
     if (!this.isFirstChange) {
@@ -120,10 +119,14 @@ export class PumpFluidComponent implements OnInit {
   ngOnInit() {
     this.psatForm = this.psatService.getFormFromPsat(this.psat.inputs);
     this.checkForm(this.psatForm);
-    if (this.selected) {
-      this.formRef.nativeElement.pumpType.focus();
-    }
     this.checkPumpRpm(true);
+    if (this.settings.temperatureMeasurement == 'C') {
+      this.tempUnit = '&#8451';
+    } else if (this.settings.temperatureMeasurement == 'F') {
+      this.tempUnit = '&#8457';
+    } else if (this.settings.temperatureMeasurement == 'K') {
+      this.tempUnit = '&#8490';
+    }
   }
 
   ngAfterViewInit() {
@@ -135,30 +138,28 @@ export class PumpFluidComponent implements OnInit {
   }
 
   disableForm() {
-    this.elements = this.formRef.nativeElement.elements;
-    for (var i = 0, len = this.elements.length; i < len; ++i) {
-      this.elements[i].disabled = true;
-    }
+    this.psatForm.disable();
   }
 
   enableForm() {
-    this.elements = this.formRef.nativeElement.elements;
-    for (var i = 0, len = this.elements.length; i < len; ++i) {
-      this.elements[i].disabled = false;
-    }
+    this.psatForm.enable();
   }
 
   addNum(str: string) {
     if (str == 'stages') {
-      this.psatForm.value.stages++;
+      this.psatForm.patchValue({
+        stages: this.psatForm.controls.stages.value + 1
+      })
     }
     this.checkForm(this.psatForm);
   }
 
   subtractNum(str: string) {
     if (str == 'stages') {
-      if (this.psatForm.value.stages != 0) {
-        this.psatForm.value.stages--;
+      if (this.psatForm.controls.stages.value != 0) {
+        this.psatForm.patchValue({
+          stages: this.psatForm.controls.stages.value - 1
+        })
       }
     }
     this.checkForm(this.psatForm);
@@ -172,7 +173,7 @@ export class PumpFluidComponent implements OnInit {
     this.checkForm(this.psatForm);
   }
 
-  checkForm(form: any) {
+  checkForm(form: FormGroup) {
     this.formValid = this.psatService.isPumpFluidFormValid(form);
     if (this.formValid) {
       this.isValid.emit(true)
@@ -181,7 +182,7 @@ export class PumpFluidComponent implements OnInit {
     }
   }
 
-  savePsat(form: any) {
+  savePsat(form: FormGroup) {
     this.psat.inputs = this.psatService.getPsatInputsFromForm(form);
     this.setCompareVals();
     this.saved.emit(this.selected);
@@ -202,7 +203,7 @@ export class PumpFluidComponent implements OnInit {
     }
     let min = 1;
     let max = 0;
-    if (this.psatForm.value.drive === 'Direct Drive') {
+    if (this.psatForm.controls.drive.value === 'Direct Drive') {
       min = 540;
       max = 3960;
     } else {
@@ -210,16 +211,18 @@ export class PumpFluidComponent implements OnInit {
       max = Infinity;
     }
     this.rpmError = null;
-    if (this.psatForm.value.pumpRPM < min) {
+    if (this.psatForm.controls.pumpRPM.value < min) {
       this.rpmError = 'Pump Speed is less than the minimum (' + min + ' rpm)';
-    } else if (this.psatForm.value.pumpRPM > max) {
+    } else if (this.psatForm.controls.pumpRPM.value > max) {
       this.rpmError = 'Pump Speed is greater than the maximum (' + max + ' rpm)';
     }
   }
 
   calculateSpecificGravity(bool?: boolean) {
-    let fluidType = this.psatForm.value.fluidType;
-    let t = this.psatForm.value.fluidTemperature;
+    let fluidType = this.psatForm.controls.fluidType.value;
+    let t = this.psatForm.controls.fluidTemperature.value;
+    t = this.convertUnitsService.value(t).from(this.settings.temperatureMeasurement).to('F');
+
     if (fluidType && t) {
 
       if (!bool) {

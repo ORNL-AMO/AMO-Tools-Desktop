@@ -8,8 +8,8 @@
 
 <nav *ngIf="currentTab.step == 1">
   <ul class="tabs subtabs phast">
-    <li class="fixed-tab-size" *ngFor="let tab of specTabs" [ngClass]="{'active': specTab == tab.value}">
-      <a (click)="changeSpecTab(tab.value)">{{tab.name}}</a>
+    <li class="fixed-tab-size" *ngFor="let tab of specTabs" [ngClass]="{'active': specTab.step == tab.step}">
+      <a (click)="changeSpecTab(tab)">{{tab.tabName}}</a>
     </li>
   </ul>
 </nav> 

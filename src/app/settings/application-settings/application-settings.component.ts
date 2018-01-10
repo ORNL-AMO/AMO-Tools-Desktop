@@ -2,6 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Settings } from '../../shared/models/settings';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
 import { SettingsService } from '../settings.service';
+import { FormGroup } from '@angular/forms';
 @Component({
   selector: 'app-application-settings',
   templateUrl: './application-settings.component.html',
@@ -9,12 +10,11 @@ import { SettingsService } from '../settings.service';
 })
 export class ApplicationSettingsComponent implements OnInit {
   @Input()
-  settingsForm: any;
+  settingsForm: FormGroup;
   @Output('startSavePolling')
   startSavePolling = new EventEmitter<boolean>();
   @Input()
-  inPhast: boolean;
-
+  inPsat: boolean;
   languages: Array<string> = [
     'English'
   ];
@@ -76,7 +76,6 @@ export class ApplicationSettingsComponent implements OnInit {
     //}
     //this.setEnergyResultUnit();
     this.settingsForm = this.settingsService.setUnits(this.settingsForm);
-    console.log(this.settingsForm);
     this.startSavePolling.emit(true);
   }
 

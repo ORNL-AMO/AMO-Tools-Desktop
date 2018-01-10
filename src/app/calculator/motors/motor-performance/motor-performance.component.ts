@@ -3,6 +3,7 @@ import { PSAT } from '../../../shared/models/psat';
 import { PsatService } from '../../../psat/psat.service';
 import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
 import { Settings } from '../../../shared/models/settings';
+import { FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-motor-performance',
@@ -16,8 +17,9 @@ export class MotorPerformanceComponent implements OnInit {
   settings: Settings;
   @Input()
   inPsat: boolean;
-  
-  performanceForm: any;
+​
+  currentField: string;
+  performanceForm: FormGroup;
 
   toggleCalculate: boolean = false;
   tabSelect: string = 'results';
@@ -62,5 +64,8 @@ export class MotorPerformanceComponent implements OnInit {
   }
   setTab(str: string){
     this.tabSelect = str;
+  }
+  changeField(str: string) {
+    this.currentField = str;
   }
 }
