@@ -92,7 +92,7 @@ export class SolidLoadChargeMaterialComponent implements OnInit {
   }
 
   focusField(str: string) {
-    this.changeField = str;
+    this.currentField = str;
   }
 
   hideMaterialModal() {
