@@ -53,11 +53,11 @@ export class LossesService {
     if (settings.energySourceType == 'Electricity') {
       if (settings.furnaceType == 'Electric Arc Furnace (EAF)') {
         this.lossesTabs.push({
-          tabName: 'Heat System Efficiency',
+          tabName: 'Slag',
           step: this.lossesTabs.length+1,
           back: this.lossesTabs.length,
           next: this.lossesTabs.length+2,
-          componentStr: 'heat-system-efficiency' 
+          componentStr: 'slag' 
         })
         this.lossesTabs.push({
           tabName: 'Exhaust Gas',
