@@ -63,16 +63,16 @@
           <td *ngIf="data.settings.energySourceType == 'Fuel'">
             {{data.baselineResults.annualCost | currency:'USD':'symbol':'1.0-0'}}
           </td>
-          <td *ngIf="data.settings.energySourceType != 'Fuel'">&mdash; &mdash;</td>
-          <td *ngIf="data.settings.energySourceType != 'Fuel'">&mdash; &mdash;</td>
+          <td *ngIf="data.settings.energySourceType != 'Fuel'">&mdash;</td>
+          <td *ngIf="data.settings.energySourceType != 'Fuel'">&mdash;</td>
           <td *ngIf="data.settings.energySourceType == 'Electricity'">
             {{getConvertedValue(data.baselineResults.annualEnergyUsed, data.settings) | sigFigs:'5'}}
           </td>
           <td *ngIf="data.settings.energySourceType == 'Electricity'">
             {{data.baselineResults.annualCost | currency:'USD':'symbol':'1.0-0'}}
           </td>
-          <td *ngIf="data.settings.energySourceType != 'Electricity'">&mdash; &mdash;</td>
-          <td *ngIf="data.settings.energySourceType != 'Electricity'">&mdash; &mdash;</td>
+          <td *ngIf="data.settings.energySourceType != 'Electricity'">&mdash;</td>
+          <td *ngIf="data.settings.energySourceType != 'Electricity'">&mdash;</td>
 
           <td *ngIf="data.settings.energySourceType == 'Steam'">
             {{getConvertedValue(data.baselineResults.annualEnergyUsed, data.settings) | sigFigs:'5'}}
@@ -80,8 +80,8 @@
           <td *ngIf="data.settings.energySourceType == 'Steam'">
             {{data.baselineResults.annualCost | currency:'USD':'symbol':'1.0-0'}}
           </td>
-          <td *ngIf="data.settings.energySourceType != 'Steam'">&mdash; &mdash;</td>
-          <td *ngIf="data.settings.energySourceType != 'Steam'">&mdash; &mdash;</td>
+          <td *ngIf="data.settings.energySourceType != 'Steam'">&mdash;</td>
+          <td *ngIf="data.settings.energySourceType != 'Steam'">&mdash;</td>
           <td>{{data.baselineResults.annualCost | currency:'USD':'symbol':'1.0-0'}}</td>
           <td>{{getResultPercent(data.baselineResults.annualCost, totalCost) | number:'1.0-1'}}</td>
           <td>{{getConvertedPercent(data.baselineResults.annualEnergyUsed, totalEnergy, data.settings) | number:'1.0-1'}}</td>

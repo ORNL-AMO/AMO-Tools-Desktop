@@ -1,0 +1,22 @@
+tr > td,
+tr > th{
+    text-align: center;
+    vertical-align: middle;
+}
+
+.name{
+    border-left: solid 10px;
+    padding-left: 4px;
+}
+
+th{
+    width:9%;
+}
+
+.btn-toggle{
+    padding-bottom: 10px;
+}
+
+.table-striped tbody tr:nth-of-type(odd) {
+    background-color: rgba(0, 0, 0, 0.12);
+}

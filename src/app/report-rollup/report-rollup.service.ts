@@ -184,7 +184,7 @@ export class ReportRollupService {
         } else {
           modificationResults = this.psatService.resultsModified(JSON.parse(JSON.stringify(val.modification.inputs)), settings[0], baselineResults.pump_efficiency);
         }
-        tmpResultsArr.push({ baselineResults: baselineResults, modificationResults: modificationResults, assessmentId: val.assessmentId, name: val.name });
+        tmpResultsArr.push({ baselineResults: baselineResults, modificationResults: modificationResults, assessmentId: val.assessmentId, name: val.name, modName: val.modification.name });
         this.psatResults.next(tmpResultsArr);
       })
     })
@@ -303,7 +303,8 @@ export interface PsatResultsData {
   baselineResults: PsatOutputs,
   modificationResults: PsatOutputs,
   assessmentId: number,
-  name: string
+  name: string,
+  modName: string,
 }
 
 

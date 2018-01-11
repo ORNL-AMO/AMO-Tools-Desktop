@@ -5,6 +5,7 @@ import { PsatService } from '../../../psat/psat.service';
 import { BaseChartDirective } from 'ng2-charts';
 import { graphColors } from '../../../phast/phast-report/report-graphs/graphColors';
 import * as _ from 'lodash';
+
 @Component({
   selector: 'app-psat-rollup-graphs',
   templateUrl: './psat-rollup-graphs.component.html',
@@ -34,6 +35,7 @@ export class PsatRollupGraphsComponent implements OnInit {
   constructor(private reportRollupService: ReportRollupService, private psatService: PsatService) { }
 
   ngOnInit() {
+    this.graphColors = graphColors;
     this.reportRollupService.psatResults.subscribe((psats: Array<PsatResultsData>) => {
       if (psats.length != 0) {
         this.totalEnergyUse = _.sumBy(psats, (psat) => { return psat.baselineResults.annual_energy });
