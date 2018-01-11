@@ -56,7 +56,14 @@
         <div class="input-group">
           <input type="number" min="0" step="any" class="form-control" id="fuelConsumption" (input)="calc()" (focus)="changeField('fuelConsumption')"
             [(ngModel)]="o2Enrichment.fuelConsumption" onfocus="this.select();">
-          <span class="input-group-addon units">MMBtu/hr</span>
+
+          <!-- debug -->
+          <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Imperial'">MMBtu/hr</span>
+          <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Metric'">GJ/hr</span>
+
+
+          <!-- real version -->
+            <!-- <span class="input-group-addon units">MMBtu/hr</span> -->
         </div>
       </div>
     </div>

@@ -17,6 +17,8 @@ export class FlueGasMaterialComponent implements OnInit {
   closeModal = new EventEmitter<FlueGasMaterial>();
   @Input()
   settings: Settings;
+  @Output('hideModal')
+  hideModal = new EventEmitter();
 
   newMaterial: FlueGasMaterial = {
     substance: 'New Fuel',
@@ -68,6 +70,10 @@ export class FlueGasMaterialComponent implements OnInit {
     }
   }
 
+  hideMaterialModal() {
+    this.hideModal.emit();
+  }
+
   setExisting() {
     if (this.selectedMaterial) {
       this.newMaterial = {
@@ -112,7 +118,7 @@ export class FlueGasMaterialComponent implements OnInit {
   }
 
   checkMaterialName() {
-    let test = _.filter(this.allMaterials, (material) => { return material.substance == this.newMaterial.substance })
+    let test = _.filter(this.allMaterials, (material) => { return material.substance.toLowerCase().trim() == this.newMaterial.substance.toLowerCase().trim() })
     if (test.length > 0) {
       this.nameError = 'Cannot have same name as existing material';
       this.isNameValid = false;

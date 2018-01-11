@@ -3,6 +3,8 @@ import { EnergyEquivalencyFuel, EnergyEquivalencyElectric, EnergyEquivalencyElec
 import { PhastService } from '../../../phast/phast.service';
 import { Settings } from '../../../shared/models/settings';
 import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
+import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
+
 @Component({
   selector: 'app-energy-equivalency',
   templateUrl: './energy-equivalency.component.html',
@@ -28,20 +30,39 @@ export class EnergyEquivalencyComponent implements OnInit {
 
   currentField: string = 'fuelFiredEfficiency';
   tabSelect: string = 'results';
-  constructor(private phastService: PhastService, private indexedDbService: IndexedDbService) { }
+  constructor(private phastService: PhastService, private indexedDbService: IndexedDbService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
     if (!this.settings) {
       this.indexedDbService.getDirectorySettings(1).then(results => {
         if(results){
           this.settings = results[0];
+          this.initDefaultValues(this.settings);
           this.calculateElectric();
           this.calculateFuel();
         }
       })
     } else {
+      this.initDefaultValues(this.settings);
       this.calculateElectric();
       this.calculateFuel();
+    }
+  }
+
+  initDefaultValues(settings: Settings) {
+    if (settings.unitsOfMeasure == 'Metric') {
+      this.energyEquivalencyElectric = {
+        fuelFiredEfficiency: 60,
+        electricallyHeatedEfficiency: 90,
+        fuelFiredHeatInput: this.convertUnitsService.roundVal(this.convertUnitsService.value(10).from('MMBtu').to('GJ'), 2)
+      };
+    }
+    else {
+      this.energyEquivalencyElectric = {
+        fuelFiredEfficiency: 60,
+        electricallyHeatedEfficiency: 90,
+        fuelFiredHeatInput: 10
+      };
     }
   }
 

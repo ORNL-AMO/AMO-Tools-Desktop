@@ -11,11 +11,12 @@ import { ConvertUnitsService } from '../../shared/convert-units/convert-units.se
   styleUrls: ['./atmosphere-specific-heat-material.component.css']
 })
 export class AtmosphereSpecificHeatMaterialComponent implements OnInit {
-
   @Output('closeModal')
   closeModal = new EventEmitter<AtmosphereSpecificHeat>();
   @Input()
   settings: Settings;
+  @Output('hideModal')
+  hideModal = new EventEmitter();
 
   newMaterial: AtmosphereSpecificHeat = {
     substance: 'New Material',
@@ -26,6 +27,7 @@ export class AtmosphereSpecificHeatMaterialComponent implements OnInit {
   isValidMaterialName: boolean = true;
   nameError: string = null;
   canAdd: boolean;
+  currentField: string = "selectedMaterial";
   constructor(private suiteDbService: SuiteDbService, private indexedDbService: IndexedDbService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
@@ -62,11 +64,12 @@ export class AtmosphereSpecificHeatMaterialComponent implements OnInit {
         specificHeat: this.selectedMaterial.specificHeat
       }
     }
+    this.checkMaterialName();
   }
 
 
   checkMaterialName() {
-    let test = _.filter(this.allMaterials, (material) => { return material.substance == this.newMaterial.substance })
+    let test = _.filter(this.allMaterials, (material) => { return material.substance.toLowerCase().trim() == this.newMaterial.substance.toLowerCase().trim() })
     if (test.length > 0) {
       this.nameError = 'Cannot have same name as existing material';
       this.isValidMaterialName = false;
@@ -74,6 +77,10 @@ export class AtmosphereSpecificHeatMaterialComponent implements OnInit {
       this.isValidMaterialName = true;
       this.nameError = null;
     }
+  }
+
+  hideMaterialModal() {
+    this.hideModal.emit();
   }
 
 

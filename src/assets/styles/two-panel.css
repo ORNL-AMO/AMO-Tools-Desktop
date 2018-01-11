@@ -76,6 +76,7 @@
     padding-bottom: 8.5px;
 }
 
+
 .psat .header{
     border-bottom: #2980b9 groove 2px;
 }
@@ -127,9 +128,9 @@
 	margin-top: 5%;
 }
 
-.help-panel{
+/* .help-panel{
 	padding-right: 15px;
-}
+} */
 
 .header h3{
 	margin: 10px 0 0px 10px;
@@ -214,3 +215,73 @@
     padding-bottom: 90px;
 }
 
+
+
+/* Floating modal styles */
+
+.custom-card-body {
+    /* padding: 15px !important; */
+    padding: 0px 15px 0px 15px;
+}
+
+.card-container{
+	/* padding-bottom: 70px;
+	max-height: none !important;
+	min-height: 100vh;
+    height: auto !important; */
+    height: 100%;
+}
+
+.card-column{
+	box-shadow: 0px 0px 69px -1px rgba(0,0,0,0.2);
+	background: #fff;
+	z-index: 2;
+}
+
+.card-help-column {
+    background: #efefef;
+}
+
+.card-header {
+    text-align: center;
+    background-color: rgba(0,0,0,0) !important;
+}
+
+.card-header h3 {
+    margin: 0 !important;
+    font-size: 16px !important;
+}
+
+
+.card-container form .form-section {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    border-bottom: #bbb dashed 1px;
+}
+
+.card-container form {
+    padding-top: 15px;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+
+.modal-btn-container {
+    position: absolute;
+    /* display: flex; */
+    text-align: center;
+    left: 0;
+    padding: inherit;
+    padding-top: 15px;
+    width: inherit;
+}
+
+.modal-btn {
+    display: inline-block;
+    padding: 0 10px;
+    margin: 0 15px;
+}
+
+.modal-lg {
+    max-width: 90%;
+}

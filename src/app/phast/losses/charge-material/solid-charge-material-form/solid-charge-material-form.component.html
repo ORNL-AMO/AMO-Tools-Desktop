@@ -183,20 +183,13 @@
     </div>
   </div>
 </form>
-
-<!--CREATE Folder MODAL-->
 <div bsModal #materialModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="materialModalLabel"
   aria-hidden="true" [config]="{backdrop: 'static'}">
-  <div class="modal-dialog modal-md">
+  <div class="modal-dialog modal-lg">
     <div class="modal-content">
-      <div class="modal-header">
-        <h3>Create Solid Material</h3>
-        <button class="close" (click)="hideMaterialModal()">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <app-solid-load-charge-material *ngIf="showModal" (closeModal)="hideMaterialModal($event)" [settings]="settings"></app-solid-load-charge-material>
+      <div>
+        <app-solid-load-charge-material *ngIf="showModal" (closeModal)="hideMaterialModal($event)" (hideModal)="hideMaterialModal($event)"
+          [settings]="settings"></app-solid-load-charge-material>
       </div>
     </div>
   </div>

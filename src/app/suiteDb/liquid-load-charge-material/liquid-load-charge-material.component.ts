@@ -5,6 +5,8 @@ import { IndexedDbService } from '../../indexedDb/indexed-db.service';
 import * as _ from 'lodash';
 import { Settings } from '../../shared/models/settings';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
+import { PhastService } from '../../phast/phast.service';
+
 @Component({
   selector: 'app-liquid-load-charge-material',
   templateUrl: './liquid-load-charge-material.component.html',
@@ -15,6 +17,8 @@ export class LiquidLoadChargeMaterialComponent implements OnInit {
   closeModal = new EventEmitter<LiquidLoadChargeMaterial>();
   @Input()
   settings: Settings;
+  @Output('hideModal')
+  hideModal = new EventEmitter();
 
   newMaterial: LiquidLoadChargeMaterial = {
     latentHeat: 0,
@@ -80,5 +84,9 @@ export class LiquidLoadChargeMaterialComponent implements OnInit {
       this.isValidMaterialName = true;
       this.nameError = null;
     }
+  }
+
+  hideMaterialModal() {
+    this.hideModal.emit();
   }
 }

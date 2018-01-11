@@ -119,8 +119,25 @@
   </div>
 </form>
 
+<!-- debug -->
 <!--CREATE material MODAL-->
 <div bsModal #materialModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="materialModalLabel"
+  aria-hidden="true" [config]="{backdrop: 'static'}">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div>
+        <app-solid-liquid-flue-gas-material *ngIf="showModal" (closeModal)="hideMaterialModal($event)" (hideModal)="hideMaterialModal($event)" [settings]="settings"></app-solid-liquid-flue-gas-material>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+<!-- real version -->
+<!--CREATE material MODAL-->
+<!-- <div bsModal #materialModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="materialModalLabel"
   aria-hidden="true" [config]="{backdrop: 'static'}">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
@@ -135,4 +152,4 @@
       </div>
     </div>
   </div>
-</div>
+</div> -->
