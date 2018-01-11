@@ -2,7 +2,7 @@
   <div class="col-12">
     <div class="output-summary">
       <div class="summary-table">
-        <table class="table table-hover">
+        <table class="table table-hover table-striped">
           <thead>
             <tr>
               <th>Energy Name</th>
@@ -51,8 +51,8 @@
                 <span *ngIf="data.hhv">
                 {{data.hhv | sigFigs:'5'}} {{energyPerMassUnit}}
                 </span>
-                <span *ngIf="data.hhv">
-                  &mdash; &mdash;
+                <span *ngIf="!data.hhv">
+                  &mdash;
                 </span>
               </td>
               <td>
