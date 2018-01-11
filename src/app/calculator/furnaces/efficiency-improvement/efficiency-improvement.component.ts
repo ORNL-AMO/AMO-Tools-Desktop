@@ -22,7 +22,7 @@ export class EfficiencyImprovementComponent implements OnInit {
     newFlueGasTemp: 1600
   }
   efficiencyImprovementOutputs: EfficiencyImprovementOutputs;
-  currentField: string = 'flueGasOxygen';
+  currentField: string = 'default';
   constructor(private phastService: PhastService, private indexedDbService: IndexedDbService) { }
 
   ngOnInit() {
