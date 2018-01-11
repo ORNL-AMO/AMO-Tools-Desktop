@@ -5,6 +5,7 @@ import { WindowRefService } from '../indexedDb/window-ref.service';
 import { Settings } from '../shared/models/settings';
 import { IndexedDbService } from '../indexedDb/indexed-db.service';
 import { ModalDirective } from 'ngx-bootstrap';
+import { AssessmentService } from '../assessment/assessment.service';
 @Component({
   selector: 'app-report-rollup',
   templateUrl: './report-rollup.component.html',
@@ -32,7 +33,7 @@ export class ReportRollupComponent implements OnInit {
   @ViewChild('unitModal') public unitModal: ModalDirective;
   @ViewChild('rollupModal') public rollupModal: ModalDirective;
   constructor(private reportRollupService: ReportRollupService,
-    private windowRefService: WindowRefService, private indexedDbService: IndexedDbService) { }
+    private windowRefService: WindowRefService, private indexedDbService: IndexedDbService, private assessmentService: AssessmentService) { }
 
   ngOnInit() {
     this.indexedDbService.getDirectorySettings(1).then(results => {
@@ -46,9 +47,11 @@ export class ReportRollupComponent implements OnInit {
     setTimeout(() => {
       this.assessmentsGathered = true;
     }, 2000)
+    this.assessmentService.showFeedback.next(false);
   }
 
   ngOnDestroy() {
+    this.assessmentService.showFeedback.next(true);
     this.reportRollupService.initSummary();
   }
 
@@ -99,6 +102,10 @@ export class ReportRollupComponent implements OnInit {
     let container = doc.getElementById('reportHeader');
     this.focusedAssessment = assessment;
     element.scrollIntoView({ behavior: 'smooth' });
+    let window = this.windowRefService.nativeWindow;
+    let scrlAmnt = 0-(container.clientHeight+25);
+    console.log(scrlAmnt);
+    window.scrollBy(0,scrlAmnt)
   }
 
   showModal() {
@@ -109,19 +116,19 @@ export class ReportRollupComponent implements OnInit {
     this.rollupModal.hide();
   }
 
-  showUnitModal(){
+  showUnitModal() {
     this.unitModal.show();
   }
 
-  hideUnitModal(){
+  hideUnitModal() {
     this.unitModal.hide();
   }
 
-  showPsatModal(){
+  showPsatModal() {
     this.psatRollupModal.show();
   }
 
-  hidePsatModal(){
+  hidePsatModal() {
     this.psatRollupModal.hide();
   }
 }

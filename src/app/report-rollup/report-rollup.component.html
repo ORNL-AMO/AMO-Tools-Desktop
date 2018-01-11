@@ -10,9 +10,9 @@
 
         <p class="report-notes">{{reportNotes}}</p>
     </div>
-    <div class="row sticky-top">
+    <div class="row sticky-top" id="reportHeader">
         <div class="col-12">
-            <div class="report-header hide-print" id="reportHeader">
+            <div class="report-header hide-print">
                 <app-report-banner (emitCloseReport)="closeReport()" (emitExport)="exportToCsv()" (emitPrint)="print()" (emitShowUnitModal)="showUnitModal()">
                 </app-report-banner>
                 <app-report-summary id="reportSummary" [settings]="settings" (showModal)="showModal()" (showPsatModal)="showPsatModal();"></app-report-summary>
@@ -22,19 +22,25 @@
     <!-- End .report-header -->
 
     <div class="row">
-        <div class="col-2">
+        <div class="col-lg-1 col-md-2 col-sm-2">
             <div class="report-container">
                 <div class="sidebar hide-print">
                     <ul>
-                        <li *ngFor="let assessment of _reportAssessments" [ngClass]="{'active': focusedAssessment.id == assessment.id}">
-                            <a (click)="selectAssessment(assessment)">{{assessment.name}}</a>
+                        <li *ngFor="let assessment of _reportAssessments" [ngClass]="{'active': focusedAssessment.id == assessment.id}" (click)="selectAssessment(assessment)">
+                            <a>
+                            <img *ngIf="assessment.type == 'PSAT'" class="icon-image" src="assets/images/ico-psat-diagram-small.png">
+                            <img *ngIf="assessment.type == 'PHAST'" class="icon-image" src="assets/images/ico-phast-diagram-small.png">
+                            <span class="sb-item">
+                                {{assessment.name}}
+                            </span>
+                        </a>
                         </li>
                     </ul>
                 </div>
             </div>
         </div>
         <!-- End .sidebar -->
-        <div class="col-10 assessment-reports">
+        <div class="col-lg-11 col-md-10 col-sm-10 assessment-reports">
             <div *ngFor="let assessment of _reportAssessments" id="{{'assessment_'+assessment.id}}" class="assessment-item">
                 <app-psat-report *ngIf="assessment.psat" [assessment]="assessment" [inRollup]="true" (selectModification)="updateSummary($event)">
                 </app-psat-report>

@@ -46,6 +46,10 @@ export class CoreComponent implements OnInit {
     if (this.electronService.process.platform == 'win32') {
       this.showScreenshot = false;
     }
+
+    this.assessmentService.showFeedback.subscribe(val => {
+      this.showFeedback = val;
+    })
   }
 
   takeScreenShot() {

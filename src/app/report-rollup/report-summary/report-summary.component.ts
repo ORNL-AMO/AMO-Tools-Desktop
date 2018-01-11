@@ -14,14 +14,15 @@ export class ReportSummaryComponent implements OnInit {
   showModal = new EventEmitter<boolean>();
   @Output('showPsatModal')
   showPsatModal = new EventEmitter<boolean>();
- // @ViewChild('rollupModal') public rollupModal: ModalDirective;
+  // @ViewChild('rollupModal') public rollupModal: ModalDirective;
+  showSummary: string = 'open';
   constructor() { }
 
   ngOnInit() {
   }
 
 
-  showFurnaceRollup(){
+  showFurnaceRollup() {
     this.showModal.emit(true);
   }
   // showModal() {
@@ -32,7 +33,11 @@ export class ReportSummaryComponent implements OnInit {
   //   this.rollupModal.hide();
   // }
 
-  showPumpModal(){
+  showPumpModal() {
     this.showPsatModal.emit(true);
+  }
+
+  collapseSummary(str: string) {
+    this.showSummary = str;
   }
 }
