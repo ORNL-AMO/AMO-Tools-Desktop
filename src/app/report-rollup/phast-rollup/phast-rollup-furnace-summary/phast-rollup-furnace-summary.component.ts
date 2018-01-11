@@ -4,6 +4,7 @@ import { ReportRollupService, PhastResultsData } from '../../report-rollup.servi
 import { BaseChartDirective } from 'ng2-charts';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { graphColors } from '../../../phast/phast-report/report-graphs/graphColors';
+import { PhastService } from '../../../phast/phast.service';
 @Component({
   selector: 'app-phast-rollup-furnace-summary',
   templateUrl: './phast-rollup-furnace-summary.component.html',
@@ -31,7 +32,7 @@ export class PhastRollupFurnaceSummaryComponent implements OnInit {
     'Energy Intensity'
   ]
   graphOption: string = 'Energy Use';
-  constructor(private reportRollupService: ReportRollupService, private convertUnitsService: ConvertUnitsService) { }
+  constructor(private reportRollupService: ReportRollupService, private convertUnitsService: ConvertUnitsService, private phastService: PhastService) { }
 
   ngOnInit() {
     this.resultData = new Array();
@@ -59,10 +60,11 @@ export class PhastRollupFurnaceSummaryComponent implements OnInit {
     ]
     let i = 1;
     this.resultData.forEach(data => {
+
       let num1 = 0;
       let num2 = 0;
       if (this.graphOption == '% Available Heat') {
-
+        // num1 = this.phastService.availableHeat(data.assessment)
       } else if (this.graphOption == 'Energy Use') {
         if (i == 1) {
           axisLabel = axisLabel + ' (' + this.settings.phastRollupUnit + '/yr)';

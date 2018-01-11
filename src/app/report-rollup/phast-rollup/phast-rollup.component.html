@@ -1,14 +1,14 @@
 <div class="card" *ngIf="settings">
-  <div class="card-header">
-    Summary of Energy Sources Used
+  <div class="header">
+    <h3>Summary of Energy Sources Used</h3>
   </div>
   <div class="card-body">
     <app-phast-rollup-energy-table [settings]="settings"></app-phast-rollup-energy-table>
   </div>
 </div>
 <div class="card">
-  <div class="card-header">
-      Energy Use Graphs
+  <div class="header">
+      <h3>Energy Use Graphs</h3>
   </div>
   <div class="card-body">
     <app-phast-rollup-graphs [settings]="settings"></app-phast-rollup-graphs>
@@ -16,8 +16,8 @@
 </div>
 
 <div class="card">
-  <div class="card-header">
-    Furnace Summary
+  <div class="header">
+    <h3>Furnace Summary</h3>
   </div>
   <div class="card-body">
     <app-phast-rollup-furnace-summary [settings]="settings"></app-phast-rollup-furnace-summary>

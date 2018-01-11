@@ -10,9 +10,17 @@ export class PhastRollupComponent implements OnInit {
   @Input()
   settings: Settings;
 
+
+  showEnergyUse: boolean = true;
+  showSummary: boolean = true;
+  showGraphs: boolean = true;
   constructor(private reportRollupService: ReportRollupService) { }
 
   ngOnInit() {
+  }
+
+  toggleCollapse(varName: string){
+    this[varName] = !this[varName]
   }
 
 }
