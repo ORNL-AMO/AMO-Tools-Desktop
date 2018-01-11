@@ -26,7 +26,7 @@ export class EfficiencyImprovementComponent implements OnInit {
   efficiencyImprovementOutputs: EfficiencyImprovementOutputs;
 
   currentField: string = 'default';
-  constructor(private phastService: PhastService, private indexedDbService: IndexedDbService) { }
+  constructor(private phastService: PhastService, private indexedDbService: IndexedDbService, private convertUnitsService: ConvertUnitsService) { }
 
 
   ngOnInit() {
