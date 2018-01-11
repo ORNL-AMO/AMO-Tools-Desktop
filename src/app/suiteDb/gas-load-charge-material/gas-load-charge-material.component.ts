@@ -17,6 +17,8 @@ export class GasLoadChargeMaterialComponent implements OnInit {
   settings: Settings;
   @Output('hideModal')
   hideModal = new EventEmitter();
+  @Output('changeField')
+  changeField = new EventEmitter<string>();
 
   newMaterial: GasLoadChargeMaterial = {
     substance: 'New Material',
@@ -76,6 +78,9 @@ export class GasLoadChargeMaterialComponent implements OnInit {
       this.isValidMaterialName = true;
       this.nameError = null;
     }
+  }
+  focusField(str: string) {
+    this.changeField.emit(str);
   }
 
   hideMaterialModal() {

@@ -13,7 +13,7 @@
           <div class="form-section">
             <div class="form-group">
               <label class="small" for="selectedMaterial">Start with existing material</label>
-              <select name="selectedMaterial" class="form-control" id="selectedMaterial" (change)="setExisting()" [(ngModel)]="selectedMaterial">
+              <select name="selectedMaterial" class="form-control" id="selectedMaterial" (change)="setExisting()" [(ngModel)]="selectedMaterial"  (focus)="focusField('selectedMaterial')">
                 <option *ngFor="let material of allMaterials" [ngValue]="material">{{material.substance}}</option>
                 <option [ngValue]="null"></option>
               </select>
@@ -32,7 +32,7 @@
             <div class="form-group">
               <label class="small" for="specificHeatVapor">Specific Heat Vapor</label>
               <div class="input-group">
-                <input type="number" id="specificHeatVapor" name="specificHeatVapor" class="form-control" [(ngModel)]="newMaterial.specificHeatVapor"
+                <input type="number" id="specificHeatVapor" name="specificHeatVapor" class="form-control" [(ngModel)]="newMaterial.specificHeatVapor" (focus)="focusField('specificHeatVapor')"
                 />
                 <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">Btu/(lb-&#8457;)</span>
                 <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kJ/(kg-&#8451;)</span>
@@ -44,7 +44,7 @@
 
       <div class="col-sm-6 col-md-6 card-help-column">
         <div class="tab-content">
-          <app-gas-load-charge-material-help [currentField]="currentField"></app-gas-load-charge-material-help>
+          <app-gas-load-charge-material-help (changeField)="changeField($event)" [currentField]="currentField"></app-gas-load-charge-material-help>
         </div>
       </div>
     </div>
