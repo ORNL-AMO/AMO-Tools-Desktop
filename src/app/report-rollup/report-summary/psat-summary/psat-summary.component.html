@@ -5,17 +5,13 @@
 </div>
 <dl class="summary-list">
     <dt>Maximum Annual<br/>Cost Savings</dt>
-    <dd *ngIf="pumpSavingsPotential">{{pumpSavingsPotential| currency:'USD':'symbol':'2.0-0'}}</dd>
-    <dd *ngIf="!pumpSavingsPotential">&mdash;</dd>
+    <dd>{{pumpSavingsPotential| currency:'USD':'symbol':'2.0-0'}}</dd>
     <dt>Annual Cost</dt>
-    <dd *ngIf="totalCost">{{totalCost | currency:'USD':'symbol':'2.0-0'}}</dd>
-    <dd *ngIf="!totalCost">&mdash;</dd>
+    <dd>{{totalCost | currency:'USD':'symbol':'2.0-0'}}</dd>
 </dl>
 <dl class="summary-list">
     <dt>Maximum Annual<br/>Energy Savings</dt>
-    <dd *ngIf="energySavingsPotential">{{energySavingsPotential| number:'2.0-0'}} MWh</dd>
-    <dd *ngIf="!energySavingsPotential">&mdash;</dd>
+    <dd>{{energySavingsPotential| number:'2.0-0'}} MWh</dd>
     <dt>Annual Energy</dt>
-    <dd *ngIf="totalEnergy">{{totalEnergy| number:'2.0-0'}} MWh</dd>
-    <dd *ngIf="!totalEnergy">&mdash;</dd>
+    <dd>{{totalEnergy| number:'2.0-0'}} MWh</dd>
 </dl>
