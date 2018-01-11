@@ -10,12 +10,62 @@
     <div class="card-help">
       <div class="help-panel">
         <div class="help-content">
+
           <div class="card" *ngIf="currentField == 'selectedMaterial'">
             <div class="card-header">
-
-              
+              <p>
+                Material Name
+              </p>
+            </div>
+            <div class="card-content">
+              Enter the name of the charge material used (make sure that a unique name is entered to prevent overlap with the existing materials).
             </div>
           </div>
+
+          <div class="card" *ngIf="currentField == 'specificHeatLiquid'">
+            <div class="card-header">
+              <p>
+                Specific heat of liquid
+              </p>
+            </div>
+            <div class="card-content">
+              Specific heat is the amount of heat that is required to raise the temperature of unit mas of the liquid by unit temperature.
+            </div>
+          </div>
+
+          <div class="card" *ngIf="currentField == 'vaporizationTemperature'">
+            <div class="card-header">
+              <p>
+                Vaporizing Temperature
+              </p>
+            </div>
+            <div class="card-content">
+              Temperature at which liquid is converted into vapor without any change in temperature.
+            </div>
+          </div>
+
+          <div class="card" *ngIf="currentField == 'latentHeat'">
+            <div class="card-header">
+              <p>
+                Latent heat of vaporization
+              </p>
+            </div>
+            <div class="card-content">
+              The amount of thermal energy required to convert a unit mass of the liquid into gas without change in temperature.
+            </div>
+          </div>
+
+          <div class="card" *ngIf="currentField == 'specificHeatVapor'">
+            <div class="card-header">
+              <p>
+                Specific heat of Vapor
+              </p>
+            </div>
+            <div class="card-content">
+              Amount of heat that is required to raise the temperature of unit mas of the substance by unit temperature.
+            </div>
+          </div>
+
         </div>
       </div>
     </div>

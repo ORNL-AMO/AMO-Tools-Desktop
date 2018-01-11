@@ -27,6 +27,7 @@ export class SolidLoadChargeMaterialComponent implements OnInit {
     specificHeatLiquid: 0,
     specificHeatSolid: 0,
   };
+  changeField: string = 'selectedMaterial';
   selectedMaterial: SolidLoadChargeMaterial;
   allMaterials: Array<SolidLoadChargeMaterial>;
   isValidMaterialName: boolean = true;
@@ -88,6 +89,10 @@ export class SolidLoadChargeMaterialComponent implements OnInit {
       this.isValidMaterialName = true;
       this.nameError = null;
     }
+  }
+
+  focusField(str: string) {
+    this.currentField = str;
   }
 
   hideMaterialModal() {

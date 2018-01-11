@@ -11,12 +11,28 @@
       <div class="help-panel">
         <div class="help-content">
 
-          <!-- use this code for help text -->
           <div class="card" *ngIf="currentField == 'selectedMaterial'">
             <div class="card-header">
+              <p>
+                Material Name
+              </p>
+            </div>
+            <div class="card-content">
+              Enter the name of the charge material used (make sure that a unique name is entered to prevent overlap with the existing materials).
             </div>
           </div>
-          
+
+          <div class="card" *ngIf="currentField == 'specificHeat'">
+            <div class="card-header">
+              <p>
+                Specific Heat
+              </p>
+            </div>
+            <div class="card-content">
+              Amount of heat that is required to raise the temperature of unit mas of the substance by unit temperature.
+            </div>
+          </div>
+
         </div>
       </div>
     </div>

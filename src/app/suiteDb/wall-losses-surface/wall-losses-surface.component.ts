@@ -77,6 +77,10 @@ export class WallLossesSurfaceComponent implements OnInit {
     }
   }
 
+  focusField(str: string) {
+    this.currentField = str;
+  }
+
   hideMaterialModal() {
     this.hideModal.emit();
   }

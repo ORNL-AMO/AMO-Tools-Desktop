@@ -10,14 +10,28 @@
     <div class="card-help">
       <div class="help-panel">
         <div class="help-content">
-          
-          <!-- use this code for creating help text -->
           <div class="card" *ngIf="currentField == 'selectedMaterial'">
             <div class="card-header">
-
+              <p>
+                Material Name
+              </p>
+            </div>
+            <div class="card-content">
+              Enter the name of the charge material used (make sure that a unique name is entered to prevent overlap with the existing materials).
             </div>
           </div>
-          
+
+          <div class="card" *ngIf="currentField == 'conditionFactor'">
+            <div class="card-header">
+              <p>
+                Condition Factor
+              </p>
+            </div>
+            <div class="card-content">
+              Used to account for surface finish, residual stress and work hardening.
+            </div>
+          </div>
+
         </div>
       </div>
     </div>

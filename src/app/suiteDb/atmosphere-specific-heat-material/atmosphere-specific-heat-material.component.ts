@@ -79,6 +79,10 @@ export class AtmosphereSpecificHeatMaterialComponent implements OnInit {
     }
   }
 
+  focusField(str: string) {
+    this.currentField = str;
+  }
+
   hideMaterialModal() {
     this.hideModal.emit();
   }

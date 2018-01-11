@@ -20,6 +20,7 @@ export class LiquidLoadChargeMaterialComponent implements OnInit {
   @Output('hideModal')
   hideModal = new EventEmitter();
 
+
   newMaterial: LiquidLoadChargeMaterial = {
     latentHeat: 0,
     specificHeatLiquid: 0,
@@ -27,6 +28,7 @@ export class LiquidLoadChargeMaterialComponent implements OnInit {
     substance: 'New Material',
     vaporizationTemperature: 0
   };
+  currentField: string = 'selectedMaterial';
   selectedMaterial: LiquidLoadChargeMaterial;
   allMaterials: Array<LiquidLoadChargeMaterial>;
   isValidMaterialName: boolean = true;
@@ -85,7 +87,9 @@ export class LiquidLoadChargeMaterialComponent implements OnInit {
       this.nameError = null;
     }
   }
-
+  focusField(str: string) {
+    this.currentField = str;
+  }
   hideMaterialModal() {
     this.hideModal.emit();
   }

@@ -13,7 +13,8 @@
           <div class="form-section">
             <div class="form-group">
               <label class="small" for="selectedMaterial">Start with existing surface</label>
-              <select name="selectedMaterial" class="form-control" id="selectedMaterial" (change)="setExisting()" [(ngModel)]="selectedMaterial">
+              <select name="selectedMaterial" class="form-control" id="selectedMaterial" (change)="setExisting()" [(ngModel)]="selectedMaterial"
+              (focus)="focusField('selectedMaterial')">
                 <option *ngFor="let material of allMaterials" [ngValue]="material">{{material.surface}}</option>
                 <option [ngValue]="null"></option>
               </select>
@@ -32,7 +33,7 @@
             <div class="form-group" *ngIf="settings">
               <label class="small" for="conditionFactor">Condition Factor</label>
               <input type="number" id="conditionFactor" name="conditionFactor" class="form-control" [(ngModel)]="newMaterial.conditionFactor"
-              />
+               (focus)="focusField('conditionFactor')"/>
             </div>
           </div>
         </form>
