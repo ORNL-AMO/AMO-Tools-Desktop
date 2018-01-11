@@ -91,13 +91,15 @@
     color: #7b7b7b;
 }
 .coming-soon .summary-list dd {
-    font-size: 16px;
-    margin-bottom: 2px;
+    font-size: 14px;
+}
+
+dd{
+    margin-bottom: 0px;
 }
 
 .summary-header {
     border-bottom: #ddd solid 1px;
-    padding: 6px;
 }
 .summary-header:after {
     display: table;
@@ -112,7 +114,6 @@
     background-repeat: no-repeat;
     background-position: left center;
     background-size: 20px;
-    padding: 7px 0 3px 31px;
     font-weight: bold;
 }
 .summary-header > span {
@@ -138,13 +139,10 @@
     }
 
 dl.summary-list {
-    padding: 8px 8px 0;
-    float: left;
-    margin-right: 2px;
-    margin-bottom: 0;
+    margin-bottom: 0px;    
+
 }
 .summary-list dt, .summary-list dd {
-    padding: 0 8px;
 }
 .summary-list dt {
     font-size: 12px;
@@ -153,9 +151,68 @@ dl.summary-list {
 }
 .summary-list dd {
     font-size: 16px;
-    margin-bottom: 2px;
 }
 
+.summary-content:after {
+    display: table;
+    content: "";
+    clear: both;
+}
+
+/* cards */
+.card-body{
+    padding: 6px;
+}
+
+.card-header{
+    padding: 6px;
+    background: #fff;
+}
+
+.card-header:after {
+    display: table;
+    content: "";
+    clear: both;
+}
+.card-header h3 {
+    font-size: 17px;
+    margin: 0;
+    padding: 7px 0 3px 31px;
+    float: left;
+    background-repeat: no-repeat;
+    background-position: left center;
+    background-size: 20px;
+    font-weight: bold;
+}
+.card-header > span {
+    float: right;
+    border-radius: 50%;
+    -webkit-box-shadow: inset 0px 0px 2px 0px rgba(0,0,0,0.5);
+    -moz-box-shadow: inset 0px 0px 2px 0px rgba(0,0,0,0.5);
+    box-shadow: inset 0px 0px 2px 0px rgba(0,0,0,0.5);
+}
+
+.card.furnaces .card-header > span {
+    background: #BF3D00;
+}
+
+.card.pumps .card-header > span {
+    background: #2980b9;
+}
+
+.card-header > span span {
+    font-size: 16px;
+    color: #fff;
+    font-weight: bold;
+    padding: 2px 10px;
+}
+
+.card-footer{
+    text-align: center;
+    padding: 6px;
+    font-size: 14px;
+    background-color: #fff;
+}
 
 @media print {
 
@@ -164,9 +221,9 @@ dl.summary-list {
         background: none;
     }
 
-    dl.summary-list {
+    /* dl.summary-list {
         margin-bottom: 10px;
-    }
+    } */
 
     .report-summary ul li {
         float: left;
