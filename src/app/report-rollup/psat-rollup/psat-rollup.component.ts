@@ -7,8 +7,6 @@ import { Settings } from 'electron';
   styleUrls: ['./psat-rollup.component.css']
 })
 export class PsatRollupComponent implements OnInit {
-  @Input()
-  settings: Settings;
 
   constructor() { }
 

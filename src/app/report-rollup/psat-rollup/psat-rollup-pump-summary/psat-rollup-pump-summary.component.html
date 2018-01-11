@@ -53,15 +53,37 @@
         <tr *ngFor="let data of resultData">
           <!-- name -->
           <td>{{data.name}}</td>
+          <td *ngIf="data.modName">{{data.modName}}</td>
+          <td *ngIf="!data.modName">&mdash;</td>
           <!-- energy use -->
-
+          <td>{{data.baselineResults.annual_energy | sigFigs:'5'}}</td>
+          <td *ngIf="data.modName">{{data.modificationResults.annual_energy | sigFigs:'5'}}</td>
+          <td *ngIf="!data.modName">&mdash;</td>
           <!-- annual cost -->
-
+          <td>{{data.baselineResults.annual_cost | currency:'USD':'symbol':'1.0-0'}}</td>
+          <td *ngIf="data.modName">{{data.modificationResults.annual_cost | currency:'USD':'symbol':'1.0-0'}}</td>
+          <td *ngIf="!data.modName">&mdash;</td>
           <!-- savings -->
-
+          <td *ngIf="data.modName">{{getSavings(data.modificationResults.annual_cost, data.baselineResults.annual_cost) | currency:'USD':'symbol':'1.0-0'}}</td>
+          <td *ngIf="!data.modName">&mdash;</td>
           <!-- implementation costs -->
-
+          <td *ngIf="data.modName">
+            <span *ngIf="data.modification.inputs.implementationCosts">
+              {{data.modification.inputs.implementationCosts | currency:'USD':'symbol':'1.0-0'}}
+            </span>
+            <span *ngIf="!data.modification.inputs.implementationCosts">&mdash;</span>
+          </td>
+          <td *ngIf="!data.modName">&mdash;</td>
           <!-- simple patback -->
+          <td *ngIf="data.modName">
+            <span *ngIf="getPayback(data.modificationResults.annual_cost, data.baselineResults.annual_cost, data.modification.inputs.implementationCosts)">
+              {{getPayback(data.modificationResults.annual_cost, data.baselineResults.annual_cost, data.modification.inputs.implementationCosts) | sigFigs:'3'}}
+            </span>
+            <span *ngIf="!getPayback(data.modificationResults.annual_cost, data.baselineResults.annual_cost, data.modification.inputs.implementationCosts)">
+              &mdash;
+            </span>
+          </td>
+          <td *ngIf="!data.modName">&mdash;</td>
         </tr>
       </tbody>
     </table>

@@ -12,9 +12,6 @@ import * as _ from 'lodash';
   styleUrls: ['./psat-rollup-graphs.component.css']
 })
 export class PsatRollupGraphsComponent implements OnInit {
-  @Input()
-  settings: Settings;
-
   @ViewChild(BaseChartDirective) private baseChart;
   pieChartLabels: Array<string>;
   pieChartData: Array<number>;

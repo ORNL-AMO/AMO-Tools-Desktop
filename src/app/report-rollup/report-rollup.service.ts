@@ -115,9 +115,9 @@ export class ReportRollupService {
       let assessmentIndex = _.findIndex(psatAssessments, { id: result.assessmentId });
       let assessment = psatAssessments[assessmentIndex];
       if (result.isBaseline) {
-        tmpResults.push({ baseline: assessment.psat, modification: assessment.psat, assessmentId: result.assessmentId, selectedIndex: -1, name: assessment.name });
+        tmpResults.push({ baseline: assessment.psat, modification: assessment.psat, assessmentId: result.assessmentId, selectedIndex: -1, name: assessment.name, assessment: assessment });
       } else {
-        tmpResults.push({ baseline: assessment.psat, modification: assessment.psat.modifications[modIndex].psat, assessmentId: result.assessmentId, selectedIndex: modIndex, name: assessment.name });
+        tmpResults.push({ baseline: assessment.psat, modification: assessment.psat.modifications[modIndex].psat, assessmentId: result.assessmentId, selectedIndex: modIndex, name: assessment.name, assessment: assessment });
       }
     });
     this.selectedPsats.next(tmpResults);
@@ -127,10 +127,10 @@ export class ReportRollupService {
     let tmpSelected = this.selectedPsats.value;
     if (modIndex != -1) {
       let selectedIndex = _.findIndex(tmpSelected, { assessmentId: assessment.id });
-      tmpSelected.splice(selectedIndex, 1, { baseline: assessment.psat, modification: assessment.psat.modifications[modIndex].psat, assessmentId: assessment.id, selectedIndex: modIndex, name: assessment.name });
+      tmpSelected.splice(selectedIndex, 1, { baseline: assessment.psat, modification: assessment.psat.modifications[modIndex].psat, assessmentId: assessment.id, selectedIndex: modIndex, name: assessment.name, assessment: assessment });
     } else {
       let selectedIndex = _.findIndex(tmpSelected, { assessmentId: assessment.id });
-      tmpSelected.splice(selectedIndex, 1, { baseline: assessment.psat, modification: assessment.psat, assessmentId: assessment.id, selectedIndex: modIndex, name: assessment.name });
+      tmpSelected.splice(selectedIndex, 1, { baseline: assessment.psat, modification: assessment.psat, assessmentId: assessment.id, selectedIndex: modIndex, name: assessment.name, assessment: assessment });
     }
     this.selectedPsats.next(tmpSelected);
   }
@@ -184,7 +184,7 @@ export class ReportRollupService {
         } else {
           modificationResults = this.psatService.resultsModified(JSON.parse(JSON.stringify(val.modification.inputs)), settings[0], baselineResults.pump_efficiency);
         }
-        tmpResultsArr.push({ baselineResults: baselineResults, modificationResults: modificationResults, assessmentId: val.assessmentId, name: val.name, modName: val.modification.name });
+        tmpResultsArr.push({ baselineResults: baselineResults, modificationResults: modificationResults, assessmentId: val.assessmentId, name: val.name, modName: val.modification.name, baseline: val.baseline, modification: val.modification });
         this.psatResults.next(tmpResultsArr);
       })
     })
@@ -220,7 +220,7 @@ export class ReportRollupService {
     }
     else {
       let selectedIndex = _.findIndex(tmpSelected, { assessmentId: assessment.id });
-      tmpSelected.splice(selectedIndex, 1, { baseline: assessment.phast, modification: assessment.phast, assessmentId: assessment.id, selectedIndex: modIndex, name: assessment.name, assessment: assessment});
+      tmpSelected.splice(selectedIndex, 1, { baseline: assessment.phast, modification: assessment.phast, assessmentId: assessment.id, selectedIndex: modIndex, name: assessment.name, assessment: assessment });
     }
     this.selectedPhasts.next(tmpSelected);
   }
@@ -295,7 +295,8 @@ export interface PsatCompare {
   modification: PSAT,
   assessmentId: number,
   selectedIndex: number,
-  name: string
+  name: string,
+  assessment: Assessment
 }
 
 
@@ -305,6 +306,8 @@ export interface PsatResultsData {
   assessmentId: number,
   name: string,
   modName: string,
+  baseline: PSAT,
+  modification: PSAT
 }
 
 

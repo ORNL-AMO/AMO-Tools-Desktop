@@ -56,6 +56,7 @@ export class PsatRollupPumpSummaryComponent implements OnInit {
       { data: new Array(), label: 'Modification' }
     ]
     let i = 1;
+    console.log(this.resultData);
     this.resultData.forEach(data => {
       let num1 = 0;
       let num2 = 0;
@@ -106,5 +107,23 @@ export class PsatRollupPumpSummaryComponent implements OnInit {
       this.baseChart.chart.config.data.datasets[1].backgroundColor = this.backgroundColors[1];
       this.baseChart.chart.config.options.scales.yAxes[0].scaleLabel = this.options.scales.yAxes[0].scaleLabel;
     }
+  }
+
+
+  getPayback(modCost: number, baselineCost: number, implementationCost: number){
+    if(implementationCost){
+      let val = (implementationCost / (baselineCost-modCost)) * 12;
+      if(isNaN(val)==false){
+        return val;
+      }else{
+        return 0;
+      }
+    }else{
+      return 0;
+    }
+  }
+
+  getSavings(modCost: number, baselineCost: number){
+    return baselineCost - modCost;
   }
 }
