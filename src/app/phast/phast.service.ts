@@ -44,6 +44,7 @@ export class PhastService {
   // secondaryTab: BehaviorSubject<string>;
   stepTab: BehaviorSubject<StepTab>;
   specTab: BehaviorSubject<StepTab>;
+  calcTab: BehaviorSubject<string>;
   constructor(
     private openingLossesService: OpeningLossesService,
     private convertUnitsService: ConvertUnitsService,
@@ -64,6 +65,7 @@ export class PhastService {
     //this.secondaryTab = new BehaviorSubject<string>('explore-opportunities');
     this.stepTab = new BehaviorSubject<StepTab>(stepTabs[0]);
     this.specTab = new BehaviorSubject<StepTab>(specTabs[0]);
+    this.calcTab = new BehaviorSubject<string>('o2-enrichment');
   }
 
   goToStep(newStepNum: number) {

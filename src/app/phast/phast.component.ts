@@ -44,6 +44,7 @@ export class PhastComponent implements OnInit {
   specTab: StepTab;
   isModalOpen: boolean = false;
   selectedLossTab: LossTab;
+  calcTab: string;
   constructor(
     private location: Location,
     private assessmentService: AssessmentService,
@@ -109,6 +110,24 @@ export class PhastComponent implements OnInit {
         this.selectedLossTab = this.lossesService.getTab(tab);
       })
     });
+    let tmpTab = this.assessmentService.getTab();
+    if (tmpTab) {
+      this.phastService.mainTab.next(tmpTab);
+    }
+    this.phastService.mainTab.subscribe(val => {
+      this.mainTab = val;
+    })
+
+    this.phastService.stepTab.subscribe(val => {
+      this.stepTab = val;
+    })
+
+    this.phastService.specTab.subscribe(val => {
+      this.specTab = val;
+    })
+    this.phastService.calcTab.subscribe(val => {
+      this.calcTab = val;
+    })
   }
 
 
