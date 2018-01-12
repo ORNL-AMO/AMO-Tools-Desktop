@@ -117,9 +117,9 @@ export class SankeyService {
       unit = 'kW';
     }
 
-    
-    
-    let tmpNode = this.createNode("Input", results.totalInput, this.baseSize, 300, 200, 0, true, false, false, false, unit, false)
+
+
+    let tmpNode = this.createNode("Energy Input", results.totalInput, this.baseSize, 300, 200, 0, true, false, false, false, unit, false)
     results.nodes.push(tmpNode);
     tmpNode = this.createNode("inter1", 0, 0, 0, 350, 0, false, false, true, true, unit, false)
     results.nodes.push(tmpNode);
