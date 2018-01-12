@@ -1,7 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Settings } from '../../shared/models/settings';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
-import { ReportRollupService } from '../report-rollup.service';
+import { ReportRollupService, ReportItem } from '../report-rollup.service';
 import { Assessment } from '../../shared/models/assessment';
 
 @Component({
@@ -24,7 +24,7 @@ export class ReportRollupUnitsComponent implements OnInit {
     'kWh'
   ]
   energyResultOptions: Array<any>;
-  phastAssessments: Array<Assessment>;
+  phastAssessments: Array<ReportItem>;
   constructor(private convertUnitsService: ConvertUnitsService, private reportRollupService: ReportRollupService) { }
 
   ngOnInit() {

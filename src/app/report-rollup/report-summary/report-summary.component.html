@@ -7,7 +7,7 @@
                     <app-psat-summary></app-psat-summary>
                 </li>
                 <li [hidden]="showSummary == 'closed'" class="furnace-summary" (click)="showFurnaceRollup()">
-                    <app-phast-summary [settings]="settings"></app-phast-summary>
+                    <app-phast-summary [settings]="settings" [numPhasts]="numPhasts"></app-phast-summary>
                 </li>
                 <li [hidden]="showSummary == 'closed'" class="coming-soon hide-print">
                     <div class="summary-header fans">

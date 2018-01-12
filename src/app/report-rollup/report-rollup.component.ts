@@ -1,11 +1,12 @@
 import { Component, OnInit, Input, Output, EventEmitter, HostListener, ViewChild, TemplateRef } from '@angular/core';
 import { Assessment } from '../shared/models/assessment';
-import { ReportRollupService, PhastResultsData } from './report-rollup.service';
+import { ReportRollupService, PhastResultsData, ReportItem } from './report-rollup.service';
 import { WindowRefService } from '../indexedDb/window-ref.service';
 import { Settings } from '../shared/models/settings';
 import { IndexedDbService } from '../indexedDb/indexed-db.service';
 import { ModalDirective } from 'ngx-bootstrap';
 import { AssessmentService } from '../assessment/assessment.service';
+import { setTimeout } from 'timers';
 @Component({
   selector: 'app-report-rollup',
   templateUrl: './report-rollup.component.html',
@@ -22,7 +23,7 @@ export class ReportRollupComponent implements OnInit {
   }
   @ViewChild('reportTemplate') reportTemplate: TemplateRef<any>;
 
-  _reportAssessments: Array<Assessment>;
+  _reportAssessments: Array<ReportItem>;
   focusedAssessment: Assessment;
 
   assessmentsGathered: boolean = false;
@@ -33,6 +34,7 @@ export class ReportRollupComponent implements OnInit {
   @ViewChild('unitModal') public unitModal: ModalDirective;
   @ViewChild('rollupModal') public rollupModal: ModalDirective;
 
+  numPhasts: number = 0;
   constructor(private reportRollupService: ReportRollupService,
     private windowRefService: WindowRefService, private indexedDbService: IndexedDbService, private assessmentService: AssessmentService) { }
 
@@ -41,14 +43,37 @@ export class ReportRollupComponent implements OnInit {
       this.settings = this.reportRollupService.checkSettings(results[0]);;
     })
     this.createdDate = new Date();
-    this.reportRollupService.reportAssessments.subscribe(assesments => {
-      this._reportAssessments = assesments;
-      this.focusedAssessment = this._reportAssessments[0];
+    this.reportRollupService.reportAssessments.subscribe(items => {
+      if (items) {
+        if (items.length != 0) {
+          this._reportAssessments = items;
+          this.focusedAssessment = this._reportAssessments[0].assessment;
+        }
+      }
     })
     setTimeout(() => {
       this.assessmentsGathered = true;
     }, 2000)
     this.assessmentService.showFeedback.next(false);
+    let count = 1;
+    this.reportRollupService.phastAssessments.subscribe(val => {
+        this.numPhasts = val.length;
+        if (val.length != 0) {
+          console.log('called ' + count)
+          this.reportRollupService.initPhastResultsArr(val);
+          count++;
+        }
+    })
+    this.reportRollupService.allPhastResults.subscribe(val => {
+      if (val.length != 0) {
+        this.reportRollupService.initPhastCompare(val);
+      }
+    })
+    this.reportRollupService.selectedPhasts.subscribe(val => {
+      if (val.length != 0) {
+        this.reportRollupService.getPhastResultsFromSelected(val);
+      }
+    })
   }
 
   ngOnDestroy() {
@@ -87,25 +112,25 @@ export class ReportRollupComponent implements OnInit {
     let container = doc.getElementById('reportHeader');
     let scrollAmount = (window.pageYOffset !== undefined) ? window.pageYOffset : (doc.documentElement || doc.body.parentNode || doc.body).scrollTop;
     if (container && scrollAmount) {
-      this._reportAssessments.forEach(assessment => {
-        let element = doc.getElementById('assessment_' + assessment.id);
+      this._reportAssessments.forEach(item => {
+        let element = doc.getElementById('assessment_' + item.assessment.id);
         let diff = Math.abs(Math.abs(container.clientHeight - element.offsetTop) - scrollAmount);
         if (diff > 0 && diff < 50) {
-          this.focusedAssessment = assessment;
+          this.focusedAssessment = item.assessment;
         }
       })
     }
   }
 
-  selectAssessment(assessment: Assessment) {
+  selectAssessment(item: ReportItem) {
     let doc = this.windowRefService.getDoc();
-    let element = doc.getElementById('assessment_' + assessment.id);
+    let element = doc.getElementById('assessment_' + item.assessment.id);
     let container = doc.getElementById('reportHeader');
-    this.focusedAssessment = assessment;
+    this.focusedAssessment = item.assessment;
     element.scrollIntoView({ behavior: 'smooth' });
     let window = this.windowRefService.nativeWindow;
-    let scrlAmnt = 0-(container.clientHeight+25);
-    window.scrollBy(0,scrlAmnt)
+    let scrlAmnt = 0 - (container.clientHeight + 25);
+    window.scrollBy(0, scrlAmnt)
   }
 
   showModal() {

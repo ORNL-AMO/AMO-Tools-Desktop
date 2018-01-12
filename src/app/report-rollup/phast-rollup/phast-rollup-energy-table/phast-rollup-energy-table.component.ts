@@ -1,9 +1,9 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { ReportRollupService, PhastCompare } from '../../report-rollup.service';
+import { ReportRollupService, PhastCompare, PhastResultsData } from '../../report-rollup.service';
 import { SuiteDbService } from '../../../suiteDb/suite-db.service';
 import { Assessment } from '../../../shared/models/assessment';
 import { Settings } from '../../../shared/models/settings';
-import { CalculatedByPhast, PhastResults } from '../../../shared/models/phast/phast';
+import { CalculatedByPhast, PhastResults, PHAST } from '../../../shared/models/phast/phast';
 import { PhastResultsService } from '../../../phast/phast-results.service';
 import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
 import { setTimeout } from 'timers';
@@ -26,7 +26,7 @@ export class PhastRollupEnergyTableComponent implements OnInit {
   electricitySummary: PhastRollupEnergySummaryItem;
   steamSummary: Array<PhastRollupEnergySummaryItem>;
   timeoutVal: any;
-  tmpArr: Array<{ assessment: PhastCompare, settings: Settings }>;
+  tmpArr: Array<{ assessment: Assessment, settings: Settings }>;
   electricityHeatingValue: number = 0;
   baseEnergyUnit: string;
   energyCostUnit: string;
@@ -37,26 +37,24 @@ export class PhastRollupEnergyTableComponent implements OnInit {
 
   ngOnInit() {
     this.settings = this.reportRollupService.checkSettings(this.settings);
-    this.reportRollupService.selectedPhasts.subscribe(val => {
+    this.reportRollupService.phastResults.subscribe(val => {
       if (val.length) {
         this.tmpArr = new Array();
         this.getUnits();
         this.electricityHeatingValue = this.convertUnitsService.value(9800).from('Btu').to(this.settings.phastRollupUnit);
-        val.forEach(assessment => {
-          this.indexedDbService.getAssessmentSettings(assessment.assessmentId).then(settingsArr => {
-            let tmpSettings = this.reportRollupService.checkSettings(settingsArr[0]);
-            let test = _.find(this.tmpArr, (val) => {
-              return val.assessment.assessmentId == assessment.assessmentId
-            })
-            if (test == undefined) {
-              this.tmpArr.push({
-                assessment: assessment,
-                settings: tmpSettings
-              })
-              this.initResults();
-              this.getData(this.tmpArr);
-            }
+        val.forEach(result => {
+          let tmpSettings = this.reportRollupService.checkSettings(result.settings);
+          let test = _.find(this.tmpArr, (val) => {
+            return val.assessment.id == result.assessmentId
           })
+          if (test == undefined) {
+            this.tmpArr.push({
+              assessment: result.assessment,
+              settings: result.settings
+            })
+            this.initResults();
+            this.getData(this.tmpArr);
+          }
         })
       }
     })
@@ -64,7 +62,7 @@ export class PhastRollupEnergyTableComponent implements OnInit {
 
   getData(dataArr: Array<any>) {
     dataArr.forEach(data => {
-      let tmpResults: PhastResults = this.phastResultsService.getResults(data.assessment.baseline, data.settings);
+      let tmpResults: PhastResults = this.phastResultsService.getResults(data.assessment.phast, data.settings);
       tmpResults.grossHeatInput = this.convertUnitsService.value(tmpResults.grossHeatInput).from(data.settings.energyResultUnit).to(this.settings.phastRollupUnit);
       if (data.settings.energySourceType == 'Fuel') {
         let tmpItem = this.getFuel(data.assessment, data.settings, tmpResults);
@@ -89,35 +87,35 @@ export class PhastRollupEnergyTableComponent implements OnInit {
         name: 'Electricity',
         energyUsed: this.electricityTotalEnergy,
         hhv: this.electricityHeatingValue,
-        cost: data.assessment.baseline.operatingCosts.electricityCost
+        cost: data.assessment.phast.operatingCosts.electricityCost
       }
     })
   }
 
-  getSteam(assessment: PhastCompare, settings: Settings, tmpResults: PhastResults): PhastRollupEnergySummaryItem {
+  getSteam(assessment: Assessment, settings: Settings, tmpResults: PhastResults): PhastRollupEnergySummaryItem {
     let tmpItem: PhastRollupEnergySummaryItem = {
       name: assessment.name,
       energyUsed: tmpResults.grossHeatInput,
       hhv: 0,
-      cost: assessment.baseline.operatingCosts.steamCost
+      cost: assessment.phast.operatingCosts.steamCost
     }
     let steamHeatingValue = 0;
     let meteredResults, designedResults;
-    if (assessment.baseline.meteredEnergy) {
-      if (assessment.baseline.meteredEnergy.meteredEnergySteam) {
-        meteredResults = this.meteredEnergyService.meteredSteam(assessment.baseline.meteredEnergy.meteredEnergySteam, assessment.baseline, settings);
-        steamHeatingValue = assessment.baseline.meteredEnergy.meteredEnergySteam.totalHeatSteam;
+    if (assessment.phast.meteredEnergy) {
+      if (assessment.phast.meteredEnergy.meteredEnergySteam) {
+        meteredResults = this.meteredEnergyService.meteredSteam(assessment.phast.meteredEnergy.meteredEnergySteam, assessment, settings);
+        steamHeatingValue = assessment.phast.meteredEnergy.meteredEnergySteam.totalHeatSteam;
         steamHeatingValue = this.convertUnitsService.value(steamHeatingValue).from(settings.energyResultUnit).to(this.settings.phastRollupUnit);
       }
     }
 
-    if (assessment.baseline.designedEnergy) {
-      if (assessment.baseline.designedEnergy.designedEnergySteam) {
-        designedResults = this.designedEnergyService.designedEnergySteam(assessment.baseline.designedEnergy.designedEnergySteam, assessment.baseline, settings);
+    if (assessment.phast.designedEnergy) {
+      if (assessment.phast.designedEnergy.designedEnergySteam) {
+        designedResults = this.designedEnergyService.designedEnergySteam(assessment.phast.designedEnergy.designedEnergySteam, assessment, settings);
         if (!steamHeatingValue) {
-          let hhvSum = _.sumBy(assessment.baseline.designedEnergy.designedEnergySteam, 'totalHeat')
+          let hhvSum = _.sumBy(assessment.phast.designedEnergy.designedEnergySteam, 'totalHeat')
           hhvSum = this.convertUnitsService.value(hhvSum).from(settings.energyResultUnit).to(this.settings.phastRollupUnit)
-          steamHeatingValue = hhvSum / assessment.baseline.designedEnergy.designedEnergySteam.length;
+          steamHeatingValue = hhvSum / assessment.phast.designedEnergy.designedEnergySteam.length;
         }
       }
     }
@@ -127,25 +125,25 @@ export class PhastRollupEnergyTableComponent implements OnInit {
   }
 
 
-  getFuel(assessment: PhastCompare, settings: Settings, tmpResults: PhastResults): PhastRollupEnergySummaryItem {
+  getFuel(assessment: Assessment, settings: Settings, tmpResults: PhastResults): PhastRollupEnergySummaryItem {
     let tmpItem: PhastRollupEnergySummaryItem = {
       name: '',
       energyUsed: 0,
       hhv: 0,
       cost: 0
     }
-    if (assessment.baseline.losses.flueGasLosses[0].flueGasType == 'By Mass') {
-      let gas = this.suiteDbService.selectSolidLiquidFlueGasMaterialById(assessment.baseline.losses.flueGasLosses[0].flueGasByMass.gasTypeId);
+    if (assessment.phast.losses.flueGasLosses[0].flueGasType == 'By Mass') {
+      let gas = this.suiteDbService.selectSolidLiquidFlueGasMaterialById(assessment.phast.losses.flueGasLosses[0].flueGasByMass.gasTypeId);
       tmpItem.name = gas.substance;
       tmpItem.hhv = this.convertHHV(gas.heatingValue, settings);
-    } else if (assessment.baseline.losses.flueGasLosses[0].flueGasType == 'By Volume') {
-      let gas = this.suiteDbService.selectGasFlueGasMaterialById(assessment.baseline.losses.flueGasLosses[0].flueGasByVolume.gasTypeId);
+    } else if (assessment.phast.losses.flueGasLosses[0].flueGasType == 'By Volume') {
+      let gas = this.suiteDbService.selectGasFlueGasMaterialById(assessment.phast.losses.flueGasLosses[0].flueGasByVolume.gasTypeId);
       tmpItem.name = gas.substance;
       tmpItem.hhv = this.convertHHV(gas.heatingValue, settings);
     }
     tmpItem.energyUsed = tmpResults.grossHeatInput;
     //TODO
-    tmpItem.cost = assessment.baseline.operatingCosts.fuelCost;
+    tmpItem.cost = assessment.phast.operatingCosts.fuelCost;
     return tmpItem;
   }
 

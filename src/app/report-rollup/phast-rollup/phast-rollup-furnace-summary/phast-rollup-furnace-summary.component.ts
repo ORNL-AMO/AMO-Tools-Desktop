@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, SimpleChanges } from '@angular/core';
 import { Settings } from '../../../shared/models/settings';
 import { ReportRollupService, PhastResultsData } from '../../report-rollup.service';
 import { BaseChartDirective } from 'ng2-charts';
@@ -41,13 +41,6 @@ export class PhastRollupFurnaceSummaryComponent implements OnInit {
     this.reportRollupService.phastResults.subscribe((phasts: Array<PhastResultsData>) => {
       if (phasts.length != 0) {
         this.resultData = phasts;
-        // phasts.forEach(val => {
-        //   if(val.modName){
-        //     this.addData(val.name, val.baselineResults.annualEnergyUsed, val.modificationResults.annualEnergyUsed, val.settings);
-        //   }else{
-        //     this.addData(val.name, val.baselineResults.annualEnergyUsed, 0, val.settings);
-        //   }
-        // });
         this.buildChartData();
       }
     })
@@ -139,22 +132,22 @@ export class PhastRollupFurnaceSummaryComponent implements OnInit {
     return this.convertUnitsService.value(val).from(settings.energyResultUnit).to(this.settings.phastRollupUnit);
   }
 
-  getAvailableHeat(data: PhastResults, settings: Settings){
+  getAvailableHeat(data: PhastResults, settings: Settings) {
     let resultCategories: ShowResultsCategories = this.phastResultsService.getResultCategories(settings);
-    if(resultCategories.showFlueGas){
+    if (resultCategories.showFlueGas) {
       return data.flueGasAvailableHeat;
     }
-    
-    if(resultCategories.showSystemEff){
+
+    if (resultCategories.showSystemEff) {
       return data.heatingSystemEfficiency;
     }
 
-    if(resultCategories.showEnInput2){
+    if (resultCategories.showEnInput2) {
       return data.availableHeatPercent;
     }
 
-    if(resultCategories.showExGas){
-      return (1-(data.totalExhaustGasEAF/ data.grossHeatInput))*100
+    if (resultCategories.showExGas) {
+      return (1 - (data.totalExhaustGasEAF / data.grossHeatInput)) * 100
     }
   }
 

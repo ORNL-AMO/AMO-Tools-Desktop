@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild, SimpleChange } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, SimpleChanges } from '@angular/core';
 import { BaseChartDirective } from 'ng2-charts';
 import { ReportRollupService, PhastResultsData } from '../../report-rollup.service';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
@@ -15,7 +15,6 @@ export class PhastRollupGraphsComponent implements OnInit {
   settings: Settings
 
   furnaceSavingsPotential: number = 0;
-  numPhasts: number = 0;
   energySavingsPotential: number = 0;
   totalCost: number = 0;
   totalEnergy: number = 0;
@@ -46,13 +45,16 @@ export class PhastRollupGraphsComponent implements OnInit {
 
   ngOnInit() {
     this.graphColors = graphColors;
+    let counter = 1;
     this.reportRollupService.phastResults.subscribe(val => {
       if (val.length != 0) {
+        console.log('called ' + counter);
         this.initTotals();
         this.calcPhastSums(val);
         this.getResults(val);
         this.getData();
         this.resultData = val;
+        counter++;
       }
     })
   }

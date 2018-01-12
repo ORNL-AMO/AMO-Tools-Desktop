@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { ReportRollupService } from '../report-rollup.service';
+import { ReportRollupService, PhastResultsData } from '../report-rollup.service';
 import { Settings } from '../../shared/models/settings';
 @Component({
   selector: 'app-phast-rollup',
@@ -9,6 +9,8 @@ import { Settings } from '../../shared/models/settings';
 export class PhastRollupComponent implements OnInit {
   @Input()
   settings: Settings;
+  @Input()
+  phastResults: Array<PhastResultsData>;
 
   constructor(private reportRollupService: ReportRollupService) { }
 

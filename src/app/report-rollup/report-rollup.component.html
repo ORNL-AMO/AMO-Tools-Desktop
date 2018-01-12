@@ -15,7 +15,7 @@
             <div class="report-header hide-print">
                 <app-report-banner (emitCloseReport)="closeReport()" (emitExport)="exportToCsv()" (emitPrint)="print()" (emitShowUnitModal)="showUnitModal()">
                 </app-report-banner>
-                <app-report-summary id="reportSummary" [settings]="settings" (showModal)="showModal()" (showPsatModal)="showPsatModal();"></app-report-summary>
+                <app-report-summary id="reportSummary" [settings]="settings" [numPhasts]="numPhasts" (showModal)="showModal()" (showPsatModal)="showPsatModal();"></app-report-summary>
             </div>
         </div>
     </div>
@@ -26,12 +26,12 @@
             <div class="report-container">
                 <div class="sidebar hide-print">
                     <ul>
-                        <li *ngFor="let assessment of _reportAssessments" [ngClass]="{'active': focusedAssessment.id == assessment.id}" (click)="selectAssessment(assessment)">
+                        <li *ngFor="let item of _reportAssessments" [ngClass]="{'active': focusedAssessment.id == item.assessment.id}" (click)="selectAssessment(item)">
                             <a>
-                            <img *ngIf="assessment.type == 'PSAT'" class="icon-image" src="assets/images/ico-psat-diagram-small.png">
-                            <img *ngIf="assessment.type == 'PHAST'" class="icon-image" src="assets/images/ico-phast-diagram-small.png">
+                            <img *ngIf="item.assessment.type == 'PSAT'" class="icon-image" src="assets/images/ico-psat-diagram-small.png">
+                            <img *ngIf="item.assessment.type == 'PHAST'" class="icon-image" src="assets/images/ico-phast-diagram-small.png">
                             <span class="sb-item">
-                                {{assessment.name}}
+                                {{item.assessment.name}}
                             </span>
                         </a>
                         </li>
@@ -41,10 +41,10 @@
         </div>
         <!-- End .sidebar -->
         <div class="col-lg-11 col-md-10 col-sm-10 assessment-reports">
-            <div *ngFor="let assessment of _reportAssessments" id="{{'assessment_'+assessment.id}}" class="assessment-item">
-                <app-psat-report *ngIf="assessment.psat" [assessment]="assessment" [inRollup]="true" (selectModification)="updateSummary($event)">
+            <div *ngFor="let item of _reportAssessments" id="{{'assessment_'+item.assessment.id}}" class="assessment-item">
+                <app-psat-report *ngIf="item.assessment.psat" [assessment]="item.assessment" [inRollup]="true" (selectModification)="updateSummary($event)" [settings]="item.settings">
                 </app-psat-report>
-                <app-phast-report *ngIf="assessment.phast" [phast]="assessment.phast" [assessment]="assessment" [inRollup]="true"></app-phast-report>
+                <app-phast-report *ngIf="item.assessment.phast" [phast]="item.assessment.phast" [assessment]="item.assessment" [inRollup]="true" [settings]="item.settings"></app-phast-report>
             </div>
         </div>
         <!-- End .content -->

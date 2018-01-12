@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, ViewChild, Output, EventEmitter } from '@angular/core';
 import { Settings } from '../../shared/models/settings';
 import { ModalDirective } from 'ngx-bootstrap';
+import { PhastResultsData } from '../report-rollup.service';
 
 @Component({
   selector: 'app-report-summary',
@@ -14,6 +15,12 @@ export class ReportSummaryComponent implements OnInit {
   showModal = new EventEmitter<boolean>();
   @Output('showPsatModal')
   showPsatModal = new EventEmitter<boolean>();
+  @Input()
+  phastResults: Array<PhastResultsData>;
+  @Input()
+  numPhasts: number;
+
+
   // @ViewChild('rollupModal') public rollupModal: ModalDirective;
   showSummary: string = 'open';
   constructor() { }
