@@ -234,7 +234,7 @@ export class PsatSankeyComponent implements OnInit {
 
     //real version
     // this.baseSize = 50 * (results.motor_power / this.baselineResults.motor_power);
-    
+
     //debug
     // this.baseSize = 300;
 
@@ -257,7 +257,7 @@ export class PsatSankeyComponent implements OnInit {
     var nodes = [];
     nodes.push(
       /*0*/{
-        name: "Input",
+        name: "Energy Input",
         value: results.motor_power,
         displaySize: this.baseSize,
         width: 300,
@@ -281,7 +281,7 @@ export class PsatSankeyComponent implements OnInit {
         top: true
       },
       /*2*/{
-        name: "Motor",
+        name: "Motor Losses",
         value: this.motor,
         displaySize: 0,
         width: 0,
@@ -308,7 +308,7 @@ export class PsatSankeyComponent implements OnInit {
         top: false
       },
         /*4*/{
-          name: "Drive",
+          name: "Drive Losses",
           value: this.drive,
           displaySize: 0,
           width: 0,
@@ -335,7 +335,7 @@ export class PsatSankeyComponent implements OnInit {
         top: false
       },
       /*6*/{
-        name: "Pump",
+        name: "Pump Losses",
         value: this.pump,
         displaySize: 0,
         width: 0,
@@ -347,7 +347,7 @@ export class PsatSankeyComponent implements OnInit {
         top: true
       },
       /*7*/{
-        name: "Output",
+        name: "Useful Output",
         value: 0,
         displaySize: 0,
         width: 0,
@@ -444,13 +444,13 @@ export class PsatSankeyComponent implements OnInit {
       .append("text")
       .attr("text-anchor", "middle")
       .attr("dx", function (d) {
-        
+
         //debug
         if (d.input) {
-          return d.x - 70;
+          return d.x - 100;
         }
         else if (d.output) {
-          return d.x + 70;
+          return d.x + 130;
         }
         else {
           return d.x;
@@ -468,7 +468,7 @@ export class PsatSankeyComponent implements OnInit {
         // }
       })
       .attr("dy", function (d) {
-        
+
         //debug
         if (d.input || d.output) {
           return d.y + (d.displaySize) + labelFontSize + labelPadding;
@@ -514,13 +514,13 @@ export class PsatSankeyComponent implements OnInit {
       .append("text")
       .attr("text-anchor", "middle")
       .attr("dx", function (d) {
-        
+
         //debug
         if (d.input) {
-          return d.x - 70;
+          return d.x - 100;
         }
         else if (d.output) {
-          return d.x + 70;
+          return d.x + 130;
         }
         else {
           return d.x;
@@ -613,7 +613,7 @@ export class PsatSankeyComponent implements OnInit {
       // .style("font-size", "12px");
   }
 
-  
+
 
   calcSankey(nodes) {
 
