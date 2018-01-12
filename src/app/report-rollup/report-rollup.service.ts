@@ -83,7 +83,6 @@ export class ReportRollupService {
           this.phastAssessments.next(this.phastArray);
           this.psatAssessments.next(this.psatArray);
           this.reportAssessments.next(this.assessmentsArray);
-          debugger;
         })
       }
     });
@@ -120,7 +119,6 @@ export class ReportRollupService {
             this.phastAssessments.next(this.phastArray);
             this.psatAssessments.next(this.psatArray);
             this.reportAssessments.next(this.assessmentsArray);
-            debugger;
           })
         }
       });
@@ -204,9 +202,9 @@ export class ReportRollupService {
           modificationResults = this.psatService.resultsModified(JSON.parse(JSON.stringify(val.modification.inputs)), settings[0], baselineResults.pump_efficiency);
         }
         tmpResultsArr.push({ baselineResults: baselineResults, modificationResults: modificationResults, assessmentId: val.assessmentId, name: val.name, modName: val.modification.name, baseline: val.baseline, modification: val.modification });
-        this.psatResults.next(tmpResultsArr);
       })
     })
+    this.psatResults.next(tmpResultsArr);
   }
 
   //USED FOR PHAST SUMMARY
@@ -269,9 +267,9 @@ export class ReportRollupService {
           modResultsArr.push(tmpResults);
           tmpResultsArr.push({ baselineResults: baselineResults, modificationResults: modResultsArr, assessmentId: val.assessment.id, isBaseline: true });
         }
-        this.allPhastResults.next(tmpResultsArr);
       }
     })
+    this.allPhastResults.next(tmpResultsArr);
   }
 
   getPhastResultsFromSelected(selectedPhasts: Array<PhastCompare>) {
@@ -292,8 +290,8 @@ export class ReportRollupService {
         baselineResultData: baselineResultData,
         modificationResultData: modificationResultData
       });
-      this.phastResults.next(tmpResultsArr);
     })
+    this.phastResults.next(tmpResultsArr);
   }
 
   checkSettings(settings: Settings) {

@@ -39,6 +39,10 @@ export class ReportRollupComponent implements OnInit {
     private windowRefService: WindowRefService, private indexedDbService: IndexedDbService, private assessmentService: AssessmentService) { }
 
   ngOnInit() {
+    setTimeout(() => {
+      this.assessmentsGathered = true;
+    }, 2000)
+
     this.indexedDbService.getDirectorySettings(1).then(results => {
       this.settings = this.reportRollupService.checkSettings(results[0]);;
     })
@@ -51,15 +55,11 @@ export class ReportRollupComponent implements OnInit {
         }
       }
     })
-    setTimeout(() => {
-      this.assessmentsGathered = true;
-    }, 2000)
     this.assessmentService.showFeedback.next(false);
     let count = 1;
     this.reportRollupService.phastAssessments.subscribe(val => {
         this.numPhasts = val.length;
         if (val.length != 0) {
-          console.log('called ' + count)
           this.reportRollupService.initPhastResultsArr(val);
           count++;
         }
