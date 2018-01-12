@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter, HostListener, ViewChild, TemplateRef } from '@angular/core';
 import { Assessment } from '../shared/models/assessment';
-import { ReportRollupService } from './report-rollup.service';
+import { ReportRollupService, PhastResultsData } from './report-rollup.service';
 import { WindowRefService } from '../indexedDb/window-ref.service';
 import { Settings } from '../shared/models/settings';
 import { IndexedDbService } from '../indexedDb/indexed-db.service';
@@ -32,6 +32,7 @@ export class ReportRollupComponent implements OnInit {
   @ViewChild('psatRollupModal') public psatRollupModal: ModalDirective;
   @ViewChild('unitModal') public unitModal: ModalDirective;
   @ViewChild('rollupModal') public rollupModal: ModalDirective;
+
   constructor(private reportRollupService: ReportRollupService,
     private windowRefService: WindowRefService, private indexedDbService: IndexedDbService, private assessmentService: AssessmentService) { }
 
@@ -104,7 +105,6 @@ export class ReportRollupComponent implements OnInit {
     element.scrollIntoView({ behavior: 'smooth' });
     let window = this.windowRefService.nativeWindow;
     let scrlAmnt = 0-(container.clientHeight+25);
-    console.log(scrlAmnt);
     window.scrollBy(0,scrlAmnt)
   }
 

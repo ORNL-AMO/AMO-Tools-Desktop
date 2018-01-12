@@ -1,8 +1,12 @@
 tr > td,
 tr > th{
     text-align: center;
+}
+
+tr > td {
     vertical-align: middle;
 }
+
 
 .name{
     border-left: solid 10px;
@@ -15,8 +19,4 @@ th{
 
 .btn-toggle{
     padding-bottom: 10px;
-}
-
-.table-striped tbody tr:nth-of-type(odd) {
-    background-color: rgba(0, 0, 0, 0.12);
 }

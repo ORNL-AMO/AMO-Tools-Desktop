@@ -18,13 +18,10 @@
             Pump Name
           </th>
           <th>
-            Energy Use Units
+            Energy Used<br>(MWh)
           </th>
           <th>
-            Energy Used
-          </th>
-          <th>
-            Annual Cost
+            Cost<br>($/yr)
           </th>
           <th>
             % of Total Cost
@@ -38,9 +35,6 @@
         <tr *ngFor="let data of resultData; let index=index;">
           <td class="name" [ngStyle]="{'border-left-color': graphColors[index]}">
             {{data.name}}
-          </td>
-          <td>
-            MWh
           </td>
           <td>
             {{data.baselineResults.annual_energy}}
@@ -61,7 +55,6 @@
           <td>
             Totals
           </td>
-          <td></td>
           <td>
             {{totalEnergyUse}}
           </td>

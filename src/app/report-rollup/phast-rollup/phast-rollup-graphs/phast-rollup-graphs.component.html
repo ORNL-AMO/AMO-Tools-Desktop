@@ -17,29 +17,36 @@
           <th>
             Furnace Name
           </th>
-          <th>
+          <!-- <th>
             Energy Use Units
+          </th> -->
+          <th>
+            Fuel Energy Used<br>
+            ({{settings.phastRollupUnit}}/yr)
           </th>
           <th>
-            Fuel Energy Used
+            Annual Cost<br>
+            ($/yr)
           </th>
           <th>
-            Annual Cost
+            Electrical Energy Use<br>
+            ({{settings.phastRollupUnit}}/yr)
           </th>
           <th>
-            Electrical Energy Use
+            Annual Cost<br>
+            ($/yr)
           </th>
           <th>
-            Annual Cost
+            Steam Energy Use<br>
+            ({{settings.phastRollupUnit}}/yr)
           </th>
           <th>
-            Steam Energy Use
+            Annual Cost<br>
+            ($/yr)
           </th>
           <th>
-            Annual Cost
-          </th>
-          <th>
-            Annual Total Cost
+            Total Annual Cost<br>
+            ($/yr)
           </th>
           <th>
             % of Total Cost
@@ -54,14 +61,14 @@
           <td class="name" [ngStyle]="{'border-left-color': graphColors[index]}">
             {{data.name}}
           </td>
-          <td>
+          <!-- <td>
             {{settings.phastRollupUnit}}/yr
-          </td>
+          </td> -->
           <td *ngIf="data.settings.energySourceType == 'Fuel'">
             {{getConvertedValue(data.baselineResults.annualEnergyUsed, data.settings) | sigFigs:'5'}}
           </td>
           <td *ngIf="data.settings.energySourceType == 'Fuel'">
-            {{data.baselineResults.annualCost | currency:'USD':'symbol':'1.0-0'}}
+            ${{data.baselineResults.annualCost | sigFigs:'4'}}
           </td>
           <td *ngIf="data.settings.energySourceType != 'Fuel'">&mdash;</td>
           <td *ngIf="data.settings.energySourceType != 'Fuel'">&mdash;</td>
@@ -69,7 +76,7 @@
             {{getConvertedValue(data.baselineResults.annualEnergyUsed, data.settings) | sigFigs:'5'}}
           </td>
           <td *ngIf="data.settings.energySourceType == 'Electricity'">
-            {{data.baselineResults.annualCost | currency:'USD':'symbol':'1.0-0'}}
+              ${{data.baselineResults.annualCost | sigFigs:'4'}}
           </td>
           <td *ngIf="data.settings.energySourceType != 'Electricity'">&mdash;</td>
           <td *ngIf="data.settings.energySourceType != 'Electricity'">&mdash;</td>
@@ -78,11 +85,11 @@
             {{getConvertedValue(data.baselineResults.annualEnergyUsed, data.settings) | sigFigs:'5'}}
           </td>
           <td *ngIf="data.settings.energySourceType == 'Steam'">
-            {{data.baselineResults.annualCost | currency:'USD':'symbol':'1.0-0'}}
+              ${{data.baselineResults.annualCost | sigFigs:'4'}}
           </td>
           <td *ngIf="data.settings.energySourceType != 'Steam'">&mdash;</td>
           <td *ngIf="data.settings.energySourceType != 'Steam'">&mdash;</td>
-          <td>{{data.baselineResults.annualCost | currency:'USD':'symbol':'1.0-0'}}</td>
+          <td>{{data.baselineResults.annualCost | sigFigs:'4'}}</td>
           <td>{{getResultPercent(data.baselineResults.annualCost, totalCost) | number:'1.0-1'}}</td>
           <td>{{getConvertedPercent(data.baselineResults.annualEnergyUsed, totalEnergy, data.settings) | number:'1.0-1'}}</td>
         </tr>
@@ -92,14 +99,14 @@
           <td>
             Totals
           </td>
-          <td></td>
+          <!-- <td>{{settings.phastRollupUnit}}/yr</td> -->
           <td>{{totalFuelEnergyUsed | sigFigs:'5'}}</td>
-          <td>{{totalFuelCost | currency:'USD':'symbol':'1.0-0'}}</td>
+          <td>${{totalFuelCost | sigFigs:'4'}}</td>
           <td>{{totalElectricalEnergyUsed | sigFigs:'5'}}</td>
-          <td>{{totalElectricalCost | currency:'USD':'symbol':'1.0-0'}}</td>
+          <td>${{totalElectricalCost | sigFigs:'4'}}</td>
           <td>{{totalSteamEnergyUsed | sigFigs:'5'}}</td>
-          <td>{{totalSteamCost | currency:'USD':'symbol':'1.0-0'}}</td>
-          <td>{{totalCost | currency:'USD':'symbol':'1.0-0'}}</td>
+          <td>${{totalSteamCost | sigFigs:'4'}}</td>
+          <td>${{totalCost | sigFigs:'4'}}</td>
         </tr>
       </tfoot>
     </table>

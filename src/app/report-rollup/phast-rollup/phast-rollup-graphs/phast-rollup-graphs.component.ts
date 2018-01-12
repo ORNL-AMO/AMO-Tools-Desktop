@@ -4,6 +4,7 @@ import { ReportRollupService, PhastResultsData } from '../../report-rollup.servi
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { Settings } from '../../../shared/models/settings';
 import { graphColors } from '../../../phast/phast-report/report-graphs/graphColors';
+import { SigFigsPipe } from '../../../shared/sig-figs.pipe';
 @Component({
   selector: 'app-phast-rollup-graphs',
   templateUrl: './phast-rollup-graphs.component.html',
@@ -129,13 +130,15 @@ export class PhastRollupGraphsComponent implements OnInit {
 
   getResultPercent(value: number, sum: number): number {
     let percent = (value / sum) * 100;
-    return percent;
+    let val = this.reportRollupService.transform(percent, 4)
+    return val;
   }
 
   getConvertedPercent(value: number, sum: number, settings: Settings) {
     let convertVal = this.getConvertedValue(value, settings);
     let percent = (convertVal / sum) * 100;
-    return percent;
+    let val = this.reportRollupService.transform(percent, 4)
+    return val;
   }
 
   getData() {

@@ -1,6 +1,9 @@
 tr > td,
 tr > th{
     text-align: center;
+}
+
+tr > td {
     vertical-align: middle;
 }
 

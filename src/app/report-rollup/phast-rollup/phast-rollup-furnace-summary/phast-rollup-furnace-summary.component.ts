@@ -5,6 +5,8 @@ import { BaseChartDirective } from 'ng2-charts';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { graphColors } from '../../../phast/phast-report/report-graphs/graphColors';
 import { PhastService } from '../../../phast/phast.service';
+import { PhastResults, ShowResultsCategories } from '../../../shared/models/phast/phast';
+import { PhastResultsService } from '../../../phast/phast-results.service';
 @Component({
   selector: 'app-phast-rollup-furnace-summary',
   templateUrl: './phast-rollup-furnace-summary.component.html',
@@ -32,7 +34,7 @@ export class PhastRollupFurnaceSummaryComponent implements OnInit {
     'Energy Intensity'
   ]
   graphOption: string = 'Energy Use';
-  constructor(private reportRollupService: ReportRollupService, private convertUnitsService: ConvertUnitsService, private phastService: PhastService) { }
+  constructor(private reportRollupService: ReportRollupService, private phastResultsService: PhastResultsService, private convertUnitsService: ConvertUnitsService, private phastService: PhastService) { }
 
   ngOnInit() {
     this.resultData = new Array();
@@ -64,7 +66,10 @@ export class PhastRollupFurnaceSummaryComponent implements OnInit {
       let num1 = 0;
       let num2 = 0;
       if (this.graphOption == '% Available Heat') {
-        // num1 = this.phastService.availableHeat(data.assessment)
+        num1 = this.getAvailableHeat(data.baselineResultData, data.settings)
+        if (data.modName) {
+          num2 = this.getAvailableHeat(data.modificationResultData, data.settings)
+        }
       } else if (this.graphOption == 'Energy Use') {
         if (i == 1) {
           axisLabel = axisLabel + ' (' + this.settings.phastRollupUnit + '/yr)';
@@ -109,7 +114,10 @@ export class PhastRollupFurnaceSummaryComponent implements OnInit {
         scaleShowVerticalLines: false,
         responsive: true
       }
-      this.addData(data.name, num1, num2);
+      //sigFigs
+      let num1SigFigs = this.reportRollupService.transform(num1, 4, true);
+      let num2SigFigs = this.reportRollupService.transform(num2, 4, true);
+      this.addData(data.name, num1SigFigs, num2SigFigs);
     })
   }
 
@@ -129,6 +137,25 @@ export class PhastRollupFurnaceSummaryComponent implements OnInit {
 
   getConvertedValue(val: number, settings: Settings) {
     return this.convertUnitsService.value(val).from(settings.energyResultUnit).to(this.settings.phastRollupUnit);
+  }
+
+  getAvailableHeat(data: PhastResults, settings: Settings){
+    let resultCategories: ShowResultsCategories = this.phastResultsService.getResultCategories(settings);
+    if(resultCategories.showFlueGas){
+      return data.flueGasAvailableHeat;
+    }
+    
+    if(resultCategories.showSystemEff){
+      return data.heatingSystemEfficiency;
+    }
+
+    if(resultCategories.showEnInput2){
+      return data.availableHeatPercent;
+    }
+
+    if(resultCategories.showExGas){
+      return (1-(data.totalExhaustGasEAF/ data.grossHeatInput))*100
+    }
   }
 
 }

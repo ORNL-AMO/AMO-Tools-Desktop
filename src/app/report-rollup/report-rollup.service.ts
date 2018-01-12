@@ -4,7 +4,7 @@ import { BehaviorSubject } from 'rxjs';
 import { Directory } from '../shared/models/directory';
 import { IndexedDbService } from '../indexedDb/indexed-db.service';
 import { PSAT, PsatOutputs } from '../shared/models/psat';
-import { PHAST, ExecutiveSummary } from '../shared/models/phast/phast';
+import { PHAST, ExecutiveSummary, PhastResults } from '../shared/models/phast/phast';
 import { PhastResultsService } from '../phast/phast-results.service';
 import { ExecutiveSummaryService } from '../phast/phast-report/executive-summary.service';
 import * as _ from 'lodash';
@@ -32,7 +32,7 @@ export class ReportRollupService {
   phastResults: BehaviorSubject<Array<PhastResultsData>>;
   allPhastResults: BehaviorSubject<Array<AllPhastResultsData>>;
 
-  constructor(private indexedDbService: IndexedDbService, private psatService: PsatService, private executiveSummaryService: ExecutiveSummaryService, private settingsService: SettingsService) {
+  constructor(private indexedDbService: IndexedDbService, private psatService: PsatService, private executiveSummaryService: ExecutiveSummaryService, private settingsService: SettingsService, private phastResultsService: PhastResultsService) {
     this.initSummary();
   }
 
@@ -265,7 +265,19 @@ export class ReportRollupService {
         settings[0] = this.checkSettings(settings[0]);
         let baselineResults = this.executiveSummaryService.getSummary(val.baseline, false, settings[0], val.baseline);
         let modificationResults = this.executiveSummaryService.getSummary(val.modification, true, settings[0], val.baseline, baselineResults);
-        tmpResultsArr.push({ baselineResults: baselineResults, modificationResults: modificationResults, assessmentId: val.assessmentId, settings: settings[0], name: val.name, modName: val.modification.name, assessment: val.assessment });
+        let baselineResultData = this.phastResultsService.getResults(val.baseline, settings[0]);
+        let modificationResultData = this.phastResultsService.getResults(val.modification, settings[0]);
+        tmpResultsArr.push({ 
+          baselineResults: baselineResults, 
+          modificationResults: modificationResults, 
+          assessmentId: val.assessmentId, 
+          settings: settings[0], 
+          name: val.name, 
+          modName: val.modification.name, 
+          assessment: val.assessment,
+          baselineResultData: baselineResultData,
+          modificationResultData: modificationResultData 
+        });
         this.phastResults.next(tmpResultsArr);
       })
     })
@@ -286,6 +298,24 @@ export class ReportRollupService {
       }
     }
     return settings;
+  }
+
+  transform(value: number, sigFigs: number, scientificNotation?: boolean): any {
+    if (isNaN(value) == false && value != null && value != undefined) {
+      //string value of number in scientific notation
+      let newValString = value.toPrecision(sigFigs);
+      //converted to number to get trailing/leading zeros
+      let newValNumber = parseFloat(newValString);
+      //convert back to string
+      let numWithZerosAndCommas = newValNumber.toLocaleString();
+      if (scientificNotation) {
+        return newValString;
+      } else {
+        return numWithZerosAndCommas;
+      }
+    } else {
+      return value;
+    }
   }
 
 }
@@ -332,6 +362,8 @@ export interface PhastCompare {
 export interface PhastResultsData {
   baselineResults: ExecutiveSummary,
   modificationResults: ExecutiveSummary,
+  baselineResultData: PhastResults,
+  modificationResultData: PhastResults,
   assessmentId: number,
   settings: Settings,
   name: string,

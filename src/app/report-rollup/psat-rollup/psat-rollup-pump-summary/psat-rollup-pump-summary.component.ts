@@ -35,13 +35,6 @@ export class PsatRollupPumpSummaryComponent implements OnInit {
     this.reportRollupService.psatResults.subscribe((psats: Array<PsatResultsData>) => {
       if (psats.length != 0) {
         this.resultData = psats;
-        // phasts.forEach(val => {
-        //   if(val.modName){
-        //     this.addData(val.name, val.baselineResults.annualEnergyUsed, val.modificationResults.annualEnergyUsed, val.settings);
-        //   }else{
-        //     this.addData(val.name, val.baselineResults.annualEnergyUsed, 0, val.settings);
-        //   }
-        // });
         this.buildChartData();
       }
     })
@@ -56,7 +49,6 @@ export class PsatRollupPumpSummaryComponent implements OnInit {
       { data: new Array(), label: 'Modification' }
     ]
     let i = 1;
-    console.log(this.resultData);
     this.resultData.forEach(data => {
       let num1 = 0;
       let num2 = 0;
