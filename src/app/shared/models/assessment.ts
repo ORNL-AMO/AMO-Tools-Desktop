@@ -11,4 +11,5 @@ export interface Assessment {
   type: string;
   name: string,
   selected?: boolean,
+  appVersion?: string
 }

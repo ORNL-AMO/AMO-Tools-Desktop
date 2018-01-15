@@ -3,7 +3,7 @@ import { PSAT, PsatInputs } from '../shared/models/psat';
 import { Assessment } from '../shared/models/assessment';
 import { PHAST } from '../shared/models/phast/phast';
 import { BehaviorSubject } from 'rxjs';
-
+declare const packageJson;
 @Injectable()
 export class AssessmentService {
 
@@ -26,7 +26,8 @@ export class AssessmentService {
       name: null,
       createdDate: new Date(),
       modifiedDate: new Date(),
-      type: assessmentType
+      type: assessmentType,
+      appVersion: packageJson.version
     }
     return newAssessment;
   }

@@ -118,7 +118,7 @@ export class AssessmentCreateComponent implements OnInit {
         if (this.newAssessment.controls.assessmentType.value == 'Pump') {
           let tmpAssessment = this.assessmentService.getNewAssessment('PSAT');
           tmpAssessment.name = this.newAssessment.controls.assessmentName.value;
-
+          console.log(tmpAssessment.appVersion);
           let tmpPsat = this.assessmentService.getNewPsat();
           tmpAssessment.psat = tmpPsat;
           if (this.settings.powerMeasurement != 'hp') {
