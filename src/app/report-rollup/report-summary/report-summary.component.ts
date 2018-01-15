@@ -2,6 +2,7 @@ import { Component, OnInit, Input, ViewChild, Output, EventEmitter } from '@angu
 import { Settings } from '../../shared/models/settings';
 import { ModalDirective } from 'ngx-bootstrap';
 import { PhastResultsData } from '../report-rollup.service';
+import { setTimeout } from 'timers';
 
 @Component({
   selector: 'app-report-summary',
@@ -19,8 +20,8 @@ export class ReportSummaryComponent implements OnInit {
   phastResults: Array<PhastResultsData>;
   @Input()
   numPhasts: number;
-
-
+  @Output('hideSummary')
+  hideSummary = new EventEmitter<boolean>();
   // @ViewChild('rollupModal') public rollupModal: ModalDirective;
   showSummary: string = 'open';
   constructor() { }
@@ -46,5 +47,8 @@ export class ReportSummaryComponent implements OnInit {
 
   collapseSummary(str: string) {
     this.showSummary = str;
+    setTimeout(() => {
+      this.hideSummary.emit(true);
+    },250)
   }
 }

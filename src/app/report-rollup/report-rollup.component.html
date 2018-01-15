@@ -15,7 +15,7 @@
             <div class="report-header hide-print">
                 <app-report-banner (emitCloseReport)="closeReport()" (emitExport)="exportToCsv()" (emitPrint)="print()" (emitShowUnitModal)="showUnitModal()">
                 </app-report-banner>
-                <app-report-summary id="reportSummary" [settings]="settings" [numPhasts]="numPhasts" (showModal)="showModal()" (showPsatModal)="showPsatModal();"></app-report-summary>
+                <app-report-summary id="reportSummary" [settings]="settings" [numPhasts]="numPhasts" (showModal)="showModal()" (showPsatModal)="showPsatModal();" (hideSummary)="setSidebarHeight()"></app-report-summary>
             </div>
         </div>
     </div>
