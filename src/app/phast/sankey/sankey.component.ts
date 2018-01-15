@@ -107,7 +107,6 @@ export class SankeyComponent implements OnInit {
       .attr('id', function (d) {
         return 'end-' + d.target;
       })
-      //real version
       .attr('orient', 'auto')
       .attr('refX', .1)
       .attr('refY', 0)
