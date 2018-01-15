@@ -8,6 +8,8 @@ import { ModalDirective } from 'ngx-bootstrap';
 import { Assessment } from '../../shared/models/assessment';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
 import { PSAT } from '../../shared/models/psat';
+declare const packageJson;
+
 @Component({
   selector: 'app-assessment-settings',
   templateUrl: './assessment-settings.component.html',
@@ -151,6 +153,7 @@ export class AssessmentSettingsComponent implements OnInit {
     tmpSettings.createdDate = new Date();
     tmpSettings.modifiedDate = new Date();
     let oldSettings = this.settings;
+    tmpSettings.appVersion = packageJson.version;
     this.indexedDbService.addSettings(tmpSettings).then(
       results => {
         this.isDirectorySettings = true;

@@ -16,6 +16,8 @@ import { ImportExportService } from '../shared/import-export/import-export.servi
 import { WallLossesSurface, GasLoadChargeMaterial, LiquidLoadChargeMaterial, SolidLoadChargeMaterial, AtmosphereSpecificHeat, FlueGasMaterial, SolidLiquidFlueGasMaterial } from '../shared/models/materials';
 import { ReportRollupService } from '../report-rollup/report-rollup.service';
 import { SettingsService } from '../settings/settings.service';
+declare const packageJson;
+
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
@@ -270,8 +272,10 @@ export class DashboardComponent implements OnInit {
       flowMeasurement: 'gpm',
       powerMeasurement: 'hp',
       pressureMeasurement: 'psi',
-      energySourceType: 'Fuel'
-
+      energySourceType: 'Fuel',
+      appVersion: packageJson.version,
+      energyResultUnit: 'MMBtu',
+      temperatureMeasurement: 'F'
     }
     this.indexedDbService.addSettings(tmpSettings).then(
       results => {

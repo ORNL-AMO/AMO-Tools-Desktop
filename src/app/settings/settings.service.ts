@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { Settings } from '../shared/models/settings';
+declare const packageJson;
 
 @Injectable()
 export class SettingsService {
@@ -63,7 +64,8 @@ export class SettingsService {
       furnaceType: form.controls.furnaceType.value,
       energyResultUnit: form.controls.energyResultUnit.value,
       customFurnaceName: form.controls.customFurnaceName.value,
-      temperatureMeasurement: form.controls.temperatureMeasurement.value
+      temperatureMeasurement: form.controls.temperatureMeasurement.value,
+      appVersion: packageJson.version
     };
     return tmpSettings;
   }

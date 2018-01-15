@@ -13,6 +13,7 @@ import { SettingsService } from '../settings/settings.service';
 import { PhastResultsService } from './phast-results.service';
 import { LossesService } from './losses/losses.service';
 import { StepTab, LossTab } from './tabs';
+import { UpdateDataService } from '../shared/update-data.service';
 @Component({
   selector: 'app-phast',
   templateUrl: './phast.component.html',
@@ -55,7 +56,8 @@ export class PhastComponent implements OnInit {
     private toastyConfig: ToastyConfig,
     private settingsService: SettingsService,
     private phastResultsService: PhastResultsService,
-    private lossesService: LossesService) {
+    private lossesService: LossesService,
+  private updateDataService: UpdateDataService) {
     this.toastyConfig.theme = 'bootstrap';
     this.toastyConfig.position = 'bottom-right';
     // this.toastyConfig.limit = 1;
@@ -70,6 +72,10 @@ export class PhastComponent implements OnInit {
       tmpAssessmentId = params['id'];
       this.indexedDbService.getAssessment(parseInt(tmpAssessmentId)).then(dbAssessment => {
         this.assessment = dbAssessment;
+        let assessmentDiffCheck: boolean = this.updateDataService.checkAssessmentVersionDifferent(this.assessment);
+        if(assessmentDiffCheck == true){
+          this.assessment = this.updateDataService.updatePhast(this.assessment);
+        }
         this._phast = (JSON.parse(JSON.stringify(this.assessment.phast)));
         this.lossesService.baseline.next(this._phast);
         if (!this._phast.operatingHours) {
@@ -150,8 +156,12 @@ export class PhastComponent implements OnInit {
       results => {
         if (results.length != 0) {
           this.settings = results[0];
-          if (!this.settings.energyResultUnit) {
-            this.settings = this.settingsService.setEnergyResultUnitSetting(this.settings);
+          let checkSettingsDiff: boolean = this.updateDataService.checkSettingsVersionDifferent(this.settings);
+          //check settings version
+          if(checkSettingsDiff == true){
+            //update if needed
+            this.settings = this.updateDataService.updateSettings(this.settings);
+            this.save();
           }
           this.lossesService.setTabs(this.settings);
           this.isAssessmentSettings = true;

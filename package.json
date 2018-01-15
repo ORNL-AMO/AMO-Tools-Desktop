@@ -100,7 +100,9 @@
     }
   },
   "devDependencies": {
-    "@angular/cli": "^1.6.4",
+    "@angular-devkit/core": "0.0.23",
+    "@angular-devkit/schematics": "0.0.42",
+    "@angular/cli": "1.6.4",
     "@types/jasmine": "2.5.38",
     "@types/lodash": "^4.14.74",
     "@types/node": "^8.0.28",
