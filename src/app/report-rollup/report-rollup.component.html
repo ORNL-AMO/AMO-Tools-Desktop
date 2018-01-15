@@ -114,7 +114,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <app-report-rollup-units *ngIf="settings" [settings]="settings"></app-report-rollup-units>
+                <app-report-rollup-units *ngIf="settings" [settings]="settings" (closeUnitModal)="hideUnitModal()"></app-report-rollup-units>
             </div>
         </div>
     </div>

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { Settings } from '../../shared/models/settings';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
 import { ReportRollupService, ReportItem } from '../report-rollup.service';
@@ -12,7 +12,8 @@ import { Assessment } from '../../shared/models/assessment';
 export class ReportRollupUnitsComponent implements OnInit {
   @Input()
   settings: Settings;
-
+  @Output('closeUnitModal')
+  closeUnitModal = new EventEmitter<boolean>();
   energyOptions: Array<string> = [
     'MMBtu',
     'Btu',
@@ -25,9 +26,11 @@ export class ReportRollupUnitsComponent implements OnInit {
   ]
   energyResultOptions: Array<any>;
   phastAssessments: Array<ReportItem>;
+  tmpSettings: Settings;
   constructor(private convertUnitsService: ConvertUnitsService, private reportRollupService: ReportRollupService) { }
 
   ngOnInit() {
+    this.tmpSettings = JSON.parse(JSON.stringify(this.settings));
     this.reportRollupService.phastAssessments.subscribe(val => {
       this.phastAssessments = val;
     })
@@ -52,6 +55,12 @@ export class ReportRollupUnitsComponent implements OnInit {
     if (unit) {
       return this.convertUnitsService.getUnit(unit).unit.name.display;
     }
+  }
+
+  saveUnits(){
+    this.settings.phastRollupUnit = this.tmpSettings.phastRollupUnit;
+    this.newUnit();
+    this.closeUnitModal.emit(true);
   }
 
   newUnit(){

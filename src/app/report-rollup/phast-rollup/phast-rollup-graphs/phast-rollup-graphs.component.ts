@@ -45,16 +45,13 @@ export class PhastRollupGraphsComponent implements OnInit {
 
   ngOnInit() {
     this.graphColors = graphColors;
-    let counter = 1;
     this.reportRollupService.phastResults.subscribe(val => {
       if (val.length != 0) {
-        console.log('called ' + counter);
         this.initTotals();
         this.calcPhastSums(val);
         this.getResults(val);
         this.getData();
         this.resultData = val;
-        counter++;
       }
     })
   }

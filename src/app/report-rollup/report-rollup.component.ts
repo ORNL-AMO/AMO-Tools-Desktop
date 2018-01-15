@@ -122,7 +122,6 @@ export class ReportRollupComponent implements OnInit {
     let header = doc.getElementById('reportHeader');
     let headerHeight = header.clientHeight;
     this.sidebarHeight = wndHeight - headerHeight;
-    console.log(this.sidebarHeight);
   }
 
   checkActiveAssessment() {
