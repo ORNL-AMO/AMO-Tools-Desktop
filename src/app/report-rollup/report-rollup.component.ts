@@ -35,13 +35,18 @@ export class ReportRollupComponent implements OnInit {
   @ViewChild('rollupModal') public rollupModal: ModalDirective;
 
   numPhasts: number = 0;
+  sidebarHeight: number = 0;
   constructor(private reportRollupService: ReportRollupService,
     private windowRefService: WindowRefService, private indexedDbService: IndexedDbService, private assessmentService: AssessmentService) { }
 
   ngOnInit() {
     setTimeout(() => {
       this.assessmentsGathered = true;
-    }, 2000)
+    }, 2000);
+
+    setTimeout(() => {
+      this.setSidebarHeight();
+    }, 2500);
 
     this.indexedDbService.getDirectorySettings(1).then(results => {
       this.settings = this.reportRollupService.checkSettings(results[0]);;
@@ -76,6 +81,10 @@ export class ReportRollupComponent implements OnInit {
     })
   }
 
+  // ngAfterViewInit(){
+  //   this.setSidebarHeight();
+  // }
+
   ngOnDestroy() {
     this.assessmentService.showFeedback.next(true);
     this.reportRollupService.initSummary();
@@ -104,6 +113,16 @@ export class ReportRollupComponent implements OnInit {
 
   closeReport() {
     this.emitCloseReport.emit(true);
+  }
+
+  setSidebarHeight(){
+    let doc = this.windowRefService.getDoc();
+    let window = this.windowRefService.nativeWindow;
+    let wndHeight = window.innerHeight;
+    let header = doc.getElementById('reportHeader');
+    let headerHeight = header.clientHeight;
+    let sidebar = doc.getElementById('sidebar');
+    this.sidebarHeight = wndHeight - headerHeight;
   }
 
   checkActiveAssessment() {

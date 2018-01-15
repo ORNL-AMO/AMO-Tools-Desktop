@@ -24,13 +24,13 @@
     <div class="row">
         <div class="col-lg-1 col-md-2 col-sm-2">
             <div class="report-container">
-                <div class="sidebar hide-print">
+                <div class="sidebar hide-print" id="sidebar" [ngStyle]="{'height.px': sidebarHeight}">
                     <ul>
                         <li *ngFor="let item of _reportAssessments" [ngClass]="{'active': focusedAssessment.id == item.assessment.id}" (click)="selectAssessment(item)">
-                            <a>
+                            <a class="sb-item">
                             <img *ngIf="item.assessment.type == 'PSAT'" class="icon-image" src="assets/images/ico-psat-diagram-small.png">
                             <img *ngIf="item.assessment.type == 'PHAST'" class="icon-image" src="assets/images/ico-phast-diagram-small.png">
-                            <span class="sb-item">
+                            <span>
                                 {{item.assessment.name}}
                             </span>
                         </a>

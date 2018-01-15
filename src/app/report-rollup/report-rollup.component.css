@@ -16,7 +16,7 @@
     background: #fff;
     border-right: #d0d0d0 solid 1px;
     position: fixed;
-    height: 100%;
+    overflow-y: scroll;
 }
     .report-container .sidebar ul {
         margin: 0;
@@ -130,5 +130,5 @@
   }
 
   .sb-item{
-      vertical-align: baseline;
+      width: 100%;
   }
