@@ -5,7 +5,7 @@
     <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
   </div> -->
   <div class="assessment-name">
-    <input type="checkbox" [(ngModel)]="isChecked" (change)="setDelete()" />
+    <input type="checkbox" [(ngModel)]="assessment.selected" (change)="setDelete()" />
     <a (click)="goToAssessment(assessment, 'assessment')" *ngIf="isSetup">{{assessment.name}}</a>
     <a (click)="goToAssessment(assessment, 'system-setup')" *ngIf="!isSetup">{{assessment.name}}</a>
 

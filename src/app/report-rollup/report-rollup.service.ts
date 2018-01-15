@@ -88,6 +88,7 @@ export class ReportRollupService {
     });
     directory.subDirectory.forEach(subDir => {
       if (subDir.selected) {
+        debugger
         this.getDirectoryAssessments(subDir.id);
         this.getChildDirectories(subDir);
       }
