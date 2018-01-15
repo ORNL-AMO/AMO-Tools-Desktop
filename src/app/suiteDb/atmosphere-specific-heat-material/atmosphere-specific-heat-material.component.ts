@@ -57,15 +57,39 @@ export class AtmosphereSpecificHeatMaterialComponent implements OnInit {
     }
   }
 
+
+  //debug
   setExisting() {
     if (this.selectedMaterial) {
-      this.newMaterial = {
-        substance: this.selectedMaterial.substance + ' (mod)',
-        specificHeat: this.selectedMaterial.specificHeat
+
+      if (this.settings.unitsOfMeasure == 'Metric') {
+        this.newMaterial = {
+          substance: this.selectedMaterial.substance + ' (mod)',
+          specificHeat: this.convertUnitsService.value(this.selectedMaterial.specificHeat).from('btulbF').to('kJkgC')
+        }
       }
+      else {
+        this.newMaterial = {
+          substance: this.selectedMaterial.substance + ' (mod)',
+          specificHeat: this.selectedMaterial.specificHeat
+        }
+      }
+
+
     }
     this.checkMaterialName();
   }
+
+  //real version
+  // setExisting() {
+  //   if (this.selectedMaterial) {
+  //     this.newMaterial = {
+  //       substance: this.selectedMaterial.substance + ' (mod)',
+  //       specificHeat: this.selectedMaterial.specificHeat
+  //     }
+  //   }
+  //   this.checkMaterialName();
+  // }
 
 
   checkMaterialName() {

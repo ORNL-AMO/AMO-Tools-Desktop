@@ -66,15 +66,29 @@ export class SolidLoadChargeMaterialComponent implements OnInit {
     }
   }
 
+
   setExisting() {
     if (this.selectedMaterial) {
-      this.newMaterial = {
-        substance: this.selectedMaterial.substance + ' (mod)',
-        latentHeat: this.selectedMaterial.latentHeat,
-        meltingPoint: this.selectedMaterial.meltingPoint,
-        specificHeatLiquid: this.selectedMaterial.specificHeatLiquid,
-        specificHeatSolid: this.selectedMaterial.specificHeatSolid,
+      if (this.settings.unitsOfMeasure == "Metric") {
+        this.newMaterial = {
+          substance: this.selectedMaterial.substance + ' (mod)',
+          latentHeat: this.convertUnitsService.value(this.selectedMaterial.latentHeat).from('btuLb').to('kJkg'),
+          meltingPoint: this.convertUnitsService.value(this.selectedMaterial.meltingPoint).from('F').to('C'),
+          specificHeatLiquid: this.convertUnitsService.value(this.selectedMaterial.specificHeatLiquid).from('btulbF').to('kJkgC'),
+          specificHeatSolid: this.convertUnitsService.value(this.selectedMaterial.specificHeatSolid).from('btulbF').to('kJkgC'),
+        }
       }
+      else {
+        this.newMaterial = {
+          substance: this.selectedMaterial.substance + ' (mod)',
+          latentHeat: this.selectedMaterial.latentHeat,
+          meltingPoint: this.selectedMaterial.meltingPoint,
+          specificHeatLiquid: this.selectedMaterial.specificHeatLiquid,
+          specificHeatSolid: this.selectedMaterial.specificHeatSolid,
+        }
+      }
+
+
       this.checkMaterialName();
     }
   }

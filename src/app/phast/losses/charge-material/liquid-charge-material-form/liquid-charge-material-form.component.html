@@ -39,8 +39,8 @@
         <input name="{{'materialLatentHeat_'+lossIndex}}" type="number" min="0" step="any" class="form-control" formControlName="materialLatentHeat"
           id="materialLatentHeat" onfocus="this.select();" (input)="checkInputError()" (focus)="focusField('materialLatentHeat')"
           (blur)="focusOut()">
-        <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">Btu/lb</span>
-        <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kJ/kg</span>
+        <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">kJ/(kg-&#8451;)</span>
+        <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kJ/(kg-&#8451;)</span>
       </div>
       <span class="alert-warning pull-right small" *ngIf="materialLatentHeatError !== null">{{materialLatentHeatError}}</span>
     </div>

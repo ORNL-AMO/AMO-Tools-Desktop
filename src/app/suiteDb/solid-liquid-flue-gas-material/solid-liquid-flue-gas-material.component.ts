@@ -64,6 +64,8 @@ export class SolidLiquidFlueGasMaterialComponent implements OnInit {
     }
   }
 
+
+
   setExisting() {
     if (this.selectedMaterial) {
       this.newMaterial = {
