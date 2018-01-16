@@ -202,8 +202,7 @@
     <h3>Now that your baseline set up, click below to start adding modifications.</h3>
     <button type="button" (click)="openModal()">Add Modified Condition</button>
     <!--<button type="button" (click)="lossesSetup()" *ngIf="!isLossesSetup">Baseline Done?</button>-->
-    <p>Data will be copied from your current baseline condition. You will not be able to modify your baseline condition after
-      creating a modification.</p>
+    <p>Data will be copied from your current baseline condition. You will not be able to add or remove losses after creating a modification.</p>
   </div>
   <div [ngClass]="{'col-md-6': inSetup, 'col-md-4': !inSetup}">
     <app-losses-result-panel *ngIf="!inSetup" [inSetup]="inSetup" [lossesTab]="selectedTab" [currentField]="currentField" [settings]="settings"
