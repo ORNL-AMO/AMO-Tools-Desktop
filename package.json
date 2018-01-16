@@ -108,7 +108,7 @@
     "codelyzer": "~2.0.0",
     "css-loader": "^0.28.7",
     "electron": "^1.7.6",
-    "electron-builder": "^19.45.6",
+    "electron-builder": "19.53.2",
     "electron-packager": "^9.0.0",
     "jasmine-core": "~2.5.2",
     "jasmine-spec-reporter": "~3.2.0",

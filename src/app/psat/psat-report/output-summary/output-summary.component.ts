@@ -88,7 +88,7 @@ export class OutputSummaryComponent implements OnInit {
   }
 
   useModification() {
-    this.reportRollupService.updateSelectedPsats(this.assessment, this.selectedModificationIndex);
+    this.reportRollupService.updateSelectedPsats({assessment: this.assessment, settings: this.settings}, this.selectedModificationIndex);
   }
 
   getDiff(num1: number, num2: number) {
