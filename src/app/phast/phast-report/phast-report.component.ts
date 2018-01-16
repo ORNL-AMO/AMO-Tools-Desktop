@@ -66,6 +66,7 @@ export class PhastReportComponent implements OnInit {
   getSettings() {
     this.indexedDbService.getAssessmentSettings(this.assessment.id).then(results => {
       if (results.length != 0) {
+        debugger
         if (!results[0].energyResultUnit) {
           results[0] = this.settingsService.setEnergyResultUnitSetting(results[0]);
         }

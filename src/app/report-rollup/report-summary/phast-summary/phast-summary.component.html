@@ -1,17 +1,23 @@
-<div class="summary-header furnaces">
-  <h3>Furnaces</h3>
-    <span><span>{{numPhasts}}</span></span>
+<div *ngIf="defaultSettings">
+    <div class="summary-header furnaces">
+        <h3>Furnaces</h3>
+        <span>
+            <span>{{numPhasts}}</span>
+        </span>
+    </div>
+    <dl class="summary-list">
+        <dt>Maximum Annual
+            <br/>Cost Savings</dt>
+        <dd>{{furnaceSavingsPotential| currency:'USD':'symbol':'2.0-0'}}</dd>
+        <dt>Annual Cost</dt>
+        <dd>{{totalCost | currency:'USD':'symbol':'2.0-0'}}</dd>
+    </dl>
+    <dl class="summary-list">
+        <dt>Maximum Annual
+            <br/>Energy Savings</dt>
+        <dd>{{energySavingsPotential| number:'2.0-0'}} {{defaultSettings.energyResultUnit}}</dd>
+        <dt>Annual Energy</dt>
+        <dd>{{totalEnergy| number:'2.0-0'}} {{defaultSettings.energyResultUnit}}
+        </dd>
+    </dl>
 </div>
-<dl class="summary-list">
-    <dt>Maximum Annual<br/>Cost Savings</dt>
-    <dd>{{furnaceSavingsPotential| currency:'USD':'symbol':'2.0-0'}}</dd>
-    <dt>Annual Cost</dt>
-    <dd>{{totalCost | currency:'USD':'symbol':'2.0-0'}}</dd>
-</dl>
-<dl class="summary-list">
-    <dt>Maximum Annual<br/>Energy Savings</dt>
-    <dd>{{energySavingsPotential| number:'2.0-0'}} {{defaultSettings.energyResultUnit}}</dd>
-    <dt>Annual Energy</dt>
-    <dd>{{totalEnergy| number:'2.0-0'}} {{defaultSettings.energyResultUnit}}
-    </dd>
-</dl>

@@ -13,7 +13,6 @@ import { ToastyService, ToastyConfig, ToastOptions, ToastData } from 'ng2-toasty
 import { JsonToCsvService } from '../shared/json-to-csv/json-to-csv.service';
 import { CompareService } from './compare.service';
 import { SettingsService } from '../settings/settings.service';
-import { UpdateDataService } from '../shared/update-data.service';
 
 @Component({
   selector: 'app-psat',
@@ -64,8 +63,7 @@ export class PsatComponent implements OnInit {
     private toastyConfig: ToastyConfig,
     private jsonToCsvService: JsonToCsvService,
     private compareService: CompareService,
-    private settingsService: SettingsService,
-  private updateDataService: UpdateDataService) {
+    private settingsService: SettingsService) {
 
     this.toastyConfig.theme = 'bootstrap';
     this.toastyConfig.position = 'bottom-right';
@@ -79,10 +77,6 @@ export class PsatComponent implements OnInit {
       tmpAssessmentId = params['id'];
       this.indexedDbService.getAssessment(parseInt(tmpAssessmentId)).then(dbAssessment => {
         this.assessment = dbAssessment;
-        let assessmentDiffCheck: boolean = this.updateDataService.checkAssessmentVersionDifferent(this.assessment);
-        if(assessmentDiffCheck == true){
-          this.assessment = this.updateDataService.updatePsat(this.assessment);
-        }
         this._psat = (JSON.parse(JSON.stringify(this.assessment.psat)));
         this.isValid = true;
         this.canContinue = true;
@@ -127,14 +121,6 @@ export class PsatComponent implements OnInit {
       results => {
         if (results.length != 0) {
           this.settings = results[0];
-          let checkSettingsDiff: boolean = this.updateDataService.checkSettingsVersionDifferent(this.settings);
-          //check settings version
-          if(checkSettingsDiff == true){
-            //update if needed
-            this.settings = this.updateDataService.updateSettings(this.settings);
-            this.save();
-            console.log('updated settings');
-          }
           // if(!this.settings.temperatureMeasurement){
           //   this.settings = this.settingsService.setTemperatureUnit(this.settings);
           // }

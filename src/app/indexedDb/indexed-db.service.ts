@@ -6,6 +6,7 @@ import { Assessment } from '../shared/models/assessment';
 import { Settings } from '../shared/models/settings';
 import { WallLossesSurface, GasLoadChargeMaterial, LiquidLoadChargeMaterial, SolidLoadChargeMaterial, AtmosphereSpecificHeat, FlueGasMaterial, SolidLiquidFlueGasMaterial } from '../shared/models/materials'
 import { SuiteDbService } from '../suiteDb/suite-db.service';
+import { UpdateDataService } from '../shared/update-data.service';
 
 
 var myDb: any = {
@@ -48,7 +49,7 @@ export class IndexedDbService {
 
   initCustomObjects: boolean = true;
 
-  constructor(private windowRef: WindowRefService, private suiteDbService: SuiteDbService) {
+  constructor(private windowRef: WindowRefService, private suiteDbService: SuiteDbService, private updateDataService: UpdateDataService) {
     this._window = windowRef.nativeWindow;
   }
 
@@ -216,7 +217,9 @@ export class IndexedDbService {
       let getRequest = store.get(id);
       myDb.setDefaultErrorHandler(getRequest, myDb);
       getRequest.onsuccess = (e) => {
-        resolve(e.target.result);
+        //e.target.result = Assessment
+        let assessment = this.updateDataService.checkAssessment(e.target.result);
+        resolve(assessment);
       }
       getRequest.onerror = (error) => {
         reject(error.target.result)
@@ -233,7 +236,12 @@ export class IndexedDbService {
       myDb.setDefaultErrorHandler(indexGetRequest, myDb);
 
       indexGetRequest.onsuccess = (e) => {
-        resolve(e.target.result)
+        //e.target.result = Array<Assessments>
+        let assessments: Array<Assessment> = e.target.result;
+        assessments.forEach(assessment => {
+          assessment = this.updateDataService.checkAssessment(assessment);
+        });
+        resolve(assessments)
       }
       indexGetRequest.onerror = (e) => {
         reject(e);
@@ -403,7 +411,11 @@ export class IndexedDbService {
       let getRequest = store.get(id);
       myDb.setDefaultErrorHandler(getRequest, myDb);
       getRequest.onsuccess = (e) => {
-        resolve(e.target.result);
+        let settingsArr: Array<Settings> = e.target.result;
+        settingsArr.forEach(setting => {
+          setting = this.updateDataService.checkSettings(setting);
+        })
+        resolve(settingsArr);
       }
       getRequest.onerror = (error) => {
         reject(error.target.result)
@@ -419,7 +431,12 @@ export class IndexedDbService {
       let indexGetRequest = index.getAll(directoryId);
       myDb.setDefaultErrorHandler(indexGetRequest, myDb);
       indexGetRequest.onsuccess = (e) => {
-        resolve(e.target.result)
+        //e.target.result = Array<Settings>
+        let settingsArr: Array<Settings> = e.target.result;
+        settingsArr.forEach(setting => {
+          setting = this.updateDataService.checkSettings(setting);
+        })
+        resolve(settingsArr)
       }
       indexGetRequest.onerror = (e) => {
         reject(e);
@@ -435,7 +452,12 @@ export class IndexedDbService {
       let indexGetRequest = index.getAll(assessmentId);
       myDb.setDefaultErrorHandler(indexGetRequest, myDb);
       indexGetRequest.onsuccess = (e) => {
-        resolve(e.target.result)
+        //e.target.result = Array<Settings>
+        let settingsArr: Array<Settings> = e.target.result;
+        settingsArr.forEach(setting => {
+          setting = this.updateDataService.checkSettings(setting);
+        })
+        resolve(settingsArr)
       }
       indexGetRequest.onerror = (e) => {
         reject(e);

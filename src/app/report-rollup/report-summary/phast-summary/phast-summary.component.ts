@@ -22,6 +22,7 @@ export class PhastSummaryComponent implements OnInit {
   ngOnInit() {
     this.indexedDbService.getDirectorySettings(1).then(results => {
       this.defaultSettings = this.reportRollupService.checkSettings(results[0]);
+      debugger;
     })
 
     this.reportRollupService.phastAssessments.subscribe(val => {
