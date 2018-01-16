@@ -74,29 +74,77 @@ export class FlueGasMaterialComponent implements OnInit {
     this.hideModal.emit();
   }
 
+  //debug
   setExisting() {
     if (this.selectedMaterial) {
-      this.newMaterial = {
-        substance: this.selectedMaterial.substance + ' (mod)',
-        C2H6: this.selectedMaterial.C2H6,
-        C3H8: this.selectedMaterial.C3H8,
-        C4H10_CnH2n: this.selectedMaterial.C4H10_CnH2n,
-        CH4: this.selectedMaterial.CH4,
-        CO: this.selectedMaterial.CO,
-        CO2: this.selectedMaterial.CO2,
-        H2: this.selectedMaterial.H2,
-        H2O: this.selectedMaterial.H2O,
-        N2: this.selectedMaterial.N2,
-        O2: this.selectedMaterial.O2,
-        SO2: this.selectedMaterial.SO2,
-        heatingValue: this.selectedMaterial.heatingValue,
-        heatingValueVolume: this.selectedMaterial.heatingValueVolume,
-        specificGravity: this.selectedMaterial.specificGravity
+
+      if (this.settings.unitsOfMeasure == 'Metric') {
+        this.newMaterial = {
+          substance: this.selectedMaterial.substance + ' (mod)',
+          C2H6: this.selectedMaterial.C2H6,
+          C3H8: this.selectedMaterial.C3H8,
+          C4H10_CnH2n: this.selectedMaterial.C4H10_CnH2n,
+          CH4: this.selectedMaterial.CH4,
+          CO: this.selectedMaterial.CO,
+          CO2: this.selectedMaterial.CO2,
+          H2: this.selectedMaterial.H2,
+          H2O: this.selectedMaterial.H2O,
+          N2: this.selectedMaterial.N2,
+          O2: this.selectedMaterial.O2,
+          SO2: this.selectedMaterial.SO2,
+          heatingValue: this.convertUnitsService.value(this.selectedMaterial.heatingValue).from('btuLb').to('kJkg'),
+          heatingValueVolume: this.convertUnitsService.value(this.selectedMaterial.heatingValueVolume).from('btuSCF').to('kJNm3'),
+          specificGravity: this.selectedMaterial.specificGravity
+        }
       }
+      else {
+        this.newMaterial = {
+          substance: this.selectedMaterial.substance + ' (mod)',
+          C2H6: this.selectedMaterial.C2H6,
+          C3H8: this.selectedMaterial.C3H8,
+          C4H10_CnH2n: this.selectedMaterial.C4H10_CnH2n,
+          CH4: this.selectedMaterial.CH4,
+          CO: this.selectedMaterial.CO,
+          CO2: this.selectedMaterial.CO2,
+          H2: this.selectedMaterial.H2,
+          H2O: this.selectedMaterial.H2O,
+          N2: this.selectedMaterial.N2,
+          O2: this.selectedMaterial.O2,
+          SO2: this.selectedMaterial.SO2,
+          heatingValue: this.selectedMaterial.heatingValue,
+          heatingValueVolume: this.selectedMaterial.heatingValueVolume,
+          specificGravity: this.selectedMaterial.specificGravity
+        }
+      }      
       this.checkMaterialName();
       this.setHHV();
     }
   }
+
+  //real version
+  // setExisting() {
+  //   if (this.selectedMaterial) {
+  //     this.newMaterial = {
+  //       substance: this.selectedMaterial.substance + ' (mod)',
+  //       C2H6: this.selectedMaterial.C2H6,
+  //       C3H8: this.selectedMaterial.C3H8,
+  //       C4H10_CnH2n: this.selectedMaterial.C4H10_CnH2n,
+  //       CH4: this.selectedMaterial.CH4,
+  //       CO: this.selectedMaterial.CO,
+  //       CO2: this.selectedMaterial.CO2,
+  //       H2: this.selectedMaterial.H2,
+  //       H2O: this.selectedMaterial.H2O,
+  //       N2: this.selectedMaterial.N2,
+  //       O2: this.selectedMaterial.O2,
+  //       SO2: this.selectedMaterial.SO2,
+  //       heatingValue: this.selectedMaterial.heatingValue,
+  //       heatingValueVolume: this.selectedMaterial.heatingValueVolume,
+  //       specificGravity: this.selectedMaterial.specificGravity
+  //     }
+  //     this.checkMaterialName();
+  //     this.setHHV();
+  //   }
+  // }
 
   setHHV() {
     const vals = this.phastService.flueGasByVolumeCalculateHeatingValue(this.newMaterial);

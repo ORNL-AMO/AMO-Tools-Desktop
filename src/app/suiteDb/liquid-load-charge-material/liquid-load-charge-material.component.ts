@@ -52,8 +52,9 @@ export class LiquidLoadChargeMaterialComponent implements OnInit {
     if (this.canAdd) {
       this.canAdd = false;
       if (this.settings.unitsOfMeasure == 'Metric') {
+
         this.newMaterial.vaporizationTemperature = this.convertUnitsService.value(this.newMaterial.vaporizationTemperature).from('C').to('F');
-        this.newMaterial.latentHeat = this.convertUnitsService.value(this.newMaterial.latentHeat).from('C').to('F');
+        this.newMaterial.latentHeat = this.convertUnitsService.value(this.newMaterial.latentHeat).from('kJkgC').to('btulbF');
         this.newMaterial.specificHeatLiquid = this.convertUnitsService.value(this.newMaterial.specificHeatLiquid).from('kJkgC').to('btulbF');
         this.newMaterial.specificHeatVapor = this.convertUnitsService.value(this.newMaterial.specificHeatVapor).from('kJkgC').to('btulbF');
       }
@@ -66,19 +67,35 @@ export class LiquidLoadChargeMaterialComponent implements OnInit {
     }
   }
 
+
+
   setExisting() {
-    this.newMaterial = {
-      substance: this.selectedMaterial.substance + ' (mod)',
-      latentHeat: this.selectedMaterial.latentHeat,
-      specificHeatLiquid: this.selectedMaterial.specificHeatLiquid,
-      specificHeatVapor: this.selectedMaterial.specificHeatVapor,
-      vaporizationTemperature: this.selectedMaterial.vaporizationTemperature
+    if (this.selectedMaterial) {
+      if (this.settings.unitsOfMeasure == 'Metric') {
+        this.newMaterial = {
+          substance: this.selectedMaterial.substance + ' (mod)',
+          latentHeat: this.convertUnitsService.value(this.selectedMaterial.latentHeat).from('btulbF').to('kJkgC'),
+          specificHeatLiquid: this.convertUnitsService.value(this.selectedMaterial.specificHeatLiquid).from('btulbF').to('kJkgC'),
+          specificHeatVapor: this.convertUnitsService.value(this.selectedMaterial.specificHeatVapor).from('btulbF').to('kJkgC'),
+          vaporizationTemperature: this.convertUnitsService.value(this.selectedMaterial.vaporizationTemperature).from('F').to('C')
+        }
+      }
+      else {
+        this.newMaterial = {
+          substance: this.selectedMaterial.substance + ' (mod)',
+          latentHeat: this.selectedMaterial.latentHeat,
+          specificHeatLiquid: this.selectedMaterial.specificHeatLiquid,
+          specificHeatVapor: this.selectedMaterial.specificHeatVapor,
+          vaporizationTemperature: this.selectedMaterial.vaporizationTemperature
+        }
+      }
+      this.checkMaterialName();
     }
   }
 
 
   checkMaterialName() {
-    let test = _.filter(this.allMaterials, (material) => { return material.substance == this.newMaterial.substance })
+    let test = _.filter(this.allMaterials, (material) => { return material.substance.toLowerCase().trim() == this.newMaterial.substance.toLowerCase().trim() })
     if (test.length > 0) {
       this.nameError = 'Cannot have same name as existing material';
       this.isValidMaterialName = false;

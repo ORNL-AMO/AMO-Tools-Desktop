@@ -58,11 +58,21 @@ export class GasLoadChargeMaterialComponent implements OnInit {
     }
   }
 
+
   setExisting() {
     if (this.selectedMaterial) {
-      this.newMaterial = {
-        substance: this.selectedMaterial.substance + ' (mod)',
-        specificHeatVapor: this.selectedMaterial.specificHeatVapor
+
+      if (this.settings.unitsOfMeasure == 'Metric') {
+        this.newMaterial = {
+          substance: this.selectedMaterial.substance + ' (mod)',
+          specificHeatVapor: this.convertUnitsService.value(this.selectedMaterial.specificHeatVapor).from('btulbF').to('kJkgC')
+        }
+      }
+      else {
+        this.newMaterial = {
+          substance: this.selectedMaterial.substance + ' (mod)',
+          specificHeatVapor: this.selectedMaterial.specificHeatVapor
+        }
       }
       this.checkMaterialName();
     }
