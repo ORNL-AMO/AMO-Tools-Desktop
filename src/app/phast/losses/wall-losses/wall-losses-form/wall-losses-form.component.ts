@@ -42,7 +42,7 @@ export class WallLossesFormComponent implements OnInit {
   surfaceOptions: Array<WallLossesSurface>;
   showModal: boolean = false;
   constructor(private windowRefService: WindowRefService, private wallLossCompareService: WallLossCompareService, private suiteDbService: SuiteDbService, private lossesService: LossesService, private convertUnitsService: ConvertUnitsService) { }
-  
+
   ngOnInit() {
     this.surfaceOptions = this.suiteDbService.selectWallLossesSurface();
     //init warnings
@@ -71,7 +71,7 @@ export class WallLossesFormComponent implements OnInit {
     //initialize difference monitor
     this.initDifferenceMonitor();
   }
-  
+
   //iterate through form elements and disable
   disableForm() {
     this.wallLossesForm.disable();
@@ -213,9 +213,13 @@ export class WallLossesFormComponent implements OnInit {
   setProperties() {
     let tmpFactor = this.suiteDbService.selectWallLossesSurfaceById(this.wallLossesForm.controls.surfaceShape.value);
     this.wallLossesForm.patchValue({
-      conditionFactor: tmpFactor.conditionFactor
+      conditionFactor: this.roundVal(tmpFactor.conditionFactor, 4)
     })
     this.calculate.emit(true);
+  }
+  roundVal(val: number, digits: number) {
+    let test = Number(val.toFixed(digits));
+    return test;
   }
 
   showMaterialModal() {

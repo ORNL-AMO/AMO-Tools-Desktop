@@ -167,13 +167,17 @@ export class FixtureLossesFormComponent implements OnInit {
   setProperties() {
     let selectedMaterial = this.suiteDbService.selectSolidLoadChargeMaterialById(this.lossesForm.controls.materialName.value);
     if (this.settings.unitsOfMeasure == 'Metric') {
-      selectedMaterial.specificHeatSolid = this.convertUnitsService.value(selectedMaterial.specificHeatSolid).from('btulbF').to('kJkgC');
+      selectedMaterial.specificHeatSolid = this.convertUnitsService.value(this.roundVal(selectedMaterial.specificHeatSolid, 4)).from('btulbF').to('kJkgC');
     }
 
     this.lossesForm.patchValue({
-      specificHeat: selectedMaterial.specificHeatSolid
+      specificHeat: this.roundVal(selectedMaterial.specificHeatSolid, 4)
     })
     this.calculate.emit(true);
+  }
+  roundVal(val: number, digits: number) {
+    let test = Number(val.toFixed(digits));
+    return test;
   }
 
   showMaterialModal() {

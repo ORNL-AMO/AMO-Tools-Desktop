@@ -7,6 +7,7 @@ import { LossesService } from '../../losses.service';
 import { Settings } from '../../../../shared/models/settings';
 import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
 import { FormGroup } from '@angular/forms';
+import {isInRootDir} from "@angular/compiler-cli/src/transformers/util";
 
 @Component({
   selector: 'app-liquid-charge-material-form',
@@ -108,21 +109,26 @@ export class LiquidChargeMaterialFormComponent implements OnInit {
   setProperties() {
     let selectedMaterial = this.suiteDbService.selectLiquidLoadChargeMaterialById(this.chargeMaterialForm.controls.materialId.value);
     if (this.settings.unitsOfMeasure == 'Metric') {
-      selectedMaterial.vaporizationTemperature = this.convertUnitsService.value(selectedMaterial.vaporizationTemperature).from('F').to('C');
-      selectedMaterial.latentHeat = this.convertUnitsService.value(selectedMaterial.latentHeat).from('btulbF').to('kJkgC');
-      selectedMaterial.specificHeatLiquid = this.convertUnitsService.value(selectedMaterial.specificHeatLiquid).from('btulbF').to('kJkgC');
-      selectedMaterial.specificHeatVapor = this.convertUnitsService.value(selectedMaterial.specificHeatVapor).from('btulbF').to('kJkgC');
+      selectedMaterial.vaporizationTemperature = this.convertUnitsService.value(this.roundVal(selectedMaterial.vaporizationTemperature, 4)).from('F').to('C');
+      selectedMaterial.latentHeat = this.convertUnitsService.value(this.roundVal(selectedMaterial.latentHeat, 4)).from('btulbF').to('kJkgC');
+      selectedMaterial.specificHeatLiquid = this.convertUnitsService.value(this.roundVal(selectedMaterial.specificHeatLiquid, 4)).from('btulbF').to('kJkgC');
+      selectedMaterial.specificHeatVapor = this.convertUnitsService.value(this.roundVal(selectedMaterial.specificHeatVapor, 4)).from('btulbF').to('kJkgC');
     }
 
 
 
     this.chargeMaterialForm.patchValue({
-      materialLatentHeat: selectedMaterial.latentHeat,
-      materialSpecificHeatLiquid: selectedMaterial.specificHeatLiquid,
-      materialSpecificHeatVapor: selectedMaterial.specificHeatVapor,
-      materialVaporizingTemperature: selectedMaterial.vaporizationTemperature
+      materialLatentHeat: this.roundVal(selectedMaterial.latentHeat, 4),
+      materialSpecificHeatLiquid: this.roundVal(selectedMaterial.specificHeatLiquid, 4),
+      materialSpecificHeatVapor: this.roundVal(selectedMaterial.specificHeatVapor, 4),
+      materialVaporizingTemperature: this.roundVal(selectedMaterial.vaporizationTemperature, 4)
     })
     this.calculate.emit(true);
+  }
+
+  roundVal(val: number, digits: number) {
+    let test = Number(val.toFixed(digits));
+    return test;
   }
   emitSave() {
     this.saveEmit.emit(true);

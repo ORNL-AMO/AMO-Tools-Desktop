@@ -121,19 +121,24 @@ export class SolidChargeMaterialFormComponent implements OnInit {
     let selectedMaterial = this.suiteDbService.selectSolidLoadChargeMaterialById(this.chargeMaterialForm.controls.materialId.value);
 
     if (this.settings.unitsOfMeasure == 'Metric') {
-      selectedMaterial.latentHeat = this.convertUnitsService.value(selectedMaterial.latentHeat).from('btuLb').to('kJkg');
-      selectedMaterial.meltingPoint = this.convertUnitsService.value(selectedMaterial.meltingPoint).from('F').to('C');
-      selectedMaterial.specificHeatLiquid = this.convertUnitsService.value(selectedMaterial.specificHeatLiquid).from('btulbF').to('kJkgC');
-      selectedMaterial.specificHeatSolid = this.convertUnitsService.value(selectedMaterial.specificHeatSolid).from('btulbF').to('kJkgC');
+      selectedMaterial.latentHeat = this.convertUnitsService.value(this.roundVal(selectedMaterial.latentHeat, 4)).from('btuLb').to('kJkg');
+      selectedMaterial.meltingPoint = this.convertUnitsService.value(this.roundVal(selectedMaterial.meltingPoint, 4)).from('F').to('C');
+      selectedMaterial.specificHeatLiquid = this.convertUnitsService.value(this.roundVal(selectedMaterial.specificHeatLiquid, 4)).from('btulbF').to('kJkgC');
+      selectedMaterial.specificHeatSolid = this.convertUnitsService.value(this.roundVal(selectedMaterial.specificHeatSolid, 4)).from('btulbF').to('kJkgC');
     }
 
     this.chargeMaterialForm.patchValue({
-      materialLatentHeatOfFusion: selectedMaterial.latentHeat,
-      materialMeltingPoint: selectedMaterial.meltingPoint,
-      materialHeatOfLiquid: selectedMaterial.specificHeatLiquid,
-      materialSpecificHeatOfSolidMaterial: selectedMaterial.specificHeatSolid
+      materialLatentHeatOfFusion: this.roundVal(selectedMaterial.latentHeat, 4),
+      materialMeltingPoint: this.roundVal(selectedMaterial.meltingPoint, 4),
+      materialHeatOfLiquid: this.roundVal(selectedMaterial.specificHeatLiquid, 4),
+      materialSpecificHeatOfSolidMaterial: this.roundVal(selectedMaterial.specificHeatSolid, 4)
     })
     this.calculate.emit(true);
+  }
+
+  roundVal(val: number, digits: number) {
+    let test = Number(val.toFixed(digits));
+    return test;
   }
 checkInputError(bool?: boolean) {
       if (!bool) {
