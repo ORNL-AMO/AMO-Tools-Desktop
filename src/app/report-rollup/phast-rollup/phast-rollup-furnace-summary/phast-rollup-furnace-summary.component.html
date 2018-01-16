@@ -1,0 +1,104 @@
+<div class="row justify-content-center">
+  <div class="col-3">
+    <div class="form-group align-self-center">
+      <select (change)="buildChartData()" class="form-control graph-select" name="graphOption" [(ngModel)]="graphOption" id="graphOption">
+        <option *ngFor="let option of graphOptions" [ngValue]="option">{{option}}
+        </option>
+      </select>
+    </div>
+  </div>
+</div>
+<div class="row justify-content-center">
+  <div class="col-lg-8 col-md-10 col-sm-12">
+    <div style="display: block" *ngIf="chartData">
+      <canvas baseChart [datasets]="chartData" [labels]="chartLabels" [options]="options" [legend]="true" [chartType]="'bar'"></canvas>
+    </div>
+  </div>
+</div>
+<div class="row justify-content-center table-row">
+  <div class="col-lg-10 col-md-12 col-sm-12 output-summary">
+    <table class="table table-hover table-striped">
+      <thead>
+        <tr>
+          <th>
+            Furnace Name
+          </th>
+          <th>
+            Modification Name
+          </th>
+          <th>
+            Baseline Energy Intensity<br>
+            /{{settings.phastRollupUnit}} 
+            <span *ngIf="settings.unitsOfMeasure == 'Metric'">/kg</span>
+            <span *ngIf="settings.unitsOfMeasure == 'Imperial'">/lb</span>)
+          </th>
+          <th>
+            Modification Energy Intensity<br>
+            ({{settings.phastRollupUnit}} 
+            <span *ngIf="settings.unitsOfMeasure == 'Metric'">/kg</span>
+            <span *ngIf="settings.unitsOfMeasure == 'Imperial'">/lb</span>)
+          </th>
+          <th>
+            Baseline Annual Cost<br>
+            ($/yr)
+          </th>
+          <th>
+            Modification Annual Cost<br>
+            ($/yr)
+          </th>
+          <th>
+            Cost Savings<br>
+            ($/yr)
+          </th>
+          <th>
+            Implementation Costs<br>
+            ($)
+          </th>
+          <th>
+            Simple Payback Period<br>
+            (Months)
+          </th>
+        </tr>
+      </thead>
+      <tbody *ngIf="resultData">
+        <tr *ngFor="let data of resultData">
+          <!-- name -->
+          <td>{{data.name}}</td>
+          <td *ngIf="data.modName">{{data.modName}}</td>
+          <td *ngIf="!data.modName">&mdash;</td>
+          <!-- energy intensity -->
+          <td>{{getConvertedValue(data.baselineResults.energyPerMass, data.settings) | sigFigs:'5'}}</td>
+          <td *ngIf="data.modName">{{getConvertedValue(data.modificationResults.energyPerMass, data.settings) | sigFigs:'5'}}</td>
+          <td *ngIf="!data.modName">&mdash;</td>
+          <!-- annual cost -->
+          <td>${{data.baselineResults.annualCost | sigFigs:'4'}}</td>
+          <td *ngIf="data.modName">${{data.modificationResults.annualCost | sigFigs:'4'}}</td>
+          <td *ngIf="!data.modName">&mdash;</td>
+          <!-- savings -->
+          <td *ngIf="data.modName">${{data.modificationResults.annualCostSavings | sigFigs:'4'}}</td>
+          <td *ngIf="!data.modName">&mdash;</td>
+          <!-- implementation costs -->
+          <td *ngIf="data.modName">
+            <span *ngIf="data.modificationResults.implementationCosts">
+              ${{data.modificationResults.implementationCosts | sigFigs:'4'}}
+            </span>
+            <span *ngIf="!data.modificationResults.implementationCosts">
+              &mdash;
+            </span>
+          </td>
+          <td *ngIf="!data.modName">&mdash;</td>
+          <!-- simple patback -->
+          <td *ngIf="data.modName">
+            <span *ngIf="data.modificationResults.paybackPeriod">
+              {{data.modificationResults.paybackPeriod | sigFigs:'4'}}
+            </span>
+            <span *ngIf="!data.modificationResults.paybackPeriod">
+              &mdash;
+            </span>
+          </td>
+          <td *ngIf="!data.modName">&mdash;</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

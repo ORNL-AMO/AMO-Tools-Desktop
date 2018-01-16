@@ -43,7 +43,7 @@ export class DashboardComponent implements OnInit {
   isExportView: boolean = false;
   isImportView: boolean = false;
   importing: any;
-  reportAssessments: Array<any>;
+  // reportAssessments: Array<any>;
   selectedItems: Array<any>;
   showImportExport: boolean;
   deleting: boolean;

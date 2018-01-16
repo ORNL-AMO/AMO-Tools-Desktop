@@ -49,7 +49,7 @@ export class AssessmentListItemComponent implements OnInit {
   }
 
   setDelete() {
-    this.assessment.selected = this.isChecked;
+   // this.assessment.selected = this.isChecked;
   }
 
 
