@@ -25,10 +25,10 @@ const width = 2650,
   styleUrls: ['./psat-sankey.component.css']
 })
 export class PsatSankeyComponent implements OnInit {
-  @Input()
-  assessment: Assessment;
-  @Input()
-  saveClicked: boolean;
+  // @Input()
+  // assessment: Assessment;
+  // @Input()
+  // saveClicked: boolean;
   @Input()
   psat: PSAT;   //baseline
   @Input()
@@ -51,14 +51,16 @@ export class PsatSankeyComponent implements OnInit {
   tmpNewEfficiencyClass: string;
   tmpInitialEfficiencyClass: string;
 
-  baselineResults: PsatOutputs;
-  modificationResults: PsatOutputs;
-  isFirstChange: boolean = true;
+  selectedResults: PsatOutputs;
+  selectedInputs: PsatInputs;
+
   exploreModIndex: number = 0;
   currentField: string;
 
   width: number;
   height: number;
+
+  firstChange: boolean = true;
   baseSize: number = 300;
   minSize: number = 3;
 
@@ -69,154 +71,44 @@ export class PsatSankeyComponent implements OnInit {
   constructor(private psatService: PsatService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
-    if (!this.psat.modifications) {
-      this.psat.modifications = new Array();
-      this.psat.modifications.push({
-        notes: {
-          systemBasicsNotes: '',
-          pumpFluidNotes: '',
-          motorNotes: '',
-          fieldDataNotes: ''
-        },
-        psat: {
-          inputs: JSON.parse(JSON.stringify(this.assessment.psat.inputs))
-        },
-        exploreOpportunities: true
-      });
-      this.exploreModIndex = 0;
-      this.psat.modifications[this.exploreModIndex].psat.name = 'Opportunities Modification';
-    } else {
-      let i = 0;
-      let exists = false;
-      //find explore opportunites modificiation
-      this.psat.modifications.forEach(mod => {
-        if (mod.exploreOpportunities) {
-          this.exploreModIndex = i;
-          exists = true;
-        } else {
-          i++;
-        }
-      })
-      //none found add one
-      if (!exists) {
-        this.psat.modifications.push({
-          notes: {
-            systemBasicsNotes: '',
-            pumpFluidNotes: '',
-            motorNotes: '',
-            fieldDataNotes: ''
-          },
-          psat: {
-            inputs: JSON.parse(JSON.stringify(this.assessment.psat.inputs))
-          },
-          exploreOpportunities: true
-        });
-        this.exploreModIndex = this.psat.modifications.length - 1;
-        this.psat.modifications[this.exploreModIndex].psat.name = 'Opportunities Modification'
-      }
-    }
-
-    this.title = 'Potential Adjustment';
-    this.unit = '%';
-    this.titlePlacement = 'top';
-    this.getResults();
-
-    if (this.debugFlag) {
-      console.log("getResults() done");
-    }
-
-    // this.sankey(this.baselineResults);
-    // this.save();
   }
 
   ngAfterViewInit() {
-    if (this.debugFlag) {
-      console.log("in ngAfterViewInit()");
-    }
-    this.sankey(this.baselineResults);
+    this.getResults();
+    this.makeSankey();
   }
 
+
   ngOnChanges(changes: SimpleChanges) {
-    // if (changes.baselineResults) {
-    //   this.createSankey('Baseline');
-    // }
-    // if (changes.modificationResults) {
-    //   this.createSankey('Modified');
-    // }
+    if (changes.psat) {
+      if (!changes.psat.firstChange) {
+        this.getResults();
+        this.makeSankey();
+      }
+    }
   }
 
 
   getResults() {
     //create copies of inputs to use for calcs
-    let psatInputs: PsatInputs = JSON.parse(JSON.stringify(this.psat.inputs));
-    let modInputs: PsatInputs = JSON.parse(JSON.stringify(this.psat.modifications[this.exploreModIndex].psat.inputs));
-    let tmpForm = this.psatService.getFormFromPsat(psatInputs);
+    this.selectedInputs = JSON.parse(JSON.stringify(this.psat.inputs));
+    let tmpForm = this.psatService.getFormFromPsat(this.selectedInputs);
     if (tmpForm.status == 'VALID') {
-
-      if (this.debugFlag) {
-        console.log("tmpForm.status = VALID");
-      }
-
-      if (psatInputs.optimize_calculation) {
-
-        if (this.debugFlag) {
-          console.log("psatInputs.optimize_calculation = " + psatInputs.optimize_calculation);
-        }
-
-        this.baselineResults = this.psatService.resultsOptimal(psatInputs, this.settings);
+      if (this.selectedInputs.optimize_calculation) {
+        this.selectedResults = this.psatService.resultsOptimal(this.selectedInputs, this.settings);
       } else {
-
-        this.baselineResults = this.psatService.resultsExisting(psatInputs, this.settings);
-
-        if (this.debugFlag) {
-          console.log("psatInputs.optimize_calculation = " + psatInputs.optimize_calculation);
-          console.log("baselineResults.motor_power = " + this.baselineResults.motor_power);
-        }
+        this.selectedResults = this.psatService.resultsExisting(this.selectedInputs, this.settings);
       }
     } else {
-
-      if (this.debugFlag) {
-        console.log("tmpForm.status = not valid");
-      }
-
-      this.baselineResults = this.psatService.emptyResults();
-    }
-    tmpForm = this.psatService.getFormFromPsat(modInputs);
-    if (tmpForm.status == 'VALID') {
-      if (modInputs.optimize_calculation) {
-        this.modificationResults = this.psatService.resultsOptimal(modInputs, this.settings);
-      } else {
-        this.modificationResults = this.psatService.resultsModified(modInputs, this.settings, this.baselineResults.pump_efficiency);
-      }
-    } else {
-      this.modificationResults = this.psatService.emptyResults();
-    }
-    this.annualSavings = this.baselineResults.annual_cost - this.modificationResults.annual_cost;
-    this.percentSavings = Number(Math.round((((this.annualSavings * 100) / this.baselineResults.annual_cost) * 100) / 100).toFixed(0));
-
-    if (this.debugFlag) {
-      console.log("annualSavings = " + this.annualSavings);
+      this.selectedResults = this.psatService.emptyResults();
     }
   }
+  
 
-
-  optimize() {
+  makeSankey() {
     let tmpInputs = JSON.parse(JSON.stringify(this.psat.inputs));
-    let baseLineResults = this.psatService.resultsExisting(tmpInputs, this.settings);
-  }
-
-
-
-  createSankey(str: string) {
-
-    this.sankey(this.baselineResults);
-
-    // this.selectedView = str;
-    // if (str == 'Baseline') {
-    //   // this.sankey("app--sankey", this.baselineResults);
-    // } else if (str == 'Modified') {
-    //   // this.sankey("app-explore-opportunities-sankey", this.modificationResults);
-    // }
+    let results = this.psatService.resultsExisting(tmpInputs, this.settings);
+    this.sankey(results);
   }
 
 
@@ -228,18 +120,10 @@ export class PsatSankeyComponent implements OnInit {
 
   sankey(results) {
 
-    if (this.debugFlag) {
-      console.log("sankey() location = " + this.location);
-    }
-
-    //real version
-    // this.baseSize = 50 * (results.motor_power / this.baselineResults.motor_power);
-
-    //debug
-    // this.baseSize = 300;
-
+    this.closeSankey();
     // Remove  all Sankeys
     d3.select('#' + this.location).selectAll('svg').remove();
+
 
     this.width = width;
     this.height = height;
@@ -252,7 +136,6 @@ export class PsatSankeyComponent implements OnInit {
       .append("g");
 
     this.calcLosses(results);
-
 
     var nodes = [];
     nodes.push(
@@ -444,8 +327,6 @@ export class PsatSankeyComponent implements OnInit {
       .append("text")
       .attr("text-anchor", "middle")
       .attr("dx", function (d) {
-
-        //debug
         if (d.input) {
           return d.x - 100;
         }
@@ -455,21 +336,8 @@ export class PsatSankeyComponent implements OnInit {
         else {
           return d.x;
         }
-
-        //real version
-        // if (d.input) {
-        //   return d.x - 30;
-        // }
-        // else if (d.output) {
-        //   return d.x + (d.displaySize * .7) + 24;
-        // }
-        // else {
-        //   return d.x;
-        // }
       })
       .attr("dy", function (d) {
-
-        //debug
         if (d.input || d.output) {
           return d.y + (d.displaySize) + labelFontSize + labelPadding;
         }
@@ -481,30 +349,13 @@ export class PsatSankeyComponent implements OnInit {
             return bottomLabelPositionY;
           }
         }
-
-        //real version
-        // if (d.input || d.output) {
-        //   return d.y + (d.displaySize / 2) - 9;
-        // }
-        // else {
-        //   if (d.top) {
-        //     return d.y - 50;
-        //   }
-        //   else {
-        //     return d.y + 60;
-        //   }
-        // }
       })
       .text(function (d) {
         if (!d.inter) {
           return d.name;
         }
       })
-      //debug
       .style("font-size", labelFontSize + "px");
-
-      //real version
-      // .style("font-size", "12px");
 
     var twoDecimalFormat = d3.format(".3");
 
@@ -514,8 +365,6 @@ export class PsatSankeyComponent implements OnInit {
       .append("text")
       .attr("text-anchor", "middle")
       .attr("dx", function (d) {
-
-        //debug
         if (d.input) {
           return d.x - 100;
         }
@@ -525,21 +374,8 @@ export class PsatSankeyComponent implements OnInit {
         else {
           return d.x;
         }
-
-        //real version
-        // if (d.input) {
-        //   return d.x - 30;
-        // }
-        // else if (d.output) {
-        //   return d.x + (d.displaySize * .7) + 24;
-        // }
-        // else {
-        //   return d.x;
-        // }
       })
       .attr("dy", function (d) {
-
-        //debug
         if (d.input || d.output) {
           return d.y + (d.displaySize) + (labelFontSize * 2) + (labelPadding * 2);
         }
@@ -549,68 +385,14 @@ export class PsatSankeyComponent implements OnInit {
         else {
           return bottomLabelPositionY + labelFontSize + labelPadding;
         }
-
-        //real version
-        // if (d.input || d.output) {
-        //   return (d.y + (d.displaySize / 2)) + 6;
-        // }
-        // else if (d.top) {
-        //   return d.y - 35;
-        // }
-        // else {
-        //   return d.y + 110;
-        // }
       })
       .text(function (d) {
         if (!d.inter) {
+          // return twoDecimalFormat(d.value) + " " + this.settings.powerMeasurement;
           return twoDecimalFormat(d.value) + " kW";
         }
       })
-      //debug
       .style("font-size", labelFontSize + "px");
-
-      //real version
-      // .style("font-size", "12px");
-
-    // var nodes_units = svg.selectAll(".nodetext")
-    //   .data(nodes)
-    //   .enter()
-    //   .append("text")
-    //   .attr("text-anchor", "middle")
-    //   .attr("dx", function (d) {
-    //     if (d.input) {
-    //       return d.x - 30;
-    //     }
-    //     else if (d.output) {
-    //       return d.x + (d.displaySize * .7) + 24;
-    //     }
-    //     else {
-    //       return d.x;
-    //     }
-    //   })
-    //   .attr("dy", function (d) {
-    //     if (d.input || d.output) {
-    //       return d.y + (d.displaySize / 2) + 21;
-    //     }
-    //     else {
-    //       if (d.top) {
-    //         return d.y - 20;
-    //       }
-    //       else {
-    //         return d.y + 160;
-    //       }
-    //     }
-    //   })
-    //   .text(function (d) {
-    //     if (!d.inter) {
-    //       return "kW";
-    //     }
-    //   })
-    //   //debug
-    //   .style("font-size", labelFontSize + "px");
-
-      //real version
-      // .style("font-size", "12px");
   }
 
 
@@ -670,14 +452,11 @@ export class PsatSankeyComponent implements OnInit {
     return nodes;
   }
 
-  // calcDisplayValue(baseSize, val, value) {
-  //   return baseSize * (val / value);
-  // }
 
-  //debug version
   calcDisplayValue(baseSize, val, value) {
     return Math.max(baseSize * (val / value), this.minSize);
   }
+
 
   makeLinks(d, nodes) {
 
@@ -709,6 +488,7 @@ export class PsatSankeyComponent implements OnInit {
     }
     return linkGen(points);
   };
+
 
   makeGradient(color, nodes, links) {
     links.forEach(function (d, i) {
@@ -969,12 +749,8 @@ export class PsatSankeyComponent implements OnInit {
       motorShaftPower = results.motor_shaft_power;
       pumpShaftPower = results.pump_shaft_power;
     }
-
     this.motor = results.motor_power * (1 - (results.motor_efficiency / 100));
-
     this.drive = motorShaftPower - pumpShaftPower;
-
     this.pump = (results.motor_power - this.motor - this.drive) * (1 - (results.pump_efficiency / 100));
-
   }
 }

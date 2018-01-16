@@ -16,8 +16,8 @@
     <div class="row panel-container" *ngIf="stepTab.step == 1">
       <div class="col-6 panel-column modification" [ngClass]="{'modal-open': isModalOpen}">
         <!--Step: 1 System Basics (Settings)-->
-        <app-system-basics *ngIf="specTab.step == 1" [phast]="_phast" [settings]="settings" [saveClicked]="saveClicked"
-          [assessment]="assessment" [isAssessmentSettings]="isAssessmentSettings" (updateSettings)="getSettings($event)" (save)="saveDb()" (openModal)="openModal($event)"></app-system-basics>
+        <app-system-basics *ngIf="specTab.step == 1" [phast]="_phast" [settings]="settings" [saveClicked]="saveClicked" [assessment]="assessment"
+          [isAssessmentSettings]="isAssessmentSettings" (updateSettings)="getSettings($event)" (save)="saveDb()" (openModal)="openModal($event)"></app-system-basics>
         <!--Step: 2 Operating Hours-->
         <app-operating-hours *ngIf="specTab.step == 2" [phast]="_phast" [saveClicked]="saveClicked" (save)="saveDb()"></app-operating-hours>
         <!--Step: 3 Operating Costs-->
@@ -49,9 +49,27 @@
     </div>
   </div>
   <!--Sankey-->
-  <div *ngIf="mainTab == 'sankey'" class="row tab-content">
+  <div *ngIf="mainTab == 'sankey'" class="row">
     <div class="col-12">
-      <app-sankey [phast]="_phast" [location]="'sankey-diagram'" [settings]="settings"></app-sankey>
+      <div class="row justify-content-center">
+        <div class="col-12 ">
+          <div class="row" *ngIf="phastOptionsLength > 1">
+            <div class="col-1"></div>
+            <div class="col-10">
+              <div class="form-group">
+                <select name="phastSelect" class="form-control mx-auto" id="phastSelect" [(ngModel)]="phast1">
+                  <option *ngFor="let phast of phastOptions" [ngValue]="phast">{{phast.name}}</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-12">
+                <app-sankey [phast]="phast1.phast" [location]="'sankey-diagram'" [settings]="settings"></app-sankey>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
   <!--Diagram-->
@@ -71,7 +89,8 @@
   <div class="footer" *ngIf="mainTab == 'system-setup' || mainTab == 'assessment'">
     <div class="pull-left">
       <!--<button class="btn btn-secondary" *ngIf="mainTab == 'system-setup'" (click)="close()">Close</button>-->
-      <button class="btn btn-secondary" *ngIf="(mainTab == 'system-setup' || mainTab == 'assessment') && (stepTab.back || selectedLossTab.back)" (click)="lastStep()">Back</button>
+      <button class="btn btn-secondary" *ngIf="(mainTab == 'system-setup' || mainTab == 'assessment') && (stepTab.back || selectedLossTab.back)"
+        (click)="lastStep()">Back</button>
     </div>
     <div class="pull-right">
       <button class="btn btn-secondary" (click)="save()">Save</button>
