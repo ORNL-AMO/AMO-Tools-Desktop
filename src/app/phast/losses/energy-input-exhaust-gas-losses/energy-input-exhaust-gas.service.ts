@@ -34,10 +34,10 @@ export class EnergyInputExhaustGasService {
 
   initForm(lossNum: number): FormGroup {
     return this.formBuilder.group({
-      'excessAir': [20],
+      'excessAir': [''],
       'combustionAirTemp': [''],
       'exhaustGasTemp': [''],
-      'totalHeatInput': [3],
+      'totalHeatInput': [0],
       'electricalPowerInput': [''],
       'name': ['Loss #'+lossNum]
      // 'otherLoss1': ['']
