@@ -97,6 +97,10 @@ export class HeadToolComponent implements OnInit {
     this.showSettings = false;
   }
 
+  changeField(str: string){
+    this.currentField = str;
+  }
+
   save() {
     this.psat.inputs.head = this.results.pumpHead;
     this.closeTool();

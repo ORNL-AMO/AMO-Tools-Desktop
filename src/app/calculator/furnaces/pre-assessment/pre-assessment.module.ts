@@ -35,7 +35,8 @@ import { ConvertPhastService } from '../../../phast/convert-phast.service';
     PreAssessmentMeteredComponent
   ],
   exports: [
-    PreAssessmentComponent
+    PreAssessmentComponent,
+    PreAssessmentGraphComponent
   ],
   providers: [
     ConvertPhastService

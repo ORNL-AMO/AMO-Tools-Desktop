@@ -66,13 +66,13 @@ export class ExecutiveSummaryComponent implements OnInit {
       });
     }
 
-    if(this.phast.modifications){
+    if (this.phast.modifications) {
       this.numMods = this.phast.modifications.length;
     }
   }
 
   useModification() {
-    this.reportRollupService.updateSelectedPhasts(this.assessment, this.selectedModificationIndex);
+    this.reportRollupService.updateSelectedPhasts({ assessment: this.assessment, settings: this.settings }, this.selectedModificationIndex);
   }
 
 }

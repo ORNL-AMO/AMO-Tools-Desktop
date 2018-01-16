@@ -72,7 +72,7 @@ export class ResultsDataComponent implements OnInit {
     }
   }
   useModification() {
-    this.reportRollupService.updateSelectedPhasts(this.assessment, this.selectedModificationIndex);
+    this.reportRollupService.updateSelectedPhasts({assessment: this.assessment, settings: this.settings}, this.selectedModificationIndex);
   }
 
   getResults() {

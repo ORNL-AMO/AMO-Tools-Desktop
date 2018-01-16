@@ -1,0 +1,17 @@
+tr > td,
+tr > th{
+    text-align: center;
+}
+
+tr > td {
+    vertical-align: middle;
+}
+
+
+.table-row{
+    padding-top: 14px;
+}
+
+.graph-select{
+    width: 100%;
+}

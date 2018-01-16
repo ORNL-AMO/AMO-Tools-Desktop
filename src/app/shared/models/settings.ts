@@ -19,5 +19,6 @@ export interface Settings {
     furnaceType?: string,
     energyResultUnit?: string,
     customFurnaceName?: string,
-    appVersion?: string
+    appVersion?: string,
+    phastRollupUnit?: string
 }

@@ -4,7 +4,7 @@ import { BehaviorSubject } from 'rxjs';
 import { Directory } from '../shared/models/directory';
 import { IndexedDbService } from '../indexedDb/indexed-db.service';
 import { PSAT, PsatOutputs } from '../shared/models/psat';
-import { PHAST, ExecutiveSummary } from '../shared/models/phast/phast';
+import { PHAST, ExecutiveSummary, PhastResults } from '../shared/models/phast/phast';
 import { PhastResultsService } from '../phast/phast-results.service';
 import { ExecutiveSummaryService } from '../phast/phast-report/executive-summary.service';
 import * as _ from 'lodash';
@@ -16,13 +16,13 @@ import { Settings } from '../shared/models/settings';
 @Injectable()
 export class ReportRollupService {
 
-  reportAssessments: BehaviorSubject<Array<Assessment>>;
-  phastAssessments: BehaviorSubject<Array<Assessment>>;
-  psatAssessments: BehaviorSubject<Array<Assessment>>;
+  reportAssessments: BehaviorSubject<Array<ReportItem>>;
+  phastAssessments: BehaviorSubject<Array<ReportItem>>;
+  psatAssessments: BehaviorSubject<Array<ReportItem>>;
 
-  assessmentsArray: Array<Assessment>;
-  phastArray: Array<Assessment>;
-  psatArray: Array<Assessment>;
+  assessmentsArray: Array<ReportItem>;
+  phastArray: Array<ReportItem>;
+  psatArray: Array<ReportItem>;
 
   selectedPsats: BehaviorSubject<Array<PsatCompare>>;
   psatResults: BehaviorSubject<Array<PsatResultsData>>;
@@ -32,14 +32,14 @@ export class ReportRollupService {
   phastResults: BehaviorSubject<Array<PhastResultsData>>;
   allPhastResults: BehaviorSubject<Array<AllPhastResultsData>>;
 
-  constructor(private indexedDbService: IndexedDbService, private psatService: PsatService, private executiveSummaryService: ExecutiveSummaryService, private settingsService: SettingsService) {
+  constructor(private indexedDbService: IndexedDbService, private psatService: PsatService, private executiveSummaryService: ExecutiveSummaryService, private settingsService: SettingsService, private phastResultsService: PhastResultsService) {
     this.initSummary();
   }
 
   initSummary() {
-    this.reportAssessments = new BehaviorSubject<Array<Assessment>>(new Array<Assessment>());
-    this.phastAssessments = new BehaviorSubject<Array<Assessment>>(new Array<Assessment>())
-    this.psatAssessments = new BehaviorSubject<Array<Assessment>>(new Array<Assessment>())
+    this.reportAssessments = new BehaviorSubject<Array<ReportItem>>(new Array<ReportItem>());
+    this.phastAssessments = new BehaviorSubject<Array<ReportItem>>(new Array<ReportItem>())
+    this.psatAssessments = new BehaviorSubject<Array<ReportItem>>(new Array<ReportItem>())
 
     this.selectedPsats = new BehaviorSubject<Array<PsatCompare>>(new Array<PsatCompare>());
     this.psatResults = new BehaviorSubject<Array<PsatResultsData>>(new Array<PsatResultsData>());
@@ -51,30 +51,41 @@ export class ReportRollupService {
   }
 
 
-  pushAssessment(assessment: Assessment) {
-    this.assessmentsArray.push(assessment);
-    this.reportAssessments.next(this.assessmentsArray);
-    if (assessment.psat) {
-      this.psatArray.push(assessment);
-      this.psatAssessments.next(this.psatArray);
-    } else if (assessment.phast) {
-      this.phastArray.push(assessment);
-      this.phastAssessments.next(this.phastArray);
-    }
+  pushAssessment(assessment: Assessment): Promise<boolean> {
+    return new Promise((resolve, reject) => {
+      this.indexedDbService.getAssessmentSettings(assessment.id).then(settings => {
+        let tmpSettings = this.checkSettings(settings[0]);
+        this.assessmentsArray.push({ assessment: assessment, settings: tmpSettings });
+        if (assessment.psat) {
+          this.psatArray.push({ assessment: assessment, settings: tmpSettings });
+          resolve(true);
+        } else if (assessment.phast) {
+          this.phastArray.push({ assessment: assessment, settings: tmpSettings });
+          resolve(true);
+        }
+      })
+    })
   }
 
   getReportData(directory: Directory) {
-    this.assessmentsArray = new Array<Assessment>();
-    this.phastArray = new Array<Assessment>();
-    this.psatArray = new Array<Assessment>();
-    this.psatAssessments.next(this.psatArray);
-    this.phastAssessments.next(this.phastArray);
-    directory.assessments.forEach(assessment => {
-      if (assessment.selected) {
+    this.assessmentsArray = new Array<ReportItem>();
+    this.phastArray = new Array<ReportItem>();
+    this.psatArray = new Array<ReportItem>();
+    let selected = directory.assessments.filter((val) => { return val.selected })
+    let i = selected.length;
+    let count = 1;
+    selected.forEach(assessment => {
+      if (count != i) {
         this.pushAssessment(assessment);
+        count++;
+      } else {
+        this.pushAssessment(assessment).then(() => {
+          this.phastAssessments.next(this.phastArray);
+          this.psatAssessments.next(this.psatArray);
+          this.reportAssessments.next(this.assessmentsArray);
+        })
       }
     });
-
     directory.subDirectory.forEach(subDir => {
       if (subDir.selected) {
         this.getDirectoryAssessments(subDir.id);
@@ -96,11 +107,21 @@ export class ReportRollupService {
 
   getDirectoryAssessments(dirId: number) {
     this.indexedDbService.getDirectoryAssessments(dirId).then(results => {
-      if (results) {
-        results.forEach(assessment => {
+      //let selected = results.assessments.filter((val) => { return val.selected })
+      let i = results.length;
+      let count = 1;
+      results.forEach(assessment => {
+        if (count != i) {
           this.pushAssessment(assessment);
-        })
-      }
+          count++;
+        } else {
+          this.pushAssessment(assessment).then(() => {
+            this.phastAssessments.next(this.phastArray);
+            this.psatAssessments.next(this.psatArray);
+            this.reportAssessments.next(this.assessmentsArray);
+          })
+        }
+      });
     })
   }
 
@@ -112,12 +133,12 @@ export class ReportRollupService {
       let minCost = _.minBy(result.modificationResults, (result) => { return result.annual_cost })
       let modIndex = _.findIndex(result.modificationResults, { annual_cost: minCost.annual_cost });
       let psatAssessments = this.psatAssessments.value;
-      let assessmentIndex = _.findIndex(psatAssessments, { id: result.assessmentId });
-      let assessment = psatAssessments[assessmentIndex];
+      let assessmentIndex = _.findIndex(psatAssessments, (val) => { return val.assessment.id == result.assessmentId });
+      let item = psatAssessments[assessmentIndex];
       if (result.isBaseline) {
-        tmpResults.push({ baseline: assessment.psat, modification: assessment.psat, assessmentId: result.assessmentId, selectedIndex: -1 });
+        tmpResults.push({ baseline: item.assessment.psat, modification: item.assessment.psat, assessmentId: result.assessmentId, selectedIndex: -1, name: item.assessment.name, assessment: item.assessment });
       } else {
-        tmpResults.push({ baseline: assessment.psat, modification: assessment.psat.modifications[modIndex].psat, assessmentId: result.assessmentId, selectedIndex: modIndex });
+        tmpResults.push({ baseline: item.assessment.psat, modification: item.assessment.psat.modifications[modIndex].psat, assessmentId: result.assessmentId, selectedIndex: modIndex, name: item.assessment.name, assessment: item.assessment });
       }
     });
     this.selectedPsats.next(tmpResults);
@@ -127,47 +148,43 @@ export class ReportRollupService {
     let tmpSelected = this.selectedPsats.value;
     if (modIndex != -1) {
       let selectedIndex = _.findIndex(tmpSelected, { assessmentId: assessment.id });
-      tmpSelected.splice(selectedIndex, 1, { baseline: assessment.psat, modification: assessment.psat.modifications[modIndex].psat, assessmentId: assessment.id, selectedIndex: modIndex });
+      tmpSelected.splice(selectedIndex, 1, { baseline: assessment.psat, modification: assessment.psat.modifications[modIndex].psat, assessmentId: assessment.id, selectedIndex: modIndex, name: assessment.name, assessment: assessment });
     } else {
       let selectedIndex = _.findIndex(tmpSelected, { assessmentId: assessment.id });
-      tmpSelected.splice(selectedIndex, 1, { baseline: assessment.psat, modification: assessment.psat, assessmentId: assessment.id, selectedIndex: modIndex });
+      tmpSelected.splice(selectedIndex, 1, { baseline: assessment.psat, modification: assessment.psat, assessmentId: assessment.id, selectedIndex: modIndex, name: assessment.name, assessment: assessment });
     }
     this.selectedPsats.next(tmpSelected);
   }
 
-  initResultsArr(psatArr: Array<Assessment>) {
+  initResultsArr(psatArr: Array<ReportItem>) {
     let tmpResultsArr = new Array<AllPsatResultsData>();
     psatArr.forEach(val => {
-      if (val.psat.setupDone && (val.psat.modifications.length != 0)) {
-        this.indexedDbService.getAssessmentSettings(val.id).then(settings => {
-          settings[0] = this.checkSettings(settings[0]);
-          let baselineResults = this.psatService.resultsExisting(JSON.parse(JSON.stringify(val.psat.inputs)), settings[0]);
-          if (val.psat.modifications) {
-            if (val.psat.modifications.length != 0) {
-              let modResultsArr = new Array<PsatOutputs>();
-              val.psat.modifications.forEach(mod => {
-                let tmpResults;
-                if (mod.psat.inputs.optimize_calculation) {
-                  tmpResults = this.psatService.resultsOptimal(JSON.parse(JSON.stringify(mod.psat.inputs)), settings[0]);
-                } else {
-                  tmpResults = this.psatService.resultsModified(JSON.parse(JSON.stringify(mod.psat.inputs)), settings[0], baselineResults.pump_efficiency);
-                }
-                modResultsArr.push(tmpResults);
-              })
-              tmpResultsArr.push({ baselineResults: baselineResults, modificationResults: modResultsArr, assessmentId: val.id });
-            } else {
-              let modResultsArr = new Array<PsatOutputs>();
-              modResultsArr.push(baselineResults);
-              tmpResultsArr.push({ baselineResults: baselineResults, modificationResults: modResultsArr, assessmentId: val.id, isBaseline: true });
-            }
+      if (val.assessment.psat.setupDone && (val.assessment.psat.modifications.length != 0)) {
+        let baselineResults = this.psatService.resultsExisting(JSON.parse(JSON.stringify(val.assessment.psat.inputs)), val.settings);
+        if (val.assessment.psat.modifications) {
+          if (val.assessment.psat.modifications.length != 0) {
+            let modResultsArr = new Array<PsatOutputs>();
+            val.assessment.psat.modifications.forEach(mod => {
+              let tmpResults;
+              if (mod.psat.inputs.optimize_calculation) {
+                tmpResults = this.psatService.resultsOptimal(JSON.parse(JSON.stringify(mod.psat.inputs)), val.settings);
+              } else {
+                tmpResults = this.psatService.resultsModified(JSON.parse(JSON.stringify(mod.psat.inputs)), val.settings, baselineResults.pump_efficiency);
+              }
+              modResultsArr.push(tmpResults);
+            })
+            tmpResultsArr.push({ baselineResults: baselineResults, modificationResults: modResultsArr, assessmentId: val.assessment.id });
           } else {
             let modResultsArr = new Array<PsatOutputs>();
             modResultsArr.push(baselineResults);
-            tmpResultsArr.push({ baselineResults: baselineResults, modificationResults: modResultsArr, assessmentId: val.id, isBaseline: true });
+            tmpResultsArr.push({ baselineResults: baselineResults, modificationResults: modResultsArr, assessmentId: val.assessment.id, isBaseline: true });
           }
-
-          this.allPsatResults.next(tmpResultsArr);
-        })
+        } else {
+          let modResultsArr = new Array<PsatOutputs>();
+          modResultsArr.push(baselineResults);
+          tmpResultsArr.push({ baselineResults: baselineResults, modificationResults: modResultsArr, assessmentId: val.assessment.id, isBaseline: true });
+        }
+        this.allPsatResults.next(tmpResultsArr);
       }
     })
   }
@@ -184,10 +201,10 @@ export class ReportRollupService {
         } else {
           modificationResults = this.psatService.resultsModified(JSON.parse(JSON.stringify(val.modification.inputs)), settings[0], baselineResults.pump_efficiency);
         }
-        tmpResultsArr.push({ baselineResults: baselineResults, modificationResults: modificationResults, assessmentId: val.assessmentId });
-        this.psatResults.next(tmpResultsArr);
+        tmpResultsArr.push({ baselineResults: baselineResults, modificationResults: modificationResults, assessmentId: val.assessmentId, name: val.name, modName: val.modification.name, baseline: val.baseline, modification: val.modification });
       })
     })
+    this.psatResults.next(tmpResultsArr);
   }
 
   //USED FOR PHAST SUMMARY
@@ -198,13 +215,13 @@ export class ReportRollupService {
       if (minCost) {
         let modIndex = _.findIndex(result.modificationResults, { annualCost: minCost.annualCost });
         if (modIndex != -1) {
-          let phastAssessments = this.phastAssessments.value;
-          let assessmentIndex = _.findIndex(phastAssessments, { id: result.assessmentId });
-          let assessment = phastAssessments[assessmentIndex];
+          let phastAssessments: Array<ReportItem> = this.phastAssessments.value;
+          let assessmentIndex = _.findIndex(phastAssessments, (val) => { return val.assessment.id == result.assessmentId });
+          let item = phastAssessments[assessmentIndex];
           if (result.isBaseline) {
-            tmpResults.push({ baseline: assessment.phast, modification: assessment.phast, assessmentId: result.assessmentId, selectedIndex: -1 });
+            tmpResults.push({ baseline: item.assessment.phast, modification: item.assessment.phast, assessmentId: result.assessmentId, selectedIndex: -1, name: item.assessment.name, assessment: item.assessment, settings: item.settings });
           } else {
-            tmpResults.push({ baseline: assessment.phast, modification: assessment.phast.modifications[modIndex].phast, assessmentId: result.assessmentId, selectedIndex: modIndex });
+            tmpResults.push({ baseline: item.assessment.phast, modification: item.assessment.phast.modifications[modIndex].phast, assessmentId: result.assessmentId, selectedIndex: modIndex, name: item.assessment.name, assessment: item.assessment, settings: item.settings });
           }
         }
       }
@@ -212,68 +229,77 @@ export class ReportRollupService {
     this.selectedPhasts.next(tmpResults);
   }
 
-  updateSelectedPhasts(assessment: Assessment, modIndex: number) {
+  updateSelectedPhasts(item: ReportItem, modIndex: number) {
     let tmpSelected = this.selectedPhasts.value;
     if (modIndex != -1) {
-      let selectedIndex = _.findIndex(tmpSelected, { assessmentId: assessment.id });
-      tmpSelected.splice(selectedIndex, 1, { baseline: assessment.phast, modification: assessment.phast.modifications[modIndex].phast, assessmentId: assessment.id, selectedIndex: modIndex });
+      let selectedIndex = _.findIndex(tmpSelected, { assessmentId: item.assessment.id });
+      tmpSelected.splice(selectedIndex, 1, { baseline: item.assessment.phast, modification: item.assessment.phast.modifications[modIndex].phast, assessmentId: item.assessment.id, selectedIndex: modIndex, name: item.assessment.name, assessment: item.assessment, settings: item.settings });
     }
     else {
-      let selectedIndex = _.findIndex(tmpSelected, { assessmentId: assessment.id });
-      tmpSelected.splice(selectedIndex, 1, { baseline: assessment.phast, modification: assessment.phast, assessmentId: assessment.id, selectedIndex: modIndex });
+      let selectedIndex = _.findIndex(tmpSelected, { assessmentId: item.assessment.id });
+      tmpSelected.splice(selectedIndex, 1, { baseline: item.assessment.phast, modification: item.assessment.phast, assessmentId: item.assessment.id, selectedIndex: modIndex, name: item.assessment.name, assessment: item.assessment, settings: item.settings });
     }
     this.selectedPhasts.next(tmpSelected);
   }
 
-  initPhastResultsArr(phastArray: Array<Assessment>) {
+  initPhastResultsArr(phastArray: Array<ReportItem>) {
     let tmpResultsArr = new Array<AllPhastResultsData>();
     phastArray.forEach(val => {
-      if (val.phast.setupDone) {
-        this.indexedDbService.getAssessmentSettings(val.id).then(settings => {
-          settings[0] = this.checkSettings(settings[0]);
-          let baselineResults = this.executiveSummaryService.getSummary(val.phast, false, settings[0], val.phast)
-          if (val.phast.modifications) {
-            if (val.phast.modifications.length != 0) {
-              let modResultsArr = new Array<ExecutiveSummary>();
-              val.phast.modifications.forEach(mod => {
-                let tmpResults = this.executiveSummaryService.getSummary(mod.phast, true, settings[0], val.phast, baselineResults);
-                modResultsArr.push(tmpResults);
-              })
-              tmpResultsArr.push({ baselineResults: baselineResults, modificationResults: modResultsArr, assessmentId: val.id });
-            } else {
-              let modResultsArr = new Array<ExecutiveSummary>();
-              let tmpResults = this.executiveSummaryService.getSummary(val.phast, true, settings[0], val.phast, baselineResults);
+      if (val.assessment.phast.setupDone) {
+        let baselineResults = this.executiveSummaryService.getSummary(val.assessment.phast, false, val.settings, val.assessment.phast)
+        if (val.assessment.phast.modifications) {
+          if (val.assessment.phast.modifications.length != 0) {
+            let modResultsArr = new Array<ExecutiveSummary>();
+            val.assessment.phast.modifications.forEach(mod => {
+              let tmpResults = this.executiveSummaryService.getSummary(mod.phast, true, val.settings, val.assessment.phast, baselineResults);
               modResultsArr.push(tmpResults);
-              tmpResultsArr.push({ baselineResults: baselineResults, modificationResults: modResultsArr, assessmentId: val.id, isBaseline: true });
-            }
+            })
+            tmpResultsArr.push({ baselineResults: baselineResults, modificationResults: modResultsArr, assessmentId: val.assessment.id });
           } else {
             let modResultsArr = new Array<ExecutiveSummary>();
-            let tmpResults = this.executiveSummaryService.getSummary(val.phast, true, settings[0], val.phast, baselineResults);
+            let tmpResults = this.executiveSummaryService.getSummary(val.assessment.phast, true, val.settings, val.assessment.phast, baselineResults);
             modResultsArr.push(tmpResults);
-            tmpResultsArr.push({ baselineResults: baselineResults, modificationResults: modResultsArr, assessmentId: val.id, isBaseline: true });
+            tmpResultsArr.push({ baselineResults: baselineResults, modificationResults: modResultsArr, assessmentId: val.assessment.id, isBaseline: true });
           }
-          this.allPhastResults.next(tmpResultsArr);
-        })
+        } else {
+          let modResultsArr = new Array<ExecutiveSummary>();
+          let tmpResults = this.executiveSummaryService.getSummary(val.assessment.phast, true, val.settings, val.assessment.phast, baselineResults);
+          modResultsArr.push(tmpResults);
+          tmpResultsArr.push({ baselineResults: baselineResults, modificationResults: modResultsArr, assessmentId: val.assessment.id, isBaseline: true });
+        }
       }
     })
+    this.allPhastResults.next(tmpResultsArr);
   }
 
   getPhastResultsFromSelected(selectedPhasts: Array<PhastCompare>) {
     let tmpResultsArr = new Array<PhastResultsData>();
     selectedPhasts.forEach(val => {
-      this.indexedDbService.getAssessmentSettings(val.assessmentId).then(settings => {
-        settings[0] = this.checkSettings(settings[0]);
-        let baselineResults = this.executiveSummaryService.getSummary(val.baseline, false, settings[0], val.baseline);
-        let modificationResults = this.executiveSummaryService.getSummary(val.modification, true, settings[0], val.baseline, baselineResults);
-        tmpResultsArr.push({ baselineResults: baselineResults, modificationResults: modificationResults, assessmentId: val.assessmentId, settings: settings[0] });
-        this.phastResults.next(tmpResultsArr);
-      })
+      let baselineResults = this.executiveSummaryService.getSummary(val.baseline, false, val.settings, val.baseline);
+      let modificationResults = this.executiveSummaryService.getSummary(val.modification, true, val.settings, val.baseline, baselineResults);
+      let baselineResultData = this.phastResultsService.getResults(val.baseline, val.settings, );
+      let modificationResultData = this.phastResultsService.getResults(val.modification, val.settings, );
+      tmpResultsArr.push({
+        baselineResults: baselineResults,
+        modificationResults: modificationResults,
+        assessmentId: val.assessmentId,
+        settings: val.settings,
+        name: val.name,
+        modName: val.modification.name,
+        assessment: val.assessment,
+        baselineResultData: baselineResultData,
+        modificationResultData: modificationResultData
+      });
     })
+    this.phastResults.next(tmpResultsArr);
   }
 
   checkSettings(settings: Settings) {
     if (!settings.energyResultUnit) {
       settings = this.settingsService.setEnergyResultUnitSetting(settings);
+    }
+    if (!settings.phastRollupUnit) {
+      settings = this.settingsService.setPhastResultUnit(settings);
     }
     if (!settings.temperatureMeasurement) {
       if (settings.unitsOfMeasure == 'Metric') {
@@ -285,20 +311,49 @@ export class ReportRollupService {
     return settings;
   }
 
+  transform(value: number, sigFigs: number, scientificNotation?: boolean): any {
+    if (isNaN(value) == false && value != null && value != undefined) {
+      //string value of number in scientific notation
+      let newValString = value.toPrecision(sigFigs);
+      //converted to number to get trailing/leading zeros
+      let newValNumber = parseFloat(newValString);
+      //convert back to string
+      let numWithZerosAndCommas = newValNumber.toLocaleString();
+      if (scientificNotation) {
+        return newValString;
+      } else {
+        return numWithZerosAndCommas;
+      }
+    } else {
+      return value;
+    }
+  }
+
+}
+
+export interface ReportItem {
+  assessment: Assessment,
+  settings: Settings
 }
 
 export interface PsatCompare {
   baseline: PSAT,
   modification: PSAT,
   assessmentId: number,
-  selectedIndex: number
+  selectedIndex: number,
+  name: string,
+  assessment: Assessment
 }
 
 
 export interface PsatResultsData {
   baselineResults: PsatOutputs,
   modificationResults: PsatOutputs,
-  assessmentId: number
+  assessmentId: number,
+  name: string,
+  modName: string,
+  baseline: PSAT,
+  modification: PSAT
 }
 
 
@@ -314,15 +369,23 @@ export interface PhastCompare {
   baseline: PHAST,
   modification: PHAST,
   assessmentId: number,
-  selectedIndex: number
+  selectedIndex: number,
+  name: string,
+  assessment: Assessment,
+  settings: Settings
 }
 
 
 export interface PhastResultsData {
   baselineResults: ExecutiveSummary,
   modificationResults: ExecutiveSummary,
+  baselineResultData: PhastResults,
+  modificationResultData: PhastResults,
   assessmentId: number,
-  settings: Settings
+  settings: Settings,
+  name: string,
+  modName: string,
+  assessment: Assessment
 }
 
 

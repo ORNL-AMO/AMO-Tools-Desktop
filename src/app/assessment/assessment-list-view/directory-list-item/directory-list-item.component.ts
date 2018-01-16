@@ -37,6 +37,6 @@ export class DirectoryListItemComponent implements OnInit {
   }
 
   setDelete() {
-    this.directory.selected = this.isChecked;
+    //this.directory.selected = this.isChecked;
   }
 }

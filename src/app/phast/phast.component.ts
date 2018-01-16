@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { Location } from '@angular/common';
 import { Assessment } from '../shared/models/assessment';
 import { AssessmentService } from '../assessment/assessment.service';
@@ -7,10 +7,10 @@ import { IndexedDbService } from '../indexedDb/indexed-db.service';
 import { ActivatedRoute } from '@angular/router';
 import { Settings } from '../shared/models/settings';
 import { PHAST } from '../shared/models/phast/phast';
-
 import { ToastyService, ToastyConfig, ToastOptions, ToastData } from 'ng2-toasty';
 import { SettingsService } from '../settings/settings.service';
 import { PhastResultsService } from './phast-results.service';
+import { PhastResults } from '../shared/models/phast/phast';
 import { LossesService } from './losses/losses.service';
 import { StepTab, LossTab } from './tabs';
 @Component({
@@ -37,6 +37,16 @@ export class PhastComponent implements OnInit {
   continueClicked: boolean = true;
   stepTab: StepTab;
   _phast: PHAST;
+
+
+  phast: PHAST;
+  modification: PHAST;
+  phastOptions: Array<any>;
+  phastOptionsLength: number;
+  phast1: PHAST;
+  phast2: PHAST;
+
+
 
   mainTab: string = 'system-setup';
   init: boolean = true;
@@ -131,6 +141,21 @@ export class PhastComponent implements OnInit {
   }
 
 
+  initSankeyList() {
+    this.phastOptions = new Array<any>();
+    this.phastOptions.push({ name: 'Baseline', phast: this._phast });
+    this.phast1 = this.phastOptions[0];
+    if (this._phast.modifications) {
+      this._phast.modifications.forEach(mod => {
+        this.phastOptions.push({ name: mod.phast.name, phast: mod.phast });
+      })
+      this.phast2 = this.phastOptions[1];
+      this.phastOptionsLength = this.phastOptions.length;
+    }
+  }
+
+
+
   ngAfterViewInit() {
     this.disclaimerToast();
   }
@@ -142,6 +167,7 @@ export class PhastComponent implements OnInit {
 
   checkSetupDone() {
     this._phast.setupDone = this.lossesService.checkSetupDone((JSON.parse(JSON.stringify(this._phast))), this.settings);
+    this.initSankeyList();
   }
 
   getSettings(update?: boolean) {

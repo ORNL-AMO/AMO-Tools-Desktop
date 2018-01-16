@@ -1,5 +1,3 @@
-
-    .summary-header.pumps h3 {
-        background-image: url('../../../../assets/images/ico-psat-diagram.png');
+    .card.pumps .card-header h3 {
+        background-image: url('../../../../assets/images/ico-psat-diagram.png');    
     }
-

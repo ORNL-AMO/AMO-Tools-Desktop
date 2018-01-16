@@ -21,8 +21,10 @@ export class ExecutiveSummaryService {
       tmpResultsSummary.annualEnergySavings = baselineSummary.annualEnergyUsed - tmpResultsSummary.annualEnergyUsed;
       tmpResultsSummary.percentSavings = Number(Math.round(((((tmpResultsSummary.annualCostSavings) * 100) / baselineSummary.annualCost) * 100) / 100).toFixed(0));
       tmpResultsSummary.implementationCosts = phast.implementationCost;
-      if (tmpResultsSummary.annualCostSavings > 0) {
+      if (tmpResultsSummary.annualCostSavings > 0 && phast.implementationCost) {
         tmpResultsSummary.paybackPeriod = (phast.implementationCost / tmpResultsSummary.annualCostSavings) * 12;
+      }else{
+        tmpResultsSummary.paybackPeriod = 0;
       }
     }
     return tmpResultsSummary;

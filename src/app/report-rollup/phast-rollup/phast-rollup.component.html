@@ -1,0 +1,29 @@
+<div class="row justify-content-center" *ngIf="settings">
+  <div class="col-lg-11 col-md-11 col-sm-12">
+    <div class="card">
+      <div class="header">
+        <h3>Summary of Energy Sources Used</h3>
+      </div>
+      <div class="card-body">
+        <app-phast-rollup-energy-table [settings]="settings"></app-phast-rollup-energy-table>
+      </div>
+    </div>
+    <div class="card">
+      <div class="header">
+        <h3>Energy Use Graph</h3>
+      </div>
+      <div class="card-body">
+        <app-phast-rollup-graphs [settings]="settings"></app-phast-rollup-graphs>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="header">
+        <h3>Modification Summary</h3>
+      </div>
+      <div class="card-body">
+        <app-phast-rollup-furnace-summary [settings]="settings"></app-phast-rollup-furnace-summary>
+      </div>
+    </div>
+  </div>
+</div>

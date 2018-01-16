@@ -1,0 +1,67 @@
+<div class="row">
+  <div class="col-12">
+    <div class="output-summary">
+      <div class="summary-table">
+        <table class="table table-hover table-striped">
+          <thead>
+            <tr>
+              <th>Energy Name</th>
+              <th>Energy Used</th>
+              <th>Heating Value (HHV)</th>
+              <th>Cost per Unit</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let data of fuelSummary">
+              <td>
+                {{data.name}}
+              </td>
+              <td>
+                {{data.energyUsed | sigFigs:'5'}} {{baseEnergyUnit}}
+              </td>
+              <td>
+                {{data.hhv | sigFigs:'5'}} {{energyPerMassUnit}}
+              </td>
+              <td>
+                {{data.cost | currency:'USD':'symbol':'1.2-2'}} {{energyCostUnit}}
+              </td>
+            </tr>
+            <tr *ngIf="electricitySummary">
+              <td>
+                {{electricitySummary.name}}
+              </td>
+              <td>
+                {{electricitySummary.energyUsed | sigFigs:'5'}} {{baseEnergyUnit}}
+              </td>
+              <td>
+                {{electricitySummary.hhv | sigFigs:'5'}} {{energyPerTimeUnit}}
+              </td>
+              <td>
+                {{electricitySummary.cost | currency:'USD':'symbol':'1.2-2'}} /kWh
+              </td>
+            </tr>
+            <tr *ngFor="let data of steamSummary">
+              <td>
+                {{data.name}}
+              </td>
+              <td>
+                {{data.energyUsed | sigFigs:'5'}} {{baseEnergyUnit}}
+              </td>
+              <td>
+                <span *ngIf="data.hhv">
+                {{data.hhv | sigFigs:'5'}} {{energyPerMassUnit}}
+                </span>
+                <span *ngIf="!data.hhv">
+                  &mdash;
+                </span>
+              </td>
+              <td>
+                {{data.cost | currency:'USD':'symbol':'1.2-2'}} {{energyCostUnit}}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

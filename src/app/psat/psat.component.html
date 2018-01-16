@@ -27,17 +27,19 @@
 
     <div class="row tab-content psat">
       <div class="col-6 panel-column modification" [ngClass]="{'modal-open': isModalOpen == true}">
-          <app-system-basics *ngIf="subTab == 'system-basics'" [settings]="settings" [saveClicked]="saveClicked" [assessment]="assessment"
-            [(psat)]="_psat" [isAssessmentSettings]="isAssessmentSettings" (updateSettings)="getSettings($event)" (updateAssessment)="save()" (openModal)="modalOpen()" (closeModal)="modalClose()"></app-system-basics>
-          <app-pump-fluid *ngIf="subTab == 'pump-fluid'" (isValid)="setValid()" (isInvalid)="setInvalid()" [saveClicked]="saveClicked"
-            [(psat)]="_psat" (saved)="save()" [selected]="true" [settings]="settings" [baseline]="true" [inSetup]="true"></app-pump-fluid>
-          <app-motor *ngIf="subTab == 'motor'" (isValid)="setValid()" (isInvalid)="setInvalid()" [saveClicked]="saveClicked" [(psat)]="_psat"
-            (saved)="save()" [selected]="true" [settings]="settings" [baseline]="true" [inSetup]="true"></app-motor>
-          <app-field-data *ngIf="subTab == 'field-data'" (isValid)="setValid()" (isInvalid)="setInvalid()" [saveClicked]="saveClicked"
-            [(psat)]="_psat" (saved)="save()" [selected]="true" [settings]="settings" [baseline]="true" [inSetup]="true" (openHeadTool)="modalOpen()" (closeHeadTool)="modalClose()"></app-field-data>
-        </div>
-        <div class="col-6 help-panel">
-          <app-help-panel [psat]="_psat" [settings]="settings" [currentTab]="subTab" [inSetup]="true" [saveClicked]="saveClicked"></app-help-panel>
+        <app-system-basics *ngIf="subTab == 'system-basics'" [settings]="settings" [saveClicked]="saveClicked" [assessment]="assessment"
+          [(psat)]="_psat" [isAssessmentSettings]="isAssessmentSettings" (updateSettings)="getSettings($event)" (updateAssessment)="save()"
+          (openModal)="modalOpen()" (closeModal)="modalClose()"></app-system-basics>
+        <app-pump-fluid *ngIf="subTab == 'pump-fluid'" (isValid)="setValid()" (isInvalid)="setInvalid()" [saveClicked]="saveClicked"
+          [(psat)]="_psat" (saved)="save()" [selected]="true" [settings]="settings" [baseline]="true" [inSetup]="true"></app-pump-fluid>
+        <app-motor *ngIf="subTab == 'motor'" (isValid)="setValid()" (isInvalid)="setInvalid()" [saveClicked]="saveClicked" [(psat)]="_psat"
+          (saved)="save()" [selected]="true" [settings]="settings" [baseline]="true" [inSetup]="true"></app-motor>
+        <app-field-data *ngIf="subTab == 'field-data'" (isValid)="setValid()" (isInvalid)="setInvalid()" [saveClicked]="saveClicked"
+          [(psat)]="_psat" (saved)="save()" [selected]="true" [settings]="settings" [baseline]="true" [inSetup]="true" (openHeadTool)="modalOpen()"
+          (closeHeadTool)="modalClose()"></app-field-data>
+      </div>
+      <div class="col-6 help-panel">
+        <app-help-panel [psat]="_psat" [settings]="settings" [currentTab]="subTab" [inSetup]="true" [saveClicked]="saveClicked"></app-help-panel>
       </div>
     </div>
 
@@ -66,11 +68,33 @@
   <div class="tab-content" *ngIf="mainTab =='diagram'">
     <app-psat-diagram [psat]="_psat" [settings]="settings"></app-psat-diagram>
   </div>
-  
-  <div class="tab-content" *ngIf="mainTab =='sankey'">
-    <!-- <app-psat-sankey [psat]="_psat" [settings]="settings"></app-psat-sankey> -->
-    <app-psat-sankey [psat]="_psat" [location]="'sankey-diagram'" [settings]="settings"></app-psat-sankey>
+
+  <!-- sankey -->
+  <div class="row" *ngIf="mainTab == 'sankey'">
+    <div class="col-12">
+      <div class="row justify-content-center">
+        <div class="col-12 ">
+          <div class="row" *ngIf="psatOptionsLength > 1">
+            <div class="col-1"></div>
+            <div class="col-10">
+              <div class="form-group">
+                <select name="psatSelect" class="form-control mx-auto" id="psatSelect" [(ngModel)]="psat1">
+                  <option *ngFor="let psat of psatOptions" [ngValue]="psat">{{psat.name}}</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-12">
+              <app-psat-sankey [psat]="psat1.psat" [location]="'sankey-diagram'" [settings]="settings"></app-psat-sankey>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
+  </div>
+
+
   <!--end diagram-->
   <!--report-->
   <div class="row justify-content-center report-container" *ngIf="mainTab == 'report'">

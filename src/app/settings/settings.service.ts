@@ -24,7 +24,8 @@ export class SettingsService {
       'furnaceType': [''],
       'energyResultUnit': [''],
       'customFurnaceName': [''],
-      'temperatureMeasurement': ['']
+      'temperatureMeasurement': [''],
+      'phastRollupUnit': ['']
     });
   }
 
@@ -44,7 +45,8 @@ export class SettingsService {
       'furnaceType': [settings.furnaceType],
       'energyResultUnit': [settings.energyResultUnit],
       'customFurnaceName': [settings.customFurnaceName],
-      'temperatureMeasurement': [settings.temperatureMeasurement]
+      'temperatureMeasurement': [settings.temperatureMeasurement],
+      'phastRollupUnit': [settings.phastRollupUnit]
     });
   }
 
@@ -65,7 +67,8 @@ export class SettingsService {
       energyResultUnit: form.controls.energyResultUnit.value,
       customFurnaceName: form.controls.customFurnaceName.value,
       temperatureMeasurement: form.controls.temperatureMeasurement.value,
-      appVersion: packageJson.version
+      appVersion: packageJson.version,
+      phastRollupUnit: form.controls.phastRollupUnit.value      
     };
     return tmpSettings;
   }
@@ -86,6 +89,7 @@ export class SettingsService {
       furnaceType: settings.furnaceType,
       customFurnaceName: settings.customFurnaceName,
       temperatureMeasurement: settings.temperatureMeasurement,
+      phastRollupUnit: settings.phastRollupUnit
     }
     return newSettings;
   }
@@ -152,6 +156,23 @@ export class SettingsService {
     }
     return settings;
   }
+
+  setPhastResultUnit(settings: Settings): Settings {
+    if (settings.unitsOfMeasure == 'Imperial') {
+      settings.phastRollupUnit = 'MMBtu'
+    }
+    else if (settings.unitsOfMeasure == 'Metric') {
+      settings.phastRollupUnit = 'GJ';
+    }
+
+    if (settings.energySourceType == 'Electricity') {
+      settings.phastRollupUnit = 'kWh';
+    }
+    return settings;
+  }
+
+
+
 
   setTemperatureUnit(settings: Settings): Settings{
     if(settings.unitsOfMeasure == 'Imperial'){
