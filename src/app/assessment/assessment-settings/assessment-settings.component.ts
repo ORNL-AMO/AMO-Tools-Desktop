@@ -306,7 +306,8 @@ export class AssessmentSettingsComponent implements OnInit {
       oldSettings.powerMeasurement != newSettings.powerMeasurement ||
       oldSettings.pressureMeasurement != newSettings.pressureMeasurement ||
       oldSettings.unitsOfMeasure != newSettings.unitsOfMeasure ||
-      oldSettings.energySourceType != newSettings.energySourceType
+      oldSettings.energySourceType != newSettings.energySourceType ||
+      oldSettings.phastRollupUnit != newSettings.phastRollupUnit
     ) {
       return true;
     } else {
