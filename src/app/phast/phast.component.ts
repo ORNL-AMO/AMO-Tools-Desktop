@@ -7,14 +7,10 @@ import { IndexedDbService } from '../indexedDb/indexed-db.service';
 import { ActivatedRoute } from '@angular/router';
 import { Settings } from '../shared/models/settings';
 import { PHAST } from '../shared/models/phast/phast';
-
 import { ToastyService, ToastyConfig, ToastOptions, ToastData } from 'ng2-toasty';
 import { SettingsService } from '../settings/settings.service';
 import { PhastResultsService } from './phast-results.service';
-
-//debug
 import { PhastResults } from '../shared/models/phast/phast';
-
 import { LossesService } from './losses/losses.service';
 import { StepTab, LossTab } from './tabs';
 @Component({
@@ -144,22 +140,17 @@ export class PhastComponent implements OnInit {
     })
   }
 
-  //debug - trying something
+
   initSankeyList() {
     this.phastOptions = new Array<any>();
     this.phastOptions.push({ name: 'Baseline', phast: this._phast });
     this.phast1 = this.phastOptions[0];
     if (this._phast.modifications) {
-      console.log("there are modifications!");
       this._phast.modifications.forEach(mod => {
         this.phastOptions.push({ name: mod.phast.name, phast: mod.phast });
       })
       this.phast2 = this.phastOptions[1];
       this.phastOptionsLength = this.phastOptions.length;
-      console.log("this.phastOptions.length = " + this.phastOptions.length);
-    }
-    else {
-      console.log("there are no modifications");
     }
   }
 
@@ -167,9 +158,6 @@ export class PhastComponent implements OnInit {
 
   ngAfterViewInit() {
     this.disclaimerToast();
-
-    //debug
-    console.log("ngAfterViewInit, _phast = " + this._phast);
   }
 
   ngOnDestroy() {
@@ -179,10 +167,7 @@ export class PhastComponent implements OnInit {
 
   checkSetupDone() {
     this._phast.setupDone = this.lossesService.checkSetupDone((JSON.parse(JSON.stringify(this._phast))), this.settings);
-
-    //debug
     this.initSankeyList();
-    console.log("checkSetupDone(), _phast.losses = " + this._phast.losses);
   }
 
   getSettings(update?: boolean) {

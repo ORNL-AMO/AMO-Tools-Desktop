@@ -46,7 +46,7 @@ export class PsatService {
       psatInputs.motor_rated_power = this.convertUnitsService.value(psatInputs.motor_rated_power).from(settings.powerMeasurement).to('hp');
     }
     if(settings.temperatureMeasurement != 'F' && psatInputs.fluidTemperature){
-      debugger
+      // debugger
       psatInputs.fluidTemperature = this.convertUnitsService.value(psatInputs.fluidTemperature).from(settings.temperatureMeasurement).to('F');
     }
     return psatInputs;

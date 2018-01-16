@@ -35,8 +35,6 @@ export class PsatComponent implements OnInit {
     'field-data'
   ]
 
-
-  //debug
   psat: PSAT;
   modification: PSAT;
   psatOptions: Array<any>;
@@ -122,19 +120,12 @@ export class PsatComponent implements OnInit {
     this.psatOptions.push({ name: 'Baseline', psat: this._psat });
     this.psat1 = this.psatOptions[0];
     if (this._psat.modifications) {
-      console.log("there are modifications!");
       this._psat.modifications.forEach(mod => {
         this.psatOptions.push({ name: mod.psat.name, psat: mod.psat });
       })
       this.psat2 = this.psatOptions[1];
       this.psatOptionsLength = this.psatOptions.length;
-      console.log("this.psatOptions.length = " + this.psatOptions.length);
     }
-    else {
-      console.log("there are no modifications");
-    }
-
-    // console.log("this.psat1.input.motor_power = " + this.psat1.inputs.motor_field_power);
   }
 
 

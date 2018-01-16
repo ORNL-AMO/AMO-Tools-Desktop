@@ -52,6 +52,7 @@ export class PsatSankeyComponent implements OnInit {
   tmpInitialEfficiencyClass: string;
 
   selectedResults: PsatOutputs;
+  selectedInputs: PsatInputs;
 
   exploreModIndex: number = 0;
   currentField: string;
@@ -73,15 +74,15 @@ export class PsatSankeyComponent implements OnInit {
   }
 
   ngAfterViewInit() {
-    this.makeSankey();
     this.getResults();
-    this.sankey(this.selectedResults);
+    this.makeSankey();
   }
 
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.psat) {
       if (!changes.psat.firstChange) {
+        this.getResults();
         this.makeSankey();
       }
     }
@@ -90,30 +91,26 @@ export class PsatSankeyComponent implements OnInit {
 
   getResults() {
     //create copies of inputs to use for calcs
-    let psatInputs: PsatInputs = JSON.parse(JSON.stringify(this.psat.inputs));
-    let tmpForm = this.psatService.getFormFromPsat(psatInputs);
+    this.selectedInputs = JSON.parse(JSON.stringify(this.psat.inputs));
+    let tmpForm = this.psatService.getFormFromPsat(this.selectedInputs);
     if (tmpForm.status == 'VALID') {
-      if (psatInputs.optimize_calculation) {
-        this.selectedResults = this.psatService.resultsOptimal(psatInputs, this.settings);
+      if (this.selectedInputs.optimize_calculation) {
+        this.selectedResults = this.psatService.resultsOptimal(this.selectedInputs, this.settings);
       } else {
-        this.selectedResults = this.psatService.resultsExisting(psatInputs, this.settings);
+        this.selectedResults = this.psatService.resultsExisting(this.selectedInputs, this.settings);
       }
     } else {
       this.selectedResults = this.psatService.emptyResults();
     }
   }
-
-
-  optimize() {
-    let tmpInputs = JSON.parse(JSON.stringify(this.psat.inputs));
-    let selectedResults = this.psatService.resultsExisting(tmpInputs, this.settings);
-  }
-
+  
 
   makeSankey() {
-    let results = this.psatService.resultsExisting(this.psat.inputs, this.settings);
+    let tmpInputs = JSON.parse(JSON.stringify(this.psat.inputs));
+    let results = this.psatService.resultsExisting(tmpInputs, this.settings);
     this.sankey(results);
   }
+
 
 
   closeSankey() {
@@ -391,6 +388,7 @@ export class PsatSankeyComponent implements OnInit {
       })
       .text(function (d) {
         if (!d.inter) {
+          // return twoDecimalFormat(d.value) + " " + this.settings.powerMeasurement;
           return twoDecimalFormat(d.value) + " kW";
         }
       })
