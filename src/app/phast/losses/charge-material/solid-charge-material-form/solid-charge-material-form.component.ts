@@ -121,10 +121,10 @@ export class SolidChargeMaterialFormComponent implements OnInit {
     let selectedMaterial = this.suiteDbService.selectSolidLoadChargeMaterialById(this.chargeMaterialForm.controls.materialId.value);
 
     if (this.settings.unitsOfMeasure == 'Metric') {
-      selectedMaterial.latentHeat = this.convertUnitsService.value(this.roundVal(selectedMaterial.latentHeat, 4)).from('btuLb').to('kJkg');
-      selectedMaterial.meltingPoint = this.convertUnitsService.value(this.roundVal(selectedMaterial.meltingPoint, 4)).from('F').to('C');
-      selectedMaterial.specificHeatLiquid = this.convertUnitsService.value(this.roundVal(selectedMaterial.specificHeatLiquid, 4)).from('btulbF').to('kJkgC');
-      selectedMaterial.specificHeatSolid = this.convertUnitsService.value(this.roundVal(selectedMaterial.specificHeatSolid, 4)).from('btulbF').to('kJkgC');
+      selectedMaterial.latentHeat = this.convertUnitsService.value(selectedMaterial.latentHeat).from('btuLb').to('kJkg');
+      selectedMaterial.meltingPoint = this.convertUnitsService.value(selectedMaterial.meltingPoint).from('F').to('C');
+      selectedMaterial.specificHeatLiquid = this.convertUnitsService.value(selectedMaterial.specificHeatLiquid).from('btulbF').to('kJkgC');
+      selectedMaterial.specificHeatSolid = this.convertUnitsService.value(selectedMaterial.specificHeatSolid).from('btulbF').to('kJkgC');
     }
 
     this.chargeMaterialForm.patchValue({

@@ -95,7 +95,7 @@ export class GasChargeMaterialFormComponent implements OnInit {
   setProperties() {
     let selectedMaterial = this.suiteDbService.selectGasLoadChargeMaterialById(this.chargeMaterialForm.controls.materialId.value);
     if (this.settings.unitsOfMeasure == 'Metric') {
-      selectedMaterial.specificHeatVapor = this.convertUnitsService.value(this.roundVal(selectedMaterial.specificHeatVapor, 4)).from('btulbF').to('kJkgC');
+      selectedMaterial.specificHeatVapor = this.convertUnitsService.value(selectedMaterial.specificHeatVapor).from('btulbF').to('kJkgC');
     }
     this.chargeMaterialForm.patchValue({
       materialSpecificHeat: this.roundVal(selectedMaterial.specificHeatVapor, 4)
