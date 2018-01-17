@@ -1,24 +1,21 @@
-<div 
-    class="assessment-report report-in-phast" 
-    *ngIf="phast && settings" 
-    [ngClass]="{'assessment-report-padding': inPhast, 'report-in-rollup': inRollup}">
+<div class="assessment-report report-in-phast" *ngIf="phast && settings" [ngClass]="{'assessment-report-padding': inPhast, 'report-in-rollup': inRollup}">
 
 
     <div *ngIf="inPhast" class="report-cover">
         <img src="assets/images/DOE-banner-color.png" class="doe-logo">
-        
+
         <div class="report-title">
             <h4>Furnace Efficiency Report:</h4>
             <h4>{{assessment.name}}</h4>
             <h5>{{createdDate| date:'medium'}}</h5>
         </div>
-        
+
         <p class="report-notes">{{reportNotes}}</p>
     </div>
 
 
-    <div class="report-header" [ngClass]="{'hide-print': inPhast}">  
-       
+    <div class="report-header" [ngClass]="{'hide-print': inPhast}">
+
         <div *ngIf="inPhast" class="btn-group hide-print">
             <button class="btn btn-secondary" (click)="print()">Print</button>
             <button class="btn btn-secondary" [disabled]="true" (click)="exportToCsv()">Export to CSV</button>
@@ -26,53 +23,62 @@
         <!--<button class="btn btn-link pull-right hide-print" aria-label="Close" (click)="closeAssessment()">Close Report</button>-->
 
         <h2 *ngIf="!assessment" class="assessment-name">Assessment Report</h2>
-        
-        <h2 *ngIf="assessment" class="assessment-name">
-            <span 
-                class="dir-list-item" 
-                *ngFor="let directory of assessmentDirectories">
-                {{directory.name}} / 
-            </span>
-            {{assessment.name}}
-            <!--<button *ngIf="inPsat" class="btn-sm btn-secondary pull-right hide-print" (click)="print()"><span class="fa fa-print"></span></button>-->
-            <span>Last Modified {{assessment.modifiedDate | date:'medium'}}</span>
-        </h2>
 
+        <div *ngIf="assessment" class="row assessment-name">
+            <div class="col-12">
+                <h2 class="assessment-title">
+                    <span class="dir-list-item" *ngFor="let directory of assessmentDirectories">
+                        {{directory.name}} /
+                    </span>
+                    {{assessment.name}}
+                    <!-- {{settings.customFurnaceName}} -->
+                    <!--<button *ngIf="inPsat" class="btn-sm btn-secondary pull-right hide-print" (click)="print()"><span class="fa fa-print"></span></button>-->
+                </h2>
+            </div>
+            <div class="col-12" *ngIf="settings.customFurnaceName">
+                <h3 class="custom-name">{{settings.customFurnaceName}}</h3>
+            </div>
+            <div class="col-12">
+                <h2 class="date-modified">
+                    <span>Last Modified {{assessment.modifiedDate | date:'medium'}}</span>
+                </h2>
+            </div>
+        </div>
     </div>
     <!-- End .report-header -->
 
 
     <div class="report-data" *ngIf="phast.setupDone">
 
-        <ul class="tabs primary hide-print">
-            <li (click)="setTab('energy-used')" [ngClass]="{'active': currentTab == 'energy-used'}">
-                <a>Energy Used</a>
-            </li><li (click)="setTab('executive-summary')" [ngClass]="{'active': currentTab == 'executive-summary'}">
-                <a>Executive Summary</a>
-            </li><li (click)="setTab('results-data')" [ngClass]="{'active': currentTab == 'results-data'}">
-                <a>Result Data</a>
-            </li><li (click)="setTab('report-graphs')" [ngClass]="{'active': currentTab == 'report-graphs'}">
-                <a>Report Graphs</a>
-            </li><li (click)="setTab('report-sankey')" [ngClass]="{'active': currentTab == 'report-sankey'}">
-                <a>Sankey</a>
-            </li><li (click)="setTab('input-summary')" [ngClass]="{'active': currentTab == 'input-summary'}">
-                <a>Input Data</a>
-            </li>
-        </ul>
+            <ul class="tabs primary hide-print">
+                    <li (click)="setTab('energy-used')" [ngClass]="{'active': currentTab == 'energy-used'}">
+                        <a>Energy Used</a>
+                    </li><li (click)="setTab('executive-summary')" [ngClass]="{'active': currentTab == 'executive-summary'}">
+                        <a>Executive Summary</a>
+                    </li><li (click)="setTab('results-data')" [ngClass]="{'active': currentTab == 'results-data'}">
+                        <a>Result Data</a>
+                    </li><li (click)="setTab('report-graphs')" [ngClass]="{'active': currentTab == 'report-graphs'}">
+                        <a>Report Graphs</a>
+                    </li><li (click)="setTab('report-sankey')" [ngClass]="{'active': currentTab == 'report-sankey'}">
+                        <a>Sankey</a>
+                    </li><li (click)="setTab('input-summary')" [ngClass]="{'active': currentTab == 'input-summary'}">
+                        <a>Input Data</a>
+                    </li>
+                </ul>
         <div class="results" [ngClass]="{'show-print':currentTab != 'energy-used'}">
-          <app-energy-used [phast]="phast" [settings]="settings"></app-energy-used>
+            <app-energy-used [phast]="phast" [settings]="settings"></app-energy-used>
         </div>
         <div class="results" [ngClass]="{'show-print':currentTab != 'executive-summary'}">
-          <app-executive-summary  [settings]="settings" [phast]="phast" [assessment]="assessment" [inPhast]="inPhast"></app-executive-summary>
+            <app-executive-summary [settings]="settings" [phast]="phast" [assessment]="assessment" [inPhast]="inPhast"></app-executive-summary>
         </div>
         <div class="results" [ngClass]="{'show-print':currentTab !=  'results-data'}">
-          <app-results-data [phast]="phast" [settings]="settings" [assessment]="assessment" [inPhast]="inPhast" [inReport]="true"></app-results-data>
-        </div>        
+            <app-results-data [phast]="phast" [settings]="settings" [assessment]="assessment" [inPhast]="inPhast" [inReport]="true"></app-results-data>
+        </div>
         <div class="results" [ngClass]="{'show-print':currentTab != 'report-graphs'}">
-          <app-report-graphs [phast]="phast" [settings]="settings"></app-report-graphs>
+            <app-report-graphs [phast]="phast" [settings]="settings"></app-report-graphs>
         </div>
         <div class="results" [ngClass]="{'show-print':currentTab != 'report-sankey'}">
-          <app-report-sankey [phast]="phast" [settings]="settings"></app-report-sankey>
+            <app-report-sankey [phast]="phast" [settings]="settings"></app-report-sankey>
         </div>
         <!--use ngClass with 'show-print' for printing-->
         <!-- ngIf temporary -->

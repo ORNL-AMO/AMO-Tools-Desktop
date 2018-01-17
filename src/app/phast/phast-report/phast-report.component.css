@@ -1,3 +1,22 @@
 .results{
     padding-top: 20px;
 }
+
+.assessment-title{
+    font-size: 22px;
+    margin-top: 10px;
+    margin-bottom: -14px;
+}
+
+.custom-name{
+    font-size: 16px;
+    margin-top: 10px;
+    margin-bottom: -14px;
+}
+
+.date-modified{
+    color: #999;
+    font-size: 12px;
+    margin-top: 15px;
+    margin-left: 0;
+}
