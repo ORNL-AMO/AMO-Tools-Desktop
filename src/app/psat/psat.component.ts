@@ -142,9 +142,9 @@ export class PsatComponent implements OnInit {
       results => {
         if (results.length != 0) {
           this.settings = results[0];
-          if(!this.settings.temperatureMeasurement){
-            this.settings = this.settingsService.setTemperatureUnit(this.settings);
-          }
+          // if(!this.settings.temperatureMeasurement){
+          //   this.settings = this.settingsService.setTemperatureUnit(this.settings);
+          // }
           this.isAssessmentSettings = true;
           if (update) {
             this.addToast('Settings Saved');

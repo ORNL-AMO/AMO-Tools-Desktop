@@ -10,6 +10,7 @@ import { ModelService } from './model.service';
 import { ConvertUnitsService } from './convert-units/convert-units.service';
 import { PercentGraphComponent } from './percent-graph/percent-graph.component';
 import { SigFigsPipe } from './sig-figs.pipe';
+import { UpdateDataService } from './update-data.service';
 
 @NgModule({
   imports: [
@@ -31,7 +32,8 @@ import { SigFigsPipe } from './sig-figs.pipe';
   providers: [
     ValidationService,
     ModelService,
-    ConvertUnitsService
+    ConvertUnitsService,
+    UpdateDataService
   ]
 })
 

@@ -176,9 +176,6 @@ export class PhastComponent implements OnInit {
       results => {
         if (results.length != 0) {
           this.settings = results[0];
-          if (!this.settings.energyResultUnit) {
-            this.settings = this.settingsService.setEnergyResultUnitSetting(this.settings);
-          }
           this.lossesService.setTabs(this.settings);
           this.isAssessmentSettings = true;
           this.checkSetupDone();
