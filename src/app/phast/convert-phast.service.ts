@@ -29,7 +29,7 @@ export class ConvertPhastService {
   constructor(private convertUnitsService: ConvertUnitsService) { }
 
   convertVal(val: number, from: string, to: string) {
-    if (val) {
+    if (val != undefined) {
       val = this.convertUnitsService.value(val).from(from).to(to);
       val = this.roundVal(val, 3);
     }
