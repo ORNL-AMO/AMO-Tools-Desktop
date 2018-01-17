@@ -136,22 +136,22 @@ export class ReportRollupService {
       let assessmentIndex = _.findIndex(psatAssessments, (val) => { return val.assessment.id == result.assessmentId });
       let item = psatAssessments[assessmentIndex];
       if (result.isBaseline) {
-        tmpResults.push({ baseline: item.assessment.psat, modification: item.assessment.psat, assessmentId: result.assessmentId, selectedIndex: -1, name: item.assessment.name, assessment: item.assessment });
+        tmpResults.push({ baseline: item.assessment.psat, modification: item.assessment.psat, assessmentId: result.assessmentId, selectedIndex: -1, name: item.assessment.name, assessment: item.assessment, settings: item.settings });
       } else {
-        tmpResults.push({ baseline: item.assessment.psat, modification: item.assessment.psat.modifications[modIndex].psat, assessmentId: result.assessmentId, selectedIndex: modIndex, name: item.assessment.name, assessment: item.assessment });
+        tmpResults.push({ baseline: item.assessment.psat, modification: item.assessment.psat.modifications[modIndex].psat, assessmentId: result.assessmentId, selectedIndex: modIndex, name: item.assessment.name, assessment: item.assessment, settings: item.settings });
       }
     });
     this.selectedPsats.next(tmpResults);
   }
 
-  updateSelectedPsats(assessment: Assessment, modIndex: number) {
+  updateSelectedPsats(item: ReportItem, modIndex: number) {
     let tmpSelected = this.selectedPsats.value;
     if (modIndex != -1) {
-      let selectedIndex = _.findIndex(tmpSelected, { assessmentId: assessment.id });
-      tmpSelected.splice(selectedIndex, 1, { baseline: assessment.psat, modification: assessment.psat.modifications[modIndex].psat, assessmentId: assessment.id, selectedIndex: modIndex, name: assessment.name, assessment: assessment });
+      let selectedIndex = _.findIndex(tmpSelected, { assessmentId: item.assessment.id });
+      tmpSelected.splice(selectedIndex, 1, { baseline: item.assessment.psat, modification: item.assessment.psat.modifications[modIndex].psat, assessmentId: item.assessment.id, selectedIndex: modIndex, name: item.assessment.name, assessment: item.assessment, settings: item.settings });
     } else {
-      let selectedIndex = _.findIndex(tmpSelected, { assessmentId: assessment.id });
-      tmpSelected.splice(selectedIndex, 1, { baseline: assessment.psat, modification: assessment.psat, assessmentId: assessment.id, selectedIndex: modIndex, name: assessment.name, assessment: assessment });
+      let selectedIndex = _.findIndex(tmpSelected, { assessmentId: item.assessment.id });
+      tmpSelected.splice(selectedIndex, 1, { baseline: item.assessment.psat, modification: item.assessment.psat, assessmentId: item.assessment.id, selectedIndex: modIndex, name: item.assessment.name, assessment: item.assessment, settings: item.settings });
     }
     this.selectedPsats.next(tmpSelected);
   }
@@ -192,17 +192,14 @@ export class ReportRollupService {
   getResultsFromSelected(selectedPsats: Array<PsatCompare>) {
     let tmpResultsArr = new Array<PsatResultsData>();
     selectedPsats.forEach(val => {
-      this.indexedDbService.getAssessmentSettings(val.assessmentId).then(settings => {
-        settings[0] = this.checkSettings(settings[0]);
-        let modificationResults;
-        let baselineResults = this.psatService.resultsExisting(JSON.parse(JSON.stringify(val.baseline.inputs)), settings[0]);
-        if (val.modification.inputs.optimize_calculation) {
-          modificationResults = this.psatService.resultsOptimal(JSON.parse(JSON.stringify(val.modification.inputs)), settings[0]);
-        } else {
-          modificationResults = this.psatService.resultsModified(JSON.parse(JSON.stringify(val.modification.inputs)), settings[0], baselineResults.pump_efficiency);
-        }
-        tmpResultsArr.push({ baselineResults: baselineResults, modificationResults: modificationResults, assessmentId: val.assessmentId, name: val.name, modName: val.modification.name, baseline: val.baseline, modification: val.modification });
-      })
+      let modificationResults;
+      let baselineResults = this.psatService.resultsExisting(JSON.parse(JSON.stringify(val.baseline.inputs)), val.settings);
+      if (val.modification.inputs.optimize_calculation) {
+        modificationResults = this.psatService.resultsOptimal(JSON.parse(JSON.stringify(val.modification.inputs)), val.settings);
+      } else {
+        modificationResults = this.psatService.resultsModified(JSON.parse(JSON.stringify(val.modification.inputs)), val.settings, baselineResults.pump_efficiency);
+      }
+      tmpResultsArr.push({ baselineResults: baselineResults, modificationResults: modificationResults, assessmentId: val.assessmentId, name: val.name, modName: val.modification.name, baseline: val.baseline, modification: val.modification, settings: val.settings });
     })
     this.psatResults.next(tmpResultsArr);
   }
@@ -342,7 +339,8 @@ export interface PsatCompare {
   assessmentId: number,
   selectedIndex: number,
   name: string,
-  assessment: Assessment
+  assessment: Assessment,
+  settings: Settings
 }
 
 
@@ -353,7 +351,8 @@ export interface PsatResultsData {
   name: string,
   modName: string,
   baseline: PSAT,
-  modification: PSAT
+  modification: PSAT,
+  settings: Settings
 }
 
 
