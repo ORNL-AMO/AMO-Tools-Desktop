@@ -91,7 +91,7 @@ export class ExploreOpportunitiesSankeyComponent implements OnInit, OnChanges {
     var nodes = [];
     nodes.push(
       /*0*/{
-        name: "Input",
+        name: "Energy Input",
         value: results.motor_power,
         displaySize: this.baseSize,
         width: 300,
@@ -115,7 +115,7 @@ export class ExploreOpportunitiesSankeyComponent implements OnInit, OnChanges {
         top: true
       },
       /*2*/{
-        name: "Motor",
+        name: "Motor Losses",
         value: this.motor,
         displaySize: 0,
         width: 0,
@@ -142,7 +142,7 @@ export class ExploreOpportunitiesSankeyComponent implements OnInit, OnChanges {
         top: false
       },
         /*4*/{
-          name: "Drive",
+          name: "Drive Losses",
           value: this.drive,
           displaySize: 0,
           width: 0,
@@ -169,7 +169,7 @@ export class ExploreOpportunitiesSankeyComponent implements OnInit, OnChanges {
         top: false
       },
       /*6*/{
-        name: "Pump",
+        name: "Pump Losses",
         value: this.pump,
         displaySize: 0,
         width: 0,
@@ -181,7 +181,7 @@ export class ExploreOpportunitiesSankeyComponent implements OnInit, OnChanges {
         top: true
       },
       /*7*/{
-        name: "Output",
+        name: "Useful Output",
         value: 0,
         displaySize: 0,
         width: 0,
