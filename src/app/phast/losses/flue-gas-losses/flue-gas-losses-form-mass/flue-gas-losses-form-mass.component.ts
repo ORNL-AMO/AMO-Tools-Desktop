@@ -163,20 +163,24 @@ export class FlueGasLossesFormMassComponent implements OnInit {
   setProperties() {
     let tmpFlueGas = this.suiteDbService.selectSolidLiquidFlueGasMaterialById(this.flueGasLossForm.controls.gasTypeId.value);
     this.flueGasLossForm.patchValue({
-      carbon: tmpFlueGas.carbon,
-      hydrogen: tmpFlueGas.hydrogen,
-      sulphur: tmpFlueGas.sulphur,
-      inertAsh: tmpFlueGas.inertAsh,
-      o2: tmpFlueGas.o2,
-      moisture: tmpFlueGas.moisture,
-      nitrogen: tmpFlueGas.nitrogen
-    })
+      carbon: this.roundVal(tmpFlueGas.carbon, 4),
+      hydrogen: this.roundVal(tmpFlueGas.hydrogen, 4),
+      sulphur: this.roundVal(tmpFlueGas.sulphur, 4),
+      inertAsh: this.roundVal(tmpFlueGas.inertAsh, 4),
+      o2: this.roundVal(tmpFlueGas.o2, 4),
+      moisture: this.roundVal(tmpFlueGas.moisture, 4),
+      nitrogen: this.roundVal(tmpFlueGas.nitrogen, 4)
+    });
     this.checkForm();
   }
   emitSave() {
     this.saveEmit.emit(true);
   }
 
+  roundVal(val: number, digits: number) {
+    let test = Number(val.toFixed(digits));
+    return test;
+  }
 
   startSavePolling() {
     this.checkForm();

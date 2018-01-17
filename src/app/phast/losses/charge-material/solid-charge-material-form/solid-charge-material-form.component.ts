@@ -128,12 +128,17 @@ export class SolidChargeMaterialFormComponent implements OnInit {
     }
 
     this.chargeMaterialForm.patchValue({
-      materialLatentHeatOfFusion: selectedMaterial.latentHeat,
-      materialMeltingPoint: selectedMaterial.meltingPoint,
-      materialHeatOfLiquid: selectedMaterial.specificHeatLiquid,
-      materialSpecificHeatOfSolidMaterial: selectedMaterial.specificHeatSolid
+      materialLatentHeatOfFusion: this.roundVal(selectedMaterial.latentHeat, 4),
+      materialMeltingPoint: this.roundVal(selectedMaterial.meltingPoint, 4),
+      materialHeatOfLiquid: this.roundVal(selectedMaterial.specificHeatLiquid, 4),
+      materialSpecificHeatOfSolidMaterial: this.roundVal(selectedMaterial.specificHeatSolid, 4)
     })
     this.calculate.emit(true);
+  }
+
+  roundVal(val: number, digits: number) {
+    let test = Number(val.toFixed(digits));
+    return test;
   }
 checkInputError(bool?: boolean) {
       if (!bool) {

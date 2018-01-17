@@ -98,9 +98,14 @@ export class GasChargeMaterialFormComponent implements OnInit {
       selectedMaterial.specificHeatVapor = this.convertUnitsService.value(selectedMaterial.specificHeatVapor).from('btulbF').to('kJkgC');
     }
     this.chargeMaterialForm.patchValue({
-      materialSpecificHeat: selectedMaterial.specificHeatVapor,
+      materialSpecificHeat: this.roundVal(selectedMaterial.specificHeatVapor, 4)
     });
     this.calculate.emit(true);
+  }
+
+  roundVal(val: number, digits: number) {
+    let test = Number(val.toFixed(digits));
+    return test;
   }
   emitSave() {
     this.saveEmit.emit(true);

@@ -67,17 +67,22 @@ export class AtmosphereLossesFormComponent implements OnInit {
   setProperties() {
     let selectedMaterial = this.suiteDbService.selectAtmosphereSpecificHeatById(this.atmosphereLossForm.controls.atmosphereGas.value);
     if (this.settings.unitsOfMeasure == 'Metric') {
-      selectedMaterial.specificHeat = this.convertUnitsService.value(selectedMaterial.specificHeat).from('btulbF').to('kJkgC');
+      selectedMaterial.specificHeat = this.convertUnitsService.value(selectedMaterial.specificHeat,).from('btulbF').to('kJkgC');
     }
 
     this.atmosphereLossForm.patchValue({
-      specificHeat: selectedMaterial.specificHeat,
+      specificHeat: this.roundVal(selectedMaterial.specificHeat, 4)
     });
     this.startSavePolling();
   }
 
   disableForm() {
     this.atmosphereLossForm.disable();
+  }
+
+  roundVal(val: number, digits: number) {
+    let test = Number(val.toFixed(digits));
+    return test;
   }
 
   enableForm() {

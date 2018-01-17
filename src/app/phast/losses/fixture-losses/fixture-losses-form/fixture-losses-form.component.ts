@@ -171,9 +171,13 @@ export class FixtureLossesFormComponent implements OnInit {
     }
 
     this.lossesForm.patchValue({
-      specificHeat: selectedMaterial.specificHeatSolid
+      specificHeat: this.roundVal(selectedMaterial.specificHeatSolid, 4)
     })
     this.calculate.emit(true);
+  }
+  roundVal(val: number, digits: number) {
+    let test = Number(val.toFixed(digits));
+    return test;
   }
 
   showMaterialModal() {
