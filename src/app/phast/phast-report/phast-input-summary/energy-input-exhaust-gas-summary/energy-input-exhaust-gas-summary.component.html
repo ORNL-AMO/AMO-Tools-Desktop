@@ -10,11 +10,11 @@
         <table class="table table-hover table-striped">
           <thead>
             <tr>
-              <th [ngStyle]="{'width.%': 100 /(phast.modifications.length+2)}">{{index+1}}</th>
-              <th [ngStyle]="{'width.%': 100 /(phast.modifications.length+2)}">
+              <th [ngStyle]="{'width.%': 100 /(numMods+2)}">{{index+1}}</th>
+              <th [ngStyle]="{'width.%': 100 /(numMods+2)}">
                 {{data.baseline.name}}
               </th>
-              <th [ngStyle]="{'width.%': 100 /(phast.modifications.length+2)}" *ngFor="let mod of data.modifications">
+              <th [ngStyle]="{'width.%': 100 /(numMods+2)}" *ngFor="let mod of data.modifications">
                 {{mod.name}}
               </th>
             </tr>

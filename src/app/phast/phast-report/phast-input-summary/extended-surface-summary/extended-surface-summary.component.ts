@@ -21,6 +21,7 @@ export class ExtendedSurfaceSummaryComponent implements OnInit {
   surfaceTemperatureDiff: Array<boolean>;
   ambientTemperatureDiff: Array<boolean>;
   surfaceEmissivityDiff: Array<boolean>;
+  numMods: number = 0;
   constructor(private suiteDbService: SuiteDbService, private cd: ChangeDetectorRef) { }
 
   ngOnInit() {
@@ -31,6 +32,9 @@ export class ExtendedSurfaceSummaryComponent implements OnInit {
 
     this.lossData = new Array();
     if (this.phast.losses) {
+      if(this.phast.modifications){
+        this.numMods = this.phast.modifications.length;
+      }
       if (this.phast.losses.extendedSurfaces) {
         this.numLosses = this.phast.losses.extendedSurfaces.length;
         let index: number = 0;

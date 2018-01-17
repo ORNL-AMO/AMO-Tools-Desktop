@@ -10,13 +10,13 @@
         <table class="table table-hover table-striped">
           <tbody>
             <tr>
-              <td [ngStyle]="{'width.%': 100 /(phast.modifications.length+2)}">
+              <td [ngStyle]="{'width.%': 100 /(numMods+2)}">
                 Heat System Efficiency
               </td>
-              <td [ngStyle]="{'width.%': 100 /(phast.modifications.length+2)}">
+              <td [ngStyle]="{'width.%': 100 /(numMods+2)}">
                 {{phast.systemEfficiency}}
               </td>
-              <td [ngStyle]="{'width.%': 100 /(phast.modifications.length+2)}" *ngFor="let mod of phast.modifications">
+              <td [ngStyle]="{'width.%': 100 /(numMods+2)}" *ngFor="let mod of phast.modifications">
                 {{mod.phast.systemEfficiency}}
               </td>
             </tr>

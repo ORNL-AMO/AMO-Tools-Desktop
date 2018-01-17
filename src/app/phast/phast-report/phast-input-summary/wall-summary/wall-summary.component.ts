@@ -31,6 +31,7 @@ export class WallSummaryComponent implements OnInit {
   surfaceShapeDiff: Array<boolean>;
   conditionFactorDiff: Array<boolean>;
   emissivityDiff: Array<boolean>;
+  numMods: number = 0;
   constructor(private suiteDbService: SuiteDbService, private cd: ChangeDetectorRef) { }
 
   ngOnInit() {
@@ -47,6 +48,9 @@ export class WallSummaryComponent implements OnInit {
     //init array
     this.lossData = new Array();
     if (this.phast.losses) {
+      if (this.phast.modifications) {
+        this.numMods = this.phast.modifications.length;
+      }
       //check losses exist
       if (this.phast.losses.wallLosses) {
         //set num losses

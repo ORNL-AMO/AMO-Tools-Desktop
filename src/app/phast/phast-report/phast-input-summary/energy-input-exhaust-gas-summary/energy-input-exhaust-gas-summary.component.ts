@@ -15,11 +15,15 @@ export class EnergyInputExhaustGasSummaryComponent implements OnInit {
   numLosses: number = 0;
   collapse: boolean = true;
   lossData: Array<any>;
+  numMods: number = 0;
   constructor() { }
 
   ngOnInit() {
     this.lossData = new Array();
     if (this.phast.losses) {
+      if(this.phast.modifications){
+        this.numMods = this.phast.modifications.length;
+      }
       if (this.phast.losses.energyInputExhaustGasLoss) {
         this.numLosses = this.phast.losses.energyInputExhaustGasLoss.length;
         let index = 0;

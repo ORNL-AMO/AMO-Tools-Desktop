@@ -31,7 +31,7 @@ export class GasLeakageSummaryComponent implements OnInit {
   leakageGasTemperatureDiff: Array<boolean>;
   specificGravityDiff: Array<boolean>;
   ambientTemperatureDiff: Array<boolean>;
-
+  numMods: number = 0;
   constructor(private suiteDbService: SuiteDbService, private cd: ChangeDetectorRef) { }
 
   ngOnInit() {
@@ -43,6 +43,9 @@ export class GasLeakageSummaryComponent implements OnInit {
 
     this.lossData = new Array();
     if (this.phast.losses) {
+      if(this.phast.modifications){
+        this.numMods = this.phast.modifications.length;
+      }
       if (this.phast.losses.leakageLosses) {
         this.numLosses = this.phast.losses.leakageLosses.length;
         let index = 0;
