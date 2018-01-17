@@ -22,11 +22,15 @@ export class SlagSummaryComponent implements OnInit {
   outletTemperatureDiff: boolean = false;
   specificHeatDiff: boolean = false;
   correctionFactorDiff: boolean = false;
+  numMods: number = 0;
   constructor(private suiteDbService: SuiteDbService, private cd: ChangeDetectorRef) { }
 
   ngOnInit() {
     this.lossData = new Array();
     if (this.phast.losses) {
+      if(this.phast.modifications){
+        this.numMods = this.phast.modifications.length;
+      }
       if (this.phast.losses.slagLosses) {
         this.numLosses = this.phast.losses.slagLosses.length;
         let index = 0;

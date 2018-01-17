@@ -24,7 +24,7 @@ export class ExhaustGasSummaryComponent implements OnInit {
   vfrDiff: Array<boolean>;
   dustLoadingDiff: Array<boolean>;
 
-
+  numMods: number = 0;
   constructor(private suiteDbService: SuiteDbService, private cd: ChangeDetectorRef) { }
 
   ngOnInit() {
@@ -37,6 +37,9 @@ export class ExhaustGasSummaryComponent implements OnInit {
 
     this.lossData = new Array();
     if (this.phast.losses) {
+      if(this.phast.modifications){
+        this.numMods = this.phast.modifications.length;
+      }
       if (this.phast.losses.exhaustGasEAF) {
         this.numLosses = this.phast.losses.exhaustGasEAF.length;
         let index = 0;

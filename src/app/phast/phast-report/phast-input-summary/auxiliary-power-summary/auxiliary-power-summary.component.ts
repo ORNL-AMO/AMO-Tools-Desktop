@@ -22,12 +22,15 @@ export class AuxiliaryPowerSummaryComponent implements OnInit {
   avgCurrentDiff: boolean = false;
   powerFactorDiff: boolean = false;
   operatingTimeDiff: boolean = false;
-
+  numMods: number = 0;
   constructor(private suiteDbService: SuiteDbService, private cd: ChangeDetectorRef) { }
 
   ngOnInit() {
     this.lossData = new Array();
     if (this.phast.losses) {
+      if(this.phast.modifications){
+        this.numMods = this.phast.modifications.length;
+      }
       if (this.phast.losses.auxiliaryPowerLosses) {
         this.numLosses = this.phast.losses.auxiliaryPowerLosses.length;
         let index = 0;

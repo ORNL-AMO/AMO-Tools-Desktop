@@ -11,11 +11,11 @@
           <thead>
             <tr>
               <!-- set table column widths based on number of modifications, add 2 for baseline and label columns -->
-              <th [ngStyle]="{'width.%': 100 /(phast.modifications.length+2)}"></th>
-              <th [ngStyle]="{'width.%': 100 /(phast.modifications.length+2)}">
+              <th [ngStyle]="{'width.%': 100 /(numMods+2)}"></th>
+              <th [ngStyle]="{'width.%': 100 /(numMods+2)}">
                 Baseline
               </th>
-              <th [ngStyle]="{'width.%': 100 /(phast.modifications.length+2)}" *ngFor="let mod of phast.modifications">
+              <th [ngStyle]="{'width.%': 100 /(numMods+2)}" *ngFor="let mod of phast.modifications">
                 {{mod.phast.name}}
               </th>
             </tr>

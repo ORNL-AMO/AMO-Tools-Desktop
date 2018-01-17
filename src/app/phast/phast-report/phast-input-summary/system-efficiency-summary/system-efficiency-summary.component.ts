@@ -11,9 +11,15 @@ export class SystemEfficiencySummaryComponent implements OnInit {
   phast: PHAST;
 
   collapse: boolean = true;
+  numMods: number = 0;
   constructor() { }
 
   ngOnInit() {
+    if(this.phast){
+      if(this.phast.modifications){
+        this.numMods = this.phast.modifications.length;
+      }
+    }
   }
 
   toggleCollapse() {

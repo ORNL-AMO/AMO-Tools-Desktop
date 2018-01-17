@@ -19,7 +19,7 @@ export class OtherSummaryComponent implements OnInit {
 
   openingTypeDiff: Array<boolean>;
   heatLossDiff: Array<boolean>;
-
+  numMods: number = 0;
   constructor(private suiteDbService: SuiteDbService, private cd: ChangeDetectorRef) { }
 
   ngOnInit() {
@@ -28,6 +28,9 @@ export class OtherSummaryComponent implements OnInit {
 
     this.lossData = new Array();
     if (this.phast.losses) {
+      if(this.phast.modifications){
+        this.numMods = this.phast.modifications.length;
+      }
       if (this.phast.losses.otherLosses) {
         this.numLosses = this.phast.losses.otherLosses.length;
         let index = 0;

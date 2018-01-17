@@ -24,6 +24,7 @@ export class FixtureSummaryComponent implements OnInit {
   initialTemperatureDiff: Array<boolean>;
   finalTemperatureDiff: Array<boolean>;
   correctionFactorDiff: Array<boolean>;
+  numMods: number = 0;
   constructor(private suiteDbService: SuiteDbService, private cd: ChangeDetectorRef) { }
 
   ngOnInit() {
@@ -37,6 +38,9 @@ export class FixtureSummaryComponent implements OnInit {
     this.materialOptions = this.suiteDbService.selectSolidLoadChargeMaterials();
     this.lossData = new Array();
     if (this.phast.losses) {
+      if(this.phast.modifications){
+        this.numMods = this.phast.modifications.length;
+      }
       if (this.phast.losses.fixtureLosses) {
         this.numLosses = this.phast.losses.fixtureLosses.length;
         let index = 0;

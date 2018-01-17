@@ -26,6 +26,7 @@ export class CoolingSummaryComponent implements OnInit {
   initialTemperatureDiff: Array<boolean>;
   outletTemperatureDiff: Array<boolean>;
   correctionFactorDiff: Array<boolean>;
+  numMods: number = 0;
   constructor(private suiteDbService: SuiteDbService, private cd: ChangeDetectorRef) { }
 
   ngOnInit() {
@@ -40,6 +41,9 @@ export class CoolingSummaryComponent implements OnInit {
 
     this.lossData = new Array();
     if (this.phast.losses) {
+      if(this.phast.modifications){
+        this.numMods = this.phast.modifications.length;
+      }
       if (this.phast.losses.coolingLosses) {
         this.numLosses = this.phast.losses.coolingLosses.length;
         let index = 0;

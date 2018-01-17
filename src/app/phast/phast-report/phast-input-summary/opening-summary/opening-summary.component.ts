@@ -30,6 +30,7 @@ export class OpeningSummaryComponent implements OnInit {
   ambientTemperatureDiff: Array<boolean>;
   emissivityDiff: Array<boolean>;
   percentTimeOpenDiff: Array<boolean>;
+  numMods: number = 0;
   constructor(private suiteDbService: SuiteDbService, private cd: ChangeDetectorRef) { }
 
   //debug trying something
@@ -50,6 +51,9 @@ export class OpeningSummaryComponent implements OnInit {
     this.lossData = new Array();
 
     if (this.phast.losses) {
+      if(this.phast.modifications){
+        this.numMods = this.phast.modifications.length;
+      }
       if (this.phast.losses.openingLosses) {
         this.numLosses = this.phast.losses.openingLosses.length;
         let index = 0;

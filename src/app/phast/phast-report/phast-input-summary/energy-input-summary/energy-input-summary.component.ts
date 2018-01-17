@@ -15,11 +15,15 @@ export class EnergyInputSummaryComponent implements OnInit {
   numLosses: number = 0;
   collapse: boolean = true;
   lossData: Array<any>;
+  numMods: number = 0;
   constructor() { }
 
   ngOnInit() {
     this.lossData = new Array();
     if (this.phast.losses) {
+      if(this.phast.modifications){
+        this.numMods = this.phast.modifications.length;
+      }
       if (this.phast.losses.energyInputEAF) {
         this.numLosses = this.phast.losses.energyInputEAF.length;
         let index = 0;

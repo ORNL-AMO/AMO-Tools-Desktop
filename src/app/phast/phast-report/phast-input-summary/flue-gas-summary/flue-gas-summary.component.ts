@@ -43,7 +43,7 @@ export class FlueGasSummaryComponent implements OnInit {
   moistureInAirDiff: Array<boolean>;
   dischargeTempDiff: Array<boolean>;
   unburnedCarbonDiff: Array<boolean>;
-
+  numMods: number = 0;
   constructor(private suiteDbService: SuiteDbService, private cd: ChangeDetectorRef) { }
 
   ngOnInit() {
@@ -63,6 +63,9 @@ export class FlueGasSummaryComponent implements OnInit {
     this.massOptions = this.suiteDbService.selectSolidLiquidFlueGasMaterials();
     this.lossData = new Array();
     if (this.phast.losses) {
+      if(this.phast.modifications){
+        this.numMods = this.phast.modifications.length;
+      }
       if (this.phast.losses.flueGasLosses) {
         this.numLosses = this.phast.losses.flueGasLosses.length;
         let index: number = 0;

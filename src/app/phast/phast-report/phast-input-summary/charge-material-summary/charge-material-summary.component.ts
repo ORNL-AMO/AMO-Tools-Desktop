@@ -66,7 +66,7 @@ export class ChargeMaterialSummaryComponent implements OnInit {
   additionalHeatDiff: Array<boolean>;
   vaporizingTemperatureDiff: Array<boolean>;
   chargeMeltedDiff: Array<boolean>;
-  
+  numMods: number = 0;
   constructor(private suiteDbService: SuiteDbService, private phastService: PhastService, private cd: ChangeDetectorRef) { }
 
   ngOnInit() {
@@ -96,6 +96,9 @@ export class ChargeMaterialSummaryComponent implements OnInit {
     this.massOptions = this.suiteDbService.selectSolidLiquidFlueGasMaterials();
     this.lossData = new Array();
     if (this.phast.losses) {
+      if(this.phast.modifications){
+        this.numMods = this.phast.modifications.length;
+      }
       if (this.phast.losses.chargeMaterials) {
         this.numLosses = this.phast.losses.chargeMaterials.length;
         let index: number = 0;
