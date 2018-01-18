@@ -191,7 +191,6 @@ export class ConvertPhastService {
   }
   //liquidChargeMaterial
   convertLiquidChargeMaterial(loss: LiquidChargeMaterial, oldSettings: Settings, newSettings: Settings): LiquidChargeMaterial {
-    debugger
     if (oldSettings.unitsOfMeasure == 'Metric' && newSettings.unitsOfMeasure == 'Imperial') {
       loss.vaporizingTemperature = this.convertVal(loss.vaporizingTemperature, 'C', 'F');
       loss.latentHeat = this.convertVal(loss.latentHeat, 'kJkg', 'btuLb');
