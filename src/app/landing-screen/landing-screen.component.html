@@ -1,51 +1,58 @@
 <div class="landing">
 
 	<h1>Welcome to the most efficient way to manage and optimize your plant's systems and equipment.</h1>
-  <h3 class="text-adj2" style="border-bottom: none">Create an assessment to model your system and find opportunities for efficiency or run calculations from one of our many
-    property and equipment calculators.</h3>
-  <h3 style="border-bottom: none">Start with one of the following options to get started.</h3>
-
-
-	<div class="row justify-content-center spacer-row">
-		<div class="col-5 spacer-col">
-
+	<h3 class="text-adj2" style="border-bottom: none">Create an assessment to model your system and find opportunities for efficiency or run calculations from one of our many
+		property and equipment calculators.</h3>
+	<h3 style="border-bottom: none">Start with one of the following options to get started.</h3>
+	<div class="row arrow-row">
+		<div class="col-6">
+			<img class="arrow-img" src="assets/images/arrow_left.png">
+		</div>
+		<div class="col-6">
+			<img class="arrow-img pull-right" src="assets/images/arrow_right.png">
 		</div>
 	</div>
 
-    <!--<div class="col-12">-->
-      <!--<div class="row">-->
-      <!--<div class="col-2">-->
+	<!--<div class="col-12">-->
+	<!--<div class="row">-->
+	<!--<div class="col-2">-->
 
-      <!--</div>-->
-      <!--<div class="col-4">-->
-        <!--&lt;!&ndash;<p style="text-align: center; padding-top: 15px"><i class="fa fa-long-arrow-down left-rotated"> style="width: 100px; height: inherit; margin-top: 10px; margin-left: 44%"</i></p>&ndash;&gt;-->
-        <!--<img class="justify-content-center left-arrow"  src="assets/images/arrow-left4.png">-->
-      <!--</div>-->
-      <!--<div class="col-4">-->
-        <!--&lt;!&ndash;<p style="text-align: center; padding-top: 15px"><i class="fa fa-long-arrow-down right-rotated">style="width: 100px; height: inherit; margin-top: 10px; margin-left: 35%"</i></p>&ndash;&gt;-->
-        <!--<img class="justify-content-center right-arrow"  src="assets/images/arrow-right4.png">-->
-      <!--</div>-->
-      <!--<div class="col-2">-->
+	<!--</div>-->
+	<!--<div class="col-4">-->
+	<!--&lt;!&ndash;<p style="text-align: center; padding-top: 15px"><i class="fa fa-long-arrow-down left-rotated"> style="width: 100px; height: inherit; margin-top: 10px; margin-left: 44%"</i></p>&ndash;&gt;-->
+	<!--<img class="justify-content-center left-arrow"  src="assets/images/arrow-left4.png">-->
+	<!--</div>-->
+	<!--<div class="col-4">-->
+	<!--&lt;!&ndash;<p style="text-align: center; padding-top: 15px"><i class="fa fa-long-arrow-down right-rotated">style="width: 100px; height: inherit; margin-top: 10px; margin-left: 35%"</i></p>&ndash;&gt;-->
+	<!--<img class="justify-content-center right-arrow"  src="assets/images/arrow-right4.png">-->
+	<!--</div>-->
+	<!--<div class="col-2">-->
 
-      <!--</div>-->
-    <!--</div>-->
-  <!--</div>-->
+	<!--</div>-->
+	<!--</div>-->
+	<!--</div>-->
 	<ul>
-      <li>
-        <h3 (click)="createAssessment()"><a  class="click-link" (click)="createAssessment()">Create Assessment</a>
-        </h3>
-        <p>Model a system and explore endless optimization scenarios.</p>
-        <a (click)="createAssessment('Pump')" class="click-link"><img class="icon-image" src="assets/images/ico-psat-diagram-small.png">Create Pump Assessment</a>
-        <a (click)="createAssessment('Furnace')" class="click-link"><img class="icon-image" src="assets/images/ico-phast-diagram-small.png">Create Furnace Assessment</a>
-        <a (click)="hideScreen()" class="click-link"><span class="fa fa-folder-o"></span> View All Your Assessments</a>
-      </li>
-      <li>
-        <h3><a  class="click-link" (click)="chooseCalculator('all')">Properties &amp; Equipment Calculators</a></h3>
-        <p>Generate detailed properties and test a variety of adjustments.</p>
-        <div>
-          <a class="icon click-link" style="padding-bottom: 5px" (click)="chooseCalculator('pumps')">
-            <i class="fa fa-calculator"></i> Pumps</a>
-        </div>
+		<li>
+			<h3 (click)="createAssessment()">
+				<a class="click-link" (click)="createAssessment()">Create Assessment</a>
+			</h3>
+			<p>Model a system and explore endless optimization scenarios.</p>
+			<a (click)="createAssessment('Pump')" class="click-link">
+				<img class="icon-image" src="assets/images/ico-psat-diagram-small.png">Create Pump Assessment</a>
+			<a (click)="createAssessment('Furnace')" class="click-link">
+				<img class="icon-image" src="assets/images/ico-phast-diagram-small.png">Create Furnace Assessment</a>
+			<a (click)="hideScreen()" class="click-link">
+				<span class="fa fa-folder-o"></span> View All Your Assessments</a>
+		</li>
+		<li>
+			<h3>
+				<a class="click-link" (click)="chooseCalculator('all')">Properties &amp; Equipment Calculators</a>
+			</h3>
+			<p>Generate detailed properties and test a variety of adjustments.</p>
+			<div>
+				<a class="icon click-link" style="padding-bottom: 5px" (click)="chooseCalculator('pumps')">
+					<i class="fa fa-calculator"></i> Pumps</a>
+			</div>
 			<!-- <div>
 				<span class="click-link" (click)="chooseCalculator('fans')">
 					<a class="icon click-link">
@@ -79,7 +86,8 @@
 	</ul>
 
 	<div class="help">
-		<h3 style="padding-bottom: 20px">Need help getting started?</h3><br>
+		<h3 style="padding-bottom: 20px">Need help getting started?</h3>
+		<br>
 		<p>Watch the following tutorial to see how to get started using the tool.</p>
 		<video controls class="tutorial-video">
 			<source src="assets/videos/landing-screen-video.mp4" type="video/mp4"> Your browser does not support mp4 videos

@@ -39,7 +39,6 @@
 	}
 
 .landing > ul {
-	margin: 25px 0 35px;
 	padding: 0;
     background: #fff;
     -webkit-box-shadow: 6px 8px 18px 1px rgba(0,0,0,0.28);
@@ -141,3 +140,13 @@
   /*margin-top: -10px;*/
   /*margin-left: 45%;*/
 /*}*/
+
+
+.arrow-row{
+	margin-bottom: -20px;
+	margin-top: -25px;
+}
+
+.arrow-img{
+	width: 60%;
+}
