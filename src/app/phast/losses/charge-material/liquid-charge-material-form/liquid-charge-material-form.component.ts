@@ -110,7 +110,7 @@ export class LiquidChargeMaterialFormComponent implements OnInit {
     let selectedMaterial = this.suiteDbService.selectLiquidLoadChargeMaterialById(this.chargeMaterialForm.controls.materialId.value);
     if (this.settings.unitsOfMeasure == 'Metric') {
       selectedMaterial.vaporizationTemperature = this.convertUnitsService.value(this.roundVal(selectedMaterial.vaporizationTemperature, 4)).from('F').to('C');
-      selectedMaterial.latentHeat = this.convertUnitsService.value(selectedMaterial.latentHeat).from('btulbF').to('kJkgC');
+      selectedMaterial.latentHeat = this.convertUnitsService.value(selectedMaterial.latentHeat).from('btuLb').to('kJkg');
       selectedMaterial.specificHeatLiquid = this.convertUnitsService.value(selectedMaterial.specificHeatLiquid).from('btulbF').to('kJkgC');
       selectedMaterial.specificHeatVapor = this.convertUnitsService.value(selectedMaterial.specificHeatVapor).from('btulbF').to('kJkgC');
     }
