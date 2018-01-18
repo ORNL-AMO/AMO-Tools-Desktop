@@ -75,7 +75,7 @@ export class SystemBasicsComponent implements OnInit {
       this.showSettingsModal();
     } else if (this.settings.energySourceType != this.newSettings.energySourceType ||
       this.settings.furnaceType != this.newSettings.furnaceType ||
-      this.settings.energyResultUnit != this.newSettings.energyResultUnit,
+      this.settings.energyResultUnit != this.newSettings.energyResultUnit ||
       this.settings.customFurnaceName != this.newSettings.customFurnaceName) {
       this.updateData(false);
     }
