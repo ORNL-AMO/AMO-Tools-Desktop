@@ -16,7 +16,8 @@
     background: #fff;
     border-right: #d0d0d0 solid 1px;
     position: fixed;
-    overflow-y: scroll;
+    overflow-y: scroll;    
+    max-width: 145px;
 }
     .report-container .sidebar ul {
         margin: 0;

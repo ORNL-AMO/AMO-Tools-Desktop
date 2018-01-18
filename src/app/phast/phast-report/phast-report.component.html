@@ -35,8 +35,9 @@
                     <!--<button *ngIf="inPsat" class="btn-sm btn-secondary pull-right hide-print" (click)="print()"><span class="fa fa-print"></span></button>-->
                 </h2>
             </div>
-            <div class="col-12" *ngIf="settings.customFurnaceName">
-                <h3 class="custom-name">{{settings.customFurnaceName}}</h3>
+            <div class="col-12">
+                <h3 class="custom-name" *ngIf="!settings.customFurnaceName">{{settings.furnaceType}}</h3>
+                <h3 class="custom-name" *ngIf="settings.customFurnaceName">{{settings.furnaceType}}:<br>{{settings.customFurnaceName}}</h3>
             </div>
             <div class="col-12">
                 <h2 class="date-modified">

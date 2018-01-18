@@ -3,7 +3,8 @@
     <div class="pull-left">
       <div *ngIf="assessment" class="title">
         <h1>{{assessment.name}}</h1>
-        <h2 *ngIf="settings.customFurnaceName">{{settings.customFurnaceName}}</h2>
+        <h2 *ngIf="!settings.customFurnaceName">{{settings.furnaceType}}</h2>
+        <h2 *ngIf="settings.customFurnaceName">{{settings.furnaceType}}:<br>{{settings.customFurnaceName}}</h2>
         <small>Last modified: {{assessment.modifiedDate | date:'medium'}}</small>
       </div>
     </div>
