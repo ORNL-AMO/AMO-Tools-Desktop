@@ -11,8 +11,9 @@ h1 {
 }
 
 #chart {
-    width: 150px;
-    height: 150px;    
+    width: 100%;
+    min-width: 200px;
+    min-height: 250px;    
 }
 
 /* don't do anything fancy when hovering */
@@ -20,14 +21,6 @@ h1 {
     opacity: 1 !important;
 }
 
-#chart text {
-    fill: rgb(175, 51, 51);
-}
-
-#chart .c3-chart-arcs-title {
-    fill: rgb(11, 109, 35);
-    font-size: 3em;
-}
 
 @keyframes value-entrance{
     0% {opacity: 0;}

@@ -42,61 +42,7 @@ export class PercentGraphComponent implements OnInit {
   constructor(private windowRefService: WindowRefService) { }
 
   ngOnInit() {
-
-    this.chart = c3.generate({
-      data: {
-        columns: [
-          ['data', 0]
-        ],
-        type: 'gauge',
-      },
-      gauge: {
-        units: '%',
-        width: 30
-      },
-      color: {
-        pattern: ['#FF0000', '#F97600', '#F6C600', '#60B044'], // the three color levels for the percentage values.
-        threshold: {
-          values: [30, 60, 90, 100]
-        }
-      },
-      size: {
-        height: 300,
-        width: 300
-      }
-    });
-
-    // this.initChart();
-    // this.chart = c3.generate({
-    //   data: {
-    //     columns: [
-    //       ['show', 0],
-    //       ['dontshow', 100],
-    //     ],
-    //     type: 'donut',
-    //     order: null
-    //   },
-    //   transition: {
-    //     duration: 300
-    //   },
-    //   color: {
-    //     pattern: ['#13BDD1', '#FFF']
-    //   },
-    //   legend: {
-    //     show: false
-    //   },
-    //   donut: {
-    //     label: {
-    //       show: false
-    //     },
-    //     title: "%",
-    //     width: 15,
-    //     expand: false
-    //   },
-    //   tooltip: {
-    //     show: false
-    //   }
-    // });
+    this.initChart();
   }
 
   ngAfterViewInit() {
@@ -107,7 +53,6 @@ export class PercentGraphComponent implements OnInit {
     setTimeout(() => {
       this.setValueMargin();
     }, 1500)
-    // this.initChart();
   }
 
   ngOnDestroy() {
@@ -145,188 +90,56 @@ export class PercentGraphComponent implements OnInit {
   }
 
   ngOnChanges() {
-    this.initChart();
+    this.updateChart();
   }
 
-  initChart() {
-    // console.log("this.title = " + this.title);
-    // console.log("this.value = " + this.value);
-    if (this.value) {
 
+  updateChart() {
+    if (this.chart) {
       this.chart.load({
         columns: [
           ['show', this.value],
         ]
       });
-
       d3.select('#chart .c3-chart-arcs-title').node().innerHTML = this.value.toFixed(0) + "%";
-
-
-
-
-      // var chart = c3.generate({
-      //   data: {
-      //     columns: [
-      //       ['show', this.value],
-      //       ['dontshow', Math.max(100 - this.value, 0)],
-      //     ],
-      //     type: 'donut',
-      //     order: null
-      //   },
-      //   transition: {
-      //     duration: 100
-      //   },
-      //   color: {
-      //     pattern: ['#13BDD1', '#FFF']
-      //   },
-      //   legend: {
-      //     show: false
-      //   },
-      //   donut: {
-      //     label: {
-      //       show: false
-      //     },
-      //     title: this.value.toFixed(0) + "%",
-      //     width: 15,
-      //     expand: false
-      //   },
-      //   tooltip: {
-      //     show: false
-      //   }
-      // });
+      d3.select('#chart .c3-chart-arcs-title').style("padding-bottom", "20px").style("font-size","26px");
+      d3.selectAll(".c3-gauge-value").style("display", "none");
     }
+    else {
+      this.initChart();
+    }
+  }
 
-    // c3.generate({
-    //   data: {
-    //     columns: [
-    //       ['data1', this.value]
-    //     ],
-    //     type: 'donut'
-    //     // onclick: function (d, i) { console.log("onclick", d, i); }
-    //   },
-    //   donut: {
-    //     title: this.value + " %"
-    //   }
-    // });
-
-
-
-
-
-
-
-
-    //       backgroundColor: [
-    //         "#27AE60", //green
-    //         "#CCD1D1"
-    //       ],
-    //       hoverBackground: [
-    //         "#229954",
-    //         "#B2BABB"
-    //       ]
-    //     }
-    //   ]
-    // } else if (this.value <= 10 && this.value >= 5) {
-    //   this.chartColorDataSet = [
-    //     {
-    //       options: this.chartOptions,
-    //       data: this.doughnutChartData,
-    //       backgroundColor: [
-    //         "#3498DB",  //blue
-    //         "#CCD1D1"
-
-    //       ],
-    //       hoverBackground: [
-    //         "#DC7633",
-    //         "#B2BABB"
-    //       ]
-    //     }
-    //   ]
-
-    // this.chartColorDataSet = [
-    //   {
-    //     options: this.chartOptions,
-    //     data: this.doughnutChartData,
-    //     backgroundColor: [
-    //       "#EB984E", //orange
-    //       "#CCD1D1"
-
-    //     ],
-    //     hoverBackground: [
-    //       "#DC7633",
-    //       "#B2BABB"
-    //     ]
-    //   }
-    // ]
-    // } else if (this.value > 100) {
-    //   this.chartColorDataSet = [
-    //     {
-    //       options: this.chartOptions,
-    //       data: this.doughnutChartData,
-    //       backgroundColor: [
-    //         "#E74C3C",  //red
-    //         "#CCD1D1"
-
-    //       ],
-    //       hoverBackground: [
-    //         "#DC7633",
-    //         "#CB4335"
-    //       ]
-    //     }
-    //   ]
-
-    // this.chartColorDataSet = [
-    //   {
-    //     options: this.chartOptions,
-    //     data: this.doughnutChartData,
-    //     backgroundColor: [
-    //       "#3498DB", //blue
-    //       "#CCD1D1"
-
-    //     ],
-    //     hoverBackground: [
-    //       "#DC7633",
-    //       "#B2BABB"
-    //     ]
-    //   }
-    // ]
-    // } else {  // < 5%
-
-    //   this.chartColorDataSet = [
-    //     {
-    //       options: this.chartOptions,
-    //       data: this.doughnutChartData,
-    //       backgroundColor: [
-    //         "#52489C",  //purple
-    //         "#CCD1D1"
-
-    //       ],
-    //       hoverBackground: [
-    //         "#DC7633",
-    //         "#B2BABB"
-    //       ]
-    //     }
-    //   ]
-
-    // this.chartColorDataSet = [
-    //   {
-    //     options: this.chartOptions,
-    //     data: this.doughnutChartData,
-    //     backgroundColor: [
-    //       "#E74C3C",   //red
-    //       "#CCD1D1"
-
-    //     ],
-    //     hoverBackground: [
-    //       "#DC7633",
-    //       "#CB4335"
-    //     ]
-    //   }
-    // ]
-    //   }
-    //   if (this.baseChart.chart) {
-    //     this.baseChart.chart.config.data.datasets[0].backgroundColor = this.chartColorDataSet[0].backgroundColor;
-    //   }
+  initChart() {
+    this.chart = c3.generate({
+      data: {
+        columns: [
+          ['data', 0]
+        ],
+        type: 'gauge',
+      },
+      gauge: {
+        width: 30,
+        label: {
+          show: false
+        }
+      },
+      color: {
+        pattern: ['#52489C', '#3498DB', '#6DAFA9', '#60B044', '#FF0000'], // the three color levels for the percentage values.
+        threshold: {
+          values: [25, 50, 75, 101]
+        }
+      },
+      tooltip: {
+        show: false
+      },
+    });
+    d3.selectAll(".c3-gauge-value").style("display", "none");
+    d3.selectAll(".c3-axis.c3-axis-x .tick text").style("display", "none");
+    d3.select("#chart .c3-chart-arcs-background").style("fill", "#e0e0e0");
+    if (this.value && this.chart) {
+      this.updateChart();
+    }
   }
 }
 
