@@ -47,8 +47,8 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
   tmpBaselinePumpType: string;
   tmpModificationMotorDrive: string;
   tmpBaselineMotorDrive: string;
-  tmpModificationEfficiencyClass: string;
-  tmpBaselineEfficiencyClass: string;
+  // tmpModificationEfficiencyClass: string;
+  // tmpBaselineEfficiencyClass: string;
 
   efficiencyClasses: Array<string> = [
     'Standard Efficiency',
@@ -106,24 +106,18 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
     } else {
       this.options = this.kWatts;
     }
-    this.tmpModificationEfficiencyClass = this.psatService.getEfficiencyClassFromEnum(this.psat.modifications[this.exploreModIndex].psat.inputs.efficiency_class);
-    this.tmpBaselineEfficiencyClass = this.psatService.getEfficiencyClassFromEnum(this.psat.inputs.efficiency_class);
+    //this.tmpModificationEfficiencyClass = this.psatService.getEfficiencyClassFromEnum(this.psat.modifications[this.exploreModIndex].psat.inputs.efficiency_class);
+  //  this.tmpBaselineEfficiencyClass = this.psatService.getEfficiencyClassFromEnum(this.psat.inputs.efficiency_class);
     this.tmpModificationPumpType = this.psatService.getPumpStyleFromEnum(this.psat.modifications[this.exploreModIndex].psat.inputs.pump_style);
     this.tmpBaselinePumpType = this.psatService.getPumpStyleFromEnum(this.psat.inputs.pump_style);
     this.tmpModificationMotorDrive = this.psatService.getDriveFromEnum(this.psat.modifications[this.exploreModIndex].psat.inputs.drive);
     this.tmpBaselineMotorDrive = this.psatService.getDriveFromEnum(this.psat.inputs.drive);
-    this.checkMotorEfficiencies();
+   // this.checkMotorEfficiencies();
     this.checkPumpTypes();
     this.checkValues();
     //init error msgs
-    this.checkCost(1);
-    this.checkCost(2);
-    this.checkFlowRate(1);
-    this.checkFlowRate(2);
-    this.checkOpFraction(1);
-    this.checkOpFraction(2);
-    this.checkRatedPower(1);
-    this.checkRatedPower(2);
+    // this.checkRatedPower(1);
+    // this.checkRatedPower(2);
     this.checkEfficiency(this.psat.inputs.efficiency, 1);
     this.checkEfficiency(this.psat.modifications[this.exploreModIndex].psat.inputs.efficiency, 2);
     this.checkEfficiency(this.psat.inputs.pump_specified, 3);
@@ -151,28 +145,28 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
     this.calculate();
   }
 
-  setEfficiencyClasses() {
-    this.checkMotorEfficiencies();
-    this.psat.modifications[this.exploreModIndex].psat.inputs.efficiency_class = this.psatService.getEfficienyClassEnum(this.tmpModificationEfficiencyClass);
-    this.psat.inputs.efficiency_class = this.psatService.getEfficienyClassEnum(this.tmpBaselineEfficiencyClass);
-    this.calculate();
-  }
+  // setEfficiencyClasses() {
+  //   this.checkMotorEfficiencies();
+  //   this.psat.modifications[this.exploreModIndex].psat.inputs.efficiency_class = this.psatService.getEfficienyClassEnum(this.tmpModificationEfficiencyClass);
+  //   this.psat.inputs.efficiency_class = this.psatService.getEfficienyClassEnum(this.tmpBaselineEfficiencyClass);
+  //   this.calculate();
+  // }
 
-  checkMotorEfficiencies() {
-    if (this.tmpModificationEfficiencyClass == 'Specified') {
-      this.showMotorEfficiency = true;
-    } else {
-      this.psat.modifications[this.exploreModIndex].psat.inputs.efficiency = null;
-    }
-    if (this.tmpBaselineEfficiencyClass == 'Specified') {
-      this.showMotorEfficiency = true;
-    } else {
-      this.psat.inputs.efficiency = null;
-    }
-    if (this.tmpBaselineEfficiencyClass != 'Specified' && this.tmpModificationEfficiencyClass != 'Specified') {
-      this.showMotorEfficiency = false;
-    }
-  }
+  // checkMotorEfficiencies() {
+  //   if (this.tmpModificationEfficiencyClass == 'Specified') {
+  //     this.showMotorEfficiency = true;
+  //   } else {
+  //     this.psat.modifications[this.exploreModIndex].psat.inputs.efficiency = null;
+  //   }
+  //   if (this.tmpBaselineEfficiencyClass == 'Specified') {
+  //     this.showMotorEfficiency = true;
+  //   } else {
+  //     this.psat.inputs.efficiency = null;
+  //   }
+  //   if (this.tmpBaselineEfficiencyClass != 'Specified' && this.tmpModificationEfficiencyClass != 'Specified') {
+  //     this.showMotorEfficiency = false;
+  //   }
+  // }
 
   checkPumpTypes() {
     if (this.tmpModificationPumpType == 'Specified Optimal Efficiency') {
@@ -288,81 +282,7 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
       return null;
     }
   }
-  checkFlowRate(num: number) {
-    this.calculate();
-    let tmp: any = {
-      message: null,
-      valid: null
-    };
-    if (num == 1) {
-      if (this.psat.inputs.flow_rate) {
-        tmp = this.psatService.checkFlowRate(this.psat.inputs.pump_style, this.psat.inputs.flow_rate, this.settings);
-      } else {
-        tmp.message = 'Flow Rate Required';
-        tmp.valid = false;
-      }
-    } else {
-      if (this.psat.modifications[this.exploreModIndex].psat.inputs.flow_rate) {
-        tmp = this.psatService.checkFlowRate(this.psat.modifications[this.exploreModIndex].psat.inputs.pump_style, this.psat.modifications[this.exploreModIndex].psat.inputs.flow_rate, this.settings);
-      } else {
-        tmp.message = 'Flow Rate Required';
-        tmp.valid = false;
-      }
-    }
-
-    if (tmp.message) {
-      if (num == 1) {
-        this.flowRateError1 = tmp.message;
-      } else {
-        this.flowRateError2 = tmp.message;
-      }
-    } else {
-      if (num == 1) {
-        this.flowRateError1 = null;
-      } else {
-        this.flowRateError2 = null;
-      }
-    }
-    return tmp.valid;
-  }
-  checkCost(num: number) {
-    this.calculate();
-    let val;
-    if (num == 1) {
-      val = this.psat.inputs.cost_kw_hour;
-    } else {
-      val = this.psat.modifications[this.exploreModIndex].psat.inputs.cost_kw_hour;
-    }
-    if (val < 0) {
-      if (num == 1) {
-        this.costError1 = 'Cannot have negative cost';
-      } else {
-        this.costError2 = 'Cannot have negative cost';
-      }
-      return false;
-    } else if (val > 1) {
-      if (num == 1) {
-        this.costError1 = "Shouldn't be greater then 1";
-      } else {
-        this.costError2 = "Shouldn't be greater then 1";
-      }
-      return false;
-    } else if (val >= 0 && val <= 1) {
-      if (num == 1) {
-        this.costError1 = null;
-      } else {
-        this.costError2 = null
-      }
-      return true;
-    } else {
-      if (num == 1) {
-        this.costError1 = null;
-      } else {
-        this.costError2 = null
-      }
-      return null;
-    }
-  }
+ 
   checkEfficiency(val: number, num: number) {
     this.calculate();
     if (val > 100) {
@@ -393,139 +313,43 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
       this.specifiedError2 = str;
     }
   }
+  // checkRatedPower(num: number) {
+  //   this.calculate();
+  //   let val;
+  //   if (num == 1) {
+  //     if (this.settings.powerMeasurement == 'hp') {
+  //       val = this.convertUnitsService.value(this.psat.inputs.motor_rated_power).from(this.settings.powerMeasurement).to('kW');
+  //     } else {
+  //       val = this.psat.inputs.motor_rated_power;
+  //     }
+  //     val = val * 1.5;
+  //   } else if (num == 2) {
+  //     if (this.settings.powerMeasurement == 'hp') {
+  //       val = this.convertUnitsService.value(this.psat.modifications[this.exploreModIndex].psat.inputs.motor_rated_power).from(this.settings.powerMeasurement).to('kW');
+  //     } else {
+  //       val = this.psat.modifications[this.exploreModIndex].psat.inputs.motor_rated_power;
+  //     }
+  //     val = val * 1.5;
+  //   }
+  //   let compareVal = this.psat.inputs.motor_field_power;
+  //   if (compareVal > val) {
+  //     if (num == 1) {
+  //       this.ratedPowerError1 = 'The Field Data Motor Power is too high compared to the Rated Motor Power, please adjust the input values.';
+  //     } else if (num == 2) {
+  //       this.ratedPowerError2 = 'The Field Data Motor Power is too high compared to the Rated Motor Power, please adjust the input values.';
+  //     }
+  //     return false;
+  //   } else {
+  //     if (num == 1) {
+  //       this.ratedPowerError1 = null;
+  //     } else if (num == 2) {
+  //       this.ratedPowerError2 = null;
+  //     }
+  //     return true
+  //   }
+  // }
 
 
-  checkOpFraction(num: number) {
-    this.calculate();
-    let val;
-    if (num == 1) {
-      val = this.psat.inputs.operating_fraction;
-    } else if (num == 2) {
-      val = this.psat.modifications[this.exploreModIndex].psat.inputs.operating_fraction;
-    }
-    if (val > 1) {
-      if (num == 1) {
-        this.opFractionError1 = 'Operating fraction needs to be between 0 - 1';
-      } else if (num == 2) {
-        this.opFractionError2 = 'Operating fraction needs to be between 0 - 1';
-      }
-      return false;
-    }
-    else if (val < 0) {
-      if (num == 1) {
-        this.opFractionError1 = "Cannot have negative operating fraction";
-      } else if (num == 2) {
-        this.opFractionError2 = "Cannot have negative operating fraction";
-      }
-      return false;
-    }
-    else {
-      if (num == 1) {
-        this.opFractionError1 = null;
-      } else if (num == 2) {
-        this.opFractionError2 = null;
-      }
-      return true;
-    }
-  }
-
-  checkRatedPower(num: number) {
-    this.calculate();
-    let val;
-    if (num == 1) {
-      if (this.settings.powerMeasurement == 'hp') {
-        val = this.convertUnitsService.value(this.psat.inputs.motor_rated_power).from(this.settings.powerMeasurement).to('kW');
-      } else {
-        val = this.psat.inputs.motor_rated_power;
-      }
-      val = val * 1.5;
-    } else if (num == 2) {
-      if (this.settings.powerMeasurement == 'hp') {
-        val = this.convertUnitsService.value(this.psat.modifications[this.exploreModIndex].psat.inputs.motor_rated_power).from(this.settings.powerMeasurement).to('kW');
-      } else {
-        val = this.psat.modifications[this.exploreModIndex].psat.inputs.motor_rated_power;
-      }
-      val = val * 1.5;
-    }
-    let compareVal = this.psat.inputs.motor_field_power;
-    if (compareVal > val) {
-      if (num == 1) {
-        this.ratedPowerError1 = 'The Field Data Motor Power is too high compared to the Rated Motor Power, please adjust the input values.';
-      } else if (num == 2) {
-        this.ratedPowerError2 = 'The Field Data Motor Power is too high compared to the Rated Motor Power, please adjust the input values.';
-      }
-      return false;
-    } else {
-      if (num == 1) {
-        this.ratedPowerError1 = null;
-      } else if (num == 2) {
-        this.ratedPowerError2 = null;
-      }
-      return true
-    }
-  }
-
-  toggleCost() {
-    if (this.showCost == false) {
-      this.psat.modifications[this.exploreModIndex].psat.inputs.cost_kw_hour = this.psat.inputs.cost_kw_hour;
-      this.calculate();
-    }
-  }
-  toggleFlowRate() {
-    if (this.showFlowRate == false) {
-      this.psat.modifications[this.exploreModIndex].psat.inputs.flow_rate = this.psat.inputs.flow_rate;
-      this.calculate();
-    }
-  }
-  toggleHead() {
-    if (this.showHead == false) {
-      this.psat.modifications[this.exploreModIndex].psat.inputs.head = this.psat.inputs.head;
-      this.calculate();
-    }
-  }
-
-  toggleSystemData() {
-    if (this.showSystemData == false) {
-      this.showCost = false;
-      this.showFlowRate = false;
-      this.showHead = false;
-      this.showOperatingFraction = false;
-      this.toggleCost();
-      this.toggleFlowRate();
-      this.toggleHead();
-      this.toggleOperatingFraction();
-    }
-  }
-
-  toggleMotorRatedPower() {
-    if (this.showRatedMotorPower == false) {
-      this.psat.modifications[this.exploreModIndex].psat.inputs.motor_rated_power = this.psat.inputs.motor_rated_power;
-      this.calculate();
-    }
-  }
-  toggleEfficiencyClass() {
-    if (this.showEfficiencyClass == false) {
-      this.psat.modifications[this.exploreModIndex].psat.inputs.efficiency_class = this.psat.inputs.efficiency_class;
-      this.tmpModificationEfficiencyClass = this.psatService.getEfficiencyClassFromEnum(this.psat.inputs.efficiency_class);
-      this.calculate();
-    }
-  }
-  toggleMotorEfficiency() {
-    if (this.showMotorEfficiency == false) {
-      this.psat.modifications[this.exploreModIndex].psat.inputs.efficiency = this.psat.inputs.efficiency;
-      this.calculate();
-    }
-  }
-  toggleRatedMotorData() {
-    if (this.showRatedMotorData == false) {
-      this.showRatedMotorPower = false;
-      this.showEfficiencyClass = false;
-      this.showMotorEfficiency = false;
-      this.toggleMotorEfficiency();
-      this.toggleEfficiencyClass();
-      this.toggleMotorRatedPower();
-    }
-  }
   togglePumpData() {
     if (this.showPumpData == false) {
       this.showPumpSpecified = false;
@@ -543,12 +367,7 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
       this.calculate();
     }
   }
-  toggleOperatingFraction() {
-    if (this.showOperatingFraction == false) {
-      this.psat.modifications[this.exploreModIndex].psat.inputs.operating_fraction = this.psat.inputs.operating_fraction;
-      this.calculate();
-    }
-  }
+
   togglePumpType() {
     if (this.showPumpType == false) {
       this.psat.modifications[this.exploreModIndex].psat.inputs.pump_style = this.psat.inputs.pump_style;
