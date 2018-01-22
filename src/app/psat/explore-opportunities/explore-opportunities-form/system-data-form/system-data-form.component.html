@@ -1,5 +1,5 @@
 <div class="checkbox">
-    <label for="general">
+    <label class="group-label" for="general">
         <input type="checkbox" id="general" value="true" (focus)="focusField('systemData')" (change)="toggleSystemData()" [(ngModel)]="showSystemData"
         /> Adjust System Data
     </label>
@@ -27,7 +27,7 @@
                 <div class="input-group">
                     <input name="modificationCost" type="number" step="any" id="modificationCost" class="form-control" (focus)="focusField('modifyCost')"
                         [(ngModel)]="psat.modifications[exploreModIndex].psat.inputs.cost_kw_hour" (input)="checkCost(2)" />
-                    <span class="input-group-addon units">($/kWh)</span>
+                    <span class="input-group-addon units">$/kWh</span>
                 </div>
                 <span class="alert-danger pull-right small" *ngIf="costError2 !== null">{{costError2}}</span>
             </div>

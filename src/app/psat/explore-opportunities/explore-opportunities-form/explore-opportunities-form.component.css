@@ -1,51 +1,11 @@
-.invalid{
-    border-color: red;
-}
-
-.explore-opportunities h2 {
-	margin-top: 40px;
-    font-size: 20px;
-}
-.explore-opportunities p {
-	font-size: 16px;
-}
-
-.explore-opportunities > ul {
-	margin: 0;
-	padding: 0;
-}
-	.explore-opportunities > ul > li {
-		border-bottom: #ddd solid 1px;
-		padding: 13px 0;
-	}
-		.explore-opportunities > ul > li > .checkbox label{
-			font-weight: bold;
-			font-size: 16px;
-		}
-
-
-.explore-opportunities li {
+.explore-ops-form li{
 	list-style: none;
 }
 
-.explore-opportunities form {
-	margin-left: 17px;
+.explore-ops-form ul {
+	padding-left: 15px;
 }
-.explore-opportunities form:after {
-	display: table;
-	content: "";
-	clear: both;
+
+form{
+    padding-top: 0px;
 }
-.explore-opportunities .form-group {
-	float: left;
-	width: 300px;
-	margin-right: 20px;
-}
-	.explore-opportunities label {
-		float: none;
-		width: 100%;
-	}
-	.explore-opportunities .form-control {
-		float: none;
-		width: 100%;
-	}
