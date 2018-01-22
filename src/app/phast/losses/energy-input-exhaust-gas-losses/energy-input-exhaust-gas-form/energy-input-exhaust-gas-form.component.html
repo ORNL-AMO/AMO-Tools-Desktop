@@ -4,7 +4,7 @@
       <label class="small" for="totalHeatInput">Total Heat Input for Burners</label>
       <div class="input-group">
         <input name="{{'totalHeatInput_'+lossIndex}}" type="number" step="any" min="0" class="form-control" formControlName="totalHeatInput"
-          id="totalHeatInput" onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('totalHeatInput')" (blur)="focusOut()">
+          id="totalHeatInput" onfocus="this.select();" (input)="checkHeat()" (focus)="focusField('totalHeatInput')" (blur)="focusOut()">
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">Btu/hr</span>
         <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kJ/hr</span>
       </div>
@@ -35,7 +35,7 @@
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">&#8457;</span>
         <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
       </div>
-      <span class="alert-warning pull-right small" *ngIf="heatError !== null">{{heatError}}</span>
+      <span class="alert-warning pull-right small" *ngIf="combustionError !== null">{{combustionError}}</span>
     </div>
     <div class="form-group">
       <label class="small" for="exhaustGasTemp">Exhaust Gas Temp</label>
