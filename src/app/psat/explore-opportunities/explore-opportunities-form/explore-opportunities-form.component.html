@@ -1,15 +1,16 @@
-<div class="explore-opportunities">
+<div class="explore-opportunities" *ngIf="psat">
   <h2>Select Potential Adjustment Projects</h2>
   <p>Select potential adjustment projects to explore opportunities to increase efficiency and the effectiveness of your system.</p>
   <ul>
     <li>
-      <app-system-data-form *ngIf="psat" [(psat)]="psat" (changeField)="focusField($event)" (emitCalculate)="calculate()" [settings]="settings" [exploreModIndex]="exploreModIndex"></app-system-data-form>
+      <app-system-data-form [(psat)]="psat" (changeField)="focusField($event)" (emitCalculate)="calculate()" [settings]="settings" [exploreModIndex]="exploreModIndex"></app-system-data-form>
     </li>
     <li>
-      <app-rated-motor-form *ngIf="psat" [(psat)]="psat" (changeField)="focusField($event)" (emitCalculate)="calculate()" [settings]="settings" [exploreModIndex]="exploreModIndex"></app-rated-motor-form>
+      <app-rated-motor-form [(psat)]="psat" (changeField)="focusField($event)" (emitCalculate)="calculate()" [settings]="settings" [exploreModIndex]="exploreModIndex"></app-rated-motor-form>
     </li>
     <li>
-      <div class="checkbox">
+        <app-pump-data-form [(psat)]="psat" (changeField)="focusField($event)" (emitCalculate)="calculate()" [settings]="settings" [exploreModIndex]="exploreModIndex"></app-pump-data-form>
+      <!-- <div class="checkbox">
         <label for="general3"><input type ="checkbox" id="general3" value="true" (focus)="focusField('pumpData')" (change)="togglePumpData()" [(ngModel)]="showPumpData" />
 								Adjust Pump Data
 							</label>
@@ -86,7 +87,7 @@
             </div>
           </form>
         </li>
-      </ul>
+      </ul> -->
     </li>
     <li>
       <div class="checkbox">

@@ -27,23 +27,59 @@ export class SystemDataFormComponent implements OnInit {
     showHead: boolean;
 
 
-    costError1: string;
-    costError2: string;
-    flowRateError1: string;
-    flowRateError2: string;
-    opFractionError1: string;
-    opFractionError2: string;
+    costError1: string = null;
+    costError2: string = null;
+    flowRateError1: string = null;
+    flowRateError2: string = null;
+    opFractionError1: string = null;
+    opFractionError2: string = null;
     constructor(private psatService: PsatService, private convertUnitsService: ConvertUnitsService) {
 
     }
 
     ngOnInit() {
+        this.initCost();
+        this.initFlowRate();
+        this.initHead();
+        this.initOpFraction();
+        this.initSystemData();
+
         this.checkCost(1);
         this.checkCost(2);
         this.checkFlowRate(1);
         this.checkFlowRate(2);
         this.checkOpFraction(1);
         this.checkOpFraction(2);
+    }
+
+    initCost() {
+        if (this.psat.inputs.cost_kw_hour != this.psat.modifications[this.exploreModIndex].psat.inputs.cost_kw_hour) {
+            this.showCost = true;
+        }
+    }
+
+    initFlowRate() {
+        if (this.psat.inputs.flow_rate != this.psat.modifications[this.exploreModIndex].psat.inputs.flow_rate) {
+            this.showFlowRate = true;
+        }
+    }
+
+    initHead() {
+        if (this.psat.inputs.head != this.psat.modifications[this.exploreModIndex].psat.inputs.head) {
+            this.showHead = true;
+        }
+    }
+
+    initOpFraction() {
+        if (this.psat.inputs.operating_fraction != this.psat.modifications[this.exploreModIndex].psat.inputs.operating_fraction) {
+            this.showOperatingFraction = true;
+        }
+    }
+
+    initSystemData() {
+        if (this.showCost || this.showFlowRate || this.showHead || this.showOperatingFraction) {
+            this.showSystemData = true;
+        }
     }
 
     toggleSystemData() {
@@ -212,7 +248,7 @@ export class SystemDataFormComponent implements OnInit {
         let dsp = tmpUnit.unit.name.display.replace('(', '');
         dsp = dsp.replace(')', '');
         return dsp;
-    
+
     }
 
 }
