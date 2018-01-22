@@ -67,7 +67,6 @@ export class PhastPieChartComponent implements OnInit {
     this.getData(this.results, this.resultCats);
     this.getColors();
     // this.initChart();
-    // this.initChart();
   }
 
   ngAfterViewInit() {
@@ -75,12 +74,15 @@ export class PhastPieChartComponent implements OnInit {
     this.window = this.windowRefService.nativeWindow;
     this.resultsWidth = this.doc.getElementsByClassName('results')[0].clientWidth;
     this.chartContainerWidth = this.resultsWidth / 2;
-    this.window.onresize = () => { this.setValueMargin() };
+    
+    this.initChart();
+
+    // this.window.onresize = () => { this.setValueMargin() };
     // this.initChart();
     //let object render before resizing initially
-    setTimeout(() => {
-      this.setValueMargin();
-    }, 1500);
+    // setTimeout(() => {
+    //   this.setValueMargin();
+    // }, 1500);
   }
 
   ngOnDestroy() {
@@ -92,8 +94,8 @@ export class PhastPieChartComponent implements OnInit {
     this.doc = this.windowRefService.getDoc();
     this.resultsWidth = this.doc.getElementsByClassName('results')[0].clientWidth;
     this.chartContainerWidth = this.resultsWidth / 2;
-    // console.log(this.chartContainerWidth);
     console.log("baseline = " + this.isBaseline);
+    console.log(this.chartContainerWidth);
     this.initChart();
     // this.resizeChart();
 
@@ -115,7 +117,7 @@ export class PhastPieChartComponent implements OnInit {
 
     if (this.isBaseline) {
       this.chart = c3.generate({
-        bindto: charts[0],
+        // bindto: charts[0],
         data: {
           columns: [
             ["wall", this.totalWallLoss],
