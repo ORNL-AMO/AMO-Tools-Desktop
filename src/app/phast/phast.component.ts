@@ -235,7 +235,6 @@ export class PhastComponent implements OnInit {
   }
 
   nextStep() {
-
     if (this.stepTab.step == 1 && this.mainTab != 'assessment') {
       if (this.specTab.next)
         this.phastService.goToSpec(this.specTab.next);
@@ -255,14 +254,20 @@ export class PhastComponent implements OnInit {
   }
 
   lastStep() {
-    if (this.stepTab.step == 2) {
-      if (this.selectedLossTab.back) {
-        this.lossesService.lossesTab.next(this.selectedLossTab.back);
-      } else {
-        this.phastService.goToStep(this.stepTab.back);
+    if (this.mainTab == 'system-basics') {
+      if (this.stepTab.step == 1) {
+        if (this.specTab.back) {
+          this.phastService.goToSpec(this.specTab.back);
+        }
+      } else if (this.stepTab.step == 2) {
+        if (this.selectedLossTab.back) {
+          this.lossesService.lossesTab.next(this.selectedLossTab.back);
+        } else {
+          this.phastService.goToStep(this.stepTab.back);
+        }
       }
-    } else if (this.stepTab.step != 1) {
-      this.phastService.goToStep(this.stepTab.back);
+    } else if (this.mainTab == 'assessment') {
+      this.phastService.mainTab.next('system-setup');
     }
   }
 

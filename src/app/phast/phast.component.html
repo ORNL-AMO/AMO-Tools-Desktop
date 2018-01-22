@@ -89,13 +89,13 @@
   <div class="footer" *ngIf="mainTab == 'system-setup' || mainTab == 'assessment'">
     <div class="pull-left">
       <!--<button class="btn btn-secondary" *ngIf="mainTab == 'system-setup'" (click)="close()">Close</button>-->
-      <button class="btn btn-secondary" *ngIf="(mainTab == 'system-setup' || mainTab == 'assessment') && (stepTab.back || selectedLossTab.back)"
+      <button class="btn btn-secondary" *ngIf="stepTab.back || selectedLossTab.back || specTab.back || (mainTab == 'assessment')"
         (click)="lastStep()">Back</button>
     </div>
     <div class="pull-right">
       <button class="btn btn-secondary" (click)="save()">Save</button>
-      <button class="btn btn-secondary" *ngIf="mainTab == 'system-setup' && stepTab.next" (click)="nextStep()">Next</button>
-      <button class="btn btn-secondary" *ngIf="mainTab == 'assessment' && selectedLossTab.next" (click)="nextStep()">Next</button>
+      <!-- <button class="btn btn-secondary" *ngIf="mainTab == 'system-setup' && stepTab.next" (click)="nextStep()">Next</button> -->
+      <button class="btn btn-secondary" *ngIf="(mainTab == 'assessment' && selectedLossTab.next) || (mainTab == 'system-setup' && stepTab.next)" (click)="nextStep()">Next</button>
       <button class="btn btn-secondary" *ngIf="mainTab == 'system-setup' && !stepTab.next" [disabled]="!_phast.setupDone" (click)="goToAssessment()">Go To Assessment</button>
       <!-- <button class="btn btn-secondary" *ngIf="mainTab == 'system-setup' && !stepTab.next" [disabled]="!_phast.setupDone" (click)="phastService()">Heat Balance Assessment</button> -->
       <button class="btn btn-primary" *ngIf="mainTab == 'assessment' && !selectedLossTab.next" [disabled]="!_phast.setupDone" (click)="goToReport()">View Report</button>
