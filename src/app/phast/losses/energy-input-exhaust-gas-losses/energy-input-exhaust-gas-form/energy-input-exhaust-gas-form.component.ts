@@ -63,6 +63,7 @@ export class EnergyInputExhaustGasFormComponent implements OnInit {
   }
 
    checkHeat() {
+     this.startSavePolling();
     if (this.settings === 'imperial') {
       if (this.exhaustGasForm.controls.totalHeatInput.value > 0 && this.exhaustGasForm.controls.combustionAirTemp.value < 300) {
         this.heatError = 'Combustion Air Temperature cannot be less than 300 degrees F';
