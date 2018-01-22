@@ -3,6 +3,7 @@ import { WindowRefService } from '../../indexedDb/window-ref.service';
 import { BaseChartDirective } from 'ng2-charts';
 import * as d3 from 'd3';
 import * as c3 from 'c3';
+
 @Component({
   selector: 'app-percent-graph',
   templateUrl: './percent-graph.component.html',

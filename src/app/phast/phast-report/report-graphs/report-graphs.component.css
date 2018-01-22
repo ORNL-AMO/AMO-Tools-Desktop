@@ -9,3 +9,13 @@ ul {
 .badge{
     color: white;
 }
+
+
+.custom-row {
+    display: inline-block;
+    width: 100%;
+}
+.chart-col {
+    display: inline-block;
+    width: 49%;
+}
