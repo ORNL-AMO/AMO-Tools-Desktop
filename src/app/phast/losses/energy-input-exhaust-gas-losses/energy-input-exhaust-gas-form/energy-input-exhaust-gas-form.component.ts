@@ -33,6 +33,7 @@ export class EnergyInputExhaustGasFormComponent implements OnInit {
   @Input()
   settings: Settings;
 
+  heatError: string = null;
   firstChange: boolean = true;
   counter: any;
 
@@ -61,7 +62,26 @@ export class EnergyInputExhaustGasFormComponent implements OnInit {
     this.initDifferenceMonitor();
   }
 
-
+   checkHeat() {
+    if (this.settings === 'imperial') {
+      if (this.exhaustGasForm.controls.totalHeatInput.value > 0 && this.exhaustGasForm.controls.combustionAirTemp.value < 300) {
+        this.heatError = 'Combustion Air Temperature cannot be less than 300 degrees F';
+      } else if (this.exhaustGasForm.controls.totalHeatInput.value > 0 && this.exhaustGasForm.controls.exhaustGasTemp.value < 40) {
+        this.heatError = 'Exhaust Gas Temperature cannot be less than 40 degrees F';
+      } else {
+        this.heatError = null;
+      }
+    }
+    if (this.settings === 'metric') {
+        if (this.exhaustGasForm.controls.totalHeatInput.value > 0 && this.exhaustGasForm.controls.combustionAirTemp.value < 150) {
+          this.heatError = 'Combustion Air Temperature cannot be less than 150 degrees C';
+        } else if (this.exhaustGasForm.controls.totalHeatInput.value > 0 && this.exhaustGasForm.controls.exhaustGasTemp.value < 4) {
+        this.heatError = 'Exhaust Gas Temperature cannot be less than 4 degrees C';
+      } else {
+          this.heatError = null;
+        }
+    }
+  }
   disableForm() {
     this.exhaustGasForm.disable();
   }

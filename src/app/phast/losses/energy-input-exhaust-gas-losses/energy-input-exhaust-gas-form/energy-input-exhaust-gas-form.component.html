@@ -35,6 +35,7 @@
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">&#8457;</span>
         <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
       </div>
+      <span class="alert-warning pull-right small" *ngIf="heatError !== null">{{heatError}}</span>
     </div>
     <div class="form-group">
       <label class="small" for="exhaustGasTemp">Exhaust Gas Temp</label>
@@ -44,6 +45,7 @@
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">&#8457;</span>
         <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
       </div>
+      <span class="alert-warning pull-right small" *ngIf="heatError !== null">{{heatError}}</span>
     </div>
     <div class="form-group">
       <label class="small" for="availableHeat">Available Heat</label>
