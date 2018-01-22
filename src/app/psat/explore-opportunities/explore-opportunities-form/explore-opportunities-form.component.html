@@ -1,27 +1,41 @@
 <div class="explore-ops-form" *ngIf="psat">
-  <ul> 
+  <ul>
     <li>
-      <app-system-data-form [(psat)]="psat" (changeField)="focusField($event)" (emitCalculate)="calculate()" [settings]="settings" [exploreModIndex]="exploreModIndex"></app-system-data-form>
+      <div class="form-group">
+        <label for="modificatonName">Modification Name</label>
+        <div class="input-group">
+          <input name="modificatonName" type="text" id="modificatonName" class="form-control" [(ngModel)]="psat.modifications[exploreModIndex].psat.name"
+            (input)="startSavePolling()" />
+        </div>
+      </div>
     </li>
     <li>
-      <app-rated-motor-form [(psat)]="psat" (changeField)="focusField($event)" (emitCalculate)="calculate()" [settings]="settings" [exploreModIndex]="exploreModIndex"></app-rated-motor-form>
+      <app-system-data-form [(psat)]="psat" (changeField)="focusField($event)" (emitCalculate)="calculate()" [settings]="settings"
+        [exploreModIndex]="exploreModIndex"></app-system-data-form>
     </li>
     <li>
-        <app-pump-data-form [(psat)]="psat" (changeField)="focusField($event)" (emitCalculate)="calculate()" [settings]="settings" [exploreModIndex]="exploreModIndex"></app-pump-data-form>
-    
+      <app-rated-motor-form [(psat)]="psat" (changeField)="focusField($event)" (emitCalculate)="calculate()" [settings]="settings"
+        [exploreModIndex]="exploreModIndex"></app-rated-motor-form>
+    </li>
+    <li>
+      <app-pump-data-form [(psat)]="psat" (changeField)="focusField($event)" (emitCalculate)="calculate()" [settings]="settings"
+        [exploreModIndex]="exploreModIndex"></app-pump-data-form>
+
     </li>
     <li>
       <div class="checkbox">
-        <label class="group-label" for="modifyCalculationMethod"><input type="checkbox" id="modifyCalculationMethod" value="true" (change)="toggleOptimized()" (focus)="focusField('modifyCalculationMethod')" [(ngModel)]="psat.modifications[exploreModIndex].psat.inputs.optimize_calculation"/>
-										Optimize Pump and Motor combination, automatically
-									</label>
+        <label class="group-label" for="modifyCalculationMethod">
+          <input type="checkbox" id="modifyCalculationMethod" value="true" (change)="toggleOptimized()" (focus)="focusField('modifyCalculationMethod')"
+            [(ngModel)]="psat.modifications[exploreModIndex].psat.inputs.optimize_calculation" /> Optimize Pump and Motor combination, automatically
+        </label>
       </div>
       <ul *ngIf="psat.modifications[exploreModIndex].psat.inputs.optimize_calculation">
         <li>
           <div class="checkbox">
-            <label for="showSizeMargin"><input name="showSizeMargin" type="checkbox" id="showSizeMargin" value="true" (focus)="focusField('sizeMargin')" [(ngModel)]="showSizeMargin"/>
-										Size Margin
-									</label>
+            <label for="showSizeMargin">
+              <input name="showSizeMargin" type="checkbox" id="showSizeMargin" value="true" (focus)="focusField('sizeMargin')"
+                [(ngModel)]="showSizeMargin" /> Size Margin
+            </label>
           </div>
           <form *ngIf="showSizeMargin">
             <div class="form-group">
@@ -38,28 +52,20 @@
         <li>
           <div class="checkbox">
             <label for="showSpeed">
-										Fixed specific speed?
-									</label>
+              Fixed specific speed?
+            </label>
           </div>
           <form>
             <div class="form-group">
             </div>
-              <div name="fixedSpeed" class="form-check">
-                <label class="form-check-label">
-                <input
-                  name="fixedSpeed"
-                  type="radio"
-                  [(ngModel)]="psat.modifications[exploreModIndex].psat.inputs.fixed_speed"
-                  [value]='1'
+            <div name="fixedSpeed" class="form-check">
+              <label class="form-check-label">
+                <input name="fixedSpeed" type="radio" [(ngModel)]="psat.modifications[exploreModIndex].psat.inputs.fixed_speed" [value]='1'
                   (change)="calculate('fixedSpecificSpeed')">Yes
-                <input
-                  name="fixedSpeed"
-                  type="radio"
-                  [(ngModel)]="psat.modifications[exploreModIndex].psat.inputs.fixed_speed"
-                  [value]='0'
+                <input name="fixedSpeed" type="radio" [(ngModel)]="psat.modifications[exploreModIndex].psat.inputs.fixed_speed" [value]='0'
                   (change)="calculate('fixedSpecificSpeed')">No
               </label>
-              </div>
+            </div>
           </form>
         </li>
       </ul>

@@ -22,6 +22,8 @@ export class ExploreOpportunitiesResultsComponent implements OnInit {
   percentSavings: number;
   @Input()
   annualSavings: number;
+  @Input()
+  modificationName: string;
   constructor() { }
 
   ngOnInit() {

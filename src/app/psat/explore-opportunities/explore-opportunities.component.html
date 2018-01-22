@@ -36,7 +36,7 @@
 
 			<div class="panel-results">
 				<app-explore-opportunities-results [percentSavings]="percentSavings" [psat]="psat" [exploreModIndex]="exploreModIndex" [baselineResults]="baselineResults"
-				 [modificationResults]="modificationResults" [settings]="settings" [annualSavings]="annualSavings" *ngIf="tabSelect == 'results'">
+				 [modificationResults]="modificationResults" [settings]="settings" [annualSavings]="annualSavings" [modificationName]="psat.modifications[exploreModIndex].psat.name" *ngIf="tabSelect == 'results'">
 				</app-explore-opportunities-results>
 			</div>
 

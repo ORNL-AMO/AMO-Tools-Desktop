@@ -24,8 +24,8 @@ export class SystemDataFormComponent implements OnInit {
     showCost: boolean = false;
     showFlowRate: boolean = false;
     showOperatingFraction: boolean = false;
-    showHead: boolean;
-
+    showHead: boolean = false;
+    showName: boolean = false;
 
     costError1: string = null;
     costError2: string = null;
@@ -33,6 +33,8 @@ export class SystemDataFormComponent implements OnInit {
     flowRateError2: string = null;
     opFractionError1: string = null;
     opFractionError2: string = null;
+
+    tmpBaselineName: string = 'Baseline';
     constructor(private psatService: PsatService, private convertUnitsService: ConvertUnitsService) {
 
     }
