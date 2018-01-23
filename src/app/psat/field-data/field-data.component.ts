@@ -335,7 +335,7 @@ export class FieldDataComponent implements OnInit {
 
   //used to add classes to inputs with different baseline vs modification values
   initDifferenceMonitor() {
-    if (this.inSetup) {
+    if (!this.inSetup) {
       let doc = this.windowRefService.getDoc();
 
       //operating fraction

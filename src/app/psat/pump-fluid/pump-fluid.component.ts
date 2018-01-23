@@ -49,7 +49,7 @@ export class PumpFluidComponent implements OnInit {
     'Vertical Turbine',
     'Large End Suction',
     // When user selects below they need a way to provide the optimal efficiency
-    'Specified Optimal Efficiency'
+    // 'Specified Optimal Efficiency'
   ];
 
   drives: Array<string> = [

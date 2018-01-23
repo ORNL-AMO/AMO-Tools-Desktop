@@ -37,9 +37,7 @@ export class PumpDataFormComponent implements OnInit {
     'Axial Flow',
     'Double Suction',
     'Vertical Turbine',
-    'Large End Suction',
-    // When user selects below they need a way to provide the optimal efficiency
-    'Specified Optimal Efficiency'
+    'Large End Suction'
   ];
   drives: Array<string> = [
     'Direct Drive',
@@ -55,6 +53,8 @@ export class PumpDataFormComponent implements OnInit {
 
   specifiedError2: string = null;
   specifiedError1: string = null;
+
+  pumpTypeTrueConst: boolean = true;
   constructor(private psatService: PsatService) {
 
   }
