@@ -269,7 +269,15 @@ export class PhastComponent implements OnInit {
         }
       }
     } else if (this.mainTab == 'assessment') {
-      this.phastService.mainTab.next('system-setup');
+      if(this.assessmentTab == 'modify-conditions'){
+        if(this.selectedLossTab.back){
+          this.lossesService.lossesTab.next(this.selectedLossTab.back);
+        }else{
+          this.phastService.mainTab.next('system-setup');
+        }
+      }else{
+        this.phastService.mainTab.next('system-setup');
+      }
     } else if (this.mainTab == 'system-setup') {
       if (this.stepTab.back) {
         this.phastService.goToStep(this.stepTab.back);
