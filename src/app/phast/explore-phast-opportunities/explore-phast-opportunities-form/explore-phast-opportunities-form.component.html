@@ -1,0 +1,46 @@
+<div class="explore-ops-form" *ngIf="phast">
+  <ul>
+    <li>
+      <div class="form-group">
+        <label for="modificatonName">Modification Name</label>
+        <div class="input-group">
+          <input name="modificatonName" type="text" id="modificatonName" class="form-control" [(ngModel)]="phast.modifications[exploreModIndex].phast.name"
+            (input)="startSavePolling()" />
+        </div>
+      </div>
+    </li>
+    <li>
+      <app-explore-charge-materials-form [(phast)]="phast" (changeField)="focusField($event)" (emitCalculate)="calculate()" [settings]="settings"
+        [exploreModIndex]="exploreModIndex"></app-explore-charge-materials-form>
+    </li>
+    <li>
+      <app-explore-fixtures-form [(phast)]="phast" (changeField)="focusField($event)" (emitCalculate)="calculate()" [settings]="settings"
+        [exploreModIndex]="exploreModIndex"></app-explore-fixtures-form>
+    </li>
+    <li>
+      <app-explore-leakage-form [(phast)]="phast" (changeField)="focusField($event)" (emitCalculate)="calculate()" [settings]="settings"
+        [exploreModIndex]="exploreModIndex"></app-explore-leakage-form>
+
+    </li>
+    <li>
+      <app-explore-wall-form [(phast)]="phast" (changeField)="focusField($event)" (emitCalculate)="calculate()" [settings]="settings"
+        [exploreModIndex]="exploreModIndex"></app-explore-wall-form>
+    </li>
+    <li>
+      <app-explore-opening-form [(phast)]="phast" (changeField)="focusField($event)" (emitCalculate)="calculate()" [settings]="settings"
+        [exploreModIndex]="exploreModIndex"></app-explore-opening-form>
+    </li>
+    <li>
+      <app-explore-operations-form [(phast)]="phast" (changeField)="focusField($event)" (emitCalculate)="calculate()" [settings]="settings"
+        [exploreModIndex]="exploreModIndex"></app-explore-operations-form>
+    </li>
+    <li>
+      <app-explore-flue-gas-form [(phast)]="phast" (changeField)="focusField($event)" (emitCalculate)="calculate()" [settings]="settings"
+        [exploreModIndex]="exploreModIndex"></app-explore-flue-gas-form>
+    </li>
+    <li>
+      <app-explore-system-efficiency-form [(phast)]="phast" (changeField)="focusField($event)" (emitCalculate)="calculate()" [settings]="settings"
+        [exploreModIndex]="exploreModIndex"></app-explore-system-efficiency-form>
+    </li>
+  </ul>
+</div>

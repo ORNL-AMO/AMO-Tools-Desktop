@@ -32,7 +32,7 @@ import { O2EnrichmentModule } from '../calculator/furnaces/o2-enrichment/o2-enri
 import { EfficiencyImprovementModule } from '../calculator/furnaces/efficiency-improvement/efficiency-improvement.module';
 import { EnergyEquivalencyModule } from '../calculator/furnaces/energy-equivalency/energy-equivalency.module';
 import { EnergyUseModule } from '../calculator/furnaces/energy-use/energy-use.module';
-import { ExplorePhastOpportunitiesComponent } from './explore-phast-opportunities/explore-phast-opportunities.component';
+import { ExplorePhastOpportunitiesModule } from './explore-phast-opportunities/explore-phast-opportunities.module';
 
 @NgModule({
   declarations: [
@@ -45,8 +45,7 @@ import { ExplorePhastOpportunitiesComponent } from './explore-phast-opportunitie
     PhastDiagramComponent,
     EnergyCostsComponent,
     LossesTabsComponent,
-    PhastCalculatorTabsComponent,
-    ExplorePhastOpportunitiesComponent
+    PhastCalculatorTabsComponent
   ],
   exports: [
   ],
@@ -69,7 +68,8 @@ import { ExplorePhastOpportunitiesComponent } from './explore-phast-opportunitie
     O2EnrichmentModule,
     EfficiencyImprovementModule,
     EnergyEquivalencyModule,
-    EnergyUseModule
+    EnergyUseModule,
+    ExplorePhastOpportunitiesModule
   ],
   providers: [
     PhastService,

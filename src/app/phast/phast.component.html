@@ -59,7 +59,7 @@
   <!--Assessment-->
   <div *ngIf="mainTab == 'assessment'">
     <div class="tab-content" *ngIf="assessmentTab == 'explore-opportunities'">
-      <app-explore-phast-opportunities></app-explore-phast-opportunities>
+      <app-explore-phast-opportunities [(phast)]="_phast" [settings]="settings" [assessment]="assessment"></app-explore-phast-opportunities>
     </div>
     <div class="tab-content" *ngIf="assessmentTab == 'modify-conditions'">
       <app-losses [(phast)]="_phast" [saveClicked]="saveClicked" (saved)="saveDb()" [settings]="settings" [inSetup]="false"></app-losses>

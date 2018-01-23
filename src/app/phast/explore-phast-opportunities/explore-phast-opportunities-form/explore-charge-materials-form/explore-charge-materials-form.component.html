@@ -1,0 +1,45 @@
+<!-- <div class="checkbox">
+  <label class="group-label" for="general">
+    <input type="checkbox" id="general" value="true" (focus)="focusField('chargeMaterial')" (change)="toggleChargeMaterials()"
+      [(ngModel)]="showChargeMaterials" /> Adjust Charge Materials
+  </label>
+</div>
+<div *ngIf="showChargeMaterials">
+  <ul *ngFor="let material of phast.losses.chargeMaterials; let index = index">
+    <li>
+      <div class="checkbox">
+        <label for="modifyTemp">
+          <input type="checkbox" id="modifyTemp" (focus)="focusField('modifyTemperature')" (change)="toggleTemp(index)" [(ngModel)]="showTemp[index]"
+          /> Modify Initial Temperature
+        </label>
+      </div>
+      <form *ngIf="showTemp[index]">
+        <div class="form-group">
+          <label for="baselineCost">Baseline Initial Temperature</label>
+          <div class="input-group">
+              <input name="{{'initialTemperature_'+index}}" type="number" step="any" class="form-control" [(ngModel)]=""
+                id="initialTemperature" onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('initialTemperature')"
+                (blur)="focusOut()">
+              <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">&#8457;</span>
+              <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
+            </div>
+          <div class="input-group">
+            <input name="baselineCost" type="number" step="any" id="baselineCost" class="form-control" (focus)="focusField('modifyCost')"
+              (input)="checkCost(1)" [(ngModel)]="psat.inputs.cost_kw_hour" />
+            <span class="input-group-addon units">$/kWH</span>
+          </div>
+          <span class="alert-danger pull-right small" *ngIf="costError1 !== null">{{costError1}}</span>
+        </div>
+        <div class="form-group">
+          <label for="modificationCost">Modification Initial Temperature</label>
+          <div class="input-group">
+            <input name="modificationCost" type="number" step="any" id="modificationCost" class="form-control" (focus)="focusField('modifyCost')"
+              [(ngModel)]="psat.modifications[exploreModIndex].psat.inputs.cost_kw_hour" (input)="checkCost(2)" />
+            <span class="input-group-addon units">$/kWh</span>
+          </div>
+          <span class="alert-danger pull-right small" *ngIf="costError2 !== null">{{costError2}}</span>
+        </div>
+      </form>
+    </li>
+  </ul>
+</div> -->

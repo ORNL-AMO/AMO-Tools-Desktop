@@ -64,7 +64,8 @@ export interface Losses {
 
 export interface Modification {
   phast?: PHAST,
-  notes?: Notes
+  notes?: Notes,
+  exploreOpportunities?: boolean;
 }
 
 export interface Notes {
