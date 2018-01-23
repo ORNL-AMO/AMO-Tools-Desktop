@@ -1,0 +1,87 @@
+<div class="checkbox">
+    <label class="group-label" for="general2"><input type ="checkbox" id="general2" value="true" (focus)="focusField('motorRatedData')" (change)="toggleRatedMotorData()"  [(ngModel)]="showRatedMotorData" />
+                            Adjust Rated Motor Data
+                        </label>
+  </div>
+  <ul *ngIf="showRatedMotorData">
+    <li>
+      <div class="checkbox">
+        <label for="modifyMotorRatedPower"><input type ="checkbox" id="modifyMotorRatedPower" value="true" (change)="toggleMotorRatedPower()" (focus)="focusField('motorRatedPower')" [(ngModel)]="showRatedMotorPower"/>
+                                    Modify Rated Motor Power
+                                </label>
+      </div>
+      <form *ngIf="showRatedMotorPower">
+        <div class="form-group">
+          <label for="baselineMotorRatedPower">Baseline Rated Motor Power</label>
+          <select name="baselineMotorRatedPower" class="form-control number-input-field" id="baselineMotorRatedPower" (focus)="focusField('motorRatedPower')"
+            (change)="checkRatedPower(1)" [(ngModel)]="psat.inputs.motor_rated_power">
+                                        <option  *ngFor="let option of options" [ngValue]="option">{{option}} {{settings.powerMeasurement}}</option>
+                                    </select>
+          <span class="alert-danger pull-right small" *ngIf="ratedPowerError1 !== null">{{ratedPowerError1}}</span>
+
+        </div>
+        <div class="form-group">
+          <label for="modificationMotorRatedPower">Modification Motor Rated Power</label>
+          <select name="modificationMotorRatedPower" class="form-control number-input-field" id="modificationMotorRatedPower" (focus)="focusField('motorRatedPower')"
+            (change)="checkRatedPower(2)" [(ngModel)]="psat.modifications[exploreModIndex].psat.inputs.motor_rated_power"
+            [disabled]="psat.modifications[exploreModIndex].psat.inputs.optimize_calculation">
+                                        <option  *ngFor="let option2 of options" [ngValue]="option2">{{option2}} {{settings.powerMeasurement}}</option>
+                                    </select>
+          <span class="alert-danger pull-right small" *ngIf="ratedPowerError2 !== null && !psat.modifications[exploreModIndex].psat.inputs.optimize_calculation">{{ratedPowerError2}}</span>
+        </div>
+      </form>
+    </li>
+    <li>
+      <div class="checkbox">
+        <label for="modifyEfficiencyClass"><input type ="checkbox" id="modifyEfficiencyClass" value="true" (change)="toggleEfficiencyClass()" (focus)="focusField('efficiencyClass')" [(ngModel)]="showEfficiencyClass"/>
+                                    Modify Efficiency Class
+                                </label>
+      </div>
+      <form *ngIf="showEfficiencyClass">
+        <div class="form-group">
+          <label for="oldEfficiencyClass">Baseline Efficiency Class</label>
+          <select name="oldEfficiencyClass" class="form-control select-input-field" (change)="setEfficiencyClasses()" id="oldEfficiencyClass"
+            (focus)="focusField('efficiencyClass')" [(ngModel)]="tmpBaselineEfficiencyClass">
+                                          <option *ngFor="let efficiencyClass of efficiencyClasses" [ngValue]="efficiencyClass">{{efficiencyClass}}</option>
+                                    </select>
+        </div>
+        <div class="form-group">
+          <label for="modificationEfficiencyClass">Modification Efficiency Class</label>
+          <select name="modificationEfficiencyClass" class="form-control select-input-field" id="modificationEfficiencyClass" (change)="setEfficiencyClasses()"
+            (focus)="focusField('efficiencyClass')" [(ngModel)]="tmpModificationEfficiencyClass" [disabled]="psat.modifications[exploreModIndex].psat.inputs.optimize_calculation">
+                                          <option *ngFor="let efficiencyClass of efficiencyClasses" [ngValue]="efficiencyClass">{{efficiencyClass}}</option>
+                                    </select>
+        </div>
+      </form>
+    </li>
+    <li *ngIf="(tmpBaselineEfficiencyClass == 'Specified' || tmpModificationEfficiencyClass == 'Specified') && showEfficiencyClass">
+      <div class="checkbox">
+        <label for="modifyMotorEfficiency"><input type="checkbox" disabled="disabled" id="modifyMotorEfficiency" value="true" (change)="toggleMotorEfficiency()" (focus)="focusField('motorEfficiency')" [(ngModel)]="showMotorEfficiency"/>
+                                    Modify Motor Specified Efficiency
+                                </label>
+      </div>
+      <form>
+        <div class="form-group">
+          <label for="baselineMotorEfficiency">Baseline Motor Efficiency</label>
+          <div class="input-group">
+            <input name="baselineMotorEfficiency" [disabled]="tmpBaselineEfficiencyClass != 'Specified'" type="number" step="any" id="baselineMotorEfficiency"
+              class="form-control" (focus)="focusField('motorEfficiency')" (input)="checkEfficiency(psat.inputs.efficiency, 1)"
+              [(ngModel)]="psat.inputs.efficiency" />
+            <span class="input-group-addon units">(%)</span>
+          </div>
+          <span class="alert-danger pull-right small" *ngIf="efficiencyError1 !== null">{{efficiencyError1}}</span>
+        </div>
+        <div class="form-group">
+          <label for="modificationMotorEfficiency">Modification Motor Efficiency</label>
+          <div class="input-group">
+            <input name="modificationMotorEfficiency" [disabled]="tmpModificationEfficiencyClass != 'Specified' || psat.modifications[exploreModIndex].psat.inputs.optimize_calculation"
+              type="number" step="any" id="modificationMotorEfficiency" class="form-control" (focus)="focusField('motorEfficiency')"
+              [(ngModel)]="psat.modifications[exploreModIndex].psat.inputs.efficiency" (input)="checkEfficiency(psat.modifications[exploreModIndex].psat.inputs.efficiency, 2)"
+            />
+            <span class="input-group-addon units">(%)</span>
+          </div>
+          <span class="alert-danger pull-right small" *ngIf="efficiencyError2 !== null && !psat.modifications[exploreModIndex].psat.inputs.optimize_calculation">{{efficiencyError2}}</span>
+        </div>
+      </form>
+    </li>
+  </ul>

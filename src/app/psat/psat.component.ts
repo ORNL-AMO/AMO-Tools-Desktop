@@ -47,7 +47,6 @@ export class PsatComponent implements OnInit {
   saveClicked: boolean = false;
   adjustment: PSAT;
   isValid;
-  canContinue;
 
   _psat: PSAT;
   fieldDataReady: boolean = false;
@@ -60,6 +59,7 @@ export class PsatComponent implements OnInit {
   tabBeforeReport: string = 'explore-opportunities';
   mainTab: string = 'system-setup';
   calcTab: string;
+  saveContinue: boolean = false;
   constructor(
     private location: Location,
     private assessmentService: AssessmentService,
@@ -86,7 +86,6 @@ export class PsatComponent implements OnInit {
         this.assessment = dbAssessment;
         this._psat = (JSON.parse(JSON.stringify(this.assessment.psat)));
         this.isValid = true;
-        this.canContinue = true;
         this.getSettings();
       })
       let tmpTab = this.assessmentService.getTab();
@@ -148,6 +147,9 @@ export class PsatComponent implements OnInit {
           this.isAssessmentSettings = true;
           if (update) {
             this.addToast('Settings Saved');
+            if(this.saveContinue){
+              this.continue(this.saveContinue)
+            }
           }
         } else {
           //if no settings found for assessment, check directory settings
@@ -235,14 +237,23 @@ export class PsatComponent implements OnInit {
     this.adjustment = $event;
   }
 
-  continue() {
-    if (this.subTab == 'field-data') {
-      this.psatService.mainTab.next('assessment');
+  continue(bool?: boolean) {
+    if (this.subTab != 'system-basics' || bool) {
+      if (!bool) {
+        this.save();
+      }else{
+        this.saveContinue = false;
+      }
+      if (this.subTab == 'field-data') {
+        this.psatService.mainTab.next('assessment');
+      } else {
+        this.subTabIndex++;
+        this.subTab = this.subTabs[this.subTabIndex];
+      }
     } else {
-      this.subTabIndex++;
-      this.subTab = this.subTabs[this.subTabIndex];
+      this.saveContinue = true;
+      this.toggleSave();
     }
-    this.canContinue = false;
   }
 
   getCanContinue() {
