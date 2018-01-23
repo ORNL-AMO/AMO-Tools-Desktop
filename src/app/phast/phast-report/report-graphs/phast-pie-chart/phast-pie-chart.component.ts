@@ -19,6 +19,8 @@ export class PhastPieChartComponent implements OnInit {
   resultCats: ShowResultsCategories;
   @Input()
   isBaseline: boolean;
+  @Input()
+  modExists: boolean;
 
   chartData: any = {
     pieChartLabels: new Array<string>(),
@@ -72,9 +74,12 @@ export class PhastPieChartComponent implements OnInit {
   ngAfterViewInit() {
     this.doc = this.windowRefService.getDoc();
     this.window = this.windowRefService.nativeWindow;
-    this.resultsWidth = this.doc.getElementsByClassName('results')[0].clientWidth;
-    this.chartContainerWidth = this.resultsWidth / 2;
-    
+
+    if (this.modExists) {
+      this.resultsWidth = this.doc.getElementsByClassName('results')[0].clientWidth;
+      this.chartContainerWidth = this.resultsWidth / 2;
+    }
+
     this.initChart();
 
     // this.window.onresize = () => { this.setValueMargin() };
@@ -115,106 +120,155 @@ export class PhastPieChartComponent implements OnInit {
     // console.log("initChart() charts.length = " + charts.length);
     // console.log("initChart() this.chartContainerWidth = " + this.chartContainerWidth);
 
-    if (this.isBaseline) {
-      this.chart = c3.generate({
-        // bindto: charts[0],
-        data: {
-          columns: [
-            ["wall", this.totalWallLoss],
-            ["atmosphere", this.totalAtmosphereLoss],
-            ["other", this.totalOtherLoss],
-            ["cooling", this.totalCoolingLoss],
-            ["opening", this.totalOpeningLoss],
-            ["fixture", this.totalFixtureLoss],
-            ["leakage", this.totalLeakageLoss],
-            ["extSurface", this.totalExtSurfaceLoss],
-            ["charge", this.totalChargeMaterialLoss],
-            ["flue", this.totalFlueGas]
-          ],
-          type: 'pie',
-          labels: true,
-          names: {
-            wall: "Wall Losses " + this.totalWallLoss + "%",
-            atmosphere: "Atmosphere Losses " + this.totalAtmosphereLoss + "%",
-            other: "Other Losses " + this.totalOtherLoss + "%",
-            cooling: "Cooling Losses " + this.totalCoolingLoss + "%",
-            opening: "Opening Losses " + this.totalOpeningLoss + "%",
-            fixture: "Fixture Losses " + this.totalFixtureLoss + "%",
-            leakage: "Leakage Losses " + this.totalLeakageLoss + "%",
-            extSurface: "Extended Surface Losses " + this.totalExtSurfaceLoss + "%",
-            charge: "Charge Materials " + this.totalChargeMaterialLoss + "%",
-            flue: "Flue Gas Losses " + this.totalFlueGas + "%"
+    if (this.modExists) {
+      if (this.isBaseline) {
+        this.chart = c3.generate({
+          bindto: charts[0],
+          data: {
+            columns: [
+              ["wall", this.totalWallLoss],
+              ["atmosphere", this.totalAtmosphereLoss],
+              ["other", this.totalOtherLoss],
+              ["cooling", this.totalCoolingLoss],
+              ["opening", this.totalOpeningLoss],
+              ["fixture", this.totalFixtureLoss],
+              ["leakage", this.totalLeakageLoss],
+              ["extSurface", this.totalExtSurfaceLoss],
+              ["charge", this.totalChargeMaterialLoss],
+              // ["flue", this.totalFlueGas]
+            ],
+            type: 'pie',
+            labels: true,
+            names: {
+              wall: "Wall Losses " + this.totalWallLoss + "%",
+              atmosphere: "Atmosphere Losses " + this.totalAtmosphereLoss + "%",
+              other: "Other Losses " + this.totalOtherLoss + "%",
+              cooling: "Cooling Losses " + this.totalCoolingLoss + "%",
+              opening: "Opening Losses " + this.totalOpeningLoss + "%",
+              fixture: "Fixture Losses " + this.totalFixtureLoss + "%",
+              leakage: "Leakage Losses " + this.totalLeakageLoss + "%",
+              extSurface: "Extended Surface Losses " + this.totalExtSurfaceLoss + "%",
+              charge: "Charge Materials " + this.totalChargeMaterialLoss + "%",
+              // flue: "Flue Gas Losses " + this.totalFlueGas + "%"
+            }
+          },
+          size: {
+            width: this.chartContainerWidth
+          },
+          color: {
+            pattern: graphColors
+          },
+          legend: {
+            position: 'right'
+          },
+          tooltip: {
+            contents: function (d, defaultTitleFormat, defaultValueFormat, color) {
+              let styling = "background-color: rgba(0, 0, 0, 0.7); border-radius: 5px; color: #fff; padding: 3px; font-size: 13px;";
+              let html = "<div style='" + styling + "'>" + d[0].name + "</div>";
+              return html;
+            }
           }
-        },
-        size: {
-          width: this.chartContainerWidth
-        },
-        color: {
-          pattern: graphColors
-        },
-        legend: {
-          position: 'right'
-        },
-        tooltip: {
-          contents: function (d, defaultTitleFormat, defaultValueFormat, color) {
-            let styling = "background-color: rgba(0, 0, 0, 0.7); border-radius: 5px; color: #fff; padding: 3px; font-size: 13px;";
-            let html = "<div style='" + styling + "'>" + d[0].name + "</div>";
-            return html;
+        });
+      }
+      else {
+        this.chart = c3.generate({
+          bindto: charts[1],
+          data: {
+            columns: [
+              ["wall", this.totalWallLoss],
+              ["atmosphere", this.totalAtmosphereLoss],
+              ["other", this.totalOtherLoss],
+              ["cooling", this.totalCoolingLoss],
+              ["opening", this.totalOpeningLoss],
+              ["fixture", this.totalFixtureLoss],
+              ["leakage", this.totalLeakageLoss],
+              ["extSurface", this.totalExtSurfaceLoss],
+              ["charge", this.totalChargeMaterialLoss],
+              // ["flue", this.totalFlueGas]
+            ],
+            type: 'pie',
+            labels: true,
+            names: {
+              wall: "Wall Losses " + this.totalWallLoss + "%",
+              atmosphere: "Atmosphere Losses " + this.totalAtmosphereLoss + "%",
+              other: "Other Losses " + this.totalOtherLoss + "%",
+              cooling: "Cooling Losses " + this.totalCoolingLoss + "%",
+              opening: "Opening Losses " + this.totalOpeningLoss + "%",
+              fixture: "Fixture Losses " + this.totalFixtureLoss + "%",
+              leakage: "Leakage Losses " + this.totalLeakageLoss + "%",
+              extSurface: "Extended Surface Losses " + this.totalExtSurfaceLoss + "%",
+              charge: "Charge Materials " + this.totalChargeMaterialLoss + "%",
+              // flue: "Flue Gas Losses " + this.totalFlueGas + "%"
+            }
+          },
+          size: {
+            width: this.chartContainerWidth
+          },
+          color: {
+            pattern: graphColors
+          },
+          legend: {
+            position: 'right'
+          },
+          tooltip: {
+            contents: function (d, defaultTitleFormat, defaultValueFormat, color) {
+              let styling = "background-color: rgba(0, 0, 0, 0.7); border-radius: 5px; color: #fff; padding: 3px; font-size: 13px;";
+              let html = "<div style='" + styling + "'>" + d[0].name + "</div>";
+              return html;
+            }
           }
-        }
-      });
+        });
+      }
     }
     else {
-      this.chart = c3.generate({
-        bindto: charts[1],
-        data: {
-          columns: [
-            ["wall", this.totalWallLoss],
-            ["atmosphere", this.totalAtmosphereLoss],
-            ["other", this.totalOtherLoss],
-            ["cooling", this.totalCoolingLoss],
-            ["opening", this.totalOpeningLoss],
-            ["fixture", this.totalFixtureLoss],
-            ["leakage", this.totalLeakageLoss],
-            ["extSurface", this.totalExtSurfaceLoss],
-            ["charge", this.totalChargeMaterialLoss],
-            ["flue", this.totalFlueGas]
-          ],
-          type: 'pie',
-          labels: true,
-          names: {
-            wall: "Wall Losses " + this.totalWallLoss + "%",
-            atmosphere: "Atmosphere Losses " + this.totalAtmosphereLoss + "%",
-            other: "Other Losses " + this.totalOtherLoss + "%",
-            cooling: "Cooling Losses " + this.totalCoolingLoss + "%",
-            opening: "Opening Losses " + this.totalOpeningLoss + "%",
-            fixture: "Fixture Losses " + this.totalFixtureLoss + "%",
-            leakage: "Leakage Losses " + this.totalLeakageLoss + "%",
-            extSurface: "Extended Surface Losses " + this.totalExtSurfaceLoss + "%",
-            charge: "Charge Materials " + this.totalChargeMaterialLoss + "%",
-            flue: "Flue Gas Losses " + this.totalFlueGas + "%"
+      if (this.isBaseline) {
+        this.chart = c3.generate({
+          bindto: charts[0],
+          data: {
+            columns: [
+              ["wall", this.totalWallLoss],
+              ["atmosphere", this.totalAtmosphereLoss],
+              ["other", this.totalOtherLoss],
+              ["cooling", this.totalCoolingLoss],
+              ["opening", this.totalOpeningLoss],
+              ["fixture", this.totalFixtureLoss],
+              ["leakage", this.totalLeakageLoss],
+              ["extSurface", this.totalExtSurfaceLoss],
+              ["charge", this.totalChargeMaterialLoss],
+              // ["flue", this.totalFlueGas]
+            ],
+            type: 'pie',
+            labels: true,
+            names: {
+              wall: "Wall Losses " + this.totalWallLoss + "%",
+              atmosphere: "Atmosphere Losses " + this.totalAtmosphereLoss + "%",
+              other: "Other Losses " + this.totalOtherLoss + "%",
+              cooling: "Cooling Losses " + this.totalCoolingLoss + "%",
+              opening: "Opening Losses " + this.totalOpeningLoss + "%",
+              fixture: "Fixture Losses " + this.totalFixtureLoss + "%",
+              leakage: "Leakage Losses " + this.totalLeakageLoss + "%",
+              extSurface: "Extended Surface Losses " + this.totalExtSurfaceLoss + "%",
+              charge: "Charge Materials " + this.totalChargeMaterialLoss + "%",
+              // flue: "Flue Gas Losses " + this.totalFlueGas + "%"
+            }
+          },
+          color: {
+            pattern: graphColors
+          },
+          legend: {
+            position: 'right'
+          },
+          tooltip: {
+            contents: function (d, defaultTitleFormat, defaultValueFormat, color) {
+              let styling = "background-color: rgba(0, 0, 0, 0.7); border-radius: 5px; color: #fff; padding: 3px; font-size: 13px;";
+              let html = "<div style='" + styling + "'>" + d[0].name + "</div>";
+              return html;
+            }
           }
-        },
-        size: {
-          width: this.chartContainerWidth
-        },
-        color: {
-          pattern: graphColors
-        },
-        legend: {
-          position: 'right'
-        },
-        tooltip: {
-          contents: function (d, defaultTitleFormat, defaultValueFormat, color) {
-            let styling = "background-color: rgba(0, 0, 0, 0.7); border-radius: 5px; color: #fff; padding: 3px; font-size: 13px;";
-            let html = "<div style='" + styling + "'>" + d[0].name + "</div>";
-            return html;
-          }
-        }
-      });
+        });
+      }
     }
-
-    d3.selectAll(".c3-legend-item").style("font-size", "13px");
+    // d3.selectAll(".c3-legend-item").style("font-size", "13px");
 
     if (this.chart) {
       // console.log("initChart, this.chart = " + this.chart);
@@ -240,7 +294,7 @@ export class PhastPieChartComponent implements OnInit {
           ["leakage", this.totalLeakageLoss],
           ["extSurface", this.totalExtSurfaceLoss],
           ["charge", this.totalChargeMaterialLoss],
-          ["flue", this.totalFlueGas]
+          // ["flue", this.totalFlueGas]
         ],
         labels: true,
         names: {
@@ -253,24 +307,77 @@ export class PhastPieChartComponent implements OnInit {
           leakage: "Leakage Losses " + this.totalLeakageLoss + "%",
           extSurface: "Extended Surface Losses " + this.totalExtSurfaceLoss + "%",
           charge: "Charge Materials " + this.totalChargeMaterialLoss + "%",
-          flue: "Flue Gas Losses " + this.totalFlueGas + "%"
+          // flue: "Flue Gas Losses " + this.totalFlueGas + "%"
         }
       });
-      // this.chart.load({
-      //   // unload: true,
-      //   columns: [
-      //     ["Wall Losses ", this.totalWallLoss],
-      //     ["Atmosphere Losses ", this.totalAtmosphereLoss],
-      //     ["Other Losses ", this.totalOtherLoss],
-      //     ["Cooling Losses ", this.totalCoolingLoss],
-      //     ["Opening Losses ", this.totalOpeningLoss],
-      //     ["Fixture Losses ", this.totalFixtureLoss],
-      //     ["Leakage Losses ", this.totalLeakageLoss],
-      //     ["Extended Surface Losses ", this.totalExtSurfaceLoss],
-      //     ["Charge Materials ", this.totalChargeMaterialLoss],
-      //     ["Flue Gas Losses ", this.totalFlueGas]
-      //   ]
-      // });
+      if (this.resultCats.showFlueGas) {
+        this.chart.load({
+          columns: [
+            ["flue", this.totalFlueGas]
+          ],
+          labels: true,
+          names: {
+            flue: "Flue Gas Losses " + this.totalFlueGas + "%"
+          }
+        });
+      }
+      if (this.resultCats.showAuxPower) {
+        this.chart.load({
+          columns: [
+            ["aux", this.totalAuxPower]
+          ],
+          labels: true,
+          names: {
+            aux: "Total Auxillary Power " + this.totalAuxPower + "%"
+          }
+        });
+      }
+      if (this.resultCats.showSlag) {
+        this.chart.load({
+          columns: [
+            ["slag", this.totalSlag]
+          ],
+          labels: true,
+          names: {
+            slag: "Total Slag " + this.totalSlag + "%"
+          }
+        });
+      }
+      if (this.resultCats.showExGas) {
+        this.chart.load({
+          columns: [
+            ["exGasEAF", this.totalExhaustGasEAF]
+          ],
+          labels: true,
+          names: {
+            exGasEAF: "Total Exhaust Gas (EAF) Losses " + this.totalExhaustGasEAF + "%"
+          }
+        });
+      }
+      else if (this.resultCats.showEnInput2) {
+        this.chart.load({
+          columns: [
+            ["exGas", this.totalExhaustGas]
+          ],
+          labels: true,
+          names: {
+            exGas: "Total Exhaust Gas Losses " + this.totalExhaustGas + "%"
+          }
+        });
+      }
+      if (this.resultCats.showSystemEff) {
+        this.chart.load({
+          columns: [
+            ["sys", this.totalSystemLosses]
+          ],
+          labels: true,
+          names: {
+            sys: "Total System Losses " + this.totalSystemLosses + "%"
+          }
+        });
+      }
+
+      d3.selectAll(".c3-legend-item").style("font-size", "13px");
     }
   }
 
@@ -291,6 +398,12 @@ export class PhastPieChartComponent implements OnInit {
     this.totalLeakageLoss = this.getLossPercent(phastResults.grossHeatInput, phastResults.totalLeakageLoss);
     this.totalExtSurfaceLoss = this.getLossPercent(phastResults.grossHeatInput, phastResults.totalExtSurfaceLoss);
     this.totalChargeMaterialLoss = this.getLossPercent(phastResults.grossHeatInput, phastResults.totalChargeMaterialLoss);
+    this.totalFlueGas = 0;
+    this.totalSlag = 0;
+    this.totalExhaustGas = 0;
+    this.totalExhaustGasEAF = 0;
+    this.totalSystemLosses = 0;
+
     if (resultCats.showFlueGas) {
       this.totalFlueGas = this.getLossPercent(phastResults.grossHeatInput, phastResults.totalFlueGas);
     }

@@ -24,18 +24,36 @@
     </div>
   </div>
   <!-- <div class="custom-row justify-content-center align-items-center"> -->
-  <div class="row justify-content-center align-items-center">
+  <!-- if there is a mod, show 2 pie charts -->
+  <div class="row justify-content-center align-items-center" *ngIf="modExists">
     <div class="col-6">
       <!-- <div class="chart-col"> -->
-      <app-phast-pie-chart [results]="selectedPhast1.data" [resultCats]="showResultsCats" [isBaseline]="true"></app-phast-pie-chart>
+      <app-phast-pie-chart [results]="selectedPhast1.data" [resultCats]="showResultsCats" [isBaseline]="true" [modExists]="modExists"></app-phast-pie-chart>
     </div>
     <!-- </div> -->
     <!-- <div class="custom-row justify-content-center align-items-center"> -->
     <div class="col-6">
-      <app-phast-pie-chart [results]="selectedPhast2.data" [resultCats]="showResultsCats" [isBaseline]="false"></app-phast-pie-chart>
+      <app-phast-pie-chart [results]="selectedPhast2.data" [resultCats]="showResultsCats" [isBaseline]="false" [modExists]="modExists"></app-phast-pie-chart>
     </div>
   </div>
 
+  <!-- if no mod, only 1 pie chart -->
+  <div class="row justify-content-center align-items-center print-pie-row" *ngIf="!modExists">
+    <div class="col-12">
+      <div class="row show-print">
+        <div class="col-12">
+          <h5>Baseline</h5>
+        </div>
+      </div>
+      <div class="row print-graph">
+        <div class="col-12">
+          <app-phast-pie-chart [results]="selectedPhast1.data" [resultCats]="showResultsCats" [isBaseline]="true" [modExists]="modExists"></app-phast-pie-chart>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- if there is a mod, show bar chart -->
   <div class="row align-items-center" *ngIf="modExists" style="padding-top: 50px;">
     <div class="col-2">
       <ul>
@@ -51,6 +69,7 @@
       <app-phast-bar-chart [resultCats]="showResultsCats" [modResults]="selectedPhast2.data" [results]="selectedPhast1.data" [settings]="settings"></app-phast-bar-chart>
     </div>
   </div>
+
 </div>
 
 

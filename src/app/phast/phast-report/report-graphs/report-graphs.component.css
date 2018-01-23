@@ -19,3 +19,22 @@ ul {
     display: inline-block;
     width: 49%;
 }
+
+
+@media print {
+
+    .print-pie-row {
+        page-break-before: always;
+        page-break-inside: avoid;
+        display: block;
+    }
+
+    .print-pie-graph {
+        display: block;
+    }
+
+    .c3 path, .c3 line {
+        fill: none;
+        stroke: #000;
+    }
+}
