@@ -55,6 +55,8 @@ export class PhastComponent implements OnInit {
   isModalOpen: boolean = false;
   selectedLossTab: LossTab;
   calcTab: string;
+  assessmentTab: string = 'explore-opportunities';
+
   constructor(
     private location: Location,
     private assessmentService: AssessmentService,
@@ -268,7 +270,15 @@ export class PhastComponent implements OnInit {
       }
     } else if (this.mainTab == 'assessment') {
       this.phastService.mainTab.next('system-setup');
+    } else if (this.mainTab == 'system-setup') {
+      if (this.stepTab.back) {
+        this.phastService.goToStep(this.stepTab.back);
+      }
     }
+  }
+
+  changeAssessmentTab(str: string) {
+    this.assessmentTab = str;
   }
 
   openModal($event) {

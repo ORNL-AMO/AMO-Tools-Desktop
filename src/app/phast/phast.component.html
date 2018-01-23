@@ -5,8 +5,26 @@
   <div class="hide-print">
     <!-- phast-tabs = step tabs -->
     <app-phast-tabs *ngIf="mainTab == 'system-setup'"></app-phast-tabs>
+
+    <nav *ngIf="mainTab == 'assessment'">
+      <ul class="tabs subtabs phast">
+        <li class="fixed-tab-size" [ngClass]="{'active': assessmentTab == 'explore-opportunities'}">
+          <a (click)="changeAssessmentTab('explore-opportunities')">Explore Opportunities
+            <br>
+            <span class="help-text psat-view">Novice View</span>
+          </a>
+        </li>
+        <li class="fixed-tab-size" [ngClass]="{'active': assessmentTab == 'modify-conditions'}">
+          <a (click)="changeAssessmentTab('modify-conditions')">Modify Conditions
+            <br>
+            <span class="help-text psat-view">Expert View</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+
     <!--losses-tabs are tabs for heat balance/assessment, both inSetup and !inSetup -->
-    <nav *ngIf="mainTab == 'assessment' || (mainTab == 'system-setup' && stepTab.step == 2)">
+    <nav *ngIf="(mainTab == 'assessment' && assessmentTab != 'explore-opportunities') || (mainTab == 'system-setup' && stepTab.step == 2)">
       <app-losses-tabs [phast]="_phast" [settings]="settings" [saveDbToggle]="saveDbToggle" [inSetup]="mainTab == 'system-setup'"></app-losses-tabs>
     </nav>
   </div>
@@ -39,8 +57,13 @@
   </div>
 
   <!--Assessment-->
-  <div *ngIf="mainTab == 'assessment'" class="tab-content">
-    <app-losses [(phast)]="_phast" [saveClicked]="saveClicked" (saved)="saveDb()" [settings]="settings" [inSetup]="false"></app-losses>
+  <div *ngIf="mainTab == 'assessment'">
+    <div class="tab-content" *ngIf="assessmentTab == 'explore-opportunities'">
+      <app-explore-phast-opportunities></app-explore-phast-opportunities>
+    </div>
+    <div class="tab-content" *ngIf="assessmentTab == 'modify-conditions'">
+      <app-losses [(phast)]="_phast" [saveClicked]="saveClicked" (saved)="saveDb()" [settings]="settings" [inSetup]="false"></app-losses>
+    </div>
   </div>
   <!--Report-->
   <div *ngIf="mainTab == 'report'" class="row justify-content-center report-container">
@@ -65,7 +88,7 @@
           </div>
           <div class="row">
             <div class="col-12">
-                <app-sankey [phast]="phast1.phast" [location]="'sankey-diagram'" [settings]="settings"></app-sankey>
+              <app-sankey [phast]="phast1.phast" [location]="'sankey-diagram'" [settings]="settings"></app-sankey>
             </div>
           </div>
         </div>
@@ -95,10 +118,11 @@
     <div class="pull-right">
       <button class="btn btn-secondary" (click)="save()">Save</button>
       <!-- <button class="btn btn-secondary" *ngIf="mainTab == 'system-setup' && stepTab.next" (click)="nextStep()">Next</button> -->
-      <button class="btn btn-secondary" *ngIf="(mainTab == 'assessment' && selectedLossTab.next) || (mainTab == 'system-setup' && stepTab.next)" (click)="nextStep()">Next</button>
+      <button class="btn btn-secondary" *ngIf="(mainTab == 'assessment' && selectedLossTab.next && assessmentTab == 'modify-conditions') || (mainTab == 'system-setup' && stepTab.next)"
+        (click)="nextStep()">Next</button>
       <button class="btn btn-secondary" *ngIf="mainTab == 'system-setup' && !stepTab.next" [disabled]="!_phast.setupDone" (click)="goToAssessment()">Go To Assessment</button>
       <!-- <button class="btn btn-secondary" *ngIf="mainTab == 'system-setup' && !stepTab.next" [disabled]="!_phast.setupDone" (click)="phastService()">Heat Balance Assessment</button> -->
-      <button class="btn btn-primary" *ngIf="mainTab == 'assessment' && !selectedLossTab.next" [disabled]="!_phast.setupDone" (click)="goToReport()">View Report</button>
+      <button class="btn btn-primary" *ngIf="mainTab == 'assessment'" [disabled]="!_phast.setupDone" (click)="goToReport()">View Report</button>
     </div>
   </div>
 </div>
