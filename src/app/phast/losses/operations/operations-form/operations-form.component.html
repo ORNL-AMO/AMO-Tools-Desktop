@@ -6,36 +6,41 @@
       <div class="incrementor form-control input-group">
         <button class="btn input-group-btn" (click)="subtractWeek()"><i class="fa fa-minus"></i></button>
         <button class="btn input-group-btn" (click)="addWeek()"><i class="fa fa-plus"></i></button>
-        <input name="weeksPerYear" type="number" step="any" class="form-control" id="weeksPerYear" (input)="calculatHrsPerYear()"
+        <input name="weeksPerYear" type="number" step="any" min="0" max="52" class="form-control" id="weeksPerYear" (input)="calculatHrsPerYear()"
           formControlName="weeksPerYear" (focus)="focusField('operatingHours')" (blur)="focusOut()">
       </div>
+      <span class="alert-warning pull-right small" *ngIf="weeksPerYearError !== null">{{weeksPerYearError}}</span>
     </div>
     <div class="form-group">
       <label for="daysPerWeek">Days / Week</label>
       <div class="incrementor form-control input-group">
         <button class="btn input-group-btn" (click)="subtractWeekDay()"><i class="fa fa-minus"></i></button>
         <button class="btn input-group-btn" (click)="addWeekDay()"><i class="fa fa-plus"></i></button>
-        <input name="daysPerWeek" type="number" step="any" class="form-control" id="daysPerWeek" (input)="calculatHrsPerYear()" formControlName="daysPerWeek"
+        <input name="daysPerWeek" type="number" step="1" min="0" max="7" class="form-control" id="daysPerWeek" (input)="calculatHrsPerYear()" formControlName="daysPerWeek"
           (focus)="focusField('operatingHours')" (blur)="focusOut()">
       </div>
+      <span class="alert-warning pull-right small" *ngIf="daysPerWeekError !== null">{{daysPerWeekError}}</span>
     </div>
     <div class="form-group">
       <label for="shiftsPerDay">Shifts / Day</label>
       <div class="incrementor form-control input-group">
         <button class="btn input-group-btn" (click)="subtractShift()"><i class="fa fa-minus"></i></button>
         <button class="btn input-group-btn" (click)="addShift()"><i class="fa fa-plus"></i></button>
-        <input name="shiftsPerDay" type="number" step="any" class="form-control" id="shiftsPerDay" (input)="calculatHrsPerYear()"
+        <input name="shiftsPerDay" type="number" step="1" min="0" class="form-control" id="shiftsPerDay" (input)="calculatHrsPerYear()"
           formControlName="shiftsPerDay" (focus)="focusField('operatingHours')" (blur)="focusOut()">
       </div>
+      <span class="alert-warning pull-right small" *ngIf="shiftsPerDayError !== null">{{shiftsPerDayError}}</span>
     </div>
     <div class="form-group">
       <label for="hoursPerShift">Hours / Shift</label>
       <div class="incrementor form-control input-group">
         <button class="btn input-group-btn" (click)="subtractShiftHr()"><i class="fa fa-minus"></i></button>
         <button class="btn input-group-btn" (click)="addShiftHr()"><i class="fa fa-plus"></i></button>
-        <input name="hoursPerShift" type="number" step="any" class="form-control" id="hoursPerShift" (input)="calculatHrsPerYear()"
+        <input name="hoursPerShift" type="number" step="1" min="0" max="24" class="form-control" id="hoursPerShift" (input)="calculatHrsPerYear()"
           formControlName="hoursPerShift" (focus)="focusField('operatingHours')" (blur)="focusOut()">
       </div>
+      <span class="alert-warning pull-right small" *ngIf="hoursPerShiftError !== null">{{hoursPerShiftError}}</span>
+      <span class="alert-warning pull-right small" *ngIf="timeError !== null">{{timeError}}</span>
     </div>
     <!--<span class="alert-warning pull-right small" *ngIf="!isCalculated">Above values not used.</span>-->
     <div class="form-group">
