@@ -103,7 +103,7 @@ export class OperationsFormComponent implements OnInit {
     // this.phast.operatingHours.hoursPerYear = this.phast.operatingHours.hoursPerShift * this.phast.operatingHours.shiftsPerDay * this.phast.operatingHours.daysPerWeek * this.phast.operatingHours.weeksPerYear;
     let tmpHoursPerYear = this.operationsForm.controls.hoursPerShift.value * this.operationsForm.controls.shiftsPerDay.value * this.operationsForm.controls.daysPerWeek.value * this.operationsForm.controls.weeksPerYear.value;
     this.operationsForm.patchValue({
-      hoursPerYear: tmpHoursPerYear
+      hoursPerYear: tmpHoursPerYear.toFixed(0)
     })
     this.isCalculated = true;
   }
