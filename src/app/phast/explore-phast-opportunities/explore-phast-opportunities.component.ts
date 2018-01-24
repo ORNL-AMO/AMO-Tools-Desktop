@@ -67,9 +67,7 @@ export class ExplorePhastOpportunitiesComponent implements OnInit {
         heatSystemEfficiencyNotes: '',
         operationsNotes: ''
       },
-      phast: {
-        losses: JSON.parse(JSON.stringify(this.assessment.phast.losses))
-      },
+      phast: JSON.parse(JSON.stringify(this.assessment.phast)),
       exploreOpportunities: true
     });
   }
