@@ -150,3 +150,7 @@
 .arrow-img{
 	width: 60%;
 }
+
+.furnace {
+  white-space: nowrap;
+}
