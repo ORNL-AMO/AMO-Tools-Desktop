@@ -1,6 +1,6 @@
 <div class="checkbox">
-  <label class="group-label" for="general">
-    <input type="checkbox" id="general" value="true" (focus)="focusField('fixtureData')" (change)="toggleFixtures()" [(ngModel)]="showFixtures"
+  <label class="group-label" for="exploreFixtures">
+    <input type="checkbox" id="exploreFixtures" value="true" (focus)="focusField('fixtureData')" (change)="toggleFixtures()" [(ngModel)]="showFixtures"
     /> Adjust Fixture Data
   </label>
 </div>
@@ -8,8 +8,8 @@
   <ul *ngFor="let loss of phast.losses.fixtureLosses; let index = index">
     <li>
       <div class="checkbox form-group">
-        <label for="modifyFeedRate">
-          <input type="checkbox" id="{{modifyFeedRate_+index}}" (focus)="focusField('feedRate')" (change)="toggleFeedRate(index, loss.feedRate)"
+        <label for="{{'modifyFeedRate_'+index}}">
+          <input type="checkbox" id="{{'modifyFeedRate_'+index}}" (focus)="focusField('feedRate')" (change)="toggleFeedRate(index, loss.feedRate)"
             [(ngModel)]="showFeedRate[index]" /> Modify Fixture Weight Feed Rate
         </label>
         <label>
