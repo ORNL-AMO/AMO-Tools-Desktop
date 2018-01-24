@@ -18,9 +18,36 @@ export class ExploreSystemEfficiencyFormComponent implements OnInit {
   settings: Settings;
   @Input()
   exploreModIndex: number;
+
+  showEfficiencyData: boolean = false;
+
   constructor() { }
 
   ngOnInit() {
+    this.initEfficiency();
   }
 
+  initEfficiency() {
+    if (this.phast.systemEfficiency != this.phast.modifications[this.exploreModIndex].phast.systemEfficiency) {
+      this.showEfficiencyData = true;
+    }
+  }
+
+  toggleEfficiency() {
+    if(this.showEfficiencyData == false){
+      this.phast.modifications[this.exploreModIndex].phast.systemEfficiency = this.phast.systemEfficiency;
+    }
+  }
+
+  focusField(str: string) {
+    //this.changeField.emit(str);
+  }
+
+  calculate() {
+    //this.emitCalculate.emit(true);
+  }
+
+  focusOut() {
+
+  }
 }

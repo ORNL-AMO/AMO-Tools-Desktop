@@ -1,3 +1,30 @@
-<p>
-  explore-system-efficiency-form works!
-</p>
+<div class="checkbox">
+  <label class="group-label" for="exploreSysEffeciency">
+    <input type="checkbox" id="exploreSysEffeciency" value="true" (focus)="focusField('efficiencyData')" (change)="toggleEfficiency()" [(ngModel)]="showEfficiencyData"
+    /> Adjust Heating System Efficiency
+  </label>
+</div>
+<div *ngIf="showEfficiencyData">
+  <ul>
+    <li>
+      <form>
+        <div class="form-group">
+          <label for="baseEfficiency">Baseline System Efficiency</label>
+          <div class="input-group">
+            <input name="baseEfficiency" type="number" step="any" min="0" max="100" class="form-control" [(ngModel)]="phast.systemEfficiency" id="baseEfficiency" onfocus="this.select();"
+              (input)="calculate()" (focus)="focusField('efficiency')">
+            <span class="input-group-addon units">%</span>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="baseEfficiency">Modification System Efficiency</label>
+          <div class="input-group">
+            <input name="modEfficiency" type="number" step="any" min="0" max="100" class="form-control" [(ngModel)]="phast.modifications[exploreModIndex].phast.systemEfficiency" id="modEfficiency" onfocus="this.select();"
+              (input)="calculate()" (focus)="focusField('efficiency')">
+            <span class="input-group-addon units">%</span>
+          </div>
+        </div>
+      </form>
+    </li>
+  </ul>
+</div>
