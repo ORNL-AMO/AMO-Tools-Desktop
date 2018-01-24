@@ -1,16 +1,19 @@
 <div class="checkbox">
   <label class="group-label" for="general">
-    <input type="checkbox" id="general" value="true" (focus)="focusField('chargeMaterial')" (change)="toggleChargeMaterials()"
-      [(ngModel)]="showChargeMaterials" /> Adjust Fixture Data
+    <input type="checkbox" id="general" value="true" (focus)="focusField('fixtureData')" (change)="toggleFixtures()" [(ngModel)]="showFixtures"
+    /> Adjust Fixture Data
   </label>
 </div>
-<div *ngIf="showChargeMaterials">
+<div *ngIf="showFixtures">
   <ul *ngFor="let loss of phast.losses.fixtureLosses; let index = index">
     <li>
-      <div class="checkbox">
+      <div class="checkbox form-group">
         <label for="modifyFeedRate">
-          <input type="checkbox" id="modifyFeedRate" (focus)="focusField('feedRate')" (change)="toggleFeedRate(index)" [(ngModel)]="showFeedRate[index]"
-          /> Modify Fixture Weight Feed Rate
+          <input type="checkbox" id="{{modifyFeedRate_+index}}" (focus)="focusField('feedRate')" (change)="toggleFeedRate(index, loss.feedRate)"
+            [(ngModel)]="showFeedRate[index]" /> Modify Fixture Weight Feed Rate
+        </label>
+        <label>
+          {{loss.name}}
         </label>
       </div>
       <form *ngIf="showFeedRate[index]">
@@ -18,21 +21,22 @@
           <label for="baselineCost">Baseline Feed Rate</label>
           <div class="input-group">
             <input name="{{'feedRate_'+index}}" type="number" step="any" min="0" class="form-control" [(ngModel)]="loss.feedRate" id="{{feedRate_+index}}"
-              onfocus="this.select();" (input)="checkFeedRate(1)" (focus)="focusField('feedRate')" (blur)="focusOut()">
+              onfocus="this.select();" (input)="checkFeedRate(1, loss.feedRate, index)" (focus)="focusField('feedRate')" (blur)="focusOut()">
             <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">lb/hr</span>
             <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kg/hr</span>
           </div>
-          <span class="alert-warning pull-right small" *ngIf="feedRateError1 !== null">{{feedRateError1}}</span>
+          <span class="alert-warning pull-right small" *ngIf="feedRateError1[index] !== null">{{feedRateError1[index]}}</span>
         </div>
         <div class="form-group">
           <label for="baselineCost">Modification Feed Rate</label>
           <div class="input-group">
             <input name="{{'feedRateMod_'+index}}" type="number" step="any" min="0" class="form-control" id="{{feedRateMod_+index}}"
-              onfocus="this.select();" (input)="checkFeedRate(2)" (focus)="focusField('feedRate')" (blur)="focusOut()" [(ngModel)]="phast.modifications[exploreModIndex].phast.losses.fixtureLosses[index].feedRate">
+              onfocus="this.select();" (input)="checkFeedRate(2, phast.modifications[exploreModIndex].phast.losses.fixtureLosses[index].feedRate, index)"
+              (focus)="focusField('feedRate')" (blur)="focusOut()" [(ngModel)]="phast.modifications[exploreModIndex].phast.losses.fixtureLosses[index].feedRate">
             <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">lb/hr</span>
             <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kg/hr</span>
           </div>
-          <span class="alert-warning pull-right small" *ngIf="feedRateError2 !== null">{{feedRateError2}}</span>
+          <span class="alert-warning pull-right small" *ngIf="feedRateError2[index] !== null">{{feedRateError2[index]}}</span>
         </div>
       </form>
     </li>

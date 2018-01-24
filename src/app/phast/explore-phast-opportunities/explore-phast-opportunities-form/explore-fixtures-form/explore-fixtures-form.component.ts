@@ -20,36 +20,85 @@ export class ExploreFixturesFormComponent implements OnInit {
   exploreModIndex: number;
 
   showFeedRate: Array<boolean>;
-  showChargeMaterials: boolean = false;
-  feedRateError1: string = null;
-  feedRateError2: string = null;
+  showFixtures: boolean = false;
+  feedRateError1: Array<string>;
+  feedRateError2: Array<string>;
   constructor() { }
 
   ngOnInit() {
+    this.initData();
+  }
+
+  initData() {
     this.showFeedRate = new Array();
+    this.feedRateError1 = new Array<string>();
+    this.feedRateError2 = new Array<string>();
+    let index: number = 0;
     this.phast.losses.fixtureLosses.forEach(loss => {
-      this.showFeedRate.push(false);
+      let check: boolean = this.initFeedRate(loss.feedRate, this.phast.modifications[this.exploreModIndex].phast.losses.fixtureLosses[index].feedRate);
+      if (!this.showFixtures && check) {
+        this.showFixtures = check;
+      }
+      this.showFeedRate.push(check);
+      this.feedRateError1.push(null);
+      this.feedRateError2.push(null);
+      index++;
     })
   }
 
 
-  toggleChargeMaterials() {
-
+  initFeedRate(rate1: number, rate2: number) {
+    if (rate1 != rate2) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
-  toggleFeedRate() {
+  toggleFixtures() {
+    if (this.showFixtures == false) {
+      let index: number = 0;
+      this.phast.losses.fixtureLosses.forEach(loss => {
+        let baselineFeedRate: number = loss.feedRate;
+        this.phast.modifications[this.exploreModIndex].phast.losses.fixtureLosses[index].feedRate = baselineFeedRate;
+        index++;
+      });
+      this.initData();
+    }
+  }
 
+  toggleFeedRate(index: number, baselineFeedRate: number) {
+    if(this.showFeedRate[index] == false){
+      this.phast.modifications[this.exploreModIndex].phast.losses.fixtureLosses[index].feedRate = baselineFeedRate;
+      this.calculate();
+    }
   }
 
   focusField(str: string) {
     //this.changeField.emit(str);
   }
 
-  checkFeedRate(num: number) {
+  checkFeedRate(num: number, feedRate: number, index: number) {
+    if (feedRate < 0) {
+      if (num == 1) {
+        this.feedRateError1[index] = 'Fixture Weight feed rate must be greater than 0';
+      } else if (num == 2) {
+        this.feedRateError2[index] = 'Fixture Weight feed rate must be greater than 0';
+      }
+    } else {
+      if (num == 1) {
+        this.feedRateError1[index] = null;
+      } else if (num == 2) {
+        this.feedRateError2[index] = null;
+      }
+    }
+  }
+
+  focusOut() {
 
   }
 
-  focusOut(){
-
+  calculate(){
+    //this.emitCalculate.emit(true)
   }
 }
