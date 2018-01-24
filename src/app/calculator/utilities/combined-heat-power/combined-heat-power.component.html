@@ -1,26 +1,47 @@
-<div class="pump-head">
-  <div class="row">
-    <div class="col-md-6 col-sm-12  mx-auto">
-      <app-combined-heat-power-form [inputs]="inputs" (changeField)="setCurrentField($event)" (emitCalculate)="calculate()"></app-combined-heat-power-form>
-    </div>
-
-    <div class="col-md-6 col-sm-12 mx-auto">
-      <ul class="tabs primary text-center">
-        <li class="calc-tab" [ngClass]="{'active': tabSelect == 'results'}">
-          <a (click)="setTab('results')">Results</a>
-        </li><!--
-    --><li class="calc-tab" [ngClass]="{'active': tabSelect == 'help'}">
-          <a (click)="setTab('help')">Help</a>
-        </li>
-      </ul>
-      <div class="tab-content">
-        <div *ngIf="tabSelect == 'results'" class="form-group text-center">
-          <app-combined-heat-power-results [results]="results"></app-combined-heat-power-results>
+<div class="modify-conditions panel-container row psat">
+  <div class="col-12">
+    <div class="row align-items-top calculator-panel">
+      <div class="modification panel-column col-6 align-top">
+        <div class="col-md-12">
+          <div class="header">
+            <h3>
+              Cash Flow Calculator
+            </h3>
+          </div>
+            <div class="row">
+              <div class="col-12">
+                <app-combined-heat-power-form [inputs]="inputs" (changeField)="setCurrentField($event)" (emitCalculate)="calculate()"></app-combined-heat-power-form>
+              </div>
+            </div>
         </div>
-        <div *ngIf="tabSelect == 'help'">
-          <app-combined-heat-power-help [currentField]="currentField" [inputs]="inputs"></app-combined-heat-power-help>
+      </div>
+      <div class="col-6 align-top">
+        <div class="help-panel">
+          <div class="row">
+            <ul class="tabs primary tab-row">
+              <li class="tab-2 panel-tab-item" [ngClass]="{'active': tabSelect == 'results'}">
+                <a (click)="setTab('results')">Results</a>
+              </li><!--
+              --><li class="tab-2 panel-tab-item" [ngClass]="{'active': tabSelect == 'help'}">
+                  <a (click)="setTab('help')">Help</a>
+              </li>
+            </ul>
+          </div>
+          <div class="row">
+            <div class="col-12">
+              <div class="tab-content curve-results" id="pumpCurveGraph">
+                <div *ngIf="tabSelect == 'results'">
+                  <app-combined-heat-power-results [results]="results"></app-combined-heat-power-results>
+                </div>
+                <div *ngIf="tabSelect == 'help'" class="help-panel">
+                  <app-combined-heat-power-help [currentField]="currentField" [inputs]="inputs"></app-combined-heat-power-help>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
   </div>
 </div>
+
