@@ -18,9 +18,88 @@ export class ExploreWallFormComponent implements OnInit {
   settings: Settings;
   @Input()
   exploreModIndex: number;
+
+  showSurfaceTemp: Array<boolean>;
+  showWall: boolean = false;
+  surfaceTempError1: Array<string>;
+  surfaceTempError2: Array<string>;
   constructor() { }
 
   ngOnInit() {
+    this.initData();
+  }
+
+  initData() {
+    this.showSurfaceTemp = new Array();
+    this.surfaceTempError1 = new Array<string>();
+    this.surfaceTempError2 = new Array<string>();
+    let index: number = 0;
+    this.phast.losses.wallLosses.forEach(loss => {
+      let check: boolean = this.initSurfaceTemp(loss.surfaceTemperature, this.phast.modifications[this.exploreModIndex].phast.losses.wallLosses[index].surfaceTemperature);
+      if (!this.showSurfaceTemp && check) {
+        this.showWall = check;
+      }
+      this.showSurfaceTemp.push(check);
+      this.surfaceTempError1.push(null);
+      this.surfaceTempError2.push(null);
+      index++;
+    })
+  }
+
+
+  initSurfaceTemp(temp1: number, temp2: number) {
+    if (temp1 != temp2) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  toggleWall() {
+    if (this.showWall == false) {
+      let index: number = 0;
+      this.phast.losses.wallLosses.forEach(loss => {
+        let baselineTemp: number = loss.surfaceTemperature;
+        this.phast.modifications[this.exploreModIndex].phast.losses.wallLosses[index].surfaceTemperature = baselineTemp;
+        index++;
+      });
+      this.initData();
+    }
+  }
+
+  toggleSurfaceTemp(index: number, baselineArea: number) {
+    if(this.showSurfaceTemp[index] == false){
+      this.phast.modifications[this.exploreModIndex].phast.losses.wallLosses[index].surfaceTemperature = baselineArea;      
+      this.calculate();
+    }
+  }
+
+  focusField(str: string) {
+    //this.changeField.emit(str);
+  }
+
+  checkSurfaceTemp(num: number, surfaceTemp: number, index: number) {
+    if(num == 1){
+      if(surfaceTemp < this.phast.losses.wallLosses[index].ambientTemperature){
+        this.surfaceTempError1[index] = 'Surface temperature lower is than ambient temperature (' +this.phast.losses.wallLosses[index].ambientTemperature+')';
+      }else{
+        this.surfaceTempError1[index] = null;
+      }
+    }else if(num ==2){
+      if(surfaceTemp < this.phast.modifications[this.exploreModIndex].phast.losses.wallLosses[index].ambientTemperature){
+        this.surfaceTempError2[index] = 'Surface temperature lower is than ambient temperature (' +this.phast.modifications[this.exploreModIndex].phast.losses.wallLosses[index].ambientTemperature+')';
+      }else{
+        this.surfaceTempError2[index] = null;
+      }
+    }
+  }
+
+  focusOut() {
+
+  }
+
+  calculate(){
+    //this.emitCalculate.emit(true)
   }
 
 }
