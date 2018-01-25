@@ -1,8 +1,7 @@
 .name-input-form .input-group-addon{
-    padding-top: 0px;
-    padding-bottom: 0px;
-    background-color: #ffffff;
-    border-radius: 0px;
+    font-size: 16px;
+    border-left: inset 1px;
+    border-right: none;
 }
 
 .name-input-form .input-group-addon:hover{

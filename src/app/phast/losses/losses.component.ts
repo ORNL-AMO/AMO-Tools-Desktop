@@ -73,7 +73,8 @@ export class LossesComponent implements OnInit {
 
     this.lossesService.lossesTab.subscribe(val => {
       this.changeField('default');
-      this.selectedTab = _.find(this.lossesTabs, (t) => { return val == t.step });
+      
+      this.selectedTab = _.find(this.lossesTabs, (t) => {return val == t.step });
       // if (this.lossesTab == 'heat-system-efficiency'
       //   || this.lossesTab == 'atmosphere-losses'
       //   || this.lossesTab == 'exhaust-gas'

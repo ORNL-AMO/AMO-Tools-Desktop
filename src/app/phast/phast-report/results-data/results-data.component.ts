@@ -61,7 +61,7 @@ export class ResultsDataComponent implements OnInit {
       });
     }
 
-    if(this.phast.modifications){
+    if (this.phast.modifications) {
       this.numMods = this.phast.modifications.length;
     }
   }
@@ -72,11 +72,11 @@ export class ResultsDataComponent implements OnInit {
     }
   }
   useModification() {
-    this.reportRollupService.updateSelectedPhasts({assessment: this.assessment, settings: this.settings}, this.selectedModificationIndex);
+    this.reportRollupService.updateSelectedPhasts({ assessment: this.assessment, settings: this.settings }, this.selectedModificationIndex);
   }
 
   getResults() {
-    this.modificationResults = new Array<PhastResults>();
+  this.modificationResults = new Array<PhastResults>();
     this.showResultsCats = this.phastResultsService.getResultCategories(this.settings);
     if (this.phast.losses) {
       this.baseLineResults = this.phastResultsService.getResults(this.phast, this.settings);

@@ -14,7 +14,7 @@
       </label> -->
       <form class="name-input-form" [formGroup]="loss.formByMass" *ngIf="loss.measurementType == 'By Mass'">
         <div class="input-group">
-          <span class="input-group-addon" (click)="collapseLoss(loss)">
+          <span class="input-group-addon units" (click)="collapseLoss(loss)">
             <span *ngIf="loss.collapse" class="fa fa-caret-down"></span>
             <span *ngIf="!loss.collapse" class="fa fa-caret-up"></span>
           </span>

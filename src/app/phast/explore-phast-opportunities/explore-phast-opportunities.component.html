@@ -1,0 +1,49 @@
+<div class="container-fluid phast">
+    <div class="row modify-conditions panel-container">
+      <div class="col-md-6 panel-column">
+        <div class="header">
+          <h3>Select Potential Adjustment Projects</h3>
+        </div>
+        <p>Select potential adjustment projects to explore opportunities to increase efficiency and the effectiveness of your system.</p>
+        <app-explore-phast-opportunities-form [phast]="phast" (emitCalculate)="getResults()" [settings]="settings" [exploreModIndex]="exploreModIndex"
+        (changeField)="focusField($event)" (changeTab)="changeTab($event)"></app-explore-phast-opportunities-form>
+  
+      </div>
+      <div class="col-6">
+        <app-losses-result-panel [inSetup]="false" [currentField]="currentField" [settings]="settings"
+        [phast]="phast" [toggleCalculate]="toggleCalculate" [modification]="phast.modifications[exploreModIndex]" [lossesTab]="lossTab"></app-losses-result-panel>
+      </div>
+      <!-- <div class="col-md-6 help-panel">
+        <div class="row">
+          <ul class="tabs primary tab-row">
+            <li class="panel-tab-item tab-2" [ngClass]="{'active': tabSelect == 'results'}">
+              <a (click)="setTab('results')">Results</a>
+            </li><!--
+            <li class="panel-tab-item tab-3" [ngClass]="{'active': tabSelect == 'sankey'}">
+              <a (click)="setTab('sankey')">Sankey</a>
+            </li>
+            <li class="panel-tab-item tab-2" [ngClass]="{'active': tabSelect == 'help'}">
+              <a (click)="setTab('help')">Help</a>
+            </li>
+          </ul>
+        </div>
+        <div class="explore-help-panel">
+          <app-explore-phast-opportunities-help *ngIf="tabSelect == 'help'">
+          </app-explore-phast-opportunities-help>
+        </div>
+        
+  
+        <!-- <app-explore-opportunities-sankey [baselineResults]="baselineResults" [modificationResults]="modificationResults" [settings]="settings"
+         *ngIf="tabSelect == 'sankey'">
+        </app-explore-opportunities-sankey> 
+  
+        <div class="panel-results">
+          <app-explore-phast-opportunities-results *ngIf="tabSelect == 'results'">
+          </app-explore-phast-opportunities-results>
+        </div>
+  
+  
+        <!-- End .help-panel 
+      </div> -->
+    </div>
+  </div>

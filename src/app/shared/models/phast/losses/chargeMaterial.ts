@@ -7,11 +7,13 @@ export interface ChargeMaterial {
   name?: string
 }
 
+//Gas uses "feedRate"
 export interface GasChargeMaterial {
   materialId?: number,
   thermicReactionType?: number,
   specificHeatGas?: number,
   feedRate?: number,
+  chargeFeedRate?: number,
   percentVapor?: number,
   initialTemperature?: number,
   dischargeTemperature?: number,
@@ -21,7 +23,7 @@ export interface GasChargeMaterial {
   additionalHeat?: number,
   heatRequired?: number
 }
-
+//Liquid and Solid uses "chargeFeedRate"
 export interface LiquidChargeMaterial {
   materialId?: number,
   thermicReactionType?: number,
@@ -29,6 +31,7 @@ export interface LiquidChargeMaterial {
   vaporizingTemperature?: number,
   latentHeat?: number,
   specificHeatVapor?: number,
+  feedRate?: number,
   chargeFeedRate?: number,
   initialTemperature?: number,
   dischargeTemperature?: number,
@@ -45,6 +48,7 @@ export interface SolidChargeMaterial {
   latentHeat?: number,
   specificHeatLiquid?: number,
   meltingPoint?: number,
+  feedRate?: number,
   chargeFeedRate?: number,
   waterContentCharged?: number,
   waterContentDischarged?: number,

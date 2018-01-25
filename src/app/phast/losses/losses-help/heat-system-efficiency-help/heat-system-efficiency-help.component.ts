@@ -14,7 +14,6 @@ export class HeatSystemEfficiencyHelpComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    console.log(this.settings);
   }
 
 }
