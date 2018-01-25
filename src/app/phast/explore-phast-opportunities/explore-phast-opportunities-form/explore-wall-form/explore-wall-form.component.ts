@@ -1,6 +1,7 @@
 import { Component, OnInit, EventEmitter, Output, Input } from '@angular/core';
 import { PHAST } from '../../../../shared/models/phast/phast';
 import { Settings } from '../../../../shared/models/settings';
+import { LossTab } from '../../../tabs';
 
 @Component({
   selector: 'app-explore-wall-form',
@@ -18,6 +19,8 @@ export class ExploreWallFormComponent implements OnInit {
   settings: Settings;
   @Input()
   exploreModIndex: number;
+  @Output('changeTab')
+  changeTab = new EventEmitter<LossTab>();
 
   showSurfaceTemp: Array<boolean>;
   showWall: boolean = false;
@@ -77,6 +80,11 @@ export class ExploreWallFormComponent implements OnInit {
 
   focusField(str: string) {
     this.changeField.emit(str);
+    this.changeTab.emit({
+      tabName: 'Wall',
+      step: 3,
+      componentStr: 'wall-losses',
+    })
   }
 
   checkSurfaceTemp(num: number, surfaceTemp: number, index: number) {

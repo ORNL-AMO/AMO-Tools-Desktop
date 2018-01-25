@@ -6,12 +6,12 @@
         </div>
         <p>Select potential adjustment projects to explore opportunities to increase efficiency and the effectiveness of your system.</p>
         <app-explore-phast-opportunities-form [phast]="phast" (emitCalculate)="getResults()" [settings]="settings" [exploreModIndex]="exploreModIndex"
-        (changeField)="focusField($event)"></app-explore-phast-opportunities-form>
+        (changeField)="focusField($event)" (changeTab)="changeTab($event)"></app-explore-phast-opportunities-form>
   
       </div>
       <div class="col-6">
-        <app-losses-result-panel [inSetup]="false" [lossesTab]="selectedTab" [currentField]="currentField" [settings]="settings"
-        [phast]="phast" [toggleCalculate]="toggleCalculate" [modification]="phast.modifications[exploreModIndex]"></app-losses-result-panel>
+        <app-losses-result-panel [inSetup]="false" [currentField]="currentField" [settings]="settings"
+        [phast]="phast" [toggleCalculate]="toggleCalculate" [modification]="phast.modifications[exploreModIndex]" [lossesTab]="lossTab"></app-losses-result-panel>
       </div>
       <!-- <div class="col-md-6 help-panel">
         <div class="row">

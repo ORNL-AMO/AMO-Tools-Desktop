@@ -2,6 +2,7 @@ import { Component, OnInit, EventEmitter, Output, Input } from '@angular/core';
 import { PHAST } from '../../../../shared/models/phast/phast';
 import { Settings } from '../../../../shared/models/settings';
 import { FlueGasByMass, FlueGasByVolume } from '../../../../shared/models/phast/losses/flueGas';
+import { LossTab } from '../../../tabs';
 
 @Component({
   selector: 'app-explore-flue-gas-form',
@@ -19,6 +20,10 @@ export class ExploreFlueGasFormComponent implements OnInit {
   settings: Settings;
   @Input()
   exploreModIndex: number;
+  @Output('changeTab')
+  changeTab = new EventEmitter<LossTab>();
+
+
   baselineFlueGas: FlueGasByMass | FlueGasByVolume;
   modifiedFlueGas: FlueGasByMass | FlueGasByVolume;
 
@@ -125,6 +130,11 @@ export class ExploreFlueGasFormComponent implements OnInit {
 
   focusField(str: string) {
     this.changeField.emit(str);
+    this.changeTab.emit({
+      tabName: 'Flue Gas',
+      step: 1,
+      componentStr: 'flue-gas-losses' 
+    })
   }
 
 }

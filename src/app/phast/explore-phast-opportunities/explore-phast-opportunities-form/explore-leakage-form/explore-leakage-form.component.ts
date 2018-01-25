@@ -1,6 +1,7 @@
 import { Component, OnInit, EventEmitter, Output, Input } from '@angular/core';
 import { PHAST } from '../../../../shared/models/phast/phast';
 import { Settings } from '../../../../shared/models/settings';
+import { LossTab } from '../../../tabs';
 
 @Component({
   selector: 'app-explore-leakage-form',
@@ -18,6 +19,10 @@ export class ExploreLeakageFormComponent implements OnInit {
   settings: Settings;
   @Input()
   exploreModIndex: number;
+  @Output('changeTab')
+  changeTab = new EventEmitter<LossTab>();
+
+
   showOpening: Array<boolean>;
   showLeakage: boolean = false;
   openingAreaError1: Array<string>;
@@ -68,14 +73,22 @@ export class ExploreLeakageFormComponent implements OnInit {
   }
 
   toggleOpening(index: number, baselineArea: number) {
-    if(this.showOpening[index] == false){
-      this.phast.modifications[this.exploreModIndex].phast.losses.leakageLosses[index].openingArea = baselineArea;      
+    if (this.showOpening[index] == false) {
+      this.phast.modifications[this.exploreModIndex].phast.losses.leakageLosses[index].openingArea = baselineArea;
       this.calculate();
     }
   }
 
   focusField(str: string) {
     this.changeField.emit(str);
+    this.changeTab.emit({
+      tabName: 'Gas Leakage',
+      step: 7,
+      next: 8,
+      back: 6,
+      componentStr: 'gas-leakage-losses',
+      showAdd: true
+    })
   }
 
   checkOpening(num: number, openingArea: number, index: number) {
@@ -98,7 +111,7 @@ export class ExploreLeakageFormComponent implements OnInit {
 
   }
 
-  calculate(){
+  calculate() {
     this.emitCalculate.emit(true)
   }
 

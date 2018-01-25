@@ -6,6 +6,7 @@ import { ConvertUnitsService } from '../../../../shared/convert-units/convert-un
 import { FormGroup } from '@angular/forms';
 import { OpeningLossesService } from '../../../losses/opening-losses/opening-losses.service';
 import { PhastService } from '../../../phast.service';
+import { LossTab } from '../../../tabs';
 
 @Component({
   selector: 'app-explore-opening-form',
@@ -23,6 +24,8 @@ export class ExploreOpeningFormComponent implements OnInit {
   settings: Settings;
   @Input()
   exploreModIndex: number;
+  @Output('changeTab')
+  changeTab = new EventEmitter<LossTab>();
 
   totalArea1: Array<number>;
   heightError1: Array<string>;
@@ -280,6 +283,14 @@ export class ExploreOpeningFormComponent implements OnInit {
 
   focusField(str: string) {
     this.changeField.emit(str);
+    this.changeTab.emit({
+      tabName: 'Opening',
+      step: 6,
+      next: 7,
+      back: 5,
+      componentStr: 'opening-losses',
+      showAdd: true 
+    })
   }
 
   focusOut() {

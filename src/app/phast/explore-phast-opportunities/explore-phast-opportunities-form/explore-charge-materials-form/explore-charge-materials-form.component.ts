@@ -2,6 +2,7 @@ import { Component, OnInit, EventEmitter, Output, Input } from '@angular/core';
 import { PHAST } from '../../../../shared/models/phast/phast';
 import { Settings } from '../../../../shared/models/settings';
 import { SolidChargeMaterial, LiquidChargeMaterial, GasChargeMaterial } from '../../../../shared/models/phast/losses/chargeMaterial';
+import { LossTab } from '../../../tabs';
 
 @Component({
   selector: 'app-explore-charge-materials-form',
@@ -19,6 +20,8 @@ export class ExploreChargeMaterialsFormComponent implements OnInit {
   settings: Settings;
   @Input()
   exploreModIndex: number;
+  @Output('changeTab')
+  changeTab = new EventEmitter<LossTab>();
 
   materials: Array<ExploreMaterial>;
   showMaterial: boolean = false;
@@ -142,6 +145,13 @@ export class ExploreChargeMaterialsFormComponent implements OnInit {
 
   focusField(str: string) {
     this.changeField.emit(str);
+    this.changeTab.emit( {
+      tabName: 'Charge Material',
+      step: 1,
+      next: 2,
+      componentStr: 'charge-material',
+      showAdd: true  
+  });
   }
 
   focusOut() {
