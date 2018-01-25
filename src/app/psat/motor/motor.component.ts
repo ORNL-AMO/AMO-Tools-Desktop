@@ -320,7 +320,6 @@ export class MotorComponent implements OnInit {
   }
 
   checkRatedPower(bool?: boolean) {
-    this.modifyPowerArrays();
     if (!bool) {
       this.startSavePolling();
     }
