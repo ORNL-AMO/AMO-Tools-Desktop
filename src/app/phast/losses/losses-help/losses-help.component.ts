@@ -16,7 +16,7 @@ export class LossesHelpComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    console.log(this.lossesTab);
+
   }
 
 }

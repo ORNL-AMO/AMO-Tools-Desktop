@@ -2,6 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { PHAST, ShowResultsCategories } from '../../../shared/models/phast/phast';
 import { Settings } from '../../../shared/models/settings';
 import { PhastResultsService } from '../../phast-results.service';
+import { LossTab } from '../../tabs';
 
 @Component({
   selector: 'app-explore-phast-opportunities-form',
@@ -19,6 +20,8 @@ export class ExplorePhastOpportunitiesFormComponent implements OnInit {
   exploreModIndex: number;
   @Output('changeField')
   changeField = new EventEmitter<string>();
+  @Output('changeTab')
+  changeTab = new EventEmitter<LossTab>();
 
   resultsCategories: ShowResultsCategories;
 
@@ -56,5 +59,9 @@ export class ExplorePhastOpportunitiesFormComponent implements OnInit {
 
   focusField(str: string){
     this.changeField.emit(str);
+  }
+
+  emitLossTab(tab: LossTab){
+    this.changeTab.emit(tab);
   }
 }

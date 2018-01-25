@@ -2,6 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { PHAST } from '../../shared/models/phast/phast';
 import { Assessment } from '../../shared/models/assessment';
 import { Settings } from '../../shared/models/settings';
+import { LossTab } from '../tabs';
 
 @Component({
   selector: 'app-explore-phast-opportunities',
@@ -18,9 +19,9 @@ export class ExplorePhastOpportunitiesComponent implements OnInit {
 
   tabSelect: string = 'results';
   exploreModIndex: number;
-  selectedTab: string = '';
   currentField: string = 'default';
   toggleCalculate: boolean = false;
+  lossTab: LossTab;
   constructor() { }
 
   ngOnInit() {
@@ -86,5 +87,11 @@ export class ExplorePhastOpportunitiesComponent implements OnInit {
 
   focusField(str: string){
     this.currentField = str;
+  }
+  
+
+  changeTab(tab: LossTab){
+    this.lossTab = tab;
+    console.log(this.lossTab);
   }
 }

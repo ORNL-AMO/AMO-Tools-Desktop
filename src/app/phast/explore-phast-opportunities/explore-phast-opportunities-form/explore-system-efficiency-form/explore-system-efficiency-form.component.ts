@@ -1,6 +1,7 @@
 import { Component, OnInit, EventEmitter, Output, Input } from '@angular/core';
 import { PHAST } from '../../../../shared/models/phast/phast';
 import { Settings } from '../../../../shared/models/settings';
+import { LossTab } from '../../../tabs';
 
 @Component({
   selector: 'app-explore-system-efficiency-form',
@@ -18,6 +19,8 @@ export class ExploreSystemEfficiencyFormComponent implements OnInit {
   settings: Settings;
   @Input()
   exploreModIndex: number;
+  @Output('changeTab')
+  changeTab = new EventEmitter<LossTab>();
 
   showEfficiencyData: boolean = false;
 
@@ -46,6 +49,11 @@ export class ExploreSystemEfficiencyFormComponent implements OnInit {
 
   calculate() {
     this.emitCalculate.emit(true);
+    this.changeTab.emit({
+      tabName: 'Heat System Efficiency',
+      step: 1,
+      componentStr: 'heat-system-efficiency' 
+    })
   }
 
   focusOut() {

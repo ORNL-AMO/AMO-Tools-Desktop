@@ -1,6 +1,7 @@
 import { Component, OnInit, EventEmitter, Output, Input } from '@angular/core';
 import { PHAST } from '../../../../shared/models/phast/phast';
 import { Settings } from '../../../../shared/models/settings';
+import { LossTab } from '../../../tabs';
 
 @Component({
   selector: 'app-explore-operations-form',
@@ -18,6 +19,9 @@ export class ExploreOperationsFormComponent implements OnInit {
   settings: Settings;
   @Input()
   exploreModIndex: number;
+  @Output('changeTab')
+  changeTab = new EventEmitter<LossTab>();
+
 
   showOperations: boolean = false;
   showOpHours: boolean = false;
@@ -103,6 +107,11 @@ export class ExploreOperationsFormComponent implements OnInit {
 
   focusField(str: string) {
     this.changeField.emit(str);
+    this.changeTab.emit({
+      tabName: 'Operations',
+      step: 1,
+      componentStr: 'operations' 
+    })
   }
 
   calculate() {

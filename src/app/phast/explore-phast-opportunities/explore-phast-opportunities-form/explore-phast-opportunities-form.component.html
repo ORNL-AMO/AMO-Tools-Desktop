@@ -11,36 +11,36 @@
     </li>
     <li>
       <app-explore-charge-materials-form *ngIf="showCharge" [(phast)]="phast" (changeField)="focusField($event)" (emitCalculate)="calculate()" [settings]="settings"
-        [exploreModIndex]="exploreModIndex"></app-explore-charge-materials-form>
+        [exploreModIndex]="exploreModIndex" (changeTab)="emitLossTab($event)"></app-explore-charge-materials-form>
     </li>
     <li>
       <app-explore-fixtures-form *ngIf="showFixtures" [(phast)]="phast" (changeField)="focusField($event)" (emitCalculate)="calculate()" [settings]="settings"
-        [exploreModIndex]="exploreModIndex"></app-explore-fixtures-form>
+        [exploreModIndex]="exploreModIndex" (changeTab)="emitLossTab($event)"></app-explore-fixtures-form>
     </li>
     <li>
       <app-explore-leakage-form *ngIf="showLeakage" [(phast)]="phast" (changeField)="focusField($event)" (emitCalculate)="calculate()" [settings]="settings"
-        [exploreModIndex]="exploreModIndex"></app-explore-leakage-form>
+        [exploreModIndex]="exploreModIndex" (changeTab)="emitLossTab($event)"></app-explore-leakage-form>
 
     </li>
     <li>
       <app-explore-wall-form *ngIf="showWall" [(phast)]="phast" (changeField)="focusField($event)" (emitCalculate)="calculate()" [settings]="settings"
-        [exploreModIndex]="exploreModIndex"></app-explore-wall-form>
+        [exploreModIndex]="exploreModIndex" (changeTab)="emitLossTab($event)"></app-explore-wall-form>
     </li>
     <li>
       <app-explore-opening-form *ngIf="showOpening" [(phast)]="phast" (changeField)="focusField($event)" (emitCalculate)="calculate()" [settings]="settings"
-        [exploreModIndex]="exploreModIndex"></app-explore-opening-form>
+        [exploreModIndex]="exploreModIndex" (changeTab)="emitLossTab($event)"></app-explore-opening-form>
     </li>
     <li>
       <app-explore-operations-form [(phast)]="phast" (changeField)="focusField($event)" (emitCalculate)="calculate()" [settings]="settings"
-        [exploreModIndex]="exploreModIndex"></app-explore-operations-form>
+        [exploreModIndex]="exploreModIndex" (changeTab)="emitLossTab($event)"></app-explore-operations-form>
     </li>
     <li>
       <app-explore-flue-gas-form *ngIf="resultsCategories.showFlueGas" [(phast)]="phast" (changeField)="focusField($event)" (emitCalculate)="calculate()" [settings]="settings"
-        [exploreModIndex]="exploreModIndex"></app-explore-flue-gas-form>
+        [exploreModIndex]="exploreModIndex" (changeTab)="emitLossTab($event)"></app-explore-flue-gas-form>
     </li>
     <li>
       <app-explore-system-efficiency-form *ngIf="resultsCategories.showSystemEff" [(phast)]="phast" (changeField)="focusField($event)" (emitCalculate)="calculate()" [settings]="settings"
-        [exploreModIndex]="exploreModIndex"></app-explore-system-efficiency-form>
+        [exploreModIndex]="exploreModIndex" (changeTab)="emitLossTab($event)"></app-explore-system-efficiency-form>
     </li>
   </ul>
 </div>
