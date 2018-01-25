@@ -22,7 +22,7 @@
           </div>
         </div>
         <div class="form-group">
-          <label for="modified02">Baseline Oxygen in Flue Gas</label>
+          <label for="modified02">Modified Oxygen in Flue Gas</label>
           <div class="input-group">
             <input name="modified02" type="number" step="any" min="0" class="form-control" [(ngModel)]="modifiedFlueGas.o2InFlueGas"
               id="modified02" onfocus="this.select();" (input)="calculate()" (focus)="focusField('o2InFlueGas')" (blur)="focusOut()">
@@ -50,7 +50,7 @@
           </div>
         </div>
         <div class="form-group">
-          <label for="modifiedExcessAir">Baseline Oxygen in Flue Gas</label>
+          <label for="modifiedExcessAir">Modified Oxygen in Flue Gas</label>
           <div class="input-group">
             <input name="modifiedExcessAir" type="number" step="any" min="0" class="form-control" [(ngModel)]="modifiedFlueGas.excessAirPercentage"
               id="modifiedExcessAir" onfocus="this.select();" (input)="calculate()" (focus)="focusField('excessAirPercentage')"
@@ -70,7 +70,7 @@
       </div>
       <form *ngIf="showFuelTemp">
         <div class="form-group">
-          <label for="baselineFlueTemperature">Baseline Flue Temperature</label>
+          <label for="baselineFlueTemperature">Baseline Flue Gas Temperature</label>
           <div class="input-group">
             <input name="baselineFlueTemperature" type="number" step="any" min="0" class="form-control" [(ngModel)]="baselineFlueGas.flueGasTemperature"
               id="baselineFlueTemperature" onfocus="this.select();" (input)="calculate()" (focus)="focusField('flueGasTemperature')"
@@ -80,7 +80,7 @@
           </div>
         </div>
         <div class="form-group">
-          <label for="modifiedFlueTemperature">Baseline Flue Temperature</label>
+          <label for="modifiedFlueTemperature">Modified Flue Gas Temperature</label>
           <div class="input-group">
             <input name="modifiedFlueTemperature" type="number" step="any" min="0" class="form-control" [(ngModel)]="modifiedFlueGas.flueGasTemperature"
               id="modifiedFlueTemperature" onfocus="this.select();" (input)="calculate()" (focus)="focusField('flueGasTemperature')"
@@ -111,7 +111,7 @@
           </div>
         </div>
         <div class="form-group">
-          <label for="modifiedAirTemp">Baseline Combustion Air Temperature</label>
+          <label for="modifiedAirTemp">Modified Combustion Air Temperature</label>
           <div class="input-group">
             <input name="modifiedAirTemp" type="number" step="any" min="0" class="form-control" [(ngModel)]="modifiedFlueGas.combustionAirTemperature"
               id="modifiedAirTemp" onfocus="this.select();" (input)="calculate()" (focus)="focusField('combustionAirTemperature')"

@@ -22,11 +22,11 @@ export class ExploreFlueGasFormComponent implements OnInit {
   baselineFlueGas: FlueGasByMass | FlueGasByVolume;
   modifiedFlueGas: FlueGasByMass | FlueGasByVolume;
 
-  showFlueGas
-  showExcessAir
-  showO2
-  showFuelTemp
-  showAirTemp
+  showFlueGas: boolean = false;
+  showExcessAir: boolean = false;
+  showO2: boolean = false;
+  showFuelTemp: boolean = false;
+  showAirTemp: boolean = false;
   constructor() { }
 
   ngOnInit() {
@@ -37,17 +37,80 @@ export class ExploreFlueGasFormComponent implements OnInit {
       this.baselineFlueGas = this.phast.losses.flueGasLosses[0].flueGasByVolume;
       this.modifiedFlueGas = this.phast.modifications[this.exploreModIndex].phast.losses.flueGasLosses[0].flueGasByVolume;
     }
+    this.initFuelTemp();
+    this.initExcessAir();
+    this.initO2();
+    this.initAirTemp();
+    this.initFlueGas();
   }
 
+  initFuelTemp(){
+    if(this.baselineFlueGas.flueGasTemperature != this.modifiedFlueGas.flueGasTemperature){
+      this.showFuelTemp = true;
+    }
+  }
 
+  initExcessAir(){
+    if(this.baselineFlueGas.excessAirPercentage != this.modifiedFlueGas.excessAirPercentage){
+      this.showExcessAir = true;
+    }
+  }
+
+  initO2(){
+    if(this.baselineFlueGas.o2InFlueGas != this.modifiedFlueGas.o2InFlueGas){
+      this.showO2 = true;
+    }
+  }
+
+  initAirTemp(){
+    if(this.baselineFlueGas.combustionAirTemperature != this.modifiedFlueGas.combustionAirTemperature){
+      this.showAirTemp = true;
+    }
+  }
+
+  initFlueGas(){
+    if(this.showAirTemp || this.showO2 || this.showExcessAir || this.showFuelTemp){
+      this.showFlueGas = true;
+    }
+  }
 
   toggleFlueGas() {
-
+    if(this.showFlueGas == false){
+      this.showExcessAir = false;
+      this.showAirTemp = false;
+      this.showFuelTemp = false;
+      this.showO2 = false;
+      this.toggleAirTemp();
+      this.toggleExcessAir();
+      this.toggleFuelTemp();
+      this.toggleO2();
+    }
   }
-  toggleAirTemp() { }
-  toggleFuelTemp() { }
-  toggleExcessAir() { }
-  toggleO2() { }
+
+  toggleAirTemp() {
+    if(this.showAirTemp == false){
+      this.modifiedFlueGas.combustionAirTemperature = this.baselineFlueGas.combustionAirTemperature;
+    }
+  }
+
+  toggleFuelTemp() { 
+    if(this.showFuelTemp == false){
+      this.modifiedFlueGas.flueGasTemperature = this.baselineFlueGas.flueGasTemperature;
+    }
+  }
+
+  toggleExcessAir() {
+    if(this.showExcessAir == false){
+      this.modifiedFlueGas.excessAirPercentage = this.baselineFlueGas.excessAirPercentage;
+    }
+   }
+
+  toggleO2() { 
+    if(this.showO2 == false){
+      this.modifiedFlueGas.o2InFlueGas = this.baselineFlueGas.o2InFlueGas;
+    }
+  }
+
   focusOut() {
 
   }
