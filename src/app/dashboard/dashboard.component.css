@@ -13,6 +13,10 @@
     overflow-y: auto;
 }
 
+.dashboard-content::-webkit-scrollbar{
+    display: none;
+}
+
 .landing-screen::-webkit-scrollbar,
 .sidebar-bg::-webkit-scrollbar {
     width: .5em;

@@ -1,8 +1,6 @@
 <div class="phast-container phast" *ngIf="assessment && settings">
   <div class="hide-print sticky-top">
     <app-phast-banner [assessment]="assessment" [settings]="settings"></app-phast-banner>
-  </div>
-  <div class="hide-print">
     <!-- phast-tabs = step tabs -->
     <app-phast-tabs *ngIf="mainTab == 'system-setup'"></app-phast-tabs>
 
@@ -57,7 +55,7 @@
   </div>
 
   <!--Assessment-->
-  <div *ngIf="mainTab == 'assessment'">
+  <div class="tab-content" *ngIf="mainTab == 'assessment'">
     <div class="tab-content" *ngIf="assessmentTab == 'explore-opportunities'">
       <app-explore-phast-opportunities [(phast)]="_phast" [settings]="settings" [assessment]="assessment"></app-explore-phast-opportunities>
     </div>
