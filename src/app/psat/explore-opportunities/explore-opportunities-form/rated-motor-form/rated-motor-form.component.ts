@@ -147,8 +147,6 @@ export class RatedMotorFormComponent implements OnInit {
   }
 
   setEfficiencyClasses() {
-    this.modifyPowerArrays(true);
-    this.modifyPowerArrays(false);
     this.checkMotorEfficiencies();
     this.psat.modifications[this.exploreModIndex].psat.inputs.efficiency_class = this.psatService.getEfficienyClassEnum(this.tmpModificationEfficiencyClass);
     this.psat.inputs.efficiency_class = this.psatService.getEfficienyClassEnum(this.tmpBaselineEfficiencyClass);
@@ -158,6 +156,8 @@ export class RatedMotorFormComponent implements OnInit {
     if (!this.psat.inputs.efficiency) {
       this.psat.inputs.efficiency = 90;
     }
+    this.modifyPowerArrays(true);
+    this.modifyPowerArrays(false);
     this.calculate();
   }
 
@@ -255,6 +255,7 @@ export class RatedMotorFormComponent implements OnInit {
   toggleMotorRatedPower() {
     if (this.showRatedMotorPower == false) {
       this.psat.modifications[this.exploreModIndex].psat.inputs.motor_rated_power = this.psat.inputs.motor_rated_power;
+      this.modifyPowerArrays(false);
       this.calculate();
     }
   }
@@ -262,6 +263,7 @@ export class RatedMotorFormComponent implements OnInit {
     if (this.showEfficiencyClass == false) {
       this.psat.modifications[this.exploreModIndex].psat.inputs.efficiency_class = this.psat.inputs.efficiency_class;
       this.tmpModificationEfficiencyClass = this.psatService.getEfficiencyClassFromEnum(this.psat.inputs.efficiency_class);
+      this.modifyPowerArrays(false);
       this.calculate();
     }
   }

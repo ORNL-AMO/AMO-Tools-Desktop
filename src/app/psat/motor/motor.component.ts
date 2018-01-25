@@ -399,8 +399,12 @@ export class MotorComponent implements OnInit {
     this.compareService.checkMotorDifferent();
   }
 
-  startSavePolling() {
+  callSavePollingAndModifyPowerArrays() {
     this.modifyPowerArrays();
+    this.startSavePolling();
+  }
+
+  startSavePolling() {
     this.checkForm(this.psatForm);
     if (this.counter) {
       clearTimeout(this.counter);
