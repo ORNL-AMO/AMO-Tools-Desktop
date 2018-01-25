@@ -45,15 +45,15 @@ export class ExploreSystemEfficiencyFormComponent implements OnInit {
 
   focusField(str: string) {
     this.changeField.emit(str);
-  }
-
-  calculate() {
-    this.emitCalculate.emit(true);
     this.changeTab.emit({
       tabName: 'Heat System Efficiency',
       step: 1,
       componentStr: 'heat-system-efficiency' 
     })
+  }
+
+  calculate() {
+    this.emitCalculate.emit(true);
   }
 
   focusOut() {

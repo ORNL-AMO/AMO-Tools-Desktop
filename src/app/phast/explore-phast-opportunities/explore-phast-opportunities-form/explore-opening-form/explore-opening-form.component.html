@@ -1,6 +1,6 @@
 <div class="checkbox">
   <label class="group-label" for="exploreOpening">
-    <input type="checkbox" id="exploreOpening" value="true" (focus)="focusField('openingData')" (change)="toggleOpening()" [(ngModel)]="showOpening"
+    <input type="checkbox" id="exploreOpening" value="true" (focus)="focusField('numberOfOpenings')" (change)="toggleOpening()" [(ngModel)]="showOpening"
     /> Adjust Opening Loss Data
   </label>
 </div>
@@ -9,7 +9,7 @@
     <li>
       <div class="checkbox form-group">
         <label for="{{'modifySize_'+index}}">
-          <input type="checkbox" id="{{'modifySize_'+index}}" (focus)="focusField('modifySize')" (change)="toggleSize(index, loss)"
+          <input type="checkbox" id="{{'modifySize_'+index}}" (focus)="focusField('numberOfOpenings')" (change)="toggleSize(index, loss)"
             [(ngModel)]="showSize[index]" /> Modify Opening Size
         </label>
         <label>
