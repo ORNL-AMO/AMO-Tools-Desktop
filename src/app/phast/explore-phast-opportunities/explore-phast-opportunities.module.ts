@@ -13,8 +13,6 @@ import { ExploreOperationsFormComponent } from './explore-phast-opportunities-fo
 import { ExploreFlueGasFormComponent } from './explore-phast-opportunities-form/explore-flue-gas-form/explore-flue-gas-form.component';
 import { ExploreSystemEfficiencyFormComponent } from './explore-phast-opportunities-form/explore-system-efficiency-form/explore-system-efficiency-form.component';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
-import { ExploreByVolumeFormComponent } from './explore-phast-opportunities-form/explore-flue-gas-form/explore-by-volume-form/explore-by-volume-form.component';
-import { ExploreByMassFormComponent } from './explore-phast-opportunities-form/explore-flue-gas-form/explore-by-mass-form/explore-by-mass-form.component';
 
 @NgModule({
   imports: [
@@ -34,9 +32,7 @@ import { ExploreByMassFormComponent } from './explore-phast-opportunities-form/e
     ExploreOpeningFormComponent,
     ExploreOperationsFormComponent,
     ExploreFlueGasFormComponent,
-    ExploreSystemEfficiencyFormComponent,
-    ExploreByVolumeFormComponent,
-    ExploreByMassFormComponent
+    ExploreSystemEfficiencyFormComponent
   ],
   exports: [
     ExplorePhastOpportunitiesComponent

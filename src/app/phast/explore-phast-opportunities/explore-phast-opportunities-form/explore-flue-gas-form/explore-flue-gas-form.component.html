@@ -6,9 +6,121 @@
 </div>
 <div *ngIf="showFlueGas">
   <ul>
-    <app-explore-by-volume-form *ngIf="phast.losses.flueGasLosses[0].flueGasType == 'By Volume'" [(phast)]="phast" (changeField)="focusField($event)" (emitCalculate)="calculate()" [settings]="settings"
-    [exploreModIndex]="exploreModIndex"></app-explore-by-volume-form>
-    <app-explore-by-mass-form *ngIf="phast.losses.flueGasLosses[0].flueGasType == 'By Mass'" [(phast)]="phast" (changeField)="focusField($event)" (emitCalculate)="calculate()" [settings]="settings"
-    [exploreModIndex]="exploreModIndex"></app-explore-by-mass-form>
+    <li *ngIf="baselineFlueGas.oxygenCalculationMethod == 'Oxygen in Flue Gas'">
+      <div class="checkbox form-group">
+        <label for="modifyO2">
+          <input type="checkbox" id="modifyO2" (focus)="focusField('o2InFlueGas')" (change)="toggleO2()" [(ngModel)]="showO2" /> Modify Oxygen In Flue Gas
+        </label>
+      </div>
+      <form *ngIf="showO2">
+        <div class="form-group">
+          <label for="baselineO2">Baseline Oxygen in Flue Gas</label>
+          <div class="input-group">
+            <input name="baselineO2" type="number" step="any" min="0" class="form-control" [(ngModel)]="baselineFlueGas.o2InFlueGas"
+              id="baselineO2" onfocus="this.select();" (input)="calculate()" (focus)="focusField('o2InFlueGas')" (blur)="focusOut()">
+            <span class="input-group-addon units">%</span>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="modified02">Baseline Oxygen in Flue Gas</label>
+          <div class="input-group">
+            <input name="modified02" type="number" step="any" min="0" class="form-control" [(ngModel)]="modifiedFlueGas.o2InFlueGas"
+              id="modified02" onfocus="this.select();" (input)="calculate()" (focus)="focusField('o2InFlueGas')" (blur)="focusOut()">
+            <span class="input-group-addon units">%</span>
+          </div>
+        </div>
+      </form>
+    </li>
+
+    <li *ngIf="baselineFlueGas.oxygenCalculationMethod == 'Excess Air'">
+      <div class="checkbox form-group">
+        <label for="modifyExcessAir">
+          <input type="checkbox" id="modifyExcessAir" (focus)="focusField('excessAirPercentage')" (change)="toggleExcessAir()" [(ngModel)]="showExcessAir"
+          /> Modify Excess Air In Flue Gas
+        </label>
+      </div>
+      <form *ngIf="showExcessAir">
+        <div class="form-group">
+          <label for="baselineExcessAir">Baseline Excess Air in Flue Gas</label>
+          <div class="input-group">
+            <input name="baselineExcessAir" type="number" step="any" min="0" class="form-control" [(ngModel)]="baselineFlueGas.excessAirPercentage"
+              id="baselineExcessAir" onfocus="this.select();" (input)="calculate()" (focus)="focusField('excessAirPercentage')"
+              (blur)="focusOut()">
+            <span class="input-group-addon units">%</span>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="modifiedExcessAir">Baseline Oxygen in Flue Gas</label>
+          <div class="input-group">
+            <input name="modifiedExcessAir" type="number" step="any" min="0" class="form-control" [(ngModel)]="modifiedFlueGas.excessAirPercentage"
+              id="modifiedExcessAir" onfocus="this.select();" (input)="calculate()" (focus)="focusField('excessAirPercentage')"
+              (blur)="focusOut()">
+            <span class="input-group-addon units">%</span>
+          </div>
+        </div>
+      </form>
+    </li>
+
+    <li>
+      <div class="checkbox form-group">
+        <label for="modifyFuelTemp">
+          <input type="checkbox" id="modifyFuelTemp" (focus)="focusField('flueGasTemperature')" (change)="toggleFuelTemp()" [(ngModel)]="showFuelTemp"
+          /> Modify Flue Temperature
+        </label>
+      </div>
+      <form *ngIf="showFuelTemp">
+        <div class="form-group">
+          <label for="baselineFlueTemperature">Baseline Flue Temperature</label>
+          <div class="input-group">
+            <input name="baselineFlueTemperature" type="number" step="any" min="0" class="form-control" [(ngModel)]="baselineFlueGas.flueGasTemperature"
+              id="baselineFlueTemperature" onfocus="this.select();" (input)="calculate()" (focus)="focusField('flueGasTemperature')"
+              (blur)="focusOut()">
+            <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">&#8457;</span>
+            <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="modifiedFlueTemperature">Baseline Flue Temperature</label>
+          <div class="input-group">
+            <input name="modifiedFlueTemperature" type="number" step="any" min="0" class="form-control" [(ngModel)]="modifiedFlueGas.flueGasTemperature"
+              id="modifiedFlueTemperature" onfocus="this.select();" (input)="calculate()" (focus)="focusField('flueGasTemperature')"
+              (blur)="focusOut()">
+            <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">&#8457;</span>
+            <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
+          </div>
+        </div>
+      </form>
+    </li>
+
+    <li>
+      <div class="checkbox form-group">
+        <label for="modifyAirTemp">
+          <input type="checkbox" id="modifyAirTemp" (focus)="focusField('combustionAirTemperature')" (change)="toggleAirTemp()" [(ngModel)]="showAirTemp"
+          /> Modify Combustion Air Temperature
+        </label>
+      </div>
+      <form *ngIf="showAirTemp">
+        <div class="form-group">
+          <label for="baselineAirTemp">Baseline Combustion Air Temperature</label>
+          <div class="input-group">
+            <input name="baselineAirTemp" type="number" step="any" min="0" class="form-control" [(ngModel)]="baselineFlueGas.combustionAirTemperature"
+              id="baselineAirTemp" onfocus="this.select();" (input)="calculate()" (focus)="focusField('combustionAirTemperature')"
+              (blur)="focusOut()">
+            <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">&#8457;</span>
+            <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="modifiedAirTemp">Baseline Combustion Air Temperature</label>
+          <div class="input-group">
+            <input name="modifiedAirTemp" type="number" step="any" min="0" class="form-control" [(ngModel)]="modifiedFlueGas.combustionAirTemperature"
+              id="modifiedAirTemp" onfocus="this.select();" (input)="calculate()" (focus)="focusField('combustionAirTemperature')"
+              (blur)="focusOut()">
+            <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">&#8457;</span>
+            <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
+          </div>
+        </div>
+      </form>
+    </li>
   </ul>
 </div>
