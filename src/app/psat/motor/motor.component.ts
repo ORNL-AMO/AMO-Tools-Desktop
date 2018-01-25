@@ -398,7 +398,7 @@ export class MotorComponent implements OnInit {
     this.compareService.checkMotorDifferent();
   }
 
-  callSavePollingAndModifyPowerArrays() {
+  changeEfficiencyClass() {
     this.modifyPowerArrays();
     this.startSavePolling();
   }

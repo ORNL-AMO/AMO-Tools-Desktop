@@ -74,6 +74,13 @@ export class PsatService {
 
   resultsOptimal(psatInputs: PsatInputs, settings: Settings): PsatOutputs {
     psatInputs = this.convertInputs(psatInputs, settings);
+    if (psatInputs.motor_rated_power > 500) {
+      debugger
+      // temporary
+      console.log("motor_rated_power in resultsOptimal must not exceed 500 because we lack data for premium motors");
+      psatInputs.motor_rated_power = 500;
+    }
+
     //call addon resultsOptimal
     let tmpResults: PsatOutputs = psatAddon.resultsOptimal(psatInputs);
     if (settings.powerMeasurement != 'hp') {
@@ -85,6 +92,13 @@ export class PsatService {
 
   resultsModified(psatInputs: PsatInputs, settings: Settings, baseline_pump_efficiency: number): PsatOutputs {
     psatInputs = this.convertInputs(psatInputs, settings);
+    if (psatInputs.motor_rated_power > 500) {
+      debugger
+      // temporary placeholder
+      console.log("motor_rated_power in resultsModified must not exceed 500 because we lack data for premium motors");
+      psatInputs.motor_rated_power = 500;
+    }
+
     let tmpInputs: any;
     tmpInputs = psatInputs;
     tmpInputs.baseline_pump_efficiency = baseline_pump_efficiency;
