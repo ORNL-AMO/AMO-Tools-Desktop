@@ -1,3 +1,14 @@
-<p>
-  explore-flue-gas-form works!
-</p>
+<div class="checkbox">
+  <label class="group-label" for="exploreFlueGas">
+    <input type="checkbox" id="exploreFlueGas" value="true" (focus)="focusField('flueGasData')" (change)="toggleFlueGas()" [(ngModel)]="showFlueGas"
+    /> Adjust Flue Gas Data
+  </label>
+</div>
+<div *ngIf="showFlueGas">
+  <ul>
+    <app-explore-by-volume-form *ngIf="phast.losses.flueGasLosses[0].flueGasType == 'By Volume'" [(phast)]="phast" (changeField)="focusField($event)" (emitCalculate)="calculate()" [settings]="settings"
+    [exploreModIndex]="exploreModIndex"></app-explore-by-volume-form>
+    <app-explore-by-mass-form *ngIf="phast.losses.flueGasLosses[0].flueGasType == 'By Mass'" [(phast)]="phast" (changeField)="focusField($event)" (emitCalculate)="calculate()" [settings]="settings"
+    [exploreModIndex]="exploreModIndex"></app-explore-by-mass-form>
+  </ul>
+</div>

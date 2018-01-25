@@ -23,4 +23,23 @@ export class ExploreFlueGasFormComponent implements OnInit {
   ngOnInit() {
   }
 
+
+
+  toggleFlueGas(){
+    
+  }
+
+
+  focusOut() {
+
+  }
+
+  calculate(){
+    //this.emitCalculate.emit(true)
+  }
+
+  focusField(str: string) {
+    //this.changeField.emit(str);
+  }
+
 }

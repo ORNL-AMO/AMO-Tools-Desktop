@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { PHAST } from '../../../shared/models/phast/phast';
+import { PHAST, ShowResultsCategories } from '../../../shared/models/phast/phast';
 import { Settings } from '../../../shared/models/settings';
+import { PhastResultsService } from '../../phast-results.service';
 
 @Component({
   selector: 'app-explore-phast-opportunities-form',
@@ -21,10 +22,34 @@ export class ExplorePhastOpportunitiesFormComponent implements OnInit {
   @Output('changeField')
   changeField = new EventEmitter<string>();
 
+  resultsCategories: ShowResultsCategories;
 
-  constructor() { }
+  showCharge: boolean = false;
+  showFixture: boolean = false;
+  showLeakage: boolean = false;
+  showWall: boolean = false;
+  showOpening: boolean = false;
+  constructor(private phastResultsService: PhastResultsService) { }
 
   ngOnInit() {
+    this.resultsCategories = this.phastResultsService.getResultCategories(this.settings);
+    
+    if(this.phast.losses.chargeMaterials){
+      this.showCharge = true;
+    }
+    if(this.phast.losses.fixtureLosses){
+      this.showFixture = true;
+    }
+    if(this.phast.losses.leakageLosses){
+      this.showLeakage = true;
+    }
+    if(this.phast.losses.wallLosses){
+      this.showWall = true;
+    }
+    if(this.phast.losses.openingLosses){
+      this.showOpening = true;
+    }
+  
   }
 
   startSavePolling(){
