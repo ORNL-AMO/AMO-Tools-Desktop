@@ -90,24 +90,28 @@ export class ExploreFlueGasFormComponent implements OnInit {
   toggleAirTemp() {
     if(this.showAirTemp == false){
       this.modifiedFlueGas.combustionAirTemperature = this.baselineFlueGas.combustionAirTemperature;
+      this.calculate();
     }
   }
 
   toggleFuelTemp() { 
     if(this.showFuelTemp == false){
       this.modifiedFlueGas.flueGasTemperature = this.baselineFlueGas.flueGasTemperature;
+      this.calculate();
     }
   }
 
   toggleExcessAir() {
     if(this.showExcessAir == false){
       this.modifiedFlueGas.excessAirPercentage = this.baselineFlueGas.excessAirPercentage;
+      this.calculate();
     }
    }
 
   toggleO2() { 
     if(this.showO2 == false){
       this.modifiedFlueGas.o2InFlueGas = this.baselineFlueGas.o2InFlueGas;
+      this.calculate();
     }
   }
 
