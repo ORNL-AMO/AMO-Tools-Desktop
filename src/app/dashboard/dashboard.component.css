@@ -15,7 +15,7 @@
 
 .landing-screen::-webkit-scrollbar,
 .sidebar-bg::-webkit-scrollbar {
-    width: 1em;
+    width: .5em;
   }
   .landing-screen::-webkit-scrollbar-track ,
   .sidebar-bg::-webkit-scrollbar-track {
