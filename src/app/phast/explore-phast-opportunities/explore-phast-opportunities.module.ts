@@ -13,12 +13,14 @@ import { ExploreOperationsFormComponent } from './explore-phast-opportunities-fo
 import { ExploreFlueGasFormComponent } from './explore-phast-opportunities-form/explore-flue-gas-form/explore-flue-gas-form.component';
 import { ExploreSystemEfficiencyFormComponent } from './explore-phast-opportunities-form/explore-system-efficiency-form/explore-system-efficiency-form.component';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { LossesModule } from '../losses/losses.module';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    LossesModule
   ],
   declarations: [
     ExplorePhastOpportunitiesFormComponent,

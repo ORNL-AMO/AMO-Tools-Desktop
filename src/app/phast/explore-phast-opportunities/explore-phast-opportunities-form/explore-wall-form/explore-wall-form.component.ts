@@ -64,6 +64,7 @@ export class ExploreWallFormComponent implements OnInit {
         index++;
       });
       this.initData();
+      this.calculate();
     }
   }
 
@@ -75,7 +76,7 @@ export class ExploreWallFormComponent implements OnInit {
   }
 
   focusField(str: string) {
-    //this.changeField.emit(str);
+    this.changeField.emit(str);
   }
 
   checkSurfaceTemp(num: number, surfaceTemp: number, index: number) {
@@ -99,7 +100,7 @@ export class ExploreWallFormComponent implements OnInit {
   }
 
   calculate(){
-    //this.emitCalculate.emit(true)
+    this.emitCalculate.emit(true)
   }
 
 }

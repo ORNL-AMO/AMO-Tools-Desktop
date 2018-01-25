@@ -120,11 +120,11 @@ export class ExploreFlueGasFormComponent implements OnInit {
   }
 
   calculate() {
-    //this.emitCalculate.emit(true)
+    this.emitCalculate.emit(true)
   }
 
   focusField(str: string) {
-    //this.changeField.emit(str);
+    this.changeField.emit(str);
   }
 
 }

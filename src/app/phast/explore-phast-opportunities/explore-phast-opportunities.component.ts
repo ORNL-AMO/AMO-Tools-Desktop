@@ -18,6 +18,9 @@ export class ExplorePhastOpportunitiesComponent implements OnInit {
 
   tabSelect: string = 'results';
   exploreModIndex: number;
+  selectedTab: string = '';
+  currentField: string = 'default';
+  toggleCalculate: boolean = false;
   constructor() { }
 
   ngOnInit() {
@@ -76,4 +79,12 @@ export class ExplorePhastOpportunitiesComponent implements OnInit {
     this.tabSelect = str;
   }
 
+
+  getResults(){
+    this.toggleCalculate = !this.toggleCalculate;
+  }
+
+  focusField(str: string){
+    this.currentField = str;
+  }
 }

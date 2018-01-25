@@ -15,8 +15,6 @@ export class ExplorePhastOpportunitiesFormComponent implements OnInit {
   emitCalculate = new EventEmitter<boolean>();
   @Input()
   settings: Settings;
-  @Output('emitSave')
-  emitSave = new EventEmitter<boolean>();
   @Input()
   exploreModIndex: number;
   @Output('changeField')
@@ -52,8 +50,11 @@ export class ExplorePhastOpportunitiesFormComponent implements OnInit {
   
   }
 
-  startSavePolling(){
-    
+  calculate(){
+    this.emitCalculate.emit(true);
   }
 
+  focusField(str: string){
+    this.changeField.emit(str);
+  }
 }

@@ -36,15 +36,16 @@ export class ExploreSystemEfficiencyFormComponent implements OnInit {
   toggleEfficiency() {
     if(this.showEfficiencyData == false){
       this.phast.modifications[this.exploreModIndex].phast.systemEfficiency = this.phast.systemEfficiency;
+      this.calculate();
     }
   }
 
   focusField(str: string) {
-    //this.changeField.emit(str);
+    this.changeField.emit(str);
   }
 
   calculate() {
-    //this.emitCalculate.emit(true);
+    this.emitCalculate.emit(true);
   }
 
   focusOut() {

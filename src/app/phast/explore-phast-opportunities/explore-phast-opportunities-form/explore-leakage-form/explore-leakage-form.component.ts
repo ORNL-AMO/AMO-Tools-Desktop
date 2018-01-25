@@ -63,17 +63,19 @@ export class ExploreLeakageFormComponent implements OnInit {
         index++;
       });
       this.initData();
+      this.calculate();
     }
   }
 
   toggleOpening(index: number, baselineArea: number) {
     if(this.showOpening[index] == false){
-      this.phast.modifications[this.exploreModIndex].phast.losses.leakageLosses[index].openingArea = baselineArea;      this.calculate();
+      this.phast.modifications[this.exploreModIndex].phast.losses.leakageLosses[index].openingArea = baselineArea;      
+      this.calculate();
     }
   }
 
   focusField(str: string) {
-    //this.changeField.emit(str);
+    this.changeField.emit(str);
   }
 
   checkOpening(num: number, openingArea: number, index: number) {
@@ -97,7 +99,7 @@ export class ExploreLeakageFormComponent implements OnInit {
   }
 
   calculate(){
-    //this.emitCalculate.emit(true)
+    this.emitCalculate.emit(true)
   }
 
 }

@@ -106,6 +106,7 @@ export class ExploreChargeMaterialsFormComponent implements OnInit {
         this.feedRateError2[index] = null;
       }
     }
+    this.calculate();
   }
 
   toggleFeedRate(index: number, material: ExploreMaterial) {
@@ -135,11 +136,12 @@ export class ExploreChargeMaterialsFormComponent implements OnInit {
         index++;
       });
       this.initData();
+      this.calculate();
     }
   }
 
   focusField(str: string) {
-    //this.changeField.emit(str);
+    this.changeField.emit(str);
   }
 
   focusOut() {
@@ -147,7 +149,7 @@ export class ExploreChargeMaterialsFormComponent implements OnInit {
   }
 
   calculate() {
-    //this.emitCalculate.emit(true)
+    this.emitCalculate.emit(true)
   }
 }
 

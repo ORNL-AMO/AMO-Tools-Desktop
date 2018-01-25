@@ -102,12 +102,14 @@ export class ExploreOpeningFormComponent implements OnInit {
   toggleViewFactor(index: number, loss: OpeningLoss) {
     if (this.showViewFactor[index] == false) {
       this.phast.modifications[this.exploreModIndex].phast.losses.openingLosses[index].viewFactor = loss.viewFactor;
+      this.calculate();
     }
   }
 
   toggleSize(index: number, loss: OpeningLoss) {
     if (this.showSize[index] == false) {
       this.setToBaseline(this.phast.modifications[this.exploreModIndex].phast.losses.openingLosses[index], loss);
+      this.calculate();
     }
   }
 
@@ -277,7 +279,7 @@ export class ExploreOpeningFormComponent implements OnInit {
   }
 
   focusField(str: string) {
-    //this.changeField.emit(str);
+    this.changeField.emit(str);
   }
 
   focusOut() {
@@ -285,7 +287,7 @@ export class ExploreOpeningFormComponent implements OnInit {
   }
 
   calculate() {
-    //this.emitCalculate.emit(true);
+    this.emitCalculate.emit(true);
   }
 
   calculateViewFactor(loss: OpeningLoss) {

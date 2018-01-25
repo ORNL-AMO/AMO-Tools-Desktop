@@ -64,6 +64,7 @@ export class ExploreFixturesFormComponent implements OnInit {
         index++;
       });
       this.initData();
+      this.calculate();
     }
   }
 
@@ -75,7 +76,7 @@ export class ExploreFixturesFormComponent implements OnInit {
   }
 
   focusField(str: string) {
-    //this.changeField.emit(str);
+    this.changeField.emit(str);
   }
 
   checkFeedRate(num: number, feedRate: number, index: number) {
@@ -99,6 +100,6 @@ export class ExploreFixturesFormComponent implements OnInit {
   }
 
   calculate(){
-    //this.emitCalculate.emit(true)
+    this.emitCalculate.emit(true)
   }
 }

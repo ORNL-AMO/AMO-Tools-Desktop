@@ -63,24 +63,28 @@ export class ExploreOperationsFormComponent implements OnInit {
   toggleElectricityCosts() {
     if (this.showElectricityCosts == false) {
       this.phast.modifications[this.exploreModIndex].phast.operatingCosts.electricityCost = this.phast.operatingCosts.electricityCost;
+      this.calculate();
     }
   }
 
   toggleSteamCosts() {
     if (this.showSteamCosts == false) {
       this.phast.modifications[this.exploreModIndex].phast.operatingCosts.steamCost = this.phast.operatingCosts.steamCost;
+      this.calculate();
     }
   }
 
   toggleFuelCosts() {
     if (this.showFuelCosts == false) {
       this.phast.modifications[this.exploreModIndex].phast.operatingCosts.fuelCost = this.phast.operatingCosts.fuelCost;
+      this.calculate();
     }
   }
 
   toggleOpHours() {
     if (this.showOpHours == false) {
       this.phast.modifications[this.exploreModIndex].phast.operatingHours.hoursPerYear = this.phast.operatingHours.hoursPerYear;
+      this.calculate();
     }
   }
 
@@ -98,11 +102,11 @@ export class ExploreOperationsFormComponent implements OnInit {
   }
 
   focusField(str: string) {
-    //this.changeField.emit(str);
+    this.changeField.emit(str);
   }
 
   calculate() {
-    //this.emitCalculate.emit(true);
+    this.emitCalculate.emit(true);
   }
 
   focusOut() {
