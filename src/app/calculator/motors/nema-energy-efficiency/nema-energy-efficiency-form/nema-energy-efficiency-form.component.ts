@@ -38,11 +38,7 @@ export class NemaEnergyEfficiencyFormComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    if (this.settings.powerMeasurement == 'hp') {
-      this.options = this.horsePowers;
-    } else {
-      this.options = this.kWatts;
-    }
+    this.modifyPowerArrays();
   }
 
   addNum(str: string) {
@@ -85,10 +81,26 @@ export class NemaEnergyEfficiencyFormComponent implements OnInit {
   modifyPowerArrays() {
     if (this.nemaForm.controls.efficiencyClass.value === 'Premium') {
         if (this.settings.powerMeasurement === 'hp') {
+          if (this.nemaForm.controls.horsePower.value > 500) {
+            this.nemaForm.patchValue({
+              'horsePower': this.horsePowersPremium[this.horsePowersPremium.length - 1]
+            });
+          }
           this.options = this.horsePowersPremium;
         } else {
+          if (this.nemaForm.controls.horsePower.value > 355) {
+            this.nemaForm.patchValue({
+              'horsePower': this.kWattsPremium[this.kWattsPremium.length - 1]
+            });
+          }
           this.options = this.kWattsPremium;
         }
+    } else {
+      if (this.settings.powerMeasurement === 'hp') {
+        this.options = this.horsePowers;
+      } else {
+        this.options = this.kWatts;
+      }
     }
   }
 
