@@ -296,3 +296,8 @@
   background-color: darkgrey;
   outline: 1px solid slategrey;
   }
+
+  .phast .scroll-item::-webkit-scrollbar-thumb{
+    background-color: #BF3D00;
+    outline: 1px solid slategrey;
+    }
