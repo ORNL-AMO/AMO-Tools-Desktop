@@ -37,7 +37,7 @@ export class EfficiencyImprovementComponent implements OnInit {
           this.initDefaultValues(this.settings);
           this.calculate();
         }
-      })
+      });
     } else {
       this.initDefaultValues(this.settings);
       this.calculate();
