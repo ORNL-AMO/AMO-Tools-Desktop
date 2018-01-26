@@ -86,30 +86,58 @@ export interface FanShaftPower {
   sumSEF?: number;
 }
 
-class Fan203Rectangular {
-  private fanRatedInfo: FanRatedInfo;
-  private planeDataRectangular: PlaneDataRectangular;
-  private baseGasDensity: BaseGasDensity;
-  private fanShaftPower: FanShaftPower;
+// TODO consider getting rid of all these "micro" interfaces used for inheritance, might make this file easier to read
+// This is really annoying, Rectangular & Circular distinctions exist ONLY because of the area calculation, easily handleable by simple math
+// export interface Fan203InputRectangular {
+//   FanRatedInfo?: FanRatedInfo;
+//   PlaneData?: PlaneDataRectangular;
+//   BaseGasDensity?: BaseGasDensity;
+//   FanShaftPower?: FanShaftPower;
+// }
+//
+// export interface Fan203InputCircular {
+//   FanRatedInfo?: FanRatedInfo;
+//   PlaneData?: PlaneDataCircular;
+//   BaseGasDensity?: BaseGasDensity;
+//   FanShaftPower?: FanShaftPower;
+// }
 
-  constructor (fanRatedInfo: FanRatedInfo, planeDataRectangular: PlaneDataRectangular, baseGasDensity: BaseGasDensity, fanShaftPower: FanShaftPower) {
-    this.fanRatedInfo = fanRatedInfo;
-    this.planeDataRectangular = planeDataRectangular;
-    this.baseGasDensity = baseGasDensity;
-    this.fanShaftPower = fanShaftPower;
-  }
+export interface Fan203Results {
+  fanEfficiencyTp?: number;
+  fanEfficiencySp?: number;
+  fanEfficiencySpr?: number;
+  Qc?: number;
+  Ptc?: number;
+  Psc?: number;
+  SPRc?: number;
+  Hc?: number;
+  Kpc?: number;
 }
 
-class Fan203Circular {
-  private fanRatedInfo: FanRatedInfo;
-  private planeDataCircular: PlaneDataCircular;
-  private baseGasDensity: BaseGasDensity;
-  private fanShaftPower: FanShaftPower;
-
-  constructor (fanRatedInfo: FanRatedInfo, planeDataCircular: PlaneDataCircular, baseGasDensity: BaseGasDensity, fanShaftPower: FanShaftPower) {
-    this.fanRatedInfo = fanRatedInfo;
-    this.planeDataCircular = planeDataCircular;
-    this.baseGasDensity = baseGasDensity;
-    this.fanShaftPower = fanShaftPower;
-  }
-}
+// export class Fan203Rectangular {
+//   private fanRatedInfo: FanRatedInfo;
+//   private planeDataRectangular: PlaneDataRectangular;
+//   private baseGasDensity: BaseGasDensity;
+//   private fanShaftPower: FanShaftPower;
+//
+//   constructor (fanRatedInfo: FanRatedInfo, planeDataRectangular: PlaneDataRectangular, baseGasDensity: BaseGasDensity, fanShaftPower: FanShaftPower) {
+//     this.fanRatedInfo = fanRatedInfo;
+//     this.planeDataRectangular = planeDataRectangular;
+//     this.baseGasDensity = baseGasDensity;
+//     this.fanShaftPower = fanShaftPower;
+//   }
+// }
+//
+// export class Fan203Circular {
+//   private fanRatedInfo: FanRatedInfo;
+//   private planeDataCircular: PlaneDataCircular;
+//   private baseGasDensity: BaseGasDensity;
+//   private fanShaftPower: FanShaftPower;
+//
+//   constructor (fanRatedInfo: FanRatedInfo, planeDataCircular: PlaneDataCircular, baseGasDensity: BaseGasDensity, fanShaftPower: FanShaftPower) {
+//     this.fanRatedInfo = fanRatedInfo;
+//     this.planeDataCircular = planeDataCircular;
+//     this.baseGasDensity = baseGasDensity;
+//     this.fanShaftPower = fanShaftPower;
+//   }
+// }
