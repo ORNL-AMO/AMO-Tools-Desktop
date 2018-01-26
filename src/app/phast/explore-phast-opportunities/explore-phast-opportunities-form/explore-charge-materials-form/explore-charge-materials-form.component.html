@@ -1,10 +1,10 @@
 <div class="checkbox">
   <label class="group-label" for="exploreMaterials">
     <input type="checkbox" id="exploreMaterials" value="true" (focus)="focusField('initialTemperature')" (change)="toggleMaterials()"
-      [(ngModel)]="showMaterials" /> Adjust Charge Material Data
+      [(ngModel)]="showMaterial" /> Adjust Charge Material Data
   </label>
 </div>
-<div *ngIf="showMaterials">
+<div *ngIf="showMaterial">
   <ul *ngFor="let material of materials; let index = index">
     <li>
       <div class="checkbox form-group">
