@@ -94,6 +94,5 @@ export class ExplorePhastOpportunitiesComponent implements OnInit {
 
   changeTab(tab: LossTab){
     this.lossTab = tab;
-    console.log(this.lossTab);
   }
 }

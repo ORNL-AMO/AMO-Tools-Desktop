@@ -1,6 +1,6 @@
 <div class="row modify-conditions">
-  <div [ngClass]="{'col-6': inSetup, 'col-8': !inSetup}">
-    <div class="row">
+  <div class="scroll-item" [ngClass]="{'col-6': inSetup, 'col-8': !inSetup}" [ngStyle]="{'height.px': containerHeight}">
+    <div class="row" style="height:100%;">
       <div class="modification" (click)="togglePanel(baselineSelected)" [ngClass]="{'disabled': baselineSelected == false, 'modal-open': isModalOpen == true, 'baseline':!inSetup,  'col-12': inSetup, 'col-md-6': !inSetup}">
         <div class="header">
           <h3>Baseline</h3>

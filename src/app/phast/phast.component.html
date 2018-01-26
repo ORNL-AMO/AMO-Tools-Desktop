@@ -55,12 +55,12 @@
   </div>
 
   <!--Assessment-->
-  <div class="tab-content" [ngStyle]="{'height': containerHeight}" *ngIf="mainTab == 'assessment'">
+  <div class="tab-content" [ngStyle]="{'height.px': containerHeight}" *ngIf="mainTab == 'assessment'">
     <div *ngIf="assessmentTab == 'explore-opportunities'">
       <app-explore-phast-opportunities [containerHeight]="containerHeight" [(phast)]="_phast" [settings]="settings" [assessment]="assessment"></app-explore-phast-opportunities>
     </div>
     <div *ngIf="assessmentTab == 'modify-conditions'">
-      <app-losses [(phast)]="_phast" [saveClicked]="saveClicked" (saved)="saveDb()" [settings]="settings" [inSetup]="false"></app-losses>
+      <app-losses [containerHeight]="containerHeight" [(phast)]="_phast" [saveClicked]="saveClicked" (saved)="saveDb()" [settings]="settings" [inSetup]="false"></app-losses>
     </div>
   </div>
   <!--Report-->

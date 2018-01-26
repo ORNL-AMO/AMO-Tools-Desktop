@@ -24,7 +24,7 @@ export class PhastComponent implements OnInit {
   @ViewChild('footer') footer: ElementRef;
   @ViewChild('content') content: ElementRef;
   containerHeight: number;
-  
+
   assessment: Assessment;
 
   saveClicked: boolean = false;
@@ -114,6 +114,7 @@ export class PhastComponent implements OnInit {
       }
       this.phastService.mainTab.subscribe(val => {
         this.mainTab = val;
+        this.getContainerHeight();
       })
 
       this.phastService.stepTab.subscribe(val => {
@@ -128,24 +129,25 @@ export class PhastComponent implements OnInit {
         this.selectedLossTab = this.lossesService.getTab(tab);
       })
     });
-    let tmpTab = this.assessmentService.getTab();
-    if (tmpTab) {
-      this.phastService.mainTab.next(tmpTab);
-    }
-    this.phastService.mainTab.subscribe(val => {
-      this.mainTab = val;
-    })
+    // let tmpTab = this.assessmentService.getTab();
+    // if (tmpTab) {
+    //   this.phastService.mainTab.next(tmpTab);
+    // }
+    // this.phastService.mainTab.subscribe(val => {
+    //   this.getContainerHeight();
+    //   this.mainTab = val;
+    // })
 
-    this.phastService.stepTab.subscribe(val => {
-      this.stepTab = val;
-    })
+    // this.phastService.stepTab.subscribe(val => {
+    //   this.stepTab = val;
+    // })
 
-    this.phastService.specTab.subscribe(val => {
-      this.specTab = val;
-    })
-    this.phastService.calcTab.subscribe(val => {
-      this.calcTab = val;
-    })
+    // this.phastService.specTab.subscribe(val => {
+    //   this.specTab = val;
+    // })
+    // this.phastService.calcTab.subscribe(val => {
+    //   this.calcTab = val;
+    // })
   }
 
 
@@ -168,7 +170,7 @@ export class PhastComponent implements OnInit {
     this.disclaimerToast();
     setTimeout(() => {
       this.getContainerHeight();
-    },400)
+    }, 100);
   }
 
   ngOnDestroy() {
@@ -176,12 +178,14 @@ export class PhastComponent implements OnInit {
     this.phastService.initTabs();
   }
 
-  getContainerHeight(){
-    let contentHeight = this.content.nativeElement.clientHeight;
-    let headerHeight = this.header.nativeElement.clientHeight;
-    let footerHeight = this.footer.nativeElement.clientHeight;
-    this.containerHeight = contentHeight - headerHeight - footerHeight;
-    console.log(this.containerHeight);
+  getContainerHeight() {
+    if (this.content) {
+      let contentHeight = this.content.nativeElement.clientHeight;
+      let headerHeight = this.header.nativeElement.clientHeight;
+      let footerHeight = this.footer.nativeElement.clientHeight;
+      this.containerHeight = contentHeight - headerHeight - footerHeight;
+      console.log(this.containerHeight);
+    }
   }
 
 
@@ -288,13 +292,13 @@ export class PhastComponent implements OnInit {
         }
       }
     } else if (this.mainTab == 'assessment') {
-      if(this.assessmentTab == 'modify-conditions'){
-        if(this.selectedLossTab.back){
+      if (this.assessmentTab == 'modify-conditions') {
+        if (this.selectedLossTab.back) {
           this.lossesService.lossesTab.next(this.selectedLossTab.back);
-        }else{
+        } else {
           this.phastService.mainTab.next('system-setup');
         }
-      }else{
+      } else {
         this.phastService.mainTab.next('system-setup');
       }
     } else if (this.mainTab == 'system-setup') {
@@ -306,6 +310,9 @@ export class PhastComponent implements OnInit {
 
   changeAssessmentTab(str: string) {
     this.assessmentTab = str;
+    setTimeout(() => {
+      this.getContainerHeight();
+    }, 100);
   }
 
   openModal($event) {
