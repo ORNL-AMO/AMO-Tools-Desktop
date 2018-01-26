@@ -1,6 +1,6 @@
-<div class="container-fluid phast">
+<div class="phast">
     <div class="row modify-conditions panel-container">
-      <div class="col-md-6 panel-column">
+      <div class="col-md-6 panel-column" [ngStyle]="{'height': containerHeight}">
         <div class="header">
           <h3>Select Potential Adjustment Projects</h3>
         </div>
@@ -9,7 +9,7 @@
         (changeField)="focusField($event)" (changeTab)="changeTab($event)"></app-explore-phast-opportunities-form>
   
       </div>
-      <div class="col-6">
+      <div class="col-6 panel-column" [ngStyle]="{'height': containerHeight}">
         <app-losses-result-panel [inSetup]="false" [currentField]="currentField" [settings]="settings"
         [phast]="phast" [toggleCalculate]="toggleCalculate" [modification]="phast.modifications[exploreModIndex]" [lossesTab]="lossTab"></app-losses-result-panel>
       </div>

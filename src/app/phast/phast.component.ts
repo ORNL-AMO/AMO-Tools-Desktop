@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ElementRef, ViewChild } from '@angular/core';
 import { Location } from '@angular/common';
 import { Assessment } from '../shared/models/assessment';
 import { AssessmentService } from '../assessment/assessment.service';
@@ -13,12 +13,18 @@ import { PhastResultsService } from './phast-results.service';
 import { PhastResults } from '../shared/models/phast/phast';
 import { LossesService } from './losses/losses.service';
 import { StepTab, LossTab } from './tabs';
+import { setTimeout } from 'timers';
 @Component({
   selector: 'app-phast',
   templateUrl: './phast.component.html',
   styleUrls: ['./phast.component.css']
 })
 export class PhastComponent implements OnInit {
+  @ViewChild('header') header: ElementRef;
+  @ViewChild('footer') footer: ElementRef;
+  @ViewChild('content') content: ElementRef;
+  containerHeight: number;
+  
   assessment: Assessment;
 
   saveClicked: boolean = false;
@@ -160,12 +166,25 @@ export class PhastComponent implements OnInit {
 
   ngAfterViewInit() {
     this.disclaimerToast();
+    setTimeout(() => {
+      this.getContainerHeight();
+    },400)
   }
 
   ngOnDestroy() {
     this.lossesService.lossesTab.next(1);
     this.phastService.initTabs();
   }
+
+  getContainerHeight(){
+    let contentHeight = this.content.nativeElement.clientHeight;
+    let headerHeight = this.header.nativeElement.clientHeight;
+    let footerHeight = this.footer.nativeElement.clientHeight;
+    this.containerHeight = contentHeight - headerHeight - footerHeight;
+    console.log(this.containerHeight);
+  }
+
+
 
   checkSetupDone() {
     this._phast.setupDone = this.lossesService.checkSetupDone((JSON.parse(JSON.stringify(this._phast))), this.settings);

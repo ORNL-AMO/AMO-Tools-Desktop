@@ -1,5 +1,4 @@
 .panel-column{
-    max-height: 100%;
     overflow-y: auto;
 }
 
@@ -12,10 +11,4 @@
   .panel-column::-webkit-scrollbar-thumb{
   background-color: darkgrey;
   outline: 1px solid slategrey;
-  }
-
-
-  .container-fluid{
-      height: 100%;
-      max-height: 100%;
   }

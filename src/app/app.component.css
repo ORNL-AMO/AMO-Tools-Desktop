@@ -1252,11 +1252,9 @@ Modify Conditions
 .modify-conditions {
   align-items: stretch;
   display: flex;
-  min-height: 100%;
 }
 
 .modify-conditions .help-panel {
-  height: 100%;
 }
   .modify-conditions .help-panel .btn-group {
     margin-bottom: 20px;

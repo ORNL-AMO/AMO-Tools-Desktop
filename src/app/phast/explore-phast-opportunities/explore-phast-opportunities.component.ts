@@ -16,7 +16,9 @@ export class ExplorePhastOpportunitiesComponent implements OnInit {
   phast: PHAST;
   @Input()
   settings: Settings;
-
+  @Input()
+  containerHeight: number;
+  
   tabSelect: string = 'results';
   exploreModIndex: number;
   currentField: string = 'default';
