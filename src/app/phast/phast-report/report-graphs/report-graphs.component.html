@@ -106,6 +106,13 @@
 </div>
 
 
+<!-- if show print then content will init -->
+<div *ngIf="showPrint">
+  <!--put print content in this component -->
+  <app-report-graphs-print></app-report-graphs-print>
+</div>
+
+
 <!-- <div class="output-summary hide-print">
   <div class="row justify-content-center align-items-center">
     <div class="col-6">

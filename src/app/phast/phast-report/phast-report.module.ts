@@ -15,6 +15,7 @@ import { ChartsModule } from 'ng2-charts';
 import { PhastReportService } from './phast-report.service';
 import { ExecutiveSummaryService } from './executive-summary.service';
 import { PhastInputSummaryModule } from './phast-input-summary/phast-input-summary.module';
+import { ReportGraphsPrintComponent } from './report-graphs/report-graphs-print/report-graphs-print.component';
 @NgModule({
   imports: [
     CommonModule,
@@ -25,7 +26,7 @@ import { PhastInputSummaryModule } from './phast-input-summary/phast-input-summa
     SharedModule,
     PhastInputSummaryModule
   ],
-  declarations: [PhastReportComponent, EnergyUsedComponent, ExecutiveSummaryComponent, ResultsDataComponent, ReportGraphsComponent, ReportSankeyComponent, PhastPieChartComponent, PhastBarChartComponent],
+  declarations: [PhastReportComponent, EnergyUsedComponent, ExecutiveSummaryComponent, ResultsDataComponent, ReportGraphsComponent, ReportSankeyComponent, PhastPieChartComponent, PhastBarChartComponent, ReportGraphsPrintComponent],
   exports: [PhastReportComponent, ResultsDataComponent],
   providers: [PhastReportService, ExecutiveSummaryService]
 })

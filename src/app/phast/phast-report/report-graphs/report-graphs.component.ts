@@ -35,7 +35,7 @@ export class ReportGraphsComponent implements OnInit {
   colors: Array<string>;
   baselineLabels: Array<string>;
   modifiedLabels: Array<string>;
-
+  showPrint: boolean = false;
   constructor(private phastService: PhastService, private phastResultsService: PhastResultsService, private phastReportService: PhastReportService) { }
 
   ngOnInit() {
@@ -66,6 +66,11 @@ export class ReportGraphsComponent implements OnInit {
       if (val) {
         this.getPieLabels(val);
       }
+    })
+
+    //subscribe to show print value
+    this.phastReportService.showPrint.subscribe(printVal => {
+      this.showPrint = printVal;
     })
   }
 
