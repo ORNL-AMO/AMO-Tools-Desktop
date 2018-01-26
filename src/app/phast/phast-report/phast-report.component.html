@@ -37,7 +37,8 @@
             </div>
             <div class="col-12">
                 <h3 class="custom-name" *ngIf="!settings.customFurnaceName">{{settings.furnaceType}}</h3>
-                <h3 class="custom-name" *ngIf="settings.customFurnaceName">{{settings.furnaceType}}:<br>{{settings.customFurnaceName}}</h3>
+                <h3 class="custom-name" *ngIf="settings.customFurnaceName">{{settings.furnaceType}}:
+                    <br>{{settings.customFurnaceName}}</h3>
             </div>
             <div class="col-12">
                 <h2 class="date-modified">
@@ -51,21 +52,26 @@
 
     <div class="report-data" *ngIf="phast.setupDone">
 
-            <ul class="tabs primary hide-print">
-                    <li (click)="setTab('energy-used')" [ngClass]="{'active': currentTab == 'energy-used'}">
-                        <a>Energy Used</a>
-                    </li><li (click)="setTab('executive-summary')" [ngClass]="{'active': currentTab == 'executive-summary'}">
-                        <a>Executive Summary</a>
-                    </li><li (click)="setTab('results-data')" [ngClass]="{'active': currentTab == 'results-data'}">
-                        <a>Result Data</a>
-                    </li><li (click)="setTab('report-graphs')" [ngClass]="{'active': currentTab == 'report-graphs'}">
-                        <a>Report Graphs</a>
-                    </li><li (click)="setTab('report-sankey')" [ngClass]="{'active': currentTab == 'report-sankey'}">
-                        <a>Sankey</a>
-                    </li><li (click)="setTab('input-summary')" [ngClass]="{'active': currentTab == 'input-summary'}">
-                        <a>Input Data</a>
-                    </li>
-                </ul>
+        <ul class="tabs primary hide-print">
+            <li (click)="setTab('energy-used')" [ngClass]="{'active': currentTab == 'energy-used'}">
+                <a>Energy Used</a>
+            </li>
+            <li (click)="setTab('executive-summary')" [ngClass]="{'active': currentTab == 'executive-summary'}">
+                <a>Executive Summary</a>
+            </li>
+            <li (click)="setTab('results-data')" [ngClass]="{'active': currentTab == 'results-data'}">
+                <a>Result Data</a>
+            </li>
+            <li (click)="setTab('report-graphs')" [ngClass]="{'active': currentTab == 'report-graphs'}">
+                <a>Report Graphs</a>
+            </li>
+            <li (click)="setTab('report-sankey')" [ngClass]="{'active': currentTab == 'report-sankey'}">
+                <a>Sankey</a>
+            </li>
+            <li (click)="setTab('input-summary')" [ngClass]="{'active': currentTab == 'input-summary'}">
+                <a>Input Data</a>
+            </li>
+        </ul>
         <div class="results" [ngClass]="{'show-print':currentTab != 'energy-used'}">
             <app-energy-used [phast]="phast" [settings]="settings"></app-energy-used>
         </div>
@@ -75,6 +81,16 @@
         <div class="results" [ngClass]="{'show-print':currentTab !=  'results-data'}">
             <app-results-data [phast]="phast" [settings]="settings" [assessment]="assessment" [inPhast]="inPhast" [inReport]="true"></app-results-data>
         </div>
+
+        <!-- debug -->
+        <!-- <div class="results" [ngClass]="{'pre-render':!graphsRendered, 'show-print':currentTab != 'report-graphs'}">
+            <app-report-graphs [phast]="phast" [settings]="settings"></app-report-graphs>
+        </div> -->
+        <!-- <div class="results">
+            <app-report-graphs [phast]="phast" [settings]="settings"></app-report-graphs>
+        </div> -->
+
+        <!-- real version -->
         <div class="results" [ngClass]="{'show-print':currentTab != 'report-graphs'}">
             <app-report-graphs [phast]="phast" [settings]="settings"></app-report-graphs>
         </div>

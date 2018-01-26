@@ -25,6 +25,8 @@ export class ReportGraphsComponent implements OnInit {
   selectedPhast1: any;
   selectedPhast2: any;
 
+  baselinePhast: any;
+
   resultsArray: Array<any>;
   modExists: boolean = false;
   showResultsCats: ShowResultsCategories;
@@ -44,6 +46,7 @@ export class ReportGraphsComponent implements OnInit {
       this.baselineResults = this.phastResultsService.getResults(this.phast, this.settings);
       this.resultsArray.push({ name: 'Baseline', data: this.baselineResults })
       this.selectedPhast1 = this.resultsArray[0];
+      this.baselinePhast = this.resultsArray[0];
       if (this.phast.modifications) {
         if (this.phast.modifications.length != 0) {
           this.modExists = true;

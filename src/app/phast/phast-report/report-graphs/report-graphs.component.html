@@ -1,5 +1,5 @@
-<div class="output-summary hide-print">
-  <div class="row justify-content-center align-items-center">
+<div class="output-summary">
+  <div class="row justify-content-center align-items-center hide-print">
     <div class="col-6">
       <div class="row">
         <div class="col-12">
@@ -25,27 +25,59 @@
   </div>
   <!-- <div class="custom-row justify-content-center align-items-center"> -->
   <!-- if there is a mod, show 2 pie charts -->
-  <div class="row justify-content-center align-items-center" *ngIf="modExists">
-    <div class="col-6">
-      <!-- <div class="chart-col"> -->
-      <app-phast-pie-chart [results]="selectedPhast1.data" [resultCats]="showResultsCats" [isBaseline]="true" [modExists]="modExists"></app-phast-pie-chart>
+  <div *ngIf="modExists">
+    <div class="row justify-content-center align-items-center print-graphs-container">
+      <div class="col-12">
+        <div class="row show-print">
+          <div class="print-duo-title-top">
+            {{selectedPhast1.name}}
+          </div>
+          <div class="print-duo-title-bottom">
+            {{selectedPhast2.name}}
+          </div>
+        </div>
+        <div class="custom-row">
+          <div class="show-duo-left print-duo-top">
+            <app-phast-pie-chart [results]="selectedPhast1.data" [resultCats]="showResultsCats" [isBaseline]="true" [modExists]="modExists"></app-phast-pie-chart>
+          </div>
+          <div class="show-duo-right print-duo-bottom">
+            <app-phast-pie-chart [results]="selectedPhast2.data" [resultCats]="showResultsCats" [isBaseline]="false" [modExists]="modExists"></app-phast-pie-chart>
+          </div>
+        </div>
+      </div>
     </div>
-    <!-- </div> -->
-    <!-- <div class="custom-row justify-content-center align-items-center"> -->
-    <div class="col-6">
-      <app-phast-pie-chart [results]="selectedPhast2.data" [resultCats]="showResultsCats" [isBaseline]="false" [modExists]="modExists"></app-phast-pie-chart>
-    </div>
+
+    <!-- <div class="row justify-content-center align-items-center print-graphs-container" *ngFor="let result of resultsArray | slice:1">
+      <div class="col-12">
+        <div class="row show-print">
+          <div class="col-6">
+            Baseline
+          </div>
+          <div class="col-6">
+            {{result.name}}
+          </div>
+        </div>
+        <div class="row show-print">
+          <div class="col-6">
+            <app-phast-pie-chart [results]="baselinePhast.data" [resultCats]="showResultsCats" [isBaseline]="true" [modExists]="modExists"></app-phast-pie-chart>
+          </div>
+          <div class="col-6">
+            <app-phast-pie-chart [results]="result.data" [resultCats]="showResultsCats" [isBaseline]="false" [modExists]="modExists"></app-phast-pie-chart>
+          </div>
+        </div>
+      </div>
+    </div> -->
   </div>
 
   <!-- if no mod, only 1 pie chart -->
-  <div class="row justify-content-center align-items-center print-pie-row" *ngIf="!modExists">
+  <div class="row justify-content-center align-items-center print-graphs-container" *ngIf="!modExists">
     <div class="col-12">
       <div class="row show-print">
-        <div class="col-12">
-          <h5>Baseline</h5>
+        <div class="col-6">
+          {{selectedPhast1.name}}
         </div>
       </div>
-      <div class="row print-graph">
+      <div class="row print-solo">
         <div class="col-12">
           <app-phast-pie-chart [results]="selectedPhast1.data" [resultCats]="showResultsCats" [isBaseline]="true" [modExists]="modExists"></app-phast-pie-chart>
         </div>
@@ -54,8 +86,8 @@
   </div>
 
   <!-- if there is a mod, show bar chart -->
-  <div class="row align-items-center" *ngIf="modExists" style="padding-top: 50px;">
-    <div class="col-2">
+  <div class="row align-items-center print-bar-chart" *ngIf="modExists" style="padding-top: 25px;">
+    <!-- <div class="col-2">
       <ul>
         <li>
           <span class="badge" style="background-color: #1E7640">{{selectedPhast1.name}}</span>
@@ -64,9 +96,10 @@
           <span class="badge" style="background-color: #2ABDDA">{{selectedPhast2.name}}</span>
         </li>
       </ul>
-    </div>
+    </div> -->
+    <!-- <div class="col-1"></div> -->
     <div class="col-7 mx-auto">
-      <app-phast-bar-chart [resultCats]="showResultsCats" [modResults]="selectedPhast2.data" [results]="selectedPhast1.data" [settings]="settings"></app-phast-bar-chart>
+      <app-phast-bar-chart [resultCats]="showResultsCats" [phast1Name]="selectedPhast1.name" [phast2Name]="selectedPhast2.name" [modResults]="selectedPhast2.data" [results]="selectedPhast1.data" [settings]="settings"></app-phast-bar-chart>
     </div>
   </div>
 

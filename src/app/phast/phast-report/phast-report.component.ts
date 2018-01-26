@@ -27,6 +27,8 @@ export class PhastReportComponent implements OnInit {
   @Input()
   inRollup: boolean;
 
+
+  //real version
   currentTab: string = 'energy-used';
   assessmentDirectories: Array<Directory>;
   createdDate: Date;
@@ -108,6 +110,7 @@ export class PhastReportComponent implements OnInit {
       )
     }
   }
+
 
   print() {
     let win = this.windowRefService.nativeWindow;
