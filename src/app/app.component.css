@@ -7,7 +7,7 @@ html {
 *, *:before, *:after {
   box-sizing: inherit;
 }
-::-webkit-scrollbar {
+body::-webkit-scrollbar {
     display: none;
 }
 
@@ -311,19 +311,35 @@ select.form-control:not([size]):not([multiple]) {
    border-right: solid 1px #9c9c9c !important;
  }
 
-.indicate-different{
-  border: #EF6C00 solid 2px;
-  box-shadow: 0px 0px 5px #EF6C00;
+.psat .indicate-different{
+  border: #2980b9 solid 2px;
+  box-shadow: 0px 0px 5px #2980b9;
 }
 
-.indicate-report-field-different{
-    color: #EF6C00 !important;
+.psat .indicate-report-field-different{
+    color: #2980b9 !important;
     font-weight: bold !important;
 }
 
-.indicate-report-row-different{
-    border: #EF6C00 solid !important;
+.psat .indicate-report-row-different{
+    border: #2980b9 solid !important;
 }
+
+.phast .indicate-different{
+  border: #BF3D00 solid 2px;
+  box-shadow: 0px 0px 5px #BF3D00;
+}
+
+.phast .indicate-report-field-different{
+    color: #BF3D00 !important;
+    font-weight: bold !important;
+}
+
+.phast .indicate-report-row-different{
+    border: #BF3D00 solid !important;
+}
+
+
 
 @media print {
 
@@ -1252,11 +1268,9 @@ Modify Conditions
 .modify-conditions {
   align-items: stretch;
   display: flex;
-  min-height: 100%;
 }
 
 .modify-conditions .help-panel {
-  height: 100%;
 }
   .modify-conditions .help-panel .btn-group {
     margin-bottom: 20px;
@@ -1278,7 +1292,6 @@ Modify Conditions
   z-index: 2;
   width: 35%;
   padding-left: 25px;
-  min-height: 100%;
 }
 .converter-col {
   height: 100%;
