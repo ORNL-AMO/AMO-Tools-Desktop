@@ -20,6 +20,11 @@ import { SettingsService } from '../settings/settings.service';
   styleUrls: ['./psat.component.css']
 })
 export class PsatComponent implements OnInit {
+  @ViewChild('header') header: ElementRef;
+  @ViewChild('footer') footer: ElementRef;
+  @ViewChild('content') content: ElementRef;
+  containerHeight: number;
+
   assessment: Assessment;
 
   panelView: string = 'help-panel';
@@ -102,9 +107,11 @@ export class PsatComponent implements OnInit {
             this.psatService.secondaryTab.next('explore-opportunities');
           }
         }
+        this.getContainerHeight();
       })
       this.psatService.secondaryTab.subscribe(val => {
         this.currentTab = val;
+        this.getContainerHeight();
       })
 
       this.psatService.calcTab.subscribe(val => {
@@ -113,6 +120,30 @@ export class PsatComponent implements OnInit {
     })
   }
 
+  ngOnDestroy() {
+    this.psatService.secondaryTab.next('explore-opportunities');
+    this.psatService.mainTab.next('system-setup');
+    this.compareService.baselinePSAT = undefined;
+    this.compareService.modifiedPSAT = undefined;
+  }
+
+  ngAfterViewInit() {
+    setTimeout(() => {
+      this.getContainerHeight();
+    }, 100);
+  }
+
+  getContainerHeight() {
+    if (this.content) {
+      setTimeout(() => {
+        let contentHeight = this.content.nativeElement.clientHeight;
+        let headerHeight = this.header.nativeElement.clientHeight;
+        let footerHeight = this.footer.nativeElement.clientHeight;
+        this.containerHeight = contentHeight - headerHeight - footerHeight;
+        console.log(this.containerHeight);
+      }, 100);
+    }
+  }
 
   initSankeyList() {
     this.psatOptions = new Array<any>();
@@ -127,14 +158,6 @@ export class PsatComponent implements OnInit {
     }
   }
 
-
-  ngOnDestroy() {
-    this.psatService.secondaryTab.next('explore-opportunities');
-    this.psatService.mainTab.next('system-setup');
-    this.compareService.baselinePSAT = undefined;
-    this.compareService.modifiedPSAT = undefined;
-  }
-
   getSettings(update?: boolean) {
     //get assessment settings
     this.indexedDbService.getAssessmentSettings(this.assessment.id).then(
@@ -147,7 +170,7 @@ export class PsatComponent implements OnInit {
           this.isAssessmentSettings = true;
           if (update) {
             this.addToast('Settings Saved');
-            if(this.saveContinue){
+            if (this.saveContinue) {
               this.continue(this.saveContinue)
             }
           }
@@ -231,6 +254,7 @@ export class PsatComponent implements OnInit {
       this.subTabIndex = _.findIndex(this.subTabs, function (tab) { return tab == str });
       this.subTab = this.subTabs[this.subTabIndex];
     }
+    this.getContainerHeight();
   }
 
   selectAdjustment($event) {
@@ -241,7 +265,7 @@ export class PsatComponent implements OnInit {
     if (this.subTab != 'system-basics' || bool) {
       if (!bool) {
         this.save();
-      }else{
+      } else {
         this.saveContinue = false;
       }
       if (this.subTab == 'field-data') {
@@ -254,6 +278,7 @@ export class PsatComponent implements OnInit {
       this.saveContinue = true;
       this.toggleSave();
     }
+    this.getContainerHeight();
   }
 
   getCanContinue() {

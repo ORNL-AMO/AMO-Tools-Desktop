@@ -184,7 +184,6 @@ export class PhastComponent implements OnInit {
       let headerHeight = this.header.nativeElement.clientHeight;
       let footerHeight = this.footer.nativeElement.clientHeight;
       this.containerHeight = contentHeight - headerHeight - footerHeight;
-      console.log(this.containerHeight);
     }
   }
 

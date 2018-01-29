@@ -297,6 +297,11 @@
   outline: 1px solid slategrey;
   }
 
+ .psat .scroll-item::-webkit-scrollbar-thumb{
+    background-color: #2980b9;
+    outline: 1px solid slategrey;
+    }
+
   .phast .scroll-item::-webkit-scrollbar-thumb{
     background-color: #BF3D00;
     outline: 1px solid slategrey;

@@ -1,59 +1,58 @@
-<div class="psat-container" *ngIf="assessment && settings">
-  <div class="hide-print sticky-top" id="psatBanner">
+<div #content class="psat-container" *ngIf="assessment && settings">
+  <div #header class="hide-print sticky-top" id="psatBanner">
     <app-psat-banner (togglePanel)="toggleOpenPanel($event)" [assessment]="assessment"></app-psat-banner>
-  </div>
-  <!--system-setup-->
-  <div class="tab-content" *ngIf="mainTab == 'system-setup'">
-    <nav class="hide-print">
-      <ul class="tabs subtabs progress-tabs psat">
-        <li class="fixed-tab-size" [ngClass]="{'active': subTab == 'system-basics'}">
-          <a (click)="changeSubTab('system-basics')">
-            <span class="step-number">1</span> Assessment Settings</a>
-        </li>
-        <li class="fixed-tab-size" [ngClass]="{'active': subTab == 'pump-fluid'}">
-          <a (click)="changeSubTab('pump-fluid')">
-            <span class="step-number">2</span> Pump &amp; Fluid</a>
-        </li>
-        <li class="fixed-tab-size" [ngClass]="{'active': subTab == 'motor', 'disabled': checkPumpFluid() }">
-          <a (click)="changeSubTab('motor')">
-            <span class="step-number">3</span> Motor</a>
-        </li>
-        <li class="fixed-tab-size" [ngClass]="{'active': subTab == 'field-data', 'disabled': checkMotor()}">
-          <a (click)="changeSubTab('field-data')">
-            <span class="step-number">4</span> Field Data</a>
-        </li>
-      </ul>
-    </nav>
-
-    <div class="row tab-content psat">
-      <div class="col-6 panel-column modification" [ngClass]="{'modal-open': isModalOpen == true}">
-        <app-system-basics *ngIf="subTab == 'system-basics'" [settings]="settings" [saveClicked]="saveClicked" [assessment]="assessment"
-          [(psat)]="_psat" [isAssessmentSettings]="isAssessmentSettings" (updateSettings)="getSettings($event)" (updateAssessment)="save()"
-          (openModal)="modalOpen()" (closeModal)="modalClose()"></app-system-basics>
-        <app-pump-fluid *ngIf="subTab == 'pump-fluid'" (isValid)="setValid()" (isInvalid)="setInvalid()" [saveClicked]="saveClicked"
-          [(psat)]="_psat" (saved)="save()" [selected]="true" [settings]="settings" [baseline]="true" [inSetup]="true"></app-pump-fluid>
-        <app-motor *ngIf="subTab == 'motor'" (isValid)="setValid()" (isInvalid)="setInvalid()" [saveClicked]="saveClicked" [(psat)]="_psat"
-          (saved)="save()" [selected]="true" [settings]="settings" [baseline]="true" [inSetup]="true"></app-motor>
-        <app-field-data *ngIf="subTab == 'field-data'" (isValid)="setValid()" (isInvalid)="setInvalid()" [saveClicked]="saveClicked"
-          [(psat)]="_psat" (saved)="save()" [selected]="true" [settings]="settings" [baseline]="true" [inSetup]="true" (openHeadTool)="modalOpen()"
-          (closeHeadTool)="modalClose()"></app-field-data>
-      </div>
-      <div class="col-6 help-panel">
-        <app-help-panel [psat]="_psat" [settings]="settings" [currentTab]="subTab" [inSetup]="true" [saveClicked]="saveClicked"></app-help-panel>
-      </div>
+    <!--system-setup-->
+    <div class="tab-content" *ngIf="mainTab == 'system-setup'">
+      <nav class="hide-print">
+        <ul class="tabs subtabs progress-tabs psat">
+          <li class="fixed-tab-size" [ngClass]="{'active': subTab == 'system-basics'}">
+            <a (click)="changeSubTab('system-basics')">
+              <span class="step-number">1</span> Assessment Settings</a>
+          </li>
+          <li class="fixed-tab-size" [ngClass]="{'active': subTab == 'pump-fluid'}">
+            <a (click)="changeSubTab('pump-fluid')">
+              <span class="step-number">2</span> Pump &amp; Fluid</a>
+          </li>
+          <li class="fixed-tab-size" [ngClass]="{'active': subTab == 'motor', 'disabled': checkPumpFluid() }">
+            <a (click)="changeSubTab('motor')">
+              <span class="step-number">3</span> Motor</a>
+          </li>
+          <li class="fixed-tab-size" [ngClass]="{'active': subTab == 'field-data', 'disabled': checkMotor()}">
+            <a (click)="changeSubTab('field-data')">
+              <span class="step-number">4</span> Field Data</a>
+          </li>
+        </ul>
+      </nav>
     </div>
-
+    <div class="hide-print" id="psatTabs" *ngIf="mainTab == 'assessment'">
+      <app-psat-tabs></app-psat-tabs>
+    </div>
   </div>
+  <div *ngIf="mainTab == 'system-setup'" class="row tab-content psat" [ngStyle]="{'height.px': containerHeight}">
+    <div class="col-6 panel-column modification" [ngClass]="{'modal-open': isModalOpen == true}">
+      <app-system-basics *ngIf="subTab == 'system-basics'" [settings]="settings" [saveClicked]="saveClicked" [assessment]="assessment"
+        [(psat)]="_psat" [isAssessmentSettings]="isAssessmentSettings" (updateSettings)="getSettings($event)" (updateAssessment)="save()"
+        (openModal)="modalOpen()" (closeModal)="modalClose()"></app-system-basics>
+      <app-pump-fluid *ngIf="subTab == 'pump-fluid'" (isValid)="setValid()" (isInvalid)="setInvalid()" [saveClicked]="saveClicked"
+        [(psat)]="_psat" (saved)="save()" [selected]="true" [settings]="settings" [baseline]="true" [inSetup]="true"></app-pump-fluid>
+      <app-motor *ngIf="subTab == 'motor'" (isValid)="setValid()" (isInvalid)="setInvalid()" [saveClicked]="saveClicked" [(psat)]="_psat"
+        (saved)="save()" [selected]="true" [settings]="settings" [baseline]="true" [inSetup]="true"></app-motor>
+      <app-field-data *ngIf="subTab == 'field-data'" (isValid)="setValid()" (isInvalid)="setInvalid()" [saveClicked]="saveClicked"
+        [(psat)]="_psat" (saved)="save()" [selected]="true" [settings]="settings" [baseline]="true" [inSetup]="true" (openHeadTool)="modalOpen()"
+        (closeHeadTool)="modalClose()"></app-field-data>
+    </div>
+    <div class="col-6 help-panel">
+      <app-help-panel [psat]="_psat" [settings]="settings" [currentTab]="subTab" [inSetup]="true" [saveClicked]="saveClicked"></app-help-panel>
+    </div>
+  </div>
+
   <!--End system-setup-->
   <!--tab (diagram and assessment)-->
-  <div class="hide-print" id="psatTabs" *ngIf="mainTab == 'assessment'">
-    <app-psat-tabs></app-psat-tabs>
-  </div>
   <!--end tabs-->
   <!--assessment-->
-  <div class="tab-content" *ngIf="mainTab == 'assessment' && (currentTab == 'explore-opportunities' || currentTab == 'modify-conditions')">
+  <div class="tab-content" *ngIf="mainTab == 'assessment' && (currentTab == 'explore-opportunities' || currentTab == 'modify-conditions')" [ngStyle]="{'height.px': containerHeight}">
     <app-explore-opportunities *ngIf="currentTab == 'explore-opportunities'" [assessment]="assessment" [settings]="settings"
-      [saveClicked]="saveClicked" [(psat)]="_psat" (saved)="save()"></app-explore-opportunities>
+      [saveClicked]="saveClicked" [(psat)]="_psat" (saved)="save()" [containerHeight]="containerHeight"></app-explore-opportunities>
     <app-modify-conditions *ngIf="currentTab == 'modify-conditions'" [assessment]="assessment" [settings]="settings" [saveClicked]="saveClicked"
       [(psat)]="_psat" (saved)="save()"></app-modify-conditions>
   </div>
@@ -105,7 +104,7 @@
   </div>
   <!--end report-->
   <!--footer-->
-  <div id="psatFooter" class="footer hide-print" *ngIf="mainTab == 'system-setup' || mainTab == 'assessment'">
+  <div #footer id="psatFooter" class="footer hide-print" *ngIf="mainTab == 'system-setup' || mainTab == 'assessment'">
     <div class="pull-right">
       <button class="btn btn-secondary" *ngIf="mainTab == 'system-setup' || mainTab == 'assessment'" (click)="toggleSave()">Save</button>
       <button class="btn btn-primary" *ngIf="mainTab == 'system-setup'" [disabled]="!getCanContinue()" (click)="continue()">Continue</button>
