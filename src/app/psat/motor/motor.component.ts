@@ -38,7 +38,6 @@ export class MotorComponent implements OnInit {
     'Standard Efficiency',
     'Energy Efficient',
     'Premium',
-    // When the user chooses specified, they need a place to put the efficiency value
     'Specified'
   ];
 

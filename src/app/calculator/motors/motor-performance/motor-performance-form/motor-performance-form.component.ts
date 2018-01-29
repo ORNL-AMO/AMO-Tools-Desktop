@@ -34,7 +34,6 @@ export class MotorPerformanceFormComponent implements OnInit {
     'Standard Efficiency',
     'Energy Efficient',
     'Premium',
-    // When the user chooses specified, they need a place to put the efficiency value
     'Specified'
   ];
   efficiencyError: string=null;
@@ -70,17 +69,11 @@ export class MotorPerformanceFormComponent implements OnInit {
       if (this.settings.powerMeasurement === 'hp') {
         if (Number(this.tmpHorsePower) > 500) {
           this.tmpHorsePower = this.horsePowersPremium[this.horsePowersPremium.length - 1];
-          // this.performanceForm.patchValue({
-          //   'horsePower': this.horsePowersPremium[this.horsePowersPremium.length - 1]
-          // });
         }
         this.options = this.horsePowersPremium;
       } else {
         if (this.performanceForm.controls.horsePower.value > 355) {
           this.tmpHorsePower = this.kWattsPremium[this.kWattsPremium.length - 1];
-          // this.performanceForm.patchValue({
-          //   'horsePower': this.kWattsPremium[this.kWattsPremium.length - 1]
-          // });
         }
         this.options = this.kWattsPremium;
       }
