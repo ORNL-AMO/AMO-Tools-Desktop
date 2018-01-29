@@ -1,14 +1,15 @@
 import { Injectable } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import {
-  FanRatedInfo, PlaneRectangular, PlaneCircular, TraverseRectangular, TraverseCircular, PlaneMstRectangular,
-  PlaneMstCircular, PlaneDataRectangular, PlaneDataCircular, BaseGasDensity, FanShaftPower, Fan203Results
+  FanRatedInfo, TraverseRectangular, TraverseCircular, PlaneDataRectangular, PlaneDataCircular, BaseGasDensity,
+  FanShaftPower, Fan203Results
 } from '../shared/models/fans';
 
-import { Settings } from '../shared/models/settings';
+declare var fanAddon: any;
+
+// import { Settings } from '../shared/models/settings';
 // import { ConvertUnitsService } from '../shared/convert-units/convert-units.service';
 // import { ValidationService } from '../shared/validation.service';
-declare var fanAddon: any;
 // import { BehaviorSubject } from 'rxjs';
 // import { FormGroup } from '@angular/forms';
 
