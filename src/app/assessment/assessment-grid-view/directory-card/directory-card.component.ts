@@ -1,6 +1,9 @@
 import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
 import { Directory, DirectoryDbRef } from '../../../shared/models/directory';
 import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
+import { Assessment } from '../../../shared/models/assessment';
+import { AssessmentService } from '../../assessment.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-directory-card',
@@ -16,13 +19,13 @@ export class DirectoryCardComponent implements OnInit {
   isChecked: boolean;
 
   isFirstChange: boolean = true;
-  constructor(private indexedDbService: IndexedDbService) { }
+  constructor(private indexedDbService: IndexedDbService, private assessmentService: AssessmentService, private router: Router) { }
 
   ngOnInit() {
-    let tmpDirectory = this.populateDirectories(this.directory);
-    this.directory.assessments = tmpDirectory.assessments;
-    this.directory.subDirectory = tmpDirectory.subDirectory;
-    this.directory.collapsed = tmpDirectory.collapsed;
+    this.populateDirectories(this.directory);
+    // this.directory.assessments = tmpDirectory.assessments;
+    // this.directory.subDirectory = tmpDirectory.subDirectory;
+    // this.directory.collapsed = tmpDirectory.collapsed;
     if (this.isChecked) {
       this.directory.selected = this.isChecked;
     }
@@ -42,31 +45,40 @@ export class DirectoryCardComponent implements OnInit {
     this.directoryChange.emit(dir)
   }
 
-  populateDirectories(directoryRef: DirectoryDbRef): Directory {
-    let tmpDirectory: Directory = {
-      name: directoryRef.name,
-      createdDate: directoryRef.createdDate,
-      modifiedDate: directoryRef.modifiedDate,
-      id: directoryRef.id,
-      collapsed: false,
-      parentDirectoryId: directoryRef.id
-    }
-    this.indexedDbService.getDirectoryAssessments(directoryRef.id).then(
+  populateDirectories(directory: Directory) {
+    // let tmpDirectory: Directory = {
+    //   name: directoryRef.name,
+    //   createdDate: directoryRef.createdDate,
+    //   modifiedDate: directoryRef.modifiedDate,
+    //   id: directoryRef.id,
+    //   collapsed: false,
+    //   parentDirectoryId: directoryRef.id
+    // }
+    this.indexedDbService.getDirectoryAssessments(directory.id).then(
       results => {
-        tmpDirectory.assessments = results;
+        directory.assessments = results;
+        console.log(directory.assessments);
       }
     );
 
-    this.indexedDbService.getChildrenDirectories(directoryRef.id).then(
+    this.indexedDbService.getChildrenDirectories(directory.id).then(
       results => {
-        tmpDirectory.subDirectory = results;
+        directory.subDirectory = results;
       }
     )
-    return tmpDirectory;
   }
 
   setDelete() {
     this.directory.selected = this.isChecked;
+  }
+
+  goToAssessment(assessment: Assessment) {
+    this.assessmentService.tab = 'system-setup';
+    if (assessment.type == 'PSAT') {
+      this.router.navigateByUrl('/psat/' + assessment.id);
+    } else if (assessment.type == 'PHAST') {
+      this.router.navigateByUrl('/phast/' + assessment.id);
+    }
   }
 
 }

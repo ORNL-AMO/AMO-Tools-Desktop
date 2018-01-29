@@ -1,0 +1,55 @@
+<table class="table" *ngIf="settings && setupDone">
+    <tr>
+        <td class="bold">Baseline Data:</td>
+        <td></td>
+    </tr>
+    <tr>
+        <td>
+            Annual Energy Use:
+        </td>
+        <td>
+            {{phastResults.annualEnergyUsed | number:'2.0-0'}} {{settings.energyResultUnit}}
+        </td>
+    </tr>
+    <tr>
+        <td>
+            Annual Energy Costs:
+        </td>
+        <td>
+            {{phastResults.annualCost| currency:'USD':'symbol':'2.0-0'}}
+        </td>
+    </tr>
+    <tr>
+        <td class="bold">
+            Modification Data:
+        </td>
+        <td></td>
+    </tr>
+    <tr>
+        <td>
+            Number of Modifications:
+        </td>
+        <td>
+            {{numMods}}
+        </td>
+    </tr>
+    <tr *ngIf="modResults">
+        <td>
+            Max Energy Savings:
+        </td>
+        <td>
+            {{modResults.annualEnergySavings | number:'2.0-0'}} {{settings.energyResultUnit}}
+        </td>
+    </tr>
+    <tr *ngIf="modResults">
+        <td>
+            Max Cost Savings:
+        </td>
+        <td>
+            {{modResults.annualCostSavings| currency:'USD':'symbol':'2.0-0'}}
+        </td>
+    </tr>
+</table>
+<div *ngIf="!setupDone">
+    <p style="font-size:small">This assessment is incomplete. Complete assessment to view results.</p>
+</div>

@@ -855,7 +855,6 @@ Sidebar
 
 
 .dashboard-content{
-    overflow-y: scroll;
     height: 100vh;
     background-color: #ececec;
 }

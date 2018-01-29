@@ -1,7 +1,29 @@
+a:not([href]):not([tabindex]):hover {
+  color: blue;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+a:not([href]):not([tabindex]){
+  color: blue;
+}
+
+
 .summary-card{
   padding-top: 10px;
 }
 
+
+.summary-card-body{
+  height: 200px;
+}
+
+
+.summary-card-header,
+.summary-card-body,
+.summary-card-footer{
+  padding: 6px;
+}
 
 /*
 Assessments: Grid View
@@ -12,7 +34,6 @@ Assessments: Grid View
   -moz-box-shadow: 0px 2px 6px 0px rgba(149,164,175,0.3);
   box-shadow: 0px 2px 6px 0px rgba(149,164,175,0.3);
   padding: 20px;
-  position: relative;
   min-height: 320px;
   background-color: #fff;
 }

@@ -33,25 +33,26 @@
 </div> -->
 
 <div class="card">
-  <div class="card-header">
+  <div class="card-header summary-card-header">
     <input type="checkbox" [(ngModel)]="isChecked" (change)="setDelete()">
-    {{directory.name}}
+    <span class="fa fa-folder"></span>
+    <a (click)="goToDirectory(directory)">{{directory.name}}</a>
   </div>
-  <div class="card-block">
-    <div class="assessment-details">
-      <ul *ngIf="directory.subDirectory">
-        <li *ngFor="let directory of directory.subDirectory">
-          <i class="fa fa-folder-o" aria-hidden="true"></i> {{directory.name}}
-        </li>
-      </ul>
-      <ul *ngIf="directory.assessments">
-        <li *ngFor="let assessment of directory.assessments">
-          <i class="fa fa-bar-chart-o" aria-hidden="true"></i> {{assessment.name}}
-        </li>
-      </ul>
-    </div>
+  <div class="card-body summary-card-body scroll-item">
+    <ul *ngIf="directory.subDirectory && directory.subDirectory.length != 0">
+      <li *ngFor="let directory of directory.subDirectory">
+        <i class="fa fa-folder-o" aria-hidden="true"></i> {{directory.name}}
+      </li>
+    </ul>
+    <ul *ngIf="directory.assessments">
+      <li *ngFor="let assessment of directory.assessments">
+        <img *ngIf="assessment.type == 'PSAT'" class="icon-image" src="assets/images/ico-psat-diagram-small.png">
+        <img *ngIf="assessment.type == 'PHAST'" class="icon-image" src="assets/images/ico-phast-diagram-small.png">
+        <a (click)="goToAssessment(assessment)">{{assessment.name}}</a>
+      </li>
+    </ul>
   </div>
-  <div class="card-footer">
+  <div class="card-footer summary-card-footer">
     <div class="last-updated pull-right">Last updated {{directory.modifiedDate | date }}</div>
   </div>
 </div>
