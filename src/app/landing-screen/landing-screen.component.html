@@ -38,9 +38,9 @@
 			</h3>
 			<p>Model a system and explore endless optimization scenarios.</p>
 			<a (click)="createAssessment('Pump')" class="click-link">
-				<img class="icon-image" src="assets/images/ico-psat-diagram-small.png">Create Pump Assessment</a>
+				<img class="icon-image" src="assets/images/ico-psat-diagram-small.png">Create Pump Assessment</a><span class="span-label">(formerly PSAT)</span>
 			<a (click)="createAssessment('Furnace')" class="click-link">
-				<img class="icon-image" src="assets/images/ico-phast-diagram-small.png">Create Furnace Assessment</a>
+				<img class="icon-image" src="assets/images/ico-phast-diagram-small.png">Create Process Heating Assessment</a><span class="span-label">(formerly PHAST)</span>
 			<a (click)="hideScreen()" class="click-link">
 				<span class="fa fa-folder-o"></span> View All Your Assessments</a>
 		</li>
@@ -60,11 +60,7 @@
 					</span>Fans
 				</span>
 			</div> -->
-			<div>
-				<a class="icon click-link" (click)="chooseCalculator('furnaces')">
-					<i class="fa fa-calculator"></i> Furnaces
-				</a>
-			</div>
+
 			<!-- <div>
 				<span class="click-link" (click)="chooseCalculator('steam')">
 					<a class="icon click-link">
@@ -72,16 +68,21 @@
 					</span>Steam
 				</span>
 			</div>-->
-			<div>
-				<a class="icon click-link" (click)="chooseCalculator('motors')">
-					<i class="fa fa-calculator"></i> Motors
-				</a>
-			</div>
-			<div>
-				<a class="icon click-link" (click)="chooseCalculator('utilities')">
-					<i class="fa fa-calculator"></i> Utilities
-				</a>
-			</div>
+      <div>
+        <a class="icon click-link" (click)="chooseCalculator('motors')">
+          <i class="fa fa-calculator"></i> Motors
+        </a>
+      </div>
+      <div>
+        <a class="icon click-link" (click)="chooseCalculator('utilities')">
+          <i class="fa fa-calculator"></i> Utilities
+        </a>
+      </div>
+      <div>
+        <a class="icon click-link furnace" (click)="chooseCalculator('furnaces')">
+          <i class="fa fa-calculator"></i> Process Heating
+        </a>
+      </div>
 		</li>
 	</ul>
 

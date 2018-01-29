@@ -76,7 +76,7 @@ export class OperatingHoursComponent implements OnInit {
     this.startSavePolling();
     this.phast.operatingHours.isCalculated = true;
     this.phast.operatingHours.hoursPerYear = this.phast.operatingHours.hoursPerShift * this.phast.operatingHours.shiftsPerDay * this.phast.operatingHours.daysPerWeek * this.phast.operatingHours.weeksPerYear;
-    this.yearFormat = this.phast.operatingHours.hoursPerYear.toFixed(2);
+    this.yearFormat = this.phast.operatingHours.hoursPerYear.toFixed(0);
   }
 
   setNotCalculated() {

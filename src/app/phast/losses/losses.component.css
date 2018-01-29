@@ -38,8 +38,10 @@
 .modal-dialog{
   top: 20%;
 }
+.row-min-height{
+  min-height: 100%;
+}
 
-
-.modify-conditions{
-  width: 100%;
+.no-padding-left{
+  padding-left: 0px;
 }

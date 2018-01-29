@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewEncapsulation, Input } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation, Input, ElementRef, ViewChild, SimpleChanges } from '@angular/core';
 import { Settings } from '../../../shared/models/settings';
 import { Assessment } from '../../../shared/models/assessment';
 import { PHAST, Modification } from '../../../shared/models/phast/phast';
@@ -25,11 +25,38 @@ export class LossesResultPanelComponent implements OnInit {
   modification: Modification;
   @Input()
   inSetup: boolean;
+  @Input()
+  containerHeight: number;
+
+  @ViewChild('resultTabs') resultTabs: ElementRef;
 
   tabSelect: string = 'results';
+  helpHeight: number;
   constructor() { }
 
   ngOnInit() {
+  }
+
+  ngAfterViewInit(){
+    setTimeout(() => {
+      this.getContainerHeight();
+    }, 100);
+  }
+
+  ngOnChanges(changes: SimpleChanges){
+    if(changes.containerHeight){
+      if(!changes.containerHeight.firstChange){
+        this.getContainerHeight();
+      }
+    }
+  }
+
+  getContainerHeight() {
+    if (this.containerHeight && this.resultTabs) {
+      let tabHeight = this.resultTabs.nativeElement.clientHeight;
+      this.helpHeight = this.containerHeight - tabHeight;
+      console.log(this.helpHeight);
+    }
   }
 
   setTab(str: string){

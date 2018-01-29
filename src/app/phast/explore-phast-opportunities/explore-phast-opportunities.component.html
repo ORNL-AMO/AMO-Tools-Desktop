@@ -9,7 +9,7 @@
         (changeField)="focusField($event)" (changeTab)="changeTab($event)"></app-explore-phast-opportunities-form>
   
       </div>
-      <div class="col-md-6 scroll-item" [ngStyle]="{'height.px': containerHeight}">
+      <div class="col-md-6 scroll-item no-padding-left" [ngStyle]="{'height.px': containerHeight}">
         <app-losses-result-panel [inSetup]="false" [currentField]="currentField" [settings]="settings"
         [phast]="phast" [toggleCalculate]="toggleCalculate" [modification]="phast.modifications[exploreModIndex]" [lossesTab]="lossTab"></app-losses-result-panel>
       </div>

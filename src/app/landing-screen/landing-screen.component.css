@@ -150,3 +150,12 @@
 .arrow-img{
 	width: 60%;
 }
+
+.furnace {
+  white-space: nowrap;
+}
+
+.span-label {
+  font-size: 15px;
+  margin-left: 25px;
+}

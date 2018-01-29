@@ -20,7 +20,7 @@
 <div class="sidebar-group secondary">
   <ul>
     <li [ngClass]="{'selected':selectedDirectoryId == directory.id && dashboardView == 'assessment-dashboard'}">
-      <span (click)="toggleSelected(directory)">All Assets</span>
+      <span (click)="toggleSelected(directory)"><i class="fa fa-folder-o" aria-hidden="true"></i> All Assets</span>
     </li>
     <li *ngIf="directory">
       <app-directory-item [directory]="getDirectory()" [selectedDirectoryId]="selectedDirectoryId" (selectSignal)="toggleSelected($event)"

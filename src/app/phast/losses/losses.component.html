@@ -1,6 +1,6 @@
 <div class="row modify-conditions">
   <div class="scroll-item" [ngClass]="{'col-6': inSetup, 'col-8': !inSetup}" [ngStyle]="{'height.px': containerHeight}">
-    <div class="row">
+    <div class="row row-min-height">
       <div class="modification" (click)="togglePanel(baselineSelected)" [ngClass]="{'disabled': baselineSelected == false, 'modal-open': isModalOpen == true, 'baseline':!inSetup,  'col-12': inSetup, 'col-md-6': !inSetup}">
         <div class="header">
           <h3>Baseline</h3>
@@ -212,11 +212,11 @@
     <!--end row-->
   </div>
   <!--end col -->
-  <div [ngClass]="{'col-md-6': inSetup, 'col-md-4': !inSetup}">
+  <div class="no-padding-left"  [ngClass]="{'col-md-6': inSetup, 'col-md-4': !inSetup}" [ngStyle]="{'height.px': containerHeight}">
     <app-losses-result-panel *ngIf="!inSetup" [inSetup]="inSetup" [lossesTab]="selectedTab" [currentField]="currentField" [settings]="settings"
-      [phast]="phast" [toggleCalculate]="toggleCalculate" [modification]="_modifications[modificationIndex]"></app-losses-result-panel>
+      [phast]="phast" [toggleCalculate]="toggleCalculate" [modification]="_modifications[modificationIndex]" [containerHeight]="containerHeight"></app-losses-result-panel>
     <app-losses-result-panel *ngIf="inSetup" [inSetup]="inSetup" [lossesTab]="selectedTab" [currentField]="currentField" [settings]="settings"
-      [phast]="phast" [toggleCalculate]="toggleCalculate"></app-losses-result-panel>
+      [phast]="phast" [toggleCalculate]="toggleCalculate" [containerHeight]="containerHeight"></app-losses-result-panel>
   </div>
 
 

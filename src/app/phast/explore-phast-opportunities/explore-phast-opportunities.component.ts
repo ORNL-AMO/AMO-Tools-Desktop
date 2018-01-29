@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
 import { PHAST } from '../../shared/models/phast/phast';
 import { Assessment } from '../../shared/models/assessment';
 import { Settings } from '../../shared/models/settings';
@@ -19,11 +19,22 @@ export class ExplorePhastOpportunitiesComponent implements OnInit {
   @Input()
   containerHeight: number;
   
+  @Output('save')
+  save = new EventEmitter<boolean>();
+  @Input()
+  saveClicked: boolean;
+
   tabSelect: string = 'results';
   exploreModIndex: number;
   currentField: string = 'default';
   toggleCalculate: boolean = false;
-  lossTab: LossTab;
+  lossTab: LossTab = {
+    step: 0,
+    tabName: '',
+    componentStr: '' 
+  };
+  counter: any;
+  isFirstChange: boolean = true;
   constructor() { }
 
   ngOnInit() {
@@ -50,6 +61,16 @@ export class ExplorePhastOpportunitiesComponent implements OnInit {
         this.exploreModIndex = this.phast.modifications.length - 1;
         this.phast.modifications[this.exploreModIndex].phast.name = 'Opportunities Modification'
       }
+    }
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (!this.isFirstChange) {
+      if (changes.saveClicked) {
+        this.save.emit(true);
+      }
+    } else {
+      this.isFirstChange = false;
     }
   }
 
@@ -83,16 +104,26 @@ export class ExplorePhastOpportunitiesComponent implements OnInit {
   }
 
 
-  getResults(){
+  getResults() {
+    this.startSavePolling();
     this.toggleCalculate = !this.toggleCalculate;
   }
 
-  focusField(str: string){
+  focusField(str: string) {
     this.currentField = str;
   }
-  
 
-  changeTab(tab: LossTab){
+
+  changeTab(tab: LossTab) {
     this.lossTab = tab;
+  }
+
+  startSavePolling() {
+    if (this.counter) {
+      clearTimeout(this.counter);
+    }
+    this.counter = setTimeout(() => {
+      this.save.emit(true);
+    }, 3000)
   }
 }

@@ -14,7 +14,7 @@
     <div class="row justify-content-center align-items-center pill-row">
       <ul class="pills-nav">
         <li [ngClass]="{'active': mainTab == 'system-setup'}" (click)="changeTab('system-setup')">
-          <span>Furnace Setup</span>
+          <span>PH System Setup</span>
         </li>
         <li [ngClass]="{'active': mainTab == 'assessment', 'disabled': !assessment.phast.setupDone}" (click)="changeTab('assessment')">
           <span>Assessment</span>
