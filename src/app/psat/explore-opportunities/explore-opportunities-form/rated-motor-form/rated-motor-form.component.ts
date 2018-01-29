@@ -209,7 +209,6 @@ export class RatedMotorFormComponent implements OnInit {
     this.calculate();
     let val;
     if (num == 1) {
-      this.modifyPowerArrays(true);
       if (this.settings.powerMeasurement == 'hp') {
         val = this.convertUnitsService.value(this.psat.inputs.motor_rated_power).from(this.settings.powerMeasurement).to('kW');
       } else {
@@ -217,7 +216,6 @@ export class RatedMotorFormComponent implements OnInit {
       }
       val = val * 1.5;
     } else if (num == 2) {
-      this.modifyPowerArrays(false);
       if (this.settings.powerMeasurement == 'hp') {
         val = this.convertUnitsService.value(this.psat.modifications[this.exploreModIndex].psat.inputs.motor_rated_power).from(this.settings.powerMeasurement).to('kW');
       } else {
@@ -255,7 +253,6 @@ export class RatedMotorFormComponent implements OnInit {
   toggleMotorRatedPower() {
     if (this.showRatedMotorPower == false) {
       this.psat.modifications[this.exploreModIndex].psat.inputs.motor_rated_power = this.psat.inputs.motor_rated_power;
-      this.modifyPowerArrays(false);
       this.calculate();
     }
   }
