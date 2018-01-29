@@ -16,6 +16,8 @@ a:not([href]):not([tabindex]){
   box-shadow: #7b7878 2px 2px 5px 1px;
 }
 
-.calculator-list p {
-  margin-top: 10px;
+.calc-item-row{
+  padding-top: 10px;
+  padding-bottom: 10px;
+  border-bottom: #eee solid 1px;
 }
