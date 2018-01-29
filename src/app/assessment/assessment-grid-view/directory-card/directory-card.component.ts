@@ -57,7 +57,6 @@ export class DirectoryCardComponent implements OnInit {
     this.indexedDbService.getDirectoryAssessments(directory.id).then(
       results => {
         directory.assessments = results;
-        console.log(directory.assessments);
       }
     );
 
