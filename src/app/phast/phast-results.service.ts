@@ -120,7 +120,7 @@ export class PhastResultsService {
         results.energyInputHeatDelivered = tmpResults.heatDelivered;
         results.totalExhaustGas = tmpResults.exhaustGasLosses;
         results.grossHeatInput = results.totalInput - results.exothermicHeat;
-        results.availableHeatPercent = this.phastService.availableHeat(phast.losses.energyInputExhaustGasLoss[0], settings);
+        results.availableHeatPercent = tmpResults.availableHeat;
       }
     }
 
