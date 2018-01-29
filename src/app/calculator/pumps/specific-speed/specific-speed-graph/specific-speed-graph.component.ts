@@ -240,13 +240,27 @@ export class SpecificSpeedGraphComponent implements OnInit {
         .style("font-size", "13px");
 
       var data = [];
-      for (var i = 100; i < 100000; i = i + 25) {
-        var efficiencyCorrection = this.psatService.achievableEfficiency(this.speedForm.controls.pumpType.value, i);
-        if (efficiencyCorrection <= 5.5) {
-          data.push({
-            x: i,
-            y: efficiencyCorrection
-          });
+
+      if (this.speedForm.controls.pumpType.value === "Vertical Turbine") {
+
+        for (var i = 1720; i < 16350; i = i + 25) {
+          var efficiencyCorrection = this.psatService.achievableEfficiency(this.speedForm.controls.pumpType.value, i);
+          if (efficiencyCorrection <= 5.5) {
+            data.push({
+              x: i,
+              y: efficiencyCorrection
+            });
+          }
+        }
+      } else {
+        for (var i = 680; i < 7300; i = i + 25) {
+          var efficiencyCorrection = this.psatService.achievableEfficiency(this.speedForm.controls.pumpType.value, i);
+          if (efficiencyCorrection <= 5.5) {
+            data.push({
+              x: i,
+              y: efficiencyCorrection
+            });
+          }
         }
       }
 
@@ -464,14 +478,24 @@ export class SpecificSpeedGraphComponent implements OnInit {
         if (this.y(efficiencyCorrection) >= 0) {
           return "translate(" + this.x(specificSpeed) + "," + this.y(efficiencyCorrection) + ")";
         }
+
       })
       .style("display", () => {
-        if (this.y(efficiencyCorrection) >= 0) {
-          return null;
+
+        if (this.speedForm.controls.pumpType.value === "Vertical Turbine") {
+          if (specificSpeed >= 1720 && specificSpeed <= 16350) {
+            return null;
+          } else {
+            return "none";
+          }
+        } else {
+          if (specificSpeed >= 680 && specificSpeed <= 7300) {
+            return null;
+          } else {
+            return "none";
+          }
         }
-        else {
-          return "none";
-        }
+
       });
 
     this.svg.append("text")
@@ -518,7 +542,7 @@ export class SpecificSpeedGraphComponent implements OnInit {
       .style("stroke", "#2ECC71")
       .style('pointer-events', 'none');
 
-      
+
   }
 
 }
