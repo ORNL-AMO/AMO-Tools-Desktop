@@ -1,12 +1,9 @@
-
-
-
 <div class="row">
-  <div class="col-12">
+  <div class="col-10">
 
     <ol class="breadcrumb">
       <li *ngFor="let crumb of breadCrumbs; let first = first;">
-        <a  class="breadcrumb-item" *ngIf="first" (click)="goToDirectory(crumb)">
+        <a class="breadcrumb-item" *ngIf="first" (click)="goToDirectory(crumb)">
           All Assessments /
         </a>
         <a class="breadcrumb-item" *ngIf="!first" (click)="goToDirectory(crumb)">
@@ -15,7 +12,16 @@
       </li>
       <li class="breadcrumb-item">{{directory.name}}</li>
     </ol>
-
+  </div>
+  <div class="col-2">
+    <div class="btn-group pull-right" role="group">
+      <button class="btn-sm btn-secondary" [ngClass]="{'active': view == 'list'}" (click)="setView('list')">
+        <i class="fa fa-list"></i>
+      </button>
+      <button class="btn-sm btn-secondary" [ngClass]="{'active': view == 'grid'}" (click)="setView('grid')">
+        <i class="fa fa-th"></i>
+      </button>
+    </div>
   </div>
 </div>
 
@@ -34,10 +40,12 @@
         <button [disabled]="!checkSelected()" type="button" class="btn btn-secondary" (click)="emitExport()">Export...</button>
 
         <button type="button" class="btn btn-link pull-right" (click)="emitImport()">Import...</button>
-      </div><!-- End .table-actions -->
+      </div>
+      <!-- End .table-actions -->
 
       <div class="header" *ngIf="view != 'settings'">
-        <label><input type="checkbox" [(ngModel)]="isAllSelected" (change)="signalSelectAll()"/> Select all</label>
+        <label>
+          <input type="checkbox" [(ngModel)]="isAllSelected" (change)="signalSelectAll()" /> Select all</label>
       </div>
 
     </div>

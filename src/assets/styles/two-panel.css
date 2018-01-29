@@ -242,7 +242,7 @@
     background: #efefef;
 }
 
-.card-header {
+/* .card-header {
     text-align: center;
     background-color: rgba(0,0,0,0) !important;
 }
@@ -250,7 +250,7 @@
 .card-header h3 {
     margin: 0 !important;
     font-size: 16px !important;
-}
+} */
 
 
 .card-container form .form-section {

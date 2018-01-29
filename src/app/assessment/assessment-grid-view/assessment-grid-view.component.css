@@ -1,3 +1,40 @@
 .summary-card{
   padding-top: 10px;
 }
+
+
+/*
+Assessments: Grid View
+=========================================== */
+.list-card {
+  border: #95A4AF solid 1px;
+  -webkit-box-shadow: 0px 2px 6px 0px rgba(149,164,175,0.3);
+  -moz-box-shadow: 0px 2px 6px 0px rgba(149,164,175,0.3);
+  box-shadow: 0px 2px 6px 0px rgba(149,164,175,0.3);
+  padding: 20px;
+  position: relative;
+  min-height: 320px;
+  background-color: #fff;
+}
+  /* .list-card input[type="checkbox"] {
+    vertical-align: top;
+    margin-top: 6px;
+  } */
+  .list-card button {
+    background: transparent;
+    border: none;
+    padding: 0;
+    box-shadow: none;
+    font-size: 14px;
+    color: #0076FF;
+  }
+    .list-card button:hover {
+      cursor: pointer;
+    }
+  .list-card .menu {
+    display: none;
+  }
+  .last-updated {
+    font-size: 13px;
+    color: #999;
+  }

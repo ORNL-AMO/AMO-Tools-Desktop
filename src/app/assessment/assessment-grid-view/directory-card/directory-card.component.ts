@@ -5,7 +5,7 @@ import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
 @Component({
   selector: 'app-directory-card',
   templateUrl: './directory-card.component.html',
-  styleUrls: ['./directory-card.component.css']
+  styleUrls: ['./directory-card.component.css', '../assessment-grid-view.component.css']
 })
 export class DirectoryCardComponent implements OnInit {
   @Input()
