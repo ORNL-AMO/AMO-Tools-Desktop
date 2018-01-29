@@ -78,12 +78,8 @@ ul {
     }
 
     .print-bar-chart {
-        /* page-break-before: always; */
         page-break-inside: avoid;
         position: relative;
-        /* top: 0; */
         left: -200px;
-        /* width: 300px; */
-        /* left: auto; */
     }
 }

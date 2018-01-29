@@ -6,13 +6,14 @@ import { Assessment } from '../../../shared/models/assessment';
 import { PhastResultsService } from '../../phast-results.service';
 import { graphColors } from './graphColors';
 import { PhastReportService } from '../phast-report.service';
+import { WindowRefService } from '../../../indexedDb/window-ref.service';
+
 @Component({
   selector: 'app-report-graphs',
   templateUrl: './report-graphs.component.html',
   styleUrls: ['./report-graphs.component.css']
 })
 export class ReportGraphsComponent implements OnInit {
-
   @Input()
   settings: Settings;
   @Input()
@@ -24,8 +25,10 @@ export class ReportGraphsComponent implements OnInit {
 
   selectedPhast1: any;
   selectedPhast2: any;
-
   baselinePhast: any;
+  chartContainerWidth: number;
+  doc: any;
+  window: any;
 
   resultsArray: Array<any>;
   modExists: boolean = false;
@@ -36,7 +39,7 @@ export class ReportGraphsComponent implements OnInit {
   baselineLabels: Array<string>;
   modifiedLabels: Array<string>;
   showPrint: boolean = false;
-  constructor(private phastService: PhastService, private phastResultsService: PhastResultsService, private phastReportService: PhastReportService) { }
+  constructor(private phastService: PhastService, private phastResultsService: PhastResultsService, private phastReportService: PhastReportService, private windowRefService: WindowRefService) { }
 
   ngOnInit() {
     this.colors = graphColors;
@@ -66,12 +69,23 @@ export class ReportGraphsComponent implements OnInit {
       if (val) {
         this.getPieLabels(val);
       }
-    })
+    });
+
+    this.doc = this.windowRefService.getDoc();
+    this.window = this.windowRefService.nativeWindow;
+    this.chartContainerWidth = this.doc.getElementsByClassName('results')[0].clientWidth;
+    if (this.chartContainerWidth == 0) {
+      this.chartContainerWidth = this.doc.getElementsByClassName('assessment-item')[0].clientWidth;
+    }
 
     //subscribe to show print value
     this.phastReportService.showPrint.subscribe(printVal => {
       this.showPrint = printVal;
     })
+  }
+
+  ngOnDestroy() {
+    this.showPrint = false;
   }
 
 

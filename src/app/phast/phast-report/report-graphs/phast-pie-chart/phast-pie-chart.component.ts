@@ -22,6 +22,14 @@ export class PhastPieChartComponent implements OnInit {
   isBaseline: boolean;
   @Input()
   modExists: boolean;
+  @Input()
+  printView: boolean;
+  @Input()
+  chartContainerWidth: number;
+  @Input()
+  chartIndex: number;
+
+  chartContainerHeight: number;
 
   chartData: any = {
     pieChartLabels: new Array<string>(),
@@ -53,9 +61,6 @@ export class PhastPieChartComponent implements OnInit {
 
   doc: any;
   window: any;
-  containerWidth: number;
-  containerHeight: number;
-  chartContainerWidth: number;
 
   chart: any;
   tmpChartData: Array<any>;
@@ -65,34 +70,21 @@ export class PhastPieChartComponent implements OnInit {
 
   ngOnInit() {
     this.getData(this.results, this.resultCats);
-    this.getColors();
+    this.getColors();    
   }
 
   ngAfterViewInit() {
-    this.doc = this.windowRefService.getDoc();
-    this.window = this.windowRefService.nativeWindow;
-
     if (this.modExists) {
-      this.containerWidth = this.doc.getElementsByClassName('results')[0].clientWidth;
-      if (this.containerWidth == 0) {
-        this.containerWidth = this.doc.getElementsByClassName('assessment-item')[0].clientWidth;
-      }
-      this.chartContainerWidth = this.containerWidth / 2;
-      this.containerHeight = 280;
+      this.chartContainerWidth = this.chartContainerWidth / 2;
     }
-    this.initChart();
-  }
+    this.chartContainerHeight = 280;
 
-  ngOnDestroy() {
-    this.window.onresize = null;
-  }
-
-
-  setValueMargin() {
-    this.doc = this.windowRefService.getDoc();
-    this.containerWidth = this.doc.getElementsByClassName('results')[0].clientWidth;
-    this.chartContainerWidth = this.containerWidth / 2 - 100;
-    this.initChart();
+    if (!this.printView) {
+      this.initChart();
+    }
+    else {
+      this.initPrintCharts();
+    }
   }
 
 
@@ -139,7 +131,7 @@ export class PhastPieChartComponent implements OnInit {
           },
           size: {
             width: this.chartContainerWidth,
-            height: this.containerHeight
+            height: this.chartContainerHeight
           },
           color: {
             pattern: graphColors
@@ -187,7 +179,7 @@ export class PhastPieChartComponent implements OnInit {
           },
           size: {
             width: this.chartContainerWidth,
-            height: this.containerHeight
+            height: this.chartContainerHeight
           },
           color: {
             pattern: graphColors
@@ -240,7 +232,7 @@ export class PhastPieChartComponent implements OnInit {
           },
           size: {
             width: this.chartContainerWidth,
-            height: this.containerHeight
+            height: this.chartContainerHeight
           },
           legend: {
             position: 'right'
@@ -429,10 +421,6 @@ export class PhastPieChartComponent implements OnInit {
     }
   }
 
-  resizeChart() {
-
-  }
-
 
   getData(phastResults: PhastResults, resultCats: ShowResultsCategories) {
     this.totalWallLoss = this.getLossPercent(phastResults.grossHeatInput, phastResults.totalWallLoss);
@@ -490,5 +478,117 @@ export class PhastPieChartComponent implements OnInit {
         backgroundColor: graphColors
       }
     ];
+  }
+
+
+
+  initPrintCharts() {
+    if (this.modExists) {
+      if (this.isBaseline) {
+        let currentChart = document.getElementsByClassName('chart')[2 + (this.chartIndex * 2)];
+       
+        this.chart = c3.generate({
+          bindto: currentChart,
+          data: {
+            columns: [
+              ["wall", this.totalWallLoss],
+              ["atmosphere", this.totalAtmosphereLoss],
+              ["other", this.totalOtherLoss],
+              ["cooling", this.totalCoolingLoss],
+              ["opening", this.totalOpeningLoss],
+              ["fixture", this.totalFixtureLoss],
+              ["leakage", this.totalLeakageLoss],
+              ["extSurface", this.totalExtSurfaceLoss],
+              ["charge", this.totalChargeMaterialLoss],
+            ],
+            type: 'pie',
+            labels: true,
+            names: {
+              wall: "Wall Losses " + this.totalWallLoss + "%",
+              atmosphere: "Atmosphere Losses " + this.totalAtmosphereLoss + "%",
+              other: "Other Losses " + this.totalOtherLoss + "%",
+              cooling: "Cooling Losses " + this.totalCoolingLoss + "%",
+              opening: "Opening Losses " + this.totalOpeningLoss + "%",
+              fixture: "Fixture Losses " + this.totalFixtureLoss + "%",
+              leakage: "Leakage Losses " + this.totalLeakageLoss + "%",
+              extSurface: "Extended Surface Losses " + this.totalExtSurfaceLoss + "%",
+              charge: "Charge Materials " + this.totalChargeMaterialLoss + "%",
+            }
+          },
+          size: {
+            width: 1300,
+            height: 320
+          },
+          color: {
+            pattern: graphColors
+          },
+          legend: {
+            position: 'right'
+          },
+          tooltip: {
+            contents: function (d, defaultTitleFormat, defaultValueFormat, color) {
+              let styling = "background-color: rgba(0, 0, 0, 0.7); border-radius: 5px; color: #fff; padding: 3px; font-size: 13px;";
+              let html = "<div style='" + styling + "'>" + d[0].name + "</div>";
+              return html;
+            }
+          }
+        });
+      }
+      else {
+        let currentChart = document.getElementsByClassName('chart')[3 + (this.chartIndex * 2)];
+
+        this.chart = c3.generate({
+          bindto: currentChart,
+          data: {
+            columns: [
+              ["wall", this.totalWallLoss],
+              ["atmosphere", this.totalAtmosphereLoss],
+              ["other", this.totalOtherLoss],
+              ["cooling", this.totalCoolingLoss],
+              ["opening", this.totalOpeningLoss],
+              ["fixture", this.totalFixtureLoss],
+              ["leakage", this.totalLeakageLoss],
+              ["extSurface", this.totalExtSurfaceLoss],
+              ["charge", this.totalChargeMaterialLoss],
+            ],
+            type: 'pie',
+            labels: true,
+            names: {
+              wall: "Wall Losses " + this.totalWallLoss + "%",
+              atmosphere: "Atmosphere Losses " + this.totalAtmosphereLoss + "%",
+              other: "Other Losses " + this.totalOtherLoss + "%",
+              cooling: "Cooling Losses " + this.totalCoolingLoss + "%",
+              opening: "Opening Losses " + this.totalOpeningLoss + "%",
+              fixture: "Fixture Losses " + this.totalFixtureLoss + "%",
+              leakage: "Leakage Losses " + this.totalLeakageLoss + "%",
+              extSurface: "Extended Surface Losses " + this.totalExtSurfaceLoss + "%",
+              charge: "Charge Materials " + this.totalChargeMaterialLoss + "%",
+            }
+          },
+          size: {
+            width: 1300,
+            height: 320
+          },
+          color: {
+            pattern: graphColors
+          },
+          legend: {
+            position: 'right'
+          },
+          tooltip: {
+            contents: function (d, defaultTitleFormat, defaultValueFormat, color) {
+              let styling = "background-color: rgba(0, 0, 0, 0.7); border-radius: 5px; color: #fff; padding: 3px; font-size: 13px;";
+              let html = "<div style='" + styling + "'>" + d[0].name + "</div>";
+              return html;
+            }
+          }
+        });
+      }
+    }
+    d3.selectAll(".c3-legend-item").style("font-size", "12px");
+
+    if (this.chart) {
+      this.updateChart();
+    }
   }
 }

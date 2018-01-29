@@ -1,1 +1,39 @@
-PRINT COMPONENT
+<div class="row justify-content-center align-items-center print-graphs-container" *ngFor="let result of resultsArray | slice:1; let i = index">
+    <div class="col-12">
+
+        <!-- pie charts -->
+        <div class="row justify-content-center align-items-center">
+            <div class="col-12">
+                <div class="row show-print">
+                    <div class="print-duo-title-top">
+                        Baseline
+                    </div>
+                    <div class="print-duo-title-bottom">
+                        {{result.name}}
+                    </div>
+                </div>
+                <div class="custom-row">
+                    <div class="show-duo-left print-duo-top">
+                        <app-phast-pie-chart [chartIndex]="i" [printView]="printView" [chartContainerWidth]="chartContainerWidth" [results]="baselinePhast.data" [resultCats]="resultCats" [isBaseline]="true" [modExists]="modExists"></app-phast-pie-chart>
+                    </div>
+                    <div class="show-duo-right print-duo-bottom">
+                        <app-phast-pie-chart [chartIndex]="i" [printView]="printView" [chartContainerWidth]="chartContainerWidth" [results]="result.data" [resultCats]="resultCats" [isBaseline]="false" [modExists]="modExists"></app-phast-pie-chart>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- bar charts -->
+        <div class="row align-items-center print-bar-chart" *ngIf="modExists" style="padding-top: 25px;">
+            <div class="col-7 mx-auto">
+                <app-phast-bar-chart [chartIndex]="i" [printView]="printView" [chartContainerWidth]="chartContainerWidth" [resultCats]="resultCats" [phast1Name]="baselinePhast.name" [phast2Name]="result.name"
+                    [modResults]="result.data" [results]="baselinePhast.data" [settings]="settings"></app-phast-bar-chart>
+            </div>
+        </div>
+
+
+
+
+    </div>
+</div>

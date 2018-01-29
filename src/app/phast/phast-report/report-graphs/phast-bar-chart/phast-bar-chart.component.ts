@@ -24,6 +24,14 @@ export class PhastBarChartComponent implements OnInit {
   phast1Name: string;
   @Input()
   phast2Name: string;
+  @Input()
+  printView: boolean;
+  @Input()
+  chartIndex: number;
+  @Input()
+  chartContainerWidth: number;
+
+  chartContainerHeight: number;
 
 
   chartColors: any = [{}];
@@ -37,9 +45,6 @@ export class PhastBarChartComponent implements OnInit {
   doc: any;
   window: any;
   resultsWidth: number;
-  containerWidth: number;
-  containerHeight: number;
-
   chart: any;
 
   constructor(private windowRefService: WindowRefService) { }
@@ -50,20 +55,20 @@ export class PhastBarChartComponent implements OnInit {
   }
 
   ngAfterViewInit() {
-    this.doc = this.windowRefService.getDoc();
-    this.window = this.windowRefService.nativeWindow;
-    this.containerWidth = this.doc.getElementsByClassName('results')[0].clientWidth;
-      if (this.containerWidth == 0) {
-        this.containerWidth = this.doc.getElementsByClassName('assessment-item')[0].clientWidth;
-      }
-    this.containerWidth = this.containerWidth - (this.containerWidth * 0.42);
-
-    //if chart is too wide, it won't fit print, cap at 877
-    if (this.containerWidth > 877) {
-      this.containerWidth = 877;
+    if (this.chartContainerWidth > 877) {
+      this.chartContainerWidth = 877;
     }
-    this.containerHeight = 280;
-    this.initChart();
+    else {
+      this.chartContainerWidth = this.chartContainerWidth * 0.58;
+    }
+    this.chartContainerHeight = 280;
+
+    if (!this.printView) {
+      this.initChart();
+    }
+    else {
+      this.initPrintCharts();
+    }
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -118,8 +123,8 @@ export class PhastBarChartComponent implements OnInit {
         }
       },
       size: {
-        width: this.containerWidth,
-        height: this.containerHeight
+        width: this.chartContainerWidth,
+        height: this.chartContainerHeight
       },
       padding: {
         bottom: 20
@@ -320,5 +325,68 @@ export class PhastBarChartComponent implements OnInit {
       '#1E7640',
       '#2ABDDA',
     ]
+  }
+
+
+  initPrintCharts() {
+    let currentChart = document.getElementsByClassName("bar-chart")[1 + this.chartIndex];
+    let unit;
+    if (this.settings.unitsOfMeasure == "Metric") {
+      unit = "GJ/hr";
+    }
+    else if (this.settings.unitsOfMeasure == "Imperial") {
+      unit = "MMBtu/hr";
+    }
+
+    this.chart = c3.generate({
+      bindto: currentChart,
+      data: {
+        columns: this.chartData,
+        type: 'bar',
+      },
+      axis: {
+        x: {
+          type: 'category',
+          categories: this.chartLabels
+        },
+        y: {
+          label: {
+            text: 'Heat Loss (' + unit + ')',
+            position: 'outer-middle'
+          },
+          tick: {
+            format: d3.format('.1f')
+          },
+        }
+      },
+      grid: {
+        y: {
+          show: true
+        }
+      },
+      size: {
+        width: 1000,
+        height: 320
+      },
+      padding: {
+        bottom: 20
+      },
+      color: {
+        pattern: graphColors
+      },
+      legend: {
+        position: 'right'
+      },
+      tooltip: {
+        contents: function (d, defaultTitleFormat, defaultValueFormat, color) {
+          return;
+        }
+      }
+    });
+    d3.selectAll(".c3-axis").style("fill", "none").style("stroke", "#000");
+    d3.selectAll(".c3-axis-y-label").style("fill", "#000").style("stroke", "#000");
+    d3.selectAll(".c3-texts").style("font-size", "10px");
+    d3.selectAll(".c3-legend-item text").style("font-size", "11px");
+    d3.selectAll(".c3-ygrids").style("stroke", "#B4B2B7").style("stroke-width", "0.5px");
   }
 }
