@@ -29,6 +29,7 @@ export class ReportGraphsComponent implements OnInit {
   chartContainerWidth: number;
   doc: any;
   window: any;
+  containerId: string;
 
   resultsArray: Array<any>;
   modExists: boolean = false;

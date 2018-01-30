@@ -6,8 +6,17 @@
         <button type="button" class="btn btn-secondary btn-sm" (click)="setDataOption('energy')" [ngClass]="{'active': dataOption == 'energy'}">Energy Used</button>
       </div>
     </div>
-    <div style="display: block" *ngIf="pieChartData">
-      <canvas baseChart [colors]="chartColors" [data]="pieChartData" [labels]="pieChartLabels" [chartType]="'pie'" [options]="options"></canvas>
+    <div class="row justify-content-center align-content-center" *ngIf="pieChartData">
+      <div class="col-12">
+
+        <!-- c3 pie chart -->
+        <div class="pie-chart-container chart-container">
+          <div class="phast-rollup-chart">
+          </div>
+        </div>
+        <!-- <canvas baseChart [colors]="chartColors" [data]="pieChartData" [labels]="pieChartLabels" [chartType]="'pie'" [options]="options"></canvas> -->
+
+      </div>
     </div>
   </div>
   <div class="col-lg-8 col-md-11 output-summary">
@@ -21,32 +30,32 @@
             Energy Use Units
           </th> -->
           <th>
-            Fuel Energy Used<br>
-            ({{settings.phastRollupUnit}}/yr)
+            Fuel Energy Used
+            <br> ({{settings.phastRollupUnit}}/yr)
           </th>
           <th>
-            Annual Cost<br>
-            ($/yr)
+            Annual Cost
+            <br> ($/yr)
           </th>
           <th>
-            Electrical Energy Use<br>
-            ({{settings.phastRollupUnit}}/yr)
+            Electrical Energy Use
+            <br> ({{settings.phastRollupUnit}}/yr)
           </th>
           <th>
-            Annual Cost<br>
-            ($/yr)
+            Annual Cost
+            <br> ($/yr)
           </th>
           <th>
-            Steam Energy Use<br>
-            ({{settings.phastRollupUnit}}/yr)
+            Steam Energy Use
+            <br> ({{settings.phastRollupUnit}}/yr)
           </th>
           <th>
-            Annual Cost<br>
-            ($/yr)
+            Annual Cost
+            <br> ($/yr)
           </th>
           <th>
-            Total Annual Cost<br>
-            ($/yr)
+            Total Annual Cost
+            <br> ($/yr)
           </th>
           <th>
             % of Total Cost
@@ -76,7 +85,7 @@
             {{getConvertedValue(data.baselineResults.annualEnergyUsed, data.settings) | sigFigs:'5'}}
           </td>
           <td *ngIf="data.settings.energySourceType == 'Electricity'">
-              ${{data.baselineResults.annualCost | sigFigs:'4'}}
+            ${{data.baselineResults.annualCost | sigFigs:'4'}}
           </td>
           <td *ngIf="data.settings.energySourceType != 'Electricity'">&mdash;</td>
           <td *ngIf="data.settings.energySourceType != 'Electricity'">&mdash;</td>
@@ -85,7 +94,7 @@
             {{getConvertedValue(data.baselineResults.annualEnergyUsed, data.settings) | sigFigs:'5'}}
           </td>
           <td *ngIf="data.settings.energySourceType == 'Steam'">
-              ${{data.baselineResults.annualCost | sigFigs:'4'}}
+            ${{data.baselineResults.annualCost | sigFigs:'4'}}
           </td>
           <td *ngIf="data.settings.energySourceType != 'Steam'">&mdash;</td>
           <td *ngIf="data.settings.energySourceType != 'Steam'">&mdash;</td>

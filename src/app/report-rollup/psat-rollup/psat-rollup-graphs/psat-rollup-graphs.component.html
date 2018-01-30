@@ -6,9 +6,17 @@
         <button type="button" class="btn btn-secondary btn-sm" (click)="setDataOption('energy')" [ngClass]="{'active': dataOption == 'energy'}">Energy Used</button>
       </div>
     </div>
-    <div style="display: block" *ngIf="pieChartData">
-      <canvas baseChart [colors]="chartColors" [data]="pieChartData" [labels]="pieChartLabels" [chartType]="'pie'" [options]="options"></canvas>
+
+    <div class="pie-chart-container chart-container">
+      <div class="psat-rollup-chart">
+
+      </div>
     </div>
+
+
+    <!-- <div style="display: block" *ngIf="pieChartData">
+      <canvas baseChart [colors]="chartColors" [data]="pieChartData" [labels]="pieChartLabels" [chartType]="'pie'" [options]="options"></canvas>
+    </div> -->
   </div>
   <div class="col-lg-8 col-md-11 output-summary">
     <table class="table table-hover table-striped">

@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter, HostListener, ViewChild, TemplateRef } from '@angular/core';
 import { Assessment } from '../shared/models/assessment';
 import { ReportRollupService, PhastResultsData, ReportItem } from './report-rollup.service';
+import { PhastReportService } from '../phast/phast-report/phast-report.service';
 import { WindowRefService } from '../indexedDb/window-ref.service';
 import { Settings } from '../shared/models/settings';
 import { IndexedDbService } from '../indexedDb/indexed-db.service';
@@ -36,7 +37,7 @@ export class ReportRollupComponent implements OnInit {
 
   numPhasts: number = 0;
   sidebarHeight: number = 0;
-  constructor(private reportRollupService: ReportRollupService,
+  constructor(private reportRollupService: ReportRollupService, private phastReportService: PhastReportService,
     private windowRefService: WindowRefService, private indexedDbService: IndexedDbService, private assessmentService: AssessmentService) { }
 
   ngOnInit() {
@@ -63,11 +64,11 @@ export class ReportRollupComponent implements OnInit {
     this.assessmentService.showFeedback.next(false);
     let count = 1;
     this.reportRollupService.phastAssessments.subscribe(val => {
-        this.numPhasts = val.length;
-        if (val.length != 0) {
-          this.reportRollupService.initPhastResultsArr(val);
-          count++;
-        }
+      this.numPhasts = val.length;
+      if (val.length != 0) {
+        this.reportRollupService.initPhastResultsArr(val);
+        count++;
+      }
     })
     this.reportRollupService.allPhastResults.subscribe(val => {
       if (val.length != 0) {
@@ -106,16 +107,31 @@ export class ReportRollupComponent implements OnInit {
   }
 
   print() {
-    let win = this.windowRefService.nativeWindow;
-    let doc = this.windowRefService.getDoc();
-    win.print();
+    // let win = this.windowRefService.nativeWindow;
+    // let doc = this.windowRefService.getDoc();
+    // win.print();
+
+    this.phastReportService.showPrint.next(true);
+
+
+    //eventually add logic for modal or something to say "building print view"
+
+    //set timeout for delay to print call. May want to do this differently later but for now should work
+    //10000000 is excessive, put it at whatever you want
+    setTimeout(() => {
+      let win = this.windowRefService.nativeWindow;
+      let doc = this.windowRefService.getDoc();
+      win.print();
+      //after printing hide content again
+      this.phastReportService.showPrint.next(false);
+    }, 5000);
   }
 
   closeReport() {
     this.emitCloseReport.emit(true);
   }
 
-  setSidebarHeight(){
+  setSidebarHeight() {
     let doc = this.windowRefService.getDoc();
     let window = this.windowRefService.nativeWindow;
     let wndHeight = window.innerHeight;

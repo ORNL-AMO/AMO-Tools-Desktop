@@ -6,8 +6,6 @@ import { graphColors } from '../graphColors';
 import { PhastReportService } from '../../phast-report.service';
 import * as d3 from 'd3';
 import * as c3 from 'c3';
-import { DOCUMENT } from '@angular/common/src/dom_tokens';
-import { parseXml } from 'builder-util-runtime/out/xml';
 @Component({
   selector: 'app-phast-pie-chart',
   templateUrl: './phast-pie-chart.component.html',
@@ -70,7 +68,7 @@ export class PhastPieChartComponent implements OnInit {
 
   ngOnInit() {
     this.getData(this.results, this.resultCats);
-    this.getColors();    
+    this.getColors();
   }
 
   ngAfterViewInit() {
@@ -98,11 +96,18 @@ export class PhastPieChartComponent implements OnInit {
 
   initChart() {
     let charts = document.getElementsByClassName('chart');
+    let chartId;
+    let currentChart;
+
 
     if (this.modExists) {
       if (this.isBaseline) {
+        currentChart = document.getElementsByClassName('chart')[charts.length - 2];
+        currentChart.id = "pie-chart-" + (charts.length - 2);
+        currentChart.className = "app-chart";
+
         this.chart = c3.generate({
-          bindto: charts[0],
+          bindto: currentChart,
           data: {
             columns: [
               ["wall", this.totalWallLoss],
@@ -149,8 +154,12 @@ export class PhastPieChartComponent implements OnInit {
         });
       }
       else {
+        currentChart = document.getElementsByClassName('chart')[charts.length - 1];
+        currentChart.id = "pie-chart-" + (charts.length - 1);
+        currentChart.className = "app-chart";
+
         this.chart = c3.generate({
-          bindto: charts[1],
+          bindto: currentChart,
           data: {
             columns: [
               ["wall", this.totalWallLoss],
@@ -199,8 +208,13 @@ export class PhastPieChartComponent implements OnInit {
     }
     else {
       if (this.isBaseline) {
+
+        currentChart = document.getElementsByClassName("chart")[charts.length - 1];
+        currentChart.id = "pie-chart-" + (charts.length - 1);
+        currentChart.className = "app-chart";
+
         this.chart = c3.generate({
-          bindto: charts[0],
+          bindto: currentChart,
           data: {
             columns: [
               ["wall", this.totalWallLoss],
@@ -326,7 +340,6 @@ export class PhastPieChartComponent implements OnInit {
     if (this.chart) {
 
       this.chart.load({
-
         columns: [
           ["wall", this.totalWallLoss],
           ["atmosphere", this.totalAtmosphereLoss],
@@ -483,10 +496,14 @@ export class PhastPieChartComponent implements OnInit {
 
 
   initPrintCharts() {
+    let charts = document.getElementsByClassName('chart');
+    let currentChart;
+
     if (this.modExists) {
       if (this.isBaseline) {
-        let currentChart = document.getElementsByClassName('chart')[2 + (this.chartIndex * 2)];
-       
+        currentChart = document.getElementsByClassName('chart')[0];
+        currentChart.className = "print-chart";
+
         this.chart = c3.generate({
           bindto: currentChart,
           data: {
@@ -535,7 +552,8 @@ export class PhastPieChartComponent implements OnInit {
         });
       }
       else {
-        let currentChart = document.getElementsByClassName('chart')[3 + (this.chartIndex * 2)];
+        currentChart = document.getElementsByClassName('chart')[0];
+        currentChart.className = "print-chart";
 
         this.chart = c3.generate({
           bindto: currentChart,

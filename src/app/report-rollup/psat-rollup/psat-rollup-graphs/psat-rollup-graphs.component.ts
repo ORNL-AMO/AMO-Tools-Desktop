@@ -1,18 +1,18 @@
-import { Component, OnInit, Input, ViewChild } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { Settings } from '../../../shared/models/settings';
 import { ReportRollupService, PsatResultsData } from '../../report-rollup.service';
 import { PsatService } from '../../../psat/psat.service';
 import { BaseChartDirective } from 'ng2-charts';
 import { graphColors } from '../../../phast/phast-report/report-graphs/graphColors';
 import * as _ from 'lodash';
-
+import * as d3 from 'd3';
+import * as c3 from 'c3';
 @Component({
   selector: 'app-psat-rollup-graphs',
   templateUrl: './psat-rollup-graphs.component.html',
   styleUrls: ['./psat-rollup-graphs.component.css']
 })
 export class PsatRollupGraphsComponent implements OnInit {
-  @ViewChild(BaseChartDirective) private baseChart;
   pieChartLabels: Array<string>;
   pieChartData: Array<number>;
   chartColors: Array<any>;
@@ -23,6 +23,10 @@ export class PsatRollupGraphsComponent implements OnInit {
       display: false
     }
   }
+
+  chart: any;
+  chartContainerWidth: number;
+
   graphColors: Array<string>;
   resultData: Array<PsatResultsData>;
   dataOption: string = 'cost';
@@ -40,14 +44,18 @@ export class PsatRollupGraphsComponent implements OnInit {
         this.resultData = psats;
         this.getResults(this.resultData);
         this.getData();
+        this.initChart();
       }
     })
   }
+  
 
   setDataOption(str: string) {
     this.dataOption = str;
     this.getResults(this.resultData);
     this.getData();
+
+    this.updateChart();
   }
   
   getResults(resultsData: Array<PsatResultsData>){
@@ -91,11 +99,7 @@ export class PsatRollupGraphsComponent implements OnInit {
       this.pieChartLabels.push(val.name + ' (%)');
       this.pieChartData.push(val.percent);
       this.backgroundColors.push(val.color);
-    })
-    if (this.baseChart && this.baseChart.chart) {
-      this.baseChart.chart.config.data.labels = this.pieChartLabels;
-      this.baseChart.chart.config.data.datasets[0].backgroundColor = this.backgroundColors;
-    }
+    });
     this.getColors();
   }
 
@@ -105,5 +109,66 @@ export class PsatRollupGraphsComponent implements OnInit {
         backgroundColor: this.backgroundColors
       }
     ]
+  }
+
+
+  initChart() {
+
+    let currentChart = document.getElementsByClassName("psat-rollup-chart")[0];
+    currentChart.className = "psat-app-chart";
+
+    this.chartContainerWidth = (window.innerWidth - 30) * 0.28;
+
+    this.chart = c3.generate({
+      bindto: currentChart,
+      data: {
+        columns: [
+
+        ],
+        type: 'pie',
+        labels: true,
+      },
+      legend: {
+        show: false
+      },
+      color: {
+        pattern: this.graphColors
+      },
+      size: {
+        width: this.chartContainerWidth,
+        height: 280
+      },
+      tooltip: {
+        contents: function (d, defaultTitleFormat, defaultValueFormat, color) {
+          let styling = "background-color: rgba(0, 0, 0, 0.7); border-radius: 5px; color: #fff; padding: 3px; font-size: 13px;";
+          let html = "<div style='" + styling + "'>" + d[0].name + "</div>";
+          return html;
+        }
+      }
+    });
+
+    for (let j = 0; j < this.pieChartData.length; j++) {
+
+      this.chart.load({
+        columns: [
+          [this.results[j].name, this.results[j].percent]
+        ],
+        labels: true
+      })
+    }
+  }
+
+  updateChart() {
+    if (this.chart) {
+      for (let i = 0; i < this.results.length; i++) {
+        this.chart.load({
+          columns: [
+            [this.results[i].name, this.results[i].percent]
+          ],
+          type: 'pie',
+          labels: true
+        });
+      }
+    }
   }
 }

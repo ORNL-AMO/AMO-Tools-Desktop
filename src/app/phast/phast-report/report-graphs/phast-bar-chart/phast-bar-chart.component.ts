@@ -88,6 +88,9 @@ export class PhastBarChartComponent implements OnInit {
   }
 
   initChart() {
+    let charts = document.getElementsByClassName("bar-chart");
+    let currentChart;
+
     let unit;
     if (this.settings.unitsOfMeasure == "Metric") {
       unit = "GJ/hr";
@@ -96,8 +99,18 @@ export class PhastBarChartComponent implements OnInit {
       unit = "MMBtu/hr";
     }
 
+    currentChart = document.getElementsByClassName("bar-chart")[charts.length - 1];
+    currentChart.className = "app-chart";
+
+    console.log("report bar chart data:");
+
+    for (let i = 0; i < this.chartData.length; i++) {
+      console.log("chartData[" + i + "] = " + this.chartData[i]);
+    }
+    console.log("---------------------");
+
     this.chart = c3.generate({
-      bindto: "#bar-chart",
+      bindto: currentChart,
       data: {
         columns: this.chartData,
         type: 'bar',
@@ -329,7 +342,9 @@ export class PhastBarChartComponent implements OnInit {
 
 
   initPrintCharts() {
-    let currentChart = document.getElementsByClassName("bar-chart")[1 + this.chartIndex];
+    let charts = document.getElementsByClassName('bar-chart');
+    let currentChart = document.getElementsByClassName("bar-chart")[0];
+    currentChart.className = "print-chart";
     let unit;
     if (this.settings.unitsOfMeasure == "Metric") {
       unit = "GJ/hr";

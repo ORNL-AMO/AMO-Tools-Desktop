@@ -10,9 +10,14 @@
 </div>
 <div class="row justify-content-center">
   <div class="col-lg-8 col-md-10 col-sm-12">
-    <div style="display: block" *ngIf="chartData">
-      <canvas baseChart [datasets]="chartData" [labels]="chartLabels" [options]="options" [legend]="true" [chartType]="'bar'"></canvas>
+
+
+    <!-- c3 graph container -->
+    <div class="chart-container bar-chart-container">
+      <div class="psat-rollup-bar-chart" id="psat-rollup-bar-chart">
+      </div>
     </div>
+
   </div>
 </div>
 <div class="row justify-content-center table-row">
