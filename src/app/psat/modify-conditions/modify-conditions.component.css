@@ -18,3 +18,7 @@
 .psat-losses-container{
   padding-top: 0px;
 }
+
+.modify-conditions{
+    min-height: 100%;
+}
