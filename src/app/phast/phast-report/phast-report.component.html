@@ -16,7 +16,7 @@
 
     <div class="report-header" [ngClass]="{'hide-print': inPhast}">
 
-        <div *ngIf="inPhast" class="btn-group hide-print">
+        <div *ngIf="inPhast && !quickReport" class="btn-group hide-print">
             <button class="btn btn-secondary" (click)="print()">Print</button>
             <button class="btn btn-secondary" [disabled]="true" (click)="exportToCsv()">Export to CSV</button>
         </div>

@@ -25,11 +25,11 @@
 
 
 <div class="card">
-  <div class="card-header summary-card-header">
+  <div class="card-header summary-card-header" [ngClass]="{'phast': assessment.type == 'PHAST', 'psat': assessment.type == 'PSAT'}" (click)="goToAssessment(assessment)">
     <input type="checkbox" [(ngModel)]="isChecked" (change)="setDelete()">
     <img *ngIf="assessment.type == 'PSAT'" class="icon-image" src="assets/images/ico-psat-diagram-small.png">
     <img *ngIf="assessment.type == 'PHAST'" class="icon-image" src="assets/images/ico-phast-diagram-small.png">
-    <a (click)="goToAssessment(assessment)">{{assessment.name}}</a>
+    <a>{{assessment.name}}</a>
   </div>
   <div class="card-body scroll-item summary-card-body">
     <app-psat-summary-card *ngIf="assessment.type == 'PSAT'" [assessment]="assessment"></app-psat-summary-card>

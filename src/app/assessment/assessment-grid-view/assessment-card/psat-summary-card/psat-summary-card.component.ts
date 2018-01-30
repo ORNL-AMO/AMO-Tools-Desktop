@@ -1,9 +1,12 @@
-import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, SimpleChanges, ViewChild } from '@angular/core';
 import { Assessment } from '../../../../shared/models/assessment';
 import { PsatOutputs, PSAT } from '../../../../shared/models/psat';
 import { Settings } from '../../../../shared/models/settings';
 import { PsatService } from '../../../../psat/psat.service';
 import { IndexedDbService } from '../../../../indexedDb/indexed-db.service';
+import { AssessmentService } from '../../../assessment.service';
+import { Router } from '@angular/router';
+import { ModalDirective } from 'ngx-bootstrap';
 
 @Component({
     selector: 'app-psat-summary-card',
@@ -20,7 +23,12 @@ export class PsatSummaryCardComponent implements OnInit {
     setupDone: boolean;
     maxCostSavings: number = 0;
     maxEnergySavings: number = 0;
-    constructor(private psatService: PsatService, private indexedDbService: IndexedDbService) { }
+
+    showReport: boolean = false;
+
+    @ViewChild('reportModal') public reportModal: ModalDirective;
+
+    constructor(private psatService: PsatService, private indexedDbService: IndexedDbService, private assessmentService: AssessmentService, private router: Router) { }
 
     ngOnInit() {
         this.setupDone = this.assessment.psat.setupDone;
@@ -65,4 +73,24 @@ export class PsatSummaryCardComponent implements OnInit {
         }
     }
 
+    goToAssessment(assessment: Assessment, str?: string, str2?: string) {
+        this.assessmentService.tab = str;
+        this.assessmentService.subTab = str2;
+        if (assessment.type == 'PSAT') {
+            this.router.navigateByUrl('/psat/' + this.assessment.id);
+        } else if (assessment.type == 'PHAST') {
+            this.router.navigateByUrl('/phast/' + this.assessment.id);
+        }
+    }
+
+
+    showReportModal() {
+        this.showReport = true;
+        this.reportModal.show();
+    }
+
+    hideReportModal() {
+        this.reportModal.hide();
+        this.showReport = false;
+    }
 }

@@ -33,15 +33,15 @@
 </div> -->
 
 <div class="card">
-  <div class="card-header summary-card-header">
+  <div class="card-header summary-card-header" (click)="goToDirectory(directory)">
     <input type="checkbox" [(ngModel)]="isChecked" (change)="setDelete()">
     <span class="fa fa-folder"></span>
-    <a (click)="goToDirectory(directory)">{{directory.name}}</a>
+    <a>{{directory.name}}</a>
   </div>
   <div class="card-body summary-card-body scroll-item">
     <ul *ngIf="directory.subDirectory && directory.subDirectory.length != 0">
       <li *ngFor="let directory of directory.subDirectory">
-        <i class="fa fa-folder-o" aria-hidden="true"></i> {{directory.name}}
+        <i class="fa fa-folder" aria-hidden="true"></i> <a (click)="goToDirectory(directory)">{{directory.name}}</a>
       </li>
     </ul>
     <ul *ngIf="directory.assessments">

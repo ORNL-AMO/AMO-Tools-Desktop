@@ -7,6 +7,7 @@ import { AssessmentService } from '../../assessment.service';
   templateUrl: './assessment-card.component.html',
   styleUrls: ['./assessment-card.component.css', '../assessment-grid-view.component.css']
 })
+
 export class AssessmentCardComponent implements OnInit {
   @Input()
   assessment: Assessment;
@@ -35,9 +36,15 @@ export class AssessmentCardComponent implements OnInit {
   goToAssessment(assessment: Assessment) {
     this.assessmentService.tab = 'system-setup';
     if (assessment.type == 'PSAT') {
-      this.router.navigateByUrl('/psat/' + this.assessment.id);
+      if(assessment.psat.setupDone){
+        this.assessmentService.tab = 'assessment';
+      }
+      this.router.navigateByUrl('/psat/' + assessment.id);
     } else if (assessment.type == 'PHAST') {
-      this.router.navigateByUrl('/phast/' + this.assessment.id);
+      if(assessment.phast.setupDone){
+        this.assessmentService.tab = 'assessment';
+      }
+      this.router.navigateByUrl('/phast/' + assessment.id);
     }
   }
 

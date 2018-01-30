@@ -6,6 +6,7 @@
   border-color: slategray;
 }
 
+
 a:not([href]):not([tabindex]):hover {
   color: blue;
   text-decoration: underline;
@@ -13,9 +14,8 @@ a:not([href]):not([tabindex]):hover {
 }
 
 a:not([href]):not([tabindex]){
-  color: black;
+  color: blue;
 }
-
 
 .last-updated {
   font-size: 13px;

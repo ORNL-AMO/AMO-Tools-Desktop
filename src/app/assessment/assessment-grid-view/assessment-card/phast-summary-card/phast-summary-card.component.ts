@@ -1,10 +1,14 @@
-import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, SimpleChanges, ViewChild } from '@angular/core';
 import { Assessment } from '../../../../shared/models/assessment';
 import { PhastResultsService } from '../../../../phast/phast-results.service';
 import { PhastResults, ExecutiveSummary } from '../../../../shared/models/phast/phast';
 import { IndexedDbService } from '../../../../indexedDb/indexed-db.service';
 import { ExecutiveSummaryService } from '../../../../phast/phast-report/executive-summary.service';
 import { Settings } from '../../../../shared/models/settings';
+import { AssessmentService } from '../../../assessment.service';
+import { Router } from '@angular/router';
+import { ModalDirective } from 'ngx-bootstrap';
+
 
 @Component({
     selector: 'app-phast-summary-card',
@@ -15,12 +19,15 @@ export class PhastSummaryCardComponent implements OnInit {
     @Input()
     assessment: Assessment;
 
+    @ViewChild('reportModal') public reportModal: ModalDirective;
+
     phastResults: ExecutiveSummary;
     modResults: ExecutiveSummary;
     settings: Settings;
     numMods: number = 0;
     setupDone: boolean;
-    constructor(private executiveSummaryService: ExecutiveSummaryService, private indexedDbService: IndexedDbService) { }
+    showReport: boolean = false;
+    constructor(private executiveSummaryService: ExecutiveSummaryService, private indexedDbService: IndexedDbService, private assessmentService: AssessmentService, private router: Router) { }
 
     ngOnInit() {
         this.setupDone = this.assessment.phast.setupDone;
@@ -43,5 +50,23 @@ export class PhastSummaryCardComponent implements OnInit {
         }
     }
 
+    goToAssessment(assessment: Assessment, str?: string, str2?: string) {
+        this.assessmentService.tab = str;
+        this.assessmentService.subTab = str2;
+        if (assessment.type == 'PSAT') {
+            this.router.navigateByUrl('/psat/' + this.assessment.id);
+        } else if (assessment.type == 'PHAST') {
+            this.router.navigateByUrl('/phast/' + this.assessment.id);
+        }
+    }
 
+    showReportModal() {
+        this.showReport = true;
+        this.reportModal.show();
+    }
+
+    hideReportModal() {
+        this.reportModal.hide();
+        this.showReport = false;
+    }
 }

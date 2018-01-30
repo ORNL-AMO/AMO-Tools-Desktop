@@ -138,9 +138,11 @@ export class PsatComponent implements OnInit {
       setTimeout(() => {
         let contentHeight = this.content.nativeElement.clientHeight;
         let headerHeight = this.header.nativeElement.clientHeight;
-        let footerHeight = this.footer.nativeElement.clientHeight;
+        let footerHeight = 0;
+        if (this.footer) {
+          footerHeight = this.footer.nativeElement.clientHeight;
+        }
         this.containerHeight = contentHeight - headerHeight - footerHeight;
-        console.log(this.containerHeight);
       }, 100);
     }
   }

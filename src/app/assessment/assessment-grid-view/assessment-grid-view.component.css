@@ -4,9 +4,6 @@ a:not([href]):not([tabindex]):hover {
   cursor: pointer;
 }
 
-a:not([href]):not([tabindex]){
-  color: blue;
-}
 
 
 .summary-card{
