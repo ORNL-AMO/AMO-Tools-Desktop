@@ -30,6 +30,11 @@ export class PsatReportComponent implements OnInit {
   inRollup: boolean;
   @Output('selectModification')
   selectModification = new EventEmitter<any>();
+  @Input()
+  quickReport: boolean;
+
+
+
   assessmentDirectories: Directory[];
   isFirstChange: boolean = true;
   numMods: number = 0;

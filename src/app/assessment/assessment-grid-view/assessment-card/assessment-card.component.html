@@ -1,4 +1,4 @@
-<div class="list-card">
+<!-- <div class="list-card">
 
   <input type="checkbox" [(ngModel)]="isChecked" (change)="setDelete()"/>
   <div class="assessment-name">
@@ -18,7 +18,24 @@
     <li><a href=""></a></li>
   </ul>
 
-  <!-- <div class="last-updated">{{assessment.date | date}}</div> -->
+  <!-- <div class="last-updated">{{assessment.date | date}}</div>
   <div class="last-updated">Last updated {{assessment.modifiedDate | date }}</div>
 
+</div> -->
+
+
+<div class="card">
+  <div class="card-header summary-card-header" [ngClass]="{'phast': assessment.type == 'PHAST', 'psat': assessment.type == 'PSAT'}" (click)="goToAssessment(assessment)">
+    <input type="checkbox" [(ngModel)]="isChecked" (change)="setDelete()">
+    <img *ngIf="assessment.type == 'PSAT'" class="icon-image" src="assets/images/ico-psat-diagram-small.png">
+    <img *ngIf="assessment.type == 'PHAST'" class="icon-image" src="assets/images/ico-phast-diagram-small.png">
+    <a>{{assessment.name}}</a>
+  </div>
+  <div class="card-body scroll-item summary-card-body">
+    <app-psat-summary-card *ngIf="assessment.type == 'PSAT'" [assessment]="assessment"></app-psat-summary-card>
+    <app-phast-summary-card *ngIf="assessment.type == 'PHAST'" [assessment]="assessment"></app-phast-summary-card>
+  </div>
+  <div class="card-footer summary-card-footer">
+    <div class="last-updated pull-right">Last updated {{assessment.modifiedDate | date }}</div>
+  </div>
 </div>
