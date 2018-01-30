@@ -36,6 +36,7 @@ import { ReportRollupModule } from '../report-rollup/report-rollup.module';
 import { VersionModalComponent } from '../version-modal/version-modal.component';
 import { UpdateModalComponent } from '../update-modal/update-modal.component';
 import {AcknowledgmentsPageComponent} from "../acknowledgments-page/acknowledgments-page.component";
+import { FsatModule } from '../fsat/fsat.module';
 
 @NgModule({
   declarations: [
@@ -69,7 +70,8 @@ import {AcknowledgmentsPageComponent} from "../acknowledgments-page/acknowledgme
     JsonToCsvModule,
     SuiteDbModule,
     ImportExportModule,
-    ReportRollupModule
+    ReportRollupModule,
+    FsatModule
   ],
   providers: [
     AssessmentService

@@ -26,6 +26,7 @@
               <div class="help-text">
                 <p *ngIf="newAssessment.controls.assessmentType.value == 'Pump'">Example: "Pump123" or "ORNL Pump 3"</p>
                 <p *ngIf="newAssessment.controls.assessmentType.value == 'Furnace'">Example: "Furnace123" or "ORNL Furnace 3"</p>
+                <p *ngIf="newAssessment.controls.assessmentType.value == 'Fan'">Example: "Fan123" or "ORNL Fan 3"</p>
               </div>
             </div><!-- End .form-group -->
 
@@ -34,6 +35,7 @@
               <select class="form-control type-select" formControlName="assessmentType">
                 <option [ngValue]="'Pump'">Pump</option>
                 <option [ngValue]="'Furnace'">Process Heating</option>
+                <option [ngValue]="'Fan'">Fan</option>
               </select>
 
               <!-- <div class="form-check">

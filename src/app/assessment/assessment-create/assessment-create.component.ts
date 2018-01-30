@@ -39,7 +39,6 @@ export class AssessmentCreateComponent implements OnInit {
     private indexedDbService: IndexedDbService) { }
 
   ngOnInit() {
-    console.log('init');
     this.indexedDbService.getDirectorySettings(this.directory.id).then(
       results => {
         if (results.length != 0) {
@@ -52,7 +51,7 @@ export class AssessmentCreateComponent implements OnInit {
     this.allAssessments = this.directory.assessments;
     this.filteredAssessments = this.allAssessments;
     this.canCreate = true;
-    if(this.type){
+    if (this.type) {
       this.newAssessment.patchValue({
         assessmentType: this.type
       })
@@ -118,7 +117,6 @@ export class AssessmentCreateComponent implements OnInit {
         if (this.newAssessment.controls.assessmentType.value == 'Pump') {
           let tmpAssessment = this.assessmentService.getNewAssessment('PSAT');
           tmpAssessment.name = this.newAssessment.controls.assessmentName.value;
-          console.log(tmpAssessment.appVersion);
           let tmpPsat = this.assessmentService.getNewPsat();
           tmpAssessment.psat = tmpPsat;
           if (this.settings.powerMeasurement != 'hp') {
@@ -178,6 +176,33 @@ export class AssessmentCreateComponent implements OnInit {
               this.indexedDbService.putDirectory(tmpDirRef).then(results => {
                 this.assessmentService.createAssessment.next(false);
                 this.router.navigateByUrl('/phast/' + tmpAssessment.id)
+              });
+            })
+          });
+        } else if (this.newAssessment.controls.assessmentType.value == 'Fan') {
+          let tmpAssessment = this.assessmentService.getNewAssessment('FSAT');
+          tmpAssessment.name = this.newAssessment.controls.assessmentName.value;
+          tmpAssessment.directoryId = this.directory.id;
+          this.indexedDbService.addAssessment(tmpAssessment).then(assessmentId => {
+            this.indexedDbService.getAssessment(assessmentId).then(assessment => {
+              tmpAssessment = assessment;
+              if (this.directory.assessments) {
+                this.directory.assessments.push(tmpAssessment);
+              } else {
+                this.directory.assessments = new Array();
+                this.directory.assessments.push(tmpAssessment);
+              }
+
+              let tmpDirRef: DirectoryDbRef = {
+                name: this.directory.name,
+                id: this.directory.id,
+                parentDirectoryId: this.directory.parentDirectoryId,
+                createdDate: this.directory.createdDate,
+                modifiedDate: this.directory.modifiedDate
+              }
+              this.indexedDbService.putDirectory(tmpDirRef).then(results => {
+                this.assessmentService.createAssessment.next(false);
+                this.router.navigateByUrl('/fsat/' + tmpAssessment.id)
               });
             })
           });
