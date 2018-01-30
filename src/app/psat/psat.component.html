@@ -48,6 +48,9 @@
 
   <!--End system-setup-->
   <!--tab (diagram and assessment)-->
+  <div class="hide-print" id="psatTabs" *ngIf="mainTab == 'assessment' || mainTab == 'calculators'">
+    <app-psat-tabs></app-psat-tabs>
+  </div>
   <!--end tabs-->
   <!--assessment-->
   <div class="tab-content" *ngIf="mainTab == 'assessment' && (currentTab == 'explore-opportunities' || currentTab == 'modify-conditions')" [ngStyle]="{'height.px': containerHeight}">

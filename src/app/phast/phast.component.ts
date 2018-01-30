@@ -145,9 +145,9 @@ export class PhastComponent implements OnInit {
     // this.phastService.specTab.subscribe(val => {
     //   this.specTab = val;
     // })
-    // this.phastService.calcTab.subscribe(val => {
-    //   this.calcTab = val;
-    // })
+     this.phastService.calcTab.subscribe(val => {
+       this.calcTab = val;
+     })
   }
 
 
