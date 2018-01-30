@@ -1,0 +1,42 @@
+<div class="banner fsat row">
+    <div class="col-3">
+      <div class="pull-left">
+        <div *ngIf="assessment" class="title">
+          <h1>{{assessment.name}}</h1>
+          <small>Last modified: {{assessment.modifiedDate | date:'medium'}}</small>
+        </div>
+      </div>
+    </div>
+  
+    <div class="col-6">
+      <div class="row justify-content-center align-items-center pill-row">
+        <!-- <ul class="pills-nav">
+          <li [ngClass]="{'active': mainTab == 'system-setup'}" (click)="changeTab('system-setup')">
+            <span>Fan Setup</span>
+          </li>
+          <li [ngClass]="{'active': mainTab == 'assessment', 'disabled': !assessment.psat.setupDone}" (click)="changeTab('assessment')">
+            <span>Assessment</span>
+          </li>
+          <li [ngClass]="{'active': mainTab == 'diagram', 'disabled': !assessment.psat.setupDone}" (click)="changeTab('diagram')">
+            <span>Diagram</span>
+          </li>
+          <li [ngClass]="{'active': mainTab == 'report','disabled': !assessment.psat.setupDone}" (click)="changeTab('report')">
+            <span>Report</span>
+          </li>
+          <li [ngClass]="{'active': mainTab == 'sankey','disabled': !assessment.psat.setupDone}" (click)="changeTab('sankey')">
+              <span>Sankey</span>
+            </li>
+          <li [ngClass]="{'active': mainTab == 'calculators','disabled': !assessment.psat.setupDone}" (click)="changeTab('calculators')">
+            <span>Calculators</span>
+          </li>
+        </ul> -->
+      </div>
+    </div>
+  
+    <div class="col-3">
+      <a routerLink="/dashboard" class="btn-dashboard pull-right">
+        <span>&times;</span> Back To Home</a>
+    </div>
+  
+  </div>
+  

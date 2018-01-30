@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { IndexedDbService } from '../indexedDb/indexed-db.service';
+import { Assessment } from '../shared/models/assessment';
 
 @Component({
   selector: 'app-fsat',
@@ -7,9 +10,19 @@ import { Component, OnInit } from '@angular/core';
 })
 export class FsatComponent implements OnInit {
 
-  constructor() { }
+  assessment: Assessment;
+
+  constructor(private activatedRoute: ActivatedRoute, private indexedDbService: IndexedDbService) { }
 
   ngOnInit() {
+    let tmpAssessmentId;
+    this.activatedRoute.params.subscribe(params => {
+      tmpAssessmentId = params['id'];
+      this.indexedDbService.getAssessment(parseInt(tmpAssessmentId)).then(dbAssessment => {
+        this.assessment = dbAssessment;
+        //this.getSettings();
+      })
+    })
   }
 
 }

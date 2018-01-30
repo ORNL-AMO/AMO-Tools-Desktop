@@ -1180,6 +1180,14 @@ Banner
   .banner.phast {
     background: #BF3D00;
   }
+  .banner.fsat{
+    background: #FCD116;
+  }
+
+  .banner.fsat .btn-dashboard, .banner.fsat .title, 
+  .banner.fsat .settings, .banner.fsat h1, .banner.fsat small{
+    color: #000;
+  }
 .banner:after {
   display: table;
   content: "";

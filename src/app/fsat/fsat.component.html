@@ -1,3 +1,5 @@
-<p>
-  fsat works!
-</p>
+<div #content class="fsat-container fsat" *ngIf="assessment">
+  <div #header class="hide-print sticky-top">
+    <app-fsat-banner [assessment]="assessment"></app-fsat-banner>
+  </div>
+</div>
