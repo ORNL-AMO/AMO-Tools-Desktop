@@ -169,12 +169,11 @@ export class EnergyInputExhaustGasLossesComponent implements OnInit {
 
   calculate(loss: EnInputExGasObj) {
     let tmpLoss = this.energyInputExhaustGasService.getLossFromForm(loss.form);
-    this.availableHeat = this.phastService.availableHeat(tmpLoss, this.settings);
-    tmpLoss.availableHeat = this.availableHeat;
     if (loss.form.status == 'VALID') {
       let results = this.phastService.energyInputExhaustGasLosses(tmpLoss, this.settings);
       loss.heatLoss = results.heatDelivered;
       loss.exhaustGas = results.exhaustGasLosses;
+      this.availableHeat = results.availableHeat;
     } else {
       loss.heatLoss = 0;
       loss.exhaustGas = 0;
