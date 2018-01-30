@@ -1280,6 +1280,12 @@ Modify Conditions
   padding-left: 25px;
   min-height: 100%;
 }
+.converter-col {
+  height: 100%;
+}
+.converter-content {
+  padding-top: 4%;
+}
   /* .modification .header {
     display: block;
     border-bottom: #ddd solid 1px;

@@ -1,0 +1,78 @@
+<div class="checkbox">
+  <label class="group-label" for="exploreMaterials">
+    <input type="checkbox" id="exploreMaterials" value="true" (focus)="focusField('initialTemperature')" (change)="toggleMaterials()"
+      [(ngModel)]="showMaterial" /> Adjust Charge Material Data
+  </label>
+</div>
+<div *ngIf="showMaterial">
+  <ul *ngFor="let material of materials; let index = index">
+    <li>
+      <div class="checkbox form-group">
+        <label for="{{'modifyInitTemp_'+index}}">
+          <input type="checkbox" id="{{'modifyInitTemp_'+index}}" (focus)="focusField('initialTemperature')" (change)="toggleInitialTemp(index, material)"
+            [(ngModel)]="showTemp[index]" /> Modify Initial Temperature
+        </label>
+        <label>
+          {{material.name}}
+        </label>
+      </div>
+      <form *ngIf="showTemp[index]">
+        <div class="form-group">
+          <label for="baselineInTemp">Baseline Initial Temperature</label>
+          <div class="input-group">
+            <input name="{{'baselineInTemp_'+index}}" type="number" step="any" min="0" class="form-control" [(ngModel)]="material.baseline.initialTemperature"
+              id="{{baselineInTemp_+index}}" onfocus="this.select();" (input)="calculate()" (focus)="focusField('initialTemperature')"
+              (blur)="focusOut()">
+            <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">&#8457;</span>
+            <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="modifiedInTemp">Modification Initial Temperature</label>
+          <div class="input-group">
+            <input name="{{'modifiedInTemp_'+index}}" type="number" step="any" min="0" class="form-control" [(ngModel)]="material.modification.initialTemperature"
+              id="{{modifiedInTemp_+index}}" onfocus="this.select();" (input)="calculate()" (focus)="focusField('initialTemperature')"
+              (blur)="focusOut()">
+            <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">&#8457;</span>
+            <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
+          </div>
+        </div>
+      </form>
+    </li>
+    <li>
+      <div class="checkbox form-group">
+        <label for="{{'modifyChargeFeedRate_'+index}}">
+          <input type="checkbox" id="{{'modifyChargeFeedRate_'+index}}" (focus)="focusField('feedRate')" (change)="toggleFeedRate(index, material)"
+            [(ngModel)]="showFeedRate[index]" /> Modify Charge Feed Rate
+        </label>
+        <label>
+          {{material.name}}
+        </label>
+      </div>
+      <form *ngIf="showFeedRate[index]">
+        <div class="form-group">
+          <label for="baselineRate">Baseline Feed Rate</label>
+          <div class="input-group">
+            <input name="{{'baselineRate_'+index}}" type="number" step="any" min="0" class="form-control" [(ngModel)]="material.baseline.chargeFeedRate"
+              id="{{baselineRate_+index}}" onfocus="this.select();" (input)="checkFeedRateError(1, material.baseline, index)"
+              (focus)="focusField('feedRate')" (blur)="focusOut()">
+            <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">lb/hr</span>
+            <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kg/hr</span>
+          </div>
+          <span class="alert-warning pull-right small" *ngIf="feedRateError1[index] !== null">{{feedRateError1[index]}}</span>
+        </div>
+        <div class="form-group">
+          <label for="modifiedRate">Modification Feed Rate</label>
+          <div class="input-group">
+            <input name="{{'modifiedRate_'+index}}" type="number" step="any" min="0" class="form-control" [(ngModel)]="material.modification.chargeFeedRate"
+              id="{{modifiedRate_+index}}" onfocus="this.select();" (input)="checkFeedRateError(2, material.modification, index)"
+              (focus)="focusField('feedRate')" (blur)="focusOut()">
+            <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">lb/hr</span>
+            <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kg/hr</span>
+          </div>
+          <span class="alert-warning pull-right small" *ngIf="feedRateError2[index] !== null">{{feedRateError2[index]}}</span>
+        </div>
+      </form>
+    </li>
+  </ul>
+</div>

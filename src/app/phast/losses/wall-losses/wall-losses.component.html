@@ -10,7 +10,7 @@
     <div class="col-12">
       <form class="name-input-form" [formGroup]="loss.form">
         <div class="input-group">
-          <span class="input-group-addon" (click)="collapseLoss(loss)">
+          <span class="input-group-addon units" (click)="collapseLoss(loss)">
             <span *ngIf="loss.collapse" class="fa fa-caret-down"></span>
             <span *ngIf="!loss.collapse" class="fa fa-caret-up"></span>
           </span>

@@ -55,6 +55,8 @@ export class PhastComponent implements OnInit {
   isModalOpen: boolean = false;
   selectedLossTab: LossTab;
   calcTab: string;
+  assessmentTab: string = 'explore-opportunities';
+
   constructor(
     private location: Location,
     private assessmentService: AssessmentService,
@@ -235,7 +237,6 @@ export class PhastComponent implements OnInit {
   }
 
   nextStep() {
-
     if (this.stepTab.step == 1 && this.mainTab != 'assessment') {
       if (this.specTab.next)
         this.phastService.goToSpec(this.specTab.next);
@@ -255,15 +256,37 @@ export class PhastComponent implements OnInit {
   }
 
   lastStep() {
-    if (this.stepTab.step == 2) {
-      if (this.selectedLossTab.back) {
-        this.lossesService.lossesTab.next(this.selectedLossTab.back);
-      } else {
+    if (this.mainTab == 'system-basics') {
+      if (this.stepTab.step == 1) {
+        if (this.specTab.back) {
+          this.phastService.goToSpec(this.specTab.back);
+        }
+      } else if (this.stepTab.step == 2) {
+        if (this.selectedLossTab.back) {
+          this.lossesService.lossesTab.next(this.selectedLossTab.back);
+        } else {
+          this.phastService.goToStep(this.stepTab.back);
+        }
+      }
+    } else if (this.mainTab == 'assessment') {
+      if(this.assessmentTab == 'modify-conditions'){
+        if(this.selectedLossTab.back){
+          this.lossesService.lossesTab.next(this.selectedLossTab.back);
+        }else{
+          this.phastService.mainTab.next('system-setup');
+        }
+      }else{
+        this.phastService.mainTab.next('system-setup');
+      }
+    } else if (this.mainTab == 'system-setup') {
+      if (this.stepTab.back) {
         this.phastService.goToStep(this.stepTab.back);
       }
-    } else if (this.stepTab.step != 1) {
-      this.phastService.goToStep(this.stepTab.back);
     }
+  }
+
+  changeAssessmentTab(str: string) {
+    this.assessmentTab = str;
   }
 
   openModal($event) {
