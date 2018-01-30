@@ -6,6 +6,8 @@ import { RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SettingsModule } from '../settings/settings.module';
 import { FsatBannerComponent } from './fsat-banner/fsat-banner.component';
+import { FsatTabsComponent } from './fsat-tabs/fsat-tabs.component';
+import { SystemBasicsComponent } from './system-basics/system-basics.component';
 
 @NgModule({
   imports: [
@@ -13,9 +15,10 @@ import { FsatBannerComponent } from './fsat-banner/fsat-banner.component';
     RouterModule,
     FormsModule,
     ReactiveFormsModule,
+    SettingsModule,
     SettingsModule
   ],
-  declarations: [FsatComponent, FsatBannerComponent],
+  declarations: [FsatComponent, FsatBannerComponent, FsatTabsComponent, SystemBasicsComponent],
   providers: [FsatService],
   exports: [FsatComponent]
 })

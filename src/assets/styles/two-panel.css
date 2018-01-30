@@ -85,6 +85,10 @@
     border-bottom: #BF3D00 groove 2px;
 }
 
+.fsat .header{
+    border-bottom: #FCD116 groove 2px;
+}
+
 .psat .disabled .header{
     border-bottom-color: gray;
 }

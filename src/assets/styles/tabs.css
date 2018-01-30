@@ -70,7 +70,7 @@ Tabs
     background: #E5E7E9;
     cursor: pointer;
   }
-  .tabs.subtabs.phast .active a {
+  .tabs.subtabs .active a {
     font-weight: bold;
     /* border-right: #BF3D00 solid 2px;
     border-left: #BF3D00 solid 2px; */
@@ -84,11 +84,8 @@ Tabs
     border-bottom: #2980b9 solid 3px;
   }
 
-  .tabs.subtabs.psat .active a {
-    font-weight: bold;
-    /* border-right: #2980b9 solid 2px;
-    border-left: #2980b9 solid 2px; */
-    background: white;
+  .tabs.subtabs.fsat {
+    border-bottom: #FCD116 solid 3px;
   }
   
     .tabs.subtabs.progress-tabs a {
@@ -120,6 +117,11 @@ Tabs
       .tabs.subtabs.psat .active .step-number {
         background: #2980b9;
       }
+
+      .tabs.subtabs.fsat .active .step-number{
+        background: #FCD116;
+      }
+
       .disabled .step-number {
         background: #efefef;
         color: #999;
