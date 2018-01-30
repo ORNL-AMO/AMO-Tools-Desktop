@@ -6,7 +6,6 @@ import { IndexedDbService } from '../../../../indexedDb/indexed-db.service';
 import { ExecutiveSummaryService } from '../../../../phast/phast-report/executive-summary.service';
 import { Settings } from '../../../../shared/models/settings';
 import { AssessmentService } from '../../../assessment.service';
-import { Router } from '@angular/router';
 import { ModalDirective } from 'ngx-bootstrap';
 
 
@@ -27,7 +26,7 @@ export class PhastSummaryCardComponent implements OnInit {
     numMods: number = 0;
     setupDone: boolean;
     showReport: boolean = false;
-    constructor(private executiveSummaryService: ExecutiveSummaryService, private indexedDbService: IndexedDbService, private assessmentService: AssessmentService, private router: Router) { }
+    constructor(private executiveSummaryService: ExecutiveSummaryService, private indexedDbService: IndexedDbService, private assessmentService: AssessmentService) { }
 
     ngOnInit() {
         this.setupDone = this.assessment.phast.setupDone;
@@ -51,13 +50,7 @@ export class PhastSummaryCardComponent implements OnInit {
     }
 
     goToAssessment(assessment: Assessment, str?: string, str2?: string) {
-        this.assessmentService.tab = str;
-        this.assessmentService.subTab = str2;
-        if (assessment.type == 'PSAT') {
-            this.router.navigateByUrl('/psat/' + this.assessment.id);
-        } else if (assessment.type == 'PHAST') {
-            this.router.navigateByUrl('/phast/' + this.assessment.id);
-        }
+        this.assessmentService.goToAssessment(assessment, str, str2);
     }
 
     showReportModal() {

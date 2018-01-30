@@ -5,7 +5,6 @@ import { Settings } from '../../../../shared/models/settings';
 import { PsatService } from '../../../../psat/psat.service';
 import { IndexedDbService } from '../../../../indexedDb/indexed-db.service';
 import { AssessmentService } from '../../../assessment.service';
-import { Router } from '@angular/router';
 import { ModalDirective } from 'ngx-bootstrap';
 
 @Component({
@@ -28,7 +27,7 @@ export class PsatSummaryCardComponent implements OnInit {
 
     @ViewChild('reportModal') public reportModal: ModalDirective;
 
-    constructor(private psatService: PsatService, private indexedDbService: IndexedDbService, private assessmentService: AssessmentService, private router: Router) { }
+    constructor(private psatService: PsatService, private indexedDbService: IndexedDbService, private assessmentService: AssessmentService) { }
 
     ngOnInit() {
         this.setupDone = this.assessment.psat.setupDone;
@@ -74,13 +73,7 @@ export class PsatSummaryCardComponent implements OnInit {
     }
 
     goToAssessment(assessment: Assessment, str?: string, str2?: string) {
-        this.assessmentService.tab = str;
-        this.assessmentService.subTab = str2;
-        if (assessment.type == 'PSAT') {
-            this.router.navigateByUrl('/psat/' + this.assessment.id);
-        } else if (assessment.type == 'PHAST') {
-            this.router.navigateByUrl('/phast/' + this.assessment.id);
-        }
+        this.assessmentService.goToAssessment(assessment, str, str2);
     }
 
 

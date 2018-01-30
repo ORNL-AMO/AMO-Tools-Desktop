@@ -1,6 +1,5 @@
 import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
 import { Assessment } from '../../../shared/models/assessment';
-import { Router } from '@angular/router';
 import { AssessmentService } from '../../assessment.service';
 @Component({
   selector: 'app-assessment-card',
@@ -15,37 +14,26 @@ export class AssessmentCardComponent implements OnInit {
   isChecked: boolean;
 
   isFirstChange: boolean = true;
-  constructor(private assessmentService: AssessmentService, private router: Router) { }
+  constructor(private assessmentService: AssessmentService) { }
 
 
   ngOnInit() {
-     if(this.isChecked){
+    if (this.isChecked) {
       this.assessment.selected = this.isChecked;
     }
   }
 
-  ngOnChanges(changes: SimpleChanges){
-    if(changes.isChecked && !this.isFirstChange){
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.isChecked && !this.isFirstChange) {
       this.assessment.selected = this.isChecked;
     }
-    else{
+    else {
       this.isFirstChange = false;
     }
   }
 
   goToAssessment(assessment: Assessment) {
-    this.assessmentService.tab = 'system-setup';
-    if (assessment.type == 'PSAT') {
-      if(assessment.psat.setupDone){
-        this.assessmentService.tab = 'assessment';
-      }
-      this.router.navigateByUrl('/psat/' + assessment.id);
-    } else if (assessment.type == 'PHAST') {
-      if(assessment.phast.setupDone){
-        this.assessmentService.tab = 'assessment';
-      }
-      this.router.navigateByUrl('/phast/' + assessment.id);
-    }
+    this.assessmentService.goToAssessment(assessment);
   }
 
   setDelete() {

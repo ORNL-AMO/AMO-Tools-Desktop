@@ -3,7 +3,6 @@ import { Directory, DirectoryDbRef } from '../../../shared/models/directory';
 import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
 import { Assessment } from '../../../shared/models/assessment';
 import { AssessmentService } from '../../assessment.service';
-import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-directory-card',
@@ -19,7 +18,7 @@ export class DirectoryCardComponent implements OnInit {
   isChecked: boolean;
 
   isFirstChange: boolean = true;
-  constructor(private indexedDbService: IndexedDbService, private assessmentService: AssessmentService, private router: Router) { }
+  constructor(private indexedDbService: IndexedDbService, private assessmentService: AssessmentService ) { }
 
   ngOnInit() {
     this.populateDirectories(this.directory);
@@ -72,18 +71,7 @@ export class DirectoryCardComponent implements OnInit {
   }
 
   goToAssessment(assessment: Assessment) {
-    this.assessmentService.tab = 'system-setup';
-    if (assessment.type == 'PSAT') {
-      if(assessment.psat.setupDone){
-        this.assessmentService.tab = 'assessment';
-      }
-      this.router.navigateByUrl('/psat/' + assessment.id);
-    } else if (assessment.type == 'PHAST') {
-      if(assessment.phast.setupDone){
-        this.assessmentService.tab = 'assessment';
-      }
-      this.router.navigateByUrl('/phast/' + assessment.id);
-    }
+    this.assessmentService.goToAssessment(assessment);
   }
 
 }

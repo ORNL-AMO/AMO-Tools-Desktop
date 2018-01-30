@@ -3,6 +3,7 @@ import { PSAT, PsatInputs } from '../shared/models/psat';
 import { Assessment } from '../shared/models/assessment';
 import { PHAST } from '../shared/models/phast/phast';
 import { BehaviorSubject } from 'rxjs';
+import { Router } from '@angular/router';
 declare const packageJson;
 @Injectable()
 export class AssessmentService {
@@ -16,11 +17,36 @@ export class AssessmentService {
   // checkForUpdates: BehaviorSubject<boolean>;
   updateAvailable: BehaviorSubject<boolean>;
   showFeedback: BehaviorSubject<boolean>;
-  constructor() {
+  constructor(private router: Router) {
     this.createAssessment = new BehaviorSubject<boolean>(null);
     // this.checkForUpdates = new BehaviorSubject<boolean>(null);
     this.updateAvailable = new BehaviorSubject<boolean>(null);
     this.showFeedback = new BehaviorSubject<boolean>(true);
+  }
+
+  goToAssessment(assessment: Assessment, str?: string, str2?: string) {
+    if(str){
+      this.tab = str;
+    }else{
+      this.tab = 'system-setup';
+    }
+
+    if(str2){
+      this.subTab = str2;
+    }
+    if (assessment.type == 'PSAT') {
+      if (assessment.psat.setupDone && !str) {
+        this.tab = 'assessment';
+      }
+      this.router.navigateByUrl('/psat/' + assessment.id);
+    } else if (assessment.type == 'PHAST') {
+      if (assessment.phast.setupDone && !str) {
+        this.tab = 'assessment';
+      }
+      this.router.navigateByUrl('/phast/' + assessment.id);
+    }else if(assessment.type == 'FSAT'){
+      this.router.navigateByUrl('/fsat/'+assessment.id);
+    }
   }
 
   getNewAssessment(assessmentType: string): Assessment {
@@ -78,7 +104,7 @@ export class AssessmentService {
         daysPerWeek: 7,
         shiftsPerDay: 3,
         hoursPerShift: 8,
-        hoursPerYear:8736
+        hoursPerYear: 8736
       },
       operatingCosts: {
         fuelCost: 8.00,

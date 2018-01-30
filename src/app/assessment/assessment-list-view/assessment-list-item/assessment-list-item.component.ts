@@ -39,13 +39,7 @@ export class AssessmentListItemComponent implements OnInit {
   }
 
   goToAssessment(assessment: Assessment, str?: string, str2?: string) {
-    this.assessmentService.tab = str;
-    this.assessmentService.subTab = str2;
-    if (assessment.type == 'PSAT') {
-      this.router.navigateByUrl('/psat/' + this.assessment.id);
-    } else if (assessment.type == 'PHAST') {
-      this.router.navigateByUrl('/phast/' + this.assessment.id);
-    }
+    this.assessmentService.goToAssessment(assessment, str, str2);
   }
 
   setDelete() {
