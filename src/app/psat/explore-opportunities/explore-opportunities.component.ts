@@ -20,6 +20,8 @@ export class ExploreOpportunitiesComponent implements OnInit {
   saved = new EventEmitter<boolean>();
   @Input()
   psat: PSAT;
+  @Input()
+  containerHeight: number;
 
   annualSavings: number;
   percentSavings: number;

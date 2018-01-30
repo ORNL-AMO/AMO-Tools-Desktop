@@ -15,13 +15,13 @@
 	/* padding-bottom: 70px;
 	max-height: none !important;
 	min-height: 100vh;
-    height: auto !important; */
-    height: 100%;
+    height: auto !important;
+    height: 100%;*/
 }
 
 .tab-content{
-    height: 100%;
-    min-height: 100%;
+    /* height: 100%;
+    min-height: 100%; */
 }
 
 .form-card{
@@ -211,11 +211,6 @@
     padding-top: 10px;
 }
 
-.phast-losses-container .card-form:last-of-type{
-    padding-bottom: 90px;
-}
-
-
 
 /* Floating modal styles */
 
@@ -242,7 +237,7 @@
     background: #efefef;
 }
 
-.card-header {
+/* .card-header {
     text-align: center;
     background-color: rgba(0,0,0,0) !important;
 }
@@ -250,7 +245,7 @@
 .card-header h3 {
     margin: 0 !important;
     font-size: 16px !important;
-}
+} */
 
 
 .card-container form .form-section {
@@ -285,3 +280,29 @@
 .modal-lg {
     max-width: 90%;
 }
+
+
+.scroll-item{
+    overflow-y: auto;
+}
+
+.scroll-item::-webkit-scrollbar {
+    width: .5em;
+  }
+  .scroll-item::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+  }
+  .scroll-item::-webkit-scrollbar-thumb{
+  background-color: darkgrey;
+  outline: 1px solid slategrey;
+  }
+
+ .psat .scroll-item::-webkit-scrollbar-thumb{
+    background-color: #2980b9;
+    outline: 1px solid slategrey;
+    }
+
+  .phast .scroll-item::-webkit-scrollbar-thumb{
+    background-color: #BF3D00;
+    outline: 1px solid slategrey;
+    }

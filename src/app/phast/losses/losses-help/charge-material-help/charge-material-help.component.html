@@ -1,21 +1,21 @@
-<div class="help-header">
 
-  <h3>Charge Material Help</h3>
-  <!-- <p>Enter loss data</p>
-  <p class="text-muted">
-    <span class="fa fa-youtube-play"></span> Watch tutorial on entering charge material data.
-  </p> -->
+<div class="help-content card">
+  <div class="card-header help-header">
 
-</div>
+    <h3>Charge Material Help</h3>
+    <!-- <p>Enter loss data</p>
+    <p class="text-muted">
+      <span class="fa fa-youtube-play"></span> Watch tutorial on entering charge material data.
+    </p> -->
+  
+  </div>
 
-
-<div class="help-content">
   <!--Solid, Liquid and Gas Charge Material-->
-  <div class="card" *ngIf="currentField == 'chargeMaterialType'">
+  <div *ngIf="currentField == 'chargeMaterialType'">
     <div class="card-header">
       Charge Material Type
     </div>
-    <div class="card-block">
+    <div class="card-body">
       <label><u><strong>Description</strong></u></label>
       <ul>
         <li>Solid</li>
@@ -25,11 +25,11 @@
     </div>
   </div>
 
-  <div class="card" *ngIf="currentField == 'materialName'">
+  <div *ngIf="currentField == 'materialName'">
     <div class="card-header">
       Material Name
     </div>
-    <div class="card-block">
+    <div class="card-body">
       <label><u><strong>Description</strong></u></label>
       <p>
         Select material from the drop down list. The material properties cells below this will be filled in if the
@@ -39,11 +39,11 @@
   </div>
 
   <!--Solid Charge Material-->
-  <div class="card" *ngIf="currentField == 'materialSpecificHeatOfSolidMaterial'">
+  <div *ngIf="currentField == 'materialSpecificHeatOfSolidMaterial'">
     <div class="card-header">
       Average Heat of the solid material
     </div>
-    <div class="card-block">
+    <div class="card-body">
       <label><u><strong>Description</strong></u></label>
       <p>
         Amount of heat per unit mass required to raise the temperature by one degree of temperature.
@@ -57,11 +57,11 @@
     </div>
   </div>
 
-  <div class="card" *ngIf="currentField == 'materialLatentHeatOfFusion'">
+  <div *ngIf="currentField == 'materialLatentHeatOfFusion'">
     <div class="card-header">
       Latent Heat of Fusion
     </div>
-    <div class="card-block">
+    <div class="card-body">
       <label><u><strong>Description</strong></u></label>
       <p>
         Latent heat of melting or fusion or phase change for the solid material.
@@ -73,11 +73,11 @@
     </div>
   </div>
 
-  <div class="card" *ngIf="currentField == 'materialHeatOfLiquid'">
+  <div *ngIf="currentField == 'materialHeatOfLiquid'">
     <div class="card-header">
       Specific Heat of liquid from molten material
     </div>
-    <div class="card-block">
+    <div class="card-body">
       <label><u><strong>Description</strong></u></label>
       <p>
         Amount of heat per unit mass required to raise the temperature by one degree of temperature.
@@ -91,11 +91,11 @@
     </div>
   </div>
 
-  <div class="card" *ngIf="currentField == 'materialMeltingPoint'">
+  <div *ngIf="currentField == 'materialMeltingPoint'">
     <div class="card-header">
       Melting Point
     </div>
-    <div class="card-block">
+    <div class="card-body">
       <label><u><strong>Description</strong></u></label>
       <p>
         Temperature of melting for the solid material.
@@ -107,11 +107,11 @@
     </div>
   </div>
 
-  <div class="card" *ngIf="currentField == 'waterContentAsCharged'">
+  <div *ngIf="currentField == 'waterContentAsCharged'">
     <div class="card-header">
       Water Content as Charged
     </div>
-    <div class="card-block">
+    <div class="card-body">
       <label><u><strong>Description</strong></u></label>
       <p>
         Water content of the charge material as percentage of total charge weight - wet basis. This value can be
@@ -124,11 +124,11 @@
     </div>
   </div>
 
-  <div class="card" *ngIf="currentField == 'waterContentAsDischarged'">
+  <div *ngIf="currentField == 'waterContentAsDischarged'">
     <div class="card-header">
       Water Content as Discharged
     </div>
-    <div class="card-block">
+    <div class="card-body">
       <label><u><strong>Description</strong></u></label>
       <p>
         Water content of the discharged material as percentage of total discharged weight - wet basis. This value can
@@ -141,11 +141,11 @@
     </div>
   </div>
 
-  <div class="card" *ngIf="currentField == 'percentChargeMelted'">
+  <div *ngIf="currentField == 'percentChargeMelted'">
     <div class="card-header">
       Charge Melted
     </div>
-    <div class="card-block">
+    <div class="card-body">
       <label><u><strong>Description</strong></u></label>
       <p>
         Charge material melted (as % of solid material charged). Use value or data from process/production engineering
@@ -158,11 +158,11 @@
     </div>
   </div>
 
-  <div class="card" *ngIf="currentField == 'percentChargeReacted'">
+  <div *ngIf="currentField == 'percentChargeReacted'">
     <div class="card-header">
       Charge Reacted
     </div>
-    <div class="card-block">
+    <div class="card-body">
       <label><u><strong>Description</strong></u></label>
       <p>
         Charge material (as % of dry material) reacted. Use value or data from process/production engineering or
@@ -175,11 +175,11 @@
     </div>
   </div>
 
-  <div class="card" *ngIf="currentField == 'waterVaporDischargeTemperature'">
+  <div *ngIf="currentField == 'waterVaporDischargeTemperature'">
     <div class="card-header">
       Water Vapor Discharge Temperature
     </div>
-    <div class="card-block">
+    <div class="card-body">
       <label><u><strong>Description</strong></u></label>
       <p>
         Temperature of water vapor (usually mixed with exhaust air or flue gases) as it is discharged form the
@@ -192,11 +192,11 @@
     </div>
   </div>
 
-  <div class="card" *ngIf="currentField == 'chargeMaterialDischargeTemperature'">
+  <div *ngIf="currentField == 'chargeMaterialDischargeTemperature'">
     <div class="card-header">
       Charge Material Discharge Temperature
     </div>
-    <div class="card-block">
+    <div class="card-body">
       <label><u><strong>Description</strong></u></label>
       <p>
         Discharge temperature for the material as it is discharged from the furnace or oven. Use production data or
@@ -209,11 +209,11 @@
     </div>
   </div>
 
-  <div class="card" *ngIf="currentField == 'additionalHeatRequired'">
+  <div *ngIf="currentField == 'additionalHeatRequired'">
     <div class="card-header">
       Additional Heat Required
     </div>
-    <div class="card-block">
+    <div class="card-body">
       <label><u><strong>Description</strong></u></label>
       <p>
         Insert value of additional heat required and not accounted for in the above calculations.
@@ -227,11 +227,11 @@
 
 
   <!--Liquid Charge Material-->
-  <div class="card" *ngIf="currentField == 'materialSpecificHeatLiquid'">
+  <div *ngIf="currentField == 'materialSpecificHeatLiquid'">
     <div class="card-header">
       Specific Heat of the Liquid
     </div>
-    <div class="card-block">
+    <div class="card-body">
       <label><u><strong>Description</strong></u></label>
       <p>
         Amount of heat per unit mass required to raise the temperature by one degree of temperature.
@@ -245,11 +245,11 @@
     </div>
   </div>
 
-  <div class="card" *ngIf="currentField == 'materialVaporizingTemperature'">
+  <div *ngIf="currentField == 'materialVaporizingTemperature'">
     <div class="card-header">
       Vaporizing Temperature of Liquid
     </div>
-    <div class="card-block">
+    <div class="card-body">
       <label><u><strong>Description</strong></u></label>
       <p>
         Vaporizing temperature of the liquid.
@@ -261,11 +261,11 @@
     </div>
   </div>
 
-  <div class="card" *ngIf="currentField == 'materialLatentHeat'">
+  <div *ngIf="currentField == 'materialLatentHeat'">
     <div class="card-header">
       Latent Heat of Vaporization
     </div>
-    <div class="card-block">
+    <div class="card-body">
       <label><u><strong>Description</strong></u></label>
       <p>
         Latent heat of vaporizing or evaporation for the liquid.
@@ -277,11 +277,11 @@
     </div>
   </div>
 
-  <div class="card" *ngIf="currentField == 'materialSpecificHeatVapor'">
+  <div *ngIf="currentField == 'materialSpecificHeatVapor'">
     <div class="card-header">
       Specific Heat of Vapor
     </div>
-    <div class="card-block">
+    <div class="card-body">
       <label><u><strong>Description</strong></u></label>
       <p>
         Give specific heat value for the vapor resulting from vaporizing of the liquid at the temperature range of the
@@ -294,11 +294,11 @@
     </div>
   </div>
 
-  <div class="card" *ngIf="currentField == 'liquidVaporized'">
+  <div *ngIf="currentField == 'liquidVaporized'">
     <div class="card-header">
       Charge Liquid Vaporized
     </div>
-    <div class="card-block">
+    <div class="card-body">
       <label><u><strong>Description</strong></u></label>
       <p>
         Charge liquid vaporized (% liquid charged) during the heating process. Get the value (data) from
@@ -311,11 +311,11 @@
     </div>
   </div>
 
-  <div class="card" *ngIf="currentField == 'liquidReacted'">
+  <div *ngIf="currentField == 'liquidReacted'">
     <div class="card-header">
       Charge Liquid Reacted (% of Charge)
     </div>
-    <div class="card-block">
+    <div class="card-body">
       <label><u><strong>Description</strong></u></label>
       <p>
         Charge Liquid Reacted
@@ -329,11 +329,11 @@
 
 
   <!--Gas Charge Material-->
-  <div class="card" *ngIf="currentField == 'materialSpecificHeat'">
+  <div *ngIf="currentField == 'materialSpecificHeat'">
     <div class="card-header">
       Specific Heat of gas
     </div>
-    <div class="card-block">
+    <div class="card-body">
       <label><u><strong>Description</strong></u></label>
       <p>
         Amount of heat per unit mass required to raise the temperature by one degree of temperature.
@@ -347,11 +347,11 @@
     </div>
   </div>
 
-  <div class="card" *ngIf="currentField == 'vaporInGas'">
+  <div *ngIf="currentField == 'vaporInGas'">
     <div class="card-header">
       Vapor in Gas Mixture
     </div>
-    <div class="card-block">
+    <div class="card-body">
       <label><u><strong>Description</strong></u></label>
       <p>
         Vapor mixed with the feed gas expressed as % of the total mixture charge weight. Use test data or charge
@@ -364,11 +364,11 @@
     </div>
   </div>
 
-  <div class="card" *ngIf="currentField == 'specificHeatOfVapor'">
+  <div *ngIf="currentField == 'specificHeatOfVapor'">
     <div class="card-header">
       Specific Heat of vapor
     </div>
-    <div class="card-block">
+    <div class="card-body">
       <label><u><strong>Description</strong></u></label>
       <p>
         Amount of heat per unit mass required to raise the temperature by one degree of temperature.
@@ -381,11 +381,11 @@
     </div>
   </div>
 
-  <div class="card" *ngIf="currentField == 'gasReacted'">
+  <div *ngIf="currentField == 'gasReacted'">
     <div class="card-header">
       Feed Gas Reacted
     </div>
-    <div class="card-block">
+    <div class="card-body">
       <label><u><strong>Description</strong></u></label>
       <p>
         Fraction of DRY gas feed that reacts in system.
@@ -398,11 +398,11 @@
   </div>
 
   <!-- All -->
-  <div class="card" *ngIf="currentField == 'initialTemperature'">
+  <div *ngIf="currentField == 'initialTemperature'">
     <div class="card-header">
       Initial Temperature
     </div>
-    <div class="card-block">
+    <div class="card-body">
       <label><u><strong>Description</strong></u></label>
       <p>
         Inlet temperature for the charge material. Use production data or actual measurement.
@@ -414,11 +414,11 @@
     </div>
   </div>
 
-  <div class="card" *ngIf="currentField == 'dischargeTemperature'">
+  <div *ngIf="currentField == 'dischargeTemperature'">
     <div class="card-header">
       Discharge Temperature
     </div>
-    <div class="card-block">
+    <div class="card-body">
       <label><u><strong>Description</strong></u></label>
       <p>
         Discharge temperature for the material as it is discharged from the furnace or oven. Use production data or
@@ -431,11 +431,11 @@
     </div>
   </div>
 
-  <div class="card" *ngIf="currentField == 'heatOfReaction'">
+  <div *ngIf="currentField == 'heatOfReaction'">
     <div class="card-header">
       Heat of Reaction
     </div>
-    <div class="card-block">
+    <div class="card-body">
       <label><u><strong>Description</strong></u></label>
       <p>
         Mass based change in enthalpy due to a reaction.
@@ -448,11 +448,11 @@
     </div>
   </div>
 
-  <div class="card" *ngIf="currentField == 'endothermicOrExothermic'">
+  <div *ngIf="currentField == 'endothermicOrExothermic'">
     <div class="card-header">
       Endothermic/Exothermic
     </div>
-    <div class="card-block">
+    <div class="card-body">
       <label><u><strong>Description</strong></u></label>
       <p>
         Type of reaction. Select from the drop down menu and select endothermic or exothermic. Use positive number
@@ -461,11 +461,11 @@
     </div>
   </div>
 
-  <div class="card" *ngIf="currentField == 'feedRate'">
+  <div *ngIf="currentField == 'feedRate'">
     <div class="card-header">
       Feed Rate
     </div>
-    <div class="card-block">
+    <div class="card-body">
       <label><u><strong>Description</strong></u></label>
       <p>
         Weight of material charged per hour. Use total weight including moisture in the charge material. Note that for
@@ -478,11 +478,11 @@
     </div>
   </div>
 
-  <div class="card" *ngIf="currentField == 'default'">
+  <div *ngIf="currentField == 'default'">
     <div class="card-header">
       Savings Suggestions
     </div>
-    <div class="card-block">
+    <div class="card-body">
       <label><u><strong>Description</strong></u></label>
       <ul>
         <li class="help-general">Explore possibilities of lowering the final product temperature</li>

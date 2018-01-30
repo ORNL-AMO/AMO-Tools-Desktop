@@ -15,7 +15,6 @@ Tabs
   /* Primary Tabs */
    .tabs.primary {
     background: #e5e5e5;
-    border-bottom: #c8c8c8 solid 1px;
   }
   .tabs.primary li {
     display: inline-block;
