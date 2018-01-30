@@ -4,7 +4,9 @@
 }
 
 .data-table{
-    padding-top: 25px;
+    padding-top: 8px;
+    padding-right: 0px;
+    padding-left: 25px;
 }
 
 .results-panel{
@@ -25,4 +27,12 @@
 
 .no-padding-left{
     padding-left: 0px;
+}
+
+.scroll-item{
+    margin-right: 0px;
+}
+
+.notes-col{
+    padding-right: 0px;
 }

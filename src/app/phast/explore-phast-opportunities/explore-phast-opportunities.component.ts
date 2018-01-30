@@ -16,6 +16,9 @@ export class ExplorePhastOpportunitiesComponent implements OnInit {
   phast: PHAST;
   @Input()
   settings: Settings;
+  @Input()
+  containerHeight: number;
+  
   @Output('save')
   save = new EventEmitter<boolean>();
   @Input()

@@ -5,10 +5,28 @@
 
 .sidebar-bg{
     max-height: 100%;
-    overflow-y: scroll;
+    overflow-y: auto;
 }
 
 .landing-screen{
     max-height: 100%;
-    overflow-y: scroll;
+    overflow-y: auto;
 }
+
+.dashboard-content::-webkit-scrollbar{
+    display: none;
+}
+
+.landing-screen::-webkit-scrollbar,
+.sidebar-bg::-webkit-scrollbar {
+    width: .5em;
+  }
+  .landing-screen::-webkit-scrollbar-track ,
+  .sidebar-bg::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+  }
+  .landing-screen::-webkit-scrollbar-thumb,
+  .sidebar-bg::-webkit-scrollbar-thumb {
+  background-color: darkgrey;
+  outline: 1px solid slategrey;
+  }

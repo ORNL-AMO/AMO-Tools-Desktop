@@ -27,6 +27,8 @@ export class LossesComponent implements OnInit {
   inSetup: boolean;
   @ViewChild('materialModal') public materialModal: ModalDirective;
   lossAdded: boolean;
+  @Input()
+  containerHeight: number;
 
   _modifications: Modification[];
   isDropdownOpen: boolean = false;
