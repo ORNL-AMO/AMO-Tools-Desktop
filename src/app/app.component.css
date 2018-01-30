@@ -1137,8 +1137,14 @@ Footer
     border-radius: 6px;
     font-size: 16px;
   }
+  .fsat .pills-nav span{
+    color: #000;
+  }
   .pills-nav .active span {
     background: rgba(0,0,0,0.5);
+  }
+  .fsat .pills-nav .active span{
+    background: #ECF0F1;
   }
   .pills-nav span:hover {
     background: rgba(0,0,0,0.3);
@@ -1227,7 +1233,7 @@ Banner
 
 }
 .banner .pills-nav {
-
+margin-bottom: 0px;
 }
 .banner.psat .title {
   color: #fff;
