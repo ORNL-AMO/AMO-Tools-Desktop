@@ -86,8 +86,12 @@ export class MotorPerformanceFormComponent implements OnInit {
     }
   }
 
-  emitChange() {
+  changePowerArrays() {
     this.modifyPowerArrays();
+    this.emitChange();
+  }
+
+  emitChange() {
     this.performanceForm.patchValue({
       frequency: this.tmpFrequency,
       horsePower: this.tmpHorsePower,
@@ -98,6 +102,19 @@ export class MotorPerformanceFormComponent implements OnInit {
       motorRPM: this.tmpMotorRpm
     });
     this.calculate.emit(true);
+  }
+
+  calculateFullLoadAmps() {
+    this.tmpFullLoadAmps = this.psatService.estFLA(
+      this.tmpHorsePower,
+      this.tmpMotorRpm,
+      this.tmpFrequency,
+      this.tmpEfficiencyClass,
+      this.tmpEfficiency,
+      this.tmpMotorVoltage,
+      this.settings
+    );
+    this.emitChange();
   }
 
   // addNum(str: string) {
