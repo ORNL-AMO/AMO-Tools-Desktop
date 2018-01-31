@@ -25,7 +25,7 @@
           <select name="modificationMotorRatedPower" class="form-control number-input-field" id="modificationMotorRatedPower" (focus)="focusField('motorRatedPower')"
             (change)="checkRatedPower(2)" [(ngModel)]="psat.modifications[exploreModIndex].psat.inputs.motor_rated_power"
             [disabled]="psat.modifications[exploreModIndex].psat.inputs.optimize_calculation">
-                                        <option  *ngFor="let option2 of options" [ngValue]="option2">{{option2}} {{settings.powerMeasurement}}</option>
+                                        <option  *ngFor="let option2 of options2" [ngValue]="option2">{{option2}} {{settings.powerMeasurement}}</option>
                                     </select>
           <span class="alert-danger pull-right small" *ngIf="ratedPowerError2 !== null && !psat.modifications[exploreModIndex].psat.inputs.optimize_calculation">{{ratedPowerError2}}</span>
         </div>
