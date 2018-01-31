@@ -26,6 +26,7 @@ import { PhastSummaryCardComponent } from './assessment-grid-view/assessment-car
 import { PsatSummaryCardComponent } from './assessment-grid-view/assessment-card/psat-summary-card/psat-summary-card.component';
 import { PhastReportModule } from '../phast/phast-report/phast-report.module';
 import { PsatModule } from '../psat/psat.module';
+import { FacilityCardComponent } from './assessment-grid-view/facility-card/facility-card.component';
 
 @NgModule({
   declarations: [
@@ -42,7 +43,8 @@ import { PsatModule } from '../psat/psat.module';
     AssessmentCreateComponent,
     AssessmentSettingsComponent,
     PhastSummaryCardComponent,
-    PsatSummaryCardComponent
+    PsatSummaryCardComponent,
+    FacilityCardComponent
   ],
   exports: [
     AssessmentDashboardComponent,

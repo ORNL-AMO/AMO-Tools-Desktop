@@ -1,0 +1,52 @@
+.fa-plus-circle{
+    font-size: xx-large;
+}
+
+
+.no-facility-data{
+    text-align: center;
+    padding-top: 15px;
+    padding-right: 10px;
+    padding-left: 10px;
+}
+
+.summary-card-body.no-facility-data:hover{
+    background-color: #efefef;
+    cursor: pointer;
+}
+
+.summary-card-header:hover{
+    background-color: inherit;
+    cursor: inherit;   
+}
+
+h5{
+    margin-bottom: 0px;
+}
+
+.modal-header, .modal-body{
+    padding: 6px;
+}
+
+td{
+    padding: 0px;
+    font-size: small;
+}
+
+li{
+    list-style: none;
+    font-size: small;
+  }
+  
+  
+  
+  ul{
+    margin-left: 0px;
+    padding-left: 0px;
+    margin-bottom: 0px;
+  }
+
+  
+  a:not([href]):not([tabindex]){
+    color: blue;
+  }

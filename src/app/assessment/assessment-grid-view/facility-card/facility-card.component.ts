@@ -1,0 +1,80 @@
+import { Component, OnInit, Input, ViewChild } from '@angular/core';
+import { Directory } from '../../../shared/models/directory';
+import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
+import { Settings } from '../../../shared/models/settings';
+import { ModalDirective } from 'ngx-bootstrap';
+import { SimpleChanges } from '@angular/core/src/metadata/lifecycle_hooks';
+import { SettingsService } from '../../../settings/settings.service';
+
+@Component({
+  selector: 'app-facility-card',
+  templateUrl: './facility-card.component.html',
+  styleUrls: ['./facility-card.component.css', '../assessment-grid-view.component.css']
+})
+export class FacilityCardComponent implements OnInit {
+  @Input()
+  directory: Directory;
+
+  @ViewChild('facilityModal') public facilityModal: ModalDirective;
+
+  settings: Settings;
+  showModal: boolean = false;
+  isParentSettings: boolean = false;
+  constructor(private indexedDbService: IndexedDbService, private settingsService: SettingsService) { }
+
+  ngOnInit() {
+    this.getSettings(this.directory.id, this.directory);
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.directory) {
+      this.getSettings(this.directory.id, this.directory);
+    }
+  }
+  showFacilityModal() {
+    this.showModal = true;
+    this.facilityModal.show();
+  }
+
+  hideFacilityModal() {
+    this.facilityModal.hide();
+    this.showModal = false;
+  }
+
+  save() {
+    if (this.isParentSettings) {
+      this.indexedDbService.addSettings(this.settings).then(val => {
+        this.isParentSettings = false;
+        this.hideFacilityModal();
+      })
+    } else {
+      this.indexedDbService.putSettings(this.settings).then(returnVal => {
+        this.hideFacilityModal();
+      })
+    }
+  }
+
+
+  getSettings(id: number, directory?: Directory) {
+    this.indexedDbService.getDirectorySettings(id).then(settings => {
+      if (settings && settings.length != 0) {
+        if (this.isParentSettings) {
+          let settingsForm = this.settingsService.getFormFromSettings(settings[0]);
+          let tmpSettings: Settings = this.settingsService.getSettingsFromForm(settingsForm);
+          tmpSettings.createdDate = new Date();
+          tmpSettings.modifiedDate = new Date();
+          tmpSettings.directoryId = this.directory.id;
+          tmpSettings.facilityInfo = settings[0].facilityInfo;
+
+          this.settings = tmpSettings;
+        } else {
+          this.settings = settings[0];
+        }
+      } else if (directory.parentDirectoryId) {
+        this.isParentSettings = true;
+        this.getSettings(directory.parentDirectoryId);
+      }
+    })
+  }
+}
+

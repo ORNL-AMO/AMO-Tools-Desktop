@@ -1,0 +1,99 @@
+<div class="card" *ngIf="settings">
+  <div class="card-header summary-card-header">
+    Directory Information
+  </div>
+  <div class="card-body summary-card-body no-facility-data" *ngIf="!settings.facilityInfo" (click)="showFacilityModal()">
+    <div class="no-facility-data">
+      Add Facility Info
+      <br>
+      <span class="fa fa-plus-circle"></span>
+      <br>
+      <p class="small">You have no facility information for this directory.</p>
+    </div>
+  </div>
+  <div class="card-body summary-card-body" *ngIf="settings.facilityInfo">
+    <table class="table">
+      <tr>
+        <td class="bold">
+          Facility Name
+        </td>
+        <td>
+          {{settings.facilityInfo.name}}
+        </td>
+      </tr>
+      <tr *ngIf="settings.facilityInfo.address">
+        <td class="bold">
+          Address
+        </td>
+        <td></td>
+      </tr>
+      <tr *ngIf="settings.facilityInfo.address">
+        <td>Street</td>
+        <td>
+          {{settings.facilityInfo.address.street}}
+        </td>
+      </tr>
+      <tr *ngIf="settings.facilityInfo.address">
+        <td>City</td>
+        <td>
+          {{settings.facilityInfo.address.city}}
+        </td>
+      </tr>
+      <tr *ngIf="settings.facilityInfo.address">
+        <td>State</td>
+        <td>
+          {{settings.facilityInfo.address.state}}
+        </td>
+      </tr>
+      <tr *ngIf="settings.facilityInfo.address">
+        <td>Country</td>
+        <td>
+          {{settings.facilityInfo.address.country}}
+        </td>
+      </tr>
+      <tr *ngIf="settings.facilityInfo.contact">
+        <td class="bold">
+          Contact Information
+        </td>
+        <td></td>
+      </tr>
+      <tr *ngIf="settings.facilityInfo.contact">
+        <td>
+          Name
+        </td>
+        <td>{{settings.facilityInfo.contact.contactName}}</td>
+      </tr>
+      <tr *ngIf="settings.facilityInfo.contact">
+        <td>
+          Phone Number
+        </td>
+        <td>{{settings.facilityInfo.contact.phoneNumber}}</td>
+      </tr>
+    </table>
+  </div>
+  <div class="card-footer summary-card-footer">
+    <a class="pull-left small" (click)="showFacilityModal()">Edit</a>
+    <div class="last-updated pull-right">Last updated {{settings.modifiedDate | date }}</div>
+  </div>
+</div>
+
+
+
+
+
+<div bsModal #facilityModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="facilityModalLabel"
+  aria-hidden="true" [config]="{backdrop: 'static'}">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5>{{directory.name}} Facilty Information.</h5>
+        <button class="close pull-right" (click)="hideFacilityModal()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body" *ngIf="showModal">
+        <app-facility-info [settings]="settings" (close)="save()"></app-facility-info>
+      </div>
+    </div>
+  </div>
+</div>
