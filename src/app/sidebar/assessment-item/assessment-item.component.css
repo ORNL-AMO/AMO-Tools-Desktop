@@ -49,6 +49,15 @@ li{
 }
 */
 
+i{
+  color:#FFE400
+}
+
+.fan-block{
+  display: inline-flex;
+  background-color: #7F8C8D;
+  padding: 2px;
+}
 
 .icon-image{
   height: 18px;

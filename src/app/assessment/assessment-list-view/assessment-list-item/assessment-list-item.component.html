@@ -8,7 +8,8 @@
     <input type="checkbox" [(ngModel)]="assessment.selected" (change)="setDelete()" />
     <a (click)="goToAssessment(assessment, 'assessment')" *ngIf="isSetup">{{assessment.name}}</a>
     <a (click)="goToAssessment(assessment, 'system-setup')" *ngIf="!isSetup">{{assessment.name}}</a>
-    <br><div class="last-updated">Last updated {{assessment.modifiedDate | date }}</div>
+    <br>
+    <div class="last-updated">Last updated {{assessment.modifiedDate | date }}</div>
     <!-- <div class="last-updated" *ngIf="!isSetup"><br>Asset not setup</div> -->
 
   </div>
@@ -21,6 +22,6 @@
 
   </div>
   <div class="actions" *ngIf="!isSetup">
-      <div class="last-updated">Asset not setup</div>
+    <div class="last-updated">Asset not setup</div>
   </div>
 </div>

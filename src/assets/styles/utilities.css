@@ -45,3 +45,15 @@ a:not([href]):not([tabindex]).disabled-link:hover{
 .table-striped tbody tr:nth-of-type(odd) {
     background-color: rgba(0, 0, 0, 0.12);
 }
+
+
+.fan-block i{
+    color:#FFE400
+  }
+  
+  .fan-block{
+    display: inline-flex;
+    background-color: #7F8C8D;
+    padding: 2px;
+  }
+  

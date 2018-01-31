@@ -10,3 +10,7 @@
   .summary-card-header.psat{
     border-bottom: #2980b9 groove 2px;
   }
+
+  .summary-card-header.fsat{
+    border-bottom: #FFE400 groove 2px;
+  }
