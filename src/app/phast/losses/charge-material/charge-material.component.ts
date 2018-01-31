@@ -220,7 +220,6 @@ export class ChargeMaterialComponent implements OnInit {
       if (loss.solidForm.status == 'VALID') {
         let tmpMaterial: ChargeMaterial = this.chargeMaterialService.buildSolidChargeMaterial(loss.solidForm);
         const results = this.phastService.solidLoadChargeMaterial(tmpMaterial.solidChargeMaterial, this.settings);
-        // loss.heatRequired = this.phastService.solidLoadChargeMaterial(tmpMaterial.solidChargeMaterial, this.settings);
         loss.heatRequired = results.grossHeatLoss;
         loss.netHeatLoss = results.netHeatLoss;
         loss.endoExoHeat = results.endoExoHeat;
@@ -230,22 +229,20 @@ export class ChargeMaterialComponent implements OnInit {
     } else if (loss.chargeMaterialType == 'Liquid') {
       if (loss.liquidForm.status == 'VALID') {
         let tmpMaterial: ChargeMaterial = this.chargeMaterialService.buildLiquidChargeMaterial(loss.liquidForm);
-        loss.heatRequired = this.phastService.liquidLoadChargeMaterial(tmpMaterial.liquidChargeMaterial, this.settings);
-        // const results = this.phastService.liquidLoadChargeMaterial(tmpMaterial.liquidChargeMaterial, this.settings);
-        // loss.heatRequired = results.grossHeatLoss;
-        // loss.netHeatLoss = results.netHeatLoss;
-        // loss.endoExoHeat = results.endoExoHeat;
+        const results = this.phastService.liquidLoadChargeMaterial(tmpMaterial.liquidChargeMaterial, this.settings);
+        loss.heatRequired = results.grossHeatLoss;
+        loss.netHeatLoss = results.netHeatLoss;
+        loss.endoExoHeat = results.endoExoHeat;
       } else {
         loss.heatRequired = null;
       }
     } else if (loss.chargeMaterialType == 'Gas') {
       if (loss.gasForm.status == 'VALID') {
         let tmpMaterial: ChargeMaterial = this.chargeMaterialService.buildGasChargeMaterial(loss.gasForm);
-        loss.heatRequired = this.phastService.gasLoadChargeMaterial(tmpMaterial.gasChargeMaterial, this.settings);
-        // const results = this.phastService.gasLoadChargeMaterial(tmpMaterial.liquidChargeMaterial, this.settings);
-        // loss.heatRequired = results.grossHeatLoss;
-        // loss.netHeatLoss = results.netHeatLoss;
-        // loss.endoExoHeat = results.endoExoHeat;
+        const results = this.phastService.gasLoadChargeMaterial(tmpMaterial.gasChargeMaterial, this.settings);
+        loss.heatRequired = results.grossHeatLoss;
+        loss.netHeatLoss = results.netHeatLoss;
+        loss.endoExoHeat = results.endoExoHeat;
       } else {
         loss.heatRequired = null;
       }
