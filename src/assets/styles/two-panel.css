@@ -17,6 +17,7 @@
 	min-height: 100vh;
     height: auto !important;
     height: 100%;*/
+    min-height: 100%;
 }
 
 .tab-content{
