@@ -8,7 +8,7 @@
     </div>
 
     <div class="form-group">
-      <label for="horsePower">Horse Power</label>
+      <label for="horsePower">Motor Power</label>
       <select class="form-control" id="horsePower"  (focus)="focusField('horsePower')" formControlName="horsePower">
         <option *ngFor="let option of options" [ngValue]="option">{{option}} {{settings.powerMeasurement}}</option>
       </select>
@@ -23,13 +23,13 @@
         <div class="incrementor input-group-addon">
           <button class="btn" (click)="addNum('motorRPM')"><i class="fa fa-plus"></i></button>
         </div>
-        <input type="number" min="1" step="any" class="form-control addon-input" id="motorRPM" formControlName="motorRPM" onfocus="this.select();" (focus)="focusField('motorRPM')">
+        <input type="number" min="1" step="10" class="form-control addon-input" id="motorRPM" formControlName="motorRPM" onfocus="this.select();" (focus)="focusField('motorRPM')">
       </div>
     </div>
 
     <div class="form-group">
       <label for="efficiencyClass">Efficiency Class</label>
-      <select class="form-control" id="efficiencyClass" formControlName="efficiencyClass">
+      <select class="form-control" id="efficiencyClass" formControlName="efficiencyClass" (change)="modifyPowerArrays()">
               <option *ngFor="let efficiencyClass of efficiencyClasses" [ngValue]="efficiencyClass">{{efficiencyClass}}</option>
             </select>
     </div>

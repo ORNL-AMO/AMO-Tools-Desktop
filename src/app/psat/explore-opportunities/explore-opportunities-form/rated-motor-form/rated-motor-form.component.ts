@@ -32,17 +32,19 @@ export class RatedMotorFormComponent implements OnInit {
   tmpModificationEfficiencyClass: string;
   tmpBaselineEfficiencyClass: string;
   options: Array<any>;
+  options2: Array<any>;
   horsePowers: Array<number> = [5, 7.5, 10, 15, 20, 25, 30, 40, 50, 60, 75, 100, 125, 150, 200, 250, 300, 350, 400, 450, 500, 600, 700, 800, 900, 1000, 1250, 1750, 2000, 2250, 2500, 3000, 3500, 4000, 4500, 5000, 5500, 6000, 7000, 8000, 9000, 10000, 11000, 12000, 13000, 14000, 15000, 16000, 17000, 18000, 19000, 20000, 22500, 25000, 27500, 30000, 35000, 40000, 45000, 50000];
+  horsePowersPremium: Array<number> = [5, 7.5, 10, 15, 20, 25, 30, 40, 50, 60, 75, 100, 125, 150, 200, 250, 300, 350, 400, 450, 500];
   kWatts: Array<number> = [3, 3.7, 4, 4.5, 5.5, 6, 7.5, 9.2, 11, 13, 15, 18.5, 22, 26, 30, 37, 45, 55, 75, 90, 110, 132, 150, 160, 185, 200, 225, 250, 280, 300, 315, 335, 355, 400, 450, 500, 560, 630, 710, 800, 900, 1000, 1250, 1500, 1750, 2000, 2250, 2500, 3000, 3500, 4000, 4500, 5000, 5500, 6000, 7000, 8000, 9000, 10000, 11000, 12000, 13000, 14000, 15000, 16000, 17000, 18000, 19000, 20000, 22500, 25000, 27500, 30000, 35000, 40000];
+  kWattsPremium: Array<number> = [3, 3.7, 4, 4.5, 5.5, 6, 7.5, 9.2, 11, 13, 15, 18.5, 22, 26, 30, 37, 45, 55, 75, 90, 110, 132, 150, 160, 185, 200, 225, 250, 280, 300, 315, 335, 355];
   efficiencyClasses: Array<string> = [
     'Standard Efficiency',
     'Energy Efficient',
+    'Premium',
     // When the user chooses specified, they need a place to put the efficiency value
     'Specified'
   ];
-  constructor(private psatService: PsatService, private convertUnitsService: ConvertUnitsService) {
-
-  }
+  constructor(private psatService: PsatService, private convertUnitsService: ConvertUnitsService) {}
 
   ngOnInit() {
     if (this.settings.powerMeasurement == 'hp') {
@@ -52,10 +54,56 @@ export class RatedMotorFormComponent implements OnInit {
     }
     this.tmpBaselineEfficiencyClass = this.psatService.getEfficiencyClassFromEnum(this.psat.inputs.efficiency_class);
     this.tmpModificationEfficiencyClass = this.psatService.getEfficiencyClassFromEnum(this.psat.modifications[this.exploreModIndex].psat.inputs.efficiency_class);
+    this.modifyPowerArrays(true);
+    this.modifyPowerArrays(false);
     this.initEfficiencyClass();
     this.initMotorEfficiency();
     this.initRatedMotorPower();
     this.initRatedMotorData();
+  }
+
+  modifyPowerArrays(isBaseline: boolean) {
+    if (isBaseline) {
+      if (this.psat.inputs.efficiency_class === this.psatService.getEfficienyClassEnum('Premium')) {
+        if (this.settings.powerMeasurement === 'hp') {
+          if (this.psat.inputs.motor_rated_power > 500) {
+            this.psat.inputs.motor_rated_power = this.horsePowersPremium[this.horsePowersPremium.length - 1];
+          }
+          this.options = this.horsePowersPremium;
+        } else {
+          if (this.psat.inputs.motor_rated_power > 355) {
+            this.psat.inputs.motor_rated_power = this.kWattsPremium[this.kWattsPremium.length - 1];
+          }
+          this.options = this.kWattsPremium;
+        }
+      } else {
+        if (this.settings.powerMeasurement === 'hp') {
+          this.options = this.horsePowers;
+        } else {
+          this.options = this.kWatts;
+        }
+      }
+    } else {
+      if (this.psat.modifications[this.exploreModIndex].psat.inputs.efficiency_class === this.psatService.getEfficienyClassEnum('Premium')) {
+        if (this.settings.powerMeasurement === 'hp') {
+          if (this.psat.modifications[this.exploreModIndex].psat.inputs.motor_rated_power > 500) {
+            this.psat.modifications[this.exploreModIndex].psat.inputs.motor_rated_power = this.horsePowersPremium[this.horsePowersPremium.length - 1];
+          }
+          this.options2 = this.horsePowersPremium;
+        } else {
+          if (this.psat.modifications[this.exploreModIndex].psat.inputs.motor_rated_power > 355) {
+            this.psat.modifications[this.exploreModIndex].psat.inputs.motor_rated_power = this.kWattsPremium[this.kWattsPremium.length - 1];
+          }
+          this.options2 = this.kWattsPremium;
+        }
+      } else {
+        if (this.settings.powerMeasurement === 'hp') {
+          this.options2 = this.horsePowers;
+        } else {
+          this.options2 = this.kWatts;
+        }
+      }
+    }
   }
 
   initEfficiencyClass() {
@@ -108,6 +156,8 @@ export class RatedMotorFormComponent implements OnInit {
     if (!this.psat.inputs.efficiency) {
       this.psat.inputs.efficiency = 90;
     }
+    this.modifyPowerArrays(true);
+    this.modifyPowerArrays(false);
     this.calculate();
   }
 
@@ -210,6 +260,7 @@ export class RatedMotorFormComponent implements OnInit {
     if (this.showEfficiencyClass == false) {
       this.psat.modifications[this.exploreModIndex].psat.inputs.efficiency_class = this.psat.inputs.efficiency_class;
       this.tmpModificationEfficiencyClass = this.psatService.getEfficiencyClassFromEnum(this.psat.inputs.efficiency_class);
+      this.modifyPowerArrays(false);
       this.calculate();
     }
   }

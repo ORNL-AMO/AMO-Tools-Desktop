@@ -74,6 +74,7 @@ export class PsatService {
 
   resultsOptimal(psatInputs: PsatInputs, settings: Settings): PsatOutputs {
     psatInputs = this.convertInputs(psatInputs, settings);
+
     //call addon resultsOptimal
     let tmpResults: PsatOutputs = psatAddon.resultsOptimal(psatInputs);
     if (settings.powerMeasurement != 'hp') {
@@ -85,6 +86,7 @@ export class PsatService {
 
   resultsModified(psatInputs: PsatInputs, settings: Settings, baseline_pump_efficiency: number): PsatOutputs {
     psatInputs = this.convertInputs(psatInputs, settings);
+
     let tmpInputs: any;
     tmpInputs = psatInputs;
     tmpInputs.baseline_pump_efficiency = baseline_pump_efficiency;
@@ -585,22 +587,26 @@ export class PsatService {
 
   getEfficienyClassEnum(effClass: string): number {
     let effEnum: number;
-    if (effClass == 'Standard Efficiency') {
+    if (effClass === 'Standard Efficiency') {
       effEnum = 0;
-    } else if (effClass == 'Energy Efficient') {
+    } else if (effClass === 'Energy Efficient') {
       effEnum = 1;
-    } else if (effClass == 'Specified') {
+    } else if (effClass === 'Premium') {
       effEnum = 2;
+    } else if (effClass === 'Specified') {
+      effEnum = 3;
     }
     return effEnum;
   }
   getEfficiencyClassFromEnum(num: number): string {
     let effClass;
-    if (num == 0) {
+    if (num === 0) {
       effClass = 'Standard Efficiency';
-    } else if (num == 1) {
+    } else if (num === 1) {
       effClass = 'Energy Efficient';
-    } else if (num == 2) {
+    } else if (num === 2) {
+      effClass = 'Premium';
+    } else if (num === 3) {
       effClass = 'Specified';
     }
     return effClass;
@@ -678,6 +684,8 @@ export class PsatService {
       efficiency = 0;
     } else if (form.controls.efficiencyClass.value == 'Energy Efficient') {
       efficiency = 1;
+    } else if (form.controls.efficiencyClass.value === 'Premium') {
+      efficiency = 2;
     } else if (form.controls.efficiencyClass.value == 'Specified') {
       efficiency = form.controls.efficiency.value;
     }
