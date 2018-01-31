@@ -244,7 +244,7 @@ export class PhastService {
 
   solidLoadChargeMaterial(input: SolidChargeMaterial, settings: Settings) {
     let inputs = this.createInputCopy(input);
-    let results = 0;
+    let netHeatLoss = 0;
     if (settings.unitsOfMeasure == 'Metric') {
       inputs.meltingPoint = this.convertUnitsService.value(inputs.meltingPoint).from('C').to('F');
       inputs.initialTemperature = this.convertUnitsService.value(inputs.initialTemperature).from('C').to('F');
@@ -256,12 +256,25 @@ export class PhastService {
       inputs.specificHeatLiquid = this.convertUnitsService.value(inputs.specificHeatLiquid).from('kJkgC').to('btulbF');
       inputs.specificHeatSolid = this.convertUnitsService.value(inputs.specificHeatSolid).from('kJkgC').to('btulbF');
       inputs.latentHeat = this.convertUnitsService.value(inputs.latentHeat).from('kJkg').to('btuLb');
-      results = phastAddon.solidLoadChargeMaterial(inputs);
+      netHeatLoss = phastAddon.solidLoadChargeMaterial(inputs);
     } else {
-      results = phastAddon.solidLoadChargeMaterial(inputs);
+      netHeatLoss = phastAddon.solidLoadChargeMaterial(inputs);
     }
-    results = this.convertResult(results, settings.energyResultUnit);
-    return results;
+
+    netHeatLoss = this.convertResult(netHeatLoss, settings.energyResultUnit);
+    const isEndothermic = (input.thermicReactionType === 0);
+    let endoExoHeat = (isEndothermic) ? input.chargeReacted / 100 : -input.chargeReacted / 100;
+    endoExoHeat = this.convertUnitsService.value(endoExoHeat * inputs.chargeFeedRate * inputs.reactionHeat).from('Btu').to(settings.energyResultUnit);
+
+    // netHeatLoss = (isEndothermic) ? netHeatLoss - endoExoHeat : netHeatLoss + endoExoHeat;
+    const grossHeatLoss = (isEndothermic) ? netHeatLoss : netHeatLoss + endoExoHeat;
+    netHeatLoss = (isEndothermic) ? netHeatLoss - endoExoHeat : netHeatLoss;
+
+    return {
+      netHeatLoss: netHeatLoss,
+      endoExoHeat: endoExoHeat,
+      grossHeatLoss: grossHeatLoss
+    };
   }
 
   wallLosses(input: WallLoss, settings: Settings) {
@@ -602,7 +615,8 @@ export class PhastService {
       } else if (loss.chargeMaterialType == 'Solid') {
         let tmpForm = this.chargeMaterialService.getSolidChargeMaterialForm(loss);
         if (tmpForm.status == 'VALID') {
-          sum += this.solidLoadChargeMaterial(loss.solidChargeMaterial, settings);
+          // sum += this.solidLoadChargeMaterial(loss.solidChargeMaterial, settings);
+          sum += this.solidLoadChargeMaterial(loss.solidChargeMaterial, settings).grossHeatLoss;
         }
       } else if (loss.chargeMaterialType == 'Liquid') {
         let tmpForm = this.chargeMaterialService.getLiquidChargeMaterialForm(loss);
