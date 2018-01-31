@@ -1,22 +1,26 @@
-<div class="tab-content" *ngIf="mainTab == 'system-setup'">
-  <nav class="hide-print">
-    <ul class="tabs subtabs progress-tabs fsat">
-      <li class="fixed-tab-size" [ngClass]="{'active': stepTab == 'system-basics'}">
-        <a (click)="changeStepTab('system-basics')">
-          <span class="step-number">1</span> Assessment Settings</a>
-      </li>
-      <li class="fixed-tab-size" [ngClass]="{'active': stepTab == 'part-1'}">
-        <a (click)="changeStepTab('part-1')">
-          <span class="step-number">2</span> Fan Part 1</a>
-      </li>
-      <li class="fixed-tab-size" [ngClass]="{'active': stepTab == 'part-2'}">
-        <a (click)="changeStepTab('part-2')">
-          <span class="step-number">3</span> Fan Part 2</a>
-      </li>
-      <li class="fixed-tab-size" [ngClass]="{'active': stepTab == 'part-3'}">
-        <a (click)="changeStepTab('part-3')">
-          <span class="step-number">4</span> Fan Part 3</a>
-      </li>
-    </ul>
-  </nav>
+<div class="row">
+  <div class="col-12">
+    <div class="tab-content" *ngIf="mainTab == 'system-setup'">
+      <nav class="hide-print">
+        <ul class="tabs subtabs progress-tabs fsat">
+          <li class="fixed-tab-size" [ngClass]="{'active': stepTab == 'system-basics'}">
+            <a (click)="changeStepTab('system-basics')">
+              <span class="step-number">1</span> Assessment Settings</a>
+          </li>
+          <li class="fixed-tab-size" [ngClass]="{'active': stepTab == 'part-1'}">
+            <a (click)="changeStepTab('part-1')">
+              <span class="step-number">2</span> Fan Part 1</a>
+          </li>
+          <li class="fixed-tab-size" [ngClass]="{'active': stepTab == 'part-2'}">
+            <a (click)="changeStepTab('part-2')">
+              <span class="step-number">3</span> Fan Part 2</a>
+          </li>
+          <li class="fixed-tab-size" [ngClass]="{'active': stepTab == 'part-3'}">
+            <a (click)="changeStepTab('part-3')">
+              <span class="step-number">4</span> Fan Part 3</a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </div>
 </div>

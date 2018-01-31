@@ -1,0 +1,21 @@
+<div class="help-panel">
+  <div class="row" *ngIf="!inSetup" style="margin: 0px;">
+      <ul class="tabs primary tab-row">
+          <li class="panel-tab-item tab-3" [ngClass]="{'active': tabSelect == 'results'}">
+              <a (click)="setTab('results')">Results</a>
+          </li><!--
+          --><li class="panel-tab-item tab-3" [ngClass]="{'active': tabSelect == 'help'}">
+              <a (click)="setTab('help')">Help</a>
+          </li><!--
+          --><li class="panel-tab-item tab-3" [ngClass]="{'active': tabSelect == 'notes'}">
+              <a (click)="setTab('notes')">Notes</a>
+          </li>
+      </ul>
+  </div>
+  <div *ngIf="inSetup" class="header">
+      <h3>Help</h3>
+  </div>
+  <div class="psat-notes" *ngIf="inSetup || tabSelect == 'help'">
+      <app-system-basics-help *ngIf="stepTab == 'system-basics'"></app-system-basics-help>
+  </div>
+</div>

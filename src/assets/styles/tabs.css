@@ -85,7 +85,7 @@ Tabs
   }
 
   .tabs.subtabs.fsat {
-    border-bottom: #FCD116 solid 3px;
+    border-bottom: #FFE400 solid 3px;
   }
   
     .tabs.subtabs.progress-tabs a {
@@ -119,7 +119,7 @@ Tabs
       }
 
       .tabs.subtabs.fsat .active .step-number{
-        background: #FCD116;
+        background: #FFE400;
       }
 
       .disabled .step-number {

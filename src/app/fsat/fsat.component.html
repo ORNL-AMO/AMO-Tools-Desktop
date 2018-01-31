@@ -1,20 +1,25 @@
-<div #content class="fsat-container fsat" *ngIf="assessment && settings">
+<div #content class="container-fluid fsat-container fsat" *ngIf="assessment && settings">
   <div #header class="hide-print sticky-top">
     <app-fsat-banner [assessment]="assessment"></app-fsat-banner>
     <app-fsat-tabs></app-fsat-tabs>
   </div>
 
-  <div *ngIf="mainTab == 'system-setup'" class="row tab-content">
+  <div *ngIf="mainTab == 'system-setup'" class="row tab-content" [ngStyle]="{'height.px': containerHeight}">
     <div class="col-6 panel-column modification">
       <app-system-basics *ngIf="stepTab == 'system-basics'" [settings]="settings" [assessment]="assessment"></app-system-basics>
+    </div>
+    <div class="col-6 help-panel">
+      <app-help-panel [settings]="settings" [stepTab]="stepTab" [inSetup]="true"></app-help-panel>
     </div>
   </div>
 
 
-  <div #footer id="psatFooter" class="footer hide-print">
-    <div class="pull-right">
-      <button class="btn btn-secondary">Save</button>
-      <button class="btn btn-primary">Continue</button>
+  <div #footer id="psatFooter" class="footer hide-print row">
+    <div class="col-12">
+      <div class="pull-right">
+        <button class="btn btn-secondary">Save</button>
+        <button class="btn btn-primary">Continue</button>
+      </div>
     </div>
   </div>
 </div>

@@ -1144,7 +1144,8 @@ Footer
     background: rgba(0,0,0,0.5);
   }
   .fsat .pills-nav .active span{
-    background: #ECF0F1;
+    background: #fff;
+    font-weight: bold;
   }
   .pills-nav span:hover {
     background: rgba(0,0,0,0.3);
@@ -1187,7 +1188,7 @@ Banner
     background: #BF3D00;
   }
   .banner.fsat{
-    background: #FCD116;
+    background: #FFE400;
   }
 
   .banner.fsat .btn-dashboard, .banner.fsat .title, 

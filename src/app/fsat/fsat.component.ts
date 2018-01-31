@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { IndexedDbService } from '../indexedDb/indexed-db.service';
 import { Assessment } from '../shared/models/assessment';
@@ -12,6 +12,10 @@ import { SettingsService } from '../settings/settings.service';
   styleUrls: ['./fsat.component.css']
 })
 export class FsatComponent implements OnInit {
+  @ViewChild('header') header: ElementRef;
+  @ViewChild('footer') footer: ElementRef;
+  @ViewChild('content') content: ElementRef;
+  containerHeight: number;
 
   assessment: Assessment;
   mainTab: string;
@@ -36,6 +40,24 @@ export class FsatComponent implements OnInit {
       this.stepTab = val;
     })
   }
+  ngAfterViewInit() {
+    setTimeout(() => {
+      this.getContainerHeight();
+    }, 100);
+  }
+
+  getContainerHeight() {
+    if (this.content) {
+      let contentHeight = this.content.nativeElement.clientHeight;
+      let headerHeight = this.header.nativeElement.clientHeight;
+      let footerHeight = 0;
+      if (this.footer) {
+        footerHeight = this.footer.nativeElement.clientHeight;
+      }
+      this.containerHeight = contentHeight - headerHeight - footerHeight;
+    }
+  }
+
 
 
   getSettings(update?: boolean) {

@@ -8,6 +8,8 @@ import { SettingsModule } from '../settings/settings.module';
 import { FsatBannerComponent } from './fsat-banner/fsat-banner.component';
 import { FsatTabsComponent } from './fsat-tabs/fsat-tabs.component';
 import { SystemBasicsComponent } from './system-basics/system-basics.component';
+import { HelpPanelComponent } from './help-panel/help-panel.component';
+import { SystemBasicsHelpComponent } from './help-panel/system-basics-help/system-basics-help.component';
 
 @NgModule({
   imports: [
@@ -18,7 +20,7 @@ import { SystemBasicsComponent } from './system-basics/system-basics.component';
     SettingsModule,
     SettingsModule
   ],
-  declarations: [FsatComponent, FsatBannerComponent, FsatTabsComponent, SystemBasicsComponent],
+  declarations: [FsatComponent, FsatBannerComponent, FsatTabsComponent, SystemBasicsComponent, HelpPanelComponent, SystemBasicsHelpComponent],
   providers: [FsatService],
   exports: [FsatComponent]
 })
