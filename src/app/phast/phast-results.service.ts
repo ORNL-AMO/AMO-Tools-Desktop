@@ -146,11 +146,18 @@ export class PhastResultsService {
         } else if (tmpFlueGas.flueGasType == 'By Volume') {
           let tmpForm = this.flueGasLossesService.initByVolumeFormFromLoss(tmpFlueGas);
           if (tmpForm.status == 'VALID') {
-            let tmpVal = this.phastService.flueGasByVolume(tmpFlueGas.flueGasByVolume, settings);
-            results.flueGasAvailableHeat = tmpVal * 100;
-            results.flueGasGrossHeat = (results.totalInput / tmpVal);
-            results.flueGasSystemLosses = results.flueGasGrossHeat * (1 - tmpVal);
+            const availableHeat = this.phastService.flueGasByVolume(tmpFlueGas.flueGasByVolume, settings);
+            results.flueGasAvailableHeat = availableHeat * 100;
+            results.flueGasGrossHeat = (results.totalInput / availableHeat);
+            results.flueGasSystemLosses = results.flueGasGrossHeat - results.totalInput;
             results.totalFlueGas = results.flueGasSystemLosses;
+
+            // original stuff
+            // let availableHeat = this.phastService.flueGasByVolume(tmpFlueGas.flueGasByVolume, settings);
+            // results.flueGasAvailableHeat = availableHeat * 100;
+            // results.flueGasGrossHeat = (results.totalInput / availableHeat);
+            // results.flueGasSystemLosses = results.flueGasGrossHeat * (1 - availableHeat);
+            // results.totalFlueGas = results.flueGasSystemLosses;
           }
         }
         results.grossHeatInput = results.totalInput + results.flueGasSystemLosses - results.exothermicHeat;
