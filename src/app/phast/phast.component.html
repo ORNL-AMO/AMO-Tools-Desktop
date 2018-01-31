@@ -25,6 +25,7 @@
     <nav *ngIf="(mainTab == 'assessment' && assessmentTab != 'explore-opportunities') || (mainTab == 'system-setup' && stepTab.step == 2)">
       <app-losses-tabs [phast]="_phast" [settings]="settings" [saveDbToggle]="saveDbToggle" [inSetup]="mainTab == 'system-setup'"></app-losses-tabs>
     </nav>
+    <app-phast-calculator-tabs *ngIf="mainTab =='calculators'"></app-phast-calculator-tabs>
   </div>
 
   <!--Furnace Setup -->
@@ -99,13 +100,12 @@
   </div>
 
   <!--Calculators-->
-  <div *ngIf="mainTab =='calculators'" class="tab-content">
-    <app-phast-calculator-tabs></app-phast-calculator-tabs>
+  <div *ngIf="mainTab =='calculators'" class="tab-content" [ngStyle]="{'height.px': containerHeight}">
     <app-efficiency-improvement *ngIf="calcTab == 'efficiency-improvement'" [settings]="settings"></app-efficiency-improvement>
     <app-energy-equivalency *ngIf="calcTab == 'energy-equivalency'" [settings]="settings"></app-energy-equivalency>
     <app-energy-use *ngIf="calcTab == 'energy-use'" [settings]="settings"></app-energy-use>
     <app-o2-enrichment *ngIf="calcTab == 'o2-enrichment'" [settings]="settings"></app-o2-enrichment>
-    <app-pre-assessment *ngIf="calcTab == 'pre-assessment'" [settings]="settings"></app-pre-assessment>
+    <app-pre-assessment *ngIf="calcTab == 'pre-assessment'" [settings]="settings" [height]="containerHeight"></app-pre-assessment>
   </div>
   <div #footer class="footer" *ngIf="mainTab == 'system-setup' || mainTab == 'assessment'">
     <div class="pull-left">

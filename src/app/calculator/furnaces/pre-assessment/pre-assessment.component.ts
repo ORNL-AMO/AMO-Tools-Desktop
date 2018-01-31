@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ElementRef, ViewChild } from '@angular/core';
 import { Settings } from '../../../shared/models/settings';
 import { PreAssessment } from './pre-assessment';
 import { DesignedEnergyService } from '../../../phast/designed-energy/designed-energy.service';
@@ -17,7 +17,10 @@ import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
 export class PreAssessmentComponent implements OnInit {
   @Input()
   settings: Settings;
+  @Input()
+  height: number;
 
+  @ViewChild('container') container: ElementRef;
 
   preAssessments: Array<PreAssessment>;
   tabSelect: string = 'results';
@@ -44,6 +47,18 @@ export class PreAssessmentComponent implements OnInit {
     }
   }
 
+  ngAfterViewInit() {
+    if (!this.height) {
+      this.getHeight();
+    }
+  }
+
+  getHeight() {
+    setTimeout(() => {
+      this.height = this.container.nativeElement.clientHeight;
+    }, 100);
+  }
+  
   initAssessments() {
     this.assessmentGraphColors = graphColors.reverse();
     this.results = new Array<any>();

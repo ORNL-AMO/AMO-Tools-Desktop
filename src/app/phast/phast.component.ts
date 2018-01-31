@@ -145,9 +145,9 @@ export class PhastComponent implements OnInit {
     // this.phastService.specTab.subscribe(val => {
     //   this.specTab = val;
     // })
-     this.phastService.calcTab.subscribe(val => {
-       this.calcTab = val;
-     })
+    this.phastService.calcTab.subscribe(val => {
+      this.calcTab = val;
+    })
   }
 
 
@@ -180,13 +180,15 @@ export class PhastComponent implements OnInit {
 
   getContainerHeight() {
     if (this.content) {
-      let contentHeight = this.content.nativeElement.clientHeight;
-      let headerHeight = this.header.nativeElement.clientHeight;
-      let footerHeight = 0;
-      if(this.footer){
-        footerHeight = this.footer.nativeElement.clientHeight;
-      }
-      this.containerHeight = contentHeight - headerHeight - footerHeight;
+      setTimeout(() => {
+        let contentHeight = this.content.nativeElement.clientHeight;
+        let headerHeight = this.header.nativeElement.clientHeight;
+        let footerHeight = 0;
+        if (this.footer) {
+          footerHeight = this.footer.nativeElement.clientHeight;
+        }
+        this.containerHeight = contentHeight - headerHeight - footerHeight;
+      },100);
     }
   }
 
