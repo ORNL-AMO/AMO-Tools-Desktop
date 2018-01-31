@@ -49,7 +49,6 @@ export class LossesService {
     defaultTabs.forEach(tab => {
       this.lossesTabs.push(tab);
     })
-    let index;
     if (settings.energySourceType == 'Electricity') {
       if (settings.furnaceType == 'Electric Arc Furnace (EAF)') {
         this.lossesTabs.push({
@@ -61,19 +60,18 @@ export class LossesService {
         })
         this.lossesTabs.push({
           tabName: 'Exhaust Gas',
-          step: this.lossesTabs.length+2,
-          back: this.lossesTabs.length+1,
-          next: this.lossesTabs.length+3,
+          step: this.lossesTabs.length+1,
+          back: this.lossesTabs.length,
+          next: this.lossesTabs.length+2,
           componentStr: 'exhaust-gas' 
         })
         this.lossesTabs.push({
           tabName: 'Energy Input',
-          step: this.lossesTabs.length+3,
-          back: this.lossesTabs.length+2,
-          next: this.lossesTabs.length+4,
+          step: this.lossesTabs.length+1,
+          back: this.lossesTabs.length,
+          next: this.lossesTabs.length+2,
           componentStr: 'energy-input' 
         })
-        index = 3;
       } 
       
       else if (settings.furnaceType != 'Custom Electrotechnology') {
@@ -86,12 +84,11 @@ export class LossesService {
         })
         this.lossesTabs.push({
           tabName: 'Energy Input',
-          step: this.lossesTabs.length+2,
-          back: this.lossesTabs.length+1,
-          next: this.lossesTabs.length+3,
+          step: this.lossesTabs.length+1,
+          back: this.lossesTabs.length,
+          next: this.lossesTabs.length+2,
           componentStr: 'energy-input-exhaust-gas' 
         })
-        index = 2;
       } 
       
       else if (settings.furnaceType == 'Custom Electrotechnology') {
@@ -102,7 +99,6 @@ export class LossesService {
           next: this.lossesTabs.length+2,
           componentStr: 'heat-system-efficiency' 
         })
-        index = 1;
       }
     } 
     
@@ -114,7 +110,6 @@ export class LossesService {
         next: this.lossesTabs.length+2,
         componentStr: 'heat-system-efficiency' 
       })
-      index = 1;
     } 
     
     else if (settings.energySourceType == 'Fuel') {
@@ -125,15 +120,13 @@ export class LossesService {
         next: this.lossesTabs.length+2,
         componentStr: 'flue-gas-losses' 
       })
-      index = 1;
     }
     this.lossesTabs.push({
       tabName: 'Operations',
-      step: this.lossesTabs.length+index,
-      back: this.lossesTabs.length+index-1,
+      step: this.lossesTabs.length+1,
+      back: this.lossesTabs.length,
       componentStr: 'operations' 
     })
-
     this.lossesTab.next(1);
   }
 

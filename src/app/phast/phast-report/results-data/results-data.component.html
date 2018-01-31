@@ -3,12 +3,12 @@
   <table class="table table-hover table-striped">
     <thead>
       <tr>
-        <th [ngStyle]="{'width.%': 100 /(numMods+2)}">{{lossUnit}}</th>
+        <th>{{lossUnit}}</th>
         <th [ngClass]="{'selected-modification': selectedModificationIndex == -1}">Baseline
         </th>
-        <th [ngStyle]="{'width.%': 100 /(numMods+2)}" *ngFor="let mod of phastMods; let index = index;" [ngClass]="{'selected-modification': index == selectedModificationIndex}">{{mod.phast.name}}
+        <th *ngFor="let mod of phastMods; let index = index;" [ngClass]="{'selected-modification': index == selectedModificationIndex}">{{mod.phast.name}}
         </th>
-        <th [ngStyle]="{'width.%': 100 /(numMods+2)}" *ngIf="!inSetup && modification != undefined">{{modification.phast.name}}</th>
+        <th *ngIf="!inSetup && modification != undefined">{{modification.phast.name}}</th>
       </tr>
     </thead>
     <tbody>

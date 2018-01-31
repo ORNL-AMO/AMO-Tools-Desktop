@@ -110,7 +110,8 @@ import { ToastyModule } from 'ng2-toasty';
     LossesService
   ],
   exports: [
-    LossesComponent
+    LossesComponent,
+    LossesResultPanelComponent
   ]
 })
 export class LossesModule { }

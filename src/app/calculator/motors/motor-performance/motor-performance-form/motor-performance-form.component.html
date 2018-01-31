@@ -31,7 +31,7 @@
   <div class="form-group">
     <label for="efficiencyClass">Efficiency Class</label>
 
-    <select name="efficiencyClass" class="form-control" id="efficiencyClass" [(ngModel)]="tmpEfficiencyClass" (change)="emitChange()">
+    <select name="efficiencyClass" class="form-control" id="efficiencyClass" [(ngModel)]="tmpEfficiencyClass" (change)="changePowerArrays()">
       <option *ngFor="let efficiencyClass of efficiencyClasses" [ngValue]="efficiencyClass">{{efficiencyClass}}</option>
     </select>
   </div>
@@ -58,6 +58,7 @@
   <div class="form-group">
     <label for="fullLoadAmps" aria-describedby="flaHelp">
       Full-Load Amps
+      <a class="form-text small click-link" (click)="calculateFullLoadAmps()">Estimate Full-Load Amps</a>
     </label>
     <div class="input-group calc-addon-group">
       <input name="fullLoadAmps" type="number" step="any" class="form-control addon-input" id="fullLoadAmps" [(ngModel)]="tmpFullLoadAmps" (input)="emitChange()"

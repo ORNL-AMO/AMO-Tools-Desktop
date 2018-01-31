@@ -13,13 +13,17 @@
       <label for="pumpType">Pump Type</label>
       <select class="form-control" name="pumpType" formControlName="pumpType" id="pumpType" (input)="startSavePolling()" (focus)="focusField('pumpType')">
         <option *ngFor="let pumpType of pumpTypes" [ngValue]="pumpType">{{pumpType}}</option>
+        <option *ngIf="!baseline" [ngValue]="'Specified Optimal Efficiency'">Specified Optimal Efficiency</option>
       </select>
     </div>
 
     <div class="form-group" *ngIf="psatForm.controls.pumpType.value == 'Specified Optimal Efficiency'">
       <label for="specifiedPumpEfficiency">Specify Pump Efficiency</label>
-      <input name="specifiedPumpEfficiency" type="number" min="0" step="any" class="form-control" formControlName="specifiedPumpEfficiency"
-        id="specifiedPumpEfficiency" onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('specifiedPumpEfficiency')">
+      <div class="input-group">
+        <input name="specifiedPumpEfficiency" type="number" min="0" step="any" class="form-control" formControlName="specifiedPumpEfficiency"
+          id="specifiedPumpEfficiency" onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('specifiedPumpEfficiency')">
+        <span class="input-group-addon units">%</span>
+      </div>
     </div>
 
     <div class="form-group">
@@ -52,7 +56,7 @@
       <div class="input-group">
         <input type="number" name="fluidTemperature" step="any" class="form-control {{different.fluidTemperature}}" formControlName="fluidTemperature"
           id="fluidTemperature" (input)="calculateSpecificGravity()" (focus)="focusField('fluidTemperature')" onfocus="this.select();">
-          <span class="input-group-addon units" [innerHTML]="tempUnit"></span>
+        <span class="input-group-addon units" [innerHTML]="tempUnit"></span>
       </div>
       <span class="alert-danger pull-right small" *ngIf="temperatureError !== null">{{temperatureError}}</span>
     </div>
@@ -81,7 +85,8 @@
         <button class="btn input-group-btn" [disabled]="!selected" (click)="addNum('stages')">
           <i class="fa fa-plus"></i>
         </button>
-        <input type="number" min="1" step="any" class="form-control" formControlName="stages" id="stages" (input)="startSavePolling()" (focus)="focusField('stages')" onfocus="this.select();">
+        <input type="number" min="1" step="any" class="form-control" formControlName="stages" id="stages" (input)="startSavePolling()"
+          (focus)="focusField('stages')" onfocus="this.select();">
       </div>
     </div>
   </div>

@@ -86,13 +86,15 @@ export class OpeningLossesFormComponent implements OnInit {
   }
 
   calculateViewFactor() {
-    const roundVal = (val: number, digits: number) => {
-      return Number(val.toFixed(digits));
-    };
-
+    let vfInputs = this.openingLossesService.getViewFactorInput(this.openingLossesForm);
+    let viewFactor = this.phastService.viewFactorCalculation(vfInputs, this.settings);
     this.openingLossesForm.patchValue({
-      viewFactor: roundVal(this.phastService.viewFactorCalculation(this.openingLossesService.getViewFactorInput(this.openingLossesForm), this.settings), 3)
+      viewFactor: this.roundVal(viewFactor, 3)
     });
+  }
+
+  roundVal(val: number, digits: number): number{
+    return Number(val.toFixed(digits));
   }
 
   checkOpeningDimensions(bool?: boolean) {

@@ -17,9 +17,9 @@
       </div><!-- End .modal-header -->
 
       <form [formGroup]="newAssessment" (keyup.enter)="createAssessment()">
-      
+
         <div class="modal-body">
-        
+
             <div class="form-group">
               <label class="form-control-label" for="assessmentName">Assessment Name</label>
               <input #assessmentName class="form-control" formControlName="assessmentName" id="assessmentName" type="text" />
@@ -32,8 +32,8 @@
             <div class="form-group">
               <label>Assessment Type</label>
               <select class="form-control type-select" formControlName="assessmentType">
-                <option>Pump</option>
-                <option>Furnace</option>
+                <option [ngValue]="'Pump'">Pump</option>
+                <option [ngValue]="'Furnace'">Process Heating</option>
               </select>
 
               <!-- <div class="form-check">
@@ -62,14 +62,14 @@
               </div>
 
             </div><!-- End .form-group -->
-          
+
         </div><!-- End .modal-body -->
 
         <div class="modal-footer">
 
           <button class="btn btn-secondary pull-left" (click)="hideCreateModal()">Close</button>
           <button class="btn btn-primary pull-right" type="submit" [disabled]="!newAssessment.valid" (click)="createAssessment()">Add Assessment</button>
-          
+
         </div><!-- End .modal-footer -->
 
       </form>

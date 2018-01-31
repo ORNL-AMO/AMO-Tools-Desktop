@@ -27,6 +27,8 @@ export class LossesComponent implements OnInit {
   inSetup: boolean;
   @ViewChild('materialModal') public materialModal: ModalDirective;
   lossAdded: boolean;
+  @Input()
+  containerHeight: number;
 
   _modifications: Modification[];
   isDropdownOpen: boolean = false;
@@ -73,7 +75,8 @@ export class LossesComponent implements OnInit {
 
     this.lossesService.lossesTab.subscribe(val => {
       this.changeField('default');
-      this.selectedTab = _.find(this.lossesTabs, (t) => { return val == t.step });
+      
+      this.selectedTab = _.find(this.lossesTabs, (t) => {return val == t.step });
       // if (this.lossesTab == 'heat-system-efficiency'
       //   || this.lossesTab == 'atmosphere-losses'
       //   || this.lossesTab == 'exhaust-gas'

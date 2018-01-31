@@ -58,7 +58,7 @@ export class OperationsComponent implements OnInit {
       this.operationsCompareService.modification = null;
     }
   }
-
+debugger
   saveLosses() {
     if (this.operationsForm.status == 'VALID') {
       let tmpOpHours: OperatingHours = {

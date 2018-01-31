@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ElementRef, ViewChild } from '@angular/core';
 import { Location } from '@angular/common';
 import { Assessment } from '../shared/models/assessment';
 import { AssessmentService } from '../assessment/assessment.service';
@@ -13,12 +13,18 @@ import { PhastResultsService } from './phast-results.service';
 import { PhastResults } from '../shared/models/phast/phast';
 import { LossesService } from './losses/losses.service';
 import { StepTab, LossTab } from './tabs';
+import { setTimeout } from 'timers';
 @Component({
   selector: 'app-phast',
   templateUrl: './phast.component.html',
   styleUrls: ['./phast.component.css']
 })
 export class PhastComponent implements OnInit {
+  @ViewChild('header') header: ElementRef;
+  @ViewChild('footer') footer: ElementRef;
+  @ViewChild('content') content: ElementRef;
+  containerHeight: number;
+
   assessment: Assessment;
 
   saveClicked: boolean = false;
@@ -55,6 +61,8 @@ export class PhastComponent implements OnInit {
   isModalOpen: boolean = false;
   selectedLossTab: LossTab;
   calcTab: string;
+  assessmentTab: string = 'explore-opportunities';
+
   constructor(
     private location: Location,
     private assessmentService: AssessmentService,
@@ -106,6 +114,7 @@ export class PhastComponent implements OnInit {
       }
       this.phastService.mainTab.subscribe(val => {
         this.mainTab = val;
+        this.getContainerHeight();
       })
 
       this.phastService.stepTab.subscribe(val => {
@@ -120,24 +129,25 @@ export class PhastComponent implements OnInit {
         this.selectedLossTab = this.lossesService.getTab(tab);
       })
     });
-    let tmpTab = this.assessmentService.getTab();
-    if (tmpTab) {
-      this.phastService.mainTab.next(tmpTab);
-    }
-    this.phastService.mainTab.subscribe(val => {
-      this.mainTab = val;
-    })
+    // let tmpTab = this.assessmentService.getTab();
+    // if (tmpTab) {
+    //   this.phastService.mainTab.next(tmpTab);
+    // }
+    // this.phastService.mainTab.subscribe(val => {
+    //   this.getContainerHeight();
+    //   this.mainTab = val;
+    // })
 
-    this.phastService.stepTab.subscribe(val => {
-      this.stepTab = val;
-    })
+    // this.phastService.stepTab.subscribe(val => {
+    //   this.stepTab = val;
+    // })
 
-    this.phastService.specTab.subscribe(val => {
-      this.specTab = val;
-    })
-    this.phastService.calcTab.subscribe(val => {
-      this.calcTab = val;
-    })
+    // this.phastService.specTab.subscribe(val => {
+    //   this.specTab = val;
+    // })
+     this.phastService.calcTab.subscribe(val => {
+       this.calcTab = val;
+     })
   }
 
 
@@ -158,12 +168,29 @@ export class PhastComponent implements OnInit {
 
   ngAfterViewInit() {
     this.disclaimerToast();
+    setTimeout(() => {
+      this.getContainerHeight();
+    }, 100);
   }
 
   ngOnDestroy() {
     this.lossesService.lossesTab.next(1);
     this.phastService.initTabs();
   }
+
+  getContainerHeight() {
+    if (this.content) {
+      let contentHeight = this.content.nativeElement.clientHeight;
+      let headerHeight = this.header.nativeElement.clientHeight;
+      let footerHeight = 0;
+      if(this.footer){
+        footerHeight = this.footer.nativeElement.clientHeight;
+      }
+      this.containerHeight = contentHeight - headerHeight - footerHeight;
+    }
+  }
+
+
 
   checkSetupDone() {
     this._phast.setupDone = this.lossesService.checkSetupDone((JSON.parse(JSON.stringify(this._phast))), this.settings);
@@ -235,7 +262,6 @@ export class PhastComponent implements OnInit {
   }
 
   nextStep() {
-
     if (this.stepTab.step == 1 && this.mainTab != 'assessment') {
       if (this.specTab.next)
         this.phastService.goToSpec(this.specTab.next);
@@ -255,15 +281,40 @@ export class PhastComponent implements OnInit {
   }
 
   lastStep() {
-    if (this.stepTab.step == 2) {
-      if (this.selectedLossTab.back) {
-        this.lossesService.lossesTab.next(this.selectedLossTab.back);
+    if (this.mainTab == 'system-basics') {
+      if (this.stepTab.step == 1) {
+        if (this.specTab.back) {
+          this.phastService.goToSpec(this.specTab.back);
+        }
+      } else if (this.stepTab.step == 2) {
+        if (this.selectedLossTab.back) {
+          this.lossesService.lossesTab.next(this.selectedLossTab.back);
+        } else {
+          this.phastService.goToStep(this.stepTab.back);
+        }
+      }
+    } else if (this.mainTab == 'assessment') {
+      if (this.assessmentTab == 'modify-conditions') {
+        if (this.selectedLossTab.back) {
+          this.lossesService.lossesTab.next(this.selectedLossTab.back);
+        } else {
+          this.phastService.mainTab.next('system-setup');
+        }
       } else {
+        this.phastService.mainTab.next('system-setup');
+      }
+    } else if (this.mainTab == 'system-setup') {
+      if (this.stepTab.back) {
         this.phastService.goToStep(this.stepTab.back);
       }
-    } else if (this.stepTab.step != 1) {
-      this.phastService.goToStep(this.stepTab.back);
     }
+  }
+
+  changeAssessmentTab(str: string) {
+    this.assessmentTab = str;
+    setTimeout(() => {
+      this.getContainerHeight();
+    }, 100);
   }
 
   openModal($event) {

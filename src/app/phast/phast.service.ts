@@ -419,33 +419,9 @@ export class PhastService {
     return results;
   }
 
-  //used in energyInputExhaustGasLosses
-  availableHeat(input: EnergyInputExhaustGasLoss, settings: Settings) {
-    let inputs = this.createInputCopy(input);
-    let results = 0;
-    if (settings.unitsOfMeasure == 'Metric') {
-      if (inputs.combustionAirTemp && inputs.exhaustGasTemp && inputs.totalHeatInput) {
-        inputs.combustionAirTemp = this.convertUnitsService.value(inputs.combustionAirTemp).from('C').to('F');
-        inputs.exhaustGasTemp = this.convertUnitsService.value(inputs.exhaustGasTemp).from('C').to('F');
-        inputs.totalHeatInput = this.convertUnitsService.value(inputs.totalHeatInput).from('kJ').to('Btu');
-        results = phastAddon.availableHeat(inputs);
-      }
-      if (isNaN(results)) {
-        results = 0;
-      }
-    } else {
-      results = phastAddon.availableHeat(inputs);
-      if (isNaN(results)) {
-        results = 0;
-      }
-    }
-    return results;
-  }
-
   //energy input for non-EAF Electric process heating
   energyInputExhaustGasLosses(input: EnergyInputExhaustGasLoss, settings: Settings) {
     let inputs = this.createInputCopy(input);
-    inputs.availableHeat = this.availableHeat(inputs, settings);
     let results: any = {
       heatDelivered: 0,
       exhaustGasLosses: 0

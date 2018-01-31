@@ -21,7 +21,7 @@
   </div>
 
   <div class="form-group" *ngIf="settingsForm.controls.energySourceType.value == 'Fuel'">
-    <label for="furnaceType">Type of Fuel Furnace</label>
+    <label for="furnaceType">Type of Fuel-Fired System</label>
     <select class="form-control" formControlName="furnaceType" id="furnaceType" ngModel="{{settingsForm.controls.furnaceType.value}}">
       <option *ngFor="let option of fuelFiredOptions" [ngValue]="option">{{option}}</option>
     </select>

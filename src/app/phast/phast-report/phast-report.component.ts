@@ -28,6 +28,8 @@ export class PhastReportComponent implements OnInit {
   assessment: Assessment;
   @Input()
   inRollup: boolean;
+  @Input()
+  quickReport: boolean;
 
   currentTab: string = 'energy-used';
   assessmentDirectories: Array<Directory>;

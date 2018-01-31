@@ -1,0 +1,61 @@
+<div class="checkbox">
+  <label class="group-label" for="exploreLeakage">
+    <input type="checkbox" id="exploreLeakage" value="true" (focus)="focusField('openingArea')" (change)="toggleLeakage()" [(ngModel)]="showLeakage"
+    /> Adjust Gas Leakage Data
+  </label>
+</div>
+<div *ngIf="showLeakage">
+  <ul *ngFor="let loss of phast.losses.leakageLosses; let index = index">
+    <li>
+      <div class="checkbox form-group">
+        <label for="{{'modifyLeakage_'+index}}">
+          <input type="checkbox" id="{{'modifyLeakage_'+index}}" (focus)="focusField('openingArea')" (change)="toggleOpening(index, loss.openingArea)"
+            [(ngModel)]="showOpening[index]" /> Modify Opening Size
+        </label>
+        <label>
+          {{loss.name}}
+        </label>
+      </div>
+      <form *ngIf="showOpening[index]">
+        <div class="form-group">
+          <label class="small" for="openingArea">Baseline Opening Area</label>
+          <div class="input-group">
+            <input name="{{'openingArea_'+index}}" type="number" step="any" min="0" class="form-control" [(ngModel)]="loss.openingArea"
+              id="openingArea" onfocus="this.select();" (input)="checkOpening(1, loss.openingArea, index)" (focus)="focusField('openingArea')"
+              (blur)="focusOut()">
+            <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">
+              <span>ft
+                <sup>2</sup>
+              </span>
+            </span>
+            <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">
+              <span>m
+                <sup>2</sup>
+              </span>
+            </span>
+          </div>
+          <span class="alert-warning pull-right small" *ngIf="openingAreaError1[index] !== null">{{openingAreaError1[index]}}</span>
+        </div>
+        <div class="form-group">
+          <label class="small" for="openingArea">Modification Opening Area</label>
+          <div class="input-group">
+            <input name="{{'openingArea_'+index}}" type="number" step="any" min="0" class="form-control" [(ngModel)]="phast.modifications[exploreModIndex].phast.losses.leakageLosses[index].openingArea"
+              id="openingArea" onfocus="this.select();" (input)="checkOpening(2, phast.modifications[exploreModIndex].phast.losses.leakageLosses[index].openingArea, index)" (focus)="focusField('openingArea')"
+              (blur)="focusOut()">
+            <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">
+              <span>ft
+                <sup>2</sup>
+              </span>
+            </span>
+            <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">
+              <span>m
+                <sup>2</sup>
+              </span>
+            </span>
+          </div>
+          <span class="alert-warning pull-right small" *ngIf="openingAreaError2[index] !== null">{{openingAreaError2[index]}}</span>
+        </div>
+      </form>
+    </li>
+  </ul>
+</div>

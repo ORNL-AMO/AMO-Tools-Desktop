@@ -1,4 +1,4 @@
-<div class="row">
+<div class="row" style="padding-bottom:20px;">
   <div class="col-4 summary-card" *ngFor="let directory of directory.subDirectory">
     <app-directory-card [directory]="directory" (directoryChange)="changeDirectory($event)" [isChecked]="isChecked"></app-directory-card>
   </div>

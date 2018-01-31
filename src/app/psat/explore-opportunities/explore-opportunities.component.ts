@@ -20,6 +20,8 @@ export class ExploreOpportunitiesComponent implements OnInit {
   saved = new EventEmitter<boolean>();
   @Input()
   psat: PSAT;
+  @Input()
+  containerHeight: number;
 
   annualSavings: number;
   percentSavings: number;
@@ -135,6 +137,9 @@ export class ExploreOpportunitiesComponent implements OnInit {
 
   save() {
     //this.assessment.psat = this.psat;
+    if(!this.psat.modifications[this.exploreModIndex].psat.name){
+      this.psat.modifications[this.exploreModIndex].psat.name = 'Opportunities Modification';
+    }
     this.saved.emit(true);
   }
   setTab(str: string) {

@@ -20,6 +20,11 @@ import { SettingsService } from '../settings/settings.service';
   styleUrls: ['./psat.component.css']
 })
 export class PsatComponent implements OnInit {
+  @ViewChild('header') header: ElementRef;
+  @ViewChild('footer') footer: ElementRef;
+  @ViewChild('content') content: ElementRef;
+  containerHeight: number;
+
   assessment: Assessment;
 
   panelView: string = 'help-panel';
@@ -47,7 +52,6 @@ export class PsatComponent implements OnInit {
   saveClicked: boolean = false;
   adjustment: PSAT;
   isValid;
-  canContinue;
 
   _psat: PSAT;
   fieldDataReady: boolean = false;
@@ -60,6 +64,7 @@ export class PsatComponent implements OnInit {
   tabBeforeReport: string = 'explore-opportunities';
   mainTab: string = 'system-setup';
   calcTab: string;
+  saveContinue: boolean = false;
   constructor(
     private location: Location,
     private assessmentService: AssessmentService,
@@ -86,7 +91,6 @@ export class PsatComponent implements OnInit {
         this.assessment = dbAssessment;
         this._psat = (JSON.parse(JSON.stringify(this.assessment.psat)));
         this.isValid = true;
-        this.canContinue = true;
         this.getSettings();
       })
       let tmpTab = this.assessmentService.getTab();
@@ -103,9 +107,11 @@ export class PsatComponent implements OnInit {
             this.psatService.secondaryTab.next('explore-opportunities');
           }
         }
+        this.getContainerHeight();
       })
       this.psatService.secondaryTab.subscribe(val => {
         this.currentTab = val;
+        this.getContainerHeight();
       })
 
       this.psatService.calcTab.subscribe(val => {
@@ -114,6 +120,32 @@ export class PsatComponent implements OnInit {
     })
   }
 
+  ngOnDestroy() {
+    this.psatService.secondaryTab.next('explore-opportunities');
+    this.psatService.mainTab.next('system-setup');
+    this.compareService.baselinePSAT = undefined;
+    this.compareService.modifiedPSAT = undefined;
+  }
+
+  ngAfterViewInit() {
+    setTimeout(() => {
+      this.getContainerHeight();
+    }, 100);
+  }
+
+  getContainerHeight() {
+    if (this.content) {
+      setTimeout(() => {
+        let contentHeight = this.content.nativeElement.clientHeight;
+        let headerHeight = this.header.nativeElement.clientHeight;
+        let footerHeight = 0;
+        if (this.footer) {
+          footerHeight = this.footer.nativeElement.clientHeight;
+        }
+        this.containerHeight = contentHeight - headerHeight - footerHeight;
+      }, 100);
+    }
+  }
 
   initSankeyList() {
     this.psatOptions = new Array<any>();
@@ -128,14 +160,6 @@ export class PsatComponent implements OnInit {
     }
   }
 
-
-  ngOnDestroy() {
-    this.psatService.secondaryTab.next('explore-opportunities');
-    this.psatService.mainTab.next('system-setup');
-    this.compareService.baselinePSAT = undefined;
-    this.compareService.modifiedPSAT = undefined;
-  }
-
   getSettings(update?: boolean) {
     //get assessment settings
     this.indexedDbService.getAssessmentSettings(this.assessment.id).then(
@@ -148,6 +172,9 @@ export class PsatComponent implements OnInit {
           this.isAssessmentSettings = true;
           if (update) {
             this.addToast('Settings Saved');
+            if (this.saveContinue) {
+              this.continue(this.saveContinue)
+            }
           }
         } else {
           //if no settings found for assessment, check directory settings
@@ -229,20 +256,31 @@ export class PsatComponent implements OnInit {
       this.subTabIndex = _.findIndex(this.subTabs, function (tab) { return tab == str });
       this.subTab = this.subTabs[this.subTabIndex];
     }
+    this.getContainerHeight();
   }
 
   selectAdjustment($event) {
     this.adjustment = $event;
   }
 
-  continue() {
-    if (this.subTab == 'field-data') {
-      this.psatService.mainTab.next('assessment');
+  continue(bool?: boolean) {
+    if (this.subTab != 'system-basics' || bool) {
+      if (!bool) {
+        this.save();
+      } else {
+        this.saveContinue = false;
+      }
+      if (this.subTab == 'field-data') {
+        this.psatService.mainTab.next('assessment');
+      } else {
+        this.subTabIndex++;
+        this.subTab = this.subTabs[this.subTabIndex];
+      }
     } else {
-      this.subTabIndex++;
-      this.subTab = this.subTabs[this.subTabIndex];
+      this.saveContinue = true;
+      this.toggleSave();
     }
-    this.canContinue = false;
+    this.getContainerHeight();
   }
 
   getCanContinue() {

@@ -39,7 +39,7 @@
     <div class="form-group">
       <label for="efficiencyClass">Efficiency Class</label>
       <select name="efficiencyClass" class="form-control select-input-field" id="efficiencyClass" formControlName="efficiencyClass"
-        (change)="startSavePolling()" (focus)="focusField('efficiencyClass')">
+        (change)="changeEfficiencyClass()" (focus)="focusField('efficiencyClass')">
         <option *ngFor="let efficiencyClass of efficiencyClasses" [ngValue]="efficiencyClass">{{efficiencyClass}}</option>
       </select>
     </div>

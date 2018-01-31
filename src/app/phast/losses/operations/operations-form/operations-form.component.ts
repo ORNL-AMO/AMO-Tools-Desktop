@@ -21,6 +21,12 @@ export class OperationsFormComponent implements OnInit {
   @Input()
   isCalculated: boolean;
 
+  timeError: string = null;
+  weeksPerYearError: string = null;
+  daysPerWeekError: string = null;
+  shiftsPerDayError: string = null;
+  hoursPerShiftError: string = null;
+
   counter: any;
   firstChange: boolean = true;
   constructor(private operationsCompareService: OperationsCompareService, private windowRefService: WindowRefService) { }
@@ -66,12 +72,38 @@ export class OperationsFormComponent implements OnInit {
     this.changeField.emit('default');
   }
   calculatHrsPerYear() {
+    let timeCheck = this.operationsForm.controls.shiftsPerDay.value * this.operationsForm.controls.hoursPerShift.value;
+    if (timeCheck > 24) {
+      this.timeError = "You have exceeded 24 hours/day  " + " "  + "("  + timeCheck.toFixed(2) + " " + "hours/day)" + " " + "Adjust your inputs for Shifts/Day and Hours/Shift.";
+    } else {
+      this.timeError = null;
+    }
+    if (this.operationsForm.controls.weeksPerYear.value > 52 || this.operationsForm.controls.weeksPerYear.value <= 0) {
+      this.weeksPerYearError = "The number of weeks/year must me greater than 0 and equal or less than 52";
+    } else {
+      this.weeksPerYearError = null;
+    }
+    if (this.operationsForm.controls.daysPerWeek.value > 7 || this.operationsForm.controls.daysPerWeek.value <= 0) {
+      this.daysPerWeekError = "The number of day/week must be greater than 0 and equal or less than 7";
+    } else {
+      this.daysPerWeekError = null;
+    }
+    if (this.operationsForm.controls.shiftsPerDay.value <= 0) {
+      this.shiftsPerDayError = "Number of shifts/day must be greater than 0";
+    } else {
+      this.shiftsPerDayError = null;
+    }
+    if ( this.operationsForm.controls.hoursPerShift.value > 24 || this.operationsForm.controls.hoursPerShift.value <= 0) {
+      this.hoursPerShiftError = " Number of hours/shift must be greater then 0 and equal or less than 24 ";
+    } else {
+      this.hoursPerShiftError = null;
+    }
     this.startSavePolling();
     // this.phast.operatingHours.isCalculated = true;
     // this.phast.operatingHours.hoursPerYear = this.phast.operatingHours.hoursPerShift * this.phast.operatingHours.shiftsPerDay * this.phast.operatingHours.daysPerWeek * this.phast.operatingHours.weeksPerYear;
     let tmpHoursPerYear = this.operationsForm.controls.hoursPerShift.value * this.operationsForm.controls.shiftsPerDay.value * this.operationsForm.controls.daysPerWeek.value * this.operationsForm.controls.weeksPerYear.value;
     this.operationsForm.patchValue({
-      hoursPerYear: tmpHoursPerYear
+      hoursPerYear: tmpHoursPerYear.toFixed(0)
     })
     this.isCalculated = true;
   }

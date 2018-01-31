@@ -12,3 +12,11 @@
     font-weight: bold;
 }
 
+
+.btn-default.active{
+    background-color: gray;
+}
+
+.btn-default{
+    padding: 6px;
+}

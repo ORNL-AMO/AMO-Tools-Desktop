@@ -1,0 +1,45 @@
+<div class="checkbox">
+  <label class="group-label" for="exploreWall">
+    <input type="checkbox" id="exploreWall" value="true" (focus)="focusField('avgSurfaceTemp')" (change)="toggleWall()" [(ngModel)]="showWall"
+    /> Adjust Wall Loss Data
+  </label>
+</div>
+<div *ngIf="showWall">
+  <ul *ngFor="let loss of phast.losses.wallLosses; let index = index">
+    <li>
+      <div class="checkbox form-group">
+        <label for="{{'modifySurfaceTemp_'+index}}">
+          <input type="checkbox" id="{{'modifySurfaceTemp_'+index}}" (focus)="focusField('avgSurfaceTemp')" (change)="toggleSurfaceTemp(index, loss.surfaceTemperature)"
+            [(ngModel)]="showSurfaceTemp[index]" /> Modify Average Surface Temperature
+        </label>
+        <label>
+          {{loss.name}}
+        </label>
+      </div>
+      <form *ngIf="showSurfaceTemp[index]">
+        <div class="form-group">
+          <label class="small" for="avgSurfaceTemp">Baseline Surface Temperature</label>
+          <div class="input-group">
+            <input name="{{'avgSurfaceTemp_'+lossIndex}}" type="number" step="any" class="form-control" [(ngModel)]="loss.surfaceTemperature"
+              id="avgSurfaceTemp" onfocus="this.select();" (input)="checkSurfaceTemp(1, loss.surfaceTemperature, index)" (focus)="focusField('avgSurfaceTemp')"
+              (blur)="focusOut()">
+            <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">&#8457;</span>
+            <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
+          </div>
+          <span class="alert-warning pull-right small" *ngIf="surfaceTempError1[index] !== null">{{surfaceTempError1[index]}}</span>
+        </div>
+        <div class="form-group">
+          <label class="small" for="avgSurfaceTemp">Modification Surface Temperature</label>
+          <div class="input-group">
+            <input name="{{'avgSurfaceTemp_'+lossIndex}}" type="number" step="any" class="form-control" [(ngModel)]="phast.modifications[exploreModIndex].phast.losses.wallLosses[index].surfaceTemperature"
+              id="avgSurfaceTemp" onfocus="this.select();" (input)="checkSurfaceTemp(2, phast.modifications[exploreModIndex].phast.losses.wallLosses[index].surfaceTemperature, index)" (focus)="focusField('avgSurfaceTemp')"
+              (blur)="focusOut()">
+            <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">&#8457;</span>
+            <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
+          </div>
+          <span class="alert-warning pull-right small" *ngIf="surfaceTempError2[index] !== null">{{surfaceTempError2[index]}}</span>
+        </div>
+      </form>
+    </li>
+  </ul>
+</div>
