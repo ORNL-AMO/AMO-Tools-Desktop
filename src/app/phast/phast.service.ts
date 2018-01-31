@@ -151,6 +151,7 @@ export class PhastService {
     }
 
     netHeatLoss = this.convertResult(netHeatLoss, settings.energyResultUnit);
+    const bindingResult = netHeatLoss;
     const isEndothermic = (input.thermicReactionType === 0);
     let endoExoHeat = (isEndothermic) ? input.percentReacted / 100 : -input.percentReacted / 100;
     endoExoHeat = this.convertUnitsService.value(endoExoHeat * inputs.feedRate * inputs.reactionHeat).from('Btu').to(settings.energyResultUnit);
@@ -160,7 +161,8 @@ export class PhastService {
     return {
       netHeatLoss: netHeatLoss,
       endoExoHeat: endoExoHeat,
-      grossHeatLoss: grossHeatLoss
+      grossHeatLoss: grossHeatLoss,
+      bindingResult: bindingResult
     };
   }
 
@@ -201,6 +203,7 @@ export class PhastService {
     }
 
     netHeatLoss = this.convertResult(netHeatLoss, settings.energyResultUnit);
+    const bindingResult = netHeatLoss;
     const isEndothermic = (input.thermicReactionType === 0);
     let endoExoHeat = (isEndothermic) ? input.percentReacted / 100 : -input.percentReacted / 100;
     endoExoHeat = this.convertUnitsService.value(endoExoHeat * inputs.chargeFeedRate * inputs.reactionHeat).from('Btu').to(settings.energyResultUnit);
@@ -210,7 +213,8 @@ export class PhastService {
     return {
       netHeatLoss: netHeatLoss,
       endoExoHeat: endoExoHeat,
-      grossHeatLoss: grossHeatLoss
+      grossHeatLoss: grossHeatLoss,
+      bindingResult: bindingResult
     };
   }
 
@@ -283,18 +287,19 @@ export class PhastService {
     }
 
     netHeatLoss = this.convertResult(netHeatLoss, settings.energyResultUnit);
+    const bindingResult = netHeatLoss;
     const isEndothermic = (input.thermicReactionType === 0);
     let endoExoHeat = (isEndothermic) ? input.chargeReacted / 100 : -input.chargeReacted / 100;
     endoExoHeat = this.convertUnitsService.value(endoExoHeat * inputs.chargeFeedRate * inputs.reactionHeat).from('Btu').to(settings.energyResultUnit);
 
-    // netHeatLoss = (isEndothermic) ? netHeatLoss - endoExoHeat : netHeatLoss + endoExoHeat;
     const grossHeatLoss = (isEndothermic) ? netHeatLoss : netHeatLoss + endoExoHeat;
     netHeatLoss = (isEndothermic) ? netHeatLoss - endoExoHeat : netHeatLoss;
 
     return {
       netHeatLoss: netHeatLoss,
       endoExoHeat: endoExoHeat,
-      grossHeatLoss: grossHeatLoss
+      grossHeatLoss: grossHeatLoss,
+      bindingResult: bindingResult
     };
   }
 
@@ -631,17 +636,17 @@ export class PhastService {
       if (loss.chargeMaterialType == 'Gas') {
         let tmpForm = this.chargeMaterialService.getGasChargeMaterialForm(loss);
         if (tmpForm.status == 'VALID') {
-          sum += this.gasLoadChargeMaterial(loss.gasChargeMaterial, settings).grossHeatLoss;
+          sum += this.gasLoadChargeMaterial(loss.gasChargeMaterial, settings).bindingResult;
         }
       } else if (loss.chargeMaterialType == 'Solid') {
         let tmpForm = this.chargeMaterialService.getSolidChargeMaterialForm(loss);
         if (tmpForm.status == 'VALID') {
-          sum += this.solidLoadChargeMaterial(loss.solidChargeMaterial, settings).grossHeatLoss;
+          sum += this.solidLoadChargeMaterial(loss.solidChargeMaterial, settings).bindingResult;
         }
       } else if (loss.chargeMaterialType == 'Liquid') {
         let tmpForm = this.chargeMaterialService.getLiquidChargeMaterialForm(loss);
         if (tmpForm.status == 'VALID') {
-          sum += this.liquidLoadChargeMaterial(loss.liquidChargeMaterial, settings).grossHeatLoss;
+          sum += this.liquidLoadChargeMaterial(loss.liquidChargeMaterial, settings).bindingResult;
         }
       }
     });
