@@ -16,6 +16,24 @@ a:not([href]):not([tabindex]){
   box-shadow: #7b7878 2px 2px 5px 1px;
 }
 
+.ico-size2 {
+  height: 55px;
+  background: linear-gradient(rgba(228, 219, 219, 0.34), rgba(76, 7, 13, 0.35));
+  /*background-color: rgba(41, 128, 185, 0);*/
+  border-radius: 15px;
+  border: 0.1px solid rgba(123, 120, 120, 0.25);
+  box-shadow: #7b7878 2px 2px 5px 1px;
+}
+
+.ico-size3 {
+  height: 55px;
+  background: linear-gradient(rgba(228, 219, 219, 0.34), rgba(187, 187, 187, 0.65));
+  /*background-color: rgba(41, 128, 185, 0);*/
+  border-radius: 15px;
+  border: 0.1px solid rgba(123, 120, 120, 0.25);
+  box-shadow: #7b7878 2px 2px 5px 1px;
+}
+
 .calc-item-row{
   padding-top: 10px;
   padding-bottom: 10px;
