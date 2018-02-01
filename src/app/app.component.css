@@ -330,6 +330,12 @@ select.form-control:not([size]):not([multiple]) {
   box-shadow: 0px 0px 5px #BF3D00;
 }
 
+.phast .indicate-different-db{
+  border: #538055 solid 2px;
+  box-shadow: 0px 0px 5px #538055;
+}
+
+
 .phast .indicate-report-field-different{
     color: #BF3D00 !important;
     font-weight: bold !important;
