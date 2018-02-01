@@ -329,10 +329,19 @@ select.form-control:not([size]):not([multiple]) {
   border: #BF3D00 solid 2px;
   box-shadow: 0px 0px 5px #BF3D00;
 }
+.phast .indicate-different-db{
+  border: #006120 solid 2px;
+  box-shadow: 0px 0px 5px #006120;
+}
 
 .phast .indicate-report-field-different{
     color: #BF3D00 !important;
     font-weight: bold !important;
+}
+
+.phast .indicate-report-field-different-db{
+  color: #006120 !important;
+  font-weight: bold !important;
 }
 
 .phast .indicate-report-row-different{

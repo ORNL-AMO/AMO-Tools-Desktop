@@ -173,7 +173,7 @@ export class GasChargeMaterialFormComponent implements OnInit {
         this.chargeMaterialCompareService.differentArray[this.lossIndex].different.gasChargeMaterialDifferent.specificHeatGas.subscribe((val) => {
           let materialSpecificHeatElements = doc.getElementsByName('materialSpecificHeat_' + this.lossIndex);
           materialSpecificHeatElements.forEach(element => {
-            element.classList.toggle('indicate-different', val);
+            element.classList.toggle('indicate-different-db', val);
           });
         })
         //feedRate
