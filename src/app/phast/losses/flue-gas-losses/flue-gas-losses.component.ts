@@ -218,14 +218,6 @@ export class FlueGasLossesComponent implements OnInit {
         const sumHeat = this.phastService.sumHeatInput(this.losses, this.settings);
         loss.grossHeat = (sumHeat / availableHeat) - sumAdditionalHeat;
         loss.systemLosses = (loss.grossHeat + sumAdditionalHeat) * (1 - availableHeat);
-
-        // loss.systemLosses = grossHeat * (1 - availableHeat);
-
-        // const availableHeat = this.phastService.flueGasByVolume(tmpFlueGas.flueGasByVolume, settings);
-        // results.flueGasAvailableHeat = availableHeat * 100;
-        // results.flueGasGrossHeat = (results.totalInput / availableHeat);
-        // results.flueGasSystemLosses = results.flueGasGrossHeat * (1 - availableHeat);
-        // results.totalFlueGas = results.flueGasSystemLosses;
       } else {
         loss.availableHeat = null;
         loss.grossHeat = null;
