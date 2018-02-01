@@ -221,28 +221,28 @@ checkInputError(bool?: boolean) {
         this.chargeMaterialCompareService.differentArray[this.lossIndex].different.solidChargeMaterialDifferent.specificHeatSolid.subscribe((val) => {
           let materialSpecificHeatOfSolidMaterialElements = doc.getElementsByName('materialSpecificHeatOfSolidMaterial_' + this.lossIndex);
           materialSpecificHeatOfSolidMaterialElements.forEach(element => {
-            element.classList.toggle('indicate-different', val);
+            element.classList.toggle('indicate-different-db', val);
           });
         })
         //materialLatentHeatOfFusion
         this.chargeMaterialCompareService.differentArray[this.lossIndex].different.solidChargeMaterialDifferent.latentHeat.subscribe((val) => {
           let materialLatentHeatOfFusionElements = doc.getElementsByName('materialLatentHeatOfFusion_' + this.lossIndex);
           materialLatentHeatOfFusionElements.forEach(element => {
-            element.classList.toggle('indicate-different', val);
+            element.classList.toggle('indicate-different-db', val);
           });
         })
         //materialHeatOfLiquid
         this.chargeMaterialCompareService.differentArray[this.lossIndex].different.solidChargeMaterialDifferent.specificHeatLiquid.subscribe((val) => {
           let materialHeatOfLiquidElements = doc.getElementsByName('materialHeatOfLiquid_' + this.lossIndex);
           materialHeatOfLiquidElements.forEach(element => {
-            element.classList.toggle('indicate-different', val);
+            element.classList.toggle('indicate-different-db', val);
           });
         })
         //materialMeltingPoint
         this.chargeMaterialCompareService.differentArray[this.lossIndex].different.solidChargeMaterialDifferent.meltingPoint.subscribe((val) => {
           let materialMeltingPointElements = doc.getElementsByName('materialMeltingPoint_' + this.lossIndex);
           materialMeltingPointElements.forEach(element => {
-            element.classList.toggle('indicate-different', val);
+            element.classList.toggle('indicate-different-db', val);
           });
         })
         //feedRate
