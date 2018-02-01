@@ -146,18 +146,18 @@ export class PhastResultsService {
         } else if (tmpFlueGas.flueGasType == 'By Volume') {
           let tmpForm = this.flueGasLossesService.initByVolumeFormFromLoss(tmpFlueGas);
           if (tmpForm.status == 'VALID') {
+            // const availableHeat = this.phastService.flueGasByVolume(tmpFlueGas.flueGasByVolume, settings);
+            // results.flueGasAvailableHeat = availableHeat * 100;
+            // results.flueGasGrossHeat = (results.totalInput / availableHeat);
+            // results.flueGasSystemLosses = results.flueGasGrossHeat - results.totalInput;
+            // results.totalFlueGas = results.flueGasSystemLosses;
+
+            // original stuff
             const availableHeat = this.phastService.flueGasByVolume(tmpFlueGas.flueGasByVolume, settings);
             results.flueGasAvailableHeat = availableHeat * 100;
             results.flueGasGrossHeat = (results.totalInput / availableHeat);
-            results.flueGasSystemLosses = results.flueGasGrossHeat - results.totalInput;
+            results.flueGasSystemLosses = results.flueGasGrossHeat * (1 - availableHeat);
             results.totalFlueGas = results.flueGasSystemLosses;
-
-            // original stuff
-            // let availableHeat = this.phastService.flueGasByVolume(tmpFlueGas.flueGasByVolume, settings);
-            // results.flueGasAvailableHeat = availableHeat * 100;
-            // results.flueGasGrossHeat = (results.totalInput / availableHeat);
-            // results.flueGasSystemLosses = results.flueGasGrossHeat * (1 - availableHeat);
-            // results.totalFlueGas = results.flueGasSystemLosses;
           }
         }
         results.grossHeatInput = results.totalInput + results.flueGasSystemLosses - results.exothermicHeat;
