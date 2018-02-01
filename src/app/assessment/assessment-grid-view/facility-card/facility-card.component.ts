@@ -20,6 +20,11 @@ export class FacilityCardComponent implements OnInit {
   settings: Settings;
   showModal: boolean = false;
   isParentSettings: boolean = false;
+
+  showAddress: boolean = false;
+  showFacilityContact: boolean = false;
+  showAssessmentContact: boolean = false;
+  showNoData: boolean = true;
   constructor(private indexedDbService: IndexedDbService, private settingsService: SettingsService) { }
 
   ngOnInit() {
@@ -45,15 +50,56 @@ export class FacilityCardComponent implements OnInit {
     if (this.isParentSettings) {
       this.indexedDbService.addSettings(this.settings).then(val => {
         this.isParentSettings = false;
+        this.checkShow();
         this.hideFacilityModal();
       })
     } else {
       this.indexedDbService.putSettings(this.settings).then(returnVal => {
+        this.checkShow();
         this.hideFacilityModal();
       })
     }
   }
 
+  checkShow() {
+    if (this.settings.facilityInfo.address) {
+      if (this.settings.facilityInfo.address.city ||
+        this.settings.facilityInfo.address.state || 
+        this.settings.facilityInfo.address.zip || 
+        this.settings.facilityInfo.address.street || 
+        this.settings.facilityInfo.address.country) {
+          this.showAddress = true;
+      }else{
+        this.showAddress = false;
+      }
+    }
+
+    if(this.settings.facilityInfo.facilityContact){
+      if(this.settings.facilityInfo.facilityContact.contactName || this.settings.facilityInfo.facilityContact.email || this.settings.facilityInfo.facilityContact.phoneNumber){
+        this.showFacilityContact = true;
+      }else{
+        this.showFacilityContact = false;
+      }
+    }
+
+    if(this.settings.facilityInfo.assessmentContact){
+      if(this.settings.facilityInfo.assessmentContact.contactName || this.settings.facilityInfo.assessmentContact.email || this.settings.facilityInfo.assessmentContact.phoneNumber){
+        this.showAssessmentContact = true;
+      }else{
+        this.showAssessmentContact = false;
+      }
+    }
+
+    if(!this.showFacilityContact && !this.showAddress && !this.showAssessmentContact){
+      if(this.settings.facilityInfo.facilityName || this.settings.facilityInfo.facilityName){
+        this.showNoData = false;
+      }else{
+        this.showNoData = true;
+      }
+    }else{
+      this.showNoData = false;
+    }
+  }
 
   getSettings(id: number, directory?: Directory) {
     this.indexedDbService.getDirectorySettings(id).then(settings => {
@@ -65,10 +111,11 @@ export class FacilityCardComponent implements OnInit {
           tmpSettings.modifiedDate = new Date();
           tmpSettings.directoryId = this.directory.id;
           tmpSettings.facilityInfo = settings[0].facilityInfo;
-
           this.settings = tmpSettings;
+          this.checkShow();
         } else {
           this.settings = settings[0];
+          this.checkShow();
         }
       } else if (directory.parentDirectoryId) {
         this.isParentSettings = true;

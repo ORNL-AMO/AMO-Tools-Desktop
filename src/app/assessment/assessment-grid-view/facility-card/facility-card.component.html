@@ -1,8 +1,8 @@
 <div class="card" *ngIf="settings">
   <div class="card-header summary-card-header">
-    Directory Information
+    {{directory.name}} Information
   </div>
-  <div class="card-body summary-card-body no-facility-data" *ngIf="!settings.facilityInfo" (click)="showFacilityModal()">
+  <div class="card-body summary-card-body no-facility-data" *ngIf="showNoData" (click)="showFacilityModal()">
     <div class="no-facility-data">
       Add Facility Info
       <br>
@@ -11,9 +11,9 @@
       <p class="small">You have no facility information for this directory.</p>
     </div>
   </div>
-  <div class="card-body summary-card-body scroll-item" *ngIf="settings.facilityInfo">
+  <div class="card-body summary-card-body scroll-item" *ngIf="!showNoData">
     <table class="table">
-      <tr>
+      <tr *ngIf="settings.facilityInfo.companyName">
         <td class="bold">
           Company Name
         </td>
@@ -21,7 +21,7 @@
           {{settings.facilityInfo.companyName}}
         </td>
       </tr>
-      <tr>
+      <tr *ngIf="settings.facilityInfo.facilityName">
         <td class="bold">
           Facility Name
         </td>
@@ -29,82 +29,82 @@
           {{settings.facilityInfo.facilityName}}
         </td>
       </tr>
-      <tr *ngIf="settings.facilityInfo.address">
+      <tr *ngIf="showAddress">
         <td class="table-section-label" colspan="2">
           Address
         </td>
       </tr>
-      <tr *ngIf="settings.facilityInfo.address">
+      <tr *ngIf="showAddress">
         <td>Street</td>
         <td>
           {{settings.facilityInfo.address.street}}
         </td>
       </tr>
-      <tr *ngIf="settings.facilityInfo.address">
+      <tr *ngIf="showAddress">
         <td>City</td>
         <td>
           {{settings.facilityInfo.address.city}}
         </td>
       </tr>
-      <tr *ngIf="settings.facilityInfo.address">
+      <tr *ngIf="showAddress">
         <td>State</td>
         <td>
           {{settings.facilityInfo.address.state}}
         </td>
       </tr>
-      <tr *ngIf="settings.facilityInfo.address">
+      <tr *ngIf="showAddress">
         <td>Country</td>
         <td>
           {{settings.facilityInfo.address.country}}
         </td>
       </tr>
-      <tr *ngIf="settings.facilityInfo.address">
+      <tr *ngIf="showAddress">
         <td>Zip</td>
         <td>
           {{settings.facilityInfo.address.zip}}
         </td>
       </tr>
-      <tr *ngIf="settings.facilityInfo.facilityContact">
+      <tr *ngIf="showFacilityContact">
         <td class="table-section-label" colspan="2">
           Facility Contact Information
         </td>
       </tr>
-      <tr *ngIf="settings.facilityInfo.facilityContact">
+      <tr *ngIf="showFacilityContact">
         <td>
           Name
         </td>
         <td>{{settings.facilityInfo.facilityContact.contactName}}</td>
       </tr>
-      <tr *ngIf="settings.facilityInfo.facilityContact">
+      <tr *ngIf="showFacilityContact">
         <td>
           Phone Number
         </td>
         <td>{{settings.facilityInfo.facilityContact.phoneNumber}}</td>
       </tr>
-      <tr *ngIf="settings.facilityInfo.facilityContact">
+      <tr *ngIf="showFacilityContact">
         <td>
           Email
         </td>
         <td>{{settings.facilityInfo.facilityContact.email}}</td>
       </tr>
-      <tr *ngIf="settings.facilityInfo.assessmentContact">
+      <tr *ngIf="showAssessmentContact">
         <td class="table-section-label" colspan="2">
           Assessment Contact Information
         </td>
       </tr>
-      <tr *ngIf="settings.facilityInfo.assessmentContact">
+      <tr *ngIf="showAssessmentContact">
         <td>
           Name
         </td>
         <td>{{settings.facilityInfo.assessmentContact.contactName}}</td>
       </tr>
-      <tr *ngIf="settings.facilityInfo.assessmentContact">
+      <tr *ngIf="showAssessmentContact">
         <td>
           Phone Number
         </td>
         <td>{{settings.facilityInfo.assessmentContact.phoneNumber}}</td>
       </tr>
-      <tr *ngIf="settings.facilityInfo.assessmentContact">
+      <tr *ngIf="showAssessmentContact">
         <td>
           Email
         </td>

@@ -10,3 +10,8 @@
   .summary-card-header.psat{
     border-bottom: #2980b9 groove 2px;
   }
+
+  .card-header:hover{
+    cursor: inherit;
+    background: inherit;
+  }

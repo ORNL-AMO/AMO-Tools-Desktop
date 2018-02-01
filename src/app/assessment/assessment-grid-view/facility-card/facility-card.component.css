@@ -2,6 +2,10 @@
     font-size: xx-large;
 }
 
+.card-header:hover{
+    cursor: inherit;
+    background: inherit;
+  }
 
 .no-facility-data{
     text-align: center;
@@ -13,11 +17,6 @@
 .summary-card-body.no-facility-data:hover{
     background-color: #efefef;
     cursor: pointer;
-}
-
-.summary-card-header:hover{
-    background-color: inherit;
-    cursor: inherit;   
 }
 
 h5{

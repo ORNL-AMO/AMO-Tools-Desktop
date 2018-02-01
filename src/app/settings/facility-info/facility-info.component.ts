@@ -71,7 +71,7 @@ export class FacilityInfoComponent implements OnInit {
         email: this.facilityForm.controls.facilityEmail.value
       },
       assessmentContact: {
-        phoneNumber: this.facilityForm.controls.facilityContactName.value,
+        phoneNumber: this.facilityForm.controls.assessmentPhoneNumber.value,
         contactName: this.facilityForm.controls.assessmentContactName.value,
         email: this.facilityForm.controls.assessmentEmail.value
       }
