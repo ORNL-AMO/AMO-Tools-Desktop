@@ -25,6 +25,7 @@ export class FacilityCardComponent implements OnInit {
   showFacilityContact: boolean = false;
   showAssessmentContact: boolean = false;
   showNoData: boolean = true;
+  collapse: boolean = false;
   constructor(private indexedDbService: IndexedDbService, private settingsService: SettingsService) { }
 
   ngOnInit() {
@@ -44,6 +45,10 @@ export class FacilityCardComponent implements OnInit {
   hideFacilityModal() {
     this.facilityModal.hide();
     this.showModal = false;
+  }
+
+  toggleCollapse(){
+    this.collapse = !this.collapse;
   }
 
   save() {

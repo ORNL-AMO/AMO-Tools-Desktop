@@ -1,8 +1,17 @@
 <div class="card" *ngIf="settings">
-  <div class="card-header summary-card-header">
-    {{directory.name}} Information
+  <div class="card-header row no-margin summary-card-header" *ngIf="showNoData">
+    <div class="col small">
+      Contact Information
+    </div>
+    <div class="col">
+      <a class="pull-right small" (click)="toggleCollapse()" *ngIf="collapse">Show</a>
+      <a class="pull-right small" (click)="toggleCollapse()" *ngIf="!collapse">Collapse</a>
+      <span class="pull-right vert-slash">&#x7c;</span>
+      <a class="pull-right small" (click)="showFacilityModal()">Edit</a>
+      <!-- <div class="last-updated pull-right">Last updated {{settings.modifiedDate | date }}</div> -->
+    </div>
   </div>
-  <div class="card-body summary-card-body no-facility-data" *ngIf="showNoData" (click)="showFacilityModal()">
+  <div class="card-body no-facility-data" *ngIf="showNoData && !collapse" (click)="showFacilityModal()">
     <div class="no-facility-data">
       Add Facility Info
       <br>
@@ -11,111 +20,146 @@
       <p class="small">You have no facility information for this directory.</p>
     </div>
   </div>
-  <div class="card-body summary-card-body scroll-item" *ngIf="!showNoData">
-    <table class="table">
-      <tr *ngIf="settings.facilityInfo.companyName">
-        <td class="bold">
-          Company Name
-        </td>
-        <td>
-          {{settings.facilityInfo.companyName}}
-        </td>
-      </tr>
-      <tr *ngIf="settings.facilityInfo.facilityName">
-        <td class="bold">
-          Facility Name
-        </td>
-        <td>
-          {{settings.facilityInfo.facilityName}}
-        </td>
-      </tr>
-      <tr *ngIf="showAddress">
-        <td class="table-section-label" colspan="2">
-          Address
-        </td>
-      </tr>
-      <tr *ngIf="showAddress">
-        <td>Street</td>
-        <td>
-          {{settings.facilityInfo.address.street}}
-        </td>
-      </tr>
-      <tr *ngIf="showAddress">
-        <td>City</td>
-        <td>
-          {{settings.facilityInfo.address.city}}
-        </td>
-      </tr>
-      <tr *ngIf="showAddress">
-        <td>State</td>
-        <td>
-          {{settings.facilityInfo.address.state}}
-        </td>
-      </tr>
-      <tr *ngIf="showAddress">
-        <td>Country</td>
-        <td>
-          {{settings.facilityInfo.address.country}}
-        </td>
-      </tr>
-      <tr *ngIf="showAddress">
-        <td>Zip</td>
-        <td>
-          {{settings.facilityInfo.address.zip}}
-        </td>
-      </tr>
-      <tr *ngIf="showFacilityContact">
-        <td class="table-section-label" colspan="2">
-          Facility Contact Information
-        </td>
-      </tr>
-      <tr *ngIf="showFacilityContact">
-        <td>
-          Name
-        </td>
-        <td>{{settings.facilityInfo.facilityContact.contactName}}</td>
-      </tr>
-      <tr *ngIf="showFacilityContact">
-        <td>
-          Phone Number
-        </td>
-        <td>{{settings.facilityInfo.facilityContact.phoneNumber}}</td>
-      </tr>
-      <tr *ngIf="showFacilityContact">
-        <td>
-          Email
-        </td>
-        <td>{{settings.facilityInfo.facilityContact.email}}</td>
-      </tr>
-      <tr *ngIf="showAssessmentContact">
-        <td class="table-section-label" colspan="2">
-          Assessment Contact Information
-        </td>
-      </tr>
-      <tr *ngIf="showAssessmentContact">
-        <td>
-          Name
-        </td>
-        <td>{{settings.facilityInfo.assessmentContact.contactName}}</td>
-      </tr>
-      <tr *ngIf="showAssessmentContact">
-        <td>
-          Phone Number
-        </td>
-        <td>{{settings.facilityInfo.assessmentContact.phoneNumber}}</td>
-      </tr>
-      <tr *ngIf="showAssessmentContact">
-        <td>
-          Email
-        </td>
-        <td>{{settings.facilityInfo.assessmentContact.email}}</td>
-      </tr>
-    </table>
+  <div class="card-header row summary-card-header no-margin" *ngIf="!showNoData">
+    <div class="col small">
+      Contact Information
+    </div>
+    <div class="col small">
+      <span>Company: {{settings.facilityInfo.companyName}}</span>
+    </div>
+    <div class="col small">
+      <span>Facility: {{settings.facilityInfo.facilityName}}</span>
+    </div>
+    <div class="col">
+      <a class="pull-right small" (click)="toggleCollapse()" *ngIf="collapse">Show</a>
+      <a class="pull-right small" (click)="toggleCollapse()" *ngIf="!collapse">Collapse</a>
+      <span class="pull-right vert-slash">&#x7c;</span>
+      <a class="pull-right small" (click)="showFacilityModal()">Edit</a>
+      <!-- <div class="last-updated pull-right">Last updated {{settings.modifiedDate | date }}</div> -->
+    </div>
   </div>
-  <div class="card-footer summary-card-footer">
-    <a class="pull-left small" (click)="showFacilityModal()">Edit</a>
-    <div class="last-updated pull-right">Last updated {{settings.modifiedDate | date }}</div>
+  <div class="card-body scroll-item" *ngIf="!showNoData && !collapse">
+    <div class="row no-margin">
+      <div class="col-4">
+        <table class="table">
+          <!-- <tr>
+            <td class="bold">
+              Company Name
+            </td>
+            <td>
+              {{settings.facilityInfo.companyName}}
+            </td>
+          </tr>
+          <tr>
+            <td class="bold">
+              Facility Name
+            </td>
+            <td>
+              {{settings.facilityInfo.facilityName}}
+            </td>
+          </tr> -->
+          <tr>
+            <td class="table-section-label" colspan="2">
+              Address
+            </td>
+          </tr>
+          <tr>
+            <td>Street</td>
+            <td>
+              {{settings.facilityInfo.address.street}}
+            </td>
+          </tr>
+          <tr>
+            <td>City</td>
+            <td>
+              {{settings.facilityInfo.address.city}}
+            </td>
+          </tr>
+          <tr>
+            <td>State</td>
+            <td>
+              {{settings.facilityInfo.address.state}}
+            </td>
+          </tr>
+          <tr>
+            <td>Country</td>
+            <td>
+              {{settings.facilityInfo.address.country}}
+            </td>
+          </tr>
+          <tr>
+            <td>Zip</td>
+            <td>
+              {{settings.facilityInfo.address.zip}}
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div class="col-4">
+        <table class="table">
+          <tr>
+            <td class="table-section-label" colspan="2">
+              Facility Contact Information
+            </td>
+          </tr>
+          <tr>
+            <td>
+              Name
+            </td>
+            <td>{{settings.facilityInfo.facilityContact.contactName}}</td>
+          </tr>
+          <tr>
+            <td>
+              Phone
+            </td>
+            <td>{{settings.facilityInfo.facilityContact.phoneNumber}}</td>
+          </tr>
+          <tr>
+            <td>
+              Email
+            </td>
+            <td>{{settings.facilityInfo.facilityContact.email}}</td>
+          </tr>
+        </table>
+      </div>
+      <div class="col-4">
+        <table class="table">
+          <tr>
+            <td class="table-section-label" colspan="2">
+              Assessment Contact Information
+            </td>
+          </tr>
+          <tr>
+            <td>
+              Name
+            </td>
+            <td>{{settings.facilityInfo.assessmentContact.contactName}}</td>
+          </tr>
+          <tr>
+            <td>
+              Phone
+            </td>
+            <td>{{settings.facilityInfo.assessmentContact.phoneNumber}}</td>
+          </tr>
+          <tr>
+            <td>
+              Email
+            </td>
+            <td>{{settings.facilityInfo.assessmentContact.email}}</td>
+          </tr>
+        </table>
+      </div>
+    </div>
   </div>
+  <!-- <div class="card-footer summary-card-footer">
+    <div class="col">
+      <a class="pull-left small" (click)="toggleCollapse()" *ngIf="collapse">Show</a>
+      <a class="pull-left small" (click)="toggleCollapse()" *ngIf="!collapse">Collapse</a>
+      <span class="pull-left vert-slash">&#x7c;</span>
+      <a class="pull-left small" (click)="showFacilityModal()">Edit</a>
+      <div class="last-updated pull-right">Last updated {{settings.modifiedDate | date }}</div>
+    </div>
+  </div> -->
 </div>
 
 

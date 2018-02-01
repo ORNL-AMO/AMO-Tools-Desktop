@@ -45,6 +45,12 @@ li{
     margin-bottom: 0px;
   }
 
+  .vert-slash{
+      padding-left: 4px;
+      padding-right: 4px;
+      margin-top: -4px;
+  }
+
   
   a:not([href]):not([tabindex]){
     color: blue;
@@ -58,4 +64,14 @@ li{
   .table-section-label{
       font-weight: bold;
       padding-top: 8px;
+      border-top: none;
   }
+
+  .no-margin{
+      margin: 0px;
+  }
+
+  .card-body{
+      padding: 6px;
+  }
+
