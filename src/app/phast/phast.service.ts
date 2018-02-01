@@ -573,7 +573,6 @@ export class PhastService {
     }
     if (losses.chargeMaterials) {
       grossHeatRequired += this.sumChargeMaterials(losses.chargeMaterials, settings);
-      grossHeatRequired -= this.sumChargeMaterialExothermic(losses.chargeMaterials, settings);
     }
     if (losses.coolingLosses) {
       grossHeatRequired += this.sumCoolingLosses(losses.coolingLosses, settings);

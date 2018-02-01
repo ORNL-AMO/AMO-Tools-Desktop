@@ -208,16 +208,24 @@ export class FlueGasLossesComponent implements OnInit {
     if (loss.measurementType == "By Volume") {
       if (loss.formByVolume.status == 'VALID') {
         let tmpLoss: FlueGas = this.flueGasLossesService.buildByVolumeLossFromForm(loss.formByVolume);
-        let tmpResult = this.phastService.flueGasByVolume(tmpLoss.flueGasByVolume, this.settings);
-        loss.availableHeat = tmpResult * 100;
+        const availableHeat = this.phastService.flueGasByVolume(tmpLoss.flueGasByVolume, this.settings);
+        loss.availableHeat = availableHeat * 100;
         if (loss.availableHeat < 0 || loss.availableHeat > 100) {
           this.availableHeatError = 'Available heat is' + ' ' + loss.availableHeat.toFixed(2) + '%' + '.' + ' ' + 'Check your input fields.';
         } else {
           this.availableHeatError = null;
         }
-        let sumHeat = this.phastService.sumHeatInput(this.losses, this.settings);
-        loss.grossHeat = (sumHeat / tmpResult) - sumAdditionalHeat;
-        loss.systemLosses = loss.grossHeat * (1 - tmpResult);
+        const sumHeat = this.phastService.sumHeatInput(this.losses, this.settings);
+        loss.grossHeat = (sumHeat / availableHeat) - sumAdditionalHeat;
+        loss.systemLosses = (loss.grossHeat + sumAdditionalHeat) * (1 - availableHeat);
+
+        // loss.systemLosses = grossHeat * (1 - availableHeat);
+
+        // const availableHeat = this.phastService.flueGasByVolume(tmpFlueGas.flueGasByVolume, settings);
+        // results.flueGasAvailableHeat = availableHeat * 100;
+        // results.flueGasGrossHeat = (results.totalInput / availableHeat);
+        // results.flueGasSystemLosses = results.flueGasGrossHeat * (1 - availableHeat);
+        // results.totalFlueGas = results.flueGasSystemLosses;
       } else {
         loss.availableHeat = null;
         loss.grossHeat = null;
@@ -226,16 +234,16 @@ export class FlueGasLossesComponent implements OnInit {
     } else if (loss.measurementType == "By Mass") {
       if (loss.formByMass.status == 'VALID') {
         let tmpLoss: FlueGas = this.flueGasLossesService.buildByMassLossFromForm(loss.formByMass);
-        let tmpResult = this.phastService.flueGasByMass(tmpLoss.flueGasByMass, this.settings);
-        loss.availableHeat = tmpResult * 100;
+        const availableHeat = this.phastService.flueGasByMass(tmpLoss.flueGasByMass, this.settings);
+        loss.availableHeat = availableHeat * 100;
         if (loss.availableHeat < 0 || loss.availableHeat > 100) {
           this.availableHeatError = 'Available heat is' + ' ' + loss.availableHeat.toFixed(2) + '%' + '.' + ' ' + 'Check your input fields.';
         } else {
           this.availableHeatError = null;
         }
-        let heatInput = this.phastService.sumHeatInput(this.losses, this.settings);
-        loss.grossHeat = (heatInput / tmpResult) - sumAdditionalHeat;;
-        loss.systemLosses = loss.grossHeat * (1 - tmpResult);
+        const heatInput = this.phastService.sumHeatInput(this.losses, this.settings);
+        loss.grossHeat = (heatInput / availableHeat) - sumAdditionalHeat;
+        loss.systemLosses = (loss.grossHeat + sumAdditionalHeat) * (1 - availableHeat);
       } else {
         loss.availableHeat = null;
         loss.grossHeat = null;
