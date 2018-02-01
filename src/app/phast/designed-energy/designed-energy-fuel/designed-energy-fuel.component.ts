@@ -7,7 +7,7 @@ import { DesignedEnergyService } from '../designed-energy.service';
 @Component({
   selector: 'app-designed-energy-fuel',
   templateUrl: './designed-energy-fuel.component.html',
-  styleUrls: ['./designed-energy-fuel.component.css', '../../aux-equipment/aux-equipment.component.css', '../../../psat/explore-opportunities/explore-opportunities.component.css']
+  styleUrls: ['./designed-energy-fuel.component.css']
 })
 export class DesignedEnergyFuelComponent implements OnInit {
   @Input()
@@ -41,7 +41,7 @@ export class DesignedEnergyFuelComponent implements OnInit {
   }
 
   calculate() {
-    this.results = this.designedEnergyService.designedEnergyFuel(this.phast.designedEnergy.designedEnergyFuel, this.phast);
+    this.results = this.designedEnergyService.designedEnergyFuel(this.phast.designedEnergy.designedEnergyFuel, this.phast, this.settings);
   }
 
   setField(str: string) {

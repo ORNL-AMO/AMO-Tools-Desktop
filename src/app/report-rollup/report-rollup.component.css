@@ -1,0 +1,138 @@
+.report-header {
+    background: #fff;
+    border-bottom: #bbb solid 1px;
+    width: 100%;
+    -webkit-box-shadow: 0px 1px 4px 0px rgba(0,0,0,0.2);
+    -moz-box-shadow: 0px 1px 4px 0px rgba(0,0,0,0.2);
+    box-shadow: 0px 1px 4px 0px rgba(0,0,0,0.2);
+}
+
+.report-container {
+    display: flex;
+    background-color: #ececec;
+
+}
+.report-container .sidebar {
+    background: #fff;
+    border-right: #d0d0d0 solid 1px;
+    position: fixed;
+    overflow-y: scroll;    
+    max-width: 145px;
+}
+    .report-container .sidebar ul {
+        margin: 0;
+        padding: 0;
+    }
+        .report-container .sidebar ul li {
+            list-style: none;
+            padding: 0;
+        }
+        .report-container .sidebar ul li.active {
+            background-color: #f5f5f5;
+        }
+        .report-container .sidebar ul li:hover {
+            cursor: pointer;
+            background-color: lightgrey;
+        }
+            .report-container .sidebar ul li a {
+                display: inline-block;
+                padding: 10px;
+                font-size: 15px;
+                border-top: #efefef solid 1px;
+            }
+                .report-container .sidebar ul li:last-of-type a {
+                    border-bottom: #efefef solid 1px;
+                }
+            .report-container .sidebar ul li.active a {
+                color: #000;
+                font-weight: bold;
+            }
+
+.report-container .content {
+    /* flex: 1;
+    overflow-y: auto; */
+    background: #f5f5f5;
+}
+
+.report-column{
+    margin-top: 50px;
+    margin-bottom: 100px;
+}
+.calculator-card{
+    border: none; 
+    margin-top: 2.5%; 
+    margin-bottom: 2.5%;
+    background: inherit;
+}
+
+.disclaimer{
+  font-weight: bold !important;
+  opacity: 1 !important;
+}
+
+
+
+@media print {
+
+    .hide-print{
+        display: none !important;
+    }
+    .report-column{
+        border: none !important;
+        box-shadow: none !important;
+        margin-top: none !important;
+        margin-bottom: none !important;
+    }
+    .report-container{
+        margin-top: 0;
+    }
+
+    .report-container .content {
+        padding-top: 0px;
+        padding: 0;
+        margin-left: 0;
+    }
+
+    .assessment-item{
+        page-break-before: always;
+        padding-top: 0px !important;
+    }
+}
+
+
+.phast-modal .modal-dialog,
+.psat-modal .modal-dialog{
+    top: 0px;
+    max-width: none;
+    margin: 10px;
+}
+
+.phast-modal .modal-header{
+    background-color: #BF3D00;
+    color: #fff;
+}
+
+.psat-modal .modal-header{
+    background-color: #2980b9;
+    color: #fff;
+}
+
+
+.assessment-reports{
+    padding-left: 50px;
+    padding-right: 50px;
+    padding-top: 25px;
+}
+
+.assessment-item{
+    margin-bottom: 2rem;
+}
+
+
+.icon-image{
+    height: 18px;
+  }
+
+  .sb-item{
+      width: 100%;
+  }

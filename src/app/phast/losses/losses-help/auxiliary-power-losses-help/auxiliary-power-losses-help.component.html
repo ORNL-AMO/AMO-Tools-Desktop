@@ -1,11 +1,10 @@
-
 <div class="help-header">
 
   <h3>Auxilary Power Losses Help</h3>
-  <p>Enter loss data</p>
+  <!-- <p>Enter loss data</p>
   <p class="text-muted">
     <span class="fa fa-youtube-play"></span> Watch tutorial on gathering loss data.
-  </p>
+  </p> -->
 
 </div>
 
@@ -13,17 +12,98 @@
 <div class="help-content">
 
 
-  <div class="card" *ngIf="currentField == 'atmosphereGas'">
+  <div class="card" *ngIf="currentField == 'motorPhase'">
     <div class="card-header">
-      Weight
+      Motor Current Phase
     </div>
     <div class="card-block">
-      <label>Description:</label>
-      <p>DESCRITION HERE</p>
-      <label>Input:</label>
+      <label><u><strong>Description</strong></u></label>
+        <p>
+          Number of phases in the motor (1 or 3)
+        </p>
+    </div>
+  </div>
+
+  <div class="card" *ngIf="currentField == 'supplyVoltage'">
+    <div class="card-header">
+      Supply Voltage
+    </div>
+    <div class="card-block">
+      <label><u><strong>Description</strong></u></label>
+        <p>
+          Voltage going into the motor
+        </p>
+      <label><u><strong>Input</strong></u></label>
       <p>
-        Units: <strong>UNIT HERE</strong><br> Minimum Value Allowed: <strong>MAX HERE</strong><br> Maximum Value Allowed: <strong>MIN HERE</strong><br>
+        Units: <strong>V</strong><br> Minimum Value: <strong>0</strong><br> Maximum Value: <strong>480</strong><br>
       </p>
     </div>
   </div>
+
+  <div class="card" *ngIf="currentField == 'avgCurrent'">
+    <div class="card-header">
+      Average Current
+    </div>
+    <div class="card-block">
+      <label><u><strong>Description</strong></u></label>
+      <p>
+        Average current going into the motor
+      </p>
+      <label><u><strong>Input</strong></u></label>
+      <p>
+        Units: <strong>A</strong><br> Minimum Value: <strong>0</strong><br>
+      </p>
+    </div>
+  </div>
+
+  <div class="card" *ngIf="currentField == 'powerFactor'">
+    <div class="card-header">
+      Power Factor
+    </div>
+    <div class="card-block">
+      <label><u><strong>Description</strong></u></label>
+      <p>
+        Power Factor, if known.
+      </p>
+      <label><u><strong>Input</strong></u></label>
+      <p>
+        Minimum Value: <strong>0</strong><br> Maximum Value: <strong>1</strong><br>
+      </p>
+    </div>
+  </div>
+
+  <div class="card" *ngIf="currentField == 'operatingTime'">
+    <div class="card-header">
+      Operating Time
+    </div>
+    <div class="card-block">
+      <label><u><strong>Description</strong></u></label>
+      <p>
+        Percent of operating hours that auxiliary unit is running
+      </p>
+      <label><u><strong>Input</strong></u></label>
+      <p>
+        Units: <strong>%</strong><br> Minimum Value: <strong>0</strong><br> Maximum Value: <strong>100</strong><br>
+      </p>
+    </div>
+  </div>
+
+  <div class="card" *ngIf="currentField == 'default'">
+    <div class="card-header">
+      Savings Suggestions
+    </div>
+    <div class="card-block">
+      <label><u><strong>Description</strong></u></label>
+      <ul>
+        <li class="help-general">Use variable speed drive where possible</li>
+        <li class="help-general">Improve power factor</li>
+        <li class="help-general">Reduce motor load through assessment of use of utilities (water, compressed air, hydraulics etc.) to eliminate waste and reduce usage where possible</li>
+        <li class="help-general">Consider alternate drive system where possible</li>
+        <li class="help-general">Use fuel-air ratio control system to maintain desired (preferably 10% excess air) for the range of burner turndown</li>
+        <li class="help-general">Replace excess air burners by ratio type burners.  Consider process requirements (i.e. make up air) to evaluate benefits of ratio type burners</li>
+        <li class="help-general">Replace atmospheric or even premix burners where possible to use nozzle mix burners with high turn down</li>
+      </ul>
+    </div>
+  </div>
+
 </div>

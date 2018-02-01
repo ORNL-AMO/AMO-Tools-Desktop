@@ -6,6 +6,7 @@ import { Settings } from '../../shared/models/settings';
 import { IndexedDbService } from '../../indexedDb/indexed-db.service';
 import { Directory } from '../../shared/models/directory';
 import { WindowRefService } from '../../indexedDb/window-ref.service';
+import { SettingsService } from '../../settings/settings.service';
 
 @Component({
   selector: 'app-psat-report',
@@ -29,19 +30,28 @@ export class PsatReportComponent implements OnInit {
   inRollup: boolean;
   @Output('selectModification')
   selectModification = new EventEmitter<any>();
+  @Input()
+  quickReport: boolean;
+
+
+
   assessmentDirectories: Directory[];
   isFirstChange: boolean = true;
   numMods: number = 0;
-  constructor(private psatService: PsatService, private indexedDbService: IndexedDbService, private windowRefService: WindowRefService) { }
+  currentTab: string = 'results';
+  createdDate: Date;
+
+  constructor(private psatService: PsatService, private indexedDbService: IndexedDbService, private windowRefService: WindowRefService, private settingsService: SettingsService) { }
 
   ngOnInit() {
+    this.createdDate = new Date();
     if (this.assessment.psat && this.settings && !this.psat) {
       this.psat = this.assessment.psat;
     }
     else if (this.assessment.psat && !this.settings) {
       this.psat = this.assessment.psat;
       //find settings
-      this.getAssessmentSettingsThenResults();
+      this.getSettings();
     }
     if (this.assessment) {
       this.assessmentDirectories = new Array();
@@ -50,41 +60,25 @@ export class PsatReportComponent implements OnInit {
 
     if (this.psat.modifications) {
       this.numMods = this.psat.modifications.length;
+    }else{
+      this.psat.modifications = new Array();
     }
   }
 
-  getAssessmentSettingsThenResults() {
+  setTab(str: string) {
+    this.currentTab = str;
+  }
+
+  getSettings() {
     //check for assessment settings
     this.indexedDbService.getAssessmentSettings(this.assessment.id).then(
       results => {
         if (results.length != 0) {
           this.settings = results[0];
-        } else {
-          //no assessment settings, find dir settings being usd
-          this.getParentDirSettingsThenResults(this.assessment.directoryId);
+          if(!this.settings.temperatureMeasurement){
+            this.settings = this.settingsService.setTemperatureUnit(this.settings);
+          }
         }
-      }
-    )
-  }
-
-  getParentDirSettingsThenResults(parentDirectoryId: number) {
-    //get parent directory
-    this.indexedDbService.getDirectory(parentDirectoryId).then(
-      results => {
-        let parentDirectory = results;
-        //get parent directory settings
-        this.indexedDbService.getDirectorySettings(parentDirectory.id).then(
-          resultSettings => {
-            if (resultSettings.length != 0) {
-              this.settings = resultSettings[0];
-              if (!this.psat.outputs) {
-                //this.psat = this.getResults(this.psat, this.settings);
-              }
-            } else {
-              //no settings try again with parents parent directory
-              this.getParentDirSettingsThenResults(parentDirectory.parentDirectoryId)
-            }
-          })
       }
     )
   }

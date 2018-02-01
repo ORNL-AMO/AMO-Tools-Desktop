@@ -1,9 +1,4 @@
-<!--<div class="section-header">
-  <h3 class="pull-left">Flue Gas Losses</h3>
-  <button class="btn btn-secondary pull-right" (click)="addLoss()">+ Add Flue Gas Loss</button>
-</div>-->
-
-<div class="no-data no-data-phast" *ngIf="_flueGasLosses.length == 0" (click)="addLoss()">
+<div class="no-data no-data-phast" *ngIf="_flueGasLosses.length == 0 && inSetup && !lossesLocked" (click)="addLoss()">
   <h3>You have no Flue Gas Losses</h3>
   <h4>Add some now.</h4>
 </div>
@@ -11,36 +6,86 @@
 <div class="card-form" *ngFor="let loss of _flueGasLosses; let lossIndex = index;">
   <div class="row">
     <div class="col-12">
-      <div class="pull-left">
-        <h6 *ngIf="isBaseline">{{loss.name}}</h6>
-        <h6 *ngIf="!isBaseline">{{loss.name}} Modification</h6>
-      </div>
-      <button *ngIf="isBaseline" class="close pull-right" aria-label="Close" (click)="removeLoss(lossIndex)">
-      <span aria-hidden="true">&times;</span>
-    </button>
+      <!-- <label class="group-label loss-label">
+        <span *ngIf="loss.collapse" class="fa fa-caret-down" (click)="collapseLoss(loss)"></span>
+        <span *ngIf="!loss.collapse" class="fa fa-caret-up" (click)="collapseLoss(loss)"></span>
+        {{loss.name}}
+        <span aria-hidden="true" *ngIf="isBaseline && inSetup && !modExists" class="close pull-right" aria-label="Close" (click)="removeLoss(lossIndex)">&times;</span>
+      </label> -->
+      <form class="name-input-form" [formGroup]="loss.formByMass" *ngIf="loss.measurementType == 'By Mass'">
+        <div class="input-group">
+          <span class="input-group-addon units" (click)="collapseLoss(loss)">
+            <span *ngIf="loss.collapse" class="fa fa-caret-down"></span>
+            <span *ngIf="!loss.collapse" class="fa fa-caret-up"></span>
+          </span>
+          <input type="text" class="form-control name-input" formControlName="name" (input)="setName(loss)">
+          <span class="input-group-addon" *ngIf="isBaseline && inSetup && !lossesLocked" (click)="removeLoss(lossIndex)">
+            <span aria-hidden="true" class="close" aria-label="Close">&times;</span>
+          </span>
+        </div>
+      </form>
+      <form class="name-input-form" [formGroup]="loss.formByVolume" *ngIf="loss.measurementType == 'By Volume'">
+        <div class="input-group">
+          <span class="input-group-addon" (click)="collapseLoss(loss)">
+            <span *ngIf="loss.collapse" class="fa fa-caret-down"></span>
+            <span *ngIf="!loss.collapse" class="fa fa-caret-up"></span>
+          </span>
+          <input type="text" class="form-control name-input" formControlName="name" (input)="setName(loss)">
+          <span class="input-group-addon" *ngIf="isBaseline && inSetup && !lossesLocked" (click)="removeLoss(lossIndex)">
+            <span aria-hidden="true" class="close" aria-label="Close">&times;</span>
+          </span>
+        </div>
+      </form>
     </div>
   </div>
-  <div class="row">
+  <div class="row" *ngIf="!loss.collapse">
     <div class="col-12">
       <div class="form-group">
         <label class="small" for="type">Type of fuel</label>
-        <select class="form-control" id="type" [(ngModel)]="loss.measurementType" [disabled]="!baselineSelected" (focus)="changeField('measurementType')">
-            <option [ngValue]="'By Volume'">Gas</option>
-            <option [ngValue]="'By Mass'">Solid/Liquid</option>
-            </select>
+        <select class="form-control" id="type" [(ngModel)]="loss.measurementType" [disabled]="!baselineSelected || lossesLocked"
+          (focus)="changeField('measurementType')" (blur)="focusOut()">
+          <option [ngValue]="'By Volume'">Gas</option>
+          <option [ngValue]="'By Mass'">Solid/Liquid</option>
+        </select>
       </div>
       <app-flue-gas-losses-form-mass [(flueGasLossForm)]="loss.formByMass" *ngIf="loss.measurementType == 'By Mass'" (changeField)="changeField($event)"
-        (calculate)="calculate(loss)" [baselineSelected]="baselineSelected" (saveEmit)="saveLosses()" [lossIndex]="lossIndex"></app-flue-gas-losses-form-mass>
+        (calculate)="calculate(loss)" [baselineSelected]="baselineSelected" (saveEmit)="saveLosses()" [lossIndex]="lossIndex"
+        [settings]="settings"></app-flue-gas-losses-form-mass>
       <app-flue-gas-losses-form-volume [(flueGasLossForm)]="loss.formByVolume" *ngIf="loss.measurementType == 'By Volume'" (changeField)="changeField($event)"
-        (calculate)="calculate(loss)" [baselineSelected]="baselineSelected" (saveEmit)="saveLosses()" [lossIndex]="lossIndex"></app-flue-gas-losses-form-volume>
+        (calculate)="calculate(loss)" [baselineSelected]="baselineSelected" (saveEmit)="saveLosses()" [lossIndex]="lossIndex"
+        [settings]="settings"></app-flue-gas-losses-form-volume>
     </div>
   </div>
   <div class="row">
     <div class="col-12">
       <div class="form-group">
-        <label class="small">Heat Loss</label>
-        <div class="text-center small">
-          {{loss.heatLoss | number:'2.2-2'}} Btu/hr
+        <label class="small font-weight-bold">Available Heat</label>
+        <div *ngIf="loss.availableHeat" class="text-center small font-weight-bold">
+          {{loss.availableHeat | number:'2.0-0'}} %
+        </div>
+        <div *ngIf="!loss.availableHeat" class="text-center small font-weight-bold">
+          &mdash; &mdash;
+        </div>
+        <span class="alert-warning pull-right small" *ngIf="availableHeatError !== null">{{availableHeatError}}</span>
+      </div>
+      <div class="form-group">
+        <label class="small font-weight-bold">Gross Heat</label>
+        <div *ngIf="loss.grossHeat" class="text-center small font-weight-bold">
+          {{loss.grossHeat | sigFigs:'5'}}
+          <span>{{resultsUnit}}</span>
+        </div>
+        <div *ngIf="!loss.grossHeat" class="text-center small font-weight-bold">
+          &mdash; &mdash;
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="small font-weight-bold">System Losses</label>
+        <div *ngIf="loss.systemLosses" class="text-center small font-weight-bold">
+          {{loss.systemLosses | sigFigs:'5'}}
+          <span>{{resultsUnit}}</span>
+        </div>
+        <div *ngIf="!loss.systemLosses" class="text-center small font-weight-bold">
+          &mdash; &mdash;
         </div>
       </div>
     </div>

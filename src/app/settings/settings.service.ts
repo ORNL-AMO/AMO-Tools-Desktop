@@ -1,12 +1,14 @@
 import { Injectable } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { Settings } from '../shared/models/settings';
+declare const packageJson;
+
 @Injectable()
 export class SettingsService {
 
   constructor(private formBuilder: FormBuilder) { }
 
-  getSettingsForm() {
+  getSettingsForm(): FormGroup {
     return this.formBuilder.group({
       'language': ['', Validators.required],
       'currency': ['', Validators.required],
@@ -19,11 +21,15 @@ export class SettingsService {
       'viscosityMeasurement': [''],
       'voltageMeasurement': [''],
       'energySourceType': [''],
-      'furnaceType': ['']
+      'furnaceType': [''],
+      'energyResultUnit': [''],
+      'customFurnaceName': [''],
+      'temperatureMeasurement': [''],
+      'phastRollupUnit': ['']
     });
   }
 
-  getFormFromSettings(settings: Settings) {
+  getFormFromSettings(settings: Settings): FormGroup {
     return this.formBuilder.group({
       'language': [settings.language, Validators.required],
       'currency': [settings.currency, Validators.required],
@@ -36,25 +42,146 @@ export class SettingsService {
       'viscosityMeasurement': [settings.viscosityMeasurement],
       'voltageMeasurement': [settings.voltageMeasurement],
       'energySourceType': [settings.energySourceType],
-      'furnaceType': [settings.furnaceType]
+      'furnaceType': [settings.furnaceType],
+      'energyResultUnit': [settings.energyResultUnit],
+      'customFurnaceName': [settings.customFurnaceName],
+      'temperatureMeasurement': [settings.temperatureMeasurement],
+      'phastRollupUnit': [settings.phastRollupUnit]
     });
   }
 
-  getSettingsFromForm(form: any) {
+  getSettingsFromForm(form: FormGroup) {
     let tmpSettings: Settings = {
-      language: form.value.language,
-      currency: form.value.currency,
-      unitsOfMeasure: form.value.unitsOfMeasure,
-      distanceMeasurement: form.value.distanceMeasurement,
-      flowMeasurement: form.value.flowMeasurement,
-      powerMeasurement: form.value.powerMeasurement,
-      pressureMeasurement: form.value.pressureMeasurement,
-      currentMeasurement: form.value.currentMeasurement,
-      viscosityMeasurement: form.value.viscosityMeasurement,
-      voltageMeasurement: form.value.voltageMeasurement,
-      energySourceType: form.value.energySourceType,
-      furnaceType: form.value.furnaceType
+      language: form.controls.language.value,
+      currency: form.controls.currency.value,
+      unitsOfMeasure: form.controls.unitsOfMeasure.value,
+      distanceMeasurement: form.controls.distanceMeasurement.value,
+      flowMeasurement: form.controls.flowMeasurement.value,
+      powerMeasurement: form.controls.powerMeasurement.value,
+      pressureMeasurement: form.controls.pressureMeasurement.value,
+      currentMeasurement: form.controls.currentMeasurement.value,
+      viscosityMeasurement: form.controls.viscosityMeasurement.value,
+      voltageMeasurement: form.controls.voltageMeasurement.value,
+      energySourceType: form.controls.energySourceType.value,
+      furnaceType: form.controls.furnaceType.value,
+      energyResultUnit: form.controls.energyResultUnit.value,
+      customFurnaceName: form.controls.customFurnaceName.value,
+      temperatureMeasurement: form.controls.temperatureMeasurement.value,
+      appVersion: packageJson.version,
+      phastRollupUnit: form.controls.phastRollupUnit.value      
     };
     return tmpSettings;
+  }
+
+  getNewSettingFromSetting(settings: Settings): Settings{
+    let newSettings: Settings = {
+      language: settings.language,
+      currency: settings.currency,
+      unitsOfMeasure: settings.unitsOfMeasure,
+      distanceMeasurement: settings.distanceMeasurement,
+      flowMeasurement: settings.flowMeasurement,
+      powerMeasurement: settings.powerMeasurement,
+      pressureMeasurement: settings.pressureMeasurement,
+      currentMeasurement: settings.currentMeasurement,
+      viscosityMeasurement: settings.viscosityMeasurement,
+      voltageMeasurement: settings.voltageMeasurement,
+      energySourceType: settings.energySourceType,
+      furnaceType: settings.furnaceType,
+      customFurnaceName: settings.customFurnaceName,
+      temperatureMeasurement: settings.temperatureMeasurement,
+      phastRollupUnit: settings.phastRollupUnit
+    }
+    return newSettings;
+  }
+
+  setUnits(settingsForm: FormGroup): FormGroup {
+    if (settingsForm.controls.unitsOfMeasure.value == 'Imperial') {
+      settingsForm.patchValue({
+        powerMeasurement: 'hp',
+        flowMeasurement: 'gpm',
+        distanceMeasurement: 'ft',
+        pressureMeasurement: 'psi',
+        temperatureMeasurement: 'F'
+        // currentMeasurement: 'A',
+        // viscosityMeasurement: 'cST',
+        // voltageMeasurement: 'V'
+      })
+
+    } else if (settingsForm.controls.unitsOfMeasure.value == 'Metric') {
+      settingsForm.patchValue({
+        powerMeasurement: 'kW',
+        flowMeasurement: 'm3/h',
+        distanceMeasurement: 'm',
+        pressureMeasurement: 'kPa',
+        temperatureMeasurement: 'C'
+        // currentMeasurement: 'A',
+        // viscosityMeasurement: 'cST',
+        // voltageMeasurement: 'V'
+      })
+    }
+    settingsForm = this.setEnergyResultUnit(settingsForm);
+    return settingsForm;
+  }
+
+  setEnergyResultUnit(settingsForm: FormGroup): FormGroup  {
+    if (settingsForm.controls.unitsOfMeasure.value == 'Imperial') {
+      settingsForm.patchValue({
+        energyResultUnit: 'MMBtu'
+      })
+    }
+    else if (settingsForm.controls.unitsOfMeasure.value == 'Metric') {
+      settingsForm.patchValue({
+        energyResultUnit: 'GJ'
+      })
+    }
+
+    if (settingsForm.controls.energySourceType.value == 'Electricity') {
+      settingsForm.patchValue({
+        energyResultUnit: 'kWh'
+      })
+    }
+    return settingsForm;
+  }
+
+  setEnergyResultUnitSetting(settings: Settings): Settings {
+    if (settings.unitsOfMeasure == 'Imperial') {
+      settings.energyResultUnit = 'MMBtu'
+    }
+    else if (settings.unitsOfMeasure == 'Metric') {
+      settings.energyResultUnit = 'GJ';
+    }
+
+    if (settings.energySourceType == 'Electricity') {
+      settings.energyResultUnit = 'kWh';
+    }
+    return settings;
+  }
+
+  setPhastResultUnit(settings: Settings): Settings {
+    if (settings.unitsOfMeasure == 'Imperial') {
+      settings.phastRollupUnit = 'MMBtu'
+    }
+    else if (settings.unitsOfMeasure == 'Metric') {
+      settings.phastRollupUnit = 'GJ';
+    }
+
+    if (settings.energySourceType == 'Electricity') {
+      settings.phastRollupUnit = 'kWh';
+    }
+    return settings;
+  }
+
+
+
+
+  setTemperatureUnit(settings: Settings): Settings{
+    if(settings.unitsOfMeasure == 'Imperial'){
+      settings.temperatureMeasurement = 'F';
+    }else if(settings.unitsOfMeasure == 'Metric'){
+      settings.temperatureMeasurement = 'C';
+    }else{
+      settings.temperatureMeasurement = 'F';
+    }
+    return settings;
   }
 }

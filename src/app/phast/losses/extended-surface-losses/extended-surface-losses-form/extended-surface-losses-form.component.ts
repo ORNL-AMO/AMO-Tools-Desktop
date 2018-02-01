@@ -1,7 +1,8 @@
 import { Component, OnInit, Input, EventEmitter, Output, ViewChild, ElementRef, SimpleChanges } from '@angular/core';
 import { WindowRefService } from '../../../../indexedDb/window-ref.service';
 import { ExtendedSurfaceCompareService } from '../extended-surface-compare.service';
-
+import { Settings } from '../../../../shared/models/settings';
+import { FormGroup } from '@angular/forms';
 @Component({
   selector: 'app-extended-surface-losses-form',
   templateUrl: './extended-surface-losses-form.component.html',
@@ -9,7 +10,7 @@ import { ExtendedSurfaceCompareService } from '../extended-surface-compare.servi
 })
 export class ExtendedSurfaceLossesFormComponent implements OnInit {
   @Input()
-  lossesForm: any;
+  lossesForm: FormGroup;
   @Output('calculate')
   calculate = new EventEmitter<boolean>();
   @Input()
@@ -20,11 +21,10 @@ export class ExtendedSurfaceLossesFormComponent implements OnInit {
   saveEmit = new EventEmitter<boolean>();
   @Input()
   lossIndex: number;
+  @Input()
+  settings: Settings;
 
-  @ViewChild('lossForm') lossForm: ElementRef;
-  form: any;
-  elements: any;
-
+  surfaceAreaError: string = null;
   firstChange: boolean = true;
   counter: any;
   temperatureError: string = null;
@@ -43,7 +43,7 @@ export class ExtendedSurfaceLossesFormComponent implements OnInit {
     }
   }
 
-  ngOnInit() { 
+  ngOnInit() {
     this.checkEmissivity(true);
     this.checkTemperature(true);
   }
@@ -56,43 +56,40 @@ export class ExtendedSurfaceLossesFormComponent implements OnInit {
   }
 
   disableForm() {
-    this.elements = this.lossForm.nativeElement.elements;
-    for (var i = 0, len = this.elements.length; i < len; ++i) {
-      this.elements[i].disabled = true;
-    }
+    this.lossesForm.disable();
   }
 
   enableForm() {
-    this.elements = this.lossForm.nativeElement.elements;
-    for (var i = 0, len = this.elements.length; i < len; ++i) {
-      this.elements[i].disabled = false;
-    }
+    this.lossesForm.enable();
   }
   checkForm() {
-    if (this.lossesForm.status == "VALID") {
-      this.calculate.emit(true);
-    }
+    this.calculate.emit(true);
   }
 
-  checkEmissivity(bool?: boolean){
-    if(!bool){
+  checkEmissivity(bool?: boolean) {
+    if (!bool) {
       this.startSavePolling();
     }
-    if(this.lossesForm.value.surfaceEmissivity >> 1){
-      this.emissivityError = 'Surface emissivity cannot be greater than 1';
-    }else{
+    if (this.lossesForm.controls.surfaceEmissivity.value > 1 || this.lossesForm.controls.surfaceEmissivity.value < 0) {
+      this.emissivityError = 'Surface emissivity must be between 0 and 1';
+    } else {
       this.emissivityError = null;
     }
   }
 
-  checkTemperature(bool?: boolean){
-    if(!bool){
+  checkTemperature(bool?: boolean) {
+    if (!bool) {
       this.startSavePolling();
     }
-    if(this.lossesForm.value.ambientTemp > this.lossesForm.value.avgSurfaceTemp){
+    if (this.lossesForm.controls.ambientTemp.value > this.lossesForm.controls.avgSurfaceTemp.value) {
       this.temperatureError = 'Ambient Temperature is greater than Surface Temperature';
-    }else{
+    } else {
       this.temperatureError = null;
+    }
+    if (this.lossesForm.controls.surfaceArea.value < 0) {
+      this.surfaceAreaError = 'Total Outside Surface Area must be equal or greater than 0 ';
+    } else {
+      this.surfaceAreaError = null;
     }
   }
 
@@ -102,7 +99,9 @@ export class ExtendedSurfaceLossesFormComponent implements OnInit {
   emitSave() {
     this.saveEmit.emit(true);
   }
-
+  focusOut() {
+    this.changeField.emit('default');
+  }
   startSavePolling() {
     this.checkForm();
     if (this.counter) {

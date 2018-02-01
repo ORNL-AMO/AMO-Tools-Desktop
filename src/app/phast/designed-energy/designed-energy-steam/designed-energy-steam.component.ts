@@ -7,7 +7,7 @@ import { DesignedEnergyService } from '../designed-energy.service';
 @Component({
   selector: 'app-designed-energy-steam',
   templateUrl: './designed-energy-steam.component.html',
-  styleUrls: ['./designed-energy-steam.component.css', '../../aux-equipment/aux-equipment.component.css', '../../../psat/explore-opportunities/explore-opportunities.component.css']
+  styleUrls: ['./designed-energy-steam.component.css']
 })
 export class DesignedEnergySteamComponent implements OnInit {
   @Input()
@@ -40,7 +40,7 @@ export class DesignedEnergySteamComponent implements OnInit {
   }
 
   calculate() {
-    this.results = this.designedEnergyService.designedEnergySteam(this.phast.designedEnergy.designedEnergySteam, this.phast);
+    this.results = this.designedEnergyService.designedEnergySteam(this.phast.designedEnergy.designedEnergySteam, this.phast, this.settings);
   }
 
   setField(str: string) {

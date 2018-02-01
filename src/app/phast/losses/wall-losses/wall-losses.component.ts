@@ -6,6 +6,8 @@ import { Losses } from '../../../shared/models/phast/phast';
 import { WallLossesService } from './wall-losses.service';
 import { WallLossCompareService } from './wall-loss-compare.service';
 import { WindowRefService } from '../../../indexedDb/window-ref.service';
+import { Settings } from '../../../shared/models/settings';
+import { FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-wall-losses',
@@ -27,9 +29,19 @@ export class WallLossesComponent implements OnInit {
   fieldChange = new EventEmitter<string>();
   @Input()
   isBaseline: boolean;
+  @Input()
+  settings: Settings;
+  @Input()
+  isLossesSetup: boolean;
+  @Input()
+  inSetup: boolean;
+  @Input()
+  modExists: boolean;
 
-  _wallLosses: Array<any>;
+  _wallLosses: Array<WallLossObj>;
   firstChange: boolean = true;
+  resultsUnit: string
+  lossesLocked: boolean = false;
   constructor(private phastService: PhastService, private wallLossesService: WallLossesService, private wallLossCompareService: WallLossCompareService, private windowRefService: WindowRefService) { }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -49,6 +61,11 @@ export class WallLossesComponent implements OnInit {
   }
 
   ngOnInit() {
+    if(this.settings.energyResultUnit != 'kWh'){
+      this.resultsUnit = this.settings.energyResultUnit + '/hr';
+    }else{
+      this.resultsUnit = 'kW';
+    }
     //initialize component data array
     //_wallLosses is array of objects that is used by wall-losses.component
     if (!this._wallLosses) {
@@ -59,13 +76,20 @@ export class WallLossesComponent implements OnInit {
       //set our baseline or modification losses for comparisons
       this.setCompareVals();
       this.wallLossCompareService.initCompareObjects();
+      let lossIndex = 1;
       this.losses.wallLosses.forEach(loss => {
         //create a temp loss object
         let tmpLoss = {
           form: this.wallLossesService.getWallLossForm(loss),
-          name: 'Loss #' + (this._wallLosses.length + 1),
-          heatLoss: loss.heatLoss || 0.0
+          heatLoss: loss.heatLoss || 0.0,
+          collapse: false
         };
+        if(!tmpLoss.form.controls.name.value){
+          tmpLoss.form.patchValue({
+            name: 'Loss #' + lossIndex
+          })
+        }
+        lossIndex++;
         //attempt to calculate tmpLoss results
         this.calculate(tmpLoss);
         //add object to component data array
@@ -83,48 +107,64 @@ export class WallLossesComponent implements OnInit {
           if (this.wallLossCompareService.differentArray && !this.isBaseline) {
             this.wallLossCompareService.differentArray.splice(lossIndex, 1);
           }
+          this.saveLosses();
         }
       }
     })
 
     //add monitor so both baseline and modification add loss when clicked
-    if (this.isBaseline) {
-      this.wallLossesService.addLossBaselineMonitor.subscribe((val) => {
-        if (val == true) {
-          this._wallLosses.push({
-            form: this.wallLossesService.initForm(),
-            name: 'Loss #' + (this._wallLosses.length + 1),
-            heatLoss: 0.0
-          })
-        }
-      })
-    } else {
-      this.wallLossesService.addLossModifiedMonitor.subscribe((val) => {
-        if (val == true) {
-          this._wallLosses.push({
-            form: this.wallLossesService.initForm(),
-            name: 'Loss #' + (this._wallLosses.length + 1),
-            heatLoss: 0.0
-          })
-        }
-      })
+    //ONLY ADDING LOSSSES IN BASELINE NOW
+    // if (this.isBaseline) {
+    //   this.wallLossesService.addLossBaselineMonitor.subscribe((val) => {
+    //     if (val == true) {
+    //       this._wallLosses.push({
+    //         form: this.wallLossesService.initForm(),
+    //         name: 'Loss #' + (this._wallLosses.length + 1),
+    //         heatLoss: 0.0
+    //       })
+    //     }
+    //   })
+    // } else {
+    //   this.wallLossesService.addLossModifiedMonitor.subscribe((val) => {
+    //     if (val == true) {
+    //       this._wallLosses.push({
+    //         form: this.wallLossesService.initForm(),
+    //         name: 'Loss #' + (this._wallLosses.length + 1),
+    //         heatLoss: 0.0
+    //       })
+    //     }
+    //   })
+    // }
+
+    if(this.inSetup && this.modExists){
+      this.lossesLocked = true;
+      this.disableForms();
     }
   }
 
   ngOnDestroy() {
     //clean up subscriptions on destroy
-    this.wallLossCompareService.baselineWallLosses = null;
-    this.wallLossCompareService.modifiedWallLosses = null;
+    if (this.isBaseline) {
+     // this.wallLossesService.addLossBaselineMonitor.next(false);
+      this.wallLossCompareService.baselineWallLosses = null;
+    } else {
+      this.wallLossCompareService.modifiedWallLosses = null;
+     // this.wallLossesService.addLossModifiedMonitor.next(false);
+    }
     this.wallLossesService.deleteLossIndex.next(null);
-    this.wallLossesService.addLossBaselineMonitor.next(false);
-    this.wallLossesService.addLossModifiedMonitor.next(false);
-    //this.wallLossesService.deleteLossIndex.unsubscribe();
-    //this.wallLossesService.addLossMonitor.unsubscribe();
+  }
+
+  disableForms(){
+    this._wallLosses.forEach(loss => {
+      loss.form.disable();
+    })
   }
 
   addLoss() {
     //if adding loss in modification signal to baseline to add loss
-    this.wallLossesService.addLoss(this.isBaseline);
+    // if (this.isLossesSetup) {
+    //   this.wallLossesService.addLoss(this.isBaseline);
+    // }
     //check compare service objects has been initialized
     //have modify conditions view call so that it isn't called twice => (!this.isBaseline)
     if (this.wallLossCompareService.differentArray) {
@@ -132,10 +172,16 @@ export class WallLossesComponent implements OnInit {
     }
     //add new empty loss to component data
     this._wallLosses.push({
-      form: this.wallLossesService.initForm(),
-      name: 'Loss #' + (this._wallLosses.length + 1),
-      heatLoss: 0.0
+      form: this.wallLossesService.initForm(this._wallLosses.length+1),
+      heatLoss: 0.0,
+      collapse: false
     });
+
+    this.saveLosses();
+  }
+
+  collapseLoss(loss: WallLossObj){
+    loss.collapse = !loss.collapse;
   }
 
   removeLoss(lossIndex: number) {
@@ -143,26 +189,28 @@ export class WallLossesComponent implements OnInit {
     this.wallLossesService.setDelete(lossIndex);
   }
 
-  //TODO: need to handle new losses after a loss has been deleted, can currently have same name
-  renameLossess() {
-    let index = 1;
-    this._wallLosses.forEach(loss => {
-      loss.name = 'Loss #' + index;
-      index++;
-    })
-  }
-
   //calculate wall loss results
-  calculate(loss: any) {
-    let tmpWallLoss: WallLoss = this.wallLossesService.getWallLossFromForm(loss.form);
-    loss.heatLoss = this.phastService.wallLosses(tmpWallLoss);
+  calculate(loss: WallLossObj) {
+    if (loss.form.status == 'VALID') {
+      let tmpWallLoss: WallLoss = this.wallLossesService.getWallLossFromForm(loss.form);
+      loss.heatLoss = this.phastService.wallLosses(tmpWallLoss, this.settings);
+    } else {
+      loss.heatLoss = null;
+    }
   }
 
   saveLosses() {
     //temp array will hold new losses data
     let tmpWallLosses = new Array<WallLoss>();
     //iterate through component array to build up new data
+    let lossIndex = 1;
     this._wallLosses.forEach(loss => {
+      if(!loss.form.controls.name.value){
+        loss.form.patchValue({
+          name: 'Loss #' + lossIndex
+        })
+      }
+      lossIndex++;
       let tmpWallLoss = this.wallLossesService.getWallLossFromForm(loss.form);
       tmpWallLoss.heatLoss = loss.heatLoss;
       tmpWallLosses.push(tmpWallLoss);
@@ -174,10 +222,12 @@ export class WallLossesComponent implements OnInit {
     //emit to losses.component that data is updated and should be saved
     this.savedLoss.emit(true);
   }
+
   //used for field by field context, send name of current field to losses.component
   changeField(str: string) {
     this.fieldChange.emit(str);
   }
+  
   //used for compare service
   setCompareVals() {
     //depending on modification/baseline set values for comparison
@@ -194,49 +244,11 @@ export class WallLossesComponent implements OnInit {
       }
     }
   }
+}
 
-  //TODO: check results data and indicate different
-  // checkHeatLoss() {
-  //   if (this.wallLossCompareService.baselineWallLosses && this.wallLossCompareService.modifiedWallLosses) {
-  //     if (this.wallLossCompareService.baselineWallLosses.length == this.wallLossCompareService.modifiedWallLosses.length) {
-  //       for (let index = 0; index < this.wallLossCompareService.baselineWallLosses.length; index++) {
-  //         let baselineHeatLoss = this.phastService.wallLosses(
-  //           this.wallLossCompareService.baselineWallLosses[index].surfaceArea,
-  //           this.wallLossCompareService.baselineWallLosses[index].ambientTemperature,
-  //           this.wallLossCompareService.baselineWallLosses[index].surfaceTemperature,
-  //           this.wallLossCompareService.baselineWallLosses[index].windVelocity,
-  //           this.wallLossCompareService.baselineWallLosses[index].surfaceEmissivity,
-  //           this.wallLossCompareService.baselineWallLosses[index].conditionFactor,
-  //           this.wallLossCompareService.baselineWallLosses[index].correctionFactor
-  //         );
-  //         let modifiedHeatLoss = this.phastService.wallLosses(
-  //           this.wallLossCompareService.modifiedWallLosses[index].surfaceArea,
-  //           this.wallLossCompareService.modifiedWallLosses[index].ambientTemperature,
-  //           this.wallLossCompareService.modifiedWallLosses[index].surfaceTemperature,
-  //           this.wallLossCompareService.modifiedWallLosses[index].windVelocity,
-  //           this.wallLossCompareService.modifiedWallLosses[index].surfaceEmissivity,
-  //           this.wallLossCompareService.modifiedWallLosses[index].conditionFactor,
-  //           this.wallLossCompareService.modifiedWallLosses[index].correctionFactor
-  //         )
-  //         if (baselineHeatLoss != modifiedHeatLoss) {
-  //           console.log('dif')
-  //           let doc = this.windowRefService.getDoc();
-  //           let heatLossElements = doc.getElementsByClassName('heatLoss_' + index);
-  //           debugger;
-  //           heatLossElements.forEach(element => {
-  //             element.classList.toggle('indicate-different', true);
-  //           });
-  //         } else {
-  //           console.log('same')
-  //           let doc = this.windowRefService.getDoc();
-  //           debugger
-  //           let heatLossElements = doc.getElementsByClassName('heatLoss_' + index);
-  //           heatLossElements.forEach(element => {
-  //             element.classList.toggle('indicate-different', false);
-  //           });
-  //         }
-  //       }
-  //     }
-  //   }
-  // }
+
+export interface WallLossObj {
+  form: FormGroup,
+  heatLoss?: number,
+  collapse: boolean
 }

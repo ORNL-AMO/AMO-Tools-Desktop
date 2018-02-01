@@ -1,0 +1,9 @@
+.output-summary .table th {
+    width: 25%;
+}
+
+
+.summary-table{
+    margin-bottom: 20px;
+  border-bottom: #bbb dashed 1px;
+}

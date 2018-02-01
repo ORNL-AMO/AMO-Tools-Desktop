@@ -4,6 +4,7 @@ import { PsatService } from '../../../psat/psat.service';
 import { Settings } from '../../../shared/models/settings';
 import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
+import { FormGroup } from '@angular/forms';
 @Component({
   selector: 'app-specific-speed',
   templateUrl: './specific-speed.component.html',
@@ -16,8 +17,8 @@ export class SpecificSpeedComponent implements OnInit {
   settings: Settings;
   @Input()
   inPsat: boolean;
-
-  speedForm: any;
+  currentField: string;
+  speedForm: FormGroup;
   specificSpeed: number;
   efficiencyCorrection: number;
   toggleCalculate: boolean = true;
@@ -43,13 +44,13 @@ export class SpecificSpeedComponent implements OnInit {
         results => {
           //convert defaults if standalone without default system settings
           if (results[0].flowMeasurement != 'gpm') {
-            let tmpVal = this.convertUnitsService.value(this.speedForm.value.flowRate).from('gpm').to(results[0].flowMeasurement);
+            let tmpVal = this.convertUnitsService.value(this.speedForm.controls.flowRate.value).from('gpm').to(results[0].flowMeasurement);
             this.speedForm.patchValue({
               flowRate: this.psatService.roundVal(tmpVal, 2)
             })
           }
           if (results[0].distanceMeasurement != 'ft') {
-            let tmpVal = this.convertUnitsService.value(this.speedForm.value.head).from('ft').to(results[0].distanceMeasurement);
+            let tmpVal = this.convertUnitsService.value(this.speedForm.controls.head.value).from('ft').to(results[0].distanceMeasurement);
 
             this.speedForm.patchValue({
               head: this.psatService.roundVal(tmpVal, 2)
@@ -66,5 +67,8 @@ export class SpecificSpeedComponent implements OnInit {
   }
   setTab(str: string) {
     this.tabSelect = str;
+  }
+  changeField(str: string) {
+    this.currentField = str;
   }
 }

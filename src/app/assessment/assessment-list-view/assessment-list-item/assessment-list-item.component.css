@@ -5,3 +5,19 @@
   border-width: 1px ;
   border-color: slategray;
 }
+
+
+a:not([href]):not([tabindex]):hover {
+  color: blue;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+a:not([href]):not([tabindex]){
+  color: blue;
+}
+
+.last-updated {
+  font-size: 13px;
+  color: #999;
+}

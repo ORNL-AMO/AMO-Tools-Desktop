@@ -4,6 +4,9 @@ import { FixtureLossesCompareService } from "../fixture-losses-compare.service";
 import { SuiteDbService } from '../../../../suiteDb/suite-db.service';
 import { ModalDirective } from 'ngx-bootstrap';
 import { LossesService } from '../../losses.service';
+import { Settings } from '../../../../shared/models/settings';
+import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
+import { FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-fixture-losses-form',
@@ -12,7 +15,7 @@ import { LossesService } from '../../losses.service';
 })
 export class FixtureLossesFormComponent implements OnInit {
   @Input()
-  lossesForm: any;
+  lossesForm: FormGroup;
   @Output('calculate')
   calculate = new EventEmitter<boolean>();
   @Input()
@@ -23,15 +26,18 @@ export class FixtureLossesFormComponent implements OnInit {
   saveEmit = new EventEmitter<boolean>();
   @Input()
   lossIndex: number;
-  @ViewChild('materialModal') public materialModal: ModalDirective;
-  @ViewChild('lossForm') lossForm: ElementRef;
-  form: any;
-  elements: any;
+  @Input()
+  settings: Settings;
 
+  @ViewChild('materialModal') public materialModal: ModalDirective;
+
+  specificHeatError: string = null;
+  feedRateError: string = null;
   firstChange: boolean = true;
   counter: any;
   materials: Array<any>;
-  constructor(private windowRefService: WindowRefService, private fixtureLossesCompareService: FixtureLossesCompareService, private suiteDbService: SuiteDbService, private lossesService: LossesService) { }
+  showModal: boolean = false;
+  constructor(private windowRefService: WindowRefService, private fixtureLossesCompareService: FixtureLossesCompareService, private suiteDbService: SuiteDbService, private lossesService: LossesService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnChanges(changes: SimpleChanges) {
     if (!this.firstChange) {
@@ -55,25 +61,12 @@ export class FixtureLossesFormComponent implements OnInit {
     }
     this.initDifferenceMonitor();
   }
-
   disableForm() {
-    this.elements = this.lossForm.nativeElement.elements;
-    for (var i = 0, len = this.elements.length; i < len; ++i) {
-      this.elements[i].disabled = true;
-    }
+    this.lossesForm.disable();
   }
 
   enableForm() {
-    this.elements = this.lossForm.nativeElement.elements;
-    for (var i = 0, len = this.elements.length; i < len; ++i) {
-      this.elements[i].disabled = false;
-    }
-  }
-
-  checkForm() {
-    if (this.lossesForm.status == 'VALID') {
-      this.calculate.emit(true);
-    }
+    this.lossesForm.enable();
   }
 
   focusField(str: string) {
@@ -84,16 +77,35 @@ export class FixtureLossesFormComponent implements OnInit {
     this.saveEmit.emit(true);
   }
 
+  focusOut() {
+    this.changeField.emit('default');
+  }
   setSpecificHeat() {
-    let tmpMaterial = this.suiteDbService.selectSolidLoadChargeMaterialById(this.lossesForm.value.materialName);
+    let tmpMaterial = this.suiteDbService.selectSolidLoadChargeMaterialById(this.lossesForm.controls.materialName.value);
     this.lossesForm.patchValue({
       specificHeat: tmpMaterial.specificHeatSolid
     })
     this.startSavePolling();
   }
 
+  checkInputError(bool?: boolean) {
+    if (!bool) {
+      this.startSavePolling();
+    }
+    if (this.lossesForm.controls.specificHeat.value < 0) {
+      this.specificHeatError = 'Specific Heat must be equal or greater than 0';
+    } else {
+      this.specificHeatError = null;
+    }
+    if (this.lossesForm.controls.feedRate.value < 0) {
+      this.feedRateError = 'Fixture Weight feed rate must be greater than 0';
+    } else {
+      this.feedRateError = null;
+    }
+  }
+
   startSavePolling() {
-    this.checkForm();
+    this.calculate.emit(true);
     if (this.counter) {
       clearTimeout(this.counter);
     }
@@ -117,7 +129,7 @@ export class FixtureLossesFormComponent implements OnInit {
         this.fixtureLossesCompareService.differentArray[this.lossIndex].different.specificHeat.subscribe((val) => {
           let specificHeatElements = doc.getElementsByName('specificHeat_' + this.lossIndex);
           specificHeatElements.forEach(element => {
-            element.classList.toggle('indicate-different', val);
+            element.classList.toggle('indicate-different-db', val);
           });
         })
         //feedRate
@@ -153,14 +165,23 @@ export class FixtureLossesFormComponent implements OnInit {
   }
 
   setProperties() {
-    let selectedMaterial = this.suiteDbService.selectSolidLoadChargeMaterialById(this.lossesForm.value.materialName);
+    let selectedMaterial = this.suiteDbService.selectSolidLoadChargeMaterialById(this.lossesForm.controls.materialName.value);
+    if (this.settings.unitsOfMeasure == 'Metric') {
+      selectedMaterial.specificHeatSolid = this.convertUnitsService.value(selectedMaterial.specificHeatSolid).from('btulbF').to('kJkgC');
+    }
+
     this.lossesForm.patchValue({
-      specificHeat: selectedMaterial.specificHeatSolid
+      specificHeat: this.roundVal(selectedMaterial.specificHeatSolid, 4)
     })
-    this.checkForm();
+    this.calculate.emit(true);
+  }
+  roundVal(val: number, digits: number) {
+    let test = Number(val.toFixed(digits));
+    return test;
   }
 
   showMaterialModal() {
+    this.showModal = true;
     this.lossesService.modalOpen.next(true);
     this.materialModal.show();
   }
@@ -176,6 +197,7 @@ export class FixtureLossesFormComponent implements OnInit {
         this.setProperties();
       }
     }
+    this.showModal = false;
     this.materialModal.hide();
     this.lossesService.modalOpen.next(false);
   }

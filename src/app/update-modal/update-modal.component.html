@@ -1,0 +1,34 @@
+<div bsModal #updateModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="updateModalLabel" aria-hidden="true"
+    [config]="{backdrop: 'static'}">
+    <div class="modal-dialog">
+        <div class="modal-content card">
+            <div class="modal-header card-title">
+                <div *ngIf="!updateSelected">
+                    AMO-Tools-Desktop Update Available
+                </div>
+                <div *ngIf="updateSelected">
+                    Downloading...
+                </div>
+                <button class="close pull-right" (click)="cancel()">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body card-body">
+                <div *ngIf="!updateSelected">
+                    <p class="card-text">When the download is complete, the program will automatically exit and install the updates</p>
+                    <button class="btn-sm btn-primary" (click)="updateClick()">Download Now</button>
+                    <button class="btn-sm btn-secondary pull-right" (click)="cancel()">Cancel</button>
+                </div>
+                <div *ngIf="updateSelected">
+                    <div class="spinner">
+                        <div class="bounce1"></div>
+                        <div class="bounce2"></div>
+                        <div class="bounce3"></div>
+                    </div>
+                    <p class="card-text">This may take a minute. The application will close and an installer for the new version will start when the
+                        download is completed. Thank you for you patience.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

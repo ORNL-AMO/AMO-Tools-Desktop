@@ -1,20 +1,20 @@
-<ul class="tabs subtabs">
+<ul class="tabs subtabs psat">
   <!--<li [ngClass]="{'active': modifyTab == 'system-basics'}" (click)="tabChange('system-basics')">
     <a class="nav-link small">
     System Basics
     </a>
   </li>-->
-  <li [ngClass]="{'active': modifyTab == 'pump-fluid'}" (click)="tabChange('pump-fluid')">
+  <li class="fixed-tab-size" [ngClass]="{'active': modifyTab == 'pump-fluid'}" (click)="tabChange('pump-fluid')">
     <a class="nav-link small">
     Pump Fluid
     </a>
-  </li>
-  <li [ngClass]="{'active': modifyTab == 'motor'}" (click)="tabChange('motor')">
+  </li><!--
+  --><li class="fixed-tab-size" [ngClass]="{'active': modifyTab == 'motor'}" (click)="tabChange('motor')">
     <a class="nav-link small">
     Motor
     </a>
-  </li>
-  <li [ngClass]="{'active': modifyTab == 'field-data'}" (click)="tabChange('field-data')">
+  </li><!--
+  --><li class="fixed-tab-size" [ngClass]="{'active': modifyTab == 'field-data'}" (click)="tabChange('field-data')">
     <a class="nav-link small">
     Field Data
     </a>

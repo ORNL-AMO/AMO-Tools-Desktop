@@ -3,7 +3,7 @@ import { PSAT, PsatInputs } from '../shared/models/psat';
 import { Assessment } from '../shared/models/assessment';
 import { PHAST } from '../shared/models/phast/phast';
 import { BehaviorSubject } from 'rxjs';
-
+declare const packageJson;
 @Injectable()
 export class AssessmentService {
 
@@ -13,9 +13,14 @@ export class AssessmentService {
   showLandingScreen: boolean = true;
 
   createAssessment: BehaviorSubject<boolean>;
-
-  constructor() { 
+  // checkForUpdates: BehaviorSubject<boolean>;
+  updateAvailable: BehaviorSubject<boolean>;
+  showFeedback: BehaviorSubject<boolean>;
+  constructor() {
     this.createAssessment = new BehaviorSubject<boolean>(null);
+    // this.checkForUpdates = new BehaviorSubject<boolean>(null);
+    this.updateAvailable = new BehaviorSubject<boolean>(null);
+    this.showFeedback = new BehaviorSubject<boolean>(true);
   }
 
   getNewAssessment(assessmentType: string): Assessment {
@@ -23,7 +28,8 @@ export class AssessmentService {
       name: null,
       createdDate: new Date(),
       modifiedDate: new Date(),
-      type: assessmentType
+      type: assessmentType,
+      appVersion: packageJson.version
     }
     return newAssessment;
   }
@@ -34,8 +40,8 @@ export class AssessmentService {
       pump_specified: null,
       pump_rated_speed: 1780,
       drive: 0,
-      kinematic_viscosity: 1,
-      specific_gravity: 1,
+      kinematic_viscosity: 1.107,
+      specific_gravity: 1.002,
       stages: 1,
       fixed_speed: 0,
       line_frequency: 0,
@@ -46,24 +52,40 @@ export class AssessmentService {
       motor_rated_voltage: 460,
       load_estimation_method: 0,
       motor_rated_fla: null,
-      margin: null,
+      margin: 0,
       operating_fraction: 1,
       flow_rate: null,
       head: 277,
       motor_field_power: null,
       motor_field_current: null,
       motor_field_voltage: 460,
-      cost_kw_hour: 0.06
-    }
+      cost_kw_hour: 0.06,
+      fluidType: 'Water',
+      fluidTemperature: 68
+    };
     let newPsat: PSAT = {
       inputs: newPsatInputs
-    }
+    };
     return newPsat;
   }
 
   getNewPhast(): PHAST {
     let newPhast: PHAST = {
-      name: null
+      name: null,
+      systemEfficiency: 90,
+      operatingHours: {
+        weeksPerYear: 52,
+        daysPerWeek: 7,
+        shiftsPerDay: 3,
+        hoursPerShift: 8,
+        hoursPerYear:8736
+      },
+      operatingCosts: {
+        fuelCost: 8.00,
+        steamCost: 10.00,
+        electricityCost: .080
+      },
+      modifications: new Array()
     }
     return newPhast;
   }
@@ -80,11 +102,11 @@ export class AssessmentService {
     return this.subTab;
   }
 
-  getLandingScreen(){
+  getLandingScreen() {
     return this.showLandingScreen;
   }
 
-  setLandingScreen(bool: boolean){
+  setLandingScreen(bool: boolean) {
     this.showLandingScreen = bool;
   }
 
@@ -119,7 +141,9 @@ export class AssessmentService {
       this.workingAssessment.psat.inputs.motor_field_power,
       this.workingAssessment.psat.inputs.motor_field_current,
       this.workingAssessment.psat.inputs.motor_field_voltage,
-      this.workingAssessment.psat.inputs.cost_kw_hour
+      this.workingAssessment.psat.inputs.cost_kw_hour,
+      this.workingAssessment.psat.inputs.fluidType,
+      this.workingAssessment.psat.inputs.fluidTemperature
     );
     tmpPSAT = {
       inputs: tmpPsatInputs
@@ -151,7 +175,9 @@ export class AssessmentService {
     _motor_field_power: any,
     _motor_field_current: any,
     _motor_field_voltage: any,
-    _cost_kw_hour: any
+    _cost_kw_hour: any,
+    _fluidType: any,
+    _fluidTemperature: any
 
   ): PsatInputs {
     let newPsatInputs: PsatInputs = {
@@ -178,8 +204,10 @@ export class AssessmentService {
       motor_field_power: _motor_field_power,
       motor_field_current: _motor_field_current,
       motor_field_voltage: _motor_field_voltage,
-      cost_kw_hour: _cost_kw_hour
-    }
+      cost_kw_hour: _cost_kw_hour,
+      fluidType: _fluidType,
+      fluidTemperature: _fluidTemperature
+    };
     return newPsatInputs;
   }
 }

@@ -1,0 +1,35 @@
+.view-factor-diagram{
+    max-width: 100%;
+}
+
+.modal-header{
+    background: #fff;
+}
+
+.modal-content{
+    border: none;
+    border-radius: 0px;
+}
+
+.dialog-image{
+    width: 80%;
+}
+
+.view-factor-modal{
+    top: 0;
+}
+
+
+.inspect-icon{
+    float: right;
+    margin-bottom: -50px;
+    margin-right: 5px;
+    position: relative;
+    font-size: x-large;
+    color: dimgray;
+}
+
+.inspect-icon:hover{
+    cursor: pointer;
+    color: black;
+}

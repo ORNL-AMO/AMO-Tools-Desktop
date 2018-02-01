@@ -1,4 +1,4 @@
-<div class="feedback" *ngIf="showFeedback">
+<div class="feedback hide-print" *ngIf="showFeedback">
 
     <div class="feedback-header">
         <h2>Provide Feedback: Tell us how we can improve this app!</h2>
@@ -9,7 +9,8 @@
 </div>
 
 <router-outlet></router-outlet>
-<div bsModal #updateModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="updateModalLabel" aria-hidden="true"
+<app-update-modal  *ngIf="showUpdateModal" (closeModal)="closeModal()"></app-update-modal>
+<!--<div bsModal #updateModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="updateModalLabel" aria-hidden="true"
     [config]="{backdrop: 'static'}">
     <div class="modal-dialog">
         <div class="modal-content card">
@@ -40,4 +41,4 @@
             </div>
         </div>
     </div>
-</div>
+</div>-->

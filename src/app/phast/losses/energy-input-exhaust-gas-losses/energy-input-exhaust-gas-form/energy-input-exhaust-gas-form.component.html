@@ -1,0 +1,57 @@
+<form [formGroup]="exhaustGasForm">
+  <div class="form-section">
+    <div class="form-group">
+      <label class="small" for="totalHeatInput">Total Heat Input for Burners</label>
+      <div class="input-group">
+        <input name="{{'totalHeatInput_'+lossIndex}}" type="number" step="any" min="0" class="form-control" formControlName="totalHeatInput"
+          id="totalHeatInput" onfocus="this.select();" (input)="checkHeat()" (focus)="focusField('totalHeatInput')" (blur)="focusOut()">
+        <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">Btu/hr</span>
+        <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kJ/hr</span>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="small" for="electricalPowerInput">Electrical Power Input</label>
+      <div class="input-group">
+        <input name="{{'electricalPowerInput_'+lossIndex}}" type="number" step="any" min="0" class="form-control" formControlName="electricalPowerInput"
+          id="electricalPowerInput" onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('electricalPowerInput')">
+        <span class="input-group-addon units">kW</span>
+      </div>
+    </div>
+  </div>
+  <div class="form-section">
+    <div class="form-group">
+      <label class="small" for="excessAir">Excess Air</label>
+      <div class="input-group">
+        <input name="{{'excessAir_'+lossIndex}}" type="number" step="any" min="0" class="form-control" formControlName="excessAir" id="excessAir"
+          onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('excessAir')" (blur)="focusOut()">
+        <span class="input-group-addon units">%</span>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="small" for="combustionAirTemp">Combustion Air Temp</label>
+      <div class="input-group">
+        <input name="{{'combustionAirTemp_'+lossIndex}}" type="number" step="10" class="form-control" formControlName="combustionAirTemp"
+          id="combustionAirTemp" onfocus="this.select();" (input)="checkHeat()" (focus)="focusField('combustionAirTemp')" (blur)="focusOut()">
+        <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">&#8457;</span>
+        <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
+      </div>
+      <span class="alert-warning pull-right small" *ngIf="combustionError !== null">{{combustionError}}</span>
+    </div>
+    <div class="form-group">
+      <label class="small" for="exhaustGasTemp">Exhaust Gas Temp</label>
+      <div class="input-group">
+        <input name="{{'exhaustGasTemp_'+lossIndex}}" type="number" step="10" class="form-control" formControlName="exhaustGasTemp"
+          id="exhaustGasTemp" onfocus="this.select();" (input)="checkHeat()" (focus)="focusField('exhaustGasTemp')" (blur)="focusOut()">
+        <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">&#8457;</span>
+        <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
+      </div>
+      <span class="alert-warning pull-right small" *ngIf="heatError !== null">{{heatError}}</span>
+    </div>
+    <div class="form-group">
+      <label class="small" for="availableHeat">Available Heat</label>
+      <div class="text-center small">
+        {{availableHeat | number:'2.2-2'}} %
+      </div>
+    </div>
+  </div>
+</form>

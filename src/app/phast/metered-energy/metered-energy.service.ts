@@ -3,100 +3,121 @@ import { MeteredEnergyResults, MeteredEnergyElectricity, MeteredEnergyFuel, Mete
 import { AuxEquipmentService } from '../aux-equipment/aux-equipment.service';
 import { PhastService } from '../phast.service';
 import { PHAST } from '../../shared/models/phast/phast';
+import { Settings } from '../../shared/models/settings';
+import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
+import { PhastResultsService } from '../phast-results.service';
 @Injectable()
 export class MeteredEnergyService {
 
-  constructor(private auxEquipmentService: AuxEquipmentService, private phastService: PhastService) { }
+  constructor(private auxEquipmentService: AuxEquipmentService, private phastService: PhastService, private phastResultsService: PhastResultsService, private convertUnitsService: ConvertUnitsService) { }
 
-  meteredElectricity(input: MeteredEnergyElectricity, phast: PHAST): MeteredEnergyResults {
+  meteredElectricity(input: MeteredEnergyElectricity, phast: PHAST, settings: Settings): MeteredEnergyResults {
     //Metered Energy Use
-    //meteredEnergyUsed = Electricity Used during collection / Collection Time 
-    let meteredEnergyUsed = (input.electricityUsed / input.electricityCollectionTime) || 0;
+    //meteredEnergyUsed = Electricity Used during collection / Collection Time
+    let meteredEnergyUsed = this.calcElectricityUsed(input);
     //Energy Intensity for Charge Material = meteredEnergyUsed / sum(charge material feed rates)
-    let sumFeedRate = this.phastService.sumChargeMaterialFeedRate(phast.losses.chargeMaterials);
+    let sumFeedRate = 0;
+    if (phast.losses) {
+      sumFeedRate = this.phastService.sumChargeMaterialFeedRate(phast.losses.chargeMaterials);
+    }
     let meteredEnergyIntensity = (meteredEnergyUsed / sumFeedRate) || 0;
     //Electricity Used (Auxiliary) = Electricity used during collection (aux) / collection time (aux)
     let meteredElectricityUsed = (input.auxElectricityUsed / input.auxElectricityCollectionTime) || 0;
-
+   
+    meteredEnergyUsed = this.convertResult(meteredEnergyUsed, settings);
+    meteredEnergyIntensity = this.convertResult(meteredEnergyIntensity, settings);
     //Calculated by PHAST
-    //Electricity used = Sum of heat input
-    let calculatedFuelEnergyUsed = this.phastService.sumHeatInput(phast.losses);
-    //Energy Intensity for Charge Materials =  Metered Energy Used / Sum(charge material feed rates)
-    let calculatedEnergyIntensity = (calculatedFuelEnergyUsed / sumFeedRate) || 0;
-    //total electricty used from auxiliary equipment
-    let tmpAuxResults = this.auxEquipmentService.calculate(phast);
-    let calculatedElectricityUsed = this.auxEquipmentService.getResultsSum(tmpAuxResults);
-
+    let calculated = this.phastResultsService.calculatedByPhast(phast, settings);
 
     let tmpResults: MeteredEnergyResults = {
       meteredEnergyUsed: meteredEnergyUsed,
       meteredEnergyIntensity: meteredEnergyIntensity,
       meteredElectricityUsed: meteredElectricityUsed,
-      calculatedFuelEnergyUsed: calculatedFuelEnergyUsed,
-      calculatedEnergyIntensity: calculatedEnergyIntensity,
-      calculatedElectricityUsed: calculatedElectricityUsed
+      calculatedFuelEnergyUsed: calculated.fuelEnergyUsed,
+      calculatedEnergyIntensity: calculated.energyIntensity,
+      calculatedElectricityUsed: calculated.electricityUsed
     }
     return tmpResults;
   }
 
-  meteredFuel(inputs: MeteredEnergyFuel, phast: PHAST): MeteredEnergyResults {
+  calcElectricityUsed(input: MeteredEnergyElectricity):number{
+    return (input.electricityUsed / input.electricityCollectionTime) || 0;
+  }
+
+  meteredFuel(inputs: MeteredEnergyFuel, phast: PHAST, settings: Settings): MeteredEnergyResults {
     //Metered Energy Use
-    //Metered Fuel Used = HHV * Flow Rate
-    let meteredEnergyUsed = inputs.heatingValue * inputs.flowRate;
+    //Metered Fuel Used = HHV * Flow Rate (if flow rate given)
+    let meteredEnergyUsed = this.calcFuelUsed(inputs);
     //Energy Intensity for Charge Materials =  Metered Energy Used / Sum(charge material feed rates)
-    let sumFeedRate = this.phastService.sumChargeMaterialFeedRate(phast.losses.chargeMaterials);
+    let sumFeedRate = 0;
+    if (phast.losses) {
+      sumFeedRate = this.phastService.sumChargeMaterialFeedRate(phast.losses.chargeMaterials);
+    }
     let meteredEnergyIntensity = (meteredEnergyUsed / sumFeedRate) || 0;
     //Electricity Used (Auxiliary) = Electricity used during collection / collection time
     let meteredElectricityUsed = (inputs.electricityUsed / inputs.electricityCollectionTime) || 0;
 
+    meteredEnergyUsed = this.convertResult(meteredEnergyUsed, settings);
+    meteredEnergyIntensity = this.convertResult(meteredEnergyIntensity, settings);
+
     //Calculated By PHAST
-    //Fuel energy used
-    let calculatedFuelEnergyUsed = this.phastService.sumHeatInput(phast.losses);
-    //energy intensity = fuel energy used / sum(charge material feed rate)
-    let calculatedEnergyIntensity = (calculatedFuelEnergyUsed / sumFeedRate) || 0;
-    //total electricty used from auxiliary equipment
-    let tmpAuxResults = this.auxEquipmentService.calculate(phast);
-    let calculatedElectricityUsed = this.auxEquipmentService.getResultsSum(tmpAuxResults);
+    let calculated = this.phastResultsService.calculatedByPhast(phast, settings);
 
     let tmpResults: MeteredEnergyResults = {
       meteredEnergyUsed: meteredEnergyUsed,
       meteredEnergyIntensity: meteredEnergyIntensity,
       meteredElectricityUsed: meteredElectricityUsed,
-      calculatedFuelEnergyUsed: calculatedFuelEnergyUsed,
-      calculatedEnergyIntensity: calculatedEnergyIntensity,
-      calculatedElectricityUsed: calculatedElectricityUsed
+      calculatedFuelEnergyUsed: calculated.fuelEnergyUsed,
+      calculatedEnergyIntensity: calculated.energyIntensity,
+      calculatedElectricityUsed: calculated.electricityUsed
     }
     return tmpResults;
   }
 
-  meteredSteam(inputs: MeteredEnergySteam, phast: PHAST): MeteredEnergyResults {
+  calcFuelUsed(inputs: MeteredEnergyFuel): number {
+    return inputs.fuelEnergy  || 0;
+  }
+
+  meteredSteam(inputs: MeteredEnergySteam, phast: PHAST, settings: Settings): MeteredEnergyResults {
     //Metered Energy Use
     //Metered Fuel Used = HHV * Flow Rate
-    let meteredEnergyUsed = inputs.totalHeatSteam * inputs.flowRate;
+    let meteredEnergyUsed = this.calcSteamEnergyUsed(inputs);
     //Energy Intensity for Charge Materials =  Metered Energy Used / Sum(charge material feed rates)
-    let sumFeedRate = this.phastService.sumChargeMaterialFeedRate(phast.losses.chargeMaterials);
+    let sumFeedRate = 0;
+    if (phast.losses) {
+      sumFeedRate = this.phastService.sumChargeMaterialFeedRate(phast.losses.chargeMaterials);
+    }
     let meteredEnergyIntensity = (meteredEnergyUsed / sumFeedRate) || 0;
     //Electricity Used (Auxiliary) = Electricity used during collection / collection time
     let meteredElectricityUsed = (inputs.electricityUsed / inputs.electricityCollectionTime) || 0;
 
+    meteredEnergyUsed = this.convertResult(meteredEnergyUsed, settings);
+    meteredEnergyIntensity = this.convertResult(meteredEnergyIntensity, settings);
     //Calculated By PHAST
-    //Fuel energy used
-    let calculatedFuelEnergyUsed = this.phastService.sumHeatInput(phast.losses);
-    //energy intensity = fuel energy used / sum(charge material feed rate)
-    let calculatedEnergyIntensity = (calculatedFuelEnergyUsed / sumFeedRate) || 0;
-    //total electricty used from auxiliary equipment
-    let tmpAuxResults = this.auxEquipmentService.calculate(phast);
-    let calculatedElectricityUsed = this.auxEquipmentService.getResultsSum(tmpAuxResults);
+    let calculated = this.phastResultsService.calculatedByPhast(phast, settings);
 
     let tmpResults: MeteredEnergyResults = {
       meteredEnergyUsed: meteredEnergyUsed,
       meteredEnergyIntensity: meteredEnergyIntensity,
       meteredElectricityUsed: meteredElectricityUsed,
-      calculatedFuelEnergyUsed: calculatedFuelEnergyUsed,
-      calculatedEnergyIntensity: calculatedEnergyIntensity,
-      calculatedElectricityUsed: calculatedElectricityUsed
+      calculatedFuelEnergyUsed: calculated.fuelEnergyUsed,
+      calculatedEnergyIntensity: calculated.energyIntensity,
+      calculatedElectricityUsed: calculated.electricityUsed
     }
     return tmpResults;
   }
 
+  calcSteamEnergyUsed(inputs: MeteredEnergySteam): number{
+    return inputs.totalHeatSteam * inputs.flowRate || 0;
+  }
+  convertResult(val: number, settings: Settings): number {
+    if(settings.energySourceType == 'Electricity'){
+      val = this.convertUnitsService.value(val).from('kWh').to(settings.energyResultUnit)
+    }else if (settings.unitsOfMeasure == 'Metric') {
+      val = this.convertUnitsService.value(val).from('kJ').to(settings.energyResultUnit);
+    } else {
+      val = this.convertUnitsService.value(val).from('Btu').to(settings.energyResultUnit);
+    }
+    return val;
+  }
 }

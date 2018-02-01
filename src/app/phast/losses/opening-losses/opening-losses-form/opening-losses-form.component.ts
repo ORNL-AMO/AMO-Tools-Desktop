@@ -2,6 +2,10 @@ import { Component, OnInit, Input, EventEmitter, Output, ViewChild, ElementRef, 
 import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
 import { WindowRefService } from '../../../../indexedDb/window-ref.service';
 import { OpeningLossesCompareService } from '../opening-losses-compare.service';
+import { OpeningLossesService } from '../opening-losses.service';
+import { PhastService } from '../../../phast.service';
+import { Settings } from '../../../../shared/models/settings';
+import { FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-opening-losses-form',
@@ -10,7 +14,7 @@ import { OpeningLossesCompareService } from '../opening-losses-compare.service';
 })
 export class OpeningLossesFormComponent implements OnInit {
   @Input()
-  openingLossesForm: any;
+  openingLossesForm: FormGroup;
   @Output('calculate')
   calculate = new EventEmitter<boolean>();
   @Input()
@@ -21,18 +25,25 @@ export class OpeningLossesFormComponent implements OnInit {
   saveEmit = new EventEmitter<boolean>();
   @Input()
   lossIndex: number;
+  @Input()
+  settings: Settings;
 
-  @ViewChild('lossForm') lossForm: ElementRef;
   totalArea: number = 0.0;
 
-  form: any;
-  elements: any;
   counter: any;
   firstChange: boolean = true;
   temperatureError: string = null;
   emissivityError: string = null;
   timeOpenError: string = null;
-  constructor(private convertUnitsService: ConvertUnitsService, private windowRefService: WindowRefService, private openingLossesCompareService: OpeningLossesCompareService) { }
+  numOpeningsError: string = null;
+  thicknessError: string = null;
+  lengthError: string = null;
+  heightError: string = null;
+  viewFactorError: string = null;
+
+  constructor(private convertUnitsService: ConvertUnitsService, private windowRefService: WindowRefService,
+              private openingLossesCompareService: OpeningLossesCompareService,
+              private openingLossesService: OpeningLossesService, private phastService: PhastService) { }
 
   ngOnChanges(changes: SimpleChanges) {
     if (!this.firstChange) {
@@ -52,6 +63,7 @@ export class OpeningLossesFormComponent implements OnInit {
     this.checkSurfaceEmissivity(true);
     this.checkTemperature(true);
     this.checkTimeOpen(true);
+    this.checkThickness(true);
   }
 
   ngAfterViewInit() {
@@ -61,83 +73,127 @@ export class OpeningLossesFormComponent implements OnInit {
     this.initDifferenceMonitor();
   }
 
+  focusOut() {
+    this.changeField.emit('default');
+  }
+
   disableForm() {
-    this.elements = this.lossForm.nativeElement.elements;
-    for (var i = 0, len = this.elements.length; i < len; ++i) {
-      this.elements[i].disabled = true;
-    }
+    this.openingLossesForm.disable();
   }
 
   enableForm() {
-    this.elements = this.lossForm.nativeElement.elements;
-    for (var i = 0, len = this.elements.length; i < len; ++i) {
-      this.elements[i].disabled = false;
+    this.openingLossesForm.enable();
+  }
+
+  calculateViewFactor() {
+    let vfInputs = this.openingLossesService.getViewFactorInput(this.openingLossesForm);
+    let viewFactor = this.phastService.viewFactorCalculation(vfInputs, this.settings);
+    this.openingLossesForm.patchValue({
+      viewFactor: this.roundVal(viewFactor, 3)
+    });
+  }
+
+  roundVal(val: number, digits: number): number{
+    return Number(val.toFixed(digits));
+  }
+
+  checkOpeningDimensions(bool?: boolean) {
+    if (!bool) {
+      this.startSavePolling();
+    }
+    if (this.openingLossesForm.controls.openingType.value === 'Round') {
+      this.lengthError = (this.openingLossesForm.controls.lengthOfOpening.value <= 0) ? "Opening Diameter must be greater than 0" : null;
+    } else {
+      this.lengthError = (this.openingLossesForm.controls.lengthOfOpening.value <= 0) ? "Opening Length must be greater than 0" : null;
+      this.heightError = (this.openingLossesForm.controls.heightOfOpening.value <= 0) ? "Opening Height must be greater than 0" : null;
     }
   }
 
-  checkForm() {
-    if (this.openingLossesForm.status == 'VALID') {
-      this.calculate.emit(true);
+  checkThickness(bool?: boolean) {
+    if (!bool) {
+      this.startSavePolling();
     }
+    this.thicknessError = (this.openingLossesForm.controls.wallThickness.value < 0) ? "Furnace Wall Thickness must be greater than or equal to 0" : null;
+  }
+
+  checkNumOpenings(bool?: boolean) {
+    if (!bool) {
+      this.startSavePolling();
+    }
+    this.numOpeningsError = (this.openingLossesForm.controls.numberOfOpenings.value < 0) ? "Number of Openings must be greater than 0" : null;
+  }
+
+  checkViewFactor(bool?: boolean) {
+    if (!bool) {
+      this.startSavePolling();
+    }
+    this.viewFactorError = (this.openingLossesForm.controls.viewFactor.value < 0) ? "View Factor must be greater than 0" : null;
   }
 
   checkTemperature(bool?: boolean) {
     if (!bool) {
       this.startSavePolling();
     }
-    if (this.openingLossesForm.value.ambientTemp > this.openingLossesForm.value.insideTemp) {
-      this.temperatureError = 'Ambient Temperature is greater than Average Zone Temperature';
-    } else {
-      this.temperatureError = null;
-    }
+    this.temperatureError = (this.openingLossesForm.controls.ambientTemp.value > this.openingLossesForm.controls.insideTemp.value) ?
+      'Ambient Temperature cannot be greater than Average Zone Temperature' : null;
   }
 
   checkSurfaceEmissivity(bool?: boolean) {
     if (!bool) {
       this.startSavePolling();
     }
-    if (this.openingLossesForm.value.emissivity > 1) {
-      this.emissivityError = 'Surface emissivity cannot be greater than 1';
-    } else {
-      this.emissivityError = null;
-    }
+    this.emissivityError = (this.openingLossesForm.controls.emissivity.value > 1 || this.openingLossesForm.controls.emissivity.value < 0) ? 'Surface emissivity must be between 0 and 1' : null;
   }
 
   checkTimeOpen(bool?: boolean) {
     if (!bool) {
       this.startSavePolling();
     }
-    if (this.openingLossesForm.value.percentTimeOpen > 100) {
-      this.timeOpenError = '% of Time Open cannot be greater than 100%';
-    } else {
-      this.timeOpenError = null;
-    }
+    this.timeOpenError = (this.openingLossesForm.controls.percentTimeOpen.value < 0 || this.openingLossesForm.controls.percentTimeOpen.value > 100) ?
+      'Percent Time Open must be between 0% and 100%' : null;
   }
 
   getArea() {
-    if (this.openingLossesForm.value.openingType == 'Round') {
+    let smallUnit = 'in';
+    let largeUnit = 'ft';
+    if (this.settings.unitsOfMeasure == 'Metric') {
+      smallUnit = 'mm';
+      largeUnit = 'm';
+    }
+
+    this.checkNumOpenings();
+    this.checkOpeningDimensions();
+    if (this.numOpeningsError !== null || this.lengthError !== null || this.heightError !== null) {
+      this.totalArea = 0;
+      return;
+    }
+
+    if (this.openingLossesForm.controls.openingType.value == 'Round') {
       if (this.openingLossesForm.controls.lengthOfOpening.status == "VALID") {
         this.openingLossesForm.controls.heightOfOpening.setValue(0);
-        let radiusInches = this.openingLossesForm.value.lengthOfOpening;
+        let radiusInches = this.openingLossesForm.controls.lengthOfOpening.value;
         //let radiusFeet = (radiusInches * .08333333) / 2;
-        let radiusFeet = this.convertUnitsService.value(radiusInches).from('in').to('ft') / 2;
-        this.totalArea = Math.PI * Math.pow(radiusFeet, 2) * this.openingLossesForm.value.numberOfOpenings;
-        this.checkForm();
+
+        let radiusFeet = this.convertUnitsService.value(radiusInches).from(smallUnit).to(largeUnit) / 2;
+        this.totalArea = Math.PI * Math.pow(radiusFeet, 2) * this.openingLossesForm.controls.numberOfOpenings.value;
+
+        this.calculate.emit(true);
       }
-    } else if (this.openingLossesForm.value.openingType == 'Rectangular (Square)') {
+    } else if (this.openingLossesForm.controls.openingType.value == 'Rectangular (Square)') {
       if (this.openingLossesForm.controls.lengthOfOpening.status == "VALID" && this.openingLossesForm.controls.heightOfOpening.status == "VALID") {
-        let lengthInches = this.openingLossesForm.value.lengthOfOpening;
-        let heightInches = this.openingLossesForm.value.heightOfOpening;
+        let lengthInches = this.openingLossesForm.controls.lengthOfOpening.value;
+        let heightInches = this.openingLossesForm.controls.heightOfOpening.value;
         let lengthFeet = 0;
         let heightFeet = 0;
         if (lengthInches) {
-          lengthFeet = this.convertUnitsService.value(lengthInches).from('in').to('ft');
+          lengthFeet = this.convertUnitsService.value(lengthInches).from(smallUnit).to(largeUnit);
         }
         if (heightInches) {
-          heightFeet = this.convertUnitsService.value(heightInches).from('in').to('ft');
+          heightFeet = this.convertUnitsService.value(heightInches).from(smallUnit).to(largeUnit);
         }
-        this.totalArea = lengthFeet * heightFeet * this.openingLossesForm.value.numberOfOpenings;
-        this.checkForm();
+        this.totalArea = lengthFeet * heightFeet * this.openingLossesForm.controls.numberOfOpenings.value;
+
+        this.calculate.emit(true);
       }
     } else {
       this.totalArea = 0.0;
@@ -153,7 +209,7 @@ export class OpeningLossesFormComponent implements OnInit {
   }
 
   startSavePolling() {
-    this.checkForm();
+    this.calculate.emit(true);
     if (this.counter) {
       clearTimeout(this.counter);
     }

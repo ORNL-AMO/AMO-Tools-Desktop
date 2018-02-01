@@ -1,0 +1,142 @@
+<div class="card summary-card">
+  <!-- toggleCollapse toggles collapse variable -->
+  <div class="card-header" (click)="toggleCollapse()">
+    <h5>Wall Losses ({{numLosses}})
+      <span class="pull-right fa" [ngClass]="{'fa-chevron-up': collapse, 'fa-chevron-down': !collapse}"></span>
+    </h5>
+  </div>
+  <!-- if not collapsed show table-->
+  <div *ngIf="!collapse">
+    <!-- iterate loss data -->
+    <div class="card-body" *ngFor="let data of lossData; let index = index;">
+      <div class="output-summary">
+        <table class="table table-hover table-striped">
+          <thead>
+            <tr>
+              <!-- set table column widths based on number of modifications, add 2 for baseline and label columns -->
+              <th [ngStyle]="{'width.%': 100 /(numMods+2)}"></th>
+              <th [ngStyle]="{'width.%': 100 /(numMods+2)}">
+                Baseline
+              </th>
+              <th [ngStyle]="{'width.%': 100 /(numMods+2)}" *ngFor="let mod of phast.modifications">
+                {{mod.phast.name}}
+              </th>
+            </tr>
+            <tr>
+              <th>{{index+1}}</th>
+              <th>
+                {{data.baseline.name}}
+              </th>
+              <th *ngFor="let mod of data.modifications">
+                {{mod.name}}
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <!--avgSurfaceTempDiff is bool set when modification data is different then baseline for surfaceTemperature-->
+              <td [ngClass]="{'indicate-report-field-different':avgSurfaceTempDiff[index] == true}">
+                Average Surface Temperature
+                <span *ngIf="settings.unitsOfMeasure == 'Imperial'">(&#8457;)</span>
+                <span *ngIf="settings.unitsOfMeasure == 'Metric'">(&#8451;)</span>
+              </td>
+              <td [ngClass]="{'indicate-report-field-different':avgSurfaceTempDiff[index] == true}">
+                {{data.baseline.surfaceTemperature}}
+              </td>
+              <!-- iterate modification array from data -->
+              <!-- checkDiff() evaluates baseline and modification for different, passed string is used for diff variable to style baseline and name fields above -->
+              <td *ngFor="let mod of data.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(data.baseline.surfaceTemperature, mod.surfaceTemperature, 'avgSurfaceTempDiff', index)}">
+                {{mod.surfaceTemperature}}
+              </td>
+            </tr>
+            <tr>
+              <td [ngClass]="{'indicate-report-field-different':ambientTempDiff[index] == true}">
+                Ambient Temperature
+                <span *ngIf="settings.unitsOfMeasure == 'Imperial'">(&#8457;)</span>
+                <span *ngIf="settings.unitsOfMeasure == 'Metric'">(&#8451;)</span>
+              </td>
+              <td [ngClass]="{'indicate-report-field-different':ambientTempDiff[index] == true}">
+                {{data.baseline.ambientTemperature}}
+              </td>
+              <td *ngFor="let mod of data.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(data.baseline.ambientTemperature, mod.ambientTemperature, 'ambientTempDiff', index)}">
+                {{mod.ambientTemperature}}
+              </td>
+            </tr>
+            <tr>
+              <td [ngClass]="{'indicate-report-field-different':windVelocityDiff[index] == true}">
+                Wind Velocity
+                <span *ngIf="settings.unitsOfMeasure == 'Imperial'">(mph)</span>
+                <span *ngIf="settings.unitsOfMeasure == 'Metric'">(km/hr)</span>
+              </td>
+              <td [ngClass]="{'indicate-report-field-different':windVelocityDiff[index] == true}">
+                {{data.baseline.windVelocity}}
+              </td>
+              <td *ngFor="let mod of data.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(data.baseline.windVelocity, mod.windVelocity, 'windVelocityDiff', index)}">
+                {{mod.windVelocity}}
+              </td>
+            </tr>
+            <tr>
+              <td [ngClass]="{'indicate-report-field-different':surfaceShapeDiff[index] == true}">
+                Surface Shape/Orientation
+              </td>
+              <td [ngClass]="{'indicate-report-field-different':surfaceShapeDiff[index] == true}">
+                {{getSurfaceOption(data.baseline.surfaceShape)}}
+              </td>
+              <td *ngFor="let mod of data.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(data.baseline.surfaceShape, mod.surfaceShape, 'surfaceShapeDiff', index)}">
+                {{getSurfaceOption(mod.surfaceShape)}}
+              </td>
+            </tr>
+            <tr>
+              <td [ngClass]="{'indicate-report-field-different':conditionFactorDiff[index] == true}">
+                Surface Shape/Orientation Factor
+              </td>
+              <td [ngClass]="{'indicate-report-field-different':conditionFactorDiff[index] == true}">
+                {{data.baseline.conditionFactor}}
+              </td>
+              <td *ngFor="let mod of data.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(data.baseline.conditionFactor, mod.conditionFactor, 'conditionFactorDiff', index)}">
+                {{mod.conditionFactor}}
+              </td>
+            </tr>
+            <tr>
+              <td [ngClass]="{'indicate-report-field-different':emissivityDiff[index] == true}">
+                Surface Emissivity
+              </td>
+              <td [ngClass]="{'indicate-report-field-different':emissivityDiff[index] == true}">
+                {{data.baseline.surfaceEmissivity}}
+              </td>
+              <td *ngFor="let mod of data.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(data.baseline.surfaceEmissivity, mod.surfaceEmissivity, 'emissivityDiff', index)}">
+                {{mod.surfaceEmissivity}}
+              </td>
+            </tr>
+            <tr>
+              <td [ngClass]="{'indicate-report-field-different':surfaceAreaDifferent[index] == true}">
+                Total Outside Surface Area
+                <span *ngIf="settings.unitsOfMeasure == 'Imperial'">(ft
+                  <sup>2</sup>)</span>
+                <span *ngIf="settings.unitsOfMeasure == 'Metric'">(m
+                  <sup>2</sup>)</span>
+              </td>
+              <td [ngClass]="{'indicate-report-field-different':surfaceAreaDifferent[index] == true}">
+                {{data.baseline.surfaceArea}}
+              </td>
+              <td *ngFor="let mod of data.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(data.baseline.surfaceArea, mod.surfaceArea, 'surfaceAreaDifferent', index)}">
+                {{mod.surfaceArea}}
+              </td>
+            </tr>
+            <tr>
+              <td [ngClass]="{'indicate-report-field-different':correctionFactorDifferent[index] == true}">
+                Correction Factor
+              </td>
+              <td [ngClass]="{'indicate-report-field-different':correctionFactorDifferent[index] == true}">
+                {{data.baseline.correctionFactor}}
+              </td>
+              <td *ngFor="let mod of data.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(data.baseline.correctionFactor, mod.correctionFactor, 'correctionFactorDifferent', index)}">
+                {{mod.correctionFactor}}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

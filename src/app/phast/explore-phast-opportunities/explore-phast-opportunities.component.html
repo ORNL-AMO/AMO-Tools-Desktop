@@ -1,0 +1,17 @@
+<div class="phast">
+    <div class="row modify-conditions panel-container">
+      <div class="col-md-6 panel-column scroll-item" [ngStyle]="{'height.px': containerHeight}">
+        <div class="header">
+          <h3>Select Potential Adjustment Projects</h3>
+        </div>
+        <p>Select potential adjustment projects to explore opportunities to increase efficiency and the effectiveness of your system.</p>
+        <app-explore-phast-opportunities-form [phast]="phast" (emitCalculate)="getResults()" [settings]="settings" [exploreModIndex]="exploreModIndex"
+        (changeField)="focusField($event)" (changeTab)="changeTab($event)"></app-explore-phast-opportunities-form>
+  
+      </div>
+      <div class="col-md-6 scroll-item no-padding-left" [ngStyle]="{'height.px': containerHeight}">
+        <app-losses-result-panel [inSetup]="false" [currentField]="currentField" [settings]="settings"
+        [phast]="phast" [toggleCalculate]="toggleCalculate" [modification]="phast.modifications[exploreModIndex]" [lossesTab]="lossTab"></app-losses-result-panel>
+      </div>
+    </div>
+  </div>

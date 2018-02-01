@@ -1,6 +1,9 @@
 import { Component, OnInit, Input, EventEmitter, Output, ViewChild, ElementRef, SimpleChanges } from '@angular/core';
 import { OtherLossesCompareService } from '../other-losses-compare.service';
 import { WindowRefService } from '../../../../indexedDb/window-ref.service';
+import { Settings } from '../../../../shared/models/settings';
+import { FormGroup } from '@angular/forms';
+
 @Component({
   selector: 'app-other-losses-form',
   templateUrl: './other-losses-form.component.html',
@@ -8,7 +11,7 @@ import { WindowRefService } from '../../../../indexedDb/window-ref.service';
 })
 export class OtherLossesFormComponent implements OnInit {
   @Input()
-  lossesForm: any;
+  lossesForm: FormGroup;
   @Output('calculate')
   calculate = new EventEmitter<boolean>();
   @Input()
@@ -19,14 +22,13 @@ export class OtherLossesFormComponent implements OnInit {
   changeField = new EventEmitter<string>();
   @Output('saveEmit')
   saveEmit = new EventEmitter<boolean>();
-
-  @ViewChild('lossForm') lossForm: ElementRef;
-  form: any;
-  elements: any;
+  @Input()
+  settings: Settings;
 
   counter: any;
 
   firstChange: boolean = true;
+  resultsUnit: string;
   constructor(private windowRefService: WindowRefService, private otherLossesCompareService: OtherLossesCompareService) { }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -42,6 +44,11 @@ export class OtherLossesFormComponent implements OnInit {
   }
 
   ngOnInit() {
+    if (this.settings.energyResultUnit != 'kWh') {
+      this.resultsUnit = this.settings.energyResultUnit + '/hr';
+    } else {
+      this.resultsUnit = 'kW';
+    }
   }
 
   ngAfterViewInit() {
@@ -52,23 +59,15 @@ export class OtherLossesFormComponent implements OnInit {
   }
 
   disableForm() {
-    this.elements = this.lossForm.nativeElement.elements;
-    for (var i = 0, len = this.elements.length; i < len; ++i) {
-      this.elements[i].disabled = true;
-    }
+    this.lossesForm.disable();
   }
 
   enableForm() {
-    this.elements = this.lossForm.nativeElement.elements;
-    for (var i = 0, len = this.elements.length; i < len; ++i) {
-      this.elements[i].disabled = false;
-    }
+    this.lossesForm.enable();
   }
 
   checkForm() {
-    if (this.lossesForm.status == "VALID") {
-      this.calculate.emit(true);
-    }
+    this.calculate.emit(true);
   }
 
   focusField(str: string) {

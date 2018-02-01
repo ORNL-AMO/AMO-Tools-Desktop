@@ -20,6 +20,8 @@ export class ExploreOpportunitiesComponent implements OnInit {
   saved = new EventEmitter<boolean>();
   @Input()
   psat: PSAT;
+  @Input()
+  containerHeight: number;
 
   annualSavings: number;
   percentSavings: number;
@@ -109,15 +111,25 @@ export class ExploreOpportunitiesComponent implements OnInit {
     //create copies of inputs to use for calcs
     let psatInputs: PsatInputs = JSON.parse(JSON.stringify(this.psat.inputs));
     let modInputs: PsatInputs = JSON.parse(JSON.stringify(this.psat.modifications[this.exploreModIndex].psat.inputs));
-    if (psatInputs.optimize_calculation) {
-      this.baselineResults = this.psatService.resultsOptimal(psatInputs, this.settings);
+    let tmpForm = this.psatService.getFormFromPsat(psatInputs);
+    if (tmpForm.status == 'VALID') {
+      if (psatInputs.optimize_calculation) {
+        this.baselineResults = this.psatService.resultsOptimal(psatInputs, this.settings);
+      } else {
+        this.baselineResults = this.psatService.resultsExisting(psatInputs, this.settings);
+      }
     } else {
-      this.baselineResults = this.psatService.resultsExisting(psatInputs, this.settings);
+      this.baselineResults = this.psatService.emptyResults();
     }
-    if (modInputs.optimize_calculation) {
-      this.modificationResults = this.psatService.resultsOptimal(modInputs, this.settings);
+    tmpForm = this.psatService.getFormFromPsat(modInputs);
+    if (tmpForm.status == 'VALID') {
+      if (modInputs.optimize_calculation) {
+        this.modificationResults = this.psatService.resultsOptimal(modInputs, this.settings);
+      } else {
+        this.modificationResults = this.psatService.resultsModified(modInputs, this.settings, this.baselineResults.pump_efficiency);
+      }
     } else {
-      this.modificationResults = this.psatService.resultsModified(modInputs, this.settings, this.baselineResults.pump_efficiency);
+      this.modificationResults = this.psatService.emptyResults();
     }
     this.annualSavings = this.baselineResults.annual_cost - this.modificationResults.annual_cost;
     this.percentSavings = Number(Math.round((((this.annualSavings * 100) / this.baselineResults.annual_cost) * 100) / 100).toFixed(0));
@@ -125,6 +137,9 @@ export class ExploreOpportunitiesComponent implements OnInit {
 
   save() {
     //this.assessment.psat = this.psat;
+    if(!this.psat.modifications[this.exploreModIndex].psat.name){
+      this.psat.modifications[this.exploreModIndex].psat.name = 'Opportunities Modification';
+    }
     this.saved.emit(true);
   }
   setTab(str: string) {

@@ -47,7 +47,6 @@ export class SystemCurveComponent implements OnInit {
         flowRate: '',
         head: ''
       })
-      this.pointTwo.form.value.pointAdjustment = 'Baseline';
     } else {
       this.curveConstants = {
         form: this.initCurveConstants()
@@ -64,8 +63,6 @@ export class SystemCurveComponent implements OnInit {
         flowRate: 0,
         head: 200
       })
-      this.pointOne.form.value.pointAdjustment = 'Point One';
-      this.pointTwo.form.value.pointAdjustment = 'Point Two';
     }
 
     //get systen settings if using stand alone calculator
@@ -73,8 +70,8 @@ export class SystemCurveComponent implements OnInit {
       this.indexedDbService.getDirectorySettings(1).then(
         results => {
           if (results[0].flowMeasurement != 'gpm') {
-            let tmpVal = this.convertUnitsService.value(this.pointOne.form.value.flowRate).from('gpm').to(results[0].flowMeasurement);
-            //let tmpVal2 = this.convertUnitsService.value(this.pointTwo.form.value.flowRate).from('gpm').to(results[0].flowMeasurement);
+            let tmpVal = this.convertUnitsService.value(this.pointOne.form.controls.flowRate.value).from('gpm').to(results[0].flowMeasurement);
+            //let tmpVal2 = this.convertUnitsService.value(this.pointTwo.form.controls.flowRate.value).from('gpm').to(results[0].flowMeasurement);
             this.pointOne.form.patchValue({
               flowRate: this.psatService.roundVal(tmpVal, 2)
             })
@@ -83,8 +80,8 @@ export class SystemCurveComponent implements OnInit {
             // })
           }
           if (results[0].distanceMeasurement != 'ft') {
-            let tmpVal = this.convertUnitsService.value(this.pointOne.form.value.head).from('ft').to(results[0].distanceMeasurement);
-            let tmpVal2 = this.convertUnitsService.value(this.pointTwo.form.value.head).from('ft').to(results[0].distanceMeasurement);
+            let tmpVal = this.convertUnitsService.value(this.pointOne.form.controls.head.value).from('ft').to(results[0].distanceMeasurement);
+            let tmpVal2 = this.convertUnitsService.value(this.pointTwo.form.controls.head.value).from('ft').to(results[0].distanceMeasurement);
             this.pointOne.form.patchValue({
               head: this.psatService.roundVal(tmpVal, 2)
             })
@@ -118,7 +115,7 @@ export class SystemCurveComponent implements OnInit {
     if (psat) {
       return this.formBuilder.group({
         'specificGravity': [psat.inputs.specific_gravity, Validators.required],
-        'systemLossExponent': [2.5, Validators.required]
+        'systemLossExponent': [1.9, Validators.required]
       })
     } else {
       return this.formBuilder.group({
@@ -129,28 +126,28 @@ export class SystemCurveComponent implements OnInit {
   }
 
   calculateP1Flow() {
-    this.pointOne.fluidPower = this.getFluidPower(this.pointOne.form.value.head, this.pointOne.form.value.flowRate, this.curveConstants.form.value.specificGravity);
+    this.pointOne.fluidPower = this.getFluidPower(this.pointOne.form.controls.head, this.pointOne.form.controls.flowRate.value, this.curveConstants.form.controls.specificGravity.value);
   }
 
   calculateP2Flow() {
-    this.pointTwo.fluidPower = this.getFluidPower(this.pointTwo.form.value.head, this.pointTwo.form.value.flowRate, this.curveConstants.form.value.specificGravity);
+    this.pointTwo.fluidPower = this.getFluidPower(this.pointTwo.form.controls.head, this.pointTwo.form.controls.flowRate.value, this.curveConstants.form.controls.specificGravity.value);
   }
 
 
   calculateValues() {
     this.lossCoefficient = this.getLossCoefficient(
-      this.pointOne.form.value.flowRate,
-      this.pointOne.form.value.head,
-      this.pointTwo.form.value.flowRate,
-      this.pointTwo.form.value.head,
-      this.curveConstants.form.value.systemLossExponent
+      this.pointOne.form.controls.flowRate.value,
+      this.pointOne.form.controls.head.value,
+      this.pointTwo.form.controls.flowRate.value,
+      this.pointTwo.form.controls.head.value,
+      this.curveConstants.form.controls.systemLossExponent.value
     );
     this.staticHead = this.getStaticHead(
-      this.pointOne.form.value.flowRate,
-      this.pointOne.form.value.head,
-      this.pointTwo.form.value.flowRate,
-      this.pointTwo.form.value.head,
-      this.curveConstants.form.value.systemLossExponent
+      this.pointOne.form.controls.flowRate.value,
+      this.pointOne.form.controls.head.value,
+      this.pointTwo.form.controls.flowRate.value,
+      this.pointTwo.form.controls.head.value,
+      this.curveConstants.form.controls.systemLossExponent.value
     );
   }
 

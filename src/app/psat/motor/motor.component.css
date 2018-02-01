@@ -9,3 +9,7 @@
 .warning{
   border-color:darkorange;
 }
+
+.click-link{
+    white-space: nowrap;
+}

@@ -1,10 +1,14 @@
-import { Component, OnInit, Input, EventEmitter, Output, ViewChild, ElementRef, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output, ViewChild, ElementRef, SimpleChanges, HostListener } from '@angular/core';
 import { WindowRefService } from '../../../../indexedDb/window-ref.service';
 import { WallLossCompareService } from '../wall-loss-compare.service';
 import { SuiteDbService } from '../../../../suiteDb/suite-db.service';
 import { WallLossesSurface } from '../../../../shared/models/materials';
 import { ModalDirective } from 'ngx-bootstrap';
 import { LossesService } from '../../losses.service';
+import { Settings } from '../../../../shared/models/settings';
+import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
+import { FormGroup } from '@angular/forms';
+
 @Component({
   selector: 'app-wall-losses-form',
   templateUrl: './wall-losses-form.component.html',
@@ -12,7 +16,7 @@ import { LossesService } from '../../losses.service';
 })
 export class WallLossesFormComponent implements OnInit {
   @Input()
-  wallLossesForm: any;
+  wallLossesForm: FormGroup;
   @Output('calculate')
   calculate = new EventEmitter<boolean>();
   @Input()
@@ -23,18 +27,28 @@ export class WallLossesFormComponent implements OnInit {
   saveEmit = new EventEmitter<boolean>();
   @Input()
   lossIndex: number;
-  @ViewChild('materialModal') public materialModal: ModalDirective;
-  @ViewChild('lossForm') lossForm: ElementRef;
-  form: any;
-  elements: any;
+  @Input()
+  settings: Settings;
 
+  @ViewChild('materialModal') public materialModal: ModalDirective;
+
+  windVelocityError: string = null;
+  surfaceAreaError: string = null;
   firstChange: boolean = true;
   counter: any;
   surfaceTmpError: string = null;
   emissivityError: string = null;
+  surfaceEmissivityError: string = null;
   surfaceOptions: Array<WallLossesSurface>;
   showModal: boolean = false;
-  constructor(private windowRefService: WindowRefService, private wallLossCompareService: WallLossCompareService, private suiteDbService: SuiteDbService, private lossesService: LossesService) { }
+  constructor(private windowRefService: WindowRefService, private wallLossCompareService: WallLossCompareService, private suiteDbService: SuiteDbService, private lossesService: LossesService, private convertUnitsService: ConvertUnitsService) { }
+
+  ngOnInit() {
+    this.surfaceOptions = this.suiteDbService.selectWallLossesSurface();
+    //init warnings
+    this.checkEmissivity(true);
+    this.checkSurfaceTemp(true);
+  }
 
   ngOnChanges(changes: SimpleChanges) {
     if (!this.firstChange) {
@@ -49,13 +63,6 @@ export class WallLossesFormComponent implements OnInit {
     }
   }
 
-  ngOnInit() {
-    this.surfaceOptions = this.suiteDbService.selectWallLossesSurface();
-    //init warnings
-    this.checkEmissivity(true);
-    this.checkSurfaceTemp(true);
-  }
-
   ngAfterViewInit() {
     //wait for view to init to disable form
     if (!this.baselineSelected) {
@@ -64,26 +71,14 @@ export class WallLossesFormComponent implements OnInit {
     //initialize difference monitor
     this.initDifferenceMonitor();
   }
+
   //iterate through form elements and disable
   disableForm() {
-    this.elements = this.lossForm.nativeElement.elements;
-    for (var i = 0, len = this.elements.length; i < len; ++i) {
-      this.elements[i].disabled = true;
-    }
+    this.wallLossesForm.disable();
   }
   //iterate through form elements and enable
   enableForm() {
-    this.elements = this.lossForm.nativeElement.elements;
-    for (var i = 0, len = this.elements.length; i < len; ++i) {
-      this.elements[i].disabled = false;
-    }
-  }
-  //utility for checking if form is valid
-  //if so tell wall-losses.component to calculate results
-  checkForm() {
-    if (this.wallLossesForm.status == "VALID") {
-      this.calculate.emit(true);
-    }
+    this.wallLossesForm.enable();
   }
   //checkSurfaceTemp and ambientTemp for needed warnings
   checkSurfaceTemp(bool?: boolean) {
@@ -91,7 +86,7 @@ export class WallLossesFormComponent implements OnInit {
     if (!bool) {
       this.startSavePolling();
     }
-    if (this.wallLossesForm.value.avgSurfaceTemp < this.wallLossesForm.value.ambientTemp) {
+    if (this.wallLossesForm.controls.avgSurfaceTemp.value < this.wallLossesForm.controls.ambientTemp.value) {
       this.surfaceTmpError = 'Surface temperature lower is than ambient temperature';
     } else {
       this.surfaceTmpError = null;
@@ -102,8 +97,8 @@ export class WallLossesFormComponent implements OnInit {
     if (!bool) {
       this.startSavePolling();
     }
-    if (this.wallLossesForm.value.surfaceEmissivity > 1) {
-      this.emissivityError = 'Surface emissivity cannot be greater than 1';
+    if (this.wallLossesForm.controls.surfaceEmissivity.value > 1 || this.wallLossesForm.controls.surfaceEmissivity.value < 0) {
+      this.emissivityError = 'Surface emissivity must be between 0 and 1';
     } else {
       this.emissivityError = null;
     }
@@ -113,13 +108,35 @@ export class WallLossesFormComponent implements OnInit {
   focusField(str: string) {
     this.changeField.emit(str);
   }
+  //emits to default help on blur of input elements
+  focusOut() {
+    this.changeField.emit('default');
+  }
+
   //emit to wall-losses.component to begin saving process
   emitSave() {
     this.saveEmit.emit(true);
   }
+
+  checkInputError(bool?: boolean) {
+    if (!bool) {
+      this.startSavePolling();
+    }
+    if (this.wallLossesForm.controls.windVelocity.value < 0) {
+      this.windVelocityError = 'Wind Velocity must be equal or greater than 0';
+    } else {
+      this.windVelocityError = null;
+    }
+    if (this.wallLossesForm.controls.surfaceArea.value < 0 ) {
+      this.surfaceAreaError = 'Total Outside Surface Area must be equal or greater than 0';
+    } else {
+      this.surfaceAreaError = null;
+    }
+  }
+
   //on input/change in form startSavePolling is called, if not called again with 3 seconds save process is triggered
   startSavePolling() {
-    this.checkForm();
+    this.calculate.emit(true);
     if (this.counter) {
       clearTimeout(this.counter);
     }
@@ -127,6 +144,7 @@ export class WallLossesFormComponent implements OnInit {
       this.emitSave();
     }, 3000)
   }
+
   //method used to subscribe to service monitoring differences in baseline vs modification forms
   initDifferenceMonitor() {
     if (this.wallLossCompareService.baselineWallLosses && this.wallLossCompareService.modifiedWallLosses && this.wallLossCompareService.differentArray.length != 0) {
@@ -193,10 +211,15 @@ export class WallLossesFormComponent implements OnInit {
   }
 
   setProperties() {
-    let tmpFactor = this.suiteDbService.selectWallLossesSurfaceById(this.wallLossesForm.value.surfaceShape);
+    let tmpFactor = this.suiteDbService.selectWallLossesSurfaceById(this.wallLossesForm.controls.surfaceShape.value);
     this.wallLossesForm.patchValue({
-      conditionFactor: tmpFactor.conditionFactor
+      conditionFactor: this.roundVal(tmpFactor.conditionFactor, 4)
     })
+    this.calculate.emit(true);
+  }
+  roundVal(val: number, digits: number) {
+    let test = Number(val.toFixed(digits));
+    return test;
   }
 
   showMaterialModal() {
@@ -219,6 +242,5 @@ export class WallLossesFormComponent implements OnInit {
     this.materialModal.hide();
     this.showModal = false;
     this.lossesService.modalOpen.next(this.showModal);
-    this.checkForm();
   }
 }

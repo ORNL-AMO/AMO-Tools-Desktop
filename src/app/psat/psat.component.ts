@@ -12,30 +12,25 @@ import { Settings } from '../shared/models/settings';
 import { ToastyService, ToastyConfig, ToastOptions, ToastData } from 'ng2-toasty';
 import { JsonToCsvService } from '../shared/json-to-csv/json-to-csv.service';
 import { CompareService } from './compare.service';
+import { SettingsService } from '../settings/settings.service';
+
 @Component({
   selector: 'app-psat',
   templateUrl: './psat.component.html',
   styleUrls: ['./psat.component.css']
 })
 export class PsatComponent implements OnInit {
+  @ViewChild('header') header: ElementRef;
+  @ViewChild('footer') footer: ElementRef;
+  @ViewChild('content') content: ElementRef;
+  containerHeight: number;
+
   assessment: Assessment;
 
   panelView: string = 'help-panel';
   isPanelOpen: boolean = true;
   currentTab: string = 'system-setup';
 
-  //TODO update tabs
-  tabs: Array<string> = [
-    'system-setup',
-    'explore-opportunities',
-    'modify-conditions',
-    'system-curve',
-    'achievable-efficiency',
-    'motor-performance',
-    'nema-energy-efficiency',
-    'specific-speed',
-
-  ]
   tabIndex: number = 0;
 
   subTabs: Array<string> = [
@@ -45,12 +40,18 @@ export class PsatComponent implements OnInit {
     'field-data'
   ]
 
+  psat: PSAT;
+  modification: PSAT;
+  psatOptions: Array<any>;
+  psatOptionsLength: number;
+  psat1: PSAT;
+  psat2: PSAT;
+
   subTabIndex: number = 0;
 
   saveClicked: boolean = false;
   adjustment: PSAT;
   isValid;
-  canContinue;
 
   _psat: PSAT;
   fieldDataReady: boolean = false;
@@ -58,11 +59,12 @@ export class PsatComponent implements OnInit {
   subTab: string = 'system-basics';
   settings: Settings;
   isAssessmentSettings: boolean = false;
-
-  emitPrint: boolean = false;
+  isModalOpen: boolean = false;
   viewingReport: boolean = false;
   tabBeforeReport: string = 'explore-opportunities';
   mainTab: string = 'system-setup';
+  calcTab: string;
+  saveContinue: boolean = false;
   constructor(
     private location: Location,
     private assessmentService: AssessmentService,
@@ -72,7 +74,8 @@ export class PsatComponent implements OnInit {
     private toastyService: ToastyService,
     private toastyConfig: ToastyConfig,
     private jsonToCsvService: JsonToCsvService,
-    private compareService: CompareService) {
+    private compareService: CompareService,
+    private settingsService: SettingsService) {
 
     this.toastyConfig.theme = 'bootstrap';
     this.toastyConfig.position = 'bottom-right';
@@ -88,7 +91,6 @@ export class PsatComponent implements OnInit {
         this.assessment = dbAssessment;
         this._psat = (JSON.parse(JSON.stringify(this.assessment.psat)));
         this.isValid = true;
-        this.canContinue = true;
         this.getSettings();
       })
       let tmpTab = this.assessmentService.getTab();
@@ -105,17 +107,57 @@ export class PsatComponent implements OnInit {
             this.psatService.secondaryTab.next('explore-opportunities');
           }
         }
+        this.getContainerHeight();
       })
       this.psatService.secondaryTab.subscribe(val => {
         this.currentTab = val;
+        this.getContainerHeight();
+      })
+
+      this.psatService.calcTab.subscribe(val => {
+        this.calcTab = val;
       })
     })
   }
 
-
   ngOnDestroy() {
     this.psatService.secondaryTab.next('explore-opportunities');
     this.psatService.mainTab.next('system-setup');
+    this.compareService.baselinePSAT = undefined;
+    this.compareService.modifiedPSAT = undefined;
+  }
+
+  ngAfterViewInit() {
+    setTimeout(() => {
+      this.getContainerHeight();
+    }, 100);
+  }
+
+  getContainerHeight() {
+    if (this.content) {
+      setTimeout(() => {
+        let contentHeight = this.content.nativeElement.clientHeight;
+        let headerHeight = this.header.nativeElement.clientHeight;
+        let footerHeight = 0;
+        if (this.footer) {
+          footerHeight = this.footer.nativeElement.clientHeight;
+        }
+        this.containerHeight = contentHeight - headerHeight - footerHeight;
+      }, 100);
+    }
+  }
+
+  initSankeyList() {
+    this.psatOptions = new Array<any>();
+    this.psatOptions.push({ name: 'Baseline', psat: this._psat });
+    this.psat1 = this.psatOptions[0];
+    if (this._psat.modifications) {
+      this._psat.modifications.forEach(mod => {
+        this.psatOptions.push({ name: mod.psat.name, psat: mod.psat });
+      })
+      this.psat2 = this.psatOptions[1];
+      this.psatOptionsLength = this.psatOptions.length;
+    }
   }
 
   getSettings(update?: boolean) {
@@ -124,9 +166,15 @@ export class PsatComponent implements OnInit {
       results => {
         if (results.length != 0) {
           this.settings = results[0];
+          // if(!this.settings.temperatureMeasurement){
+          //   this.settings = this.settingsService.setTemperatureUnit(this.settings);
+          // }
           this.isAssessmentSettings = true;
           if (update) {
             this.addToast('Settings Saved');
+            if (this.saveContinue) {
+              this.continue(this.saveContinue)
+            }
           }
         } else {
           //if no settings found for assessment, check directory settings
@@ -140,7 +188,17 @@ export class PsatComponent implements OnInit {
     this.indexedDbService.getDirectorySettings(parentId).then(
       results => {
         if (results.length != 0) {
-          this.settings = results[0];
+          let settingsForm = this.settingsService.getFormFromSettings(results[0]);
+          let tmpSettings: Settings = this.settingsService.getSettingsFromForm(settingsForm);
+          tmpSettings.createdDate = new Date();
+          tmpSettings.modifiedDate = new Date();
+          tmpSettings.assessmentId = this.assessment.id;
+          //create settings for assessment
+          this.indexedDbService.addSettings(tmpSettings).then(
+            results => {
+              this.addToast('Settings Saved');
+              this.getSettings();
+            })
         }
         else {
           //if no settings for directory check parent directory
@@ -150,8 +208,8 @@ export class PsatComponent implements OnInit {
             }
           )
         }
-      }
-    )
+      })
+
   }
 
   checkPumpFluid() {
@@ -198,20 +256,31 @@ export class PsatComponent implements OnInit {
       this.subTabIndex = _.findIndex(this.subTabs, function (tab) { return tab == str });
       this.subTab = this.subTabs[this.subTabIndex];
     }
+    this.getContainerHeight();
   }
 
   selectAdjustment($event) {
     this.adjustment = $event;
   }
 
-  continue() {
-    if (this.subTab == 'field-data') {
-      this.psatService.mainTab.next('assessment');
+  continue(bool?: boolean) {
+    if (this.subTab != 'system-basics' || bool) {
+      if (!bool) {
+        this.save();
+      } else {
+        this.saveContinue = false;
+      }
+      if (this.subTab == 'field-data') {
+        this.psatService.mainTab.next('assessment');
+      } else {
+        this.subTabIndex++;
+        this.subTab = this.subTabs[this.subTabIndex];
+      }
     } else {
-      this.subTabIndex++;
-      this.subTab = this.subTabs[this.subTabIndex];
+      this.saveContinue = true;
+      this.toggleSave();
     }
-    this.canContinue = false;
+    this.getContainerHeight();
   }
 
   getCanContinue() {
@@ -242,10 +311,6 @@ export class PsatComponent implements OnInit {
     this.saveClicked = !this.saveClicked;
   }
 
-  togglePrint() {
-    this.emitPrint = !this.emitPrint;
-  }
-
   save() {
     let tmpForm = this.psatService.getFormFromPsat(this._psat.inputs);
     if (
@@ -254,6 +319,10 @@ export class PsatComponent implements OnInit {
       this.psatService.isFieldDataFormValid(tmpForm)
     ) {
       this._psat.setupDone = true;
+
+      //debug
+      this.initSankeyList();
+
     } else {
       this._psat.setupDone = false;
     }
@@ -270,6 +339,7 @@ export class PsatComponent implements OnInit {
     this.indexedDbService.putAssessment(this.assessment).then(
       results => {
         this.addToast('Assessment Saved');
+        this.psatService.getResults.next(true);
       }
     )
   }
@@ -290,6 +360,13 @@ export class PsatComponent implements OnInit {
   }
   goToReport() {
     this.psatService.mainTab.next('report');
+  }
+
+  modalOpen() {
+    this.isModalOpen = true;
+  }
+  modalClose() {
+    this.isModalOpen = false;
   }
 
 }

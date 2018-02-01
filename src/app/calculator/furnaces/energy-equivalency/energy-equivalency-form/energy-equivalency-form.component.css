@@ -1,6 +1,17 @@
+.form-header{
+    font-size: 12px;
+}
 
-.results-box{
-    border: solid;
-    border-radius: 10px;
-    border-color: #BF3D00
+.header{
+    padding-bottom: 0px;
+}
+
+label{
+    font-weight: normal;
+    font-size: small;
+}
+
+
+form{
+    padding-top: 0px;
 }

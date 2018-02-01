@@ -1,0 +1,93 @@
+<div class="card summary-card">
+  <div class="card-header" (click)="toggleCollapse()">
+    <h5>Auxiliary Power Losses ({{numLosses}})
+      <span class="pull-right fa" [ngClass]="{'fa-chevron-up': collapse, 'fa-chevron-down': !collapse}"></span>
+    </h5>
+  </div>
+  <div *ngIf="!collapse">
+    <div class="card-body" *ngFor="let data of lossData; let index = index;">
+      <div class="output-summary">
+        <table class="table table-hover table-striped">
+          <thead>
+            <tr>
+              <!-- set table column widths based on number of modifications, add 2 for baseline and label columns -->
+              <th [ngStyle]="{'width.%': 100 /(numMods+2)}"></th>
+              <th [ngStyle]="{'width.%': 100 /(numMods+2)}">
+                Baseline
+              </th>
+              <th [ngStyle]="{'width.%': 100 /(numMods+2)}" *ngFor="let mod of phast.modifications">
+                {{mod.phast.name}}
+              </th>
+            </tr>
+            <tr>
+              <th>{{index+1}}</th>
+              <th>
+                {{data.baseline.name}}
+              </th>
+              <th *ngFor="let mod of data.modifications">
+                {{mod.name}}
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td [ngClass]="{'indicate-report-field-different':motorPhaseDiff == true}">
+                Motor Current Phase(s)
+              </td>
+              <td [ngClass]="{'indicate-report-field-different':motorPhaseDiff == true}">
+                {{data.baseline.motorPhase}}
+              </td>
+              <td *ngFor="let mod of data.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(data.baseline.motorPhase, mod.motorPhase, 'motorPhaseDiff')}">
+                {{mod.motorPhase}}
+              </td>
+            </tr>
+            <tr>
+              <td [ngClass]="{'indicate-report-field-different':supplyVoltageDiff == true}">
+                Supply Voltage
+              </td>
+              <td [ngClass]="{'indicate-report-field-different':supplyVoltageDiff == true}">
+                {{data.baseline.supplyVoltage}}
+              </td>
+              <td *ngFor="let mod of data.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(data.baseline.supplyVoltage, mod.supplyVoltage, 'supplyVoltageDiff')}">
+                {{mod.supplyVoltage}}
+              </td>
+            </tr>
+            <tr>
+              <td [ngClass]="{'indicate-report-field-different':avgCurrentDiff == true}">
+                Average Current
+              </td>
+              <td [ngClass]="{'indicate-report-field-different':avgCurrentDiff == true}">
+                {{data.baseline.avgCurrent}}
+              </td>
+              <td *ngFor="let mod of data.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(data.baseline.avgCurrent, mod.avgCurrent, 'avgCurrentDiff')}">
+                {{mod.avgCurrent}}
+              </td>
+            </tr>
+            <tr>
+              <td [ngClass]="{'indicate-report-field-different':powerFactorDiff == true}">
+                Power Factor
+              </td>
+              <td [ngClass]="{'indicate-report-field-different':powerFactorDiff == true}">
+                {{data.baseline.powerFactor}}
+              </td>
+              <td *ngFor="let mod of data.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(data.baseline.powerFactor, mod.powerFactor, 'powerFactorDiff')}">
+                {{mod.powerFactor}}
+              </td>
+            </tr>
+            <tr>
+              <td [ngClass]="{'indicate-report-field-different':operatingTimeDiff == true}">
+                Operating Time
+              </td>
+              <td [ngClass]="{'indicate-report-field-different':operatingTimeDiff == true}">
+                {{data.baseline.operatingTime}}
+              </td>
+              <td *ngFor="let mod of data.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(data.baseline.operatingTime, mod.operatingTime, 'operatingTimeDiff')}">
+                {{mod.operatingTime}}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

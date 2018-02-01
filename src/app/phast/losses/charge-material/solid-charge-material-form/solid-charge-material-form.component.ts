@@ -4,6 +4,10 @@ import { WindowRefService } from '../../../../indexedDb/window-ref.service';
 import { ChargeMaterialCompareService } from '../charge-material-compare.service';
 import { ModalDirective } from 'ngx-bootstrap';
 import { LossesService } from '../../losses.service';
+import { Settings } from '../../../../shared/models/settings';
+import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
+import { FormGroup } from '@angular/forms';
+
 @Component({
   selector: 'app-solid-charge-material-form',
   templateUrl: './solid-charge-material-form.component.html',
@@ -11,7 +15,7 @@ import { LossesService } from '../../losses.service';
 })
 export class SolidChargeMaterialFormComponent implements OnInit {
   @Input()
-  chargeMaterialForm: any;
+  chargeMaterialForm: FormGroup;
   @Output('calculate')
   calculate = new EventEmitter<boolean>();
   @Input()
@@ -22,20 +26,30 @@ export class SolidChargeMaterialFormComponent implements OnInit {
   saveEmit = new EventEmitter<boolean>();
   @Input()
   lossIndex: number;
-  @ViewChild('materialModal') public materialModal: ModalDirective;
+  @Input()
+  settings: Settings;
 
-  @ViewChild('lossForm') lossForm: ElementRef;
-  form: any;
-  elements: any;
+  @ViewChild('materialModal') public materialModal: ModalDirective;
 
   firstChange: boolean = true;
 
+  specificHeatError: string = null;
+  latentHeatError: string = null;
+  heatOfLiquidError: string = null;
+  feedRateError: string = null;
+  waterChargedError: string = null;
+  waterDischargedError: string = null;
+  chargeMeltedError: string = null;
+  chargeSolidReactedError: string = null;
+  heatOfReactionError: string = null;
   materialTypes: any;
   selectedMaterialId: any;
   selectedMaterial: any;
   counter: any;
   dischargeTempError: string = null;
-  constructor(private suiteDbService: SuiteDbService, private chargeMaterialCompareService: ChargeMaterialCompareService, private windowRefService: WindowRefService, private lossesService: LossesService) { }
+  showModal: boolean = false;
+  constructor(private suiteDbService: SuiteDbService, private chargeMaterialCompareService: ChargeMaterialCompareService, private windowRefService: WindowRefService, private lossesService: LossesService, private convertUnitsService: ConvertUnitsService) {
+  }
 
   ngOnChanges(changes: SimpleChanges) {
     if (!this.firstChange) {
@@ -53,8 +67,8 @@ export class SolidChargeMaterialFormComponent implements OnInit {
     //get material types from ToolSuiteDb
     this.materialTypes = this.suiteDbService.selectSolidLoadChargeMaterials();
     if (this.chargeMaterialForm) {
-      if (this.chargeMaterialForm.value.materialId && this.chargeMaterialForm.value.materialId != '') {
-        if (this.chargeMaterialForm.value.materialLatentHeatOfFusion == '') {
+      if (this.chargeMaterialForm.controls.materialId.value && this.chargeMaterialForm.controls.materialId.value != '') {
+        if (this.chargeMaterialForm.controls.materialLatentHeatOfFusion.value == '') {
           this.setProperties();
         }
       }
@@ -67,36 +81,25 @@ export class SolidChargeMaterialFormComponent implements OnInit {
     }
     this.initDifferenceMonitor();
   }
+
   ngOnDestroy() {
     this.lossesService.modalOpen.next(false);
   }
 
 
   disableForm() {
-    this.elements = this.lossForm.nativeElement.elements;
-    for (var i = 0, len = this.elements.length; i < len; ++i) {
-      this.elements[i].disabled = true;
-    }
+    this.chargeMaterialForm.disable();
   }
 
   enableForm() {
-    this.elements = this.lossForm.nativeElement.elements;
-    for (var i = 0, len = this.elements.length; i < len; ++i) {
-      this.elements[i].disabled = false;
-    }
-  }
-
-  checkForm() {
-    if (this.chargeMaterialForm.status == "VALID") {
-      this.calculate.emit(true);
-    }
+    this.chargeMaterialForm.enable();
   }
 
   checkDischargeTemp() {
-    if ((this.chargeMaterialForm.value.chargeMaterialDischargeTemperature > this.chargeMaterialForm.value.materialMeltingPoint) && this.chargeMaterialForm.value.percentChargeMelted == 0) {
+    if ((this.chargeMaterialForm.controls.chargeMaterialDischargeTemperature.value > this.chargeMaterialForm.controls.materialMeltingPoint.value) && this.chargeMaterialForm.controls.percentChargeMelted.value == 0) {
       this.dischargeTempError = 'The discharge temperature is higher than the melting point, please enter proper percentage for charge melted.';
       return false;
-    } else if ((this.chargeMaterialForm.value.chargeMaterialDischargeTemperature < this.chargeMaterialForm.value.materialMeltingPoint) && this.chargeMaterialForm.value.percentChargeMelted > 0) {
+    } else if ((this.chargeMaterialForm.controls.chargeMaterialDischargeTemperature.value < this.chargeMaterialForm.controls.materialMeltingPoint.value) && this.chargeMaterialForm.controls.percentChargeMelted.value > 0) {
       this.dischargeTempError = 'The discharge temperature is lower than the melting point, the percentage for charge melted should be 0%.';
       return false;
     } else {
@@ -110,23 +113,90 @@ export class SolidChargeMaterialFormComponent implements OnInit {
     this.changeField.emit(str);
   }
 
-  setProperties() {
-    let selectedMaterial = this.suiteDbService.selectSolidLoadChargeMaterialById(this.chargeMaterialForm.value.materialId);
-    this.chargeMaterialForm.patchValue({
-      materialLatentHeatOfFusion: selectedMaterial.latentHeat,
-      materialMeltingPoint: selectedMaterial.meltingPoint,
-      materialHeatOfLiquid: selectedMaterial.specificHeatLiquid,
-      materialSpecificHeatOfSolidMaterial: selectedMaterial.specificHeatSolid
-    })
-    this.checkForm();
+  focusOut() {
+    this.changeField.emit('default');
   }
+
+  setProperties() {
+    let selectedMaterial = this.suiteDbService.selectSolidLoadChargeMaterialById(this.chargeMaterialForm.controls.materialId.value);
+
+    if (this.settings.unitsOfMeasure == 'Metric') {
+      selectedMaterial.latentHeat = this.convertUnitsService.value(selectedMaterial.latentHeat).from('btuLb').to('kJkg');
+      selectedMaterial.meltingPoint = this.convertUnitsService.value(selectedMaterial.meltingPoint).from('F').to('C');
+      selectedMaterial.specificHeatLiquid = this.convertUnitsService.value(selectedMaterial.specificHeatLiquid).from('btulbF').to('kJkgC');
+      selectedMaterial.specificHeatSolid = this.convertUnitsService.value(selectedMaterial.specificHeatSolid).from('btulbF').to('kJkgC');
+    }
+
+    this.chargeMaterialForm.patchValue({
+      materialLatentHeatOfFusion: this.roundVal(selectedMaterial.latentHeat, 4),
+      materialMeltingPoint: this.roundVal(selectedMaterial.meltingPoint, 4),
+      materialHeatOfLiquid: this.roundVal(selectedMaterial.specificHeatLiquid, 4),
+      materialSpecificHeatOfSolidMaterial: this.roundVal(selectedMaterial.specificHeatSolid, 4)
+    })
+    this.calculate.emit(true);
+  }
+
+  roundVal(val: number, digits: number) {
+    let test = Number(val.toFixed(digits));
+    return test;
+  }
+checkInputError(bool?: boolean) {
+      if (!bool) {
+    this.startSavePolling();
+  }
+  if (this.chargeMaterialForm.controls.materialSpecificHeatOfSolidMaterial.value < 0) {
+        this.specificHeatError = 'Average Specific Heat must be equal or greater than 0';
+      } else {
+        this.specificHeatError = null;
+      }
+  if (this.chargeMaterialForm.controls.materialLatentHeatOfFusion.value < 0) {
+        this.latentHeatError = 'Latent Heat of Fusion must be equal or greater than 0';
+      } else {
+        this.latentHeatError = null;
+      }
+  if (this.chargeMaterialForm.controls.materialHeatOfLiquid.value < 0) {
+        this.heatOfLiquidError = 'Specific heat of liquid from molten material must be equal or greater than 0';
+      } else {
+        this.heatOfLiquidError = null;
+      }
+  if (this.chargeMaterialForm.controls.feedRate.value < 0) {
+        this.feedRateError = 'Charge Feed Rate must be grater than 0';
+      } else {
+        this.feedRateError = null;
+      }
+  if (this.chargeMaterialForm.controls.waterContentAsCharged.value < 0 || this.chargeMaterialForm.controls.waterContentAsCharged.value > 100) {
+        this.waterChargedError = 'Water Content as Charged must be equal or greater than 0 and less than or equal to 100%';
+      } else {
+        this.waterChargedError = null;
+      }
+  if (this.chargeMaterialForm.controls.waterContentAsDischarged.value < 0 || this.chargeMaterialForm.controls.waterContentAsDischarged.value > 100) {
+        this.waterDischargedError = 'Water Content as Discharged must be equal or greater than 0 and less than or equal to 100%';
+      } else {
+        this.waterDischargedError = null;
+      }
+  if (this.chargeMaterialForm.controls.percentChargeMelted.value < 0 || this.chargeMaterialForm.controls.percentChargeMelted.value > 100) {
+        this.chargeMeltedError = 'Charge Melted must be equal or greater than 0 and less than or equal to 100%';
+      } else {
+        this.chargeMeltedError = null;
+      }
+  if (this.chargeMaterialForm.controls.percentChargeReacted.value < 0 || this.chargeMaterialForm.controls.percentChargeReacted.value > 100) {
+        this.chargeSolidReactedError = 'Charge Reacted must be equal or greater than 0 and less than or equal to 100%';
+      } else {
+        this.chargeSolidReactedError = null;
+      }
+   if (this.chargeMaterialForm.controls.heatOfReaction.value < 0) {
+        this.heatOfReactionError = 'Heat of Reaction cannot be less than zero. For exothermic reactions, change "Endothermic/Exothermic"';
+      } else {
+        this.heatOfReactionError = null;
+      }
+}
 
   emitSave() {
     this.saveEmit.emit(true);
   }
 
   startSavePolling() {
-    this.checkForm();
+    this.calculate.emit(true);
     if (this.counter) {
       clearTimeout(this.counter);
     }
@@ -151,28 +221,28 @@ export class SolidChargeMaterialFormComponent implements OnInit {
         this.chargeMaterialCompareService.differentArray[this.lossIndex].different.solidChargeMaterialDifferent.specificHeatSolid.subscribe((val) => {
           let materialSpecificHeatOfSolidMaterialElements = doc.getElementsByName('materialSpecificHeatOfSolidMaterial_' + this.lossIndex);
           materialSpecificHeatOfSolidMaterialElements.forEach(element => {
-            element.classList.toggle('indicate-different', val);
+            element.classList.toggle('indicate-different-db', val);
           });
         })
         //materialLatentHeatOfFusion
         this.chargeMaterialCompareService.differentArray[this.lossIndex].different.solidChargeMaterialDifferent.latentHeat.subscribe((val) => {
           let materialLatentHeatOfFusionElements = doc.getElementsByName('materialLatentHeatOfFusion_' + this.lossIndex);
           materialLatentHeatOfFusionElements.forEach(element => {
-            element.classList.toggle('indicate-different', val);
+            element.classList.toggle('indicate-different-db', val);
           });
         })
         //materialHeatOfLiquid
         this.chargeMaterialCompareService.differentArray[this.lossIndex].different.solidChargeMaterialDifferent.specificHeatLiquid.subscribe((val) => {
           let materialHeatOfLiquidElements = doc.getElementsByName('materialHeatOfLiquid_' + this.lossIndex);
           materialHeatOfLiquidElements.forEach(element => {
-            element.classList.toggle('indicate-different', val);
+            element.classList.toggle('indicate-different-db', val);
           });
         })
         //materialMeltingPoint
         this.chargeMaterialCompareService.differentArray[this.lossIndex].different.solidChargeMaterialDifferent.meltingPoint.subscribe((val) => {
           let materialMeltingPointElements = doc.getElementsByName('materialMeltingPoint_' + this.lossIndex);
           materialMeltingPointElements.forEach(element => {
-            element.classList.toggle('indicate-different', val);
+            element.classList.toggle('indicate-different-db', val);
           });
         })
         //feedRate
@@ -257,6 +327,7 @@ export class SolidChargeMaterialFormComponent implements OnInit {
   }
 
   showMaterialModal() {
+    this.showModal = true;
     this.lossesService.modalOpen.next(true);
     this.materialModal.show();
   }
@@ -272,6 +343,7 @@ export class SolidChargeMaterialFormComponent implements OnInit {
         this.setProperties();
       }
     }
+    this.showModal = false;
     this.materialModal.hide();
     this.lossesService.modalOpen.next(false);
   }

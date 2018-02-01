@@ -1,0 +1,20 @@
+ul{
+    margin: 0px;
+    padding: 0px;
+}
+
+.pill-row{
+    height: 100%;
+}
+
+.btn-dashboard{
+    height: 100%;
+}
+
+.title h2{
+    font-weight: 400;
+    font-size: 16px;
+    margin-top: 14px;
+    margin-bottom: -14px;
+    color: rgba(255,255,255,.75);
+}

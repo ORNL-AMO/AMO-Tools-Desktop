@@ -1,0 +1,24 @@
+<div class="row">
+  <div class="col-6">
+    <small>Benefits / Cost </small>
+  </div>
+  <div class="col-6 text-center">
+    <small>{{cashFlowResults.results | currency:'USD':'symbol':'2.2-2'}}</small>
+  </div>
+</div>
+<div class="row">
+  <div class="col-6">
+    <small>Simple Payback Period </small>
+  </div>
+  <div class="col-6 text-center">
+    <small>{{cashFlowResults.payback}} months</small>
+  </div>
+</div>
+<div class="row">
+  <div class="col-12 text-center diagram-container" id="cashFlowDiagram">
+    <!-- graph here -->
+  </div>
+</div>
+<div class="row" id="graphInfo">
+
+</div>

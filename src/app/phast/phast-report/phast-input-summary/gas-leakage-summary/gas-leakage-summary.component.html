@@ -1,0 +1,93 @@
+<div class="card summary-card">
+  <div class="card-header" (click)="toggleCollapse()">
+    <h5>Gas Leakage Losses ({{numLosses}})
+      <span class="pull-right fa" [ngClass]="{'fa-chevron-up': collapse, 'fa-chevron-down': !collapse}"></span>
+    </h5>
+  </div>
+  <div *ngIf="!collapse">
+    <div class="card-body" *ngFor="let data of lossData; let index = index;">
+      <div class="output-summary">
+        <table class="table table-hover table-striped">
+          <thead>
+            <tr>
+              <!-- set table column widths based on number of modifications, add 2 for baseline and label columns -->
+              <th [ngStyle]="{'width.%': 100 /(numMods+2)}"></th>
+              <th [ngStyle]="{'width.%': 100 /(numMods+2)}">
+                Baseline
+              </th>
+              <th [ngStyle]="{'width.%': 100 /(numMods+2)}" *ngFor="let mod of phast.modifications">
+                {{mod.phast.name}}
+              </th>
+            </tr>
+            <tr>
+              <th>{{index+1}}</th>
+              <th>
+                {{data.baseline.name}}
+              </th>
+              <th *ngFor="let mod of data.modifications">
+                {{mod.name}}
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td [ngClass]="{'indicate-report-field-different':draftPressureDiff[index] == true}">
+                Furnace Draft Pressure
+              </td>
+              <td [ngClass]="{'indicate-report-field-different':draftPressureDiff[index] == true}">
+                {{data.baseline.draftPressure}}
+              </td>
+              <td *ngFor="let mod of data.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(data.baseline.draftPressure, mod.draftPressure, 'draftPressureDiff', index)}">
+                {{mod.draftPressure}}
+              </td>
+            </tr>
+            <tr>
+              <td [ngClass]="{'indicate-report-field-different':openingAreaDiff[index] == true}">
+                Opening Area
+              </td>
+              <td [ngClass]="{'indicate-report-field-different':openingAreaDiff[index] == true}">
+                {{data.baseline.openingArea}}
+              </td>
+              <td *ngFor="let mod of data.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(data.baseline.openingArea, mod.openingArea, 'openingAreaDiff', index)}">
+                {{mod.openingArea}}
+              </td>
+            </tr>
+            <tr>
+              <td [ngClass]="{'indicate-report-field-different':leakageGasTemperatureDiff[index] == true}">
+                Temperature of Gasses Leaking
+              </td>
+              <td [ngClass]="{'indicate-report-field-different':leakageGasTemperatureDiff[index] == true}">
+                {{data.baseline.leakageGasTemperature}}
+              </td>
+              <td *ngFor="let mod of data.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(data.baseline.leakageGasTemperature, mod.leakageGasTemperature, 'leakageGasTemperatureDiff', index)}">
+                {{mod.leakageGasTemperature}}
+              </td>
+            </tr>
+            <tr>
+              <td [ngClass]="{'indicate-report-field-different':specificGravityDiff[index] == true}">
+                Specific Density of Flue Gases
+              </td>
+              <td [ngClass]="{'indicate-report-field-different':specificGravityDiff[index] == true}">
+                {{data.baseline.specificGravity}}
+              </td>
+              <td *ngFor="let mod of data.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(data.baseline.specificGravity, mod.specificGravity, 'specificGravityDiff', index)}">
+                {{mod.specificGravity}}
+              </td>
+            </tr>
+            <tr>
+              <td [ngClass]="{'indicate-report-field-different':ambientTemperatureDiff[index] == true}">
+                Ambient Temperature
+              </td>
+              <td [ngClass]="{'indicate-report-field-different':ambientTemperatureDiff[index] == true}">
+                {{data.baseline.ambientTemperature}}
+              </td>
+              <td *ngFor="let mod of data.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(data.baseline.ambientTemperature, mod.ambientTemperature, 'ambientTemperatureDiff', index)}">
+                {{mod.ambientTemperature}}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

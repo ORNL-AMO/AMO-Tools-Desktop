@@ -13,7 +13,12 @@ export interface Settings {
     currentMeasurement?: string,
     viscosityMeasurement?: string,
     voltageMeasurement?: string,
+    temperatureMeasurement?: string,
     id?: number,
     energySourceType?: string,
-    furnaceType?: string
+    furnaceType?: string,
+    energyResultUnit?: string,
+    customFurnaceName?: string,
+    appVersion?: string,
+    phastRollupUnit?: string
 }

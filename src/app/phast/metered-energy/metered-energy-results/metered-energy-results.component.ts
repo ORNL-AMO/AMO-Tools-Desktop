@@ -13,38 +13,24 @@ export class MeteredEnergyResultsComponent implements OnInit {
   settings: Settings;
 
   resultUnits: any = {
+    energyPerMassUnit: '',
+    energyPerTimeUnit: '',
+    electricityUsedUnit: ''
   }
   constructor() { }
 
   ngOnInit() {
-    if (this.settings.energySourceType == 'Fuel') {
-      this.resultUnits = {
-        meteredEnergyUsed: 'Btu/hr',
-        meteredEnergyIntensity: 'Btu/lb',
-        meteredElectricityUsed: 'kW',
-        calculatedFuelEnergyUsed: 'Btu/hr',
-        calculatedEnergyIntensity: 'Btu/lb',
-        calculatedElectricityUsed: 'kW'
-      }
-    } else if (this.settings.energySourceType == 'Steam') {
-      this.resultUnits = {
-        meteredEnergyUsed: 'Btu/hr',
-        meteredEnergyIntensity: 'Btu/lb',
-        meteredElectricityUsed: 'kW',
-        calculatedFuelEnergyUsed: 'Btu/hr',
-        calculatedEnergyIntensity: 'Btu/lb',
-        calculatedElectricityUsed: 'kW'
-      }
-    } else if (this.settings.energySourceType == 'Electricity') {
-      this.resultUnits = {
-        meteredEnergyUsed: 'kW',
-        meteredEnergyIntensity: 'kW/lb',
-        meteredElectricityUsed: 'kW',
-        calculatedFuelEnergyUsed: 'kW',
-        calculatedEnergyIntensity: 'kW/lb',
-        calculatedElectricityUsed: 'kW'
-      }
+    if (this.settings.energyResultUnit == 'kWh') {
+      this.resultUnits.energyPerTimeUnit = this.settings.energyResultUnit;
+    } else {
+      this.resultUnits.energyPerTimeUnit = this.settings.energyResultUnit + '/hr';
     }
+    if (this.settings.unitsOfMeasure == 'Metric') {
+      this.resultUnits.energyPerMassUnit = this.settings.energyResultUnit + '/kg';
+    } else if (this.settings.unitsOfMeasure == 'Imperial') {
+      this.resultUnits.energyPerMassUnit = this.settings.energyResultUnit + '/lb';
+    }
+    this.resultUnits.electricityUsedUnit = 'kW';
   }
 
 }

@@ -44,6 +44,8 @@ export class CoolingLossesCompareService {
       finalTemperature: new BehaviorSubject<boolean>(null),
       specificHeat: new BehaviorSubject<boolean>(null),
       correctionFactor: new BehaviorSubject<boolean>(null),
+      gasDensity: new BehaviorSubject<boolean>(null),
+      coolingMedium: new BehaviorSubject<boolean>(null)
     }
     let tmpLiquidDifferent: LiquidCoolingLossDifferent = {
       flowRate: new BehaviorSubject<boolean>(null),
@@ -52,18 +54,12 @@ export class CoolingLossesCompareService {
       outletTemperature: new BehaviorSubject<boolean>(null),
       specificHeat: new BehaviorSubject<boolean>(null),
       correctionFactor: new BehaviorSubject<boolean>(null),
-    }
-    let tmpWaterDifferent: WaterCoolingLossDifferent = {
-      flowRate: new BehaviorSubject<boolean>(null),
-      initialTemperature: new BehaviorSubject<boolean>(null),
-      outletTemperature: new BehaviorSubject<boolean>(null),
-      correctionFactor: new BehaviorSubject<boolean>(null),
+      coolingMedium: new BehaviorSubject<boolean>(null)
     }
     let tmpDifferent: CoolingLossDifferent = {
       coolingLossType: new BehaviorSubject<boolean>(null),
       gasCoolingLossDifferent: tmpGasDifferent,
-      liquidCoolingLossDifferent: tmpLiquidDifferent,
-      waterCoolingLossDifferent: tmpWaterDifferent
+      liquidCoolingLossDifferent: tmpLiquidDifferent
     }
     return tmpDifferent;
   }
@@ -73,7 +69,7 @@ export class CoolingLossesCompareService {
       if (this.baselineCoolingLosses.length != 0 && this.modifiedCoolingLosses.length != 0 && this.baselineCoolingLosses.length == this.modifiedCoolingLosses.length) {
         for (let lossIndex = 0; lossIndex < this.differentArray.length; lossIndex++) {
           this.differentArray[lossIndex].different.coolingLossType.next(this.compare(this.baselineCoolingLosses[lossIndex].coolingLossType, this.modifiedCoolingLosses[lossIndex].coolingLossType));
-          if (this.baselineCoolingLosses[lossIndex].coolingLossType == 'Other Gas' && this.modifiedCoolingLosses[lossIndex].coolingLossType == 'Other Gas') {
+          if (this.baselineCoolingLosses[lossIndex].coolingLossType == 'Gas' && this.modifiedCoolingLosses[lossIndex].coolingLossType == 'Gas') {
             //flowRate
             this.differentArray[lossIndex].different.gasCoolingLossDifferent.flowRate.next(this.compare(this.baselineCoolingLosses[lossIndex].gasCoolingLoss.flowRate, this.modifiedCoolingLosses[lossIndex].gasCoolingLoss.flowRate));
             //initialTemperature
@@ -84,8 +80,12 @@ export class CoolingLossesCompareService {
             this.differentArray[lossIndex].different.gasCoolingLossDifferent.specificHeat.next(this.compare(this.baselineCoolingLosses[lossIndex].gasCoolingLoss.specificHeat, this.modifiedCoolingLosses[lossIndex].gasCoolingLoss.specificHeat));
             //correctionFactor
             this.differentArray[lossIndex].different.gasCoolingLossDifferent.correctionFactor.next(this.compare(this.baselineCoolingLosses[lossIndex].gasCoolingLoss.correctionFactor, this.modifiedCoolingLosses[lossIndex].gasCoolingLoss.correctionFactor));
+            //gasDensity
+            this.differentArray[lossIndex].different.gasCoolingLossDifferent.gasDensity.next(this.compare(this.baselineCoolingLosses[lossIndex].gasCoolingLoss.gasDensity, this.modifiedCoolingLosses[lossIndex].gasCoolingLoss.gasDensity));
+            //coolingMedium
+            this.differentArray[lossIndex].different.gasCoolingLossDifferent.coolingMedium.next(this.compare(this.baselineCoolingLosses[lossIndex].coolingMedium, this.modifiedCoolingLosses[lossIndex].coolingMedium));
           }
-          else if (this.baselineCoolingLosses[lossIndex].coolingLossType == 'Other Liquid' && this.modifiedCoolingLosses[lossIndex].coolingLossType == 'Other Liquid') {
+          else if (this.baselineCoolingLosses[lossIndex].coolingLossType == 'Liquid' && this.modifiedCoolingLosses[lossIndex].coolingLossType == 'Liquid') {
             //flowRate
             this.differentArray[lossIndex].different.liquidCoolingLossDifferent.flowRate.next(this.compare(this.baselineCoolingLosses[lossIndex].liquidCoolingLoss.flowRate, this.modifiedCoolingLosses[lossIndex].liquidCoolingLoss.flowRate));
             //density
@@ -98,17 +98,11 @@ export class CoolingLossesCompareService {
             this.differentArray[lossIndex].different.liquidCoolingLossDifferent.specificHeat.next(this.compare(this.baselineCoolingLosses[lossIndex].liquidCoolingLoss.specificHeat, this.modifiedCoolingLosses[lossIndex].liquidCoolingLoss.specificHeat));
             //correctionFactor
             this.differentArray[lossIndex].different.liquidCoolingLossDifferent.correctionFactor.next(this.compare(this.baselineCoolingLosses[lossIndex].liquidCoolingLoss.correctionFactor, this.modifiedCoolingLosses[lossIndex].liquidCoolingLoss.correctionFactor));
+            //coolingMedium
+            this.differentArray[lossIndex].different.liquidCoolingLossDifferent.coolingMedium.next(this.compare(this.baselineCoolingLosses[lossIndex].coolingMedium, this.modifiedCoolingLosses[lossIndex].coolingMedium));
+
           }
-          else if (this.baselineCoolingLosses[lossIndex].coolingLossType == 'Water' && this.modifiedCoolingLosses[lossIndex].coolingLossType == 'Water') {
-            //flowRate
-            this.differentArray[lossIndex].different.waterCoolingLossDifferent.flowRate.next(this.compare(this.baselineCoolingLosses[lossIndex].waterCoolingLoss.flowRate, this.modifiedCoolingLosses[lossIndex].waterCoolingLoss.flowRate));
-            //initialTemperature
-            this.differentArray[lossIndex].different.waterCoolingLossDifferent.initialTemperature.next(this.compare(this.baselineCoolingLosses[lossIndex].waterCoolingLoss.initialTemperature, this.modifiedCoolingLosses[lossIndex].waterCoolingLoss.initialTemperature));
-            //outletTemperature
-            this.differentArray[lossIndex].different.waterCoolingLossDifferent.outletTemperature.next(this.compare(this.baselineCoolingLosses[lossIndex].waterCoolingLoss.outletTemperature, this.modifiedCoolingLosses[lossIndex].waterCoolingLoss.outletTemperature));
-            //correctionFactor
-            this.differentArray[lossIndex].different.waterCoolingLossDifferent.correctionFactor.next(this.compare(this.baselineCoolingLosses[lossIndex].waterCoolingLoss.correctionFactor, this.modifiedCoolingLosses[lossIndex].waterCoolingLoss.correctionFactor));
-          } else {
+          else {
             this.disableIndexed(lossIndex);
           }
         }
@@ -129,6 +123,8 @@ export class CoolingLossesCompareService {
       this.differentArray[lossIndex].different.gasCoolingLossDifferent.finalTemperature.next(false);
       this.differentArray[lossIndex].different.gasCoolingLossDifferent.specificHeat.next(false);
       this.differentArray[lossIndex].different.gasCoolingLossDifferent.correctionFactor.next(false);
+      this.differentArray[lossIndex].different.gasCoolingLossDifferent.gasDensity.next(false);
+      this.differentArray[lossIndex].different.gasCoolingLossDifferent.coolingMedium.next(false);
       //liquidCooling
       this.differentArray[lossIndex].different.liquidCoolingLossDifferent.flowRate.next(false);
       this.differentArray[lossIndex].different.liquidCoolingLossDifferent.density.next(false);
@@ -136,11 +132,7 @@ export class CoolingLossesCompareService {
       this.differentArray[lossIndex].different.liquidCoolingLossDifferent.outletTemperature.next(false);
       this.differentArray[lossIndex].different.liquidCoolingLossDifferent.specificHeat.next(false);
       this.differentArray[lossIndex].different.liquidCoolingLossDifferent.correctionFactor.next(false);
-      //waterCooling
-      this.differentArray[lossIndex].different.waterCoolingLossDifferent.flowRate.next(false);
-      this.differentArray[lossIndex].different.waterCoolingLossDifferent.initialTemperature.next(false);
-      this.differentArray[lossIndex].different.waterCoolingLossDifferent.outletTemperature.next(false);
-      this.differentArray[lossIndex].different.waterCoolingLossDifferent.correctionFactor.next(false);
+      this.differentArray[lossIndex].different.liquidCoolingLossDifferent.coolingMedium.next(false);
     }
   }
 
@@ -152,6 +144,8 @@ export class CoolingLossesCompareService {
     this.differentArray[lossIndex].different.gasCoolingLossDifferent.finalTemperature.next(false);
     this.differentArray[lossIndex].different.gasCoolingLossDifferent.specificHeat.next(false);
     this.differentArray[lossIndex].different.gasCoolingLossDifferent.correctionFactor.next(false);
+    this.differentArray[lossIndex].different.gasCoolingLossDifferent.gasDensity.next(false);
+    this.differentArray[lossIndex].different.gasCoolingLossDifferent.coolingMedium.next(false);
     //liquidCooling
     this.differentArray[lossIndex].different.liquidCoolingLossDifferent.flowRate.next(false);
     this.differentArray[lossIndex].different.liquidCoolingLossDifferent.density.next(false);
@@ -159,11 +153,7 @@ export class CoolingLossesCompareService {
     this.differentArray[lossIndex].different.liquidCoolingLossDifferent.outletTemperature.next(false);
     this.differentArray[lossIndex].different.liquidCoolingLossDifferent.specificHeat.next(false);
     this.differentArray[lossIndex].different.liquidCoolingLossDifferent.correctionFactor.next(false);
-    //waterCooling
-    this.differentArray[lossIndex].different.waterCoolingLossDifferent.flowRate.next(false);
-    this.differentArray[lossIndex].different.waterCoolingLossDifferent.initialTemperature.next(false);
-    this.differentArray[lossIndex].different.waterCoolingLossDifferent.outletTemperature.next(false);
-    this.differentArray[lossIndex].different.waterCoolingLossDifferent.correctionFactor.next(false);
+    this.differentArray[lossIndex].different.liquidCoolingLossDifferent.coolingMedium.next(false);
   }
 
   compare(a: any, b: any) {
@@ -185,8 +175,7 @@ export class CoolingLossesCompareService {
 export interface CoolingLossDifferent {
   coolingLossType: BehaviorSubject<boolean>,
   gasCoolingLossDifferent: GasCoolingLossDifferent,
-  liquidCoolingLossDifferent: LiquidCoolingLossDifferent,
-  waterCoolingLossDifferent: WaterCoolingLossDifferent
+  liquidCoolingLossDifferent: LiquidCoolingLossDifferent
 }
 
 export interface GasCoolingLossDifferent {
@@ -195,6 +184,8 @@ export interface GasCoolingLossDifferent {
   finalTemperature: BehaviorSubject<boolean>,
   specificHeat: BehaviorSubject<boolean>,
   correctionFactor: BehaviorSubject<boolean>,
+  gasDensity: BehaviorSubject<boolean>,
+  coolingMedium: BehaviorSubject<boolean>
 }
 
 export interface LiquidCoolingLossDifferent {
@@ -204,11 +195,5 @@ export interface LiquidCoolingLossDifferent {
   outletTemperature: BehaviorSubject<boolean>,
   specificHeat: BehaviorSubject<boolean>,
   correctionFactor: BehaviorSubject<boolean>,
-}
-
-export interface WaterCoolingLossDifferent {
-  flowRate: BehaviorSubject<boolean>,
-  initialTemperature: BehaviorSubject<boolean>,
-  outletTemperature: BehaviorSubject<boolean>,
-  correctionFactor: BehaviorSubject<boolean>,
+  coolingMedium: BehaviorSubject<boolean>
 }

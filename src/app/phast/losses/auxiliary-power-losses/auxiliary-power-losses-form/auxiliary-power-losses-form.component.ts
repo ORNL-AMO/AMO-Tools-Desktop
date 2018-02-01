@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, EventEmitter, Output, ViewChild, ElementRef, SimpleChanges } from '@angular/core';
 import { WindowRefService } from '../../../../indexedDb/window-ref.service';
-import { AuxiliaryPowerCompareService } from "../auxiliary-power-compare.service";
+import { AuxiliaryPowerCompareService } from '../auxiliary-power-compare.service';
+import { FormGroup } from '@angular/forms';
 @Component({
   selector: 'app-auxiliary-power-losses-form',
   templateUrl: './auxiliary-power-losses-form.component.html',
@@ -8,7 +9,7 @@ import { AuxiliaryPowerCompareService } from "../auxiliary-power-compare.service
 })
 export class AuxiliaryPowerLossesFormComponent implements OnInit {
   @Input()
-  auxLossesForm: any;
+  auxLossesForm: FormGroup;
   @Output('calculate')
   calculate = new EventEmitter<boolean>();
   @Input()
@@ -20,12 +21,15 @@ export class AuxiliaryPowerLossesFormComponent implements OnInit {
   @Input()
   lossIndex: number;
 
-  @ViewChild('lossForm') lossForm: ElementRef;
-  form: any;
-  elements: any;
-
+  inputError: string = null;
   firstChange: boolean = true;
   counter: any;
+  voltageError: string = null;
+
+  motorPhases: Array<number> = [
+    1,
+    3
+  ]
   constructor(private windowRefService: WindowRefService, private auxiliaryPowerCompareService: AuxiliaryPowerCompareService) { }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -50,34 +54,40 @@ export class AuxiliaryPowerLossesFormComponent implements OnInit {
   }
 
   disableForm() {
-    this.elements = this.lossForm.nativeElement.elements;
-    for (var i = 0, len = this.elements.length; i < len; ++i) {
-      this.elements[i].disabled = true;
-    }
+    this.auxLossesForm.disable();
   }
 
   enableForm() {
-    this.elements = this.lossForm.nativeElement.elements;
-    for (var i = 0, len = this.elements.length; i < len; ++i) {
-      this.elements[i].disabled = false;
-    }
+    this.auxLossesForm.enable();
   }
 
   checkForm() {
-    if (this.auxLossesForm.status == "VALID") {
-      this.calculate.emit(true);
-    }
+    this.calculate.emit(true);
   }
 
   focusField(str: string) {
     this.changeField.emit(str);
   }
-
+  focusOut() {
+    this.changeField.emit('default');
+  }
   emitSave() {
     this.saveEmit.emit(true);
   }
 
+  checkVoltageError(bool?: boolean) {
+    if (!bool) {
+      this.startSavePolling();
+    }
+    if (this.auxLossesForm.controls.supplyVoltage.value < 0 || this.auxLossesForm.controls.supplyVoltage.value > 480) {
+      this.voltageError = 'Supply Voltage must be between 0 and 480';
+    } else {
+      this.voltageError = null;
+    }
+  }
+
   startSavePolling() {
+    console.log(this.auxLossesForm);
     this.checkForm();
     if (this.counter) {
       clearTimeout(this.counter);

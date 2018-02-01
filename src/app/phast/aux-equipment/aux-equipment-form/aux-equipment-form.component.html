@@ -1,101 +1,74 @@
-<form>
-  <div class="form-section">
-    <div class="form-group">
-      <label for="dutyCycle">Duty Cycle</label>
-      <div class="input-group">
-        <input name="dutyCycle" type="number" step="any" id="dutyCycle" class="form-control" (focus)="focusField('dutyCycle')" [(ngModel)]="equipment.dutyCycle"
-          (input)="calculate()" onfocus="this.select();" />
-        <span class="input-group-addon units">%</span>
-      </div>
-    </div>
-    <div class="form-group">
-      <label>Motor Power</label>
-      <div name="motorPower" class="form-check">
-        <label class="form-check-label">
-                <input
-                  name="motorPower"
-                  [(ngModel)]="equipment.motorPower"
-                  class="form-check-input"
-                  type="radio"
-                  value="Calculated"
-                  (focus)="focusField('motorPower')"
-                  (change)="calculate()"
-                  style="position: absolute !important;">Calculated</label>
-        <label class="form-check-label">
-                <input
-                  name="motorPower"
-                  [(ngModel)]="equipment.motorPower"
-                  class="form-check-input"
-                  type="radio"
-                  value="Rated"
-                  (focus)="focusField('motorPower')"
-                                    (change)="calculate()">Rated
-              </label>
-      </div>
+<div class="form-section">
+  <div class="form-group">
+    <label for="dutyCycle">Duty Cycle</label>
+    <div class="input-group">
+      <input name="dutyCycle" type="number" step="any" id="dutyCycle" class="form-control" (focus)="focusField('dutyCycle')" [(ngModel)]="equipment.dutyCycle"
+        (input)="calculate()" onfocus="this.select();" />
+      <span class="input-group-addon units">%</span>
     </div>
   </div>
-  <div class="form-section">
-    <div class="form-group" *ngIf="equipment.motorPower == 'Calculated'">
-      <label>Motor Phase</label>
-      <div name="motorPhase" class="form-check">
-        <label class="form-check-label">
-                <input
-                  name="motorPhase"
-                  [(ngModel)]="equipment.motorPhase"
-                  class="form-check-input"
-                  type="radio"
-                  value='1'
-                  (focus)="focusField('motorPhase')"
-                                    (change)="calculate()">1
-                </label>
-        <label class="form-check-label">
-                <input
-                  name="motorPhase"
-                  [(ngModel)]="equipment.motorPhase"
-                  class="form-check-input"
-                  type="radio"
-                  value='3'
-                  (focus)="focusField('motorPhase')"
-                                    (change)="calculate()">3
-              </label>
-      </div>
-    </div>
-    <div class="form-group" *ngIf="equipment.motorPower == 'Calculated'">
-      <label for="supplyVoltage">Supply Voltage</label>
-      <div class="input-group">
-        <input name="supplyVoltage" type="number" step="any" id="supplyVoltage" class="form-control" (focus)="focusField('supplyVoltage')"
-          [(ngModel)]="equipment.supplyVoltage" (input)="calculate()" onfocus="this.select();" />
-        <span class="input-group-addon units">V</span>
-      </div>
-    </div>
-    <div class="form-group" *ngIf="equipment.motorPower == 'Calculated'">
-      <label for="averageCurrent">Average Current</label>
-      <div class="input-group">
-        <input name="averageCurrent" type="number" step="any" id="averageCurrent" class="form-control" (focus)="focusField('averageCurrent')"
-          [(ngModel)]="equipment.averageCurrent" (input)="calculate()" onfocus="this.select();" />
-        <span class="input-group-addon units">A</span>
-      </div>
-    </div>
-    <div class="form-group" *ngIf="equipment.motorPower == 'Calculated'">
-      <label for="powerFactor">Power Factor</label>
-      <input name="powerFactor" type="number" step="any" id="powerFactor" class="form-control" (focus)="focusField('powerFactor')"
-        [(ngModel)]="equipment.powerFactor" (input)="calculate()" onfocus="this.select();" />
-    </div>
-    <div class="form-group" *ngIf="equipment.motorPower == 'Rated'">
-      <label for="totalConnectedPower">Total Connected Power</label>
-      <div class="input-group">
-        <input name="totalConnectedPower" type="number" step="any" id="totalConnectedPower" class="form-control" (focus)="focusField('totalConnectedPower')"
-          [(ngModel)]="equipment.totalConnectedPower" (input)="calculate()" onfocus="this.select();" />
-        <span class="input-group-addon units">hp</span>
-      </div>
-    </div>
-    <div class="form-group" *ngIf="equipment.motorPower == 'Rated'">
-      <label for="ratedCapacity">Rated Capacity</label>
-      <div class="input-group">
-        <input name="ratedCapacity" type="number" step="any" id="ratedCapacity" class="form-control" (focus)="focusField('ratedCapacity')"
-          [(ngModel)]="equipment.ratedCapacity" (input)="calculate()" onfocus="this.select();" />
-        <span class="input-group-addon units">%</span>
-      </div>
+  <div class="form-group">
+    <label>Motor Power</label>
+    <div name="motorPower" class="form-check">
+      <label class="form-check-label">
+        <input name="motorPower" [(ngModel)]="equipment.motorPower" class="form-check-input" type="radio" value="Calculated" (focus)="focusField('motorPower')"
+          (change)="calculate()" style="position: absolute !important;">Calculated</label>
+      <label class="form-check-label">
+        <input name="motorPower" [(ngModel)]="equipment.motorPower" class="form-check-input" type="radio" value="Rated" (focus)="focusField('motorPower')"
+          (change)="calculate()">Rated
+      </label>
     </div>
   </div>
-</form>
+</div>
+<div class="form-section">
+  <div class="form-group" *ngIf="equipment.motorPower == 'Calculated'">
+    <label>Motor Phase</label>
+    <div name="motorPhase" class="form-check">
+      <label class="form-check-label">
+        <input name="motorPhase" [(ngModel)]="equipment.motorPhase" class="form-check-input" type="radio" value='1' (focus)="focusField('motorPhase')"
+          (change)="calculate()">1
+      </label>
+      <label class="form-check-label">
+        <input name="motorPhase" [(ngModel)]="equipment.motorPhase" class="form-check-input" type="radio" value='3' (focus)="focusField('motorPhase')"
+          (change)="calculate()">3
+      </label>
+    </div>
+  </div>
+  <div class="form-group" *ngIf="equipment.motorPower == 'Calculated'">
+    <label for="supplyVoltage">Supply Voltage</label>
+    <div class="input-group">
+      <input name="supplyVoltage" type="number" step="any" id="supplyVoltage" class="form-control" (focus)="focusField('supplyVoltage')"
+        [(ngModel)]="equipment.supplyVoltage" (input)="calculate()" onfocus="this.select();" />
+      <span class="input-group-addon units">V</span>
+    </div>
+  </div>
+  <div class="form-group" *ngIf="equipment.motorPower == 'Calculated'">
+    <label for="averageCurrent">Average Current</label>
+    <div class="input-group">
+      <input name="averageCurrent" type="number" step="any" id="averageCurrent" class="form-control" (focus)="focusField('averageCurrent')"
+        [(ngModel)]="equipment.averageCurrent" (input)="calculate()" onfocus="this.select();" />
+      <span class="input-group-addon units">A</span>
+    </div>
+  </div>
+  <div class="form-group" *ngIf="equipment.motorPower == 'Calculated'">
+    <label for="powerFactor">Power Factor</label>
+    <input name="powerFactor" type="number" step="any" id="powerFactor" class="form-control" (focus)="focusField('powerFactor')"
+      [(ngModel)]="equipment.powerFactor" (input)="calculate()" onfocus="this.select();" />
+  </div>
+  <div class="form-group" *ngIf="equipment.motorPower == 'Rated'">
+    <label for="totalConnectedPower">Total Connected Power</label>
+    <div class="input-group">
+      <input name="totalConnectedPower" type="number" step="any" id="totalConnectedPower" class="form-control" (focus)="focusField('totalConnectedPower')"
+        [(ngModel)]="equipment.totalConnectedPower" (input)="calculate()" onfocus="this.select();" />
+      <span class="input-group-addon units">hp</span>
+    </div>
+  </div>
+  <div class="form-group" *ngIf="equipment.motorPower == 'Rated'">
+    <label for="ratedCapacity">Rated Capacity</label>
+    <div class="input-group">
+      <input name="ratedCapacity" type="number" step="any" id="ratedCapacity" class="form-control" (focus)="focusField('ratedCapacity')"
+        [(ngModel)]="equipment.ratedCapacity" (input)="calculate()" onfocus="this.select();" />
+      <span class="input-group-addon units">%</span>
+    </div>
+  </div>
+</div>

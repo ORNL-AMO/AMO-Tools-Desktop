@@ -34,6 +34,7 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
   line: any;
   filter: any;
   detailBox: any;
+  tooltipPointer: any;
   pointer: any;
   focusAvg: any;
   focusMax: any;
@@ -96,14 +97,24 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
     let curveGraph = this.doc.getElementById('achievableEfficiencyGraph');
 
     this.canvasWidth = curveGraph.clientWidth;
-    this.canvasHeight = this.canvasWidth * (3/5);
+    this.canvasHeight = this.canvasWidth * (3 / 5);
 
     if (this.canvasWidth < 400) {
       this.fontSize = '8px';
-      this.margin = { top: 10, right: 10, bottom: 50, left: 75 };
+
+      //debug
+      this.margin = { top: 10, right: 35, bottom: 50, left: 50 };
+      
+      //real version
+      // this.margin = { top: 10, right: 10, bottom: 50, left: 75 };
     } else {
       this.fontSize = '11px';
-      this.margin = { top: 20, right: 20, bottom: 75, left: 120 };
+
+      //debug
+      this.margin = { top: 20, right: 45, bottom: 75, left: 95 };      
+
+      //real version
+      // this.margin = { top: 20, right: 20, bottom: 75, left: 120 };
     }
     this.width = this.canvasWidth - this.margin.left - this.margin.right;
     this.height = this.canvasHeight - this.margin.top - this.margin.bottom;
@@ -117,7 +128,7 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
   calculateYaverage(flow: number) {
     if (this.checkForm()) {
       let tmpResults = this.psatService.pumpEfficiency(
-        this.efficiencyForm.value.pumpType,
+        this.efficiencyForm.controls.pumpType.value,
         flow,
         this.settings
       );
@@ -128,7 +139,7 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
   calculateYmax(flow: number) {
     if (this.checkForm()) {
       let tmpResults = this.psatService.pumpEfficiency(
-        this.efficiencyForm.value.pumpType,
+        this.efficiencyForm.controls.pumpType.value,
         flow,
         this.settings
       );
@@ -141,7 +152,7 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
     if (
       this.efficiencyForm.controls.pumpType.status == 'VALID' &&
       this.efficiencyForm.controls.flowRate.status == 'VALID' &&
-      this.efficiencyForm.value.pumpType != 'Specified Optimal Efficiency'
+      this.efficiencyForm.controls.pumpType.value != 'Specified Optimal Efficiency'
     ) {
       return true;
     } else {
@@ -166,7 +177,12 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
       .attr("width", this.width + this.margin.left + this.margin.right)
       .attr("height", this.height + this.margin.top + this.margin.bottom)
       .append("g")
-      .attr("transform", "translate(" + this.margin.left + "," + this.margin.top + ")");
+
+      //debug
+      .attr("transform", "translate(" + (this.margin.left) + "," + this.margin.top + ")");
+      
+      //real version
+      // .attr("transform", "translate(" + this.margin.left + "," + this.margin.top + ")");
 
     // filters go in defs element
     var defs = this.svg.append("defs");
@@ -219,7 +235,7 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
       .range([this.height, 0])
       .domain([(min - 10), (max + 10)]);
 
-    if(this.isGridToggled) {
+    if (this.isGridToggled) {
       this.xAxis = d3.axisBottom()
         .scale(this.x)
         .tickSizeInner(0)
@@ -236,7 +252,7 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
         .tickSize(-this.width)
         .ticks(11);
     }
-    else{
+    else {
       this.xAxis = d3.axisBottom()
         .scale(this.x)
         .tickSizeInner(0)
@@ -258,6 +274,10 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
       .attr("class", "x axis")
       .attr("transform", "translate(0," + this.height + ")")
       .call(this.xAxis)
+      
+      //debug
+      .attr("class", "grid")    
+
       .style("stroke-width", ".5px")
       .selectAll('text')
       .style("text-anchor", "end")
@@ -268,6 +288,10 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
     this.yAxis = this.svg.append('g')
       .attr("class", "y axis")
       .call(this.yAxis)
+
+      //debug
+      .attr("class", "grid")
+      
       .style("stroke-width", ".5px")
       .selectAll('text')
       .style("font-size", this.fontSize);
@@ -350,8 +374,20 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
       .style("opacity", 0)
       .style('pointer-events', 'none');
 
+    //debug
+    this.tooltipPointer = d3.select("app-achievable-efficiency-graph").append("div")
+      .attr("id", "tooltipPointer")
+      .attr("class", "tooltip-pointer")
+      .style("opacity", 0)
+      .style('pointer-events', 'none');
+
+    //debug
     const detailBoxWidth = 160;
     const detailBoxHeight = 120;
+
+    //real version
+    // const detailBoxWidth = 160;
+    // const detailBoxHeight = 120;
 
     this.pointer = this.svg.append("polygon")
       .attr("id", "pointer")
@@ -407,11 +443,11 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
 
         this.focusAvg
           .style("display", null)
-          .style("opacity",1)
+          .style("opacity", 1)
           .style('pointer-events', 'none');
         this.focusMax
           .style("display", null)
-          .style("opacity",1)
+          .style("opacity", 1)
           .style('pointer-events', 'none');
         this.pointer
           .style("display", null)
@@ -420,9 +456,14 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
           .style("display", null)
           .style('pointer-events', 'none');
 
+        //debug
+        this.tooltipPointer
+          .style("display", null)
+          .style('pointer-events', 'none');
       })
       .on("mousemove", () => {
 
+        //debug
         this.focusAvg
           .style("display", null)
           .style("opacity", 1)
@@ -432,11 +473,30 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
           .style("opacity", 1)
           .style('pointer-events', 'none');
         this.pointer
-          .style("display", null)
+          // .style("display", null)
           .style('pointer-events', 'none');
         this.detailBox
-          .style("display", null)
+          // .style("display", null)
           .style('pointer-events', 'none');
+        this.tooltipPointer
+          // .style("display", null)
+          .style('pointer-events', 'none');
+
+        //real version
+        // this.focusAvg
+        //   .style("display", null)
+        //   .style("opacity", 1)
+        //   .style('pointer-events', 'none');
+        // this.focusMax
+        //   .style("display", null)
+        //   .style("opacity", 1)
+        //   .style('pointer-events', 'none');
+        // this.pointer
+        //   .style("display", null)
+        //   .style('pointer-events', 'none');
+        // this.detailBox
+        //   .style("display", null)
+        //   .style('pointer-events', 'none');
 
         //maxpoint
         let maxX0 = this.x.invert(d3.mouse(d3.event.currentTarget)[0]);
@@ -460,7 +520,10 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
         let avgD = avgX0 - avgD0.x > avgD1.x - avgX0 ? avgD1 : avgD0;
         this.focusAvg.attr("transform", "translate(" + this.x(avgD.x) + "," + this.y(avgD.y) + ")");
 
-        this.pointer.transition()
+        // this.pointer.transition()
+        //   .style("opacity", 1);
+        //debug
+        this.tooltipPointer.transition()
           .style("opacity", 1);
 
         this.detailBox.transition()
@@ -468,26 +531,28 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
 
         var detailBoxWidth = 160;
         var detailBoxHeight = 120;
+        var tooltipPointerWidth = detailBoxWidth * 0.05;
+        var tooltipPointerHeight = detailBoxHeight * 0.05;
 
-        this.pointer
-          .attr("transform", 'translate(' + (this.x(avgD.x) - (detailBoxWidth / 2)) + ',' + (this.y(avgD.y) + 27) + ')')
-          .style("fill", "#ffffff")
-          .style("filter", "url(#drop-shadow)");
+        //real version
+        // this.pointer
+        //   .attr("transform", 'translate(' + (this.x(avgD.x) - (detailBoxWidth / 2)) + ',' + (this.y(avgD.y) + 27) + ')')
+        //   .style("fill", "#ffffff")
+        //   .style("filter", "url(#drop-shadow)");
 
-
+        //debug 
         this.detailBox
           .style("padding-right", "10px")
           .style("padding-left", "10px")
           .html(
-          "<p><strong><div>Flow Rate: </div></strong><div>" + format(maxD.flowRate) + " " + this.settings.flowMeasurement + "</div>" +
+          "<div class='tooltip-pointer'></div><p><strong><div>Flow Rate: </div></strong><div>" + format(maxD.flowRate) + " " + this.settings.flowMeasurement + "</div>" +
           "<strong><div>Maximum: </div></strong><div>" + format(maxD.y) + " %</div>" +
-
           "<strong><div>Average: </div></strong><div>" + format(avgD.y) + " %</div></p>")
 
           // "<div style='float:left;'>Fluid Power: </div><div style='float: right;'>" + format(d.fluidPower) + " </div></strong></p>")
-
-          .style("left", (this.margin.left + this.x(avgD.x) - (detailBoxWidth / 2 - 17)) + "px")
-          .style("top", (this.margin.top + this.y(avgD.y) + 83) + "px")
+          .style("left", Math.min(((this.margin.left + this.x(avgD.x) - (detailBoxWidth / 2 - 17)) - 2), this.canvasWidth - detailBoxWidth) + "px")
+          // .style("left", (this.margin.left + this.x(avgD.x) - (detailBoxWidth / 2 - 17)) - 2 + "px")
+          .style("top", (this.margin.top + this.y(avgD.y) + 26) + "px")
           .style("position", "absolute")
           .style("width", detailBoxWidth + "px")
           .style("height", detailBoxHeight + "px")
@@ -496,32 +561,47 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
           .style("font", "12px sans-serif")
           .style("background", "#ffffff")
           .style("border", "0px")
+          .style("box-shadow", "0px 0px 10px 2px grey")
           .style("pointer-events", "none");
+
+        this.tooltipPointer
+          .attr("class", "tooltip-pointer")
+          .html("<div></div>")
+          .style("left", (this.margin.left + this.x(avgD.x)) + 5 + "px")
+          .style("top", (this.margin.top + this.y(avgD.y) + 16) + "px")
+          .style("position", "absolute")
+          .style("width", "0px")
+          .style("height", "0px")
+          .style("border-left", "10px solid transparent")
+          .style("border-right", "10px solid transparent")
+          .style("border-bottom", "10px solid white")
+          .style('pointer-events', 'none');
       })
       .on("mouseout", () => {
-        this.pointer
-          .transition()
-          .delay(100)
-          .duration(600)
-          .style("opacity",0);
 
         this.detailBox
           .transition()
           .delay(100)
           .duration(600)
-          .style("opacity",0);
+          .style("opacity", 0);
+
+        this.tooltipPointer
+          .transition()
+          .delay(100)
+          .duration(600)
+          .style("opacity", 0);
 
         this.focusAvg
           .transition()
           .delay(100)
           .duration(600)
-          .style("opacity",0);
+          .style("opacity", 0);
 
         this.focusMax
           .transition()
           .delay(100)
           .duration(600)
-          .style("opacity",0);
+          .style("opacity", 0);
       });
 
     this.svg.selectAll("line").style("pointer-events", "none");
@@ -590,7 +670,7 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
     this.svg.append("text")
       .attr("x", 20)
       .attr("y", "20")
-      .text("Achievable Efficiency (max): " + format(this.calculateYmax(this.efficiencyForm.value.flowRate)) + ' %')
+      .text("Achievable Efficiency (max): " + format(this.calculateYmax(this.efficiencyForm.controls.flowRate.value)) + ' %')
       .style("font-size", this.fontSize)
       .style("font-weight", "bold")
       .style("fill", "#2ECC71");
@@ -598,7 +678,7 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
     this.svg.append("text")
       .attr("x", 20)
       .attr("y", "50")
-      .text("Achievable Efficiency (average): " + format(this.calculateYaverage(this.efficiencyForm.value.flowRate)) + ' %')
+      .text("Achievable Efficiency (average): " + format(this.calculateYaverage(this.efficiencyForm.controls.flowRate.value)) + ' %')
       .style("font-size", this.fontSize)
       .style("font-weight", "bold")
       .style("fill", "#3498DB");
@@ -608,12 +688,12 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
   drawPoints() {
     this.maxPoint
       .attr("transform", () => {
-        if (this.y(this.calculateYmax(this.efficiencyForm.value.flowRate)) >= 0) {
-          return "translate(" + this.x(this.efficiencyForm.value.flowRate) + "," + this.y(this.calculateYmax(this.efficiencyForm.value.flowRate)) + ")";
+        if (this.y(this.calculateYmax(this.efficiencyForm.controls.flowRate.value)) >= 0) {
+          return "translate(" + this.x(this.efficiencyForm.controls.flowRate.value) + "," + this.y(this.calculateYmax(this.efficiencyForm.controls.flowRate.value)) + ")";
         }
       })
       .style("display", () => {
-        if (this.y(this.calculateYmax(this.efficiencyForm.value.flowRate)) >= 0) {
+        if (this.y(this.calculateYmax(this.efficiencyForm.controls.flowRate.value)) >= 0) {
           return null;
         } else {
           return "none";
@@ -622,12 +702,12 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
 
     this.avgPoint
       .attr("transform", () => {
-        if (this.y(this.calculateYaverage(this.efficiencyForm.value.flowRate)) >= 0) {
-          return "translate(" + this.x(this.efficiencyForm.value.flowRate) + "," + this.y(this.calculateYaverage(this.efficiencyForm.value.flowRate)) + ")";
+        if (this.y(this.calculateYaverage(this.efficiencyForm.controls.flowRate.value)) >= 0) {
+          return "translate(" + this.x(this.efficiencyForm.controls.flowRate.value) + "," + this.y(this.calculateYaverage(this.efficiencyForm.controls.flowRate.value)) + ")";
         }
       })
       .style("display", () => {
-        if (this.y(this.calculateYaverage(this.efficiencyForm.value.flowRate)) >= 0) {
+        if (this.y(this.calculateYaverage(this.efficiencyForm.controls.flowRate.value)) >= 0) {
           return null;
         } else {
           return "none";
@@ -635,12 +715,12 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
       });
   }
 
-  toggleGrid(){
-    if(this.isGridToggled){
+  toggleGrid() {
+    if (this.isGridToggled) {
       this.isGridToggled = false;
       this.makeGraph();
     }
-    else{
+    else {
       this.isGridToggled = true;
       this.makeGraph();
     }

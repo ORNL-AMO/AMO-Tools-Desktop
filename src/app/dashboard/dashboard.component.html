@@ -1,44 +1,43 @@
 <div class="container-fluid">
     <div class="row dashboard-content" *ngIf="dashboardView != 'detailed-report'">
-        <div class="col-2 sidebar-bg">
+
+        <div class="col-2 sidebar-bg" [ngClass]="{'modal-open': isModalOpen}">
             <app-sidebar *ngIf="allDirectories" [selectedCalculator]="selectedCalculator" [directory]="getAllDirectories()" [newDirEventToggle]="newDirEventToggle"
                 [workingDirectory]="getWorkingDirectory()" [dashboardView]="dashboardView" (directoryChange)="changeWorkingDirectory($event)"
-                (selectCalculator)="viewCalculator($event)" (emitGoHome)="goHome()" (emitShowAbout)="showAbout()" (emitShowTutorials)="showTutorials()"
-                (emitGoToSettings)="showSettings()" (emitGoToContact)="showContact()"></app-sidebar>
+                (selectCalculator)="viewCalculator($event)" (emitGoHome)="goHome()" (emitShowAbout)="showAbout()" (emitShowAcknowledgments)="showAcknowledgments()"
+                (emitShowTutorials)="showTutorials()" (emitGoToSettings)="showSettings()" (emitGoToContact)="showContact()" (openModal)="openModal($event)">
+            </app-sidebar>
         </div>
-        <div class="col-10 dashboard-page" *ngIf="allDirectories && dashboardView == 'assessment-dashboard'">
+
+        <div class="col-10" *ngIf="allDirectories && dashboardView == 'assessment-dashboard'">
+
             <app-assessment-dashboard [directory]="workingDirectory" (directoryChange)="changeWorkingDirectory($event)" (deleteDataSignal)="showDeleteModal()"
                 (deleteCheckedItems)="showDeleteItemsModal()" (resetDataEmit)="showDeleteModal()" (emitNewDir)="newDir()" (genReport)="generateReport()"
-                (exportEmit)="exportSelected()" (importEmit)="showImportModal()"></app-assessment-dashboard>
+                (exportEmit)="exportSelected()" (importEmit)="showImportModal()">
+            </app-assessment-dashboard>
+
         </div>
-        <div class="col-10 dashboard-page" *ngIf="allDirectories && dashboardView == 'calculator'">
+
+        <div class="col-10" *ngIf="allDirectories && dashboardView == 'calculator'">
             <app-calculator (selectCalculator)="viewCalculator($event)" [selectedCalculator]="selectedCalculator" [goCalcHome]="goCalcHome"></app-calculator>
         </div>
-        <div class="col-10 dashboard-page" *ngIf="allDirectories && dashboardView == 'landing-screen'">
+        <div class="col-10 landing-screen" *ngIf="allDirectories && dashboardView == 'landing-screen'">
             <app-landing-screen (hideLandingScreen)="hideScreen()" (selectCalculator)="viewCalculator($event)" [directory]="allDirectories"></app-landing-screen>
         </div>
-        <div class="col-10 dashboard-page" *ngIf="allDirectories && dashboardView == 'tutorials'">
+        <div class="col-10" *ngIf="allDirectories && dashboardView == 'tutorials'">
             <app-tutorials></app-tutorials>
         </div>
-        <div class="col-10 dashboard-page" *ngIf="allDirectories && dashboardView == 'about-page'">
+        <div class="col-10" *ngIf="allDirectories && dashboardView == 'about-page'">
             <app-about-page></app-about-page>
         </div>
-        <div class="col-10 dashboard-page" *ngIf="allDirectories && dashboardView == 'contact'">
+        <div class="col-10" *ngIf="allDirectories && dashboardView == 'contact'">
             <app-contact-page></app-contact-page>
         </div>
-        <div class="col-10 dashboard-page" *ngIf="allDirectories && dashboardView == 'settings'">
-
-            <div class="row">
-                <div class="col-10 mx-auto">
-                    <div class="content-container default-settings">
-
-                        <h2>Default Settings</h2>
-                        <app-assessment-settings [directory]="allDirectories" (resetDataEmit)="showDeleteModal($event)" (emitUpdateDirectory)="updateDir()"></app-assessment-settings>
-
-                    </div>
-                </div>
-            </div>
-
+        <div class="col-10" *ngIf="allDirectories && dashboardView == 'acknowledgments-page'">
+            <app-acknowledgments-page></app-acknowledgments-page>
+        </div>
+        <div class="col-10" *ngIf="allDirectories && dashboardView == 'settings'">
+            <app-assessment-settings [directory]="allDirectories" (resetDataEmit)="showDeleteModal($event)" (emitUpdateDirectory)="updateDir()"></app-assessment-settings>
         </div>
     </div>
     <!--<div class="row">
@@ -48,10 +47,8 @@
 </div>
 
 <div class="report" *ngIf="dashboardView == 'detailed-report'">
-    <app-detailed-report [selectedItems]="selectedItems" (emitCloseReport)="closeReport()"></app-detailed-report>
+    <app-report-rollup (emitCloseReport)="closeReport()"></app-report-rollup>
 </div>
-
-
 
 <div bsModal #deleteModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true"
     [config]="{backdrop: 'static'}">
@@ -60,8 +57,8 @@
             <div class="modal-header">
                 <h3>Delete Data</h3>
                 <button class="close" aria-label="Close" (click)="hideDeleteModal()">
-          <span *ngIf="!deleting" aria-hidden="true">&times;</span>
-        </button>
+                    <span *ngIf="!deleting" aria-hidden="true">&times;</span>
+                </button>
             </div>
             <div class="modal-body">
                 <div *ngIf="!deleting" class="row">
@@ -92,7 +89,7 @@
     </div>
 </div>
 
-<app-assessment-create *ngIf="createAssessment == true" (hideModal)="hideModal()" [(directory)]="workingDirectory" class="create-container"></app-assessment-create>
+<app-assessment-create *ngIf="createAssessment == true" [(directory)]="workingDirectory" class="create-container"></app-assessment-create>
 
 <div bsModal #deleteItemsModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="deleteItemsModalLabel"
     aria-hidden="true" [config]="{backdrop: 'static'}">
@@ -101,8 +98,8 @@
             <div class="modal-header">
                 <h3>Delete Selected Items</h3>
                 <button class="close" aria-label="Close" (click)="hideDeleteItemsModal()">
-          <span aria-hidden="true">&times;</span>
-        </button>
+                    <span aria-hidden="true">&times;</span>
+                </button>
             </div>
             <div class="modal-body">
                 <button class="btn btn-secondary pull-left" (click)="hideDeleteItemsModal()">Cancel</button>
@@ -119,8 +116,8 @@
             <div class="modal-header">
                 <h3>Assessments to be Exported</h3>
                 <button class="close" aria-label="Close" (click)="hideExportModal()">
-          <span aria-hidden="true">&times;</span>
-        </button>
+                    <span aria-hidden="true">&times;</span>
+                </button>
             </div>
             <div class="modal-body" *ngIf="showImportExport && isExportView">
                 <app-import-export [export]="true" [selectedItems]="returnSelected()" (closeExportModal)="hideExportModal()"></app-import-export>
@@ -139,8 +136,8 @@
                     Assessments will be imported into working directory
                 </p>-->
                 <button class="close" aria-label="Close" (click)="hideImportModal()">
-          <span aria-hidden="true">&times;</span>
-        </button>
+                    <span aria-hidden="true">&times;</span>
+                </button>
             </div>
             <div class="modal-body" *ngIf="showImportExport && isImportView">
                 <app-import-export *ngIf="!importInProgress" [import]="true" (importData)="checkImportData($event)"></app-import-export>

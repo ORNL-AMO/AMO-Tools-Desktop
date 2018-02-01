@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, SimpleChanges, Output, EventEmitter } from '@angular/core';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
+import { FormGroup } from '@angular/forms';
 @Component({
   selector: 'app-psat-settings',
   templateUrl: './psat-settings.component.html',
@@ -7,7 +8,7 @@ import { ConvertUnitsService } from '../../shared/convert-units/convert-units.se
 })
 export class PsatSettingsComponent implements OnInit {
   @Input()
-  settingsForm: any;
+  settingsForm: FormGroup;
   @Input()
   unitChange: boolean;
   @Output('startSavePolling')
@@ -20,8 +21,7 @@ export class PsatSettingsComponent implements OnInit {
   currentMeasurements: Array<any> = [];
   viscosityMeasurements: Array<any> = [];
   voltageMeasurements: Array<any> = [];
-
-
+  temperatureMeasurements: Array<any> = [];
   isFirstChange: boolean = true;
   constructor(private convertUnitsService: ConvertUnitsService) { }
 
@@ -33,13 +33,14 @@ export class PsatSettingsComponent implements OnInit {
     this.currentMeasurements = new Array();
     this.viscosityMeasurements = new Array();
     this.voltageMeasurements = new Array();
-
+    this.temperatureMeasurements = new Array();
     let tmpList = [
       'gpm',
       'MGD',
       'm3/h',
       'L/s',
-      'm3/min'
+      'm3/min',
+      'impgpm'
     ];
     tmpList.forEach(unit => {
       let tmpPossibility = {
@@ -72,7 +73,8 @@ export class PsatSettingsComponent implements OnInit {
     })
     tmpList = [
       'kPa',
-      'psi'
+      'psi',
+      'bar'
     ];
     tmpList.forEach(unit => {
       let tmpPossibility = {
@@ -82,6 +84,18 @@ export class PsatSettingsComponent implements OnInit {
       this.pressureMeasurements.push(tmpPossibility);
     })
 
+    tmpList = [
+      'C',
+      'F',
+      'K'
+    ];
+    tmpList.forEach(unit => {
+      let tmpPossibility = {
+        unit: unit,
+        display: this.getUnitName(unit)
+      }
+      this.temperatureMeasurements.push(tmpPossibility);
+    })
     // tmpList = this.convertUnitsService.possibilities('current');
     // tmpList.forEach(unit => {
     //   let tmpPossibility = {

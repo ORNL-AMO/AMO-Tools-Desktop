@@ -1,6 +1,10 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { FlowCalculations, FlowCalculationsOutput } from '../../../shared/models/phast/flowCalculations';
 import { PhastService } from '../../../phast/phast.service';
+import { Settings } from '../../../shared/models/settings';
+import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
+import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
+
 @Component({
   selector: 'app-energy-use',
   templateUrl: './energy-use.component.html',
@@ -9,6 +13,8 @@ import { PhastService } from '../../../phast/phast.service';
 export class EnergyUseComponent implements OnInit {
   @Input()
   inPhast: boolean;
+  @Input()
+  settings: Settings;
 
   flowCalculations: FlowCalculations = {
     //natural gas
@@ -35,11 +41,60 @@ export class EnergyUseComponent implements OnInit {
   currentField: string = 'orificeDiameter';
   tabSelect: string = 'results';
 
-  constructor(private phastService: PhastService) { }
+  constructor(private phastService: PhastService, private indexedDbService: IndexedDbService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
-    this.calculate();
+    if (!this.settings) {
+      this.indexedDbService.getDirectorySettings(1).then(results => {
+        if (results) {
+          this.settings = results[0];
+          this.initDefaultValues(this.settings);
+          this.calculate();
+        }
+      })
+    } else {
+      this.initDefaultValues(this.settings);
+      this.calculate();
+    }
   }
+
+  initDefaultValues(settings: Settings) {
+    if (settings.unitsOfMeasure == 'Metric') {
+      this.flowCalculations = {
+        //natural gas
+        gasType: 9,
+        specificGravity: 0.14,
+        orificeDiameter: this.convertUnitsService.roundVal(this.convertUnitsService.value(3.5).from('in').to('cm'), 2),
+        insidePipeDiameter: this.convertUnitsService.roundVal(this.convertUnitsService.value(8).from('in').to('cm'), 2),
+        // 1 is sharp edge
+        sectionType: 1,
+        dischargeCoefficient: 0.6,
+        gasHeatingValue: this.convertUnitsService.roundVal(this.convertUnitsService.value(7325).from('btuSCF').to('kJNm3'), 2),
+        gasTemperature: this.convertUnitsService.roundVal(this.convertUnitsService.value(85).from('F').to('C'), 2),
+        gasPressure: this.convertUnitsService.roundVal(this.convertUnitsService.value(85).from('psi').to('kPa'), 2),
+        orificePressureDrop: this.convertUnitsService.roundVal(this.convertUnitsService.value(10).from('in').to('cm'), 2),
+        operatingTime: 10
+      };
+    }
+    else {
+      this.flowCalculations = {
+        //natural gas
+        gasType: 9,
+        specificGravity: 0.14,
+        orificeDiameter: 3.5,
+        insidePipeDiameter: 8,
+        // 1 is sharp edge
+        sectionType: 1,
+        dischargeCoefficient: 0.6,
+        gasHeatingValue: 7325,
+        gasTemperature: 85,
+        gasPressure: 85,
+        orificePressureDrop: 10,
+        operatingTime: 10
+      };
+    }
+  }
+
   setCurrentField(str: string) {
     this.currentField = str;
   }
@@ -49,7 +104,7 @@ export class EnergyUseComponent implements OnInit {
   }
 
   calculate() {
-    this.flowCalculationResults = this.phastService.flowCalculations(this.flowCalculations);
+    this.flowCalculationResults = this.phastService.flowCalculations(this.flowCalculations, this.settings);
   }
 
 }

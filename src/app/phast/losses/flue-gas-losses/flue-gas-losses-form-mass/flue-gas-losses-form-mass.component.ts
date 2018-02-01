@@ -4,6 +4,10 @@ import { WindowRefService } from '../../../../indexedDb/window-ref.service';
 import { FlueGasCompareService } from "../flue-gas-compare.service";
 import { ModalDirective } from 'ngx-bootstrap';
 import { LossesService } from '../../losses.service';
+import { Settings } from '../../../../shared/models/settings';
+import { PhastService } from "../../../phast.service";
+import { FormGroup } from '@angular/forms';
+
 @Component({
   selector: 'app-flue-gas-losses-form-mass',
   templateUrl: './flue-gas-losses-form-mass.component.html',
@@ -11,7 +15,7 @@ import { LossesService } from '../../losses.service';
 })
 export class FlueGasLossesFormMassComponent implements OnInit {
   @Input()
-  flueGasLossForm: any;
+  flueGasLossForm: FormGroup;
   @Output('calculate')
   calculate = new EventEmitter<boolean>();
   @Input()
@@ -22,24 +26,36 @@ export class FlueGasLossesFormMassComponent implements OnInit {
   saveEmit = new EventEmitter<boolean>();
   @Input()
   lossIndex: number;
+  @Input()
+  settings: Settings;
 
   @ViewChild('materialModal') public materialModal: ModalDirective;
 
-  @ViewChild('lossForm') lossForm: ElementRef;
-  form: any;
-  elements: any;
-
+  moistureInAirCompositionError: string = null;
+  unburnedCarbonInAshError: string = null;
   firstChange: boolean = true;
   options: any;
   counter: any;
   showModal: boolean = false;
-  constructor(private suiteDbService: SuiteDbService, private flueGasCompareService: FlueGasCompareService, private windowRefService: WindowRefService, private lossesService: LossesService) { }
+
+  calculationMethods: Array<string> = [
+    'Excess Air',
+    'Oxygen in Flue Gas'
+  ];
+
+  calculationExcessAir = 0.0;
+  calculationFlueGasO2 = 0.0;
+  calculationWarning: string = null;
+  calcMethodExcessAir: boolean;
+
+  constructor(private suiteDbService: SuiteDbService, private flueGasCompareService: FlueGasCompareService, private windowRefService: WindowRefService,
+    private lossesService: LossesService, private phastService: PhastService) { }
 
   ngOnInit() {
     this.options = this.suiteDbService.selectSolidLiquidFlueGasMaterials();
     if (this.flueGasLossForm) {
-      if (this.flueGasLossForm.value.gasTypeId && this.flueGasLossForm.value.gasTypeId != '') {
-        if (this.flueGasLossForm.value.carbon == '') {
+      if (this.flueGasLossForm.controls.gasTypeId.value && this.flueGasLossForm.controls.gasTypeId.value != '') {
+        if (this.flueGasLossForm.controls.carbon.value == '') {
           this.setProperties();
         }
       }
@@ -47,6 +63,7 @@ export class FlueGasLossesFormMassComponent implements OnInit {
     if (!this.baselineSelected) {
       this.disableForm();
     }
+    this.setCalcMethod();
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -68,46 +85,101 @@ export class FlueGasLossesFormMassComponent implements OnInit {
     this.initDifferenceMonitor();
   }
 
-
+  focusOut() {
+    this.changeField.emit('default');
+  }
   disableForm() {
-    this.elements = this.lossForm.nativeElement.elements;
-    for (var i = 0, len = this.elements.length; i < len; ++i) {
-      this.elements[i].disabled = true;
-    }
+    this.flueGasLossForm.disable();
   }
 
   enableForm() {
-    this.elements = this.lossForm.nativeElement.elements;
-    for (var i = 0, len = this.elements.length; i < len; ++i) {
-      this.elements[i].disabled = false;
-    }
+    this.flueGasLossForm.enable();
   }
 
   checkForm() {
-    if (this.flueGasLossForm.status == "VALID") {
-      this.calculate.emit(true);
-    }
+    this.calcExcessAir();
+    this.calculate.emit(true);
   }
 
   focusField(str: string) {
     this.changeField.emit(str);
   }
 
-  setProperties() {
-    let tmpFlueGas = this.suiteDbService.selectSolidLiquidFlueGasMaterialById(this.flueGasLossForm.value.gasTypeId);
+  changeMethod() {
     this.flueGasLossForm.patchValue({
-      carbon: tmpFlueGas.carbon,
-      hydrogen: tmpFlueGas.hydrogen,
-      sulphur: tmpFlueGas.sulphur,
-      inertAsh: tmpFlueGas.inertAsh,
-      o2: tmpFlueGas.o2,
-      moisture: tmpFlueGas.moisture,
-      nitrogen: tmpFlueGas.nitrogen
-    })
+      o2InFlueGas: 0,
+      excessAirPercentage: 0
+    });
+    this.setCalcMethod();
+  }
+
+  setCalcMethod() {
+    if (this.flueGasLossForm.controls.oxygenCalculationMethod.value == 'Excess Air') {
+      this.calcMethodExcessAir = true;
+    } else {
+      this.calcMethodExcessAir = false;
+    }
+    this.calcExcessAir();
+  }
+
+  calcExcessAir() {
+    let input = {
+      carbon: this.flueGasLossForm.controls.carbon.value,
+      hydrogen: this.flueGasLossForm.controls.hydrogen.value,
+      sulphur: this.flueGasLossForm.controls.sulphur.value,
+      inertAsh: this.flueGasLossForm.controls.inertAsh.value,
+      o2: this.flueGasLossForm.controls.o2.value,
+      moisture: this.flueGasLossForm.controls.moisture.value,
+      nitrogen: this.flueGasLossForm.controls.nitrogen.value,
+      moistureInAirCombustion: this.flueGasLossForm.controls.moistureInAirComposition.value,
+      o2InFlueGas: this.flueGasLossForm.controls.o2InFlueGas.value,
+      excessAir: this.flueGasLossForm.controls.excessAirPercentage.value
+    };
+    this.calculationWarning = null;
+    if (!this.calcMethodExcessAir) {
+      if (input.o2InFlueGas < 0 || input.o2InFlueGas > 20.99999) {
+        this.calculationExcessAir = 0.0;
+        this.calculationWarning = 'Oxygen levels in Flue Gas must be greater than or equal to 0 and less than 21 percent';
+      } else {
+        this.calculationExcessAir = this.phastService.flueGasByMassCalculateExcessAir(input);
+      }
+      this.flueGasLossForm.patchValue({
+        excessAirPercentage: this.calculationExcessAir
+      });
+    } else {
+      if (input.excessAir < 0) {
+        this.calculationFlueGasO2 = 0.0;
+
+        this.calculationWarning = 'Excess Air must be greater than 0 percent';
+      } else {
+        this.calculationFlueGasO2 = this.phastService.flueGasByMassCalculateO2(input);
+      }
+      this.flueGasLossForm.patchValue({
+        o2InFlueGas: this.calculationFlueGasO2
+      });
+    }
+  }
+
+  setProperties() {
+    let tmpFlueGas = this.suiteDbService.selectSolidLiquidFlueGasMaterialById(this.flueGasLossForm.controls.gasTypeId.value);
+    this.flueGasLossForm.patchValue({
+      carbon: this.roundVal(tmpFlueGas.carbon, 4),
+      hydrogen: this.roundVal(tmpFlueGas.hydrogen, 4),
+      sulphur: this.roundVal(tmpFlueGas.sulphur, 4),
+      inertAsh: this.roundVal(tmpFlueGas.inertAsh, 4),
+      o2: this.roundVal(tmpFlueGas.o2, 4),
+      moisture: this.roundVal(tmpFlueGas.moisture, 4),
+      nitrogen: this.roundVal(tmpFlueGas.nitrogen, 4)
+    });
     this.checkForm();
   }
   emitSave() {
     this.saveEmit.emit(true);
+  }
+
+  roundVal(val: number, digits: number) {
+    let test = Number(val.toFixed(digits));
+    return test;
   }
 
   startSavePolling() {
@@ -117,7 +189,23 @@ export class FlueGasLossesFormMassComponent implements OnInit {
     }
     this.counter = setTimeout(() => {
       this.emitSave();
-    }, 3000)
+    }, 3000);
+  }
+
+  checkInputError(bool?: boolean) {
+    if (!bool) {
+      this.startSavePolling();
+    }
+    if (this.flueGasLossForm.controls.moistureInAirComposition.value < 0 || this.flueGasLossForm.controls.moistureInAirComposition.value > 100) {
+      this.moistureInAirCompositionError = 'Moisture in Air Combustion must be equal or greater than 0 and less than or equal to 100%';
+    } else {
+      this.moistureInAirCompositionError = null;
+    }
+    if (this.flueGasLossForm.controls.unburnedCarbonInAsh.value < 0 || this.flueGasLossForm.controls.unburnedCarbonInAsh.value > 100) {
+      this.unburnedCarbonInAshError = 'Unburned Carbon in Ash must be equal or greater than 0 and less than or equal to 100%';
+    } else {
+      this.unburnedCarbonInAshError = null;
+    }
   }
 
   initDifferenceMonitor() {

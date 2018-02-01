@@ -1,3 +1,7 @@
 .invalid{
     color: red;
 }
+
+.head-tool-summary td, .head-tool-summary th{
+    font-size: large;
+}

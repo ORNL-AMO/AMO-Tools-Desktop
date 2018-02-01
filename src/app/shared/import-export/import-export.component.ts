@@ -45,7 +45,7 @@ export class ImportExportComponent implements OnInit {
         clearTimeout(this.gatheringData);
       }
       this.gatheringData = setTimeout(() => {
-        if(this.gatheringSettings){
+        if (this.gatheringSettings) {
           clearTimeout(this.gatheringSettings);
         }
         //used to make sure all assessments proccessed (gotten outputs)
@@ -53,7 +53,6 @@ export class ImportExportComponent implements OnInit {
           this.getAssessmentSettings(item);
         });
         this.gatheringSettings = setTimeout(() => {
-          console.log(this.exportData);
           this.isDataGathered = true;
         }, 500)
       }, 500)
@@ -106,11 +105,14 @@ export class ImportExportComponent implements OnInit {
 
   setImportFile($event) {
     if ($event.target.files) {
-      if ($event.target.files[0].type == 'application/json') {
-        this.fileReference = $event;
-        this.validFile = true;
-      } else {
-        this.validFile = false;
+      if ($event.target.files.length != 0) {
+        let regex = /.json$/;
+        if (regex.test($event.target.files[0].name)) {
+          this.fileReference = $event;
+          this.validFile = true;
+        } else {
+          this.validFile = false;
+        }
       }
     }
   }

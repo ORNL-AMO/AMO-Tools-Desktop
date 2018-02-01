@@ -6,12 +6,14 @@ export interface MeteredEnergy {
 
 
 export interface MeteredEnergyFuel {
+    fuelDescription?: string,
     fuelType: number,
     heatingValue: number,
     collectionTime: number,
+    fuelFlowRateInput?: number,
     electricityUsed: number,
     electricityCollectionTime: number,
-    flowRate: number
+    fuelEnergy: number
 }
 export interface MeteredEnergyResults {
     meteredEnergyUsed: number,

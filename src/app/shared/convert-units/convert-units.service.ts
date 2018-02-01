@@ -32,6 +32,13 @@ import { volumeFlowRate } from './definitions/volumeFlowRate';
 import { viscosity } from './definitions/viscosity';
 import { frequency } from './definitions/frequency';
 import { force } from './definitions/force';
+//import {kineViscosity} from './definitions/kineViscosity'
+import { specificHeat } from './definitions/specificHeat'
+import { volumetricHeat } from './definitions/volumetricHeat';
+import { specificEnergy } from './definitions/specificEnergy';
+import { density } from './definitions/density';
+import { volumetricEnergy } from './definitions/volumetricEnergy';
+
 import * as _ from 'lodash';
 import * as keys from 'lodash.keys';
 import * as each from 'lodash.foreach';
@@ -60,8 +67,13 @@ export class ConvertUnitsService {
     volumeFlowRate: volumeFlowRate,
     viscosity: viscosity,
     frequency: frequency,
-    force: force
-
+    force: force,
+    //kineViscosity: kineViscosity,
+    specificHeat: specificHeat,
+    volumetricHeat: volumetricHeat,
+    specificEnergy: specificEnergy,
+    density: density,
+    volumetricEnergy: volumetricEnergy
   }
   origin: any;
   destination: any;
@@ -87,9 +99,11 @@ export class ConvertUnitsService {
   }
 
   from(from: any) {
-    if (!this.val){
-      if(this.val != 0)
-      throw new Error('need to set value before call to .from');
+    if (!this.val) {
+      if (this.val !== 0) {
+        // throw new Error('need to set value before call to .from');
+        console.log('You need to set a value (make sure its not undefined) before you call .from');
+      }
     }
     if (this.destination)
       throw new Error('.from must be called before .to');

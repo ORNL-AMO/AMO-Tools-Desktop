@@ -18,11 +18,11 @@ export const speed = {
         }
     },
     imperial: {
-        'm/h': {
+        'mph': {
             name: {
                 singular: 'Mile per hour'
                 , plural: 'Miles per hour' ,
-                 display:  '(m/h)'
+                 display:  '(mph)'
             }
             , to_anchor: 1
         }
@@ -49,7 +49,7 @@ export const speed = {
             , ratio: 1 / 1.609344
         }
         , imperial: {
-            unit: 'm/h'
+            unit: 'mph'
             , ratio: 1.609344
         }
     }

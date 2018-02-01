@@ -1,4 +1,5 @@
 import { Directory } from '../models/directory';
+import {FlueGasByVolume} from "../models/phast/losses/flueGas";
 
 export const MockDirectory: Directory = {
   name: 'Root Directory',
@@ -19,8 +20,8 @@ export const MockDirectory: Directory = {
           pump_specified: null,
           pump_rated_speed: 1780,
           drive: 0,
-          kinematic_viscosity: 1.0,
-          specific_gravity: 1.0,
+          kinematic_viscosity: 1.107,
+          specific_gravity: 1.002,
           stages: 2.0,
           fixed_speed: 1,
           line_frequency: 0,
@@ -39,7 +40,9 @@ export const MockDirectory: Directory = {
           motor_field_current: null,
           motor_field_voltage: 480,
           cost_kw_hour: .05,
-          cost: .05
+          cost: .05,
+          fluidType: 'Water',
+          fluidTemperature: 68
         },
         setupDone: true
       }
@@ -51,6 +54,20 @@ export const MockDirectory: Directory = {
       createdDate: new Date(),
       modifiedDate: new Date(),
       phast: {
+        systemEfficiency: 90,
+        operatingHours: {
+          weeksPerYear: 52,
+          daysPerWeek: 7,
+          shiftsPerDay: 3,
+          hoursPerShift: 8,
+          hoursPerYear: 8736,
+          isCalculated: true
+        },
+        operatingCosts: {
+          fuelCost: 8.00,
+          steamCost: 10.00,
+          electricityCost: .080
+        },
         losses: {
           chargeMaterials: [
             {
@@ -116,19 +133,19 @@ export const MockDirectory: Directory = {
               surfaceTemperature: 225.0,
               windVelocity: 10.0,
               surfaceEmissivity: 0.9,
-              conditionFactor: 1.394,
-              surfaceShape: 'Vertical Plates',
+              conditionFactor: 1.016,
+              surfaceShape: 1,
               correctionFactor: 1.0
-            },
+            }
           ],
           atmosphereLosses: [
             {
-              atmosphereGas: 1,
-              specificHeat: 0.02,
+              atmosphereGas: 5,
+              specificHeat: 0.0184,
               inletTemperature: 100.0,
               outletTemperature: 1400.0,
               flowRate: 1200.0,
-              correctionFactor: 1.0,
+              correctionFactor: 1.0
             }
           ],
           openingLosses: [
@@ -173,7 +190,8 @@ export const MockDirectory: Directory = {
                 initialTemperature: 80.0,
                 finalTemperature: 350.0,
                 specificHeat: 0.02,
-                correctionFactor: 1.0
+                correctionFactor: 1.0,
+                gasDensity: 1.0
               }
             },
             {
@@ -199,8 +217,8 @@ export const MockDirectory: Directory = {
           ],
           fixtureLosses: [
             {
-              materialName: 'Material 1',
-              specificHeat: 0.122,
+              materialName: 1,
+              specificHeat: 0.247910198232625,
               feedRate: 1250.0,
               initialTemperature: 300.0,
               finalTemperature: 1800.0,
@@ -222,47 +240,51 @@ export const MockDirectory: Directory = {
             {
               flueGasType: "By Volume",
               flueGasByVolume: {
-                flueGasTemperature: 700,
-                excessAirPercentage: 9.0,
-                combustionAirTemperature: 125,
-                CH4: 94.1,
-                C2H6: 2.4,
-                N2: 1.41,
-                H2: 0.03,
-                C3H8: 0.49,
-                C4H10_CnH2n: 0.29,
+                flueGasTemperature: 1400,
+                oxygenCalculationMethod: 'Excess Air',
+                excessAirPercentage: 10.0,
+                o2InFlueGas: 0.5,
+                combustionAirTemperature: 500,
+                fuelTemperature: 125,
+                gasTypeId: 1,
+                C2H6: 8.5,
+                C3H8: 0,
+                C4H10_CnH2n: 0,
+                CH4: 87,
+                CO: 0,
+                CO2: 0.4,
+                H2: 0.4,
                 H2O: 0,
-                CO: 0.42,
-                CO2: 0.71,
-                SO2: 0,
-                O2: 0
+                N2: 3.6,
+                O2: 0.1,
+                SO2: 0
               }
             },
-            {
-              flueGasType: "By Mass",
-              flueGasByMass: {
-                flueGasTemperature: 700,
-                excessAirPercentage: 9.0,
-                combustionAirTemperature: 125,
-                fuelTemperature: 70,
-                moistureInAirComposition: 1.0,
-                ashDischargeTemperature: 100,
-                unburnedCarbonInAsh: 1.5,
-                carbon: 75.0,
-                hydrogen: 5.0,
-                sulphur: 1.0,
-                inertAsh: 9.0,
-                o2: 7.0,
-                moisture: 0.0,
-                nitrogen: 1.5
-              }
-            }
+            // {
+            //   flueGasType: "By Mass",
+            //   flueGasByMass: {
+            //     flueGasTemperature: 700,
+            //     excessAirPercentage: 9.0,
+            //     combustionAirTemperature: 125,
+            //     fuelTemperature: 70,
+            //     moistureInAirComposition: 1.0,
+            //     ashDischargeTemperature: 100,
+            //     unburnedCarbonInAsh: 1.5,
+            //     carbon: 75.0,
+            //     hydrogen: 5.0,
+            //     sulphur: 1.0,
+            //     inertAsh: 9.0,
+            //     o2: 7.0,
+            //     moisture: 0.0,
+            //     nitrogen: 1.5
+            //   }
+            // }
           ],
           slagLosses: [
             {
-              weight: 3,
-              inletTemperature: 500,
-              outletTemperature: 550,
+              weight: 0,
+              inletTemperature: 0,
+              outletTemperature: 0,
               specificHeat: 0.2479,
               correctionFactor: 1.0
             }
@@ -270,36 +292,37 @@ export const MockDirectory: Directory = {
           auxiliaryPowerLosses: [
             {
               motorPhase: 3,
-              supplyVoltage: 460,
-              avgCurrent: 19,
-              powerFactor: .85,
+              supplyVoltage: 480,
+              avgCurrent: 0,
+              powerFactor: .9,
               operatingTime: 100,
             }
           ],
-          energyInput: [
+          energyInputEAF: [
             {
-              naturalGasHeatInput: 50,
-              naturalGasFlow: 0,
-              measuredOxygenFlow: 6500,
-              coalCarbonInjection: 3300,
-              coalHeatingValue: 9000,
-              electrodeUse: 500,
-              electrodeHeatingValue: 12000,
-              otherFuels: 20,
-              electricityInput: 18000
+              naturalGasHeatInput: 0,
+              flowRateInput: 0,
+              // naturalGasFlow: 0,
+              // measuredOxygenFlow: 6500,
+              coalCarbonInjection: 0,
+              coalHeatingValue: 13000,
+              electrodeUse: 0,
+              electrodeHeatingValue: 14000,
+              otherFuels: 0,
+              electricityInput: 0
             }
           ],
-          exhaustGas: [
+          exhaustGasEAF: [
             {
-              cycleTime: 2,
-              offGasTemp: 2800,
-              CO: 10,
-              H2: 10,
-              O2: 0,
-              CO2: 5,
-              combustibleGases: 5,
-              vfr: 50000,
-              dustLoading: 0.005,
+              // cycleTime: 2,
+              offGasTemp: 0,
+              CO: 0,
+              H2: 0,
+              // O2: 0,
+              // CO2: 5,
+              combustibleGases: 0,
+              vfr: 0,
+              dustLoading: 0,
               otherLosses: 0
             }
           ]

@@ -175,8 +175,8 @@ export const volume = {
         }
         , gal: {
             name: {
-                singular: 'Gallon'
-                , plural: 'Gallons' ,
+                singular: 'U.S. Gallon'
+                , plural: 'U.S. Gallons' ,
                  display:  '(gal)'
             }
             , to_anchor: 128
@@ -197,6 +197,14 @@ export const volume = {
             }
             , to_anchor: 25852.7
 
+        }
+        , 'impgal': {
+          name: {
+            singular: 'Imperial Gallon'
+            , plural: 'Imperial Gallons',
+            display:  '(imp gal)'
+          }
+          , to_anchor: 153.722
         }
     },
     _anchors: {

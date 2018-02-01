@@ -1,16 +1,17 @@
+.phast-container{
+    height: 100%;
+}
 
-/*.tab-content{
-  height: 80vh;
-  max-height: 80vh;
+.system-setup{
+    height: 100%;
 }
 
 
-.panel{
-  height: 100%;
-}*/
+.modal-open {
+    z-index: initial !important;
+}
 
 
-.disclaimer{
-  font-weight: bold !important;
-  opacity: 1 !important;
+#phastSelect {
+    margin-top: 25px;
 }

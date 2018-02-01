@@ -8,6 +8,7 @@ import { ModalDirective } from 'ngx-bootstrap';
 import { Assessment } from '../../shared/models/assessment';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
 import { PSAT } from '../../shared/models/psat';
+declare const packageJson;
 
 @Component({
   selector: 'app-assessment-settings',
@@ -50,8 +51,11 @@ export class AssessmentSettingsComponent implements OnInit {
         }
       }
     )
-
   }
+
+  // checkForUpdates(){
+
+  // }
 
   showSettingsModal(_oldSettings?: Settings, _newSettings?: Settings) {
     let settingsChanged;
@@ -149,6 +153,7 @@ export class AssessmentSettingsComponent implements OnInit {
     tmpSettings.createdDate = new Date();
     tmpSettings.modifiedDate = new Date();
     let oldSettings = this.settings;
+    tmpSettings.appVersion = packageJson.version;
     this.indexedDbService.addSettings(tmpSettings).then(
       results => {
         this.isDirectorySettings = true;
@@ -304,7 +309,8 @@ export class AssessmentSettingsComponent implements OnInit {
       oldSettings.powerMeasurement != newSettings.powerMeasurement ||
       oldSettings.pressureMeasurement != newSettings.pressureMeasurement ||
       oldSettings.unitsOfMeasure != newSettings.unitsOfMeasure ||
-      oldSettings.energySourceType != newSettings.energySourceType
+      oldSettings.energySourceType != newSettings.energySourceType ||
+      oldSettings.phastRollupUnit != newSettings.phastRollupUnit
     ) {
       return true;
     } else {

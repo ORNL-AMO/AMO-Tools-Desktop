@@ -4,6 +4,8 @@ import { Settings } from '../../../shared/models/settings';
 import { Assessment } from '../../../shared/models/assessment';
 import { PsatService } from '../../psat.service';
 import * as _ from 'lodash';
+import { ReportRollupService } from '../../../report-rollup/report-rollup.service';
+
 @Component({
   selector: 'app-output-summary',
   templateUrl: './output-summary.component.html',
@@ -24,8 +26,8 @@ export class OutputSummaryComponent implements OnInit {
   unit: string;
   titlePlacement: string;
   maxAnnualSavings: number = 0;
-  selectedModificationIndex: number = 0;
-  constructor(private psatService: PsatService) { }
+  selectedModificationIndex: number;
+  constructor(private psatService: PsatService, private reportRollupService: ReportRollupService) { }
 
   ngOnInit() {
     this.unit = '%';
@@ -37,7 +39,20 @@ export class OutputSummaryComponent implements OnInit {
         mod.psat.outputs = this.getResults(JSON.parse(JSON.stringify(mod.psat)), this.settings, true);
         mod.psat.outputs.percent_annual_savings = this.getSavingsPercentage(this.psat, mod.psat);
       })
-      this.getMaxAnnualSavings();
+      if (this.inRollup) {
+        this.getMaxAnnualSavings();
+      }
+    }
+    if (this.inRollup) {
+      this.reportRollupService.selectedPsats.forEach(val => {
+        if (val) {
+          val.forEach(assessment => {
+            if (assessment.assessmentId == this.assessment.id) {
+              this.selectedModificationIndex = assessment.selectedIndex;
+            }
+          })
+        }
+      })
     }
   }
 
@@ -51,26 +66,29 @@ export class OutputSummaryComponent implements OnInit {
   }
 
   getResults(psat: PSAT, settings: Settings, isModification?: boolean): PsatOutputs {
-    if (psat.inputs.optimize_calculation) {
-      return this.psatService.resultsOptimal(JSON.parse(JSON.stringify(psat.inputs)), settings);
-    } else if (!isModification) {
-      return this.psatService.resultsExisting(JSON.parse(JSON.stringify(psat.inputs)), settings);
+    let tmpForm = this.psatService.getFormFromPsat(psat.inputs);
+    if (tmpForm.status == 'VALID') {
+      if (psat.inputs.optimize_calculation) {
+        return this.psatService.resultsOptimal(JSON.parse(JSON.stringify(psat.inputs)), settings);
+      } else if (!isModification) {
+        return this.psatService.resultsExisting(JSON.parse(JSON.stringify(psat.inputs)), settings);
+      } else {
+        return this.psatService.resultsModified(JSON.parse(JSON.stringify(psat.inputs)), settings, this.psat.outputs.pump_efficiency);
+      }
     } else {
-      return this.psatService.resultsModified(JSON.parse(JSON.stringify(psat.inputs)), settings, this.psat.outputs.pump_efficiency);
+      return this.psatService.emptyResults();
     }
   }
 
   getMaxAnnualSavings() {
     let minCost = _.minBy(this.psat.modifications, (mod) => { return mod.psat.outputs.annual_cost })
     if (minCost) {
-      this.selectedModificationIndex = _.findIndex(this.psat.modifications, minCost);
       this.maxAnnualSavings = this.psat.outputs.annual_cost - minCost.psat.outputs.annual_cost;
-
     }
   }
 
   useModification() {
-    this.selectModification.emit({ modIndex: this.selectedModificationIndex, type: 'PSAT', assessment: this.assessment })
+    this.reportRollupService.updateSelectedPsats({assessment: this.assessment, settings: this.settings}, this.selectedModificationIndex);
   }
 
   getDiff(num1: number, num2: number) {
@@ -80,5 +98,16 @@ export class OutputSummaryComponent implements OnInit {
     } else {
       return diff;
     }
+  }
+
+  getPaybackPeriod(modification: PSAT) {
+    let result = 0;
+    let annualCostSavings = this.getDiff(this.psat.outputs.annual_cost, modification.outputs.annual_cost);
+    if (isNaN(annualCostSavings) == false) {
+      if (annualCostSavings > 1) {
+        result = (modification.inputs.implementationCosts / annualCostSavings) * 12;
+      }
+    }
+    return result;
   }
 }

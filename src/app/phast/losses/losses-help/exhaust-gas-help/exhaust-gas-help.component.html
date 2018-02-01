@@ -2,10 +2,10 @@
 <div class="help-header">
 
   <h3>Exhaust Gas Help</h3>
-  <p>Enter data</p>
+  <!-- <p>Enter data</p>
   <p class="text-muted">
     <span class="fa fa-youtube-play"></span> Watch tutorial on gathering wall loss data.
-  </p>
+  </p> -->
 
 </div>
 
@@ -13,20 +13,116 @@
 <div class="help-content">
 
 
-  <div class="card" *ngIf="currentField == 'cycleTime'">
+  <div class="card" *ngIf="currentField == 'offGasTemp'">
     <div class="card-header">
-      Cycle Time
+      Off (Exhaust) Gas Temperature
     </div>
     <div class="card-block">
-      <label>Description:</label>
-      <p>DESCRITION HERE</p>
-      <label>Input:</label>
+      <label><u><strong>Description</strong></u></label>
       <p>
-        Units: <strong>UNIT HERE</strong><br> Minimum Value Allowed: <strong>MAX HERE</strong><br> Maximum Value Allowed: <strong>MIN HERE</strong><br>
+        Temperature of exhaust gases from the EAF (sometimes referred to as fourth hole). This is measured or estimated
+        before the gases are mixed with outside air.
+      </p>
+      <label><u><strong>Input</strong></u></label>
+      <p>
+        Units: <strong>&#8457;</strong> or <strong>&#8451;</strong>
       </p>
     </div>
   </div>
 
-  <!--remaining fields needed-->
+  <div class="card" *ngIf="currentField == 'CO'">
+    <div class="card-header">
+      CO
+    </div>
+    <div class="card-block">
+      <label><u><strong>Description</strong></u></label>
+      <p>
+        Average value of CO percentage in exhaust gases. Note that the values vary with time during the cycle and this is average over the cycle time.
+      </p>
+      <label><u><strong>Input</strong></u></label>
+      <p>
+        Units: <strong>%</strong><br> Minimum Value: <strong>0</strong><br> Maximum Value: <strong>100</strong><br>
+      </p>
+    </div>
+  </div>
+
+  <div class="card" *ngIf="currentField == 'H2'">
+    <div class="card-header">
+      H<sub>2</sub>
+    </div>
+    <div class="card-block">
+      <label><u><strong>Description</strong></u></label>
+      <p>
+        Average value of H<sub>2</sub> percentage in exhaust gases. Note that the values vary with time during the cycle and this is average over the cycle time.
+      </p>
+      <label><u><strong>Input</strong></u></label>
+      <p>
+        Units: <strong>%</strong><br> Minimum Value: <strong>0</strong><br> Maximum Value: <strong>100</strong><br>
+      </p>
+    </div>
+  </div>
+
+  <div class="card" *ngIf="currentField == 'combustibleGases'">
+    <div class="card-header">
+      Combustible Gas as CH<sub>4</sub>
+    </div>
+    <div class="card-block">
+      <label><u><strong>Description</strong></u></label>
+      <p>
+        Total volume of exhaust gases (use average value).
+      </p>
+      <label><u><strong>Input</strong></u></label>
+      <p>
+        Units: <strong>%</strong><br> Minimum Value: <strong>0</strong><br> Maximum Value: <strong>100</strong><br>
+      </p>
+    </div>
+  </div>
+
+  <div class="card" *ngIf="currentField == 'vfr'">
+    <div class="card-header">
+      Total Volumetric Flow Rate
+    </div>
+    <div class="card-block">
+      <label><u><strong>Description</strong></u></label>
+      <p>
+        Average value of combustible gases percentage in exhaust gases. Note that the values vary with time during the cycle and this is average over the cycle time.
+      </p>
+      <label><u><strong>Input</strong></u></label>
+      <p>
+        Units: <strong>cfm</strong> or <strong>m<sup>3</sup>/min</strong><br> Minimum Value: <strong>0</strong><br>
+      </p>
+    </div>
+  </div>
+
+  <div class="card" *ngIf="currentField == 'dustLoading'">
+    <div class="card-header">
+      Dust Loading
+    </div>
+    <div class="card-block">
+      <label><u><strong>Description</strong></u></label>
+      <p>
+        Dust loading for exhaust gases in terms of weight/SCF
+      </p>
+      <label><u><strong>Input</strong></u></label>
+      <p>
+        Units: <strong>lb/scf</strong> or <strong>kg/Nm<sup>3</sup></strong><br> Minimum Value: <strong>0</strong><br>
+      </p>
+    </div>
+  </div>
+
+  <div class="card" *ngIf="currentField == 'default'">
+    <div class="card-header">
+      Savings Suggestions
+    </div>
+    <div class="card-block">
+      <label><u><strong>Description</strong></u></label>
+      <ul>
+        <li class="help-general">Minimize volume by controlling make up air and air leaks in the oven</li>
+        <li class="help-general">Use preheated combustion air</li>
+        <li class="help-general">Reduce exhaust gas temperature by using one or more heat recovery methods</li>
+      </ul>
+    </div>
+  </div>
+
 
 </div>

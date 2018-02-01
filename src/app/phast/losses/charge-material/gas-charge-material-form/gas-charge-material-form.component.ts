@@ -4,6 +4,10 @@ import { WindowRefService } from '../../../../indexedDb/window-ref.service';
 import { ChargeMaterialCompareService } from '../charge-material-compare.service';
 import { ModalDirective } from 'ngx-bootstrap';
 import { LossesService } from '../../losses.service';
+import { Settings } from '../../../../shared/models/settings';
+import { PhastService } from "../../../phast.service";
+import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
+import { FormGroup } from '@angular/forms';
 @Component({
   selector: 'app-gas-charge-material-form',
   templateUrl: './gas-charge-material-form.component.html',
@@ -11,7 +15,7 @@ import { LossesService } from '../../losses.service';
 })
 export class GasChargeMaterialFormComponent implements OnInit {
   @Input()
-  chargeMaterialForm: any;
+  chargeMaterialForm: FormGroup;
   @Output('calculate')
   calculate = new EventEmitter<boolean>();
   @Input()
@@ -22,17 +26,22 @@ export class GasChargeMaterialFormComponent implements OnInit {
   saveEmit = new EventEmitter<boolean>();
   @Input()
   lossIndex: number;
+  @Input()
+  settings: Settings;
   @ViewChild('materialModal') public materialModal: ModalDirective;
-  @ViewChild('lossForm') lossForm: ElementRef;
-  form: any;
-  elements: any;
-
   firstChange: boolean = true;
   materialTypes: any;
   selectedMaterial: any;
   counter: any;
   showModal: boolean = false;
-  constructor(private suiteDbService: SuiteDbService, private chargeMaterialCompareService: ChargeMaterialCompareService, private windowRefService: WindowRefService, private lossesService: LossesService) { }
+  dischargeTempError: string = null;
+  specificHeatGasError: string = null;
+  feedGasRateError: string = null;
+  gasMixVaporError: string = null;
+  specificHeatGasVaporError: string = null;
+  feedGasReactedError: string = null;
+  heatOfReactionError: string = null;
+  constructor(private suiteDbService: SuiteDbService, private chargeMaterialCompareService: ChargeMaterialCompareService, private windowRefService: WindowRefService, private lossesService: LossesService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnChanges(changes: SimpleChanges) {
     if (!this.firstChange) {
@@ -49,8 +58,8 @@ export class GasChargeMaterialFormComponent implements OnInit {
   ngOnInit() {
     this.materialTypes = this.suiteDbService.selectGasLoadChargeMaterials();
     if (this.chargeMaterialForm) {
-      if (this.chargeMaterialForm.value.materialId && this.chargeMaterialForm.value.materialId != '') {
-        if (this.chargeMaterialForm.value.materialSpecificHeat == '') {
+      if (this.chargeMaterialForm.controls.materialId.value && this.chargeMaterialForm.controls.materialId.value != '') {
+        if (this.chargeMaterialForm.controls.materialSpecificHeat.value == '') {
           this.setProperties();
         }
       }
@@ -70,41 +79,76 @@ export class GasChargeMaterialFormComponent implements OnInit {
 
 
   disableForm() {
-    this.elements = this.lossForm.nativeElement.elements;
-    for (var i = 0, len = this.elements.length; i < len; ++i) {
-      this.elements[i].disabled = true;
-    }
+    this.chargeMaterialForm.disable();
   }
 
   enableForm() {
-    this.elements = this.lossForm.nativeElement.elements;
-    for (var i = 0, len = this.elements.length; i < len; ++i) {
-      this.elements[i].disabled = false;
-    }
-  }
-
-  checkForm() {
-    if (this.chargeMaterialForm.status == "VALID") {
-      this.calculate.emit(true);
-    }
+    this.chargeMaterialForm.enable();
   }
 
   focusField(str: string) {
     this.changeField.emit(str);
   }
-
+  focusOut() {
+    this.changeField.emit('default');
+  }
   setProperties() {
-    let selectedMaterial = this.suiteDbService.selectGasLoadChargeMaterialById(this.chargeMaterialForm.value.materialId);
+    let selectedMaterial = this.suiteDbService.selectGasLoadChargeMaterialById(this.chargeMaterialForm.controls.materialId.value);
+    if (this.settings.unitsOfMeasure == 'Metric') {
+      selectedMaterial.specificHeatVapor = this.convertUnitsService.value(selectedMaterial.specificHeatVapor).from('btulbF').to('kJkgC');
+    }
     this.chargeMaterialForm.patchValue({
-      materialSpecificHeat: selectedMaterial.specificHeatVapor,
+      materialSpecificHeat: this.roundVal(selectedMaterial.specificHeatVapor, 4)
     });
+    this.calculate.emit(true);
+  }
+
+  roundVal(val: number, digits: number) {
+    let test = Number(val.toFixed(digits));
+    return test;
   }
   emitSave() {
     this.saveEmit.emit(true);
   }
 
+  checkInputError(bool?: boolean) {
+    if (!bool) {
+      this.startSavePolling();
+    }
+    if (this.chargeMaterialForm.controls.materialSpecificHeat.value < 0) {
+      this.specificHeatGasError = 'Specific Heat of Gas must be equal or greater than 0';
+    } else {
+      this.specificHeatGasError = null;
+    }
+    if (this.chargeMaterialForm.controls.feedRate.value < 0) {
+      this.feedGasRateError = 'Feed Rate for Gas Mixture must be greater than 0';
+    } else {
+      this.feedGasRateError = null;
+    }
+    if (this.chargeMaterialForm.controls.vaporInGas.value < 0 || this.chargeMaterialForm.controls.vaporInGas.value > 100) {
+      this.gasMixVaporError = 'Vapor in Gas Mixture must be equal or greater  than 0 and less than or equal to 100%';
+    } else {
+      this.gasMixVaporError = null;
+    }
+    if (this.chargeMaterialForm.controls.specificHeatOfVapor.value < 0) {
+      this.specificHeatGasVaporError = 'Specific Heat of Vapor must be equal or greater than 0';
+    } else {
+      this.specificHeatGasVaporError = null;
+    }
+    if (this.chargeMaterialForm.controls.gasReacted.value < 0 || this.chargeMaterialForm.controls.gasReacted.value > 100) {
+      this.feedGasReactedError = 'Feed Gas Reacted must be equal or greater than 0 and less than or equal to 100%';
+    } else {
+      this.feedGasReactedError = null;
+    }
+    if (this.chargeMaterialForm.controls.heatOfReaction.value < 0) {
+      this.heatOfReactionError = 'Heat of Reaction cannot be less than zero. For exothermic reactions, change "Endothermic/Exothermic"';
+    } else {
+      this.heatOfReactionError = null;
+    }
+  }
+
   startSavePolling() {
-    this.checkForm();
+    this.calculate.emit(true);
     if (this.counter) {
       clearTimeout(this.counter);
     }
@@ -129,7 +173,7 @@ export class GasChargeMaterialFormComponent implements OnInit {
         this.chargeMaterialCompareService.differentArray[this.lossIndex].different.gasChargeMaterialDifferent.specificHeatGas.subscribe((val) => {
           let materialSpecificHeatElements = doc.getElementsByName('materialSpecificHeat_' + this.lossIndex);
           materialSpecificHeatElements.forEach(element => {
-            element.classList.toggle('indicate-different', val);
+            element.classList.toggle('indicate-different-db', val);
           });
         })
         //feedRate
@@ -208,8 +252,8 @@ export class GasChargeMaterialFormComponent implements OnInit {
   hideMaterialModal(event?: any) {
     if (event) {
       this.materialTypes = this.suiteDbService.selectGasLoadChargeMaterials();
-      let newMaterial = this.materialTypes.filter(material => {return material.substance == event.substance})
-      if(newMaterial.length != 0){
+      let newMaterial = this.materialTypes.filter(material => { return material.substance == event.substance })
+      if (newMaterial.length != 0) {
         this.chargeMaterialForm.patchValue({
           materialId: newMaterial[0].id
         })
@@ -219,6 +263,6 @@ export class GasChargeMaterialFormComponent implements OnInit {
     this.materialModal.hide();
     this.showModal = false;
     this.lossesService.modalOpen.next(this.showModal);
-    this.checkForm();
+    this.calculate.emit(true);
   }
 }

@@ -29,35 +29,37 @@ export class ExploreOpportunitiesSankeyComponent implements OnInit, OnChanges {
   firstChange: boolean = true;
 
   //Max width of Sankey
+
   baseSize: number = 50;
 
 
   selectedView: string = 'Baseline';
 
+
   constructor(private convertUnitsService: ConvertUnitsService) {
   }
 
   ngOnInit() {
-    this.createSankey();
+    this.createSankey('Baseline');
   }
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.baselineResults) {
       if (this.selectedView == 'Baseline') {
-        this.createSankey();
+        this.createSankey('Baseline');
       }
     }
     if (changes.modificationResults) {
       if (this.selectedView == 'Modified') {
-        this.createSankey();
+        this.createSankey('Modified');
       }
     }
   }
-  createSankey() {
+  createSankey(str: string) {
+    this.selectedView = str;
     if (this.selectedView == 'Baseline') {
       this.sankey("app-explore-opportunities-sankey", this.baselineResults);
     } else if (this.selectedView == 'Modified') {
-      console.log('create modified 2');
       this.sankey("app-explore-opportunities-sankey", this.modificationResults);
     }
   }
@@ -71,11 +73,13 @@ export class ExploreOpportunitiesSankeyComponent implements OnInit, OnChanges {
 
   sankey(location, results) {
 
+    this.baseSize = 50 * (results.motor_power/this.baselineResults.motor_power);
+
     // Remove  all Sankeys
     d3.select(location).selectAll('svg').remove();
 
     this.width = 400;
-    this.height = 400;
+    this.height = 300;
 
     svg = d3.select(location).append('svg')
       .attr("viewBox", "0 0 " + this.width + " " + this.height)
@@ -87,7 +91,7 @@ export class ExploreOpportunitiesSankeyComponent implements OnInit, OnChanges {
     var nodes = [];
     nodes.push(
       /*0*/{
-        name: "Input",
+        name: "Energy Input",
         value: results.motor_power,
         displaySize: this.baseSize,
         width: 300,
@@ -111,7 +115,7 @@ export class ExploreOpportunitiesSankeyComponent implements OnInit, OnChanges {
         top: true
       },
       /*2*/{
-        name: "Motor",
+        name: "Motor Losses",
         value: this.motor,
         displaySize: 0,
         width: 0,
@@ -138,7 +142,7 @@ export class ExploreOpportunitiesSankeyComponent implements OnInit, OnChanges {
         top: false
       },
         /*4*/{
-          name: "Drive",
+          name: "Drive Losses",
           value: this.drive,
           displaySize: 0,
           width: 0,
@@ -165,7 +169,7 @@ export class ExploreOpportunitiesSankeyComponent implements OnInit, OnChanges {
         top: false
       },
       /*6*/{
-        name: "Pump",
+        name: "Pump Losses",
         value: this.pump,
         displaySize: 0,
         width: 0,
@@ -177,7 +181,7 @@ export class ExploreOpportunitiesSankeyComponent implements OnInit, OnChanges {
         top: true
       },
       /*7*/{
-        name: "Output",
+        name: "Useful Output",
         value: 0,
         displaySize: 0,
         width: 0,
@@ -713,6 +717,7 @@ export class ExploreOpportunitiesSankeyComponent implements OnInit, OnChanges {
       });
     () => this.changePlaceHolders(nodes);
   }
+
 
   calcLosses(results) {
     var motorShaftPower;

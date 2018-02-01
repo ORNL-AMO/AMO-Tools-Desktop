@@ -22,6 +22,10 @@ import { SettingsModule } from '../settings/settings.module';
 import { ToastyModule } from 'ng2-toasty';
 
 import { ImportExportModule } from '../shared/import-export/import-export.module';
+import { PhastSummaryCardComponent } from './assessment-grid-view/assessment-card/phast-summary-card/phast-summary-card.component';
+import { PsatSummaryCardComponent } from './assessment-grid-view/assessment-card/psat-summary-card/psat-summary-card.component';
+import { PhastReportModule } from '../phast/phast-report/phast-report.module';
+import { PsatModule } from '../psat/psat.module';
 
 @NgModule({
   declarations: [
@@ -36,7 +40,9 @@ import { ImportExportModule } from '../shared/import-export/import-export.module
     AssessmentListItemComponent,
     CreateFolderComponent,
     AssessmentCreateComponent,
-    AssessmentSettingsComponent
+    AssessmentSettingsComponent,
+    PhastSummaryCardComponent,
+    PsatSummaryCardComponent
   ],
   exports: [
     AssessmentDashboardComponent,
@@ -53,7 +59,9 @@ import { ImportExportModule } from '../shared/import-export/import-export.module
     IndexedDbModule,
     SettingsModule,
     ToastyModule,
-    ImportExportModule
+    ImportExportModule,
+    PhastReportModule,
+    PsatModule
   ],
   providers: []
 })

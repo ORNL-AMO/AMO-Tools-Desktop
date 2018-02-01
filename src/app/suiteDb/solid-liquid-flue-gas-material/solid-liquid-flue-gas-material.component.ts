@@ -1,9 +1,11 @@
-import { Component, OnInit, EventEmitter, Output } from '@angular/core';
+import { Component, OnInit, EventEmitter, Output, Input } from '@angular/core';
 import { SolidLiquidFlueGasMaterial } from '../../shared/models/materials';
 import { SuiteDbService } from '../suite-db.service';
 import { IndexedDbService } from '../../indexedDb/indexed-db.service';
 import * as _ from 'lodash';
-
+import { Settings } from '../../shared/models/settings';
+import { PhastService } from '../../phast/phast.service';
+import {ConvertUnitsService} from "../../shared/convert-units/convert-units.service";
 @Component({
   selector: 'app-solid-liquid-flue-gas-material',
   templateUrl: './solid-liquid-flue-gas-material.component.html',
@@ -12,6 +14,10 @@ import * as _ from 'lodash';
 export class SolidLiquidFlueGasMaterialComponent implements OnInit {
   @Output('closeModal')
   closeModal = new EventEmitter<SolidLiquidFlueGasMaterial>();
+  @Input()
+  settings: Settings;
+  @Output('hideModal')
+  hideModal = new EventEmitter();
 
   newMaterial: SolidLiquidFlueGasMaterial = {
     substance: 'New Fuel',
@@ -21,29 +27,44 @@ export class SolidLiquidFlueGasMaterialComponent implements OnInit {
     moisture: 0,
     nitrogen: 0,
     o2: 0,
-    sulphur: 0
-
+    sulphur: 0,
+    heatingValue: 0
   };
   selectedMaterial: SolidLiquidFlueGasMaterial;
   allMaterials: Array<SolidLiquidFlueGasMaterial>;
-  isValidMaterialName: boolean = true;
+  isValid: boolean;
   nameError: string = null;
-  constructor(private suiteDbService: SuiteDbService, private indexedDbService: IndexedDbService) { }
+  canAdd: boolean;
+  isNameValid: boolean;
+  currentField: string = 'selectedMaterial';
+  constructor(private suiteDbService: SuiteDbService, private indexedDbService: IndexedDbService, private phastService: PhastService,  private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
+    this.canAdd = true;
     this.allMaterials = this.suiteDbService.selectSolidLiquidFlueGasMaterials();
     this.checkMaterialName();
+    this.setHHV();
     // this.selectedMaterial = this.allMaterials[0];
+    // if (!this.settings) {
+    //   this.indexedDbService.getSettings(1).then(results => {
+    //     this.settings = results;
+    //   })
+    // }
   }
 
   addMaterial() {
-    let suiteDbResult = this.suiteDbService.insertSolidLiquidFlueGasMaterial(this.newMaterial);
-    if (suiteDbResult == true) {
-      this.indexedDbService.addSolidLiquidFlueGasMaterial(this.newMaterial).then(idbResults => {
-        this.closeModal.emit(this.newMaterial);
-      })
+    if (this.canAdd) {
+      this.canAdd = false;
+      let suiteDbResult = this.suiteDbService.insertSolidLiquidFlueGasMaterial(this.newMaterial);
+      if (suiteDbResult == true) {
+        this.indexedDbService.addSolidLiquidFlueGasMaterial(this.newMaterial).then(idbResults => {
+          this.closeModal.emit(this.newMaterial);
+        })
+      }
     }
   }
+
+
 
   setExisting() {
     if (this.selectedMaterial) {
@@ -55,21 +76,48 @@ export class SolidLiquidFlueGasMaterialComponent implements OnInit {
         moisture: this.selectedMaterial.moisture,
         nitrogen: this.selectedMaterial.nitrogen,
         o2: this.selectedMaterial.o2,
-        sulphur: this.selectedMaterial.sulphur
+        sulphur: this.selectedMaterial.sulphur,
+        heatingValue: 0
       }
+      this.setHHV();
+      this.checkMaterialName();
     }
   }
+
+  setHHV() {
+    const tmpHeatingVals = this.phastService.flueGasByMassCalculateHeatingValue(this.newMaterial);
+    if (isNaN(tmpHeatingVals) === false) {
+      this.isValid = true;
+      this.newMaterial.heatingValue = tmpHeatingVals;
+      if (this.settings.unitsOfMeasure === 'Metric') {
+        this.newMaterial.heatingValue = this.convertUnitsService.value(tmpHeatingVals).from('btuLb').to('kJkg');
+      }
+    } else {
+      this.isValid = false;
+      this.newMaterial.heatingValue = 0;
+    }
+  }
+
 
 
   checkMaterialName() {
     let test = _.filter(this.allMaterials, (material) => { return material.substance == this.newMaterial.substance })
     if (test.length > 0) {
       this.nameError = 'Cannot have same name as existing material';
-      this.isValidMaterialName = false;
+      this.isNameValid = false;
     } else {
-      this.isValidMaterialName = true;
+      this.isNameValid = true;
       this.nameError = null;
     }
+  }
+
+  focusField(str: string){
+    this.currentField = str;
+  }
+
+
+  hideMaterialModal() {
+    this.hideModal.emit();
   }
 
 }

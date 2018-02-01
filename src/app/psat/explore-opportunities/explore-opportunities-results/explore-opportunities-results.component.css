@@ -1,11 +1,17 @@
-/*td{
-    text-align: center;
-    vertical-align: middle;
+.output-summary .table {
+    font-size: 14px;
 }
-th{
+.output-summary .table th {
+    border: none;
+    padding: 0px 10px;
     text-align: center;
-}*/
-
+    font-size: 12px;
+}
+.output-summary .table td {
+    padding: 0px 8px;
+    vertical-align: middle;
+    text-align: center;
+}
 
 .positive-savings{
 	color: green;
@@ -16,7 +22,6 @@ th{
 }
 
 
-.psat-name{
-    font-size: large !important;
-    vertical-align: middle;
+.no-data{
+    width: 100%;
 }

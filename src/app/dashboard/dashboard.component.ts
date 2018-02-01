@@ -14,6 +14,9 @@ import { SuiteDbService } from '../suiteDb/suite-db.service';
 import { WindowRefService } from '../indexedDb/window-ref.service';
 import { ImportExportService } from '../shared/import-export/import-export.service';
 import { WallLossesSurface, GasLoadChargeMaterial, LiquidLoadChargeMaterial, SolidLoadChargeMaterial, AtmosphereSpecificHeat, FlueGasMaterial, SolidLiquidFlueGasMaterial } from '../shared/models/materials';
+import { ReportRollupService } from '../report-rollup/report-rollup.service';
+import { SettingsService } from '../settings/settings.service';
+declare const packageJson;
 
 @Component({
   selector: 'app-dashboard',
@@ -42,16 +45,17 @@ export class DashboardComponent implements OnInit {
   isExportView: boolean = false;
   isImportView: boolean = false;
   importing: any;
-  reportAssessments: Array<any>;
+  // reportAssessments: Array<any>;
   selectedItems: Array<any>;
   showImportExport: boolean;
   deleting: boolean;
   suiteDbInit: boolean = false;
-
+  isModalOpen: boolean = false;
   createAssessment: boolean = false;
 
   constructor(private indexedDbService: IndexedDbService, private formBuilder: FormBuilder, private assessmentService: AssessmentService, private toastyService: ToastyService,
-    private toastyConfig: ToastyConfig, private jsonToCsvService: JsonToCsvService, private suiteDbService: SuiteDbService, private importExportService: ImportExportService) {
+    private toastyConfig: ToastyConfig, private jsonToCsvService: JsonToCsvService, private suiteDbService: SuiteDbService, private importExportService: ImportExportService,
+    private reportRollupService: ReportRollupService, private settingsService: SettingsService) {
     this.toastyConfig.theme = 'bootstrap';
     this.toastyConfig.position = 'bottom-right';
     this.toastyConfig.limit = 1;
@@ -157,7 +161,9 @@ export class DashboardComponent implements OnInit {
       }
     );
   }
-
+  openModal($event){
+    this.isModalOpen = $event;
+  }
 
   hideScreen() {
     this.dashboardView = 'assessment-dashboard';
@@ -179,6 +185,11 @@ export class DashboardComponent implements OnInit {
   showAbout() {
     this.selectedCalculator = '';
     this.dashboardView = 'about-page';
+  }
+
+  showAcknowledgments() {
+    this.selectedCalculator = '';
+    this.dashboardView = 'acknowledgments-page';
   }
 
   showTutorials() {
@@ -261,18 +272,25 @@ export class DashboardComponent implements OnInit {
       flowMeasurement: 'gpm',
       powerMeasurement: 'hp',
       pressureMeasurement: 'psi',
-      energySourceType: 'Fuel'
-
+      energySourceType: 'Fuel',
+      appVersion: packageJson.version,
+      energyResultUnit: 'MMBtu',
+      temperatureMeasurement: 'F'
     }
     this.indexedDbService.addSettings(tmpSettings).then(
       results => {
       }
     )
+
+    tmpSettings.assessmentId = 1;
+    this.indexedDbService.addSettings(tmpSettings).then(results => { });
+    tmpSettings.assessmentId = 2;
+    this.indexedDbService.addSettings(tmpSettings).then(results => { });
   }
 
   createDirectory() {
     let tmpDirectory: DirectoryDbRef = {
-      name: 'All Assets',
+      name: 'All Assessments',
       createdDate: new Date(),
       modifiedDate: new Date(),
       parentDirectoryId: null,
@@ -457,7 +475,8 @@ export class DashboardComponent implements OnInit {
   generateReport() {
     if (this.checkSelected()) {
       this.selectedItems = new Array();
-      this.getSelected(this.workingDirectory);
+      this.reportRollupService.getReportData(this.workingDirectory);
+      //this.getSelected(this.workingDirectory);
       this.dashboardView = 'detailed-report';
     } else {
       this.addToast('No items have been selected');
@@ -597,21 +616,11 @@ export class DashboardComponent implements OnInit {
         this.indexedDbService.addAssessment(tmpAssessment).then(
           results => {
             //check for psat until phast has settings
-            if (tmpAssessment.psat) {
-              let tmpSettings: Settings = {
-                language: dataObj.settings.language,
-                currency: dataObj.settings.currency,
-                unitsOfMeasure: dataObj.settings.unitsOfMeasure,
-                assessmentId: results,
-                flowMeasurement: dataObj.settings.flowMeasurement,
-                powerMeasurement: dataObj.settings.powerMeasurement,
-                distanceMeasurement: dataObj.settings.distanceMeasurement,
-                pressureMeasurement: dataObj.settings.pressureMeasurement
-              }
-              this.indexedDbService.addSettings(tmpSettings).then(
-                results => { }
-              )
-            }
+            let tmpSettings: Settings = this.settingsService.getNewSettingFromSetting(dataObj.settings);
+            tmpSettings.assessmentId = results;
+            this.indexedDbService.addSettings(tmpSettings).then(
+              results => { }
+            )
           }
         )
       })

@@ -6,6 +6,7 @@ import { Settings } from '../../shared/models/settings';
 import { IndexedDbService } from '../../indexedDb/indexed-db.service';
 import { ModalDirective } from 'ngx-bootstrap';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
+import { FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-system-basics',
@@ -29,10 +30,13 @@ export class SystemBasicsComponent implements OnInit {
   updateAssessment = new EventEmitter<boolean>();
   @Output('nameUpdated')
   nameUpdated = new EventEmitter<boolean>();
-
+  @Output('openModal')
+  openModal = new EventEmitter<boolean>();
+  @Output('closeModal')
+  closeModal = new EventEmitter<boolean>();
   unitChange: boolean = false;
 
-  settingsForm: any;
+  settingsForm: FormGroup;
   isFirstChange: boolean = true;
 
   newSettings: Settings;
@@ -62,6 +66,9 @@ export class SystemBasicsComponent implements OnInit {
     this.settingsForm = this.settingsService.getFormFromSettings(this.settings);
   }
 
+  ngOnDestroy() {
+    clearTimeout(this.counter);
+  }
 
   setUnits() {
     this.unitChange = !this.unitChange;
@@ -76,9 +83,10 @@ export class SystemBasicsComponent implements OnInit {
       this.settings.language != this.newSettings.language ||
       this.settings.powerMeasurement != this.newSettings.powerMeasurement ||
       this.settings.pressureMeasurement != this.newSettings.pressureMeasurement ||
-      this.settings.unitsOfMeasure != this.newSettings.unitsOfMeasure
+      this.settings.unitsOfMeasure != this.newSettings.unitsOfMeasure ||
+      this.settings.temperatureMeasurement != this.newSettings.temperatureMeasurement
     ) {
-      if (this.psat.inputs.flow_rate || this.psat.inputs.head || this.psat.inputs.motor_rated_power) {
+      if (this.psat.inputs.flow_rate || this.psat.inputs.head || this.psat.inputs.motor_rated_power || this.psat.inputs.fluidTemperature) {
         this.showSettingsModal();
       } else {
         this.updateData(false);
@@ -101,29 +109,15 @@ export class SystemBasicsComponent implements OnInit {
       }
       this.updateAssessment.emit(true);
     }
+    //update settings
     this.newSettings.assessmentId = this.assessment.id;
-    //assessment has existing settings
-    if (this.isAssessmentSettings) {
-      this.newSettings.id = this.settings.id;
-      this.indexedDbService.putSettings(this.newSettings).then(
-        results => {
-          //get updated settings
-          this.updateSettings.emit(true);
-        }
-      )
-    }
-    //create settings for assessment
-    else {
-      this.newSettings.createdDate = new Date();
-      this.newSettings.modifiedDate = new Date();
-      this.indexedDbService.addSettings(this.newSettings).then(
-        results => {
-          this.isAssessmentSettings = true;
-          //get updated settings
-          this.updateSettings.emit(true);
-        }
-      )
-    }
+    this.newSettings.id = this.settings.id;
+    this.indexedDbService.putSettings(this.newSettings).then(
+      results => {
+        //get updated settings
+        this.updateSettings.emit(true);
+      }
+    )
     this.hideSettingsModal();
   }
 
@@ -144,14 +138,21 @@ export class SystemBasicsComponent implements OnInit {
         psat.inputs.motor_rated_power = this.getClosest(psat.inputs.motor_rated_power, this.kWatts);
       }
     }
+    if (psat.inputs.fluidTemperature) {
+      if (this.settings.temperatureMeasurement && this.newSettings.temperatureMeasurement) {
+        psat.inputs.fluidTemperature = this.convertUnitsService.value(psat.inputs.fluidTemperature).from(this.settings.temperatureMeasurement).to(this.newSettings.temperatureMeasurement);
+      }
+    }
     return psat;
   }
 
   showSettingsModal() {
+    this.openModal.emit(true);
     this.settingsModal.show();
   }
 
   hideSettingsModal() {
+    this.closeModal.emit(true);
     this.settingsModal.hide();
   }
 

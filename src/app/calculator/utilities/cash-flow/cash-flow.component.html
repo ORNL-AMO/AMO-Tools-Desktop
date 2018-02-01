@@ -1,0 +1,46 @@
+<div class="modify-conditions panel-container row psat">
+  <div class="col-12">
+    <div class="row align-items-top calculator-panel">
+      <div class="modification panel-column col-6 align-top">
+        <div class="col-md-12">
+          <div class="header">
+            <h3>
+              Cash Flow Calculator
+            </h3>
+          </div>
+          <div class="row">
+            <div class="col-12">
+              <app-cash-flow-form [cashFlowForm]="cashFlowForm" (emitCalculate)="calculate()" (changeField)="setField($event)"></app-cash-flow-form>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-6 align-top">
+        <div class="help-panel">
+          <div class="row">
+            <ul class="tabs primary tab-row">
+              <li class="tab-2 panel-tab-item" [ngClass]="{'active': tabSelect == 'results'}">
+                <a (click)="setTab('results')">Results</a>
+              </li><!--
+        --><li class="tab-2 panel-tab-item" [ngClass]="{'active': tabSelect == 'help'}">
+                <a (click)="setTab('help')">Help</a>
+              </li>
+            </ul>
+          </div>
+          <div class="row">
+            <div class="col-12">
+              <div class="tab-content curve-results" id="pumpCurveGraph">
+                <div *ngIf="tabSelect == 'results'">
+                      <app-cash-flow-diagram [cashFlowResults]="cashFlowResults" [cashFlowForm]="cashFlowForm"></app-cash-flow-diagram>                      
+                </div>
+                <div *ngIf="tabSelect == 'help'" class="help-panel">
+                  <app-cash-flow-help [currentField]="currentField"></app-cash-flow-help>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

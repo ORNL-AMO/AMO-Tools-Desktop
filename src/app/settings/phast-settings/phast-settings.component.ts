@@ -1,5 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Settings } from '../../shared/models/settings';
+import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
+import { FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-phast-settings',
@@ -8,16 +10,17 @@ import { Settings } from '../../shared/models/settings';
 })
 export class PhastSettingsComponent implements OnInit {
   @Input()
-  settingsForm: any;
+  settingsForm: FormGroup;
   @Output('startSavePolling')
   startSavePolling = new EventEmitter<boolean>();
+  @Input()
+  disable: boolean;
 
   fuelFiredOptions: Array<string> = [
-    'Ladle Heater 1',
-    'Ladle Heater 2',
+    'Ladle Heater',
     'Reheat Furnace',
-    'Tundish Heater 1',
-    'Tundish Heater 2'
+    'Tundish Heater',
+    'Custom Fuel Furnace'
   ]
 
   electrotechOptions: Array<string> = [
@@ -25,30 +28,36 @@ export class PhastSettingsComponent implements OnInit {
     'Induction Heating and Melting',
     'Electrical Resistance',
     'Vacuum Furnace',
-    'Electric Arc Furnace (EAF)'
+    'Electric Arc Furnace (EAF)',
+    'Custom Electrotechnology'
   ]
 
   // electricOptions: Array<string>;
-
   constructor() { }
-
   ngOnInit() {
-    if (!this.settingsForm.furnaceType || this.settingsForm.furnaceType == '') {
+    if (!this.settingsForm.controls.furnaceType.value || this.settingsForm.controls.furnaceType.value == '') {
       this.setOptions();
+    }
+    if (this.disable) {
+      this.settingsForm.controls.furnaceType.disable();
+      this.settingsForm.controls.energySourceType.disable();
+      this.settingsForm.controls.customFurnaceName.disable();
     }
   }
 
   setOptions() {
-    if (this.settingsForm.value.energySourceType == 'Fuel') {
+    if (this.settingsForm.controls.energySourceType.value == 'Fuel') {
       this.settingsForm.patchValue({
-        furnaceType: 'Ladle Heater 1'
+        furnaceType: 'Ladle Heater'
       })
-    } else if (this.settingsForm.value.energySourceType == 'Electricity') {
+    } else if (this.settingsForm.controls.energySourceType.value == 'Electricity') {
       this.settingsForm.patchValue({
-        furnaceType: 'Electrical Infrared'
+        furnaceType: 'Electrical Infrared',
+        energyResultUnit: 'kWh'
       })
     }
   }
+
 
   startPolling() {
     this.startSavePolling.emit(true);

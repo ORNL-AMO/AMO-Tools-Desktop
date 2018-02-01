@@ -1,19 +1,20 @@
-<form #lossForm [formGroup]="exhaustGasForm">
+<form [formGroup]="exhaustGasForm">
   <div class="form-section">
-    <div class="form-group">
+    <!--<div class="form-group">
       <label class="small" for="cycleTime">Cycle Time</label>
       <div class="input-group">
         <input name="{{'cycleTime_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="cycleTime" id="cycleTime"
           onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('cycleTime')">
         <span class="input-group-addon units">hrs</span>
       </div>
-    </div>
+    </div>-->
     <div class="form-group">
       <label class="small" for="offGasTemp">Off (Exhaust) Gas Temp</label>
       <div class="input-group">
-        <input name="{{'offGasTemp_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="offGasTemp" id="offGasTemp"
-          onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('offGasTemp')">
-        <span class="input-group-addon units">&#8457;</span>
+        <input name="{{'offGasTemp_'+lossIndex}}" type="number" step="10" class="form-control" formControlName="offGasTemp" id="offGasTemp"
+          onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('offGasTemp')" (blur)="focusOut()">
+        <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">&#8457;</span>
+        <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
       </div>
     </div>
   </div>
@@ -21,40 +22,40 @@
     <div class="form-group">
       <label class="small" for="CO">CO</label>
       <div class="input-group">
-        <input name="{{'CO_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="CO" id="CO" onfocus="this.select();"
-          (input)="startSavePolling()" (focus)="focusField('CO')">
+        <input name="{{'CO_'+lossIndex}}" type="number" step="any" min="0" max="100" class="form-control" formControlName="CO" id="CO" onfocus="this.select();"
+          (input)="startSavePolling()" (focus)="focusField('CO')" (blur)="focusOut()">
         <span class="input-group-addon units">%</span>
       </div>
     </div>
-    <div class="form-group">
+    <!--<div class="form-group">
       <label class="small" for="O2">O2</label>
       <div class="input-group">
         <input name="{{'O2_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="O2" id="O2" onfocus="this.select();"
           (input)="startSavePolling()" (focus)="focusField('O2')">
         <span class="input-group-addon units">%</span>
       </div>
-    </div>
+    </div>-->
     <div class="form-group">
       <label class="small" for="H2">H2</label>
       <div class="input-group">
-        <input name="{{'H2_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="H2" id="H2" onfocus="this.select();"
-          (input)="startSavePolling()" (focus)="focusField('H2')">
+        <input name="{{'H2_'+lossIndex}}" type="number" step="any" min="0" max="100" class="form-control" formControlName="H2" id="H2" onfocus="this.select();"
+          (input)="startSavePolling()" (focus)="focusField('H2')" (blur)="focusOut()">
         <span class="input-group-addon units">%</span>
       </div>
     </div>
-    <div class="form-group">
+    <!--<div class="form-group">
       <label class="small" for="CO2">CO2</label>
       <div class="input-group">
         <input name="{{'CO2_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="CO2" id="CO2" onfocus="this.select();"
           (input)="startSavePolling()" (focus)="focusField('CO2')">
         <span class="input-group-addon units">%</span>
       </div>
-    </div>
+    </div>-->
     <div class="form-group">
       <label class="small" for="combustibleGases">Combustible Gas as CH4</label>
       <div class="input-group">
-        <input name="{{'combustibleGases_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="combustibleGases"
-          id="combustibleGases" onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('combustibleGases')">
+        <input name="{{'combustibleGases_'+lossIndex}}" type="number" step="any" min="0" max="100" class="form-control" formControlName="combustibleGases"
+          id="combustibleGases" onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('combustibleGases')" (blur)="focusOut()">
         <span class="input-group-addon units">%</span>
       </div>
     </div>
@@ -63,36 +64,20 @@
     <div class="form-group">
       <label class="small" for="vfr">Total Volumetric Flow Rate</label>
       <div class="input-group">
-        <input name="{{'vfr_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="vfr" id="vfr" onfocus="this.select();"
-          (input)="startSavePolling()" (focus)="focusField('vfr')">
-        <span class="input-group-addon units">cfm</span>
+        <input name="{{'vfr_'+lossIndex}}" type="number" step="any" min="0" class="form-control" formControlName="vfr" id="vfr" onfocus="this.select();"
+          (input)="startSavePolling()" (focus)="focusField('vfr')" (blur)="focusOut()">
+        <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">cfm</span>
+        <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">m<sup>3</sup>/min</span>
       </div>
     </div>
     <div class="form-group">
       <label class="small" for="dustLoading">Dust Loading</label>
       <div class="input-group">
-        <input name="{{'dustLoading_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="dustLoading" id="dustLoading"
-          onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('dustLoading')">
-        <span class="input-group-addon units">lb/scf</span>
+        <input name="{{'dustLoading_'+lossIndex}}" type="number" step="any" min="0" class="form-control" formControlName="dustLoading" id="dustLoading"
+          onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('dustLoading')" (blur)="focusOut()">
+        <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">lb/scf</span>
+        <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kg/Nm<sup>3</sup></span>
       </div>
-    </div>
-  </div>
-  <div class="form-section">
-    <div *ngFor="let lossNumber of otherLossArray; let index = index;">
-      <div class="form-group">
-        <label class="small" for="{{'otherLoss'+lossNumber}}">
-          <span *ngIf="isBaseline" class="fa fa-times" (click)="signalRemove(index, lossNumber)"></span>
-          Other Loss for Other Areas {{lossNumber}}
-          </label>
-        <div class="input-group">
-          <input name="{{'otherLoss'+lossNumber+'_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="{{'otherLoss'+lossNumber}}"
-            id="{{'otherLoss'+lossNumber}}" onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('otherLoss')">
-          <span class="input-group-addon units">Btu/Cycle</span>
-        </div>
-      </div>
-    </div>
-    <div class="form-group" *ngIf="isBaseline">
-      <a class="text-center small" (click)="addOtherSignal()">Add Other Loss</a>
     </div>
   </div>
 </form>

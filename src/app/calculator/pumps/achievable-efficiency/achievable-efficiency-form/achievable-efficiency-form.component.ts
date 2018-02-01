@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Settings } from '../../../../shared/models/settings';
+import { FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-achievable-efficiency-form',
@@ -8,7 +9,7 @@ import { Settings } from '../../../../shared/models/settings';
 })
 export class AchievableEfficiencyFormComponent implements OnInit {
   @Input()
-  efficiencyForm: any;
+  efficiencyForm: FormGroup;
   @Output('calculate')
   calculate = new EventEmitter<boolean>();
   @Input()
@@ -35,8 +36,8 @@ export class AchievableEfficiencyFormComponent implements OnInit {
 
   ngOnInit() {
     if (this.efficiencyForm) {
-      this.tmpFlowRate = this.efficiencyForm.value.flowRate;
-      this.tmpPumpType = this.efficiencyForm.value.pumpType;
+      this.tmpFlowRate = this.efficiencyForm.controls.flowRate.value;
+      this.tmpPumpType = this.efficiencyForm.controls.pumpType.value;
     }
   }
 

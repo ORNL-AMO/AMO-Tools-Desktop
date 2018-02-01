@@ -15,7 +15,8 @@ export class LandingScreenComponent implements OnInit {
   directory: Directory;
 
   displayVideo: boolean = false;
-
+  showCreateAssessment: boolean = false;
+  createAssessmentType: string;
   constructor() { }
 
   ngOnInit() {
@@ -31,5 +32,16 @@ export class LandingScreenComponent implements OnInit {
 
   chooseCalculator(str: string) {
     this.selectCalculator.emit(str);
+  }
+
+  createAssessment(str?: string){
+    if(str){
+      this.createAssessmentType = str;
+    }
+    this.showCreateAssessment = true;
+  }
+
+  hideCreateAssessment(){
+    this.showCreateAssessment = false;
   }
 }

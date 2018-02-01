@@ -1,4 +1,4 @@
-<form #lossForm [formGroup]="lossesForm">
+<form [formGroup]="lossesForm">
 
   <div class="form-group">
     <label class="small" for="description">Loss Description</label>
@@ -11,8 +11,7 @@
     <div class="input-group">
       <input name="{{'heatLoss_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="heatLoss" id="heatLoss"
         onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('heatLoss')">
-      <span class="input-group-addon units">Btu/hr</span>
+      <span class="input-group-addon units">{{resultsUnit}}</span>
     </div>
   </div>
-
 </form>

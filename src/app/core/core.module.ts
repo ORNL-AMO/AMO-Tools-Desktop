@@ -10,7 +10,6 @@ import { AssessmentModule } from '../assessment/assessment.module';
 import { PhastModule } from '../phast/phast.module';
 import { PsatModule } from '../psat/psat.module';
 import { CalculatorModule } from '../calculator/calculator.module';
-import { DetailedReportModule } from '../detailed-report/detailed-report.module';
 import { ModalModule } from 'ngx-bootstrap';
 import { autoUpdater } from 'electron-updater';
 
@@ -32,6 +31,12 @@ import { LandingScreenComponent } from '../landing-screen/landing-screen.compone
 import { AboutPageComponent } from '../about-page/about-page.component';
 import { TutorialsComponent } from '../tutorials/tutorials.component';
 import { ContactPageComponent } from '../contact-page/contact-page.component';
+import { ReportRollupModule } from '../report-rollup/report-rollup.module';
+
+import { VersionModalComponent } from '../version-modal/version-modal.component';
+import { UpdateModalComponent } from '../update-modal/update-modal.component';
+import {AcknowledgmentsPageComponent} from "../acknowledgments-page/acknowledgments-page.component";
+
 @NgModule({
   declarations: [
     CoreComponent,
@@ -42,7 +47,10 @@ import { ContactPageComponent } from '../contact-page/contact-page.component';
     LandingScreenComponent,
     AboutPageComponent,
     TutorialsComponent,
-    ContactPageComponent
+    ContactPageComponent,
+    AcknowledgmentsPageComponent,
+    UpdateModalComponent,
+    VersionModalComponent
   ],
   imports: [
     CommonModule,
@@ -51,7 +59,6 @@ import { ContactPageComponent } from '../contact-page/contact-page.component';
     PsatModule,
     PhastModule,
     CalculatorModule,
-    DetailedReportModule,
     ModalModule,
     NgxElectronModule,
     IndexedDbModule,
@@ -61,7 +68,8 @@ import { ContactPageComponent } from '../contact-page/contact-page.component';
     ToastyModule.forRoot(),
     JsonToCsvModule,
     SuiteDbModule,
-    ImportExportModule
+    ImportExportModule,
+    ReportRollupModule
   ],
   providers: [
     AssessmentService

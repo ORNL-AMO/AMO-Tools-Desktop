@@ -1,0 +1,63 @@
+<div class="no-data no-data-phast" *ngIf="_exhaustGasLosses.length == 0 && inSetup && !lossesLocked" (click)="addLoss()">
+  <h3>You have no Energy Input</h3>
+  <h4>Add some now.</h4>
+</div>
+
+
+<div class="card-form" *ngFor="let loss of _exhaustGasLosses; let lossIndex = index;">
+  <div class="row">
+    <div class="col-12">
+      <form class="name-input-form" [formGroup]="loss.form">
+        <div class="input-group">
+          <span class="input-group-addon units" (click)="collapseLoss(loss)">
+            <span *ngIf="loss.collapse" class="fa fa-caret-down"></span>
+            <span *ngIf="!loss.collapse" class="fa fa-caret-up"></span>
+          </span>
+          <input type="text" class="form-control name-input" formControlName="name">
+          <span class="input-group-addon" *ngIf="isBaseline && inSetup && !lossesLocked" (click)="removeLoss(lossIndex)">
+            <span aria-hidden="true" class="close" aria-label="Close">&times;</span>
+          </span>
+        </div>
+      </form>
+      <!-- <label class="group-label loss-label">
+        <span *ngIf="loss.collapse" class="fa fa-caret-down" (click)="collapseLoss(loss)"></span>
+        <span *ngIf="!loss.collapse" class="fa fa-caret-up" (click)="collapseLoss(loss)"></span>
+        {{loss.name}}
+        <span aria-hidden="true" *ngIf="isBaseline && inSetup" class="close pull-right" aria-label="Close" (click)="removeLoss(lossIndex)">&times;</span>
+      </label> -->
+    </div>
+  </div>
+  <div class="row" *ngIf="!loss.collapse">
+    <div class="col-12">
+      <app-energy-input-exhaust-gas-form (changeField)="changeField($event)" [(exhaustGasForm)]="loss.form" (calculate)="calculate(loss)"
+        [baselineSelected]="baselineSelected" (saveEmit)="saveLosses()" [lossIndex]="lossIndex" [availableHeat]="availableHeat"
+        [settings]="settings"></app-energy-input-exhaust-gas-form>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12">
+      <div class="form-group">
+        <label class="small font-weight-bold">Fuel Heat Delivered</label>
+        <div *ngIf="loss.heatLoss" class="text-center small font-weight-bold">
+          {{loss.heatLoss | sigFigs:'5'}}
+          <span>{{resultsUnit}}</span>
+        </div>
+        <div *ngIf="!loss.heatLoss" class="text-center small font-weight-bold">
+          &mdash; &mdash;
+        </div>
+      </div>
+    </div>
+    <div class="col-12">
+      <div class="form-group">
+        <label class="small font-weight-bold">{{loss.form.controls.name.value}} Total</label>
+        <div *ngIf="loss.exhaustGas" class="text-center small font-weight-bold">
+          {{loss.exhaustGas | sigFigs:'5'}}
+          <span>{{resultsUnit}}</span>
+        </div>
+        <div *ngIf="!loss.exhaustGas" class="text-center small font-weight-bold">
+          &mdash; &mdash;
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

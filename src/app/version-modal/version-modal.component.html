@@ -1,0 +1,47 @@
+<div bsModal #versionModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="versionModalLabel"
+  aria-hidden="true" [config]="{backdrop: 'static'}">
+  <div class="modal-dialog">
+    <div class="modal-content card">
+      <div class="modal-header">
+        <h3>Release Notes for v{{versionNum}}</h3>
+        <button class="close" (click)="hideVersionModal()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <h5>Application:</h5>
+        <ul>
+          <li>Enhanced: Home page styling</li>
+          <li>Added: Cash flow diagram for cash flow calculator</li>
+          <li>Added: Percent load estimation calculator</li>
+          <li>Fixed: Many bug fixes, mostly in PHAST</li>
+        </ul>
+        <h5>PSAT:</h5>
+        <ul>
+          <li>Added: Results panel for assessments screen comparing baseline modification</li>
+          <li>Added: Sankey tab</li>
+        </ul>
+        <h5>PHAST:</h5>
+        <ul>
+          <li>Fixed: add new materials modals and updated styles</li>
+          <li>Added: Indicator for required losses that are completed</li>
+          <li>Added: Support for Metric/Imperial unit logic for Furnace Calculators</li>
+          <li>Enhanced: Graphs and styling for Furnace Calculators</li>
+          <li>Fixed: Work flow for heat balance</li>
+          <li>Added: Naming losses functionality</li>
+          <li>Added: Additional button navigation</li>
+          <li>Added: Help text for new material modals.</li>
+          <li>Added: Calculators tab with furnace calculators</li>
+          <li>Added: Input Data tab to furnace reports</li>
+        </ul>
+        <h5>Reports:</h5>
+        <ul>
+          <li>Added: Rollup Reports for Furnace and Pump assessment comparisons</li>
+          <li>Fixed: Sidebar navigation</li>
+          <li>Added: Collapse top summary functionality</li>
+          <li>Improved: Performance for gathering assessments and data</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>

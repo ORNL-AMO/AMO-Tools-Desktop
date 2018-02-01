@@ -9,26 +9,31 @@ import { ModelService } from './model.service';
 
 import { ConvertUnitsService } from './convert-units/convert-units.service';
 import { PercentGraphComponent } from './percent-graph/percent-graph.component';
+import { SigFigsPipe } from './sig-figs.pipe';
+import { UpdateDataService } from './update-data.service';
 
 @NgModule({
-    imports: [
-      CommonModule,
-      FormsModule,
-      ReactiveFormsModule,
-      ChartsModule
+  imports: [
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    ChartsModule
   ],
   declarations: [
     ControlMessagesComponent,
-    PercentGraphComponent
+    PercentGraphComponent,
+    SigFigsPipe
   ],
   exports: [
     ControlMessagesComponent,
-    PercentGraphComponent
+    PercentGraphComponent,
+    SigFigsPipe
   ],
   providers: [
     ValidationService,
     ModelService,
-    ConvertUnitsService
+    ConvertUnitsService,
+    UpdateDataService
   ]
 })
 

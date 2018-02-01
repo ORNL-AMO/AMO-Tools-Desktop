@@ -1,0 +1,13 @@
+.output-summary .table th {
+    width: 25%;
+}
+.selected-modification{
+    z-index: 2;
+    background: #e5efe9;
+}
+
+
+tr > td:not(:first-child),
+tr > th:not(:first-child){
+    text-align: center;
+}

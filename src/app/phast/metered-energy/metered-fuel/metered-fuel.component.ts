@@ -8,7 +8,7 @@ import { Settings } from '../../../shared/models/settings';
 @Component({
   selector: 'app-metered-fuel',
   templateUrl: './metered-fuel.component.html',
-  styleUrls: ['./metered-fuel.component.css', '../../aux-equipment/aux-equipment.component.css', '../../../psat/explore-opportunities/explore-opportunities.component.css']
+  styleUrls: ['./metered-fuel.component.css', '../../../psat/explore-opportunities/explore-opportunities.component.css', '../../aux-equipment/aux-equipment.component.css']
 })
 export class MeteredFuelComponent implements OnInit {
   @Input()
@@ -35,13 +35,18 @@ export class MeteredFuelComponent implements OnInit {
   ngOnInit() {
     if (!this.phast.meteredEnergy.meteredEnergyFuel) {
       this.phast.meteredEnergy.meteredEnergyFuel = {
+        fuelDescription: 'gas',
         fuelType: 0,
         heatingValue: 0,
         collectionTime: 0,
         electricityUsed: 0,
         electricityCollectionTime: 0,
-        flowRate: 0
+        fuelEnergy: 0
       };
+    }else{
+      if(!this.phast.meteredEnergy.meteredEnergyFuel.fuelDescription){
+        this.phast.meteredEnergy.meteredEnergyFuel.fuelDescription = 'gas';
+      }
     }
     this.calculate();
   }
@@ -55,7 +60,7 @@ export class MeteredFuelComponent implements OnInit {
   }
 
   calculate() {
-    this.results = this.meteredEnergyService.meteredFuel(this.phast.meteredEnergy.meteredEnergyFuel, this.phast);
+    this.results = this.meteredEnergyService.meteredFuel(this.phast.meteredEnergy.meteredEnergyFuel, this.phast, this.settings);
   }
 
   setField(str: string) {

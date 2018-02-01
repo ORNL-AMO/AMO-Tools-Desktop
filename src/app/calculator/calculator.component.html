@@ -1,10 +1,10 @@
 <app-pumps [selectedTool]="selectedTool" [goCalcHome]="goCalcHome" *ngIf="selectedCalculator == 'pumps'"></app-pumps>
 <app-furnaces [selectedTool]="selectedTool" [goCalcHome]="goCalcHome" *ngIf="selectedCalculator == 'furnaces'"></app-furnaces>
-<app-motors *ngIf="selectedCalculator == 'motors'"></app-motors>
+<app-motors [selectedTool]="selectedTool" [goCalcHome]="goCalcHome" *ngIf="selectedCalculator == 'motors'"></app-motors>
 <app-fans *ngIf="selectedCalculator == 'fans'"></app-fans>
 <app-steam *ngIf="selectedCalculator == 'steam'"></app-steam>
 <app-compressed-air *ngIf="selectedCalculator == 'compressed-air'"></app-compressed-air>
-<app-utilities [selectedTool]="selectedTool" *ngIf="selectedCalculator == 'utilities'"></app-utilities>
+<app-utilities [selectedTool]="selectedTool" [goCalcHome]="goCalcHome" *ngIf="selectedCalculator == 'utilities'"></app-utilities>
 
 <div *ngIf="selectedCalculator == 'all'">
 
@@ -16,27 +16,35 @@
                 <h2>All Calculators</h2>
 
                 <h3>Pumps</h3>
-                <ul>
-                    <li>
-                        <a (click)="showTool('pumps','head-tool')">Head Tool</a>
+                <div class="row calc-item-row">
+                    <div class="col-1">
+                        <img src="assets/images/head-tool-tran.png" class="ico-size">
+                    </div>
+                    <div class="col-11">
+                        <a class="click-item" (click)="showTool('pumps','head-tool')">Head Tool</a>
                         <p>
                             Use head tool calculator to calculate pump head.
                         </p>
-                    </li>
-                    <li>
-                        <a (click)="showTool('pumps','system-curve')">System Curve</a>
+                    </div>
+                </div>
+
+                <div class="row calc-item-row">
+                    <div class="col-1">
+                        <img src="assets/images/system-curve-tran.png" class="ico-size">
+                    </div>
+                    <div class="col-11">
+                        <a class="click-item" (click)="showTool('pumps','system-curve')">System Curve</a>
                         <p>
                             Use system curve to graph your pumps flow.
                         </p>
-                    </li>
-                    <li>
-                        <a (click)="showTool('pumps','nema-energy-efficiency')">NEMA Energy Efficiency</a>
-                        <p>
-                            The predicted efficiency of an induction motor from NEMA MG1, based on size, rotating speed and efficiency class.
-                        </p>
-                    </li>
-                    <li>
-                        <a (click)="showTool('pumps','specific-speed')">Specific Speed</a>
+                    </div>
+                </div>
+                <div class="row calc-item-row">
+                    <div class="col-1">
+                        <img src="assets/images/speed-tran.png" class="ico-size">
+                    </div>
+                    <div class="col-11">
+                        <a class="click-item" (click)="showTool('pumps','specific-speed')">Specific Speed</a>
                         <p>
                             For each pump type there is an optimal specific speed based on size, flow rate, specific speed. Hydraulic Institute standards
                             also include factors for wear and surface finish on wetted parts but these two factors are not
@@ -45,62 +53,165 @@
                             given conditions and calculates the amount of efficiency penalty to be deducted from the maximum
                             value due to operation away from the optimal specific speed.
                         </p>
-                    </li>
-                    <li>
-                        <a (click)="showTool('pumps','achievable-efficiency')">Pump Efficiency Curves</a>
+                    </div>
+                </div>
+                <div class="row calc-item-row">
+                    <div class="col-1">
+                        <img src="assets/images/pump-eff.png" class="ico-size">
+                    </div>
+                    <div class="col-11">
+                        <a class="click-item" (click)="showTool('pumps','achievable-efficiency')">Pump Efficiency Curves</a>
                         <p>
                             Determine the achievable pump efficiency for vaious pump styles which are based on the Hydraulic Institute (HI) standard
                             ANSI/HI 1.3-2000
                         </p>
-                    </li>
-                    <li>
-                        <a (click)="showTool('pumps','motor-performance')">Motor Performance</a>
-                        <p>
-                            Plots current, efficiency, power factor vs motor shaft load for a given motor description.
-                        </p>
-                    </li>
-                </ul>
-
-                <h3>Furnaces</h3>
-                <ul>
-                    <li>
-                        <a (click)="showTool('furnaces','o2-enrichment')">O2 Enrichment</a>
-                        <p>Use the O2 Enrichment calculator to estimate fuel savings from adjusting the oxygen content of combustion
-                            and flue gases
-                        </p>
-                    </li>
-                    <li>
-                        <a (click)="showTool('furnaces','efficiency-improvement')">Efficiency Improvement</a>
-                        <p>
-                            Use the Efficiency Improvement calculator to explore potential fuel savings from adjusting burner operating conditions.
-                        </p>
-                    </li>
-                    <li>
-                        <a (click)="showTool('furnaces','energy-equivalency')">Energy Equivalency</a>
-                        <p>
-                            Use the Energy Equivalency calculator to learn the required heat input when switching heat source from fuel-fired to electric
-                            or vice versa.
-                        </p>
-                    </li>
-                    <li>
+                    </div>
+                </div>
+                <div class="row calc-item-row">
+                    <div class="col-1">
+                        <img src="assets/images/pump-curve.png" class="ico-size">
+                    </div>
+                    <div class="col-11">
+                        <a class="click-item" (click)="showTool('pumps','pump-curve')">Pump Curve</a>
+                        <p>Use pump curve calculator to develop a pump curve and explore the effects of changes in head, flow,
+                            pump speed and impeller diameter</p>
+                    </div>
+                </div>
+                <h3>Motors</h3>
+              <div class="row calc-item-row">
+                <div class="col-1">
+                  <img src="assets/images/nema.png" class="ico-size">
+                </div>
+                <div class="col-11">
+                  <a (click)="showTool('motors','nema-energy-efficiency')">NEMA Energy Efficiency</a>
+                  <p>
+                    The predicted efficiency of an induction motor from NEMA MG1, based on size, rotating speed and efficiency class.
+                  </p>
+                </div>
+              </div>
+              <div class="row calc-item-row">
+                <div class="col-1">
+                  <img src="assets/images/performance.png" class="ico-size">
+                </div>
+                <div class="col-11">
+                  <a (click)="showTool('motors','motor-performance')">Motor Performance</a>
+                  <p>
+                    Plots current, efficiency, power factor vs motor shaft load for a given motor description.
+                  </p>
+                </div>
+              </div>
+              <div class="row calc-item-row">
+                <div class="col-1">
+                  <img src="assets/images/load-est.png" class="ico-size">
+                </div>
+                <div class="col-11">
+                  <a (click)="showTool('motors','percent-load-estimation')"> Percent Load Estimation</a>
+                  <p>
+                    Calculates Percent Load Estimation
+                  </p>
+                </div>
+              </div>
+                <h3>Process Heating Equipment</h3>
+                  <div class="row calc-item-row">
+                    <div class="col-1">
+                      <img src="assets/images/o2.png" class="ico-size">
+                    </div>
+                    <div class="col-11">
+                      <a (click)="showTool('furnaces','o2-enrichment')">O<sub>2</sub> Enrichment</a>
+                      <p>Use the O<sub>2</sub> Enrichment calculator to estimate fuel savings from adjusting the oxygen content of combustion
+                        and flue gases.
+                      </p>
+                    </div>
+                  </div>
+                  <div class="row calc-item-row">
+                    <div class="col-1">
+                      <img src="assets/images/eff-impr.png" class="ico-size">
+                    </div>
+                    <div class="col-11">
+                      <a (click)="showTool('furnaces','efficiency-improvement')">Efficiency Improvement</a>
+                      <p>
+                        Use the Efficiency Improvement calculator to explore potential fuel savings from adjusting burner operating conditions.
+                      </p>
+                    </div>
+                  </div>
+                  <div class="row calc-item-row">
+                    <div class="col-1">
+                      <img src="assets/images/energy-equ.png" class="ico-size">
+                    </div>
+                    <div class="col-11">
+                      <a (click)="showTool('furnaces','energy-equivalency')">Energy Equivalency</a>
+                      <p>
+                        Use the Energy Equivalency calculator to learn the required heat input when switching heat source from fuel-fired to electric
+                        or vice versa.
+                      </p>
+                    </div>
+                  </div>
+                    <div class="row calc-item-row">
+                      <div class="col-1">
+                        <img src="assets/images/flow.png" class="ico-size">
+                      </div>
+                      <div class="col-11">
                         <a (click)="showTool('furnaces', 'energy-use')">Flow Calculations Energy Use</a>
                         <p>
-                            Calculation of flow rates for commonly used gases using data for an orifice type flow meter and heat input calculations when
-                            the gas is a fuel (i.e. natural gas, propane). This calculator estimates the energy flow into
-                            the furnace by calculating the gas flow from data obtained by an orifice meter. This can then
-                            be compared to the calculations provided by the PHAST tool.
+                          Calculation of flow rates for commonly used gases using data for an orifice type flow meter and heat input calculations when
+                          the gas is a fuel (i.e. natural gas, propane). This calculator estimates the energy flow into
+                          the furnace by calculating the gas flow from data obtained by an orifice meter. This can then
+                          be compared to the calculations provided by the PHAST tool.
                         </p>
-                    </li>
-                </ul>
-
+                      </div>
+                    </div>
+                   <div class="row calc-item-row">
+                     <div class="col-1">
+                       <img src="assets/images/assessment.png" class="ico-size">
+                     </div>
+                     <div class="col-11">
+                       <a (click)="showTool('furnaces', 'pre-assessment')">Pre-assessment / Screening Calculator</a>
+                       <p>
+                         This calculator allows the user to enter either energy use information gathered from meters or design specifications
+                         (for fuel, electrotechnology or steam furnaces) to calculate energy use for multiple furnaces. This allows users to
+                         compare the relative energy use of furnaces within a facility to prioritize energy evaluations and efficiency improvements.
+                       </p>
+                     </div>
+                   </div>
                 <h3>Utilities</h3>
-                <ul>
-                    <li>
+                    <div class="row calc-item-row">
+                      <div class="col-1">
+                        <img src="assets/images/unit-converter.png" class="ico-size">
+                      </div>
+                      <div class="col-11">
                         <a (click)="showTool('utilities','convert-units')">Unit Converter</a>
-                        <p>Use unit converter for quick unit conversion calculations</p>
-                    </li>
-                </ul>
-
+                        <p>
+                          Use unit converter for quick unit conversion calculations.
+                        </p>
+                      </div>
+                    </div>
+                    <div class="row calc-item-row">
+                      <div class="col-1">
+                        <img src="assets/images/chp.png" class="ico-size">
+                      </div>
+                      <div class="col-11">
+                        <a (click)="showTool('utilities','combined-heat-power')">Combined Heat and Power</a>
+                        <p>
+                          The Combined Heat and Power (CHP) calculator is intended to help plant managers and other intended parties to conduct a very
+                          preliminary initial screening of the potential CHP cost savings at the facility based on - Annual
+                          Electricity Consumption, Annual Thermal Loads, Average Electricity and Fuel prices and Annual
+                          Operating hours. This calculator is not intended to estimate the economic performance of a specific
+                          CHP project, rather it is intended to only give the user an initial understanding of whether
+                          CHP has the potential to provide economic savings at their facility.
+                        </p>
+                      </div>
+                    </div>
+                    <div class="row calc-item-row">
+                      <div class="col-1">
+                        <img src="assets/images/cash-flow.png" class="ico-size">
+                      </div>
+                      <div class="col-11">
+                        <a (click)="showTool('utilities','cash-flow')">Cash Flow Diagram</a>
+                        <p>
+                          Cash flow diagram displays the revenues (savings) and costs associated with an investment.
+                        </p>
+                      </div>
+                    </div>
             </div>
             <!-- End .content-container -->
 
