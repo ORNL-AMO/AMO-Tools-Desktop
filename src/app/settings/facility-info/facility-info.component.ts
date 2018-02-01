@@ -19,23 +19,36 @@ export class FacilityInfoComponent implements OnInit {
   ngOnInit() {
     if (!this.settings.facilityInfo) {
       this.facilityForm = this.formBuilder.group({
-        name: [''],
+        companyName: [''],
+        facilityName: [''],
         street: [''],
         city: [''],
         state: [''],
+        zip: [''],
         country: [''],
-        contactName: [''],
-        phoneNumber: ['']
+        facilityContactName: [''],
+        facilityPhoneNumber: [''],
+        facilityEmail: [''],
+        assessmentContactName: [''],
+        assessmentPhoneNumber: [''],
+        assessmentEmail: [''],
       })
-    }else{
+    }
+    else{
       this.facilityForm = this.formBuilder.group({
-        name: [this.settings.facilityInfo.name],
+        facilityName: [this.settings.facilityInfo.facilityName],
+        companyName: [this.settings.facilityInfo.companyName],
         street: [this.settings.facilityInfo.address.street],
         city: [this.settings.facilityInfo.address.city],
         state: [this.settings.facilityInfo.address.state],
         country: [this.settings.facilityInfo.address.country],
-        contactName: [this.settings.facilityInfo.contact.contactName],
-        phoneNumber: [this.settings.facilityInfo.contact.phoneNumber]
+        zip: [this.settings.facilityInfo.address.zip],
+        facilityContactName: [this.settings.facilityInfo.facilityContact.contactName],
+        facilityPhoneNumber: [this.settings.facilityInfo.facilityContact.phoneNumber],
+        facilityEmail: [this.settings.facilityInfo.facilityContact.email],
+        assessmentContactName: [this.settings.facilityInfo.assessmentContact.contactName],
+        assessmentPhoneNumber: [this.settings.facilityInfo.assessmentContact.phoneNumber],
+        assessmentEmail: [this.settings.facilityInfo.assessmentContact.email],
       })
     }
 
@@ -43,16 +56,24 @@ export class FacilityInfoComponent implements OnInit {
 
   save() {
     this.settings.facilityInfo = {
-      name: this.facilityForm.controls.name.value,
+      companyName: this.facilityForm.controls.companyName.value,
+      facilityName: this.facilityForm.controls.facilityName.value,
       address: {
         street: this.facilityForm.controls.street.value,
         city: this.facilityForm.controls.city.value,
         state: this.facilityForm.controls.state.value,
         country: this.facilityForm.controls.country.value,
+        zip: this.facilityForm.controls.zip.value
       },
-      contact: {
-        phoneNumber: this.facilityForm.controls.phoneNumber.value,
-        contactName: this.facilityForm.controls.contactName.value
+      facilityContact: {
+        phoneNumber: this.facilityForm.controls.facilityPhoneNumber.value,
+        contactName: this.facilityForm.controls.facilityContactName.value,
+        email: this.facilityForm.controls.facilityEmail.value
+      },
+      assessmentContact: {
+        phoneNumber: this.facilityForm.controls.facilityContactName.value,
+        contactName: this.facilityForm.controls.assessmentContactName.value,
+        email: this.facilityForm.controls.assessmentEmail.value
       }
     }
     this.close.emit(true);

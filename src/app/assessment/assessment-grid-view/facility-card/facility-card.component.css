@@ -50,3 +50,13 @@ li{
   a:not([href]):not([tabindex]){
     color: blue;
   }
+
+  .modal-dialog{
+      top: 0px;
+      max-width: 750px;
+  }
+
+  .table-section-label{
+      font-weight: bold;
+      padding-top: 8px;
+  }

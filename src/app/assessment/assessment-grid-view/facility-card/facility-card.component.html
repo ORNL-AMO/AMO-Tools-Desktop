@@ -11,21 +11,28 @@
       <p class="small">You have no facility information for this directory.</p>
     </div>
   </div>
-  <div class="card-body summary-card-body" *ngIf="settings.facilityInfo">
+  <div class="card-body summary-card-body scroll-item" *ngIf="settings.facilityInfo">
     <table class="table">
+      <tr>
+        <td class="bold">
+          Company Name
+        </td>
+        <td>
+          {{settings.facilityInfo.companyName}}
+        </td>
+      </tr>
       <tr>
         <td class="bold">
           Facility Name
         </td>
         <td>
-          {{settings.facilityInfo.name}}
+          {{settings.facilityInfo.facilityName}}
         </td>
       </tr>
       <tr *ngIf="settings.facilityInfo.address">
-        <td class="bold">
+        <td class="table-section-label" colspan="2">
           Address
         </td>
-        <td></td>
       </tr>
       <tr *ngIf="settings.facilityInfo.address">
         <td>Street</td>
@@ -51,23 +58,57 @@
           {{settings.facilityInfo.address.country}}
         </td>
       </tr>
-      <tr *ngIf="settings.facilityInfo.contact">
-        <td class="bold">
-          Contact Information
+      <tr *ngIf="settings.facilityInfo.address">
+        <td>Zip</td>
+        <td>
+          {{settings.facilityInfo.address.zip}}
         </td>
-        <td></td>
       </tr>
-      <tr *ngIf="settings.facilityInfo.contact">
+      <tr *ngIf="settings.facilityInfo.facilityContact">
+        <td class="table-section-label" colspan="2">
+          Facility Contact Information
+        </td>
+      </tr>
+      <tr *ngIf="settings.facilityInfo.facilityContact">
         <td>
           Name
         </td>
-        <td>{{settings.facilityInfo.contact.contactName}}</td>
+        <td>{{settings.facilityInfo.facilityContact.contactName}}</td>
       </tr>
-      <tr *ngIf="settings.facilityInfo.contact">
+      <tr *ngIf="settings.facilityInfo.facilityContact">
         <td>
           Phone Number
         </td>
-        <td>{{settings.facilityInfo.contact.phoneNumber}}</td>
+        <td>{{settings.facilityInfo.facilityContact.phoneNumber}}</td>
+      </tr>
+      <tr *ngIf="settings.facilityInfo.facilityContact">
+        <td>
+          Email
+        </td>
+        <td>{{settings.facilityInfo.facilityContact.email}}</td>
+      </tr>
+      <tr *ngIf="settings.facilityInfo.assessmentContact">
+        <td class="table-section-label" colspan="2">
+          Assessment Contact Information
+        </td>
+      </tr>
+      <tr *ngIf="settings.facilityInfo.assessmentContact">
+        <td>
+          Name
+        </td>
+        <td>{{settings.facilityInfo.assessmentContact.contactName}}</td>
+      </tr>
+      <tr *ngIf="settings.facilityInfo.assessmentContact">
+        <td>
+          Phone Number
+        </td>
+        <td>{{settings.facilityInfo.assessmentContact.phoneNumber}}</td>
+      </tr>
+      <tr *ngIf="settings.facilityInfo.assessmentContact">
+        <td>
+          Email
+        </td>
+        <td>{{settings.facilityInfo.assessmentContact.email}}</td>
       </tr>
     </table>
   </div>

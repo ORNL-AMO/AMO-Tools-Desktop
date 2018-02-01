@@ -26,9 +26,11 @@ export interface Settings {
 
 
 export interface FacilityInfo {
-    name?: string,
+    companyName?: string,
+    facilityName?: string,
     address?: StreetAddress,
-    contact?: Contact
+    facilityContact?: Contact,
+    assessmentContact?: Contact
 }
 
 export interface StreetAddress {
@@ -41,5 +43,6 @@ export interface StreetAddress {
 
 export interface Contact {
     contactName?: string,
-    phoneNumber?: number
+    phoneNumber?: number,
+    email?: string
 }
