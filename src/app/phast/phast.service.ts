@@ -468,9 +468,10 @@ export class PhastService {
     if (settings.unitsOfMeasure == 'Metric') {
       inputs.combustionAirTemp = this.convertUnitsService.value(inputs.combustionAirTemp).from('C').to('F');
       inputs.exhaustGasTemp = this.convertUnitsService.value(inputs.exhaustGasTemp).from('C').to('F');
-      inputs.totalHeatInput = this.convertUnitsService.value(inputs.totalHeatInput).from('kJ').to('Btu');
+      inputs.totalHeatInput = this.convertUnitsService.value(inputs.totalHeatInput).from('GJ').to('Btu');
       results = phastAddon.energyInputExhaustGasLosses(inputs);
     } else {
+      inputs.totalHeatInput = this.convertUnitsService.value(inputs.totalHeatInput).from('MMBtu').to('Btu');
       results = phastAddon.energyInputExhaustGasLosses(inputs);
     }
     results.heatDelivered = this.convertResult(results.heatDelivered, settings.energyResultUnit);
