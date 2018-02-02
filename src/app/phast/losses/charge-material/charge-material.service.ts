@@ -38,9 +38,8 @@ export class ChargeMaterialService {
       'heatOfReaction': [0, Validators.required],
       'endothermicOrExothermic': ['Endothermic', Validators.required],
       'additionalHeatRequired': [0, Validators.required],
-      'name': ['Loss #' + lossNum]
-
-    })
+      'name': ['Material #' + lossNum]
+    });
   }
   //gas charge material form from GasChargeMaterial
   getGasChargeMaterialForm(chargeMaterial: ChargeMaterial): FormGroup {
@@ -104,8 +103,8 @@ export class ChargeMaterialService {
       'heatOfReaction': [0, Validators.required],
       'endothermicOrExothermic': ['Endothermic', Validators.required],
       'additionalHeatRequired': [0, Validators.required],
-      'name': ['Loss #' + lossNum]
-    })
+      'name': ['Material #' + lossNum]
+    });
   }
 
   //liquid charge material form from LiquidChargeMaterial
@@ -179,8 +178,8 @@ export class ChargeMaterialService {
       'heatOfReaction': [0, Validators.required],
       'endothermicOrExothermic': ['Endothermic', Validators.required],
       'additionalHeatRequired': [0, Validators.required],
-      'name': ['Loss #' + lossNum]
-    })
+      'name': ['Material #' + lossNum]
+    });
   }
 
   //solid material form from SolidChargeMaterial

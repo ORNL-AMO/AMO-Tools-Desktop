@@ -257,8 +257,8 @@ export class ChargeMaterialComponent implements OnInit {
       if (material.chargeMaterialType == 'Gas') {
         if (!material.gasForm.controls.name.value) {
           material.gasForm.patchValue({
-            name: 'Loss #' + lossIndex
-          })
+            name: 'Material #' + lossIndex
+          });
         }
         lossIndex++;
         tmpMaterial = this.chargeMaterialService.buildGasChargeMaterial(material.gasForm);
@@ -267,8 +267,8 @@ export class ChargeMaterialComponent implements OnInit {
       } else if (material.chargeMaterialType == 'Solid') {
         if (!material.solidForm.controls.name.value) {
           material.solidForm.patchValue({
-            name: 'Loss #' + lossIndex
-          })
+            name: 'Material #' + lossIndex
+          });
         }
         lossIndex++;
         tmpMaterial = this.chargeMaterialService.buildSolidChargeMaterial(material.solidForm);
@@ -277,8 +277,8 @@ export class ChargeMaterialComponent implements OnInit {
       } else if (material.chargeMaterialType == 'Liquid') {
         if (!material.liquidForm.controls.name.value) {
           material.liquidForm.patchValue({
-            name: 'Loss #' + lossIndex
-          })
+            name: 'Material #' + lossIndex
+          });
         }
         lossIndex++;
         tmpMaterial = this.chargeMaterialService.buildLiquidChargeMaterial(material.liquidForm);
@@ -286,7 +286,7 @@ export class ChargeMaterialComponent implements OnInit {
         tmpMaterial.chargeMaterialType = 'Liquid';
       }
       tmpChargeMaterials.push(tmpMaterial);
-    })
+    });
     this.losses.chargeMaterials = tmpChargeMaterials;
     this.setCompareVals();
     this.savedLoss.emit(true);

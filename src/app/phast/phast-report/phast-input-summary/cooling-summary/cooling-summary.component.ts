@@ -117,6 +117,7 @@ export class CoolingSummaryComponent implements OnInit {
     }
     let tmpCoolingLossData: CoolingLossData = {
       name: loss.name,
+      coolingMedium: loss.coolingMedium,
       coolingType: loss.coolingLossType,
       flowRate: tmpFlowRate,
       density: tmpDensity,
@@ -124,7 +125,7 @@ export class CoolingSummaryComponent implements OnInit {
       outletTemperature: tmpOutletTemp,
       specificHeat: tmpSpecificHeat,
       correctionFactor: tmpCorrectionFactor
-    }
+    };
     return tmpCoolingLossData;
   }
 }
@@ -132,6 +133,7 @@ export class CoolingSummaryComponent implements OnInit {
 
 export interface CoolingLossData {
   name: string,
+  coolingMedium: string,
   coolingType: string,
   flowRate: number,
   density: number,
