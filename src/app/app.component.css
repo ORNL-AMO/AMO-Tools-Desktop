@@ -1072,6 +1072,49 @@ Calculators
   background: transparent;
 }
 
+.ico-size {
+  height: 55px;
+  background: linear-gradient(rgba(228, 219, 219, 0.34), rgba(30, 144, 255, 0.26));
+  /*background-color: rgba(41, 128, 185, 0);*/
+  border-radius: 15px;
+  border: 0.1px solid rgba(123, 120, 120, 0.25);
+  box-shadow: #7b7878 2px 2px 5px 1px;
+}
+
+.ico-size2 {
+  height: 55px;
+  background: linear-gradient(rgba(228, 219, 219, 0.34), rgba(255, 0, 22, 0.42));
+  /*background-color: rgba(41, 128, 185, 0);*/
+  border-radius: 15px;
+  border: 0.1px solid rgba(123, 120, 120, 0.25);
+  box-shadow: #7b7878 2px 2px 5px 1px;
+}
+
+.ico-size3 {
+  height: 55px;
+  background: linear-gradient(rgba(228, 219, 219, 0.34), rgba(187, 187, 187, 0.65));
+  /*background-color: rgba(41, 128, 185, 0);*/
+  border-radius: 15px;
+  border: 0.1px solid rgba(123, 120, 120, 0.25);
+  box-shadow: #7b7878 2px 2px 5px 1px;
+}
+
+.ico-size4 {
+  height: 55px;
+  background: linear-gradient(rgba(228, 219, 219, 0.34), rgba(107, 132, 106, 0.65));
+  /*background-color: rgba(41, 128, 185, 0);*/
+  border-radius: 15px;
+  border: 0.1px solid rgba(123, 120, 120, 0.25);
+  box-shadow: #7b7878 2px 2px 5px 1px;
+}
+
+.calc-item-row{
+  padding-top: 10px;
+  padding-bottom: 10px;
+  border-bottom: #eee solid 1px;
+}
+
+
 /* Pump Head
 ================================================ */
 .pump-head select.form-control:not([size]):not([multiple]) {
@@ -1241,6 +1284,7 @@ Banner
   padding-left: 58px;
   background: url('../assets/images/ico-phast-diagram.png') no-repeat 14px;
   background-size: 31px;
+  background-color: #000B13;
 }
 
 .banner-border{
