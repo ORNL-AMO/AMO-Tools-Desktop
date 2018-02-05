@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, HostListener } from '@angular/core';
 import { Location } from '@angular/common';
 import { Assessment } from '../shared/models/assessment';
 import { AssessmentService } from '../assessment/assessment.service';
@@ -24,6 +24,11 @@ export class PsatComponent implements OnInit {
   @ViewChild('footer') footer: ElementRef;
   @ViewChild('content') content: ElementRef;
   containerHeight: number;
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event){
+    this.getContainerHeight();
+  }
 
   assessment: Assessment;
 
