@@ -1,21 +1,20 @@
 import { Component, OnInit, Input, ViewChild, SimpleChanges } from '@angular/core';
-import { Directory } from '../../../shared/models/directory';
-import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
-import { Settings } from '../../../shared/models/settings';
+import { Directory } from '../../shared/models/directory';
+import { IndexedDbService } from '../../indexedDb/indexed-db.service';
+import { Settings } from '../../shared/models/settings';
 import { ModalDirective } from 'ngx-bootstrap';
-import { SettingsService } from '../../../settings/settings.service';
+import { SettingsService } from '../../settings/settings.service';
 
 @Component({
-  selector: 'app-facility-card',
-  templateUrl: './facility-card.component.html',
-  styleUrls: ['./facility-card.component.css', '../assessment-grid-view.component.css']
+  selector: 'app-folder-contact-info',
+  templateUrl: './folder-contact-info.component.html',
+  styleUrls: ['./folder-contact-info.component.css']
 })
-export class FacilityCardComponent implements OnInit {
+export class FolderContactInfoComponent implements OnInit {
   @Input()
   directory: Directory;
 
   @ViewChild('facilityModal') public facilityModal: ModalDirective;
-
   settings: Settings;
   showModal: boolean = false;
   isParentSettings: boolean = false;
@@ -128,4 +127,3 @@ export class FacilityCardComponent implements OnInit {
     })
   }
 }
-

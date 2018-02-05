@@ -28,6 +28,8 @@ import { PhastReportModule } from '../phast/phast-report/phast-report.module';
 import { PsatModule } from '../psat/psat.module';
 import { FacilityCardComponent } from './assessment-grid-view/facility-card/facility-card.component';
 import { SummaryCardComponent } from './assessment-grid-view/summary-card/summary-card.component';
+import { FolderSummaryComponent } from './folder-summary/folder-summary.component';
+import { FolderContactInfoComponent } from './folder-contact-info/folder-contact-info.component';
 
 @NgModule({
   declarations: [
@@ -46,7 +48,9 @@ import { SummaryCardComponent } from './assessment-grid-view/summary-card/summar
     PhastSummaryCardComponent,
     PsatSummaryCardComponent,
     FacilityCardComponent,
-    SummaryCardComponent
+    SummaryCardComponent,
+    FolderSummaryComponent,
+    FolderContactInfoComponent
   ],
   exports: [
     AssessmentDashboardComponent,

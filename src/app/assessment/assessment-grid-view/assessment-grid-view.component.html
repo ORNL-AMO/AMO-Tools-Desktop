@@ -1,11 +1,11 @@
-<div class="row">
+<!-- <div class="row">
   <div class="col-6 summary-card">
     <app-facility-card [directory]="directory"></app-facility-card>
   </div>
   <div class="col-6 summary-card">
     <app-summary-card [directory]="directory"></app-summary-card>
   </div>
-</div>
+</div> -->
 <div class="row">
   <div class="col-4 summary-card" *ngFor="let directory of directory.subDirectory">
     <app-directory-card [directory]="directory" (directoryChange)="changeDirectory($event)" [isChecked]="isChecked"></app-directory-card>

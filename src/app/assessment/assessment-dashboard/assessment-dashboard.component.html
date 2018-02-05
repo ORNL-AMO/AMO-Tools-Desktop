@@ -1,5 +1,5 @@
 <div class="row justify-content-center dashboard-content scroll-item">
-	<div class="col-11 assessment-dashboard">
+	<div class="col-10 assessment-dashboard">
 		<!--<app-assessment-banner [workingDirectoryName]="directory.name"></app-assessment-banner>-->
 		<app-assessment-menu 
 			(viewChange)="changeView($event)" 
@@ -35,5 +35,9 @@
 			(emitUpdateDirectory)="newDir()">
 		</app-assessment-settings>
 		
+	</div>
+	<div class="col-2 dashboard-summary">
+		<!-- <app-folder-summary [directory]="directory"></app-folder-summary> -->
+		<app-folder-contact-info [directory]="directory"></app-folder-contact-info>
 	</div>
 </div>

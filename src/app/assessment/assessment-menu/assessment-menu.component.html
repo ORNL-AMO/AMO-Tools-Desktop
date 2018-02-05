@@ -1,4 +1,4 @@
-<!-- <div class="row">
+<div class="row">
   <div class="col-10">
 
     <ol class="breadcrumb">
@@ -23,8 +23,8 @@
       </button>
     </div>
   </div>
-</div> -->
-
+</div>
+<!--
 <div class="card">
   <div class="card-header row no-margin">
     <div class="col">
@@ -62,10 +62,10 @@
 </div>
 
 
+-->
 
 
-
-<!-- <div class="row">
+<div class="row">
   <div class="col-12">
 
     <div class="table-header">
@@ -79,22 +79,26 @@
 
         <button type="button" class="btn btn-link pull-right" (click)="emitImport()">Import...</button>
       </div>
-      <!-- End .table-actions 
+      <!-- End .table-actions -->
 
-<div class="header" *ngIf="view != 'settings'">
-  <label>
-    <input type="checkbox" [(ngModel)]="isAllSelected" (change)="signalSelectAll()" /> Select all</label>
-</div>
+      <div class="header" *ngIf="view != 'settings'">
+        <label>
+          <input type="checkbox" [(ngModel)]="isAllSelected" (change)="signalSelectAll()" /> Select all</label>
+      </div>
 
-</div>
-
-</div>
-<!-- <div class="col-2">
-    <div class="btn-group pull-right" role="group">
-      <button class="btn btn-secondary" [ngClass]="{'active': view == 'list'}" (click)="setView('list')"><i class="fa fa-list"></i></button>
-      <button class="btn btn-secondary" [ngClass]="{'active': view == 'grid'}" (click)="setView('grid')"><i class="fa fa-th"></i></button>
     </div>
+
   </div>
+  <!-- <div class="col-2">
+    <div class="btn-group pull-right" role="group">
+      <button class="btn btn-secondary" [ngClass]="{'active': view == 'list'}" (click)="setView('list')">
+        <i class="fa fa-list"></i>
+      </button>
+      <button class="btn btn-secondary" [ngClass]="{'active': view == 'grid'}" (click)="setView('grid')">
+        <i class="fa fa-th"></i>
+      </button>
+    </div>
+  </div> -->
 </div>
 
 <!--<app-assessment-create *ngIf="createAssessment" (hideModal)="hideModal()" [(directory)]="directory" class="create-container"></app-assessment-create>-->
