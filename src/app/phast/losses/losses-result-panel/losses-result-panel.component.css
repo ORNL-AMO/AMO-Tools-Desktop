@@ -1,17 +1,17 @@
 .tab-row{
     width: 100%;
     text-align: center;
-}
-
-.data-table{
-    padding-top: 8px;
+    padding-left: 0px;
     padding-right: 0px;
-    padding-left: 25px;
 }
 
-.results-panel{
-    padding: 0px;
+ .data-table{
+    padding-top: 12px;
 }
+
+/* .results-panel{
+    padding: 0px;
+} */
 
 .results-panel .tabs.primary{
     font-size: 15px;
@@ -29,10 +29,15 @@
     padding-left: 0px;
 }
 
-.scroll-item{
+/* .scroll-item{
     margin-right: 0px;
-}
+} */
 
 .notes-col{
+    padding-right: 0px;
+}
+
+.tab-col{
+    padding-left: 0px;
     padding-right: 0px;
 }

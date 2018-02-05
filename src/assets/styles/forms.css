@@ -1,8 +1,14 @@
-.name-input-form .input-group-addon{
+.input-group-addon.left{
     font-size: 16px;
     border-left: inset 1px;
     border-right: none;
 }
+
+/* .input-group-addon.right{
+    font-size: 16px;
+    border-left: none;
+    border-right: inset 1px;
+} */
 
 .name-input-form .input-group-addon:hover{
     font-weight: bold;
