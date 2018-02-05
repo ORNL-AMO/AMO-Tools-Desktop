@@ -1287,10 +1287,10 @@ Banner
 }
 .banner.phast .title {
   color: #fff;
-  padding-left: 58px;
-  background: url('../assets/images/ico-phast-diagram.png') no-repeat 14px;
-  background-size: 31px;
-  background-color: #000B13;
+  padding-left: 75px;
+  background: url('../assets/images/phast-logo.png') no-repeat 10px;
+  background-size: 60px;
+  /*background-color: #000B13;*/
 }
 
 .banner-border{
