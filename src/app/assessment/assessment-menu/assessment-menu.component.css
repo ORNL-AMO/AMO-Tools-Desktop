@@ -20,3 +20,15 @@
 .btn-default{
     padding: 6px;
 }
+.btn-secondary{
+    padding: 8px 10px 6px;
+    font-size: 15px;
+    /* width: 100%; */
+}
+
+/* .col{
+    text-align: center;
+} */
+.no-margin{
+    margin: 0;
+}

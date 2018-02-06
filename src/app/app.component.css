@@ -173,7 +173,7 @@ label {
   position: relative;
 }
   .form-group:hover {
-    background: #efefef;
+    background: #D5D8DC;
   }
   .modal .form-group:hover {
     background: transparent;
@@ -428,7 +428,7 @@ In-Assessment Calculators
   .calc-form form {
     margin-bottom: 10px;
     padding-bottom: 10px;
-    border-bottom: #efefef solid 1px;
+    border-bottom: #D5D8DC solid 1px;
   }
    .calc-form .form-group label {
     font-size: 15px;
@@ -1382,7 +1382,7 @@ Modify Conditions
     /* .modification .header button {
       background: #fff;
       border: none;
-      border-left: #efefef solid 1px;
+      border-left: #D5D8DC solid 1px;
       margin: 0;
       padding: 4px 16px;
       float: right;
@@ -1392,7 +1392,7 @@ Modify Conditions
     }
       .modification .header button:hover {
         cursor: pointer;
-        background: #efefef;
+        background: #D5D8DC;
       } */
 
   .modification.disabled, .modification.disabled button, .modification.disabled textarea {
@@ -1516,7 +1516,7 @@ Modify Conditions
 
 .note-form textarea {
   width: 100%;
-    border: #efefef solid 1px;
+    border: #D5D8DC solid 1px;
     padding: 6px 8px;
     font-size: 15px;
 
@@ -1600,7 +1600,7 @@ No Data Messaging
 .no-data {
   padding: 26px 50px;
   text-align: center;
-  background: #efefef;
+  background: #D5D8DC;
   border-right: #cacaca solid 1px;
 }
 .no-data h3 {
@@ -1678,7 +1678,7 @@ Toasty Overrides ================================= */
   padding-top: 103px;
 } */
 .losses-container.disabled, .losses-container:disabled{
-    background: #efefef;
+    background: #D5D8DC;
 }
 
 .losses-empty{

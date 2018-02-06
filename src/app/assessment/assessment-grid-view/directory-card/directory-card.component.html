@@ -33,10 +33,10 @@
 </div> -->
 
 <div class="card">
-  <div class="card-header summary-card-header" (click)="goToDirectory(directory)">
+  <div class="card-header summary-card-header">
     <input type="checkbox" [(ngModel)]="isChecked" (change)="setDelete()">
     <span class="fa fa-folder"></span>
-    <a>{{directory.name}}</a>
+    <a (click)="goToDirectory(directory)">{{directory.name}}</a>
   </div>
   <div class="card-body summary-card-body scroll-item">
     <ul *ngIf="directory.subDirectory && directory.subDirectory.length != 0">

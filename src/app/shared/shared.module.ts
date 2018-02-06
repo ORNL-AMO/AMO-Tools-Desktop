@@ -11,6 +11,7 @@ import { ConvertUnitsService } from './convert-units/convert-units.service';
 import { PercentGraphComponent } from './percent-graph/percent-graph.component';
 import { SigFigsPipe } from './sig-figs.pipe';
 import { UpdateDataService } from './update-data.service';
+import { FacilityInfoSummaryComponent } from './facility-info-summary/facility-info-summary.component';
 
 @NgModule({
   imports: [
@@ -22,12 +23,14 @@ import { UpdateDataService } from './update-data.service';
   declarations: [
     ControlMessagesComponent,
     PercentGraphComponent,
-    SigFigsPipe
+    SigFigsPipe,
+    FacilityInfoSummaryComponent
   ],
   exports: [
     ControlMessagesComponent,
     PercentGraphComponent,
-    SigFigsPipe
+    SigFigsPipe,
+    FacilityInfoSummaryComponent
   ],
   providers: [
     ValidationService,

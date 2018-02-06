@@ -17,3 +17,9 @@ ul{
 .summary-card-body .fa-folder{
   font-size: large;
 }
+
+
+.card-header:hover{
+  cursor: inherit;
+  background: inherit;
+}
