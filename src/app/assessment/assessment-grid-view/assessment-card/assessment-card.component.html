@@ -28,18 +28,21 @@
         </button>
       </div>
       <div class="modal-body">
-        <form>
+        <form [formGroup]="editForm">
           <div class="form-group">
             <label>Assessment Name</label>
-            <input type="text" class="form-control" name="name" [(ngModel)]="assessment.name">
+            <input type="text" class="form-control" formControlName="name">
           </div>
           <div class="form-group" *ngIf="directories">
             <label>Assessment Directory</label>
-            <select name="assesmentDirectory" class="form-control" [(ngModel)]="assessment.directoryId">
-              <option *ngFor="let dir of directories" [ngValue]="dir.id"><span *ngIf="dir.parentDirectoryId">{{getParentDirStr(dir.parentDirectoryId)}}</span>{{dir.name}}</option>
+            <select class="form-control" formControlName="directoryId">
+              <option *ngFor="let dir of directories" [ngValue]="dir.id"><span *ngIf="dir.parentDirectoryId">{{getParentDirStr(dir.parentDirectoryId)}}</span>{{dir.name}}/</option>
             </select>
           </div>
         </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-default" (click)="save()">Save</button>
       </div>
     </div>
   </div>

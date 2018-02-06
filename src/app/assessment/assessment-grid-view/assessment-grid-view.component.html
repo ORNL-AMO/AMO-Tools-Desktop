@@ -3,6 +3,6 @@
     <app-directory-card [directory]="directory" (directoryChange)="changeDirectory($event)" [isChecked]="isChecked"></app-directory-card>
   </div>
   <div class="col-4 summary-card" *ngFor="let assessment of directory.assessments">
-    <app-assessment-card [assessment]="assessment" [isChecked]="isChecked"></app-assessment-card>
+    <app-assessment-card [assessment]="assessment" [isChecked]="isChecked" (changeDirectory)="changeDirectory(directory)"></app-assessment-card>
   </div>
 </div>
