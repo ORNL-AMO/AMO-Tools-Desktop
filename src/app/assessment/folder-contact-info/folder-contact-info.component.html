@@ -1,9 +1,9 @@
 <div class="row contact-info contact-section-header">
-  <div class="col-2 fa-col">
-    <i class="fa fa-address-card"></i>
-  </div>
-  <div class="col-9 header-col">
-    Contact Information
+  <div class="col">
+    <h5>
+      <i class="fa fa-address-card"></i>
+      Contact Information
+    </h5>
   </div>
 </div>
 <div class="row contact-info-row" *ngIf="settings && !showNoData">
@@ -36,14 +36,12 @@
   </div>
 </div>
 
-<div class="card-body no-facility-data" *ngIf="showNoData" (click)="showFacilityModal()">
-  <div class="no-facility-data">
-    Add Facility Info
-    <br>
-    <span class="fa fa-plus-circle"></span>
-    <br>
-    <p class="small">You have no facility information for this directory.</p>
-  </div>
+<div class="no-facility-data" *ngIf="showNoData" (click)="showFacilityModal()">
+  Add Facility Info
+  <br>
+  <span class="fa fa-plus-circle"></span>
+  <br>
+  <p class="small">You have no facility information for this directory.</p>
 </div>
 
 
@@ -54,7 +52,7 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h5>{{directory.name}} Facilty Information.</h5>
+        <h4 class="bold">{{directory.name}} Facilty Information.</h4>
         <button class="close pull-right" (click)="hideFacilityModal()">
           <span aria-hidden="true">&times;</span>
         </button>
