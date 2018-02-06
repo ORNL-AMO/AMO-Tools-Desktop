@@ -27,6 +27,7 @@ export class GasLeakageLossesFormComponent implements OnInit {
 
   openingAreaError: string = null;
   specificGravityError: string = null;
+  draftPressureError: string = null;
   firstChange: boolean = true;
   counter: any;
   temperatureError: string = null;
@@ -93,6 +94,11 @@ export class GasLeakageLossesFormComponent implements OnInit {
       this.specificGravityError = 'Specific Density of Flue Gases must be equal or greater than 0';
     } else {
       this.specificGravityError = null;
+    }
+    if (this.lossesForm.controls.draftPressure.value < 0) {
+      this.draftPressureError = 'Draft Pressure must be equal or greater than 0';
+    } else {
+      this.draftPressureError = null;
     }
   }
 
