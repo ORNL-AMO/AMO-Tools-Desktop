@@ -18,6 +18,7 @@ export class FacilityInfoComponent implements OnInit {
 
   ngOnInit() {
     if (!this.settings.facilityInfo) {
+      let date = new Date().toDateString();
       this.facilityForm = this.formBuilder.group({
         companyName: [''],
         facilityName: [''],
@@ -32,6 +33,7 @@ export class FacilityInfoComponent implements OnInit {
         assessmentContactName: [''],
         assessmentPhoneNumber: [''],
         assessmentEmail: [''],
+        date: [date]
       })
     }
     else{
@@ -49,6 +51,7 @@ export class FacilityInfoComponent implements OnInit {
         assessmentContactName: [this.settings.facilityInfo.assessmentContact.contactName],
         assessmentPhoneNumber: [this.settings.facilityInfo.assessmentContact.phoneNumber],
         assessmentEmail: [this.settings.facilityInfo.assessmentContact.email],
+        date: [this.settings.facilityInfo.date]
       })
     }
 
@@ -74,7 +77,8 @@ export class FacilityInfoComponent implements OnInit {
         phoneNumber: this.facilityForm.controls.assessmentPhoneNumber.value,
         contactName: this.facilityForm.controls.assessmentContactName.value,
         email: this.facilityForm.controls.assessmentEmail.value
-      }
+      },
+      date: this.facilityForm.controls.date.value
     }
     this.close.emit(true);
   }

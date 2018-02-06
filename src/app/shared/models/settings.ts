@@ -30,7 +30,8 @@ export interface FacilityInfo {
     facilityName?: string,
     address?: StreetAddress,
     facilityContact?: Contact,
-    assessmentContact?: Contact
+    assessmentContact?: Contact,
+    date?: string
 }
 
 export interface StreetAddress {
