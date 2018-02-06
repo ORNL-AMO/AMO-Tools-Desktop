@@ -1,21 +1,21 @@
-/*.output-summary .table {
+.output-summary .table {
     font-size: 14px;
 }
 .output-summary .table th {
     border: none;
     padding: 0px 10px;
-    text-align: left;
-    font-size: 12px;
+    padding: 0;
 }
 .output-summary .table td {
     padding: 0px 8px;
+    vertical-align: middle;
 }
 
 
 .output-summary .table tr.callout td {
     font-weight: bold;
 }
-*/
+
 .selected-modification{
     z-index: 2;
     background: #e5efe9;
@@ -24,4 +24,16 @@
 tr > td:not(:first-child),
 tr > th:not(:first-child){
     text-align: center;
+}
+
+
+@media print {
+    .output-summary .table th,
+    .output-summary .table td {
+        font-size: 20px;
+    }
+
+    .print-section-header {
+        font-size: 30px;
+    }
 }

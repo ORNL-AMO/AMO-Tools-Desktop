@@ -72,6 +72,8 @@
                 <a>Input Data</a>
             </li>
         </ul>
+
+        <!-- debug -->
         <div class="results" [ngClass]="{'show-print':currentTab != 'energy-used'}">
             <app-energy-used [phast]="phast" [settings]="settings"></app-energy-used>
         </div>
@@ -81,24 +83,32 @@
         <div class="results" [ngClass]="{'show-print':currentTab !=  'results-data'}">
             <app-results-data [phast]="phast" [settings]="settings" [assessment]="assessment" [inPhast]="inPhast" [inReport]="true"></app-results-data>
         </div>
-
-        <!-- debug -->
-        <!-- <div class="results" [ngClass]="{'pre-render':!graphsRendered, 'show-print':currentTab != 'report-graphs'}">
-            <app-report-graphs [phast]="phast" [settings]="settings"></app-report-graphs>
-        </div> -->
-        <!-- <div class="results">
-            <app-report-graphs [phast]="phast" [settings]="settings"></app-report-graphs>
-        </div> -->
-
-        <!-- real version -->
         <div class="results" [ngClass]="{'show-print':currentTab != 'report-graphs'}">
-            <app-report-graphs [phast]="phast" [settings]="settings"></app-report-graphs>
+            <app-report-graphs [phast]="phast" [settings]="settings" [assessment]="assessment"></app-report-graphs>
         </div>
         <div class="results" [ngClass]="{'show-print':currentTab != 'report-sankey'}">
-            <app-report-sankey [phast]="phast" [settings]="settings"></app-report-sankey>
+            <app-report-sankey [phast]="phast" [settings]="settings" [assessment]="assessment"></app-report-sankey>
         </div>
+
+        <!-- real version -->
+        <!-- <div class="results" [ngClass]="{'show-print':currentTab != 'energy-used'}">
+            <app-energy-used [phast]="phast" [settings]="settings"></app-energy-used>
+        </div>
+        <div class="results" [ngClass]="{'show-print':currentTab != 'executive-summary'}">
+            <app-executive-summary [settings]="settings" [phast]="phast" [assessment]="assessment" [inPhast]="inPhast"></app-executive-summary>
+        </div>
+        <div class="results" [ngClass]="{'show-print':currentTab !=  'results-data'}">
+            <app-results-data [phast]="phast" [settings]="settings" [assessment]="assessment" [inPhast]="inPhast" [inReport]="true"></app-results-data>
+        </div>
+        <div class="results" [ngClass]="{'show-print':currentTab != 'report-graphs'}">
+            <app-report-graphs [phast]="phast" [settings]="settings" [assessment]="assessment"></app-report-graphs>
+        </div>
+        <div class="results" [ngClass]="{'show-print':currentTab != 'report-sankey'}">
+            <app-report-sankey [phast]="phast" [settings]="settings" [assessment]="assessment"></app-report-sankey>
+        </div> -->
         <!--use ngClass with 'show-print' for printing-->
         <!-- ngIf temporary -->
+        
         <div class="results" *ngIf="currentTab == 'input-summary'">
             <app-phast-input-summary [phast]="phast" [settings]="settings"></app-phast-input-summary>
         </div>

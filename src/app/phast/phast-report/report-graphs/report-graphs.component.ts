@@ -82,7 +82,7 @@ export class ReportGraphsComponent implements OnInit {
     //subscribe to show print value
     this.phastReportService.showPrint.subscribe(printVal => {
       this.showPrint = printVal;
-    })
+    });
   }
 
   ngOnDestroy() {

@@ -72,15 +72,16 @@ export class PhastPieChartComponent implements OnInit {
   }
 
   ngAfterViewInit() {
-    if (this.modExists) {
-      this.chartContainerWidth = this.chartContainerWidth / 2;
-    }
-    this.chartContainerHeight = 280;
-
     if (!this.printView) {
+      if (this.modExists) {
+        this.chartContainerWidth = this.chartContainerWidth / 2;
+      }
+      this.chartContainerHeight = 280;
       this.initChart();
     }
     else {
+      this.chartContainerHeight = 500;
+      this.chartContainerWidth = 1400;
       this.initPrintCharts();
     }
   }
@@ -208,7 +209,6 @@ export class PhastPieChartComponent implements OnInit {
     }
     else {
       if (this.isBaseline) {
-
         currentChart = document.getElementsByClassName("chart")[charts.length - 1];
         currentChart.id = "pie-chart-" + (charts.length - 1);
         currentChart.className = "app-chart";
@@ -430,7 +430,9 @@ export class PhastPieChartComponent implements OnInit {
           }
         });
       }
-      d3.selectAll(".c3-legend-item").style("font-size", "13px");
+      if (!this.printView) {
+        d3.selectAll(".c3-legend-item").style("font-size", "13px");
+      }
     }
   }
 
@@ -502,7 +504,7 @@ export class PhastPieChartComponent implements OnInit {
     if (this.modExists) {
       if (this.isBaseline) {
         currentChart = document.getElementsByClassName('chart')[0];
-        currentChart.className = "print-chart";
+        currentChart.className = "print-pie-chart";
 
         this.chart = c3.generate({
           bindto: currentChart,
@@ -533,8 +535,8 @@ export class PhastPieChartComponent implements OnInit {
             }
           },
           size: {
-            width: 1300,
-            height: 320
+            width: this.chartContainerWidth,
+            height: this.chartContainerHeight
           },
           color: {
             pattern: graphColors
@@ -552,8 +554,8 @@ export class PhastPieChartComponent implements OnInit {
         });
       }
       else {
-        currentChart = document.getElementsByClassName('chart')[0];
-        currentChart.className = "print-chart";
+        currentChart = document.getElementsByClassName('chart')[charts.length - 1];
+        currentChart.className = "print-pie-chart";
 
         this.chart = c3.generate({
           bindto: currentChart,
@@ -584,8 +586,8 @@ export class PhastPieChartComponent implements OnInit {
             }
           },
           size: {
-            width: 1300,
-            height: 320
+            width: this.chartContainerWidth,
+            height: this.chartContainerHeight
           },
           color: {
             pattern: graphColors
@@ -603,7 +605,59 @@ export class PhastPieChartComponent implements OnInit {
         });
       }
     }
-    d3.selectAll(".c3-legend-item").style("font-size", "12px");
+    else {
+      currentChart = document.getElementsByClassName('chart')[0];
+      currentChart.className = "print-pie-chart";
+
+      this.chart = c3.generate({
+        bindto: currentChart,
+        data: {
+          columns: [
+            ["wall", this.totalWallLoss],
+            ["atmosphere", this.totalAtmosphereLoss],
+            ["other", this.totalOtherLoss],
+            ["cooling", this.totalCoolingLoss],
+            ["opening", this.totalOpeningLoss],
+            ["fixture", this.totalFixtureLoss],
+            ["leakage", this.totalLeakageLoss],
+            ["extSurface", this.totalExtSurfaceLoss],
+            ["charge", this.totalChargeMaterialLoss],
+          ],
+          type: 'pie',
+          labels: true,
+          names: {
+            wall: "Wall Losses " + this.totalWallLoss + "%",
+            atmosphere: "Atmosphere Losses " + this.totalAtmosphereLoss + "%",
+            other: "Other Losses " + this.totalOtherLoss + "%",
+            cooling: "Cooling Losses " + this.totalCoolingLoss + "%",
+            opening: "Opening Losses " + this.totalOpeningLoss + "%",
+            fixture: "Fixture Losses " + this.totalFixtureLoss + "%",
+            leakage: "Leakage Losses " + this.totalLeakageLoss + "%",
+            extSurface: "Extended Surface Losses " + this.totalExtSurfaceLoss + "%",
+            charge: "Charge Materials " + this.totalChargeMaterialLoss + "%",
+          }
+        },
+        size: {
+          width: this.chartContainerWidth,
+          height: this.chartContainerHeight
+        },
+        color: {
+          pattern: graphColors
+        },
+        legend: {
+          position: 'right'
+        },
+        tooltip: {
+          contents: function (d, defaultTitleFormat, defaultValueFormat, color) {
+            let styling = "background-color: rgba(0, 0, 0, 0.7); border-radius: 5px; color: #fff; padding: 3px; font-size: 13px;";
+            let html = "<div style='" + styling + "'>" + d[0].name + "</div>";
+            return html;
+          }
+        }
+      });
+    }
+    d3.selectAll(".print-pie-chart .c3-legend-item").style("font-size", "1.3rem");
+    d3.selectAll(".print-pie-chart g.c3-chart-arc text").style("font-size", "1.3rem");
 
     if (this.chart) {
       this.updateChart();

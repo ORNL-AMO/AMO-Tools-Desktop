@@ -24,9 +24,8 @@
     </div>
   </div>
 
-
   <!-- if no mod, only 1 pie chart -->
-  <div class="row justify-content-center align-items-center print-graphs-container" *ngIf="!modExists">
+  <div class="row justify-content-center align-items-center hide-print" *ngIf="!modExists">
     <div class="col-12">
       <div class="row show-print">
         <div class="col-6">
@@ -35,8 +34,8 @@
       </div>
       <div class="row print-solo">
         <div class="col-12">
-          <app-phast-pie-chart [chartIndex]="0" [printView]="false" [chartContainerWidth]="chartContainerWidth" [results]="selectedPhast1.data" [resultCats]="showResultsCats"
-            [isBaseline]="true" [modExists]="modExists"></app-phast-pie-chart>
+          <app-phast-pie-chart [chartIndex]="0" [printView]="false" [chartContainerWidth]="chartContainerWidth" [results]="selectedPhast1.data"
+            [resultCats]="showResultsCats" [isBaseline]="true" [modExists]="modExists"></app-phast-pie-chart>
         </div>
       </div>
     </div>
@@ -48,12 +47,12 @@
       <div class="col-12">
         <div class="row">
           <div class="col-6">
-            <app-phast-pie-chart [chartIndex]="0" [printView]="false" [chartContainerWidth]="chartContainerWidth" [results]="selectedPhast1.data" [resultCats]="showResultsCats"
-              [isBaseline]="true" [modExists]="modExists"></app-phast-pie-chart>
+            <app-phast-pie-chart [chartIndex]="0" [printView]="false" [chartContainerWidth]="chartContainerWidth" [results]="selectedPhast1.data"
+              [resultCats]="showResultsCats" [isBaseline]="true" [modExists]="modExists"></app-phast-pie-chart>
           </div>
           <div class="col-6">
-            <app-phast-pie-chart [chartIndex]="1" [printView]="false" [chartContainerWidth]="chartContainerWidth" [results]="selectedPhast2.data" [resultCats]="showResultsCats"
-              [isBaseline]="false" [modExists]="modExists"></app-phast-pie-chart>
+            <app-phast-pie-chart [chartIndex]="1" [printView]="false" [chartContainerWidth]="chartContainerWidth" [results]="selectedPhast2.data"
+              [resultCats]="showResultsCats" [isBaseline]="false" [modExists]="modExists"></app-phast-pie-chart>
           </div>
         </div>
       </div>
@@ -70,10 +69,10 @@
 
 
   <!-- if show print then content will init -->
-  <div *ngIf="showPrint && modExists" class="row show-print print-component">
-    <!--put print content in this component -->
-    <app-report-graphs-print [printView]="true" [settings]="settings" [modExists]="modExists" [resultCats]="showResultsCats" [baselinePhast]="baselinePhast"
-      [resultsArray]="resultsArray"></app-report-graphs-print>
+  <!-- <div *ngIf="showPrint && modExists" class="row show-print print-component"> -->
+  <div *ngIf="showPrint" class="row show-print print-component">
+    <!-- contains pie and bar chart print views -->
+    <app-report-graphs-print [assessment]="assessment" [printView]="true" [settings]="settings" [modExists]="modExists" [resultCats]="showResultsCats"
+      [baselinePhast]="baselinePhast" [resultsArray]="resultsArray" [phast]="phast"></app-report-graphs-print>
   </div>
-
 </div>

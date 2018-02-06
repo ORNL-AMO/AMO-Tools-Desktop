@@ -1,3 +1,57 @@
-<p>
-  psat-rollup-energy-table works!
-</p>
+<table class="table table-hover table-striped">
+  <thead>
+    <tr>
+      <th>
+        Pump Name
+      </th>
+      <th>
+        Energy Used
+        <br>(MWh)
+      </th>
+      <th>
+        Cost
+        <br>($/yr)
+      </th>
+      <th>
+        % of Total Cost
+      </th>
+      <th>
+        % of Total Energy Used
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let data of resultData; let i=index;">
+      <td class="name" [ngStyle]="{'border-left-color': graphColors[i]}">
+        {{data.name}}
+      </td>
+      <td>
+        {{data.baselineResults.annual_energy}}
+      </td>
+      <td>
+        {{data.baselineResults.annual_cost | currency}}
+      </td>
+      <td>
+        {{getTotalCostPercent(data.baselineResults.annual_cost)}}
+      </td>
+      <td>
+        {{getTotalEnergyPercent(data.baselineResults.annual_energy)}}
+      </td>
+    </tr>
+  </tbody>
+  <tfoot>
+    <tr>
+      <td>
+        Totals
+      </td>
+      <td>
+        {{totalEnergyUse}}
+      </td>
+      <td>
+        {{totalCost | currency}}
+      </td>
+      <td></td>
+      <td></td>
+    </tr>
+  </tfoot>
+</table>

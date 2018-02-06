@@ -74,6 +74,16 @@
 
 @media print {
 
+    .print-break-before {
+        page-break-before: always;
+        page-break-inside: avoid;
+    }
+    
+    .print-break-after {
+        page-break-after: always;
+        page-break-inside: avoid;
+    }
+
     .hide-print{
         display: none !important;
     }

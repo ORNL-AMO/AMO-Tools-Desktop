@@ -55,18 +55,21 @@ export class PhastBarChartComponent implements OnInit {
   }
 
   ngAfterViewInit() {
-    if (this.chartContainerWidth > 877) {
-      this.chartContainerWidth = 877;
-    }
-    else {
-      this.chartContainerWidth = this.chartContainerWidth * 0.58;
-    }
-    this.chartContainerHeight = 280;
+
 
     if (!this.printView) {
+      if (this.chartContainerWidth > 877) {
+        this.chartContainerWidth = 877;
+      }
+      else {
+        this.chartContainerWidth = this.chartContainerWidth * 0.58;
+      }
+      this.chartContainerHeight = 280;
       this.initChart();
     }
     else {
+      this.chartContainerWidth = 1400;
+      this.chartContainerHeight = 700;
       this.initPrintCharts();
     }
   }
@@ -101,13 +104,6 @@ export class PhastBarChartComponent implements OnInit {
 
     currentChart = document.getElementsByClassName("bar-chart")[charts.length - 1];
     currentChart.className = "app-chart";
-
-    console.log("report bar chart data:");
-
-    for (let i = 0; i < this.chartData.length; i++) {
-      console.log("chartData[" + i + "] = " + this.chartData[i]);
-    }
-    console.log("---------------------");
 
     this.chart = c3.generate({
       bindto: currentChart,
@@ -165,12 +161,12 @@ export class PhastBarChartComponent implements OnInit {
 
           if (d[1]) {
             html = html
-                + "<td>"
-                  + d[1].name + ": "
-                + "</td>"
-                + "<td style='text-align: right; font-weight: bold'>"
-                  + d[1].value + " " + unit
-                + "</td>"
+              + "<td>"
+              + d[1].name + ": "
+              + "</td>"
+              + "<td style='text-align: right; font-weight: bold'>"
+              + d[1].value + " " + unit
+              + "</td>"
               + "</tr>"
           }
           html = html + "</table></div>";
@@ -195,8 +191,8 @@ export class PhastBarChartComponent implements OnInit {
         ]
       });
       setTimeout(function () {
-        d3.selectAll(".c3-legend-item text").style("font-size", "11px");
-        d3.selectAll(".c3-texts").style("font-size", "10px");
+        d3.selectAll(".c3-legend-item text").style("font-size", "12px");
+        d3.selectAll(".c3-texts").style("font-size", "12px");
       }, 500);
     }
   }
@@ -342,9 +338,8 @@ export class PhastBarChartComponent implements OnInit {
 
 
   initPrintCharts() {
-    let charts = document.getElementsByClassName('bar-chart');
     let currentChart = document.getElementsByClassName("bar-chart")[0];
-    currentChart.className = "print-chart";
+    currentChart.className = "print-bar-chart";
     let unit;
     if (this.settings.unitsOfMeasure == "Metric") {
       unit = "GJ/hr";
@@ -362,16 +357,18 @@ export class PhastBarChartComponent implements OnInit {
       axis: {
         x: {
           type: 'category',
-          categories: this.chartLabels
+          categories: this.chartLabels,
+          tick: {
+            rotate: 60,
+            multiline: false
+          },
+          height: 300
         },
         y: {
           label: {
             text: 'Heat Loss (' + unit + ')',
-            position: 'outer-middle'
-          },
-          tick: {
-            format: d3.format('.1f')
-          },
+            position: 'outer-bottom',
+          }
         }
       },
       grid: {
@@ -380,8 +377,8 @@ export class PhastBarChartComponent implements OnInit {
         }
       },
       size: {
-        width: 1000,
-        height: 320
+        width: this.chartContainerWidth,
+        height: this.chartContainerHeight
       },
       padding: {
         bottom: 20
@@ -398,10 +395,11 @@ export class PhastBarChartComponent implements OnInit {
         }
       }
     });
-    d3.selectAll(".c3-axis").style("fill", "none").style("stroke", "#000");
-    d3.selectAll(".c3-axis-y-label").style("fill", "#000").style("stroke", "#000");
-    d3.selectAll(".c3-texts").style("font-size", "10px");
-    d3.selectAll(".c3-legend-item text").style("font-size", "11px");
-    d3.selectAll(".c3-ygrids").style("stroke", "#B4B2B7").style("stroke-width", "0.5px");
+    d3.selectAll(".print-bar-chart .c3-axis").style("fill", "none").style("stroke", "#000");
+    d3.selectAll(".print-bar-chart .c3-axis-y-label").style("fill", "#000").style("stroke", "#000");
+    d3.selectAll(".print-bar-chart .c3-ygrids").style("stroke", "#B4B2B7").style("stroke-width", "0.5px");
+    d3.selectAll(".print-bar-chart .c3-axis-x g.tick text tspan").style("font-size", "1.4rem").style("fill", "#000").style("stroke", "#000");
+    d3.selectAll(".print-bar-chart .c3-axis-y g.tick text tspan").style("font-size", "0.8rem");
+    d3.selectAll(".print-bar-chart .c3-axis-y-label").style("font-size", "1.4rem");
   }
 }

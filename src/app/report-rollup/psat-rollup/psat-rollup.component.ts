@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { Settings } from 'electron';
+import { Settings } from '../../shared/models/settings';
 
 @Component({
   selector: 'app-psat-rollup',
@@ -7,6 +7,8 @@ import { Settings } from 'electron';
   styleUrls: ['./psat-rollup.component.css']
 })
 export class PsatRollupComponent implements OnInit {
+  @Input()
+  settings: Settings;
 
   constructor() { }
 

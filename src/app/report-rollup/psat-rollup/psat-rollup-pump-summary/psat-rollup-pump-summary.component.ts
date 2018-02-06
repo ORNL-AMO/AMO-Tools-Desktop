@@ -1,6 +1,5 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
 import { Settings } from '../../../shared/models/settings';
-import { BaseChartDirective } from 'ng2-charts';
 import { ReportRollupService, PsatResultsData } from '../../report-rollup.service';
 import { graphColors } from '../../../phast/phast-report/report-graphs/graphColors';
 import * as d3 from 'd3';
@@ -13,18 +12,30 @@ import * as c3 from 'c3';
 export class PsatRollupPumpSummaryComponent implements OnInit {
   @Input()
   settings: Settings
+  @Input()
+  printView: boolean;
+
+  firstLoad: boolean = true;
+  isUpdate: boolean = false;
+  showTitle: boolean = false;
+  showLegend: boolean = true;
 
   //chart element
-  chart: any;
   chartContainerWidth: number;
 
   //chart text
+  title: string;
   unit: string;
   axisLabel: string;
   chartLabels: Array<string>;
 
+  //print view chart variables
+  titles: Array<string>;
+  units: Array<string>;
+  printChartData: Array<any>;
+
   //chart data
-  dataColumns: Array<any>;
+  allDataColumns: Array<any>;
   baselineColumns: Array<any>;
   modColumns: Array<any>;
 
@@ -35,53 +46,64 @@ export class PsatRollupPumpSummaryComponent implements OnInit {
   graphOptions: Array<string> = [
     'Energy Use',
     'Cost'
-  ]
+  ];
+  numPsats: number;
   graphOption: string = 'Energy Use';
   constructor(private reportRollupService: ReportRollupService) { }
 
   ngOnInit() {
     this.resultData = new Array();
-    this.chartContainerWidth = (window.innerWidth - 30) * .55;
     this.reportRollupService.psatResults.subscribe((psats: Array<PsatResultsData>) => {
       if (psats.length != 0) {
+        this.numPsats = psats.length;
         this.resultData = psats;
-        this.buildChartData();
+        if (this.printView) {
+          this.chartContainerWidth = 1250;
+          this.initPrintChartData();
+        }
+        else {
+          this.chartContainerWidth = (window.innerWidth - 30) * .60;
+          this.buildChartData(this.graphOption, false);
+          this.initChartData();
+        }
       }
-    })
+    });
   }
 
-  ngAfterViewInit() {
-    this.initChart();
+  ngOnChanges() {
+    if (this.firstLoad) {
+      this.firstLoad = !this.firstLoad;
+    }
+    else {
+      this.buildChartData(this.graphOption, true);
+      this.initChartData();
+    }
   }
 
-
-  buildChartData() {
+  buildChartData(graphOption: string, update: boolean) {
     //init arrays
-    this.chartLabels = new Array();
-    this.dataColumns = new Array<any>();
     this.baselineColumns = new Array<any>();
     this.baselineColumns.push("Baseline");
     this.modColumns = new Array<any>();
     this.modColumns.push("Modification");
-
-    this.axisLabel = this.graphOption;
+    this.title = graphOption;
+    this.chartLabels = new Array();
     let i = 1;
+
     this.resultData.forEach(data => {
       let num1 = 0;
       let num2 = 0;
-      if (this.graphOption == 'Energy Use') {
+      if (graphOption == 'Energy Use') {
         if (i == 1) {
           this.unit = 'kWh/yr';
-          this.axisLabel = this.axisLabel + ' (' + this.unit + ')';
         }
         num1 = data.baselineResults.annual_energy;
         if (data.modName) {
           num2 = data.modificationResults.annual_energy;
         }
-      } else if (this.graphOption == 'Cost') {
+      } else if (graphOption == 'Cost') {
         if (i == 1) {
           this.unit = "$/yr";
-          this.axisLabel = this.axisLabel + ' (' + this.unit + ')';
         }
         num1 = data.baselineResults.annual_cost;
         if (data.modName) {
@@ -91,8 +113,11 @@ export class PsatRollupPumpSummaryComponent implements OnInit {
       i++;
       this.addData(data.name, num1, num2);
     });
+    this.axisLabel = graphOption + " (" + this.unit + ")";
 
-    this.initChart();
+    if (!this.printView) {
+      this.isUpdate = update;
+    }
   }
 
   addData(label: string, baseNum: number, modNum: number) {
@@ -119,100 +144,25 @@ export class PsatRollupPumpSummaryComponent implements OnInit {
     return baselineCost - modCost;
   }
 
-  initChart() {
-    let charts = document.getElementsByClassName("psat-rollup-bar-chart");
-    let currentChart = charts[0];
-    let unit = this.unit;
-
-    this.chart = c3.generate({
-      bindto: currentChart,
-      data: {
-        columns: [
-          this.baselineColumns,
-          this.modColumns
-        ],
-        type: 'bar',
-      },
-      axis: {
-        x: {
-          type: 'category',
-          categories: this.chartLabels
-        },
-        y: {
-          label: {
-            text: this.graphOption,
-            position: 'outer-middle'
-          },
-          tick: {
-            format: d3.format('.1f')
-          },
-        }
-      },
-      grid: {
-        y: {
-          show: true
-        }
-      },
-      size: {
-        width: this.chartContainerWidth,
-        height: 320
-      },
-      padding: {
-        bottom: 20
-      },
-      color: {
-        pattern: this.graphColors
-      },
-      legend: {
-        position: 'right'
-      },
-      tooltip: {
-        contents: function (d, defaultTitleFormat, defaultValueFormat, color) {
-          let styling = "background-color: rgba(0, 0, 0, 0.7); border-radius: 5px; color: #fff; padding: 3px; font-size: 13px; display: inline-block; white-space: nowrap;";
-          let html = "<div style='" + styling + "'>"
-            + "<table>"
-            + "<tr>"
-            + "<td>"
-            + d[0].name + ": "
-            + "</td>"
-            + "<td style='text-align: right; font-weight: bold'>"
-            + d[0].value + " " + unit
-            + "</td>"
-            + "</tr>"
-            + "<tr>";
-
-          if (d[1]) {
-            html = html
-              + "<td>"
-              + d[1].name + ": "
-              + "</td>"
-              + "<td style='text-align: right; font-weight: bold'>"
-              + d[1].value + " " + unit
-              + "</td>"
-              + "</tr>"
-          }
-          html = html + "</table></div>";
-          return html;
-        }
-      }
-    });
-
-    //formatting chart
-    d3.selectAll(".c3-axis").style("fill", "none").style("stroke", "#000");
-    d3.selectAll(".c3-axis-y-label").style("fill", "#000").style("stroke", "#000");
-    d3.selectAll(".c3-texts").style("font-size", "10px");
-    d3.selectAll(".c3-legend-item text").style("font-size", "11px");
-    d3.selectAll(".c3-ygrids").style("stroke", "#B4B2B7").style("stroke-width", "0.5px");
+  initChartData() {
+    this.allDataColumns = new Array<any>();
+    this.allDataColumns.push(this.baselineColumns);
+    this.allDataColumns.push(this.modColumns);
   }
 
-  updateChart() {
-    if (this.chart) {
-      this.chart.load({
-        columns: [
-          this.baselineColumns,
-          this.modColumns
-        ]
-      });
+  initPrintChartData() {
+    this.printChartData = new Array<any>();
+    this.titles = new Array<any>();
+    this.units = new Array<any>();
+
+    for (let i = 0; i < this.graphOptions.length; i++) {
+      let tmpDataColumns = new Array<any>();
+      this.buildChartData(this.graphOptions[i], false);
+      tmpDataColumns.push(this.baselineColumns);
+      tmpDataColumns.push(this.modColumns);
+      this.printChartData.push(tmpDataColumns);
+      this.titles.push(this.graphOptions[i]);
+      this.units.push(this.unit);
     }
   }
 }

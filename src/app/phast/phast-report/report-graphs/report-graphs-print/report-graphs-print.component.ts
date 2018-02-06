@@ -30,13 +30,30 @@ export class ReportGraphsPrintComponent implements OnInit {
     printView: boolean;
     @Input()
     chartContainerWidth: number;
+    @Input()
+    phast: PHAST;
+    @Input()
+    assessment: Assessment;
+
+    sankeyBaseline: PHAST;
+    modification: PHAST;
+    sankeyPhastOptions: Array<any>;
+    assessmentName: string;
 
     constructor() { }
 
-    ngOnInit() { 
-    }
-
-    ngAfterViewInit() {
-
+    ngOnInit() {
+        this.assessmentName = this.assessment.name.replace(/\s/g, '');
+        this.sankeyPhastOptions = new Array<any>();
+        this.sankeyPhastOptions.push({ name: 'Baseline', phast: this.phast });
+        this.sankeyBaseline = this.sankeyPhastOptions[0];
+        if (this.phast.modifications) {
+            if (this.phast.modifications.length > 0) {
+                this.modExists = true;
+            }
+            this.phast.modifications.forEach(mod => {
+                this.sankeyPhastOptions.push({ name: mod.phast.name, phast: mod.phast });
+            });
+        }
     }
 }

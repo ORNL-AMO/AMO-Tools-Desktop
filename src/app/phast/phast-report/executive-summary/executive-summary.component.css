@@ -11,3 +11,14 @@ tr > td:not(:first-child),
 tr > th:not(:first-child){
     text-align: center;
 }
+
+@media print {
+    .print-section-header {
+        font-size: 30px;
+    }
+
+    .output-summary .table th,
+    .output-summary .table td {
+        font-size: 20px;
+    }
+}

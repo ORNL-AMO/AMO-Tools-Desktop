@@ -1,0 +1,64 @@
+.custom-row {
+    display: inline-block;
+    width: 100%;
+}
+
+@media print {
+
+    .custom-row {
+        display: block;
+    }
+
+    .print-graphs-container {
+        page-break-before: always;
+        page-break-inside: avoid;
+    }
+
+    .print-conserve-paper {
+        page-break-before: avoid;
+        page-break-inside: avoid;
+    }
+
+    .print-solo {
+        page-break-inside: avoid;
+        position: relative;
+        top: 0;
+        left: -400px;
+    }
+
+    .print-duo-title-top {
+        position: absolute;
+        display: inline-block;
+        top: 50px;
+        left: 0;
+        right: 0;
+        margin: 0 auto;
+        font-weight: bold;
+    }
+
+    .print-duo-title-bottom {
+        position: absolute;
+        display: inline-block;
+        top: 65%;
+        left: 0;
+        right: 0;
+        margin: 0 auto;
+        font-weight: bold;
+    }
+
+    .print-duo-top {
+        page-break-inside: avoid;
+        position: relative;
+        display: block;
+        width: 100%;
+        top: 100px;
+    }
+
+    .print-duo-bottom {
+        page-break-inside: avoid;
+        position: relative;
+        display: block;
+        width: 100%;
+        top: 200px;
+    }
+}

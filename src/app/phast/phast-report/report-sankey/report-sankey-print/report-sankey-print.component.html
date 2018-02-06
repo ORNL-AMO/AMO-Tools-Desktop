@@ -1,0 +1,27 @@
+<div class="row justify-content-center align-items-center" [ngClass]="{'print-graphs-container':modExists, 'print-conserve-paper':!modExists}">
+  <div class="col-12">
+    <div class="row justify-content-center align-items-center">
+      <div class="col-12">
+        <div class="row show-print">
+          <div class="print-duo-title-top">
+            Baseline
+          </div>
+          <div *ngIf="modExists" class="print-duo-title-bottom">
+            {{option.name}}
+          </div>
+        </div>
+
+        <div class="custom-row">
+          <div class="print-duo-top">
+            <app-sankey [phast]="baseline.phast" [settings]="settings" [location]="assessmentName + '-print-sankey-'" [printView]="true"
+              [modIndex]="i"></app-sankey>
+          </div>
+          <div *ngIf="modExists" class="print-duo-bottom">
+            <app-sankey [phast]="option.phast" [settings]="settings" [location]="assessmentName + '-print-sankey-'" [printView]="true"
+              [modIndex]="i"></app-sankey>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
