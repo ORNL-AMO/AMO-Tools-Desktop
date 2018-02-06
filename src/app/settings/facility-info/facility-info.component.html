@@ -1,0 +1,100 @@
+<form [formGroup]="facilityForm">
+  <div class="row">
+    <div class="col-lg-6 col-md-6 col-sm-12">
+      <div class="form-group">
+        <label class="group-label" for="companyName">Company Name</label>
+        <input type="text" id="companyName" name="companyName" class="form-control" formControlName="companyName" />
+      </div>
+    </div>
+    <div class="col-lg-6 col-md-6 col-sm-12">
+      <div class="form-group">
+        <label class="group-label" for="facilityName">Facility Name</label>
+        <input type="text" id="facilityName" name="facilityName" class="form-control" formControlName="facilityName" />
+      </div>
+    </div>
+    <div class="col-lg-6 col-md-6 col-sm-12">
+      <div class="form-group">
+        <label class="group-label" for="date">Assessment Date</label>
+        <input type="text" id="date" name="date" class="form-control" formControlName="date" />
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-lg-6 col-md-6 col-sm-12 form-section">
+      <label class="group-label">Facility Contact Info</label>
+      <div class="form-group">
+        <label class="small" for="facilityContactName">Name</label>
+        <input type="text" id="facilityContactName" name="facilityContactName" class="form-control" formControlName="facilityContactName"
+        />
+      </div>
+      <div class="form-group">
+        <label class="small" for="facilityPhoneNumber">Phone Number</label>
+        <input type="number" id="facilityPhoneNumber" name="facilityPhoneNumber" class="form-control" formControlName="facilityPhoneNumber"
+        />
+      </div>
+      <div class="form-group">
+        <label class="small" for="facilityEmail">Email</label>
+        <input type="email" id="facilityEmail" name="facilityEmail" class="form-control" formControlName="facilityEmail" />
+      </div>
+    </div>
+    <div class="col-lg-6 col-md-6 col-sm-12 form-section">
+      <label class="group-label">Assessment Contact Info</label>
+      <div class="form-group">
+        <label class="small" for="assessmentContactName">Name</label>
+        <input type="text" id="assessmentContactName" name="assessmentContactName" class="form-control" formControlName="assessmentContactName"
+        />
+      </div>
+      <div class="form-group">
+        <label class="small" for="assessmentPhoneNumber">Phone Number</label>
+        <input type="number" id="assessmentPhoneNumber" name="assessmentPhoneNumber" class="form-control" formControlName="assessmentPhoneNumber"
+        />
+      </div>
+      <div class="form-group">
+        <label class="small" for="assessmentEmail">Email</label>
+        <input type="email" id="assessmentEmail" name="assessmentEmail" class="form-control" formControlName="assessmentEmail" />
+      </div>
+    </div>
+    <div class="col-12 form-section">
+      <div class="row">
+        <div class="col-12">
+          <label class="group-label">Facility Location</label>
+        </div>
+        <div class="col-6">
+          <div class="form-group">
+            <label class="small" for="street">Street</label>
+            <input type="text" id="street" name="street" class="form-control" formControlName="street" />
+          </div>
+        </div>
+        <div class="col-6">
+          <div class="form-group">
+            <label class="small" for="city">City</label>
+            <input type="text" id="city" name="city" class="form-control" formControlName="city" />
+          </div>
+        </div>
+        <div class="col-6">
+          <div class="form-group">
+            <label class="small" for="state">State</label>
+            <input type="text" id="state" name="state" class="form-control" formControlName="state" />
+          </div>
+        </div>
+        <div class="col-6">
+          <div class="form-group">
+            <label class="small" for="zip">Zip</label>
+            <input type="text" id="zip" name="zip" class="form-control" formControlName="zip" />
+          </div>
+        </div>
+        <div class="col-6">
+          <div class="form-group">
+            <label class="small" for="country">Country</label>
+            <input type="text" id="country" name="country" class="form-control" formControlName="country" />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>
+<div class="row">
+  <div class="col">
+    <button class="btn pull-right" (click)="save()">Save</button>
+  </div>
+</div>

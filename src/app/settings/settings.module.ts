@@ -6,12 +6,14 @@ import { ApplicationSettingsComponent } from './application-settings/application
 import { PsatSettingsComponent } from './psat-settings/psat-settings.component';
 import { PhastSettingsComponent } from './phast-settings/phast-settings.component';
 import { SettingsService } from './settings.service';
+import { FacilityInfoComponent } from './facility-info/facility-info.component';
 
 @NgModule({
     declarations: [
         ApplicationSettingsComponent,
         PsatSettingsComponent,
-        PhastSettingsComponent
+        PhastSettingsComponent,
+        FacilityInfoComponent
     ],
     imports: [
         CommonModule,
@@ -24,7 +26,8 @@ import { SettingsService } from './settings.service';
     exports: [
         PsatSettingsComponent,
         ApplicationSettingsComponent,
-        PhastSettingsComponent
+        PhastSettingsComponent,
+        FacilityInfoComponent
     ]
 })
 

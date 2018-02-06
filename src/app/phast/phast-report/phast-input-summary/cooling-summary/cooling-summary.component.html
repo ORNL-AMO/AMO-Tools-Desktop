@@ -46,10 +46,10 @@
                 Name of Cooling Medium
               </td>
               <td [ngClass]="{'indicate-report-field-different':nameDiff[index] == true}">
-                {{data.baseline.name}}
+                {{data.baseline.coolingMedium}}
               </td>
-              <td *ngFor="let mod of data.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(data.baseline.name, mod.name, 'nameDiff', index)}">
-                {{mod.name}}
+              <td *ngFor="let mod of data.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(data.baseline.coolingMedium, mod.coolingMedium, 'nameDiff', index)}">
+                {{mod.coolingMedium}}
               </td>
             </tr>
             <tr>

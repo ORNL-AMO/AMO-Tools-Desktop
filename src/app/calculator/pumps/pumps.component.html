@@ -4,41 +4,69 @@
     <div class="col-10  mx-auto">
       <div class="content-container calculator-list">
         <h2>Pump Calculators</h2>
-        <ul>
-          <li>
-            <a (click)="showTool('head-tool')">Head Tool</a>
-            <p>Use head tool calculator to calculate pump head.</p>
-          </li>
-          <li>
-            <a (click)="showTool('system-curve')">System Curve</a>
-            <p>Use system curve to graph your pumps flow.</p>
-          </li>
-          <li>
-            <a (click)="showTool('specific-speed')">Specific Speed</a>
-            <p>For each pump type there is an optimal specific speed based on size, flow rate, specific speed. Hydraulic Institute
-              standards also include factors for wear and surface finish on wetted parts but these two factors are not considered
-              in the PSAT calculations. Operation at the optimal specific speed allows a pump to operate at maximum efficiency.
-              This calculator determines the specific speed for a pump at the given conditions and calculates the amount
-              of efficiency penalty to be deducted from the maximum value due to operation away from the optimal specific
-              speed.
+        <div class="row calc-item-row">
+          <div class="col-1">
+            <img src="assets/images/head-tool.png" class="ico-size">
+          </div>
+          <div class="col-11">
+            <a class="click-item" (click)="showTool('head-tool')">Head Tool</a>
+            <p>
+              Use head tool calculator to calculate pump head.
             </p>
-          </li>
-          <li>
-            <a (click)="showTool('achievable-efficiency')">Pump Efficiency Curves</a>
-            <p>Determine the achievable pump efficiency for vaious pump styles which are based on the Hydraulic Institute (HI)
-              standard ANSI/HI 1.3-2000.</p>
-          </li>
-          <li>
-            <a (click)="showTool('pump-curve')">Pump Curve</a>
-            <p>Use pump curve calculator to develop a pump curve and explore the effects of changes in head, flow, pump speed
-              and impeller diameter</p>
-          </li>
-        </ul>
-
+          </div>
+        </div>
+        <div class="row calc-item-row">
+          <div class="col-1">
+            <img src="assets/images/system-curve-tran.png" class="ico-size">
+          </div>
+          <div class="col-11">
+            <a class="click-item" (click)="showTool('system-curve')">System Curve</a>
+            <p>
+              Use system curve to graph your pumps flow.
+            </p>
+          </div>
+        </div>
+        <div class="row calc-item-row">
+          <div class="col-1">
+            <img src="assets/images/speed-tran.png" class="ico-size">
+          </div>
+          <div class="col-11">
+            <a class="click-item" (click)="showTool('specific-speed')">Specific Speed</a>
+            <p>
+              For each pump type there is an optimal specific speed based on size, flow rate, specific speed. Hydraulic Institute standards
+              also include factors for wear and surface finish on wetted parts but these two factors are not
+              considered in the PSAT calculations. Operation at the optimal specific speed allows a pump to
+              operate at maximum efficiency. This calculator determines the specific speed for a pump at the
+              given conditions and calculates the amount of efficiency penalty to be deducted from the maximum
+              value due to operation away from the optimal specific speed.
+            </p>
+          </div>
+        </div>
+        <div class="row calc-item-row">
+          <div class="col-1">
+            <img src="assets/images/pump-eff.png" class="ico-size">
+          </div>
+          <div class="col-11">
+            <a class="click-item" (click)="showTool('achievable-efficiency')">Pump Efficiency Curves</a>
+            <p>
+              Determine the achievable pump efficiency for vaious pump styles which are based on the Hydraulic Institute (HI) standard
+              ANSI/HI 1.3-2000
+            </p>
+          </div>
+        </div>
+        <div class="row calc-item-row">
+          <div class="col-1">
+            <img src="assets/images/pump-curve.png" class="ico-size">
+          </div>
+          <div class="col-11">
+            <a class="click-item" (click)="showTool('pump-curve')">Pump Curve</a>
+            <p>Use pump curve calculator to develop a pump curve and explore the effects of changes in head, flow,
+              pump speed and impeller diameter</p>
+          </div>
+        </div>
       </div>
     </div>
   </div>
-
 </div>
 
 

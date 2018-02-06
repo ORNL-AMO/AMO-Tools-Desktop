@@ -1,0 +1,77 @@
+<div class="output-summary" *ngIf="facilityInfo">
+  <h5 class="show-print">Facility Information</h5>
+  <table class="table table-hover table-striped">
+    <tr>
+      <td class="bold">Company</td>
+      <td>{{facilityInfo.companyName}}</td>
+    </tr>
+    <tr>
+      <td class="bold">Facility</td>
+      <td>{{facilityInfo.facilityName}}</td>
+    </tr>
+    <tr>
+      <td class="bold">Date</td>
+      <td>{{facilityInfo.date}}</td>
+    </tr>
+    <tr>
+      <td class="bold" colspan="2">Address</td>
+    </tr>
+    <tr>
+      <td>Street</td>
+      <td>{{facilityInfo.address.street}}</td>
+    </tr>
+    <tr>
+      <td>City</td>
+      <td>{{facilityInfo.address.city}}</td>
+    </tr>
+    <tr>
+      <td>State</td>
+      <td>{{facilityInfo.address.state}}</td>
+    </tr>
+    <tr>
+      <td>Country</td>
+      <td>{{facilityInfo.address.country}}</td>
+    </tr>
+    <tr>
+      <td>Zip</td>
+      <td>{{facilityInfo.address.zip}}</td>
+    </tr>
+    <tr>
+      <td class="bold" colspan="2">
+        Facility Contact
+      </td>
+    </tr>
+    <tr>
+      <td>Name</td>
+      <td>{{facilityInfo.facilityContact.contactName}}</td>
+    </tr>
+    <tr>
+      <td>Phone</td>
+      <td>{{facilityInfo.facilityContact.phoneNumber}}</td>
+    </tr>
+    <tr>
+      <td>Email</td>
+      <td>{{facilityInfo.facilityContact.email}}</td>
+    </tr>
+    <tr>
+      <td class="bold" colspan="2">
+        Assessment Contact
+      </td>
+    </tr>
+    <tr>
+      <td>Name</td>
+      <td>{{facilityInfo.assessmentContact.contactName}}</td>
+    </tr>
+    <tr>
+      <td>Phone</td>
+      <td>{{facilityInfo.assessmentContact.phoneNumber}}</td>
+    </tr>
+    <tr>
+      <td>Email</td>
+      <td>{{facilityInfo.assessmentContact.email}}</td>
+    </tr>
+  </table>
+</div>
+<div *ngIf="!facilityInfo">
+  No Facility Information Found
+</div>

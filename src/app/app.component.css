@@ -173,7 +173,7 @@ label {
   position: relative;
 }
   .form-group:hover {
-    background: #efefef;
+    background: #D5D8DC;
   }
   .modal .form-group:hover {
     background: transparent;
@@ -329,10 +329,25 @@ select.form-control:not([size]):not([multiple]) {
   border: #BF3D00 solid 2px;
   box-shadow: 0px 0px 5px #BF3D00;
 }
+.phast .indicate-different-db{
+  border: #006120 solid 2px;
+  box-shadow: 0px 0px 5px #006120;
+}
+
+.phast .indicate-different-db{
+  border: #538055 solid 2px;
+  box-shadow: 0px 0px 5px #538055;
+}
+
 
 .phast .indicate-report-field-different{
     color: #BF3D00 !important;
     font-weight: bold !important;
+}
+
+.phast .indicate-report-field-different-db{
+  color: #006120 !important;
+  font-weight: bold !important;
 }
 
 .phast .indicate-report-row-different{
@@ -413,7 +428,7 @@ In-Assessment Calculators
   .calc-form form {
     margin-bottom: 10px;
     padding-bottom: 10px;
-    border-bottom: #efefef solid 1px;
+    border-bottom: #D5D8DC solid 1px;
   }
    .calc-form .form-group label {
     font-size: 15px;
@@ -1063,6 +1078,49 @@ Calculators
   background: transparent;
 }
 
+.ico-size {
+  height: 55px;
+  background: linear-gradient(rgba(228, 219, 219, 0.34), rgba(30, 144, 255, 0.26));
+  /*background-color: rgba(41, 128, 185, 0);*/
+  border-radius: 15px;
+  border: 0.1px solid rgba(123, 120, 120, 0.25);
+  box-shadow: #7b7878 2px 2px 5px 1px;
+}
+
+.ico-size2 {
+  height: 55px;
+  background: linear-gradient(rgba(228, 219, 219, 0.34), rgba(255, 0, 22, 0.42));
+  /*background-color: rgba(41, 128, 185, 0);*/
+  border-radius: 15px;
+  border: 0.1px solid rgba(123, 120, 120, 0.25);
+  box-shadow: #7b7878 2px 2px 5px 1px;
+}
+
+.ico-size3 {
+  height: 55px;
+  background: linear-gradient(rgba(228, 219, 219, 0.34), rgba(187, 187, 187, 0.65));
+  /*background-color: rgba(41, 128, 185, 0);*/
+  border-radius: 15px;
+  border: 0.1px solid rgba(123, 120, 120, 0.25);
+  box-shadow: #7b7878 2px 2px 5px 1px;
+}
+
+.ico-size4 {
+  height: 55px;
+  background: linear-gradient(rgba(228, 219, 219, 0.34), rgba(107, 132, 106, 0.65));
+  /*background-color: rgba(41, 128, 185, 0);*/
+  border-radius: 15px;
+  border: 0.1px solid rgba(123, 120, 120, 0.25);
+  box-shadow: #7b7878 2px 2px 5px 1px;
+}
+
+.calc-item-row{
+  padding-top: 10px;
+  padding-bottom: 10px;
+  border-bottom: #eee solid 1px;
+}
+
+
 /* Pump Head
 ================================================ */
 .pump-head select.form-control:not([size]):not([multiple]) {
@@ -1229,9 +1287,10 @@ Banner
 }
 .banner.phast .title {
   color: #fff;
-  padding-left: 58px;
-  background: url('../assets/images/ico-phast-diagram.png') no-repeat 14px;
-  background-size: 31px;
+  padding-left: 75px;
+  background: url('../assets/images/phast-logo.png') no-repeat 10px;
+  background-size: 60px;
+  /*background-color: #000B13;*/
 }
 
 .banner-border{
@@ -1323,7 +1382,7 @@ Modify Conditions
     /* .modification .header button {
       background: #fff;
       border: none;
-      border-left: #efefef solid 1px;
+      border-left: #D5D8DC solid 1px;
       margin: 0;
       padding: 4px 16px;
       float: right;
@@ -1333,7 +1392,7 @@ Modify Conditions
     }
       .modification .header button:hover {
         cursor: pointer;
-        background: #efefef;
+        background: #D5D8DC;
       } */
 
   .modification.disabled, .modification.disabled button, .modification.disabled textarea {
@@ -1457,7 +1516,7 @@ Modify Conditions
 
 .note-form textarea {
   width: 100%;
-    border: #efefef solid 1px;
+    border: #D5D8DC solid 1px;
     padding: 6px 8px;
     font-size: 15px;
 
@@ -1541,7 +1600,7 @@ No Data Messaging
 .no-data {
   padding: 26px 50px;
   text-align: center;
-  background: #efefef;
+  background: #D5D8DC;
   border-right: #cacaca solid 1px;
 }
 .no-data h3 {
@@ -1619,7 +1678,7 @@ Toasty Overrides ================================= */
   padding-top: 103px;
 } */
 .losses-container.disabled, .losses-container:disabled{
-    background: #efefef;
+    background: #D5D8DC;
 }
 
 .losses-empty{

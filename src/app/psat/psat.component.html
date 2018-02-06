@@ -24,7 +24,7 @@
         </ul>
       </nav>
     </div>
-    <div class="hide-print" id="psatTabs" *ngIf="mainTab == 'assessment'">
+    <div class="hide-print" id="psatTabs" *ngIf="mainTab == 'assessment' || mainTab == 'calculators'">
       <app-psat-tabs></app-psat-tabs>
     </div>
   </div>
@@ -48,9 +48,9 @@
 
   <!--End system-setup-->
   <!--tab (diagram and assessment)-->
-  <div class="hide-print" id="psatTabs" *ngIf="mainTab == 'assessment' || mainTab == 'calculators'">
+  <!-- <div class="hide-print" id="psatTabs" *ngIf="mainTab == 'assessment' || mainTab == 'calculators'">
     <app-psat-tabs></app-psat-tabs>
-  </div>
+  </div> -->
   <!--end tabs-->
   <!--assessment-->
   <div class="tab-content" *ngIf="mainTab == 'assessment' && (currentTab == 'explore-opportunities' || currentTab == 'modify-conditions')" [ngStyle]="{'height.px': containerHeight}">
@@ -59,7 +59,7 @@
     <app-modify-conditions *ngIf="currentTab == 'modify-conditions'" [assessment]="assessment" [settings]="settings" [saveClicked]="saveClicked"
       [(psat)]="_psat" (saved)="save()"></app-modify-conditions>
   </div>
-  <div class="tab-content" *ngIf="mainTab == 'calculators'">
+  <div class="tab-content" *ngIf="mainTab == 'calculators'" [ngStyle]="{'height.px': containerHeight}">
     <app-system-curve *ngIf="calcTab == 'system-curve'" [inPsat]="true" [psat]="_psat" [settings]="settings"></app-system-curve>
     <app-achievable-efficiency *ngIf="calcTab == 'achievable-efficiency'" [inPsat]="true" [settings]="settings" [psat]="_psat"></app-achievable-efficiency>
     <app-motor-performance *ngIf="calcTab == 'motor-performance'" [inPsat]="true" [psat]="_psat" [settings]="settings"></app-motor-performance>

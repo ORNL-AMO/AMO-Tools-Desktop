@@ -21,7 +21,9 @@ export interface GasChargeMaterial {
   percentReacted?: number,
   reactionHeat?: number,
   additionalHeat?: number,
-  heatRequired?: number
+  heatRequired?: number,
+  endoExoHeat?: number,
+  netHeatLoss?: number,
 }
 //Liquid and Solid uses "chargeFeedRate"
 export interface LiquidChargeMaterial {
@@ -39,7 +41,9 @@ export interface LiquidChargeMaterial {
   percentReacted?: number,
   reactionHeat?: number,
   additionalHeat?: number,
-  heatRequired?: number
+  heatRequired?: number,
+  endoExoHeat?: number,
+  netHeatLoss?: number,
 }
 export interface SolidChargeMaterial {
   materialId?: number,
@@ -59,5 +63,7 @@ export interface SolidChargeMaterial {
   chargeReacted?: number,
   reactionHeat?: number,
   additionalHeat?: number,
-  heatRequired?: number
+  heatRequired?: number,
+  endoExoHeat?: number,
+  netHeatLoss?: number,
 }

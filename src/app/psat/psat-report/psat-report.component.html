@@ -82,7 +82,9 @@
             </li>
             <li (click)="setTab('inputData')" [ngClass]="{'active': currentTab == 'inputData'}">
                 <a>Input Data</a>
-            </li>
+            </li><li (click)="setTab('facilityInfo')" [ngClass]="{'active': currentTab == 'facilityInfo'}">
+                    <a>Facility Info</a>
+                </li>
         </ul>
         <!--<div class="charts" [ngClass]="{'mod-page-break': numMods > 3}">
             <app-chart-summary [psat]="psat"></app-chart-summary>
@@ -96,7 +98,10 @@
             <app-input-summary [psat]="psat" [settings]="settings">
             </app-input-summary>
         </div>
-
+        <div class="input-data results" [ngClass]="{'show-print': currentTab != 'facilityInfo'}">
+            <app-facility-info-summary [assessment]="assessment">
+            </app-facility-info-summary>
+        </div>
     </div>
     <!-- End .report-data -->
 

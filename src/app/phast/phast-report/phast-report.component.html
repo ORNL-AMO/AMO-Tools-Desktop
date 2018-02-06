@@ -71,9 +71,10 @@
             <li (click)="setTab('input-summary')" [ngClass]="{'active': currentTab == 'input-summary'}">
                 <a>Input Data</a>
             </li>
+            <li (click)="setTab('facility-info')" [ngClass]="{'active': currentTab == 'facility-info'}">
+                <a>Facility Info</a>
+            </li>
         </ul>
-
-        <!-- debug -->
         <div class="results" [ngClass]="{'show-print':currentTab != 'energy-used'}">
             <app-energy-used [phast]="phast" [settings]="settings"></app-energy-used>
         </div>
@@ -108,9 +109,12 @@
         </div> -->
         <!--use ngClass with 'show-print' for printing-->
         <!-- ngIf temporary -->
-        
+
         <div class="results" *ngIf="currentTab == 'input-summary'">
             <app-phast-input-summary [phast]="phast" [settings]="settings"></app-phast-input-summary>
+        </div>
+        <div class="results" *ngIf="currentTab == 'facility-info'">
+            <app-facility-info-summary [assessment]="assessment"></app-facility-info-summary>
         </div>
     </div>
     <div *ngIf="!phast.setupDone">

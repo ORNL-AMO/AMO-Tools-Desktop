@@ -152,13 +152,13 @@
               </td>
             </tr>
             <tr>
-              <td [ngClass]="{'indicate-report-field-different':specificHeatSolidDiff[index] == true}">
+              <td [ngClass]="{'indicate-report-field-different-db':specificHeatSolidDiff[index] == true}">
                 Specific Heat Solid
               </td>
-              <td [ngClass]="{'indicate-report-field-different':specificHeatSolidDiff[index] == true}">
+              <td [ngClass]="{'indicate-report-field-different-db':specificHeatSolidDiff[index] == true}">
                 {{data.baseline.specificHeatSolid}}
               </td>
-              <td *ngFor="let mod of data.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(data.baseline.specificHeatSolid, mod.specificHeatSolid, 'specificHeatSolidDiff', index)}">
+              <td *ngFor="let mod of data.modifications" [ngClass]="{'indicate-report-field-different-db': checkDiff(data.baseline.specificHeatSolid, mod.specificHeatSolid, 'specificHeatSolidDiff', index)}">
                 {{mod.specificHeatSolid}}
               </td>
             </tr>

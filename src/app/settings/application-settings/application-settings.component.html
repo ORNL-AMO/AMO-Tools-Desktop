@@ -24,13 +24,13 @@
   <div class="form-group">
     <label>Units of Measure</label>
     <div class="form-check">
-      <label class="form-check-label">
+      <label class="form-check-label" style="display: block;">
         <input class="form-check-input" type="radio" name="unitsOfMeasure" formControlName="unitsOfMeasure" value="Imperial" (change)="setUnits()">Imperial
       </label>
-      <label class="form-check-label">
+      <label class="form-check-label" style="display: block;">
         <input class="form-check-input" type="radio" name="unitsOfMeasure" formControlName="unitsOfMeasure" value="Metric" (change)="setUnits()">Metric
       </label>
-      <label class="form-check-label" *ngIf="inPsat">
+      <label class="form-check-label" *ngIf="inPsat" style="display: block;">
         <input class="form-check-input" type="radio" name="unitsOfMeasure" formControlName="unitsOfMeasure" value="Custom" (change)="setUnits()">Custom
       </label>
     </div>

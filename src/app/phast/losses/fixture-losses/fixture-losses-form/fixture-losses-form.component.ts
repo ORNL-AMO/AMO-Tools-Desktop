@@ -129,7 +129,7 @@ export class FixtureLossesFormComponent implements OnInit {
         this.fixtureLossesCompareService.differentArray[this.lossIndex].different.specificHeat.subscribe((val) => {
           let specificHeatElements = doc.getElementsByName('specificHeat_' + this.lossIndex);
           specificHeatElements.forEach(element => {
-            element.classList.toggle('indicate-different', val);
+            element.classList.toggle('indicate-different-db', val);
           });
         })
         //feedRate

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ElementRef, ViewChild } from '@angular/core';
+import { Component, OnInit, Input, ElementRef, ViewChild, HostListener } from '@angular/core';
 import { Location } from '@angular/common';
 import { Assessment } from '../shared/models/assessment';
 import { AssessmentService } from '../assessment/assessment.service';
@@ -24,6 +24,12 @@ export class PhastComponent implements OnInit {
   @ViewChild('footer') footer: ElementRef;
   @ViewChild('content') content: ElementRef;
   containerHeight: number;
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event){
+    this.getContainerHeight();
+  }
+
 
   assessment: Assessment;
 
@@ -119,6 +125,7 @@ export class PhastComponent implements OnInit {
 
       this.phastService.stepTab.subscribe(val => {
         this.stepTab = val;
+        this.getContainerHeight();
       })
 
       this.phastService.specTab.subscribe(val => {
@@ -145,9 +152,9 @@ export class PhastComponent implements OnInit {
     // this.phastService.specTab.subscribe(val => {
     //   this.specTab = val;
     // })
-     this.phastService.calcTab.subscribe(val => {
-       this.calcTab = val;
-     })
+    this.phastService.calcTab.subscribe(val => {
+      this.calcTab = val;
+    })
   }
 
 
@@ -167,7 +174,6 @@ export class PhastComponent implements OnInit {
 
 
   ngAfterViewInit() {
-    this.disclaimerToast();
     setTimeout(() => {
       this.getContainerHeight();
     }, 100);
@@ -180,13 +186,15 @@ export class PhastComponent implements OnInit {
 
   getContainerHeight() {
     if (this.content) {
-      let contentHeight = this.content.nativeElement.clientHeight;
-      let headerHeight = this.header.nativeElement.clientHeight;
-      let footerHeight = 0;
-      if(this.footer){
-        footerHeight = this.footer.nativeElement.clientHeight;
-      }
-      this.containerHeight = contentHeight - headerHeight - footerHeight;
+      setTimeout(() => {
+        let contentHeight = this.content.nativeElement.clientHeight;
+        let headerHeight = this.header.nativeElement.clientHeight;
+        let footerHeight = 0;
+        if (this.footer) {
+          footerHeight = this.footer.nativeElement.clientHeight;
+        }
+        this.containerHeight = contentHeight - headerHeight - footerHeight;
+      },100);
     }
   }
 

@@ -1,7 +1,7 @@
-<div class="modify-conditions panel-container row phast" *ngIf="settings">
+<div #container class="modify-conditions panel-container row phast" *ngIf="settings">
   <div class="col-12">
     <div class="row align-items-top calculator-panel">
-      <div class="modification panel-column col-6 align-top">
+      <div class="modification panel-column col-6 align-top scroll-item" [ngStyle]="{'height.px': height}">
         <div class="header">
           <h3>Pre-assessment / Screening Calculator</h3>
         </div>
