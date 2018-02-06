@@ -8,19 +8,19 @@
     <div class="col-12">
       <form class="name-input-form" [formGroup]="material.solidForm" *ngIf="material.chargeMaterialType == 'Solid'">
         <div class="input-group">
-          <span class="input-group-addon units" (click)="collapseLoss(material)">
+          <span class="input-group-addon units left" (click)="collapseLoss(material)">
             <span *ngIf="material.collapse" class="fa fa-caret-down"></span>
             <span *ngIf="!material.collapse" class="fa fa-caret-up"></span>
           </span>
           <input type="text" class="form-control name-input" formControlName="name" (input)="setName(material)">
-          <span class="input-group-addon" *ngIf="isBaseline && inSetup && !lossesLocked" (click)="removeMaterial(lossIndex)">
+          <span class="input-group-addon units" *ngIf="isBaseline && inSetup && !lossesLocked" (click)="removeMaterial(lossIndex)">
             <span aria-hidden="true" class="close" aria-label="Close">&times;</span>
           </span>
         </div>
       </form>
       <form class="name-input-form" [formGroup]="material.gasForm" *ngIf="material.chargeMaterialType == 'Gas'">
         <div class="input-group">
-          <span class="input-group-addon units" (click)="collapseLoss(material)">
+          <span class="input-group-addon units left" (click)="collapseLoss(material)">
             <span *ngIf="material.collapse" class="fa fa-caret-down"></span>
             <span *ngIf="!material.collapse" class="fa fa-caret-up"></span>
           </span>
@@ -32,12 +32,12 @@
       </form>
       <form class="name-input-form" [formGroup]="material.liquidForm" *ngIf="material.chargeMaterialType == 'Liquid'">
         <div class="input-group">
-          <span class="input-group-addon units" (click)="collapseLoss(material)">
+          <span class="input-group-addon units left" (click)="collapseLoss(material)">
             <span *ngIf="material.collapse" class="fa fa-caret-down"></span>
             <span *ngIf="!material.collapse" class="fa fa-caret-up"></span>
           </span>
           <input type="text" class="form-control name-input" formControlName="name" (input)="setName(material)">
-          <span class="input-group-addon" *ngIf="isBaseline && inSetup && !lossesLocked" (click)="removeMaterial(lossIndex)">
+          <span class="input-group-addon units" *ngIf="isBaseline && inSetup && !lossesLocked" (click)="removeMaterial(lossIndex)">
             <span aria-hidden="true" class="close" aria-label="Close">&times;</span>
           </span>
         </div>

@@ -16,7 +16,9 @@ export class DesignedEnergyElectricityComponent implements OnInit {
   phast: PHAST;
   @Output('emitSave')
   emitSave = new EventEmitter<boolean>();
-
+  @Input()
+  containerHeight: number;
+  
   tabSelect: string = 'results';
   results: DesignedEnergyResults;
 

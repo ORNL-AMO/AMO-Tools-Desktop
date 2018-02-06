@@ -14,24 +14,24 @@
       </label> -->
       <form class="name-input-form" [formGroup]="loss.formByMass" *ngIf="loss.measurementType == 'By Mass'">
         <div class="input-group">
-          <span class="input-group-addon units" (click)="collapseLoss(loss)">
+          <span class="input-group-addon units left" (click)="collapseLoss(loss)">
             <span *ngIf="loss.collapse" class="fa fa-caret-down"></span>
             <span *ngIf="!loss.collapse" class="fa fa-caret-up"></span>
           </span>
           <input type="text" class="form-control name-input" formControlName="name" (input)="setName(loss)">
-          <span class="input-group-addon" *ngIf="isBaseline && inSetup && !lossesLocked" (click)="removeLoss(lossIndex)">
+          <span class="input-group-addon units" *ngIf="isBaseline && inSetup && !lossesLocked" (click)="removeLoss(lossIndex)">
             <span aria-hidden="true" class="close" aria-label="Close">&times;</span>
           </span>
         </div>
       </form>
       <form class="name-input-form" [formGroup]="loss.formByVolume" *ngIf="loss.measurementType == 'By Volume'">
         <div class="input-group">
-          <span class="input-group-addon" (click)="collapseLoss(loss)">
+          <span class="input-group-addon units left" (click)="collapseLoss(loss)">
             <span *ngIf="loss.collapse" class="fa fa-caret-down"></span>
             <span *ngIf="!loss.collapse" class="fa fa-caret-up"></span>
           </span>
           <input type="text" class="form-control name-input" formControlName="name" (input)="setName(loss)">
-          <span class="input-group-addon" *ngIf="isBaseline && inSetup && !lossesLocked" (click)="removeLoss(lossIndex)">
+          <span class="input-group-addon units" *ngIf="isBaseline && inSetup && !lossesLocked" (click)="removeLoss(lossIndex)">
             <span aria-hidden="true" class="close" aria-label="Close">&times;</span>
           </span>
         </div>
