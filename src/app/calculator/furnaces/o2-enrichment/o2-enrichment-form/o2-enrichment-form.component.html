@@ -19,7 +19,7 @@
       <div class="form-group">
         <label class="small" for="combAirTemp">Combustion air preheat temperature</label>
         <div class="input-group">
-          <input type="number" min="0" max="2000" step="10" class="form-control" id="combAirTemp" (input)="calc()" (focus)="changeField('combAirTemp')"
+          <input type="number" min="0" step="10" class="form-control" id="combAirTemp" (input)="calc()" (focus)="changeField('combAirTemp')"
             [(ngModel)]="o2Enrichment.combAirTemp" onfocus="this.select();" (keyup.enter)="enterPlot()">
           <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Imperial'">&#8457;</span>
           <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
@@ -42,7 +42,7 @@
       <div class="form-group">
         <label class="small" for="flueGasTemp">Flue gas temperature</label>
         <div class="input-group">
-          <input type="number" min="0" max="4000" step="10" class="form-control" id="flueGasTemp" (input)="calc()" (focus)="changeField('flueGasTemp')"
+          <input type="number" min="0" step="10" class="form-control" id="flueGasTemp" (input)="calc()" (focus)="changeField('flueGasTemp')"
             [(ngModel)]="o2Enrichment.flueGasTemp" onfocus="this.select();" (keyup.enter)="enterPlot()">
           <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Imperial'">&#8457;</span>
           <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
@@ -97,7 +97,7 @@
       <div class="form-group">
         <label class="small" for="combAirTempEnriched">Combustion air preheat temperature</label>
         <div class="input-group">
-          <input type="number" min="0" max="2000" step="10" class="form-control" id="combAirTempEnriched" (focus)="changeField('combAirTemp')"
+          <input type="number" min="0"  step="10" class="form-control" id="combAirTempEnriched" (focus)="changeField('combAirTemp')"
             [(ngModel)]="o2Enrichment.combAirTempEnriched" (input)="calc()" onfocus="this.select();" (keyup.enter)="enterPlot()">
           <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Imperial'">&#8457;</span>
           <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
@@ -119,7 +119,7 @@
       <div class="form-group">
         <label class="small" for="flueGasTempEnriched">Flue gas temperature</label>
         <div class="input-group">
-          <input type="number" min="0" max="4000" step="10" class="form-control" id="flueGasTempEnriched" (input)="calc()" (focus)="changeField('flueGasTemp')"
+          <input type="number" min="0" step="10" class="form-control" id="flueGasTempEnriched" (input)="calc()" (focus)="changeField('flueGasTemp')"
             [(ngModel)]="o2Enrichment.flueGasTempEnriched" onfocus="this.select();" (keyup.enter)="enterPlot()">
           <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Imperial'">&#8457;</span>
           <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
