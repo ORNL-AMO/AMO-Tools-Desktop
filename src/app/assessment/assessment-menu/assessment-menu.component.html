@@ -24,46 +24,6 @@
     </div>
   </div>
 </div>
-<!--
-<div class="card">
-  <div class="card-header row no-margin">
-    <div class="col">
-      <button (click)="showCreateAssessment()" type="button" class="btn btn-secondary">Add Assessment</button>
-    </div>
-    <div class="col">
-      <app-create-folder [(directory)]="directory" (newDirectory)="emitNewDir()" class="create-container"></app-create-folder>
-    </div>
-    <div class="col">
-      <button [disabled]="!checkSelected()" type="button" class="btn btn-secondary" (click)="emitGenReport()">Generate Report</button>
-    </div>
-    <div class="col">
-      <button [disabled]="!checkSelected()" type="button" (click)="signalDeleteItems()" class="btn btn-secondary">Delete...</button>
-    </div>
-    <div class="col">
-      <button [disabled]="!checkSelected()" type="button" class="btn btn-secondary" (click)="emitExport()">Export...</button>
-    </div>
-    <div class="col">
-      <button type="button" class="btn btn-secondary" (click)="emitImport()">Import...</button>
-    </div>
-    <div class="col">
-      <button type="button" class="btn btn-secondary">Select All</button>
-    </div>
-    <div class="col">
-      <div class="btn-group pull-right" role="group">
-        <button class="btn btn-default" [ngClass]="{'active': view == 'list'}" (click)="setView('list')">
-          <i class="fa fa-list"></i>
-        </button>
-        <button class="btn btn-default" [ngClass]="{'active': view == 'grid'}" (click)="setView('grid')">
-          <i class="fa fa-th"></i>
-        </button>
-      </div>
-    </div>
-  </div>
-</div>
-
-
--->
-
 
 <div class="row">
   <div class="col-12">
@@ -83,22 +43,13 @@
 
       <div class="header" *ngIf="view != 'settings'">
         <label>
-          <input type="checkbox" [(ngModel)]="isAllSelected" (change)="signalSelectAll()" /> Select all</label>
+          <input type="checkbox" [(ngModel)]="isAllSelected" (change)="signalSelectAll()"/>Select all</label>
+          <button [disabled]="!checkSelected()" type="button" class="btn btn-secondary pull-right" (click)="moveSelected()">Move Selected</button>
       </div>
 
     </div>
 
   </div>
-  <!-- <div class="col-2">
-    <div class="btn-group pull-right" role="group">
-      <button class="btn btn-secondary" [ngClass]="{'active': view == 'list'}" (click)="setView('list')">
-        <i class="fa fa-list"></i>
-      </button>
-      <button class="btn btn-secondary" [ngClass]="{'active': view == 'grid'}" (click)="setView('grid')">
-        <i class="fa fa-th"></i>
-      </button>
-    </div>
-  </div> -->
 </div>
 
 <!--<app-assessment-create *ngIf="createAssessment" (hideModal)="hideModal()" [(directory)]="directory" class="create-container"></app-assessment-create>-->

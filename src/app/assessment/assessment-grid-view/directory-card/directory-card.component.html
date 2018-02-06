@@ -37,6 +37,7 @@
     <input type="checkbox" [(ngModel)]="isChecked" (change)="setDelete()">
     <span class="fa fa-folder"></span>
     <a (click)="goToDirectory(directory)">{{directory.name}}</a>
+    <i class="fa fa-gear pull-right"></i>
   </div>
   <div class="card-body summary-card-body scroll-item">
     <ul *ngIf="directory.subDirectory && directory.subDirectory.length != 0">

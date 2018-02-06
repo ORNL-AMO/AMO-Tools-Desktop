@@ -30,6 +30,8 @@ export class AssessmentMenuComponent implements OnInit {
   exportEmit = new EventEmitter<boolean>();
   @Output('importEmit')
   importEmit = new EventEmitter<boolean>();
+  @Output('emitMove')
+  emitMove = new EventEmitter<boolean>();
 
   breadCrumbs: Array<Directory>;
 
@@ -135,5 +137,9 @@ export class AssessmentMenuComponent implements OnInit {
     } else {
       return false;
     }
+  }
+
+  moveSelected() {
+    this.emitMove.emit(true)
   }
 }
