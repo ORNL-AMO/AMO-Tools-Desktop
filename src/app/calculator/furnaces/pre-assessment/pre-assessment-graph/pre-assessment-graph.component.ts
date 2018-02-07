@@ -19,9 +19,6 @@ export class PreAssessmentGraphComponent implements OnInit {
   chartContainerHeight: number;
   chartContainerWidth: number;
 
-  pieChartLabels: Array<string>;
-  pieChartData: Array<number>;
-
   constructor() { }
 
   ngOnInit() {
