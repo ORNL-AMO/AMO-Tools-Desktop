@@ -60,7 +60,7 @@ export class PreAssessmentComponent implements OnInit {
   }
   
   initAssessments() {
-    this.assessmentGraphColors = graphColors.reverse();
+    this.assessmentGraphColors = graphColors;
     this.results = new Array<any>();
     this.preAssessments = new Array<PreAssessment>();
     this.addPreAssessment();
@@ -157,7 +157,7 @@ export class PreAssessmentComponent implements OnInit {
         name: name,
         value: num,
         color: color
-      })
+      });
     }
   }
 
@@ -176,15 +176,15 @@ export class PreAssessmentComponent implements OnInit {
       unitsOfMeasure: this.settings.unitsOfMeasure,
       energySourceType: 'Fuel'
     }
-
     this.preAssessments.unshift({
       type: 'Metered',
       name: 'Furnace ' + this.nameIndex,
       settings: tmpSettings,
       collapsed: false,
       collapsedState: 'open',
-      borderColor: this.assessmentGraphColors.pop()
-    })
+      borderColor: this.assessmentGraphColors[this.preAssessments.length]
+    });
+
     this.nameIndex++;
     if (this.preAssessments.length >= 20) {
       this.showAdd = false;

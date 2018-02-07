@@ -14,7 +14,6 @@ import { ModalModule } from 'ngx-bootstrap/modal/modal.module';
 import { PhastRollupGraphsComponent } from './phast-rollup/phast-rollup-graphs/phast-rollup-graphs.component';
 import { PhastRollupEnergyTableComponent } from './phast-rollup/phast-rollup-energy-table/phast-rollup-energy-table.component';
 
-import { ChartsModule } from 'ng2-charts';
 import { SharedModule } from '../shared/shared.module';
 import { ReportRollupUnitsComponent } from './report-rollup-units/report-rollup-units.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -38,7 +37,6 @@ import { PsatRollupPumpSummaryTableComponent } from './psat-rollup/psat-rollup-p
     PsatModule,
     PhastReportModule,
     ModalModule,
-    ChartsModule,
     SharedModule,
     FormsModule,
     ReactiveFormsModule

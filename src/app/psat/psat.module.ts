@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SharedModule } from '../shared/shared.module';
-import { ChartsModule } from 'ng2-charts';
+// import { ChartsModule } from 'ng2-charts';
 import { ModalModule } from 'ngx-bootstrap';
 import { IndexedDbModule } from '../indexedDb/indexedDb.module';
 import { JsonToCsvModule } from '../shared/json-to-csv/json-to-csv.module';
@@ -70,7 +70,7 @@ import { PsatSankeyComponent } from './psat-sankey/psat-sankey.component';
     FormsModule,
     ReactiveFormsModule,
     SharedModule,
-    ChartsModule,
+    // ChartsModule,
     ModalModule.forRoot(),
     IndexedDbModule,
     SettingsModule,

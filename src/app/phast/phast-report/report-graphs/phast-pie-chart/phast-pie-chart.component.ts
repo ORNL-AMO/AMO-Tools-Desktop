@@ -1,7 +1,6 @@
 import { Component, OnInit, Input, ViewChild, SimpleChanges } from '@angular/core';
 import { PHAST, PhastResults, ShowResultsCategories } from '../../../../shared/models/phast/phast';
 import { WindowRefService } from '../../../../indexedDb/window-ref.service';
-import { BaseChartDirective } from 'ng2-charts';
 import { graphColors } from '../graphColors';
 import { PhastReportService } from '../../phast-report.service';
 import * as d3 from 'd3';
@@ -332,6 +331,9 @@ export class PhastPieChartComponent implements OnInit {
 
     if (this.chart) {
       this.updateChart();
+
+      //debug - remove when complete
+      // this.drawLeaderLines();
     }
   }
 
@@ -656,16 +658,40 @@ export class PhastPieChartComponent implements OnInit {
         }
       });
     }
-
-
-
     if (this.chart) {
       this.updateChart();
+      // this.drawLeaderLines();
     }
-    
+
     setTimeout(() => {
       d3.selectAll(".print-pie-chart .c3-legend-item").style("font-size", "1.3rem");
       d3.selectAll(".print-pie-chart g.c3-chart-arc text").style("font-size", "1.3rem");
     }, 300);
   }
+
+
+  // drawLeaderLines() {
+
+  //   if (this.chart) {
+
+  //     console.log("chart = " + this.chart);
+  //     let tmps = document.getElementsByClassName('app-chart');
+  //     let tmp = tmps[tmps.length - 1];
+  //     console.log("tmp.className = " + tmp.className);
+  //     let svg = tmp.firstElementChild;
+
+  //     let legendItems = svg.getElementsByClassName("c3-legend-item");
+  //     let pieSlices = svg.getElementsByClassName("c3-chart-arc");
+  
+  //     console.log("legend items = " + legendItems.length);
+  //     console.log("pie slices = " + pieSlices.length);
+
+  //     for (let i = 0; i < pieSlices.length; i++) {
+  //       let pathSlice = d3.select(pieSlices[i].getElementsByClassName("c3-arc")[0]);
+  //       // let slice = d3.select(pieSlices[i]);
+  //       console.log("pieSlice[" + i + "].attr('x') = " + pathSlice.attr('transform'));
+  //     }
+  //   }
+  // }
+
 }

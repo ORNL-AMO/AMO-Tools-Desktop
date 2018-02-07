@@ -1,7 +1,6 @@
 import { Component, OnInit, Input, ViewChild, SimpleChanges } from '@angular/core';
 import { PHAST, PhastResults, ShowResultsCategories } from '../../../../shared/models/phast/phast';
 import { WindowRefService } from '../../../../indexedDb/window-ref.service';
-import { BaseChartDirective } from 'ng2-charts';
 import { Settings } from '../../../../shared/models/settings';
 import { graphColors } from '../graphColors';
 import * as d3 from 'd3';

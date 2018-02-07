@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { ChartsModule } from 'ng2-charts';
+// import { ChartsModule } from 'ng2-charts';
 
 import { ControlMessagesComponent } from './control-messages/control-messages.component';
 import { ValidationService } from './validation.service';
@@ -18,7 +18,7 @@ import { FacilityInfoSummaryComponent } from './facility-info-summary/facility-i
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    ChartsModule
+    // ChartsModule
   ],
   declarations: [
     ControlMessagesComponent,
