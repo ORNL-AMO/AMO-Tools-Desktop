@@ -1,3 +1,43 @@
 .settings-form{
   padding: 20px;
 }
+
+/* .no-data-link{
+  font-size: smaller;
+  color: blue;
+  font-weight: bold;
+  padding-left: 10px;
+}
+
+.no-data-link:hover{
+  cursor: pointer;
+  text-decoration: underline;
+} */
+
+a:not([href]):not([tabindex]).no-data-link{
+  font-size: smaller;
+  font-weight: bold;
+  padding-left: 10px;
+  animation-name: no-data;
+  animation-duration: .75s;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+}
+
+a:not([href]):not([tabindex]).no-data-link:hover{
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+
+@keyframes no-data{
+  from {color: blue;}
+  to {color: red;}
+}
+
+
+.data-updated{
+  padding-left: 10px;
+    color: green;
+    font-size: small;
+}

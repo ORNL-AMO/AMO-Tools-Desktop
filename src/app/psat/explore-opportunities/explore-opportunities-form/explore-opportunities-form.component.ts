@@ -44,18 +44,13 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
   }
 
   startSavePolling() {
-    if (this.counter) {
-      clearTimeout(this.counter);
-    }
-    this.counter = setTimeout(() => {
-      this.emitSave.emit(true);
-    }, 3000)
+    this.emitSave.emit(true);
   }
 
   toggleOptimized() {
     this.calculate();
     if (!this.psat.modifications[this.exploreModIndex].psat.inputs.optimize_calculation) {
-            this.psat.modifications[this.exploreModIndex].psat.inputs.fixed_speed = 0;
+      this.psat.modifications[this.exploreModIndex].psat.inputs.fixed_speed = 0;
       this.psat.modifications[this.exploreModIndex].psat.inputs.margin = 0;
       this.showSizeMargin = false;
     }
