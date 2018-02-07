@@ -27,8 +27,6 @@ export class AssessmentDashboardComponent implements OnInit {
   exportEmit = new EventEmitter<boolean>();
   @Output('importEmit')
   importEmit = new EventEmitter<boolean>();
-  @Output('emitMove')
-  emitMove = new EventEmitter<boolean>();
 
   isChecked: boolean = false;
   view: string;
@@ -97,9 +95,4 @@ export class AssessmentDashboardComponent implements OnInit {
   emitImport(){
     this.importEmit.emit(true);
   }
-
-  moveEmit(){
-    this.emitMove.emit(true);
-  }
-
 }

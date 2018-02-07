@@ -138,8 +138,4 @@ export class AssessmentMenuComponent implements OnInit {
       return false;
     }
   }
-
-  moveSelected() {
-    this.emitMove.emit(true)
-  }
 }

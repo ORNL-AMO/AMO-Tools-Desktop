@@ -13,7 +13,7 @@
 
             <app-assessment-dashboard [directory]="workingDirectory" (directoryChange)="changeWorkingDirectory($event)" (deleteDataSignal)="showDeleteModal()"
                 (deleteCheckedItems)="showDeleteItemsModal()" (resetDataEmit)="showDeleteModal()" (emitNewDir)="newDir()" (genReport)="generateReport()"
-                (exportEmit)="exportSelected()" (importEmit)="showImportModal()" (emitMove)="showMoveItemsModal()">
+                (exportEmit)="exportSelected()" (importEmit)="showImportModal()">
             </app-assessment-dashboard>
 
         </div>

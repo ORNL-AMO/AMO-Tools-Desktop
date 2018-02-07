@@ -38,12 +38,6 @@ export class AssessmentCardComponent implements OnInit {
     this.indexedDbService.getAllDirectories().then(dirs => {
       this.directories = dirs;
     })
-
-    this.editForm = this.formBuilder.group({
-      'name': [this.assessment.name],
-      'directoryId': [this.assessment.directoryId]
-    })
-    
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -75,6 +69,10 @@ export class AssessmentCardComponent implements OnInit {
   }
 
   showEditModal() {
+    this.editForm = this.formBuilder.group({
+      'name': [this.assessment.name],
+      'directoryId': [this.assessment.directoryId]
+    })
     this.editModal.show();
   }
 
@@ -85,14 +83,14 @@ export class AssessmentCardComponent implements OnInit {
   getParentDirStr(id: number) {
     let parentDir = _.find(this.directories, (dir) => { return dir.id == id });
     let str = parentDir.name + '/';
-    while(parentDir.parentDirectoryId){
+    while (parentDir.parentDirectoryId) {
       parentDir = _.find(this.directories, (dir) => { return dir.id == parentDir.parentDirectoryId });
       str = parentDir.name + '/' + str;
     }
     return str;
   }
 
-  save(){
+  save() {
     this.assessment.name = this.editForm.controls.name.value;
     this.assessment.directoryId = this.editForm.controls.directoryId.value;
     this.indexedDbService.putAssessment(this.assessment).then(val => {
