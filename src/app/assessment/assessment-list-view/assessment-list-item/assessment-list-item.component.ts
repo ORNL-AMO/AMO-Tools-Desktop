@@ -29,6 +29,10 @@ export class AssessmentListItemComponent implements OnInit {
 
   editForm: FormGroup;
   isSetup: boolean;
+
+  showReport: boolean = false;
+
+  @ViewChild('reportModal') public reportModal: ModalDirective;
   constructor(private assessmentService: AssessmentService, private router: Router, private indexedDbService: IndexedDbService, private formBuilder: FormBuilder) { }
 
   ngOnInit() {
@@ -99,4 +103,13 @@ export class AssessmentListItemComponent implements OnInit {
     })
   }
 
+  showReportModal() {
+    this.showReport = true;
+    this.reportModal.show();
+  }
+
+  hideReportModal() {
+    this.reportModal.hide();
+    this.showReport = false;
+  }
 }
