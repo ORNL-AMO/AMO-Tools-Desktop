@@ -25,3 +25,6 @@ tr > td:not(:first-child),
 tr > th:not(:first-child){
     text-align: center;
 }
+.tr-underline {
+  border-bottom: 2px groove #bf3d00;
+}
