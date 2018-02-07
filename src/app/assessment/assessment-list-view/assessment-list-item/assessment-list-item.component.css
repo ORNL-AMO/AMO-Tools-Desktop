@@ -21,3 +21,14 @@ a:not([href]):not([tabindex]){
   font-size: 13px;
   color: #999;
 }
+
+.fa-edit:hover{
+  color: blue;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.fa-edit{
+  padding-top: 4px;
+  font-size: larger;
+}

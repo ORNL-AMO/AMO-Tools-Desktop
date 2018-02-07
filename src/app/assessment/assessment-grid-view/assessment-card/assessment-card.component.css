@@ -10,8 +10,19 @@
   .summary-card-header.psat{
     border-bottom: #2980b9 groove 2px;
   }
-
+/* 
   .card-header:hover{
     cursor: inherit;
     background: inherit;
+  } */
+
+  .fa-edit:hover{
+    color: blue;
+    text-decoration: underline;
+    cursor: pointer;
+  }
+
+  .fa-edit{
+    padding-top: 4px;
+    font-size: larger;
   }

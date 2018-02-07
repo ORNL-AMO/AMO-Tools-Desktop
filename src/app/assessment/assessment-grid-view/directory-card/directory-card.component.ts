@@ -74,7 +74,7 @@ export class DirectoryCardComponent implements OnInit {
     );
     this.indexedDbService.getAllDirectories().then(dirs => {
       this.directories = dirs;
-      _.remove(this.directories, (dir) => {return dir.id == this.directory.id });
+      _.remove(this.directories, (dir) => { return dir.id == this.directory.id });
     })
   }
 
@@ -111,12 +111,16 @@ export class DirectoryCardComponent implements OnInit {
 
   getParentDirStr(id: number) {
     let parentDir = _.find(this.directories, (dir) => { return dir.id == id });
-    let str = parentDir.name + '/';
-    while (parentDir.parentDirectoryId) {
-      parentDir = _.find(this.directories, (dir) => { return dir.id == parentDir.parentDirectoryId });
-      str = parentDir.name + '/' + str;
+    if (parentDir) {
+      let str = parentDir.name + '/';
+      while (parentDir.parentDirectoryId) {
+        parentDir = _.find(this.directories, (dir) => { return dir.id == parentDir.parentDirectoryId });
+        str = parentDir.name + '/' + str;
+      }
+      return str;
+    } else {
+      return '';
     }
-    return str;
   }
 
   save() {

@@ -4,7 +4,7 @@
     <img *ngIf="assessment.type == 'PSAT'" class="icon-image" src="assets/images/ico-psat-diagram-small.png">
     <img *ngIf="assessment.type == 'PHAST'" class="icon-image" src="assets/images/ico-phast-diagram-small.png">
     <a (click)="goToAssessment(assessment)">{{assessment.name}}</a>
-    <i class="fa fa-wrench pull-right" (click)="showEditModal()"></i>
+    <i class="fa fa-edit pull-right" (click)="showEditModal()"></i>
   </div>
   <div class="card-body scroll-item summary-card-body">
     <app-psat-summary-card *ngIf="assessment.type == 'PSAT'" [assessment]="assessment"></app-psat-summary-card>
@@ -22,7 +22,7 @@
   <div class="modal-dialog modal-md">
     <div class="modal-content" *ngIf="editForm">
       <div class="modal-header">
-        EDIT {{assessment.name}}
+        Edit {{assessment.name}} Properties
         <button class="close" (click)="hideEditModal()">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -30,11 +30,11 @@
       <div class="modal-body">
         <form [formGroup]="editForm">
           <div class="form-group">
-            <label>Assessment Name</label>
+            <label>Edit Assessment Name</label>
             <input type="text" class="form-control" formControlName="name">
           </div>
           <div class="form-group" *ngIf="directories">
-            <label>Assessment Directory</label>
+            <label>Move Assessment to Different Folder</label>
             <select class="form-control" formControlName="directoryId">
               <option *ngFor="let dir of directories" [ngValue]="dir.id"><span *ngIf="dir.parentDirectoryId">{{getParentDirStr(dir.parentDirectoryId)}}</span><span class="bold">{{dir.name}}/</span></option>
             </select>
