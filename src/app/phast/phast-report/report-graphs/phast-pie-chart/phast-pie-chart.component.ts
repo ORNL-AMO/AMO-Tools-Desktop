@@ -656,11 +656,16 @@ export class PhastPieChartComponent implements OnInit {
         }
       });
     }
-    d3.selectAll(".print-pie-chart .c3-legend-item").style("font-size", "1.3rem");
-    d3.selectAll(".print-pie-chart g.c3-chart-arc text").style("font-size", "1.3rem");
+
+
 
     if (this.chart) {
       this.updateChart();
     }
+    
+    setTimeout(() => {
+      d3.selectAll(".print-pie-chart .c3-legend-item").style("font-size", "1.3rem");
+      d3.selectAll(".print-pie-chart g.c3-chart-arc text").style("font-size", "1.3rem");
+    }, 300);
   }
 }

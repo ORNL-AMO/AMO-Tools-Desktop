@@ -1720,10 +1720,10 @@ Toasty Overrides ================================= */
     margin: 40px 0 100px;
 }
     .report-title h4 {
-        font-size: 38px;
+        font-size: 60px;
     }
     .report-title h5 {
-        font-size: 18px;
+        font-size: 34px;
     }
 
 
@@ -1823,11 +1823,20 @@ Toasty Overrides ================================= */
         text-align: center;
         page-break-after: always;
     } */
+
+    /*debug version */
     .doe-logo {
+      width: 350px;
+      display: inline-block;
+      margin-top: 100px;
+    }
+
+    /* real version */
+    /* .doe-logo {
         width: 200px;
         display: inline-block;
         margin-top: 100px;
-    }
+    } */
     .report-header {
         position: static;
         border: none;
