@@ -341,9 +341,9 @@ export class PhastComponent implements OnInit {
     this.checkSetupDone();
     this.assessment.phast = (JSON.parse(JSON.stringify(this._phast)));
     this.lossesService.baseline.next(this._phast);
-    this.saveDbToggle = 'saveDb' + Math.random();
+    // this.saveDbToggle = 'saveDb' + Math.random();
     this.indexedDbService.putAssessment(this.assessment).then(
-      results => { this.addToast('Assessment Saved') }
+      results => { console.log('save')}
     )
   }
 

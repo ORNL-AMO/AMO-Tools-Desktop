@@ -49,7 +49,7 @@ export class OperatingHoursComponent implements OnInit {
   calculatHrsPerYear() {
     let timeCheck = this.phast.operatingHours.shiftsPerDay * this.phast.operatingHours.hoursPerShift;
     if (timeCheck > 24) {
-      this.timeError = "You have exceeded 24 hours/day  " + " "  + "("  + timeCheck.toFixed(2) + " " + "hours/day)" + " " + "Adjust your inputs for Shifts/Day and Hours/Shift.";
+      this.timeError = "You have exceeded 24 hours/day  " + " " + "(" + timeCheck.toFixed(2) + " " + "hours/day)" + " " + "Adjust your inputs for Shifts/Day and Hours/Shift.";
     } else {
       this.timeError = null;
     }
@@ -68,7 +68,7 @@ export class OperatingHoursComponent implements OnInit {
     } else {
       this.shiftsPerDayError = null;
     }
-     if ( this.phast.operatingHours.hoursPerShift > 24 || this.phast.operatingHours.hoursPerShift <= 0) {
+    if (this.phast.operatingHours.hoursPerShift > 24 || this.phast.operatingHours.hoursPerShift <= 0) {
       this.hoursPerShiftError = " Number of hours/shift must be greater then 0 and equal or less than 24 ";
     } else {
       this.hoursPerShiftError = null;
@@ -122,12 +122,7 @@ export class OperatingHoursComponent implements OnInit {
   }
 
   startSavePolling() {
-    if (this.counter) {
-      clearTimeout(this.counter);
-    }
-    this.counter = setTimeout(() => {
-      this.save.emit(true);
-    }, 3000)
+    this.save.emit(true);
   }
 
 }

@@ -45,11 +45,6 @@ export class AuxEquipmentFormComponent implements OnInit {
   }
 
   startSavePolling() {
-    if (this.counter) {
-      clearTimeout(this.counter);
-    }
-    this.counter = setTimeout(() => {
-      this.emitSave.emit(true);
-    }, 3000)
+    this.emitSave.emit(true);
   }
 }
