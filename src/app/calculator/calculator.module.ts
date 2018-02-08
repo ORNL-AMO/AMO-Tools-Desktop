@@ -13,15 +13,14 @@ import { MotorsModule } from './motors/motors.module';
 
 import { PumpsModule } from './pumps/pumps.module';
 import { UtilitiesModule } from './utilities/utilities.module';
-import { CompressedAirComponent } from './compressed-air/compressed-air.component';
 import { StandaloneService } from './standalone.service';
+import { CompressedAirModule } from './compressed-air/compressed-air.module';
 
 @NgModule({
   declarations: [
     CalculatorComponent,
     FansComponent,
-    SteamComponent,
-    CompressedAirComponent
+    SteamComponent
   ],
   exports: [
     CalculatorComponent
@@ -35,7 +34,8 @@ import { StandaloneService } from './standalone.service';
     PumpsModule,
     UtilitiesModule,
     FurnacesModule,
-    MotorsModule
+    MotorsModule,
+    CompressedAirModule
   ],
   providers: [
     StandaloneService
