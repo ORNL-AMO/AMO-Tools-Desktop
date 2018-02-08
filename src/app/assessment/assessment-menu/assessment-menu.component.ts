@@ -30,6 +30,8 @@ export class AssessmentMenuComponent implements OnInit {
   exportEmit = new EventEmitter<boolean>();
   @Output('importEmit')
   importEmit = new EventEmitter<boolean>();
+  @Output('emitMove')
+  emitMove = new EventEmitter<boolean>();
 
   breadCrumbs: Array<Directory>;
 

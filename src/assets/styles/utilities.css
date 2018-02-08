@@ -35,10 +35,10 @@ a:not([href]):not([tabindex]).disabled-link:hover{
     background-color: #ffffff;
 }
 
-.summary-card .card-header:hover{
+/* .summary-card .card-header:hover{
     background-color: #D5D8DC;
     cursor: pointer;
-}
+} */
 
 
 

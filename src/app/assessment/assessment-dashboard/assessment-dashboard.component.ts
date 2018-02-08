@@ -95,5 +95,4 @@ export class AssessmentDashboardComponent implements OnInit {
   emitImport(){
     this.importEmit.emit(true);
   }
-
 }

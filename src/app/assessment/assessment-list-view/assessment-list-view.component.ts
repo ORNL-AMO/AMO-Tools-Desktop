@@ -18,8 +18,12 @@ export class AssessmentListViewComponent implements OnInit {
   ngOnInit() {
   }
 
-  changeDirectory($event) {
-    this.directoryChange.emit($event);
+  changeDirectory(dir?) {
+    if(dir){
+      this.directoryChange.emit(dir);
+    }else{
+      this.directoryChange.emit(this.directory);
+    }
   }
 
 }
