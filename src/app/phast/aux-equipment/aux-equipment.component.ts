@@ -14,7 +14,9 @@ export class AuxEquipmentComponent implements OnInit {
   phast: PHAST;
   @Output('save')
   save = new EventEmitter<boolean>();
-
+  @Input()
+  containerHeight: number;
+  
   tabSelect: string = 'results';
   currentField: string = 'fuelType';
 

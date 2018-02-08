@@ -14,14 +14,14 @@
           <label class="col-4 col-form-label" for="currentFlueGasOxygen">Flue Gas Oxygen</label>
           <div class="col-4">
             <div class="input-group">
-              <input autofocus class="form-control" name="currentFlueGasOxygen" type="number" step="any" id="currentFlueGasOxygen" [(ngModel)]="efficiencyImprovementInputs.currentFlueGasOxygen"
+              <input autofocus class="form-control" name="currentFlueGasOxygen" type="number" max="100" step="any" id="currentFlueGasOxygen" [(ngModel)]="efficiencyImprovementInputs.currentFlueGasOxygen"
                 (input)="calc()" onfocus="this.select();" (focus)="focusField('flueGasOxygen')" (blur)="focusOut()">
               <span class="input-group-addon units">% Dry</span>
             </div>
           </div>
           <div class="col-4">
             <div class="input-group">
-              <input class="form-control" name="newFlueGasOxygen" type="number" step="any" id="newFlueGasOxygen" [(ngModel)]="efficiencyImprovementInputs.newFlueGasOxygen"
+              <input class="form-control" name="newFlueGasOxygen" type="number" max="100" step="any" id="newFlueGasOxygen" [(ngModel)]="efficiencyImprovementInputs.newFlueGasOxygen"
                 (input)="calc()" onfocus="this.select();" (focus)="focusField('flueGasOxygen')" (blur)="focusOut()">
               <span class="input-group-addon units">% Dry</span>
             </div>

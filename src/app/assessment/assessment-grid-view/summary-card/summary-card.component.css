@@ -1,0 +1,16 @@
+.no-margin{
+    margin: 0px;
+}
+
+.card-body{
+    padding: 6px;
+}
+
+.card-header:hover{
+    cursor: inherit;
+    background: inherit;
+  }
+
+  .card{
+      height: 100%;
+  }

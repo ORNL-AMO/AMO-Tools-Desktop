@@ -64,6 +64,8 @@
                         <a>Sankey</a>
                     </li><li (click)="setTab('input-summary')" [ngClass]="{'active': currentTab == 'input-summary'}">
                         <a>Input Data</a>
+                    </li><li (click)="setTab('facility-info')" [ngClass]="{'active': currentTab == 'facility-info'}">
+                            <a>Facility Info</a>
                     </li>
                 </ul>
         <div class="results" [ngClass]="{'show-print':currentTab != 'energy-used'}">
@@ -85,6 +87,9 @@
         <!-- ngIf temporary -->
         <div class="results" *ngIf="currentTab == 'input-summary'">
             <app-phast-input-summary [phast]="phast" [settings]="settings"></app-phast-input-summary>
+        </div>
+        <div class="results" *ngIf="currentTab == 'facility-info'">
+            <app-facility-info-summary [assessment]="assessment"></app-facility-info-summary>
         </div>
     </div>
     <div *ngIf="!phast.setupDone">

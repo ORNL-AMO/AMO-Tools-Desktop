@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ElementRef, ViewChild } from '@angular/core';
+import { Component, OnInit, Input, ElementRef, ViewChild, HostListener } from '@angular/core';
 import { Location } from '@angular/common';
 import { Assessment } from '../shared/models/assessment';
 import { AssessmentService } from '../assessment/assessment.service';
@@ -24,6 +24,12 @@ export class PhastComponent implements OnInit {
   @ViewChild('footer') footer: ElementRef;
   @ViewChild('content') content: ElementRef;
   containerHeight: number;
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event){
+    this.getContainerHeight();
+  }
+
 
   assessment: Assessment;
 
@@ -119,6 +125,7 @@ export class PhastComponent implements OnInit {
 
       this.phastService.stepTab.subscribe(val => {
         this.stepTab = val;
+        this.getContainerHeight();
       })
 
       this.phastService.specTab.subscribe(val => {
@@ -348,7 +355,7 @@ export class PhastComponent implements OnInit {
   disclaimerToast() {
     let toastOptions: ToastOptions = {
       title: 'Disclaimer:',
-      msg: ' The PHAST Tool is still in the early stages of development. Only a portion of the tools functionality is in place, some links/buttons/forms may not work and are placeholders for future work.',
+      msg: 'Please keep in mind that this application is still in beta. Please let us know if you have any suggestions for improving our app.',
       showClose: true,
       timeout: 10000000,
       theme: 'default'
