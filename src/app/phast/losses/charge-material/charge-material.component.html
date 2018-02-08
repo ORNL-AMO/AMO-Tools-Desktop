@@ -65,10 +65,10 @@
       </div>
       <app-solid-charge-material-form *ngIf="material.chargeMaterialType == 'Solid'" (changeField)="changeField($event)" [(chargeMaterialForm)]="material.solidForm"
         (calculate)="calculate(material)" [baselineSelected]="baselineSelected" (saveEmit)="saveLosses()" [lossIndex]="lossIndex"
-        [settings]="settings"></app-solid-charge-material-form>
+        [settings]="settings" [inputError]="inputError"></app-solid-charge-material-form>
       <app-liquid-charge-material-form *ngIf="material.chargeMaterialType == 'Liquid'" (changeField)="changeField($event)" [(chargeMaterialForm)]="material.liquidForm"
         (calculate)="calculate(material)" [baselineSelected]="baselineSelected" (saveEmit)="saveLosses()" [lossIndex]="lossIndex"
-        [settings]="settings"></app-liquid-charge-material-form>
+        [settings]="settings" [inputError]="inputError"></app-liquid-charge-material-form>
       <app-gas-charge-material-form *ngIf="material.chargeMaterialType == 'Gas'" (changeField)="changeField($event)" [(chargeMaterialForm)]="material.gasForm"
         (calculate)="calculate(material)" [baselineSelected]="baselineSelected" (saveEmit)="saveLosses()" [lossIndex]="lossIndex"
         [settings]="settings" [inputError]="inputError"></app-gas-charge-material-form>
@@ -76,11 +76,11 @@
   </div>
   <div class="row">
     <div class="col-12">
-      <div class="form-group">
+      <div class="form-group" [ngClass]="{'input-error': inputError == true}">
         <label class="small font-weight-bold" *ngIf="material.chargeMaterialType == 'Solid'">{{material.solidForm.controls.name.value}} Net Heat Loss</label>
         <label class="small font-weight-bold" *ngIf="material.chargeMaterialType == 'Gas'">{{material.gasForm.controls.name.value}} Net Heat Loss</label>
         <label class="small font-weight-bold" *ngIf="material.chargeMaterialType == 'Liquid'">{{material.liquidForm.controls.name.value}} Net Heat Loss</label>
-        <div *ngIf="material.netHeatLoss" class="text-center small font-weight-bold" [ngStyle]="{'input-error': inputError}">
+        <div *ngIf="material.netHeatLoss" class="text-center small font-weight-bold">
           {{material.netHeatLoss | sigFigs:'5'}}
           <span>{{resultsUnit}}</span>
         </div>
@@ -91,7 +91,7 @@
         <label class="small font-weight-bold" *ngIf="material.chargeMaterialType == 'Solid'">{{material.solidForm.controls.name.value}} Reaction Heat</label>
         <label class="small font-weight-bold" *ngIf="material.chargeMaterialType == 'Gas'">{{material.gasForm.controls.name.value}} Reaction Heat</label>
         <label class="small font-weight-bold" *ngIf="material.chargeMaterialType == 'Liquid'">{{material.liquidForm.controls.name.value}} Reaction Heat</label>
-        <div *ngIf="material.endoExoHeat" class="text-center small font-weight-bold" [ngStyle]="{'input-error': inputError}">
+        <div *ngIf="material.endoExoHeat" class="text-center small font-weight-bold">
           {{material.endoExoHeat | sigFigs:'5'}}
           <span>{{resultsUnit}}</span>
         </div>
@@ -102,7 +102,7 @@
         <label class="small font-weight-bold" *ngIf="material.chargeMaterialType == 'Solid'">{{material.solidForm.controls.name.value}} Gross Heat</label>
         <label class="small font-weight-bold" *ngIf="material.chargeMaterialType == 'Gas'">{{material.gasForm.controls.name.value}} Gross Heat</label>
         <label class="small font-weight-bold" *ngIf="material.chargeMaterialType == 'Liquid'">{{material.liquidForm.controls.name.value}} Gross Heat</label>
-        <div *ngIf="material.heatRequired" class="text-center small font-weight-bold" [ngStyle]="{'input-error': inputError}">
+        <div *ngIf="material.heatRequired" class="text-center small font-weight-bold">
           {{material.heatRequired | sigFigs:'5'}}
           <span>{{resultsUnit}}</span>
         </div>

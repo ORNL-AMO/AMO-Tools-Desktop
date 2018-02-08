@@ -28,6 +28,8 @@ export class SolidChargeMaterialFormComponent implements OnInit {
   lossIndex: number;
   @Input()
   settings: Settings;
+  @Input()
+  inputError: boolean;
 
   @ViewChild('materialModal') public materialModal: ModalDirective;
 
@@ -73,6 +75,7 @@ export class SolidChargeMaterialFormComponent implements OnInit {
         }
       }
     }
+    this.checkInputError(true);
   }
 
   ngAfterViewInit() {
@@ -140,56 +143,71 @@ export class SolidChargeMaterialFormComponent implements OnInit {
     let test = Number(val.toFixed(digits));
     return test;
   }
-checkInputError(bool?: boolean) {
-      if (!bool) {
-    this.startSavePolling();
+  checkInputError(bool?: boolean) {
+    if (!bool) {
+      this.startSavePolling();
+    }
+    if (this.chargeMaterialForm.controls.materialSpecificHeatOfSolidMaterial.value < 0) {
+      this.specificHeatError = 'Average Specific Heat must be equal or greater than 0';
+    } else {
+      this.specificHeatError = null;
+    }
+    if (this.chargeMaterialForm.controls.materialLatentHeatOfFusion.value < 0) {
+      this.latentHeatError = 'Latent Heat of Fusion must be equal or greater than 0';
+    } else {
+      this.latentHeatError = null;
+    }
+    if (this.chargeMaterialForm.controls.materialHeatOfLiquid.value < 0) {
+      this.heatOfLiquidError = 'Specific heat of liquid from molten material must be equal or greater than 0';
+    } else {
+      this.heatOfLiquidError = null;
+    }
+    if (this.chargeMaterialForm.controls.feedRate.value < 0) {
+      this.feedRateError = 'Charge Feed Rate must be grater than 0';
+    } else {
+      this.feedRateError = null;
+    }
+    if (this.chargeMaterialForm.controls.waterContentAsCharged.value < 0 || this.chargeMaterialForm.controls.waterContentAsCharged.value > 100) {
+      this.waterChargedError = 'Water Content as Charged must be equal or greater than 0 and less than or equal to 100%';
+    } else {
+      this.waterChargedError = null;
+    }
+    if (this.chargeMaterialForm.controls.waterContentAsDischarged.value < 0 || this.chargeMaterialForm.controls.waterContentAsDischarged.value > 100) {
+      this.waterDischargedError = 'Water Content as Discharged must be equal or greater than 0 and less than or equal to 100%';
+    } else {
+      this.waterDischargedError = null;
+    }
+    if (this.chargeMaterialForm.controls.percentChargeMelted.value < 0 || this.chargeMaterialForm.controls.percentChargeMelted.value > 100) {
+      this.chargeMeltedError = 'Charge Melted must be equal or greater than 0 and less than or equal to 100%';
+    } else {
+      this.chargeMeltedError = null;
+    }
+    if (this.chargeMaterialForm.controls.percentChargeReacted.value < 0 || this.chargeMaterialForm.controls.percentChargeReacted.value > 100) {
+      this.chargeSolidReactedError = 'Charge Reacted must be equal or greater than 0 and less than or equal to 100%';
+    } else {
+      this.chargeSolidReactedError = null;
+    }
+    if (this.chargeMaterialForm.controls.heatOfReaction.value < 0) {
+      this.heatOfReactionError = 'Heat of Reaction cannot be less than zero. For exothermic reactions, change "Endothermic/Exothermic"';
+    } else {
+      this.heatOfReactionError = null;
+    }
+
+    if ((this.chargeMaterialForm.controls.chargeMaterialDischargeTemperature.value > this.chargeMaterialForm.controls.materialMeltingPoint.value) && this.chargeMaterialForm.controls.percentChargeMelted.value == 0) {
+      this.dischargeTempError = 'The discharge temperature is higher than the melting point, please enter proper percentage for charge melted.';
+    } else if ((this.chargeMaterialForm.controls.chargeMaterialDischargeTemperature.value < this.chargeMaterialForm.controls.materialMeltingPoint.value) && this.chargeMaterialForm.controls.percentChargeMelted.value > 0) {
+      this.dischargeTempError = 'The discharge temperature is lower than the melting point, the percentage for charge melted should be 0%.';
+    } else {
+      this.dischargeTempError = null;
+    }
+
+    if (this.specificHeatError || this.latentHeatError || this.heatOfLiquidError || this.feedRateError || this.waterChargedError || this.chargeMeltedError || this.chargeSolidReactedError || this.heatOfReactionError || this.dischargeTempError) {
+      this.inputError = true;
+    } else {
+      this.inputError = false;
+    }
+    console.log(this.inputError);
   }
-  if (this.chargeMaterialForm.controls.materialSpecificHeatOfSolidMaterial.value < 0) {
-        this.specificHeatError = 'Average Specific Heat must be equal or greater than 0';
-      } else {
-        this.specificHeatError = null;
-      }
-  if (this.chargeMaterialForm.controls.materialLatentHeatOfFusion.value < 0) {
-        this.latentHeatError = 'Latent Heat of Fusion must be equal or greater than 0';
-      } else {
-        this.latentHeatError = null;
-      }
-  if (this.chargeMaterialForm.controls.materialHeatOfLiquid.value < 0) {
-        this.heatOfLiquidError = 'Specific heat of liquid from molten material must be equal or greater than 0';
-      } else {
-        this.heatOfLiquidError = null;
-      }
-  if (this.chargeMaterialForm.controls.feedRate.value < 0) {
-        this.feedRateError = 'Charge Feed Rate must be grater than 0';
-      } else {
-        this.feedRateError = null;
-      }
-  if (this.chargeMaterialForm.controls.waterContentAsCharged.value < 0 || this.chargeMaterialForm.controls.waterContentAsCharged.value > 100) {
-        this.waterChargedError = 'Water Content as Charged must be equal or greater than 0 and less than or equal to 100%';
-      } else {
-        this.waterChargedError = null;
-      }
-  if (this.chargeMaterialForm.controls.waterContentAsDischarged.value < 0 || this.chargeMaterialForm.controls.waterContentAsDischarged.value > 100) {
-        this.waterDischargedError = 'Water Content as Discharged must be equal or greater than 0 and less than or equal to 100%';
-      } else {
-        this.waterDischargedError = null;
-      }
-  if (this.chargeMaterialForm.controls.percentChargeMelted.value < 0 || this.chargeMaterialForm.controls.percentChargeMelted.value > 100) {
-        this.chargeMeltedError = 'Charge Melted must be equal or greater than 0 and less than or equal to 100%';
-      } else {
-        this.chargeMeltedError = null;
-      }
-  if (this.chargeMaterialForm.controls.percentChargeReacted.value < 0 || this.chargeMaterialForm.controls.percentChargeReacted.value > 100) {
-        this.chargeSolidReactedError = 'Charge Reacted must be equal or greater than 0 and less than or equal to 100%';
-      } else {
-        this.chargeSolidReactedError = null;
-      }
-   if (this.chargeMaterialForm.controls.heatOfReaction.value < 0) {
-        this.heatOfReactionError = 'Heat of Reaction cannot be less than zero. For exothermic reactions, change "Endothermic/Exothermic"';
-      } else {
-        this.heatOfReactionError = null;
-      }
-}
 
   emitSave() {
     this.saveEmit.emit(true);

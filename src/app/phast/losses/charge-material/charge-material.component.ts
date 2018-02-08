@@ -218,6 +218,7 @@ export class ChargeMaterialComponent implements OnInit {
   }
 
   calculate(loss: ChargeMaterialObj) {
+    console.log(this.inputError)
     if (loss.chargeMaterialType == 'Solid') {
       if (loss.solidForm.status == 'VALID') {
         let tmpMaterial: ChargeMaterial = this.chargeMaterialService.buildSolidChargeMaterial(loss.solidForm);
