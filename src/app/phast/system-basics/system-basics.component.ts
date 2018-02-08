@@ -75,11 +75,13 @@ export class SystemBasicsComponent implements OnInit {
     this.settings.id = id;
     this.settings.assessmentId = this.assessment.id;
     if (this.settings.unitsOfMeasure !== this.oldSettings.unitsOfMeasure) {
-      this.showUpdateData = true;
+      if (this.phast.losses) {
+        this.showUpdateData = true;
+      }
       //this.showSettingsModal();
     }
 
-    if(this.showUpdateData == false){
+    if (this.showUpdateData == false && this.phast.losses) {
       this.dataUpdated = true;
     }
     // } else if (this.settings.energySourceType != this.newSettings.energySourceType ||
