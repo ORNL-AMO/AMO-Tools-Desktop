@@ -4,6 +4,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CompressedAirComponent } from './compressed-air.component';
 import { BagMethodComponent } from './bag-method/bag-method.component';
 import { SharedModule } from '../../shared/shared.module';
+import { BagMethodFormComponent } from './bag-method/bag-method-form/bag-method-form.component';
 
 @NgModule({
   imports: [
@@ -14,7 +15,8 @@ import { SharedModule } from '../../shared/shared.module';
   ],
   declarations: [
     CompressedAirComponent,
-    BagMethodComponent
+    BagMethodComponent,
+    BagMethodFormComponent
   ],
   exports: [
     CompressedAirComponent
