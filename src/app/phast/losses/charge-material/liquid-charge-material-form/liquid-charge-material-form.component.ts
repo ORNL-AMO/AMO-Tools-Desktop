@@ -194,13 +194,7 @@ export class LiquidChargeMaterialFormComponent implements OnInit {
 
   startSavePolling() {
     this.calculate.emit(true);
-    //this.checkDischargeTemp();
-    if (this.counter) {
-      clearTimeout(this.counter);
-    }
-    this.counter = setTimeout(() => {
-      this.emitSave();
-    }, 3000)
+    this.emitSave();
   }
 
   initDifferenceMonitor() {

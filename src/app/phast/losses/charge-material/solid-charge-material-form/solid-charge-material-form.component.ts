@@ -98,18 +98,18 @@ export class SolidChargeMaterialFormComponent implements OnInit {
     this.chargeMaterialForm.enable();
   }
 
-  checkDischargeTemp() {
-    if ((this.chargeMaterialForm.controls.chargeMaterialDischargeTemperature.value > this.chargeMaterialForm.controls.materialMeltingPoint.value) && this.chargeMaterialForm.controls.percentChargeMelted.value == 0) {
-      this.dischargeTempError = 'The discharge temperature is higher than the melting point, please enter proper percentage for charge melted.';
-      return false;
-    } else if ((this.chargeMaterialForm.controls.chargeMaterialDischargeTemperature.value < this.chargeMaterialForm.controls.materialMeltingPoint.value) && this.chargeMaterialForm.controls.percentChargeMelted.value > 0) {
-      this.dischargeTempError = 'The discharge temperature is lower than the melting point, the percentage for charge melted should be 0%.';
-      return false;
-    } else {
-      this.dischargeTempError = null;
-      return true;
-    }
-  }
+  // checkDischargeTemp() {
+  //   if ((this.chargeMaterialForm.controls.chargeMaterialDischargeTemperature.value > this.chargeMaterialForm.controls.materialMeltingPoint.value) && this.chargeMaterialForm.controls.percentChargeMelted.value == 0) {
+  //     this.dischargeTempError = 'The discharge temperature is higher than the melting point, please enter proper percentage for charge melted.';
+  //     return false;
+  //   } else if ((this.chargeMaterialForm.controls.chargeMaterialDischargeTemperature.value < this.chargeMaterialForm.controls.materialMeltingPoint.value) && this.chargeMaterialForm.controls.percentChargeMelted.value > 0) {
+  //     this.dischargeTempError = 'The discharge temperature is lower than the melting point, the percentage for charge melted should be 0%.';
+  //     return false;
+  //   } else {
+  //     this.dischargeTempError = null;
+  //     return true;
+  //   }
+  // }
 
 
   focusField(str: string) {
@@ -215,12 +215,7 @@ export class SolidChargeMaterialFormComponent implements OnInit {
 
   startSavePolling() {
     this.calculate.emit(true);
-    if (this.counter) {
-      clearTimeout(this.counter);
-    }
-    this.counter = setTimeout(() => {
-      this.emitSave();
-    }, 3000)
+    this.emitSave();
   }
 
   initDifferenceMonitor() {

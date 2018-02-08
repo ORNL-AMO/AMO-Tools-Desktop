@@ -37,8 +37,11 @@ export class SystemBasicsComponent implements OnInit {
 
   isFirstChange: boolean = true;
   counter: any;
-  newSettings: Settings;
+  oldSettings: Settings;
   lossesExist: boolean;
+
+  showUpdateData: boolean = false;
+  dataUpdated: boolean = false;
   constructor(private settingsService: SettingsService, private indexedDbService: IndexedDbService, private convertPhastService: ConvertPhastService) { }
 
   ngOnInit() {
@@ -47,11 +50,8 @@ export class SystemBasicsComponent implements OnInit {
       this.settingsForm = this.settingsService.setEnergyResultUnit(this.settingsForm);
       this.saveChanges();
     }
+    this.oldSettings = this.settingsService.getSettingsFromForm(this.settingsForm);
     this.lossesExist = this.lossExists(this.phast);
-  }
-
-  ngOnDestroy() {
-    clearTimeout(this.counter);
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -70,67 +70,74 @@ export class SystemBasicsComponent implements OnInit {
     }
   }
   saveChanges() {
-    this.newSettings = this.settingsService.getSettingsFromForm(this.settingsForm);
-    if (this.settings.currency !== this.newSettings.currency || this.settings.unitsOfMeasure !== this.newSettings.unitsOfMeasure) {
-      this.showSettingsModal();
-    } else if (this.settings.energySourceType != this.newSettings.energySourceType ||
-      this.settings.furnaceType != this.newSettings.furnaceType ||
-      this.settings.energyResultUnit != this.newSettings.energyResultUnit ||
-      this.settings.customFurnaceName != this.newSettings.customFurnaceName) {
-      this.updateData(false);
-    }
-  }
-
-  updateData(bool?: boolean) {
-    this.newSettings.assessmentId = this.assessment.id;
-    if (bool) {
+    let id = this.settings.id;
+    this.settings = this.settingsService.getSettingsFromForm(this.settingsForm);
+    this.settings.id = id;
+    this.settings.assessmentId = this.assessment.id;
+    if (this.settings.unitsOfMeasure !== this.oldSettings.unitsOfMeasure) {
       if (this.phast.losses) {
-        this.phast.losses = this.convertPhastService.convertPhastLosses(this.phast.losses, this.settings, this.newSettings);
-        if (this.phast.meteredEnergy) {
-          this.phast.meteredEnergy = this.convertPhastService.convertMeteredEnergy(this.phast.meteredEnergy, this.settings, this.newSettings);
-        }
-        if (this.phast.designedEnergy) {
-          this.phast.designedEnergy = this.convertPhastService.convertDesignedEnergy(this.phast.designedEnergy, this.settings, this.newSettings);
-        }
-        if (this.phast.modifications) {
-          this.phast.modifications.forEach(mod => {
-            if (mod.phast.losses) {
-              mod.phast.losses = this.convertPhastService.convertPhastLosses(mod.phast.losses, this.settings, this.newSettings);
-            }
-            if (mod.phast.meteredEnergy) {
-              mod.phast.meteredEnergy = this.convertPhastService.convertMeteredEnergy(mod.phast.meteredEnergy, this.settings, this.newSettings);
-            }
-            if (mod.phast.designedEnergy) {
-              mod.phast.designedEnergy = this.convertPhastService.convertDesignedEnergy(mod.phast.designedEnergy, this.settings, this.newSettings);
-            }
-          })
-        }
+        this.showUpdateData = true;
       }
-      this.save.emit(true);
+      //this.showSettingsModal();
     }
-    //assessment has existing settings
+
+    if (this.showUpdateData == false && this.phast.losses) {
+      this.dataUpdated = true;
+    }
+    // } else if (this.settings.energySourceType != this.newSettings.energySourceType ||
+    //   this.settings.furnaceType != this.newSettings.furnaceType ||
+    //   this.settings.energyResultUnit != this.newSettings.energyResultUnit ||
+    //   this.settings.customFurnaceName != this.newSettings.customFurnaceName) {
+    //   this.updateData(false);
+    // }
     if (this.isAssessmentSettings) {
-      this.newSettings.id = this.settings.id;
-      this.indexedDbService.putSettings(this.newSettings).then(
+      this.indexedDbService.putSettings(this.settings).then(
         results => {
           //get updated settings
           this.updateSettings.emit(true);
-          this.hideSettingsModal();
         }
       )
     }
     //create settings for assessment
     else {
-      this.newSettings.createdDate = new Date();
-      this.newSettings.modifiedDate = new Date();
-      this.indexedDbService.addSettings(this.newSettings).then(
+      this.settings.createdDate = new Date();
+      this.settings.modifiedDate = new Date();
+      this.indexedDbService.addSettings(this.settings).then(
         results => {
           this.isAssessmentSettings = true;
           //get updated settings
           this.updateSettings.emit(true);
-          this.hideSettingsModal();
         }
       )
+    }
+  }
+
+  updateData(bool?: boolean) {
+    if (this.phast.losses) {
+      this.phast.losses = this.convertPhastService.convertPhastLosses(this.phast.losses, this.oldSettings, this.settings);
+      if (this.phast.meteredEnergy) {
+        this.phast.meteredEnergy = this.convertPhastService.convertMeteredEnergy(this.phast.meteredEnergy, this.oldSettings, this.settings);
+      }
+      if (this.phast.designedEnergy) {
+        this.phast.designedEnergy = this.convertPhastService.convertDesignedEnergy(this.phast.designedEnergy, this.oldSettings, this.settings);
+      }
+      if (this.phast.modifications) {
+        this.phast.modifications.forEach(mod => {
+          if (mod.phast.losses) {
+            mod.phast.losses = this.convertPhastService.convertPhastLosses(mod.phast.losses, this.oldSettings, this.settings);
+          }
+          if (mod.phast.meteredEnergy) {
+            mod.phast.meteredEnergy = this.convertPhastService.convertMeteredEnergy(mod.phast.meteredEnergy, this.oldSettings, this.settings);
+          }
+          if (mod.phast.designedEnergy) {
+            mod.phast.designedEnergy = this.convertPhastService.convertDesignedEnergy(mod.phast.designedEnergy, this.oldSettings, this.settings);
+          }
+        })
+      }
+      this.save.emit(true);
+      this.oldSettings = this.settingsService.getSettingsFromForm(this.settingsForm);
+      this.showUpdateData = false;
+      this.dataUpdated = true;
     }
   }
 
@@ -144,11 +151,6 @@ export class SystemBasicsComponent implements OnInit {
     this.settingsModal.hide();
   }
   startSavePolling() {
-    if (this.counter) {
-      clearTimeout(this.counter);
-    }
-    this.counter = setTimeout(() => {
-      this.saveChanges()
-    }, 3500)
+    this.saveChanges()
   }
 }

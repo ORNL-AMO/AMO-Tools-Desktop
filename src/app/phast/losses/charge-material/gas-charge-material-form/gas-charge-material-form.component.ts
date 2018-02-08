@@ -67,6 +67,7 @@ export class GasChargeMaterialFormComponent implements OnInit {
         }
       }
     }
+    this.checkInputError(true);
   }
 
   ngAfterViewInit() {
@@ -158,12 +159,7 @@ export class GasChargeMaterialFormComponent implements OnInit {
 
   startSavePolling() {
     this.calculate.emit(true);
-    if (this.counter) {
-      clearTimeout(this.counter);
-    }
-    this.counter = setTimeout(() => {
-      this.emitSave();
-    }, 3000)
+    this.emitSave();
   }
 
   initDifferenceMonitor() {

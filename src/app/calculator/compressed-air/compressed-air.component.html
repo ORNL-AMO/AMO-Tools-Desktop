@@ -1,26 +1,27 @@
-<div class="row justify-content-center align-items-center" style="height: 100%;">
-<div class="col-8">
-  <div class="card">
-    <div class="card-block">
-      <h4>
-        This portion of the application is still in active development.
-      </h4>
-      <h5>
-        Below is a description of what you will find here in the future.
-      </h5>
-      <blockquote class="blockquote">
-        <p>
-          Helps users analyze energy use and savings opportunities in manufacturing compressed air systems.
-        </p>
-      </blockquote>
+<div *ngIf="getSelectedTool() == 'none'">
 
-      <blockquote class="blockquote">
-        <p>
-          This tool allows you to baseline existing and model future system operations improvements, and evaluate energy and dollar
-          savings from many energy efficiency measures.
-        </p>
-      </blockquote>
+  <div class="row">
+    <div class="col-10  mx-auto">
+      <div class="content-container calculator-list">
+        <h2>Compressed Air Calculators</h2>
+        <div class="row calc-item-row">
+          <div class="col-1">
+            <!--icon here-->
+            <!-- <img src="assets/images/head-tool.png" class="ico-size"> -->
+          </div>
+          <div class="col-11">
+            <a class="click-item" (click)="showTool('bag-method')">Bag Method</a>
+            <p>
+              Use head tool calculator to calculate pump head.
+            </p>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>
+
+
+<div class="stand-alone-calc" *ngIf="getSelectedTool() == 'bag-method'">
+  <app-bag-method></app-bag-method>
 </div>

@@ -65,13 +65,13 @@
       </div>
       <app-solid-charge-material-form *ngIf="material.chargeMaterialType == 'Solid'" (changeField)="changeField($event)" [(chargeMaterialForm)]="material.solidForm"
         (calculate)="calculate(material)" [baselineSelected]="baselineSelected" (saveEmit)="saveLosses()" [lossIndex]="lossIndex"
-        [settings]="settings" [inputError]="inputError"></app-solid-charge-material-form>
+        [settings]="settings" [(inputError)]="inputError"></app-solid-charge-material-form>
       <app-liquid-charge-material-form *ngIf="material.chargeMaterialType == 'Liquid'" (changeField)="changeField($event)" [(chargeMaterialForm)]="material.liquidForm"
         (calculate)="calculate(material)" [baselineSelected]="baselineSelected" (saveEmit)="saveLosses()" [lossIndex]="lossIndex"
-        [settings]="settings" [inputError]="inputError"></app-liquid-charge-material-form>
+        [settings]="settings" [(inputError)]="inputError"></app-liquid-charge-material-form>
       <app-gas-charge-material-form *ngIf="material.chargeMaterialType == 'Gas'" (changeField)="changeField($event)" [(chargeMaterialForm)]="material.gasForm"
         (calculate)="calculate(material)" [baselineSelected]="baselineSelected" (saveEmit)="saveLosses()" [lossIndex]="lossIndex"
-        [settings]="settings" [inputError]="inputError"></app-gas-charge-material-form>
+        [settings]="settings" [(inputError)]="inputError"></app-gas-charge-material-form>
     </div>
   </div>
   <div class="row">
