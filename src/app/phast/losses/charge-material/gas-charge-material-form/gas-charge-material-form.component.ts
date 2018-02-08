@@ -28,8 +28,8 @@ export class GasChargeMaterialFormComponent implements OnInit {
   lossIndex: number;
   @Input()
   settings: Settings;
-  @Input()
-  inputError: boolean;
+  @Output('inputError')
+  inputError = new EventEmitter<boolean>();
 
   @ViewChild('materialModal') public materialModal: ModalDirective;
   firstChange: boolean = true;
@@ -151,9 +151,9 @@ export class GasChargeMaterialFormComponent implements OnInit {
     }
 
     if(this.specificHeatGasError || this.feedGasRateError || this.gasMixVaporError || this.specificHeatGasVaporError || this.feedGasRateError || this.heatOfReactionError){
-      this.inputError = true;
+      this.inputError.emit(true);
     }else{
-      this.inputError = false;
+      this.inputError.emit(false);
     }
   }
 

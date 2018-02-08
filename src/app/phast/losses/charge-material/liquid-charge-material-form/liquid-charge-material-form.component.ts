@@ -29,8 +29,8 @@ export class LiquidChargeMaterialFormComponent implements OnInit {
   lossIndex: number;
   @Input()
   settings: Settings;
-  @Input()
-  inputError: boolean;
+  @Output('inputError')
+  inputError = new EventEmitter<boolean>();
 
   @ViewChild('materialModal') public materialModal: ModalDirective;
 
@@ -186,9 +186,9 @@ export class LiquidChargeMaterialFormComponent implements OnInit {
     }
 
     if (this.specificHeatLiquidError || this.specificHeatVaporError || this.feedLiquidRateError || this.chargeVaporError || this.chargeReactedError || this.heatOfReactionError || this.materialLatentHeatError || this.dischargeTempError) {
-      this.inputError = true;
+      this.inputError.emit(true);
     } else {
-      this.inputError = false;
+      this.inputError.emit(false);
     }
   }
 

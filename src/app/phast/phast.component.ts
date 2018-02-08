@@ -333,16 +333,17 @@ export class PhastComponent implements OnInit {
   save() {
     this.saveClicked = !this.saveClicked;
   }
+
   saveDb() {
     this.checkSetupDone();
     this.assessment.phast = (JSON.parse(JSON.stringify(this._phast)));
     this.lossesService.baseline.next(this._phast);
-    // this.saveDbToggle = 'saveDb' + Math.random();
     this.indexedDbService.putAssessment(this.assessment).then(
-      results => { console.log('save')}
+      results => {
+
+      }
     )
   }
-
 
   exportData() {
     //TODO: Logic for exporting data

@@ -65,18 +65,18 @@
       </div>
       <app-solid-charge-material-form *ngIf="material.chargeMaterialType == 'Solid'" (changeField)="changeField($event)" [(chargeMaterialForm)]="material.solidForm"
         (calculate)="calculate(material)" [baselineSelected]="baselineSelected" (saveEmit)="saveLosses()" [lossIndex]="lossIndex"
-        [settings]="settings" [(inputError)]="inputError"></app-solid-charge-material-form>
+        [settings]="settings" (inputError)="setError($event)"></app-solid-charge-material-form>
       <app-liquid-charge-material-form *ngIf="material.chargeMaterialType == 'Liquid'" (changeField)="changeField($event)" [(chargeMaterialForm)]="material.liquidForm"
         (calculate)="calculate(material)" [baselineSelected]="baselineSelected" (saveEmit)="saveLosses()" [lossIndex]="lossIndex"
-        [settings]="settings" [(inputError)]="inputError"></app-liquid-charge-material-form>
+        [settings]="settings" (inputError)="setError($event)"></app-liquid-charge-material-form>
       <app-gas-charge-material-form *ngIf="material.chargeMaterialType == 'Gas'" (changeField)="changeField($event)" [(chargeMaterialForm)]="material.gasForm"
         (calculate)="calculate(material)" [baselineSelected]="baselineSelected" (saveEmit)="saveLosses()" [lossIndex]="lossIndex"
-        [settings]="settings" [(inputError)]="inputError"></app-gas-charge-material-form>
+        [settings]="settings" (inputError)="setError($event)"></app-gas-charge-material-form>
     </div>
   </div>
-  <div class="row">
+  <div class="row" [ngClass]="{'input-error': showError == true}">
     <div class="col-12">
-      <div class="form-group" [ngClass]="{'input-error': inputError == true}">
+      <div class="form-group">
         <label class="small font-weight-bold" *ngIf="material.chargeMaterialType == 'Solid'">{{material.solidForm.controls.name.value}} Net Heat Loss</label>
         <label class="small font-weight-bold" *ngIf="material.chargeMaterialType == 'Gas'">{{material.gasForm.controls.name.value}} Net Heat Loss</label>
         <label class="small font-weight-bold" *ngIf="material.chargeMaterialType == 'Liquid'">{{material.liquidForm.controls.name.value}} Net Heat Loss</label>

@@ -28,8 +28,8 @@ export class SolidChargeMaterialFormComponent implements OnInit {
   lossIndex: number;
   @Input()
   settings: Settings;
-  @Input()
-  inputError: boolean;
+  @Output('inputError')
+  inputError = new EventEmitter<boolean>();
 
   @ViewChild('materialModal') public materialModal: ModalDirective;
 
@@ -202,11 +202,10 @@ export class SolidChargeMaterialFormComponent implements OnInit {
     }
 
     if (this.specificHeatError || this.latentHeatError || this.heatOfLiquidError || this.feedRateError || this.waterChargedError || this.chargeMeltedError || this.chargeSolidReactedError || this.heatOfReactionError || this.dischargeTempError) {
-      this.inputError = true;
+      this.inputError.emit(true);
     } else {
-      this.inputError = false;
+      this.inputError.emit(false);
     }
-    console.log(this.inputError);
   }
 
   emitSave() {

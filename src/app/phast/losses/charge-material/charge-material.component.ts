@@ -44,7 +44,7 @@ export class ChargeMaterialComponent implements OnInit {
   disableType: boolean = false;
   lossesLocked: boolean = false;
 
-  inputError: boolean = false;
+  showError: boolean = false;
   constructor(private formBuilder: FormBuilder, private phastService: PhastService, private chargeMaterialService: ChargeMaterialService, private chargeMaterialCompareService: ChargeMaterialCompareService) { }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -218,7 +218,6 @@ export class ChargeMaterialComponent implements OnInit {
   }
 
   calculate(loss: ChargeMaterialObj) {
-    console.log(this.inputError)
     if (loss.chargeMaterialType == 'Solid') {
       if (loss.solidForm.status == 'VALID') {
         let tmpMaterial: ChargeMaterial = this.chargeMaterialService.buildSolidChargeMaterial(loss.solidForm);
@@ -338,6 +337,10 @@ export class ChargeMaterialComponent implements OnInit {
         this.chargeMaterialCompareService.checkChargeMaterials();
       }
     }
+  }
+
+  setError(bool: boolean){
+    this.showError = bool;
   }
 }
 

@@ -83,7 +83,7 @@
     </div>
 
 
-    <div class="form-group" [ngClass]="{'input-warning': checkDischargeTemp() == false}">
+    <div class="form-group">
       <label class="small" for="chargeMaterialDischargeTemperature">Charge Material Discharge Temperature</label>
       <div class="input-group">
         <input name="{{'chargeMaterialDischargeTemperature_'+lossIndex}}" type="number" step="any" class="form-control" formControlName="chargeMaterialDischargeTemperature"
@@ -129,7 +129,7 @@
     </div>
 
 
-    <div class="form-group" [ngClass]="{'input-warning': checkDischargeTemp() == false}">
+    <div class="form-group">
       <label class="small" for="percentChargeMelted">Charge Melted</label>
       <div class="input-group">
         <input name="{{'percentChargeMelted_'+lossIndex}}" type="number" step="any" min="0" max="100" class="form-control" formControlName="percentChargeMelted"
