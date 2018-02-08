@@ -29,6 +29,9 @@ export class LiquidChargeMaterialFormComponent implements OnInit {
   lossIndex: number;
   @Input()
   settings: Settings;
+  @Input()
+  inputError: boolean;
+
   @ViewChild('materialModal') public materialModal: ModalDirective;
 
   firstChange: boolean = true;
