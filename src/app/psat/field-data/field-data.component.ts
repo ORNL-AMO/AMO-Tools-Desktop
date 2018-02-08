@@ -131,7 +131,10 @@ export class FieldDataComponent implements OnInit {
 
   getDisplayUnit(unit: any) {
     if (unit) {
-      return this.convertUnitsService.getUnit(unit).unit.name.display;
+      let dispUnit: string = this.convertUnitsService.getUnit(unit).unit.name.display;
+      dispUnit = dispUnit.replace('(', '');
+      dispUnit = dispUnit.replace(')', '');
+      return dispUnit;
     }
   }
 
