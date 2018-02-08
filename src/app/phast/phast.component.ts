@@ -216,9 +216,6 @@ export class PhastComponent implements OnInit {
           this.isAssessmentSettings = true;
           this.checkSetupDone();
           this.init = false;
-          if (update) {
-            this.addToast('Settings Saved');
-          }
         } else {
           //if no settings found for assessment, check directory settings
           this.getParentDirectorySettings(this.assessment.directoryId);
@@ -239,7 +236,6 @@ export class PhastComponent implements OnInit {
           //create settings for assessment
           this.indexedDbService.addSettings(tmpSettings).then(
             results => {
-              this.addToast('Settings Saved');
               this.getSettings();
             })
         }
@@ -341,9 +337,9 @@ export class PhastComponent implements OnInit {
     this.checkSetupDone();
     this.assessment.phast = (JSON.parse(JSON.stringify(this._phast)));
     this.lossesService.baseline.next(this._phast);
-    this.saveDbToggle = 'saveDb' + Math.random();
+    // this.saveDbToggle = 'saveDb' + Math.random();
     this.indexedDbService.putAssessment(this.assessment).then(
-      results => { this.addToast('Assessment Saved') }
+      results => { console.log('save')}
     )
   }
 

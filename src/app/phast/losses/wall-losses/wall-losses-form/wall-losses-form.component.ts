@@ -127,7 +127,7 @@ export class WallLossesFormComponent implements OnInit {
     } else {
       this.windVelocityError = null;
     }
-    if (this.wallLossesForm.controls.surfaceArea.value < 0 ) {
+    if (this.wallLossesForm.controls.surfaceArea.value < 0) {
       this.surfaceAreaError = 'Total Outside Surface Area must be equal or greater than 0';
     } else {
       this.surfaceAreaError = null;
@@ -137,12 +137,7 @@ export class WallLossesFormComponent implements OnInit {
   //on input/change in form startSavePolling is called, if not called again with 3 seconds save process is triggered
   startSavePolling() {
     this.calculate.emit(true);
-    if (this.counter) {
-      clearTimeout(this.counter);
-    }
-    this.counter = setTimeout(() => {
-      this.emitSave();
-    }, 3000)
+    this.emitSave();
   }
 
   //method used to subscribe to service monitoring differences in baseline vs modification forms
