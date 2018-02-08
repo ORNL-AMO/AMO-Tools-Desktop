@@ -129,6 +129,12 @@ export class FieldDataComponent implements OnInit {
     this.helpPanelService.currentField.next(str);
   }
 
+  getDisplayUnit(unit: any) {
+    if (unit) {
+      return this.convertUnitsService.getUnit(unit).unit.name.display;
+    }
+  }
+
   checkForm(form: any) {
     this.formValid = this.psatService.isFieldDataFormValid(form);
     if (this.formValid) {

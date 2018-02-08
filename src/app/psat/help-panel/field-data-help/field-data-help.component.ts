@@ -45,6 +45,10 @@ export class FieldDataHelpComponent implements OnInit {
     }
     return flowRateRange.max;
   }
-
+  getDisplayUnit(unit: any) {
+    if (unit) {
+      return this.convertUnitsService.getUnit(unit).unit.name.display;
+    }
+  }
 
 }
