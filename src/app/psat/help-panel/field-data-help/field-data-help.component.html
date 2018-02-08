@@ -63,8 +63,8 @@
       </p>
       <label><u><strong>Input</strong></u></label>
       <p>
-        Minimum Value Allowed: <strong>{{minFlowRate | number:'2.2-2'}} {{settings.flowMeasurement}}</strong><br> Maximum
-        Value Allowed: <strong>{{maxFlowRate | number:'2.2-2'}} {{settings.flowMeasurement}}</strong><br>
+        Minimum Value Allowed: <strong> {{minFlowRate | number:'2.2-2'}} <span [innerHTML]="getDisplayUnit(settings.flowMeasurement)"></span></strong><br> Maximum
+        Value Allowed: <strong>{{maxFlowRate | number:'2.2-2'}} <span [innerHTML]="getDisplayUnit(settings.flowMeasurement)"></span></strong><br>
       </p>
     </div>
   </div>
