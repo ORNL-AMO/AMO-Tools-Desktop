@@ -27,36 +27,43 @@
             Modification Name
           </th>
           <th>
-            Baseline Energy Intensity<br>
-            /{{settings.phastRollupUnit}} 
+            Energy Intensity<br>
+            ({{settings.phastRollupUnit}}
             <span *ngIf="settings.unitsOfMeasure == 'Metric'">/kg</span>
-            <span *ngIf="settings.unitsOfMeasure == 'Imperial'">/lb</span>)
+            <span *ngIf="settings.unitsOfMeasure == 'Imperial'">/lb</span>)<br>
+            Baseline
           </th>
           <th>
-            Modification Energy Intensity<br>
-            ({{settings.phastRollupUnit}} 
+            Energy Intensity<br>
+            ({{settings.phastRollupUnit}}
             <span *ngIf="settings.unitsOfMeasure == 'Metric'">/kg</span>
-            <span *ngIf="settings.unitsOfMeasure == 'Imperial'">/lb</span>)
+            <span *ngIf="settings.unitsOfMeasure == 'Imperial'">/lb</span>)<br>
+            Modification
           </th>
           <th>
-            Baseline Annual Cost<br>
-            ($/yr)
+            Annual Cost<br>
+            ($/yr)<br>
+            Baseline
           </th>
           <th>
-            Modification Annual Cost<br>
-            ($/yr)
+            Annual Cost<br>
+            ($/yr)<br>
+            Modification
           </th>
           <th>
             Cost Savings<br>
-            ($/yr)
+            ($/yr)<br>
+            &nbsp;
           </th>
           <th>
             Implementation Costs<br>
-            ($)
+            ($)<br>
+            &nbsp;
           </th>
           <th>
             Simple Payback Period<br>
-            (Months)
+            (Months)<br>
+            &nbsp;
           </th>
         </tr>
       </thead>
@@ -71,7 +78,7 @@
           <td *ngIf="data.modName">{{getConvertedValue(data.modificationResults.energyPerMass, data.settings) | sigFigs:'5'}}</td>
           <td *ngIf="!data.modName">&mdash;</td>
           <!-- annual cost -->
-          <td>${{data.baselineResults.annualCost | sigFigs:'4'}}</td>
+          <td >${{data.baselineResults.annualCost | sigFigs:'4'}}</td>
           <td *ngIf="data.modName">${{data.modificationResults.annualCost | sigFigs:'4'}}</td>
           <td *ngIf="!data.modName">&mdash;</td>
           <!-- savings -->
@@ -86,7 +93,7 @@
               &mdash;
             </span>
           </td>
-          <td *ngIf="!data.modName">&mdash;</td>
+          <td class="col-span" *ngIf="!data.modName">&mdash;</td>
           <!-- simple patback -->
           <td *ngIf="data.modName">
             <span *ngIf="data.modificationResults.paybackPeriod">
