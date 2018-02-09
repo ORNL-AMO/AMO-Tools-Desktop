@@ -24,19 +24,19 @@
         <div class="col-10 dashboard-scroll scroll-item" *ngIf="allDirectories && dashboardView == 'landing-screen'">
             <app-landing-screen (hideLandingScreen)="hideScreen()" (selectCalculator)="viewCalculator($event)" [directory]="allDirectories"></app-landing-screen>
         </div>
-        <div class="col-10" *ngIf="allDirectories && dashboardView == 'tutorials'">
+        <div class="col-10 dashboard-scroll scroll-item" *ngIf="allDirectories && dashboardView == 'tutorials'">
             <app-tutorials></app-tutorials>
         </div>
-        <div class="col-10" *ngIf="allDirectories && dashboardView == 'about-page'">
+        <div class="col-10 dashboard-scroll scroll-item" *ngIf="allDirectories && dashboardView == 'about-page'">
             <app-about-page></app-about-page>
         </div>
-        <div class="col-10" *ngIf="allDirectories && dashboardView == 'contact'">
+        <div class="col-10 dashboard-scroll scroll-item" *ngIf="allDirectories && dashboardView == 'contact'">
             <app-contact-page></app-contact-page>
         </div>
-        <div class="col-10" *ngIf="allDirectories && dashboardView == 'acknowledgments-page'">
+        <div class="col-10 dashboard-scroll scroll-item" *ngIf="allDirectories && dashboardView == 'acknowledgments-page'">
             <app-acknowledgments-page></app-acknowledgments-page>
         </div>
-        <div class="col-10" *ngIf="allDirectories && dashboardView == 'settings'">
+        <div class="col-10 dashboard-scroll scroll-item" *ngIf="allDirectories && dashboardView == 'settings'">
             <app-assessment-settings [directory]="allDirectories" (resetDataEmit)="showDeleteModal($event)" (emitUpdateDirectory)="updateDir()"></app-assessment-settings>
         </div>
     </div>
