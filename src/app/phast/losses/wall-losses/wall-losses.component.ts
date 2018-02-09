@@ -42,6 +42,7 @@ export class WallLossesComponent implements OnInit {
   firstChange: boolean = true;
   resultsUnit: string
   lossesLocked: boolean = false;
+  showError: boolean = false;
   constructor(private phastService: PhastService, private wallLossesService: WallLossesService, private wallLossCompareService: WallLossCompareService, private windowRefService: WindowRefService) { }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -178,6 +179,10 @@ export class WallLossesComponent implements OnInit {
     });
 
     this.saveLosses();
+  }
+
+  setError(bool: boolean){
+    this.showError = bool;
   }
 
   collapseLoss(loss: WallLossObj){

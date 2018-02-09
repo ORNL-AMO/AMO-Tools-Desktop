@@ -41,7 +41,7 @@ export class FlueGasLossesComponent implements OnInit {
   resultsUnit: string;
 
   availableHeatError: string = null;
-
+  showError: boolean = false;
   disableType: boolean = false;
   lossesLocked: boolean = false;
   constructor(private phastService: PhastService, private flueGasLossesService: FlueGasLossesService, private flueGasCompareService: FlueGasCompareService) { }
@@ -244,7 +244,11 @@ export class FlueGasLossesComponent implements OnInit {
     }
   }
 
-
+  setType(loss: FlueGasObj) {
+    if (loss.measurementType == 'By Volume') {
+      this.setError(false);
+    }
+  }
   setName(loss: FlueGasObj) {
     if (loss.measurementType == 'By Volume') {
       loss.formByMass.patchValue({
@@ -286,6 +290,11 @@ export class FlueGasLossesComponent implements OnInit {
     this.losses.flueGasLosses = tmpFlueGasLosses;
     this.setCompareVals();
     this.savedLoss.emit(true);
+  }
+
+  setError(bool: boolean) {
+    console.log(bool);
+    this.showError = bool;
   }
 
   changeField(str: string) {

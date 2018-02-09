@@ -43,20 +43,20 @@
       <div class="form-group">
         <label class="small" for="type">Type of fuel</label>
         <select class="form-control" id="type" [(ngModel)]="loss.measurementType" [disabled]="!baselineSelected || lossesLocked"
-          (focus)="changeField('measurementType')" (blur)="focusOut()">
+          (focus)="changeField('measurementType')" (blur)="focusOut()" (change)="setType()">
           <option [ngValue]="'By Volume'">Gas</option>
           <option [ngValue]="'By Mass'">Solid/Liquid</option>
         </select>
       </div>
       <app-flue-gas-losses-form-mass [(flueGasLossForm)]="loss.formByMass" *ngIf="loss.measurementType == 'By Mass'" (changeField)="changeField($event)"
         (calculate)="calculate(loss)" [baselineSelected]="baselineSelected" (saveEmit)="saveLosses()" [lossIndex]="lossIndex"
-        [settings]="settings"></app-flue-gas-losses-form-mass>
+        [settings]="settings" (inputError)="setError($event)"></app-flue-gas-losses-form-mass>
       <app-flue-gas-losses-form-volume [(flueGasLossForm)]="loss.formByVolume" *ngIf="loss.measurementType == 'By Volume'" (changeField)="changeField($event)"
         (calculate)="calculate(loss)" [baselineSelected]="baselineSelected" (saveEmit)="saveLosses()" [lossIndex]="lossIndex"
         [settings]="settings"></app-flue-gas-losses-form-volume>
     </div>
   </div>
-  <div class="row">
+  <div class="row" [ngClass]="{'input-error': showError == true}">
     <div class="col-12">
       <div class="form-group">
         <label class="small font-weight-bold">Available Heat</label>

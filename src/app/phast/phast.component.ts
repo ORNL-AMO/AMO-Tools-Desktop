@@ -203,6 +203,7 @@ export class PhastComponent implements OnInit {
 
   checkSetupDone() {
     this._phast.setupDone = this.lossesService.checkSetupDone((JSON.parse(JSON.stringify(this._phast))), this.settings);
+    this.lossesService.updateTabs.next(true);
     this.initSankeyList();
   }
 

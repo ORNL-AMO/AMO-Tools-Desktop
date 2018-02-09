@@ -87,6 +87,8 @@ export class AuxiliaryPowerLossesFormComponent implements OnInit {
 
     if(this.voltageError){
       this.inputError.emit(true);
+    }else{
+      this.inputError.emit(false);
     }
   }
 

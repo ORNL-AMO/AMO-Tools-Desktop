@@ -354,7 +354,9 @@ select.form-control:not([size]):not([multiple]) {
     border: #BF3D00 solid !important;
 }
 
-
+.input-error{
+  color: red;
+}
 
 @media print {
 

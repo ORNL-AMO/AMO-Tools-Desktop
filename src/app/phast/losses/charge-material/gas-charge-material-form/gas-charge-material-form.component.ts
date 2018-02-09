@@ -150,7 +150,7 @@ export class GasChargeMaterialFormComponent implements OnInit {
       this.heatOfReactionError = null;
     }
 
-    if(this.specificHeatGasError || this.feedGasRateError || this.gasMixVaporError || this.specificHeatGasVaporError || this.feedGasRateError || this.heatOfReactionError){
+    if(this.specificHeatGasError || this.feedGasRateError || this.gasMixVaporError || this.specificHeatGasVaporError || this.feedGasReactedError || this.heatOfReactionError){
       this.inputError.emit(true);
     }else{
       this.inputError.emit(false);
