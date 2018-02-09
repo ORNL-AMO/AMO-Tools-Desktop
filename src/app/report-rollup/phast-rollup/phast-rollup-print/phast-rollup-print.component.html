@@ -1,0 +1,47 @@
+<div class="print-break-before show-print" *ngIf="settings">
+
+  <div class="row justify-content-center">
+    <div class="col-12">
+      <!-- <div class="header"> -->
+        <h3>PHAST Rollup Report</h3>
+      <!-- </div> -->
+    </div>
+  </div>
+  <div class="row justify-content-center">
+    <div class="col-12">
+      <div class="header">
+        <h5>Summary of Energy Sources Used</h5>
+      </div>
+    </div>
+  </div>
+  <div class="row justify-content-center">
+    <div class="col-12">
+      <app-phast-rollup-energy-table [printView]="true" [settings]="settings"></app-phast-rollup-energy-table>
+    </div>
+  </div>
+  <div class="row justify-content-center">
+    <div class="col-12">
+      <div class="header">
+        <h5>Energy Use</h5>
+      </div>
+    </div>
+  </div>
+  <div class="row justify-content-center">
+    <div class="col-12">
+      <app-phast-rollup-graphs [printView]="true" [settings]="settings"></app-phast-rollup-graphs>
+    </div>
+  </div>
+  <div class="row justify-content-center">
+    <div class="col-12">
+      <div class="header">
+        <h5>Modification Summary</h5>
+      </div>
+    </div>
+  </div>
+  <div class="row justify-content-center">
+    <div class="col-12">
+      <app-phast-rollup-furnace-summary [printView]="true" [settings]="settings"></app-phast-rollup-furnace-summary>
+    </div>
+  </div>
+
+</div>

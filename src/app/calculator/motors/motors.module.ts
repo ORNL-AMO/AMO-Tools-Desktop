@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SharedModule } from '../../shared/shared.module';
 import { ModalModule } from 'ngx-bootstrap';
-import { ChartsModule } from 'ng2-charts';
+// import { ChartsModule } from 'ng2-charts';
 
 
 import {NemaEnergyEfficiencyModule} from './nema-energy-efficiency/nema-energy-efficiency.module';
@@ -25,7 +25,7 @@ import {PercentLoadEstimationModule} from "./percent-load-estimation/percent-loa
     ReactiveFormsModule,
     SharedModule,
     ModalModule,
-    ChartsModule,
+    // ChartsModule,
     NemaEnergyEfficiencyModule,
     MotorPerformanceModule,
     PercentLoadEstimationModule

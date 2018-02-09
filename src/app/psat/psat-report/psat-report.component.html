@@ -1,46 +1,76 @@
-
-
-<div 
-    class="assessment-report report-in-psat" 
-    *ngIf="psat && settings" 
-    [ngClass]="{'assessment-report-padding': inPsat, 'report-in-rollup': !inPsat}">
+<div class="assessment-report report-in-psat" *ngIf="psat && settings" [ngClass]="{'assessment-report-padding': inPsat, 'report-in-rollup': inRollup}">
 
 
     <div *ngIf="inPsat" class="report-cover">
         <img src="assets/images/DOE-banner-color.png" class="doe-logo">
-        
+
         <div class="report-title">
             <h4>Pump Efficiency Report:</h4>
             <h4>{{assessment.name}}</h4>
             <h5>{{createdDate| date:'medium'}}</h5>
         </div>
-        
+
         <p class="report-notes">{{reportNotes}}</p>
     </div>
 
 
-    <div class="report-header" [ngClass]="{'hide-print': inPsat}">  
-       
-        <div *ngIf="inPsat && !quickReport" class="btn-group">
+    <!-- debug -->
+    <div class="report-header" [ngClass]="{'hide-print': inPsat}">
+
+        <div *ngIf="inPsat && !quickReport" class="btn-group hide-print">
             <button class="btn btn-secondary" (click)="print()">Print</button>
             <button class="btn btn-secondary" (click)="exportToCsv()">Export to CSV</button>
         </div>
         <!--<button class="btn btn-link pull-right hide-print" aria-label="Close" (click)="closeAssessment()">Close Report</button>-->
 
         <h2 *ngIf="!assessment" class="assessment-name">Assessment Report</h2>
-        
-        <h2 *ngIf="assessment" class="assessment-name">
-            <span 
-                class="dir-list-item" 
-                *ngFor="let directory of assessmentDirectories">
-                {{directory.name}} / 
-            </span>
-            {{assessment.name}}
-            <!--<button *ngIf="inPsat" class="btn-sm btn-secondary pull-right hide-print" (click)="print()"><span class="fa fa-print"></span></button>-->
-            <span>Last Modified {{assessment.modifiedDate | date:'medium'}}</span>
-        </h2>
 
+        <div *ngIf="assessment" class="row assessment-name">
+            <div class="col-12">
+                <h2 class="assessment-title">
+                    <span class="dir-list-item" *ngFor="let directory of assessmentDirectories">
+                        {{directory.name}} /
+                    </span>
+                    {{assessment.name}}
+
+                </h2>
+            </div>
+            <div class="col-12">
+                <h2 class="date-modified">
+                    <span>Last Modified {{assessment.modifiedDate | date:'medium'}}</span>
+                </h2>
+            </div>
+
+            <!--<button *ngIf="inPsat" class="btn-sm btn-secondary pull-right hide-print" (click)="print()"><span class="fa fa-print"></span></button>-->
+            <!-- <span>Last Modified {{assessment.modifiedDate | date:'medium'}}</span> -->
+
+        </div>
     </div>
+    <!-- End .report-header -->
+
+
+    <!-- real version -->
+    <!-- <div class="report-header" [ngClass]="{'hide-print': inPsat}">
+
+        <div *ngIf="inPsat && !quickReport" class="btn-group">
+            <button class="btn btn-secondary" (click)="print()">Print</button>
+            <button class="btn btn-secondary" (click)="exportToCsv()">Export to CSV</button>
+        </div> -->
+    <!--<button class="btn btn-link pull-right hide-print" aria-label="Close" (click)="closeAssessment()">Close Report</button>-->
+
+    <!-- <h2 *ngIf="!assessment" class="assessment-name">Assessment Report</h2>
+
+        <h2 *ngIf="assessment" class="assessment-name">
+            <span class="dir-list-item" *ngFor="let directory of assessmentDirectories">
+                {{directory.name}} /
+            </span>
+            {{assessment.name}} -->
+    <!--<button *ngIf="inPsat" class="btn-sm btn-secondary pull-right hide-print" (click)="print()"><span class="fa fa-print"></span></button>-->
+    <!-- <span>Last Modified {{assessment.modifiedDate | date:'medium'}}</span> -->
+    <!-- <span>Last Modified {{assessment.modifiedDate | date:'medium'}}</span> -->
+    <!-- </h2> -->
+
+    <!-- </div> -->
     <!-- End .report-header -->
 
 
@@ -49,35 +79,34 @@
         <ul class="tabs primary hide-print">
             <li (click)="setTab('results')" [ngClass]="{'active': currentTab == 'results'}">
                 <a>Results</a>
-            </li><li (click)="setTab('inputData')" [ngClass]="{'active': currentTab == 'inputData'}">
+            </li>
+            <li (click)="setTab('inputData')" [ngClass]="{'active': currentTab == 'inputData'}">
                 <a>Input Data</a>
-            </li><li (click)="setTab('facilityInfo')" [ngClass]="{'active': currentTab == 'facilityInfo'}">
-                    <a>Facility Info</a>
-                </li>
+            </li>
+            <li (click)="setTab('facilityInfo')" [ngClass]="{'active': currentTab == 'facilityInfo'}">
+                <a>Facility Info</a>
+            </li>
         </ul>
         <!--<div class="charts" [ngClass]="{'mod-page-break': numMods > 3}">
             <app-chart-summary [psat]="psat"></app-chart-summary>
         </div>-->
+        <div class="results" [ngClass]="{'show-print':currentTab != 'facility-info'}">
+            <app-facility-info-summary [assessment]="assessment"></app-facility-info-summary>
+        </div>
+
         <div class="results" [ngClass]="{'show-print': currentTab != 'results'}">
-            <app-output-summary 
-                [psat]="psat" 
-                [settings]="settings" 
-                [inRollup]="inRollup" 
-                [assessment]="assessment" 
-                (selectModification)="useModification($event)">
+            <app-output-summary [psat]="psat" [settings]="settings" [inRollup]="inRollup" [assessment]="assessment" (selectModification)="useModification($event)">
             </app-output-summary>
 
         </div>
         <div class="input-data results" [ngClass]="{'show-print': currentTab != 'inputData'}">
-            <app-input-summary 
-                [psat]="psat" 
-                [settings]="settings">
+            <app-input-summary [psat]="psat" [settings]="settings">
             </app-input-summary>
         </div>
-        <div class="input-data results" [ngClass]="{'show-print': currentTab != 'facilityInfo'}">
+        <!-- <div class="input-data results" [ngClass]="{'show-print': currentTab != 'facilityInfo'}">
             <app-facility-info-summary [assessment]="assessment">
             </app-facility-info-summary>
-        </div>
+        </div> -->
     </div>
     <!-- End .report-data -->
 

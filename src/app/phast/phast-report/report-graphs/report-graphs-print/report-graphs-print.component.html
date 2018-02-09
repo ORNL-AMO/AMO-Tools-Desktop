@@ -1,0 +1,73 @@
+<div *ngFor="let result of resultsArray; let i = index">
+    <div *ngIf="!modExists || i > 0">
+        <div class="row justify-content-center align-items-center print-graphs-container">
+            <div class="col-12">
+
+                <!-- pie charts -->
+                <div class="row justify-content-center align-items-center">
+                    <div class="col-12">
+                        <div class="row show-print">
+                            <div class="col-12 print-graph-title">
+                                Baseline
+                            </div>
+                        </div>
+                        <div class="row show-print">
+                            <div class="col-12">
+                                <app-phast-pie-chart [chartIndex]="i" [printView]="true" [chartContainerWidth]="chartContainerWidth" [results]="baselinePhast.data"
+                                    [resultCats]="resultCats" [isBaseline]="true" [modExists]="modExists"></app-phast-pie-chart>
+                            </div>
+                        </div>
+                        <div class="row show-print" *ngIf="modExists" style="padding-top: 50px;">
+                            <div class="col-12 print-graph-title">
+                                {{result.name}}
+                            </div>
+                        </div>
+                        <div class="row show-print" *ngIf="modExists">
+                            <app-phast-pie-chart [chartIndex]="i" [printView]="true" [chartContainerWidth]="chartContainerWidth" [results]="result.data"
+                                [resultCats]="resultCats" [isBaseline]="false" [modExists]="modExists"></app-phast-pie-chart>
+                        </div>
+                    </div>
+                </div>
+
+
+                <!-- bar charts -->
+                <div class="row" *ngIf="modExists" style="padding-top: 50px; padding-left: 55px; font-size: 28px;">
+                    Heat Loss ({{energyUnit}}/hr)
+                </div>
+                <div class="row justify-content-center align-items-center" *ngIf="modExists" style="padding-top: 10px;">
+                    <div class="col-12">
+                        <app-phast-bar-chart [chartIndex]="i" [printView]="true" [chartContainerWidth]="chartContainerWidth" [resultCats]="resultCats"
+                            [phast1Name]="baselinePhast.name" [phast2Name]="result.name" [modResults]="result.data" [results]="baselinePhast.data"
+                            [settings]="settings"></app-phast-bar-chart>
+                    </div>
+                </div>
+
+                <!-- sankey -->
+                <div class="row align-items-center" [ngClass]="{'print-sankey': modExists}">
+                    <div class="col-12">
+                        <div class="row align-items-center print-baseline-sankey-title">
+                            <div class="col-12" class="print-graph-title">
+                                Baseline
+                            </div>
+                        </div>
+                        <div class="row align-items-center print-baseline-sankey">
+                            <app-sankey [settings]="settings" [phast]="sankeyBaseline.phast" [location]="assessmentName + '-print-sankey-'" [printView]="true"
+                                [modIndex]="i"></app-sankey>
+                        </div>
+                        <div *ngIf="modExists" class="row align-items-center print-mod-sankey-title" style="padding-top: 100px;">
+                            <div class="col-12" class="print-graph-title">
+                                {{result.name}}
+                            </div>
+                        </div>
+                        <div *ngIf="modExists" class="row align-items-center print-mod-sankey">
+                            <app-sankey [settings]="settings" [phast]="sankeyPhastOptions[i].phast" [location]="assessmentName + '-print-sankey-'" [printView]="true"
+                                [modIndex]="i"></app-sankey>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <!-- </div> -->
+        </div>
+    </div>
+</div>

@@ -1,5 +1,5 @@
 <div class="output-summary">
-  <h5 class="show-print">Assessment Executive Summary</h5>
+  <h4 class="show-print print-section-header">Assessment Executive Summary</h4>
   <table class="table table-hover table-striped">
     <thead>
       <tr>
@@ -95,7 +95,7 @@
     <h5>Modification Notes</h5>
       <p>
         <small>
-          <span *ngFor="let note of notes">
+          <span class="print-notes" *ngFor="let note of notes">
             <b>{{note.modificationName}} &mdash; {{note.lossName}}:</b> {{note.note}}<br>
           </span>
         </small>

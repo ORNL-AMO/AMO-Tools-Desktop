@@ -1,4 +1,4 @@
-tr > td,
+/* tr > td,
 tr > th{
     text-align: center;
 }
@@ -13,4 +13,14 @@ tr > td {
 
 .graph-select{
     width: 100%;
+} */
+
+
+@media print {
+    .print-rollup-bar-chart-container {
+        padding-bottom: 30px;
+        page-break-inside: avoid;
+    }
+
+
 }

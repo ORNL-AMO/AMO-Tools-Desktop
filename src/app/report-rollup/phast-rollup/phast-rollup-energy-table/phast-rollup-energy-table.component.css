@@ -1,0 +1,6 @@
+@media print {
+    tr > td,
+    tr > th {
+        font-size: 18px !important;
+    }
+}

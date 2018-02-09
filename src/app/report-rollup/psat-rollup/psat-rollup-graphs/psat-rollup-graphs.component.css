@@ -1,4 +1,4 @@
-tr > td,
+/* tr > td,
 tr > th{
     text-align: center;
 }
@@ -23,4 +23,4 @@ th{
 
 .table-striped tbody tr:nth-of-type(odd) {
     background-color: rgba(0, 0, 0, 0.12);
-}
+} */

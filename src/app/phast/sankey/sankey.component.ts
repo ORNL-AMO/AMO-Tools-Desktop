@@ -2,7 +2,6 @@ import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
 import { Losses, PHAST } from '../../shared/models/phast/phast';
 import * as _ from 'lodash';
 import { PhastService } from '../phast.service';
-// declare var d3: any;
 import * as d3 from 'd3';
 var svg;
 import { Settings } from '../../shared/models/settings';
@@ -13,7 +12,7 @@ const width = 2650,
   height = 1400,
   labelFontSize = 28,
   labelPadding = 4,
-  reportFontSize = 30,
+  reportFontSize = 34,
   reportPadding = 4,
   topLabelPositionY = 150,
   bottomLabelPositionY = 1250,
@@ -34,7 +33,13 @@ export class SankeyComponent implements OnInit {
   settings: Settings;
   @Input()
   location: string;
+  @Input()
+  printView: boolean;
+  @Input()
+  modIndex: number;
 
+  graph: any;
+  isBaseline: boolean;
   firstChange: boolean = true;
   baseSize: number = 300;
   minSize: number = 3;
@@ -43,6 +48,9 @@ export class SankeyComponent implements OnInit {
   }
 
   ngOnInit() {
+    if (this.location != "sankey-diagram") {
+      this.location = this.location + this.modIndex.toString();
+    }
   }
 
   ngAfterViewInit() {
@@ -66,6 +74,7 @@ export class SankeyComponent implements OnInit {
     }
   }
 
+
   sankey(results: FuelResults) {
     // Remove  all Sankeys
     d3.select('#' + this.location).selectAll('svg').remove();
@@ -86,15 +95,29 @@ export class SankeyComponent implements OnInit {
     links.push({ source: i, target: i + 1 })
 
 
-    svg = d3.select('#' + this.location).append('svg')
-      .call(() => {
-        this.calcSankey(results.nodes);
-      })
-      .attr("width", "100%")
-      .attr("height", "80%")
-      .attr("viewBox", "0 0 " + width + " " + height)
-      .attr("preserveAspectRatio", "xMinYMin")
-      .append("g");
+    if (this.printView) {
+      svg = d3.select('#' + this.location).append('svg')
+        .call(() => {
+          this.calcSankey(results.nodes);
+        })
+        .attr("width", "2400px")
+        .attr("height", "800px")
+        .attr("viewBox", "0 0 " + width + " " + height)
+        .attr("preserveAspectRatio", "xMinYMin")
+        .append("g");
+    }
+    else {
+      svg = d3.select('#' + this.location).append('svg')
+        .call(() => {
+          this.calcSankey(results.nodes);
+        })
+        .attr("width", "100%")
+        .attr("height", "80%")
+        .attr("viewBox", "0 0 " + width + " " + height)
+        .attr("preserveAspectRatio", "xMinYMin")
+        .append("g");
+    }
+
 
     this.drawFurnace();
     var color = this.findColor(results.nodes[0].value);
