@@ -22,7 +22,7 @@ export class PhastRollupGraphsComponent implements OnInit {
   totalCost: number = 0;
   totalEnergy: number = 0;
   results: Array<any>;
-  
+
   // contains results for every option to build print view charts
   allResults: Array<any>;
 
@@ -81,25 +81,27 @@ export class PhastRollupGraphsComponent implements OnInit {
     let sumEnergy = 0;
     let sumCost = 0;
     let sumEnergySavings = 0;
-    resultsData.forEach(result => {
-      let tmpAnnualEnergyUsed = this.getConvertedValue(result.baselineResults.annualEnergyUsed, result.settings)
-      let diffEnergy = this.getConvertedValue(result.baselineResults.annualEnergySavings, result.settings)
-      let diffCost = result.baselineResults.annualCost;
-      if (result.settings.energySourceType == 'Fuel') {
-        this.totalFuelCost += result.baselineResults.annualCost;
-        this.totalFuelEnergyUsed += tmpAnnualEnergyUsed;
-      } else if (result.settings.energySourceType == 'Steam') {
-        this.totalSteamCost += result.baselineResults.annualCost;
-        this.totalSteamEnergyUsed += tmpAnnualEnergyUsed;
-      } else if (result.settings.energySourceType == 'Electricity') {
-        this.totalElectricalCost += result.baselineResults.annualCost;
-        this.totalElectricalEnergyUsed += tmpAnnualEnergyUsed;
-      }
-      sumSavings += diffCost;
-      sumCost += result.baselineResults.annualCost;
-      sumEnergySavings += diffEnergy;
-      sumEnergy += tmpAnnualEnergyUsed;
-    })
+    if (resultsData) {
+      resultsData.forEach(result => {
+        let tmpAnnualEnergyUsed = this.getConvertedValue(result.baselineResults.annualEnergyUsed, result.settings)
+        let diffEnergy = this.getConvertedValue(result.baselineResults.annualEnergySavings, result.settings)
+        let diffCost = result.baselineResults.annualCost;
+        if (result.settings.energySourceType == 'Fuel') {
+          this.totalFuelCost += result.baselineResults.annualCost;
+          this.totalFuelEnergyUsed += tmpAnnualEnergyUsed;
+        } else if (result.settings.energySourceType == 'Steam') {
+          this.totalSteamCost += result.baselineResults.annualCost;
+          this.totalSteamEnergyUsed += tmpAnnualEnergyUsed;
+        } else if (result.settings.energySourceType == 'Electricity') {
+          this.totalElectricalCost += result.baselineResults.annualCost;
+          this.totalElectricalEnergyUsed += tmpAnnualEnergyUsed;
+        }
+        sumSavings += diffCost;
+        sumCost += result.baselineResults.annualCost;
+        sumEnergySavings += diffEnergy;
+        sumEnergy += tmpAnnualEnergyUsed;
+      });
+    }
     this.furnaceSavingsPotential = sumSavings;
     this.energySavingsPotential = sumEnergySavings;
     this.totalCost = sumCost;
@@ -128,22 +130,25 @@ export class PhastRollupGraphsComponent implements OnInit {
   getResults(resultsData: Array<PhastResultsData>) {
     this.results = new Array();
     let i = 0;
-    resultsData.forEach(val => {
-      let percent;
-      if (this.dataOption == 'cost') {
-        percent = this.getResultPercent(val.baselineResults.annualCost, this.totalCost)
-      } else {
-        let energyUsed = this.getConvertedValue(val.baselineResults.annualEnergyUsed, val.settings);
-        percent = this.getResultPercent(energyUsed, this.totalEnergy);
-      }
-      this.results.push({
-        name: val.name,
-        percent: percent,
-        color: graphColors[i],
-        settings: val.settings
-      })
-      i++;
-    });
+    if (resultsData) {
+      resultsData.forEach(val => {
+        let percent;
+        if (this.dataOption == 'cost') {
+          percent = this.getResultPercent(val.baselineResults.annualCost, this.totalCost)
+        } else {
+          let energyUsed = this.getConvertedValue(val.baselineResults.annualEnergyUsed, val.settings);
+          percent = this.getResultPercent(energyUsed, this.totalEnergy);
+        }
+        this.results.push({
+          name: val.name,
+          percent: percent,
+          color: graphColors[i],
+          settings: val.settings
+        })
+        i++;
+      });
+    }
+    
   }
 
   getConvertedValue(val: number, settings: Settings) {

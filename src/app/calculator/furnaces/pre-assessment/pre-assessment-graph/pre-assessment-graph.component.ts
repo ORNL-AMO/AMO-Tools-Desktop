@@ -2,6 +2,7 @@ import { Component, OnInit, Input, SimpleChange } from '@angular/core';
 import { graphColors } from '../../../../phast/phast-report/report-graphs/graphColors';
 import * as d3 from 'd3';
 import * as c3 from 'c3';
+
 @Component({
   selector: 'app-pre-assessment-graph',
   templateUrl: './pre-assessment-graph.component.html',

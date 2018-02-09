@@ -45,6 +45,9 @@ export class ReportRollupComponent implements OnInit {
     private windowRefService: WindowRefService, private indexedDbService: IndexedDbService, private assessmentService: AssessmentService) { }
 
   ngOnInit() {
+    this._phastAssessments = new Array<ReportItem>();
+    this._psatAssessments = new Array<ReportItem>();
+
     setTimeout(() => {
       this.assessmentsGathered = true;
       this.numPhasts = this._phastAssessments.length;
@@ -149,7 +152,7 @@ export class ReportRollupComponent implements OnInit {
       //after printing hide content again
       this.phastReportService.showPrint.next(false);
       this.printView = false;
-    }, 5000);
+    }, 10000);
   }
 
   closeReport() {
