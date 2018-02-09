@@ -29,7 +29,9 @@
       <div class="input-group">
         <input name="flowRate" type="number" min="0" step="any" class="form-control" formControlName="flowRate" id="flowRate" (input)="checkFlowRate()"
           (focus)="focusField('flowRate')" onfocus="this.select();">
-        <span class="input-group-addon units">{{settings.flowMeasurement}}</span>
+        <span class="input-group-addon units" [innerHTML]="getDisplayUnit(settings.flowMeasurement)"></span>
+        <!--<span class="input-group-addon units">{{settings.flowMeasurement}}</span>-->
+
       </div>
       <span class="alert-danger pull-right small" *ngIf="flowError !== null">{{flowError}}</span>
     </div>

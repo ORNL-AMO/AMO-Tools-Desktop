@@ -1,0 +1,26 @@
+<div class="panel-container row compressed-air">
+  <div class="col-12">
+    <div class="row align-items-top calculator-panel">
+      <div class="panel-column col-6 align-top">
+        <div class="header">
+          <h3>Compressed Air - Bag Method</h3>
+        </div>
+        <div class="row">
+          <div class="col-12 tab-content">
+            <app-bag-method-form [inputs]="inputs" (calculate)="calculateAnnualConsumption($event)"></app-bag-method-form>
+          </div>
+        </div>
+      </div>
+      <div class="col-6 align-top">
+        <div class="help-panel">
+          <div class="header">
+            <h3>Help</h3>
+          </div>
+          <div class="tab-content">
+            <p>Cover the orifice with a trash bag and calculate the number of seconds it takes to fill the bag. Once done, close
+              the bag and measure its dimensions.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

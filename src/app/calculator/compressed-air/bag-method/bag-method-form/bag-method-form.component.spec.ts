@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { SummaryCardComponent } from './summary-card.component';
+import { BagMethodFormComponent } from './bag-method-form.component';
 
-describe('SummaryCardComponent', () => {
-  let component: SummaryCardComponent;
-  let fixture: ComponentFixture<SummaryCardComponent>;
+describe('BagMethodFormComponent', () => {
+  let component: BagMethodFormComponent;
+  let fixture: ComponentFixture<BagMethodFormComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ SummaryCardComponent ]
+      declarations: [ BagMethodFormComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(SummaryCardComponent);
+    fixture = TestBed.createComponent(BagMethodFormComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

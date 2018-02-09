@@ -507,6 +507,12 @@ export class DashboardComponent implements OnInit {
     this.dashboardView = 'assessment-dashboard';
   }
 
+  showMoveItemsModal(){
+    this.selectedItems = new Array();
+    this.getSelected(this.workingDirectory);
+    setTimeout(() => {console.log(this.selectedItems)},1000)
+  }
+
 
   getSelected(dir: Directory) {
     //add selected and children dir assessments

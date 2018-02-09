@@ -18,7 +18,7 @@ export class ExplorePhastOpportunitiesComponent implements OnInit {
   settings: Settings;
   @Input()
   containerHeight: number;
-  
+
   @Output('save')
   save = new EventEmitter<boolean>();
   @Input()
@@ -31,7 +31,7 @@ export class ExplorePhastOpportunitiesComponent implements OnInit {
   lossTab: LossTab = {
     step: 0,
     tabName: '',
-    componentStr: '' 
+    componentStr: ''
   };
   counter: any;
   isFirstChange: boolean = true;
@@ -119,11 +119,6 @@ export class ExplorePhastOpportunitiesComponent implements OnInit {
   }
 
   startSavePolling() {
-    if (this.counter) {
-      clearTimeout(this.counter);
-    }
-    this.counter = setTimeout(() => {
-      this.save.emit(true);
-    }, 3000)
+    this.save.emit(true);
   }
 }

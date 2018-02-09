@@ -174,6 +174,7 @@ export class PhastComponent implements OnInit {
 
 
   ngAfterViewInit() {
+    this.disclaimerToast();
     setTimeout(() => {
       this.getContainerHeight();
     }, 100);
@@ -215,9 +216,6 @@ export class PhastComponent implements OnInit {
           this.isAssessmentSettings = true;
           this.checkSetupDone();
           this.init = false;
-          if (update) {
-            this.addToast('Settings Saved');
-          }
         } else {
           //if no settings found for assessment, check directory settings
           this.getParentDirectorySettings(this.assessment.directoryId);
@@ -238,7 +236,6 @@ export class PhastComponent implements OnInit {
           //create settings for assessment
           this.indexedDbService.addSettings(tmpSettings).then(
             results => {
-              this.addToast('Settings Saved');
               this.getSettings();
             })
         }
@@ -340,9 +337,9 @@ export class PhastComponent implements OnInit {
     this.checkSetupDone();
     this.assessment.phast = (JSON.parse(JSON.stringify(this._phast)));
     this.lossesService.baseline.next(this._phast);
-    this.saveDbToggle = 'saveDb' + Math.random();
+    // this.saveDbToggle = 'saveDb' + Math.random();
     this.indexedDbService.putAssessment(this.assessment).then(
-      results => { this.addToast('Assessment Saved') }
+      results => { console.log('save')}
     )
   }
 
@@ -354,7 +351,7 @@ export class PhastComponent implements OnInit {
   disclaimerToast() {
     let toastOptions: ToastOptions = {
       title: 'Disclaimer:',
-      msg: ' The PHAST Tool is still in the early stages of development. Only a portion of the tools functionality is in place, some links/buttons/forms may not work and are placeholders for future work.',
+      msg: 'Please keep in mind that this application is still in beta. Please let us know if you have any suggestions for improving our app.',
       showClose: true,
       timeout: 10000000,
       theme: 'default'

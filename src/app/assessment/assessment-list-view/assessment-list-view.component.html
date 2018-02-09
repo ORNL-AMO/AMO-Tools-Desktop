@@ -1,11 +1,11 @@
 <div class="list-view" style="padding-bottom: 20px;">
 	
 	<div class="list-item" *ngFor="let directory of directory.subDirectory">
-		<app-directory-list-item [directory]="directory" (directoryChange)="changeDirectory($event)" [isChecked]="isChecked"></app-directory-list-item>
+		<app-directory-list-item [directory]="directory" (directoryChange)="changeDirectory($event)" [isChecked]="isChecked" (updateDirectory)="changeDirectory()"></app-directory-list-item>
 	</div>
 	
 	<div class="list-item" *ngFor="let assessment of directory.assessments">
-		<app-assessment-list-item [assessment]="assessment" [isChecked]="isChecked"></app-assessment-list-item>
+		<app-assessment-list-item [assessment]="assessment" [isChecked]="isChecked" (changeDirectory)="changeDirectory()"></app-assessment-list-item>
 	</div>
 
 </div>

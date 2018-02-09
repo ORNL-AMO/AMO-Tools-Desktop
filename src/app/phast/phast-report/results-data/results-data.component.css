@@ -26,6 +26,9 @@ tr > th:not(:first-child){
     text-align: center;
 }
 
+.tr-underline {
+  border-bottom: 2px groove #bf3d00;
+}
 
 @media print {
     .output-summary .table th,
@@ -37,3 +40,4 @@ tr > th:not(:first-child){
         font-size: 30px;
     }
 }
+
