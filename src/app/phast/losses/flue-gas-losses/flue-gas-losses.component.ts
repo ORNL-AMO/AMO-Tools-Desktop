@@ -244,11 +244,6 @@ export class FlueGasLossesComponent implements OnInit {
     }
   }
 
-  setType(loss: FlueGasObj) {
-    if (loss.measurementType == 'By Volume') {
-      this.setError(false);
-    }
-  }
   setName(loss: FlueGasObj) {
     if (loss.measurementType == 'By Volume') {
       loss.formByMass.patchValue({
@@ -293,7 +288,6 @@ export class FlueGasLossesComponent implements OnInit {
   }
 
   setError(bool: boolean) {
-    console.log(bool);
     this.showError = bool;
   }
 
