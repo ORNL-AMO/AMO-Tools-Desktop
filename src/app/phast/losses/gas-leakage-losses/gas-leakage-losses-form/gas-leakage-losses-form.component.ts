@@ -24,6 +24,8 @@ export class GasLeakageLossesFormComponent implements OnInit {
   lossIndex: number;
   @Input()
   settings: Settings;
+  @Output('inputError')
+  inputError = new EventEmitter<boolean>();
 
   openingAreaError: string = null;
   specificGravityError: string = null;
@@ -46,7 +48,7 @@ export class GasLeakageLossesFormComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.checkTemperature(true);
+    this.checkInputError(true);
   }
 
   ngAfterViewInit() {
@@ -70,16 +72,16 @@ export class GasLeakageLossesFormComponent implements OnInit {
     this.calculate.emit(true);
   }
 
-  checkTemperature(bool?: boolean) {
-    if (!bool) {
-      this.startSavePolling();
-    }
-    if (this.lossesForm.controls.ambientTemperature.value > this.lossesForm.controls.leakageGasTemperature.value) {
-      this.temperatureError = 'Ambient Temperature is greater than Temperature of Gases Leaking';
-    } else {
-      this.temperatureError = null;
-    }
-  }
+  // checkTemperature(bool?: boolean) {
+  //   if (!bool) {
+  //     this.startSavePolling();
+  //   }
+  //   if (this.lossesForm.controls.ambientTemperature.value > this.lossesForm.controls.leakageGasTemperature.value) {
+  //     this.temperatureError = 'Ambient Temperature is greater than Temperature of Gases Leaking';
+  //   } else {
+  //     this.temperatureError = null;
+  //   }
+  // }
 
   checkInputError(bool?: boolean) {
     if (!bool) {
@@ -99,6 +101,16 @@ export class GasLeakageLossesFormComponent implements OnInit {
       this.draftPressureError = 'Draft Pressure must be equal or greater than 0';
     } else {
       this.draftPressureError = null;
+    }
+    if (this.lossesForm.controls.ambientTemperature.value > this.lossesForm.controls.leakageGasTemperature.value) {
+      this.temperatureError = 'Ambient Temperature is greater than Temperature of Gases Leaking';
+    } else {
+      this.temperatureError = null;
+    }
+    if(this.openingAreaError || this.specificGravityError || this.draftPressureError || this.temperatureError){
+      this.inputError.emit(true);
+    }else{
+      this.inputError.emit(false);
     }
   }
 

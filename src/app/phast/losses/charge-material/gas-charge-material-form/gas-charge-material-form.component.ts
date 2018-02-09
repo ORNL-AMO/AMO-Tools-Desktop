@@ -28,6 +28,9 @@ export class GasChargeMaterialFormComponent implements OnInit {
   lossIndex: number;
   @Input()
   settings: Settings;
+  @Output('inputError')
+  inputError = new EventEmitter<boolean>();
+
   @ViewChild('materialModal') public materialModal: ModalDirective;
   firstChange: boolean = true;
   materialTypes: any;
@@ -64,6 +67,7 @@ export class GasChargeMaterialFormComponent implements OnInit {
         }
       }
     }
+    this.checkInputError(true);
   }
 
   ngAfterViewInit() {
@@ -144,6 +148,12 @@ export class GasChargeMaterialFormComponent implements OnInit {
       this.heatOfReactionError = 'Heat of Reaction cannot be less than zero. For exothermic reactions, change "Endothermic/Exothermic"';
     } else {
       this.heatOfReactionError = null;
+    }
+
+    if(this.specificHeatGasError || this.feedGasRateError || this.gasMixVaporError || this.specificHeatGasVaporError || this.feedGasReactedError || this.heatOfReactionError){
+      this.inputError.emit(true);
+    }else{
+      this.inputError.emit(false);
     }
   }
 

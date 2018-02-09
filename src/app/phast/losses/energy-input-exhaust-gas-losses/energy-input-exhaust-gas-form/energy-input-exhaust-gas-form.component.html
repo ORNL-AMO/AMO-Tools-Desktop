@@ -13,7 +13,7 @@
       <label class="small" for="electricalPowerInput">Electrical Power Input</label>
       <div class="input-group">
         <input name="{{'electricalPowerInput_'+lossIndex}}" type="number" step="any" min="0" class="form-control" formControlName="electricalPowerInput"
-          id="electricalPowerInput" onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('electricalPowerInput')">
+          id="electricalPowerInput" onfocus="this.select();" (input)="checkHeat()" (focus)="focusField('electricalPowerInput')">
         <span class="input-group-addon units">kW</span>
       </div>
     </div>
@@ -23,7 +23,7 @@
       <label class="small" for="excessAir">Excess Air</label>
       <div class="input-group">
         <input name="{{'excessAir_'+lossIndex}}" type="number" step="any" min="0" class="form-control" formControlName="excessAir" id="excessAir"
-          onfocus="this.select();" (input)="startSavePolling()" (focus)="focusField('excessAir')" (blur)="focusOut()">
+          onfocus="this.select();" (input)="checkHeat()" (focus)="focusField('excessAir')" (blur)="focusOut()">
         <span class="input-group-addon units">%</span>
       </div>
     </div>

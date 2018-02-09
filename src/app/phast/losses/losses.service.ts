@@ -26,12 +26,14 @@ export class LossesService {
 
   lossesTabs: Array<LossTab>;
   tabsSet: boolean;
+  updateTabs: BehaviorSubject<boolean>;
   constructor(private phastService: PhastService, private phastResultsService: PhastResultsService, private flueGasLossesService: FlueGasLossesService) {
     this.lossIndex = new BehaviorSubject<number>(0);
     this.baseline = new BehaviorSubject<PHAST>(null);
     this.modification = new BehaviorSubject<Modification>(null);
     this.lossesTab = new BehaviorSubject<number>(1);
     this.modalOpen = new BehaviorSubject<boolean>(false);
+    this.updateTabs = new BehaviorSubject<boolean>(false);
     // this.chargeDone = new BehaviorSubject<boolean>(false);
     // this.enInput1Done = new BehaviorSubject<boolean>(false);
     // this.enInput2Done = new BehaviorSubject<boolean>(false);
