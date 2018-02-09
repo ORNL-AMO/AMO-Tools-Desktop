@@ -68,7 +68,7 @@ export class PhastBarChartComponent implements OnInit {
     }
     else {
       this.chartContainerWidth = 1400;
-      this.chartContainerHeight = 700;
+      this.chartContainerHeight = 400;
       this.initPrintCharts();
     }
   }
@@ -175,7 +175,10 @@ export class PhastBarChartComponent implements OnInit {
     });
     d3.selectAll(".c3-axis").style("fill", "none").style("stroke", "#000");
     d3.selectAll(".c3-axis-y-label").style("fill", "#000").style("stroke", "#000");
-    d3.selectAll(".c3-texts").style("font-size", "10px");
+
+    d3.selectAll(".c3-texts").style("font-size", "20px");
+    // d3.selectAll(".c3-texts").style("font-size", "10px");
+
     d3.selectAll(".c3-legend-item text").style("font-size", "11px");
     d3.selectAll(".c3-ygrids").style("stroke", "#B4B2B7").style("stroke-width", "0.5px");
   }
@@ -211,63 +214,72 @@ export class PhastBarChartComponent implements OnInit {
       this.baselineData.push(totalWallLoss);
       totalWallLoss = this.getMMBtu(modResults.totalWallLoss);
       this.modificationData.push(totalWallLoss);
-      this.chartLabels.push('Wall Losses');
+      this.chartLabels.push('Wall');
+      // this.chartLabels.push('Wall Losses');
     }
     if (phastResults.totalAtmosphereLoss) {
       let totalAtmosphereLoss = this.getMMBtu(phastResults.totalAtmosphereLoss);
       this.baselineData.push(totalAtmosphereLoss);
       totalAtmosphereLoss = this.getMMBtu(modResults.totalAtmosphereLoss);
       this.modificationData.push(totalAtmosphereLoss);
-      this.chartLabels.push('Atmosphere Losses');
+      this.chartLabels.push('Atmosphere');
+      // this.chartLabels.push('Atmosphere Losses');
     }
     if (phastResults.totalOtherLoss) {
       let totalOtherLoss = this.getMMBtu(phastResults.totalOtherLoss);
       this.baselineData.push(totalOtherLoss);
       totalOtherLoss = this.getMMBtu(modResults.totalWallLoss);
       this.modificationData.push(totalOtherLoss);
-      this.chartLabels.push('Other Losses');
+      this.chartLabels.push('Other');
+      // this.chartLabels.push('Other Losses');
     }
     if (phastResults.totalCoolingLoss) {
       let totalCoolingLoss = this.getMMBtu(phastResults.totalCoolingLoss);
       this.baselineData.push(totalCoolingLoss);
       totalCoolingLoss = this.getMMBtu(modResults.totalCoolingLoss);
       this.modificationData.push(totalCoolingLoss);
-      this.chartLabels.push('Cooling Losses');
+      this.chartLabels.push('Cooling');
+      // this.chartLabels.push('Cooling Losses');
     }
     if (phastResults.totalOpeningLoss) {
       let totalOpeningLoss = this.getMMBtu(phastResults.totalOpeningLoss);
       this.baselineData.push(totalOpeningLoss);
       totalOpeningLoss = this.getMMBtu(modResults.totalOpeningLoss);
       this.modificationData.push(totalOpeningLoss);
-      this.chartLabels.push('Opening Losses');
+      this.chartLabels.push('Opening');
+      // this.chartLabels.push('Opening Losses');
     }
     if (phastResults.totalFixtureLoss) {
       let totalFixtureLoss = this.getMMBtu(phastResults.totalFixtureLoss);
       this.baselineData.push(totalFixtureLoss);
       totalFixtureLoss = this.getMMBtu(modResults.totalFixtureLoss);
       this.modificationData.push(totalFixtureLoss);
-      this.chartLabels.push('Fixture Losses');
+      this.chartLabels.push('Fixture');
+      // this.chartLabels.push('Fixture Losses');
     }
     if (phastResults.totalLeakageLoss) {
       let totalLeakageLoss = this.getMMBtu(phastResults.totalLeakageLoss);
       this.baselineData.push(totalLeakageLoss);
       totalLeakageLoss = this.getMMBtu(modResults.totalLeakageLoss);
       this.modificationData.push(totalLeakageLoss);
-      this.chartLabels.push('Leakage Losses');
+      this.chartLabels.push('Leakage');
+      // this.chartLabels.push('Leakage Losses');
     }
     if (phastResults.totalExtSurfaceLoss) {
       let totalExtSurfaceLoss = this.getMMBtu(phastResults.totalExtSurfaceLoss);
       this.baselineData.push(totalExtSurfaceLoss);
       totalExtSurfaceLoss = this.getMMBtu(modResults.totalExtSurfaceLoss);
       this.modificationData.push(totalExtSurfaceLoss);
-      this.chartLabels.push('Extended Surface Losses');
+      this.chartLabels.push('Extended Surface');
+      // this.chartLabels.push('Extended Surface Losses');
     }
     if (phastResults.totalChargeMaterialLoss) {
       let totalChargeMaterialLoss = this.getMMBtu(phastResults.totalChargeMaterialLoss);
       this.baselineData.push(totalChargeMaterialLoss);
       totalChargeMaterialLoss = this.getMMBtu(modResults.totalChargeMaterialLoss);
       this.modificationData.push(totalChargeMaterialLoss);
-      this.chartLabels.push('Charge Material Losses');
+      this.chartLabels.push('Charge Material');
+      // this.chartLabels.push('Charge Material Losses');
     }
 
     if (resultCats.showFlueGas && phastResults.totalFlueGas) {
@@ -275,7 +287,8 @@ export class PhastBarChartComponent implements OnInit {
       this.baselineData.push(totalFlueGas);
       totalFlueGas = this.getMMBtu(modResults.totalFlueGas);
       this.modificationData.push(totalFlueGas);
-      this.chartLabels.push('Flue Gas Losses');
+      this.chartLabels.push('Flue Gas');
+      // this.chartLabels.push('Flue Gas Losses');
     }
 
     if (resultCats.showAuxPower && phastResults.totalAuxPower) {
@@ -283,7 +296,8 @@ export class PhastBarChartComponent implements OnInit {
       this.baselineData.push(totalAuxPower);
       totalAuxPower = this.getMMBtu(modResults.totalAuxPower);
       this.modificationData.push(totalAuxPower);
-      this.chartLabels.push('Auxillary Power Losses');
+      this.chartLabels.push('Auxillary Power');
+      // this.chartLabels.push('Auxillary Power Losses');
     }
 
     if (resultCats.showSlag && phastResults.totalSlag) {
@@ -291,28 +305,32 @@ export class PhastBarChartComponent implements OnInit {
       this.baselineData.push(totalSlag);
       totalSlag = this.getMMBtu(modResults.totalSlag);
       this.modificationData.push(totalSlag);
-      this.chartLabels.push('Slag Losses');
+      this.chartLabels.push('Slag');
+      // this.chartLabels.push('Slag Losses');
     }
     if (resultCats.showExGas && phastResults.totalExhaustGasEAF) {
       let totalExhaustGasEAF = this.getMMBtu(phastResults.totalExhaustGasEAF);
       this.baselineData.push(totalExhaustGasEAF);
       totalExhaustGasEAF = this.getMMBtu(modResults.totalExhaustGasEAF);
       this.modificationData.push(totalExhaustGasEAF);
-      this.chartLabels.push('Exhaust Gas (EAF) Losses');
+      this.chartLabels.push('Exhaust Gas (EAF)');
+      // this.chartLabels.push('Exhaust Gas (EAF) Losses');
     }
     if (resultCats.showEnInput2 && phastResults.totalExhaustGas) {
       let totalExhaustGas = this.getMMBtu(phastResults.totalExhaustGas);
       this.baselineData.push(totalExhaustGas);
       totalExhaustGas = this.getMMBtu(modResults.totalExhaustGas);
       this.modificationData.push(totalExhaustGas);
-      this.chartLabels.push('Exhaust Gas Losses');
+      this.chartLabels.push('Exhaust Gas');
+      // this.chartLabels.push('Exhaust Gas Losses');
     }
     if (phastResults.totalSystemLosses && resultCats.showSystemEff) {
       let totalSystemLosses = this.getMMBtu(phastResults.totalSystemLosses);
       this.baselineData.push(totalSystemLosses);
       totalSystemLosses = this.getMMBtu(modResults.totalSystemLosses);
       this.modificationData.push(totalSystemLosses);
-      this.chartLabels.push('System Losses');
+      this.chartLabels.push('System');
+      // this.chartLabels.push('System Losses');
     }
     this.chartData.push(this.baselineData);
     this.chartData.push(this.modificationData);
@@ -347,6 +365,10 @@ export class PhastBarChartComponent implements OnInit {
       unit = "MMBtu/hr";
     }
 
+    let xTickWidth = (this.chartContainerWidth - 500) / this.chartLabels.length;
+    console.log("chartContainerWidth = " + this.chartContainerWidth);
+    console.log("xTickWidth = " + xTickWidth);
+
     this.chart = c3.generate({
       bindto: currentChart,
       data: {
@@ -358,14 +380,20 @@ export class PhastBarChartComponent implements OnInit {
           type: 'category',
           categories: this.chartLabels,
           tick: {
-            rotate: 60,
-            multiline: false
+            multiline: true,
+            height: 100,
+            width: 55
           },
-          height: 300
+          // height: 250,
+          // width: null
+          // padding: {
+          //   left: 0,
+          //   right: 0
+          // }
         },
         y: {
           label: {
-            text: 'Heat Loss (' + unit + ')',
+            text: '',
             position: 'outer-bottom',
           }
         }
@@ -397,8 +425,9 @@ export class PhastBarChartComponent implements OnInit {
     d3.selectAll(".print-bar-chart .c3-axis").style("fill", "none").style("stroke", "#000");
     d3.selectAll(".print-bar-chart .c3-axis-y-label").style("fill", "#000").style("stroke", "#000");
     d3.selectAll(".print-bar-chart .c3-ygrids").style("stroke", "#B4B2B7").style("stroke-width", "0.5px");
-    d3.selectAll(".print-bar-chart .c3-axis-x g.tick text tspan").style("font-size", "1.4rem").style("fill", "#000").style("stroke", "#000");
-    d3.selectAll(".print-bar-chart .c3-axis-y g.tick text tspan").style("font-size", "0.8rem");
+    d3.selectAll(".print-bar-chart .c3-axis-x g.tick text tspan").style("font-size", "18px").style("fill", "#000").style("stroke", "#000").style("line-height", "20px");
+    // d3.selectAll(".print-bar-chart .c3-axis-x g.tick text tspan").style("font-size", "1.2rem").style("fill", "#000").style("stroke", "#000");
+    // d3.selectAll(".print-bar-chart .c3-axis-y g.tick text tspan").style("font-size", "1.0rem");
     d3.selectAll(".print-bar-chart .c3-axis-y-label").style("font-size", "1.4rem");
   }
 }

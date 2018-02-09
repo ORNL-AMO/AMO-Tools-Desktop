@@ -31,7 +31,10 @@
 
 
                 <!-- bar charts -->
-                <div class="row justify-content-center align-items-center" *ngIf="modExists" style="padding-top: 50px;">
+                <div class="row" *ngIf="modExists" style="padding-top: 50px; padding-left: 55px; font-size: 28px;">
+                    Heat Loss ({{energyUnit}}/hr)
+                </div>
+                <div class="row justify-content-center align-items-center" *ngIf="modExists" style="padding-top: 10px;">
                     <div class="col-12">
                         <app-phast-bar-chart [chartIndex]="i" [printView]="true" [chartContainerWidth]="chartContainerWidth" [resultCats]="resultCats"
                             [phast1Name]="baselinePhast.name" [phast2Name]="result.name" [modResults]="result.data" [results]="baselinePhast.data"

@@ -39,6 +39,7 @@ export class ReportGraphsPrintComponent implements OnInit {
     modification: PHAST;
     sankeyPhastOptions: Array<any>;
     assessmentName: string;
+    energyUnit: string;
 
     constructor() { }
 
@@ -55,5 +56,6 @@ export class ReportGraphsPrintComponent implements OnInit {
                 this.sankeyPhastOptions.push({ name: mod.phast.name, phast: mod.phast });
             });
         }
+        this.energyUnit = this.settings.energyResultUnit;
     }
 }

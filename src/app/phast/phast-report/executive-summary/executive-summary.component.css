@@ -21,4 +21,8 @@ tr > th:not(:first-child){
     .output-summary .table td {
         font-size: 20px;
     }
+
+    .print-notes {
+        font-size: 18px;
+    }
 }

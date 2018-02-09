@@ -1,4 +1,4 @@
-<div class="assessment-report report-in-psat" *ngIf="psat && settings" [ngClass]="{'assessment-report-padding': inPsat, 'report-in-rollup': !inPsat}">
+<div class="assessment-report report-in-psat" *ngIf="psat && settings" [ngClass]="{'assessment-report-padding': inPsat, 'report-in-rollup': inRollup}">
 
 
     <div *ngIf="inPsat" class="report-cover">
@@ -82,13 +82,18 @@
             </li>
             <li (click)="setTab('inputData')" [ngClass]="{'active': currentTab == 'inputData'}">
                 <a>Input Data</a>
-            </li><li (click)="setTab('facilityInfo')" [ngClass]="{'active': currentTab == 'facilityInfo'}">
-                    <a>Facility Info</a>
-                </li>
+            </li>
+            <li (click)="setTab('facilityInfo')" [ngClass]="{'active': currentTab == 'facilityInfo'}">
+                <a>Facility Info</a>
+            </li>
         </ul>
         <!--<div class="charts" [ngClass]="{'mod-page-break': numMods > 3}">
             <app-chart-summary [psat]="psat"></app-chart-summary>
         </div>-->
+        <div class="results" [ngClass]="{'show-print':currentTab != 'facility-info'}">
+            <app-facility-info-summary [assessment]="assessment"></app-facility-info-summary>
+        </div>
+
         <div class="results" [ngClass]="{'show-print': currentTab != 'results'}">
             <app-output-summary [psat]="psat" [settings]="settings" [inRollup]="inRollup" [assessment]="assessment" (selectModification)="useModification($event)">
             </app-output-summary>
@@ -98,10 +103,10 @@
             <app-input-summary [psat]="psat" [settings]="settings">
             </app-input-summary>
         </div>
-        <div class="input-data results" [ngClass]="{'show-print': currentTab != 'facilityInfo'}">
+        <!-- <div class="input-data results" [ngClass]="{'show-print': currentTab != 'facilityInfo'}">
             <app-facility-info-summary [assessment]="assessment">
             </app-facility-info-summary>
-        </div>
+        </div> -->
     </div>
     <!-- End .report-data -->
 

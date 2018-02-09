@@ -5,7 +5,8 @@
         <img src="assets/images/DOE-banner-color.png" class="doe-logo">
 
         <div class="report-title">
-            <h4>Furnace Efficiency Report:</h4>
+            <h4>PH Equipment/System
+                <br> Summary Report:</h4>
             <h4>{{assessment.name}}</h4>
             <h5>{{createdDate| date:'medium'}}</h5>
         </div>
@@ -75,10 +76,15 @@
                 <a>Facility Info</a>
             </li>
         </ul>
+        
+        <div class="results" [ngClass]="{'show-print':currentTab != 'facility-info'}">
+            <app-facility-info-summary [assessment]="assessment"></app-facility-info-summary>
+        </div>
+
         <div class="results" [ngClass]="{'show-print':currentTab != 'energy-used'}">
             <app-energy-used [phast]="phast" [settings]="settings"></app-energy-used>
         </div>
-        <div class="results" [ngClass]="{'show-print':currentTab != 'executive-summary'}">
+        <div class="results print-break-before" [ngClass]="{'show-print':currentTab != 'executive-summary'}">
             <app-executive-summary [settings]="settings" [phast]="phast" [assessment]="assessment" [inPhast]="inPhast"></app-executive-summary>
         </div>
         <div class="results" [ngClass]="{'show-print':currentTab !=  'results-data'}">
@@ -90,31 +96,8 @@
         <div class="results" [ngClass]="{'show-print':currentTab != 'report-sankey'}">
             <app-report-sankey [phast]="phast" [settings]="settings" [assessment]="assessment"></app-report-sankey>
         </div>
-
-        <!-- real version -->
-        <!-- <div class="results" [ngClass]="{'show-print':currentTab != 'energy-used'}">
-            <app-energy-used [phast]="phast" [settings]="settings"></app-energy-used>
-        </div>
-        <div class="results" [ngClass]="{'show-print':currentTab != 'executive-summary'}">
-            <app-executive-summary [settings]="settings" [phast]="phast" [assessment]="assessment" [inPhast]="inPhast"></app-executive-summary>
-        </div>
-        <div class="results" [ngClass]="{'show-print':currentTab !=  'results-data'}">
-            <app-results-data [phast]="phast" [settings]="settings" [assessment]="assessment" [inPhast]="inPhast" [inReport]="true"></app-results-data>
-        </div>
-        <div class="results" [ngClass]="{'show-print':currentTab != 'report-graphs'}">
-            <app-report-graphs [phast]="phast" [settings]="settings" [assessment]="assessment"></app-report-graphs>
-        </div>
-        <div class="results" [ngClass]="{'show-print':currentTab != 'report-sankey'}">
-            <app-report-sankey [phast]="phast" [settings]="settings" [assessment]="assessment"></app-report-sankey>
-        </div> -->
-        <!--use ngClass with 'show-print' for printing-->
-        <!-- ngIf temporary -->
-
         <div class="results" *ngIf="currentTab == 'input-summary'">
             <app-phast-input-summary [phast]="phast" [settings]="settings"></app-phast-input-summary>
-        </div>
-        <div class="results" *ngIf="currentTab == 'facility-info'">
-            <app-facility-info-summary [assessment]="assessment"></app-facility-info-summary>
         </div>
     </div>
     <div *ngIf="!phast.setupDone">

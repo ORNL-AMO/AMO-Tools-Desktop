@@ -25,6 +25,8 @@ export class ReportRollupComponent implements OnInit {
   @ViewChild('reportTemplate') reportTemplate: TemplateRef<any>;
 
   _reportAssessments: Array<ReportItem>;
+  _phastAssessments: Array<ReportItem>;
+  _psatAssessments: Array<ReportItem>;
   focusedAssessment: Assessment;
 
   assessmentsGathered: boolean = false;
@@ -36,18 +38,16 @@ export class ReportRollupComponent implements OnInit {
   @ViewChild('rollupModal') public rollupModal: ModalDirective;
 
   numPhasts: number = 0;
+
   sidebarHeight: number = 0;
-
-
   printView: boolean = false;
-
-
   constructor(private reportRollupService: ReportRollupService, private phastReportService: PhastReportService,
     private windowRefService: WindowRefService, private indexedDbService: IndexedDbService, private assessmentService: AssessmentService) { }
 
   ngOnInit() {
     setTimeout(() => {
       this.assessmentsGathered = true;
+      this.numPhasts = this._phastAssessments.length;
     }, 2000);
 
     setTimeout(() => {
@@ -69,7 +69,6 @@ export class ReportRollupComponent implements OnInit {
     this.assessmentService.showFeedback.next(false);
     let count = 1;
     this.reportRollupService.phastAssessments.subscribe(val => {
-      this.numPhasts = val.length;
       if (val.length != 0) {
         this.reportRollupService.initPhastResultsArr(val);
         count++;
@@ -85,11 +84,31 @@ export class ReportRollupComponent implements OnInit {
         this.reportRollupService.getPhastResultsFromSelected(val);
       }
     })
+
+
+    this.reportRollupService.psatAssessments.subscribe(items => {
+      if (items) {
+        if (items.length != 0) {
+          this._psatAssessments = items;
+        }
+      }
+    });
+
+    this.reportRollupService.phastAssessments.subscribe(items => {
+      if (items) {
+        if (items.length != 0) {
+          this._phastAssessments = items;
+        }
+      }
+    })
   }
 
-  // ngAfterViewInit(){
+
+
+  // ngAfterViewInit() {
   //   this.setSidebarHeight();
   // }
+
 
   ngOnDestroy() {
     this.assessmentService.showFeedback.next(true);
@@ -115,9 +134,8 @@ export class ReportRollupComponent implements OnInit {
     // let win = this.windowRefService.nativeWindow;
     // let doc = this.windowRefService.getDoc();
     // win.print();
-
-    this.phastReportService.showPrint.next(true);
     this.printView = true;
+    this.phastReportService.showPrint.next(true);
 
 
     //eventually add logic for modal or something to say "building print view"

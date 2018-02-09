@@ -71,6 +71,15 @@
 }
 
 
+.print-notification {
+    top: 0;
+    position: fixed;
+    z-index: 1020;
+    height: 100vh;
+    width: 100vw;
+    background-color: #ececec;
+}
+
 
 @media print {
 

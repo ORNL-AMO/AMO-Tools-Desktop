@@ -1766,7 +1766,9 @@ Toasty Overrides ================================= */
     font-size: 16px !important;
   }
 
-
+  .report-in-rollup {
+    page-break-before: always;
+  }
 
   .report-cover {
     display: block;

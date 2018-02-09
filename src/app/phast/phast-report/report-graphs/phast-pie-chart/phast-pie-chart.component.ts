@@ -334,6 +334,14 @@ export class PhastPieChartComponent implements OnInit {
 
       //debug - remove when complete
       // this.drawLeaderLines();
+      // console.log("d3.selectAll");
+      // d3.selectAll('.c3-chart-arc .c3-arcs text').each(function(v) {
+      //   console.log("rendered");
+      //   let label = d3.select(this);
+      //   let pos = label.attr("transform").match(/-?\d+(\.\d+)?/g);
+      //   console.log("pos[0] = " + pos[0] + ", pos[1] = " + pos[1]);
+      //   label.attr("transform", "translate(" + pos[0] + "," + pos[1] + ")");
+      // });
     }
   }
 

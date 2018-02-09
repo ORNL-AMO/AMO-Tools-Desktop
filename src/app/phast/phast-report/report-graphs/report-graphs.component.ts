@@ -27,9 +27,6 @@ export class ReportGraphsComponent implements OnInit {
   selectedPhast2: any;
   baselinePhast: any;
   chartContainerWidth: number;
-  doc: any;
-  window: any;
-  containerId: string;
 
   resultsArray: Array<any>;
   modExists: boolean = false;
@@ -72,12 +69,7 @@ export class ReportGraphsComponent implements OnInit {
       }
     });
 
-    this.doc = this.windowRefService.getDoc();
-    this.window = this.windowRefService.nativeWindow;
-    this.chartContainerWidth = this.doc.getElementsByClassName('results')[0].clientWidth;
-    if (this.chartContainerWidth == 0) {
-      this.chartContainerWidth = this.doc.getElementsByClassName('assessment-item')[0].clientWidth;
-    }
+    this.chartContainerWidth = window.innerWidth * 0.90;
 
     //subscribe to show print value
     this.phastReportService.showPrint.subscribe(printVal => {
