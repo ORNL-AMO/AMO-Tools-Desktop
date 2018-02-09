@@ -42,8 +42,8 @@ export class OpeningLossesFormComponent implements OnInit {
   viewFactorError: string = null;
 
   constructor(private convertUnitsService: ConvertUnitsService, private windowRefService: WindowRefService,
-              private openingLossesCompareService: OpeningLossesCompareService,
-              private openingLossesService: OpeningLossesService, private phastService: PhastService) { }
+    private openingLossesCompareService: OpeningLossesCompareService,
+    private openingLossesService: OpeningLossesService, private phastService: PhastService) { }
 
   ngOnChanges(changes: SimpleChanges) {
     if (!this.firstChange) {
@@ -93,7 +93,7 @@ export class OpeningLossesFormComponent implements OnInit {
     });
   }
 
-  roundVal(val: number, digits: number): number{
+  roundVal(val: number, digits: number): number {
     return Number(val.toFixed(digits));
   }
 
@@ -210,12 +210,7 @@ export class OpeningLossesFormComponent implements OnInit {
 
   startSavePolling() {
     this.calculate.emit(true);
-    if (this.counter) {
-      clearTimeout(this.counter);
-    }
-    this.counter = setTimeout(() => {
-      this.emitSave();
-    }, 3000)
+    this.emitSave();
   }
 
   initDifferenceMonitor() {

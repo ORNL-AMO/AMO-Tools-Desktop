@@ -26,8 +26,6 @@ import { PhastSummaryCardComponent } from './assessment-grid-view/assessment-car
 import { PsatSummaryCardComponent } from './assessment-grid-view/assessment-card/psat-summary-card/psat-summary-card.component';
 import { PhastReportModule } from '../phast/phast-report/phast-report.module';
 import { PsatModule } from '../psat/psat.module';
-import { FacilityCardComponent } from './assessment-grid-view/facility-card/facility-card.component';
-import { SummaryCardComponent } from './assessment-grid-view/summary-card/summary-card.component';
 import { FolderSummaryComponent } from './folder-summary/folder-summary.component';
 import { FolderContactInfoComponent } from './folder-contact-info/folder-contact-info.component';
 
@@ -47,8 +45,6 @@ import { FolderContactInfoComponent } from './folder-contact-info/folder-contact
     AssessmentSettingsComponent,
     PhastSummaryCardComponent,
     PsatSummaryCardComponent,
-    FacilityCardComponent,
-    SummaryCardComponent,
     FolderSummaryComponent,
     FolderContactInfoComponent
   ],

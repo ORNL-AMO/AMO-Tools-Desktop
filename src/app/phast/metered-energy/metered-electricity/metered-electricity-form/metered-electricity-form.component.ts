@@ -4,7 +4,7 @@ import { MeteredEnergyElectricity } from '../../../../shared/models/phast/metere
 @Component({
   selector: 'app-metered-electricity-form',
   templateUrl: './metered-electricity-form.component.html',
-  styleUrls: ['./metered-electricity-form.component.css','../../../../psat/explore-opportunities/explore-opportunities-form/explore-opportunities-form.component.css']
+  styleUrls: ['./metered-electricity-form.component.css', '../../../../psat/explore-opportunities/explore-opportunities-form/explore-opportunities-form.component.css']
 })
 export class MeteredElectricityFormComponent implements OnInit {
   @Input()
@@ -35,12 +35,7 @@ export class MeteredElectricityFormComponent implements OnInit {
   }
 
   startSavePolling() {
-    if (this.counter) {
-      clearTimeout(this.counter);
-    }
-    this.counter = setTimeout(() => {
-      this.emitSave.emit(true);
-    }, 3000)
+    this.emitSave.emit(true);
   }
 
 }

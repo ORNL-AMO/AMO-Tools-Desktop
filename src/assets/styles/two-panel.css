@@ -90,6 +90,10 @@
     border-bottom-color: gray;
 }
 
+.compressed-air .header{
+    border-bottom: #17A589 groove 2px;
+}
+
 .panel-add a{
     padding-top: 5px;
     padding-bottom: 5px;

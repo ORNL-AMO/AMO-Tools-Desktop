@@ -123,12 +123,7 @@ export class HeatSystemEfficiencyComponent implements OnInit {
   }
 
   startSavePolling() {
-    if (this.counter) {
-      clearTimeout(this.counter);
-    }
-    this.counter = setTimeout(() => {
-      this.saveLosses();
-    }, 3000)
+    this.saveLosses();
   }
 
   calculate(bool?: boolean) {

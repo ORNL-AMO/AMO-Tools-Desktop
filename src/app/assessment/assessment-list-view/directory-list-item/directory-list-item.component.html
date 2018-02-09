@@ -9,4 +9,39 @@
     <i class="fa fa-folder" aria-hidden="true"></i>
     <a (click)="goToDirectory(directory)">{{directory.name}}</a>
   </div>
+  <div>
+    <span class="fa fa-edit pull-right" (click)="showEditModal()"></span>
+  </div>
+</div>
+
+
+<div bsModal #editModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true"
+  [config]="{backdrop: 'static'}">
+  <div class="modal-dialog modal-md">
+    <div class="modal-content" *ngIf="editForm">
+      <div class="modal-header">
+        Edit {{directory.name}} Properties
+        <button class="close" (click)="hideEditModal()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="editForm">
+          <div class="form-group">
+            <label>Edit Folder Name</label>
+            <input type="text" class="form-control" formControlName="name">
+          </div>
+          <div class="form-group" *ngIf="directories">
+            <label>Change Folder Location</label>
+            <select class="form-control" formControlName="directoryId">
+              <option *ngFor="let dir of directories" [ngValue]="dir.id"><span *ngIf="dir.parentDirectoryId">{{getParentDirStr(dir.parentDirectoryId)}}</span><span class="bold">{{dir.name}}/</span></option>
+            </select>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-default" (click)="save()">Save</button>
+      </div>
+    </div>
+  </div>
 </div>

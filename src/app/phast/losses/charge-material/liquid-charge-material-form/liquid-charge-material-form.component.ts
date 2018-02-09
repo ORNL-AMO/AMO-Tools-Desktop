@@ -7,7 +7,7 @@ import { LossesService } from '../../losses.service';
 import { Settings } from '../../../../shared/models/settings';
 import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
 import { FormGroup } from '@angular/forms';
-import {isInRootDir} from "@angular/compiler-cli/src/transformers/util";
+import { isInRootDir } from "@angular/compiler-cli/src/transformers/util";
 
 @Component({
   selector: 'app-liquid-charge-material-form',
@@ -178,12 +178,7 @@ export class LiquidChargeMaterialFormComponent implements OnInit {
   startSavePolling() {
     this.calculate.emit(true);
     this.checkDischargeTemp();
-    if (this.counter) {
-      clearTimeout(this.counter);
-    }
-    this.counter = setTimeout(() => {
-      this.emitSave();
-    }, 3000)
+    this.emitSave();
   }
 
   initDifferenceMonitor() {

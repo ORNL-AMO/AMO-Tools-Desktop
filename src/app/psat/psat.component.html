@@ -108,10 +108,17 @@
   <!--end report-->
   <!--footer-->
   <div #footer id="psatFooter" class="footer hide-print" *ngIf="mainTab == 'system-setup' || mainTab == 'assessment'">
-    <div class="pull-right">
-      <button class="btn btn-secondary" *ngIf="mainTab == 'system-setup' || mainTab == 'assessment'" (click)="toggleSave()">Save</button>
-      <button class="btn btn-primary" *ngIf="mainTab == 'system-setup'" [disabled]="!getCanContinue()" (click)="continue()">Continue</button>
+    <div class="pull-left" *ngIf="subTab != 'system-basics' || mainTab == 'assessment'">
+      <button class="btn btn-default" (click)="back()">Back</button>
     </div>
+    <div class="pull-right" *ngIf="mainTab == 'system-setup' && mainTab != 'assessment'">
+      <!-- <button class="btn btn-secondary" *ngIf="mainTab == 'system-setup' || mainTab == 'assessment'" (click)="toggleSave()">Save</button> -->
+      <button class="btn btn-primary" [disabled]="!getCanContinue()" (click)="continue()">Continue</button>
+    </div>
+    
+    <div class="pull-right" *ngIf="mainTab == 'assessment'">
+        <button class="btn btn-primary" (click)="goToReport()">Go To Report</button>
+      </div>
   </div>
   <!--end footer-->
 </div>

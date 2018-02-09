@@ -129,6 +129,15 @@ export class FieldDataComponent implements OnInit {
     this.helpPanelService.currentField.next(str);
   }
 
+  getDisplayUnit(unit: any) {
+    if (unit) {
+      let dispUnit: string = this.convertUnitsService.getUnit(unit).unit.name.display;
+      dispUnit = dispUnit.replace('(', '');
+      dispUnit = dispUnit.replace(')', '');
+      return dispUnit;
+    }
+  }
+
   checkForm(form: any) {
     this.formValid = this.psatService.isFieldDataFormValid(form);
     if (this.formValid) {
@@ -174,12 +183,7 @@ export class FieldDataComponent implements OnInit {
 
   startSavePolling() {
     this.checkForm(this.psatForm);
-    if (this.counter) {
-      clearTimeout(this.counter);
-    }
-    this.counter = setTimeout(() => {
-      this.savePsat(this.psatForm)
-    }, 3000)
+    this.savePsat(this.psatForm)
   }
 
   checkFlowRate(bool?: boolean) {

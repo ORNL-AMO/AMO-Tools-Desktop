@@ -1,0 +1,63 @@
+<form>
+  <div class="form-section">
+    <div class="form-group">
+      <label for="operatingHours">Operating Time</label>
+      <div class="input-group">
+        <input name="operatingHours" class="form-control" type="number" step="any" [(ngModel)]="inputs.operatingHours" id="operatingHours"
+          (input)="emitChange()" onfocus="this.select();">
+        <span class="input-group-addon units">hrs/yr</span>
+      </div>
+    </div>
+  </div>
+  <div class="form-section">
+    <div class="form-group">
+      <label for="fillTime">Bag Fill Time</label>
+      <div class="input-group">
+        <input name="fillTime" class="form-control" type="number" step="any" [(ngModel)]="inputs.fillTime" id="fillTime" (input)="emitChange()"
+          onfocus="this.select();">
+        <span class="input-group-addon units">s</span>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="height">Height of Bag</label>
+      <div class="input-group">
+        <input name="height" class="form-control" type="number" step="any" [(ngModel)]="inputs.height" id="height" (input)="emitChange()"
+          onfocus="this.select();">
+        <span class="input-group-addon units">inch</span>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="diameter">Diameter of Bag</label>
+      <div class="input-group">
+        <input name="diameter" class="form-control" type="number" step="any" [(ngModel)]="inputs.diameter" id="diameter" (input)="emitChange()"
+          onfocus="this.select();">
+        <span class="input-group-addon units">inch</span>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="bold" for="flowRate">Flow Rate</label>
+      <div class="text-center small">
+        {{inputs.flowRate | number:'1.0-2'}} SCFM
+      </div>
+    </div>
+  </div>
+  <div class="form-section">
+    <div class="form-group">
+      <label for="airBlows">Total Number of Units of Bag</label>
+      <div class="input-group">
+        <input name="airBlows" class="form-control" type="number" step="any" [(ngModel)]="inputs.airBlows" id="airBlows" (input)="emitChange()"
+          onfocus="this.select();">
+        <span class="input-group-addon units">Airblows</span>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="bold" for="flowRate">Annual Compressed Air Consumption</label>
+      <div class="text-center small">
+        {{inputs.annualConsumption | number:'1.0-2'}} KSCF
+      </div>
+    </div>
+  </div>
+</form>

@@ -16,3 +16,15 @@ a:not([href]):not([tabindex]):hover {
 a:not([href]):not([tabindex]){
   color: black;
 }
+
+
+.fa-edit:hover{
+  color: blue;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.fa-edit{
+  padding-top: 4px;
+  font-size: larger;
+}
