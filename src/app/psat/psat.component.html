@@ -107,13 +107,16 @@
   </div>
   <!--end report-->
   <!--footer-->
-  <div #footer id="psatFooter" class="footer hide-print" *ngIf="mainTab == 'system-setup' || mainTab == 'assessment'">
+  <div #footer id="psatFooter" class="footer hide-print" *ngIf="mainTab == 'system-setup' || mainTab == 'assessment' || mainTab == 'calculators'">
     <div class="pull-left" *ngIf="subTab != 'system-basics' || mainTab == 'assessment'">
       <button class="btn btn-default" (click)="back()">Back</button>
     </div>
     <div class="pull-right" *ngIf="mainTab == 'system-setup' && mainTab != 'assessment'">
       <!-- <button class="btn btn-secondary" *ngIf="mainTab == 'system-setup' || mainTab == 'assessment'" (click)="toggleSave()">Save</button> -->
       <button class="btn btn-primary" [disabled]="!getCanContinue()" (click)="continue()">Continue</button>
+    </div>
+    <div class="pull-right" *ngIf="mainTab == 'calculators'">
+      <button class="btn btn-primary" [disabled]="calcTab != 'system-curve' && calcTab != 'pump-curve'">Save to Assessment</button>
     </div>
     
     <div class="pull-right" *ngIf="mainTab == 'assessment'">
