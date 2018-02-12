@@ -7,6 +7,7 @@ import { Settings } from '../shared/models/settings';
 import { WallLossesSurface, GasLoadChargeMaterial, LiquidLoadChargeMaterial, SolidLoadChargeMaterial, AtmosphereSpecificHeat, FlueGasMaterial, SolidLiquidFlueGasMaterial } from '../shared/models/materials'
 import { SuiteDbService } from '../suiteDb/suite-db.service';
 import { UpdateDataService } from '../shared/update-data.service';
+import { Calculator } from '../shared/models/calculators';
 
 
 var myDb: any = {
@@ -23,7 +24,8 @@ var myDb: any = {
     atmosphereSpecificHeat: 'atmosphereSpecificHeat',
     wallLossesSurface: 'wallLossesSurface',
     flueGasMaterial: 'flueGasMaterial',
-    solidLiquidFlueGasMaterial: 'solidLiquidFlueGasMaterial'
+    solidLiquidFlueGasMaterial: 'solidLiquidFlueGasMaterial',
+    calculator: 'calculator'
   },
   defaultErrorHandler: function (e) {
     //todo: implement error handling
@@ -146,6 +148,15 @@ export class IndexedDbService {
         if (!newVersion.objectStoreNames.contains(myDb.storeNames.solidLiquidFlueGasMaterial)) {
           console.log('creating solidLiquidFlueGasMaterial store...');
           let settingsObjStore = newVersion.createObjectStore(myDb.storeNames.solidLiquidFlueGasMaterial, {
+            autoIncrement: true,
+            keyPath: 'id'
+          })
+          settingsObjStore.createIndex('id', 'id', { unique: false });
+        }
+        //calculator
+        if (!newVersion.objectStoreNames.contains(myDb.storeNames.calculator)) {
+          console.log('creating calculator store...');
+          let settingsObjStore = newVersion.createObjectStore(myDb.storeNames.calculator, {
             autoIncrement: true,
             keyPath: 'id'
           })
@@ -821,4 +832,88 @@ export class IndexedDbService {
       }
     })
   }
+
+
+  //calculator
+  addCalculator(_calculator: Calculator): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let transaction = myDb.instance.transaction([myDb.storeNames.calculator], 'readwrite');
+      let store = transaction.objectStore(myDb.storeNames.calculator);
+      let addRequest = store.add(_calculator);
+      myDb.setDefaultErrorHandler(addRequest, myDb);
+      addRequest.onsuccess = (e) => {
+        resolve(e.target.result);
+      }
+      addRequest.onerror = (e) => {
+        reject(e.target.result)
+      }
+    });
+  }
+
+  getCalculator(id: number): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let transaction = myDb.instance.transaction([myDb.storeNames.calculator], 'readonly');
+      let store = transaction.objectStore(myDb.storeNames.calculator);
+      let getRequest = store.get(id);
+      myDb.setDefaultErrorHandler(getRequest, myDb);
+      getRequest.onsuccess = (e) => {
+        resolve(e.target.result);
+      }
+      getRequest.onerror = (error) => {
+        reject(error.target.result)
+      }
+    })
+  }
+
+  getAllCalculator(): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let transaction = myDb.instance.transaction([myDb.storeNames.calculator], 'readonly');
+      let store = transaction.objectStore(myDb.storeNames.calculator);
+      let getRequest = store.getAll();
+      myDb.setDefaultErrorHandler(getRequest, myDb);
+      getRequest.onsuccess = (e) => {
+        resolve(e.target.result);
+      }
+      getRequest.onerror = (error) => {
+        reject(error.target.result)
+      }
+    })
+  }
+
+  putCalculator(calculator: Calculator): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let transaction = myDb.instance.transaction([myDb.storeNames.calculator], 'readwrite');
+      let store = transaction.objectStore(myDb.storeNames.calculator);
+      let getRequest = store.get(calculator.id);
+      getRequest.onsuccess = (event) => {
+        let tmpCalc: Calculator = event.target.result;
+        tmpCalc = calculator;
+        let updateRequest = store.put(tmpCalc);
+        updateRequest.onsuccess = (event) => {
+          resolve(event);
+        }
+        updateRequest.onerror = (event) => {
+          reject(event)
+        }
+      }
+      getRequest.onerror = (event) => {
+        reject(event);
+      }
+    })
+  }
+
+  deleteCalculator(id: number): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let transaction = myDb.instance.transaction([myDb.storeNames.calculator], 'readwrite');
+      let store = transaction.objectStore(myDb.storeNames.calculator);
+      let deleteRequest = store.delete(id);
+      deleteRequest.onsuccess = (event) => {
+        resolve(event.target.result);
+      }
+      deleteRequest.onerror = (event) => {
+        reject(event.target.result);
+      }
+    })
+  }
+
 }
