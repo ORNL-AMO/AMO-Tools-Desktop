@@ -25,7 +25,6 @@ tr > td:not(:first-child),
 tr > th:not(:first-child){
     text-align: center;
 }
-<<<<<<< HEAD
 
 
 @media print {
@@ -38,8 +37,7 @@ tr > th:not(:first-child){
         font-size: 30px;
     }
 }
-=======
+
 .tr-underline {
   border-bottom: 2px groove #bf3d00;
 }
->>>>>>> develop
