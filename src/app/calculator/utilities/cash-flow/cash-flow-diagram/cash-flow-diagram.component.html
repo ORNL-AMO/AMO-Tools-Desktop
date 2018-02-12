@@ -15,10 +15,12 @@
   </div>
 </div>
 <div class="row">
-  <div class="col-12 text-center diagram-container" id="cashFlowDiagram">
+  <div #ngChart class="col-12 text-center diagram-container" id="cashFlowDiagram">
     <!-- graph here -->
   </div>
-</div>
-<div class="row" id="graphInfo">
 
+</div>
+
+<div id="cashFlowDl" class="col-md-2">
+  <span class="fa fa-download" (click)="downloadChart()"></span>
 </div>

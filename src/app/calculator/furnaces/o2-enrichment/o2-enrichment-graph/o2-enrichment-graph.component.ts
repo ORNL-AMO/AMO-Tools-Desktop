@@ -1,9 +1,10 @@
-import { Component, OnInit, Input, SimpleChanges, DoCheck, KeyValueDiffers } from '@angular/core';
+import { Component, OnInit, Input, SimpleChanges, DoCheck, KeyValueDiffers, ViewChild, ElementRef } from '@angular/core';
 import { PhastService } from '../../../../phast/phast.service';
 import { WindowRefService } from '../../../../indexedDb/window-ref.service';
 import { O2Enrichment, O2EnrichmentOutput } from '../../../../shared/models/phast/o2Enrichment';
 import * as d3 from 'd3';
 import { Settings } from '../../../../shared/models/settings';
+import { SvgToPngService } from '../../../../shared/svg-to-png/svg-to-png.service';
 
 @Component({
   selector: 'app-o2-enrichment-graph',
@@ -21,6 +22,9 @@ export class O2EnrichmentGraphComponent implements OnInit, DoCheck {
   lines: any;
   @Input()
   settings: Settings;
+
+  @ViewChild("ngChart") ngChart: ElementRef;
+  exportName: string;
 
   o2EnrichmentPoint: O2Enrichment;
 
@@ -67,7 +71,7 @@ export class O2EnrichmentGraphComponent implements OnInit, DoCheck {
 
   @Input()
   toggleCalculate: boolean;
-  constructor(private phastService: PhastService, private windowRefService: WindowRefService, private differs: KeyValueDiffers) {
+  constructor(private phastService: PhastService, private windowRefService: WindowRefService, private differs: KeyValueDiffers, private svgToPngService: SvgToPngService) {
     this.differ = differs.find({}).create();
   }
 
@@ -164,9 +168,9 @@ export class O2EnrichmentGraphComponent implements OnInit, DoCheck {
 
   makeGraph() {
     // Remove  all previous graphs
-    d3.select('app-o2-enrichment-graph').selectAll('svg').remove();
+    d3.select(this.ngChart.nativeElement).selectAll('svg').remove();
 
-    this.svg = d3.select('app-o2-enrichment-graph').append('svg')
+    this.svg = d3.select(this.ngChart.nativeElement).append('svg')
       .attr("width", this.width + this.margin.left + this.margin.right)
       .attr("height", this.height + this.margin.top + this.margin.bottom)
       .append("g")
@@ -774,4 +778,10 @@ export class O2EnrichmentGraphComponent implements OnInit, DoCheck {
     }
   }
 
+  downloadChart() {
+    if (!this.exportName) {
+      this.exportName = "o2-enrichment-graph";
+    }
+    this.svgToPngService.exportPNG(this.ngChart, this.exportName);
+  }
 }

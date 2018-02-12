@@ -1707,7 +1707,18 @@ Toasty Overrides ================================= */
   opacity: 0.6;
 }
 
-.chart-container .fa-download:hover {
+#gridToggle .fa-download {
+  position: absolute;
+  left: 55px;
+  border: 1px solid;
+  border-color: rgb(33, 37, 41);
+  padding: 5px;
+  border-radius: 4px;
+  opacity: 0.6;
+}
+
+.chart-container .fa-download:hover,
+#gridToggle .fa-download:hover {
   cursor: pointer;
   opacity: 1;
 }

@@ -43,7 +43,12 @@
                 <app-pump-curve-graph [pumpCurveForm]="pumpCurveForm" [settings]="settings" [toggleCalculate]="toggleCalculate" [selectedFormView]="selectedFormView"></app-pump-curve-graph>
                 <!--<span *ngIf"selectedFormView == 'Equation'">TEST EQUATION HERE</span>-->
               </div>
-              <div class="col-11">
+              <!-- <div class="col-11">
+                <p [innerHTML]="regEquation"></p>
+              </div> -->
+            </div>
+            <div class="row justify-content-center" style="width: 100%;" *ngIf="tabSelect == 'results'">
+              <div class="col-11" style="top: 60px;">
                 <p [innerHTML]="regEquation"></p>
               </div>
             </div>

@@ -1,8 +1,8 @@
-import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, SimpleChanges, ViewChild, ElementRef } from '@angular/core';
 import { PsatService } from '../../../../psat/psat.service';
 import { Settings } from '../../../../shared/models/settings';
 import { WindowRefService } from '../../../../indexedDb/window-ref.service';
-//eclare const d3: any;
+import { SvgToPngService } from '../../../../shared/svg-to-png/svg-to-png.service';
 import * as d3 from 'd3';
 import { FormGroup } from '@angular/forms';
 @Component({
@@ -17,6 +17,10 @@ export class MotorPerformanceGraphComponent implements OnInit {
   toggleCalculate: boolean;
   @Input()
   settings: Settings;
+
+  @ViewChild("ngChart") ngChart: ElementRef;
+
+  exportName: string;
 
   svg: any;
   xAxis: any;
@@ -55,7 +59,7 @@ export class MotorPerformanceGraphComponent implements OnInit {
   doc: any;
   window: any;
 
-  constructor(private windowRefService: WindowRefService, private psatService: PsatService) { }
+  constructor(private windowRefService: WindowRefService, private psatService: PsatService, private svgToPngService: SvgToPngService) { }
 
   ngOnInit() {
 
@@ -193,9 +197,9 @@ export class MotorPerformanceGraphComponent implements OnInit {
   makeGraph() {
 
     //Remove  all previous graphs
-    d3.select('app-motor-performance-graph').selectAll('svg').remove();
+    d3.select(this.ngChart.nativeElement).selectAll('svg').remove();
 
-    this.svg = d3.select('app-motor-performance-graph').append('svg')
+    this.svg = d3.select(this.ngChart.nativeElement).append('svg')
       .attr("width", this.width + this.margin.left + this.margin.right)
       .attr("height", this.height + this.margin.top + this.margin.bottom)
       .append("g")
@@ -657,4 +661,10 @@ export class MotorPerformanceGraphComponent implements OnInit {
     }
   }
 
+  downloadChart() {
+    if (!this.exportName) {
+      this.exportName = "motor-performance-graph";
+    }
+    this.svgToPngService.exportPNG(this.ngChart, this.exportName);
+  }
 }
