@@ -1,0 +1,64 @@
+<div class="card summary-card" xmlns="http://www.w3.org/1999/html">
+  <div class="card-header" (click)="toggleCollapse()">
+    <h5>Operation Data ( {{numLosses}} )
+    <span class="pull-right fa" [ngClass]="{'fa-chevron-down': collapse, 'fa-chevron-up': !collapse}"></span>
+    </h5>
+  </div>
+
+  <div *ngIf="collapse">
+    <div class="card-body">
+      <div class="output-summary">
+        <table class="table table-hover table-striped">
+          <thead>
+          <tr>
+            <th [ngStyle]="{'width.%': 100 /(numMods+2)}"></th>
+            <th [ngStyle]="{'width.%': 100 /(numMods+2)}">
+              Something
+            </th>
+            <th [ngStyle]="{'width.%': 100 /(numMods+2)}" *ngFor="let mod of phast.modifications">
+              {{mod.phast.name}}
+            </th>
+          </tr>
+          <tr>
+            <th>{{index+1}}</th>
+            <th>
+              {{data.baseline.name}}
+            </th>
+            <th *ngFor="let mod of data.modifications">
+              {{mod.name}}
+            </th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td>
+              Energy Source Type
+            </td>
+          </tr>
+          <tr>
+            <td>
+              Furnace Type
+            </td>
+          </tr>
+          <tr>
+            <td>
+              Furnace Name
+            </td>
+          </tr>
+          <tr>
+            <td>
+              Operating Hours
+            </td>
+          </tr>
+          <tr>
+            <td>
+              Cost
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+</div>
