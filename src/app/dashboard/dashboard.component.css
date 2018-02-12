@@ -30,3 +30,8 @@
   background-color: darkgrey;
   outline: 1px solid slategrey;
   }
+
+
+  .pre-assessment-modal .modal-dialog{
+      top: 0px;
+      }

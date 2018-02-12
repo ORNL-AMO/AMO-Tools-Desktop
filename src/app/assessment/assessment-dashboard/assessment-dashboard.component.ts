@@ -27,7 +27,9 @@ export class AssessmentDashboardComponent implements OnInit {
   exportEmit = new EventEmitter<boolean>();
   @Output('importEmit')
   importEmit = new EventEmitter<boolean>();
-
+  @Output('emitPreAssessment')
+  emitPreAssessment = new EventEmitter<boolean>();
+  
   isChecked: boolean = false;
   view: string;
   isFirstChange: boolean = true;
@@ -94,5 +96,9 @@ export class AssessmentDashboardComponent implements OnInit {
 
   emitImport(){
     this.importEmit.emit(true);
+  }
+
+  preAssessmentEmit(){
+    this.emitPreAssessment.emit(true);
   }
 }

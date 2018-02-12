@@ -2,6 +2,7 @@ import { PreAssessment } from "../../calculator/furnaces/pre-assessment/pre-asse
 
 export interface Calculator {
     directoryId?: number,
+    assessmentId?: number,
     id?: number,
     name?: string,
     type?: string,

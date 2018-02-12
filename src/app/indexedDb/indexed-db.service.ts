@@ -156,11 +156,13 @@ export class IndexedDbService {
         //calculator
         if (!newVersion.objectStoreNames.contains(myDb.storeNames.calculator)) {
           console.log('creating calculator store...');
-          let settingsObjStore = newVersion.createObjectStore(myDb.storeNames.calculator, {
+          let calculatorObjStore = newVersion.createObjectStore(myDb.storeNames.calculator, {
             autoIncrement: true,
             keyPath: 'id'
           })
-          settingsObjStore.createIndex('id', 'id', { unique: false });
+          calculatorObjStore.createIndex('id', 'id', { unique: false });
+          calculatorObjStore.createIndex('directoryId', 'directoryId', { unique: false });
+          calculatorObjStore.createIndex('assessmentId', 'assessmentId', { unique: false });
         }
       }
       myDb.setDefaultErrorHandler(this.request, myDb);
@@ -848,6 +850,38 @@ export class IndexedDbService {
         reject(e.target.result)
       }
     });
+  }
+  getDirectoryCalculator(directoryId: number): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let transaction = myDb.instance.transaction([myDb.storeNames.calculator], 'readwrite');
+      let store = transaction.objectStore(myDb.storeNames.calculator);
+      let index = store.index('directoryId');
+      let indexGetRequest = index.getAll(directoryId);
+      myDb.setDefaultErrorHandler(indexGetRequest, myDb);
+      indexGetRequest.onsuccess = (e) => {
+        let calculators: Array<Calculator> = e.target.result;
+        resolve(calculators)
+      }
+      indexGetRequest.onerror = (e) => {
+        reject(e);
+      }
+    })
+  }
+  getAssessmentCalculator(directoryId: number): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let transaction = myDb.instance.transaction([myDb.storeNames.calculator], 'readwrite');
+      let store = transaction.objectStore(myDb.storeNames.calculator);
+      let index = store.index('assessmentId');
+      let indexGetRequest = index.getAll(directoryId);
+      myDb.setDefaultErrorHandler(indexGetRequest, myDb);
+      indexGetRequest.onsuccess = (e) => {
+        let calculators: Array<Calculator> = e.target.result;
+        resolve(calculators)
+      }
+      indexGetRequest.onerror = (e) => {
+        reject(e);
+      }
+    })
   }
 
   getCalculator(id: number): Promise<any> {

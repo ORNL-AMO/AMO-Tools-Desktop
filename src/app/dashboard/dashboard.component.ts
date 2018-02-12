@@ -40,6 +40,7 @@ export class DashboardComponent implements OnInit {
   @ViewChild('deleteItemsModal') public deleteItemsModal: ModalDirective;
   @ViewChild('exportModal') public exportModal: ModalDirective;
   @ViewChild('importModal') public importModal: ModalDirective;
+  @ViewChild('preAssessmentModal') public preAssessmentModal: ModalDirective;
 
   importInProgress: boolean = false;
   isExportView: boolean = false;
@@ -52,7 +53,7 @@ export class DashboardComponent implements OnInit {
   suiteDbInit: boolean = false;
   isModalOpen: boolean = false;
   createAssessment: boolean = false;
-
+  showPreAssessment: boolean = false;
   constructor(private indexedDbService: IndexedDbService, private formBuilder: FormBuilder, private assessmentService: AssessmentService, private toastyService: ToastyService,
     private toastyConfig: ToastyConfig, private jsonToCsvService: JsonToCsvService, private suiteDbService: SuiteDbService, private importExportService: ImportExportService,
     private reportRollupService: ReportRollupService, private settingsService: SettingsService) {
@@ -161,12 +162,22 @@ export class DashboardComponent implements OnInit {
       }
     );
   }
-  openModal($event){
+  openModal($event) {
     this.isModalOpen = $event;
   }
 
   hideScreen() {
     this.dashboardView = 'assessment-dashboard';
+  }
+
+  showPreAssessmentModal() {
+    this.showPreAssessment = true;
+    this.preAssessmentModal.show();
+  }
+
+  hidePreAssessmentModal() {
+    this.showPreAssessment = false;
+    this.preAssessmentModal.hide();
   }
 
   getAllDirectories() {
@@ -507,10 +518,10 @@ export class DashboardComponent implements OnInit {
     this.dashboardView = 'assessment-dashboard';
   }
 
-  showMoveItemsModal(){
+  showMoveItemsModal() {
     this.selectedItems = new Array();
     this.getSelected(this.workingDirectory);
-    setTimeout(() => {console.log(this.selectedItems)},1000)
+    setTimeout(() => { console.log(this.selectedItems) }, 1000)
   }
 
 

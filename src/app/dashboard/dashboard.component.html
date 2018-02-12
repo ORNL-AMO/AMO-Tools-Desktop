@@ -13,7 +13,7 @@
 
             <app-assessment-dashboard [directory]="workingDirectory" (directoryChange)="changeWorkingDirectory($event)" (deleteDataSignal)="showDeleteModal()"
                 (deleteCheckedItems)="showDeleteItemsModal()" (resetDataEmit)="showDeleteModal()" (emitNewDir)="newDir()" (genReport)="generateReport()"
-                (exportEmit)="exportSelected()" (importEmit)="showImportModal()">
+                (exportEmit)="exportSelected()" (importEmit)="showImportModal()" (emitPreAssessment)="showPreAssessmentModal()">
             </app-assessment-dashboard>
 
         </div>
@@ -160,5 +160,21 @@
     </div>
 </div>
 
+<div bsModal #preAssessmentModal="bs-modal" class="modal fade pre-assessment-modal" tabindex="-1" role="dialog" aria-labelledby="preAssessmentModalLabel" aria-hidden="true"
+    [config]="{backdrop: 'static'}">
+    <div class="modal-dialog modal-lg export-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Pre Assessment</h3>
+                <button class="close" aria-label="Close" (click)="hidePreAssessmentModal()">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" *ngIf="showPreAssessment">
+                <app-pre-assessment></app-pre-assessment>
+            </div>
+        </div>
+    </div>
+</div>
 
 <ng2-toasty></ng2-toasty>
