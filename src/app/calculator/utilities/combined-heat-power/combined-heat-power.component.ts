@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { StandaloneService } from '../../standalone.service';
-import { CombinedHeatPower, CombinedHeatPowerOutput } from '../../../shared/models/combinedHeatPower';
+import { CombinedHeatPower, CombinedHeatPowerOutput } from '../../../shared/models/standalone';
 
 @Component({
   selector: 'app-combined-heat-power',
@@ -35,7 +35,7 @@ export class CombinedHeatPowerComponent implements OnInit {
   }
   currentField: string = 'annualOperatingHours';
   tabSelect: string = 'results';
-  constructor(private standaloneService: StandaloneService) { }
+  constructor() { }
 
   ngOnInit() {
   }
@@ -48,7 +48,7 @@ export class CombinedHeatPowerComponent implements OnInit {
   }
 
   calculate() {
-    this.results = this.standaloneService.CHPcalculator(this.inputs);
+    this.results = StandaloneService.CHPcalculator(this.inputs);
   }
 
 }
