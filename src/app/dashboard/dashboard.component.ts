@@ -570,7 +570,6 @@ export class DashboardComponent implements OnInit {
       data.pop();
       this.importInProgress = true;
       this.runImport(data);
-
     }
     else {
       this.addToast('INVALID FILE');
