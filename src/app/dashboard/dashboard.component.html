@@ -13,7 +13,7 @@
 
             <app-assessment-dashboard [directory]="workingDirectory" (directoryChange)="changeWorkingDirectory($event)" (deleteDataSignal)="showDeleteModal()"
                 (deleteCheckedItems)="showDeleteItemsModal()" (resetDataEmit)="showDeleteModal()" (emitNewDir)="newDir()" (genReport)="generateReport()"
-                (exportEmit)="exportSelected()" (importEmit)="showImportModal()" (emitPreAssessment)="showPreAssessmentModal()">
+                (exportEmit)="exportSelected()" (importEmit)="showImportModal()" (emitPreAssessment)="showPreAssessmentModal()" [directoryCalculator]="workingDirectoryCalculator">
             </app-assessment-dashboard>
 
         </div>
@@ -40,10 +40,6 @@
             <app-assessment-settings [directory]="allDirectories" (resetDataEmit)="showDeleteModal($event)" (emitUpdateDirectory)="updateDir()"></app-assessment-settings>
         </div>
     </div>
-    <!--<div class="row">
-        <button (click)="takeScreenShot()">Screenshot</button>
-        <div #photo id="photo"></div>
-    </div>-->
 </div>
 
 <div class="report" *ngIf="dashboardView == 'detailed-report'">
@@ -163,18 +159,18 @@
 <div bsModal #preAssessmentModal="bs-modal" class="modal fade pre-assessment-modal" tabindex="-1" role="dialog" aria-labelledby="preAssessmentModalLabel" aria-hidden="true"
     [config]="{backdrop: 'static'}">
     <div class="modal-dialog modal-lg">
-        <div class="modal-content">
+        <div class="modal-content" *ngIf="workingDirectoryCalculator">
             <div class="modal-header">
-                <h3>Pre Assessment</h3>
+                <h3>Pre-assessment / Screening Calculator</h3>
                 <button class="close" aria-label="Close" (click)="hidePreAssessmentModal()">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body" *ngIf="showPreAssessment">
-                <app-pre-assessment [inModal]="true"></app-pre-assessment>
+                <app-pre-assessment [inModal]="true" [(calculator)]="workingDirectoryCalculator" [settings]="workingDirectorySettings"></app-pre-assessment>
             </div>
-            <div class="modal-footer">
-                <button class="btn btn-primary">Save to Folder</button>
+            <div class="modal-footer justify-content-center">
+                <button class="btn btn-primary save-btn" (click)="addCalculatorData(workingDirectoryCalculator)">Save to Folder</button>
             </div>
         </div>
     </div>

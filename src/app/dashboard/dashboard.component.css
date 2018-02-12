@@ -48,5 +48,17 @@
 .pre-assessment-modal .modal-body{
     padding-top: 0px;
     padding-bottom: 0px;
-    min-height: 90vh;
+    min-height: 85vh;
+    max-height: 85vh;
+}
+
+
+
+.pre-assessment-modal .modal-header,
+.pre-assessment-modal .modal-footer{
+    padding: 8px;
+}
+
+.save-btn{
+    padding: 6px;
 }

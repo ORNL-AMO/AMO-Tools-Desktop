@@ -45,5 +45,6 @@ td{
 
 
 .in-modal{
-    min-height: 90vh;
+    min-height: 85vh;
+    max-height: 85vh;
 }

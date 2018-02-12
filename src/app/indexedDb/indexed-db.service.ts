@@ -12,7 +12,7 @@ import { Calculator } from '../shared/models/calculators';
 
 var myDb: any = {
   name: 'CrudDB',
-  version: 3,
+  version: 4,
   instance: {},
   storeNames: {
     assessments: 'assessments',
