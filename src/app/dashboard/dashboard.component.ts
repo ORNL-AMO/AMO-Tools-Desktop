@@ -161,7 +161,7 @@ export class DashboardComponent implements OnInit {
       }
     );
   }
-  openModal($event){
+  openModal($event) {
     this.isModalOpen = $event;
   }
 
@@ -507,10 +507,10 @@ export class DashboardComponent implements OnInit {
     this.dashboardView = 'assessment-dashboard';
   }
 
-  showMoveItemsModal(){
+  showMoveItemsModal() {
     this.selectedItems = new Array();
     this.getSelected(this.workingDirectory);
-    setTimeout(() => {console.log(this.selectedItems)},1000)
+    setTimeout(() => { console.log(this.selectedItems) }, 1000)
   }
 
 
@@ -601,6 +601,9 @@ export class DashboardComponent implements OnInit {
           tmpDirDbRef.parentDirectoryId = checkParentArr[0].newId;
         }
         this.indexedDbService.addDirectory(tmpDirDbRef).then(results => {
+          dir.directorySettings.directoryId = results;
+          delete dir.directorySettings.id;
+          this.indexedDbService.addSettings(dir.directorySettings);
           dirIdPairs.push({ oldId: dir.directory.id, newId: results });
         });
       }
@@ -647,5 +650,6 @@ export class DashboardComponent implements OnInit {
 export interface ImportDataObjects {
   settings: Settings,
   directory: Directory,
-  assessment: Assessment
+  assessment: Assessment,
+  directorySettings: Settings
 }
