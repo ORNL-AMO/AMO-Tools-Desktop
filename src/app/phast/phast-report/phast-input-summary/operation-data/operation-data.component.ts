@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import {PHAST} from "../../../../shared/models/phast/phast";
+import { PHAST } from "../../../../shared/models/phast/phast";
 import { Settings } from '../../../../shared/models/settings';
 
 
@@ -9,17 +9,23 @@ import { Settings } from '../../../../shared/models/settings';
   styleUrls: ['./operation-data.component.css']
 })
 export class OperationDataComponent implements OnInit {
- @Input()
+  @Input()
   phast: PHAST;
- @Input()
- settings: Settings;
- collapse: boolean = true;
- numLosses: number = 0;
- numMods: number = 0;
- lossData: Array<any>;
+  @Input()
+  settings: Settings;
+
+
+  collapse: boolean = true;
+  numLosses: number = 0;
+  numMods: number = 0;
+  lossData: Array<any>;
   constructor() { }
 
   ngOnInit() {
+    console.log(this.settings.energySourceType);
+    console.log(this.phast.operatingCosts);
+    console.log(this.phast.operatingHours);
+    console.log(this.settings.furnaceType);
   }
   toggleCollapse() {
     this.collapse = !this.collapse;
