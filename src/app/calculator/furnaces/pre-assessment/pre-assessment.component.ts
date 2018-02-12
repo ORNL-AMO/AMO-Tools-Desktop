@@ -19,6 +19,8 @@ export class PreAssessmentComponent implements OnInit {
   settings: Settings;
   @Input()
   height: number;
+  @Input()
+  inModal: boolean;
 
   @ViewChild('container') container: ElementRef;
 
@@ -55,10 +57,12 @@ export class PreAssessmentComponent implements OnInit {
 
   getHeight() {
     setTimeout(() => {
-      this.height = this.container.nativeElement.clientHeight;
-    }, 100);
+      if (this.container.nativeElement.clientHeight) {
+        this.height = this.container.nativeElement.clientHeight;
+      }
+    }, 200);
   }
-  
+
   initAssessments() {
     this.assessmentGraphColors = graphColors.reverse();
     this.results = new Array<any>();

@@ -162,7 +162,7 @@
 
 <div bsModal #preAssessmentModal="bs-modal" class="modal fade pre-assessment-modal" tabindex="-1" role="dialog" aria-labelledby="preAssessmentModalLabel" aria-hidden="true"
     [config]="{backdrop: 'static'}">
-    <div class="modal-dialog modal-lg export-modal">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
                 <h3>Pre Assessment</h3>
@@ -171,7 +171,10 @@
                 </button>
             </div>
             <div class="modal-body" *ngIf="showPreAssessment">
-                <app-pre-assessment></app-pre-assessment>
+                <app-pre-assessment [inModal]="true"></app-pre-assessment>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary">Save to Folder</button>
             </div>
         </div>
     </div>

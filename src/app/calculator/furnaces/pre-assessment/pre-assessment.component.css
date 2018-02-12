@@ -42,3 +42,8 @@ td{
 .no-data{
     width: 100%;
 }
+
+
+.in-modal{
+    min-height: 90vh;
+}
