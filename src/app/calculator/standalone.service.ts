@@ -19,12 +19,7 @@ export class StandaloneService {
   }
 
   static pneumaticAirRequirement(input: PneumaticAirRequirementInput): PneumaticAirRequirementOutput {
-    const output = standaloneAddon.pneumaticAirRequirement(input);
-    return {
-      airRequirementPneumaticCylinder: output.airRequirementPneumaticCylinder,
-      volumeAirIntakePiston: output.volumeAirIntakePiston,
-      compressionRatio: output.compressionRatio
-    };
+    return standaloneAddon.pneumaticAirRequirement(input);
   }
 
   static getReceiverTankCalculationMethod(method: string) {
@@ -72,7 +67,7 @@ export class StandaloneService {
 
   // calculate flow rate
   static pneumaticValveCalculateFlowRate(inletPressure: number, outletPressure: number): number {
-    return standaloneAddon.pneumaticValve({inletPressure, outletPressure}).flowRate;
+    return standaloneAddon.pneumaticValve({inletPressure: inletPressure, outletPressure: outletPressure}).flowRate;
   }
 
   // calculate flow coefficient
