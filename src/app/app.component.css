@@ -1698,9 +1698,25 @@ Toasty Overrides ================================= */
     text-decoration: none;
 }
 
+
+/* chart download icon */
+.chart-container .fa-download {
+  position: absolute;
+  right: 0;
+  top: 0;
+  opacity: 0.6;
+}
+
+.chart-container .fa-download:hover {
+  cursor: pointer;
+  opacity: 1;
+}
+
+
 .show-print{
     display: none;
 }
+
 
 @media screen and (min-width: 768px) {
   /*.rollups .pumps {

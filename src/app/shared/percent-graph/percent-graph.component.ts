@@ -1,5 +1,6 @@
-import { Component, OnInit, Input, SimpleChange, ViewChild } from '@angular/core';
+import { Component, OnInit, Input, ElementRef, SimpleChange, ViewChild } from '@angular/core';
 import { WindowRefService } from '../../indexedDb/window-ref.service';
+import { SvgToPngService } from '../svg-to-png/svg-to-png.service';
 import * as d3 from 'd3';
 import * as c3 from 'c3';
 
@@ -32,12 +33,17 @@ export class PercentGraphComponent implements OnInit {
   chartColorDataSet: Array<any>;
   chart: any;
 
+  firstChange: boolean = true;
+  exportName: string;
+
   potential: number = 0;
 
   doc: any;
   window: any;
 
-  constructor(private windowRefService: WindowRefService) { }
+  @ViewChild('ngChart') ngChart: ElementRef;
+
+  constructor(private windowRefService: WindowRefService, private svgToPngService: SvgToPngService) { }
 
   ngOnInit() {
     this.initChart();
@@ -51,6 +57,8 @@ export class PercentGraphComponent implements OnInit {
     setTimeout(() => {
       this.setValueMargin();
     }, 1500)
+
+    this.exportName = this.title + "-graph";
   }
 
   ngOnDestroy() {
@@ -88,7 +96,12 @@ export class PercentGraphComponent implements OnInit {
   }
 
   ngOnChanges() {
-    this.updateChart();
+    if (this.firstChange) {
+      this.firstChange = !this.firstChange;
+    }
+    else {
+      this.updateChart();
+    }
   }
 
 
@@ -99,8 +112,9 @@ export class PercentGraphComponent implements OnInit {
           ['show', this.value],
         ]
       });
-      d3.select('#chart .c3-chart-arcs-title').node().innerHTML = this.value.toFixed(0) + "%";
-      d3.select('#chart .c3-chart-arcs-title').style("padding-bottom", "20px").style("font-size","26px");
+
+      d3.select(this.ngChart.nativeElement).selectAll(".c3-chart-arcs-title").node().innerHTML = this.value.toFixed(0) + "%";
+      d3.selectAll('.c3-chart-arcs-title').style("padding-bottom", "20px").style("font-size", "26px");
       d3.selectAll(".c3-gauge-value").style("display", "none");
     }
     else {
@@ -110,6 +124,7 @@ export class PercentGraphComponent implements OnInit {
 
   initChart() {
     this.chart = c3.generate({
+      bindto: this.ngChart.nativeElement,
       data: {
         columns: [
           ['data', 0]
@@ -130,13 +145,18 @@ export class PercentGraphComponent implements OnInit {
       },
       tooltip: {
         show: false
-      },
+      }
     });
     d3.selectAll(".c3-gauge-value").style("display", "none");
     d3.selectAll(".c3-axis.c3-axis-x .tick text").style("display", "none");
-    d3.select("#chart .c3-chart-arcs-background").style("fill", "#e0e0e0");
+    d3.selectAll(".c3-chart-arcs-background").style("fill", "#e0e0e0");
+
     if (this.value && this.chart) {
       this.updateChart();
     }
+  }
+
+  downloadChart() {
+    this.svgToPngService.exportPNG(this.ngChart, this.exportName);
   }
 }

@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-// import { ChartsModule } from 'ng2-charts';
 
 import { ControlMessagesComponent } from './control-messages/control-messages.component';
 import { ValidationService } from './validation.service';
@@ -12,6 +11,7 @@ import { PercentGraphComponent } from './percent-graph/percent-graph.component';
 import { SigFigsPipe } from './sig-figs.pipe';
 import { UpdateDataService } from './update-data.service';
 import { FacilityInfoSummaryComponent } from './facility-info-summary/facility-info-summary.component';
+import { SvgToPngService } from './svg-to-png/svg-to-png.service';
 
 @NgModule({
   imports: [
@@ -36,7 +36,8 @@ import { FacilityInfoSummaryComponent } from './facility-info-summary/facility-i
     ValidationService,
     ModelService,
     ConvertUnitsService,
-    UpdateDataService
+    UpdateDataService,
+    SvgToPngService
   ]
 })
 
