@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import {StandaloneService} from "../../standalone.service";
+import {BagMethodInput, BagMethodOutput} from "../../../shared/models/standalone";
 
 @Component({
   selector: 'app-bag-method',
@@ -7,41 +9,26 @@ import { Component, OnInit } from '@angular/core';
 })
 export class BagMethodComponent implements OnInit {
 
-  inputs: BagMethod;
+  inputs: BagMethodInput;
+  outputs: BagMethodOutput;
   constructor() { }
 
   ngOnInit() {
     this.inputs = {
-      operatingHours: 0,
-      fillTime: 0,
-      height: 0,
-      diameter: 0,
+      operatingTime: 0,
+      bagFillTime: 0,
+      heightOfBag: 0,
+      diameterOfBag: 0,
+      numberOfUnits: 0
+    };
+
+    this.outputs = {
       flowRate: 0,
-      airBlows: 0,
       annualConsumption: 0
-    }
+    };
   }
 
-  calculateFlowRate(inputs: BagMethod) {
-    //flowRate = (.0273 * diameter^2 * height)/fillTime
-    if (inputs.fillTime) {
-      inputs.flowRate = (.0273 * (inputs.diameter * inputs.diameter) * inputs.height) / inputs.fillTime;
-    }
+  calculateAnnualConsumption(inputs: BagMethodInput) {
+    this.outputs = StandaloneService.bagMethod(inputs);
   }
-
-  calculateAnnualConsumption(inputs: BagMethod) {
-    this.calculateFlowRate(inputs);
-    inputs.annualConsumption = (inputs.flowRate * inputs.operatingHours * inputs.airBlows * 60) / 1000
-  }
-}
-
-
-export interface BagMethod {
-  operatingHours: number,
-  fillTime: number,
-  height: number,
-  diameter: number,
-  flowRate: number,
-  airBlows: number,
-  annualConsumption: number
 }

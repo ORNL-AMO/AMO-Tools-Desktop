@@ -4,7 +4,7 @@ import {
   CombinedHeatPower, CombinedHeatPowerOutput, PneumaticAirRequirementInput, PneumaticAirRequirementOutput,
   ReceiverTankGeneral, ReceiverTankDedicatedStorage, ReceiverTankBridgingCompressor, ReceiverTankMeteredStorage,
   OperatingCostInput, OperatingCostOutput, AirSystemCapacityInput, AirSystemCapacityOutput, AirVelocityInput, PipeSizes,
-  PipeSizingOutput, PipeSizingInput, PneumaticValve
+  PipeSizingOutput, PipeSizingInput, PneumaticValve, BagMethodInput, BagMethodOutput
 } from '../shared/models/standalone';
 
 
@@ -73,6 +73,10 @@ export class StandaloneService {
   // calculate flow coefficient
   static pneumaticValve(input: PneumaticValve): number {
     return standaloneAddon.pneumaticVale(input).flowCoefficient;
+  }
+
+  static bagMethod(input: BagMethodInput): BagMethodOutput {
+    return standaloneAddon.bagMethod(input);
   }
 
   static CHPcalculator(inputs: CombinedHeatPower): CombinedHeatPowerOutput {
