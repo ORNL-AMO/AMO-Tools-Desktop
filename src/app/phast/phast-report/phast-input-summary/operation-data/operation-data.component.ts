@@ -22,6 +22,12 @@ export class OperationDataComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
+    if (this.phast) {
+      if (this.phast.modifications){
+        this.numMods = this.phast.modifications.length;
+      }
+    }
+
     console.log(this.settings.energySourceType);
     console.log(this.phast.operatingCosts);
     console.log(this.phast.operatingHours);

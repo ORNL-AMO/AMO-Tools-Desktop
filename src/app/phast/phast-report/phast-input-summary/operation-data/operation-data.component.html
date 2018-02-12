@@ -25,26 +25,74 @@
             <td>
               Energy Source Type
             </td>
-            <td>{{settings.energySourceType}}</td>
+            <td>
+              {{settings.energySourceType}}
+            </td>
+            <td>
+              {{settings.energySourceType}}
+            </td>
           </tr>
-          <tr>
+          <tr *ngIf=!null >
             <td>
               Furnace Type
             </td>
-          </tr>
-          <tr>
-            <td>
-              Furnace Name
+            <td *ngIf="!settings.customFurnaceName">
+              {{settings.furnaceType}}
+            </td>
+            <td *ngIf="settings.customFurnaceName">
+              {{settings.customFurnaceName}}
             </td>
           </tr>
+          <!--<tr *ngIf=!null>-->
+            <!--<td>-->
+              <!--Furnace Name-->
+            <!--</td>-->
+            <!--<td>-->
+              <!--{{settings.customFurnaceName}}-->
+            <!--</td>-->
+          <!--</tr>-->
           <tr>
             <td>
               Operating Hours
             </td>
+            <td>
+              {{phast.operatingHours.hoursPerYear}}
+            </td>
+            <td *ngFor="let mod of phast.modifications">
+              {{mod.phast.operatingHours.hoursPerYear}}
+            </td>
           </tr>
           <tr>
             <td>
-              Cost
+              Cost of fuel
+            </td>
+            <td>
+              {{phast.operatingCosts.fuelCost}}
+            </td>
+            <td *ngFor="let mod of phast.modifications">
+              {{mod.phast.operatingCosts.fuelCost}}
+            </td>
+          </tr>
+          <tr>
+            <td>
+              Cost of Steam
+            </td>
+            <td>
+              {{phast.operatingCosts.steamCost}}
+            </td>
+            <td *ngFor="let mod of phast.modifications">
+              {{mod.phast.operatingCosts.steamCost}}
+            </td>
+          </tr>
+          <tr>
+            <td>
+              Cost of Electricity
+            </td>
+            <td>
+              {{phast.operatingCosts.electricityCost}}
+            </td>
+            <td *ngFor="let mod of phast.modifications">
+              {{mod.phast.operatingCosts.electricityCost}}
             </td>
           </tr>
           </tbody>
