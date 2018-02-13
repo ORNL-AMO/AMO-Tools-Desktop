@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { BagMethod } from '../bag-method.component';
+import {BagMethodInput, BagMethodOutput} from '../../../../shared/models/standalone';
 
 @Component({
   selector: 'app-bag-method-form',
@@ -8,16 +8,16 @@ import { BagMethod } from '../bag-method.component';
 })
 export class BagMethodFormComponent implements OnInit {
   @Input()
-  inputs: BagMethod;
+  inputs: BagMethodInput;
+  @Input()
+  outputs: BagMethodOutput;
   @Output('calculate')
-  calculate = new EventEmitter<BagMethod>();
+  calculate = new EventEmitter<BagMethodInput>();
   constructor() { }
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
-
-  emitChange(){
+  emitChange() {
     this.calculate.emit(this.inputs);
   }
 }

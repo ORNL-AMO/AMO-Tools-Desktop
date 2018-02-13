@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { CombinedHeatPower } from '../../../../shared/models/combinedHeatPower';
+import { CombinedHeatPower } from '../../../../shared/models/standalone';
 @Component({
   selector: 'app-combined-heat-power-form',
   templateUrl: './combined-heat-power-form.component.html',
