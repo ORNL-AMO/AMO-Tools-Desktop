@@ -8,7 +8,7 @@
         <div class="row">
           <div class="col-12">
             <app-system-curve-form [psat]="psat" [settings]="settings" [(pointOne)]="pointOne" [(pointTwo)]="pointTwo" [(curveConstants)]="curveConstants"
-              (save)="saveCalculator()" (setVals)="setPointValuesFromCalc()" [inAssessment]="inAssessment"></app-system-curve-form>
+              (save)="changes()" (setVals)="setPointValuesFromCalc()" [inAssessment]="inAssessment"></app-system-curve-form>
               <a *ngIf="inAssessment" class="small pull-right reset-link" (click)="initializeCalculator(true)">Reset Baseline and Modifcation Data</a>
             </div>
         </div>

@@ -6,7 +6,7 @@ import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { PsatService } from '../../../psat/psat.service';
 import { Assessment } from '../../../shared/models/assessment';
-import { Calculator, CurveData } from '../../../shared/models/calculators';
+import { Calculator, CurveData, SystemCurve } from '../../../shared/models/calculators';
 import * as _ from 'lodash';
 @Component({
   selector: 'app-system-curve',
@@ -44,8 +44,8 @@ export class SystemCurveComponent implements OnInit {
       this.indexedDbService.getAssessmentCalculator(this.assessment.id).then((results: Array<Calculator>) => {
         if (results.length != 0) {
           this.calculator = results[0];
+          this.calcExists = true;
           if (this.calculator.systemCurve) {
-            this.calcExists = true;
             this.initDefault();
             this.setPointValuesFromCalc(true);
             this.curveConstants.form.patchValue({
@@ -115,6 +115,16 @@ export class SystemCurveComponent implements OnInit {
     this.calculateP1Flow();
     this.calculateP2Flow();
     this.calculateValues();
+  }
+
+  changes(){
+    if(this.inAssessment){
+      this.saveCalculator();
+    }else{
+      this.calculateP1Flow();
+      this.calculateP2Flow();
+      this.calculateValues();
+    }
   }
 
   convertDefaults(settings: Settings) {
@@ -226,21 +236,22 @@ export class SystemCurveComponent implements OnInit {
       }
       dataPoints.push(modPoint);
     })
-    this.calculator = {
-      systemCurve: {
-        specificGravity: this.psat.inputs.specific_gravity,
-        systemLossExponent: 1.9,
-        dataPoints: dataPoints,
-        selectedP1Name: dataPoints[0].modName,
-        selectedP2Name: dataPoints[1].modName
+    let systemCurve: SystemCurve = {
+      specificGravity: this.psat.inputs.specific_gravity,
+      systemLossExponent: 1.9,
+      dataPoints: dataPoints,
+      selectedP1Name: dataPoints[0].modName,
+      selectedP2Name: dataPoints[1].modName
+    }
+    if (this.calculator) {
+      this.calculator.systemCurve = systemCurve;
+    } else {
+      this.calculator = {
+        assessmentId: this.assessment.id,
+        systemCurve: systemCurve
       }
     }
-    if (id) {
-      this.calculator.id = id;
-      this.calculator.assessmentId = this.assessment.id;
-    }
-
-    if(reset){
+    if (reset) {
       this.setPointValuesFromCalc(true)
       this.saveCalculator();
     }
