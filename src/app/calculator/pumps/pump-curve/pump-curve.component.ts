@@ -4,8 +4,9 @@ import { Settings } from '../../../shared/models/settings';
 import { IndexedDbService } from '../../../indexedDb/indexed-db.service';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { PsatService } from '../../../psat/psat.service';
-import { PumpCurveForm, PumpCurveDataRow } from './pump-curve';
 import { PumpCurveService } from './pump-curve.service';
+import { PumpCurveForm, PumpCurveDataRow, Calculator } from '../../../shared/models/calculators';
+import { Assessment } from '../../../shared/models/assessment';
 @Component({
   selector: 'app-pump-curve',
   templateUrl: './pump-curve.component.html',
@@ -18,7 +19,10 @@ export class PumpCurveComponent implements OnInit {
   settings: Settings;
   @Input()
   inPsat: boolean;
-
+  @Input()
+  inAssessment: boolean;
+  @Input()
+  assessment: Assessment;
   tabSelect: string = 'results';
 
   pumpCurveForm: PumpCurveForm;
@@ -26,6 +30,9 @@ export class PumpCurveComponent implements OnInit {
   currentField: string = 'maxFlow';
   selectedFormView: string;
   regEquation: string;
+  calculator: Calculator;
+  calcExists: boolean = false;
+  saving: boolean = false;
   constructor(private indexedDbService: IndexedDbService, private psatService: PsatService, private convertUnitsService: ConvertUnitsService, private pumpCurveService: PumpCurveService) { }
 
   ngOnInit() {
@@ -38,7 +45,34 @@ export class PumpCurveComponent implements OnInit {
       )
     }
 
-    this.initForm();
+    if (this.inAssessment) {
+      this.indexedDbService.getAssessmentCalculator(this.assessment.id).then(results => {
+        if (results.length != 0) {
+          this.calculator = results[0];
+          this.calcExists = true;
+          if (this.calculator.pumpCurveForm) {
+            this.pumpCurveForm = this.calculator.pumpCurveForm;
+            this.subscribe();
+          } else {
+            this.initForm();
+            this.subscribe();
+          }
+        } else {
+          this.initForm();
+          this.subscribe();
+        }
+      })
+    } else {
+      this.initForm();
+      this.subscribe();
+    }
+  }
+
+  ngOnDestroy() {
+    this.pumpCurveService.calcMethod.next('Equation')
+  }
+
+  subscribe() {
     this.pumpCurveService.calcMethod.subscribe(val => {
       this.selectedFormView = val;
     })
@@ -76,10 +110,6 @@ export class PumpCurveComponent implements OnInit {
         }
       }
     })
-  }
-
-  ngOnDestroy() {
-    this.pumpCurveService.calcMethod.next('Equation')
   }
 
   setTab(str: string) {
@@ -136,9 +166,31 @@ export class PumpCurveComponent implements OnInit {
     } else {
       this.toggleCalculate = !this.toggleCalculate;
     }
+    if (this.inAssessment) {
+      this.saveCalculator();
+    }
   }
 
-  setFormView(str: string){
+  saveCalculator() {
+    if (!this.saving || this.calcExists) {
+      if (this.calcExists) {
+        this.calculator.pumpCurveForm = this.pumpCurveForm;
+        this.indexedDbService.putCalculator(this.calculator);
+      } else {
+        this.saving = true;
+        this.calculator = {
+          assessmentId: this.assessment.id,
+          pumpCurveForm: this.pumpCurveForm
+        }
+        this.indexedDbService.addCalculator(this.calculator).then(() => {
+          this.calcExists = true;
+        })
+      }
+    }
+  }
+
+  setFormView(str: string) {
     this.selectedFormView = str;
+    this.calculate();
   }
 }

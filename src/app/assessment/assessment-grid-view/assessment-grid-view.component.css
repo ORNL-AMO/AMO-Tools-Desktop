@@ -4,7 +4,14 @@ a:not([href]):not([tabindex]):hover {
   cursor: pointer;
 }
 
+.calc-card:hover{
+  background-color: #95A4AF;
+  cursor: pointer;
+}
 
+.calc-card{
+  text-align: center;
+}
 
 .summary-card{
   padding-top: 10px;

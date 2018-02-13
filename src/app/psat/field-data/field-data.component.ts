@@ -8,6 +8,7 @@ import { WindowRefService } from '../../indexedDb/window-ref.service';
 import { HelpPanelService } from '../help-panel/help-panel.service';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
 import { FormGroup } from '@angular/forms';
+import { Assessment } from '../../shared/models/assessment';
 @Component({
   selector: 'app-field-data',
   templateUrl: './field-data.component.html',
@@ -38,6 +39,8 @@ export class FieldDataComponent implements OnInit {
   baseline: boolean;
   @Input()
   inSetup: boolean;
+  @Input()
+  assessment: Assessment;
 
   counter: any;
 

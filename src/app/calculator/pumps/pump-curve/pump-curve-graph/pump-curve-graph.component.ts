@@ -1,7 +1,8 @@
 import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
 import { PsatService } from '../../../../psat/psat.service';
 import { WindowRefService } from '../../../../indexedDb/window-ref.service';
-import { PumpCurveForm } from '../pump-curve';
+
+import { PumpCurveForm, PumpCurveDataRow } from '../../../../shared/models/calculators';
 //declare const d3: any;
 import * as d3 from 'd3';
 import * as regression from 'regression';

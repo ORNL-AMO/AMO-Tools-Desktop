@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Directory } from '../../shared/models/directory';
+import { Calculator } from '../../shared/models/calculators';
 
 @Component({
   selector: 'app-assessment-list-view',
@@ -13,6 +14,10 @@ export class AssessmentListViewComponent implements OnInit {
   directoryChange = new EventEmitter();
   @Input()
   isChecked: boolean;
+  @Input()
+  directoryCalculator: Calculator;
+  @Output('emitPreAssessment')
+  emitPreAssessment = new EventEmitter<boolean>();
   constructor() { }
 
   ngOnInit() {
@@ -24,6 +29,10 @@ export class AssessmentListViewComponent implements OnInit {
     }else{
       this.directoryChange.emit(this.directory);
     }
+  }
+
+  viewPreAssessment() {
+    this.emitPreAssessment.emit(true);
   }
 
 }

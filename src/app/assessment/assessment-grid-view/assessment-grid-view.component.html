@@ -1,4 +1,16 @@
 <div class="row">
+  <div class="col-4 summary-card" *ngIf="directoryCalculator">
+    <div class="card calc-card" (click)="viewPreAssessment()">
+      <div class="card-body" *ngIf="directoryCalculator.preAssessments">
+        <a>View or Edit
+          <br> PH Pre-Assessment / Screening</a>
+      </div>
+      <div class="card-body" *ngIf="!directoryCalculator.preAssessments">
+        <a>Add
+          <br> PH Pre-Assessment / Screening</a>
+      </div>
+    </div>
+  </div>
   <div class="col-4 summary-card" *ngFor="let directory of directory.subDirectory">
     <app-directory-card [directory]="directory" (directoryChange)="changeDirectory($event)" [isChecked]="isChecked" (updateDirectory)="changeDirectory()"></app-directory-card>
   </div>
