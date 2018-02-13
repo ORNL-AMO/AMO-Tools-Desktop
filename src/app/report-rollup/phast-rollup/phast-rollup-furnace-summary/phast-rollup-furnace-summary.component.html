@@ -20,8 +20,6 @@
     <table class="table table-hover table-striped">
       <thead>
       <tr>
-        <th></th>
-        <th></th>
         <th>
           Energy Intensity
         </th>
@@ -37,52 +35,58 @@
         <th>
           Simple Payback Period
         </th>
-      </tr>
         <tr>
           <th>
+            ({{settings.phastRollupUnit}}
+            <span *ngIf="settings.unitsOfMeasure == 'Metric'">/kg</span>
+            <span *ngIf="settings.unitsOfMeasure == 'Imperial'">/lb</span>)
+          </th>
+          <th>
+            ({{settings.phastRollupUnit}}
+            <span *ngIf="settings.unitsOfMeasure == 'Metric'">/kg</span>
+            <span *ngIf="settings.unitsOfMeasure == 'Imperial'">/lb</span>)
+          </th>
+          <th>
+            ($/yr)
+          </th>
+          <th>
+            ($/yr)
+          </th>
+          <th>
+            ($/yr)
+          </th>
+          <th>
+            ($)
+          </th>
+          <th>
+            (Months)
+          </th>
+      </tr>
+        <tr>
+          <th colspan="2">
             Furnace Name
           </th>
-          <th>
+          <th colspan="2">
             Modification Name
           </th>
-          <th>
-            ({{settings.phastRollupUnit}}
-            <span *ngIf="settings.unitsOfMeasure == 'Metric'">/kg</span>
-            <span *ngIf="settings.unitsOfMeasure == 'Imperial'">/lb</span>)<br>
+          <th colspan="2">
             Baseline
           </th>
-          <th>
-            ({{settings.phastRollupUnit}}
-            <span *ngIf="settings.unitsOfMeasure == 'Metric'">/kg</span>
-            <span *ngIf="settings.unitsOfMeasure == 'Imperial'">/lb</span>)<br>
+          <th colspan="2">
             Modification
           </th>
-          <th>
-            ($/yr)<br>
+          <th colspan="2">
             Baseline
           </th>
-          <th>
-            ($/yr)<br>
+          <th colspan="2">
             Modification
-          </th>
-          <th>
-            ($/yr)<br>
-            &nbsp;
-          </th>
-          <th>
-            ($)<br>
-            &nbsp;
-          </th>
-          <th>
-            (Months)<br>
-            &nbsp;
           </th>
         </tr>
       </thead>
       <tbody *ngIf="resultData">
         <tr *ngFor="let data of resultData">
           <!-- name -->
-          <td>{{data.name}}</td>
+          <td colspan="2">{{data.name}}</td>
           <td *ngIf="data.modName">{{data.modName}}</td>
           <td *ngIf="!data.modName">&mdash;</td>
           <!-- energy intensity -->
