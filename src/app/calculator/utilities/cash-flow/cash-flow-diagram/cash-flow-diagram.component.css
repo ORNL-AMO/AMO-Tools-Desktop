@@ -16,21 +16,12 @@
 }
 
 
-#gridToggleBtn::before{
-  background-color: #dcdcdc;
-  font-size: 12px;
-  height: 28px;
-  vertical-align: middle;
-}
-
-
 #cashFlowDl .fa-download {
   position: absolute;
-  border: 1px solid;
-  border-color: rgb(33, 37, 41);
   padding: 5px;
   border-radius: 4px;
   opacity: 0.6;
+  background-color: #dcdcdc;
 }
 
 #cashFlowDl .fa-download:hover {

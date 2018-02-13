@@ -19,7 +19,6 @@ export class MotorPerformanceGraphComponent implements OnInit {
   settings: Settings;
 
   @ViewChild("ngChart") ngChart: ElementRef;
-
   exportName: string;
 
   svg: any;

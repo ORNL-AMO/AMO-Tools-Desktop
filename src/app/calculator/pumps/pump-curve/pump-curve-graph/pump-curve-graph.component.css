@@ -3,22 +3,7 @@
     z-index: 9999;
   
     left: 30px
-  }
-  
-  #gridToggleBtn{
-    padding: 0;
-    background-color: #dcdcdc;
-    height: 28px;
-    width: 28px;
-  }
-  
-  #gridToggleBtn::before{
-    background-color: #dcdcdc;
-    font-size: 12px;
-    height: 28px;
-    vertical-align: middle;
-  }
-  
+  } 
   
   .grid .tick { 
     stroke: lightgrey;

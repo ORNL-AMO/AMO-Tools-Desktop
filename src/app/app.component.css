@@ -1699,33 +1699,70 @@ Toasty Overrides ================================= */
 }
 
 
-/* chart download icon */
-.chart-container .fa-download {
-  position: absolute;
-  right: 0;
-  top: 0;
+/* chart toggle grid lines */
+#gridToggleBtn{
+  padding: 0;
+  background-color: #dcdcdc;
+  height: 28px;
+  width: 28px;
   opacity: 0.6;
+  transition: ease-in-out 0.2s all;
 }
+
+#gridToggleBtn:hover {
+  opacity: 1;
+  cursor: pointer;
+  border-color: #212529;
+}
+
+#gridToggleBtn::before{
+  background-color: #dcdcdc;
+  font-size: 12px;
+  height: 28px;
+  vertical-align: middle;
+}
+
+
+
+
+/* chart download icon */
+
+.fa-download {
+  position: absolute;
+  opacity: 0.6;
+  padding: 5px;
+  border-radius: 2px;
+  background-color: #dcdcdc;
+  border: 1px solid transparent;
+  transition: ease-in-out 0.2s all;
+}
+
+.percent-chart-btn {
+  left: -15%;
+  top: 105%;
+}
+
 
 #gridToggle .fa-download {
-  position: absolute;
   left: 55px;
-  border: 1px solid;
-  border-color: rgb(33, 37, 41);
-  padding: 5px;
-  border-radius: 4px;
-  opacity: 0.6;
 }
 
-.chart-container .fa-download:hover,
+.fa-download:hover {
+  cursor: pointer;
+  opacity: 1;
+  border-color: #212529;
+}
+
+/* .chart-container .fa-download:hover,
 #gridToggle .fa-download:hover {
   cursor: pointer;
   opacity: 1;
-}
+  border-color: #212529;
+} */
 
 
 .show-print{
-    display: none;
+  display: none;
 }
 
 
