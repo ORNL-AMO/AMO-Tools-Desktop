@@ -11,30 +11,31 @@
     <label>Select Energy Source Type</label>
     <div class="form-check enrgy-form">
       <input id="fuel" type="radio" name="energySourceType" formControlName="energySourceType" value="Fuel" (change)="setOptions()">
-      <label for="fuel">Fuel-fired</label><br>
-        <input id="electricity" type="radio" name="energySourceType" formControlName="energySourceType" value="Electricity"
-          (change)="setOptions()">
-      <label for="electricity">Electrotechnology</label><br>
-        <input type="radio" id="steam" name="energySourceType" formControlName="energySourceType" value="Steam" (change)="setOptions()">
-      <label for="steam" >Steam-based</label>
+      <label for="fuel">Fuel-fired</label>
+      <br>
+      <input id="electricity" type="radio" name="energySourceType" formControlName="energySourceType" value="Electricity" (change)="setOptions()">
+      <label for="electricity">Electrotechnology</label>
+      <br>
+      <input type="radio" id="steam" name="energySourceType" formControlName="energySourceType" value="Steam" (change)="setOptions()">
+      <label for="steam">Steam-based</label>
     </div>
   </div>
 
   <div class="form-group" *ngIf="settingsForm.controls.energySourceType.value == 'Fuel'">
     <label for="furnaceType">Type of Fuel-Fired System</label>
-    <select class="form-control" formControlName="furnaceType" id="furnaceType" ngModel="{{settingsForm.controls.furnaceType.value}}">
+    <select (change)="startPolling()" class="form-control" formControlName="furnaceType" id="furnaceType" ngModel="{{settingsForm.controls.furnaceType.value}}">
       <option *ngFor="let option of fuelFiredOptions" [ngValue]="option">{{option}}</option>
     </select>
   </div>
   <div class="form-group" *ngIf="settingsForm.controls.energySourceType.value == 'Electricity'">
     <label for="furnaceType">Type of Electric Furnace</label>
-    <select class="form-control" formControlName="furnaceType" id="furnaceType" ngModel="{{settingsForm.controls.furnaceType.value}}">
+    <select (change)="startPolling()" class="form-control" formControlName="furnaceType" id="furnaceType" ngModel="{{settingsForm.controls.furnaceType.value}}">
       <option *ngFor="let option of electrotechOptions" [ngValue]="option">{{option}}</option>
     </select>
   </div>
   <div class="form-group" *ngIf="settingsForm.controls.furnaceType.value == 'Custom Fuel Furnace' || settingsForm.controls.furnaceType.value == 'Custom Electrotechnology'">
     <label for="customFurnaceName">Custom Furnace Name</label>
-    <input class="form-control" formControlName="customFurnaceName" id="customFurnaceName">
+    <input (input)="startPolling()" class="form-control" formControlName="customFurnaceName" id="customFurnaceName">
   </div>
 </form>
 <!-- <div class="row" *ngIf="disable">

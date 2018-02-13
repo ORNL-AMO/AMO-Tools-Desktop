@@ -55,7 +55,6 @@ export class LossesResultPanelComponent implements OnInit {
     if (this.containerHeight && this.resultTabs) {
       let tabHeight = this.resultTabs.nativeElement.clientHeight;
       this.helpHeight = this.containerHeight - tabHeight;
-      console.log(this.helpHeight);
     }
   }
 

@@ -287,7 +287,7 @@ export class PhastComponent implements OnInit {
   }
 
   lastStep() {
-    if (this.mainTab == 'system-basics') {
+    if (this.mainTab == 'system-setup') {
       if (this.stepTab.step == 1) {
         if (this.specTab.back) {
           this.phastService.goToSpec(this.specTab.back);

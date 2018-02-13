@@ -252,4 +252,8 @@ export class LossesComponent implements OnInit {
     this.isModalOpen = false;
     this.materialModal.hide();
   }
+
+  cancelEdit(){
+    this.showEditModification = false;
+  }
 }
