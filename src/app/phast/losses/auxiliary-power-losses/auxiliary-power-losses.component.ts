@@ -37,6 +37,7 @@ export class AuxiliaryPowerLossesComponent implements OnInit {
   @Input()
   modExists: boolean;
 
+  inputError: boolean = false;
   resultsUnit: string;
   _auxiliaryPowerLosses: Array<AuxPowLossObj>;
   firstChange: boolean = true;
@@ -213,6 +214,9 @@ export class AuxiliaryPowerLossesComponent implements OnInit {
     }
   }
 
+  setInputError(bool: boolean){
+    this.inputError = bool;
+  }
 
 }
 

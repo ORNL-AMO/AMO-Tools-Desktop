@@ -29,6 +29,8 @@ export class AtmosphereLossesFormComponent implements OnInit {
   lossIndex: number;
   @Input()
   settings: Settings;
+  @Output('inputError')
+  inputError = new EventEmitter<boolean>();
 
   @ViewChild('materialModal') public materialModal: ModalDirective;
   firstChange: boolean = true;
@@ -55,6 +57,8 @@ export class AtmosphereLossesFormComponent implements OnInit {
   ngOnInit() {
     this.materialTypes = this.suiteDbService.selectAtmosphereSpecificHeat();
     this.checkTempError(true);
+    this.checkCorrectionError(true);
+    this.checkInputErrors();
   }
 
   ngAfterViewInit() {
@@ -115,6 +119,14 @@ export class AtmosphereLossesFormComponent implements OnInit {
     }
   }
 
+  checkInputErrors(){
+    if(this.temperatureError || this.specificHeatError || this.flowRateError){
+      this.inputError.emit(true);
+    }else{
+      this.inputError.emit(false);
+    }
+  }
+
   focusField(str: string) {
     this.changeField.emit(str);
   }
@@ -126,6 +138,7 @@ export class AtmosphereLossesFormComponent implements OnInit {
   }
 
   startSavePolling() {
+    this.checkInputErrors();
     this.calculate.emit(true);
     this.emitSave();
   }

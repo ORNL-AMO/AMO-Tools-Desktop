@@ -95,7 +95,7 @@ export class FolderContactInfoComponent implements OnInit {
       }
 
       if (!this.showFacilityContact && !this.showAddress && !this.showAssessmentContact) {
-        if (this.settings.facilityInfo.facilityName || this.settings.facilityInfo.facilityName) {
+        if (this.settings.facilityInfo.facilityName || this.settings.facilityInfo.companyName) {
           this.showNoData = false;
         } else {
           this.showNoData = true;

@@ -73,7 +73,7 @@ export class PhastService {
     this.stepTab.next(newStep);
   }
 
-  goToSpec(newSpec: number){
+  goToSpec(newSpec: number) {
     let newSpecTab = _.find(specTabs, (tab) => { return tab.step == newSpec });
     this.specTab.next(newSpecTab);
   }
@@ -715,9 +715,11 @@ export class PhastService {
         correctionFactor: 1,
       }
       let tmpForm = this.wallLossesService.getWallLossForm(tmpWallLoss);
-      let lossVal = this.wallLosses(tmpWallLoss, settings);
-      if (isNaN(lossVal) == false) {
-        sum += this.wallLosses(tmpWallLoss, settings);
+      if (tmpForm.status == 'VALID') {
+        let lossVal = this.wallLosses(tmpWallLoss, settings);
+        if (isNaN(lossVal) == false) {
+          sum += this.wallLosses(tmpWallLoss, settings);
+        }
       }
     })
     return sum;

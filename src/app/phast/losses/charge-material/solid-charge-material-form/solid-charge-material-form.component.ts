@@ -28,6 +28,8 @@ export class SolidChargeMaterialFormComponent implements OnInit {
   lossIndex: number;
   @Input()
   settings: Settings;
+  @Output('inputError')
+  inputError = new EventEmitter<boolean>();
 
   @ViewChild('materialModal') public materialModal: ModalDirective;
 
@@ -73,6 +75,7 @@ export class SolidChargeMaterialFormComponent implements OnInit {
         }
       }
     }
+    this.checkInputError(true);
   }
 
   ngAfterViewInit() {
@@ -95,18 +98,18 @@ export class SolidChargeMaterialFormComponent implements OnInit {
     this.chargeMaterialForm.enable();
   }
 
-  checkDischargeTemp() {
-    if ((this.chargeMaterialForm.controls.chargeMaterialDischargeTemperature.value > this.chargeMaterialForm.controls.materialMeltingPoint.value) && this.chargeMaterialForm.controls.percentChargeMelted.value == 0) {
-      this.dischargeTempError = 'The discharge temperature is higher than the melting point, please enter proper percentage for charge melted.';
-      return false;
-    } else if ((this.chargeMaterialForm.controls.chargeMaterialDischargeTemperature.value < this.chargeMaterialForm.controls.materialMeltingPoint.value) && this.chargeMaterialForm.controls.percentChargeMelted.value > 0) {
-      this.dischargeTempError = 'The discharge temperature is lower than the melting point, the percentage for charge melted should be 0%.';
-      return false;
-    } else {
-      this.dischargeTempError = null;
-      return true;
-    }
-  }
+  // checkDischargeTemp() {
+  //   if ((this.chargeMaterialForm.controls.chargeMaterialDischargeTemperature.value > this.chargeMaterialForm.controls.materialMeltingPoint.value) && this.chargeMaterialForm.controls.percentChargeMelted.value == 0) {
+  //     this.dischargeTempError = 'The discharge temperature is higher than the melting point, please enter proper percentage for charge melted.';
+  //     return false;
+  //   } else if ((this.chargeMaterialForm.controls.chargeMaterialDischargeTemperature.value < this.chargeMaterialForm.controls.materialMeltingPoint.value) && this.chargeMaterialForm.controls.percentChargeMelted.value > 0) {
+  //     this.dischargeTempError = 'The discharge temperature is lower than the melting point, the percentage for charge melted should be 0%.';
+  //     return false;
+  //   } else {
+  //     this.dischargeTempError = null;
+  //     return true;
+  //   }
+  // }
 
 
   focusField(str: string) {
@@ -188,6 +191,20 @@ export class SolidChargeMaterialFormComponent implements OnInit {
       this.heatOfReactionError = 'Heat of Reaction cannot be less than zero. For exothermic reactions, change "Endothermic/Exothermic"';
     } else {
       this.heatOfReactionError = null;
+    }
+
+    if ((this.chargeMaterialForm.controls.chargeMaterialDischargeTemperature.value > this.chargeMaterialForm.controls.materialMeltingPoint.value) && this.chargeMaterialForm.controls.percentChargeMelted.value == 0) {
+      this.dischargeTempError = 'The discharge temperature is higher than the melting point, please enter proper percentage for charge melted.';
+    } else if ((this.chargeMaterialForm.controls.chargeMaterialDischargeTemperature.value < this.chargeMaterialForm.controls.materialMeltingPoint.value) && this.chargeMaterialForm.controls.percentChargeMelted.value > 0) {
+      this.dischargeTempError = 'The discharge temperature is lower than the melting point, the percentage for charge melted should be 0%.';
+    } else {
+      this.dischargeTempError = null;
+    }
+
+    if (this.specificHeatError || this.latentHeatError || this.heatOfLiquidError || this.feedRateError || this.waterChargedError || this.chargeMeltedError || this.chargeSolidReactedError || this.heatOfReactionError || this.dischargeTempError) {
+      this.inputError.emit(true);
+    } else {
+      this.inputError.emit(false);
     }
   }
 

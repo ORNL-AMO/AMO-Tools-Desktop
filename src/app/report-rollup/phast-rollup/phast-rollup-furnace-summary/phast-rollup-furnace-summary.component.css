@@ -21,6 +21,13 @@ tr > td {
         padding-bottom: 30px;
         page-break-inside: avoid;
     }
-
-
+}
+table {
+  table-layout: fixed;
+}
+table td {
+  width: 25%;
+}
+table td:first-child {
+  width: 50%;
 }
